@@ -25,8 +25,8 @@ evals:
   - id: E4
     criterion: AC-4
     executor: test
-    cmd: config:executors.test.api_khong_cache
-    expected: "exit 0; turbo bao moi task thanh cong, khong task nao doc tu cache"
+    cmd: config:executors.test.api_khong_cache_tru_agent
+    expected: "exit 0; turbo bao moi task con lai thanh cong, 0 cached; goi agent bi loai bang --filter=!agent"
     evidence_required: [run_id, exit_code, verifier, verified_at]
 
   - id: E5
@@ -61,7 +61,7 @@ evals:
     criterion: AC-9
     executor: script
     cmd: config:executors.script.rang_t1_im
-    expected: "exit 0; cong im lang va tra ve 0 cho diff chi cham file T1 — nua suppression"
+    expected: "exit 0; luat t1-escape co chay va khong co dong VIOLATION [PR] cho diff chi cham file T1 — nua suppression"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E10

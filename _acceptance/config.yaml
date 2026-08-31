@@ -11,7 +11,7 @@ design_pass:
 executors:
   test:
     api: "bun run db:test && bun run test"
-    api_khong_cache: "bun run db:test && bunx turbo run test --concurrency=1 --force"
+    api_khong_cache_tru_agent: "bun run db:test && bunx turbo run test --concurrency=1 --force --filter=!agent"
   script:
     product_map: "node ${CLAUDE_PLUGIN_ROOT}/scripts/product-map.mjs --root . --check"
     db_test: "bun run db:test"

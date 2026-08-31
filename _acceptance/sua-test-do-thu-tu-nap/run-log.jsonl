@@ -9,3 +9,17 @@
 {"ts":"2026-08-31T23:23:43Z","round":1,"evalId":"E9","run_id":"sua-test-do-thu-tu-nap-E9-1788218623","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"}
 {"ts":"2026-08-31T23:23:54Z","round":1,"evalId":"E10","run_id":"sua-test-do-thu-tu-nap-E10-1788218634","exit_code":0,"cmd":"bun run lint"}
 {"ts":"2026-08-31T23:24:12Z","round":1,"evalId":"E11","run_id":"sua-test-do-thu-tu-nap-E11-1788218652","exit_code":0,"cmd":"bun run check-types"}
+{"ts":"2026-08-31T23:28:47Z","round":2,"evalId":"E1","run_id":"sua-test-do-thu-tu-nap-E1-1788218927","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan sach"}
+{"ts":"2026-08-31T23:28:56Z","round":2,"evalId":"E2","run_id":"sua-test-do-thu-tu-nap-E2-1788218936","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan thu-tu"}
+{"ts":"2026-08-31T23:29:02Z","round":2,"evalId":"E3","run_id":"sua-test-do-thu-tu-nap-E3-1788218942","exit_code":0,"cmd":"bun run db:test"}
+{"ts":"2026-08-31T23:29:45Z","round":2,"evalId":"E4","run_id":"sua-test-do-thu-tu-nap-E4-1788218985","exit_code":1,"cmd":"bun run db:test && bunx turbo run test --concurrency=1 --force"}
+{"ts":"2026-08-31T23:30:51Z","round":2,"evalId":"E5","run_id":"sua-test-do-thu-tu-nap-E5-1788219051","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan doi"}
+{"ts":"2026-08-31T23:30:57Z","round":2,"evalId":"E6","run_id":"sua-test-do-thu-tu-nap-E6-1788219057","exit_code":0,"cmd":"node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/product-map.mjs"}
+{"ts":"2026-08-31T23:31:04Z","round":2,"evalId":"E7","run_id":"sua-test-do-thu-tu-nap-E7-1788219064","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam"}
+{"ts":"2026-08-31T23:31:10Z","round":2,"evalId":"E8","run_id":"sua-test-do-thu-tu-nap-E8-1788219070","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"}
+{"ts":"2026-08-31T23:31:38Z","round":2,"evalId":"SUITE-violation-capture","run_id":"sua-test-do-thu-tu-nap-SUITE-violation-capture-1788219098","exit_code":0,"cmd":"reproduce rang-t1-escape --chan chan scenario and capture full pre-merge-check.sh output"}
+{"ts":"2026-08-31T23:31:38Z","round":2,"evalId":"E9","run_id":"sua-test-do-thu-tu-nap-E9-1788219098","exit_code":1,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"}
+{"ts":"2026-08-31T23:32:10Z","round":2,"evalId":"SUITE-t1-im-capture","run_id":"sua-test-do-thu-tu-nap-SUITE-t1-im-capture-1788219130","exit_code":0,"cmd":"reproduce rang-t1-escape --chan im scenario and capture full pre-merge-check.sh output"}
+{"ts":"2026-08-31T23:32:19Z","round":2,"evalId":"E10","run_id":"sua-test-do-thu-tu-nap-E10-1788219139","exit_code":0,"cmd":"bunx turbo run lint --force"}
+{"ts":"2026-08-31T23:32:36Z","round":2,"evalId":"E11","run_id":"sua-test-do-thu-tu-nap-E11-1788219156","exit_code":0,"cmd":"bunx turbo run check-types --force"}
+{"ts":"2026-08-31T23:32:55Z","round":2,"evalId":"E4-rerun","run_id":"sua-test-do-thu-tu-nap-E4-rerun-1788219175","exit_code":0,"cmd":"bun run db:test && bunx turbo run test --concurrency=1 --force (flakiness characterisation re-run, does NOT replace the E4 result)"}

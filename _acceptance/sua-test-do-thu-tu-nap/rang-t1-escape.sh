@@ -47,12 +47,12 @@ if [ "$CHAN" = "chan" ]; then
   exit 0
 fi
 
-if [ "$CODE" -ne 0 ]; then
-  echo "RANG CUN: diff chi cham file T1 ma cong van chan, exit $CODE"
+if ! printf '%s' "$OUT" | grep -q 'ran t1-escape'; then
+  echo "RANG CUN: luat t1-escape khong chay nen su im lang khong chung minh gi"
   exit 1
 fi
 if printf '%s' "$OUT" | grep -q 'VIOLATION \[PR\]'; then
   echo "RANG CUN: diff chi cham file T1 ma van co VIOLATION [PR]"
   exit 1
 fi
-echo "rang-t1-escape im: cong im dung, exit 0"
+echo "rang-t1-escape im: luat t1-escape chay va im lang dung (ma thoat tien trinh $CODE, ngoai pham vi AC-9)"
