@@ -2,14 +2,31 @@ schema_version: 1
 enforcement: strict
 gap_probe: advisory
 recheck: strict
+discovery:
+  brainstorm_skill: superpowers:brainstorming
+feature_loop:
+  ui_standards_skill: web-design-guidelines
+design_pass:
+  ds_skill: web-design-guidelines
 executors:
   test:
     api: "bun run db:test && bun run test"
+    api_khong_cache: "bun run db:test && bunx turbo run test --concurrency=1 --force"
   script:
-    product_map: "node /Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.5.0/scripts/product-map.mjs --root . --check"
+    product_map: "node ${CLAUDE_PLUGIN_ROOT}/scripts/product-map.mjs --root . --check"
+    db_test: "bun run db:test"
+    resolve_plugin: "node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/product-map.mjs"
+    lint: "bun run lint"
+    check_types: "bun run check-types"
+    rang_suite_sach: "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan sach"
+    rang_suite_thu_tu: "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan thu-tu"
+    rang_config_doi: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan doi"
+    rang_config_o_cam: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam"
+    rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
+    rang_t1_im: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"
   design:
-    gate: "node /Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.5.0/scripts/design-gate.mjs"
-    ui_check: "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.5.0/scripts/design-scan.js"
+    gate: "node ${CLAUDE_PLUGIN_ROOT}/scripts/design-gate.mjs"
+    ui_check: "${CLAUDE_PLUGIN_ROOT}/scripts/design-scan.js"
 risk_tiers:
   t1_skip_globs:
     - "docs/**"
