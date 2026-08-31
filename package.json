@@ -21,13 +21,16 @@
 		"db:reset": "turbo run db:reset",
 		"db:seed": "turbo run db:seed",
 		"db:studio": "turbo run db:studio",
-		"db:test": "bun run --filter=@crm/db db:test"
+		"db:test": "bun run --filter=@crm/db db:test",
+		"ui:capture": "node scripts/ui-capture.mjs"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.10",
 		"@oxlint/plugins": "1.78.0",
+		"jsdom": "^30.0.1",
 		"knip": "6.32.2",
 		"oxlint": "1.78.0",
+		"puppeteer-core": "^25.9.0",
 		"turbo": "^2.10.8",
 		"typescript": "5.9.2"
 	},

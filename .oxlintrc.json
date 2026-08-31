@@ -4,7 +4,9 @@
 	"categories": {
 		"correctness": "off"
 	},
-	"jsPlugins": ["./tools/oxlint/anti-slop/index.ts"],
+	"jsPlugins": [
+		"./tools/oxlint/anti-slop/index.ts"
+	],
 	"ignorePatterns": [
 		"**/node_modules/**",
 		"**/dist/**",
@@ -16,7 +18,9 @@
 		"apps/api/src/generated/**",
 		"packages/db/src/generated/**",
 		"packages/ui/src/components/**",
-		"tools/oxlint/anti-slop/**"
+		"tools/oxlint/anti-slop/**",
+		"lib/**",
+		"scripts/**"
 	],
 	"rules": {
 		"anti-slop/no-chained-type-assertions": "error",
@@ -45,7 +49,9 @@
 			}
 		},
 		{
-			"files": ["packages/validation/src/**"],
+			"files": [
+				"packages/validation/src/**"
+			],
 			"rules": {
 				"anti-slop/no-unknown-parameters": "off"
 			}

@@ -1,0 +1,36 @@
+schema_version: 1
+enforcement: strict
+gap_probe: advisory
+recheck: strict
+executors:
+  test:
+    api: "bun run db:test && bun run test"
+  script:
+    product_map: "node /Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.5.0/scripts/product-map.mjs --root . --check"
+  design:
+    gate: "node /Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.5.0/scripts/design-gate.mjs"
+    ui_check: "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.5.0/scripts/design-scan.js"
+risk_tiers:
+  t1_skip_globs:
+    - "docs/**"
+    - "**/*.md"
+    - "PRODUCT-MAP.md"
+  t3_paths:
+    - "packages/auth/**"
+    - "packages/db/prisma/**"
+    - "apps/api/src/auth/**"
+    - "apps/api/src/api-keys/**"
+    - "apps/api/src/sso/**"
+    - "apps/api/src/users/**"
+    - "apps/api/src/workspace/**"
+    - "apps/api/src/tracking/**"
+    - "apps/api/src/mailbox/**"
+signoff:
+  required_for: [T2, T3]
+  approvers: ["Manh Phan"]
+dev_server:
+  start: "TURBO_UI=false bunx turbo run dev --ui=stream --filter=app --filter=api"
+  url: "http://localhost:3000"
+  api_base: ["http://localhost:3001"]
+capture:
+  ui: "bun run ui:capture"

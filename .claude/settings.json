@@ -3,6 +3,18 @@
     "bgIsolation": "none"
   },
   "enabledPlugins": {
-    "paper-desktop@paper": true
+    "paper-desktop@paper": true,
+    "acceptance-gate@acceptance-gate-kit": true,
+    "feature-loop@acceptance-gate-kit": true,
+    "diagram-design@acceptance-gate-kit": true,
+    "superpowers@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "acceptance-gate-kit": {
+      "source": {
+        "source": "github",
+        "repo": "phanlemanh/acceptance-gate-kit"
+      }
+    }
   }
 }

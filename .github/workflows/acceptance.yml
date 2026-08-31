@@ -1,0 +1,32 @@
+name: Acceptance
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [onehub, release]
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    name: acceptance gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Product map
+        run: node scripts/product-map.mjs --root . --check
+
+      - name: Pre-merge check
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            bash scripts/pre-merge-check.sh . --base "origin/${{ github.base_ref }}"
+          else
+            bash scripts/pre-merge-check.sh . --base "HEAD^" --no-t1-escape
+          fi
