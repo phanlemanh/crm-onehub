@@ -14,6 +14,12 @@ import ThumbsDown from "@carbon/icons-react/es/ThumbsDown";
 import ThumbsUp from "@carbon/icons-react/es/ThumbsUp";
 import User from "@carbon/icons-react/es/User";
 import WarningAlt from "@carbon/icons-react/es/WarningAlt";
+import { MessageResponse } from "@crm/ui/components/ai-elements/message";
+import {
+	Reasoning,
+	ReasoningContent,
+	ReasoningTrigger,
+} from "@crm/ui/components/ai-elements/reasoning";
 import {
 	AsyncButtonContent,
 	useAsyncAction,
@@ -22,7 +28,6 @@ import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { DotMatrix } from "@crm/ui/components/dot-matrix";
 import { Icon } from "@crm/ui/components/icon";
-import { Markdown } from "@crm/ui/components/markdown";
 import {
 	MessageScroller,
 	MessageScrollerButton,
@@ -31,7 +36,6 @@ import {
 	MessageScrollerProvider,
 	MessageScrollerViewport,
 } from "@crm/ui/components/message-scroller";
-import { Reasoning } from "@crm/ui/components/reasoning";
 import { ThinkingIndicator } from "@crm/ui/components/thinking-indicator";
 import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
 import { cn } from "@crm/ui/lib/utils";
@@ -896,13 +900,12 @@ function AssistantMessage({
 				if (item.kind === "reasoned") {
 					return (
 						<Reasoning
-							key={item.id}
+							defaultOpen={item.streaming}
 							isStreaming={item.streaming}
-							label="Reasoning"
+							key={item.id}
 						>
-							<Markdown className="wrap-break-word leading-5">
-								{item.text}
-							</Markdown>
+							<ReasoningTrigger />
+							<ReasoningContent>{item.text}</ReasoningContent>
 						</Reasoning>
 					);
 				}
@@ -921,12 +924,9 @@ function AssistantMessage({
 					if (!text) return null;
 
 					return (
-						<Markdown
-							key={item.id}
-							className="wrap-break-word text-sm leading-5"
-						>
+						<MessageResponse key={item.id} className="text-sm leading-5">
 							{text}
-						</Markdown>
+						</MessageResponse>
 					);
 				}
 
@@ -969,9 +969,9 @@ function FollowUpTranscriptItem({
 					{answered ? "Answered" : "Waiting for your answer"}
 				</span>
 			</div>
-			<Markdown className="mt-1.5 wrap-break-word text-sm leading-5">
+			<MessageResponse className="mt-1.5 text-sm leading-5">
 				{question.prompt}
-			</Markdown>
+			</MessageResponse>
 		</div>
 	);
 }

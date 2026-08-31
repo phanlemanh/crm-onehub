@@ -8,6 +8,11 @@ import LogoLinkedin from "@carbon/icons-react/es/LogoLinkedin";
 import Send from "@carbon/icons-react/es/Send";
 import Warning from "@carbon/icons-react/es/Warning";
 import {
+	Message,
+	MessageContent,
+	MessageResponse,
+} from "@crm/ui/components/ai-elements/message";
+import {
 	Attachment,
 	AttachmentContent,
 	AttachmentGroup,
@@ -15,7 +20,6 @@ import {
 	AttachmentTitle,
 	AttachmentTrigger,
 } from "@crm/ui/components/attachment";
-import { Bubble, BubbleContent } from "@crm/ui/components/bubble";
 import { Button } from "@crm/ui/components/button";
 import {
 	Empty,
@@ -28,13 +32,8 @@ import {
 import { type CarbonIcon, Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import Logo from "@crm/ui/components/logo";
-import { Markdown } from "@crm/ui/components/markdown";
 import { Marker, MarkerContent, MarkerIcon } from "@crm/ui/components/marker";
-import {
-	Message,
-	MessageAvatar,
-	MessageContent,
-} from "@crm/ui/components/message";
+import { MessageAvatar } from "@crm/ui/components/message";
 import {
 	MessageScroller,
 	MessageScrollerButton,
@@ -390,24 +389,18 @@ const SOURCE_ICONS = {
 function Item({ item }: { item: TranscriptItem }) {
 	if (item.kind === "said") {
 		return item.mine ? (
-			<Message align="end" className="min-w-0">
-				<MessageContent>
-					<Bubble variant="secondary" align="end">
-						<BubbleContent className="text-pretty">{item.text}</BubbleContent>
-					</Bubble>
-				</MessageContent>
+			<Message className="min-w-0" from="user">
+				<MessageContent className="text-pretty">{item.text}</MessageContent>
 			</Message>
 		) : (
-			<Message className="min-w-0">
+			<div className="flex min-w-0 gap-2">
 				<AgentAvatar />
-				<MessageContent>
-					<Bubble variant="ghost">
-						<BubbleContent>
-							<Markdown className="wrap-break-word">{item.text}</Markdown>
-						</BubbleContent>
-					</Bubble>
-				</MessageContent>
-			</Message>
+				<Message className="min-w-0" from="assistant">
+					<MessageContent>
+						<MessageResponse>{item.text}</MessageResponse>
+					</MessageContent>
+				</Message>
+			</div>
 		);
 	}
 
@@ -415,9 +408,9 @@ function Item({ item }: { item: TranscriptItem }) {
 		return (
 			<div className="w-full max-w-sm border-ring/50 border-l-2 bg-muted/40 px-3 py-2.5">
 				<p className="font-medium text-xs">Follow-up</p>
-				<Markdown className="mt-1.5 wrap-break-word text-sm leading-5">
+				<MessageResponse className="mt-1.5 text-sm leading-5">
 					{item.question.prompt}
-				</Markdown>
+				</MessageResponse>
 			</div>
 		);
 	}
