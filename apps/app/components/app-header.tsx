@@ -1,6 +1,7 @@
 "use client";
 
 import Asleep from "@carbon/icons-react/es/Asleep";
+import Language from "@carbon/icons-react/es/Language";
 import Light from "@carbon/icons-react/es/Light";
 import Logout from "@carbon/icons-react/es/Logout";
 import Menu from "@carbon/icons-react/es/Menu";
@@ -20,10 +21,19 @@ import { Separator } from "@crm/ui/components/separator";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { EnrichmentQueue } from "@/components/enrichment-queue";
 import { useMobileNav } from "@/components/mobile-nav";
+import {
+	COOKIE_MAX_AGE,
+	COOKIE_PATH,
+	COOKIE_SAME_SITE,
+	LANG_COOKIE,
+	type Locale,
+} from "@/lib/locale/locale";
+import { useLocale } from "@/lib/locale/provider";
 import { signOutAndRedirect } from "@/lib/sign-out";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -102,9 +112,22 @@ export function AppHeaderFallback() {
 	);
 }
 
+const OTHER_LOCALE: Record<Locale, { next: Locale; label: string }> = {
+	en: { next: "vi", label: "Tiếng Việt" },
+	vi: { next: "en", label: "English" },
+};
+
 function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
 	const { resolvedTheme, setTheme } = useTheme();
 	const isDark = resolvedTheme === "dark";
+	const locale = useLocale();
+	const router = useRouter();
+	const other = OTHER_LOCALE[locale];
+
+	const chooseLocale = (next: Locale) => {
+		document.cookie = `${LANG_COOKIE}=${next}; Max-Age=${COOKIE_MAX_AGE}; Path=${COOKIE_PATH}; SameSite=${COOKIE_SAME_SITE}`;
+		router.refresh();
+	};
 
 	return (
 		<DropdownMenu>
@@ -137,6 +160,15 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
 				>
 					{isDark ? <Light /> : <Asleep />}
 					{isDark ? "Light mode" : "Dark mode"}
+				</DropdownMenuItem>
+				<DropdownMenuItem
+					onSelect={(event) => {
+						event.preventDefault();
+						chooseLocale(other.next);
+					}}
+				>
+					<Language />
+					{other.label}
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem onClick={onSignOut}>
