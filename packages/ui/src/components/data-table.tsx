@@ -238,7 +238,7 @@ function FacetSubmenu({
 						{selected.length > 0 && (
 							<>
 								<DropdownMenuItem onSelect={() => onChange([])}>
-									{msg.table.clear}
+									{msg.table.clearFilters}
 								</DropdownMenuItem>
 								<DropdownMenuSeparator />
 							</>
@@ -358,10 +358,7 @@ export function DataTable<TRow, TSub = unknown>({
 			{selecting && selection ? (
 				<div className="flex h-8 items-center gap-2">
 					<span className="truncate text-xs text-muted-foreground">
-						<span className="font-medium text-foreground tabular-nums">
-							{selection.state.count}
-						</span>{" "}
-						selected
+						{msg.table.selected(String(selection.state.count))}
 					</span>
 					<div className="ml-auto flex items-center gap-2">
 						{selection.actions}
@@ -370,7 +367,7 @@ export function DataTable<TRow, TSub = unknown>({
 							size="sm"
 							onClick={() => selection.state.clear()}
 						>
-							{msg.table.clear}
+							{msg.table.clearSelection}
 						</Button>
 					</div>
 				</div>
