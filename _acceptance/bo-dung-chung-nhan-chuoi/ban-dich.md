@@ -23,7 +23,7 @@ Chỗ có `X`, `Y`, `Z` là chỗ chữ ghép biến: tên hay số do chỗ g�
 | `table.selectRow` | Select X | **Chọn X** |
 | `table.selectRowFallback` | Select row | **Chọn dòng** |
 | `table.searchFacet` | Search X… | **Tìm X…** |
-| `table.facetOptions` | Options | **Lựa chọn** |
+| `table.facetOptions` | Options | **Các lựa chọn** |
 | `pagination.previous` | Previous | **Trước** |
 | `pagination.next` | Next | **Tiếp** |
 | `pagination.empty` | No results | **Không có kết quả** |
@@ -46,39 +46,34 @@ Chỗ có `X`, `Y`, `Z` là chỗ chữ ghép biến: tên hay số do chỗ g�
 | `attendee.declined` | Declined | **Từ chối** |
 | `attendee.tentative` | Maybe | **Có thể dự** |
 | `attendee.needsAction` | No reply | **Chưa trả lời** |
-| `sortableList.role` | sortable | **tay cầm sắp xếp** |
-| `sortableList.reorder` | Reorder X | **Kéo để đổi thứ tự X** |
+| `sortableList.reorder` | Reorder X | **Đổi thứ tự X** |
 | `skeletonSwap.loaded` | X loaded | **Đã tải xong X** |
 | `reasoning.thinking` | Thinking… | **Đang suy nghĩ…** |
 | `threadMessage.empty` | No message body. | **Thư không có nội dung.** |
 
-## Vòng chấm 3 sửa mười dòng, và gỡ một nhãn
+## Vòng chấm 4 sửa ba dòng — cả ba là nhãn không ai nhìn thấy
 
-Hội đồng vòng chấm 3 chỉ hai chỗ SAI. Cả hai đến từ chính bản sửa của vòng chấm 2:
+Hội đồng vòng 4 kiểm **mọi** chỗ gọi của cả 43 khoá, ở hai tầng: chỗ đọc bảng
+trong bộ dựng chung, và chỗ dựng component trong `apps/app`. Không dòng nào SAI,
+không dòng nào làm người bấm nhầm. Ba dòng GƯỢNG, và cả ba hỏng theo cùng một
+lối: **vòng 3 đem luật của nhãn NHÌN THẤY áp lên nhãn chỉ trình đọc màn hình
+NGHE thấy.**
 
-- **`sortableList.reorder` bỏ chữ "trường".** Vòng chấm 2 thêm chữ đó để làm rõ
-  cái gì đang bị kéo. Nhưng khoá này có **hai** chỗ gọi:
-  `fields-list.tsx:332` truyền `field.label` — "trường" đúng; `field-editor.tsx:341`
-  truyền `option.label`, tức một lựa chọn bên trong một trường — và câu ra màn
-  thành *"Kéo để đổi thứ tự trường Bất động sản"*, gọi một giá trị thả xuống là
-  trường. Đây đúng khuôn lỗi "một khoá đứng ở hai chỗ" mà vòng chấm 2 vừa chẩn
-  đoán ở `table.detail` rồi tái phạm ngay dòng dưới.
-- **`suggestion.dismiss` "Bỏ qua gợi ý" → "Từ chối gợi ý".** Bấm nút đó là vĩnh
-  viễn — `facts.tsx:44` báo lại "it won't be suggested again". "Bỏ qua" trong
-  tiếng Việt là để đó lát nữa quay lại.
+- **`sortableList.reorder` bỏ chữ "Kéo".** Chuỗi này nằm trong `sr-only`, tức chỉ
+  người nghe nhận được. `SortableList` gắn `KeyboardSensor`, nên người nghe đổi
+  thứ tự **bằng bàn phím, không kéo bao giờ**. Câu cũ bảo họ làm một động tác họ
+  không có. Chữ "Kéo" vẫn đúng ở chỗ của nó — dòng gợi ý nhìn thấy được ở
+  `apps/app`, thuộc vòng ③.
+- **`table.facetOptions` trả lại "Các lựa chọn".** Vòng 3 cắt chữ "Các" theo luật
+  ngắn-theo-ngữ-cảnh của `CONTEXT.md`. Nhưng luật đó nói ngữ cảnh đến từ **màn
+  hình**, mà đây là `aria-label` của một `role="listbox"` — người nghe không có
+  màn hình. "Lựa chọn" trần nghe ra như một mệnh lệnh, không như tên một danh sách.
+- **`sortableList.role` gỡ hẳn.** Vòng 3 viện `CLAUDE.md` — cấm đúc từ ghép tiếng
+  Việt cho thuật ngữ kỹ thuật — để gỡ `carousel.role`, rồi để nguyên
+  `sortableList.role` ("tay cầm sắp xếp", cũng là từ đúc) hai dòng bên dưới trong
+  **cùng một commit**. Nay cùng một luật cho cả hai.
 
-Tám dòng nữa sửa cùng lượt: `pagination.next` ("Sau" → **"Tiếp"**),
-`suggestion.accept`, `table.clearFilters`, `table.sortByDetail`,
-`table.facetOptions`, `sortableList.role`, và bản `showing` chết ở
-`apps/app/lib/messages/companies.ts` đã xoá — trước đó cùng một câu có hai bản
-tiếng Việt trong cùng sản phẩm.
-
-**`carousel.role` bị gỡ hẳn.** `CLAUDE.md` cấm đúc từ ghép tiếng Việt cho thuật
-ngữ kỹ thuật; giữ nguyên chữ `carousel` thì nhãn nói tiếng Anh giữa màn tiếng
-Việt. Nên thuộc tính `aria-roledescription` của băng trượt bị bỏ, và trình đọc
-màn hình đọc vai thật của phần tử — đúng ở mọi thứ tiếng.
-
-**`pagination.next` = "Tiếp" đóng luôn một lỗ của phép đo.** "Sau" là khoá duy
-nhất không mang dấu tiếng Việt, nên nó là mục duy nhất trong danh sách miễn của
-luật "mọi giá trị phải mang dấu". Danh sách miễn nay **rỗng**, và phép đo phủ
-44/44 khoá.
+Gỡ khoá này không đủ: `dnd-kit` tự đặt `aria-roledescription="sortable"`, một chữ
+tiếng Anh đọc thành tiếng. Nên thuộc tính bị **tắt tường minh** sau chỗ trải
+`attributes`, và trình đọc màn hình đọc vai thật ("nút") — đúng ở mọi thứ tiếng.
+Dòng `sr-only` ngay bên trong đã nói việc phải làm.
