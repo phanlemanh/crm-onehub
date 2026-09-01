@@ -3,6 +3,7 @@ import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import type { ReactElement } from "react";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
+import { renderToStaticMarkup } from "react-dom/server";
 import { AttendeeList } from "../src/components/attendee-list";
 import {
 	Carousel,
@@ -444,6 +445,25 @@ describe("AC-5 — chấm bản vẽ, không chấm mã", () => {
 			const ca = CA.find((c) => c.ten === m.goc);
 			if (!ca) throw new Error(`không có ca ${m.goc}`);
 			expect(await chungNhau(ca, m.so, m.trong)).toEqual([]);
+		},
+	);
+
+	test.each(CA.map((c) => [c.ten, c] as const))(
+		"%s: dựng NGOÀI nhà cung cấp thì vẫn vẽ, vẫn tiếng Anh, không nổ",
+		async (_ten, ca) => {
+			const khong_boc = renderToStaticMarkup(
+				<NuqsTestingAdapter>
+					<TooltipProvider delayDuration={0}>{ca.ve()}</TooltipProvider>
+				</NuqsTestingAdapter>,
+			);
+			const co_boc = renderToStaticMarkup(
+				<NuqsTestingAdapter>
+					<LocaleProvider locale="en">
+						<TooltipProvider delayDuration={0}>{ca.ve()}</TooltipProvider>
+					</LocaleProvider>
+				</NuqsTestingAdapter>,
+			);
+			expect(khong_boc).toBe(co_boc);
 		},
 	);
 
