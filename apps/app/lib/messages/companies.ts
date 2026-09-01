@@ -26,6 +26,11 @@ const MESSAGES = {
 			enrichment: "Enrichment",
 			activity: "Activity",
 		},
+		title: "Companies",
+		description: "Every company in the network.",
+		showing: (from: number, to: number, total: number) =>
+			`Showing ${from}–${to} of ${total}`,
+		noResults: "No results",
 		empty: "No companies match this view.",
 		emptyArchived: "No archived companies.",
 	},
@@ -54,6 +59,11 @@ const MESSAGES = {
 			enrichment: "Bổ sung",
 			activity: "Hoạt động",
 		},
+		title: "Công ty",
+		description: "Mọi công ty trong mạng lưới.",
+		showing: (from: number, to: number, total: number) =>
+			`Đang xem ${from}–${to} trong ${total}`,
+		noResults: "Không có kết quả",
 		empty: "Chưa có công ty nào khớp bộ lọc này.",
 		emptyArchived: "Chưa có công ty nào đã lưu trữ.",
 	},
