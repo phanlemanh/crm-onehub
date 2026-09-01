@@ -3,62 +3,65 @@ feature_slug: tieng-viet-cho-crm
 evals:
   - id: E1
     criterion: AC-1
-    executor: script
-    cmd: config:executors.script.rang_ngon_ngu_nguon
-    expected: "exit 0; chan chua-chon + Accept-Language uu tien vi -> vi; chieu do: bo tang Accept-Language thi chan nay phai do"
-    paths: ["apps/app/lib/locale/**", "apps/app/app/layout.tsx"]
-    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    executor: ui-check
+    steps:
+      - "Khoi dong dev server theo config dev_server.start"
+      - "Xoa sach cookie, gui Accept-Language: vi-VN,vi;q=0.9 -> chup evidence/E1-step1.png"
+      - "Doc HTML tu luot ve DAU TIEN cua may chu va khang dinh <html lang=\"vi\">"
+    expected: "chua tung chon + trinh duyet uu tien vi -> may chu ve ra lang=vi ngay luot dau; do o TANG VE, khong phai o ham resolver"
+    evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
 
   - id: E2
     criterion: AC-2
-    executor: script
-    cmd: config:executors.script.rang_ngon_ngu_nguon
-    expected: "exit 0; chan chua-chon + Accept-Language uu tien en -> en"
-    paths: ["apps/app/lib/locale/**", "apps/app/app/layout.tsx"]
-    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    executor: ui-check
+    steps:
+      - "Xoa sach cookie, gui Accept-Language: en-US,en;q=0.9 -> chup evidence/E2-step1.png"
+      - "Khang dinh <html lang=\"en\"> trong HTML may chu tra ve"
+    expected: "chua tung chon + trinh duyet uu tien en -> lang=en"
+    evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
 
   - id: E3
     criterion: AC-3
     executor: ui-check
     steps:
-      - "Khoi dong dev server theo config dev_server.start"
       - "Dat cookie ngon ngu = vi, mo mot trang bat ky -> chup evidence/E3-step1.png"
-      - "Doc HTML tu luot ve DAU TIEN cua may chu (khong doi client hydrate) va khang dinh <html lang=\"vi\">"
-      - "Chup lai sau khi hydrate -> evidence/E3-step2.png de doi chieu khong co nhay"
-    expected: "lang=vi co mat trong HTML may chu tra ve, khong phai chi sau khi hydrate"
+      - "Doc HTML luot ve dau tien, khang dinh <html lang=\"vi\">"
+      - "Chup sau khi hydrate -> evidence/E3-step2.png; hai anh phai giong nhau ve thu tieng"
+    expected: "lang=vi co trong HTML may chu tra ve, khong phai chi sau khi hydrate"
     evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
 
   - id: E4
     criterion: AC-4
     executor: script
     cmd: config:executors.script.rang_ngon_ngu_la
-    expected: "exit 0; gia tri khong hop le BCP 47 -> roi ve en, khong nem loi; chieu do: bo buoc kiem hop le thi chan nay phai do"
+    expected: "exit 0; gia tri khong hop le BCP 47 -> tra ve en, khong nem loi. Chieu do: bo buoc kiem hop le thi chan nay do voi thong diep ghim ten gia tri gay loi"
     paths: ["apps/app/lib/locale/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E5
     criterion: AC-5
-    executor: ui-check
-    steps:
-      - "Mo man cong ty o tieng Anh -> evidence/E5-step1.png"
-      - "Doi sang tieng Viet bang nut trong thanh dau trang -> evidence/E5-step2.png"
-      - "Dong tab, mo lai cung URL -> evidence/E5-step3.png; khang dinh van tieng Viet"
-    expected: "lua chon o lai sau khi dong va mo lai"
-    evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
+    executor: script
+    cmd: config:executors.script.rang_cookie
+    expected: "exit 0; Set-Cookie mang DU ba thuoc tinh Max-Age=31536000, Path=/, SameSite=Lax. Chieu do: bo Max-Age (thanh cookie phien) thi chan nay do va goi ten thuoc tinh thieu"
+    paths: ["apps/app/lib/locale/**", "apps/app/components/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E6
     criterion: AC-6
-    executor: script
-    cmd: config:executors.script.rang_chu_man_cong_ty
-    expected: "exit 0; 0 chuoi giao dien tieng Anh con lai tren man cong ty; chieu do: bo mot nhan khoi kho chuoi thi phep do phai chi dung ten nhan do"
-    paths: ["apps/app/app/(app)/[slug]/companies/**", "apps/app/lib/messages/**"]
-    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    executor: ui-check
+    steps:
+      - "Dat ngon ngu vi, mo man cong ty -> chup evidence/E6-step1.png"
+      - "Doc TOAN BO chu nhin thay tren trang da ve (khong grep ma nguon) va liet ke moi chuoi tieng Anh con lai"
+      - "Loc bo lang loc du lieu nguoi nhap (ten cong ty, ten mien)"
+      - "Mo bo loc facet va tab de bat ba chuoi bang dung chung -> chup evidence/E6-step2.png"
+    expected: "0 chuoi giao dien tieng Anh nhin thay; hai nhan trinh-doc-man-hinh khoa cung trong bang dung chung nam ngoai pham vi va KHONG tinh"
+    evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
 
   - id: E7
     criterion: AC-7
     executor: script
     cmd: config:executors.script.rang_du_lieu_khong_dich
-    expected: "exit 0; o chua ten cong ty mang translate=no va noi dung giu nguyen; chieu do: bo translate=no thi chan nay phai do"
+    expected: "exit 0; CHINH phan tu ve ten cong ty mang translate=no (khong phai mot the boc nao do o tren), va noi dung ten giu nguyen. Chieu do: go translate=no khoi phan tu do thi chan nay do"
     paths: ["apps/app/app/(app)/[slug]/companies/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -66,7 +69,7 @@ evals:
     criterion: AC-8
     executor: script
     cmd: config:executors.script.rang_dinh_dang
-    expected: "exit 0; dem so cho khai cung vung trong apps/app va packages/ui/src/lib = 0, VA ham dinh dang tra ket qua khac nhau cho vi va en tren cung mot gia tri"
+    expected: "exit 0; MA TRAN DAY DU 5 ham x 2 ngon ngu, moi o mot chuoi ky vong ghim san: formatDay/formatCount/formatMoney/formatMoneyCompact/formatPercent tren cung mot gia tri co dinh. VA dem so cho khai cung vung trong apps/app + packages/ui/src/lib = 0. Chieu do: tra MOT ham ve en-US thi chan nay do va goi dung ten ham do"
     paths: ["packages/ui/src/lib/format.ts", "apps/app/components/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -74,23 +77,34 @@ evals:
     criterion: AC-9
     executor: ui-check
     steps:
-      - "Mo man cong ty o tieng Viet, kho hep nhat duoc ho tro -> evidence/E9-step1.png"
-      - "Doc anh va khang dinh khong chu nao tran khoi khung"
-      - "Mo lai o kho rong -> evidence/E9-step2.png"
-    expected: "khong tran o ca hai kho; container dai dung truncate/line-clamp/break-words, flex child co min-w-0"
+      - "Mo man cong ty o tieng Viet, dat be rong cua so 768px -> chup evidence/E9-step1.png"
+      - "Doc anh: khang dinh khong TIEU DE COT nao ket thuc bang dau ba cham"
+      - "Dat lai 1440px -> chup evidence/E9-step2.png de doi chieu"
+    expected: "o 768px khong tieu de cot nao bi cat cut; o du lieu dai van duoc phep cat"
     evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
 
   - id: E10
     criterion: AC-10
-    executor: script
-    cmd: config:executors.design.gate
-    expected: "exit 0; khong loi a11y P0 tren man cong ty va tren nut doi tieng"
-    paths: ["apps/app/app/(app)/[slug]/companies/**", "apps/app/components/app-header.tsx"]
-    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    executor: ui-check
+    steps:
+      - "Mo bat ky trang nao, nhan Tab cho toi khi tieu diem toi nut doi tieng -> chup evidence/E10-step1.png"
+      - "Doc anh va khang dinh CO vong tieu diem nhin thay duoc quanh nut"
+      - "Nhan Enter -> chup evidence/E10-step2.png; khang dinh menu da mo"
+    expected: "vong tieu diem nhin thay duoc trong anh, va Enter mo duoc menu — khong dua vao bo quet a11y tu dong"
+    evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
 
   - id: E11
+    criterion: AC-12
+    executor: ui-check
+    steps:
+      - "Dat cookie ngon ngu = en, gui Accept-Language: vi-VN -> chup evidence/E11-step1.png"
+      - "Khang dinh <html lang=\"en\"> — lua chon da luu thang ngon ngu trinh duyet"
+    expected: "lua chon da luu thang header trinh duyet; do o tang ve"
+    evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
+
+  - id: E12
     criterion: AC-11
     executor: judgment
-    question: "Hai cau. (1) Ban tieng Viet cua man cong ty doc nhu tieng Viet cua nguoi trong nghe quan he doi tac, hay doc nhu mot ban dich may? (2) Moi nhan co tuan luat NGAN-THEO-NGU-CANH trong CONTEXT.md khong — tuc chi mang phan ma man hinh CHUA cap? Neu mot nhan lap lai danh tu ma man hinh da noi, goi ten nhan do. Doi chieu ca tu dien san pham, nhat la 'cong ty' va 'ca nhan' co y KHONG khoa vao nghe moi gioi."
-    inputs: [contract.md, ../../CONTEXT.md, evidence/E5-step2.png]
+    question: "Hai cau. (1) Muoi nhan cot tieng Viet da khai trong muc Notes cua contract — Ten, Ten mien, Nganh, Phu trach, Ca nhan, Thoa thuan mo, Ngay tao, Hoat dong cuoi, Bo sung, Luu tru — doc nhu tieng Viet cua nguoi trong nghe quan he doi tac, hay nhu ban dich may? (2) Nhan nao lap lai danh tu ma man hinh DA noi, tuc pham luat ngan-theo-ngu-canh trong CONTEXT.md? Goi ten nhan do."
+    inputs: [contract.md, ../../CONTEXT.md, evidence/ban-mau-man-cong-ty.html]
     evidence_required: [judged_by, verdict, rationale]

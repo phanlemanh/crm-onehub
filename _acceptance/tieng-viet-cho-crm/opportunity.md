@@ -122,7 +122,7 @@ không phải ở đây.
 ## Thước đo thành công → ứng viên criterion
 
 - Số bước bắt buộc trong một luồng thật còn hiện tiếng Anh, đếm theo luồng.
-- Số nhân viên chọn tiếng Việt rồi giữ nguyên sau một tuần.
+- Số nhân viên chọn tiếng Việt rồi giữ nguyên sau một tuần. **CHƯA CÓ NGUỒN SINH** — phản biện ngữ cảnh sạch 2026-09-01 chỉ ra không vòng nào trong năm vòng sinh ra con số này. Cần một sự kiện đo đạc khi người đổi tiếng; chưa xếp vào vòng nào.
 - Số câu máy chủ hiện lên màn hình mà chưa có bản tiếng Việt.
 
 ## Out of scope từ khám phá

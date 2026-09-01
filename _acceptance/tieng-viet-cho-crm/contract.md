@@ -31,11 +31,12 @@ Source input: prompt · `_acceptance/tieng-viet-cho-crm/opportunity.md`
 - AC-3: Given người dùng đã chọn tiếng Việt, When trang được máy chủ dựng, Then thẻ `<html lang>` mang giá trị `vi` NGAY Ở LƯỢT VẼ ĐẦU, không phải sau một lượt vẽ lại.
 - AC-4: Given lựa chọn ngôn ngữ đã lưu mang một giá trị không phải thẻ ngôn ngữ hợp lệ, When người mở CRM, Then màn hình rơi về tiếng Anh và không có lỗi nào nổ.
 - AC-5: Given người dùng đổi sang tiếng Việt rồi đóng trình duyệt, When họ quay lại, Then màn hình vẫn tiếng Việt.
-- AC-6: Given người dùng đang ở tiếng Việt, When họ mở màn công ty, Then mọi chữ của giao diện — nhãn, tiêu đề cột, nút, thông báo rỗng — là tiếng Việt, không còn chuỗi tiếng Anh nào.
+- AC-6: Given người dùng đang ở tiếng Việt, When họ mở màn công ty, Then mọi chữ NHÌN THẤY của giao diện là tiếng Việt — kể cả ba chuỗi bảng dùng chung nhận từ ngoài vào (`empty`, `facet.empty`, `tabs.allLabel`) — TRỪ hai nhãn cho trình đọc màn hình còn khoá cứng trong bảng dùng chung (`"Select every row on this page"` và chữ `Select` trong nhãn từng dòng); hai chuỗi đó là việc vòng ②.
 - AC-7: Given một công ty có tên do người nhập, When màn hình hiện ở tiếng Việt, Then tên đó giữ nguyên như đã nhập VÀ được đánh dấu để trình duyệt không tự dịch.
 - AC-8: Given người dùng đang ở tiếng Việt, When màn công ty hiện ngày và số, Then chúng theo quy ước tiếng Việt, và trong phạm vi vòng này không còn chỗ nào khai cứng một vùng.
-- AC-9: Given chuỗi tiếng Việt dài hơn chuỗi tiếng Anh tương ứng, When màn công ty hiện ở khổ hẹp nhất được hỗ trợ, Then không chữ nào tràn khỏi khung chứa nó.
-- AC-10: Given người dùng chỉ dùng bàn phím, When họ tới nút đổi tiếng, Then nút nhận được tiêu điểm nhìn thấy được và mở được bằng bàn phím.
+- AC-9: Given chuỗi tiếng Việt dài hơn chuỗi tiếng Anh tương ứng, When màn công ty hiện ở bề rộng 768px, Then không TIÊU ĐỀ CỘT nào bị cắt cụt; ô dữ liệu dài vẫn được phép cắt kèm dấu ba chấm.
+- AC-10: Given người dùng chỉ dùng bàn phím, When họ nhấn Tab tới nút đổi tiếng rồi Enter, Then nút hiện vòng tiêu điểm NHÌN THẤY ĐƯỢC trong ảnh chụp, và menu mở ra.
+- AC-12: Given người dùng đã chọn tiếng Anh và trình duyệt của họ khai ưu tiên tiếng Việt, When họ mở CRM, Then màn hình hiện tiếng Anh — lựa chọn đã lưu thắng ngôn ngữ trình duyệt.
 - AC-11: Given bản tiếng Việt của màn công ty, When một nhân viên quan hệ đối tác đọc nó, Then chữ đọc như tiếng Việt của người trong nghề, không phải như một bản dịch máy. (judgment)
 
 ## Coverage
@@ -58,7 +59,7 @@ thiết kế trước khi nạp chuẩn nội bộ: **đường cho người l�
 ## Out of scope
 
 - Không dịch câu lỗi từ máy chủ. 107 chỗ đổ nguyên văn tiếng Anh lên màn hình vẫn nguyên — đó là vòng ④.
-- Không đụng chuỗi trong `packages/ui/src/components/**`. Khuôn nhận-chuỗi-từ-ngoài là việc vòng ②.
+- Không SỬA `packages/ui/src/components/**`. Vòng này chỉ TRUYỀN chuỗi vào ba chỗ bảng dùng chung đã mở sẵn (`empty`, `facet.empty`, `tabs.allLabel`) — truyền vào một chỗ đã mở không phải sửa component. Hai nhãn trình-đọc-màn-hình khoá cứng ở đó vẫn tiếng Anh, có tên trong AC-6, và là việc vòng ②.
 - Không dịch màn thoả thuận hợp tác. Bảy giai đoạn của nó chưa ai định nghĩa; đó là quyết định nghiệp vụ.
 - Không chạm 10 chỗ định dạng trong `ai-elements/context.tsx` — bảng chi phí tác nhân, không nằm trên màn công ty.
 - Không thêm ngôn ngữ thứ ba, không đổi tiền tệ, không đổi múi giờ.
@@ -80,6 +81,15 @@ sửa vế đầu không phải chốt khuôn của vế sau.
 sẽ sửa — tài liệu đó nói về cột nào được cộng và tỉ giá đóng băng lúc nào, không
 nói về hiển thị), `docs/design.md`, `CONTEXT.md`, và chuẩn giao diện nội bộ mà
 kho khai ở `feature_loop.ui_standards_skill`.
+
+**Nhãn tiếng Việt của mười cột** (chốt theo luật ngắn-theo-ngữ-cảnh trong
+`CONTEXT.md`): Tên · Tên miền · Ngành · Phụ trách · Cá nhân · Thoả thuận mở ·
+Ngày tạo · Hoạt động cuối · Bổ sung · Lưu trữ. Hội đồng phán ở AC-11 chấm đúng
+danh sách này, không chấm chữ chưa ai khai.
+
+**Hợp đồng cookie:** `Max-Age` một năm · `Path=/` · `SameSite=Lax`. Không khai
+thì cookie thành cookie-phiên, và lựa chọn mất khi người tắt máy — một phép đo
+đóng-mở-tab không bắt được điều đó.
 
 **Giá đã nhận:** trang đăng nhập chuyển từ vẽ tĩnh sang vẽ động, vì `<html lang>`
 chỉ khai được ở trang gốc và trang gốc phải đọc lựa chọn ngôn ngữ.
