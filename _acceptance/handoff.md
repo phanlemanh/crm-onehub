@@ -13,6 +13,11 @@ Repo là bản riêng của OneMount, tách từ `trycompai/crm` trong phiên n�
 
 Đã gửi lên hãng, đang mở: PR `trycompai/crm#194` (vá `dev-session`), issue `#195` (test phập phù `retireExhausted`).
 
+**Sửa lại chẩn đoán của `#195`, đo ngày 2026-09-01:** `retireExhausted` KHÔNG phập phù. Nó
+đỏ mỗi lần CSDL kiểm còn hàng `AgentTask` của một lượt chạy bị cắt ngang, vì nó gọi
+`claimDue(10, RESEARCH)` — lấy mọi hàng đến hạn, không chỉ ba hàng nó tạo. `bun run db:test`
+làm nó xanh lại. 3 lần đỏ trong 11 lượt lưới đầy đủ, cả ba đều sau một suite bị cắt.
+
 ## Chạy tại máy
 
 ```
