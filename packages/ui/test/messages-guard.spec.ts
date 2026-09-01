@@ -48,7 +48,7 @@ describe("bảng dịch phải thật sự là tiếng Việt", () => {
 	});
 
 	test("danh sách miễn dấu không được dài thêm mà không ai thấy", () => {
-		expect(KHONG_DAU_CHO_PHEP).toHaveLength(1);
+		expect(KHONG_DAU_CHO_PHEP).toHaveLength(0);
 	});
 });
 

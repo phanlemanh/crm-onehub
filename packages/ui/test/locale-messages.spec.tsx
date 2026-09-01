@@ -51,7 +51,7 @@ describe("component đọc ngôn ngữ từ nhà cung cấp", () => {
 	test("phân trang hiện tiếng Việt", () => {
 		const ra = ve(phanTrang, "vi");
 		expect(ra).toContain("Trước");
-		expect(ra).toContain("Sau");
+		expect(ra).toContain("Tiếp");
 		expect(ra).toContain("trong");
 		expect(ra).not.toContain("Previous");
 		expect(ra).not.toContain("Showing");

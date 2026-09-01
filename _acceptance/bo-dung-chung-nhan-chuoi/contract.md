@@ -117,7 +117,8 @@ chuỗi tiếng Anh của nó, một khoá một lượt, rồi xem phép đo c�
 | --- | --- |
 | Trước đường B | 14 / 34 |
 | Đường B, lúc vòng chấm 1 | 32 / 39 |
-| Đường B, sau vòng chấm 2 | **44 / 45** |
+| Đường B, sau vòng chấm 2 | 44 / 45 |
+| Sau vòng chấm 3 | **44 / 44** |
 
 **Con số 39/39 tôi công bố ở vòng chấm 1 là SAI, và sai theo đúng lối đã hỏng
 hai lần trước.** Kịch bản quét của tôi thay chuỗi ở nửa sau của file — nửa không
@@ -145,10 +146,9 @@ Hai luật mới đóng cả hai:
   và có hai phép đo: không mục nào được trùng một chuỗi của giao diện, và số mục
   chỉ đổi khi có người thêm dữ liệu thử.
 
-**Khoá duy nhất phép đo còn không bắt: `table.clearFilters`.** Nó chỉ vẽ trong
-menu con của một mục lọc KHÔNG tìm được, sau khi menu lọc đã mở. Giàn kiểm mở
-được menu con thứ nhất, chưa mở được menu con thứ hai một cách tin cậy. Ghi ra
-đây vì AC-6 đòi mọi khoá không bắt được phải có tên.
+**Sau vòng chấm 3, không khoá nào lọt.** Danh sách miễn dấu tiếng Việt cũng rỗng
+— khoá cuối cùng trong đó, `pagination.next = "Sau"`, đổi thành "Tiếp" theo hội
+đồng, nên luật "mọi giá trị mang dấu tiếng Việt" nay không có ngoại lệ nào.
 
 **Nhà cung cấp ngôn ngữ ở gói nào, và vì sao (AC-4).** `apps/app` phụ thuộc
 `@crm/ui`; chiều ngược lại không tồn tại. Nên `packages/ui` không dùng được

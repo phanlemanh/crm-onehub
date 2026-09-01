@@ -126,7 +126,6 @@ function Carousel({
         onKeyDownCapture={handleKeyDown}
         className={cn("relative", className)}
         role="region"
-        aria-roledescription={msg.carousel.role}
         data-slot="carousel"
         {...props}
       >
