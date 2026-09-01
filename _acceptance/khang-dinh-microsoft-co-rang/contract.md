@@ -5,9 +5,9 @@ slug: khang-dinh-microsoft-co-rang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: implemented
-approved_by:
-approved_at:
+status: signed-off
+approved_by: Manh Phan
+approved_at: 2026-09-01
 veto_state: mo
 veto_opened_at: 2026-09-01T02:04:58Z
 ---

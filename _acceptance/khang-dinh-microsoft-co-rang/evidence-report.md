@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 73c2b317d6ecd633da31a8b89a934efebe355f4b
-human_signoff:
+human_signoff: Manh Phan 2026-09-01
 ---
 
 # Evidence Report: khang-dinh-microsoft-co-rang
