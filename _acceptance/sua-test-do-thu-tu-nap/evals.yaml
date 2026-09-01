@@ -67,15 +67,15 @@ evals:
   - id: E10
     criterion: AC-10
     executor: script
-    cmd: config:executors.script.lint
-    expected: "exit 0; moi task lint thanh cong"
+    cmd: config:executors.script.lint_khong_cache
+    expected: "exit 0; moi task lint thanh cong, 0 cached"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E11
     criterion: AC-10
     executor: script
-    cmd: config:executors.script.check_types
-    expected: "exit 0; moi task kiem kieu thanh cong"
+    cmd: config:executors.script.check_types_khong_cache
+    expected: "exit 0; moi task kiem kieu thanh cong, 0 cached"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E12

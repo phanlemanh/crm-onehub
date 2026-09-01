@@ -23,3 +23,17 @@
 {"ts":"2026-08-31T23:32:19Z","round":2,"evalId":"E10","run_id":"sua-test-do-thu-tu-nap-E10-1788219139","exit_code":0,"cmd":"bunx turbo run lint --force"}
 {"ts":"2026-08-31T23:32:36Z","round":2,"evalId":"E11","run_id":"sua-test-do-thu-tu-nap-E11-1788219156","exit_code":0,"cmd":"bunx turbo run check-types --force"}
 {"ts":"2026-08-31T23:32:55Z","round":2,"evalId":"E4-rerun","run_id":"sua-test-do-thu-tu-nap-E4-rerun-1788219175","exit_code":0,"cmd":"bun run db:test && bunx turbo run test --concurrency=1 --force (flakiness characterisation re-run, does NOT replace the E4 result)"}
+{"ts":"2026-08-31T23:51:12Z","round":3,"evalId":"E1","run_id":"sua-test-do-thu-tu-nap-E1-1788220272","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan sach"}
+{"ts":"2026-08-31T23:51:20Z","round":3,"evalId":"E2","run_id":"sua-test-do-thu-tu-nap-E2-1788220280","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan thu-tu"}
+{"ts":"2026-08-31T23:51:28Z","round":3,"evalId":"E3","run_id":"sua-test-do-thu-tu-nap-E3-1788220288","exit_code":0,"cmd":"bun run db:test"}
+{"ts":"2026-08-31T23:51:53Z","round":3,"evalId":"E4","run_id":"sua-test-do-thu-tu-nap-E4-1788220313","exit_code":0,"cmd":"bun run db:test && bunx turbo run test --concurrency=1 --force --filter=!agent"}
+{"ts":"2026-08-31T23:52:02Z","round":3,"evalId":"E5","run_id":"sua-test-do-thu-tu-nap-E5-1788220322","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan doi"}
+{"ts":"2026-08-31T23:52:09Z","round":3,"evalId":"E6","run_id":"sua-test-do-thu-tu-nap-E6-1788220329","exit_code":0,"cmd":"node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/product-map.mjs"}
+{"ts":"2026-08-31T23:52:16Z","round":3,"evalId":"E7","run_id":"sua-test-do-thu-tu-nap-E7-1788220336","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam"}
+{"ts":"2026-08-31T23:52:23Z","round":3,"evalId":"E8","run_id":"sua-test-do-thu-tu-nap-E8-1788220343","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"}
+{"ts":"2026-08-31T23:52:30Z","round":3,"evalId":"E9","run_id":"sua-test-do-thu-tu-nap-E9-1788220350","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"}
+{"ts":"2026-08-31T23:53:11Z","round":3,"evalId":"SUITE-ac9-mutation","run_id":"sua-test-do-thu-tu-nap-SUITE-ac9-mutation-1788220391","exit_code":0,"cmd":"mutation test: run the E9 T1-only scenario with --no-t1-escape and check the harness assertions fire"}
+{"ts":"2026-08-31T23:53:11Z","round":3,"evalId":"E10","run_id":"sua-test-do-thu-tu-nap-E10-1788220391","exit_code":0,"cmd":"bunx turbo run lint --force"}
+{"ts":"2026-08-31T23:53:26Z","round":3,"evalId":"E11","run_id":"sua-test-do-thu-tu-nap-E11-1788220406","exit_code":0,"cmd":"bunx turbo run check-types --force"}
+{"ts":"2026-08-31T23:57:23Z","round":3,"evalId":"E10","run_id":"sua-test-do-thu-tu-nap-E10-1788220643","exit_code":0,"cmd":"bunx turbo run lint --force"}
+{"ts":"2026-08-31T23:57:37Z","round":3,"evalId":"E11","run_id":"sua-test-do-thu-tu-nap-E11-1788220657","exit_code":0,"cmd":"bunx turbo run check-types --force"}
