@@ -11,29 +11,29 @@ evals:
   - id: E2
     criterion: AC-2
     executor: script
-    cmd: config:executors.script.rang_config_o_cam
+    cmd: config:executors.script.rang_config_o_cam_duong
     expected: "exit 0; hai o cam thiet ke deu doc ra ten skill"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E3
     criterion: AC-3
     executor: script
-    cmd: config:executors.script.rang_config_o_cam
+    cmd: config:executors.script.rang_config_o_cam_duong
     expected: "exit 0 tren cau hinh that, khong con doi o cam khai thac"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E4
     criterion: AC-4
     executor: script
-    cmd: config:executors.script.rang_config_o_cam
-    expected: "chieu do: fixture bo ui_standards_skill bi bat, in dung ten o thieu"
+    cmd: config:executors.script.rang_config_o_cam_do
+    expected: "exit 0; ca hai fixture — bo ui_standards_skill va bo ds_skill — deu bi bat"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E5
     criterion: AC-5
     executor: script
-    cmd: config:executors.script.rang_config_o_cam
-    expected: "chieu trung tinh: fixture CO khai discovery.brainstorm_skill van xanh — khai khong phai loi"
+    cmd: config:executors.script.rang_config_o_cam_trung_tinh
+    expected: "exit 0; fixture CO khai discovery.brainstorm_skill van xanh — khai khong phai loi"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E6

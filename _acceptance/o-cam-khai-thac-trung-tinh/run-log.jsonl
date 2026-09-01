@@ -1,0 +1,8 @@
+{"ts":"2026-09-01T01:08:19Z","round":1,"evalId":"E1","run_id":"o-cam-khai-thac-trung-tinh-E1-1788224640","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan khai-thac"}
+{"ts":"2026-09-01T01:08:19Z","round":1,"evalId":"E2","run_id":"o-cam-khai-thac-trung-tinh-E2-1788224700","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam"}
+{"ts":"2026-09-01T01:08:19Z","round":1,"evalId":"E3","run_id":"o-cam-khai-thac-trung-tinh-E3-1788224700","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam"}
+{"ts":"2026-09-01T01:08:19Z","round":1,"evalId":"E4","run_id":"o-cam-khai-thac-trung-tinh-E4-1788224700","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam"}
+{"ts":"2026-09-01T01:08:19Z","round":1,"evalId":"E5","run_id":"o-cam-khai-thac-trung-tinh-E5-1788224700","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam"}
+{"ts":"2026-09-01T01:08:19Z","round":1,"evalId":"E6","run_id":"o-cam-khai-thac-trung-tinh-E6-1788224720","exit_code":0,"cmd":"bash _acceptance/o-cam-khai-thac-trung-tinh/rang-quet.sh"}
+{"ts":"2026-09-01T01:08:19Z","round":1,"evalId":"E8","run_id":"o-cam-khai-thac-trung-tinh-E8-1788224820","exit_code":0,"cmd":"bunx turbo run lint --force"}
+{"ts":"2026-09-01T01:08:19Z","round":1,"evalId":"E9","run_id":"o-cam-khai-thac-trung-tinh-E9-1788224860","exit_code":0,"cmd":"bunx turbo run check-types --force"}

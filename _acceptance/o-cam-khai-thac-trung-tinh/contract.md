@@ -33,7 +33,7 @@ Source input: prompt
 - AC-1: Given `_acceptance/config.yaml`, When bộ đọc của kit đọc `discovery.brainstorm_skill`, Then khoá vắng mặt và giá trị đọc ra là rỗng.
 - AC-2: Given `_acceptance/config.yaml`, When bộ đọc của kit đọc `feature_loop.ui_standards_skill` và `design_pass.ds_skill`, Then cả hai trả về tên skill.
 - AC-3: Given răng ổ cắm đã thu về hai ổ thiết kế, When chạy nó trên cấu hình thật, Then nó thoát 0.
-- AC-4: Given một cấu hình dựng sẵn bị gỡ một ổ thiết kế, When chạy răng ổ cắm trên cấu hình đó, Then nó bắt được và báo đúng tên ổ thiếu.
+- AC-4: Given hai cấu hình dựng sẵn, mỗi cái gỡ đúng MỘT ổ thiết kế, When chạy răng chiều đỏ trên từng cái, Then nó bắt được cả hai và báo đúng tên ổ thiếu của từng cái.
 - AC-5: Given một cấu hình dựng sẵn có khai `discovery.brainstorm_skill`, When chạy răng ổ cắm trên cấu hình đó, Then nó KHÔNG coi đó là lỗi — ổ trung tính, khai hay không khai đều hợp lệ.
 - AC-6: Given bộ quét vào phiên, When chạy nó trên repo này, Then nó không báo hồ sơ hỏng nào và bản đồ không lệch.
 - AC-7: Given hợp đồng của hồ sơ `sua-test-do-thu-tu-nap`, When người đọc mục Notes của nó, Then có dòng nói AC-7 cũ bị vòng này thay thế, kèm slug thay thế.
@@ -59,3 +59,13 @@ cấu hình, đã đếm hết được.
 Vòng này sinh ra từ một phép đo sai, không từ một tính năng thiếu. Nó cũng là
 lần đầu hai phiên cùng ghi một cây làm việc: khoá bị gỡ lúc 07:21:00 bởi tiến
 trình ngoài phiên này, và bản đồ tôi vẽ lại bị phiên đó commit kèm.
+
+**Vòng chấm 1 trả PASS nhưng nêu hai điểm yếu của chính phép đo; cả hai đã sửa
+TRƯỚC vòng 2, không phải sau một cái đỏ.**
+
+- Bốn tiêu chí AC-2 đến AC-5 từng dùng chung một lệnh, một mã thoát. Nay răng
+  tách thành ba chân riêng, mỗi tiêu chí một mã thoát của nó.
+- Chiều đỏ chỉ gỡ `ui_standards_skill`. Nay gỡ từng ổ một, và AC-4 nói rõ là
+  hai cấu hình dựng sẵn. Phát hiện thêm khi sửa: `grep -v ds_skill` gỡ CẢ HAI
+  dòng, vì `ds_skill` là chuỗi con của `ui_standards_skill` — chiều đỏ cũ đỏ vì
+  lý do sai. Răng nay tự đếm số dòng bị gỡ và kêu nếu khác 1.
