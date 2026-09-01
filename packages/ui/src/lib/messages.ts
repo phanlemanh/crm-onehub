@@ -35,7 +35,6 @@ const en = {
 		close: "Close",
 	},
 	carousel: {
-		role: "carousel",
 		itemRole: "item",
 		previousSlide: "Previous item",
 		nextSlide: "Next item",
@@ -79,14 +78,14 @@ export type Messages = typeof en;
 
 const vi = {
 	table: {
-		clearFilters: "Bỏ lọc này",
+		clearFilters: "Bỏ chọn tất cả",
 		clearSelection: "Bỏ chọn",
 		selected: (count: string) => `Đã chọn ${count} dòng`,
 		filters: "Lọc",
 		sort: "Sắp xếp",
 		sortBy: "Sắp xếp theo",
 		detailColumn: "Chi tiết",
-		sortByDetail: "Mở rộng được lên trước",
+		sortByDetail: "Dòng có chi tiết lên trước",
 		ascending: "Tăng dần",
 		descending: "Giảm dần",
 		columns: "Cột",
@@ -95,11 +94,11 @@ const vi = {
 		selectRow: (label: string) => `Chọn ${label}`,
 		selectRowFallback: "Chọn dòng",
 		searchFacet: (label: string) => `Tìm ${label}…`,
-		facetOptions: "Các lựa chọn",
+		facetOptions: "Lựa chọn",
 	},
 	pagination: {
 		previous: "Trước",
-		next: "Sau",
+		next: "Tiếp",
 		empty: "Không có kết quả",
 		showing: (from: string, to: string, total: string) =>
 			`${from}–${to} trong số ${total}`,
@@ -112,14 +111,13 @@ const vi = {
 		close: "Đóng",
 	},
 	carousel: {
-		role: "dải thẻ trượt",
 		itemRole: "mục",
 		previousSlide: "Mục trước",
 		nextSlide: "Mục sau",
 	},
 	suggestion: {
-		accept: "Áp dụng gợi ý",
-		dismiss: "Bỏ qua gợi ý",
+		accept: "Chấp nhận gợi ý",
+		dismiss: "Từ chối gợi ý",
 	},
 	spinner: {
 		loading: "Đang tải",
@@ -138,8 +136,8 @@ const vi = {
 		needsAction: "Chưa trả lời",
 	},
 	sortableList: {
-		role: "tay kéo sắp xếp",
-		reorder: (label: string) => `Kéo để đổi thứ tự trường ${label}`,
+		role: "tay cầm sắp xếp",
+		reorder: (label: string) => `Kéo để đổi thứ tự ${label}`,
 	},
 	skeletonSwap: {
 		loaded: (label: string) => `Đã tải xong ${label}`,

@@ -15,7 +15,7 @@ export const DU_LIEU = {
 
 export const TRUNG_TINH: ReadonlySet<string> = new Set(Object.values(DU_LIEU));
 
-export const KHONG_DAU_CHO_PHEP: readonly string[] = ["Sau"];
+export const KHONG_DAU_CHO_PHEP: readonly string[] = [];
 
 export const DAU_TIENG_VIET =
 	/[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/i;

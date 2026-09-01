@@ -161,3 +161,61 @@ bảng rỗng, dòng mở rộng được, chọn dòng không nhãn, cuộn lê
 
 Phép đo nay bắt **44 / 45 khoá**. Khoá còn lại — `table.clearFilters` — có tên
 trong hợp đồng cùng lý do.
+
+---
+
+# Vòng chấm 3 — 2026-09-01
+
+Hai người chấm: một đo AC-7 sau khi người cho phép nới bề rộng cột, một chấm lại
+tiếng Việt trên bảng dịch mới.
+
+## AC-7 — ĐẠT
+
+Đo ở bốn bề rộng, khung trình duyệt đưa lên trước. Dấu ba chấm ở Geist 12px rộng
+**6,9px**.
+
+| 768px, tiếng Việt | Ô chứa chữ | Chữ đầy đủ | Hiện |
+| --- | ---: | ---: | --- |
+| Tên | 19 | 19,2 | đủ |
+| Tên miền | 41 | 49,3 | Tên m… |
+| Phụ trách | 41 | 53,2 | Phụ tr… |
+| Thoả thuận mở | 41 | 81,8 | Thoả t… |
+| Hoạt động cuối | 37 | 83,7 | Hoạt … |
+
+Ô hẹp nhất còn 37px — gấp 5,4 lần dấu ba chấm. **Không cột nào trống.** Trước
+khi nới, cột `Thoả thuận mở` chỉ còn 1,58px và hiện trống hoàn toàn.
+
+Kiểm ở 1024px, 1280px, 360px: không bề rộng nào làm tiêu đề trống.
+
+Kiểm ở tiếng Anh cùng 768px: bề rộng cột **giống hệt**, và tiếng Anh cũng cắt 3
+trong 5 cột. Xác nhận lại điều vòng chấm 2 đã nói: cắt chữ là chuyện bố cục,
+không phải chuyện độ dài tiếng Việt.
+
+Chữ đầy đủ đến trình đọc màn hình qua ba đường độc lập: nội dung chữ thật trong
+DOM (cắt bằng CSS không đụng cây trợ năng), `title` trên ô, và tên truy cập của
+nút sắp xếp. Người chấm đọc cây trợ năng ở 768px và nhận về nguyên chuỗi
+`Thoả thuận mở`.
+
+## AC-10 — KHÔNG ĐẠT, hai chỗ SAI, và cả hai do vòng chấm 2 gây ra
+
+**`sortableList.reorder` — chữ "trường" vòng chấm 2 thêm vào.** Khoá này có hai
+chỗ gọi. Ở chỗ thứ hai, `X` là một lựa chọn bên trong một trường, nên câu ra màn
+là *"Kéo để đổi thứ tự trường Bất động sản"* — gọi một giá trị thả xuống là
+trường.
+
+Đây đúng khuôn lỗi "một khoá đứng ở hai chỗ gọi" mà vòng chấm 2 vừa chẩn đoán ở
+`table.detail`, tách khoá để chữa, rồi tái phạm ngay dòng dưới.
+
+**`suggestion.dismiss` = "Bỏ qua gợi ý".** Bấm là vĩnh viễn; `facts.tsx:44` báo
+lại "it won't be suggested again". "Bỏ qua" là để đó lát nữa quay lại.
+
+## Đã sửa
+
+Mười dòng, kể cả `pagination.next` "Sau" → "Tiếp" — khoá duy nhất không mang dấu
+tiếng Việt, nên sửa nó làm **danh sách miễn dấu rỗng** và phép đo phủ **44/44**.
+
+`carousel.role` gỡ hẳn: `CLAUDE.md` cấm đúc từ ghép cho thuật ngữ kỹ thuật, và
+giữ nguyên chữ `carousel` thì nhãn nói tiếng Anh giữa màn tiếng Việt.
+
+Bản `showing` chết ở `apps/app/lib/messages/companies.ts` đã xoá — trước đó cùng
+một câu có hai bản tiếng Việt trong cùng sản phẩm.

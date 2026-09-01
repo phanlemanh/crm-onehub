@@ -7,14 +7,14 @@ Chỗ có `X`, `Y`, `Z` là chỗ chữ ghép biến: tên hay số do chỗ g�
 
 | Khoá | Tiếng Anh | Tiếng Việt |
 | --- | --- | --- |
-| `table.clearFilters` | Clear | **Bỏ lọc này** |
+| `table.clearFilters` | Clear | **Bỏ chọn tất cả** |
 | `table.clearSelection` | Clear selection | **Bỏ chọn** |
 | `table.selected` | X selected | **Đã chọn X dòng** |
 | `table.filters` | Filters | **Lọc** |
 | `table.sort` | Sort | **Sắp xếp** |
 | `table.sortBy` | Sort by | **Sắp xếp theo** |
 | `table.detailColumn` | Detail | **Chi tiết** |
-| `table.sortByDetail` | Expandable first | **Mở rộng được lên trước** |
+| `table.sortByDetail` | Expandable first | **Dòng có chi tiết lên trước** |
 | `table.ascending` | Ascending | **Tăng dần** |
 | `table.descending` | Descending | **Giảm dần** |
 | `table.columns` | Columns | **Cột** |
@@ -23,20 +23,19 @@ Chỗ có `X`, `Y`, `Z` là chỗ chữ ghép biến: tên hay số do chỗ g�
 | `table.selectRow` | Select X | **Chọn X** |
 | `table.selectRowFallback` | Select row | **Chọn dòng** |
 | `table.searchFacet` | Search X… | **Tìm X…** |
-| `table.facetOptions` | Options | **Các lựa chọn** |
+| `table.facetOptions` | Options | **Lựa chọn** |
 | `pagination.previous` | Previous | **Trước** |
-| `pagination.next` | Next | **Sau** |
+| `pagination.next` | Next | **Tiếp** |
 | `pagination.empty` | No results | **Không có kết quả** |
 | `pagination.showing` | Showing X–Y of Z | **X–Y trong số Z** |
 | `messageScroller.toEnd` | Scroll to end | **Xuống cuối** |
 | `messageScroller.toStart` | Scroll to start | **Lên đầu** |
 | `dialog.close` | Close | **Đóng** |
-| `carousel.role` | carousel | **dải thẻ trượt** |
 | `carousel.itemRole` | item | **mục** |
 | `carousel.previousSlide` | Previous item | **Mục trước** |
 | `carousel.nextSlide` | Next item | **Mục sau** |
-| `suggestion.accept` | Accept | **Áp dụng gợi ý** |
-| `suggestion.dismiss` | Dismiss | **Bỏ qua gợi ý** |
+| `suggestion.accept` | Accept | **Chấp nhận gợi ý** |
+| `suggestion.dismiss` | Dismiss | **Từ chối gợi ý** |
 | `spinner.loading` | Loading | **Đang tải** |
 | `datePicker.clear` | Clear | **Xoá ngày** |
 | `datePicker.previousMonth` | Go to the previous month | **Về tháng trước** |
@@ -47,44 +46,39 @@ Chỗ có `X`, `Y`, `Z` là chỗ chữ ghép biến: tên hay số do chỗ g�
 | `attendee.declined` | Declined | **Từ chối** |
 | `attendee.tentative` | Maybe | **Có thể dự** |
 | `attendee.needsAction` | No reply | **Chưa trả lời** |
-| `sortableList.role` | sortable | **tay kéo sắp xếp** |
-| `sortableList.reorder` | Reorder X | **Kéo để đổi thứ tự trường X** |
+| `sortableList.role` | sortable | **tay cầm sắp xếp** |
+| `sortableList.reorder` | Reorder X | **Kéo để đổi thứ tự X** |
 | `skeletonSwap.loaded` | X loaded | **Đã tải xong X** |
 | `reasoning.thinking` | Thinking… | **Đang suy nghĩ…** |
 | `threadMessage.empty` | No message body. | **Thư không có nội dung.** |
 
-## Vòng chấm 2 sửa sáu dòng và tách một khoá
+## Vòng chấm 3 sửa mười dòng, và gỡ một nhãn
 
-Hội đồng vòng chấm 2 chấm KHÔNG ĐẠT, chỉ ba chỗ SAI và bảy chỗ GƯỢNG. Đã sửa:
+Hội đồng vòng chấm 3 chỉ hai chỗ SAI. Cả hai đến từ chính bản sửa của vòng chấm 2:
 
-- **`messageScroller.*` trả về "Xuống cuối" / "Lên đầu".** Vòng chấm 1 thêm chữ
-  "hộp thư" vào, và chữ đó sai: hai chỗ dùng duy nhất là khung trò chuyện với
-  tác nhân, không phải hộp thư. Người nghe được gọi tên một vật không có trên màn.
-- **`table.detail` tách làm `detailColumn` và `sortByDetail`.** Cùng khuôn lỗi đã
-  làm `table.clear` phải tách. Một khoá đứng ở hai chỗ: đầu cột mở rộng thì
-  "Chi tiết" đúng; trong menu "Sắp xếp theo" nó đứng lẫn giữa tên cột và đọc như
-  một cột không tồn tại.
-- **`table.selected` thêm chữ "dòng".** "Đã chọn 12" thiếu loại từ.
-- **`sortableList.reorder` thêm chữ "trường".** `X` là nhãn một trường, nên
-  "Kéo để đổi thứ tự Người phụ trách" không nói rõ cái gì được kéo.
-- **`carousel.role` bỏ từ ghép tự đúc**, **`sortableList.role` thành danh từ**
-  (`aria-roledescription` thay tên vai, nên phải là danh từ chứ không phải câu tả
-  việc), **`suggestion.dismiss`** và **`table.selectAllRows`** tự đứng được hơn,
-  **`table.clearFilters`** nói rõ phạm vi là một mục lọc.
+- **`sortableList.reorder` bỏ chữ "trường".** Vòng chấm 2 thêm chữ đó để làm rõ
+  cái gì đang bị kéo. Nhưng khoá này có **hai** chỗ gọi:
+  `fields-list.tsx:332` truyền `field.label` — "trường" đúng; `field-editor.tsx:341`
+  truyền `option.label`, tức một lựa chọn bên trong một trường — và câu ra màn
+  thành *"Kéo để đổi thứ tự trường Bất động sản"*, gọi một giá trị thả xuống là
+  trường. Đây đúng khuôn lỗi "một khoá đứng ở hai chỗ" mà vòng chấm 2 vừa chẩn
+  đoán ở `table.detail` rồi tái phạm ngay dòng dưới.
+- **`suggestion.dismiss` "Bỏ qua gợi ý" → "Từ chối gợi ý".** Bấm nút đó là vĩnh
+  viễn — `facts.tsx:44` báo lại "it won't be suggested again". "Bỏ qua" trong
+  tiếng Việt là để đó lát nữa quay lại.
 
-## Ba khoá mới, sinh ra từ vòng chấm 2
+Tám dòng nữa sửa cùng lượt: `pagination.next` ("Sau" → **"Tiếp"**),
+`suggestion.accept`, `table.clearFilters`, `table.sortByDetail`,
+`table.facetOptions`, `sortableList.role`, và bản `showing` chết ở
+`apps/app/lib/messages/companies.ts` đã xoá — trước đó cùng một câu có hai bản
+tiếng Việt trong cùng sản phẩm.
 
-- **`datePicker.previousMonth` · `nextMonth` · `chooseMonth` · `chooseYear`** —
-  ô chọn ngày mở ra là một tấm lịch tiếng Anh nguyên khối: tên tháng, tên thứ, và
-  35 nhãn ngày mà trình đọc màn hình đọc lên. Nguyên nhân một dòng: `<Calendar>`
-  không nhận `locale`.
-- **`table.facetOptions`** — `cmdk` đặt `aria-label="Suggestions"` cho danh sách
-  lựa chọn khi không ai truyền `label`. Chuỗi của thư viện, đọc lên thành tiếng.
+**`carousel.role` bị gỡ hẳn.** `CLAUDE.md` cấm đúc từ ghép tiếng Việt cho thuật
+ngữ kỹ thuật; giữ nguyên chữ `carousel` thì nhãn nói tiếng Anh giữa màn tiếng
+Việt. Nên thuộc tính `aria-roledescription` của băng trượt bị bỏ, và trình đọc
+màn hình đọc vai thật của phần tử — đúng ở mọi thứ tiếng.
 
-## Chỗ vẫn đáng cãi
-
-- **`table.clearFilters` → "Bỏ lọc này".** Nút nằm trong menu con của MỘT mục lọc
-  và chỉ xoá mục đó. Chữ "này" là chữ phân biệt phạm vi, không phải chữ thừa.
-- **`pagination.showing` bỏ hẳn động từ.** Bảng nằm ngay trên. Nhưng vòng ① đã
-  ship `apps/app/lib/messages/companies.ts` với "Đang xem X–Y trong Z" — cùng một
-  câu, hai bản trong cùng sản phẩm. Chuỗi đó hiện là chữ chết; cần chốt một bản.
+**`pagination.next` = "Tiếp" đóng luôn một lỗ của phép đo.** "Sau" là khoá duy
+nhất không mang dấu tiếng Việt, nên nó là mục duy nhất trong danh sách miễn của
+luật "mọi giá trị phải mang dấu". Danh sách miễn nay **rỗng**, và phép đo phủ
+44/44 khoá.
