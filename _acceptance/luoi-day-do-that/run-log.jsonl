@@ -1,0 +1,7 @@
+{"ts":"2026-09-01T03:42:09Z","round":1,"evalId":"E1","run_id":"luoi-day-do-that-E1-1788234129","exit_code":0,"cmd":"bash _acceptance/luoi-day-do-that/rang-hook.sh --chan ep-chay"}
+{"ts":"2026-09-01T03:42:16Z","round":1,"evalId":"E2","run_id":"luoi-day-do-that-E2-1788234136","exit_code":0,"cmd":"bash _acceptance/luoi-day-do-that/rang-hook.sh --chan con-rang"}
+{"ts":"2026-09-01T03:42:32Z","round":1,"evalId":"E7","run_id":"luoi-day-do-that-E7-1788234152","exit_code":0,"cmd":"bash _acceptance/luoi-day-do-that/rang-hook.sh --chan canary-slop"}
+{"ts":"2026-09-01T03:42:32Z","round":1,"evalId":"E3","run_id":"luoi-day-do-that-E3-1788234152","exit_code":0,"cmd":"bash _acceptance/luoi-day-do-that/rang-hook.sh --chan loi-thoat"}
+{"ts":"2026-09-01T03:42:32Z","round":1,"evalId":"E4","run_id":"luoi-day-do-that-E4-1788234152","exit_code":0,"cmd":"bash _acceptance/luoi-day-do-that/rang-hook.sh --chan tro-dung"}
+{"ts":"2026-09-01T03:42:32Z","round":1,"evalId":"E5","run_id":"luoi-day-do-that-E5-1788234152","exit_code":0,"cmd":"bunx turbo run lint --force"}
+{"ts":"2026-09-01T03:42:38Z","round":1,"evalId":"E6","run_id":"luoi-day-do-that-E6-1788234158","exit_code":0,"cmd":"bunx turbo run check-types --force"}
