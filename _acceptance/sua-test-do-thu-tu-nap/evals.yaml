@@ -47,7 +47,7 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.rang_config_o_cam
-    expected: "exit 0; ba o cam doc ra ten skill, va fixture bo mot o cam bi bat"
+    expected: "exit 0; HAI o cam thiet ke doc ra ten skill (AC-7 goc doi ba — o khai thac da duoc ho so o-cam-khai-thac-trung-tinh thay the), fixture bo tung o thiet ke deu bi bat, va fixture CO khai o khai thac van xanh"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8
