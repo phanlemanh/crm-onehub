@@ -10,6 +10,7 @@ import {
 	useRef,
 	useState,
 } from "react";
+import { useMessages } from "@crm/ui/components/locale-provider";
 
 const CROSSFADE = {
 	type: "spring",
@@ -39,6 +40,7 @@ export function SkeletonSwap({
 	label,
 	className,
 }: SkeletonSwapProps) {
+	const msg = useMessages();
 	const [showSkeleton, setShowSkeleton] = useState(false);
 	const shownAt = useRef(0);
 	const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -117,7 +119,7 @@ export function SkeletonSwap({
 				</m.div>
 				{label ? (
 					<span role="status" aria-live="polite" className="sr-only">
-						{loading ? "" : `${label} loaded`}
+						{loading ? "" : msg.skeletonSwap.loaded(label)}
 					</span>
 				) : null}
 			</div>

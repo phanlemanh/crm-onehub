@@ -1,10 +1,10 @@
-export type FormatLocale = "vi" | "en";
+import type { Locale } from "./locale";
 
 const numberFormats = new Map<string, Intl.NumberFormat>();
 const dateFormats = new Map<string, Intl.DateTimeFormat>();
 
 function numberFormat(
-	locale: FormatLocale,
+	locale: Locale,
 	options: Intl.NumberFormatOptions,
 ): Intl.NumberFormat {
 	const key = `${locale}|${JSON.stringify(options)}`;
@@ -16,7 +16,7 @@ function numberFormat(
 }
 
 export function dateFormat(
-	locale: FormatLocale,
+	locale: Locale,
 	options: Intl.DateTimeFormatOptions,
 ): Intl.DateTimeFormat {
 	const key = `${locale}|${JSON.stringify(options)}`;
@@ -31,7 +31,7 @@ export function formatCount(
 	count: number,
 	noun: string,
 	plural = `${noun}s`,
-	locale: FormatLocale = "en",
+	locale: Locale = "en",
 ): string {
 	if (locale === "vi") return `${count} ${noun}`;
 	return `${count} ${count === 1 ? noun : plural}`;
@@ -64,7 +64,7 @@ function fractionDigits(code: string): number {
 export function formatMoney(
 	cents: number,
 	currency = "usd",
-	locale: FormatLocale = "en",
+	locale: Locale = "en",
 ): string {
 	const code = displayCurrencyCode(currency);
 	const whole = cents % 100 === 0;
@@ -81,7 +81,7 @@ export function formatMoney(
 export function formatMoneyCompact(
 	cents: number,
 	currency = "usd",
-	locale: FormatLocale = "en",
+	locale: Locale = "en",
 ): string {
 	return numberFormat(locale, {
 		style: "currency",
@@ -91,10 +91,7 @@ export function formatMoneyCompact(
 	}).format(cents / 100);
 }
 
-export function formatPercent(
-	rate: number,
-	locale: FormatLocale = "en",
-): string {
+export function formatPercent(rate: number, locale: Locale = "en"): string {
 	return numberFormat(locale, {
 		style: "percent",
 		maximumFractionDigits: 0,
@@ -119,7 +116,7 @@ export function fromDay(value: string | null | undefined): Date | undefined {
 
 export function formatDay(
 	value: string | null | undefined,
-	locale: FormatLocale = "en",
+	locale: Locale = "en",
 ): string {
 	const date = fromDay(value);
 	return date

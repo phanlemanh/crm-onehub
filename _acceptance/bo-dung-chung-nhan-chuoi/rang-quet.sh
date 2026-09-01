@@ -18,7 +18,7 @@ case "$CHAN" in
     ;;
 
   canary)
-    echo "-- chiều đỏ: gieo bảy con chim mồi, mỗi con một KIỂU chuỗi khác nhau"
+    echo "-- chiều đỏ: gieo mười một con chim mồi, mỗi con một KIỂU chuỗi khác nhau"
     mkdir -p "$FIX/components"
     cp "$NGUON"/*.tsx "$FIX/components/"
 
@@ -35,11 +35,21 @@ export function ChimMoi({
 	phu?: string;
 }) {
 	const ten = `Canary Template ${nhan}`;
+	const cut = `Canary Cut ${nhan}…`;
+	const dinh = `chim-moi-${nhan}-lop`;
+	const ba_ngoi = phu ? "Canary Ternary" : "Canary Ternary Two";
+	const hoac = phu || "Canary Or Fallback";
+	const tran = "Canary Bare Const";
 	return (
 		<div title="Canary Title Attribute">
 			<span aria-label="Canary Aria Label">Canary Jsx Text</span>
 			<span>{phu ?? "Canary Fallback."}</span>
 			<span>{ten}</span>
+			<span>{cut}</span>
+			<span>{ba_ngoi}</span>
+			<span>{hoac}</span>
+			<span>{tran}</span>
+			<span className={dinh} />
 			<span>{NHAN_MOI.mot}</span>
 		</div>
 	);
@@ -50,7 +60,8 @@ TSX
     THIEU=""
     for moi in "Canary Label Map" "Canary Default Param" "Canary Template" \
                "Canary Title Attribute" "Canary Aria Label" "Canary Jsx Text" \
-               "Canary Fallback."; do
+               "Canary Fallback." "Canary Cut" "Canary Ternary" \
+               "Canary Or Fallback" "Canary Bare Const"; do
       grep -qF "$moi" <<<"$RA" || THIEU="$THIEU
     lọt lưới: $moi"
     done
@@ -59,7 +70,14 @@ TSX
       echo "RĂNG CÙN: máy quét ĐẾM HỤT. Nó trả 0 được bằng cách không nhìn.$THIEU"
       exit 1
     fi
-    echo "    bảy kiểu chuỗi, bảy con bị bắt"
+    echo "    mười một kiểu chuỗi, mười một con bị bắt"
+
+    echo "-- chiều dương: chuỗi ghép biến chỉ có mảnh định danh thì KHÔNG được báo"
+    if grep -qF "chim-moi-" <<<"$RA"; then
+      echo "RĂNG CÙN: máy quét báo cả mảnh định danh — nó sẽ chôn chữ thật dưới nhiễu"
+      exit 1
+    fi
+    echo "    mảnh định danh không bị báo nhầm"
 
     echo "-- chiều dương: gỡ chim mồi thì máy quét im về chúng"
     rm "$FIX/components/chim-moi.tsx"

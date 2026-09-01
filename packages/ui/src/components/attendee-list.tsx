@@ -1,3 +1,5 @@
+"use client";
+
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
 import {
 	type StatusTone,
@@ -10,6 +12,7 @@ import {
 } from "@crm/ui/components/tooltip";
 import { cn } from "@crm/ui/lib/utils";
 import type * as React from "react";
+import { useMessages } from "@crm/ui/components/locale-provider";
 
 export type Attendee = {
 	id: string;
@@ -27,12 +30,6 @@ const RESPONSE_TONE: Record<string, StatusTone> = {
 	needsAction: "neutral",
 };
 
-const RESPONSE_LABEL: Record<string, string> = {
-	accepted: "Accepted",
-	declined: "Declined",
-	tentative: "Maybe",
-	needsAction: "No reply",
-};
 
 function AttendeeList({
 	attendees,
@@ -43,6 +40,7 @@ function AttendeeList({
 	attendees: readonly Attendee[];
 	max?: number;
 }) {
+	const msg = useMessages();
 	if (attendees.length === 0) return null;
 
 	const shown = attendees.slice(0, max);
@@ -75,8 +73,10 @@ function AttendeeList({
 								<StatusIndicator
 									tone={RESPONSE_TONE[attendee.responseStatus ?? "needsAction"] ?? "neutral"}
 									label={
-										RESPONSE_LABEL[attendee.responseStatus ?? "needsAction"] ??
-										"No reply"
+										msg.attendee[
+											(attendee.responseStatus ??
+												"needsAction") as keyof typeof msg.attendee
+										] ?? msg.attendee.needsAction
 									}
 								/>
 							</span>

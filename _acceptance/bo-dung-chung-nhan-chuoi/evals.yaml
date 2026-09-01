@@ -1,0 +1,125 @@
+schema_version: 1
+slug: bo-dung-chung-nhan-chuoi
+suite:
+  - executors.script.check_types_khong_cache
+  - executors.script.lint_khong_cache
+  - executors.script.lint_slop
+  - executors.test.api
+
+evals:
+  - id: E1
+    criterion: AC-1
+    cau_hoi: Bảng dùng chung hiện chữ tiếng Việt cho mọi chuỗi nó tự chứa?
+    cach_do: >-
+      Bài kiểm dựng component: vẽ DataTable trong nhà cung cấp tiếng Việt, rồi
+      khẳng định từng chuỗi của bảng dịch xuất hiện trong cây đã vẽ. Menu thả
+      xuống mở bằng sự kiện của thư viện kiểm, không bằng trình duyệt — vòng ①
+      đã chứng minh Chrome không giao diện không mở được nó.
+    chieu_do: >-
+      Trả một khoá của bảng dịch về chuỗi tiếng Anh. Bài kiểm phải đỏ và gọi tên
+      đúng khoá đó.
+    lenh: bun run test --filter=@crm/ui
+
+  - id: E2
+    criterion: AC-2
+    cau_hoi: Các component dùng chung còn lại hiện chữ tiếng Việt cho phần chúng tự chứa?
+    cach_do: >-
+      Bài kiểm dựng component cho từng component máy quét gọi tên, trong nhà
+      cung cấp tiếng Việt.
+    chieu_do: >-
+      Bỏ một component ra khỏi bảng dịch. Bài kiểm của nó phải đỏ, và bài kiểm
+      của các component khác phải vẫn xanh — nếu tất cả cùng đỏ thì phép đo đang
+      đo nhà cung cấp chứ không đo component.
+    lenh: bun run test --filter=@crm/ui
+
+  - id: E3
+    criterion: AC-3
+    cau_hoi: Component dựng NGOÀI nhà cung cấp có hiện tiếng Anh và không nổ không?
+    cach_do: >-
+      Vẽ từng component KHÔNG bọc nhà cung cấp. Khẳng định hai điều: không ném
+      lỗi, và chữ hiện ra là tiếng Anh.
+    chieu_do: >-
+      Đổi hook đọc ngôn ngữ sang ném lỗi khi thiếu nhà cung cấp. Bài kiểm phải
+      đỏ. Đây là phép đo của phí bản rẽ: kho của hãng không dựng nhà cung cấp
+      nào.
+    lenh: bun run test --filter=@crm/ui
+
+  - id: E4
+    criterion: AC-4
+    cau_hoi: Kiểu ngôn ngữ chỉ còn một định nghĩa, và gói dùng chung không nhập ngược từ ứng dụng?
+    cach_do: >-
+      Quét hai điều: `packages/ui/src` không có dòng nào nhập từ `apps/`, và
+      trong cả kho chỉ còn một chỗ khai kiểu ngôn ngữ.
+    chieu_do: >-
+      Trên bản sao, thêm lại một khai báo kiểu thứ hai. Phép đo phải đỏ và in ra
+      hai đường dẫn.
+    lenh: |
+      bash _acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh --chan mot-goc
+      bash _acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh --chan khong-nhap-nguoc
+
+  - id: E5
+    criterion: AC-5
+    cau_hoi: Còn chuỗi tiếng Anh khoá cứng nào trong bộ dựng chung không?
+    cach_do: Máy quét đọc cây cú pháp, đếm chuỗi khoá cứng, trừ `logo.tsx`.
+    chieu_do: >-
+      Là chính E6. Máy quét này không được tin nếu chưa qua phép đo chim mồi.
+    lenh: bash _acceptance/bo-dung-chung-nhan-chuoi/rang-quet.sh --chan dem
+
+  - id: E6
+    criterion: AC-6
+    cau_hoi: Cái thước có đếm hụt được không?
+    cach_do: >-
+      Gieo bảy kiểu chuỗi mồi vào một bản sao — chữ trong thẻ, `aria-label`,
+      `title`, giá trị mặc định, dự phòng `??`, bảng nhãn, chuỗi ghép biến.
+      Máy quét phải gọi tên đủ bảy.
+    chieu_do: >-
+      Gỡ file mồi thì máy quét phải im về chúng. Một máy quét báo cả thứ không
+      còn tồn tại thì nó đang đọc bộ nhớ đệm chứ không đọc mã.
+    lenh: bash _acceptance/bo-dung-chung-nhan-chuoi/rang-quet.sh --chan canary
+
+  - id: E7
+    criterion: AC-7
+    cau_hoi: Tiêu đề cột dài bị cắt có mang dấu ba chấm, và trình đọc màn hình có nghe được chữ đầy đủ?
+    cach_do: >-
+      Ảnh chụp ở 768px với tiêu đề tiếng Việt, cộng một bài kiểm dựng component
+      khẳng định thuộc tính mang chữ đầy đủ có mặt trên ô tiêu đề.
+    chieu_do: >-
+      Gỡ lớp cắt-kèm-ba-chấm. Ảnh phải khác đi, và bài kiểm thuộc tính phải đỏ.
+      Phép đo phải chạy trên tiêu đề DÀI HƠN bề rộng cột — chạy trên tiêu đề
+      ngắn thì nó xanh mà không đo gì.
+    lenh: bun run test --filter=@crm/ui
+
+  - id: E8
+    criterion: AC-8
+    cau_hoi: Số ở phân trang có giống nhau giữa máy chủ và trình duyệt, và theo quy ước tiếng Việt?
+    cach_do: >-
+      Định dạng cùng một số ở hai vùng, ghim chuỗi mong đợi. Cộng một máy quét
+      bắt mọi `Intl.NumberFormat` và `Intl.DateTimeFormat` khai ở tầng module
+      trong `packages/ui`.
+    chieu_do: >-
+      Đưa lại `new Intl.NumberFormat()` ngoặc rỗng vào tầng module trên bản sao.
+      Máy quét phải đỏ và gọi tên đúng dòng đó.
+    lenh: bun run test --filter=@crm/ui
+
+  - id: E9
+    criterion: AC-9
+    cau_hoi: Đổi tiếng thì chữ trong bảng đổi theo mà không cần tải lại trang?
+    cach_do: >-
+      Bài kiểm dựng component: đổi giá trị của nhà cung cấp, khẳng định chữ đổi
+      trong cùng một lượt vẽ. Component KHÔNG được máy chủ vẽ lại.
+    chieu_do: >-
+      Chốt ngôn ngữ ở tầng module thay vì đọc từ nhà cung cấp. Bài kiểm phải đỏ.
+      Nếu nó vẫn xanh thì phép đo đang ăn theo `router.refresh()` của thanh đầu
+      trang chứ không đo tính phản ứng.
+    lenh: bun run test --filter=@crm/ui
+
+  - id: E10
+    criterion: AC-10
+    cau_hoi: Chữ đọc như tiếng Việt của người trong nghề?
+    cach_do: >-
+      Hội đồng phán chấm đúng bảng dịch đã chốt trong
+      `ban-dich.md` TRƯỚC khi chấm. Không chấm chữ chưa ai khai.
+    chieu_do: >-
+      Không có chiều máy. Đây là tiêu chí phán xét, và bảng dịch phải nằm trong
+      hồ sơ trước lúc chấm để hội đồng không bắn vào bia đang chạy.
+    lenh: null

@@ -16,6 +16,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import Logo from "@crm/ui/components/logo";
 import { Separator } from "@crm/ui/components/separator";
 import { Skeleton } from "@crm/ui/components/skeleton";
@@ -33,7 +34,6 @@ import {
 	LANG_COOKIE,
 	type Locale,
 } from "@/lib/locale/locale";
-import { useLocale } from "@/lib/locale/provider";
 import { signOutAndRedirect } from "@/lib/sign-out";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";

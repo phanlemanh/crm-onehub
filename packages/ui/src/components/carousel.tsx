@@ -10,6 +10,7 @@ import { Button } from "@crm/ui/components/button"
 import ChevronLeft from "@carbon/icons-react/es/ChevronLeft";
 import ChevronRight from "@carbon/icons-react/es/ChevronRight";
 import { Icon } from "@crm/ui/components/icon";
+import { useMessages } from "@crm/ui/components/locale-provider";
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -179,6 +180,7 @@ function CarouselPrevious({
   size = "icon-sm",
   ...props
 }: React.ComponentProps<typeof Button>) {
+  const msg = useMessages();
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
 
   return (
@@ -198,7 +200,7 @@ function CarouselPrevious({
       {...props}
     >
       <Icon icon={ChevronLeft} className="cn-rtl-flip" />
-      <span className="sr-only">Previous slide</span>
+      <span className="sr-only">{msg.carousel.previousSlide}</span>
     </Button>
   )
 }
@@ -209,6 +211,7 @@ function CarouselNext({
   size = "icon-sm",
   ...props
 }: React.ComponentProps<typeof Button>) {
+  const msg = useMessages();
   const { orientation, scrollNext, canScrollNext } = useCarousel()
 
   return (
@@ -228,7 +231,7 @@ function CarouselNext({
       {...props}
     >
       <Icon icon={ChevronRight} className="cn-rtl-flip" />
-      <span className="sr-only">Next slide</span>
+      <span className="sr-only">{msg.carousel.nextSlide}</span>
     </Button>
   )
 }

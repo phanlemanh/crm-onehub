@@ -9,6 +9,7 @@ import {
 	InputGroupButton,
 	InputGroupTextarea,
 } from "@crm/ui/components/input-group";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Popover,
 	PopoverContent,
@@ -21,7 +22,6 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { activityLabel } from "@/lib/activity-presentation";
-import { useLocale } from "@/lib/locale/provider";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { ActivityIcon } from "./activity-icon";

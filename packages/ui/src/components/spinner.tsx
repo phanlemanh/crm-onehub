@@ -1,5 +1,8 @@
+"use client";
+
 import { cn } from "@crm/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
+import { useMessages } from "@crm/ui/components/locale-provider";
 
 const SILHOUETTE =
 	"M384 99.548 367.934 87.04 256.021 0 0 199.096v113.782L256.021 512 512 312.879V199.096Z";
@@ -24,11 +27,12 @@ function Spinner({
 	size,
 	...props
 }: React.ComponentProps<"svg"> & VariantProps<typeof spinnerVariants>) {
+	const msg = useMessages();
 	return (
 		<svg
 			data-slot="spinner"
 			role="status"
-			aria-label="Loading"
+			aria-label={msg.spinner.loading}
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="-68 -68 648 648"
 			fill="none"

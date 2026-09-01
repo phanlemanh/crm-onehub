@@ -8,14 +8,15 @@ import Task from "@carbon/icons-react/es/Task";
 import Time from "@carbon/icons-react/es/Time";
 import { Button } from "@crm/ui/components/button";
 import type { CarbonIcon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
-import { dateFormat, type FormatLocale } from "@crm/ui/lib/format";
+import { dateFormat } from "@crm/ui/lib/format";
+import type { Locale } from "@crm/ui/lib/locale";
 import { cn } from "@crm/ui/lib/utils";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
 import { DetailSheetEmpty, SECTION_TITLE } from "@/components/detail-sheet";
-import { useLocale } from "@/lib/locale/provider";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { useHydrated } from "@/lib/use-hydrated";
@@ -90,7 +91,7 @@ const DAY_OPTIONS: Intl.DateTimeFormatOptions = {
 	year: "numeric",
 };
 
-function dayLabel(day: string, local: boolean, locale: FormatLocale): string {
+function dayLabel(day: string, local: boolean, locale: Locale): string {
 	const now = new Date();
 	const today = dayKey(now.toISOString(), local);
 	const yesterdayDate = local
@@ -103,11 +104,7 @@ function dayLabel(day: string, local: boolean, locale: FormatLocale): string {
 	return dateFormat(locale, DAY_OPTIONS).format(new Date(`${day}T00:00:00`));
 }
 
-function byDay(
-	entries: TimelineEntryData[],
-	local: boolean,
-	locale: FormatLocale,
-) {
+function byDay(entries: TimelineEntryData[], local: boolean, locale: Locale) {
 	const groups = new Map<
 		string,
 		{ day: string; label: string; entries: TimelineEntryData[] }

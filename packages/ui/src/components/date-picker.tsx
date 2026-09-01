@@ -14,6 +14,7 @@ import { formatDay, fromDay, toDay } from "@crm/ui/lib/format";
 import { cn } from "@crm/ui/lib/utils";
 import type { VariantProps } from "class-variance-authority";
 import { useState } from "react";
+import { useMessages } from "@crm/ui/components/locale-provider";
 
 export function DatePicker({
 	id,
@@ -27,6 +28,7 @@ export function DatePicker({
 	onChange: (next: string) => void;
 	placeholder?: string;
 } & VariantProps<typeof selectTriggerVariants>) {
+	const msg = useMessages();
 	const [open, setOpen] = useState(false);
 	const selected = fromDay(value);
 	const thisYear = new Date().getFullYear();
@@ -75,7 +77,7 @@ export function DatePicker({
 							className="w-full justify-start"
 							onClick={() => choose("")}
 						>
-							Clear
+							{msg.datePicker.clear}
 						</Button>
 					</div>
 				) : null}

@@ -17,12 +17,13 @@ import {
 } from "@crm/ui/components/alert-dialog";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
-import { dateFormat, type FormatLocale } from "@crm/ui/lib/format";
+import { useLocale } from "@crm/ui/components/locale-provider";
+import { dateFormat } from "@crm/ui/lib/format";
+import type { Locale } from "@crm/ui/lib/locale";
 import { cn } from "@crm/ui/lib/utils";
 import { useState } from "react";
 import { z } from "zod";
 import { runFailureReason } from "@/lib/agent-run-failure";
-import { useLocale } from "@/lib/locale/provider";
 import type { RouterOutputs } from "@/lib/trpc/types";
 
 type Runs = RouterOutputs["agents"]["history"];
@@ -420,7 +421,7 @@ function humanStatus(value: string): string {
 		.replace(/^./, (character) => character.toUpperCase());
 }
 
-function formatDate(value: string, locale: FormatLocale): string {
+function formatDate(value: string, locale: Locale): string {
 	return dateFormat(locale, DATE_OPTIONS).format(new Date(value));
 }
 

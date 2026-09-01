@@ -12,6 +12,7 @@ import {
 	EntityLogo,
 	type EntityLogoTone,
 } from "@crm/ui/components/entity-logo";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { useTableSelection } from "@crm/ui/hooks/use-table-selection";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
@@ -31,7 +32,6 @@ import {
 	ENRICHMENT_POLL_MS,
 	isEnriching,
 } from "@/lib/enrichment-status";
-import { useLocale } from "@/lib/locale/provider";
 import {
 	type CompanyMessages,
 	companyMessages,

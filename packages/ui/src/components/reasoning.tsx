@@ -9,18 +9,20 @@ import {
 import { Shimmer } from "@crm/ui/components/shimmer";
 import { cn } from "@crm/ui/lib/utils";
 import type { ReactNode } from "react";
+import { useMessages } from "@crm/ui/components/locale-provider";
 
 export function Reasoning({
 	children,
 	className,
 	isStreaming = false,
-	label = "Reasoning",
+	label,
 }: {
 	children: ReactNode;
 	className?: string;
 	isStreaming?: boolean;
 	label?: string;
 }) {
+	const msg = useMessages();
 	return (
 		<Accordion
 			key={isStreaming ? "streaming" : "settled"}
@@ -31,7 +33,7 @@ export function Reasoning({
 		>
 			<AccordionItem value="reasoning">
 				<AccordionTrigger variant="subtle">
-					{isStreaming ? <Shimmer>Thinking…</Shimmer> : label}
+					{isStreaming ? <Shimmer>{msg.reasoning.thinking}</Shimmer> : label}
 				</AccordionTrigger>
 				<AccordionContent className="text-muted-foreground">
 					{children}
