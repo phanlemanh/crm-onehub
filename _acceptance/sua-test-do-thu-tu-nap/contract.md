@@ -5,7 +5,7 @@ slug: sua-test-do-thu-tu-nap
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, cli]
-status: implemented
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-01
 veto_state: mo

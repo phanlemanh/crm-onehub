@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 7ce1c733599c83f20c975bdd06132a762ea4df29
-human_signoff:
+human_signoff: Manh Phan 2026-09-01
 ---
 
 # Evidence Report: sua-test-do-thu-tu-nap
