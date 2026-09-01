@@ -56,13 +56,30 @@ giới này phải rõ trước khi viết dòng mã nào.
 | # | Giả định | Nếu sai thì | Phép thử rẻ nhất | Trạng thái |
 |---|---|---|---|---|
 | 1 | Người bán thật sự vướng vì tiếng Anh, không phải vướng vì luồng việc | Dịch xong vẫn chậm như cũ, tiền đổ vào chỗ không đau | Ngồi cạnh 3 người bán trong một giờ, đếm số lần họ dừng ở một nhãn | Chưa thử |
-| 2 | Nhãn màn hình là nguồn đau chính, không phải câu lỗi từ máy chủ | Làm xong phần to nhất mà người vẫn gặp tiếng Anh ở đúng lúc hỏng việc | Đếm câu máy chủ nào thật sự hiện lên màn hình, trong 181 câu | Chưa thử |
+| 2 | ~~Nhãn màn hình là nguồn đau chính, không phải câu lỗi từ máy chủ~~ | — | Đếm chỗ giao diện hiện nguyên văn câu máy chủ | **Đã thử 2026-09-01 — SAI.** 107 chỗ gọi `toast.error(error.message)`, tức đổ thẳng câu tiếng Anh của máy chủ lên màn hình. Câu máy chủ là chữ mặt tiền, không phải chữ nội bộ. |
 | 3 | Bộ dựng chung chịu được việc nhận chuỗi từ ngoài vào | Phải sửa lại 109 file theo kiểu khác, chi phí nhân đôi | Đổi thử một component, xem có phải sửa mọi nơi gọi nó không | Chưa thử |
 | 4 | Chữ do tác nhân sinh ra chấp nhận được khi chỉ bảo mô hình đổi tiếng | Phần đó vẫn tiếng Anh, và nó là phần người đọc nhiều nhất | Chạy một tác nhân với một dòng chỉ dẫn tiếng Việt, đọc kết quả | Chưa thử |
 | 5 | Kho đủ chỗ để đặt tuỳ chọn ngôn ngữ mà không đụng phần đăng nhập | Phải sửa vùng dữ liệu nhạy cảm, hạng rủi ro nhảy lên mức cao nhất | Đọc bảng người dùng và luật vùng nhạy cảm trong cấu hình cổng | Chưa thử |
 
 Giả định 1 là cái nặng nhất, và nó **không phải câu hỏi kỹ thuật**. Bốn cái sau
 rẻ và trả lời được trong một buổi.
+
+## Thứ tự năm vòng — người chốt 2026-09-01
+
+Người mở phạm vi ra cả năm vùng, mỗi vùng MỘT vòng riêng. Timebox hai ngày một
+vòng giữ nguyên; mục Ngoài phạm vi vẫn cấm gộp năm vùng vào một vòng.
+
+| # | Vùng | Vì sao đứng ở đây |
+| --- | --- | --- |
+| ① | Xương sống + định dạng ngày/số | Không có nó thì không vùng nào chạy. 19 chỗ định dạng là phép thử rẻ nhất chứng minh đường ống thông từ lựa chọn tới màn hình |
+| ② | Bộ dựng chung | Chốt khuôn nhận-chuỗi-từ-ngoài. Khuôn này ràng buộc ③, nên chốt sau ③ là làm hai lần |
+| ③ | Nhãn ứng dụng | Quét lớn, 177 file, đi theo khuôn đã chốt ở ② |
+| ④ | Câu máy chủ | Độc lập với khuôn giao diện, chỉ cần xương sống. Cần quyết riêng: gắn mã lỗi, hay máy chủ biết người đọc là ai |
+| ⑤ | Chữ tác nhân sinh ra | Một dòng chỉ dẫn, nhưng chất lượng văn phải người chấm — hợp lý hơn khi người đã dùng bản tiếng Việt hằng ngày |
+
+**Điều kiện lật, ghi trước để khỏi bàn lại:** ④ chỉ đứng sau ③ vì câu lỗi hiện
+ở đường hỏng, còn ngưỡng nói về bước bắt buộc trong luồng thành công. **Người
+bán báo họ kẹt ở chỗ báo lỗi thì ④ nhảy lên trước ③.**
 
 ## Ngưỡng chết / ngưỡng UAT
 
