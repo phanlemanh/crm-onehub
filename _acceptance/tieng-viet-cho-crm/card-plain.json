@@ -1,0 +1,126 @@
+{
+  "feature_plain": "Nhân viên quan hệ đối tác chọn tiếng Việt một lần, và màn công ty hiện trọn tiếng Việt — nhãn, ngày, số. Lựa chọn ở lại khi họ quay lại.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ hiện tiếng Việt ngay lần đầu cho người có trình duyệt tiếng Việt, dù họ chưa từng chọn gì."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ hiện tiếng Anh cho người có trình duyệt tiếng Anh."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ khai đúng thứ tiếng của trang ngay từ lượt vẽ đầu của máy chủ — không nháy tiếng Anh rồi mới đổi."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ rơi về tiếng Anh một cách êm nếu lựa chọn đã lưu bị hỏng, thay vì vỡ màn hình."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ nhớ lựa chọn qua cả lần tắt máy, không chỉ qua lần đóng tab."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ hiện tiếng Việt cho mọi chữ người nhìn thấy trên màn công ty, kể cả ba chỗ chữ đến từ bảng dùng chung."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ giữ nguyên tên công ty người nhập, và chặn trình duyệt tự dịch nó."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ hiện ngày và số theo quy ước tiếng Việt — 1 thg 9, và dấu chấm ngăn nghìn."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ giữ mọi tiêu đề cột đọc được ở khổ hẹp, dù chữ tiếng Việt dài hơn."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ cho người chỉ dùng bàn phím tới được nút đổi tiếng, thấy rõ nó đang được chọn, và mở được bằng Enter."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ tôn trọng lựa chọn của người: đã chọn tiếng Anh thì trình duyệt tiếng Việt không kéo họ ngược lại."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ để một hội đồng mù phán xem chữ đọc như tiếng Việt người trong nghề hay như bản dịch máy."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "OOS-1",
+      "p": "Sẽ KHÔNG dịch câu lỗi từ máy chủ. 107 chỗ vẫn hiện tiếng Anh khi có sự cố — đó là vòng ④."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Sẽ KHÔNG sửa bộ dựng chung. Chỉ truyền chữ vào ba chỗ nó đã mở sẵn; hai nhãn cho trình đọc màn hình vẫn tiếng Anh."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Sẽ KHÔNG dịch màn thoả thuận hợp tác. Bảy giai đoạn của nó chưa ai định nghĩa — đó là quyết định nghiệp vụ, không phải việc dịch."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Sẽ KHÔNG dịch dữ liệu người dùng nhập. Tên công ty, ghi chú, nội dung thư giữ nguyên."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Sẽ KHÔNG thêm ngôn ngữ thứ ba, không đổi tiền tệ, không đổi múi giờ."
+    }
+  ],
+  "scope_plain": "Bốn nguồn chữ còn lại — bộ dựng chung, nhãn toàn ứng dụng, câu máy chủ, chữ tác nhân sinh — nằm ở bốn vòng sau, theo thứ tự đã chốt.",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Bốn cách người có thể tới: chưa chọn bao giờ · đã chọn tiếng Việt · đã chọn tiếng Anh · lựa chọn hỏng. Cả bốn đều có tiêu chí. Thước đối chiếu là chuẩn quốc tế về thẻ ngôn ngữ hợp lệ."
+    },
+    {
+      "i": 1,
+      "p": "Bốn nơi thứ tiếng hiện ra: thẻ ngôn ngữ của trang · chữ giao diện · ngày và số · dữ liệu người nhập, chỗ này phải KHÔNG đổi. Thước đối chiếu là chuẩn tiếp cận WCAG mức A."
+    },
+    {
+      "i": 2,
+      "p": "Ba thời điểm: lượt vẽ đầu · ngay sau khi đổi tiếng · lần quay lại sau. Đối chiếu với cách kho đã giải cho nút sáng/tối."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Hợp đồng hứa màn công ty hết tiếng Anh, trong khi phạm vi cấm chạm bộ dựng chung mà màn đó vẽ ra chữ. Đã sửa: ba chỗ chữ nhận được từ ngoài vào nên truyền được, hai nhãn còn lại gọi tên làm ngoại lệ."
+    },
+    {
+      "i": 1,
+      "p": "Phép đo định dạng chỉ kiểm một hàm trong năm, và không ghim giá trị. Bốn hàm kia có thể giữ tiếng Anh mà vẫn xanh. Đã sửa: ghim đủ năm hàm hai thứ tiếng, kèm chiều đỏ."
+    },
+    {
+      "i": 2,
+      "p": "Hai phép đo kiểm một hàm rời trong khi tiêu chí phụ thuộc lượt vẽ của máy chủ — dây nối hỏng thì cả hai vẫn xanh. Đã sửa: chuyển sang đo trên trang đã vẽ."
+    },
+    {
+      "i": 3,
+      "p": "Không tiêu chí nào phủ ca người đã chọn tiếng Anh mà trình duyệt khai tiếng Việt — họ sẽ bị kéo ngược mỗi lần tải lại. Đã sửa: thêm một tiêu chí và một phép đo."
+    },
+    {
+      "i": 4,
+      "p": "Cookie không khai tuổi thọ, nên có thể ship dạng mất-khi-tắt-máy, mà phép đo chỉ đóng tab nên không thấy. Đã sửa: khai một năm, và phép đo kiểm thẳng ba thuộc tính."
+    }
+  ],
+  "decisions_plain": [
+    {
+      "id": "d-20260901T061208Z-18037",
+      "p": "Gọi là 'công ty' và 'cá nhân', không phải 'công ty môi giới' — đổi lại: tên rộng hơn thực tế giai đoạn này."
+    },
+    {
+      "id": "d-20260901T074216Z-31114",
+      "p": "Nhãn cắt theo ngữ cảnh màn hình — đổi lại: cùng một cột ở màn khác phải viết lại, kho chữ không dùng chung nhãn giữa các màn."
+    },
+    {
+      "id": "d-20260901T075111Z-31436",
+      "p": "KHÔNG làm nguồn sinh cho thước 'giữ tiếng Việt sau một tuần' — đổi lại: Cổng Giá trị sẽ đọc một ô CHƯA ĐO."
+    }
+  ]
+}
