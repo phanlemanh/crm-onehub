@@ -7,18 +7,28 @@ reason:
 verified_by: same-context implementation run
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 14c1b13a999231b98126e28b6aeb96a95eebc862
+verified_commit: 2ac1ab0a783d39cda80ef1f905aa5dc7b451a0f7
 human_signoff: Manh Phan 2026-09-01
 ---
 
 # Evidence Report: hinh-cua-luoi
 
-Verified on the worktree at `14c1b13` with the changes of this round applied and
-nothing else. `git status --porcelain` reports two modified files
-(`.githooks/pre-push`, `package.json`), one modified record (`_acceptance/config.yaml`)
-and three new paths (`.githooks/gate-shape.json`, `scripts/verify-gate-shape.mjs`,
-`_acceptance/hinh-cua-luoi/`). The tree was clean before every attack below and
-clean after each one.
+Verified on the tree of commit `2ac1ab0`, which carries this round's change,
+rebased onto `ccd9ce6`. Every eval below ran against that tree after it was
+committed, so the evidence pins the code it certifies. The tree was clean before
+every attack below and clean after each one.
+
+**The rebase is itself evidence.** `ccd9ce6` brought four source files this round
+never saw. The gate's own report went from `752 files` to `756 files` with no edit
+to `gate-shape.json`. The bar rose by itself, which is the property the round was
+built for.
+
+The first pass of this report pinned `verified_commit` to the PARENT commit — the
+tree the change was written against, not the tree the change produces.
+`scripts/pre-merge-check.sh` caught it and blocked the merge with `evidence is
+stale — code changed after verify`. It was right. The evals were re-run against
+the real tree rather than the pin being edited to match, and re-run again after
+the rebase moved that tree.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -55,11 +65,11 @@ what the gate announced. An echoed line cannot produce a ledger row.
 ## Evidence
 
 - eval: E1
-  run_id: hinh-cua-luoi-E1-1788249866
+  run_id: hinh-cua-luoi-E1-1788256160
   exit_code: 0
   baseline: red
   verifier: config:executors.script.rang_hinh_hinh
-  verified_at: 2026-09-01T08:04:26Z
+  verified_at: 2026-09-01T09:49:20Z
   output: |
     pre-push: gate matches its shape across 10 packages
       exempt: @crm/typescript-config from 'check-types' — Ships tsconfig JSON only.
@@ -67,15 +77,15 @@ what the gate announced. An echoed line cannot produce a ledger row.
       lint: 9/9 packages ran fresh
       exempt: @crm/ui from 'test' — No test script today. This is a known gap.
       test: 8/8 packages ran fresh
-      lint:slop: 752 files, 9 rules
+      lint:slop: 756 files, 9 rules
     rang-hinh hinh: luoi tu doi chieu voi ban khai, phu het 10 goi, khong goi nao doc dem
 
 - eval: E2
-  run_id: hinh-cua-luoi-E2-1788249903
+  run_id: hinh-cua-luoi-E2-1788256197
   exit_code: 0
   baseline: red
   verifier: config:executors.script.rang_hinh_tan_cong
-  verified_at: 2026-09-01T08:05:03Z
+  verified_at: 2026-09-01T09:49:57Z
   output: |
     don 'rut tac vu test khoi vong lap' -> luoi do, ma thoat 1
       - checker 'test' left no run summary, so nothing proves it ran at all
@@ -90,11 +100,11 @@ what the gate announced. An echoed line cannot produce a ledger row.
     rang-hinh tan-cong: bon don cua bo hoi quy deu lam do MOT phep doi chieu duy nhat
 
 - eval: E3
-  run_id: hinh-cua-luoi-E3-1788249976
+  run_id: hinh-cua-luoi-E3-1788256271
   exit_code: 0
   baseline: red
   verifier: config:executors.script.rang_hinh_bo_sot
-  verified_at: 2026-09-01T08:06:16Z
+  verified_at: 2026-09-01T09:51:11Z
   output: |
     goi bo kich ban 'test' -> luoi do, ma thoat 1
       - packages/env declares no 'test' script and no exemption — add the script,
@@ -109,32 +119,32 @@ what the gate announced. An echoed line cannot produce a ledger row.
     kiem gi, hay them ca mot goc moi — deu la cho lech
 
 - eval: E4
-  run_id: hinh-cua-luoi-E4-1788249977
+  run_id: hinh-cua-luoi-E4-1788256271
   exit_code: 0
   baseline: green
   verifier: config:executors.script.rang_hinh_noi_day
-  verified_at: 2026-09-01T08:06:17Z
+  verified_at: 2026-09-01T09:51:11Z
   output: |
     noi day dung: git goi '<tmp>/da-cai/.githooks/pre-push', trung nguyen byte voi luoi cua cay
     rang-hinh noi-day: cong thuc 'git config core.hooksPath .githooks' lam git goi dung luoi cua cay
 
 - eval: E5
-  run_id: hinh-cua-luoi-E5-1788249977
+  run_id: hinh-cua-luoi-E5-1788256271
   exit_code: 0
   baseline: red
   verifier: config:executors.script.rang_hinh_noi_day_am
-  verified_at: 2026-09-01T08:06:17Z
+  verified_at: 2026-09-01T09:51:11Z
   output: |
     KHONG NOI DAY: git se goi '<tmp>/chua-cai/.git/hooks/pre-push', ma tep do khong ton tai.
       Moi lan day deu xanh voi khong gi duoc chay. Chay 'bun install' de dat core.hooksPath.
     rang-hinh noi-day-am: kho chua cai lam chan noi-day do va goi ten tep hook trong
 
 - eval: E6
-  run_id: hinh-cua-luoi-E6-1788249977
+  run_id: hinh-cua-luoi-E6-1788256271
   exit_code: 0
   baseline: red
   verifier: config:executors.script.rang_hinh_noi_day_lech
-  verified_at: 2026-09-01T08:06:17Z
+  verified_at: 2026-09-01T09:51:11Z
   output: |
     LUOI LECH: git se goi '<tmp>/khac/pre-push',
       nhung luoi cua cay nay la '<tmp>/lech/.githooks/pre-push'. Hai tep khac nhau.
@@ -142,20 +152,20 @@ what the gate announced. An echoed line cannot produce a ledger row.
     rang-hinh noi-day-lech: luoi dang sua khac luoi se chay thi chan noi-day do
 
 - eval: E7
-  run_id: hinh-cua-luoi-E7-1788249866
+  run_id: hinh-cua-luoi-E7-1788256160
   exit_code: 0
   baseline: red
   verifier: config:executors.script.rang_hinh_hinh
-  verified_at: 2026-09-01T08:04:26Z
+  verified_at: 2026-09-01T09:49:20Z
   output: |
-      lint:slop: 752 files, 9 rules
+      lint:slop: 756 files, 9 rules
 
 - eval: E8
-  run_id: hinh-cua-luoi-E8-1788250001
+  run_id: hinh-cua-luoi-E8-1788256296
   exit_code: 0
   baseline: green
   verifier: config:executors.script.rang_hook_ep_chay
-  verified_at: 2026-09-01T08:06:41Z
+  verified_at: 2026-09-01T09:51:36Z
   output: |
       Cached:    0 cached, 13 total
       Cached:    0 cached, 9 total
@@ -171,7 +181,7 @@ this tree, minutes apart.** The pre-feature hook and the pre-feature
 `rang-hook.sh --chan ep-chay` was run:
 
 ```
-OLD ep-chay exit=0
+The signed leg finishes green:
   Cached:    0 cached, 13 total
   Cached:    0 cached, 9 total
   Cached:    0 cached, 1 total
@@ -182,7 +192,7 @@ rang-hook ep-chay: du 4 tac vu duoc goi, 3 tac vu qua bo dung deu 0 doc tu dem
 green. The same attack on the new frame:
 
 ```
-NEW hinh exit=1
+E1 stops the round, non-zero:
   - 'test' never reached @crm/auth — the gate covered 1 of the 8 packages that need it
   - 'test' never reached @crm/db — the gate covered 1 of the 8 packages that need it
   - 'test' never reached @crm/telemetry — the gate covered 1 of the 8 packages that need it
@@ -268,9 +278,11 @@ on a repository built the way `bun install` builds one.
 
 ## Variance
 
-E1 ran green four times across the session and reported the same shape each
-time — 9/9, 9/9, 8/8, 752 files, 9 rules. It ran red twice on purpose, once
-against the pre-feature hook and once under the `--filter` attack. `agent#test`
+E1 ran green seven times across the session. It reported 9/9, 9/9, 8/8 every
+time. Its file count moved once, from 752 to 756, when the rebase brought four
+new source files in — the one number that is supposed to move. It ran red twice
+on purpose, once against the pre-feature hook and once under the `--filter`
+attack. `agent#test`
 flaked once in eight full gate runs, as recorded above. Every other eval is
 deterministic and ran at least twice.
 
