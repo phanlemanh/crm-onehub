@@ -1,6 +1,6 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
 if [ -n "${CRM_SKIP_HOOKS:-}" ]; then
 	echo "pre-push: CRM_SKIP_HOOKS is set, so nothing was checked before this push."
@@ -24,9 +24,18 @@ fail() {
 	exit 1
 }
 
+ROOT="$(git rev-parse --show-toplevel)"
+LOG="$(mktemp)"
+RUNS_BEFORE="$(mktemp)"
+trap 'rm -f "$LOG" "$RUNS_BEFORE"' EXIT
+ls -1 "$ROOT/.turbo/runs" 2>/dev/null >"$RUNS_BEFORE" || true
+
 export TURBO_FORCE=true
+export TURBO_RUN_SUMMARY=true
 
 for task in check-types lint lint:slop test; do
 	echo "pre-push: bun run $task"
-	bun run "$task" || fail "$task"
+	bun run "$task" 2>&1 | tee -a "$LOG" || fail "$task"
 done
+
+bun "$ROOT/scripts/verify-gate-shape.mjs" --log "$LOG" --runs-before "$RUNS_BEFORE"

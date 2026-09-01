@@ -54,8 +54,17 @@ reason, and that is the only sanctioned way past it.
 **A `pre-push` hook runs them for you**, so a push that would fail CI fails on your machine
 instead, where the feedback is in seconds rather than minutes. `bun install` wires it up — the
 hooks live in `.githooks/` and `prepare` points `core.hooksPath` at them, so there is nothing to
-install and no hook manager in the dependency tree. Turbo caches, so a second push that changed
-nothing relevant is nearly free.
+install and no hook manager in the dependency tree. The hook forces every task to run, so a push
+costs about 25 seconds and never reports a cached result as a check.
+
+**The gate also checks its own shape**, and refuses the push when it no longer matches. The shape
+is `.githooks/gate-shape.json`. It lists the four checkers and, per checker, the packages **exempt**
+from it with a written reason — it never lists the packages that are covered. Those are derived
+from the tree on every run: every directory under `apps/` and `packages/` holding a `package.json`
+must run every checker, freshly, and exit zero. So adding a package raises the bar with no edit to
+that file, and dropping a check — a narrowed `--filter`, a task removed from the loop, a package
+that quietly loses its `test` script — fails the push that does it, naming what went missing.
+Removing a check on purpose is one line in `gate-shape.json` and a reason, in the same commit.
 
 It needs the Postgres from `docker compose up -d`, because the API and telemetry tests are real
 integration tests. When you need to push past it — a WIP branch, a docker-less machine, a red test
