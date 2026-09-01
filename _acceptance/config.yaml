@@ -4,6 +4,11 @@ gap_probe: advisory
 recheck: strict
 feature_loop:
   ui_standards_skill: web-design-guidelines
+  suite_keys:
+    - executors.test.api
+    - executors.script.check_types_khong_cache
+    - executors.script.lint_khong_cache
+    - executors.script.lint_slop
 design_pass:
   ds_skill: web-design-guidelines
 executors:
@@ -16,6 +21,7 @@ executors:
     resolve_plugin: "node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/product-map.mjs"
     lint: "bun run lint"
     lint_khong_cache: "bunx turbo run lint --force"
+    lint_slop: "bun run lint:slop"
     check_types: "bun run check-types"
     check_types_khong_cache: "bunx turbo run check-types --force"
     rang_suite_sach: "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan sach"
