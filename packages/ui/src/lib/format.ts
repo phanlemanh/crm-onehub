@@ -1,4 +1,4 @@
-type FormatLocale = "vi" | "en";
+export type FormatLocale = "vi" | "en";
 
 const numberFormats = new Map<string, Intl.NumberFormat>();
 const dateFormats = new Map<string, Intl.DateTimeFormat>();
@@ -15,7 +15,7 @@ function numberFormat(
 	return made;
 }
 
-function dateFormat(
+export function dateFormat(
 	locale: FormatLocale,
 	options: Intl.DateTimeFormatOptions,
 ): Intl.DateTimeFormat {

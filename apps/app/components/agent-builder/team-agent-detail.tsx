@@ -26,6 +26,7 @@ import {
 } from "@crm/ui/components/dropdown-menu";
 import { Icon } from "@crm/ui/components/icon";
 import { SaveBarViewport } from "@crm/ui/components/save-bar";
+import { dateFormat, type FormatLocale } from "@crm/ui/lib/format";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -40,6 +41,7 @@ import {
 	PageShellHeading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { useLocale } from "@/lib/locale/provider";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -51,7 +53,7 @@ type AgentDetail = RouterOutputs["agents"]["byId"];
 type ReviewVersion = AgentDetail["reviewVersion"];
 type Runs = RouterOutputs["agents"]["history"];
 type Activity = RouterOutputs["agents"]["activity"];
-const DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
+const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
 	month: "short",
 	day: "numeric",
 	hour: "numeric",
@@ -59,15 +61,7 @@ const DATE_FORMATTER = new Intl.DateTimeFormat("en-US", {
 	second: "2-digit",
 	timeZone: "UTC",
 	timeZoneName: "short",
-});
-const _TIME_FORMATTER = new Intl.DateTimeFormat("en-US", {
-	hour: "2-digit",
-	minute: "2-digit",
-	second: "2-digit",
-	hour12: false,
-	timeZone: "UTC",
-});
-
+};
 export function TeamAgentDetail({
 	agentId,
 	initialAgent,
@@ -79,6 +73,7 @@ export function TeamAgentDetail({
 	initialRuns: Runs;
 	initialActivity: Activity;
 }) {
+	const locale = useLocale();
 	const trpc = useTRPC();
 	const queryClient = useQueryClient();
 	const workspaceUrl = useWorkspaceUrl();
@@ -227,7 +222,7 @@ export function TeamAgentDetail({
 							{isDraft
 								? "Private draft"
 								: nextRun
-									? formatDate(nextRun)
+									? formatDate(nextRun, locale)
 									: triggerSummary}
 						</span>
 						<div className="mt-1 flex flex-wrap gap-2">
@@ -571,6 +566,6 @@ function textOf(value: string | undefined, fallback: string): string {
 	return value?.trim() ? value : fallback;
 }
 
-function formatDate(value: string): string {
-	return DATE_FORMATTER.format(new Date(value));
+function formatDate(value: string, locale: FormatLocale): string {
+	return dateFormat(locale, DATE_OPTIONS).format(new Date(value));
 }
