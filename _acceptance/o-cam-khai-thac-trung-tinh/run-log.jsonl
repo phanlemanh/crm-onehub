@@ -6,3 +6,11 @@
 {"ts":"2026-09-01T01:08:19Z","round":1,"evalId":"E6","run_id":"o-cam-khai-thac-trung-tinh-E6-1788224720","exit_code":0,"cmd":"bash _acceptance/o-cam-khai-thac-trung-tinh/rang-quet.sh"}
 {"ts":"2026-09-01T01:08:19Z","round":1,"evalId":"E8","run_id":"o-cam-khai-thac-trung-tinh-E8-1788224820","exit_code":0,"cmd":"bunx turbo run lint --force"}
 {"ts":"2026-09-01T01:08:19Z","round":1,"evalId":"E9","run_id":"o-cam-khai-thac-trung-tinh-E9-1788224860","exit_code":0,"cmd":"bunx turbo run check-types --force"}
+{"ts":"2026-09-01T01:13:47Z","round":2,"evalId":"E1","run_id":"o-cam-khai-thac-trung-tinh-E1-1788225050","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan khai-thac"}
+{"ts":"2026-09-01T01:13:47Z","round":2,"evalId":"E2","run_id":"o-cam-khai-thac-trung-tinh-E2-1788225060","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam-duong"}
+{"ts":"2026-09-01T01:13:47Z","round":2,"evalId":"E3","run_id":"o-cam-khai-thac-trung-tinh-E3-1788225060","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam-duong"}
+{"ts":"2026-09-01T01:13:47Z","round":2,"evalId":"E4","run_id":"o-cam-khai-thac-trung-tinh-E4-1788225070","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam-do"}
+{"ts":"2026-09-01T01:13:47Z","round":2,"evalId":"E5","run_id":"o-cam-khai-thac-trung-tinh-E5-1788225080","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam-trung-tinh"}
+{"ts":"2026-09-01T01:13:47Z","round":2,"evalId":"E6","run_id":"o-cam-khai-thac-trung-tinh-E6-1788225090","exit_code":0,"cmd":"bash _acceptance/o-cam-khai-thac-trung-tinh/rang-quet.sh"}
+{"ts":"2026-09-01T01:13:47Z","round":2,"evalId":"E8","run_id":"o-cam-khai-thac-trung-tinh-E8-1788225150","exit_code":0,"cmd":"bunx turbo run lint --force"}
+{"ts":"2026-09-01T01:13:47Z","round":2,"evalId":"E9","run_id":"o-cam-khai-thac-trung-tinh-E9-1788225200","exit_code":0,"cmd":"bunx turbo run check-types --force"}

@@ -66,6 +66,10 @@ TRƯỚC vòng 2, không phải sau một cái đỏ.**
 - Bốn tiêu chí AC-2 đến AC-5 từng dùng chung một lệnh, một mã thoát. Nay răng
   tách thành ba chân riêng, mỗi tiêu chí một mã thoát của nó.
 - Chiều đỏ chỉ gỡ `ui_standards_skill`. Nay gỡ từng ổ một, và AC-4 nói rõ là
-  hai cấu hình dựng sẵn. Phát hiện thêm khi sửa: `grep -v ds_skill` gỡ CẢ HAI
-  dòng, vì `ds_skill` là chuỗi con của `ui_standards_skill` — chiều đỏ cũ đỏ vì
-  lý do sai. Răng nay tự đếm số dòng bị gỡ và kêu nếu khác 1.
+  hai cấu hình dựng sẵn.
+- Lỗi tôi TỰ GÂY RA khi viết bản mở rộng vòng 2, và người chấm bắt được trước
+  khi nó ra khỏi cửa: `grep -v ds_skill` gỡ CẢ HAI dòng, vì `ds_skill` là chuỗi
+  con của `ui_standards_skill`. Nó KHÔNG có ở vòng 1 — chiều đỏ vòng 1 chỉ dùng
+  mẫu `ui_standards_skill`, và mẫu đó gỡ đúng một dòng. Bản ghi trước của mục
+  này nói ngược lại; câu đó sai và đã sửa. Răng nay tự đếm số dòng bị gỡ và kêu
+  nếu khác 1.

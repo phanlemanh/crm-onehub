@@ -7,21 +7,23 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: eef6b4a7cb790dcbda85c84e6bdb0e761fcf0f5c
+verified_commit: f4b2ea9d72b5f03de89ab1009b40a3f86c374e59
 human_signoff:
 ---
 
 # Evidence Report: o-cam-khai-thac-trung-tinh
 
-Working tree at verify time: clean. `git status --porcelain` printed nothing.
+Round 2. Verified at commit `f4b2ea9d72b5f03de89ab1009b40a3f86c374e59`, confirmed
+by `git rev-parse HEAD` in this context. Working tree clean: `git status --porcelain`
+printed nothing.
 
-Every command below was resolved from `_acceptance/config.yaml` through the
-kit's own reader, `resolveConfigKey` in `lib/evidence-core.cjs`. No command was
-retyped by hand.
+Every command below was resolved fresh from `_acceptance/config.yaml` through the
+kit's own reader, `resolveConfigKey` in `lib/evidence-core.cjs`. The eval keys
+changed this round and the new keys resolve.
 
-E2, E3, E4 and E5 bind to the SAME command, `executors.script.rang_config_o_cam`.
-That command ran ONCE. The four evals grade three different lines of that one
-run's output. This report does not claim four independent runs.
+E2 and E3 share one command, `executors.script.rang_config_o_cam_duong`. It ran
+ONCE and backs both. E4 and E5 now have their own commands and their own exit
+codes. This report does not claim two independent runs for E2 and E3.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -38,11 +40,11 @@ run's output. This report does not claim four independent runs.
 ## Evidence
 
 - eval: E1
-  run_id: o-cam-khai-thac-trung-tinh-E1-1788224640
+  run_id: o-cam-khai-thac-trung-tinh-E1-1788225050
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.rang_config_khai_thac
-  verified_at: 2026-09-01T01:04:00Z
+  verified_at: 2026-09-01T01:10:50Z
   output: |
     -- chieu duong: config that phai doc ra RONG
     o cam khai thac dang trong, dung nhu kit mac dinh
@@ -50,126 +52,140 @@ run's output. This report does not claim four independent runs.
     rang-config khai-thac: hai chieu dung
 
 - eval: E2
-  run_id: o-cam-khai-thac-trung-tinh-E2-1788224700
+  run_id: o-cam-khai-thac-trung-tinh-E2-1788225060
   exit_code: 0
   baseline: n-a
-  verifier: config:executors.script.rang_config_o_cam
-  verified_at: 2026-09-01T01:05:00Z
+  verifier: config:executors.script.rang_config_o_cam_duong
+  verified_at: 2026-09-01T01:11:00Z
   output: |
     -- chieu duong: config that
     hai o cam thiet ke deu doc ra ten skill
-  # Line graded for E2: "hai o cam thiet ke deu doc ra ten skill" under the
-  # positive leg. Both design sockets read back a skill name.
+    rang-config o-cam-duong: chieu duong dung
+  # Line graded for E2: "hai o cam thiet ke deu doc ra ten skill". Both design
+  # sockets read back a skill name through the kit reader.
 
 - eval: E3
-  run_id: o-cam-khai-thac-trung-tinh-E3-1788224700
+  run_id: o-cam-khai-thac-trung-tinh-E3-1788225060
   exit_code: 0
   baseline: n-a
-  verifier: config:executors.script.rang_config_o_cam
-  verified_at: 2026-09-01T01:05:00Z
+  verifier: config:executors.script.rang_config_o_cam_duong
+  verified_at: 2026-09-01T01:11:00Z
   output: |
-    rang-config o-cam: ba chieu dung
-  # Line graded for E3: the closing summary of the same run. The harness now
-  # asks for two design sockets only. It clears the real config.
+    rang-config o-cam-duong: chieu duong dung
+  # Line graded for E3: the closing summary of the same run. The positive leg
+  # clears the real config and no longer asks for a discovery socket.
 
 - eval: E4
-  run_id: o-cam-khai-thac-trung-tinh-E4-1788224700
+  run_id: o-cam-khai-thac-trung-tinh-E4-1788225070
   exit_code: 0
   baseline: n-a
-  verifier: config:executors.script.rang_config_o_cam
-  verified_at: 2026-09-01T01:05:00Z
+  verifier: config:executors.script.rang_config_o_cam_do
+  verified_at: 2026-09-01T01:11:10Z
   output: |
-    -- chieu do: fixture bo mot o cam thiet ke
+    -- chieu do: fixture bo ui_standards_skill
     o cam thiet ke trong: feature_loop.ui_standards_skill
-  # Line graded for E4: the red leg. The harness strips ui_standards_skill from
-  # a copy of the config, catches the gap, and names the missing socket.
+    -- chieu do: fixture bo ds_skill
+    o cam thiet ke trong: design_pass.ds_skill
+    rang-config o-cam-do: ca hai o cam thiet ke deu co rang
+  # Two fixtures now, one per design socket, each named correctly in the output.
 
 - eval: E5
-  run_id: o-cam-khai-thac-trung-tinh-E5-1788224700
+  run_id: o-cam-khai-thac-trung-tinh-E5-1788225080
   exit_code: 0
   baseline: n-a
-  verifier: config:executors.script.rang_config_o_cam
-  verified_at: 2026-09-01T01:05:00Z
+  verifier: config:executors.script.rang_config_o_cam_trung_tinh
+  verified_at: 2026-09-01T01:11:20Z
   output: |
     -- chieu trung tinh: fixture CO khai o cam khai thac
     hai o cam thiet ke deu doc ra ten skill
-  # Line graded for E5: the neutral leg. A fixture that DOES declare
-  # discovery.brainstorm_skill stays green. Declaring it is not a defect.
+    rang-config o-cam-trung-tinh: khai o cam khai thac khong phai loi
+  # A fixture that DOES declare discovery.brainstorm_skill stays green.
+  # Declaring the discovery socket is not a defect.
 
 - eval: E6
-  run_id: o-cam-khai-thac-trung-tinh-E6-1788224720
+  run_id: o-cam-khai-thac-trung-tinh-E6-1788225090
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.start_scan
-  verified_at: 2026-09-01T01:05:20Z
+  verified_at: 2026-09-01T01:11:30Z
   output: |
     bo quet sach: config doc duoc, khong ho so hong, ban do khop, o cam khai thac trong
     -- chieu do: ban do lech thi phep do phai do
     rang-quet: hai chieu dung
 
 - eval: E8
-  run_id: o-cam-khai-thac-trung-tinh-E8-1788224820
+  run_id: o-cam-khai-thac-trung-tinh-E8-1788225150
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.lint_khong_cache
-  verified_at: 2026-09-01T01:07:00Z
+  verified_at: 2026-09-01T01:12:30Z
   output: |
     Tasks:    9 successful, 9 total
     Cached:    0 cached, 9 total
-    Time:    200ms
+    Time:    272ms
 
 - eval: E9
-  run_id: o-cam-khai-thac-trung-tinh-E9-1788224860
+  run_id: o-cam-khai-thac-trung-tinh-E9-1788225200
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.check_types_khong_cache
-  verified_at: 2026-09-01T01:07:40Z
+  verified_at: 2026-09-01T01:13:20Z
   output: |
     api:check-types: cache bypass, force executing 2135256e13140ac5
     api:check-types: $ tsc --noEmit
     Tasks:    13 successful, 13 total
     Cached:    0 cached, 13 total
-    Time:    5.648s
+    Time:    5.455s
 
 - eval: E7
-  judged_by: judge-subagent (fresh context, blind — contract plus the referenced old contract only)
+  judged_by: judge-subagent (fresh context, blind — the two contract files only)
   verdict: PASS
-  rationale: The Notes block of the signed record states AC-7 is superseded and names the replacement slug o-cam-khai-thac-trung-tinh, which is what AC-7 asks for. It also gives the reason inline — the kit rule makes the empty discovery socket legal — and records that the signed evidence stays valid at commit b933334, so a reader of the old record needs no hunting. The signed AC-7 text itself is unchanged.
+  rationale: Both judged files changed between round 1 and round 2, so the judge was re-run rather than carried forward. The Notes block of the signed record now reads "AC-7 đã bị thay thế 2026-09-01 — xem hồ sơ o-cam-khai-thac-trung-tinh", giving the date, the replacement slug, and the reason inline — the kit rule that leaves the discovery socket legally empty. The signed AC-7 text itself is unchanged and the record stays signed-off.
 
 ## Known limits
 
-- One command backs four criteria. E2, E3, E4 and E5 all resolve to
-  `executors.script.rang_config_o_cam`. That is thin. Four criteria sharing one
-  binary signal means one broken leg reddens all four, and no eval isolates a
-  single leg. The legs are distinguishable only by reading the output lines,
-  which is what this report does by hand.
-- The red leg removes one design socket, not both. The harness strips
-  `feature_loop.ui_standards_skill` only. A config that lost `design_pass.ds_skill`
-  instead is never exercised.
-- The judge did not read the kit text. It judged the supersession line against
-  the two contracts alone. The verify context read
-  `commands/start.md` lines 100-125 separately and confirms the claim.
-- No baseline (diffBase) run was performed. Every eval carries `baseline: n-a`.
-  Whether these evals discriminate the change from the prior tree is unmeasured.
-- The supersession line in the signed record carries no date. A later round that
-  revisits the same rule leaves two supersession claims with no order between them.
+- The self-count guard in the red leg was probed, not assumed. Replicating its
+  arithmetic against the real config shows the anchored pattern drops one socket
+  line for each key, while the old unanchored pattern drops two socket lines for
+  `ds_skill`. The guard therefore fires on exactly the substring collision it was
+  added for. It discriminates. It is not decoration.
+- E2 and E3 still share one command and one exit code. Round 2 reduced the
+  four-criteria-on-one-signal problem to two, it did not remove it. AC-2 and AC-3
+  assert nearly the same thing, so the cost is small, but the finding is not
+  fully closed.
+- No baseline (diffBase) run was performed in either round. Every eval carries
+  `baseline: n-a`. Whether these evals discriminate this change from the prior
+  tree stays unmeasured.
+- The composite key `executors.script.rang_config_o_cam` still exists in
+  `_acceptance/config.yaml` and still chains all three legs, but no eval binds it
+  this round. Its chaining path is unexercised by the gate.
+- The supersession block in the signed record names the tooth as
+  `rang-config.sh --chan o-cam`. After this round that is the composite alias,
+  not the leg that grades AC-4. The reference still resolves and still runs.
 
 ## Ngoài hợp đồng
 
-- The lint task reports 5 warnings across `api` and `app` (unused import in
+- The claim that the round-1 red leg "went red for the wrong reason" does not
+  hold. The round-1 harness at commit `eef6b4a` used `grep -v "ui_standards_skill"`,
+  and the probe shows that pattern drops one socket line, not two. The substring
+  collision bites `ds_skill` only. It was a defect in the round-2 extension,
+  caught before it shipped, never a latent defect in the round-1 measure. The
+  round-2 fix is still correct; only the story about round 1 is wrong.
+- The lint task reports 5 warnings across `api` and `app` (an unused import in
   `tracking.contracts`, a barrel file in `postcss.config.mjs`). The tasks
-  succeed. The contract asks only that lint is green, so these are outside it.
+  succeed. The contract asks only that lint is green.
 - Two commits from the other session carry a `Co-Authored-By` trailer, which the
-  repo rules forbid. The contract puts rewriting them out of scope. They remain.
+  repo rules forbid. The contract puts rewriting them out of scope.
 
 ## Analyst
 
-Non-discriminating evals: unknown — no baseline tree was run this round, so no eval can be called green-on-both or red-on-baseline.
+Non-discriminating evals: unknown — no baseline tree was run in either round, so no eval can be called green-on-both or red-on-baseline.
 
 ## Variance
 
-none — every eval is deterministic and ran once.
+none — every eval is deterministic and ran once per round.
 
 ## Iterations
 
-Round 1: all nine evals cleared. No return to implementation.
+Round 1 (commit eef6b4a): all nine evals cleared. The verifier raised two weaknesses in the measure itself — four criteria bound to one exit code, and a red leg that stripped only one design socket.
+Round 2 (commit f4b2ea9): both weaknesses addressed before any red. Three separate legs replace the single socket command, and the red leg strips each design socket in turn with a self-count guard. All nine evals cleared again. The judge was re-run because both judged files changed.
