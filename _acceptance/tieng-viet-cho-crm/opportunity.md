@@ -14,9 +14,12 @@ prototype:
 
 ## Vấn đề & ai gặp
 
-CRM này là **sản phẩm nội bộ của OneHub**, không bán ra ngoài. Người dùng là
-**nhân viên quan hệ đối tác** — họ giữ và mở mạng lưới quan hệ với các công ty
-môi giới và cá nhân môi giới.
+OneHub là **nền tảng thị trường nhiều bên** trong tài chính và bất động sản,
+kéo các cá nhân và công ty nhỏ vào một mạng lưới chung. Giai đoạn đầu tập trung
+vào môi giới, mạng lưới sẽ mở rộng sau.
+
+CRM này là **sản phẩm nội bộ**, không bán ra ngoài. Người dùng là **nhân viên
+quan hệ đối tác** — họ giữ và mở quan hệ với mạng lưới.
 
 Họ đọc màn hình bằng tiếng Anh trong khi làm việc bằng tiếng Việt. Mỗi nhãn phải
 dịch trong đầu trước khi bấm, và người mới vào nghề trả giá đắt nhất.
@@ -87,7 +90,7 @@ bán báo họ kẹt ở chỗ báo lỗi thì ④ nhảy lên trước ③.**
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: [đề xuất] Nhân viên quan hệ đối tác làm xong một việc thật bằng tiếng Việt mà không phải quay về tiếng Anh giữa chừng không?
-- Kết quả nào là SỐNG: [đề xuất] Ba nhân viên quan hệ đối tác, mỗi người chạy trọn một luồng thật (thêm một công ty môi giới · ghi hoạt động · cập nhật một thoả thuận hợp tác), và không ai gặp một câu tiếng Anh nào ở bước bắt buộc.
+- Kết quả nào là SỐNG: [đề xuất] Ba nhân viên quan hệ đối tác, mỗi người chạy trọn một luồng thật (thêm một công ty · ghi hoạt động · cập nhật một thoả thuận hợp tác), và không ai gặp một câu tiếng Anh nào ở bước bắt buộc.
 - Kết quả nào là CHẾT: [đề xuất] Người vẫn gặp tiếng Anh ở giữa luồng, hoặc họ nói bản tiếng Việt đọc gượng hơn bản tiếng Anh.
 - Timebox: [đề xuất] Hai ngày dựng cho vòng đầu, và vòng đầu chỉ lấy MỘT nguồn chữ. Quá hai ngày nghĩa là đang làm cả năm nguồn cùng lúc.
 
@@ -136,15 +139,18 @@ Người chốt bốn từ, ghi vào `CONTEXT.md` ở gốc kho (trước hôm n
 từ điển sản phẩm nào):
 
 - **Nhân viên quan hệ đối tác** — người dùng CRM này. Không phải "người bán hàng".
-- **Công ty môi giới** — đang hiện dưới danh từ chung `Companies`.
-- **Cá nhân môi giới** — đang hiện dưới `Contacts`.
-- **Thỏa thuận hợp tác** — đang hiện dưới `Deals`. KHÔNG phải một ca lẻ do môi
-  giới đưa về, mà là quan hệ hợp tác với một môi giới.
+- **Công ty** — một doanh nghiệp trong mạng lưới, đang hiện dưới `Companies`.
+  KHÔNG gọi "công ty môi giới": tên đó khoá vào giai đoạn đầu và bắt đổi tên
+  toàn màn hình mỗi lần mở lĩnh vực mới.
+- **Cá nhân** — một người trong mạng lưới, đang hiện dưới `Contacts`. Cùng lý do
+  không khoá tên vào nghề môi giới.
+- **Thỏa thuận hợp tác** — đang hiện dưới `Deals`. Quan hệ hợp tác với một công
+  ty hoặc một cá nhân, không phải một ca lẻ do đối tác đưa về.
 
 **Danh từ thứ năm chặn lại: giai đoạn của một thoả thuận.** Dữ liệu đang mang
 bảy bước của một phễu bán phần mềm thừa kế từ kho gốc — `DEMO_BOOKED`,
 `QUALIFIED_TO_BUY`, `DECISION_MAKER_BOUGHT_IN`, `CLOSED_WON`… Không ai demo cho
-một môi giới mình sắp bắt tay.
+một đối tác mình sắp bắt tay.
 
 Đây là phát hiện của vòng khai thác này, và nó lớn hơn việc dịch: **tiếng Anh
 cho phép cái lệch đó đi tiếp vì nhãn thừa kế không ai đọc như một lời khẳng

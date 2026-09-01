@@ -1,8 +1,18 @@
 # Từ điển sản phẩm
 
-CRM này là **sản phẩm nội bộ của OneHub**, dùng bởi nhân viên OneHub. Nó không
-bán ra ngoài. Việc của nó là mở rộng và giữ mạng lưới quan hệ với các công ty
-môi giới và cá nhân môi giới.
+## OneHub là gì
+
+**Nền tảng thị trường nhiều bên** trong lĩnh vực tài chính và bất động sản.
+Việc của nó là kéo các cá nhân và các công ty nhỏ vào một mạng lưới chung —
+cùng mô hình mà Beike (Trung Quốc), Compass và Keller Williams đã đi.
+
+**Giai đoạn đầu tập trung vào môi giới.** Mạng lưới sẽ mở rộng sau, nên danh từ
+sản phẩm KHÔNG khoá vào giai đoạn này: gọi là **công ty** và **cá nhân**, không
+phải "công ty môi giới" và "cá nhân môi giới". Một cái tên khoá vào giai đoạn
+đầu bắt đổi tên trên toàn bộ màn hình mỗi lần mở lĩnh vực mới.
+
+CRM này là **sản phẩm nội bộ**, dùng bởi nhân viên OneHub. Nó không bán ra
+ngoài.
 
 Kho tách từ một CRM bán hàng của hãng, nên nhiều danh từ trên màn hình vẫn là
 danh từ CRM chung. Mục dưới đây là nghĩa **của OneHub**, và nó thắng nghĩa
@@ -14,22 +24,25 @@ hiểu.
 ---
 
 **Nhân viên quan hệ đối tác**: người dùng CRM này. Nhân viên OneHub, giữ và mở
-quan hệ với mạng lưới môi giới.
+quan hệ với mạng lưới.
 _Avoid_: "người bán hàng", "sales rep", "khách hàng". Họ không bán gì cho ai, và
 họ là người trong nhà, không phải khách mua sản phẩm.
 
-**Công ty môi giới**: một doanh nghiệp môi giới trong mạng lưới. Trên màn hình
-đang hiện dưới danh từ chung `Companies`.
-_Avoid_: "khách hàng", "công ty khách". Quan hệ là hợp tác, không phải mua bán.
+**Công ty**: một doanh nghiệp trong mạng lưới. Giai đoạn này phần lớn là công ty
+môi giới nhỏ. Trên màn hình đang hiện dưới `Companies`.
+_Avoid_: "công ty môi giới" — khoá vào giai đoạn đầu. "Khách hàng", "công ty
+khách" — quan hệ là hợp tác, không phải mua bán.
 
-**Cá nhân môi giới**: một người môi giới trong mạng lưới, có thể thuộc một công
-ty môi giới hoặc hành nghề độc lập. Trên màn hình đang hiện dưới `Contacts`.
-_Avoid_: "liên hệ", "contact" — hai từ đó không nói được người này làm nghề gì.
+**Cá nhân**: một người trong mạng lưới, có thể thuộc một công ty hoặc hành nghề
+độc lập. Giai đoạn này phần lớn là môi giới. Trên màn hình đang hiện dưới
+`Contacts`.
+_Avoid_: "cá nhân môi giới" — khoá vào giai đoạn đầu. "Liên hệ", "contact" —
+không nói được người này là ai trong mạng lưới.
 
-**Thỏa thuận hợp tác**: một quan hệ hợp tác với một môi giới. Trên màn hình đang
-hiện dưới `Deals`. Chốt 2026-09-01.
-_Avoid_: "cơ hội", "deal bán hàng", "giao dịch". Nó không phải một ca lẻ do môi
-giới đưa về, và không phải một lần bán.
+**Thỏa thuận hợp tác**: một quan hệ hợp tác với một công ty hoặc một cá nhân
+trong mạng lưới. Trên màn hình đang hiện dưới `Deals`. Chốt 2026-09-01.
+_Avoid_: "cơ hội", "deal bán hàng", "giao dịch". Nó không phải một ca lẻ do đối
+tác đưa về, và không phải một lần bán.
 
 **Giai đoạn thoả thuận**: bước hiện tại của một thoả thuận hợp tác. **CHƯA CHỐT
 NGHĨA.** Dữ liệu đang mang bảy bước của một phễu bán phần mềm — `DEMO_BOOKED`,
