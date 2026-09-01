@@ -126,6 +126,25 @@ rằng đột biến có thật sự đổi file. Bộ đo cũ `rang-quet.sh` đ
 đó (`DIFF_N -ne 2` → "RĂNG CÙN: đột biến lệch 0 dòng"); tôi đánh rơi nó khi
 chuyển sang đường B. Hai người chấm độc lập đo lại được 32/39.
 
+**Hai lỗ vòng chấm 2 tìm ra trong chính phép đo, đã bịt.**
+
+Phép đo so hai bản vẽ, nên nó chỉ bắt được chuỗi **giống hệt từng byte**. Dịch
+một khoá thành một chuỗi tiếng Anh KHÁC — `sortBy: "Order by"` — thì hai tập chữ
+khác nhau và nó xanh. Người chấm làm hai mươi khoá thành tiếng Anh trơn mà bộ
+kiểm không đỏ một bài.
+
+Và danh sách trung tính không ai canh: thêm một dòng vào đó là tắt vĩnh viễn một
+chuỗi tiếng Anh, mà dòng đó nằm trong chính file phép đo.
+
+Hai luật mới đóng cả hai:
+
+- **Mỗi giá trị tiếng Việt phải mang ít nhất một dấu tiếng Việt.** `"Order by"`
+  không có dấu nào nên nó đỏ, dù nó khác chuỗi gốc. Đúng một khoá được miễn —
+  `pagination.next = "Sau"` — và danh sách miễn có phép đo đếm độ dài riêng.
+- **Danh sách trung tính thôi viết tay.** Nó sinh ra từ một khối dữ liệu thử,
+  và có hai phép đo: không mục nào được trùng một chuỗi của giao diện, và số mục
+  chỉ đổi khi có người thêm dữ liệu thử.
+
 **Khoá duy nhất phép đo còn không bắt: `table.clearFilters`.** Nó chỉ vẽ trong
 menu con của một mục lọc KHÔNG tìm được, sau khi menu lọc đã mở. Giàn kiểm mở
 được menu con thứ nhất, chưa mở được menu con thứ hai một cách tin cậy. Ghi ra
