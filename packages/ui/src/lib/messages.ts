@@ -55,6 +55,7 @@ const en = {
 		needsAction: "No reply",
 	},
 	sortableList: {
+		role: "sortable",
 		reorder: (label: string) => `Reorder ${label}`,
 	},
 	skeletonSwap: {
@@ -125,6 +126,7 @@ const vi = {
 		needsAction: "Chưa trả lời",
 	},
 	sortableList: {
+		role: "kéo được để sắp xếp",
 		reorder: (label: string) => `Kéo để đổi thứ tự ${label}`,
 	},
 	skeletonSwap: {

@@ -12,7 +12,7 @@
 	},
 	"scripts": {
 		"check-types": "tsc --noEmit",
-		"test": "bun test",
+		"test": "bun test --preload ./test/setup-dom.ts",
 		"ui:add": "shadcn add",
 		"lint": "biome check .",
 		"clean": "rm -rf .turbo node_modules"

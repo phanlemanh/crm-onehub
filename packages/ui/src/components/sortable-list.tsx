@@ -109,6 +109,7 @@ export function SortableItem({
 				className="cursor-grab text-muted-foreground"
 				{...attributes}
 				{...listeners}
+				aria-roledescription={msg.sortableList.role}
 			>
 				<Icon icon={Draggable} />
 				<span className="sr-only">{msg.sortableList.reorder(label)}</span>
