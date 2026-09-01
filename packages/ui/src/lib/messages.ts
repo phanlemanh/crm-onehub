@@ -2,7 +2,9 @@ import { DEFAULT_LOCALE, type Locale } from "./locale";
 
 const en = {
 	table: {
-		clear: "Clear",
+		clearFilters: "Clear",
+		clearSelection: "Clear selection",
+		selected: (count: string) => `${count} selected`,
 		filters: "Filters",
 		sort: "Sort",
 		sortBy: "Sort by",
@@ -31,8 +33,10 @@ const en = {
 		close: "Close",
 	},
 	carousel: {
-		previousSlide: "Previous slide",
-		nextSlide: "Next slide",
+		role: "carousel",
+		itemRole: "item",
+		previousSlide: "Previous item",
+		nextSlide: "Next item",
 	},
 	suggestion: {
 		accept: "Accept",
@@ -68,15 +72,17 @@ export type Messages = typeof en;
 
 const vi = {
 	table: {
-		clear: "Bỏ lọc",
+		clearFilters: "Bỏ lọc",
+		clearSelection: "Bỏ chọn",
+		selected: (count: string) => `Đã chọn ${count}`,
 		filters: "Lọc",
 		sort: "Sắp xếp",
-		sortBy: "Sắp theo",
+		sortBy: "Sắp xếp theo",
 		detail: "Chi tiết",
 		ascending: "Tăng dần",
 		descending: "Giảm dần",
 		columns: "Cột",
-		toggleColumns: "Ẩn hiện cột",
+		toggleColumns: "Ẩn/hiện cột",
 		selectAllRows: "Chọn mọi dòng ở trang này",
 		selectRow: (label: string) => `Chọn ${label}`,
 		selectRowFallback: "Chọn dòng",
@@ -87,22 +93,24 @@ const vi = {
 		next: "Sau",
 		empty: "Không có kết quả",
 		showing: (from: string, to: string, total: string) =>
-			`${from}–${to} trong ${total}`,
+			`${from}–${to} trong số ${total}`,
 	},
 	messageScroller: {
-		toEnd: "Xuống cuối",
-		toStart: "Lên đầu",
+		toEnd: "Xuống cuối hộp thư",
+		toStart: "Lên đầu hộp thư",
 	},
 	dialog: {
 		close: "Đóng",
 	},
 	carousel: {
-		previousSlide: "Ảnh trước",
-		nextSlide: "Ảnh sau",
+		role: "băng trượt",
+		itemRole: "mục",
+		previousSlide: "Mục trước",
+		nextSlide: "Mục sau",
 	},
 	suggestion: {
-		accept: "Nhận",
-		dismiss: "Bỏ",
+		accept: "Áp dụng gợi ý",
+		dismiss: "Bỏ qua",
 	},
 	spinner: {
 		loading: "Đang tải",
@@ -113,17 +121,17 @@ const vi = {
 	attendee: {
 		accepted: "Nhận lời",
 		declined: "Từ chối",
-		tentative: "Chưa chắc",
+		tentative: "Có thể dự",
 		needsAction: "Chưa trả lời",
 	},
 	sortableList: {
-		reorder: (label: string) => `Đổi chỗ ${label}`,
+		reorder: (label: string) => `Kéo để đổi thứ tự ${label}`,
 	},
 	skeletonSwap: {
-		loaded: (label: string) => `Đã tải ${label}`,
+		loaded: (label: string) => `Đã tải xong ${label}`,
 	},
 	reasoning: {
-		thinking: "Đang nghĩ…",
+		thinking: "Đang suy nghĩ…",
 	},
 	threadMessage: {
 		empty: "Thư không có nội dung.",
