@@ -38,16 +38,15 @@ const path = require("node:path");
 const { resolveConfigKey } = require(path.join(process.argv[2], "lib", "evidence-core.cjs"));
 const text = fs.readFileSync(process.argv[1], "utf8");
 const keys = [
-  "discovery.brainstorm_skill",
   "feature_loop.ui_standards_skill",
   "design_pass.ds_skill",
 ];
 const missing = keys.filter((k) => !resolveConfigKey(text, k));
 if (missing.length) {
-  console.log("o cam trong: " + missing.join(", "));
+  console.log("o cam thiet ke trong: " + missing.join(", "));
   process.exit(1);
 }
-console.log("ba o cam deu doc ra ten skill");
+console.log("hai o cam thiet ke deu doc ra ten skill");
 ' "$1" "$2"
 }
 
@@ -67,13 +66,54 @@ case "$CHAN" in
   o-cam)
     echo "-- chieu duong: config that"
     detect_o_cam "$ROOT/_acceptance/config.yaml" "$ROOT" || exit 1
-    echo "-- chieu do: fixture bo mot o cam"
+    echo "-- chieu do: fixture bo mot o cam thiet ke"
     grep -v "ui_standards_skill" "$ROOT/_acceptance/config.yaml" > "$FIX/config.yaml"
     if detect_o_cam "$FIX/config.yaml" "$ROOT"; then
-      echo "RANG CUN: fixture thieu o cam ma phep do van xanh"
+      echo "RANG CUN: fixture thieu o cam thiet ke ma phep do van xanh"
       exit 1
     fi
-    echo "rang-config o-cam: hai chieu dung"
+    echo "-- chieu trung tinh: fixture CO khai o cam khai thac"
+    {
+      printf 'discovery:\n  brainstorm_skill: mot-skill-nao-do\n'
+      cat "$ROOT/_acceptance/config.yaml"
+    } > "$FIX/config.yaml"
+    if ! detect_o_cam "$FIX/config.yaml" "$ROOT"; then
+      echo "RANG SAI: o cam khai thac la trung tinh, khai no khong duoc tinh la loi"
+      exit 1
+    fi
+    echo "rang-config o-cam: ba chieu dung"
+    ;;
+  khai-thac)
+    echo "-- chieu duong: config that phai doc ra RONG"
+    V="$(node -e '
+const path = require("node:path");
+const { resolveConfigKey } = require(path.join(process.argv[2], "lib", "evidence-core.cjs"));
+const text = require("node:fs").readFileSync(process.argv[1], "utf8");
+const v = resolveConfigKey(text, "discovery.brainstorm_skill");
+process.stdout.write(v == null ? "" : String(v));
+' "$ROOT/_acceptance/config.yaml" "$ROOT")"
+    if [ -n "$V" ]; then
+      echo "o cam khai thac dang cam: $V — kit noi o nay trung tinh, de trong"
+      exit 1
+    fi
+    echo "o cam khai thac dang trong, dung nhu kit mac dinh"
+    echo "-- chieu do: fixture CO khai thi phai doc ra duoc"
+    {
+      printf 'discovery:\n  brainstorm_skill: mot-skill-nao-do\n'
+      cat "$ROOT/_acceptance/config.yaml"
+    } > "$FIX/config.yaml"
+    V="$(node -e '
+const path = require("node:path");
+const { resolveConfigKey } = require(path.join(process.argv[2], "lib", "evidence-core.cjs"));
+const text = require("node:fs").readFileSync(process.argv[1], "utf8");
+const v = resolveConfigKey(text, "discovery.brainstorm_skill");
+process.stdout.write(v == null ? "" : String(v));
+' "$FIX/config.yaml" "$ROOT")"
+    if [ "$V" != "mot-skill-nao-do" ]; then
+      echo "RANG CUN: fixture co khai ma bo doc khong thay — phep do khong do gi"
+      exit 1
+    fi
+    echo "rang-config khai-thac: hai chieu dung"
     ;;
   *)
     echo "rang-config: chan la $CHAN"

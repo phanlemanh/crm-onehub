@@ -78,3 +78,10 @@ sửa tiêu chí sau khi thấy kết quả là đường dễ nhất để làm
   đỏ vì một luật KHÁC nổ — hồ sơ này chưa ký nên luật per-slug chặn, và răng
   đọc mã thoát của cả tiến trình. Nay AC-9 nói về đúng luật `t1-escape`. Vế bị
   bỏ không đo thứ tiêu chí hứa đo.
+
+**AC-7 đã bị thay thế — xem hồ sơ `o-cam-khai-thac-trung-tinh`.** AC-7 đòi cả ba
+ổ cắm phải có tên. Kit nói khác: `commands/start.md` dòng 113-120 cấm cắm skill
+vào ổ khai thác và nói để trống là hợp lệ, bộ quét trả rỗng thì thẻ dùng khuôn
+mặc định, không cờ đỏ. Tiêu chí này cưỡng chế một luật không có thật, nên răng
+`rang-config.sh --chan o-cam` đã thu về đúng hai ổ thiết kế. Văn bản AC-7 giữ
+nguyên làm sử liệu; bằng chứng đã ký vẫn đúng với cấu hình tại commit `b933334`.

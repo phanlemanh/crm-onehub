@@ -1,0 +1,65 @@
+schema_version: 1
+feature_slug: o-cam-khai-thac-trung-tinh
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.rang_config_khai_thac
+    expected: "exit 0; o cam khai thac doc ra rong, va fixture co khai thi bo doc phai thay — hai chieu"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.rang_config_o_cam
+    expected: "exit 0; hai o cam thiet ke deu doc ra ten skill"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.rang_config_o_cam
+    expected: "exit 0 tren cau hinh that, khong con doi o cam khai thac"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.rang_config_o_cam
+    expected: "chieu do: fixture bo ui_standards_skill bi bat, in dung ten o thieu"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.rang_config_o_cam
+    expected: "chieu trung tinh: fixture CO khai discovery.brainstorm_skill van xanh — khai khong phai loi"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.start_scan
+    expected: "exit 0; bo quet doc duoc config, khong ho so hong, ban do khop, o cam khai thac trong"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: judgment
+    question: "Hop dong sua-test-do-thu-tu-nap da ky va khong duoc viet lai. Muc Notes cua no nay co mot dong noi AC-7 cu bi vong nay thay the. Dong do co du de mot nguoi doc ho so cu hieu vi sao tieu chi do khong con dung, ma khong phai tu di tim khong?"
+    inputs: [contract.md, ../sua-test-do-thu-tu-nap/contract.md]
+    evidence_required: [judged_by, verdict, rationale]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.lint_khong_cache
+    expected: "exit 0; moi task lint thanh cong, 0 cached"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.check_types_khong_cache
+    expected: "exit 0; moi task kiem kieu thanh cong, 0 cached"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

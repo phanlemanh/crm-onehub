@@ -22,6 +22,8 @@ executors:
     rang_suite_thu_tu: "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan thu-tu"
     rang_config_doi: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan doi"
     rang_config_o_cam: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam"
+    rang_config_khai_thac: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan khai-thac"
+    start_scan: "bash _acceptance/o-cam-khai-thac-trung-tinh/rang-quet.sh"
     rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
     rang_t1_im: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"
   design:
