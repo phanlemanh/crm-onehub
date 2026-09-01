@@ -5,7 +5,7 @@ slug: tieng-viet-cho-crm
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: paused
 approved_by: Manh Phan
 approved_at: 2026-09-01
 design_doc: docs/superpowers/specs/2026-09-01-tieng-viet-cho-crm-design.md
@@ -21,6 +21,13 @@ chọn đó, rồi chứng minh đường ấy chạy trọn trên **một** mà
 
 Đây là vòng ① trong năm vòng đã chốt ở `opportunity.md`. Bốn nguồn chữ còn lại
 nằm ngoài vòng này.
+
+**Vòng này DỪNG ở S4 vòng chấm 1, 2026-09-01, và chưa ký Cổng 2.** Người chọn
+đường C: đảo thứ tự, đưa vòng ② lên trước. Căn cứ ghi ở `decisions.jsonl`.
+AC-6 và AC-9 cùng trượt vì một lý do — hợp đồng hứa về một màn hình mà chính nó
+cấm sửa component dùng chung vẽ ra màn hình đó. Vòng ② mở đường; vòng này chạy
+lại S4 ngay sau đó, và AC-6 lúc ấy bỏ được mục trừ hai nhãn trình-đọc-màn-hình.
+Phần đã làm vẫn nằm trong nhánh và vẫn xanh ở mười phép đo còn lại.
 
 Source input: prompt · `_acceptance/tieng-viet-cho-crm/opportunity.md`
 

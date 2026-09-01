@@ -63,7 +63,7 @@ giới này phải rõ trước khi viết dòng mã nào.
 |---|---|---|---|---|
 | 1 | Nhân viên quan hệ đối tác thật sự vướng vì tiếng Anh, không phải vướng vì luồng việc | Dịch xong vẫn chậm như cũ, công đổ vào chỗ không đau | Ngồi cạnh 3 nhân viên trong một giờ, đếm số lần họ dừng ở một nhãn | Chưa thử |
 | 2 | ~~Nhãn màn hình là nguồn đau chính, không phải câu lỗi từ máy chủ~~ | — | Đếm chỗ giao diện hiện nguyên văn câu máy chủ | **Đã thử 2026-09-01 — SAI.** 107 chỗ gọi `toast.error(error.message)`, tức đổ thẳng câu tiếng Anh của máy chủ lên màn hình. Câu máy chủ là chữ mặt tiền, không phải chữ nội bộ. |
-| 3 | Bộ dựng chung chịu được việc nhận chuỗi từ ngoài vào | Phải sửa lại 109 file theo kiểu khác, chi phí nhân đôi | Đổi thử một component, xem có phải sửa mọi nơi gọi nó không | Chưa thử |
+| 3 | Bộ dựng chung chịu được việc nhận chuỗi từ ngoài vào | Phải sửa lại 109 file theo kiểu khác, chi phí nhân đôi | Đổi thử một component, xem có phải sửa mọi nơi gọi nó không | **Đã đếm 2026-09-01 — nhỏ hơn tưởng nhiều.** Bộ dựng chung có 75 file, nhưng chỉ **9 file mang chữ nhìn thấy được, tổng 25 chuỗi**; riêng `data-table.tsx` giữ 13. Sáu chỗ gọi `DataTable`. Bộ này đã dùng `createContext` ở 15 file và đã phụ thuộc `next-themes`, nên nếp truyền-qua-context có sẵn trong kho. Còn phải đổi thử thật để biết có chỗ gọi nào phải sửa không |
 | 4 | Chữ do tác nhân sinh ra chấp nhận được khi chỉ bảo mô hình đổi tiếng | Phần đó vẫn tiếng Anh, và nó là phần người đọc nhiều nhất | Chạy một tác nhân với một dòng chỉ dẫn tiếng Việt, đọc kết quả | Chưa thử |
 | 5 | Kho đủ chỗ để đặt tuỳ chọn ngôn ngữ mà không đụng phần đăng nhập | Phải sửa vùng dữ liệu nhạy cảm, hạng rủi ro nhảy lên mức cao nhất | Đọc bảng người dùng và luật vùng nhạy cảm trong cấu hình cổng | Chưa thử |
 
@@ -86,6 +86,25 @@ vòng giữ nguyên; mục Ngoài phạm vi vẫn cấm gộp năm vùng vào m�
 **Điều kiện lật, ghi trước để khỏi bàn lại:** ④ chỉ đứng sau ③ vì câu lỗi hiện
 ở đường hỏng, còn ngưỡng nói về bước bắt buộc trong luồng thành công. **Người
 bán báo họ kẹt ở chỗ báo lỗi thì ④ nhảy lên trước ③.**
+
+### Lật thật, người chốt 2026-09-01: ② lên trước ①
+
+Thứ tự chạy nay là **② → ① → ③ → ④ → ⑤**.
+
+Vòng ① chạy tới S4 rồi dừng. Hai phép đo trượt, và cả hai trượt vì một lý do:
+hợp đồng hứa mọi chữ trên màn công ty là tiếng Việt, trong khi chính nó cấm sửa
+bộ dựng chung vẽ ra màn đó. Bảng dùng chung khoá cứng `Filters`, `Sort`,
+`Columns`, `Detail`, `Clear`, và chém tiêu đề cột dài không dấu ba chấm. Không
+chỗ nào nhận giá trị từ ngoài.
+
+Bảng thứ tự cũ đã nói ② ràng buộc ③. Vòng chấm chứng minh nó ràng buộc cả ①.
+
+Cùng một lớp lỗi xuất hiện lần thứ hai — phản biện ngữ cảnh sạch bắt lần đầu ở
+P0, bản vá gọi tên hai ngoại lệ, vòng chấm chứng minh danh sách ngoại lệ thiếu.
+Lần thứ hai nghĩa là khung sai chứ không phải chi tiết sai. Người chọn đổi khung.
+
+Giá phải trả, ghi trước: chưa màn nào hiện tiếng Việt trọn vẹn cho tới khi ②
+xong và ① chạy lại S4.
 
 ## Ngưỡng chết / ngưỡng UAT
 
