@@ -21,6 +21,8 @@ fail() {
 	exit 1
 }
 
+export TURBO_FORCE=true
+
 for task in check-types lint lint:slop test; do
 	echo "pre-push: bun run $task"
 	bun run "$task" || fail "$task"

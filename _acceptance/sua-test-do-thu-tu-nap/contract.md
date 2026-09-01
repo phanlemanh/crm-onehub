@@ -83,5 +83,7 @@ sửa tiêu chí sau khi thấy kết quả là đường dễ nhất để làm
 ổ cắm phải có tên. Kit nói khác: `commands/start.md` dòng 113-120 cấm cắm skill
 vào ổ khai thác và nói để trống là hợp lệ, bộ quét trả rỗng thì thẻ dùng khuôn
 mặc định, không cờ đỏ. Tiêu chí này cưỡng chế một luật không có thật, nên răng
-`rang-config.sh --chan o-cam` đã thu về đúng hai ổ thiết kế. Văn bản AC-7 giữ
+`rang-config.sh --chan o-cam-duong` đã thu về đúng hai ổ thiết kế (tên chân
+sửa 2026-09-01 khi răng tách thành ba chân riêng; `--chan o-cam` nay là bí danh
+gộp cả ba). Văn bản AC-7 giữ
 nguyên làm sử liệu; bằng chứng đã ký vẫn đúng với cấu hình tại commit `b933334`.
