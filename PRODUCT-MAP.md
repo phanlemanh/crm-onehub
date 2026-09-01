@@ -23,7 +23,7 @@ flowchart TD
 
 ## Sắp mở vòng
 
-- Người bán hàng dùng CRM bằng tiếng Việt (`tieng-viet-cho-crm`)
+- Nhân viên quan hệ đối tác dùng CRM bằng tiếng Việt (`tieng-viet-cho-crm`)
 
 ## Đã giao
 

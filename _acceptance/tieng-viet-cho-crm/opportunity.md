@@ -1,7 +1,7 @@
 ---
 schema_version: 1
 slug: tieng-viet-cho-crm
-feature: Người bán hàng dùng CRM bằng tiếng Việt
+feature: Nhân viên quan hệ đối tác dùng CRM bằng tiếng Việt
 owner: phanlemanh@gmail.com
 stage: decided
 decision: build
@@ -14,9 +14,12 @@ prototype:
 
 ## Vấn đề & ai gặp
 
-Người bán hàng của OneMount đọc màn hình bằng tiếng Anh trong khi làm việc bằng
-tiếng Việt. Mỗi nhãn phải dịch trong đầu trước khi bấm, và người mới vào nghề
-trả giá đắt nhất.
+CRM này là **sản phẩm nội bộ của OneHub**, không bán ra ngoài. Người dùng là
+**nhân viên quan hệ đối tác** — họ giữ và mở mạng lưới quan hệ với các công ty
+môi giới và cá nhân môi giới.
+
+Họ đọc màn hình bằng tiếng Anh trong khi làm việc bằng tiếng Việt. Mỗi nhãn phải
+dịch trong đầu trước khi bấm, và người mới vào nghề trả giá đắt nhất.
 
 Hôm nay kho **không có một mẩu hạ tầng đa ngôn ngữ nào**. Tôi đếm chứ không đoán:
 
@@ -55,7 +58,7 @@ giới này phải rõ trước khi viết dòng mã nào.
 
 | # | Giả định | Nếu sai thì | Phép thử rẻ nhất | Trạng thái |
 |---|---|---|---|---|
-| 1 | Người bán thật sự vướng vì tiếng Anh, không phải vướng vì luồng việc | Dịch xong vẫn chậm như cũ, tiền đổ vào chỗ không đau | Ngồi cạnh 3 người bán trong một giờ, đếm số lần họ dừng ở một nhãn | Chưa thử |
+| 1 | Nhân viên quan hệ đối tác thật sự vướng vì tiếng Anh, không phải vướng vì luồng việc | Dịch xong vẫn chậm như cũ, công đổ vào chỗ không đau | Ngồi cạnh 3 nhân viên trong một giờ, đếm số lần họ dừng ở một nhãn | Chưa thử |
 | 2 | ~~Nhãn màn hình là nguồn đau chính, không phải câu lỗi từ máy chủ~~ | — | Đếm chỗ giao diện hiện nguyên văn câu máy chủ | **Đã thử 2026-09-01 — SAI.** 107 chỗ gọi `toast.error(error.message)`, tức đổ thẳng câu tiếng Anh của máy chủ lên màn hình. Câu máy chủ là chữ mặt tiền, không phải chữ nội bộ. |
 | 3 | Bộ dựng chung chịu được việc nhận chuỗi từ ngoài vào | Phải sửa lại 109 file theo kiểu khác, chi phí nhân đôi | Đổi thử một component, xem có phải sửa mọi nơi gọi nó không | Chưa thử |
 | 4 | Chữ do tác nhân sinh ra chấp nhận được khi chỉ bảo mô hình đổi tiếng | Phần đó vẫn tiếng Anh, và nó là phần người đọc nhiều nhất | Chạy một tác nhân với một dòng chỉ dẫn tiếng Việt, đọc kết quả | Chưa thử |
@@ -83,8 +86,8 @@ bán báo họ kẹt ở chỗ báo lỗi thì ④ nhảy lên trước ③.**
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] Người bán làm xong một việc thật bằng tiếng Việt mà không phải quay về tiếng Anh giữa chừng không?
-- Kết quả nào là SỐNG: [đề xuất] Ba người bán, mỗi người chạy trọn một luồng thật (thêm khách · ghi hoạt động · chốt một cơ hội), và không ai gặp một câu tiếng Anh nào ở bước bắt buộc.
+- Câu hỏi phép đo trả lời: [đề xuất] Nhân viên quan hệ đối tác làm xong một việc thật bằng tiếng Việt mà không phải quay về tiếng Anh giữa chừng không?
+- Kết quả nào là SỐNG: [đề xuất] Ba nhân viên quan hệ đối tác, mỗi người chạy trọn một luồng thật (thêm một công ty môi giới · ghi hoạt động · cập nhật một thoả thuận hợp tác), và không ai gặp một câu tiếng Anh nào ở bước bắt buộc.
 - Kết quả nào là CHẾT: [đề xuất] Người vẫn gặp tiếng Anh ở giữa luồng, hoặc họ nói bản tiếng Việt đọc gượng hơn bản tiếng Anh.
 - Timebox: [đề xuất] Hai ngày dựng cho vòng đầu, và vòng đầu chỉ lấy MỘT nguồn chữ. Quá hai ngày nghĩa là đang làm cả năm nguồn cùng lúc.
 
@@ -109,14 +112,14 @@ Không lấy hình thái từ đâu ngoài. Chuẩn giao diện của kho vẫn 
 - **Ngưỡng UAT chốt cùng lúc ký:** CHƯA CHỐT. Bốn dòng ở mục Ngưỡng vẫn mang tiền tố `[đề xuất]` — đó là lời của máy, không phải lời người ký. Người gỡ tiền tố mới là chốt.
 
 **Phạm vi vòng đầu — máy đề xuất, người chưa chốt:** chỉ lấy cột "nhãn ứng
-dụng". Căn cứ: cột to nhất, người bán chạm nhiều nhất, và là cột duy nhất giải
+dụng". Căn cứ: cột to nhất, nhân viên chạm nhiều nhất, và là cột duy nhất giải
 xong thì bốn cột kia có chỗ dựa. Phạm vi này sẽ được chốt ở hợp đồng bước kế,
 không phải ở đây.
 
 ## Thước đo thành công → ứng viên criterion
 
 - Số bước bắt buộc trong một luồng thật còn hiện tiếng Anh, đếm theo luồng.
-- Số người bán chọn tiếng Việt rồi giữ nguyên sau một tuần.
+- Số nhân viên chọn tiếng Việt rồi giữ nguyên sau một tuần.
 - Số câu máy chủ hiện lên màn hình mà chưa có bản tiếng Việt.
 
 ## Out of scope từ khám phá
@@ -126,3 +129,28 @@ không phải ở đây.
 - Không đổi tiền tệ hay múi giờ. Định dạng theo vùng là việc khác với dịch chữ.
 - Không làm cả năm nguồn chữ trong một vòng. Ngưỡng timebox ở trên đã nói rõ là một nguồn.
 - Không đụng phần đăng nhập và phân quyền. Nếu tuỳ chọn ngôn ngữ buộc phải sửa vùng đó thì quay lại hỏi người trước.
+
+## Từ vựng chốt 2026-09-01 — và một danh từ CHƯA chốt được
+
+Người chốt bốn từ, ghi vào `CONTEXT.md` ở gốc kho (trước hôm nay kho không có
+từ điển sản phẩm nào):
+
+- **Nhân viên quan hệ đối tác** — người dùng CRM này. Không phải "người bán hàng".
+- **Công ty môi giới** — đang hiện dưới danh từ chung `Companies`.
+- **Cá nhân môi giới** — đang hiện dưới `Contacts`.
+- **Thỏa thuận hợp tác** — đang hiện dưới `Deals`. KHÔNG phải một ca lẻ do môi
+  giới đưa về, mà là quan hệ hợp tác với một môi giới.
+
+**Danh từ thứ năm chặn lại: giai đoạn của một thoả thuận.** Dữ liệu đang mang
+bảy bước của một phễu bán phần mềm thừa kế từ kho gốc — `DEMO_BOOKED`,
+`QUALIFIED_TO_BUY`, `DECISION_MAKER_BOUGHT_IN`, `CLOSED_WON`… Không ai demo cho
+một môi giới mình sắp bắt tay.
+
+Đây là phát hiện của vòng khai thác này, và nó lớn hơn việc dịch: **tiếng Anh
+cho phép cái lệch đó đi tiếp vì nhãn thừa kế không ai đọc như một lời khẳng
+định. Tiếng Việt không cho hoãn** — viết "Đã đặt lịch demo" bằng tiếng Việt thì
+cái sai hiện ra giữa màn hình.
+
+Hệ quả cho thứ tự năm vòng: màn **thoả thuận hợp tác** không dịch được trước khi
+có người quyết bảy giai đoạn thật. Đó là một quyết định nghiệp vụ, không phải
+việc của vòng ngôn ngữ.
