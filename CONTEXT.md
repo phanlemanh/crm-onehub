@@ -21,6 +21,28 @@ thừa kế.
 Từ chưa có mục ở đây thì hoặc thêm mục trước, hoặc viết bằng chữ thường ai cũng
 hiểu.
 
+## Luật viết nhãn: ngắn theo ngữ cảnh, không ngắn theo nghĩa
+
+Nghĩa không nằm hết trong cụm từ. Một phần nằm ở **chỗ người đang đứng** — tên
+màn, dòng họ đang đọc, cột bên cạnh. Nhãn chỉ mang phần ngữ cảnh **chưa cấp**.
+
+Phép thử: xoá một chữ khỏi nhãn — người đứng ở màn đó còn hiểu đúng không? Còn
+thì chữ đó là thừa, vì màn hình đã nói nó rồi.
+
+| Ngữ cảnh | Nhãn dài | Nhãn đúng | Ngữ cảnh đã cấp gì |
+|---|---|---|---|
+| Màn thoả thuận, mỗi dòng là một thoả thuận | Thoả thuận đang mở | **Đang mở** | danh từ "thoả thuận" |
+| Màn công ty, mỗi dòng là một công ty | Công ty | **Tên** | dòng đã là công ty |
+| Cột người chịu trách nhiệm | Người phụ trách | **Phụ trách** | cột không thể là vật |
+| Cột trong bảng dữ liệu | Bổ sung dữ liệu | **Bổ sung** | đang ở trong bảng dữ liệu |
+
+Đây KHÔNG phải cắt cho vừa khung. Cắt cho vừa khung là bỏ chữ mang nghĩa, và nó
+làm nhãn cụt. Luật này bỏ chữ mà **màn hình đã nói rồi**, nên nhãn ngắn hơn mà
+người đọc hiểu y hệt.
+
+Hệ quả đo được ở màn công ty: giãn tối đa so với tiếng Anh tụt từ 3,0× xuống
+1,8×, và hai tiêu đề từng bị cắt cụt ở khổ hẹp nay vừa khung.
+
 ---
 
 **Nhân viên quan hệ đối tác**: người dùng CRM này. Nhân viên OneHub, giữ và mở

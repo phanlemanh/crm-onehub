@@ -1,0 +1,147 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Bản mẫu — màn công ty, tiếng Việt so tiếng Anh</title>
+<style>
+  :root {
+    --ground: #ffffff;
+    --raise: #fafafa;
+    --ink: #141414;
+    --ink-mid: #5a5a5a;
+    --ink-soft: #8a8a8a;
+    --line: #e4e4e4;
+    --brand: #006b4f;
+    --warn-bg: #fdf4e3;
+    --warn-line: #d9a441;
+    --warn-ink: #7a5300;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px;
+    background: var(--ground); color: var(--ink);
+    font: 14px/1.5 ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: var(--ink-mid); margin: 0 0 28px; max-width: 70ch; }
+  h2 { font-size: 14px; margin: 32px 0 8px; letter-spacing: .02em; }
+  h2 .tag {
+    font: 500 11px/1 ui-monospace, monospace; letter-spacing: .08em;
+    color: var(--ink-soft); margin-left: 8px; text-transform: uppercase;
+  }
+  .frame { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .frame.narrow { max-width: 560px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td {
+    text-align: left; padding: 9px 12px;
+    border-bottom: 1px solid var(--line); white-space: nowrap;
+  }
+  th {
+    background: var(--raise); font-weight: 500; color: var(--ink-mid);
+    font-size: 12px; letter-spacing: .02em;
+  }
+  tr:last-child td { border-bottom: 0; }
+  td.num { font-variant-numeric: tabular-nums; }
+  .cell-clip { display: block; max-width: 128px; overflow: hidden; text-overflow: ellipsis; }
+  .bleed th, .bleed td { overflow: visible; }
+  .flag {
+    background: var(--warn-bg); border-left: 3px solid var(--warn-line);
+    color: var(--warn-ink); padding: 10px 14px; margin: 10px 0 0;
+    border-radius: 0 5px 5px 0; max-width: 70ch;
+  }
+  .flag b { font-weight: 600; }
+  .legend { color: var(--ink-soft); font-size: 12px; margin-top: 6px; }
+  .dot { color: var(--brand); }
+</style>
+
+<h1>Màn công ty — bản mẫu tiếng Việt</h1>
+<p class="sub">
+  Bản tĩnh, dựng từ đúng mười cột thật của bảng công ty và đúng từ điển sản phẩm
+  đã chốt. Mục đích duy nhất: cho thấy chữ tiếng Việt dài hơn làm vỡ chỗ nào,
+  trước khi có dòng mã nào.
+</p>
+
+<h2>1 · Hôm nay <span class="tag">tiếng Anh · khổ rộng</span></h2>
+<div class="frame">
+  <table>
+    <tr>
+      <th>Company</th><th>Domain</th><th>Industry</th><th>Owner</th>
+      <th>Contacts</th><th>Open deals</th><th>Created</th><th>Last activity</th>
+    </tr>
+    <tr>
+      <td>Bất động sản An Khang</td><td>ankhang.vn</td><td>Real estate</td>
+      <td>Trần Minh</td><td class="num">12</td><td class="num">3</td>
+      <td>Sep 1, 2026</td><td>Aug 28, 2026</td>
+    </tr>
+    <tr>
+      <td>Môi giới Phú Thịnh</td><td>phuthinh.com.vn</td><td>Brokerage</td>
+      <td>Lê Thu Hà</td><td class="num">1,240</td><td class="num">17</td>
+      <td>Jul 14, 2026</td><td>Aug 31, 2026</td>
+    </tr>
+  </table>
+</div>
+
+<h2>2 · Tiếng Việt <span class="tag">khổ rộng · vẫn đứng</span></h2>
+<div class="frame">
+  <table>
+    <tr>
+      <th>Tên</th><th>Tên miền</th><th>Ngành</th><th>Phụ trách</th>
+      <th>Cá nhân</th><th>Thoả thuận mở</th><th>Ngày tạo</th><th>Hoạt động cuối</th>
+    </tr>
+    <tr>
+      <td>Bất động sản An Khang</td><td>ankhang.vn</td><td>Bất động sản</td>
+      <td>Trần Minh</td><td class="num">12</td><td class="num">3</td>
+      <td>1 thg 9, 2026</td><td>28 thg 8, 2026</td>
+    </tr>
+    <tr>
+      <td>Môi giới Phú Thịnh</td><td>phuthinh.com.vn</td><td>Môi giới</td>
+      <td>Lê Thu Hà</td><td class="num">1.240</td><td class="num">17</td>
+      <td>14 thg 7, 2026</td><td>31 thg 8, 2026</td>
+    </tr>
+  </table>
+</div>
+<p class="legend">
+  Ngày và số đã đổi theo tiếng: <span class="dot">1 thg 9, 2026</span> thay cho
+  <span class="dot">Sep 1, 2026</span>, và <span class="dot">1.240</span> thay cho
+  <span class="dot">1,240</span> — dấu chấm ngăn nghìn, không phải dấu phẩy.
+</p>
+
+<h2>3 · Tiếng Việt <span class="tag">khổ hẹp · nhãn theo ngữ cảnh</span></h2>
+<div class="frame narrow">
+  <table class="bleed">
+    <tr>
+      <th>Tên</th><th>Phụ trách</th>
+      <th>Thoả thuận mở</th><th>Hoạt động cuối</th>
+    </tr>
+    <tr>
+      <td><span class="cell-clip">Bất động sản An Khang</span></td>
+      <td>Trần Minh</td><td class="num">3</td><td>28 thg 8, 2026</td>
+    </tr>
+    <tr>
+      <td><span class="cell-clip">Môi giới Phú Thịnh</span></td>
+      <td>Lê Thu Hà</td><td class="num">17</td><td>31 thg 8, 2026</td>
+    </tr>
+  </table>
+</div>
+
+<div class="flag">
+  <b>Nhãn cắt theo ngữ cảnh, không cắt theo nghĩa.</b>
+  Mỗi dòng đã là một công ty và bảng đã nằm trong màn "Công ty", nên nhãn chỉ
+  mang phần ngữ cảnh CHƯA cấp: "Phụ trách" thay "Người phụ trách", "Bổ sung"
+  thay "Bổ sung dữ liệu", "Tên" thay "Công ty".
+  <br><br>
+  Giãn tối đa so với tiếng Anh tụt từ 3,0× xuống 1,8×. Bản dài trước đó cắt cụt
+  hai tiêu đề ở khổ này.
+</div>
+
+<h2>4 · Menu đổi tiếng <span class="tag">thanh đầu trang</span></h2>
+<div class="frame" style="max-width:260px">
+  <div style="padding:8px 0">
+    <div style="padding:7px 14px;color:var(--ink-soft);font-size:12px">Ngôn ngữ</div>
+    <div style="padding:7px 14px;display:flex;justify-content:space-between">
+      <span>Tiếng Việt</span><span class="dot">✓</span>
+    </div>
+    <div style="padding:7px 14px">English</div>
+  </div>
+</div>
+<p class="legend">
+  Dùng lại menu thả xuống đang có cho nút sáng/tối — không dựng kiểu dáng mới.
+</p>

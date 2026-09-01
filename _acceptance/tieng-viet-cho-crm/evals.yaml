@@ -91,6 +91,6 @@ evals:
   - id: E11
     criterion: AC-11
     executor: judgment
-    question: "Ban tieng Viet cua man cong ty doc nhu tieng Viet cua nguoi trong nghe quan he doi tac, hay doc nhu mot ban dich may? Doi chieu voi tu dien san pham CONTEXT.md — nhat la hai tu 'cong ty' va 'ca nhan', co y KHONG khoa vao nghe moi gioi."
+    question: "Hai cau. (1) Ban tieng Viet cua man cong ty doc nhu tieng Viet cua nguoi trong nghe quan he doi tac, hay doc nhu mot ban dich may? (2) Moi nhan co tuan luat NGAN-THEO-NGU-CANH trong CONTEXT.md khong — tuc chi mang phan ma man hinh CHUA cap? Neu mot nhan lap lai danh tu ma man hinh da noi, goi ten nhan do. Doi chieu ca tu dien san pham, nhat la 'cong ty' va 'ca nhan' co y KHONG khoa vao nghe moi gioi."
     inputs: [contract.md, ../../CONTEXT.md, evidence/E5-step2.png]
     evidence_required: [judged_by, verdict, rationale]
