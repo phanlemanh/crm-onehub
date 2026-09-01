@@ -1,0 +1,85 @@
+---
+schema_version: 1
+feature: Xương sống ngôn ngữ — nhân viên chọn tiếng Việt một lần, màn công ty hiện trọn tiếng Việt
+slug: tieng-viet-cho-crm
+owner: phanlemanh@gmail.com
+risk_tier: T2
+surfaces: [ui]
+status: draft
+approved_by:
+approved_at:
+design_doc: docs/superpowers/specs/2026-09-01-tieng-viet-cho-crm-design.md
+---
+
+# Acceptance Contract: tieng-viet-cho-crm
+
+## Context
+
+Nhân viên quan hệ đối tác đọc màn hình bằng tiếng Anh trong khi làm việc bằng
+tiếng Việt. Vòng này dựng đường để họ chọn tiếng Việt một lần và giữ nguyên lựa
+chọn đó, rồi chứng minh đường ấy chạy trọn trên **một** màn hình: màn công ty.
+
+Đây là vòng ① trong năm vòng đã chốt ở `opportunity.md`. Bốn nguồn chữ còn lại
+nằm ngoài vòng này.
+
+Source input: prompt · `_acceptance/tieng-viet-cho-crm/opportunity.md`
+
+## Criteria
+
+- AC-1: Given người dùng chưa từng chọn tiếng và trình duyệt của họ khai ưu tiên tiếng Việt, When họ mở CRM lần đầu, Then màn hình hiện tiếng Việt.
+- AC-2: Given người dùng chưa từng chọn tiếng và trình duyệt khai ưu tiên tiếng Anh, When họ mở CRM, Then màn hình hiện tiếng Anh.
+- AC-3: Given người dùng đã chọn tiếng Việt, When trang được máy chủ dựng, Then thẻ `<html lang>` mang giá trị `vi` NGAY Ở LƯỢT VẼ ĐẦU, không phải sau một lượt vẽ lại.
+- AC-4: Given lựa chọn ngôn ngữ đã lưu mang một giá trị không phải thẻ ngôn ngữ hợp lệ, When người mở CRM, Then màn hình rơi về tiếng Anh và không có lỗi nào nổ.
+- AC-5: Given người dùng đổi sang tiếng Việt rồi đóng trình duyệt, When họ quay lại, Then màn hình vẫn tiếng Việt.
+- AC-6: Given người dùng đang ở tiếng Việt, When họ mở màn công ty, Then mọi chữ của giao diện — nhãn, tiêu đề cột, nút, thông báo rỗng — là tiếng Việt, không còn chuỗi tiếng Anh nào.
+- AC-7: Given một công ty có tên do người nhập, When màn hình hiện ở tiếng Việt, Then tên đó giữ nguyên như đã nhập VÀ được đánh dấu để trình duyệt không tự dịch.
+- AC-8: Given người dùng đang ở tiếng Việt, When màn công ty hiện ngày và số, Then chúng theo quy ước tiếng Việt, và trong phạm vi vòng này không còn chỗ nào khai cứng một vùng.
+- AC-9: Given chuỗi tiếng Việt dài hơn chuỗi tiếng Anh tương ứng, When màn công ty hiện ở khổ hẹp nhất được hỗ trợ, Then không chữ nào tràn khỏi khung chứa nó.
+- AC-10: Given người dùng chỉ dùng bàn phím, When họ tới nút đổi tiếng, Then nút nhận được tiêu điểm nhìn thấy được và mở được bằng bàn phím.
+- AC-11: Given bản tiếng Việt của màn công ty, When một nhân viên quan hệ đối tác đọc nó, Then chữ đọc như tiếng Việt của người trong nghề, không phải như một bản dịch máy. (judgment)
+
+## Coverage
+
+Quét bằng skill `morphological-scan`, preset ma-trận-kiểm. Ba trục, 48 ô, quét
+theo lát cắt của trục "nơi hiện ra".
+
+- Trục **nguồn ngôn ngữ**: chưa chọn bao giờ | đã chọn `vi` | đã chọn `en` | giá trị không hợp lệ [thước CE: BCP 47 — chuẩn định nghĩa thẻ ngôn ngữ hợp lệ, `[NGÀNH: BCP 47]`]
+- Trục **nơi hiện ra**: thẻ ngôn ngữ của trang | chữ của giao diện | ngày và số | dữ liệu người dùng nhập, phải KHÔNG đổi [thước CE: WCAG 2.2 SC 3.1.1 mức A đòi ngôn ngữ trang phải máy đọc được, `[NGÀNH: WCAG 2.2]` · `[SUY-TỪ-REPO: packages/ui/src/lib/format.ts]`]
+- Trục **thời điểm**: lượt vẽ đầu từ máy chủ | ngay sau khi người đổi tiếng | lượt quay lại sau [thước CE: `[SUY-TỪ-REPO: apps/app/components/theme-provider.tsx]` — nếp sáng/tối của kho đã giải đúng ba thời điểm này]
+
+Cross-cutting áp mọi ô Core: chuỗi tiếng Việt dài hơn tiếng Anh 20–30% (AC-9), và
+dấu tiếng Việt phải hiện đúng ở mọi phông đang dùng.
+
+Hai ô Core đến từ chân ngành chứ không từ đề bài, và chúng là hai lỗ của bản
+thiết kế trước khi nạp chuẩn nội bộ: **đường cho người lần đầu** (AC-1, luật
+"detect via Accept-Language, not IP") và **chặn trình duyệt tự dịch dữ liệu**
+(AC-7, luật `translate="no"` cho tên riêng).
+
+## Out of scope
+
+- Không dịch câu lỗi từ máy chủ. 107 chỗ đổ nguyên văn tiếng Anh lên màn hình vẫn nguyên — đó là vòng ④.
+- Không đụng chuỗi trong `packages/ui/src/components/**`. Khuôn nhận-chuỗi-từ-ngoài là việc vòng ②.
+- Không dịch màn thoả thuận hợp tác. Bảy giai đoạn của nó chưa ai định nghĩa; đó là quyết định nghiệp vụ.
+- Không chạm 10 chỗ định dạng trong `ai-elements/context.tsx` — bảng chi phí tác nhân, không nằm trên màn công ty.
+- Không thêm ngôn ngữ thứ ba, không đổi tiền tệ, không đổi múi giờ.
+- Không dịch dữ liệu người dùng nhập. Tên công ty, ghi chú, nội dung thư giữ nguyên như đã nhập.
+
+## Notes
+
+Hợp đồng viết TRƯỚC khi có mã.
+
+**Ràng buộc kỹ thuật đã kiểm:** 19 chỗ định dạng hiện là hằng ở mức module, chốt
+một lần lúc nạp file. Đổi ngôn ngữ lúc chạy không làm chúng đổi theo. Trong phạm
+vi vòng này có 9 chỗ — 6 ở `apps/app`, 3 ở `packages/ui/src/lib/format.ts`.
+
+**Ranh giới với vòng ②:** định dạng là hàm của (ngôn ngữ, giá trị); chuỗi là một
+kho bản dịch. Vòng này sở hữu vế đầu. Chạm `packages/ui/src/lib/format.ts` để
+sửa vế đầu không phải chốt khuôn của vế sau.
+
+**Đã đọc trước khi viết:** `docs/currency.md` (vì `formatMoney` nằm trong module
+sẽ sửa — tài liệu đó nói về cột nào được cộng và tỉ giá đóng băng lúc nào, không
+nói về hiển thị), `docs/design.md`, `CONTEXT.md`, và chuẩn giao diện nội bộ mà
+kho khai ở `feature_loop.ui_standards_skill`.
+
+**Giá đã nhận:** trang đăng nhập chuyển từ vẽ tĩnh sang vẽ động, vì `<html lang>`
+chỉ khai được ở trang gốc và trang gốc phải đọc lựa chọn ngôn ngữ.

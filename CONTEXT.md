@@ -25,28 +25,32 @@ hiểu.
 
 **Nhân viên quan hệ đối tác**: người dùng CRM này. Nhân viên OneHub, giữ và mở
 quan hệ với mạng lưới.
-_Avoid_: "người bán hàng", "sales rep", "khách hàng". Họ không bán gì cho ai, và
-họ là người trong nhà, không phải khách mua sản phẩm.
+_Avoid_: người bán hàng, sales rep, khách hàng
+Vì sao: họ không bán gì cho ai, và họ là người trong nhà, không phải khách mua
+sản phẩm.
 
 **Công ty**: một doanh nghiệp trong mạng lưới. Giai đoạn này phần lớn là công ty
 môi giới nhỏ. Trên màn hình đang hiện dưới `Companies`.
-_Avoid_: "công ty môi giới" — khoá vào giai đoạn đầu. "Khách hàng", "công ty
-khách" — quan hệ là hợp tác, không phải mua bán.
+_Avoid_: công ty môi giới, công ty khách
+Vì sao: "công ty môi giới" khoá vào giai đoạn đầu; "công ty khách" nói sai bản
+chất quan hệ — hợp tác, không phải mua bán.
 
 **Cá nhân**: một người trong mạng lưới, có thể thuộc một công ty hoặc hành nghề
 độc lập. Giai đoạn này phần lớn là môi giới. Trên màn hình đang hiện dưới
 `Contacts`.
-_Avoid_: "cá nhân môi giới" — khoá vào giai đoạn đầu. "Liên hệ", "contact" —
-không nói được người này là ai trong mạng lưới.
+_Avoid_: cá nhân môi giới, liên hệ, contact
+Vì sao: "cá nhân môi giới" khoá vào giai đoạn đầu; hai từ còn lại không nói được
+người này là ai trong mạng lưới.
 
 **Thỏa thuận hợp tác**: một quan hệ hợp tác với một công ty hoặc một cá nhân
 trong mạng lưới. Trên màn hình đang hiện dưới `Deals`. Chốt 2026-09-01.
-_Avoid_: "cơ hội", "deal bán hàng", "giao dịch". Nó không phải một ca lẻ do đối
-tác đưa về, và không phải một lần bán.
+_Avoid_: cơ hội, deal bán hàng, giao dịch
+Vì sao: nó không phải một ca lẻ do đối tác đưa về, và không phải một lần bán.
 
 **Giai đoạn thoả thuận**: bước hiện tại của một thoả thuận hợp tác. **CHƯA CHỐT
 NGHĨA.** Dữ liệu đang mang bảy bước của một phễu bán phần mềm — `DEMO_BOOKED`,
 `QUALIFIED_TO_BUY`, `CLOSED_WON`… — thừa kế từ kho gốc và không mô tả quy trình
 hợp tác của OneHub.
-_Avoid_: dịch bảy bước đó sang tiếng Việt. Dịch một bước không xảy ra là in cái
-sai ra màn hình bằng thứ tiếng người đọc hiểu được.
+_Avoid_: đã đặt lịch demo, đủ điều kiện để mua
+Vì sao: dịch một bước không xảy ra là in cái sai ra màn hình bằng thứ tiếng
+người đọc hiểu được.
