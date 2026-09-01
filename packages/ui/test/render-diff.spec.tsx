@@ -35,6 +35,7 @@ import { ThreadMessage } from "../src/components/thread-message";
 import { TooltipProvider } from "../src/components/tooltip";
 import type { Locale } from "../src/lib/locale";
 import type { TableQueryState } from "../src/lib/table-query";
+import { TRUNG_TINH } from "./du-lieu";
 
 const DOC_NGHE_DUOC = [
 	"title",
@@ -47,21 +48,6 @@ const DOC_NGHE_DUOC = [
 	"placeholder",
 	"alt",
 ] as const;
-
-const TRUNG_TINH = new Set([
-	"Đất Xanh",
-	"lan@onemount.com",
-	"Lan",
-	"LA",
-	"Tên cột",
-	"Tên miền",
-	"Ngành",
-	"Phụ trách",
-	"Bất động sản",
-	"Ghi chú của tôi",
-	"1 thg 9, 2026",
-	"Sep 1, 2026",
-]);
 
 async function chuNguoiDoc(html: string): Promise<Set<string>> {
 	const ra = new Set<string>();

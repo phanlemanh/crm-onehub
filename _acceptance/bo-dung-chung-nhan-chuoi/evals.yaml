@@ -77,7 +77,9 @@ evals:
       khoá một lượt, rồi chạy lại phép đo. Cả 39 khoá phải làm nó đỏ.
     chieu_do: >-
       Khoá nào trả về tiếng Anh mà phép đo vẫn xanh thì khoá đó không ai kiểm.
-      Bộ kiểm trước bắt 14 trên 34; bộ kiểm này bắt 39 trên 39.
+      Ba mốc đo được: trước đường B 14/34, lúc vòng chấm 1 là 32/39, sau vòng
+      chấm 2 là 44/45. Thêm hai đòn nữa phải đỏ: dịch một khoá thành một chuỗi
+      tiếng Anh KHÁC, và thêm một chuỗi giao diện vào danh sách trung tính.
     lenh: cd packages/ui && bun run test
 
   - id: E7
