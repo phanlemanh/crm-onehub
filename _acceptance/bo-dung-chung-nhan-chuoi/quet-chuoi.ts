@@ -37,6 +37,38 @@ function laChuNguoiDoc(value: string): boolean {
 	return CHU_TIENG_ANH.test(s) || /^[A-Z][a-z].* [a-z]/.test(s);
 }
 
+const GOI_LOP = new Set(["cn", "cva", "clsx", "tv", "twMerge"]);
+
+function conLai(node: ts.StringLiteral): boolean {
+	const cha = node.parent;
+	if (!cha) return false;
+	if (ts.isImportDeclaration(cha) || ts.isExportDeclaration(cha)) return false;
+	if (ts.isJsxAttribute(cha) || ts.isPropertyAssignment(cha)) return false;
+	if (ts.isParameter(cha) || ts.isBindingElement(cha)) return false;
+	if (ts.isLiteralTypeNode(cha) || ts.isTypeReferenceNode(cha)) return false;
+	if (ts.isBinaryExpression(cha)) {
+		const k = cha.operatorToken.kind;
+		if (k !== ts.SyntaxKind.QuestionQuestionToken && k !== ts.SyntaxKind.BarBarToken) {
+			return false;
+		}
+		return false;
+	}
+	if (ts.isElementAccessExpression(cha) || ts.isComputedPropertyName(cha)) return false;
+	if (ts.isCaseClause(cha)) return false;
+	let len = node.parent;
+	while (len) {
+		if (ts.isCallExpression(len)) {
+			const ten_ham = ts.isIdentifier(len.expression) ? len.expression.text : "";
+			if (GOI_LOP.has(ten_ham)) return false;
+		}
+		if (ts.isJsxAttribute(len) && ts.isIdentifier(len.name)) {
+			return THUOC_TINH_NGUOI_DOC.has(len.name.text);
+		}
+		len = len.parent;
+	}
+	return true;
+}
+
 function quetFile(duong: string, ten: string): Hang[] {
 	const nguon = readFileSync(duong, "utf8");
 	const cay = ts.createSourceFile(ten, nguon, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
@@ -44,7 +76,7 @@ function quetFile(duong: string, ten: string): Hang[] {
 
 	const ghi = (node: ts.Node, chuoi: string, loai: Hang["loai"], cho: string) => {
 		const s = chuoi.replace(/\s+/g, " ").trim();
-		if (!laChuNguoiDoc(s)) return;
+		if (cho !== "chuỗi ghép biến" && !laChuNguoiDoc(s)) return;
 		const { line } = cay.getLineAndCharacterOfPosition(node.getStart(cay));
 		ra.push({ file: ten, dong: line + 1, chuoi: s, loai, cho });
 	};
@@ -59,8 +91,14 @@ function quetFile(duong: string, ten: string): Hang[] {
 				ghi(node, gt.text, "khoa-cung", ten_tt);
 			}
 		} else if (ts.isTemplateExpression(node)) {
-			const manh = [node.head.text, ...node.templateSpans.map((s) => s.literal.text)].join(" ");
-			if (/[A-Za-z]{3}/.test(manh)) ghi(node, manh, "khoa-cung", "chuỗi ghép biến");
+			const manh = [node.head.text, ...node.templateSpans.map((s) => s.literal.text)];
+			const co_chu = manh.some((m) => /[A-Za-z]{3,}/.test(m));
+			const la_lop_css = manh.some(
+				(m) => /[(){}\[\]#%;:]|--|\bpx\b/.test(m) || /^-|-$/.test(m.trim()),
+			);
+			if (co_chu && !la_lop_css) {
+				ghi(node, manh.join(" ").trim() || manh.join(""), "khoa-cung", "chuỗi ghép biến");
+			}
 		} else if (ts.isParameter(node) || ts.isBindingElement(node)) {
 			const md = node.initializer;
 			if (md && ts.isStringLiteral(md)) {
@@ -74,10 +112,13 @@ function quetFile(duong: string, ten: string): Hang[] {
 			ghi(node, node.initializer.text, "khoa-cung", "bảng nhãn");
 		} else if (
 			ts.isBinaryExpression(node) &&
-			node.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken &&
+			(node.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken ||
+				node.operatorToken.kind === ts.SyntaxKind.BarBarToken) &&
 			ts.isStringLiteral(node.right)
 		) {
 			ghi(node, node.right.text, "mac-dinh", "dự phòng ??");
+		} else if (ts.isStringLiteral(node) && conLai(node)) {
+			ghi(node, node.text, "khoa-cung", "chuỗi trần");
 		}
 		ts.forEachChild(node, di);
 	};

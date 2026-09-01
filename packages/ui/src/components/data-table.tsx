@@ -41,6 +41,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@crm/ui/components/table";
+import { useMessages } from "@crm/ui/components/locale-provider";
 import type { TableSelection } from "@crm/ui/hooks/use-table-selection";
 import { ROW_ACCENT, ROW_ACCENT_EXPANDABLE } from "@crm/ui/lib/row-accent";
 import type { TableQueryState } from "@crm/ui/lib/table-query";
@@ -185,6 +186,7 @@ function FacetSubmenu({
 	selected: string[];
 	onChange: (values: string[]) => void;
 }) {
+	const msg = useMessages();
 	return (
 		<DropdownMenuSub>
 			<DropdownMenuSubTrigger>
@@ -200,7 +202,7 @@ function FacetSubmenu({
 						className="max-h-72"
 					>
 						<CommandInput
-							placeholder={`Search ${facet.label.toLowerCase()}…`}
+							placeholder={msg.table.searchFacet(facet.label.toLowerCase())}
 							value={facet.search}
 							onValueChange={facet.onSearchChange}
 							onKeyDown={(event) => event.stopPropagation()}
@@ -236,7 +238,7 @@ function FacetSubmenu({
 						{selected.length > 0 && (
 							<>
 								<DropdownMenuItem onSelect={() => onChange([])}>
-									Clear
+									{msg.table.clear}
 								</DropdownMenuItem>
 								<DropdownMenuSeparator />
 							</>
@@ -285,6 +287,7 @@ export function DataTable<TRow, TSub = unknown>({
 	className,
 	tableClassName,
 }: DataTableProps<TRow, TSub>) {
+	const msg = useMessages();
 	const [expandedIds, setExpandedIds] = useQueryState(
 		"expand",
 		parseAsArrayOf(parseAsString).withDefault([]),
@@ -367,7 +370,7 @@ export function DataTable<TRow, TSub = unknown>({
 							size="sm"
 							onClick={() => selection.state.clear()}
 						>
-							Clear
+							{msg.table.clear}
 						</Button>
 					</div>
 				</div>
@@ -391,7 +394,7 @@ export function DataTable<TRow, TSub = unknown>({
 					>
 						<span className="flex items-center gap-2">
 							<Filter />
-							Filters
+							{msg.table.filters}
 							{activeFilterCount > 0 && (
 								<span className="tabular-nums opacity-60">
 									({activeFilterCount})
@@ -465,7 +468,7 @@ export function DataTable<TRow, TSub = unknown>({
 										className="justify-start sm:justify-center"
 									>
 										<Filter data-icon="inline-start" />
-										Filters
+										{msg.table.filters}
 										{activeFacetFilterCount > 0 && (
 											<span className="tabular-nums opacity-60">
 												({activeFacetFilterCount})
@@ -494,18 +497,18 @@ export function DataTable<TRow, TSub = unknown>({
 										className="justify-start sm:justify-center"
 									>
 										<ArrowsVertical data-icon="inline-start" />
-										Sort
+										{msg.table.sort}
 									</Button>
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align="end" className="min-w-48">
-									<DropdownMenuLabel>Sort by</DropdownMenuLabel>
+									<DropdownMenuLabel>{msg.table.sortBy}</DropdownMenuLabel>
 									<DropdownMenuRadioGroup
 										value={query.sort}
 										onValueChange={query.setSort}
 									>
 										{anyExpandable && (
 											<DropdownMenuRadioItem value="detail">
-												Detail
+												{msg.table.detail}
 											</DropdownMenuRadioItem>
 										)}
 										{sortableColumns.map((column) => (
@@ -522,10 +525,10 @@ export function DataTable<TRow, TSub = unknown>({
 										}
 									>
 										<DropdownMenuRadioItem value="asc">
-											Ascending
+											{msg.table.ascending}
 										</DropdownMenuRadioItem>
 										<DropdownMenuRadioItem value="desc">
-											Descending
+											{msg.table.descending}
 										</DropdownMenuRadioItem>
 									</DropdownMenuRadioGroup>
 								</DropdownMenuContent>
@@ -540,14 +543,14 @@ export function DataTable<TRow, TSub = unknown>({
 										className="justify-start sm:justify-center"
 									>
 										<Column data-icon="inline-start" />
-										Columns
+										{msg.table.columns}
 										<span className="tabular-nums opacity-60">
 											({visibleColumns.length})
 										</span>
 									</Button>
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align="end" className="min-w-48">
-									<DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+									<DropdownMenuLabel>{msg.table.toggleColumns}</DropdownMenuLabel>
 									{hideable.map((column) => (
 										<DropdownMenuCheckboxItem
 											key={column.id}
@@ -602,13 +605,13 @@ export function DataTable<TRow, TSub = unknown>({
 										selection.state.toggleAll(checked === true)
 									}
 									disabled={deferredRows.length === 0}
-									aria-label="Select every row on this page"
+									aria-label={msg.table.selectAllRows}
 								/>
 							</TableHead>
 						)}
 						{anyExpandable && (
 							<TableHead className="h-11 w-10 px-3">
-								<span className="sr-only">Detail</span>
+								<span className="sr-only">{msg.table.detail}</span>
 							</TableHead>
 						)}
 						{visibleColumns.map((column) => {
@@ -616,6 +619,7 @@ export function DataTable<TRow, TSub = unknown>({
 							return (
 								<TableHead
 									key={column.id}
+									title={columnLabel(column)}
 									className={cn(
 										"h-11 overflow-hidden px-3 font-normal text-muted-foreground",
 										column.width,
@@ -637,16 +641,16 @@ export function DataTable<TRow, TSub = unknown>({
 											size="xs"
 											onClick={() => query.toggleSort(column.id)}
 											className={cn(
-												"-ml-2 font-normal text-muted-foreground hover:text-foreground",
+												"-ml-2 min-w-0 max-w-full font-normal text-muted-foreground hover:text-foreground",
 												column.align === "right" && "-mr-2 ml-0 flex-row-reverse",
 												column.align === "center" && "mx-auto",
 											)}
 										>
-											{column.header}
+											<span className="truncate">{column.header}</span>
 											<SortIndicator active={isActive} dir={query.dir} />
 										</Button>
 									) : (
-										column.header
+										<span className="block truncate">{column.header}</span>
 									)}
 								</TableHead>
 							);
@@ -700,8 +704,8 @@ export function DataTable<TRow, TSub = unknown>({
 												}
 												aria-label={
 													selection.rowLabel
-														? `Select ${selection.rowLabel(row)}`
-														: "Select row"
+														? msg.table.selectRow(selection.rowLabel(row))
+														: msg.table.selectRowFallback
 												}
 											/>
 										</TableCell>

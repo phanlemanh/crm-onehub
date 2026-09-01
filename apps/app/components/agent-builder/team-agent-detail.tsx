@@ -25,8 +25,10 @@ import {
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { SaveBarViewport } from "@crm/ui/components/save-bar";
-import { dateFormat, type FormatLocale } from "@crm/ui/lib/format";
+import { dateFormat } from "@crm/ui/lib/format";
+import type { Locale } from "@crm/ui/lib/locale";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -41,7 +43,6 @@ import {
 	PageShellHeading,
 	PageShellTitle,
 } from "@/components/page-shell";
-import { useLocale } from "@/lib/locale/provider";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -566,6 +567,6 @@ function textOf(value: string | undefined, fallback: string): string {
 	return value?.trim() ? value : fallback;
 }
 
-function formatDate(value: string, locale: FormatLocale): string {
+function formatDate(value: string, locale: Locale): string {
 	return dateFormat(locale, DATE_OPTIONS).format(new Date(value));
 }

@@ -51,6 +51,8 @@ executors:
     rang_cookie: "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan cookie"
     rang_du_lieu_khong_dich: "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan du-lieu-khong-dich"
     rang_dinh_dang: "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan dinh-dang"
+    rang_goc_mot_goc: "bash _acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh --chan mot-goc"
+    rang_goc_khong_nhap_nguoc: "bash _acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh --chan khong-nhap-nguoc"
     rang_quet_dem: "bash _acceptance/bo-dung-chung-nhan-chuoi/rang-quet.sh --chan dem"
     rang_quet_canary: "bash _acceptance/bo-dung-chung-nhan-chuoi/rang-quet.sh --chan canary"
     rang_quet_phan_loai: "bash _acceptance/bo-dung-chung-nhan-chuoi/rang-quet.sh --chan phan-loai"

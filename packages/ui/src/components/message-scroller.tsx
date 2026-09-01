@@ -11,6 +11,7 @@ import {
 import { cn } from "@crm/ui/lib/utils"
 import { Button } from "@crm/ui/components/button"
 import { ArrowDownIcon } from "lucide-react"
+import { useMessages } from "@crm/ui/components/locale-provider"
 
 function MessageScrollerProvider(
   props: React.ComponentProps<typeof MessageScrollerPrimitive.Provider>
@@ -91,6 +92,7 @@ function MessageScrollerButton({
   ...props
 }: React.ComponentProps<typeof MessageScrollerPrimitive.Button> &
   Pick<React.ComponentProps<typeof Button>, "variant" | "size">) {
+  const msg = useMessages()
   return (
     <MessageScrollerPrimitive.Button
       data-slot="message-scroller-button"
@@ -110,7 +112,7 @@ function MessageScrollerButton({
           <ArrowDownIcon
           />
           <span className="sr-only">
-            {direction === "end" ? "Scroll to end" : "Scroll to start"}
+            {direction === "end" ? msg.messageScroller.toEnd : msg.messageScroller.toStart}
           </span>
         </>
       )}

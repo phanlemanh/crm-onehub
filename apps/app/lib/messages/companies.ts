@@ -1,4 +1,4 @@
-import type { Locale } from "@/lib/locale/locale";
+import type { Locale } from "@crm/ui/lib/locale";
 
 const MESSAGES = {
 	en: {

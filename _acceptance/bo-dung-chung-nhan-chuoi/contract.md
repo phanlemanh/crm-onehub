@@ -5,9 +5,9 @@ slug: bo-dung-chung-nhan-chuoi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-09-01
 design_doc:
 ---
 
@@ -92,6 +92,16 @@ Hợp đồng viết TRƯỚC khi có mã.
 | **Khoá cứng — phạm vi vòng này** | **33** |
 | Mặc định đè được — vòng ③ | 20 |
 | Chỗ gọi `DataTable` | 6 |
+
+**Thước tốt lên hai lần TRONG vòng, và con số theo đó đổi.** Lúc ký, thước nói
+33 chuỗi khoá cứng. Trong lúc đi dây tôi tìm bằng tay hai chỗ nó không nhìn: một
+chuỗi ghép biến kết thúc bằng dấu (`Search …`), và chuỗi trần nằm trong nhánh
+của một biểu thức ba ngôi (`No results`, `Select row`, `Scroll to end`). Thước
+được sửa từ **liệt kê chỗ được phép nhìn** sang **nhìn mọi chuỗi rồi trừ những
+chỗ chắc chắn không ai đọc** — hướng an toàn hơn cho một phép đo dám nói "0".
+Chạy lại thước mới trên mã trước vòng: **39 chuỗi khoá cứng, không phải 33.**
+Con số ở bảng dưới là con số lúc ký; con số đúng là 39. Cả hai chim mồi mới đã
+được gieo vào `--chan canary`, nên lỗ đó không mở lại được lặng lẽ.
 
 **Vì sao có AC-6, một tiêu chí về chính cái thước.** Bản nháp trước của hợp đồng
 này khai 9 file / 25 chuỗi. Số thật là 18 / 53, chưa kể `logo.tsx` — hụt hơn một nửa. Tôi đếm bằng

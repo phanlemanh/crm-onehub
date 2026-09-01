@@ -1,4 +1,5 @@
 import "@crm/ui/globals.css";
+import { LocaleProvider } from "@crm/ui/components/locale-provider";
 import { Toaster } from "@crm/ui/components/sonner";
 import { TooltipProvider } from "@crm/ui/components/tooltip";
 import { cn } from "@crm/ui/lib/utils";
@@ -9,7 +10,6 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { LocalDateTimeHydrator } from "@/components/local-date-time";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LANG_COOKIE } from "@/lib/locale/locale";
-import { LocaleProvider } from "@/lib/locale/provider";
 import { resolveLocale } from "@/lib/locale/resolve";
 import { TRPCReactProvider } from "@/lib/trpc/client";
 

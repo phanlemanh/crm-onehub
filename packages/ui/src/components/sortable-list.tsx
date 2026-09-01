@@ -26,6 +26,7 @@ import type { ReactNode } from "react";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
 import { cn } from "@crm/ui/lib/utils";
+import { useMessages } from "@crm/ui/components/locale-provider";
 
 export function SortableList({
 	ids,
@@ -79,6 +80,7 @@ export function SortableItem({
 	className?: string;
 	children: ReactNode;
 }) {
+	const msg = useMessages();
 	const {
 		attributes,
 		listeners,
@@ -109,7 +111,7 @@ export function SortableItem({
 				{...listeners}
 			>
 				<Icon icon={Draggable} />
-				<span className="sr-only">Reorder {label}</span>
+				<span className="sr-only">{msg.sortableList.reorder(label)}</span>
 			</Button>
 			{children}
 		</div>
