@@ -1,0 +1,7 @@
+{"ts":"2026-09-01T02:09:28Z","round":1,"evalId":"E2","run_id":"khang-dinh-microsoft-co-rang-E2-1788228568","exit_code":0,"cmd":"bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan hinh-thuc"}
+{"ts":"2026-09-01T02:09:36Z","round":1,"evalId":"E1","run_id":"khang-dinh-microsoft-co-rang-E1-1788228575","exit_code":0,"cmd":"bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan duong"}
+{"ts":"2026-09-01T02:09:36Z","round":1,"evalId":"E3","run_id":"khang-dinh-microsoft-co-rang-E3-1788228575","exit_code":0,"cmd":"bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan duong"}
+{"ts":"2026-09-01T02:09:45Z","round":1,"evalId":"E4","run_id":"khang-dinh-microsoft-co-rang-E4-1788228584","exit_code":0,"cmd":"bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan do"}
+{"ts":"2026-09-01T02:10:25Z","round":1,"evalId":"E5","run_id":"khang-dinh-microsoft-co-rang-E5-1788228623","exit_code":0,"cmd":"bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan sach"}
+{"ts":"2026-09-01T02:10:33Z","round":1,"evalId":"E6","run_id":"khang-dinh-microsoft-co-rang-E6-1788228632","exit_code":0,"cmd":"bunx turbo run lint --force"}
+{"ts":"2026-09-01T02:10:47Z","round":1,"evalId":"E7","run_id":"khang-dinh-microsoft-co-rang-E7-1788228640","exit_code":0,"cmd":"bunx turbo run check-types --force"}

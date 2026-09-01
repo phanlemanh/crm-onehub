@@ -49,3 +49,17 @@ evals:
     cmd: config:executors.script.check_types_khong_cache
     expected: "exit 0; moi task kiem kieu thanh cong, 0 cached"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.rang_microsoft_nguon_env
+    expected: "exit 0; dat chuoi rong song qua loadRootEnv va doc ra chua-khai; cach xoa cu thi bi .env goc dien lai"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.rang_microsoft_do
+    expected: "exit 0; dot bien sinh tu chinh setup.ts lech DUNG 2 dong, khac la rang keu"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

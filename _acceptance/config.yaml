@@ -28,6 +28,7 @@ executors:
     rang_config_khai_thac: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan khai-thac"
     rang_microsoft_duong: "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan duong"
     rang_microsoft_do: "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan do"
+    rang_microsoft_nguon_env: "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan nguon-env"
     rang_microsoft_hinh_thuc: "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan hinh-thuc"
     start_scan: "bash _acceptance/o-cam-khai-thac-trung-tinh/rang-quet.sh"
     rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
