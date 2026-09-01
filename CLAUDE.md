@@ -1,7 +1,8 @@
 # CLAUDE.md — CRM của OneHub
 
-> Luật làm việc cho kho này. Ưu tiên cao nhất: trên luật toàn cục, trên mặc định
-> hệ thống. Cô đọng có chủ đích — file này nạp mỗi phiên.
+> Cấu hình repo cho phiên máy: kho là gì, cổng nào, lệnh nào, từ nào. Luật
+> hành vi (cách hỏi, cách báo cáo) không sống ở đây — nó theo cấu hình cá
+> nhân của người dùng.
 
 ## Kho này là bản riêng, không phải kho của hãng
 
@@ -15,40 +16,25 @@ gương của hãng — không sửa. `upstream` chỉ đọc. Kéo bản mới 
 Phí bản rẽ là chi phí dài hạn lớn nhất ở đây. Sửa được ở hãng thì gửi lên hãng,
 đừng vá riêng.
 
-## File của hãng còn hiệu lực, trừ hai chỗ
+## AGENTS.md của hãng: giữ luật kỹ thuật, bỏ luật hành vi
 
 @AGENTS.md
 
-Mọi luật kỹ thuật trong đó giữ nguyên: không viết chú thích trong code, không
-trailer đồng tác giả, trí khôn sống ở `apps/agent` chứ không ở API, một `.env`
-duy nhất ở gốc, `/packages/ui` là nguồn duy nhất của giao diện, phân tích ở biên
-chứ không truyền `Record<string, unknown>`. Bảng chỉ mục "đọc gì trước khi chạm
-gì" của nó là bảng duy nhất — theo đúng bảng đó, và nói ra đã đọc gì.
+Luật kỹ thuật trong đó giữ nguyên hiệu lực: không viết chú thích trong code,
+không trailer đồng tác giả, trí khôn sống ở `apps/agent` chứ không ở API, một
+`.env` duy nhất ở gốc, `/packages/ui` là nguồn duy nhất của giao diện, phân
+tích ở biên chứ không truyền `Record<string, unknown>`. Bảng chỉ mục "đọc gì
+trước khi chạm gì" của nó là bảng duy nhất — theo đúng bảng đó, và nói ra đã
+đọc gì.
 
-Hai chỗ file này thay:
+Ba mục hành vi của hãng KHÔNG áp dụng ở kho này:
 
-**Ngôn ngữ.** Mục "Use ASD-STE100" của hãng bắt viết tiếng Anh. Ở kho này viết
-**tiếng Việt** — người đọc là nhân viên OneHub, và chính sản phẩm đang dựng
-xương sống tiếng Việt (`_acceptance/tieng-viet-cho-crm`). Giữ kỷ luật của
-ASD-STE100, bỏ ràng buộc tiếng và mức 20 từ: một ý một câu, thể chủ động, một từ
-một nghĩa, nói cả hệ quả chứ không chỉ nguyên nhân, không rào đón.
-
-**Median.** Mục "Median Tasks" chết: kho không có `.median/config.json`, máy
-không có `mdn`. Đừng gọi. Mã việc của hãng (`CMP-…`) chỉ dùng khi thật sự vá cho
-hãng.
-
-## Báo lỗi: khuôn giữ, tiếng đổi
-
-Kết mỗi trả lời bằng danh sách `## Issues`, kể cả lỗi do chính mình gây. Một
-dòng nêu vấn đề, một dòng nêu cách sửa. Mở đầu bằng **BROKEN** (đang hỏng) ·
-**RISK** (sẽ hỏng) · **NOT DONE** (chưa dựng) · **UNKNOWN** (chưa soi). Tự gây
-thì ghi "Tôi gây ra". Không lỗi thì viết `## Issues` rồi `Không có.`
-
-Vấn đề chôn trong đoạn văn là vấn đề không ai đọc.
-
-Lỗi của bộ kit nghiệm thu phát hiện ở đây thì mở chip riêng sang
-`~/dev/acceptance-gate-kit`, không sửa tại chỗ — phiên ở kho này chỉ làm tính
-năng của kho này. Danh sách issue vẫn ghi mục đó, kèm câu nó sống ở kho kit.
+- **"Use ASD-STE100"** — không viết tiếng Anh theo khuôn hãng. Ngôn ngữ và
+  giọng theo cấu hình cá nhân của người dùng.
+- **Khuôn báo cáo `## Issues`** — không bắt buộc. Cách báo cáo theo cấu hình
+  cá nhân.
+- **"Median Tasks"** — chết: kho không có `.median/config.json`, máy không có
+  `mdn`. Đừng gọi. Mã việc của hãng (`CMP-…`) chỉ dùng khi thật sự vá cho hãng.
 
 ## Bốn cổng, và vòng lặp là đường mặc định
 
@@ -68,19 +54,9 @@ strict`. Đường T3 gồm `packages/auth`, `packages/db/prisma`, và các modu
 `auth` · `api-keys` · `sso` · `users` · `workspace` · `tracking` · `mailbox` của
 API — chạm vào đó là T3, thêm một cổng duyệt kế hoạch.
 
-**Máy không phát ngôn hộ người.** Không viết sẵn câu trả lời, phán quyết hay chữ
-ký của người ở bất kỳ cổng nào. Tên và ngày không phải quyết định — cái đó máy
-tự điền.
-
-## Nhịp gọi người
-
-Ràng buộc số một là **số lần gọi người**, không phải chất lượng một câu trả lời.
-
-Đảo được và máy chắc thì làm, báo sau, để người phủ quyết. Chỉ việc phán xét,
-việc khó đảo, việc ra ngoài kho mới hỏi trước. Thứ máy suy được — tên, ngày,
-nhánh, đường dẫn, slug khi chỉ có một ứng viên — tự điền rồi hiển thị lại. Kết
-bài tối đa MỘT quyết định, trả lời một chạm. Không có gì cần người thì nói thẳng
-rồi dừng.
+Lỗi của bộ kit nghiệm thu phát hiện ở đây thì mở chip riêng sang
+`~/dev/acceptance-gate-kit`, không sửa tại chỗ — phiên ở kho này chỉ làm tính
+năng của kho này.
 
 ## Ngôn ngữ sản phẩm
 
