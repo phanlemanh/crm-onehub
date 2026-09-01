@@ -99,3 +99,21 @@ Nay chân này chạy **chính bộ nạp trước thật** và chính bài ki�
 Chiều đỏ là một đột biến tối thiểu đưa bộ nạp về cách xoá, lệch đúng một dòng.
 Răng từ chối chạy nếu gốc kho đã có `.env.local`, để không bao giờ ghi đè file
 của người, và xoá file dựng sẵn khi thoát.
+
+**Vòng chấm 3 PASS, và người chấm PHÁ ĐƯỢC hai lời hứa an toàn của bộ răng.**
+Ba chỗ vá dưới đây rơi vào SAU vòng 3, nên chúng chỉ có phép thử tấn công của
+tôi, KHÔNG có một vòng chấm ngữ-cảnh-sạch nào phủ. Người ký cần biết đúng điều
+đó.
+
+- Lưới chặn ghi đè dùng `[ -e ]`, mà `[ -e ]` là sai với một liên kết hỏng. Người
+  chấm dựng đúng ca đó: lưới cho qua, lệnh ghi đi theo liên kết và tạo ra file ở
+  đầu kia. Nay lưới kiểm cả `[ -L ]`. Thử lại: thoát 2, liên kết còn nguyên,
+  không file nào được tạo.
+- Bẫy dọn khi thoát KHÔNG chạy với một cú giết cứng. Người chấm giết đúng lúc
+  file dựng sẵn vừa sinh ra và nó ở lại gốc kho. Nó đo tiếp bán kính thiệt hại
+  thay vì đoán: các chân đo vẫn an toàn, nhưng một tiến trình chạy không qua bộ
+  nạp trước sẽ đọc nhầm hai khoá đó, và git bỏ qua file nên không ai thấy. Nay
+  bộ răng quét dọn file này lúc khởi động, CHỈ khi nội dung khớp y nguyên fixture.
+  Thử lại: file sót bị dọn, file `.env.local` của người thì còn nguyên.
+- Lệnh dọn file đột biến quét toàn thư mục, nên hai lượt chấm chạy song song xoá
+  của nhau. Nay chỉ dọn file cũ hơn 60 phút.

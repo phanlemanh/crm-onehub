@@ -17,7 +17,16 @@ cleanup() {
   rm -rf "$FIX"
 }
 trap cleanup EXIT
-rm -f "$ROOT/apps/api/test/rang-mutant-"*.ts
+
+FIXTURE_ENV='MICROSOFT_CLIENT_ID="tu-file-env-local"
+MICROSOFT_CLIENT_SECRET="tu-file-env-local"'
+
+find "$ROOT/apps/api/test" -maxdepth 1 -name 'rang-mutant-*.ts' -mmin +60 -delete 2>/dev/null
+
+if [ -f "$ENVLOCAL" ] && [ "$(cat "$ENVLOCAL")" = "$FIXTURE_ENV" ]; then
+  echo "don .env.local con sot tu mot luot bi giet cung — noi dung khop y nguyen fixture"
+  rm -f "$ENVLOCAL"
+fi
 
 TDB="$(grep '^TEST_DATABASE_URL=' "$ROOT/.env" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"')"
 [ -n "$TDB" ] || { echo "khong doc duoc TEST_DATABASE_URL tu .env goc"; exit 2; }
@@ -80,11 +89,11 @@ case "$CHAN" in
     echo "rang-microsoft hinh-thuc: ky vong la hang so, khong doc moi truong"
     ;;
   nguon-env)
-    if [ -e "$ENVLOCAL" ]; then
-      echo "co san .env.local o goc kho — rang khong dam ghi de file cua nguoi; don no roi chay lai"
+    if [ -e "$ENVLOCAL" ] || [ -L "$ENVLOCAL" ]; then
+      echo "co san .env.local o goc kho (ke ca lien ket hong) — rang khong dam ghi de file cua nguoi; don no roi chay lai"
       exit 2
     fi
-    printf 'MICROSOFT_CLIENT_ID="tu-file-env-local"\nMICROSOFT_CLIENT_SECRET="tu-file-env-local"\n' > "$ENVLOCAL"
+    printf '%s\n' "$FIXTURE_ENV" > "$ENVLOCAL"
     DA_TAO_ENVLOCAL=1
 
     echo "-- chieu duong: bo nap truoc THAT, .env goc CO khai hai khoa"

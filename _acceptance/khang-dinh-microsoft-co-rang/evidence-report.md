@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bcb7bb81103af72b083312101a1594dfe0156bc6
+verified_commit: 73c2b317d6ecd633da31a8b89a934efebe355f4b
 human_signoff:
 ---
 
@@ -26,69 +26,63 @@ human_signoff:
 | E9 | AC-7 | script | PASS |
 
 Tree state: clean at the pinned commit. The only file outside version control is
-this round's `run-log.jsonl`, inside `_acceptance/`.
+`run-log.jsonl`, inside `_acceptance/`. The harness left no fixture file and no
+mutant file behind after the graded runs.
 
 Two commands each back two evals. `rang_microsoft_duong` ran once and backs E1
 and E3. `rang_microsoft_do` ran once and backs E4 and E9. Each pair reads a
-different fact from the one run. E1 reads the summary line under keys declared in
-the shell. E3 reads the pass count. E9 reads the line-count guard on the derived
-mutant. E4 reads the red count and the name of the red case.
+different fact from the one run.
 
 ## Evidence
 
 - eval: E1
-  run_id: khang-dinh-microsoft-co-rang-E1-1788229123
+  run_id: khang-dinh-microsoft-co-rang-E1-1788229485
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.rang_microsoft_duong
-  verified_at: 2026-09-01T02:18:44Z
+  verified_at: 2026-09-01T02:24:45Z
   output: |
     5 pass
     0 fail
     rang-microsoft duong: khoa Microsoft dat tu shell van bi lam rong, may chu bao khong co, bai kiem xanh
-    (the harness runs `env -i`, then declares both keys in the shell; the real
-    preload blanks them and the auth config reads not-configured)
 
 - eval: E2
-  run_id: khang-dinh-microsoft-co-rang-E2-1788229123
+  run_id: khang-dinh-microsoft-co-rang-E2-1788229484
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.rang_microsoft_hinh_thuc
-  verified_at: 2026-09-01T02:18:43Z
+  verified_at: 2026-09-01T02:24:45Z
   output: |
     rang-microsoft hinh-thuc: ky vong la hang so, khong doc moi truong
-    (zero `process.env` reads in apps/api/test/auth.e2e.spec.ts;
-    the literal `microsoft: false` is present)
 
 - eval: E3
-  run_id: khang-dinh-microsoft-co-rang-E3-1788229123
+  run_id: khang-dinh-microsoft-co-rang-E3-1788229485
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.rang_microsoft_duong
-  verified_at: 2026-09-01T02:18:44Z
+  verified_at: 2026-09-01T02:24:45Z
   output: |
     5 pass
     0 fail
     rang-microsoft duong: khoa Microsoft dat tu shell van bi lam rong, may chu bao khong co, bai kiem xanh
 
 - eval: E4
-  run_id: khang-dinh-microsoft-co-rang-E4-1788229124
+  run_id: khang-dinh-microsoft-co-rang-E4-1788229485
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.rang_microsoft_do
-  verified_at: 2026-09-01T02:18:45Z
+  verified_at: 2026-09-01T02:24:46Z
   output: |
     4 pass
     1 fail
     rang-microsoft do: dot bien toi thieu tu chinh bo nap truoc lam DUNG MOT bai do, va do la bai dang nhap
-    (the script pins the red count at one and greps the name of the red case)
 
 - eval: E5
-  run_id: khang-dinh-microsoft-co-rang-E5-1788229139
+  run_id: khang-dinh-microsoft-co-rang-E5-1788229499
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.rang_suite_sach
-  verified_at: 2026-09-01T02:19:02Z
+  verified_at: 2026-09-01T02:25:01Z
   output: |
     381 pass
     0 fail
@@ -97,100 +91,120 @@ mutant. E4 reads the red count and the name of the red case.
     rang-suite sach: 381 pass, 0 fail
 
 - eval: E6
-  run_id: khang-dinh-microsoft-co-rang-E6-1788229142
+  run_id: khang-dinh-microsoft-co-rang-E6-1788229501
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.lint_khong_cache
-  verified_at: 2026-09-01T02:19:03Z
+  verified_at: 2026-09-01T02:25:02Z
   output: |
-    api:lint: Found 4 warnings.
     Tasks:    9 successful, 9 total
     Cached:    0 cached, 9 total
 
 - eval: E7
-  run_id: khang-dinh-microsoft-co-rang-E7-1788229143
+  run_id: khang-dinh-microsoft-co-rang-E7-1788229502
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.check_types_khong_cache
-  verified_at: 2026-09-01T02:19:09Z
+  verified_at: 2026-09-01T02:25:08Z
   output: |
-    api:check-types: $ tsc --noEmit
     Tasks:    13 successful, 13 total
     Cached:    0 cached, 13 total
 
 - eval: E8
-  run_id: khang-dinh-microsoft-co-rang-E8-1788229125
+  run_id: khang-dinh-microsoft-co-rang-E8-1788229486
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.rang_microsoft_nguon_env
-  verified_at: 2026-09-01T02:18:45Z
+  verified_at: 2026-09-01T02:24:47Z
   output: |
-    sentinel|""|undefined
-    xoa|"tu-file-env"
-    rang-microsoft nguon-env: dat rong song qua bo nap, cach xoa thi bi .env goc dien lai
-    (leg one: the blank sentinel survives the real loadRootEnv and reads as absent.
-    leg two: the delete approach is refilled from the fixture .env — the leg
-    therefore measures a difference, not a constant)
+    -- chieu duong: bo nap truoc THAT, .env goc CO khai hai khoa
+    5 pass
+    0 fail
+    -- chieu do: cung fixture, nhung bo nap truoc quay ve cach XOA
+    4 pass
+    1 fail
+    rang-microsoft nguon-env: qua BO NAP THAT — dat rong song qua .env goc, cach xoa thi do dung bai dang nhap
+    (no hand-written mechanism remains in this leg; both directions run the real
+    preload and the real sign-in spec against a real root fixture file)
 
 - eval: E9
-  run_id: khang-dinh-microsoft-co-rang-E9-1788229124
+  run_id: khang-dinh-microsoft-co-rang-E9-1788229485
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.rang_microsoft_do
-  verified_at: 2026-09-01T02:18:45Z
+  verified_at: 2026-09-01T02:24:46Z
   output: |
     rang-microsoft do: dot bien toi thieu tu chinh bo nap truoc lam DUNG MOT bai do, va do la bai dang nhap
-    (the harness derives the mutant from apps/api/test/setup.ts by substitution,
-    counts the diff, and stops unless exactly two lines differ)
+    (the harness derives the mutant from apps/api/test/setup.ts, counts the diff,
+    and stops unless exactly two lines differ)
 
 ## Known limits
 
-1. E8 does not execute the real preload. It imports the real `loadRootEnv` from
-   `packages/env/src/index.ts`, but it writes the blank sentinel by hand and it
-   carries its own copy of `optional()` rather than importing the auth module. So
-   E8 proves the mechanism in principle. It does not bind that mechanism to
-   `apps/api/test/setup.ts`. A preload that reverted to `delete` would leave E8
-   green. E1 covers the missing link for the shell source, through the real
-   preload and the real auth module. No eval covers it for the `.env` source.
-   The verifier closed that gap by hand this round: a throwaway workspace whose
-   `.env` declares both keys, the real preload, and the real
-   `isMicrosoftConfigured()`. With the blank sentinel the assertion reads
-   not-configured. With a delete-based copy of the same preload the assertion
-   reads configured. The gap is in the eval set, not in the product.
-2. Two commands each back two evals — `rang_microsoft_duong` for E1 and E3,
+1. The clobber guard misses a symlink whose target does not exist. The harness
+   tests `[ -e "$ENVLOCAL" ]`, which is false for a dangling symlink. The verifier
+   reproduced the consequence in an isolated directory: the write follows the
+   link and creates the target file. Cleanup then removes the link and leaves the
+   written target. The stated property is that the harness can never overwrite the
+   owner's file. That property has this one exception.
+   Fix: test `[ -e "$ENVLOCAL" ] || [ -L "$ENVLOCAL" ]`.
+2. A hard kill leaves the fixture file in the repository root. The verifier tested
+   this on the real harness: it polled for the file, sent SIGKILL to the process
+   group, and the file remained with the fixture content. An exit trap does not
+   run on SIGKILL. The harness sweeps stray mutant files before it starts. It has
+   no equivalent sweep for its own fixture file.
+   Measured blast radius: the test legs are not affected, because the blank
+   sentinel holds against a declaring file — the positive leg stayed green with a
+   stale fixture in place, and the `nguon-env` leg refused to start, which is the
+   safe direction. A process with no preload does read the stale values: the
+   verifier measured `isMicrosoftConfigured()` reading configured. So a leftover
+   misconfigures the developer's own application until they notice it. The file is
+   ignored by git, so `git status` does not show it and the gate's staleness check
+   cannot see it.
+   Fix: sweep the fixture file at start when its content matches the fixture
+   exactly, the same way mutant files are swept.
+3. The mutant sweep is not scoped to the running process. The verifier placed a
+   decoy mutant file and ran an unrelated channel; the decoy was deleted. Two
+   graded runs in parallel therefore delete each other's mutant.
+   Fix: scope the sweep by age, or run the legs strictly in sequence.
+4. Two commands each back two evals — `rang_microsoft_duong` for E1 and E3,
    `rang_microsoft_do` for E4 and E9. Each pair reads a different fact from one
-   run, so the coupling is defensible, but a re-run for a second criterion would
-   be stronger.
-3. No baseline ran in either round. Every eval carries `baseline: n-a`.
-4. The red leg writes its derived mutant into `apps/api/test/` and removes it in
-   an exit trap. A hard kill leaves the file in the source tree. The name does not
-   match the test-discovery pattern, so a stray file does not join a suite run.
+   run, so the coupling is defensible. A re-run per criterion would be stronger.
+5. No baseline ran in any round. Every eval carries `baseline: n-a`. No eval is
+   confirmed discriminating by measurement against the pre-feature tree.
+6. Design objection, recorded for the human even though the evidence is green: the
+   `nguon-env` leg writes a real file into the real repository root during a graded
+   run. The verifier judges the write defensible, because no weaker fixture reaches
+   the real loader — `loadRootEnv()` resolves its root from the working directory
+   and reads only `.env` and `.env.local` there, so a synthetic fixture cannot
+   exercise the real preload. The write buys the measurement that round 2 could not
+   make. Two cleaner designs exist. A throwaway git worktree moves the write out of
+   the working tree, at the cost of installing dependencies there. An explicit root
+   override in the loader removes the write entirely, at the cost of widening
+   product code to serve a harness. The verifier does not block on this. The human
+   should decide whether a graded measure may write into the tree it grades.
 
 ## Ngoài hợp đồng
 
 1. `loadRootEnv()` in `packages/env/src/index.ts` fills every key whose value is
    `undefined`. Any other preload in the repository that deletes a variable meets
-   the same hole. The contract scopes this round to one assertion in one file, so
-   no repository-wide sweep ran.
+   the same hole. The contract puts a repository-wide sweep out of scope.
 2. The `apps/agent` suite stays outside this round, as the contract states.
 
 ## Analyst
 
 Baseline did not run, so no eval is confirmed non-discriminating by measurement.
-Three evals are discriminating by construction. E4 and E9 run the same test file
-with one derived preload and require the sign-in case to turn red. E8 runs both
-mechanisms against the same fixture `.env` and requires them to differ. E1 and E4
-together form a two-point measurement of one mapping. E5, E6 and E7 are
-regression guards and are expected to stay green regardless of this change.
+Four evals are discriminating by construction. E4 and E9 run the sign-in spec with
+a derived preload and require exactly one red case. E8 runs the real preload twice
+against the same root fixture — once as shipped, once mutated back to the old
+mechanism — and requires green then exactly one red. E1 and E8 together cover both
+sources named in AC-1: the shell and the root file. E5, E6 and E7 are regression
+guards and are expected to stay green regardless of this change.
 
-The AC-1 rewrite was examined for criterion-fitting, because a criterion rewritten
-after a finding is the shape that hides it. It is not fitted. The old text
-promised a mechanism — the variables leave the environment — that is now false by
-design, since the variables stay and hold an empty string. The new text promises
-an outcome, and it names the `.env` source that the old text never covered, so the
-Given is broader. The pre-fix code fails the new criterion: with `delete`, a root
-`.env` that declares the keys makes the auth config read configured. A criterion
-that the old code fails is a real criterion.
+The round-2 objection to E8 is closed. E8 no longer assigns the sentinel itself and
+no longer carries its own copy of the auth reader. Both directions now run
+`apps/api/test/setup.ts` and `apps/api/test/auth.e2e.spec.ts` unmodified except for
+the one-line mutation under test. A revert of the preload to the old mechanism now
+turns E8 red, which was the exact property the round-2 version lacked.
 
 ## Variance
 
@@ -198,9 +212,14 @@ none — every eval is deterministic and ran once per round.
 
 ## Iterations
 
-Round 1: every eval green at commit 3023055. The verifier reported a hole the
-evals did not cover: the preload deleted the two keys, and `loadRootEnv()` refills
-any key that is `undefined`, so a root `.env` declaring the keys undid the delete.
+Round 1: every eval green at commit 3023055, but the verifier found a hole the
+evals did not cover — the preload deleted the two keys, and `loadRootEnv()` refills
+any key that is `undefined`, so a root file declaring the keys undid the delete.
 AC-1 as written was a false promise. Round 2: the preload assigns an empty string,
 AC-1 is rewritten as an outcome claim naming both sources, AC-7 and the E8 and E9
-legs are added, and every eval is green at commit bcb7bb8.
+legs are added, every eval green at commit bcb7bb8 — but E8 measured a replica of
+the mechanism rather than the real preload, so the verifier closed that link by
+hand. Round 3: the E8 leg runs the real preload and the real spec against a real
+root fixture in both directions, every eval green at commit 73c2b31, and the
+verifier tested the three safety properties of the new leg and reports three
+defects in them under Known limits.
