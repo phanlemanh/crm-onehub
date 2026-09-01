@@ -5,9 +5,11 @@ slug: bo-dung-chung-nhan-chuoi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-09-01
+signed_off_by: Manh Phan
+signed_off_at: 2026-09-01
 design_doc:
 ---
 
