@@ -3,13 +3,13 @@ schema_version: 1
 slug: tieng-viet-cho-crm
 feature: Người bán hàng dùng CRM bằng tiếng Việt
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-01T04:45:00Z
 prototype:
   base_commit:
-  disposition:
+  disposition: archive
 ---
 
 ## Vấn đề & ai gặp
@@ -87,9 +87,14 @@ Không lấy hình thái từ đâu ngoài. Chuẩn giao diện của kho vẫn 
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: …
-- **disposition = …** Căn cứ: …
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **decision = build.** Người ký: Manh Phan, 2026-09-01. Căn cứ: người bán đọc màn hình bằng tiếng Anh trong khi làm việc bằng tiếng Việt, và người mới vào nghề trả giá đắt nhất.
+- **disposition = archive.** Căn cứ: buổi khai thác không dựng bản thử nào, nên không có mã nào để giữ.
+- **Ngưỡng UAT chốt cùng lúc ký:** CHƯA CHỐT. Bốn dòng ở mục Ngưỡng vẫn mang tiền tố `[đề xuất]` — đó là lời của máy, không phải lời người ký. Người gỡ tiền tố mới là chốt.
+
+**Phạm vi vòng đầu — máy đề xuất, người chưa chốt:** chỉ lấy cột "nhãn ứng
+dụng". Căn cứ: cột to nhất, người bán chạm nhiều nhất, và là cột duy nhất giải
+xong thì bốn cột kia có chỗ dựa. Phạm vi này sẽ được chốt ở hợp đồng bước kế,
+không phải ở đây.
 
 ## Thước đo thành công → ứng viên criterion
 
