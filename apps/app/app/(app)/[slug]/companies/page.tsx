@@ -10,6 +10,8 @@ import {
 	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { getLocale } from "@/lib/locale/server";
+import { companyMessages } from "@/lib/messages/companies";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
@@ -17,21 +19,21 @@ import { companiesSearchParams } from "./companies-search-params";
 import { CompaniesTable } from "./companies-table";
 import { CreateCompanySheet } from "./create-company-sheet";
 
-export const metadata: Metadata = {
-	title: "Companies",
-};
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: companyMessages(await getLocale()).title };
+}
 
-export default function CompaniesPage({
+export default async function CompaniesPage({
 	searchParams,
 }: PageProps<"/[slug]/companies">) {
+	const m = companyMessages(await getLocale());
+
 	return (
 		<PageShell className="min-h-0">
 			<PageShellHeader>
 				<PageShellHeading>
-					<PageShellTitle>Companies</PageShellTitle>
-					<PageShellDescription>
-						Every account in the pipeline.
-					</PageShellDescription>
+					<PageShellTitle>{m.title}</PageShellTitle>
+					<PageShellDescription>{m.description}</PageShellDescription>
 				</PageShellHeading>
 				<PageShellActions>
 					<CreateCompanySheet />

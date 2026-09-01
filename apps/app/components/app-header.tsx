@@ -112,10 +112,10 @@ export function AppHeaderFallback() {
 	);
 }
 
-const OTHER_LOCALE: Record<Locale, { next: Locale; label: string }> = {
+const OTHER_LOCALE = {
 	en: { next: "vi", label: "Tiếng Việt" },
 	vi: { next: "en", label: "English" },
-};
+} satisfies Record<Locale, { next: Locale; label: string }>;
 
 function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
 	const { resolvedTheme, setTheme } = useTheme();
