@@ -19,78 +19,136 @@ design_doc:
 Người đảo thứ tự ngày 2026-09-01 và đưa nó lên trước vòng ①.
 
 Vòng ① dựng xong đường ngôn ngữ rồi dừng ở S4: hai phép đo trượt vì bảng dùng
-chung khoá cứng chín chuỗi tiếng Anh và chém tiêu đề cột dài không dấu ba chấm.
-Chỗ gọi không truyền vào được. Vòng này mở đường đó.
+chung khoá cứng chữ tiếng Anh và chém tiêu đề cột dài không dấu ba chấm. Chỗ gọi
+không truyền vào được. Vòng này mở đường đó.
 
 Bảng thứ tự cũ nói vòng ② ràng buộc vòng ③. Vòng chấm chứng minh nó ràng buộc cả
 vòng ①.
 
 Source input: `_acceptance/tieng-viet-cho-crm/opportunity.md` · giả định #3
 
+## Hai loại chuỗi, và vòng này chỉ lấy một
+
+Máy quét `quet-chuoi.ts` phân biệt hai loại, và ranh giới này là **toàn bộ phạm
+vi** của vòng:
+
+- **Khoá cứng (33 chuỗi)** — component tự chứa, chỗ gọi không có đường truyền
+  vào. `Filters` ở `data-table.tsx:394` là loại này. **Vòng ② lấy hết.**
+- **Mặc định đè được (20 chuỗi)** — component khai một giá trị dự phòng, chỗ gọi
+  đè được và phần lớn đã đè rồi. `date-picker.tsx:22` khai `"Select a date"`,
+  nhưng cả hai chỗ gọi đều truyền `"No date yet"` từ `apps/app`. **Vòng ② KHÔNG
+  lấy.** Dịch một giá trị không màn nào vẽ ra là công vô ích, và chữ thật nằm ở
+  `apps/app` — đó là vòng ③.
+
+Hệ quả phải nói trước: **sau vòng ②, ô ngày vẫn đọc "No date yet" và ô gợi ý
+công ty vẫn đọc "Search companies…".** Chúng đóng ở vòng ③, không ở đây.
+
 ## Criteria
 
-- AC-1: Given nhân viên đang đọc tiếng Việt, When họ mở một màn có bảng dùng chung, Then mười một chuỗi bảng đang khoá cứng hiện tiếng Việt: `Clear` · `Filters` · `Sort` · `Sort by` · `Detail` · `Ascending` · `Descending` · `Columns` · `Toggle columns` · `Select every row on this page` · `Select row`.
-- AC-2: Given nhân viên đang đọc tiếng Việt, When màn hiện phân trang, nút đóng hộp thoại, ô ngày, ô gợi ý, vòng quay ảnh, hoặc con quay chờ, Then chữ của chúng là tiếng Việt.
+- AC-1: Given nhân viên đang đọc tiếng Việt, When họ mở một màn có bảng dùng chung, Then mọi chuỗi bảng đang khoá cứng hiện tiếng Việt. Danh sách do `quet-chuoi.ts` liệt kê, không do hợp đồng liệt kê.
+- AC-2: Given nhân viên đang đọc tiếng Việt, When họ mở một màn có BẤT KỲ component dùng chung nào khác, Then chữ khoá cứng của nó là tiếng Việt. Hợp đồng không kể tên component nào ở đây — máy quét kể, và AC-5 là chỗ đếm.
 - AC-3: Given một component dùng chung dựng ở nơi KHÔNG có nhà cung cấp ngôn ngữ, When nó vẽ, Then nó hiện tiếng Anh và không lỗi nào nổ.
-- AC-4: Given khuôn mới đã dựng, When đếm sáu chỗ gọi `DataTable`, Then không chỗ nào phải truyền thêm chuỗi để có tiếng Việt.
-- AC-5: Given quét mọi file ở tầng đầu của `packages/ui/src/components/`, When đếm chuỗi tiếng Anh nhìn thấy được còn khoá cứng, Then còn đúng 0. Phép đo tự liệt kê danh sách; hợp đồng không liệt kê hộ nó.
-- AC-6: Given một tiêu đề cột dài hơn bề rộng cột, When màn hiện ở 768px, Then chữ bị cắt mang dấu ba chấm, và tiêu đề đầy đủ đọc được bằng trình đọc màn hình.
-- AC-7: Given người đổi tiếng, When màn vẽ lại, Then chữ trong bảng dùng chung đổi theo NGAY, không cần tải lại trang.
-- AC-8: Given kho bản dịch của vòng này, When vòng ③ quét 177 file nhãn ứng dụng, Then nó dùng lại đúng khuôn này, không dựng khuôn thứ hai. (judgment)
-- AC-9: Given bản tiếng Việt của bảng dùng chung, When một nhân viên quan hệ đối tác đọc nó, Then chữ đọc như tiếng Việt của người trong nghề. (judgment)
+- AC-4: Given `packages/ui` sau vòng này, When tìm chỗ nó nhập từ `apps/app`, Then không có chỗ nào, và kiểu `Locale` chỉ còn MỘT định nghĩa trong cả kho.
+- AC-5: Given máy quét chạy trên `packages/ui/src/components/*.tsx`, When đếm chuỗi tiếng Anh khoá cứng còn lại, Then còn đúng 0 — TRỪ `logo.tsx`, chỗ giữ tên hãng cũ chứ không giữ chữ để dịch.
+- AC-6: Given máy quét là thứ AC-5 dựa vào, When gieo bảy kiểu chuỗi mồi khác nhau vào một bản sao, Then máy quét gọi tên đủ bảy.
+- AC-7: Given một tiêu đề cột dài hơn bề rộng cột, When màn hiện ở 768px, Then chữ bị cắt mang dấu ba chấm, và tiêu đề đầy đủ nằm trong một thuộc tính trình đọc màn hình đọc được.
+- AC-8: Given phân trang hiện tổng số dòng, When trang vẽ từ máy chủ rồi trình duyệt nhận, Then số hiện giống nhau ở hai bên và theo quy ước tiếng Việt.
+- AC-9: Given nhân viên đổi tiếng, When màn vẽ lại, Then chữ trong bảng dùng chung đổi theo mà không cần tải lại trang, KỂ CẢ khi component không được máy chủ vẽ lại.
+- AC-10: Given bảng dịch của vòng này đã chốt trong hồ sơ TRƯỚC khi chấm, When một nhân viên quan hệ đối tác đọc nó, Then chữ đọc như tiếng Việt của người trong nghề. Hội đồng chấm đúng bảng đã chốt, không chấm chữ chưa ai khai. (judgment)
 
 ## Coverage
 
 Ba trục, quét theo lát cắt của trục "loại chữ".
 
-- Trục **loại chữ**: chữ trên nút | chữ trong menu | chữ khi rỗng | nhãn chỉ trình đọc màn hình nghe thấy [thước CE: WCAG 2.2 SC 1.3.1 và SC 4.1.2 — nhãn cho trình đọc màn hình là chữ thật, không phải chú thích, `[NGÀNH: WCAG 2.2]`]
-- Trục **chỗ gọi**: đã truyền chuỗi vào (`empty`, `facet.empty`, `tabs.allLabel`) | chưa truyền gì | dựng ngoài nhà cung cấp ngôn ngữ [thước CE: `[SUY-TỪ-REPO: AGENTS.md]` — luật "thứ người tự dựng máy chủ có thể thiếu thì phải im lặng bỏ khả năng, không được nổ"]
-- Trục **thời điểm**: lượt vẽ đầu | ngay sau khi người đổi tiếng [thước CE: `[SUY-TỪ-REPO: packages/ui/src/components/*` đã dùng `createContext` ở 15 file và đã phụ thuộc `next-themes`]`]
+- Trục **loại chữ**: chữ trên nút | chữ trong menu thả xuống | chữ khi rỗng | nhãn chỉ trình đọc màn hình nghe thấy | chuỗi ghép biến vào câu [thước CE: WCAG 2.2 SC 1.3.1 và SC 4.1.2 — nhãn cho trình đọc màn hình là chữ thật, `[NGÀNH: WCAG 2.2]`]
+- Trục **chỗ gọi**: chỗ gọi đè được | chỗ gọi không đè được | dựng ngoài nhà cung cấp ngôn ngữ [thước CE: `[SUY-TỪ-REPO: AGENTS.md]` — luật "thứ người tự dựng máy chủ có thể thiếu thì phải im lặng bỏ khả năng, không được nổ"]
+- Trục **thời điểm**: lượt vẽ đầu từ máy chủ | ngay sau khi người đổi tiếng, không tải lại trang [thước CE: `[SUY-TỪ-REPO: apps/app/components/app-header.tsx` gọi `router.refresh()`, nên chuỗi vẽ từ máy chủ đổi kể cả khi provider không phản ứng — trục này tồn tại để phân biệt hai thứ đó`]`]
 
-Cross-cutting: chuỗi tiếng Việt dài hơn tiếng Anh 20–30%, và bảng có cột rộng cố
-định (AC-6).
+Cross-cutting: chuỗi tiếng Việt dài hơn tiếng Anh 20–30% (AC-7), và chuỗi ghép
+biến phải đảo được trật tự từ.
 
 ## Out of scope
 
-- **Không chạm `packages/ui/src/components/ai-elements/**`.** Đếm được: 23 file, 12 file mang chữ, tổng 37 chuỗi — nhiều hơn cả phần còn lại của bộ dựng chung. Đó là bảng tác nhân, không hiện trên màn công ty, và có tài liệu riêng `docs/agent-panel.md`. Nó đi cùng vòng ⑤.
-- **Không đổi `aria-label="Comp AI Logo"` trong `logo.tsx`.** Đó là tên hãng cũ sót lại trong bản rẽ, không phải việc dịch. Ghi thành issue riêng.
-- Không dịch nhãn của ứng dụng — 177 file, đó là vòng ③.
-- Không dịch câu máy chủ trả về — 181 câu, đó là vòng ④.
-- **Không thêm thư viện đa ngôn ngữ.** Hai mươi lăm chuỗi không đủ căn cứ chọn thư viện; chọn bây giờ là chọn mà chưa có bằng chứng của 177 file. Khuôn vòng này phải để vòng ③ đổi nguồn chuỗi mà không đổi chỗ gọi.
+- **Không chạm 20 chuỗi mặc định mà chỗ gọi đè được.** Lý do ở mục "Hai loại chuỗi". Đó là vòng ③.
+- **Không chạm `packages/ui/src/components/ai-elements/**`.** Máy quét đếm riêng: 23 file, ~40 chuỗi. Bảng tác nhân, có tài liệu riêng `docs/agent-panel.md`, đi cùng vòng ⑤.
+- **Không chạm `calendar.tsx`.** Tên thứ và tháng ở đó không phải chuỗi trong mã — chúng do `react-day-picker` sinh, qua một đối tượng `Locale` kiểu date-fns (`calendar.tsx:22,44,190`). Đổi chúng là chọn một nguồn dịch thứ hai, và dòng dưới cấm việc đó.
+- **Không đổi `aria-label="Comp AI Logo"` trong `logo.tsx`.** Tên hãng cũ sót lại trong bản rẽ, không phải việc dịch. AC-5 trừ nó ra bằng câu chữ của chính nó.
+- **Không thêm thư viện đa ngôn ngữ.** Ba mươi ba chuỗi không đủ căn cứ chọn; chọn bây giờ là chọn trước khi có bằng chứng của vòng ③. Khuôn vòng này phải để vòng ③ đổi nguồn chuỗi mà không đổi chỗ gọi.
+- Không dịch nhãn của ứng dụng — vòng ③. Không dịch câu máy chủ trả về — vòng ④.
 - Không thêm ngôn ngữ thứ ba.
 
 ## Notes
 
 Hợp đồng viết TRƯỚC khi có mã.
 
-**Vì sao AC-5 đo bằng máy quét chứ không bằng danh sách trong hợp đồng.** Vòng ①
-trượt đúng ở chỗ này: nó viết ra một danh sách ngoại lệ bằng tay, và danh sách đó
-thiếu. Danh sách viết tay già đi từ lúc ký. Ở đây hợp đồng chỉ khai **ranh giới**
-(tầng đầu của `components/`, trừ `logo.tsx`), còn việc liệt kê từng chuỗi là việc
-của phép đo, chạy lại mỗi vòng chấm.
+**Con số ở đây do máy đếm, không do tay gõ.** Chạy
+`bash _acceptance/bo-dung-chung-nhan-chuoi/rang-quet.sh --chan dem`.
 
-**Ràng buộc kỹ thuật đã đếm 2026-09-01:**
-
-| Đếm được | Số |
+| Máy quét trả | Số |
 | --- | --- |
 | File ở tầng đầu `packages/ui/src/components/` | 75 |
-| File trong đó mang chữ nhìn thấy được | 9 |
-| Chuỗi phải dịch | 25 |
-| Riêng `data-table.tsx` giữ | 14 |
+| File mang chữ người đọc thấy | 18 |
+| Chuỗi tổng | 53 |
+| **Khoá cứng — phạm vi vòng này** | **33** |
+| Mặc định đè được — vòng ③ | 20 |
 | Chỗ gọi `DataTable` | 6 |
-| File đã dùng `createContext` trong bộ dựng chung | 15 |
 
-**Nguồn của AC-6:** `data-table.tsx` đặt `overflow-hidden` lên ô tiêu đề cùng một
-bề rộng cố định, và không đặt `truncate`. Chữ bị chém trần, người đọc không nhận
-được tín hiệu nào rằng chữ đã cụt.
+**Vì sao có AC-6, một tiêu chí về chính cái thước.** Bản nháp trước của hợp đồng
+này khai 9 file / 25 chuỗi. Số thật là 18 / 53, chưa kể `logo.tsx` — hụt hơn một nửa. Tôi đếm bằng
+`grep` viết vội rồi gõ kết quả vào hợp đồng như một sự thật. Vòng ① hỏng theo
+đúng lối đó, ở một danh sách ngoại lệ viết tay thiếu năm chuỗi. Hai lần cùng một
+lối: **con số do máy sinh mà không ai kiểm cái máy.**
 
-**Ranh giới với vòng ③:** vòng này chốt **cách một component nhận chuỗi**. Vòng ③
-chốt **kho chuỗi ở đâu và ai dịch**. Hai việc khác nhau, và AC-8 là chỗ người
-chấm xem vòng này có ép vòng ③ dựng lại từ đầu không.
+Nên vòng này không sửa bằng cách đếm cẩn thận hơn. Nó sửa bằng cách **bắt cái
+thước phải chịu một phép đo**: `rang-quet.sh --chan canary` gieo bảy kiểu chuỗi
+mồi — chữ trong thẻ, `aria-label`, `title`, giá trị mặc định, dự phòng `??`,
+bảng nhãn, chuỗi ghép biến — và máy quét phải gọi tên đủ bảy. Một máy quét trả 0
+bằng cách không nhìn thì đỏ ở đây trước khi kịp làm ai yên tâm.
 
-**Phí bản rẽ:** khuôn phải là thứ gửi ngược lên hãng được. Một component nhận
-chuỗi qua nhà cung cấp và có sẵn mặc định tiếng Anh chạy y nguyên trong kho của
-hãng, nơi không ai dựng nhà cung cấp đó — AC-3 là phép đo của chính điều này.
+**Nhà cung cấp ngôn ngữ ở gói nào, và vì sao (AC-4).** `apps/app` phụ thuộc
+`@crm/ui`; chiều ngược lại không tồn tại. Nên `packages/ui` không dùng được
+`useLocale` mà vòng ① dựng ở `apps/app/lib/locale/`. Vòng này chuyển gốc ngôn
+ngữ **vào `packages/ui`**, và `apps/app` dùng lại từ đó. Kho hiện có hai định
+nghĩa trùng của cùng một kiểu — `apps/app/lib/locale/locale.ts` (`Locale`) và
+`packages/ui/src/lib/format.ts` (`FormatLocale`), cả hai là `"vi" | "en"`. AC-4
+đo rằng sau vòng này chỉ còn một.
 
-**Đã đọc trước khi viết:** `docs/design.md`, `AGENTS.md`, `CONTEXT.md`,
-`_acceptance/tieng-viet-cho-crm/{opportunity,contract,gap-probe}.md`.
+**Chỗ đặt file, và vì sao không tự do chọn.** `.oxlintrc.json` bỏ qua
+`packages/ui/src/components/**` nhưng **có soi** `packages/ui/src/lib/**` — cùng
+một bảng chuỗi đặt ở hai nơi cho hai kết quả `lint:slop` khác nhau. Và bản đồ
+`exports` của gói mở `./lib/*` sang `.ts`, `./components/*` sang `.tsx`, nên một
+nhà cung cấp có JSX **không đặt được** trong `lib/`.
+
+**AC-8 đến từ một lỗi có sẵn.** `table-pagination.tsx:9` khai
+`new Intl.NumberFormat()` — không vùng, ở tầng module, tạo một lần. Máy chủ Node
+in `1,234`, trình duyệt tiếng Việt in `1.234`. Đó là lệch hydrat, có từ trước
+vòng này, và nó nằm đúng trong file vòng này sửa. Chân `dinh-dang` của vòng ①
+không bắt được vì nó chỉ quét `Intl.*("en-US"`, mà đây là ngoặc rỗng.
+
+**AC-9 và cái bẫy xanh rỗng.** `app-header.tsx:129` đã gọi `router.refresh()`
+khi người đổi tiếng, nên chuỗi vẽ từ máy chủ đổi theo **kể cả khi nhà cung cấp
+mới không làm gì**. Phép đo của AC-9 phải dựng một component KHÔNG được máy chủ
+vẽ lại; nếu không nó xanh mà chẳng chứng minh gì.
+
+**Năm trong ba mươi ba chuỗi nằm sau menu thả xuống.** `Sort by` · `Ascending`
+· `Descending` · `Toggle columns` · `Detail` sống trong `DropdownMenu`
+(`data-table.tsx:501,525,528,550`). Báo cáo bằng chứng vòng ① ghi rằng menu đó
+không mở được trong Chrome không giao diện. Phép đo cho chúng phải là bài kiểm
+dựng component, không phải ảnh chụp — và `packages/ui` **chưa có lệnh `test`**
+(xem Issues), nên dựng giàn kiểm là việc đầu tiên của vòng, không phải việc cuối.
+
+**Phí bản rẽ.** 17 trong 18 file sắp sửa là file của hãng. Khuôn phải là thứ gửi
+ngược lên hãng được: một component nhận chuỗi qua nhà cung cấp và có sẵn mặc
+định tiếng Anh chạy y nguyên trong kho của hãng, nơi không ai dựng nhà cung cấp
+đó. AC-3 là phép đo của chính điều này.
+
+**Chuỗi ghép biến, năm chỗ.** `data-table.tsx:172,203,357,703` và
+`table-pagination.tsx:38`. Tiếng Việt đảo trật tự từ, nên bảng tra phẳng
+`Record<khoá, chuỗi>` không tả nổi chúng. Vòng ① đã có khuôn đúng ở
+`apps/app/lib/messages/companies.ts:31` — `showing` là một **hàm**
+`(from,to,total) => string`. Vòng này dùng lại dạng đó.
+
+**Đã đọc trước khi viết:** `AGENTS.md`, `docs/design.md`, `CONTEXT.md`,
+`.oxlintrc.json`, `packages/ui/package.json`,
+`_acceptance/tieng-viet-cho-crm/{opportunity,contract,decisions}.md`, và ba bản
+phản biện ngữ cảnh sạch chạy 2026-09-01.
