@@ -37,7 +37,7 @@ chất quan hệ — hợp tác, không phải mua bán.
 
 **Cá nhân**: một người trong mạng lưới, có thể thuộc một công ty hoặc hành nghề
 độc lập. Giai đoạn này phần lớn là môi giới. Trên màn hình đang hiện dưới
-`Contacts`.
+`Contacts`. Người xác nhận 2026-09-01.
 _Avoid_: cá nhân môi giới, liên hệ, contact
 Vì sao: "cá nhân môi giới" khoá vào giai đoạn đầu; hai từ còn lại không nói được
 người này là ai trong mạng lưới.

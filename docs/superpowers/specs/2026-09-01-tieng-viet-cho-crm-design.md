@@ -117,6 +117,55 @@ Nhãn dùng đúng từ điển `CONTEXT.md`: **"Công ty"**, không phải "Cô
 giới" — tên khoá vào giai đoạn đầu bắt đổi tên toàn màn hình khi mạng lưới mở
 lĩnh vực mới.
 
+<!-- <<<UX-SPEC-TEMPLATE -->
+## Đặc tả UX
+
+### 1. Luồng
+
+- Suôn sẻ: mở CRM → thanh đầu trang → menu ngôn ngữ → chọn Tiếng Việt → trang vẽ lại, màn công ty hiện tiếng Việt (điểm ra: ở nguyên màn đang đứng)
+- Biên: chưa từng chọn bao giờ → lấy theo ngôn ngữ trình duyệt khai; danh sách công ty rỗng → thông báo rỗng cũng phải là tiếng Việt
+- Lỗi & quay lại: lựa chọn đã lưu mang giá trị không hợp lệ → rơi về tiếng Anh, không báo lỗi cho người; người đổi lại bằng chính menu đó
+
+### 2. Kiểm kê màn
+
+| Màn | MỘT việc của màn | Vào từ / ra tới |
+|---|---|---|
+| Menu ngôn ngữ (thanh đầu trang) | Đổi thứ tiếng của toàn bộ giao diện | Từ mọi màn / ở nguyên màn đang đứng |
+| Danh sách công ty | Xem và lọc các công ty trong mạng lưới | Từ thanh điều hướng / tới chi tiết một công ty |
+
+### 3. Bảng trạng thái
+
+<!-- <<<UX-STATE-TABLE -->
+| Trạng thái | Màn | Hiển thị gì | Người làm gì tiếp |
+|---|---|---|---|
+| ST-menu-ngon-ngu-dong | Menu ngôn ngữ | Nhãn thứ tiếng đang dùng, có tiêu điểm nhìn thấy được khi tới bằng bàn phím | Mở menu bằng chuột hoặc bàn phím |
+| ST-menu-ngon-ngu-mo | Menu ngôn ngữ | Hai dòng: Tiếng Việt · English, dòng đang dùng có dấu | Chọn một dòng, hoặc Esc để đóng |
+| ST-cong-ty-dang-tai | Danh sách công ty | Khung xương của bảng, không nháy chữ tiếng Anh trước | Chờ |
+| ST-cong-ty-rong | Danh sách công ty | "Chưa có công ty nào khớp bộ lọc này" — bằng tiếng đang dùng | Đổi bộ lọc, hoặc thêm công ty |
+| ST-cong-ty-co-du-lieu | Danh sách công ty | Nhãn cột tiếng Việt; tên công ty giữ nguyên như đã nhập, không cho trình duyệt tự dịch | Mở một công ty |
+<!-- UX-STATE-TABLE>>> -->
+
+### 4. Hành vi
+
+- Đổi tiếng giữ nguyên màn đang đứng; vòng này KHÔNG hứa giữ vị trí cuộn và bộ lọc (đã xếp Later ở bản quét).
+- Ô chứa chữ dài phải cắt hoặc xuống dòng; con của flex phải cho phép co lại. Chuỗi tiếng Việt dài hơn tiếng Anh 20–30%.
+- Menu tới được bằng bàn phím, có tiêu điểm nhìn thấy được, đóng bằng Esc.
+
+### 5. Xuất xứ component
+
+| Component | Nấc | Vì sao |
+|---|---|---|
+| Menu thả xuống dùng chung | dùng | Thanh đầu trang đã nhập sẵn cho nút sáng/tối; luật giao diện của kho cấm dựng biến thể tại chỗ gọi |
+| Bảng dữ liệu dùng chung | dùng | Màn công ty đã dùng; vòng này chỉ đổi chữ đưa vào, không đổi component |
+
+### 6. Khuôn IA đã chọn + căn cứ
+
+Khuôn IA: danh-sách-chi-tiết (master-detail)
+Căn cứ: không tra mẫu. Màn công ty đã tồn tại và đã theo khuôn này (danh sách
+`companies` → chi tiết `[companyId]`); vòng này không dựng màn mới, chỉ đổi thứ
+tiếng của màn đang có. Chỉ một khuôn khả dĩ nên không có gì để cân.
+<!-- UX-SPEC-TEMPLATE>>> -->
+
 ## Đo bằng gì
 
 Bốn thứ phải đo được, mỗi thứ kèm chiều đỏ:
