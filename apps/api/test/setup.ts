@@ -16,6 +16,13 @@ fallback("ALLOWED_SIGN_IN", "example.com");
 fallback("GOOGLE_CLIENT_ID", "test-google-client-id");
 fallback("GOOGLE_CLIENT_SECRET", "test-google-client-secret");
 
+const clear = (key: string) => {
+	delete process.env[key];
+};
+
+clear("MICROSOFT_CLIENT_ID");
+clear("MICROSOFT_CLIENT_SECRET");
+
 afterAll(async () => {
 	if (!process.env.DATABASE_URL) return;
 	const { db } = await import("@crm/db");
