@@ -4,19 +4,23 @@ import { TooltipProvider } from "@crm/ui/components/tooltip";
 import { cn } from "@crm/ui/lib/utils";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { cookies, headers } from "next/headers";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { LocalDateTimeHydrator } from "@/components/local-date-time";
 import { ThemeProvider } from "@/components/theme-provider";
+import { LANG_COOKIE } from "@/lib/locale/locale";
+import { LocaleProvider } from "@/lib/locale/provider";
+import { resolveLocale } from "@/lib/locale/resolve";
 import { TRPCReactProvider } from "@/lib/trpc/client";
 
 const fontSans = Geist({
 	variable: "--font-geist-sans",
-	subsets: ["latin"],
+	subsets: ["latin", "vietnamese"],
 });
 
 const fontMono = Geist_Mono({
 	variable: "--font-geist-mono",
-	subsets: ["latin"],
+	subsets: ["latin", "vietnamese"],
 });
 
 export const metadata: Metadata = {
@@ -35,26 +39,34 @@ export const metadata: Metadata = {
 	manifest: "/site.webmanifest",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const [cookieStore, headerList] = await Promise.all([cookies(), headers()]);
+	const locale = resolveLocale(
+		cookieStore.get(LANG_COOKIE)?.value,
+		headerList.get("accept-language") ?? undefined,
+	);
+
 	return (
 		<html
-			lang="en"
+			lang={locale}
 			suppressHydrationWarning
 			className={cn(fontSans.variable, fontMono.variable, "h-full antialiased")}
 		>
 			<body className="flex min-h-full flex-col font-sans">
-				<NuqsAdapter>
-					<TRPCReactProvider>
-						<ThemeProvider>
-							<TooltipProvider>{children}</TooltipProvider>
-							<Toaster richColors />
-						</ThemeProvider>
-					</TRPCReactProvider>
-				</NuqsAdapter>
+				<LocaleProvider locale={locale}>
+					<NuqsAdapter>
+						<TRPCReactProvider>
+							<ThemeProvider>
+								<TooltipProvider>{children}</TooltipProvider>
+								<Toaster richColors />
+							</ThemeProvider>
+						</TRPCReactProvider>
+					</NuqsAdapter>
+				</LocaleProvider>
 				<LocalDateTimeHydrator />
 			</body>
 		</html>
