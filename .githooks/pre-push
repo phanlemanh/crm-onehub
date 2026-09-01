@@ -2,7 +2,10 @@
 
 set -eu
 
-[ -n "${CRM_SKIP_HOOKS:-}" ] && exit 0
+if [ -n "${CRM_SKIP_HOOKS:-}" ]; then
+	echo "pre-push: CRM_SKIP_HOOKS is set, so nothing was checked before this push."
+	exit 0
+fi
 
 deleting_only=1
 while read -r _local_ref local_sha _remote_ref _remote_sha; do

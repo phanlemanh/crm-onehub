@@ -7,13 +7,24 @@ CHAN="${2:-}"
 [ "${1:-}" = "--chan" ] || { echo "rang-hook: dùng --chan ep-chay|con-rang|loi-thoat|tro-dung"; exit 2; }
 
 FIX="$(mktemp -d)"
-trap 'rm -rf "$FIX"' EXIT
+PLANT="$ROOT/packages/env/test/rang-hong-$$.spec.ts"
+cleanup() { rm -rf "$FIX"; rm -f "$PLANT"; }
+trap cleanup EXIT
+find "$ROOT/packages/env/test" -maxdepth 1 -name 'rang-hong-*.spec.ts' -mmin +60 -delete 2>/dev/null
+
+TAC_VU="check-types lint lint:slop test"
 
 SHA="$(git -C "$ROOT" rev-parse HEAD)"
 REF() { printf 'refs/heads/onehub %s refs/heads/onehub %s\n' "$SHA" "$SHA"; }
 
 case "$CHAN" in
   ep-chay)
+    DONG="$(grep -n '^for task in' "$HOOK" | head -1 | cut -d: -f2-)"
+    if [ "$DONG" != "for task in $TAC_VU; do" ]; then
+      echo "danh sach tac vu cua luoi da doi: $DONG"
+      echo "  ky vong: for task in $TAC_VU; do"
+      exit 1
+    fi
     cd "$ROOT" || exit 2
     OUT="$(REF | bash "$HOOK" 2>&1)"
     CODE=$?
@@ -22,9 +33,15 @@ case "$CHAN" in
       printf '%s' "$OUT" | tail -5
       exit 1
     fi
+    for tv in $TAC_VU; do
+      if ! grep -q "pre-push: bun run $tv" <<<"$OUT"; then
+        echo "RANG CUN: khong thay tac vu '$tv' chay trong luoi"
+        exit 1
+      fi
+    done
     DONG_CACHE="$(printf '%s' "$OUT" | grep -c 'Cached:')"
-    if [ "$DONG_CACHE" -lt 3 ]; then
-      echo "RANG CUN: chi thay $DONG_CACHE dong tong ket turbo, ky vong it nhat 3"
+    if [ "$DONG_CACHE" -ne 3 ]; then
+      echo "RANG CUN: thay $DONG_CACHE dong tong ket bo dung, ky vong dung 3"
       exit 1
     fi
     XAU="$(printf '%s' "$OUT" | grep 'Cached:' | grep -v 'Cached:[[:space:]]*0 cached')"
@@ -34,27 +51,31 @@ case "$CHAN" in
       exit 1
     fi
     printf '%s' "$OUT" | grep 'Cached:' | sed 's/^/  /'
-    echo "rang-hook ep-chay: moi tac vu turbo cua luoi day deu chay that, 0 doc tu dem"
+    echo "rang-hook ep-chay: du 4 tac vu duoc goi, 3 tac vu qua bo dung deu 0 doc tu dem"
     ;;
   con-rang)
-    sed 's/^for task in .*$/for task in khong-co-tac-vu-nay; do/' "$HOOK" > "$FIX/hook"
-    DIFF_N=$(diff "$HOOK" "$FIX/hook" | grep -c '^[<>]')
-    if [ "$DIFF_N" -ne 2 ]; then
-      echo "RANG CUN: dot bien lech $DIFF_N dong, ky vong 2"
-      exit 1
+    if [ -e "$PLANT" ]; then
+      echo "da co file $PLANT — rang khong ghi de"
+      exit 2
     fi
+    printf 'import { expect, it } from "bun:test";\n\nit("rang cai vao de luoi phai chan", () => {\n\texpect(1).toBe(2);\n});\n' > "$PLANT"
     cd "$ROOT" || exit 2
-    OUT="$(REF | bash "$FIX/hook" 2>&1)"
+    OUT="$(REF | bash "$HOOK" 2>&1)"
     CODE=$?
     if [ "$CODE" -eq 0 ]; then
-      echo "RANG CUN: mot tac vu hong ma luoi day van cho di — luoi khong chan gi"
+      echo "RANG CUN: mot bai kiem THAT dang do ma luoi day van cho di"
       exit 1
     fi
-    if ! printf '%s' "$OUT" | grep -q 'would have failed CI'; then
+    if ! grep -q 'would have failed CI' <<<"$OUT"; then
       echo "RANG CUN: luoi chan nhung khong noi vi sao"
       exit 1
     fi
-    echo "rang-hook con-rang: mot tac vu hong thi luoi day chan, exit $CODE"
+    if ! grep -q '`bun run test` failed' <<<"$OUT"; then
+      echo "RANG CUN: luoi chan nhung khong goi ten tac vu test"
+      printf '%s' "$OUT" | tail -4
+      exit 1
+    fi
+    echo "rang-hook con-rang: mot bai kiem that do thi luoi day chan va goi dung ten tac vu, exit $CODE"
     ;;
   loi-thoat)
     cd "$ROOT" || exit 2
@@ -66,7 +87,11 @@ case "$CHAN" in
       echo "RANG DO: loi thoat khan cap khong con di duoc"
       exit 1
     fi
-    if [ -n "$OUT" ]; then
+    if ! grep -q 'CRM_SKIP_HOOKS is set' <<<"$OUT"; then
+      echo "RANG CUN: loi thoat im lang — nguoi de sot bien trong ho so shell se tat luoi ma khong biet"
+      exit 1
+    fi
+    if grep -q 'pre-push: bun run' <<<"$OUT"; then
       echo "RANG CUN: loi thoat van chay tac vu — dang le phai ra ngay"
       exit 1
     fi
