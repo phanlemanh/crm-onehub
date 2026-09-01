@@ -118,7 +118,8 @@ chuỗi tiếng Anh của nó, một khoá một lượt, rồi xem phép đo c�
 | Trước đường B | 14 / 34 |
 | Đường B, lúc vòng chấm 1 | 32 / 39 |
 | Đường B, sau vòng chấm 2 | 44 / 45 |
-| Sau vòng chấm 3 | **44 / 44** |
+| Sau vòng chấm 3 | 44 / 44 |
+| Sau vòng chấm 4 | **43 / 43** |
 
 **Con số 39/39 tôi công bố ở vòng chấm 1 là SAI, và sai theo đúng lối đã hỏng
 hai lần trước.** Kịch bản quét của tôi thay chuỗi ở nửa sau của file — nửa không

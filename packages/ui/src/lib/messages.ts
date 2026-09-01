@@ -60,7 +60,6 @@ const en = {
 		needsAction: "No reply",
 	},
 	sortableList: {
-		role: "sortable",
 		reorder: (label: string) => `Reorder ${label}`,
 	},
 	skeletonSwap: {
@@ -94,7 +93,7 @@ const vi = {
 		selectRow: (label: string) => `Chọn ${label}`,
 		selectRowFallback: "Chọn dòng",
 		searchFacet: (label: string) => `Tìm ${label}…`,
-		facetOptions: "Lựa chọn",
+		facetOptions: "Các lựa chọn",
 	},
 	pagination: {
 		previous: "Trước",
@@ -136,8 +135,7 @@ const vi = {
 		needsAction: "Chưa trả lời",
 	},
 	sortableList: {
-		role: "tay cầm sắp xếp",
-		reorder: (label: string) => `Kéo để đổi thứ tự ${label}`,
+		reorder: (label: string) => `Đổi thứ tự ${label}`,
 	},
 	skeletonSwap: {
 		loaded: (label: string) => `Đã tải xong ${label}`,
