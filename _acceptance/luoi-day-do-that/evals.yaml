@@ -5,21 +5,21 @@ evals:
     criterion: AC-1
     executor: script
     cmd: config:executors.script.rang_hook_ep_chay
-    expected: "exit 0; moi dong tong ket cua bo dung deu la '0 cached', it nhat 3 dong"
+    expected: "exit 0; dong `for task in` khop NGUYEN VAN bon ten, du bon dong thong bao nguyen-ve, va DUNG 3 dong tong ket bo dung deu '0 cached'"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
     criterion: AC-2
     executor: script
     cmd: config:executors.script.rang_hook_con_rang
-    expected: "exit 0; dot bien lech dung 2 dong lam luoi thoat khac 0 va in 'would have failed CI'"
+    expected: "exit 0; mot bai kiem THAT dang do lam luoi thoat khac 0, in 'would have failed CI' va goi dung ten tac vu test"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E3
     criterion: AC-3
     executor: script
     cmd: config:executors.script.rang_hook_loi_thoat
-    expected: "exit 0; CRM_SKIP_HOOKS lam luoi ra ngay, khong dau ra, duoi 3 giay"
+    expected: "exit 0; CRM_SKIP_HOOKS lam luoi IN RA mot dong noi khong co gi duoc kiem, khong chay tac vu nao, duoi 3 giay"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E4
@@ -41,4 +41,11 @@ evals:
     executor: script
     cmd: config:executors.script.check_types_khong_cache
     expected: "exit 0; moi task kiem kieu thanh cong, 0 cached"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.rang_hook_canary_slop
+    expected: "exit 0; cai mot vi pham anti-slop that lam luoi chan, goi dung ten tac vu lint:slop va in ten luat vi pham"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

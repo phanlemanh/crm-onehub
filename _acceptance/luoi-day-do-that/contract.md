@@ -34,6 +34,7 @@ Source input: prompt
 - AC-3: Given người cần đẩy gấp và đặt biến thoát khẩn cấp, When lưới chạy, Then nó NÓI RA rằng không có gì được kiểm, ra ngay, không chạy tác vụ nào, và không tốn quá 3 giây.
 - AC-4: Given hợp đồng đã ký của `sua-test-do-thu-tu-nap`, When đọc chỗ nó trỏ tới bộ răng, Then tên chân là chân chấm thật, không phải bí danh gộp, và chân đó chạy được.
 - AC-5: Given cây làm việc, When chạy tác vụ soi mã và tác vụ kiểm kiểu, Then cả hai xanh.
+- AC-6: Given một vi phạm anti-slop được cài vào kho, When lưới chạy, Then nó thoát khác 0, gọi đúng tên tác vụ soi-mã-thừa, và in ra tên luật bị vi phạm.
 
 ## Coverage
 
@@ -71,10 +72,10 @@ chạy nếu số dòng lệch khác 2 — cùng nếp với bộ răng của v�
 - Biến ép chạy KHÔNG phủ cả bốn tác vụ. Tác vụ soi-mã-thừa chạy `oxlint` trực
   tiếp, không qua bộ dựng. AC-1 nay nói đúng ba-trên-bốn, và thông điệp commit
   cũng đã sửa theo.
-- **Giới hạn còn lại:** `oxlint` 1.78 không có tuỳ chọn bộ nhớ đệm nào, và khi
-  sạch nó không in gì. Nên độ tươi của nó là tính chất theo cấu tạo — không có
-  đệm để mà đọc lại — chứ không phải thứ đo được từng lượt. Bộ răng chỉ khẳng
-  định nó ĐƯỢC GỌI.
+- Tôi từng khai độ tươi của tác vụ soi-mã-thừa là "không đo được". **Sai, và
+  người chấm chứng minh sai ở vòng 2**: có ít nhất hai đường đo. Nay AC-6 đo
+  bằng đường thứ hai — cài một vi phạm thật rồi đòi lưới chặn. Đó là đo HIỆU
+  QUẢ, không phải đo lời thông báo.
 - Chân đo cũ nhận "ít nhất 3 dòng tổng kết". Người chấm chứng minh lỗ: xoá hẳn
   tác vụ soi-mã-thừa khỏi lưới thì vẫn đủ 3 dòng và chân vẫn xanh. Nay chân đối
   chiếu nguyên văn danh sách bốn tác vụ và đòi đúng 3 dòng tổng kết.
@@ -84,3 +85,26 @@ chạy nếu số dòng lệch khác 2 — cùng nếp với bộ răng của v�
 - Lối thoát khẩn cấp trước đây im lặng tuyệt đối, nên một biến sót trong hồ sơ
   shell sẽ tắt lưới ở mọi lần đẩy mà không ai biết. Nay nó in một dòng nói thẳng
   là không có gì được kiểm.
+
+**Vòng chấm 2 PASS, và người chấm phá được bộ răng bằng một đòn MỚI.** Nó giữ
+nguyên dòng danh sách tác vụ, chỉ sửa thân vòng lặp thành
+`[ "$task" = "lint:slop" ] || bun run "$task"`. Đủ bốn dòng thông báo vẫn in, ba
+dòng tổng kết vẫn `0 cached`, chân đo vẫn xanh — mà tác vụ soi-mã-thừa không hề
+chạy. Vì dòng thông báo được in TRƯỚC lệnh, nên "đã gọi" chỉ được chứng minh
+bằng một tiếng rao.
+
+Ba chỗ vá của vòng 3, tôi tự chạy lại đòn tấn công đó để kiểm:
+
+- Thêm AC-6 và chân `canary-slop`: cài một vi phạm `no-unknown-parameters` thật
+  vào kho, đòi lưới chặn, gọi đúng tên tác vụ và in tên luật. Chạy lại đúng đòn
+  của người chấm: chân `ep-chay` vẫn xanh như nó nói, còn chân canary **đỏ, thoát
+  1**. Lỗ đã đóng.
+- Dòng thông báo nay so NGUYÊN VẾ. Trước đó `pre-push: bun run lint` khớp cả dòng
+  của `lint:slop` — cùng họ lỗi chuỗi-con đã cắn tôi một lần hôm nay ở
+  `ds_skill` với `ui_standards_skill`.
+- Quét dọn file cài nay so NỘI DUNG nguyên văn và dọn ở MỌI tuổi, không đợi 60
+  phút. Người chấm chỉ ra đúng: một cú giết cứng để lại một bài kiểm đỏ trong thư
+  mục được git theo dõi, và lưới sẽ chặn MỌI lần đẩy suốt một giờ.
+
+**Ba dòng `expected:` trong `evals.yaml` từng tả bộ răng của vòng 1** — người
+chấm bắt được. Chúng đã viết lại cho khớp chân đo hiện tại.

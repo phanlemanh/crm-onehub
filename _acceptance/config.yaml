@@ -31,6 +31,7 @@ executors:
     rang_microsoft_nguon_env: "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan nguon-env"
     rang_microsoft_hinh_thuc: "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan hinh-thuc"
     rang_hook_ep_chay: "bash _acceptance/luoi-day-do-that/rang-hook.sh --chan ep-chay"
+    rang_hook_canary_slop: "bash _acceptance/luoi-day-do-that/rang-hook.sh --chan canary-slop"
     rang_hook_con_rang: "bash _acceptance/luoi-day-do-that/rang-hook.sh --chan con-rang"
     rang_hook_loi_thoat: "bash _acceptance/luoi-day-do-that/rang-hook.sh --chan loi-thoat"
     rang_hook_tro_dung: "bash _acceptance/luoi-day-do-that/rang-hook.sh --chan tro-dung"

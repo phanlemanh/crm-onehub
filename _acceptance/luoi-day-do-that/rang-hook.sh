@@ -8,9 +8,36 @@ CHAN="${2:-}"
 
 FIX="$(mktemp -d)"
 PLANT="$ROOT/packages/env/test/rang-hong-$$.spec.ts"
-cleanup() { rm -rf "$FIX"; rm -f "$PLANT"; }
+SLOP="$ROOT/packages/env/src/rang-slop-$$.ts"
+cleanup() { rm -rf "$FIX"; rm -f "$PLANT" "$SLOP"; }
 trap cleanup EXIT
-find "$ROOT/packages/env/test" -maxdepth 1 -name 'rang-hong-*.spec.ts' -mmin +60 -delete 2>/dev/null
+
+NOI_DUNG_PLANT='import { expect, it } from "bun:test";
+
+it("rang cai vao de luoi phai chan", () => {
+	expect(1).toBe(2);
+});'
+NOI_DUNG_SLOP='export function thu(input: unknown): string {
+	return input as string;
+}'
+
+don_du() {
+  for f in "$ROOT/packages/env/test/"rang-hong-*.spec.ts; do
+    [ -f "$f" ] || continue
+    if [ "$(cat "$f")" = "$NOI_DUNG_PLANT" ]; then
+      echo "don $f con sot tu mot luot bi giet cung"
+      rm -f "$f"
+    fi
+  done
+  for f in "$ROOT/packages/env/src/"rang-slop-*.ts; do
+    [ -f "$f" ] || continue
+    if [ "$(cat "$f")" = "$NOI_DUNG_SLOP" ]; then
+      echo "don $f con sot tu mot luot bi giet cung"
+      rm -f "$f"
+    fi
+  done
+}
+don_du
 
 TAC_VU="check-types lint lint:slop test"
 
@@ -34,8 +61,8 @@ case "$CHAN" in
       exit 1
     fi
     for tv in $TAC_VU; do
-      if ! grep -q "pre-push: bun run $tv" <<<"$OUT"; then
-        echo "RANG CUN: khong thay tac vu '$tv' chay trong luoi"
+      if ! grep -qx "pre-push: bun run $tv" <<<"$OUT"; then
+        echo "RANG CUN: khong thay dong thong bao NGUYEN VE cho tac vu '$tv'"
         exit 1
       fi
     done
@@ -58,7 +85,7 @@ case "$CHAN" in
       echo "da co file $PLANT — rang khong ghi de"
       exit 2
     fi
-    printf 'import { expect, it } from "bun:test";\n\nit("rang cai vao de luoi phai chan", () => {\n\texpect(1).toBe(2);\n});\n' > "$PLANT"
+    printf '%s\n' "$NOI_DUNG_PLANT" > "$PLANT"
     cd "$ROOT" || exit 2
     OUT="$(REF | bash "$HOOK" 2>&1)"
     CODE=$?
@@ -76,6 +103,30 @@ case "$CHAN" in
       exit 1
     fi
     echo "rang-hook con-rang: mot bai kiem that do thi luoi day chan va goi dung ten tac vu, exit $CODE"
+    ;;
+  canary-slop)
+    if [ -e "$SLOP" ]; then
+      echo "da co file $SLOP — rang khong ghi de"
+      exit 2
+    fi
+    printf '%s\n' "$NOI_DUNG_SLOP" > "$SLOP"
+    cd "$ROOT" || exit 2
+    OUT="$(REF | bash "$HOOK" 2>&1)"
+    CODE=$?
+    if [ "$CODE" -eq 0 ]; then
+      echo "RANG CUN: cai mot vi pham soi-ma-thua ma luoi van cho di — tac vu do khong doc cay hien tai"
+      exit 1
+    fi
+    if ! grep -q '`bun run lint:slop` failed' <<<"$OUT"; then
+      echo "RANG CUN: luoi chan nhung khong phai vi tac vu soi-ma-thua"
+      tail -4 <<<"$OUT"
+      exit 1
+    fi
+    if ! grep -q 'no-unknown-parameters' <<<"$OUT"; then
+      echo "RANG CUN: chan dung tac vu nhung khong in ra vi pham nao"
+      exit 1
+    fi
+    echo "rang-hook canary-slop: tac vu soi-ma-thua DOC that cay hien tai va chan dung luot day nay"
     ;;
   loi-thoat)
     cd "$ROOT" || exit 2
