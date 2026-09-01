@@ -60,22 +60,25 @@ evals:
   - id: E5
     criterion: AC-5
     cau_hoi: Còn chuỗi tiếng Anh khoá cứng nào trong bộ dựng chung không?
-    cach_do: Máy quét đọc cây cú pháp, đếm chuỗi khoá cứng, trừ `logo.tsx`.
+    cach_do: >-
+      Dựng THẬT từng component hai lần — một lần tiếng Anh, một lần tiếng Việt —
+      trong jsdom, mở cả ba menu thả xuống của bảng, rồi lấy chữ trong thẻ cùng
+      chín thuộc tính trình đọc màn hình đọc lên. Chữ nào giống hệt ở cả hai bản
+      vẽ mà không có tên trong danh sách trung tính thì nó chưa được dịch.
     chieu_do: >-
-      Là chính E6. Máy quét này không được tin nếu chưa qua phép đo chim mồi.
-    lenh: bash _acceptance/bo-dung-chung-nhan-chuoi/rang-quet.sh --chan dem
+      Là chính E6. Phép đo không đọc mã, nên không có lối lách cú pháp nào.
+    lenh: cd packages/ui && bun run test
 
   - id: E6
     criterion: AC-6
-    cau_hoi: Cái thước có đếm hụt được không?
+    cau_hoi: Phép đo của AC-5 có bỏ sót khoá nào không?
     cach_do: >-
-      Gieo bảy kiểu chuỗi mồi vào một bản sao — chữ trong thẻ, `aria-label`,
-      `title`, giá trị mặc định, dự phòng `??`, bảng nhãn, chuỗi ghép biến.
-      Máy quét phải gọi tên đủ bảy.
+      Trả TỪNG khoá của bảng dịch tiếng Việt về đúng chuỗi tiếng Anh của nó, một
+      khoá một lượt, rồi chạy lại phép đo. Cả 39 khoá phải làm nó đỏ.
     chieu_do: >-
-      Gỡ file mồi thì máy quét phải im về chúng. Một máy quét báo cả thứ không
-      còn tồn tại thì nó đang đọc bộ nhớ đệm chứ không đọc mã.
-    lenh: bash _acceptance/bo-dung-chung-nhan-chuoi/rang-quet.sh --chan canary
+      Khoá nào trả về tiếng Anh mà phép đo vẫn xanh thì khoá đó không ai kiểm.
+      Bộ kiểm trước bắt 14 trên 34; bộ kiểm này bắt 39 trên 39.
+    lenh: cd packages/ui && bun run test
 
   - id: E7
     criterion: AC-7

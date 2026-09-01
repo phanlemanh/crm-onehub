@@ -49,8 +49,8 @@ công ty vẫn đọc "Search companies…".** Chúng đóng ở vòng ③, khô
 - AC-2: Given nhân viên đang đọc tiếng Việt, When họ mở một màn có BẤT KỲ component dùng chung nào khác, Then chữ khoá cứng của nó là tiếng Việt. Hợp đồng không kể tên component nào ở đây — máy quét kể, và AC-5 là chỗ đếm.
 - AC-3: Given một component dùng chung dựng ở nơi KHÔNG có nhà cung cấp ngôn ngữ, When nó vẽ, Then nó hiện tiếng Anh và không lỗi nào nổ.
 - AC-4: Given `packages/ui` sau vòng này, When tìm chỗ nó nhập từ `apps/app`, Then không có chỗ nào, và kiểu `Locale` chỉ còn MỘT định nghĩa trong cả kho.
-- AC-5: Given máy quét chạy trên `packages/ui/src/components/*.tsx`, When đếm chuỗi tiếng Anh khoá cứng còn lại, Then còn đúng 0 — TRỪ `logo.tsx`, chỗ giữ tên hãng cũ chứ không giữ chữ để dịch.
-- AC-6: Given máy quét là thứ AC-5 dựa vào, When gieo bảy kiểu chuỗi mồi khác nhau vào một bản sao, Then máy quét gọi tên đủ bảy.
+- AC-5: Given mỗi component dùng chung được DỰNG THẬT hai lần, một lần tiếng Anh một lần tiếng Việt, When so chữ người đọc thấy trong hai bản vẽ, Then không chữ nào giống nhau ở cả hai — trừ danh sách trung tính khai trong hồ sơ (tên riêng, dữ liệu thử).
+- AC-6: Given phép đo của AC-5, When trả TỪNG khoá của bảng dịch tiếng Việt về đúng chuỗi tiếng Anh của nó, một khoá một lượt, Then phép đo đỏ ở cả 39 khoá, không sót khoá nào.
 - AC-7: Given một tiêu đề cột dài hơn bề rộng cột, When màn hiện ở 768px, Then chữ bị cắt mang dấu ba chấm, và tiêu đề đầy đủ nằm trong một thuộc tính trình đọc màn hình đọc được.
 - AC-8: Given phân trang hiện tổng số dòng, When trang vẽ từ máy chủ rồi trình duyệt nhận, Then số hiện giống nhau ở hai bên và theo quy ước tiếng Việt.
 - AC-9: Given nhân viên đổi tiếng, When màn vẽ lại, Then chữ trong bảng dùng chung đổi theo mà không cần tải lại trang, KỂ CẢ khi component không được máy chủ vẽ lại.
