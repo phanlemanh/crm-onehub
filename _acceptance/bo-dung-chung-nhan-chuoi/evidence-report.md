@@ -1,3 +1,16 @@
+---
+schema_version: 2
+feature_slug: bo-dung-chung-nhan-chuoi
+verdict: PASS
+failed_evals: []
+reason: Bốn vòng chấm ngữ cảnh sạch. Chín tiêu chí có bằng chứng máy; AC-10 nhận trên bằng chứng vòng chấm 4 sau khi sửa đúng ba dòng hội đồng nêu.
+verified_by: fresh-context verification subagent
+enforcement_mode: strict
+bypass_used: false
+verified_commit: 26bffdaa9bdbe347361905a9b74b1583bf158bd8
+human_signoff: Manh Phan 2026-09-01
+---
+
 # Báo cáo bằng chứng — vòng ②, vòng chấm 1
 
 Ngày 2026-09-01. Bốn người chấm ngữ cảnh sạch, không ai trong số đó là người làm.
