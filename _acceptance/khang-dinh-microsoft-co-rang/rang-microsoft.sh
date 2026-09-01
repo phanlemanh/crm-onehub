@@ -7,9 +7,17 @@ CHAN="${2:-}"
 
 SETUP="$ROOT/apps/api/test/setup.ts"
 MUTANT="$ROOT/apps/api/test/rang-mutant-$$.ts"
+MUTANT_XOA="$ROOT/apps/api/test/rang-mutant-xoa-$$.ts"
+ENVLOCAL="$ROOT/.env.local"
 FIX="$(mktemp -d)"
-cleanup() { rm -f "$MUTANT"; rm -rf "$FIX"; }
+DA_TAO_ENVLOCAL=0
+cleanup() {
+  rm -f "$MUTANT" "$MUTANT_XOA"
+  [ "$DA_TAO_ENVLOCAL" = "1" ] && rm -f "$ENVLOCAL"
+  rm -rf "$FIX"
+}
 trap cleanup EXIT
+rm -f "$ROOT/apps/api/test/rang-mutant-"*.ts
 
 TDB="$(grep '^TEST_DATABASE_URL=' "$ROOT/.env" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"')"
 [ -n "$TDB" ] || { echo "khong doc duoc TEST_DATABASE_URL tu .env goc"; exit 2; }
@@ -72,34 +80,42 @@ case "$CHAN" in
     echo "rang-microsoft hinh-thuc: ky vong la hang so, khong doc moi truong"
     ;;
   nguon-env)
-    printf '{"name":"probe","workspaces":["x"]}\n' > "$FIX/package.json"
-    printf 'MICROSOFT_CLIENT_ID="tu-file-env"\nMICROSOFT_CLIENT_SECRET="tu-file-env"\n' > "$FIX/.env"
-    cd "$FIX" || exit 2
-    OUT="$(LOADER="$ROOT/packages/env/src/index.ts" bun -e '
-const optional = (k) => { const v = process.env[k]; return v && v.length > 0 ? v : undefined; };
-const { loadRootEnv } = await import(process.env.LOADER);
-process.env.MICROSOFT_CLIENT_ID = "";
-loadRootEnv();
-console.log("sentinel|" + JSON.stringify(process.env.MICROSOFT_CLIENT_ID) + "|" + optional("MICROSOFT_CLIENT_ID"));
-' 2>&1)"
-    echo "  $OUT"
-    case "$OUT" in
-      'sentinel|""|undefined') ;;
-      *) echo "RANG DO: dat rong khong song qua bo nap .env goc"; exit 1 ;;
-    esac
-    OUT2="$(LOADER="$ROOT/packages/env/src/index.ts" bun -e '
-const { loadRootEnv } = await import(process.env.LOADER);
-process.env.MICROSOFT_CLIENT_ID = "gi-do";
-delete process.env.MICROSOFT_CLIENT_ID;
-loadRootEnv();
-console.log("xoa|" + JSON.stringify(process.env.MICROSOFT_CLIENT_ID));
-' 2>&1)"
-    echo "  $OUT2"
-    case "$OUT2" in
-      'xoa|"tu-file-env"') ;;
-      *) echo "RANG CUN: cach xoa dang le phai bi .env goc dien lai, ma khong — phep do khong do gi"; exit 1 ;;
-    esac
-    echo "rang-microsoft nguon-env: dat rong song qua bo nap, cach xoa thi bi .env goc dien lai"
+    if [ -e "$ENVLOCAL" ]; then
+      echo "co san .env.local o goc kho — rang khong dam ghi de file cua nguoi; don no roi chay lai"
+      exit 2
+    fi
+    printf 'MICROSOFT_CLIENT_ID="tu-file-env-local"\nMICROSOFT_CLIENT_SECRET="tu-file-env-local"\n' > "$ENVLOCAL"
+    DA_TAO_ENVLOCAL=1
+
+    echo "-- chieu duong: bo nap truoc THAT, .env goc CO khai hai khoa"
+    OUT="$(chay "$SETUP")"
+    printf '%s' "$OUT" | grep -E '^ *[0-9]+ (pass|fail)'
+    FAIL="$(so_do "$OUT")"
+    if [ "${FAIL:-1}" -ne 0 ]; then
+      echo "RANG DO: khai hai khoa trong .env goc lam bai kiem do — dat rong khong song qua bo nap"
+      exit 1
+    fi
+
+    echo "-- chieu do: cung fixture, nhung bo nap truoc quay ve cach XOA"
+    sed 's/^\tprocess\.env\[key\] = "";/\tdelete process.env[key];/' "$SETUP" > "$MUTANT_XOA"
+    DIFF_N=$(diff "$SETUP" "$MUTANT_XOA" | grep -c '^[<>]')
+    if [ "$DIFF_N" -ne 2 ]; then
+      echo "RANG CUN: dot bien xoa lech $DIFF_N dong, ky vong 2 — khong toi thieu"
+      diff "$SETUP" "$MUTANT_XOA"
+      exit 1
+    fi
+    OUT2="$(chay "$MUTANT_XOA")"
+    printf '%s' "$OUT2" | grep -E '^ *[0-9]+ (pass|fail)'
+    FAIL2="$(so_do "$OUT2")"
+    if [ "${FAIL2:-0}" -eq 0 ]; then
+      echo "RANG CUN: cach xoa dang le phai do voi .env co khai, ma van xanh — phep do khong do gi"
+      exit 1
+    fi
+    if ! printf '%s' "$OUT2" | grep -q '(fail).*lets the sign-in page read what it may offer'; then
+      echo "RANG CUN: co bai do nhung khong phai bai dang nhap"
+      exit 1
+    fi
+    echo "rang-microsoft nguon-env: qua BO NAP THAT — dat rong song qua .env goc, cach xoa thi do dung bai dang nhap"
     ;;
   *)
     echo "rang-microsoft: chan la $CHAN"

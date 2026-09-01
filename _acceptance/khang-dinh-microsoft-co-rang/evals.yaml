@@ -54,7 +54,7 @@ evals:
     criterion: AC-1
     executor: script
     cmd: config:executors.script.rang_microsoft_nguon_env
-    expected: "exit 0; dat chuoi rong song qua loadRootEnv va doc ra chua-khai; cach xoa cu thi bi .env goc dien lai"
+    expected: "exit 0; chay BO NAP TRUOC THAT voi .env.local goc CO khai hai khoa — bai kiem xanh; dot bien quay ve cach xoa thi dung bai dang nhap do"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E9

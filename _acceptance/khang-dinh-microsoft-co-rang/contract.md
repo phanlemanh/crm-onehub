@@ -88,3 +88,14 @@ nạp, cách cũ bị điền lại.
 nạp dựng sẵn cũ khác bộ nạp thật ở hai chỗ, nên cái đỏ không quy được về một
 nguyên nhân. Nay nó sinh ra từ chính bộ nạp thật bằng một phép thay, và bộ răng
 đếm số dòng lệch, khác 2 là kêu.
+
+**Vòng chấm 2 PASS nhưng bắt tiếp một chỗ mỏng, đã sửa trước vòng 3.** Chân
+`nguon-env` cũ tự chép lại cơ chế — nó tự đặt chuỗi rỗng và tự mang một bản sao
+của hàm đọc khoá, nên nó đo một bản mô phỏng chứ không đo sản phẩm. Quay bộ nạp
+trước về cách xoá thì chân đó vẫn xanh.
+
+Nay chân này chạy **chính bộ nạp trước thật** và chính bài kiểm thật, với một
+`.env.local` dựng sẵn ở gốc kho khai hai khoá Microsoft — đúng ca đã suýt lọt.
+Chiều đỏ là một đột biến tối thiểu đưa bộ nạp về cách xoá, lệch đúng một dòng.
+Răng từ chối chạy nếu gốc kho đã có `.env.local`, để không bao giờ ghi đè file
+của người, và xoá file dựng sẵn khi thoát.
