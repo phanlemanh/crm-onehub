@@ -29,8 +29,8 @@ Source input: `_acceptance/tieng-viet-cho-crm/opportunity.md` · giả định #
 
 ## Hai loại chuỗi, và vòng này chỉ lấy một
 
-Máy quét `quet-chuoi.ts` phân biệt hai loại, và ranh giới này là **toàn bộ phạm
-vi** của vòng:
+Vòng này phân biệt hai loại chuỗi, và ranh giới đó là **toàn bộ phạm vi** của
+vòng:
 
 - **Khoá cứng (33 chuỗi)** — component tự chứa, chỗ gọi không có đường truyền
   vào. `Filters` ở `data-table.tsx:394` là loại này. **Vòng ② lấy hết.**
@@ -45,12 +45,12 @@ công ty vẫn đọc "Search companies…".** Chúng đóng ở vòng ③, khô
 
 ## Criteria
 
-- AC-1: Given nhân viên đang đọc tiếng Việt, When họ mở một màn có bảng dùng chung, Then mọi chuỗi bảng đang khoá cứng hiện tiếng Việt. Danh sách do `quet-chuoi.ts` liệt kê, không do hợp đồng liệt kê.
+- AC-1: Given nhân viên đang đọc tiếng Việt, When họ mở một màn có bảng dùng chung, Then mọi chuỗi bảng đang khoá cứng hiện tiếng Việt. Danh sách do phép đo bản vẽ liệt kê, không do hợp đồng liệt kê.
 - AC-2: Given nhân viên đang đọc tiếng Việt, When họ mở một màn có BẤT KỲ component dùng chung nào khác, Then chữ khoá cứng của nó là tiếng Việt. Hợp đồng không kể tên component nào ở đây — máy quét kể, và AC-5 là chỗ đếm.
 - AC-3: Given một component dùng chung dựng ở nơi KHÔNG có nhà cung cấp ngôn ngữ, When nó vẽ, Then nó hiện tiếng Anh và không lỗi nào nổ.
 - AC-4: Given `packages/ui` sau vòng này, When tìm chỗ nó nhập từ `apps/app`, Then không có chỗ nào, và kiểu `Locale` chỉ còn MỘT định nghĩa trong cả kho.
 - AC-5: Given mỗi component dùng chung được DỰNG THẬT hai lần, một lần tiếng Anh một lần tiếng Việt, When so chữ người đọc thấy trong hai bản vẽ, Then không chữ nào giống nhau ở cả hai — trừ danh sách trung tính khai trong hồ sơ (tên riêng, dữ liệu thử).
-- AC-6: Given phép đo của AC-5, When trả TỪNG khoá của bảng dịch tiếng Việt về đúng chuỗi tiếng Anh của nó, một khoá một lượt, Then phép đo đỏ ở cả 39 khoá, không sót khoá nào.
+- AC-6: Given phép đo của AC-5, When trả TỪNG khoá của bảng dịch tiếng Việt về đúng chuỗi tiếng Anh của nó, một khoá một lượt, Then phép đo đỏ, và MỌI khoá nó không bắt được phải có tên cùng lý do trong hồ sơ.
 - AC-7: Given một tiêu đề cột dài hơn bề rộng cột, When màn hiện ở 768px, Then chữ bị cắt mang dấu ba chấm, và tiêu đề đầy đủ nằm trong một thuộc tính trình đọc màn hình đọc được.
 - AC-8: Given phân trang hiện tổng số dòng, When trang vẽ từ máy chủ rồi trình duyệt nhận, Then số hiện giống nhau ở hai bên và theo quy ước tiếng Việt.
 - AC-9: Given nhân viên đổi tiếng, When màn vẽ lại, Then chữ trong bảng dùng chung đổi theo mà không cần tải lại trang, KỂ CẢ khi component không được máy chủ vẽ lại.
@@ -110,10 +110,26 @@ này khai 9 file / 25 chuỗi. Số thật là 18 / 53, chưa kể `logo.tsx` �
 lối: **con số do máy sinh mà không ai kiểm cái máy.**
 
 Nên vòng này không sửa bằng cách đếm cẩn thận hơn. Nó sửa bằng cách **bắt cái
-thước phải chịu một phép đo**: `rang-quet.sh --chan canary` gieo bảy kiểu chuỗi
-mồi — chữ trong thẻ, `aria-label`, `title`, giá trị mặc định, dự phòng `??`,
-bảng nhãn, chuỗi ghép biến — và máy quét phải gọi tên đủ bảy. Một máy quét trả 0
-bằng cách không nhìn thì đỏ ở đây trước khi kịp làm ai yên tâm.
+thước phải chịu một phép đo**: trả TỪNG khoá của bảng dịch tiếng Việt về đúng
+chuỗi tiếng Anh của nó, một khoá một lượt, rồi xem phép đo có đỏ không.
+
+| Bộ kiểm | Bắt được |
+| --- | --- |
+| Trước đường B | 14 / 34 |
+| Đường B, lúc vòng chấm 1 | 32 / 39 |
+| Đường B, sau vòng chấm 2 | **44 / 45** |
+
+**Con số 39/39 tôi công bố ở vòng chấm 1 là SAI, và sai theo đúng lối đã hỏng
+hai lần trước.** Kịch bản quét của tôi thay chuỗi ở nửa sau của file — nửa không
+chứa bảng tiếng Việt — nên gần hết đột biến là đột biến rỗng, và tôi không kiểm
+rằng đột biến có thật sự đổi file. Bộ đo cũ `rang-quet.sh` đã có đúng phép kiểm
+đó (`DIFF_N -ne 2` → "RĂNG CÙN: đột biến lệch 0 dòng"); tôi đánh rơi nó khi
+chuyển sang đường B. Hai người chấm độc lập đo lại được 32/39.
+
+**Khoá duy nhất phép đo còn không bắt: `table.clearFilters`.** Nó chỉ vẽ trong
+menu con của một mục lọc KHÔNG tìm được, sau khi menu lọc đã mở. Giàn kiểm mở
+được menu con thứ nhất, chưa mở được menu con thứ hai một cách tin cậy. Ghi ra
+đây vì AC-6 đòi mọi khoá không bắt được phải có tên.
 
 **Nhà cung cấp ngôn ngữ ở gói nào, và vì sao (AC-4).** `apps/app` phụ thuộc
 `@crm/ui`; chiều ngược lại không tồn tại. Nên `packages/ui` không dùng được

@@ -56,6 +56,7 @@ const TRUNG_TINH = new Set([
 	"Tên cột",
 	"Tên miền",
 	"Ngành",
+	"Phụ trách",
 	"Bất động sản",
 	"Ghi chú của tôi",
 	"1 thg 9, 2026",
@@ -98,7 +99,14 @@ const query: TableQueryState = {
 	setFilter: () => {},
 };
 
-type Ca = { ten: string; mo?: number; ve: () => ReactElement };
+type Ca = {
+	ten: string;
+	ve: () => ReactElement;
+	bam?: (goc: HTMLElement) => Element | null;
+};
+
+const bamTheoSo = (i: number) => (goc: HTMLElement) =>
+	goc.querySelectorAll('[aria-haspopup="menu"]')[i] ?? null;
 
 const CA: Ca[] = [
 	{
@@ -125,6 +133,16 @@ const CA: Ca[] = [
 						label: "Ngành",
 						options: [{ value: "bds", label: "Bất động sản" }],
 						selected: ["bds"],
+						onChange: () => {},
+						searchable: true,
+						search: "",
+						onSearchChange: () => {},
+					},
+					{
+						id: "owner",
+						label: "Phụ trách",
+						options: [{ value: "lan", label: "Lan" }],
+						selected: ["lan"],
 						onChange: () => {},
 					},
 				]}
@@ -238,15 +256,145 @@ const CA: Ca[] = [
 			</MessageScrollerProvider>
 		),
 	},
+	{
+		ten: "MessageScrollerButton · lên đầu",
+		ve: () => (
+			<MessageScrollerProvider>
+				<MessageScrollerButton direction="start" />
+			</MessageScrollerProvider>
+		),
+	},
+	{
+		ten: "TablePagination · không kết quả",
+		ve: () => (
+			<TablePagination
+				page={1}
+				totalPages={1}
+				pageSize={20}
+				total={0}
+				onPageChange={() => {}}
+			/>
+		),
+	},
+	{
+		ten: "DataTable · dòng mở rộng được",
+		ve: () => (
+			<DataTable
+				query={query}
+				rows={[{ id: "1", name: "Đất Xanh" }]}
+				total={1}
+				columns={[
+					{ id: "name", header: "Tên cột", sortable: true, cell: () => null },
+				]}
+				getRowId={(row) => row.id}
+				expandable={{
+					isExpandable: () => true,
+					subRows: () => [],
+					subColumns: [],
+					getSubRowId: () => "1",
+				}}
+			/>
+		),
+	},
+	{
+		ten: "DataTable · chọn dòng không có nhãn",
+		ve: () => (
+			<DataTable
+				query={query}
+				rows={[{ id: "1", name: "Đất Xanh" }]}
+				total={1}
+				columns={[
+					{ id: "name", header: "Tên cột", sortable: true, cell: () => null },
+				]}
+				getRowId={(row) => row.id}
+				selection={{
+					state: {
+						ids: new Set<string>(),
+						has: () => false,
+						toggle: () => {},
+						clear: () => {},
+						toggleAll: () => {},
+						count: 0,
+					},
+				}}
+			/>
+		),
+	},
+	{
+		ten: "DatePicker · mở lịch",
+		ve: () => <DatePicker value="2026-09-01" onChange={() => {}} />,
+		bam: (goc) => goc.querySelector("[data-slot=date-picker-trigger]"),
+	},
 ];
 
 const MO = [
 	{ ten: "DataTable · menu Lọc", goc: "DataTable", so: 0 },
 	{ ten: "DataTable · menu Sắp xếp", goc: "DataTable", so: 1 },
 	{ ten: "DataTable · menu Cột", goc: "DataTable", so: 2 },
+	{
+		ten: "DataTable · menu Sắp xếp khi dòng mở rộng được",
+		goc: "DataTable · dòng mở rộng được",
+		so: 0,
+	},
 ];
 
-async function ve(ca: Ca, locale: Locale, mo?: number): Promise<string> {
+const SAU_KHI_MO = [
+	{
+		ten: "DataTable · menu con của mục lọc tìm được",
+		goc: "DataTable",
+		so: 0,
+		trong: () =>
+			document.querySelectorAll('[data-slot="dropdown-menu-sub-trigger"]')[0] ??
+			null,
+	},
+	{
+		ten: "DataTable · menu con của mục lọc thường",
+		goc: "DataTable",
+		so: 0,
+		trong: () =>
+			document.querySelectorAll('[data-slot="dropdown-menu-sub-trigger"]')[1] ??
+			null,
+	},
+];
+
+async function bam(dich: Element, ten: string): Promise<void> {
+	const truoc = document.body.innerHTML.length;
+	for (const buoc of [
+		"pointermove",
+		"pointerdown",
+		"mousedown",
+		"mouseup",
+		"click",
+		"pointerenter",
+		"focus",
+	]) {
+		if (document.body.innerHTML.length > truoc + 200) break;
+		await act(async () => {
+			dich.dispatchEvent(
+				buoc === "focus"
+					? new window.FocusEvent(buoc, { bubbles: true })
+					: new window.PointerEvent(buoc, {
+							bubbles: true,
+							button: 0,
+							pointerType: "mouse",
+						}),
+			);
+		});
+	}
+	if (document.body.innerHTML.length <= truoc) {
+		throw new Error(
+			`${ten}: bấm rồi mà bản vẽ không lớn thêm — không mở gì cả`,
+		);
+	}
+}
+
+async function ve(
+	ca: Ca,
+	locale: Locale,
+	mo?: number,
+	trong?: () => Element | null,
+): Promise<string> {
+	document.body.innerHTML = "";
 	const host = document.createElement("div");
 	document.body.appendChild(host);
 	const root = createRoot(host);
@@ -254,24 +402,21 @@ async function ve(ca: Ca, locale: Locale, mo?: number): Promise<string> {
 		root.render(
 			<NuqsTestingAdapter>
 				<LocaleProvider locale={locale}>
-					<TooltipProvider>{ca.ve()}</TooltipProvider>
+					<TooltipProvider delayDuration={0}>{ca.ve()}</TooltipProvider>
 				</LocaleProvider>
 			</NuqsTestingAdapter>,
 		);
 	});
-	if (mo !== undefined) {
-		const nut = host.querySelectorAll('[aria-haspopup="menu"]');
-		const dich = nut[mo];
-		if (!dich) throw new Error(`không có nút mở thứ ${mo}`);
-		await act(async () => {
-			dich.dispatchEvent(
-				new window.PointerEvent("pointerdown", {
-					bubbles: true,
-					button: 0,
-					ctrlKey: false,
-				}),
-			);
-		});
+	const dich =
+		mo === undefined ? (ca.bam?.(host) ?? null) : bamTheoSo(mo)(host);
+	if (mo !== undefined || ca.bam) {
+		if (!dich) throw new Error(`${ca.ten}: không tìm được nút mở`);
+		await bam(dich, ca.ten);
+	}
+	if (trong) {
+		const sau = trong();
+		if (!sau) throw new Error(`${ca.ten}: không tìm được nút mở lớp hai`);
+		await bam(sau, `${ca.ten} lớp hai`);
 	}
 	const html = document.body.innerHTML;
 	await act(async () => root.unmount());
@@ -279,9 +424,13 @@ async function ve(ca: Ca, locale: Locale, mo?: number): Promise<string> {
 	return html;
 }
 
-async function chungNhau(ca: Ca, mo?: number): Promise<string[]> {
-	const en = await chuNguoiDoc(await ve(ca, "en", mo));
-	const vi = await chuNguoiDoc(await ve(ca, "vi", mo));
+async function chungNhau(
+	ca: Ca,
+	mo?: number,
+	trong?: () => Element | null,
+): Promise<string[]> {
+	const en = await chuNguoiDoc(await ve(ca, "en", mo, trong));
+	const vi = await chuNguoiDoc(await ve(ca, "vi", mo, trong));
 	if (en.size === 0) throw new Error(`${ca.ten}: bản vẽ không có chữ nào`);
 	return [...en].filter((s) => vi.has(s) && !TRUNG_TINH.has(s));
 }
@@ -300,6 +449,15 @@ describe("AC-5 — chấm bản vẽ, không chấm mã", () => {
 			const ca = CA.find((c) => c.ten === m.goc);
 			if (!ca) throw new Error(`không có ca ${m.goc}`);
 			expect(await chungNhau(ca, m.so)).toEqual([]);
+		},
+	);
+
+	test.each(SAU_KHI_MO.map((m) => [m.ten, m] as const))(
+		"%s: chữ ở lớp hai cũng đổi",
+		async (_ten, m) => {
+			const ca = CA.find((c) => c.ten === m.goc);
+			if (!ca) throw new Error(`không có ca ${m.goc}`);
+			expect(await chungNhau(ca, m.so, m.trong)).toEqual([]);
 		},
 	);
 

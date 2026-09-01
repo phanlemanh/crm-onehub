@@ -8,7 +8,8 @@ const en = {
 		filters: "Filters",
 		sort: "Sort",
 		sortBy: "Sort by",
-		detail: "Detail",
+		detailColumn: "Detail",
+		sortByDetail: "Expandable first",
 		ascending: "Ascending",
 		descending: "Descending",
 		columns: "Columns",
@@ -17,6 +18,7 @@ const en = {
 		selectRow: (label: string) => `Select ${label}`,
 		selectRowFallback: "Select row",
 		searchFacet: (label: string) => `Search ${label}…`,
+		facetOptions: "Options",
 	},
 	pagination: {
 		previous: "Previous",
@@ -47,6 +49,10 @@ const en = {
 	},
 	datePicker: {
 		clear: "Clear",
+		previousMonth: "Go to the previous month",
+		nextMonth: "Go to the next month",
+		chooseMonth: "Choose the month",
+		chooseYear: "Choose the year",
 	},
 	attendee: {
 		accepted: "Accepted",
@@ -73,21 +79,23 @@ export type Messages = typeof en;
 
 const vi = {
 	table: {
-		clearFilters: "Bỏ lọc",
+		clearFilters: "Bỏ lọc này",
 		clearSelection: "Bỏ chọn",
-		selected: (count: string) => `Đã chọn ${count}`,
+		selected: (count: string) => `Đã chọn ${count} dòng`,
 		filters: "Lọc",
 		sort: "Sắp xếp",
 		sortBy: "Sắp xếp theo",
-		detail: "Chi tiết",
+		detailColumn: "Chi tiết",
+		sortByDetail: "Mở rộng được lên trước",
 		ascending: "Tăng dần",
 		descending: "Giảm dần",
 		columns: "Cột",
 		toggleColumns: "Ẩn/hiện cột",
-		selectAllRows: "Chọn mọi dòng ở trang này",
+		selectAllRows: "Chọn tất cả dòng trên trang này",
 		selectRow: (label: string) => `Chọn ${label}`,
 		selectRowFallback: "Chọn dòng",
 		searchFacet: (label: string) => `Tìm ${label}…`,
+		facetOptions: "Các lựa chọn",
 	},
 	pagination: {
 		previous: "Trước",
@@ -97,27 +105,31 @@ const vi = {
 			`${from}–${to} trong số ${total}`,
 	},
 	messageScroller: {
-		toEnd: "Xuống cuối hộp thư",
-		toStart: "Lên đầu hộp thư",
+		toEnd: "Xuống cuối",
+		toStart: "Lên đầu",
 	},
 	dialog: {
 		close: "Đóng",
 	},
 	carousel: {
-		role: "băng trượt",
+		role: "dải thẻ trượt",
 		itemRole: "mục",
 		previousSlide: "Mục trước",
 		nextSlide: "Mục sau",
 	},
 	suggestion: {
 		accept: "Áp dụng gợi ý",
-		dismiss: "Bỏ qua",
+		dismiss: "Bỏ qua gợi ý",
 	},
 	spinner: {
 		loading: "Đang tải",
 	},
 	datePicker: {
 		clear: "Xoá ngày",
+		previousMonth: "Về tháng trước",
+		nextMonth: "Sang tháng sau",
+		chooseMonth: "Chọn tháng",
+		chooseYear: "Chọn năm",
 	},
 	attendee: {
 		accepted: "Nhận lời",
@@ -126,8 +138,8 @@ const vi = {
 		needsAction: "Chưa trả lời",
 	},
 	sortableList: {
-		role: "kéo được để sắp xếp",
-		reorder: (label: string) => `Kéo để đổi thứ tự ${label}`,
+		role: "tay kéo sắp xếp",
+		reorder: (label: string) => `Kéo để đổi thứ tự trường ${label}`,
 	},
 	skeletonSwap: {
 		loaded: (label: string) => `Đã tải xong ${label}`,
