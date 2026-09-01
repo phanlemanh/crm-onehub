@@ -91,7 +91,7 @@ function CommandInput({
 function CommandList({
 	className,
 	...props
-}: React.ComponentProps<typeof CommandPrimitive.List>) {
+}: React.ComponentProps<typeof CommandPrimitive.List> & { label?: string }) {
 	return (
 		<CommandPrimitive.List
 			data-slot="command-list"

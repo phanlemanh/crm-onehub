@@ -46,12 +46,12 @@ function ve(locale: Locale): string {
 						getRowId={(row) => row.id}
 						selection={{
 							state: {
-								ids: new Set<string>(),
-								has: () => false,
+								ids: new Set<string>(["1"]),
+								has: () => true,
 								toggle: () => {},
 								clear: () => {},
 								toggleAll: () => {},
-								size: 0,
+								count: 2,
 							},
 							rowLabel: (row) => row.name,
 						}}

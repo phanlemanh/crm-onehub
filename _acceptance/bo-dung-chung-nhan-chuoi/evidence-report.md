@@ -103,3 +103,61 @@ Máy quét vẫn mù mười hai lối. Canary vẫn không đọc phân loại.
 mở menu, vẫn bỏ chín component, vẫn không có CSS.
 
 Vá thêm một lượt nữa là lần thứ tư cùng một lớp lỗi. Luật dừng-vá nói dừng.
+
+---
+
+# Vòng chấm 2 — 2026-09-01
+
+Bốn người chấm ngữ cảnh sạch. Verdict: **REJECT**, và cái nặng nhất là một con số
+tôi tự công bố sai.
+
+## Tôi công bố 39/39. Số thật lúc đó là 32/39
+
+Kịch bản quét của tôi thay chuỗi ở nửa sau của `messages.ts` — nửa không chứa
+bảng tiếng Việt — nên gần hết đột biến là đột biến rỗng. **Tôi không kiểm rằng
+đột biến có thật sự đổi file.** Bộ đo cũ `rang-quet.sh` có đúng phép kiểm đó và
+tôi đánh rơi nó khi chuyển sang đường B.
+
+Đây là lần thứ ba cùng một lớp lỗi: tin một cái thước mà không đo cái thước.
+
+## Ô chọn ngày mở ra là một tấm lịch tiếng Anh nguyên khối
+
+`date-picker.tsx` dựng `<Calendar>` mà không truyền `locale`, dù `locale` đã nằm
+sẵn trong hàm và đã được dùng ngay dòng trên. Nhân viên đọc tiếng Việt nghe trình
+đọc màn hình đọc `"Today, Tuesday, September 1st, 2026, selected"`, cộng tên 12
+tháng, 7 thứ, và 35 nhãn ngày. Ba chỗ gọi đều sống.
+
+## Ba chuỗi tiếng Anh đến từ thư viện, không từ mã của kho
+
+Không máy quét mã nào có thể thấy chúng. Phép đo bản vẽ thấy cả ba:
+
+- `aria-roledescription="sortable"` — `dnd-kit` gắn vào tay kéo.
+- `aria-roledescription="carousel"` — khoá cứng trong `carousel.tsx`.
+- `aria-label="Suggestions"` — `cmdk` đặt cho danh sách lựa chọn khi không ai
+  truyền `label`.
+
+## Ba tiêu chí trượt vì lý do ngoài tầm vòng này
+
+**AC-7 KHÔNG ĐẠT.** Ở 768px, cột `Thoả thuận mở` còn 1,58px cho chữ — hẹp hơn
+chính dấu ba chấm (6,85px). Trình duyệt không vẽ nổi ký tự nào. Không phải lỗi do
+tiếng Việt dài: `Open deals` ở tiếng Anh cũng chỉ được 1,58px và cũng trống. Bề
+rộng `w-[9%]` do chỗ gọi đặt ở `apps/app`, tức vòng ③. Ở 1024px mọi cột đều cắt
+kèm ba chấm đúng.
+
+**AC-10 KHÔNG ĐẠT.** Hội đồng chỉ ba chỗ SAI, trong đó một chỗ do chính vòng chấm
+1 gây ra: `messageScroller.*` được thêm chữ "hộp thư" trong khi hai chỗ dùng duy
+nhất là khung trò chuyện với tác nhân.
+
+**AC-8 ĐẠT**, AC-9 ĐẠT — và AC-9 lần này có bằng chứng phân biệt được hai cơ chế:
+thanh chọn dòng (máy chủ chưa bao giờ vẽ) đổi chữ tại chỗ, `performance.timeOrigin`
+không đổi, trạng thái chọn 2 dòng vẫn còn.
+
+## Đã sửa trong vòng chấm
+
+Lịch tiếng Việt · ba chuỗi thư viện · `table.detail` tách làm hai · sáu nhãn hội
+đồng chấm sai · fixture `size: 0` khiến cả một file kiểm chưa từng vẽ thanh chọn
+dòng · phép đo mở thêm sáu trạng thái trước đây không ai chạm (menu con, lịch mở,
+bảng rỗng, dòng mở rộng được, chọn dòng không nhãn, cuộn lên đầu).
+
+Phép đo nay bắt **44 / 45 khoá**. Khoá còn lại — `table.clearFilters` — có tên
+trong hợp đồng cùng lý do.

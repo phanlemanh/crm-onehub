@@ -207,7 +207,7 @@ function FacetSubmenu({
 							onValueChange={facet.onSearchChange}
 							onKeyDown={(event) => event.stopPropagation()}
 						/>
-						<CommandList>
+						<CommandList label={msg.table.facetOptions}>
 							<CommandEmpty>{facet.empty ?? "Nothing matches."}</CommandEmpty>
 							<CommandGroup>
 								{facet.options.map((option) => {
@@ -505,7 +505,7 @@ export function DataTable<TRow, TSub = unknown>({
 									>
 										{anyExpandable && (
 											<DropdownMenuRadioItem value="detail">
-												{msg.table.detail}
+												{msg.table.sortByDetail}
 											</DropdownMenuRadioItem>
 										)}
 										{sortableColumns.map((column) => (
@@ -608,7 +608,7 @@ export function DataTable<TRow, TSub = unknown>({
 						)}
 						{anyExpandable && (
 							<TableHead className="h-11 w-10 px-3">
-								<span className="sr-only">{msg.table.detail}</span>
+								<span className="sr-only">{msg.table.detailColumn}</span>
 							</TableHead>
 						)}
 						{visibleColumns.map((column) => {

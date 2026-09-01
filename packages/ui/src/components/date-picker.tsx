@@ -10,12 +10,12 @@ import {
 	PopoverTrigger,
 } from "@crm/ui/components/popover";
 import { selectTriggerVariants } from "@crm/ui/components/select";
-import { useLocale } from "@crm/ui/components/locale-provider";
+import { useLocale, useMessages } from "@crm/ui/components/locale-provider";
 import { formatDay, fromDay, toDay } from "@crm/ui/lib/format";
 import { cn } from "@crm/ui/lib/utils";
 import type { VariantProps } from "class-variance-authority";
+import { vi as viLich } from "react-day-picker/locale";
 import { useState } from "react";
-import { useMessages } from "@crm/ui/components/locale-provider";
 
 export function DatePicker({
 	id,
@@ -62,6 +62,13 @@ export function DatePicker({
 			</PopoverTrigger>
 			<PopoverContent size="fit" align="start">
 				<Calendar
+					locale={locale === "vi" ? viLich : undefined}
+					labels={{
+						labelPrevious: () => msg.datePicker.previousMonth,
+						labelNext: () => msg.datePicker.nextMonth,
+						labelMonthDropdown: () => msg.datePicker.chooseMonth,
+						labelYearDropdown: () => msg.datePicker.chooseYear,
+					}}
 					mode="single"
 					selected={selected}
 					startMonth={new Date(thisYear - 10, 0)}
