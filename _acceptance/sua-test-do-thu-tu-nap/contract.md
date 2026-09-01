@@ -5,7 +5,7 @@ slug: sua-test-do-thu-tu-nap
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, cli]
-status: signed-off
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-09-01
 veto_state: mo
@@ -87,3 +87,9 @@ mặc định, không cờ đỏ. Tiêu chí này cưỡng chế một luật kh
 sửa 2026-09-01 khi răng tách thành ba chân riêng; `--chan o-cam` nay là bí danh
 gộp cả ba). Văn bản AC-7 giữ
 nguyên làm sử liệu; bằng chứng đã ký vẫn đúng với cấu hình tại commit `b933334`.
+
+**Bằng chứng lỗi thời 2026-09-01 — hồ sơ mở lại để chấm lần nữa.** Sau khi ký,
+hai vòng sau sửa đúng hai file mà hồ sơ này đã chấm (`apps/api/test/setup.ts`,
+`apps/api/test/auth.e2e.spec.ts`) và cả `.githooks/pre-push`. Lưới trước-merge
+so với `origin/onehub` bắt được. Chữ ký cũ giữ nguyên trong lịch sử git; trạng
+thái quay về `implemented` để chấm lại theo đúng nghi thức của kit.
