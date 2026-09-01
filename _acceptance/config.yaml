@@ -43,7 +43,7 @@ executors:
     rang_hook_tro_dung: "bash _acceptance/luoi-day-do-that/rang-hook.sh --chan tro-dung"
     rang_ngon_ngu_la: "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan la"
     rang_cookie: "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan cookie"
-    rang_du_lieu_khong_dich: "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan khong-dich"
+    rang_du_lieu_khong_dich: "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan du-lieu-khong-dich"
     rang_dinh_dang: "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan dinh-dang"
     start_scan: "bash _acceptance/o-cam-khai-thac-trung-tinh/rang-quet.sh"
     rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"

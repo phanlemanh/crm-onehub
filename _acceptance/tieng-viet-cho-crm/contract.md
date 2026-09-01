@@ -5,7 +5,7 @@ slug: tieng-viet-cho-crm
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-09-01
 design_doc: docs/superpowers/specs/2026-09-01-tieng-viet-cho-crm-design.md
