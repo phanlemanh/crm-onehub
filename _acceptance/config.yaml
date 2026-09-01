@@ -2,8 +2,6 @@ schema_version: 1
 enforcement: strict
 gap_probe: advisory
 recheck: strict
-discovery:
-  brainstorm_skill: superpowers:brainstorming
 feature_loop:
   ui_standards_skill: web-design-guidelines
 design_pass:
