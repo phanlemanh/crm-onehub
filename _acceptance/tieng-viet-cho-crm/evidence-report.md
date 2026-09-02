@@ -7,7 +7,7 @@ reason: Chín tiêu chí máy có bằng chứng hai chiều. E6 còn bốn chu�
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a9cb0201118f8f703ed5f8f855e2f25dd73df5aa
+verified_commit: eac1898
 human_signoff:
 ---
 
@@ -369,6 +369,37 @@ Lấy bằng `curl` từ lượt trả về ĐẦU TIÊN của máy chủ, khôn
 Và lượt vẽ đầu ấy đã mang chữ tiếng Việt, không phải chờ một lượt vẽ lại: file
 `evidence/E3-step1.html` chứa `Công ty` ×3, `Mọi công ty trong mạng lưới` ×2,
 `Số lượng cá nhân`, `Số thoả thuận đang mở`, `Hoạt động gần nhất`.
+
+## Hai đính chính, ghi ngày 2026-09-02 sau khi vòng ③ mở
+
+**Một — mốc cây đã ghim SAI.** Báo cáo này từng ghim
+`a9cb0201118f8f703ed5f8f855e2f25dd73df5aa`, là cây **trước** commit `eac1898`
+(sửa ngày theo vùng người đọc, và đặt lại tên hai cột đếm). Nhưng mọi con số
+trong báo cáo đo trên cây **đã có** bản sửa đó. Ai chạy lại ở mốc cũ sẽ ra số
+khác. Mốc nay ghim `eac1898`.
+
+**Hai — con số 4 nay là 5, và chuỗi thứ năm là thứ vòng này không thể thấy.**
+Vòng ③ dựng ba trạng thái dữ liệu thử mà trước đó không tồn tại, trong đó có một
+công ty vừa có hoạt động trong 30 ngày. Đo lại màn công ty trên cây hôm nay:
+
+```
+-- du lieu thu sinh tu may chu: 154 gia tri tren 18 dong
+-- CON LAI (5 chuoi / 5 lan)
+   * "2d ago"
+   * "Archived"
+   * "New company"
+   * "Search companies by name or domain…"
+   * "Views"
+```
+
+`"2d ago"` là chữ thời gian tương đối trong `local-date-time.tsx`. Nó đứng đó
+suốt vòng này, và **phép đo của vòng này không đỏ được vì không công ty nào
+trong dữ liệu thử có hoạt động** — đúng cái lỗ mục Known limits đã gọi tên.
+
+Điều này KHÔNG đổi verdict và KHÔNG đổi quyết định định tuyến: chữ thời gian
+tương đối vốn đã nằm trong phạm vi vòng ③ (`nhan-ung-dung-noi-tieng-viet`,
+mục "Cộng ba thứ nữa vòng ① tìm ra mà không nhận"). Nó chỉ đổi CON SỐ người sắp
+ký: bốn thành năm.
 
 ## Định tuyến ở Cổng 2
 
