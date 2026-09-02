@@ -21,8 +21,7 @@
 			"id": "test",
 			"kind": "turbo",
 			"exempt": {
-				"@crm/typescript-config": "Ships tsconfig JSON only. There is no behaviour to test.",
-				"@crm/ui": "No test script today. This is a known gap, not a decision: the shared components ship untested."
+				"@crm/typescript-config": "Ships tsconfig JSON only. There is no behaviour to test."
 			}
 		},
 		{
