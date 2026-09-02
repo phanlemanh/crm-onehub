@@ -54,8 +54,8 @@ Danh sách chuỗi do máy sinh: `node _acceptance/nhan-ung-dung-noi-tieng-viet/
 | `headers.company` | `Company` | `Công ty` | |
 | `headers.owner` | `Owner` | `Phụ trách` | cột không thể là vật nên bỏ "người" |
 | `headers.created` | `Created` | `Ngày tạo` | |
-| `headers.lastActivity` | `Last activity` | `Hoạt động cuối` | |
-| `headers.archived` | `Archived` | `Lưu trữ` | |
+| `headers.lastActivity` | `Last activity` | `Hoạt động gần nhất` | dùng lại đúng chữ vòng ① đã chốt — cùng một cột trên ba màn phải đọc giống nhau |
+| `headers.archived` | `Archived` | `Ngày lưu trữ` | vòng ① đã chốt; ô dưới cột là một ngày |
 | `labels.createdDate` | `Created date` | `Ngày tạo` | dạng dài trong menu |
 | `labels.archivedDate` | `Archived date` | `Ngày lưu trữ` | |
 | `empty` | `No contacts match this view.` | `Chưa có cá nhân nào khớp bộ lọc này.` | |
@@ -92,8 +92,8 @@ Danh sách chuỗi do máy sinh: `node _acceptance/nhan-ung-dung-noi-tieng-viet/
 | `headers.owner` | `Owner` | `Phụ trách` | |
 | `headers.closeDate` | `Close date` | `Ngày chốt` | |
 | `headers.created` | `Created` | `Ngày tạo` | |
-| `headers.lastActivity` | `Last activity` | `Hoạt động cuối` | |
-| `headers.archived` | `Archived` | `Lưu trữ` | |
+| `headers.lastActivity` | `Last activity` | `Hoạt động gần nhất` | dùng lại đúng chữ vòng ① đã chốt — cùng một cột trên ba màn phải đọc giống nhau |
+| `headers.archived` | `Archived` | `Ngày lưu trữ` | vòng ① đã chốt; ô dưới cột là một ngày |
 | `labels.createdDate` | `Created date` | `Ngày tạo` | |
 | `labels.archivedDate` | `Archived date` | `Ngày lưu trữ` | |
 | `closing` | `Closing` | `Sắp chốt` | nhóm theo hạn chốt |
