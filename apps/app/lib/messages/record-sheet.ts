@@ -1,0 +1,218 @@
+import type { Locale } from "@crm/ui/lib/locale";
+
+const en = {
+	tabs: {
+		overview: "Overview",
+		activity: "Activity",
+		agent: "Agent",
+		details: "Details",
+		deals: "Deals",
+		contacts: "Contacts",
+	},
+	section: {
+		about: "About",
+		links: "Links",
+		background: "Background",
+		whereItStands: "Where it stands",
+		onIt: "On it",
+	},
+	srLabel: {
+		primary: "Primary",
+		socialLinks: "social links",
+	},
+	company: {
+		openPipeline: "Open pipeline",
+		openDeals: "Open deals",
+		nextClose: "Next close",
+		primaryContact: "Primary contact",
+		makePrimary: "Make primary",
+		primaryUpdated: "Primary contact updated.",
+		addContact: "Add contact",
+		newDeal: "New deal",
+		noContactsTitle: "No contacts yet",
+		noContactsBody: (name: string) =>
+			`Everyone you talk to at ${name} lives here — add the first person and their calls, emails and notes hang off them.`,
+		noDealsTitle: "No deals yet",
+		noDealsBody: (name: string) =>
+			`Nothing is being sold to ${name} right now. Open one and it joins the pipeline and the forecast.`,
+		deleteDeals: (n: string) =>
+			`${n} and everything filed against the account go too.`,
+		deleteNoDeals: "Everything filed against the account goes too.",
+		deleteContacts: (n: string) =>
+			`${n} who work there stay in the CRM, without a company.`,
+		archived: (name: string) => `${name} was archived.`,
+		restored: (name: string) => `${name} was restored.`,
+		purged: (name: string) => `${name} was deleted forever.`,
+	},
+	contact: {
+		primaryAt: (name: string) => `Primary contact at ${name}`,
+		noCompany: "No company",
+		currentRole: "Current role",
+		tenure: "Tenure",
+		seniority: "Seniority",
+		fn: "Function",
+		based: "Based",
+		previously: "Previously",
+		oneRole: "1 role",
+		roles: (n: string) => `${n} roles`,
+		weKnowThem: "We know them",
+		emails: "Emails",
+		neverReplied: (first: string) => `${first} has never replied`,
+		meetings: "Meetings",
+		nextMeeting: "Next meeting",
+		alsoHere: "Also here",
+		notOnDealsTitle: "Not on any deals",
+		notOnDealsBody: (name: string) =>
+			`${name} is not attached to anything being sold yet. Deals are opened on the company, then people are added to them.`,
+		deleteWarning:
+			"Their notes, agent conversations and everything the agent found go too; emails and meetings stay filed against the company.",
+		added: (name: string) => `${name} added.`,
+		firstName: "First name",
+		lastName: "Last name",
+		rolePlaceholder: "Head of Security",
+	},
+	deal: {
+		expectedClose: "Expected close",
+		inStage: "In stage",
+		inStageSince: "In stage since",
+		opened: "Opened",
+		inCurrency: (cur: string) => `In ${cur}`,
+		currencyGone: (cur: string) => `${cur} — no longer supported`,
+		descriptionHint: (name: string) =>
+			`What ${name} is buying, why now, and what stands in the way.`,
+		description: "Description",
+		role: "Role",
+		roleOnDeal: (name: string) => `Role on this deal for ${name}`,
+		champion: "Champion",
+		noContactsTitle: "No contacts on this deal",
+		noContactsBody: (name: string) =>
+			`Nobody from ${name} is attached yet. Bring the people you are selling to onto the deal and it says who to chase.`,
+		onDeal: (name: string) => `${name} is on the deal.`,
+		addedToDeal: "Added to the deal.",
+		everybodyOn: (name: string) => `Everybody at ${name} is already on it`,
+		chooseSomebody: "Choose somebody",
+		addToDeal: "Add to deal",
+		created: (name: string) => `${name} created.`,
+		noOwner: "Could not work out who should own this deal.",
+		create: "Create deal",
+		amountNotNumber: "Amount has to be a number.",
+		remove: "Remove",
+		deleteWarning: (company: string, people: string) =>
+			`Its stage history, notes and agent conversations go too. ${company} and the ${people} on it stay in the CRM.`,
+		person: "person",
+		people: "people",
+		closed: "Closed",
+	},
+};
+
+export type RecordSheetMessages = typeof en;
+
+const vi = {
+	tabs: {
+		overview: "Tổng quan",
+		activity: "Hoạt động",
+		agent: "Tác nhân",
+		details: "Chi tiết",
+		deals: "Thoả thuận",
+		contacts: "Cá nhân",
+	},
+	section: {
+		about: "Giới thiệu",
+		links: "Liên kết",
+		background: "Quá trình",
+		whereItStands: "Đang tới đâu",
+		onIt: "Người tham gia",
+	},
+	srLabel: {
+		primary: "Đầu mối",
+		socialLinks: "liên kết mạng xã hội",
+	},
+	company: {
+		openPipeline: "Giá trị đang mở",
+		openDeals: "Thoả thuận đang mở",
+		nextClose: "Lần chốt gần nhất",
+		primaryContact: "Đầu mối chính",
+		makePrimary: "Đặt làm đầu mối chính",
+		primaryUpdated: "Đã đổi đầu mối chính.",
+		addContact: "Thêm cá nhân",
+		newDeal: "Thoả thuận mới",
+		noContactsTitle: "Chưa có cá nhân nào",
+		noContactsBody: (name: string) =>
+			`Mọi người bạn trao đổi ở ${name} nằm ở đây — thêm người đầu tiên, rồi cuộc gọi, email và ghi chú của họ gắn theo.`,
+		noDealsTitle: "Chưa có thoả thuận nào",
+		noDealsBody: (name: string) =>
+			`Chưa có thoả thuận hợp tác nào với ${name}. Mở một thoả thuận thì nó vào phần đang theo dõi và vào dự báo.`,
+		deleteDeals: (n: string) => `${n} và mọi thứ gắn với công ty này mất theo.`,
+		deleteNoDeals: "Mọi thứ gắn với công ty này mất theo.",
+		deleteContacts: (n: string) =>
+			`${n} làm việc ở đó vẫn ở lại CRM, nhưng không thuộc công ty nào.`,
+		archived: (name: string) => `Đã lưu trữ ${name}.`,
+		restored: (name: string) => `Đã khôi phục ${name}.`,
+		purged: (name: string) => `Đã xoá vĩnh viễn ${name}.`,
+	},
+	contact: {
+		primaryAt: (name: string) => `Đầu mối chính ở ${name}`,
+		noCompany: "Chưa thuộc công ty nào",
+		currentRole: "Vị trí hiện tại",
+		tenure: "Thâm niên",
+		seniority: "Cấp bậc",
+		fn: "Mảng phụ trách",
+		based: "Làm việc tại",
+		previously: "Trước đây",
+		oneRole: "1 vị trí",
+		roles: (n: string) => `${n} vị trí`,
+		weKnowThem: "Mức thân quen",
+		emails: "Email",
+		neverReplied: (first: string) => `${first} chưa trả lời lần nào`,
+		meetings: "Cuộc họp",
+		nextMeeting: "Cuộc họp tới",
+		alsoHere: "Cùng tham dự",
+		notOnDealsTitle: "Chưa gắn thoả thuận nào",
+		notOnDealsBody: (name: string) =>
+			`${name} chưa gắn với thoả thuận nào. Thoả thuận mở trên công ty trước, rồi mới thêm người vào.`,
+		deleteWarning:
+			"Ghi chú, hội thoại với tác nhân và mọi thứ tác nhân tìm được đều mất theo; email và cuộc họp vẫn gắn với công ty.",
+		added: (name: string) => `Đã thêm ${name}.`,
+		firstName: "Tên",
+		lastName: "Họ",
+		rolePlaceholder: "Trưởng phòng Kinh doanh",
+	},
+	deal: {
+		expectedClose: "Dự kiến chốt",
+		inStage: "Ở giai đoạn",
+		inStageSince: "Ở giai đoạn này từ",
+		opened: "Ngày mở",
+		inCurrency: (cur: string) => `Quy đổi ${cur}`,
+		currencyGone: (cur: string) => `${cur} — không còn hỗ trợ`,
+		descriptionHint: (name: string) =>
+			`${name} đang cần gì, vì sao là lúc này, và còn vướng gì.`,
+		description: "Mô tả",
+		role: "Vai trò",
+		roleOnDeal: (name: string) => `Vai trò của ${name} trong thoả thuận này`,
+		champion: "Người ủng hộ",
+		noContactsTitle: "Chưa có ai trong thoả thuận này",
+		noContactsBody: (name: string) =>
+			`Chưa ai từ ${name} được gắn vào. Thêm những người bạn đang trao đổi vào thoả thuận thì biết cần theo ai.`,
+		onDeal: (name: string) => `${name} đã vào thoả thuận.`,
+		addedToDeal: "Đã thêm vào thoả thuận.",
+		everybodyOn: (name: string) => `Mọi người ở ${name} đã ở trong rồi`,
+		chooseSomebody: "Chọn một người",
+		addToDeal: "Thêm vào thoả thuận",
+		created: (name: string) => `Đã tạo ${name}.`,
+		noOwner: "Không xác định được ai phụ trách thoả thuận này.",
+		create: "Tạo thoả thuận",
+		amountNotNumber: "Giá trị phải là một con số.",
+		remove: "Gỡ",
+		deleteWarning: (company: string, people: string) =>
+			`Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. ${company} và ${people} trong đó vẫn ở lại CRM.`,
+		person: "người",
+		people: "người",
+		closed: "Đã chốt",
+	},
+} satisfies RecordSheetMessages;
+
+const BANG = { en, vi } satisfies Record<Locale, RecordSheetMessages>;
+
+export function recordSheetMessages(locale: Locale): RecordSheetMessages {
+	return BANG[locale] ?? BANG.en;
+}
