@@ -4,6 +4,8 @@ import LogoX from "@carbon/icons-react/es/LogoX";
 import Money from "@carbon/icons-react/es/Money";
 import UserMultiple from "@carbon/icons-react/es/UserMultiple";
 import type { CarbonIcon } from "@crm/ui/components/icon";
+import type { Locale } from "@crm/ui/lib/locale";
+import { crmMessages } from "@/lib/messages/crm";
 
 type SocialLink<T> = { key: keyof T; label: string; icon: CarbonIcon };
 
@@ -25,8 +27,8 @@ const COMPANY_LINKS: SocialLink<CompanyLinks>[] = [
 	{ key: "linkedinUrl", label: "LinkedIn", icon: LogoLinkedin },
 	{ key: "twitterUrl", label: "X", icon: LogoX },
 	{ key: "githubUrl", label: "GitHub", icon: LogoGithub },
-	{ key: "pricingUrl", label: "Pricing", icon: Money },
-	{ key: "careersUrl", label: "Careers", icon: UserMultiple },
+	{ key: "pricingUrl", label: "facts.pricing", icon: Money },
+	{ key: "careersUrl", label: "facts.careers", icon: UserMultiple },
 ];
 
 const CONTACT_LINKS: SocialLink<ContactLinks>[] = [
@@ -45,8 +47,13 @@ function present<T extends Record<string, string | null>>(
 	});
 }
 
-export function companySocialLinks(company: CompanyLinks) {
-	return present(company, COMPANY_LINKS);
+export function companySocialLinks(company: CompanyLinks, locale: Locale) {
+	const m = crmMessages(locale).facts;
+	const label = { "facts.pricing": m.pricing, "facts.careers": m.careers };
+	return present(company, COMPANY_LINKS).map((link) => ({
+		...link,
+		label: label[link.label as keyof typeof label] ?? link.label,
+	}));
 }
 
 export function contactSocialLinks(contact: ContactLinks) {
@@ -54,7 +61,7 @@ export function contactSocialLinks(contact: ContactLinks) {
 }
 
 export function hasCompanyLinks(company: CompanyLinks): boolean {
-	return companySocialLinks(company).length > 0;
+	return present(company, COMPANY_LINKS).length > 0;
 }
 
 export function hasContactLinks(contact: ContactLinks): boolean {

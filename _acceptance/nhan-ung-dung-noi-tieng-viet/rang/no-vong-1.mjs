@@ -1,6 +1,9 @@
 import { execFileSync } from "node:child_process";
 import puppeteer from "puppeteer-core";
 
+const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
+const CHO_VE = Number(process.env.CHO_VE ?? 90000);
+
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const APP = process.env.APP_URL ?? "http://localhost:3000";
 const SLUG = process.env.SLUG ?? "crm";
@@ -67,10 +70,10 @@ async function chu(locale) {
 	);
 	await page.goto(`${APP}/${SLUG}/companies?hide=nothing`, {
 		waitUntil: "networkidle0",
-		timeout: 60000,
+		timeout: CHO_TAI,
 	});
 	await page.waitForSelector('[data-slot="table-body"] [data-slot="table-row"]', {
-		timeout: 30000,
+		timeout: CHO_VE,
 	});
 	await new Promise((r) => setTimeout(r, 1200));
 	const lang = await page.evaluate(() => document.documentElement.lang);

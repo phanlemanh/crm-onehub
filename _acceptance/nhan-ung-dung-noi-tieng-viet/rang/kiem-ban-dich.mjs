@@ -55,6 +55,58 @@ console.log(`-- giong het ban tieng Anh ma khong khai: ${chuaDich.length}`);
 for (const d of chuaDich) console.log(`   CHUA DICH   ${d.khoa} -> ${JSON.stringify(d.vi)}`);
 console.log(`-- gia tri dung chung nhieu khoa: ${chungGiaTri.length} (binh thuong khi cung nghia)`);
 
-const hong = thieuKhai.length + chuaDich.length;
+const KHO = [
+	"apps/app/lib/messages/companies.ts",
+	"apps/app/lib/messages/contacts.ts",
+	"apps/app/lib/messages/deals.ts",
+	"apps/app/lib/messages/crm.ts",
+	"apps/app/lib/messages/record-sheet.ts",
+];
+
+function khoaTrongKho(goc) {
+	const cat =
+		goc.indexOf("\n\tvi: {") >= 0
+			? goc.indexOf("\n\tvi: {")
+			: goc.indexOf("\nconst vi = {");
+	const ra = [];
+	const ngan = [];
+	for (const line of goc.slice(0, cat).split("\n")) {
+		const mo = line.match(/^(\t+)(\w+): \{$/);
+		if (mo) {
+			const sau = mo[1].length;
+			ngan.length = Math.max(0, sau - 1);
+			ngan[sau - 1] = mo[2];
+			continue;
+		}
+		const la = line.match(/^(\t+)(\w+)[:(]/);
+		if (!la) continue;
+		const sau = la[1].length;
+		const d = [...ngan.slice(0, sau - 1), la[2]].filter(Boolean);
+		if (d[0] === "en" || d[0] === "vi") d.shift();
+		if (d.length > 0) ra.push(d.join("."));
+	}
+	return [...new Set(ra)];
+}
+
+const daKhai = new Set(dong.map((d) => d.khoa));
+const chuaCoDong = [];
+for (const f of KHO) {
+	for (const k of khoaTrongKho(readFileSync(f, "utf8"))) {
+		const phan = k.split(".");
+		let thay = false;
+		for (let i = 0; i < phan.length; i += 1) {
+			if (daKhai.has(phan.slice(i).join("."))) {
+				thay = true;
+				break;
+			}
+		}
+		if (!thay) chuaCoDong.push(`${f.split("/").pop()}:${k}`);
+	}
+}
+
+console.log(`-- khoa trong kho chuoi KHONG co dong nao trong bang: ${chuaCoDong.length}`);
+for (const k of chuaCoDong) console.log(`   CHUA KHAI   ${k}`);
+
+const hong = thieuKhai.length + chuaDich.length + chuaCoDong.length;
 console.log(`ket qua: dong hong=${hong}`);
 process.exit(hong > 0 ? 1 : 0);

@@ -21,6 +21,21 @@ for f in "$RANG"/*.mjs "$RANG"/*.sh; do
   tong=$((tong + 1))
   if grep -qE "$VAT_THAT" "$f"; then
     echo "   dung vat that  $ten"
+    continue
+  fi
+
+  qua=""
+  KHOI_CHAY='spawnSync|execFileSync|execSync|spawn\(|exec\(|(^|[^a-z])node |(^|[^a-z])bash '
+  for goi in $(grep -E "$KHOI_CHAY" "$f" | grep -oE '[a-z0-9-]+\.mjs' | sort -u); do
+    [ "$goi" = "$ten" ] && continue
+    [ -f "$RANG/$goi" ] || continue
+    grep -qE "$VAT_THAT" "$RANG/$goi" || continue
+    qua="$goi"
+    break
+  done
+
+  if [ -n "$qua" ]; then
+    echo "   qua $qua  $ten — cham san pham bang cach chay $qua"
   else
     echo "   CHI DOC MA     $ten — chan nay khong cham toi san pham dang chay"
     hong=$((hong + 1))

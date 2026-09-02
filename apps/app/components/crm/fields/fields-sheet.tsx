@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Tabs, TabsList, TabsTrigger } from "@crm/ui/components/tabs";
 import { useQuery } from "@tanstack/react-query";
@@ -10,12 +11,7 @@ import {
 import { DetailSheet, DetailSheetHeader } from "@/components/detail-sheet";
 import { useTRPC } from "@/lib/trpc/client";
 import { FieldEditor } from "./field-editor";
-import {
-	ENTITY_TABS,
-	NEW_FIELD,
-	SHEET_TITLE,
-	subtitleFor,
-} from "./fields-copy";
+import { entityTabs, fieldsCopy, subtitleFor } from "./fields-copy";
 import { entityOf } from "./fields-entity";
 import { FieldsList } from "./fields-list";
 
@@ -33,6 +29,8 @@ function FieldsSheetBody({
 	onClose: () => void;
 }) {
 	const trpc = useTRPC();
+	const locale = useLocale();
+	const copy = fieldsCopy(locale);
 	const entity = entityOf(kind);
 
 	const query = useQuery(
@@ -50,13 +48,15 @@ function FieldsSheetBody({
 	});
 
 	if (field) {
-		const entityLabel = ENTITY_TABS.find((tab) => tab.kind === kind)?.label;
+		const entityLabel = entityTabs(locale).find(
+			(tab) => tab.kind === kind,
+		)?.label;
 		const filled = coverage.data;
 
 		return (
 			<>
 				<DetailSheetHeader
-					title={editing?.label ?? (editingKey ? "" : NEW_FIELD)}
+					title={editing?.label ?? (editingKey ? "" : copy.newField)}
 					description={
 						filled
 							? `${entityLabel} · ${filled.filled} of ${filled.total} filled`
@@ -84,8 +84,8 @@ function FieldsSheetBody({
 	return (
 		<>
 			<DetailSheetHeader
-				title={SHEET_TITLE}
-				description={subtitleFor(kind)}
+				title={copy.sheetTitle}
+				description={subtitleFor(kind, locale)}
 				onClose={onClose}
 				note={
 					<Tabs
@@ -93,7 +93,7 @@ function FieldsSheetBody({
 						onValueChange={(next) => onEntity(next as RecordKind)}
 					>
 						<TabsList>
-							{ENTITY_TABS.map((tab) => (
+							{entityTabs(locale).map((tab) => (
 								<TabsTrigger key={tab.kind} value={tab.kind}>
 									{tab.label}
 								</TabsTrigger>

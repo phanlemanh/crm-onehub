@@ -484,7 +484,7 @@ function CompanyContacts({
 					<DetailSheetEmpty
 						icon={UserMultiple}
 						title={m.company.noContactsTitle}
-						description={`Everyone you talk to at ${company.name} lives here — add the first person and their calls, emails and notes hang off them.`}
+						description={m.company.noContactsBody(company.name)}
 						action={
 							<Button variant="outline" size="sm" onClick={onAdd}>
 								<Icon icon={Add} data-icon="inline-start" />
@@ -611,7 +611,7 @@ function CompanyDeals({
 					<DetailSheetEmpty
 						icon={Partnership}
 						title={m.company.noDealsTitle}
-						description={`Nothing is being sold to ${company.name} right now. Open one and it joins the pipeline and the forecast.`}
+						description={m.company.noDealsBody(company.name)}
 						action={
 							<Button variant="outline" size="sm" onClick={onAdd}>
 								<Icon icon={Add} data-icon="inline-start" />

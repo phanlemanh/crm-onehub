@@ -40,12 +40,9 @@ export type RecordFieldEntry = {
 
 const NONE = "__none__";
 
-const UNASSIGNED = "Unassigned";
-
-const FORMER_MEMBER = "Former member";
-
 export function FieldsCog({ kind }: { kind: RecordKind }) {
-	const m = crmMessages(useLocale());
+	const locale = useLocale();
+	const m = crmMessages(locale);
 	const { open } = useFieldsSheet();
 
 	return (
@@ -71,11 +68,12 @@ export function RecordFields({
 	onSave: (values: Record<string, FieldValueJson>) => void;
 }) {
 	const trpc = useTRPC();
+	const locale = useLocale();
 	const users = useQuery(trpc.users.list.queryOptions());
 
 	const userOptionsFor = (value: string) => {
 		const options = [
-			{ value: NONE, label: UNASSIGNED },
+			{ value: NONE, label: crmMessages(locale).owner.unassigned },
 			...(users.data ?? []).map((user) => ({
 				value: user.id,
 				label: user.name,
@@ -83,7 +81,7 @@ export function RecordFields({
 		];
 
 		if (users.data && !options.some((option) => option.value === value)) {
-			options.push({ value, label: FORMER_MEMBER });
+			options.push({ value, label: crmMessages(locale).owner.formerMember });
 		}
 
 		return options;
@@ -163,7 +161,7 @@ export function RecordFields({
 								label={field.label}
 								value={current}
 								options={userOptionsFor(current)}
-								placeholder={UNASSIGNED}
+								placeholder={crmMessages(locale).owner.unassigned}
 								saving={busy}
 								onSave={(next) => save(next === NONE ? null : next)}
 							/>

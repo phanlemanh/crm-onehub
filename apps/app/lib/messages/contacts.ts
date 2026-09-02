@@ -64,7 +64,6 @@ const en = {
 		deleteWarning:
 			"Their email addresses are suppressed, so the inbox sync will not file them again. This cannot be undone.",
 		nobody: "Nobody",
-		chooseCompany: "Choose a company",
 	},
 };
 
@@ -134,7 +133,6 @@ const vi = {
 		deleteWarning:
 			"Địa chỉ email của họ bị chặn, nên hộp thư sẽ không tự thêm lại. Việc này không hoàn tác được.",
 		nobody: "Không ai",
-		chooseCompany: "Chọn công ty",
 	},
 } satisfies ContactMessages;
 

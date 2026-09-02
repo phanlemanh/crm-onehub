@@ -137,7 +137,7 @@ export function ActivityComposer({ anchor }: { anchor: TimelineAnchor }) {
 									<Icon icon={Calendar} data-icon="inline-start" />
 									{dueAt
 										? dateFormat(locale, DUE_OPTIONS).format(dueAt)
-										: "Due date"}
+										: m.timeline.composer.dueDate}
 								</InputGroupButton>
 							</PopoverTrigger>
 							<PopoverContent size="fit" align="start">
@@ -161,8 +161,10 @@ export function ActivityComposer({ anchor }: { anchor: TimelineAnchor }) {
 						>
 							{create.isPending ? <Spinner /> : null}
 							{isTask
-								? "Add task"
-								: `Log ${activityLabel(type, locale).toLowerCase()}`}
+								? m.timeline.composer.addTask
+								: m.timeline.composer.log(
+										activityLabel(type, locale).toLowerCase(),
+									)}
 						</InputGroupButton>
 					)}
 				</InputGroupAddon>

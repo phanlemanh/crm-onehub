@@ -4,6 +4,7 @@ import { Button } from "@crm/ui/components/button";
 import { DatePicker } from "@crm/ui/components/date-picker";
 import { Field, FieldLabel } from "@crm/ui/components/field";
 import { Input } from "@crm/ui/components/input";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Select,
 	SelectContent,
@@ -16,6 +17,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { contactName } from "@/components/crm/contact-name";
+import { crmMessages } from "@/lib/messages/crm";
+import { recordSheetMessages } from "@/lib/messages/record-sheet";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
@@ -34,6 +37,8 @@ function QuickAddForm({
 	onCancel: () => void;
 	children: React.ReactNode;
 }) {
+	const cancel = crmMessages(useLocale()).sheet.cancel;
+
 	return (
 		<form
 			className="flex shrink-0 flex-col gap-4 border-b px-5 py-4"
@@ -48,7 +53,7 @@ function QuickAddForm({
 					disabled={pending}
 					onClick={onCancel}
 				>
-					Cancel
+					{cancel}
 				</Button>
 				<Button type="submit" size="sm" disabled={pending || !ready}>
 					{pending ? <Spinner /> : null}
@@ -70,6 +75,8 @@ export function QuickAddContact({
 }) {
 	const trpc = useTRPC();
 	const cache = useCrmCache();
+	const sheet = recordSheetMessages(useLocale());
+	const m = sheet.contact;
 
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
@@ -85,7 +92,7 @@ export function QuickAddContact({
 		trpc.contacts.create.mutationOptions({
 			onSuccess: async (contact) => {
 				await cache.contact(contact.id);
-				toast.success(`${contact.firstName} added.`);
+				toast.success(m.added(contact.firstName));
 				onDone();
 			},
 			onError: (error) => toast.error(error.message),
@@ -94,7 +101,7 @@ export function QuickAddContact({
 
 	return (
 		<QuickAddForm
-			submitLabel="Add contact"
+			submitLabel={sheet.company.addContact}
 			pending={create.isPending}
 			ready={firstName.trim() !== ""}
 			onCancel={onDone}
@@ -110,7 +117,7 @@ export function QuickAddContact({
 			}
 		>
 			<Field>
-				<FieldLabel htmlFor={firstNameId}>First name</FieldLabel>
+				<FieldLabel htmlFor={firstNameId}>{m.firstName}</FieldLabel>
 				<Input
 					id={firstNameId}
 					autoFocus
@@ -120,7 +127,7 @@ export function QuickAddContact({
 				/>
 			</Field>
 			<Field>
-				<FieldLabel htmlFor={lastNameId}>Last name</FieldLabel>
+				<FieldLabel htmlFor={lastNameId}>{m.lastName}</FieldLabel>
 				<Input
 					id={lastNameId}
 					value={lastName}
@@ -129,7 +136,7 @@ export function QuickAddContact({
 				/>
 			</Field>
 			<Field>
-				<FieldLabel htmlFor={emailId}>Email</FieldLabel>
+				<FieldLabel htmlFor={emailId}>{m.fields.email}</FieldLabel>
 				<Input
 					id={emailId}
 					type="email"
@@ -139,12 +146,12 @@ export function QuickAddContact({
 				/>
 			</Field>
 			<Field>
-				<FieldLabel htmlFor={titleId}>Title</FieldLabel>
+				<FieldLabel htmlFor={titleId}>{m.fields.title}</FieldLabel>
 				<Input
 					id={titleId}
 					value={title}
 					onChange={(event) => setTitle(event.target.value)}
-					placeholder="Head of Security"
+					placeholder={m.rolePlaceholder}
 					autoComplete="off"
 				/>
 			</Field>
@@ -163,6 +170,8 @@ export function AttachDealContact({
 }) {
 	const trpc = useTRPC();
 	const cache = useCrmCache();
+	const locale = useLocale();
+	const m = recordSheetMessages(locale).deal;
 
 	const [contactId, setContactId] = useState("");
 	const [role, setRole] = useState("");
@@ -180,11 +189,7 @@ export function AttachDealContact({
 					(candidate) => candidate.id === attached.contactId,
 				);
 				await cache.deal(dealId);
-				toast.success(
-					person
-						? `${contactName(person)} is on the deal.`
-						: "Added to the deal.",
-				);
+				toast.success(person ? m.onDeal(contactName(person)) : m.addedToDeal);
 				onDone();
 			},
 			onError: (error) => toast.error(error.message),
@@ -194,14 +199,14 @@ export function AttachDealContact({
 	const nobody = !options.isPending && candidates.length === 0;
 
 	const placeholder = options.isPending
-		? "Loading…"
+		? crmMessages(locale).misc.loading
 		: nobody
-			? `Everybody at ${companyName} is already on it`
-			: "Choose somebody";
+			? m.everybodyOn(companyName)
+			: m.chooseSomebody;
 
 	return (
 		<QuickAddForm
-			submitLabel="Add to deal"
+			submitLabel={m.addToDeal}
 			pending={attach.isPending}
 			ready={contactId !== ""}
 			onCancel={onDone}
@@ -210,7 +215,7 @@ export function AttachDealContact({
 			}
 		>
 			<Field>
-				<FieldLabel htmlFor={personId}>Person</FieldLabel>
+				<FieldLabel htmlFor={personId}>{m.personLabel}</FieldLabel>
 				<Select value={contactId} onValueChange={setContactId}>
 					<SelectTrigger id={personId} className="w-full" disabled={nobody}>
 						<SelectValue placeholder={placeholder} />
@@ -226,12 +231,12 @@ export function AttachDealContact({
 				</Select>
 			</Field>
 			<Field>
-				<FieldLabel htmlFor={roleId}>Role</FieldLabel>
+				<FieldLabel htmlFor={roleId}>{m.role}</FieldLabel>
 				<Input
 					id={roleId}
 					value={role}
 					onChange={(event) => setRole(event.target.value)}
-					placeholder="Champion"
+					placeholder={m.champion}
 					autoComplete="off"
 				/>
 			</Field>
@@ -252,6 +257,7 @@ export function QuickAddDeal({
 }) {
 	const trpc = useTRPC();
 	const cache = useCrmCache();
+	const m = recordSheetMessages(useLocale()).deal;
 
 	const [name, setName] = useState("");
 	const [amount, setAmount] = useState("");
@@ -268,7 +274,7 @@ export function QuickAddDeal({
 		trpc.deals.create.mutationOptions({
 			onSuccess: async (deal) => {
 				await cache.deal(deal.id);
-				toast.success(`${deal.name} created.`);
+				toast.success(m.created(deal.name));
 				onDone();
 			},
 			onError: (error) => toast.error(error.message),
@@ -277,7 +283,7 @@ export function QuickAddDeal({
 
 	const submit = () => {
 		if (!owner) {
-			toast.error("Could not work out who should own this deal.");
+			toast.error(m.noOwner);
 			return;
 		}
 
@@ -285,7 +291,7 @@ export function QuickAddDeal({
 		if (amount.trim() !== "") {
 			const parsed = Number.parseFloat(amount);
 			if (!Number.isFinite(parsed) || parsed < 0) {
-				toast.error("Amount has to be a number.");
+				toast.error(m.amountNotNumber);
 				return;
 			}
 			amountCents = Math.round(parsed * 100);
@@ -302,14 +308,14 @@ export function QuickAddDeal({
 
 	return (
 		<QuickAddForm
-			submitLabel="Create deal"
+			submitLabel={m.create}
 			pending={create.isPending}
 			ready={name.trim() !== ""}
 			onCancel={onDone}
 			onSubmit={submit}
 		>
 			<Field className="sm:col-span-2">
-				<FieldLabel htmlFor={nameId}>Name</FieldLabel>
+				<FieldLabel htmlFor={nameId}>{m.contactColumns.name}</FieldLabel>
 				<Input
 					id={nameId}
 					autoFocus
@@ -320,7 +326,7 @@ export function QuickAddDeal({
 				/>
 			</Field>
 			<Field>
-				<FieldLabel htmlFor={amountId}>Amount</FieldLabel>
+				<FieldLabel htmlFor={amountId}>{m.fields.amount}</FieldLabel>
 				<Input
 					id={amountId}
 					value={amount}
@@ -330,12 +336,12 @@ export function QuickAddDeal({
 				/>
 			</Field>
 			<Field>
-				<FieldLabel htmlFor={closeId}>Expected close</FieldLabel>
+				<FieldLabel htmlFor={closeId}>{m.expectedClose}</FieldLabel>
 				<DatePicker
 					id={closeId}
 					value={closeDate}
 					onChange={setCloseDate}
-					placeholder="No date yet"
+					placeholder={m.noDate}
 				/>
 			</Field>
 		</QuickAddForm>

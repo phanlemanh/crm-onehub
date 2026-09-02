@@ -39,6 +39,12 @@ mà không có tên ở đây thì phép đo đỏ.
 | `deal.currencyEntry` | `${code} · ${name}` | chỉ có biến | mã và tên tiền tệ do máy chủ trả |
 | `deal.candidateTitle` | ` · ${title}` | chỉ có biến | chức danh do người nhập |
 | `deal.namePlaceholder` | `${name} — OneHub` | biến + tên riêng | ví dụ trong ô nhập; OneHub là tên công ty |
+| `fields.type.url` | `URL` | từ viết tắt | tên chuẩn kỹ thuật, tiếng Việt dùng nguyên |
+| `fields.type.email` · `create.email` | `Email` | tên riêng | đã có mục cho `headers.email`; cùng lý do |
+| `create.domainPlaceholder` | `datxanh.vn` | ví dụ tên miền | tên miền thật, không dịch |
+| `meta.notCounted` | `${n} chưa tính (thiếu tỉ giá ${cur})` | có dấu | không thuộc mục này, giữ để đối chiếu |
+| `bulkMenu.leftAlone` | `${done} ${n} bị bỏ qua${why}` | có dấu | không thuộc mục này, giữ để đối chiếu |
+| `contact.fields.x` | `X` | tên riêng | tên nền tảng, giữ nguyên |
 | `stage.*` (bảy khoá) | `Demo booked` … `Unqualified` | không dịch theo hợp đồng | AC-14 — bảy bước chưa ai định nghĩa nghĩa |
 
 ---
@@ -491,7 +497,7 @@ các dòng dưới dịch theo giọng hợp tác. Đây là chỗ hội đồng
 
 | Khoá | Tiếng Anh | Tiếng Việt | Ghi chú |
 | --- | --- | --- | --- |
-| `deal.expectedClose` | `Expected close` | `Dự kiến chốt` | |
+| `deal.expectedClose` | `Expected close` | `Ngày dự kiến chốt` | neo danh từ `Ngày` như mọi nhãn ngày anh em (`Ngày mở`, `Ngày chốt`, `Ngày tạo`); bỏ neo thì `chốt` đọc lửng giữa danh từ và động từ |
 | `deal.inStage` | `In stage` | `Ở giai đoạn` | |
 | `deal.inStageSince` | `In stage since` | `Ở giai đoạn này từ` | |
 | `deal.opened` | `Opened` | `Ngày mở` | |
@@ -522,3 +528,245 @@ các dòng dưới dịch theo giọng hợp tác. Đây là chỗ hội đồng
 | `deal.person` | `person` | `người` | dùng trong câu trên |
 | `deal.people` | `people` | `người` | tiếng Việt không đổi dạng |
 | `deal.closed` | `Closed` | `Đã chốt` | |
+
+## Bổ sung ở vòng sửa S4-r1 — 199 khoá khai SAU khi chạm mã
+
+**Đọc kỹ chỗ này trước khi chấm.** Hội đồng ở vòng S4-r1 bắt được rằng hai tiêu
+đề cột đang chạy trên màn công ty — `Số lượng cá nhân` và `Số thoả thuận đang mở`
+— không có ở bất cứ đâu trong bảng, dù bảng tự nhận đã liệt kê đủ. Đối chiếu bằng
+máy cho ra con số thật: **199 trên 537 khoá chưa từng có dòng nào**, 37%.
+
+Phần lớn số đó có từ bước S3, không phải từ vòng sửa này. Chúng được khai ở đây
+**sau khi mã đã viết**, nên chúng KHÔNG mang tính chất "chốt trước khi chạm mã"
+mà AC-13 đòi. Ba mục trên vẫn giữ tính chất đó; mục này thì không, và không được
+đọc như thể có.
+
+Việc này còn nói một điều về chính bảng: nó không có phép đối chiếu ĐỦ, chỉ có
+phép đối chiếu ĐÚNG. Một bảng chỉ kiểm "dòng đã viết có sai không" thì im lặng
+trước mọi dòng chưa ai viết. `rang/kiem-ban-dich.mjs` nay kiểm cả hai chiều.
+
+### companies — 20 khoá
+
+| Khoá | Tiếng Anh | Tiếng Việt | Ghi chú |
+| --- | --- | --- | --- |
+| `headers.domain` | `Domain` | `Tên miền` | |
+| `headers.industry` | `Industry` | `Ngành` | |
+| `headers.contacts` | `Contacts` | `Số lượng cá nhân` | |
+| `headers.openDeals` | `Open deals` | `Số thoả thuận đang mở` | |
+| `headers.enrichment` | `Enrichment` | `Bổ sung dữ liệu` | |
+| `labels.enrichmentStatus` | `Enrichment status` | `Trạng thái bổ sung dữ liệu` | |
+| `facets.industry` | `Industry` | `Ngành` | |
+| `facets.enrichment` | `Enrichment` | `Bổ sung dữ liệu` | |
+| `noun` | `company` | `công ty` | |
+| `nounPlural` | `companies` | `công ty` | |
+| `archivedToggle` | `Archived` | `Lưu trữ` | |
+| `create.newButton` | `New company` | `Công ty mới` | |
+| `create.name` | `Name` | `Tên` | |
+| `create.domain` | `Domain` | `Tên miền` | |
+| `create.domainPlaceholder` | `stripe.com` | `datxanh.vn` | |
+| `create.domainHint` | `A full URL is fine — it is reduced to the bare host, which has to be unique.` | `Dán cả đường dẫn cũng được — hệ thống rút về tên miền gốc, và tên miền đó phải là duy nhất.` | |
+| `create.owner` | `Owner` | `Phụ trách` | |
+| `create.unassigned` | `Unassigned` | `Chưa giao` | |
+| `create.submit` | `Add company` | `Thêm công ty` | |
+| `create.cancel` | `Cancel` | `Huỷ` | |
+
+### contacts — 17 khoá
+
+| Khoá | Tiếng Anh | Tiếng Việt | Ghi chú |
+| --- | --- | --- | --- |
+| `noun` | `contact` | `cá nhân` | |
+| `facets.seniority` | `Seniority` | `Cấp bậc` | |
+| `facets.persona` | `Persona` | `Nhóm đối tác` | |
+| `facets.searching` | `Searching…` | `Đang tìm…` | |
+| `facets.noMatch` | `No company matches.` | `Không công ty nào khớp.` | |
+| `archivedToggle` | `Archived` | `Lưu trữ` | |
+| `create.newButton` | `New contact` | `Cá nhân mới` | |
+| `create.firstName` | `First name` | `Tên` | |
+| `create.lastName` | `Last name` | `Họ` | |
+| `create.email` | `Email` | `Email` | |
+| `create.jobTitle` | `Title` | `Chức danh` | |
+| `create.titlePlaceholder` | `Head of Security` | `Trưởng phòng Kinh doanh` | |
+| `create.company` | `Company` | `Công ty` | |
+| `create.owner` | `Owner` | `Phụ trách` | |
+| `create.unassigned` | `Unassigned` | `Chưa giao` | |
+| `create.submit` | `Add contact` | `Thêm cá nhân` | |
+| `create.cancel` | `Cancel` | `Huỷ` | |
+
+### deals — 18 khoá
+
+| Khoá | Tiếng Anh | Tiếng Việt | Ghi chú |
+| --- | --- | --- | --- |
+| `noun` | `deal` | `thoả thuận` | |
+| `facets.stage` | `Stage` | `Giai đoạn` | |
+| `archivedToggle` | `Archived` | `Lưu trữ` | |
+| `meta.count` | `${n} deals` | `${n} thoả thuận` | |
+| `meta.openPipeline` | `open pipeline` | `đang mở` | |
+| `meta.notCounted` | `${n} not counted (no ${cur} rate)` | `${n} chưa tính (thiếu tỉ giá ${cur})` | |
+| `create.newButton` | `New deal` | `Thoả thuận mới` | |
+| `create.name` | `Name` | `Tên` | |
+| `create.company` | `Company` | `Công ty` | |
+| `create.owner` | `Owner` | `Phụ trách` | |
+| `create.stage` | `Stage` | `Giai đoạn` | |
+| `create.amount` | `Amount` | `Giá trị` | |
+| `create.closeDate` | `Expected close date` | `Ngày dự kiến chốt` | |
+| `create.chooseOwner` | `Choose an owner` | `Chọn người phụ trách` | |
+| `create.stageHint` | `A new deal is an open deal — close it from the pipeline once there is an outcome to record.` | `Thoả thuận mới là thoả thuận đang mở — chốt nó khi đã có kết quả để ghi lại.` | |
+| `create.submit` | `Add deal` | `Thêm thoả thuận` | |
+| `create.cancel` | `Cancel` | `Huỷ` | |
+| `bulk.sameReason` | `The same reason goes on every one of them, so keep it to what they have in common.` | `Cùng một lý do ghi cho tất cả, nên chỉ nêu phần chung của chúng.` | |
+
+### crm — 77 khoá
+
+| Khoá | Tiếng Anh | Tiếng Việt | Ghi chú |
+| --- | --- | --- | --- |
+| `timeline.composer.failed` | `Could not save. Check your connection and try again.` | `Chưa lưu được. Kiểm tra kết nối rồi thử lại.` | |
+| `timeline.type.email` | `Email` | `Email` | |
+| `enrichment.research` | `Research` | `Tra cứu` | |
+| `enrichment.reEnrich` | `Re-enrich` | `Tra cứu lại` | |
+| `time.ahead` | `in ${d}` | `sau ${d} nữa` | |
+| `activity.within7` | `Active within 7 days` | `Có hoạt động trong 7 ngày` | |
+| `activity.within30` | `Active within 30 days` | `Có hoạt động trong 30 ngày` | |
+| `activity.within90` | `Active within 90 days` | `Có hoạt động trong 90 ngày` | |
+| `close.save` | `Save` | `Lưu` | |
+| `web.views` | `${n} views` | `${n} lượt xem` | |
+| `fields.required` | `required` | `bắt buộc` | |
+| `fields.standardRow` | `Standard fields` | `Trường chuẩn` | |
+| `fields.standardNote` | `reorder and hide only` | `chỉ sắp lại thứ tự và ẩn` | |
+| `fields.suggestedRow` | `Suggested fields` | `Trường gợi ý` | |
+| `fields.suggestedNote` | `one click to add` | `một cú bấm để thêm` | |
+| `fields.add` | `Add` | `Thêm` | |
+| `fields.customGroup` | `Custom fields` | `Trường tự tạo` | |
+| `fields.dragNote` | `Drag to order` | `Kéo để sắp thứ tự` | |
+| `fields.archivedRow` | `Archived` | `Đã lưu trữ` | |
+| `fields.archivedNote` | `values kept, hidden everywhere` | `giữ giá trị, ẩn ở mọi nơi` | |
+| `fields.newField` | `New field` | `Trường mới` | |
+| `fields.orderNote` | `Order here is the order on the sheet` | `Thứ tự ở đây là thứ tự trên hồ sơ` | |
+| `fields.manualOnly` | `Manual only` | `Chỉ nhập tay` | |
+| `fields.tableNote` | `also a column on the table` | `cũng là một cột trên bảng` | |
+| `fields.filterNote` | `also a filter` | `cũng là một bộ lọc` | |
+| `fields.emptyTitle` | `No custom fields yet` | `Chưa có trường tự tạo nào` | |
+| `fields.errorTitle` | `We could not load your fields` | `Chưa tải được các trường của bạn` | |
+| `fields.tryAgain` | `Try again` | `Thử lại` | |
+| `fields.labelLabel` | `Label` | `Nhãn` | |
+| `fields.keyLabel` | `Key` | `Khoá` | |
+| `fields.agentLabel` | `Let your agents fill this` | `Để tác nhân điền giúp` | |
+| `fields.briefLabel` | `What counts as an answer` | `Thế nào là một câu trả lời` | |
+| `fields.typeLabel` | `Type` | `Kiểu` | |
+| `fields.optionsLabel` | `Options` | `Lựa chọn` | |
+| `fields.addOption` | `Add option` | `Thêm lựa chọn` | |
+| `fields.allFilled` | `Nothing left to fill` | `Không còn gì để điền` | |
+| `fields.addField` | `Create field` | `Tạo trường` | |
+| `fields.saveChanges` | `Save changes` | `Lưu thay đổi` | |
+| `fields.archive` | `Archive` | `Lưu trữ` | |
+| `fields.fillRest` | `Fill the rest` | `Điền phần còn lại` | |
+| `fields.type.url` | `URL` | `URL` | |
+| `fields.type.email` | `Email` | `Email` | |
+| `fields.type.phone` | `Phone` | `Số điện thoại` | |
+| `bulk.restore` | `Restore` | `Khôi phục` | |
+| `bulk.deleteForever` | `Delete forever` | `Xoá vĩnh viễn` | |
+| `bulk.archive` | `Archive` | `Lưu trữ` | |
+| `bulk.reEnrich` | `Re-enrich` | `Tra cứu lại` | |
+| `bulk.moveToCompany` | `Move to company` | `Chuyển sang công ty` | |
+| `views.button` | `Views` | `Bảng xem` | |
+| `views.saveCurrent` | `Save current view…` | `Lưu bảng xem này…` | |
+| `views.mine` | `My views` | `Bảng của tôi` | |
+| `views.shared` | `Shared with the team` | `Dùng chung cả đội` | |
+| `views.dialogTitle` | `Save this view` | `Lưu bảng xem này` | |
+| `views.name` | `Name` | `Tên` | |
+| `views.remove` | `Delete ${name}` | `Xoá ${name}` | |
+| `bulkMenu.actions` | `Actions` | `Hành động` | |
+| `bulkMenu.assignOwner` | `Assign owner` | `Giao người phụ trách` | |
+| `bulkMenu.nobodyElse` | `Nobody else works here yet.` | `Chưa có ai khác trong đội.` | |
+| `bulkMenu.cancel` | `Cancel` | `Huỷ` | |
+| `bulkMenu.confirmDelete` | `Delete` | `Xoá` | |
+| `bulkMenu.leftAlone` | `${done} ${n} left alone${why}` | `${done} ${n} bị bỏ qua${why}` | |
+| `missing.industry` | `industry` | `ngành` | |
+| `missing.socialLinks` | `social links` | `liên kết mạng xã hội` | |
+| `sheet.back` | `Back` | `Quay lại` | |
+| `sheet.close` | `Close` | `Đóng` | |
+| `sheet.moreActions` | `More actions` | `Thêm hành động` | |
+| `sheet.fields` | `Fields` | `Trường` | |
+| `sheet.confirmDelete` | `Delete ${name} forever?` | `Xoá vĩnh viễn ${name}?` | |
+| `sheet.cancel` | `Cancel` | `Huỷ` | |
+| `sheet.restore` | `Restore ${noun}` | `Khôi phục ${noun}` | |
+| `sheet.archive` | `Archive ${noun}` | `Lưu trữ ${noun}` | |
+| `sheet.deleteForever` | `Delete ${noun} forever` | `Xoá vĩnh viễn ${noun}` | |
+| `sheet.confirmDeleteForever` | `Delete forever` | `Xoá vĩnh viễn` | |
+| `sheet.fallbackName` | `The ${noun}` | `${noun} này` | |
+| `sheet.archived` | `${name} was archived.` | `Đã lưu trữ ${name}.` | |
+| `sheet.restored` | `${name} was restored.` | `Đã khôi phục ${name}.` | |
+| `sheet.deletedForever` | `${name} was deleted forever.` | `Đã xoá vĩnh viễn ${name}.` | |
+
+### record-sheet — 67 khoá
+
+| Khoá | Tiếng Anh | Tiếng Việt | Ghi chú |
+| --- | --- | --- | --- |
+| `tabs.deals` | `Deals` | `Thoả thuận` | |
+| `tabs.contacts` | `Contacts` | `Cá nhân` | |
+| `company.fallbackTitle` | `Company` | `Công ty` | |
+| `company.contactColumns.primary` | `Primary` | `Đầu mối` | |
+| `company.contactColumns.name` | `Name` | `Tên` | |
+| `company.contactColumns.email` | `Email` | `Email` | |
+| `company.contactColumns.owner` | `Owner` | `Phụ trách` | |
+| `company.dealColumns.deal` | `Deal` | `Tên` | |
+| `company.dealColumns.stage` | `Stage` | `Giai đoạn` | |
+| `company.dealColumns.amount` | `Amount` | `Giá trị` | |
+| `company.dealColumns.closeDate` | `Close date` | `Ngày chốt` | |
+| `company.dealColumns.owner` | `Owner` | `Phụ trách` | |
+| `company.fields.name` | `Name` | `Tên` | |
+| `company.fields.domain` | `Domain` | `Tên miền` | |
+| `company.fields.website` | `Website` | `Website` | |
+| `company.fields.phone` | `Phone` | `Điện thoại` | |
+| `company.fields.email` | `Email` | `Email` | |
+| `company.fields.city` | `City` | `Thành phố` | |
+| `company.fields.country` | `Country` | `Quốc gia` | |
+| `company.fields.owner` | `Owner` | `Phụ trách` | |
+| `company.fields.unassigned` | `Unassigned` | `Chưa giao` | |
+| `company.details` | `Details` | `Chi tiết` | |
+| `company.primaryContactBadge` | `Primary contact` | `Đầu mối chính` | |
+| `company.oneDeal` | `Its one deal` | `Thoả thuận duy nhất của công ty` | |
+| `company.manyDeals` | `All ${n} of its deals` | `Cả ${n} thoả thuận của công ty` | |
+| `company.onePerson` | `The one person` | `Một người` | |
+| `company.manyPeople` | `The ${n} people` | `${n} người` | |
+| `contact.fallbackTitle` | `Contact` | `Cá nhân` | |
+| `contact.dealColumns.deal` | `Deal` | `Tên` | |
+| `contact.dealColumns.role` | `Role` | `Vai trò` | |
+| `contact.dealColumns.stage` | `Stage` | `Giai đoạn` | |
+| `contact.dealColumns.amount` | `Amount` | `Giá trị` | |
+| `contact.dealColumns.owner` | `Owner` | `Phụ trách` | |
+| `contact.fields.firstName` | `First name` | `Tên` | |
+| `contact.fields.lastName` | `Last name` | `Họ` | |
+| `contact.fields.titlePlaceholder` | `Head of Security` | `Trưởng phòng Kinh doanh` | |
+| `contact.fields.email` | `Email` | `Email` | |
+| `contact.fields.phone` | `Phone` | `Điện thoại` | |
+| `contact.fields.linkedin` | `LinkedIn` | `LinkedIn` | |
+| `contact.fields.x` | `X` | `X` | tên nền tảng, giữ nguyên |
+| `contact.fields.github` | `GitHub` | `GitHub` | |
+| `contact.fields.owner` | `Owner` | `Phụ trách` | |
+| `contact.fields.unassigned` | `Unassigned` | `Chưa giao` | |
+| `contact.fields.company` | `Company` | `Công ty` | |
+| `contact.details` | `Details` | `Chi tiết` | |
+| `contact.meetingFallback` | `Meeting` | `Cuộc họp` | |
+| `contact.fn` | `Function` | `Mảng phụ trách` | |
+| `contact.lastReply` | `last reply` | `trả lời gần nhất` | |
+| `contact.thisCompany` | `this company` | `công ty này` | |
+| `deal.fallbackTitle` | `Deal` | `Thoả thuận` | |
+| `deal.contactColumns.name` | `Name` | `Tên` | |
+| `deal.contactColumns.role` | `Role` | `Vai trò` | |
+| `deal.contactColumns.email` | `Email` | `Email` | |
+| `deal.contactColumns.remove` | `Remove` | `Gỡ` | |
+| `deal.fields.name` | `Name` | `Tên` | |
+| `deal.fields.amount` | `Amount` | `Giá trị` | |
+| `deal.fields.currency` | `Currency` | `Tiền tệ` | |
+| `deal.fields.closeDate` | `Close date` | `Ngày chốt` | |
+| `deal.fields.owner` | `Owner` | `Phụ trách` | |
+| `deal.details` | `Details` | `Chi tiết` | |
+| `deal.stageSection` | `Stage` | `Giai đoạn` | |
+| `deal.reason` | `Reason` | `Lý do` | |
+| `deal.takeOff` | `Take off this deal` | `Gỡ khỏi thoả thuận này` | |
+| `deal.addContact` | `Add contact` | `Thêm cá nhân` | |
+| `deal.championPlaceholder` | `Champion` | `Người ủng hộ` | |
+| `deal.nobodyAttached` | `Nobody from ${name} is attached yet.` | `Chưa ai từ ${name} được gắn vào.` | |
+| `deal.noRate` | `No ${cur} rate — left out of totals` | `Không có tỷ giá ${cur} — không tính vào tổng` | |
+| `deal.personLabel` | `Person` | `Người` | |
+

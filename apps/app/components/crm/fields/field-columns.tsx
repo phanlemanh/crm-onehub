@@ -2,10 +2,13 @@
 
 import type { DataTableColumn } from "@crm/ui/components/data-table";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { formatDay } from "@crm/ui/lib/format";
+import type { Locale } from "@crm/ui/lib/locale";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { type Owner, OwnerCell } from "@/components/crm/owner-cell";
+import { crmMessages } from "@/lib/messages/crm";
 import { useTRPC } from "@/lib/trpc/client";
 import type { FieldEntity } from "./fields-entity";
 
@@ -15,10 +18,14 @@ function render(
 	type: string,
 	value: string | number | boolean | null,
 	users: Map<string, Owner>,
+	locale: Locale,
 ) {
 	if (value === null || value === "") return <EmptyCellValue />;
 
-	if (type === "CHECKBOX") return value === true ? "Yes" : "No";
+	if (type === "CHECKBOX") {
+		const misc = crmMessages(locale).misc;
+		return value === true ? misc.yes : misc.no;
+	}
 	if (type === "DATE") return formatDay(String(value));
 	if (type === "USER") {
 		const user = users.get(String(value));
@@ -43,6 +50,7 @@ export function useFieldColumns<Row extends WithFields>(
 	const fields = query.data;
 	const members = users.data;
 
+	const locale = useLocale();
 	const byId = useMemo(
 		() => new Map((members ?? []).map((user) => [user.id, user])),
 		[members],
@@ -60,9 +68,9 @@ export function useFieldColumns<Row extends WithFields>(
 				hideBelow: "lg" as const,
 				cell: (row: Row) => (
 					<span className="truncate">
-						{render(field.type, row.fields[field.key] ?? null, byId)}
+						{render(field.type, row.fields[field.key] ?? null, byId, locale)}
 					</span>
 				),
 			}));
-	}, [fields, byId]);
+	}, [fields, byId, locale]);
 }

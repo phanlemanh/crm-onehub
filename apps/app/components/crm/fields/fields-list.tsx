@@ -29,35 +29,18 @@ import {
 	EmptyTitle,
 } from "@crm/ui/components/empty";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { SortableItem, SortableList } from "@crm/ui/components/sortable-list";
 import { Spinner } from "@crm/ui/components/spinner";
+import type { Locale } from "@crm/ui/lib/locale";
 import { FIELD_TEMPLATES } from "@crm/validation/field-templates";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { crmMessages } from "@/lib/messages/crm";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import {
-	ADD,
-	ARCHIVED_NOTE,
-	ARCHIVED_ROW,
-	CUSTOM_GROUP,
-	DRAG_NOTE,
-	EMPTY_BODY,
-	EMPTY_TITLE,
-	ERROR_BODY,
-	ERROR_TITLE,
-	FILTER_NOTE,
-	MANUAL_ONLY,
-	NEW_FIELD,
-	ORDER_NOTE,
-	RETRY,
-	STANDARD_NOTE,
-	STANDARD_ROW,
-	SUGGESTED_NOTE,
-	SUGGESTED_ROW,
-	TABLE_NOTE,
-} from "./fields-copy";
+import { fieldsCopy, optionCount } from "./fields-copy";
 import { type FieldEntity, kindOf } from "./fields-entity";
 import { STANDARD_FIELDS } from "./standard-fields";
 
@@ -65,23 +48,24 @@ type Field = RouterOutputs["fields"]["list"][number];
 
 const ROW = "flex items-center gap-2.5 border-b px-5 py-2";
 
-function summaryOf(field: Field): string {
+function summaryOf(field: Field, locale: Locale): string {
+	const copy = fieldsCopy(locale);
 	const parts: string[] = [];
 
 	if (field.agentFilled) {
 		parts.push(
 			field.agentBrief ??
 				(field.options.length > 0
-					? `${field.options.length} options`
+					? optionCount(field.options.length, locale)
 					: field.label),
 		);
 	} else {
-		parts.push(MANUAL_ONLY);
-		if (field.required) parts.push("required");
+		parts.push(copy.manualOnly);
+		if (field.required) parts.push(crmMessages(locale).fields.required);
 	}
 
-	if (field.showOnTable) parts.push(TABLE_NOTE);
-	if (field.showOnFilter) parts.push(FILTER_NOTE);
+	if (field.showOnTable) parts.push(copy.tableNote);
+	if (field.showOnFilter) parts.push(copy.filterNote);
 
 	return parts.join(" · ");
 }
@@ -143,6 +127,8 @@ export function FieldsList({
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const queryClient = useQueryClient();
+	const locale = useLocale();
+	const copy = fieldsCopy(locale);
 
 	const listKey = trpc.fields.list.queryKey({ entity, includeArchived: true });
 
@@ -205,8 +191,8 @@ export function FieldsList({
 		<>
 			<div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
 				<DisclosureRow
-					title={STANDARD_ROW}
-					note={`${standard.length} · ${STANDARD_NOTE}`}
+					title={copy.standardRow}
+					note={`${standard.length} · ${copy.standardNote}`}
 				>
 					<ul className="border-b bg-muted/40 py-1">
 						{standard.map((field) => (
@@ -222,8 +208,8 @@ export function FieldsList({
 
 				{suggestions.length > 0 && (
 					<DisclosureRow
-						title={SUGGESTED_ROW}
-						note={`${suggestions.length} · ${SUGGESTED_NOTE}`}
+						title={copy.suggestedRow}
+						note={`${suggestions.length} · ${copy.suggestedNote}`}
 					>
 						<ul className="border-b bg-muted/40 py-1">
 							{suggestions.map((template) => (
@@ -260,7 +246,7 @@ export function FieldsList({
 										}
 									>
 										<Icon icon={Add} data-icon="inline-start" />
-										{ADD}
+										{copy.add}
 									</Button>
 								</li>
 							))}
@@ -278,8 +264,8 @@ export function FieldsList({
 							<EmptyMedia variant="icon">
 								<Icon icon={Warning} />
 							</EmptyMedia>
-							<EmptyTitle>{ERROR_TITLE}</EmptyTitle>
-							<EmptyDescription>{ERROR_BODY}</EmptyDescription>
+							<EmptyTitle>{copy.errorTitle}</EmptyTitle>
+							<EmptyDescription>{copy.errorBody}</EmptyDescription>
 						</EmptyHeader>
 						<EmptyContent>
 							<Button
@@ -288,7 +274,7 @@ export function FieldsList({
 								onClick={() => query.refetch()}
 							>
 								<Icon icon={Renew} data-icon="inline-start" />
-								{RETRY}
+								{copy.retry}
 							</Button>
 						</EmptyContent>
 					</Empty>
@@ -300,13 +286,13 @@ export function FieldsList({
 									<EmptyMedia variant="icon">
 										<Icon icon={Add} />
 									</EmptyMedia>
-									<EmptyTitle>{EMPTY_TITLE}</EmptyTitle>
-									<EmptyDescription>{EMPTY_BODY}</EmptyDescription>
+									<EmptyTitle>{copy.emptyTitle}</EmptyTitle>
+									<EmptyDescription>{copy.emptyBody}</EmptyDescription>
 								</EmptyHeader>
 								<EmptyContent>
 									<Button onClick={onNew}>
 										<Icon icon={Add} data-icon="inline-start" />
-										{NEW_FIELD}
+										{copy.newField}
 									</Button>
 								</EmptyContent>
 							</Empty>
@@ -314,10 +300,10 @@ export function FieldsList({
 							<>
 								<div className="flex items-center justify-between gap-3 px-5 pt-3.5 pb-2">
 									<span className="font-medium text-muted-foreground text-xs uppercase tracking-wider">
-										{CUSTOM_GROUP}
+										{copy.customGroup}
 									</span>
 									<span className="text-muted-foreground text-xs">
-										{DRAG_NOTE}
+										{copy.dragNote}
 									</span>
 								</div>
 
@@ -341,7 +327,7 @@ export function FieldsList({
 													{field.label}
 												</span>
 												<span className="w-full truncate text-muted-foreground text-xs">
-													{summaryOf(field)}
+													{summaryOf(field, locale)}
 												</span>
 											</button>
 
@@ -381,8 +367,8 @@ export function FieldsList({
 
 						{archived.length > 0 ? (
 							<DisclosureRow
-								title={ARCHIVED_ROW}
-								note={`${archived.length} · ${ARCHIVED_NOTE}`}
+								title={copy.archivedRow}
+								note={`${archived.length} · ${copy.archivedNote}`}
 							>
 								<ul className="border-b">
 									{archived.map((field) => (
@@ -413,10 +399,10 @@ export function FieldsList({
 				<div className="flex shrink-0 items-center justify-between gap-3 border-t px-5 py-3">
 					<Button onClick={onNew}>
 						<Icon icon={Add} data-icon="inline-start" />
-						{NEW_FIELD}
+						{copy.newField}
 					</Button>
 					<span className="text-right text-muted-foreground text-xs">
-						{ORDER_NOTE}
+						{copy.orderNote}
 					</span>
 				</div>
 			) : null}

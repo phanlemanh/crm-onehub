@@ -79,31 +79,29 @@ function dealCurrency(currency: string) {
 	return normalizeCurrency(currency) || currency;
 }
 
-function currencyOptions(currency: string) {
+function currencyOptions(currency: string, m: RecordSheetMessages) {
 	if (CURRENCY_OPTIONS.some((option) => option.value === currency)) {
 		return CURRENCY_OPTIONS;
 	}
 
 	return [
-		{ value: currency, label: `${currency} — no longer supported` },
+		{ value: currency, label: m.deal.currencyGone(currency) },
 		...CURRENCY_OPTIONS,
 	];
 }
 
 function ReportedValue({ deal }: { deal: Deal }) {
 	const locale = useLocale();
-	const _m = recordSheetMessages(locale);
+	const m = recordSheetMessages(locale);
 	const currency = dealCurrency(deal.currency);
 
 	if (currency === deal.reportingCurrency) return null;
 	if (deal.amountCents === null) return null;
 
 	return (
-		<DetailSheetProperty label={`In ${deal.reportingCurrency}`}>
+		<DetailSheetProperty label={m.deal.inCurrency(deal.reportingCurrency)}>
 			{deal.baseAmountCents === null ? (
-				<span className="text-muted-foreground">
-					No {currency} rate — left out of totals
-				</span>
+				<span className="text-muted-foreground">{m.deal.noRate(currency)}</span>
 			) : (
 				<span className="tabular-nums text-muted-foreground">
 					≈ {formatMoney(deal.baseAmountCents, deal.reportingCurrency, locale)}
@@ -344,7 +342,7 @@ function DealOverview({ deal }: { deal: Deal }) {
 					<InlineSelectField
 						label={m.deal.fields.currency}
 						value={currency}
-						options={currencyOptions(currency)}
+						options={currencyOptions(currency, m)}
 						onSave={(currency) => save({ currency })}
 					/>
 					<ReportedValue deal={deal} />
@@ -381,7 +379,7 @@ function DealOverview({ deal }: { deal: Deal }) {
 				<InlineTextArea
 					label={m.deal.description}
 					value={deal.description}
-					placeholder={`What ${deal.company.name} is buying, why now, and what stands in the way.`}
+					placeholder={m.deal.descriptionHint(deal.company.name)}
 					saving={isSaving("description")}
 					onSave={(description) => save({ description })}
 				/>
@@ -422,7 +420,7 @@ function WhereItStands({ deal }: { deal: Deal }) {
 				<DetailSheetProperty label={m.section.onIt} wide>
 					{deal.contacts.length === 0 ? (
 						<span className="text-muted-foreground">
-							Nobody from {deal.company.name} is attached yet.
+							{m.deal.nobodyAttached(deal.company.name)}
 						</span>
 					) : (
 						<span className="flex flex-wrap items-center gap-x-3 gap-y-0.5">
@@ -498,7 +496,7 @@ function DealContacts({
 					<DetailSheetEmpty
 						icon={UserMultiple}
 						title={m.deal.noContactsTitle}
-						description={`Nobody from ${deal.company.name} is attached yet. Bring the people you are selling to onto the deal and it says who to chase.`}
+						description={m.deal.noContactsBody(deal.company.name)}
 						action={
 							<Button variant="outline" size="sm" onClick={onAdd}>
 								<Icon icon={Add} data-icon="inline-start" />
@@ -534,7 +532,7 @@ function DealContacts({
 						</TableCell>
 						<TableCell className="truncate px-1 py-2.5">
 							<InlineTextCell
-								label={`Role on this deal for ${contactName(contact)}`}
+								label={m.deal.roleOnDeal(contactName(contact))}
 								value={contact.role}
 								placeholder={m.deal.championPlaceholder}
 								saving={

@@ -74,8 +74,8 @@ export function TimelineEntry({
 	const synced = entry.meta?.synced === true;
 	const author = synced
 		? entry.emailThread
-			? "via Gmail"
-			: "via Calendar"
+			? m.timeline.viaGmail
+			: m.timeline.viaCalendar
 		: entry.createdBy.name;
 
 	const headline = change

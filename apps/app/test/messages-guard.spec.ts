@@ -1,4 +1,6 @@
 import { describe, expect, it } from "bun:test";
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { companyMessages } from "@/lib/messages/companies";
 import { contactMessages } from "@/lib/messages/contacts";
 import { crmMessages } from "@/lib/messages/crm";
@@ -35,6 +37,7 @@ const KHONG_DAU = new Set([
 	"tabs.emails",
 	"contact.emails",
 	"type.email",
+	"type.url",
 	"create.email",
 	"contactColumns.email",
 	"fields.website",
@@ -244,6 +247,29 @@ describe("kho chuoi cua vong ③a", () => {
 			"crm:fields.stillToGo": ["Còn 1 nữa", "Còn 12 nữa"],
 			"crm:fields.optionCount": ["1 lựa chọn", "12 lựa chọn"],
 			"crm:fields.option": ["Lựa chọn 1", "Lựa chọn 12"],
+			"crm:fields.filledOn": [
+				"Đã điền cho 1 trên A B",
+				"Đã điền cho 12 trên A B",
+			],
+			"crm:sheet.restore": ["Khôi phục 1", "Khôi phục 12"],
+			"crm:sheet.archive": ["Lưu trữ 1", "Lưu trữ 12"],
+			"crm:sheet.deleteForever": ["Xoá vĩnh viễn 1", "Xoá vĩnh viễn 12"],
+			"crm:sheet.fallbackName": ["1 này", "12 này"],
+			"crm:sheet.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
+			"crm:sheet.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
+			"crm:sheet.deletedForever": [
+				"Đã xoá vĩnh viễn 1.",
+				"Đã xoá vĩnh viễn 12.",
+			],
+			"crm:web.views": ["1 lượt xem", "12 lượt xem"],
+			"record-sheet:deal.nobodyAttached": [
+				"Chưa ai từ 1 được gắn vào.",
+				"Chưa ai từ 12 được gắn vào.",
+			],
+			"record-sheet:deal.noRate": [
+				"Không có tỷ giá 1 — không tính vào tổng",
+				"Không có tỷ giá 12 — không tính vào tổng",
+			],
 		} satisfies Record<string, [string, string]>;
 
 		const ham: string[] = [];
@@ -264,5 +290,37 @@ describe("kho chuoi cua vong ③a", () => {
 			expect(f("1", "A", "B")).toBe(mot);
 			expect(f("12", "A", "B")).toBe(nhieu);
 		}
+	});
+});
+
+describe("khoa chet", () => {
+	const NGUON = readdirSync(join(import.meta.dir, ".."), {
+		recursive: true,
+		withFileTypes: true,
+	})
+		.filter(
+			(muc) =>
+				muc.isFile() &&
+				/\.tsx?$/.test(muc.name) &&
+				!muc.parentPath.includes("/lib/messages") &&
+				!muc.parentPath.includes("/test") &&
+				!muc.parentPath.includes("/node_modules") &&
+				!muc.parentPath.includes("/.next"),
+		)
+		.map((muc) => readFileSync(join(muc.parentPath, muc.name), "utf8"))
+		.join("\n");
+
+	it("moi khoa da khai deu co it nhat mot cho goi trong apps/app", () => {
+		const chet: string[] = [];
+
+		for (const [ten, lay] of MODULE) {
+			for (const [duong] of phang(lay("en"))) {
+				const la = duong.split(".").pop() ?? "";
+				const goi = new RegExp(`\\.${la}\\b|"${la}"|'${la}'`);
+				if (!goi.test(NGUON)) chet.push(`${ten}.${duong}`);
+			}
+		}
+
+		expect(chet.sort()).toEqual([]);
 	});
 });

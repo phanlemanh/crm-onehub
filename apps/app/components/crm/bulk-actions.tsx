@@ -153,7 +153,7 @@ export function BulkDeleteDialog({
 				<AlertDialogFooter>
 					<AlertDialogCancel>{m.bulkMenu.cancel}</AlertDialogCancel>
 					<AlertDialogAction variant="destructive" onClick={onConfirm}>
-						Delete
+						{m.bulkMenu.confirmDelete}
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>

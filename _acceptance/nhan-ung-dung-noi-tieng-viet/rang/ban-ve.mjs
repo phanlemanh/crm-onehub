@@ -3,6 +3,9 @@ import { appendFileSync, readFileSync } from "node:fs";
 import { z } from "../../../packages/validation/node_modules/zod/index.js";
 import puppeteer from "puppeteer-core";
 import { BE_MAT, CHUA_MO } from "./be-mat.mjs";
+
+const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
+const CHO_VE = Number(process.env.CHO_VE ?? 90000);
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const APP = process.env.APP_URL ?? "http://localhost:3000";
 const API = process.env.API_URL ?? "http://localhost:3001";
@@ -440,16 +443,16 @@ async function ve(browser, cookie, locale, doc, arg) {
 	);
 	await page.goto(`${APP}/${SLUG}/${DUONG}${TRANG}`, {
 		waitUntil: "networkidle0",
-		timeout: 60000,
+		timeout: CHO_TAI,
 	});
-	await page.waitForSelector('[data-slot="table-head"]', { timeout: 30000 });
+	await page.waitForSelector('[data-slot="table-head"]', { timeout: CHO_VE });
 	if (CHO_DONG) {
 		await page.waitForFunction(
 			() =>
 				document.querySelectorAll(
 					'[data-slot="table-body"] [data-slot="table-row"]',
 				).length > 0,
-			{ timeout: 30000 },
+			{ timeout: CHO_VE },
 		);
 	} else {
 		await new Promise((r) => setTimeout(r, 1500));
@@ -491,9 +494,9 @@ try {
 		);
 		await page.goto(`${APP}/${SLUG}/${DUONG}`, {
 			waitUntil: "networkidle0",
-			timeout: 60000,
+			timeout: CHO_TAI,
 		});
-		await page.waitForSelector('[data-slot="table-head"]', { timeout: 30000 });
+		await page.waitForSelector('[data-slot="table-head"]', { timeout: CHO_VE });
 		let buoc = 0;
 		let toi = null;
 		for (let i = 1; i <= 30; i += 1) {
@@ -593,11 +596,11 @@ try {
 					{ name: cookie.name, value: cookie.value, domain: "localhost", path: "/" },
 					{ name: "lang", value: locale, domain: "localhost", path: "/" },
 				);
-				await page.goto(`${APP}/${SLUG}/${man}`, { waitUntil: "networkidle0", timeout: 60000 });
-				await page.waitForSelector('[data-slot="table-head"]', { timeout: 30000 });
+				await page.goto(`${APP}/${SLUG}/${man}`, { waitUntil: "networkidle0", timeout: CHO_TAI });
+				await page.waitForSelector('[data-slot="table-head"]', { timeout: CHO_VE });
 				await page.waitForFunction(
 					() => document.querySelectorAll('[data-slot="table-body"] [data-slot="table-row"]').length > 0,
-					{ timeout: 30000 },
+					{ timeout: CHO_VE },
 				);
 				const lang = await page.evaluate(() => document.documentElement.lang);
 				const chu = [...((await page.evaluate(DOC_CHU, scope)) ?? [])];
@@ -672,7 +675,7 @@ try {
 				const daMo = [];
 				for (const tab of hs.tabs) {
 					const url = `${APP}/${SLUG}/${hs.man}?record=${hs.loai}:${id[hs.loai]}&tab=${tab}`;
-					await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });
+					await page.goto(url, { waitUntil: "networkidle0", timeout: CHO_TAI });
 					await new Promise((r) => setTimeout(r, 1800));
 					await page.evaluate(() => {
 						for (const el of document.querySelectorAll("*")) {
@@ -733,7 +736,7 @@ try {
 			);
 			await page.goto(
 				`${APP}/${SLUG}/companies?record=company:${id.company}&tab=activity&timeline=${tab}`,
-				{ waitUntil: "networkidle0", timeout: 60000 },
+				{ waitUntil: "networkidle0", timeout: CHO_TAI },
 			);
 			await new Promise((r) => setTimeout(r, 1600));
 		};
@@ -906,7 +909,7 @@ try {
 			]) {
 				await page.goto(`${APP}/${SLUG}/${man}${tham}`, {
 					waitUntil: "networkidle0",
-					timeout: 60000,
+					timeout: CHO_TAI,
 				});
 				await new Promise((r) => setTimeout(r, 1500));
 				const phan = await page.evaluate(DOC_TRO_NANG, [
@@ -960,10 +963,10 @@ try {
 		);
 		await page.goto(`${APP}/${SLUG}/companies`, {
 			waitUntil: "networkidle0",
-			timeout: 60000,
+			timeout: CHO_TAI,
 		});
 		await page.waitForSelector('[data-slot="table-body"] [data-slot="table-row"]', {
-			timeout: 30000,
+			timeout: CHO_VE,
 		});
 
 		const o = await page.$$('[data-slot="table-body"] [data-slot="table-row"] [role="checkbox"]');

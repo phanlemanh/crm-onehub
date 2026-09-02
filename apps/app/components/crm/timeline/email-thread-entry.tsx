@@ -6,11 +6,13 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "@crm/ui/components/accordion";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { ThreadMessage } from "@crm/ui/components/thread-message";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { LocalDateTime } from "@/components/local-date-time";
+import { crmMessages } from "@/lib/messages/crm";
 import { useTRPC } from "@/lib/trpc/client";
 
 const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
@@ -28,6 +30,7 @@ export function EmailThreadEntry({
 	messageCount: number;
 }) {
 	const trpc = useTRPC();
+	const m = crmMessages(useLocale());
 	const [opened, setOpened] = useState(false);
 
 	const thread = useQuery({
@@ -45,7 +48,9 @@ export function EmailThreadEntry({
 		>
 			<AccordionItem value={threadId}>
 				<AccordionTrigger variant="subtle">
-					{messageCount === 1 ? "1 message" : `${messageCount} messages`}
+					{messageCount === 1
+						? m.timeline.oneMessage
+						: m.timeline.messages(String(messageCount))}
 				</AccordionTrigger>
 
 				<AccordionContent>

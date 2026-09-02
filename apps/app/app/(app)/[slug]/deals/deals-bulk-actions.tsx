@@ -233,13 +233,10 @@ export function DealsBulkActions({
 					<DialogHeader>
 						<DialogTitle>
 							{closing === "CLOSED_LOST"
-								? `Close ${deals(ids.length, locale)} as lost`
-								: `Mark ${deals(ids.length, locale)} as unqualified`}
+								? m.bulk.closeLost(deals(ids.length, locale))
+								: m.bulk.markUnqualified(deals(ids.length, locale))}
 						</DialogTitle>
-						<DialogDescription>
-							The same reason goes on every one of them, so keep it to what they
-							have in common.
-						</DialogDescription>
+						<DialogDescription>{m.bulk.sameReason}</DialogDescription>
 					</DialogHeader>
 
 					<form
@@ -252,12 +249,12 @@ export function DealsBulkActions({
 						}}
 					>
 						<Field>
-							<FieldLabel htmlFor={reasonId}>Reason</FieldLabel>
+							<FieldLabel htmlFor={reasonId}>{c.close.reason}</FieldLabel>
 							<Textarea
 								id={reasonId}
 								value={reason}
 								onChange={(event) => setReason(event.target.value)}
-								placeholder="Budget pulled for the quarter"
+								placeholder={m.bulk.reasonPlaceholder}
 								rows={3}
 							/>
 						</Field>

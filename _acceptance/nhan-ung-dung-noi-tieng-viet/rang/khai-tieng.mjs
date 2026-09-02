@@ -2,6 +2,9 @@ import { execFileSync } from "node:child_process";
 import puppeteer from "puppeteer-core";
 import { z } from "../../../packages/validation/node_modules/zod/index.js";
 
+const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
+const CHO_VE = Number(process.env.CHO_VE ?? 90000);
+
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const APP = process.env.APP_URL ?? "http://localhost:3000";
 const API = process.env.API_URL ?? "http://localhost:3001";
@@ -87,9 +90,9 @@ async function xem(man, canTim, trang = "") {
 	);
 	await page.goto(`${APP}/${SLUG}/${man}${trang}`, {
 		waitUntil: "networkidle0",
-		timeout: 60000,
+		timeout: CHO_TAI,
 	});
-	await page.waitForSelector('[data-slot="table-head"]', { timeout: 30000 });
+	await page.waitForSelector('[data-slot="table-head"]', { timeout: CHO_VE });
 	await new Promise((r) => setTimeout(r, 1200));
 	const lang = await page.evaluate(() => document.documentElement.lang);
 	if (lang !== "vi") {

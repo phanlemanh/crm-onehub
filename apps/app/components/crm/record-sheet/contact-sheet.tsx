@@ -164,7 +164,9 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 						{contact.isPrimaryContact ? (
 							<StatusIndicator
 								tone="success"
-								label={`Primary contact at ${contact.company?.name ?? "this company"}`}
+								label={m.contact.primaryAt(
+									contact.company?.name ?? m.contact.thisCompany,
+								)}
 							/>
 						) : null}
 						{contact.enrichmentStatus !== "COMPLETE" ? (
@@ -502,11 +504,14 @@ function Background({ brief }: { brief: NonNullable<Contact["brief"]> }) {
 }
 
 function PreviousRoles({ roles }: { roles: string[] }) {
+	const m = recordSheetMessages(useLocale());
 	return (
 		<Accordion type="single" collapsible>
 			<AccordionItem value="previous">
 				<AccordionTrigger variant="subtle">
-					{roles.length === 1 ? "1 role" : `${roles.length} roles`}
+					{roles.length === 1
+						? m.contact.oneRole
+						: m.contact.roles(String(roles.length))}
 				</AccordionTrigger>
 				<AccordionContent>
 					<ul className="space-y-1">
@@ -545,10 +550,10 @@ function WeKnowThem({
 							{" · "}
 							{lastReplyAt ? (
 								<>
-									last reply <LocalRelativeDate date={lastReplyAt} />
+									{m.contact.lastReply} <LocalRelativeDate date={lastReplyAt} />
 								</>
 							) : (
-								`${first} has never replied`
+								m.contact.neverReplied(first)
 							)}
 						</span>
 					</DetailSheetProperty>
@@ -619,7 +624,7 @@ function ContactDeals({ contact }: { contact: Contact }) {
 			<DetailSheetEmpty
 				icon={Partnership}
 				title={m.contact.notOnDealsTitle}
-				description={`${contactName(contact)} is not attached to anything being sold yet. Deals are opened on the company, then people are added to them.`}
+				description={m.contact.notOnDealsBody(contactName(contact))}
 			/>
 		);
 	}

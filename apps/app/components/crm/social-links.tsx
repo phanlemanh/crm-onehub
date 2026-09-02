@@ -1,6 +1,7 @@
 import { Button } from "@crm/ui/components/button";
 import type { CarbonIcon } from "@crm/ui/components/icon";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	type CompanyLinks,
 	type ContactLinks,
@@ -35,7 +36,7 @@ function SocialLinks({
 }
 
 export function CompanySocials({ company }: { company: CompanyLinks }) {
-	return <SocialLinks rows={companySocialLinks(company)} />;
+	return <SocialLinks rows={companySocialLinks(company, useLocale())} />;
 }
 
 export function ContactSocials({ contact }: { contact: ContactLinks }) {

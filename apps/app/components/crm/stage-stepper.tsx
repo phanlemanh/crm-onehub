@@ -1,11 +1,13 @@
 "use client";
 
 import { DealStage } from "@crm/db/enums";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { cn } from "@crm/ui/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { DealStageIndicator } from "@/components/crm/deal-stage";
 import { dealStageLabel, isClosedStage, OPEN_STAGES } from "@/lib/deal-stage";
+import { crmMessages } from "@/lib/messages/crm";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
@@ -20,12 +22,13 @@ export function StageStepper({
 }) {
 	const trpc = useTRPC();
 	const cache = useCrmCache();
+	const m = crmMessages(useLocale());
 
 	const setStage = useMutation(
 		trpc.deals.setStage.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.deal(dealId);
-				if (result.changed) toast.success("Stage updated.");
+				if (result.changed) toast.success(m.close.stageUpdated);
 			},
 			onError: (error) => toast.error(error.message),
 		}),
