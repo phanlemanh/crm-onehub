@@ -29,6 +29,20 @@ cấm sửa component dùng chung vẽ ra màn hình đó. Vòng ② mở đư�
 lại S4 ngay sau đó, và AC-6 lúc ấy bỏ được mục trừ hai nhãn trình-đọc-màn-hình.
 Phần đã làm vẫn nằm trong nhánh và vẫn xanh ở mười phép đo còn lại.
 
+**Chạy lại S4 ngày 2026-09-02, sau khi vòng ② ký Cổng 2.** Hai chỗ hợp đồng
+đổi, và cả hai đổi vì thế giới đổi chứ không vì kết quả đổi:
+
+- **AC-6 bỏ mục trừ.** Vòng ② đã dịch hai nhãn trình-đọc-màn-hình, nên câu trừ
+  không còn mô tả cái gì có thật.
+- **AC-9 GIỮ NGUYÊN CÂU CHỮ**, dù nay nó nghịch với AC-7 của vòng ② mà người đã
+  ký: AC-9 cấm tiêu đề cột bị cắt, AC-7 của vòng ② lại đòi tiêu đề cột cắt kèm
+  dấu ba chấm. Không viết lại AC-9 cho vừa kết quả. Báo cáo bằng chứng đo cả hai
+  cách đọc và để người chọn ở Cổng 2.
+
+Ba nhãn cột vòng người lạ lái thử nêu — `Cá nhân` · `Thoả thuận mở` · `Bổ sung`
+— là chữ vòng này chốt, nên vòng này nhận lại. Danh sách mười nhãn ở mục Notes
+đã cập nhật.
+
 Source input: prompt · `_acceptance/tieng-viet-cho-crm/opportunity.md`
 
 ## Criteria
@@ -38,7 +52,7 @@ Source input: prompt · `_acceptance/tieng-viet-cho-crm/opportunity.md`
 - AC-3: Given người dùng đã chọn tiếng Việt, When trang được máy chủ dựng, Then thẻ `<html lang>` mang giá trị `vi` NGAY Ở LƯỢT VẼ ĐẦU, không phải sau một lượt vẽ lại.
 - AC-4: Given lựa chọn ngôn ngữ đã lưu mang một giá trị không phải thẻ ngôn ngữ hợp lệ, When người mở CRM, Then màn hình rơi về tiếng Anh và không có lỗi nào nổ.
 - AC-5: Given người dùng đổi sang tiếng Việt rồi đóng trình duyệt, When họ quay lại, Then màn hình vẫn tiếng Việt.
-- AC-6: Given người dùng đang ở tiếng Việt, When họ mở màn công ty, Then mọi chữ NHÌN THẤY của giao diện là tiếng Việt — kể cả ba chuỗi bảng dùng chung nhận từ ngoài vào (`empty`, `facet.empty`, `tabs.allLabel`) — TRỪ hai nhãn cho trình đọc màn hình còn khoá cứng trong bảng dùng chung (`"Select every row on this page"` và chữ `Select` trong nhãn từng dòng); hai chuỗi đó là việc vòng ②.
+- AC-6: Given người dùng đang ở tiếng Việt, When họ mở màn công ty, Then mọi chữ NHÌN THẤY của giao diện là tiếng Việt — kể cả ba chuỗi bảng dùng chung nhận từ ngoài vào (`empty`, `facet.empty`, `tabs.allLabel`). Mục trừ hai nhãn trình-đọc-màn-hình của bản ký ngày 2026-09-01 đã bỏ: vòng ② đóng cả hai, nên tiêu chí này nay không còn ngoại lệ nào.
 - AC-7: Given một công ty có tên do người nhập, When màn hình hiện ở tiếng Việt, Then tên đó giữ nguyên như đã nhập VÀ được đánh dấu để trình duyệt không tự dịch.
 - AC-8: Given người dùng đang ở tiếng Việt, When màn công ty hiện ngày và số, Then chúng theo quy ước tiếng Việt, và trong phạm vi vòng này không còn chỗ nào khai cứng một vùng.
 - AC-9: Given chuỗi tiếng Việt dài hơn chuỗi tiếng Anh tương ứng, When màn công ty hiện ở bề rộng 768px, Then không TIÊU ĐỀ CỘT nào bị cắt cụt; ô dữ liệu dài vẫn được phép cắt kèm dấu ba chấm.
@@ -90,9 +104,34 @@ nói về hiển thị), `docs/design.md`, `CONTEXT.md`, và chuẩn giao diện
 kho khai ở `feature_loop.ui_standards_skill`.
 
 **Nhãn tiếng Việt của mười cột** (chốt theo luật ngắn-theo-ngữ-cảnh trong
-`CONTEXT.md`): Tên · Tên miền · Ngành · Phụ trách · Cá nhân · Thoả thuận mở ·
-Ngày tạo · Hoạt động cuối · Bổ sung · Lưu trữ. Hội đồng phán ở AC-11 chấm đúng
-danh sách này, không chấm chữ chưa ai khai.
+`CONTEXT.md`): Tên · Tên miền · Ngành · Phụ trách · **Số lượng cá nhân** ·
+**Số thoả thuận đang mở** · Ngày tạo · **Hoạt động gần nhất** ·
+**Bổ sung dữ liệu** · **Ngày lưu trữ**. Hội đồng phán ở AC-11 chấm
+đúng danh sách này, không chấm chữ chưa ai khai.
+
+Năm nhãn in đậm đổi ngày 2026-09-02. Ba nhãn đầu đi từ vòng người lạ lái thử
+của vòng ② — cả hai người độc lập nêu đúng ba chữ cũ là chữ họ **phải đi hỏi mới
+hiểu**; hai nhãn còn lại đi từ hội đồng chấm lại. Cách sửa là áp chính luật
+ngắn-theo-ngữ-cảnh với bằng chứng mới, không phải bỏ luật:
+
+- `Cá nhân` và `Thoả thuận mở` đứng trên cột **toàn số**, mà màn hình chưa hề
+  cấp phần nghĩa "bao nhiêu". Bản sửa đầu thêm `Số`; hội đồng bác một nửa. Trong
+  tiếng Việt `số + danh từ` mặc định đọc thành **mã định danh** (số nhà, số tài
+  khoản), nên `Số cá nhân` vẫn sai loại. Đuôi `đang mở` tự chặn cách đọc ấy, nên
+  cột thoả thuận giữ `Số`, còn cột cá nhân phải dùng `Số lượng`.
+- `Bổ sung` trả về dạng dài. `CONTEXT.md` lấy chính cặp này làm ví dụ cho luật,
+  với lý lẽ rằng "đang ở trong bảng dữ liệu" đã cấp chữ "dữ liệu". Hai người lạ
+  bác đúng câu đó. Hội đồng bác thêm một tầng: `Bổ sung dữ liệu` là **cụm động
+  từ đứng trên cột không chứa hành động**, nên người đọc hiểu thành một nút bấm.
+  Cùng lỗi ấy ở `Lưu trữ`, và `Lưu trữ` nhận lại danh từ đứng trước:
+  `Ngày lưu trữ`, cho khớp `Ngày tạo`. Cột bổ sung thì KHÔNG: bản thử
+  `Trạng thái bổ sung dữ liệu` đo ra 141,7px trong một ô rộng nhất 83,8px, tức
+  **không vừa ở bất kỳ bề rộng nào** — nên tiêu đề giữ `Bổ sung dữ liệu`, còn
+  dạng dài `Trạng thái bổ sung dữ liệu` sống ở nhãn dùng trong menu, chỗ độ dài
+  không tốn gì. Hội đồng chia 2–1 ở nhãn này; số đo là thứ phá thế chia.
+- `Hoạt động cuối` đổi thành `Hoạt động gần nhất`. Cả ba người chấm nêu cùng một
+  điều: `cuối` trong tiếng Việt là *cuối cùng, đã hết*, và với nhân viên quan hệ
+  đối tác thì "quan hệ đã dừng" là đúng thứ nghĩa không được hiểu nhầm.
 
 **Hợp đồng cookie:** `Max-Age` một năm · `Path=/` · `SameSite=Lax`. Không khai
 thì cookie thành cookie-phiên, và lựa chọn mất khi người tắt máy — một phép đo

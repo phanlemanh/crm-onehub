@@ -40,7 +40,12 @@ case "$CHAN" in
     echo "-- chieu do: ban sao bo buoc kiem hop le"
     sed 's/if (isLocale(cookieValue)) return cookieValue;/if (cookieValue !== undefined) return cookieValue as Locale;/' \
       "$RESOLVE" > "$FIX/resolve.ts"
-    cp "$ROOT/apps/app/lib/locale/locale.ts" "$FIX/locale.ts"
+    sed "s|@crm/ui/lib/locale|$ROOT/packages/ui/src/lib/locale|" \
+      "$ROOT/apps/app/lib/locale/locale.ts" > "$FIX/locale.ts"
+    if grep -q '@crm/ui' "$FIX/locale.ts"; then
+      echo "RANG CUN: ban sao van con duong nhap khong giai duoc ngoai kho goi"
+      exit 1
+    fi
     DIFF_N=$(diff "$RESOLVE" "$FIX/resolve.ts" | grep -c '^[<>]')
     if [ "$DIFF_N" -ne 2 ]; then
       echo "RANG CUN: dot bien lech $DIFF_N dong, ky vong 2"
@@ -135,6 +140,33 @@ process.exit(bad === 0 ? 0 : 1);
       exit 1
     fi
     echo "    0 cho khai cung vung"
+
+    echo "-- chieu duong C: dem cho dung dinh dang MA KHONG truyen vung nao"
+    VANG=$(grep -rnoE 'new Intl\.(NumberFormat|DateTimeFormat|RelativeTimeFormat|ListFormat|PluralRules|Collator)\([^,)]*' \
+      "$ROOT/apps/app" "$ROOT/packages/ui/src/lib" --include=*.ts --include=*.tsx 2>/dev/null \
+      | grep -E '\((undefined|void 0|"[^"]*"|'"'"'[^'"'"']*'"'"')?$')
+    M=$(printf '%s' "$VANG" | grep -c . | tr -d ' ')
+    if [ "$M" -ne 0 ]; then
+      echo "$VANG" | sed 's/^/      /'
+      echo "RANG DO: con $M cho dung Intl ma khong truyen vung — no in theo vung cua may, khong theo vung nguoi doc chon"
+      exit 1
+    fi
+    echo "    0 cho dung Intl khong truyen vung"
+
+    echo "-- chieu do B: ban sao bo vung khoi mot cho dung"
+    sed 's/new Intl.DateTimeFormat(locale, options)/new Intl.DateTimeFormat(undefined, options)/' \
+      "$FORMAT" > "$FIX/format-vung.ts"
+    DIFF_V=$(diff "$FORMAT" "$FIX/format-vung.ts" | grep -c '^[<>]')
+    if [ "$DIFF_V" -ne 2 ]; then
+      echo "RANG CUN: dot bien lech $DIFF_V dong, ky vong 2"
+      exit 1
+    fi
+    if ! grep -rnoE 'new Intl\.[A-Za-z]+\([^,)]*' "$FIX/format-vung.ts" \
+      | grep -qE '\(undefined$'; then
+      echo "RANG CUN: bo vung khoi mot cho dung ma phep dem VAN khong thay"
+      exit 1
+    fi
+    echo "    ban sao mat vung -> phep dem thay ngay"
 
     echo "-- chieu do: ban sao tra formatDay ve en-US"
     sed 's|: (value ?? "—");|: (value ?? "—");|; s|dateFormat(locale, {|dateFormat("en", {|' "$FORMAT" > "$FIX/format.ts"
