@@ -1,4 +1,5 @@
 import { describe, expect, it } from "bun:test";
+import { companyMessages } from "@/lib/messages/companies";
 import { contactMessages } from "@/lib/messages/contacts";
 import { crmMessages } from "@/lib/messages/crm";
 import { dealMessages } from "@/lib/messages/deals";
@@ -8,6 +9,7 @@ const DAU_TIENG_VIET =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
 
 const MODULE = [
+	["companies", companyMessages],
 	["contacts", contactMessages],
 	["deals", dealMessages],
 	["record-sheet", recordSheetMessages],
@@ -32,6 +34,7 @@ const KHONG_DAU = new Set([
 	"headers.emails",
 	"tabs.emails",
 	"contact.emails",
+	"create.email",
 	"standard.email",
 	"standard.website",
 	"standard.linkedin",
@@ -92,6 +95,18 @@ describe("kho chuoi cua vong ③a", () => {
 
 	it("moi ham ghep bien co khang dinh, va so ham bang so khang dinh", () => {
 		const GHIM = {
+			"companies:bulk.reassigned": [
+				"Đã đổi người phụ trách cho 1.",
+				"Đã đổi người phụ trách cho 12.",
+			],
+			"companies:bulk.enriching": [
+				"Đang tra cứu 1 — bảng sẽ tự cập nhật.",
+				"Đang tra cứu 12 — bảng sẽ tự cập nhật.",
+			],
+			"companies:bulk.archived": ["Đã lưu trữ 1.", "Đã lưu trữ 12."],
+			"companies:bulk.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
+			"companies:bulk.deleted": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
+			"companies:bulk.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
 			"contacts:created": ["Đã thêm 1.", "Đã thêm 12."],
 			"contacts:bulk.reassigned": [
 				"Đã đổi người phụ trách cho 1.",

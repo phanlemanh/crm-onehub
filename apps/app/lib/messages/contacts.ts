@@ -1,6 +1,7 @@
 import type { Locale } from "@crm/ui/lib/locale";
 
 const en = {
+	noun: "contact",
 	title: "Contacts",
 	description: "Everyone in the pipeline.",
 	headers: {
@@ -70,6 +71,7 @@ const en = {
 export type ContactMessages = typeof en;
 
 const vi = {
+	noun: "cá nhân",
 	title: "Cá nhân",
 	description: "Mọi cá nhân trong mạng lưới.",
 	headers: {

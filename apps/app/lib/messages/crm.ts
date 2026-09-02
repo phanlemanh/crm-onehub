@@ -196,6 +196,16 @@ const en = {
 		companies: "Companies",
 		deals: "Deals",
 	},
+	bulk: {
+		restore: "Restore",
+		deleteForever: "Delete forever",
+		archive: "Archive",
+		reEnrich: "Re-enrich",
+		nobody: "Nobody",
+		moveToCompany: "Move to company",
+		noCompany: "No company",
+		cannotUndo: "This cannot be undone.",
+	},
 	views: {
 		saved: "View saved.",
 		deleted: "View deleted.",
@@ -405,6 +415,16 @@ const vi = {
 		contacts: "Cá nhân",
 		companies: "Công ty",
 		deals: "Thoả thuận",
+	},
+	bulk: {
+		restore: "Khôi phục",
+		deleteForever: "Xoá vĩnh viễn",
+		archive: "Lưu trữ",
+		reEnrich: "Tra cứu lại",
+		nobody: "Không ai",
+		moveToCompany: "Chuyển sang công ty",
+		noCompany: "Chưa thuộc công ty nào",
+		cannotUndo: "Việc này không hoàn tác được.",
 	},
 	views: {
 		saved: "Đã lưu bảng xem.",

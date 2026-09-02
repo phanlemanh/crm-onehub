@@ -26,10 +26,20 @@ const MESSAGES = {
 			enrichment: "Enrichment",
 			activity: "Activity",
 		},
+		noun: "company",
+		nounPlural: "companies",
 		title: "Companies",
 		description: "Every company in the network.",
 		empty: "No companies match this view.",
 		emptyArchived: "No archived companies.",
+		bulk: {
+			reassigned: (n: string) => `${n} reassigned.`,
+			enriching: (n: string) => `Looking up ${n} — the table will update.`,
+			archived: (n: string) => `${n} archived.`,
+			restored: (n: string) => `${n} restored.`,
+			deleted: (n: string) => `${n} deleted forever.`,
+			confirmDelete: (n: string) => `Delete ${n} forever?`,
+		},
 	},
 	vi: {
 		headers: {
@@ -56,10 +66,20 @@ const MESSAGES = {
 			enrichment: "Bổ sung dữ liệu",
 			activity: "Hoạt động",
 		},
+		noun: "công ty",
+		nounPlural: "công ty",
 		title: "Công ty",
 		description: "Mọi công ty trong mạng lưới.",
 		empty: "Chưa có công ty nào khớp bộ lọc này.",
 		emptyArchived: "Chưa có công ty nào đã lưu trữ.",
+		bulk: {
+			reassigned: (n: string) => `Đã đổi người phụ trách cho ${n}.`,
+			enriching: (n: string) => `Đang tra cứu ${n} — bảng sẽ tự cập nhật.`,
+			archived: (n: string) => `Đã lưu trữ ${n}.`,
+			restored: (n: string) => `Đã khôi phục ${n}.`,
+			deleted: (n: string) => `Đã xoá vĩnh viễn ${n}.`,
+			confirmDelete: (n: string) => `Xoá vĩnh viễn ${n}?`,
+		},
 	},
 } as const;
 
