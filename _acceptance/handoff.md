@@ -8,7 +8,7 @@ việc gì trong hàng đợi.
 
 - `origin` = `phanlemanh/crm-onehub` (riêng tư), nhánh làm việc `onehub`
 - `upstream` = `trycompai/crm` (chỉ đọc, MIT) · `release` = bản gương, không sửa
-- **25 commit chưa đẩy** lên `origin` tính đến cuối phiên này
+- **27 commit chưa đẩy** lên `origin` tính đến cuối phiên này
 
 Đã gửi lên hãng, đang mở: PR `trycompai/crm#194` (vá `dev-session`), issue `#195`
 (nay đã biết là **không phải test phập phù** — xem mục bẫy).
