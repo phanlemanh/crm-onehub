@@ -1,20 +1,20 @@
 "use client";
 
+import { useLocale } from "@crm/ui/components/locale-provider";
+import type { Locale } from "@crm/ui/lib/locale";
 import { InlineScript } from "./inline-script";
 
 const DAY_MS = 86_400_000;
 const MINUTE_MS = 60_000;
 const HOUR_MS = 60 * MINUTE_MS;
 const dateTimeFormatters = new Map<string, Intl.DateTimeFormat>();
-const relativeDateFormatter = new Intl.RelativeTimeFormat(undefined, {
-	numeric: "auto",
-});
+const relativeDateFormatters = new Map<string, Intl.RelativeTimeFormat>();
 const LOCAL_DAY_OPTIONS = {
 	month: "short",
 	day: "numeric",
 	year: "numeric",
 } as const;
-const LOCAL_DATE_TIME_SCRIPT = `{var s="time[data-local-date-kind]",f=function(n){try{var k=n.dataset.localDateKind,v=n.dataset.localDateValue,e=n.dataset.localDateEnd,o=JSON.parse(n.dataset.localDateOptions||"{}"),d=new Date(v),t=d.getTime(),x=Date.now()-t,a=Math.abs(x),r;if(k==="date-time")r=new Intl.DateTimeFormat(void 0,o).format(d);else if(k==="date-range")r=new Intl.DateTimeFormat(void 0,o).formatRange(d,new Date(e));else if(k==="day")r=new Intl.DateTimeFormat(void 0,o).format(new Date(v+"T00:00:00"));else if(k==="relative-date"){var z=new Date(),q=(Date.UTC(z.getFullYear(),z.getMonth(),z.getDate())-Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()))/${DAY_MS};r=new Intl.RelativeTimeFormat(void 0,{numeric:"auto"}).format(-q,"day")}else if(!Number.isFinite(t))r="—";else if(a<${MINUTE_MS})r="just now";else if(a>=${30 * DAY_MS})r=new Intl.DateTimeFormat(void 0,{month:"short",day:"numeric"}).format(d);else{var u=a<${HOUR_MS}?Math.floor(a/${MINUTE_MS})+"m":a<${DAY_MS}?Math.floor(a/${HOUR_MS})+"h":Math.floor(a/${DAY_MS})+"d";r=x<0?"in "+u:u+" ago"}n.textContent=r}catch{}};var c=function(r){if(r.nodeType===1&&r.matches&&r.matches(s))f(r);if(r.querySelectorAll)r.querySelectorAll(s).forEach(f)};c(document);new MutationObserver(function(m){m.forEach(function(r){r.addedNodes.forEach(c)})}).observe(document.documentElement,{childList:true,subtree:true})}`;
+const LOCAL_DATE_TIME_SCRIPT = `{var g=document.documentElement.lang||void 0,s="time[data-local-date-kind]",f=function(n){try{var k=n.dataset.localDateKind,v=n.dataset.localDateValue,e=n.dataset.localDateEnd,o=JSON.parse(n.dataset.localDateOptions||"{}"),d=new Date(v),t=d.getTime(),x=Date.now()-t,a=Math.abs(x),r;if(k==="date-time")r=new Intl.DateTimeFormat(g,o).format(d);else if(k==="date-range")r=new Intl.DateTimeFormat(g,o).formatRange(d,new Date(e));else if(k==="day")r=new Intl.DateTimeFormat(g,o).format(new Date(v+"T00:00:00"));else if(k==="relative-date"){var z=new Date(),q=(Date.UTC(z.getFullYear(),z.getMonth(),z.getDate())-Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()))/${DAY_MS};r=new Intl.RelativeTimeFormat(g,{numeric:"auto"}).format(-q,"day")}else if(!Number.isFinite(t))r="—";else if(a<${MINUTE_MS})r="just now";else if(a>=${30 * DAY_MS})r=new Intl.DateTimeFormat(g,{month:"short",day:"numeric"}).format(d);else{var u=a<${HOUR_MS}?Math.floor(a/${MINUTE_MS})+"m":a<${DAY_MS}?Math.floor(a/${HOUR_MS})+"h":Math.floor(a/${DAY_MS})+"d";r=x<0?"in "+u:u+" ago"}n.textContent=r}catch{}};var c=function(r){if(r.nodeType===1&&r.matches&&r.matches(s))f(r);if(r.querySelectorAll)r.querySelectorAll(s).forEach(f)};c(document);new MutationObserver(function(m){m.forEach(function(r){r.addedNodes.forEach(c)})}).observe(document.documentElement,{childList:true,subtree:true})}`;
 
 export function LocalDateTime({
 	date,
@@ -23,12 +23,13 @@ export function LocalDateTime({
 	date: string;
 	options: Intl.DateTimeFormatOptions;
 }) {
+	const locale = useLocale();
 	return (
 		<LocalTime
 			kind="date-time"
 			date={date}
 			options={options}
-			fallback={getDateTimeFormatter(options).format(new Date(date))}
+			fallback={getDateTimeFormatter(locale, options).format(new Date(date))}
 		/>
 	);
 }
@@ -42,13 +43,14 @@ export function LocalDateTimeRange({
 	end: string;
 	options: Intl.DateTimeFormatOptions;
 }) {
+	const locale = useLocale();
 	return (
 		<LocalTime
 			kind="date-range"
 			date={start}
 			end={end}
 			options={options}
-			fallback={getDateTimeFormatter(options).formatRange(
+			fallback={getDateTimeFormatter(locale, options).formatRange(
 				new Date(start),
 				new Date(end),
 			)}
@@ -57,33 +59,38 @@ export function LocalDateTimeRange({
 }
 
 export function LocalRelativeDate({ date }: { date: string }) {
+	const locale = useLocale();
 	return (
 		<LocalTime
 			kind="relative-date"
 			date={date}
-			fallback={formatRelativeDate(date)}
+			fallback={formatRelativeDate(date, locale)}
 		/>
 	);
 }
 
 export function LocalRelativeTime({ date }: { date: string }) {
+	const locale = useLocale();
 	return (
 		<LocalTime
 			kind="relative-time"
 			date={date}
-			fallback={formatRelativeTime(date)}
+			fallback={formatRelativeTime(date, locale)}
 		/>
 	);
 }
 
 export function LocalDay({ date }: { date: string }) {
+	const locale = useLocale();
 	const day = date.slice(0, 10);
 	return (
 		<LocalTime
 			kind="day"
 			date={day}
 			options={LOCAL_DAY_OPTIONS}
-			fallback={getDateTimeFormatter(LOCAL_DAY_OPTIONS).format(dayDate(day))}
+			fallback={getDateTimeFormatter(locale, LOCAL_DAY_OPTIONS).format(
+				dayDate(day),
+			)}
 		/>
 	);
 }
@@ -119,23 +126,24 @@ function LocalTime({
 	);
 }
 
-function formatRelativeDate(date: string): string {
+function formatRelativeDate(date: string, locale: Locale): string {
 	const now = new Date();
 	const then = new Date(date);
 	const days = (calendarDay(now) - calendarDay(then)) / DAY_MS;
-	return relativeDateFormatter.format(-days, "day");
+	return getRelativeFormatter(locale).format(-days, "day");
 }
 
-function formatRelativeTime(date: string): string {
+function formatRelativeTime(date: string, locale: Locale): string {
 	const then = new Date(date).getTime();
 	if (!Number.isFinite(then)) return "—";
 	const difference = Date.now() - then;
 	const absolute = Math.abs(difference);
 	if (absolute < MINUTE_MS) return "just now";
 	if (absolute >= 30 * DAY_MS) {
-		return getDateTimeFormatter({ month: "short", day: "numeric" }).format(
-			new Date(then),
-		);
+		return getDateTimeFormatter(locale, {
+			month: "short",
+			day: "numeric",
+		}).format(new Date(then));
 	}
 
 	const distance =
@@ -156,13 +164,23 @@ function dayDate(day: string): Date {
 }
 
 function getDateTimeFormatter(
+	locale: Locale,
 	options: Intl.DateTimeFormatOptions,
 ): Intl.DateTimeFormat {
-	const key = JSON.stringify(options);
+	const key = `${locale}:${JSON.stringify(options)}`;
 	const cached = dateTimeFormatters.get(key);
 	if (cached) return cached;
 
-	const formatter = new Intl.DateTimeFormat(undefined, options);
+	const formatter = new Intl.DateTimeFormat(locale, options);
 	dateTimeFormatters.set(key, formatter);
+	return formatter;
+}
+
+function getRelativeFormatter(locale: Locale): Intl.RelativeTimeFormat {
+	const cached = relativeDateFormatters.get(locale);
+	if (cached) return cached;
+
+	const formatter = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+	relativeDateFormatters.set(locale, formatter);
 	return formatter;
 }
