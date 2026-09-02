@@ -35,7 +35,7 @@ export type TimelineAnchor =
 	| { contactId: string }
 	| { dealId: string };
 
-function tabLabels(m: CrmMessages): Record<TimelineTab, string> {
+function tabLabels(m: CrmMessages) {
 	const t = m.timeline.tabs;
 	return {
 		all: t.all,
@@ -44,12 +44,10 @@ function tabLabels(m: CrmMessages): Record<TimelineTab, string> {
 		meetings: t.meetings,
 		upcoming: t.upcoming,
 		done: t.done,
-	};
+	} satisfies Record<TimelineTab, string>;
 }
 
-function emptyStates(
-	m: CrmMessages,
-): Record<TimelineTab, { title: string; description: string }> {
+function emptyStates(m: CrmMessages) {
 	const e = m.timeline.empty;
 	return {
 		all: { title: e.allTitle, description: e.allBody },
@@ -58,7 +56,7 @@ function emptyStates(
 		meetings: { title: e.meetingsTitle, description: e.meetingsBody },
 		upcoming: { title: e.upcomingTitle, description: e.upcomingBody },
 		done: { title: e.doneTitle, description: e.doneBody },
-	};
+	} satisfies Record<TimelineTab, { title: string; description: string }>;
 }
 
 const EMPTY_ICONS = {
