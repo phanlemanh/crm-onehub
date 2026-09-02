@@ -39,6 +39,15 @@ function phien() {
 	return { name: line.slice(0, eq), value: line.slice(eq + 1) };
 }
 
+async function goiTho(cookie, path, input) {
+	const url = `${API}/api/trpc/${path}?input=${encodeURIComponent(JSON.stringify(input))}`;
+	const res = await fetch(url, {
+		headers: { Cookie: `${cookie.name}=${cookie.value}` },
+	});
+	if (!res.ok) throw new Error(`${path} ${res.status}`);
+	return (await res.json()).result.data;
+}
+
 async function goi(cookie, path, input) {
 	const url = `${API}/api/trpc/${path}?input=${encodeURIComponent(JSON.stringify({ json: input }))}`;
 	const res = await fetch(url, {
@@ -79,10 +88,19 @@ async function idBanGhi(cookie) {
 }
 
 const chu = z.string().trim().min(1);
+const truong = z.object({
+	label: chu,
+	typeLabel: chu.nullish(),
+	agentBrief: chu.nullish(),
+	options: z.array(z.object({ label: chu })).nullish(),
+});
+
+
 const nguoi = z.object({ name: chu.nullish(), email: chu.nullish() }).nullish();
 const ngay = z.string().nullish();
 
 const dongCongTy = z.object({
+	id: chu,
 	name: chu,
 	domain: chu.nullish(),
 	industry: chu.nullish(),
@@ -186,6 +204,39 @@ async function duLieuThu(cookie) {
 			if (Number.isNaN(d.getTime())) continue;
 			for (const locale of ["vi", "en"]) {
 				for (const kieu of KIEU) nguon.add(new Intl.DateTimeFormat(locale, kieu).format(d));
+			}
+		}
+	}
+
+	for (const thucThe of ["COMPANY", "CONTACT", "DEAL"]) {
+		const raw = await goiTho(cookie, "fields.list", {
+			entity: thucThe,
+			includeArchived: false,
+		});
+		for (const t of z.array(truong).parse(raw)) {
+			them(t.label);
+			them(t.typeLabel);
+			them(t.agentBrief);
+			for (const o of t.options ?? []) them(o.label);
+		}
+	}
+
+	const hoatDong = z.object({
+		entries: z.array(
+			z.object({ subject: chu.nullish(), body: chu.nullish() }),
+		),
+	});
+	for (const row of congTy.slice(0, 6)) {
+		const id = row.id;
+		const raw = await goiTho(cookie, "activities.timeline", {
+			companyId: id,
+			filter: "history",
+			limit: 50,
+		});
+		for (const it of hoatDong.parse(raw).entries) {
+			them(it.subject);
+			if (it.body) {
+				for (const dong of it.body.split(/\n+/)) them(dong.trim() || null);
 			}
 		}
 	}

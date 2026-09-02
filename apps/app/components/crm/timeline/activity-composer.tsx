@@ -22,6 +22,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { activityLabel } from "@/lib/activity-presentation";
+import { type CrmMessages, crmMessages } from "@/lib/messages/crm";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { ActivityIcon } from "./activity-icon";
@@ -36,16 +37,20 @@ const DUE_OPTIONS: Intl.DateTimeFormatOptions = {
 	day: "numeric",
 };
 
-const PLACEHOLDER = {
-	NOTE: "Log a note, call, email, meeting or task…",
-	CALL: "What came out of the call?",
-	EMAIL: "What was said?",
-	MEETING: "What came out of the meeting?",
-	TASK: "What needs doing?",
-} satisfies Record<ComposableType, string>;
+function placeholders(m: CrmMessages) {
+	const c = m.timeline.composer;
+	return {
+		NOTE: c.placeholder,
+		CALL: c.call,
+		EMAIL: c.note,
+		MEETING: c.meeting,
+		TASK: c.task,
+	} satisfies Record<ComposableType, string>;
+}
 
 export function ActivityComposer({ anchor }: { anchor: TimelineAnchor }) {
 	const locale = useLocale();
+	const m = crmMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
@@ -67,7 +72,8 @@ export function ActivityComposer({ anchor }: { anchor: TimelineAnchor }) {
 				await cache.activity();
 				reset();
 			},
-			onError: (error) => toast.error(error.message),
+			onError: (error) =>
+				toast.error(error.data ? error.message : m.timeline.composer.failed),
 		}),
 	);
 
@@ -93,8 +99,8 @@ export function ActivityComposer({ anchor }: { anchor: TimelineAnchor }) {
 				<InputGroupTextarea
 					value={draft}
 					onChange={(event) => setDraft(event.target.value)}
-					placeholder={PLACEHOLDER[type]}
-					aria-label="What happened"
+					placeholder={placeholders(m)[type]}
+					aria-label={m.timeline.composer.happened}
 					onKeyDown={(event) => {
 						if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
 							event.preventDefault();
