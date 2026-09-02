@@ -26,7 +26,7 @@ import { ListSearch } from "@/components/data-table/list-search";
 import { SavedViewsMenu } from "@/components/data-table/saved-views-menu";
 import { useTableQuery } from "@/components/data-table/use-table-query";
 import { LocalRelativeTime } from "@/components/local-date-time";
-import { ACTIVITY_FACET_OPTIONS } from "@/lib/activity-recency";
+import { activityFacetOptions } from "@/lib/activity-recency";
 import {
 	ENRICHMENT_POLL_MS,
 	enrichmentFacetOptions,
@@ -242,7 +242,7 @@ export function CompaniesTable() {
 		{
 			id: "activity",
 			label: m.facets.activity,
-			options: ACTIVITY_FACET_OPTIONS.filter(
+			options: activityFacetOptions(locale).filter(
 				(option) => (facetCounts?.activity?.[option.value] ?? 0) > 0,
 			),
 		},
@@ -261,7 +261,7 @@ export function CompaniesTable() {
 	return (
 		<DataTable
 			query={query}
-			search={<ListSearch placeholder="Search companies by name or domain…" />}
+			search={<ListSearch placeholder={m.search} />}
 			actions={
 				<>
 					<SavedViewsMenu entity="COMPANY" table={table} />
@@ -272,7 +272,7 @@ export function CompaniesTable() {
 						onClick={() => setArchived(!input.archived)}
 					>
 						<Archive data-icon="inline-start" />
-						Archived
+						{m.archivedToggle}
 					</Button>
 				</>
 			}

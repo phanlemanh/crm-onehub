@@ -32,6 +32,24 @@ const MESSAGES = {
 		description: "Every company in the network.",
 		empty: "No companies match this view.",
 		emptyArchived: "No archived companies.",
+		search: "Search companies by name or domain…",
+		archivedToggle: "Archived",
+		create: {
+			title: "New company",
+			newButton: "New company",
+			description:
+				"Give it a name and a domain. The agent fills in the logo, description, industry, address and socials.",
+			name: "Name",
+			namePlaceholder: "Stripe",
+			domain: "Domain",
+			domainPlaceholder: "stripe.com",
+			domainHint:
+				"A full URL is fine — it is reduced to the bare host, which has to be unique.",
+			owner: "Owner",
+			unassigned: "Unassigned",
+			submit: "Add company",
+			cancel: "Cancel",
+		},
 		bulk: {
 			reassigned: (n: string) => `${n} reassigned.`,
 			enriching: (n: string) => `Looking up ${n} — the table will update.`,
@@ -72,6 +90,24 @@ const MESSAGES = {
 		description: "Mọi công ty trong mạng lưới.",
 		empty: "Chưa có công ty nào khớp bộ lọc này.",
 		emptyArchived: "Chưa có công ty nào đã lưu trữ.",
+		search: "Tìm công ty theo tên hoặc tên miền…",
+		archivedToggle: "Lưu trữ",
+		create: {
+			title: "Công ty mới",
+			newButton: "Công ty mới",
+			description:
+				"Chỉ cần tên và tên miền. Tác nhân sẽ tự điền logo, mô tả, ngành, địa chỉ và mạng xã hội.",
+			name: "Tên",
+			namePlaceholder: "Đất Xanh",
+			domain: "Tên miền",
+			domainPlaceholder: "datxanh.vn",
+			domainHint:
+				"Dán cả đường dẫn cũng được — hệ thống rút về tên miền gốc, và tên miền đó phải là duy nhất.",
+			owner: "Phụ trách",
+			unassigned: "Chưa giao",
+			submit: "Thêm công ty",
+			cancel: "Huỷ",
+		},
 		bulk: {
 			reassigned: (n: string) => `Đã đổi người phụ trách cho ${n}.`,
 			enriching: (n: string) => `Đang tra cứu ${n} — bảng sẽ tự cập nhật.`,

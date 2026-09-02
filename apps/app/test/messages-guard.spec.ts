@@ -35,6 +35,7 @@ const KHONG_DAU = new Set([
 	"tabs.emails",
 	"contact.emails",
 	"create.email",
+	"create.domainPlaceholder",
 	"standard.email",
 	"standard.website",
 	"standard.linkedin",
@@ -107,6 +108,8 @@ describe("kho chuoi cua vong ③a", () => {
 			"companies:bulk.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
 			"companies:bulk.deleted": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
 			"companies:bulk.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
+			"crm:views.remove": ["Xoá 1", "Xoá 12"],
+			"crm:bulkMenu.leftAlone": ["1 A bị bỏ quaB", "12 A bị bỏ quaB"],
 			"contacts:created": ["Đã thêm 1.", "Đã thêm 12."],
 			"contacts:bulk.reassigned": [
 				"Đã đổi người phụ trách cho 1.",

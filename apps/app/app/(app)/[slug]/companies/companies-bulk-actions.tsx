@@ -53,8 +53,10 @@ export function CompaniesBulkActions({
 		trpc.companies.bulkAssignOwner.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.company();
-				reportBulk(result, (count) =>
-					m.bulk.reassigned(companies(count, locale)),
+				reportBulk(
+					result,
+					(count) => m.bulk.reassigned(companies(count, locale)),
+					locale,
 				);
 				onDone();
 			},
@@ -66,8 +68,10 @@ export function CompaniesBulkActions({
 		trpc.companies.bulkEnrich.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.company();
-				reportBulk(result, (count) =>
-					m.bulk.enriching(companies(count, locale)),
+				reportBulk(
+					result,
+					(count) => m.bulk.enriching(companies(count, locale)),
+					locale,
 				);
 				onDone();
 			},
@@ -79,8 +83,10 @@ export function CompaniesBulkActions({
 		trpc.companies.bulkArchive.mutationOptions({
 			onSuccess: async (result, variables) => {
 				await cache.removedMany({ kind: "company", ids: variables.ids });
-				reportBulk(result, (count) =>
-					m.bulk.archived(companies(count, locale)),
+				reportBulk(
+					result,
+					(count) => m.bulk.archived(companies(count, locale)),
+					locale,
 				);
 				onDone();
 			},
@@ -92,8 +98,10 @@ export function CompaniesBulkActions({
 		trpc.companies.bulkRestore.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.company();
-				reportBulk(result, (count) =>
-					m.bulk.restored(companies(count, locale)),
+				reportBulk(
+					result,
+					(count) => m.bulk.restored(companies(count, locale)),
+					locale,
 				);
 				onDone();
 			},
@@ -105,7 +113,11 @@ export function CompaniesBulkActions({
 		trpc.companies.bulkPurge.mutationOptions({
 			onSuccess: async (result, variables) => {
 				await cache.removedMany({ kind: "company", ids: variables.ids });
-				reportBulk(result, (count) => m.bulk.deleted(companies(count, locale)));
+				reportBulk(
+					result,
+					(count) => m.bulk.deleted(companies(count, locale)),
+					locale,
+				);
 				setConfirming(false);
 				onDone();
 			},

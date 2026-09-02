@@ -207,8 +207,23 @@ const en = {
 		cannotUndo: "This cannot be undone.",
 	},
 	views: {
+		button: "Views",
+		saveCurrent: "Save current view…",
+		mine: "My views",
+		shared: "Shared with the team",
+		dialogTitle: "Save this view",
+		name: "Name",
 		saved: "View saved.",
 		deleted: "View deleted.",
+		remove: (name: string) => `Delete ${name}`,
+	},
+	bulkMenu: {
+		actions: "Actions",
+		assignOwner: "Assign owner",
+		nobodyElse: "Nobody else works here yet.",
+		cancel: "Cancel",
+		leftAlone: (done: string, n: string, why: string) =>
+			`${done} ${n} left alone${why}`,
 	},
 	misc: {
 		nothingChanged: "Nothing changed.",
@@ -427,8 +442,23 @@ const vi = {
 		cannotUndo: "Việc này không hoàn tác được.",
 	},
 	views: {
+		button: "Bảng xem",
+		saveCurrent: "Lưu bảng xem này…",
+		mine: "Bảng của tôi",
+		shared: "Dùng chung cả đội",
+		dialogTitle: "Lưu bảng xem này",
+		name: "Tên",
 		saved: "Đã lưu bảng xem.",
 		deleted: "Đã xoá bảng xem.",
+		remove: (name: string) => `Xoá ${name}`,
+	},
+	bulkMenu: {
+		actions: "Hành động",
+		assignOwner: "Giao người phụ trách",
+		nobodyElse: "Chưa có ai khác trong đội.",
+		cancel: "Huỷ",
+		leftAlone: (done: string, n: string, why: string) =>
+			`${done} ${n} bị bỏ qua${why}`,
 	},
 	misc: {
 		nothingChanged: "Không có gì thay đổi.",

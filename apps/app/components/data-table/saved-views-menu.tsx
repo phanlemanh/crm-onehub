@@ -20,11 +20,13 @@ import {
 } from "@crm/ui/components/dropdown-menu";
 import { Field, FieldLabel } from "@crm/ui/components/field";
 import { Input } from "@crm/ui/components/input";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Switch } from "@crm/ui/components/switch";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import type { FieldEntity } from "@/components/crm/fields/fields-entity";
+import { crmMessages } from "@/lib/messages/crm";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -45,6 +47,7 @@ export function SavedViewsMenu({
 	entity: FieldEntity;
 	table: Pick<TableQuery<string, string>, "currentView" | "applyView">;
 }) {
+	const m = crmMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const views = useQuery(trpc.savedViews.list.queryOptions({ entity }));
@@ -65,7 +68,7 @@ export function SavedViewsMenu({
 		trpc.savedViews.create.mutationOptions({
 			onSuccess: async () => {
 				await settle();
-				toast.success("View saved.");
+				toast.success(m.views.saved);
 				closeDialog();
 			},
 			onError: (error) => toast.error(error.message),
@@ -76,7 +79,7 @@ export function SavedViewsMenu({
 		trpc.savedViews.delete.mutationOptions({
 			onSuccess: async () => {
 				await settle();
-				toast.success("View deleted.");
+				toast.success(m.views.deleted);
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -96,15 +99,17 @@ export function SavedViewsMenu({
 						className="justify-start sm:justify-center"
 					>
 						<Bookmark data-icon="inline-start" />
-						Views
+						{m.views.button}
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end" className="min-w-56">
 					<DropdownMenuItem onSelect={() => setDialogOpen(true)}>
-						Save current view…
+						{m.views.saveCurrent}
 					</DropdownMenuItem>
 					{list.length > 0 && <DropdownMenuSeparator />}
-					{mine.length > 0 && <DropdownMenuLabel>My views</DropdownMenuLabel>}
+					{mine.length > 0 && (
+						<DropdownMenuLabel>{m.views.mine}</DropdownMenuLabel>
+					)}
 					{mine.map((view) => (
 						<ViewItem
 							key={view.id}
@@ -114,7 +119,7 @@ export function SavedViewsMenu({
 						/>
 					))}
 					{shared_.length > 0 && (
-						<DropdownMenuLabel>Shared with the team</DropdownMenuLabel>
+						<DropdownMenuLabel>{m.views.shared}</DropdownMenuLabel>
 					)}
 					{shared_.map((view) => (
 						<DropdownMenuItem
@@ -133,11 +138,11 @@ export function SavedViewsMenu({
 			>
 				<DialogContent>
 					<DialogHeader>
-						<DialogTitle>Save this view</DialogTitle>
+						<DialogTitle>{m.views.dialogTitle}</DialogTitle>
 					</DialogHeader>
 					<div className="flex flex-col gap-4">
 						<Field>
-							<FieldLabel htmlFor="saved-view-name">Name</FieldLabel>
+							<FieldLabel htmlFor="saved-view-name">{m.views.name}</FieldLabel>
 							<Input
 								id="saved-view-name"
 								value={name}
@@ -189,6 +194,7 @@ function ViewItem({
 	onApply: () => void;
 	onDelete: () => void;
 }) {
+	const m = crmMessages(useLocale());
 	return (
 		<div className="flex items-center gap-1">
 			<DropdownMenuItem className="min-w-0 flex-1" onSelect={onApply}>
@@ -200,7 +206,7 @@ function ViewItem({
 				onSelect={onDelete}
 			>
 				<Close />
-				<span className="sr-only">Delete {view.name}</span>
+				<span className="sr-only">{m.views.remove(view.name)}</span>
 			</DropdownMenuItem>
 		</div>
 	);

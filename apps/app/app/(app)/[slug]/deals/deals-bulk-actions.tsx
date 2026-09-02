@@ -71,7 +71,11 @@ export function DealsBulkActions({
 		trpc.deals.bulkAssignOwner.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.deal();
-				reportBulk(result, (count) => m.bulk.reassigned(deals(count, locale)));
+				reportBulk(
+					result,
+					(count) => m.bulk.reassigned(deals(count, locale)),
+					locale,
+				);
 				onDone();
 			},
 			onError,
@@ -82,7 +86,11 @@ export function DealsBulkActions({
 		trpc.deals.bulkSetStage.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.deal();
-				reportBulk(result, (count) => m.bulk.moved(deals(count, locale)));
+				reportBulk(
+					result,
+					(count) => m.bulk.moved(deals(count, locale)),
+					locale,
+				);
 				setClosing(null);
 				setReason("");
 				onDone();
@@ -95,7 +103,11 @@ export function DealsBulkActions({
 		trpc.deals.bulkArchive.mutationOptions({
 			onSuccess: async (result, variables) => {
 				await cache.removedMany({ kind: "deal", ids: variables.ids });
-				reportBulk(result, (count) => m.bulk.archived(deals(count, locale)));
+				reportBulk(
+					result,
+					(count) => m.bulk.archived(deals(count, locale)),
+					locale,
+				);
 				onDone();
 			},
 			onError,
@@ -106,7 +118,11 @@ export function DealsBulkActions({
 		trpc.deals.bulkRestore.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.deal();
-				reportBulk(result, (count) => m.bulk.restored(deals(count, locale)));
+				reportBulk(
+					result,
+					(count) => m.bulk.restored(deals(count, locale)),
+					locale,
+				);
 				onDone();
 			},
 			onError,
@@ -117,7 +133,11 @@ export function DealsBulkActions({
 		trpc.deals.bulkPurge.mutationOptions({
 			onSuccess: async (result, variables) => {
 				await cache.removedMany({ kind: "deal", ids: variables.ids });
-				reportBulk(result, (count) => m.bulk.deleted(deals(count, locale)));
+				reportBulk(
+					result,
+					(count) => m.bulk.deleted(deals(count, locale)),
+					locale,
+				);
 				setConfirming(false);
 				onDone();
 			},

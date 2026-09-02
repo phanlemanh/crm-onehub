@@ -1,5 +1,13 @@
-export const ACTIVITY_FACET_OPTIONS = [
-	{ value: "7", label: "Active within 7 days" },
-	{ value: "30", label: "Active within 30 days" },
-	{ value: "90", label: "Active within 90 days" },
-];
+import type { Locale } from "@crm/ui/lib/locale";
+import { crmMessages } from "@/lib/messages/crm";
+
+const KHOA = [
+	{ value: "7", khoa: "within7" },
+	{ value: "30", khoa: "within30" },
+	{ value: "90", khoa: "within90" },
+] as const;
+
+export function activityFacetOptions(locale: Locale) {
+	const m = crmMessages(locale).activity;
+	return KHOA.map(({ value, khoa }) => ({ value, label: m[khoa] }));
+}

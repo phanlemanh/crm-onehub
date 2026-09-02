@@ -58,8 +58,10 @@ export function ContactsBulkActions({
 		trpc.contacts.bulkAssignOwner.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.contact();
-				reportBulk(result, (count) =>
-					m.bulk.reassigned(contacts(count, locale)),
+				reportBulk(
+					result,
+					(count) => m.bulk.reassigned(contacts(count, locale)),
+					locale,
 				);
 				onDone();
 			},
@@ -71,7 +73,11 @@ export function ContactsBulkActions({
 		trpc.contacts.bulkSetCompany.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.contact();
-				reportBulk(result, (count) => m.bulk.moved(contacts(count, locale)));
+				reportBulk(
+					result,
+					(count) => m.bulk.moved(contacts(count, locale)),
+					locale,
+				);
 				onDone();
 			},
 			onError,
@@ -84,8 +90,8 @@ export function ContactsBulkActions({
 				await cache.contact();
 				reportBulk(
 					result,
-					(count) =>
-						`Looking up ${contacts(count, locale)} — the table will update.`,
+					(count) => m.bulk.enriching(contacts(count, locale)),
+					locale,
 				);
 				onDone();
 			},
@@ -97,7 +103,11 @@ export function ContactsBulkActions({
 		trpc.contacts.bulkArchive.mutationOptions({
 			onSuccess: async (result, variables) => {
 				await cache.removedMany({ kind: "contact", ids: variables.ids });
-				reportBulk(result, (count) => m.bulk.archived(contacts(count, locale)));
+				reportBulk(
+					result,
+					(count) => m.bulk.archived(contacts(count, locale)),
+					locale,
+				);
 				onDone();
 			},
 			onError,
@@ -108,7 +118,11 @@ export function ContactsBulkActions({
 		trpc.contacts.bulkRestore.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.contact();
-				reportBulk(result, (count) => m.bulk.restored(contacts(count, locale)));
+				reportBulk(
+					result,
+					(count) => m.bulk.restored(contacts(count, locale)),
+					locale,
+				);
 				onDone();
 			},
 			onError,
@@ -119,7 +133,11 @@ export function ContactsBulkActions({
 		trpc.contacts.bulkPurge.mutationOptions({
 			onSuccess: async (result, variables) => {
 				await cache.removedMany({ kind: "contact", ids: variables.ids });
-				reportBulk(result, (count) => m.bulk.deleted(contacts(count, locale)));
+				reportBulk(
+					result,
+					(count) => m.bulk.deleted(contacts(count, locale)),
+					locale,
+				);
 				setConfirming(false);
 				onDone();
 			},

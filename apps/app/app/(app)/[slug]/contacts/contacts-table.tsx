@@ -25,7 +25,7 @@ import { ListSearch } from "@/components/data-table/list-search";
 import { SavedViewsMenu } from "@/components/data-table/saved-views-menu";
 import { useTableQuery } from "@/components/data-table/use-table-query";
 import { LocalRelativeTime } from "@/components/local-date-time";
-import { ACTIVITY_FACET_OPTIONS } from "@/lib/activity-recency";
+import { activityFacetOptions } from "@/lib/activity-recency";
 import { type ContactMessages, contactMessages } from "@/lib/messages/contacts";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -253,7 +253,7 @@ export function ContactsTable() {
 		{
 			id: "activity",
 			label: m.facets.activity,
-			options: ACTIVITY_FACET_OPTIONS.filter(
+			options: activityFacetOptions(locale).filter(
 				(option) => (facetCounts?.activity?.[option.value] ?? 0) > 0,
 			),
 		},
