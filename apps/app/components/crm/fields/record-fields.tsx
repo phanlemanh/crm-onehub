@@ -5,6 +5,7 @@ import type { FieldValueJson } from "@crm/db/fields";
 import { Button } from "@crm/ui/components/button";
 import { Checkbox } from "@crm/ui/components/checkbox";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Tooltip,
 	TooltipContent,
@@ -22,6 +23,7 @@ import {
 	useFieldsSheet,
 } from "@/components/crm/record-sheet/record-stack";
 import { DetailSheetProperty } from "@/components/detail-sheet";
+import { crmMessages } from "@/lib/messages/crm";
 import { useTRPC } from "@/lib/trpc/client";
 
 type RecordFieldOption = { id: string; label: string };
@@ -43,6 +45,7 @@ const UNASSIGNED = "Unassigned";
 const FORMER_MEMBER = "Former member";
 
 export function FieldsCog({ kind }: { kind: RecordKind }) {
+	const m = crmMessages(useLocale());
 	const { open } = useFieldsSheet();
 
 	return (
@@ -50,10 +53,10 @@ export function FieldsCog({ kind }: { kind: RecordKind }) {
 			<TooltipTrigger asChild>
 				<Button variant="ghost" size="icon-sm" onClick={() => open(kind)}>
 					<Icon icon={Settings} />
-					<span className="sr-only">Fields</span>
+					<span className="sr-only">{m.sheet.fields}</span>
 				</Button>
 			</TooltipTrigger>
-			<TooltipContent>Fields</TooltipContent>
+			<TooltipContent>{m.sheet.fields}</TooltipContent>
 		</Tooltip>
 	);
 }

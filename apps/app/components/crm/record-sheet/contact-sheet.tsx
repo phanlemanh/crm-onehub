@@ -588,7 +588,7 @@ function Colleagues({
 }: {
 	colleagues: Contact["relationship"]["colleagues"];
 }) {
-	const m = recordSheetMessages(useLocale());
+	const _m = recordSheetMessages(useLocale());
 	const openRecord = useOpenRecord();
 
 	return (

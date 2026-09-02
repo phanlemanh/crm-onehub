@@ -288,7 +288,7 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 					<DetailSheetStats>
 						<DetailSheetStat label={m.company.openPipeline}>
 							<span className="tabular-nums">
-								{formatMoney(openValueCents, company.reportingCurrency)}
+								{formatMoney(openValueCents, company.reportingCurrency, locale)}
 							</span>
 							{openUncounted > 0 ? (
 								<span className="text-muted-foreground">

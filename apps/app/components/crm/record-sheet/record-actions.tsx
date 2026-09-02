@@ -86,7 +86,7 @@ function useRestoreRecord(record: RecordRef) {
 }
 
 function usePurgeRecord(record: RecordRef) {
-	const m = crmMessages(useLocale());
+	const _m = crmMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const { close } = useRecordStack();

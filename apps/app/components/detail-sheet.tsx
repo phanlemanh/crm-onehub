@@ -62,7 +62,7 @@ export function DetailSheet({
 	className?: string;
 	children: ReactNode;
 }) {
-	const m = crmMessages(useLocale());
+	const _m = crmMessages(useLocale());
 	const content = useRef<HTMLDivElement>(null);
 
 	return (

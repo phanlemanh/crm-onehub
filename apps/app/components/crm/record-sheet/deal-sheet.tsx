@@ -92,7 +92,7 @@ function currencyOptions(currency: string) {
 
 function ReportedValue({ deal }: { deal: Deal }) {
 	const locale = useLocale();
-	const m = recordSheetMessages(locale);
+	const _m = recordSheetMessages(locale);
 	const currency = dealCurrency(deal.currency);
 
 	if (currency === deal.reportingCurrency) return null;
@@ -131,6 +131,7 @@ const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
 };
 
 export function DealSheet({ dealId }: { dealId: string }) {
+	const locale = useLocale();
 	const m = recordSheetMessages(useLocale());
 	const trpc = useTRPC();
 	const openRecord = useOpenRecord();
@@ -230,7 +231,11 @@ export function DealSheet({ dealId }: { dealId: string }) {
 								<EmptyCellValue />
 							) : (
 								<span className="tabular-nums">
-									{formatMoney(deal.amountCents, dealCurrency(deal.currency))}
+									{formatMoney(
+										deal.amountCents,
+										dealCurrency(deal.currency),
+										locale,
+									)}
 								</span>
 							)}
 						</DetailSheetStat>
@@ -333,7 +338,7 @@ function DealOverview({ deal }: { deal: Deal }) {
 							save({ amountCents: Math.round(parsed * 100) });
 						}}
 						render={(value) =>
-							formatMoney(Math.round(Number(value) * 100), currency)
+							formatMoney(Math.round(Number(value) * 100), currency, locale)
 						}
 					/>
 					<InlineSelectField

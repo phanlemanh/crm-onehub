@@ -121,6 +121,7 @@ const dongCaNhan = z.object({
 	archivedAt: ngay,
 });
 const dongThoaThuan = z.object({
+	id: chu,
 	name: chu,
 	currency: chu.nullish(),
 	company: z.object({ name: chu.nullish() }).nullish(),
@@ -218,6 +219,32 @@ async function duLieuThu(cookie) {
 			them(t.typeLabel);
 			them(t.agentBrief);
 			for (const o of t.options ?? []) them(o.label);
+		}
+	}
+
+	const chiTiet = z.object({
+		city: chu.nullish(),
+		country: chu.nullish(),
+		description: chu.nullish(),
+		contacts: z
+			.array(z.object({ role: chu.nullish(), title: chu.nullish() }))
+			.nullish(),
+	});
+	const chiTietCua = [
+		["companies.byId", congTy.map((r) => r.id).slice(0, 8)],
+		["deals.byId", thoaThuan.map((r) => r.id).slice(0, 8)],
+	];
+	for (const [thuTuc, ids] of chiTietCua) {
+		for (const id of ids) {
+			const t = chiTiet.parse(await goiTho(cookie, thuTuc, { id }));
+			them(t.city);
+			them(t.country);
+			them(t.description);
+			if (t.city && t.country) them(`${t.city}, ${t.country}`);
+			for (const c of t.contacts ?? []) {
+				them(c.role);
+				them(c.title);
+			}
 		}
 	}
 
@@ -448,7 +475,7 @@ async function ve(browser, cookie, locale, doc, arg) {
 
 const DAU_VIET =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
-const CHI_SO = /^[\d\s.,:%–\-—/()+…·|]*$/;
+const CHI_SO = /^[\d\s.,:%–\-—/()+…·|≈~≥≤<>]*$/;
 
 const cookie = phien();
 const browser = await puppeteer.launch({
