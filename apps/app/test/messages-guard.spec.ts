@@ -52,28 +52,17 @@ const KHONG_DAU = new Set([
 	"standard.website",
 	"standard.linkedin",
 	"standard.github",
-	"viaGmail",
+	"timeline.viaGmail",
 	"composer.log",
 	"stageChange",
 	"currencyEntry",
 	"candidateTitle",
 	"namePlaceholder",
-	"stage.DEMO_BOOKED",
-	"stage.QUALIFIED_TO_BUY",
-	"stage.DECISION_MAKER_IN",
-	"stage.CONTRACT_SENT",
-	"stage.CLOSED_WON",
-	"stage.CLOSED_LOST",
-	"stage.UNQUALIFIED",
 ]);
 
 function mienDau(khoa: string): boolean {
 	const phan = khoa.split(".");
-	return (
-		KHONG_DAU.has(khoa) ||
-		KHONG_DAU.has(phan.slice(-2).join(".")) ||
-		KHONG_DAU.has(phan[phan.length - 1] ?? "")
-	);
+	return KHONG_DAU.has(khoa) || KHONG_DAU.has(phan.slice(-2).join("."));
 }
 
 function hienRa(v: GiaTri): string {
@@ -262,6 +251,7 @@ describe("kho chuoi cua vong ③a", () => {
 				"Đã xoá vĩnh viễn 12.",
 			],
 			"crm:web.views": ["1 lượt xem", "12 lượt xem"],
+			"crm:fields.removeOption": ["Bỏ 1", "Bỏ 12"],
 			"record-sheet:deal.nobodyAttached": [
 				"Chưa ai từ 1 được gắn vào.",
 				"Chưa ai từ 12 được gắn vào.",

@@ -188,7 +188,11 @@ export function DashboardSummary() {
 											{deal.amountCents === null ? (
 												<EmptyCellValue />
 											) : (
-												formatMoneyCompact(deal.amountCents, deal.currency)
+												formatMoneyCompact(
+													deal.amountCents,
+													deal.currency,
+													locale,
+												)
 											)}
 										</TableCell>
 									</SimpleTableRow>
@@ -204,7 +208,7 @@ export function DashboardSummary() {
 						<CardDescription>
 							{overdueTasks.length === 0
 								? "Every task you have logged is either done or still to come"
-								: `${formatCount(overdueTasks.length, "task")} past due`}
+								: `${formatCount(overdueTasks.length, "task", undefined, locale)} past due`}
 						</CardDescription>
 					</CardHeader>
 					<CardPanel>

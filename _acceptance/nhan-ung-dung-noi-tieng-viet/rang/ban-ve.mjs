@@ -1021,6 +1021,21 @@ try {
 		}
 		await new Promise((r) => setTimeout(r, 2500));
 		const sau = await page.evaluate(doc);
+
+		const chuMoi = await page.evaluate(() => {
+			const t = document.createElement("time");
+			t.dateTime = new Date(Date.now() - 5 * 60_000).toISOString();
+			t.setAttribute("data-local-date-kind", "relative-time");
+			t.setAttribute(
+				"data-local-date-value",
+				new Date(Date.now() - 5 * 60_000).toISOString(),
+			);
+			t.textContent = "";
+			document.body.appendChild(t);
+			return new Promise((ok) => {
+				setTimeout(() => ok(t.textContent ?? ""), 400);
+			});
+		});
 		await page.close();
 
 		const taiLai = truoc.moc !== sau.moc;
@@ -1031,7 +1046,16 @@ try {
 		console.log(`   chu doi theo:            ${doiChu ? "co" : "KHONG"}`);
 		console.log(`   trang KHONG tai lai:     ${taiLai ? "KHONG — da tai lai" : "dung"}`);
 		console.log(`   thanh chon dong con giu: ${giuChon ? "co" : "KHONG"}`);
-		const hong = (doiChu ? 0 : 1) + (taiLai ? 1 : 0) + (giuChon ? 0 : 1);
+		const DAU = /[ăâđêôơưáàảãạếềểễệíìỉĩịóòỏõọúùủũụ]/i;
+		const chuThoiGianViet = DAU.test(chuMoi);
+		console.log(
+			`   chu thoi gian sau khi doi: ${JSON.stringify(chuMoi)} — ${chuThoiGianViet ? "tieng Viet" : "CON TIENG ANH"}`,
+		);
+		const hong =
+			(doiChu ? 0 : 1) +
+			(taiLai ? 1 : 0) +
+			(giuChon ? 0 : 1) +
+			(chuThoiGianViet ? 0 : 1);
 		console.log(`ket qua: hong=${hong}`);
 		process.exit(hong > 0 ? 1 : 0);
 	}

@@ -8,6 +8,7 @@ import {
 } from "@crm/ui/components/card";
 import type { ChartConfig } from "@crm/ui/components/chart";
 import { DashboardRow, StatGroup } from "@crm/ui/components/dashboard";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { StatCard, type StatDelta } from "@crm/ui/components/stat-card";
 import {
 	formatCount,
@@ -44,6 +45,7 @@ function changeDelta(
 }
 
 export function SalesDashboard({ summary }: { summary: Summary }) {
+	const locale = useLocale();
 	const workspaceUrl = useWorkspaceUrl();
 
 	const {
@@ -57,9 +59,10 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 		unconverted,
 	} = summary;
 
-	const money = (cents: number) => formatMoneyCompact(cents, reportingCurrency);
+	const money = (cents: number) =>
+		formatMoneyCompact(cents, reportingCurrency, locale);
 	const exact = (value: number | string) =>
-		formatMoney(Number(value), reportingCurrency);
+		formatMoney(Number(value), reportingCurrency, locale);
 
 	const hasTrend = trend.some((point) => point.won > 0 || point.created > 0);
 
@@ -88,19 +91,19 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 						wonPrevMonth.valueCents,
 						"vs. last month",
 					)}
-					description={`${formatCount(wonThisMonth.count, "deal")} · ${money(wonPrevMonth.valueCents)} last month`}
+					description={`${formatCount(wonThisMonth.count, "deal", undefined, locale)} · ${money(wonPrevMonth.valueCents)} last month`}
 				/>
 				<StatCard
 					label="Open pipeline"
 					value={money(pipeline.totalCents)}
-					description={`${formatCount(pipeline.totalDeals, "deal")} in progress · ${money(closingThisMonthTotal.valueCents)} due this month`}
+					description={`${formatCount(pipeline.totalDeals, "deal", undefined, locale)} in progress · ${money(closingThisMonthTotal.valueCents)} due this month`}
 				/>
 				<StatCard
 					label={`Win rate (${performance.windowDays}d)`}
 					value={
 						performance.winRate === null
 							? "—"
-							: formatPercent(performance.winRate)
+							: formatPercent(performance.winRate, locale)
 					}
 					description={
 						performance.wins + performance.losses === 0
@@ -126,7 +129,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 			{unconverted.count > 0 ? (
 				<p className="text-muted-foreground text-xs">
 					Every figure above is in {reportingCurrency}.{" "}
-					{formatCount(unconverted.count, "deal")} in{" "}
+					{formatCount(unconverted.count, "deal", undefined, locale)} in{" "}
 					{unconverted.currencies.join(", ")}{" "}
 					{unconverted.count === 1 ? "is" : "are"} not included — there is no
 					rate to convert {unconverted.currencies.length === 1 ? "it" : "them"}{" "}

@@ -37,6 +37,7 @@ export function fieldsCopy(locale: Locale) {
 		typeLabel: m.fields.typeLabel,
 		optionsLabel: m.fields.optionsLabel,
 		addOption: m.fields.addOption,
+		removeOption: m.fields.removeOption,
 		allFilled: m.fields.allFilled,
 		addField: m.fields.addField,
 		cancel: m.sheet.cancel,

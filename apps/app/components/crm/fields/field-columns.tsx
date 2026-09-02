@@ -26,7 +26,7 @@ function render(
 		const misc = crmMessages(locale).misc;
 		return value === true ? misc.yes : misc.no;
 	}
-	if (type === "DATE") return formatDay(String(value));
+	if (type === "DATE") return formatDay(String(value), locale);
 	if (type === "USER") {
 		const user = users.get(String(value));
 		return user ? <OwnerCell owner={user} /> : <EmptyCellValue />;

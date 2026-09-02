@@ -320,7 +320,7 @@ export function FieldEditor({
 										<SortableItem
 											key={optionId(option, index)}
 											id={optionId(option, index)}
-											label={option.label || "option"}
+											label={option.label || optionLabel(index, locale)}
 										>
 											<Input
 												aria-label={optionLabel(index, locale)}
@@ -348,7 +348,7 @@ export function FieldEditor({
 											>
 												<Icon icon={Close} />
 												<span className="sr-only">
-													Remove {optionLabel(index, locale)}
+													{copy.removeOption(optionLabel(index, locale))}
 												</span>
 											</Button>
 										</SortableItem>

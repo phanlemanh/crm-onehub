@@ -31,7 +31,7 @@ export function formatCount(
 	count: number,
 	noun: string,
 	plural = `${noun}s`,
-	locale: Locale = "en",
+	locale: Locale,
 ): string {
 	if (locale === "vi") return `${count} ${noun}`;
 	return `${count} ${count === 1 ? noun : plural}`;
@@ -64,7 +64,7 @@ function fractionDigits(code: string): number {
 export function formatMoney(
 	cents: number,
 	currency = "usd",
-	locale: Locale = "en",
+	locale: Locale,
 ): string {
 	const code = displayCurrencyCode(currency);
 	const whole = cents % 100 === 0;
@@ -81,7 +81,7 @@ export function formatMoney(
 export function formatMoneyCompact(
 	cents: number,
 	currency = "usd",
-	locale: Locale = "en",
+	locale: Locale,
 ): string {
 	return numberFormat(locale, {
 		style: "currency",
@@ -91,7 +91,7 @@ export function formatMoneyCompact(
 	}).format(cents / 100);
 }
 
-export function formatPercent(rate: number, locale: Locale = "en"): string {
+export function formatPercent(rate: number, locale: Locale): string {
 	return numberFormat(locale, {
 		style: "percent",
 		maximumFractionDigits: 0,
@@ -116,7 +116,7 @@ export function fromDay(value: string | null | undefined): Date | undefined {
 
 export function formatDay(
 	value: string | null | undefined,
-	locale: Locale = "en",
+	locale: Locale,
 ): string {
 	const date = fromDay(value);
 	return date

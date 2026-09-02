@@ -13,7 +13,7 @@ describe("day strings", () => {
 	});
 
 	it("reads the day the server stored, not the local rendering of it", () => {
-		expect(formatDay("2026-12-31T00:00:00.000Z")).toBe("Dec 31, 2026");
+		expect(formatDay("2026-12-31T00:00:00.000Z", "en")).toBe("Dec 31, 2026");
 		expect(fromDay("2026-12-31T00:00:00.000Z")?.getDate()).toBe(31);
 	});
 
@@ -21,6 +21,6 @@ describe("day strings", () => {
 		expect(fromDay(null)).toBeUndefined();
 		expect(fromDay("")).toBeUndefined();
 		expect(fromDay("someday")).toBeUndefined();
-		expect(formatDay(null)).toBe("—");
+		expect(formatDay(null, "en")).toBe("—");
 	});
 });

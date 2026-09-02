@@ -16,6 +16,7 @@ const LOCAL_DAY_OPTIONS = {
 	year: "numeric",
 } as const;
 const MOC = "\u0000";
+const NUT_TU = "local-date-words";
 
 function manh(f: (n: string) => string): [string, string] {
 	const [truoc, sau] = f(MOC).split(MOC);
@@ -34,8 +35,8 @@ function tuThoiGian(locale: Locale) {
 	};
 }
 
-const kichBan = (tu: ReturnType<typeof tuThoiGian>) =>
-	`{var T=${JSON.stringify(tu)},g=document.documentElement.lang||void 0,s="time[data-local-date-kind]",f=function(n){try{var k=n.dataset.localDateKind,v=n.dataset.localDateValue,e=n.dataset.localDateEnd,o=JSON.parse(n.dataset.localDateOptions||"{}"),d=new Date(v),t=d.getTime(),x=Date.now()-t,a=Math.abs(x),r;if(k==="date-time")r=new Intl.DateTimeFormat(g,o).format(d);else if(k==="date-range")r=new Intl.DateTimeFormat(g,o).formatRange(d,new Date(e));else if(k==="day")r=new Intl.DateTimeFormat(g,o).format(new Date(v+"T00:00:00"));else if(k==="relative-date"){var z=new Date(),q=(Date.UTC(z.getFullYear(),z.getMonth(),z.getDate())-Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()))/${DAY_MS};r=new Intl.RelativeTimeFormat(g,{numeric:"auto"}).format(-q,"day")}else if(!Number.isFinite(t))r="—";else if(a<${MINUTE_MS})r=T.justNow;else if(a>=${30 * DAY_MS})r=new Intl.DateTimeFormat(g,{month:"short",day:"numeric"}).format(d);else{var u=a<${HOUR_MS}?T.m[0]+Math.floor(a/${MINUTE_MS})+T.m[1]:a<${DAY_MS}?T.h[0]+Math.floor(a/${HOUR_MS})+T.h[1]:T.d[0]+Math.floor(a/${DAY_MS})+T.d[1];r=x<0?T.ahead[0]+u+T.ahead[1]:T.ago[0]+u+T.ago[1]}n.textContent=r}catch{}};var c=function(r){if(r.nodeType===1&&r.matches&&r.matches(s))f(r);if(r.querySelectorAll)r.querySelectorAll(s).forEach(f)};c(document);new MutationObserver(function(m){m.forEach(function(r){r.addedNodes.forEach(c)})}).observe(document.documentElement,{childList:true,subtree:true})}`;
+const kichBan = () =>
+	`{var s="time[data-local-date-kind]",f=function(n){try{var T=JSON.parse(document.getElementById("${NUT_TU}").dataset.tu),g=document.documentElement.lang||void 0,k=n.dataset.localDateKind,v=n.dataset.localDateValue,e=n.dataset.localDateEnd,o=JSON.parse(n.dataset.localDateOptions||"{}"),d=new Date(v),t=d.getTime(),x=Date.now()-t,a=Math.abs(x),r;if(k==="date-time")r=new Intl.DateTimeFormat(g,o).format(d);else if(k==="date-range")r=new Intl.DateTimeFormat(g,o).formatRange(d,new Date(e));else if(k==="day")r=new Intl.DateTimeFormat(g,o).format(new Date(v+"T00:00:00"));else if(k==="relative-date"){var z=new Date(),q=(Date.UTC(z.getFullYear(),z.getMonth(),z.getDate())-Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()))/${DAY_MS};r=new Intl.RelativeTimeFormat(g,{numeric:"auto"}).format(-q,"day")}else if(!Number.isFinite(t))r="—";else if(a<${MINUTE_MS})r=T.justNow;else if(a>=${30 * DAY_MS})r=new Intl.DateTimeFormat(g,{month:"short",day:"numeric"}).format(d);else{var u=a<${HOUR_MS}?T.m[0]+Math.floor(a/${MINUTE_MS})+T.m[1]:a<${DAY_MS}?T.h[0]+Math.floor(a/${HOUR_MS})+T.h[1]:T.d[0]+Math.floor(a/${DAY_MS})+T.d[1];r=x<0?T.ahead[0]+u+T.ahead[1]:T.ago[0]+u+T.ago[1]}n.textContent=r}catch{}};var c=function(r){if(r.nodeType===1&&r.matches&&r.matches(s))f(r);if(r.querySelectorAll)r.querySelectorAll(s).forEach(f)};c(document);new MutationObserver(function(m){m.forEach(function(r){r.addedNodes.forEach(c)})}).observe(document.documentElement,{childList:true,subtree:true})}`;
 
 export function LocalDateTime({
 	date,
@@ -117,7 +118,17 @@ export function LocalDay({ date }: { date: string }) {
 }
 
 export function LocalDateTimeHydrator({ locale }: { locale: Locale }) {
-	return <InlineScript html={kichBan(tuThoiGian(locale))} />;
+	return (
+		<>
+			<span
+				id={NUT_TU}
+				hidden
+				data-tu={JSON.stringify(tuThoiGian(locale))}
+				data-lang={locale}
+			/>
+			<InlineScript html={kichBan()} />
+		</>
+	);
 }
 
 function LocalTime({

@@ -654,6 +654,7 @@ trước mọi dòng chưa ai viết. `rang/kiem-ban-dich.mjs` nay kiểm cả h
 | `fields.typeLabel` | `Type` | `Kiểu` | |
 | `fields.optionsLabel` | `Options` | `Lựa chọn` | |
 | `fields.addOption` | `Add option` | `Thêm lựa chọn` | |
+| `fields.removeOption` | `Remove ${label}` | `Bỏ ${label}` | nhãn chỉ trình đọc màn hình nghe; vòng 2 bắt được chỗ ghép `Remove` + nhãn tiếng Việt |
 | `fields.allFilled` | `Nothing left to fill` | `Không còn gì để điền` | |
 | `fields.addField` | `Create field` | `Tạo trường` | |
 | `fields.saveChanges` | `Save changes` | `Lưu thay đổi` | |
