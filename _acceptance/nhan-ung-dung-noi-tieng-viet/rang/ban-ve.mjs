@@ -30,7 +30,7 @@ const chan = process.argv[2] ?? "chu";
 
 // Chan cua vong ③ chua dung — do la viec S3. Bao ro thay vi loi mo.
 const CHUA_DUNG = new Set([
-	"--chan", "ho-so", "dong-thoi-gian", "no-vong-1",
+	"--chan", "no-vong-1",
 	"trinh-doc-man-hinh", "khai-tieng", "doi-tieng", "giai-doan",
 ]);
 if (CHUA_DUNG.has(chan)) {
@@ -75,6 +75,23 @@ function vietTat(names) {
 		{ encoding: "utf8" },
 	);
 	return JSON.parse(out.trim().split("\n").pop());
+}
+
+async function idBanGhi(cookie) {
+	const [c, ct, d] = await Promise.all([
+		goi(cookie, "companies.list", {}),
+		goi(cookie, "contacts.list", {}),
+		goi(cookie, "deals.list", {}),
+	]);
+	const lay = (r, ten) => {
+		const id = r.rows[0]?.id;
+		if (!id) {
+			console.log(`RANG CUN: may chu khong tra ban ghi ${ten} nao`);
+			process.exit(2);
+		}
+		return id;
+	};
+	return { company: lay(c, "cong ty"), contact: lay(ct, "ca nhan"), deal: lay(d, "thoa thuan") };
 }
 
 async function duLieuThu(cookie) {
@@ -470,6 +487,214 @@ try {
 		}
 		console.log(`\nket qua: con lai=${tongDu} lan · be mat lech=${tongLech}`);
 		process.exit(tongDu + tongLech > 0 ? 1 : 0);
+	}
+
+	if (chan === "ho-so") {
+		const trung = await duLieuThu(cookie);
+		const scope = [MAN, ...CHUA_MO, '[data-slot="record-sheet"]', '[role="dialog"]'];
+		const id = await idBanGhi(cookie);
+		const HO_SO = [
+			{ loai: "company", man: "companies", tabs: ["overview", "activity"] },
+			{ loai: "contact", man: "contacts", tabs: ["overview", "deals", "activity"] },
+			{ loai: "deal", man: "deals", tabs: ["overview", "activity"] },
+		];
+		let tongDu = 0;
+		for (const hs of HO_SO) {
+			const doc = async (locale) => {
+				const page = await browser.newPage();
+				await page.setViewport({ width, height, deviceScaleFactor: 1 });
+				await page.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
+				await browser.setCookie(
+					{ name: cookie.name, value: cookie.value, domain: "localhost", path: "/" },
+					{ name: "lang", value: locale, domain: "localhost", path: "/" },
+				);
+				const chu = [];
+				const daMo = [];
+				for (const tab of hs.tabs) {
+					const url = `${APP}/${SLUG}/${hs.man}?record=${hs.loai}:${id[hs.loai]}&tab=${tab}`;
+					await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });
+					await new Promise((r) => setTimeout(r, 1800));
+					await page.evaluate(() => {
+						for (const el of document.querySelectorAll("*")) {
+							if (el.scrollHeight > el.clientHeight + 40) el.scrollTop = el.scrollHeight;
+						}
+					});
+					await new Promise((r) => setTimeout(r, 800));
+					const phan = (await page.evaluate(DOC_CHU, scope)) ?? [];
+					if (phan.length === 0) {
+						console.log(`RANG CUN: ho so ${hs.loai} tab ${tab} khong ve ra chu nao`);
+						process.exit(2);
+					}
+					chu.push(...phan);
+					daMo.push(`${hs.loai}/${tab}`);
+				}
+				const lang = await page.evaluate(() => document.documentElement.lang);
+				await page.close();
+				return { lang, chu, daMo };
+			};
+			const vi = await doc("vi");
+			const en = await doc("en");
+			if (vi.lang !== "vi" || en.lang !== "en") {
+				console.log(`RANG CUN: lang lech o ${hs.loai}`);
+				process.exit(2);
+			}
+			const dem = (l) => {
+				const m = new Map();
+				for (const x of l) m.set(x, (m.get(x) ?? 0) + 1);
+				return m;
+			};
+			const viDem = dem(vi.chu);
+			const enDem = dem(en.chu);
+			const duLieu = [...trung.set];
+			const laDuLieu = (x) => trung.set.has(x) || duLieu.some((d) => d.length > 2 && x.includes(d));
+			const con = [...viDem.keys()]
+				.filter((x) => enDem.has(x) && !laDuLieu(x) && !CHI_SO.test(x))
+				.sort();
+			const lan = con.reduce((n, x) => n + viDem.get(x), 0);
+			tongDu += lan;
+			console.log(`\n-- ho so ${hs.loai} · tab da mo=${vi.daMo.length} (${vi.daMo.join(" · ")})`);
+			console.log(`   CON LAI: ${con.length} chuoi / ${lan} lan`);
+			for (const x of con) console.log(`      * ${JSON.stringify(x)}${viDem.get(x) > 1 ? ` x${viDem.get(x)}` : ""}`);
+		}
+		console.log(`\nket qua: con lai=${tongDu} lan`);
+		process.exit(tongDu > 0 ? 1 : 0);
+	}
+
+	if (chan === "dong-thoi-gian") {
+		const trung = await duLieuThu(cookie);
+		const scope = [MAN, ...CHUA_MO, '[data-slot="record-sheet"]', "[data-sonner-toast]"];
+		const id = await idBanGhi(cookie);
+		const TAB = ["all", "notes", "email", "meetings", "upcoming", "done"];
+
+		const moHoSo = async (page, locale, tab) => {
+			await browser.setCookie(
+				{ name: cookie.name, value: cookie.value, domain: "localhost", path: "/" },
+				{ name: "lang", value: locale, domain: "localhost", path: "/" },
+			);
+			await page.goto(
+				`${APP}/${SLUG}/companies?record=company:${id.company}&tab=activity&timeline=${tab}`,
+				{ waitUntil: "networkidle0", timeout: 60000 },
+			);
+			await new Promise((r) => setTimeout(r, 1600));
+		};
+
+		const CHO_HONG = Number(process.env.CHO_HONG ?? 8000);
+		const soanRoiGui = async (page) => {
+			await page.evaluate(() => {
+				window.__toast = [];
+				const gom = (n) => {
+					if (n.nodeType !== 1) return;
+					if (n.matches?.("[data-sonner-toast]")) {
+						const t = n.textContent.replace(/\s+/g, " ").trim();
+						if (t && !window.__toast.includes(t)) window.__toast.push(t);
+					}
+					n.querySelectorAll?.("[data-sonner-toast]").forEach((e) => {
+						const t = e.textContent.replace(/\s+/g, " ").trim();
+						if (t && !window.__toast.includes(t)) window.__toast.push(t);
+					});
+				};
+				new MutationObserver((ms) => {
+					for (const m of ms) m.addedNodes.forEach(gom);
+				}).observe(document.body, { childList: true, subtree: true });
+			});
+			const o = await page.$("textarea");
+			if (!o) return null;
+			await o.click();
+			await o.type("Ghi thu tu phep do nghiem thu");
+			await new Promise((r) => setTimeout(r, 300));
+			await page.keyboard.down("Meta");
+			await page.keyboard.press("Enter");
+			await page.keyboard.up("Meta");
+			await new Promise((r) => setTimeout(r, CHO_HONG));
+			return page.evaluate(() => window.__toast ?? []);
+		};
+
+		const doc = async (locale) => {
+			const page = await browser.newPage();
+			await page.setViewport({ width, height, deviceScaleFactor: 1 });
+			await page.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
+			const chu = [];
+			for (const tab of TAB) {
+				await moHoSo(page, locale, tab);
+				const phan = (await page.evaluate(DOC_CHU, scope)) ?? [];
+				if (phan.length === 0) {
+					console.log(`RANG CUN: tab dong thoi gian "${tab}" khong ve ra chu nao`);
+					process.exit(2);
+				}
+				chu.push(...phan);
+			}
+			const lang = await page.evaluate(() => document.documentElement.lang);
+			await page.close();
+			return { lang, chu };
+		};
+
+		const duongHong = async (locale, kieu) => {
+			const page = await browser.newPage();
+			await page.setViewport({ width, height, deviceScaleFactor: 1 });
+			await page.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
+			await moHoSo(page, locale, "all");
+			let daChan = false;
+			await page.setRequestInterception(true);
+			page.on("request", (req) => {
+				const laLenh =
+					req.method() === "POST" && req.url().includes("activities.create");
+				if (!laLenh) {
+					req.continue();
+					return;
+				}
+				daChan = true;
+				if (kieu === "trinh-duyet") req.abort("failed");
+				else req.continue({ postData: JSON.stringify({ json: { type: "NOTE" } }) });
+			});
+			const toast = await soanRoiGui(page);
+			await page.close();
+			if (!daChan) {
+				console.log(`RANG CUN: duong hong "${kieu}" khong bat duoc lenh nao — cu pha khong cham toi vat`);
+				process.exit(2);
+			}
+			return toast;
+		};
+
+		const vi = await doc("vi");
+		const en = await doc("en");
+		if (vi.lang !== "vi" || en.lang !== "en") {
+			console.log(`RANG CUN: lang lech (vi->${vi.lang}, en->${en.lang})`);
+			process.exit(2);
+		}
+		const dem = (l) => {
+			const m = new Map();
+			for (const x of l) m.set(x, (m.get(x) ?? 0) + 1);
+			return m;
+		};
+		const viDem = dem(vi.chu);
+		const enDem = dem(en.chu);
+		const duLieu = [...trung.set];
+		const laDuLieu = (x) => trung.set.has(x) || duLieu.some((d) => d.length > 2 && x.includes(d));
+		const con = [...viDem.keys()]
+			.filter((x) => enDem.has(x) && !laDuLieu(x) && !CHI_SO.test(x))
+			.sort();
+		const lan = con.reduce((n, x) => n + viDem.get(x), 0);
+
+		console.log(`-- sau tab dong thoi gian, hai thu tieng`);
+		console.log(`   CON LAI: ${con.length} chuoi / ${lan} lan`);
+		for (const x of con) console.log(`      * ${JSON.stringify(x)}${viDem.get(x) > 1 ? ` x${viDem.get(x)}` : ""}`);
+
+		const hongTD = await duongHong("vi", "trinh-duyet");
+		const hongMC = await duongHong("vi", "may-chu");
+		console.log(`\n-- duong hong (a) phia trinh duyet, o tieng Viet`);
+		console.log(`   chu hien ra: ${JSON.stringify(hongTD)}`);
+		console.log(`-- duong hong (b) may chu tu choi that, o tieng Viet`);
+		console.log(`   chu hien ra: ${JSON.stringify(hongMC)}`);
+		console.log(
+			"   (b) KHONG phai chieu do — hop dong khai cau may chu van tieng Anh, vong ④",
+		);
+
+		const hongTDViet = (hongTD ?? []).some((t) => DAU_VIET.test(t));
+		if (!hongTDViet) {
+			console.log(`   DUONG (a) CHUA DAT: khong cau nao mang dau tieng Viet`);
+		}
+		console.log(`\nket qua: con lai=${lan} lan · duong hong (a) tieng Viet=${hongTDViet ? "co" : "khong"}`);
+		process.exit(lan > 0 || !hongTDViet ? 1 : 0);
 	}
 
 	if (chan === "be-rong") {

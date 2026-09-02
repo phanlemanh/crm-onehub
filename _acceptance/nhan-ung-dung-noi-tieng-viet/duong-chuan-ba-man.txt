@@ -9,3 +9,20 @@ Do 2026-09-02 tren may chu dung tu cay lam viec, HEAD 90ea0be.
 -- man deals · be mat khai=10 · da mo vi=10 en=10
    CON LAI: 65 chuoi / 872 lan
 ket qua: con lai=1890 lan · be mat lech=0
+
+## Chan ho-so
+-- ho so company · tab da mo=2 (company/overview · company/activity)
+   CON LAI: 78 chuoi / 256 lan
+-- ho so contact · tab da mo=3 (contact/overview · contact/deals · contact/activity)
+   CON LAI: 105 chuoi / 459 lan
+-- ho so deal · tab da mo=2 (deal/overview · deal/activity)
+   CON LAI: 86 chuoi / 294 lan
+ket qua: con lai=1009 lan
+
+## Chan dong-thoi-gian
+   CON LAI: 56 chuoi / 341 lan
+-- duong hong (a) phia trinh duyet, o tieng Viet
+   chu hien ra: ["Failed to fetch"]
+-- duong hong (b) may chu tu choi that, o tieng Viet
+   chu hien ra: ["Invalid input: expected object, received undefined"]
+ket qua: con lai=341 lan · duong hong (a) tieng Viet=khong
