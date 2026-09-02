@@ -16,20 +16,25 @@ human_signoff:
 Ngày 2026-09-02, sau khi vòng ② ký Cổng 2. Cây ghim: `a9cb0201`, cộng các thay
 đổi chưa commit liệt kê ở mục "Cây đo được là cây nào".
 
-| Eval | Tiêu chí | Kiểu | Verdict | Đổi so với vòng chấm 1 |
-| --- | --- | --- | --- | --- |
-| E1 | AC-1 | ui-check | ĐẠT | — |
-| E2 | AC-2 | ui-check | ĐẠT | — |
-| E3 | AC-3 | ui-check | ĐẠT | — |
-| E4 | AC-4 | script | ĐẠT | ràng đã gãy, đã sửa |
-| E5 | AC-5 | script | ĐẠT | — |
-| **E6** | AC-6 | ui-check | **KHÔNG ĐẠT** | 11 chuỗi → **4** |
-| E7 | AC-7 | script | ĐẠT | — |
-| E8 | AC-8 | script | ĐẠT | **trước đây ĐẠT NHẦM** |
-| **E9** | AC-9 | ui-check | **hai cách đọc** | cắt trần 2 → **0** |
-| E10 | AC-10 | ui-check | ĐẠT | — |
-| E11 | AC-12 | ui-check | ĐẠT | — |
-| E12 | AC-11 | judgment | **KHÔNG ĐẠT** | năm nhãn đã đổi, hội đồng vẫn chia |
+| Eval | Criterion | Executor | Verdict |
+|---|---|---|---|
+| E6 | AC-6 | ui-check | FAIL |
+| E9 | AC-9 | ui-check | UNCERTAIN |
+| E12 | AC-11 | judgment | UNCERTAIN |
+| E1 | AC-1 | ui-check | PASS |
+| E2 | AC-2 | ui-check | PASS |
+| E3 | AC-3 | ui-check | PASS |
+| E4 | AC-4 | script | PASS |
+| E5 | AC-5 | script | PASS |
+| E7 | AC-7 | script | PASS |
+| E8 | AC-8 | script | PASS |
+| E10 | AC-10 | ui-check | PASS |
+| E11 | AC-12 | ui-check | PASS |
+
+Đổi so với vòng chấm 1: E6 từ 11 chuỗi tiếng Anh xuống **4**. E9 từ 2 tiêu đề bị
+chém trần xuống **0**, nhưng câu chữ tiêu chí nay nghịch với tiêu chí vòng ② mà
+người đã ký. E8 lộ ra vòng chấm 1 đã chấm **ĐẠT NHẦM**. E4 lộ ra ràng đã gãy từ
+vòng ② và không ai chạy lại. E12 chấm lại sau khi năm nhãn đổi, hội đồng vẫn chia.
 
 ## Cây đo được là cây nào — và bốn lượt đo đầu đo nhầm cây
 
@@ -364,6 +369,102 @@ Lấy bằng `curl` từ lượt trả về ĐẦU TIÊN của máy chủ, khôn
 Và lượt vẽ đầu ấy đã mang chữ tiếng Việt, không phải chờ một lượt vẽ lại: file
 `evidence/E3-step1.html` chứa `Công ty` ×3, `Mọi công ty trong mạng lưới` ×2,
 `Số lượng cá nhân`, `Số thoả thuận đang mở`, `Hoạt động gần nhất`.
+
+## Evidence
+
+- eval: E6
+  run_id: tieng-viet-cho-crm-r2-E6
+  exit_code: 1
+  baseline: red
+  verifier: /Users/manhphan/dev/crm/.claude/worktrees/exciting-tharp-571c02/_acceptance/tieng-viet-cho-crm/rang/ban-ve-man-cong-ty.mjs
+  verified_at: 2026-09-02T02:41:54Z
+  screenshot: evidence/E6-man-vi-1440.png
+  reason: Bốn chuỗi tiếng Anh còn nhìn thấy trên màn công ty ở trạng thái mặc định, năm chuỗi khi mở đủ chín cột. Tất cả là chuỗi khoá cứng tại chỗ gọi trong apps/app.
+
+- eval: E9
+  run_id: tieng-viet-cho-crm-r2-E9
+  exit_code: 0
+  baseline: red
+  verifier: /Users/manhphan/dev/crm/.claude/worktrees/exciting-tharp-571c02/_acceptance/tieng-viet-cho-crm/rang/ban-ve-man-cong-ty.mjs
+  verified_at: 2026-09-02T02:41:54Z
+  screenshot: evidence/E9-768-vi-768.png
+  verdict: UNCERTAIN
+  rationale: Không tiêu đề nào bị chém trần ở bất kỳ bề rộng nào, ở cả hai thứ tiếng — lỗi vòng chấm 1 tìm ra đã đóng. Nhưng ở 768px có bốn tiêu đề bị cắt kèm dấu ba chấm, và câu chữ AC-9 cấm tiêu đề bị cắt, trong khi AC-7 của vòng ② mà người đã ký lại quy định tiêu đề bị cắt phải cắt thế nào. Hai tiêu chí nghịch nhau; máy không tự chọn được cái nào thắng.
+
+- eval: E12
+  judged_by: ba người chấm ngữ cảnh sạch, hai vòng
+  verdict: UNCERTAIN
+  rationale: Vòng chấm chữ 1 — ba người, cả ba KHÔNG ĐẠT, năm nhãn đổi theo chỗ hai người trở lên cùng chỉ. Vòng chấm chữ 2 trên nhãn mới — một ĐẠT, hai KHÔNG ĐẠT. Hai người đề xuất một sửa duy nhất giống nhau, người thứ ba đòi hướng ngược lại, và phép đo đứng về phía người thứ ba: bản sửa hai người đề xuất làm hai nhãn kề nhau chỉ khác nhau từ ký tự thứ 10 thay vì thứ 4 khi bị cắt ở 1024px. Mỗi hướng đều có một cái giá đo được.
+  human_override:
+
+- eval: E1
+  run_id: tieng-viet-cho-crm-r2-E1
+  exit_code: 0
+  baseline: n-a
+  verifier: curl
+  verified_at: 2026-09-02T02:41:54Z
+  screenshot: evidence/E1-step1.html
+
+- eval: E2
+  run_id: tieng-viet-cho-crm-r2-E2
+  exit_code: 0
+  baseline: n-a
+  verifier: curl
+  verified_at: 2026-09-02T02:41:54Z
+  screenshot: evidence/E2-step1.html
+
+- eval: E3
+  run_id: tieng-viet-cho-crm-r2-E3
+  exit_code: 0
+  baseline: n-a
+  verifier: curl
+  verified_at: 2026-09-02T02:41:54Z
+  screenshot: evidence/E3-step1.html
+
+- eval: E4
+  run_id: tieng-viet-cho-crm-r2-E4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.rang_ngon_ngu_la
+  verified_at: 2026-09-02T02:41:54Z
+
+- eval: E5
+  run_id: tieng-viet-cho-crm-r2-E5
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.rang_cookie
+  verified_at: 2026-09-02T02:41:54Z
+
+- eval: E7
+  run_id: tieng-viet-cho-crm-r2-E7
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.rang_du_lieu_khong_dich
+  verified_at: 2026-09-02T02:41:54Z
+
+- eval: E8
+  run_id: tieng-viet-cho-crm-r2-E8
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.rang_dinh_dang
+  verified_at: 2026-09-02T02:41:54Z
+  screenshot: evidence/E8-ngay-vi.html
+
+- eval: E10
+  run_id: tieng-viet-cho-crm-r2-E10
+  exit_code: 0
+  baseline: n-a
+  verifier: /Users/manhphan/dev/crm/.claude/worktrees/exciting-tharp-571c02/_acceptance/tieng-viet-cho-crm/rang/ban-ve-man-cong-ty.mjs
+  verified_at: 2026-09-02T02:41:54Z
+  screenshot: evidence/E10-step1.png
+
+- eval: E11
+  run_id: tieng-viet-cho-crm-r2-E11
+  exit_code: 0
+  baseline: n-a
+  verifier: curl
+  verified_at: 2026-09-02T02:41:54Z
+  screenshot: evidence/E11-step1.html
 
 ## Lệnh suite
 
