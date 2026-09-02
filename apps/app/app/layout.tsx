@@ -67,7 +67,7 @@ export default async function RootLayout({
 						</TRPCReactProvider>
 					</NuqsAdapter>
 				</LocaleProvider>
-				<LocalDateTimeHydrator />
+				<LocalDateTimeHydrator locale={locale} />
 			</body>
 		</html>
 	);

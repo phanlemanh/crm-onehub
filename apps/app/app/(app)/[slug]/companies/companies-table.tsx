@@ -28,8 +28,8 @@ import { useTableQuery } from "@/components/data-table/use-table-query";
 import { LocalRelativeTime } from "@/components/local-date-time";
 import { ACTIVITY_FACET_OPTIONS } from "@/lib/activity-recency";
 import {
-	ENRICHMENT_FACET_OPTIONS,
 	ENRICHMENT_POLL_MS,
+	enrichmentFacetOptions,
 	isEnriching,
 } from "@/lib/enrichment-status";
 import {
@@ -235,7 +235,7 @@ export function CompaniesTable() {
 		{
 			id: "enrichment",
 			label: m.facets.enrichment,
-			options: ENRICHMENT_FACET_OPTIONS.filter(
+			options: enrichmentFacetOptions(locale).filter(
 				(option) => (facetCounts?.enrichment?.[option.value] ?? 0) > 0,
 			),
 		},
