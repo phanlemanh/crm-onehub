@@ -9,8 +9,17 @@ const BO_QUA_THUOC = new Set([
 
 const CHI_THI = new Set(["use client", "use server", "use strict"]);
 
+const PHIM = new Set([
+	"Enter", "Escape", "Tab", "Backspace", "Delete", "ArrowUp", "ArrowDown",
+	"ArrowLeft", "ArrowRight", "Home", "End", "PageUp", "PageDown",
+]);
+
+const LOP_CSS =
+	/(^|\s)(min-w-|max-w-|w-\[|h-\[|text-|bg-|border-|flex|grid|gap-|px-|py-|pt-|pb-|pl-|pr-|mt-|mb-|ml-|mr-|rounded-|truncate|font-|wrap-|whitespace-|tabular-|leading-|tracking-|opacity-|z-|top-|left-|right-|bottom-|shrink-|items-|justify-|absolute|relative|hidden|inline-|overflow-|hover:|focus:|sm:|md:|lg:)/
+
 const CHU_NGUOI_DOC = (s) => {
 	if (CHI_THI.has(s)) return false;
+	if (PHIM.has(s)) return false;
 	if (s.length < 2 || s.length > 200) return false;
 	if (!/[A-Za-z]/.test(s)) return false;
 	if (/^[a-z0-9_-]+$/.test(s)) return false;
@@ -20,6 +29,8 @@ const CHU_NGUOI_DOC = (s) => {
 	if (/^@?[\w-]+\/[\w-]+$/.test(s)) return false;
 	if (/^\.?\/?[\w-]+\.[a-z]{2,4}$/.test(s)) return false;
 	if (/^[a-z]+([A-Z][a-z]*)+$/.test(s)) return false;
+	if (/^(noreferrer|noopener|nofollow)(\s+(noreferrer|noopener|nofollow))*$/.test(s)) return false;
+	if (LOP_CSS.test(s)) return false;
 	return /\s/.test(s) || /^[A-Z]/.test(s);
 };
 
@@ -33,6 +44,7 @@ function moduleDich(file) {
 
 const theo = new Map();
 for (const file of lat().tham) {
+	if (/\/lib\/messages\//.test(file)) continue;
 	const src = readFileSync(file, "utf8");
 	const mod = moduleDich(file);
 	src.split("\n").forEach((line, i) => {
