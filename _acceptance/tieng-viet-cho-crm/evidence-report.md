@@ -138,7 +138,7 @@ thanh đầu trang. Ghi lại vì người chốt cần biết chúng có thật
 `English` bị luật "phải mang dấu tiếng Việt" bắt, và đây là **ngoại lệ cố ý**:
 dòng ấy gọi tên thứ tiếng sẽ chuyển sang, nên nó phải viết bằng thứ tiếng đó.
 
-### Cái thước có đo được không: 20 trên 22 khoá
+### Cái thước có đo được không: 20 trên 22 lúc chấm, 22 trên 22 sau khi dữ liệu thử đủ
 
 Trả TỪNG khoá tiếng Việt về đúng chuỗi tiếng Anh của nó, một khoá một lượt, trên
 máy chủ thật, rồi xem số dư có tăng không. Mỗi đột biến còn phải qua **phép kiểm
@@ -162,6 +162,19 @@ máy chủ thật, rồi xem số dư có tăng không. Mỗi đột biến còn
 
 Dữ liệu thử không sinh ra được hai trạng thái ấy. Đây là giới hạn của **dữ liệu**,
 không phải của thước.
+
+**Đo lại 2026-09-02: 22 / 22.** Vòng ③ dựng hai hàng còn thiếu trong dữ liệu thử.
+Chạy lại đúng hai khoá ấy, ở trạng thái mở menu:
+
+```
+-- nen: ban ve nguyen ban con 17 chuoi du
+   facets.unassigned      do  17->21  "Chưa giao" -> "Unassigned"
+   facets.activity        do  17->22  "Hoạt động" -> "Activity"
+ket qua: bat 2/2 · dot bien cun 0 · sot 0
+```
+
+Không còn khoá nào lọt lưới, và danh sách "không bắt được" nay **rỗng**. Chẩn
+đoán ở trên đúng: giới hạn nằm ở dữ liệu, và khi dữ liệu có thì thước bắt ngay.
 
 **Bản đầu của kịch bản đột biến có một lỗi và nó tự khai ra.** Nó so số dòng đổi
 bằng `git diff` so với commit, nên khi cây đã mang bản sửa nhãn chưa commit thì
