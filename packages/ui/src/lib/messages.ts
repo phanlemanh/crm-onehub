@@ -77,7 +77,7 @@ export type Messages = typeof en;
 
 const vi = {
 	table: {
-		clearFilters: "Bỏ chọn tất cả",
+		clearFilters: "Bỏ hết tiêu chí",
 		clearSelection: "Bỏ chọn",
 		selected: (count: string) => `Đã chọn ${count} dòng`,
 		filters: "Lọc",

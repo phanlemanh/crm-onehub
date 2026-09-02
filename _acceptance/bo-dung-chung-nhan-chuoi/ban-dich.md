@@ -7,7 +7,7 @@ Chỗ có `X`, `Y`, `Z` là chỗ chữ ghép biến: tên hay số do chỗ g�
 
 | Khoá | Tiếng Anh | Tiếng Việt |
 | --- | --- | --- |
-| `table.clearFilters` | Clear | **Bỏ chọn tất cả** |
+| `table.clearFilters` | Clear | **Bỏ hết tiêu chí** |
 | `table.clearSelection` | Clear selection | **Bỏ chọn** |
 | `table.selected` | X selected | **Đã chọn X dòng** |
 | `table.filters` | Filters | **Lọc** |
@@ -77,3 +77,16 @@ Gỡ khoá này không đủ: `dnd-kit` tự đặt `aria-roledescription="sorta
 tiếng Anh đọc thành tiếng. Nên thuộc tính bị **tắt tường minh** sau chỗ trải
 `attributes`, và trình đọc màn hình đọc vai thật ("nút") — đúng ở mọi thứ tiếng.
 Dòng `sr-only` ngay bên trong đã nói việc phải làm.
+
+
+## Vòng người lạ lái thử sửa một dòng
+
+Hai người lạ — không biết gì về vòng này — dùng thử CRM như một ngày làm việc
+thật. Một người ở màn rộng, một người ở màn hẹp và màn điện thoại.
+
+**`table.clearFilters` "Bỏ chọn tất cả" → "Bỏ hết tiêu chí".** Vòng chấm 3 chọn
+chữ đó để bắt cặp với `clearSelection` = "Bỏ chọn"; vòng chấm 4 chấm là "hoà".
+Người lạ ở màn hẹp gặp cả hai **cùng một lúc** và dừng lại nghĩ: thanh chọn dòng
+có nút "Bỏ chọn", trong menu lọc có "Bỏ chọn tất cả", hai chữ gần như nhau cho
+hai việc ngược nhau. Bắt cặp đẹp trên bảng không có nghĩa là phân biệt được trên
+màn.
