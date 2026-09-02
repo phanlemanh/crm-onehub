@@ -1,98 +1,136 @@
 # Handoff — nhánh `onehub`
 
-Viết lại cuối phiên 2026-09-01. Bản trước (2026-08-31) có hai mục đã SAI — xem
-"Bẫy cũ nay sai" ở cuối. Đọc file này trước khi làm bất cứ việc gì trong hàng đợi.
+Viết lại cuối phiên 2026-09-02. Bản trước (2026-09-01) đúng về luật đo nhưng
+thiếu một cái bẫy đắt — xem "Bẫy mới" ở cuối. Đọc file này trước khi làm bất cứ
+việc gì trong hàng đợi.
 
 ## Hiện trạng
 
 - `origin` = `phanlemanh/crm-onehub` (riêng tư), nhánh làm việc `onehub`
 - `upstream` = `trycompai/crm` (chỉ đọc, MIT) · `release` = bản gương, không sửa
-- **22 commit chưa đẩy** lên `origin` tính đến cuối phiên này
+- **25 commit chưa đẩy** lên `origin` tính đến cuối phiên này
 
 Đã gửi lên hãng, đang mở: PR `trycompai/crm#194` (vá `dev-session`), issue `#195`
 (nay đã biết là **không phải test phập phù** — xem mục bẫy).
 
 ## Việc tiếng Việt: năm vòng, đang ở đâu
 
-`_acceptance/tieng-viet-cho-crm/opportunity.md` chốt năm vòng. Thứ tự **đã đảo**
+`_acceptance/tieng-viet-cho-crm/opportunity.md` chốt năm vòng. Thứ tự đã đảo
 ngày 2026-09-01: ② lên trước ①.
 
 | Vòng | Vùng | Trạng thái |
 | --- | --- | --- |
 | ② | Bộ dựng chung (`packages/ui`) | **Đã ký Cổng 2** — `bo-dung-chung-nhan-chuoi` |
-| ① | Xương sống + định dạng ngày/số | **Dừng ở S4**, cần chạy lại — `tieng-viet-cho-crm` |
-| ③ | Nhãn ứng dụng (`apps/app`) | chưa mở |
+| ① | Xương sống + định dạng ngày/số | **Chờ chữ ký ở Cổng 2** — `tieng-viet-cho-crm` |
+| ③ | Nhãn ứng dụng (`apps/app`) | **việc kế tiếp**, chưa mở |
 | ④ | Câu máy chủ trả về | chưa mở |
 | ⑤ | Chữ tác nhân sinh ra | chưa mở |
 
-**Việc kế tiếp: chạy lại S4 cho vòng ①.** Nó nay đóng được AC-9 (bảng dùng chung
-đã nhận chuỗi từ ngoài), nhưng **E6 vẫn sẽ đỏ**: ô tìm và nút `Archived` là chuỗi
-khoá cứng **tại chỗ gọi** trong `apps/app`, tức vòng ③. Đọc
-`_acceptance/tieng-viet-cho-crm/decisions.jsonl` trước — 15 dòng, mỗi dòng một
-quyết định và căn cứ.
+### Vòng ① — còn đúng một việc của người
 
-## Bài học đắt nhất của phiên, đừng trả giá lại
+S4 chạy lại ngày 2026-09-02. Chín tiêu chí đạt có bằng chứng hai chiều. Người đã
+chọn ở Cổng 2: **bốn chuỗi còn lại chuyển sang vòng ③, vòng ① ký với giới hạn đã
+khai** (`decisions.jsonl`, `d-2026-09-02T10:40:00Z-cong2v1`).
 
-**Ba lần liên tiếp một phép đo nói dối, và mỗi lần tôi tin nó.**
+**Chữ ký chưa ghi.** Lệnh của người, một lượt gõ:
 
-1. Máy quét mã đếm 25 chuỗi; số thật là 53. Nó bỏ sót vì nó là **một danh sách
-   hình dạng chuỗi**, và một danh sách hình dạng không chứng minh được sự vắng mặt.
-   Người chấm gieo chữ lọt lưới bằng mười hai lối; rẻ nhất là đổi nháy kép thành
-   nháy ngược.
-2. Chuyển sang **chấm bản vẽ** — dựng thật từng component hai lần, tiếng Anh và
-   tiếng Việt, rồi so chữ người đọc thấy. Không lối lách cú pháp nào tồn tại, vì
-   nó không nhìn cú pháp. Nó bắt được cả chuỗi **của thư viện**: `dnd-kit` đặt
-   `aria-roledescription="sortable"`, `cmdk` đặt `aria-label="Suggestions"` — thứ
-   không máy quét mã nào của mình có thể thấy.
-3. Rồi tôi công bố "phép đo bắt 39/39" trong khi số thật là 32/39. Kịch bản quét
-   của tôi thay chuỗi ở nửa file không chứa bảng dịch, và **tôi không kiểm rằng
-   đột biến có thật sự đổi file**. Bộ đo cũ có đúng phép kiểm đó; tôi đánh rơi nó
-   khi đổi cách.
+```
+/acceptance-gate:signoff tieng-viet-cho-crm
+```
 
-**Luật rút ra, áp cho mọi phép đo sau này:** trước khi tin một con số, phá vật
-thật rồi xem phép đo có đỏ không — và kiểm rằng cú phá **thật sự đổi được vật**.
-Một phép đo chỉ xanh được mà không đỏ được thì nó không đo gì.
+Câu gộp còn cần lời của người cho hai mục **chưa chắc**, và máy không điền hộ:
 
-Phép đo hiện tại: `cd packages/ui && bun run test`. Quét 43 khoá bảng dịch, trả
-từng khoá về tiếng Anh một lượt: **43/43 đỏ**. Cách chạy quét ghi trong
-`_acceptance/bo-dung-chung-nhan-chuoi/contract.md`, mục AC-6.
+- **E9** — tiêu đề cột dài bị cắt kèm dấu ba chấm ở màn hẹp. Câu chữ AC-9 cấm
+  tiêu đề bị cắt; AC-7 của vòng ② mà người đã ký lại quy định cắt thì phải cắt
+  thế nào. Hai lời hứa nghịch nhau. Đo được: **0 chỗ cắt trần** ở mọi khổ, mọi
+  thứ tiếng; 4 chỗ cắt kèm ba chấm ở 768px, và tiếng Anh cùng khổ cũng cắt 2.
+- **E12** — mười nhãn cột. Hai vòng hội đồng, năm nhãn đã đổi, hội đồng vẫn chia
+  và hai hướng sửa họ đề nghị ngược nhau.
 
-## Người lạ lái thử tìm ra gì
+Sau khi ký: `PRODUCT-MAP.md` được vẽ lại, và vòng ③ mở được.
 
-Hai người lạ dùng CRM một ngày làm việc, không biết gì về vòng nào. Cả hai nói
-cùng một câu: **"chỉ có trang Công ty được dịch"**, và chỗ khó chịu nhất không
-phải tiếng Anh mà là **nửa nọ nửa kia trong cùng một màn**.
+### Vòng ③ — việc kế tiếp, và nó thừa kế một hoá đơn
 
-### Lỗi sản phẩm — không thuộc vòng ngôn ngữ nào, chưa ai nhận
+Chạy `/feature-loop:feature-loop <mô tả>`. Đây là vòng quét lớn nhất: 177 file
+nhãn ứng dụng.
 
-1. **Sắp xếp theo `Thoả thuận mở` ra sai thứ tự.** Đọc từ trên xuống:
-   2·2·2·2·0·1·1·2·1·1·0·1·1·1·0. Cột khai `sortable: true`
-   (`companies-table.tsx`), nên lỗi ở đường truy vấn.
-2. **Bấm đầu cột vừa sắp xếp vừa mở hồ sơ dòng đầu.** Lặp lại ba lần.
-3. **Ở 390px không còn ô đánh dấu, nhưng lựa chọn cũ vẫn sống** — bấm được
-   `Actions → Archive` cho một dòng không nhìn thấy là dòng nào. Đây là chỗ nguy
-   nhất trong danh sách.
-4. **`Cột (7)` nói dối ở màn hẹp**: cột đã ẩn theo bề rộng vẫn được đếm, vẫn còn
-   dấu tick, bấm tick không có gì xảy ra.
-5. **Cột ô đánh dấu chiếm ~120px ở 768px** trong khi bốn tiêu đề bên cạnh bị cắt;
-   tắt bớt một cột thì khoảng trống phình lên ~240px. Bảng không cuộn ngang.
-   Đây là **nguyên nhân gốc** của việc cắt chữ mà vòng ② vá bằng cách nới phần trăm.
-6. **`Esc` đóng form thêm công ty, mất sạch chữ vừa gõ, không hỏi lại.**
-7. **Menu con của bộ lọc rất khó mở bằng cách bấm** trên màn cảm ứng — bấm lần đầu
-   thường đóng sạch cả menu. Thiết kế cho chuột rê.
+**Cổng 2 của vòng ③ phải đo lại đúng năm chuỗi này và thấy chúng biến mất:**
 
-### Thuộc vòng ①, nhận lại khi chạy lại S4
+| Chuỗi | Ở đâu |
+| --- | --- |
+| `Search companies by name or domain…` | `companies-table.tsx:264` |
+| `Archived` | `companies-table.tsx`, nút chuyển màn lưu trữ |
+| `Views` | `saved-views-menu.tsx` |
+| `New company` | `create-company-sheet.tsx` |
+| `Not researched` + 4 nhãn trạng thái | `lib/enrichment-status.ts:10` |
 
-Ba nhãn cột người lạ **phải đi hỏi mới hiểu**, cả hai người độc lập nêu đúng ba
-chữ này: `Thoả thuận mở` · `Cá nhân` · `Bổ sung`. Hai chữ đầu đứng trên cột
-**toàn số**, nên một danh từ chỉ người và một danh từ chỉ quan hệ đều đọc sai loại.
+Cộng ba thứ nữa vòng ① tìm ra mà không nhận:
 
-### Thuộc vòng ③
+- **Chữ thời gian tương đối** — `just now`, `2h ago`, `in 3d`, và ba hậu tố
+  `m`/`h`/`d`, trong `local-date-time.tsx`. Dữ liệu thử không sinh ra chúng nên
+  **không phép đo nào che chúng**. Thêm một công ty có hoạt động vào dữ liệu thử
+  trước khi tin bất kỳ con số nào.
+- **20 chuỗi mặc định đè được** mà vòng ② cố ý bỏ — ô ngày vẫn đọc `No date yet`,
+  ô gợi ý công ty vẫn đọc `Search companies…`.
+- **Bề rộng cột.** Đây mới là chỗ chữa việc cắt tiêu đề. Rút nhãn ngắn hơn không
+  cứu được gì: ở 768px tiếng Anh cũng cắt.
 
-Trang chủ, Liên hệ, Thoả thuận, Chat, Cài đặt, form thêm công ty, hồ sơ công ty:
-tiếng Anh 100%. Và `packages/ui/src/lib/format.ts` mặc định `locale = "en"` với
-**24 chỗ gọi ở `apps/app`, 0 chỗ truyền vùng** — nên tiền, ngày, phần trăm vẫn in
-tiếng Anh. Giờ hiện `9:09 PM`, ngày hiện `CN, 26 THG 7, 2026`.
+**Dùng lại nguyên giàn đo của vòng ①**, đừng dựng cái mới:
+`_acceptance/tieng-viet-cho-crm/rang/ban-ve-man-cong-ty.mjs` (dựng màn thật hai
+lần rồi trừ) và `rang/dot-bien.mjs` (trả từng khoá về tiếng Anh, một khoá một
+lượt). Chúng đã chịu bốn luật và ba lần tự hỏng.
+
+## Luật đo — bốn luật, mỗi luật một lần trả giá
+
+1. **Không dựng máy quét mã để chứng minh "không còn chữ tiếng Anh".** Một danh
+   sách hình dạng chuỗi không chứng minh được sự vắng mặt. Dựng vật thật hai
+   lần, tiếng Anh và tiếng Việt, rồi so chữ người đọc thấy.
+2. **Trước khi tin một con số: phá vật thật, xem phép đo có đỏ không, VÀ kiểm
+   rằng cú phá thật sự đổi được vật.** Một phép đo chỉ xanh được mà không đỏ
+   được thì nó không đo gì.
+3. **Danh sách trung tính phải sinh ra, không viết tay.** Vòng ① sinh 128 giá trị
+   từ máy chủ: dữ liệu qua tRPC, chữ viết tắt bằng chính hàm của sản phẩm, ngày
+   bằng chính bộ định dạng của sản phẩm.
+4. **Mọi giá trị tiếng Việt phải mang dấu tiếng Việt** — chặn lối dịch một khoá
+   thành một chuỗi tiếng Anh KHÁC.
+
+### Ba cái thước hỏng trong phiên 2026-09-02, cùng một họ
+
+Cả ba **xanh được mà chưa từng chứng minh đỏ được**:
+
+- **Đếm theo tập hợp chuỗi phân biệt.** Trả `headers.archived` về `"Archived"`
+  thì nó trùng nút `Archived` đã có trên màn, tập hợp không đổi, phép đo báo
+  XANH. → Đếm **số lần xuất hiện**, không đếm số chuỗi khác nhau.
+- **Đọc `box-shadow` để biết có vòng tiêu điểm.** Giá trị đọc được trong suốt
+  hoàn toàn. → So **điểm ảnh** trước và sau khi có tiêu điểm.
+- **Chân định dạng chỉ grep vùng KHAI CỨNG.** Nó mù với `Intl.DateTimeFormat(undefined, …)`,
+  nên màn công ty in ngày tiếng Anh suốt một vòng trong khi AC-8 được chấm ĐẠT.
+  → Đếm mọi chỗ dựng `Intl.*` **không truyền vùng nào**.
+
+### Lời chấm của hội đồng phải đo lại, không tin thẳng
+
+Ba lời chấm nặng liên tiếp về chữ **bị cắt** đều SAI: `Hoạt động cuối` không cắt
+ra từ tục, `Phụ trách` không cắt, `Ngày tạo` hiện `Ngày t…` chứ không phải `N..`.
+Chữ cắt bằng CSS **không nằm trong DOM**, nên người chấm đọc ảnh chỉ đoán. Đo
+bằng cách dựng từng tiền tố rồi so bề rộng ô.
+
+## Bẫy mới — đắt nhất phiên này
+
+**Máy chủ dev ở `:3000`/`:3001` chạy từ kho gốc `/Users/manhphan/dev/crm`, không
+phải từ cây làm việc.** Bốn lượt đo đầu đo nhầm cây. Hai cây tình cờ cùng commit
+nên con số không sai, nhưng **đột biến không thể đỏ**: kịch bản sửa file ở cây
+này trong khi máy chủ đọc file ở cây kia, và mọi khoá đều báo "lọt lưới".
+
+Luật: **`ps ax | grep next` xem máy chủ chạy từ thư mục nào TRƯỚC khi tin bất kỳ
+con số nào.** Cây làm việc thì dựng máy chủ riêng:
+
+```
+cd apps/app && PORT=3100 API_URL=http://localhost:3001 APP_URL=http://localhost:3100 bun run dev
+```
+
+**Và: đừng để kịch bản đo khôi phục bằng `git checkout`.** Kịch bản đột biến của
+vòng ① từng làm thế và **xoá mất bản sửa chưa commit** của phiên. Khôi phục bằng
+nội dung đã chụp trong bộ nhớ.
 
 ## Ba thứ chặn, cần người quyết — không phải việc code
 
@@ -112,12 +150,15 @@ token, thay giá trị bằng thang màu tự dựng.
 
 ## Hàng đợi feature-loop
 
-Chạy bằng `/feature-loop:feature-loop <mô tả>`. Cổng nghiệm thu **đã chạy thật 6
-lần** trong hai phiên vừa rồi — không còn là đường chưa ai đi.
+Chạy bằng `/feature-loop:feature-loop <mô tả>`. Cổng nghiệm thu **đã chạy thật 7
+lần** — không còn là đường chưa ai đi.
 
-1. **`tieng-viet-cho-crm` chạy lại S4** — T2 — việc kế tiếp, xem mục trên.
-2. **Vòng ③ nhãn ứng dụng** — T2 — quét lớn nhất. Dùng lại giàn kiểm bản vẽ của
-   vòng ②, đừng dựng máy quét mã.
+1. **Vòng ③ nhãn ứng dụng** — T2 — việc kế tiếp, xem mục trên.
+2. **`prerender-mat-vi-doc-cookie`** — T2 — **mới, mức cao.** Đọc `cookies()` ở
+   layout gốc làm **mọi tuyến** mất khả năng dựng sẵn, không riêng trang đăng
+   nhập như hợp đồng vòng ① khai. Máy chủ dev in một lỗi mỗi lượt tải trang, trỏ
+   `apps/app/app/layout.tsx:47`. Cần đo giá thật rồi chọn giữa bọc vùng chờ và
+   chấp nhận giá.
 3. **`he-icon-mot-moi`** — T2 — `components.json` khai `lucide` nhưng thực tế 73
    file Carbon / 28 lucide. Cần người chọn ở Cổng Đáng.
 4. **`eve-stream-sang-ui-message`** — T2 — rủi ro cao nhất. Đọc `docs/agent-panel.md`
@@ -131,39 +172,36 @@ lần** trong hai phiên vừa rồi — không còn là đường chưa ai đi.
    `packages/ui/src/styles/globals.css`.
 9. **`oxlint-thu-hep-mien-tru`** — T1 — `.oxlintrc.json` bỏ qua cả `lib/**` và
    `scripts/**`; mọi script viết sau này cũng thoát luật.
+10. **`du-lieu-thu-thieu-hai-trang-thai`** — T1 — 0 trên 15 công ty thiếu người
+    phụ trách, 0 có hoạt động. Hai khoá bản dịch vì thế **không có phép đo nào
+    che**, và chữ thời gian tương đối cũng không.
 
-Ngoài hàng đợi, cần **chip riêng**: `packages/ui/src/components/logo.tsx:10` mang
-`aria-label="Comp AI Logo"` — trình đọc màn hình đọc tên hãng cũ cho nhân viên
-OneHub. Đổi tên hãng không phải việc vòng ngôn ngữ.
+Ngoài hàng đợi, cần **chip riêng**:
+
+- `packages/ui/src/components/logo.tsx:10` mang `aria-label="Comp AI Logo"` —
+  trình đọc màn hình đọc tên hãng cũ cho nhân viên OneHub.
+- **`CONTEXT.md` viết cả `thoả` lẫn `thỏa`** cho cùng một từ. Chọn một.
+- **`CONTEXT.md` chưa có mục từ cho "bổ sung dữ liệu"** — một năng lực sản phẩm
+  đang hiện trên màn mà từ điển chưa định nghĩa.
+
+Đã mở chip sang `~/dev/acceptance-gate-kit`: thẻ Cổng 2 gặp eval trượt là khuyên
+"máy quay lại sửa code" kể cả khi phần việc còn lại thuộc vòng sau, và ở trạng
+thái đó nó **nuốt luôn** các mục cần người quyết cùng khối "Ngoài hợp đồng".
 
 ## Đã kiểm / chưa kiểm
 
 Xanh cuối phiên, ép chạy không cache: `check-types` 13/13 · `lint` 9/9 ·
-`lint:slop` sạch · `test` 11/11, trong đó **76 bài ở `@crm/ui`**.
+`lint:slop` sạch · `test` 11/11.
 
-Đã đo tận mắt trên máy chủ thật: năm ca phân giải ngôn ngữ (trình duyệt `vi`→`vi`,
-`en`→`en`, cookie thắng header cả hai chiều, cookie rác→`en`); bề rộng tiêu đề cột
-ở 768/1024/1280/360px; số phân trang khớp giữa máy chủ và trình duyệt; đổi tiếng
-không tải lại trang, chứng minh bằng thanh chọn dòng mà máy chủ chưa bao giờ vẽ.
+Đã đo tận mắt trên máy chủ dựng từ cây làm việc: năm ca phân giải ngôn ngữ; bề
+rộng và chữ-thật-hiện-ra của mọi tiêu đề cột ở 768/1024/1280/1440/1920px, hai thứ
+tiếng; 15 ngày in đúng quy ước Việt trong lượt vẽ đầu của máy chủ; vòng tiêu điểm
+so bằng điểm ảnh; bốn trạng thái màn trước đây không phép đo nào chạm (cột ẩn,
+màn lưu trữ, bảng rỗng, mọi menu mở kể cả menu con).
 
-**Chưa kiểm:** trình đọc màn hình thật (NVDA/JAWS/VoiceOver) — chỉ đọc cây trợ
-năng của trình duyệt. Năm chỗ gọi `DataTable` ngoài màn công ty. Kích thước gói
-sau khi ba component thành client component. Tên pháp nhân thật 40–60 ký tự — dữ
-liệu thử chỉ có "Đất Xanh", 8 ký tự.
-
-## Bẫy cũ NAY SAI — đừng dùng lại
-
-Bản handoff trước bảo tự export khoá Google giả và tự nạp `.env` cho `db:test`.
-**Cả hai đã vá 2026-09-01 và cách lách cũ nay sai.** Từ gốc kho, không export gì:
-
-```
-bun run db:test && bun run test
-```
-
-`agent#test` đỏ ở `retireExhausted` khi cơ sở dữ liệu còn hàng `AgentTask` của một
-lượt chạy bị cắt ngang. **Không phải test phập phù** (issue `#195` nói sai): một
-khi hàng tồn tại thì nó đỏ mọi lần chạy. `bun run db:test` cho sạch rồi mới tin
-màu đỏ.
+**Chưa kiểm:** trình đọc màn hình thật (NVDA/JAWS/VoiceOver). Năm chỗ gọi
+`DataTable` ngoài màn công ty. Kích thước gói sau khi ba component thành client
+component. Tên pháp nhân thật 40–60 ký tự — dữ liệu thử dài nhất là "Pennylane".
 
 ## Bẫy còn đúng
 
@@ -171,15 +209,23 @@ màu đỏ.
   `apps/app` 3000, `apps/api` 3001, `apps/agent` 2000.
 - Đăng nhập không cần OAuth: `cd apps/api && bun run dev:session <email>`.
 - Đẩy lên `origin` cần `http.version HTTP/1.1` (đã đặt trong git config kho).
-  HTTP/2 trả 400.
-- **Khung trình duyệt ẩn thì mọi bề rộng trả về 0** và ảnh chụp vô dụng. Đưa tab
-  lên trước rồi mới đo. Phiên này mất hai lượt đo vì quên.
-- **Nhiều phiên chấm ghi cùng một cây làm việc thì hồ sơ bằng chứng lẫn nhau.**
-  Một người chấm phải băm md5 từng lượt để biết mã đang ở bản nào. Vòng sau chạy
-  trong worktree riêng.
+  HTTP/2 trả 400. `pre-push` chạy `check-types`, `lint`, `lint:slop`, `test`.
+- **Khung trình duyệt ẩn thì mọi bề rộng trả về 0** và ảnh chụp vô dụng. Cột bị
+  ẩn theo bề rộng cũng trả 0 — lọc chúng ra trước khi đếm "cắt trần".
+- `bun run test` chạy **song song** có lượt đỏ ở `api#test`; chạy tuần tự
+  (`--concurrency=1`) thì xanh. Nhiều gói dùng chung một cơ sở dữ liệu thử.
+- `agent#test` đỏ ở `retireExhausted` khi cơ sở dữ liệu còn hàng `AgentTask` của
+  một lượt chạy bị cắt ngang. **Không phải test phập phù** (issue `#195` nói sai).
+  `bun run db:test` cho sạch rồi mới tin màu đỏ.
+- Bản handoff 2026-08-31 bảo tự export khoá Google giả và tự nạp `.env` cho
+  `db:test`. **Cả hai đã vá 2026-09-01 và cách lách cũ nay sai.**
 - CLI `ai-elements` bỏ qua cả cờ `--help` và cài thẳng toàn bộ. Lấy từ
   `https://registry.ai-sdk.dev/<tên>.json` và tự ghi file.
 - `PRODUCT-MAP.md` do máy vẽ lại mỗi lần một người ký một cổng. Sửa tay là làm hồ
   sơ lệch, và `--check` bắt. Hai trạng thái hồ sơ dễ sai: `status` của hợp đồng
   chỉ nhận `draft|approved|implemented|verified|signed-off|machine-cleared`, và
   `evidence-report.md` **bắt buộc có frontmatter kèm `verdict`**.
+- Thẻ Cổng 2 đọc `evidence-report.md` bằng **khuôn máy**: bảng phải là
+  `| E6 | AC-6 | ui-check | FAIL |` với verdict `PASS`/`FAIL`/`UNCERTAIN`, và
+  mỗi eval phải có một khối `- eval: <id>`. Viết bảng bằng chữ người thì thẻ
+  không thấy mục nào.

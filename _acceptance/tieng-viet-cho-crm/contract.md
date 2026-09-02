@@ -85,6 +85,14 @@ thiết kế trước khi nạp chuẩn nội bộ: **đường cho người l�
 - Không chạm 10 chỗ định dạng trong `ai-elements/context.tsx` — bảng chi phí tác nhân, không nằm trên màn công ty.
 - Không thêm ngôn ngữ thứ ba, không đổi tiền tệ, không đổi múi giờ.
 - Không dịch dữ liệu người dùng nhập. Tên công ty, ghi chú, nội dung thư giữ nguyên như đã nhập.
+- **Không dịch chuỗi khoá cứng TẠI CHỖ GỌI trong `apps/app`** — thêm ngày
+  2026-09-02, SAU khi đo, theo quyết định của người ở Cổng 2
+  (`d-2026-09-02T10:40:00Z-cong2v1`). Ranh giới là một LUẬT, không phải một danh
+  sách: chuỗi nào chỗ gọi tự viết ra thay vì nhận từ kho bản dịch thì thuộc vòng
+  ③. Phép đo vẫn đếm và vẫn báo chúng — mục này không tắt phép đo, nó chỉ nói ai
+  nhận. Tính đến ngày thêm, phép đo báo đúng năm chuỗi: `Archived` · `Views` ·
+  `New company` · ô tìm công ty · và năm nhãn trạng thái bổ sung dữ liệu, trong
+  đó `Not researched` hiện 15 lần. Chuỗi mới xuất hiện sau ngày này vẫn bị bắt.
 
 ## Notes
 

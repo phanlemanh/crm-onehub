@@ -370,6 +370,23 @@ Và lượt vẽ đầu ấy đã mang chữ tiếng Việt, không phải chờ
 `evidence/E3-step1.html` chứa `Công ty` ×3, `Mọi công ty trong mạng lưới` ×2,
 `Số lượng cá nhân`, `Số thoả thuận đang mở`, `Hoạt động gần nhất`.
 
+## Định tuyến ở Cổng 2
+
+Ngày 2026-09-02, Manh Phan chọn: **bốn chuỗi còn lại chuyển sang vòng ③, vòng ①
+ký với giới hạn đã khai.** Căn cứ: cả năm chuỗi là chuỗi khoá cứng tại chỗ gọi,
+nằm đúng trong 177 file nhãn ứng dụng mà vòng ③ phải quét; đóng chúng ở đây là
+làm hai lần.
+
+**E6 GIỮ NGUYÊN verdict FAIL trong hồ sơ này.** Quyết định của người là định
+tuyến phần việc còn lại, không phải tuyên bố tiêu chí đã đạt. Hợp đồng nhận thêm
+một dòng ngoài phạm vi, viết dưới dạng LUẬT chứ không phải danh sách, và **phép
+đo không bị tắt** — nó vẫn đếm và vẫn báo năm chuỗi đó ở mọi lượt chạy sau.
+
+Cổng 2 của vòng ③ phải đo lại đúng năm chuỗi này và thấy chúng biến mất.
+
+Chữ ký và các mục người phủ quyết chưa ghi vào file này — chúng do lệnh ký của
+người ghi, không do phiên máy ghi.
+
 ## Evidence
 
 - eval: E6
