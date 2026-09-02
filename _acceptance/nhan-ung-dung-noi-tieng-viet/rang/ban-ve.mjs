@@ -1,24 +1,8 @@
 import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
+import { z } from "../../../packages/validation/node_modules/zod/index.js";
 import puppeteer from "puppeteer-core";
 import { BE_MAT, CHUA_MO } from "./be-mat.mjs";
-import { z } from "../../../packages/validation/node_modules/zod/index.js";
-
-const chuTrong = z.string().trim().min(1);
-const dongCongTy = z.object({
-	name: chuTrong.nullish(),
-	domain: chuTrong.nullish(),
-	industry: chuTrong.nullish(),
-	createdAt: chuTrong.nullish(),
-	lastActivityAt: chuTrong.nullish(),
-	archivedAt: chuTrong.nullish(),
-	owner: z.object({ name: chuTrong.nullish(), email: chuTrong.nullish() }).nullish(),
-});
-const danhSachCongTy = z.object({ rows: z.array(dongCongTy) });
-const danhSachNguoi = z.array(
-	z.object({ name: chuTrong.nullish(), email: chuTrong.nullish() }),
-);
-const khongGian = z.object({ name: chuTrong.nullish() });
-
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const APP = process.env.APP_URL ?? "http://localhost:3000";
 const API = process.env.API_URL ?? "http://localhost:3001";
@@ -94,54 +78,155 @@ async function idBanGhi(cookie) {
 	return { company: lay(c, "cong ty"), contact: lay(ct, "ca nhan"), deal: lay(d, "thoa thuan") };
 }
 
+const chu = z.string().trim().min(1);
+const nguoi = z.object({ name: chu.nullish(), email: chu.nullish() }).nullish();
+const ngay = z.string().nullish();
+
+const dongCongTy = z.object({
+	name: chu,
+	domain: chu.nullish(),
+	industry: chu.nullish(),
+	owner: nguoi,
+	createdAt: ngay,
+	lastActivityAt: ngay,
+	archivedAt: ngay,
+});
+const dongCaNhan = z.object({
+	firstName: chu.nullish(),
+	lastName: chu.nullish(),
+	email: chu.nullish(),
+	title: chu.nullish(),
+	company: z.object({ name: chu.nullish() }).nullish(),
+	owner: nguoi,
+	createdAt: ngay,
+	lastActivityAt: ngay,
+	archivedAt: ngay,
+});
+const dongThoaThuan = z.object({
+	name: chu,
+	currency: chu.nullish(),
+	company: z.object({ name: chu.nullish() }).nullish(),
+	owner: nguoi,
+	createdAt: ngay,
+	closeDate: ngay,
+	lastActivityAt: ngay,
+	archivedAt: ngay,
+});
+
 async function duLieuThu(cookie) {
-	const [list, users, workspace] = await Promise.all([
-		goi(cookie, "companies.list", {}).then((v) => danhSachCongTy.parse(v)),
-		goi(cookie, "users.list", null).then((v) => danhSachNguoi.parse(v)),
-		goi(cookie, "workspace.get", null).then((v) => khongGian.parse(v)),
+	const [list, contacts, deals, users, workspace] = await Promise.all([
+		goi(cookie, "companies.list", {}),
+		goi(cookie, "contacts.list", {}),
+		goi(cookie, "deals.list", {}),
+		goi(cookie, "users.list", null),
+		goi(cookie, "workspace.get", null),
 	]);
+	const congTy = z.object({ rows: z.array(dongCongTy) }).parse(list).rows;
+	const caNhan = z.object({ rows: z.array(dongCaNhan) }).parse(contacts).rows;
+	const thoaThuan = z.object({ rows: z.array(dongThoaThuan) }).parse(deals).rows;
+	const doi = z.array(z.object({ name: chu.nullish(), email: chu.nullish() })).parse(users);
+	const noiLam = z.object({ name: chu.nullish() }).parse(workspace);
+	const tienBaoCao = z
+		.object({ reportingCurrency: chu.nullish() })
+		.parse(deals).reportingCurrency;
+
 	const ten = new Set();
 	const nguon = new Set();
-	for (const row of list.rows) {
-		for (const value of [row.name, row.domain, row.industry]) {
-			if (value) nguon.add(value);
+	const them = (v) => {
+		if (v !== null && v !== undefined) nguon.add(v);
+	};
+	const themTen = (v) => {
+		if (v !== null && v !== undefined) {
+			nguon.add(v);
+			ten.add(v);
 		}
-		if (row.name) ten.add(row.name);
-		if (row.owner?.name) {
-			nguon.add(row.owner.name);
-			ten.add(row.owner.name);
-		}
-		if (row.owner?.email) nguon.add(row.owner.email);
+	};
+
+	for (const row of congTy) {
+		them(row.domain);
+		them(row.industry);
+		themTen(row.name);
+		themTen(row.owner?.name);
+		them(row.owner?.email);
 	}
-	for (const user of users) {
-		if (user.name) {
-			nguon.add(user.name);
-			ten.add(user.name);
-		}
-		if (user.email) nguon.add(user.email);
+	for (const row of caNhan) {
+		them(row.email);
+		them(row.title);
+		them(row.company?.name);
+		themTen(row.firstName);
+		themTen(row.lastName);
+		themTen([row.firstName, row.lastName].filter(Boolean).join(" ") || null);
+		themTen(row.owner?.name);
 	}
-	if (workspace?.name) {
-		nguon.add(workspace.name);
-		ten.add(workspace.name);
+	for (const row of thoaThuan) {
+		themTen(row.name);
+		them(row.company?.name);
+		themTen(row.owner?.name);
+		them(row.currency);
+		them(row.currency?.toUpperCase());
 	}
+	for (const u of doi) {
+		themTen(u.name);
+		them(u.email);
+	}
+	themTen(noiLam.name);
+	them(tienBaoCao);
+	them(tienBaoCao?.toUpperCase());
 	for (const tat of vietTat([...ten])) nguon.add(tat);
 
 	const KIEU = [
 		{ month: "short", day: "numeric" },
 		{ month: "short", day: "numeric", year: "numeric" },
 	];
-	for (const row of list.rows) {
-		for (const iso of [row.createdAt, row.lastActivityAt, row.archivedAt]) {
-			if (!iso) continue;
+	for (const row of [...congTy, ...thoaThuan, ...caNhan]) {
+		const moc = [row.createdAt, row.lastActivityAt, row.archivedAt, row.closeDate];
+		for (const iso of moc) {
+			if (iso === null || iso === undefined) continue;
 			const d = new Date(iso);
+			if (Number.isNaN(d.getTime())) continue;
 			for (const locale of ["vi", "en"]) {
-				for (const kieu of KIEU) {
-					nguon.add(new Intl.DateTimeFormat(locale, kieu).format(d));
-				}
+				for (const kieu of KIEU) nguon.add(new Intl.DateTimeFormat(locale, kieu).format(d));
 			}
 		}
 	}
-	return { set: nguon, rows: list.rows.length };
+
+	for (const gt of khaiNgoaiLe()) nguon.add(gt);
+	return { set: nguon, rows: congTy.length };
+}
+
+function khaiNgoaiLe() {
+	const src = readFileSync(
+		"_acceptance/nhan-ung-dung-noi-tieng-viet/ban-dich.md",
+		"utf8",
+	);
+	const mo = src.indexOf("## Ngoại lệ khỏi luật dấu tiếng Việt");
+	if (mo === -1) {
+		console.log("RANG CUN: ban dich khong con muc ngoai le");
+		process.exit(2);
+	}
+	const sau = src.indexOf("\n## ", mo + 1);
+	const muc = src.slice(mo, sau === -1 ? undefined : sau);
+	const ra = [];
+	for (const m of muc.matchAll(/^\| [^|]+ \| `([^`]+)` \|/gm)) ra.push(m[1]);
+	for (const m of muc.matchAll(/^\| `stage\.\*`[^|]*\| `([^`]+)` … `([^`]+)` \|/gm)) {
+		ra.push(m[1], m[2]);
+	}
+	for (const g of [
+		"Demo booked",
+		"Qualified to buy",
+		"Decision maker in",
+		"Contract sent",
+		"Closed won",
+		"Closed lost",
+		"Unqualified",
+	]) {
+		ra.push(g);
+	}
+	if (ra.length === 0) {
+		console.log("RANG CUN: doc muc ngoai le ra 0 gia tri — khuon bang da doi?");
+		process.exit(2);
+	}
+	return ra;
 }
 
 const DOC_CHU = (roots) => {

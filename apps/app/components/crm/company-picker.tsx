@@ -9,19 +9,21 @@ import {
 	CommandItem,
 	CommandList,
 } from "@crm/ui/components/command";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { useSearchInput } from "@crm/ui/hooks/use-search-input";
 import { cn } from "@crm/ui/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { type Ref, useId, useState } from "react";
 import { PROPERTY_LABEL, PROPERTY_ROW } from "@/components/detail-sheet";
+import { crmMessages } from "@/lib/messages/crm";
 import { useTRPC } from "@/lib/trpc/client";
 
 export function CompanyPicker({
 	id,
 	value,
 	onValueChange,
-	placeholder = "Choose a company",
+	placeholder,
 	none,
 	selected,
 	disabled,
@@ -38,6 +40,7 @@ export function CompanyPicker({
 	variant?: "default" | "ghost";
 	className?: string;
 }) {
+	const m = crmMessages(useLocale());
 	const trpc = useTRPC();
 
 	const [query, setQuery] = useState("");
@@ -77,9 +80,13 @@ export function CompanyPicker({
 			options={options}
 			selectedOption={current}
 			disabled={disabled}
-			placeholder={placeholder}
-			searchPlaceholder="Search companies…"
-			empty={companies.isFetching ? "Searching…" : "No company matches."}
+			placeholder={placeholder ?? m.companyPicker.choose}
+			searchPlaceholder={m.companyPicker.search}
+			empty={
+				companies.isFetching
+					? m.companyPicker.searching
+					: m.companyPicker.noMatch
+			}
 			search={text}
 			onSearchChange={setText}
 			stale={stale}
@@ -98,6 +105,7 @@ export function CompanyMenuSearch({
 	onSelect: (companyId: string | null) => void;
 	inputRef?: Ref<HTMLInputElement>;
 }) {
+	const m = crmMessages(useLocale());
 	const trpc = useTRPC();
 
 	const [query, setQuery] = useState("");
@@ -117,14 +125,16 @@ export function CompanyMenuSearch({
 		>
 			<CommandInput
 				ref={inputRef}
-				placeholder="Search companies…"
+				placeholder={m.companyPicker.search}
 				value={text}
 				onValueChange={setText}
 				autoFocus
 			/>
 			<CommandList>
 				<CommandEmpty>
-					{companies.isFetching ? "Searching…" : "No company matches."}
+					{companies.isFetching
+						? m.companyPicker.searching
+						: m.companyPicker.noMatch}
 				</CommandEmpty>
 				<CommandGroup>
 					{none && !query.trim() ? (
@@ -158,7 +168,7 @@ export function CompanyMenuSearch({
 }
 
 export function InlineCompanyField({
-	label = "Company",
+	label,
 	value,
 	onSave,
 	saving = false,
@@ -172,12 +182,13 @@ export function InlineCompanyField({
 	none?: { value: string; label: string };
 	company?: { id: string; name: string } | null;
 }) {
+	const m = crmMessages(useLocale());
 	const id = useId();
 
 	return (
 		<div className={cn(PROPERTY_ROW, "items-center")}>
 			<label htmlFor={id} className={PROPERTY_LABEL}>
-				{label}
+				{label ?? m.standard.company}
 			</label>
 			<div className="flex min-w-0 items-center gap-1.5">
 				<CompanyPicker

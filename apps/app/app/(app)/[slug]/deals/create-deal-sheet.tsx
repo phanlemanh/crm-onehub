@@ -200,10 +200,7 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 									))}
 								</SelectContent>
 							</Select>
-							<FieldDescription>
-								A new deal is an open deal — close it from the pipeline once
-								there is an outcome to record.
-							</FieldDescription>
+							<FieldDescription>{m.create.stageHint}</FieldDescription>
 						</Field>
 
 						<Field>

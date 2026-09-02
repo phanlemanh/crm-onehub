@@ -11,6 +11,7 @@ import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useTableSelection } from "@crm/ui/hooks/use-table-selection";
 import { formatMoney } from "@crm/ui/lib/format";
+import type { Locale } from "@crm/ui/lib/locale";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
 import { closingOptions } from "@/components/crm/closing-window";
@@ -33,7 +34,10 @@ import { dealsSearchParams } from "./deals-search-params";
 
 type DealRow = RouterOutputs["deals"]["list"]["rows"][number];
 
-function columnsFor(m: DealMessages): DataTableColumn<DealRow>[] {
+function columnsFor(
+	m: DealMessages,
+	locale: Locale,
+): DataTableColumn<DealRow>[] {
 	return [
 		{
 			id: "name",
@@ -69,7 +73,7 @@ function columnsFor(m: DealMessages): DataTableColumn<DealRow>[] {
 					<EmptyCellValue />
 				) : (
 					<span className="tabular-nums">
-						{formatMoney(row.amountCents, row.currency)}
+						{formatMoney(row.amountCents, row.currency, locale)}
 					</span>
 				),
 		},
@@ -230,9 +234,9 @@ export function DealsTable() {
 	const columns = useMemo(
 		() =>
 			input.archived
-				? [...columnsFor(m), archivedColumn(m), ...fieldColumns]
-				: [...columnsFor(m), ...fieldColumns],
-		[fieldColumns, input.archived, m],
+				? [...columnsFor(m, locale), archivedColumn(m), ...fieldColumns]
+				: [...columnsFor(m, locale), ...fieldColumns],
+		[fieldColumns, input.archived, m, locale],
 	);
 
 	return (
@@ -284,7 +288,7 @@ export function DealsTable() {
 					<span>
 						{m.meta.count(String(deals.data?.total ?? 0))} ·{" "}
 						<span className="tabular-nums">
-							{formatMoney(openPipelineCents, reportingCurrency)}
+							{formatMoney(openPipelineCents, reportingCurrency, locale)}
 						</span>{" "}
 						{m.meta.openPipeline}
 						{unconverted && unconverted.count > 0 ? (

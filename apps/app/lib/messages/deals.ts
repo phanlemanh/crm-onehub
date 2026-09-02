@@ -56,6 +56,8 @@ const en = {
 		noDate: "No date yet",
 		namePlaceholder: "Stripe — Comp AI",
 		chooseOwner: "Choose an owner",
+		stageHint:
+			"A new deal is an open deal — close it from the pipeline once there is an outcome to record.",
 		submit: "Add deal",
 		cancel: "Cancel",
 	},
@@ -134,6 +136,8 @@ const vi = {
 		noDate: "Chưa có ngày",
 		namePlaceholder: "Đất Xanh — OneHub",
 		chooseOwner: "Chọn người phụ trách",
+		stageHint:
+			"Thoả thuận mới là thoả thuận đang mở — chốt nó khi đã có kết quả để ghi lại.",
 		submit: "Thêm thoả thuận",
 		cancel: "Huỷ",
 	},
