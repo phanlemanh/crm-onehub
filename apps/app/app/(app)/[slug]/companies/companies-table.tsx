@@ -50,7 +50,7 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			header: m.headers.name,
 			sortable: true,
 			hideable: false,
-			width: "w-[22%]",
+			width: "w-[18%]",
 			cell: (row) => (
 				<span className="flex min-w-0 items-center gap-2.5">
 					<EntityLogo
@@ -70,7 +70,7 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			id: "domain",
 			header: m.headers.domain,
 			sortable: true,
-			width: "w-[15%]",
+			width: "w-[12%]",
 			hideBelow: "md",
 			cell: (row) =>
 				row.domain ? (
@@ -83,7 +83,7 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			id: "industry",
 			header: m.headers.industry,
 			sortable: true,
-			width: "w-[15%]",
+			width: "w-[12%]",
 			hideBelow: "lg",
 			cell: (row) =>
 				row.industry ? (
@@ -98,7 +98,7 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			id: "owner",
 			header: m.headers.owner,
 			sortable: true,
-			width: "w-[15%]",
+			width: "w-[13%]",
 			hideBelow: "md",
 			cell: (row) => <OwnerCell owner={row.owner} />,
 		},
@@ -107,7 +107,7 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			header: m.headers.contacts,
 			sortable: true,
 			align: "right",
-			width: "w-[12%]",
+			width: "w-[16%]",
 			hideBelow: "lg",
 			cell: (row) => <span className="tabular-nums">{row.contactCount}</span>,
 		},
@@ -116,7 +116,7 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			header: m.headers.openDeals,
 			sortable: true,
 			align: "right",
-			width: "w-[15%]",
+			width: "w-[20%]",
 			cell: (row) => <span className="tabular-nums">{row.openDealCount}</span>,
 		},
 		{
@@ -138,7 +138,7 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			header: m.headers.lastActivity,
 			sortable: true,
 			align: "right",
-			width: "w-[15%]",
+			width: "w-[18%]",
 			hideBelow: "sm",
 			cell: (row) => (
 				<span className="text-muted-foreground">

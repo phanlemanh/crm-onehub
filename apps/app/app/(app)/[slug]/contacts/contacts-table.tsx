@@ -41,7 +41,7 @@ function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
 			header: m.headers.name,
 			sortable: true,
 			hideable: false,
-			width: "w-[22%]",
+			width: "w-[15%]",
 			cell: (row) => (
 				<span className="flex min-w-0 items-center gap-2">
 					<PersonAvatar
@@ -114,7 +114,7 @@ function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
 			header: m.headers.lastActivity,
 			sortable: true,
 			align: "right",
-			width: "w-[12%]",
+			width: "w-[19%]",
 			hideBelow: "sm",
 			cell: (row) => (
 				<span className="text-muted-foreground">

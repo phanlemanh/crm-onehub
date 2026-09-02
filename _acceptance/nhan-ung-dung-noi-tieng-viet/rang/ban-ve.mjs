@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { appendFileSync, readFileSync } from "node:fs";
 import { z } from "../../../packages/validation/node_modules/zod/index.js";
 import puppeteer from "puppeteer-core";
 import { BE_MAT, CHUA_MO } from "./be-mat.mjs";
@@ -875,10 +875,19 @@ try {
 		}
 		console.log(`-- doi chieu tieng Anh cung ${width}px, lang=${en.lang}`);
 		for (const h of en.value) console.log(dong(h));
+		if (process.env.XUAT) {
+			const dong2 = (h) =>
+				`| ${h.text} | ${h.boxWidth} | ${h.textWidth} | ${h.hien ?? h.text} | ${h.title ? "co" : "khong"} |`;
+			appendFileSync(
+				process.env.XUAT,
+				`\n## ${DUONG} · ${width}px · tieng Viet\n| cot | be rong o | be rong chu | chu that hien ra | title |\n| --- | ---: | ---: | --- | --- |\n${vi.value.map(dong2).join("\n")}\n`,
+			);
+		}
+		const nguong = width >= 1024 ? catTran + catCoBaCham : catTran;
 		console.log(
-			`ket qua ${width}px: cat tran=${catTran} · cat kem ba cham=${catCoBaCham} · tong=${vi.value.length}`,
+			`ket qua ${width}px: cat tran=${catTran} · cat kem ba cham=${catCoBaCham} · tong=${vi.value.length} · hong=${nguong}`,
 		);
-		process.exit(catTran > 0 ? 1 : 0);
+		process.exit(nguong > 0 ? 1 : 0);
 	}
 
 	const trung = await duLieuThu(cookie);

@@ -44,7 +44,7 @@ function columnsFor(
 			header: m.headers.name,
 			sortable: true,
 			hideable: false,
-			width: "w-[24%]",
+			width: "w-[17%]",
 			cell: (row) => <span className="truncate font-medium">{row.name}</span>,
 		},
 		{
@@ -119,7 +119,7 @@ function columnsFor(
 			header: m.headers.lastActivity,
 			sortable: true,
 			align: "right",
-			width: "w-[12%]",
+			width: "w-[19%]",
 			hideBelow: "lg",
 			cell: (row) => (
 				<span className="text-muted-foreground">
