@@ -195,7 +195,7 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 								<SelectContent>
 									{OPEN_STAGES.map((value) => (
 										<SelectItem key={value} value={value}>
-											{dealStageLabel(value)}
+											<span lang="en">{dealStageLabel(value)}</span>
 										</SelectItem>
 									))}
 								</SelectContent>

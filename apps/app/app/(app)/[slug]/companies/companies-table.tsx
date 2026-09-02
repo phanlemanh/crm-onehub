@@ -87,7 +87,9 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			hideBelow: "lg",
 			cell: (row) =>
 				row.industry ? (
-					<span className="truncate">{row.industry}</span>
+					<span className="truncate" lang="en">
+						{row.industry}
+					</span>
 				) : (
 					<EmptyCellValue />
 				),

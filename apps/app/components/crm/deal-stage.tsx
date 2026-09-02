@@ -10,5 +10,9 @@ export function DealStageIndicator({
 	className?: string;
 }) {
 	const { label, tone } = dealStagePresentation(stage);
-	return <StatusIndicator tone={tone} label={label} className={className} />;
+	return (
+		<span lang="en">
+			<StatusIndicator tone={tone} label={label} className={className} />
+		</span>
+	);
 }

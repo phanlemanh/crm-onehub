@@ -59,7 +59,7 @@ export function StageStepper({
 								{current && option === DealStage.CLOSED_WON ? (
 									<DealStageIndicator stage={stage} className="text-xs" />
 								) : (
-									dealStageLabel(option)
+									<span lang="en">{dealStageLabel(option)}</span>
 								)}
 							</span>
 						</button>
