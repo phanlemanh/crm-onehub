@@ -30,8 +30,9 @@ mà không có tên ở đây thì phép đo đỏ.
 | --- | --- | --- | --- |
 | `headers.email` · `standard.email` · `timeline.tabs.emails` · `contact.emails` · `company.fields.email` · `company.contactColumns.email` | `Email` | từ mượn | `CONTEXT.md` cấm đúc từ ghép cho thuật ngữ kỹ thuật; "thư điện tử" là từ người dùng không tự nói |
 | `standard.website` · `company.fields.website` | `Website` | từ mượn | như trên |
-| `standard.linkedin` | `LinkedIn` | tên riêng | tên sản phẩm, không dịch |
-| `standard.github` | `GitHub` | tên riêng | tên sản phẩm, không dịch |
+| `standard.linkedin` · `contact.fields.linkedin` | `LinkedIn` | tên riêng | tên sản phẩm, không dịch |
+| `contact.fields.x` | `X` | tên riêng | tên mạng xã hội, một chữ cái |
+| `standard.github` · `contact.fields.github` | `GitHub` | tên riêng | tên sản phẩm, không dịch |
 | `timeline.viaGmail` | `qua Gmail` | từ Việt không dấu + tên riêng | "qua" là từ tiếng Việt vốn không mang dấu |
 | `timeline.composer.log` | `Ghi ${type}` | từ Việt không dấu | "Ghi" là từ tiếng Việt vốn không mang dấu |
 | `timeline.stageChange` | `${a} → ${b}` | chỉ có biến | hai đầu là giai đoạn thoả thuận, không dịch |
