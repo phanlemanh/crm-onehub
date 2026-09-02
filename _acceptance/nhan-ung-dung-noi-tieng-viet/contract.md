@@ -116,6 +116,20 @@ quét dùng để ĐẾM PHẠM VI. Nó **không được** dùng làm phép đo
 đã giết một máy quét vì một danh sách hình dạng chuỗi không chứng minh được sự
 vắng mặt.
 
+**Thước đếm tốt lên bốn lần TRONG vòng, và con số theo đó đổi.** Lúc ký Cổng 1
+thước nói 569 chuỗi. Trong lúc lập bảng dịch, mỗi lần siết bỏ đi một loại thứ
+**không ai đọc**: chuỗi lớp CSS, giá trị thuộc tính `rel`, tên phím bàn phím, và
+chính kho chuỗi vòng ① bị đếm cả bản Anh lẫn bản Việt.
+
+| Thước | Chuỗi khác nhau | Lần xuất hiện |
+| --- | ---: | ---: |
+| Lúc ký Cổng 1 | 426 | 569 |
+| Sau khi siết | **357** | **436** |
+
+Con số ở mục Context là con số lúc ký; con số đúng là 357 / 436. Cả hai được ghi
+lại thay vì lặng lẽ thay số — cùng khuôn vòng ② đã đi. Phạm vi KHÔNG đổi: cùng
+92 file, cùng ba luồng.
+
 **AC-10 viết lại lời hứa mà vòng ① và ② mâu thuẫn nhau.** AC-9 của vòng ① cấm
 tiêu đề cột bị cắt; AC-7 của vòng ② lại quy định tiêu đề bị cắt phải cắt thế nào.
 Hai lời hứa nghịch nhau và không ai gỡ. AC-10 gộp cả hai vế thành một tiêu chí

@@ -13,10 +13,7 @@ const DUONG = process.env.DUONG ?? "companies";
 const chan = process.argv[2] ?? "chu";
 
 // Chan cua vong ③ chua dung — do la viec S3. Bao ro thay vi loi mo.
-const CHUA_DUNG = new Set([
-	"--chan", "no-vong-1",
-	"trinh-doc-man-hinh", "khai-tieng", "doi-tieng", "giai-doan",
-]);
+const CHUA_DUNG = new Set(["--chan"]);
 if (CHUA_DUNG.has(chan)) {
 	console.log(
 		`CHUA DUNG: chan "${process.argv.slice(2).join(" ")}" cua vong ③ chua duoc xay.\n` +
@@ -858,6 +855,182 @@ try {
 		}
 		console.log(`\nket qua: con lai=${lan} lan · duong hong (a) tieng Viet=${hongTDViet ? "co" : "khong"}`);
 		process.exit(lan > 0 || !hongTDViet ? 1 : 0);
+	}
+
+	if (chan === "trinh-doc-man-hinh") {
+		const trung = await duLieuThu(cookie);
+		const id = await idBanGhi(cookie);
+		const DOC_TRO_NANG = (roots) => {
+			const nhinThay = (el) => {
+				const r = el.getBoundingClientRect();
+				return r.width > 0 && r.height > 0;
+			};
+			const out = [];
+			const trong = roots.flatMap((sel) => [...document.querySelectorAll(sel)]);
+			if (trong.length === 0) return out;
+			for (const el of trong.flatMap((g) => [...g.querySelectorAll("*")])) {
+				if (!nhinThay(el)) continue;
+				for (const a of [
+					"aria-label",
+					"aria-description",
+					"aria-roledescription",
+					"aria-placeholder",
+					"title",
+					"alt",
+				]) {
+					const v = el.getAttribute(a);
+					if (v) out.push(v.replace(/\s+/g, " ").trim());
+				}
+				if (el.matches(".sr-only")) {
+					const t = el.textContent.replace(/\s+/g, " ").trim();
+					if (t) out.push(t);
+				}
+			}
+			return out;
+		};
+		const doc = async (locale) => {
+			const page = await browser.newPage();
+			await page.setViewport({ width, height, deviceScaleFactor: 1 });
+			await browser.setCookie(
+				{ name: cookie.name, value: cookie.value, domain: "localhost", path: "/" },
+				{ name: "lang", value: locale, domain: "localhost", path: "/" },
+			);
+			const chu = [];
+			for (const [man, tham] of [
+				["companies", "?hide=nothing"],
+				["contacts", "?hide=nothing"],
+				["deals", "?hide=nothing"],
+				["companies", `?record=company:${id.company}&tab=overview`],
+				["contacts", `?record=contact:${id.contact}&tab=overview`],
+				["deals", `?record=deal:${id.deal}&tab=overview`],
+			]) {
+				await page.goto(`${APP}/${SLUG}/${man}${tham}`, {
+					waitUntil: "networkidle0",
+					timeout: 60000,
+				});
+				await new Promise((r) => setTimeout(r, 1500));
+				const phan = await page.evaluate(DOC_TRO_NANG, [
+					MAN,
+					'[data-slot="record-sheet"]',
+					'[role="dialog"]',
+				]);
+				if (phan.length === 0) {
+					console.log(`RANG CUN: ${man}${tham} khong co nhan tro nang nao`);
+					process.exit(2);
+				}
+				chu.push(...phan);
+			}
+			const lang = await page.evaluate(() => document.documentElement.lang);
+			await page.close();
+			return { lang, chu };
+		};
+		const vi = await doc("vi");
+		const en = await doc("en");
+		if (vi.lang !== "vi" || en.lang !== "en") {
+			console.log(`RANG CUN: lang lech (vi->${vi.lang}, en->${en.lang})`);
+			process.exit(2);
+		}
+		const dem = (l) => {
+			const m = new Map();
+			for (const x of l) m.set(x, (m.get(x) ?? 0) + 1);
+			return m;
+		};
+		const viDem = dem(vi.chu);
+		const enDem = dem(en.chu);
+		const duLieu = [...trung.set];
+		const laDuLieu = (x) =>
+			trung.set.has(x) || duLieu.some((d) => d.length > 2 && x.includes(d));
+		const con = [...viDem.keys()]
+			.filter((x) => enDem.has(x) && !laDuLieu(x) && !CHI_SO.test(x))
+			.sort();
+		const lan = con.reduce((n, x) => n + viDem.get(x), 0);
+		console.log(`-- nhan chi trinh doc man hinh nghe: vi=${vi.chu.length} lan, en=${en.chu.length} lan`);
+		console.log(`-- CON LAI: ${con.length} chuoi / ${lan} lan`);
+		for (const x of con) console.log(`   * ${JSON.stringify(x)}`);
+		console.log(`ket qua: con lai=${lan} lan`);
+		process.exit(lan > 0 ? 1 : 0);
+	}
+
+	if (chan === "doi-tieng") {
+		const page = await browser.newPage();
+		await page.setViewport({ width, height, deviceScaleFactor: 1 });
+		await browser.setCookie(
+			{ name: cookie.name, value: cookie.value, domain: "localhost", path: "/" },
+			{ name: "lang", value: "en", domain: "localhost", path: "/" },
+		);
+		await page.goto(`${APP}/${SLUG}/companies`, {
+			waitUntil: "networkidle0",
+			timeout: 60000,
+		});
+		await page.waitForSelector('[data-slot="table-body"] [data-slot="table-row"]', {
+			timeout: 30000,
+		});
+
+		const o = await page.$$('[data-slot="table-body"] [data-slot="table-row"] [role="checkbox"]');
+		if (o.length === 0) {
+			console.log("RANG CUN: khong tim thay o danh dau de dung thanh chon dong");
+			process.exit(2);
+		}
+		await o[0].click();
+		await new Promise((r) => setTimeout(r, 600));
+
+		const doc = () => {
+			const man = document.querySelector('[data-slot="page-shell"]');
+			return {
+				moc: performance.timeOrigin,
+				chon: [
+					...document.querySelectorAll(
+						'[data-slot="table-body"] [role="checkbox"][data-state="checked"]',
+					),
+				].length,
+				chu: man ? man.textContent.replace(/\s+/g, " ").trim().slice(0, 400) : null,
+			};
+		};
+		const truoc = await page.evaluate(doc);
+		if (truoc.chon === 0) {
+			console.log("RANG CUN: chua chon duoc dong nao — thanh chon dong khong bat");
+			process.exit(2);
+		}
+
+		const nut = await page.$$("header button, button");
+		let moduoc = false;
+		for (const b of nut) {
+			const co = await b.evaluate((el) => el.getAttribute("aria-haspopup") === "menu");
+			if (!co) continue;
+			await b.click().catch(() => {});
+			await new Promise((r) => setTimeout(r, 500));
+			const hang = await page.$$('[data-slot="dropdown-menu-item"]');
+			for (const h of hang) {
+				const t = await h.evaluate((el) => el.textContent.trim());
+				if (t === "Tiếng Việt" || t === "Vietnamese" || t === "Tiếng Việt") {
+					await h.click().catch(() => {});
+					moduoc = true;
+					break;
+				}
+			}
+			if (moduoc) break;
+			await page.keyboard.press("Escape").catch(() => {});
+			await new Promise((r) => setTimeout(r, 200));
+		}
+		if (!moduoc) {
+			console.log("RANG CUN: khong tim thay hang doi tieng trong menu tai khoan");
+			process.exit(2);
+		}
+		await new Promise((r) => setTimeout(r, 2500));
+		const sau = await page.evaluate(doc);
+		await page.close();
+
+		const taiLai = truoc.moc !== sau.moc;
+		const doiChu = truoc.chu !== sau.chu;
+		const giuChon = sau.chon === truoc.chon;
+		console.log(`-- truoc: ${truoc.chon} dong chon · ${JSON.stringify(truoc.chu?.slice(0, 70))}`);
+		console.log(`-- sau:   ${sau.chon} dong chon · ${JSON.stringify(sau.chu?.slice(0, 70))}`);
+		console.log(`   chu doi theo:            ${doiChu ? "co" : "KHONG"}`);
+		console.log(`   trang KHONG tai lai:     ${taiLai ? "KHONG — da tai lai" : "dung"}`);
+		console.log(`   thanh chon dong con giu: ${giuChon ? "co" : "KHONG"}`);
+		const hong = (doiChu ? 0 : 1) + (taiLai ? 1 : 0) + (giuChon ? 0 : 1);
+		console.log(`ket qua: hong=${hong}`);
+		process.exit(hong > 0 ? 1 : 0);
 	}
 
 	if (chan === "be-rong") {
