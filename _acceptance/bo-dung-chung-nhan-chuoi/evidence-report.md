@@ -232,3 +232,61 @@ giữ nguyên chữ `carousel` thì nhãn nói tiếng Anh giữa màn tiếng V
 
 Bản `showing` chết ở `apps/app/lib/messages/companies.ts` đã xoá — trước đó cùng
 một câu có hai bản tiếng Việt trong cùng sản phẩm.
+
+---
+
+# Vòng người lạ lái thử — 2026-09-01, sau khi ký Cổng 2
+
+Hai người lạ, không biết gì về vòng này, dùng CRM như một ngày làm việc thật.
+Một người ở 1280px, một người ở 768px rồi 390px. Không ai được cho biết tiêu chí
+nào.
+
+## Điều họ nói mà không phép đo nào của vòng này nói được
+
+**Vòng ② dịch đúng thứ nó hứa, và đó không phải thứ người dùng thấy.** Cả hai
+người mô tả cùng một cảm giác: *"chỉ có trang Công ty được dịch"*. Người thứ nhất
+nói thẳng chỗ khó chịu nhất **không phải tiếng Anh, mà là nửa nọ nửa kia trong
+cùng một màn** — bảng Liên hệ đầu cột tiếng Anh, chân bảng "1–25 trong số 45",
+"Trước", "Tiếp" tiếng Việt. Chân bảng đó chính là công của vòng này.
+
+Đó là cái giá của thứ tự năm vòng, và nó chỉ hiện ra khi có người lái thử.
+
+## Một dòng của vòng này hỏng thật, và hỏng vì bản sửa của vòng chấm 3
+
+Thanh chọn dòng có **"Bỏ chọn"**; trong menu lọc có **"Bỏ chọn tất cả"**. Hai
+chữ gần như nhau, hai việc ngược nhau. Người lạ dừng lại nghĩ trước khi bấm.
+
+Vòng chấm 3 chọn "Bỏ chọn tất cả" để bắt cặp với "Bỏ chọn". Vòng chấm 4 chấm
+"hoà". Không hội đồng nào thấy chúng **đứng cạnh nhau trên một màn** vì hội đồng
+đọc bảng dịch, không mở màn hình. Đã đổi thành **"Bỏ hết tiêu chí"**.
+
+## Ba chữ của vòng ① người lạ phải đi hỏi mới hiểu
+
+`Thoả thuận mở` · `Cá nhân` · `Bổ sung` — ba nhãn cột trên bảng chính, thứ họ
+nhìn cả ngày. Cả hai người độc lập nêu cùng ba chữ đó. `Cá nhân` và
+`Thoả thuận mở` đứng trên cột toàn **số**, nên danh từ chỉ người và danh từ chỉ
+quan hệ đều đọc sai loại. Đây là nhãn vòng ① chốt, không phải vòng ②.
+
+## Lỗi sản phẩm họ tìm ra, không thuộc vòng ngôn ngữ nào
+
+- **Sắp xếp theo `Thoả thuận mở` ra sai thứ tự.** Đọc từ trên xuống:
+  2·2·2·2·0·1·1·2·1·1·0·1·1·1·0. Người lạ nói thẳng: *"nếu sếp hỏi công ty nào
+  đang mở nhiều thoả thuận nhất, tôi không dùng nút này để trả lời được"*.
+- **Bấm đầu cột vừa sắp xếp vừa mở hồ sơ dòng đầu.** Lặp lại ba lần.
+- **`Cột (7)` nói dối ở màn hẹp.** Hai cột đã ẩn theo bề rộng vẫn được đếm và vẫn
+  còn dấu tick; bấm tick không có gì xảy ra.
+- **Ở 390px không còn ô đánh dấu, nhưng lựa chọn cũ vẫn sống.** Người lạ vẫn bấm
+  được `Actions → Archive` cho một dòng họ **không nhìn thấy là dòng nào**.
+- **Cột ô đánh dấu chiếm ~120px ở 768px** trong khi bốn tiêu đề bên cạnh bị cắt;
+  tắt bớt một cột thì khoảng trống đó phình lên ~240px thay vì nhường chỗ.
+- **Bảng không cuộn ngang** ở màn hẹp.
+- **Esc đóng form thêm công ty, mất sạch chữ vừa gõ, không hỏi lại.**
+- Danh sách người phụ trách có `manh.phan`, `phanlemanh`, `verify` — người lạ
+  không biết dòng nào là mình.
+
+## Điều họ xác nhận là ổn
+
+Lựa chọn ngôn ngữ được nhớ qua tải lại trang. Menu `Sắp xếp` là chỗ dịch tử tế
+nhất cả app. Tìm kiếm bỏ dấu chạy được cả hai chiều trên chữ Latin có dấu. Gõ
+"Công ty Cổ phần Địa ốc Phú Mỹ Hưng" vào ô tên: dấu hiện đúng, không lỗi phông.
+Ở 390px bố cục đọc dễ hơn hẳn 768px.
