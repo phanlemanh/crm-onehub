@@ -3,7 +3,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 const en = {
 	noun: "deal",
 	title: "Deals",
-	description: "Every partnership in the network.",
+	description: "The pipeline, and everything that has already closed.",
 	headers: {
 		name: "Deal",
 		company: "Company",
@@ -35,11 +35,29 @@ const en = {
 	emptyArchived: "No archived deals.",
 	search: "Search deals by name or company…",
 	created: (name: string) => `${name} added.`,
+	archivedToggle: "Archived",
+	meta: {
+		count: (n: string) => `${n} deals`,
+		openPipeline: "open pipeline",
+		notCounted: (n: string, cur: string) => `${n} not counted (no ${cur} rate)`,
+	},
 	create: {
+		title: "New deal",
+		newButton: "New deal",
+		description:
+			"Every deal belongs to a company and has someone's name against it.",
+		name: "Name",
+		company: "Company",
+		owner: "Owner",
+		stage: "Stage",
+		amount: "Amount",
+		closeDate: "Expected close date",
 		currency: "Currency",
 		noDate: "No date yet",
 		namePlaceholder: "Stripe — Comp AI",
 		chooseOwner: "Choose an owner",
+		submit: "Add deal",
+		cancel: "Cancel",
 	},
 	bulk: {
 		reassigned: (n: string) => `${n} reassigned.`,
@@ -62,7 +80,7 @@ export type DealMessages = typeof en;
 const vi = {
 	noun: "thoả thuận",
 	title: "Thoả thuận",
-	description: "Mọi thoả thuận hợp tác trong mạng lưới.",
+	description: "Những thoả thuận đang theo, và những gì đã chốt xong.",
 	headers: {
 		name: "Tên",
 		company: "Công ty",
@@ -94,11 +112,30 @@ const vi = {
 	emptyArchived: "Chưa có thoả thuận nào đã lưu trữ.",
 	search: "Tìm thoả thuận theo tên hoặc công ty…",
 	created: (name: string) => `Đã thêm ${name}.`,
+	archivedToggle: "Lưu trữ",
+	meta: {
+		count: (n: string) => `${n} thoả thuận`,
+		openPipeline: "đang mở",
+		notCounted: (n: string, cur: string) =>
+			`${n} chưa tính (thiếu tỉ giá ${cur})`,
+	},
 	create: {
+		title: "Thoả thuận mới",
+		newButton: "Thoả thuận mới",
+		description:
+			"Mỗi thoả thuận thuộc về một công ty và có một người đứng tên phụ trách.",
+		name: "Tên",
+		company: "Công ty",
+		owner: "Phụ trách",
+		stage: "Giai đoạn",
+		amount: "Giá trị",
+		closeDate: "Ngày dự kiến chốt",
 		currency: "Tiền tệ",
 		noDate: "Chưa có ngày",
 		namePlaceholder: "Đất Xanh — OneHub",
 		chooseOwner: "Chọn người phụ trách",
+		submit: "Thêm thoả thuận",
+		cancel: "Huỷ",
 	},
 	bulk: {
 		reassigned: (n: string) => `Đã đổi người phụ trách cho ${n}.`,

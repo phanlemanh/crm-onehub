@@ -124,6 +124,11 @@ describe("kho chuoi cua vong ③a", () => {
 			"contacts:bulk.restored": ["Đã khôi phục 1.", "Đã khôi phục 12."],
 			"contacts:bulk.deleted": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
 			"contacts:bulk.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
+			"deals:meta.count": ["1 thoả thuận", "12 thoả thuận"],
+			"deals:meta.notCounted": [
+				"1 chưa tính (thiếu tỉ giá A)",
+				"12 chưa tính (thiếu tỉ giá A)",
+			],
 			"deals:created": ["Đã thêm 1.", "Đã thêm 12."],
 			"deals:bulk.reassigned": [
 				"Đã đổi người phụ trách cho 1.",
