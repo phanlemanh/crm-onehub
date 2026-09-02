@@ -14,10 +14,11 @@ const KHO = [
 
 const CHAN = ["ba-man", "ho-so", "dong-thoi-gian", "trinh-doc-man-hinh"];
 
-function duong(khoi) {
+function quetKhoa(dong, tu, den) {
 	const ra = new Map();
 	const ngan = [];
-	for (const line of khoi.split("\n")) {
+	for (let i = tu; i < den; i += 1) {
+		const line = dong[i];
 		const mo = line.match(/^(\t+)(\w+): \{$/);
 		if (mo) {
 			const sau = mo[1].length;
@@ -31,24 +32,22 @@ function duong(khoi) {
 		const duongDan = [...ngan.slice(0, sau - 1), la[2]].filter(Boolean);
 		if (duongDan[0] === "en" || duongDan[0] === "vi") duongDan.shift();
 		const key = duongDan.join(".");
-		if (!ra.has(key)) ra.set(key, { gt: la[3], dong: line });
+		if (!ra.has(key)) ra.set(key, { gt: la[3], chiSo: i });
 	}
 	return ra;
 }
 
 function capKhoa(goc) {
-	const viStart =
-		goc.indexOf("\n\tvi: {") >= 0
-			? goc.indexOf("\n\tvi: {")
-			: goc.indexOf("\nconst vi = {");
+	const dong = goc.split("\n");
+	const viStart = dong.findIndex((d) => d === "\tvi: {" || d === "const vi = {");
 	if (viStart === -1) return [];
-	const en = duong(goc.slice(0, viStart));
-	const vi = duong(goc.slice(viStart));
+	const en = quetKhoa(dong, 0, viStart);
+	const vi = quetKhoa(dong, viStart, dong.length);
 	const ra = [];
-	for (const [khoa, { gt, dong }] of vi) {
+	for (const [khoa, { gt, chiSo }] of vi) {
 		const enVal = en.get(khoa)?.gt;
 		if (!enVal || enVal === gt) continue;
-		ra.push({ ten: khoa, viVal: gt, enVal, dong });
+		ra.push({ ten: khoa, viVal: gt, enVal, chiSo });
 	}
 	return ra;
 }
@@ -112,13 +111,12 @@ if (!nenSach) {
 let cun = 0;
 try {
 	for (const [ten, file] of KHO) {
-		const truoc = goc.get(file);
-		let moi = truoc;
+		const hang = goc.get(file).split("\n");
 		const cuaKho = cap.filter((c) => c.file === file);
 		for (const c of cuaKho) {
-			moi = moi.replace(c.dong, c.dong.replace(`"${c.viVal}"`, `"${c.enVal}"`));
+			hang[c.chiSo] = hang[c.chiSo].replace(`"${c.viVal}"`, `"${c.enVal}"`);
 		}
-		writeFileSync(file, moi);
+		writeFileSync(file, hang.join("\n"));
 		const dong = soDongDoi(file);
 		if (dong !== cuaKho.length * 2) {
 			console.log(
@@ -132,13 +130,19 @@ try {
 		}
 	}
 	if (cun > 0) {
-		console.log("RANG CUN: co dot bien khong dung so dong — khong tin ket qua");
-		process.exit(2);
+		throw new Error(
+			"RANG CUN: co dot bien khong dung so dong — khong tin ket qua",
+		);
 	}
 
 	await new Promise((r) => setTimeout(r, CHO_MS));
 	console.log("-- do lai bon chan tren cay da dot bien");
 	var sau = chayChan();
+} catch (loi) {
+	for (const [file, noiDung] of goc) writeFileSync(file, noiDung);
+	console.log(String(loi instanceof Error ? loi.message : loi));
+	console.log("-- kho chuoi da tra ve nguyen trang");
+	process.exit(2);
 } finally {
 	for (const [file, noiDung] of goc) writeFileSync(file, noiDung);
 }
@@ -226,7 +230,7 @@ console.log(
 console.log(
 	"   LECH LOI KY: E13 doi 'mot khoa mot luot, dung 1 dong khac ban goc'.\n" +
 		"   Chan nay dot bien ca kho mot luot va kiem 2 dong x so khoa.\n" +
-		"   Ly do: 390 luot x 4 chan x ~3 phut = ~20 gio may chu that.\n" +
+		`   Ly do: ${cap.length} luot x ${CHAN.length} chan x ~3 phut = ~${Math.round((cap.length * CHAN.length * 3) / 60)} gio may chu that.\n` +
 		"   Hau qua: quy ket theo khoa suy tu chuoi hien ra, khong tu tung luot rieng.",
 );
 

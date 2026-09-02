@@ -1,4 +1,4 @@
-# khoa bon chan nghiem thu khong ve ra (159/390)
+# khoa bon chan nghiem thu khong ve ra (190/426)
 companies.labels.archivedDate
 companies.empty
 companies.emptyArchived
@@ -79,6 +79,33 @@ crm.facts.added
 crm.facts.dismissed
 crm.facts.pricing
 crm.facts.careers
+crm.fields.required
+crm.fields.standardRow
+crm.fields.standardNote
+crm.fields.suggestedRow
+crm.fields.suggestedNote
+crm.fields.customGroup
+crm.fields.dragNote
+crm.fields.archivedNote
+crm.fields.newField
+crm.fields.orderNote
+crm.fields.manualOnly
+crm.fields.tableNote
+crm.fields.filterNote
+crm.fields.emptyTitle
+crm.fields.errorTitle
+crm.fields.tryAgain
+crm.fields.labelLabel
+crm.fields.keyLabel
+crm.fields.agentLabel
+crm.fields.briefLabel
+crm.fields.typeLabel
+crm.fields.optionsLabel
+crm.fields.addOption
+crm.fields.allFilled
+crm.fields.addField
+crm.fields.saveChanges
+crm.fields.fillRest
 crm.fields.type.text
 crm.fields.type.longText
 crm.fields.type.number
@@ -111,8 +138,10 @@ crm.views.saved
 crm.views.deleted
 crm.bulkMenu.assignOwner
 crm.bulkMenu.nobodyElse
+crm.bulkMenu.confirmDelete
 crm.missing.industry
 crm.sheet.back
+crm.sheet.confirmDeleteForever
 crm.misc.nothingChanged
 crm.misc.yes
 crm.misc.loading
@@ -124,7 +153,6 @@ record-sheet.company.contactColumns.primary
 record-sheet.company.primaryContactBadge
 record-sheet.company.oneDeal
 record-sheet.company.onePerson
-record-sheet.company.primaryContact
 record-sheet.company.primaryUpdated
 record-sheet.company.noContactsTitle
 record-sheet.company.noDealsTitle
@@ -139,6 +167,8 @@ record-sheet.contact.based
 record-sheet.contact.previously
 record-sheet.contact.oneRole
 record-sheet.contact.emails
+record-sheet.contact.lastReply
+record-sheet.contact.thisCompany
 record-sheet.contact.nextMeeting
 record-sheet.contact.rolePlaceholder
 record-sheet.deal.contactColumns.role
@@ -151,6 +181,7 @@ record-sheet.deal.champion
 record-sheet.deal.noContactsTitle
 record-sheet.deal.addedToDeal
 record-sheet.deal.chooseSomebody
+record-sheet.deal.personLabel
 record-sheet.deal.addToDeal
 record-sheet.deal.noOwner
 record-sheet.deal.create
