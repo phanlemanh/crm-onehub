@@ -1,0 +1,11 @@
+# Duong chuan truoc khi dich — chan ba-man
+
+Do 2026-09-02 tren may chu dung tu cay lam viec, HEAD 90ea0be.
+
+-- man companies · be mat khai=10 · da mo vi=10 en=10
+   CON LAI: 19 chuoi / 71 lan
+-- man contacts · be mat khai=9 · da mo vi=9 en=9
+   CON LAI: 78 chuoi / 947 lan
+-- man deals · be mat khai=10 · da mo vi=10 en=10
+   CON LAI: 65 chuoi / 872 lan
+ket qua: con lai=1890 lan · be mat lech=0

@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process";
 import puppeteer from "puppeteer-core";
+import { BE_MAT, CHUA_MO } from "./be-mat.mjs";
 import { z } from "../../../packages/validation/node_modules/zod/index.js";
 
 const chuTrong = z.string().trim().min(1);
@@ -29,7 +30,7 @@ const chan = process.argv[2] ?? "chu";
 
 // Chan cua vong ③ chua dung — do la viec S3. Bao ro thay vi loi mo.
 const CHUA_DUNG = new Set([
-	"--chan", "ba-man", "ho-so", "dong-thoi-gian", "no-vong-1",
+	"--chan", "ho-so", "dong-thoi-gian", "no-vong-1",
 	"trinh-doc-man-hinh", "khai-tieng", "doi-tieng", "giai-doan",
 ]);
 if (CHUA_DUNG.has(chan)) {
@@ -398,6 +399,77 @@ try {
 			`ket qua: vong tieu diem=${coVong ? "co" : "KHONG"} · menu mo=${coMenu ? "co" : "KHONG"} · so dong=${menu.length}`,
 		);
 		process.exit(coVong && coMenu ? 0 : 1);
+	}
+
+	if (chan === "ba-man") {
+		const trung = await duLieuThu(cookie);
+		const scope = [MAN, ...CHUA_MO];
+		const BA_MAN = (process.env.MAN_LIST ?? "companies,contacts,deals").split(",");
+		let tongDu = 0;
+		let tongLech = 0;
+		for (const man of BA_MAN) {
+			const doc = async (locale) => {
+				const page = await browser.newPage();
+				await page.setViewport({ width, height, deviceScaleFactor: 1 });
+				await page.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
+				await browser.setCookie(
+					{ name: cookie.name, value: cookie.value, domain: "localhost", path: "/" },
+					{ name: "lang", value: locale, domain: "localhost", path: "/" },
+				);
+				await page.goto(`${APP}/${SLUG}/${man}`, { waitUntil: "networkidle0", timeout: 60000 });
+				await page.waitForSelector('[data-slot="table-head"]', { timeout: 30000 });
+				await page.waitForFunction(
+					() => document.querySelectorAll('[data-slot="table-body"] [data-slot="table-row"]').length > 0,
+					{ timeout: 30000 },
+				);
+				const lang = await page.evaluate(() => document.documentElement.lang);
+				const chu = [...((await page.evaluate(DOC_CHU, scope)) ?? [])];
+				const moDuoc = [];
+				for (const bm of BE_MAT[man]) {
+					const ok = await bm.mo(page).catch(() => false);
+					if (ok) {
+						moDuoc.push(bm.ten);
+						chu.push(...((await page.evaluate(DOC_CHU, scope)) ?? []));
+					}
+					await bm.dong(page).catch(() => {});
+				}
+				await page.close();
+				return { lang, chu, moDuoc };
+			};
+			const vi = await doc("vi");
+			const en = await doc("en");
+			if (vi.lang !== "vi" || en.lang !== "en") {
+				console.log(`RANG CUN: lang lech o ${man} (vi->${vi.lang}, en->${en.lang})`);
+				process.exit(2);
+			}
+			const dem = (l) => {
+				const m = new Map();
+				for (const x of l) m.set(x, (m.get(x) ?? 0) + 1);
+				return m;
+			};
+			const viDem = dem(vi.chu);
+			const enDem = dem(en.chu);
+			const duLieu = [...trung.set];
+			const laDuLieu = (x) => trung.set.has(x) || duLieu.some((d) => d.length > 2 && x.includes(d));
+			const con = [...viDem.keys()]
+				.filter((x) => enDem.has(x) && !laDuLieu(x) && !CHI_SO.test(x))
+				.sort();
+			const lan = con.reduce((n, x) => n + viDem.get(x), 0);
+			const khai = BE_MAT[man].length;
+			const lech = khai - vi.moDuoc.length;
+			tongDu += lan;
+			tongLech += Math.abs(lech) + Math.abs(khai - en.moDuoc.length);
+			console.log(`\n-- man ${man} · be mat khai=${khai} · da mo vi=${vi.moDuoc.length} en=${en.moDuoc.length}`);
+			console.log(`   da mo: ${vi.moDuoc.join(" · ") || "(khong cai nao)"}`);
+			if (lech !== 0) {
+				const thieu = BE_MAT[man].map((b) => b.ten).filter((t) => !vi.moDuoc.includes(t));
+				console.log(`   KHONG MO DUOC: ${thieu.join(" · ")}`);
+			}
+			console.log(`   CON LAI: ${con.length} chuoi / ${lan} lan`);
+			for (const x of con) console.log(`      * ${JSON.stringify(x)}${viDem.get(x) > 1 ? ` x${viDem.get(x)}` : ""}`);
+		}
+		console.log(`\nket qua: con lai=${tongDu} lan · be mat lech=${tongLech}`);
+		process.exit(tongDu + tongLech > 0 ? 1 : 0);
 	}
 
 	if (chan === "be-rong") {
