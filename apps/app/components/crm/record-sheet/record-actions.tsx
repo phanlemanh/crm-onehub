@@ -22,9 +22,11 @@ import {
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
+import { crmMessages } from "@/lib/messages/crm";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import {
@@ -84,6 +86,7 @@ function useRestoreRecord(record: RecordRef) {
 }
 
 function usePurgeRecord(record: RecordRef) {
+	const m = crmMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const { close } = useRecordStack();
@@ -115,6 +118,7 @@ export function RecordActions({
 	consequence: string;
 	archivedAt: string | null;
 }) {
+	const m = crmMessages(useLocale());
 	const [confirming, setConfirming] = useState(false);
 	const archive = useArchiveRecord(record);
 	const restore = useRestoreRecord(record);
@@ -128,7 +132,7 @@ export function RecordActions({
 				<DropdownMenuTrigger asChild>
 					<Button variant="ghost" size="icon-sm" disabled={pending}>
 						<Icon icon={OverflowMenuVertical} />
-						<span className="sr-only">More actions</span>
+						<span className="sr-only">{m.sheet.moreActions}</span>
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end" className="min-w-44">
@@ -162,12 +166,12 @@ export function RecordActions({
 			<AlertDialog open={confirming} onOpenChange={setConfirming}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Delete {name} forever?</AlertDialogTitle>
+						<AlertDialogTitle>{m.sheet.confirmDelete(name)}</AlertDialogTitle>
 						<AlertDialogDescription>{consequence}</AlertDialogDescription>
 					</AlertDialogHeader>
 
 					<AlertDialogFooter>
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogCancel>{m.sheet.cancel}</AlertDialogCancel>
 						<AlertDialogAction
 							variant="destructive"
 							onClick={() => purge.mutate({ id: record.id })}

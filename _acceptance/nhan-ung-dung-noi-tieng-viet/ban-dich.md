@@ -28,7 +28,7 @@ mà không có tên ở đây thì phép đo đỏ.
 
 | Khoá | Giá trị | Loại | Vì sao |
 | --- | --- | --- | --- |
-| `headers.email` · `standard.email` · `timeline.tabs.emails` · `contact.emails` · `company.fields.email` · `company.contactColumns.email` | `Email` | từ mượn | `CONTEXT.md` cấm đúc từ ghép cho thuật ngữ kỹ thuật; "thư điện tử" là từ người dùng không tự nói |
+| `headers.email` · `standard.email` · `timeline.tabs.emails` · `contact.emails` · `company.fields.email` · `company.contactColumns.email` · `timeline.type.email` · `contact.fields.email` · `deal.contactColumns.email` | `Email` | từ mượn | `CONTEXT.md` cấm đúc từ ghép cho thuật ngữ kỹ thuật; "thư điện tử" là từ người dùng không tự nói |
 | `standard.website` · `company.fields.website` | `Website` | từ mượn | như trên |
 | `standard.linkedin` · `contact.fields.linkedin` | `LinkedIn` | tên riêng | tên sản phẩm, không dịch |
 | `contact.fields.x` | `X` | tên riêng | tên mạng xã hội, một chữ cái |

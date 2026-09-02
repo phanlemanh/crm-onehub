@@ -37,6 +37,7 @@ const en = {
 			call: "Call",
 			meeting: "Meeting",
 			task: "Task",
+			email: "Email",
 			stageChange: "Stage change",
 			enrichment: "Enrichment",
 		},
@@ -74,6 +75,8 @@ const en = {
 		again: "Taking another look — this page will update when it finishes.",
 		agentResearching: "Agent is researching",
 		notKnown: "Not known yet",
+		research: "Research",
+		reEnrich: "Re-enrich",
 	},
 	time: {
 		justNow: "just now",
@@ -225,6 +228,19 @@ const en = {
 		leftAlone: (done: string, n: string, why: string) =>
 			`${done} ${n} left alone${why}`,
 	},
+	missing: {
+		industry: "industry",
+		description: "description",
+		socialLinks: "social links",
+	},
+	sheet: {
+		back: "Back",
+		close: "Close",
+		moreActions: "More actions",
+		fields: "Fields",
+		confirmDelete: (name: string) => `Delete ${name} forever?`,
+		cancel: "Cancel",
+	},
 	misc: {
 		nothingChanged: "Nothing changed.",
 		yes: "Yes",
@@ -273,6 +289,7 @@ const vi = {
 			call: "Cuộc gọi",
 			meeting: "Cuộc họp",
 			task: "Việc cần làm",
+			email: "Email",
 			stageChange: "Đổi giai đoạn",
 			enrichment: "Bổ sung dữ liệu",
 		},
@@ -310,6 +327,8 @@ const vi = {
 		again: "Đang tra cứu lại — trang sẽ tự cập nhật khi xong.",
 		agentResearching: "Tác nhân đang tra cứu",
 		notKnown: "Chưa biết",
+		research: "Tra cứu",
+		reEnrich: "Tra cứu lại",
 	},
 	time: {
 		justNow: "vừa xong",
@@ -459,6 +478,19 @@ const vi = {
 		cancel: "Huỷ",
 		leftAlone: (done: string, n: string, why: string) =>
 			`${done} ${n} bị bỏ qua${why}`,
+	},
+	missing: {
+		industry: "ngành",
+		description: "mô tả",
+		socialLinks: "liên kết mạng xã hội",
+	},
+	sheet: {
+		back: "Quay lại",
+		close: "Đóng",
+		moreActions: "Thêm hành động",
+		fields: "Trường",
+		confirmDelete: (name: string) => `Xoá vĩnh viễn ${name}?`,
+		cancel: "Huỷ",
 	},
 	misc: {
 		nothingChanged: "Không có gì thay đổi.",

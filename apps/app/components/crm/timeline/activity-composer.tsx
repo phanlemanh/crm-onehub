@@ -122,10 +122,10 @@ export function ActivityComposer({ anchor }: { anchor: TimelineAnchor }) {
 							<ToggleGroupItem
 								key={option}
 								value={option}
-								aria-label={activityLabel(option)}
+								aria-label={activityLabel(option, locale)}
 							>
 								<ActivityIcon type={option} />
-								{activityLabel(option)}
+								{activityLabel(option, locale)}
 							</ToggleGroupItem>
 						))}
 					</ToggleGroup>
@@ -160,7 +160,9 @@ export function ActivityComposer({ anchor }: { anchor: TimelineAnchor }) {
 							disabled={create.isPending}
 						>
 							{create.isPending ? <Spinner /> : null}
-							{isTask ? "Add task" : `Log ${activityLabel(type).toLowerCase()}`}
+							{isTask
+								? "Add task"
+								: `Log ${activityLabel(type, locale).toLowerCase()}`}
 						</InputGroupButton>
 					)}
 				</InputGroupAddon>

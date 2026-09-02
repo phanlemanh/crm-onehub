@@ -34,6 +34,7 @@ const KHONG_DAU = new Set([
 	"headers.emails",
 	"tabs.emails",
 	"contact.emails",
+	"type.email",
 	"create.email",
 	"contactColumns.email",
 	"fields.website",
@@ -123,6 +124,7 @@ describe("kho chuoi cua vong ③a", () => {
 				"Cả 12 thoả thuận của công ty",
 			],
 			"record-sheet:company.manyPeople": ["1 người", "12 người"],
+			"crm:sheet.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
 			"contacts:created": ["Đã thêm 1.", "Đã thêm 12."],
 			"contacts:bulk.reassigned": [
 				"Đã đổi người phụ trách cho 1.",

@@ -47,7 +47,8 @@ export function TimelineEntry({
 	entry: TimelineEntryData;
 	anchor: TimelineAnchor;
 }) {
-	const m = crmMessages(useLocale());
+	const locale = useLocale();
+	const m = crmMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
@@ -103,7 +104,7 @@ export function TimelineEntry({
 						}
 					/>
 				) : (
-					<span role="img" aria-label={activityLabel(entry.type)}>
+					<span role="img" aria-label={activityLabel(entry.type, locale)}>
 						<ActivityIcon type={entry.type} />
 					</span>
 				)}
@@ -136,7 +137,7 @@ export function TimelineEntry({
 
 						{!headline && !entry.body ? (
 							<p className="text-muted-foreground">
-								{activityLabel(entry.type)}
+								{activityLabel(entry.type, locale)}
 							</p>
 						) : null}
 					</div>

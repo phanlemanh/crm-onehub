@@ -13,6 +13,7 @@ import {
 } from "@crm/ui/components/empty";
 import type { CarbonIcon } from "@crm/ui/components/icon";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Separator } from "@crm/ui/components/separator";
 import type { SheetSize } from "@crm/ui/components/sheet";
 import {
@@ -35,6 +36,7 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from "@/components/responsive-sheet";
+import { crmMessages } from "@/lib/messages/crm";
 
 const GUTTER = "px-5";
 
@@ -60,6 +62,7 @@ export function DetailSheet({
 	className?: string;
 	children: ReactNode;
 }) {
+	const m = crmMessages(useLocale());
 	const content = useRef<HTMLDivElement>(null);
 
 	return (
@@ -98,6 +101,7 @@ export function DetailSheetHeader({
 	onBack?: () => void;
 	onClose: () => void;
 }) {
+	const m = crmMessages(useLocale());
 	return (
 		<SheetHeader className={cn("gap-0 border-b py-3", GUTTER)}>
 			<div className="flex items-start gap-3">
@@ -106,10 +110,10 @@ export function DetailSheetHeader({
 						<TooltipTrigger asChild>
 							<Button variant="ghost" size="icon-sm" onClick={onBack}>
 								<Icon icon={ArrowLeft} />
-								<span className="sr-only">Back</span>
+								<span className="sr-only">{m.sheet.back}</span>
 							</Button>
 						</TooltipTrigger>
-						<TooltipContent>Back</TooltipContent>
+						<TooltipContent>{m.sheet.back}</TooltipContent>
 					</Tooltip>
 				) : null}
 
@@ -138,7 +142,7 @@ export function DetailSheetHeader({
 					) : null}
 					<Button variant="ghost" size="icon-sm" onClick={onClose}>
 						<Icon icon={Close} />
-						<span className="sr-only">Close</span>
+						<span className="sr-only">{m.sheet.close}</span>
 					</Button>
 				</div>
 			</div>
@@ -306,6 +310,7 @@ export function DetailSheetPending({
 	fields: string[];
 	running: boolean;
 }) {
+	const m = crmMessages(useLocale());
 	if (fields.length === 0) return null;
 
 	return (
@@ -319,7 +324,7 @@ export function DetailSheetPending({
 					)}
 				/>
 				<span className="font-medium text-xs">
-					{running ? "Agent is researching" : "Not known yet"}
+					{running ? m.enrichment.agentResearching : m.enrichment.notKnown}
 				</span>
 			</div>
 			<p className="text-pretty text-muted-foreground text-xs/5">

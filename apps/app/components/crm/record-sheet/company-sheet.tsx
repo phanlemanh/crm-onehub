@@ -23,6 +23,7 @@ import {
 	TooltipTrigger,
 } from "@crm/ui/components/tooltip";
 import { formatMoney } from "@crm/ui/lib/format";
+import type { Locale } from "@crm/ui/lib/locale";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AgentPanel } from "@/components/crm/agent-panel";
@@ -56,6 +57,7 @@ import {
 import { LocalDay } from "@/components/local-date-time";
 import { OPEN_STAGES } from "@/lib/deal-stage";
 import { ENRICHMENT_POLL_MS, isEnriching } from "@/lib/enrichment-status";
+import { crmMessages } from "@/lib/messages/crm";
 import {
 	type RecordSheetMessages,
 	recordSheetMessages,
@@ -81,11 +83,12 @@ type CompanyDeal = Company["deals"][number];
 
 const UNASSIGNED = "unassigned";
 
-function pendingFields(company: Company): string[] {
+function pendingFields(company: Company, locale: Locale): string[] {
+	const m = crmMessages(locale).missing;
 	const missing: string[] = [];
-	if (!company.industry) missing.push("industry");
-	if (!company.description) missing.push("description");
-	if (!hasCompanyLinks(company)) missing.push("social links");
+	if (!company.industry) missing.push(m.industry);
+	if (!company.description) missing.push(m.description);
+	if (!hasCompanyLinks(company)) missing.push(m.socialLinks);
 	return missing;
 }
 
@@ -314,7 +317,8 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 }
 
 function CompanyOverview({ company }: { company: Company }) {
-	const m = recordSheetMessages(useLocale());
+	const locale = useLocale();
+	const m = recordSheetMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
@@ -426,7 +430,7 @@ function CompanyOverview({ company }: { company: Company }) {
 					</DetailSheetSection>
 
 					<DetailSheetPending
-						fields={pendingFields(company)}
+						fields={pendingFields(company, locale)}
 						running={isEnriching(company.enrichmentStatus, company.queued)}
 					/>
 
