@@ -2,12 +2,12 @@
 schema_version: 2
 feature_slug: nhan-ung-dung-noi-tieng-viet
 verdict: REJECT
-failed_evals: [E1, E10, E13, E15]
+failed_evals: [E13]
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b0e0c45ced78356fc8efbb9c59ca538bc06c9178
+verified_commit: fccef6f236f6b5edb760d65e6554c74f69e5f9c5
 human_signoff:
 ---
 
@@ -15,7 +15,7 @@ human_signoff:
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
-| E1 | AC-1 | script | FAIL |
+| E1 | AC-1 | script | PASS |
 | E2 | AC-2 | script | PASS |
 | E3 | AC-3 | script | PASS |
 | E4 | AC-4 | script | PASS |
@@ -24,231 +24,222 @@ human_signoff:
 | E7 | AC-7 | script | PASS |
 | E8 | AC-8 | script | PASS |
 | E9 | AC-9 | script | PASS |
-| E10 | AC-10 | script | FAIL |
+| E10 | AC-10 | script | PASS |
 | E11 | AC-11 | script | PASS |
 | E12 | AC-12 | test | PASS |
 | E13 | AC-12 | script | FAIL |
-| E14 | AC-13 | judgment | UNCERTAIN |
-| E15 | AC-1 | script | FAIL |
+| E14 | AC-13 | judgment | FAIL |
+| E15 | AC-1 | script | PASS |
 | E16 | AC-14 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E1-r1
-  exit_code: 1
-  baseline: red
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E1-r2
+  exit_code: 0
+  baseline: n-a
   verifier: config:executors.script.rang3_ba_man
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
-    -- man companies · be mat khai=10 · da mo vi=10 en=10
-       da mo: menu Bộ lọc · menu con facet 1 · menu con facet 2 · menu con facet 3 · menu con facet 4 · menu Sắp xếp · menu Cột · menu Views · thanh chọn dòng · hộp thoại tạo mới
-       CON LAI: 0 chuoi / 0 lan
-    TimeoutError: Waiting failed: 30000ms exceeded
-        at new WaitTask (node_modules/.bun/puppeteer-core@25.9.0/node_modules/puppeteer-core/lib/puppeteer/common/WaitTask.js:46:34)
-        at IsolatedWorld.waitForFunction (puppeteer-core/lib/puppeteer/api/Realm.js:49:26)
-        at CdpFrame.waitForFunction (puppeteer-core/lib/puppeteer/api/Frame.js:585:43)
-        at doc (_acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs:598:16)
-        at async file://.../rang/ban-ve.mjs:616:15
-    Node.js v24.15.0
+    CON LAI: 0 chuoi / 0 lan
+
+    ket qua: con lai=0 lan · be mat lech=0
 
 - eval: E2
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E2-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E2-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_ho_so
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
     CON LAI: 0 chuoi / 0 lan
 
     ket qua: con lai=0 lan
 
 - eval: E3
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E3-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E3-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_dong_thoi_gian
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
     (b) KHONG phai chieu do — hop dong khai cau may chu van tieng Anh, vong ④
 
     ket qua: con lai=0 lan · duong hong (a) tieng Viet=co
 
 - eval: E4
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E4-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E4-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_no_vong_1
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
+    khong hien     "Nothing found"                          · nhãn trạng thái bổ sung dữ liệu
     da dich        "2d ago"                                 · chữ thời gian tương đối
     ket qua: con tieng Anh=0 · khong hien de doi chieu=4 · tong=10
 
 - eval: E5
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E5-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E5-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_trinh_doc_man_hinh
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
-    -- nhan chi trinh doc man hinh nghe: vi=196 lan, en=196 lan
+    -- nhan chi trinh doc man hinh nghe: vi=196 lan, en=194 lan
     -- CON LAI: 0 chuoi / 0 lan
     ket qua: con lai=0 lan
 
 - eval: E6
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E6-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E6-r2
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.test.api
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
-    Tasks:    11 successful, 11 total
-    Cached:    10 cached, 11 total
-      Time:    3.184s
+    app:test:  0 fail
+    app:test:  585 expect() calls
+    app:test: Ran 193 tests across 19 files. [815.00ms]
 
 - eval: E7
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E7-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E7-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_khai_tieng
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
-       boc du  Banking                2 cho, chua boc 0
-       boc du  Accounting             1 cho, chua boc 0
+    boc du  Banking                2 cho, chua boc 0
+    boc du  Accounting             1 cho, chua boc 0
     ket qua: cho chua khai lang=en=0
 
 - eval: E8
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E8-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E8-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_doi_tieng
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
-       trang KHONG tai lai:     dung
-       thanh chon dong con giu: co
+    trang KHONG tai lai:     dung
+    thanh chon dong con giu: co
     ket qua: hong=0
 
 - eval: E9
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E9-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.rang3_may_chu_ve
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
-       luot ve dau OK  /contacts — lang=vi · <title> mo dau Cá nhân · h1 la Cá nhân
-       luot ve dau OK  /deals — lang=vi · <title> mo dau Thoả thuận · h1 la Thoả thuận
+    luot ve dau OK  /contacts — lang=vi · <title> mo dau Cá nhân · h1 la Cá nhân
+    luot ve dau OK  /deals — lang=vi · <title> mo dau Thoả thuận · h1 la Thoả thuận
     ket qua: man hong=0/3
 
 - eval: E10
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E10-r1
-  exit_code: 1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E10-r2
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.rang3_be_rong
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
-    TimeoutError: Waiting failed: 30000ms exceeded
-        at new WaitTask (node_modules/.bun/puppeteer-core@25.9.0/node_modules/puppeteer-core/lib/puppeteer/common/WaitTask.js:46:34)
-        at IsolatedWorld.waitForFunction (puppeteer-core/lib/puppeteer/api/Realm.js:49:26)
-        at CdpFrame.waitForFunction (puppeteer-core/lib/puppeteer/api/Frame.js:585:43)
     $ bun scripts/dev-session.ts manh.phan@onemount.com
     ket qua 1440px: cat tran=0 · cat kem ba cham=0 · tong=7 · hong=0
-    ket qua: o hong=1/12
+    ket qua: o hong=0/12
 
 - eval: E11
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E11-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E11-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_du_lieu_bien
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
-       co      1 hang · ten phap nhan 40-60 ky tu
-             vi du: "Công ty Cổ phần Đầu tư và Phát triển Địa ốc Phú Mỹ"
+    co      1 hang · ten phap nhan 40-60 ky tu
+          vi du: "Công ty Cổ phần Đầu tư và Phát triển Địa ốc Phú Mỹ"
     ket qua: trang thai thieu=0/3
 
 - eval: E12
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E12-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E12-r2
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.test.api
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
-    Tasks:    11 successful, 11 total
-    Cached:    10 cached, 11 total
-      Time:    3.184s
+    app:test:  0 fail
+    app:test:  585 expect() calls
+    app:test: Ran 193 tests across 19 files. [815.00ms]
 
 - eval: E13
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E13-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E13-r2
   exit_code: 1
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_dot_bien
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
-       nguong khai: bat >= 95% SO KHOA — dat 231/390 = 59%
+    -- do phu: bon chan ve ra 236/426 khoa (55%)
+       190 khoa nam ngoai bon chan — hop thoai tao, man trong, man luu tru, thao tac hang loat
+    -- bat tren khoa CO ve ra: 236/236 (100%)
+
+    -- cham theo dung loi da ky o E13
+       nguong khai: bat >= 95% SO KHOA — dat 236/426 = 55%
        KHONG DAT · moi khoa khong bat duoc da co ten o rang/dot-bien-sot.txt
        LECH LOI KY: E13 doi 'mot khoa mot luot, dung 1 dong khac ban goc'.
-       Chan nay dot bien ca kho mot luot va kiem 2 dong x so khoa.
-       Ly do: 390 luot x 4 chan x ~3 phut = ~20 gio may chu that.
-       Hau qua: quy ket theo khoa suy tu chuoi hien ra, khong tu tung luot rieng.
 
-    ket qua: bat 231/390 khoa (59%) · ve ra 231 · mu 0 · ngoai phu 159 · dot bien cun 0
+    ket qua: bat 236/426 khoa (55%) · ve ra 236 · mu 0 · ngoai phu 190 · dot bien cun 0
 
 - eval: E14
   judged_by: judge panel — domain-correctness, operational-feasibility, spec-alignment (fresh context)
-  verdict: UNCERTAIN
+  verdict: FAIL
   rationale: |
-    Panel không carried, không ungrounded — chấm mới trên round này, dùng ban-dich.md và E10-chu-hien-ra.txt làm hai đầu vào bắt buộc.
-    - domain-correctness: UNCERTAIN — (1) Trong phạm vi các mục CÓ mặt, bảng dịch đọc như tiếng Việt của người trong nghề quan hệ hợp tác — có lý do rõ cho từng chỗ lệch khỏi nghĩa đen, né giọng bán hàng ("đang bán" → "đang cần"/"đang trao đổi"), không có dấu hiệu dịch máy. Nhưng đối chiếu với E10 (đầu vào bắt buộc), hai tiêu đề cột thật đang hiện trên màn companies — "Số lượng cá nhân" và "Số thoả thuận đang mở" (đo ở mọi khổ 1024px trở lên) — KHÔNG có mặt ở bất cứ đâu trong ban-dich.md, dù tài liệu tự nhận đã liệt kê đủ 357 chuỗi qua đúng năm mục (11+32+34+170+110=357 khớp). Nghĩa là bảng "đã chốt TRƯỚC khi chấm" không phủ hết chữ thật đang chạy, nên không thể xác nhận hai nhãn này đã qua đúng luật từ điển của CONTEXT.md. (2) Trong các mục có mặt, không thấy nhãn cột nào lệch loại từ so với ô ngày dưới nó — mọi tiêu đề cột-ngày đều là cụm danh từ có "Ngày" tường minh (Ngày tạo, Ngày chốt, Ngày lưu trữ). (3) Với đúng chữ thật đo ở E10, hai tiêu đề bị cắt trên cùng màn companies@768px ("Số thoả thuận đan…" và "Hoạt động gần…") vẫn phân biệt rõ, không có cặp nhãn cạnh nhau nào dễ lẫn.
-    - operational-feasibility: UNCERTAIN — Bảng đọc như tiếng Việt tự nhiên có căn cứ rõ cho từng lựa chọn từ, không như bản dịch máy (Q1 đạt); trong các nhãn cột companies/contacts đo ở E10, không thấy cặp nhãn liền kề nào dễ lẫn dù bị cắt ở 768px — "Số thoả thuận đan…" và "Hoạt động gần…" không trùng nhau và không trùng nhãn nào khác trên cùng màn (Q3 đạt). Nhưng deal.expectedClose dịch thành "Dự kiến chốt", bỏ neo danh từ "Ngày" mà mọi nhãn ngày anh em khác trong cùng file đều giữ (deal.opened→"Ngày mở", headers.closeDate→"Ngày chốt", labels.createdDate→"Ngày tạo", labels.archivedDate→"Ngày lưu trữ") — dòng này không có Ghi chú giải thích, và "chốt" trong tiếng Việt lưỡng tính danh từ/động từ nên không đủ căn cứ để nói chắc nhãn này đọc như danh từ ngày ("dự kiến [ngày] chốt") hay như cụm động từ lơ lửng ("dự kiến [sẽ] chốt") — đúng dạng vi phạm câu hỏi 2 nêu ví dụ, nhưng chưa đủ bằng chứng để chốt PASS hay FAIL.
-    - spec-alignment: PASS — (1) Bảng dịch đọc như tiếng Việt của người trong nghề: nhiều chỗ né sát nghĩa gốc để đúng giọng hợp tác (vd. "trao đổi" thay "đang bán", "Mức thân quen" thay câu "We know them", "Vì sao không thành?" thay "mất vào tay ai") — không phải khuôn dịch máy. (2) Trong các nhãn cột có nêu rõ loại ô dưới nó (Ngày tạo/Ngày lưu trữ/Ngày chốt, đều đứng trước ô ngày), tất cả đều là cụm danh từ đúng loại từ, không thấy cụm động từ đặt trên cột ngày. (3) Trong đúng phạm vi chữ thật đã đo ở E10 (companies/contacts, 4 khổ rộng), không có cặp nhãn liền kề nào — kể cả bản bị cắt bớt dấu ba chấm ("Số thoả thuận đan…", "Hoạt động gần…") — trùng hoặc dễ lẫn nhau; tiền tố còn lại của mỗi nhãn vẫn phân biệt rõ.
+    Panel không carried, không ungrounded — chấm mới trên round này, đề xuất chung của panel là FAIL. Ba lens:
+
+    - domain-correctness: FAIL — (1) Ba phần đầu của bảng (companies/contacts/deals/crm/record-sheet gốc) đọc như tiếng Việt của người trong nghề, có lý lẽ ngữ cảnh rõ cho từng lựa chọn — không phải dịch máy. Nhưng chính ban-dich.md tự khai ở mục "Bổ sung ở vòng sửa S4-r1" (dòng 532-546): 199/537 khoá (37%) được viết SAU khi mã đã chạm, nên "KHÔNG mang tính chất 'chốt trước khi chạm mã' mà AC-13 đòi" — đây là vi phạm trực tiếp, tự thừa nhận, cho đúng câu hỏi (1). (2) Trong phạm vi ba file được cấp, không thấy nhãn nào dùng cụm động từ trên cột chứa ngày — các nhãn ngày đều neo danh từ "Ngày" nhất quán (Ngày tạo, Ngày chốt, Ngày mở, Ngày dự kiến chốt, Ngày lưu trữ). (3) Theo đúng chữ thật đo ở E10, chỉ hai nhãn bị cắt (ở 768px: "Số thoả thuận đan…" và "Hoạt động gần…"/"Hoạt động gần …"), và chúng không giống nhau đủ để gây lẫn khi đứng cạnh nhau trên cùng màn. Vi phạm ở câu (1) đã đủ căn cứ rõ ràng, tự bản dịch xác nhận, nên verdict tổng thể là FAIL.
+    - operational-feasibility: FAIL — Câu 1: chính bảng dịch tự thú — mục "Bổ sung ở vòng sửa S4-r1" khai 199/537 khoá (37%) được thêm SAU khi mã đã chạm, và nói thẳng phần đó "KHÔNG mang tính chất 'chốt trước khi chạm mã' mà AC-13 đòi". Ba mục gốc (companies/contacts/deals đầu file) đọc như tiếng Việt tự nhiên của người trong nghề quan hệ đối tác, không như dịch máy — nhưng phần bổ sung phá đúng điều kiện "chốt trước" mà câu hỏi 1 hỏi, nên không thể PASS toàn bộ. Câu 3 (chỉ dựa E10): ở màn công ty 768px có hai nhãn liền kề cùng bị cắt cùng lúc — "Số thoả thuận đan…" (cắt ngay giữa từ "đang", dừng đúng ở một từ thật khác là "đan") và "Hoạt động gần…" — cặp này đứng cạnh nhau trên cùng một màn hẹp và cùng mất nghĩa. Câu 2: rà các nhãn cột có bằng chứng thật (E10) thì không thấy cụm động từ nào dùng sai trên cột chứa ngày/số — các nhãn còn lại trong bảng (vd. closing→"Sắp chốt", contact.based→"Làm việc tại") là suy đoán cấu trúc màn hình không có trong phạm vi input nên không dùng làm căn cứ.
+    - spec-alignment: UNCERTAIN — Chữ trong bảng dịch (cả phần gốc lẫn phần bổ sung S4-r1) đọc tự nhiên như tiếng Việt người trong nghề viết, không như bản dịch máy — nhưng chính file này tự khai 199/537 khoá (37%) chỉ được chốt SAU khi mã đã viết, và nói thẳng "KHÔNG mang tính chất 'chốt trước khi chạm mã' mà AC-13 đòi... không được đọc như thể có" (ban-dich.md, mục "Bổ sung ở vòng sửa S4-r1"). Không có contract.md trong phạm vi input để biết "vòng này" mà AC-13 nói có bao trùm phần bổ sung đó hay không, nên câu 1 không đủ căn cứ chốt PASS hay FAIL. Câu 2 không tìm được nhãn nào hiện còn sai loại từ so với ô dưới nó (các trường hợp tương tự — section.onIt, contact.weKnowThem — đã được ghi nhận là đã sửa); câu 3 chỉ có bằng chứng E10 cho companies/contacts ở 768px và một phần deals ở 768px, không đủ để khẳng định hay bác bỏ cặp nhãn dễ lẫn trên các khổ/màn khác mà bảng dịch có nhắc tới.
+
+    Đề xuất panel: FAIL — hai trong ba lens chốt FAIL trên cùng một căn cứ tự-khai của ban-dich.md (199/537 khoá chốt SAU khi mã đã chạm), lens thứ ba giữ UNCERTAIN vì thiếu contract.md để xác nhận phạm vi "vòng này" của AC-13.
   required_evidence:
-    - "Khoá i18n và bản dịch đã rà theo luật CONTEXT.md cho hai tiêu đề cột companies đo tại E10 — 'Số lượng cá nhân' và 'Số thoả thuận đang mở' (ví dụ: grep khoá trong file i18n nguồn của module companies, hoặc một dòng bổ sung trong ban-dich.md ghi rõ khoá + lý do) — nếu xuất hiện và tuân đúng luật (không đúc từ ghép, đúng từ điển), câu hỏi (1) đổi từ UNCERTAIN sang PASS."
-    - "Đo 'chữ thật hiện ra' (kiểu bảng E10) cho khu vực hồ sơ thoả thuận (record-sheet) ở các khổ 768/1024/1280/1440px, riêng nhãn deal.expectedClose ('Dự kiến chốt') đặt cạnh giá trị ngày — file hiện chưa tồn tại, cần sinh thêm vào _acceptance/nhan-ung-dung-noi-tieng-viet/evidence/ song song E10."
-    - "Một dòng Ghi chú trong ban-dich.md giải thích lựa chọn 'Dự kiến chốt' (thay vì 'Ngày dự kiến chốt') cho hàng deal.expectedClose, xác nhận nó đọc như danh từ neo ngày nhất quán với các nhãn ngày anh em khác trong cùng bảng — nếu thêm dòng này với lý lẽ hợp lý, verdict đổi sang PASS cho câu hỏi 2."
+    - "(domain-correctness) Bằng chứng đảo verdict: log/timestamp git cho thấy 199 khoá ở mục 'Bổ sung ở vòng sửa S4-r1' (ban-dich.md dòng 548-773) thực sự được chốt trong hồ sơ TRƯỚC commit mã UI tương ứng, mâu thuẫn với chính lời tự khai ở dòng 539-542 của ban-dich.md rằng chúng viết SAU khi mã đã viết — nếu chứng minh được điều này thì câu hỏi (1) đổi từ FAIL sang PASS."
+    - "(operational-feasibility) Đọc contract.md (ngoài phạm vi input hiện tại) mục AC-13: nếu điều khoản chỉ đòi bảng dịch có mặt ĐẦY ĐỦ trong hồ sơ TRƯỚC KHI hội đồng chấm — không đòi mọi khoá phải được liệt kê trước khi chạm mã — thì 199 khoá bổ sung ở S4-r1 vẫn hợp lệ và câu 1 đổi từ FAIL sang PASS/UNCERTAIN."
+    - "(spec-alignment) Đọc _acceptance/nhan-ung-dung-noi-tieng-viet/contract.md mục AC-13 để xác nhận 'vòng này' có bao gồm 199 khoá bổ sung ở S4-r1 hay không — nếu AC-13 chỉ áp cho 357 khoá gốc (vòng ③a) và phần bổ sung được chấm ở eval khác, câu 1 đổi thành PASS; nếu AC-13 áp cho toàn bộ 537 khoá hiện có trong file, câu 1 đổi thành FAIL rõ ràng."
+    - "(spec-alignment) Chạy lại script đo chữ thật hiện ra (kiểu E10) cho bảng deals ở 1024/1280/1440px và cho các nhãn khác được nêu trong ban-dich.md (vd. facets, tabs, record-sheet) — hiện E10 chỉ có deals·768px và hai bảng companies/contacts, không đủ để trả lời câu 3 về cặp nhãn dễ lẫn trên toàn bộ màn hình liên quan."
   human_override:
 
 - eval: E15
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E15-r1
-  exit_code: 1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E15-r2
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.rang3_khong_may_quet
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
-    dung vat that  ban-ve.mjs
-    CHI DOC MA     dot-bien.mjs — chan nay khong cham toi san pham dang chay
-    dung vat that  du-lieu-bien.mjs
-    dung vat that  khai-tieng.mjs
-    dung vat that  no-vong-1.mjs
-    CHI DOC MA     be-rong.sh — chan nay khong cham toi san pham dang chay
+    qua ban-ve.mjs  be-rong.sh — cham san pham bang cach chay ban-ve.mjs
     dung vat that  may-chu-ve.sh
-    ket qua: chan chi doc ma=2/7
+    ket qua: chan chi doc ma=0/7
 
 - eval: E16
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E16-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E16-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_giai_doan
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
   output: |
-       boc du  Closed lost          3 cho, chua boc 0
-       boc du  Unqualified          3 cho, chua boc 0
+    boc du  Closed lost          3 cho, chua boc 0
+    boc du  Unqualified          3 cho, chua boc 0
     ket qua: cho chua khai lang=en=0
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bunx turbo run check-types --force
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-SUITE-bunx_turbo_run_check_types_force-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-SUITE-bunx_turbo_run_check_types_force-r2
   exit_code: 0
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
 
 - cmd: bun run lint:slop
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-SUITE-bun_run_lint_slop-r1
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-02T23:58:00+07:00
+  verified_at: 2026-09-03T01:20:00+07:00
 
 ## Known limits
 
@@ -256,7 +247,9 @@ human_signoff:
 
 ## Analyst
 
-E6, E12 — `bun run db:test && bun run test` xanh trên cả HEAD lẫn baseline (diffBase): hai eval này không phân biệt được feature khỏi code cũ. Đây là bài kiểm hồi quy có chủ ý (regression-guard) đã tồn tại trước vòng này, không phải bằng chứng riêng cho AC-6/AC-12 — nên đọc như một guard bình thường, không phải một chỗ hổng của E6/E12.
+carried từ round trước — baseline không đo lại round này.
+
+none — round này không đo baseline (P2, evals.yaml không đổi từ lần baseline cuối); danh sách eval không-phân-biệt kế thừa nguyên trạng từ round trước và rỗng ở đầu vào round này. Lệnh suite (check-types, lint, lint:slop) xanh cả hai phía là regression-guard bình thường, không liệt kê.
 
 ## Variance
 
@@ -264,4 +257,5 @@ none — không có eval nào mang field `runs > 1` trong vòng này; không eva
 
 ## Iterations
 
-Round 1: E1, E10, E13, E15 failed. E1 và E10 cùng vỡ ở `TimeoutError: Waiting failed: 30000ms exceeded` trong puppeteer — E1 khi bóc bề mặt ẩn trên màn companies (menu Views), E10 khi đo bề rộng chữ ở 1440px. E13 chỉ bắt được đột biến 231/390 khoá (59%), dưới ngưỡng khai 95%. E15 (chặn chống-lách) chỉ xác nhận 2/7 chặn E1-E11 dùng trình duyệt/trình biên dịch thật, 5 chặn còn lại chưa được đóng dấu "dung vat that" qua phép kiểm hiện có. Trả về S3 implementation.
+Round 1: E1, E10, E13, E15 failed. E1 và E10 cùng vỡ ở `TimeoutError: Waiting failed: 30000ms exceeded` trong puppeteer — E1 khi bóc bề mặt ẩn trên màn companies (menu Views), E10 khi đo bề rộng chữ ở 1440px. E13 chỉ bắt được đột biến 231/390 khoá (59%), dưới ngưỡng khai 95%. E15 (chặn chống-lách) chỉ xác nhận 2/7 chặn E1-E11 dùng trình duyệt/trình biên dịch thật. Trả về S3 implementation.
+Round 2: E1, E10, E15 đã xanh (timeout puppeteer hết, và 7/7 chặn E1-E11 nay xác nhận dùng vật thật). E13 vẫn đỏ — đột biến bắt được 236/426 khoá (55%), vẫn dưới ngưỡng khai 95%, phạm vi bàn chân đo chưa phủ 190 khoá nằm ở hộp thoại tạo/màn trống/màn lưu trữ/thao tác hàng loạt. E14 (judgment) chấm FAIL — ban-dich.md tự khai 199/537 khoá (37%) chốt SAU khi mã đã chạm, vi phạm điều kiện "chốt trước khi chạm mã" mà AC-13 đòi. Trả về S3 implementation.
