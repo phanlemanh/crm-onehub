@@ -5,6 +5,7 @@ import { Button } from "@crm/ui/components/button";
 import { Field, FieldGroup, FieldLabel } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Select,
 	SelectContent,
@@ -29,6 +30,7 @@ import { type ComponentProps, Suspense, useId, useState } from "react";
 import { toast } from "sonner";
 import { CompanyPicker } from "@/components/crm/company-picker";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
+import { contactMessages } from "@/lib/messages/contacts";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
@@ -36,10 +38,11 @@ import { useTRPC } from "@/lib/trpc/client";
 const NONE = "none";
 
 function AddButton(props: ComponentProps<typeof Button>) {
+	const m = contactMessages(useLocale());
 	return (
 		<Button {...props}>
 			<Icon icon={Add} data-icon="inline-start" />
-			New contact
+			{m.create.newButton}
 		</Button>
 	);
 }
@@ -53,6 +56,7 @@ export function CreateContactSheet({ companyId }: { companyId?: string }) {
 }
 
 function CreateContactForm({ companyId }: { companyId?: string }) {
+	const m = contactMessages(useLocale());
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 	const cache = useCrmCache();
@@ -100,11 +104,8 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 			</SheetTrigger>
 			<SheetContent side="right">
 				<SheetHeader>
-					<SheetTitle>New contact</SheetTitle>
-					<SheetDescription>
-						Email addresses are unique, so importing the same person twice
-						updates them rather than duplicating them.
-					</SheetDescription>
+					<SheetTitle>{m.create.title}</SheetTitle>
+					<SheetDescription>{m.create.description}</SheetDescription>
 				</SheetHeader>
 
 				<form
@@ -124,7 +125,9 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 				>
 					<FieldGroup>
 						<Field>
-							<FieldLabel htmlFor={firstNameId}>First name</FieldLabel>
+							<FieldLabel htmlFor={firstNameId}>
+								{m.create.firstName}
+							</FieldLabel>
 							<Input
 								id={firstNameId}
 								value={firstName}
@@ -135,7 +138,7 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 						</Field>
 
 						<Field>
-							<FieldLabel htmlFor={lastNameId}>Last name</FieldLabel>
+							<FieldLabel htmlFor={lastNameId}>{m.create.lastName}</FieldLabel>
 							<Input
 								id={lastNameId}
 								value={lastName}
@@ -145,7 +148,7 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 						</Field>
 
 						<Field>
-							<FieldLabel htmlFor={emailId}>Email</FieldLabel>
+							<FieldLabel htmlFor={emailId}>{m.create.email}</FieldLabel>
 							<Input
 								id={emailId}
 								type="email"
@@ -156,34 +159,38 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 						</Field>
 
 						<Field>
-							<FieldLabel htmlFor={titleId}>Title</FieldLabel>
+							<FieldLabel htmlFor={titleId}>{m.create.jobTitle}</FieldLabel>
 							<Input
 								id={titleId}
 								value={title}
 								onChange={(event) => setTitle(event.target.value)}
-								placeholder="Head of Security"
+								placeholder={m.create.titlePlaceholder}
 								autoComplete="off"
 							/>
 						</Field>
 
 						<Field>
-							<FieldLabel htmlFor="create-contact-company">Company</FieldLabel>
+							<FieldLabel htmlFor="create-contact-company">
+								{m.create.company}
+							</FieldLabel>
 							<CompanyPicker
 								id="create-contact-company"
 								value={company}
 								onValueChange={setCompany}
-								none={{ value: NONE, label: "No company" }}
+								none={{ value: NONE, label: m.create.noCompany }}
 							/>
 						</Field>
 
 						<Field>
-							<FieldLabel htmlFor="create-contact-owner">Owner</FieldLabel>
+							<FieldLabel htmlFor="create-contact-owner">
+								{m.create.owner}
+							</FieldLabel>
 							<Select value={ownerId} onValueChange={setOwnerId}>
 								<SelectTrigger id="create-contact-owner">
 									<SelectValue />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value={NONE}>Unassigned</SelectItem>
+									<SelectItem value={NONE}>{m.create.unassigned}</SelectItem>
 									{(users.data ?? []).map((user) => (
 										<SelectItem key={user.id} value={user.id}>
 											{user.name}
@@ -202,10 +209,10 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 						disabled={create.isPending || firstName.trim() === ""}
 					>
 						{create.isPending ? <Spinner /> : null}
-						Add contact
+						{m.create.submit}
 					</Button>
 					<SheetClose asChild>
-						<Button variant="outline">Cancel</Button>
+						<Button variant="outline">{m.create.cancel}</Button>
 					</SheetClose>
 				</SheetFooter>
 			</SheetContent>
