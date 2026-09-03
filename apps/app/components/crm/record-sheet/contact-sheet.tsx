@@ -222,7 +222,7 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 						<RecordActions
 							record={{ kind: "contact", id: contact.id }}
 							name={contactName(contact)}
-							consequence={`Their notes, agent conversations and everything the agent found go too; emails and meetings stay filed against the company.${contact.email ? ` The sync will not bring ${contact.email} back — only adding them yourself will.` : ""}`}
+							consequence={m.contact.deleteWarning}
 							archivedAt={contact.archivedAt}
 						/>
 					</>

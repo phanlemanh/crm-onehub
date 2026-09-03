@@ -100,7 +100,6 @@ const companyRecordFieldOutput = z.object({
 	key: z.string(),
 	label: z.string(),
 	type: companyFieldType,
-	typeLabel: z.string(),
 	agentFilled: z.boolean(),
 	agentBrief: z.string().nullable(),
 	required: z.boolean(),

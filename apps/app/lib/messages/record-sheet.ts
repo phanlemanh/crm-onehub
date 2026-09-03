@@ -18,6 +18,8 @@ const en = {
 	},
 	company: {
 		fallbackTitle: "Company",
+		domainPlaceholder: "stripe.com",
+		websitePlaceholder: "https://stripe.com",
 		contactColumns: {
 			primary: "Primary",
 			name: "Name",
@@ -147,6 +149,8 @@ const en = {
 		stageSection: "Stage",
 		reason: "Reason",
 		takeOff: "Take off this deal",
+		takeOffNamed: (name: string) => `Take ${name} off this deal`,
+		namePlaceholder: (company: string) => `${company} — Comp AI`,
 		addContact: "Add contact",
 		championPlaceholder: "Champion",
 		expectedClose: "Expected close",
@@ -206,6 +210,8 @@ const vi = {
 	},
 	company: {
 		fallbackTitle: "Công ty",
+		domainPlaceholder: "datxanh.com.vn",
+		websitePlaceholder: "https://datxanh.com.vn",
 		contactColumns: {
 			primary: "Đầu mối",
 			name: "Tên",
@@ -334,6 +340,8 @@ const vi = {
 		stageSection: "Giai đoạn",
 		reason: "Lý do",
 		takeOff: "Gỡ khỏi thoả thuận này",
+		takeOffNamed: (name: string) => `Gỡ ${name} khỏi thoả thuận này`,
+		namePlaceholder: (company: string) => `${company} — OneHub`,
 		addContact: "Thêm cá nhân",
 		championPlaceholder: "Người ủng hộ",
 		expectedClose: "Ngày dự kiến chốt",

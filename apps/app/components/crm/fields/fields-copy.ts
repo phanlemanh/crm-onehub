@@ -1,3 +1,4 @@
+import type { FieldTypeName } from "@crm/db/fields-shape";
 import type { Locale } from "@crm/ui/lib/locale";
 import type { RecordKind } from "@/components/crm/record-sheet/record-stack";
 import { crmMessages } from "@/lib/messages/crm";
@@ -94,6 +95,19 @@ export function filterPlacement(entity: FieldEntity, locale: Locale): string {
 	if (entity === "CONTACT") return m.filterContact;
 	return m.filterDeal;
 }
+
+export const TYPE_KEY = {
+	TEXT: "text",
+	LONG_TEXT: "longText",
+	NUMBER: "number",
+	DATE: "date",
+	CHECKBOX: "checkbox",
+	SELECT: "select",
+	URL: "url",
+	EMAIL: "email",
+	PHONE: "phone",
+	USER: "user",
+} as const satisfies Record<FieldTypeName, string>;
 
 export function fieldTypeLabel(
 	type: keyof ReturnType<typeof crmMessages>["fields"]["type"],

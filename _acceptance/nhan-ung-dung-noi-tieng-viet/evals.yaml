@@ -300,3 +300,26 @@ evals:
       - "apps/app/lib/deal-stage.ts"
       - "apps/app/app/(app)/[slug]/deals/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E17
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.rang3_chu_cung_jsx
+    expected: >-
+      exit 0. Doc CAY CU PHAP cua 96 file trong lat: moi node chu trong JSX va
+      moi thuoc tinh co gia tri chuoi, tru di thu chac chan khong ai doc — ten
+      thuoc tinh ky thuat, va gia tri la mot dinh danh chu thuong. MOI CHO TRU
+      PHAI IN RA kem ly do; tru im lang la lop loi ba cai thuoc truoc da mac.
+      Chan nay bat huong ma bon chan ve va chan khoa-chet KHONG bat duoc: chu
+      nguoi doc thay viet thang vao JSX o cho le ra doc tu kho chuoi. Vong 6 va
+      vong 7 cung tra ve lop loi nay; day la phep do sinh ra de dong no.
+      Chan cung do cho AC-2 vi lat gom ca ho so ban ghi.
+      Chieu do: doi mot nhan bat ky tu {m.khoa} thanh chu cung thi chan nay do
+      VA goi dung ten file, so dong va nguyen van chuoi do; tra lai thi xanh.
+      Da chung minh hai chieu tren mot ban sao cua companies-table 2026-09-03:
+      lanh exit 0 · pha exit 1 goi ten "Archived" · hoan nguyen exit 0, va md5
+      doi that o luot pha.
+    paths:
+      - "apps/app/app/(app)/[slug]/**"
+      - "apps/app/components/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

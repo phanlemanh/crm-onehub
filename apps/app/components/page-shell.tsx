@@ -2,6 +2,7 @@ import { Skeleton } from "@crm/ui/components/skeleton";
 import { Spinner } from "@crm/ui/components/spinner";
 import { cn } from "@crm/ui/lib/utils";
 import type * as React from "react";
+import { PageLoadingStatus } from "./page-loading-status";
 import { PageTransition } from "./page-transition";
 
 function PageShell({
@@ -151,9 +152,7 @@ function PageShellFallback() {
 					<Skeleton className="h-40 w-full rounded-lg" />
 				</div>
 			</div>
-			<span role="status" className="sr-only">
-				Loading page…
-			</span>
+			<PageLoadingStatus />
 		</PageShell>
 	);
 }

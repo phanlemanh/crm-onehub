@@ -86,7 +86,6 @@ export const serializedFieldOutput = z.object({
 	key: z.string(),
 	label: z.string(),
 	type: z.enum(FIELD_TYPES),
-	typeLabel: z.string(),
 	agentFilled: z.boolean(),
 	agentBrief: z.string().nullable(),
 	required: z.boolean(),

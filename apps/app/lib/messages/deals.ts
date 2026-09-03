@@ -68,6 +68,9 @@ const en = {
 		restored: (n: string) => `${n} restored.`,
 		deleted: (n: string) => `${n} deleted forever.`,
 		confirmDelete: (n: string) => `Delete ${n} forever?`,
+		changeStage: "Change stage",
+		save: "Save",
+		cancel: "Cancel",
 		deleteWarning:
 			"Everything filed against them — activity, notes, the amounts in your pipeline — goes too. This cannot be undone.",
 		sameReason:
@@ -150,6 +153,9 @@ const vi = {
 		restored: (n: string) => `Đã khôi phục ${n}.`,
 		deleted: (n: string) => `Đã xoá vĩnh viễn ${n}.`,
 		confirmDelete: (n: string) => `Xoá vĩnh viễn ${n}?`,
+		changeStage: "Đổi giai đoạn",
+		save: "Lưu",
+		cancel: "Huỷ",
 		deleteWarning:
 			"Mọi thứ gắn với chúng — hoạt động, ghi chú, giá trị đang tính — mất theo. Việc này không hoàn tác được.",
 		sameReason:

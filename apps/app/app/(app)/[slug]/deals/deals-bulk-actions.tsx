@@ -192,7 +192,7 @@ export function DealsBulkActions({
 					}
 				/>
 				<DropdownMenuSub>
-					<DropdownMenuSubTrigger>Change stage</DropdownMenuSubTrigger>
+					<DropdownMenuSubTrigger>{m.bulk.changeStage}</DropdownMenuSubTrigger>
 					<DropdownMenuSubContent className="max-h-72 overflow-y-auto">
 						<DropdownMenuGroup>
 							{DEAL_STAGE_OPTIONS.map((option) => (
@@ -267,7 +267,7 @@ export function DealsBulkActions({
 							disabled={setStage.isPending || reason.trim() === ""}
 						>
 							{setStage.isPending ? <Spinner /> : null}
-							Save
+							{m.bulk.save}
 						</Button>
 						<Button
 							variant="outline"
@@ -276,7 +276,7 @@ export function DealsBulkActions({
 								setReason("");
 							}}
 						>
-							Cancel
+							{m.bulk.cancel}
 						</Button>
 					</DialogFooter>
 				</DialogContent>

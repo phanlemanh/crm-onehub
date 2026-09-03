@@ -1,11 +1,13 @@
 "use client";
 
 import { AttendeeList } from "@crm/ui/components/attendee-list";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { useQuery } from "@tanstack/react-query";
 import {
 	LocalDateTime,
 	LocalDateTimeRange,
 } from "@/components/local-date-time";
+import { crmMessages } from "@/lib/messages/crm";
 import { useTRPC } from "@/lib/trpc/client";
 
 const RANGE_OPTIONS: Intl.DateTimeFormatOptions = {
@@ -35,6 +37,7 @@ export function MeetingEntry({
 	attendeeCount: number;
 	conferenceUrl: string | null;
 }) {
+	const m = crmMessages(useLocale()).timeline;
 	const trpc = useTRPC();
 
 	const event = useQuery({
@@ -47,7 +50,7 @@ export function MeetingEntry({
 			<span className="text-muted-foreground text-xs">
 				{isAllDay ? (
 					<>
-						<LocalDateTime date={startsAt} options={DAY_OPTIONS} /> · All day
+						<LocalDateTime date={startsAt} options={DAY_OPTIONS} /> · {m.allDay}
 					</>
 				) : (
 					<LocalDateTimeRange
@@ -69,7 +72,7 @@ export function MeetingEntry({
 					rel="noreferrer"
 					className="text-muted-foreground text-xs underline underline-offset-3 hover:text-foreground"
 				>
-					Join call
+					{m.joinCall}
 				</a>
 			) : null}
 		</div>

@@ -5,7 +5,7 @@ import ChevronRight from "@carbon/icons-react/es/ChevronRight";
 import OverflowMenuVertical from "@carbon/icons-react/es/OverflowMenuVertical";
 import Renew from "@carbon/icons-react/es/Renew";
 import Warning from "@carbon/icons-react/es/Warning";
-import { fieldKeyFromLabel, typeLabel } from "@crm/db/fields-shape";
+import { fieldKeyFromLabel } from "@crm/db/fields-shape";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import {
@@ -40,7 +40,12 @@ import { crmMessages } from "@/lib/messages/crm";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
-import { fieldsCopy, optionCount } from "./fields-copy";
+import {
+	fieldsCopy,
+	fieldTypeLabel,
+	optionCount,
+	TYPE_KEY,
+} from "./fields-copy";
 import { type FieldEntity, kindOf } from "./fields-entity";
 import { STANDARD_FIELDS } from "./standard-fields";
 
@@ -221,7 +226,7 @@ export function FieldsList({
 										{template.label}
 										{template.options && template.options.length > 0
 											? ` · ${template.options.join(", ")}`
-											: ` · ${typeLabel(template.type)}`}
+											: ` · ${fieldTypeLabel(TYPE_KEY[template.type], locale)}`}
 									</span>
 									<Button
 										variant="outline"
@@ -335,7 +340,7 @@ export function FieldsList({
 												variant="mono"
 												className="w-18 shrink-0 justify-center"
 											>
-												{field.typeLabel}
+												{fieldTypeLabel(TYPE_KEY[field.type], locale)}
 											</Badge>
 
 											<DropdownMenu>

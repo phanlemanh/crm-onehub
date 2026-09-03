@@ -2,6 +2,9 @@ import type { Locale } from "@crm/ui/lib/locale";
 
 const en = {
 	timeline: {
+		openIn: (mailbox: string) => `Open in ${mailbox}`,
+		allDay: "All day",
+		joinCall: "Join call",
 		composer: {
 			placeholder: "Log a note, call, email, meeting or task…",
 			call: "What came out of the call?",
@@ -304,6 +307,8 @@ const en = {
 		yes: "Yes",
 		no: "No",
 		loading: "Loading…",
+		loadingPage: "Loading page…",
+		recordNotLoaded: "This record could not be loaded",
 	},
 };
 
@@ -311,6 +316,9 @@ export type CrmMessages = typeof en;
 
 const vi = {
 	timeline: {
+		openIn: (mailbox: string) => `Mở trong ${mailbox}`,
+		allDay: "Cả ngày",
+		joinCall: "Vào cuộc gọi",
 		composer: {
 			placeholder:
 				"Ghi một ghi chú, cuộc gọi, email, cuộc họp hoặc việc cần làm…",
@@ -613,6 +621,8 @@ const vi = {
 		yes: "Có",
 		no: "Không",
 		loading: "Đang tải…",
+		loadingPage: "Đang tải trang…",
+		recordNotLoaded: "Không tải được bản ghi này",
 	},
 } satisfies CrmMessages;
 

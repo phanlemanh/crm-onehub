@@ -49,6 +49,7 @@ import {
 	optionLabel,
 	sheetPlacement,
 	stillToGo,
+	TYPE_KEY,
 	tablePlacement,
 } from "./fields-copy";
 import { type FieldEntity, kindOf } from "./fields-entity";
@@ -65,19 +66,6 @@ type Draft = {
 	showOnTable: boolean;
 	showOnFilter: boolean;
 };
-
-const TYPE_KEY = {
-	TEXT: "text",
-	LONG_TEXT: "longText",
-	NUMBER: "number",
-	DATE: "date",
-	CHECKBOX: "checkbox",
-	SELECT: "select",
-	URL: "url",
-	EMAIL: "email",
-	PHONE: "phone",
-	USER: "user",
-} as const satisfies Record<(typeof FIELD_TYPES)[number], string>;
 
 function optionId(option: { id?: string }, index: number): string {
 	return option.id ?? `draft-${index}`;

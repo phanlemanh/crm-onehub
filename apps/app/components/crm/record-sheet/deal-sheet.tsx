@@ -215,7 +215,10 @@ export function DealSheet({ dealId }: { dealId: string }) {
 						<RecordActions
 							record={{ kind: "deal", id: deal.id }}
 							name={deal.name}
-							consequence={`Its stage history, notes and agent conversations go too. ${deal.company.name} and the ${deal.contacts.length === 1 ? "person" : "people"} on it stay in the CRM.`}
+							consequence={m.deal.deleteWarning(
+								deal.company.name,
+								deal.contacts.length === 1 ? m.deal.person : m.deal.people,
+							)}
 							archivedAt={deal.archivedAt}
 						/>
 					</>
@@ -571,7 +574,7 @@ function DealContacts({
 									>
 										<Icon icon={Close} />
 										<span className="sr-only">
-											Take {contactName(contact)} off this deal
+											{m.deal.takeOffNamed(contactName(contact))}
 										</span>
 									</Button>
 								</TooltipTrigger>

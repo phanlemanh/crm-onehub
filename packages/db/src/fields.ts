@@ -5,7 +5,6 @@ import {
 	type FieldValueJson,
 	type FieldValueWrite,
 	recordColumn,
-	typeLabel,
 } from "./fields-shape";
 import { Prisma } from "./generated/prisma/client";
 import type { FieldEntity, FieldType } from "./generated/prisma/enums";
@@ -33,7 +32,6 @@ export type SerializedField = {
 	key: string;
 	label: string;
 	type: FieldType;
-	typeLabel: string;
 	agentFilled: boolean;
 	agentBrief: string | null;
 	required: boolean;
@@ -54,7 +52,6 @@ export function serializeField(
 		key: definition.key,
 		label: definition.label,
 		type: definition.type,
-		typeLabel: typeLabel(definition.type),
 		agentFilled: definition.agentFilled,
 		agentBrief: definition.agentBrief,
 		required: definition.required,

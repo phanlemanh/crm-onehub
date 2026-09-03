@@ -58,6 +58,9 @@ const KHONG_DAU = new Set([
 	"currencyEntry",
 	"candidateTitle",
 	"namePlaceholder",
+	"company.domainPlaceholder",
+	"deal.namePlaceholder",
+	"company.websitePlaceholder",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -267,6 +270,12 @@ describe("kho chuoi cua vong ③a", () => {
 				"Không có tỷ giá 1 — không tính vào tổng",
 				"Không có tỷ giá 12 — không tính vào tổng",
 			],
+			"crm:timeline.openIn": ["Mở trong 1", "Mở trong 12"],
+			"record-sheet:deal.takeOffNamed": [
+				"Gỡ 1 khỏi thoả thuận này",
+				"Gỡ 12 khỏi thoả thuận này",
+			],
+			"record-sheet:deal.namePlaceholder": ["1 — OneHub", "12 — OneHub"],
 		} satisfies Record<string, [string, string]>;
 
 		const ham: string[] = [];

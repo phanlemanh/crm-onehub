@@ -369,7 +369,7 @@ function CompanyOverview({ company }: { company: Company }) {
 								label={m.company.fields.domain}
 								value={company.domain}
 								type="url"
-								placeholder="stripe.com"
+								placeholder={m.company.domainPlaceholder}
 								saving={isSaving("domain")}
 								onSave={(domain) => save({ domain })}
 							/>
@@ -377,7 +377,7 @@ function CompanyOverview({ company }: { company: Company }) {
 								label={m.company.fields.website}
 								value={company.website}
 								type="url"
-								placeholder="https://stripe.com"
+								placeholder={m.company.websitePlaceholder}
 								saving={isSaving("website")}
 								onSave={(website) => save({ website })}
 							/>
