@@ -1,4 +1,4 @@
-# khoa bon chan nghiem thu khong ve ra (265/519)
+# khoa bon chan nghiem thu khong ve ra (275/531)
 companies.labels.archivedDate
 companies.empty
 companies.emptyArchived
@@ -58,6 +58,7 @@ crm.timeline.composer.dueDate
 crm.timeline.composer.addTask
 crm.timeline.composer.failed
 crm.timeline.tabs.emails
+crm.timeline.showOlder
 crm.timeline.oneMessage
 crm.timeline.messages
 crm.timeline.viaGmail
@@ -138,6 +139,12 @@ crm.fields.briefLabel
 crm.fields.typeLabel
 crm.fields.optionsLabel
 crm.fields.addOption
+crm.fields.moreFor
+crm.fields.edit
+crm.fields.restore
+crm.fields.archiveBody
+crm.fields.archiveField
+crm.fields.filledOf
 crm.fields.removeOption
 crm.fields.allFilled
 crm.fields.addField
@@ -182,6 +189,7 @@ crm.views.dialogTitle
 crm.views.saved
 crm.views.deleted
 crm.views.remove
+crm.views.shareWithTeam
 crm.bulkMenu.assignOwner
 crm.bulkMenu.nobodyElse
 crm.bulkMenu.confirmDelete
@@ -206,6 +214,7 @@ record-sheet.company.manyDeals
 record-sheet.company.onePerson
 record-sheet.company.manyPeople
 record-sheet.company.primaryUpdated
+record-sheet.company.unconverted
 record-sheet.company.noContactsTitle
 record-sheet.company.noContactsBody
 record-sheet.company.noDealsTitle
@@ -230,6 +239,7 @@ record-sheet.contact.roles
 record-sheet.contact.emails
 record-sheet.contact.neverReplied
 record-sheet.contact.lastReply
+record-sheet.contact.source
 record-sheet.contact.thisCompany
 record-sheet.contact.nextMeeting
 record-sheet.contact.notOnDealsBody
@@ -265,7 +275,7 @@ record-sheet.deal.deleteWarning
 record-sheet.deal.person
 record-sheet.deal.people
 
-# khoa khong quy ket duoc (14/519) — gia tri qua ngan hoac toan bien
+# khoa khong quy ket duoc (14/531) — gia tri qua ngan hoac toan bien
 crm.timeline.composer.log  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
 crm.timeline.tabs.all  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
 crm.timeline.due  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
