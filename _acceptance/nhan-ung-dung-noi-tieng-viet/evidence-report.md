@@ -295,3 +295,4 @@ none — every multi-run eval is uniform
 
 Round 1: E1, E10, E13, E15 failed — bề mặt ẩn chưa mở hết, bề rộng cột 768px thiếu vế title/ba chấm, độ phủ đột biến và chân chống-lách chưa đạt. Returned to implementation.
 Round 2: E13 failed — độ phủ đột biến (mutation coverage) chưa đạt ngưỡng cổng 2. Returned to implementation.
+Round 3: 15/15 tiêu chí máy đạt, 0 lệnh đỏ, 0 bị chặn. E14 (hội đồng) trả UNCERTAIN — hai lăng kính bỏ phiếu trắng ở cùng một chỗ: bảng dịch tự mâu thuẫn luật của chính nó (`section.whereItStands` = "Đang tới đâu" là câu hỏi trong khi luật đòi nhãn mục phải là danh từ; `contact.lastReply` bỏ từ phân loại mà `Hoạt động gần nhất` giữ). Verdict PENDING-JUDGMENT. Bản phản biện tìm được một hồi quy do vòng sửa r2 gây ra: `formatCount` nhánh `vi` in danh từ tiếng Anh trần ở năm chỗ ngoài lát. Đã sửa, mở vòng 4 theo lệnh của người.
