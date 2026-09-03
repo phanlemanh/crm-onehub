@@ -1,0 +1,40 @@
+THANH DIEU HUONG CON TIENG ANH — tim ra o Task 3, 2026-09-04
+
+Khi them ve thu hai cho may-chu-ve.sh (tieng Anh phai VANG MAT), doi chung duong
+DO ca ba man o lang=vi. Dieu tra ra hai thu khac han nhau trong cung mot chuoi:
+
+1. "CompaniesTable" trong du lieu flight cua Next — CHU MAY, khong phai chu nguoi
+   doc. Ve thu hai phai tru phan <script>, neu khong no bao dong gia.
+
+2. <span class="sr-only">Companies</span> — CHU THAT cho trinh doc man hinh, CON
+   TIENG ANH. Ba nhan: Companies, Contacts, Deals, hien tren CA BA man.
+
+Nguon: apps/app/components/app-icon-rail.tsx:52
+  { title: "Companies", href: "/companies", icon: Building, match: "prefix" }
+Ba nhan viet cung, khong qua kho chuoi.
+
+## Vi sao no khong thuoc vong nay
+
+app-icon-rail.tsx la KHUNG UNG DUNG. Hop dong ③a khoanh lat bang do thi nhap tu
+ba luong (92 file); thanh dieu huong khong nam trong do. No thuoc vong ①
+(tieng-viet-cho-crm — "Xuong song + dinh dang ngay/so"), va vong ① DANG CHO CHU KY
+o Cong 2.
+
+Nen may-chu-ve.sh tru <nav aria-label="Primary"> khoi vung do, va NOI RA dieu do
+trong moi luot chay — khong tru im lang.
+
+## Nghia la gi
+
+Mot nguoi doc tieng Viet dung trinh doc man hinh nghe ba muc dieu huong chinh
+bang tieng Anh. AC-5 cua vong ③a hua 42 chuoi chi trinh doc man hinh nghe duoc
+la tieng Viet, va phep do cua no da XANH — vi no chi quet ba man, khong quet
+khung ung dung.
+
+Viec cua nguoi: quyet o Cong 2 xem ba nhan nay di vong ① (dang cho ky) hay mo
+mot viec rieng. May khong tu sua vi vong nay khong doi chuoi san pham.
+
+## Bang chung hai chieu
+
+lang=vi                          -> 0/3 man hong, in ca hai ve moi man
+lang=en                          -> 3/3 man hong, ghim "CON TIENG ANH /companies: Companies"
+go rieng ve tieng-Anh-vang-mat   -> cung luot lang=en cho 0 dong CON TIENG ANH
