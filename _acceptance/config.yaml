@@ -67,6 +67,7 @@ executors:
     rang3_dot_bien: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/dot-bien.mjs"
     rang3_giai_doan: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs giai-doan"
     rang3_khong_may_quet: "bash _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khong-may-quet.sh"
+    rang3_chu_cung_jsx: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/chu-cung-jsx.mjs"
     start_scan: "bash _acceptance/o-cam-khai-thac-trung-tinh/rang-quet.sh"
     rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
     rang_t1_im: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"
