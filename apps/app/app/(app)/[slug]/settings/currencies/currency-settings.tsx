@@ -302,7 +302,7 @@ export function CurrencySettings() {
 					<CardDescription>
 						{unconverted.count === 0
 							? "Every deal with an amount can be converted into the reporting currency."
-							: `${formatCount(unconverted.count, "deal")} cannot be converted, so ${unconverted.count === 1 ? "it is" : "they are"} left out of every total.`}
+							: `${formatCount(unconverted.count, "deal", "en")} cannot be converted, so ${unconverted.count === 1 ? "it is" : "they are"} left out of every total.`}
 						{refreshedAt ? (
 							<>
 								{" "}

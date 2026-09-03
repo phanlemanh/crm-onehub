@@ -26,10 +26,10 @@ import { ListSearch } from "@/components/data-table/list-search";
 import { SavedViewsMenu } from "@/components/data-table/saved-views-menu";
 import { useTableQuery } from "@/components/data-table/use-table-query";
 import { LocalRelativeTime } from "@/components/local-date-time";
-import { ACTIVITY_FACET_OPTIONS } from "@/lib/activity-recency";
+import { activityFacetOptions } from "@/lib/activity-recency";
 import {
-	ENRICHMENT_FACET_OPTIONS,
 	ENRICHMENT_POLL_MS,
+	enrichmentFacetOptions,
 	isEnriching,
 } from "@/lib/enrichment-status";
 import {
@@ -50,7 +50,7 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			header: m.headers.name,
 			sortable: true,
 			hideable: false,
-			width: "w-[22%]",
+			width: "w-[18%]",
 			cell: (row) => (
 				<span className="flex min-w-0 items-center gap-2.5">
 					<EntityLogo
@@ -70,7 +70,7 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			id: "domain",
 			header: m.headers.domain,
 			sortable: true,
-			width: "w-[15%]",
+			width: "w-[12%]",
 			hideBelow: "md",
 			cell: (row) =>
 				row.domain ? (
@@ -83,11 +83,13 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			id: "industry",
 			header: m.headers.industry,
 			sortable: true,
-			width: "w-[15%]",
+			width: "w-[12%]",
 			hideBelow: "lg",
 			cell: (row) =>
 				row.industry ? (
-					<span className="truncate">{row.industry}</span>
+					<span className="truncate" lang="en">
+						{row.industry}
+					</span>
 				) : (
 					<EmptyCellValue />
 				),
@@ -96,7 +98,7 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			id: "owner",
 			header: m.headers.owner,
 			sortable: true,
-			width: "w-[15%]",
+			width: "w-[13%]",
 			hideBelow: "md",
 			cell: (row) => <OwnerCell owner={row.owner} />,
 		},
@@ -105,7 +107,7 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			header: m.headers.contacts,
 			sortable: true,
 			align: "right",
-			width: "w-[12%]",
+			width: "w-[16%]",
 			hideBelow: "lg",
 			cell: (row) => <span className="tabular-nums">{row.contactCount}</span>,
 		},
@@ -114,7 +116,7 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			header: m.headers.openDeals,
 			sortable: true,
 			align: "right",
-			width: "w-[15%]",
+			width: "w-[20%]",
 			cell: (row) => <span className="tabular-nums">{row.openDealCount}</span>,
 		},
 		{
@@ -136,7 +138,7 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			header: m.headers.lastActivity,
 			sortable: true,
 			align: "right",
-			width: "w-[15%]",
+			width: "w-[18%]",
 			hideBelow: "sm",
 			cell: (row) => (
 				<span className="text-muted-foreground">
@@ -235,14 +237,14 @@ export function CompaniesTable() {
 		{
 			id: "enrichment",
 			label: m.facets.enrichment,
-			options: ENRICHMENT_FACET_OPTIONS.filter(
+			options: enrichmentFacetOptions(locale).filter(
 				(option) => (facetCounts?.enrichment?.[option.value] ?? 0) > 0,
 			),
 		},
 		{
 			id: "activity",
 			label: m.facets.activity,
-			options: ACTIVITY_FACET_OPTIONS.filter(
+			options: activityFacetOptions(locale).filter(
 				(option) => (facetCounts?.activity?.[option.value] ?? 0) > 0,
 			),
 		},
@@ -261,7 +263,7 @@ export function CompaniesTable() {
 	return (
 		<DataTable
 			query={query}
-			search={<ListSearch placeholder="Search companies by name or domain…" />}
+			search={<ListSearch placeholder={m.search} />}
 			actions={
 				<>
 					<SavedViewsMenu entity="COMPANY" table={table} />
@@ -272,7 +274,7 @@ export function CompaniesTable() {
 						onClick={() => setArchived(!input.archived)}
 					>
 						<Archive data-icon="inline-start" />
-						Archived
+						{m.archivedToggle}
 					</Button>
 				</>
 			}

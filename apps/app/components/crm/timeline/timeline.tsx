@@ -17,6 +17,7 @@ import { cn } from "@crm/ui/lib/utils";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
 import { DetailSheetEmpty, SECTION_TITLE } from "@/components/detail-sheet";
+import { type CrmMessages, crmMessages } from "@/lib/messages/crm";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { useHydrated } from "@/lib/use-hydrated";
@@ -34,46 +35,29 @@ export type TimelineAnchor =
 	| { contactId: string }
 	| { dealId: string };
 
-const TAB_LABELS = {
-	all: "All",
-	notes: "Notes",
-	email: "Email",
-	meetings: "Meetings",
-	upcoming: "Upcoming",
-	done: "Done",
-} satisfies Record<TimelineTab, string>;
+function tabLabels(m: CrmMessages) {
+	const t = m.timeline.tabs;
+	return {
+		all: t.all,
+		notes: t.notes,
+		email: t.emails,
+		meetings: t.meetings,
+		upcoming: t.upcoming,
+		done: t.done,
+	} satisfies Record<TimelineTab, string>;
+}
 
-const EMPTY_STATES = {
-	all: {
-		title: "Nothing has happened yet",
-		description:
-			"Calls, notes, emails and meetings all land here. Log the first one above, or wait for Gmail and Calendar to sync.",
-	},
-	notes: {
-		title: "No notes",
-		description:
-			"Notes are what you write down for the next person to read — what they care about, who else is involved, what you promised.",
-	},
-	email: {
-		title: "No email",
-		description:
-			"Threads appear here as they are synced from Gmail. Nothing from before this mailbox was connected is imported.",
-	},
-	meetings: {
-		title: "No meetings",
-		description:
-			"Calendar events with someone from this record on them show up here, past and upcoming.",
-	},
-	upcoming: {
-		title: "Nothing outstanding",
-		description:
-			"Tasks you have not finished appear here, and at the top of the All tab until they are done.",
-	},
-	done: {
-		title: "Nothing finished yet",
-		description: "Tasks move here once you tick them off.",
-	},
-} satisfies Record<TimelineTab, { title: string; description: string }>;
+function emptyStates(m: CrmMessages) {
+	const e = m.timeline.empty;
+	return {
+		all: { title: e.allTitle, description: e.allBody },
+		notes: { title: e.notesTitle, description: e.notesBody },
+		email: { title: e.emailTitle, description: e.emailBody },
+		meetings: { title: e.meetingsTitle, description: e.meetingsBody },
+		upcoming: { title: e.upcomingTitle, description: e.upcomingBody },
+		done: { title: e.doneTitle, description: e.doneBody },
+	} satisfies Record<TimelineTab, { title: string; description: string }>;
+}
 
 const EMPTY_ICONS = {
 	all: Time,
@@ -99,8 +83,9 @@ function dayLabel(day: string, local: boolean, locale: Locale): string {
 		: new Date(Date.now() - 86_400_000);
 	const yesterday = dayKey(yesterdayDate.toISOString(), local);
 
-	if (day === today) return "Today";
-	if (day === yesterday) return "Yesterday";
+	const m = crmMessages(locale).timeline;
+	if (day === today) return m.today;
+	if (day === yesterday) return m.yesterday;
 	return dateFormat(locale, DAY_OPTIONS).format(new Date(`${day}T00:00:00`));
 }
 
@@ -165,6 +150,7 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 	const trpc = useTRPC();
 	const hydrated = useHydrated();
 	const locale = useLocale();
+	const m = crmMessages(locale);
 
 	const [tab, setTab] = useQueryState(
 		SEARCH_PARAM.record.timeline,
@@ -208,7 +194,7 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 				>
 					{TIMELINE_TABS.map((option) => (
 						<ToggleGroupItem key={option} value={option}>
-							{TAB_LABELS[option]}
+							{tabLabels(m)[option]}
 							{counts.data?.[option] ? (
 								<span className="tabular-nums opacity-60">
 									{counts.data[option]}
@@ -226,14 +212,14 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 			) : entries.length === 0 && pinnedEntries.length === 0 ? (
 				<DetailSheetEmpty
 					icon={EMPTY_ICONS[tab]}
-					title={EMPTY_STATES[tab].title}
-					description={EMPTY_STATES[tab].description}
+					title={emptyStates(m)[tab].title}
+					description={emptyStates(m)[tab].description}
 				/>
 			) : (
 				<div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-4">
 					{pinnedEntries.length > 0 ? (
 						<TimelineDay
-							label="Outstanding"
+							label={m.timeline.outstanding}
 							entries={pinnedEntries}
 							anchor={anchor}
 						/>
@@ -257,7 +243,7 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 							onClick={() => history.fetchNextPage()}
 						>
 							{history.isFetchingNextPage ? <Spinner /> : null}
-							Show older
+							{m.timeline.showOlder}
 						</Button>
 					) : null}
 				</div>

@@ -17,6 +17,7 @@ import {
 	type EntityLogoTone,
 } from "@crm/ui/components/entity-logo";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
 import { SimpleTable, SimpleTableRow } from "@crm/ui/components/simple-table";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
@@ -54,6 +55,10 @@ import {
 import { LocalDateTime, LocalRelativeDate } from "@/components/local-date-time";
 import { factsByField } from "@/lib/contact-facts";
 import { ENRICHMENT_POLL_MS, isEnriching } from "@/lib/enrichment-status";
+import {
+	type RecordSheetMessages,
+	recordSheetMessages,
+} from "@/lib/messages/record-sheet";
 import { savingField } from "@/lib/pending-field";
 import { hasContactLinks } from "@/lib/social-links";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -73,20 +78,24 @@ const DATE_OPTIONS: Intl.DateTimeFormatOptions = {
 	year: "numeric",
 };
 
-const DEAL_COLUMNS = [
-	{ id: "deal", header: "Deal", width: "w-[32%]", className: "pl-5" },
-	{ id: "role", header: "Role", width: "w-[16%]" },
-	{ id: "stage", header: "Stage", width: "w-[22%]" },
-	{
-		id: "amount",
-		header: "Amount",
-		width: "w-[16%]",
-		align: "right" as const,
-	},
-	{ id: "owner", header: "Owner", width: "w-[14%]" },
-];
+function dealColumns(m: RecordSheetMessages) {
+	const d = m.contact.dealColumns;
+	return [
+		{ id: "deal", header: d.deal, width: "w-[32%]", className: "pl-5" },
+		{ id: "role", header: d.role, width: "w-[16%]" },
+		{ id: "stage", header: d.stage, width: "w-[22%]" },
+		{
+			id: "amount",
+			header: d.amount,
+			width: "w-[16%]",
+			align: "right" as const,
+		},
+		{ id: "owner", header: d.owner, width: "w-[14%]" },
+	];
+}
 
 export function ContactSheet({ contactId }: { contactId: string }) {
+	const m = recordSheetMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const { tab, setTab } = useRecordSheetView("overview");
@@ -106,7 +115,7 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 		trpc.companies.setPrimaryContact.mutationOptions({
 			onSuccess: async () => {
 				await cache.contact(contactId);
-				toast.success("Primary contact updated.");
+				toast.success(m.company.primaryUpdated);
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -116,23 +125,23 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 		? [
 				{
 					value: "overview",
-					label: "Overview",
+					label: m.tabs.overview,
 					content: <ContactOverview contact={contact} />,
 				},
 				{
 					value: "deals",
-					label: "Deals",
+					label: m.tabs.deals,
 					count: contact.deals.length,
 					content: <ContactDeals contact={contact} />,
 				},
 				{
 					value: "activity",
-					label: "Activity",
+					label: m.tabs.activity,
 					content: <Timeline anchor={{ contactId: contact.id }} />,
 				},
 				{
 					value: "agent",
-					label: "Agent",
+					label: m.tabs.agent,
 					content: <AgentPanel record={{ kind: "contact", id: contact.id }} />,
 					keepMounted: true,
 				},
@@ -143,7 +152,7 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 		<RecordSheetFrame
 			loading={query.isPending}
 			error={query.error?.message ?? null}
-			title={contact ? contactName(contact) : "Contact"}
+			title={contact ? contactName(contact) : m.contact.fallbackTitle}
 			description={
 				contact ? (
 					<MetaLine parts={[contact.title, contact.company?.name]} />
@@ -155,7 +164,9 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 						{contact.isPrimaryContact ? (
 							<StatusIndicator
 								tone="success"
-								label={`Primary contact at ${contact.company?.name ?? "this company"}`}
+								label={m.contact.primaryAt(
+									contact.company?.name ?? m.contact.thisCompany,
+								)}
 							/>
 						) : null}
 						{contact.enrichmentStatus !== "COMPLETE" ? (
@@ -184,7 +195,9 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 							<Button asChild variant="outline" size="sm">
 								<a href={`mailto:${contact.email}`}>
 									<Icon icon={Email} data-icon="inline-start" />
-									<span className="hidden sm:inline">Email</span>
+									<span className="hidden sm:inline">
+										{m.contact.fields.email}
+									</span>
 								</a>
 							</Button>
 						) : null}
@@ -201,7 +214,9 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 								}
 							>
 								<Icon icon={Star} data-icon="inline-start" />
-								<span className="hidden sm:inline">Make primary</span>
+								<span className="hidden sm:inline">
+									{m.company.makePrimary}
+								</span>
 							</Button>
 						) : null}
 						<RecordActions
@@ -216,14 +231,14 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 			stats={
 				contact ? (
 					<DetailSheetStats>
-						<DetailSheetStat label="Company">
+						<DetailSheetStat label={m.contact.fields.company}>
 							{contact.company ? (
 								<CompanyStat company={contact.company} />
 							) : (
 								<EmptyCellValue />
 							)}
 						</DetailSheetStat>
-						<DetailSheetStat label="Email">
+						<DetailSheetStat label={m.contact.fields.email}>
 							{contact.email ? (
 								<a
 									href={`mailto:${contact.email}`}
@@ -235,7 +250,7 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 								<EmptyCellValue />
 							)}
 						</DetailSheetStat>
-						<DetailSheetStat label="Phone">
+						<DetailSheetStat label={m.contact.fields.phone}>
 							{contact.phone ? (
 								<a
 									href={`tel:${contact.phone}`}
@@ -247,7 +262,7 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 								<EmptyCellValue />
 							)}
 						</DetailSheetStat>
-						<DetailSheetStat label="Owner">
+						<DetailSheetStat label={m.contact.fields.owner}>
 							<OwnerCell owner={contact.owner} />
 						</DetailSheetStat>
 					</DetailSheetStats>
@@ -286,6 +301,7 @@ function CompanyStat({
 }
 
 function ContactOverview({ contact }: { contact: Contact }) {
+	const m = recordSheetMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
@@ -323,44 +339,47 @@ function ContactOverview({ contact }: { contact: Contact }) {
 
 	return (
 		<DetailSheetBody>
-			<DetailSheetSection title="Details" action={<FieldsCog kind="contact" />}>
+			<DetailSheetSection
+				title={m.contact.details}
+				action={<FieldsCog kind="contact" />}
+			>
 				<DetailSheetProperties>
 					<InlineField
-						label="First name"
+						label={m.contact.fields.firstName}
 						value={contact.firstName}
 						saving={isSaving("firstName")}
 						onSave={(firstName) => firstName && save({ firstName })}
 					/>
 					<InlineField
-						label="Last name"
+						label={m.contact.fields.lastName}
 						value={contact.lastName}
 						saving={isSaving("lastName")}
 						onSave={(lastName) => save({ lastName })}
 					/>
 					<InlineField
-						label="Title"
+						label={m.contact.fields.title}
 						value={contact.title}
-						placeholder="Head of Security"
+						placeholder={m.contact.fields.titlePlaceholder}
 						saving={isSaving("title")}
 						onSave={(title) => save({ title })}
 						{...agentProps("title")}
 					/>
 					<InlineField
-						label="Email"
+						label={m.contact.fields.email}
 						value={contact.email}
 						type="email"
 						saving={isSaving("email")}
 						onSave={(email) => save({ email })}
 					/>
 					<InlineField
-						label="Phone"
+						label={m.contact.fields.phone}
 						value={contact.phone}
 						type="tel"
 						saving={isSaving("phone")}
 						onSave={(phone) => save({ phone })}
 					/>
 					<InlineField
-						label="LinkedIn"
+						label={m.contact.fields.linkedin}
 						value={contact.linkedinUrl}
 						type="url"
 						saving={isSaving("linkedinUrl")}
@@ -368,7 +387,7 @@ function ContactOverview({ contact }: { contact: Contact }) {
 						{...agentProps("linkedinUrl")}
 					/>
 					<InlineField
-						label="X"
+						label={m.contact.fields.x}
 						value={contact.twitterUrl}
 						type="url"
 						saving={isSaving("twitterUrl")}
@@ -376,7 +395,7 @@ function ContactOverview({ contact }: { contact: Contact }) {
 						{...agentProps("twitterUrl")}
 					/>
 					<InlineField
-						label="GitHub"
+						label={m.contact.fields.github}
 						value={contact.githubUrl}
 						type="url"
 						saving={isSaving("githubUrl")}
@@ -387,16 +406,16 @@ function ContactOverview({ contact }: { contact: Contact }) {
 						value={contact.company?.id ?? NONE}
 						company={contact.company}
 						saving={isSaving("companyId")}
-						none={{ value: NONE, label: "No company" }}
+						none={{ value: NONE, label: m.contact.fields.noCompany }}
 						onSave={(companyId) =>
 							save({ companyId: companyId === NONE ? null : companyId })
 						}
 					/>
 					<InlineSelectField
-						label="Owner"
+						label={m.contact.fields.owner}
 						value={contact.owner?.id ?? NONE}
 						options={[
-							{ value: NONE, label: "Unassigned" },
+							{ value: NONE, label: m.contact.fields.unassigned },
 							...(users.data ?? []).map((user) => ({
 								value: user.id,
 								label: user.name,
@@ -422,7 +441,7 @@ function ContactOverview({ contact }: { contact: Contact }) {
 			/>
 
 			{hasContactLinks(contact) ? (
-				<DetailSheetSection title="Links">
+				<DetailSheetSection title={m.section.links}>
 					<ContactSocials contact={contact} />
 				</DetailSheetSection>
 			) : null}
@@ -433,20 +452,21 @@ function ContactOverview({ contact }: { contact: Contact }) {
 }
 
 function Background({ brief }: { brief: NonNullable<Contact["brief"]> }) {
+	const m = recordSheetMessages(useLocale());
 	const sections = brief.sections;
 	const previous = sections.previousRoles ?? [];
 
 	const lines = [
-		{ label: "Current role", value: sections.currentRole },
-		{ label: "Tenure", value: sections.tenure },
-		{ label: "Seniority", value: sections.seniority },
-		{ label: "Function", value: sections.function },
-		{ label: "Based", value: sections.location },
+		{ label: m.contact.currentRole, value: sections.currentRole },
+		{ label: m.contact.tenure, value: sections.tenure },
+		{ label: m.contact.seniority, value: sections.seniority },
+		{ label: m.contact.fn, value: sections.function },
+		{ label: m.contact.based, value: sections.location },
 	].filter((line) => Boolean(line.value));
 
 	return (
 		<DetailSheetSection
-			title="Background"
+			title={m.section.background}
 			action={
 				<span className="text-muted-foreground text-xs">
 					{brief.sourceUrl ? (
@@ -456,7 +476,7 @@ function Background({ brief }: { brief: NonNullable<Contact["brief"]> }) {
 							rel="noreferrer noopener"
 							className="underline-offset-2 hover:underline"
 						>
-							Source
+							{m.contact.source}
 						</a>
 					) : null}
 					{brief.sourceUrl ? " · " : null}
@@ -474,7 +494,7 @@ function Background({ brief }: { brief: NonNullable<Contact["brief"]> }) {
 				))}
 
 				{previous.length > 0 ? (
-					<DetailSheetProperty label="Previously" wide>
+					<DetailSheetProperty label={m.contact.previously} wide>
 						<PreviousRoles roles={previous} />
 					</DetailSheetProperty>
 				) : null}
@@ -484,11 +504,14 @@ function Background({ brief }: { brief: NonNullable<Contact["brief"]> }) {
 }
 
 function PreviousRoles({ roles }: { roles: string[] }) {
+	const m = recordSheetMessages(useLocale());
 	return (
 		<Accordion type="single" collapsible>
 			<AccordionItem value="previous">
 				<AccordionTrigger variant="subtle">
-					{roles.length === 1 ? "1 role" : `${roles.length} roles`}
+					{roles.length === 1
+						? m.contact.oneRole
+						: m.contact.roles(String(roles.length))}
 				</AccordionTrigger>
 				<AccordionContent>
 					<ul className="space-y-1">
@@ -509,6 +532,7 @@ function WeKnowThem({
 	relationship: Contact["relationship"];
 	contactName: string;
 }) {
+	const m = recordSheetMessages(useLocale());
 	const { emails, meetings, lastReplyAt, nextMeeting, colleagues } =
 		relationship;
 
@@ -517,33 +541,33 @@ function WeKnowThem({
 	const first = name.split(" ")[0] ?? name;
 
 	return (
-		<DetailSheetSection title="We know them">
+		<DetailSheetSection title={m.contact.weKnowThem}>
 			<DetailSheetProperties>
 				{emails > 0 ? (
-					<DetailSheetProperty label="Emails">
+					<DetailSheetProperty label={m.contact.emails}>
 						<span className="tabular-nums">{emails}</span>
 						<span className="text-muted-foreground">
 							{" · "}
 							{lastReplyAt ? (
 								<>
-									last reply <LocalRelativeDate date={lastReplyAt} />
+									{m.contact.lastReply} <LocalRelativeDate date={lastReplyAt} />
 								</>
 							) : (
-								`${first} has never replied`
+								m.contact.neverReplied(first)
 							)}
 						</span>
 					</DetailSheetProperty>
 				) : null}
 
 				{meetings > 0 ? (
-					<DetailSheetProperty label="Meetings">
+					<DetailSheetProperty label={m.contact.meetings}>
 						<span className="tabular-nums">{meetings}</span>
 					</DetailSheetProperty>
 				) : null}
 
 				{nextMeeting ? (
-					<DetailSheetProperty label="Next meeting" wide>
-						{nextMeeting.title ?? "Meeting"}
+					<DetailSheetProperty label={m.contact.nextMeeting} wide>
+						{nextMeeting.title ?? m.contact.meetingFallback}
 						<span className="text-muted-foreground">
 							{" · "}
 							<LocalDateTime
@@ -555,7 +579,7 @@ function WeKnowThem({
 				) : null}
 
 				{colleagues.length > 0 ? (
-					<DetailSheetProperty label="Also here" wide>
+					<DetailSheetProperty label={m.contact.alsoHere} wide>
 						<Colleagues colleagues={colleagues} />
 					</DetailSheetProperty>
 				) : null}
@@ -569,6 +593,7 @@ function Colleagues({
 }: {
 	colleagues: Contact["relationship"]["colleagues"];
 }) {
+	const _m = recordSheetMessages(useLocale());
 	const openRecord = useOpenRecord();
 
 	return (
@@ -591,20 +616,21 @@ function Colleagues({
 }
 
 function ContactDeals({ contact }: { contact: Contact }) {
+	const m = recordSheetMessages(useLocale());
 	const openRecord = useOpenRecord();
 
 	if (contact.deals.length === 0) {
 		return (
 			<DetailSheetEmpty
 				icon={Partnership}
-				title="Not on any deals"
-				description={`${contactName(contact)} is not attached to anything being sold yet. Deals are opened on the company, then people are added to them.`}
+				title={m.contact.notOnDealsTitle}
+				description={m.contact.notOnDealsBody(contactName(contact))}
 			/>
 		);
 	}
 
 	return (
-		<SimpleTable variant="panel" columns={DEAL_COLUMNS}>
+		<SimpleTable variant="panel" columns={dealColumns(m)}>
 			{contact.deals.map((deal) => (
 				<SimpleTableRow
 					key={deal.id}

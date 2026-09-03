@@ -1,6 +1,7 @@
 "use client";
 
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
 	type SimpleTableColumn,
@@ -8,6 +9,7 @@ import {
 } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
 import { formatMoney } from "@crm/ui/lib/format";
+import type { Locale } from "@crm/ui/lib/locale";
 import { CompanyCell } from "@/components/crm/company-cell";
 import { DealStageIndicator } from "@/components/crm/deal-stage";
 import { OwnerCell } from "@/components/crm/owner-cell";
@@ -33,6 +35,7 @@ const COLUMNS: SimpleTableColumn[] = [
 ];
 
 export function DealListResultTable({ result }: { result: DealListResult }) {
+	const locale = useLocale();
 	const openRecord = useOpenRecord();
 	const prefetchRecord = usePrefetchRecord();
 	const count = result.deals.length;
@@ -85,6 +88,7 @@ export function DealListResultTable({ result }: { result: DealListResult }) {
 											{formatMoney(
 												Math.round(deal.amount * 100),
 												deal.currency,
+												locale,
 											)}
 										</span>
 									)}
@@ -117,7 +121,7 @@ export function DealListResultTable({ result }: { result: DealListResult }) {
 				)}
 			</SimpleTable>
 			<div className="flex flex-wrap items-center justify-between gap-3 text-muted-foreground text-xs">
-				<span>{tableMeta(result)}</span>
+				<span>{tableMeta(result, locale)}</span>
 				<span>
 					As of <LocalDay date={result.asOf} />
 				</span>
@@ -147,10 +151,10 @@ function tableTitle(result: DealListResult): string {
 		: `${count} ${stale}${status}deal${count === 1 ? "" : "s"}`;
 }
 
-function tableMeta(result: DealListResult): string {
+function tableMeta(result: DealListResult, locale: Locale): string {
 	const details = [
 		`${result.deals.length} deal${result.deals.length === 1 ? "" : "s"}`,
-		pipelineTotal(result.deals),
+		pipelineTotal(result.deals, locale),
 		result.criteria.inactiveForDays === null
 			? null
 			: `${result.criteria.inactiveForDays}+ days inactive`,
@@ -168,7 +172,10 @@ function humaniseStage(stage: string): string {
 		.join(" ");
 }
 
-function pipelineTotal(deals: readonly DealListItem[]): string | null {
+function pipelineTotal(
+	deals: readonly DealListItem[],
+	locale: Locale,
+): string | null {
 	const currencies = new Set(deals.map((deal) => deal.currency));
 	if (currencies.size !== 1) return null;
 
@@ -176,5 +183,5 @@ function pipelineTotal(deals: readonly DealListItem[]): string | null {
 	if (!currency) return null;
 
 	const amount = deals.reduce((sum, deal) => sum + (deal.amount ?? 0), 0);
-	return `${formatMoney(Math.round(amount * 100), currency)} pipeline`;
+	return `${formatMoney(Math.round(amount * 100), currency, locale)} pipeline`;
 }

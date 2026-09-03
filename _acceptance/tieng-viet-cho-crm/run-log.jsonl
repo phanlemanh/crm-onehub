@@ -13,3 +13,12 @@
 {"ts": "2026-09-01T09:54:56Z", "round": 1, "evalId": "SUITE-check-types", "run_id": "tieng-viet-cho-crm-SUITE-check-types-1788256496", "exit_code": 0, "cmd": "bunx turbo run check-types --force"}
 {"ts": "2026-09-01T09:55:07Z", "round": 1, "evalId": "SUITE-lint", "run_id": "tieng-viet-cho-crm-SUITE-lint-1788256507", "exit_code": 0, "cmd": "bunx turbo run lint --force"}
 {"ts": "2026-09-01T09:55:12Z", "round": 1, "evalId": "SUITE-lint-slop", "run_id": "tieng-viet-cho-crm-SUITE-lint-slop-1788256512", "exit_code": 1, "cmd": "bun run lint:slop"}
+{"ts": "2026-09-02T02:38:29Z", "round": 2, "evalId": "E4", "run_id": "tieng-viet-cho-crm-r2-E4", "exit_code": 0, "cmd": "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan la"}
+{"ts": "2026-09-02T02:38:29Z", "round": 2, "evalId": "E5", "run_id": "tieng-viet-cho-crm-r2-E5", "exit_code": 0, "cmd": "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan cookie"}
+{"ts": "2026-09-02T02:38:29Z", "round": 2, "evalId": "E7", "run_id": "tieng-viet-cho-crm-r2-E7", "exit_code": 0, "cmd": "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan du-lieu-khong-dich"}
+{"ts": "2026-09-02T02:38:29Z", "round": 2, "evalId": "E8", "run_id": "tieng-viet-cho-crm-r2-E8", "exit_code": 0, "cmd": "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan dinh-dang"}
+{"ts": "2026-09-02T02:38:29Z", "round": 2, "evalId": "E6", "run_id": "tieng-viet-cho-crm-r2-E6", "exit_code": 1, "cmd": "APP_URL=http://localhost:3100 node _acceptance/tieng-viet-cho-crm/rang/ban-ve-man-cong-ty.mjs man"}
+{"ts": "2026-09-02T02:38:29Z", "round": 2, "evalId": "E6-dot-bien", "run_id": "tieng-viet-cho-crm-r2-E6-mut", "exit_code": 0, "cmd": "APP_URL=http://localhost:3100 CHO_MS=6000 node _acceptance/tieng-viet-cho-crm/rang/dot-bien.mjs"}
+{"ts": "2026-09-02T02:38:29Z", "round": 2, "evalId": "E9", "run_id": "tieng-viet-cho-crm-r2-E9", "exit_code": 0, "cmd": "APP_URL=http://localhost:3100 BE_RONG=768 TRANG='?hide=nothing' node _acceptance/tieng-viet-cho-crm/rang/ban-ve-man-cong-ty.mjs be-rong"}
+{"ts": "2026-09-02T02:38:29Z", "round": 2, "evalId": "E10", "run_id": "tieng-viet-cho-crm-r2-E10", "exit_code": 0, "cmd": "APP_URL=http://localhost:3100 node _acceptance/tieng-viet-cho-crm/rang/ban-ve-man-cong-ty.mjs ban-phim"}
+{"ts": "2026-09-02T02:38:29Z", "round": 2, "evalId": "SUITE", "run_id": "tieng-viet-cho-crm-r2-SUITE", "exit_code": 0, "cmd": "bun run db:test && bunx turbo run test --force --concurrency=1 && bunx turbo run check-types --force && bunx turbo run lint --force && bun run lint:slop"}

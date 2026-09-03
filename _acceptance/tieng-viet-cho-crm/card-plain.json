@@ -1,126 +1,41 @@
 {
-  "feature_plain": "Nhân viên quan hệ đối tác chọn tiếng Việt một lần, và màn công ty hiện trọn tiếng Việt — nhãn, ngày, số. Lựa chọn ở lại khi họ quay lại.",
-  "will_do": [
+  "feature_plain": "Nhân viên chọn tiếng Việt một lần, và màn danh sách công ty hiện bằng tiếng Việt từ lượt vẽ đầu — chữ, ngày và số.",
+  "scope_plain": "Vòng này chỉ nhận màn công ty. Câu lỗi máy chủ trả về, màn thoả thuận, bảng chi phí tác nhân, ngôn ngữ thứ ba và dữ liệu người nhập đều để cho vòng sau.",
+  "analyst_plain": "Mỗi phép đo trong hồ sơ này đều đã được thử làm cho đỏ, và đã đỏ thật.",
+  "decisions": [
     {
-      "id": "AC-1",
-      "p": "Sẽ hiện tiếng Việt ngay lần đầu cho người có trình duyệt tiếng Việt, dù họ chưa từng chọn gì."
+      "id": "E9",
+      "q": "Tiêu đề cột dài bị cắt kèm dấu ba chấm — chấp nhận được không?",
+      "why": "Không tiêu đề nào còn bị chém cụt không dấu hiệu, ở mọi khổ màn và cả hai thứ tiếng — lỗi lần trước đã hết. Nhưng ở màn hẹp vẫn có bốn tiêu đề bị cắt bớt, và tiêu chí vòng này cấm chuyện đó, trong khi tiêu chí vòng bộ dựng chung anh đã ký lại quy định cắt thì phải cắt thế nào. Hai lời hứa nghịch nhau nên máy không tự chọn được. Máy ngả về nhận: chữ đầy đủ vẫn đến được trình đọc màn hình và vẫn hiện khi rê chuột. Tiếng Anh ở cùng khổ màn cũng bị cắt, nên đây là chuyện bề rộng cột chứ không phải chuyện tiếng Việt dài."
     },
     {
-      "id": "AC-2",
-      "p": "Sẽ hiện tiếng Anh cho người có trình duyệt tiếng Anh."
-    },
-    {
-      "id": "AC-3",
-      "p": "Sẽ khai đúng thứ tiếng của trang ngay từ lượt vẽ đầu của máy chủ — không nháy tiếng Anh rồi mới đổi."
-    },
-    {
-      "id": "AC-4",
-      "p": "Sẽ rơi về tiếng Anh một cách êm nếu lựa chọn đã lưu bị hỏng, thay vì vỡ màn hình."
-    },
-    {
-      "id": "AC-5",
-      "p": "Sẽ nhớ lựa chọn qua cả lần tắt máy, không chỉ qua lần đóng tab."
-    },
-    {
-      "id": "AC-6",
-      "p": "Sẽ hiện tiếng Việt cho mọi chữ người nhìn thấy trên màn công ty, kể cả ba chỗ chữ đến từ bảng dùng chung."
-    },
-    {
-      "id": "AC-7",
-      "p": "Sẽ giữ nguyên tên công ty người nhập, và chặn trình duyệt tự dịch nó."
-    },
-    {
-      "id": "AC-8",
-      "p": "Sẽ hiện ngày và số theo quy ước tiếng Việt — 1 thg 9, và dấu chấm ngăn nghìn."
-    },
-    {
-      "id": "AC-9",
-      "p": "Sẽ giữ mọi tiêu đề cột đọc được ở khổ hẹp, dù chữ tiếng Việt dài hơn."
-    },
-    {
-      "id": "AC-10",
-      "p": "Sẽ cho người chỉ dùng bàn phím tới được nút đổi tiếng, thấy rõ nó đang được chọn, và mở được bằng Enter."
-    },
-    {
-      "id": "AC-12",
-      "p": "Sẽ tôn trọng lựa chọn của người: đã chọn tiếng Anh thì trình duyệt tiếng Việt không kéo họ ngược lại."
-    },
-    {
-      "id": "AC-11",
-      "p": "Sẽ để một hội đồng mù phán xem chữ đọc như tiếng Việt người trong nghề hay như bản dịch máy."
-    }
-  ],
-  "wont_do": [
-    {
-      "id": "OOS-1",
-      "p": "Sẽ KHÔNG dịch câu lỗi từ máy chủ. 107 chỗ vẫn hiện tiếng Anh khi có sự cố — đó là vòng ④."
-    },
-    {
-      "id": "OOS-2",
-      "p": "Sẽ KHÔNG sửa bộ dựng chung. Chỉ truyền chữ vào ba chỗ nó đã mở sẵn; hai nhãn cho trình đọc màn hình vẫn tiếng Anh."
-    },
-    {
-      "id": "OOS-3",
-      "p": "Sẽ KHÔNG dịch màn thoả thuận hợp tác. Bảy giai đoạn của nó chưa ai định nghĩa — đó là quyết định nghiệp vụ, không phải việc dịch."
-    },
-    {
-      "id": "OOS-4",
-      "p": "Sẽ KHÔNG dịch dữ liệu người dùng nhập. Tên công ty, ghi chú, nội dung thư giữ nguyên."
-    },
-    {
-      "id": "OOS-5",
-      "p": "Sẽ KHÔNG thêm ngôn ngữ thứ ba, không đổi tiền tệ, không đổi múi giờ."
-    }
-  ],
-  "scope_plain": "Bốn nguồn chữ còn lại — bộ dựng chung, nhãn toàn ứng dụng, câu máy chủ, chữ tác nhân sinh — nằm ở bốn vòng sau, theo thứ tự đã chốt.",
-  "coverage_plain": [
-    {
-      "i": 0,
-      "p": "Bốn cách người có thể tới: chưa chọn bao giờ · đã chọn tiếng Việt · đã chọn tiếng Anh · lựa chọn hỏng. Cả bốn đều có tiêu chí. Thước đối chiếu là chuẩn quốc tế về thẻ ngôn ngữ hợp lệ."
-    },
-    {
-      "i": 1,
-      "p": "Bốn nơi thứ tiếng hiện ra: thẻ ngôn ngữ của trang · chữ giao diện · ngày và số · dữ liệu người nhập, chỗ này phải KHÔNG đổi. Thước đối chiếu là chuẩn tiếp cận WCAG mức A."
-    },
-    {
-      "i": 2,
-      "p": "Ba thời điểm: lượt vẽ đầu · ngay sau khi đổi tiếng · lần quay lại sau. Đối chiếu với cách kho đã giải cho nút sáng/tối."
-    }
-  ],
-  "gap_probe_plain": [
-    {
-      "i": 0,
-      "p": "Hợp đồng hứa màn công ty hết tiếng Anh, trong khi phạm vi cấm chạm bộ dựng chung mà màn đó vẽ ra chữ. Đã sửa: ba chỗ chữ nhận được từ ngoài vào nên truyền được, hai nhãn còn lại gọi tên làm ngoại lệ."
-    },
-    {
-      "i": 1,
-      "p": "Phép đo định dạng chỉ kiểm một hàm trong năm, và không ghim giá trị. Bốn hàm kia có thể giữ tiếng Anh mà vẫn xanh. Đã sửa: ghim đủ năm hàm hai thứ tiếng, kèm chiều đỏ."
-    },
-    {
-      "i": 2,
-      "p": "Hai phép đo kiểm một hàm rời trong khi tiêu chí phụ thuộc lượt vẽ của máy chủ — dây nối hỏng thì cả hai vẫn xanh. Đã sửa: chuyển sang đo trên trang đã vẽ."
-    },
-    {
-      "i": 3,
-      "p": "Không tiêu chí nào phủ ca người đã chọn tiếng Anh mà trình duyệt khai tiếng Việt — họ sẽ bị kéo ngược mỗi lần tải lại. Đã sửa: thêm một tiêu chí và một phép đo."
-    },
-    {
-      "i": 4,
-      "p": "Cookie không khai tuổi thọ, nên có thể ship dạng mất-khi-tắt-máy, mà phép đo chỉ đóng tab nên không thấy. Đã sửa: khai một năm, và phép đo kiểm thẳng ba thuộc tính."
+      "id": "E12",
+      "q": "Mười nhãn cột đọc như tiếng Việt người trong nghề chưa?",
+      "why": "Năm nhãn đã đổi trong vòng này theo hai người lạ lái thử và một hội đồng chấm. Hội đồng chấm lại trên nhãn mới thì chia: một người nhận, hai người không, và hai hướng sửa họ đề nghị ngược nhau. Máy đo được cái giá của cả hai hướng nhưng không chọn thay anh được. Máy ngả về nhận bộ nhãn hiện tại và để vòng nhãn ứng dụng chỉnh tiếp, vì sửa thêm lượt nữa là lượt đổi chữ thứ ba trong cùng một vòng."
     }
   ],
   "decisions_plain": [
-    {
-      "id": "d-20260901T061208Z-18037",
-      "p": "Gọi là 'công ty' và 'cá nhân', không phải 'công ty môi giới' — đổi lại: tên rộng hơn thực tế giai đoạn này."
-    },
-    {
-      "id": "d-20260901T074216Z-31114",
-      "p": "Nhãn cắt theo ngữ cảnh màn hình — đổi lại: cùng một cột ở màn khác phải viết lại, kho chữ không dùng chung nhãn giữa các màn."
-    },
-    {
-      "id": "d-20260901T075111Z-31436",
-      "p": "KHÔNG làm nguồn sinh cho thước 'giữ tiếng Việt sau một tuần' — đổi lại: Cổng Giá trị sẽ đọc một ô CHƯA ĐO."
-    }
+    { "id": "d-20260901T061208Z-18037", "p": "Gọi là công ty và cá nhân, không gắn chữ môi giới — đổi lại, người mới đọc chưa biết ngay mạng lưới gồm ai." },
+    { "id": "d-20260901T074216Z-31114", "p": "Nhãn chỉ mang phần nghĩa màn hình chưa nói — đổi lại, cùng một cột đặt ở màn khác phải viết lại chữ." },
+    { "id": "d-20260901T075111Z-31436", "p": "KHÔNG làm đường đo xem nhân viên có giữ tiếng Việt sau một tuần không — đổi lại, lúc xét giá trị sẽ thiếu một con số." },
+    { "id": "d-20260901T085833Z-21450", "p": "Chứng minh phần đổi tiếng bằng ba phép đo trên trình duyệt thật thay vì viết bài kiểm riêng — đổi lại, nếu trình duyệt không chạy được thì phần đó không còn phép đo nào." },
+    { "id": "d-20260901T091154Z-25773", "p": "Nút đổi tiếng là một dòng trong menu tài khoản, cạnh dòng sáng/tối — đổi lại, người dùng bàn phím phải nhấn thêm một lần trong menu so với câu chữ tiêu chí." },
+    { "id": "d-20260901T100245Z-11238", "p": "Dừng vòng này lại thay vì vá tiếp, vì hai phép đo trượt cùng một lý do và cái sai nằm ở khung chứ không ở chi tiết." },
+    { "id": "d-2026-09-01T10:20:51Z-c", "p": "Anh chọn đảo thứ tự: làm bộ dựng chung trước, vòng ngôn ngữ dừng lại chờ." },
+    { "id": "d-2026-09-01T10:56:12Z-quet", "p": "Con số về phạm vi do máy đếm, không gõ tay — đổi lại, phải nuôi thêm một cái máy đếm." },
+    { "id": "d-2026-09-01T11:25:50Z-cong1v2", "p": "Anh ký cho bộ dựng chung nhận chuỗi từ ngoài, và biết trước ô ngày với ô gợi ý công ty vẫn còn tiếng Anh." },
+    { "id": "d-2026-09-01T11:40:04Z-thuoc", "p": "Đổi cách đếm từ liệt-kê sang nhìn-tất-cả-rồi-trừ, và số chuỗi thật hoá ra nhiều hơn lúc ký." },
+    { "id": "d-2026-09-01T13:29:04Z-banve", "p": "Anh chọn bỏ máy quét mã, chuyển sang dựng thật rồi so chữ người đọc thấy — nhờ đó bắt được cả chữ do thư viện ngoài đặt." },
+    { "id": "d-2026-09-01T14:53:02Z-hairang", "p": "Thêm hai luật vào phép đo, bịt hai lối một bản dịch giả vẫn qua được." },
+    { "id": "d-2026-09-01T15:00:08Z-cot", "p": "Anh cho phép nới bề rộng cột ở màn công ty, vì trước đó một tiêu đề hiện trống trơn ở màn hẹp." },
+    { "id": "d-2026-09-01T23:42:10Z-cong2", "p": "Anh ký nghiệm thu cho bộ dựng chung sau bốn vòng chấm." },
+    { "id": "d-2026-09-02T01:10:00Z-cay", "p": "Đo lại từ đầu trên máy chủ dựng đúng từ bản chép đang sửa — bốn lượt đo trước đó đọc nhầm bản chép khác." },
+    { "id": "d-2026-09-02T01:30:00Z-thuoc", "p": "Phép đo dựng màn công ty thật hai lần rồi so chữ, và danh sách chữ được phép giống nhau do máy chủ sinh chứ không ai gõ tay." },
+    { "id": "d-2026-09-02T02:00:00Z-lan", "p": "Đếm số lần chữ xuất hiện chứ không đếm số chữ khác nhau — nếu không, một chữ tiếng Anh trùng chữ đã có trên màn sẽ tàng hình." },
+    { "id": "d-2026-09-02T02:30:00Z-ngay", "p": "Sửa chỗ in ngày để nó theo tiếng người đọc chọn — trước đó màn công ty in ngày tiếng Anh cho người đọc tiếng Việt suốt một vòng." },
+    { "id": "d-2026-09-02T03:00:00Z-nhan", "p": "Đổi năm nhãn cột theo người lạ lái thử và hội đồng — đổi lại, nhãn dài hơn nên có thêm một khổ màn bị cắt chữ." },
+    { "id": "d-2026-09-02T03:30:00Z-hoidong", "p": "KHÔNG sửa theo một lời chấm nghe rất nặng, vì đo lại thì chữ thật hiện ra không phải như lời chấm nói." },
+    { "id": "d-2026-09-02T09:40:00Z-dungva", "p": "Dừng đổi chữ sau hai vòng hội đồng, vì hai hướng sửa ngược nhau và mỗi hướng đều có một cái giá đo được." },
+    { "id": "d-2026-09-02T09:45:00Z-batloi", "p": "Mọi lời chấm về chữ bị cắt phải đo lại bằng máy — ba lời chấm nặng liên tiếp đều sai." }
   ]
 }

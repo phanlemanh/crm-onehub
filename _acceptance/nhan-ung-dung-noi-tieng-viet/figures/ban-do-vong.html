@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bản đồ vòng — vòng đang duyệt nằm ở đâu</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:   #fafafa;
+    --paper-2: #f2f2f2;
+    --ink:     #171717;
+    --muted:   #575757;
+    --soft:    #666666;
+    --rule:    rgba(23,23,23,0.12);
+    --accent:  #006B4F;
+    --sans:    'Geist', system-ui, sans-serif;
+    --serif:   'Lora', Georgia, serif;
+    --mono:    'Geist Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1200px; width: 100%; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .standfirst {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 62ch;
+    margin-bottom: 1.75rem;
+  }
+  svg { width: 100%; min-width: 900px; display: block; }
+  .notes {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 0.9fr;
+    gap: 2rem;
+  }
+  .notes h2 {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .notes p { font-size: 0.86rem; line-height: 1.6; color: var(--ink); }
+  .notes p + p { margin-top: 0.6rem; }
+  .notes .quiet { color: var(--muted); }
+  code {
+    font-family: var(--mono);
+    font-size: 0.8em;
+    color: var(--muted);
+  }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+  }
+  @media (max-width: 860px) { .notes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Cổng 1 · Bản đồ vòng</p>
+  <h1>Vòng đang duyệt là lát đầu của vòng ba, và nó nhận một khoản nợ</h1>
+  <p class="standfirst">Năm vòng đưa sản phẩm sang tiếng Việt. Vòng ba quá lớn cho một lượt, nên nó cắt làm ba lát; lát đang duyệt là lát chạm đúng ba luồng mà ngưỡng nghiệm thu đã hứa đo.</p>
+
+  <svg viewBox="0 0 1120 640" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ năm vòng đưa sản phẩm sang tiếng Việt, với vòng đang duyệt ở giữa">
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+      <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+    </defs>
+
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <!-- ============ ĐƯỜNG NỐI (vẽ trước để nằm dưới hộp) ============ -->
+
+    <!-- thứ tự vòng -->
+    <line x1="216" y1="268" x2="250" y2="268" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="432" y1="268" x2="466" y2="268" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="648" y1="268" x2="682" y2="268" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="864" y1="268" x2="898" y2="268" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <!-- khoản nợ: vòng 1 -> vòng 3a, vòng lên trên nên không đi sau lưng vòng 2 -->
+    <path d="M 128 216 V 144 A 8 8 0 0 1 136 136 H 552 A 8 8 0 0 1 560 144 V 212"
+          fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <rect x="244" y="96" width="200" height="34" rx="4" fill="#fafafa"/>
+    <text x="344" y="110" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHOẢN NỢ CHUYỂN SANG</text>
+    <text x="344" y="126" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">5 chuỗi + chữ thời gian tương đối</text>
+
+    <!-- phạm vi hoãn -->
+    <path d="M 528 320 V 376 A 8 8 0 0 1 520 384 H 460 A 8 8 0 0 0 452 392 V 420"
+          fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+    <path d="M 592 320 V 376 A 8 8 0 0 0 600 384 H 660 A 8 8 0 0 1 668 392 V 420"
+          fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+    <rect x="532" y="356" width="56" height="16" rx="2" fill="#fafafa"/>
+    <text x="560" y="368" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">HOÃN LẠI</text>
+
+    <!-- ============ VÒNG 1 ============ -->
+    <rect x="40" y="216" width="176" height="104" rx="6" fill="#fafafa"/>
+    <rect x="40" y="216" width="176" height="104" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="52" y="230" width="56" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="80" y="243" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">VÒNG 1</text>
+    <text x="204" y="243" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">CHỜ KÝ</text>
+    <text x="56" y="280" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Xương sống ngôn ngữ</text>
+    <text x="56" y="306" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">44 chuỗi</text>
+
+    <!-- ============ VÒNG 2 ============ -->
+    <rect x="256" y="216" width="176" height="104" rx="6" fill="#fafafa"/>
+    <rect x="256" y="216" width="176" height="104" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="268" y="230" width="56" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="296" y="243" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">VÒNG 2</text>
+    <text x="420" y="243" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">ĐÃ KÝ</text>
+    <text x="272" y="262" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Bộ dựng chung nhận</text>
+    <text x="272" y="280" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">chữ từ ngoài</text>
+    <text x="272" y="306" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">43 chuỗi</text>
+
+    <!-- ============ VÒNG 3A — vòng đang duyệt ============ -->
+    <rect x="472" y="216" width="176" height="104" rx="6" fill="#fafafa"/>
+    <rect x="472" y="216" width="176" height="104" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="484" y="230" width="64" height="18" rx="4" fill="none" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
+    <text x="516" y="243" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">VÒNG 3A</text>
+    <text x="636" y="243" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">ĐANG DUYỆT</text>
+    <text x="488" y="280" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Ba luồng của ngưỡng</text>
+    <text x="488" y="306" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">569 chuỗi</text>
+
+    <!-- ============ VÒNG 4 ============ -->
+    <rect x="688" y="216" width="176" height="104" rx="6" fill="#fafafa"/>
+    <rect x="688" y="216" width="176" height="104" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="700" y="230" width="56" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="728" y="243" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">VÒNG 4</text>
+    <text x="852" y="243" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">VÒNG SAU</text>
+    <text x="704" y="262" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Câu do máy chủ</text>
+    <text x="704" y="280" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">trả về</text>
+    <text x="704" y="306" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">107 chỗ</text>
+
+    <!-- ============ VÒNG 5 ============ -->
+    <rect x="904" y="216" width="176" height="104" rx="6" fill="#fafafa"/>
+    <rect x="904" y="216" width="176" height="104" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="916" y="230" width="56" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="944" y="243" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">VÒNG 5</text>
+    <text x="1068" y="243" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">VÒNG SAU</text>
+    <text x="920" y="280" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Chữ của tác nhân</text>
+    <text x="920" y="306" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">327 chuỗi</text>
+
+    <!-- ============ LÁT HOÃN 3B ============ -->
+    <rect x="364" y="424" width="176" height="88" rx="6" fill="#fafafa"/>
+    <rect x="364" y="424" width="176" height="88" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1" stroke-dasharray="5,4"/>
+    <rect x="376" y="438" width="64" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.25)" stroke-width="0.8"/>
+    <text x="408" y="451" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LÁT 3B</text>
+    <text x="528" y="451" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">HOÃN</text>
+    <text x="380" y="484" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Màn cài đặt</text>
+    <text x="380" y="502" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">308 chuỗi</text>
+
+    <!-- ============ LÁT HOÃN 3C ============ -->
+    <rect x="580" y="424" width="176" height="88" rx="6" fill="#fafafa"/>
+    <rect x="580" y="424" width="176" height="88" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1" stroke-dasharray="5,4"/>
+    <rect x="592" y="438" width="64" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.25)" stroke-width="0.8"/>
+    <text x="624" y="451" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LÁT 3C</text>
+    <text x="744" y="451" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">HOÃN</text>
+    <text x="596" y="484" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Các trang còn lại</text>
+    <text x="596" y="502" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">319 chuỗi</text>
+
+    <!-- ============ CHÚ GIẢI ============ -->
+    <line x1="40" y1="560" x2="1080" y2="560" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="40" y="580" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+    <rect x="40" y="600" width="14" height="12" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+    <text x="62" y="610" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">vòng đang duyệt</text>
+
+    <rect x="320" y="600" width="14" height="12" rx="3" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="342" y="610" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">lát cắt ra, hoãn lại</text>
+
+    <line x1="600" y1="606" x2="618" y2="606" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="626" y="610" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">khoản nợ vòng trước gửi sang</text>
+
+    <line x1="880" y1="606" x2="898" y2="606" stroke="#575757" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="906" y="610" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">phạm vi hoãn sang lát sau</text>
+  </svg>
+
+  <div class="notes">
+    <div>
+      <h2>Vì sao cắt lát</h2>
+      <p>Vòng ba đầy đủ là 1103 chuỗi. Nó không vừa hai ngày mà hồ sơ cơ hội tự khai. Lát đang duyệt không cắt theo thư mục mà cắt theo đúng ba luồng ngưỡng nghiệm thu đã hứa: thêm một công ty, ghi một hoạt động, cập nhật một thoả thuận.</p>
+      <p class="quiet">Đó là lát duy nhất làm cho ngưỡng ấy đo được. Cắt kiểu khác thì Cổng Giá trị vẫn phải đọc bảng còn ô chưa đo.</p>
+    </div>
+    <div>
+      <h2>Khoản nợ vòng một gửi sang</h2>
+      <p>Vòng một đóng lại với một tiêu chí chưa đạt, và người ký chấp nhận giới hạn đó. Năm chuỗi đo được ở vòng một được định tuyến sang vòng này ngày 2026-09-02, cùng cách viết thời gian tương đối.</p>
+      <p class="quiet">Một khoản nợ chuyển vòng mà không có biên nhận thì biến mất. AC-4 là biên nhận, và nó đòi phép đo gọi tên từng chuỗi chứ không trả một con số.</p>
+    </div>
+    <div>
+      <h2>Con số ở đâu ra</h2>
+      <p>Số chuỗi trên mỗi hộp do máy đếm, không do tay gõ. Vòng bốn đếm bằng đơn vị khác: 107 chỗ trong mã đổ nguyên văn câu tiếng Anh của máy chủ lên thông báo nổi.</p>
+      <p class="quiet">Máy quét dùng để đếm phạm vi. Nó không được dùng làm phép đo nghiệm thu.</p>
+    </div>
+  </div>
+
+  <footer>Hình 1 / 2 · điểm quyết định ở Cổng 1 · vòng 3a</footer>
+</div>
+</body>
+</html>

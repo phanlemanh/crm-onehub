@@ -208,7 +208,7 @@ function FacetSubmenu({
 							onKeyDown={(event) => event.stopPropagation()}
 						/>
 						<CommandList label={msg.table.facetOptions}>
-							<CommandEmpty>{facet.empty ?? "Nothing matches."}</CommandEmpty>
+							<CommandEmpty>{facet.empty ?? msg.table.facetEmpty}</CommandEmpty>
 							<CommandGroup>
 								{facet.options.map((option) => {
 									const checked = selected.includes(option.value);
@@ -581,7 +581,7 @@ export function DataTable<TRow, TSub = unknown>({
 				overlay={
 					deferredRows.length === 0 ? (
 						<div className="absolute inset-x-0 top-11 bottom-0 flex items-center justify-center px-4 py-8 text-center text-muted-foreground">
-							{loading ? <Spinner /> : (empty ?? "No results found.")}
+							{loading ? <Spinner /> : (empty ?? msg.table.noResults)}
 						</div>
 					) : null
 				}

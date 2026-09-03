@@ -17,6 +17,7 @@ import {
 	EntityLogo,
 	type EntityLogoTone,
 } from "@crm/ui/components/entity-logo";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
 	type SimpleTableColumn,
@@ -90,6 +91,7 @@ const ACTIVITY_COLUMNS: SimpleTableColumn[] = [
 ];
 
 export function DashboardSummary() {
+	const locale = useLocale();
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const openRecord = useOpenRecord();
@@ -186,7 +188,11 @@ export function DashboardSummary() {
 											{deal.amountCents === null ? (
 												<EmptyCellValue />
 											) : (
-												formatMoneyCompact(deal.amountCents, deal.currency)
+												formatMoneyCompact(
+													deal.amountCents,
+													deal.currency,
+													locale,
+												)
 											)}
 										</TableCell>
 									</SimpleTableRow>
@@ -202,7 +208,7 @@ export function DashboardSummary() {
 						<CardDescription>
 							{overdueTasks.length === 0
 								? "Every task you have logged is either done or still to come"
-								: `${formatCount(overdueTasks.length, "task")} past due`}
+								: `${formatCount(overdueTasks.length, "task", "en")} past due`}
 						</CardDescription>
 					</CardHeader>
 					<CardPanel>
@@ -286,7 +292,7 @@ export function DashboardSummary() {
 							<SimpleTableRow key={entry.id}>
 								<TableCell className={CELL}>
 									<span className="truncate">
-										{entry.subject ?? activityLabel(entry.type)}
+										{entry.subject ?? activityLabel(entry.type, locale)}
 									</span>
 								</TableCell>
 								<TableCell className={`${CELL} hidden md:table-cell`}>

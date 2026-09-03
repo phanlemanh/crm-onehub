@@ -1,34 +1,51 @@
 import type { EnrichmentStatus } from "@crm/db/enums";
 import type { StatusTone } from "@crm/ui/components/status-indicator";
+import type { Locale } from "@crm/ui/lib/locale";
+import { crmMessages } from "@/lib/messages/crm";
 
 type EnrichmentPresentation = Record<
 	EnrichmentStatus,
-	{ label: string; tone: StatusTone; busy?: boolean }
+	{
+		khoa: keyof ReturnType<typeof crmMessages>["enrichment"];
+		tone: StatusTone;
+		busy?: boolean;
+	}
 >;
 
 const PRESENTATION: EnrichmentPresentation = {
-	PENDING: { label: "Not researched", tone: "neutral" },
-	RUNNING: { label: "Researching", tone: "info", busy: true },
-	COMPLETE: { label: "Enriched", tone: "success" },
-	FAILED: { label: "Enrichment failed", tone: "error" },
-	SKIPPED: { label: "Nothing found", tone: "neutral" },
+	PENDING: { khoa: "pending", tone: "neutral" },
+	RUNNING: { khoa: "running", tone: "info", busy: true },
+	COMPLETE: { khoa: "complete", tone: "success" },
+	FAILED: { khoa: "failed", tone: "error" },
+	SKIPPED: { khoa: "skipped", tone: "neutral" },
 };
 
-const QUEUED = { label: "Queued", tone: "neutral" as StatusTone, busy: false };
+const QUEUED = {
+	khoa: "queued",
+	tone: "neutral" as StatusTone,
+	busy: false,
+} as const;
 
 export const ENRICHMENT_POLL_MS = 3_000;
 
 export const ENRICHMENT_IDLE_POLL_MS = 30_000;
 
-export const ENRICHMENT_FACET_OPTIONS = (
-	Object.keys(PRESENTATION) as EnrichmentStatus[]
-).map((value) => ({ value, label: PRESENTATION[value].label }));
+export function enrichmentFacetOptions(locale: Locale) {
+	const m = crmMessages(locale).enrichment;
+	return (Object.keys(PRESENTATION) as EnrichmentStatus[]).map((value) => ({
+		value,
+		label: m[PRESENTATION[value].khoa],
+	}));
+}
 
 export function enrichmentPresentation(
 	status: EnrichmentStatus,
 	queued: boolean,
+	locale: Locale,
 ) {
-	return status === "PENDING" && queued ? QUEUED : PRESENTATION[status];
+	const { khoa, ...con } =
+		status === "PENDING" && queued ? QUEUED : PRESENTATION[status];
+	return { ...con, label: crmMessages(locale).enrichment[khoa] };
 }
 
 export function isEnriching(status: EnrichmentStatus, queued = false): boolean {

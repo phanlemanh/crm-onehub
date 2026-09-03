@@ -7,24 +7,29 @@ import Phone from "@carbon/icons-react/es/Phone";
 import Task from "@carbon/icons-react/es/Task";
 import type { ActivityType } from "@crm/db/enums";
 import type { CarbonIcon } from "@crm/ui/components/icon";
+import type { Locale } from "@crm/ui/lib/locale";
+import { crmMessages } from "@/lib/messages/crm";
 
 type ActivityPresentation = Record<
 	ActivityType,
-	{ icon: CarbonIcon; label: string }
+	{
+		icon: CarbonIcon;
+		khoa: keyof ReturnType<typeof crmMessages>["timeline"]["type"];
+	}
 >;
 
 const PRESENTATION: ActivityPresentation = {
-	NOTE: { icon: Chat, label: "Note" },
-	CALL: { icon: Phone, label: "Call" },
-	EMAIL: { icon: Email, label: "Email" },
-	MEETING: { icon: Events, label: "Meeting" },
-	TASK: { icon: Task, label: "Task" },
-	STAGE_CHANGE: { icon: ArrowRight, label: "Stage change" },
-	ENRICHMENT: { icon: MagicWand, label: "Enrichment" },
+	NOTE: { icon: Chat, khoa: "note" },
+	CALL: { icon: Phone, khoa: "call" },
+	EMAIL: { icon: Email, khoa: "email" },
+	MEETING: { icon: Events, khoa: "meeting" },
+	TASK: { icon: Task, khoa: "task" },
+	STAGE_CHANGE: { icon: ArrowRight, khoa: "stageChange" },
+	ENRICHMENT: { icon: MagicWand, khoa: "enrichment" },
 };
 
-export function activityLabel(type: ActivityType): string {
-	return PRESENTATION[type].label;
+export function activityLabel(type: ActivityType, locale: Locale): string {
+	return crmMessages(locale).timeline.type[PRESENTATION[type].khoa];
 }
 
 export function activityIcon(type: ActivityType): CarbonIcon {

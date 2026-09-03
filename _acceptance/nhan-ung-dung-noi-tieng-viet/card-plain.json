@@ -1,0 +1,44 @@
+{
+  "feature_plain": "Nhân viên làm trọn ba việc hằng ngày — thêm một công ty, ghi một hoạt động, cập nhật một thoả thuận — mà màn hình nói tiếng Việt suốt cả ba.",
+  "will_do": [
+    { "id": "AC-1", "p": "Sẽ hiện tiếng Việt trên cả ba màn danh sách — công ty, cá nhân, thoả thuận — kể cả chữ chỉ hiện ra sau khi bấm mở một menu." },
+    { "id": "AC-2", "p": "Sẽ hiện tiếng Việt trong hồ sơ một bản ghi, ở mọi tab và mọi phần phải cuộn xuống mới thấy." },
+    { "id": "AC-4", "p": "Sẽ đóng nốt năm chỗ tiếng Anh mà vòng trước đo được rồi chuyển sang đây, và gọi tên từng chỗ kèm bản dịch thay thế." },
+    { "id": "AC-5", "p": "Sẽ nói tiếng Việt cả với người dùng trình đọc màn hình — 42 nhãn họ nghe mà không ai nhìn thấy." },
+    { "id": "AC-7", "p": "Sẽ khai đúng tiếng cho những giá trị còn tiếng Anh, để trình đọc màn hình không đọc chúng bằng giọng Việt." },
+    { "id": "AC-9", "p": "Sẽ hiện tiếng Việt ngay từ khung hình đầu tiên máy chủ trả về, không đợi trình duyệt chạy xong." },
+    { "id": "AC-10", "p": "Sẽ để tiêu đề cột hiện đủ chữ từ 1024px trở lên; ở màn hẹp hơn thì cắt có dấu ba chấm và chữ đầy đủ vẫn tới được trình đọc màn hình." },
+    { "id": "AC-11", "p": "Sẽ chạy đúng cả với ba loại dữ liệu khó: công ty chưa có người phụ trách, công ty vừa có hoạt động, và tên pháp nhân rất dài." },
+    { "id": "AC-12", "p": "Sẽ làm hỏng bản dựng nếu ai đó thêm một chữ tiếng Anh mà quên bản tiếng Việt của nó." }
+  ],
+  "wont_do": [
+    { "id": "AC-3", "p": "Sẽ KHÔNG dịch câu lỗi do máy chủ trả về — chúng thuộc vòng sau; nhưng sẽ ép một lỗi thật rồi ghi lại chữ hiện ra, để chỗ đứt nằm trong hồ sơ chứ không bị giấu." },
+    { "id": "AC-6", "p": "Sẽ KHÔNG thêm đuôi số nhiều vào danh từ khi đếm — tiếng Việt không biến hình số nhiều." },
+    { "id": "AC-8", "p": "Sẽ KHÔNG tải lại trang khi người đổi tiếng; chữ đổi tại chỗ, kể cả ở phần máy chủ không vẽ lại." },
+    { "id": "AC-14", "p": "Sẽ KHÔNG đặt tên tiếng Việt cho bảy giai đoạn thoả thuận — chưa ai định nghĩa chúng, và dịch một bước không xảy ra là in cái sai ra màn hình bằng thứ tiếng người đọc hiểu được." }
+  ],
+  "scope_plain": "Vòng này chỉ lấy ba luồng hằng ngày. Màn Cài đặt, các trang còn lại, chữ do tác nhân sinh ra, câu lỗi máy chủ và trang giới thiệu của hãng đều để cho vòng sau.",
+  "coverage_plain": [
+    { "i": 0, "p": "Đã soi đủ năm chỗ một chữ có thể chui ra: chỗ gọi tự viết, mặc định của bộ dựng chung, chữ do thư viện ngoài đặt, dữ liệu từ kho, và câu máy chủ. Bằng chứng đủ: vòng trước đã bắt được chữ do thư viện ngoài đặt — thứ không máy quét mã nào thấy." },
+    { "i": 1, "p": "Đã soi đủ năm nơi chữ hiện ra, kể cả chỗ chỉ trình đọc màn hình nghe và chỗ phải mở menu mới thấy. Bằng chứng đủ: đúng hai nhánh đó là hai nhánh vòng trước bỏ sót." },
+    { "i": 2, "p": "Đã soi đủ sáu trạng thái dữ liệu, kể cả trạng thái dữ liệu thử hiện KHÔNG dựng được. Bằng chứng đủ: hai chữ của vòng trước không có phép đo nào che vì thiếu đúng hai trạng thái này." },
+    { "i": 3, "p": "Đã soi đủ ba thời điểm màn được vẽ. Bằng chứng đủ: vòng trước tìm ra một lỗi nằm đúng ranh giữa hai thời điểm đầu." },
+    { "i": 4, "p": "Áp cho mọi ô: chữ tiếng Việt dài hơn tiếng Anh khoảng một phần tư, nên bề rộng cột phải chịu được." },
+    { "i": 5, "p": "Áp cho mọi ô: mỗi chữ tiếng Việt phải mang ít nhất một dấu — chặn lối dịch thành một chữ tiếng Anh khác." },
+    { "i": 6, "p": "Áp cho mọi ô: một trang một tiếng, chữ khác tiếng phải tự khai tiếng của nó. Đây là ô đến từ chuẩn ngành chứ không từ đề bài — hai vòng trước đều không có." }
+  ],
+  "gap_probe_plain": [
+    { "i": 0, "p": "Luồng thứ ba kết bằng đổi giai đoạn thoả thuận, mà bảy giai đoạn đó chưa ai định nghĩa. Phép đo sẽ coi chúng là dữ liệu và báo xanh, trong khi nhân viên đứng ở bước cuối nhìn thấy chữ tiếng Anh. Đã sửa: thêm một tiêu chí gọi tên đủ bảy giá trị, và đưa câu hỏi lên cổng này." },
+    { "i": 1, "p": "Hợp đồng vừa hứa câu báo lưu hỏng là tiếng Việt vừa cấm chạm câu lỗi máy chủ — đúng lối vòng ① đã chết. Đã sửa: lời hứa thu lại còn phần trình duyệt tự sinh, và phép đo phải ép một lỗi thật từ máy chủ rồi ghi lại chữ hiện ra." },
+    { "i": 2, "p": "Không phép đo nào mở menu ra, nên chữ trong menu Lọc, Sắp xếp, Cột sẽ không bao giờ bị nhìn tới. Đây là lần thứ ba cùng một lỗ. Đã sửa: phép đo phải khai trước danh sách mọi thứ cần mở, mở đủ số đó, và in tên từng cái." },
+    { "i": 3, "p": "Phép đo cho câu ghép số tuyên quét cả lớp mà không liệt kê từng câu, nên một câu mới thêm sau này sẽ không ai kiểm. Đã sửa: liệt kê từng câu theo tên, và đếm — số câu đếm được phải bằng số câu có kiểm." },
+    { "i": 4, "p": "Hội đồng chấm chữ được giao hai tài liệu mà không bước nào tạo ra chúng. Đã sửa: bảng dịch phải chốt trước khi chạm mã, và thiếu tài liệu thì hội đồng dừng chứ không chấm bằng cảm giác." }
+  ],
+  "decisions_plain": [
+    { "id": "d-20260902T120000Z-lat", "p": "KHÔNG làm trọn vòng ③ một lần — cắt ba lát, lát đầu là ba luồng của ngưỡng; đổi lại, sau lát này màn Cài đặt và các trang khác vẫn tiếng Anh." },
+    { "id": "d-20260902T120100Z-lat2", "p": "Khoanh lát theo thứ ba luồng thật sự vẽ ra, không theo thư mục — nhờ đó bắt được chỗ vòng trước gửi sang; đổi lại lát phình từ 476 lên 569 chuỗi." },
+    { "id": "d-20260902T120200Z-duongA", "p": "Nối dài kho chuỗi sẵn có thay vì nạp một thư viện đa ngôn ngữ; đổi lại 569 chuỗi phải gõ tay, và không có công cụ rút danh mục nếu sau này thuê người dịch ngoài." },
+    { "id": "d-20260902T120300Z-ac10", "p": "Viết lại lời hứa về tiêu đề cột mà hai vòng trước mâu thuẫn nhau; đổi lại đây là chữ MỚI nên phải được duyệt ở cổng này, không được coi là thừa kế." },
+    { "id": "d-20260902T120400Z-designpass", "p": "KHÔNG mở một phiên thiết kế riêng vì vòng này dịch chữ trên giao diện đang chạy; bù lại gói duyệt mang 24 ảnh chụp thật và số đo bề rộng cột, nên phần nhìn vẫn duyệt trên hình." }
+  ]
+}

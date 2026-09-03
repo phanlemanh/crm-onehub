@@ -2,6 +2,7 @@
 
 import { DealStage } from "@crm/db/enums";
 import { Checkbox } from "@crm/ui/components/checkbox";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { cn } from "@crm/ui/lib/utils";
 import { useMutation } from "@tanstack/react-query";
@@ -11,6 +12,7 @@ import { RecordLink } from "@/components/crm/record-sheet/record-link";
 import { LocalDateTime, LocalRelativeTime } from "@/components/local-date-time";
 import { activityLabel } from "@/lib/activity-presentation";
 import { dealStageLabel } from "@/lib/deal-stage";
+import { crmMessages } from "@/lib/messages/crm";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -45,6 +47,8 @@ export function TimelineEntry({
 	entry: TimelineEntryData;
 	anchor: TimelineAnchor;
 }) {
+	const locale = useLocale();
+	const m = crmMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
@@ -70,8 +74,8 @@ export function TimelineEntry({
 	const synced = entry.meta?.synced === true;
 	const author = synced
 		? entry.emailThread
-			? "via Gmail"
-			: "via Calendar"
+			? m.timeline.viaGmail
+			: m.timeline.viaCalendar
 		: entry.createdBy.name;
 
 	const headline = change
@@ -94,13 +98,13 @@ export function TimelineEntry({
 					<Checkbox
 						checked={done}
 						disabled={complete.isPending}
-						aria-label={done ? "Mark as not done" : "Mark as done"}
+						aria-label={done ? m.timeline.markNotDone : m.timeline.markDone}
 						onCheckedChange={(checked) =>
 							complete.mutate({ id: entry.id, completed: checked === true })
 						}
 					/>
 				) : (
-					<span role="img" aria-label={activityLabel(entry.type)}>
+					<span role="img" aria-label={activityLabel(entry.type, locale)}>
 						<ActivityIcon type={entry.type} />
 					</span>
 				)}
@@ -133,7 +137,7 @@ export function TimelineEntry({
 
 						{!headline && !entry.body ? (
 							<p className="text-muted-foreground">
-								{activityLabel(entry.type)}
+								{activityLabel(entry.type, locale)}
 							</p>
 						) : null}
 					</div>
@@ -171,7 +175,7 @@ export function TimelineEntry({
 								tone={overdue ? "error" : "info"}
 								label={
 									<>
-										{overdue ? "Overdue" : "Due"}{" "}
+										{overdue ? m.closing.overdue : m.timeline.due}{" "}
 										<LocalRelativeTime date={entry.dueAt} />
 									</>
 								}

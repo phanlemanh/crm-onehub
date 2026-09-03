@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bảy giai đoạn thoả thuận — hai lối đi</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:   #fafafa;
+    --paper-2: #f2f2f2;
+    --ink:     #171717;
+    --muted:   #575757;
+    --soft:    #666666;
+    --rule:    rgba(23,23,23,0.12);
+    --accent:  #006B4F;
+    --sans:    'Geist', system-ui, sans-serif;
+    --serif:   'Lora', Georgia, serif;
+    --mono:    'Geist Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1120px; width: 100%; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .standfirst {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 62ch;
+    margin-bottom: 1.75rem;
+  }
+  svg { width: 100%; min-width: 900px; display: block; }
+  .notes {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem 3rem;
+  }
+  .notes h2 {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .notes p { font-size: 0.86rem; line-height: 1.6; color: var(--ink); }
+  .notes p + p { margin-top: 0.6rem; }
+  .notes .quiet { color: var(--muted); }
+  .full { grid-column: 1 / -1; }
+  code { font-family: var(--mono); font-size: 0.8em; color: var(--muted); }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+  }
+  @media (max-width: 860px) { .notes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Cổng 1 · Điểm rẽ</p>
+  <h1>Bảy giai đoạn thoả thuận: đặt tên tiếng Việt bây giờ, hay giữ nguyên và khai đúng tiếng của chúng?</h1>
+  <p class="standfirst">Luồng thứ ba của ngưỡng kết thúc bằng việc đổi giai đoạn một thoả thuận. Bảy giá trị ấy là chỗ duy nhất trong lát này mà tiếng Anh còn quyền ở lại — hoặc không.</p>
+
+  <svg viewBox="0 0 1000 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ hai nhánh: đặt tên tiếng Việt cho bảy giai đoạn thoả thuận, hoặc giữ nguyên và khai đúng tiếng">
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+    </defs>
+
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <!-- ============ ĐƯỜNG NỐI ============ -->
+    <path d="M 344 88 H 278 A 8 8 0 0 0 270 96 V 194" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <path d="M 656 88 H 722 A 8 8 0 0 1 730 96 V 194" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <rect x="292" y="66" width="40" height="16" rx="2" fill="#fafafa"/>
+    <text x="312" y="78" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">DỊCH</text>
+
+    <rect x="660" y="66" width="76" height="16" rx="2" fill="#fafafa"/>
+    <text x="698" y="78" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHAI TIẾNG</text>
+
+    <line x1="270" y1="288" x2="270" y2="346" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="730" y1="288" x2="730" y2="346" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="270" y1="424" x2="270" y2="482" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="730" y1="424" x2="730" y2="482" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <!-- ============ CÂU HỎI ============ -->
+    <polygon points="500,44 656,88 500,132 344,88" fill="#fafafa"/>
+    <polygon points="500,44 656,88 500,132 344,88" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="500" y="74" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">CÂU HỎI</text>
+    <text x="500" y="98" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bảy giai đoạn nói tiếng nào?</text>
+
+    <!-- ============ NHÃN HÀNG, giữa hai cột ============ -->
+    <text x="500" y="248" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">LỰA CHỌN</text>
+    <text x="500" y="392" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">NHÂN VIÊN GẶP GÌ</text>
+    <text x="500" y="530" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">PHẢI CHẤP NHẬN</text>
+
+    <!-- ============ NHÁNH TRÁI — lựa chọn ============ -->
+    <rect x="120" y="200" width="300" height="88" rx="6" fill="#fafafa"/>
+    <rect x="120" y="200" width="300" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="140" y="232" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Đặt tên tiếng Việt bây giờ</text>
+    <text x="140" y="256" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">cần người định nghĩa bảy bước thật</text>
+    <text x="140" y="278" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">chưa có tiêu chí nào viết theo nhánh này</text>
+
+    <!-- ============ NHÁNH PHẢI — lựa chọn ============ -->
+    <rect x="580" y="200" width="300" height="88" rx="6" fill="#fafafa"/>
+    <rect x="580" y="200" width="300" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="600" y="232" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Giữ nguyên, khai đúng tiếng</text>
+    <text x="600" y="256" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">không đụng vào nghĩa của bảy bước</text>
+    <text x="600" y="278" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">AC-14 đang viết theo nhánh này</text>
+
+    <!-- ============ NHÂN VIÊN GẶP GÌ ============ -->
+    <rect x="120" y="352" width="300" height="72" rx="6" fill="#fafafa"/>
+    <rect x="120" y="352" width="300" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="140" y="384" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Đọc hết bằng tiếng Việt</text>
+    <text x="140" y="406" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">kể cả ở bước bắt buộc cuối</text>
+
+    <rect x="580" y="352" width="300" height="72" rx="6" fill="#fafafa"/>
+    <rect x="580" y="352" width="300" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="600" y="384" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Vẫn gặp tiếng Anh một lần</text>
+    <text x="600" y="406" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">ở đúng bước bắt buộc cuối</text>
+
+    <!-- ============ PHẢI CHẤP NHẬN ============ -->
+    <rect x="120" y="488" width="300" height="76" rx="6" fill="#fafafa"/>
+    <rect x="120" y="488" width="300" height="76" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1" stroke-dasharray="5,4"/>
+    <text x="140" y="520" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Dịch một bước không có thật</text>
+    <text x="140" y="542" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">cái sai được in ra bằng tiếng Việt</text>
+
+    <rect x="580" y="488" width="300" height="76" rx="6" fill="#fafafa"/>
+    <rect x="580" y="488" width="300" height="76" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1" stroke-dasharray="5,4"/>
+    <text x="600" y="520" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Ngưỡng nghiệm thu trượt ở đây</text>
+    <text x="600" y="542" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">trượt đã biết trước, không bất ngờ</text>
+
+    <!-- ============ CHÚ GIẢI ============ -->
+    <line x1="40" y1="612" x2="960" y2="612" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="40" y="632" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+    <polygon points="52,644 68,652 52,660 36,652" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+    <text x="76" y="656" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">câu hỏi chỉ người trả lời được</text>
+
+    <rect x="400" y="646" width="14" height="12" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="422" y="656" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">một lựa chọn và điều nó đòi hỏi</text>
+
+    <rect x="712" y="646" width="14" height="12" rx="3" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="734" y="656" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">cái phải chấp nhận nếu chọn nhánh đó</text>
+  </svg>
+
+  <div class="notes">
+    <div>
+      <h2>Nhánh trái đòi gì trước khi dịch</h2>
+      <p>Bảy giá trị đang lưu trong cơ sở dữ liệu là bảy bước của một phễu bán phần mềm, thừa kế từ kho gốc. Chúng không mô tả cách OneHub làm việc với đối tác.</p>
+      <p class="quiet">Vậy nhánh này không bắt đầu bằng việc dịch. Nó bắt đầu bằng việc một người ở OneHub định nghĩa bảy bước hợp tác thật, rồi mới đặt tên. Dịch một bước không xảy ra là in cái sai ra màn hình bằng thứ tiếng người đọc hiểu được — sai mà đọc trôi thì khó thấy hơn sai mà đọc vấp.</p>
+    </div>
+    <div>
+      <h2>Nhánh phải trả giá ở đâu</h2>
+      <p>Bảy giá trị giữ nguyên, và mỗi chỗ hiện chúng tự khai là tiếng Anh. Trình đọc màn hình vì thế đọc đúng giọng thay vì đọc chữ Anh bằng giọng Việt.</p>
+      <p class="quiet">Đổi lại, nhân viên vẫn gặp tiếng Anh ở bước bắt buộc cuối của luồng thứ ba. Ngưỡng nghiệm thu đã viết là “không ai gặp một câu tiếng Anh nào ở bước bắt buộc”, nên nó sẽ trượt đúng ở chỗ này. Cái được là trượt có báo trước, đo được, và gọi tên đủ bảy giá trị chứ không trả một con số.</p>
+    </div>
+    <div class="full">
+      <h2>Vì sao điểm này phải lên Cổng 1</h2>
+      <p>Bảy giá trị là dữ liệu từ cơ sở dữ liệu, nên mọi phép đo tự động sẽ trừ chúng ra như dữ liệu và báo xanh — trong khi người đứng ở bước cuối vẫn nhìn thấy chữ tiếng Anh. Không nêu ra thì ngưỡng nghiệm thu vẫn xanh mà lời hứa với nhân viên đã hỏng.</p>
+      <p class="quiet">Hai nhánh ở đây không có nhánh đúng sẵn. Một nhánh đòi thêm một quyết định về nghiệp vụ mà máy không thay người quyết được; nhánh kia nhận một vết trượt đã biết trước. Chọn nhánh nào là việc của người ký cổng.</p>
+    </div>
+  </div>
+
+  <footer>Hình 2 / 2 · điểm quyết định ở Cổng 1 · vòng 3a</footer>
+</div>
+</body>
+</html>

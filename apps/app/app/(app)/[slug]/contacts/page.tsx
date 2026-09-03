@@ -10,6 +10,8 @@ import {
 	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { getLocale } from "@/lib/locale/server";
+import { contactMessages } from "@/lib/messages/contacts";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
@@ -17,19 +19,21 @@ import { contactsSearchParams } from "./contacts-search-params";
 import { ContactsTable } from "./contacts-table";
 import { CreateContactSheet } from "./create-contact-sheet";
 
-export const metadata: Metadata = {
-	title: "Contacts",
-};
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: contactMessages(await getLocale()).title };
+}
 
-export default function ContactsPage({
+export default async function ContactsPage({
 	searchParams,
 }: PageProps<"/[slug]/contacts">) {
+	const m = contactMessages(await getLocale());
+
 	return (
 		<PageShell className="min-h-0">
 			<PageShellHeader>
 				<PageShellHeading>
-					<PageShellTitle>Contacts</PageShellTitle>
-					<PageShellDescription>Everyone in the pipeline.</PageShellDescription>
+					<PageShellTitle>{m.title}</PageShellTitle>
+					<PageShellDescription>{m.description}</PageShellDescription>
 				</PageShellHeading>
 				<PageShellActions>
 					<CreateContactSheet />

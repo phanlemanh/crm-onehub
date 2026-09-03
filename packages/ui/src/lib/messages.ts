@@ -19,6 +19,8 @@ const en = {
 		selectRowFallback: "Select row",
 		searchFacet: (label: string) => `Search ${label}…`,
 		facetOptions: "Options",
+		facetEmpty: "Nothing matches.",
+		noResults: "No results found.",
 	},
 	pagination: {
 		previous: "Previous",
@@ -94,6 +96,8 @@ const vi = {
 		selectRowFallback: "Chọn dòng",
 		searchFacet: (label: string) => `Tìm ${label}…`,
 		facetOptions: "Các lựa chọn",
+		facetEmpty: "Không có gì khớp.",
+		noResults: "Không tìm thấy kết quả nào.",
 	},
 	pagination: {
 		previous: "Trước",

@@ -34,14 +34,27 @@ thì chữ đó là thừa, vì màn hình đã nói nó rồi.
 | Màn thoả thuận, mỗi dòng là một thoả thuận | Thoả thuận đang mở | **Đang mở** | danh từ "thoả thuận" |
 | Màn công ty, mỗi dòng là một công ty | Công ty | **Tên** | dòng đã là công ty |
 | Cột người chịu trách nhiệm | Người phụ trách | **Phụ trách** | cột không thể là vật |
-| Cột trong bảng dữ liệu | Bổ sung dữ liệu | **Bổ sung** | đang ở trong bảng dữ liệu |
+| Cột toàn số, mỗi dòng một công ty | Số lượng cá nhân | **Số lượng cá nhân** | dòng đã là công ty, nhưng "bao nhiêu" thì chưa — và `số + danh từ` trần lại đọc ra mã định danh |
 
 Đây KHÔNG phải cắt cho vừa khung. Cắt cho vừa khung là bỏ chữ mang nghĩa, và nó
 làm nhãn cụt. Luật này bỏ chữ mà **màn hình đã nói rồi**, nên nhãn ngắn hơn mà
 người đọc hiểu y hệt.
 
 Hệ quả đo được ở màn công ty: giãn tối đa so với tiếng Anh tụt từ 3,0× xuống
-1,8×, và hai tiêu đề từng bị cắt cụt ở khổ hẹp nay vừa khung.
+1,8×. Câu trước ở đây nói "hai tiêu đề từng bị cắt cụt ở khổ hẹp nay vừa khung";
+đo lại 2026-09-02 thì SAI: ở 768px vẫn có hai trong năm tiêu đề bị cắt, và ở
+tiếng Anh cũng vậy. Cắt là chuyện bề rộng cột, không phải chuyện độ dài nhãn —
+nên rút nhãn ngắn thêm không cứu được gì, chỉ mất nghĩa. Từ vòng ② trở đi mọi
+tiêu đề bị cắt đều mang dấu ba chấm và chữ đầy đủ vẫn tới được trình đọc màn
+hình.
+
+**Phép thử phải hỏi người, không hỏi mình.** Bảng trên từng có một dòng nữa:
+*cột trong bảng dữ liệu → `Bổ sung dữ liệu` → **`Bổ sung`***, với lý lẽ rằng
+đứng trong một bảng dữ liệu thì chữ "dữ liệu" đã được cấp. Ngày 2026-09-01, hai
+người lạ dùng CRM một ngày làm việc nêu `Bổ sung` là chữ họ **phải đi hỏi mới
+hiểu**. Ngữ cảnh ấy chưa bao giờ cấp chữ đó — chỉ người viết nhãn tưởng là nó có
+cấp. Dòng ví dụ đã rút, và nhãn trả về dạng dài. Khi phép thử chỉ chạy trong đầu
+người viết, nó trả lời "còn hiểu" mọi lần.
 
 ---
 

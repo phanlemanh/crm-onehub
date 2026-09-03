@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale } from "@crm/ui/components/locale-provider";
+import type { Locale } from "@crm/ui/lib/locale";
 import { useQuery } from "@tanstack/react-query";
 import {
 	DetailSheetProperties,
@@ -7,6 +9,7 @@ import {
 	DetailSheetSection,
 } from "@/components/detail-sheet";
 import { LocalRelativeTime } from "@/components/local-date-time";
+import { crmMessages } from "@/lib/messages/crm";
 import { useTRPC } from "@/lib/trpc/client";
 
 type Touch = {
@@ -24,6 +27,8 @@ export function WebsiteActivity({
 	contactId?: string;
 }) {
 	const trpc = useTRPC();
+	const locale = useLocale();
+	const m = crmMessages(locale).web;
 
 	const company = useQuery({
 		...trpc.tracking.companyActivity.queryOptions({
@@ -48,66 +53,70 @@ export function WebsiteActivity({
 	const first = activity.firstTouch;
 	const last = activity.lastTouch;
 	const channelChanged =
-		first != null && last != null && channel(last) !== channel(first);
+		first != null &&
+		last != null &&
+		channel(last, locale) !== channel(first, locale);
 	const campaign = last?.campaign ?? first?.campaign ?? null;
 
 	return (
-		<DetailSheetSection title="Website activity">
+		<DetailSheetSection title={m.title}>
 			<DetailSheetProperties>
-				<DetailSheetProperty label="Page views">
+				<DetailSheetProperty label={m.pageViews}>
 					<span className="tabular-nums">
 						{activity.views.toLocaleString()}
 					</span>
 					{activity.lastSeenAt ? (
 						<span className="text-muted-foreground">
-							{" · last seen "}
+							{m.lastSeen}
 							<LocalRelativeTime date={activity.lastSeenAt} />
 						</span>
 					) : null}
 				</DetailSheetProperty>
 
 				{first ? (
-					<DetailSheetProperty label="Original source">
-						{channel(first)}
+					<DetailSheetProperty label={m.originalSource}>
+						{channel(first, locale)}
 					</DetailSheetProperty>
 				) : null}
 
 				{topPage ? (
-					<DetailSheetProperty label="Top page">
+					<DetailSheetProperty label={m.topPage}>
 						<span className="flex min-w-0 items-baseline gap-1">
 							<span className="truncate font-mono" title={topPage.path}>
 								{topPage.path}
 							</span>
 							<span className="shrink-0 text-muted-foreground">
 								{"· "}
-								<span className="tabular-nums">{topPage.views}</span> views
+								{m.views(String(topPage.views))}
 							</span>
 						</span>
 					</DetailSheetProperty>
 				) : null}
 
 				{channelChanged ? (
-					<DetailSheetProperty label="Latest source">
-						{channel(last)}
+					<DetailSheetProperty label={m.latestSource}>
+						{channel(last, locale)}
 					</DetailSheetProperty>
 				) : null}
 
 				{first?.at ? (
-					<DetailSheetProperty label="First seen">
+					<DetailSheetProperty label={m.firstSeen}>
 						<LocalRelativeTime date={first.at} />
 					</DetailSheetProperty>
 				) : null}
 
 				{campaign ? (
-					<DetailSheetProperty label="Campaign">{campaign}</DetailSheetProperty>
+					<DetailSheetProperty label={m.campaign}>
+						{campaign}
+					</DetailSheetProperty>
 				) : null}
 			</DetailSheetProperties>
 		</DetailSheetSection>
 	);
 }
 
-function channel(touch: Touch | null): string {
-	if (!touch) return "Unknown";
+function channel(touch: Touch | null, locale: Locale): string {
+	if (!touch) return crmMessages(locale).web.unknown;
 	if (!touch.medium || touch.medium === "direct") return touch.source;
 	return `${touch.source} · ${touch.medium}`;
 }

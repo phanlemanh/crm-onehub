@@ -4,6 +4,7 @@ import Add from "@carbon/icons-react/es/Add";
 import { Button } from "@crm/ui/components/button";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { SimpleTableRow } from "@crm/ui/components/simple-table";
 import { Spinner } from "@crm/ui/components/spinner";
 import { TableCell } from "@crm/ui/components/table";
@@ -111,9 +112,12 @@ export function DealAmount({
 	amountCents: number | null;
 	currency: string;
 }) {
+	const locale = useLocale();
 	if (amountCents === null) return <EmptyCellValue />;
 	return (
-		<span className="tabular-nums">{formatMoney(amountCents, currency)}</span>
+		<span className="tabular-nums">
+			{formatMoney(amountCents, currency, locale)}
+		</span>
 	);
 }
 

@@ -1,0 +1,168 @@
+import type { Locale } from "@crm/ui/lib/locale";
+
+const en = {
+	noun: "deal",
+	title: "Deals",
+	description: "The pipeline, and everything that has already closed.",
+	headers: {
+		name: "Deal",
+		company: "Company",
+		stage: "Stage",
+		amount: "Amount",
+		owner: "Owner",
+		closeDate: "Close date",
+		created: "Created",
+		lastActivity: "Last activity",
+		archived: "Archived",
+	},
+	labels: {
+		createdDate: "Created date",
+		archivedDate: "Archived date",
+	},
+	facets: {
+		owner: "Owner",
+		unassigned: "Unassigned",
+		stage: "Stage",
+		closing: "Closing",
+	},
+	tabs: {
+		all: "All deals",
+		open: "Open",
+		closed: "Closed",
+	},
+	closing: "Closing",
+	empty: "No deals match this view.",
+	emptyArchived: "No archived deals.",
+	search: "Search deals by name or company…",
+	created: (name: string) => `${name} added.`,
+	archivedToggle: "Archived",
+	meta: {
+		count: (n: string) => `${n} deals`,
+		openPipeline: "open pipeline",
+		notCounted: (n: string, cur: string) => `${n} not counted (no ${cur} rate)`,
+	},
+	create: {
+		title: "New deal",
+		newButton: "New deal",
+		description:
+			"Every deal belongs to a company and has someone's name against it.",
+		name: "Name",
+		company: "Company",
+		owner: "Owner",
+		stage: "Stage",
+		amount: "Amount",
+		closeDate: "Expected close date",
+		currency: "Currency",
+		noDate: "No date yet",
+		namePlaceholder: "Stripe — Comp AI",
+		chooseOwner: "Choose an owner",
+		stageHint:
+			"A new deal is an open deal — close it from the pipeline once there is an outcome to record.",
+		submit: "Add deal",
+		cancel: "Cancel",
+	},
+	bulk: {
+		reassigned: (n: string) => `${n} reassigned.`,
+		moved: (n: string) => `${n} moved.`,
+		archived: (n: string) => `${n} archived.`,
+		restored: (n: string) => `${n} restored.`,
+		deleted: (n: string) => `${n} deleted forever.`,
+		confirmDelete: (n: string) => `Delete ${n} forever?`,
+		deleteWarning:
+			"Everything filed against them — activity, notes, the amounts in your pipeline — goes too. This cannot be undone.",
+		sameReason:
+			"The same reason goes on every one of them, so keep it to what they have in common.",
+		closeLost: (n: string) => `Close ${n} as lost`,
+		markUnqualified: (n: string) => `Mark ${n} as unqualified`,
+		reasonPlaceholder: "Budget pulled for the quarter",
+		nobody: "Nobody",
+	},
+};
+
+export type DealMessages = typeof en;
+
+const vi = {
+	noun: "thoả thuận",
+	title: "Thoả thuận",
+	description: "Những thoả thuận đang theo, và những gì đã chốt xong.",
+	headers: {
+		name: "Tên",
+		company: "Công ty",
+		stage: "Giai đoạn",
+		amount: "Giá trị",
+		owner: "Phụ trách",
+		closeDate: "Ngày chốt",
+		created: "Ngày tạo",
+		lastActivity: "Hoạt động gần nhất",
+		archived: "Ngày lưu trữ",
+	},
+	labels: {
+		createdDate: "Ngày tạo",
+		archivedDate: "Ngày lưu trữ",
+	},
+	facets: {
+		owner: "Phụ trách",
+		unassigned: "Chưa giao",
+		stage: "Giai đoạn",
+		closing: "Hạn chốt",
+	},
+	tabs: {
+		all: "Tất cả",
+		open: "Đang mở",
+		closed: "Đã chốt",
+	},
+	closing: "Sắp chốt",
+	empty: "Chưa có thoả thuận nào khớp bộ lọc này.",
+	emptyArchived: "Chưa có thoả thuận nào đã lưu trữ.",
+	search: "Tìm thoả thuận theo tên hoặc công ty…",
+	created: (name: string) => `Đã thêm ${name}.`,
+	archivedToggle: "Lưu trữ",
+	meta: {
+		count: (n: string) => `${n} thoả thuận`,
+		openPipeline: "đang mở",
+		notCounted: (n: string, cur: string) =>
+			`${n} chưa tính (thiếu tỉ giá ${cur})`,
+	},
+	create: {
+		title: "Thoả thuận mới",
+		newButton: "Thoả thuận mới",
+		description:
+			"Mỗi thoả thuận thuộc về một công ty và có một người đứng tên phụ trách.",
+		name: "Tên",
+		company: "Công ty",
+		owner: "Phụ trách",
+		stage: "Giai đoạn",
+		amount: "Giá trị",
+		closeDate: "Ngày dự kiến chốt",
+		currency: "Tiền tệ",
+		noDate: "Chưa có ngày",
+		namePlaceholder: "Đất Xanh — OneHub",
+		chooseOwner: "Chọn người phụ trách",
+		stageHint:
+			"Thoả thuận mới là thoả thuận đang mở — chốt nó khi đã có kết quả để ghi lại.",
+		submit: "Thêm thoả thuận",
+		cancel: "Huỷ",
+	},
+	bulk: {
+		reassigned: (n: string) => `Đã đổi người phụ trách cho ${n}.`,
+		moved: (n: string) => `Đã chuyển ${n} sang công ty khác.`,
+		archived: (n: string) => `Đã lưu trữ ${n}.`,
+		restored: (n: string) => `Đã khôi phục ${n}.`,
+		deleted: (n: string) => `Đã xoá vĩnh viễn ${n}.`,
+		confirmDelete: (n: string) => `Xoá vĩnh viễn ${n}?`,
+		deleteWarning:
+			"Mọi thứ gắn với chúng — hoạt động, ghi chú, giá trị đang tính — mất theo. Việc này không hoàn tác được.",
+		sameReason:
+			"Cùng một lý do ghi cho tất cả, nên chỉ nêu phần chung của chúng.",
+		closeLost: (n: string) => `Chốt ${n} là không thành`,
+		markUnqualified: (n: string) => `Đánh dấu ${n} là chưa phù hợp`,
+		reasonPlaceholder: "Đối tác hoãn sang quý sau",
+		nobody: "Không ai",
+	},
+} satisfies DealMessages;
+
+const BANG = { en, vi } satisfies Record<Locale, DealMessages>;
+
+export function dealMessages(locale: Locale): DealMessages {
+	return BANG[locale] ?? BANG.en;
+}

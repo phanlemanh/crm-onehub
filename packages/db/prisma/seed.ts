@@ -61,6 +61,8 @@ type SeedCompany = {
 	city: string;
 	country: string;
 	countryCode: string;
+	ownerless?: true;
+	lastActivityDaysAgo?: number;
 };
 
 const COMPANIES: readonly SeedCompany[] = [
@@ -183,6 +185,33 @@ const COMPANIES: readonly SeedCompany[] = [
 		city: "London",
 		country: "United Kingdom",
 		countryCode: "GB",
+	},
+	{
+		name: "Công ty Cổ phần Đầu tư và Phát triển Địa ốc Phú Mỹ",
+		domain: "diaocphumy.vn",
+		industry: "Real Estate",
+		city: "Thành phố Hồ Chí Minh",
+		country: "Việt Nam",
+		countryCode: "VN",
+		ownerless: true,
+	},
+	{
+		name: "Nhà Đất Thủ Đức",
+		domain: "nhadatthuduc.vn",
+		industry: "Real Estate",
+		city: "Thành phố Hồ Chí Minh",
+		country: "Việt Nam",
+		countryCode: "VN",
+		lastActivityDaysAgo: 2,
+	},
+	{
+		name: "Sàn Giao Dịch Bất Động Sản Hoàng Gia",
+		domain: "hoanggia.vn",
+		industry: "Real Estate",
+		city: "Hà Nội",
+		country: "Việt Nam",
+		countryCode: "VN",
+		ownerless: true,
 	},
 ];
 
@@ -385,12 +414,28 @@ async function seedCompanies(
 				city: company.city,
 				country: company.country,
 				countryCode: company.countryCode,
-				ownerId: pick(ownerIds),
+				ownerId: company.ownerless ? null : pick(ownerIds),
 				createdAt: daysFromNow(-integer(30, 400), 12),
+				lastActivityAt:
+					company.lastActivityDaysAgo === undefined
+						? null
+						: daysFromNow(-company.lastActivityDaysAgo, 10),
 			},
 			update: {},
 			select: { id: true, name: true, domain: true, iconUrl: true },
 		});
+		if (company.ownerless || company.lastActivityDaysAgo !== undefined) {
+			await db.company.update({
+				where: { id: row.id },
+				data: {
+					ownerId: company.ownerless ? null : undefined,
+					lastActivityAt:
+						company.lastActivityDaysAgo === undefined
+							? undefined
+							: daysFromNow(-company.lastActivityDaysAgo, 10),
+				},
+			});
+		}
 		companies.push({ ...row, domain: row.domain ?? company.domain });
 	}
 

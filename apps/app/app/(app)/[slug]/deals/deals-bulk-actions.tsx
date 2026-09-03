@@ -21,9 +21,11 @@ import {
 	DropdownMenuSubTrigger,
 } from "@crm/ui/components/dropdown-menu";
 import { Field, FieldLabel } from "@crm/ui/components/field";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
 import { formatCount } from "@crm/ui/lib/format";
+import type { Locale } from "@crm/ui/lib/locale";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { toast } from "sonner";
@@ -34,11 +36,13 @@ import {
 	reportBulk,
 } from "@/components/crm/bulk-actions";
 import { DEAL_STAGE_OPTIONS, LOSING_STAGES } from "@/lib/deal-stage";
+import { crmMessages } from "@/lib/messages/crm";
+import { dealMessages } from "@/lib/messages/deals";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
-function deals(count: number): string {
-	return formatCount(count, "deal");
+function deals(count: number, locale: Locale): string {
+	return formatCount(count, dealMessages(locale).noun, locale);
 }
 
 export function DealsBulkActions({
@@ -50,6 +54,9 @@ export function DealsBulkActions({
 	onDone: () => void;
 	archived: boolean;
 }) {
+	const locale = useLocale();
+	const c = crmMessages(locale);
+	const m = dealMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const users = useQuery(trpc.users.list.queryOptions());
@@ -64,7 +71,11 @@ export function DealsBulkActions({
 		trpc.deals.bulkAssignOwner.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.deal();
-				reportBulk(result, (count) => `${deals(count)} reassigned.`);
+				reportBulk(
+					result,
+					(count) => m.bulk.reassigned(deals(count, locale)),
+					locale,
+				);
 				onDone();
 			},
 			onError,
@@ -75,7 +86,11 @@ export function DealsBulkActions({
 		trpc.deals.bulkSetStage.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.deal();
-				reportBulk(result, (count) => `${deals(count)} moved.`);
+				reportBulk(
+					result,
+					(count) => m.bulk.moved(deals(count, locale)),
+					locale,
+				);
 				setClosing(null);
 				setReason("");
 				onDone();
@@ -88,7 +103,11 @@ export function DealsBulkActions({
 		trpc.deals.bulkArchive.mutationOptions({
 			onSuccess: async (result, variables) => {
 				await cache.removedMany({ kind: "deal", ids: variables.ids });
-				reportBulk(result, (count) => `${deals(count)} archived.`);
+				reportBulk(
+					result,
+					(count) => m.bulk.archived(deals(count, locale)),
+					locale,
+				);
 				onDone();
 			},
 			onError,
@@ -99,7 +118,11 @@ export function DealsBulkActions({
 		trpc.deals.bulkRestore.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.deal();
-				reportBulk(result, (count) => `${deals(count)} restored.`);
+				reportBulk(
+					result,
+					(count) => m.bulk.restored(deals(count, locale)),
+					locale,
+				);
 				onDone();
 			},
 			onError,
@@ -110,7 +133,11 @@ export function DealsBulkActions({
 		trpc.deals.bulkPurge.mutationOptions({
 			onSuccess: async (result, variables) => {
 				await cache.removedMany({ kind: "deal", ids: variables.ids });
-				reportBulk(result, (count) => `${deals(count)} deleted forever.`);
+				reportBulk(
+					result,
+					(count) => m.bulk.deleted(deals(count, locale)),
+					locale,
+				);
 				setConfirming(false);
 				onDone();
 			},
@@ -127,7 +154,7 @@ export function DealsBulkActions({
 					<DropdownMenuGroup>
 						<DropdownMenuItem onSelect={() => restore.mutate({ ids })}>
 							<Undo />
-							Restore
+							{c.bulk.restore}
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 					<DropdownMenuSeparator />
@@ -136,7 +163,7 @@ export function DealsBulkActions({
 							variant="destructive"
 							onSelect={() => setConfirming(true)}
 						>
-							Delete forever
+							{c.bulk.deleteForever}
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 				</BulkActionsMenu>
@@ -144,8 +171,8 @@ export function DealsBulkActions({
 				<BulkDeleteDialog
 					open={confirming}
 					onOpenChange={setConfirming}
-					title={`Delete ${deals(ids.length)} forever?`}
-					description="Everything filed against them — activity, notes, the amounts in your pipeline — goes too. This cannot be undone."
+					title={m.bulk.confirmDelete(deals(ids.length, locale))}
+					description={m.bulk.deleteWarning}
 					onConfirm={() => purge.mutate({ ids })}
 				/>
 			</>
@@ -189,7 +216,7 @@ export function DealsBulkActions({
 				<DropdownMenuGroup>
 					<DropdownMenuItem onSelect={() => archive.mutate({ ids })}>
 						<Archive />
-						Archive
+						{c.bulk.archive}
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 			</BulkActionsMenu>
@@ -206,13 +233,10 @@ export function DealsBulkActions({
 					<DialogHeader>
 						<DialogTitle>
 							{closing === "CLOSED_LOST"
-								? `Close ${deals(ids.length)} as lost`
-								: `Mark ${deals(ids.length)} as unqualified`}
+								? m.bulk.closeLost(deals(ids.length, locale))
+								: m.bulk.markUnqualified(deals(ids.length, locale))}
 						</DialogTitle>
-						<DialogDescription>
-							The same reason goes on every one of them, so keep it to what they
-							have in common.
-						</DialogDescription>
+						<DialogDescription>{m.bulk.sameReason}</DialogDescription>
 					</DialogHeader>
 
 					<form
@@ -225,12 +249,12 @@ export function DealsBulkActions({
 						}}
 					>
 						<Field>
-							<FieldLabel htmlFor={reasonId}>Reason</FieldLabel>
+							<FieldLabel htmlFor={reasonId}>{c.close.reason}</FieldLabel>
 							<Textarea
 								id={reasonId}
 								value={reason}
 								onChange={(event) => setReason(event.target.value)}
-								placeholder="Budget pulled for the quarter"
+								placeholder={m.bulk.reasonPlaceholder}
 								rows={3}
 							/>
 						</Field>

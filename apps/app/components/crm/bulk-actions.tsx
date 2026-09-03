@@ -23,9 +23,12 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
+import type { Locale } from "@crm/ui/lib/locale";
 import type { ReactNode } from "react";
 import { toast } from "sonner";
+import { crmMessages } from "@/lib/messages/crm";
 
 export type BulkResult = {
 	requested: number;
@@ -37,17 +40,21 @@ export type BulkResult = {
 export function reportBulk(
 	result: BulkResult,
 	done: (count: number) => string,
+	locale: Locale,
 ): void {
+	const m = crmMessages(locale);
 	if (result.succeeded === 0) {
-		toast.error(result.message ?? "Nothing changed.");
+		toast.error(result.message ?? m.misc.nothingChanged);
 		return;
 	}
 
 	if (result.failed > 0) {
 		toast.error(
-			`${done(result.succeeded)} ${result.failed} ${
-				result.failed === 1 ? "was" : "were"
-			} left alone${result.message ? ` — ${result.message}` : "."}`,
+			m.bulkMenu.leftAlone(
+				done(result.succeeded),
+				String(result.failed),
+				result.message ? ` — ${result.message}` : ".",
+			),
 		);
 		return;
 	}
@@ -66,12 +73,13 @@ export function BulkActionsMenu({
 	onOpenChange?: (open: boolean) => void;
 	children: ReactNode;
 }) {
+	const m = crmMessages(useLocale());
 	return (
 		<DropdownMenu open={open} onOpenChange={onOpenChange}>
 			<DropdownMenuTrigger asChild>
 				<Button variant="outline" size="sm" disabled={pending}>
 					{pending ? <Spinner /> : null}
-					Actions
+					{m.bulkMenu.actions}
 					<ChevronDown data-icon="inline-end" className="opacity-60" />
 				</Button>
 			</DropdownMenuTrigger>
@@ -91,9 +99,10 @@ export function BulkOwnerMenu({
 	onSelect: (ownerId: string | null) => void;
 	unassignedLabel?: string;
 }) {
+	const m = crmMessages(useLocale());
 	return (
 		<DropdownMenuSub>
-			<DropdownMenuSubTrigger>Assign owner</DropdownMenuSubTrigger>
+			<DropdownMenuSubTrigger>{m.bulkMenu.assignOwner}</DropdownMenuSubTrigger>
 			<DropdownMenuSubContent className="max-h-72 overflow-y-auto">
 				<DropdownMenuGroup>
 					{unassignedLabel && (
@@ -102,7 +111,7 @@ export function BulkOwnerMenu({
 						</DropdownMenuItem>
 					)}
 					{users.length === 0 ? (
-						<DropdownMenuLabel>Nobody else works here yet.</DropdownMenuLabel>
+						<DropdownMenuLabel>{m.bulkMenu.nobodyElse}</DropdownMenuLabel>
 					) : (
 						users.map((user) => (
 							<DropdownMenuItem
@@ -132,6 +141,7 @@ export function BulkDeleteDialog({
 	description: string;
 	onConfirm: () => void;
 }) {
+	const m = crmMessages(useLocale());
 	return (
 		<AlertDialog open={open} onOpenChange={onOpenChange}>
 			<AlertDialogContent>
@@ -141,9 +151,9 @@ export function BulkDeleteDialog({
 				</AlertDialogHeader>
 
 				<AlertDialogFooter>
-					<AlertDialogCancel>Cancel</AlertDialogCancel>
+					<AlertDialogCancel>{m.bulkMenu.cancel}</AlertDialogCancel>
 					<AlertDialogAction variant="destructive" onClick={onConfirm}>
-						Delete
+						{m.bulkMenu.confirmDelete}
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>
