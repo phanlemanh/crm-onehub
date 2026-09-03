@@ -84,7 +84,7 @@ evals:
   - id: E5
     criterion: AC-5
     executor: script
-    cmd: config:executors.script.rang3_dong_thoi_gian
+    cmd: config:executors.script.rang3_doi_tieng
     expected: >-
       exit 0. Chu thoi gian tuong doi doc tu phan tu <time> DO CHINH TRANG VE RA
       — chan phai neu duoc no lay phan tu nao, o dong nao cua bang, va no khong

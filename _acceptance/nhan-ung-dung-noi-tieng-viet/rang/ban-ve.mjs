@@ -475,6 +475,21 @@ async function ve(browser, cookie, locale, doc, arg) {
 
 const DAU_VIET =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
+const DOC_THOI_GIAN = () => {
+	const nut = [
+		...document.querySelectorAll('time[data-local-date-kind="relative-time"]'),
+	].filter((t) => {
+		const r = t.getBoundingClientRect();
+		return r.width > 0 && r.height > 0 && (t.textContent ?? "").trim() !== "";
+	});
+	if (nut.length === 0) return null;
+	return {
+		chu: (nut[0].textContent ?? "").trim(),
+		so: nut.length,
+		gio: nut[0].getAttribute("data-local-date-value") ?? "",
+	};
+};
+
 const CHI_SO = /^[\d\s.,:%–\-—/()+…·|≈~≥≤<>]*$/;
 
 const cookie = phien();
@@ -991,6 +1006,7 @@ try {
 			};
 		};
 		const truoc = await page.evaluate(doc);
+		const gioTruoc = await page.evaluate(DOC_THOI_GIAN);
 		if (truoc.chon === 0) {
 			console.log("RANG CUN: chua chon duoc dong nao — thanh chon dong khong bat");
 			process.exit(2);
@@ -1023,21 +1039,17 @@ try {
 		await new Promise((r) => setTimeout(r, 2500));
 		const sau = await page.evaluate(doc);
 
-		const chuMoi = await page.evaluate(() => {
-			const t = document.createElement("time");
-			t.dateTime = new Date(Date.now() - 5 * 60_000).toISOString();
-			t.setAttribute("data-local-date-kind", "relative-time");
-			t.setAttribute(
-				"data-local-date-value",
-				new Date(Date.now() - 5 * 60_000).toISOString(),
-			);
-			t.textContent = "";
-			document.body.appendChild(t);
-			return new Promise((ok) => {
-				setTimeout(() => ok(t.textContent ?? ""), 400);
-			});
-		});
+		const gioSau = await page.evaluate(DOC_THOI_GIAN);
 		await page.close();
+
+		if (gioTruoc === null || gioSau === null) {
+			console.log(
+				"KHONG DO DUOC: trang khong ve <time> nao mang chu thoi gian tuong doi.\n" +
+					"   Chan nay doc phan tu do CHINH TRANG ve ra; khong co gi de doc thi khong do duoc.",
+			);
+			await browser.close();
+			process.exit(2);
+		}
 
 		const taiLai = truoc.moc !== sau.moc;
 		const doiChu = truoc.chu !== sau.chu;
@@ -1048,15 +1060,23 @@ try {
 		console.log(`   trang KHONG tai lai:     ${taiLai ? "KHONG — da tai lai" : "dung"}`);
 		console.log(`   thanh chon dong con giu: ${giuChon ? "co" : "KHONG"}`);
 		const DAU = /[ăâđêôơưáàảãạếềểễệíìỉĩịóòỏõọúùủũụ]/i;
-		const chuThoiGianViet = DAU.test(chuMoi);
+		const chuThoiGianViet = DAU.test(gioSau.chu);
+		const truocLaAnh = !DAU.test(gioTruoc.chu);
 		console.log(
-			`   chu thoi gian sau khi doi: ${JSON.stringify(chuMoi)} — ${chuThoiGianViet ? "tieng Viet" : "CON TIENG ANH"}`,
+			`   chu thoi gian doc TU TRANG — ${gioSau.so} the <time>, cai dau moc ${gioSau.gio}:`,
+		);
+		console.log(
+			`     truoc khi doi tieng: ${JSON.stringify(gioTruoc.chu)} — ${truocLaAnh ? "tieng Anh, dung" : "DA LA TIENG VIET: doi chung am mat nghia"}`,
+		);
+		console.log(
+			`     sau khi doi tieng:   ${JSON.stringify(gioSau.chu)} — ${chuThoiGianViet ? "tieng Viet" : "CHU THOI GIAN CON TIENG ANH"}`,
 		);
 		const hong =
 			(doiChu ? 0 : 1) +
 			(taiLai ? 1 : 0) +
 			(giuChon ? 0 : 1) +
-			(chuThoiGianViet ? 0 : 1);
+			(chuThoiGianViet ? 0 : 1) +
+			(truocLaAnh ? 0 : 1);
 		console.log(`ket qua: hong=${hong}`);
 		process.exit(hong > 0 ? 1 : 0);
 	}
