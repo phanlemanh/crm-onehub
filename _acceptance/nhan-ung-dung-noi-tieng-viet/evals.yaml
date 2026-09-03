@@ -251,6 +251,8 @@ evals:
       - ban-dich.md
       - ../../CONTEXT.md
       - evidence/E10-chu-hien-ra.txt
+      - evidence/E14-nhom-han-chot.md
+      - evidence/E14-bang-cong-ty-1280.png
     expected: >-
       SUA O CONG 2 VONG S4-r2. Nguong cu doi bang dich chot TRUOC khi cham ma
       va lay do lam dieu kien truot. 338 dong dat dieu kien ay; 199 dong con
