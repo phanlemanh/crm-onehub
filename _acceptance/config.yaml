@@ -15,6 +15,7 @@ executors:
   test:
     api: "bun run db:test && bun run test"
     api_khong_cache_tru_agent: "bun run db:test && bunx turbo run test --concurrency=1 --force --filter=!agent"
+    rang3_khoa_chet: "cd apps/app && bun test test/messages-guard.spec.ts"
   script:
     product_map: "node ${CLAUDE_PLUGIN_ROOT}/scripts/product-map.mjs --root . --check"
     db_test: "bun run db:test"
@@ -68,6 +69,11 @@ executors:
     rang3_giai_doan: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs giai-doan"
     rang3_khong_may_quet: "bash _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khong-may-quet.sh"
     rang3_chu_cung_jsx: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/chu-cung-jsx.mjs"
+    rang3_khai_sinh: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.mjs"
+    rang3_khai_sinh_so: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.mjs --chan so"
+    rang3_khai_sinh_tap_rong: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.mjs --chan tap-rong"
+    rang3_mien_tru: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/mien-tru.mjs"
+    rang3_dot_bien_khoanh: "RUT_GON=1 node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/dot-bien.mjs --chan khoanh-vung"
     start_scan: "bash _acceptance/o-cam-khai-thac-trung-tinh/rang-quet.sh"
     rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
     rang_t1_im: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"

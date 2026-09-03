@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Một lượt khai sinh — bộ kiểm hỏi gì trước khi tin một phép đo</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --page:    #fafafa;
+    --card:    #fafafa;
+    --ink:     #171717;
+    --muted:   #575757;
+    --soft:    #666666;
+    --rule:    rgba(23,23,23,0.12);
+    --accent:  #006B4F;
+    --sans:    'Geist', system-ui, sans-serif;
+    --serif:   'Lora', Georgia, serif;
+    --mono:    'Geist Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:  #171717;
+      --ink:   #fafafa;
+      --muted: #b4b4b4;
+      --soft:  #9a9a9a;
+      --rule:  rgba(250,250,250,0.16);
+      --accent:#2f9b7a;
+    }
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1100px; width: 100%; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .standfirst {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 66ch;
+    margin-bottom: 1.75rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+  svg { width: 100%; min-width: 900px; display: block; }
+  .notes {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 0.9fr;
+    gap: 2rem;
+  }
+  .notes h2 {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .notes p { font-size: 0.86rem; line-height: 1.6; color: var(--ink); }
+  .notes p + p { margin-top: 0.6rem; }
+  .notes .quiet { color: var(--muted); }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+  }
+  @media (max-width: 860px) { .notes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Cổng 1 · Hình 1 · AC-11 &amp; AC-2</p>
+  <h1>Một lượt khai sinh — bộ kiểm hỏi ba câu trước khi tin một phép đo</h1>
+  <p class="standfirst">Sổ khai sinh không phải một lời khai trong hồ sơ. Nó là một lượt chạy: bộ kiểm chạy chân đo ở chiều lành, tự tay phá vật đo, rồi chạy lại. Chỉ khi chân đỏ đúng chỗ đã hứa thì phép đo ấy mới được tính là có răng.</p>
+
+  <div class="card">
+  <svg viewBox="0 0 1360 1180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ luồng một lượt khai sinh: chạy chiều lành, áp véc-tơ phá, chạy lại, ba cách bộ kiểm từ chối, lối ra cho chân cùn, và một cách đạt">
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+      <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+    </defs>
+
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <!-- ================= ĐƯỜNG NỐI (vẽ trước, nằm dưới hộp) ================= -->
+
+    <!-- xương sống: đường chứng minh được -->
+    <line x1="224" y1="152" x2="224" y2="188" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <line x1="224" y1="248" x2="224" y2="288" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <line x1="224" y1="384" x2="224" y2="424" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <line x1="224" y1="496" x2="224" y2="536" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <line x1="224" y1="640" x2="224" y2="680" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <line x1="224" y1="792" x2="224" y2="832" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+    <!-- nhánh từ chối -->
+    <line x1="356" y1="336" x2="516" y2="336" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="356" y1="588" x2="516" y2="588" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="356" y1="736" x2="516" y2="736" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <!-- chân cùn thì đi tiếp, không nằm im -->
+    <line x1="920" y1="588" x2="976" y2="588" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <!-- nhãn nhánh từ chối -->
+    <rect x="404" y="310" width="64" height="16" rx="2" fill="#fafafa"/>
+    <text x="436" y="322" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">chân kêu</text>
+
+    <rect x="404" y="562" width="64" height="16" rx="2" fill="#fafafa"/>
+    <text x="436" y="574" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">còn xanh</text>
+
+    <rect x="384" y="710" width="104" height="16" rx="2" fill="#fafafa"/>
+    <text x="436" y="722" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">sai thông điệp</text>
+
+    <!-- nhãn xương sống -->
+    <rect x="232" y="396" width="32" height="16" rx="2" fill="#fafafa"/>
+    <text x="248" y="408" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">im</text>
+
+    <rect x="232" y="652" width="32" height="16" rx="2" fill="#fafafa"/>
+    <text x="248" y="664" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">đỏ</text>
+
+    <rect x="232" y="804" width="44" height="16" rx="2" fill="#fafafa"/>
+    <text x="254" y="816" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">đúng</text>
+
+    <!-- ================= CỘT CHÍNH ================= -->
+
+    <!-- điểm bắt đầu -->
+    <rect x="64" y="96" width="320" height="56" rx="28" fill="#fafafa"/>
+    <rect x="64" y="96" width="320" height="56" rx="28" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+    <text x="224" y="122" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">sổ khai sinh</text>
+    <text x="224" y="140" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">một mục cho mỗi phép đo của vòng ③a</text>
+
+    <!-- bước 1 -->
+    <rect x="64" y="188" width="320" height="60" rx="6" fill="#fafafa"/>
+    <rect x="64" y="188" width="320" height="60" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="224" y="214" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chạy chân đo ở chiều lành</text>
+    <text x="224" y="234" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chưa phá gì cả</text>
+
+    <!-- quyết định 1 -->
+    <polygon points="224,288 356,336 224,384 92,336" fill="#fafafa"/>
+    <polygon points="224,288 356,336 224,384 92,336" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="224" y="340" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chân đo có im không?</text>
+
+    <!-- bước 2 -->
+    <rect x="64" y="424" width="320" height="72" rx="6" fill="#fafafa"/>
+    <rect x="64" y="424" width="320" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="224" y="452" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">áp véc-tơ phá, rồi chạy lại</text>
+    <text x="224" y="476" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">mặc định: phục vụ đúng trang đó ở tiếng Anh</text>
+
+    <!-- quyết định 2 -->
+    <polygon points="224,536 356,588 224,640 92,588" fill="#fafafa"/>
+    <polygon points="224,536 356,588 224,640 92,588" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="224" y="592" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">lần này chân có đỏ không?</text>
+
+    <!-- quyết định 3 -->
+    <polygon points="224,680 356,736 224,792 92,736" fill="#fafafa"/>
+    <polygon points="224,680 356,736 224,792 92,736" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="224" y="732" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đỏ đúng thông điệp</text>
+    <text x="224" y="750" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đã ghim trước không?</text>
+
+    <!-- kết cục đạt -->
+    <rect x="64" y="832" width="320" height="80" rx="6" fill="#fafafa"/>
+    <rect x="64" y="832" width="320" height="80" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="196" y="846" width="56" height="18" rx="4" fill="none" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
+    <text x="224" y="859" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐẠT</text>
+    <text x="224" y="884" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">trả vật về nguyên trạng</text>
+    <text x="224" y="904" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chân này vừa chứng minh nó đo thật</text>
+
+    <!-- ================= BA CÁCH BỘ KIỂM TỪ CHỐI ================= -->
+
+    <text x="520" y="264" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">BA CÁCH BỘ KIỂM TỪ CHỐI PHÉP ĐO NÀY</text>
+
+    <rect x="520" y="292" width="400" height="88" rx="6" fill="#fafafa"/>
+    <rect x="520" y="292" width="400" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="544" y="308" width="44" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="566" y="321" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐỎ</text>
+    <text x="544" y="348" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">thước hỏng sẵn</text>
+    <text x="544" y="368" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">chân kêu ngay cả khi chưa ai phá gì</text>
+
+    <rect x="520" y="544" width="400" height="88" rx="6" fill="#fafafa"/>
+    <rect x="520" y="544" width="400" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="544" y="560" width="44" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="566" y="573" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐỎ</text>
+    <text x="544" y="600" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">chân không đo được gì</text>
+    <text x="544" y="620" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">phá thật rồi mà nó vẫn im</text>
+
+    <rect x="980" y="520" width="340" height="136" rx="6" fill="#fafafa"/>
+    <rect x="980" y="520" width="340" height="136" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="1004" y="536" width="60" height="18" rx="4" fill="none" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
+    <text x="1034" y="549" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-13</text>
+    <text x="1004" y="580" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">sửa cho đỏ được,</text>
+    <text x="1004" y="598" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">hoặc XOÁ khỏi kho</text>
+    <text x="1004" y="622" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">một chân cùn không được nằm im</text>
+    <text x="1004" y="640" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">— sổ phải gọi tên nó</text>
+
+    <rect x="520" y="692" width="400" height="88" rx="6" fill="#fafafa"/>
+    <rect x="520" y="692" width="400" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="544" y="708" width="44" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="566" y="721" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐỎ</text>
+    <text x="544" y="748" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">đỏ vì một lý do khác</text>
+    <text x="544" y="768" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">không phải lý do đã ghim trong sổ</text>
+
+    <!-- ================= BÁNH CÓC HAI CHIỀU ================= -->
+
+    <line x1="40" y1="944" x2="1320" y2="944" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="40" y="966" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">BÁNH CÓC HAI CHIỀU TRÊN CHÍNH SỔ</text>
+    <text x="40" y="984" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">dân số suy từ file có thật, không từ một tài liệu: chân nào tài liệu quên nhắc tên thì không bao giờ bị đòi khai sinh</text>
+
+    <line x1="356" y1="1024" x2="876" y2="1024" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="876" y1="1060" x2="356" y2="1060" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <rect x="456" y="998" width="320" height="16" rx="2" fill="#fafafa"/>
+    <text x="616" y="1010" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">chân có file, vắng mục trong sổ ⇒ đỏ</text>
+
+    <rect x="456" y="1034" width="320" height="16" rx="2" fill="#fafafa"/>
+    <text x="616" y="1046" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">mục trong sổ trỏ tới chân không còn file ⇒ đỏ</text>
+
+    <rect x="64" y="1000" width="288" height="88" rx="6" fill="#fafafa"/>
+    <rect x="64" y="1000" width="288" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="80" y="1028" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">danh sách chân đo có thật</text>
+    <text x="80" y="1050" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">các file trong rang/ cộng bài kiểm</text>
+    <text x="80" y="1068" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">khoá-chết, trừ bản khai miễn trừ</text>
+
+    <rect x="880" y="1000" width="288" height="88" rx="6" fill="#fafafa"/>
+    <rect x="880" y="1000" width="288" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="896" y="1038" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">sổ khai sinh</text>
+    <text x="896" y="1058" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">khai-sinh.json</text>
+
+    <!-- ================= CHÚ GIẢI ================= -->
+    <line x1="40" y1="1112" x2="1320" y2="1112" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="40" y="1132" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+    <line x1="40" y1="1152" x2="58" y2="1152" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="66" y="1156" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">đường chứng minh được — chân này có răng</text>
+
+    <line x1="400" y1="1152" x2="418" y2="1152" stroke="#575757" stroke-width="1"/>
+    <text x="426" y="1156" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">bộ kiểm từ chối, và gọi tên lý do</text>
+
+    <rect x="720" y="1145" width="16" height="14" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="744" y="1156" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">chạy lại mỗi lượt, không phải một câu trong hồ sơ</text>
+  </svg>
+  </div>
+
+  <div class="notes">
+    <div>
+      <h2>Vì sao là một lượt chạy, không phải một lời khai</h2>
+      <p>Bảy bản vá của vòng này, nếu chỉ được chứng minh một lần trong hồ sơ, thì vòng sau không còn gì giữ chúng. Sổ khai sinh chạy lại toàn bộ cặp hai chiều mỗi lượt, nên một bản vá bị gỡ sẽ lộ ra ngay lượt kế tiếp.</p>
+      <p class="quiet">Đây là điểm quyết định <code>d-…-11023</code>: sổ chạy lại mỗi lượt thay vì lời khai tĩnh trong hồ sơ.</p>
+    </div>
+    <div>
+      <h2>Vì sao cú phá mặc định là lật ngôn ngữ</h2>
+      <p>Bốn thước ở đây hứa đo màn tiếng Việt. Cú phá rẻ nhất mà vẫn thật là phục vụ đúng trang đó ở tiếng Anh: cùng máy chủ, cùng tuyến, đổi đúng một biến đang được đo. Không cần cây sao riêng, không sửa file nào.</p>
+      <p class="quiet">Thước nào không đỏ trước cú đó thì nó chưa từng đo gì. Điểm quyết định <code>d-…-11024</code>.</p>
+    </div>
+    <div>
+      <h2>Ba lối từ chối khác nhau ba chuyện</h2>
+      <p>Chân kêu khi chưa ai phá: thước hỏng sẵn. Phá rồi mà chân vẫn im: nó không đo gì. Chân đỏ nhưng nói chuyện khác: nó đỏ vì lý do khác, và người đọc hồ sơ sẽ tin nhầm.</p>
+      <p class="quiet">Ba lối đó phải gọi tên được, chứ không gộp thành một chữ hỏng.</p>
+    </div>
+  </div>
+
+  <footer>Hình 1 / 2 · điểm quyết định ở Cổng 1 · thuoc-cua-lat-3a-co-rang · AC-11, AC-2</footer>
+</div>
+</body>
+</html>

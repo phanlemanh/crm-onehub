@@ -1,0 +1,310 @@
+schema_version: 1
+feature_slug: thuoc-cua-lat-3a-co-rang
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.rang3_giai_doan
+    expected: >-
+      exit 0. HAI VE PHAI KHAC NGUON — day la ca ma ban dau cua chan nay lam sai.
+      DAN SO: enum giai doan doc tu may chu dang chay (deals.list + hop dong tRPC),
+      khong tu mot hang go tay. KHANG DINH cho tung gia tri trong dan so: gia tri do
+      hien TREN MAN, ben trong mot phan tu tu khai lang="en" — dung AC-14 cua vong ③a.
+      So khang dinh in ra phai BANG so gia tri enum, va lan chay in tung cap
+      <gia tri> -> <tim thay o dau>.
+      Chieu do: mot gia tri co trong enum may chu ma khong tim duoc phan tu tuong ung
+      tren man — chan DO va in "GIAI DOAN KHONG THAY TREN MAN: <gia tri>". Doi chung
+      duong la luot chay ngay truoc do tren cung may chu.
+      Vi sao phai the: neu ca dan so lan khang dinh cung doc tu may chu thi quan he
+      LUON dung va chan khong bao gio do duoc — do chinh la hang-dung, dung lop loi
+      tieu chi nay sinh ra de giet. Vec-to lat ngon ngu KHONG dung cho chan nay: bay
+      gia tri nay co y o lai tieng Anh trong phan tu lang="en"
+      [nhan-ung-dung-noi-tieng-viet#F1], nen doi ngon ngu khong dong toi chung.
+    paths:
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs"
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.json"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.rang3_khai_sinh_tap_rong
+    expected: >-
+      exit 0. Chay tung chan co the roi vao tap quan sat rong — khai-tieng,
+      no-vong-1, du-lieu-bien — tren CUNG may chu, mot lan o trang thai binh
+      thuong (doi chung duong: chan im, exit 0) va mot lan o trang thai KHONG
+      QUAN SAT DUOC GI (loc bang mot tu khoa khong khop hang nao, hoac bo cookie
+      phien).
+      Chieu do: o luot thu hai moi chan phai thoat MA 2 va in dung dong
+      "KHONG DO DUOC: tap <ten tap> rong". Exit 0 o luot thu hai la TRUOT — do
+      la chinh lop loi tap-so-rong. Exit 1 cung la truot: khong quan sat duoc gi
+      khong phai vat hong.
+    paths:
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs"
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/no-vong-1.mjs"
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/du-lieu-bien.mjs"
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.rang3_may_chu_ve
+    expected: >-
+      exit 0. Voi ca ba man, luot may chu tra ve DAU TIEN phai thoa mot QUAN HE
+      hai ve — chuoi tieng Viet co mat VA chuoi tieng Anh cua man do vang mat.
+      Mang ANH[] thoi nam khong: no la ve thu hai cua khang dinh. Lan chay in ra
+      ca hai ve cho tung man.
+      Chieu do (cung may chu, cung tuyen, doi dung mot bien): lay cung ba tuyen
+      voi cookie lang=en — chuoi tieng Anh co mat, chan phai DO va in dung dong
+      "CON TIENG ANH /<man>: <chuoi tim thay>". Doi chung duong la luot lang=vi
+      ngay trươc do. Ban cu chi grep tieng Viet nen no XANH ca o lang=en; do la
+      phep thu phan biet ban cu voi ban moi.
+    paths:
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/may-chu-ve.sh"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.rang3_no_vong_1
+    expected: >-
+      exit 0. Muoi chuoi vong ① dinh tuyen sang ③a, moi chuoi mang ban dich tieng
+      Viet DA GHIM ngay trong bang khai. Chan kiem chuoi tieng Anh vang mat VA
+      ban dich tieng Viet da ghim CO MAT. Lan chay in ra tung cap.
+      Chieu do 1 (con tieng Anh): chay cung trang o lang=en — chan DO, in
+      "CON TIENG ANH: <chuoi>". Chieu do 2 (lop loi that su cua ban cu): dung mot
+      trang thai ma ca hai ban deu khong ve chuoi ra — chan phai in
+      "KHONG DO DUOC: <chuoi> vang o ca hai thu tieng" va thoat MA 2. Ban cu tinh
+      truong hop nay la "da dich" va exit 0; do la phep thu phan biet.
+    paths:
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/no-vong-1.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.rang3_dong_thoi_gian
+    expected: >-
+      exit 0. Chu thoi gian tuong doi doc tu phan tu <time> DO CHINH TRANG VE RA
+      — chan phai neu duoc no lay phan tu nao, o dong nao cua bang, va no khong
+      goi createElement lan nao. Trang khong ve ra phan tu <time> nao thi chan
+      thoat MA 2 kem dong "KHONG DO DUOC: trang khong ve <time> nao".
+      Chieu do (cung fixture, doi dung mot bien): tra khoa thoi gian tuong doi ve
+      tieng Anh trong mot ban sao kho chuoi — chan phai DO va in
+      "CHU THOI GIAN CON TIENG ANH: <chu doc duoc>". Ban cu tu dung the <time>
+      dung khuon ben doc nen no XANH ke ca khi component viet that hong hoan
+      toan; do la phep thu phan biet.
+    paths:
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs"
+      - "apps/app/components/local-date-time.tsx"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.rang3_ba_man
+    expected: >-
+      exit 0. Mau so cua be mat an THOI la do dai mang BE_MAT. Chan dem be mat ma
+      trang THAT SU moi ra (nut mang aria-haspopup=menu, o mo hop thoai) roi so
+      hai chieu voi ban khai. Lan chay in ca hai danh sach.
+      Chieu do 1 (ban khai thieu): trang moi mot be mat khong co trong ban khai —
+      chan DO, in "BE MAT KHONG KHAI: <ten>". Chieu do 2 (banh coc nguoc): go mot
+      dong ban khai ma be mat that van con — chan DO, in
+      "BAN KHAI CO DONG CHET: <ten>". Ban cu chi lam phep tru khai - da-mo nen go
+      mot dong ban khai lam no van XANH; do la phep thu phan biet.
+    paths:
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs"
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/be-mat.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.rang3_du_lieu_bien
+    expected: >-
+      exit 0. Ba trang thai bien — khong nguoi phu trach, co hoat dong trong 30
+      ngay, ten phap nhan 40-60 ky tu — duoc doc bang CHU HIEN TREN MAN qua trinh
+      duyet, khong bang so hang trong co so du lieu. Phan dem hang o lai nhung
+      doi vai: thieu hang thi thoat MA 2 kem dong
+      "KHONG DO DUOC: thieu hang cho trang thai <ten>".
+      Chieu do (cung may chu): doc cung ba trang thai o lang=en — chu thoi gian
+      tuong doi va nhan facet hien tieng Anh, chan phai DO va goi ten trang thai
+      kem chu doc duoc. Ban cu khong mo trinh duyet lan nao nen chieu do nay
+      KHONG THE toi duoc; do la phep thu phan biet. Chan nay dong thoi la cai
+      phat hien duoc cay du lieu RONG — lo ma vong 7 sang vong 8 khong ai thay.
+    paths:
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/du-lieu-bien.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.rang3_khoa_chet
+    expected: >-
+      exit 0. Chan khoa-chet goi mot khoa la con song CHI khi duong day du cua no
+      co mat tai mot cho goi. Ten la trung mot tu pho thong o noi khac khong giu
+      khoa song.
+      Cap hai chieu tren CUNG mot fixture, nam ngay trong file kiem: (a) doi
+      chung duong — mot khoa co that va co cho goi that phai duoc goi la song;
+      (b) chieu do duong-dung-ten — mot khoa gia co la trung voi mot tu PHO THONG
+      CO THAT trong ma (vi du la "person", "title", "email") ma khong co cho goi
+      nao dung duong day du cua no, phai bi goi la CHET. Thong diep ghim: ten
+      khoa gia do phai xuat hien trong danh sach chet.
+      Ban cu chi tu kiem bang "khongAiGoiKhoaNay" — mot dinh danh vo nghia khong
+      bao gio cham duong dung-ten, nen ban cu XANH o (b); do la phep thu phan
+      biet. Chay cung phai chung minh song("deal.person") KHONG con tra ve true
+      chi vi tu "person" xuat hien o mot cau tieng Anh chua dich.
+    paths:
+      - "apps/app/test/messages-guard.spec.ts"
+      - "apps/app/lib/messages/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.rang3_mien_tru
+    expected: >-
+      exit 0. Banh coc HAI CHIEU tren ca ba ban khai mien tru cua gian do:
+      KHONG_DAU trong messages-guard.spec.ts · rang/dot-bien-sot.txt · hai khoi
+      case cua rang/khong-may-quet.sh. Lan chay in so dong va so hit that cua tung
+      ban khai.
+      Chieu do da co san, khong can dung: dong `viet-tat.ts` trong khoi case cua
+      khong-may-quet.sh CHUA TUNG co mot hit nao — file do song o thu muc rang/
+      cua vong ①, va vong lap cua chan chi duyet *.mjs va *.sh. LUOT CHAY DAU
+      TIEN cua chan mien-tru PHAI DO va in dung dong
+      "DONG MIEN TRU CHET: khong-may-quet.sh:viet-tat.ts". Ghi luot do vao ho so
+      lam chieu do; roi go dong chet di, chan im — do la doi chung duong.
+      Chieu do lap lai duoc: them mot dong mien tru tro toi mot ten khong co that
+      vao BAT KY ban khai nao trong ba — chan DO va goi ten dung ban khai va dong.
+      Doi chung duong khong duoc phep la "moi dong deu co hit" tu nhien: no phai
+      la trang thai SAU khi go dong chet da biet ten.
+      Vi sao can: them mot dong vao bat ky ban khai nao la tat mot phan phep do,
+      vinh vien, khong dau vet. Khong phat hien nao trong chin cai goi ten cho
+      nay.
+    paths:
+      - "apps/app/test/messages-guard.spec.ts"
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/dot-bien-sot.txt"
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khong-may-quet.sh"
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/mien-tru.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.rang3_dot_bien_khoanh
+    expected: >-
+      exit 0. Chung minh ban kinh no cua rang/dot-bien.mjs bi khoanh, tren mot
+      luot chay THAT (rut gon con vai khoa cho du chay trong mot lenh):
+      (a) trong luc chan dang chay, kich ban ghi mot doi thay vao mot file ma san
+      pham; sau khi chan thoat, doi thay do phai CON NGUYEN — ghim bang md5 truoc
+      va sau;
+      (b) sau khi chan thoat bang MOI duong (binh thuong, SIGINT, loi khong bat),
+      `git status --porcelain` tren nam file kho chuoi phai RONG — kiem bang
+      [ -z "$(...)" ], khong bang exit code cua git status.
+      Chieu do: chay lai voi ban khoi phuc kieu cu (ghi de anh chup dau luot) —
+      buoc (a) phai DO va in "DOI THAY BI NUOT: <file> md5 <truoc> -> <sau>".
+      Doi chung duong la ban moi o cung kich ban. Day la LOP LOI KHAC bay cai
+      tren: dot-bien.mjs DO DUOC san roi, benh cua no la ban kinh no.
+    paths:
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/dot-bien.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.rang3_khai_sinh
+    expected: >-
+      exit 0. DAN SO KHONG LAY TU evals.yaml — lay tu CAC FILE co that: moi *.mjs va
+      *.sh trong rang/ cong apps/app/test/messages-guard.spec.ts, tru di mot ban khai
+      mien tru co ly do tung dong. Dung MOT ban khai duy nhat, chung voi
+      khong-may-quet.sh, khong hai danh sach song song. Ly do: lay dan so tu mot tai
+      lieu thi chan nao khong duoc tai lieu nhac ten se khong bao gio bi doi khai sinh
+      — mien-tru.mjs va be-mat.mjs roi dung vao ho do.
+      So chan trong danh sach la N. Lan chay in mot bang DUNG N DONG, moi dong hai
+      chieu; bang it hon N dong la TRUOT, khong phai dat.
+      Voi tung muc: chay chieu lanh (phai im), ap vec-to pha, chay lai (phai do VA in
+      dung thong diep da ghim), tra vat ve nguyen trang.
+      HA TANG HONG KHONG BAO GIO LA DAT: mot muc khong chay duoc vi thieu trinh duyet,
+      may chu khong len, hay het gio — chan THOAT MA 2 va in
+      "KHONG DO DUOC: <ten chan> — <nguyen nhan>". Cam bo qua muc do roi exit 0.
+      Chieu do: go nhanh do cua mot chan bat ky, hoac lam thong diep ghim lech mot chu
+      — chan canh so DO va in
+      "CHAN KHONG DO DUOC: <ten chan> — cho <thong diep ghim>, nhan <thuc te>". Doi
+      chung duong la luot chay truoc khi go.
+      BAT BUOC XUAT: ghi bang ket qua ra evidence/khai-sinh-bang.md, duong dan suy tu
+      vi tri script chu khong hardcode goc kho; E13 doc dung file nay
+      [nhan-ung-dung-noi-tieng-viet#F5].
+    paths:
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/**"
+      - "apps/app/test/messages-guard.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.rang3_khai_sinh_so
+    expected: >-
+      exit 0. Banh coc HAI CHIEU giua so khai sinh va danh sach chan co that tren dia
+      (cung dan so voi E11):
+      (a) mot chan co file that ma VANG muc trong so — DO, in
+      "CHAN KHONG CO KHAI SINH: <ten chan>";
+      (b) mot muc trong so tro toi chan KHONG CON FILE — DO, in
+      "MUC KHAI SINH MO COI: <ten muc>".
+      CAP HAI CHIEU NAM TRONG CHINH LUOT CHAY, khong phai mot cau ke o thi qua khu: bo
+      kiem TU DUNG tren ban sao hai so tam — mot so thieu mot muc, mot so thua mot muc
+      mo coi — chay lai chinh no tren tung so tam, doi dung hai thong diep da ghim o
+      tren, roi tra nguyen trang. Doi chung duong la luot chay tren so NGUYEN VEN:
+      phai im.
+      Vi sao bat buoc: hop dong nay khai luat cat ngang "moi cap hai chieu chay lai
+      duoc moi CI", va quyet dinh 11023 chot rang chung minh mot lan roi ghi vao ho so
+      la thu luat khai sinh goi la muc nat. Con canh so ma khong tu do duoc thi ca vong
+      nay la mot tang tautology moi.
+    paths:
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.json"
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.mjs"
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/evals.yaml"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.rang3_khai_sinh_so
+    expected: >-
+      exit 0. Moi chan trong danh sach phai o dung MOT trong hai trang thai, khong
+      co trang thai thu ba: (a) co vec-to pha lam no do duoc, hoac (b) duoc khai
+      "da xoa" kem ly do, va file cua no THAT SU khong con.
+      Chieu do 1: mot chan nam trong danh sach, khong co vec-to pha, va khong duoc
+      khai la da xoa — DO, in "CHAN KHONG PHA DUOC MA VAN CON: <ten chan>". Day la
+      chieu quan trong nhat: no cam mot chan cun nam im trong kho.
+      Chieu do 2: mot chan duoc khai "da xoa" ma file van con tren dia — DO, in
+      "KHAI XOA NHUNG FILE VAN CON: <ten chan>".
+      Doi chung duong: so nguyen ven sau S3, chan im. Cap hai chieu dung so tam
+      nhu E12, trong chinh luot chay.
+    paths:
+      - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/**"
+      - "apps/app/test/messages-guard.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-12
+    executor: judgment
+    cmd: judgment
+    expected: >-
+      Voi TUNG chan do trong so khai sinh, mot nguoi chiu trach nhiem ky doc ho so
+      va noi duoc mot cau bang ngon ngu san pham: "cai gi phai hong ngoai doi thi
+      chan nay do". Khong duoc phep tra loi bang ma thoat hay ten ham.
+      Hoi dong cham TRUOT khi: mot chan chi mo ta duoc bang co che noi bo · mot
+      chieu do chi chung minh duoc rang thuoc doi mau chu khong chung minh duoc
+      no doi mau VI vat that hong · hoac ho so khong noi duoc chan nao da bi XOA
+      va vi sao.
+      TRUOT CUNG khi thieu dau vao: `evidence/khai-sinh-bang.md` la vat do E11
+      SINH RA trong lan chay cua no, khong phai van ban nguoi go. Thieu file, hoac
+      file khong cite duoc run_id cua E11 trong vong nay, thi E13 TRUOT — khong
+      cham bang cam giac tren anh chup. Day la bai hoc
+      [nhan-ung-dung-noi-tieng-viet#F5]: hoi dong cua vong truoc da mo hai file
+      khong ton tai roi cham bang cam giac.
+    inputs:
+      - _acceptance/thuoc-cua-lat-3a-co-rang/evidence/khai-sinh-bang.md
+      - _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.json
+    evidence_required: [run_id, verifier, verified_at, output]

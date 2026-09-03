@@ -1,0 +1,53 @@
+{
+  "feature_plain": "Bộ đồ đo của vòng dịch tiếng Việt được sửa để mỗi phép đo phải chứng minh nó BÁO HỎNG ĐƯỢC, và chứng minh lại điều đó ở mỗi lượt chạy — thay vì chỉ biết báo đạt.",
+
+  "will_do": [
+    { "id": "AC-1", "p": "Sẽ hỏi máy chủ xem đang có những giai đoạn thoả thuận nào, rồi kiểm từng cái một hiện đúng trên màn — thay vì so với một danh sách bảy cái ai đó gõ tay trong chính file đo." },
+    { "id": "AC-3", "p": "Sẽ kiểm cả hai vế ở lượt máy chủ trả về đầu tiên: chữ tiếng Việt phải có, VÀ chữ tiếng Anh cũ phải mất. Một trang còn lẫn hai thứ tiếng thôi được tính là đạt." },
+    { "id": "AC-4", "p": "Sẽ ghim sẵn bản dịch tiếng Việt cho từng chữ cũ, rồi kiểm đúng bản dịch ấy có mặt — không chỉ kiểm chữ cũ đã biến mất." },
+    { "id": "AC-5", "p": "Sẽ đọc mốc thời gian do chính trang vẽ ra. Trước đây phép đo tự dựng một mốc giả đúng khuôn mình mong rồi tự đọc lại, nên phần hiển thị thật hỏng hẳn nó vẫn báo đạt." },
+    { "id": "AC-6", "p": "Sẽ đếm những menu và hộp thoại mà trang THẬT SỰ mời ra, rồi so với bản khai. Trước đây mẫu số lấy từ chính bản khai, nên gỡ một dòng khỏi bản khai là mất một chỗ kiểm mà không ai biết." },
+    { "id": "AC-7", "p": "Sẽ mở màn hình đọc chữ hiện ra cho ba trường hợp dữ liệu khó — công ty không có người phụ trách, công ty vừa có hoạt động, tên pháp nhân rất dài — thay vì chỉ đếm số dòng trong cơ sở dữ liệu rồi kết luận." },
+    { "id": "AC-8", "p": "Sẽ chỉ coi một khoá dịch là còn dùng khi tên đầy đủ của nó xuất hiện ở một chỗ gọi thật. Trước đây một khoá được coi là còn sống chỉ vì một từ phổ thông như «người» hay «tiêu đề» xuất hiện đâu đó trong mã." },
+    { "id": "AC-10", "p": "Sẽ giữ nguyên bản sửa mà một người làm trong lúc phép đo đang chạy. Phép đo nặng nhất hiện nuốt mất công việc chưa lưu, và giữ mã sản phẩm ở bản tiếng Anh suốt mười phút mỗi lượt." },
+    { "id": "AC-11", "p": "Sẽ chạy lại CẢ HAI chiều của từng phép đo ở mỗi lượt: chạy trên bản lành phải im, phá thật rồi chạy lại phải báo hỏng đúng lý do đã ghim trước." },
+    { "id": "AC-13", "p": "Sẽ xoá hẳn phép đo nào không cách nào làm nó báo hỏng, và ghi tên nó lại. Một cái thước cùn không được phép nằm im trong kho." }
+  ],
+
+  "wont_do": [
+    { "id": "AC-2", "p": "Sẽ KHÔNG coi «không quan sát được gì» là đạt. Không có dữ liệu để so thì phép đo tuyên bố là nó không đo được, chứ không báo xanh." },
+    { "id": "AC-9", "p": "Chặn việc tắt một phép đo bằng cách lặng lẽ thêm một dòng vào danh sách ngoại lệ — dòng ngoại lệ không còn đối tượng thật sẽ bị gọi tên." }
+  ],
+
+  "scope_plain": "Không đổi một chữ nào của sản phẩm — bản dịch đã xong và đang xanh; và không đụng tới bộ đồ đo của hai vòng dịch trước, dù chúng gần như chắc cùng bệnh.",
+
+  "coverage_plain": [
+    { "i": 0, "p": "Đã kê đủ bốn lý do khiến một phép đo báo xanh mà chẳng đo gì, cộng một lý do thứ năm khác hẳn: phép đo báo hỏng được nhưng làm hỏng cây làm việc. Bằng chứng đủ: chín khiếm khuyết vòng trước tìm ra, mỗi cái rơi đúng vào một lý do — không cái nào phải nhét vào ô «khác»." },
+    { "i": 1, "p": "Đã kê đủ các cách phá thật một phép đo, kể cả ô «không phá được thì xoá» nay có tiêu chí riêng — AC-13 (thước cùn phải bị xoá). Bằng chứng đủ: đối chiếu với ba bộ đột biến có tên của ngành." },
+    { "i": 2, "p": "Đã kê đủ các chỗ mà cặp chứng minh hai chiều có thể sống, từ rẻ nhất tới đắt nhất. Bằng chứng đủ: cái giá của hai chỗ đắt đã trả thật ở vòng trước, không phải ước lượng." },
+    { "i": 3, "p": "Mọi phép đo phải phân biệt được «tôi không đo được» với «vật hỏng», và gọi tên nguyên nhân. Lẫn hai cái này từng làm mất trắng một lượt chạy vì một trục trặc cấu hình bị đọc thành lỗi sản phẩm." },
+    { "i": 4, "p": "Một lượt hết giờ không được tính là đã bắt được lỗi. Đây là điều ba bộ đột biến của ngành tách riêng mà bộ đồ đo hiện tại chưa tách." },
+    { "i": 5, "p": "Cú phá nào chứng minh được là không thể làm hỏng gì thì vào sổ riêng, không vào mẫu số — kẻo tỉ lệ đẹp lên mà không có nghĩa." },
+    { "i": 6, "p": "Không đổi một chữ nào người dùng đọc được. Vòng này chỉ hỏi bằng chứng cho bản dịch có đáng gì không." },
+    { "i": 7, "p": "Mọi chứng minh hai chiều phải tự chạy lại được ở mỗi lượt. Một câu «đã thử rồi, nó báo hỏng» viết trong hồ sơ không được tính là bằng chứng." }
+  ],
+
+  "gap_probe_plain": [
+    { "i": 0, "p": "Bản kiểm tổng tự lấy danh sách «những phép đo phải chứng minh» từ một tài liệu, nên phép đo nào tài liệu không nhắc tên thì không bao giờ bị đòi chứng minh — kể cả hai phép đo do chính vòng này dựng ra. Và một lượt hỏng vì máy không lên vẫn có thể trôi qua thành đạt. ĐÃ SỬA: danh sách nay suy từ các file có thật, số dòng kết quả phải khớp số phép đo, và máy không lên thì tuyên bố không đo được chứ không bao giờ báo đạt." },
+    { "i": 1, "p": "Chiều báo-hỏng của chính bản kiểm tổng chỉ là một câu kể ở thì quá khứ — làm bằng tay một lần, không gì chạy lại. Đúng thứ mà cả vòng này tồn tại để giết. ĐÃ SỬA: bản kiểm tổng nay tự dựng hai bản sổ hỏng ngay trong lượt chạy của nó, tự chạy lại trên đó, và đòi đúng hai lời báo đã ghim trước." },
+    { "i": 2, "p": "Phép đo canh danh sách ngoại lệ khai hai kết quả trái nhau đều là đúng, và không ai được phép dọn nguyên nhân. ĐÃ SỬA: nói rõ mốc đạt là trạng thái sau khi gỡ dòng ngoại lệ đã chết, và cho phép vòng này gỡ những dòng ấy kèm nghĩa vụ gọi tên từng dòng đã gỡ." },
+    { "i": 3, "p": "Tiêu chí về bảy giai đoạn thoả thuận lấy cả hai vế so sánh từ cùng một nguồn, nên quan hệ ấy luôn đúng và phép đo không bao giờ báo hỏng được — đúng cái bệnh nó sinh ra để chữa. ĐÃ SỬA: một vế là danh sách máy chủ đang có, vế kia là chữ thật hiện trên màn." },
+    { "i": 4, "p": "Người chấm ở bước cuối được giao đọc một bảng mà không phép đo nào có nghĩa vụ sinh ra, nên họ sẽ chấm bằng cảm giác. Đúng lỗi vòng trước đã mắc. ĐÃ SỬA: bảng ấy nay là vật bắt buộc phải sinh ra, và thiếu nó thì bước chấm trượt cứng." }
+  ],
+
+  "decisions_plain": [
+    { "id": "d-20260903T212704Z-11021", "p": "KHÔNG làm bản đặc tả giao diện — vòng này không có màn hình nào; đổi lại người duyệt thấy cấu trúc lần đầu trong mã." },
+    { "id": "d-20260903T212704Z-11022", "p": "Mở một vòng riêng có chủ ngữ là bộ đồ đo, thay vì nới bộ tiêu chí của vòng dịch để nuốt chín lỗi đó — đổi lại bằng chứng của vòng dịch thành cũ và nó phải chạy lại một lượt." },
+    { "id": "d-20260903T212704Z-11023", "p": "Giao một cuốn sổ và một bản kiểm chạy lại cả hai chiều mỗi lượt, thay vì bảy bản vá rời kèm lời khai trong hồ sơ — đổi lại có thêm một phép đo nữa phải nuôi." },
+    { "id": "d-20260903T212704Z-11024", "p": "Cách phá mặc định là phục vụ đúng trang đó ở tiếng Anh trên cùng máy chủ, thay vì dựng cây và máy chủ thứ hai cho mỗi cú phá — đổi lại nó chỉ chứng minh phép đo phản ứng với ngôn ngữ, còn lời hứa mịn hơn vẫn cần cách phá đắt hơn." },
+    { "id": "d-20260903T212704Z-11025", "p": "Tách phép đo nặng nhất ra khỏi khuôn chung vì bệnh của nó khác hẳn — nó báo hỏng được, nó chỉ làm hỏng cây làm việc; đổi lại bảng lớp lỗi của bộ công cụ chưa có tên cho bệnh này nên kho khác sẽ lại xếp nhầm." },
+    { "id": "d-20260903T212704Z-11026", "p": "KHÔNG đụng tới bộ đồ đo của hai vòng dịch trước — đổi lại chúng gần như chắc cùng bệnh, và một chữ ký đang chờ trên bằng chứng do chính chúng sinh ra." },
+    { "id": "d-20260903T213906Z-11027", "p": "Danh sách «những phép đo phải chứng minh» suy từ các file có thật chứ không từ một tài liệu — đổi lại bản khai ngoại lệ trở thành chỗ tập trung quyền lực, nên chính nó phải nằm dưới lưới canh." },
+    { "id": "d-20260903T213906Z-11028", "p": "Tiêu chí về bảy giai đoạn thoả thuận tách hai vế lấy từ hai nguồn khác nhau — đổi lại cách phá rẻ nhất không dùng được cho nó, vì bảy giá trị đó cố ý ở lại tiếng Anh." }
+  ]
+}
