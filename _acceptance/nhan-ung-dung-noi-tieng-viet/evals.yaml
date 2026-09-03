@@ -127,9 +127,14 @@ evals:
     expected: >-
       exit 0. Doi tieng roi khang dinh chu doi theo MA KHONG tai lai trang —
       chung minh bang performance.timeOrigin khong doi VA mot component may chu
-      chua bao gio ve lai van doi chu. Chieu do: bo nha cung cap ngon ngu khoi
-      component do thi chan nay do. Chan nay ton tai vi router.refresh() lam moi
-      thu xanh gia — xem AC-9 cua vong ②.
+      chua bao gio ve lai van doi chu. THEM O VONG S4-r2: chan nay con phai
+      chen mot the <time> MOI sau khi doi tieng va khang dinh chu thoi gian
+      tuong doi cua no la tieng Viet — kich ban nuong san chu luc tai se sai o
+      dung cho do, va khong phep do nao cu bat duoc.
+      Chieu do: bo nha cung cap ngon ngu khoi component do thi chan nay do; va
+      tra kich ban ve nuong chu luc tai thi phep do <time> moi do.
+      Chan nay ton tai vi router.refresh() lam moi thu xanh gia — xem AC-9 cua
+      vong ②.
     paths:
       - "apps/app/components/**"
       - "apps/app/lib/locale/**"
@@ -194,12 +199,16 @@ evals:
     executor: test
     cmd: config:executors.test.api
     expected: >-
-      exit 0. Hai chan: (a) trinh bien dich — moi kho chuoi khai `satisfies` cung
+      exit 0. Ba chan: (a) trinh bien dich — moi kho chuoi khai `satisfies` cung
       mot kieu nen thieu mot khoa tieng Viet la loi bien dich; (b) bai kiem —
       moi gia tri tieng Viet mang it nhat mot dau tieng Viet, va danh sach mien
-      dau phai RONG hoac tung muc co ten kem ly do. Chieu do: xoa mot khoa khoi
-      object vi thi check-types do; doi mot gia tri thanh mot chuoi tieng Anh
-      KHAC thi bai kiem do.
+      dau phai RONG hoac tung muc co ten kem ly do; (c) THEM O VONG S4-r2 —
+      moi khoa da khai phai co it nhat mot cho goi trong apps/app. Khoa viet ra
+      roi bo quen la lop loi vong S4-r1 tra gia: 83 khoa da dich ma man hinh
+      duoi no van tieng Anh.
+      Chieu do: xoa mot khoa khoi object vi thi check-types do; doi mot gia tri
+      thanh mot chuoi tieng Anh KHAC thi bai kiem do; them mot khoa khong ai
+      goi thi chan khoa chet do.
     paths:
       - "apps/app/lib/messages/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -264,8 +273,11 @@ evals:
       exit 0. Chan chong-lach: khang dinh khong phep do nao cua vong nay chung
       minh su vang mat bang cach doc MA NGUON. Moi chan tu E1 den E11 phai dung
       trinh duyet that hoac trinh bien dich; chan nao chi grep ma nguon thi bao
-      do. Chieu do: them mot chan gia chi grep ma nguon thi chan nay do va goi
-      ten chan gia do.
+      do. THEM O VONG S4-r2: mot chan CHAY mot chan khac thi thua tam voi cua
+      chan do — nhung phai CHAY that. Nhac ten trong mot chuoi khong tinh, vi
+      the la fail-open.
+      Chieu do: them mot chan gia chi grep ma nguon thi chan nay do va goi ten
+      chan gia do; them mot chan gia chi NHAC TEN ban-ve.mjs cung phai do.
     paths:
       - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
