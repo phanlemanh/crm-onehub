@@ -1,4 +1,4 @@
-# khoa bon chan nghiem thu khong ve ra (266/521)
+# khoa bon chan nghiem thu khong ve ra (265/519)
 companies.labels.archivedDate
 companies.empty
 companies.emptyArchived
@@ -199,7 +199,6 @@ crm.misc.loading
 record-sheet.section.about
 record-sheet.section.links
 record-sheet.section.background
-record-sheet.srLabel.primary
 record-sheet.company.contactColumns.primary
 record-sheet.company.primaryContactBadge
 record-sheet.company.oneDeal
