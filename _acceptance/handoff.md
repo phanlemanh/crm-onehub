@@ -1,14 +1,15 @@
 # Handoff — nhánh `onehub`
 
-Viết lại cuối phiên 2026-09-02. Bản trước (2026-09-01) đúng về luật đo nhưng
-thiếu một cái bẫy đắt — xem "Bẫy mới" ở cuối. Đọc file này trước khi làm bất cứ
-việc gì trong hàng đợi.
+Viết lại cuối phiên **2026-09-03**. Phiên này chạy S4 sáu vòng cho lát ③a và
+kết thúc ở **16/16 tiêu chí máy đạt**. Đọc file này trước khi làm bất cứ việc gì
+trong hàng đợi — nhất là mục "Bẫy" và mục "Lớp lỗi không thước nào bắt".
 
 ## Hiện trạng
 
 - `origin` = `phanlemanh/crm-onehub` (riêng tư), nhánh làm việc `onehub`
 - `upstream` = `trycompai/crm` (chỉ đọc, MIT) · `release` = bản gương, không sửa
-- **61 commit chưa đẩy** lên `origin` tính đến cuối phiên 2026-09-03
+- **72 commit chưa đẩy** lên `origin`, tính đến `68b8fb5` cuối phiên 2026-09-03.
+  Chưa ai đẩy, và phiên trước được dặn không đẩy khi chưa hỏi.
 
 Đã gửi lên hãng, đang mở: PR `trycompai/crm#194` (vá `dev-session`), issue `#195`
 (nay đã biết là **không phải test phập phù** — xem mục bẫy).
@@ -22,7 +23,7 @@ ngày 2026-09-01: ② lên trước ①.
 | --- | --- | --- |
 | ② | Bộ dựng chung (`packages/ui`) | **Đã ký Cổng 2** — `bo-dung-chung-nhan-chuoi` |
 | ① | Xương sống + định dạng ngày/số | **Chờ chữ ký ở Cổng 2** — `tieng-viet-cho-crm` |
-| ③a | Nhãn ứng dụng, lát ba luồng (`apps/app`) | **Chờ người ký ở Cổng 2** — `nhan-ung-dung-noi-tieng-viet`, S4 vòng 3 |
+| ③a | Nhãn ứng dụng, lát ba luồng (`apps/app`) | **16/16 máy đạt sau S4 vòng 6.** Chờ hai chữ ký, và chờ vòng 7 vì mã đổi sau khi ghim |
 | ④ | Câu máy chủ trả về | chưa mở |
 | ⑤ | Chữ tác nhân sinh ra | chưa mở |
 
@@ -49,56 +50,97 @@ Câu gộp còn cần lời của người cho hai mục **chưa chắc**, và m
 
 Sau khi ký: `PRODUCT-MAP.md` được vẽ lại, và vòng ③ mở được.
 
-### Vòng ③a — đã chạy, đang chờ hai chữ ký
+### Vòng ③a — sáu vòng S4, nay 16/16 máy đạt, chờ hai chữ ký
 
 Lát khoanh bằng đồ thị nhập từ ba luồng của ngưỡng UAT: **96 file**, không phải
 177 — phần còn lại đi lát ③b (Cài đặt) và ③c (trang khác).
 
-Máy chấm **14/16 tiêu chí xanh** ở vòng S4 thứ hai. Ba màn danh sách, hồ sơ ghi
-chép, dòng thời gian và cây trợ năng đều **0 chữ tiếng Anh sót**, kể cả sau khi
-mở hết menu và hộp thoại. Người chọn ở Cổng 2 ngày 2026-09-03: **thu phạm vi hai
-lời hứa** E13 và E14 — bảng đối chiếu ở `contract.md`, mục "Hai lời hứa thu lại".
+| Vòng | Máy đỏ | Hội đồng E14 | Phát hiện trong-hợp-đồng |
+| --- | --- | --- | --- |
+| 1 | E1 E10 E13 E15 | UNCERTAIN | 7 |
+| 2 | E13 | FAIL | 5 |
+| 3 | — | UNCERTAIN | 2 |
+| 4 | — (một lượt BLOCKED oan) | PASS | 6 |
+| 5 | E13 | PASS | 6 |
+| 6 | **không cái nào** | UNCERTAIN | 1 |
+
+**Bằng chứng vòng 6 ghim `422ea73`, nhưng HEAD nay là `68b8fb5`** — mã đổi sau
+khi ghim, nên lưới kiểm hiệu lực sẽ gọi hồ sơ là STALE. Vòng 7 phải chạy trước
+khi trình Cổng 2.
+
+Chạy vòng 7 (bốn bước, không bước nào bỏ được):
+
+```
+node ~/.claude/plugins/marketplaces/acceptance-gate-kit/feature-loop/scripts/s4-args.mjs \
+  --slug nhan-ung-dung-noi-tieng-viet --root . --out <ws>/s4-args.json --no-carry
+```
+
+1. Máy chủ dev phải chạy TỪ WORKTREE, cổng 3000 và 3001. Executor không ghim
+   cổng nên mặc định trỏ `localhost:3000`.
+2. Cây phải SẠCH trước khi sinh args — args ghim một sha, ghim vào cây bẩn là
+   hồ sơ nói dối.
+3. Bộ sinh args đếm vòng từ mục `## Iterations` của `evidence-report.md`, mà
+   workflow **không tự ghi vòng của chính nó**. Ghi tay dòng `Round N:` trước,
+   không thì nó mint trùng số vòng và đụng `run_id` đã có.
+4. Gọi `Workflow` với `scriptPath` tuyệt đối tới `acceptance-verify.js`, args
+   nguyên văn từ file vừa sinh. **Không gõ tay một chữ nào trong args** — phiên
+   này đã một lần tự sửa ba đoạn `expected` và phải dừng lượt chạy để đưa chúng
+   về `evals.yaml`.
 
 **Hai việc của người, không việc nào máy làm hộ được:**
 
-1. Duyệt bản thu phạm vi: `contract.md` có `amended_by:` để trống.
+1. Duyệt bản thu phạm vi E13 và E14: `contract.md` có `amended_by:` để trống.
+   Bảng đối chiếu ở mục "Hai lời hứa thu lại".
 2. Ký vòng: `/acceptance-gate:signoff nhan-ung-dung-noi-tieng-viet`.
 
-**Cái bẫy đắt nhất của vòng này, để vòng sau khỏi trả lại.** Máy chủ dev phải
-chạy TỪ WORKTREE. Bốn lượt đo đầu chạy trên máy chủ của bản checkout chính nên
-đo nhầm cây, và đột biến không bao giờ đỏ được. Kiểm bằng cách phá vật thật rồi
-xem phép đo có đổi màu không — không tin một con số xanh nào chưa từng đỏ.
+### Lớp lỗi KHÔNG thước nào bắt — chỗ đáng đọc nhất file này
 
-**Bẫy thứ hai: đừng dọn cây bằng `git checkout --`.** Chân đột biến ghi đè năm
-kho chuỗi rồi trả lại. Nếu nó chết giữa chừng, `git checkout --` khôi phục về
-HEAD chứ không về bản trước đột biến — lần này mất cả buổi chiều dịch. Commit
-trước khi chạy chân đó.
+Vòng 6 đạt 16/16 tiêu chí máy **và vẫn còn 18 chỗ hiện tiếng Anh** cho người đọc
+tiếng Việt: nút của màn trống trên hồ sơ, cả bảng Trường, hộp thoại Bảng xem,
+nút "Show older". Sáu chỗ đã có khoá sẵn, dùng đúng cách đó tám chục dòng trong
+cùng file.
 
-**Cổng 2 của vòng ③ phải đo lại đúng năm chuỗi này và thấy chúng biến mất:**
+Vì sao không thước nào thấy: **bốn chân vẽ chỉ thấy bề mặt chúng mở**, và chặn
+khoá-chết chỉ đọc kho chuỗi, không đọc JSX. Hai hướng của cùng một lỗ —
 
-| Chuỗi | Ở đâu |
-| --- | --- |
-| `Search companies by name or domain…` | `companies-table.tsx:264` |
-| `Archived` | `companies-table.tsx`, nút chuyển màn lưu trữ |
-| `Views` | `saved-views-menu.tsx` |
-| `New company` | `create-company-sheet.tsx` |
-| `Not researched` + 4 nhãn trạng thái | `lib/enrichment-status.ts:10` |
+- *khoá không có chỗ gọi* → chặn khoá-chết bắt được (đã có).
+- *chữ cứng trong JSX lẽ ra là khoá* → **không gì bắt được**.
 
-Cộng ba thứ nữa vòng ① tìm ra mà không nhận:
+18 chỗ đó do một người đọc diff tìm ra. Vòng sau cũng vậy, trừ khi ai đó dựng
+được phép đo cho hướng thứ hai.
 
-- **Chữ thời gian tương đối** — `just now`, `2h ago`, `in 3d`, và ba hậu tố
-  `m`/`h`/`d`, trong `local-date-time.tsx`. Dữ liệu thử không sinh ra chúng nên
-  **không phép đo nào che chúng**. Thêm một công ty có hoạt động vào dữ liệu thử
-  trước khi tin bất kỳ con số nào.
-- **20 chuỗi mặc định đè được** mà vòng ② cố ý bỏ — ô ngày vẫn đọc `No date yet`,
-  ô gợi ý công ty vẫn đọc `Search companies…`.
-- **Bề rộng cột.** Đây mới là chỗ chữa việc cắt tiêu đề. Rút nhãn ngắn hơn không
-  cứu được gì: ở 768px tiếng Anh cũng cắt.
+Con số bổ trợ, cùng câu chuyện: phép đột biến đo được **265 khoá nằm ngoài tầm
+với** của bốn chân (hộp thoại tạo, màn trống, màn lưu trữ, thao tác hàng loạt).
+Danh sách đủ ở `rang/dot-bien-sot.txt`.
 
-**Dùng lại nguyên giàn đo của vòng ①**, đừng dựng cái mới:
-`_acceptance/tieng-viet-cho-crm/rang/ban-ve-man-cong-ty.mjs` (dựng màn thật hai
-lần rồi trừ) và `rang/dot-bien.mjs` (trả từng khoá về tiếng Anh, một khoá một
-lượt). Chúng đã chịu bốn luật và ba lần tự hỏng.
+### Giàn đo của lát ③a — trạng thái sau khi sửa
+
+`rang/dot-bien.mjs` — trả từng khoá về tiếng Anh trên máy chủ thật.
+
+- Bắt **cả vùng giá trị** (từ dòng `khoa:` tới dòng đóng bằng dấu phẩy), nên
+  khoá giá trị-hàm và chuỗi-nhiều-dòng cũng đảo được. Bản cũ chỉ khớp
+  `khoa: "một dòng",` và mù với **93 khoá, 17%**, không khai ở đâu.
+- Kiểm bằng cách **đọc lại file sau khi ghi**, không đoán số dòng git đếm.
+- Ba sổ, ba nghĩa khác nhau: *bắt được* · *mù* (vẽ ra mà không bắt) ·
+  *không quy kết được* (giá trị quá ngắn hoặc toàn biến, không đủ căn cứ nói
+  bốn chân có vẽ ra hay không). Chỉ hai sổ đầu vào mẫu số ngưỡng.
+- Từ chối `0/0` là đạt.
+- Bắt SIGINT/SIGTERM/SIGHUP và lỗi không bắt, trả năm kho chuỗi về nguyên trạng
+  trước khi thoát. Đã kiểm bằng cách giết một lượt chạy thật ở giây 230.
+
+Số hiện tại: **bắt 240/240 khoa vẽ ra (100%), mù 0**, trên nền 519 khoá đảo
+được / 538 khoá có cả hai bản. 17 khoá giống hệt nhau ở hai bản (`Email`, `URL`,
+`Website`, `LinkedIn`, `GitHub`, `X`) được gọi tên chứ không bỏ im.
+
+`rang/kiem-ban-dich.mjs` — đối chiếu bảng dịch **hai chiều** (kho→bảng và
+bảng→kho), khớp bằng đường đầy đủ hoặc hai đoạn cuối, không khớp hậu tố bất kỳ.
+Bản lỏng trước đó che 15 khoá dùng chung một dòng tên `title`, 12 dòng tả khoá
+đã biến mất, và hai giai đoạn thoả thuận ghi sai tên enum.
+
+`apps/app/test/messages-guard.spec.ts` — chặn khoá-chết buộc lá đi kèm tên cha
+và **mang theo chiều đỏ của chính nó**. Bản cũ khớp theo tên lá trên một khối
+văn bản gộp nên `.name`, `.title`, `.email` làm gần như mọi khoá trông còn sống:
+nó **không thể đỏ**.
 
 ## Luật đo — bốn luật, mỗi luật một lần trả giá
 
@@ -152,6 +194,55 @@ cd apps/app && PORT=3100 API_URL=http://localhost:3001 APP_URL=http://localhost:
 vòng ① từng làm thế và **xoá mất bản sửa chưa commit** của phiên. Khôi phục bằng
 nội dung đã chụp trong bộ nhớ.
 
+### Bẫy của phiên 2026-09-03 — bốn cái, mỗi cái trả giá thật
+
+**1. `git checkout --` để dọn cây sau khi chân đột biến chết.** Nó khôi phục về
+HEAD chứ không về bản trước đột biến, và lần này **mất cả buổi chiều dịch**.
+Dựng lại được chỉ vì `ban-dich.md` sinh sau khi thêm khoá nên giữ đủ 537 khoá
+kèm hai thứ tiếng. Luật: **commit trước khi chạy chân đột biến**, và nếu cây bẩn
+thì đọc `git status` xem cái gì bẩn trước khi đụng vào.
+
+**2. Chân đột biến ghi đè năm file mã sản phẩm trong ~10 phút mỗi lượt.** Trong
+cửa sổ đó, bốn cổng máy vẫn xanh vì bản tiếng Anh đúng kiểu. Commit lúc ấy là
+đóng bản tiếng Anh vào lịch sử mà không gì báo. Nay chân đã bắt tín hiệu dừng,
+nhưng **commit chủ động thì không gì chặn** — kiểm `git status` trước.
+
+**3. `git status --porcelain` có output vẫn thoát 0.** Câu
+`git status --porcelain <path> && echo SACH` in "SACH" **trong khi file đang bẩn**.
+Phiên này đã đọc sai một lần đúng ở chỗ nguy hiểm nhất. Dùng `[ -z "$(...)" ]`.
+
+**4. Trần thời gian của Bash là 600 giây, không phải giá trị truyền vào.** Chân
+đột biến chạy ~20 phút nên **luôn phải chạy nền**, không chạy tiền cảnh.
+
+### Hai lỗi của bộ kit — nên mở chip sang `~/dev/acceptance-gate-kit`
+
+- **`runLogWriteFailed: true` ở cả sáu lượt.** Workflow không ghi được
+  `run-log.jsonl` lẫn `evidence-report.md`; phiên này dựng lại bằng tay từ kết
+  quả mỗi lần. Không làm thì vòng sau đếm sai số vòng.
+- **Bộ đếm vòng đọc `## Iterations` nhưng workflow chỉ ghi lịch sử TRƯỚC vòng
+  của nó**, không ghi vòng của chính nó. Phải ghi tay dòng `Round N:` sau mỗi
+  lượt, không thì mint trùng số vòng và đụng `run_id` đã có.
+
+## Nợ đã biết của lát ③a — chưa sửa, mỗi cái có tên
+
+Xếp theo mức nặng. Bốn cái đầu do phiên 2026-09-03 gây ra khi vá lỗi khác.
+
+| Chỗ | Chuyện gì |
+| --- | --- |
+| `apps/app/lib/social-links.ts:30` | Giấu khoá thông điệp (`"facts.pricing"`) trong trường `label: string` rồi tra bằng ép kiểu; gõ sai một ký tự thì in thẳng `facts.pricing` lên màn. Ba module anh em cùng vòng dùng trường `khoa` có kiểu. **Bị nêu sáu vòng liền.** |
+| `packages/ui/src/components/carousel.tsx:57` | Mất `aria-roledescription` ở cả hai thứ tiếng và còn một `useMessages()` chết. `sortable-list.tsx:112` cũng xoá `roleDescription` thay vì dịch. **Trình đọc màn hình nghe được ít hơn trước vòng dịch.** biome bỏ qua thư mục đó. |
+| `packages/ui/tsconfig.json:4` | `include: ["src"]` nên ~850 dòng test của `packages/ui` **nằm ngoài `bun run check-types`**; `jsdom` chỉ khai ở `package.json` gốc. Bật `["src","test"]` lên thì lộ hơn mười lỗi kiểu, phần lớn là fixture nặn theo bên đọc chứ không theo kiểu thật. |
+| `.claude/launch.json` mục `dev` | Chạy `npm run dev` ở gốc — sai trình quản lý gói (kho dùng bun) và đúng lệnh mà `CLAUDE.md` nói không chạy được khi không có TTY. Mục `dev-dang-chay` (đính vào cổng 3000 sẵn có) mới là mục đúng. |
+| `packages/ui/src/components/reasoning.tsx:17` | Mất nhãn mặc định, không có khoá thay: gọi không truyền `label` và không streaming thì nút mở ra rỗng. |
+| `fields-list.tsx:338` và `:224` | Nhãn kiểu trường có hai nguồn: máy chủ tính `field.typeLabel` (luôn tiếng Anh) trong khi hộp sửa ngay cạnh hiện tiếng Việt. **Trong lát.** |
+| `packages/ui/src/lib/format.ts:67` | `formatMoney`/`formatMoneyCompact` để tham số bắt buộc sau tham số có mặc định nên mặc định `"usd"` là mã chết. |
+| Năm chỗ ghim `"en"` | `sales-dashboard.tsx:94,99,132` · `dashboard-summary.tsx:211` · `currency-settings.tsx:305`. Ngoài lát nên chữ vẫn tiếng Anh, nhưng ba chỗ đầu **có `locale` sống ngay trong file**. |
+| `apps/app/lib/messages/companies.ts:122` | Khuôn khác bốn kho còn lại, không có `satisfies` nên lệch khoá không đỏ lúc biên dịch. |
+| Định danh tiếng Việt trong mã sản phẩm | `BANG`, `khoa`, `kichBan`, `manh`, `con`, `MOC`, `NUT_TU`. Trái luật `CLAUDE.md`; `manh` và `con` không có nghĩa ở cả hai thứ tiếng. Nặng nhất ở `packages/ui` vì đó là nơi merge với kho hãng. |
+| `translate="no"` | Mới áp cho đúng ô tên công ty; tên thoả thuận và tên cá nhân cùng vừa sửa thì không. |
+| Sáu phát hiện về thước, vòng 5 | Fixture bảy giai đoạn gõ tay không round-trip từ enum máy chủ · E11 đếm hàng trong cơ sở dữ liệu chứ không đọc chữ trên màn · số facet là hằng viết tay · chặn hồ sơ đếm chính thứ nó vừa mở. |
+| `_acceptance/config.yaml` | `ui_standards_skill` và `design_pass.ds_skill` trỏ vào `web-design-guidelines`, skill không tồn tại. |
+
 ## Ba thứ chặn, cần người quyết — không phải việc code
 
 **B1 — Google OAuth.** `GOOGLE_CLIENT_ID`/`SECRET` rỗng, trang sign-in báo "No way
@@ -170,10 +261,11 @@ token, thay giá trị bằng thang màu tự dựng.
 
 ## Hàng đợi feature-loop
 
-Chạy bằng `/feature-loop:feature-loop <mô tả>`. Cổng nghiệm thu **đã chạy thật 7
+Chạy bằng `/feature-loop:feature-loop <mô tả>`. Cổng nghiệm thu **đã chạy thật 13
 lần** — không còn là đường chưa ai đi.
 
-1. **Vòng ③ nhãn ứng dụng** — T2 — việc kế tiếp, xem mục trên.
+1. **Lát ③a nhãn ứng dụng** — T2 — đã chạy sáu vòng S4, xem mục trên. Việc còn
+   lại: chạy vòng 7 trên HEAD, rồi hai chữ ký của người.
 2. **`prerender-mat-vi-doc-cookie`** — T2 — **mới, mức cao.** Đọc `cookies()` ở
    layout gốc làm **mọi tuyến** mất khả năng dựng sẵn, không riêng trang đăng
    nhập như hợp đồng vòng ① khai. Máy chủ dev in một lỗi mỗi lượt tải trang, trỏ
