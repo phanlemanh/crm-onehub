@@ -97,17 +97,38 @@ const thoaThuan = z
 	.object({ rows: z.array(z.object({ stage: chu })) })
 	.parse(dsThoaThuan).rows;
 
-const GIAI_DOAN = [
-	"Demo booked",
-	"Qualified to buy",
-	"Decision maker in",
-	"Contract sent",
-	"Closed won",
-	"Closed lost",
-	"Unqualified",
-];
 const NGANH = [...new Set(congTy.map((r) => r.industry).filter(Boolean))];
 const MA_GIAI_DOAN = [...new Set(thoaThuan.map((r) => r.stage))];
+
+function nhanGiaiDoan(ma) {
+	const kichBan = `
+import { DealStage } from "@crm/db/enums";
+import { dealStageLabel } from "./lib/deal-stage";
+const ma = ${JSON.stringify(ma)};
+const duEnum = Object.values(DealStage);
+console.log(JSON.stringify({
+  nhan: Object.fromEntries(ma.map((m) => [m, dealStageLabel(m)])),
+  duEnum,
+}));
+`;
+	let ra;
+	try {
+		ra = execFileSync("bun", ["-e", kichBan], {
+			cwd: "apps/app",
+			encoding: "utf8",
+		});
+	} catch (loi) {
+		console.log(
+			"KHONG DO DUOC: khong goi duoc dealStageLabel cua san pham — " +
+				String(loi.stderr ?? loi.message).slice(0, 300),
+		);
+		process.exit(2);
+	}
+	return JSON.parse(ra.trim().split("\n").pop());
+}
+
+const { nhan: NHAN_GIAI_DOAN, duEnum: ENUM_GIAI_DOAN } = nhanGiaiDoan(MA_GIAI_DOAN);
+const GIAI_DOAN = MA_GIAI_DOAN.map((m) => NHAN_GIAI_DOAN[m]);
 
 const browser = await puppeteer.launch({
 	executablePath: CHROME,
@@ -139,17 +160,31 @@ async function xem(man, canTim, trang = "") {
 }
 
 if (chan === "giai-doan") {
-	console.log(`-- bay gia tri giai doan, lay tu enum cua may chu: ${MA_GIAI_DOAN.length} ma dang dung`);
-	if (GIAI_DOAN.length !== 7) {
-		console.log(`RANG CUN: cho 7 gia tri giai doan, thay ${GIAI_DOAN.length}`);
+	if (GIAI_DOAN.length === 0) {
+		console.log(
+			"KHONG DO DUOC: tap giai doan tu may chu RONG — deals.list khong tra ve hang nao.\n" +
+				"   Tap so rong khong phai la dat: khong co gi de doi chieu.",
+		);
 		process.exit(2);
 	}
-	const thay = await xem("deals", GIAI_DOAN, "?hide=nothing");
+	const chuaPhu = ENUM_GIAI_DOAN.filter((m) => !MA_GIAI_DOAN.includes(m));
+	console.log(
+		`-- DAN SO: ${MA_GIAI_DOAN.length} ma giai doan doc tu may chu trong chinh luot chay nay\n` +
+			`   nhan lay tu dealStageLabel() CUA SAN PHAM, khong tu mot hang trong file do:\n` +
+			MA_GIAI_DOAN.map((m) => `     ${m.padEnd(26)} -> ${JSON.stringify(NHAN_GIAI_DOAN[m])}`).join("\n") +
+			`\n-- DO PHU: enum co ${ENUM_GIAI_DOAN.length} ma, du lieu thu phu ${MA_GIAI_DOAN.length}` +
+			(chuaPhu.length > 0
+				? `\n   CHUA PHU (khai ra, khong tinh la dat): ${chuaPhu.join(" · ")}`
+				: "") +
+			"\n-- KHANG DINH: moi nhan phai hien tren man, trong mot phan tu tu khai lang=en (AC-14 vong ③a)",
+	);
+	const thay = await xem("deals", GIAI_DOAN, process.env.TRANG ?? "?hide=nothing");
 	let hong = 0;
 	for (const g of GIAI_DOAN) {
 		const cho = thay.filter((x) => x.gt === g);
 		if (cho.length === 0) {
-			console.log(`   khong hien  ${g}`);
+			console.log(`   GIAI DOAN KHONG THAY TREN MAN: ${g}`);
+			hong += 1;
 			continue;
 		}
 		const chuaBoc = cho.filter((x) => !x.boc);
@@ -163,12 +198,26 @@ if (chan === "giai-doan") {
 	process.exit(hong > 0 ? 1 : 0);
 }
 
-console.log(`-- gia tri du lieu tieng Anh lay tu may chu: ${NGANH.length} nganh`);
-const thay = await xem("companies", NGANH, "?hide=nothing");
+if (NGANH.length === 0) {
+	console.log(
+		"KHONG DO DUOC: tap nganh nghe RONG — khong cong ty nao co truong industry.\n" +
+			"   Tap so rong khong phai la dat: khong co gi de doi chieu.",
+	);
+	await browser.close();
+	process.exit(2);
+}
+console.log(
+	`-- DAN SO: ${NGANH.length} nganh doc tu may chu trong chinh luot chay nay`,
+);
+const thay = await xem("companies", NGANH, process.env.TRANG ?? "?hide=nothing");
 let hong = 0;
 for (const g of NGANH) {
 	const cho = thay.filter((x) => x.gt === g);
-	if (cho.length === 0) continue;
+	if (cho.length === 0) {
+		console.log(`   NGANH KHONG THAY TREN MAN: ${g}`);
+		hong += 1;
+		continue;
+	}
 	const chuaBoc = cho.filter((x) => !x.boc);
 	if (chuaBoc.length > 0) hong += chuaBoc.length;
 	console.log(
