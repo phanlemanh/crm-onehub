@@ -260,3 +260,4 @@ none — không có eval nào chạy nhiều lần (runs > 1) round này
 Round 1: E1 failed — bản vẽ ba màn chưa mở đủ bề mặt ẩn trước khi đối chiếu. Returned to implementation.
 Round 2: E13 failed — chặn đột biến báo tỷ lệ bắt dưới ngưỡng khớp mới. Returned to implementation.
 Round 3: 16 eval máy PASS; E14 (AC-13) UNCERTAIN ở hai lens (domain-correctness, operational-feasibility) — verdict PENDING-JUDGMENT, chờ người quyết.
+Round 4: 16/16 tiêu chí máy đạt, 0 lệnh đỏ, 0 bị chặn, hội đồng E14 PASS. Verdict REJECT vì bảy phát hiện trong-hợp-đồng, cả bảy nhắm vào THƯỚC chứ không vào sản phẩm. Lượt đầu của vòng 4 bị BLOCKED oan ở E16 — chân khai tiếng ném lỗi trần khi máy chủ nghẽn nên người kiểm chẩn đoán sai thành 'API chưa chạy'; API thật ra đã sống 20 giờ. Đã vá chân để nó tự phân biệt hai ca, và chạy lại cùng vòng.
