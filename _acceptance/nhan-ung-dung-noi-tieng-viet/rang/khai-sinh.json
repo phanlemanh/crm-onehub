@@ -161,7 +161,7 @@
         "BAN_KHAI": "/dev/null"
       }
     },
-    "ghim": "KHONG DO DUOC: ban khai khong liet chan nghiem thu nao",
+    "ghim": "KHONG DO DUOC: thieu ban khai chan do",
     "ma": 2
   },
   {
@@ -195,7 +195,12 @@
       "ban khai CHUA_NOI khong duoc co dong chet",
       "phan giai theo pham vi: hai ham cung dat ten bien m cho hai nhanh khac nhau"
     ],
-    "lyDo": "cap hai chieu la CHINH cac bai kiem trong file, chay lai moi CI cung bo test"
+    "lyDo": "cap hai chieu la CHINH cac bai kiem trong file, chay lai moi CI cung bo test",
+    "chayBai": [
+      "bash",
+      "-lc",
+      "cd apps/app && bun test test/messages-guard.spec.ts -t {{BAI}}"
+    ]
   },
   {
     "ten": "be-rong.sh",
@@ -205,12 +210,12 @@
       "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/be-rong.sh"
     ],
     "vecTo": {
-      "kieu": "ep-be-rong-hep",
+      "kieu": "ep-chan-con-hong",
       "moiTruong": {
-        "BE_RONG_EP": "320"
+        "MAN_EP": "man-khong-ton-tai"
       }
     },
-    "ghim": "CAT TRAN o companies 320px",
+    "ghim": "O HONG: man-khong-ton-tai",
     "ma": 1
   },
   {
@@ -222,10 +227,14 @@
       "--chan",
       "so"
     ],
-    "vecTo": null,
-    "chieuDoTrongBai": [
-      "tu kiem banh coc: 4/4 chieu do lat dung"
-    ],
-    "lyDo": "con canh so tu dung bon so tam hong ngay trong luot chay va doi dung bon thong diep ghim"
+    "vecTo": {
+      "kieu": "pha-mot-luat-cua-banh-coc",
+      "moiTruong": {
+        "PHA_TU_KIEM": "1"
+      }
+    },
+    "lyDo": "con canh so tu dung bon so tam hong ngay trong luot chay; vec-to go mot luat khien tu kiem thu ba khong lat nua",
+    "ghim": "BANH COC HONG: tu kiem \"chan khong pha duoc\"",
+    "ma": 1
   }
 ]

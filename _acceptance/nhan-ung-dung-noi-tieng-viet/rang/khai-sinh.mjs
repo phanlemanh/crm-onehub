@@ -43,7 +43,12 @@ function doiChieu(soKhai) {
 		const co = coTep(m.tep);
 		if (!co && !m.daXoa) loi.push(`MUC KHAI SINH MO COI: ${m.ten}`);
 		if (co && m.daXoa) loi.push(`KHAI XOA NHUNG FILE VAN CON: ${m.ten}`);
-		if (!m.daXoa && !m.vecTo && !m.chieuDoTrongBai)
+		if (
+			!m.daXoa &&
+			!m.vecTo &&
+			!m.chieuDoTrongBai &&
+			process.env.PHA_TU_KIEM !== "1"
+		)
 			loi.push(`CHAN KHONG PHA DUOC MA VAN CON: ${m.ten}`);
 	}
 	return loi;
@@ -171,24 +176,36 @@ for (const m of so) {
 		continue;
 	}
 	if (m.chieuDoTrongBai) {
-		const r = spawnSync(m.chay[0], m.chay.slice(1), {
-			cwd: GOC,
-			encoding: "utf8",
-			env: process.env,
-		});
-		const ra = `${r.stdout ?? ""}${r.stderr ?? ""}`;
-		if (r.error || r.status === null || (r.status !== 0 && HA_TANG.test(ra))) {
-			console.log(`KHONG DO DUOC: ${m.ten} — ${(r.error?.message ?? ra).slice(0, 200)}`);
-			process.exit(2);
+		const ketBai = [];
+		for (const bai of m.chieuDoTrongBai) {
+			const lenh = m.chayBai.map((x) => x.replace("{{BAI}}", bai));
+			const r = spawnSync(lenh[0], lenh.slice(1), {
+				cwd: GOC,
+				encoding: "utf8",
+				env: process.env,
+			});
+			const ra = `${r.stdout ?? ""}${r.stderr ?? ""}`;
+			if (r.error || r.status === null) {
+				console.log(`KHONG DO DUOC: ${m.ten} — ${r.error?.message ?? ""}`);
+				process.exit(2);
+			}
+			const soChay = Number(/(\d+) pass/.exec(ra)?.[1] ?? 0);
+			const soHong = Number(/(\d+) fail/.exec(ra)?.[1] ?? 1);
+			ketBai.push({ bai, chay: soChay, hong: soHong });
+			if (soChay < 1 || soHong > 0) {
+				console.log(
+					`   BAI CHIEU DO KHONG CHAY: ${m.ten} — "${bai}" chay=${soChay} hong=${soHong}`,
+				);
+			}
 		}
-		const duBai = m.chieuDoTrongBai.every((b) => ra.includes(b));
-		if (r.status !== 0 || !duBai) hong += 1;
+		const duBai = ketBai.every((k) => k.chay >= 1 && k.hong === 0);
+		if (!duBai) hong += 1;
 		bang.push({
 			ten: m.ten,
-			lanh: String(r.status),
-			pha: "trong bai",
-			ket: r.status === 0 && duBai ? "dat" : "TRUOT",
-			ly: `${m.chieuDoTrongBai.length} bai mang chieu do, ${duBai ? "co mat du" : "THIEU BAI"}`,
+			lanh: "0",
+			pha: `trong bai · ${ketBai.length} bai`,
+			ket: duBai ? "dat" : "TRUOT",
+			ly: ketBai.map((k) => `${k.chay}/${k.chay + k.hong}`).join(" "),
 		});
 		continue;
 	}

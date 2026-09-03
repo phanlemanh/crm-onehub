@@ -5,7 +5,7 @@ slug: thuoc-cua-lat-3a-co-rang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [script]
-status: approved
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-09-04
 design_doc: docs/superpowers/specs/2026-09-04-thuoc-cua-lat-3a-co-rang-design.md

@@ -73,7 +73,7 @@ executors:
     rang3_khai_sinh_so: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.mjs --chan so"
     rang3_khai_sinh_tap_rong: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.mjs --chan tap-rong"
     rang3_mien_tru: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/mien-tru.mjs"
-    rang3_dot_bien_khoanh: "RUT_GON=1 node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/dot-bien.mjs --chan khoanh-vung"
+    rang3_dot_bien_khoanh: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/dot-bien.mjs --chan khoanh-vung"
     start_scan: "bash _acceptance/o-cam-khai-thac-trung-tinh/rang-quet.sh"
     rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
     rang_t1_im: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"
