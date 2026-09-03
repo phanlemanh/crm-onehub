@@ -243,7 +243,7 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 							onClick={() => history.fetchNextPage()}
 						>
 							{history.isFetchingNextPage ? <Spinner /> : null}
-							Show older
+							{m.timeline.showOlder}
 						</Button>
 					) : null}
 				</div>

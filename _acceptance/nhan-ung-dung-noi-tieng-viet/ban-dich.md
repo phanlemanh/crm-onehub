@@ -779,3 +779,26 @@ Phép đối chiếu cũ khớp bằng hậu tố bất kỳ, nên một dòng t
 | `contact.fields.title` | `Title` | `Chức danh` | |
 | `contact.fields.noCompany` | `No company` | `Chưa thuộc công ty nào` | |
 | `deal.contactColumns.title` | `Title` | `Chức danh` | |
+
+### Bổ sung ở vòng sửa S4-r6 — chữ tiếng Anh còn sót trên bề mặt bốn chân không mở tới
+
+Bản phản biện vòng 6 tìm ra 18 chỗ vẫn hiện tiếng Anh cho người đọc tiếng Việt:
+nút của màn trống trên hồ sơ, bảng Trường, hộp thoại Bảng xem, nút xem cũ hơn.
+Bốn chân nghiệm thu báo 0 dư vì chúng không mở đúng những bề mặt ấy — cùng câu
+chuyện mà con số 265 khoá ngoài tầm với đã kể. Sáu chỗ đã có khoá sẵn và đang
+được dùng cách đó vài chục dòng; mười ba khoá dưới đây là mới.
+
+| Khoá | Tiếng Anh | Tiếng Việt | Ghi chú |
+| --- | --- | --- | --- |
+| `timeline.showOlder` | `Show older` | `Xem cũ hơn` | |
+| `fields.moreFor` | `More for ${label}` | `Thêm hành động cho ${label}` | nhãn chỉ trình đọc màn hình nghe |
+| `fields.edit` | `Edit` | `Sửa` | |
+| `fields.restore` | `Restore` | `Khôi phục` | |
+| `fields.archiveTitle` | `Archive ${label}?` | `Lưu trữ ${label}?` | |
+| `fields.archiveBody` | `Hidden everywhere. Its values are kept.` | `Ẩn ở mọi nơi. Giá trị vẫn được giữ.` | |
+| `fields.archiveField` | `Archive field` | `Lưu trữ trường` | nút xác nhận, nói rõ đối tượng |
+| `fields.filledOf` | `${entity} · ${a} of ${b} filled` | `${entity} · đã điền ${a}/${b}` | tiếng Việt bỏ giới từ, dùng dấu gạch |
+| `views.shareWithTeam` | `Share with the team` | `Chia sẻ với cả đội` | |
+| `views.save` | `Save` | `Lưu` | |
+| `company.unconverted` | `+${n} unconverted` | `+${n} chưa quy đổi` | thoả thuận không quy đổi được sang tiền báo cáo |
+| `contact.source` | `Source` | `Nguồn` | liên kết tới nơi tác nhân tìm ra dữ kiện |

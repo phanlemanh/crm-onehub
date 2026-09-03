@@ -476,7 +476,7 @@ function Background({ brief }: { brief: NonNullable<Contact["brief"]> }) {
 							rel="noreferrer noopener"
 							className="underline-offset-2 hover:underline"
 						>
-							Source
+							{m.contact.source}
 						</a>
 					) : null}
 					{brief.sourceUrl ? " · " : null}

@@ -500,7 +500,7 @@ function DealContacts({
 						action={
 							<Button variant="outline" size="sm" onClick={onAdd}>
 								<Icon icon={Add} data-icon="inline-start" />
-								Add contact
+								{m.deal.addContact}
 							</Button>
 						}
 					/>

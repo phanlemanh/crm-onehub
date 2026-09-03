@@ -252,6 +252,13 @@ describe("kho chuoi cua vong ③a", () => {
 			],
 			"crm:web.views": ["1 lượt xem", "12 lượt xem"],
 			"crm:fields.removeOption": ["Bỏ 1", "Bỏ 12"],
+			"crm:fields.moreFor": ["Thêm hành động cho 1", "Thêm hành động cho 12"],
+			"crm:fields.archiveTitle": ["Lưu trữ 1?", "Lưu trữ 12?"],
+			"crm:fields.filledOf": ["1 · đã điền A/B", "12 · đã điền A/B"],
+			"record-sheet:company.unconverted": [
+				"+1 chưa quy đổi",
+				"+12 chưa quy đổi",
+			],
 			"record-sheet:deal.nobodyAttached": [
 				"Chưa ai từ 1 được gắn vào.",
 				"Chưa ai từ 12 được gắn vào.",

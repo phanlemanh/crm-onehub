@@ -343,19 +343,19 @@ export function FieldsList({
 													<Button variant="ghost" size="icon-xs">
 														<Icon icon={OverflowMenuVertical} />
 														<span className="sr-only">
-															More for {field.label}
+															{copy.moreFor(field.label)}
 														</span>
 													</Button>
 												</DropdownMenuTrigger>
 												<DropdownMenuContent align="end">
 													<DropdownMenuItem onSelect={() => onEdit(field.key)}>
-														Edit
+														{copy.edit}
 													</DropdownMenuItem>
 													<DropdownMenuSeparator />
 													<DropdownMenuItem
 														onSelect={() => archive.mutate({ id: field.id })}
 													>
-														Archive
+														{copy.archive}
 													</DropdownMenuItem>
 												</DropdownMenuContent>
 											</DropdownMenu>
@@ -384,7 +384,7 @@ export function FieldsList({
 												size="xs"
 												onClick={() => restore.mutate({ id: field.id })}
 											>
-												Restore
+												{copy.restore}
 											</Button>
 										</li>
 									))}

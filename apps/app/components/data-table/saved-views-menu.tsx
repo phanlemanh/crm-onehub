@@ -152,7 +152,7 @@ export function SavedViewsMenu({
 						</Field>
 						<Field orientation="horizontal">
 							<FieldLabel htmlFor="saved-view-shared">
-								Share with the team
+								{m.views.shareWithTeam}
 							</FieldLabel>
 							<Switch
 								id="saved-view-shared"
@@ -163,7 +163,7 @@ export function SavedViewsMenu({
 					</div>
 					<DialogFooter>
 						<Button variant="outline" onClick={closeDialog}>
-							Cancel
+							{m.sheet.cancel}
 						</Button>
 						<Button
 							disabled={name.trim() === "" || create.isPending}
@@ -176,7 +176,7 @@ export function SavedViewsMenu({
 								})
 							}
 						>
-							Save
+							{m.views.save}
 						</Button>
 					</DialogFooter>
 				</DialogContent>

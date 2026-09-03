@@ -424,9 +424,11 @@ export function FieldEditor({
 				<AlertDialog open={confirming} onOpenChange={setConfirming}>
 					<AlertDialogContent>
 						<AlertDialogHeader>
-							<AlertDialogTitle>Archive {field.label}?</AlertDialogTitle>
+							<AlertDialogTitle>
+								{copy.archiveTitle(field.label)}
+							</AlertDialogTitle>
 							<AlertDialogDescription>
-								Hidden everywhere. Its values are kept.
+								{copy.archiveBody}
 							</AlertDialogDescription>
 						</AlertDialogHeader>
 						<AlertDialogFooter>
@@ -435,7 +437,7 @@ export function FieldEditor({
 								variant="destructive"
 								onClick={() => archive.mutate({ id: field.id })}
 							>
-								Archive field
+								{copy.archiveField}
 							</AlertDialogAction>
 						</AlertDialogFooter>
 					</AlertDialogContent>

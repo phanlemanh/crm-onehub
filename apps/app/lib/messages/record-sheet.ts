@@ -56,6 +56,7 @@ const en = {
 		primaryUpdated: "Primary contact updated.",
 		addContact: "Add contact",
 		newDeal: "New deal",
+		unconverted: (n: string) => `+${n} unconverted`,
 		noContactsTitle: "No contacts yet",
 		noContactsBody: (name: string) =>
 			`Everyone you talk to at ${name} lives here — add the first person and their calls, emails and notes hang off them.`,
@@ -111,6 +112,7 @@ const en = {
 		emails: "Emails",
 		neverReplied: (first: string) => `${first} has never replied`,
 		lastReply: "last reply",
+		source: "Source",
 		thisCompany: "this company",
 		meetings: "Meetings",
 		nextMeeting: "Next meeting",
@@ -242,6 +244,7 @@ const vi = {
 		primaryUpdated: "Đã đổi đầu mối chính.",
 		addContact: "Thêm cá nhân",
 		newDeal: "Thoả thuận mới",
+		unconverted: (n: string) => `+${n} chưa quy đổi`,
 		noContactsTitle: "Chưa có cá nhân nào",
 		noContactsBody: (name: string) =>
 			`Mọi người bạn trao đổi ở ${name} nằm ở đây — thêm người đầu tiên, rồi cuộc gọi, email và ghi chú của họ gắn theo.`,
@@ -296,6 +299,7 @@ const vi = {
 		emails: "Email",
 		neverReplied: (first: string) => `${first} chưa trả lời lần nào`,
 		lastReply: "trả lời gần nhất",
+		source: "Nguồn",
 		thisCompany: "công ty này",
 		meetings: "Cuộc họp",
 		nextMeeting: "Cuộc họp tới",

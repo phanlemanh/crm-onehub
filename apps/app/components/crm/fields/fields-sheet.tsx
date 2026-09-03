@@ -59,7 +59,11 @@ function FieldsSheetBody({
 					title={editing?.label ?? (editingKey ? "" : copy.newField)}
 					description={
 						filled
-							? `${entityLabel} · ${filled.filled} of ${filled.total} filled`
+							? copy.filledOf(
+									entityLabel ?? "",
+									String(filled.filled),
+									String(filled.total),
+								)
 							: entityLabel
 					}
 					onBack={() => onEdit(null)}

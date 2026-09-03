@@ -293,7 +293,7 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 							{openUncounted > 0 ? (
 								<span className="text-muted-foreground">
 									{" "}
-									+{openUncounted} unconverted
+									{m.company.unconverted(String(openUncounted))}
 								</span>
 							) : null}
 						</DetailSheetStat>
@@ -488,7 +488,7 @@ function CompanyContacts({
 						action={
 							<Button variant="outline" size="sm" onClick={onAdd}>
 								<Icon icon={Add} data-icon="inline-start" />
-								Add contact
+								{m.company.addContact}
 							</Button>
 						}
 					/>
@@ -615,7 +615,7 @@ function CompanyDeals({
 						action={
 							<Button variant="outline" size="sm" onClick={onAdd}>
 								<Icon icon={Add} data-icon="inline-start" />
-								New deal
+								{m.company.newDeal}
 							</Button>
 						}
 					/>
