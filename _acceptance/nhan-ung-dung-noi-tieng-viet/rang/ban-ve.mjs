@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { appendFileSync, readFileSync } from "node:fs";
 import { z } from "../../../packages/validation/node_modules/zod/index.js";
 import puppeteer from "puppeteer-core";
-import { BE_MAT, CHUA_MO } from "./be-mat.mjs";
+import { BE_MAT, CHUA_MO, DEM_BE_MAT_TRANG, LA_MENU } from "./be-mat.mjs";
 import { suySlug } from "./slug.mjs";
 
 const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
@@ -619,6 +619,7 @@ try {
 					{ timeout: CHO_VE },
 				);
 				const lang = await page.evaluate(() => document.documentElement.lang);
+				const trangMoi = await page.evaluate(DEM_BE_MAT_TRANG);
 				const chu = [...((await page.evaluate(DOC_CHU, scope)) ?? [])];
 				const moDuoc = [];
 				for (const bm of BE_MAT[man]) {
@@ -630,7 +631,7 @@ try {
 					await bm.dong(page).catch(() => {});
 				}
 				await page.close();
-				return { lang, chu, moDuoc };
+				return { lang, chu, moDuoc, trangMoi };
 			};
 			const vi = await doc("vi");
 			const en = await doc("en");
@@ -652,15 +653,33 @@ try {
 				.sort();
 			const lan = con.reduce((n, x) => n + viDem.get(x), 0);
 			const khai = BE_MAT[man].length;
-			const lech = khai - vi.moDuoc.length;
-			tongDu += lan;
-			tongLech += Math.abs(lech) + Math.abs(khai - en.moDuoc.length);
-			console.log(`\n-- man ${man} · be mat khai=${khai} · da mo vi=${vi.moDuoc.length} en=${en.moDuoc.length}`);
-			console.log(`   da mo: ${vi.moDuoc.join(" · ") || "(khong cai nao)"}`);
-			if (lech !== 0) {
-				const thieu = BE_MAT[man].map((b) => b.ten).filter((t) => !vi.moDuoc.includes(t));
-				console.log(`   KHONG MO DUOC: ${thieu.join(" · ")}`);
+			let lech = 0;
+			if (vi.trangMoi === null) {
+				console.log(`KHONG DO DUOC: khong tim thay khung man o ${man} de dem be mat`);
+				process.exit(2);
 			}
+			const khaiMenu = BE_MAT[man].filter((b) => LA_MENU(b.ten)).length;
+			if (vi.trangMoi.loai > khaiMenu) {
+				console.log(
+					`   BE MAT KHONG KHAI: trang moi ra ${vi.trangMoi.loai} LOAI menu, ban khai co ${khaiMenu}`,
+				);
+				lech += vi.trangMoi.loai - khaiMenu;
+			}
+			for (const bm of BE_MAT[man]) {
+				if (!vi.moDuoc.includes(bm.ten)) {
+					console.log(
+						`   BAN KHAI CO DONG CHET: ${man}:${bm.ten} — trang khong moi be mat nay ra`,
+					);
+					lech += 1;
+				}
+			}
+			tongDu += lan;
+			tongLech += lech + Math.abs(khai - en.moDuoc.length);
+			console.log(
+				`\n-- man ${man} · trang moi ${vi.trangMoi.loai} loai menu (${vi.trangMoi.theHien} the hien, ${vi.trangMoi.trenDong} tren dong)` +
+					` · ban khai ${khaiMenu} menu tren tong ${khai} be mat · da mo vi=${vi.moDuoc.length} en=${en.moDuoc.length}`,
+			);
+			console.log(`   da mo: ${vi.moDuoc.join(" · ") || "(khong cai nao)"}`);
 			console.log(`   CON LAI: ${con.length} chuoi / ${lan} lan`);
 			for (const x of con) console.log(`      * ${JSON.stringify(x)}${viDem.get(x) > 1 ? ` x${viDem.get(x)}` : ""}`);
 		}
