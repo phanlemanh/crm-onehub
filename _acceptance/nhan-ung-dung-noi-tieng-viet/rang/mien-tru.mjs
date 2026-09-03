@@ -94,6 +94,14 @@ banKhai.push({
 	},
 });
 
+if (process.env.DONG_GIA) {
+	banKhai.push({
+		ten: "dong-gia-de-thu-banh-coc",
+		dong: [process.env.DONG_GIA],
+		song: () => false,
+	});
+}
+
 let chet = 0;
 let tong = 0;
 for (const bk of banKhai) {

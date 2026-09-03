@@ -5,6 +5,38 @@ import { fileURLToPath } from "node:url";
 const GOC = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
 const TRANG_THAI = ["RUNNING", "COMPLETE", "FAILED", "SKIPPED"];
+const TRA_VE = process.argv.includes("--tra-ve-pending");
+const GO_HOAT_DONG = process.argv.includes("--go-hoat-dong");
+const PHUC_HOAT_DONG = process.argv.includes("--phuc-hoat-dong");
+const KHO_MOC = "/tmp/moc-hoat-dong.json";
+
+const kichBanTraVe = `
+import { db } from "./src/client";
+const n = await db.company.updateMany({ data: { enrichmentStatus: "PENDING" } });
+console.log(\`-- da tra \${n.count} cong ty ve PENDING (dung tap rong de thu chieu do)\`);
+`;
+
+const kichBanGoHoatDong = `
+import { writeFileSync } from "node:fs";
+import { db } from "./src/client";
+const rows = await db.company.findMany({
+  where: { lastActivityAt: { not: null } },
+  select: { id: true, lastActivityAt: true },
+});
+writeFileSync(${JSON.stringify(KHO_MOC)}, JSON.stringify(rows));
+await db.company.updateMany({ data: { lastActivityAt: null } });
+console.log(\`-- da go moc hoat dong cua \${rows.length} cong ty, chup vao ${KHO_MOC}\`);
+`;
+
+const kichBanPhucHoatDong = `
+import { readFileSync } from "node:fs";
+import { db } from "./src/client";
+const rows = JSON.parse(readFileSync(${JSON.stringify(KHO_MOC)}, "utf8"));
+for (const r of rows) {
+  await db.company.update({ where: { id: r.id }, data: { lastActivityAt: new Date(r.lastActivityAt) } });
+}
+console.log(\`-- da phuc moc hoat dong cho \${rows.length} cong ty\`);
+`;
 
 const kichBan = `
 import { db } from "./src/client";
@@ -55,9 +87,16 @@ if (conThieu.length > 0) {
 }
 `;
 
-console.log("-- gieo nam trang thai bo sung du lieu cho du lieu thu");
+console.log("-- gieo du lieu thu");
 try {
-	const ra = execFileSync("bun", ["-e", kichBan], {
+	const chon = GO_HOAT_DONG
+	? kichBanGoHoatDong
+	: PHUC_HOAT_DONG
+		? kichBanPhucHoatDong
+		: TRA_VE
+			? kichBanTraVe
+			: kichBan;
+	const ra = execFileSync("bun", ["-e", chon], {
 		cwd: `${GOC}/packages/db`,
 		encoding: "utf8",
 		env: process.env,

@@ -7,6 +7,7 @@ const CHO_VE = Number(process.env.CHO_VE ?? 90000);
 
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const APP = process.env.APP_URL ?? "http://localhost:3000";
+const TIENG = process.env.TIENG ?? "vi";
 
 const NO = [
 	{ cu: "Search companies by name or domain…", moi: "Tìm công ty theo tên hoặc tên miền…", o: "ô tìm trên màn công ty" },
@@ -83,12 +84,12 @@ async function chu(locale) {
 	return { lang, ra };
 }
 
-const vi = await chu("vi");
+const vi = await chu(TIENG);
 const en = await chu("en");
 await browser.close();
 
-if (vi.lang !== "vi" || en.lang !== "en") {
-	console.log(`RANG CUN: lang lech (vi->${vi.lang}, en->${en.lang})`);
+if (vi.lang !== TIENG || en.lang !== "en") {
+	console.log(`KHONG DO DUOC: lang lech (${TIENG}->${vi.lang}, en->${en.lang})`);
 	process.exit(2);
 }
 

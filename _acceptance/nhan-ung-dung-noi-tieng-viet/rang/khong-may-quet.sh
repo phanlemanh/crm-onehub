@@ -7,7 +7,7 @@ RANG="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Moi chan phai dung trinh duyet that, may chu that, hoac trinh bien dich.
 VAT_THAT='puppeteer|curl|bun test|bunx tsc|fetch\(|createSourceFile\(|createProgram\('
 
-DANH_SACH="$RANG/danh-sach-chan.json"
+DANH_SACH="${BAN_KHAI:-$RANG/danh-sach-chan.json}"
 [ -f "$DANH_SACH" ] || { echo "KHONG DO DUOC: thieu ban khai chan do tai $DANH_SACH"; exit 2; }
 CANH="$(node -e 'const d=require(process.argv[1]);console.log(d.chanNghiemThu.map(c=>c.ten.split("/").pop()).join("\n"))' "$DANH_SACH")"
 [ -n "$CANH" ] || { echo "KHONG DO DUOC: ban khai khong liet chan nghiem thu nao — tap so rong"; exit 2; }

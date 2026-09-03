@@ -658,14 +658,21 @@ try {
 				console.log(`KHONG DO DUOC: khong tim thay khung man o ${man} de dem be mat`);
 				process.exit(2);
 			}
-			const khaiMenu = BE_MAT[man].filter((b) => LA_MENU(b.ten)).length;
+			const banKhaiMan =
+				process.env.THEM_BE_MAT_GIA === "1"
+					? [
+							{ ten: "menu gia de thu banh coc", mo: async () => false, dong: async () => {} },
+							...BE_MAT[man],
+						]
+					: BE_MAT[man];
+			const khaiMenu = banKhaiMan.filter((b) => LA_MENU(b.ten)).length;
 			if (vi.trangMoi.loai > khaiMenu) {
 				console.log(
 					`   BE MAT KHONG KHAI: trang moi ra ${vi.trangMoi.loai} LOAI menu, ban khai co ${khaiMenu}`,
 				);
 				lech += vi.trangMoi.loai - khaiMenu;
 			}
-			for (const bm of BE_MAT[man]) {
+			for (const bm of banKhaiMan) {
 				if (!vi.moDuoc.includes(bm.ten)) {
 					console.log(
 						`   BAN KHAI CO DONG CHET: ${man}:${bm.ten} — trang khong moi be mat nay ra`,
@@ -1033,7 +1040,8 @@ try {
 
 		const nut = await page.$$("header button, button");
 		let moduoc = false;
-		for (const b of nut) {
+		const boQuaDoiTieng = process.env.KHONG_DOI === "1";
+		for (const b of boQuaDoiTieng ? [] : nut) {
 			const co = await b.evaluate((el) => el.getAttribute("aria-haspopup") === "menu");
 			if (!co) continue;
 			await b.click().catch(() => {});
@@ -1051,7 +1059,7 @@ try {
 			await page.keyboard.press("Escape").catch(() => {});
 			await new Promise((r) => setTimeout(r, 200));
 		}
-		if (!moduoc) {
+		if (!moduoc && process.env.KHONG_DOI !== "1") {
 			console.log("RANG CUN: khong tim thay hang doi tieng trong menu tai khoan");
 			process.exit(2);
 		}
