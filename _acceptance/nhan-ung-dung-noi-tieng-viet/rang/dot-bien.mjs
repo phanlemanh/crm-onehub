@@ -1,5 +1,6 @@
-import { execFileSync, spawnSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { execFileSync, spawn, spawnSync } from "node:child_process";
+import { existsSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 
 const CHO_MS = Number(process.env.CHO_MS ?? 12000);
 const RANG = "_acceptance/nhan-ung-dung-noi-tieng-viet/rang";
@@ -77,7 +78,7 @@ function capKhoa(goc) {
 }
 
 function soDongDoi(file) {
-	const out = execFileSync("git", ["diff", "--numstat", "--", file], {
+	const out = execFileSync("git", ["-C", SAO, "diff", "--numstat", "--", file], {
 		encoding: "utf8",
 	}).trim();
 	if (out === "") return 0;
@@ -85,26 +86,198 @@ function soDongDoi(file) {
 	return Number(them) + Number(bot);
 }
 
-function chayChan() {
+const CONG_SAO = Number(process.env.CONG_SAO ?? 3200);
+
+async function doiMayChu(url, hanGiay = 180) {
+	for (let i = 0; i < hanGiay; i += 1) {
+		try {
+			const r = await fetch(url, { redirect: "manual" });
+			if (r.status > 0) return true;
+		} catch {}
+		await new Promise((r) => setTimeout(r, 1000));
+	}
+	return false;
+}
+
+function dungMayChuSao(sao) {
+	const con = spawn("bun", ["run", "dev"], {
+		cwd: join(sao, "apps/app"),
+		env: {
+			...process.env,
+			PORT: String(CONG_SAO),
+			APP_URL: `http://localhost:${CONG_SAO}`,
+			API_URL: process.env.API_URL ?? "http://localhost:3001",
+		},
+		stdio: "ignore",
+		detached: true,
+	});
+	con.unref();
+	return con;
+}
+
+function chayChan(appUrl) {
 	const ra = [];
 	for (const c of CHAN) {
 		const r = spawnSync("node", [`${RANG}/ban-ve.mjs`, c], {
 			encoding: "utf8",
+			env: { ...process.env, APP_URL: appUrl },
 		});
 		ra.push(`${r.stdout ?? ""}${r.stderr ?? ""}`);
 	}
 	return ra.join("\n");
 }
 
-const goc = new Map();
-for (const [, file] of KHO) goc.set(file, readFileSync(file, "utf8"));
+const co = (ten) => {
+	const i = process.argv.indexOf(ten);
+	return i === -1 ? null : process.argv[i + 1];
+};
+const CHAN_CHAY = co("--chan");
+const KIEU_CU = process.env.KIEU_CU === "1";
 
+function md5(file) {
+	return execFileSync("md5", ["-q", file], { encoding: "utf8" }).trim();
+}
+
+function sachChua(files) {
+	const ra = execFileSync("git", ["status", "--porcelain", "--", ...files], {
+		encoding: "utf8",
+	});
+	return ra.trim() === "";
+}
+
+function dungCaySao() {
+	const sao = process.env.CAY_SAO ?? `/tmp/dot-bien-${process.pid}`;
+	if (existsSync(sao)) rmSync(sao, { recursive: true, force: true });
+	execFileSync("git", ["worktree", "add", "--detach", "--quiet", sao, "HEAD"], {
+		encoding: "utf8",
+	});
+	for (const ten of ["node_modules", ".env"]) {
+		const nguon = join(process.cwd(), ten);
+		if (existsSync(nguon) && !existsSync(join(sao, ten)))
+			symlinkSync(nguon, join(sao, ten));
+	}
+	return sao;
+}
+
+function donCaySao(sao) {
+	try {
+		execFileSync("git", ["worktree", "remove", "--force", sao], {
+			encoding: "utf8",
+		});
+	} catch {
+		rmSync(sao, { recursive: true, force: true });
+	}
+	try {
+		execFileSync("git", ["worktree", "prune"], { encoding: "utf8" });
+	} catch {}
+}
+
+if (CHAN_CHAY === "khoanh-vung") {
+	const MOC = "apps/app/lib/messages/crm.ts";
+	const DAU_HIEU = "\nconst BAN_SUA_CUA_NGUOI_DANG_LAM = 1;\n";
+
+	if (!sachChua(KHO.map(([, f]) => f))) {
+		console.log(
+			"KHONG DO DUOC: nam kho chuoi dang ban truoc khi do — kiem git status roi chay lai",
+		);
+		process.exit(2);
+	}
+
+	const truocHet = md5(MOC);
+	const banGoc = readFileSync(MOC, "utf8");
+	let sao = null;
+	let hong = 0;
+
+	try {
+		const anhChup = new Map();
+		for (const [, file] of KHO) anhChup.set(file, readFileSync(file, "utf8"));
+		console.log("-- chan chup anh nam kho chuoi luc khoi dong");
+
+		writeFileSync(MOC, banGoc + DAU_HIEU);
+		const sauKhiNguoiSua = md5(MOC);
+		if (sauKhiNguoiSua === truocHet) {
+			console.log(
+				"KHONG DO DUOC: cu gia lap nguoi-sua khong doi duoc file — phep do vo nghia",
+			);
+			process.exit(2);
+		}
+		console.log(`-- nguoi sua GIUA luot chay: ${MOC} md5 ${truocHet} -> ${sauKhiNguoiSua}`);
+
+		if (KIEU_CU) {
+			console.log("-- KIEU CU: dot bien thang cay lam viec, khoi phuc bang anh chup dau luot");
+			for (const [, file] of KHO) {
+				const noi = readFileSync(file, "utf8");
+				writeFileSync(file, `${noi}\nconst DOT_BIEN_GIA = 1;\n`);
+			}
+			for (const [file, noi] of anhChup) writeFileSync(file, noi);
+		} else {
+			sao = dungCaySao();
+			console.log(`-- cay sao: ${sao}`);
+			for (const [, file] of KHO) {
+				const trongSao = join(sao, file);
+				const noi = readFileSync(trongSao, "utf8");
+				writeFileSync(trongSao, `${noi}\nconst DOT_BIEN_GIA = 1;\n`);
+			}
+			const doiTrongSao = KHO.filter(([, f]) =>
+				readFileSync(join(sao, f), "utf8").includes("DOT_BIEN_GIA"),
+			).length;
+			if (doiTrongSao !== KHO.length) {
+				console.log(
+					`KHONG DO DUOC: chi ${doiTrongSao}/${KHO.length} kho chuoi doi duoc trong cay sao`,
+				);
+				hong += 1;
+			}
+			console.log(`-- da dot bien ${doiTrongSao}/${KHO.length} kho chuoi TRONG CAY SAO`);
+		}
+
+		const sauLuot = md5(MOC);
+		if (sauLuot !== sauKhiNguoiSua) {
+			console.log(`   DOI THAY BI NUOT: ${MOC} md5 ${sauKhiNguoiSua} -> ${sauLuot}`);
+			hong += 1;
+		} else {
+			console.log(`   doi thay giua luot chay CON NGUYEN: ${MOC} md5 ${sauLuot}`);
+		}
+	} finally {
+		writeFileSync(MOC, banGoc);
+		if (sao) donCaySao(sao);
+	}
+
+	const veGoc = md5(MOC) === truocHet;
+	const sach = sachChua(KHO.map(([, f]) => f));
+	console.log(`   file moc ve nguyen trang:  ${veGoc ? "co" : "KHONG"}`);
+	console.log(`   nam kho chuoi sach sau khi thoat: ${sach ? "co" : "KHONG"}`);
+	if (!veGoc || !sach) hong += 1;
+
+	console.log(`ket qua: hong=${hong}`);
+	process.exit(hong > 0 ? 1 : 0);
+}
+
+if (!sachChua(KHO.map(([, f]) => f))) {
+	console.log(
+		"KHONG DO DUOC: nam kho chuoi dang ban truoc khi do — commit hoac don cay roi chay lai",
+	);
+	process.exit(2);
+}
+
+const SAO = dungCaySao();
+const APP_SAO = `http://localhost:${CONG_SAO}`;
+console.log(`-- cay sao: ${SAO} · may chu rieng o cong ${CONG_SAO}`);
+
+const goc = new Map();
+for (const [, file] of KHO) goc.set(file, readFileSync(join(SAO, file), "utf8"));
+
+let mayChu = null;
 let daTra = false;
 function traLai(vi) {
 	if (daTra) return;
 	daTra = true;
-	for (const [file, noiDung] of goc) writeFileSync(file, noiDung);
-	if (vi) console.log(`\n-- ${vi}: da tra nam kho chuoi ve nguyen trang`);
+	if (mayChu?.pid) {
+		try {
+			process.kill(-mayChu.pid, "SIGTERM");
+		} catch {}
+	}
+	donCaySao(SAO);
+	if (vi) console.log(`\n-- ${vi}: da go cay sao, cay lam viec khong bi cham`);
 }
 
 for (const tin of ["SIGINT", "SIGTERM", "SIGHUP"]) {
@@ -148,8 +321,19 @@ function duLai(vb) {
 	return t;
 }
 
-console.log("-- nen: bon chan nghiem thu tren ban dich day du");
-const nen = chayChan();
+mayChu = dungMayChuSao(SAO);
+console.log(`-- cho may chu cua cay sao len o ${APP_SAO}`);
+if (!(await doiMayChu(APP_SAO))) {
+	console.log(
+		`KHONG DO DUOC: may chu cua cay sao khong len o ${APP_SAO} sau 180 giay.\n` +
+			"   Day la loi ha tang, khong phai loi san pham — khong duoc doc thanh mot lan do dat.",
+	);
+	traLai("may chu khong len");
+	process.exit(2);
+}
+
+console.log("-- nen: bon chan nghiem thu tren ban dich day du, do TREN CAY SAO");
+const nen = chayChan(APP_SAO);
 const nenSach = /ket qua: con lai=0 lan/.test(nen);
 console.log(
 	`   bon chan tren cay lanh: ${nenSach ? "sach" : "CHUA SACH — do dot bien khong noi len dieu gi"}`,
@@ -171,9 +355,9 @@ try {
 		for (const c of [...cuaKho].sort((x, y) => y.dau - x.dau)) {
 			hang.splice(c.dau, c.cuoi - c.dau + 1, ...c.enHang);
 		}
-		writeFileSync(file, hang.join("\n"));
+		writeFileSync(join(SAO, file), hang.join("\n"));
 
-		const sauKhi = readFileSync(file, "utf8").split("\n");
+		const sauKhi = readFileSync(join(SAO, file), "utf8").split("\n");
 		const viMoi = quetKhoa(
 			sauKhi,
 			sauKhi.findIndex((d) => d === "\tvi: {" || d === "const vi = {"),
@@ -207,7 +391,7 @@ try {
 
 	await new Promise((r) => setTimeout(r, CHO_MS));
 	console.log("-- do lai bon chan tren cay da dot bien");
-	var sau = chayChan();
+	var sau = chayChan(APP_SAO);
 } catch (loi) {
 	traLai("dut giua chung");
 	console.log(String(loi instanceof Error ? loi.message : loi));
