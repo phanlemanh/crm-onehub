@@ -31,14 +31,20 @@ describe("định dạng theo ngôn ngữ", () => {
 	});
 
 	it("đếm: tiếng Anh đổi dạng số nhiều, tiếng Việt thì không", () => {
-		expect(formatCount(1, "company", "companies", "en")).toBe("1 company");
-		expect(formatCount(3, "company", "companies", "en")).toBe("3 companies");
-		expect(formatCount(1, "công ty", "công ty", "vi")).toBe("1 công ty");
-		expect(formatCount(3, "công ty", "công ty", "vi")).toBe("3 công ty");
+		expect(formatCount(1, "company", "en", "companies")).toBe("1 company");
+		expect(formatCount(3, "company", "en", "companies")).toBe("3 companies");
+		expect(formatCount(1, "công ty", "vi", "công ty")).toBe("1 công ty");
+		expect(formatCount(3, "công ty", "vi", "công ty")).toBe("3 công ty");
 	});
 
-	it("mặc định vẫn là tiếng Anh, nên chỗ gọi cũ không đổi hành vi", () => {
-		expect(formatDay("2026-09-01")).toBe("Sep 1, 2026");
-		expect(formatMoney(123456, "usd")).toBe("$1,234.56");
+	it("không còn mặc định: mọi chỗ gọi phải nói ra tiếng của nó", () => {
+		expect(formatDay("2026-09-01", "en")).toBe("Sep 1, 2026");
+		expect(formatMoney(123456, "usd", "en")).toBe("$1,234.56");
+	});
+
+	it("số nhiều mặc định chỉ dựng ở tiếng Anh, không dựng ở tiếng Việt", () => {
+		expect(formatCount(3, "deal", "en")).toBe("3 deals");
+		expect(formatCount(1, "deal", "en")).toBe("1 deal");
+		expect(formatCount(3, "thoả thuận", "vi")).toBe("3 thoả thuận");
 	});
 });

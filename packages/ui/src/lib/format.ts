@@ -30,8 +30,8 @@ export function dateFormat(
 export function formatCount(
 	count: number,
 	noun: string,
-	plural = `${noun}s`,
 	locale: Locale,
+	plural = `${noun}s`,
 ): string {
 	if (locale === "vi") return `${count} ${noun}`;
 	return `${count} ${count === 1 ? noun : plural}`;

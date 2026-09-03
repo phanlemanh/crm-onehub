@@ -13,7 +13,6 @@ import {
 import { CardTableEmpty } from "@crm/ui/components/card-table";
 import { Field, FieldDescription, FieldLabel } from "@crm/ui/components/field";
 import { Input } from "@crm/ui/components/input";
-import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Select,
 	SelectContent,
@@ -54,7 +53,6 @@ const USAGE_COLUMNS: SimpleTableColumn[] = [
 ];
 
 export function CurrencySettings() {
-	const locale = useLocale();
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
@@ -304,7 +302,7 @@ export function CurrencySettings() {
 					<CardDescription>
 						{unconverted.count === 0
 							? "Every deal with an amount can be converted into the reporting currency."
-							: `${formatCount(unconverted.count, "deal", undefined, locale)} cannot be converted, so ${unconverted.count === 1 ? "it is" : "they are"} left out of every total.`}
+							: `${formatCount(unconverted.count, "deal", "en")} cannot be converted, so ${unconverted.count === 1 ? "it is" : "they are"} left out of every total.`}
 						{refreshedAt ? (
 							<>
 								{" "}

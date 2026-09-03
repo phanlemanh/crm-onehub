@@ -42,7 +42,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
 function deals(count: number, locale: Locale): string {
-	return formatCount(count, dealMessages(locale).noun, undefined, locale);
+	return formatCount(count, dealMessages(locale).noun, locale);
 }
 
 export function DealsBulkActions({

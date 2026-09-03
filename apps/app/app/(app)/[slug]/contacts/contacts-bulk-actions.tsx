@@ -30,7 +30,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
 function contacts(count: number, locale: Locale): string {
-	return formatCount(count, contactMessages(locale).noun, undefined, locale);
+	return formatCount(count, contactMessages(locale).noun, locale);
 }
 
 export function ContactsBulkActions({

@@ -27,7 +27,7 @@ import { useTRPC } from "@/lib/trpc/client";
 
 function companies(count: number, locale: Locale): string {
 	const m = companyMessages(locale);
-	return formatCount(count, m.noun, m.nounPlural, locale);
+	return formatCount(count, m.noun, locale, m.nounPlural);
 }
 
 export function CompaniesBulkActions({

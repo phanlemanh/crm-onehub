@@ -208,7 +208,7 @@ export function DashboardSummary() {
 						<CardDescription>
 							{overdueTasks.length === 0
 								? "Every task you have logged is either done or still to come"
-								: `${formatCount(overdueTasks.length, "task", undefined, locale)} past due`}
+								: `${formatCount(overdueTasks.length, "task", "en")} past due`}
 						</CardDescription>
 					</CardHeader>
 					<CardPanel>
