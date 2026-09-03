@@ -1,0 +1,82 @@
+26 KHOA LO RA KHI SIET CHAN KHOA-CHET — Task 8, 2026-09-04
+
+Ban long cua song() khop la va cha RIENG RE tren khoi ma toan app noi chuoi, nen
+mot khoa con "song" chi vi mot tu pho thong xuat hien o dau do. Ban moi doc cay
+cu phap, lan theo alias theo PHAM VI, va doi cap cha.la LIEN KE tren mot chuoi
+truy cap co goc la mot bien kho chuoi.
+
+So do khi siet: 26 khoa mat cho goi that.
+
+KHONG SUA TRONG VONG NAY — rang buoc cua vong la khong doi chuoi san pham. Ca 26
+khai trong ban khai CHUA_NOI_KHAI cua messages-guard.spec.ts, duoi BANH COC HAI
+CHIEU: them mot khoa con song vao ban khai la DO, bo mot khoa chet ra khoi ban
+khai cung la DO, va mot dong tro toi khoa khong ton tai cung DO.
+
+Moi dong duoi day la mot khoan no chuyen sang vong ③a luot 9.
+
+## Nhom 1 — bang Truong hien tieng Anh (18 khoa)
+
+crm.standard.name · domain · website · industry · city · country · firstName ·
+lastName · title · email · phone · linkedin · github · owner · amount ·
+currency · closeDate · stage
+
+Nguyen nhan: apps/app/components/crm/fields/standard-fields.ts khai
+STANDARD_FIELDS la mot mang CHUOI TIENG ANH VIET CUNG ("Name", "Domain",
+"Website", "First name", "Last name", "Title", "LinkedIn", "GitHub",
+"Close date"...), va fields-list.tsx render thang mang do. Mười tám khoa
+crm.standard.* da dich nam chet ben canh.
+
+Day dung la lop loi ma handoff.md goi ten: "16/16 tieu chi may dat va van con 18
+cho hien tieng Anh... ca bang Truong". Nay no CO mot phep do bat duoc.
+
+Vi sao chu-cung-jsx.mjs (E17 cua vong ③a) khong bat: no doc JSX, con day la mot
+mang hang trong mot file .ts thuan. Do la lo thu hai, cung dang bao.
+
+## Nhom 2 — tam khoa con lai
+
+record-sheet.tabs.details
+record-sheet.company.archived
+record-sheet.company.restored
+record-sheet.company.purged
+record-sheet.contact.noCompany
+record-sheet.deal.remove
+crm.companyPicker.none
+crm.owner.label
+
+Chua dieu tra tung cai. Ba khoa company.archived/restored/purged co ve trung vai
+voi crm.sheet.archived/restored/deletedForever dang duoc goi that o
+record-actions.tsx — nghia la mot trong hai bo la thua.
+
+## Bang chung hai chieu da chay
+
+do 1  bo "crm.standard.name" khoi ban khai            -> 1 bai do
+do 2  them "record-sheet.deal.person" (con song)      -> 1 bai do
+do 3  them "crm.khong.co.khoa.nay" (khong ton tai)    -> 1 bai do
+do 4  noi song() ve kieu cu (la va cha rieng re)      -> 3 bai do, gom bai dung-ten
+nguyen trang                                          -> 20 bai xanh
+
+## Nam co che, nam chieu do — chay lai duoc moi luot
+
+do 5  bo phan giai theo PHAM VI (bang alias phang toan tep)  -> bai vat-thu do
+
+Chieu do 5 lan dau KHONG lat: bang alias phang van dung khi thu tu van ban thuan.
+Vat thu phai mang dung ca gay sai — mot bien cung ten khai TRONG callback long
+ben trong, roi bien ngoai van duoc dung sau do. Vat thu song o
+test/vat-thu-duong-goi/, va chan doc duong goi nhan mot thu muc lam doi so nen no
+quet duoc vat thu ma khong quet ma san pham.
+
+Bai hoc: co che nao khong co vat thu rieng thi khong biet no co rang hay khong.
+Neo goc vao bien kho chuoi la thu lam nen khac biet that (61 -> 26 khoa); phan
+giai pham vi chi chung minh duoc bang vat thu.
+
+## Hai lo moi truong lam do bon cong may, khong phai loi ma
+
+1. Cay lam viec nay chua bao gio co node_modules. `lint` xanh vi oxlint chay qua
+   bunx toan cuc, nen no che mat viec check-types va test chua tung chay o day.
+2. Cay lam viec nay khong co .env — .env khong vao git nen worktree khong thua
+   ke. prisma generate va TEST_DATABASE_URL cung do vi mot nguyen nhan do.
+   Da noi bang symlink toi .env cua kho goc, dung luat "mot .env o goc kho".
+
+Va mot cho suyt tu lua: `bun run check-types` khong ep cache co the XANH ma khong
+chay gi (12 cached, 13 total). Ep --force thi no do. Bon cong may cua vong nay
+phai luon ep khong cache — config.yaml da khai dung the o feature_loop.suite_keys.
