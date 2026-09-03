@@ -22,6 +22,47 @@ người), `PRODUCT-MAP.md` để máy vẽ lại. Hai dây lùi còn đó:
 khi tin handoff hay tin một con số.** Bản handoff mới nhất có thể không nằm trên
 nhánh mình đang đứng.
 
+## Vòng ③a — vòng 8 đã chạy và SẬP, chưa có verdict
+
+Chiều 2026-09-03, sau khi người chọn **đổi khuôn** ở điều khoản thôi-vá.
+
+Đã làm xong và đã commit (`163d4a4`, `b0f14b6`, `d1dddcb`):
+
+- Dựng `rang/chu-cung-jsx.mjs` — phép đo còn thiếu, đọc CÂY CÚ PHÁP thay vì grep.
+  Bắt hướng mà bốn chân vẽ và chặn khoá-chết đều mù: chữ người đọc thấy viết
+  thẳng vào JSX ở chỗ lẽ ra đọc từ kho chuỗi. Chiều đỏ đã chứng minh hai chiều
+  trên một bản sao, kèm kiểm md5 rằng cú phá thật sự đổi file. Đo lần đầu **15
+  chỗ trên 9 file**; sau vòng sửa **0**.
+- Buộc nó vào AC-1 thành **E17** trong `evals.yaml`, ổ cắm `rang3_chu_cung_jsx`.
+- Đóng cả năm phát hiện trong-hợp-đồng của vòng 7, gồm gỡ `typeLabel` khỏi
+  `SerializedField` và bốn hợp đồng tRPC (chuỗi tiếng Anh máy chủ đúc sẵn, không
+  bao giờ đi theo người đọc được).
+- Bù bước đã bỏ sót: hội đồng vòng 7 đòi hai bằng chứng, nay có ở
+  `evidence/E14-nhom-han-chot.md` và `evidence/E14-bang-cong-ty-1280.png`, và đã
+  vào `inputs` của E14 nên hội đồng chạy lại thay vì carry nguyên UNCERTAIN.
+
+**Vòng 8 sập, không có verdict.** Phiên chạm trần dùng (reset 19:20 giờ Sài Gòn)
+làm bốn agent chết — `refute:dot-bien.mjs`, `triage` ×2, `capture:provenance` —
+rồi workflow sập vì dereference `prov.enforcement_mode` khi `prov` là null.
+**41/45 agent đã xong và mất trắng** (~3,0M token, ~12 phút): không verdict,
+không `result.report`, không `result.runLog`, không gì ghi xuống workspace.
+
+Chạy lại bằng cách resume, KHÔNG chạy mới (agent đã xong sẽ dùng lại kết quả):
+
+```
+Workflow({ scriptPath: '<scratch>/acceptance-verify.js',
+           resumeFromRunId: 'wf_de35a3ef-eac', args: <nguyên văn s4-args vòng 8> })
+```
+
+Trước khi resume, kiểm ba thứ: cây sạch ở `d1dddcb` · hai máy chủ chạy TỪ KHO GỐC
+(không phải worktree) · `select count(*) from public.company` ra 18. Đã mở chip
+sang `~/dev/acceptance-gate-kit` cho cả hai lỗi kit.
+
+**Cơ sở dữ liệu dev từng rỗng giữa vòng 7 và vòng 8** — người setup lại CRM, không
+phải chân đo nào xoá. Nhưng lỗ vẫn còn: **không phép đo nào của vòng phát hiện cây
+rỗng**; tôi bắt được chỉ vì mở ảnh chụp ra nhìn. Một vòng chấm ứng dụng rỗng vẫn
+báo xanh được.
+
 ## Hiện trạng
 
 - `origin` = `phanlemanh/crm-onehub` (riêng tư), nhánh làm việc `onehub`
