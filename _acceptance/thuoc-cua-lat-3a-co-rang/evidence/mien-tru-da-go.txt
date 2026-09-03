@@ -1,0 +1,20 @@
+Dong mien tru DA CHET, go trong Task 1 ngay 2026-09-04.
+Hop dong doi ho so goi ten tung dong (muc Out of scope, ngoai le co ten).
+
+messages-guard.spec.ts:KHONG_DAU
+  headers.emails      khong duong khoa nao co hai doan cuoi la "headers.emails"
+                      (co tabs.emails va contact.emails, ca hai da co dong rieng)
+  dealColumns.title   khong duong khoa nao co hai doan cuoi la "dealColumns.title"
+                      (co contactColumns.title, da co dong rieng)
+  stageChange         duong that la crm.timeline.type.stageChange, hai doan cuoi
+                      la "type.stageChange" — dong nay chua tung mien duoc gi.
+                      Gia tri vi la "Doi giai doan", mang dau, nen go an toan.
+  currencyEntry       khong khoa nao mang ten la nay trong nam kho chuoi
+  candidateTitle      khong khoa nao mang ten la nay trong nam kho chuoi
+
+rang/khong-may-quet.sh (khoi case, se doc ban khai chung o buoc sau)
+  viet-tat.ts         file song o _acceptance/tieng-viet-cho-crm/rang/, va vong lap
+                      cua chan chi duyet *.mjs va *.sh — chua tung co mot hit nao
+
+rang/dot-bien-sot.txt
+  (khong dong nao chet — 289/289 con doi tuong that)

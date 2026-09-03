@@ -33,7 +33,6 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 
 const KHONG_DAU = new Set([
 	"headers.email",
-	"headers.emails",
 	"tabs.emails",
 	"contact.emails",
 	"type.email",
@@ -46,7 +45,6 @@ const KHONG_DAU = new Set([
 	"fields.x",
 	"fields.github",
 	"contactColumns.title",
-	"dealColumns.title",
 	"create.domainPlaceholder",
 	"standard.email",
 	"standard.website",
@@ -54,9 +52,6 @@ const KHONG_DAU = new Set([
 	"standard.github",
 	"timeline.viaGmail",
 	"composer.log",
-	"stageChange",
-	"currencyEntry",
-	"candidateTitle",
 	"namePlaceholder",
 	"company.domainPlaceholder",
 	"deal.namePlaceholder",
