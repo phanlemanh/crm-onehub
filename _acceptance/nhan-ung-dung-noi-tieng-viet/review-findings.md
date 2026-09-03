@@ -1,138 +1,104 @@
-# Review findings — nhan-ung-dung-noi-tieng-viet (round 7)
-
 ## Trong hợp đồng
 
-- **Nhãn kiểu trường vẫn tiếng Anh do máy chủ đúc sẵn, không thể theo người đọc**
-  file: `apps/app/components/crm/fields/fields-list.tsx:338`
-  severity: high
-  AC: AC-2
-  `serializeField` ở `packages/db/src/fields.ts:57` tính sẵn `typeLabel: typeLabel(definition.type)` — một chuỗi hiển thị tiếng Anh cứng từ `packages/db/src/fields-shape.ts:60` — rồi đẩy nó qua hợp đồng tRPC (`apps/api/src/fields/fields.contracts.ts:89` và ba contract companies/contacts/deals cùng khai `typeLabel: z.string()`).
-
-  Tấm Trường vẽ chuỗi đó nguyên xi ở dòng 338 (`{field.typeLabel}` trong Badge), và dòng 224 còn gọi thẳng `typeLabel(template.type)` nhập từ `@crm/db/fields-shape`. Máy chủ không biết người đọc chọn tiếng gì, nên chuỗi này không bao giờ đi theo được người đọc.
-
-  Vòng này đã dựng sẵn lối đúng — `fieldTypeLabel(type, locale)` ở `apps/app/components/crm/fields/fields-copy.ts:98` — nhưng chỉ đấu vào một chỗ, ô Select của `field-editor.tsx:292`. Kết quả: người đọc tiếng Việt mở tấm Trường thì ô chọn kiểu là tiếng Việt, còn huy hiệu kiểu ngay cạnh nó là tiếng Anh. Tấm này mở ra từ hồ sơ bản ghi qua `FieldsCog`, đúng nhánh AC-1 hứa ("kể cả chữ chỉ hiện ra sau khi mở một menu hay hộp thoại") và AC-2.
-
-  Máy quét chuỗi tĩnh không thấy được vì chữ đến từ API lúc chạy, nên E15 vẫn PASS.
-
-  Sửa: bỏ `typeLabel` khỏi `SerializedField`, để chỗ vẽ gọi `fieldTypeLabel(TYPE_KEY[field.type], locale)`.
-
-- **`companies.ts` dùng khuôn khác bốn kho chuỗi anh em, mất chốt biên dịch mà AC-12 hứa**
-  file: `apps/app/lib/messages/companies.ts:122`
-  severity: medium
-  AC: AC-12
-  Bốn kho chuỗi kia (`crm.ts:617`, `deals.ts:162`, `contacts.ts:137`, `record-sheet.ts:374`) đều theo đúng khuôn của `packages/ui/src/lib/messages.ts`: `const en` → `export type XMessages = typeof en` → `const vi = {…} satisfies XMessages` → `const BANG = { en, vi } satisfies Record<Locale, XMessages>`.
-
-  `companies.ts` một mình đi lối khác: một object `MESSAGES` bọc cả hai tiếng với `as const`, rồi `export type CompanyMessages = (typeof MESSAGES)[Locale]`. Không có `satisfies` nào so `vi` với `en`.
-
-  Hệ quả cụ thể: `vi` không bị kiểm ở chỗ khai. Một khoá thừa trong `vi` không bao giờ bị bắt; một khoá thiếu chỉ vỡ nếu có chỗ gọi đọc đúng khoá đó — khoá không ai đọc thì lọt. AC-12 của contract hứa "một khoá tiếng Việt thiếu làm hỏng bản dựng"; ở riêng file này lời hứa đó chỉ còn được `apps/app/test/messages-guard.spec.ts` đỡ lúc chạy, không phải trình biên dịch.
-
-  Sửa: tách `const en` / `const vi = {…} satisfies CompanyMessages` / `BANG` như bốn file kia.
-
-- **Deal sheet delete confirmation is hardcoded English; its translation key is dead**
-  file: `apps/app/components/crm/record-sheet/deal-sheet.tsx:218`
-  severity: high
-  AC: AC-2
-  `consequence={`Its stage history, notes and agent conversations go too. ${deal.company.name} and the ${deal.contacts.length === 1 ? "person" : "people"} on it stay in the CRM.`}` is still an English template literal.
-
-  `recordSheetMessages(locale).deal.deleteWarning(company, people)` was written for exactly this string (and `deal.person` / `deal.people` for the count word), and is never called from anywhere. A Vietnamese reader gets English in the one dialog that confirms an irreversible delete. The guard in finding #1 is what let this through.
-
-- **Contact sheet delete confirmation is hardcoded English; its translation key is dead**
-  file: `apps/app/components/crm/record-sheet/contact-sheet.tsx:225`
-  severity: high
-  AC: AC-2
-  `consequence={`Their notes, agent conversations and everything the agent found go too; emails and meetings stay filed against the company.${contact.email ? ` The sync will not bring ${contact.email} back — only adding them yourself will.` : ""}`}`
-
-  `recordSheetMessages(locale).contact.deleteWarning` holds the first sentence verbatim and is never called; the second (email-suppression) sentence has no key at all. Same irreversible-delete dialog, same English-in-Vietnamese result.
-
-- **Untranslated labels left in the round's own scope**
-  file: `apps/app/app/(app)/[slug]/deals/deals-bulk-actions.tsx:195`
-  severity: medium
-  AC: AC-1
-  `<DropdownMenuSubTrigger>Change stage</DropdownMenuSubTrigger>` — no message key exists for this string in any of the five stores, so it was missed rather than deferred. It sits in the Deals bulk-actions menu, on one of the three list screens the round claims to cover.
-
-  Same class, same scope: `apps/app/components/crm/record-sheet/deal-sheet.tsx:573` renders `<span className="sr-only">Take {contactName(contact)} off this deal</span>` in English, while the visible tooltip beside it uses `m.deal.takeOff`. The screen-reader label and the tooltip now disagree in Vietnamese.
-
-  Neither is reachable by the automated measures: `khai-tieng.mjs` only opens the deals table and never opens the bulk menu, and `kiem-ke.mjs` is an inventory printer with no exit code.
+(không có)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **Khoá thông điệp đi lậu trong trường `label`, mất kiểm tra biên dịch**
-  Người dùng thấy gì: Nếu một dòng chữ trong khối liên kết mạng xã hội của công ty bị đặt sai, người xem hồ sơ công ty có thể thấy một đoạn mã kỹ thuật thay vì chữ tiếng Việt, mà không ai phát hiện trước khi phát hành.
+- **social-links.ts invents a stringly-typed label sentinel instead of the `khoa` key pattern the same change establishes**
+  Người dùng thấy gì: Nếu sau này có ai thêm một liên kết công ty mới mà khai sai nhãn, màn hình có thể hiện một chuỗi ký hiệu thô thay vì tên liên kết, và hệ thống sẽ không báo lỗi ngay lúc dựng.
   file: `apps/app/lib/social-links.ts`
   severity: high
   Đề xuất: known-limits
 
-- **Sáu bản đồ `satisfies Record<RecordKind|FieldEntity, …>` bị đổi thành chuỗi if có nhánh rơi im lặng**
-  Người dùng thấy gì: Nếu sau này có thêm một loại bản ghi hoặc loại trường mới, tên hiển thị của loại đó trên màn hình có thể sai — ví dụ hiện nhầm chữ của 'thoả thuận' — mà không ai nhận ra trước khi phát hành.
-  file: `apps/app/components/crm/fields/fields-copy.ts`
+- **.claude/launch.json runs `npm run dev` in a bun-only repo, against the root task CLAUDE.md says does not run**
+  Người dùng thấy gì: Cấu hình dùng để xem trước dự án cục bộ dùng nhầm công cụ và lệnh so với cách kho này thực sự chạy, nên người mở xem trước bằng cách này có thể không khởi động được.
+  file: `.claude/launch.json`
   severity: medium
   Đề xuất: known-limits
 
-- **Thước `dot-bien` ghi đè năm file mã nguồn đã theo dõi, dựa vào chụp-rồi-trả**
-  Người dùng thấy gì: Nếu công cụ đo tự động bị dừng đột ngột giữa chừng, một số chữ tiếng Việt trên các màn công ty, cá nhân, thoả thuận có thể vô tình bị ghi đè ngược sang tiếng Anh trong kho mã nguồn mà không ai nhận ra ngay.
+- **local-date-time.tsx: the message-splitting and the injected hydration script both fail silently**
+  Người dùng thấy gì: Nếu bản dịch một mốc thời gian bị viết sai khuôn, mọi mốc thời gian tương đối trên trang có thể im lặng giữ nguyên chữ tiếng Anh cũ mà không có cảnh báo nào cho người dùng hay người vận hành biết.
+  file: `apps/app/components/local-date-time.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Coined Vietnamese identifiers moved from test files into shipped app code**
+  Người dùng thấy gì: Đây là vấn đề trong cách đặt tên biến trong mã nguồn, không ảnh hưởng gì tới chữ mà người dùng nhìn thấy trên màn hình.
+  file: `apps/app/components/local-date-time.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **The dead-key guard's `song()` matches parent and leaf across the concatenated whole-app source, so it proves less than it claims**
+  Người dùng thấy gì: Bài kiểm tra dùng để phát hiện các khoá dịch không còn được dùng có thể bỏ lọt lỗi thật, khiến một vài chữ còn thiếu bản dịch không được phát hiện sớm.
+  file: `apps/app/test/messages-guard.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **format.ts puts a required parameter after an optional one, making the defaults unreachable**
+  Người dùng thấy gì: Đây là vấn đề trong cách viết một hàm định dạng tiền tệ trong mã nguồn; vì mọi nơi gọi hàm này hiện đã phải khai đủ tham số nên chữ hiển thị cho người dùng không bị ảnh hưởng.
+  file: `packages/ui/src/lib/format.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Permanent-delete dialog for a contact lost the email-suppression warning**
+  Người dùng thấy gì: Khi xoá hẳn một cá nhân, hộp thoại xác nhận không còn nhắc rằng địa chỉ email của người đó sẽ không tự động được đồng bộ lại — người dùng có thể xoá nhầm mà không biết hậu quả này, trong khi xoá nhiều cá nhân cùng lúc vẫn có lời nhắc đó.
+  file: `apps/app/components/crm/record-sheet/contact-sheet.tsx`
+  severity: medium
+  Đề xuất: new-contract
+
+- **Mutation sweep restores a start-of-run snapshot, silently discarding concurrent edits**
+  Người dùng thấy gì: Đây là rủi ro trong công cụ đo lường nội bộ dùng lúc kiểm tra tính năng, không phải lỗi mà người dùng cuối gặp phải trên sản phẩm thật.
   file: `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/dot-bien.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Bộ xác minh lưới xoá file trong `.turbo/runs` mà nó không tạo, và xoá trước khi báo lỗi**
-  Người dùng thấy gì: Khi việc kiểm tra trước khi đẩy mã phát hiện lỗi, bằng chứng cần thiết để tìm nguyên nhân có thể đã bị xoá mất, khiến việc sửa lỗi chậm lại — người dùng cuối không thấy ảnh hưởng trực tiếp.
-  file: `scripts/verify-gate-shape.mjs`
+- **Composer discards the real error message whenever error.data is falsy**
+  Người dùng thấy gì: Khi lưu một hoạt động thất bại vì một lý do khác sự cố kết nối, người dùng vẫn chỉ thấy thông báo chung chung nói kiểm tra kết nối, không thấy lý do thật, gây khó hiểu khi báo lỗi cho đội ngũ hỗ trợ.
+  file: `apps/app/components/crm/timeline/activity-composer.tsx`
   severity: low
   Đề xuất: known-limits
 
-- **Dead-key guard cannot fail: it matches any quoted word anywhere in the source**
-  Người dùng thấy gì: Một phép kiểm tra tự động dùng để tìm chữ dịch bị bỏ quên có thể báo 'an toàn' dù thực ra không có màn hình nào dùng tới dòng chữ đó, nên chữ tiếng Anh sót lại có thể không bị phát hiện trước khi phát hành.
-  file: `apps/app/test/messages-guard.spec.ts`
+- **Hình 1 — Đo chỉ dẫn thay vì đầu ra: chặn chống-lách chứng minh "chạm sản phẩm thật" bằng grep mã nguồn của chính các chặn**
+  Người dùng thấy gì: Bằng chứng nói không phép đo nào giả mạo việc chạm vào sản phẩm thật lại có thể tự nó bị qua mặt chỉ bằng cách nhắc đúng từ khoá trong mã nguồn mà không thực sự mở trang nào — nghĩa là một số phép đo báo đạt trong hồ sơ có thể chưa thực sự chạy trên sản phẩm thật.
+  file: `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khong-may-quet.sh`
   severity: high
   Đề xuất: new-contract
 
-- **Unused locale hook left in DetailSheet**
-  Người dùng thấy gì: Không ảnh hưởng gì tới người dùng — đây là một dòng mã thừa, không hiển thị hay thay đổi bất kỳ chữ nào trên màn hình.
-  file: `apps/app/components/detail-sheet.tsx`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình 4 — khẳng định âm-tính-một-mình: chuỗi không hiện ở CẢ HAI thứ tiếng vẫn tính là đạt**
-  Người dùng thấy gì: Phép đo cho năm chuỗi đã biết lỗi từ vòng trước có thể báo 'đã dịch xong' ngay cả khi một chuỗi thật ra không còn hiện ra ở đâu để kiểm tra, nên một chỗ bị gỡ nhầm hoặc hỏng có thể không bị phát hiện.
-  file: `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/no-vong-1.mjs`
-  severity: high
-  Đề xuất: new-contract
-
-- **Hình 2 — fixture viết tay đứng thay enum máy chủ: danh sách giai đoạn là hằng trong file đo**
-  Người dùng thấy gì: Nếu sau này thêm một giai đoạn thoả thuận thứ tám, phép kiểm tra hiện tại sẽ không nhận ra và không báo lỗi, nên giai đoạn mới có thể hiển thị sai mà không ai biết.
+- **Hình 2 — Fixture viết tay đúng khuôn bên đọc: bảy giá trị giai đoạn là hằng gõ tay, không rút từ enum máy chủ**
+  Người dùng thấy gì: Danh sách bảy giai đoạn thoả thuận dùng để kiểm tra được gõ tay thay vì lấy trực tiếp từ chính hệ thống, nên nếu sau này hệ thống có thêm một giai đoạn mới, phép đo sẽ không phát hiện được giai đoạn đó bị bỏ sót.
   file: `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs`
   severity: high
   Đề xuất: new-contract
 
-- **Hình 1 — đo chỉ dẫn thay vì đầu ra: chặn "khoá chết" grep định danh toàn app, không hỏi renderer có đọc khoá không**
-  Người dùng thấy gì: Phép kiểm tra dùng để tìm chữ dịch không còn được dùng tới hiện chỉ tìm tên xuất hiện ở bất kỳ đâu trong toàn bộ ứng dụng, không chứng minh có màn hình nào thực sự đọc và hiện chữ đó, nên một dòng chữ không còn ai dùng vẫn được báo là an toàn.
-  file: `apps/app/test/messages-guard.spec.ts`
+- **Hình 4 — Khẳng định âm-tính-một-mình: giá trị không hiện ra thì bỏ qua, không phải đỏ**
+  Người dùng thấy gì: Nếu các nhãn giai đoạn hay ngành nghề không hiện ra trên màn vì lý do khác — đổi giao diện, dữ liệu trống — phép đo vẫn báo là đạt thay vì báo là không đo được gì cả.
+  file: `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs`
   severity: high
   Đề xuất: new-contract
 
-- **Hình 3 — assert chuỗi có mặt trong khi lời hứa là quan hệ vi-có ⟂ en-không-có**
-  Người dùng thấy gì: Phép đo hiện chỉ xác nhận có chữ tiếng Việt xuất hiện, không xác nhận chữ tiếng Anh tương ứng đã biến mất, nên một màn vừa có tiếng Việt vừa còn sót tiếng Anh vẫn có thể được báo là đạt.
+- **Hình 3 — Assert "chuỗi có mặt" trong khi lời hứa là quan hệ: mảng đối chứng tiếng Anh khai ra rồi không dùng**
+  Người dùng thấy gì: Phép đo chỉ kiểm tra chữ tiếng Việt có xuất hiện hay không, mà bỏ qua phần kiểm tra chữ tiếng Anh cũ đã biến mất chưa — một trang còn lẫn cả hai thứ tiếng vẫn có thể được báo là đạt.
   file: `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/may-chu-ve.sh`
   severity: high
   Đề xuất: new-contract
 
-- **Hình 5 — tuyên quét lớp bề mặt ẩn nhưng chỉ chạy điểm-case, và phép đếm bề mặt là hằng đúng**
-  Người dùng thấy gì: Phép đo bề mặt ẩn của hồ sơ bản ghi hiện chỉ mở các tab, không mở menu hành động, ô sửa tại chỗ, hay hộp thoại xác nhận, và luôn tự báo 'đủ' bất kể có bỏ sót gì, nên chữ tiếng Anh sót trong các bề mặt đó có thể không bị phát hiện.
+- **Hình 4 — Khẳng định âm-tính-một-mình: chuỗi biến mất khỏi cả hai thứ tiếng được tính là đạt, và không ghim chuỗi tiếng Việt thay thế**
+  Người dùng thấy gì: Nếu một chữ cũ biến mất khỏi màn hình vì lý do khác — bị gỡ bỏ hoặc dữ liệu trống, không phải vì đã được dịch — phép đo vẫn báo là đã dịch xong mà không ghi lại chữ tiếng Việt dự kiến để đối chiếu.
+  file: `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/no-vong-1.mjs`
+  severity: medium
+  Đề xuất: new-contract
+
+- **Hình 2 — Fixture viết tay đúng khuôn bên đọc: thẻ <time> tự dựng theo hợp đồng của kịch bản đọc, không đi qua component viết**
+  Người dùng thấy gì: Phép đo mốc thời gian tự dựng một phần tử thử riêng thay vì đọc phần tử do chính trang thực sự vẽ ra, nên nếu phần hiển thị mốc thời gian thật trên sản phẩm bị hỏng, phép đo này vẫn báo đạt.
   file: `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs`
   severity: medium
   Đề xuất: new-contract
 
-- **Hình 1 — đo dữ liệu đầu vào thay vì màn hình: E11 không hề dựng trình duyệt**
-  Người dùng thấy gì: Phép đo cho ba trường hợp dữ liệu biên (không người phụ trách, vừa có hoạt động, tên dài) chỉ kiểm tra dữ liệu thô từ máy chủ, không thực sự mở màn hình lên xem, nên chữ hiển thị sai hoặc bố cục vỡ ở các trường hợp này có thể không bị phát hiện.
+- **Hình 1 — Đo đầu vào thay vì đầu ra: chặn dữ liệu biên chỉ đếm hàng trong bảng, không đọc một chữ nào trên màn**
+  Người dùng thấy gì: Phép đo cho ba trường hợp dữ liệu biên (thiếu người phụ trách, mới có hoạt động, tên dài) chỉ đếm số dòng dữ liệu chứ không thực sự mở màn hình đọc chữ hiển thị, nên chưa chứng minh được chữ trên màn thật sự dùng tiếng Việt trong các trường hợp này.
   file: `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/du-lieu-bien.mjs`
-  severity: medium
-  Đề xuất: new-contract
-
-- **Hình 1 + hình 4 — chân chống-lách tự chứng minh bằng cách grep mã nguồn, và không có đối chứng dương**
-  Người dùng thấy gì: Bộ chặn 'phép đo giả' dùng để bảo đảm các phép đo khác thực sự mở ứng dụng lên kiểm tra lại tự kiểm tra bằng cách đọc mã nguồn, và chưa có phép thử nào chứng minh nó thực sự bắt được một phép đo giả, nên một phép đo giả có thể lọt qua mà không ai biết bằng chứng nghiệm thu là thật hay không.
-  file: `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khong-may-quet.sh`
   severity: medium
   Đề xuất: new-contract
 
@@ -140,4 +106,4 @@ Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt 
 
 (không có)
 
-⚠ Cụm ngoài vùng phủ: 4/18 lỗi rơi vào file không bộ đo nào phủ (apps/app/lib/social-links.ts, scripts/verify-gate-shape.mjs, apps/app/test/messages-guard.spec.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+⚠ Cụm ngoài vùng phủ: 3/16 lỗi rơi vào file không bộ đo nào phủ (apps/app/lib/social-links.ts, .claude/launch.json, apps/app/test/messages-guard.spec.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.

@@ -1,6 +1,7 @@
 import { execFileSync } from "node:child_process";
 import puppeteer from "puppeteer-core";
 import { z } from "../../../packages/validation/node_modules/zod/index.js";
+import { suySlug } from "./slug.mjs";
 
 const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
 const CHO_VE = Number(process.env.CHO_VE ?? 90000);
@@ -8,7 +9,6 @@ const CHO_VE = Number(process.env.CHO_VE ?? 90000);
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const APP = process.env.APP_URL ?? "http://localhost:3000";
 const API = process.env.API_URL ?? "http://localhost:3001";
-const SLUG = process.env.SLUG ?? "crm";
 const chan = process.argv[2] ?? "khai-tieng";
 
 const chu = z.string().trim().min(1);
@@ -85,6 +85,7 @@ const DOC = (canTim) => {
 };
 
 const cookie = phien();
+const SLUG = await suySlug(cookie);
 const [dsCongTy, dsThoaThuan] = await Promise.all([
 	goi(cookie, "companies.list", {}),
 	goi(cookie, "deals.list", {}),

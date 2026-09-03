@@ -1,12 +1,12 @@
 import { execFileSync } from "node:child_process";
 import puppeteer from "puppeteer-core";
+import { suySlug } from "./slug.mjs";
 
 const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
 const CHO_VE = Number(process.env.CHO_VE ?? 90000);
 
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const APP = process.env.APP_URL ?? "http://localhost:3000";
-const SLUG = process.env.SLUG ?? "crm";
 
 const NO = [
 	{ cu: "Search companies by name or domain…", o: "ô tìm trên màn công ty" },
@@ -55,6 +55,7 @@ const DOC = () => {
 };
 
 const cookie = phien();
+const SLUG = await suySlug(cookie);
 const browser = await puppeteer.launch({
 	executablePath: CHROME,
 	headless: "new",

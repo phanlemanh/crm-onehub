@@ -3,13 +3,13 @@ import { appendFileSync, readFileSync } from "node:fs";
 import { z } from "../../../packages/validation/node_modules/zod/index.js";
 import puppeteer from "puppeteer-core";
 import { BE_MAT, CHUA_MO } from "./be-mat.mjs";
+import { suySlug } from "./slug.mjs";
 
 const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
 const CHO_VE = Number(process.env.CHO_VE ?? 90000);
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const APP = process.env.APP_URL ?? "http://localhost:3000";
 const API = process.env.API_URL ?? "http://localhost:3001";
-const SLUG = process.env.SLUG ?? "crm";
 const MAN = '[data-slot="page-shell"]';
 const DUONG = process.env.DUONG ?? "companies";
 
@@ -478,6 +478,7 @@ const DAU_VIET =
 const CHI_SO = /^[\d\s.,:%–\-—/()+…·|≈~≥≤<>]*$/;
 
 const cookie = phien();
+const SLUG = await suySlug(cookie);
 const browser = await puppeteer.launch({
 	executablePath: CHROME,
 	headless: "new",
