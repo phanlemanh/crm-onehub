@@ -35,10 +35,8 @@ mà không có tên ở đây thì phép đo đỏ.
 | `standard.github` · `contact.fields.github` | `GitHub` | tên riêng | tên sản phẩm, không dịch |
 | `timeline.viaGmail` | `qua Gmail` | từ Việt không dấu + tên riêng | "qua" là từ tiếng Việt vốn không mang dấu |
 | `timeline.composer.log` | `Ghi ${type}` | từ Việt không dấu | "Ghi" là từ tiếng Việt vốn không mang dấu |
-| `timeline.stageChange` | `${a} → ${b}` | chỉ có biến | hai đầu là giai đoạn thoả thuận, không dịch |
-| `deal.currencyEntry` | `${code} · ${name}` | chỉ có biến | mã và tên tiền tệ do máy chủ trả |
-| `deal.candidateTitle` | ` · ${title}` | chỉ có biến | chức danh do người nhập |
-| `deal.namePlaceholder` | `${name} — OneHub` | biến + tên riêng | ví dụ trong ô nhập; OneHub là tên công ty |
+| `timeline.type.stageChange` | `${a} → ${b}` | chỉ có biến | hai đầu là giai đoạn thoả thuận, không dịch |
+| `create.namePlaceholder` | `${name} — OneHub` | biến + tên riêng | ví dụ trong ô nhập; OneHub là tên công ty |
 | `fields.type.url` | `URL` | từ viết tắt | tên chuẩn kỹ thuật, tiếng Việt dùng nguyên |
 | `fields.type.email` · `create.email` | `Email` | tên riêng | đã có mục cho `headers.email`; cùng lý do |
 | `create.domainPlaceholder` | `datxanh.vn` | ví dụ tên miền | tên miền thật, không dịch |
@@ -98,7 +96,6 @@ mà không có tên ở đây thì phép đo đỏ.
 | `bulk.confirmDelete` | `Delete ${n} forever?` | `Xoá vĩnh viễn ${n}?` | |
 | `bulk.deleteWarning` | `Their email addresses are suppressed, so the inbox sync will not file them again. This cannot be undone.` | `Địa chỉ email của họ bị chặn, nên hộp thư sẽ không tự thêm lại. Việc này không hoàn tác được.` | |
 | `bulk.nobody` | `Nobody` | `Không ai` | |
-| `bulk.chooseCompany` | `Choose a company` | `Chọn công ty` | |
 | `created` | `${name} added.` | `Đã thêm ${name}.` | |
 | `namePlaceholder` | `Jane Cooper` | `Nguyễn Thị Lan` | ví dụ trong ô nhập |
 
@@ -137,7 +134,7 @@ mà không có tên ở đây thì phép đo đỏ.
 | `bulk.markUnqualified` | `Mark ${n} as unqualified` | `Đánh dấu ${n} là chưa phù hợp` | |
 | `bulk.reasonPlaceholder` | `Budget pulled for the quarter` | `Đối tác hoãn sang quý sau` | ví dụ lý do; bản gốc nói chuyện ngân sách bán hàng |
 | `bulk.nobody` | `Nobody` | `Không ai` | |
-| `bulk.chooseOwner` | `Choose an owner` | `Chọn người phụ trách` | |
+| `create.chooseOwner` | `Choose an owner` | `Chọn người phụ trách` | |
 | `create.currency` | `Currency` | `Tiền tệ` | |
 | `create.noDate` | `No date yet` | `Chưa có ngày` | **nợ vòng ②**, chuỗi mặc định đè được |
 | `create.namePlaceholder` | `Stripe — Comp AI` | `Đất Xanh — OneHub` | ví dụ; bản gốc còn mang tên hãng cũ |
@@ -174,11 +171,11 @@ tác của OneHub. Giữ nguyên, bọc trong phần tử khai `lang="en"`.
 | --- | --- | --- | --- |
 | `stage.DEMO_BOOKED` | `Demo booked` | `Demo booked` | KHÔNG dịch — AC-14 |
 | `stage.QUALIFIED_TO_BUY` | `Qualified to buy` | `Qualified to buy` | KHÔNG dịch — AC-14 |
-| `stage.DECISION_MAKER_IN` | `Decision maker in` | `Decision maker in` | KHÔNG dịch — AC-14 |
+| `stage.DECISION_MAKER_BOUGHT_IN` | `Decision maker in` | `Decision maker in` | KHÔNG dịch — AC-14 |
 | `stage.CONTRACT_SENT` | `Contract sent` | `Contract sent` | KHÔNG dịch — AC-14 |
 | `stage.CLOSED_WON` | `Closed won` | `Closed won` | KHÔNG dịch — AC-14 |
 | `stage.CLOSED_LOST` | `Closed lost` | `Closed lost` | KHÔNG dịch — AC-14 |
-| `stage.UNQUALIFIED` | `Unqualified` | `Unqualified` | KHÔNG dịch — AC-14 |
+| `stage.UNQUALIFIED_TO_BUY` | `Unqualified` | `Unqualified` | KHÔNG dịch — AC-14 |
 
 ### Dòng thời gian — ô soạn
 
@@ -208,7 +205,7 @@ tác của OneHub. Giữ nguyên, bọc trong phần tử khai `lang="en"`.
 | `timeline.messages` | `${n} messages` | `${n} thư` | tiếng Việt không thêm đuôi số nhiều |
 | `timeline.viaGmail` | `via Gmail` | `qua Gmail` | tên sản phẩm giữ nguyên |
 | `timeline.viaCalendar` | `via Calendar` | `qua Lịch` | |
-| `timeline.stageChange` | `${a} → ${b}` | `${a} → ${b}` | hai đầu là giai đoạn, không dịch |
+| `timeline.type.stageChange` | `${a} → ${b}` | `${a} → ${b}` | hai đầu là giai đoạn, không dịch |
 | `timeline.markNotDone` | `Mark as not done` | `Đánh dấu chưa xong` | |
 | `timeline.markDone` | `Mark as done` | `Đánh dấu đã xong` | |
 | `timeline.due` | `Due` | `Hạn` | |
@@ -268,16 +265,12 @@ thử thiếu đúng trạng thái đó; Task 1 vòng này đã dựng.
 | `time.minutes` | `${n}m` | `${n} phút` | hậu tố một chữ cái không đọc được trong tiếng Việt |
 | `time.hours` | `${n}h` | `${n} giờ` | |
 | `time.days` | `${n}d` | `${n} ngày` | |
-| `time.in` | `in ${d}` | `sau ${d} nữa` | |
 | `time.ago` | `${d} ago` | `${d} trước` | **nợ vòng ①** — chuỗi thứ năm |
 
 ### Lọc theo mức hoạt động
 
 | Khoá | Tiếng Anh | Tiếng Việt | Ghi chú |
 | --- | --- | --- | --- |
-| `activity.7` | `Active within 7 days` | `Có hoạt động trong 7 ngày` | |
-| `activity.30` | `Active within 30 days` | `Có hoạt động trong 30 ngày` | |
-| `activity.90` | `Active within 90 days` | `Có hoạt động trong 90 ngày` | |
 
 ### Hạn chốt thoả thuận
 
@@ -347,7 +340,6 @@ thử thiếu đúng trạng thái đó; Task 1 vòng này đã dựng.
 
 | Khoá | Tiếng Anh | Tiếng Việt | Ghi chú |
 | --- | --- | --- | --- |
-| `fields.filledOf` | `${entity} · ${a} of ${b} filled` | `${entity} · đã điền ${a}/${b}` | |
 | `fields.filledOn` | `Filled on ${a} of ${b} ${noun}` | `Đã điền ở ${a}/${b} ${noun}` | |
 | `fields.stillToGo` | `${n} still to go` | `Còn ${n} nữa` | |
 | `fields.type.text` | `Text — a short line` | `Chữ — một dòng ngắn` | |
@@ -439,8 +431,6 @@ các dòng dưới dịch theo giọng hợp tác. Đây là chỗ hội đồng
 | `section.background` | `Background` | `Quá trình` | |
 | `section.whereItStands` | `Where it stands` | `Đang tới đâu` | |
 | `section.onIt` | `On it` | `Người tham gia` | nhãn mục phải là danh từ, không phải câu hỏi |
-| `srLabel.primary` | `Primary` | `Đầu mối` | nhãn chỉ trình đọc màn hình nghe |
-| `srLabel.socialLinks` | `social links` | `liên kết mạng xã hội` | |
 
 ### Hồ sơ công ty
 
@@ -449,7 +439,6 @@ các dòng dưới dịch theo giọng hợp tác. Đây là chỗ hội đồng
 | `company.openPipeline` | `Open pipeline` | `Giá trị đang mở` | bản gốc là từ bán hàng |
 | `company.openDeals` | `Open deals` | `Thoả thuận đang mở` | vòng ① đã chốt |
 | `company.nextClose` | `Next close` | `Lần chốt gần nhất` | |
-| `company.primaryContact` | `Primary contact` | `Đầu mối chính` | |
 | `company.makePrimary` | `Make primary` | `Đặt làm đầu mối chính` | |
 | `company.primaryUpdated` | `Primary contact updated.` | `Đã đổi đầu mối chính.` | |
 | `company.addContact` | `Add contact` | `Thêm cá nhân` | |
@@ -474,7 +463,6 @@ các dòng dưới dịch theo giọng hợp tác. Đây là chỗ hội đồng
 | `contact.currentRole` | `Current role` | `Vị trí hiện tại` | |
 | `contact.tenure` | `Tenure` | `Thâm niên` | |
 | `contact.seniority` | `Seniority` | `Cấp bậc` | |
-| `contact.function` | `Function` | `Mảng phụ trách` | |
 | `contact.based` | `Based` | `Làm việc tại` | |
 | `contact.previously` | `Previously` | `Trước đây` | |
 | `contact.oneRole` | `1 role` | `1 vị trí` | |
@@ -503,7 +491,6 @@ các dòng dưới dịch theo giọng hợp tác. Đây là chỗ hội đồng
 | `deal.opened` | `Opened` | `Ngày mở` | |
 | `deal.inCurrency` | `In ${cur}` | `Quy đổi ${cur}` | |
 | `deal.currencyGone` | `${cur} — no longer supported` | `${cur} — không còn hỗ trợ` | |
-| `deal.currencyEntry` | `${code} · ${name}` | `${code} · ${name}` | chỉ có biến |
 | `deal.descriptionHint` | `What ${name} is buying, why now, and what stands in the way.` | `${name} đang cần gì, vì sao là lúc này, và còn vướng gì.` | bản gốc nói "đang mua" |
 | `deal.description` | `Description` | `Mô tả` | |
 | `deal.role` | `Role` | `Vai trò` | |
@@ -516,11 +503,10 @@ các dòng dưới dịch theo giọng hợp tác. Đây là chỗ hội đồng
 | `deal.everybodyOn` | `Everybody at ${name} is already on it` | `Mọi người ở ${name} đã ở trong rồi` | |
 | `deal.chooseSomebody` | `Choose somebody` | `Chọn một người` | |
 | `deal.addToDeal` | `Add to deal` | `Thêm vào thoả thuận` | |
-| `deal.candidateTitle` | ` · ${title}` | ` · ${title}` | chỉ có biến |
 | `deal.created` | `${name} created.` | `Đã tạo ${name}.` | |
 | `deal.noOwner` | `Could not work out who should own this deal.` | `Không xác định được ai phụ trách thoả thuận này.` | |
 | `deal.create` | `Create deal` | `Tạo thoả thuận` | |
-| `deal.namePlaceholder` | `${name} — Comp AI` | `${name} — OneHub` | bản gốc còn mang tên hãng cũ |
+| `create.namePlaceholder` | `${name} — Comp AI` | `${name} — OneHub` | bản gốc còn mang tên hãng cũ |
 | `deal.noDate` | `No date yet` | `Chưa có ngày` | **nợ vòng ②** |
 | `deal.amountNotNumber` | `Amount has to be a number.` | `Giá trị phải là một con số.` | |
 | `deal.remove` | `Remove` | `Gỡ` | |
@@ -771,3 +757,25 @@ trước mọi dòng chưa ai viết. `rang/kiem-ban-dich.mjs` nay kiểm cả h
 | `deal.noRate` | `No ${cur} rate — left out of totals` | `Không có tỷ giá ${cur} — không tính vào tổng` | |
 | `deal.personLabel` | `Person` | `Người` | |
 
+
+### Bổ sung ở vòng dọn S4-r4 — khoá trước đây bị một dòng tên chung che
+
+Phép đối chiếu cũ khớp bằng hậu tố bất kỳ, nên một dòng tên `title` che cho bốn chuỗi khác nhau ở bốn màn. Nay mỗi khoá có dòng riêng.
+
+| Khoá | Tiếng Anh | Tiếng Việt | Ghi chú |
+| --- | --- | --- | --- |
+| `create.title` | `New company` | `Công ty mới` | |
+| `create.description` | `Give it a name and a domain. The agent fills in the logo, description, industry, address and socials.` | `Chỉ cần tên và tên miền. Tác nhân sẽ tự điền logo, mô tả, ngành, địa chỉ và mạng xã hội.` | |
+| `facets.title` | `Title` | `Chức danh` | |
+| `create.title` | `New contact` | `Cá nhân mới` | |
+| `create.description` | `Email addresses are unique, so importing the same person twice updates them rather than duplicating them.` | `Địa chỉ email là duy nhất, nên nạp lại cùng một người sẽ cập nhật người đó chứ không tạo bản trùng.` | |
+| `create.noCompany` | `No company` | `Chưa thuộc công ty nào` | |
+| `facets.closing` | `Closing` | `Hạn chốt` | |
+| `create.title` | `New deal` | `Thoả thuận mới` | |
+| `create.description` | `Every deal belongs to a company and has someone's name against it.` | `Mỗi thoả thuận thuộc về một công ty và có một người đứng tên phụ trách.` | |
+| `bulk.noCompany` | `No company` | `Chưa thuộc công ty nào` | |
+| `missing.description` | `description` | `mô tả` | |
+| `company.contactColumns.title` | `Title` | `Chức danh` | |
+| `contact.fields.title` | `Title` | `Chức danh` | |
+| `contact.fields.noCompany` | `No company` | `Chưa thuộc công ty nào` | |
+| `deal.contactColumns.title` | `Title` | `Chức danh` | |

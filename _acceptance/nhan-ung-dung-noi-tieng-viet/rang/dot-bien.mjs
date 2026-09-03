@@ -26,16 +26,24 @@ function quetKhoa(dong, tu, den) {
 			ngan[sau - 1] = mo[2];
 			continue;
 		}
-		const la = line.match(/^(\t+)(\w+): "(.*)",$/);
+		const la = line.match(/^(\t+)(\w+):/);
 		if (!la) continue;
 		const sau = la[1].length;
+		let het = i;
+		while (het < den - 1 && !/,$/.test(dong[het])) het += 1;
 		const duongDan = [...ngan.slice(0, sau - 1), la[2]].filter(Boolean);
 		if (duongDan[0] === "en" || duongDan[0] === "vi") duongDan.shift();
 		const key = duongDan.join(".");
-		if (!ra.has(key)) ra.set(key, { gt: la[3], chiSo: i });
+		if (!ra.has(key)) {
+			ra.set(key, { hang: dong.slice(i, het + 1), dau: i, cuoi: het });
+		}
+		i = het;
 	}
 	return ra;
 }
+
+const giongHet = [];
+let coCaHai = 0;
 
 function capKhoa(goc) {
 	const dong = goc.split("\n");
@@ -44,10 +52,26 @@ function capKhoa(goc) {
 	const en = quetKhoa(dong, 0, viStart);
 	const vi = quetKhoa(dong, viStart, dong.length);
 	const ra = [];
-	for (const [khoa, { gt, chiSo }] of vi) {
-		const enVal = en.get(khoa)?.gt;
-		if (!enVal || enVal === gt) continue;
-		ra.push({ ten: khoa, viVal: gt, enVal, chiSo });
+	for (const [khoa, o] of vi) {
+		const b = en.get(khoa);
+		if (!b) continue;
+		coCaHai += 1;
+		const viChu = o.hang.join("\n");
+		const enChu = b.hang.join("\n");
+		if (viChu === enChu) {
+			giongHet.push(khoa);
+			continue;
+		}
+		ra.push({
+			manh: manhDaiNhat(enChu),
+			ten: khoa,
+			viChu,
+			enChu,
+			viHang: o.hang,
+			enHang: b.hang,
+			dau: o.dau,
+			cuoi: o.cuoi,
+		});
 	}
 	return ra;
 }
@@ -109,7 +133,14 @@ if (CHI.length > 0) {
 		`-- CHI_KHOA: chi dot bien ${cap.length}/${CHI.length} khoa duoc goi ten`,
 	);
 }
-console.log(`-- ${cap.length} khoa tren ${KHO.length} kho chuoi`);
+console.log(
+	`-- kiem ke khoa: ${coCaHai} khoa co ca ban en lan ban vi tren ${KHO.length} kho chuoi`,
+);
+console.log(
+	`   ${giongHet.length} khoa giong het nhau o hai ban — dao lai khong doi gi, nen khong dot bien duoc:`,
+);
+console.log(`   ${giongHet.join(" · ")}`);
+console.log(`-- ${cap.length} khoa dot bien duoc (${coCaHai} - ${giongHet.length})`);
 
 function duLai(vb) {
 	let t = 0;
@@ -133,19 +164,38 @@ try {
 	for (const [ten, file] of KHO) {
 		const hang = goc.get(file).split("\n");
 		const cuaKho = cap.filter((c) => c.file === file);
-		for (const c of cuaKho) {
-			hang[c.chiSo] = hang[c.chiSo].replace(`"${c.viVal}"`, `"${c.enVal}"`);
+		if (cuaKho.length === 0) {
+			console.log(`   ${ten.padEnd(14)} khong khoa nao duoc chon — bo qua`);
+			continue;
+		}
+		for (const c of [...cuaKho].sort((x, y) => y.dau - x.dau)) {
+			hang.splice(c.dau, c.cuoi - c.dau + 1, ...c.enHang);
 		}
 		writeFileSync(file, hang.join("\n"));
+
+		const sauKhi = readFileSync(file, "utf8").split("\n");
+		const viMoi = quetKhoa(
+			sauKhi,
+			sauKhi.findIndex((d) => d === "\tvi: {" || d === "const vi = {"),
+			sauKhi.length,
+		);
+		const lech = [];
+		for (const c of cuaKho) {
+			const o = viMoi.get(c.ten);
+			if (!o || o.hang.join("\n") !== c.enChu) lech.push(c.ten);
+		}
 		const dong = soDongDoi(file);
-		if (dong !== cuaKho.length * 2) {
+		if (lech.length > 0) {
 			console.log(
-				`   RANG CUN: ${ten} — dot bien lech ${dong} dong, cho ${cuaKho.length * 2}`,
+				`   RANG CUN: ${ten} — ${lech.length} khoa doc lai KHONG ra ban tieng Anh: ${lech.slice(0, 5).join(" · ")}`,
 			);
+			cun += 1;
+		} else if (dong === 0) {
+			console.log(`   RANG CUN: ${ten} — file khong doi mot dong nao`);
 			cun += 1;
 		} else {
 			console.log(
-				`   ${ten.padEnd(14)} dot bien ${cuaKho.length} khoa, dung ${dong} dong`,
+				`   ${ten.padEnd(14)} dot bien ${cuaKho.length} khoa, doc lai dung ban tieng Anh ca ${cuaKho.length}, git thay ${dong} dong doi`,
 			);
 		}
 	}
@@ -170,6 +220,18 @@ try {
 const CHI_SO =
 	/^[\d\s.,:%\u2013\-\u2014/()+\u2026\u00b7|\u2248~\u2265\u2264<>]*$/;
 
+function manhDaiNhat(vung) {
+	const than = vung.replace(/^\s*\w+:\s*/, "").replace(/,\s*$/, "");
+	const trong = [...than.matchAll(/"((?:[^"\\]|\\.)*)"|`((?:[^`\\]|\\.)*)`/g)]
+		.map((m) => m[1] ?? m[2] ?? "")
+		.join("\u0000");
+	const manh = trong
+		.split(/\$\{[^}]*\}|\u0000/)
+		.map((x) => x.replace(/\\n/g, " ").trim())
+		.filter((x) => x.length >= 4);
+	return manh.sort((a, b) => b.length - a.length)[0] ?? "";
+}
+
 function chuVeRa(vb) {
 	return vb
 		.split("\n")
@@ -187,8 +249,8 @@ const bat = [];
 const mu = [];
 const ngoaiPhu = [];
 for (const c of cap) {
-	const trongSau = veSau.includes(c.enVal);
-	const trongNen = veNen.includes(c.enVal);
+	const trongSau = c.manh !== "" && veSau.includes(c.manh);
+	const trongNen = c.manh !== "" && veNen.includes(c.manh);
 	if (trongSau && !trongNen) {
 		bat.push(c);
 		continue;
@@ -196,14 +258,17 @@ for (const c of cap) {
 	if (trongSau && trongNen) {
 		mu.push({
 			...c,
-			ly: `chan da ve chuoi nay o luot nen: ${dongKhop(veNen, c.enVal).trim().slice(0, 72)}`,
+			ly: `chan da ve chuoi nay o luot nen: ${dongKhop(veNen, c.manh).trim().slice(0, 72)}`,
 		});
 		continue;
 	}
-	if (CHI_SO.test(c.enVal)) {
+	if (c.manh === "" || CHI_SO.test(c.manh)) {
 		mu.push({
 			...c,
-			ly: "gia tri chi co so/dau — bo loc du thua cua chan nuot no",
+			ly:
+				c.manh === ""
+					? "khong rut duoc manh chu nao dai >= 4 ky tu de doi chieu"
+					: "gia tri chi co so/dau — bo loc du thua cua chan nuot no",
 		});
 		continue;
 	}
@@ -265,4 +330,13 @@ console.log(
 	`\nket qua: bat ${bat.length}/${chamDuoc} khoa ve ra (${tyBat}%) · do phu ${tyPhu}% · mu ${mu.length} · ngoai tam voi ${ngoaiPhu.length} · dot bien cun ${cun}`,
 );
 const thieuTen = ngoaiPhu.length > 0 && chuaGhiTen;
-process.exit(cun > 0 || bat.length !== chamDuoc || thieuTen ? 1 : 0);
+if (chamDuoc === 0) {
+	console.log(
+		`RANG CUN: khong khoa nao duoc bon chan ve ra — 0/0 KHONG phai dat.\n` +
+			`   Dot bien co chay that (du thua doi tu ${duLai(nen)} sang ${duLai(sau)} lan)\n` +
+			`   nhung khong quy ket duoc khoa nao. Phep quy ket hong, khong phai san pham sach.`,
+	);
+}
+process.exit(
+	cun > 0 || chamDuoc === 0 || bat.length !== chamDuoc || thieuTen ? 1 : 0,
+);

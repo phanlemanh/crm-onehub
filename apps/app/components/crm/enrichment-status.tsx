@@ -1,3 +1,5 @@
+"use client";
+
 import type { EnrichmentStatus } from "@crm/db/enums";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";

@@ -122,14 +122,15 @@ const want = [
   ["formatMoneyCompact vi", f.formatMoneyCompact(123456789, "usd", "vi"), "1,2 Tr US$"],
   ["formatPercent en", f.formatPercent(0.125, "en"), "13%"],
   ["formatPercent vi", f.formatPercent(0.125, "vi"), "13%"],
-  ["formatCount en", f.formatCount(3, "company", "companies", "en"), "3 companies"],
-  ["formatCount vi", f.formatCount(3, "công ty", "công ty", "vi"), "3 công ty"],
+  ["formatCount en", f.formatCount(3, "company", "en", "companies"), "3 companies"],
+  ["formatCount vi", f.formatCount(3, "công ty", "vi", "công ty"), "3 công ty"],
+  ["formatCount en so nhieu mac dinh", f.formatCount(3, "deal", "en"), "3 deals"],
 ];
 let bad = 0;
 for (const [name, got, exp] of want) {
   if (got !== exp) { console.log("  LECH " + name + ": " + JSON.stringify(got) + " != " + JSON.stringify(exp)); bad++; }
 }
-console.log(bad === 0 ? "  10/10 o khop chuoi ghim san" : "  " + bad + " o lech");
+console.log(bad === 0 ? "  " + want.length + "/" + want.length + " o khop chuoi ghim san" : "  " + bad + " o lech");
 process.exit(bad === 0 ? 0 : 1);
 ' || { echo "RANG DO: ma tran dinh dang lech"; exit 1; }
 

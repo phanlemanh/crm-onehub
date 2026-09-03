@@ -1,13 +1,14 @@
 ---
 schema_version: 2
 feature_slug: nhan-ung-dung-noi-tieng-viet
-verdict: PENDING-JUDGMENT
+verdict: REJECT
 failed_evals: []
+reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 30d38f2ace5aca893108f0a3bccbc7f35a3fd652
-human_signoff: 
+verified_commit: 7b8573d231d03492a4885317514408569ca87a74
+human_signoff:
 ---
 
 # Evidence Report: nhan-ung-dung-noi-tieng-viet
@@ -34,250 +35,212 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E1-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E1-r4
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_ba_man
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
        CON LAI: 0 chuoi / 0 lan
 
     ket qua: con lai=0 lan · be mat lech=0
 
 - eval: E2
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E2-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E2-r4
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_ho_so
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
        CON LAI: 0 chuoi / 0 lan
 
     ket qua: con lai=0 lan
 
 - eval: E3
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E3-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E3-r4
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_dong_thoi_gian
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
        (b) KHONG phai chieu do — hop dong khai cau may chu van tieng Anh, vong ④
 
     ket qua: con lai=0 lan · duong hong (a) tieng Viet=co
 
 - eval: E4
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E4-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E4-r4
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_no_vong_1
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
        khong hien     "Nothing found"                          · nhãn trạng thái bổ sung dữ liệu
        da dich        "2d ago"                                 · chữ thời gian tương đối
     ket qua: con tieng Anh=0 · khong hien de doi chieu=4 · tong=10
 
 - eval: E5
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E5-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E5-r4
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_trinh_doc_man_hinh
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
-    -- nhan chi trinh doc man hinh nghe: vi=196 lan, en=193 lan
+    -- nhan chi trinh doc man hinh nghe: vi=196 lan, en=196 lan
     -- CON LAI: 0 chuoi / 0 lan
     ket qua: con lai=0 lan
 
 - eval: E6
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E6-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E6-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.api
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
      Tasks:    11 successful, 11 total
     Cached:    11 cached, 11 total
-      Time:    586ms >>> FULL TURBO
+      Time:    234ms >>> FULL TURBO
 
 - eval: E7
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E7-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E7-r4
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_khai_tieng
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
        boc du  Banking                2 cho, chua boc 0
        boc du  Accounting             1 cho, chua boc 0
     ket qua: cho chua khai lang=en=0
 
 - eval: E8
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E8-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E8-r4
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_doi_tieng
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
+    -- truoc: 1 dong chon · "CompaniesEvery company in the network.New company1 selectedActionsClea"
+    -- sau:   1 dong chon · "Công tyMọi công ty trong mạng lưới.Công ty mớiĐã chọn 1 dòngHành độngB"
+       chu doi theo:            co
+       trang KHONG tai lai:     dung
        thanh chon dong con giu: co
        chu thoi gian sau khi doi: "5 phút trước" — tieng Viet
     ket qua: hong=0
 
 - eval: E9
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E9-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E9-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.rang3_may_chu_ve
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
        luot ve dau OK  /contacts — lang=vi · <title> mo dau Cá nhân · h1 la Cá nhân
        luot ve dau OK  /deals — lang=vi · <title> mo dau Thoả thuận · h1 la Thoả thuận
     ket qua: man hong=0/3
 
 - eval: E10
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E10-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E10-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.rang3_be_rong
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
     $ bun scripts/dev-session.ts manh.phan@onemount.com
     ket qua 1440px: cat tran=0 · cat kem ba cham=0 · tong=7 · hong=0
     ket qua: o hong=0/12
 
 - eval: E11
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E11-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E11-r4
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_du_lieu_bien
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
        co      1 hang · ten phap nhan 40-60 ky tu
              vi du: "Công ty Cổ phần Đầu tư và Phát triển Địa ốc Phú Mỹ"
     ket qua: trang thai thieu=0/3
 
 - eval: E12
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E12-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E12-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.api
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
      Tasks:    11 successful, 11 total
     Cached:    11 cached, 11 total
-      Time:    586ms >>> FULL TURBO
+      Time:    234ms >>> FULL TURBO
 
 - eval: E13
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E13-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E13-r4
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_dot_bien
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
-       Hau qua: quy ket theo khoa suy tu chuoi hien ra, khong tu tung luot rieng.
+       DAT · 190 khoa ngoai tam voi da co ten o rang/dot-bien-sot.txt
 
     ket qua: bat 236/236 khoa ve ra (100%) · do phu 55% · mu 0 · ngoai tam voi 190 · dot bien cun 0
 
-- eval: E14
-  judged_by: judge panel — domain-correctness, operational-feasibility, spec-alignment (fresh context)
-  verdict: UNCERTAIN
-  rationale: |
-    Hội đồng 3 lăng kính: domain-correctness UNCERTAIN, operational-feasibility UNCERTAIN,
-    spec-alignment PASS. Toàn bộ phiếu và lý lẽ từng lăng kính chép nguyên văn dưới đây
-    (votes), không rút gọn hay viết lại.
-  votes:
-    - lens: domain-correctness
-      verdict: UNCERTAIN
-      rationale: |
-        Giọng dịch nhìn chung tự nhiên, đúng chất quan hệ đối tác (vd "Chốt ${n} là không
-        thành" thay vì dịch sát nghĩa thắng-thua), không đọc như bản dịch máy — câu (1)
-        nghiêng PASS. Ba bảng cột đo ở E10 (companies/contacts/deals, 768–1440px) không cho
-        ra cặp nhãn nào lẫn nhau kể cả sau khi bị cắt ("Số thoả thuận đan…", "Hoạt động
-        gần…" đều tách bạch với các cột còn lại) — câu (3) không tìm được bằng chứng vi
-        phạm trong đúng phạm vi E10. Câu (2) có một ứng viên thật — `contact.lastReply`:
-        "last reply" → "trả lời gần nhất" (dòng 752) — bỏ từ phân loại danh từ mà mẫu song
-        song "Hoạt động gần nhất" (dùng lặp lại có chủ đích trên ba màn) luôn giữ; nhưng
-        "trả lời" cũng có thể đọc như danh từ tỉnh lược tự nhiên trong tiếng Việt, và không
-        có file nào trong phạm vi cho thấy nhãn này thật sự đứng cạnh ô giá trị gì — nên
-        không đủ căn cứ để chốt đây là SAI LOẠI TỪ rõ ràng hay một lựa chọn hợp lệ.
-    - lens: operational-feasibility
-      verdict: UNCERTAIN
-      rationale: |
-        Câu (1): bảng dịch đọc tự nhiên, có lý lẽ rõ về đăng ký giọng hợp tác (vd "Chốt
-        ${n} là không thành" thay vì "thua", "Đã đổi người phụ trách cho ${n}" thay vì câu
-        bị động máy móc) — không như bản dịch máy. Câu (3): dựa đúng chữ thật ở E10, không
-        thấy cặp nhãn liền kề nào có nguy cơ lẫn nhau kể cả khi cắt (companies·768 hai cột
-        bị cắt là "Số thoả thuận đan…" và "Hoạt động gần…", không giống nhau). Câu (2) là
-        điểm mù: bảng tự đặt luật "nhãn mục phải là danh từ, không phải câu hỏi" (áp cho
-        `section.onIt`) nhưng `section.whereItStands` = "Đang tới đâu" — chính nó là một
-        câu hỏi/cụm động từ — nằm ngay cạnh trong cùng bảng "Mục và nhãn chung", trong khi
-        các nhãn mục anh em (`Giới thiệu`, `Liên kết`, `Quá trình`, `Người tham gia`) đều là
-        danh từ. Đây không khớp khuôn "cột bảng — ô dưới" mà câu hỏi ví dụ (cột chứa ngày)
-        nêu, nên tôi không đủ chắc để tính nó là vi phạm hay chỉ là nhãn mục (không phải cột
-        dữ liệu) nằm ngoài phạm vi câu hỏi.
-    - lens: spec-alignment
-      verdict: PASS
-      rationale: |
-        (1) Chữ đọc như tiếng Việt của người trong nghề quan hệ đối tác, không như bản dịch
-        máy: các câu được cải biên theo ngữ cảnh chứ không dịch sát nghĩa đen — ví dụ
-        "Budget pulled for the quarter" → "Đối tác hoãn sang quý sau" (đổi hẳn nội dung ví
-        dụ, không phải dịch từng chữ), "Everyone you talk to at X" → "Mọi người bạn trao
-        đổi ở X" (né khung "bán hàng" của bản gốc theo đúng CONTEXT.md). (2) Rà toàn bộ các
-        nhãn cột (headers.*, dealColumns.*, contactColumns.*) đối chiếu với nội dung ô bên
-        dưới: không tìm thấy nhãn nào lệch loại từ so với ô dưới nó — mọi nhãn cột trên
-        ngày (`headers.closeDate`, `headers.created`, `headers.archived`, `deal.opened`,
-        `deal.expectedClose`...) đều là cụm danh từ neo bằng "Ngày"/"Lần", và bảng còn tự
-        ghi lý do neo để tránh đúng lỗi "chốt" đọc lửng giữa danh từ/động từ — cho thấy vấn
-        đề này đã được xử lý chủ động, không phải bỏ sót. (3) Theo đúng chữ đo ở E10 (không
-        đoán ảnh chụp): duy nhất một trường hợp hai nhãn cột đứng cạnh nhau cùng bị cắt trên
-        cùng một màn là bảng companies ở 768px ("Số thoả thuận đan…" và "Hoạt động gần…") —
-        nhưng hai chuỗi cắt này KHÔNG dễ lẫn vào nhau (khác chữ rõ ràng), và CONTEXT.md đã
-        tự khai đúng hiện tượng này ("768px vẫn có hai trong năm tiêu đề bị cắt") kèm cơ chế
-        giảm nhẹ đã có (dấu ba chấm + `title` cho trình đọc màn hình, xác nhận ở cột "title:
-        co" trong E10). Không có cặp nhãn nào thật sự gây nhầm lẫn theo đúng nghĩa câu hỏi
-        (3) đòi hỏi.
-  required_evidence:
-    - "(domain-correctness) Ảnh chụp (hoặc bản đo kiểu E10) màn hồ sơ cá nhân, mục hiện contact.lastReply, chụp đúng lúc nhãn \"trả lời gần nhất\" đứng cạnh giá trị thời gian thật của nó — nếu giá trị là một mốc thời gian/ngày thì câu (2) có căn cứ chốt SAI LOẠI TỪ; nếu là một đoạn trích trả lời (nội dung) thì nhãn hợp lệ."
-    - "(domain-correctness) Chạy một bản mở rộng của rang/kiem-ke.mjs hoặc kiem-ban-dich.mjs đối chiếu toàn bộ 537 khoá (không chỉ ba bảng companies/contacts/deals đã đo ở E10) để xác nhận không còn nhãn nào khác lẫn loại từ với ô bên dưới, đặc biệt trong khối record-sheet (dòng 701–773) chưa được E10 đo tới."
-    - "(operational-feasibility) Người quyết có tính section.whereItStands = \"Đang tới đâu\" (ban-dich.md, bảng \"Mục và nhãn chung\", dòng gần section.onIt) là một trường hợp \"sai loại từ\" theo câu hỏi (2) hay không — vì nó là nhãn MỤC chứ không phải nhãn CỘT bảng có ô dữ liệu bên dưới như ví dụ đề bài nêu; nếu tính là vi phạm thì verdict thành FAIL, nếu không tính thì câu (2) sạch và cần xét lại verdict tổng."
-  human_override: 
-
 - eval: E15
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E15-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E15-r4
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.rang3_khong_may_quet
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
        qua ban-ve.mjs  be-rong.sh — cham san pham bang cach chay ban-ve.mjs
        dung vat that  may-chu-ve.sh
     ket qua: chan chi doc ma=0/7
 
 - eval: E16
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-E16-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-E16-r4
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.rang3_giai_doan
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
   output: |
        boc du  Closed lost          3 cho, chua boc 0
        boc du  Unqualified          3 cho, chua boc 0
     ket qua: cho chua khai lang=en=0
 
+- eval: E14
+  judged_by: judge panel (fresh context) — 3 lens: domain-correctness, operational-feasibility, spec-alignment
+  proposal: PASS
+  votes:
+    - domain-correctness: PASS — (1) Bảng dịch đọc tự nhiên, đúng giọng người trong nghề quan hệ hợp tác — các câu bán hàng gốc ("selling to", "Nothing is being sold to X") được viết lại thành ngôn ngữ đối tác ("chưa có thoả thuận hợp tác nào với X", "những người bạn đang trao đổi"), không phải dịch máy bám chữ. (2) Rà toàn bộ nhãn cột/nhãn trường trong ban-dich.md, không thấy cụm động từ đặt trên cột chứa ngày hay giá trị danh từ khác loại — các nhãn ngày đều neo "Ngày"/"Lần" thành danh từ (Ngày dự kiến chốt, Lần chốt gần nhất), và trường hợp cận biên duy nhất tìm được (contact.based → "Làm việc tại") là cách gọi hồ sơ cá nhân tiếng Việt quen thuộc, không phải lỗi sai loại từ. (3) Theo đúng chữ thật đo ở E10, hai tiêu đề từng bị cắt ("Số thoả thuận đan…", "Hoạt động gần…") không bao giờ đứng cạnh một tiêu đề "Số…" khác cũng đang bị cắt trong cùng ảnh chụp — ở khổ hẹp chỉ một cột "Số…" xuất hiện, ở khổ rộng cả hai hiện đủ chữ — nên không có cặp nhãn nào đọc thành nhau ở dạng bị cắt.
+    - operational-feasibility: UNCERTAIN — Câu (1) có căn cứ tốt: bảng dịch đọc như tiếng Việt người trong nghề viết, có lý lẽ ngữ cảnh riêng cho từng dòng khác biệt với bản Anh (vd. bỏ khung "bán hàng" thắng-thua, không thêm đuôi số nhiều, đảo trật tự chủ ngữ), không phải văn phong dịch máy. Câu (2): rà hết các cột bảng thật (companies/contacts/deals/company.dealColumns/…) thì mọi tiêu đề cột đều là danh từ khớp loại dữ liệu bên dưới, kể cả cột hành động deal.contactColumns.remove="Gỡ" (động từ hợp lệ vì đó là nút bấm) — không tìm được nhãn sai loại từ trong phạm vi cột thật; nhưng phạm vi "ô dưới nó" có thể còn bao gồm các nhãn field dạng label-giá trị (contact.based="Làm việc tại", deal.inStageSince="Ở giai đoạn này từ") mà tài liệu đưa vào không đủ để phân định chắc đây có tính là "cột" hay không. Câu (3): E10 chỉ đo companies và contacts ở các khổ rộng, KHÔNG đo bảng deals — trong khi bảng deals có hai cột liền kề cùng bắt đầu bằng "Ngày " (headers.closeDate="Ngày chốt" và headers.created="Ngày tạo"), đúng dạng cặp dễ lẫn khi bị cắt ở khổ hẹp, nhưng không có chữ thật hiện ra nào đo được cho cặp này nên không thể kết luận PASS hay FAIL theo đúng luật "chỉ dựa chữ thật hiện ra ở E10".
+      required_evidence:
+        - Đo "chữ thật hiện ra" kiểu E10 cho bảng deals ở 768px (và các khổ hẹp khác) cho các cột headers.closeDate ("Ngày chốt") và headers.created ("Ngày tạo") khi đứng liền kề — chạy lại script đo cột (kiểu rang/chu-hien-ra hoặc tương đương) trên màn Deals và xuất file evidence giống E10-chu-hien-ra.txt; nếu hai cột này cắt còn cùng một tiền tố ("Ngày…") thì câu (3) đổi sang có cặp nhãn dễ lẫn.
+        - Chụp hoặc trích DOM khu vực "About" của hồ sơ cá nhân (field contact.based) và khu vực giai đoạn của hồ sơ thoả thuận (field deal.inStageSince) để xác định các nhãn này có hiển thị dạng cột bảng (nhãn trên, giá trị dưới) hay dạng câu nhãn:giá trị nội tuyến — nếu là dạng cột bảng thì "Làm việc tại" (cụm động từ) đứng trên giá trị là tên địa danh (danh từ) sẽ là một nhãn sai loại từ theo câu (2).
+    - spec-alignment: PASS — (1) Bảng dịch đọc tự nhiên như tiếng Việt sản phẩm ngành đối tác — câu ngắn gọn, đúng giọng quan hệ hợp tác (không phải "bán hàng"), có lý do rõ cho từng lựa chọn từ (vd. "moved" → "chuyển sang công ty khác", tránh "khách hàng"/"liên hệ"); không có dấu hiệu dịch máy word-by-word. (2) Mọi nhãn cột chứa ngày đều neo danh từ "Ngày" nhất quán (Ngày tạo, Ngày chốt, Ngày lưu trữ, Ngày mở), kể cả deal.expectedClose có ghi chú tường minh về việc tránh đọc "chốt" như động từ — quét toàn bộ headers.* và *.dealColumns.closeDate không thấy cụm động từ nào đứng trên cột ngày. (3) Theo đúng chữ thật đo ở E10 (768px companies/contacts), hai tiêu đề bị cắt cùng màn ("Số thoả thuận đan…" và "Hoạt động gần…") không giống nhau, không có cặp nhãn liền kề nào cắt xuống còn dễ lẫn.
+  human_override:
+
 ### Lệnh suite (hồi quy)
 
 - cmd: bunx turbo run check-types --force
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-SUITE-bunx_turbo_run_check_types_force-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-SUITE-bunx_turbo_run_check_types_force-r4
   exit_code: 0
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
+  output: |
+     Tasks:    13 successful, 13 total
+    Cached:    0 cached, 13 total
+      Time:    13.324s
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-SUITE-bunx_turbo_run_lint_force-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-SUITE-bunx_turbo_run_lint_force-r4
   exit_code: 0
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
+  output: |
+     Tasks:    9 successful, 9 total
+    Cached:    0 cached, 9 total
+      Time:    946ms
 
 - cmd: bun run lint:slop
-  run_id: minted-nhan-ung-dung-noi-tieng-viet-SUITE-bun_run_lint_slop-r3
+  run_id: minted-nhan-ung-dung-noi-tieng-viet-SUITE-bun_run_lint_slop-r4
   exit_code: 0
-  verified_at: 2026-09-03T02:36:45Z
+  verified_at: 2026-09-03T06:00:00Z
+  output: |
+    $ oxlint
 
 ## Known limits
 
@@ -285,14 +248,15 @@ human_signoff:
 
 ## Analyst
 
-none — moi eval feature deu red tren baseline (co phan biet)
+carried tu round 3 — baseline khong do lai round nay
+none — không có eval nào được đánh dấu không-phân-biệt round này (baseline không đo lại round 4; xem round 3 cho lần đo baseline gần nhất)
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — không có eval nào chạy nhiều lần (runs > 1) round này
 
 ## Iterations
 
-Round 1: E1, E10, E13, E15 failed — bề mặt ẩn chưa mở hết, bề rộng cột 768px thiếu vế title/ba chấm, độ phủ đột biến và chân chống-lách chưa đạt. Returned to implementation.
-Round 2: E13 failed — độ phủ đột biến (mutation coverage) chưa đạt ngưỡng cổng 2. Returned to implementation.
-Round 3: 15/15 tiêu chí máy đạt, 0 lệnh đỏ, 0 bị chặn. E14 (hội đồng) trả UNCERTAIN — hai lăng kính bỏ phiếu trắng ở cùng một chỗ: bảng dịch tự mâu thuẫn luật của chính nó (`section.whereItStands` = "Đang tới đâu" là câu hỏi trong khi luật đòi nhãn mục phải là danh từ; `contact.lastReply` bỏ từ phân loại mà `Hoạt động gần nhất` giữ). Verdict PENDING-JUDGMENT. Bản phản biện tìm được một hồi quy do vòng sửa r2 gây ra: `formatCount` nhánh `vi` in danh từ tiếng Anh trần ở năm chỗ ngoài lát. Đã sửa, mở vòng 4 theo lệnh của người.
+Round 1: E1 failed — bản vẽ ba màn chưa mở đủ bề mặt ẩn trước khi đối chiếu. Returned to implementation.
+Round 2: E13 failed — chặn đột biến báo tỷ lệ bắt dưới ngưỡng khớp mới. Returned to implementation.
+Round 3: 16 eval máy PASS; E14 (AC-13) UNCERTAIN ở hai lens (domain-correctness, operational-feasibility) — verdict PENDING-JUDGMENT, chờ người quyết.

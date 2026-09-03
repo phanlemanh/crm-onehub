@@ -89,24 +89,51 @@ function khoaTrongKho(goc) {
 }
 
 const daKhai = new Set(dong.map((d) => d.khoa));
-const chuaCoDong = [];
+
+function hopLe(k) {
+	const phan = k.split(".");
+	const ra = [k];
+	if (phan.length >= 2) ra.push(phan.slice(-2).join("."));
+	if (phan.length === 1) ra.push(phan[0]);
+	return ra;
+}
+
+const NGOAI_KHO = "apps/app/lib/deal-stage.ts";
+
+const moiKhoaKho = [];
+for (const m of readFileSync(NGOAI_KHO, "utf8").matchAll(
+	/^\t(\w+): \{ label: "/gm,
+)) {
+	moiKhoaKho.push({ file: "deal-stage.ts", khoa: `stage.${m[1]}` });
+}
 for (const f of KHO) {
 	for (const k of khoaTrongKho(readFileSync(f, "utf8"))) {
-		const phan = k.split(".");
-		let thay = false;
-		for (let i = 0; i < phan.length; i += 1) {
-			if (daKhai.has(phan.slice(i).join("."))) {
-				thay = true;
-				break;
-			}
-		}
-		if (!thay) chuaCoDong.push(`${f.split("/").pop()}:${k}`);
+		moiKhoaKho.push({ file: f.split("/").pop(), khoa: k });
 	}
 }
 
-console.log(`-- khoa trong kho chuoi KHONG co dong nao trong bang: ${chuaCoDong.length}`);
-for (const k of chuaCoDong) console.log(`   CHUA KHAI   ${k}`);
+const chuaCoDong = [];
+for (const { file, khoa } of moiKhoaKho) {
+	if (!hopLe(khoa).some((x) => daKhai.has(x))) {
+		chuaCoDong.push(`${file}:${khoa}`);
+	}
+}
 
-const hong = thieuKhai.length + chuaDich.length + chuaCoDong.length;
+const phuDuoc = new Set();
+for (const { khoa } of moiKhoaKho) for (const x of hopLe(khoa)) phuDuoc.add(x);
+const dongThua = dong
+	.map((d) => d.khoa)
+	.filter((k) => !k.includes("*") && !phuDuoc.has(k));
+
+console.log(
+	`-- chieu 1, kho -> bang: ${chuaCoDong.length} khoa khong co dong nao (khop bang duong day du hoac hai doan cuoi, khong khop bang hau to bat ky)`,
+);
+for (const k of chuaCoDong) console.log(`   CHUA KHAI   ${k}`);
+console.log(
+	`-- chieu 2, bang -> kho: ${dongThua.length} dong ta mot khoa khong con trong kho chuoi nao`,
+);
+for (const k of dongThua) console.log(`   DONG THUA   ${k}`);
+
+const hong = thieuKhai.length + chuaDich.length + chuaCoDong.length + dongThua.length;
 console.log(`ket qua: dong hong=${hong}`);
 process.exit(hong > 0 ? 1 : 0);

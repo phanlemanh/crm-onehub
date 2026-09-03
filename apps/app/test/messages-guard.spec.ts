@@ -300,14 +300,30 @@ describe("khoa chet", () => {
 		.map((muc) => readFileSync(join(muc.parentPath, muc.name), "utf8"))
 		.join("\n");
 
+	const coTen = (ten: string) =>
+		new RegExp(`\\.${ten}\\b|"${ten}"|'${ten}'`).test(NGUON);
+
+	function song(duong: string): boolean {
+		const phan = duong.split(".");
+		const la = phan[phan.length - 1] ?? "";
+		if (!coTen(la)) return false;
+		const cha = phan[phan.length - 2];
+		if (!cha) return true;
+		if (new RegExp(`\\.${cha}\\.${la}\\b`).test(NGUON)) return true;
+		return coTen(cha);
+	}
+
+	it("chan nay do duoc: mot khoa khong ai goi phai bi goi ten", () => {
+		expect(song("khongAiGoiKhoaNay")).toBe(false);
+		expect(song("nhomKhongTonTai.khongAiGoiKhoaNay")).toBe(false);
+	});
+
 	it("moi khoa da khai deu co it nhat mot cho goi trong apps/app", () => {
 		const chet: string[] = [];
 
 		for (const [ten, lay] of MODULE) {
 			for (const [duong] of phang(lay("en"))) {
-				const la = duong.split(".").pop() ?? "";
-				const goi = new RegExp(`\\.${la}\\b|"${la}"|'${la}'`);
-				if (!goi.test(NGUON)) chet.push(`${ten}.${duong}`);
+				if (!song(duong)) chet.push(`${ten}.${duong}`);
 			}
 		}
 

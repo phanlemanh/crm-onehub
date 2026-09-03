@@ -16,10 +16,6 @@ const en = {
 		whereItStands: "Where it stands",
 		onIt: "On it",
 	},
-	srLabel: {
-		primary: "Primary",
-		socialLinks: "social links",
-	},
 	company: {
 		fallbackTitle: "Company",
 		contactColumns: {
@@ -205,10 +201,6 @@ const vi = {
 		background: "Quá trình",
 		whereItStands: "Đang tới đâu",
 		onIt: "Người tham gia",
-	},
-	srLabel: {
-		primary: "Đầu mối",
-		socialLinks: "liên kết mạng xã hội",
 	},
 	company: {
 		fallbackTitle: "Công ty",
