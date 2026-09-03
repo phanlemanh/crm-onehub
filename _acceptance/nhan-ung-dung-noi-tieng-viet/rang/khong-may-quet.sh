@@ -5,7 +5,7 @@ RANG="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Chan chong-lach: khong chan do nao duoc chung minh su vang mat bang cach DOC MA NGUON.
 # Moi chan phai dung trinh duyet that, may chu that, hoac trinh bien dich.
-VAT_THAT='puppeteer|curl|bun test|bunx tsc|fetch\('
+VAT_THAT='puppeteer|curl|bun test|bunx tsc|fetch\(|createSourceFile\(|createProgram\('
 
 hong=0
 tong=0
