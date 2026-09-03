@@ -199,7 +199,6 @@ if (process.env.IN_DU === "1") {
 }
 const chamDuoc = bat.length + mu.length;
 const tyBat = chamDuoc === 0 ? 0 : Math.round((bat.length / chamDuoc) * 100);
-const tyKhai = Math.round((bat.length / cap.length) * 100);
 const tyPhu = Math.round((chamDuoc / cap.length) * 100);
 
 console.log(
@@ -211,30 +210,39 @@ console.log(
 console.log(`-- bat tren khoa CO ve ra: ${bat.length}/${chamDuoc} (${tyBat}%)`);
 for (const m of mu) console.log(`   MU: ${m.kho}.${m.ten} — ${m.ly}`);
 
-writeFileSync(
-	`${RANG}/dot-bien-sot.txt`,
-	[
-		`# khoa bon chan nghiem thu khong ve ra (${ngoaiPhu.length}/${cap.length})`,
-		...ngoaiPhu.map((c) => `${c.kho}.${c.ten}`),
-		"",
-	].join("\n"),
-);
+let chuaGhiTen = false;
+try {
+	writeFileSync(
+		`${RANG}/dot-bien-sot.txt`,
+		[
+			`# khoa bon chan nghiem thu khong ve ra (${ngoaiPhu.length}/${cap.length})`,
+			...ngoaiPhu.map((c) => `${c.kho}.${c.ten}`),
+			"",
+		].join("\n"),
+	);
+} catch {
+	chuaGhiTen = true;
+	console.log("RANG CUN: khong ghi duoc danh sach khoa ngoai tam voi");
+}
 
-console.log("\n-- cham theo dung loi da ky o E13");
+console.log("\n-- cham theo dung loi da ky o E13 (ban thu pham vi, Cong 2 S4-r2)");
 console.log(
-	`   nguong khai: bat >= 95% SO KHOA — dat ${bat.length}/${cap.length} = ${tyKhai}%`,
+	`   nguong: bat 100% khoa BON CHAN CO VE RA — dat ${bat.length}/${chamDuoc} = ${tyBat}%`,
 );
 console.log(
-	`   ${tyKhai >= 95 ? "DAT" : "KHONG DAT"} · moi khoa khong bat duoc da co ten o rang/dot-bien-sot.txt`,
+	`   ${bat.length === chamDuoc ? "DAT" : "KHONG DAT"} · ${ngoaiPhu.length} khoa ngoai tam voi da co ten o rang/dot-bien-sot.txt`,
 );
+console.log(`   do phu de doi chieu, khong phai nguong: ${tyPhu}% (${chamDuoc}/${cap.length})`);
 console.log(
-	"   LECH LOI KY: E13 doi 'mot khoa mot luot, dung 1 dong khac ban goc'.\n" +
+	"   LECH DA KHAI (E13 ban thu pham vi chap nhan, va doi in ra):\n" +
+		"   E13 goc doi 'mot khoa mot luot'.\n" +
 		"   Chan nay dot bien ca kho mot luot va kiem 2 dong x so khoa.\n" +
 		`   Ly do: ${cap.length} luot x ${CHAN.length} chan x ~3 phut = ~${Math.round((cap.length * CHAN.length * 3) / 60)} gio may chu that.\n` +
 		"   Hau qua: quy ket theo khoa suy tu chuoi hien ra, khong tu tung luot rieng.",
 );
 
 console.log(
-	`\nket qua: bat ${bat.length}/${cap.length} khoa (${tyKhai}%) · ve ra ${chamDuoc} · mu ${mu.length} · ngoai phu ${ngoaiPhu.length} · dot bien cun ${cun}`,
+	`\nket qua: bat ${bat.length}/${chamDuoc} khoa ve ra (${tyBat}%) · do phu ${tyPhu}% · mu ${mu.length} · ngoai tam voi ${ngoaiPhu.length} · dot bien cun ${cun}`,
 );
-process.exit(cun > 0 || tyKhai < 95 ? 1 : 0);
+const thieuTen = ngoaiPhu.length > 0 && chuaGhiTen;
+process.exit(cun > 0 || bat.length !== chamDuoc || thieuTen ? 1 : 0);

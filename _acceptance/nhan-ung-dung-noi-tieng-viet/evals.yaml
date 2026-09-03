@@ -209,10 +209,18 @@ evals:
     executor: script
     cmd: config:executors.script.rang3_dot_bien
     expected: >-
-      exit 0. Tra TUNG khoa cua moi kho chuoi tieng Viet ve dung chuoi tieng Anh
-      cua no, mot khoa mot luot, tren may chu that; moi dot bien phai qua phep
-      kiem "dot bien that su doi file" (dung 1 dong khac ban goc). Bat >= 95%
-      so khoa; MOI khoa khong bat duoc phai co ten cung ly do trong ho so.
+      exit 0. SUA O CONG 2 VONG S4-r2 — nguong cu doi 95% MOI khoa; thuoc chi
+      voi toi nhung khoa bon chan nghiem thu thuc su ve ra, nen mau so ay do
+      TAM VOI cua chan chu khong do do tin cua thuoc.
+      Tra kho chuoi tieng Viet ve dung chuoi tieng Anh cua no tren may chu that;
+      moi dot bien phai qua phep kiem "dot bien that su doi file" (so dong doi
+      dung bang 2 x so khoa). Doi HAI dieu:
+      (1) tren nhung khoa bon chan CO ve ra o luot nen, dot bien phai lam chan
+      do 100% — mot khoa vo hinh voi chan la mot cho mu, khong duoc bo qua;
+      (2) MOI khoa nam ngoai tam voi phai co ten trong rang/dot-bien-sot.txt,
+      va chan phai in ca hai con so: do phu (ve ra / tong) va ty bat.
+      Chan cung phai in ro cho lech con lai: no dot bien ca kho mot luot chu
+      khong mot khoa mot luot, vi mot khoa mot luot la ~85 gio may chu that.
       Chieu do: chinh chan nay la chieu do — no do cai thuoc, khong do san pham.
     paths:
       - "apps/app/lib/messages/**"
@@ -222,9 +230,11 @@ evals:
     criterion: AC-13
     executor: judgment
     question: >-
-      Ba cau. (1) Bang dich cua vong nay da chot trong ho so TRUOC khi cham —
-      doc no nhu tieng Viet cua nguoi trong nghe quan he doi tac, hay nhu ban
-      dich may? (2) Nhan nao dung SAI LOAI TU so voi thu nam trong o duoi no —
+      Ba cau. (1) Bang dich co doc nhu tieng Viet cua nguoi trong nghe quan he
+      doi tac, hay nhu ban dich may? Cham CHU, khong cham thu tu thoi gian:
+      muc "Bo sung o vong sua S4-r1" khai ro 199/537 dong duoc viet SAU khi
+      cham ma. Do la mot gioi han da khai, khong phai cho de truot cau (1) —
+      no duoc tinh o cau rieng ben duoi. (2) Nhan nao dung SAI LOAI TU so voi thu nam trong o duoi no —
       vi du cum dong tu dung tren mot cot chua ngay? (3) Cap nhan nao dung canh
       nhau tren cung mot man ma de lan, ke ca khi bi cat bot o kho hep? Voi cau
       3, chi duoc dua tren CHU THAT HIEN RA da do o E10 — khong doan tu anh chup.
@@ -233,10 +243,17 @@ evals:
       - ../../CONTEXT.md
       - evidence/E10-chu-hien-ra.txt
     expected: >-
-      TRUOT CUNG khi thieu bat ky dau vao nao. `ban-dich.md` la vat S3 phai sinh
-      TRUOC khi cham ma — bang dich chot trong ho so truoc khi cham, dung luat
-      vong ②. `E10-chu-hien-ra.txt` do E10 xuat. Thieu mot trong hai thi E14
-      KHONG duoc cham tiep va KHONG duoc coi la UNCERTAIN — no la BLOCKED.
+      SUA O CONG 2 VONG S4-r2. Nguong cu doi bang dich chot TRUOC khi cham ma
+      va lay do lam dieu kien truot. 338 dong dat dieu kien ay; 199 dong con
+      lai thi khong, va khong the sua bang lam them — khong ai quyet dinh duoc
+      mot viec da xay ra roi. Nguong moi doi HAI dieu do duoc:
+      (1) bang DU — `rang/kiem-ban-dich.mjs` doi chieu hai chieu, moi khoa
+      trong nam kho chuoi phai co dong, va moi dong phai co khoa;
+      (2) chu DOC DUOC nhu tieng Viet trong nghe, cham bang hoi dong.
+      Thu tu thoi gian khong con la dieu kien truot, nhung PHAI hien trong ho
+      so: muc "Bo sung o vong sua S4-r1" cua ban-dich.md goi ten 199 dong ay.
+      TRUOT CUNG khi thieu bat ky dau vao nao. `E10-chu-hien-ra.txt` do E10
+      xuat. Thieu mot dau vao thi E14 la BLOCKED, khong phai UNCERTAIN.
     evidence_required: [judged_by, verdict, rationale]
 
   - id: E15

@@ -8,7 +8,7 @@ việc gì trong hàng đợi.
 
 - `origin` = `phanlemanh/crm-onehub` (riêng tư), nhánh làm việc `onehub`
 - `upstream` = `trycompai/crm` (chỉ đọc, MIT) · `release` = bản gương, không sửa
-- **27 commit chưa đẩy** lên `origin` tính đến cuối phiên này
+- **61 commit chưa đẩy** lên `origin` tính đến cuối phiên 2026-09-03
 
 Đã gửi lên hãng, đang mở: PR `trycompai/crm#194` (vá `dev-session`), issue `#195`
 (nay đã biết là **không phải test phập phù** — xem mục bẫy).
@@ -22,7 +22,7 @@ ngày 2026-09-01: ② lên trước ①.
 | --- | --- | --- |
 | ② | Bộ dựng chung (`packages/ui`) | **Đã ký Cổng 2** — `bo-dung-chung-nhan-chuoi` |
 | ① | Xương sống + định dạng ngày/số | **Chờ chữ ký ở Cổng 2** — `tieng-viet-cho-crm` |
-| ③ | Nhãn ứng dụng (`apps/app`) | **việc kế tiếp**, chưa mở |
+| ③a | Nhãn ứng dụng, lát ba luồng (`apps/app`) | **Chờ người ký ở Cổng 2** — `nhan-ung-dung-noi-tieng-viet`, S4 vòng 3 |
 | ④ | Câu máy chủ trả về | chưa mở |
 | ⑤ | Chữ tác nhân sinh ra | chưa mở |
 
@@ -49,10 +49,30 @@ Câu gộp còn cần lời của người cho hai mục **chưa chắc**, và m
 
 Sau khi ký: `PRODUCT-MAP.md` được vẽ lại, và vòng ③ mở được.
 
-### Vòng ③ — việc kế tiếp, và nó thừa kế một hoá đơn
+### Vòng ③a — đã chạy, đang chờ hai chữ ký
 
-Chạy `/feature-loop:feature-loop <mô tả>`. Đây là vòng quét lớn nhất: 177 file
-nhãn ứng dụng.
+Lát khoanh bằng đồ thị nhập từ ba luồng của ngưỡng UAT: **96 file**, không phải
+177 — phần còn lại đi lát ③b (Cài đặt) và ③c (trang khác).
+
+Máy chấm **14/16 tiêu chí xanh** ở vòng S4 thứ hai. Ba màn danh sách, hồ sơ ghi
+chép, dòng thời gian và cây trợ năng đều **0 chữ tiếng Anh sót**, kể cả sau khi
+mở hết menu và hộp thoại. Người chọn ở Cổng 2 ngày 2026-09-03: **thu phạm vi hai
+lời hứa** E13 và E14 — bảng đối chiếu ở `contract.md`, mục "Hai lời hứa thu lại".
+
+**Hai việc của người, không việc nào máy làm hộ được:**
+
+1. Duyệt bản thu phạm vi: `contract.md` có `amended_by:` để trống.
+2. Ký vòng: `/acceptance-gate:signoff nhan-ung-dung-noi-tieng-viet`.
+
+**Cái bẫy đắt nhất của vòng này, để vòng sau khỏi trả lại.** Máy chủ dev phải
+chạy TỪ WORKTREE. Bốn lượt đo đầu chạy trên máy chủ của bản checkout chính nên
+đo nhầm cây, và đột biến không bao giờ đỏ được. Kiểm bằng cách phá vật thật rồi
+xem phép đo có đổi màu không — không tin một con số xanh nào chưa từng đỏ.
+
+**Bẫy thứ hai: đừng dọn cây bằng `git checkout --`.** Chân đột biến ghi đè năm
+kho chuỗi rồi trả lại. Nếu nó chết giữa chừng, `git checkout --` khôi phục về
+HEAD chứ không về bản trước đột biến — lần này mất cả buổi chiều dịch. Commit
+trước khi chạy chân đó.
 
 **Cổng 2 của vòng ③ phải đo lại đúng năm chuỗi này và thấy chúng biến mất:**
 

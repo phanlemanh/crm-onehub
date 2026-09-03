@@ -8,6 +8,9 @@ surfaces: [ui]
 status: approved
 approved_by: Manh Phan
 approved_at: 2026-09-02
+amended_at: 2026-09-03
+amended_reason: "Cong 2 vong S4-r2 — thu pham vi E13 (mau so cua thuoc) va E14 (dieu kien thu tu thoi gian)"
+amended_by:
 design_doc: docs/superpowers/specs/2026-09-02-nhan-ung-dung-noi-tieng-viet-design.md
 ---
 
@@ -154,6 +157,25 @@ còn nhìn thấy chúng".
 phép đo xanh mà chưa từng chứng minh nó đỏ được. AC-12 bắt kho chuỗi chịu hai
 phép đo mà vòng ② đã dựng: trình biên dịch bắt thiếu khoá, và bài kiểm bắt giá
 trị tiếng Việt không mang dấu.
+
+**Hai lời hứa thu lại ở Cổng 2 sau vòng S4-r2 — chờ người ký.** Vòng máy chấm
+14/16 xanh; hai chỗ đỏ đều là lời hứa về THƯỚC và về QUY TRÌNH, không phải tiếng
+Việt sai trên màn. Người chọn đường "thu phạm vi" ở Cổng 2 ngày 2026-09-03.
+
+| Lời hứa cũ | Đo được | Lời hứa mới |
+| --- | --- | --- |
+| E13: bắt ≥ 95% **mọi** khoá | 236/426 = 55% | bắt **100%** khoá bốn chân *có* vẽ ra (đạt 236/236), và gọi tên mọi khoá ngoài tầm với |
+| E14: bảng dịch chốt **trước** khi chạm mã | 338/537 dòng đạt | bảng **đủ** (đối chiếu hai chiều) + chữ đọc được như tiếng trong nghề; thứ tự thời gian khai thành giới hạn, không còn là điều kiện trượt |
+
+Vì sao đổi mẫu số của E13: 190 khoá còn lại nằm sau hộp thoại tạo, màn trống,
+màn lưu trữ và thao tác hàng loạt — nơi bốn chân không mở tới. Đếm chúng vào mẫu
+số là để **tầm với của chân đo** giả trang thành **độ tin của thước**. Con số độ
+phủ vẫn phải in ra, và 190 khoá vẫn phải có tên; đổi mẫu số không phải là giấu.
+
+Vì sao E14 bỏ điều kiện thứ tự: 199 dòng đã viết sau khi chạm mã, và **không ai
+quyết định được một việc đã xảy ra rồi**. Giữ nó làm điều kiện trượt thì mọi
+vòng sau đều trượt cùng một chỗ mà không ai học được gì. Nó ở lại hồ sơ như một
+giới hạn có tên, trong mục "Bổ sung ở vòng sửa S4-r1" của `ban-dich.md`.
 
 **Ba lối đọc và vì sao không có lối thứ tư.** 130 chuỗi nằm trong file `.ts`
 thuần nơi hook React không sống được. Vòng ① đã có tiền lệ: hai helper nhận vùng
