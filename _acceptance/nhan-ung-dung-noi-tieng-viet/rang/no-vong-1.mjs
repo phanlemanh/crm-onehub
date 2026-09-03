@@ -9,16 +9,16 @@ const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const APP = process.env.APP_URL ?? "http://localhost:3000";
 
 const NO = [
-	{ cu: "Search companies by name or domain…", o: "ô tìm trên màn công ty" },
-	{ cu: "Archived", o: "nút chuyển sang màn lưu trữ" },
-	{ cu: "Views", o: "nút bảng xem đã lưu" },
-	{ cu: "New company", o: "nút tạo công ty" },
-	{ cu: "Not researched", o: "nhãn trạng thái bổ sung dữ liệu" },
-	{ cu: "Researching", o: "nhãn trạng thái bổ sung dữ liệu" },
-	{ cu: "Enriched", o: "nhãn trạng thái bổ sung dữ liệu" },
-	{ cu: "Enrichment failed", o: "nhãn trạng thái bổ sung dữ liệu" },
-	{ cu: "Nothing found", o: "nhãn trạng thái bổ sung dữ liệu" },
-	{ cu: "2d ago", o: "chữ thời gian tương đối" },
+	{ cu: "Search companies by name or domain…", moi: "Tìm công ty theo tên hoặc tên miền…", o: "ô tìm trên màn công ty" },
+	{ cu: "Archived", moi: "Lưu trữ", o: "nút chuyển sang màn lưu trữ" },
+	{ cu: "Views", moi: "Bảng xem", o: "nút bảng xem đã lưu" },
+	{ cu: "New company", moi: "Công ty mới", o: "nút tạo công ty" },
+	{ cu: "Not researched", moi: "Chưa tra cứu", o: "nhãn trạng thái bổ sung dữ liệu" },
+	{ cu: "Researching", moi: "Đang tra cứu", o: "nhãn trạng thái bổ sung dữ liệu" },
+	{ cu: "Enriched", moi: "Đã bổ sung", o: "nhãn trạng thái bổ sung dữ liệu" },
+	{ cu: "Enrichment failed", moi: "Bổ sung dữ liệu hỏng", o: "nhãn trạng thái bổ sung dữ liệu" },
+	{ cu: "Nothing found", moi: "Không tìm thấy gì", o: "nhãn trạng thái bổ sung dữ liệu" },
+	{ cu: "2d ago", moi: "ngày trước", o: "chữ thời gian tương đối" },
 ];
 
 function phien() {
@@ -96,23 +96,43 @@ console.log(
 	`-- nam chuoi vong ① dinh tuyen sang vong nay, goi ten tung cai (${NO.length} dong)`,
 );
 let hong = 0;
-let khongThay = 0;
-for (const { cu, o } of NO) {
+let khongDoDuoc = 0;
+for (const { cu, moi, o } of NO) {
 	const conO = vi.ra.filter((t) => t.includes(cu)).length;
 	const coOEn = en.ra.some((t) => t.includes(cu));
+	const coBanDich = vi.ra.some((t) => t.includes(moi));
 	if (conO > 0) {
 		hong += 1;
 		console.log(`   CON TIENG ANH  ${JSON.stringify(cu).padEnd(40)} ${conO} cho · ${o}`);
 		continue;
 	}
 	if (!coOEn) {
-		khongThay += 1;
-		console.log(`   khong hien     ${JSON.stringify(cu).padEnd(40)} · ${o}`);
+		khongDoDuoc += 1;
+		console.log(
+			`   KHONG DO DUOC  ${JSON.stringify(cu).padEnd(40)} vang o CA HAI thu tieng · ${o}`,
+		);
 		continue;
 	}
-	console.log(`   da dich        ${JSON.stringify(cu).padEnd(40)} · ${o}`);
+	if (!coBanDich) {
+		hong += 1;
+		console.log(
+			`   THIEU BAN DICH ${JSON.stringify(cu).padEnd(40)} cho ${JSON.stringify(moi)} · ${o}`,
+		);
+		continue;
+	}
+	console.log(
+		`   da dich        ${JSON.stringify(cu).padEnd(40)} -> ${JSON.stringify(moi)} · ${o}`,
+	);
+}
+if (khongDoDuoc > 0) {
+	console.log(
+		`ket qua: KHONG DO DUOC ${khongDoDuoc}/${NO.length} chuoi — vang o ca hai thu tieng.\n` +
+			"   Vang o ca hai ban KHONG phai la da dich: no la khong quan sat duoc gi.\n" +
+			"   Dung du lieu thu co du trang thai roi chay lai.",
+	);
+	process.exit(2);
 }
 console.log(
-	`ket qua: con tieng Anh=${hong} · khong hien de doi chieu=${khongThay} · tong=${NO.length}`,
+	`ket qua: con tieng Anh hoac thieu ban dich=${hong}/${NO.length}`,
 );
 process.exit(hong > 0 ? 1 : 0);
