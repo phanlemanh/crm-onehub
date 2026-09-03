@@ -264,3 +264,19 @@ record-sheet.deal.remove
 record-sheet.deal.deleteWarning
 record-sheet.deal.person
 record-sheet.deal.people
+
+# khoa khong quy ket duoc (14/519) — gia tri qua ngan hoac toan bien
+crm.timeline.composer.log  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
+crm.timeline.tabs.all  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
+crm.timeline.due  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
+crm.time.minutes  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
+crm.time.hours  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
+crm.time.days  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
+crm.time.ahead  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
+crm.time.ago  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
+crm.fields.add  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
+crm.fields.keyLabel  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
+crm.sheet.fallbackName  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
+crm.misc.yes  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
+crm.misc.no  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
+record-sheet.deal.inCurrency  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu

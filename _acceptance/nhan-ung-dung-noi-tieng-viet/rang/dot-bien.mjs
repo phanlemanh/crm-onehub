@@ -247,6 +247,7 @@ const veNen = chuVeRa(nen);
 const veSau = chuVeRa(sau);
 const bat = [];
 const mu = [];
+const khongQuyKet = [];
 const ngoaiPhu = [];
 for (const c of cap) {
 	const trongSau = c.manh !== "" && veSau.includes(c.manh);
@@ -263,12 +264,12 @@ for (const c of cap) {
 		continue;
 	}
 	if (c.manh === "" || CHI_SO.test(c.manh)) {
-		mu.push({
+		khongQuyKet.push({
 			...c,
 			ly:
 				c.manh === ""
-					? "khong rut duoc manh chu nao dai >= 4 ky tu de doi chieu"
-					: "gia tri chi co so/dau — bo loc du thua cua chan nuot no",
+					? "gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu"
+					: "gia tri chi co so va dau cau",
 		});
 		continue;
 	}
@@ -294,6 +295,12 @@ console.log(
 );
 console.log(`-- bat tren khoa CO ve ra: ${bat.length}/${chamDuoc} (${tyBat}%)`);
 for (const m of mu) console.log(`   MU: ${m.kho}.${m.ten} — ${m.ly}`);
+console.log(
+	`-- ${khongQuyKet.length} khoa KHONG QUY KET DUOC: phep do khong noi duoc bon chan co ve ra hay khong,\n` +
+		"   vi gia tri tieng Anh cua chung qua ngan hoac gan nhu toan bien. Chung khong nam trong\n" +
+		"   mau so cua nguong, va tung cai phai co ten ngay duoi day:",
+);
+for (const k of khongQuyKet) console.log(`   KHONG QUY KET  ${k.kho}.${k.ten} — ${k.ly}`);
 
 let chuaGhiTen = false;
 try {
@@ -302,6 +309,9 @@ try {
 		[
 			`# khoa bon chan nghiem thu khong ve ra (${ngoaiPhu.length}/${cap.length})`,
 			...ngoaiPhu.map((c) => `${c.kho}.${c.ten}`),
+			"",
+			`# khoa khong quy ket duoc (${khongQuyKet.length}/${cap.length}) — gia tri qua ngan hoac toan bien`,
+			...khongQuyKet.map((c) => `${c.kho}.${c.ten}  # ${c.ly}`),
 			"",
 		].join("\n"),
 	);
@@ -327,7 +337,7 @@ console.log(
 );
 
 console.log(
-	`\nket qua: bat ${bat.length}/${chamDuoc} khoa ve ra (${tyBat}%) · do phu ${tyPhu}% · mu ${mu.length} · ngoai tam voi ${ngoaiPhu.length} · dot bien cun ${cun}`,
+	`\nket qua: bat ${bat.length}/${chamDuoc} khoa ve ra (${tyBat}%) · do phu ${tyPhu}% · mu ${mu.length} · khong quy ket ${khongQuyKet.length} · ngoai tam voi ${ngoaiPhu.length} · dot bien cun ${cun}`,
 );
 const thieuTen = ngoaiPhu.length > 0 && chuaGhiTen;
 if (chamDuoc === 0) {
