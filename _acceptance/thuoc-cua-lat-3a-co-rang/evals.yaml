@@ -290,6 +290,14 @@ evals:
     criterion: AC-12
     executor: judgment
     cmd: judgment
+    question: >-
+      Doc bang khai sinh (evidence/khai-sinh-bang.md) va so khai sinh
+      (rang/khai-sinh.json). Voi TUNG chan do trong bang, ho so co noi duoc bang
+      ngon ngu san pham rang CAI GI PHAI HONG NGOAI DOI thi chan ay do khong?
+      Cham TRUOT neu: mot chan chi mo ta duoc bang co che noi bo (ten ham, co
+      cau, ma thoat) · mot chieu do chi chung minh thuoc doi mau chu khong chung
+      minh no doi mau VI vat that hong · hoac ho so khong noi duoc chan nao da bi
+      xoa va vi sao.
     expected: >-
       Voi TUNG chan do trong so khai sinh, mot nguoi chiu trach nhiem ky doc ho so
       va noi duoc mot cau bang ngon ngu san pham: "cai gi phai hong ngoai doi thi
