@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { appendFileSync, readFileSync } from "node:fs";
-import { z } from "../../../packages/validation/node_modules/zod/index.js";
 import puppeteer from "puppeteer-core";
+import { z } from "../../../packages/validation/node_modules/zod/index.js";
 import { BE_MAT, CHUA_MO } from "./be-mat.mjs";
 import { suySlug } from "./slug.mjs";
 
@@ -84,7 +84,11 @@ async function idBanGhi(cookie) {
 		}
 		return id;
 	};
-	return { company: lay(c, "cong ty"), contact: lay(ct, "ca nhan"), deal: lay(d, "thoa thuan") };
+	return {
+		company: lay(c, "cong ty"),
+		contact: lay(ct, "ca nhan"),
+		deal: lay(d, "thoa thuan"),
+	};
 }
 
 const chu = z.string().trim().min(1);
@@ -94,7 +98,6 @@ const truong = z.object({
 	agentBrief: chu.nullish(),
 	options: z.array(z.object({ label: chu })).nullish(),
 });
-
 
 const nguoi = z.object({ name: chu.nullish(), email: chu.nullish() }).nullish();
 const ngay = z.string().nullish();
@@ -110,6 +113,7 @@ const dongCongTy = z.object({
 	archivedAt: ngay,
 });
 const dongCaNhan = z.object({
+	id: chu,
 	firstName: chu.nullish(),
 	lastName: chu.nullish(),
 	email: chu.nullish(),
@@ -142,8 +146,12 @@ async function duLieuThu(cookie) {
 	]);
 	const congTy = z.object({ rows: z.array(dongCongTy) }).parse(list).rows;
 	const caNhan = z.object({ rows: z.array(dongCaNhan) }).parse(contacts).rows;
-	const thoaThuan = z.object({ rows: z.array(dongThoaThuan) }).parse(deals).rows;
-	const doi = z.array(z.object({ name: chu.nullish(), email: chu.nullish() })).parse(users);
+	const thoaThuan = z
+		.object({ rows: z.array(dongThoaThuan) })
+		.parse(deals).rows;
+	const doi = z
+		.array(z.object({ name: chu.nullish(), email: chu.nullish() }))
+		.parse(users);
 	const noiLam = z.object({ name: chu.nullish() }).parse(workspace);
 	const tienBaoCao = z
 		.object({ reportingCurrency: chu.nullish() })
@@ -198,13 +206,19 @@ async function duLieuThu(cookie) {
 		{ month: "short", day: "numeric", year: "numeric" },
 	];
 	for (const row of [...congTy, ...thoaThuan, ...caNhan]) {
-		const moc = [row.createdAt, row.lastActivityAt, row.archivedAt, row.closeDate];
+		const moc = [
+			row.createdAt,
+			row.lastActivityAt,
+			row.archivedAt,
+			row.closeDate,
+		];
 		for (const iso of moc) {
 			if (iso === null || iso === undefined) continue;
 			const d = new Date(iso);
 			if (Number.isNaN(d.getTime())) continue;
 			for (const locale of ["vi", "en"]) {
-				for (const kieu of KIEU) nguon.add(new Intl.DateTimeFormat(locale, kieu).format(d));
+				for (const kieu of KIEU)
+					nguon.add(new Intl.DateTimeFormat(locale, kieu).format(d));
 			}
 		}
 	}
@@ -249,11 +263,9 @@ async function duLieuThu(cookie) {
 	}
 
 	const hoatDong = z.object({
-		entries: z.array(
-			z.object({ subject: chu.nullish(), body: chu.nullish() }),
-		),
+		entries: z.array(z.object({ subject: chu.nullish(), body: chu.nullish() })),
 	});
-	for (const row of congTy.slice(0, 6)) {
+	for (const row of congTy) {
 		const id = row.id;
 		const raw = await goiTho(cookie, "activities.timeline", {
 			companyId: id,
@@ -264,6 +276,25 @@ async function duLieuThu(cookie) {
 			them(it.subject);
 			if (it.body) {
 				for (const dong of it.body.split(/\n+/)) them(dong.trim() || null);
+			}
+		}
+	}
+
+	for (const [khoa, ds] of [
+		["contactId", caNhan],
+		["dealId", thoaThuan],
+	]) {
+		for (const row of ds) {
+			const raw = await goiTho(cookie, "activities.timeline", {
+				[khoa]: row.id,
+				filter: "history",
+				limit: 50,
+			});
+			for (const it of hoatDong.parse(raw).entries) {
+				them(it.subject);
+				if (it.body) {
+					for (const dong of it.body.split(/\n+/)) them(dong.trim() || null);
+				}
 			}
 		}
 	}
@@ -286,7 +317,9 @@ function khaiNgoaiLe() {
 	const muc = src.slice(mo, sau === -1 ? undefined : sau);
 	const ra = [];
 	for (const m of muc.matchAll(/^\| [^|]+ \| `([^`]+)` \|/gm)) ra.push(m[1]);
-	for (const m of muc.matchAll(/^\| `stage\.\*`[^|]*\| `([^`]+)` … `([^`]+)` \|/gm)) {
+	for (const m of muc.matchAll(
+		/^\| `stage\.\*`[^|]*\| `([^`]+)` … `([^`]+)` \|/gm,
+	)) {
 		ra.push(m[1], m[2]);
 	}
 	for (const g of [
@@ -316,7 +349,9 @@ const DOC_CHU = (roots) => {
 		const r = el.getBoundingClientRect();
 		if (r.width === 0 || r.height === 0) return false;
 		const s = getComputedStyle(el);
-		return s.visibility !== "hidden" && s.display !== "none" && s.opacity !== "0";
+		return (
+			s.visibility !== "hidden" && s.display !== "none" && s.opacity !== "0"
+		);
 	};
 	const out = [];
 	const them = (raw) => {
@@ -356,53 +391,53 @@ const DOC_TIEU_DE = () =>
 		.filter((th) => th.getBoundingClientRect().width > 0)
 		.filter((th) => th.textContent.trim() !== "")
 		.map((th) => {
-		const holder = th.querySelector("span,button,div") ?? th;
-		const text = th.textContent.replace(/\s+/g, " ").trim();
-		const probe = document.createElement("span");
-		probe.style.cssText =
-			"position:absolute;left:-9999px;white-space:nowrap;visibility:hidden";
-		const cs = getComputedStyle(holder);
-		probe.style.font = cs.font;
-		probe.style.letterSpacing = cs.letterSpacing;
-		probe.textContent = text;
-		document.body.appendChild(probe);
-		const textWidth = probe.getBoundingClientRect().width;
-		probe.remove();
-		const cut = [...th.querySelectorAll("*")].find(
-			(e) =>
-				getComputedStyle(e).textOverflow === "ellipsis" &&
-				e.scrollWidth > e.clientWidth + 0.5,
-		);
-		const box = holder.getBoundingClientRect().width;
-		const ten =
-			th.getAttribute("title") ??
-			th.querySelector("[title]")?.getAttribute("title") ??
-			null;
-		const rong = (s) => {
-			probe.textContent = s;
+			const holder = th.querySelector("span,button,div") ?? th;
+			const text = th.textContent.replace(/\s+/g, " ").trim();
+			const probe = document.createElement("span");
+			probe.style.cssText =
+				"position:absolute;left:-9999px;white-space:nowrap;visibility:hidden";
+			const cs = getComputedStyle(holder);
+			probe.style.font = cs.font;
+			probe.style.letterSpacing = cs.letterSpacing;
+			probe.textContent = text;
 			document.body.appendChild(probe);
-			const w = probe.getBoundingClientRect().width;
+			const textWidth = probe.getBoundingClientRect().width;
 			probe.remove();
-			return w;
-		};
-		let hien = text;
-		if (textWidth > box + 0.5) {
-			hien = "";
-			for (let i = 1; i <= text.length; i += 1) {
-				if (rong(`${text.slice(0, i)}…`) > box) break;
-				hien = `${text.slice(0, i)}…`;
+			const cut = [...th.querySelectorAll("*")].find(
+				(e) =>
+					getComputedStyle(e).textOverflow === "ellipsis" &&
+					e.scrollWidth > e.clientWidth + 0.5,
+			);
+			const box = holder.getBoundingClientRect().width;
+			const ten =
+				th.getAttribute("title") ??
+				th.querySelector("[title]")?.getAttribute("title") ??
+				null;
+			const rong = (s) => {
+				probe.textContent = s;
+				document.body.appendChild(probe);
+				const w = probe.getBoundingClientRect().width;
+				probe.remove();
+				return w;
+			};
+			let hien = text;
+			if (textWidth > box + 0.5) {
+				hien = "";
+				for (let i = 1; i <= text.length; i += 1) {
+					if (rong(`${text.slice(0, i)}…`) > box) break;
+					hien = `${text.slice(0, i)}…`;
+				}
 			}
-		}
-		return {
-			text,
-			hien,
-			boxWidth: Number(box.toFixed(2)),
-			textWidth: Number(textWidth.toFixed(2)),
-			bicat: textWidth > box + 0.5,
-			coBaCham: Boolean(cut),
-			title: ten,
-		};
-	});
+			return {
+				text,
+				hien,
+				boxWidth: Number(box.toFixed(2)),
+				textWidth: Number(textWidth.toFixed(2)),
+				bicat: textWidth > box + 0.5,
+				coBaCham: Boolean(cut),
+				title: ten,
+			};
+		});
 
 const TRANG = process.env.TRANG ?? "";
 const CHO_DONG = process.env.CHO_DONG !== "0";
@@ -459,7 +494,9 @@ async function ve(browser, cookie, locale, doc, arg) {
 	}
 	const lang = await page.evaluate(() => document.documentElement.lang);
 	if (process.env.ANH) {
-		await page.screenshot({ path: `${process.env.ANH}-${locale}-${width}.png` });
+		await page.screenshot({
+			path: `${process.env.ANH}-${locale}-${width}.png`,
+		});
 	}
 	const value = await page.evaluate(doc, arg);
 	if (MO === "menu") {
@@ -490,7 +527,12 @@ try {
 		const page = await browser.newPage();
 		await page.setViewport({ width, height, deviceScaleFactor: 1 });
 		await browser.setCookie(
-			{ name: cookie.name, value: cookie.value, domain: "localhost", path: "/" },
+			{
+				name: cookie.name,
+				value: cookie.value,
+				domain: "localhost",
+				path: "/",
+			},
 			{ name: "lang", value: "vi", domain: "localhost", path: "/" },
 		);
 		await page.goto(`${APP}/${SLUG}/${DUONG}`, {
@@ -509,7 +551,8 @@ try {
 				const r = el.getBoundingClientRect();
 				return {
 					tag: el.tagName.toLowerCase(),
-					nhan: el.getAttribute("aria-label") ?? el.textContent.trim().slice(0, 40),
+					nhan:
+						el.getAttribute("aria-label") ?? el.textContent.trim().slice(0, 40),
 					popup: el.getAttribute("aria-haspopup"),
 					vong:
 						cs.outlineStyle !== "none" && Number.parseFloat(cs.outlineWidth) > 0
@@ -531,7 +574,9 @@ try {
 			}
 		}
 		if (toi === null) {
-			console.log("RANG DO: 30 lan Tab khong toi duoc dieu khien mo menu tren thanh dau");
+			console.log(
+				"RANG DO: 30 lan Tab khong toi duoc dieu khien mo menu tren thanh dau",
+			);
 			process.exit(1);
 		}
 		const khung = {
@@ -553,7 +598,8 @@ try {
 		const khac = Buffer.compare(coTieuDiem, khongTieuDiem) !== 0;
 		await page.evaluate(() => {
 			const el = [...document.querySelectorAll("button")].find(
-				(b) => b.getAttribute("aria-haspopup") === "menu" &&
+				(b) =>
+					b.getAttribute("aria-haspopup") === "menu" &&
 					b.getBoundingClientRect().y < 60,
 			);
 			el?.focus();
@@ -566,9 +612,11 @@ try {
 		await page.keyboard.press("Enter");
 		await new Promise((r) => setTimeout(r, 700));
 		const menu = await page.evaluate(() =>
-			[...document.querySelectorAll('[data-slot="dropdown-menu-content"] [role^="menuitem"], [data-slot="dropdown-menu-content"] [data-slot="dropdown-menu-item"]')].map(
-				(el) => el.textContent.replace(/\s+/g, " ").trim(),
-			),
+			[
+				...document.querySelectorAll(
+					'[data-slot="dropdown-menu-content"] [role^="menuitem"], [data-slot="dropdown-menu-content"] [data-slot="dropdown-menu-item"]',
+				),
+			].map((el) => el.textContent.replace(/\s+/g, " ").trim()),
 		);
 		await page.screenshot({
 			path: "_acceptance/tieng-viet-cho-crm/evidence/E10-step2.png",
@@ -585,7 +633,9 @@ try {
 	if (chan === "ba-man") {
 		const trung = await duLieuThu(cookie);
 		const scope = [MAN, ...CHUA_MO];
-		const BA_MAN = (process.env.MAN_LIST ?? "companies,contacts,deals").split(",");
+		const BA_MAN = (process.env.MAN_LIST ?? "companies,contacts,deals").split(
+			",",
+		);
 		let tongDu = 0;
 		let tongLech = 0;
 		for (const man of BA_MAN) {
@@ -594,13 +644,26 @@ try {
 				await page.setViewport({ width, height, deviceScaleFactor: 1 });
 				await page.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
 				await browser.setCookie(
-					{ name: cookie.name, value: cookie.value, domain: "localhost", path: "/" },
+					{
+						name: cookie.name,
+						value: cookie.value,
+						domain: "localhost",
+						path: "/",
+					},
 					{ name: "lang", value: locale, domain: "localhost", path: "/" },
 				);
-				await page.goto(`${APP}/${SLUG}/${man}`, { waitUntil: "networkidle0", timeout: CHO_TAI });
-				await page.waitForSelector('[data-slot="table-head"]', { timeout: CHO_VE });
+				await page.goto(`${APP}/${SLUG}/${man}`, {
+					waitUntil: "networkidle0",
+					timeout: CHO_TAI,
+				});
+				await page.waitForSelector('[data-slot="table-head"]', {
+					timeout: CHO_VE,
+				});
 				await page.waitForFunction(
-					() => document.querySelectorAll('[data-slot="table-body"] [data-slot="table-row"]').length > 0,
+					() =>
+						document.querySelectorAll(
+							'[data-slot="table-body"] [data-slot="table-row"]',
+						).length > 0,
 					{ timeout: CHO_VE },
 				);
 				const lang = await page.evaluate(() => document.documentElement.lang);
@@ -620,7 +683,9 @@ try {
 			const vi = await doc("vi");
 			const en = await doc("en");
 			if (vi.lang !== "vi" || en.lang !== "en") {
-				console.log(`RANG CUN: lang lech o ${man} (vi->${vi.lang}, en->${en.lang})`);
+				console.log(
+					`RANG CUN: lang lech o ${man} (vi->${vi.lang}, en->${en.lang})`,
+				);
 				process.exit(2);
 			}
 			const dem = (l) => {
@@ -631,7 +696,8 @@ try {
 			const viDem = dem(vi.chu);
 			const enDem = dem(en.chu);
 			const duLieu = [...trung.set];
-			const laDuLieu = (x) => trung.set.has(x) || duLieu.some((d) => d.length > 2 && x.includes(d));
+			const laDuLieu = (x) =>
+				trung.set.has(x) || duLieu.some((d) => d.length > 2 && x.includes(d));
 			const con = [...viDem.keys()]
 				.filter((x) => enDem.has(x) && !laDuLieu(x) && !CHI_SO.test(x))
 				.sort();
@@ -640,14 +706,21 @@ try {
 			const lech = khai - vi.moDuoc.length;
 			tongDu += lan;
 			tongLech += Math.abs(lech) + Math.abs(khai - en.moDuoc.length);
-			console.log(`\n-- man ${man} · be mat khai=${khai} · da mo vi=${vi.moDuoc.length} en=${en.moDuoc.length}`);
+			console.log(
+				`\n-- man ${man} · be mat khai=${khai} · da mo vi=${vi.moDuoc.length} en=${en.moDuoc.length}`,
+			);
 			console.log(`   da mo: ${vi.moDuoc.join(" · ") || "(khong cai nao)"}`);
 			if (lech !== 0) {
-				const thieu = BE_MAT[man].map((b) => b.ten).filter((t) => !vi.moDuoc.includes(t));
+				const thieu = BE_MAT[man]
+					.map((b) => b.ten)
+					.filter((t) => !vi.moDuoc.includes(t));
 				console.log(`   KHONG MO DUOC: ${thieu.join(" · ")}`);
 			}
 			console.log(`   CON LAI: ${con.length} chuoi / ${lan} lan`);
-			for (const x of con) console.log(`      * ${JSON.stringify(x)}${viDem.get(x) > 1 ? ` x${viDem.get(x)}` : ""}`);
+			for (const x of con)
+				console.log(
+					`      * ${JSON.stringify(x)}${viDem.get(x) > 1 ? ` x${viDem.get(x)}` : ""}`,
+				);
 		}
 		console.log(`\nket qua: con lai=${tongDu} lan · be mat lech=${tongLech}`);
 		process.exit(tongDu + tongLech > 0 ? 1 : 0);
@@ -655,11 +728,20 @@ try {
 
 	if (chan === "ho-so") {
 		const trung = await duLieuThu(cookie);
-		const scope = [MAN, ...CHUA_MO, '[data-slot="record-sheet"]', '[role="dialog"]'];
+		const scope = [
+			MAN,
+			...CHUA_MO,
+			'[data-slot="record-sheet"]',
+			'[role="dialog"]',
+		];
 		const id = await idBanGhi(cookie);
 		const HO_SO = [
 			{ loai: "company", man: "companies", tabs: ["overview", "activity"] },
-			{ loai: "contact", man: "contacts", tabs: ["overview", "deals", "activity"] },
+			{
+				loai: "contact",
+				man: "contacts",
+				tabs: ["overview", "deals", "activity"],
+			},
 			{ loai: "deal", man: "deals", tabs: ["overview", "activity"] },
 		];
 		let tongDu = 0;
@@ -669,7 +751,12 @@ try {
 				await page.setViewport({ width, height, deviceScaleFactor: 1 });
 				await page.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
 				await browser.setCookie(
-					{ name: cookie.name, value: cookie.value, domain: "localhost", path: "/" },
+					{
+						name: cookie.name,
+						value: cookie.value,
+						domain: "localhost",
+						path: "/",
+					},
 					{ name: "lang", value: locale, domain: "localhost", path: "/" },
 				);
 				const chu = [];
@@ -680,13 +767,16 @@ try {
 					await new Promise((r) => setTimeout(r, 1800));
 					await page.evaluate(() => {
 						for (const el of document.querySelectorAll("*")) {
-							if (el.scrollHeight > el.clientHeight + 40) el.scrollTop = el.scrollHeight;
+							if (el.scrollHeight > el.clientHeight + 40)
+								el.scrollTop = el.scrollHeight;
 						}
 					});
 					await new Promise((r) => setTimeout(r, 800));
 					const phan = (await page.evaluate(DOC_CHU, scope)) ?? [];
 					if (phan.length === 0) {
-						console.log(`RANG CUN: ho so ${hs.loai} tab ${tab} khong ve ra chu nao`);
+						console.log(
+							`RANG CUN: ho so ${hs.loai} tab ${tab} khong ve ra chu nao`,
+						);
 						process.exit(2);
 					}
 					chu.push(...phan);
@@ -710,15 +800,21 @@ try {
 			const viDem = dem(vi.chu);
 			const enDem = dem(en.chu);
 			const duLieu = [...trung.set];
-			const laDuLieu = (x) => trung.set.has(x) || duLieu.some((d) => d.length > 2 && x.includes(d));
+			const laDuLieu = (x) =>
+				trung.set.has(x) || duLieu.some((d) => d.length > 2 && x.includes(d));
 			const con = [...viDem.keys()]
 				.filter((x) => enDem.has(x) && !laDuLieu(x) && !CHI_SO.test(x))
 				.sort();
 			const lan = con.reduce((n, x) => n + viDem.get(x), 0);
 			tongDu += lan;
-			console.log(`\n-- ho so ${hs.loai} · tab da mo=${vi.daMo.length} (${vi.daMo.join(" · ")})`);
+			console.log(
+				`\n-- ho so ${hs.loai} · tab da mo=${vi.daMo.length} (${vi.daMo.join(" · ")})`,
+			);
 			console.log(`   CON LAI: ${con.length} chuoi / ${lan} lan`);
-			for (const x of con) console.log(`      * ${JSON.stringify(x)}${viDem.get(x) > 1 ? ` x${viDem.get(x)}` : ""}`);
+			for (const x of con)
+				console.log(
+					`      * ${JSON.stringify(x)}${viDem.get(x) > 1 ? ` x${viDem.get(x)}` : ""}`,
+				);
 		}
 		console.log(`\nket qua: con lai=${tongDu} lan`);
 		process.exit(tongDu > 0 ? 1 : 0);
@@ -726,13 +822,23 @@ try {
 
 	if (chan === "dong-thoi-gian") {
 		const trung = await duLieuThu(cookie);
-		const scope = [MAN, ...CHUA_MO, '[data-slot="record-sheet"]', "[data-sonner-toast]"];
+		const scope = [
+			MAN,
+			...CHUA_MO,
+			'[data-slot="record-sheet"]',
+			"[data-sonner-toast]",
+		];
 		const id = await idBanGhi(cookie);
 		const TAB = ["all", "notes", "email", "meetings", "upcoming", "done"];
 
 		const moHoSo = async (page, locale, tab) => {
 			await browser.setCookie(
-				{ name: cookie.name, value: cookie.value, domain: "localhost", path: "/" },
+				{
+					name: cookie.name,
+					value: cookie.value,
+					domain: "localhost",
+					path: "/",
+				},
 				{ name: "lang", value: locale, domain: "localhost", path: "/" },
 			);
 			await page.goto(
@@ -782,7 +888,9 @@ try {
 				await moHoSo(page, locale, tab);
 				const phan = (await page.evaluate(DOC_CHU, scope)) ?? [];
 				if (phan.length === 0) {
-					console.log(`RANG CUN: tab dong thoi gian "${tab}" khong ve ra chu nao`);
+					console.log(
+						`RANG CUN: tab dong thoi gian "${tab}" khong ve ra chu nao`,
+					);
 					process.exit(2);
 				}
 				chu.push(...phan);
@@ -808,12 +916,17 @@ try {
 				}
 				daChan = true;
 				if (kieu === "trinh-duyet") req.abort("failed");
-				else req.continue({ postData: JSON.stringify({ json: { type: "NOTE" } }) });
+				else
+					req.continue({
+						postData: JSON.stringify({ json: { type: "NOTE" } }),
+					});
 			});
 			const toast = await soanRoiGui(page);
 			await page.close();
 			if (!daChan) {
-				console.log(`RANG CUN: duong hong "${kieu}" khong bat duoc lenh nao — cu pha khong cham toi vat`);
+				console.log(
+					`RANG CUN: duong hong "${kieu}" khong bat duoc lenh nao — cu pha khong cham toi vat`,
+				);
 				process.exit(2);
 			}
 			return toast;
@@ -833,7 +946,8 @@ try {
 		const viDem = dem(vi.chu);
 		const enDem = dem(en.chu);
 		const duLieu = [...trung.set];
-		const laDuLieu = (x) => trung.set.has(x) || duLieu.some((d) => d.length > 2 && x.includes(d));
+		const laDuLieu = (x) =>
+			trung.set.has(x) || duLieu.some((d) => d.length > 2 && x.includes(d));
 		const con = [...viDem.keys()]
 			.filter((x) => enDem.has(x) && !laDuLieu(x) && !CHI_SO.test(x))
 			.sort();
@@ -841,7 +955,10 @@ try {
 
 		console.log(`-- sau tab dong thoi gian, hai thu tieng`);
 		console.log(`   CON LAI: ${con.length} chuoi / ${lan} lan`);
-		for (const x of con) console.log(`      * ${JSON.stringify(x)}${viDem.get(x) > 1 ? ` x${viDem.get(x)}` : ""}`);
+		for (const x of con)
+			console.log(
+				`      * ${JSON.stringify(x)}${viDem.get(x) > 1 ? ` x${viDem.get(x)}` : ""}`,
+			);
 
 		const hongTD = await duongHong("vi", "trinh-duyet");
 		const hongMC = await duongHong("vi", "may-chu");
@@ -857,7 +974,9 @@ try {
 		if (!hongTDViet) {
 			console.log(`   DUONG (a) CHUA DAT: khong cau nao mang dau tieng Viet`);
 		}
-		console.log(`\nket qua: con lai=${lan} lan · duong hong (a) tieng Viet=${hongTDViet ? "co" : "khong"}`);
+		console.log(
+			`\nket qua: con lai=${lan} lan · duong hong (a) tieng Viet=${hongTDViet ? "co" : "khong"}`,
+		);
 		process.exit(lan > 0 || !hongTDViet ? 1 : 0);
 	}
 
@@ -896,7 +1015,12 @@ try {
 			const page = await browser.newPage();
 			await page.setViewport({ width, height, deviceScaleFactor: 1 });
 			await browser.setCookie(
-				{ name: cookie.name, value: cookie.value, domain: "localhost", path: "/" },
+				{
+					name: cookie.name,
+					value: cookie.value,
+					domain: "localhost",
+					path: "/",
+				},
 				{ name: "lang", value: locale, domain: "localhost", path: "/" },
 			);
 			const chu = [];
@@ -948,7 +1072,9 @@ try {
 			.filter((x) => enDem.has(x) && !laDuLieu(x) && !CHI_SO.test(x))
 			.sort();
 		const lan = con.reduce((n, x) => n + viDem.get(x), 0);
-		console.log(`-- nhan chi trinh doc man hinh nghe: vi=${vi.chu.length} lan, en=${en.chu.length} lan`);
+		console.log(
+			`-- nhan chi trinh doc man hinh nghe: vi=${vi.chu.length} lan, en=${en.chu.length} lan`,
+		);
 		console.log(`-- CON LAI: ${con.length} chuoi / ${lan} lan`);
 		for (const x of con) console.log(`   * ${JSON.stringify(x)}`);
 		console.log(`ket qua: con lai=${lan} lan`);
@@ -959,20 +1085,32 @@ try {
 		const page = await browser.newPage();
 		await page.setViewport({ width, height, deviceScaleFactor: 1 });
 		await browser.setCookie(
-			{ name: cookie.name, value: cookie.value, domain: "localhost", path: "/" },
+			{
+				name: cookie.name,
+				value: cookie.value,
+				domain: "localhost",
+				path: "/",
+			},
 			{ name: "lang", value: "en", domain: "localhost", path: "/" },
 		);
 		await page.goto(`${APP}/${SLUG}/companies`, {
 			waitUntil: "networkidle0",
 			timeout: CHO_TAI,
 		});
-		await page.waitForSelector('[data-slot="table-body"] [data-slot="table-row"]', {
-			timeout: CHO_VE,
-		});
+		await page.waitForSelector(
+			'[data-slot="table-body"] [data-slot="table-row"]',
+			{
+				timeout: CHO_VE,
+			},
+		);
 
-		const o = await page.$$('[data-slot="table-body"] [data-slot="table-row"] [role="checkbox"]');
+		const o = await page.$$(
+			'[data-slot="table-body"] [data-slot="table-row"] [role="checkbox"]',
+		);
 		if (o.length === 0) {
-			console.log("RANG CUN: khong tim thay o danh dau de dung thanh chon dong");
+			console.log(
+				"RANG CUN: khong tim thay o danh dau de dung thanh chon dong",
+			);
 			process.exit(2);
 		}
 		await o[0].click();
@@ -987,19 +1125,25 @@ try {
 						'[data-slot="table-body"] [role="checkbox"][data-state="checked"]',
 					),
 				].length,
-				chu: man ? man.textContent.replace(/\s+/g, " ").trim().slice(0, 400) : null,
+				chu: man
+					? man.textContent.replace(/\s+/g, " ").trim().slice(0, 400)
+					: null,
 			};
 		};
 		const truoc = await page.evaluate(doc);
 		if (truoc.chon === 0) {
-			console.log("RANG CUN: chua chon duoc dong nao — thanh chon dong khong bat");
+			console.log(
+				"RANG CUN: chua chon duoc dong nao — thanh chon dong khong bat",
+			);
 			process.exit(2);
 		}
 
 		const nut = await page.$$("header button, button");
 		let moduoc = false;
 		for (const b of nut) {
-			const co = await b.evaluate((el) => el.getAttribute("aria-haspopup") === "menu");
+			const co = await b.evaluate(
+				(el) => el.getAttribute("aria-haspopup") === "menu",
+			);
 			if (!co) continue;
 			await b.click().catch(() => {});
 			await new Promise((r) => setTimeout(r, 500));
@@ -1017,7 +1161,9 @@ try {
 			await new Promise((r) => setTimeout(r, 200));
 		}
 		if (!moduoc) {
-			console.log("RANG CUN: khong tim thay hang doi tieng trong menu tai khoan");
+			console.log(
+				"RANG CUN: khong tim thay hang doi tieng trong menu tai khoan",
+			);
 			process.exit(2);
 		}
 		await new Promise((r) => setTimeout(r, 2500));
@@ -1042,10 +1188,16 @@ try {
 		const taiLai = truoc.moc !== sau.moc;
 		const doiChu = truoc.chu !== sau.chu;
 		const giuChon = sau.chon === truoc.chon;
-		console.log(`-- truoc: ${truoc.chon} dong chon · ${JSON.stringify(truoc.chu?.slice(0, 70))}`);
-		console.log(`-- sau:   ${sau.chon} dong chon · ${JSON.stringify(sau.chu?.slice(0, 70))}`);
+		console.log(
+			`-- truoc: ${truoc.chon} dong chon · ${JSON.stringify(truoc.chu?.slice(0, 70))}`,
+		);
+		console.log(
+			`-- sau:   ${sau.chon} dong chon · ${JSON.stringify(sau.chu?.slice(0, 70))}`,
+		);
 		console.log(`   chu doi theo:            ${doiChu ? "co" : "KHONG"}`);
-		console.log(`   trang KHONG tai lai:     ${taiLai ? "KHONG — da tai lai" : "dung"}`);
+		console.log(
+			`   trang KHONG tai lai:     ${taiLai ? "KHONG — da tai lai" : "dung"}`,
+		);
 		console.log(`   thanh chon dong con giu: ${giuChon ? "co" : "KHONG"}`);
 		const DAU = /[ăâđêôơưáàảãạếềểễệíìỉĩịóòỏõọúùủũụ]/i;
 		const chuThoiGianViet = DAU.test(chuMoi);
@@ -1094,7 +1246,11 @@ try {
 	const trung = await duLieuThu(cookie);
 	const scope =
 		chan === "man"
-			? [MAN, '[data-slot="dropdown-menu-content"]', '[data-slot="dropdown-menu-sub-content"]']
+			? [
+					MAN,
+					'[data-slot="dropdown-menu-content"]',
+					'[data-slot="dropdown-menu-sub-content"]',
+				]
 			: null;
 	const vi = await ve(browser, cookie, "vi", DOC_CHU, scope);
 	const en = await ve(browser, cookie, "en", DOC_CHU, scope);
@@ -1119,7 +1275,9 @@ try {
 		trung.set.has(s) || duLieu.some((d) => d.length > 2 && s.includes(d));
 	const dangXet = (s) => !laDuLieu(s) && !CHI_SO.test(s);
 
-	const con = [...viDem.keys()].filter((s) => enDem.has(s) && dangXet(s)).sort();
+	const con = [...viDem.keys()]
+		.filter((s) => enDem.has(s) && dangXet(s))
+		.sort();
 	const khongDau = [...viDem.keys()]
 		.filter((s) => !enDem.has(s) && dangXet(s) && !DAU_VIET.test(s))
 		.sort();
@@ -1136,12 +1294,16 @@ try {
 		`-- CON LAI: giong het o ca hai thu tieng, khong phai du lieu (${con.length} chuoi / ${lanCon} lan)`,
 	);
 	for (const s of con)
-		console.log(`   * ${JSON.stringify(s)}${viDem.get(s) > 1 ? ` x${viDem.get(s)}` : ""}`);
+		console.log(
+			`   * ${JSON.stringify(s)}${viDem.get(s) > 1 ? ` x${viDem.get(s)}` : ""}`,
+		);
 	console.log(
 		`-- KHONG MANG DAU TIENG VIET: chi co o ban vi ma khong dau (${khongDau.length} chuoi / ${lanKhongDau} lan)`,
 	);
 	for (const s of khongDau)
-		console.log(`   * ${JSON.stringify(s)}${viDem.get(s) > 1 ? ` x${viDem.get(s)}` : ""}`);
+		console.log(
+			`   * ${JSON.stringify(s)}${viDem.get(s) > 1 ? ` x${viDem.get(s)}` : ""}`,
+		);
 	console.log(
 		`ket qua: con lai=${con.length} · khong dau=${khongDau.length} · lan=${lanCon + lanKhongDau}`,
 	);

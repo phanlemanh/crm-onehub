@@ -1,4 +1,4 @@
-# khoa bon chan nghiem thu khong ve ra (275/531)
+# khoa bon chan nghiem thu khong ve ra (282/543)
 companies.labels.archivedDate
 companies.empty
 companies.emptyArchived
@@ -44,12 +44,16 @@ deals.bulk.archived
 deals.bulk.restored
 deals.bulk.deleted
 deals.bulk.confirmDelete
+deals.bulk.changeStage
 deals.bulk.deleteWarning
 deals.bulk.sameReason
 deals.bulk.closeLost
 deals.bulk.markUnqualified
 deals.bulk.reasonPlaceholder
 deals.bulk.nobody
+crm.timeline.openIn
+crm.timeline.allDay
+crm.timeline.joinCall
 crm.timeline.composer.call
 crm.timeline.composer.note
 crm.timeline.composer.meeting
@@ -73,8 +77,6 @@ crm.timeline.empty.meetingsTitle
 crm.timeline.empty.meetingsBody
 crm.timeline.empty.upcomingTitle
 crm.timeline.empty.upcomingBody
-crm.timeline.empty.doneTitle
-crm.timeline.empty.doneBody
 crm.enrichment.running
 crm.enrichment.complete
 crm.enrichment.failed
@@ -87,7 +89,6 @@ crm.enrichment.againRunning
 crm.enrichment.again
 crm.enrichment.agentResearching
 crm.time.justNow
-crm.closing.later
 crm.closing.none
 crm.close.done
 crm.close.asLost
@@ -204,9 +205,13 @@ crm.sheet.restored
 crm.sheet.deletedForever
 crm.misc.nothingChanged
 crm.misc.loading
+crm.misc.loadingPage
+crm.misc.recordNotLoaded
 record-sheet.section.about
 record-sheet.section.links
 record-sheet.section.background
+record-sheet.company.domainPlaceholder
+record-sheet.company.websitePlaceholder
 record-sheet.company.contactColumns.primary
 record-sheet.company.primaryContactBadge
 record-sheet.company.oneDeal
@@ -250,6 +255,8 @@ record-sheet.deal.contactColumns.role
 record-sheet.deal.contactColumns.remove
 record-sheet.deal.reason
 record-sheet.deal.takeOff
+record-sheet.deal.takeOffNamed
+record-sheet.deal.namePlaceholder
 record-sheet.deal.championPlaceholder
 record-sheet.deal.currencyGone
 record-sheet.deal.descriptionHint
@@ -275,7 +282,7 @@ record-sheet.deal.deleteWarning
 record-sheet.deal.person
 record-sheet.deal.people
 
-# khoa khong quy ket duoc (14/531) — gia tri qua ngan hoac toan bien
+# khoa khong quy ket duoc (14/543) — gia tri qua ngan hoac toan bien
 crm.timeline.composer.log  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
 crm.timeline.tabs.all  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
 crm.timeline.due  # gia tri tieng Anh khong co manh chu co dinh nao dai >= 4 ky tu
