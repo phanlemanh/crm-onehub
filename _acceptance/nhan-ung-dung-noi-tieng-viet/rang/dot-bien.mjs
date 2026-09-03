@@ -75,6 +75,26 @@ function chayChan() {
 const goc = new Map();
 for (const [, file] of KHO) goc.set(file, readFileSync(file, "utf8"));
 
+let daTra = false;
+function traLai(vi) {
+	if (daTra) return;
+	daTra = true;
+	for (const [file, noiDung] of goc) writeFileSync(file, noiDung);
+	if (vi) console.log(`\n-- ${vi}: da tra nam kho chuoi ve nguyen trang`);
+}
+
+for (const tin of ["SIGINT", "SIGTERM", "SIGHUP"]) {
+	process.on(tin, () => {
+		traLai(tin);
+		process.exit(130);
+	});
+}
+process.on("uncaughtException", (loi) => {
+	traLai("loi khong bat");
+	console.log(String(loi));
+	process.exit(2);
+});
+
 const cap = [];
 for (const [ten, file] of KHO) {
 	for (const c of capKhoa(goc.get(file))) cap.push({ ...c, kho: ten, file });
@@ -139,12 +159,12 @@ try {
 	console.log("-- do lai bon chan tren cay da dot bien");
 	var sau = chayChan();
 } catch (loi) {
-	for (const [file, noiDung] of goc) writeFileSync(file, noiDung);
+	traLai("dut giua chung");
 	console.log(String(loi instanceof Error ? loi.message : loi));
 	console.log("-- kho chuoi da tra ve nguyen trang");
 	process.exit(2);
 } finally {
-	for (const [file, noiDung] of goc) writeFileSync(file, noiDung);
+	traLai(null);
 }
 
 const CHI_SO =

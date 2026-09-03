@@ -24,12 +24,45 @@ function phien() {
 	return { name: line.slice(0, eq), value: line.slice(eq + 1) };
 }
 
-async function goi(cookie, path, input) {
+async function song(url) {
+	try {
+		await fetch(url, { method: "HEAD" });
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+async function goi(cookie, path, input, lan = 0) {
 	const url = `${API}/api/trpc/${path}?input=${encodeURIComponent(JSON.stringify(input))}`;
-	const res = await fetch(url, {
-		headers: { Cookie: `${cookie.name}=${cookie.value}` },
-	});
-	if (!res.ok) throw new Error(`${path} ${res.status}`);
+	let res;
+	try {
+		res = await fetch(url, {
+			headers: { Cookie: `${cookie.name}=${cookie.value}` },
+		});
+	} catch (loi) {
+		if (lan < 2) {
+			await new Promise((r) => setTimeout(r, 2000 * (lan + 1)));
+			return goi(cookie, path, input, lan + 1);
+		}
+		const co = await song(API);
+		console.log(
+			`RANG CUN: khong noi duoc toi ${API} sau 3 lan thu.\n` +
+				`   cong 3001 ${co ? "CO tra loi — nghen hoac tu choi, khong phai chet" : "KHONG tra loi — may chu API chua chay"}\n` +
+				`   loi goc: ${loi instanceof Error ? loi.message : String(loi)}`,
+		);
+		process.exit(2);
+	}
+	if (!res.ok) {
+		if (res.status >= 500 && lan < 2) {
+			await new Promise((r) => setTimeout(r, 2000 * (lan + 1)));
+			return goi(cookie, path, input, lan + 1);
+		}
+		console.log(
+			`RANG CUN: ${path} tra ${res.status} sau ${lan + 1} lan thu — may chu API SONG nhung tu choi lenh nay. Day khong phai "API chua chay".`,
+		);
+		process.exit(2);
+	}
 	return (await res.json()).result.data;
 }
 
