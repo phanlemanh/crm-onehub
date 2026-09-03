@@ -44,6 +44,9 @@ mà không có tên ở đây thì phép đo đỏ.
 | `bulkMenu.leftAlone` | `${done} ${n} bị bỏ qua${why}` | có dấu | không thuộc mục này, giữ để đối chiếu |
 | `contact.fields.x` | `X` | tên riêng | tên nền tảng, giữ nguyên |
 | `stage.*` (bảy khoá) | `Demo booked` … `Unqualified` | không dịch theo hợp đồng | AC-14 — bảy bước chưa ai định nghĩa nghĩa |
+| `company.domainPlaceholder` | `datxanh.com.vn` | ví dụ tên miền | tên miền thật, không dịch — cùng lý do với `create.domainPlaceholder` |
+| `company.websitePlaceholder` | `https://datxanh.com.vn` | ví dụ địa chỉ web | như trên, kèm giao thức |
+| `deal.namePlaceholder` | `${x} — OneHub` | biến + tên riêng | ví dụ trong ô nhập; cùng lý do với `create.namePlaceholder` |
 
 ---
 
@@ -277,8 +280,8 @@ thử thiếu đúng trạng thái đó; Task 1 vòng này đã dựng.
 | Khoá | Tiếng Anh | Tiếng Việt | Ghi chú |
 | --- | --- | --- | --- |
 | `closing.overdue` | `Overdue` | `Quá hạn` | |
-| `closing.thisMonth` | `Closing this month` | `Chốt trong tháng này` | |
-| `closing.nextMonth` | `Closing next month` | `Chốt tháng sau` | |
+| `closing.thisMonth` | `Closing this month` | `Trong tháng này` | nhãn nhóm «Hạn chốt» đã nói "chốt" — chốt 2026-09-03, xem CONTEXT.md |
+| `closing.nextMonth` | `Closing next month` | `Tháng sau` | nhãn nhóm «Hạn chốt» đã nói "chốt" — chốt 2026-09-03, xem CONTEXT.md |
 | `closing.later` | `Later` | `Muộn hơn` | |
 | `closing.none` | `No close date` | `Chưa có ngày chốt` | |
 
@@ -802,3 +805,41 @@ chuyện mà con số 265 khoá ngoài tầm với đã kể. Sáu chỗ đã c�
 | `views.save` | `Save` | `Lưu` | |
 | `company.unconverted` | `+${n} unconverted` | `+${n} chưa quy đổi` | thoả thuận không quy đổi được sang tiền báo cáo |
 | `contact.source` | `Source` | `Nguồn` | liên kết tới nơi tác nhân tìm ra dữ kiện |
+
+## Bổ sung ở vòng sửa S4-r7 — 12 khoá khai SAU khi chạm mã
+
+Cùng tính chất với mục S4-r1 ở trên, và phải đọc y như vậy: **12 khoá này khai
+SAU khi mã đã viết**, nên chúng KHÔNG mang tính chất "chốt trước khi chạm mã" mà
+AC-13 đòi.
+
+Chúng sinh ra ở vòng sửa đóng năm phát hiện của S4 vòng 7 — nối những chỗ chữ
+người đọc thấy còn viết thẳng vào JSX về kho chuỗi. `rang/kiem-ban-dich.mjs` bắt
+được thiếu sót này ở chiều kho→bảng, đúng chiều mà bản lỏng trước đây bỏ lọt.
+
+### deals — 3 khoá
+
+| Khoá | Tiếng Anh | Tiếng Việt | Ghi chú |
+| --- | --- | --- | --- |
+| `bulk.changeStage` | `Change stage` | `Đổi giai đoạn` | menu con của thao tác hàng loạt |
+| `bulk.save` | `Save` | `Lưu` | |
+| `bulk.cancel` | `Cancel` | `Huỷ` | |
+
+### crm — 5 khoá
+
+| Khoá | Tiếng Anh | Tiếng Việt | Ghi chú |
+| --- | --- | --- | --- |
+| `timeline.openIn` | `Open in ${x}` | `Mở trong ${x}` | ${x} là tên hộp thư, dữ liệu người dùng |
+| `timeline.allDay` | `All day` | `Cả ngày` | |
+| `timeline.joinCall` | `Join call` | `Vào cuộc gọi` | |
+| `misc.loadingPage` | `Loading page…` | `Đang tải trang…` | chỉ trình đọc màn hình nghe |
+| `misc.recordNotLoaded` | `This record could not be loaded` | `Không tải được bản ghi này` | |
+
+### record-sheet — 4 khoá
+
+| Khoá | Tiếng Anh | Tiếng Việt | Ghi chú |
+| --- | --- | --- | --- |
+| `company.domainPlaceholder` | `stripe.com` | `datxanh.com.vn` | ví dụ tên miền, miễn luật dấu |
+| `company.websitePlaceholder` | `https://stripe.com` | `https://datxanh.com.vn` | ví dụ địa chỉ, miễn luật dấu |
+| `deal.takeOffNamed` | `Take ${x} off this deal` | `Gỡ ${x} khỏi thoả thuận này` | nhãn cho trình đọc màn hình, nói cùng câu với tooltip cạnh nó |
+| `deal.namePlaceholder` | `${x} — Comp AI` | `${x} — OneHub` | bản tiếng Anh còn mang tên hãng cũ; đổi tên hãng là việc riêng, không thuộc vòng ngôn ngữ |
+

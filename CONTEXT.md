@@ -35,6 +35,7 @@ thì chữ đó là thừa, vì màn hình đã nói nó rồi.
 | Màn công ty, mỗi dòng là một công ty | Công ty | **Tên** | dòng đã là công ty |
 | Cột người chịu trách nhiệm | Người phụ trách | **Phụ trách** | cột không thể là vật |
 | Cột toàn số, mỗi dòng một công ty | Số lượng cá nhân | **Số lượng cá nhân** | dòng đã là công ty, nhưng "bao nhiêu" thì chưa — và `số + danh từ` trần lại đọc ra mã định danh |
+| Nhóm lọc «Hạn chốt» trên màn thoả thuận | Chốt trong tháng này | **Trong tháng này** | nhãn nhóm đã nói "chốt" |
 
 Đây KHÔNG phải cắt cho vừa khung. Cắt cho vừa khung là bỏ chữ mang nghĩa, và nó
 làm nhãn cụt. Luật này bỏ chữ mà **màn hình đã nói rồi**, nên nhãn ngắn hơn mà
@@ -47,6 +48,25 @@ tiếng Anh cũng vậy. Cắt là chuyện bề rộng cột, không phải chu
 nên rút nhãn ngắn thêm không cứu được gì, chỉ mất nghĩa. Từ vòng ② trở đi mọi
 tiêu đề bị cắt đều mang dấu ba chấm và chữ đầy đủ vẫn tới được trình đọc màn
 hình.
+
+**Hai ngoại lệ đã chốt 2026-09-03, sau khi hội đồng nghiệm thu để ngỏ.**
+
+*Nhóm lọc «Hạn chốt» — sửa.* Năm lựa chọn từng trộn ba loại từ: `Quá hạn` ·
+`Muộn hơn` (tính từ) trộn với `Chốt trong tháng này` · `Chốt tháng sau` (cụm
+động từ). Nhãn nhóm đã là **Hạn chốt**, nên chữ "Chốt" là thứ màn hình đã nói.
+Bỏ nó đi thì cả năm cùng trả lời một câu — *khi nào* — và hết trộn loại từ:
+`Quá hạn` · `Trong tháng này` · `Tháng sau` · `Muộn hơn` · `Chưa có ngày chốt`.
+
+*Cặp cột trên bảng Công ty — GIỮ NGUYÊN, và đây là ngoại lệ có lý do.*
+`Số lượng cá nhân` và `Số thoả thuận đang mở` đứng cạnh nhau nhưng không dùng
+cùng dạng lượng từ. Theo dòng bảng trên thì đáng ra phải là *Số lượng thoả
+thuận đang mở*. **Không đổi được**: chữ ấy rộng ~168px trong khi ô ở khổ 1024px
+chỉ có 137px, nên nó sẽ bị cắt ở đúng khổ mà AC-10 cấm cắt. Số đo ở
+`_acceptance/nhan-ung-dung-noi-tieng-viet/evidence/E10-chu-hien-ra.txt`.
+
+Còn chuyện hai nhãn có dễ lẫn khi lướt không: **không**. Chúng tách nhau ngay ở
+chữ thứ hai (`lượng` / `thoả`), và ở mọi khổ từ 1024px trở lên không nhãn nào bị
+cắt — đo thật, không đoán từ ảnh.
 
 **Phép thử phải hỏi người, không hỏi mình.** Bảng trên từng có một dòng nữa:
 *cột trong bảng dữ liệu → `Bổ sung dữ liệu` → **`Bổ sung`***, với lý lẽ rằng

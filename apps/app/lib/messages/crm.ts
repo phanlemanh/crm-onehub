@@ -412,8 +412,8 @@ const vi = {
 	},
 	closing: {
 		overdue: "Quá hạn",
-		thisMonth: "Chốt trong tháng này",
-		nextMonth: "Chốt tháng sau",
+		thisMonth: "Trong tháng này",
+		nextMonth: "Tháng sau",
 		later: "Muộn hơn",
 		none: "Chưa có ngày chốt",
 	},
