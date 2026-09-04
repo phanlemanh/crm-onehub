@@ -1,0 +1,122 @@
+{
+  "feature_plain": "Một nhân viên OneHub mở CRM lần đầu và thấy màn đăng nhập cùng màn khai báo bằng tiếng Việt, thay vì tiếng Anh như hiện nay.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ hiện toàn bộ màn đăng nhập bằng tiếng Việt — kể cả nhãn cho trình đọc màn hình mà người sáng mắt không thấy."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ hiện màn khai báo công ty và màn khoá nghiên cứu bằng tiếng Việt, từ nhãn ô nhập tới chữ trên nút."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ hiện tiếng Việt cả ở màn báo chưa cấu hình được cách đăng nhập nào — màn chỉ xuất hiện khi hệ thống chưa cắm khoá, và giữ nguyên tên các khoá phải gõ lại."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ hiện tiếng Việt cả ở khoảnh khắc màn đang tải, thứ chớp qua trước khi các nút hiện ra."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ hiện tiếng Việt trên cả ba nút lúc đang gửi, và khoá nút lại để không ai bấm hai lần."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ giữ nguyên mười ba thứ không được dịch — tên khoá phải gõ lại, tên tổ chức người quản trị tự đặt, tên hãng — và đánh dấu để trình duyệt đừng tự dịch chúng."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ ghép động từ tiếng Việt với tên tổ chức nguyên văn trên nút đăng nhập một chạm, thay vì đúc sẵn một câu tiếng Anh."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ đổi cả chữ trên thẻ tab trình duyệt theo tiếng người đọc, không chỉ chữ trong trang."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ chọn tiếng theo đúng thứ tự: lựa chọn người đã lưu thắng, rồi tới khai báo của trình duyệt, và khi không có gì cả thì mặc định là tiếng Việt."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ bắt lỗi ngay lúc dựng bản phát hành nếu một câu có bản tiếng Anh mà thiếu bản tiếng Việt, thay vì để nhân viên phát hiện trên màn."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-10",
+      "p": "Chặn chữ tiếng Việt tràn ra ngoài ô chứa nó — tiếng Việt dài hơn tiếng Anh, nên đo bề rộng thật trên ba khổ màn chứ không đếm ký tự."
+    },
+    {
+      "id": "AC-11",
+      "p": "Chặn thói viết chữ thẳng vào mã: mọi câu người đọc thấy phải lấy từ kho chuỗi, để lần sau đổi chữ không phải đi lùng."
+    },
+    {
+      "id": "AC-13",
+      "p": "Sẽ KHÔNG còn dòng giới thiệu nhà làm gốc và đường dẫn ra ngoài ở chân màn đăng nhập; giấy phép ở gốc kho giữ nguyên."
+    }
+  ],
+  "scope_plain": "Chỉ hai luồng cửa vào. Màn Cài đặt, phần còn lại của ứng dụng, và các chỗ khác còn mang tên hãng cũ đều để lại cho đợt sau.",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Đã kê đủ sáu thứ người có thể đang nhìn: khung chung, chữ trên thẻ tab, nội dung màn, các nhánh rẽ theo cấu hình, khoảnh khắc đang tải, và lúc báo lỗi. Bằng chứng đủ: chính 18 chỗ tiếng Anh mà đợt trước sót đều rơi vào một trong sáu ô này."
+    },
+    {
+      "i": 1,
+      "p": "Đã kê đủ năm nguồn sinh ra chữ: nhãn của mình, dữ liệu người nhập, mã kỹ thuật, tên riêng, và câu do máy chủ đúc sẵn. Ô cuối là ô vòng này không với tới được, và nó được khai thành giới hạn."
+    },
+    {
+      "i": 2,
+      "p": "Đã kê đủ năm cách một người có thể được chọn tiếng hộ, gồm cả trường hợp chưa từng chọn gì và trình duyệt cũng không khai gì."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Phép đo đã trừ đi đúng thứ nó phải bắt: một câu quên dịch sẽ hiện y nhau ở cả hai thứ tiếng, và cách đo cũ bỏ qua nó rồi báo đạt. Đã sửa: nay từng ô phải chứng minh bản tiếng Việt KHÁC bản tiếng Anh và có dấu."
+    },
+    {
+      "i": 1,
+      "p": "Bộ tiêu chí hứa câu báo lỗi cũng bằng tiếng Việt, nhưng không phép đo nào chịu làm cho lỗi xảy ra để mà xem. Đúng chỗ hai đợt trước đã vấp. Đã sửa: thêm một phép đo ngắt mạng thật rồi đọc chữ trong thông báo, và hội đồng chấm buộc phải nhận chữ đó làm đầu vào."
+    },
+    {
+      "i": 2,
+      "p": "Luật chọn tiếng có năm trường hợp mà chỉ ba được kiểm, và cả ba đều kiểm trên hàm rời chứ không qua máy chủ thật. Đã sửa: đủ năm, cộng một phép đo gửi yêu cầu thật để chứng minh lựa chọn đã lưu thắng khai báo của trình duyệt."
+    },
+    {
+      "i": 3,
+      "p": "Danh sách thứ-không-được-dịch không ghim số lượng, nên đếm thiếu vẫn báo đạt. Đã sửa: bảng đóng mười ba dòng, đếm thiếu một dòng là từ chối đo chứ không phải đạt."
+    },
+    {
+      "i": 4,
+      "p": "Sổ kiểm thước tự lấy danh sách từ chính thư mục nó sắp đọc — một phép so chỉ có thể tự đồng ý với mình. Đã sửa: danh sách ghim sẵn mười lăm mục, thiếu mục nào thì dừng và gọi tên."
+    }
+  ],
+  "decisions_plain": [
+    {
+      "id": "d-2026-09-04T03:13:40Z-44544",
+      "p": "KHÔNG làm phần câu lỗi do máy chủ gửi về — nó vẫn tiếng Anh. Đổi lại vòng này gọn và không đụng giao kèo giữa máy chủ với ứng dụng; nhưng nhân viên gặp tiếng Anh đúng lúc đang hỏng việc."
+    },
+    {
+      "id": "d-2026-09-04T03:13:40Z-01378",
+      "p": "Chọn tiếng Việt làm mặc định cho người chưa từng chọn gì. Đổi lại một dòng sửa ở bộ dựng chung chạm tới mọi màn, không riêng hai màn này."
+    },
+    {
+      "id": "d-2026-09-04T03:13:40Z-17749",
+      "p": "KHÔNG dịch tên workspace mặc định — nó cũng chính là địa chỉ người ta gõ. Đổi lại việc này giữ mức rủi ro thấp và bớt được một cổng duyệt."
+    },
+    {
+      "id": "d-2026-09-04T03:13:40Z-33137",
+      "p": "Chọn bỏ hẳn dòng giới thiệu nhà làm gốc thay vì đổi tên nó. Đổi lại mất một chỗ ghi công trên màn; nghĩa vụ giấy phép vẫn đủ vì nó nằm ở mã nguồn."
+    },
+    {
+      "id": "d-2026-09-04T03:13:40Z-59511",
+      "p": "Chọn dựng sổ tự kiểm thước ngay từ đầu. Đổi lại tốn thêm công lúc làm, nhưng tránh được cái giá đợt trước đã trả: tám vòng rồi phải mở hẳn một vòng riêng để chữa thước."
+    },
+    {
+      "id": "d-2026-09-04T03:16:28Z-16681",
+      "p": "KHÔNG làm phiên soi thẩm mỹ trên bản bấm được. Đổi lại anh duyệt giao diện ở cổng này bằng chữ chứ không bằng bản chạy thật — bù bằng phép đo bề rộng, sân thiết kế, và hội đồng chấm ảnh ba màn ở cổng sau."
+    }
+  ]
+}
