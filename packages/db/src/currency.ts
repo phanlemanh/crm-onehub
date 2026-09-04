@@ -7,6 +7,7 @@ export interface CurrencyMeta {
 export const DEFAULT_REPORTING_CURRENCY = "USD";
 
 const CURRENCY_LIST: readonly CurrencyMeta[] = [
+	{ code: "VND", name: "Vietnamese Dong", minorUnits: 0 },
 	{ code: "USD", name: "US Dollar", minorUnits: 2 },
 	{ code: "EUR", name: "Euro", minorUnits: 2 },
 	{ code: "JPY", name: "Japanese Yen", minorUnits: 0 },

@@ -62,8 +62,9 @@ describe("normalizeCurrency and isCurrencyCode", () => {
 		}
 	});
 
-	it("offers only the eleven currencies most of the world trades in", () => {
+	it("offers twelve currencies, and the one this CRM's own deals are in comes first", () => {
 		expect(CURRENCIES.map((entry) => entry.code)).toEqual([
+			"VND",
 			"USD",
 			"EUR",
 			"JPY",
@@ -94,6 +95,7 @@ describe("normalizeCurrency and isCurrencyCode", () => {
 
 	it("names the currencies it knows", () => {
 		expect(currencyName("jpy")).toBe("Japanese Yen");
+		expect(currencyName("vnd")).toBe("Vietnamese Dong");
 		expect(currencyName("ZZZ")).toBeNull();
 	});
 });
@@ -101,6 +103,7 @@ describe("normalizeCurrency and isCurrencyCode", () => {
 describe("minorUnitsOf", () => {
 	it("knows the currencies that are not two-decimal", () => {
 		expect(minorUnitsOf("JPY")).toBe(0);
+		expect(minorUnitsOf("VND")).toBe(0);
 	});
 
 	it("assumes two for anything else, so an amount still round-trips", () => {
