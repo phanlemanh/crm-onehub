@@ -1,5 +1,5 @@
 import { afterAll, beforeEach, describe, expect, it } from "bun:test";
-import { db, RecordSource } from "@crm/db";
+import { db, type TouchOutcome, RecordSource } from "@crm/db";
 import { AgentQueueService } from "../src/agent/agent-queue.service";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import type { CampaignDetail } from "../src/campaigns/campaigns.contracts";
@@ -203,6 +203,24 @@ describe("chiến dịch tuyển đối tác", () => {
 					id: campaign.id,
 					contactId: "khong-co-ca-nhan-nay",
 					outcome: "ANSWERED",
+				},
+				userId,
+			),
+		).rejects.toThrow();
+
+		expect(await touchCount(campaign.id)).toBe(0);
+		expect(await callCount()).toBe(0);
+	});
+
+	it("AC-8 · lượt gọi hỏng thì hoạt động cũng không ở lại", async () => {
+		const campaign = await running("Lượt gọi hỏng");
+
+		await expect(
+			service.touch(
+				{
+					id: campaign.id,
+					contactId: contactAt(0),
+					outcome: "KHONG_PHAI_KET_QUA" as TouchOutcome,
 				},
 				userId,
 			),
