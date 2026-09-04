@@ -17,9 +17,9 @@ const en = {
 		name: "Name",
 		phone: "Phone",
 		tier: "Volume",
-		listingsNew30d: "New listings in 30 days",
+		listingsNew30d: "New listings",
 		districts: "Areas",
-		lastOutcome: "Last outcome",
+		lastOutcome: "Latest",
 		record: "Record",
 	},
 	status: {
@@ -107,9 +107,9 @@ const vi = {
 		name: "Tên",
 		phone: "Số điện thoại",
 		tier: "Sản lượng",
-		listingsNew30d: "Tin mới 30 ngày",
+		listingsNew30d: "Tin mới",
 		districts: "Địa bàn",
-		lastOutcome: "Kết quả gần nhất",
+		lastOutcome: "Gần nhất",
 		record: "Ghi kết quả",
 	},
 	status: {

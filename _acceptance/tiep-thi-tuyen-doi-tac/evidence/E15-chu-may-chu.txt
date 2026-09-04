@@ -1,0 +1,17 @@
+E15 — cau loi may chu hien nguyen van trong giao dien
+run_id: ttmtn5dar1
+gioi han da khai: contract.md Notes — thong diep loi may chu van tieng Anh (vong ④ ho so tieng Viet)
+cach dung: ket thuc chien dich qua API giua chung roi bam mot nut ket qua (ST-ghi-ket-qua-loi)
+
+[vi] tieu de cua giao dien: "Chưa ghi được kết quả. Dòng giữ nguyên."
+[vi] chu hien ra trong than: "This campaign is FINISHED; only a RUNNING campaign accepts call outcomes."
+[vi] may chu tra nguyen van: "This campaign is FINISHED; only a RUNNING campaign accepts call outcomes."
+[vi] la cau cua may chu: DUNG
+
+[en] tieu de cua giao dien: "The outcome did not save. The row stays as it was."
+[en] chu hien ra trong than: "This campaign is FINISHED; only a RUNNING campaign accepts call outcomes."
+[en] may chu tra nguyen van: "This campaign is FINISHED; only a RUNNING campaign accepts call outcomes."
+[en] la cau cua may chu: DUNG
+
+tru khoi phep so hai thu tieng: 1 chuoi
+chuoi bi tru khong bien mat khoi ho so — no nam o tep nay.

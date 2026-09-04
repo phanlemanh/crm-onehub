@@ -9,17 +9,24 @@ export const PHAM_VI = [
 export const MA_TRANG_THAI = [
 	{
 		ma: "ST-danh-sach-loading",
-		cach: "chan mang cham tren campaigns.list roi doc man danh sach chien dich",
+		donVi: true,
+		cach: "do o muc don vi — E25",
+		vi_sao:
+			"trang /campaigns nap truoc campaigns.list o may chu (HydrateClient), nen co dang-tai khong bao gio bat o luot dau",
 	},
 	{
 		ma: "ST-danh-sach-empty",
-		toanCuc: true,
+		donVi: true,
 		cach: "do o muc don vi — E25",
+		vi_sao:
+			"rong toan cuc: chi ton tai truoc chien dich dau tien cua noi lam viec duy nhat",
 	},
 	{
 		ma: "ST-tao-khong-goc-nhin",
-		toanCuc: true,
+		donVi: true,
 		cach: "do o muc don vi — E25",
+		vi_sao:
+			"rong toan cuc: chi ton tai truoc goc nhin ca nhan dung chung dau tien",
 	},
 	{
 		ma: "ST-tao-dang-luu",
@@ -135,6 +142,19 @@ export const DOC_KHONG_DICH = (giaTri) => {
 	}
 	return thieu;
 };
+
+export const DOC_TOAST = () =>
+	[...document.querySelectorAll("[data-sonner-toast]")].map((t) => {
+		const lay = (sel) => {
+			const el = t.querySelector(sel);
+			return el === null ? "" : el.textContent.replace(/\s+/g, " ").trim();
+		};
+		return {
+			tieuDe: lay("[data-title]"),
+			than: lay("[data-description]"),
+			toanBo: t.textContent.replace(/\s+/g, " ").trim(),
+		};
+	});
 
 export const DOC_TIEU_DE = () =>
 	[...document.querySelectorAll('[data-slot="table-head"]')]

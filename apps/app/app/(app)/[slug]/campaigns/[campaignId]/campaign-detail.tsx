@@ -202,7 +202,7 @@ function MembersTable({
 			id: "name",
 			header: m.memberColumns.name,
 			hideable: false,
-			width: "w-[18%]",
+			width: "w-[17%]",
 			cell: (row) => (
 				<Button
 					variant="link"
@@ -218,7 +218,7 @@ function MembersTable({
 		{
 			id: "phone",
 			header: m.memberColumns.phone,
-			width: "w-[12%]",
+			width: "w-[11%]",
 			cell: (row) =>
 				row.phone === null ? (
 					<span className="text-muted-foreground">{m.empty.noPhone}</span>
@@ -231,7 +231,7 @@ function MembersTable({
 		{
 			id: "tier",
 			header: m.memberColumns.tier,
-			width: "w-[10%]",
+			width: "w-[9%]",
 			hideBelow: "md",
 			cell: (row) =>
 				row.tier === null ? (
@@ -246,7 +246,7 @@ function MembersTable({
 			id: "listingsNew30d",
 			header: m.memberColumns.listingsNew30d,
 			align: "right",
-			width: "w-[10%]",
+			width: "w-[8%]",
 			hideBelow: "lg",
 			cell: (row) =>
 				row.listingsNew30d === null ? (
@@ -260,7 +260,7 @@ function MembersTable({
 		{
 			id: "districts",
 			header: m.memberColumns.districts,
-			width: "w-[12%]",
+			width: "w-[8%]",
 			hideBelow: "lg",
 			cell: (row) =>
 				row.districts === null ? (
@@ -274,7 +274,7 @@ function MembersTable({
 		{
 			id: "lastOutcome",
 			header: m.memberColumns.lastOutcome,
-			width: "w-[10%]",
+			width: "w-[9%]",
 			cell: (row) =>
 				row.lastOutcome === null ? (
 					<EmptyCellValue />
@@ -289,7 +289,7 @@ function MembersTable({
 			id: "record",
 			header: m.memberColumns.record,
 			hideable: false,
-			width: "w-[28%]",
+			width: "w-[38%]",
 			cell: (row) => (
 				<ButtonGroup>
 					{OUTCOMES.map((outcome) => {

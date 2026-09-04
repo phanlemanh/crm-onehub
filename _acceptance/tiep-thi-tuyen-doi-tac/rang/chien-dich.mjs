@@ -12,6 +12,7 @@ import {
 	DOC_NUT_KET_QUA,
 	DOC_SO_DO,
 	DOC_TIEU_DE,
+	DOC_TOAST,
 	KHOA_KET_QUA,
 	MA_TRANG_THAI,
 	PHAM_VI,
@@ -102,6 +103,21 @@ async function bao(cookie, path, input) {
 	const body = await res.json();
 	if (body.error) cun(`${path} tra loi: ${body.error.message}`);
 	return body.result.data;
+}
+
+async function baoLoi(cookie, path, input) {
+	let res;
+	try {
+		res = await fetch(`${API}/api/trpc/${path}`, {
+			method: "POST",
+			headers: { ...bia(cookie), "Content-Type": "application/json" },
+			body: JSON.stringify(input),
+		});
+	} catch (error) {
+		cun(`may chu API ${API} khong tra loi ${path} — ${error.message}`);
+	}
+	const body = await res.json();
+	return body.error ? String(body.error.message) : null;
 }
 
 async function suySlug(cookie) {
@@ -890,7 +906,7 @@ if (chan === "chu") {
 	console.log("-- muoi hai ma trang thai da khai truoc:");
 	for (const t of MA_TRANG_THAI) {
 		console.log(
-			`   ${t.ma.padEnd(28)} ${t.toanCuc ? "do o muc don vi — E25" : t.cach}`,
+			`   ${t.ma.padEnd(28)} ${t.cach}${t.donVi ? ` (${t.vi_sao})` : ""}`,
 		);
 	}
 	const CAN = [
@@ -966,6 +982,7 @@ if (chan === "chu") {
 		const daDung = new Map();
 		const khongDung = new Map();
 		const khongDich = new Set();
+		const mayChu = [];
 		try {
 			const page = await moTrang(browser, cookie, locale, 1440, 1000);
 			await page.setRequestInterception(true);
@@ -984,28 +1001,7 @@ if (chan === "chu") {
 				if (locale === "vi") await chupHinh(page, `E15-${ma}.png`);
 			};
 
-			cham.khop = "campaigns.list";
-			const chuaXong = di(page, DUONG_DS).catch(() => {});
-			let thayLoading = true;
-			try {
-				await page.waitForFunction(
-					(want) => (document.body.textContent ?? "").includes(want),
-					{ timeout: 15000 },
-					kho[locale]["loading.list"],
-				);
-			} catch {
-				thayLoading = false;
-			}
-			if (thayLoading) {
-				await thu("ST-danh-sach-loading");
-			} else {
-				khongDung.set(
-					"ST-danh-sach-loading",
-					`chan mang cham tren campaigns.list khong lam hien "${kho[locale]["loading.list"]}": trang /campaigns nap truoc campaigns.list o may chu (HydrateClient) va staleTime la 30s, nen truy van tren trinh duyet khong bao gio o trang thai pending.`,
-				);
-			}
-			cham.khop = null;
-			await chuaXong;
+			await di(page, DUONG_DS);
 			await cho(600);
 
 			cham.khop = "campaigns.create";
@@ -1108,9 +1104,28 @@ if (chan === "chu") {
 			await choBang(page);
 			await cho(600);
 			await bao(cookie, "campaigns.finish", { id: cdLoi.id });
+			const cauApi = await baoLoi(cookie, "campaigns.touch", {
+				id: cdLoi.id,
+				contactId: d.nguoi[0].id,
+				outcome: "NO_ANSWER",
+			});
+			if (cauApi === null) {
+				cun(
+					"campaigns.touch tren chien dich da ket thuc khong tra loi — khong co cau may chu de ghi lai",
+				);
+			}
 			await ghiKetQua(page, 0, nhanKetQua[0]);
 			await page.waitForSelector("[data-sonner-toast]", { timeout: CHO_VE });
 			await cho(500);
+			const banhBao = await page.evaluate(DOC_TOAST);
+			if (banhBao.length === 0) cun("ST-ghi-ket-qua-loi: khong doc duoc thong bao noi nao");
+			mayChu.push({
+				locale,
+				tieuDe: banhBao[0].tieuDe,
+				hienRa: banhBao[0].than,
+				may: cauApi,
+				khop: banhBao[0].than === cauApi,
+			});
 			await thu("ST-ghi-ket-qua-loi");
 
 			await di(page, duongCd(cd.id));
@@ -1139,13 +1154,18 @@ if (chan === "chu") {
 		} finally {
 			await browser.close();
 		}
-		return { gom, daDung, khongDung, khongDich };
+		return { gom, daDung, khongDung, khongDich, mayChu };
 	};
 
 	const banVi = await chay("vi");
 	const banEn = await chay("en");
 
-	console.log("-- muoi ma dung tren trinh duyet, so chuoi thu duoc:");
+	const mayChu = [...banVi.mayChu, ...banEn.mayChu];
+	const truMayChu = new Set(
+		mayChu.filter((x) => x.khop && x.hienRa !== "").map((x) => x.hienRa),
+	);
+
+	console.log("-- chin ma dung tren trinh duyet, so chuoi thu duoc:");
 	for (const [ma, so] of banVi.daDung) {
 		console.log(`   ${ma.padEnd(28)} vi=${so} en=${banEn.daDung.get(ma) ?? 0}`);
 	}
@@ -1161,7 +1181,9 @@ if (chan === "chu") {
 		duLieu.has(s) || duList.some((v) => v.length > 2 && s.includes(v));
 	const dangXet = (s) => !laDuLieu(s) && !CHI_SO.test(s);
 
-	const con = [...viDem.keys()].filter((s) => enDem.has(s) && dangXet(s)).sort();
+	const con = [...viDem.keys()]
+		.filter((s) => enDem.has(s) && dangXet(s) && !truMayChu.has(s))
+		.sort();
 
 	console.log(
 		`-- chuoi nhin thay: vi=${viDem.size} en=${enDem.size} (${banVi.gom.length}/${banEn.gom.length} lan)`,
@@ -1173,24 +1195,64 @@ if (chan === "chu") {
 			`   * ${JSON.stringify(s)}${khoa.length > 0 ? ` ← khoa ${khoa.join(", ")}` : ""}`,
 		);
 	}
+	console.log(
+		"-- CAU LOI MAY CHU — gioi han da khai (vong ④ ho so tieng Viet), ghi lai nguyen van:",
+	);
+	for (const x of mayChu) {
+		console.log(`   [${x.locale}] tieu de cua giao dien: ${JSON.stringify(x.tieuDe)}`);
+		console.log(`   [${x.locale}] chu hien ra trong than: ${JSON.stringify(x.hienRa)}`);
+		console.log(`   [${x.locale}] may chu tra nguyen van: ${JSON.stringify(x.may)}`);
+		console.log(
+			`   [${x.locale}] la cau cua may chu: ${x.khop ? "DUNG — khop nguyen van, tru khoi phep so hai thu tieng" : "KHONG khop — GIU LAI trong phep so"}`,
+		);
+	}
+	console.log(
+		`   KHONG phai chieu do — hop dong khai cau nay van tieng Anh; chan ghi lai chu thay vi tru lang. Tru ${truMayChu.size} chuoi.`,
+	);
+	mkdirSync(ANH, { recursive: true });
+	const veMayChu = [
+		"E15 — cau loi may chu hien nguyen van trong giao dien",
+		`run_id: ${RUN}`,
+		"gioi han da khai: contract.md Notes — thong diep loi may chu van tieng Anh (vong ④ ho so tieng Viet)",
+		"cach dung: ket thuc chien dich qua API giua chung roi bam mot nut ket qua (ST-ghi-ket-qua-loi)",
+		"",
+		...mayChu.flatMap((x) => [
+			`[${x.locale}] tieu de cua giao dien: ${JSON.stringify(x.tieuDe)}`,
+			`[${x.locale}] chu hien ra trong than: ${JSON.stringify(x.hienRa)}`,
+			`[${x.locale}] may chu tra nguyen van: ${JSON.stringify(x.may)}`,
+			`[${x.locale}] la cau cua may chu: ${x.khop ? "DUNG" : "KHONG"}`,
+			"",
+		]),
+		`tru khoi phep so hai thu tieng: ${truMayChu.size} chuoi`,
+		"chuoi bi tru khong bien mat khoi ho so — no nam o tep nay.",
+		"",
+	].join("\n");
+	writeFileSync(`${ANH}/E15-chu-may-chu.txt`, veMayChu);
+	console.log(`   da ghi ${ANH}/E15-chu-may-chu.txt`);
+
+	const lechMayChu = mayChu.filter((x) => !x.khop);
+
 	const hongDich = [...banVi.khongDich, ...banEn.khongDich];
 	console.log(`-- DU LIEU SAN KHONG DUOC DANH DAU translate="no" (${hongDich.length})`);
 	for (const s of hongDich) console.log(`   * ${s}`);
 
-	if (banVi.daDung.size !== 10) {
+	if (banVi.daDung.size !== 9) {
 		cun(
-			`chi dung duoc ${banVi.daDung.size}/10 ma tren trinh duyet — thieu: ${[...chuaDung.keys()].join(", ") || "(khong ro)"}`,
+			`chi dung duoc ${banVi.daDung.size}/9 ma tren trinh duyet — thieu: ${[...chuaDung.keys()].join(", ") || "(khong ro)"}`,
 		);
 	}
+	if (mayChu.length !== 2) {
+		cun(`khong ghi lai duoc cau loi may chu o ca hai thu tieng (${mayChu.length}/2)`);
+	}
 
-	if (con.length > 0 || hongDich.length > 0) {
+	if (con.length > 0 || hongDich.length > 0 || lechMayChu.length > 0) {
 		console.log(
-			`E15 DO: con lai=${con.length} · thieu translate="no"=${hongDich.length}`,
+			`E15 DO: con lai=${con.length} · thieu translate="no"=${hongDich.length} · cau khong phai cua may chu=${lechMayChu.length}`,
 		);
 		process.exit(1);
 	}
 	console.log(
-		`E15 CHU 12ma=khai truoc 10ma=dung tren trinh duyet 2ma=do o muc don vi — E25 trung=0 translate_no=du`,
+		`E15 CHU 12ma=khai truoc 9ma=dung tren trinh duyet 3ma=do o muc don vi — E25 trung=0 translate_no=du cau_may_chu=ghi lai o E15-chu-may-chu.txt`,
 	);
 	process.exit(0);
 }
