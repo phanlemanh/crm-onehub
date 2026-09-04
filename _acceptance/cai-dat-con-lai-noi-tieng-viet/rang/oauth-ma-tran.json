@@ -1,0 +1,31 @@
+{
+	"lat": "cai-dat-con-lai-noi-tieng-viet",
+	"ghi_chu": "Ma tran DONG 4 nguon x 5 trang thai = 20 o. Moi o la mot khoa kho chuoi, hoac dung_chung voi mot o khac, hoac khong_ton_tai kem ly do. Ke tu chinh nhom khoa cua settings-ket-noi.ts, khong go tay theo bao cao. Chan do doi: so o quan sat tren man + so o do muc ma + so o khong ton tai = 20.",
+	"nguon": ["google", "microsoft", "slack", "tiepNhan"],
+	"trang_thai": ["chuaCam", "dangCam", "daCam", "camLai", "dangGo"],
+	"o": [
+		{ "nguon": "google", "trang_thai": "chuaCam", "khoa": "google.chuaCamMoTa" },
+		{ "nguon": "google", "trang_thai": "dangCam", "khong_ton_tai": "Google doi logo thanh spinner, khong doi chu — khong co khoa nao cho trang thai nay" },
+		{ "nguon": "google", "trang_thai": "daCam", "khoa": "google.daCamMoTa" },
+		{ "nguon": "google", "trang_thai": "camLai", "khoa": "google.canCamLai" },
+		{ "nguon": "google", "trang_thai": "dangGo", "khong_ton_tai": "Google khong co nhan cho luc dang go — nut chi bi vo hieu" },
+
+		{ "nguon": "microsoft", "trang_thai": "chuaCam", "khoa": "microsoft.chuaCamMoTa" },
+		{ "nguon": "microsoft", "trang_thai": "dangCam", "khong_ton_tai": "Microsoft doi logo thanh spinner, khong doi chu" },
+		{ "nguon": "microsoft", "trang_thai": "daCam", "khoa": "microsoft.daCamMoTa" },
+		{ "nguon": "microsoft", "trang_thai": "camLai", "khoa": "microsoft.canCamLai" },
+		{ "nguon": "microsoft", "trang_thai": "dangGo", "khong_ton_tai": "Microsoft khong co nhan cho luc dang go" },
+
+		{ "nguon": "slack", "trang_thai": "chuaCam", "khoa": "slack.camSlack" },
+		{ "nguon": "slack", "trang_thai": "dangCam", "khoa": "slack.dangMoSlack" },
+		{ "nguon": "slack", "trang_thai": "daCam", "khoa": "slack.daCap" },
+		{ "nguon": "slack", "trang_thai": "camLai", "khoa": "slack.camLai" },
+		{ "nguon": "slack", "trang_thai": "dangGo", "khoa": "slack.dangGo" },
+
+		{ "nguon": "tiepNhan", "trang_thai": "chuaCam", "khoa": "tiepNhan.moTa" },
+		{ "nguon": "tiepNhan", "trang_thai": "dangCam", "khong_ton_tai": "hop nhan khong di qua OAuth — khong co buoc cam" },
+		{ "nguon": "tiepNhan", "trang_thai": "daCam", "khong_ton_tai": "hop nhan khong co trang thai da cam" },
+		{ "nguon": "tiepNhan", "trang_thai": "camLai", "khong_ton_tai": "hop nhan khong co duong cam lai" },
+		{ "nguon": "tiepNhan", "trang_thai": "dangGo", "khong_ton_tai": "hop nhan khong go duoc" }
+	]
+}

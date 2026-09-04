@@ -1,0 +1,54 @@
+{
+	"lat": "cai-dat-con-lai-noi-tieng-viet",
+	"ghi_chu": "Vat KHACH CHEP di dan sang he thong khac. Dich lech mot ky tu la vo site cua khach. Chan do KHONG so luot vi voi luot en — hai luot dung tu CUNG mot template nen luon bang nhau ke ca khi template sai. Moi doan so voi NGUON CHAN LY NGOAI MAN theo truong `nguon`.",
+	"doan": [
+		{
+			"ten": "the script theo doi",
+			"file": "apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx",
+			"route": "/settings/tracking",
+			"nguon": "db-template",
+			"cach_lay": "tRPC tracking.settings tra ve scriptUrl va siteId; the dung lai la: <script + \\n  src=\"<scriptUrl>\" + \\n  data-site=\"<siteId>\" + \\n  async\\n  defer\\n + ></script>",
+			"phai_co_translate_no": true
+		},
+		{
+			"ten": "the script qua Tag Manager",
+			"file": "apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx",
+			"route": "/settings/tracking",
+			"nguon": "db-template",
+			"cach_lay": "cung nguon, bien the Tag Manager: khong co thuoc tinh data-site, siteId nam trong query cua src",
+			"phai_co_translate_no": true
+		},
+		{
+			"ten": "khoa API vua tao",
+			"file": "apps/app/app/(app)/[slug]/settings/api-keys/created-api-key-dialog.tsx",
+			"route": "/settings/api-keys",
+			"nguon": "api-tao",
+			"cach_lay": "tRPC apiKeys.create tra ve key MOT LAN; so trong CUNG luot tao — moi lan tao mot gia tri khac nen so hai luot tieng la bat kha thi theo cau tao",
+			"phai_co_translate_no": true
+		},
+		{
+			"ten": "URI chuyen huong o hop them nha cung cap SSO",
+			"file": "apps/app/app/(app)/[slug]/settings/sso/add-sso-provider-sheet.tsx",
+			"route": "/settings/sso",
+			"nguon": "cau-hinh",
+			"cach_lay": "callbackURL dung tu origin cua app + duong dan callback cua better-auth",
+			"phai_co_translate_no": true
+		},
+		{
+			"ten": "URI chuyen huong tren tung dong bang SSO",
+			"file": "apps/app/app/(app)/[slug]/settings/sso/sso-table.tsx",
+			"route": "/settings/sso",
+			"nguon": "cau-hinh",
+			"cach_lay": "row.callbackURL tu tRPC sso.list",
+			"phai_co_translate_no": true
+		},
+		{
+			"ten": "lenh moi bot vao kenh Slack",
+			"file": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx",
+			"route": "/settings/connections/slack",
+			"nguon": "hang-trong-ma",
+			"cach_lay": "hang INVITE_COMMAND — chuoi nguoi dung go THAT vao Slack, giu nguyen ten ung dung da dang ky",
+			"phai_co_translate_no": true
+		}
+	]
+}

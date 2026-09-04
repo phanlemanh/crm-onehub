@@ -1,0 +1,11 @@
+{
+	"lat": "cai-dat-con-lai-noi-tieng-viet",
+	"ghi_chu": "Du lieu NGUOI NHAP hien tren man — phan tu chua chung phai mang translate=no. Do bang LUAT, khong dem dong. Chan MA doc cay cu phap (luon chay duoc); chan MAN chi cho thu gieo duoc qua API that khong can OAuth.",
+	"o": [
+		{ "file": "apps/app/app/(app)/[slug]/settings/api-keys/api-keys-table.tsx", "truong": "ten khoa API", "gieo_duoc": true },
+		{ "file": "apps/app/app/(app)/[slug]/settings/tracking/allowed-domains.tsx", "truong": "ten mien duoc phep", "gieo_duoc": true },
+		{ "file": "apps/app/app/(app)/[slug]/settings/sso/sso-table.tsx", "truong": "ten nha cung cap SSO", "gieo_duoc": false, "vi_sao": "can mot nha cung cap that" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx", "truong": "ten kenh Slack", "gieo_duoc": false, "vi_sao": "can Slack da cam" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/members/members-table.tsx", "truong": "ten va email thanh vien", "gieo_duoc": true, "vi_sao": "workspace onehub da co thanh vien" }
+	]
+}
