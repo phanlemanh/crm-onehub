@@ -1,123 +1,99 @@
 ## Trong hợp đồng
 
-Không có phát hiện nào ánh xạ được vào một AC cụ thể trong vòng này.
+- **Màn grant-access chỉ dịch một nửa: client component còn sáu chuỗi tiếng Anh cứng**
+  AC: AC-11
+  file: `apps/app/app/(landing)/grant-access/grant-access.tsx:26`
+  severity: high
+  Vòng này kéo màn grant-access vào phạm vi (evidence-report.md ghi "màn grant-access — màn thứ tư của cửa vào — vào phạm vi và đã dịch") và đã nối page.tsx vào kho chuỗi authMessages(...).grantAccess. Nhưng client component bên dưới không được đồng bộ: sáu chuỗi người-đọc-thấy vẫn viết thẳng trong JSX — "Grant Google access" (L26), "Grant Microsoft access" (L31), "Grant access" (L86), "Sign out" (L99), và hai câu báo lỗi client tự dựng "Could not reach the provider." (L46) và "Could not sign out." (L94). Kho chuỗi apps/app/lib/messages/auth.ts không có khoá nào cho những chuỗi này (grantAccess chỉ có title/google/microsoft/both/privacy).
+
+  Hai luật bị vi phạm cùng lúc: AC-11 của contract ("không chuỗi người-đọc-thấy nào còn viết thẳng trong JSX") và AC-14 (câu báo lỗi dự phòng do CLIENT tự dựng phải hiện tiếng của người đọc — hai câu ở L46/L94 là client tự dựng, KHÔNG nằm trong Known limits vì Known limits chỉ miễn câu do máy chủ đúc sẵn). Kết quả trên sản phẩm: người đọc tiếng Việt thấy tiêu đề và đoạn riêng tư bằng tiếng Việt, rồi ba cái nút ngay dưới bằng tiếng Anh.
+
+  Lý do map vào AC-11: grant-access.tsx là một trong chín file trong phạm vi của AC-11, và các chuỗi viết thẳng trong JSX (không lấy từ kho chuỗi) chính là điều AC-11 cấm.
+
+- **Giá trị 13/13 của bảng đóng AC-6 ("Context") không mang translate="no"**
+  AC: AC-6
+  file: `apps/app/app/(landing)/onboarding/research/research-form.tsx:49`
+  severity: high
+  AC-6 là BẢNG ĐÓNG mười ba giá trị, dòng 13 ghi rõ: "Context trong nhãn và mô tả ô khoá" (contract.md L45, và rang/o-ghim.json khongDich[12]). Trong research-form.tsx không có bất kỳ thuộc tính translate="no" nào — grep trả về rỗng. nhãn.label = "Khoá API Context" (L49) và nhãn.noKey = "Chưa có khoá API Context?" (L63) đều để trần cho trình duyệt dịch, nên tên riêng "Context" bị dịch mất.
+
+  Đây là một trong những lý do E6 đang đỏ với "KHONG DO DUOC: dân số THIẾU: quan sát được 3/13 giá trị của bảng đóng" (evidence-report.md phần Evidence, eval E6). Cách vá đúng theo đúng khuôn mà onboarding-form.tsx đã dùng: bọc riêng mảnh chứa "Context" trong `<span translate="no">`, không đánh dấu cả nhãn.
+
+  Lý do map vào AC-6: "Context" là dòng 13 trong bảng đóng mười ba giá trị của AC-6, và AC-6 đòi hỏi chính nó phải mang translate="no".
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **Phạm vi diff được giao là rỗng — đã review vòng chưa đẩy trên onehub thay thế**
-  Người dùng thấy gì: Không ảnh hưởng người dùng. Đây chỉ là ghi chú kỹ thuật về việc chọn phạm vi so sánh khi review, không phải một lỗi của sản phẩm.
-  file: `N/A — review scope`
+- **`translate="no"` đặt lên cả nhãn nút, không đặt riêng vào dữ liệu — ngược với kế hoạch và luật CLAUDE.md**
+  Người dùng thấy gì: Nếu trình duyệt tự dịch trang sang tiếng khác, đoạn chữ đã dịch đứng cạnh tên thương hiệu có thể bị khoá dịch theo, làm chữ hiện không nhất quán.
+  file: `apps/app/app/(landing)/sign-in/social-sign-in.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Layout gốc còn đọc tiếng bằng tay thay vì gọi getLocale() đã hợp nhất**
+  Người dùng thấy gì: Nếu sau này cách chọn tiếng thay đổi, tiêu đề trang và nội dung màn hình có thể rơi vào không còn khớp tiếng với nhau.
+  file: `apps/app/app/layout.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Khoảng diff được yêu cầu là RỖNG — đã review khoảng thực của vòng**
+  Người dùng thấy gì: Không ảnh hưởng người dùng — đây là lưu ý về phạm vi rà soát của vòng kiểm tra này, không phải lỗi trên sản phẩm.
+  file: `Users/manhphan/dev/crm`
   severity: low
   Đề xuất: wont-fix
 
-- **tiengCuaNguoiDoc() nhân bản y hệt getLocale() đã có, và sống nhầm chỗ**
-  Người dùng thấy gì: Người dùng không thấy khác biệt ngay bây giờ. Nhưng nếu sau này ai sửa cách nhận diện ngôn ngữ ở nơi khác, ba màn đăng nhập và khai báo có thể không được cập nhật theo, dẫn tới lệch ngôn ngữ giữa các trang.
-  file: `apps/app/components/auth-shell.tsx`
+- **`translate="no"` check passes if ANY one occurrence is compliant**
+  Người dùng thấy gì: Công cụ kiểm tra có thể báo đạt dù tên thương hiệu vẫn bị trình duyệt tự dịch sai ở một chỗ khác trên cùng màn hình, nên lỗi thật lọt qua mà không ai biết.
+  file: `_acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs`
   severity: high
-  Đề xuất: known-limits
+  Đề xuất: new-contract
 
-- **Hai form client nhận chuỗi qua prop thay vì đọc useLocale() như mọi client component khác**
-  Người dùng thấy gì: Người dùng không thấy khác biệt ngay bây giờ. Nhưng nếu sau này có người thêm chữ mới mà quên chép đủ sang trang gọi form, người dùng có thể thấy thiếu chữ mà không ai được cảnh báo.
-  file: `apps/app/app/(landing)/onboarding/onboarding-form.tsx`
-  severity: medium
-  Đề xuất: known-limits
+- **Per-screen results overwritten — a violation on an earlier screen is erased**
+  Người dùng thấy gì: Công cụ kiểm tra có thể báo đạt dù một màn trước đó thực sự bị trình duyệt dịch sai tên riêng, vì kết quả màn sau ghi đè mất kết quả màn trước.
+  file: `_acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs`
+  severity: high
+  Đề xuất: new-contract
 
-- **Màn grant-access vẫn nguyên tiếng Anh bên trong khung đã chuyển sang tiếng Việt**
-  Người dùng thấy gì: Màn "thêm một bước nữa" trong luồng vào ứng dụng vẫn hiện toàn bộ tiếng Anh, dù các màn ngay trước và khung xung quanh nó đã chuyển sang tiếng Việt, khiến người dùng gặp một màn hình lẫn hai thứ tiếng.
-  file: `apps/app/app/(landing)/grant-access/page.tsx`
+- **Unreachable screen is silently skipped instead of refusing the measurement**
+  Người dùng thấy gì: Khi một màn không mở được để kiểm tra, công cụ lặng lẽ bỏ qua thay vì báo không đo được, khiến báo cáo trông như đã kiểm tra đủ trong khi thực ra thiếu.
+  file: `_acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs`
   severity: medium
   Đề xuất: new-contract
 
-- **Bài kiểm resolveLocale mất hai nhánh hành vi, đổi lấy một khẳng định vô nghĩa**
-  Người dùng thấy gì: Không ảnh hưởng người dùng ngay bây giờ. Nhưng nếu sau này ai sửa nhầm cách chọn ngôn ngữ tự động, lỗi đó có thể không bị phát hiện, khiến người dùng nhận sai ngôn ngữ mà không ai biết.
-  file: `apps/app/test/locale-resolve.spec.ts`
+- **E16 capture never asserts it captured the requested language or the right server**
+  Người dùng thấy gì: Ảnh chụp bằng chứng có thể ghi nhận tiếng Việt trong khi trang thực tế hiện tiếng Anh, hoặc lấy nhầm từ một bản máy chủ khác, khiến người duyệt tin nhầm.
+  file: `_acceptance/cua-vao-noi-tieng-viet/rang/e16-capture.mjs`
   severity: medium
-  Đề xuất: known-limits
+  Đề xuất: new-contract
 
-- **dot-bien.mjs crashes on load: SAO and APP_SAO are never declared**
-  Người dùng thấy gì: Không ảnh hưởng người dùng. Đây là lỗi của công cụ đo tự động thuộc một vòng nghiệm thu khác, không phải lỗi của màn hình người dùng nhìn thấy.
-  file: `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/dot-bien.mjs`
-  severity: high
-  Đề xuất: known-limits
-
-- **cua-vao.mjs dang-gui branch calls undefined hienRa()**
-  Người dùng thấy gì: Không ảnh hưởng người dùng trực tiếp. Nhưng hiện tại chưa có bằng chứng tự động nào xác nhận nút gửi hiện đúng chữ tiếng Việt lúc đang xử lý, vì công cụ kiểm tra tự động bị lỗi trước khi chạy tới bước đó.
+- **E14 evidence named "three screens" is one screen, saved twice under two names**
+  Người dùng thấy gì: Tệp bằng chứng đặt tên là đã chụp đủ ba màn hình nhưng thực ra chỉ chụp một màn hai lần, khiến người duyệt tưởng đã có đủ bằng chứng.
   file: `_acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs`
-  severity: high
-  Đề xuất: known-limits
+  severity: medium
+  Đề xuất: new-contract
 
-- **SSO sign-in swallows a thrown signIn.sso: no toast, button spins forever**
-  Người dùng thấy gì: Nếu đăng nhập bằng SSO gặp sự cố mạng, nút có thể xoay mãi không dừng mà không hiện thông báo lỗi nào, khiến người dùng không biết phải làm gì tiếp theo.
+- **`ten-sso` eval does not test the claim in its own pass message**
+  Người dùng thấy gì: Công cụ kiểm tra báo đạt cho câu chữ trên nút đăng nhập liên kết ngoài mà không thực sự kiểm tra đúng câu đó, nên lỗi hiển thị sai có thể lọt qua.
+  file: `_acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs`
+  severity: medium
+  Đề xuất: new-contract
+
+- **SSO sign-in catch discards the error with no log**
+  Người dùng thấy gì: Khi đăng nhập lỗi vì nguyên nhân khác ngoài mất mạng, người dùng vẫn chỉ thấy thông báo chung chung, và đội kỹ thuật không có manh mối để tìm nguyên nhân thật.
   file: `apps/app/app/(landing)/sign-in/sso-sign-in.tsx`
   severity: medium
+  Đề xuất: known-limits
+
+- **Spawn failure recorded as a failed eval instead of a refusal**
+  Người dùng thấy gì: Không ảnh hưởng trực tiếp người dùng — báo cáo nội bộ có thể ghi nhầm một phép đo không chạy được thành một phép đo thất bại.
+  file: `_acceptance/cua-vao-noi-tieng-viet/rang/khai-sinh.mjs`
+  severity: low
   Đề xuất: new-contract
 
-- **Hình dạng 3 — đếm chuỗi trên MÃ NGUỒN trang thay vì trên chữ người đọc thấy**
-  Người dùng thấy gì: Không ảnh hưởng người dùng. Cách đo tự động hiện tại có thể báo đạt dù một dòng chữ đã biến mất khỏi màn hình thật, nên kết quả đo chưa đáng tin cho tiêu chí này.
-  file: `_acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs`
-  severity: high
+- **Dead import left behind by the string extraction**
+  Người dùng thấy gì: Không ảnh hưởng người dùng — đây là một dòng khai báo thừa còn sót lại sau khi dọn code, sản phẩm vẫn chạy đúng.
+  file: `apps/app/app/(landing)/grant-access/page.tsx`
+  severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 3 — khẳng định 'có chuỗi' không phân biệt nổi trạng thái đang tải với trang đã xong**
-  Người dùng thấy gì: Không ảnh hưởng người dùng trực tiếp. Nhưng hiện chưa có bằng chứng tự động thật sự xác nhận màn hình lúc đang tải hiện đúng tiếng Việt, vì công cụ đo chưa từng mở được đúng thời điểm đó.
-  file: `_acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs`
-  severity: high
-  Đề xuất: known-limits
-
-- **Phép đo không chạy được — `hienRa` chưa định nghĩa, chặng dang-gui (E5) ném ReferenceError**
-  Người dùng thấy gì: Không ảnh hưởng người dùng trực tiếp. Công cụ kiểm tra tự động bị dừng giữa chừng nên chưa xác nhận được nút gửi hiện đúng chữ tiếng Việt lúc đang xử lý.
-  file: `_acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs`
-  severity: high
-  Đề xuất: known-limits
-
-- **Hình dạng 5 — E12 tuyên quét LỚP, bài kiểm được gọi chỉ có năm điểm-case**
-  Người dùng thấy gì: Không ảnh hưởng người dùng ngay. Nhưng phạm vi kiểm tra tự động cho toàn bộ kho chữ hiện hẹp hơn những gì được công bố, nên một số chữ thiếu hoặc sai có thể lọt qua mà không bị bắt.
-  file: `apps/app/test/auth-messages.spec.ts`
-  severity: high
-  Đề xuất: known-limits
-
-- **Hình dạng 2 — fixture tRPC viết tay đúng khuôn bên đọc, không bao giờ đi qua bên ghi thật**
-  Người dùng thấy gì: Không ảnh hưởng người dùng trực tiếp. Nhánh "chưa có cách nào để vào" vẫn chưa được xác nhận bằng một phép đo chạy được thật sự, nên chưa có bằng chứng đáng tin cho trường hợp này.
-  file: `_acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 4 — chặng chân trang chỉ có khẳng định âm tính, không đối chứng dương, không ghim đúng chuỗi đã khai**
-  Người dùng thấy gì: Không ảnh hưởng người dùng trực tiếp. Nhưng phép đo hiện tại có thể báo đạt ngay cả khi màn hình bị lỗi trắng trang, nên kết quả đo cho tiêu chí gỡ dòng chân chưa đáng tin cậy hoàn toàn.
-  file: `_acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 4 — sổ khai sinh chỉ chạy chiều lành, tự ghi 'chua chung' cho cả 15 mục**
-  Người dùng thấy gì: Không ảnh hưởng người dùng. Nhưng chưa có bằng chứng nào cho thấy các phép đo tự động thật sự có khả năng báo lỗi khi sản phẩm bị hỏng, nên độ tin cậy của toàn bộ báo cáo đo tự động còn thấp.
-  file: `_acceptance/cua-vao-noi-tieng-viet/rang/khai-sinh.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 6 — cổng mặc định 3300/3301 trỏ ra ngoài cây đang kiểm, và executor khai sinh là cái duy nhất không ghi đè**
-  Người dùng thấy gì: Không ảnh hưởng người dùng. Nhưng một phép đo tổng hợp quan trọng hiện đang đo nhầm máy chủ, nên kết quả của nó chưa xanh được lần nào và chưa nói lên điều gì về sản phẩm thật.
-  file: `_acceptance/cua-vao-noi-tieng-viet/rang/may-chu.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 3 — dấu translate="no" kiểm bằng 'có phần tử nào đó' thay vì đúng ô đã ghim**
-  Người dùng thấy gì: Không ảnh hưởng người dùng trực tiếp. Nhưng phép đo hiện tại có thể báo đạt dù một trong các mục không nên dịch bị bỏ sót, nên bằng chứng cho tiêu chí này chưa chặt như đã hứa.
-  file: `_acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 3 — nhãn nút SSO đo bằng regex 'có mặt tên', động từ đã dịch không hề được đo**
-  Người dùng thấy gì: Không ảnh hưởng người dùng trực tiếp. Nhưng phần quan trọng nhất của lời hứa — động từ trên nút đăng nhập SSO phải được dịch — hiện chưa có bằng chứng tự động nào xác nhận.
-  file: `_acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 1 — đầu vào hội đồng lấy từ kho chuỗi trên đĩa, không lấy từ đầu ra đã dựng**
-  Người dùng thấy gì: Không ảnh hưởng người dùng trực tiếp. Nhưng bằng chứng dùng để chấm ba nhãn trường của màn khai báo hiện lấy từ kho chữ có sẵn thay vì từ màn hình thật đã dựng, nên chưa chứng minh được điều đã hứa.
-  file: `_acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-⚠ Cụm ngoài vùng phủ: 2/19 lỗi rơi vào file không bộ đo nào phủ (N/A — review scope, _acceptance/nhan-ung-dung-noi-tieng-viet/rang/dot-bien.mjs) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
