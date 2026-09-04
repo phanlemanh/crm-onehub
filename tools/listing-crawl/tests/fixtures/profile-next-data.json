@@ -1,0 +1,61 @@
+{
+  "props": {
+    "appProps": {
+      "pathname": "/moi-gioi-mau-1"
+    },
+    "initialState": {
+      "shop": {
+        "info": {
+          "name": "Chuyên trang mẫu",
+          "alias": "moi-gioi-mau-1",
+          "address": "Phú Mỹ Hưng",
+          "phoneNumber": "0900000000",
+          "type": "paid",
+          "service_type": "membership",
+          "brokerLicense": {
+            "name": "Nguyễn Văn Mẫu",
+            "license_number": "HCM-0000000",
+            "issued_place_id": 1,
+            "issued_place": {
+              "id": 1,
+              "name": "Tp Hồ Chí Minh"
+            }
+          },
+          "workingAreas": [
+            {
+              "regionId": "13000",
+              "areaId": "13102",
+              "areaName": "Quận 7",
+              "regionName": "Tp Hồ Chí Minh"
+            },
+            {
+              "regionId": "13000",
+              "areaId": "13118",
+              "areaName": "Huyện Nhà Bè",
+              "regionName": "Tp Hồ Chí Minh"
+            }
+          ],
+          "workingAreasDisplay": "Quận 7,Huyện Nhà Bè (Tp Hồ Chí Minh)",
+          "urls": {
+            "shop": "https://nhatot.com/moi-gioi-mau-1"
+          }
+        }
+      },
+      "ads": {
+        "totalAdsCount": 436,
+        "lastestAdInfo": {
+          "ads": [
+            {
+              "info": {
+                "name": "Nguyễn Văn Mẫu",
+                "company_ad": false,
+                "area_name": "Quận 7",
+                "region_name": "Tp Hồ Chí Minh"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
