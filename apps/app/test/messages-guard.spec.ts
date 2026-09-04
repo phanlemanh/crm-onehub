@@ -1,8 +1,8 @@
 import { describe, expect, it } from "bun:test";
 import { join } from "node:path";
+import { authMessages } from "@/lib/messages/auth";
 import { companyMessages } from "@/lib/messages/companies";
 import { contactMessages } from "@/lib/messages/contacts";
-import { authMessages } from "@/lib/messages/auth";
 import { crmMessages } from "@/lib/messages/crm";
 import { dealMessages } from "@/lib/messages/deals";
 import { recordSheetMessages } from "@/lib/messages/record-sheet";
@@ -118,9 +118,6 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"auth.research.submit",
 	"auth.research.submitting",
 	"auth.research.title",
-	"auth.shell.eyebrow",
-	"auth.shell.headline",
-	"auth.shell.homepage",
 	"auth.signIn.continueWith",
 	"auth.signIn.description",
 	"auth.signIn.error.unreachable",

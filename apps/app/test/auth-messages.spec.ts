@@ -44,7 +44,9 @@ describe("kho chuoi cua vao", () => {
 
 	it("cau bao loi du phong noi nguoi dung lam gi tiep", () => {
 		const vi = authMessages("vi").signIn.error.unreachable;
-		expect(vi.length).toBeGreaterThan(authMessages("en").signIn.error.unreachable.length / 2);
+		expect(vi.length).toBeGreaterThan(
+			authMessages("en").signIn.error.unreachable.length / 2,
+		);
 		expect(vi).toMatch(/thử lại|kiểm tra/i);
 	});
 });

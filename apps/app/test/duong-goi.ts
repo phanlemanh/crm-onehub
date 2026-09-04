@@ -6,6 +6,7 @@ import type * as TS from "typescript";
 const ts: typeof TS = createRequire(import.meta.url)("typescript");
 
 const HAM_KHO = new Set([
+	"authMessages",
 	"companyMessages",
 	"contactMessages",
 	"dealMessages",
