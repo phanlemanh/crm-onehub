@@ -1,0 +1,20 @@
+# Chu that hien ra tren man dang nhap, doc tu may chu dang chay
+
+shell.homepage
+  vi: "Trang chủ"
+  en: "Homepage"
+shell.eyebrow
+  vi: "CRM"
+  en: "CRM"
+shell.headline
+  vi: "Mọi khách hàng, một chỗ."
+  en: "Every customer, one place."
+signIn.title
+  vi: "Mừng bạn quay lại"
+  en: "Welcome back"
+signIn.description
+  vi: "Đăng nhập bằng tài khoản của bạn để tiếp tục."
+  en: "Sign in with your account to continue."
+
+# Hai man khai bao KHONG dung duoc trong moi truong nay — xem Known limits
+# cua contract.md. Chua do duoc, khong phai da dat.

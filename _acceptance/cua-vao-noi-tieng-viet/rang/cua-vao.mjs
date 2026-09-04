@@ -146,6 +146,47 @@ if (chan === "dang-nhap") {
 	]);
 	for (const o of GHIM.dangNhap) soO(KHO, o, vi, en, "man dang nhap");
 	const tong = GHIM.dangNhap.reduce((n, o) => n + o.soLan, 0);
+
+	const dong = [
+		"# Chu that hien ra tren man dang nhap, doc tu may chu dang chay",
+		"",
+	];
+	for (const o of GHIM.dangNhap)
+		dong.push(
+			`${o.khoa}\n  vi: ${JSON.stringify(lay(KHO.vi, o.khoa))}\n  en: ${JSON.stringify(lay(KHO.en, o.khoa))}`,
+		);
+	dong.push(
+		"",
+		"# Hai man khai bao KHONG dung duoc trong moi truong nay — xem Known limits",
+		"# cua contract.md. Chua do duoc, khong phai da dat.",
+	);
+	writeFileSync(
+		resolve(HERE, "../evidence/E14-chu-hien-ra.txt"),
+		`${dong.join("\n")}\n`,
+	);
+
+	const br = await moTrinhDuyet();
+	try {
+		for (const t of ["vi", "en"]) {
+			const p = await moTrang(br, t, null);
+			await p.goto(`${APP}/sign-in`, {
+				waitUntil: "networkidle0",
+				timeout: 60000,
+			});
+			await p.screenshot({
+				path: resolve(HERE, `../evidence/E14-ba-man-${t}.png`),
+				fullPage: true,
+			});
+			await p.screenshot({
+				path: resolve(HERE, `../evidence/E16-sign-in-${t}.png`),
+				fullPage: true,
+			});
+			await p.close();
+		}
+	} finally {
+		await br.close();
+	}
+
 	ketThuc(`${tong} o ghim tren man dang nhap dat quan he ba ve`);
 }
 
