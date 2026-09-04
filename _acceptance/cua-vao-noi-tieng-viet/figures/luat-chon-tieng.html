@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luật chọn tiếng — ai được quyết, và theo thứ tự nào</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --page:   #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:   #171717;
+      --ink:    #fafafa;
+      --muted:  #b4b4b4;
+      --soft:   #9a9a9a;
+      --rule:   rgba(250,250,250,0.16);
+      --accent: #2f9b7a;
+    }
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1240px; width: 100%; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .standfirst {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 68ch;
+    margin-bottom: 1.75rem;
+  }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 1040px; display: block; }
+  .notes {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 0.95fr;
+    gap: 2rem;
+  }
+  .notes h2 {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .notes p { font-size: 0.86rem; line-height: 1.6; color: var(--ink); }
+  .notes p + p { margin-top: 0.6rem; }
+  .notes .quiet { color: var(--muted); }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+    line-height: 1.7;
+  }
+  @media (max-width: 900px) { .notes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Cổng 1 · Hình · AC-9 · cua-vao-noi-tieng-viet</p>
+  <h1>Luật chọn tiếng — ai được quyết, và theo thứ tự nào</h1>
+  <p class="standfirst">Hai đầu vào, năm đường. Lựa chọn của chính người dùng được hỏi trước; khai của trình duyệt chỉ được hỏi tới khi người ấy chưa từng chọn. Ngả nào không quyết được cũng rơi về tiếng Việt.</p>
+
+  <div class="card">
+  <svg viewBox="0 0 1560 1100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ quyết định luật chọn tiếng: lựa chọn đã lưu của người dùng được hỏi trước và thắng khai của trình duyệt; năm đường đi ứng với năm ô của trục C trong hợp đồng; mọi ngả không quyết được đều rơi về tiếng Việt là mặc định">
+    <defs>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');
+        svg {
+          --paper:#fafafa; --node:#ffffff; --ink:#171717; --muted:#575757;
+          --soft:#666666; --rule:rgba(23,23,23,0.12); --accent:#006B4F;
+          --tint:rgba(0,107,79,0.08); --leader:rgba(23,23,23,0.42);
+          --badge:rgba(23,23,23,0.34);
+        }
+        @media (prefers-color-scheme: dark) {
+          svg {
+            --paper:#171717; --node:#212121; --ink:#fafafa; --muted:#b4b4b4;
+            --soft:#9a9a9a; --rule:rgba(250,250,250,0.16); --accent:#2f9b7a;
+            --tint:rgba(47,155,122,0.14); --leader:rgba(250,250,250,0.42);
+            --badge:rgba(250,250,250,0.38);
+          }
+        }
+        .bg   { fill: var(--paper); }
+        .mask { fill: var(--paper); }
+        .node { fill: var(--node); stroke: var(--ink); stroke-width: 1; }
+        .focal{ fill: var(--tint); stroke: var(--accent); stroke-width: 1.4; }
+        .edge { fill: none; stroke: var(--muted); stroke-width: 1; }
+        .edge-d { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 5,4; }
+        .mk   { fill: var(--muted); }
+        .name { fill: var(--ink); font: 600 16px 'Geist', system-ui, sans-serif; }
+        .sub  { fill: var(--muted); font: 400 12px 'Geist', system-ui, sans-serif; }
+        .alab { fill: var(--soft); font: 400 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.06em; }
+        .entry{ fill: var(--muted); font: 500 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.16em; }
+        .bdg  { fill: none; stroke: var(--badge); stroke-width: 0.8; }
+        .bdgt { fill: var(--muted); font: 500 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.08em; }
+        .call { fill: var(--ink); font: italic 400 17px 'Lora', Georgia, serif; }
+        .lead { fill: none; stroke: var(--leader); stroke-width: 1; stroke-dasharray: 4,3; }
+        .dot  { fill: var(--ink); }
+        .hr   { stroke: var(--rule); stroke-width: 0.8; }
+        .lgl  { fill: var(--muted); font: 500 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.16em; }
+        .lgi  { fill: var(--muted); font: 400 11px 'Geist Mono', ui-monospace, monospace; }
+      </style>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon class="mk" points="0 0, 8 3, 0 6"/>
+      </marker>
+    </defs>
+
+    <rect class="bg" width="100%" height="100%"/>
+
+    <!-- ======================= ĐƯỜNG NỐI (vẽ trước) ======================= -->
+
+    <!-- A1 · lối vào -->
+    <path class="edge" d="M 760 44 V 94" marker-end="url(#arrow)"/>
+
+    <!-- A2 · đã chọn → hỏi lựa chọn ấy -->
+    <path class="edge" d="M 570 156 H 448 Q 440 156 440 164 V 334" marker-end="url(#arrow)"/>
+    <!-- A3 · chưa chọn → hỏi trình duyệt -->
+    <path class="edge" d="M 950 156 H 1112 Q 1120 156 1120 164 V 334" marker-end="url(#arrow)"/>
+
+    <!-- A4 · lựa chọn đã lưu là Việt → Ô 1 -->
+    <path class="edge" d="M 250 396 H 212 Q 204 396 204 404 V 798" marker-end="url(#arrow)"/>
+    <!-- A5 · lựa chọn đã lưu là Anh → Ô 2 -->
+    <path class="edge" d="M 440 456 V 744 Q 440 752 448 752 H 524 Q 532 752 532 760 V 798" marker-end="url(#arrow)"/>
+    <!-- A6 · lựa chọn hỏng → mặc định (ngoài năm ô) -->
+    <path class="edge-d" d="M 630 396 H 688 Q 696 396 696 404 V 926" marker-end="url(#arrow)"/>
+
+    <!-- A7 · trình duyệt có khai → xét khai ấy -->
+    <path class="edge" d="M 1120 456 V 578" marker-end="url(#arrow)"/>
+    <!-- A8 · trình duyệt không khai → Ô 5 -->
+    <path class="edge" d="M 1310 396 H 1452 Q 1460 396 1460 404 V 926" marker-end="url(#arrow)"/>
+
+    <!-- A9 · khai Việt → Ô 3 -->
+    <path class="edge" d="M 930 640 H 868 Q 860 640 860 648 V 798" marker-end="url(#arrow)"/>
+    <!-- A10 · khai Anh → Ô 4 -->
+    <path class="edge" d="M 1120 700 V 798" marker-end="url(#arrow)"/>
+    <!-- A11 · khai thứ tiếng khác → mặc định (ngoài năm ô) -->
+    <path class="edge-d" d="M 1310 640 H 1392 Q 1400 640 1400 648 V 926" marker-end="url(#arrow)"/>
+
+    <!-- ======================= NHÃN TRÊN ĐƯỜNG ======================= -->
+    <rect class="mask" x="487" y="132" width="44" height="18" rx="2"/>
+    <text class="alab" x="509" y="146" text-anchor="middle">CÓ</text>
+
+    <rect class="mask" x="1001" y="132" width="60" height="18" rx="2"/>
+    <text class="alab" x="1031" y="146" text-anchor="middle">KHÔNG</text>
+
+    <rect class="mask" x="216" y="580" width="48" height="18" rx="2"/>
+    <text class="alab" x="222" y="594">VIỆT</text>
+
+    <rect class="mask" x="452" y="580" width="44" height="18" rx="2"/>
+    <text class="alab" x="458" y="594">ANH</text>
+
+    <rect class="mask" x="708" y="580" width="124" height="18" rx="2"/>
+    <text class="alab" x="714" y="594">KHÔNG ĐỌC ĐƯỢC</text>
+
+    <rect class="mask" x="1132" y="508" width="44" height="18" rx="2"/>
+    <text class="alab" x="1138" y="522">CÓ</text>
+
+    <rect class="mask" x="1351" y="372" width="60" height="18" rx="2"/>
+    <text class="alab" x="1381" y="386" text-anchor="middle">KHÔNG</text>
+
+    <rect class="mask" x="877" y="616" width="44" height="18" rx="2"/>
+    <text class="alab" x="899" y="630" text-anchor="middle">VIỆT</text>
+
+    <rect class="mask" x="1132" y="740" width="44" height="18" rx="2"/>
+    <text class="alab" x="1138" y="754">ANH</text>
+
+    <rect class="mask" x="1313" y="616" width="76" height="18" rx="2"/>
+    <text class="alab" x="1351" y="630" text-anchor="middle">KHÔNG KHỚP</text>
+
+    <!-- ======================= NÚT ======================= -->
+
+    <text class="entry" x="760" y="32" text-anchor="middle">MỘT LƯỢT MỞ MÀN ĐĂNG NHẬP</text>
+
+    <!-- D1 — câu hỏi đầu tiên, và là câu quyết định -->
+    <polygon class="mask" points="760,96 950,156 760,216 570,156"/>
+    <polygon class="focal" points="760,96 950,156 760,216 570,156"/>
+    <text class="name" x="760" y="152" text-anchor="middle">Người này đã tự chọn tiếng chưa?</text>
+    <text class="sub"  x="760" y="174" text-anchor="middle">lựa chọn còn giữ trên máy họ</text>
+
+    <!-- D2 — lựa chọn đã lưu đọc ra tiếng gì -->
+    <polygon class="mask" points="440,336 630,396 440,456 250,396"/>
+    <polygon class="node" points="440,336 630,396 440,456 250,396"/>
+    <text class="name" x="440" y="402" text-anchor="middle">Lựa chọn ấy là tiếng nào?</text>
+
+    <!-- D3 — trình duyệt có khai gì không -->
+    <polygon class="mask" points="1120,336 1310,396 1120,456 930,396"/>
+    <polygon class="node" points="1120,336 1310,396 1120,456 930,396"/>
+    <text class="name" x="1120" y="402" text-anchor="middle">Trình duyệt có khai tiếng ưa dùng?</text>
+
+    <!-- D4 — khai ấy có tiếng mình nói không -->
+    <polygon class="mask" points="1120,580 1310,640 1120,700 930,640"/>
+    <polygon class="node" points="1120,580 1310,640 1120,700 930,640"/>
+    <text class="name" x="1120" y="646" text-anchor="middle">Khai ấy có Việt hay Anh?</text>
+
+    <!-- Ô 1 -->
+    <rect class="node" x="60" y="800" width="288" height="72" rx="20"/>
+    <rect class="bdg"  x="76" y="818" width="40" height="20" rx="4"/>
+    <text class="bdgt" x="96" y="832" text-anchor="middle">Ô 1</text>
+    <text class="name" x="130" y="832">Tiếng Việt</text>
+    <text class="sub"  x="130" y="854">đã chọn Việt, trình duyệt Anh</text>
+
+    <!-- Ô 2 -->
+    <rect class="node" x="388" y="800" width="288" height="72" rx="20"/>
+    <rect class="bdg"  x="404" y="818" width="40" height="20" rx="4"/>
+    <text class="bdgt" x="424" y="832" text-anchor="middle">Ô 2</text>
+    <text class="name" x="458" y="832">Tiếng Anh</text>
+    <text class="sub"  x="458" y="854">đã chọn Anh, trình duyệt Việt</text>
+
+    <!-- Ô 3 -->
+    <rect class="node" x="716" y="800" width="288" height="72" rx="20"/>
+    <rect class="bdg"  x="732" y="818" width="40" height="20" rx="4"/>
+    <text class="bdgt" x="752" y="832" text-anchor="middle">Ô 3</text>
+    <text class="name" x="786" y="832">Tiếng Việt</text>
+    <text class="sub"  x="786" y="854">chưa chọn, trình duyệt Việt</text>
+
+    <!-- Ô 4 -->
+    <rect class="node" x="1044" y="800" width="288" height="72" rx="20"/>
+    <rect class="bdg"  x="1060" y="818" width="40" height="20" rx="4"/>
+    <text class="bdgt" x="1080" y="832" text-anchor="middle">Ô 4</text>
+    <text class="name" x="1114" y="832">Tiếng Anh</text>
+    <text class="sub"  x="1114" y="854">chưa chọn, trình duyệt Anh</text>
+
+    <!-- Ô 5 — nơi mọi ngả không quyết được rơi vào -->
+    <rect class="mask"  x="60" y="928" width="1440" height="72" rx="20"/>
+    <rect class="focal" x="60" y="928" width="1440" height="72" rx="20"/>
+    <rect class="bdg"   x="76" y="946" width="40" height="20" rx="4"/>
+    <text class="bdgt"  x="96" y="960" text-anchor="middle">Ô 5</text>
+    <text class="name"  x="130" y="960">Tiếng Việt — mặc định</text>
+    <text class="sub"   x="130" y="982">chưa chọn và trình duyệt không khai · mọi ngả không quyết được cũng rơi về đây</text>
+
+    <!-- ======================= GHI CHÚ LỀ ======================= -->
+    <text class="call" x="60" y="52">Đã chọn rồi thì máy</text>
+    <text class="call" x="60" y="76">không hỏi trình duyệt nữa.</text>
+    <path class="lead" d="M 266 70 Q 380 96 438 214"/>
+    <circle class="dot" cx="440" cy="220" r="2.5"/>
+
+    <text class="call" x="60" y="908">Mặc định đổi từ tiếng Anh sang tiếng Việt — 04/09.</text>
+    <path class="lead" d="M 444 902 Q 520 910 558 924"/>
+    <circle class="dot" cx="562" cy="928" r="2.5"/>
+
+    <!-- ======================= CHÚ GIẢI ======================= -->
+    <line class="hr" x1="60" y1="1036" x2="1500" y2="1036"/>
+    <text class="lgl" x="60" y="1066">CHÚ GIẢI</text>
+    <text class="lgi" x="200" y="1066">Ô 1–5 = năm ô của trục C trong hợp đồng (AC-9)</text>
+    <text class="lgi" x="560" y="1066">nét liền = một ô · nét đứt = ngả ngoài năm ô</text>
+    <text class="lgi" x="900" y="1066">lựa chọn đã lưu = cookie lang · khai của trình duyệt = Accept-Language</text>
+  </svg>
+  </div>
+
+  <div class="notes">
+    <div>
+      <h2>Ai được quyết</h2>
+      <p>Lựa chọn của chính người dùng được hỏi trước, và nó thắng. Ô 1 và Ô 2 là hai lần chứng: người đã chọn Việt mà trình duyệt khai Anh vẫn ra tiếng Việt, và ngược lại. Khai của trình duyệt chỉ có tiếng nói khi người ấy chưa từng chọn.</p>
+    </div>
+    <div>
+      <h2>Khi không ai quyết được</h2>
+      <p>Ba ngả cùng đổ về một chỗ: chưa chọn và trình duyệt không khai gì (Ô 5), lựa chọn đã lưu không đọc được, và khai của trình duyệt không có thứ tiếng nào mình nói. Cả ba ra tiếng Việt.</p>
+      <p class="quiet">Hai ngả sau nằm ngoài năm ô của hợp đồng — vẽ nét đứt để không đếm nhầm thành ô thứ sáu.</p>
+    </div>
+    <div>
+      <h2>Năm ô, năm đường</h2>
+      <p>Mỗi ô của trục C có một đường riêng và một đích riêng trên hình. AC-9 đòi đúng năm khẳng định, mỗi ô một khẳng định; E9 đo trên luật thuần, E18 đo trên máy chủ thật.</p>
+    </div>
+  </div>
+
+  <footer>
+    Hình vẽ theo luật đang sống ở apps/app/lib/locale/resolve.ts, ở trạng thái SAU khi mặc định đổi từ tiếng Anh sang tiếng Việt.<br>
+    Trước lần đổi ấy, cả ba ngả đổ về Ô 5 đều ra tiếng Anh · hình dựng 04/09/2026
+  </footer>
+</div>
+</body>
+</html>
