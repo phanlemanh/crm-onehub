@@ -55,12 +55,57 @@ chủ dev chạy từ thư mục nào — trước khi tin handoff hay tin một
 với ba phiên. Nếu bạn thấy một phiên khác đang mở trên cây mình định gộp, **nhắn
 nó trước**, đừng gộp đè.
 
+## Vòng `cua-vao-noi-tieng-viet` — dừng ở vòng 3, chưa ký được
+
+Bốn màn cửa vào (`/sign-in`, `/onboarding`, `/onboarding/research`,
+`/grant-access`) **đã nói tiếng Việt**, và `DEFAULT_LOCALE` nay là `vi`. Bốn
+lệnh chứng minh của kho xanh: 207 test, 13/13 kiểu, 9/9 lint, `lint:slop` sạch.
+
+**Nhưng verdict là BLOCKED, và bộ kit từ chối mời ký** (`one_shot: null`). Đây
+là hành vi đúng: 8 phép đo TỪ CHỐI ĐO vì môi trường không dựng nổi vật, không
+phải vì sản phẩm hỏng. Người đã chọn dừng vòng và ký với hạn chế, nhưng lệnh ký
+không chạy trên một vòng BLOCKED — xem mục quyết định cuối `decisions.jsonl`.
+
+### Vì sao môi trường chặn tám phép đo
+
+| Không đo được | Cần gì để mở khoá |
+| --- | --- |
+| Hai màn khai báo | Một workspace CHƯA khai báo xong (`onboarded=false`, `canRename=true`). Workspace này đã xong nên `/onboarding` chuyển hướng về `/onehub` |
+| Nhánh "chưa có cách nào để vào" | Cấu hình không có nhà cung cấp nào. Cổng gọi API từ phía máy chủ nên chặn ở trình duyệt không tới |
+| Nút SSO | Một bản ghi `ssoProvider` có tên không phải ASCII |
+| Nút Microsoft | Chưa cấu hình |
+
+Đường mở khoá: một cặp máy chủ thứ hai chạy trên cơ sở dữ liệu thử sạch, cộng
+gieo một nhà cung cấp SSO. Là một khối việc riêng, không phải một lượt sửa.
+
+### Ba món nợ giàn đo — đi vào vòng riêng
+
+1. **Ba danh sách đường dẫn gõ tay** ở `rang/cua-vao.mjs` dòng 271, 374, 538.
+   Dân số đã sinh-từ-đĩa cho bộ quét cú pháp (`rang/lat.mjs`) nhưng ba chân chạy
+   trên trình duyệt thì chưa. Hệ quả: chúng **chưa bao giờ mở `/grant-access`**.
+2. **Hai quy ước cho một việc**: mốc `NUL` ở `grant-access.tsx` (không thể trượt)
+   và tách theo chữ `Context` ở `research-form.tsx` (mất im lặng nửa câu nếu ai
+   viết lại câu). Trái luật một-quy-ước của `AGENTS.md`.
+3. **Màn đăng nhập ghép chuỗi ở máy chủ** rồi truyền xuống, nên nó là màn duy
+   nhất phải bọc `translate="no"` quanh CẢ nhãn. Ba màn kia đã đọc `useLocale()`.
+
+### Bài học đắt nhất của phiên, không nằm ở mã
+
+Ba vòng liền, người soi chỉ ra một thứ và **tôi sửa đúng thứ đó chứ không sửa
+lớp mà nó thuộc về**: vòng 1 sửa đúng màn được nêu tên, vòng 2 sửa đúng file
+được nêu tên, vòng 3 sửa dân số ở đúng MỘT chỗ được nêu tên trong khi còn ba
+chỗ nữa. Phiên sau đọc một phát hiện thì hỏi trước: *lớp của nó là gì, và còn
+chỗ nào cùng lớp?*
+
+Kèm theo: `git checkout --` làm mất việc chưa commit **hai lần** trong phiên
+này, dù bẫy đó đã ghi sẵn ở mục Bẫy. Commit trước mọi lượt checkout dùng để so
+sánh.
+
 ## Đợt tới — bốn việc, người đã chọn cả bốn
 
-1. **Màn đăng nhập + màn khai báo.** Hai màn ĐẦU TIÊN một nhân viên mới nhìn
-   thấy, và cả hai vẫn tiếng Anh. Chúng nằm **ngoài mọi lát đã khoanh** — không
-   vòng nào đang phủ. Triển khai nội bộ mà cửa vào còn tiếng Anh thì công dịch
-   bên trong mất một nửa ý nghĩa.
+1. ~~**Màn đăng nhập + màn khai báo.**~~ **XONG 04/09** — bốn màn đã dịch, vòng
+   `cua-vao-noi-tieng-viet` dừng ở vòng 3 với verdict BLOCKED và chưa ký được.
+   Việc kế của nó là **vòng giàn đo** cho ba món nợ ở mục trên.
 2. **Đổi nhãn "Comp AI" thành OneHub.** ~20 chỗ người đọc được: tiêu đề mọi tab,
    chân trang, khung đăng nhập, 12 chỗ màn Slack, và `logo.tsx:10` mang
    `aria-label="Comp AI Logo"`. Chạm cùng nhóm file với mục 1 — làm chung một đợt.
