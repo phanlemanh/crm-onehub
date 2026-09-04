@@ -2,13 +2,15 @@ import { readFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
-import { GOC, lat } from "./lat.mjs";
+import { GOC, KHAI_MAC_DINH, khaiTuArgv, lat } from "./lat.mjs";
 
 const ts = createRequire(import.meta.url)("typescript");
 const HERE = dirname(fileURLToPath(import.meta.url));
-const BANG = JSON.parse(readFileSync(`${HERE}/toast-cua-lat.json`, "utf8"));
-const KHOA = JSON.parse(readFileSync(`${HERE}/khong-du-quyen.json`, "utf8"));
-const TD = JSON.parse(readFileSync(`${HERE}/tieu-de-cua-lat.json`, "utf8"));
+const KHAI_PATH = khaiTuArgv(KHAI_MAC_DINH);
+const KHAI_DIR = dirname(KHAI_PATH);
+const BANG = JSON.parse(readFileSync(`${KHAI_DIR}/toast-cua-lat.json`, "utf8"));
+const KHOA = JSON.parse(readFileSync(`${KHAI_DIR}/khong-du-quyen.json`, "utf8"));
+const TD = JSON.parse(readFileSync(`${KHAI_DIR}/tieu-de-cua-lat.json`, "utf8"));
 
 const SO_TIEU_DE = TD.so_o;
 const GIU_NGUYEN = new Set(TD.giu_nguyen.map((g) => g.chu));
@@ -153,7 +155,7 @@ function tuKhoChuoi(duong) {
 }
 
 function chanToast() {
-	const L = lat();
+	const L = lat(KHAI_PATH);
 	const { thay, boQua } = quetToast(L.file);
 
 	const daKhai = new Set(BANG.loi_goi.map((l) => `${l.file}|${l.khoa}`));
@@ -200,7 +202,7 @@ function khoaThanhBen() {
 }
 
 function chanTieuDe() {
-	const L = lat();
+	const L = lat(KHAI_PATH);
 	const o = quetTieuDe(L.file);
 	const khoKhoa = khoaThanhBen();
 
@@ -320,7 +322,7 @@ function chanKhongDuQuyen() {
 }
 
 function chanDoiChieu() {
-	const L = lat();
+	const L = lat(KHAI_PATH);
 	daMo = 0;
 	const { thay } = quetToast(L.file);
 	const soMoToast = daMo;

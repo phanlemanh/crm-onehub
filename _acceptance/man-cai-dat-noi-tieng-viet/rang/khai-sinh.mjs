@@ -1,12 +1,14 @@
 import { execFileSync } from "node:child_process";
-import { rmSync, writeFileSync } from "node:fs";
+import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { GOC, lat } from "./lat.mjs";
+import { GOC, KHAI_MAC_DINH, khaiTuArgv, lat } from "./lat.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const NGOAI = `${HERE}/chu-ngoai-jsx.mjs`;
 const BOC = `${HERE}/chu-cung-lat.mjs`;
+const KHAI_PATH = khaiTuArgv(KHAI_MAC_DINH);
+const LAT_ARG = ["--lat", KHAI_PATH];
 
 function chay(lenh) {
 	try {
@@ -24,8 +26,9 @@ function chay(lenh) {
 }
 
 function chanDanSo() {
-	const truoc = lat();
-	const moi = `${GOC}/apps/app/app/(app)/[slug]/settings/zz-tam-do-dan-so.tsx`;
+	const truoc = lat(KHAI_PATH);
+	const thuMucDau = JSON.parse(readFileSync(KHAI_PATH, "utf8")).thu_muc[0];
+	const moi = `${GOC}/${thuMucDau}/zz-tam-do-dan-so.tsx`;
 	const sach = () =>
 		execFileSync("git", ["status", "--porcelain"], { cwd: GOC, encoding: "utf8" });
 	const gocTruoc = sach();
@@ -37,10 +40,10 @@ function chanDanSo() {
 			moi,
 			'export default function ZzTamDoDanSo() {\n\treturn <p>Rates last fetched from the feed.</p>;\n}\n',
 		);
-		sau = lat();
+		sau = lat(KHAI_PATH);
 		ma = {
-			moiChuoi: chay([`${HERE}/moi-chuoi.mjs`]).ma,
-			chuCung: chay([`${HERE}/chu-cung-lat.mjs`]).ma,
+			moiChuoi: chay([`${HERE}/moi-chuoi.mjs`, ...LAT_ARG]).ma,
+			chuCung: chay([`${HERE}/chu-cung-lat.mjs`, ...LAT_ARG]).ma,
 		};
 	} finally {
 		rmSync(moi, { force: true });
@@ -77,7 +80,7 @@ function chanDanSo() {
 	process.exit(0);
 }
 
-const L = lat();
+const L = lat(KHAI_PATH);
 
 if (process.argv.includes("--chan") && process.argv[process.argv.indexOf("--chan") + 1] === "dan-so")
 	chanDanSo();
@@ -87,7 +90,7 @@ if (L.soTuDia === 0) {
 	process.exit(2);
 }
 
-const raBoc = chay([BOC]).ra;
+const raBoc = chay([BOC, ...LAT_ARG]).ra;
 const soJsx = Number(/bo quet doc (\d+) file/.exec(raBoc)?.[1] ?? NaN);
 
 if (Number.isNaN(soJsx)) {
@@ -99,7 +102,7 @@ if (Number.isNaN(soJsx)) {
 
 let ngoai;
 try {
-	ngoai = JSON.parse(chay([NGOAI, "--chan", "doi-chieu"]).ra.trim());
+	ngoai = JSON.parse(chay([NGOAI, "--chan", "doi-chieu", ...LAT_ARG]).ra.trim());
 } catch {
 	console.log("KHONG DO DUOC: chan ngoai-JSX khong tra ve so dem doc duoc");
 	process.exit(2);

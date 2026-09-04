@@ -2,11 +2,13 @@ import { readFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
-import { GOC, lat } from "./lat.mjs";
+import { GOC, KHAI_MAC_DINH, khaiTuArgv, lat } from "./lat.mjs";
 
 const ts = createRequire(import.meta.url)("typescript");
 const HERE = dirname(fileURLToPath(import.meta.url));
-const KHAI = JSON.parse(readFileSync(`${HERE}/khong-phai-chu-nguoi-doc.json`, "utf8"));
+const KHAI_PATH = khaiTuArgv(KHAI_MAC_DINH);
+const KHAI_DIR = dirname(KHAI_PATH);
+const KHAI = JSON.parse(readFileSync(`${KHAI_DIR}/khong-phai-chu-nguoi-doc.json`, "utf8"));
 
 const DAU =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
@@ -112,7 +114,7 @@ export function quet(files) {
 	return ra;
 }
 
-const L = lat();
+const L = lat(KHAI_PATH);
 
 if (L.soTuDia === 0) {
 	console.log("KHONG DO DUOC: lat sinh ra 0 file — tap rong khong bao gio la dat");
