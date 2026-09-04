@@ -1,5 +1,5 @@
 import { afterAll, beforeEach, describe, expect, it } from "bun:test";
-import { db, type TouchOutcome, RecordSource } from "@crm/db";
+import { db, RecordSource, type TouchOutcome } from "@crm/db";
 import { AgentQueueService } from "../src/agent/agent-queue.service";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import type { CampaignDetail } from "../src/campaigns/campaigns.contracts";
