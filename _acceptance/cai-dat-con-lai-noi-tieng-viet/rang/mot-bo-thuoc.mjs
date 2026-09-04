@@ -48,6 +48,14 @@ const MUI = [
 ];
 
 
+function khoiSh(duong) {
+	const dong = readFileSync(duong, "utf8")
+		.split("\n")
+		.map((d) => d.replace(/\s+/g, " ").trim())
+		.filter((d) => d.length > 0 && !d.startsWith("#"));
+	return [{ ten: "than script", dong }];
+}
+
 function chotTienDe() {
 	const yaml = readFileSync(CAU_HINH, "utf8");
 	const can = new Set();
@@ -108,7 +116,7 @@ for (const d of [DOT_MOT, DOT_HAI])
 
 function fileMjs(thuMuc) {
 	return readdirSync(thuMuc)
-		.filter((t) => t.endsWith(".mjs"))
+		.filter((t) => t.match(/\.(mjs|sh)$/))
 		.sort()
 		.map((t) => `${thuMuc}/${t}`);
 }

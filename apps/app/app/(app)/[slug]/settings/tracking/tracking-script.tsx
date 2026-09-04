@@ -173,7 +173,7 @@ export function TrackingScript() {
 								<SnippetText value={CLOSE_TAG} className="text-code-accent" />
 							</pre>
 							<p className="text-muted-foreground text-xs/relaxed">
-								{t.doanMa.siteIdNhan}{" "}
+								<span translate="no">{t.doanMa.siteIdNhan}</span>{" "}
 								<span className="font-mono text-foreground" translate="no">
 									{siteId}
 								</span>{" "}

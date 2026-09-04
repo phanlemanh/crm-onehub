@@ -90,7 +90,7 @@ export function VerifyInstallation() {
 						<FieldLabel htmlFor={urlId}>{t.kiemTra.trangNhan}</FieldLabel>
 						<InputGroup>
 							<InputGroupAddon>
-								<InputGroupText>https://</InputGroupText>
+								<InputGroupText translate="no">https://</InputGroupText>
 							</InputGroupAddon>
 							<InputGroupInput
 								id={urlId}

@@ -529,6 +529,14 @@ async function chanKhongDich(cookie, slug) {
 		);
 		if (ly === null && !ngoai) thua.push(gt);
 	}
+	const khongCoThuocTinh = [...ung]
+		.filter(([gt, o]) => !o.kd && mt.khai.has(gt))
+		.map(([gt]) => gt);
+	for (const gt of khongCoThuocTinh)
+		console.log(
+			`THIEU THUOC TINH: ${JSON.stringify(gt)} co trong bang khong-dich nhung phan tu chua no KHONG mang translate="no" — trinh duyet se tu dich no.`,
+		);
+
 	const thieu = [...mt.khai.keys()].filter((v) => !mt.dung.has(v));
 	for (const v of thieu)
 		console.log(
@@ -543,10 +551,11 @@ async function chanKhongDich(cookie, slug) {
 	const chet = chetNgoaiLat(mt.khoiNgoai, thayNgoai, daDo);
 	for (const d of chet) console.log(`   ${d}`);
 	console.log(
-		`\nket qua: thieu dong=${thieu.length} · thua gia tri=${thua.length} · ngoai lat (gioi han da khai)=${soNgoai} · mien tru chet=${chet.length} · route khong do duoc=${tuChoi.length}`,
+		`\nket qua: thieu dong=${thieu.length} · thua gia tri=${thua.length} · thieu thuoc tinh=${khongCoThuocTinh.length} · ngoai lat (gioi han da khai)=${soNgoai} · mien tru chet=${chet.length} · route khong do duoc=${tuChoi.length}`,
 	);
 	for (const d of tuChoi) console.log(`   TU CHOI DO: ${d}`);
 	if (chet.length > 0) await ket(1);
+	if (khongCoThuocTinh.length > 0) await ket(1);
 	if (thieu.length > 0 || thua.length > 0 || tuChoi.length > 0) await ket(2);
 	await ket(0);
 }

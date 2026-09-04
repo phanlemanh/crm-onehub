@@ -35,7 +35,7 @@ export default async function SsoSettingsPage({
 			<PageShellHeader>
 				<PageShellHeading>
 					<PageShellTitle>
-						{settingsMessages(locale).thanhBen.sso}
+						<span translate="no">{settingsMessages(locale).thanhBen.sso}</span>
 					</PageShellTitle>
 					<PageShellDescription>{t.trang.moTa}</PageShellDescription>
 				</PageShellHeading>
