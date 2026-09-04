@@ -21,10 +21,15 @@ design_doc: docs/superpowers/specs/2026-09-04-cai-dat-con-lai-noi-tieng-viet-des
 lại trong **một vòng** — chi phí thật của vòng lặp là cố định theo vòng, không
 theo file, nên cắt đôi là trả chi phí đó hai lần.
 
-Dân số sơ bộ: 242 chuỗi JSX (bộ quét ③a), ~20 toast mang chữ, 7 tiêu đề tab.
-Con số toast là grep sơ bộ — đợt một grep đếm 11 mà thước AST ra 12, nên số
-thật do thước chốt ở S3, không hứa trước. Chân sinh-rồi-trừ đợt một tìm thêm 9
-chuỗi trên 75; dân số gấp ba thì phải chờ nó.
+**Dân số chốt bằng thước ở S3, không bằng grep: 465 chuỗi dịch thật** — connections
+245 · tracking 121 · api-keys 41 · sso 38 · members 20. Đếm sơ bộ ở S0 ra 269
+(242 JSX + ~20 toast + 7 tiêu đề); chân sinh-rồi-trừ thấy 514, trừ 47 dòng kỹ
+thuật khai có tên và đọc trong ngữ cảnh còn 465. Bộ quét JSX xác nhận đúng 242
+phần của nó; toast ra 23 chứ không phải 20; tiêu đề đúng 7.
+
+Chênh 1,7 lần là **lớp chữ nằm ngoài tầm bộ quét JSX** — 449 chuỗi bối cảnh
+`khac` và 56 thuộc tính không kỹ thuật. Đợt một chân này tìm thêm 9 trên 75; ở
+dân số gấp ba nó tìm thêm ~196.
 
 **Ba lớp mới so với đợt một, mỗi lớp một tiêu chí riêng:**
 

@@ -17,6 +17,7 @@ const THUOC_JSX = new Set(KHAI.thuoc_jsx_ky_thuat);
 const KHOA_OBJECT = new Set(KHAI.khoa_object_ky_thuat);
 const HAM_KY_THUAT = new Set(KHAI.ham_ky_thuat);
 const GIU_NGUYEN = new Map(KHAI.giu_nguyen.map((g) => [g.chu, g]));
+const MAU = (KHAI.mau_ky_thuat?.mau ?? []).map((m) => new RegExp(m));
 const NOI_NGUOI_DOC = new Set(["chu-con", "khac"]);
 
 function cay(duong) {
@@ -32,6 +33,7 @@ function cay(duong) {
 function chuNguoiCoTheDoc(chu, boi_canh) {
 	if (chu.trim().length < 2) return false;
 	if (chu.startsWith("/")) return false;
+	if (MAU.some((m) => m.test(chu))) return false;
 	if (!/[A-Za-z]{2}/.test(chu)) return false;
 	if (/^[a-z0-9-]+(\/[a-z0-9._-]+)+$/.test(chu)) return false;
 	if (/^[A-Z][A-Z0-9_]*$/.test(chu)) return false;
