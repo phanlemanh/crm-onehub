@@ -5,6 +5,7 @@ import {
 	Injectable,
 	NotFoundException,
 } from "@nestjs/common";
+import { CampaignsService } from "../campaigns/campaigns.service";
 import { InjectDatabase } from "../database/database.constants";
 import type {
 	SavedView,
@@ -14,7 +15,10 @@ import type {
 
 @Injectable()
 export class SavedViewsService {
-	constructor(@InjectDatabase() private readonly db: Db) {}
+	constructor(
+		@InjectDatabase() private readonly db: Db,
+		private readonly campaigns: CampaignsService,
+	) {}
 
 	async list(entity: FieldEntity, userId: string): Promise<SavedView[]> {
 		const rows = await this.db.savedView.findMany({
@@ -76,6 +80,13 @@ export class SavedViewsService {
 		const existing = await this.db.savedView.findUnique({ where: { id } });
 		if (!existing || existing.ownerId !== userId) {
 			throw new NotFoundException(`No saved view with id ${id}.`);
+		}
+
+		const used = await this.campaigns.usedViewIds(id);
+		if (used.length > 0) {
+			throw new ConflictException(
+				`This view is the segment of ${used.join(", ")}. Finish or repoint those campaigns first.`,
+			);
 		}
 
 		try {

@@ -9,6 +9,7 @@ import { ArchiveModule } from "./archive/archive.module";
 import { AuthModule } from "./auth/auth.module";
 import { BackfillModule } from "./backfill/backfill.module";
 import { AppCacheModule } from "./cache/cache.module";
+import { CampaignsModule } from "./campaigns/campaigns.module";
 import { CompaniesModule } from "./companies/companies.module";
 import { validateEnv } from "./config/env.validation";
 import { ContactsModule } from "./contacts/contacts.module";
@@ -81,6 +82,7 @@ import { WorkspaceModule } from "./workspace/workspace.module";
 		ArchiveModule,
 		SavedViewsModule,
 		ListingsModule,
+		CampaignsModule,
 	],
 })
 export class AppModule {}
