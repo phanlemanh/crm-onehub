@@ -115,8 +115,22 @@ OneHub)? Máy không tự quyết.
 - **Ba trong sáu vật khách chép không đo được** vì cùng lý do: URI chuyển hướng ở hộp thêm SSO (nút khoá với vai trò member), URI trên dòng bảng SSO (bảng rỗng), lệnh mời bot Slack (Slack chưa cắm). Bốn lượt đo được đều **khớp từng byte** với nguồn ngoài màn.
 - **Một route không dựng được**: `/settings/connections/slack/people` `redirect()` về màn cha khi Slack chưa cắm. Khai có lý do; route đo được 9/9 sau khi trừ.
 - **Vế dấu của AC-1 là phép đo gần đúng.** Từ mượn mà tiếng Việt không thêm dấu (`Cookie`) phải khai miễn có tên, nếu không nó báo oan.
-- **Bốn nhãn tràn ở cả hai lượt tiếng**, báo riêng và không tính vào chân bề rộng: ba nhãn chỉ-đọc-màn-hình có `clientWidth` 1px, và nút *"Slack chưa cấu hình"* tràn ở cả bản Anh — lỗi bố cục có sẵn, không phải lỗi bản dịch.
+- **Bốn nhãn tràn ở cả hai lượt tiếng.** Chân bề rộng CÓ tính chúng và chúng làm chân đỏ — lời khai cũ nói *"không tính"* là sai, đã sửa. Chi tiết: ba nhãn chỉ-đọc-màn-hình có `clientWidth` 1px, và nút *"Slack chưa cấu hình"* tràn ở cả bản Anh — lỗi bố cục có sẵn, không phải lỗi bản dịch.
 - **Nới một cột**: `/settings/members` cột Vai trò 14%→18% (lấy từ cột Tên 34%→30%) để nhãn tiếng Việt không bị cắt. Đây là đổi bố cục, ngoài lời hứa chỉ-đổi-chữ của vòng.
 - **Kéo thêm hai chỗ ngoài lát**: nhãn hạn cookie (`packages/db/src/tracking.ts`, T2) và hai nút cùng một `aria-label` của `components/slack/channel-picker.tsx` — chúng hiện trên màn của lát nên bỏ qua thì AC-1 đỏ.
 - **Chân một-bộ-thước chỉ nói lên điều gì khi thư mục `rang/` đã đủ file.** Nó tự chốt tiền đề bằng cách đòi mọi script mà ổ cắm `cd2_*` trỏ tới phải có mặt; thiếu thì thoát mã 2.
+
+### Nợ có tên — trả trước khi mở đợt agent-builder
+
+Vòng chấm một ra 16 phát hiện. Bảy chỗ đã đóng (bốn chỗ hồ sơ sai, ba chiều đỏ
+mù). Chín chỗ còn lại ghi thành nợ, vì chúng **không giấu một lỗi sản phẩm nào
+hôm nay** nhưng sẽ giấu khi dân số lớn hơn:
+
+- **`chapNhan` là cửa thoát vĩnh viễn cho AC-7**, và lý do ghi trong nó sai sự thật (nói bản khai `mien_tru` rỗng, thực tế có ba dòng). Một chân đỏ thật trên cây lành vẫn cho `dot-bien` in XANH.
+- **Ba trong bốn con số neo của AC-9 không ai đọc** — chỉ `neo.file` được kiểm; đặt `neo.route`, `neo.file_vat_chep`, `neo.file_quyen` thành 999 thì chân vẫn xanh.
+- **Cần gạt `khong_quet` chưa từng được gạt trong vòng này** — bản khai để rỗng nên thân kiểm không chạy. Nó CÓ răng (thử tay thì đỏ), nhưng vòng này không chứng gì về nó.
+- **Ô *chưa có tên miền được phép* khẳng định một lý do không ai đo** — nó chỉ kiểm `domains.length === 0`, không bao giờ gọi `tracking.removeDomain`, mà vẫn in nguyên văn *"tracking.removeDomain từ chối vai trò..."* như bằng chứng.
+- **AC-4 mượn lại một lý do chính vòng này đã bác.** Kết luận (đo mức mã) vẫn đúng; căn cứ thì sai — lý do thật là Slack chưa cắm, không phải vai trò tài khoản.
+- **Giới hạn ba trạng thái rỗng khai NẶNG hơn sự thật.** Workspace có sẵn một chủ sở hữu và giàn đo hỗ trợ `NGUOI=`; đo bằng chủ sở hữu thì dựng được 4/6 và mở thêm một vật chép.
+- **Năm chỗ giữ nguyên chữ "workspace"** trong bản dịch — ba chỗ nói về workspace của Slack (có lý), hai chỗ mơ hồ. Máy không thấy được vì từ nằm trong câu có dấu.
 
