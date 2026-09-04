@@ -5,10 +5,13 @@ slug: cua-vao-noi-tieng-viet
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-09-04
 design_doc: docs/superpowers/specs/2026-09-04-cua-vao-noi-tieng-viet-design.md
+amended_at: 2026-09-04
+amended_reason: "S3 — khai tam gioi han moi truong: 8/15 chan do TU CHOI DO vi thieu fixture, khong vi san pham hong. Khong tieu chi nao bi thu hep."
+amended_by:
 ---
 
 # Acceptance Contract: cua-vao-noi-tieng-viet
@@ -107,6 +110,29 @@ nào còn viết thẳng trong JSX (AC-11).
 - Màn Cài đặt và phần còn lại của ứng dụng: đó là lát ③b.
 
 ## Known limits
+
+### Tám chỗ môi trường này KHÔNG dựng nổi vật để đo (khai ở S3, 04/09)
+
+Không tiêu chí nào bị thu hẹp. Phép đo vẫn đòi đúng điều đã hứa, và vẫn TỪ CHỐI
+ĐO thay vì báo đạt. Đây là ghi nhận rằng môi trường chưa có vật, không phải
+tuyên bố sản phẩm đã đúng.
+
+| Không đo được | Vì sao | Tiêu chí chạm tới |
+| --- | --- | --- |
+| Hai màn khai báo | Workspace này đã khai báo xong nên `/onboarding` và `/onboarding/research` chuyển hướng về ứng dụng. Đi theo chuyển hướng là đo bảng điều khiển — một bản nháp đã làm đúng thế và báo 4 ô có mặt trong khi chúng chưa từng ở đó | AC-2, AC-5, AC-8 (2/3 đường), AC-10 (2/3 màn) |
+| Nhánh "chưa có cách nào để vào" | Cổng gọi API từ phía máy chủ nên chặn ở trình duyệt không tới được. Cần cấu hình không có nhà cung cấp nào | AC-3 (nửa "hiện ra trên màn") |
+| Nhà cung cấp SSO | Chưa gieo bản ghi `ssoProvider` nào có tên không phải ASCII | AC-7, AC-6 (1/13 dòng) |
+| Nhà cung cấp Microsoft | Chưa cấu hình | AC-6 (1/13 dòng) |
+
+**Đã bù được một phần:** bốn tên biến môi trường của AC-3 được bảo chứng bởi bài
+kiểm đơn vị `auth-messages.spec.ts` — chúng giữ nguyên ở cả hai thứ tiếng. Chỉ
+nửa "hiện ra trên màn" là chưa đo.
+
+**Đường mở khoá, nếu về sau muốn:** một cặp máy chủ thứ hai chạy trên cơ sở dữ
+liệu thử sạch (workspace chưa khai báo, không nhà cung cấp nào), cộng một bản ghi
+`ssoProvider` gieo sẵn. Ước lượng: một khối việc riêng, không phải một lượt sửa.
+
+### Giới hạn đã khai từ Cổng 1
 
 - **Chuỗi lỗi do máy chủ đúc sẵn vẫn hiện tiếng Anh.** Bốn chỗ gọi
   `toast.error(error.message)` nhận câu Better Auth và tRPC tự dựng ở máy chủ.
