@@ -24,6 +24,8 @@ const RATES_ATTEMPTS = 2;
 
 const RETRY_DELAY_MS = 400;
 
+const PIVOT = "USD";
+
 export interface RateRefresh {
 	ok: boolean;
 	base: string;
@@ -74,7 +76,7 @@ export class RatesService {
 
 	async refresh(): Promise<RateRefresh> {
 		const base = await readReportingCurrency(this.db);
-		const quotes = await this.fetch(base);
+		const quotes = await this.fetch(PIVOT);
 
 		if (!quotes) {
 			return {
@@ -86,7 +88,19 @@ export class RatesService {
 			};
 		}
 
-		const written = await this.store(base, quotes.rates, quotes.asOf);
+		const derived = this.derive(base, quotes.rates);
+
+		if (derived === null) {
+			return {
+				ok: false,
+				base,
+				written: 0,
+				asOf: null,
+				reason: `${RATES_PROVIDER} did not quote ${base}. Rates entered by hand are unaffected.`,
+			};
+		}
+
+		const written = await this.store(base, derived, quotes.asOf);
 
 		await writeRatesRefreshedAt(this.db, new Date());
 
@@ -159,6 +173,30 @@ export class RatesService {
 		return written;
 	}
 
+	private derive(
+		base: string,
+		perPivot: Map<string, Prisma.Decimal>,
+	): Map<string, Prisma.Decimal> | null {
+		const baseCode = normalizeCurrency(base);
+		const basePerPivot = perPivot.get(baseCode);
+
+		if (!basePerPivot || basePerPivot.lessThanOrEqualTo(0)) return null;
+
+		const rates = new Map<string, Prisma.Decimal>();
+
+		for (const [quoteCurrency, quotePerPivot] of perPivot) {
+			if (quoteCurrency === baseCode) continue;
+			if (quotePerPivot.lessThanOrEqualTo(0)) continue;
+
+			rates.set(
+				quoteCurrency,
+				basePerPivot.dividedBy(quotePerPivot).toDecimalPlaces(10),
+			);
+		}
+
+		return rates.size > 0 ? rates : null;
+	}
+
 	private async fetch(
 		base: string,
 	): Promise<{ rates: Map<string, Prisma.Decimal>; asOf: Date } | null> {
@@ -210,15 +248,11 @@ export class RatesService {
 			for (const [code, value] of Object.entries(body.rates)) {
 				const quoteCurrency = normalizeCurrency(code);
 				if (!isCurrencyCode(quoteCurrency)) continue;
-				if (quoteCurrency === normalizeCurrency(base)) continue;
 
-				const perBase = Number(value);
-				if (!Number.isFinite(perBase) || perBase <= 0) continue;
+				const perPivot = Number(value);
+				if (!Number.isFinite(perPivot) || perPivot <= 0) continue;
 
-				rates.set(
-					quoteCurrency,
-					new Prisma.Decimal(1).dividedBy(perBase).toDecimalPlaces(10),
-				);
+				rates.set(quoteCurrency, new Prisma.Decimal(perPivot));
 			}
 
 			if (rates.size === 0) {

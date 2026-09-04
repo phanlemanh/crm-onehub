@@ -29,8 +29,16 @@ to dollars and printed `$2.0M`, silently.)
   that overwrites a frozen rate, and only on a reporting-currency change.
 
 **`ExchangeRate.rate` = units of `baseCurrency` per unit of `quoteCurrency`**, so
-`baseAmount = amount × rate` everywhere. The feed quotes the other way; `RatesService`
-inverts on ingest.
+`baseAmount = amount × rate` everywhere.
+
+**The feed is always asked with USD as the pivot, never with the reporting currency**,
+and the stored rate is cross-computed: `base per quote = perUsd[base] / perUsd[quote]`.
+Asking it with the reporting currency looks simpler and was how this worked until VND
+arrived. The feed rounds to six decimal places, which for a low-unit currency leaves
+two significant figures: with `VND` as the base it quoted AUD and CAD as the same
+`0.000053`, so two currencies inverted to one rate and every total was overstated by
+about 2.5%. A currency whose unit is worth much less than a dollar cannot be a feed
+base. `apps/api/test/rates-precision.spec.ts` holds the arithmetic.
 
 - **`MANUAL` beats `FETCHED`** (unique on `(base, quote, source)`), which makes the
   fetcher optional — Settings → Currencies is the manual path. `resolveRate` refuses a
