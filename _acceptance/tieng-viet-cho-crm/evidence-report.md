@@ -7,7 +7,7 @@ reason: Chín tiêu chí máy có bằng chứng hai chiều. E6 còn bốn chu�
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: eac1898
+verified_commit: e695eb33a79878721447554d5d0807c3f9db30cf
 human_signoff:
 ---
 
@@ -599,3 +599,7 @@ Vòng chấm 2 (2026-09-02): E6 còn 4 chuỗi, tất cả là chuỗi khoá c�
 trong `apps/app` — vòng ③. E9 trượt theo câu chữ, đạt theo chất, và hai cách đọc
 nghịch nhau vì AC-7 của vòng ② nay quy định điều AC-9 cấm. E8 lộ ra đã ĐẠT NHẦM
 ở vòng chấm 1 và đã sửa. Năm nhãn cột đổi theo vòng người lạ lái thử và hội đồng.
+
+### Re-pin lần 1 — 2026-09-04, do ba hồ sơ chứng cho cây cũ (87 · 9 · 4 file mã đã đổi), ghim lại vào cây sắp ký
+run_id: repin-20260904T030617Z-17073
+sha: e695eb33a79878721447554d5d0807c3f9db30cf · suites: 4 lệnh exit 0

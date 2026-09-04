@@ -7,7 +7,7 @@ reason: "E11 (rang/khai-sinh.mjs, khong tham so --chan) bi cong cu giet o moc 60
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 10c6029a9f819a2eea8103b40434bd43c38eacb5
+verified_commit: e695eb33a79878721447554d5d0807c3f9db30cf
 human_signoff:
 ---
 
@@ -268,3 +268,7 @@ Trạng thái đo được sau các bản sửa, chạy tay ngoài workflow:
 | Bánh cóc sổ (E12/E14) | 0 lỗi đối chiếu, 4/4 tự kiểm lật |
 | Chân tập-rỗng (E2) | 3/3 ca, mỗi ca một véc-tơ dữ liệu riêng |
 | Bốn cổng máy, ép không cache | 13/13 · 9/9 · 0 · 197 bài |
+
+### Re-pin lần 1 — 2026-09-04, do ba hồ sơ chứng cho cây cũ (87 · 9 · 4 file mã đã đổi), ghim lại vào cây sắp ký
+run_id: repin-20260904T030617Z-17073
+sha: e695eb33a79878721447554d5d0807c3f9db30cf · suites: 4 lệnh exit 0

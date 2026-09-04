@@ -22,3 +22,4 @@
 {"ts": "2026-09-02T02:38:29Z", "round": 2, "evalId": "E9", "run_id": "tieng-viet-cho-crm-r2-E9", "exit_code": 0, "cmd": "APP_URL=http://localhost:3100 BE_RONG=768 TRANG='?hide=nothing' node _acceptance/tieng-viet-cho-crm/rang/ban-ve-man-cong-ty.mjs be-rong"}
 {"ts": "2026-09-02T02:38:29Z", "round": 2, "evalId": "E10", "run_id": "tieng-viet-cho-crm-r2-E10", "exit_code": 0, "cmd": "APP_URL=http://localhost:3100 node _acceptance/tieng-viet-cho-crm/rang/ban-ve-man-cong-ty.mjs ban-phim"}
 {"ts": "2026-09-02T02:38:29Z", "round": 2, "evalId": "SUITE", "run_id": "tieng-viet-cho-crm-r2-SUITE", "exit_code": 0, "cmd": "bun run db:test && bunx turbo run test --force --concurrency=1 && bunx turbo run check-types --force && bunx turbo run lint --force && bun run lint:slop"}
+{"ts":"2026-09-04T03:07:05Z","kind":"repin","run_id":"repin-20260904T030617Z-17073","sha":"e695eb33a79878721447554d5d0807c3f9db30cf","suites_exit":[0,0,0,0]}

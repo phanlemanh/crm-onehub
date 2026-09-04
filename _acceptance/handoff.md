@@ -32,7 +32,7 @@ nhau trong đêm. Đã gộp một, còn một.
 | --- | --- | --- |
 | `/Users/manhphan/dev/crm` | `onehub` | Kho gốc. **Máy chủ dev 3000/3001/2000 chạy từ đây.** `.env` chỉ sống ở đây |
 | `.claude/worktrees/exciting-tharp-571c02` | `claude/elated-ptolemy-dc8eb1` | **Đã gộp** vào `onehub` ở `3b27b44`, gộp sạch |
-| `.claude/worktrees/sweet-leavitt-d88e70` | `claude/sweet-leavitt-d88e70` | **Chưa gộp.** Giữ trọn vòng `thuoc-cua-lat-3a-co-rang`. Đã nhắn phiên đó chốt việc |
+| `.claude/worktrees/sweet-leavitt-d88e70` | `claude/sweet-leavitt-d88e70` | **Đã gộp** vào `onehub` ở `e695eb3`, ba phút sau khi dòng này được viết là "chưa gộp" |
 | `/private/var/…/agk-baseline` | detached | Cây nền của bộ kit, đừng đụng |
 
 Khi gộp nốt `sweet-leavitt`: chỉ **một file** đụng nhau,
@@ -69,11 +69,21 @@ nó trước**, đừng gộp đè.
    `docs/currency.md` trước. Tỷ giá thật đã lấy về, chỉ thiếu VND trong danh sách.
 4. **Lát ③b — màn Cài đặt.** Phần còn lại theo kế hoạch đã khoanh.
 
-Còn nợ hai chữ ký, một lượt gõ mỗi cái:
+Còn nợ **ba** chữ ký — và KHÔNG phải "một lượt gõ mỗi cái".
+
+Ba hồ sơ đều mang verdict mà bộ dựng thẻ từ chối mời ký (`one_shot: null` với
+REJECT/BLOCKED). Thứ biến chúng thành ký được là bốn quyết định ở mục "Hướng đã
+chốt", và chúng vào hồ sơ bằng `human_override` từng mục, không bằng một vòng
+chạy mới.
+
+Bằng chứng đã được **ghim lại vào cây hiện tại** sáng 04/09 — trước đó ba hồ sơ
+chứng cho cây cách đây 87 · 9 · 4 file mã. Một lượt làn máy, `run_id`
+`repin-20260904T030617Z-17073`, bốn suite exit 0, 1263 bài không đỏ, `Cached: 0`.
 
 ```
 /acceptance-gate:signoff tieng-viet-cho-crm
 /acceptance-gate:signoff nhan-ung-dung-noi-tieng-viet
+/acceptance-gate:signoff thuoc-cua-lat-3a-co-rang
 ```
 
 ## Môi trường: đã cắm gì, còn thiếu gì
