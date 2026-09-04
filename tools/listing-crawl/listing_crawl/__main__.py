@@ -9,6 +9,7 @@ from statistics import quantiles
 
 from listing_crawl.emit import build_batch, post_batch, validate_batch, write_batch
 from listing_crawl.parse import directory_urls, next_data_of, parse_profile
+from listing_crawl.redact import Redactor
 from listing_crawl.tiers import config
 
 LOGGER = logging.getLogger("listing_crawl")
@@ -34,14 +35,29 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--out", type=Path, default=None)
     parser.add_argument("--log", type=Path, default=None)
+    parser.add_argument("--redact", action="store_true")
     return parser.parse_args(argv)
 
 
-def setup_logging(target: Path | None) -> None:
+class RedactFilter(logging.Filter):
+    def __init__(self, redactor: Redactor) -> None:
+        super().__init__()
+        self.redactor = redactor
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        record.msg = self.redactor.text(record.getMessage())
+        record.args = ()
+        return True
+
+
+def setup_logging(target: Path | None, redactor: Redactor | None = None) -> None:
     handlers: list[logging.Handler] = [logging.StreamHandler(sys.stderr)]
     if target:
         target.parent.mkdir(parents=True, exist_ok=True)
         handlers.append(logging.FileHandler(target, encoding="utf-8"))
+    if redactor:
+        for handler in handlers:
+            handler.addFilter(RedactFilter(redactor))
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
@@ -234,7 +250,12 @@ def summary(items: list[dict], counts: dict) -> dict:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
-    setup_logging(args.log)
+    redactor = Redactor() if args.redact else None
+    setup_logging(args.log, redactor)
+
+    if args.redact and not (args.dry_run or args.out):
+        LOGGER.error("--redact chỉ dùng khi ghi lô ra tệp — thêm --dry-run hoặc --out")
+        return EXIT_NO_SEED
 
     if args.limit is not None and args.limit <= 0:
         LOGGER.error("không có địa chỉ nào")
@@ -259,6 +280,8 @@ def main(argv: list[str] | None = None) -> int:
         )
 
     batch = build_batch(items)
+    if redactor:
+        batch = redactor.batch(batch)
     validate_batch(batch)
 
     if args.dry_run or args.out:

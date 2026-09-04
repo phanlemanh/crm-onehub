@@ -34,6 +34,40 @@ cd tools/listing-crawl
 | `--dry-run` | ghi lô ra tệp thay vì gửi lên cổng |
 | `--out PATH` | đường dẫn tệp lô |
 | `--log PATH` | ghi nhật ký lượt chạy ra tệp |
+| `--redact` | che danh tính trước khi ghi lô và nhật ký; chỉ đi cùng `--dry-run` hoặc `--out` |
+
+## Bằng chứng luôn che danh tính
+
+Mọi tệp lô và nhật ký đưa vào `_acceptance/**/evidence/` đều đã che danh tính.
+Tên người, tên chuyên trang, số điện thoại và địa chỉ hồ sơ là dữ liệu cá nhân
+của người ngoài đời; nó theo mọi bản sao của kho và lên máy chủ chung.
+
+Chạy có cờ `--redact` thì bộ cào che ngay lúc ghi, cả lô lẫn nhật ký:
+
+```bash
+./.venv/bin/python -m listing_crawl --limit 50 --dry-run --redact \
+  --out ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json \
+  --log ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-run.log
+```
+
+Tệp đã có thì che sau bằng chính bộ luật đó — truyền nhiều tệp một lần để nhãn
+ăn khớp giữa các tệp:
+
+```bash
+./.venv/bin/python -m listing_crawl.redact \
+  ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json \
+  ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-antibot-probe.log \
+  ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-run.log
+```
+
+`listing_crawl/redact.py` thay tên người bằng `Môi giới 01`, tên chuyên trang
+bằng `Chuyên trang 01`, số điện thoại bằng `09xxxxxxxx`, địa chỉ hồ sơ bằng
+`https://nhatot.com/moi-gioi-mau-01`. Nhãn khoá theo địa chỉ hồ sơ nên một môi
+giới mang cùng một số ở mọi tệp, và chạy lại lần hai không đổi nhãn.
+
+**Giữ nguyên mọi thứ đo được**: con số tin đăng, tin mới 30 ngày, địa bàn, tỉnh
+thành, mức sản lượng, cờ chứng chỉ, cờ hình thái, và mọi dòng tổng kết của nhật
+ký. Lô sau khi che vẫn hợp lược đồ. `tests/test_redact.py` ghim cả hai vế.
 
 Nhật ký ghi **mọi lần thử của lượt chạy**, không chỉ lần cuối: `lan_thu` (tổng
 lượt tải), `lan_thu_hong`, và tách theo việc — `lan_thu_so_do`, `lan_thu_danh_ba`,

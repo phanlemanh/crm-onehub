@@ -1,5 +1,5 @@
 import { afterAll, beforeEach, describe, expect, it } from "bun:test";
-import { db, Prisma, RecordSource, type TouchOutcome } from "@crm/db";
+import { type Db, db, Prisma, RecordSource, type TouchOutcome } from "@crm/db";
 import { AgentQueueService } from "../src/agent/agent-queue.service";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import type { CampaignDetail } from "../src/campaigns/campaigns.contracts";
@@ -127,6 +127,21 @@ async function callCount(): Promise<number> {
 	return db.activity.count({ where: { createdById: userId, type: "CALL" } });
 }
 
+function demTruyVan(so: Record<string, number>): Db {
+	const dem = db.$extends({
+		query: {
+			$allOperations({ model, operation, args, query }) {
+				const khoa = `${model ?? "raw"}.${operation}`;
+				so[khoa] = (so[khoa] ?? 0) + 1;
+
+				return query(args);
+			},
+		},
+	});
+
+	return dem as unknown as Db;
+}
+
 async function daNem(promise: Promise<unknown>): Promise<Error> {
 	try {
 		await promise;
@@ -187,6 +202,32 @@ describe("chiến dịch tuyển đối tác", () => {
 
 		expect(view?.size).toBe(filtered.total);
 		expect(view?.size).toBe(3);
+	});
+
+	it("AC-6 · mỗi góc nhìn đếm bằng một câu count, không quét bảng", async () => {
+		const so: Record<string, number> = {};
+		const dem = demTruyVan(so);
+		const demFields = new FieldsService(dem, agent);
+		const demContacts = new ContactsService(
+			dem,
+			new CompanyDirectoryService(agent),
+			agent,
+			new AgentQueueService(dem),
+			new ActivityStampService(dem),
+			demFields,
+		);
+		const demViews = new SavedViewsService(
+			dem,
+			new CampaignsService(dem, demContacts),
+		);
+
+		const views = await demViews.list("CONTACT", userId);
+
+		expect(views.find((row) => row.id === viewId)?.size).toBe(3);
+		expect(so["Contact.count"]).toBe(views.length);
+		expect(so["Contact.findMany"]).toBeUndefined();
+		expect(so["Contact.groupBy"]).toBeUndefined();
+		expect(so["FieldValue.findMany"]).toBeUndefined();
 	});
 
 	it("AC-7 · vòng đời ba trạng thái, đã kết thúc không bắt đầu lại", async () => {

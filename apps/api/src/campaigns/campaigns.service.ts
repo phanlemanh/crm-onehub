@@ -319,13 +319,7 @@ export class CampaignsService {
 	}
 
 	async memberCount(filters: SavedViewFilters): Promise<number> {
-		const page = await this.contacts.list({
-			...this.contactListFor(filters, ""),
-			page: 1,
-			pageSize: 1,
-		});
-
-		return page.total;
+		return this.contacts.countMatching(this.contactListFor(filters, ""));
 	}
 
 	private async require(id: string): Promise<CampaignRow> {

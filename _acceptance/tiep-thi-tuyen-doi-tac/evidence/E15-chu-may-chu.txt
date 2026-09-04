@@ -1,5 +1,5 @@
 E15 — cau loi may chu hien nguyen van trong giao dien
-run_id: ttmtn5dar1
+run_id: ttmtn8u85m
 gioi han da khai: contract.md Notes — thong diep loi may chu van tieng Anh (vong ④ ho so tieng Viet)
 cach dung: ket thuc chien dich qua API giua chung roi bam mot nut ket qua (ST-ghi-ket-qua-loi)
 

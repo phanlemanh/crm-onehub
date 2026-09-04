@@ -96,7 +96,7 @@ executors:
     rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
     rang_t1_im: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"
     tt_crawl_test: cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v
-    tt_crawl_live: cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --limit 50 --dry-run --out ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json --log ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-run.log
+    tt_crawl_live: cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --limit 50 --dry-run --redact --out ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json --log ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-run.log
     tt_ui_luong: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs luong
     tt_ui_chu: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs chu
     tt_ui_trang_thai: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs trang-thai

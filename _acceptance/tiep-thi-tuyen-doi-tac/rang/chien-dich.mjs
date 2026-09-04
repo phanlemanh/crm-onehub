@@ -40,6 +40,8 @@ const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
 const CHO_VE = Number(process.env.CHO_VE ?? 60000);
 const PHA = process.env.PHA ?? "";
 const CHAM_MS = Number(process.env.CHAM_MS ?? 12000);
+const CHO_SAN = Number(process.env.CHO_SAN ?? 90000);
+const NHIP_SAN = Number(process.env.NHIP_SAN ?? 3000);
 
 const RUN = process.env.RUN_ID ?? `tt${Date.now().toString(36)}`;
 const HO = `Rang${RUN}`;
@@ -51,22 +53,120 @@ function cun(loi) {
 	process.exit(2);
 }
 
-function phien() {
+async function thuApi() {
+	let res;
+	try {
+		res = await fetch(`${API}/health`, {
+			signal: AbortSignal.timeout(NHIP_SAN),
+		});
+	} catch (error) {
+		return { san: false, vi: `khong goi duoc ${API}/health — ${error.message}` };
+	}
+	let than;
+	try {
+		than = await res.json();
+	} catch (error) {
+		return {
+			san: false,
+			vi: `${API}/health tra ${res.status} khong phai JSON — ${error.message}`,
+		};
+	}
+	if (res.status !== 200 || than.database !== "up") {
+		return {
+			san: false,
+			vi: `${API}/health tra ${res.status} ${JSON.stringify(than)}`,
+		};
+	}
+	return { san: true, gia: than };
+}
+
+async function thuApp() {
+	try {
+		const res = await fetch(`${APP}/`, {
+			redirect: "manual",
+			signal: AbortSignal.timeout(NHIP_SAN),
+		});
+		return { san: true, gia: res.status };
+	} catch (error) {
+		return { san: false, vi: `khong goi duoc ${APP}/ — ${error.message}` };
+	}
+}
+
+async function thuPhien() {
 	let raw;
 	try {
 		raw = execFileSync("bun", ["run", "dev:session", EMAIL], {
 			cwd: "apps/api",
 			encoding: "utf8",
+			stdio: ["ignore", "pipe", "pipe"],
 		});
 	} catch (error) {
-		cun(
-			`khong lay duoc phien bang "cd apps/api && bun run dev:session ${EMAIL}" — ${error.message}`,
-		);
+		const noi = `${error.stderr ?? ""}${error.stdout ?? ""}`.trim();
+		return {
+			san: false,
+			vi: `"cd apps/api && bun run dev:session ${EMAIL}" hong — ${(noi || error.message).slice(0, 600)}`,
+		};
 	}
 	const line = raw.trim().split("\n").pop().trim();
 	const eq = line.indexOf("=");
-	if (eq < 1) cun(`dev:session tra dong khong doc duoc: ${JSON.stringify(line)}`);
-	return { name: line.slice(0, eq), value: line.slice(eq + 1) };
+	if (eq < 1) {
+		return {
+			san: false,
+			vi: `dev:session tra dong khong doc duoc: ${JSON.stringify(line)}`,
+		};
+	}
+	return { san: true, gia: { name: line.slice(0, eq), value: line.slice(eq + 1) } };
+}
+
+const TIEN_DE = [
+	{
+		ten: `may chu API ${API}`,
+		lenh: "cd apps/api && bun run dev",
+		thu: thuApi,
+	},
+	{
+		ten: `may chu app ${APP}`,
+		lenh: "cd apps/app && bun run dev",
+		thu: thuApp,
+	},
+	{
+		ten: "bo khach co so du lieu (@crm/db qua dev:session)",
+		lenh: "bun run db:test",
+		thu: thuPhien,
+	},
+];
+
+function chuaSan(muc, vi) {
+	console.log(
+		`RANG CHUA SAN: ${muc.ten} chua tra loi sau ${Math.round(CHO_SAN / 1000)}s — ${vi}\n` +
+			`Chan lai khong tu dung duoc thu nay. Dung roi chay lai:\n` +
+			`  bun run db:test                 sinh bo khach Prisma va dung co so du lieu kiem\n` +
+			`  cd apps/api && bun run dev      may chu API 3001\n` +
+			`  cd apps/app && bun run dev      may chu app 3000\n` +
+			`Muc con thieu o tren: ${muc.lenh}`,
+	);
+	process.exit(2);
+}
+
+async function choSan(muc, han) {
+	let ket = await muc.thu();
+	while (!ket.san && Date.now() < han) {
+		await cho(NHIP_SAN);
+		ket = await muc.thu();
+	}
+	return ket;
+}
+
+async function tienDe() {
+	const han = Date.now() + CHO_SAN;
+	let cookie = null;
+	for (const muc of TIEN_DE) {
+		const ket = await choSan(muc, han);
+		if (!ket.san) chuaSan(muc, ket.vi);
+		if (muc.thu === thuPhien) cookie = ket.gia;
+	}
+	if (!cookie) chuaSan(TIEN_DE[2], "khong lay duoc phien");
+	return cookie;
 }
 
 function bia(cookie) {
@@ -437,7 +537,7 @@ async function ghiKetQua(page, dongThuTu, nhan) {
 	return true;
 }
 
-const cookie = phien();
+const cookie = await tienDe();
 const slug = await suySlug(cookie);
 const kho = khoChuoi();
 const vi = kho.vi;
