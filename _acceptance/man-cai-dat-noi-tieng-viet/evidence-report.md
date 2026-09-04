@@ -1,12 +1,12 @@
 ---
 schema_version: 1
 slug: man-cai-dat-noi-tieng-viet
-verdict: PENDING-JUDGMENT
+verdict: PASS
 round: 3
 run_id: s4r3-20260904T121903Z-30646
 verified_commit: f8c65619b81cc7a16f67922afef69fb6ddc253cd
 verified_at: 2026-09-04T12:19:03Z
-human_signoff:
+human_signoff: Manh Phan 2026-09-04
 ---
 
 # Bằng chứng — man-cai-dat-noi-tieng-viet
@@ -18,7 +18,7 @@ vòng này. Máy viết thì không tự chấm.
 |---|---|---|
 | 1 | PENDING-JUDGMENT | 7 — một suite đỏ, một eval sai dây, bốn phép đo tự hạ chuẩn |
 | 2 | REJECT | 7 — **cùng lớp lỗi với vòng 1** |
-| 3 | PENDING-JUDGMENT | 7, đều nhẹ; 16/16 eval khớp bản khai |
+| 3 | PENDING-JUDGMENT → PASS (người ký) | 7, đều nhẹ; 16/16 eval khớp bản khai |
 
 ## Vòng 3 — bảng phép đo
 
