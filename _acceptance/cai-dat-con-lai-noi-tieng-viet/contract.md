@@ -5,7 +5,7 @@ slug: cai-dat-con-lai-noi-tieng-viet
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
@@ -105,3 +105,18 @@ OneHub)? Máy không tự quyết.
 - Đổi bố cục, component, luồng.
 
 ## Notes
+
+### Known limits
+
+Đo được ở S3, khai trước khi trình cổng — không để vòng chấm mới lộ.
+
+- **Tám câu quyền Slack vẫn tiếng Anh trên `/settings/connections/slack`.** Nguồn là `packages/auth/src/slack-scopes.ts`; `packages/auth/**` là `t3_paths` nên kéo vào là đổi hạng vòng và thêm một cổng duyệt kế hoạch. Chân đo khai có tên và **in riêng con số 8** ở dòng kết quả — đây là giới hạn, không phải đã dịch.
+- **Ba trong sáu trạng thái rỗng không dựng được**, và lý do là **vai trò của tài khoản đo**: `manh.phan@onemount.com` là thành viên, nên `tracking.removeDomain` và `tracking.sources` trả 403; trạng thái *chưa có kênh Slack* thì cần Slack đã cắm. Đo được 3/6 (khoá API rỗng · SSO rỗng · lọc thành viên không khớp). Phép đo **từ chối đo** và gọi tên ba ô, không hạ xuống đọc mã.
+- **Ba trong sáu vật khách chép không đo được** vì cùng lý do: URI chuyển hướng ở hộp thêm SSO (nút khoá với vai trò member), URI trên dòng bảng SSO (bảng rỗng), lệnh mời bot Slack (Slack chưa cắm). Bốn lượt đo được đều **khớp từng byte** với nguồn ngoài màn.
+- **Một route không dựng được**: `/settings/connections/slack/people` `redirect()` về màn cha khi Slack chưa cắm. Khai có lý do; route đo được 9/9 sau khi trừ.
+- **Vế dấu của AC-1 là phép đo gần đúng.** Từ mượn mà tiếng Việt không thêm dấu (`Cookie`) phải khai miễn có tên, nếu không nó báo oan.
+- **Bốn nhãn tràn ở cả hai lượt tiếng**, báo riêng và không tính vào chân bề rộng: ba nhãn chỉ-đọc-màn-hình có `clientWidth` 1px, và nút *"Slack chưa cấu hình"* tràn ở cả bản Anh — lỗi bố cục có sẵn, không phải lỗi bản dịch.
+- **Nới một cột**: `/settings/members` cột Vai trò 14%→18% (lấy từ cột Tên 34%→30%) để nhãn tiếng Việt không bị cắt. Đây là đổi bố cục, ngoài lời hứa chỉ-đổi-chữ của vòng.
+- **Kéo thêm hai chỗ ngoài lát**: nhãn hạn cookie (`packages/db/src/tracking.ts`, T2) và hai nút cùng một `aria-label` của `components/slack/channel-picker.tsx` — chúng hiện trên màn của lát nên bỏ qua thì AC-1 đỏ.
+- **Chân một-bộ-thước chỉ nói lên điều gì khi thư mục `rang/` đã đủ file.** Nó tự chốt tiền đề bằng cách đòi mọi script mà ổ cắm `cd2_*` trỏ tới phải có mặt; thiếu thì thoát mã 2.
+
