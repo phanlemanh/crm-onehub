@@ -101,3 +101,23 @@ trục đều truy được về vật có thật trong kho.
 - **Phép đo bề rộng chỉ bắt chỗ chữ bị CẮT.** Vùng chứa cho xuống dòng thì nở ra, nên nhãn dài không làm nó đỏ — đã kiểm bằng cách cắm một nhãn dài gấp ba và xác nhận nhãn lên tới màn thật. Trên hai màn này nhãn dài không làm vỡ bố cục, nhưng điều chứng được chỉ là "không có chỗ nào bị cắt".
 - **Hàng FILE của phép đối chiếu không thể lệch.** Bộ quét ③a vọng lại danh sách đầu vào thay vì đếm file nó thật sự mở, nên bốn ô của hàng đó là cùng một số theo đại số. Hàng VẬT thì thật và đối chiếu theo tập. Sửa bộ quét ③a là chạm vào thước của một hồ sơ đã ký, nên ghi thành nợ có tên, trả trước khi mở đợt 33 file.
 - **Bộ thước của vòng chỉ được nửa cái thước.** `_acceptance/**/*.mjs` không nằm trong `lint` — biome chạy theo workspace và `_acceptance` không thuộc workspace nào. Nhưng `lint:slop` CÓ quét nó: oxlint chạy từ gốc và `.oxlintrc.json` không loại trừ `_acceptance`.
+
+### Đính chính sau khi ký — 04/09
+
+**Giới hạn khai ở AC-4 dựa trên một tiền đề SAI.** Hợp đồng viết: *"phiên phát
+triển đăng nhập bằng chủ sở hữu nên trình duyệt không bao giờ vẽ hai câu này"*.
+Sai. Tài khoản đo — `manh.phan@onemount.com` — là **thành viên**; chủ sở hữu là
+`phanlemanh@gmail.com`. Cả hai câu **hiện ra trên màn thật**, bằng tiếng Việt,
+với đúng phiên dev vẫn dùng:
+
+- `/onehub/settings` → *"Chỉ chủ sở hữu hoặc quản trị mới đổi được."*
+- `/onehub/settings/currencies` → *"Chỉ chủ sở hữu hoặc quản trị mới đổi được cách quy đổi tiền."*
+
+Nghĩa là AC-4 **đo được ở mức màn** ngay từ đầu, và giới hạn kia không cần thiết.
+Ba vòng chấm không bắt được vì cả ba soi đúng chân đọc mã mà hợp đồng chỉ tới,
+không ai thử dựng màn để bác tiền đề.
+
+Phát hiện khi vòng `cai-dat-con-lai-noi-tieng-viet` đo vai trò của phiên. Chữ ký
+và verdict của hồ sơ này KHÔNG đổi — điều được chứng vẫn đúng, chỉ là nó chứng
+ít hơn mức đáng lẽ chứng được. Vòng sau đo bằng màn.
+

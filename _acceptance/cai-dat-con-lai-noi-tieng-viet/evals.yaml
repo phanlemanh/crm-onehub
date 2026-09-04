@@ -242,8 +242,10 @@ evals:
     expected: >-
       exit 0. HAI ve. (1) So than ham giua moi .mjs cua hai thu muc rang/: mot khoi trung
       tu 12 dong tro len la DO kem ten hai file — bat ca chan DOM (be-rong, hai-tieng), khong
-      chi chan AST. Chieu do chung bang chep be-rong.mjs (khong co createSourceFile) vao
-      rang/ dot nay. (2) Chay lai cac mui goi dot mot KHONG tham so: thoat 0 va in dung
+      chi chan AST. Chieu do chung bang chep man-that-lib.mjs (khong co createSourceFile) vao
+      rang/ dot nay — chon file do chinh vi no khong co ham AST, nen mot bo do chi grep
+      ten ham se de lot. Chung them bang chep RIENG mot ham 16 dong sang mot file co
+      phan bao quanh khac han. (2) Chay lai cac mui goi dot mot KHONG tham so: thoat 0 va in dung
       10 file · 12 toast · 9 o title nhu evidence-report da ky cua dot mot — chung --lat mac
       dinh phan giai theo thu muc script, khong theo cwd, va bang chung da ky tai lap duoc.
     paths:

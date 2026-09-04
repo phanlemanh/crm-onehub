@@ -50,7 +50,7 @@ function columns(
 			header: t.bang.ten,
 			sortable: true,
 			hideable: false,
-			width: "w-[34%]",
+			width: "w-[30%]",
 			cell: (row) => (
 				<span className="flex min-w-0 items-center gap-2">
 					<PersonAvatar
@@ -84,7 +84,7 @@ function columns(
 			id: "role",
 			header: t.bang.vaiTro,
 			sortable: true,
-			width: "w-[14%]",
+			width: "w-[18%]",
 			cell: (row) => (
 				<span className="text-muted-foreground">{t.vaiTro[row.role]}</span>
 			),

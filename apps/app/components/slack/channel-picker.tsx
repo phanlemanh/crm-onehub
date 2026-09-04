@@ -59,7 +59,7 @@ export function ChannelPicker({
 					>
 						{onSelect && selectable ? (
 							<button
-								aria-label={`Choose #${channel.name}`}
+								aria-label={t.kenh.chonKenh(channel.name)}
 								aria-pressed={selected}
 								className="absolute inset-0"
 								disabled={pending}
@@ -83,7 +83,7 @@ export function ChannelPicker({
 									!selected && !channel.isMember && "text-muted-foreground",
 								)}
 							>
-								{channel.name}
+								<span translate="no">{channel.name}</span>
 							</span>
 							<span className="text-muted-foreground text-xs">
 								{describe(channel, canInviteItself)}

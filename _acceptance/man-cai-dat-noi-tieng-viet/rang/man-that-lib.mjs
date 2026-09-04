@@ -1,6 +1,7 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
-import { dirname } from "node:path";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { GOC, lat } from "./lat.mjs";
@@ -136,8 +137,9 @@ export async function canhCong(cookie, slug) {
 }
 
 export const GOM = () => {
-	const goc = document.querySelector(
-		'[data-slot="page-shell-scroll"]',
+	const goc = (
+		document.querySelector('[data-slot="page-shell-scroll"]') ??
+		document.querySelector("main")
 	)?.parentElement;
 	if (!goc) return null;
 	const nhinThay = (el) => {
@@ -200,8 +202,9 @@ export const GOM = () => {
 };
 
 export const DO_RONG = () => {
-	const goc = document.querySelector(
-		'[data-slot="page-shell-scroll"]',
+	const goc = (
+		document.querySelector('[data-slot="page-shell-scroll"]') ??
+		document.querySelector("main")
 	)?.parentElement;
 	if (!goc) return null;
 	const nhinThay = (el) => {
@@ -246,7 +249,7 @@ export const DO_RONG = () => {
 	return ra;
 };
 
-export async function moMan(cookie, slug, man, tieng, rong, sau) {
+export async function moManMem(cookie, slug, man, tieng, rong, sau) {
 	const trang = await trinhDuyet.newPage();
 	await trang.setViewport({ width: rong, height: CAO, deviceScaleFactor: 1 });
 	await trang.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
@@ -261,24 +264,39 @@ export async function moMan(cookie, slug, man, tieng, rong, sau) {
 	});
 	const chuoi = res?.request().redirectChain() ?? [];
 	if (chuoi.length > 0) {
-		await khongDo(
-			`KHONG DO DUOC: tien de thieu — ${doi} bi chuyen huong ${chuoi.length} chang truoc khi ve.`,
-			"   Chan nay KHONG do man den sau mot lenh chuyen huong.",
-		);
+		return {
+			trang,
+			loi: [
+				`KHONG DO DUOC: tien de thieu — ${doi} bi chuyen huong ${chuoi.length} chang truoc khi ve.`,
+				"   Chan nay KHONG do man den sau mot lenh chuyen huong.",
+			],
+		};
 	}
 	if (new URL(trang.url()).pathname !== doi) {
-		await khongDo(
-			`KHONG DO DUOC: tien de thieu — xin ${doi} nhung dung o ${new URL(trang.url()).pathname}.`,
-		);
+		return {
+			trang,
+			loi: [
+				`KHONG DO DUOC: tien de thieu — xin ${doi} nhung dung o ${new URL(trang.url()).pathname}.`,
+			],
+		};
 	}
 	await new Promise((r) => setTimeout(r, sau ?? CHO_LANG));
 	const langThat = await trang.evaluate(() => document.documentElement.lang);
 	if (langThat !== tieng) {
-		await khongDo(
-			`KHONG DO DUOC: tien de thieu — xin lang=${tieng} nhung trang ve lang=${langThat}.`,
-		);
+		return {
+			trang,
+			loi: [
+				`KHONG DO DUOC: tien de thieu — xin lang=${tieng} nhung trang ve lang=${langThat}.`,
+			],
+		};
 	}
-	return trang;
+	return { trang, loi: null };
+}
+
+export async function moMan(cookie, slug, man, tieng, rong, sau) {
+	const ra = await moManMem(cookie, slug, man, tieng, rong, sau);
+	if (ra.loi !== null) await khongDo(...ra.loi);
+	return ra.trang;
 }
 
 export async function docMan(cookie, slug, man, tieng, rong) {
@@ -298,3 +316,119 @@ export async function docMan(cookie, slug, man, tieng, rong) {
 	return gia;
 }
 
+export const THU_MUC_CAI_DAT = "apps/app/app/(app)/[slug]/settings";
+
+let tsGoi = null;
+
+export function tsCua() {
+	if (tsGoi === null) tsGoi = createRequire(import.meta.url)("typescript");
+	return tsGoi;
+}
+
+export function docCay(duong) {
+	const ts = tsCua();
+	return ts.createSourceFile(
+		duong,
+		readFileSync(`${GOC}/${duong}`, "utf8"),
+		ts.ScriptTarget.Latest,
+		true,
+		ts.ScriptKind.TSX,
+	);
+}
+
+export function docKhai(duong, ten) {
+	if (!existsSync(duong)) {
+		console.log(
+			`KHONG DO DUOC: tien de thieu — chua co ban khai ${ten} tai ${duong.replace(`${GOC}/`, "")}.`,
+		);
+		process.exit(2);
+	}
+	return JSON.parse(readFileSync(duong, "utf8"));
+}
+
+export function sinhRouteCaiDat(bo = []) {
+	const ra = [];
+	const di = (thuMuc, duoi) => {
+		for (const m of readdirSync(thuMuc, { withFileTypes: true })) {
+			if (m.isDirectory()) di(join(thuMuc, m.name), `${duoi}/${m.name}`);
+			else if (m.name === "page.tsx") ra.push(`/settings${duoi}`);
+		}
+	};
+	di(`${GOC}/${THU_MUC_CAI_DAT}`, "");
+	const loai = new Set(bo);
+	return { het: ra.sort(), do: ra.filter((r) => !loai.has(r)).sort() };
+}
+
+export function fileCaiDat() {
+	const ra = [];
+	const di = (thuMuc, duoi) => {
+		for (const m of readdirSync(thuMuc, { withFileTypes: true })) {
+			if (m.isDirectory()) di(join(thuMuc, m.name), `${duoi}/${m.name}`);
+			else if (m.name.endsWith(".tsx"))
+				ra.push(`${THU_MUC_CAI_DAT}${duoi}/${m.name}`);
+		}
+	};
+	di(`${GOC}/${THU_MUC_CAI_DAT}`, "");
+	return ra.sort();
+}
+
+export async function goiApiTao(cookie, duong, vao) {
+	const res = await fetch(`${API}/api/trpc/${duong}`, {
+		method: "POST",
+		redirect: "manual",
+		headers: { ...mu(cookie), "content-type": "application/json" },
+		body: JSON.stringify(vao),
+	});
+	if (res.status >= 300 && res.status < 400) {
+		return { loi: `${duong} tra ${res.status} va doi chuyen huong.` };
+	}
+	const chu = await res.text();
+	if (!res.ok) {
+		let ly = chu.slice(0, 160);
+		try {
+			ly = JSON.parse(chu).error?.message ?? ly;
+		} catch {}
+		return { loi: `${duong} tra ${res.status}: ${ly}` };
+	}
+	return { gia: JSON.parse(chu).result.data };
+}
+
+export async function gomTrang(trang) {
+	return trang.evaluate(GOM);
+}
+
+export async function doRongTrang(trang) {
+	return trang.evaluate(DO_RONG);
+}
+
+export function soCap(vi, en, boi) {
+	const n = Math.min(vi.length, en.length);
+	const ra = { soCap: n, lech: [], trung: [], khongDau: [] };
+	for (let i = 0; i < n; i += 1) {
+		if (vi[i].khoa !== en[i].khoa) {
+			ra.lech.push({ so: i, vi: vi[i].khoa, en: en[i].khoa });
+			continue;
+		}
+		const ly = boi(vi[i].chu, vi[i]);
+		if (ly !== null) continue;
+		if (vi[i].chu === en[i].chu) ra.trung.push(vi[i]);
+		else if (!DAU_VIET.test(vi[i].chu)) ra.khongDau.push(vi[i]);
+	}
+	return ra;
+}
+
+export async function goiApiMem(cookie, duong, vao) {
+	const url = `${API}/api/trpc/${duong}?input=${encodeURIComponent(
+		JSON.stringify({ json: vao }),
+	)}`;
+	const res = await fetch(url, { redirect: "manual", headers: mu(cookie) });
+	const chu = await res.text();
+	if (!res.ok) {
+		let ly = chu.slice(0, 160);
+		try {
+			ly = JSON.parse(chu).error?.message ?? ly;
+		} catch {}
+		return { loi: `${duong} tra ${res.status}: ${ly}` };
+	}
+	return { gia: JSON.parse(chu).result.data };
+}

@@ -29,7 +29,7 @@ function chanDanSo() {
 	const truoc = lat(KHAI_PATH);
 	const khai = JSON.parse(readFileSync(KHAI_PATH, "utf8"));
 
-	if (khai.neo && typeof khai.neo.file === "number") {
+	if (khai.neo && Number.isInteger(khai.neo.file)) {
 		if (truoc.soTuDia !== khai.neo.file) {
 			console.log(
 				`KHONG DO DUOC: ban khai ghim neo ${khai.neo.file} file nhung quet thu muc ra ${truoc.soTuDia}. ` +

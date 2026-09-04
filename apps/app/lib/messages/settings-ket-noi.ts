@@ -227,6 +227,7 @@ const en = {
 		chuaCap: "Not granted",
 	},
 	kenh: {
+		chonKenh: (ten: string) => `Choose #${ten}`,
 		xinLai: "Ask again",
 		xinVao: "Request",
 		tieuDe: "Channels Comp AI can reach",
@@ -501,6 +502,7 @@ const vi = {
 		chuaCap: "Chưa cấp",
 	},
 	kenh: {
+		chonKenh: (ten: string) => `Chọn kênh #${ten}`,
 		xinLai: "Xin lại",
 		xinVao: "Xin vào",
 		tieuDe: "Kênh OneHub với tới được",

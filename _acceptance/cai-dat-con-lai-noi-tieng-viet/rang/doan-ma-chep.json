@@ -1,6 +1,6 @@
 {
 	"lat": "cai-dat-con-lai-noi-tieng-viet",
-	"ghi_chu": "Vat KHACH CHEP di dan sang he thong khac. Dich lech mot ky tu la vo site cua khach. Chan do KHONG so luot vi voi luot en — hai luot dung tu CUNG mot template nen luon bang nhau ke ca khi template sai. Moi doan so voi NGUON CHAN LY NGOAI MAN theo truong `nguon`.",
+	"ghi_chu": "Vat KHACH CHEP di dan sang he thong khac. Dich lech mot ky tu la vo site cua khach. Chan do KHONG so luot vi voi luot en — hai luot dung tu CUNG mot template nen luon bang nhau ke ca khi template sai. Moi doan so voi NGUON CHAN LY NGOAI MAN theo truong `nguon`. google-connection.tsx KHONG co vat chep nao — danh sach sau file cua design sai, doc lai mã thi chi co nam file. Ban khai giu dung nam.",
 	"doan": [
 		{
 			"ten": "the script theo doi",
