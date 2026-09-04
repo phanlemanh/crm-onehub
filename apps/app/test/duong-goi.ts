@@ -1,19 +1,28 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
-import { join, relative } from "node:path";
+import { dirname, join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 import type * as TS from "typescript";
 
 const ts: typeof TS = createRequire(import.meta.url)("typescript");
 
-const HAM_KHO = new Set([
-	"authMessages",
-	"companyMessages",
-	"contactMessages",
-	"dealMessages",
-	"crmMessages",
-	"recordSheetMessages",
-	"settingsMessages",
-]);
+const THU_MUC_KHO = join(
+	dirname(fileURLToPath(import.meta.url)),
+	"..",
+	"lib",
+	"messages",
+);
+
+const HAM_KHO = new Set(
+	readdirSync(THU_MUC_KHO)
+		.filter((t) => t.endsWith(".ts"))
+		.flatMap((t) => {
+			const nguon = readFileSync(join(THU_MUC_KHO, t), "utf8");
+			return [...nguon.matchAll(/^export function ([A-Za-z0-9_]+)\s*\(/gm)].map(
+				(m) => m[1],
+			);
+		}),
+);
 
 const GOC = "__KHO_CHUOI__";
 const SAU_TOI_DA = 6;

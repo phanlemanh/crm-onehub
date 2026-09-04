@@ -20,10 +20,12 @@ const TEN_KHO = readdirSync(THU_MUC_KHO)
 const MODULE: readonly (readonly [string, (locale: Locale) => Nhanh])[] =
 	await Promise.all(
 		TEN_KHO.map(async (ten) => {
-			const ns = (await import(`@/lib/messages/${ten}`)) as Record<string, unknown>;
-			const lay = Object.values(ns).find((v) => v instanceof Function);
+			const ns: unknown = await import(`@/lib/messages/${ten}`);
+			const lay = Object.values(ns as object).find(
+				(v): v is (locale: Locale) => Nhanh => v instanceof Function,
+			);
 			if (!lay) throw new Error(`kho chuoi ${ten} khong xuat mot ham lay`);
-			return [ten, lay as (locale: Locale) => Nhanh] as const;
+			return [ten, lay] as const;
 		}),
 	);
 
