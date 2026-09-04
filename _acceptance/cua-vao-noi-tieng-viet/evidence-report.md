@@ -360,3 +360,17 @@ viet thang trong JSX) va AC-6 tai research-form.tsx ("Context" thieu
 translate="no") — xem review-findings.md. Chua quay lai implementation cho
 hai vi pham nay; dang cho nguoi quyet o Cong 2 vi con hai chan ha tang chua
 mo duoc.
+
+Sua sau vong 2 — DOI KHUON (nguoi chon, 04/09): dan so cua phep do nay SINH TU
+DIA thay vi viet tay. Hai vong lien sot cung mot man vi lat toi khai co 8 file
+trong khi thu muc (landing) co 10, va hai file thieu chinh la hai file bi sot.
+Nay: moi .tsx duoi (landing) cong khung dung chung, tru mot ban khai loai-tru co
+ly do tung dong; mot dong loai-tru tro toi duong khong con tren dia lam chan TU
+CHOI DO. Da chung minh bang cach them mot man moi ma KHONG sua ban khai — chan
+tu bat va goi ten file do.
+Voi dan so that, hai phat hien TRONG hop dong da dong: sau chuoi cung trong
+grant-access.tsx (gom hai cau loi client tu dung, thu ma Known limits khong he
+mien) va dau translate="no" cho dong 13 cua bang dong. Chan khong-dich nay kiem
+TUNG lan xuat hien thay vi "co cai nao do", va cong don qua cac man thay vi ghi
+de. Tam gioi han moi truong GIU NGUYEN.
+
