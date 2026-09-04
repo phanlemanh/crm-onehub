@@ -10,24 +10,29 @@ import type { FC, SVGProps } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-type ProviderChoice = {
-	label: string;
-	Logo: FC<SVGProps<SVGSVGElement>>;
-};
+const LOGO = {
+	google: GoogleLogo,
+	microsoft: MicrosoftLogo,
+} as const satisfies Record<MailboxProviderId, FC<SVGProps<SVGSVGElement>>>;
 
-const PROVIDERS = {
-	google: { label: "Continue with Google", Logo: GoogleLogo },
-	microsoft: { label: "Continue with Microsoft", Logo: MicrosoftLogo },
-} as const satisfies Record<MailboxProviderId, ProviderChoice>;
-
-export function SocialSignIn({ provider }: { provider: MailboxProviderId }) {
+export function SocialSignIn({
+	provider,
+	nhan,
+	dangGui,
+	loi,
+}: {
+	provider: MailboxProviderId;
+	nhan: string;
+	dangGui: string;
+	loi: string;
+}) {
 	const [pending, setPending] = useState(false);
 
-	const { label, Logo } = PROVIDERS[provider];
+	const Logo = LOGO[provider];
 
 	function fail(message?: string) {
 		setPending(false);
-		toast.error(message ?? "Could not reach the sign-in service.");
+		toast.error(message ?? loi);
 	}
 
 	async function handleClick() {
@@ -59,7 +64,7 @@ export function SocialSignIn({ provider }: { provider: MailboxProviderId }) {
 			) : (
 				<Logo data-icon="inline-start" className="size-4" />
 			)}
-			{label}
+			<span translate="no">{pending ? dangGui : nhan}</span>
 		</Button>
 	);
 }

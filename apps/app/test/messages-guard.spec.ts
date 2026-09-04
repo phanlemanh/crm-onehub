@@ -100,7 +100,6 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"crm.standard.stage",
 	"auth.docTitle.onboarding",
 	"auth.docTitle.research",
-	"auth.docTitle.signIn",
 	"auth.onboarding.description",
 	"auth.onboarding.name",
 	"auth.onboarding.slug",
@@ -118,14 +117,6 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"auth.research.submit",
 	"auth.research.submitting",
 	"auth.research.title",
-	"auth.signIn.continueWith",
-	"auth.signIn.description",
-	"auth.signIn.error.unreachable",
-	"auth.signIn.noWay.description",
-	"auth.signIn.noWay.howTo",
-	"auth.signIn.noWay.title",
-	"auth.signIn.signingIn",
-	"auth.signIn.title",
 ];
 
 describe("kho chuoi cua vong ③a", () => {

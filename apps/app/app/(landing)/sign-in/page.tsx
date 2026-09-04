@@ -2,21 +2,36 @@ import type { MailboxProviderId } from "@crm/auth/scopes";
 import type { Metadata } from "next";
 import { redirect, unstable_rethrow } from "next/navigation";
 import { Suspense } from "react";
-import { AuthHeading, AuthShell } from "@/components/auth-shell";
+import {
+	AuthHeading,
+	AuthShell,
+	tiengCuaNguoiDoc,
+} from "@/components/auth-shell";
+import { authMessages } from "@/lib/messages/auth";
 import { getSession } from "@/lib/session";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { SocialSignIn } from "./social-sign-in";
-import { type SsoProvider, SsoSignIn } from "./sso-sign-in";
+import { SsoSignIn } from "./sso-sign-in";
 
-export const metadata: Metadata = {
-	title: "Sign in",
+const TEN_HANG = {
+	google: "Google",
+	microsoft: "Microsoft",
+} as const satisfies Record<MailboxProviderId, string>;
+
+type NhaCungCap = {
+	providerId: string;
+	name: string;
 };
 
 type SignInOptions = {
 	google: boolean;
 	microsoft: boolean;
-	providers: SsoProvider[];
+	providers: NhaCungCap[];
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: authMessages(await tiengCuaNguoiDoc()).docTitle.signIn };
+}
 
 async function signInOptions(): Promise<SignInOptions | null> {
 	try {
@@ -40,16 +55,15 @@ async function currentSession() {
 	}
 }
 
-export default function SignInPage({ searchParams }: PageProps<"/sign-in">) {
+export default async function SignInPage({
+	searchParams,
+}: PageProps<"/sign-in">) {
+	const m = authMessages(await tiengCuaNguoiDoc()).signIn;
+
 	return (
 		<AuthShell>
 			<Suspense
-				fallback={
-					<AuthHeading
-						title="Welcome back"
-						description="Sign in with your account to continue."
-					/>
-				}
+				fallback={<AuthHeading title={m.title} description={m.description} />}
 			>
 				<SignIn searchParams={searchParams} />
 			</Suspense>
@@ -60,15 +74,18 @@ export default function SignInPage({ searchParams }: PageProps<"/sign-in">) {
 async function SignIn({
 	searchParams,
 }: Pick<PageProps<"/sign-in">, "searchParams">) {
-	const [session, options, { method }] = await Promise.all([
+	const [session, options, { method }, locale] = await Promise.all([
 		currentSession(),
 		signInOptions(),
 		searchParams,
+		tiengCuaNguoiDoc(),
 	]);
 
 	if (session) {
 		redirect("/");
 	}
+
+	const m = authMessages(locale).signIn;
 
 	const configured: MailboxProviderId[] = [];
 	if (options?.google ?? true) configured.push("google");
@@ -88,16 +105,13 @@ async function SignIn({
 	if (!showSso && social.length === 0) {
 		return (
 			<>
-				<AuthHeading
-					title="No way in yet"
-					description="This CRM has no sign-in method configured, so nobody can get in — including you."
-				/>
+				<AuthHeading title={m.noWay.title} description={m.noWay.description} />
 
-				<p className="text-center text-muted-foreground text-sm/5">
-					Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET — or MICROSOFT_CLIENT_ID
-					and MICROSOFT_CLIENT_SECRET — in the root .env file and restart. Your
-					own identity provider can be added from Settings once somebody is
-					signed in.
+				<p
+					className="text-center text-muted-foreground text-sm/5"
+					translate="no"
+				>
+					{m.noWay.howTo}
 				</p>
 			</>
 		);
@@ -105,14 +119,26 @@ async function SignIn({
 
 	return (
 		<>
-			<AuthHeading
-				title="Welcome back"
-				description="Sign in with your account to continue."
-			/>
+			<AuthHeading title={m.title} description={m.description} />
 
-			{showSso ? <SsoSignIn providers={providers} /> : null}
+			{showSso ? (
+				<SsoSignIn
+					providers={providers.map((provider) => ({
+						...provider,
+						nhan: m.continueWith(provider.name),
+					}))}
+					dangGui={m.signingIn}
+					loi={m.error.unreachable}
+				/>
+			) : null}
 			{social.map((provider) => (
-				<SocialSignIn key={provider} provider={provider} />
+				<SocialSignIn
+					key={provider}
+					provider={provider}
+					nhan={m.continueWith(TEN_HANG[provider])}
+					dangGui={m.signingIn}
+					loi={m.error.unreachable}
+				/>
 			))}
 		</>
 	);

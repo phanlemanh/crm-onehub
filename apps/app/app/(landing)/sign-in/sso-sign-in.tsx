@@ -9,9 +9,18 @@ import { toast } from "sonner";
 export type SsoProvider = {
 	providerId: string;
 	name: string;
+	nhan: string;
 };
 
-export function SsoSignIn({ providers }: { providers: SsoProvider[] }) {
+export function SsoSignIn({
+	providers,
+	dangGui,
+	loi,
+}: {
+	providers: SsoProvider[];
+	dangGui: string;
+	loi: string;
+}) {
 	const [pending, setPending] = useState<string | null>(null);
 
 	async function handleClick(providerId: string) {
@@ -26,7 +35,7 @@ export function SsoSignIn({ providers }: { providers: SsoProvider[] }) {
 		});
 
 		if (error) {
-			toast.error(error.message ?? "Could not reach the sign-in service.");
+			toast.error(error.message ?? loi);
 			setPending(null);
 		}
 	}
@@ -45,7 +54,9 @@ export function SsoSignIn({ providers }: { providers: SsoProvider[] }) {
 					{pending === provider.providerId ? (
 						<Spinner data-icon="inline-start" />
 					) : null}
-					Continue with {provider.name}
+					<span translate="no">
+						{pending === provider.providerId ? dangGui : provider.nhan}
+					</span>
 				</Button>
 			))}
 		</>
