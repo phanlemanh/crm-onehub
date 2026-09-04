@@ -241,12 +241,16 @@ evals:
     cmd: config:executors.script.tt_ui_chu
     expected: >-
       exit 0. Chan "chu" khai TRUOC danh sach dong 12 ma ST-* cua AC-12 va in
-      tung ma kem cach dung: 10 ma dung tren trinh duyet (loading bang chan
-      mang cham, dang-luu bang chan tra loi cham, loi bang cach ket thuc chien
-      dich qua API giua chung roi bam ket qua, thanh-vien-rong bang goc nhin
-      loc gia tri khong ai co, chua-so bang mot muc ingest vang phone), 2 ma
-      rong toan cuc (ST-danh-sach-empty, ST-tao-khong-goc-nhin) ghi "do o muc
-      don vi — E25". Thieu mot ma → thoat ma 2 goi ten ma. Voi lang=vi thu thap
+      tung ma kem cach dung: 9 ma dung tren trinh duyet (dang-luu bang chan
+      tra loi cham, loi bang cach ket thuc chien dich qua API giua chung roi
+      bam ket qua, thanh-vien-rong bang goc nhin loc gia tri khong ai co,
+      chua-so bang mot muc ingest vang phone), 3 ma do o muc don vi
+      (ST-danh-sach-empty, ST-tao-khong-goc-nhin, ST-danh-sach-loading) ghi
+      "do o muc don vi — E25". Thieu mot ma → thoat ma 2 goi ten ma.
+      Cau loi MAY CHU tra ve van tieng Anh (pham vi vong ④ cua ho so tieng
+      Viet): chan TRU no khoi phep so hai thu tieng NHUNG ghi lai nguyen van
+      chu hien ra vao evidence/E15-chu-may-chu.txt — cho dut nam trong ho so,
+      khong bi giau. Voi lang=vi thu thap
       moi chuoi giao dien SINH TU MAY (tru gia tri du lieu: ten chuyen trang,
       dia ban, so dien thoai, ten goc nhin) va doi chieu voi lang=en: con lai 0
       chuoi trung; moi phan tu chua du lieu tu san mang translate="no". Chieu
@@ -410,8 +414,8 @@ evals:
     expected: >-
       exit 0. apps/app/test/campaign-states.spec.ts: ham chon trang thai thuan
       (khong React) tra 'empty' khi rows=[] va 'rows' khi co dong; 'no-views' khi
-      danh sach goc nhin CONTACT rong; hai chuoi rong toan cuc co trong
-      campaignMessages.vi va mang dau. Chieu do: doi ham tra 'rows' cho [] trong
+      danh sach goc nhin CONTACT rong; 'loading' khi chua co du lieu; ba chuoi
+      cua ba trang thai do-o-muc-don-vi co trong campaignMessages.vi va mang dau. Chieu do: doi ham tra 'rows' cho [] trong
       ban sao → do.
     paths:
       - "apps/app/app/(app)/[slug]/campaigns/**"
