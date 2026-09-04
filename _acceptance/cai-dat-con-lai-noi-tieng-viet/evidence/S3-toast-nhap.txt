@@ -1,0 +1,24 @@
+KHONG DO DUOC: bang khai 0 loi goi toast mang chu, chan do nhan ra 23; thieu 0, thua 23. Bang ghim (file, khoa kho chuoi) — khong ghim so dong.
+  THUA:  apps/app/app/(app)/[slug]/settings/api-keys/api-keys-table.tsx:173 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/connections/google-connection.tsx:144 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/connections/google-connection.tsx:234 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/connections/microsoft-connection.tsx:82 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/connections/microsoft-connection.tsx:171 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx:46 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx:63 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx:170 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx:174 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/connections/slack/slack-connect-button.tsx:38 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/connections/slack/slack-connect-button.tsx:40 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/connections/slack/slack-disconnect-button.tsx:40 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/members/members-table.tsx:150 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/sso/add-sso-provider-sheet.tsx:88 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/sso/sso-table.tsx:143 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/tracking/allowed-domains.tsx:67 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/tracking/allowed-domains.tsx:153 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/tracking/tracking-cookies.tsx:62 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx:51 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx:65 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx:87 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx:93 doc khoa (khong doc kho chuoi) ma bang khong khai
+  THUA:  apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx:94 doc khoa (khong doc kho chuoi) ma bang khong khai

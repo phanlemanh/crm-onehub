@@ -1,0 +1,13 @@
+{
+	"lat": "cai-dat-con-lai-noi-tieng-viet",
+	"thu_muc": [
+		"apps/app/app/(app)/[slug]/settings/tracking", "apps/app/app/(app)/[slug]/settings/connections", "apps/app/app/(app)/[slug]/settings/connections/slack", "apps/app/app/(app)/[slug]/settings/connections/slack/people",
+		"apps/app/app/(app)/[slug]/settings/connections/google", "apps/app/app/(app)/[slug]/settings/connections/microsoft", "apps/app/app/(app)/[slug]/settings/connections/intake",
+		"apps/app/app/(app)/[slug]/settings/api-keys", "apps/app/app/(app)/[slug]/settings/members", "apps/app/app/(app)/[slug]/settings/sso"
+	],
+	"neo": { "file": 33, "route": 10, "file_vat_chep": 6, "file_quyen": 9,
+		"ghi_chu": "Bon con so lay tu kiem ke S0 ngay 04/09, DOC LAP voi luat quet — de dan so sinh ra co thu de so. Lech la thoat ma 2 kem diff." },
+	"them": [],
+	"khong_quet": [],
+	"mien_tru": []
+}
