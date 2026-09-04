@@ -1,29 +1,31 @@
 import { describe, expect, it } from "bun:test";
+import { readdirSync } from "node:fs";
 import { join } from "node:path";
-import { authMessages } from "@/lib/messages/auth";
-import { companyMessages } from "@/lib/messages/companies";
-import { contactMessages } from "@/lib/messages/contacts";
-import { crmMessages } from "@/lib/messages/crm";
-import { dealMessages } from "@/lib/messages/deals";
-import { recordSheetMessages } from "@/lib/messages/record-sheet";
-import { settingsMessages } from "@/lib/messages/settings";
+import type { Locale } from "@crm/ui/lib/locale";
 import { docDuongGoi, taoSong } from "./duong-goi";
 
 const DAU_TIENG_VIET =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
 
-const MODULE = [
-	["companies", companyMessages],
-	["contacts", contactMessages],
-	["deals", dealMessages],
-	["record-sheet", recordSheetMessages],
-	["crm", crmMessages],
-	["auth", authMessages],
-	["settings", settingsMessages],
-] as const;
-
 type GiaTri = string | ((...doiSo: string[]) => string);
 type Nhanh = { readonly [khoa: string]: GiaTri | Nhanh };
+
+const THU_MUC_KHO = join(import.meta.dir, "..", "lib", "messages");
+
+const TEN_KHO = readdirSync(THU_MUC_KHO)
+	.filter((t) => t.endsWith(".ts"))
+	.map((t) => t.replace(/\.ts$/, ""))
+	.sort();
+
+const MODULE: readonly (readonly [string, (locale: Locale) => Nhanh])[] =
+	await Promise.all(
+		TEN_KHO.map(async (ten) => {
+			const ns = (await import(`@/lib/messages/${ten}`)) as Record<string, unknown>;
+			const lay = Object.values(ns).find((v) => v instanceof Function);
+			if (!lay) throw new Error(`kho chuoi ${ten} khong xuat mot ham lay`);
+			return [ten, lay as (locale: Locale) => Nhanh] as const;
+		}),
+	);
 
 function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 	return Object.entries(o).flatMap(([k, v]): [string, GiaTri][] =>
