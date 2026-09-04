@@ -14,6 +14,24 @@
       ],
       "port": 3000,
       "autoPort": false
+    },
+    {
+      "name": "api-cay-nay",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/api && PORT=3301 bun run dev"
+      ],
+      "port": 3301
+    },
+    {
+      "name": "app-cay-nay",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/app && PORT=3300 NEXT_PUBLIC_API_URL=http://localhost:3301 API_URL=http://localhost:3301 APP_URL=http://localhost:3300 bun run dev"
+      ],
+      "port": 3300
     }
   ]
 }

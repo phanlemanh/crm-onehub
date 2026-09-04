@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chín khiếm khuyết, hai bệnh — vì sao cái thứ chín có thuốc riêng</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --page:    #fafafa;
+    --card:    #fafafa;
+    --ink:     #171717;
+    --muted:   #575757;
+    --soft:    #666666;
+    --rule:    rgba(23,23,23,0.12);
+    --accent:  #006B4F;
+    --sans:    'Geist', system-ui, sans-serif;
+    --serif:   'Lora', Georgia, serif;
+    --mono:    'Geist Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:  #171717;
+      --ink:   #fafafa;
+      --muted: #b4b4b4;
+      --soft:  #9a9a9a;
+      --rule:  rgba(250,250,250,0.16);
+      --accent:#2f9b7a;
+    }
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1200px; width: 100%; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .standfirst {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 66ch;
+    margin-bottom: 1.75rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+  svg { width: 100%; min-width: 960px; display: block; }
+  .notes {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 0.9fr;
+    gap: 2rem;
+  }
+  .notes h2 {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .notes p { font-size: 0.86rem; line-height: 1.6; color: var(--ink); }
+  .notes p + p { margin-top: 0.6rem; }
+  .notes .quiet { color: var(--muted); }
+  code { font-family: var(--mono); font-size: 0.8em; color: var(--muted); }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+  }
+  @media (max-width: 860px) { .notes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Cổng 1 · Hình 2 · AC-1 … AC-10</p>
+  <h1>Chín khiếm khuyết, hai bệnh — và cái thứ chín cần thuốc khác</h1>
+  <p class="standfirst">Đề bài xếp cả chín cùng một hình. Đọc mã thì tám cái đúng vậy: chúng xanh được mà không đỏ được. Cái thứ chín đỏ được, và đã đỏ thật — bệnh của nó là bán kính nổ. Khác bệnh thì khác thuốc, nên nó đứng riêng một nhóm.</p>
+
+  <div class="card">
+  <svg viewBox="0 0 1160 920" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ phân nhóm chín khiếm khuyết của giàn đo thành hai bệnh, kèm mã tiêu chí phủ từng cái">
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <!-- ================= KHUNG NHÓM ================= -->
+    <rect x="40" y="64" width="664" height="636" rx="8" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+    <rect x="736" y="64" width="384" height="636" rx="8" fill="rgba(0,107,79,0.03)" stroke="rgba(0,107,79,0.30)" stroke-width="1"/>
+
+    <!-- ================= NHÓM 1 ================= -->
+    <text x="64" y="96" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">NHÓM 1 · 8 CÁI</text>
+    <text x="64" y="122" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">xanh được mà không đỏ được</text>
+    <text x="64" y="144" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">phá thật vào vật đo, chân vẫn im — nên nó chưa từng đo gì; chữa bằng cặp hai chiều</text>
+
+    <!-- lý do 1 -->
+    <rect x="64" y="168" width="616" height="144" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="80" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">tập quan sát rỗng hoặc tự cấp</text>
+
+    <rect x="80" y="208" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="221" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-1</text>
+    <text x="148" y="221" fill="#171717" font-size="11" font-family="'Geist', sans-serif">bảy giai đoạn thoả thuận là một danh sách gõ tay, không hỏi máy chủ</text>
+
+    <rect x="80" y="240" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="253" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-2</text>
+    <text x="148" y="253" fill="#171717" font-size="11" font-family="'Geist', sans-serif">không giá trị nào hiện ra thì chân bỏ qua, rồi báo đạt</text>
+
+    <rect x="80" y="272" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="285" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-6</text>
+    <text x="148" y="285" fill="#171717" font-size="11" font-family="'Geist', sans-serif">mẫu số bề mặt lấy từ chính bản khai — gỡ một dòng, không ai biết</text>
+
+    <!-- lý do 2 -->
+    <rect x="64" y="332" width="616" height="112" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="80" y="356" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">chỉ kiểm một vế của quan hệ</text>
+
+    <rect x="80" y="372" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="385" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-3</text>
+    <text x="148" y="385" fill="#171717" font-size="11" font-family="'Geist', sans-serif">lượt máy chủ về: chỉ tìm chữ Việt, không tìm chữ Anh còn sót</text>
+
+    <rect x="80" y="404" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="417" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-4</text>
+    <text x="148" y="417" fill="#171717" font-size="11" font-family="'Geist', sans-serif">nợ vòng ①: vắng ở cả hai thứ tiếng vẫn được tính là đã dịch</text>
+
+    <!-- lý do 3 -->
+    <rect x="64" y="464" width="616" height="80" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="80" y="488" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">vật đo do chính bên đọc nặn ra</text>
+
+    <rect x="80" y="504" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="517" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-5</text>
+    <text x="148" y="517" fill="#171717" font-size="11" font-family="'Geist', sans-serif">chân tự dựng thẻ thời gian, rồi tự đọc lại đúng thẻ ấy</text>
+
+    <!-- lý do 4 -->
+    <rect x="64" y="564" width="616" height="112" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="80" y="588" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">đo nhầm vật</text>
+
+    <rect x="80" y="604" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="617" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-7</text>
+    <text x="148" y="617" fill="#171717" font-size="11" font-family="'Geist', sans-serif">dữ liệu biên đếm hàng trong cơ sở dữ liệu, không đọc chữ trên màn</text>
+
+    <rect x="80" y="636" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="649" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-8</text>
+    <text x="148" y="649" fill="#171717" font-size="11" font-family="'Geist', sans-serif">chặn khoá-chết nhận ra tên lá, không nhận ra đường đầy đủ</text>
+
+    <!-- ================= NHÓM 2 ================= -->
+    <text x="760" y="96" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">NHÓM 2 · 1 CÁI</text>
+    <text x="760" y="122" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">đỏ được, nhưng làm</text>
+    <text x="760" y="144" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">hỏng cây làm việc</text>
+    <text x="760" y="166" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">bệnh của nó là bán kính nổ</text>
+
+    <rect x="760" y="192" width="336" height="120" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="776" y="208" width="60" height="18" rx="4" fill="none" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
+    <text x="806" y="221" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-10</text>
+    <text x="776" y="252" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">chân đột biến</text>
+    <text x="776" y="276" fill="#171717" font-size="11" font-family="'Geist', sans-serif">ăn mất bản sửa chưa lưu, và giữ mã sản</text>
+    <text x="776" y="294" fill="#171717" font-size="11" font-family="'Geist', sans-serif">phẩm ở bản tiếng Anh suốt lượt chạy</text>
+
+    <line x1="752" y1="344" x2="752" y2="424" stroke="#006B4F" stroke-width="2"/>
+    <text x="772" y="366" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', Georgia, serif">Lớp lỗi này không có trong bảng</text>
+    <text x="772" y="388" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', Georgia, serif">của bộ kit. Đó là lý do bốn vòng</text>
+    <text x="772" y="410" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', Georgia, serif">liền nó bị xếp nhầm sang trái.</text>
+
+    <rect x="760" y="456" width="336" height="120" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="776" y="480" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">KHÁC BỆNH THÌ KHÁC THUỐC</text>
+    <text x="776" y="506" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Tám cái bên trái chữa bằng cặp hai</text>
+    <text x="776" y="524" fill="#171717" font-size="11" font-family="'Geist', sans-serif">chiều: phá thật, rồi xem chân có đỏ.</text>
+    <text x="776" y="546" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Cái này chữa bằng khoanh vùng: không</text>
+    <text x="776" y="564" fill="#171717" font-size="11" font-family="'Geist', sans-serif">chạm gì ngoài bản sao của chính nó.</text>
+
+    <rect x="760" y="600" width="336" height="76" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="776" y="624" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">VÌ SAO ĐỨNG RIÊNG</text>
+    <text x="776" y="650" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Nhập nó vào cùng khuôn là kê nhầm</text>
+    <text x="776" y="668" fill="#171717" font-size="11" font-family="'Geist', sans-serif">thuốc. Nên nó có tiêu chí riêng.</text>
+
+    <!-- ================= Ô QUÉT TÌM RA ================= -->
+    <rect x="40" y="732" width="1080" height="80" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="5,4"/>
+    <text x="64" y="758" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">Ô DO QUÉT TÌM RA — KHÔNG NẰM TRONG CHÍN CÁI</text>
+
+    <rect x="64" y="770" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="90" y="783" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-9</text>
+    <text x="132" y="783" fill="#171717" font-size="11" font-family="'Geist', sans-serif">ba bản khai miễn trừ trong giàn đo, không cái nào có bánh cóc — thêm một dòng là tắt một phép đo, vĩnh viễn, không dấu vết</text>
+
+    <!-- ================= CHÚ GIẢI ================= -->
+    <line x1="40" y1="844" x2="1120" y2="844" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="40" y="864" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+    <rect x="40" y="881" width="16" height="14" rx="3" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="66" y="892" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">xanh được mà không đỏ được</text>
+
+    <rect x="420" y="881" width="16" height="14" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="446" y="892" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">khác bệnh: đỏ được, nhưng bán kính nổ</text>
+
+    <text x="800" y="892" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">AC-n = mã tiêu chí phủ đúng khiếm khuyết đó</text>
+  </svg>
+  </div>
+
+  <div class="notes">
+    <div>
+      <h2>Vì sao chín cái này ở lại bốn vòng liền</h2>
+      <p>Hợp đồng của vòng ③a nói về chữ trên màn. Mọi lỗi của giàn đo bị xếp ra ngoài hợp đồng, vòng nào cũng vậy — nên chúng tái xuất suốt vòng năm đến vòng tám mà không vòng nào có quyền sửa.</p>
+      <p class="quiet">Vòng này đổi chủ ngữ: hợp đồng nói về giàn đo, không nói về sản phẩm. Điểm quyết định <code>d-…-11022</code>.</p>
+    </div>
+    <div>
+      <h2>Vì sao cái thứ chín tách khỏi khuôn</h2>
+      <p>Bảng lớp lỗi của bộ kit có mười ba lớp, và không lớp nào là bán kính nổ. Cái thứ chín đỏ được — nó không thiếu răng, nó cắn cả vào cây làm việc. Bốn vòng liền nó bị xếp nhầm chính vì bảng không có ô cho nó.</p>
+      <p class="quiet">Đóng nó vào khuôn cặp hai chiều là kê nhầm thuốc. Điểm quyết định <code>d-…-11025</code>.</p>
+    </div>
+    <div>
+      <h2>Ô thứ mười không đến từ đề bài</h2>
+      <p>Quét không gian tìm ra một chỗ không phát hiện nào gọi tên: ba bản khai miễn trừ, không cái nào có bánh cóc. Đây là câu hỏi ai canh cái canh.</p>
+      <p class="quiet">Nó không nằm trong chín cái, nên nó đứng ngoài hai nhóm — nhưng nó vẫn phải có tiêu chí.</p>
+    </div>
+  </div>
+
+  <footer>Hình 2 / 2 · điểm quyết định ở Cổng 1 · thuoc-cua-lat-3a-co-rang · AC-1 … AC-10</footer>
+</div>
+</body>
+</html>

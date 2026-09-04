@@ -1,0 +1,57 @@
+{
+  "ghiChu": "Ban khai nay KHONG liet dan so. Dan so suy tu DIA: moi *.mjs va *.sh trong rang/, tru mienTru, cong ngoaiRang. Ban khai chi noi cac NGOAI LE, va moi ngoai le phai co ly do doc duoc.",
+  "ngoaiRang": [
+    {
+      "ten": "apps/app/test/messages-guard.spec.ts",
+      "lyDo": "chan nghiem thu song ngoai rang/ vi no la bai kiem cua apps/app; chan chong-lach khong quet duoc no, va dieu do phai hien thanh mot con so chu khong duoc im"
+    }
+  ],
+  "sieuDo": [
+    {
+      "ten": "khong-may-quet.sh",
+      "lyDo": "chu ngu la gian do, khong phai san pham — no canh cac chan khac co cham vat that khong"
+    },
+    {
+      "ten": "mien-tru.mjs",
+      "lyDo": "chu ngu la gian do — no canh ba ban khai mien tru, khong khang dinh gi ve man hinh"
+    },
+    {
+      "ten": "khai-sinh.mjs",
+      "lyDo": "chu ngu la gian do — no chay hai chieu cua moi chan; tu khai sinh bang chan con --chan so"
+    }
+  ],
+  "mienTru": [
+    {
+      "ten": "be-mat.mjs",
+      "lyDo": "module khai be mat an, ban-ve.mjs nhap vao — khong phai phep do"
+    },
+    {
+      "ten": "slug.mjs",
+      "lyDo": "module suy slug workspace, moi chan nhap vao — khong phai phep do"
+    },
+    {
+      "ten": "lat.mjs",
+      "lyDo": "dem pham vi lat, sinh so cho hop dong — khong phai phep do nghiem thu"
+    },
+    {
+      "ten": "phan-loai.mjs",
+      "lyDo": "phan loai chuoi de sinh so pham vi — khong phai phep do nghiem thu"
+    },
+    {
+      "ten": "dem-pham-vi.mjs",
+      "lyDo": "dem pham vi — khong phai phep do nghiem thu"
+    },
+    {
+      "ten": "kiem-ke.mjs",
+      "lyDo": "kiem ke khoa, sinh bang doi chieu — khong phai phep do nghiem thu"
+    },
+    {
+      "ten": "kiem-ban-dich.mjs",
+      "lyDo": "doi chieu bang dich voi kho chuoi — khong phai phep do nghiem thu"
+    },
+    {
+      "ten": "xuat-hinh.mjs",
+      "lyDo": "xuat anh cho ho so — khong phai phep do nghiem thu"
+    }
+  ]
+}

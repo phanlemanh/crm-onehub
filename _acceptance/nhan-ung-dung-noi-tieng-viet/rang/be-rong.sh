@@ -9,10 +9,13 @@ mkdir -p "$(dirname "$XUAT")"
 echo "# Chu that hien ra o moi tieu de cot — dau vao bat buoc cua E14" > "$XUAT"
 
 hong=0
-for man in companies contacts deals; do
-  for w in 768 1024 1280 1440; do
-    if ! DUONG="$man" BE_RONG="$w" XUAT="$XUAT" node "$RANG/ban-ve.mjs" be-rong \
-      | grep -E '^ket qua'; then
+for man in ${MAN_EP:-companies contacts deals}; do
+  for w in ${BE_RONG_EP:-768 1024 1280 1440}; do
+    ra="$(DUONG="$man" BE_RONG="$w" XUAT="$XUAT" node "$RANG/ban-ve.mjs" be-rong 2>&1)"
+    ma=$?
+    printf '%s\n' "$ra" | grep -E '^ket qua' || true
+    if [ "$ma" -ne 0 ]; then
+      echo "   O HONG: $man ${w}px — chan con tra ma $ma"
       hong=$((hong + 1))
     fi
   done

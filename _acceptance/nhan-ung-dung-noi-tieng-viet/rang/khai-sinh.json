@@ -1,0 +1,245 @@
+[
+  {
+    "ten": "khai-tieng.mjs:giai-doan",
+    "tep": "khai-tieng.mjs",
+    "chay": [
+      "node",
+      "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs",
+      "giai-doan"
+    ],
+    "vecTo": {
+      "kieu": "loc-man",
+      "moiTruong": {
+        "TRANG": "?hide=nothing&q=zzz-khong-co-thoa-thuan-nao"
+      }
+    },
+    "ghim": "GIAI DOAN KHONG THAY TREN MAN:",
+    "ma": 1
+  },
+  {
+    "ten": "khai-tieng.mjs:khai-tieng",
+    "tep": "khai-tieng.mjs",
+    "chay": [
+      "node",
+      "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs"
+    ],
+    "vecTo": {
+      "kieu": "loc-man",
+      "moiTruong": {
+        "TRANG": "?hide=nothing&q=zzz-khong-co-cong-ty-nao"
+      }
+    },
+    "ghim": "NGANH KHONG THAY TREN MAN:",
+    "ma": 1
+  },
+  {
+    "ten": "may-chu-ve.sh",
+    "tep": "may-chu-ve.sh",
+    "chay": [
+      "bash",
+      "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/may-chu-ve.sh"
+    ],
+    "vecTo": {
+      "kieu": "lat-ngon-ngu",
+      "moiTruong": {
+        "TIENG": "en"
+      }
+    },
+    "ghim": "CON TIENG ANH /companies:",
+    "ma": 1
+  },
+  {
+    "ten": "no-vong-1.mjs",
+    "tep": "no-vong-1.mjs",
+    "chay": [
+      "node",
+      "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/no-vong-1.mjs"
+    ],
+    "vecTo": {
+      "kieu": "lat-ngon-ngu",
+      "moiTruong": {
+        "TIENG": "en"
+      }
+    },
+    "ghim": "CON TIENG ANH",
+    "ma": 1
+  },
+  {
+    "ten": "ban-ve.mjs:doi-tieng",
+    "tep": "ban-ve.mjs",
+    "chay": [
+      "node",
+      "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs",
+      "doi-tieng"
+    ],
+    "vecTo": {
+      "kieu": "bo-cu-doi-tieng",
+      "moiTruong": {
+        "KHONG_DOI": "1"
+      }
+    },
+    "ghim": "CHU THOI GIAN CON TIENG ANH",
+    "ma": 1
+  },
+  {
+    "ten": "ban-ve.mjs:ba-man",
+    "tep": "ban-ve.mjs",
+    "chay": [
+      "node",
+      "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs",
+      "ba-man"
+    ],
+    "vecTo": {
+      "kieu": "them-dong-ban-khai",
+      "moiTruong": {
+        "THEM_BE_MAT_GIA": "1"
+      }
+    },
+    "ghim": "BAN KHAI CO DONG CHET:",
+    "ma": 1
+  },
+  {
+    "ten": "du-lieu-bien.mjs",
+    "tep": "du-lieu-bien.mjs",
+    "chay": [
+      "node",
+      "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/du-lieu-bien.mjs"
+    ],
+    "vecTo": {
+      "kieu": "lat-ngon-ngu",
+      "moiTruong": {
+        "TIENG": "en"
+      }
+    },
+    "ghim": "CON TIENG ANH o trang thai",
+    "ma": 1
+  },
+  {
+    "ten": "dot-bien.mjs:khoanh-vung",
+    "tep": "dot-bien.mjs",
+    "chay": [
+      "node",
+      "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/dot-bien.mjs",
+      "--chan",
+      "khoanh-vung"
+    ],
+    "vecTo": {
+      "kieu": "khoi-phuc-kieu-cu",
+      "moiTruong": {
+        "KIEU_CU": "1"
+      }
+    },
+    "ghim": "DOI THAY BI NUOT o duong thoat",
+    "ma": 1,
+    "chayRieng": true,
+    "lyDo": "chieu do cua no SUA CAY LAM VIEC, nen khong duoc chay song song voi chan khac"
+  },
+  {
+    "ten": "chu-cung-jsx.mjs",
+    "tep": "chu-cung-jsx.mjs",
+    "chay": [
+      "node",
+      "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/chu-cung-jsx.mjs"
+    ],
+    "vecTo": {
+      "kieu": "vat-thu-mang-hinh-dang-can-bat",
+      "doiSo": [
+        "_acceptance/thuoc-cua-lat-3a-co-rang/vat-thu/chu-cung-trong-jsx.tsx"
+      ]
+    },
+    "ghim": "chuoi nguoi doc thay con khoa cung trong JSX",
+    "ma": 1
+  },
+  {
+    "ten": "khong-may-quet.sh",
+    "tep": "khong-may-quet.sh",
+    "chay": [
+      "bash",
+      "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khong-may-quet.sh"
+    ],
+    "vecTo": {
+      "kieu": "ban-khai-rong",
+      "moiTruong": {
+        "BAN_KHAI": "/dev/null"
+      }
+    },
+    "ghim": "KHONG DO DUOC: thieu ban khai chan do",
+    "ma": 2
+  },
+  {
+    "ten": "mien-tru.mjs",
+    "tep": "mien-tru.mjs",
+    "chay": [
+      "node",
+      "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/mien-tru.mjs"
+    ],
+    "vecTo": {
+      "kieu": "them-dong-ban-khai",
+      "moiTruong": {
+        "DONG_GIA": "khong.co.khoa.nay.dau"
+      }
+    },
+    "ghim": "DONG MIEN TRU CHET:",
+    "ma": 1
+  },
+  {
+    "ten": "apps/app/test/messages-guard.spec.ts",
+    "tep": "apps/app/test/messages-guard.spec.ts",
+    "chay": [
+      "bun",
+      "test",
+      "test/messages-guard.spec.ts"
+    ],
+    "vecTo": null,
+    "chieuDoTrongBai": [
+      "chan nay do duoc: mot khoa khong ai goi phai bi goi ten",
+      "chan nay do duoc: ten la trung mot tu pho thong khong giu khoa song",
+      "ban khai CHUA_NOI khong duoc co dong chet",
+      "phan giai theo pham vi: hai ham cung dat ten bien m cho hai nhanh khac nhau"
+    ],
+    "lyDo": "cap hai chieu la CHINH cac bai kiem trong file, chay lai moi CI cung bo test",
+    "chayBai": [
+      "bun",
+      "test",
+      "test/messages-guard.spec.ts",
+      "-t",
+      "{{BAI}}"
+    ],
+    "cwd": "apps/app"
+  },
+  {
+    "ten": "be-rong.sh",
+    "tep": "be-rong.sh",
+    "chay": [
+      "bash",
+      "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/be-rong.sh"
+    ],
+    "vecTo": {
+      "kieu": "ep-chan-con-hong",
+      "moiTruong": {
+        "MAN_EP": "man-khong-ton-tai"
+      }
+    },
+    "ghim": "O HONG: man-khong-ton-tai",
+    "ma": 1
+  },
+  {
+    "ten": "khai-sinh.mjs:so",
+    "tep": "khai-sinh.mjs",
+    "chay": [
+      "node",
+      "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.mjs",
+      "--chan",
+      "so"
+    ],
+    "vecTo": {
+      "kieu": "pha-mot-luat-cua-banh-coc",
+      "moiTruong": {
+        "PHA_TU_KIEM": "1"
+      }
+    },
+    "lyDo": "con canh so tu dung bon so tam hong ngay trong luot chay; vec-to go mot luat khien tu kiem thu ba khong lat nua",
+    "ghim": "BANH COC HONG: tu kiem \"chan khong pha duoc\"",
+    "ma": 1
+  }
+]

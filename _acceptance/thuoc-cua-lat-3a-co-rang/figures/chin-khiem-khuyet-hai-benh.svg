@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1160 920" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ phân nhóm chín khiếm khuyết của giàn đo thành hai bệnh, kèm mã tiêu chí phủ từng cái">
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <!-- ================= KHUNG NHÓM ================= -->
+    <rect x="40" y="64" width="664" height="636" rx="8" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+    <rect x="736" y="64" width="384" height="636" rx="8" fill="rgba(0,107,79,0.03)" stroke="rgba(0,107,79,0.30)" stroke-width="1"/>
+
+    <!-- ================= NHÓM 1 ================= -->
+    <text x="64" y="96" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">NHÓM 1 · 8 CÁI</text>
+    <text x="64" y="122" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">xanh được mà không đỏ được</text>
+    <text x="64" y="144" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">phá thật vào vật đo, chân vẫn im — nên nó chưa từng đo gì; chữa bằng cặp hai chiều</text>
+
+    <!-- lý do 1 -->
+    <rect x="64" y="168" width="616" height="144" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="80" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">tập quan sát rỗng hoặc tự cấp</text>
+
+    <rect x="80" y="208" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="221" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-1</text>
+    <text x="148" y="221" fill="#171717" font-size="11" font-family="'Geist', sans-serif">bảy giai đoạn thoả thuận là một danh sách gõ tay, không hỏi máy chủ</text>
+
+    <rect x="80" y="240" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="253" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-2</text>
+    <text x="148" y="253" fill="#171717" font-size="11" font-family="'Geist', sans-serif">không giá trị nào hiện ra thì chân bỏ qua, rồi báo đạt</text>
+
+    <rect x="80" y="272" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="285" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-6</text>
+    <text x="148" y="285" fill="#171717" font-size="11" font-family="'Geist', sans-serif">mẫu số bề mặt lấy từ chính bản khai — gỡ một dòng, không ai biết</text>
+
+    <!-- lý do 2 -->
+    <rect x="64" y="332" width="616" height="112" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="80" y="356" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">chỉ kiểm một vế của quan hệ</text>
+
+    <rect x="80" y="372" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="385" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-3</text>
+    <text x="148" y="385" fill="#171717" font-size="11" font-family="'Geist', sans-serif">lượt máy chủ về: chỉ tìm chữ Việt, không tìm chữ Anh còn sót</text>
+
+    <rect x="80" y="404" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="417" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-4</text>
+    <text x="148" y="417" fill="#171717" font-size="11" font-family="'Geist', sans-serif">nợ vòng ①: vắng ở cả hai thứ tiếng vẫn được tính là đã dịch</text>
+
+    <!-- lý do 3 -->
+    <rect x="64" y="464" width="616" height="80" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="80" y="488" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">vật đo do chính bên đọc nặn ra</text>
+
+    <rect x="80" y="504" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="517" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-5</text>
+    <text x="148" y="517" fill="#171717" font-size="11" font-family="'Geist', sans-serif">chân tự dựng thẻ thời gian, rồi tự đọc lại đúng thẻ ấy</text>
+
+    <!-- lý do 4 -->
+    <rect x="64" y="564" width="616" height="112" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="80" y="588" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">đo nhầm vật</text>
+
+    <rect x="80" y="604" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="617" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-7</text>
+    <text x="148" y="617" fill="#171717" font-size="11" font-family="'Geist', sans-serif">dữ liệu biên đếm hàng trong cơ sở dữ liệu, không đọc chữ trên màn</text>
+
+    <rect x="80" y="636" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="106" y="649" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-8</text>
+    <text x="148" y="649" fill="#171717" font-size="11" font-family="'Geist', sans-serif">chặn khoá-chết nhận ra tên lá, không nhận ra đường đầy đủ</text>
+
+    <!-- ================= NHÓM 2 ================= -->
+    <text x="760" y="96" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">NHÓM 2 · 1 CÁI</text>
+    <text x="760" y="122" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">đỏ được, nhưng làm</text>
+    <text x="760" y="144" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">hỏng cây làm việc</text>
+    <text x="760" y="166" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">bệnh của nó là bán kính nổ</text>
+
+    <rect x="760" y="192" width="336" height="120" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="776" y="208" width="60" height="18" rx="4" fill="none" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
+    <text x="806" y="221" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-10</text>
+    <text x="776" y="252" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">chân đột biến</text>
+    <text x="776" y="276" fill="#171717" font-size="11" font-family="'Geist', sans-serif">ăn mất bản sửa chưa lưu, và giữ mã sản</text>
+    <text x="776" y="294" fill="#171717" font-size="11" font-family="'Geist', sans-serif">phẩm ở bản tiếng Anh suốt lượt chạy</text>
+
+    <line x1="752" y1="344" x2="752" y2="424" stroke="#006B4F" stroke-width="2"/>
+    <text x="772" y="366" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', Georgia, serif">Lớp lỗi này không có trong bảng</text>
+    <text x="772" y="388" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', Georgia, serif">của bộ kit. Đó là lý do bốn vòng</text>
+    <text x="772" y="410" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', Georgia, serif">liền nó bị xếp nhầm sang trái.</text>
+
+    <rect x="760" y="456" width="336" height="120" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="776" y="480" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">KHÁC BỆNH THÌ KHÁC THUỐC</text>
+    <text x="776" y="506" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Tám cái bên trái chữa bằng cặp hai</text>
+    <text x="776" y="524" fill="#171717" font-size="11" font-family="'Geist', sans-serif">chiều: phá thật, rồi xem chân có đỏ.</text>
+    <text x="776" y="546" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Cái này chữa bằng khoanh vùng: không</text>
+    <text x="776" y="564" fill="#171717" font-size="11" font-family="'Geist', sans-serif">chạm gì ngoài bản sao của chính nó.</text>
+
+    <rect x="760" y="600" width="336" height="76" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="776" y="624" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">VÌ SAO ĐỨNG RIÊNG</text>
+    <text x="776" y="650" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Nhập nó vào cùng khuôn là kê nhầm</text>
+    <text x="776" y="668" fill="#171717" font-size="11" font-family="'Geist', sans-serif">thuốc. Nên nó có tiêu chí riêng.</text>
+
+    <!-- ================= Ô QUÉT TÌM RA ================= -->
+    <rect x="40" y="732" width="1080" height="80" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="5,4"/>
+    <text x="64" y="758" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">Ô DO QUÉT TÌM RA — KHÔNG NẰM TRONG CHÍN CÁI</text>
+
+    <rect x="64" y="770" width="52" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="90" y="783" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-9</text>
+    <text x="132" y="783" fill="#171717" font-size="11" font-family="'Geist', sans-serif">ba bản khai miễn trừ trong giàn đo, không cái nào có bánh cóc — thêm một dòng là tắt một phép đo, vĩnh viễn, không dấu vết</text>
+
+    <!-- ================= CHÚ GIẢI ================= -->
+    <line x1="40" y1="844" x2="1120" y2="844" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="40" y="864" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+    <rect x="40" y="881" width="16" height="14" rx="3" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="66" y="892" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">xanh được mà không đỏ được</text>
+
+    <rect x="420" y="881" width="16" height="14" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="446" y="892" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">khác bệnh: đỏ được, nhưng bán kính nổ</text>
+
+    <text x="800" y="892" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">AC-n = mã tiêu chí phủ đúng khiếm khuyết đó</text>
+  </svg>

@@ -1,11 +1,11 @@
 import { describe, expect, it } from "bun:test";
-import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { companyMessages } from "@/lib/messages/companies";
 import { contactMessages } from "@/lib/messages/contacts";
 import { crmMessages } from "@/lib/messages/crm";
 import { dealMessages } from "@/lib/messages/deals";
 import { recordSheetMessages } from "@/lib/messages/record-sheet";
+import { docDuongGoi, taoSong } from "./duong-goi";
 
 const DAU_TIENG_VIET =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
@@ -33,7 +33,6 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 
 const KHONG_DAU = new Set([
 	"headers.email",
-	"headers.emails",
 	"tabs.emails",
 	"contact.emails",
 	"type.email",
@@ -46,7 +45,6 @@ const KHONG_DAU = new Set([
 	"fields.x",
 	"fields.github",
 	"contactColumns.title",
-	"dealColumns.title",
 	"create.domainPlaceholder",
 	"standard.email",
 	"standard.website",
@@ -54,9 +52,6 @@ const KHONG_DAU = new Set([
 	"standard.github",
 	"timeline.viaGmail",
 	"composer.log",
-	"stageChange",
-	"currencyEntry",
-	"candidateTitle",
 	"namePlaceholder",
 	"company.domainPlaceholder",
 	"deal.namePlaceholder",
@@ -71,6 +66,35 @@ function mienDau(khoa: string): boolean {
 function hienRa(v: GiaTri): string {
 	return v instanceof Function ? v("X", "Y", "Z") : v;
 }
+
+const CHUA_NOI_KHAI: readonly string[] = [
+	"record-sheet.tabs.details",
+	"record-sheet.company.archived",
+	"record-sheet.company.restored",
+	"record-sheet.company.purged",
+	"record-sheet.contact.noCompany",
+	"record-sheet.deal.remove",
+	"crm.companyPicker.none",
+	"crm.owner.label",
+	"crm.standard.name",
+	"crm.standard.domain",
+	"crm.standard.website",
+	"crm.standard.industry",
+	"crm.standard.city",
+	"crm.standard.country",
+	"crm.standard.firstName",
+	"crm.standard.lastName",
+	"crm.standard.title",
+	"crm.standard.email",
+	"crm.standard.phone",
+	"crm.standard.linkedin",
+	"crm.standard.github",
+	"crm.standard.owner",
+	"crm.standard.amount",
+	"crm.standard.currency",
+	"crm.standard.closeDate",
+	"crm.standard.stage",
+];
 
 describe("kho chuoi cua vong ③a", () => {
 	for (const [ten, lay] of MODULE) {
@@ -300,49 +324,54 @@ describe("kho chuoi cua vong ③a", () => {
 });
 
 describe("khoa chet", () => {
-	const NGUON = readdirSync(join(import.meta.dir, ".."), {
-		recursive: true,
-		withFileTypes: true,
-	})
-		.filter(
-			(muc) =>
-				muc.isFile() &&
-				/\.tsx?$/.test(muc.name) &&
-				!muc.parentPath.includes("/lib/messages") &&
-				!muc.parentPath.includes("/test") &&
-				!muc.parentPath.includes("/node_modules") &&
-				!muc.parentPath.includes("/.next"),
-		)
-		.map((muc) => readFileSync(join(muc.parentPath, muc.name), "utf8"))
-		.join("\n");
-
-	const coTen = (ten: string) =>
-		new RegExp(`\\.${ten}\\b|"${ten}"|'${ten}'`).test(NGUON);
-
-	function song(duong: string): boolean {
-		const phan = duong.split(".");
-		const la = phan[phan.length - 1] ?? "";
-		if (!coTen(la)) return false;
-		const cha = phan[phan.length - 2];
-		if (!cha) return true;
-		if (new RegExp(`\\.${cha}\\.${la}\\b`).test(NGUON)) return true;
-		return coTen(cha);
-	}
+	const song = taoSong(docDuongGoi(join(import.meta.dir, "..")));
+	const CHUA_NOI = new Set(CHUA_NOI_KHAI);
 
 	it("chan nay do duoc: mot khoa khong ai goi phai bi goi ten", () => {
 		expect(song("khongAiGoiKhoaNay")).toBe(false);
 		expect(song("nhomKhongTonTai.khongAiGoiKhoaNay")).toBe(false);
 	});
 
-	it("moi khoa da khai deu co it nhat mot cho goi trong apps/app", () => {
+	it("chan nay do duoc: ten la trung mot tu pho thong khong giu khoa song", () => {
+		expect(song("deal.person")).toBe(true);
+		expect(song("deal.email")).toBe(false);
+		expect(song("deal.title")).toBe(false);
+		expect(song("company.person")).toBe(false);
+		expect(song("contact.stage")).toBe(false);
+	});
+
+	it("moi khoa da khai deu co cho goi, tru ban khai CHUA_NOI", () => {
 		const chet: string[] = [];
-
-		for (const [ten, lay] of MODULE) {
-			for (const [duong] of phang(lay("en"))) {
-				if (!song(duong)) chet.push(`${ten}.${duong}`);
-			}
-		}
-
+		for (const [ten, lay] of MODULE)
+			for (const [duong] of phang(lay("en")))
+				if (!song(duong) && !CHUA_NOI.has(`${ten}.${duong}`))
+					chet.push(`${ten}.${duong}`);
 		expect(chet.sort()).toEqual([]);
+	});
+
+	it("ban khai CHUA_NOI khong duoc co dong chet", () => {
+		const songLai: string[] = [];
+		for (const [ten, lay] of MODULE)
+			for (const [duong] of phang(lay("en")))
+				if (song(duong) && CHUA_NOI.has(`${ten}.${duong}`))
+					songLai.push(`${ten}.${duong}`);
+		const khongCoKhoa = [...CHUA_NOI].filter((khoa) => {
+			const [ten, ...con] = khoa.split(".");
+			const lay = MODULE.find(([t]) => t === ten)?.[1];
+			return !lay || !phang(lay("en")).some(([d]) => d === con.join("."));
+		});
+		expect([...songLai, ...khongCoKhoa].sort()).toEqual([]);
+	});
+});
+
+describe("bo doc duong goi", () => {
+	const VAT_THU = join(import.meta.dir, "vat-thu-duong-goi");
+
+	it("phan giai theo pham vi: hai ham cung dat ten bien m cho hai nhanh khac nhau", () => {
+		const song = taoSong(docDuongGoi(VAT_THU));
+		expect(song("fields.add")).toBe(true);
+		expect(song("standard.company")).toBe(true);
+		expect(song("fields.company")).toBe(false);
+		expect(song("standard.add")).toBe(false);
 	});
 });

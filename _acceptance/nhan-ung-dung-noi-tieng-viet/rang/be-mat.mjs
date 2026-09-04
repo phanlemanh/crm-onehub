@@ -116,3 +116,25 @@ export const CHUA_MO = [
 	'[data-slot="dropdown-menu-sub-content"]',
 	'[role="dialog"]',
 ];
+
+export const DEM_BE_MAT_TRANG = () => {
+	const trong = (el) => {
+		const r = el.getBoundingClientRect();
+		return r.width > 0 && r.height > 0;
+	};
+	const man = document.querySelector('[data-slot="page-shell"]');
+	if (!man) return null;
+	const than = man.querySelector('[data-slot="table-body"]');
+	const menu = [...man.querySelectorAll("button, [role='button']")].filter(
+		(el) => trong(el) && el.getAttribute("aria-haspopup") === "menu",
+	);
+	const trongThan = menu.filter((el) => than?.contains(el));
+	const ngoaiThan = menu.filter((el) => !than?.contains(el));
+	return {
+		loai: ngoaiThan.length + (trongThan.length > 0 ? 1 : 0),
+		theHien: menu.length,
+		trenDong: trongThan.length,
+	};
+};
+
+export const LA_MENU = (ten) => /menu/i.test(ten) && !/menu con/i.test(ten);
