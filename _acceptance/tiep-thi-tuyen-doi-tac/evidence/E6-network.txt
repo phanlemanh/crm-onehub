@@ -1,4 +1,12 @@
 Driver = node script (puppeteer-core CDP) + curl, khong phai Claude Browser tool
 co read_network_requests. Khong co duong doc network chuan cua driver nay.
-Cac goi API minh tu goi truc tiep (contacts.list, campaigns.members, savedViews.list,
-fields.list) qua curl deu tra HTTP 200 va JSON khong co truong "error".
+=> networkObserved = "n-a (driver)".
+
+Lan verify nay (2026-09-05, RUN_ID=e6v1788564734):
+- fields.list {entity:CONTACT} qua curl: HTTP 200, JSON khong co truong "error".
+- contacts.list voi filter {san_luong:[id "Cao"]} + q="Rang e6v1788564734" qua curl:
+  HTTP 200, JSON khong co truong "error", result.data.total=4, rows.length=4,
+  tat ca 4 rows co fields.san_luong="Cao".
+- chien-dich.mjs luong tu goi contacts.list/campaigns.members/savedViews.create noi bo
+  (khong qua curl) va deu khong bao loi (script thoat 2 neu tRPC tra error) — script
+  thoat 0.
