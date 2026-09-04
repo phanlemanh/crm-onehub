@@ -1,9 +1,9 @@
 {
   "source": "nhatot",
-  "crawledAt": "2026-09-04T16:27:20.707327Z",
+  "crawledAt": "2026-09-04T17:12:04.249801Z",
   "items": [
     {
-      "url": "https://nhatot.com/moi-gioi-pF1fW3hQ2EFvKyA",
+      "url": "https://nhatot.com/moi-gioi-locnhapho",
       "shopName": "Nhà đẹp Gò Vấp bylocnhapho",
       "isCompany": true,
       "hasLicense": false,
@@ -19,7 +19,7 @@
       "phone": "0967286620"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-GPbJIyTvfEKB8NH",
+      "url": "https://nhatot.com/moi-gioi-trang-nhadatsohongrieng",
       "shopName": "Nhà Đất Sổ Hồng Riêng",
       "isCompany": true,
       "hasLicense": false,
@@ -35,7 +35,7 @@
       "phone": "0931117660"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-bbbWDOpcIFwY2La",
+      "url": "https://nhatot.com/moi-gioi-giatotphumyhung",
       "shopName": "Minh Hiếu BĐS Phú Mỹ Hưng",
       "isCompany": true,
       "hasLicense": true,
@@ -51,7 +51,7 @@
       "phone": "0903187589"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-aOKKD6WXIxO5u23",
+      "url": "https://nhatot.com/moi-gioi-hau-tran-bds",
       "shopName": "Chuyên trang HẬU TRẦN BĐS",
       "isCompany": true,
       "hasLicense": false,
@@ -65,7 +65,7 @@
       "phone": "0966551166"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-lyualWldZlMKR93",
+      "url": "https://nhatot.com/moi-gioi-quyanbds",
       "shopName": "Quý Ân BĐS",
       "isCompany": true,
       "hasLicense": false,
@@ -79,7 +79,7 @@
       "phone": "0909198331"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-WHOJGAyaXGp8G8V",
+      "url": "https://nhatot.com/moi-gioi-nguyennhatthongtinthat",
       "shopName": "Nhà Phố Nguyễn Nhật Thông Tin Thật",
       "isCompany": true,
       "hasLicense": false,
@@ -95,7 +95,7 @@
       "phone": "0888822287"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-0HIc2ZI54sIrFHh",
+      "url": "https://nhatot.com/moi-gioi-quan-vu",
       "shopName": "Quân Nhà Thật",
       "isCompany": true,
       "hasLicense": false,
@@ -109,7 +109,7 @@
       "phone": "0886847948"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-fsfMH7segADB1yG",
+      "url": "https://nhatot.com/moi-gioi-nguyen-dinh-chien",
       "shopName": "Nguyễn Đình Chiến",
       "isCompany": true,
       "hasLicense": false,
@@ -123,7 +123,7 @@
       "phone": "0932615127"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-i6dmNi55Kh1i067",
+      "url": "https://nhatot.com/moi-gioi-bdshuydaiduong",
       "shopName": "BĐS Huy Đại Dương",
       "isCompany": true,
       "hasLicense": true,
@@ -139,7 +139,7 @@
       "phone": "0988999734"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-29ejla7EZzSnWlg",
+      "url": "https://nhatot.com/moi-gioi-anhtran",
       "shopName": "Anh Trần - Môi giới Mua Bán Nhà khu vực HCM",
       "isCompany": true,
       "hasLicense": false,
@@ -155,7 +155,7 @@
       "phone": "0865444004"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-j3CZ88xEgG5DeoO",
+      "url": "https://nhatot.com/moi-gioi-truong-vinh-sang-",
       "shopName": "Trương Vĩnh Sang",
       "isCompany": true,
       "hasLicense": false,
@@ -167,6 +167,583 @@
       "listingsNew30d": 88,
       "tier": "cao",
       "phone": "0707107206"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-hauchuyennhabinhthanh",
+      "shopName": "Hậu chuyên nhà Bình Thạnh",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Bình Thạnh",
+        "Quận Gò Vấp",
+        "Quận Phú Nhuận"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 87,
+      "listingsNew30d": 87,
+      "tier": "cao",
+      "phone": "0948774788"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-thuong-nha-pho-trung-tam",
+      "shopName": "Thương nhà phố trung tâm",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 7"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 81,
+      "listingsNew30d": 81,
+      "tier": "cao",
+      "phone": "0889111369"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-bdslinhxuan-thuduc",
+      "shopName": "Quốc Lê - Chuyên BĐS P Linh Xuân Tp Thủ Đức và kv lân cận",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Thành phố Thủ Đức"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 78,
+      "listingsNew30d": 78,
+      "tier": "cao",
+      "phone": "0394680089"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-trungnhadat0901888734",
+      "shopName": "Trung Nhà Đất 0901888734",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 77,
+      "listingsNew30d": 77,
+      "tier": "cao",
+      "phone": "0901888734"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-chuyen-trang-15607903-1616581695178",
+      "shopName": "Chuyên trang BĐS HOME CITY",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 1",
+        "Quận 3",
+        "Quận Phú Nhuận"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 76,
+      "listingsNew30d": 76,
+      "tier": "cao",
+      "phone": "0931116390"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-nhaphotrungtam13510",
+      "shopName": "Nhaphotrungtam13510",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 1",
+        "Quận 3",
+        "Quận 5",
+        "Quận 10"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 72,
+      "listingsNew30d": 72,
+      "tier": "cao",
+      "phone": "0986747315"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-thaopmh",
+      "shopName": "Ms Thảo PMH",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 1",
+        "Quận 7"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 69,
+      "listingsNew30d": 69,
+      "tier": "cao",
+      "phone": "0901759333"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-chuyen-nha-dat-quan-12",
+      "shopName": "CHUYÊN NHÀ ĐẤT QUẬN 12",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 68,
+      "listingsNew30d": 68,
+      "tier": "cao",
+      "phone": "0981068778"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-tonydzung",
+      "shopName": "Chuyên cho thuê PHÒNG TRỌ & KTX & SLEEPBOX",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12",
+        "Quận Bình Thạnh",
+        "Quận Gò Vấp"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 67,
+      "listingsNew30d": 67,
+      "tier": "cao",
+      "phone": "0359510640"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-odaucungthaybinhyen",
+      "shopName": "Ở ĐÂU CŨNG THẤY BÌNH YÊN",
+      "isCompany": true,
+      "hasLicense": true,
+      "districts": [
+        "Quận Tân Phú"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 66,
+      "listingsNew30d": 66,
+      "tier": "cao",
+      "personName": "LÊ THỊ CÔNG SỨ",
+      "phone": "0383126945"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-thanh-phuc",
+      "shopName": "THÀNH PHÚC BĐS QUẬN 12, HÓC MÔN",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 64,
+      "listingsNew30d": 64,
+      "tier": "cao",
+      "phone": "0902949591"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-nhabansaigonqhome",
+      "shopName": "Quỳnh Nguyễn - Kho nhà Sài Gòn",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Bình Thạnh",
+        "Quận Gò Vấp",
+        "Quận Phú Nhuận"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 64,
+      "listingsNew30d": 64,
+      "tier": "cao",
+      "phone": "0967259749"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-phuong-nha-nhieu",
+      "shopName": "Phương Nhà Nhiều",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 4"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 63,
+      "listingsNew30d": 63,
+      "tier": "cao",
+      "phone": "0904523367"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-thieny912",
+      "shopName": "Thiên Ý",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 7"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 61,
+      "listingsNew30d": 61,
+      "tier": "cao",
+      "phone": "0911022907"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-thanhngan",
+      "shopName": "Nhà Đất Thanh Ngân",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12",
+        "Quận Gò Vấp",
+        "Huyện Hóc Môn"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 60,
+      "listingsNew30d": 60,
+      "tier": "cao",
+      "phone": "0931488300"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-chothuechdvrohangtaihifriendz",
+      "shopName": "Cho thuê CHDV rổ hàng tại Hifriendz",
+      "isCompany": true,
+      "hasLicense": true,
+      "districts": [
+        "Quận 5",
+        "Quận 6",
+        "Quận 8"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 58,
+      "listingsNew30d": 58,
+      "tier": "vua",
+      "personName": "Đào Tạo, Bồi Dưỡng Kiến Thức Hàng Nghề Môi Giới Bất Động Sản",
+      "phone": "0794484732"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-0848888444",
+      "shopName": "NHÀ-PHỐ-SÀI-GÒN",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Tân Bình"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 57,
+      "listingsNew30d": 57,
+      "tier": "vua",
+      "phone": "0848888444"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-trogovapgiare",
+      "shopName": "Quyên Hifriendz - Phòng Thật Giá Thật",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Gò Vấp"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 48,
+      "listingsNew30d": 48,
+      "tier": "vua",
+      "phone": "0917392576"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-trieu-thi-hong-nga",
+      "shopName": "Triệu Thị Hồng Nga",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Huyện Nhà Bè"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 48,
+      "listingsNew30d": 48,
+      "tier": "vua",
+      "phone": "0937819507"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-hoangtamnhadat",
+      "shopName": "Hoàng Tâm nhà đất",
+      "isCompany": true,
+      "hasLicense": true,
+      "districts": [
+        "Quận 7",
+        "Quận 8"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 48,
+      "listingsNew30d": 48,
+      "tier": "vua",
+      "personName": "chứng chỉ hành nghề môi giới",
+      "phone": "0972672029"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-nguyen-minh720",
+      "shopName": "BĐS Nguyen Minh",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 48,
+      "listingsNew30d": 48,
+      "tier": "vua",
+      "phone": "0916790639"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-thanh-thao-hifriendz",
+      "shopName": "Thanh Thảo Hifriendz",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 8"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 47,
+      "listingsNew30d": 47,
+      "tier": "vua",
+      "phone": "0879556907"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-nhathatgiathatsaigon",
+      "shopName": "LY NHÀ THẬT SÀI GÒN",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 1",
+        "Quận 3",
+        "Quận 10",
+        "Quận Phú Nhuận"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 47,
+      "listingsNew30d": 47,
+      "tier": "vua",
+      "phone": "0961999283"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mai-tien-dam",
+      "shopName": "Mai Tiến Đàm",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 1",
+        "Quận 7",
+        "Huyện Nhà Bè"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 45,
+      "listingsNew30d": 45,
+      "tier": "vua",
+      "phone": "0903682998"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-duynhaphochuyennhaaochamlachot",
+      "shopName": "Duy _ Nhà phố",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Bình Tân",
+        "Quận Gò Vấp",
+        "Quận Tân Bình",
+        "Quận Tân Phú"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 44,
+      "listingsNew30d": 44,
+      "tier": "vua",
+      "phone": "0836780969"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-ho-phan-huy-chau",
+      "shopName": "Châu Nhà Phố Quận 7",
+      "isCompany": true,
+      "hasLicense": true,
+      "districts": [
+        "Quận 7",
+        "Huyện Nhà Bè"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 43,
+      "listingsNew30d": 43,
+      "tier": "vua",
+      "personName": "HỒ PHAN HUY CHÂU",
+      "phone": "0788639468"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-nuong-7979",
+      "shopName": "NƯƠNG 7979",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 6",
+        "Quận Bình Tân",
+        "Quận Tân Bình",
+        "Quận Tân Phú"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 43,
+      "listingsNew30d": 43,
+      "tier": "vua",
+      "phone": "0906821688"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-tran-thanh-hoa",
+      "shopName": "Trần Thanh Hoà",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Gò Vấp"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 43,
+      "listingsNew30d": 43,
+      "tier": "vua",
+      "phone": "0989837508"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-thanh-nhan-bds",
+      "shopName": "Thanh Nhân Bđs",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12",
+        "Huyện Củ Chi",
+        "Huyện Hóc Môn"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 43,
+      "listingsNew30d": 43,
+      "tier": "vua",
+      "phone": "0346700466"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-nha-dep-gia-chinh-chu",
+      "shopName": "Nhà Đẹp Giá Chính Chủ",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12",
+        "Quận Bình Thạnh",
+        "Quận Gò Vấp"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 42,
+      "listingsNew30d": 42,
+      "tier": "vua",
+      "phone": "0901338834"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-nguyen-thanh-huong",
+      "shopName": "Nguyễn Thanh Hương",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 8"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 41,
+      "listingsNew30d": 41,
+      "tier": "vua",
+      "phone": "0928485678"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mr-cuong",
+      "shopName": "BĐS MR CƯỜNG",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 6"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 40,
+      "listingsNew30d": 40,
+      "tier": "vua",
+      "phone": "0935115424"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-long-nha-pho",
+      "shopName": "Long Nhà Xưởng",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 39,
+      "listingsNew30d": 39,
+      "tier": "vua",
+      "phone": "0932717597"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-vlivingduplexstudiosaigon",
+      "shopName": "V Living - Duplex & Studio Sài Gòn",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 6",
+        "Quận 8",
+        "Huyện Bình Chánh"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 39,
+      "listingsNew30d": 39,
+      "tier": "vua",
+      "phone": "0862530098"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-tran-thi-tuyet-mai",
+      "shopName": "Trần Thị Tuyết Mai",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 6",
+        "Quận 8",
+        "Quận 10",
+        "Quận 11"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 39,
+      "listingsNew30d": 39,
+      "tier": "vua",
+      "phone": "0336493063"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-quang-quoc-bds",
+      "shopName": "Quang Quốc Bds",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Gò Vấp"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 38,
+      "listingsNew30d": 38,
+      "tier": "vua",
+      "phone": "0868387638"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-nhadepcungminh",
+      "shopName": "Nhà Đẹp Cùng Minh",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Bình Thạnh",
+        "Quận Gò Vấp",
+        "Quận Phú Nhuận",
+        "Quận Tân Bình"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 38,
+      "listingsNew30d": 38,
+      "tier": "vua",
+      "phone": "0839866249"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-trang-bdsquan12",
+      "shopName": "Trang BDS Quan 12",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 37,
+      "listingsNew30d": 37,
+      "tier": "vua",
+      "phone": "0986217590"
     }
   ]
 }

@@ -13,6 +13,7 @@ import { LISTING, MATCH_KEY } from "../src/listings/listings-config";
 
 const suffix = process.env.TEST_RUN_ID ?? "listing-ingest";
 const keys = LISTING.fields.map((field) => field.key);
+const SELECT_KEYS = ["san_luong", "hinh_thai", "chung_chi"];
 
 const agent = {
 	fieldBackfillRecords: async () => ({ queued: 0, merged: 0 }),
@@ -58,6 +59,39 @@ async function urls(): Promise<string[]> {
 	return rows.map((row) => row.text ?? "");
 }
 
+function selectItem() {
+	return item(7, { tier: "cao", isCompany: false, hasLicense: true });
+}
+
+async function selectLabels(): Promise<Record<string, string | undefined>> {
+	const rows = await db.fieldValue.findMany({
+		where: {
+			field: { entity: "CONTACT", key: { in: SELECT_KEYS } },
+			option: { isNot: null },
+		},
+		select: {
+			field: { select: { key: true } },
+			option: { select: { label: true } },
+		},
+	});
+
+	return Object.fromEntries(
+		rows.map((row) => [row.field.key, row.option?.label]),
+	);
+}
+
+async function renameOption(key: string, from: string, to: string) {
+	const definition = await db.fieldDefinition.findUnique({
+		where: { entity_key: { entity: "CONTACT", key } },
+		select: { id: true },
+	});
+
+	await db.fieldOption.updateMany({
+		where: { fieldId: definition?.id, label: from },
+		data: { label: to },
+	});
+}
+
 async function cleanup() {
 	const rows = await db.contact.findMany({
 		where: { source: RecordSource.LISTING, firstName: { contains: "Người" } },
@@ -96,6 +130,34 @@ describe("cổng tiếp nhận lô từ sàn", () => {
 			},
 		});
 		expect(contact?.fieldValues.length).toBe(9);
+	});
+
+	it("AC-1 · ba trường chọn mang đúng nhãn của mục", async () => {
+		await ingest.ingest(parseListingBatch(batch([selectItem()])));
+
+		expect(await selectLabels()).toEqual({
+			san_luong: "Cao",
+			hinh_thai: "Cá nhân",
+			chung_chi: "Có",
+		});
+	});
+
+	it("AC-1 · nhãn tuỳ chọn lệch thì tiếp nhận ném lỗi gọi tên trường và nhãn", async () => {
+		await ingest.ingest(parseListingBatch(batch([selectItem()])));
+		await renameOption("san_luong", "Cao", "Cao (≥60)");
+
+		try {
+			await expect(
+				ingest.ingest(parseListingBatch(batch([selectItem()]))),
+			).rejects.toThrow(
+				'Listing field "san_luong" has no option labelled "Cao". Known options: "Cao (≥60)", "Vừa", "Thấp", "Ngủ".',
+			);
+		} finally {
+			await renameOption("san_luong", "Cao (≥60)", "Cao");
+		}
+
+		await ingest.ingest(parseListingBatch(batch([selectItem()])));
+		expect((await selectLabels()).san_luong).toBe("Cao");
 	});
 
 	it("AC-2 · gửi lại cùng lô thì cập nhật, không tạo trùng", async () => {

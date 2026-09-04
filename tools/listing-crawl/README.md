@@ -35,8 +35,14 @@ cd tools/listing-crawl
 | `--out PATH` | đường dẫn tệp lô |
 | `--log PATH` | ghi nhật ký lượt chạy ra tệp |
 
-Nhật ký ghi: số gieo, số lấy được, số bị chặn, số có số điện thoại, tứ phân vị
-tin mới 30 ngày.
+Nhật ký ghi **mọi lần thử của lượt chạy**, không chỉ lần cuối: `lan_thu` (tổng
+lượt tải), `lan_thu_hong`, và tách theo việc — `lan_thu_so_do`, `lan_thu_danh_ba`,
+`lan_thu_ho_so`, `lan_thu_lo_so`. Cạnh đó: `gieo`, `lay_duoc`, `bi_chan`,
+`co_so_dien_thoai`, `tong_bang_tin_moi`, `tong_khac_tin_moi`, và tứ phân vị của
+cả `tin_dang` lẫn `tin_moi_30_ngay`.
+
+Gieo địa chỉ: đọc sơ đồ site trước; rỗng thì lật trang danh bạ theo `?page=N` tới
+`directory_max_pages` cho đủ `--limit`.
 
 ## Lược đồ là một chiều, không có bản chép tay
 
@@ -87,26 +93,94 @@ Workspace của kho là `apps/*` và `packages/*`. `tools/` nằm ngoài, cố �
 `package.json`, không task turbo, không cache. `.venv/` và `__pycache__/` đã vào
 `.gitignore` ở gốc kho — đừng commit thư viện.
 
-## Mẫu trong `tests/fixtures/`
+## Mẫu trong `tests/fixtures/` — rút bằng máy từ bản chụp, không viết tay
 
-**Cắt từ trang thật**, tải một lần ngày 2026-09-04 qua trình duyệt: trang danh bạ
-`/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh` và một trang hồ sơ
-`/moi-gioi-*`. Lớp CSS, thứ tự nút, và hình dạng `__NEXT_DATA__` giữ nguyên vì đó
-là thứ khuôn bóc đọc.
+Ba mẫu (`directory.html`, `profile.html`, `profile-b.html`) do
+`scripts/make_fixtures.py` **cắt ra từ bản chụp trang thật**. Script giữ nguyên
+cây thẻ và khoá JSON của bản chụp; nó chỉ bỏ ảnh, `svg`, thuộc tính trình bày, và
+thay dữ liệu cá nhân bằng giá trị giả. Không dòng cấu trúc nào gõ tay, nên mẫu
+không thể vừa khít bộ chọn của bên đọc một cách giả tạo.
 
-Đã bỏ dữ liệu cá nhân thật: tên người là `Nguyễn Văn Mẫu`, số điện thoại
-`0900000000`, địa chỉ trang `https://nhatot.com/moi-gioi-mau-1`, tên chuyên trang
-`Chuyên trang mẫu`, số giấy phép `HCM-0000000`.
+Chụp lại rồi rút lại:
 
-Hai con số đặt theo bài kiểm chứ không theo bản chụp, và nói ra ở đây để không ai
-đọc mẫu như số liệu thị trường:
+```bash
+cd tools/listing-crawl
+./.venv/bin/python - <<'EOF'
+import asyncio, sys
+from crawl4ai import AsyncWebCrawler, BrowserConfig, CacheMode, CrawlerRunConfig
+async def go(urls, out):
+    run = CrawlerRunConfig(cache_mode=CacheMode.BYPASS, check_robots_txt=True,
+                           page_timeout=60000, delay_before_return_html=4.0)
+    async with AsyncWebCrawler(config=BrowserConfig(headless=True, enable_stealth=True)) as c:
+        for name, url in urls:
+            r = await c.arun(url=url, config=run)
+            open(f"{out}/{name}", "w").write(r.html)
+            await asyncio.sleep(1.5)
+asyncio.run(go([
+    ("directory.html", "https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh"),
+    ("profile-a.html", "https://nhatot.com/moi-gioi-<slug thứ nhất>"),
+    ("profile-b.html", "https://nhatot.com/moi-gioi-<slug thứ ba>"),
+], "/tmp/nhatot-capture"))
+EOF
+./.venv/bin/python scripts/make_fixtures.py --capture /tmp/nhatot-capture \
+  --profiles profile-a.html profile-b.html --cards 0 2
+```
 
-- thẻ đầu của danh bạ ghi `436` tin; trang thật hôm chụp ghi `435`.
-- `company_ad` để `false`; hồ sơ thật hôm chụp là `true`. Mẫu là môi giới cá
-  nhân, khớp với phía «cá nhân» của bộ đo.
+`--cards 0 2` chọn đúng hai thẻ danh bạ ứng với hai hồ sơ đã chụp, để thẻ và hồ
+sơ trong mẫu nói về cùng hai chuyên trang. Bài kiểm
+`test_the_danh_ba_va_trang_ho_so_bao_cung_mot_tong_tin` đo đúng chỗ ghép đó.
 
-`totalAdsCount` của mẫu là `436` để tổng tin tách khỏi tin mới 30 ngày (`164`) —
-trên hồ sơ thật hai số đó trùng nhau và làm bài kiểm không phân biệt được.
+Dữ liệu cá nhân đã thay, hình dạng giữ nguyên: tên người `Nguyễn Văn Mẫu` /
+`Trần Thị Mẫu`, số điện thoại `0900000000` / `0900000001`, chuyên trang
+`Chuyên trang mẫu` / `Chuyên trang mẫu hai`, đường dẫn
+`https://nhatot.com/moi-gioi-mau-1` / `-mau-2`, số giấy phép `HCM-0000000`,
+`alias` `aaaaaaaaaaaaaaa` / `bbbbbbbbbbbbbbb`.
+
+**Mọi con số giữ nguyên như bản chụp** — 436 và 164 tin, `totalAdsCount` 436 và
+164. Bản trước đây đặt `totalAdsCount` là `436` cạnh tin-mới-30-ngày `164` cho
+«đẹp bài kiểm»; đó là mẫu tự dựng và nó che mất chuyện dưới đây.
+
+`alias` cố ý khác `urls[0].url` trong mẫu, vì đó là hai trường khác nhau trên
+trang thật: `alias` là chuỗi mờ (`pF1fW3hQ2EFvKyA`), `urls[0].url` là đường dẫn
+người bấm được (`locnhapho`). Bản cũ dựng địa chỉ hồ sơ từ `alias` nên mọi địa
+chỉ trong lô đều 404.
+
+## Sàn chỉ công bố MỘT con số — tổng tin và tin mới 30 ngày trùng nhau
+
+Đo ngày 2026-09-05 trên trang hồ sơ thật: sáu chuyên trang soi tay, rồi một lượt
+chạy thật gieo 50 hồ sơ lấy được 49. **49/49 hồ sơ có tổng tin bằng tin mới 30
+ngày** (`tong_khac_tin_moi: 0`, `_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-run.log`).
+Bốn chỗ dưới đây **luôn bằng nhau** trên cùng một hồ sơ.
+
+| Chỗ | Ví dụ |
+|---|---|
+| Thẻ danh bạ, «Xem N tin đăng» | 164 |
+| Trang hồ sơ, ô «Tin hiện có · N tin» | 164 |
+| Trang hồ sơ, ô đầu trang «N tin mới · Trong 30 ngày» | 164 |
+| `__NEXT_DATA__` → `ads.totalAdsCount` và `ads.lastestAdInfo.paging.total` | 164 |
+
+Nghĩa là **nhatot không có con số «tin mới 30 ngày» riêng**. Ô mang nhãn «Trong
+30 ngày» hiện đúng số tin đang đăng. Bộ cào vì thế phát `listingsTotal` và
+`listingsNew30d` bằng nhau, và `tier_of()` thật ra xếp bậc theo **tổng tin đang
+đăng**, không theo độ tươi 30 ngày. Ngưỡng 60/20/1 phải đọc theo nghĩa đó.
+
+Chỗ này **không được im**. Ba việc giữ nó nói ra:
+
+- `parse.py` đọc hai số ở hai chỗ khác nhau (`_shown_total` đọc ô «Tin hiện có»,
+  `_new_30d` đọc ô «Trong 30 ngày») và đối chiếu `listingsTotal` với
+  `ads.totalAdsCount`; lệch là ném lỗi gọi tên trường.
+- Bản tổng kết mỗi lượt chạy in `tong_bang_tin_moi` và `tong_khac_tin_moi`, và
+  ghi một dòng cảnh báo khi có hồ sơ bằng nhau.
+- `test_nhatot_chi_cong_bo_mot_con_so_cho_ca_hai_truong` ghim đúng lời khai này.
+  Ngày sàn tách hai số ra, bài đó đỏ và người phải đọc lại mục này.
+
+Lệnh tái lập: `./.venv/bin/python -m listing_crawl --limit 50 --dry-run --out /tmp/that.json`
+rồi đếm `listingsTotal != listingsNew30d` trong tệp lô — hoặc đọc thẳng
+`tong_khac_tin_moi` ở dòng tổng kết.
+
+**Điều này phải lên bàn người quyết.** Lược đồ tiếp nhận có hai trường số, sàn
+chỉ có một. Hoặc bỏ `tin_moi_30_ngay` và đổi tên ngưỡng theo tổng tin, hoặc tìm
+nguồn khác cho độ tươi. Bộ cào không tự chế ra con số thứ hai.
 
 ## Sơ đồ site không có địa chỉ hồ sơ
 

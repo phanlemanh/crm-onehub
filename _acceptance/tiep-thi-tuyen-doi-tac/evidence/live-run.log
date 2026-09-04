@@ -1,19 +1,5 @@
-2026-09-04 23:11:09,583 WARNING sơ đồ site không có địa chỉ /moi-gioi- — gieo từ trang danh bạ https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh
-2026-09-04 23:11:12,501 WARNING bỏ qua https://nhatot.com/moi-gioi-locnhapho: Blocked by anti-bot protection: Cloudflare JS challenge
-2026-09-04 23:11:12,706 WARNING bỏ qua https://nhatot.com/moi-gioi-trang-nhadatsohongrieng: Blocked by anti-bot protection: Cloudflare JS challenge
-2026-09-04 23:11:12,910 WARNING bỏ qua https://nhatot.com/moi-gioi-giatotphumyhung: Blocked by anti-bot protection: Cloudflare JS challenge
-2026-09-04 23:11:13,113 WARNING bỏ qua https://nhatot.com/moi-gioi-hau-tran-bds: Blocked by anti-bot protection: Cloudflare JS challenge
-2026-09-04 23:11:13,321 WARNING bỏ qua https://nhatot.com/moi-gioi-quyanbds: Blocked by anti-bot protection: Cloudflare JS challenge
-2026-09-04 23:11:13,527 WARNING bỏ qua https://nhatot.com/moi-gioi-nguyennhatthongtinthat: Blocked by anti-bot protection: Cloudflare JS challenge
-2026-09-04 23:11:13,737 WARNING bỏ qua https://nhatot.com/moi-gioi-quan-vu: Blocked by anti-bot protection: Cloudflare JS challenge
-2026-09-04 23:11:13,943 WARNING bỏ qua https://nhatot.com/moi-gioi-nguyen-dinh-chien: Blocked by anti-bot protection: Cloudflare JS challenge
-2026-09-04 23:11:14,150 WARNING bỏ qua https://nhatot.com/moi-gioi-bdshuydaiduong: Blocked by anti-bot protection: Cloudflare JS challenge
-2026-09-04 23:11:14,360 WARNING bỏ qua https://nhatot.com/moi-gioi-anhtran: Blocked by anti-bot protection: Cloudflare JS challenge
-2026-09-04 23:11:14,573 WARNING bỏ qua https://nhatot.com/moi-gioi-truong-vinh-sang-: Blocked by anti-bot protection: Cloudflare JS challenge
-2026-09-04 23:11:14,595 ERROR không có địa chỉ nào
-2026-09-04 23:18:23,093 WARNING sơ đồ site không có địa chỉ /moi-gioi- — gieo từ trang danh bạ https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh
-2026-09-04 23:18:57,970 INFO lượt chạy: {'gieo': 11, 'lay_duoc': 11, 'bi_chan': 0, 'co_so_dien_thoai': 11, 'tin_moi_30_ngay': {'min': 88, 'q1': 100, 'trung_vi': 118, 'q3': 164, 'max': 436}}
-2026-09-04 23:18:57,971 INFO đã ghi /Users/manhphan/dev/crm-onehub/_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json (11 mục)
-2026-09-04 23:26:46,127 WARNING sơ đồ site không có địa chỉ /moi-gioi- — gieo từ trang danh bạ https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh
-2026-09-04 23:27:20,707 INFO lượt chạy: {'gieo': 11, 'lay_duoc': 11, 'bi_chan': 0, 'co_so_dien_thoai': 11, 'tin_moi_30_ngay': {'min': 88, 'q1': 100, 'trung_vi': 118, 'q3': 164, 'max': 436}}
-2026-09-04 23:27:20,708 INFO đã ghi ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json (11 mục)
+2026-09-05 00:05:46,904 WARNING sơ đồ site không có địa chỉ /moi-gioi- — gieo từ trang danh bạ https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh
+2026-09-05 00:10:14,584 WARNING bỏ qua https://nhatot.com/moi-gioi-thuylinhezh: isCompany: không bóc được từ dữ liệu nhúng
+2026-09-05 00:12:04,249 INFO lượt chạy: {'gieo': 50, 'lay_duoc': 49, 'bi_chan': 1, 'lan_thu': 68, 'lan_thu_hong': 6, 'lan_thu_so_do': 13, 'lan_thu_danh_ba': 5, 'lan_thu_ho_so': 50, 'lan_thu_lo_so': 0, 'co_so_dien_thoai': 49, 'tong_bang_tin_moi': 49, 'tong_khac_tin_moi': 0, 'tin_dang': {'min': 37, 'q1': 43, 'trung_vi': 61, 'q3': 84, 'max': 436}, 'tin_moi_30_ngay': {'min': 37, 'q1': 43, 'trung_vi': 61, 'q3': 84, 'max': 436}}
+2026-09-05 00:12:04,249 WARNING 49/49 hồ sơ có tổng tin bằng tin mới 30 ngày — sàn chỉ công bố một con số
+2026-09-05 00:12:04,251 INFO đã ghi ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json (49 mục)

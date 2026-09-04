@@ -38,11 +38,20 @@ function splitName(full: string): PersonName {
 }
 
 function optionId(
-	definition: FieldDefinitionWithOptions | undefined,
+	definitions: Definitions,
+	key: ListingFieldKey,
 	label: string,
-): string | null {
-	return (
-		definition?.options.find((option) => option.label === label)?.id ?? null
+): string {
+	const definition = definitions.get(key);
+	const found = definition?.options.find((option) => option.label === label);
+	if (found) return found.id;
+
+	const known = (definition?.options ?? [])
+		.map((option) => `"${option.label}"`)
+		.join(", ");
+
+	throw new Error(
+		`Listing field "${key}" has no option labelled "${label}". Known options: ${known || "none"}.`,
 	);
 }
 
@@ -134,23 +143,22 @@ export class ListingIngestService {
 	): Promise<void> {
 		const values = {
 			san_luong: {
-				optionId: optionId(
-					definitions.get("san_luong"),
-					TIER_LABELS[item.tier],
-				),
+				optionId: optionId(definitions, "san_luong", TIER_LABELS[item.tier]),
 			},
 			tin_dang: { number: item.listingsTotal },
 			tin_moi_30_ngay: { number: item.listingsNew30d },
 			dia_ban: { text: item.districts.join(", ") },
 			hinh_thai: {
 				optionId: optionId(
-					definitions.get("hinh_thai"),
+					definitions,
+					"hinh_thai",
 					item.isCompany ? "Công ty" : "Cá nhân",
 				),
 			},
 			chung_chi: {
 				optionId: optionId(
-					definitions.get("chung_chi"),
+					definitions,
+					"chung_chi",
 					item.hasLicense ? "Có" : "Không",
 				),
 			},

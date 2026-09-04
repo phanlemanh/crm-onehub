@@ -1,3 +1,4 @@
+import json
 import re
 from typing import Any
 
@@ -16,16 +17,25 @@ SELECTORS = {
     "directory_total": "div.f1wbnxee div.r1b53g1 p",
     "profile_stat": "div.stat-item",
     "profile_stat_value": "span.stat-value",
+    "profile_summary": "div.sqlk7f7",
+    "profile_summary_label": "div.s2n0vny",
+    "profile_summary_value": "div.sc6snot",
     "profile_license": "span.sfxtd9i",
     "profile_areas": "div.f1hs14pk",
+    "directory_blurb": "div.a16wvwrq",
 }
 
 NEW_30D_LABEL = "Trong 30 ngày"
+TOTAL_LABEL = "Tin hiện có"
 LICENSE_LABEL = "Chứng chỉ môi giới"
 AREAS_PREFIX = "Khu vực:"
 
 DIGITS = re.compile(r"\d+")
 AREAS_SHAPE = re.compile(r"^(?P<districts>[^()]+?)\s*(?:\((?P<city>[^()]+)\))?$")
+NEXT_DATA = re.compile(
+    r'<script[^>]+id="__NEXT_DATA__"[^>]*>(.*?)</script>',
+    re.DOTALL,
+)
 
 
 def _text(node) -> str:
@@ -64,6 +74,13 @@ def _dig(payload: Any, *path: str) -> Any:
     return node
 
 
+def next_data_of(html: str) -> dict:
+    found = NEXT_DATA.search(html)
+    if not found:
+        raise ValueError("__NEXT_DATA__: không có trong trang hồ sơ")
+    return json.loads(found.group(1))
+
+
 def parse_directory(html: str) -> list[dict]:
     tree = lxml_html.fromstring(html)
     rows: list[dict] = []
@@ -97,6 +114,21 @@ def parse_directory(html: str) -> list[dict]:
     return rows
 
 
+def directory_urls(html: str) -> list[str]:
+    tree = lxml_html.fromstring(html)
+    found: list[str] = []
+    for card in tree.cssselect(SELECTORS["directory_card"]):
+        link = card.cssselect(SELECTORS["directory_link"])
+        if not link:
+            continue
+        href = link[0].get("href")
+        if href:
+            found.append(href)
+    if not found:
+        raise _missing("url", "trang danh bạ")
+    return found
+
+
 def _new_30d(tree) -> int:
     for stat in tree.cssselect(SELECTORS["profile_stat"]):
         if NEW_30D_LABEL not in _text(stat):
@@ -106,6 +138,45 @@ def _new_30d(tree) -> int:
             raise _missing("listingsNew30d", "trang hồ sơ")
         return _first_int(_text(value[0]), "listingsNew30d", "trang hồ sơ")
     raise _missing("listingsNew30d", "trang hồ sơ")
+
+
+def _shown_total(tree) -> int:
+    for block in tree.cssselect(SELECTORS["profile_summary"]):
+        label = block.cssselect(SELECTORS["profile_summary_label"])
+        if not label or TOTAL_LABEL not in _text(label[0]):
+            continue
+        value = block.cssselect(SELECTORS["profile_summary_value"])
+        if not value:
+            raise _missing("listingsTotal", f"ô «{TOTAL_LABEL}» của trang hồ sơ")
+        return _first_int(
+            _text(value[0]), "listingsTotal", f"ô «{TOTAL_LABEL}» của trang hồ sơ"
+        )
+    raise _missing("listingsTotal", f"ô «{TOTAL_LABEL}» của trang hồ sơ")
+
+
+def _total(tree, next_data: dict) -> int:
+    shown = _shown_total(tree)
+    embedded = _dig(next_data, "props", "initialState", "ads", "totalAdsCount")
+    if not isinstance(embedded, int):
+        raise _missing("listingsTotal", "dữ liệu nhúng")
+    if embedded != shown:
+        raise ValueError(
+            f"listingsTotal: ô «{TOTAL_LABEL}» ghi {shown}, dữ liệu nhúng ghi {embedded}"
+        )
+    return shown
+
+
+def _profile_url(shop: dict) -> str:
+    urls = shop.get("urls")
+    if isinstance(urls, list):
+        for entry in urls:
+            slug = entry.get("url") if isinstance(entry, dict) else None
+            if isinstance(slug, str) and slug.strip():
+                return f"{PROFILE_URL_PREFIX}{slug.strip()}"
+    direct = _dig(shop, "urls", "shop")
+    if isinstance(direct, str) and direct.strip():
+        return direct.strip()
+    raise _missing("url", "dữ liệu nhúng")
 
 
 def parse_profile(html: str, next_data: dict) -> dict:
@@ -118,12 +189,7 @@ def parse_profile(html: str, next_data: dict) -> dict:
     if not isinstance(shop_name, str) or not shop_name.strip():
         raise _missing("shopName", "dữ liệu nhúng")
 
-    alias = shop.get("alias")
-    url = _dig(shop, "urls", "shop") or (
-        f"{PROFILE_URL_PREFIX}{alias}" if isinstance(alias, str) and alias else None
-    )
-    if not isinstance(url, str) or not url.strip():
-        raise _missing("url", "dữ liệu nhúng")
+    url = _profile_url(shop)
 
     license_name = _dig(shop, "brokerLicense", "name")
     has_license = bool(
@@ -148,10 +214,6 @@ def parse_profile(html: str, next_data: dict) -> dict:
             raise _missing("districts", "trang hồ sơ")
         districts, city = _split_areas(_text(areas_node[0]), "districts", "trang hồ sơ")
 
-    total = _dig(next_data, "props", "initialState", "ads", "totalAdsCount")
-    if not isinstance(total, int):
-        raise _missing("listingsTotal", "dữ liệu nhúng")
-
     ads = _dig(next_data, "props", "initialState", "ads", "lastestAdInfo", "ads")
     company_flags = [
         _dig(ad, "info", "company_ad")
@@ -161,6 +223,7 @@ def parse_profile(html: str, next_data: dict) -> dict:
     if not company_flags:
         raise _missing("isCompany", "dữ liệu nhúng")
 
+    total = _total(tree, next_data)
     new_30d = _new_30d(tree)
 
     item: dict = {
