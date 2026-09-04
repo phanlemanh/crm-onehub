@@ -1,7 +1,7 @@
 {
-  "run_id": "design-gate-9ae8bff2f4",
+  "run_id": "design-gate-98f620b394",
   "verifier": "scripts/design-gate.mjs (vendored Impeccable detector)",
-  "verified_at": "2026-09-04T07:20:59.931Z",
+  "verified_at": "2026-09-04T07:58:46.373Z",
   "target": "_acceptance/cua-vao-noi-tieng-viet/evidence/E16-sign-in-vi.html",
   "fail_on": [
     "P0"
@@ -12,28 +12,50 @@
   "p0_count": 0,
   "blocking": [],
   "hits": [
-    "tiny-text",
-    "gradient-text",
-    "layout-transition"
+    "cramped-padding"
   ],
   "findings": [
     {
-      "rule": "tiny-text",
+      "rule": "cramped-padding",
       "severity": "warning",
       "pTier": "P2",
-      "detail": "1.5px body text"
+      "detail": "0px vertical padding (need ≥4.8px for 16px text)"
     },
     {
-      "rule": "gradient-text",
-      "severity": "warning",
-      "pTier": "P1",
-      "detail": "background-clip: text + gradient"
-    },
-    {
-      "rule": "layout-transition",
+      "rule": "cramped-padding",
       "severity": "warning",
       "pTier": "P2",
-      "detail": "transition: height"
+      "detail": "<section> \"relative\": children flush against border on all sides (no inset)"
+    },
+    {
+      "rule": "cramped-padding",
+      "severity": "warning",
+      "pTier": "P2",
+      "detail": "<div> \"relative\": children flush against border on all sides (no inset)"
+    },
+    {
+      "rule": "cramped-padding",
+      "severity": "warning",
+      "pTier": "P2",
+      "detail": "<div> \"flex\": children flush against border on all sides (no inset)"
+    },
+    {
+      "rule": "cramped-padding",
+      "severity": "warning",
+      "pTier": "P2",
+      "detail": "0px vertical padding (need ≥9.6px for 32px text)"
+    },
+    {
+      "rule": "cramped-padding",
+      "severity": "warning",
+      "pTier": "P2",
+      "detail": "<section> \"flex\": children flush against border on all sides (no inset)"
+    },
+    {
+      "rule": "cramped-padding",
+      "severity": "warning",
+      "pTier": "P2",
+      "detail": "<div>: children flush against border on all sides (no inset)"
     }
   ]
 }
