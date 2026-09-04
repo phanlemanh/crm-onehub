@@ -1,0 +1,52 @@
+{
+	"lat": "man-cai-dat-noi-tieng-viet",
+	"ghi_chu": "Bang khai gia tri KHONG DUOC DICH cua hai man Cai dat. Chan `man-that.mjs khong-dich` sinh tap ung vien TU MAN THAT (moi phan tu mang translate=\"no\", hop voi moi chuoi hien giong het nhau o hai luot locale) roi doi chieu CA HAI CHIEU voi bang nay. Truoc khi doi chieu, nam luat co ten duoi day tru ra nhung gia tri may tu suy duoc — so, du lieu nguoi nhap, ma dong tien, ten model, gia tri bi che — de bang khong phinh theo du lieu cua tung may.",
+	"luat": [
+		{
+			"ten": "so-thuan",
+			"vi_sao": "Chuoi chi gom chu so va dau cau khong mang tu nao de dich: ty gia, so deal, ngay han luu tru, dau cham giua hai ve cau."
+		},
+		{
+			"ten": "du-lieu-nguoi-nhap",
+			"vi_sao": "Ten workspace, dia chi website va slug do nguoi go vao. Chung doi theo tung workspace nen khong dong thanh bang duoc — AC-6b do chung bang luat translate=\"no\"."
+		},
+		{
+			"ten": "ma-va-ten-dong-tien",
+			"vi_sao": "Ma ba chu va ten tieng Anh cua dong tien lay tu packages/db/src/currency.ts, khong phai chu cua man. Danh sach do la nguon that, khong phai ban sao go tay."
+		},
+		{
+			"ten": "ten-model",
+			"vi_sao": "Ten model, ten nha cung cap va ma model lay tu settings.modelCatalog cua may chu. Chung la ten thuong hieu."
+		},
+		{
+			"ten": "gia-tri-bi-che",
+			"vi_sao": "Khoa da cam hien ra duoi dang cham tron che gan het. Do la du lieu bi che, khong phai nhan."
+		}
+	],
+	"dong": [
+		{
+			"gia_tri": "SSO",
+			"vi_sao": "Dinh danh ky thuat. Luat kho cam duc tu ghep tieng Viet cho thuat ngu ky thuat — AC-3 khai dong giu nguyen nay."
+		},
+		{
+			"gia_tri": "Website",
+			"vi_sao": "Kho chuoi khai cung mot chu o ca hai ban: tieng Viet dung nguyen chu Website."
+		},
+		{
+			"gia_tri": "https://",
+			"vi_sao": "Tien to giao thuc dat truoc o nhap dia chi. Khong phai chu nguoi doc."
+		},
+		{
+			"gia_tri": "Model",
+			"vi_sao": "Kho chuoi khai cung mot chu o ca hai ban: tieng Viet dung nguyen chu Model."
+		},
+		{
+			"gia_tri": "Acme Inc.",
+			"vi_sao": "Ten cong ty mau trong o goi y. Ten rieng, giu nguyen o ca hai ban."
+		},
+		{
+			"gia_tri": "acme.com",
+			"vi_sao": "Ten mien mau trong o goi y. Giu nguyen o ca hai ban."
+		}
+	]
+}

@@ -49,6 +49,11 @@ function vetTay() {
 				),
 		},
 		{
+			ten: "tu don viet thuong trong JSX",
+			file: "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx",
+			cam: (s) => s.replace("t.tienTe.donVi", '"unit"'),
+		},
+		{
 			ten: "thuoc tinh khong ky thuat",
 			file: "apps/app/app/(app)/[slug]/settings/agent-model.tsx",
 			cam: (s) => s.replace("placeholder={t.model.tim}", 'placeholder="Search models…"'),

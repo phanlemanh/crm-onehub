@@ -14,6 +14,7 @@ const DAU =
 const THUOC_KY_THUAT = new Set(KHAI.thuoc_ky_thuat);
 const HAM_KY_THUAT = new Set(KHAI.ham_ky_thuat);
 const GIU_NGUYEN = new Map(KHAI.giu_nguyen.map((g) => [g.chu, g]));
+const NOI_NGUOI_DOC = new Set(["chu-con", "khac"]);
 
 function cay(duong) {
 	return ts.createSourceFile(
@@ -25,15 +26,17 @@ function cay(duong) {
 	);
 }
 
-function chuNguoiCoTheDoc(chu) {
+function chuNguoiCoTheDoc(chu, boi_canh) {
 	if (chu.trim().length < 2) return false;
 	if (chu.startsWith("/")) return false;
 	if (!/[A-Za-z]{2}/.test(chu)) return false;
 	if (/^[a-z0-9-]+(\/[a-z0-9._-]+)+$/.test(chu)) return false;
-	if (/^[a-z][a-zA-Z0-9]*$/.test(chu)) return false;
-	if (/^[a-z0-9-]+$/.test(chu)) return false;
 	if (/^[A-Z][A-Z0-9_]*$/.test(chu)) return false;
-	return true;
+
+	const tuDon = /^[a-z][a-zA-Z0-9]*$/.test(chu) || /^[a-z0-9-]+$/.test(chu);
+	if (!tuDon) return true;
+
+	return NOI_NGUOI_DOC.has(boi_canh) || boi_canh.startsWith("thuoc:");
 }
 
 function boiCanh(n) {
@@ -62,6 +65,13 @@ function boiCanh(n) {
 			HAM_KY_THUAT.has(cha.expression.text)
 		)
 			return "ham-ky-thuat";
+		if (
+			ts.isTypeReferenceNode(cha) ||
+			ts.isIndexedAccessTypeNode(cha) ||
+			ts.isTypeOperatorNode(cha) ||
+			ts.isLiteralTypeNode(cha)
+		)
+			return "kieu";
 		if (ts.isJsxText(cha)) return "chu-con";
 		cha = cha.parent;
 	}
@@ -81,9 +91,12 @@ export function quet(files) {
 					n.head.text +
 					n.templateSpans.map((s) => `\${…}${s.literal.text}`).join("");
 
-			if (chu !== null && chuNguoiCoTheDoc(chu)) {
+			if (chu !== null) {
 				const bc = boiCanh(n);
-				if (!["nhap", "chi-thi", "thuoc-ky-thuat", "khoa-ky-thuat", "ham-ky-thuat"].includes(bc))
+				if (
+					chuNguoiCoTheDoc(chu, bc) &&
+					!["nhap", "chi-thi", "kieu", "thuoc-ky-thuat", "khoa-ky-thuat", "ham-ky-thuat"].includes(bc)
+				)
 					ra.push({
 						file: f,
 						dong: nguon.getLineAndCharacterOfPosition(n.getStart(nguon)).line + 1,

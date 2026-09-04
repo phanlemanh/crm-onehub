@@ -118,6 +118,7 @@ export function WorkspaceForm() {
 								value={values.name}
 								onChange={(event) => edit({ name: event.target.value })}
 								placeholder={t.congTy.tenGoiY}
+								translate="no"
 								autoComplete="organization"
 								disabled={!canRename || save.isPending}
 								required

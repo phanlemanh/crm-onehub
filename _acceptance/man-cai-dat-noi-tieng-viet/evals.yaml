@@ -300,3 +300,20 @@ evals:
       - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"
       - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E16
+    criterion: AC-10b
+    executor: script
+    cmd: config:executors.script.cai_dat_be_rong_do
+    expected: >-
+      exit 0. Cam mot nhan tieng Viet dai vao kho chuoi (khoa moc daCam), cho HMR, chay
+      chan be-rong o be rong ghim, doi hoi con so "vi tran ma en vua" LON HON 0, roi tra
+      kho chuoi ve nguyen trang.
+      So do bang 0 nghia la chan be-rong MU: eval nay DO va noi thang dieu do.
+      Khong tim thay khoa moc nghia la vet da lac hau so voi ma: THOAT MA 2, khong phai dat.
+      Cay lam viec phai tro ve dung trang thai truoc khi chay — khac di la thoat ma 2.
+      Ket qua that da quan sat: vi 274/198px tran, en 60/60px vua, tai 360px.
+    paths:
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
+      - "apps/app/lib/messages/settings.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

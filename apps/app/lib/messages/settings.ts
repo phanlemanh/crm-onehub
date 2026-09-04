@@ -98,6 +98,7 @@ const en = {
 		cotSoDeal: "Deals",
 		cotQuyDoiDuoc: "Convertible",
 		chonMot: "Pick one",
+		donVi: "unit",
 		luuTyGia: "Save rate",
 		daLuuTyGia: "Rate saved.",
 		go: "Remove",
@@ -124,7 +125,7 @@ export type SettingsMessages = typeof en;
 const vi = {
 	thanhBen: {
 		nhan: "Cài đặt workspace",
-		chung: "Chung",
+		chung: "Tổng quan",
 		theoDoi: "Theo dõi & phân tích",
 		ketNoi: "Kết nối",
 		tienTe: "Tiền tệ",
@@ -133,11 +134,11 @@ const vi = {
 		sso: "SSO",
 	},
 	tieuDeTab: {
-		chung: "Chung",
+		chung: "Tổng quan",
 		tienTe: "Tiền tệ",
 	},
 	chung: {
-		tieuDe: "Chung",
+		tieuDe: "Tổng quan",
 		moTa: "Công ty bạn là ai, và tác nhân nghiên cứu nghĩ bằng model nào.",
 	},
 	congTy: {
@@ -219,6 +220,7 @@ const vi = {
 		cotSoDeal: "Số deal",
 		cotQuyDoiDuoc: "Quy đổi được",
 		chonMot: "Chọn một",
+		donVi: "đơn vị",
 		luuTyGia: "Lưu tỷ giá",
 		daLuuTyGia: "Đã lưu tỷ giá.",
 		go: "Gỡ",

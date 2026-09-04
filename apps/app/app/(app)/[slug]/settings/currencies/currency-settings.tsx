@@ -233,7 +233,13 @@ export function CurrencySettings() {
 
 						<Field className="w-48">
 							<FieldLabel htmlFor={rateValueId}>
-								1 {draftCurrency || "unit"} = ? {reportingCurrency}
+								1{" "}
+								{draftCurrency ? (
+									<span translate="no">{draftCurrency}</span>
+								) : (
+									t.tienTe.donVi
+								)}{" "}
+								= ? <span translate="no">{reportingCurrency}</span>
 							</FieldLabel>
 							<Input
 								id={rateValueId}

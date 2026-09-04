@@ -59,7 +59,14 @@
 		"data-checked",
 		"transitionTypes",
 		"queryKey",
-		"prefetch"
+		"prefetch",
+		"aria-current",
+		"aria-busy",
+		"aria-hidden",
+		"aria-live",
+		"aria-controls",
+		"aria-expanded",
+		"khoa"
 	],
 	"ham_ky_thuat": [
 		"cn",
@@ -77,5 +84,12 @@
 			"chu": "px-3 py-2.5 align-middle",
 			"vi_sao": "chuỗi lớp CSS gán cho hằng CELL, không phải chữ người đọc"
 		}
-	]
+	],
+	"khoa_kieu": {
+		"ghi_chu": "Khoa cua kieu chi muc vao kho chuoi — gia tri la TEN KHOA, khong phai chu nguoi doc. Khai o day thay vi mien tru tung gia tri, vi danh sach gia tri se dai theo so muc thanh ben.",
+		"duong": [
+			"settings-sidebar.tsx: SettingsNavItem.khoa",
+			"settings-sidebar.tsx: keyof SettingsMessages[\"thanhBen\"]"
+		]
+	}
 }
