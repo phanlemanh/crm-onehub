@@ -1,5 +1,5 @@
 import { afterAll, expect, it } from "bun:test";
-import { db } from "@crm/db";
+import { db, Prisma } from "@crm/db";
 
 const suffix = process.env.TEST_RUN_ID ?? "campaign-schema";
 
@@ -9,7 +9,17 @@ afterAll(async () => {
 	await db.user.deleteMany({ where: { id: `${suffix}-user` } });
 });
 
-it("từ chối xoá góc nhìn đang có chiến dịch dùng", async () => {
+async function daNem(promise: Promise<unknown>): Promise<Error> {
+	try {
+		await promise;
+	} catch (error) {
+		return error as Error;
+	}
+
+	throw new Error("Câu xoá đã đi lọt mà đáng lẽ nó phải bị chặn.");
+}
+
+it("từ chối xoá góc nhìn đang có chiến dịch dùng, gỡ chiến dịch ra thì xoá được", async () => {
 	const user = await db.user.create({
 		data: {
 			id: `${suffix}-user`,
@@ -27,15 +37,35 @@ it("từ chối xoá góc nhìn đang có chiến dịch dùng", async () => {
 			ownerId: user.id,
 		},
 	});
-	await db.campaign.create({
+	const campaign = await db.campaign.create({
 		data: {
 			name: `${suffix} chiến dịch`,
 			savedViewId: view.id,
 			createdById: user.id,
 		},
+		select: { id: true },
 	});
 
-	await expect(
-		(async () => db.savedView.delete({ where: { id: view.id } }))(),
-	).rejects.toThrow();
+	const error = await daNem(db.savedView.delete({ where: { id: view.id } }));
+
+	expect(error).toBeInstanceOf(Prisma.PrismaClientKnownRequestError);
+	expect((error as Prisma.PrismaClientKnownRequestError).code).toBe("P2003");
+	expect(error.message).toContain("campaign_savedViewId_fkey");
+
+	expect(
+		await db.savedView.findUnique({
+			where: { id: view.id },
+			select: { id: true },
+		}),
+	).toEqual({ id: view.id });
+
+	await db.campaign.delete({ where: { id: campaign.id } });
+	await db.savedView.delete({ where: { id: view.id } });
+
+	expect(
+		await db.savedView.findUnique({
+			where: { id: view.id },
+			select: { id: true },
+		}),
+	).toBeNull();
 });

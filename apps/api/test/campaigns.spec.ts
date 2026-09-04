@@ -1,5 +1,5 @@
 import { afterAll, beforeEach, describe, expect, it } from "bun:test";
-import { db, RecordSource, type TouchOutcome } from "@crm/db";
+import { db, Prisma, RecordSource, type TouchOutcome } from "@crm/db";
 import { AgentQueueService } from "../src/agent/agent-queue.service";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import type { CampaignDetail } from "../src/campaigns/campaigns.contracts";
@@ -127,6 +127,16 @@ async function callCount(): Promise<number> {
 	return db.activity.count({ where: { createdById: userId, type: "CALL" } });
 }
 
+async function daNem(promise: Promise<unknown>): Promise<Error> {
+	try {
+		await promise;
+	} catch (error) {
+		return error as Error;
+	}
+
+	throw new Error("Lượt ghi đã đi lọt mà đáng lẽ nó phải hỏng.");
+}
+
 beforeEach(async () => {
 	await clean();
 	await seed();
@@ -219,10 +229,10 @@ describe("chiến dịch tuyển đối tác", () => {
 		);
 	});
 
-	it("AC-8 · hoạt động hỏng thì không còn lượt gọi nào", async () => {
+	it("AC-8 · cá nhân không có thật thì lệnh ghi THỨ NHẤT đứt vì khoá ngoại — bài này KHÔNG đo tính nguyên tử, số đếm bằng 0 đúng theo cấu trúc", async () => {
 		const campaign = await running("Hoạt động hỏng");
 
-		await expect(
+		const error = await daNem(
 			service.touch(
 				{
 					id: campaign.id,
@@ -231,16 +241,20 @@ describe("chiến dịch tuyển đối tác", () => {
 				},
 				userId,
 			),
-		).rejects.toThrow();
+		);
+
+		expect(error).toBeInstanceOf(Prisma.PrismaClientKnownRequestError);
+		expect((error as Prisma.PrismaClientKnownRequestError).code).toBe("P2003");
+		expect(error.message).toContain("activity_contactId_fkey");
 
 		expect(await touchCount(campaign.id)).toBe(0);
 		expect(await callCount()).toBe(0);
 	});
 
-	it("AC-8 · lượt gọi hỏng thì hoạt động cũng không ở lại", async () => {
+	it("AC-8 · lượt gọi hỏng thì hoạt động cũng không ở lại — đây là chân thật của tính nguyên tử", async () => {
 		const campaign = await running("Lượt gọi hỏng");
 
-		await expect(
+		const error = await daNem(
 			service.touch(
 				{
 					id: campaign.id,
@@ -249,7 +263,12 @@ describe("chiến dịch tuyển đối tác", () => {
 				},
 				userId,
 			),
-		).rejects.toThrow();
+		);
+
+		expect(error).toBeInstanceOf(Prisma.PrismaClientValidationError);
+		expect(error.message).toContain(
+			"Invalid value for argument `outcome`. Expected TouchOutcome.",
+		);
 
 		expect(await touchCount(campaign.id)).toBe(0);
 		expect(await callCount()).toBe(0);

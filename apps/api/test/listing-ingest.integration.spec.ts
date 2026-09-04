@@ -1,19 +1,31 @@
 import { afterAll, beforeEach, describe, expect, it } from "bun:test";
 import { db, RecordSource } from "@crm/db";
-import { InvalidInput } from "@crm/validation";
 import {
+	type ListingBatch,
 	type ListingItem,
 	parseListingBatch,
 } from "@crm/validation/listing-ingest";
+import {
+	BadRequestException,
+	ForbiddenException,
+	type HttpException,
+	ServiceUnavailableException,
+} from "@nestjs/common";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { FieldsService } from "../src/fields/fields.service";
 import { ListingFieldsService } from "../src/listings/listing-fields.service";
 import { ListingIngestService } from "../src/listings/listing-ingest.service";
-import { LISTING, MATCH_KEY } from "../src/listings/listings-config";
+import { ListingsController } from "../src/listings/listings.controller";
+import {
+	LISTING,
+	MATCH_KEY,
+	TIER_LABELS,
+} from "../src/listings/listings-config";
 
 const suffix = process.env.TEST_RUN_ID ?? "listing-ingest";
 const keys = LISTING.fields.map((field) => field.key);
 const SELECT_KEYS = ["san_luong", "hinh_thai", "chung_chi"];
+const SECRET = `bi-mat-${suffix}`;
 
 const agent = {
 	fieldBackfillRecords: async () => ({ queued: 0, merged: 0 }),
@@ -23,7 +35,7 @@ const fields = new FieldsService(db, agent);
 const listingFields = new ListingFieldsService(db, fields);
 const ingest = new ListingIngestService(db, listingFields);
 
-function item(n: number, overrides: Partial<ListingItem> = {}) {
+function item(n: number, overrides: Partial<ListingItem> = {}): ListingItem {
 	return {
 		url: `https://nhatot.com/moi-gioi-${suffix}-${n}`,
 		shopName: `Chuyên trang ${suffix} ${n}`,
@@ -57,6 +69,75 @@ async function urls(): Promise<string[]> {
 	});
 
 	return rows.map((row) => row.text ?? "");
+}
+
+type OTruong = {
+	text: string | null;
+	number: number | null;
+	date: Date | null;
+	option: string | null;
+};
+
+async function contactIdOf(url: string): Promise<string> {
+	const definition = await db.fieldDefinition.findUnique({
+		where: { entity_key: { entity: "CONTACT", key: MATCH_KEY } },
+		select: { id: true },
+	});
+	const anchor = await db.fieldValue.findFirst({
+		where: { fieldId: definition?.id, text: url, contactId: { not: null } },
+		select: { contactId: true },
+	});
+	if (!anchor?.contactId) {
+		throw new Error(`Không có cá nhân nào mang ${MATCH_KEY} = ${url}.`);
+	}
+
+	return anchor.contactId;
+}
+
+async function valuesOf(url: string): Promise<Record<string, OTruong>> {
+	const rows = await db.fieldValue.findMany({
+		where: {
+			contactId: await contactIdOf(url),
+			field: { entity: "CONTACT", key: { in: [...keys] } },
+		},
+		select: {
+			text: true,
+			number: true,
+			date: true,
+			field: { select: { key: true } },
+			option: { select: { label: true } },
+		},
+	});
+
+	return Object.fromEntries(
+		rows.map((row) => [
+			row.field.key,
+			{
+				text: row.text,
+				number: row.number === null ? null : Number(row.number),
+				date: row.date,
+				option: row.option?.label ?? null,
+			},
+		]),
+	);
+}
+
+function gate(secret: string | undefined): ListingsController {
+	const config = {
+		get: () => secret,
+	} as unknown as ConstructorParameters<typeof ListingsController>[1];
+
+	return new ListingsController(ingest, config);
+}
+
+async function refused(promise: Promise<unknown>): Promise<HttpException> {
+	try {
+		await promise;
+	} catch (error) {
+		return error as HttpException;
+	}
+
+	throw new Error("Cổng đã nhận lô mà đáng lẽ nó phải từ chối.");
 }
 
 function selectItem() {
@@ -113,23 +194,30 @@ afterAll(async () => {
 });
 
 describe("cổng tiếp nhận lô từ sàn", () => {
-	it("AC-1 · mỗi mục thành một cá nhân nguồn sàn với chín trường đúng", async () => {
+	it("AC-1 · chín trường mang đúng giá trị của mục — ma trận toàn phần", async () => {
+		const at = "2026-09-04T10:00:00Z";
+		const sent = item(1);
 		const result = await ingest.ingest(
-			parseListingBatch(batch([item(1), item(2), item(3)])),
+			parseListingBatch(batch([sent, item(2), item(3)], at)),
 		);
 
 		expect(result).toEqual({ created: 3, updated: 0 });
 		expect((await urls()).length).toBe(3);
 
-		const contact = await db.contact.findFirst({
-			where: { source: RecordSource.LISTING, firstName: "Người" },
-			select: {
-				id: true,
-				phone: true,
-				fieldValues: { select: { text: true, number: true } },
-			},
-		});
-		expect(contact?.fieldValues.length).toBe(9);
+		const got = await valuesOf(sent.url);
+		expect(Object.keys(got).sort()).toEqual([...keys].sort());
+
+		expect(got.san_luong?.option).toBe(TIER_LABELS[sent.tier]);
+		expect(got.tin_dang?.number).toBe(sent.listingsTotal);
+		expect(got.tin_moi_30_ngay?.number).toBe(sent.listingsNew30d);
+		expect(got.dia_ban?.text).toBe(sent.districts.join(", "));
+		expect(got.hinh_thai?.option).toBe(sent.isCompany ? "Công ty" : "Cá nhân");
+		expect(got.chung_chi?.option).toBe(sent.hasLicense ? "Có" : "Không");
+		expect(got.ten_chuyen_trang?.text).toBe(sent.shopName);
+		expect(got.trang_nhatot?.text).toBe(sent.url);
+		expect(got.san_cap_nhat_luc?.date?.toISOString()).toBe(
+			new Date(at).toISOString(),
+		);
 	});
 
 	it("AC-1 · ba trường chọn mang đúng nhãn của mục", async () => {
@@ -215,18 +303,47 @@ describe("cổng tiếp nhận lô từ sàn", () => {
 		expect(contact?.phone).toBe("0911111111");
 	});
 
-	it("AC-3 · một mục sai lược đồ thì cả lô bị từ chối và không ghi gì", async () => {
-		const { listingsTotal: _drop, ...broken } = item(2);
+	it("AC-3 · cổng trả 403 khi khoá sai, và không ghi gì", async () => {
+		const body = batch([item(1)]) as unknown as ListingBatch;
 
-		expect(() => parseListingBatch(batch([item(1), broken]))).toThrow(
-			InvalidInput,
-		);
-		expect(() => parseListingBatch(batch([item(1), broken]))).toThrow(
-			"items.1.listingsTotal",
-		);
-		expect(
-			await db.contact.count({ where: { source: RecordSource.LISTING } }),
-		).toBe(0);
+		const error = await refused(gate(SECRET).run(body, "Bearer sai-be-bet"));
+
+		expect(error).toBeInstanceOf(ForbiddenException);
+		expect(error.getStatus()).toBe(403);
+		expect((await urls()).length).toBe(0);
+	});
+
+	it("AC-3 · cổng trả 503 khi khoá chưa cấu hình, và không ghi gì", async () => {
+		const body = batch([item(1)]) as unknown as ListingBatch;
+
+		const error = await refused(gate(undefined).run(body, `Bearer ${SECRET}`));
+
+		expect(error).toBeInstanceOf(ServiceUnavailableException);
+		expect(error.getStatus()).toBe(503);
+		expect(error.message).toBe("Listing ingest is not configured.");
+		expect((await urls()).length).toBe(0);
+	});
+
+	it("AC-3 · cổng trả 400 gọi tên mục và trường sai, và không ghi gì", async () => {
+		const { listingsTotal: _drop, ...broken } = item(2);
+		const body = batch([item(1), broken]) as unknown as ListingBatch;
+
+		const error = await refused(gate(SECRET).run(body, `Bearer ${SECRET}`));
+
+		expect(error).toBeInstanceOf(BadRequestException);
+		expect(error.getStatus()).toBe(400);
+		expect(error.message).toContain("items.1.listingsTotal");
+		expect((await urls()).length).toBe(0);
+	});
+
+	it("AC-3 · cổng nhận lô khi khoá đúng", async () => {
+		const body = batch([item(1)]) as unknown as ListingBatch;
+
+		expect(await gate(SECRET).run(body, `Bearer ${SECRET}`)).toEqual({
+			created: 1,
+			updated: 0,
+		});
+		expect((await urls()).length).toBe(1);
 	});
 
 	it("AC-4 · không xếp việc nghiên cứu cho người đến từ sàn", async () => {

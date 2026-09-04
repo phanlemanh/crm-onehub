@@ -10,9 +10,12 @@ evals:
       gui 3 muc → 3 ca nhan source=LISTING, moi ca nhan co du 9 gia tri truong
       dung bang muc gui (san_luong, tin_dang, tin_moi_30_ngay, dia_ban, hinh_thai,
       chung_chi, ten_chuyen_trang, trang_nhatot, san_cap_nhat_luc), phan hoi
-      {created: 3, updated: 0}. Chieu do: trong ban sao, doi mot gia tri tin_dang
-      truoc khi ghi → bai do voi thong diep neu ten truong tin_dang va gia tri
-      lech.
+      {created: 3, updated: 0}. Ma tran toan phan: 9 khang dinh, moi truong mot,
+      so gia tri that trong FieldValue (text / number / date / nhan option) voi
+      dung truong cua muc gui; them mot khang dinh tap khoa doc ve bang dung 9
+      khoa. Chieu do: hoan vi tin_dang ↔ tin_moi_30_ngay trong ban sao (hai
+      truong cung kieu NUMBER) → bai do o assert got.tin_dang, "Expected: 101
+      Received: 61".
     paths:
       - "apps/api/src/listings/**"
       - "packages/validation/src/listing-ingest.ts"
@@ -42,11 +45,18 @@ evals:
     executor: test
     cmd: config:executors.test.tt_api
     expected: >-
-      exit 0. Ba bai rieng, cung mot lo mau: (a) khoa sai → 403; (b) khoa chua
-      cau hinh → 503; (c) mot muc thieu listingsTotal → 400 va thong diep chua
-      "items.1.listingsTotal". Sau moi bai: dem contact source=LISTING = 0 va
-      dem FieldValue cua 9 truong = 0. Chieu do: bo kiem khoa trong ban sao →
-      bai (a) do voi thong diep "expected 403"; bo parse Zod → bai (c) do.
+      exit 0. Ba bai rieng, cung mot lo mau, ca ba goi qua chinh lop cong
+      (ListingsController.run, khong goi thang bo phan tich): (a) khoa sai →
+      ForbiddenException, getStatus() = 403; (b) khoa chua cau hinh →
+      ServiceUnavailableException, getStatus() = 503, thong diep "Listing ingest
+      is not configured."; (c) mot muc thieu listingsTotal → BadRequestException,
+      getStatus() = 400 va thong diep chua "items.1.listingsTotal". Sau moi bai:
+      dem FieldValue trang_nhatot cua lo = 0. Doi chung duong cung lop: khoa dung
+      → cong tra {created: 1, updated: 0}. Chieu do: bo kiem khoa trong ban sao →
+      bai (a) do "Cong da nhan lo ma dang le no phai tu choi"; ep nhanh
+      !this.secret thanh false → bai (b) do o toBeInstanceOf
+      ServiceUnavailableException; bo parse Zod → bai (c) do cung thong diep voi
+      bai (a).
     paths:
       - "apps/api/src/listings/**"
       - "packages/validation/src/listing-ingest.ts"
@@ -163,8 +173,16 @@ evals:
       exit 0. Bai "mot cu bam hai ban ghi": campaigns.touch voi nonce rieng → co
       dung 1 CampaignTouch va dung 1 Activity type=CALL cung contactId, cung
       createdById, activityId cua touch tro dung activity do, |createdAt lech| <
-      1s. Bai "cung giao dich": ep loi khi tao Activity (fixture) → khong con
-      CampaignTouch nao. Chieu do: bo transaction trong ban sao → bai thu hai do.
+      1s. Bai "luot goi hong" la chan that cua tinh nguyen tu: ep lenh ghi THU
+      HAI (campaignTouch.create) hong bang outcome ngoai enum → PrismaClient
+      ValidationError ghim "Invalid value for argument `outcome`. Expected
+      TouchOutcome.", va khong con CampaignTouch lan Activity nao. Bai "ca nhan
+      khong co that" KHAI RO trong ten bai rang no KHONG do tinh nguyen tu: lenh
+      ghi thu nhat dut vi khoa ngoai, nen so dem bang 0 dung theo cau truc; no
+      ghim P2003 va "activity_contactId_fkey" de phan biet "hong o buoc nao".
+      Chieu do: bo transaction trong ban sao → bai "luot goi hong" do voi
+      callCount = 1; bo contactId khoi activity.create trong ban sao → bai "ca
+      nhan khong co that" do vi thong diep doi sang "campaignTouch_contactId_fkey".
     paths:
       - "apps/api/src/campaigns/**"
       - "apps/api/src/activities/**"
@@ -228,11 +246,19 @@ evals:
       chien dich → HttpException, thong diep chua TEN chien dich; goc nhin van
       con. Goc nhin khong co chien dich → xoa duoc. Chieu do: bo kiem trong ban
       sao → Prisma Restrict van chan nhung thong diep khong co ten chien dich →
-      bai do vi assert thong diep.
+      bai do vi assert thong diep. Tang duoi (rang buoc onDelete: Restrict) do
+      rieng o apps/api/test/campaign-schema.spec.ts: xoa bi chan → ghim
+      PrismaClientKnownRequestError, code P2003, thong diep chua
+      "campaign_savedViewId_fkey"; goc nhin VAN CON sau khi bi tu choi; doi chung
+      duong trong cung bai — go chien dich ra roi xoa lai thi xoa duoc va goc
+      nhin bien mat. Chieu do: doi rang buoc do sang ON DELETE CASCADE tren co so
+      du lieu kiem → bai do "Cau xoa da di lot ma dang le no phai bi chan".
     paths:
       - "apps/api/src/saved-views/**"
       - "apps/api/src/campaigns/**"
+      - "packages/db/prisma/schema.prisma"
       - "apps/api/test/campaigns.spec.ts"
+      - "apps/api/test/campaign-schema.spec.ts"
     evidence_required: [run_id, exit_code, verifier, verified_at]
 
   - id: E15
@@ -414,9 +440,20 @@ evals:
     expected: >-
       exit 0. apps/app/test/campaign-states.spec.ts: ham chon trang thai thuan
       (khong React) tra 'empty' khi rows=[] va 'rows' khi co dong; 'no-views' khi
-      danh sach goc nhin CONTACT rong; 'loading' khi chua co du lieu; ba chuoi
-      cua ba trang thai do-o-muc-don-vi co trong campaignMessages.vi va mang dau. Chieu do: doi ham tra 'rows' cho [] trong
-      ban sao → do.
+      danh sach goc nhin CONTACT rong; 'loading' khi chua co du lieu. Roi bai
+      "E25 · ba trang thai don vi noi dung cau chu man hien ra" khang dinh QUAN
+      HE, khong phai su co mat: doc cay cu phap cua campaigns-table.tsx va
+      create-campaign-sheet.tsx, lay dung nhanh `if (<ket qua listState /
+      createState> === "<ma>")`, roi so tap chuoi ma nhanh do ve voi kho chuoi —
+      listState([], true) = 'loading' ⇒ [m.loading.list]; listState([], false) =
+      'empty' ⇒ [m.title, m.empty.list]; createState([]) = 'no-views' ⇒
+      [m.empty.noViews, m.create.segmentHint, m.create.openContacts]. Nhanh bien
+      mat thi bai nem loi, khong xanh lang le. Phep kiem dau tieng Viet cho ba
+      chuoi nay van song nhung o luoi chung
+      (apps/app/test/messages-guard.spec.ts, quet moi gia tri vi cua moi module)
+      — bo o day de khong do hai lan. Chieu do: doi ham tra 'rows' cho [] trong
+      ban sao → do; doi nhanh 'empty' cua campaigns-table.tsx ve m.empty.members
+      trong ban sao → do voi chenh lech chuoi dung o dong assert.
     paths:
       - "apps/app/app/(app)/[slug]/campaigns/**"
       - "apps/app/lib/messages/campaigns.ts"
