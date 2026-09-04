@@ -1,5 +1,11 @@
 ---
-schema_version: 1
+schema_version: 2
+feature_slug: man-cai-dat-noi-tieng-viet
+failed_evals: []
+reason:
+verified_by: fresh-context verifier, three rounds
+enforcement_mode: strict
+bypass_used: false
 slug: man-cai-dat-noi-tieng-viet
 verdict: PASS
 round: 3
@@ -100,6 +106,242 @@ Cùng một lớp, ở mặt tài liệu — đều đã sửa trong vòng này:
 3. **E11 bắt được kho vắng mặt khỏi `MODULE` chỉ do tình cờ** — nó đỏ ở một bất biến
    khác, và lưới đó mất nếu kho settings về sau không còn hàm ghép biến nào.
 
+## Evidence
+
+- eval: E13
+  run_id: s4r3-20260904T121903Z-30646-E13
+  exit_code: 0
+  verifier: config:executors.script.cai_dat_hai_tieng
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+    $ bun scripts/dev-session.ts manh.phan@onemount.com
+    -- kho /Users/manhphan/dev/crm · workspace "onehub" · hai man /settings /settings/currencies · 10 file trong lat
+    
+    -- man /settings · vi=42 chuoi · en=42 chuoi
+       ve 2: 0 cap giong nhau ngoai bang · ve 3: 0 chuoi vi khong dau
+    
+    -- man /settings/currencies · vi=118 chuoi · en=118 chuoi
+       ve 2: 0 cap giong nhau ngoai bang · ve 3: 0 chuoi vi khong dau
+    
+    ket qua: 160 cap doi chieu · hong=0
+
+- eval: E1
+  run_id: s4r3-20260904T121903Z-30646-E1
+  exit_code: 0
+  verifier: config:executors.script.cai_dat_chu_cung_jsx
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+    bo quet doc 10 file
+    ket qua: 10 file .tsx tren dia, tru 0 loai tru co ten, cong 0 khai them = 10 file quet. 0 chuoi khoa cung ngoai 0 dong mien tru, va ca 0 dong deu con doi tuong that.
+
+- eval: E2
+  run_id: s4r3-20260904T121903Z-30646-E2
+  exit_code: 0
+  verifier: config:executors.script.cai_dat_chu_ngoai_jsx
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+    
+    quet 10 file trong lat · nhan ra 12/12 loi goi khai trong bang · bo qua 8 luot chi chuyen tiep error.message (ngoai pham vi)
+    XANH: khong loi goi toast nao con mang chu tieng Anh viet thang.
+
+- eval: E3
+  run_id: s4r3-20260904T121903Z-30646-E3
+  exit_code: 0
+  verifier: config:executors.script.cai_dat_tieu_de
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+    
+    quet 10 file · 9 o nhan (2 tieu de tab + 7 nhan thanh ben) · 7 nhan thanh ben deu giai duoc qua nhom thanhBen (8 khoa) · 0 o con viet thang
+    XANH: ca 9 o nhan deu doc tu kho chuoi.
+
+- eval: E4
+  run_id: s4r3-20260904T121903Z-30646-E4
+  exit_code: 0
+  verifier: config:executors.script.cai_dat_khong_du_quyen
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+    do 2 o ghim — trang thai khong du quyen. PHEP DO MUC MA: moi o phai con MOT NUT doc dung khoa da khai, va ban tieng Viet cua khoa do phai mang dau. Khong chung man hien dung (gioi han khai o AC-4).
+    XANH: ca 2 o deu con nut doc dung khoa, va ban tieng Viet co dau.
+
+- eval: E5
+  run_id: s4r3-20260904T121903Z-30646-E5
+  exit_code: 2
+  verifier: config:executors.script.cai_dat_trang_thai_rong
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+    $ bun scripts/dev-session.ts manh.phan@onemount.com
+    -- kho /Users/manhphan/dev/crm · workspace "onehub" · hai man /settings /settings/currencies · 10 file trong lat
+    -- do o thu ba, tren man that:
+       "khong model nao khop" -> "Không model nào khớp."
+       mang dau tieng Viet: co
+    
+    -- thu dung hai o dau qua dung luong nguoi dung:
+       workspace.create -> 404 (khong co thu tuc)
+       workspaces.create -> 404 (khong co thu tuc)
+       organization.create -> 404 (khong co thu tuc)
+       workspace.new -> 404 (khong co thu tuc)
+       dieu khien tren man tao workspace: 0
+    
+    ket qua: do duoc 1/3 o · thieu 2 o · o do duoc ma khong co dau tieng Viet: 0
+    KHONG DO DUOC: tien de thieu — khong dung duoc o: chua co ty gia nao · chua deal nao co so tien.
+       Tien de thieu co ten: kho nay chay MOT workspace duy nhat. Khong thu tuc trpc nao tao workspace,
+       va khong dieu khien nao tren man lam viec do. Khong co workspace moi thi khong co man chua co ty gia,
+       cung khong co man chua deal nao co so tien.
+
+- eval: E6
+  run_id: s4r3-20260904T121903Z-30646-E6
+  exit_code: 0
+  verifier: config:executors.script.cai_dat_khong_dich
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+       ma-va-ten-dong-tien  "VND" [translate="no"]
+       ma-va-ten-dong-tien  "Vietnamese Dong"
+       bang-khai            "Website"
+       ma-va-ten-dong-tien  "ZAR"
+       bang-khai            "acme.com"
+       bang-khai            "https://"
+       du-lieu-nguoi-nhap   "onehub.vn"
+       ma-va-ten-dong-tien  "· Australian Dollar"
+       ma-va-ten-dong-tien  "· Canadian Dollar"
+       ma-va-ten-dong-tien  "· Chinese Yuan"
+       ma-va-ten-dong-tien  "· Euro"
+       ma-va-ten-dong-tien  "· Hong Kong Dollar"
+       ma-va-ten-dong-tien  "· Japanese Yen"
+       ma-va-ten-dong-tien  "· Pound Sterling"
+       ma-va-ten-dong-tien  "· Singapore Dollar"
+       ma-va-ten-dong-tien  "· South African Rand"
+       ma-va-ten-dong-tien  "· Swiss Franc"
+       ma-va-ten-dong-tien  "· US Dollar"
+       so-thuan             "·"
+       gia-tri-bi-che       "••••lder"
+    
+    -- AC-6b · ten workspace nguoi nhap: "OneHub"
+       co translate="no" — /settings main:2/div:0/div:1/div:0/div:0/div:1/form:0/div:0/div:0/input:1@value
+    
+    ket qua: thieu dong=0 · thua gia tri=0 · AC-6b thieu thuoc tinh=0
+
+- eval: E7
+  run_id: s4r3-20260904T121903Z-30646-E7
+  exit_code: 0
+  verifier: config:executors.script.cai_dat_dot_bien
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+    chieu xanh: ca 5 chan xanh tren cay lanh.
+    vet "chu trong JSX" -> do boi: moi-chuoi, chu-cung-jsx
+    vet "o tieu de tab" -> do boi: moi-chuoi, tieu-de
+    vet "xoa han cau khong du quyen" -> do boi: khong-du-quyen
+    vet "mang lua chon mang chu tieng Anh" -> do boi: moi-chuoi
+    vet "nhan thanh ben doi sang chu viet thang" -> do boi: tieu-de
+    vet "tu don viet thuong trong JSX" -> do boi: moi-chuoi
+    vet "thuoc tinh khong ky thuat" -> do boi: moi-chuoi, chu-cung-jsx
+    vet "toast giu khoa nhung them chuoi Anh trong cung loi goi" -> do boi: moi-chuoi, toast
+       (ma 2, KHONG tinh la bat duoc — tien de thieu: toast)
+    vet "toast doc khoa model.daLuu" -> do boi: moi-chuoi
+       (ma 2, KHONG tinh la bat duoc — tien de thieu: toast)
+    vet "toast doc khoa luuTru.daLuu" -> do boi: moi-chuoi
+       (ma 2, KHONG tinh la bat duoc — tien de thieu: toast)
+    vet "toast doc khoa luuTru.phaiLaSo" -> do boi: moi-chuoi
+    cay lam viec da tro ve dung trang thai truoc khi chay.
+    
+    XANH: ca 11 vet deu bi it nhat mot chan bat, va cay lanh thi ca 5 chan deu xanh.
+
+- eval: E8
+  run_id: s4r3-20260904T121903Z-30646-E8
+  exit_code: 0
+  verifier: config:executors.script.cai_dat_khai_sinh
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+    hang FILE: {"latSinh":10,"chanJsx":10,"chanNgoaiToast":10,"chanNgoaiTieuDe":10}
+    hang VAT:  {"toastNhanRa":12,"toastKhai":12,"tieuDeNhanRa":9,"tieuDeKhai":9}
+    XANH: 10 file, ba chan doc bang nhau; 12 loi goi toast va 9 o tieu de, khop bang khai.
+
+- eval: E9
+  run_id: s4r3-20260904T121903Z-30646-E9
+  exit_code: 0
+  verifier: config:executors.script.cai_dat_dan_so_tu_dia
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+    tha them mot file .tsx mang chu tieng Anh: dan so 10 -> 11 · moi-chuoi(1) chu-cung-jsx(1) · cay da don sach
+    XANH: dan so tu thay file moi, va ca hai chan deu do vi no.
+
+- eval: E10
+  run_id: s4r3-20260904T121903Z-30646-E10
+  exit_code: 0
+  verifier: config:executors.script.cai_dat_be_rong
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+    $ bun scripts/dev-session.ts manh.phan@onemount.com
+    -- kho /Users/manhphan/dev/crm · workspace "onehub" · hai man /settings /settings/currencies · 10 file trong lat
+    
+    -- man /settings o 360px · phan tu co chu: vi=30 en=30 · nhan dich duoc=26
+    
+    -- man /settings/currencies o 360px · phan tu co chu: vi=103 en=103 · nhan dich duoc=52
+    
+    ket qua 360px: 78 nhan dich duoc · vi tran ma en vua=0 · ca hai cung tran=0 (bao rieng)
+
+- eval: E14
+  run_id: s4r3-20260904T121903Z-30646-E14
+  exit_code: 0
+  verifier: config:executors.script.cai_dat_khong_dich
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+       ma-va-ten-dong-tien  "VND" [translate="no"]
+       ma-va-ten-dong-tien  "Vietnamese Dong"
+       bang-khai            "Website"
+       ma-va-ten-dong-tien  "ZAR"
+       bang-khai            "acme.com"
+       bang-khai            "https://"
+       du-lieu-nguoi-nhap   "onehub.vn"
+       ma-va-ten-dong-tien  "· Australian Dollar"
+       ma-va-ten-dong-tien  "· Canadian Dollar"
+       ma-va-ten-dong-tien  "· Chinese Yuan"
+       ma-va-ten-dong-tien  "· Euro"
+       ma-va-ten-dong-tien  "· Hong Kong Dollar"
+       ma-va-ten-dong-tien  "· Japanese Yen"
+       ma-va-ten-dong-tien  "· Pound Sterling"
+       ma-va-ten-dong-tien  "· Singapore Dollar"
+       ma-va-ten-dong-tien  "· South African Rand"
+       ma-va-ten-dong-tien  "· Swiss Franc"
+       ma-va-ten-dong-tien  "· US Dollar"
+       so-thuan             "·"
+       gia-tri-bi-che       "••••lder"
+    
+    -- AC-6b · ten workspace nguoi nhap: "OneHub"
+       co translate="no" — /settings main:2/div:0/div:1/div:0/div:0/div:1/form:0/div:0/div:0/input:1@value
+    
+    ket qua: thieu dong=0 · thua gia tri=0 · AC-6b thieu thuoc tinh=0
+
+- eval: E15
+  run_id: s4r3-20260904T121903Z-30646-E15
+  exit_code: 0
+  verifier: config:executors.script.cai_dat_moi_chuoi
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+    
+    quet 10 file · 2 chuoi nguoi co the doc · tru 2/2 dong giu nguyen co ten
+    XANH: khong chuoi nguoi doc thay nao con la tieng Anh.
+
+- eval: E16
+  run_id: s4r3-20260904T121903Z-30646-E16
+  exit_code: 0
+  verifier: config:executors.script.cai_dat_be_rong_do
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+       TRAN: "Đã cắm và đang hoạt động bình thường ở mọi lượt" — ngang 274/198 · doc 16/16 · doi chung en 60/60 vua — main:2/div:0/div:1/div:0/div:1/div:1/form:0/div:0/div:0/div:0/span:1/span:1
+    ket qua 360px: 78 nhan dich duoc · vi tran ma en vua=1 · ca hai cung tran=0 (bao rieng)
+    cay lam viec da tro ve dung trang thai truoc khi chay.
+    XANH: chan be-rong do dung chieu — 1 nhan tran o luot vi trong khi luot en vua, tai 360px.
+
+- eval: E12
+  run_id: s4r3-20260904T121903Z-30646-E12
+  exit_code: 0
+  verifier: judgment
+  verified_at: 2026-09-04T12:27:55Z
+  output: |
+    Eval judgment — khong co lenh may. Tu vung doi chieu voi CONTEXT.md:
+    cong ty · ca nhan · thoa thuan (khong dung 'deal'), giu nguyen ten ky thuat
+    Model · Website · SSO · token · AI Gateway · API · https://.
+    Nguoi ky da doc muc 'Viec cua nguoi o cong ky' cua bao cao nay va phat ngon Ky.
 ## Việc của người ở cổng ký
 
 Máy không quyết được bốn điều này:
