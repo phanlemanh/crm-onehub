@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -26,9 +26,26 @@ function doc(duong, vi) {
 const danhSach = doc(join(RANG, "danh-sach-chan.json"), "ban khai chan do");
 const so = doc(join(RANG, "khai-sinh.json"), "so khai sinh");
 
-const DAN_SO = [...danhSach.chanNghiemThu, ...danhSach.chanSieuDo].map(
-	(c) => c.ten,
-);
+const mienTru = new Set((danhSach.mienTru ?? []).map((m) => m.ten));
+const ngoaiRang = (danhSach.ngoaiRang ?? []).map((m) => m.ten);
+const sieuDo = new Set((danhSach.sieuDo ?? []).map((m) => m.ten));
+
+const TRONG_RANG = readdirSync(RANG)
+	.filter((f) => /\.(mjs|sh)$/.test(f))
+	.filter((f) => !mienTru.has(f))
+	.sort();
+
+const DAN_SO = [...TRONG_RANG, ...ngoaiRang];
+
+const mienTruChet = [...mienTru].filter((t) => !existsSync(join(RANG, t)));
+if (mienTruChet.length > 0) {
+	for (const t of mienTruChet)
+		console.log(`   DONG MIEN TRU CHET: danh-sach-chan.json:${t}`);
+	console.log(
+		`KHONG DO DUOC: ban khai mien tru co ${mienTruChet.length} dong khong tro toi file nao`,
+	);
+	process.exit(2);
+}
 
 const coTep = (ten) =>
 	existsSync(join(RANG, ten)) || existsSync(join(GOC, ten));
@@ -115,6 +132,8 @@ if (chan === "tap-rong") {
 			ten: "no-vong-1.mjs",
 			chay: ["node", `${RANG}/no-vong-1.mjs`],
 			ghim: "vang o CA HAI thu tieng",
+			pha: ["--tra-ve-pending"],
+			phuc: ["--phuc-trang-thai"],
 		},
 		{
 			ten: "du-lieu-bien.mjs",
@@ -135,13 +154,22 @@ if (chan === "tap-rong") {
 
 	console.log("-- chieu pha: dung TAP RONG that bang mot cu doi DU LIEU cho tung ca");
 	const bi = CA.map((c) => {
-		const pha = chay("node", [GIEO, ...(c.pha ?? ["--tra-ve-pending"])]);
+		const pha = chay("node", [GIEO, ...c.pha]);
 		if (pha.status !== 0) {
-			console.log(`KHONG DO DUOC: khong pha duoc du lieu cho ${c.ten}`);
+			console.log(
+				`KHONG DO DUOC: khong pha duoc du lieu cho ${c.ten} — ${(pha.stdout ?? "").slice(-200)}`,
+			);
 			process.exit(2);
 		}
 		const r = chay(c.chay[0], c.chay.slice(1));
-		chay("node", [GIEO, ...(c.phuc ?? [])]);
+		const phuc = chay("node", [GIEO, ...c.phuc]);
+		if (phuc.status !== 0) {
+			console.log(
+				`KHONG DO DUOC: PHUC HOI THAT BAI sau khi pha ${c.ten} — du lieu thu dang o trang thai da pha.\n` +
+					`   ${(phuc.stdout ?? "").slice(-300)}`,
+			);
+			process.exit(2);
+		}
 		return r;
 	});
 
@@ -180,7 +208,7 @@ for (const m of so) {
 		for (const bai of m.chieuDoTrongBai) {
 			const lenh = m.chayBai.map((x) => x.replace("{{BAI}}", bai));
 			const r = spawnSync(lenh[0], lenh.slice(1), {
-				cwd: GOC,
+				cwd: m.cwd ? join(GOC, m.cwd) : GOC,
 				encoding: "utf8",
 				env: process.env,
 			});

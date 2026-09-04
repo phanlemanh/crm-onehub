@@ -1,110 +1,143 @@
 import { execFileSync } from "node:child_process";
-import { dirname, resolve } from "node:path";
+import { existsSync, mkdirSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const GOC = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const HO_SO = dirname(fileURLToPath(import.meta.url));
+const GOC = resolve(HO_SO, "../..");
+const CHUP = join(HO_SO, ".anh-chup");
+const KHO_TRANG_THAI = join(CHUP, "trang-thai-bo-sung.json");
+const KHO_HOAT_DONG = join(CHUP, "moc-hoat-dong.json");
 
 const TRANG_THAI = ["RUNNING", "COMPLETE", "FAILED", "SKIPPED"];
-const TRA_VE = process.argv.includes("--tra-ve-pending");
-const GO_HOAT_DONG = process.argv.includes("--go-hoat-dong");
-const PHUC_HOAT_DONG = process.argv.includes("--phuc-hoat-dong");
-const KHO_MOC = "/tmp/moc-hoat-dong.json";
 
-const kichBanTraVe = `
-import { db } from "./src/client";
-const n = await db.company.updateMany({ data: { enrichmentStatus: "PENDING" } });
-console.log(\`-- da tra \${n.count} cong ty ve PENDING (dung tap rong de thu chieu do)\`);
-`;
+const co = (c) => process.argv.includes(c);
+const PHA_TRANG_THAI = co("--tra-ve-pending");
+const PHA_HOAT_DONG = co("--go-hoat-dong");
 
-const kichBanGoHoatDong = `
+mkdirSync(CHUP, { recursive: true });
+
+const chup = (kho, chon) => `
 import { writeFileSync } from "node:fs";
 import { db } from "./src/client";
-const rows = await db.company.findMany({
-  where: { lastActivityAt: { not: null } },
-  select: { id: true, lastActivityAt: true },
-});
-writeFileSync(${JSON.stringify(KHO_MOC)}, JSON.stringify(rows));
-await db.company.updateMany({ data: { lastActivityAt: null } });
-console.log(\`-- da go moc hoat dong cua \${rows.length} cong ty, chup vao ${KHO_MOC}\`);
+const rows = await db.company.findMany({ select: ${chon} });
+writeFileSync(${JSON.stringify(kho)}, JSON.stringify(rows));
+console.log(\`-- da chup \${rows.length} hang vao ${kho}\`);
 `;
 
-const kichBanPhucHoatDong = `
+const doiAnhChup = (kho, ten) => `
+import { existsSync } from "node:fs";
+if (!existsSync(${JSON.stringify(kho)})) {
+  console.log("KHONG DO DUOC: thieu anh chup ${ten} — khong phuc duoc, va KHONG duoc doan");
+  process.exit(2);
+}
+`;
+
+const KICH_BAN = {
+  "tra-ve-pending": chup(KHO_TRANG_THAI, "{ id: true, enrichmentStatus: true }") + `
+const n = await db.company.updateMany({ data: { enrichmentStatus: "PENDING" } });
+console.log(\`-- da tra \${n.count} cong ty ve PENDING (dung tap rong de thu chieu do)\`);
+`,
+  "phuc-trang-thai": doiAnhChup(KHO_TRANG_THAI, "trang thai bo sung du lieu") + `
 import { readFileSync } from "node:fs";
 import { db } from "./src/client";
-const rows = JSON.parse(readFileSync(${JSON.stringify(KHO_MOC)}, "utf8"));
+const rows = JSON.parse(readFileSync(${JSON.stringify(KHO_TRANG_THAI)}, "utf8"));
 for (const r of rows) {
-  await db.company.update({ where: { id: r.id }, data: { lastActivityAt: new Date(r.lastActivityAt) } });
+  await db.company.update({ where: { id: r.id }, data: { enrichmentStatus: r.enrichmentStatus } });
 }
-console.log(\`-- da phuc moc hoat dong cho \${rows.length} cong ty\`);
-`;
-
-const kichBan = `
+const sau = await db.company.findMany({ select: { id: true, enrichmentStatus: true } });
+const map = new Map(rows.map((r) => [r.id, r.enrichmentStatus]));
+const lech = sau.filter((r) => map.has(r.id) && map.get(r.id) !== r.enrichmentStatus);
+console.log(\`-- da phuc \${rows.length} hang · con lech \${lech.length}\`);
+if (lech.length > 0) process.exit(1);
+`,
+  "go-hoat-dong": chup(KHO_HOAT_DONG, "{ id: true, lastActivityAt: true }") + `
+await db.company.updateMany({ data: { lastActivityAt: null } });
+console.log("-- da go moc hoat dong cua moi cong ty");
+`,
+  "phuc-hoat-dong": doiAnhChup(KHO_HOAT_DONG, "moc hoat dong") + `
+import { readFileSync } from "node:fs";
 import { db } from "./src/client";
-
-const CAN = ${JSON.stringify(TRANG_THAI)};
-
-const rows = await db.company.findMany({
-	select: { id: true, name: true, enrichmentStatus: true },
-	orderBy: { name: "asc" },
-});
-
-if (rows.length < CAN.length + 1) {
-	console.log(
-		\`KHONG GIEO DUOC: chi co \${rows.length} cong ty, can it nhat \${CAN.length + 1} de giu mot cai o PENDING\`,
-	);
-	process.exit(2);
+const rows = JSON.parse(readFileSync(${JSON.stringify(KHO_HOAT_DONG)}, "utf8"));
+for (const r of rows) {
+  await db.company.update({
+    where: { id: r.id },
+    data: { lastActivityAt: r.lastActivityAt === null ? null : new Date(r.lastActivityAt) },
+  });
 }
-
+const sau = await db.company.findMany({ select: { id: true, lastActivityAt: true } });
+const map = new Map(rows.map((r) => [r.id, r.lastActivityAt]));
+const lech = sau.filter((r) => {
+  if (!map.has(r.id)) return false;
+  const cu = map.get(r.id);
+  const moi = r.lastActivityAt;
+  return (cu === null) !== (moi === null) ||
+    (cu !== null && moi !== null && new Date(cu).getTime() !== moi.getTime());
+});
+console.log(\`-- da phuc \${rows.length} hang · con lech \${lech.length}\`);
+if (lech.length > 0) process.exit(1);
+`,
+  gieo: `
+import { db } from "./src/client";
+const CAN = ${JSON.stringify(TRANG_THAI)};
+const rows = await db.company.findMany({
+  select: { id: true, name: true, enrichmentStatus: true },
+  orderBy: { name: "asc" },
+});
+if (rows.length < CAN.length + 1) {
+  console.log(\`KHONG GIEO DUOC: chi co \${rows.length} cong ty, can it nhat \${CAN.length + 1}\`);
+  process.exit(2);
+}
 const dangCo = new Set(rows.map((r) => r.enrichmentStatus));
 const thieu = CAN.filter((t) => !dangCo.has(t));
-
-if (thieu.length === 0) {
-	console.log("-- du lieu thu da du nam trang thai bo sung du lieu, khong gieo them");
-	for (const t of ["PENDING", ...CAN]) {
-		console.log(\`   \${t.padEnd(10)} \${rows.filter((r) => r.enrichmentStatus === t).length} cong ty\`);
-	}
-	process.exit(0);
+if (thieu.length > 0) {
+  const nhan = rows.slice(1, 1 + thieu.length);
+  for (let i = 0; i < thieu.length; i += 1) {
+    await db.company.update({ where: { id: nhan[i].id }, data: { enrichmentStatus: thieu[i] } });
+    console.log(\`   \${thieu[i].padEnd(10)} <- \${nhan[i].name}\`);
+  }
 }
-
-const nhan = rows.slice(1, 1 + thieu.length);
-for (let i = 0; i < thieu.length; i += 1) {
-	const c = nhan[i];
-	await db.company.update({
-		where: { id: c.id },
-		data: { enrichmentStatus: thieu[i] },
-	});
-	console.log(\`   \${thieu[i].padEnd(10)} <- \${c.name}\`);
-}
-
 const sau = await db.company.findMany({ select: { enrichmentStatus: true } });
 const dem = {};
 for (const r of sau) dem[r.enrichmentStatus] = (dem[r.enrichmentStatus] ?? 0) + 1;
 const conThieu = ["PENDING", ...CAN].filter((t) => !dem[t]);
-console.log(\`-- sau khi gieo: \${JSON.stringify(dem)}\`);
+console.log(\`-- trang thai hien co: \${JSON.stringify(dem)}\`);
 if (conThieu.length > 0) {
-	console.log(\`KHONG GIEO DUOC: van thieu \${conThieu.join(", ")}\`);
-	process.exit(1);
+  console.log(\`KHONG GIEO DUOC: van thieu \${conThieu.join(", ")}\`);
+  process.exit(1);
 }
-`;
+`,
+};
 
-console.log("-- gieo du lieu thu");
+const chan = PHA_TRANG_THAI
+  ? "tra-ve-pending"
+  : co("--phuc-trang-thai")
+    ? "phuc-trang-thai"
+    : PHA_HOAT_DONG
+      ? "go-hoat-dong"
+      : co("--phuc-hoat-dong")
+        ? "phuc-hoat-dong"
+        : "gieo";
+
+console.log(`-- gieo-du-lieu-bien: chan ${chan}`);
 try {
-	const chon = GO_HOAT_DONG
-	? kichBanGoHoatDong
-	: PHUC_HOAT_DONG
-		? kichBanPhucHoatDong
-		: TRA_VE
-			? kichBanTraVe
-			: kichBan;
-	const ra = execFileSync("bun", ["-e", chon], {
-		cwd: `${GOC}/packages/db`,
-		encoding: "utf8",
-		env: process.env,
-	});
-	process.stdout.write(ra);
+  process.stdout.write(
+    execFileSync("bun", ["-e", KICH_BAN[chan]], {
+      cwd: `${GOC}/packages/db`,
+      encoding: "utf8",
+      env: process.env,
+    }),
+  );
 } catch (loi) {
-	console.log(
-		`KHONG GIEO DUOC: ${String(loi.stdout ?? "")}${String(loi.stderr ?? loi.message).slice(0, 400)}`,
-	);
-	process.exit(2);
+  const ra = `${String(loi.stdout ?? "")}${String(loi.stderr ?? loi.message)}`;
+  process.stdout.write(ra.slice(0, 600));
+  process.exit(ra.includes("KHONG DO DUOC") ? 2 : (loi.status ?? 2));
+}
+
+if (
+  (PHA_TRANG_THAI && !existsSync(KHO_TRANG_THAI)) ||
+  (PHA_HOAT_DONG && !existsSync(KHO_HOAT_DONG))
+) {
+  console.log("KHONG DO DUOC: da pha du lieu ma KHONG chup duoc anh — khong phuc duoc");
+  process.exit(2);
 }

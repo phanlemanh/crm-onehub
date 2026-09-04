@@ -1,34 +1,12 @@
 {
-  "chanNghiemThu": [
+  "ghiChu": "Ban khai nay KHONG liet dan so. Dan so suy tu DIA: moi *.mjs va *.sh trong rang/, tru mienTru, cong ngoaiRang. Ban khai chi noi cac NGOAI LE, va moi ngoai le phai co ly do doc duoc.",
+  "ngoaiRang": [
     {
-      "ten": "khai-tieng.mjs"
-    },
-    {
-      "ten": "may-chu-ve.sh"
-    },
-    {
-      "ten": "no-vong-1.mjs"
-    },
-    {
-      "ten": "ban-ve.mjs"
-    },
-    {
-      "ten": "du-lieu-bien.mjs"
-    },
-    {
-      "ten": "dot-bien.mjs"
-    },
-    {
-      "ten": "chu-cung-jsx.mjs"
-    },
-    {
-      "ten": "be-rong.sh"
-    },
-    {
-      "ten": "apps/app/test/messages-guard.spec.ts"
+      "ten": "apps/app/test/messages-guard.spec.ts",
+      "lyDo": "chan nghiem thu song ngoai rang/ vi no la bai kiem cua apps/app; chan chong-lach khong quet duoc no, va dieu do phai hien thanh mot con so chu khong duoc im"
     }
   ],
-  "chanSieuDo": [
+  "sieuDo": [
     {
       "ten": "khong-may-quet.sh",
       "lyDo": "chu ngu la gian do, khong phai san pham — no canh cac chan khac co cham vat that khong"

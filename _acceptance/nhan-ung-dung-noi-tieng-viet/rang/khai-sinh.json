@@ -184,9 +184,9 @@
     "ten": "apps/app/test/messages-guard.spec.ts",
     "tep": "apps/app/test/messages-guard.spec.ts",
     "chay": [
-      "bash",
-      "-lc",
-      "cd apps/app && bun test test/messages-guard.spec.ts"
+      "bun",
+      "test",
+      "test/messages-guard.spec.ts"
     ],
     "vecTo": null,
     "chieuDoTrongBai": [
@@ -197,10 +197,13 @@
     ],
     "lyDo": "cap hai chieu la CHINH cac bai kiem trong file, chay lai moi CI cung bo test",
     "chayBai": [
-      "bash",
-      "-lc",
-      "cd apps/app && bun test test/messages-guard.spec.ts -t {{BAI}}"
-    ]
+      "bun",
+      "test",
+      "test/messages-guard.spec.ts",
+      "-t",
+      "{{BAI}}"
+    ],
+    "cwd": "apps/app"
   },
   {
     "ten": "be-rong.sh",

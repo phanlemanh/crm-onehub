@@ -9,14 +9,23 @@ VAT_THAT='puppeteer|curl|bun test|bunx tsc|fetch\(|createSourceFile\(|createProg
 
 DANH_SACH="${BAN_KHAI:-$RANG/danh-sach-chan.json}"
 [ -f "$DANH_SACH" ] || { echo "KHONG DO DUOC: thieu ban khai chan do tai $DANH_SACH"; exit 2; }
-CANH="$(node -e 'const d=require(process.argv[1]);console.log(d.chanNghiemThu.map(c=>c.ten.split("/").pop()).join("\n"))' "$DANH_SACH")"
-[ -n "$CANH" ] || { echo "KHONG DO DUOC: ban khai khong liet chan nghiem thu nao — tap so rong"; exit 2; }
+
+BO_QUA="$(node -e 'const d=require(process.argv[1]);console.log([...(d.mienTru||[]),...(d.sieuDo||[])].map(c=>c.ten).join("\n"))' "$DANH_SACH")" || {
+  echo "KHONG DO DUOC: khong doc duoc ban khai chan do tai $DANH_SACH"; exit 2; }
+NGOAI_RANG="$(node -e 'const d=require(process.argv[1]);console.log((d.ngoaiRang||[]).map(c=>c.ten).join("\n"))' "$DANH_SACH")"
+SO_NGOAI="$(printf '%s' "$NGOAI_RANG" | grep -c . || true)"
+
+echo "-- dan so suy tu DIA: moi *.mjs va *.sh trong rang/, tru $(printf '%s' "$BO_QUA" | grep -c . || echo 0) muc bo qua da khai"
+if [ "$SO_NGOAI" -gt 0 ]; then
+  echo "   NGOAI PHAM VI QUET (khai truoc, $SO_NGOAI chan): $(printf '%s' "$NGOAI_RANG" | tr '\n' ' ')"
+  echo "   chan nay chi duyet rang/; cac chan tren nam noi khac va KHONG duoc quet o day."
+fi
 
 hong=0
 tong=0
 for f in "$RANG"/*.mjs "$RANG"/*.sh; do
   ten="$(basename "$f")"
-  printf '%s\n' "$CANH" | grep -qxF "$ten" || continue
+  printf '%s\n' "$BO_QUA" | grep -qxF "$ten" && continue
   tong=$((tong + 1))
   if grep -qE "$VAT_THAT" "$f"; then
     echo "   dung vat that  $ten"
