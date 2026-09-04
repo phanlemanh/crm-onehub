@@ -338,3 +338,15 @@ session xac thuc non-interactive cho E8, khong dung duoc may chu 3300 cho
 E15); E14 UNCERTAIN vi thieu dau vao cho hai man khai bao. Chua quay lai
 implementation — dang cho nguoi quyet o Cong 2 vi phan lon nguyen nhan la ha
 tang/fixture chu khong ro rang la loi san pham (xem review-findings.md).
+
+Round 2: vong sua sau khi nguoi doc muoi chin phat hien cua vong 1. Da dong
+nam cho THAT: ham doc tieng nhan ban (nay dung getLocale co san o
+lib/locale/server.ts), hai form doc useLocale thay vi nhan chuoi qua prop,
+man grant-access — man THU TU cua cua vao — vao pham vi va da dich, chan
+dang-gui goi mot ham da xoa nen nem ReferenceError, va hai ca kiem nhanh cua
+resolveLocale bi xoa nham nay tra lai. Cong mot loi NGUOI DOC KHONG BAT DUOC:
+chan chu-cung-jsx nhan co "--lat" ma bo quet khong he hieu, nen no quet dung
+file JSON cua lat va bao XANH ma chua bao gio doc tam file kia. Nay di qua
+lop boc chu-cung-lat.mjs — khang dinh so file bo quet doc BANG so file lat
+khai, va do khi mot dong mien tru khong con doi tuong that. Tam gioi han moi
+truong cua vong 1 GIU NGUYEN, khong tieu chi nao bi thu hep.
