@@ -10,6 +10,9 @@ import {
 	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { getLocale } from "@/lib/locale/server";
+import { settingsMessages } from "@/lib/messages/settings";
+import { ssoMessages } from "@/lib/messages/settings-sso";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
@@ -17,22 +20,24 @@ import { AddSsoProviderSheet } from "./add-sso-provider-sheet";
 import { ssoSearchParams } from "./sso-search-params";
 import { SsoTable } from "./sso-table";
 
-export const metadata: Metadata = {
-	title: "SSO",
-};
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: settingsMessages(await getLocale()).thanhBen.sso };
+}
 
-export default function SsoSettingsPage({
+export default async function SsoSettingsPage({
 	searchParams,
 }: PageProps<"/[slug]/settings/sso">) {
+	const locale = await getLocale();
+	const t = ssoMessages(locale);
+
 	return (
 		<PageShell className="min-h-0">
 			<PageShellHeader>
 				<PageShellHeading>
-					<PageShellTitle>SSO</PageShellTitle>
-					<PageShellDescription>
-						Let your people sign in through your own identity provider. While
-						one is configured, the sign-in page offers it instead of Google.
-					</PageShellDescription>
+					<PageShellTitle>
+						{settingsMessages(locale).thanhBen.sso}
+					</PageShellTitle>
+					<PageShellDescription>{t.trang.moTa}</PageShellDescription>
 				</PageShellHeading>
 
 				<PageShellActions>

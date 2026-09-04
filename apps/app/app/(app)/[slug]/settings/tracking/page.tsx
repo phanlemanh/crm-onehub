@@ -9,25 +9,26 @@ import {
 	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { getLocale } from "@/lib/locale/server";
+import { theoDoiMessages } from "@/lib/messages/settings-theo-doi";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { TrackingSections } from "./tracking-sections";
 
-export const metadata: Metadata = {
-	title: "Tracking & Analytics",
-};
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: theoDoiMessages(await getLocale()).trang.tab };
+}
 
-export default function TrackingSettingsPage() {
+export default async function TrackingSettingsPage() {
+	const t = theoDoiMessages(await getLocale());
+
 	return (
 		<PageShell>
 			<PageShellHeader>
 				<PageShellHeading>
-					<PageShellTitle>Tracking &amp; Analytics</PageShellTitle>
-					<PageShellDescription>
-						Track website visitors and automatically add contacts when a form is
-						submitted.
-					</PageShellDescription>
+					<PageShellTitle>{t.trang.tieuDe}</PageShellTitle>
+					<PageShellDescription>{t.trang.moTa}</PageShellDescription>
 				</PageShellHeading>
 			</PageShellHeader>
 

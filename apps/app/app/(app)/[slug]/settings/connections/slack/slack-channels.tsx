@@ -20,6 +20,7 @@ import {
 	InputGroupAddon,
 	InputGroupInput,
 } from "@crm/ui/components/input-group";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation } from "@tanstack/react-query";
 import { useDeferredValue, useState } from "react";
 import { toast } from "sonner";
@@ -28,11 +29,16 @@ import {
 	type PickerChannel,
 } from "@/components/slack/channel-picker";
 import { useSlackChannels } from "@/components/slack/use-slack-channels";
+import {
+	type KetNoiMessages,
+	ketNoiMessages,
+} from "@/lib/messages/settings-ket-noi";
 import { useTRPC } from "@/lib/trpc/client";
 
 const INVITE_COMMAND = "/invite @Comp AI";
 
 export function SlackChannels() {
+	const t = ketNoiMessages(useLocale());
 	const trpc = useTRPC();
 	const [asking, setAsking] = useState<PickerChannel | null>(null);
 	const [query, setQuery] = useState("");
@@ -45,10 +51,10 @@ export function SlackChannels() {
 				setAsking(null);
 				toast.success(
 					result.alreadyJoined
-						? "Comp AI is already in there."
+						? t.kenh.daOTrong
 						: result.queued
-							? "Comp AI is joining."
-							: "Ask someone inside to invite Comp AI.",
+							? t.kenh.dangVao
+							: t.kenh.nhoMoi,
 				);
 			},
 			onError: (error) => toast.error(error.message),
@@ -60,7 +66,7 @@ export function SlackChannels() {
 	const refresh = useMutation(
 		trpc.slack.refreshPeople.mutationOptions({
 			onSuccess: async () => {
-				toast.success("Reading the channel list from Slack.");
+				toast.success(t.kenh.dangDoc);
 				await channels.reload();
 			},
 			onError: (error) => toast.error(error.message),
@@ -75,10 +81,8 @@ export function SlackChannels() {
 		<section className="flex flex-col gap-3 px-(--spacing-block-inline)">
 			<div className="flex items-end justify-between gap-4">
 				<div>
-					<h2 className="font-medium text-sm">Channels Comp AI can reach</h2>
-					<p className="text-muted-foreground text-xs">
-						Agents pick from this list.
-					</p>
+					<h2 className="font-medium text-sm">{t.kenh.tieuDe}</h2>
+					<p className="text-muted-foreground text-xs">{t.kenh.moTa}</p>
 				</div>
 				<Button
 					disabled={refreshing}
@@ -86,14 +90,12 @@ export function SlackChannels() {
 					size="sm"
 					variant="outline"
 				>
-					{refreshing ? "Refreshing…" : "Refresh"}
+					{refreshing ? t.kenh.dangLamMoi : t.kenh.lamMoi}
 				</Button>
 			</div>
 
 			{channels.stalled ? (
-				<p className="text-warning text-xs">
-					Comp AI is not reading Slack right now. The list can be out of date.
-				</p>
+				<p className="text-warning text-xs">{t.kenh.treo}</p>
 			) : null}
 
 			{rows.length > 0 || query ? (
@@ -103,7 +105,7 @@ export function SlackChannels() {
 					</InputGroupAddon>
 					<InputGroupInput
 						onChange={(event) => setQuery(event.target.value)}
-						placeholder="Search channels"
+						placeholder={t.kenh.tim}
 						value={query}
 					/>
 				</InputGroup>
@@ -115,10 +117,10 @@ export function SlackChannels() {
 				empty={
 					<p className="px-4 py-4 text-muted-foreground text-sm">
 						{channels.pending
-							? "Reading the channel list from Slack…"
+							? t.kenh.dangDocCho
 							: query
-								? `No channel matches “${query}”.`
-								: "No channels yet. Comp AI reads the list from Slack after it connects."}
+								? t.kenh.khongKhop(query)
+								: t.kenh.chuaCoKenh}
 					</p>
 				}
 				onAdd={(channel) => void joinAction.run(channel.id)}
@@ -133,7 +135,7 @@ export function SlackChannels() {
 					size="sm"
 					variant="outline"
 				>
-					{channels.fetchingMore ? "Loading…" : "Load more"}
+					{channels.fetchingMore ? t.kenh.dangTai : t.kenh.taiThem}
 				</Button>
 			) : null}
 
@@ -143,6 +145,7 @@ export function SlackChannels() {
 				onCancel={() => setAsking(null)}
 				onConfirm={() => asking && void joinAction.run(asking.id)}
 				status={joinAction.status}
+				t={t}
 			/>
 		</section>
 	);
@@ -154,12 +157,14 @@ function AskDialog({
 	onCancel,
 	onConfirm,
 	status,
+	t,
 }: {
 	canInviteItself: boolean;
 	channel: PickerChannel | null;
 	onCancel: () => void;
 	onConfirm: () => void;
 	status: "idle" | "pending" | "success" | "error";
+	t: KetNoiMessages;
 }) {
 	if (!channel) return null;
 
@@ -167,11 +172,11 @@ function AskDialog({
 		try {
 			await navigator.clipboard.writeText(INVITE_COMMAND);
 		} catch {
-			toast.error("Copying failed. Copy the command above by hand.");
+			toast.error(t.kenh.chepHong);
 			return;
 		}
 
-		toast.success("Command copied.");
+		toast.success(t.kenh.daChep);
 		onConfirm();
 	}
 
@@ -180,33 +185,34 @@ function AskDialog({
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>
-						{canInviteItself
-							? `Add Comp AI to #${channel.name}?`
-							: "Ask someone to add Comp AI"}
+						{canInviteItself ? t.kenh.themHoi(channel.name) : t.kenh.nhoThem}
 					</AlertDialogTitle>
 					<AlertDialogDescription>
 						{canInviteItself
-							? `It is a private channel, so Comp AI joins as you. Same as typing the invite yourself. Everyone in the channel sees it join. It reads nothing until you turn a permission on.`
-							: `We cannot add Comp AI to a private channel yet. Someone already in #${channel.name} has to run this.`}
+							? t.kenh.themMoTa
+							: t.kenh.nhoThemMoTa(channel.name)}
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 
 				{canInviteItself ? null : (
-					<div className="rounded-md bg-muted px-3 py-2.5 font-mono text-sm">
+					<div
+						className="rounded-md bg-muted px-3 py-2.5 font-mono text-sm"
+						translate="no"
+					>
 						{INVITE_COMMAND}
 					</div>
 				)}
 
 				<AlertDialogFooter>
 					<AlertDialogCancel disabled={status === "pending"}>
-						Cancel
+						{t.chung.huy}
 					</AlertDialogCancel>
 					<Button
 						disabled={status === "pending"}
 						onClick={canInviteItself ? onConfirm : () => void copyThenConfirm()}
 					>
-						<AsyncButtonContent pendingLabel="Adding…" status={status}>
-							{canInviteItself ? "Add Comp AI" : "Copy and mark as asked"}
+						<AsyncButtonContent pendingLabel={t.kenh.dangThem} status={status}>
+							{canInviteItself ? t.kenh.them : t.kenh.chepVaDanhDau}
 						</AsyncButtonContent>
 					</Button>
 				</AlertDialogFooter>

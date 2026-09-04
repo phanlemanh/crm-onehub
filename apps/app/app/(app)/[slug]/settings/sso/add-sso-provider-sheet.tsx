@@ -15,6 +15,7 @@ import {
 	InputGroupAddon,
 	InputGroupInput,
 } from "@crm/ui/components/input-group";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Sheet,
 	SheetClose,
@@ -30,6 +31,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { type ComponentProps, Suspense, useId, useState } from "react";
 import { toast } from "sonner";
+import { ssoMessages } from "@/lib/messages/settings-sso";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
@@ -46,10 +48,12 @@ const EMPTY = {
 };
 
 function AddButton(props: ComponentProps<typeof Button>) {
+	const t = ssoMessages(useLocale());
+
 	return (
 		<Button {...props}>
 			<Icon icon={Add} data-icon="inline-start" />
-			Add provider
+			{t.them.nut}
 		</Button>
 	);
 }
@@ -63,6 +67,7 @@ export function AddSsoProviderSheet() {
 }
 
 function AddSsoProviderForm() {
+	const t = ssoMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
@@ -85,7 +90,7 @@ function AddSsoProviderForm() {
 		trpc.sso.register.mutationOptions({
 			onSuccess: async (provider) => {
 				await cache.sso();
-				toast.success(`${provider.name} saved.`);
+				toast.success(t.them.daLuu(provider.name));
 				await setOpen(null);
 				setValues(EMPTY);
 			},
@@ -112,10 +117,8 @@ function AddSsoProviderForm() {
 
 			<SheetContent side="right">
 				<SheetHeader>
-					<SheetTitle>Add an identity provider</SheetTitle>
-					<SheetDescription>
-						Configure an OpenID Connect provider.
-					</SheetDescription>
+					<SheetTitle>{t.them.tieuDe}</SheetTitle>
+					<SheetDescription>{t.them.moTa}</SheetDescription>
 				</SheetHeader>
 
 				<form
@@ -134,25 +137,24 @@ function AddSsoProviderForm() {
 				>
 					<FieldGroup>
 						<Field>
-							<FieldLabel htmlFor={providerIdId}>Name</FieldLabel>
+							<FieldLabel htmlFor={providerIdId}>{t.them.ten}</FieldLabel>
 							<Input
 								id={providerIdId}
 								value={values.providerId}
 								onChange={(event) => edit({ providerId: event.target.value })}
-								placeholder="okta"
+								placeholder={t.them.tenGoiY}
 								autoComplete="off"
 								autoCapitalize="off"
 								autoCorrect="off"
 								spellCheck={false}
+								translate="no"
 								required
 							/>
-							<FieldDescription>
-								Names the sign-in button. Cannot be changed later.
-							</FieldDescription>
+							<FieldDescription>{t.them.tenMoTa}</FieldDescription>
 						</Field>
 
 						<Field>
-							<FieldLabel htmlFor={issuerId}>Issuer URL</FieldLabel>
+							<FieldLabel htmlFor={issuerId}>{t.them.issuer}</FieldLabel>
 							<Input
 								id={issuerId}
 								type="url"
@@ -164,29 +166,31 @@ function AddSsoProviderForm() {
 								autoCorrect="off"
 								spellCheck={false}
 								inputMode="url"
+								translate="no"
 								required
 							/>
-							<FieldDescription>Where discovery lives.</FieldDescription>
+							<FieldDescription>{t.them.issuerMoTa}</FieldDescription>
 						</Field>
 
 						<Field>
-							<FieldLabel htmlFor={domainId}>Email domain</FieldLabel>
+							<FieldLabel htmlFor={domainId}>{t.them.tenMien}</FieldLabel>
 							<Input
 								id={domainId}
 								value={values.domain}
 								onChange={(event) => edit({ domain: event.target.value })}
-								placeholder="acme.com"
+								placeholder={t.them.tenMienGoiY}
 								autoComplete="off"
 								autoCapitalize="off"
 								autoCorrect="off"
 								spellCheck={false}
+								translate="no"
 								required
 							/>
-							<FieldDescription>Comma-separate several.</FieldDescription>
+							<FieldDescription>{t.them.tenMienMoTa}</FieldDescription>
 						</Field>
 
 						<Field>
-							<FieldLabel htmlFor={clientIdId}>Client ID</FieldLabel>
+							<FieldLabel htmlFor={clientIdId}>{t.them.maClient}</FieldLabel>
 							<Input
 								id={clientIdId}
 								value={values.clientId}
@@ -195,34 +199,44 @@ function AddSsoProviderForm() {
 								autoCapitalize="off"
 								autoCorrect="off"
 								spellCheck={false}
+								translate="no"
 								required
 							/>
 						</Field>
 
 						<Field>
-							<FieldLabel htmlFor={clientSecretId}>Client secret</FieldLabel>
+							<FieldLabel htmlFor={clientSecretId}>{t.them.maBiMat}</FieldLabel>
 							<Input
 								id={clientSecretId}
 								type="password"
 								value={values.clientSecret}
 								onChange={(event) => edit({ clientSecret: event.target.value })}
 								autoComplete="off"
+								translate="no"
 								required
 							/>
-							<FieldDescription>Never shown again.</FieldDescription>
+							<FieldDescription>{t.them.maBiMatMoTa}</FieldDescription>
 						</Field>
 
 						<Field>
-							<FieldLabel htmlFor={redirectId}>Redirect URI</FieldLabel>
+							<FieldLabel htmlFor={redirectId}>
+								{t.them.uriChuyenHuong}
+							</FieldLabel>
 							<InputGroup>
-								<InputGroupInput id={redirectId} value={callbackURL} readOnly />
+								<InputGroupInput
+									id={redirectId}
+									value={callbackURL}
+									readOnly
+									translate="no"
+								/>
 								<InputGroupAddon align="inline-end">
-									<CopyValue value={callbackURL} label="Redirect URI" />
+									<CopyValue
+										value={callbackURL}
+										label={t.them.uriChuyenHuong}
+									/>
 								</InputGroupAddon>
 							</InputGroup>
-							<FieldDescription>
-								Add this at your provider before saving.
-							</FieldDescription>
+							<FieldDescription>{t.them.uriMoTa}</FieldDescription>
 						</Field>
 					</FieldGroup>
 				</form>
@@ -234,10 +248,10 @@ function AddSsoProviderForm() {
 						disabled={!complete || register.isPending}
 					>
 						{register.isPending ? <Spinner /> : null}
-						Add provider
+						{t.them.nut}
 					</Button>
 					<SheetClose asChild>
-						<Button variant="outline">Cancel</Button>
+						<Button variant="outline">{t.them.huy}</Button>
 					</SheetClose>
 				</SheetFooter>
 			</SheetContent>

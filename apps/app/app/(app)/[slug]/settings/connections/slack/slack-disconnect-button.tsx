@@ -14,10 +14,12 @@ import {
 	useAsyncAction,
 } from "@crm/ui/components/async-action";
 import { Button } from "@crm/ui/components/button";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ketNoiMessages } from "@/lib/messages/settings-ket-noi";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
@@ -28,6 +30,7 @@ export function SlackDisconnectButton({
 	canManage: boolean;
 	workspace: string | null;
 }) {
+	const t = ketNoiMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const router = useRouter();
@@ -37,7 +40,7 @@ export function SlackDisconnectButton({
 			onSuccess: async () => {
 				await cache.slack();
 				setConfirming(false);
-				toast.success("Slack disconnected.");
+				toast.success(t.slack.daGo);
 				router.refresh();
 			},
 			onError: (error) => toast.error(error.message),
@@ -55,7 +58,7 @@ export function SlackDisconnectButton({
 				onClick={() => setConfirming(true)}
 				disabled={!canManage || disconnectAction.pending}
 			>
-				Disconnect
+				{t.slack.go}
 			</Button>
 
 			<AlertDialog
@@ -67,18 +70,13 @@ export function SlackDisconnectButton({
 				<AlertDialogContent>
 					<AlertDialogHeader>
 						<AlertDialogTitle>
-							Disconnect {workspace ?? "Slack"}?
+							{t.slack.goHoi(workspace ?? t.ten.slack)}
 						</AlertDialogTitle>
-						<AlertDialogDescription>
-							Agents stop sending to Slack immediately, and the cached channel
-							list is cleared so a new app re-reads it. Who is matched to which
-							Slack account is kept, so reconnecting the same workspace does not
-							ask you to match everyone again.
-						</AlertDialogDescription>
+						<AlertDialogDescription>{t.slack.goMoTa}</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
 						<AlertDialogCancel disabled={disconnectAction.pending}>
-							Cancel
+							{t.chung.huy}
 						</AlertDialogCancel>
 						<Button
 							variant="destructive"
@@ -87,9 +85,9 @@ export function SlackDisconnectButton({
 						>
 							<AsyncButtonContent
 								status={disconnectAction.status}
-								pendingLabel="Disconnecting…"
+								pendingLabel={t.slack.dangGo}
 							>
-								Disconnect
+								{t.slack.go}
 							</AsyncButtonContent>
 						</Button>
 					</AlertDialogFooter>

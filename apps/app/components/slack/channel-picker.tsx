@@ -4,7 +4,9 @@ import Checkmark from "@carbon/icons-react/es/Checkmark";
 import Locked from "@carbon/icons-react/es/Locked";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { cn } from "@crm/ui/lib/utils";
+import { ketNoiMessages } from "@/lib/messages/settings-ket-noi";
 
 export type PickerChannel = {
 	id: string;
@@ -35,6 +37,7 @@ export function ChannelPicker({
 	pending?: boolean;
 	value?: string | null;
 }) {
+	const t = ketNoiMessages(useLocale());
 	return (
 		<div className="flex flex-col divide-y overflow-hidden rounded-lg border">
 			{channels.length === 0 ? empty : null}
@@ -101,7 +104,7 @@ export function ChannelPicker({
 									size="xs"
 									variant="outline"
 								>
-									{channel.inviteRequestedAt ? "Ask again" : "Request"}
+									{channel.inviteRequestedAt ? t.kenh.xinLai : t.kenh.xinVao}
 								</Button>
 							) : !channel.isMember && onAdd ? (
 								<Button

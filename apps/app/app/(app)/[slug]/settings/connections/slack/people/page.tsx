@@ -2,6 +2,8 @@ import SlackLogo from "@crm/ui/components/brand-logos/slack";
 import { Spinner } from "@crm/ui/components/spinner";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { getLocale } from "@/lib/locale/server";
+import { ketNoiMessages } from "@/lib/messages/settings-ket-noi";
 import { requireSession } from "@/lib/session";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { ConnectionPage } from "../../connection-page";
@@ -27,6 +29,7 @@ export default function SlackPeoplePage(props: SlackPeoplePageProps) {
 
 async function SlackPeoplePageContent({ params }: SlackPeoplePageProps) {
 	await requireSession();
+	const t = ketNoiMessages(await getLocale());
 	const { slug } = await params;
 	const queryClient = getServerQueryClient();
 	const trpc = getServerTrpc();
@@ -41,12 +44,9 @@ async function SlackPeoplePageContent({ params }: SlackPeoplePageProps) {
 			<header className="flex flex-col gap-3 px-(--spacing-block-inline) text-center">
 				<SlackLogo className="mx-auto size-7" />
 				<h1 className="font-medium text-2xl tracking-tight">
-					Slack is connected
+					{t.nguoi.tieuDe}
 				</h1>
-				<p className="text-muted-foreground text-sm">
-					Match your CRM people to Slack once. Agents use these exact accounts
-					later instead of guessing from a similar name.
-				</p>
+				<p className="text-muted-foreground text-sm">{t.nguoi.moTa}</p>
 			</header>
 			<SlackPeopleMatches slug={slug} initialMatches={matches} />
 		</ConnectionPage>

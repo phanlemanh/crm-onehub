@@ -72,6 +72,19 @@ const KHONG_DAU = new Set([
 	"congTy.websiteTienTo",
 	"congTy.websiteGoiY",
 	"model.nhan",
+	"doanMa.siteIdNhan",
+	"kiemTra.trangGoiY",
+	"tenMien.tenGoiY",
+	"cookie.tieuDe",
+	"ten.google",
+	"ten.googleWorkspace",
+	"ten.gmail",
+	"ten.slack",
+	"ten.microsoft",
+	"ten.microsoft365",
+	"ten.outlook",
+	"ten.stripe",
+	"ten.docusign",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -346,6 +359,70 @@ describe("kho chuoi cua vong ③a", () => {
 			"settings:tienTe.khongQuyDoiDuoc": [
 				"1 thoả thuận không quy đổi được, nên chúng nằm ngoài mọi tổng.",
 				"12 thoả thuận không quy đổi được, nên chúng nằm ngoài mọi tổng.",
+			],
+			"settings-theo-doi:kiemTra.khongCoScriptMoTa": [
+				"Trang trả lời trong 1 ms, nhưng thẻ không nằm trong HTML. Kiểm lại xem thẻ có nằm trong head, phía trên mọi thứ viết lại trang, hay không.",
+				"Trang trả lời trong 12 ms, nhưng thẻ không nằm trong HTML. Kiểm lại xem thẻ có nằm trong head, phía trên mọi thứ viết lại trang, hay không.",
+			],
+			"settings-theo-doi:kiemTra.cungDocContainer": [
+				" Đã đọc cả container Tag Manager 1, và thẻ cũng không có trong đó.",
+				" Đã đọc cả container Tag Manager 12, và thẻ cũng không có trong đó.",
+			],
+			"settings-theo-doi:kiemTra.gtmRoiSiteIdMoTa": [
+				"Container 1 có mang thẻ, nhưng site ID không nằm trong URL của script. Tag Manager chỉ giữ lại URL khi chèn script, nên thuộc tính data-site không bao giờ tới được trang và bộ theo dõi không khởi động. Chép đoạn mã Tag Manager ở trên rồi thay phần HTML của thẻ.",
+				"Container 12 có mang thẻ, nhưng site ID không nằm trong URL của script. Tag Manager chỉ giữ lại URL khi chèn script, nên thuộc tính data-site không bao giờ tới được trang và bộ theo dõi không khởi động. Chép đoạn mã Tag Manager ở trên rồi thay phần HTML của thẻ.",
+			],
+			"settings-theo-doi:kiemTra.thayMoTaDau": [
+				"Trả lời trong 1 ms. Site ID",
+				"Trả lời trong 12 ms. Site ID",
+			],
+			"settings-ket-noi:chung.daXoa": [
+				"Đã xoá 1 mục đã kéo về.",
+				"Đã xoá 12 mục đã kéo về.",
+			],
+			"settings-ket-noi:danhSach.daCamVoi": ["Đã cắm vào 1", "Đã cắm vào 12"],
+			"settings-ket-noi:them.daCamRoi": ["1 đã cắm rồi.", "12 đã cắm rồi."],
+			"settings-ket-noi:google.dongBoHong": [
+				"Đồng bộ hỏng: 1",
+				"Đồng bộ hỏng: 12",
+			],
+			"settings-ket-noi:slack.daKhopNguoi": [
+				"Đã khớp 1 trên A người đã soát.",
+				"Đã khớp 12 trên A người đã soát.",
+			],
+			"settings-ket-noi:slack.thieuQuyen": [
+				"Slack giữ lại 1 quyền",
+				"Slack giữ lại 12 quyền",
+			],
+			"settings-ket-noi:slack.camHongMac": [
+				"Không cắm được Slack (1).",
+				"Không cắm được Slack (12).",
+			],
+			"settings-ket-noi:slack.goHoi": ["Gỡ 1?", "Gỡ 12?"],
+			"settings-ket-noi:quyen.dem": ["1 rộng trên A", "12 rộng trên A"],
+			"settings-ket-noi:kenh.khongKhop": [
+				"Không kênh nào khớp “1”.",
+				"Không kênh nào khớp “12”.",
+			],
+			"settings-ket-noi:kenh.themHoi": [
+				"Thêm OneHub vào #1?",
+				"Thêm OneHub vào #12?",
+			],
+			"settings-ket-noi:kenh.nhoThemMoTa": [
+				"Chưa thêm OneHub vào kênh riêng tư được. Một người đã ở trong #1 phải chạy lệnh này.",
+				"Chưa thêm OneHub vào kênh riêng tư được. Một người đã ở trong #12 phải chạy lệnh này.",
+			],
+			"settings-ket-noi:nguoi.demKhop": [
+				"Đã khớp 1 trên A",
+				"Đã khớp 12 trên A",
+			],
+			"settings-khoa-api:thuHoi.choKhoa": ["Thu hồi 1", "Thu hồi 12"],
+			"settings-sso:bang.maClient": [" · mã client …1", " · mã client …12"],
+			"settings-sso:go.choNha": ["Gỡ 1", "Gỡ 12"],
+			"settings-sso:them.daLuu": ["Đã lưu 1.", "Đã lưu 12."],
+			"settings-thanh-vien:bang.doiVaiTro": [
+				"Đổi vai trò của 1",
+				"Đổi vai trò của 12",
 			],
 		} satisfies Record<string, [string, string]>;
 

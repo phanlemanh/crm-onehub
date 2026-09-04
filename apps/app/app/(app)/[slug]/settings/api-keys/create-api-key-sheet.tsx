@@ -10,6 +10,7 @@ import {
 } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Select,
 	SelectContent,
@@ -32,6 +33,10 @@ import { useMutation } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { type ComponentProps, Suspense, useId, useState } from "react";
 import { toast } from "sonner";
+import {
+	type KhoaApiMessages,
+	khoaApiMessages,
+} from "@/lib/messages/settings-khoa-api";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
@@ -40,22 +45,28 @@ import { CreatedApiKeyDialog } from "./created-api-key-dialog";
 
 const FORM = "create-api-key";
 
-const EXPIRATION_OPTIONS = [
-	{ value: "30", label: "30 days" },
-	{ value: "90", label: "90 days" },
-	{ value: "365", label: "1 year" },
-	{ value: "never", label: "No expiration" },
-] as const;
+type ExpirationValue = "30" | "90" | "365" | "never";
 
-type ExpirationValue = (typeof EXPIRATION_OPTIONS)[number]["value"];
+function expirationOptions(
+	t: KhoaApiMessages,
+): { value: ExpirationValue; nhan: string }[] {
+	return [
+		{ value: "30", nhan: t.tao.han30 },
+		{ value: "90", nhan: t.tao.han90 },
+		{ value: "365", nhan: t.tao.han365 },
+		{ value: "never", nhan: t.tao.khongHetHan },
+	];
+}
 
 type CreatedApiKey = RouterOutputs["apiKeys"]["create"];
 
 function NewApiKeyButton(props: ComponentProps<typeof Button>) {
+	const t = khoaApiMessages(useLocale());
+
 	return (
 		<Button {...props}>
 			<Icon icon={Add} data-icon="inline-start" />
-			New API key
+			{t.tao.nut}
 		</Button>
 	);
 }
@@ -69,6 +80,7 @@ export function CreateApiKeySheet() {
 }
 
 function CreateApiKeyForm() {
+	const t = khoaApiMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
@@ -105,11 +117,8 @@ function CreateApiKeyForm() {
 
 				<SheetContent side="right">
 					<SheetHeader>
-						<SheetTitle>New API key</SheetTitle>
-						<SheetDescription>
-							Acts as you. Anything it can read or change is exactly what you
-							can.
-						</SheetDescription>
+						<SheetTitle>{t.tao.tieuDe}</SheetTitle>
+						<SheetDescription>{t.tao.moTa}</SheetDescription>
 					</SheetHeader>
 
 					<form
@@ -126,26 +135,25 @@ function CreateApiKeyForm() {
 					>
 						<FieldGroup>
 							<Field>
-								<FieldLabel htmlFor={nameId}>Name</FieldLabel>
+								<FieldLabel htmlFor={nameId}>{t.tao.ten}</FieldLabel>
 								<Input
 									id={nameId}
 									value={name}
 									onChange={(event) => setName(event.target.value)}
-									placeholder="CI pipeline"
+									placeholder={t.tao.tenGoiY}
 									maxLength={64}
 									autoComplete="off"
 									autoCapitalize="off"
 									autoCorrect="off"
 									spellCheck={false}
+									translate="no"
 									required
 								/>
-								<FieldDescription>
-									Something you will recognise later, like where it runs.
-								</FieldDescription>
+								<FieldDescription>{t.tao.tenMoTa}</FieldDescription>
 							</Field>
 
 							<Field>
-								<FieldLabel htmlFor={expirationId}>Expires</FieldLabel>
+								<FieldLabel htmlFor={expirationId}>{t.tao.hetHan}</FieldLabel>
 								<Select
 									value={expiration}
 									onValueChange={(value) =>
@@ -156,9 +164,9 @@ function CreateApiKeyForm() {
 										<SelectValue />
 									</SelectTrigger>
 									<SelectContent>
-										{EXPIRATION_OPTIONS.map((option) => (
+										{expirationOptions(t).map((option) => (
 											<SelectItem key={option.value} value={option.value}>
-												{option.label}
+												{option.nhan}
 											</SelectItem>
 										))}
 									</SelectContent>
@@ -174,10 +182,10 @@ function CreateApiKeyForm() {
 							disabled={!name.trim() || create.isPending}
 						>
 							{create.isPending ? <Spinner /> : null}
-							Create key
+							{t.tao.taoKhoa}
 						</Button>
 						<SheetClose asChild>
-							<Button variant="outline">Cancel</Button>
+							<Button variant="outline">{t.tao.huy}</Button>
 						</SheetClose>
 					</SheetFooter>
 				</SheetContent>

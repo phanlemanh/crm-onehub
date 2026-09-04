@@ -92,15 +92,50 @@ function noRong(ngan: NganXep, chuoi: string[], sau = 0): string[] {
 	return noRong(ngan, [...thay, ...chuoi.slice(1)], sau + 1);
 }
 
-function laThamSoKho(nut: TS.Node): nut is TS.ParameterDeclaration {
+function tenKhoTuKieu(kieu: TS.TypeNode | undefined): boolean {
 	return (
-		ts.isParameter(nut) &&
-		nut.type !== undefined &&
-		ts.isTypeReferenceNode(nut.type) &&
-		ts.isIdentifier(nut.type.typeName) &&
-		/Messages$/.test(nut.type.typeName.text) &&
-		ts.isIdentifier(nut.name)
+		kieu !== undefined &&
+		ts.isTypeReferenceNode(kieu) &&
+		ts.isIdentifier(kieu.typeName) &&
+		/Messages$/.test(kieu.typeName.text)
 	);
+}
+
+function thamSoKho(nut: TS.Node): string[] {
+	if (!ts.isParameter(nut)) return [];
+
+	if (ts.isIdentifier(nut.name) && tenKhoTuKieu(nut.type))
+		return [nut.name.text];
+
+	if (
+		ts.isObjectBindingPattern(nut.name) &&
+		nut.type !== undefined &&
+		ts.isTypeLiteralNode(nut.type)
+	) {
+		const kho = new Set(
+			nut.type.members
+				.filter(
+					(m): m is TS.PropertySignature =>
+						ts.isPropertySignature(m) &&
+						ts.isIdentifier(m.name) &&
+						tenKhoTuKieu(m.type),
+				)
+				.map((m) => (m.name as TS.Identifier).text),
+		);
+		return nut.name.elements
+			.filter(
+				(e) =>
+					ts.isIdentifier(e.name) &&
+					kho.has(
+						e.propertyName && ts.isIdentifier(e.propertyName)
+							? e.propertyName.text
+							: e.name.text,
+					),
+			)
+			.map((e) => (e.name as TS.Identifier).text);
+	}
+
+	return [];
 }
 
 function ghiKhaiBao(
@@ -174,8 +209,8 @@ export function docDuongGoi(thuMuc: string): DuongGoi {
 			const sau = laPhamVi(nut) ? [...ngan, new Map<string, string[]>()] : ngan;
 			const hien = sau[sau.length - 1];
 
-			if (hien && laThamSoKho(nut) && ts.isIdentifier(nut.name))
-				hien.set(nut.name.text, [GOC]);
+			if (hien)
+				for (const ten of thamSoKho(nut)) hien.set(ten, [GOC]);
 			if (hien && ts.isVariableDeclaration(nut)) ghiKhaiBao(nut, sau, hien);
 			if (ts.isElementAccessExpression(nut))
 				ghiTruyCapDong(nut, sau, { cap, congDong });
@@ -199,6 +234,16 @@ export function taoSong(duongGoi: DuongGoi): (duong: string) => boolean {
 		const la = phan[phan.length - 1] ?? "";
 		const cha = phan[phan.length - 2];
 		if (!cha) return duongGoi.don.has(la);
-		return duongGoi.cap.has(`${cha}.${la}`) || duongGoi.congDong.has(cha);
+		if (duongGoi.cap.has(`${cha}.${la}`) || duongGoi.congDong.has(cha)) return true;
+
+		for (let i = 0; i < phan.length - 1; i += 1) {
+			const to = phan[i] ?? "";
+			if (duongGoi.congDong.has(to)) return true;
+			const sau = phan[i + 1] ?? "";
+			if (/^\d+$/.test(sau) && (duongGoi.don.has(to) || duongGoi.cap.has(`${phan[i - 1] ?? ""}.${to}`)))
+				return true;
+		}
+		return false;
 	};
 }
+

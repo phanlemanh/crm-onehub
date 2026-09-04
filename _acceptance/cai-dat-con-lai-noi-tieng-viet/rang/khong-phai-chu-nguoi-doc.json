@@ -70,14 +70,6 @@
 			"vi_sao": "gia tri enum result.status"
 		},
 		{
-			"chu": "matched",
-			"vi_sao": "gia tri enum trang thai doi chieu"
-		},
-		{
-			"chu": "created",
-			"vi_sao": "gia tri enum trang thai"
-		},
-		{
 			"chu": "never",
 			"vi_sao": "gia tri cua o chon han dung — nhan hien ra la 'No expiration', dich rieng"
 		},
@@ -100,6 +92,46 @@
 		{
 			"chu": "sm",
 			"vi_sao": "kich thuoc component"
+		},
+		{
+			"chu": "console.cloud.google.com",
+			"vi_sao": "danh sach trang ten mien de LOC link trong thong bao loi cua Google — so sanh trong ma, khong hien ra man"
+		},
+		{
+			"chu": "console.developers.google.com",
+			"vi_sao": "danh sach trang ten mien de loc link"
+		},
+		{
+			"chu": "support.google.com",
+			"vi_sao": "danh sach trang ten mien de loc link"
+		},
+		{
+			"chu": "myaccount.google.com",
+			"vi_sao": "danh sach trang ten mien de loc link"
+		},
+		{
+			"chu": "https:",
+			"vi_sao": "so sanh url.protocol"
+		},
+		{
+			"chu": "groups:read",
+			"vi_sao": "ma scope cua Slack, gui len Slack API"
+		},
+		{
+			"chu": "groups:history",
+			"vi_sao": "ma scope cua Slack"
+		},
+		{
+			"chu": "none",
+			"vi_sao": "gia tri co motion cua component Icon — tat hoat anh"
+		},
+		{
+			"chu": "pending",
+			"vi_sao": "gia tri trang thai cua useAsyncAction, so sanh trong ma"
+		},
+		{
+			"chu": "true",
+			"vi_sao": "gia tri aria-disabled"
 		}
 	],
 	"khoa_kieu": {
