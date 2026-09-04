@@ -22,9 +22,12 @@ trong tuần đầu: đặt tên công ty, chọn model cho tác nhân, đặt h
 khoá nghiên cứu, và xem mọi con số quy về đồng Việt Nam. Màn Currencies vừa đổi
 sang VND tuần này — số đã là tiếng Việt, chữ quanh nó thì chưa.
 
-Đợt này khoanh mười file: cụm gốc (8) và cụm currencies (2). 74 chuỗi người đọc
-thấy — 54 trong JSX, 11 trong `toast.*()`, 9 tiêu đề tab và nhãn thanh bên. 33
+Đợt này khoanh mười file: cụm gốc (8) và cụm currencies (2). 75 chuỗi người đọc
+thấy — 54 trong JSX, 12 trong `toast.*()`, 9 tiêu đề tab và nhãn thanh bên. 33
 file còn lại đi vòng sau.
+
+Con số toast sửa từ 11 lên 12 khi bảng đóng được kê từ chính mã: lượt đếm đầu
+đếm chuỗi khớp mẫu, không đếm chỗ gọi, nên bỏ sót một `chuoi-mau`.
 
 **Lớp lỗi phải chặn, và nó đã ăn ba vòng liên tiếp: thước mù cho ra màu xanh
 sai.** Bộ quét `chu-cung-jsx.mjs` của vòng ③a chỉ đi qua cây JSX, nên 20 trong
@@ -47,8 +50,8 @@ kiểm kê 74 chuỗi ngày 04/09 · Web Interface Guidelines (chữ dài ra, `t
 
 - AC-1: Given màn General và màn Currencies dựng trên máy chủ thật HAI LẦN — một lượt `vi`, một lượt `en` — When phép đo đọc chữ NGƯỜI ĐỌC THẤY của từng lượt (không đọc mã nguồn), Then ba vế cùng đúng: số chuỗi quan sát được ở hai lượt BẰNG nhau; mỗi cặp chuỗi cùng vị trí KHÁC nhau, trừ các giá trị của bảng miễn trừ AC-6; và mọi chuỗi của lượt `vi` mang dấu tiếng Việt. Tập quan sát rỗng là TỪ CHỐI ĐO — thoát mã 2, không phải một lượt đạt. Đây là tiêu chí bắt được lỗi mà đọc mã không bắt được: một trang server quên `await getLocale()` thì kho chuỗi vẫn đủ dấu và không còn chuỗi viết thẳng, nhưng cả màn hiện sai tiếng.
 - AC-1b: Given mười file thuộc lát, When phép đo đọc mã, Then không còn chuỗi người-đọc-thấy nào viết thẳng trong JSX, ngoài các dòng miễn trừ có tên; và mọi dòng miễn trừ đều còn đối tượng thật.
-- AC-2: Given BẢNG ĐÓNG mười một lời gọi `toast.*()` mang chuỗi viết thẳng — mỗi dòng khai file, số dòng, và HÌNH DẠNG lời gọi — When phép đo đọc mã của mười file, Then số lời gọi phép đo NHẬN RA BẰNG mười một; thiếu một dòng là TỪ CHỐI ĐO, thoát mã 2 và gọi tên dòng thiếu. Và mỗi câu đó đọc từ kho chuỗi, có bản tiếng Việt có dấu. Đếm số vật nhận ra, không chỉ số file đã mở: một chân đo mở đủ mười file mà chỉ nhận ra sáu trong mười một hình dạng vẫn cho ra ba con số file bằng nhau.
-- AC-3: Given chín tiêu đề tab và nhãn thanh bên của lát (`export const metadata` và mảng khai thanh bên), When phép đo đọc mã, Then bảy nhãn dịch được đều đọc từ kho chuỗi và có bản tiếng Việt có dấu; hai tên thương hiệu giữ nguyên. Đây cũng là lớp bộ quét JSX không nhìn thấy.
+- AC-2: Given BẢNG ĐÓNG **mười hai** lời gọi `toast.*()` mang chữ — mỗi dòng khai file, số dòng, và HÌNH DẠNG lời gọi — When phép đo đọc mã của mười file, Then số lời gọi phép đo NHẬN RA BẰNG mười hai — chín `chuoi-thang` và ba `chuoi-mau`; thiếu một dòng là TỪ CHỐI ĐO, thoát mã 2 và gọi tên dòng thiếu. Và mỗi câu đó đọc từ kho chuỗi, có bản tiếng Việt có dấu. Đếm số vật nhận ra, không chỉ số file đã mở: một chân đo mở đủ mười file mà chỉ nhận ra chín `chuoi-thang` và bỏ sót ba `chuoi-mau` vẫn cho ra ba con số file bằng nhau.
+- AC-3: Given chín ô `title` của lát (`export const metadata` và mảng khai thanh bên), When phép đo đọc mã, Then số ô nhận ra BẰNG chín — lệch là thoát mã 2; tám nhãn dịch được đều đọc từ kho chuỗi và có bản tiếng Việt có dấu; và một dòng GIỮ NGUYÊN CÓ TÊN — `SSO`, định danh kỹ thuật mà luật kho cấm đúc từ ghép tiếng Việt — giữ nguyên văn. Dòng giữ nguyên nào không còn đối tượng thật làm chân ĐỎ. Lát này KHÔNG có tên thương hiệu nào trong ô `title`: Google Workspace và Microsoft 365 nằm ở 33 file của đợt sau.
 - AC-4: Given hai câu giải thích vì sao ô bị khoá — chỉ hiện với người không phải chủ sở hữu và không phải quản trị — When phép đo đọc mã của hai file chứa chúng, Then cả hai câu đọc từ kho chuỗi (không viết thẳng) và bản tiếng Việt của chúng có dấu. **Giới hạn đã khai:** không phép đo nào của vòng này DỰNG RA trạng thái đó — kho chưa có hạ tầng dựng component trong test, và phiên phát triển đăng nhập bằng chủ sở hữu nên trình duyệt không bao giờ vẽ hai câu này. Điều được chứng là chuỗi đã nằm đúng chỗ, KHÔNG phải là màn hiện đúng.
 - AC-5: Given ba trạng thái rỗng của lát — chưa có tỷ giá nào, chưa deal nào có số tiền, không model nào khớp ô tìm — When mỗi trạng thái được dựng, Then câu của nó hiện bằng tiếng Việt có dấu. Phép đo phải MỞ được từng trạng thái chứ không suy từ mã. **Bước gieo đã khai:** hai trạng thái đầu mở bằng cách tạo một workspace MỚI qua đúng luồng người dùng — workspace mới chưa có tỷ giá và chưa có deal nào; trạng thái thứ ba mở bằng cách gõ một chuỗi không khớp vào ô tìm model. Không cần chạm cơ sở dữ liệu.
 - AC-6: Given các giá trị không được dịch của lát — tên thương hiệu và mã tiền tệ — When màn dựng ở cả hai thứ tiếng, Then tập ứng viên SINH TỪ MÀN THẬT (mọi phần tử mang `translate="no"`, hợp với mọi chuỗi hiện giống hệt nhau ở hai lượt) BẰNG bảng khai **theo cả hai chiều**: thiếu một dòng của bảng là thoát mã 2 và gọi tên dòng thiếu; và thừa một giá trị trên màn mà bảng không khai CŨNG là thoát mã 2 và gọi tên giá trị đó. Một bảng chỉ khớp với chính nó thì không đo được cái nó sinh ra để đo.

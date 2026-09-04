@@ -1,0 +1,18 @@
+{
+	"lat": "man-cai-dat-noi-tieng-viet",
+	"ghi_chu": "Hai cau CHI hien khi nguoi dung khong phai chu so huu va khong phai quan tri. Phien phat trien dang nhap bang chu so huu nen trinh duyet KHONG BAO GIO ve chung ra — do o muc ma, gioi han khai o AC-4.",
+	"o": [
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/workspace-form.tsx",
+			"dong": 155,
+			"co_khi": "canRename === false",
+			"goc": "Only an owner or an admin can change this."
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx",
+			"dong": 165,
+			"co_khi": "canManage === false",
+			"goc": "Only an owner or an admin can change how money is reported."
+		}
+	]
+}

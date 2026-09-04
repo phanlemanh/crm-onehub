@@ -1,0 +1,18 @@
+{
+	"lat": "man-cai-dat-noi-tieng-viet",
+	"ghi_chu": "Bang dong cac loi goi toast MANG CHU trong lat. Loi goi chi chuyen tiep error.message KHONG nam trong bang — chung ngoai pham vi vong nay (cau chu sinh o apps/api, la t3_paths).",
+	"loi_goi": [
+		{ "file": "apps/app/app/(app)/[slug]/settings/copy-value.tsx", "dong": 10, "hinh_dang": "chuoi-mau", "goc": "Could not copy the ${label.toLowerCase()}. Select it instead." },
+		{ "file": "apps/app/app/(app)/[slug]/settings/copy-value.tsx", "dong": 29, "hinh_dang": "chuoi-mau", "goc": "${label} copied." },
+		{ "file": "apps/app/app/(app)/[slug]/settings/agent-model.tsx", "dong": 82, "hinh_dang": "chuoi-thang", "goc": "The agent will use this model from its next session." },
+		{ "file": "apps/app/app/(app)/[slug]/settings/archive-retention.tsx", "dong": 42, "hinh_dang": "chuoi-thang", "goc": "Archive retention saved." },
+		{ "file": "apps/app/app/(app)/[slug]/settings/archive-retention.tsx", "dong": 84, "hinh_dang": "chuoi-thang", "goc": "Enter a number of days." },
+		{ "file": "apps/app/app/(app)/[slug]/settings/workspace-form.tsx", "dong": 55, "hinh_dang": "chuoi-thang", "goc": "Workspace saved." },
+		{ "file": "apps/app/app/(app)/[slug]/settings/research-key.tsx", "dong": 42, "hinh_dang": "chuoi-thang", "goc": "Context API key saved." },
+		{ "file": "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx", "dong": 74, "hinh_dang": "chuoi-mau", "goc": "Every total is now reported in ${next.reportingCurrency}." },
+		{ "file": "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx", "dong": 88, "hinh_dang": "chuoi-thang", "goc": "Rate saved." },
+		{ "file": "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx", "dong": 98, "hinh_dang": "chuoi-thang", "goc": "Rate removed." },
+		{ "file": "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx", "dong": 108, "hinh_dang": "chuoi-thang", "goc": "Rates refreshed." },
+		{ "file": "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx", "dong": 198, "hinh_dang": "chuoi-thang", "goc": "A rate has to be a number greater than zero." }
+	]
+}

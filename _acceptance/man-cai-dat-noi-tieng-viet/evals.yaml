@@ -51,12 +51,13 @@ evals:
     expected: >-
       exit 0. Chan do MOI — doc cung cay cu phap TypeScript nhung bat lop chu bo quet
       JSX KHONG nhin thay: doi so chuoi cua toast.*(). Chay tren dan so lat sinh tu dia.
-      MA TRAN TOAN PHAN, viet truoc: bang dong toast-cua-lat.json khai muoi mot loi goi,
-      moi dong co file, so dong, va HINH DANG (chuoi thang · chuoi mau · ba ngoi ·
-      toast.promise · goi qua ham tro giup).
+      MA TRAN TOAN PHAN, viet truoc: bang dong toast-cua-lat.json khai muoi hai loi goi,
+      moi dong co file, so dong, va HINH DANG. Lat nay co hai hinh dang: chuoi-thang
+      (chin dong) va chuoi-mau (ba dong). Hinh dang thu hai la cho de sot nhat — mot
+      chan chi bat StringLiteral se thay chin trong muoi hai va van exit 0.
       So loi goi chan do NHAN RA phai BANG so dong cua bang; thieu mot dong la THOAT MA 2
       va goi ten dong thieu. Dem SO VAT nhan ra, khong chi so file da mo — mot chan mo
-      du muoi file ma chi nhan sau trong muoi mot hinh dang van cho ba con so file bang
+      du muoi file ma bo sot ca ba chuoi-mau van cho ba con so file bang
       nhau [thuoc-cua-lat-3a-co-rang#F1].
       Xanh nghia la khong loi goi nao trong bang con mang chuoi tieng Anh viet thang.
       Chuyen tiep error.message KHONG tinh — ngoai pham vi; chan do phai in so luot bo
@@ -76,9 +77,12 @@ evals:
     expected: >-
       exit 0. Cung chan do moi, hinh dang thu hai — gia tri title: trong
       export const metadata va trong mang khai thanh ben.
-      So o quan sat duoc phai BANG chin; thieu mot o la THOAT MA 2 va goi ten o thieu.
-      Bay nhan dich duoc doc tu kho chuoi va co ban tieng Viet co dau; hai ten thuong
-      hieu — Google Workspace, Microsoft 365 — giu nguyen van.
+      So o nhan ra phai BANG chin (con so khai trong tieu-de-cua-lat.json); lech la
+      THOAT MA 2 va in tung o da thay.
+      Tam nhan dich duoc doc tu kho chuoi va co ban tieng Viet co dau.
+      MOT dong giu nguyen CO TEN — "SSO", dinh danh ky thuat — giu nguyen van; dong giu
+      nguyen nao khong con doi tuong that lam chan DO (mien tru chet).
+      Lat nay KHONG co ten thuong hieu nao trong o title.
       Chieu do: doi mot nhan dich duoc ve chuoi viet thang thi chan do va goi ten khoa do.
     paths:
       - "apps/app/app/(app)/[slug]/settings/*.tsx"
