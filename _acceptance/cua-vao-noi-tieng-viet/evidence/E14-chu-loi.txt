@@ -1,0 +1,2 @@
+vi: Không kết nối được tới dịch vụ đăng nhập. Kiểm tra mạng rồi thử lại.
+en: Could not reach the sign-in service. Check your connection and try again.

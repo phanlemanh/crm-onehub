@@ -1,0 +1,94 @@
+{
+	"dangNhap": [
+		{ "khoa": "shell.homepage", "soLan": 2, "che": "doi" },
+		{ "khoa": "shell.eyebrow", "soLan": 1, "che": "giu" },
+		{ "khoa": "shell.headline", "soLan": 1, "che": "doi" },
+		{ "khoa": "signIn.title", "soLan": 1, "che": "doi" },
+		{ "khoa": "signIn.description", "soLan": 1, "che": "doi" }
+	],
+	"khaiBao": [
+		{ "khoa": "onboarding.name", "soLan": 1, "che": "doi" },
+		{ "khoa": "onboarding.slug", "soLan": 1, "che": "doi" },
+		{ "khoa": "onboarding.website", "soLan": 1, "che": "giu" },
+		{ "khoa": "onboarding.slugHint", "soLan": 1, "che": "doi" },
+		{ "khoa": "onboarding.websiteHint", "soLan": 1, "che": "doi" },
+		{ "khoa": "onboarding.submit", "soLan": 1, "che": "doi" },
+		{ "khoa": "research.label", "soLan": 1, "che": "doi" },
+		{ "khoa": "research.placeholder", "soLan": 1, "che": "doi" },
+		{ "khoa": "research.signUp", "soLan": 1, "che": "doi" }
+	],
+	"tieuDeTaiLieu": [
+		{ "duong": "/sign-in", "khoa": "docTitle.signIn" },
+		{ "duong": "/onboarding", "khoa": "docTitle.onboarding" },
+		{ "duong": "/onboarding/research", "khoa": "docTitle.research" }
+	],
+	"khongDich": [
+		{
+			"gia_tri": "GOOGLE_CLIENT_ID",
+			"o": "doan huong dan man chua-co-duong",
+			"nhom": "dinh danh"
+		},
+		{
+			"gia_tri": "GOOGLE_CLIENT_SECRET",
+			"o": "doan huong dan man chua-co-duong",
+			"nhom": "dinh danh"
+		},
+		{
+			"gia_tri": "MICROSOFT_CLIENT_ID",
+			"o": "doan huong dan man chua-co-duong",
+			"nhom": "dinh danh"
+		},
+		{
+			"gia_tri": "MICROSOFT_CLIENT_SECRET",
+			"o": "doan huong dan man chua-co-duong",
+			"nhom": "dinh danh"
+		},
+		{ "gia_tri": "https://", "o": "tien to o website", "nhom": "dinh danh" },
+		{ "gia_tri": "/", "o": "tien to o dia chi workspace", "nhom": "dinh danh" },
+		{ "gia_tri": "acme.com", "o": "goi y o website", "nhom": "dinh danh" },
+		{
+			"gia_tri": "CRM",
+			"o": "goi y o ten cong ty",
+			"nhom": "du lieu nguoi nhap"
+		},
+		{
+			"gia_tri": "crm",
+			"o": "goi y o dia chi workspace",
+			"nhom": "du lieu nguoi nhap"
+		},
+		{ "gia_tri": "Đất Xanh", "o": "nut SSO", "nhom": "du lieu nguoi nhap" },
+		{ "gia_tri": "Google", "o": "nut dang nhap Google", "nhom": "ten rieng" },
+		{
+			"gia_tri": "Microsoft",
+			"o": "nut dang nhap Microsoft",
+			"nhom": "ten rieng"
+		},
+		{ "gia_tri": "Context", "o": "nhan va mo ta o khoa", "nhom": "ten rieng" }
+	],
+	"chonTieng": [
+		{
+			"ten": "khong cookie, khong Accept-Language",
+			"cookie": null,
+			"header": null,
+			"mong": "vi"
+		},
+		{
+			"ten": "khong cookie, Accept-Language vi",
+			"cookie": null,
+			"header": "vi-VN,vi;q=0.9",
+			"mong": "vi"
+		},
+		{
+			"ten": "cookie vi thang Accept-Language en",
+			"cookie": "vi",
+			"header": "en-US,en;q=0.9",
+			"mong": "vi"
+		}
+	],
+	"beRong": [768, 1024, 1280],
+	"dangGui": [
+		{ "ten": "nut dang nhap", "duong": "/sign-in" },
+		{ "ten": "nut khai bao cong ty", "duong": "/onboarding" },
+		{ "ten": "nut khoa nghien cuu", "duong": "/onboarding/research" }
+	]
+}

@@ -1,0 +1,25 @@
+{
+	"lat": "cua-vao-noi-tieng-viet",
+	"file": [
+		"apps/app/components/auth-shell.tsx",
+		"apps/app/app/(landing)/sign-in/page.tsx",
+		"apps/app/app/(landing)/sign-in/social-sign-in.tsx",
+		"apps/app/app/(landing)/sign-in/sso-sign-in.tsx",
+		"apps/app/app/(landing)/onboarding/page.tsx",
+		"apps/app/app/(landing)/onboarding/onboarding-form.tsx",
+		"apps/app/app/(landing)/onboarding/research/page.tsx",
+		"apps/app/app/(landing)/onboarding/research/research-form.tsx"
+	],
+	"mien_tru": [
+		{
+			"chuoi": "acme.com",
+			"vi_sao": "goi y o website — dinh danh, AC-6 dong 7"
+		},
+		{
+			"chuoi": "https://",
+			"vi_sao": "tien to o website — dinh danh, AC-6 dong 5"
+		},
+		{ "chuoi": "Google", "vi_sao": "ten rieng, AC-6 dong 12" },
+		{ "chuoi": "Microsoft", "vi_sao": "ten rieng, AC-6 dong 12" }
+	]
+}
