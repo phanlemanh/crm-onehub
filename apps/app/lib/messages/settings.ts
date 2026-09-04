@@ -125,7 +125,7 @@ export type SettingsMessages = typeof en;
 
 const vi = {
 	thanhBen: {
-		nhan: "Cài đặt workspace",
+		nhan: "Cài đặt công ty",
 		chung: "Tổng quan",
 		theoDoi: "Theo dõi & phân tích",
 		ketNoi: "Kết nối",
@@ -203,10 +203,10 @@ const vi = {
 		moTa: "Số của bạn báo cáo bằng đồng nào, và các đồng khác quy về đó ra sao.",
 		dongBaoCao: "Đồng tiền báo cáo",
 		dongBaoCaoMoTa:
-			"Mọi tổng, biểu đồ và trung bình trong CRM đều tính bằng đồng này. Mỗi deal vẫn giữ đồng tiền lúc bán.",
+			"Mọi tổng, biểu đồ và trung bình trong CRM đều tính bằng đồng này. Mỗi thoả thuận vẫn giữ đồng tiền lúc chốt.",
 		baoCaoBang: "Báo cáo tổng bằng",
 		doiDuoc:
-			"Đổi cái này thì mọi deal quy đổi lại theo tỷ giá hôm nay. Con số đã báo cáo sẽ dịch chuyển.",
+			"Đổi cái này thì mọi thoả thuận quy đổi lại theo tỷ giá hôm nay. Con số đã báo cáo sẽ dịch chuyển.",
 		khongDuQuyen:
 			"Chỉ chủ sở hữu hoặc quản trị mới đổi được cách quy đổi tiền.",
 		daDoi: (ma: string) => `Từ giờ mọi tổng báo cáo bằng ${ma}.`,
@@ -221,7 +221,7 @@ const vi = {
 		cotNguon: "Nguồn",
 		cotTinhDen: "Tính đến",
 		cotHanhDong: "Hành động",
-		cotSoDeal: "Số deal",
+		cotSoDeal: "Số thoả thuận",
 		cotQuyDoiDuoc: "Quy đổi được",
 		chonMot: "Chọn một",
 		donVi: "đơn vị",
@@ -235,11 +235,12 @@ const vi = {
 		bangTay: "Tự nhập",
 		layVe: "Lấy về",
 		dangDung: "Đồng tiền đang dùng",
-		quyDoiDuocHet: "Mọi deal có số tiền đều quy đổi được về đồng tiền báo cáo.",
+		quyDoiDuocHet:
+			"Mọi thoả thuận có số tiền đều quy đổi được về đồng tiền báo cáo.",
 		khongQuyDoiDuoc: (so: string) =>
-			`${so} deal không quy đổi được, nên chúng nằm ngoài mọi tổng.`,
+			`${so} thoả thuận không quy đổi được, nên chúng nằm ngoài mọi tổng.`,
 		layLanCuoi: "Lấy tỷ giá lần cuối",
-		chuaDealNaoCoTien: "Chưa deal nào có số tiền.",
+		chuaDealNaoCoTien: "Chưa thoả thuận nào có số tiền.",
 		laDongBaoCao: "· đồng tiền báo cáo",
 		coTyGia: "Có",
 		chuaCoTyGiaNgan: "Chưa có tỷ giá",

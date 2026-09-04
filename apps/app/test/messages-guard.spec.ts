@@ -340,8 +340,8 @@ describe("kho chuoi cua vong ③a", () => {
 				"Từ giờ mọi tổng báo cáo bằng 12.",
 			],
 			"settings:tienTe.khongQuyDoiDuoc": [
-				"1 deal không quy đổi được, nên chúng nằm ngoài mọi tổng.",
-				"12 deal không quy đổi được, nên chúng nằm ngoài mọi tổng.",
+				"1 thoả thuận không quy đổi được, nên chúng nằm ngoài mọi tổng.",
+				"12 thoả thuận không quy đổi được, nên chúng nằm ngoài mọi tổng.",
 			],
 		} satisfies Record<string, [string, string]>;
 
