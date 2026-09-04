@@ -1,0 +1,277 @@
+schema_version: 1
+feature_slug: cai-dat-con-lai-noi-tieng-viet
+evals:
+
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.cd2_hai_tieng
+    expected: >-
+      exit 0. Danh sach route SINH TU THU MUC settings/ (moi page.tsx la mot route),
+      TRU hai route dot mot va tru cac route khai khong-dung-duoc co ly do trong ban khai.
+      Moi route dung hai luot vi/en tren may chu that, redirect: manual — 3xx la
+      THOAT MA 2 goi ten route. Ba ve tren TUNG route: so chuoi bang nhau · moi cap khac
+      nhau tru bang AC-6 · luot vi co dau. Tap rong tren mot route la thoat ma 2.
+      In so route do duoc / so route thu muc sinh ra; hai so lech ma khong co dong khai
+      ly do la thoat ma 2.
+      Chieu do: ghim settingsMessages("vi") vao mot trang thi luot en hien tieng Viet,
+      ve 2 gay, chan do goi ten trang va duong DOM.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/**"
+      - "apps/app/lib/messages/settings.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-1b
+    executor: script
+    cmd: config:executors.script.cd2_chu_cung_jsx
+    expected: >-
+      exit 0. Mui goi mong tro ve chu-cung-lat.mjs cua dot mot kem --lat tro toi ban khai
+      dot nay. Dan so sinh tu dia; bo quet doc BANG so file lat sinh; 0 chuoi viet thang
+      trong JSX ngoai mien tru co ten; mien tru chet la DO.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/**"
+      - "_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.cd2_toast
+    expected: >-
+      exit 0. Bang dong toast ghim (file, khoa kho chuoi); doi chieu TUNG MUC ca hai chieu;
+      lech mot muc la thoat ma 2 in ca THIEU lan THUA. In so luot chuyen tiep error.message
+      da bo qua. Chieu do: doi mot khoa trong bang thanh khoa khong ai doc thi tong van
+      bang nhau nhung chan thoat ma 2.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/**"
+      - "_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.cd2_tieu_de
+    expected: >-
+      exit 0. Dem O title, khong dem chuoi: bay generateMetadata. So o nhan ra BANG bay,
+      lech la thoat ma 2 liet tung o. Ca bay doc tu kho chuoi. Chieu do: doi mot ve
+      "General"-kieu chuoi viet thang thi chan do.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.cd2_khong_du_quyen
+    expected: >-
+      exit 0. Bang dong (file, khoa) ke o S3. Doc CAY CU PHAP: moi o con MOT NUT doc dung
+      khoa da khai, ban vi co dau. Xoa han khoi dieu kien thi chan DO goi ten khoa va dieu
+      kien. PHEP DO MUC MA — khai thang, khong chung man hien dung.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/**"
+      - "apps/app/lib/messages/settings.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.cd2_trang_thai_rong
+    expected: >-
+      Sau cau rong ke thanh bang. Dung tren may chu that; trang thai nao dung duoc thi doc
+      chu nguoi doc thay va doi hoi tieng Viet co dau; trang thai nao KHONG dung duoc thi
+      THOAT MA 2 goi ten, TUYET DOI khong ha xuong doc ma roi ghi dat. Ket qua in ro hai
+      danh sach: dung duoc / khong dung duoc — mang sang cong ky.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/**"
+      - "apps/app/lib/messages/settings.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-5b
+    executor: script
+    cmd: config:executors.script.cd2_oauth
+    expected: >-
+      exit 0. MA TRAN DONG 4 nguon x 5 trang thai = 20 o trong ban khai; moi o la mot khoa
+      kho chuoi, hoac "dung chung voi o X", hoac "khong ton tai trong ma" kem ly do.
+      Doi hoi: so o quan sat tren man (trang thai dang hien cua onehub) + so o do muc ma
+      (moi khoa con dung mot nut AST doc no, ban vi co dau) + so o khai khong-ton-tai = 20.
+      Thieu mot o la thoat ma 2 goi ten o. Ma tran in ra output. KHONG dung luong OAuth that.
+      Chieu do: xoa nut doc khoa cua o "Microsoft x cam lai" thi chan do goi ten o do —
+      khong phai "liet nhung gi tim thay" ma la "doi du 20".
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/connections/**"
+      - "apps/app/lib/messages/settings.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.cd2_khong_dich
+    expected: >-
+      exit 0. Tap ung vien sinh tu man that tren MOI route cua lat; doi chieu bang khai
+      ca hai chieu; thieu hay thua deu thoat ma 2 goi ten. Chieu do: bo translate="no"
+      khoi mot ten thuong hieu thi chan do; them mot URL moi vao man ma khong khai thi
+      chan cung do.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/**"
+      - "_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-6b
+    executor: script
+    cmd: config:executors.script.cd2_khong_dich
+    expected: >-
+      exit 0. HAI chan. Chan MA: bang dong (file, truong du lieu) ke o S3; doc cay cu phap,
+      phan tu JSX boc bieu thuc truong do phai mang translate="no" — khai thang la muc ma.
+      Chan MAN: chi cho thu gieo duoc qua API that KHONG can OAuth (tao mot khoa API, them
+      mot ten mien); in ro danh sach gieo duoc / khong gieo duoc mang sang cong ky. Workspace
+      onehub mac dinh khong co khoa API, SSO, kenh Slack — mot chan man don doc se thoat ma 2
+      vinh vien, do la ly do tach. Chieu do: go thuoc tinh khoi mot phan tu thi chan ma do.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.cd2_dot_bien
+    expected: >-
+      exit 0. Vet cho TUNG hinh dang: JSX · title · thuoc tinh · tu don · mang lua chon ·
+      toast doi khoa · toast giu khoa them chuoi · xoa cau khong-du-quyen · DOAN MA
+      NGUOI CHEP: sua TEMPLATE DUNG CHUNG (khong phai kho vi) mot ky tu, E16 phai do ma 1.
+      Chi MA 1 tinh la bat duoc; ma 2 in rieng. Cay lanh thi
+      moi chan xanh; git status truoc/sau bang nhau.
+    paths:
+      - "_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.cd2_khai_sinh
+    expected: >-
+      exit 0. Hang FILE tu ba nguon doc lap (voi gioi han ke thua: o cua chan ③a la vong
+      lai dau vao — noi ro trong output); hang VAT so theo TAP cho toast va so o title
+      bang bay. Lech la thoat ma 2 in ca hai hang.
+    paths:
+      - "_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.cd2_dan_so_tu_dia
+    expected: >-
+      exit 0. Truoc het: so file quet ra BANG so neo trong ban khai (33 · 10 route · 6 file
+      vat chep · 9 file canManage) — lech la thoat ma 2 kem diff ten file; ban khai liet du
+      MUOI thu muc. Roi hai thi nghiem: (a) tha mot file .tsx mang chu tieng Anh vao thu muc
+      lat → dan so tang 1 VA moi-chuoi + chu-cung deu DO; (b) CAN GAT khong_quet —
+      khai file do vao khong_quet cua ban khai (tren ban sao ban khai) → chan van DO vi
+      file bi loai tru ma con tieng Anh, in ten file. Ca hai deu don sach, git status
+      bang nhau. Chieu (b) la cai dot mot chua co.
+    paths:
+      - "_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.cd2_be_rong
+    expected: >-
+      exit 0. Moi route cua lat o 360px hai luot; scrollWidth > clientWidth la DO; en la
+      doi chung duong; khong mien tru truncate; tap rong thoat ma 2. Gioi han ke thua noi
+      ro trong output: mu voi vung chua xuong dong.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-10b
+    executor: script
+    cmd: config:executors.script.cd2_be_rong_do
+    expected: >-
+      exit 0. Cam nhan vi dai vao mot khoa moc cua lat nay, chay be-rong, doi "vi tran ma
+      en vua" > 0, tra kho chuoi ve nguyen trang, git status bang nhau. So bang 0 la eval
+      DO — chan be-rong mu.
+    paths:
+      - "_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/**"
+      - "apps/app/lib/messages/settings.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.cd2_moi_chuoi
+    expected: >-
+      exit 0. Mui goi tro ve moi-chuoi.mjs dot mot kem --lat. Lay MOI chuoi, tru theo luat
+      co ten voi hai danh sach TACH BIET (thuoc tinh JSX / khoa object). Con tieng Anh la DO
+      in file:dong:boi canh:nguyen van. 0 chuoi la thoat ma 2. Giu-nguyen chet la DO.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/**"
+      - "_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E16
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.cd2_doan_ma_chep
+    expected: >-
+      exit 0. KHONG so vi voi en — hai luot dung tu cung mot template nen luon bang nhau
+      ke ca khi template sai. Moi doan so voi NGUON CHAN LY NGOAI MAN: the <script> so voi
+      template dung tu token workspace doc trong DB; khoa API so voi gia tri API tra ve
+      TRONG CUNG LUOT TAO (moi lan tao mot gia tri khac); URL/gia tri SSO so voi cau hinh.
+      Tap ung vien SINH TU DOM tren MOI route (nut chep, hoac code/pre trong translate=no),
+      doi chieu hai chieu voi bang; bang PHAI co it nhat mot dong cho moi trong 6 file
+      design neu — thieu file nao la thoat ma 2 goi ten file. Lech mot byte so voi nguon
+      la DO kem ten doan va vi tri byte. Chieu do: sua template dung chung (doi mot dau
+      nhay trong URL) thi ca hai luot cung sai ma chan van DO — vi no so voi nguon, khong
+      so hai luot voi nhau.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/tracking/**"
+      - "apps/app/app/(app)/[slug]/settings/api-keys/**"
+      - "apps/app/app/(app)/[slug]/settings/sso/**"
+      - "_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.cd2_mot_bo_thuoc
+    expected: >-
+      exit 0. HAI ve. (1) So than ham giua moi .mjs cua hai thu muc rang/: mot khoi trung
+      tu 12 dong tro len la DO kem ten hai file — bat ca chan DOM (be-rong, hai-tieng), khong
+      chi chan AST. Chieu do chung bang chep be-rong.mjs (khong co createSourceFile) vao
+      rang/ dot nay. (2) Chay lai cac mui goi dot mot KHONG tham so: thoat 0 va in dung
+      10 file · 12 toast · 9 o title nhu evidence-report da ky cua dot mot — chung --lat mac
+      dinh phan giai theo thu muc script, khong theo cwd, va bang chung da ky tai lap duoc.
+    paths:
+      - "_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/**"
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E18
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.rang3_khoa_chet
+    expected: >-
+      exit 0. Bo canh kho chuoi: moi gia tri vi co dau tru mien tru co ten, khong gia tri
+      nao y het en, moi ham ghep bien co khang dinh ghim, khong khoa chet. Kho settings
+      da nam trong MODULE tu dot mot.
+    paths:
+      - "apps/app/lib/messages/settings.ts"
+      - "apps/app/test/messages-guard.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E19
+    criterion: AC-1
+    executor: judgment
+    inputs:
+      - apps/app/lib/messages/settings.ts
+      - CONTEXT.md
+    expected: >-
+      Ban dich doc nhu tieng Viet cua nguoi lam nghe. Ba phep thu cua dot mot, cong mot:
+      cau ghep so nhieu tieng Anh (${n === 1 ? "is" : "are"}) da thanh mot cau tieng Viet
+      tu nhien, khong con dau vet chia so. Danh tu: cong ty · ca nhan · thoa thuan;
+      "workspace" chua co muc tu dien — dung "cong ty" nhu dot mot da chon.
