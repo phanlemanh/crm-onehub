@@ -7,6 +7,7 @@ const ts: typeof TS = createRequire(import.meta.url)("typescript");
 
 const HAM_KHO = new Set([
 	"authMessages",
+	"campaignMessages",
 	"companyMessages",
 	"contactMessages",
 	"dealMessages",

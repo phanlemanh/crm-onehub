@@ -1,6 +1,7 @@
 import { describe, expect, it } from "bun:test";
 import { join } from "node:path";
 import { authMessages } from "@/lib/messages/auth";
+import { campaignMessages } from "@/lib/messages/campaigns";
 import { companyMessages } from "@/lib/messages/companies";
 import { contactMessages } from "@/lib/messages/contacts";
 import { crmMessages } from "@/lib/messages/crm";
@@ -12,6 +13,7 @@ const DAU_TIENG_VIET =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
 
 const MODULE = [
+	["campaigns", campaignMessages],
 	["companies", companyMessages],
 	["contacts", contactMessages],
 	["deals", dealMessages],
@@ -72,6 +74,59 @@ function hienRa(v: GiaTri): string {
 }
 
 const CHUA_NOI_KHAI: readonly string[] = [
+	"campaigns.columns.answered",
+	"campaigns.columns.called",
+	"campaigns.columns.created",
+	"campaigns.columns.name",
+	"campaigns.columns.owner",
+	"campaigns.columns.segment",
+	"campaigns.columns.status",
+	"campaigns.create.openContacts",
+	"campaigns.create.script",
+	"campaigns.create.scriptPlaceholder",
+	"campaigns.create.segment",
+	"campaigns.create.segmentHint",
+	"campaigns.create.submitting",
+	"campaigns.detail.finish",
+	"campaigns.detail.finishedAt",
+	"campaigns.detail.openView",
+	"campaigns.detail.saving",
+	"campaigns.detail.script",
+	"campaigns.detail.start",
+	"campaigns.detail.startedAt",
+	"campaigns.detail.uncalledOnly",
+	"campaigns.empty.list",
+	"campaigns.empty.members",
+	"campaigns.empty.noPhone",
+	"campaigns.empty.noViews",
+	"campaigns.error.touch",
+	"campaigns.loading.list",
+	"campaigns.loading.members",
+	"campaigns.memberColumns.districts",
+	"campaigns.memberColumns.lastOutcome",
+	"campaigns.memberColumns.listingsNew30d",
+	"campaigns.memberColumns.name",
+	"campaigns.memberColumns.phone",
+	"campaigns.memberColumns.record",
+	"campaigns.memberColumns.tier",
+	"campaigns.outcome.answered",
+	"campaigns.outcome.declined",
+	"campaigns.outcome.meeting",
+	"campaigns.outcome.noAnswer",
+	"campaigns.outcome.wrongNumber",
+	"campaigns.stats.answerRate",
+	"campaigns.stats.answered",
+	"campaigns.stats.called",
+	"campaigns.stats.control",
+	"campaigns.stats.meetingRate",
+	"campaigns.stats.meetings",
+	"campaigns.stats.members",
+	"campaigns.stats.noControl",
+	"campaigns.stats.noRate",
+	"campaigns.stats.thisCampaign",
+	"campaigns.status.draft",
+	"campaigns.status.finished",
+	"campaigns.status.running",
 	"record-sheet.tabs.details",
 	"record-sheet.company.archived",
 	"record-sheet.company.restored",
