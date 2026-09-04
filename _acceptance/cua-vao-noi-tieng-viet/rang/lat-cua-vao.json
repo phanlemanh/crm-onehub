@@ -1,15 +1,12 @@
 {
 	"lat": "cua-vao-noi-tieng-viet",
-	"file": [
-		"apps/app/components/auth-shell.tsx",
-		"apps/app/app/(landing)/sign-in/page.tsx",
-		"apps/app/app/(landing)/sign-in/social-sign-in.tsx",
-		"apps/app/app/(landing)/sign-in/sso-sign-in.tsx",
-		"apps/app/app/(landing)/onboarding/page.tsx",
-		"apps/app/app/(landing)/onboarding/onboarding-form.tsx",
-		"apps/app/app/(landing)/onboarding/research/page.tsx",
-		"apps/app/app/(landing)/onboarding/research/research-form.tsx",
-		"apps/app/app/(landing)/grant-access/page.tsx"
+	"thu_muc": ["apps/app/app/(landing)"],
+	"them": ["apps/app/components/auth-shell.tsx"],
+	"khong_quet": [
+		{
+			"duong": "apps/app/app/(landing)/page.tsx",
+			"vi_sao": "trang gioi thieu cong khai — Ngoai pham vi cua contract, khong thuoc luong cua vao"
+		}
 	],
 	"mien_tru": [
 		{

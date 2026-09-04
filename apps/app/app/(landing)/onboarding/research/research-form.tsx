@@ -18,6 +18,8 @@ import { toast } from "sonner";
 import { authMessages } from "@/lib/messages/auth";
 import { useTRPC } from "@/lib/trpc/client";
 
+const TEN = "Context";
+
 export function ResearchForm() {
 	const nhan = authMessages(useLocale()).research;
 	const trpc = useTRPC();
@@ -46,7 +48,11 @@ export function ResearchForm() {
 		>
 			<FieldGroup>
 				<Field>
-					<FieldLabel htmlFor={keyId}>{nhan.label}</FieldLabel>
+					<FieldLabel htmlFor={keyId}>
+						{nhan.label.split(TEN)[0]}
+						<span translate="no">{TEN}</span>
+						{nhan.label.split(TEN)[1]}
+					</FieldLabel>
 					<Input
 						id={keyId}
 						name="apiKey"
@@ -60,7 +66,9 @@ export function ResearchForm() {
 						required
 					/>
 					<FieldDescription>
-						{nhan.noKey}{" "}
+						{nhan.noKey.split(TEN)[0]}
+						<span translate="no">{TEN}</span>
+						{nhan.noKey.split(TEN)[1]}{" "}
 						<a
 							href={CONTEXT_DEV_SIGNUP_URL}
 							target="_blank"

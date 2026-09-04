@@ -183,17 +183,16 @@ evals:
     executor: script
     cmd: config:executors.script.cua_vao_chu_cung_jsx
     expected: >-
-      exit 0. Doc CAY CU PHAP cua 9 file trong pham vi va tim chuoi nguoi-doc-thay
-      viet thang vao JSX. Ket qua = 0 cho ngoai ban khai mien tru cua lat.
-      Chan phai khang dinh so file bo quet THUC SU doc BANG so file lat khai —
-      vong 1 xanh gia vi co "--lat" khong phai co ma bo quet hieu, nen no quet
-      dung file JSON do va bao 0 cho.
-      Mot dong mien tru khong con doi tuong that cung lam chan DO.
-      Chan nay CHI DOC MA nen no khong bao gio du mot minh — no bat huong "chu cung
-      trong JSX", con huong "chu that hien ra" do E1 den E5 bat. Hai huong cua cung
-      mot lo.
-      Chieu do: viet mot chuoi tieng Anh thang vao JSX cua mot trong 8 file tren
-      ban sao thi chan do va goi ten file cung so dong.
+      exit 0. DAN SO SINH TU DIA: moi file .tsx duoi app/(landing) cong khung dung
+      chung, tru mot ban khai loai-tru co ly do tung dong. KHONG duoc viet tay danh
+      sach — hai vong dau sot cung mot man vi ban khai tay thieu dung hai file.
+      Chan khang dinh so file bo quet THUC SU doc BANG so file lat sinh ra.
+      Ket qua = 0 chuoi nguoi-doc-thay khoa cung, ngoai ban khai mien tru.
+      Mot dong mien tru khong con doi tuong that, hoac mot dong loai-tru tro toi
+      file khong con ton tai, deu lam chan DO/TU CHOI DO.
+      Chieu do da chung minh: them mot man .tsx moi duoi (landing) ma KHONG sua ban
+      khai thi chan do va goi ten file do; tro loai-tru toi mot duong khong co tren
+      dia thi chan thoat ma 2.
     paths:
       - "apps/app/app/(landing)/**"
       - "apps/app/components/auth-shell.tsx"

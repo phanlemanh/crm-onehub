@@ -50,6 +50,15 @@ const en = {
 		both: "This CRM reads your mail and calendar so meetings and email threads show up on the right company. It is read-only — nothing is ever sent on your behalf.",
 		privacy:
 			"Only conversations with companies in the CRM are stored. Personal mail is discarded without being saved.",
+		grant: (ten: string) => `Grant ${ten} access`,
+		grantOne: "Grant access",
+		granting: "Opening…",
+		signOut: "Sign out",
+		error: {
+			provider:
+				"Could not reach the provider. Check your connection and try again.",
+			signOut: "Could not sign out. Reload the page and try again.",
+		},
 	},
 	research: {
 		title: "Level up your CRM data",
@@ -116,6 +125,15 @@ const vi = {
 		both: "CRM đọc thư và lịch của bạn để cuộc họp và luồng thư hiện đúng ở công ty tương ứng. Chỉ đọc — không bao giờ gửi gì thay bạn.",
 		privacy:
 			"Chỉ lưu trao đổi với các công ty có trong CRM. Thư cá nhân bị bỏ đi, không lưu lại.",
+		grant: (ten: string) => `Cấp quyền ${ten}`,
+		grantOne: "Cấp quyền",
+		granting: "Đang mở…",
+		signOut: "Đăng xuất",
+		error: {
+			provider:
+				"Không kết nối được tới nhà cung cấp. Kiểm tra mạng rồi thử lại.",
+			signOut: "Không đăng xuất được. Tải lại trang rồi thử lại.",
+		},
 	},
 	research: {
 		title: "Làm dày dữ liệu CRM của bạn",

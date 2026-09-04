@@ -129,6 +129,7 @@ describe("kho chuoi cua vong ③a", () => {
 	it("moi ham ghep bien co khang dinh, va so ham bang so khang dinh", () => {
 		const GHIM = {
 			"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
+			"auth:grantAccess.grant": ["Cấp quyền 1", "Cấp quyền 12"],
 			"companies:bulk.reassigned": [
 				"Đã đổi người phụ trách cho 1.",
 				"Đã đổi người phụ trách cho 12.",

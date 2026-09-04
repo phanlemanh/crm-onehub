@@ -1,18 +1,28 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { GOC, lat } from "./lat.mjs";
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-const GOC = resolve(HERE, "../../..");
-const LAT = JSON.parse(readFileSync(`${HERE}/lat-cua-vao.json`, "utf8"));
 const QUET = `${GOC}/_acceptance/nhan-ung-dung-noi-tieng-viet/rang/chu-cung-jsx.mjs`;
-
 const DONG = /^(\S+):(\d+)\s+\[([^\]]+)\]\s+"(.*)"$/;
+
+const L = lat();
+
+if (L.thieu.length > 0) {
+	console.log(
+		`KHONG DO DUOC: ban khai lat tro toi ${L.thieu.length} duong khong co tren dia: ${L.thieu.join(" · ")}`,
+	);
+	process.exit(2);
+}
+
+if (L.soTuDia === 0) {
+	console.log(
+		"KHONG DO DUOC: quet thu muc cua lat ra 0 file .tsx — tap quan sat rong khong bao gio la dat",
+	);
+	process.exit(2);
+}
 
 function chay() {
 	try {
-		return execFileSync("node", [QUET, ...LAT.file], {
+		return execFileSync("node", [QUET, ...L.file], {
 			cwd: GOC,
 			encoding: "utf8",
 			stdio: ["ignore", "pipe", "pipe"],
@@ -23,19 +33,12 @@ function chay() {
 }
 
 const ra = chay();
-
-if (!ra.includes("quet ")) {
-	console.log(
-		`KHONG DO DUOC: bo quet khong in dong tong ket. Dau ra:\n${ra.slice(0, 400)}`,
-	);
-	process.exit(2);
-}
-
 const soQuet = Number(/quet (\d+) file trong lat/.exec(ra)?.[1] ?? -1);
-if (soQuet !== LAT.file.length) {
+
+if (soQuet !== L.file.length) {
 	console.log(
-		`KHONG DO DUOC: lat khai ${LAT.file.length} file nhung bo quet doc ${soQuet}. ` +
-			"Danh sach file va thu bo quet thuc su doc da lech.",
+		`KHONG DO DUOC: lat sinh ra ${L.file.length} file nhung bo quet doc ${soQuet}. ` +
+			"Danh sach va thu bo quet thuc su doc da lech.",
 	);
 	process.exit(2);
 }
@@ -50,17 +53,16 @@ const cho = truoc
 	.filter((m) => m !== null)
 	.map((m) => ({ file: m[1], dong: m[2], loai: m[3], chuoi: m[4] }));
 
-const mienTru = LAT.mien_tru ?? [];
 const dungToi = new Set();
 const conLai = [];
 
 for (const c of cho) {
-	const mt = mienTru.find((m) => m.chuoi === c.chuoi);
+	const mt = L.mienTru.find((m) => m.chuoi === c.chuoi);
 	if (mt) dungToi.add(mt.chuoi);
 	else conLai.push(c);
 }
 
-const chet = mienTru.filter((m) => !dungToi.has(m.chuoi));
+const chet = L.mienTru.filter((m) => !dungToi.has(m.chuoi));
 
 for (const c of conLai)
 	console.log(
@@ -69,11 +71,17 @@ for (const c of conLai)
 
 for (const m of chet)
 	console.log(
-		`MIEN TRU CHET: dong "${m.chuoi}" (${m.vi_sao}) khong con doi tuong that trong lat — go no khoi ban khai`,
+		`MIEN TRU CHET: dong "${m.chuoi}" (${m.vi_sao}) khong con doi tuong that — go no khoi ban khai`,
 	);
 
-if (conLai.length > 0 || chet.length > 0) process.exit(1);
+for (const k of L.treo)
+	console.log(
+		`LOAI TRU TREO: "${k.duong}" (${k.vi_sao}) khong con nam duoi thu muc lat quet — go no khoi ban khai`,
+	);
+
+if (conLai.length > 0 || chet.length > 0 || L.treo.length > 0) process.exit(1);
 
 console.log(
-	`ket qua: ${soQuet} file, 0 chuoi nguoi-doc-thay khoa cung ngoai ${mienTru.length} dong mien tru, va ca ${mienTru.length} dong deu con doi tuong that`,
+	`ket qua: ${L.soTuDia} file .tsx tren dia, tru ${L.khongQuet.length} loai tru co ten, cong ${L.file.length - L.soTuDia + L.khongQuet.length} khai them = ${L.file.length} file quet. ` +
+		`0 chuoi khoa cung ngoai ${L.mienTru.length} dong mien tru, va ca ${L.mienTru.length} dong deu con doi tuong that.`,
 );

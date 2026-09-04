@@ -552,13 +552,23 @@ if (chan === "khong-dich") {
 						});
 						return {
 							gia_tri: b.gia_tri,
-							thay: els.length > 0,
-							co_dau: els.some((e) => e.closest('[translate="no"]') !== null),
+							lan: els.length,
+							khongDau: els
+								.filter((e) => e.closest('[translate="no"]') === null)
+								.map((e) => (e.textContent ?? "").trim().slice(0, 60)),
 						};
 					}),
 				GHIM.khongDich,
 			);
-			for (const c of co) if (c.thay) thay.set(c.gia_tri, c);
+			for (const c of co) {
+				if (c.lan === 0) continue;
+				const cu = thay.get(c.gia_tri) ?? { lan: 0, khongDau: [], man: [] };
+				thay.set(c.gia_tri, {
+					lan: cu.lan + c.lan,
+					khongDau: [...cu.khongDau, ...c.khongDau.map((x) => `${d}: ${x}`)],
+					man: [...cu.man, d],
+				});
+			}
 			await p.close();
 		}
 	} finally {
@@ -572,9 +582,10 @@ if (chan === "khong-dich") {
 				"Dan so thieu bi chan y het dan so rong — khong bao gio la mot luot dat.",
 		);
 	for (const [gt, c] of thay)
-		if (!c.co_dau)
+		for (const cho of c.khongDau)
 			loi.push(
-				`THIEU DAU: gia tri "${gt}" hien tren man ma phan tu chua no khong mang translate="no"`,
+				`THIEU DAU: gia tri "${gt}" hien o ${cho} — phan tu chua no khong mang translate="no". ` +
+					`Gia tri nay hien ${c.lan} lan tren ${[...new Set(c.man)].length} man; MOI lan deu phai mang dau.`,
 			);
 	ketThuc(
 		`${thay.size}/${GHIM.khongDich.length} gia tri khong dich deu nguyen van va deu mang dau`,
