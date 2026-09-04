@@ -10,6 +10,7 @@ profile_prefix = "/moi-gioi-"
 respect_robots = true
 phone_reveal_cap = 200
 request_delay_seconds = 1.5
+stealth = true
 
 [ingest]
 url = "http://localhost:3001/internal/listings/ingest"

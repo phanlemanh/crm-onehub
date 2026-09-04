@@ -116,9 +116,42 @@ trên hồ sơ thật hai số đó trùng nhau và làm bài kiểm không phâ
 đọc sơ đồ site trước; rỗng thì ghi cảnh báo và gieo từ `crawl.directory`.
 `robots.txt` cho `Allow: /` và không cấm hai lớp đường dẫn này.
 
+## Cloudflare chặn từ lượt tải THỨ HAI, không phải lượt đầu
+
+Lượt chạy thật ngày 2026-09-04 trả 100% «Blocked by anti-bot protection:
+Cloudflare JS challenge». Đo lại thì hình dạng lỗi rất riêng: **lượt tải đầu
+trong một trình duyệt mới luôn qua**, mọi lượt sau trả 307 rồi 403 với trang
+28 KB — trang đố JS của Cloudflare — kể cả khi giãn 1,5 giây giữa hai lượt. Nên
+đây không phải chặn theo nhịp gọi; Cloudflare chấm dấu vết trình duyệt sau khi
+đã thấy nó một lần.
+
+Chữa bằng `enable_stealth = true` (khoá `[crawl].stealth` trong `config.toml`),
+tức `BrowserConfig(enable_stealth=True)` — crawl4ai vá dấu vết bằng
+`playwright-stealth` trên từng trang. Ba nhánh đo trên cùng 4 hồ sơ, cùng nhịp
+1,5 giây, bằng chứng ở
+`_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-antibot-probe.log`:
+
+| Nhánh | Lấy được | Bị chặn |
+|---|---|---|
+| A — như cũ, không tàng hình | 1/4 | 3/4 |
+| B — `enable_stealth=True` | **4/4** | 0/4 |
+| C — B cộng `simulate_user` + `override_navigator` + `magic` | 1/4 | 3/4 |
+
+**Nhánh C làm hỏng lại nhánh B.** `override_navigator` ghi đè `navigator` bằng
+đoạn vá thô của crawl4ai, đè lên bản vá tinh của `playwright-stealth` và để lại
+dấu vết Cloudflare bắt được. Đừng bật ba cờ đó chung với tàng hình. Hồ sơ trình
+duyệt thật (`user_data_dir`) và proxy chưa cần thử — nhánh B đã đủ.
+
 ## Tuân thủ
 
-`check_robots_txt=True` bật cho mọi lượt tải. `request_delay_seconds` giãn nhịp.
+`check_robots_txt=True` bật cho mọi lượt tải.
+
+`request_delay_seconds` giãn nhịp bằng `asyncio.sleep` thật trong `paced_fetch`.
+Trước đây nó truyền vào `CrawlerRunConfig(mean_delay=...)`, mà `mean_delay`
+**chỉ có tác dụng với `arun_many`** — vòng lặp `arun` tuần tự của bộ cào này bỏ
+qua nó hoàn toàn, và thực đo là ~0,2 giây một lượt. Cấu hình khai 1,5 giây mà
+máy chạy 0,2 giây là sai lời khai; nay đã đúng.
+
 Lộ số điện thoại chỉ chạy cho hồ sơ mức Cao và có trần `phone_reveal_cap`, vì đó
 là bước đắt nhất và nhạy nhất — không lộ số của người không định gọi.
 

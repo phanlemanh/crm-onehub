@@ -90,6 +90,19 @@ def fixture_run(limit: int | None) -> tuple[list[dict], dict]:
     return items, {"gieo": len(seeds), "lay_duoc": len(items), "bi_chan": blocked}
 
 
+def paced_fetch(crawler, delay: float):
+    seen_one = False
+
+    async def fetch(url: str, run):
+        nonlocal seen_one
+        if seen_one:
+            await asyncio.sleep(delay)
+        seen_one = True
+        return await crawler.arun(url=url, config=run)
+
+    return fetch
+
+
 async def live_run(limit: int | None) -> tuple[list[dict], dict]:
     from crawl4ai import AsyncWebCrawler, BrowserConfig, CacheMode, CrawlerRunConfig
 
@@ -98,19 +111,20 @@ async def live_run(limit: int | None) -> tuple[list[dict], dict]:
     run = CrawlerRunConfig(
         cache_mode=CacheMode.BYPASS,
         check_robots_txt=bool(settings["respect_robots"]),
-        mean_delay=delay,
         page_timeout=60_000,
     )
+    browser = BrowserConfig(headless=True, enable_stealth=bool(settings["stealth"]))
 
-    async with AsyncWebCrawler(config=BrowserConfig(headless=True)) as crawler:
-        seeds = await seed_urls(crawler, run, settings, limit)
+    async with AsyncWebCrawler(config=browser) as crawler:
+        fetch = paced_fetch(crawler, delay)
+        seeds = await seed_urls(fetch, run, settings, limit)
         if not seeds:
             return [], {"gieo": 0, "lay_duoc": 0, "bi_chan": 0}
 
         items: list[dict] = []
         blocked = 0
         for url in seeds:
-            result = await crawler.arun(url=url, config=run)
+            result = await fetch(url, run)
             if not result.success or not result.html:
                 blocked += 1
                 LOGGER.warning("bỏ qua %s: %s", url, result.error_message)
@@ -121,21 +135,21 @@ async def live_run(limit: int | None) -> tuple[list[dict], dict]:
                 blocked += 1
                 LOGGER.warning("bỏ qua %s: %s", url, error)
 
-        await reveal_phones(crawler, run, items, int(settings["phone_reveal_cap"]))
+        await reveal_phones(fetch, run, items, int(settings["phone_reveal_cap"]))
         return items, {"gieo": len(seeds), "lay_duoc": len(items), "bi_chan": blocked}
 
 
-async def seed_urls(crawler, run, settings: dict, limit: int | None) -> list[str]:
+async def seed_urls(fetch, run, settings: dict, limit: int | None) -> list[str]:
     prefix = settings["profile_prefix"]
     found: list[str] = []
     seen: set[str] = set()
 
-    index = await crawler.arun(url=settings["sitemap"], config=run)
+    index = await fetch(settings["sitemap"], run)
     children = SITEMAP_LOC.findall(index.html or "") if index.success else []
     for child in children:
         if limit is not None and len(found) >= limit:
             break
-        page = await crawler.arun(url=child, config=run)
+        page = await fetch(child, run)
         if not page.success:
             continue
         for url in SITEMAP_LOC.findall(page.html or ""):
@@ -149,7 +163,7 @@ async def seed_urls(crawler, run, settings: dict, limit: int | None) -> list[str
             prefix,
             settings["directory"],
         )
-        page = await crawler.arun(url=settings["directory"], config=run)
+        page = await fetch(settings["directory"], run)
         if page.success and page.html:
             for row in parse_directory(page.html):
                 if row["url"] not in seen:
@@ -159,13 +173,13 @@ async def seed_urls(crawler, run, settings: dict, limit: int | None) -> list[str
     return found[:limit] if limit is not None else found
 
 
-async def reveal_phones(crawler, run, items: list[dict], cap: int) -> None:
+async def reveal_phones(fetch, run, items: list[dict], cap: int) -> None:
     targets = [item for item in items if item["tier"] == "cao" and "phone" not in item][:cap]
     if not targets:
         return
     reveal = run.clone(js_code=PHONE_REVEAL_JS)
     for item in targets:
-        result = await crawler.arun(url=item["url"], config=reveal)
+        result = await fetch(item["url"], reveal)
         if not result.success or not result.html:
             continue
         try:
