@@ -81,7 +81,8 @@ const en = {
 		dongBaoCaoMoTa:
 			"Every total, chart and average in the CRM is expressed in this currency. Each deal keeps the currency it was sold in.",
 		baoCaoBang: "Report totals in",
-		doiDuoc: "Changing this re-converts every deal at today's rates. Figures already reported will move.",
+		doiDuoc:
+			"Changing this re-converts every deal at today's rates. Figures already reported will move.",
 		khongDuQuyen: "Only an owner or an admin can change how money is reported.",
 		daDoi: (ma: string) => `Every total is now reported in ${ma}.`,
 		tyGia: "Exchange rates",
@@ -162,7 +163,8 @@ const vi = {
 		tim: "Tìm model…",
 		khongKhop: "Không model nào khớp.",
 		macDinh: "Mặc định —",
-		gia: (vao: string, ra: string) => `${vao} vào · ${ra} ra trên 1 triệu token`,
+		gia: (vao: string, ra: string) =>
+			`${vao} vào · ${ra} ra trên 1 triệu token`,
 		nguCanhTrieu: (so: string) => `ngữ cảnh ${so} triệu token`,
 		nguCanhNghin: (so: string) => `ngữ cảnh ${so} nghìn token`,
 		khongVoiToi: (ma: string) =>
@@ -203,8 +205,10 @@ const vi = {
 		dongBaoCaoMoTa:
 			"Mọi tổng, biểu đồ và trung bình trong CRM đều tính bằng đồng này. Mỗi deal vẫn giữ đồng tiền lúc bán.",
 		baoCaoBang: "Báo cáo tổng bằng",
-		doiDuoc: "Đổi cái này thì mọi deal quy đổi lại theo tỷ giá hôm nay. Con số đã báo cáo sẽ dịch chuyển.",
-		khongDuQuyen: "Chỉ chủ sở hữu hoặc quản trị mới đổi được cách quy đổi tiền.",
+		doiDuoc:
+			"Đổi cái này thì mọi deal quy đổi lại theo tỷ giá hôm nay. Con số đã báo cáo sẽ dịch chuyển.",
+		khongDuQuyen:
+			"Chỉ chủ sở hữu hoặc quản trị mới đổi được cách quy đổi tiền.",
 		daDoi: (ma: string) => `Từ giờ mọi tổng báo cáo bằng ${ma}.`,
 		tyGia: "Tỷ giá",
 		tyGiaMoTaDau: "Một đơn vị của mỗi đồng mua được bao nhiêu",
@@ -226,7 +230,8 @@ const vi = {
 		go: "Gỡ",
 		daGo: "Đã gỡ tỷ giá.",
 		phaiLonHonKhong: "Tỷ giá phải là số lớn hơn không.",
-		chuaCoTyGia: "Chưa có tỷ giá nào. Làm mới để lấy về, hoặc tự nhập một dòng.",
+		chuaCoTyGia:
+			"Chưa có tỷ giá nào. Làm mới để lấy về, hoặc tự nhập một dòng.",
 		bangTay: "Tự nhập",
 		layVe: "Lấy về",
 		dangDung: "Đồng tiền đang dùng",

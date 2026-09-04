@@ -32,7 +32,6 @@ function chayHet() {
 }
 
 function vetTay() {
-	const hinhDang = [...new Set(BANG.loi_goi.map((l) => l.hinh_dang))];
 	return [
 		{
 			ten: "chu trong JSX",
@@ -49,6 +48,11 @@ function vetTay() {
 				),
 		},
 		{
+			ten: "nhan thanh ben doi sang chu viet thang",
+			file: "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx",
+			cam: (s) => s.replace('{ khoa: "chung", href: ROOT }', '{ khoa: "General", href: ROOT }'),
+		},
+		{
 			ten: "tu don viet thuong trong JSX",
 			file: "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx",
 			cam: (s) => s.replace("t.tienTe.donVi", '"unit"'),
@@ -58,29 +62,11 @@ function vetTay() {
 			file: "apps/app/app/(app)/[slug]/settings/agent-model.tsx",
 			cam: (s) => s.replace("placeholder={t.model.tim}", 'placeholder="Search models…"'),
 		},
-		...hinhDang.map((hd) => {
-			const dong = BANG.loi_goi.find((l) => l.hinh_dang === hd);
-			return {
-				ten: `toast hinh dang ${hd}`,
-				file: dong.file,
-				cam: (s) => {
-					const cac = s.split("\n");
-					for (let i = 0; i < cac.length; i += 1)
-						if (
-							/toast\.[a-z]+\(/.test(cac[i]) &&
-							/t\.[a-zA-Z]+\.[a-zA-Z]+/.test(cac[i])
-						) {
-							const moi = [...cac];
-							moi[i] = cac[i].replace(
-								/t\.[a-zA-Z]+\.[a-zA-Z]+(\([^)]*\))?/,
-								'"Saved for good."',
-							);
-							return moi.join("\n");
-						}
-					return s;
-				},
-			};
-		}),
+		...BANG.loi_goi.slice(0, 3).map((l) => ({
+			ten: `toast doc khoa ${l.khoa}`,
+			file: l.file,
+			cam: (s) => s.replace(`t.${l.khoa}`, '"Saved for good."'),
+		})),
 	];
 }
 

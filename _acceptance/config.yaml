@@ -97,7 +97,7 @@ executors:
     cai_dat_tieu_de: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --chan tieu-de"
     cai_dat_khong_du_quyen: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --chan khong-du-quyen"
     cai_dat_khai_sinh: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs"
-    cai_dat_dan_so_tu_dia: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs"
+    cai_dat_dan_so_tu_dia: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --chan dan-so"
     cai_dat_be_rong_do: "bash _acceptance/man-cai-dat-noi-tieng-viet/rang/be-rong-do.sh"
     cai_dat_dot_bien: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/dot-bien.mjs"
     cai_dat_hai_tieng: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/man-cai-dat-noi-tieng-viet/rang/man-that.mjs hai-tieng"

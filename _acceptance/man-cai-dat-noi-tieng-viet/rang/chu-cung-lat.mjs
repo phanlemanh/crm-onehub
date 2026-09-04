@@ -35,6 +35,8 @@ function chay() {
 const ra = chay();
 const soQuet = Number(/quet (\d+) file trong lat/.exec(ra)?.[1] ?? -1);
 
+console.log(`bo quet doc ${soQuet} file`);
+
 if (soQuet !== L.file.length) {
 	console.log(
 		`KHONG DO DUOC: lat sinh ra ${L.file.length} file nhung bo quet doc ${soQuet}. ` +

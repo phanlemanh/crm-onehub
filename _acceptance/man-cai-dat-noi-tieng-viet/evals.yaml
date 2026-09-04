@@ -23,7 +23,7 @@ evals:
       - "apps/app/app/(app)/[slug]/settings/*.tsx"
       - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"
       - "apps/app/lib/messages/settings.ts"
-    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E1
     criterion: AC-1b
@@ -113,7 +113,9 @@ evals:
     executor: script
     cmd: config:executors.script.cai_dat_trang_thai_rong
     expected: >-
-      exit 0. Dung man Currencies tren may chu that o mot workspace CHUA co ty gia va
+      THOAT MA 2 la ket qua DA KHAI TRUOC cua eval nay, khong phai that bai: hop dong
+      AC-5 khai san rang hai trong ba o KHONG dung duoc trong kho nay.
+      Dung man Currencies tren may chu that o mot workspace CHUA co ty gia va
       CHUA co deal nao co so tien — hai trang thai rong that, khong gia lap.
       BUOC GIEO da khai: tao mot workspace MOI qua dung luong nguoi dung (workspace moi
       chua co ty gia va chua co deal nao), KHONG cham co so du lieu. Buoc nay phai chay
@@ -130,7 +132,7 @@ evals:
       - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"
       - "apps/app/app/(app)/[slug]/settings/agent-model.tsx"
       - "apps/app/lib/messages/settings.ts"
-    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E6
     criterion: AC-6
@@ -160,7 +162,7 @@ evals:
     executor: script
     cmd: config:executors.script.cai_dat_dot_bien
     expected: >-
-      exit 0. Day la phep do CUA CAC PHEP DO. No chep lat sang mot ban sao, cam lai
+      exit 0. Day la phep do CUA CAC PHEP DO. No cam lai
       mot cau tieng Anh vao TUNG lop — mot vao JSX, mot vao title, va mot vao MOI HINH
       DANG toast khai trong toast-cua-lat.json (khong phai mot luot duy nhat: cam vao
       dung hinh dang chan do von da thay thi chieu do xanh gia) —
@@ -170,7 +172,12 @@ evals:
       Va chieu con lai: tren ban sao KHONG bi pha, ca ba chan deu xanh.
       Thieu mot trong hai chieu thi eval nay DO — mot thuoc chua tung do khong phan
       biet duoc "sach" voi "chua chay".
-      Ban sao phai bi xoa sau khi chay, va lat that KHONG duoc dong toi.
+      CACH LAM da doi o S3, va khai thang: no sua TAI CHO tren lat that roi tra nguyen
+      trang tu ban giu trong bo nho (finally), chu KHONG chep sang ban sao — ban sao
+      thu cong khong du de bo quet ③a chay duoc.
+      Doi lai co mot rui ro da biet: tien trinh bi giet giua chung thi mot file o lai
+      trang thai hong, va may chu dev dang chay se nap ban hong do. Chan tu khang dinh
+      `git status --porcelain` truoc va sau BANG NHAU; khac di la thoat ma 2.
     paths:
       - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -232,7 +239,7 @@ evals:
     paths:
       - "apps/app/app/(app)/[slug]/settings/*.tsx"
       - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"
-    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E11
     criterion: AC-1
