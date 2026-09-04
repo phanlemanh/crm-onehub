@@ -35,10 +35,13 @@ Source input: prompt · `_acceptance/handoff.md` (hướng đã chốt 04/09) ·
 - AC-3: Given cấu hình KHÔNG có cách đăng nhập nào (không Google, không Microsoft, không SSO), When một người đọc tiếng Việt mở `/sign-in`, Then màn "chưa có cách nào để vào" hiện tiêu đề, mô tả và đoạn hướng dẫn bằng tiếng Việt; và bốn tên biến môi trường trong đoạn đó giữ nguyên chữ hoa gốc, không bị dịch, không bị đổi dạng.
 - AC-4: Given Suspense fallback của `/sign-in` (trạng thái hiện trong lúc đang đọc cấu hình), When phép đo dựng riêng trạng thái đó, Then tiêu đề và mô tả dự phòng hiện đúng tiếng của người đọc. Phép đo phải MỞ được trạng thái này chứ không suy từ mã.
 - AC-5: Given ba nút gửi (đăng nhập, khai báo công ty, khoá nghiên cứu), When nút ở trạng thái đang gửi, Then chữ trên nút ở trạng thái đó hiện đúng tiếng của người đọc; và nút bị khoá trong lúc đang gửi.
-- AC-6: Given ba nhóm KHÔNG được dịch — dữ liệu người nhập (`provider.name` của SSO, tên workspace), định danh kỹ thuật (bốn tên biến môi trường, tiền tố `https://`, tiền tố `/`, gợi ý `acme.com`, giá trị slug), và tên riêng (Google, Microsoft, Context) — When trang dựng ở tiếng Việt, Then mỗi nhóm hiện nguyên văn như ở tiếng Anh, và phần tử chứa nó mang `translate="no"`. Một giá trị thuộc ba nhóm này mà bị dịch làm tiêu chí đỏ và gọi tên giá trị đó.
+- AC-6: Given BẢNG ĐÓNG mười ba giá trị không được dịch dưới đây, When trang dựng ở tiếng Việt, Then số giá trị quan sát được BẰNG mười ba; mỗi giá trị hiện nguyên văn giống hệt lượt tiếng Anh; và phần tử chứa nó mang `translate="no"`. Thiếu một dòng của bảng là TỪ CHỐI ĐO — thoát mã 2 và gọi tên dòng thiếu, không phải một lượt đạt. Một giá trị bị dịch làm tiêu chí đỏ và gọi tên giá trị đó.
+  Định danh kỹ thuật: (1) `GOOGLE_CLIENT_ID` (2) `GOOGLE_CLIENT_SECRET` (3) `MICROSOFT_CLIENT_ID` (4) `MICROSOFT_CLIENT_SECRET` — cả bốn trong đoạn hướng dẫn của màn chưa-có-đường; (5) tiền tố `https://` của ô website; (6) tiền tố `/` của ô địa chỉ workspace; (7) gợi ý `acme.com` của ô website.
+  Dữ liệu người nhập: (8) tên nhà cung cấp SSO trên nút; (9) giá trị người gõ trong ô tên công ty; (10) giá trị slug trong ô địa chỉ workspace; (11) gợi ý `CRM` của ô tên công ty.
+  Tên riêng: (12) `Google` và `Microsoft` trên nút đăng nhập; (13) `Context` trong nhãn và mô tả ô khoá.
 - AC-7: Given `provider.name` do người quản trị tự gõ, When nút SSO dựng ra, Then chữ trên nút ghép động từ đã dịch với tên nguyên văn — chuỗi không được đúc sẵn trong kho chuỗi thành một câu tiếng Anh trọn vẹn.
 - AC-8: Given ba trang `/sign-in`, `/onboarding`, `/onboarding/research`, When một người đọc tiếng Việt mở từng trang, Then tiêu đề tài liệu (thứ hiện trên thẻ tab trình duyệt) hiện tiếng Việt; và ở tiếng Anh hiện tiếng Anh. Tiêu đề tĩnh không đổi theo tiếng là tiêu chí đỏ.
-- AC-9: Given luật chọn tiếng ở `resolveLocale`, When một người mở cửa vào lần đầu, Then thứ tự áp dụng là cookie `lang` trước, rồi `Accept-Language`, rồi mặc định; và mặc định là `vi`. Ba lượt kiểm: có cookie `en` → ra tiếng Anh dù `Accept-Language` khai `vi`; không cookie và `Accept-Language` khai `en` → ra tiếng Anh; không cookie và không `Accept-Language` → ra tiếng Việt.
+- AC-9: Given trục C của mục Coverage khai NĂM cách chọn tiếng, When một người mở `/sign-in` qua MÁY CHỦ THẬT, Then phép đo đưa ra đúng NĂM khẳng định, mỗi ô một khẳng định, và số khẳng định bằng số ô: (1) cookie `vi` + `Accept-Language: en` → `vi`; (2) cookie `en` + `Accept-Language: vi` → `en`; (3) không cookie + `Accept-Language: vi` → `vi`; (4) không cookie + `Accept-Language: en` → `en`; (5) không cookie + không `Accept-Language` → `vi`. Mỗi khẳng định kiểm HAI vế trên lượt máy chủ trả về: thuộc tính `lang` của thẻ `html`, VÀ tiêu đề màn hiện ra đúng thứ tiếng mong đợi. Thiếu một ô là đỏ và gọi tên ô đó.
 - AC-10: Given tiếng Việt dài hơn tiếng Anh, When ba màn dựng ở tiếng Việt trên các khổ màn 768px, 1024px và 1280px, Then không chuỗi người-đọc-thấy nào bị cắt trần — bề rộng chữ thật không vượt bề rộng ô chứa nó. Riêng tiêu đề lớn trong ô `max-w-[14ch]` phải được đo bằng bề rộng dựng thật, không suy từ số ký tự.
 - AC-11: Given 8 file trong phạm vi, When bộ kiểm đọc cây cú pháp của chúng, Then không chuỗi người-đọc-thấy nào còn viết thẳng trong JSX — mọi chuỗi như vậy đến từ kho chuỗi. Chuỗi thuộc ba nhóm khai miễn ở AC-6 không tính.
 - AC-12: Given kho chuỗi mới `apps/app/lib/messages/auth.ts`, When biên dịch chạy, Then nó theo cùng khuôn `satisfies` với năm kho chuỗi anh em, để một khoá có ở tiếng Anh mà thiếu ở tiếng Việt làm biên dịch đỏ. Và mọi giá trị tiếng Việt mang ít nhất một ký tự có dấu tiếng Việt, trừ các khoá khai miễn có lý do ghi từng dòng.
@@ -102,6 +105,16 @@ nào còn viết thẳng trong JSX (AC-11).
   chân trang bên trong, 12 chỗ màn Slack, `logo.tsx`. Vòng này chỉ gỡ dòng chân
   của khung cửa vào.
 - Màn Cài đặt và phần còn lại của ứng dụng: đó là lát ③b.
+
+## Known limits
+
+- **Chuỗi lỗi do máy chủ đúc sẵn vẫn hiện tiếng Anh.** Bốn chỗ gọi
+  `toast.error(error.message)` nhận câu Better Auth và tRPC tự dựng ở máy chủ.
+  Máy chủ không biết tiếng của người gọi nên câu đó không đi theo người đọc được.
+  Sửa đúng là gửi MÃ lỗi cho client tra — vòng riêng, chạm hợp đồng tRPC.
+  AC-14 và E17 chỉ bảo chứng câu dự phòng do client tự dựng.
+- Kho chưa wire `executors.design.static` nên vòng này KHÔNG có static eval
+  per-surface; chỉ có sân thiết kế ở E16.
 
 ## Notes
 

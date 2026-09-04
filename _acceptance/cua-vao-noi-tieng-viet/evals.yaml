@@ -1,19 +1,23 @@
 schema_version: 1
 feature_slug: cua-vao-noi-tieng-viet
 evals:
+
   - id: E1
     criterion: AC-1
     executor: script
     cmd: config:executors.script.cua_vao_dang_nhap
     expected: >-
-      exit 0. Dung /sign-in hai lan tren may chu that — mot lan lang=vi, mot lan
-      lang=en — roi doc chu NGUOI DOC THAY tren man, khong doc ma nguon. Tru phan
-      giong het nhau giua hai thu tieng va tru ba nhom khai mien cua AC-6. Con lai
-      = 0 chuoi tieng Anh o luot vi.
-      Chan phai kiem du SAU cho cua khung chung: hai nhan thay-anh cua lien ket
-      logo, nhan nhom, tieu de lon, tieu de man, mo ta man.
-      Chieu do: go mot khoa bat ky trong kho chuoi ve tieng Anh tren mot ban sao
-      thi chan do va GOI TEN dung khoa do. Cap hai chieu chay tren cung fixture.
+      exit 0. Dung /sign-in hai lan tren may chu that — lang=vi va lang=en — roi doc
+      chu NGUOI DOC THAY tren man, khong doc ma nguon.
+      KHONG tru theo "giong het nhau". Voi TUNG o trong SAU o ghim — hai nhan
+      thay-anh cua lien ket logo, nhan nhom, tieu de lon, tieu de man, mo ta man —
+      khang dinh QUAN HE ba ve: chuoi luot vi KHAC chuoi luot en, VA chuoi luot vi
+      mang dau tieng Viet, VA chuoi luot en dung ban tieng Anh da ghim. So o do
+      duoc phai BANG sau.
+      Mot chuoi trung nhau giua hai luot ma khong nam trong bang dong muoi ba gia
+      tri cua AC-6 lam chan DO va in NGUYEN VAN chuoi do.
+      Chieu do: go mot khoa trong kho chuoi ve tieng Anh tren mot ban sao thi chan
+      do va GOI TEN dung khoa do. Cap hai chieu chay tren cung fixture.
     paths:
       - "apps/app/app/(landing)/sign-in/**"
       - "apps/app/components/auth-shell.tsx"
@@ -26,9 +30,11 @@ evals:
     cmd: config:executors.script.cua_vao_khai_bao
     expected: >-
       exit 0. Dung /onboarding va /onboarding/research hai lan, hai thu tieng.
-      Kiem du chin cho: ba nhan truong, hai dong mo ta truong, nhan o khoa, chu
-      goi y trong o khoa, chu tren nut gui, chu cua lien ket dang ky.
-      Con lai = 0 chuoi tieng Anh o luot vi tren ca hai man.
+      KHONG tru theo "giong het nhau". Voi TUNG o trong CHIN o ghim — ba nhan
+      truong, hai dong mo ta truong, nhan o khoa, chu goi y trong o khoa, chu tren
+      nut gui, chu cua lien ket dang ky — khang dinh QUAN HE ba ve nhu E1: vi KHAC
+      en, VA vi mang dau tieng Viet, VA en dung ban da ghim. So o do duoc BANG chin.
+      Trung nhau ngoai bang dong cua AC-6 la do, in nguyen van chuoi do.
       Chieu do: go mot khoa ve tieng Anh thi chan do va goi ten khoa do.
     paths:
       - "apps/app/app/(landing)/onboarding/**"
@@ -90,14 +96,17 @@ evals:
     executor: script
     cmd: config:executors.script.cua_vao_khong_dich
     expected: >-
-      exit 0. Dan so cua phep do SINH TU MA DANG CHAY, khong go tay: bon ten bien
-      moi truong doc tu doan huong dan, ten nha cung cap SSO doc tu may chu, ba
-      dinh danh https:// va / va acme.com doc tu DOM.
-      Voi tung gia tri: no hien NGUYEN VAN o luot vi giong luot en, VA phan tu
-      chua no tu khai translate="no". Mot gia tri bi dich, hoac mot gia tri khong
-      mang dau, deu lam chan do va GOI TEN gia tri do.
-      Dan so rong = TU CHOI DO, thoat ma 2, khong phai dat.
-      Chieu do: bo dau translate="no" o mot cho thi chan do va goi ten cho do.
+      exit 0. Bang dong MUOI BA gia tri cua AC-6 duoc viet truoc trong chinh chan do,
+      moi dong ghi gia tri va noi no hien ra. Fixture GIEO SAN mot nha cung cap SSO
+      ten khong phai ASCII va mot workspace co ten nguoi go, de hai nhom du lieu
+      nguoi nhap co dai dien that.
+      Doc xong phai khang dinh so phan tu quan sat duoc BANG muoi ba. Thieu mot dong
+      thi thoat ma 2 va GOI TEN dong thieu — dan so THIEU bi chan y het dan so RONG,
+      khong bao gio la dat.
+      Voi tung gia tri: hien NGUYEN VAN o luot vi giong luot en, VA phan tu chua no
+      tu khai translate="no".
+      Chieu do: bo dau translate="no" o mot cho thi chan do va goi ten cho do; bo
+      mot dong khoi fixture thi chan thoat ma 2 va goi ten dong do.
     paths:
       - "apps/app/app/(landing)/**"
       - "apps/app/components/auth-shell.tsx"
@@ -137,12 +146,14 @@ evals:
     executor: test
     cmd: config:executors.test.cua_vao_chon_tieng
     expected: >-
-      exit 0. Bai kiem cua resolveLocale chay du BA lo trinh: cookie en cong
-      Accept-Language vi ra "en" (cookie thang); khong cookie cong Accept-Language
-      en ra "en"; khong cookie cong khong Accept-Language ra "vi" (mac dinh moi).
-      Cong them mot khang dinh rang DEFAULT_LOCALE bang "vi".
-      Chieu do: doi DEFAULT_LOCALE ve "en" thi bai kiem do o dung khang dinh thu
-      tu, voi thong diep ghim ten hang.
+      exit 0. Bai kiem cua resolveLocale dua ra dung NAM khang dinh, mot cho moi o cua
+      truc C, va so khang dinh BANG nam: (1) cookie vi + Accept-Language en ra "vi";
+      (2) cookie en + Accept-Language vi ra "en"; (3) khong cookie + Accept-Language
+      vi ra "vi"; (4) khong cookie + Accept-Language en ra "en"; (5) khong cookie +
+      khong Accept-Language ra "vi". Cong mot khang dinh DEFAULT_LOCALE bang "vi".
+      Day la lop HAM THUAN. Ve may chu that do E18 — mot minh E9 khong du cho AC-9.
+      Chieu do: doi DEFAULT_LOCALE ve "en" thi bai kiem do o dung khang dinh thu nam,
+      voi thong diep ghim ten hang.
     paths:
       - "packages/ui/src/lib/locale.ts"
       - "apps/app/lib/locale/**"
@@ -233,6 +244,7 @@ evals:
       - evidence/E14-ba-man-vi.png
       - evidence/E14-ba-man-en.png
       - evidence/E14-chu-hien-ra.txt
+      - evidence/E14-chu-loi.txt
       - contract.md
     expected: >-
       TRUOT CUNG khi thieu bat ky dau vao nao — thieu mot dau vao thi E14 la
@@ -256,17 +268,64 @@ evals:
       - "apps/app/components/auth-shell.tsx"
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
 
+  - id: E17
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.cua_vao_loi_mang
+    expected: >-
+      exit 0. EP DUT MANG THAT o luot bam nut dang nhap (chan luot goi ra nha cung
+      cap), roi doc CHU TRONG THONG BAO NOI hien ra, o ca hai thu tieng.
+      Khang dinh quan he: chuoi luot vi KHAC chuoi luot en, VA chuoi luot vi mang
+      dau tieng Viet. Day la cau DU PHONG do client tu dung — khong phai cau may chu
+      duc san, thu do nam o Known limits.
+      Khong noi duoc thong bao, hoac khong bat duoc chu trong no, thi thoat ma 2 va
+      goi ten trang thai thieu. Tap quan sat rong khong bao gio la dat.
+      Chan nay xuat chu bat duoc ra evidence/E14-chu-loi.txt lam dau vao bat buoc
+      cua E14 — thieu no thi E14 la BLOCKED.
+      Chieu do: go cau du phong ve tieng Anh thi chan do va in nguyen van cau do.
+    paths:
+      - "apps/app/app/(landing)/sign-in/**"
+      - "apps/app/lib/messages/auth.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E18
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.cua_vao_chon_tieng_may_chu
+    expected: >-
+      exit 0. Ba luot yeu cau THAT toi /sign-in qua may chu dang chay, khong goi ham
+      thuan: (1) khong cookie va khong Accept-Language; (2) khong cookie va
+      Accept-Language vi; (3) cookie lang=vi va Accept-Language en.
+      Moi luot khang dinh HAI ve tren chinh luot tra ve: thuoc tinh lang cua the html
+      dung thu tieng mong doi, VA tieu de man hien ra dung thu tieng do. Mot ve dung
+      mot ve sai van la do.
+      Luot (3) la o ma E9 mot minh khong cham toi: no chung minh cookie THANG
+      Accept-Language tren duong that.
+      Chieu do: doi thu tu uu tien trong resolveLocale cho Accept-Language thang
+      cookie thi luot (3) do va goi ten o do.
+    paths:
+      - "packages/ui/src/lib/locale.ts"
+      - "apps/app/lib/locale/**"
+      - "apps/app/app/layout.tsx"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
   - id: E15
-    criterion: AC-1
+    criterion: AC-11
     executor: script
     cmd: config:executors.script.cua_vao_khai_sinh
     expected: >-
-      exit 0. So khai sinh chay CA HAI CHIEU cua TUNG chan trong danh sach chan
-      cua vong nay, ngay trong luot chay do: chieu lanh phai im, chieu bi pha phai
-      do voi dung thong diep da ghim. Bang ket qua co dung so dong bang so chan.
-      Mot chan khong chay duoc vi ha tang lam bo kiem TU CHOI DO va goi ten chan
-      do; no khong bao gio la mot luot dat.
-      Day la thu vong ③a phai mo mot vong rieng moi co — vong nay co no tu dau.
+      exit 0. DANH SACH DONG cac muc khai sinh duoc viet truoc ngay trong file nay,
+      N = 15: cua-vao.mjs voi muoi hai chan (dang-nhap, khai-bao, khong-co-duong,
+      trang-thai-tam, dang-gui, khong-dich, ten-sso, tieu-de-tai-lieu, be-rong,
+      chan-trang, loi-mang, chon-tieng-may-chu), cong chu-cung-jsx.mjs, cong hai bai
+      kiem locale-resolve.spec.ts va auth-messages.spec.ts.
+      So khai sinh chay CA HAI CHIEU cua TUNG muc trong danh sach do ngay trong luot
+      chay: chieu lanh phai im, chieu bi pha phai do voi dung thong diep da ghim.
+      Bang ket qua phai co dung N dong VA ten tung dong khop danh sach. KHONG duoc
+      suy dan so tu viec quet thu muc rang/ — dan so suy tu chinh thu muc no sap doc
+      la mot dang thuc tu thoa.
+      Thieu mot muc, hoac ha tang lam mot muc khong chay duoc, thi thoat ma 2 va goi
+      ten muc do; khong bao gio la mot luot dat.
     paths:
       - "_acceptance/cua-vao-noi-tieng-viet/rang/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
