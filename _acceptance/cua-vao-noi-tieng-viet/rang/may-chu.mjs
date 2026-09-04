@@ -35,7 +35,7 @@ export async function khoChuoi() {
 			"-e",
 			'const { authMessages } = await import("./apps/app/lib/messages/auth.ts");' +
 				'const MAU = "Đất Xanh";' +
-				'const phang = (o) => Object.fromEntries(Object.entries(o).map(([k, v]) => [' +
+				"const phang = (o) => Object.fromEntries(Object.entries(o).map(([k, v]) => [" +
 				'k, v instanceof Function ? v(MAU) : v && typeof v === "object" ? phang(v) : v]));' +
 				'console.log(JSON.stringify({ vi: phang(authMessages("vi")), en: phang(authMessages("en")), mau: MAU }))',
 		],

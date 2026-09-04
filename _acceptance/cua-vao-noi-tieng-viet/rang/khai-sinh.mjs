@@ -24,13 +24,8 @@ const DANH_SACH = [
 	CHAN("loi-mang"),
 	CHAN("chon-tieng-may-chu"),
 	{
-		muc: "chu-cung-jsx.mjs --lat lat-cua-vao.json",
-		chay: () =>
-			chayNode([
-				`${GOC}/_acceptance/nhan-ung-dung-noi-tieng-viet/rang/chu-cung-jsx.mjs`,
-				"--lat",
-				`${HERE}/lat-cua-vao.json`,
-			]),
+		muc: "chu-cung-lat.mjs",
+		chay: () => chayNode([`${HERE}/chu-cung-lat.mjs`]),
 	},
 	{
 		muc: "test/locale-resolve.spec.ts",

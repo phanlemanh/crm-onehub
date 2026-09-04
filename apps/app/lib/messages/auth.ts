@@ -10,6 +10,7 @@ const en = {
 		signIn: "Sign in",
 		onboarding: "Set up",
 		research: "Research key",
+		grantAccess: "Grant access",
 	},
 	signIn: {
 		title: "Welcome back",
@@ -40,6 +41,16 @@ const en = {
 		submit: "Continue",
 		submitting: "Saving…",
 	},
+	grantAccess: {
+		title: "One more step",
+		google:
+			"This CRM reads your Gmail and Calendar so meetings and email threads show up on the right company. It is read-only — nothing is ever sent on your behalf.",
+		microsoft:
+			"This CRM reads your Outlook mail so email threads show up on the right company. It is read-only — nothing is ever sent on your behalf.",
+		both: "This CRM reads your mail and calendar so meetings and email threads show up on the right company. It is read-only — nothing is ever sent on your behalf.",
+		privacy:
+			"Only conversations with companies in the CRM are stored. Personal mail is discarded without being saved.",
+	},
 	research: {
 		title: "Level up your CRM data",
 		description:
@@ -65,6 +76,7 @@ const vi = {
 		signIn: "Đăng nhập",
 		onboarding: "Khai báo",
 		research: "Khoá nghiên cứu",
+		grantAccess: "Cấp quyền",
 	},
 	signIn: {
 		title: "Mừng bạn quay lại",
@@ -94,6 +106,16 @@ const vi = {
 		websiteHint: "Đọc một lần, để mọi câu trả lời sau đó biết bạn bán gì.",
 		submit: "Tiếp tục",
 		submitting: "Đang lưu…",
+	},
+	grantAccess: {
+		title: "Còn một bước nữa",
+		google:
+			"CRM đọc Gmail và Lịch của bạn để cuộc họp và luồng thư hiện đúng ở công ty tương ứng. Chỉ đọc — không bao giờ gửi gì thay bạn.",
+		microsoft:
+			"CRM đọc thư Outlook của bạn để luồng thư hiện đúng ở công ty tương ứng. Chỉ đọc — không bao giờ gửi gì thay bạn.",
+		both: "CRM đọc thư và lịch của bạn để cuộc họp và luồng thư hiện đúng ở công ty tương ứng. Chỉ đọc — không bao giờ gửi gì thay bạn.",
+		privacy:
+			"Chỉ lưu trao đổi với các công ty có trong CRM. Thư cá nhân bị bỏ đi, không lưu lại.",
 	},
 	research: {
 		title: "Làm dày dữ liệu CRM của bạn",

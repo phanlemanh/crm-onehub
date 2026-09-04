@@ -1,15 +1,12 @@
 import type { Metadata } from "next";
-import {
-	AuthHeading,
-	AuthShell,
-	tiengCuaNguoiDoc,
-} from "@/components/auth-shell";
+import { AuthHeading, AuthShell } from "@/components/auth-shell";
+import { getLocale } from "@/lib/locale/server";
 import { authMessages } from "@/lib/messages/auth";
 import { requireMailboxAccess } from "@/lib/session";
 import { ResearchForm } from "./research-form";
 
 export async function generateMetadata(): Promise<Metadata> {
-	return { title: authMessages(await tiengCuaNguoiDoc()).docTitle.research };
+	return { title: authMessages(await getLocale()).docTitle.research };
 }
 
 export const instant = false;
@@ -17,24 +14,13 @@ export const instant = false;
 export default async function ResearchKeyPage() {
 	await requireMailboxAccess();
 
-	const m = authMessages(await tiengCuaNguoiDoc()).research;
+	const m = authMessages(await getLocale()).research;
 
 	return (
 		<AuthShell>
 			<AuthHeading title={m.title} description={m.description} />
 
-			<ResearchForm
-				nhan={{
-					title: m.title,
-					description: m.description,
-					label: m.label,
-					placeholder: m.placeholder,
-					noKey: m.noKey,
-					signUp: m.signUp,
-					submit: m.submit,
-					submitting: m.submitting,
-				}}
-			/>
+			<ResearchForm />
 		</AuthShell>
 	);
 }

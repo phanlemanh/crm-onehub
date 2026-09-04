@@ -28,14 +28,19 @@ export function SsoSignIn({
 
 		const origin = window.location.origin;
 
-		const { error } = await signIn.sso({
-			providerId,
-			callbackURL: `${origin}/`,
-			errorCallbackURL: `${origin}/sign-in`,
-		});
+		try {
+			const { error } = await signIn.sso({
+				providerId,
+				callbackURL: `${origin}/`,
+				errorCallbackURL: `${origin}/sign-in`,
+			});
 
-		if (error) {
-			toast.error(error.message ?? loi);
+			if (error) {
+				toast.error(error.message ?? loi);
+				setPending(null);
+			}
+		} catch {
+			toast.error(loi);
 			setPending(null);
 		}
 	}

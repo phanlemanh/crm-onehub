@@ -18,6 +18,10 @@ amended_by:
 
 ## Context
 
+**Sửa ở vòng 1 (04/09):** cửa vào có BỐN màn, không phải ba. Màn `grant-access`
+dùng chung khung `AuthShell` nên nó nằm trong cùng luồng; lượt soi độc lập tìm
+ra nó khi khung đã nói tiếng Việt còn thân màn thì chưa. Nay nó trong phạm vi.
+
 Màn đăng nhập và màn khai báo là hai màn ĐẦU TIÊN một nhân viên OneHub nhìn thấy,
 và cả hai vẫn tiếng Anh. Chúng nằm ngoài mọi lát đã khoanh: vòng ③a khoanh 96 file
 của ba luồng bên trong ứng dụng, không đụng `(landing)`.
@@ -46,7 +50,7 @@ Source input: prompt · `_acceptance/handoff.md` (hướng đã chốt 04/09) ·
 - AC-8: Given ba trang `/sign-in`, `/onboarding`, `/onboarding/research`, When một người đọc tiếng Việt mở từng trang, Then tiêu đề tài liệu (thứ hiện trên thẻ tab trình duyệt) hiện tiếng Việt; và ở tiếng Anh hiện tiếng Anh. Tiêu đề tĩnh không đổi theo tiếng là tiêu chí đỏ.
 - AC-9: Given trục C của mục Coverage khai NĂM cách chọn tiếng, When một người mở `/sign-in` qua MÁY CHỦ THẬT, Then phép đo đưa ra đúng NĂM khẳng định, mỗi ô một khẳng định, và số khẳng định bằng số ô: (1) cookie `vi` + `Accept-Language: en` → `vi`; (2) cookie `en` + `Accept-Language: vi` → `en`; (3) không cookie + `Accept-Language: vi` → `vi`; (4) không cookie + `Accept-Language: en` → `en`; (5) không cookie + không `Accept-Language` → `vi`. Mỗi khẳng định kiểm HAI vế trên lượt máy chủ trả về: thuộc tính `lang` của thẻ `html`, VÀ tiêu đề màn hiện ra đúng thứ tiếng mong đợi. Thiếu một ô là đỏ và gọi tên ô đó.
 - AC-10: Given tiếng Việt dài hơn tiếng Anh, When ba màn dựng ở tiếng Việt trên các khổ màn 768px, 1024px và 1280px, Then không chuỗi người-đọc-thấy nào bị cắt trần — bề rộng chữ thật không vượt bề rộng ô chứa nó. Riêng tiêu đề lớn trong ô `max-w-[14ch]` phải được đo bằng bề rộng dựng thật, không suy từ số ký tự.
-- AC-11: Given 8 file trong phạm vi, When bộ kiểm đọc cây cú pháp của chúng, Then không chuỗi người-đọc-thấy nào còn viết thẳng trong JSX — mọi chuỗi như vậy đến từ kho chuỗi. Chuỗi thuộc ba nhóm khai miễn ở AC-6 không tính.
+- AC-11: Given 9 file trong phạm vi (bốn màn của cửa vào cộng khung dùng chung), When bộ kiểm đọc cây cú pháp của chúng, Then không chuỗi người-đọc-thấy nào còn viết thẳng trong JSX — mọi chuỗi như vậy đến từ kho chuỗi. Chuỗi thuộc ba nhóm khai miễn ở AC-6 không tính.
 - AC-12: Given kho chuỗi mới `apps/app/lib/messages/auth.ts`, When biên dịch chạy, Then nó theo cùng khuôn `satisfies` với năm kho chuỗi anh em, để một khoá có ở tiếng Anh mà thiếu ở tiếng Việt làm biên dịch đỏ. Và mọi giá trị tiếng Việt mang ít nhất một ký tự có dấu tiếng Việt, trừ các khoá khai miễn có lý do ghi từng dòng.
 - AC-13: Given dòng chân "Made with love by Comp AI" và liên kết `trycomp.ai`, When bất kỳ màn nào của cửa vào dựng ra, Then cả chữ lẫn liên kết KHÔNG còn trên màn ở cả hai thứ tiếng; và file `LICENSE` ở gốc kho không đổi.
 - AC-14: Given người đọc tiếng Việt gặp lỗi mạng khi bấm một nút đăng nhập, When client tự dựng câu báo lỗi dự phòng, Then câu đó hiện tiếng Việt. Câu lỗi do máy chủ đúc sẵn nằm NGOÀI tiêu chí này — xem Known limits. (judgment)
@@ -102,8 +106,7 @@ nào còn viết thẳng trong JSX (AC-11).
 - Chuỗi lỗi do máy chủ đúc sẵn (`error.message` của Better Auth và tRPC ở bốn chỗ
   gọi `toast.error`). Máy chủ không biết tiếng của người gọi nên câu đó không đi
   theo người đọc được. Vòng này chỉ dịch câu dự phòng của client.
-- Trang chủ `/` và các trang lỗi của `(landing)`. Không nằm trong hai luồng cửa
-  vào.
+- Trang chủ `/` và các trang lỗi của `(landing)`. Không nằm trong luồng cửa vào.
 - Nhãn "Comp AI" ở những chỗ KHÁC ngoài khung cửa vào — tiêu đề tab của ứng dụng,
   chân trang bên trong, 12 chỗ màn Slack, `logo.tsx`. Vòng này chỉ gỡ dòng chân
   của khung cửa vào.

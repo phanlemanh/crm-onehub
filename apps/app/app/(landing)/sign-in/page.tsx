@@ -2,11 +2,8 @@ import type { MailboxProviderId } from "@crm/auth/scopes";
 import type { Metadata } from "next";
 import { redirect, unstable_rethrow } from "next/navigation";
 import { Suspense } from "react";
-import {
-	AuthHeading,
-	AuthShell,
-	tiengCuaNguoiDoc,
-} from "@/components/auth-shell";
+import { AuthHeading, AuthShell } from "@/components/auth-shell";
+import { getLocale } from "@/lib/locale/server";
 import { authMessages } from "@/lib/messages/auth";
 import { getSession } from "@/lib/session";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
@@ -30,7 +27,7 @@ type SignInOptions = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-	return { title: authMessages(await tiengCuaNguoiDoc()).docTitle.signIn };
+	return { title: authMessages(await getLocale()).docTitle.signIn };
 }
 
 async function signInOptions(): Promise<SignInOptions | null> {
@@ -58,7 +55,7 @@ async function currentSession() {
 export default async function SignInPage({
 	searchParams,
 }: PageProps<"/sign-in">) {
-	const m = authMessages(await tiengCuaNguoiDoc()).signIn;
+	const m = authMessages(await getLocale()).signIn;
 
 	return (
 		<AuthShell>
@@ -78,7 +75,7 @@ async function SignIn({
 		currentSession(),
 		signInOptions(),
 		searchParams,
-		tiengCuaNguoiDoc(),
+		getLocale(),
 	]);
 
 	if (session) {

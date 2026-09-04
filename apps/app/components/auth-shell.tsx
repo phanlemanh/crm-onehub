@@ -1,22 +1,12 @@
 import Logo from "@crm/ui/components/logo";
-import { cookies, headers } from "next/headers";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { AuthShader } from "@/components/auth-shader";
-import { LANG_COOKIE } from "@/lib/locale/locale";
-import { resolveLocale } from "@/lib/locale/resolve";
+import { getLocale } from "@/lib/locale/server";
 import { authMessages } from "@/lib/messages/auth";
 
-export async function tiengCuaNguoiDoc() {
-	const [cookieStore, headerList] = await Promise.all([cookies(), headers()]);
-	return resolveLocale(
-		cookieStore.get(LANG_COOKIE)?.value,
-		headerList.get("accept-language") ?? undefined,
-	);
-}
-
 export async function AuthShell({ children }: { children: ReactNode }) {
-	const m = authMessages(await tiengCuaNguoiDoc()).shell;
+	const m = authMessages(await getLocale()).shell;
 
 	return (
 		<main className="dark grid min-h-svh bg-background text-foreground lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)]">
@@ -64,7 +54,7 @@ export async function AuthHeading({
 	title: string;
 	description: ReactNode;
 }) {
-	const m = authMessages(await tiengCuaNguoiDoc()).shell;
+	const m = authMessages(await getLocale()).shell;
 
 	return (
 		<div className="flex flex-col gap-3 text-left">

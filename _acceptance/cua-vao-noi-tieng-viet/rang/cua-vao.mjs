@@ -502,13 +502,11 @@ if (chan === "dang-gui") {
 				await new Promise((r) => setTimeout(r, 1200));
 				const chu = await b.evaluate((e) => e.innerText.trim());
 				const khoa = await b.evaluate((e) => e.disabled === true);
-				const mong = hienRa(
-					lay(
-						KHO[t],
-						nut.duong === "/sign-in"
-							? "signIn.signingIn"
-							: "onboarding.submitting",
-					),
+				const mong = lay(
+					KHO[t],
+					nut.duong === "/sign-in"
+						? "signIn.signingIn"
+						: "onboarding.submitting",
 				);
 				if (!chu.includes(mong))
 					loi.push(

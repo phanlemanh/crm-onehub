@@ -183,8 +183,12 @@ evals:
     executor: script
     cmd: config:executors.script.cua_vao_chu_cung_jsx
     expected: >-
-      exit 0. Doc CAY CU PHAP cua 8 file trong pham vi va tim chuoi nguoi-doc-thay
-      viet thang vao JSX. Ket qua = 0 cho.
+      exit 0. Doc CAY CU PHAP cua 9 file trong pham vi va tim chuoi nguoi-doc-thay
+      viet thang vao JSX. Ket qua = 0 cho ngoai ban khai mien tru cua lat.
+      Chan phai khang dinh so file bo quet THUC SU doc BANG so file lat khai —
+      vong 1 xanh gia vi co "--lat" khong phai co ma bo quet hieu, nen no quet
+      dung file JSON do va bao 0 cho.
+      Mot dong mien tru khong con doi tuong that cung lam chan DO.
       Chan nay CHI DOC MA nen no khong bao gio du mot minh — no bat huong "chu cung
       trong JSX", con huong "chu that hien ra" do E1 den E5 bat. Hai huong cua cung
       mot lo.

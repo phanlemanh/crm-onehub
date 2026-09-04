@@ -49,18 +49,11 @@ try {
 		timeout: 30000,
 	});
 	await new Promise((r) => setTimeout(r, 500));
-	const htmlLang = await page.evaluate(
-		() => document.documentElement.lang,
-	);
+	const htmlLang = await page.evaluate(() => document.documentElement.lang);
 	await page.screenshot({ path: outPng, fullPage: true });
 	const html = await page
 		.content()
-		.then((h) =>
-			h.replace(
-				/<head([^>]*)>/i,
-				`<head$1><base href="${APP}/">`,
-			),
-		);
+		.then((h) => h.replace(/<head([^>]*)>/i, `<head$1><base href="${APP}/">`));
 	writeFileSync(outHtml, html, "utf8");
 	console.log(`saved ${outPng} and ${outHtml} (lang=${htmlLang})`);
 } finally {

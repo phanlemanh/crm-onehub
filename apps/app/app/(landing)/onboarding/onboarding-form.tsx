@@ -15,21 +15,17 @@ import {
 	InputGroupInput,
 	InputGroupText,
 } from "@crm/ui/components/input-group";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useId, useRef, useState } from "react";
 import { toast } from "sonner";
-import type { AuthMessages } from "@/lib/messages/auth";
+import { authMessages } from "@/lib/messages/auth";
 import { useTRPC } from "@/lib/trpc/client";
 
-export function OnboardingForm({
-	placeholder,
-	nhan,
-}: {
-	placeholder: string;
-	nhan: AuthMessages["onboarding"];
-}) {
+export function OnboardingForm({ placeholder }: { placeholder: string }) {
+	const nhan = authMessages(useLocale()).onboarding;
 	const trpc = useTRPC();
 	const router = useRouter();
 

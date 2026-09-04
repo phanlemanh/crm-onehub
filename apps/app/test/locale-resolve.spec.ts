@@ -19,6 +19,14 @@ describe("luat chon tieng", () => {
 		expect(O.length).toBe(5);
 	});
 
+	it("trinh duyet xep hang: en dung truoc vi thi ra en", () => {
+		expect(resolveLocale(undefined, "vi;q=0.3,en;q=0.9")).toBe("en");
+	});
+
+	it("cookie hong thi roi ve mac dinh, khong roi tiep xuong header", () => {
+		expect(resolveLocale("zz-ZZ-nonsense", "vi-VN")).toBe(DEFAULT_LOCALE);
+	});
+
 	for (const [ten, cookie, header, mong] of O) {
 		it(ten, () => {
 			expect(resolveLocale(cookie, header)).toBe(mong);

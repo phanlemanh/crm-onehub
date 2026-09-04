@@ -31,7 +31,7 @@ executors:
     cua_vao_tieu_de_tai_lieu: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs tieu-de-tai-lieu"
     cua_vao_be_rong: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs be-rong"
     cua_vao_chan_trang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chan-trang"
-    cua_vao_chu_cung_jsx: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/chu-cung-jsx.mjs --lat _acceptance/cua-vao-noi-tieng-viet/rang/lat-cua-vao.json"
+    cua_vao_chu_cung_jsx: "node _acceptance/cua-vao-noi-tieng-viet/rang/chu-cung-lat.mjs"
     cua_vao_khai_sinh: "node _acceptance/cua-vao-noi-tieng-viet/rang/khai-sinh.mjs"
     product_map: "node ${CLAUDE_PLUGIN_ROOT}/scripts/product-map.mjs --root . --check"
     db_test: "bun run db:test"
