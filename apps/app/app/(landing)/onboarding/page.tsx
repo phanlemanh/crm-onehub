@@ -1,26 +1,43 @@
 import { DEFAULT_WORKSPACE_NAME } from "@crm/auth";
 import type { Metadata } from "next";
-import { AuthHeading, AuthShell } from "@/components/auth-shell";
+import {
+	AuthHeading,
+	AuthShell,
+	tiengCuaNguoiDoc,
+} from "@/components/auth-shell";
+import { authMessages } from "@/lib/messages/auth";
 import { requireMailboxAccess } from "@/lib/session";
 import { OnboardingForm } from "./onboarding-form";
 
-export const metadata: Metadata = {
-	title: "Set up",
-};
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: authMessages(await tiengCuaNguoiDoc()).docTitle.onboarding };
+}
 
 export const instant = false;
 
 export default async function OnboardingPage() {
 	await requireMailboxAccess();
 
+	const m = authMessages(await tiengCuaNguoiDoc()).onboarding;
+
 	return (
 		<AuthShell>
-			<AuthHeading
-				title="Tell us about your company"
-				description="Two things, once. The name is what the CRM calls you; the website is how the agent learns what you sell."
-			/>
+			<AuthHeading title={m.title} description={m.description} />
 
-			<OnboardingForm placeholder={DEFAULT_WORKSPACE_NAME} />
+			<OnboardingForm
+				placeholder={DEFAULT_WORKSPACE_NAME}
+				nhan={{
+					title: m.title,
+					description: m.description,
+					name: m.name,
+					slug: m.slug,
+					slugHint: m.slugHint,
+					website: m.website,
+					websiteHint: m.websiteHint,
+					submit: m.submit,
+					submitting: m.submitting,
+				}}
+			/>
 		</AuthShell>
 	);
 }

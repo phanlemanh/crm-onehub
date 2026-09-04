@@ -20,9 +20,16 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useId, useRef, useState } from "react";
 import { toast } from "sonner";
+import type { AuthMessages } from "@/lib/messages/auth";
 import { useTRPC } from "@/lib/trpc/client";
 
-export function OnboardingForm({ placeholder }: { placeholder: string }) {
+export function OnboardingForm({
+	placeholder,
+	nhan,
+}: {
+	placeholder: string;
+	nhan: AuthMessages["onboarding"];
+}) {
 	const trpc = useTRPC();
 	const router = useRouter();
 
@@ -60,7 +67,7 @@ export function OnboardingForm({ placeholder }: { placeholder: string }) {
 		>
 			<FieldGroup>
 				<Field>
-					<FieldLabel htmlFor={nameId}>Company name</FieldLabel>
+					<FieldLabel htmlFor={nameId}>{nhan.name}</FieldLabel>
 					<Input
 						id={nameId}
 						name="name"
@@ -71,6 +78,7 @@ export function OnboardingForm({ placeholder }: { placeholder: string }) {
 							if (!slugEdited.current) setSlug(workspaceSlug(next));
 						}}
 						placeholder={placeholder}
+						translate="no"
 						autoComplete="organization"
 						autoFocus
 						required
@@ -78,10 +86,10 @@ export function OnboardingForm({ placeholder }: { placeholder: string }) {
 				</Field>
 
 				<Field>
-					<FieldLabel htmlFor={slugId}>Workspace URL</FieldLabel>
+					<FieldLabel htmlFor={slugId}>{nhan.slug}</FieldLabel>
 					<InputGroup>
 						<InputGroupAddon>
-							<InputGroupText>/</InputGroupText>
+							<InputGroupText translate="no">/</InputGroupText>
 						</InputGroupAddon>
 						<InputGroupInput
 							id={slugId}
@@ -95,6 +103,7 @@ export function OnboardingForm({ placeholder }: { placeholder: string }) {
 								setSlug((value) => (value ? workspaceSlug(value) : ""))
 							}
 							placeholder={workspaceSlug(placeholder)}
+							translate="no"
 							autoComplete="off"
 							autoCapitalize="off"
 							autoCorrect="off"
@@ -102,21 +111,20 @@ export function OnboardingForm({ placeholder }: { placeholder: string }) {
 							required
 						/>
 					</InputGroup>
-					<FieldDescription>
-						Your team will use this address to open the CRM.
-					</FieldDescription>
+					<FieldDescription>{nhan.slugHint}</FieldDescription>
 				</Field>
 
 				<Field>
-					<FieldLabel htmlFor={websiteId}>Website</FieldLabel>
+					<FieldLabel htmlFor={websiteId}>{nhan.website}</FieldLabel>
 					<InputGroup>
 						<InputGroupAddon>
-							<InputGroupText>https://</InputGroupText>
+							<InputGroupText translate="no">https://</InputGroupText>
 						</InputGroupAddon>
 						<InputGroupInput
 							id={websiteId}
 							name="website"
 							placeholder="acme.com"
+							translate="no"
 							autoComplete="off"
 							autoCapitalize="off"
 							autoCorrect="off"
@@ -125,15 +133,13 @@ export function OnboardingForm({ placeholder }: { placeholder: string }) {
 							required
 						/>
 					</InputGroup>
-					<FieldDescription>
-						Read once, so every answer afterwards knows what you sell.
-					</FieldDescription>
+					<FieldDescription>{nhan.websiteHint}</FieldDescription>
 				</Field>
 			</FieldGroup>
 
 			<Button type="submit" disabled={save.isPending}>
 				{save.isPending ? <Spinner data-icon="inline-start" /> : null}
-				Continue
+				{save.isPending ? nhan.submitting : nhan.submit}
 			</Button>
 		</form>
 	);
