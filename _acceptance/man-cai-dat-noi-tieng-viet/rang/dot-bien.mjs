@@ -78,6 +78,15 @@ function vetTay() {
 			file: "apps/app/app/(app)/[slug]/settings/agent-model.tsx",
 			cam: (s) => s.replace("placeholder={t.model.tim}", 'placeholder="Search models…"'),
 		},
+		{
+			ten: "toast giu khoa nhung them chuoi Anh trong cung loi goi",
+			file: "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx",
+			cam: (s) =>
+				s.replace(
+					"toast.success(t.tienTe.daGo);",
+					'toast.success(t.tienTe.daGo, { description: "Removed from the list." });',
+				),
+		},
 		...BANG.loi_goi.slice(0, 3).map((l) => ({
 			ten: `toast doc khoa ${l.khoa}`,
 			file: l.file,
