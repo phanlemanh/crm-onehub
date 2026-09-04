@@ -1,37 +1,80 @@
 # Handoff — nhánh `onehub`
 
-Viết lại rạng sáng **2026-09-04**. Phiên trước dựng xong môi trường chạy được:
-đăng nhập Google, khoá model, tác nhân, khoá cron, kho ảnh, tỷ giá thật. Rồi
-quay lại lát ③a và tìm ra rằng thứ làm nó đỏ mấy vòng liền **không phải lỗi sản
-phẩm**.
+Viết lại sáng **2026-09-04**. Phiên này gộp lại các dòng đã rẽ, và nhận một
+**hướng mới từ người** làm đổi trọng số của gần như mọi thứ còn treo.
 
-Đọc ba mục trước khi làm bất cứ việc gì: "Đứng ở cây nào", "Bẫy", và "Lớp lỗi
-không thước nào bắt".
+Đọc ba mục trước khi làm bất cứ việc gì: "Hướng đã chốt", "Đứng ở cây nào",
+và "Bẫy".
+
+## Hướng đã chốt — 2026-09-04
+
+**Việt hoá nhanh, rồi triển khai cho đội OneHub dùng.** Sản phẩm nội bộ. Khi
+phải chọn, chọn về phía **dọn dẹp · mở · nội bộ** — không phải về phía chặt hơn.
+
+Bốn quyết định của người trong lượt này, và cái giá của mỗi cái:
+
+| Chỗ | Người chọn | Nghĩa là |
+| --- | --- | --- |
+| Vòng `thuoc-cua-lat-3a-co-rang` | **Dừng ở 12/14**, khai giới hạn | E11 (bị công cụ giết ở mốc 600 giây) và E13 (hội đồng đề nghị FAIL) thành **giới hạn đã khai**, không phải việc phải đóng. Đủ chặt cho một công cụ nội bộ |
+| Vòng ① — E9 | **Chấp nhận** cắt kèm ba chấm | AC-7 của vòng ② thắng AC-9 của vòng ①. Căn cứ: 0 chỗ cắt trần, và tiếng Anh cùng khổ cũng cắt |
+| Vòng ① — E12 | **Chấp nhận** mười nhãn cột như đang có | Không chạy vòng sửa chữ thứ ba. Nhãn đưa ra cho đội dùng, chính họ nói lại ở Cổng Giá trị |
+| Đợt tới | Bốn việc, theo thứ tự dưới | Dồn sang **chữ trên màn**, không dồn thêm vào giàn đo |
+
+Hệ quả cho phiên sau: **đừng mở thêm vòng nào có chủ ngữ là giàn đo.** Giàn đo
+đã đủ dùng. Mọi vòng mới phải đưa thêm chữ tiếng Việt ra trước mắt một nhân viên.
 
 ## Đứng ở cây nào — đọc mục này trước
 
-Ba cây, và chúng nhích khác nhau **trong cùng một phiên**:
+Sáng 04/09 có **ba phiên máy chạy cùng lúc** trên cùng một kho, và ba dòng đã rẽ
+nhau trong đêm. Đã gộp một, còn một.
 
-| Cây | Nhánh | Vai |
+| Cây | Nhánh | Trạng thái |
 | --- | --- | --- |
 | `/Users/manhphan/dev/crm` | `onehub` | Kho gốc. **Máy chủ dev 3000/3001/2000 chạy từ đây.** `.env` chỉ sống ở đây |
-| `.claude/worktrees/exciting-tharp-571c02` | `claude/elated-ptolemy-dc8eb1` | Cây làm việc của phiên |
+| `.claude/worktrees/exciting-tharp-571c02` | `claude/elated-ptolemy-dc8eb1` | **Đã gộp** vào `onehub` ở `3b27b44`, gộp sạch |
+| `.claude/worktrees/sweet-leavitt-d88e70` | `claude/sweet-leavitt-d88e70` | **Chưa gộp.** Giữ trọn vòng `thuoc-cua-lat-3a-co-rang`. Đã nhắn phiên đó chốt việc |
 | `/private/var/…/agk-baseline` | detached | Cây nền của bộ kit, đừng đụng |
 
-**Trong phiên 2026-09-03 có ít nhất hai phiên máy cùng commit vào `onehub`.** Nó
-đi từ `7c2e498` lên `dbc8e37` trong lúc phiên này làm việc ở worktree. Hai commit
-đó (`dc70600`, `dbc8e37`) không đụng file nào phiên này sửa, nhưng lần sau không
-chắc may thế.
+Khi gộp nốt `sweet-leavitt`: chỉ **một file** đụng nhau,
+`_acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs`, **4 cụm**. Ba cụm là
+cộng thêm hai bên (dòng `import`, và hai chỗ dùng `KHONG_DOI`) — ghép là xong.
+Cụm thứ tư ở đoạn đếm bề mặt (~dòng 727) khác luồng điều khiển: nhánh sweet thêm
+"không tìm thấy khung màn thì thoát mã 2" (AC-2), `onehub` thêm phần báo cáo độ
+lệch bản khai (AC-6). **Giữ cả hai.**
 
-**Bản vá `68bb5f8` mới nhất CHƯA lên `onehub`** — nó nằm trên nhánh worktree.
-Việc đầu tiên của phiên sau là quyết đưa nó sang, hoặc rebase worktree lên
-`dbc8e37`.
+Dây lùi đã đặt: `luu-onehub-2026-09-04` · `luu-elated-2026-09-04` ·
+`luu-sweet-2026-09-04`.
 
-`onehub` giờ hơn `origin` **82 commit**. Chưa ai đẩy. Đừng đẩy khi chưa hỏi.
+**`onehub` ĐÃ đẩy lên `origin`** lúc 05:00 sáng 04/09 (`ecae119`). Bản handoff
+trước nói "hơn origin 82 commit, chưa ai đẩy" — sai. Lượt gộp `3b27b44` thì chưa
+đẩy.
 
-Luật: `git worktree list`, rồi xem máy chủ dev chạy từ thư mục nào, **trước khi
-tin handoff hay tin một con số**. Bản handoff mới nhất có thể không nằm trên
-nhánh mình đang đứng.
+Luật, và lần này nó có giá thật: **`git worktree list`, `ListAgents`, rồi xem máy
+chủ dev chạy từ thư mục nào — trước khi tin handoff hay tin một con số.** Ngày
+03/09 mất một buổi vì hai phiên cùng dịch một bộ chuỗi. Ngày 04/09 suýt lặp lại
+với ba phiên. Nếu bạn thấy một phiên khác đang mở trên cây mình định gộp, **nhắn
+nó trước**, đừng gộp đè.
+
+## Đợt tới — bốn việc, người đã chọn cả bốn
+
+1. **Màn đăng nhập + màn khai báo.** Hai màn ĐẦU TIÊN một nhân viên mới nhìn
+   thấy, và cả hai vẫn tiếng Anh. Chúng nằm **ngoài mọi lát đã khoanh** — không
+   vòng nào đang phủ. Triển khai nội bộ mà cửa vào còn tiếng Anh thì công dịch
+   bên trong mất một nửa ý nghĩa.
+2. **Đổi nhãn "Comp AI" thành OneHub.** ~20 chỗ người đọc được: tiêu đề mọi tab,
+   chân trang, khung đăng nhập, 12 chỗ màn Slack, và `logo.tsx:10` mang
+   `aria-label="Comp AI Logo"`. Chạm cùng nhóm file với mục 1 — làm chung một đợt.
+3. **Thêm VND vào danh sách tiền tệ.** `CURRENCY_LIST` có 11 đồng tiền và
+   **không có VND**. Phải sửa mã, không phải cấu hình; `minorUnits = 0`. Đọc
+   `docs/currency.md` trước. Tỷ giá thật đã lấy về, chỉ thiếu VND trong danh sách.
+4. **Lát ③b — màn Cài đặt.** Phần còn lại theo kế hoạch đã khoanh.
+
+Còn nợ hai chữ ký, một lượt gõ mỗi cái:
+
+```
+/acceptance-gate:signoff tieng-viet-cho-crm
+/acceptance-gate:signoff nhan-ung-dung-noi-tieng-viet
+```
 
 ## Môi trường: đã cắm gì, còn thiếu gì
 
@@ -271,28 +314,29 @@ người tự tạo tài khoản.
 Thẻ script **chưa dán lên trang thật**, và nó đang trỏ `http://localhost:3000/t/crm.js`
 nên chỉ dùng được sau khi CRM có địa chỉ công khai.
 
-## Hàng đợi
+## Hàng đợi còn lại
+
+Thứ tự ưu tiên nằm ở mục **"Đợt tới"** đầu file, không nằm ở đây. Mục này là
+phần tồn còn lại, sau khi hai mục đầu của hàng đợi cũ đã được người đóng ngày
+04/09 — E9 và E12 chấp nhận, vòng thước dừng ở 12/14.
 
 Chạy bằng `/feature-loop:feature-loop <mô tả>`. Cổng nghiệm thu đã chạy thật 13
 lần — không còn là đường chưa ai đi.
 
-1. **Gỡ nốt hai cái đỏ của lát ③a** — sửa phép quy kết của `dot-bien`; quyết số
-   phận `chu-cung-jsx`. Rồi chạy lại trọn bộ, rồi hai chữ ký.
-2. **Chạy lại vòng ①** để xem `68bb5f8` có gỡ E6 không, rồi người chọn E9 và E12.
-3. **`them-vnd-vao-tien-te`** — T2 — xem mục nợ. Đọc `docs/currency.md` trước.
-4. **`don-vet-cau-hinh`** — T2 nhỏ — `AGENT_PORT`, `.env.example`, `launch.json`.
-5. **`prerender-mat-vi-doc-cookie`** — T2, mức cao. Đọc `cookies()` ở layout gốc
+1. **`them-vnd-vao-tien-te`** — T2 — xem mục nợ. Đọc `docs/currency.md` trước.
+2. **`don-vet-cau-hinh`** — T2 nhỏ — `AGENT_PORT`, `.env.example`, `launch.json`.
+3. **`prerender-mat-vi-doc-cookie`** — T2, mức cao. Đọc `cookies()` ở layout gốc
    làm **mọi tuyến** mất khả năng dựng sẵn. Máy chủ dev in một lỗi mỗi lượt tải
    trang, trỏ `apps/app/app/layout.tsx:47`.
-6. **`he-icon-mot-moi`** — T2 — `components.json` khai `lucide` nhưng thực tế 73
+4. **`he-icon-mot-moi`** — T2 — `components.json` khai `lucide` nhưng thực tế 73
    file Carbon / 28 lucide. Cần người chọn ở Cổng Đáng.
-7. **`eve-stream-sang-ui-message`** — T2, rủi ro cao nhất. Đọc `docs/agent-panel.md`
+5. **`eve-stream-sang-ui-message`** — T2, rủi ro cao nhất. Đọc `docs/agent-panel.md`
    trước khi chạm. **Không thay eve** — nó là thứ cho agent bền, lịch chạy, sandbox.
-8. **`transcript-dung-tron-ai-elements`** — T2 — phụ thuộc mục 7.
-9. **`geist-kich-thuoc-dieu-khien`** — T2. Geist **không công bố thang bo góc** —
+6. **`transcript-dung-tron-ai-elements`** — T2 — phụ thuộc mục 5.
+7. **`geist-kich-thuoc-dieu-khien`** — T2. Geist **không công bố thang bo góc** —
    đừng đi tìm cái không tồn tại.
-10. **`ban-chay-cho-doi`** — T3 — mục lớn nhất. **Nay đã mở khoá**: nó phụ thuộc
-    đăng nhập Google, mà đăng nhập Google đã chạy.
+8. **`ban-chay-cho-doi`** — T3 — mục lớn nhất. **Nay đã mở khoá**: nó phụ thuộc
+   đăng nhập Google, mà đăng nhập Google đã chạy.
 
 ## Đã gửi lên hãng
 
