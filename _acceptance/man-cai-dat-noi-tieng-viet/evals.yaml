@@ -279,3 +279,24 @@ evals:
     paths:
       - "apps/app/app/(app)/[slug]/settings/workspace-form.tsx"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.cai_dat_moi_chuoi
+    expected: >-
+      exit 0. Chan SINH ROI TRU — nguoc voi lieu ke tung cho nap.
+      Lay MOI chuoi trong muoi file (StringLiteral, template, JsxText) roi tru theo luat
+      CO TEN trong khong-phai-chu-nguoi-doc.json: chuoi nhap khau, chi thi dau file,
+      thuoc tinh ky thuat, ham ky thuat, va ban khai giu-nguyen.
+      Con lai ma la tieng Anh thi DO, in ten file, so dong, boi canh, va nguyen van chuoi.
+      Quet ra 0 chuoi la THOAT MA 2 — bo quet hong chu khong phai lat sach.
+      Dong giu-nguyen nao khong con doi tuong that lam chan DO (mien tru chet).
+      Chieu do: cam mot cau tieng Anh vao BAT KY cho nao trong muoi file — JSX, toast,
+      title, toan tu ba ngoi, thuoc tinh khong ky thuat — thi chan phai DO. Day la chieu
+      do manh hon cac chan khac: no khong phu thuoc vao viec doan dung cho nap.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/*.tsx"
+      - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
