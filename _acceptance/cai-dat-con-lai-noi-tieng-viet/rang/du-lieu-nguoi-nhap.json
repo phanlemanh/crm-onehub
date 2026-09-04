@@ -20,10 +20,10 @@
 			"vi_sao": "can mot nha cung cap that"
 		},
 		{
-			"file": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx",
+			"file": "apps/app/components/slack/channel-picker.tsx",
 			"truong": "ten kenh Slack",
 			"gieo_duoc": false,
-			"vi_sao": "can Slack da cam"
+			"vi_sao": "ten kenh ve o channel-picker, khong ve o slack-channels — cho kia chi truyen no vao mot ham ghep cau"
 		},
 		{
 			"file": "apps/app/app/(app)/[slug]/settings/members/members-table.tsx",

@@ -109,6 +109,11 @@ const BIEU_THUC = {
 	"ten va email thanh vien": ["row.name", "row.email"],
 };
 
+function routeKhaiKhongDung() {
+	const khai = docKhai(`${HERE}/lat-cai-dat-2.json`, "lat-cai-dat-2");
+	return khai.route_khong_dung_duoc ?? [];
+}
+
 function batLuat(bang, ten) {
 	const co = (bang.luat ?? []).map((l) => l.ten);
 	const la = co.filter((t) => !LUAT_CO_2.has(t));
@@ -268,6 +273,10 @@ function dungBoi(tt) {
 		tt.theoDoi.siteId,
 	].filter(Boolean);
 	const khai = new Map((bang.dong ?? []).map((d) => [d.gia_tri, d]));
+	const khoiNgoai = bang.ngoai_lat?.khoi ?? [];
+	const ngoaiLat = new Map();
+	for (const k of khoiNgoai) for (const c of k.chuoi ?? []) ngoaiLat.set(c, k);
+	const mienDau = new Map((bang.mien_dau ?? []).map((d) => [d.chuoi, d]));
 	const dung = new Set();
 	const boi = (chu, o) => {
 		if (luat.has("so-thuan") && CHI_SO.test(chu)) return "so-thuan";
@@ -285,11 +294,55 @@ function dungBoi(tt) {
 		}
 		return null;
 	};
-	return { boi, khai, dung, nguoi, vat };
+	return { boi, khai, dung, nguoi, vat, khoiNgoai, ngoaiLat, mienDau };
+}
+
+function demThem(m, chu) {
+	m.set(chu, (m.get(chu) ?? 0) + 1);
+}
+
+function inNgoaiLat(khoiNgoai, thay, lan) {
+	if (khoiNgoai.length === 0) {
+		console.log(
+			"ngoai lat (gioi han da khai): 0 chuoi — ban khai khong co khoi nao",
+		);
+		return 0;
+	}
+	let tong = 0;
+	for (const k of khoiNgoai) {
+		const co = (k.chuoi ?? []).filter((c) => thay.has(c));
+		const lanKhoi = co.reduce((s, c) => s + (lan.get(c) ?? 0), 0);
+		tong += co.length;
+		console.log(
+			`ngoai lat (gioi han da khai): ${co.length} chuoi tu ${k.nguon} tren ${k.route ?? "moi route"} — ${lanKhoi} lan duoc mien. Day la GIOI HAN DA KHAI, khong phai da dich.`,
+		);
+	}
+	return tong;
+}
+
+function chetNgoaiLat(khoiNgoai, thay, daDo) {
+	const chet = [];
+	for (const k of khoiNgoai) {
+		if (k.route !== undefined && !daDo.has(k.route)) {
+			console.log(
+				`   BO QUA CHET: khoi ${k.nguon} khai route ${k.route} ma route do khong do duoc luot nay.`,
+			);
+			continue;
+		}
+		for (const c of k.chuoi ?? [])
+			if (!thay.has(c))
+				chet.push(
+					`MIEN TRU CHET: ${JSON.stringify(c)} khai ngoai lat tu ${k.nguon} ma khong con tren man ${k.route ?? "nao"}.`,
+				);
+	}
+	return chet;
 }
 
 function danhSachRoute() {
-	const r = sinhRouteCaiDat(MAN);
+	const boQua = routeKhaiKhongDung();
+	const r = sinhRouteCaiDat([...MAN, ...boQua.map((x) => x.route)]);
+	for (const x of boQua)
+		console.log(`-- route khai khong dung duoc: ${x.route} — ${x.vi_sao}`);
 	if (r.do.length === 0) {
 		console.log("KHONG DO DUOC: thu muc settings/ sinh ra 0 route cua lat.");
 		process.exit(2);
@@ -321,6 +374,11 @@ async function chanHaiTieng(cookie, slug) {
 	const mt = dungBoi(tt);
 	const r = danhSachRoute();
 	const tuChoi = [];
+	const daDo = new Set();
+	const thayNgoai = new Set();
+	const thayDau = new Set();
+	const lanNgoai = new Map();
+	const lanDau = new Map();
 	let doDuoc = 0;
 	let hong = 0;
 	let capTong = 0;
@@ -332,6 +390,11 @@ async function chanHaiTieng(cookie, slug) {
 			continue;
 		}
 		doDuoc += 1;
+		daDo.add(man);
+		for (const g of hai.vi) {
+			if (mt.ngoaiLat.has(g.chu)) thayNgoai.add(g.chu);
+			if (mt.mienDau.has(g.chu)) thayDau.add(g.chu);
+		}
 		const k = soCap(hai.vi, hai.en, mt.boi);
 		capTong += k.soCap;
 		console.log(
@@ -347,23 +410,58 @@ async function chanHaiTieng(cookie, slug) {
 			console.log(
 				`   VE 1 HONG: cap ${l.so} lech duong DOM — vi=${l.vi} · en=${l.en}`,
 			);
-		for (const o of k.trung)
+		const trung = [];
+		const khongDau = [];
+		for (const o of k.trung) {
+			if (mt.ngoaiLat.has(o.chu)) {
+				demThem(lanNgoai, o.chu);
+				continue;
+			}
+			trung.push(o);
+		}
+		for (const o of k.khongDau) {
+			if (mt.ngoaiLat.has(o.chu)) {
+				demThem(lanNgoai, o.chu);
+				continue;
+			}
+			if (mt.mienDau.has(o.chu)) {
+				demThem(lanDau, o.chu);
+				continue;
+			}
+			khongDau.push(o);
+		}
+		for (const o of trung)
 			console.log(
 				`   VE 2 HONG: ${JSON.stringify(o.chu)} giong het o hai luot ma bang khong khai — ${o.khoa}`,
 			);
-		for (const o of k.khongDau)
+		for (const o of khongDau)
 			console.log(
 				`   VE 3 HONG: chuoi luot vi khong mang dau — ${JSON.stringify(o.chu)} — ${o.khoa}`,
 			);
 		console.log(
-			`   ve 1: ${k.lech.length} cap lech · ve 2: ${k.trung.length} cap giong nhau · ve 3: ${k.khongDau.length} chuoi khong dau`,
+			`   ve 1: ${k.lech.length} cap lech · ve 2: ${trung.length} cap giong nhau · ve 3: ${khongDau.length} chuoi khong dau`,
 		);
-		hong += k.lech.length + k.trung.length + k.khongDau.length;
+		hong += k.lech.length + trung.length + khongDau.length;
 	}
+	console.log("");
+	const soNgoai = inNgoaiLat(mt.khoiNgoai, thayNgoai, lanNgoai);
+	const soDau = [...mt.mienDau.keys()].filter((c) => thayDau.has(c)).length;
+	const lanDauTong = [...lanDau.values()].reduce((s, n) => s + n, 0);
 	console.log(
-		`\nket qua: route do duoc ${doDuoc}/${r.do.length} (thu muc sinh ra ${r.het.length}, tru ${MAN.length} route dot mot) · ${capTong} cap doi chieu · hong=${hong}`,
+		`mien dau (tu muon tieng Viet khong them dau): ${soDau} chuoi — ${lanDauTong} lan duoc mien o ve 3.`,
 	);
-	if (hong > 0) await ket(1);
+	const chet = chetNgoaiLat(mt.khoiNgoai, thayNgoai, daDo);
+	if (daDo.size > 0)
+		for (const c of mt.mienDau.keys())
+			if (!thayDau.has(c))
+				chet.push(
+					`MIEN TRU CHET: ${JSON.stringify(c)} khai mien dau ma khong con tren man nao.`,
+				);
+	for (const d of chet) console.log(`   ${d}`);
+	console.log(
+		`\nket qua: route do duoc ${doDuoc}/${r.do.length} (thu muc sinh ra ${r.het.length}, tru ${MAN.length} route dot mot) · ${capTong} cap doi chieu · ngoai lat (gioi han da khai)=${soNgoai} · mien dau=${soDau} · mien tru chet=${chet.length} · hong=${hong}`,
+	);
+	if (hong + chet.length > 0) await ket(1);
 	if (tuChoi.length > 0) {
 		console.log(
 			`KHONG DO DUOC: ${tuChoi.length} route khong dung duoc va ban khai lat-cai-dat-2.json khong co dong khai ly do cho chung:`,
@@ -385,6 +483,9 @@ async function chanKhongDich(cookie, slug) {
 	const r = danhSachRoute();
 	const ung = new Map();
 	const tuChoi = [];
+	const daDo = new Set();
+	const thayNgoai = new Set();
+	const lanNgoai = new Map();
 	let coThuocTinh = 0;
 	for (const man of r.do) {
 		const hai = await docHaiLuot(cookie, slug, man, RONG);
@@ -392,6 +493,8 @@ async function chanKhongDich(cookie, slug) {
 			tuChoi.push(hai.tuChoi);
 			continue;
 		}
+		daDo.add(man);
+		for (const g of hai.vi) if (mt.ngoaiLat.has(g.chu)) thayNgoai.add(g.chu);
 		const n = Math.min(hai.vi.length, hai.en.length);
 		for (let i = 0; i < n; i += 1) {
 			const kd = hai.vi[i].khongDich || hai.en[i].khongDich;
@@ -416,10 +519,15 @@ async function chanKhongDich(cookie, slug) {
 	const thua = [];
 	for (const [gt, o] of [...ung].sort()) {
 		const ly = mt.boi(gt, { khongDich: o.kd });
+		const ngoai = ly === null && mt.ngoaiLat.has(gt);
+		if (ngoai) {
+			thayNgoai.add(gt);
+			demThem(lanNgoai, gt);
+		}
 		console.log(
-			`   ${(ly ?? "CHUA KHAI").padEnd(20)} ${JSON.stringify(gt)}${o.kd ? ' [translate="no"]' : ""} <- ${[...o.cho].join(" ")}`,
+			`   ${(ly ?? (ngoai ? "ngoai-lat" : "CHUA KHAI")).padEnd(20)} ${JSON.stringify(gt)}${o.kd ? ' [translate="no"]' : ""} <- ${[...o.cho].join(" ")}`,
 		);
-		if (ly === null) thua.push(gt);
+		if (ly === null && !ngoai) thua.push(gt);
 	}
 	const thieu = [...mt.khai.keys()].filter((v) => !mt.dung.has(v));
 	for (const v of thieu)
@@ -430,10 +538,15 @@ async function chanKhongDich(cookie, slug) {
 		console.log(
 			`THUA MOT GIA TRI: man that co ${JSON.stringify(v)} ma bang khong khai — no phai duoc dich, hoac phai co mot dong khai ly do.`,
 		);
+	console.log("");
+	const soNgoai = inNgoaiLat(mt.khoiNgoai, thayNgoai, lanNgoai);
+	const chet = chetNgoaiLat(mt.khoiNgoai, thayNgoai, daDo);
+	for (const d of chet) console.log(`   ${d}`);
 	console.log(
-		`\nket qua: thieu dong=${thieu.length} · thua gia tri=${thua.length} · route khong do duoc=${tuChoi.length}`,
+		`\nket qua: thieu dong=${thieu.length} · thua gia tri=${thua.length} · ngoai lat (gioi han da khai)=${soNgoai} · mien tru chet=${chet.length} · route khong do duoc=${tuChoi.length}`,
 	);
 	for (const d of tuChoi) console.log(`   TU CHOI DO: ${d}`);
+	if (chet.length > 0) await ket(1);
 	if (thieu.length > 0 || thua.length > 0 || tuChoi.length > 0) await ket(2);
 	await ket(0);
 }
@@ -1069,7 +1182,8 @@ const trinhDuyet = await puppeteer.launch({
 });
 datTrinhDuyet(trinhDuyet);
 
-const r = sinhRouteCaiDat(MAN);
+const boQuaCuoi = routeKhaiKhongDung();
+const r = sinhRouteCaiDat([...MAN, ...boQuaCuoi.map((x) => x.route)]);
 console.log(
 	`-- kho ${GOC} · workspace "${slug}" · vai tro nguoi do se doc tu may chu · ${r.do.length} route cua lat (thu muc sinh ${r.het.length}) · chan ${chan}`,
 );
