@@ -5,9 +5,9 @@ slug: cua-vao-noi-tieng-viet
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-09-04
 design_doc: docs/superpowers/specs/2026-09-04-cua-vao-noi-tieng-viet-design.md
 ---
 
