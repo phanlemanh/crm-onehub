@@ -3,8 +3,8 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const GOC = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
-export const APP = process.env.APP_URL ?? "http://localhost:3300";
-export const API = process.env.API_URL ?? "http://localhost:3301";
+export const APP = process.env.APP_URL ?? "http://localhost:3000";
+export const API = process.env.API_URL ?? "http://localhost:3001";
 export const CHROME =
 	process.env.CHROME ??
 	"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
