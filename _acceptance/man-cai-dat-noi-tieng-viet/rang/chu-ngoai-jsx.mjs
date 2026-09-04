@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
@@ -125,6 +125,7 @@ function quetTieuDe(files) {
 				});
 
 			if (
+				TD.co_thanh_ben === true &&
 				ts.isPropertyAssignment(n) &&
 				ts.isIdentifier(n.name) &&
 				n.name.text === "khoa" &&
@@ -195,7 +196,11 @@ function chanToast() {
 }
 
 function khoaThanhBen() {
-	const kho = readFileSync(`${GOC}/apps/app/lib/messages/settings.ts`, "utf8");
+	const thuMucKho = `${GOC}/apps/app/lib/messages`;
+	const kho = readdirSync(thuMucKho)
+		.filter((t) => t.endsWith(".ts"))
+		.map((t) => readFileSync(`${thuMucKho}/${t}`, "utf8"))
+		.join("\n");
 	const khoi = /thanhBen:\s*\{([^}]*)\}/.exec(kho);
 	if (!khoi) return null;
 	return new Set([...khoi[1].matchAll(/^\s*([A-Za-z][A-Za-z0-9]*):/gm)].map((m) => m[1]));
@@ -204,9 +209,9 @@ function khoaThanhBen() {
 function chanTieuDe() {
 	const L = lat(KHAI_PATH);
 	const o = quetTieuDe(L.file);
-	const khoKhoa = khoaThanhBen();
+	const khoKhoa = TD.co_thanh_ben === true ? khoaThanhBen() : new Set();
 
-	if (khoKhoa === null || khoKhoa.size === 0) {
+	if (TD.co_thanh_ben === true && (khoKhoa === null || khoKhoa.size === 0)) {
 		console.log(
 			"KHONG DO DUOC: khong doc duoc nhom thanhBen trong kho chuoi — khong co gi de doi chieu nhan thanh ben",
 		);
@@ -269,7 +274,11 @@ function chanTieuDe() {
 
 function chanKhongDuQuyen() {
 	const o = KHOA.o;
-	const kho = readFileSync(`${GOC}/apps/app/lib/messages/settings.ts`, "utf8");
+	const thuMucKho = `${GOC}/apps/app/lib/messages`;
+	const kho = readdirSync(thuMucKho)
+		.filter((t) => t.endsWith(".ts"))
+		.map((t) => readFileSync(`${thuMucKho}/${t}`, "utf8"))
+		.join("\n");
 	const do_ = [];
 
 	for (const m of o) {
@@ -304,8 +313,10 @@ function chanKhongDuQuyen() {
 		}
 		const banVi = cac[cac.length - 1];
 		const gt = new RegExp(`${ten}:\\s*"([^"]*)"`).exec(banVi);
-		if (!gt) do_.push(`${m.khoa} — khong tim thay khoa nay trong ban vi cua kho chuoi`);
-		else if (!DAU.test(gt[1]))
+		const laHam = new RegExp(`${ten}:\\s*\\(`).test(banVi);
+		if (!gt && !laHam)
+			do_.push(`${m.khoa} — khong tim thay khoa nay trong ban vi cua kho chuoi`);
+		else if (gt && !DAU.test(gt[1]))
 			do_.push(`${m.khoa} — ban tieng Viet ${JSON.stringify(gt[1])} khong mang dau`);
 	}
 

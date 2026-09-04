@@ -1,1 +1,9 @@
-{"lat":"cai-dat-con-lai-noi-tieng-viet","ghi_chu":"Ke o Task 5 tu cay da dich.","o":[]}
+{
+	"lat": "cai-dat-con-lai-noi-tieng-viet",
+	"ghi_chu": "Cac cau CHI hien khi nguoi dung khong du quyen. Ghim (file, khoa kho chuoi) — KHONG ghim so dong. Phien phat trien dang nhap bang chu so huu nen trinh duyet khong ve chung ra; do o muc ma, gioi han khai o AC-4. Ke tu ma sau khi dich, khong go tay.",
+	"o": [
+		{ "file": "apps/app/app/(app)/[slug]/settings/connections/slack/page.tsx", "khoa": "slack.moTaThuong", "co_khi": "status.canManage === false" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx", "khoa": "kenh.nhoThem", "co_khi": "canInviteItself === false" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx", "khoa": "kenh.nhoThemMoTa", "co_khi": "canInviteItself === false" }
+	]
+}

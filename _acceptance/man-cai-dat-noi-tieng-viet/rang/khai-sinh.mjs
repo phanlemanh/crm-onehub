@@ -27,6 +27,35 @@ function chay(lenh) {
 
 function chanDanSo() {
 	const truoc = lat(KHAI_PATH);
+	const khai = JSON.parse(readFileSync(KHAI_PATH, "utf8"));
+
+	if (khai.neo && typeof khai.neo.file === "number") {
+		if (truoc.soTuDia !== khai.neo.file) {
+			console.log(
+				`KHONG DO DUOC: ban khai ghim neo ${khai.neo.file} file nhung quet thu muc ra ${truoc.soTuDia}. ` +
+					"Neo lay tu kiem ke tay, DOC LAP voi luat quet — lech nghia la mot ben sai, phai doc ten file de biet ben nao.",
+			);
+			for (const f of truoc.file) console.log(`  tren dia: ${f}`);
+			process.exit(2);
+		}
+		console.log(`neo: ${truoc.soTuDia}/${khai.neo.file} file — khop`);
+	}
+
+	const loaiRa = khai.khong_quet ?? [];
+	if (loaiRa.length > 0) {
+		const conAnh = [];
+		for (const k of loaiRa) {
+			const ma = chay([`${HERE}/moi-chuoi.mjs`, "--lat", KHAI_PATH, "--chi", k.duong]).ma;
+			if (ma === 1) conAnh.push(k);
+		}
+		for (const k of conAnh)
+			console.log(
+				`LOAI TRU CHE GIAU: "${k.duong}" (${k.vi_sao}) van con chuoi tieng Anh — ` +
+					"loai tru chi hop le cho file KHONG phai be mat cua lat, khong phai cho file kho dich.",
+			);
+		if (conAnh.length > 0) process.exit(1);
+		console.log(`can gat khong_quet: ${loaiRa.length} dong, khong dong nao che giau chu tieng Anh`);
+	}
 	const thuMucDau = JSON.parse(readFileSync(KHAI_PATH, "utf8")).thu_muc[0];
 	const moi = `${GOC}/${thuMucDau}/zz-tam-do-dan-so.tsx`;
 	const sach = () =>

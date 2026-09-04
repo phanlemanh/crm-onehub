@@ -123,7 +123,9 @@ if (L.soTuDia === 0) {
 	process.exit(2);
 }
 
-const tatCa = quet(L.file);
+const chiI = process.argv.indexOf("--chi");
+const chi = chiI >= 0 ? process.argv[chiI + 1] : null;
+const tatCa = quet(chi ? [chi] : L.file);
 
 if (tatCa.length === 0) {
 	console.log(
