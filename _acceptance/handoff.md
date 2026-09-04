@@ -307,7 +307,7 @@ sạch rồi mới tin màu đỏ.
 | `fields-list.tsx:338`, `:224` | Nhãn kiểu trường hai nguồn: máy chủ tính `field.typeLabel` (luôn tiếng Anh) trong khi hộp sửa ngay cạnh hiện tiếng Việt |
 | Năm chỗ ghim `"en"` | `sales-dashboard.tsx:94,99,132` · `dashboard-summary.tsx:211` · `currency-settings.tsx:305`. Ba chỗ đầu **có `locale` sống ngay trong file** |
 | Định danh tiếng Việt trong mã sản phẩm | `BANG`, `khoa`, `kichBan`, `manh`, `con`, `MOC`, `NUT_TU`. Trái luật `CLAUDE.md`. Nặng nhất ở `packages/ui` — nơi merge với kho hãng |
-| `_acceptance/config.yaml` | `ui_standards_skill` và `design_pass.ds_skill` trỏ `web-design-guidelines`, skill **không tồn tại trên đĩa** |
+| ~~`_acceptance/config.yaml`~~ | ~~`ui_standards_skill` trỏ skill không tồn tại~~ — **SAI, đã đóng 04/09.** `web-design-guidelines` có thật ở `.claude/skills/`, nạp được, và nó tải luật từ `raw.githubusercontent.com/vercel-labs/web-interface-guidelines` nên cần mạng lúc chạy |
 
 ## Còn chặn, cần người quyết
 
