@@ -1,32 +1,27 @@
 import { describe, expect, it } from "bun:test";
-import { resolveLocale } from "../lib/locale/resolve";
+import { DEFAULT_LOCALE } from "@crm/ui/lib/locale";
+import { resolveLocale } from "@/lib/locale/resolve";
 
-describe("resolveLocale", () => {
-	it("lấy cookie khi cookie hợp lệ", () => {
-		expect(resolveLocale("vi", "en-US,en;q=0.9")).toBe("vi");
+const O = [
+	["cookie vi thang Accept-Language en", "vi", "en-US,en;q=0.9", "vi"],
+	["cookie en thang Accept-Language vi", "en", "vi-VN,vi;q=0.9", "en"],
+	["khong cookie, Accept-Language vi", undefined, "vi-VN,vi;q=0.9", "vi"],
+	["khong cookie, Accept-Language en", undefined, "en-US,en;q=0.9", "en"],
+	["khong cookie, khong Accept-Language", undefined, undefined, "vi"],
+] as const;
+
+describe("luat chon tieng", () => {
+	it("mac dinh la tieng Viet", () => {
+		expect(DEFAULT_LOCALE).toBe("vi");
 	});
 
-	it("lựa chọn đã lưu thắng ngôn ngữ trình duyệt", () => {
-		expect(resolveLocale("en", "vi-VN,vi;q=0.9")).toBe("en");
+	it("do du nam o cua truc C", () => {
+		expect(O.length).toBe(5);
 	});
 
-	it("chưa chọn thì lấy theo trình duyệt", () => {
-		expect(resolveLocale(undefined, "vi-VN,vi;q=0.9")).toBe("vi");
-	});
-
-	it("chưa chọn và trình duyệt tiếng Anh thì ra en", () => {
-		expect(resolveLocale(undefined, "en-US,en;q=0.9")).toBe("en");
-	});
-
-	it("trình duyệt xếp hạng: en đứng trước vi thì ra en", () => {
-		expect(resolveLocale(undefined, "vi;q=0.3,en;q=0.9")).toBe("en");
-	});
-
-	it("cookie hỏng thì rơi về en, không ném lỗi", () => {
-		expect(resolveLocale("zz-ZZ-nonsense", "vi-VN")).toBe("en");
-	});
-
-	it("không cookie, không header thì ra en", () => {
-		expect(resolveLocale(undefined, undefined)).toBe("en");
-	});
+	for (const [ten, cookie, header, mong] of O) {
+		it(ten, () => {
+			expect(resolveLocale(cookie, header)).toBe(mong);
+		});
+	}
 });

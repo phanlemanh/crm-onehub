@@ -7,7 +7,7 @@ import { Spinner } from "../src/components/spinner";
 import { TablePagination } from "../src/components/table-pagination";
 import { ThreadMessage } from "../src/components/thread-message";
 import { TooltipProvider } from "../src/components/tooltip";
-import type { Locale } from "../src/lib/locale";
+import { DEFAULT_LOCALE, type Locale } from "../src/lib/locale";
 import { type Messages, messages } from "../src/lib/messages";
 
 function ve(node: ReactElement, locale?: Locale): string {
@@ -93,10 +93,13 @@ describe("component đọc ngôn ngữ từ nhà cung cấp", () => {
 });
 
 describe("AC-3 — dựng NGOÀI nhà cung cấp", () => {
-	test("không nổ, và rơi về tiếng Anh", () => {
+	test("không nổ, và rơi về tiếng mặc định", () => {
 		const ra = ve(phanTrang);
-		expect(ra).toContain("Previous");
-		expect(ra).toContain("Showing");
+		const m = messages(DEFAULT_LOCALE).pagination;
+		const kia = messages(DEFAULT_LOCALE === "vi" ? "en" : "vi").pagination;
+		expect(ra).toContain(m.previous);
+		expect(ra).toContain(m.next);
+		expect(ra).not.toContain(kia.previous);
 	});
 
 	test("mọi component vòng này chạm đều dựng được khi thiếu nhà cung cấp", () => {

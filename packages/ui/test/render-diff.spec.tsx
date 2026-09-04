@@ -34,7 +34,7 @@ import { Suggestion } from "../src/components/suggestion";
 import { TablePagination } from "../src/components/table-pagination";
 import { ThreadMessage } from "../src/components/thread-message";
 import { TooltipProvider } from "../src/components/tooltip";
-import type { Locale } from "../src/lib/locale";
+import { DEFAULT_LOCALE, type Locale } from "../src/lib/locale";
 import type { TableQueryState } from "../src/lib/table-query";
 import { TRUNG_TINH } from "./du-lieu";
 
@@ -449,7 +449,7 @@ describe("AC-5 — chấm bản vẽ, không chấm mã", () => {
 	);
 
 	test.each(CA.map((c) => [c.ten, c] as const))(
-		"%s: dựng NGOÀI nhà cung cấp thì vẫn vẽ, vẫn tiếng Anh, không nổ",
+		"%s: dựng NGOÀI nhà cung cấp thì vẫn vẽ, vẫn ra tiếng mặc định, không nổ",
 		async (_ten, ca) => {
 			const khong_boc = renderToStaticMarkup(
 				<NuqsTestingAdapter>
@@ -458,7 +458,7 @@ describe("AC-5 — chấm bản vẽ, không chấm mã", () => {
 			);
 			const co_boc = renderToStaticMarkup(
 				<NuqsTestingAdapter>
-					<LocaleProvider locale="en">
+					<LocaleProvider locale={DEFAULT_LOCALE}>
 						<TooltipProvider delayDuration={0}>{ca.ve()}</TooltipProvider>
 					</LocaleProvider>
 				</NuqsTestingAdapter>,
