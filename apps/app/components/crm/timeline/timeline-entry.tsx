@@ -115,6 +115,7 @@ export function TimelineEntry({
 					<div className="min-w-0 flex-1 space-y-0.5">
 						{headline ? (
 							<p
+								translate={change ? undefined : "no"}
 								className={cn(
 									"wrap-anywhere font-medium",
 									done && "text-muted-foreground line-through",
@@ -126,6 +127,7 @@ export function TimelineEntry({
 
 						{entry.body ? (
 							<p
+								translate="no"
 								className={cn(
 									"whitespace-pre-wrap text-pretty wrap-anywhere",
 									headline && "text-muted-foreground",

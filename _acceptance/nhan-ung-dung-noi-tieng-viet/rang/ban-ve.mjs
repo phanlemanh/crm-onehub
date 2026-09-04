@@ -366,12 +366,13 @@ const DOC_CHU = (roots) => {
 		for (let n = walker.nextNode(); n; n = walker.nextNode()) {
 			const el = n.parentElement;
 			if (!el) continue;
-			if (el.closest("script,style,noscript,template")) continue;
+			if (el.closest('script,style,noscript,template,[translate="no"]')) continue;
 			if (!nhinThay(el)) continue;
 			them(n.nodeValue);
 		}
 		for (const el of scope.querySelectorAll("*")) {
 			if (!nhinThay(el)) continue;
+			if (el.closest('[translate="no"]')) continue;
 			for (const attr of [
 				"placeholder",
 				"title",
