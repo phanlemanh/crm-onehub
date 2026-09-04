@@ -1,1 +1,16 @@
 {"ts":"2026-09-04T12:19:03Z","kind":"round","run_id":"s4r3-20260904T121903Z-30646","sha":"f8c65619b81cc7a16f67922afef69fb6ddc253cd","round":3,"verdict":"PENDING-JUDGMENT","suites_exit":[0,0,0,0]}
+{"ts":"2026-09-04T12:29:25Z","kind":"eval","run_id":"s4r3b-20260904T122909Z-26601-E13","eval":"E13","criterion":"AC-1","verifier":"config:executors.script.cai_dat_hai_tieng","exit_code":0}
+{"ts":"2026-09-04T12:29:25Z","kind":"eval","run_id":"s4r3b-20260904T122909Z-26601-E1","eval":"E1","criterion":"AC-1b","verifier":"config:executors.script.cai_dat_chu_cung_jsx","exit_code":0}
+{"ts":"2026-09-04T12:29:25Z","kind":"eval","run_id":"s4r3b-20260904T122909Z-26601-E2","eval":"E2","criterion":"AC-2","verifier":"config:executors.script.cai_dat_chu_ngoai_jsx","exit_code":0}
+{"ts":"2026-09-04T12:29:25Z","kind":"eval","run_id":"s4r3b-20260904T122909Z-26601-E3","eval":"E3","criterion":"AC-3","verifier":"config:executors.script.cai_dat_tieu_de","exit_code":0}
+{"ts":"2026-09-04T12:29:25Z","kind":"eval","run_id":"s4r3b-20260904T122909Z-26601-E4","eval":"E4","criterion":"AC-4","verifier":"config:executors.script.cai_dat_khong_du_quyen","exit_code":0}
+{"ts":"2026-09-04T12:29:35Z","kind":"eval","run_id":"s4r3b-20260904T122909Z-26601-E5","eval":"E5","criterion":"AC-5","verifier":"config:executors.script.cai_dat_trang_thai_rong","exit_code":2}
+{"ts":"2026-09-04T12:29:51Z","kind":"eval","run_id":"s4r3b-20260904T122909Z-26601-E6","eval":"E6","criterion":"AC-6","verifier":"config:executors.script.cai_dat_khong_dich","exit_code":0}
+{"ts":"2026-09-04T12:29:58Z","kind":"eval","run_id":"s4r3b-20260904T122909Z-26601-E7","eval":"E7","criterion":"AC-7","verifier":"config:executors.script.cai_dat_dot_bien","exit_code":0}
+{"ts":"2026-09-04T12:29:58Z","kind":"eval","run_id":"s4r3b-20260904T122909Z-26601-E8","eval":"E8","criterion":"AC-8","verifier":"config:executors.script.cai_dat_khai_sinh","exit_code":0}
+{"ts":"2026-09-04T12:29:58Z","kind":"eval","run_id":"s4r3b-20260904T122909Z-26601-E9","eval":"E9","criterion":"AC-9","verifier":"config:executors.script.cai_dat_dan_so_tu_dia","exit_code":0}
+{"ts":"2026-09-04T12:30:14Z","kind":"eval","run_id":"s4r3b-20260904T122909Z-26601-E10","eval":"E10","criterion":"AC-10","verifier":"config:executors.script.cai_dat_be_rong","exit_code":0}
+{"ts":"2026-09-04T12:30:29Z","kind":"eval","run_id":"s4r3b-20260904T122909Z-26601-E14","eval":"E14","criterion":"AC-6b","verifier":"config:executors.script.cai_dat_khong_dich","exit_code":0}
+{"ts":"2026-09-04T12:30:29Z","kind":"eval","run_id":"s4r3b-20260904T122909Z-26601-E15","eval":"E15","criterion":"AC-11","verifier":"config:executors.script.cai_dat_moi_chuoi","exit_code":0}
+{"ts":"2026-09-04T12:30:51Z","kind":"eval","run_id":"s4r3b-20260904T122909Z-26601-E16","eval":"E16","criterion":"AC-10b","verifier":"config:executors.script.cai_dat_be_rong_do","exit_code":0}
+{"ts":"2026-09-04T12:31:37Z","kind":"round","run_id":"s4r3b-20260904T122909Z-26601","sha":"7bb6f3146a1942a9f30c507ab75dcf7af905c2d5","round":3,"verdict":"PASS","suites_exit":[0,0,0,0]}
