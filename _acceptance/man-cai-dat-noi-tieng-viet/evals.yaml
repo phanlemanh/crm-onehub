@@ -51,10 +51,10 @@ evals:
     expected: >-
       exit 0. Chan do MOI — doc cung cay cu phap TypeScript nhung bat lop chu bo quet
       JSX KHONG nhin thay: doi so chuoi cua toast.*(). Chay tren dan so lat sinh tu dia.
-      MA TRAN TOAN PHAN, viet truoc: bang dong toast-cua-lat.json khai muoi hai loi goi,
-      moi dong co file, so dong, va HINH DANG. Lat nay co hai hinh dang: chuoi-thang
-      (chin dong) va chuoi-mau (ba dong). Hinh dang thu hai la cho de sot nhat — mot
-      chan chi bat StringLiteral se thay chin trong muoi hai va van exit 0.
+      MA TRAN TOAN PHAN, viet truoc: bang dong toast-cua-lat.json khai muoi hai loi goi theo (file, khoa kho chuoi),
+      KHONG ghim so dong hay hinh dang cu phap: ca hai la tinh chat cua cay CHUA dich —
+      sau khi dich thi 10/12 so dong sai va 12/12 hinh dang thanh vo nghia, ma phep do
+      van xanh vi no chi so DEM. Nay doi chieu TUNG MUC, ca hai chieu.
       So loi goi chan do NHAN RA phai BANG so dong cua bang; thieu mot dong la THOAT MA 2
       va goi ten dong thieu. Dem SO VAT nhan ra, khong chi so file da mo — mot chan mo
       du muoi file ma bo sot ca ba chuoi-mau van cho ba con so file bang
@@ -62,8 +62,8 @@ evals:
       Xanh nghia la khong loi goi nao trong bang con mang chuoi tieng Anh viet thang.
       Chuyen tiep error.message KHONG tinh — ngoai pham vi; chan do phai in so luot bo
       qua vi ly do do.
-      Chieu do: cam lai mot cau tieng Anh vao mot loi goi thuoc TUNG hinh dang cua bang
-      thi chan do va in nguyen van cau do kem ten file va so dong.
+      Chieu do: doi mot khoa trong bang thanh khoa khong ai doc thi TONG VAN 12=12 nhung
+      chan thoat ma 2, in ca muc THIEU lan muc THUA.
     paths:
       - "apps/app/app/(app)/[slug]/settings/*.tsx"
       - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"

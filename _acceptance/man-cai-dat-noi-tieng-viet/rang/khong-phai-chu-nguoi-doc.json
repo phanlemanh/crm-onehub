@@ -1,7 +1,31 @@
 {
 	"lat": "man-cai-dat-noi-tieng-viet",
-	"ghi_chu": "Chan moi-chuoi sinh dan so bang cach lay MOI chuoi trong lat roi TRU theo luat co ten — nguoc voi cach liet ke tung cho nap, von da bo sot ba lan lien tiep (JSX, toast, tieu de, ba ngoi).",
-	"thuoc_ky_thuat": [
+	"ghi_chu": "Chan moi-chuoi sinh dan so bang cach lay MOI chuoi trong lat roi TRU theo luat co ten. HAI danh sach TACH BIET, va tach la co ly do: mot thuoc tinh JSX ten `name` la ky thuat, nhung mot KHOA object ten `name` thuong la nhan hien len man ({ name: \"Ninety days after close\" }). Dung chung mot danh sach cho ca hai chinh la cho lop loi nay chui qua.",
+	"ham_ky_thuat": [
+		"cn",
+		"clsx",
+		"twMerge",
+		"require",
+		"import"
+	],
+	"giu_nguyen": [
+		{
+			"chu": "__default__",
+			"vi_sao": "giá trị mốc trong mã, không bao giờ hiện lên màn — FOLLOW_DEFAULT ở agent-model.tsx"
+		},
+		{
+			"chu": "px-3 py-2.5 align-middle",
+			"vi_sao": "chuỗi lớp CSS gán cho hằng CELL, không phải chữ người đọc"
+		}
+	],
+	"khoa_kieu": {
+		"ghi_chu": "Khoa cua kieu chi muc vao kho chuoi — gia tri la TEN KHOA, khong phai chu nguoi doc. Khai o day thay vi mien tru tung gia tri, vi danh sach gia tri se dai theo so muc thanh ben.",
+		"duong": [
+			"settings-sidebar.tsx: SettingsNavItem.khoa",
+			"settings-sidebar.tsx: keyof SettingsMessages[\"thanhBen\"]"
+		]
+	},
+	"thuoc_jsx_ky_thuat": [
 		"className",
 		"class",
 		"id",
@@ -68,28 +92,41 @@
 		"aria-expanded",
 		"khoa"
 	],
-	"ham_ky_thuat": [
-		"cn",
-		"clsx",
-		"twMerge",
-		"require",
-		"import"
+	"khoa_object_ky_thuat": [
+		"id",
+		"href",
+		"src",
+		"key",
+		"className",
+		"class",
+		"slug",
+		"khoa",
+		"viewBox",
+		"path",
+		"queryKey",
+		"style",
+		"align",
+		"width",
+		"height",
+		"size",
+		"variant",
+		"tone",
+		"type",
+		"side",
+		"orientation"
 	],
-	"giu_nguyen": [
-		{
-			"chu": "__default__",
-			"vi_sao": "giá trị mốc trong mã, không bao giờ hiện lên màn — FOLLOW_DEFAULT ở agent-model.tsx"
-		},
-		{
-			"chu": "px-3 py-2.5 align-middle",
-			"vi_sao": "chuỗi lớp CSS gán cho hằng CELL, không phải chữ người đọc"
-		}
-	],
-	"khoa_kieu": {
-		"ghi_chu": "Khoa cua kieu chi muc vao kho chuoi — gia tri la TEN KHOA, khong phai chu nguoi doc. Khai o day thay vi mien tru tung gia tri, vi danh sach gia tri se dai theo so muc thanh ben.",
-		"duong": [
-			"settings-sidebar.tsx: SettingsNavItem.khoa",
-			"settings-sidebar.tsx: keyof SettingsMessages[\"thanhBen\"]"
+	"khoa_object_mang_chu": {
+		"ghi_chu": "Khoa object KHONG duoc dua vao danh sach ky thuat, du chung cung ten voi mot thuoc tinh JSX ky thuat. Gia tri cua chung la chu nguoi doc thay.",
+		"khoa": [
+			"name",
+			"value",
+			"label",
+			"title",
+			"header",
+			"srLabel",
+			"description",
+			"placeholder",
+			"text"
 		]
 	}
 }

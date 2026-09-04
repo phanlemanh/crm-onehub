@@ -267,24 +267,56 @@ function chanTieuDe() {
 
 function chanKhongDuQuyen() {
 	const o = KHOA.o;
+	const kho = readFileSync(`${GOC}/apps/app/lib/messages/settings.ts`, "utf8");
 	const do_ = [];
+
 	for (const m of o) {
-		const noi_dung = readFileSync(`${GOC}/${m.file}`, "utf8");
-		if (noi_dung.includes(m.goc))
-			do_.push(`${m.file} — cau con viet thang: ${JSON.stringify(m.goc)}`);
-		else if (!tuKhoChuoi(m.file))
-			do_.push(`${m.file} — khong con viet thang nhung cung khong doc tu kho chuoi`);
+		const nguon = cay(m.file);
+		let thay = false;
+		const di = (n) => {
+			if (
+				ts.isPropertyAccessExpression(n) &&
+				`${n.expression.getText(nguon).replace(/^t\./, "")}.${n.name.text}` === m.khoa &&
+				n.expression.getText(nguon).startsWith("t.")
+			)
+				thay = true;
+			ts.forEachChild(n, di);
+		};
+		ts.forEachChild(nguon, di);
+
+		if (!thay) {
+			do_.push(
+				`${m.file} — khong con nut nao doc khoa ${m.khoa}. Cau nay chi hien khi ${m.co_khi}, ` +
+					"nen mat no di thi khong man nao va khong chan nao khac thay duoc.",
+			);
+			continue;
+		}
+
+		const nhom = m.khoa.split(".")[0];
+		const ten = m.khoa.split(".")[1];
+		const khoi = new RegExp(`${nhom}:\\s*\\{[\\s\\S]*?\\n\\t\\},`, "g");
+		const cac = [...kho.matchAll(khoi)].map((x) => x[0]);
+		if (cac.length < 2) {
+			do_.push(`${m.khoa} — khong doc duoc ca hai ban en/vi cua nhom ${nhom} trong kho chuoi`);
+			continue;
+		}
+		const banVi = cac[cac.length - 1];
+		const gt = new RegExp(`${ten}:\\s*"([^"]*)"`).exec(banVi);
+		if (!gt) do_.push(`${m.khoa} — khong tim thay khoa nay trong ban vi cua kho chuoi`);
+		else if (!DAU.test(gt[1]))
+			do_.push(`${m.khoa} — ban tieng Viet ${JSON.stringify(gt[1])} khong mang dau`);
 	}
 
 	console.log(
-		`do ${o.length} o ghim — trang thai khong du quyen. PHEP DO MUC MA: chung chuoi da nam dung cho, KHONG chung man hien dung (gioi han khai o AC-4). Dau tieng Viet do boi bo canh kho chuoi.`,
+		`do ${o.length} o ghim — trang thai khong du quyen. PHEP DO MUC MA: moi o phai con MOT NUT doc dung ` +
+			"khoa da khai, va ban tieng Viet cua khoa do phai mang dau. Khong chung man hien dung (gioi han khai o AC-4).",
 	);
 
 	if (do_.length > 0) {
 		for (const d of do_) console.log(`KHONG DU QUYEN: ${d}`);
 		process.exit(1);
 	}
-	console.log("XANH: ca hai cau doc tu kho chuoi.");
+	console.log(`XANH: ca ${o.length} o deu con nut doc dung khoa, va ban tieng Viet co dau.`);
 }
 
 function chanDoiChieu() {
@@ -299,6 +331,8 @@ function chanDoiChieu() {
 			latSinh: L.file.length,
 			daMoToast: soMoToast,
 			daMoTieuDe: daMo,
+			toastMuc: thay.map((t) => `${t.file}|${t.khoa}`).sort(),
+			toastKhaiMuc: BANG.loi_goi.map((l) => `${l.file}|${l.khoa}`).sort(),
 			toastNhanRa: thay.length,
 			toastKhai: BANG.loi_goi.length,
 			tieuDeNhanRa: td.length,

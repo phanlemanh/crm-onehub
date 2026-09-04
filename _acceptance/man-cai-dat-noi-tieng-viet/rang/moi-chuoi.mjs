@@ -11,7 +11,8 @@ const KHAI = JSON.parse(readFileSync(`${HERE}/khong-phai-chu-nguoi-doc.json`, "u
 const DAU =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
 
-const THUOC_KY_THUAT = new Set(KHAI.thuoc_ky_thuat);
+const THUOC_JSX = new Set(KHAI.thuoc_jsx_ky_thuat);
+const KHOA_OBJECT = new Set(KHAI.khoa_object_ky_thuat);
 const HAM_KY_THUAT = new Set(KHAI.ham_ky_thuat);
 const GIU_NGUYEN = new Map(KHAI.giu_nguyen.map((g) => [g.chu, g]));
 const NOI_NGUOI_DOC = new Set(["chu-con", "khac"]);
@@ -36,7 +37,7 @@ function chuNguoiCoTheDoc(chu, boi_canh) {
 	const tuDon = /^[a-z][a-zA-Z0-9]*$/.test(chu) || /^[a-z0-9-]+$/.test(chu);
 	if (!tuDon) return true;
 
-	return NOI_NGUOI_DOC.has(boi_canh) || boi_canh.startsWith("thuoc:");
+	return NOI_NGUOI_DOC.has(boi_canh) || boi_canh.startsWith("thuoc:") || boi_canh === "khoa";
 }
 
 function boiCanh(n) {
@@ -52,11 +53,11 @@ function boiCanh(n) {
 	while (cha) {
 		if (ts.isImportDeclaration(cha) || ts.isExportDeclaration(cha)) return "nhap";
 		if (ts.isJsxAttribute(cha) && ts.isIdentifier(cha.name))
-			return THUOC_KY_THUAT.has(cha.name.text) ? "thuoc-ky-thuat" : `thuoc:${cha.name.text}`;
+			return THUOC_JSX.has(cha.name.text) ? "thuoc-ky-thuat" : `thuoc:${cha.name.text}`;
 		if (
 			ts.isPropertyAssignment(cha) &&
 			ts.isIdentifier(cha.name) &&
-			THUOC_KY_THUAT.has(cha.name.text)
+			KHOA_OBJECT.has(cha.name.text)
 		)
 			return "khoa-ky-thuat";
 		if (

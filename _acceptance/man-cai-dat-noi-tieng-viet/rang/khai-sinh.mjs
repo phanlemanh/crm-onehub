@@ -119,9 +119,12 @@ const hangVat = {
 };
 
 const lechFile = new Set(Object.values(hangFile)).size !== 1;
+const lechMuc =
+	JSON.stringify(ngoai.toastMuc) !== JSON.stringify(ngoai.toastKhaiMuc);
 const lechVat =
 	hangVat.toastNhanRa !== hangVat.toastKhai ||
-	hangVat.tieuDeNhanRa !== hangVat.tieuDeKhai;
+	hangVat.tieuDeNhanRa !== hangVat.tieuDeKhai ||
+	lechMuc;
 const rong = hangFile.latSinh === 0 || hangVat.toastNhanRa === 0;
 
 console.log(`hang FILE: ${JSON.stringify(hangFile)}`);
@@ -143,9 +146,19 @@ if (lechFile) {
 
 if (lechVat) {
 	console.log(
-		`KHONG DO DUOC: hang VAT lech — toast nhan ra ${hangVat.toastNhanRa}/${hangVat.toastKhai}, tieu de nhan ra ${hangVat.tieuDeNhanRa}/${hangVat.tieuDeKhai}. ` +
-			"Hang FILE khong bat duoc lop nay: mot chan mo du file ma nhan ra 0 vat van cho ba con so file bang nhau.",
+		`KHONG DO DUOC: hang VAT lech — toast nhan ra ${hangVat.toastNhanRa}/${hangVat.toastKhai}, tieu de nhan ra ${hangVat.tieuDeNhanRa}/${hangVat.tieuDeKhai}.`,
 	);
+	if (lechMuc) {
+		const nhan = new Set(ngoai.toastMuc);
+		const khai = new Set(ngoai.toastKhaiMuc);
+		for (const m of ngoai.toastKhaiMuc.filter((x) => !nhan.has(x)))
+			console.log(`  THIEU: bang khai ${m} ma chan do khong nhan ra`);
+		for (const m of ngoai.toastMuc.filter((x) => !khai.has(x)))
+			console.log(`  THUA:  chan do nhan ra ${m} ma bang khong khai`);
+		console.log(
+			"  So dem bang nhau van co the lech MUC — day la cho hang VAT chi so dem da bo qua.",
+		);
+	}
 	process.exit(2);
 }
 

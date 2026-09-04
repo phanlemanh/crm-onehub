@@ -12,6 +12,7 @@ const CHAN = [
 	{ ten: "chu-cung-jsx", lenh: ["chu-cung-lat.mjs"] },
 	{ ten: "toast", lenh: ["chu-ngoai-jsx.mjs", "--chan", "toast"] },
 	{ ten: "tieu-de", lenh: ["chu-ngoai-jsx.mjs", "--chan", "tieu-de"] },
+	{ ten: "khong-du-quyen", lenh: ["chu-ngoai-jsx.mjs", "--chan", "khong-du-quyen"] },
 ];
 
 function chay(chan) {
@@ -45,6 +46,21 @@ function vetTay() {
 				s.replace(
 					"settingsMessages(await getLocale()).tieuDeTab.chung",
 					'"General"',
+				),
+		},
+		{
+			ten: "xoa han cau khong du quyen",
+			file: "apps/app/app/(app)/[slug]/settings/workspace-form.tsx",
+			cam: (s) =>
+				s.replace(/\t*\{canRename \? null : \(\n(?:.|\n)*?\n\t*\)\}\n/, ""),
+		},
+		{
+			ten: "mang lua chon mang chu tieng Anh",
+			file: "apps/app/app/(app)/[slug]/settings/archive-retention.tsx",
+			cam: (s) =>
+				s.replace(
+					"export function ArchiveRetention() {",
+					'const CHON = [{ name: "Ninety days after close", value: "90" }];\n\nexport function ArchiveRetention() {',
 				),
 		},
 		{
@@ -114,7 +130,12 @@ for (const v of VET) {
 		writeFileSync(duong, truoc);
 	}
 
-	const doDuoc = ket.filter((x) => x.ma !== 0).map((x) => x.chan);
+	const doDuoc = ket.filter((x) => x.ma === 1).map((x) => x.chan);
+	const khongDo = ket.filter((x) => x.ma === 2).map((x) => x.chan);
+	if (khongDo.length > 0)
+		console.log(
+			`   (ma 2, KHONG tinh la bat duoc — tien de thieu: ${khongDo.join(", ")})`,
+		);
 	if (doDuoc.length === 0) {
 		mu.push(v.ten);
 		console.log(`THUOC MU: cam "${v.ten}" vao ${v.file} ma KHONG chan nao do.`);
