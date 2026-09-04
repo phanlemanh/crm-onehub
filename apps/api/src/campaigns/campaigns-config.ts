@@ -9,6 +9,14 @@ export const CAMPAIGNS = {
 
 export const ANSWERED_OUTCOMES = ["ANSWERED", "MEETING"] as const;
 
+export const OUTCOME_LABELS = {
+	NO_ANSWER: "Không nghe",
+	ANSWERED: "Trả lời",
+	MEETING: "Hẹn gặp",
+	DECLINED: "Từ chối",
+	WRONG_NUMBER: "Sai số",
+} as const;
+
 export const FIELD_FILTER_PREFIX = "field:";
 
 export const MEMBER_FIELDS = {

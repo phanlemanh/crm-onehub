@@ -39,6 +39,7 @@ import {
 	CAMPAIGNS,
 	FIELD_FILTER_PREFIX,
 	MEMBER_FIELDS,
+	OUTCOME_LABELS,
 } from "./campaigns-config";
 
 type CampaignOwner = { id: string; name: string } | null;
@@ -240,7 +241,7 @@ export class CampaignsService {
 			const activity = await tx.activity.create({
 				data: {
 					type: ActivityType.CALL,
-					subject: `${input.outcome} · ${campaign.name}`,
+					subject: `${OUTCOME_LABELS[input.outcome]} · ${campaign.name}`,
 					body: input.note ?? null,
 					occurredAt: new Date(),
 					contactId: input.contactId,
