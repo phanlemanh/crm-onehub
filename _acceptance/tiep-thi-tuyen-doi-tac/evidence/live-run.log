@@ -14,3 +14,6 @@
 2026-09-04 23:18:23,093 WARNING sơ đồ site không có địa chỉ /moi-gioi- — gieo từ trang danh bạ https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh
 2026-09-04 23:18:57,970 INFO lượt chạy: {'gieo': 11, 'lay_duoc': 11, 'bi_chan': 0, 'co_so_dien_thoai': 11, 'tin_moi_30_ngay': {'min': 88, 'q1': 100, 'trung_vi': 118, 'q3': 164, 'max': 436}}
 2026-09-04 23:18:57,971 INFO đã ghi /Users/manhphan/dev/crm-onehub/_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json (11 mục)
+2026-09-04 23:26:46,127 WARNING sơ đồ site không có địa chỉ /moi-gioi- — gieo từ trang danh bạ https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh
+2026-09-04 23:27:20,707 INFO lượt chạy: {'gieo': 11, 'lay_duoc': 11, 'bi_chan': 0, 'co_so_dien_thoai': 11, 'tin_moi_30_ngay': {'min': 88, 'q1': 100, 'trung_vi': 118, 'q3': 164, 'max': 436}}
+2026-09-04 23:27:20,708 INFO đã ghi ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json (11 mục)

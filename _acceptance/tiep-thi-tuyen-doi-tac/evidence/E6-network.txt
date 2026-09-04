@@ -1,0 +1,4 @@
+Driver = node script (puppeteer-core CDP) + curl, khong phai Claude Browser tool
+co read_network_requests. Khong co duong doc network chuan cua driver nay.
+Cac goi API minh tu goi truc tiep (contacts.list, campaigns.members, savedViews.list,
+fields.list) qua curl deu tra HTTP 200 va JSON khong co truong "error".
