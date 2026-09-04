@@ -18,7 +18,7 @@ evals:
       ve 2 gay, chan do goi ten trang va duong DOM.
     paths:
       - "apps/app/app/(app)/[slug]/settings/**"
-      - "apps/app/lib/messages/settings.ts"
+      - "apps/app/lib/messages/settings-*.ts"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
@@ -70,7 +70,7 @@ evals:
       kien. PHEP DO MUC MA — khai thang, khong chung man hien dung.
     paths:
       - "apps/app/app/(app)/[slug]/settings/**"
-      - "apps/app/lib/messages/settings.ts"
+      - "apps/app/lib/messages/settings-*.ts"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E6
@@ -84,7 +84,7 @@ evals:
       danh sach: dung duoc / khong dung duoc — mang sang cong ky.
     paths:
       - "apps/app/app/(app)/[slug]/settings/**"
-      - "apps/app/lib/messages/settings.ts"
+      - "apps/app/lib/messages/settings-*.ts"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
@@ -101,7 +101,7 @@ evals:
       khong phai "liet nhung gi tim thay" ma la "doi du 20".
     paths:
       - "apps/app/app/(app)/[slug]/settings/connections/**"
-      - "apps/app/lib/messages/settings.ts"
+      - "apps/app/lib/messages/settings-*.ts"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8
@@ -121,7 +121,7 @@ evals:
   - id: E9
     criterion: AC-6b
     executor: script
-    cmd: config:executors.script.cd2_khong_dich
+    cmd: config:executors.script.cd2_du_lieu_nguoi_nhap
     expected: >-
       exit 0. HAI chan. Chan MA: bang dong (file, truong du lieu) ke o S3; doc cay cu phap,
       phan tu JSX boc bieu thuc truong do phai mang translate="no" — khai thang la muc ma.
@@ -197,7 +197,7 @@ evals:
       DO — chan be-rong mu.
     paths:
       - "_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/**"
-      - "apps/app/lib/messages/settings.ts"
+      - "apps/app/lib/messages/settings-*.ts"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E15
@@ -262,7 +262,7 @@ evals:
       nao y het en, moi ham ghep bien co khang dinh ghim, khong khoa chet. Kho settings
       da nam trong MODULE tu dot mot.
     paths:
-      - "apps/app/lib/messages/settings.ts"
+      - "apps/app/lib/messages/settings-*.ts"
       - "apps/app/test/messages-guard.spec.ts"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -270,7 +270,11 @@ evals:
     criterion: AC-1
     executor: judgment
     inputs:
-      - apps/app/lib/messages/settings.ts
+      - apps/app/lib/messages/settings-ket-noi.ts
+      - apps/app/lib/messages/settings-theo-doi.ts
+      - apps/app/lib/messages/settings-khoa-api.ts
+      - apps/app/lib/messages/settings-sso.ts
+      - apps/app/lib/messages/settings-thanh-vien.ts
       - CONTEXT.md
     expected: >-
       Ban dich doc nhu tieng Viet cua nguoi lam nghe. Ba phep thu cua dot mot, cong mot:

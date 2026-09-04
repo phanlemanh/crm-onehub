@@ -97,7 +97,7 @@ OneHub)? Máy không tự quyết.
 
 ## Out of scope
 
-- 28 lượt toast chuyển tiếp `error.message` từ API — câu chữ sinh ở `apps/api/src/{sso,api-keys,tracking,users,workspace}`, là `t3_paths`.
+- 25 lượt toast chuyển tiếp `error.message` từ API — câu chữ sinh ở `apps/api/src/{sso,api-keys,tracking,users,workspace}`, là `t3_paths`.
 - Đổi tên ứng dụng Slack đã đăng ký với Slack — quyết định hoãn từ đầu phiên.
 - Dựng luồng OAuth thật để mở các trạng thái cắm/gỡ — chỉ đo trạng thái mặc định trên màn.
 - agent-builder — 236 chuỗi, vòng kế.

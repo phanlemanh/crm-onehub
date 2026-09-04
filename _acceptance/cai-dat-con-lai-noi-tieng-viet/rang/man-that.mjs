@@ -894,7 +894,7 @@ async function chanDoanMaChep(cookie, slug) {
 		"add-sso-provider-sheet",
 		"sso-table",
 		"slack-channels",
-		"google-connection",
+		,
 	];
 	const coFile = new Set(
 		bang.doan.map((d) =>

@@ -209,8 +209,7 @@ export function docDuongGoi(thuMuc: string): DuongGoi {
 			const sau = laPhamVi(nut) ? [...ngan, new Map<string, string[]>()] : ngan;
 			const hien = sau[sau.length - 1];
 
-			if (hien)
-				for (const ten of thamSoKho(nut)) hien.set(ten, [GOC]);
+			if (hien) for (const ten of thamSoKho(nut)) hien.set(ten, [GOC]);
 			if (hien && ts.isVariableDeclaration(nut)) ghiKhaiBao(nut, sau, hien);
 			if (ts.isElementAccessExpression(nut))
 				ghiTruyCapDong(nut, sau, { cap, congDong });
@@ -234,16 +233,19 @@ export function taoSong(duongGoi: DuongGoi): (duong: string) => boolean {
 		const la = phan[phan.length - 1] ?? "";
 		const cha = phan[phan.length - 2];
 		if (!cha) return duongGoi.don.has(la);
-		if (duongGoi.cap.has(`${cha}.${la}`) || duongGoi.congDong.has(cha)) return true;
+		if (duongGoi.cap.has(`${cha}.${la}`) || duongGoi.congDong.has(cha))
+			return true;
 
 		for (let i = 0; i < phan.length - 1; i += 1) {
 			const to = phan[i] ?? "";
 			if (duongGoi.congDong.has(to)) return true;
 			const sau = phan[i + 1] ?? "";
-			if (/^\d+$/.test(sau) && (duongGoi.don.has(to) || duongGoi.cap.has(`${phan[i - 1] ?? ""}.${to}`)))
+			if (
+				/^\d+$/.test(sau) &&
+				(duongGoi.don.has(to) || duongGoi.cap.has(`${phan[i - 1] ?? ""}.${to}`))
+			)
 				return true;
 		}
 		return false;
 	};
 }
-
