@@ -1,0 +1,38 @@
+{
+  "source": "nhatot",
+  "crawledAt": "2026-09-04T14:26:21.694075Z",
+  "items": [
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-1",
+      "shopName": "Chuyên trang mẫu",
+      "isCompany": false,
+      "hasLicense": true,
+      "districts": [
+        "Quận 7",
+        "Huyện Nhà Bè"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 436,
+      "listingsNew30d": 164,
+      "tier": "cao",
+      "personName": "Nguyễn Văn Mẫu",
+      "phone": "0900000000"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-2",
+      "shopName": "Chuyên trang mẫu",
+      "isCompany": false,
+      "hasLicense": true,
+      "districts": [
+        "Quận 7",
+        "Huyện Nhà Bè"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 436,
+      "listingsNew30d": 164,
+      "tier": "cao",
+      "personName": "Nguyễn Văn Mẫu",
+      "phone": "0900000000"
+    }
+  ]
+}
