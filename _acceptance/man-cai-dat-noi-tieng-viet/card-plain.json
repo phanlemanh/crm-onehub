@@ -1,0 +1,14 @@
+{
+	"feature_plain": "Màn Cài đặt — cụm Tổng quan và Tiền tệ — đọc tiếng Việt cho người quản trị OneHub.",
+	"scope_plain": "33 file còn lại của cụm Cài đặt, và câu lỗi do API sinh, để lại vòng sau.",
+	"decisions_plain": [
+		{ "id": 1, "p": "KHÔNG làm cả 43 file một lượt — cắt đôi, đợt này 10 file, đổi lại thêm một cổng người." },
+		{ "id": 2, "p": "KHÔNG dịch câu lỗi do API trả về — giữ vòng ở hạng nhẹ, đổi lại người gặp lỗi vẫn đọc tiếng Anh." },
+		{ "id": 3, "p": "KHÔNG duyệt giao diện trên bản bấm được — vòng chỉ đổi chữ, rủi ro chữ dài ra do phép đo hộp bao gánh." },
+		{ "id": 4, "p": "KHÔNG dựng ra màn cho trạng thái không đủ quyền — đo ở mức mã, đổi lại không chứng được màn hiện đúng." },
+		{ "id": 5, "p": "KHÔNG dựng luồng tạo workspace chỉ để có dữ liệu thử — đổi lại hai màn rỗng chưa ai nhìn thấy." },
+		{ "id": 6, "p": "Dựng thước TRƯỚC khi dịch, để chiều đỏ của mỗi phép đo được chứng trên chính hiện trạng." },
+		{ "id": 7, "p": "Đổi khuôn giữa chừng: sinh dân số rồi trừ, thay vì liệt kê từng chỗ chữ có thể nấp." },
+		{ "id": 8, "p": "Bảng đóng ghim khoá kho chuỗi thay vì số dòng — số dòng trôi ngay khi mã đổi." }
+	]
+}
