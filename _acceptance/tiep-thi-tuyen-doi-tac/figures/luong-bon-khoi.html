@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luồng bốn khối — từ sàn nhatot đến số đo trên trang chiến dịch</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:  #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 2.5rem 2rem;
+  }
+  .frame { max-width: 1280px; width: 100%; }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 1040px; display: block; }
+  .notes {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 0.9fr;
+    gap: 2rem;
+  }
+  .notes h2 {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .notes p { font-size: 0.86rem; line-height: 1.6; color: var(--ink); }
+  .notes p + p { margin-top: 0.6rem; }
+  .notes .quiet { color: var(--muted); }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+    line-height: 1.7;
+  }
+  @media (max-width: 900px) { .notes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="card">
+  <svg viewBox="0 0 1280 424" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Luồng trái sang phải: bộ cào ngoài CRM gửi lô JSON tới cổng tiếp nhận có khoá bí mật; cổng ghi cá nhân với chín trường theo trang nhatot; người lọc và lưu góc nhìn làm phân khúc; chiến dịch chọn góc nhìn; mỗi cú bấm ghi một lượt gọi kèm hoạt động gọi; số đo đếm cá nhân riêng biệt, đặt phân khúc cạnh đối chứng; tác nhân không đụng chín trường">
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+      <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+    </defs>
+
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <!-- ============ TIÊU ĐỀ ============ -->
+    <text x="40" y="28" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em">CỔNG PHẠM VI · HÌNH 2/3 · LUỒNG BỐN KHỐI · AC-1…AC-6 · AC-8 · AC-10</text>
+    <text x="40" y="60" fill="#171717" font-size="22" font-family="'Lora', Georgia, serif">Bốn khối, một chiều: từ sàn nhatot đến số đo trên trang chiến dịch</text>
+
+    <!-- ============ ĐƯỜNG NỐI (vẽ trước) ============ -->
+    <line x1="152" y1="196" x2="208" y2="196" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <line x1="320" y1="196" x2="408" y2="196" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <line x1="520" y1="196" x2="596" y2="196" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <line x1="708" y1="196" x2="748" y2="196" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <line x1="860" y1="196" x2="936" y2="196" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <line x1="1048" y1="196" x2="1132" y2="196" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+    <!-- ============ NHÃN TRÊN CẠNH ============ -->
+    <rect x="156" y="172" width="48" height="16" rx="2" fill="#fafafa"/>
+    <text x="180" y="184" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LÔ JSON</text>
+
+    <rect x="324" y="156" width="80" height="16" rx="2" fill="#fafafa"/>
+    <text x="364" y="168" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">UPSERT THEO</text>
+    <rect x="324" y="172" width="80" height="16" rx="2" fill="#fafafa"/>
+    <text x="364" y="184" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">TRANG NHATOT</text>
+
+    <rect x="524" y="172" width="64" height="16" rx="2" fill="#fafafa"/>
+    <text x="556" y="184" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LỌC VÀ LƯU</text>
+
+    <rect x="712" y="172" width="32" height="16" rx="2" fill="#fafafa"/>
+    <text x="728" y="184" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CHỌN</text>
+
+    <rect x="864" y="172" width="64" height="16" rx="2" fill="#fafafa"/>
+    <text x="896" y="184" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">MỘT CÚ BẤM</text>
+
+    <rect x="1052" y="156" width="72" height="16" rx="2" fill="#fafafa"/>
+    <text x="1088" y="168" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐẾM CÁ NHÂN</text>
+    <rect x="1052" y="172" width="72" height="16" rx="2" fill="#fafafa"/>
+    <text x="1088" y="184" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">RIÊNG BIỆT</text>
+
+    <!-- ============ NÚT 1 · Bộ cào — ngoài CRM ============ -->
+    <rect x="40" y="152" width="112" height="88" rx="6" fill="#fafafa"/>
+    <rect x="40" y="152" width="112" height="88" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+    <text x="96" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bộ cào</text>
+    <text x="96" y="212" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">ngoài CRM</text>
+
+    <!-- ============ NÚT 2 · Cổng tiếp nhận ============ -->
+    <rect x="208" y="152" width="112" height="88" rx="6" fill="#fafafa"/>
+    <rect x="208" y="152" width="112" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="264" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cổng tiếp nhận</text>
+    <text x="264" y="212" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">cần khoá bí mật</text>
+
+    <!-- ============ NÚT 3 · Cá nhân + 9 trường ============ -->
+    <rect x="408" y="152" width="112" height="88" rx="6" fill="#fafafa"/>
+    <rect x="408" y="152" width="112" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="464" y="180" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cá nhân</text>
+    <text x="464" y="196" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">+ 9 trường</text>
+    <text x="464" y="216" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">nguồn: sàn nhatot</text>
+
+    <!-- ============ NÚT 4 · Góc nhìn đã lưu ============ -->
+    <rect x="596" y="152" width="112" height="88" rx="6" fill="#fafafa"/>
+    <rect x="596" y="152" width="112" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="652" y="180" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Góc nhìn</text>
+    <text x="652" y="196" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đã lưu</text>
+    <text x="652" y="216" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">= phân khúc</text>
+
+    <!-- ============ NÚT 5 · Chiến dịch ============ -->
+    <rect x="748" y="152" width="112" height="88" rx="6" fill="#fafafa"/>
+    <rect x="748" y="152" width="112" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="804" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chiến dịch</text>
+    <text x="804" y="212" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">kênh gọi điện</text>
+
+    <!-- ============ NÚT 6 · Lượt gọi + hoạt động gọi ============ -->
+    <rect x="936" y="152" width="112" height="88" rx="6" fill="#fafafa"/>
+    <rect x="936" y="152" width="112" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="992" y="180" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lượt gọi +</text>
+    <text x="992" y="196" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">hoạt động gọi</text>
+    <text x="992" y="216" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">ghi cùng một lúc</text>
+
+    <!-- ============ NÚT 7 · Số đo — tiêu điểm ============ -->
+    <rect x="1132" y="152" width="112" height="88" rx="6" fill="#fafafa"/>
+    <rect x="1132" y="152" width="112" height="88" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="1188" y="184" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Số đo</text>
+    <text x="1188" y="204" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">phân khúc</text>
+    <text x="1188" y="220" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">cạnh đối chứng</text>
+
+    <!-- ============ CHÚ THÍCH ============ -->
+    <path d="M 464 308 V 252" fill="none" stroke="rgba(23,23,23,0.42)" stroke-width="1" stroke-dasharray="4,3"/>
+    <circle cx="464" cy="244" r="2" fill="#171717"/>
+    <text x="464" y="328" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif" text-anchor="middle">tác nhân KHÔNG đụng chín trường; không việc nghiên cứu nào được xếp</text>
+
+    <!-- ============ CHÚ GIẢI ============ -->
+    <line x1="40" y1="372" x2="1240" y2="372" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <rect x="40" y="384" width="16" height="16" rx="3" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+    <text x="64" y="396" fill="#575757" font-size="9" font-family="'Geist', sans-serif">ngoài CRM — thu thập là việc tay chân</text>
+    <rect x="304" y="384" width="16" height="16" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="328" y="396" fill="#575757" font-size="9" font-family="'Geist', sans-serif">trong CRM</text>
+    <rect x="440" y="384" width="16" height="16" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+    <text x="464" y="396" fill="#575757" font-size="9" font-family="'Geist', sans-serif">số mà hồ sơ cơ hội đo bằng</text>
+    <line x1="656" y1="392" x2="684" y2="392" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <text x="692" y="396" fill="#575757" font-size="9" font-family="'Geist', sans-serif">một chiều — không có đường ngược</text>
+    <text x="1240" y="396" fill="#575757" font-size="9" font-style="italic" font-family="'Geist', sans-serif" text-anchor="end">bộ cào nói với CRM qua một cổng, không ghi thẳng cơ sở dữ liệu</text>
+  </svg>
+  </div>
+
+  <div class="notes">
+    <div>
+      <h2>Vì sao bộ cào đứng ngoài</h2>
+      <p>Thu thập là việc tay chân và tác nhân của kho chạy trong hộp cát không mạng, nên bộ cào không ở trong tác nhân lẫn API. Nó chỉ nói chuyện với CRM qua một cổng tiếp nhận có khoá — lược đồ được kiểm ở biên, bí mật cơ sở dữ liệu không rời máy chủ.</p>
+    </div>
+    <div>
+      <h2>Trí khôn không ở cổng tiếp nhận</h2>
+      <p>Cổng chỉ ghi điều sàn nói: không chấm điểm, không khớp mờ, không xếp việc nghiên cứu. Chín trường do sàn cấp và tác nhân không được điền hay đè — đó là chú thích trên hình.</p>
+      <p class="quiet">Mức sản lượng cao · vừa · thấp · ngủ do bộ cào tính từ ngưỡng trong tệp cấu hình của nó.</p>
+    </div>
+    <div>
+      <h2>Số đo đếm gì</h2>
+      <p>Đếm trên cá nhân riêng biệt: một người gọi ba lần vẫn là một. Trang chiến dịch đặt bốn số của phân khúc cạnh bốn số đối chứng (mọi chiến dịch khác); ngưỡng «phân khúc ≥ 2× đối chứng» đọc từ hai hàng đó.</p>
+    </div>
+  </div>
+
+  <footer>Hình 2 / 3 · điểm quyết định tại Cổng Phạm vi · hồ sơ tiep-thi-tuyen-doi-tac · nguồn: bản thiết kế 2026-09-04, mục 3 · tên kỹ thuật: cổng tiếp nhận = POST /internal/listings/ingest · góc nhìn đã lưu = SavedView (CONTACT) · lượt gọi = CampaignTouch + Activity CALL</footer>
+</div>
+</body>
+</html>

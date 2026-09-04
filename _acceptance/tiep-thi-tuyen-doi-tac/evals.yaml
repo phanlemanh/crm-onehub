@@ -1,0 +1,420 @@
+schema_version: 1
+feature_slug: tiep-thi-tuyen-doi-tac
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tt_api
+    expected: >-
+      exit 0. Bai "tiep nhan lo hop le" trong apps/api/test/listing-ingest.integration.spec.ts:
+      gui 3 muc → 3 ca nhan source=LISTING, moi ca nhan co du 9 gia tri truong
+      dung bang muc gui (san_luong, tin_dang, tin_moi_30_ngay, dia_ban, hinh_thai,
+      chung_chi, ten_chuyen_trang, trang_nhatot, san_cap_nhat_luc), phan hoi
+      {created: 3, updated: 0}. Chieu do: trong ban sao, doi mot gia tri tin_dang
+      truoc khi ghi → bai do voi thong diep neu ten truong tin_dang va gia tri
+      lech.
+    paths:
+      - "apps/api/src/listings/**"
+      - "packages/validation/src/listing-ingest.ts"
+      - "apps/api/test/listing-ingest*.spec.ts"
+      - "packages/db/prisma/schema.prisma"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tt_api
+    expected: >-
+      exit 0. Bai "gui lai cung lo": gui lo lan 1, gui lai lan 2 voi tin_dang doi
+      va crawledAt moi → {created: 0, updated: N}, dem contact source=LISTING
+      KHONG tang, tin_dang va san_cap_nhat_luc mang gia tri moi. Bai "giu so":
+      lo 1 co phone → contact.phone = so; lo 2 VANG phone → contact.phone GIU
+      nguyen; lo 3 co phone khac → doi. Chieu do: bo buoc tim theo trang_nhatot
+      trong ban sao → bai do vi dem tang; ghi phone = null khi vang trong ban
+      sao → bai "giu so" do goi ten phone.
+    paths:
+      - "apps/api/src/listings/**"
+      - "apps/api/test/listing-ingest*.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tt_api
+    expected: >-
+      exit 0. Ba bai rieng, cung mot lo mau: (a) khoa sai → 403; (b) khoa chua
+      cau hinh → 503; (c) mot muc thieu listingsTotal → 400 va thong diep chua
+      "items.1.listingsTotal". Sau moi bai: dem contact source=LISTING = 0 va
+      dem FieldValue cua 9 truong = 0. Chieu do: bo kiem khoa trong ban sao →
+      bai (a) do voi thong diep "expected 403"; bo parse Zod → bai (c) do.
+    paths:
+      - "apps/api/src/listings/**"
+      - "packages/validation/src/listing-ingest.ts"
+      - "apps/api/test/listing-ingest*.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.tt_api
+    expected: >-
+      exit 0. Bai "khong xep viec nghien cuu": sau khi tiep nhan lo, dem AgentTask
+      kind=identify cho cac contactId vua tao = 0, va enrichmentStatus cua ho =
+      SKIPPED. Chieu do (should-NOT-fire): trong ban sao goi agent.contactCreated
+      trong service → bai do vi dem AgentTask = N.
+    paths:
+      - "apps/api/src/listings/**"
+      - "apps/api/test/listing-ingest*.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.tt_api
+    expected: >-
+      exit 0. Bai "dung 9 truong": tren DB khong co truong san nao, tiep nhan lo
+      dau → 9 FieldDefinition entity=CONTACT voi dung 9 khoa co dinh, nhan tieng
+      Viet co dau, agentFilled=false cho ca 9, showOnFilter=true cho san_luong,
+      hinh_thai, chung_chi; goi lai lan 2 khong tao them dinh nghia. Bai
+      "loc duoc": contacts.list voi fields {san_luong: [id option Cao]} tra dung
+      tap. Chieu do: doi agentFilled mac dinh thanh true trong ban sao → bai do
+      goi ten truong dau tien sai.
+    paths:
+      - "apps/api/src/listings/**"
+      - "apps/api/src/fields/**"
+      - "apps/api/test/listing-ingest*.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E6
+    criterion: AC-6
+    executor: ui-check
+    cmd: config:executors.script.tt_ui_luong
+    steps:
+      - "Khoi dong may chu theo config dev_server.start; script tu lay phien bang dev:session"
+      - "Mo man Ca nhan, loc San luong = Cao, luu goc nhin dung chung ten 'San luong cao <run_id>' → evidence/E6-goc-nhin.png"
+      - "Mo Chien dich → Chien dich moi → chon goc nhin vua luu, dat ten, tao → evidence/E6-tao.png"
+      - "Doc bang thanh vien, so dong = so ket qua cua man Ca nhan voi cung bo loc; in 'E6 THANH VIEN KHOP n=<so>'"
+    expected: >-
+      exit 0 va dau ra chua dong "E6 THANH VIEN KHOP n=<so>" voi <so> ≥ 1 va bang
+      dung so ket qua goi contacts.list cung bo loc. Chieu do: script doi bo loc
+      cua goc nhin sang mot gia tri khac roi so lai — khac la do.
+    paths:
+      - "apps/app/app/(app)/[slug]/campaigns/**"
+      - "apps/app/components/data-table/**"
+      - "_acceptance/tiep-thi-tuyen-doi-tac/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tt_api
+    expected: >-
+      exit 0. Bai "thanh vien = ket qua goc nhin" trong apps/api/test/campaigns.spec.ts:
+      tao goc nhin CONTACT loc san_luong=Cao voi nonce rieng, tao chien dich tren
+      no → campaigns.members tra dung tap id bang contacts.list cung filters,
+      va tap doi theo khi mot ca nhan doi muc. Chieu do: bo ap dung filters cua
+      goc nhin trong ban sao → bai do vi tap lon hon.
+    paths:
+      - "apps/api/src/campaigns/**"
+      - "apps/api/src/contacts/**"
+      - "apps/api/test/campaigns.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.tt_api
+    expected: >-
+      exit 0. Bai "vong doi": create → DRAFT khong startedAt; start → RUNNING co
+      startedAt; finish → FINISHED co finishedAt; start lai tren FINISHED → tu
+      choi (HttpException) va trang thai giu nguyen. Chieu do: cho phep
+      FINISHED→RUNNING trong ban sao → bai do voi thong diep "expected refusal".
+    paths:
+      - "apps/api/src/campaigns/**"
+      - "apps/api/test/campaigns.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E9
+    criterion: AC-8
+    executor: ui-check
+    cmd: config:executors.script.tt_ui_luong
+    steps:
+      - "Chien dich cua luot nay co TEN chua run_id (nonce) — dat tu buoc E6"
+      - "Mo ho so ca nhan dong dau, dem so hoat dong Goi TRUOC → n0; quay lai chien dich, bam Bat dau → evidence/E9-bat-dau.png"
+      - "Bam ket qua 'Tra loi' tren dong do → evidence/E9-ghi.png"
+      - "Tai lai trang; mo lai ho so ca nhan, dem hoat dong Goi SAU → n1; muc moi nhat co tieu de chua 'Tra loi' VA ten chien dich (nonce) → evidence/E9-dong-thoi-gian.png; in 'E9 CALL n0=<n0> n1=<n1> nonce=<nonce>'"
+    expected: >-
+      exit 0 va dau ra "E9 CALL n0=.. n1=.." voi n1 - n0 = 1 (quan he, khong phai
+      chuoi-co-mat) SAU KHI TAI LAI, va muc moi mang ten chien dich cua dung luot
+      nay. Chieu do: script dem lai ma khong bam → n1 = n0 → do.
+    paths:
+      - "apps/app/app/(app)/[slug]/campaigns/**"
+      - "apps/app/components/crm/timeline/**"
+      - "_acceptance/tiep-thi-tuyen-doi-tac/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tt_api
+    expected: >-
+      exit 0. Bai "mot cu bam hai ban ghi": campaigns.touch voi nonce rieng → co
+      dung 1 CampaignTouch va dung 1 Activity type=CALL cung contactId, cung
+      createdById, activityId cua touch tro dung activity do, |createdAt lech| <
+      1s. Bai "cung giao dich": ep loi khi tao Activity (fixture) → khong con
+      CampaignTouch nao. Chieu do: bo transaction trong ban sao → bai thu hai do.
+    paths:
+      - "apps/api/src/campaigns/**"
+      - "apps/api/src/activities/**"
+      - "apps/api/test/campaigns.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E11
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.tt_api
+    expected: >-
+      exit 0. Bai "tu choi ngoai RUNNING" (should-NOT-fire): touch tren DRAFT va
+      tren FINISHED → HttpException, thong diep chua ten trang thai; dem
+      CampaignTouch = 0 va dem Activity CALL cua ca nhan = 0 sau ca hai. Chieu
+      do: bo dieu kien status trong ban sao → bai do vi dem = 2.
+    paths:
+      - "apps/api/src/campaigns/**"
+      - "apps/api/test/campaigns.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E12
+    criterion: AC-10
+    executor: ui-check
+    cmd: config:executors.script.tt_ui_luong
+    steps:
+      - "Sau khi ghi 3 ket qua cho 2 ca nhan (mot nguoi 2 lan): doc dai so do → evidence/E12-so-do.png"
+      - "In 'E12 SO DO da_goi=2 tra_loi=<n> hen=<n> toan_tap_da_goi=<n>'"
+    expected: >-
+      exit 0 va dong "E12 SO DO da_goi=2 ..." — mot nguoi ghi hai lan van dem
+      mot; cot toan tap hien canh cot chien dich; truoc khi ghi ket qua nao, ty
+      le hien "—". Chieu do: script tinh lai tu API va so — lech la do.
+    paths:
+      - "apps/app/app/(app)/[slug]/campaigns/**"
+      - "_acceptance/tiep-thi-tuyen-doi-tac/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
+
+  - id: E13
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.tt_api
+    expected: >-
+      exit 0. Bai "dem ca nhan rieng biet": 3 touch (A: NO_ANSWER roi ANSWERED;
+      B: MEETING) → da_goi=2, tra_loi=2, hen=1, ty le tra loi = 1.0; chien dich
+      thu hai co 1 touch NO_ANSWER → doi chung CUA chien dich 1 = chi chien dich
+      2: da_goi=1, tra_loi=0 (KHONG tinh chinh no). Bai "khong chia cho 0": chien
+      dich chua touch → ty le = null. Bai "chua co doi chung": kho chi co MOT
+      chien dich → doi chung = null, khong phai ty so 1.0. Chieu do: dem theo
+      dong thay vi distinct trong ban sao → da_goi=3 → do; tinh doi chung gom
+      chinh no → bai "chua co doi chung" do.
+    paths:
+      - "apps/api/src/campaigns/**"
+      - "apps/api/test/campaigns.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E14
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.tt_api
+    expected: >-
+      exit 0. Bai "goc nhin dang duoc dung": savedViews.delete tren goc nhin co
+      chien dich → HttpException, thong diep chua TEN chien dich; goc nhin van
+      con. Goc nhin khong co chien dich → xoa duoc. Chieu do: bo kiem trong ban
+      sao → Prisma Restrict van chan nhung thong diep khong co ten chien dich →
+      bai do vi assert thong diep.
+    paths:
+      - "apps/api/src/saved-views/**"
+      - "apps/api/src/campaigns/**"
+      - "apps/api/test/campaigns.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E15
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.tt_ui_chu
+    expected: >-
+      exit 0. Chan "chu" khai TRUOC danh sach dong 12 ma ST-* cua AC-12 va in
+      tung ma kem cach dung: 10 ma dung tren trinh duyet (loading bang chan
+      mang cham, dang-luu bang chan tra loi cham, loi bang cach ket thuc chien
+      dich qua API giua chung roi bam ket qua, thanh-vien-rong bang goc nhin
+      loc gia tri khong ai co, chua-so bang mot muc ingest vang phone), 2 ma
+      rong toan cuc (ST-danh-sach-empty, ST-tao-khong-goc-nhin) ghi "do o muc
+      don vi — E25". Thieu mot ma → thoat ma 2 goi ten ma. Voi lang=vi thu thap
+      moi chuoi giao dien SINH TU MAY (tru gia tri du lieu: ten chuyen trang,
+      dia ban, so dien thoai, ten goc nhin) va doi chieu voi lang=en: con lai 0
+      chuoi trung; moi phan tu chua du lieu tu san mang translate="no". Chieu
+      do: tra mot khoa tieng Viet ve tieng Anh trong ban sao → do va goi ten
+      khoa; bo mot ma khoi danh sach in → thoat ma 2.
+    paths:
+      - "apps/app/app/(app)/[slug]/campaigns/**"
+      - "apps/app/lib/messages/campaigns.ts"
+      - "_acceptance/tiep-thi-tuyen-doi-tac/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E16
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.tt_app
+    expected: >-
+      exit 0. messages-guard.spec.ts co campaignMessages trong danh sach MODULE
+      va moi gia tri vi mang it nhat mot dau tieng Viet; mot khoa vi thieu lam
+      typecheck do (satisfies). Chieu do: xoa dau o mot gia tri trong ban sao →
+      bai do goi ten khoa.
+    paths:
+      - "apps/app/lib/messages/campaigns.ts"
+      - "apps/app/test/messages-guard.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E17
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.tt_crawl_test
+    expected: >-
+      exit 0, ≥ 8 test OK. tests/fixtures/ co mau danh ba va mau ho so RUT GON,
+      bo du lieu ca nhan that; parser ra dung: shopName, personName, listingsTotal,
+      listingsNew30d, districts, hasLicense, isCompany, tier; bai "bien" cho tier
+      (should-NOT-fire sat duoi): 60→cao, 59→vua, 20→vua, 19→thap, 1→thap,
+      0→ngu — sat duoi nguong KHONG duoc len bac; emitter ra lo hop le theo
+      schemas/listing-ingest.schema.json; bai "banh coc": sinh lai schema tu Zod
+      bang packages/validation/scripts/listing-ingest-schema.ts va diff voi ban
+      commit → khop. Chieu do: test "phá mẫu" tu xoa so tin trong ban sao mau →
+      parser bao loi ten truong listingsTotal — test này PHẢI có mặt và xanh
+      (tuc chieu do da chay); doi mot field trong Zod ma khong sinh lai → bai
+      "banh coc" do.
+    paths:
+      - "tools/listing-crawl/**"
+      - "packages/validation/src/listing-ingest.ts"
+      - "packages/validation/scripts/listing-ingest-schema.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E18
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.tt_crawl_live
+    expected: >-
+      exit 0 va evidence/live-run.log in: so dia chi gieo tu sitemap, so ho so
+      lay duoc (≤ 50), so bi chan (HTTP 403/429 hoac trang chong bot), so co so
+      dien thoai sau buoc lo so (tran ap dung), tu phan vi tin moi 30 ngay;
+      evidence/live-batch.json hop le theo schema. Lenh bi mang chan hoan toan →
+      BLOCKED chu khong PASS. Chieu do: --limit 0 → script thoat ma 2 "khong co
+      dia chi nao".
+    paths:
+      - "tools/listing-crawl/**"
+      - "packages/validation/src/listing-ingest.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E19
+    criterion: AC-14
+    executor: judgment
+    question: >-
+      Doc live-run.log va live-batch.json. (1) Ty le ho so lay duoc tren so gieo
+      va so bi chan co cho thay san chan bot o muc lam hong thue hang thang khong?
+      (2) Tu phan vi tin moi 30 ngay co cho thay nguong 60/20/1 hop ly khong, hay
+      phai chinh truoc chien dich dau? (3) Ty le co so dien thoai sau lo so co du
+      de mo mot chien dich goi dien khong? Tra loi tung cau co/khong kem so.
+    inputs:
+      - contract.md
+      - evidence/live-batch.json
+      - evidence/live-run.log
+    evidence_required: [judged_by, verdict, rationale]
+
+  - id: E20
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.tt_ui_thiet_ke
+    expected: >-
+      exit 0. Chan "thiet-ke": chup HTML da render cua danh sach chien dich va
+      trang chien dich (dang chay) vao evidence/, roi goi design-gate.mjs --mode
+      dom --fail-on P0 tren tung tep; in verdict PASS cho ca hai. Chieu do: tiem
+      mot nut icon khong aria-label vao ban sao HTML → REJECT.
+    paths:
+      - "apps/app/app/(app)/[slug]/campaigns/**"
+      - "_acceptance/tiep-thi-tuyen-doi-tac/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E21
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.tt_ui_be_rong
+    expected: >-
+      exit 0. Chan "be-rong": o 1024px khong tieu de cot nao cua bang thanh vien
+      bi cat; o 768px moi tieu de bi cat co dau ba cham VA chu day du trong cay
+      tro nang; in bang ten cot × be rong × trang thai. Chieu do: rut khung cot
+      xuong 300px → o 1024px co cot bi cat → do.
+    paths:
+      - "apps/app/app/(app)/[slug]/campaigns/**"
+      - "_acceptance/tiep-thi-tuyen-doi-tac/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E22
+    criterion: AC-13
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tt_crawl_to_ingest
+    expected: >-
+      exit 0. Vong khep kin: emitter Python chay --fixtures --dry-run ra
+      evidence/fixture-batch.json, roi bai apps/api/test/listing-fixture-batch.spec.ts
+      DOC DUNG TEP DO, dua qua parse Zod that va ListingIngestService that (DB
+      thu sach) → khong loi, created = so muc trong fixtures, 9 gia tri truong
+      cua muc dau khop tep. Chieu do: sua tep lo trong ban sao cho tier = "CAO"
+      (chu hoa) → Zod tu choi, bai do goi ten items.0.tier.
+    paths:
+      - "tools/listing-crawl/**"
+      - "packages/validation/src/listing-ingest.ts"
+      - "apps/api/src/listings/**"
+      - "apps/api/test/listing-fixture-batch.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E23
+    criterion: AC-16
+    executor: ui-check
+    cmd: config:executors.script.tt_ui_trang_thai
+    steps:
+      - "Tao chien dich nhap (ten chua run_id) → trang chien dich: bang thanh vien KHONG co nut ket qua → evidence/E23-nhap.png"
+      - "Bam Bat dau → nut ket qua xuat hien; bam Ket thuc → evidence/E23-ket-thuc-bam.png"
+      - "Tai lai trang → huy hieu 'Đã kết thúc' + moc; KHONG nut Bat dau, KHONG nut ket qua → evidence/E23-ket-thuc.png; in 'E23 TRANG THAI nhap=0nut chay=5nut ketthuc=0nut batdau=an'"
+    expected: >-
+      exit 0 va dong "E23 TRANG THAI nhap=0nut chay=5nut ketthuc=0nut batdau=an"
+      doc SAU KHI TAI LAI. Chieu do: script dem nut tren trang nhap ma thay 5 →
+      do.
+    paths:
+      - "apps/app/app/(app)/[slug]/campaigns/**"
+      - "_acceptance/tiep-thi-tuyen-doi-tac/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
+
+  - id: E24
+    criterion: AC-16
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tt_api
+    expected: >-
+      exit 0. Bai "ket thuc tu giao dien" trong campaigns.spec.ts: campaigns.finish
+      voi nonce rieng → hang Campaign status=FINISHED, finishedAt trong 5s, va
+      campaigns.byId tra dung; campaigns.start sau do → tu choi. Chieu do: bo ghi
+      finishedAt trong ban sao → bai do goi ten finishedAt.
+    paths:
+      - "apps/api/src/campaigns/**"
+      - "apps/api/test/campaigns.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E25
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.tt_app
+    expected: >-
+      exit 0. apps/app/test/campaign-states.spec.ts: ham chon trang thai thuan
+      (khong React) tra 'empty' khi rows=[] va 'rows' khi co dong; 'no-views' khi
+      danh sach goc nhin CONTACT rong; hai chuoi rong toan cuc co trong
+      campaignMessages.vi va mang dau. Chieu do: doi ham tra 'rows' cho [] trong
+      ban sao → do.
+    paths:
+      - "apps/app/app/(app)/[slug]/campaigns/**"
+      - "apps/app/lib/messages/campaigns.ts"
+      - "apps/app/test/campaign-states.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
