@@ -150,7 +150,7 @@ const en = {
 		reason: "Reason",
 		takeOff: "Take off this deal",
 		takeOffNamed: (name: string) => `Take ${name} off this deal`,
-		namePlaceholder: (company: string) => `${company} — Comp AI`,
+		namePlaceholder: (company: string) => `${company} — OneHub`,
 		addContact: "Add contact",
 		championPlaceholder: "Champion",
 		expectedClose: "Expected close",

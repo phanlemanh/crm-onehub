@@ -54,7 +54,7 @@ const en = {
 		closeDate: "Expected close date",
 		currency: "Currency",
 		noDate: "No date yet",
-		namePlaceholder: "Stripe — Comp AI",
+		namePlaceholder: "Stripe — OneHub",
 		chooseOwner: "Choose an owner",
 		stageHint:
 			"A new deal is an open deal — close it from the pipeline once there is an outcome to record.",
