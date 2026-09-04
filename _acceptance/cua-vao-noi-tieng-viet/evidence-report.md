@@ -339,7 +339,7 @@ E15); E14 UNCERTAIN vi thieu dau vao cho hai man khai bao. Chua quay lai
 implementation — dang cho nguoi quyet o Cong 2 vi phan lon nguyen nhan la ha
 tang/fixture chu khong ro rang la loi san pham (xem review-findings.md).
 
-Round 2: vong sua sau khi nguoi doc muoi chin phat hien cua vong 1. Da dong
+Sua sau vong 1 (chua phai mot vong cham): sau khi nguoi doc muoi chin phat hien. Da dong
 nam cho THAT: ham doc tieng nhan ban (nay dung getLocale co san o
 lib/locale/server.ts), hai form doc useLocale thay vi nhan chuoi qua prop,
 man grant-access — man THU TU cua cua vao — vao pham vi va da dich, chan
