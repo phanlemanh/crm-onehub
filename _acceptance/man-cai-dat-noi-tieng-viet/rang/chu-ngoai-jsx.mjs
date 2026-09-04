@@ -98,23 +98,45 @@ function quetToast(files) {
 }
 
 function quetTieuDe(files) {
-	const thay = [];
+	const o = [];
 	for (const f of files) {
 		const nguon = cay(f);
 		const di = (n) => {
 			if (
 				ts.isPropertyAssignment(n) &&
 				ts.isIdentifier(n.name) &&
-				n.name.text === "title" &&
-				(ts.isStringLiteral(n.initializer) ||
-					ts.isNoSubstitutionTemplateLiteral(n.initializer))
+				n.name.text === "title"
 			)
-				thay.push({ file: f, dong: dong(n, nguon), chu: n.initializer.text });
+				o.push({
+					file: f,
+					dong: dong(n, nguon),
+					loai: "tieu-de-tab",
+					viet_thang:
+						ts.isStringLiteral(n.initializer) ||
+						ts.isNoSubstitutionTemplateLiteral(n.initializer)
+							? n.initializer.text
+							: null,
+				});
+
+			if (
+				ts.isPropertyAssignment(n) &&
+				ts.isIdentifier(n.name) &&
+				n.name.text === "khoa" &&
+				n.parent &&
+				ts.isObjectLiteralExpression(n.parent)
+			)
+				o.push({
+					file: f,
+					dong: dong(n, nguon),
+					loai: "nhan-thanh-ben",
+					viet_thang: null,
+				});
+
 			ts.forEachChild(n, di);
 		};
 		ts.forEachChild(nguon, di);
 	}
-	return thay;
+	return o;
 }
 
 function tuKhoChuoi(duong) {
@@ -160,43 +182,51 @@ function chanToast() {
 
 function chanTieuDe() {
 	const L = lat();
-	const thay = quetTieuDe(L.file);
+	const o = quetTieuDe(L.file);
 
-	if (thay.length !== SO_TIEU_DE) {
+	if (o.length !== SO_TIEU_DE) {
 		console.log(
-			`KHONG DO DUOC: lat khai ${SO_TIEU_DE} o tieu de, chan do nhan ra ${thay.length}.`,
+			`KHONG DO DUOC: lat khai ${SO_TIEU_DE} o nhan (tieu de tab + nhan thanh ben), chan do nhan ra ${o.length}.`,
 		);
-		for (const t of thay) console.log(`  thay: ${t.file}:${t.dong} ${JSON.stringify(t.chu)}`);
+		for (const x of o) console.log(`  thay: ${x.file}:${x.dong} [${x.loai}]`);
+		console.log(
+			"  Dem O NHAN, khong dem chuoi: dich xong thi chuoi roi vao kho, o nhan thi con.",
+		);
 		process.exit(2);
 	}
 
-	const dungToi = new Set(thay.filter((t) => GIU_NGUYEN.has(t.chu)).map((t) => t.chu));
+	const thang = o.filter((x) => x.viet_thang !== null);
+	const dungToi = new Set(
+		thang.filter((x) => GIU_NGUYEN.has(x.viet_thang)).map((x) => x.viet_thang),
+	);
 	const chet = TD.giu_nguyen.filter((g) => !dungToi.has(g.chu));
-	const dichDuoc = thay.filter((t) => !GIU_NGUYEN.has(t.chu));
-	const con = dichDuoc.filter((t) => /[A-Za-z]/.test(t.chu) && !DAU.test(t.chu));
+	const con = thang.filter(
+		(x) =>
+			!GIU_NGUYEN.has(x.viet_thang) &&
+			/[A-Za-z]/.test(x.viet_thang) &&
+			!DAU.test(x.viet_thang),
+	);
 
-	for (const t of con)
+	for (const x of con)
 		console.log(
-			`CHU NGOAI JSX: ${t.file}:${t.dong} [tieu de] ${JSON.stringify(t.chu)} — le ra phai doc tu kho chuoi`,
+			`CHU NGOAI JSX: ${x.file}:${x.dong} [${x.loai}] ${JSON.stringify(x.viet_thang)} — le ra phai doc tu kho chuoi`,
 		);
 
 	for (const g of chet)
 		console.log(
-			`MIEN TRU CHET: tieu de ${JSON.stringify(g.chu)} (${g.vi_sao}) khong con doi tuong that — go no khoi ban khai`,
+			`GIU NGUYEN CHET: ${JSON.stringify(g.chu)} (${g.vi_sao}) khong con o nhan nao viet thang gia tri do — go no khoi ban khai`,
 		);
 
 	console.log(
-		`\nquet ${L.file.length} file trong lat · ${thay.length} o tieu de, tru ${thay.length - dichDuoc.length} dong giu nguyen co ten = ${dichDuoc.length} nhan dich duoc`,
+		`\nquet ${L.file.length} file · ${o.length} o nhan (${o.filter((x) => x.loai === "tieu-de-tab").length} tieu de tab + ${o.filter((x) => x.loai === "nhan-thanh-ben").length} nhan thanh ben) · ${thang.length} o con viet thang`,
 	);
 
 	if (con.length > 0 || chet.length > 0) {
-		if (con.length > 0)
-			console.log(`\nDO: ${con.length} tieu de con viet thang bang tieng Anh.`);
-		if (chet.length > 0)
-			console.log(`DO: ${chet.length} dong giu nguyen khong con doi tuong that.`);
+		if (con.length > 0) console.log(`\nDO: ${con.length} o nhan con viet thang bang tieng Anh.`);
+		if (chet.length > 0) console.log(`DO: ${chet.length} dong giu nguyen khong con doi tuong that.`);
 		process.exit(1);
 	}
-	console.log("XANH: moi tieu de dich duoc deu khong con viet thang.");
+	console.log(`XANH: ca ${o.length} o nhan deu doc tu kho chuoi.`);
 }
 
 function chanKhongDuQuyen() {

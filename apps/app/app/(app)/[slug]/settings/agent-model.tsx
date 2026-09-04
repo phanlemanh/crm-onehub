@@ -18,6 +18,7 @@ import {
 	CommandList,
 } from "@crm/ui/components/command";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Popover,
 	PopoverContent,
@@ -26,6 +27,10 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
+import {
+	type SettingsMessages,
+	settingsMessages,
+} from "@/lib/messages/settings";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
@@ -44,15 +49,18 @@ function perMillion(rate: number): string {
 	return `$${dollars.toFixed(2).replace(/\.?0+$/, "")}`;
 }
 
-function priceHint(model: CatalogModel): string | null {
+function priceHint(model: CatalogModel, t: SettingsMessages): string | null {
 	if (!model.pricing) return null;
-	return `${perMillion(model.pricing.input)} in · ${perMillion(model.pricing.output)} out per 1M`;
+	return t.model.gia(
+		perMillion(model.pricing.input),
+		perMillion(model.pricing.output),
+	);
 }
 
-function contextHint(tokens: number): string {
+function contextHint(tokens: number, t: SettingsMessages): string {
 	return tokens >= 1_000_000
-		? `${Math.round(tokens / 1_000_000)}M context`
-		: `${Math.round(tokens / 1_000)}K context`;
+		? t.model.nguCanhTrieu(String(Math.round(tokens / 1_000_000)))
+		: t.model.nguCanhNghin(String(Math.round(tokens / 1_000)));
 }
 
 function byProvider(models: CatalogModel[]): [string, CatalogModel[]][] {
@@ -68,6 +76,7 @@ function byProvider(models: CatalogModel[]): [string, CatalogModel[]][] {
 }
 
 export function AgentModel() {
+	const t = settingsMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const [open, setOpen] = useState(false);
@@ -79,7 +88,7 @@ export function AgentModel() {
 		trpc.settings.setAgentModel.mutationOptions({
 			onSuccess: async () => {
 				await cache.settings();
-				toast.success("The agent will use this model from its next session.");
+				toast.success(t.model.daLuu);
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -98,7 +107,7 @@ export function AgentModel() {
 
 	const currentLabel = selectedId
 		? effectiveName
-		: `Default — ${effectiveName}`;
+		: `${t.model.macDinh} ${effectiveName}`;
 
 	const choose = (id: string) => {
 		setOpen(false);
@@ -109,10 +118,8 @@ export function AgentModel() {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Research agent</CardTitle>
-				<CardDescription>
-					The model the agent thinks with, routed through the Vercel AI Gateway.
-				</CardDescription>
+				<CardTitle>{t.model.tieuDe}</CardTitle>
+				<CardDescription>{t.model.moTa}</CardDescription>
 			</CardHeader>
 
 			<CardContent>
@@ -122,7 +129,7 @@ export function AgentModel() {
 							variant="outline"
 							role="combobox"
 							aria-expanded={open}
-							aria-label="Model"
+							aria-label={t.model.nhan}
 							disabled={save.isPending || catalog.isPending || unavailable}
 						>
 							{currentLabel}
@@ -132,9 +139,9 @@ export function AgentModel() {
 
 					<PopoverContent align="start" size="fit" className="w-96">
 						<Command>
-							<CommandInput placeholder="Search models…" />
+							<CommandInput placeholder={t.model.tim} />
 							<CommandList>
-								<CommandEmpty>No model matches that.</CommandEmpty>
+								<CommandEmpty>{t.model.khongKhop}</CommandEmpty>
 
 								<CommandGroup>
 									<CommandItem
@@ -142,14 +149,14 @@ export function AgentModel() {
 										data-checked={current === FOLLOW_DEFAULT}
 										onSelect={() => choose(FOLLOW_DEFAULT)}
 									>
-										Default — {defaultModel?.name ?? defaultId}
+										{t.model.macDinh} {defaultModel?.name ?? defaultId}
 									</CommandItem>
 								</CommandGroup>
 
 								{byProvider(models).map(([provider, group]) => (
 									<CommandGroup key={provider} heading={provider}>
 										{group.map((model) => {
-											const price = priceHint(model);
+											const price = priceHint(model, t);
 
 											return (
 												<CommandItem
@@ -160,7 +167,7 @@ export function AgentModel() {
 												>
 													<span>{model.name}</span>
 													<span className="ml-auto text-muted-foreground text-xs">
-														{price ?? contextHint(model.contextWindowTokens)}
+														{price ?? contextHint(model.contextWindowTokens, t)}
 													</span>
 												</CommandItem>
 											);
@@ -174,10 +181,10 @@ export function AgentModel() {
 
 				<p className="text-muted-foreground text-xs">
 					{unavailable
-						? `Could not reach the AI Gateway to list models. The agent is still running ${effectiveId}.`
+						? t.model.khongVoiToi(effectiveId)
 						: effective
-							? `${effectiveId} · ${contextHint(effective.contextWindowTokens)}${
-									priceHint(effective) ? ` · ${priceHint(effective)}` : ""
+							? `${effectiveId} · ${contextHint(effective.contextWindowTokens, t)}${
+									priceHint(effective, t) ? ` · ${priceHint(effective, t)}` : ""
 								}`
 							: effectiveId}
 				</p>

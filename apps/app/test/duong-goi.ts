@@ -12,6 +12,7 @@ const HAM_KHO = new Set([
 	"dealMessages",
 	"crmMessages",
 	"recordSheetMessages",
+	"settingsMessages",
 ]);
 
 const GOC = "__KHO_CHUOI__";
