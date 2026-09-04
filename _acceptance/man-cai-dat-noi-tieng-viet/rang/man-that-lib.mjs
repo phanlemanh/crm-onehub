@@ -5,29 +5,29 @@ import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { GOC, lat } from "./lat.mjs";
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-const APP = process.env.APP_URL ?? "http://localhost:3000";
-const API = process.env.API_URL ?? "http://localhost:3001";
-const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
-const CHO_LANG = Number(process.env.CHO_LANG ?? 2500);
-const RONG = Number(process.env.BE_RONG ?? 1440);
-const HEP = Number(process.env.BE_RONG_HEP ?? 360);
-const CAO = Number(process.env.CAO ?? 1000);
-const NGUOI = process.env.NGUOI ?? "manh.phan@onemount.com";
-const BANG = `${HERE}/khong-dich-cua-lat.json`;
-const MAN = ["/settings", "/settings/currencies"];
-const LUAT_CO = new Set([
+export const HERE = dirname(fileURLToPath(import.meta.url));
+export const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+export const APP = process.env.APP_URL ?? "http://localhost:3000";
+export const API = process.env.API_URL ?? "http://localhost:3001";
+export const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
+export const CHO_LANG = Number(process.env.CHO_LANG ?? 2500);
+export const RONG = Number(process.env.BE_RONG ?? 1440);
+export const HEP = Number(process.env.BE_RONG_HEP ?? 360);
+export const CAO = Number(process.env.CAO ?? 1000);
+export const NGUOI = process.env.NGUOI ?? "manh.phan@onemount.com";
+export const BANG = `${HERE}/khong-dich-cua-lat.json`;
+export const MAN = ["/settings", "/settings/currencies"];
+export const LUAT_CO = new Set([
 	"so-thuan",
 	"du-lieu-nguoi-nhap",
 	"ma-va-ten-dong-tien",
 	"ten-model",
 	"gia-tri-bi-che",
 ]);
-const CHI_SO = /^[\d\s.,:;%–\-—/()+=?…·|≈~≥≤<>]*$/;
-const DAU_VIET =
+export const CHI_SO = /^[\d\s.,:;%–\-—/()+=?…·|≈~≥≤<>]*$/;
+export const DAU_VIET =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
-const CHE = /^[•●○*·\s]{3,}/;
+export const CHE = /^[•●○*·\s]{3,}/;
 
 let trinhDuyet = null;
 
@@ -135,7 +135,7 @@ export async function canhCong(cookie, slug) {
 	}
 }
 
-const GOM = () => {
+export const GOM = () => {
 	const goc = document.querySelector(
 		'[data-slot="page-shell-scroll"]',
 	)?.parentElement;
@@ -199,7 +199,7 @@ const GOM = () => {
 	return ra;
 };
 
-const DO_RONG = () => {
+export const DO_RONG = () => {
 	const goc = document.querySelector(
 		'[data-slot="page-shell-scroll"]',
 	)?.parentElement;

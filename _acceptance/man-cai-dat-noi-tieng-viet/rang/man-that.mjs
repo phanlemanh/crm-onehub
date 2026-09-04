@@ -1,15 +1,23 @@
-import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
-import { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { GOC, lat } from "./lat.mjs";
 import {
+	API,
+	datTrinhDuyet,
+	BANG,
+	CAO,
+	CHE,
+	CHI_SO,
+	CHROME,
+	DAU_VIET,
+	DO_RONG,
+	HEP,
+	LUAT_CO,
+	MAN,
+	RONG,
 	canhCong,
-	chiaCookie,
 	docMan,
 	goiApi,
-	datTrinhDuyet,
 	ket,
 	khongDo,
 	moMan,
@@ -17,32 +25,6 @@ import {
 	phien,
 	suySlug,
 } from "./man-that-lib.mjs";
-
-const HERE = dirname(fileURLToPath(import.meta.url));
-const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-const APP = process.env.APP_URL ?? "http://localhost:3000";
-const API = process.env.API_URL ?? "http://localhost:3001";
-const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
-const CHO_LANG = Number(process.env.CHO_LANG ?? 2500);
-const RONG = Number(process.env.BE_RONG ?? 1440);
-const HEP = Number(process.env.BE_RONG_HEP ?? 360);
-const CAO = Number(process.env.CAO ?? 1000);
-const NGUOI = process.env.NGUOI ?? "manh.phan@onemount.com";
-const BANG = `${HERE}/khong-dich-cua-lat.json`;
-const MAN = ["/settings", "/settings/currencies"];
-const LUAT_CO = new Set([
-	"so-thuan",
-	"du-lieu-nguoi-nhap",
-	"ma-va-ten-dong-tien",
-	"ten-model",
-	"gia-tri-bi-che",
-]);
-const CHI_SO = /^[\d\s.,:;%–\-—/()+=?…·|≈~≥≤<>]*$/;
-const DAU_VIET =
-	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
-const CHE = /^[•●○*·\s]{3,}/;
-
-
 
 function docBang() {
 	if (!existsSync(BANG)) {
