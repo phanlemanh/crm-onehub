@@ -257,6 +257,11 @@ evals:
     criterion: AC-10
     executor: ui-check
     cmd: config:executors.design.gate
+    steps:
+      - "Dung /sign-in o tieng Viet tren may chu dang chay, chup evidence/E16-sign-in-vi.png"
+      - "Dung /sign-in o tieng Anh, chup evidence/E16-sign-in-en.png"
+      - "Chay san thiet ke tren hai anh do va doc muc P0"
+      - "Hai man khai bao KHONG dung duoc trong moi truong nay (xem Known limits) — ghi ro la chua do, khong bao dat"
     expected: >-
       exit 0. San thiet ke cua ba man o tieng Viet: khong vi pham muc P0 nao.
       Chan nay do SAN, khong thay E10 — E10 do be rong chu that, chan nay do cac
