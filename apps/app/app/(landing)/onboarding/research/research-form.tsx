@@ -9,15 +9,17 @@ import {
 	FieldLabel,
 } from "@crm/ui/components/field";
 import { Input } from "@crm/ui/components/input";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useId } from "react";
 import { toast } from "sonner";
-import type { AuthMessages } from "@/lib/messages/auth";
+import { authMessages } from "@/lib/messages/auth";
 import { useTRPC } from "@/lib/trpc/client";
 
-export function ResearchForm({ nhan }: { nhan: AuthMessages["research"] }) {
+export function ResearchForm() {
+	const nhan = authMessages(useLocale()).research;
 	const trpc = useTRPC();
 	const router = useRouter();
 
