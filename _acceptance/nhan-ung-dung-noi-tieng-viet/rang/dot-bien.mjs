@@ -1,5 +1,5 @@
 import { execFileSync, spawn, spawnSync } from "node:child_process";
-import { existsSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const CHO_MS = Number(process.env.CHO_MS ?? 12000);
@@ -172,96 +172,141 @@ function donCaySao(sao) {
 	} catch {}
 }
 
+const CHE_DO = process.env.KHOANH_CHE_DO ?? "";
+const BAT_TAY_DIR = join(RANG, "../../thuoc-cua-lat-3a-co-rang/.anh-chup");
+const BAT_TAY = {
+	sanSang: join(BAT_TAY_DIR, "con-da-chup"),
+	daSua: join(BAT_TAY_DIR, "nguoi-da-sua"),
+};
+
+if (CHAN_CHAY === "khoanh-vung" && CHE_DO !== "") {
+	let sao = null;
+	const donDep = () => {
+		if (sao) donCaySao(sao);
+		sao = null;
+	};
+	for (const tin of ["SIGINT", "SIGTERM", "SIGHUP"]) {
+		process.on(tin, () => {
+			donDep();
+			process.exit(130);
+		});
+	}
+	process.on("uncaughtException", () => {
+		donDep();
+		process.exit(2);
+	});
+
+	const anhChup = new Map();
+	for (const [, file] of KHO) anhChup.set(file, readFileSync(file, "utf8"));
+	if (!KIEU_CU) sao = dungCaySao();
+
+	writeFileSync(BAT_TAY.sanSang, "1");
+	for (let i = 0; i < 200 && !existsSync(BAT_TAY.daSua); i += 1) {
+		await new Promise((r) => setTimeout(r, 100));
+	}
+
+	if (!KIEU_CU) {
+		for (const [, file] of KHO) {
+			const trongSao = join(sao, file);
+			writeFileSync(trongSao, `${readFileSync(trongSao, "utf8")}\nconst DOT_BIEN_GIA = 1;\n`);
+		}
+	} else {
+		for (const [, file] of KHO)
+			writeFileSync(file, `${readFileSync(file, "utf8")}\nconst DOT_BIEN_GIA = 1;\n`);
+		process.on("exit", () => {
+			for (const [file, noi] of anhChup) writeFileSync(file, noi);
+		});
+	}
+
+	console.log(`   con: che do ${CHE_DO}, da dot bien`);
+	if (CHE_DO === "sigint") {
+		process.kill(process.pid, "SIGINT");
+		await new Promise((r) => setTimeout(r, 3000));
+	}
+	if (CHE_DO === "loi") throw new Error("loi khong bat, co y");
+	donDep();
+	process.exit(0);
+}
+
 if (CHAN_CHAY === "khoanh-vung") {
 	const MOC = "apps/app/lib/messages/crm.ts";
 	const DAU_HIEU = "\nconst BAN_SUA_CUA_NGUOI_DANG_LAM = 1;\n";
+	const TEP_KHO = KHO.map(([, f]) => f);
 
-	if (!sachChua(KHO.map(([, f]) => f))) {
-		console.log(
-			"KHONG DO DUOC: nam kho chuoi dang ban truoc khi do — kiem git status roi chay lai",
-		);
+	if (!sachChua(TEP_KHO)) {
+		console.log("KHONG DO DUOC: nam kho chuoi dang ban truoc khi do — kiem git status roi chay lai");
 		process.exit(2);
 	}
 
-	const truocHet = md5(MOC);
 	const banGoc = readFileSync(MOC, "utf8");
-	let sao = null;
+	const truocHet = md5(MOC);
+	const DUONG_THOAT = ["binh-thuong", "sigint", "loi"];
 	let hong = 0;
 
 	try {
-		const anhChup = new Map();
-		for (const [, file] of KHO) anhChup.set(file, readFileSync(file, "utf8"));
-		console.log("-- chan chup anh nam kho chuoi luc khoi dong");
+		for (const che of DUONG_THOAT) {
+			mkdirSync(BAT_TAY_DIR, { recursive: true });
+			for (const f of [BAT_TAY.sanSang, BAT_TAY.daSua])
+				if (existsSync(f)) unlinkSync(f);
 
-		writeFileSync(MOC, banGoc + DAU_HIEU);
-		const sauKhiNguoiSua = md5(MOC);
-		if (sauKhiNguoiSua === truocHet) {
-			console.log(
-				"KHONG DO DUOC: cu gia lap nguoi-sua khong doi duoc file — phep do vo nghia",
-			);
-			process.exit(2);
-		}
-		console.log(`-- nguoi sua GIUA luot chay: ${MOC} md5 ${truocHet} -> ${sauKhiNguoiSua}`);
+			const con = spawn("node", [`${RANG}/dot-bien.mjs`, "--chan", "khoanh-vung"], {
+				stdio: "ignore",
+				env: { ...process.env, KHOANH_CHE_DO: che },
+			});
+			const xong = new Promise((ok) => con.on("exit", (ma) => ok(ma)));
 
-		if (KIEU_CU) {
-			console.log("-- KIEU CU: dot bien thang cay lam viec, khoi phuc bang anh chup dau luot");
-			for (const [, file] of KHO) {
-				const noi = readFileSync(file, "utf8");
-				writeFileSync(file, `${noi}\nconst DOT_BIEN_GIA = 1;\n`);
+			for (let i = 0; i < 300 && !existsSync(BAT_TAY.sanSang); i += 1)
+				await new Promise((r) => setTimeout(r, 100));
+			if (!existsSync(BAT_TAY.sanSang)) {
+				console.log(`KHONG DO DUOC: con khong bao da chup o duong thoat ${che}`);
+				process.exit(2);
 			}
-			for (const [file, noi] of anhChup) writeFileSync(file, noi);
-		} else {
-			sao = dungCaySao();
-			console.log(`-- cay sao: ${sao}`);
-			for (const [, file] of KHO) {
-				const trongSao = join(sao, file);
-				const noi = readFileSync(trongSao, "utf8");
-				writeFileSync(trongSao, `${noi}\nconst DOT_BIEN_GIA = 1;\n`);
-			}
-			const doiTrongSao = KHO.filter(([, f]) =>
-				readFileSync(join(sao, f), "utf8").includes("DOT_BIEN_GIA"),
-			).length;
-			if (doiTrongSao !== KHO.length) {
-				console.log(
-					`KHONG DO DUOC: chi ${doiTrongSao}/${KHO.length} kho chuoi doi duoc trong cay sao`,
+
+			writeFileSync(MOC, banGoc + DAU_HIEU);
+			const sauNguoiSuaThat = md5(MOC);
+			writeFileSync(BAT_TAY.daSua, "1");
+			const maCon = await xong;
+
+			const sauLuot = md5(MOC);
+			const giuDuoc = sauLuot === sauNguoiSuaThat;
+			const conSao =
+				execFileSync("git", ["worktree", "list"], { encoding: "utf8" }).includes(
+					"/dot-bien-",
 				);
+			const sach = sachChua(TEP_KHO.filter((f) => f !== MOC));
+
+			if (!giuDuoc) {
+				console.log(`   DOI THAY BI NUOT o duong thoat ${che}: ${MOC} md5 ${sauNguoiSuaThat} -> ${sauLuot}`);
 				hong += 1;
 			}
-			console.log(`-- da dot bien ${doiTrongSao}/${KHO.length} kho chuoi TRONG CAY SAO`);
-		}
-
-		const sauLuot = md5(MOC);
-		if (sauLuot !== sauKhiNguoiSua) {
-			console.log(`   DOI THAY BI NUOT: ${MOC} md5 ${sauKhiNguoiSua} -> ${sauLuot}`);
-			hong += 1;
-		} else {
-			console.log(`   doi thay giua luot chay CON NGUYEN: ${MOC} md5 ${sauLuot}`);
+			if (conSao) {
+				console.log(`   CAY SAO SOT LAI o duong thoat ${che}`);
+				hong += 1;
+			}
+			if (!sach) {
+				console.log(`   KHO CHUOI BAN o duong thoat ${che}`);
+				hong += 1;
+			}
+			if (giuDuoc && !conSao && sach) {
+				console.log(
+					`   duong thoat ${che.padEnd(12)} doi thay CON NGUYEN · khong sot cay sao · kho chuoi sach (con thoat ${maCon})`,
+				);
+			}
+			writeFileSync(MOC, banGoc);
 		}
 	} finally {
 		writeFileSync(MOC, banGoc);
-		if (sao) donCaySao(sao);
 	}
 
 	const veGoc = md5(MOC) === truocHet;
-	const sach = sachChua(KHO.map(([, f]) => f));
-	console.log(`   file moc ve nguyen trang:  ${veGoc ? "co" : "KHONG"}`);
-	console.log(`   nam kho chuoi sach sau khi thoat: ${sach ? "co" : "KHONG"}`);
-	if (!veGoc || !sach) hong += 1;
+	const sachHet = sachChua(TEP_KHO);
+	console.log(`   file moc ve nguyen trang: ${veGoc ? "co" : "KHONG"}`);
+	console.log(`   nam kho chuoi sach:       ${sachHet ? "co" : "KHONG"}`);
+	if (!veGoc || !sachHet) hong += 1;
 
-	console.log(`ket qua: hong=${hong}`);
+	console.log(`ket qua: hong=${hong} tren ${DUONG_THOAT.length} duong thoat`);
 	process.exit(hong > 0 ? 1 : 0);
 }
-
-if (!sachChua(KHO.map(([, f]) => f))) {
-	console.log(
-		"KHONG DO DUOC: nam kho chuoi dang ban truoc khi do — commit hoac don cay roi chay lai",
-	);
-	process.exit(2);
-}
-
-const SAO = dungCaySao();
-const APP_SAO = `http://localhost:${CONG_SAO}`;
-console.log(`-- cay sao: ${SAO} · may chu rieng o cong ${CONG_SAO}`);
 
 const goc = new Map();
 for (const [, file] of KHO) goc.set(file, readFileSync(join(SAO, file), "utf8"));

@@ -137,4 +137,4 @@ export const DEM_BE_MAT_TRANG = () => {
 	};
 };
 
-export const LA_MENU = (ten) => /menu/i.test(ten);
+export const LA_MENU = (ten) => /menu/i.test(ten) && !/menu con/i.test(ten);

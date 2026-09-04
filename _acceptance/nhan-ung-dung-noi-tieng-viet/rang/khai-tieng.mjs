@@ -168,14 +168,23 @@ if (chan === "giai-doan") {
 		process.exit(2);
 	}
 	const chuaPhu = ENUM_GIAI_DOAN.filter((m) => !MA_GIAI_DOAN.includes(m));
+	if (chuaPhu.length > 0) {
+		console.log(
+			`KHONG DO DUOC: enum co ${ENUM_GIAI_DOAN.length} ma, du lieu thu chi phu ${MA_GIAI_DOAN.length}.\n` +
+				`   Chua phu: ${chuaPhu.join(" · ")}\n` +
+				"   AC-1 doi SO KHANG DINH BANG SO GIA TRI ENUM. Mot ma khong co thoa thuan nao\n" +
+				"   thi nhan cua no khong hien duoc, nen khong khang dinh duoc — do la TIEN DE\n" +
+				"   thieu, khong phai dat. Gieo du lieu thu cho du bay giai doan roi do lai.",
+		);
+		await browser.close();
+		process.exit(2);
+	}
 	console.log(
 		`-- DAN SO: ${MA_GIAI_DOAN.length} ma giai doan doc tu may chu trong chinh luot chay nay\n` +
 			`   nhan lay tu dealStageLabel() CUA SAN PHAM, khong tu mot hang trong file do:\n` +
 			MA_GIAI_DOAN.map((m) => `     ${m.padEnd(26)} -> ${JSON.stringify(NHAN_GIAI_DOAN[m])}`).join("\n") +
 			`\n-- DO PHU: enum co ${ENUM_GIAI_DOAN.length} ma, du lieu thu phu ${MA_GIAI_DOAN.length}` +
-			(chuaPhu.length > 0
-				? `\n   CHUA PHU (khai ra, khong tinh la dat): ${chuaPhu.join(" · ")}`
-				: "") +
+
 			"\n-- KHANG DINH: moi nhan phai hien tren man, trong mot phan tu tu khai lang=en (AC-14 vong ③a)",
 	);
 	const thay = await xem("deals", GIAI_DOAN, process.env.TRANG ?? "?hide=nothing");

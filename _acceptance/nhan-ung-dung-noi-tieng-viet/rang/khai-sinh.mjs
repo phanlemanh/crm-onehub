@@ -1,4 +1,5 @@
-import { spawnSync } from "node:child_process";
+import { execFile, spawnSync } from "node:child_process";
+import { promisify } from "node:util";
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -129,6 +130,13 @@ if (chan === "tap-rong") {
 
 	const CA = [
 		{
+			ten: "khai-tieng.mjs",
+			chay: ["node", `${RANG}/khai-tieng.mjs`],
+			ghim: "tap nganh nghe RONG",
+			pha: ["--go-nganh"],
+			phuc: ["--phuc-nganh"],
+		},
+		{
 			ten: "no-vong-1.mjs",
 			chay: ["node", `${RANG}/no-vong-1.mjs`],
 			ghim: "vang o CA HAI thu tieng",
@@ -195,117 +203,138 @@ if (chan === "tap-rong") {
 const HA_TANG =
 	/ECONNREFUSED|Failed to launch|Chrome|ENOENT|command not found|TimeoutError/i;
 
-const bang = [];
-let hong = 0;
+const SONG_SONG = Number(process.env.SONG_SONG ?? 3);
+const chayAsync = promisify(execFile);
 
-for (const m of so) {
-	if (m.daXoa) {
-		bang.push({ ten: m.ten, lanh: "-", pha: "-", ket: "da xoa", ly: m.lyDo });
-		continue;
+async function chay(lenh, doiSo, them, cwd) {
+	try {
+		const { stdout, stderr } = await chayAsync(lenh, doiSo, {
+			cwd: cwd ?? GOC,
+			encoding: "utf8",
+			maxBuffer: 32 * 1024 * 1024,
+			env: { ...process.env, ...(them ?? {}) },
+		});
+		return { status: 0, ra: `${stdout}${stderr}` };
+	} catch (loi) {
+		return {
+			status: loi.code ?? null,
+			ra: `${loi.stdout ?? ""}${loi.stderr ?? ""}${loi.message ?? ""}`,
+			loi,
+		};
 	}
+}
+
+async function theoLuong(muc, n, viec) {
+	const ra = new Array(muc.length);
+	let i = 0;
+	await Promise.all(
+		Array.from({ length: Math.min(n, muc.length) }, async () => {
+			while (i < muc.length) {
+				const k = i;
+				i += 1;
+				ra[k] = await viec(muc[k], k);
+			}
+		}),
+	);
+	return ra;
+}
+
+async function motMuc(m) {
+	const cwd = m.cwd ? join(GOC, m.cwd) : GOC;
+
+	if (m.daXoa)
+		return { ten: m.ten, lanh: "-", pha: "-", ket: "da xoa", ly: m.lyDo, hong: 0 };
+
 	if (m.chieuDoTrongBai) {
-		const ketBai = [];
+		const ket = [];
 		for (const bai of m.chieuDoTrongBai) {
 			const lenh = m.chayBai.map((x) => x.replace("{{BAI}}", bai));
-			const r = spawnSync(lenh[0], lenh.slice(1), {
-				cwd: m.cwd ? join(GOC, m.cwd) : GOC,
-				encoding: "utf8",
-				env: process.env,
-			});
-			const ra = `${r.stdout ?? ""}${r.stderr ?? ""}`;
-			if (r.error || r.status === null) {
-				console.log(`KHONG DO DUOC: ${m.ten} — ${r.error?.message ?? ""}`);
-				process.exit(2);
-			}
-			const soChay = Number(/(\d+) pass/.exec(ra)?.[1] ?? 0);
-			const soHong = Number(/(\d+) fail/.exec(ra)?.[1] ?? 1);
-			ketBai.push({ bai, chay: soChay, hong: soHong });
-			if (soChay < 1 || soHong > 0) {
-				console.log(
-					`   BAI CHIEU DO KHONG CHAY: ${m.ten} — "${bai}" chay=${soChay} hong=${soHong}`,
-				);
-			}
+			const r = await chay(lenh[0], lenh.slice(1), {}, cwd);
+			if (r.loi?.code === undefined && r.status === null)
+				return { ten: m.ten, chan: true, ly: r.ra.slice(0, 200) };
+			const soChay = Number(/(\d+) pass/.exec(r.ra)?.[1] ?? 0);
+			const soHong = Number(/(\d+) fail/.exec(r.ra)?.[1] ?? 1);
+			ket.push({ bai, chay: soChay, hong: soHong });
 		}
-		const duBai = ketBai.every((k) => k.chay >= 1 && k.hong === 0);
-		if (!duBai) hong += 1;
-		bang.push({
+		const du = ket.every((k) => k.chay >= 1 && k.hong === 0);
+		return {
 			ten: m.ten,
 			lanh: "0",
-			pha: `trong bai · ${ketBai.length} bai`,
-			ket: duBai ? "dat" : "TRUOT",
-			ly: ketBai.map((k) => `${k.chay}/${k.chay + k.hong}`).join(" "),
-		});
-		continue;
+			pha: `trong bai · ${ket.length} bai`,
+			ket: du ? "dat" : "TRUOT",
+			ly: ket.map((k) => `${k.bai.slice(0, 28)}=${k.chay}/${k.chay + k.hong}`).join(" · "),
+			hong: du ? 0 : 1,
+		};
 	}
-	if (!m.vecTo) {
-		hong += 1;
-		bang.push({
+
+	if (!m.vecTo)
+		return {
 			ten: m.ten,
 			lanh: "-",
 			pha: "KHONG CO",
 			ket: "TRUOT",
 			ly: m.lyDo ?? "khong khai vec-to pha nao",
-		});
-		console.log(`   CHAN KHONG PHA DUOC MA VAN CON: ${m.ten}`);
-		continue;
-	}
+			hong: 1,
+		};
+
+	const lanh = await chay(m.chay[0], m.chay.slice(1), {}, cwd);
+	if (lanh.status !== 0 && HA_TANG.test(lanh.ra))
+		return { ten: m.ten, chan: true, ly: lanh.ra.slice(0, 300) };
 
 	const doiSo = [...m.chay.slice(1), ...(m.vecTo.doiSo ?? [])];
-	const lanh = spawnSync(m.chay[0], m.chay.slice(1), {
-		cwd: GOC,
-		encoding: "utf8",
-		env: process.env,
-	});
-	const raLanh = `${lanh.stdout ?? ""}${lanh.stderr ?? ""}`;
-	if (lanh.error || lanh.status === null || (lanh.status !== 0 && HA_TANG.test(raLanh))) {
-		console.log(
-			`KHONG DO DUOC: ${m.ten} — ${(lanh.error?.message ?? raLanh).slice(0, 300)}`,
-		);
-		process.exit(2);
-	}
-
-	const bi = spawnSync(m.chay[0], doiSo, {
-		cwd: GOC,
-		encoding: "utf8",
-		env: { ...process.env, ...(m.vecTo.moiTruong ?? {}) },
-	});
-	const raBi = `${bi.stdout ?? ""}${bi.stderr ?? ""}`;
-	if (bi.error || bi.status === null) {
-		console.log(`KHONG DO DUOC: ${m.ten} o chieu pha — ${bi.error?.message ?? ""}`);
-		process.exit(2);
-	}
+	const bi = await chay(m.chay[0], doiSo, m.vecTo.moiTruong ?? {}, cwd);
+	if (bi.status === null && !bi.ra)
+		return { ten: m.ten, chan: true, ly: "chieu pha khong chay duoc" };
 
 	const imLanh = lanh.status === 0;
-	const doDung = bi.status === m.ma && raBi.includes(m.ghim);
-	if (!imLanh || !doDung) {
-		hong += 1;
-		console.log(
-			`   CHAN KHONG DO DUOC: ${m.ten} — cho lanh=0 va pha=${m.ma} kem ${JSON.stringify(m.ghim)},` +
-				` nhan lanh=${lanh.status} pha=${bi.status}${raBi.includes(m.ghim) ? "" : " (KHONG thay thong diep ghim)"}`,
-		);
-	}
-	bang.push({
+	const doDung = bi.status === m.ma && bi.ra.includes(m.ghim);
+	return {
 		ten: m.ten,
 		lanh: String(lanh.status),
 		pha: `${bi.status} · ${m.vecTo.kieu}`,
 		ket: imLanh && doDung ? "dat" : "TRUOT",
 		ly: m.ghim,
-	});
+		hong: imLanh && doDung ? 0 : 1,
+		chiTiet: imLanh && doDung
+			? null
+			: `cho lanh=0 va pha=${m.ma} kem ${JSON.stringify(m.ghim)}, nhan lanh=${lanh.status} pha=${bi.status}${bi.ra.includes(m.ghim) ? "" : " (KHONG thay thong diep ghim)"}`,
+	};
+}
+
+const batDau = Date.now();
+const songSongDuoc = so.filter((m) => !m.chayRieng);
+const phaiRieng = so.filter((m) => m.chayRieng);
+const ketQua = await theoLuong(songSongDuoc, SONG_SONG, motMuc);
+for (const m of phaiRieng) ketQua.push(await motMuc(m));
+if (phaiRieng.length > 0)
+	console.log(
+		`   ${phaiRieng.length} muc chay RIENG vi chieu do cua chung sua cay lam viec: ${phaiRieng.map((m) => m.ten).join(" · ")}`,
+	);
+
+const bang = [];
+let hong = 0;
+for (const k of ketQua) {
+	if (k.chan) {
+		console.log(`KHONG DO DUOC: ${k.ten} — ${k.ly}`);
+		process.exit(2);
+	}
+	if (k.chiTiet) console.log(`   CHAN KHONG DO DUOC: ${k.ten} — ${k.chiTiet}`);
+	hong += k.hong;
+	bang.push(k);
 }
 
 if (bang.length !== so.length) {
-	console.log(
-		`KHONG DO DUOC: bang co ${bang.length} dong, so khai sinh co ${so.length} muc`,
-	);
+	console.log(`KHONG DO DUOC: bang co ${bang.length} dong, so khai sinh co ${so.length} muc`);
 	process.exit(2);
 }
 
 const dong = (c) => `| ${c.ten} | ${c.lanh} | ${c.pha} | ${c.ket} | ${c.ly ?? ""} |`;
+const giay = Math.round((Date.now() - batDau) / 1000);
 const vb = [
 	"# Bang khai sinh — moi chan, hai chieu, trong chinh luot chay nay",
 	"",
-	`Sinh boi \`rang/khai-sinh.mjs\` luc ${new Date().toISOString()}.`,
-	`Dan so: ${DAN_SO.length} chan trong ban khai · ${so.length} muc trong so.`,
+	`Sinh boi \`rang/khai-sinh.mjs\` luc ${new Date().toISOString()} · ${giay} giay · ${SONG_SONG} luong.`,
+	`Dan so: ${DAN_SO.length} chan suy tu DIA · ${so.length} muc trong so.`,
 	"",
 	"| Chan | Chieu lanh | Chieu pha | Ket | Thong diep ghim |",
 	"| --- | --- | --- | --- | --- |",
@@ -319,11 +348,8 @@ mkdirSync(dirname(BANG), { recursive: true });
 writeFileSync(BANG, vb);
 
 console.log("");
-for (const c of bang) {
-	console.log(
-		`   ${c.ket.padEnd(6)} ${c.ten.padEnd(38)} lanh=${c.lanh} pha=${c.pha}`,
-	);
-}
-console.log(`\n-- bang ghi ra ${BANG}`);
+for (const c of bang)
+	console.log(`   ${c.ket.padEnd(6)} ${c.ten.padEnd(38)} lanh=${c.lanh} pha=${c.pha}`);
+console.log(`\n-- bang ghi ra ${BANG} · ${giay} giay · ${SONG_SONG} luong`);
 console.log(`ket qua: chan chua chung minh do duoc=${hong}/${so.length}`);
 process.exit(hong > 0 ? 1 : 0);

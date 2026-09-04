@@ -30,15 +30,19 @@ evals:
     executor: script
     cmd: config:executors.script.rang3_khai_sinh_tap_rong
     expected: >-
-      exit 0. Chay tung chan co the roi vao tap quan sat rong — khai-tieng,
-      no-vong-1, du-lieu-bien — tren CUNG may chu, mot lan o trang thai binh
-      thuong (doi chung duong: chan im, exit 0) va mot lan o trang thai KHONG
-      QUAN SAT DUOC GI (loc bang mot tu khoa khong khop hang nao, hoac bo cookie
-      phien).
-      Chieu do: o luot thu hai moi chan phai thoat MA 2 va in dung dong
-      "KHONG DO DUOC: tap <ten tap> rong". Exit 0 o luot thu hai la TRUOT — do
-      la chinh lop loi tap-so-rong. Exit 1 cung la truot: khong quan sat duoc gi
-      khong phai vat hong.
+      exit 0. Lop da tuyen co BA chan co the roi vao tap quan sat rong: khai-tieng,
+      no-vong-1, du-lieu-bien. So khang dinh phai BANG so phan tu cua lop — bang in
+      ra ba dong, mot dong moi chan; hai dong la TRUOT.
+      Moi chan co vec-to DU LIEU rieng, vi mot cu doi du lieu chi lam rong tap cua
+      mot chan: khai-tieng <- go nganh cua moi cong ty · no-vong-1 <- tra trang thai
+      bo sung du lieu ve mot gia tri · du-lieu-bien <- go moc hoat dong. Moi cu pha
+      CHUP anh truoc, va buoc phuc hoi phai thanh cong — phuc hoi that bai la exit 2
+      kem ten chan, khong duoc im.
+      Chieu lanh: ca ba chan exit 0 tren du lieu thu day du.
+      Chieu do: sau cu pha, moi chan phai thoat MA 2 kem thong diep ghim CUA RIENG NO
+      — "tap nganh nghe RONG" · "vang o CA HAI thu tieng" · "thieu hang cho trang
+      thai". Exit 0 la TRUOT (do la chinh lop tap-so-rong); exit 1 cung TRUOT, vi
+      khong quan sat duoc gi khong phai vat hong.
     paths:
       - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs"
       - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/no-vong-1.mjs"
@@ -165,23 +169,22 @@ evals:
     executor: script
     cmd: config:executors.script.rang3_mien_tru
     expected: >-
-      exit 0. Banh coc HAI CHIEU tren ca ba ban khai mien tru cua gian do:
-      KHONG_DAU trong messages-guard.spec.ts · rang/dot-bien-sot.txt · hai khoi
-      case cua rang/khong-may-quet.sh. Lan chay in so dong va so hit that cua tung
-      ban khai.
-      Chieu do da co san, khong can dung: dong `viet-tat.ts` trong khoi case cua
-      khong-may-quet.sh CHUA TUNG co mot hit nao — file do song o thu muc rang/
-      cua vong ①, va vong lap cua chan chi duyet *.mjs va *.sh. LUOT CHAY DAU
-      TIEN cua chan mien-tru PHAI DO va in dung dong
-      "DONG MIEN TRU CHET: khong-may-quet.sh:viet-tat.ts". Ghi luot do vao ho so
-      lam chieu do; roi go dong chet di, chan im — do la doi chung duong.
-      Chieu do lap lai duoc: them mot dong mien tru tro toi mot ten khong co that
-      vao BAT KY ban khai nao trong ba — chan DO va goi ten dung ban khai va dong.
-      Doi chung duong khong duoc phep la "moi dong deu co hit" tu nhien: no phai
-      la trang thai SAU khi go dong chet da biet ten.
-      Vi sao can: them mot dong vao bat ky ban khai nao la tat mot phan phep do,
-      vinh vien, khong dau vet. Khong phat hien nao trong chin cai goi ten cho
-      nay.
+      exit 0. Banh coc HAI CHIEU tren cac ban khai mien tru cua gian do:
+      danh-sach-chan.json (khoi mienTru) · KHONG_DAU trong messages-guard.spec.ts ·
+      rang/dot-bien-sot.txt. Lan chay in so dong va so hit that cua tung ban khai.
+      Doi chieu bang DUONG KHOA DAY DU nap tu kho chuoi qua mot trinh chay that,
+      khong bang ten la — do la dung lop loi chan khoa-chet dang chua.
+      Chieu do lap lai duoc: them mot dong mien tru tro toi mot ten khong co that vao
+      BAT KY ban khai nao — chan DO va goi ten dung ban khai va dong, khuon
+      "DONG MIEN TRU CHET: <ban khai>:<dong>".
+      Doi chung duong la trang thai SAU khi go cac dong chet da biet ten. Luot chay
+      dau tien cua vong nay DA DO that voi sau dong: nam dong trong KHONG_DAU
+      (headers.emails · dealColumns.title · stageChange · currencyEntry ·
+      candidateTitle) va mot dong trong chan chong-lach (viet-tat.ts, file song o thu
+      muc rang/ cua vong ① nen chua tung co hit). Ho so ghi ten tung dong da go o
+      evidence/mien-tru-da-go.txt.
+      Vi sao can: them mot dong vao bat ky ban khai nao la tat mot phan phep do, vinh
+      vien, khong dau vet. Khong phat hien nao trong chin cai goi ten cho nay.
     paths:
       - "apps/app/test/messages-guard.spec.ts"
       - "_acceptance/nhan-ung-dung-noi-tieng-viet/rang/dot-bien-sot.txt"

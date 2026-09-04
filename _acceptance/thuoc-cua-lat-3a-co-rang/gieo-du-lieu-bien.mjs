@@ -8,12 +8,14 @@ const GOC = resolve(HO_SO, "../..");
 const CHUP = join(HO_SO, ".anh-chup");
 const KHO_TRANG_THAI = join(CHUP, "trang-thai-bo-sung.json");
 const KHO_HOAT_DONG = join(CHUP, "moc-hoat-dong.json");
+const KHO_NGANH = join(CHUP, "nganh.json");
 
 const TRANG_THAI = ["RUNNING", "COMPLETE", "FAILED", "SKIPPED"];
 
 const co = (c) => process.argv.includes(c);
 const PHA_TRANG_THAI = co("--tra-ve-pending");
 const PHA_HOAT_DONG = co("--go-hoat-dong");
+const PHA_NGANH = co("--go-nganh");
 
 mkdirSync(CHUP, { recursive: true });
 
@@ -77,6 +79,23 @@ const lech = sau.filter((r) => {
 console.log(\`-- da phuc \${rows.length} hang · con lech \${lech.length}\`);
 if (lech.length > 0) process.exit(1);
 `,
+  "go-nganh": chup(KHO_NGANH, "{ id: true, industry: true }") + `
+await db.company.updateMany({ data: { industry: null } });
+console.log("-- da go nganh cua moi cong ty (dung tap nganh rong)");
+`,
+  "phuc-nganh": doiAnhChup(KHO_NGANH, "nganh") + `
+import { readFileSync } from "node:fs";
+import { db } from "./src/client";
+const rows = JSON.parse(readFileSync(${JSON.stringify(KHO_NGANH)}, "utf8"));
+for (const r of rows) {
+  await db.company.update({ where: { id: r.id }, data: { industry: r.industry } });
+}
+const sau = await db.company.findMany({ select: { id: true, industry: true } });
+const map = new Map(rows.map((r) => [r.id, r.industry]));
+const lech = sau.filter((r) => map.has(r.id) && map.get(r.id) !== r.industry);
+console.log(\`-- da phuc \${rows.length} hang · con lech \${lech.length}\`);
+if (lech.length > 0) process.exit(1);
+`,
   gieo: `
 import { db } from "./src/client";
 const CAN = ${JSON.stringify(TRANG_THAI)};
@@ -109,15 +128,20 @@ if (conThieu.length > 0) {
 `,
 };
 
-const chan = PHA_TRANG_THAI
-  ? "tra-ve-pending"
-  : co("--phuc-trang-thai")
-    ? "phuc-trang-thai"
-    : PHA_HOAT_DONG
-      ? "go-hoat-dong"
-      : co("--phuc-hoat-dong")
-        ? "phuc-hoat-dong"
-        : "gieo";
+const CHAN_THEO_CO = [
+  ["--tra-ve-pending", "tra-ve-pending"],
+  ["--phuc-trang-thai", "phuc-trang-thai"],
+  ["--go-hoat-dong", "go-hoat-dong"],
+  ["--phuc-hoat-dong", "phuc-hoat-dong"],
+  ["--go-nganh", "go-nganh"],
+  ["--phuc-nganh", "phuc-nganh"],
+];
+
+const chan = CHAN_THEO_CO.find(([c]) => co(c))?.[1] ?? "gieo";
+if (!KICH_BAN[chan]) {
+  console.log(`KHONG DO DUOC: khong co kich ban cho chan ${chan}`);
+  process.exit(2);
+}
 
 console.log(`-- gieo-du-lieu-bien: chan ${chan}`);
 try {
@@ -136,7 +160,8 @@ try {
 
 if (
   (PHA_TRANG_THAI && !existsSync(KHO_TRANG_THAI)) ||
-  (PHA_HOAT_DONG && !existsSync(KHO_HOAT_DONG))
+  (PHA_HOAT_DONG && !existsSync(KHO_HOAT_DONG)) ||
+  (PHA_NGANH && !existsSync(KHO_NGANH))
 ) {
   console.log("KHONG DO DUOC: da pha du lieu ma KHONG chup duoc anh — khong phuc duoc");
   process.exit(2);

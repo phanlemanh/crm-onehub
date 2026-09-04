@@ -61,10 +61,10 @@ const can = [
 		ten: "khong nguoi phu trach",
 		vi_sao: "khoa facets.unassigned chi hien khi co hang nay",
 		loc: (r) => !r.owner,
-		cho: ["\u2014"],
+		oPhaiTrong: ["Phụ trách", "Owner"],
 		vi_sao_cho:
-			"o Phu trach trong phai hien ky hieu o-trong chung cua bo dung (EmptyCellValue), " +
-			"khong duoc de trong va khong duoc hien chu tieng Anh",
+			"o Phu trach CUA DUNG HANG DO phai hien ky hieu o-trong chung cua bo dung " +
+			"(EmptyCellValue), khong duoc de trang va khong duoc hien chu tieng Anh",
 		cam: [/\bUnassigned\b/, /\bNo owner\b/, /\bNone\b/],
 	},
 	{
@@ -80,7 +80,7 @@ const can = [
 		ten: "ten phap nhan 40-60 ky tu",
 		vi_sao: "be rong cot chua bao gio gap ten that dai",
 		loc: (r) => r.name.length >= 40 && r.name.length <= 60,
-		cho: [],
+		oKhongCatTran: ["Tên", "Company"],
 		cam: [],
 	},
 ];
@@ -129,6 +129,29 @@ const DOC = () => {
 	return ra;
 };
 
+const DOC_HANG = (ten) => {
+	const dau = [...document.querySelectorAll('[data-slot="table-head"]')].map((h) =>
+		(h.textContent ?? "").replace(/\s+/g, " ").trim(),
+	);
+	const hang = [
+		...document.querySelectorAll('[data-slot="table-body"] [data-slot="table-row"]'),
+	].find((r) => (r.textContent ?? "").includes(ten));
+	if (!hang) return null;
+	const o = [...hang.querySelectorAll('[data-slot="table-cell"]')].map((c, i) => {
+		const trong = c.querySelector("span,div,a") ?? c;
+		return {
+			cot: dau[i] ?? `cot-${i}`,
+			chu: (c.textContent ?? "").replace(/\s+/g, " ").trim(),
+			oRong: Math.round(c.clientWidth),
+			chuRong: Math.round(Math.max(c.scrollWidth, trong.scrollWidth)),
+			baCham:
+				getComputedStyle(trong).textOverflow === "ellipsis" ||
+				getComputedStyle(c).textOverflow === "ellipsis",
+		};
+	});
+	return { dau, o };
+};
+
 async function docMan(ten) {
 	const page = await browser.newPage();
 	await page.setViewport({ width: 1440, height: 1000 });
@@ -146,21 +169,24 @@ async function docMan(ten) {
 	await new Promise((r) => setTimeout(r, 800));
 	const lang = await page.evaluate(() => document.documentElement.lang);
 	const chu = await page.evaluate(DOC);
+	const hang = await page.evaluate(DOC_HANG, ten);
 	await page.close();
-	return { lang, chu };
+	return { lang, chu, hang };
 }
 
 console.log(`\n-- doc CHU TREN MAN cho tung trang thai (lang=${TIENG})`);
 let hong = 0;
 for (const c of can) {
-	const { lang, chu } = await docMan(c.viDu);
+	const { lang, chu, hang } = await docMan(c.viDu);
 	if (lang !== TIENG) {
 		console.log(`KHONG DO DUOC: trang khong o lang=${TIENG} (${lang})`);
 		await browser.close();
 		process.exit(2);
 	}
-	if (chu.length === 0) {
-		console.log(`KHONG DO DUOC: khong doc duoc chu nao tren man cho ${c.ten}`);
+	if (chu.length === 0 || hang === null) {
+		console.log(
+			`KHONG DO DUOC: khong tim thay hang cua ${JSON.stringify(c.viDu)} tren man cho ${c.ten}`,
+		);
 		await browser.close();
 		process.exit(2);
 	}
@@ -174,31 +200,68 @@ for (const c of can) {
 		continue;
 	}
 
-	const thieuCho =
-		(c.cho?.length > 0 && !c.cho.some((m) => gop.includes(m))) ||
-		(c.choMau?.length > 0 && !c.choMau.some((re) => re.test(gop)));
-	if (thieuCho) {
-		console.log(
-			`   THIEU DAU HIEU o trang thai ${c.ten}: cho mot trong ${JSON.stringify(c.cho ?? c.choMau?.map(String))}` +
-				(c.vi_sao_cho ? `\n         ${c.vi_sao_cho}` : ""),
-		);
-		hong += 1;
-		continue;
+	let bangChung = null;
+
+	if (c.oPhaiTrong) {
+		const o = hang.o.find((x) => c.oPhaiTrong.includes(x.cot));
+		if (!o) {
+			console.log(
+				`KHONG DO DUOC: khong thay cot ${JSON.stringify(c.oPhaiTrong)} — cot co: ${JSON.stringify(hang.dau)}`,
+			);
+			await browser.close();
+			process.exit(2);
+		}
+		if (o.chu !== "\u2014") {
+			console.log(
+				`   O KHONG DUNG KY HIEU TRONG o trang thai ${c.ten}: cot ${JSON.stringify(o.cot)} doc ${JSON.stringify(o.chu)}, cho "\u2014"\n` +
+					`         ${c.vi_sao_cho}`,
+			);
+			hong += 1;
+			continue;
+		}
+		bangChung = `${o.cot}="${o.chu}"`;
 	}
 
-	const tenDay = chu.some((t) => t.includes(c.viDu));
-	if (!tenDay) {
-		console.log(`   TEN BI CAT o trang thai ${c.ten}: khong thay ${JSON.stringify(c.viDu)} nguyen ven`);
-		hong += 1;
-		continue;
+	if (c.choMau) {
+		if (!c.choMau.some((re) => re.test(gop))) {
+			console.log(
+				`   THIEU DAU HIEU o trang thai ${c.ten}: cho mot trong ${JSON.stringify(c.choMau.map(String))}`,
+			);
+			hong += 1;
+			continue;
+		}
+		bangChung = chu.find((t) => c.choMau.some((re) => re.test(t))) ?? null;
 	}
 
-	const bangChung =
-		chu.find((t) => (c.cho ?? []).some((m) => t.includes(m))) ??
-		chu.find((t) => (c.choMau ?? []).some((re) => re.test(t))) ??
-		c.viDu;
+	if (c.oKhongCatTran) {
+		const o = hang.o.find((x) => c.oKhongCatTran.includes(x.cot));
+		if (!o) {
+			console.log(
+				`KHONG DO DUOC: khong thay cot ${JSON.stringify(c.oKhongCatTran)} — cot co: ${JSON.stringify(hang.dau)}`,
+			);
+			await browser.close();
+			process.exit(2);
+		}
+		const biCat = o.chuRong > o.oRong + 1;
+		if (biCat && !o.baCham) {
+			console.log(
+				`   CAT TRAN o trang thai ${c.ten}: cot ${JSON.stringify(o.cot)} chu ${o.chuRong}px trong o ${o.oRong}px, KHONG co ba cham`,
+			);
+			hong += 1;
+			continue;
+		}
+		if (!o.chu.includes(c.viDu) && !biCat) {
+			console.log(
+				`   TEN KHONG DAY DU o trang thai ${c.ten}: cot ${JSON.stringify(o.cot)} doc ${JSON.stringify(o.chu)}`,
+			);
+			hong += 1;
+			continue;
+		}
+		bangChung = `${o.cot} chu=${o.chuRong}px o=${o.oRong}px ${biCat ? "cat + ba cham" : "du cho"}`;
+	}
+
 	console.log(
-		`   doc duoc  ${c.ten.padEnd(30)} ${chu.length} doan chu · dau hieu ${JSON.stringify(bangChung)}`,
+		`   doc duoc  ${c.ten.padEnd(30)} ${chu.length} doan chu · ${bangChung}`,
 	);
 }
 

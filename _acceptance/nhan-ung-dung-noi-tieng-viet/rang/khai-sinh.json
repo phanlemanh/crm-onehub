@@ -129,8 +129,10 @@
         "KIEU_CU": "1"
       }
     },
-    "ghim": "DOI THAY BI NUOT:",
-    "ma": 1
+    "ghim": "DOI THAY BI NUOT o duong thoat",
+    "ma": 1,
+    "chayRieng": true,
+    "lyDo": "chieu do cua no SUA CAY LAM VIEC, nen khong duoc chay song song voi chan khac"
   },
   {
     "ten": "chu-cung-jsx.mjs",
