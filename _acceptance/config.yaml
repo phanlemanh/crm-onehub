@@ -18,7 +18,7 @@ executors:
     api: "bun run db:test && bun run test"
     api_khong_cache_tru_agent: "bun run db:test && bunx turbo run test --concurrency=1 --force --filter=!agent"
     rang3_khoa_chet: "cd apps/app && bun test test/messages-guard.spec.ts"
-    tt_api: bun run db:test && cd apps/api && bun run test listing-ingest campaigns
+    tt_api: bun run db:test && cd apps/api && bun run test listing-ingest.integration listing-fields listing-fixture-batch campaigns.spec campaign-schema
     tt_app: cd apps/app && bun test test/messages-guard.spec.ts test/campaign-states.spec.ts
   script:
     cua_vao_loi_mang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"
