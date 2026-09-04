@@ -238,3 +238,33 @@ none — không có eval nào chạy nhiều lần (mọi eval đều `runs: 1`,
 ## Iterations
 
 Round 1: 12/14 eval máy (E1-E10, E12, E14) và 4 lệnh suite đều PASS, đối chứng baseline hợp lệ theo A/B. E11 (rang/khai-sinh.mjs, không tham số --chan) bị công cụ giết ở mốc 600 giây trước khi in dòng tổng kết — verdict tổng là BLOCKED, chưa đo được đầy đủ AC-11 ở nhánh khai-sinh không lọc. E13 (AC-12, judgment) đang chờ người quyết — panel đề xuất FAIL trên cả ba lens vì một số chân trong bảng khai sinh chỉ mô tả được bằng cơ chế nội bộ của bộ đo, chưa dịch sang hậu quả sản phẩm.
+
+## Giới hạn đề xuất khai — CHƯA CÓ CHỮ KÝ NGƯỜI
+
+Phiên `crm-3e` chuyển lời rằng người đã chốt dừng vòng ở mức đang có. Máy ghi
+lại ĐỀ XUẤT, không tự điền `human_override` hay `human_signoff` — hai ô đó vẫn
+để trống, và chỉ người mới điền được.
+
+- **E11 (AC-11) — sổ khai sinh.** Vòng 1 BLOCKED vì lượt chạy tuần tự mất ~25
+  phút, vượt trần công cụ 600 giây. **Đã sửa sau vòng 1:** chạy ba luồng song
+  song, xong trong 435 giây, 14/14 chân chứng minh cả hai chiều. Giới hạn còn
+  lại: kết quả đó đo bằng tay ngoài workflow, chưa qua một lượt S4.
+- **E13 (AC-12) — hội đồng.** Đề xuất FAIL vì một số chân đo chưa dịch được
+  sang hậu quả sản phẩm. Chưa chấm lại sau khi hồ sơ được bổ sung
+  `evidence/chin-khiem-khuyet-gio-ra-sao.md`.
+
+### Hồ sơ này CŨ so với mã
+
+`verified_commit` ghim `10c6029a9f819a2eea8103b40434bd43c38eacb5` (vòng 1).
+HEAD nay là `3275bf3`, sau hai lượt sửa đóng **13/13 phát hiện trong-hợp-đồng**
+của vòng 1. Bảng verdict ở trên nói về mã TRƯỚC các bản sửa đó. Lưới kiểm hiệu
+lực sẽ gọi hồ sơ này là STALE, và điều đó đúng.
+
+Trạng thái đo được sau các bản sửa, chạy tay ngoài workflow:
+
+| Vật | Kết quả |
+| --- | --- |
+| Sổ khai sinh (E11) | 14/14 chân, hai chiều, 435 giây |
+| Bánh cóc sổ (E12/E14) | 0 lỗi đối chiếu, 4/4 tự kiểm lật |
+| Chân tập-rỗng (E2) | 3/3 ca, mỗi ca một véc-tơ dữ liệu riêng |
+| Bốn cổng máy, ép không cache | 13/13 · 9/9 · 0 · 197 bài |
