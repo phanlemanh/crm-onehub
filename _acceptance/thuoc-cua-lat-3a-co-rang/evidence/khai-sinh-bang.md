@@ -1,6 +1,6 @@
 # Bang khai sinh — moi chan, hai chieu, trong chinh luot chay nay
 
-Sinh boi `rang/khai-sinh.mjs` luc 2026-09-04T01:48:42.357Z · 435 giay · 3 luong.
+Sinh boi `rang/khai-sinh.mjs` luc 2026-09-04T13:25:13.208Z · 438 giay · 3 luong.
 Dan so: 12 chan suy tu DIA · 14 muc trong so.
 
 | Chan | Chieu lanh | Chieu pha | Ket | Thong diep ghim |
