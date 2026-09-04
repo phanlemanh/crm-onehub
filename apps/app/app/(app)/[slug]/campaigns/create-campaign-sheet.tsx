@@ -103,8 +103,13 @@ function SegmentField({
 				</SelectTrigger>
 				<SelectContent>
 					{views.map((view) => (
-						<SelectItem key={view.id} value={view.id} translate="no">
-							{view.name}
+						<SelectItem key={view.id} value={view.id}>
+							<span translate="no">{view.name}</span>
+							{view.size === null ? null : (
+								<span className="text-muted-foreground">
+									{m.create.segmentSize(String(view.size))}
+								</span>
+							)}
 						</SelectItem>
 					))}
 				</SelectContent>

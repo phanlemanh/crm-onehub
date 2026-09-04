@@ -154,6 +154,31 @@ describe("chiến dịch tuyển đối tác", () => {
 		expect(campaign.stats.members).toBe(3);
 	});
 
+	it("AC-6 · số cá nhân của góc nhìn bằng đúng số kết quả bộ lọc", async () => {
+		const filtered = await contacts.list({
+			q: "",
+			sort: "",
+			dir: "asc",
+			page: 1,
+			pageSize: 1,
+			owner: [userId],
+			company: [],
+			source: [],
+			title: [],
+			seniority: [],
+			persona: [],
+			activity: [],
+			fields: {},
+			archived: false,
+		});
+
+		const views = await savedViews.list("CONTACT", userId);
+		const view = views.find((row) => row.id === viewId);
+
+		expect(view?.size).toBe(filtered.total);
+		expect(view?.size).toBe(3);
+	});
+
 	it("AC-7 · vòng đời ba trạng thái, đã kết thúc không bắt đầu lại", async () => {
 		const created = await draft("Vòng đời");
 		expect(created.status).toBe("DRAFT");

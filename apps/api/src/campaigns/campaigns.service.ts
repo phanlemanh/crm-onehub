@@ -318,6 +318,16 @@ export class CampaignsService {
 		return rows.map((row) => row.name);
 	}
 
+	async memberCount(filters: SavedViewFilters): Promise<number> {
+		const page = await this.contacts.list({
+			...this.contactListFor(filters, ""),
+			page: 1,
+			pageSize: 1,
+		});
+
+		return page.total;
+	}
+
 	private async require(id: string): Promise<CampaignRow> {
 		const row = await this.db.campaign.findUnique({
 			where: { id },
@@ -411,16 +421,6 @@ export class CampaignsService {
 			fields,
 			archived: filters.archived,
 		};
-	}
-
-	private async memberCount(filters: SavedViewFilters): Promise<number> {
-		const page = await this.contacts.list({
-			...this.contactListFor(filters, ""),
-			page: 1,
-			pageSize: 1,
-		});
-
-		return page.total;
 	}
 
 	private async viewPage(

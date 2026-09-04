@@ -3,6 +3,7 @@ import { parseSavedViewFilters } from "@crm/validation/saved-view";
 import {
 	ConflictException,
 	Injectable,
+	Logger,
 	NotFoundException,
 } from "@nestjs/common";
 import { CampaignsService } from "../campaigns/campaigns.service";
@@ -13,8 +14,21 @@ import type {
 	SavedViewUpdateData,
 } from "./saved-views.contracts";
 
+type SavedViewRow = {
+	id: string;
+	entity: FieldEntity;
+	name: string;
+	shared: boolean;
+	filters: unknown;
+	ownerId: string;
+	createdAt: Date;
+	updatedAt: Date;
+};
+
 @Injectable()
 export class SavedViewsService {
+	private readonly logger = new Logger(SavedViewsService.name);
+
 	constructor(
 		@InjectDatabase() private readonly db: Db,
 		private readonly campaigns: CampaignsService,
@@ -26,7 +40,9 @@ export class SavedViewsService {
 			orderBy: { name: "asc" },
 		});
 
-		return rows.map((row) => this.serialize(row, userId));
+		const sizes = await Promise.all(rows.map((row) => this.sizeOf(row)));
+
+		return rows.map((row, index) => this.serialize(row, userId, sizes[index]));
 	}
 
 	async create(
@@ -44,7 +60,7 @@ export class SavedViewsService {
 				},
 			});
 
-			return this.serialize(row, userId);
+			return this.serialize(row, userId, await this.sizeOf(row));
 		} catch (error) {
 			throw this.translate(error);
 		}
@@ -70,7 +86,7 @@ export class SavedViewsService {
 				},
 			});
 
-			return this.serialize(row, userId);
+			return this.serialize(row, userId, await this.sizeOf(row));
 		} catch (error) {
 			throw this.translate(error, id);
 		}
@@ -98,18 +114,28 @@ export class SavedViewsService {
 		return { id };
 	}
 
+	private async sizeOf(row: SavedViewRow): Promise<number | null> {
+		if (row.entity !== "CONTACT") return null;
+
+		try {
+			return await this.campaigns.memberCount(
+				parseSavedViewFilters(row.filters),
+			);
+		} catch (error) {
+			this.logger.warn({
+				message: "Saved view size not counted",
+				savedViewId: row.id,
+				reason: error instanceof Error ? error.message : "unknown",
+			});
+
+			return null;
+		}
+	}
+
 	private serialize(
-		row: {
-			id: string;
-			entity: FieldEntity;
-			name: string;
-			shared: boolean;
-			filters: unknown;
-			ownerId: string;
-			createdAt: Date;
-			updatedAt: Date;
-		},
+		row: SavedViewRow,
 		userId: string,
+		size: number | null | undefined,
 	): SavedView {
 		return {
 			id: row.id,
@@ -117,6 +143,7 @@ export class SavedViewsService {
 			name: row.name,
 			shared: row.shared,
 			filters: parseSavedViewFilters(row.filters),
+			size: size ?? null,
 			mine: row.ownerId === userId,
 			createdAt: row.createdAt.toISOString(),
 			updatedAt: row.updatedAt.toISOString(),
