@@ -1,0 +1,85 @@
+{
+  "run_id": "design-gate-e49e0b3eb9",
+  "verifier": "scripts/design-gate.mjs (vendored Impeccable detector)",
+  "verified_at": "2026-09-04T04:50:16.902Z",
+  "target": "evidence/E16-sign-in-vi.html",
+  "fail_on": [
+    "P0"
+  ],
+  "mode": "dom",
+  "verdict": "REJECT",
+  "exit_code": 2,
+  "p0_count": 2,
+  "blocking": [
+    "low-contrast",
+    "low-contrast"
+  ],
+  "hits": [
+    "cramped-padding",
+    "low-contrast",
+    "gradient-text",
+    "layout-transition"
+  ],
+  "findings": [
+    {
+      "rule": "cramped-padding",
+      "severity": "warning",
+      "pTier": "P2",
+      "detail": "0px vertical padding (need ≥4.8px for 16px text)"
+    },
+    {
+      "rule": "cramped-padding",
+      "severity": "warning",
+      "pTier": "P2",
+      "detail": "<section> \"relative\": children flush against border on all sides (no inset)"
+    },
+    {
+      "rule": "cramped-padding",
+      "severity": "warning",
+      "pTier": "P2",
+      "detail": "<div> \"relative\": children flush against border on all sides (no inset)"
+    },
+    {
+      "rule": "cramped-padding",
+      "severity": "warning",
+      "pTier": "P2",
+      "detail": "<div> \"flex\": children flush against border on all sides (no inset)"
+    },
+    {
+      "rule": "low-contrast",
+      "severity": "warning",
+      "pTier": "P0",
+      "detail": "1.0:1 (need 4.5:1) — text #ffffff on #ffffff"
+    },
+    {
+      "rule": "low-contrast",
+      "severity": "warning",
+      "pTier": "P0",
+      "detail": "1.0:1 (need 3:1) — text #ffffff on #ffffff"
+    },
+    {
+      "rule": "cramped-padding",
+      "severity": "warning",
+      "pTier": "P2",
+      "detail": "0px vertical padding (need ≥9.6px for 32px text)"
+    },
+    {
+      "rule": "cramped-padding",
+      "severity": "warning",
+      "pTier": "P2",
+      "detail": "<section> \"flex\": children flush against border on all sides (no inset)"
+    },
+    {
+      "rule": "gradient-text",
+      "severity": "warning",
+      "pTier": "P1",
+      "detail": "background-clip: text + gradient"
+    },
+    {
+      "rule": "layout-transition",
+      "severity": "warning",
+      "pTier": "P2",
+      "detail": "transition: height"
+    }
+  ]
+}

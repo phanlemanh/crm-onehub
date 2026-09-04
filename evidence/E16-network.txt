@@ -1,0 +1,23 @@
+E16 network truth
+==================
+Driver used for capture: standalone puppeteer-core script
+(_acceptance/cua-vao-noi-tieng-viet/rang/e16-capture.mjs), invoked directly via
+node, not the Claude_Browser MCP pane. That driver exposes no
+read_network_requests / read_console_messages equivalent to this verifier
+process, so failed-request / console-error introspection per the NETWORK
+TRUTH rail is not available here.
+networkObserved = "n-a (driver)"
+
+Basic reachability (curl, not a substitute for the rail above):
+  GET http://localhost:3000/sign-in -> 200 (checked before capture)
+
+Supplementary probe (separate short-lived puppeteer page, console+pageerror
+listeners attached, cookie lang=vi, same dev server):
+  [console:info] React DevTools notice (dev-mode noise, expected)
+  [console:log] [HMR] connected
+  [console:error] Error: Route "/sign-in": Next.js encountered runtime data
+    during prerendering.
+This last line is an existing Next.js dev-mode prerender warning on the
+/sign-in route, unrelated to AC-10 / the design scan. Not treated as a
+FAIL-eligible network request (it is a console warning, not an XHR/fetch),
+and out of scope for this eval. Flagging only for completeness.
