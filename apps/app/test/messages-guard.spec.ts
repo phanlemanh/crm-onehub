@@ -2,6 +2,7 @@ import { describe, expect, it } from "bun:test";
 import { join } from "node:path";
 import { companyMessages } from "@/lib/messages/companies";
 import { contactMessages } from "@/lib/messages/contacts";
+import { authMessages } from "@/lib/messages/auth";
 import { crmMessages } from "@/lib/messages/crm";
 import { dealMessages } from "@/lib/messages/deals";
 import { recordSheetMessages } from "@/lib/messages/record-sheet";
@@ -16,6 +17,7 @@ const MODULE = [
 	["deals", dealMessages],
 	["record-sheet", recordSheetMessages],
 	["crm", crmMessages],
+	["auth", authMessages],
 ] as const;
 
 type GiaTri = string | ((...doiSo: string[]) => string);
@@ -56,6 +58,8 @@ const KHONG_DAU = new Set([
 	"company.domainPlaceholder",
 	"deal.namePlaceholder",
 	"company.websitePlaceholder",
+	"shell.eyebrow",
+	"onboarding.website",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -94,6 +98,37 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"crm.standard.currency",
 	"crm.standard.closeDate",
 	"crm.standard.stage",
+	"auth.docTitle.onboarding",
+	"auth.docTitle.research",
+	"auth.docTitle.signIn",
+	"auth.onboarding.description",
+	"auth.onboarding.name",
+	"auth.onboarding.slug",
+	"auth.onboarding.slugHint",
+	"auth.onboarding.submit",
+	"auth.onboarding.submitting",
+	"auth.onboarding.title",
+	"auth.onboarding.website",
+	"auth.onboarding.websiteHint",
+	"auth.research.description",
+	"auth.research.label",
+	"auth.research.noKey",
+	"auth.research.placeholder",
+	"auth.research.signUp",
+	"auth.research.submit",
+	"auth.research.submitting",
+	"auth.research.title",
+	"auth.shell.eyebrow",
+	"auth.shell.headline",
+	"auth.shell.homepage",
+	"auth.signIn.continueWith",
+	"auth.signIn.description",
+	"auth.signIn.error.unreachable",
+	"auth.signIn.noWay.description",
+	"auth.signIn.noWay.howTo",
+	"auth.signIn.noWay.title",
+	"auth.signIn.signingIn",
+	"auth.signIn.title",
 ];
 
 describe("kho chuoi cua vong ③a", () => {
@@ -124,6 +159,7 @@ describe("kho chuoi cua vong ③a", () => {
 
 	it("moi ham ghep bien co khang dinh, va so ham bang so khang dinh", () => {
 		const GHIM = {
+			"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
 			"companies:bulk.reassigned": [
 				"Đã đổi người phụ trách cho 1.",
 				"Đã đổi người phụ trách cho 12.",
