@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent (chay tuan tu — dieu khoan CL
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 296564f2aef813e016177f34a049779a46871c27
-human_signoff:
+human_signoff: Manh Phan 2026-09-05
 ---
 
 # Evidence Report: cai-dat-con-lai-noi-tieng-viet
