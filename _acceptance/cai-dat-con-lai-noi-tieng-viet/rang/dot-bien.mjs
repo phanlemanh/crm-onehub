@@ -136,4 +136,4 @@ const VET = [
 	},
 ];
 
-chayDotBien({ HERE, CHAN, VET });
+await chayDotBien({ HERE, CHAN, VET });

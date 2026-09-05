@@ -3,6 +3,10 @@ import { dirname } from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { GOC, KHAI_MAC_DINH, khaiTuArgv, lat } from "./lat.mjs";
+import { giuDoc } from "./khoa-cay.mjs";
+
+
+await giuDoc();
 
 const ts = createRequire(import.meta.url)("typescript");
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -313,11 +317,15 @@ function chanKhongDuQuyen() {
 		}
 		const banVi = cac[cac.length - 1];
 		const gt = new RegExp(`${ten}:\\s*"([^"]*)"`).exec(banVi);
-		const laHam = new RegExp(`${ten}:\\s*\\(`).test(banVi);
-		if (!gt && !laHam)
+		const ham = new RegExp(`${ten}:\\s*\\([^)]*\\)\\s*=>\\s*([^,\\n]*)`).exec(banVi);
+		if (!gt && !ham)
 			do_.push(`${m.khoa} — khong tim thay khoa nay trong ban vi cua kho chuoi`);
 		else if (gt && !DAU.test(gt[1]))
 			do_.push(`${m.khoa} — ban tieng Viet ${JSON.stringify(gt[1])} khong mang dau`);
+		else if (ham && !DAU.test(ham[1]))
+			do_.push(
+				`${m.khoa} — ban tieng Viet la ham, than ${JSON.stringify(ham[1].trim())} khong mang dau`,
+			);
 	}
 
 	console.log(

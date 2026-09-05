@@ -1,5 +1,9 @@
 import { execFileSync } from "node:child_process";
 import { GOC, KHAI_MAC_DINH, khaiTuArgv, lat } from "./lat.mjs";
+import { giuDoc } from "./khoa-cay.mjs";
+
+
+await giuDoc();
 
 const QUET = `${GOC}/_acceptance/nhan-ung-dung-noi-tieng-viet/rang/chu-cung-jsx.mjs`;
 const DONG = /^(\S+):(\d+)\s+\[([^\]]+)\]\s+"(.*)"$/;

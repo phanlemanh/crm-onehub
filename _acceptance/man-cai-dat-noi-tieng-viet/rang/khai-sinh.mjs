@@ -3,10 +3,13 @@ import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { GOC, KHAI_MAC_DINH, khaiTuArgv, lat } from "./lat.mjs";
+import { giuViet } from "./khoa-cay.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const NGOAI = `${HERE}/chu-ngoai-jsx.mjs`;
 const BOC = `${HERE}/chu-cung-lat.mjs`;
+await giuViet();
+
 const KHAI_PATH = khaiTuArgv(KHAI_MAC_DINH);
 const LAT_ARG = ["--lat", KHAI_PATH];
 

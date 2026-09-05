@@ -177,6 +177,24 @@ function ghiTruyCapDong(
 	else ra.congDong.add(cuoi);
 }
 
+function ghiTraCuuMap(
+	nut: TS.CallExpression,
+	ngan: NganXep,
+	ra: { cap: Set<string>; congDong: Set<string> },
+): void {
+	const goi = nut.expression;
+	if (!ts.isPropertyAccessExpression(goi) || goi.name.text !== "get") return;
+	const chuoi = chuoiTruyCap(goi.expression);
+	if (!chuoi) return;
+	const day = noRong(ngan, chuoi);
+	if (day[0] !== GOC || day.length < 2) return;
+	const cuoi = day[day.length - 1] ?? "";
+	const doiSo = nut.arguments[0];
+	if (doiSo && ts.isStringLiteralLike(doiSo))
+		ra.cap.add(`${cuoi}.${doiSo.text}`);
+	else ra.congDong.add(cuoi);
+}
+
 function ghiTruyCapTinh(
 	nut: TS.PropertyAccessExpression,
 	ngan: NganXep,
@@ -213,6 +231,7 @@ export function docDuongGoi(thuMuc: string): DuongGoi {
 			if (hien && ts.isVariableDeclaration(nut)) ghiKhaiBao(nut, sau, hien);
 			if (ts.isElementAccessExpression(nut))
 				ghiTruyCapDong(nut, sau, { cap, congDong });
+			if (ts.isCallExpression(nut)) ghiTraCuuMap(nut, sau, { cap, congDong });
 			if (
 				ts.isPropertyAccessExpression(nut) &&
 				!ts.isPropertyAccessExpression(nut.parent)

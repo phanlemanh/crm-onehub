@@ -11,8 +11,10 @@ GIU="$(mktemp)"
 BE_RONG="${BE_RONG_HEP:-360}"
 
 cd "$ROOT" || exit 2
+node "$RANG/khoa-cay.mjs" viet $$ || exit 2
+export KHOA_CAY_CHU=$
 cp "$KHO" "$GIU"
-tra() { cp "$GIU" "$KHO"; rm -f "$GIU"; }
+tra() { cp "$GIU" "$KHO"; rm -f "$GIU"; node "$RANG/khoa-cay.mjs" tha $$; }
 trap tra EXIT
 
 truoc="$(git status --porcelain | sort)"
@@ -45,6 +47,11 @@ if [ "$truoc" != "$sau" ]; then
   exit 2
 fi
 echo "cay lam viec da tro ve dung trang thai truoc khi chay."
+
+if [ "$ma" -eq 2 ]; then
+  echo "KHONG DO DUOC: chan be-rong tu khai tien de thieu (ma 2) trong luc cam vet — con so no in ra khong noi len dieu gi."
+  exit 2
+fi
 
 if [ -z "$so" ]; then
   echo "KHONG DO DUOC: chan be-rong khong in ra con so 'vi tran ma en vua' — khong doc duoc ket qua"

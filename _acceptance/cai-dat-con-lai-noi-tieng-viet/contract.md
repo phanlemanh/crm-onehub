@@ -119,6 +119,8 @@ OneHub)? Máy không tự quyết.
 - **Nới một cột**: `/settings/members` cột Vai trò 14%→18% (lấy từ cột Tên 34%→30%) để nhãn tiếng Việt không bị cắt. Đây là đổi bố cục, ngoài lời hứa chỉ-đổi-chữ của vòng.
 - **Đổi bố cục thứ hai**: hàng nút cắm Slack trên `/settings/connections/slack` được phép xuống dòng ở 360px. Nút *"Slack chưa cấu hình"* tràn ở CẢ bản Anh (98/67px) — lỗi có sẵn trước vòng, nhưng nó chặn đường về 0 của phép đo bề rộng nên sửa trong vòng.
 - **Kéo thêm hai chỗ ngoài lát**: nhãn hạn cookie (`packages/db/src/tracking.ts`, T2) và hai nút cùng một `aria-label` của `components/slack/channel-picker.tsx` — chúng hiện trên màn của lát nên bỏ qua thì AC-1 đỏ.
+- **Hai chân đột biến (AC-7, AC-10b) sửa cây tại chỗ và đo qua máy chủ dev đang chạy**, nên chúng không được chạy cùng lúc với chân quan sát nào. Vòng chấm 05/09 lộ điều đó: bộ chạy fan-out của kit cho mọi lệnh chạy song song, E1 đỏ 14 cặp, E13 tràn, và giám khảo E19 đọc đúng nhãn đang bị cắm. Từ 05/09 mọi chân dùng chung một **khoá cây** (`khoa-cay.mjs`): chân đột biến chờ chân quan sát xong rồi giữ cây, chân quan sát chờ đột biến trả nguyên trạng; chờ quá 15 phút là thoát mã 2. Khoá **không** phủ bốn bộ kiểm của kho (`bun run test`, kiểu, lint) — chúng vẫn có thể đọc cây giữa lúc đột biến.
+- **AC-5 và AC-12 thoát 0 khi có ít nhất một ô đo được và không ô nào đỏ**; phần không dựng được gọi tên dưới nhãn *GIỚI HẠN ĐÃ KHAI* và đi thẳng sang cổng ký. Bản trước đòi mã 2 khi *có* ô không dựng được — trên máy này (thành viên, Slack chưa cắm) hai eval đó không bao giờ có đường về 0, và kit coi mã 2 là trượt. Chỉ 0 ô đo được mới là mã 2.
 - **Chân một-bộ-thước chỉ nói lên điều gì khi thư mục `rang/` đã đủ file.** Nó tự chốt tiền đề bằng cách đòi mọi script mà ổ cắm `cd2_*` trỏ tới phải có mặt; thiếu thì thoát mã 2.
 
 ### Nợ có tên — trả trước khi mở đợt agent-builder
@@ -170,11 +172,10 @@ chiều chạy được trên cây này:
 
 **Sáu chỗ còn lại là nợ có tên** — không chỗ nào giấu một lỗi sản phẩm hôm nay:
 
-- **E16 không có đường nào thoát 0 trên máy này**, mà `expected` ghi 0: mã 2 vì
-  ba vật cần vai chủ sở hữu hoặc Slack đã cắm; sáu vật gieo được đều khớp từng
-  byte. Màu là **thật**; vòng chấm ghi nó là *không đo được* kèm sáu vật khớp,
-  đúng nếp E5 của đợt một — không sửa kỳ vọng cho vừa kết quả. (E13 từng cùng
-  cảnh; đã có đường về 0 từ 05/09 — xem Known limits.)
+- ~~E16 không có đường nào thoát 0 trên máy này~~ — **đổi cách khai 05/09**, xem
+  Known limits: ba vật cần vai chủ sở hữu hoặc Slack là *giới hạn đã khai* in
+  ra mỗi lượt; sáu vật gieo được khớp từng byte. Nợ còn lại: đo lại bằng chủ sở
+  hữu để dựng thêm hai vật.
 - **Chân trạng thái rỗng chưa có lưới "tập rỗng không bao giờ là đạt"** ở vế màn.
 - **Sáu dòng `decisions.jsonl` trùng `id`** với dòng khác: bộ sinh `id` va nhau
   trong cùng giây. Sổ là append-only nên không sửa lùi; lần sau đổi bộ sinh.

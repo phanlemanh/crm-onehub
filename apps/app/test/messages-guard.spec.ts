@@ -33,9 +33,11 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 	return Object.entries(o).flatMap(([k, v]): [string, GiaTri][] =>
 		v instanceof Function
 			? [[`${tien}${k}`, v]]
-			: v instanceof Object
-				? phang(v, `${tien}${k}.`)
-				: [[`${tien}${k}`, v]],
+			: v instanceof Map
+				? phang(Object.fromEntries(v) as Nhanh, `${tien}${k}.`)
+				: v instanceof Object
+					? phang(v, `${tien}${k}.`)
+					: [[`${tien}${k}`, v]],
 	);
 }
 

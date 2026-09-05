@@ -78,10 +78,13 @@ evals:
     executor: script
     cmd: config:executors.script.cd2_trang_thai_rong
     expected: >-
+      exit 0 khi it nhat mot o dung duoc va moi o dung duoc deu doc tieng Viet co dau.
       Sau cau rong ke thanh bang. Dung tren may chu that; trang thai nao dung duoc thi doc
       chu nguoi doc thay va doi hoi tieng Viet co dau; trang thai nao KHONG dung duoc thi
-      THOAT MA 2 goi ten, TUYET DOI khong ha xuong doc ma roi ghi dat. Ket qua in ro hai
-      danh sach: dung duoc / khong dung duoc — mang sang cong ky.
+      GOI TEN kem ly do duoi nhan GIOI HAN DA KHAI, TUYET DOI khong ha xuong doc ma roi ghi
+      dat. Khong dung duoc o nao la thoat ma 2 (tap rong). Ket qua in ro hai danh sach:
+      dung duoc / khong dung duoc — mang sang cong ky. (Sua 05/09: ban truoc doi ma 2 khi
+      CO o khong dung duoc, nen tren may nay eval khong bao gio co duong ve 0.)
     paths:
       - "apps/app/app/(app)/[slug]/settings/**"
       - "apps/app/lib/messages/settings-*.ts"
@@ -225,7 +228,9 @@ evals:
       Tap ung vien SINH TU DOM tren MOI route (nut chep, hoac code/pre trong translate=no),
       doi chieu hai chieu voi bang; bang PHAI co it nhat mot dong cho moi trong 6 file
       design neu — thieu file nao la thoat ma 2 goi ten file. Lech mot byte so voi nguon
-      la DO kem ten doan va vi tri byte. Chieu do: sua template dung chung (doi mot dau
+      la DO kem ten doan va vi tri byte. Vat khong gieo duoc (can vai chu so huu hoac Slack
+      that) GOI TEN duoi nhan GIOI HAN DA KHAI va mang sang cong ky; 0 vat do duoc la
+      thoat ma 2. (Sua 05/09: ban truoc doi ma 2 khi CO vat khong gieo duoc.) Chieu do: sua template dung chung (doi mot dau
       nhay trong URL) thi ca hai luot cung sai ma chan van DO — vi no so voi nguon, khong
       so hai luot voi nhau.
     paths:

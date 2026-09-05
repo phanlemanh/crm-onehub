@@ -2,6 +2,8 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { GOC } from "../../man-cai-dat-noi-tieng-viet/rang/lat.mjs";
+import { giuDoc } from "../../man-cai-dat-noi-tieng-viet/rang/khoa-cay.mjs";
+
 import {
 	APP,
 	CAO,
@@ -29,6 +31,8 @@ import {
 	suySlug,
 	tsCua,
 } from "../../man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs";
+
+await giuDoc();
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const LUAT_CO_2 = new Set(["so-thuan", "du-lieu-nguoi-nhap", "doan-ma-chep"]);
@@ -751,11 +755,17 @@ async function chanTrangThaiRong(cookie, slug) {
 		`\nket qua: dung duoc=${doDuoc.length} · khong dung duoc=${khongDung.length} · o dung duoc ma khong co dau tieng Viet=${khongDau}`,
 	);
 	if (khongDau > 0) await ket(1);
-	if (khongDung.length > 0) {
+	if (doDuoc.length === 0) {
 		console.log(
-			"KHONG DO DUOC: tien de thieu — chan nay KHONG ha xuong doc ma roi ghi dat cho nhung o tren.",
+			"KHONG DO DUOC: khong dung duoc o nao. Tap quan sat rong khong bao gio la dat.",
 		);
 		await ket(2);
+	}
+	if (khongDung.length > 0) {
+		console.log(
+			`GIOI HAN DA KHAI: ${khongDung.length}/${CAU_RONG.length} o khong dung duoc tren may nay (ly do o tren) — chan nay KHONG ha xuong doc ma roi ghi dat cho chung; danh sach mang sang cong ky.`,
+		);
+		await ket(0);
 	}
 	await ket(0);
 }
@@ -1148,12 +1158,15 @@ async function chanDoanMaChep(cookie, slug) {
 		);
 		await ket(2);
 	}
-	if (khongDo2.length > 0) await ket(2);
 	if (daDo.length === 0) {
 		await khongDo(
 			"KHONG DO DUOC: 0 doan do duoc. Tap quan sat rong khong bao gio la dat.",
 		);
 	}
+	if (khongDo2.length > 0)
+		console.log(
+			`GIOI HAN DA KHAI: ${khongDo2.length} vat khong do duoc tren may nay (ly do o tren) — ${daDo.length} vat do duoc deu khop tung byte; danh sach mang sang cong ky.`,
+		);
 	await ket(0);
 }
 

@@ -1,6 +1,8 @@
 import { existsSync, readFileSync } from "node:fs";
 import puppeteer from "puppeteer-core";
 import { GOC, lat } from "./lat.mjs";
+import { giuDoc } from "./khoa-cay.mjs";
+
 import {
 	API,
 	datTrinhDuyet,
@@ -25,6 +27,8 @@ import {
 	phien,
 	suySlug,
 } from "./man-that-lib.mjs";
+
+await giuDoc();
 
 function docBang() {
 	if (!existsSync(BANG)) {

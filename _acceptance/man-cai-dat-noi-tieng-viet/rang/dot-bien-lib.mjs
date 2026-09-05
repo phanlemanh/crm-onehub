@@ -2,6 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { isAbsolute, join } from "node:path";
 import { GOC } from "./lat.mjs";
+import { giuViet } from "./khoa-cay.mjs";
 
 export function sach() {
 	return execFileSync("git", ["status", "--porcelain"], {
@@ -30,7 +31,8 @@ export function chayHet(HERE, bo) {
 	return bo.map((c) => ({ chan: c.ten, ma: chay(HERE, c) }));
 }
 
-export function chayDotBien({ HERE, CHAN, VET }) {
+export async function chayDotBien({ HERE, CHAN, VET }) {
+	await giuViet();
 	const gocTruoc = sach();
 	const nen = chayHet(HERE, CHAN);
 	const chuaXanh = nen.filter((x) => x.ma !== 0 && x.ma !== 2);

@@ -4,6 +4,10 @@ import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { giuViet } from "../../man-cai-dat-noi-tieng-viet/rang/khoa-cay.mjs";
+
+
+await giuViet();
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(HERE, "../../..");
