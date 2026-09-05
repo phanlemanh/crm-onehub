@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, expect, it } from "bun:test";
+import { expect, it } from "bun:test";
 import { db } from "@crm/db";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { FieldsService } from "../src/fields/fields.service";
@@ -13,18 +13,6 @@ const agent = {
 
 const fields = new FieldsService(db, agent);
 const service = new ListingFieldsService(db, fields);
-
-beforeAll(async () => {
-	await db.fieldDefinition.deleteMany({
-		where: { entity: "CONTACT", key: { in: keys } },
-	});
-});
-
-afterAll(async () => {
-	await db.fieldDefinition.deleteMany({
-		where: { entity: "CONTACT", key: { in: keys } },
-	});
-});
 
 it("dựng đủ chín trường, tác nhân không điền được", async () => {
 	const built = await service.ensure();
@@ -47,10 +35,21 @@ it("dựng đủ chín trường, tác nhân không điền được", async () 
 
 it("gọi lần hai không tạo thêm định nghĩa nào", async () => {
 	await service.ensure();
+	const before = await db.fieldDefinition.findMany({
+		where: { entity: "CONTACT", key: { in: keys } },
+		select: { id: true },
+	});
+
+	await service.ensure();
 	await service.ensure();
 
-	const count = await db.fieldDefinition.count({
+	const after = await db.fieldDefinition.findMany({
 		where: { entity: "CONTACT", key: { in: keys } },
+		select: { id: true },
 	});
-	expect(count).toBe(9);
+
+	expect(after.length).toBe(9);
+	expect(after.map((row) => row.id).sort()).toEqual(
+		before.map((row) => row.id).sort(),
+	);
 });

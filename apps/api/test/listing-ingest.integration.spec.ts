@@ -22,7 +22,7 @@ import {
 	TIER_LABELS,
 } from "../src/listings/listings-config";
 
-const suffix = process.env.TEST_RUN_ID ?? "listing-ingest";
+const suffix = `listing-ingest-${process.env.TEST_RUN_ID ?? "local"}`;
 const keys = LISTING.fields.map((field) => field.key);
 const SELECT_KEYS = ["san_luong", "hinh_thai", "chung_chi"];
 const SECRET = `bi-mat-${suffix}`;
@@ -39,7 +39,7 @@ function item(n: number, overrides: Partial<ListingItem> = {}): ListingItem {
 	return {
 		url: `https://nhatot.com/moi-gioi-${suffix}-${n}`,
 		shopName: `Chuyên trang ${suffix} ${n}`,
-		personName: `Người ${n}`,
+		personName: `Người ${n} ${suffix}`,
 		isCompany: false,
 		hasLicense: n % 2 === 0,
 		districts: ["Quận 7"],
@@ -144,9 +144,12 @@ function selectItem() {
 	return item(7, { tier: "cao", isCompany: false, hasLicense: true });
 }
 
-async function selectLabels(): Promise<Record<string, string | undefined>> {
+async function selectLabels(
+	url: string,
+): Promise<Record<string, string | undefined>> {
 	const rows = await db.fieldValue.findMany({
 		where: {
+			contactId: await contactIdOf(url),
 			field: { entity: "CONTACT", key: { in: SELECT_KEYS } },
 			option: { isNot: null },
 		},
@@ -175,7 +178,7 @@ async function renameOption(key: string, from: string, to: string) {
 
 async function cleanup() {
 	const rows = await db.contact.findMany({
-		where: { source: RecordSource.LISTING, firstName: { contains: "Người" } },
+		where: { lastName: { contains: suffix } },
 		select: { id: true },
 	});
 	const ids = rows.map((row) => row.id);
@@ -186,12 +189,7 @@ async function cleanup() {
 
 beforeEach(cleanup);
 
-afterAll(async () => {
-	await cleanup();
-	await db.fieldDefinition.deleteMany({
-		where: { entity: "CONTACT", key: { in: keys } },
-	});
-});
+afterAll(cleanup);
 
 describe("cổng tiếp nhận lô từ sàn", () => {
 	it("AC-1 · chín trường mang đúng giá trị của mục — ma trận toàn phần", async () => {
@@ -221,9 +219,10 @@ describe("cổng tiếp nhận lô từ sàn", () => {
 	});
 
 	it("AC-1 · ba trường chọn mang đúng nhãn của mục", async () => {
-		await ingest.ingest(parseListingBatch(batch([selectItem()])));
+		const sent = selectItem();
+		await ingest.ingest(parseListingBatch(batch([sent])));
 
-		expect(await selectLabels()).toEqual({
+		expect(await selectLabels(sent.url)).toEqual({
 			san_luong: "Cao",
 			hinh_thai: "Cá nhân",
 			chung_chi: "Có",
@@ -231,7 +230,8 @@ describe("cổng tiếp nhận lô từ sàn", () => {
 	});
 
 	it("AC-1 · nhãn tuỳ chọn lệch thì tiếp nhận ném lỗi gọi tên trường và nhãn", async () => {
-		await ingest.ingest(parseListingBatch(batch([selectItem()])));
+		const sent = selectItem();
+		await ingest.ingest(parseListingBatch(batch([sent])));
 		await renameOption("san_luong", "Cao", "Cao (≥60)");
 
 		try {
@@ -244,14 +244,15 @@ describe("cổng tiếp nhận lô từ sàn", () => {
 			await renameOption("san_luong", "Cao (≥60)", "Cao");
 		}
 
-		await ingest.ingest(parseListingBatch(batch([selectItem()])));
-		expect((await selectLabels()).san_luong).toBe("Cao");
+		await ingest.ingest(parseListingBatch(batch([sent])));
+		expect((await selectLabels(sent.url)).san_luong).toBe("Cao");
 	});
 
 	it("AC-2 · gửi lại cùng lô thì cập nhật, không tạo trùng", async () => {
-		await ingest.ingest(parseListingBatch(batch([item(1)])));
+		const sent = item(1);
+		await ingest.ingest(parseListingBatch(batch([sent])));
 		const before = await db.contact.count({
-			where: { source: RecordSource.LISTING },
+			where: { lastName: { contains: suffix } },
 		});
 
 		const result = await ingest.ingest(
@@ -262,7 +263,7 @@ describe("cổng tiếp nhận lô từ sàn", () => {
 
 		expect(result).toEqual({ created: 0, updated: 1 });
 		expect(
-			await db.contact.count({ where: { source: RecordSource.LISTING } }),
+			await db.contact.count({ where: { lastName: { contains: suffix } } }),
 		).toBe(before);
 
 		const definition = await db.fieldDefinition.findUnique({
@@ -270,23 +271,26 @@ describe("cổng tiếp nhận lô từ sàn", () => {
 			select: { id: true },
 		});
 		const value = await db.fieldValue.findFirst({
-			where: { fieldId: definition?.id },
+			where: {
+				fieldId: definition?.id,
+				contactId: await contactIdOf(sent.url),
+			},
 			select: { number: true },
 		});
 		expect(Number(value?.number)).toBe(999);
 	});
 
 	it("AC-2 · lô vắng số điện thoại thì giữ số cũ, lô có số thì đè", async () => {
-		await ingest.ingest(
-			parseListingBatch(batch([item(1, { phone: "0900000001" })])),
-		);
+		const sent = item(1, { phone: "0900000001" });
+		await ingest.ingest(parseListingBatch(batch([sent])));
+		const id = await contactIdOf(sent.url);
 
 		const { phone: _drop, ...withoutPhone } = item(1);
 		await ingest.ingest(
 			parseListingBatch(batch([withoutPhone], "2026-09-05T10:00:00Z")),
 		);
-		let contact = await db.contact.findFirst({
-			where: { source: RecordSource.LISTING },
+		let contact = await db.contact.findUnique({
+			where: { id },
 			select: { phone: true },
 		});
 		expect(contact?.phone).toBe("0900000001");
@@ -296,8 +300,8 @@ describe("cổng tiếp nhận lô từ sàn", () => {
 				batch([item(1, { phone: "0911111111" })], "2026-09-06T10:00:00Z"),
 			),
 		);
-		contact = await db.contact.findFirst({
-			where: { source: RecordSource.LISTING },
+		contact = await db.contact.findUnique({
+			where: { id },
 			select: { phone: true },
 		});
 		expect(contact?.phone).toBe("0911111111");
@@ -350,7 +354,7 @@ describe("cổng tiếp nhận lô từ sàn", () => {
 		await ingest.ingest(parseListingBatch(batch([item(1)])));
 
 		const contacts = await db.contact.findMany({
-			where: { source: RecordSource.LISTING },
+			where: { lastName: { contains: suffix }, source: RecordSource.LISTING },
 			select: { id: true, enrichmentStatus: true },
 		});
 		const tasks = await db.agentTask.count({
