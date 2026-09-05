@@ -68,6 +68,9 @@ evals:
       exit 0. Bang dong (file, khoa) ke o S3. Doc CAY CU PHAP: moi o con MOT NUT doc dung
       khoa da khai, ban vi co dau. Xoa han khoi dieu kien thi chan DO goi ten khoa va dieu
       kien. PHEP DO MUC MA — khai thang, khong chung man hien dung.
+      CHIEU THUA (them 05/09): ung vien sinh tu cay cu phap — moi khoa kho chuoi nam o
+      NHANH SAI cua dung dieu kien co_khi — doi chieu voi bang; khoa co trong ma ma bang
+      khong co la DO goi ten. Dieu kien khong theo khuon "<bieu thuc> === false" la ma 2.
     paths:
       - "apps/app/app/(app)/[slug]/settings/**"
       - "apps/app/lib/messages/settings-*.ts"
@@ -129,7 +132,10 @@ evals:
       exit 0. HAI chan. Chan MA: bang dong (file, truong du lieu) ke o S3; doc cay cu phap,
       phan tu JSX boc bieu thuc truong do phai mang translate="no" — khai thang la muc ma.
       Chan MAN: chi cho thu gieo duoc qua API that KHONG can OAuth (tao mot khoa API, them
-      mot ten mien); in ro danh sach gieo duoc / khong gieo duoc mang sang cong ky. Workspace
+      mot ten mien) VA cac o do duoc tren VAT SAN CO: ban khai tro nguon_san toi cho lay
+      gia tri that trong cung luot goi, chan mo dung route roi doi translate="no" tren
+      dung gia tri do; nguon_san rong hoac gia tri khong hien tren man deu la DO.
+      In ro danh sach gieo duoc / khong gieo duoc mang sang cong ky. Workspace
       onehub mac dinh khong co khoa API, SSO, kenh Slack — mot chan man don doc se thoat ma 2
       vinh vien, do la ly do tach. Chieu do: go thuoc tinh khoi mot phan tu thi chan ma do.
     paths:
@@ -143,7 +149,10 @@ evals:
     expected: >-
       exit 0. Vet cho TUNG hinh dang: JSX · title · thuoc tinh · tu don · mang lua chon ·
       toast doi khoa · toast giu khoa them chuoi · xoa cau khong-du-quyen · DOAN MA
-      NGUOI CHEP: sua TEMPLATE DUNG CHUNG (khong phai kho vi) mot ky tu, E16 phai do ma 1.
+      NGUOI CHEP: sua TEMPLATE DUNG CHUNG (khong phai kho vi) mot ky tu, E16 phai do ma 1;
+      va sua trackingSnippet trong packages/db (WRITER that) mot ky tu, E16 cung phai do.
+      Vet nam trong ma may chu chay khai cho_ms de cho nap lai. Vet ma MOI chan tra ma 2
+      la KHONG DO DUOC (ma 2), khong duoc ket luan la "thuoc mu".
       Chi MA 1 tinh la bat duoc; ma 2 in rieng. Cay lanh thi
       moi chan xanh; git status truoc/sau bang nhau.
     paths:
@@ -225,6 +234,9 @@ evals:
       ke ca khi template sai. Moi doan so voi NGUON CHAN LY NGOAI MAN: the <script> so voi
       template dung tu token workspace doc trong DB; khoa API so voi gia tri API tra ve
       TRONG CUNG LUOT TAO (moi lan tao mot gia tri khac); URL/gia tri SSO so voi cau hinh.
+      The script so voi tracking.settings.snippet / .tagManagerSnippet cua chinh may chu —
+      KHONG voi ban go tay trong phep do. Man xuong dong cho de doc nen hai ben cung gom
+      khoang trang TRANG TRI truoc khi so; moi ky tu khac so tung byte.
       Tap ung vien SINH TU DOM tren MOI route (nut chep, hoac code/pre trong translate=no),
       doi chieu hai chieu voi bang; bang PHAI co it nhat mot dong cho moi trong 6 file
       design neu — thieu file nao la thoat ma 2 goi ten file. Lech mot byte so voi nguon

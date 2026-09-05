@@ -125,6 +125,14 @@ const VET = [
 		chan: ["moi-chuoi", "chu-cung-jsx", "toast", "tieu-de", "khong-du-quyen"],
 	})),
 	{
+		ten: "sua ten thuoc tinh trong trackingSnippet cua packages/db (WRITER that)",
+		file: "packages/db/src/tracking.ts",
+		cam: (s) =>
+			s.replace('data-site="${siteId}"', 'data-sit="${siteId}"'),
+		chan: ["doan-ma-chep"],
+		cho_ms: 12000,
+	},
+	{
 		ten: "sua mot ky tu trong template dung chung cua the script",
 		file: `${LAT}/tracking/tracking-script.tsx`,
 		cam: (s) =>
@@ -133,6 +141,7 @@ const VET = [
 				'const SITE_ATTRIBUTE = "data-sit";',
 			),
 		chan: ["doan-ma-chep"],
+		cho_ms: 12000,
 	},
 ];
 

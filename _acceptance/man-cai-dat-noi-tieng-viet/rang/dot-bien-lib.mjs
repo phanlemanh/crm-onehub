@@ -62,6 +62,7 @@ export async function chayDotBien({ HERE, CHAN, VET }) {
 		);
 
 	const mu = [];
+	const chuaDo = [];
 	const khongCam = [];
 
 	for (const v of VET) {
@@ -80,6 +81,12 @@ export async function chayDotBien({ HERE, CHAN, VET }) {
 		let ket;
 		try {
 			writeFileSync(duong, sau);
+			if (v.cho_ms !== undefined) {
+				console.log(
+					`   (cho ${v.cho_ms}ms cho may chu nap lai truoc khi do — vet nay nam trong ma may chu chay)`,
+				);
+				execFileSync("sleep", [String(v.cho_ms / 1000)]);
+			}
 			ket = chayHet(HERE, bo);
 		} finally {
 			writeFileSync(duong, truoc);
@@ -93,7 +100,12 @@ export async function chayDotBien({ HERE, CHAN, VET }) {
 			console.log(
 				`   (ma 2, KHONG tinh la bat duoc — tien de thieu: ${khongDo.join(", ")})`,
 			);
-		if (doDuoc.length === 0) {
+		if (doDuoc.length === 0 && khongDo.length > 0) {
+			chuaDo.push(`${v.ten} (${khongDo.join(", ")})`);
+			console.log(
+				`KHONG DO DUOC: cam "${v.ten}" vao ${v.file} ma moi chan deu tra ma 2 — tien de thieu, KHONG duoc ket luan la thuoc mu.`,
+			);
+		} else if (doDuoc.length === 0) {
 			mu.push(v.ten);
 			console.log(
 				`THUOC MU: cam "${v.ten}" vao ${v.file} ma KHONG chan nao do.`,
@@ -115,6 +127,13 @@ export async function chayDotBien({ HERE, CHAN, VET }) {
 	if (khongCam.length > 0) {
 		console.log(
 			`\nKHONG DO DUOC: ${khongCam.length} vet khong cam duoc vao ma — vet da lac hau: ${khongCam.join(" · ")}`,
+		);
+		process.exit(2);
+	}
+
+	if (chuaDo.length > 0) {
+		console.log(
+			`\nKHONG DO DUOC: ${chuaDo.length}/${VET.length} vet khong chan nao do duoc (tien de thieu): ${chuaDo.join(" · ")}`,
 		);
 		process.exit(2);
 	}

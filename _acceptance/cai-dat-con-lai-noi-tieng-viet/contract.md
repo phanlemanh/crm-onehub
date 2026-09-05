@@ -111,7 +111,11 @@ OneHub)? Máy không tự quyết.
 Đo được ở S3, khai trước khi trình cổng — không để vòng chấm mới lộ.
 
 - **Tám câu quyền Slack vẫn tiếng Anh trên `/settings/connections/slack`.** Nguồn là `packages/auth/src/slack-scopes.ts`; `packages/auth/**` là `t3_paths` nên kéo vào là đổi hạng vòng và thêm một cổng duyệt kế hoạch. Chân đo khai có tên và **in riêng con số 8** ở dòng kết quả — đây là giới hạn, không phải đã dịch.
-- **Ba trong sáu trạng thái rỗng không dựng được**, và lý do là **vai trò của tài khoản đo**: `manh.phan@onemount.com` là thành viên, nên `tracking.removeDomain` và `tracking.sources` trả 403; trạng thái *chưa có kênh Slack* thì cần Slack đã cắm. Đo được 3/6 (khoá API rỗng · SSO rỗng · lọc thành viên không khớp). Phép đo **từ chối đo** và gọi tên ba ô, không hạ xuống đọc mã.
+- **Ba trong sáu trạng thái rỗng không dựng được**, và lý do là **vai trò của tài khoản đo**: `manh.phan@onemount.com` là thành viên, nên `tracking.addDomain`, `tracking.removeDomain` và `tracking.sources` trả 403; trạng thái *chưa có kênh Slack* thì cần Slack đã cắm. Đo được 3/6 (khoá API rỗng · SSO rỗng · lọc thành viên không khớp). Phép đo **từ chối đo** và gọi tên ba ô, không hạ xuống đọc mã.
+- **Bảng không-đủ-quyền (AC-4) có chiều thừa từ 05/09**: ứng viên sinh từ cây cú pháp — mọi khoá kho chuỗi nằm ở nhánh sai của đúng điều kiện đã khai — rồi đối chiếu với bảng; khoá có trong mã mà bảng không có là ĐỎ. Chính chiều này tìm ra ô thứ tư `kenh.chepVaDanhDau`, bị sót khi kê tay. Điều kiện phải viết theo khuôn `<biểu thức> === false`; khác khuôn là thoát mã 2.
+- **Chân màn của AC-6b đo cả VẬT SẴN CÓ, không chỉ vật gieo được**: bản khai trỏ `nguon_san` tới nơi lấy giá trị thật trong cùng lượt gọi (tên miền `onehub.vn`, bốn email thành viên), mở đúng route rồi đòi `translate="no"`. Sáu phép so thay cho một. Ô khai `do_san_duoc` mà nguồn rỗng, hoặc giá trị không hiện trên màn, đều là đỏ.
+- **Nguồn chân lý của AC-12 là `tracking.settings` của chính máy chủ**, không phải bản gõ tay trong phép đo. Màn xuống dòng cho dễ đọc nên hai bên cùng gom khoảng trắng **trang trí** trước khi so; mọi ký tự khác so từng byte. Đột biến `trackingSnippet` trong `packages/db` (writer thật) nay nằm trong bộ vết và làm chân đỏ đúng byte.
+- **Bộ đột biến phân biệt *chưa đo được* với *đo mà không bắt*.** Vết mà mọi chân đều thoát mã 2 là tiền đề thiếu (mã 2), không còn bị kết luận là "thước mù". Vết nằm trong mã máy chủ chạy khai `cho_ms` để chờ nạp lại — thiếu nó thì lượt đo rơi vào cửa sổ biên dịch.
 - **Ba trong sáu vật khách chép không đo được** vì cùng lý do: URI chuyển hướng ở hộp thêm SSO (nút khoá với vai trò member), URI trên dòng bảng SSO (bảng rỗng), lệnh mời bot Slack (Slack chưa cắm). Bốn lượt đo được đều **khớp từng byte** với nguồn ngoài màn.
 - **Một route không dựng được**: `/settings/connections/slack/people` `redirect()` về màn cha khi Slack chưa cắm. Khai có lý do; route đo được 9/9 sau khi trừ.
 - **Vế dấu của AC-1 là phép đo gần đúng.** Từ mượn mà tiếng Việt không thêm dấu (`Cookie`) phải khai miễn có tên, nếu không nó báo oan.
@@ -137,6 +141,25 @@ hôm nay** nhưng sẽ giấu khi dân số lớn hơn:
 - **Giới hạn ba trạng thái rỗng khai NẶNG hơn sự thật.** Workspace có sẵn một chủ sở hữu và giàn đo hỗ trợ `NGUOI=`; đo bằng chủ sở hữu thì dựng được 4/6 và mở thêm một vật chép.
 - **Năm chỗ giữ nguyên chữ "workspace"** trong bản dịch — ba chỗ nói về workspace của Slack (có lý), hai chỗ mơ hồ. Máy không thấy được vì từ nằm trong câu có dấu.
 
+
+### Vòng chấm ba — ba chỗ đo lường đã vá, một chỗ thành nợ
+
+Vòng chấm ba (05/09) trả REJECT với bốn phát hiện đo lường trong hợp đồng. **Ba
+chỗ đã đóng**, mỗi chỗ có cặp hai chiều chạy được trên cây này (xem Known
+limits): bảng không-đủ-quyền có chiều thừa · chân màn AC-6b đo vật sẵn có ·
+nguồn chân lý AC-12 lấy từ máy chủ. Hai phát hiện hạ tầng của vòng cũng đã sửa:
+khoá cây không cho chân đột biến chen vào chân đang giữ, và chân gieo dữ liệu
+giữ cây trong lúc gieo.
+
+**Một chỗ còn lại là nợ có tên:**
+
+- **Bốn chân màn chưa có đối chứng dương trong bộ đột biến**: `hai-tieng` ·
+  `oauth` · `khong-dich` · `du-lieu-nguoi-nhap`. `evals.yaml` mô tả chiều đỏ cho
+  từng chân, và ba trong bốn đã được chứng **bằng tay** trong phiên 05/09 (ghim
+  `settingsMessages("vi")`; bịa một route vào `route_khong_dung_duoc`; gỡ
+  `translate="no"` khỏi một phần tử) — nhưng không lần nào nằm trong `dot-bien`,
+  nên vòng sau không tự chạy lại. Giá: mỗi vết cần một lượt chờ máy chủ nạp lại,
+  nên bộ đột biến dài thêm khoảng một phút. Trả ở đợt agent-builder.
 
 ### Vòng chấm hai — ba chiều đỏ mù đã vá, phần còn lại thành nợ
 

@@ -587,6 +587,17 @@ async function chanKhongDich(cookie, slug) {
 	await ket(0);
 }
 
+function layTheoDuong(goc, duong) {
+	let cho = [goc];
+	for (const doan of duong.split(".")) {
+		const mang = doan.endsWith("[]");
+		const ten = mang ? doan.slice(0, -2) : doan;
+		cho = cho.flatMap((x) => (x === null || x === undefined ? [] : [x[ten]]));
+		if (mang) cho = cho.flatMap((x) => (Array.isArray(x) ? x : []));
+	}
+	return cho.filter((x) => String(x ?? "") === x && x !== "");
+}
+
 async function chanDuLieuNguoiNhap(cookie, slug) {
 	await nangLenViet();
 	const bang = docKhai(`${HERE}/du-lieu-nguoi-nhap.json`, "du-lieu-nguoi-nhap");
@@ -640,6 +651,7 @@ async function chanDuLieuNguoiNhap(cookie, slug) {
 		}
 	}
 	let thieuMan = 0;
+	const khongDoSan = [];
 	const tt = await trangThai(cookie);
 
 	const ten = `chan-do-${Date.now()}`;
@@ -686,11 +698,47 @@ async function chanDuLieuNguoiNhap(cookie, slug) {
 		await don("ten mien gieo thu", "tracking.removeDomain", { id: themMien.gia.id });
 	}
 
-	const san = (tt.theoDoi.domains ?? []).map((d) => d.host);
-	const nguoiSan = (tt.thanhVien.rows ?? []).map((m) => m.email);
-	console.log(
-		`   gia tri nguoi nhap san co tren man: ${[...san, ...nguoiSan].join(" · ")}`,
-	);
+	console.log("\n-- CHAN MAN: do VAT SAN CO tren workspace nay");
+	for (const o of bang.o) {
+		if (o.do_san_duoc !== true) {
+			if (o.vi_sao_san !== undefined)
+				khongGieo.push(`${o.truong} (vat san co) — ${o.vi_sao_san}`);
+			continue;
+		}
+		const gia = layTheoDuong(tt, o.nguon_san);
+		if (gia.length === 0) {
+			console.log(
+				`   KHONG DO DUOC: ${o.truong} khai do_san_duoc nhung ${o.nguon_san} khong tra ve gia tri nao — tap quan sat rong khong bao gio la dat.`,
+			);
+			khongDoSan.push(`${o.truong} — ${o.nguon_san} rong`);
+			continue;
+		}
+		const mo = await moManMem(cookie, slug, o.route, "vi", RONG);
+		if (mo.loi !== null) {
+			await mo.trang.close();
+			khongDoSan.push(`${o.truong} — ${mo.loi[0]}`);
+			continue;
+		}
+		const nut = (await gomTrang(mo.trang)) ?? [];
+		await mo.trang.close();
+		for (const v of gia) {
+			const cho = nut.filter((n) => n.chu === v);
+			if (cho.length === 0) {
+				console.log(
+					`   DO: ${o.truong} — ${JSON.stringify(v)} co trong ${o.nguon_san} ma man ${o.route} khong ve ra no.`,
+				);
+				thieuMan += 1;
+				continue;
+			}
+			gieoDuoc.push(`${o.truong} (san co) — ${JSON.stringify(v)} tren ${o.route}`);
+			for (const c of cho) {
+				console.log(
+					`   ${c.khongDich ? "co  " : "THIEU"} translate="no" — ${o.route} ${c.khoa} = ${JSON.stringify(c.chu)}`,
+				);
+				if (!c.khongDich) thieuMan += 1;
+			}
+		}
+	}
 
 	console.log("\n-- gieo duoc:");
 	for (const d of gieoDuoc) console.log(`   ${d}`);
@@ -701,6 +749,13 @@ async function chanDuLieuNguoiNhap(cookie, slug) {
 	);
 	if (thieuMa > 0 || thieuMan > 0) await ket(1);
 	if (khongMap > 0) await ket(2);
+	if (khongDoSan.length > 0) {
+		for (const d of khongDoSan) console.log(`   KHONG DO DUOC: ${d}`);
+		console.log(
+			"KHONG DO DUOC: mot o khai do_san_duoc ma khong do duoc — khai va thuc te lech nhau.",
+		);
+		await ket(2);
+	}
 	if (donKhongXong.length > 0) {
 		for (const d of donKhongXong) console.log(`   DON KHONG XONG: ${d}`);
 		console.log(
@@ -899,6 +954,14 @@ async function chanOauth(cookie, slug) {
 	await ket(0);
 }
 
+function gomTrangTri(s) {
+	return s
+		.replace(/\s+/g, " ")
+		.replace(/\s+>/g, ">")
+		.replace(/<\s+/g, "<")
+		.trim();
+}
+
 function lechByte(a, b) {
 	const x = Buffer.from(a, "utf8");
 	const y = Buffer.from(b, "utf8");
@@ -1005,8 +1068,14 @@ async function chanDoanMaChep(cookie, slug) {
 			continue;
 		}
 		for (const d of ra.doan) ungVien.set(d.chu.replace(/\s+/g, " ").trim(), d);
-		const mongHtml = `<script\n  src="${tt.theoDoi.scriptUrl}"\n  data-site="${tt.theoDoi.siteId}"\n  async\n  defer\n></script>`;
-		const mongGtm = `<script\n  src="${tt.theoDoi.scriptUrl}?site=${tt.theoDoi.siteId}"\n  async\n  defer\n></script>`;
+		const mongHtml = tt.theoDoi.snippet;
+		const mongGtm = tt.theoDoi.tagManagerSnippet;
+		if (String(mongHtml ?? "") !== mongHtml || String(mongGtm ?? "") !== mongGtm) {
+			khongDo2.push(
+				`the script (lang=${tieng}) — tracking.settings khong tra ve snippet/tagManagerSnippet, nen khong co nguon ngoai man de so`,
+			);
+			continue;
+		}
 		for (const [ten, that, mong] of [
 			["the script theo doi", ra.html, mongHtml],
 			["the script qua Tag Manager", ra.gtm, mongGtm],
@@ -1016,13 +1085,17 @@ async function chanDoanMaChep(cookie, slug) {
 				continue;
 			}
 			daDo.push(`${ten} (lang=${tieng})`);
-			const i = lechByte(that, mong);
+			const gonMan = gomTrangTri(that);
+			const gonNguon = gomTrangTri(mong);
+			const i = lechByte(gonMan, gonNguon);
 			if (i === -1) {
-				console.log(`   khop tung byte — ${ten} (lang=${tieng})`);
+				console.log(
+					`   khop tung byte voi NGUON NGOAI MAN (tracking.settings) — ${ten} (lang=${tieng}); man xuong dong cho de doc nen hai ben cung gom khoang trang trang tri truoc khi so — moi ky tu khac deu duoc so tung byte`,
+				);
 				continue;
 			}
 			lech.push(
-				`${ten} (lang=${tieng}) lech tu byte ${i}: man co ${JSON.stringify(that.slice(Math.max(0, i - 12), i + 12))} · nguon co ${JSON.stringify(mong.slice(Math.max(0, i - 12), i + 12))}`,
+				`${ten} (lang=${tieng}) lech tu byte ${i}: man co ${JSON.stringify(gonMan.slice(Math.max(0, i - 12), i + 12))} · nguon (tracking.settings) co ${JSON.stringify(gonNguon.slice(Math.max(0, i - 12), i + 12))}`,
 			);
 		}
 	}

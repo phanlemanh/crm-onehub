@@ -276,6 +276,79 @@ function chanTieuDe() {
 	console.log(`XANH: ca ${o.length} o nhan deu doc tu kho chuoi.`);
 }
 
+function canhGac(coKhi) {
+	const m = /^(.+?)\s*===\s*false$/.exec(coKhi.trim());
+	return m === null ? null : m[1].trim();
+}
+
+function khoaTrongNhanh(nut, nguon) {
+	const ra = new Set();
+	const di = (n) => {
+		if (
+			ts.isPropertyAccessExpression(n) &&
+			n.expression.getText(nguon).startsWith("t.")
+		)
+			ra.add(
+				`${n.expression.getText(nguon).replace(/^t\./, "")}.${n.name.text}`,
+			);
+		ts.forEachChild(n, di);
+	};
+	di(nut);
+	return ra;
+}
+
+function khoaSinhTuMa(file, cacCoKhi) {
+	const nguon = cay(file);
+	const ra = new Map();
+	for (const c of cacCoKhi) ra.set(c, new Set());
+	const di = (n) => {
+		if (ts.isConditionalExpression(n)) {
+			const test = n.condition.getText(nguon).trim();
+			for (const c of cacCoKhi) {
+				const gac = canhGac(c);
+				if (gac !== null && test === gac)
+					for (const k of khoaTrongNhanh(n.whenFalse, nguon)) ra.get(c).add(k);
+			}
+		}
+		ts.forEachChild(n, di);
+	};
+	ts.forEachChild(nguon, di);
+	return ra;
+}
+
+function chanThuaKhongDuQuyen(o) {
+	const thua = [];
+	const khongDoc = [];
+	const theoFile = new Map();
+	for (const m of o) {
+		if (!theoFile.has(m.file)) theoFile.set(m.file, new Map());
+		const b = theoFile.get(m.file);
+		if (!b.has(m.co_khi)) b.set(m.co_khi, new Set());
+		b.get(m.co_khi).add(m.khoa);
+	}
+	for (const [file, b] of theoFile) {
+		const sinh = khoaSinhTuMa(file, [...b.keys()]);
+		for (const [coKhi, daKhai] of b) {
+			if (canhGac(coKhi) === null) {
+				khongDoc.push(
+					`${file} — dieu kien ${JSON.stringify(coKhi)} khong theo khuon "<bieu thuc> === false", nen chan nay khong sinh duoc ung vien tu ma de doi chieu.`,
+				);
+				continue;
+			}
+			const tuMa = sinh.get(coKhi);
+			console.log(
+				`   ${file} · ${coKhi} — ma sinh ra ${tuMa.size} khoa, ban khai co ${daKhai.size}`,
+			);
+			for (const k of tuMa)
+				if (!daKhai.has(k))
+					thua.push(
+						`${file} — ${k} hien o dung nhanh ${coKhi} ma ban khai khong co. Bang nay tuyen la BANG DONG cua lop do, nen thieu mot o la thuoc do sot.`,
+					);
+		}
+	}
+	return { thua, khongDoc };
+}
+
 function chanKhongDuQuyen() {
 	const o = KHOA.o;
 	const thuMucKho = `${GOC}/apps/app/lib/messages`;
@@ -328,8 +401,13 @@ function chanKhongDuQuyen() {
 			);
 	}
 
+	console.log("\n-- CHIEU THUA: ung vien sinh tu cay cu phap, doi chieu voi ban khai");
+	const { thua, khongDoc } = chanThuaKhongDuQuyen(o);
+	for (const d of khongDoc) console.log(`   KHONG DO DUOC: ${d}`);
+	for (const d of thua) console.log(`   THUA: ${d}`);
+
 	console.log(
-		`do ${o.length} o ghim — trang thai khong du quyen. PHEP DO MUC MA: moi o phai con MOT NUT doc dung ` +
+		`\ndo ${o.length} o ghim — trang thai khong du quyen. PHEP DO MUC MA: moi o phai con MOT NUT doc dung ` +
 			"khoa da khai, va ban tieng Viet cua khoa do phai mang dau. Khong chung man hien dung (gioi han khai o AC-4).",
 	);
 
@@ -337,6 +415,8 @@ function chanKhongDuQuyen() {
 		for (const d of do_) console.log(`KHONG DU QUYEN: ${d}`);
 		process.exit(1);
 	}
+	if (thua.length > 0) process.exit(1);
+	if (khongDoc.length > 0) process.exit(2);
 	console.log(`XANH: ca ${o.length} o deu con nut doc dung khoa, va ban tieng Viet co dau.`);
 }
 

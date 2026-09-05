@@ -1,6 +1,6 @@
 {
 	"lat": "cai-dat-con-lai-noi-tieng-viet",
-	"ghi_chu": "Du lieu NGUOI NHAP hien tren man — phan tu chua chung phai mang translate=no. Do bang LUAT, khong dem dong. Chan MA doc cay cu phap (luon chay duoc); chan MAN chi cho thu gieo duoc qua API that khong can OAuth.",
+	"ghi_chu": "Du lieu NGUOI NHAP hien tren man — phan tu chua chung phai mang translate=no. Do bang LUAT, khong dem dong. Chan MA doc cay cu phap (luon chay duoc). Chan MAN co hai duong: GIEO qua API that khong can OAuth, va DO VAT SAN CO tren workspace (nguon_san tro toi cho lay gia tri that trong cung luot goi). O nao khong di duoc duong nao thi khai vi_sao/vi_sao_san va goi ten o cong ky.",
 	"o": [
 		{
 			"file": "apps/app/app/(app)/[slug]/settings/api-keys/api-keys-table.tsx",
@@ -11,25 +11,35 @@
 			"file": "apps/app/app/(app)/[slug]/settings/tracking/allowed-domains.tsx",
 			"truong": "ten mien duoc phep",
 			"gieo_duoc": false,
-			"vi_sao": "tai khoan do la thanh vien; tracking.removeDomain tu choi vai tro member nen khong don sach de gieo lai"
+			"vi_sao": "tai khoan do la thanh vien; tracking.addDomain tra 403 (Only an owner or an admin can change tracking) nen khong gieo moi duoc",
+			"do_san_duoc": true,
+			"route": "/settings/tracking",
+			"nguon_san": "theoDoi.domains[].host"
 		},
 		{
 			"file": "apps/app/app/(app)/[slug]/settings/sso/sso-table.tsx",
 			"truong": "ten nha cung cap SSO",
 			"gieo_duoc": false,
-			"vi_sao": "can mot nha cung cap that"
+			"vi_sao": "can mot nha cung cap that",
+			"do_san_duoc": false,
+			"vi_sao_san": "bang sso rong tren workspace nay"
 		},
 		{
 			"file": "apps/app/components/slack/channel-picker.tsx",
 			"truong": "ten kenh Slack",
 			"gieo_duoc": false,
-			"vi_sao": "ten kenh ve o channel-picker, khong ve o slack-channels — cho kia chi truyen no vao mot ham ghep cau"
+			"vi_sao": "ten kenh ve o channel-picker, khong ve o slack-channels — cho kia chi truyen no vao mot ham ghep cau",
+			"do_san_duoc": false,
+			"vi_sao_san": "Slack chua cam nen khong co kenh nao tren man"
 		},
 		{
 			"file": "apps/app/app/(app)/[slug]/settings/members/members-table.tsx",
 			"truong": "ten va email thanh vien",
-			"gieo_duoc": true,
-			"vi_sao": "workspace onehub da co thanh vien"
+			"gieo_duoc": false,
+			"vi_sao": "khong tao thanh vien moi tu phien do; do bang thanh vien SAN CO thay vi gieo",
+			"do_san_duoc": true,
+			"route": "/settings/members",
+			"nguon_san": "thanhVien.rows[].email"
 		}
 	]
 }
