@@ -24,7 +24,10 @@ if ! grep -qF "$KHOA_MOC: \"$GIA_TRI_MOC\"," "$KHO"; then
   exit 2
 fi
 
-DAI="$GIA_TRI_MOC va con dai them mot doan cho tran han o be rong hep"
+# Vet phai la mot cum tieng Viet CO DAU doc duoc: no nam tren cay khoang 15 giay,
+# va bat ky agent nao doc file trong cua so do se thay no. Vet khong dau, tu mo ta
+# la vet, tung lam ba giam khao cham AC-1 truot oan ngay 05/09.
+DAI="$GIA_TRI_MOC của người dùng trong công ty và toàn bộ quyền đi kèm"
 KHOA_MOC="$KHOA_MOC" GIA_TRI_MOC="$GIA_TRI_MOC" DAI="$DAI" perl -pi -e '
   my $k = quotemeta($ENV{KHOA_MOC});
   my $g = quotemeta($ENV{GIA_TRI_MOC});

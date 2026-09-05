@@ -142,6 +142,31 @@ hôm nay** nhưng sẽ giấu khi dân số lớn hơn:
 - **Năm chỗ giữ nguyên chữ "workspace"** trong bản dịch — ba chỗ nói về workspace của Slack (có lý), hai chỗ mơ hồ. Máy không thấy được vì từ nằm trong câu có dấu.
 
 
+### Vòng chấm sáu — 19/19 phép đo máy xanh, một phiếu trượt oan
+
+Vòng sáu (05/09): **cả 19 phép đo máy đều PASS** — lần đầu tiên. `failed_evals`,
+`failed_commands` và `blocked` đều rỗng. Verdict vẫn REJECT vì E19 (chất tiếng
+Việt) bị ba giám khảo chấm trượt, **và cả ba trích cùng một chuỗi**:
+`settings-thanh-vien.ts` khoá `bang.vaiTro` mang giá trị *"Vai trò va con dai
+them mot doan cho tran han o be rong hep"* — không dấu, đọc như chữ gỡ lỗi.
+
+**Chuỗi đó chưa từng nằm trong commit nào.** Nó là **vết của chân đo bề rộng**
+(`be-rong-do.sh`), cắm vào đúng khoá đó rồi trả lại sau khoảng 15 giây. Bằng
+chứng: `git log -S` trên file trả 0 commit; trên đĩa giá trị là `"Vai trò"`;
+cây sạch; và chính E14 — chân cắm vết — PASS trong cùng vòng, tức nó đã trả
+nguyên trạng. Ba giám khảo đọc file đúng lúc cửa sổ ấy mở.
+
+**Khoá cây không phủ tới đó.** `khoa-cay.mjs` xếp hàng các *chân đo* với nhau,
+nhưng lượt giám khảo và lượt soi mã của bộ chạy là agent đọc file thẳng, không
+đi qua khoá. Đây là cùng lớp lỗi đã làm E1/E13 đỏ oan ở vòng bốn, lần này rơi
+vào làn giám khảo.
+
+**Đã giảm nhẹ, chưa khử:** vết nay là một cụm tiếng Việt **có dấu, đọc được**
+(*"Vai trò của người dùng trong công ty và toàn bộ quyền đi kèm"*) thay vì một
+câu tự mô tả không dấu. Cửa sổ vẫn còn, nhưng một lượt đọc rơi vào giữa nó
+không còn thấy chữ gỡ lỗi. Khử hẳn thì phải cắm vết trên một bản sao cây và trỏ
+máy chủ dev sang đó — việc của đợt sau, vì chân này đo qua máy chủ đang chạy.
+
 ### Vòng chấm năm — lỗ phủ đã đóng
 
 Vòng năm (05/09) trả BLOCKED **vì hạ tầng, không vì sản phẩm**: một agent chết
