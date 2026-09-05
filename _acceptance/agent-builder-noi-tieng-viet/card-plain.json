@@ -1,0 +1,40 @@
+{
+  "feature_plain": "Người quản trị OneHub mở cụm dựng tác nhân và đọc mọi thứ bằng tiếng Việt — trừ cửa sổ trò chuyện, để đợt sau.",
+  "will_do": [
+    { "id": "AC-1", "p": "Sẽ dựng từng màn của cụm bằng hai thứ tiếng trên máy chủ thật, và bắt lỗi nếu hai lượt không khớp nhau." },
+    { "id": "AC-1b", "p": "Sẽ không còn câu tiếng Anh nào viết thẳng trong mã màn, trừ những dòng đã khai lý do." },
+    { "id": "AC-2", "p": "Sẽ dịch mọi thông báo nổi, và bắt lỗi nếu bảng khai và mã lệch nhau một mục." },
+    { "id": "AC-3", "p": "Sẽ đổi bốn tiêu đề tab trình duyệt sang đọc theo tiếng người dùng chọn." },
+    { "id": "AC-4", "p": "Sẽ dịch cả chữ nằm trong thuộc tính — nhãn cho trình đọc màn hình, chữ gợi ý trong ô nhập, chú giải khi rê chuột." },
+    { "id": "AC-5", "p": "Sẽ dựng thử một tác nhân thật để đọc được ít nhất sáu trong tám trạng thái màn, gồm cả lúc danh sách rỗng và lúc đang lưu." },
+    { "id": "AC-6", "p": "Sẽ giữ nguyên tên thương hiệu và định danh kỹ thuật, và so từng giá trị giữa hai lượt tiếng để bắt chỗ lỡ dịch." },
+    { "id": "AC-6b", "p": "Sẽ đánh dấu tên tác nhân, tiêu đề hội thoại và tên kênh để trình duyệt không tự dịch chúng." },
+    { "id": "AC-7", "p": "Sẽ tự phá mã theo sáu kiểu khác nhau và đòi đúng thước chuyên trách của kiểu đó bắt được." },
+    { "id": "AC-8", "p": "Sẽ đếm dân số màn từ đĩa chứ không gõ tay, và bắt lỗi nếu số đếm lệch bản kiểm kê." },
+    { "id": "AC-9", "p": "Sẽ kiểm mọi nhãn ở bề rộng điện thoại để bản tiếng Việt dài hơn không bị cắt chữ." }
+  ],
+  "wont_do": [
+    { "id": "AC-13", "p": "Chặn ship nếu bản dịch đọc như chữ dịch máy — có người đọc chấm, không chỉ máy đếm." }
+  ],
+  "scope_plain": "Cửa sổ trò chuyện để đợt sau; không tách kho chuỗi dùng chung; không dựng luồng đăng nhập Slack thật; không đổi bố cục.",
+  "coverage_plain": [
+    { "i": 0, "p": "Chữ có thể nấp ở bảy chỗ khác nhau trên màn. Bằng chứng đủ: mỗi chỗ trong bảy chỗ đó đều là nơi một vòng trước đã từng để lọt thật." },
+    { "i": 1, "p": "Màn hiện ra ở năm điều kiện khác nhau — rỗng, đang tải, lỗi, vừa lưu, bình thường. Bằng chứng đủ: vòng trước đã đo được ba trong sáu và khai tên ba ô còn lại." },
+    { "i": 2, "p": "Bốn loại chữ KHÔNG được dịch. Bằng chứng đủ: cả ba tiêu chí cùng loại ở vòng trước đều tìm ra lỗi thật." },
+    { "i": 3, "p": "Bốn luật chung áp cho mọi ô: đếm từ đĩa, mỗi thước phải từng đỏ đúng chỗ, mỗi dòng miễn trừ phải có đối tượng thật, không chép thước cũ." }
+  ],
+  "gap_probe_plain": [
+    { "i": 0, "p": "Không phép đo nào dựng thử một tác nhân thật, nên hơn một nửa số chữ của đợt này sẽ chỉ được đọc trong mã chứ không đọc trên màn. Đã sửa: phép đo tự tạo một tác nhân rồi đo trên nó, và phải đọc được ít nhất sáu trong tám trạng thái." },
+    { "i": 1, "p": "Vùng chữ không-được-dịch chỉ được ĐẾM chứ không được SO, nên một tên thương hiệu bị lỡ dịch vẫn lọt. Đã sửa: so từng giá trị giữa hai lượt tiếng và đòi giống hệt nhau." },
+    { "i": 2, "p": "Luật canh vùng hoãn tự mâu thuẫn: sáu file để đợt sau còn tiếng Anh là đúng thiết kế, mà luật lại bảo còn tiếng Anh là sai. Đã sửa: đỏ khi chữ của đợt này rò sang vùng hoãn, và khi danh sách khác sáu file đã khai." },
+    { "i": 3, "p": "Phép tự phá mã chỉ đòi 'một thước nào đó bắt được', nên một thước hỏng vẫn nấp sau thước bắt-hết. Đã sửa: ghim từng kiểu phá với đúng thước chuyên trách của nó." },
+    { "i": 4, "p": "Bốn con số kiểm kê không được ghi ở đâu, nên người duyệt không kiểm được; và chữ trong thuộc tính chỉ soi chín tên gõ tay. Đã sửa: ghi thẳng bốn con số vào hợp đồng, và danh sách tên thuộc tính sinh từ mã chứ không gõ tay." }
+  ],
+  "decisions_plain": [
+    { "id": "d-1", "p": "KHÔNG làm cửa sổ trò chuyện trong đợt này — đổi lại màn trò chuyện có khung tiếng Việt quanh nội dung tiếng Anh cho tới đợt sau." },
+    { "id": "d-2", "p": "Chia chữ thành ba kho thay vì một — đổi lại phải canh tên nhóm trùng nhau giữa các kho." },
+    { "id": "d-3", "p": "Thêm mục 'Tác nhân' vào từ điển sản phẩm và dùng chữ đã ship — đổi lại khoá từ vựng sớm cho cả hai đợt." },
+    { "id": "d-4", "p": "KHÔNG áp tiêu chí đoạn-mã-người-chép của vòng trước — đã đọc mã và bảng mã không có nút chép nào." },
+    { "id": "d-5", "p": "KHÔNG dựng bản bấm được trước cổng — vòng này chỉ đổi chữ trên màn đã có, không đổi bố cục." }
+  ]
+}
