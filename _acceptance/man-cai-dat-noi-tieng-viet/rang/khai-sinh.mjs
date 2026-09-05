@@ -41,6 +41,35 @@ function chanDanSo() {
 		console.log(`neo: ${truoc.soTuDia}/${khai.neo.file} file — khop`);
 	}
 
+	const neoKhac = [];
+	if (khai.neo && Number.isInteger(khai.neo.route)) {
+		const route = truoc.file.filter((d) => d.endsWith("/page.tsx")).length;
+		if (route !== khai.neo.route)
+			neoKhac.push(`route: ban khai ghim ${khai.neo.route}, dem page.tsx tren dia ra ${route}`);
+		else console.log(`neo: ${route}/${khai.neo.route} route — khop`);
+	}
+	if (khai.neo && Number.isInteger(khai.neo.file_quyen)) {
+		const mauChuoi = String(khai.neo.quyen_mau ?? "");
+		if (mauChuoi === "") {
+			console.log(
+				"KHONG DO DUOC: ban khai ghim neo file_quyen ma khong khai quyen_mau — khong co mau thi khong dem duoc tren dia, con so nay khong ai doc.",
+			);
+			process.exit(2);
+		}
+		const mau = new RegExp(mauChuoi);
+		const quyen = truoc.file.filter((d) => mau.test(readFileSync(`${GOC}/${d}`, "utf8")));
+		if (quyen.length !== khai.neo.file_quyen)
+			neoKhac.push(
+				`file_quyen: ban khai ghim ${khai.neo.file_quyen}, tren dia ${quyen.length} file khop /${khai.neo.quyen_mau}/: ${quyen.join(" · ")}`,
+			);
+		else console.log(`neo: ${quyen.length}/${khai.neo.file_quyen} file mang /${khai.neo.quyen_mau}/ — khop`);
+	}
+	if (neoKhac.length > 0) {
+		for (const d of neoKhac) console.log(`KHONG DO DUOC: neo lech — ${d}`);
+		console.log("Neo lay tu kiem ke tay, DOC LAP voi luat quet — lech nghia la mot ben sai, phai doc ten file de biet ben nao.");
+		process.exit(2);
+	}
+
 	const loaiRa = khai.khong_quet ?? [];
 	if (loaiRa.length > 0) {
 		const conAnh = [];

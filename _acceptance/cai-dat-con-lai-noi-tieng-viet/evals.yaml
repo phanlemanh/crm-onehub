@@ -269,6 +269,10 @@ evals:
   - id: E19
     criterion: AC-1
     executor: judgment
+    question: >-
+      Nam kho chuoi nay doc nhu tieng Viet cua nguoi lam nghe khong: cau ghep so nhieu
+      tieng Anh da thanh mot cau Viet tu nhien, danh tu theo CONTEXT.md (cong ty · ca nhan ·
+      thoa thuan), va cho nao con la chu dich may thi neu dich danh khoa?
     inputs:
       - apps/app/lib/messages/settings-ket-noi.ts
       - apps/app/lib/messages/settings-theo-doi.ts

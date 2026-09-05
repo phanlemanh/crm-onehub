@@ -935,6 +935,15 @@ async function doTheScript(cookie, slug, tieng) {
 
 async function chanDoanMaChep(cookie, slug) {
 	const bang = docKhai(`${HERE}/doan-ma-chep.json`, "doan-ma-chep");
+	const neoVat = docKhai(`${HERE}/lat-cai-dat-2.json`, "lat-cai-dat-2").neo?.file_vat_chep;
+	const fileRieng = new Set(bang.doan.map((d) => d.file)).size;
+	if (Number.isInteger(neoVat) && neoVat !== fileRieng) {
+		console.log(
+			`KHONG DO DUOC: neo file_vat_chep ghim ${neoVat} ma bang doan-ma-chep.json co ${fileRieng} file rieng. Day la kiem tu-nhat-quan giua hai ban khai tay, khong phai dem tren dia — lech nghia la mot trong hai ban khai da lac.`,
+		);
+		await ket(2);
+	}
+	console.log(`neo: ${fileRieng}/${neoVat} file co vat chep — khop`);
 	const tt = await trangThai(cookie);
 	const canCo = [
 		"tracking-script",

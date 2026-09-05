@@ -51,13 +51,6 @@ const CHAN = [
 	},
 ];
 
-const CHAP_NHAN = {
-	"chu-cung-jsx":
-		"lat-cai-dat-2.json khai mien_tru rong, nen ba chu cung co that (https:// · data-site · https://acme.okta.com) lam chan do san. Chan nay khong duoc tinh la bat duoc vet nao.",
-	"doan-ma-chep":
-		"doan-ma-chep.json khong co dong cho google-connection, va ba doan con lai doi SSO/Slack da cam. Chan nay do ma 2 tren cay lanh; chi ma 1 moi tinh la bat duoc.",
-};
-
 const VET = [
 	{
 		ten: "chu trong JSX",
@@ -143,4 +136,4 @@ const VET = [
 	},
 ];
 
-chayDotBien({ HERE, CHAN, VET, chapNhan: CHAP_NHAN });
+chayDotBien({ HERE, CHAN, VET });

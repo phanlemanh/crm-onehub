@@ -96,7 +96,7 @@ async function SlackConnectionPageContent({
 				icon={Close}
 				tone="text-muted-foreground"
 			/>
-			<div className="flex items-center gap-4 border-y px-(--spacing-block-inline) py-5">
+			<div className="flex flex-wrap items-center gap-4 border-y px-(--spacing-block-inline) py-5">
 				<SlackConnectButton
 					slug={slug}
 					configured={status.configured}

@@ -30,12 +30,10 @@ export function chayHet(HERE, bo) {
 	return bo.map((c) => ({ chan: c.ten, ma: chay(HERE, c) }));
 }
 
-export function chayDotBien({ HERE, CHAN, VET, chapNhan = {} }) {
+export function chayDotBien({ HERE, CHAN, VET }) {
 	const gocTruoc = sach();
 	const nen = chayHet(HERE, CHAN);
-	const chuaXanh = nen.filter(
-		(x) => x.ma !== 0 && chapNhan[x.chan] === undefined,
-	);
+	const chuaXanh = nen.filter((x) => x.ma !== 0 && x.ma !== 2);
 
 	if (chuaXanh.length > 0) {
 		console.log(
@@ -47,17 +45,18 @@ export function chayDotBien({ HERE, CHAN, VET, chapNhan = {} }) {
 	}
 
 	const nenMa = new Map(nen.map((x) => [x.chan, x.ma]));
-	for (const x of nen) {
-		if (chapNhan[x.chan] === undefined) continue;
-		console.log(`nen khai truoc: ${x.chan} = ma ${x.ma} — ${chapNhan[x.chan]}`);
-	}
+	for (const x of nen)
+		if (x.ma === 2)
+			console.log(
+				`nen: ${x.chan} = ma 2 — tien de thieu tren cay lanh, do chinh chan do noi ra; voi chan nay chi ma 1 moi tinh la bat duoc.`,
+			);
 
 	const soXanh = nen.filter((x) => x.ma === 0).length;
 	if (soXanh === CHAN.length)
 		console.log(`chieu xanh: ca ${CHAN.length} chan xanh tren cay lanh.`);
 	else
 		console.log(
-			`chieu xanh: ${soXanh}/${CHAN.length} chan xanh tren cay lanh; ${CHAN.length - soXanh} chan khai truoc la khong do duoc.`,
+			`chieu xanh: ${soXanh}/${CHAN.length} chan xanh tren cay lanh; ${CHAN.length - soXanh} chan tu khai tien de thieu (ma 2).`,
 		);
 
 	const mu = [];

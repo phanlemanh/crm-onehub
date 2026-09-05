@@ -115,8 +115,9 @@ OneHub)? Máy không tự quyết.
 - **Ba trong sáu vật khách chép không đo được** vì cùng lý do: URI chuyển hướng ở hộp thêm SSO (nút khoá với vai trò member), URI trên dòng bảng SSO (bảng rỗng), lệnh mời bot Slack (Slack chưa cắm). Bốn lượt đo được đều **khớp từng byte** với nguồn ngoài màn.
 - **Một route không dựng được**: `/settings/connections/slack/people` `redirect()` về màn cha khi Slack chưa cắm. Khai có lý do; route đo được 9/9 sau khi trừ.
 - **Vế dấu của AC-1 là phép đo gần đúng.** Từ mượn mà tiếng Việt không thêm dấu (`Cookie`) phải khai miễn có tên, nếu không nó báo oan.
-- **Bốn nhãn tràn ở cả hai lượt tiếng.** Chân bề rộng CÓ tính chúng và chúng làm chân đỏ — lời khai cũ nói *"không tính"* là sai, đã sửa. Chi tiết: ba nhãn chỉ-đọc-màn-hình có `clientWidth` 1px, và nút *"Slack chưa cấu hình"* tràn ở cả bản Anh — lỗi bố cục có sẵn, không phải lỗi bản dịch.
+- **Chân bề rộng bỏ qua chữ nằm trong hộp ≤1px** (chữ chỉ dành cho trình đọc màn hình). Đến 05/09 nó vẫn đếm ba ô *"Hành động"* loại này là tràn — thước đo đứng sai chỗ, vì không mắt nào nhìn thấy chúng. Vế hai-tiếng KHÔNG bỏ chúng: chúng vẫn phải được dịch. Sau khi sửa, 146 nhãn đo được thay cho 156.
 - **Nới một cột**: `/settings/members` cột Vai trò 14%→18% (lấy từ cột Tên 34%→30%) để nhãn tiếng Việt không bị cắt. Đây là đổi bố cục, ngoài lời hứa chỉ-đổi-chữ của vòng.
+- **Đổi bố cục thứ hai**: hàng nút cắm Slack trên `/settings/connections/slack` được phép xuống dòng ở 360px. Nút *"Slack chưa cấu hình"* tràn ở CẢ bản Anh (98/67px) — lỗi có sẵn trước vòng, nhưng nó chặn đường về 0 của phép đo bề rộng nên sửa trong vòng.
 - **Kéo thêm hai chỗ ngoài lát**: nhãn hạn cookie (`packages/db/src/tracking.ts`, T2) và hai nút cùng một `aria-label` của `components/slack/channel-picker.tsx` — chúng hiện trên màn của lát nên bỏ qua thì AC-1 đỏ.
 - **Chân một-bộ-thước chỉ nói lên điều gì khi thư mục `rang/` đã đủ file.** Nó tự chốt tiền đề bằng cách đòi mọi script mà ổ cắm `cd2_*` trỏ tới phải có mặt; thiếu thì thoát mã 2.
 
@@ -126,8 +127,8 @@ Vòng chấm một ra 16 phát hiện. Bảy chỗ đã đóng (bốn chỗ hồ
 mù). Chín chỗ còn lại ghi thành nợ, vì chúng **không giấu một lỗi sản phẩm nào
 hôm nay** nhưng sẽ giấu khi dân số lớn hơn:
 
-- **`chapNhan` là cửa thoát vĩnh viễn cho AC-7**, và lý do ghi trong nó sai sự thật (nói bản khai `mien_tru` rỗng, thực tế có ba dòng). Một chân đỏ thật trên cây lành vẫn cho `dot-bien` in XANH.
-- **Ba trong bốn con số neo của AC-9 không ai đọc** — chỉ `neo.file` được kiểm; đặt `neo.route`, `neo.file_vat_chep`, `neo.file_quyen` thành 999 thì chân vẫn xanh.
+- ~~`chapNhan` là cửa thoát vĩnh viễn cho AC-7~~ — **đã đóng 05/09**: gỡ hẳn cửa; chân nào thoát mã 2 trên cây lành thì chính nó khai tiền đề thiếu, không cần ai viết lý do hộ, và mã 1 trên cây lành vẫn là "chiều xanh gãy". Lý do cũ (`mien_tru` rỗng) quả là sai: chân đó xanh trên cây lành.
+- ~~Ba trong bốn con số neo của AC-9 không ai đọc~~ — **đã đóng 05/09**: `route` đếm `page.tsx` trên đĩa, `file_quyen` đếm file khớp mẫu `quyen_mau` khai trong bản khai, `file_vat_chep` so với số file riêng trong bảng đoạn mã chép (kiểm tự-nhất-quán giữa hai bản khai tay, nói rõ là vậy). Đặt hai số thành 999 thì thoát mã 2 kèm tên file.
 - **Cần gạt `khong_quet` chưa từng được gạt trong vòng này** — bản khai để rỗng nên thân kiểm không chạy. Nó CÓ răng (thử tay thì đỏ), nhưng vòng này không chứng gì về nó.
 - **Ô *chưa có tên miền được phép* khẳng định một lý do không ai đo** — nó chỉ kiểm `domains.length === 0`, không bao giờ gọi `tracking.removeDomain`, mà vẫn in nguyên văn *"tracking.removeDomain từ chối vai trò..."* như bằng chứng.
 - **AC-4 mượn lại một lý do chính vòng này đã bác.** Kết luận (đo mức mã) vẫn đúng; căn cứ thì sai — lý do thật là Slack chưa cắm, không phải vai trò tài khoản.
@@ -169,19 +170,20 @@ chiều chạy được trên cây này:
 
 **Sáu chỗ còn lại là nợ có tên** — không chỗ nào giấu một lỗi sản phẩm hôm nay:
 
-- **E13 và E16 không có đường nào thoát 0 trên máy này**, mà `expected` của chúng
-  vẫn ghi 0. E13 (bề rộng 360px) đỏ vì bốn nhãn tràn ở **cả hai lượt tiếng** —
-  ba nhãn chỉ-đọc-màn-hình cao 1px và một nút tràn sẵn ở bản Anh; E16 (đoạn mã
-  chép) mã 2 vì ba vật cần vai chủ sở hữu hoặc Slack đã cắm. Cả hai màu là
-  **thật**, chỉ là `expected` khai sai kỳ vọng.
+- **E16 không có đường nào thoát 0 trên máy này**, mà `expected` ghi 0: mã 2 vì
+  ba vật cần vai chủ sở hữu hoặc Slack đã cắm; sáu vật gieo được đều khớp từng
+  byte. Màu là **thật**; vòng chấm ghi nó là *không đo được* kèm sáu vật khớp,
+  đúng nếp E5 của đợt một — không sửa kỳ vọng cho vừa kết quả. (E13 từng cùng
+  cảnh; đã có đường về 0 từ 05/09 — xem Known limits.)
 - **Chân trạng thái rỗng chưa có lưới "tập rỗng không bao giờ là đạt"** ở vế màn.
-- **Ba trong bốn con số neo vẫn không ai đọc** (`route`, `file_vat_chep`,
-  `file_quyen`) — nợ này mang từ vòng một sang, chưa trả.
 - **Sáu dòng `decisions.jsonl` trùng `id`** với dòng khác: bộ sinh `id` va nhau
   trong cùng giây. Sổ là append-only nên không sửa lùi; lần sau đổi bộ sinh.
 - **Chữ "workspace" giữ nguyên ở BẢY chuỗi `vi`, không phải năm** như nợ vòng
   một ghi. Đếm bằng cách nạp kho chuỗi rồi duyệt mọi giá trị, ngày 05/09.
-- **Chờ người: 13 chuỗi tiếng Việt đã viết "OneHub" trong khi bản `en` vẫn là
-  "Comp AI"** — đếm cùng cách, cùng ngày. Hợp đồng dành chỗ này cho người ở
-  Cổng Phạm vi, và nó **chọi với tên ứng dụng Slack đã đăng ký**. Máy đã đi tiếp
-  theo làn V; đây là ô để veto.
+- **Người đã chốt 05/09: "OneHub" ở cả hai tiếng.** 13 chuỗi `en` đổi từ "Comp
+  AI" sang "OneHub" cho khớp bản Việt — câu mô tả nói về sản phẩm này, và kho là
+  bản riêng của OneHub. Còn lại một nợ khác loại: **lệnh mời bot `/invite @Comp
+  AI` gõ cứng trong mã** (`slack-channels.tsx`). Tên đó phải bằng tên ứng dụng
+  Slack đã đăng ký thật ở workspace đang dùng — là cấu hình, không phải bản
+  dịch; gõ cứng tên nào cũng sai ở một workspace nào đó. Trả ở đợt sau: đọc từ
+  cấu hình hoặc từ Slack trả về sau khi cắm.

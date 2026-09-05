@@ -208,8 +208,10 @@ export const DO_RONG = () => {
 	)?.parentElement;
 	if (!goc) return null;
 	const nhinThay = (el) => {
-		const r = el.getBoundingClientRect();
-		if (r.width === 0 || r.height === 0) return false;
+		for (let a = el; a && a !== goc; a = a.parentElement) {
+			const ra = a.getBoundingClientRect();
+			if (ra.width <= 1 || ra.height <= 1) return false;
+		}
 		const s = getComputedStyle(el);
 		return (
 			s.visibility !== "hidden" && s.display !== "none" && s.opacity !== "0"

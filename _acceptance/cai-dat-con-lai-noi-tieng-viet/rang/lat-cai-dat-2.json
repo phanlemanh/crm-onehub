@@ -17,7 +17,8 @@
 		"route": 10,
 		"file_vat_chep": 5,
 		"file_quyen": 9,
-		"ghi_chu": "Bon con so lay tu kiem ke S0 ngay 04/09, DOC LAP voi luat quet — de dan so sinh ra co thu de so. Lech la thoat ma 2 kem diff. file_vat_chep sua 6->5 ngay 05/09: sau la con so dem SAI cua design (google-connection khong co vat chep nao), AC-12 chot nam. GIOI HAN: ba trong bon so nay hien KHONG chan nao doc — xem no co ten."
+		"quyen_mau": "canManage",
+		"ghi_chu": "Bon con so lay tu kiem ke S0 ngay 04/09, DOC LAP voi luat quet — de dan so sinh ra co thu de so. Lech la thoat ma 2 kem diff. file_vat_chep sua 6->5 ngay 05/09: sau la con so dem SAI cua design (google-connection khong co vat chep nao), AC-12 chot nam. Tu 05/09 ca bon so deu co chan doc: file va route va file_quyen (dem file khop quyen_mau tren dia) o khai-sinh; file_vat_chep o chan doan-ma-chep, so voi so file rieng trong bang."
 	},
 	"them": [],
 	"khong_quet": [],
