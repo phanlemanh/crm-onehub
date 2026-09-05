@@ -178,8 +178,8 @@ evals:
     executor: script
     cmd: config:executors.script.cd2_dan_so_tu_dia
     expected: >-
-      exit 0. Truoc het: so file quet ra BANG so neo trong ban khai (33 · 10 route · 6 file
-      vat chep · 9 file canManage) — lech la thoat ma 2 kem diff ten file; ban khai liet du
+      exit 0. Truoc het: so file quet ra BANG so neo trong ban khai (33 · 10 route · 5 file
+      vat chep · 9 file canManage — file_quyen dem bang mau quyen_mau khai trong ban khai) — lech la thoat ma 2 kem diff ten file; ban khai liet du
       MUOI thu muc. Roi hai thi nghiem: (a) tha mot file .tsx mang chu tieng Anh vao thu muc
       lat → dan so tang 1 VA moi-chuoi + chu-cung deu DO — nhung TRUOC do phai chay NEN:
       ca hai chan xanh tren cay lanh, khong thi thoat ma 2. Chan tra ma 2 khi co vet la
