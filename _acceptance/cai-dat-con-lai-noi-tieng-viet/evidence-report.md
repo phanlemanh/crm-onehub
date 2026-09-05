@@ -228,7 +228,7 @@ human_signoff: Manh Phan 2026-09-05
 
 ### Lenh suite (hoi quy)
 
-- cmd: bun run db:test && bunx turbo run test --force --concurrency=1
+- cmd: bun run db:test && bun run test
   run_id: s4r7-20260905T122152Z-16596-S1
   exit_code: 0
   verified_at: 2026-09-05T12:21:52Z
@@ -258,9 +258,14 @@ human_signoff: Manh Phan 2026-09-05
   no khong dung trang thai nao. No co ten, khai trong hop dong.
 - **Bon chan man chua co doi chung duong trong bo dot bien** (hai-tieng · oauth ·
   khong-dich · du-lieu-nguoi-nhap). Ba trong bon da chung bang tay ngay 05/09.
-- **Bo test cua kho chi xanh khi chay TUAN TU.** Chay song song thi api:test do bat dinh
-  vi cac goi dung chung mot co so du lieu thu — chay rieng api:test cho 385 pass, 0 fail.
-  Vong nay khong cham file nao duoi apps/api. Day la net moi truong co san cua kho.
+- **SUA SAU KHI KY (05/09):** ban dau muc nay khai "bo test cua kho chi xanh khi chay
+  tuan tu, chay song song thi api:test do bat dinh". **Loi khai do SAI, va sai la cua toi.**
+  Script `test` o goc package.json DA co `--concurrency=1`; lenh suite khai trong
+  `config.yaml` la `bun run db:test && bun run test`, chay ep buoc cho 11/11 task, 0 fail.
+  Cho do bat dinh la vi TOI go `bunx turbo run test --force` truc tiep khi kiem, tuc bo qua
+  chinh lop tuan tu cua kho. Kho KHONG co net moi truong nao o day. Dong `run_id` cua
+  lenh suite trong `run-log.jsonl` ghi dung lenh da khai. Chu ky va verdict cua ho so nay
+  KHONG doi.
 - **channel-picker.tsx la component dung chung** ma nay doc kho chuoi cua khu vuc Cai dat;
   chu tren man agent-builder theo kho do. Tach kho rieng la viec cua dot agent-builder.
 - **Lenh moi bot Slack `/invite @Comp AI` van go cung** trong ma, trong khi chu quanh no

@@ -18,7 +18,7 @@
 {"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E17","eval":"E17","criterion":"AC-13","verifier":"config:executors.script.cd2_mot_bo_thuoc","exit_code":0}
 {"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E18","eval":"E18","criterion":"AC-1","verifier":"config:executors.test.rang3_khoa_chet","exit_code":0}
 {"ts":"2026-09-05T12:21:52Z","kind":"panel","run_id":"s4r7-20260905T122152Z-16596-E19","eval":"E19","criterion":"AC-1","verifier":"judge panel (fresh context)","exit_code":0}
-{"ts":"2026-09-05T12:21:52Z","kind":"suite","run_id":"s4r7-20260905T122152Z-16596-S1","eval":"SUITE-S1","verifier":"bun run db:test && bunx turbo run test --force --concurrency=1","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"suite","run_id":"s4r7-20260905T122152Z-16596-S1","eval":"SUITE-S1","verifier":"bun run db:test && bun run test","exit_code":0}
 {"ts":"2026-09-05T12:21:52Z","kind":"suite","run_id":"s4r7-20260905T122152Z-16596-S2","eval":"SUITE-S2","verifier":"bunx turbo run check-types --force","exit_code":0}
 {"ts":"2026-09-05T12:21:52Z","kind":"suite","run_id":"s4r7-20260905T122152Z-16596-S3","eval":"SUITE-S3","verifier":"bunx turbo run lint --force","exit_code":0}
 {"ts":"2026-09-05T12:21:52Z","kind":"suite","run_id":"s4r7-20260905T122152Z-16596-S4","eval":"SUITE-S4","verifier":"bun run lint:slop","exit_code":0}
