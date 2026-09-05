@@ -6,31 +6,45 @@ failed_evals: []
 reason: |
   Vòng 3 chạy làm HAI LƯỢT TÁCH RỜI, theo đường (a) người chọn sau khi hai vòng
   trước cùng hỏng vì làn bộ kiểm và làn lái trình duyệt giẫm lên nhau.
-  Lượt máy (17 phép đo + 4 bộ kiểm, có dựng lại cơ sở dữ liệu thử và sinh lại bộ
-  khách): PENDING-JUDGMENT — 0 phép đo trượt, 0 lệnh trượt, 0 chân bị chặn.
-  Lượt lái (7 phép đo trình duyệt, KHÔNG chạy bộ kiểm nào): PASS — 0 trượt, 0 chặn.
+
+  Lượt máy (17 phép đo, KHÔNG chạy bộ kiểm cùng lúc): PENDING-JUDGMENT —
+  0 phép đo trượt, 0 lệnh trượt, 0 chân bị chặn.
+  Lượt lái (7 phép đo trình duyệt): PASS — 0 trượt, 0 chặn.
+
   Phán quyết hợp nhất là PENDING-JUDGMENT vì phép phán xét E19 trả UNCERTAIN:
-  hội đồng ba mắt không thống nhất được câu «sàn chặn bot ở mức làm hỏng nhịp
-  hàng tháng không». Đó là câu người quyết ở Cổng Bằng chứng.
-verified_by: fresh-context verification subagents (hai lượt)
+  hội đồng ba mắt không thống nhất câu «sàn chặn bot ở mức làm hỏng nhịp hàng
+  tháng không». Đó là câu người quyết ở Cổng Bằng chứng.
+
+  BỐN LƯỢT CHẤM đã chạy trong vòng 3, mỗi lượt sửa một chỗ lượt trước phơi ra:
+  (1) lượt máy đầu — bộ chấm phát hiện lệnh chỉ nạp HAI tệp kiểm trong khi hồ
+  sơ khai năm, nên chân của AC-5 và AC-11 chưa từng chạy; (2) mở lệnh cho đủ
+  năm tệp — lộ ra ba tệp kiểm XOÁ HÀNG CHÚNG KHÔNG TẠO RA, dọn cả dữ liệu người
+  dùng; (3) sửa cô lập bộ kiểm — lộ ra hợp đồng hứa lô tới 500 mục mà trần thân
+  yêu cầu thật chỉ ~360 mục; (4) chia lô và nâng trần cho đúng một đường —
+  lượt này.
+verified_by: fresh-context verification subagents
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3856984
+verified_commit: 49a9f63
 human_signoff:
 ---
 
 # Evidence Report: tiep-thi-tuyen-doi-tac — vòng 3
 
-Vòng này chạy hai lượt tách rời. Lý do và quyết định ghi ở
-`decisions.jsonl` (`d-20260905T040000Z-tach-lan`).
+| Lượt | Phép đo | Bộ kiểm | Phán quyết | Chạy ở commit |
+|---|---|---|---|---|
+| Máy (bản cuối) | 17 | 0 (chạy riêng) | PENDING-JUDGMENT | `49a9f63` |
+| Lái trình duyệt | 7 | 0 | PASS | `3856984` |
 
-| Lượt | Phép đo | Bộ kiểm | Phán quyết |
-|---|---|---|---|
-| Máy | 17 (E1–E5, E7, E8, E10, E11, E13, E14, E16–E19, E22, E24, E25) | 4 | PENDING-JUDGMENT |
-| Lái trình duyệt | 7 (E6, E9, E12, E15, E20, E21, E23) | 0 | PASS |
+**Điều người ký cần biết về lượt lái:** nó chạy ở `3856984`, trước ba commit
+sau đó (`3eda9b3` cô lập bộ kiểm, `f3b0726` chia lô và trần thân yêu cầu,
+`49a9f63` bằng chứng cào). Ba commit đó chạm bộ kiểm, bộ cào, và
+`apps/api/src/create-app.ts` — **không chạm mã giao diện nào**. Rủi ro lệch là
+thấp nhưng có thật, và nó được nói ra ở đây thay vì giấu.
 
-Không phép đo nào trượt ở cả hai lượt. Không chân nào bị chặn.
-Phán xét E19 trả UNCERTAIN — việc của người ở Cổng Bằng chứng.
+Bốn lệnh chứng minh của kho chạy riêng sau cùng, tất cả xanh:
+`bun run db:test && bun run test` · `check-types` · `lint` · `lint:slop`;
+và bộ kiểm Python 28/28.
 
 ## Lượt máy
 
@@ -65,141 +79,163 @@ Phán xét E19 trả UNCERTAIN — việc của người ở Cổng Bằng chứ
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tt_api
-  verified_at: 2026-09-05T06:20:00+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
      0 fail
-     91 expect() calls
-    Ran 23 tests across 2 files. [1273.00ms]
+     129 expect() calls
+    Ran 29 tests across 6 files. [6.39s]
 
 - eval: E2
   run_id: minted-tiep-thi-tuyen-doi-tac-E2-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tt_api
-  verified_at: 2026-09-05T06:20:00+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
      0 fail
-     91 expect() calls
-    Ran 23 tests across 2 files. [1273.00ms]
+     129 expect() calls
+    Ran 29 tests across 6 files. [6.39s]
 
 - eval: E3
   run_id: minted-tiep-thi-tuyen-doi-tac-E3-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tt_api
-  verified_at: 2026-09-05T06:20:00+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
      0 fail
-     91 expect() calls
-    Ran 23 tests across 2 files. [1273.00ms]
+     129 expect() calls
+    Ran 29 tests across 6 files. [6.39s]
 
 - eval: E4
   run_id: minted-tiep-thi-tuyen-doi-tac-E4-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tt_api
-  verified_at: 2026-09-05T06:20:00+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
      0 fail
-     91 expect() calls
-    Ran 23 tests across 2 files. [1273.00ms]
+     129 expect() calls
+    Ran 29 tests across 6 files. [6.39s]
 
 - eval: E5
   run_id: minted-tiep-thi-tuyen-doi-tac-E5-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tt_api
-  verified_at: 2026-09-05T06:20:00+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
      0 fail
-     91 expect() calls
-    Ran 23 tests across 2 files. [1273.00ms]
+     129 expect() calls
+    Ran 29 tests across 6 files. [6.39s]
 
 - eval: E7
   run_id: minted-tiep-thi-tuyen-doi-tac-E7-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tt_api
-  verified_at: 2026-09-05T06:20:00+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
      0 fail
-     91 expect() calls
-    Ran 23 tests across 2 files. [1273.00ms]
+     129 expect() calls
+    Ran 29 tests across 6 files. [6.39s]
 
 - eval: E8
   run_id: minted-tiep-thi-tuyen-doi-tac-E8-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tt_api
-  verified_at: 2026-09-05T06:20:00+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
      0 fail
-     91 expect() calls
-    Ran 23 tests across 2 files. [1273.00ms]
+     129 expect() calls
+    Ran 29 tests across 6 files. [6.39s]
 
 - eval: E10
   run_id: minted-tiep-thi-tuyen-doi-tac-E10-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tt_api
-  verified_at: 2026-09-05T06:20:00+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
      0 fail
-     91 expect() calls
-    Ran 23 tests across 2 files. [1273.00ms]
+     129 expect() calls
+    Ran 29 tests across 6 files. [6.39s]
 
 - eval: E11
   run_id: minted-tiep-thi-tuyen-doi-tac-E11-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tt_api
-  verified_at: 2026-09-05T06:20:00+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
      0 fail
-     91 expect() calls
-    Ran 23 tests across 2 files. [1273.00ms]
+     129 expect() calls
+    Ran 29 tests across 6 files. [6.39s]
 
 - eval: E13
   run_id: minted-tiep-thi-tuyen-doi-tac-E13-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tt_api
-  verified_at: 2026-09-05T06:20:00+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
      0 fail
-     91 expect() calls
-    Ran 23 tests across 2 files. [1273.00ms]
+     129 expect() calls
+    Ran 29 tests across 6 files. [6.39s]
 
 - eval: E14
   run_id: minted-tiep-thi-tuyen-doi-tac-E14-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tt_api
-  verified_at: 2026-09-05T06:20:00+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
      0 fail
-     91 expect() calls
-    Ran 23 tests across 2 files. [1273.00ms]
+     129 expect() calls
+    Ran 29 tests across 6 files. [6.39s]
+
+- eval: E24
+  run_id: minted-tiep-thi-tuyen-doi-tac-E24-r3
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.tt_api
+  verified_at: 2026-09-05T04:10:00Z
+  output: |
+     0 fail
+     129 expect() calls
+    Ran 29 tests across 6 files. [6.39s]
 
 - eval: E16
   run_id: minted-tiep-thi-tuyen-doi-tac-E16-r3
   exit_code: 0
   baseline: green
   verifier: config:executors.test.tt_app
-  verified_at: 2026-09-05T06:20:00+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
      0 fail
      209 expect() calls
-    Ran 30 tests across 2 files. [543.00ms]
+    Ran 30 tests across 2 files. [423.00ms]
+
+- eval: E25
+  run_id: minted-tiep-thi-tuyen-doi-tac-E25-r3
+  exit_code: 0
+  baseline: green
+  verifier: config:executors.test.tt_app
+  verified_at: 2026-09-05T04:10:00Z
+  output: |
+     0 fail
+     209 expect() calls
+    Ran 30 tests across 2 files. [423.00ms]
 
 - eval: E17
   run_id: minted-tiep-thi-tuyen-doi-tac-E17-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.script.tt_crawl_test
-  verified_at: 2026-09-05T06:20:00+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
-    Ran 20 tests in 0.049s
+    Ran 28 tests in 0.066s
 
     OK
 
@@ -208,26 +244,24 @@ Phán xét E19 trả UNCERTAIN — việc của người ở Cổng Bằng chứ
   exit_code: 0
   baseline: red
   verifier: config:executors.script.tt_crawl_live
-  verified_at: 2026-09-05T06:15:29+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
-    2026-09-05 06:15:29,112 INFO lượt chạy: {'gieo': 50, 'lay_duoc': 48, 'bi_chan': 2, 'lan_thu': 68, 'lan_thu_hong': 7, 'lan_thu_so_do': 13, 'lan_thu_danh_ba': 5, 'lan_thu_ho_so': 50, 'lan_thu_lo_so': 0, 'co_so_dien_thoai': 48, 'tong_bang_tin_moi': 48, 'tong_khac_tin_moi': 0, 'tin_dang': {'min': 37, 'q1': 43, 'trung_vi': 60, 'q3': 80, 'max': 436}, 'tin_moi_30_ngay': {'min': 37, 'q1': 43, 'trung_vi': 60, 'q3': 80, 'max': 436}}
-    2026-09-05 06:15:29,112 WARNING 48/48 hồ sơ có tổng tin bằng tin mới 30 ngày — sàn chỉ công bố một con số
-    2026-09-05 06:15:29,114 INFO đã ghi ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json (48 mục)
+    2026-09-05 08:21:34,926 WARNING 49/49 hồ sơ có tổng tin bằng tin mới 30 ngày — sàn chỉ công bố một con số
+    2026-09-05 08:21:34,929 INFO đã ghi 1 lô ra đĩa trước khi gửi (49 mục): ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json
+    2026-09-05 08:21:34,931 INFO chạy khô: 1 lô nằm trên đĩa, không gửi lô nào
 
 - eval: E19
-  criterion: AC-14
-  executor: judgment
-  judged_by: judge panel (domain-correctness, operational-feasibility, spec-alignment)
-  proposal: UNCERTAIN
+  judged_by: panel — domain-correctness, operational-feasibility, spec-alignment (fresh context)
+  verdict: UNCERTAIN
   votes:
-  - domain-correctness: PASS — Log và batch trả lời đủ ba câu bằng số cụ thể: (1) chặn thấp — 1/50 bị chặn (2%), 49/50 lấy được (98%), tổng lượt thử đếm đủ (68 = 13 sơ đồ + 5 danh bạ + 50 hồ sơ) — không cho thấy chặn ở mức hại thuê hàng tháng; (2) tứ phân vị {min 37, q1 43, trung_vi 61, q3 84, max 436} cho thấy ngưỡng 20 không phân biệt được gì trên mẫu thật (0/49 hồ sơ rơi tier "thấp"), nên 60/20/1 chưa hợp lý toàn thang dù mốc 60 chia gần giữa (26 cao/23 vừa); (3) 49/49 hồ sơ (100%) có số điện thoại không rỗng, đủ mở chiến dịch gọi điện. Cả ba đều là câu trả lời cụ thể đủ cho quyết định mở chiến dịch đầu, đúng yêu cầu AC-14.
-  - operational-feasibility: UNCERTAIN — (1) Không — tổng lần thử đếm đủ (13 sơ đồ + 5 danh bạ + 50 hồ sơ + 0 lộ số = 68 = lan_thu, khớp); lay_duoc/gieo = 49/50 (98%), bi_chan = 1/50 (2%), lan_thu_hong = 6/68 (8,8%) — mức chặn này không cho thấy sàn chặn bot đủ mạnh để làm hỏng thuê hàng tháng. (2) Không đủ căn cứ — tứ phân vị tin đăng (min 37, q1 43, trung vị 61, q3 84) chỉ kiểm được vạch 60 (gần trung vị, hợp lý), còn vạch 20 và 1 không có hồ sơ nào gần đó vì sàn thấp nhất quan sát được (37) đã cao hơn cả vạch "vừa" — hai ngưỡng dưới chưa được dữ liệu này chứng minh hợp lý. (3) Có — 49/49 hồ sơ (100%) có số điện thoại, đủ để mở chiến dịch gọi điện đầu tiên. Vì câu (2) không có bằng chứng để phán, tổng thể UNCERTAIN.
-    required_evidence:
-    - Chạy lại bộ cào thật trên seed mở rộng ngoài cụm Quận 12/Gò Vấp/Tân Bình, ưu tiên gồm chuyên trang có dưới 40 tin đăng, và ghi tứ phân vị mới vào live-run.log — nếu xuất hiện hồ sơ có tin đăng gần hoặc dưới 20, mới đủ dữ liệu kiểm ngưỡng "vừa" (20) và "thấp" (1) của bảng 60/20/1.
-  - spec-alignment: UNCERTAIN — (1) Chặn bot: KHÔNG cho thấy mức làm hỏng — lấy được 49/50 (98%), bị chặn 1/50 (2%) — nhưng nhật ký không tách được 6 "lan_thu_hong" là loại lỗi gì (chặn, timeout, hay lỗi bóc tách như dòng "isCompany: không bóc được" xuất hiện ở cả hai lượt) và không xác nhận được liệu con số này có trùng hay tách khỏi "bi_chan=1", nên không chắc mọi lần thử đã được gộp đúng. (2) Tứ phân vị (min=37, q1=43, trung vị=61, q3=84, max=436) chỉ chạm được biên ngưỡng "cao" (60, khớp ranh giới tier trong live-batch.json) — cả 49 hồ sơ đều ≥37 nên hai ngưỡng dưới (20 và 1) chưa được dữ liệu này kiểm; mẫu cũng có vẻ sắp giảm dần theo tổng tin (436→37) chứ không ngẫu nhiên, nên không đủ căn cứ kết luận 60/20/1 hợp lý. (3) Số điện thoại: CÓ, đủ — 49/49 (100%) hồ sơ lấy được có số điện thoại, thừa để mở chiến dịch gọi điện.
-    required_evidence:
-    - Dòng log mức chi tiết hơn (hoặc mã bộ đếm trong tools/listing-crawl/) phân loại rõ nguyên nhân của từng lần trong 6 lan_thu_hong, và xác nhận bi_chan=1 có phải do sàn chặn (403/429/CAPTCHA) khác với lỗi bóc tách dữ liệu ở live-run.log dòng 2 và dòng 7 ("bỏ qua ... isCompany: không bóc được") — nếu tách rõ và bi_chan thật sự chỉ đếm chặn-bot (không lẫn lỗi parse), câu (1) đổi sang PASS rõ ràng.
-    - Một lượt cào 50 hồ sơ khác không sắp theo listingsTotal giảm dần, hoặc mở rộng gieo tới khi có hồ sơ dưới 20 tin đăng, ghi vào evidence/*.json và *.log mới — để tứ phân vị thật sự chạm được ngưỡng 20 và 1; nếu min mẫu mới xuống dưới 20 và phân bố quanh 20/1 hợp lý theo tier hiện có, câu (2) đổi sang PASS.
+    - domain-correctness: UNCERTAIN — (1) Tỷ lệ mất hồ sơ thấp và ổn định (1-2 bị chặn trên 50 gieo, tức 2-4%), và tổng đếm khớp đủ mọi lần thử ở cả 5 lượt (lan_thu_so_do + lan_thu_danh_ba + lan_thu_ho_so = lan_thu, ví dụ 13+5+50=68) — không cho thấy sàn chặn ở mức phá vỡ chi phí thuê tháng. (2) Tứ phân vị tin đăng của lô 49 hồ sơ là min 37 / q1 43 / trung vị 61 / q3 84 / max 436: ngưỡng 60 (Cao) có cơ sở vì chia mẫu gần đôi (26 cao/23 vừa), nhưng KHÔNG hồ sơ nào trong mẫu thấp hơn 37, nên ngưỡng 20 (Vừa) và 1 (Thấp) hoàn toàn chưa được dữ liệu thật chạm tới — không có căn cứ nói chúng hợp lý hay không. (3) 49/49 hồ sơ (100%) có số điện thoại theo log (`co_so_dien_thoai: 49`) — đủ dư để mở một chiến dịch gọi điện. Vì câu 2 chỉ trả lời được cho một trong ba ngưỡng, chưa đủ căn cứ để chốt PASS cho toàn bộ AC-14.
+    - operational-feasibility: UNCERTAIN — (1) Có bằng chứng: 5 lượt chạy đều gieo 50, lấy được 48-49 (96-98%), bị chặn 1-2; tổng lần thử (lan_thu=68) khớp đúng tổng ba mục con (so_do+danh_ba+ho_so=13+5+50) ở cả 5 lượt nên tổng kết đếm đủ mọi lần thử — mức chặn thấp, không cho thấy sàn chặn ở mức làm hỏng thuê hàng tháng, dù nhãn "bi_chan" gộp cả lỗi trích xuất ("isCompany: không bóc được") lẫn chặn bot thật (chỉ 1/5 lượt có thông điệp "Blocked by anti-bot protection"). (2) Tứ phân vị tin_dang và tin_moi_30_ngay giống hệt nhau ở cả 5 lượt (vd min37/q1 43/trung vị 61/q3 84/max 436), xác nhận đúng lời khai hợp đồng là sàn chỉ công bố một con số; ngưỡng "Cao"=60 nằm sát trung vị và chia mẫu khoảng 28 cao/21 vừa — hợp lý cho mức Cao, nhưng sàn của mẫu (min=37) không có hồ sơ nào dưới 20, nên hai ngưỡng "Trung"=20 và "Thấp"=1 hoàn toàn chưa được kiểm chứng bằng dữ liệu thật. (3) co_so_dien_thoai bằng đúng lay_duoc ở cả 5 lượt (49/49, 48/48…) tức tỷ lệ có trường số điện thoại là 100%, đủ về mặt số lượng — nhưng toàn bộ 49 mục trong live-batch.json đều mang cùng một giá trị "09xxxxxxxx" y hệt, nên không thể xác nhận từ đúng ba file được cấp rằng đây là số thật quay được, hay chỉ là placeholder che cho hồ sơ nghiệm thu.
+    - spec-alignment: PASS — (1) Không: lấy được 49/50 (98%, lần xấu nhất 48/50=96%), bị chặn chỉ 1-2/50; và chỉ 1 trong 5 lần chạy có cảnh báo "Blocked by anti-bot protection" thực sự (4/5 lần còn lại "bị chặn" thật ra là lỗi bóc trường isCompany, không phải chặn bot) — không cho thấy sàn chặn bot ở mức làm hỏng thuê hàng tháng. Tổng kết lan_thu=68 khớp đúng tổng ba pha (lan_thu_ho_so 50 + lan_thu_so_do 13 + lan_thu_danh_ba 5) và lan_thu_hong tăng đồng bộ khi bi_chan tăng (6→7 khi bi_chan 1→2) ở các lần chạy khác nhau, cho thấy phép đếm có vẻ bao trọn mọi lần thử qua cả ba pha, dù không mọi lần "hỏng" đều có dòng WARNING tường minh riêng. (2) Không: tứ phân vị (min 37, q1 43, trung vị 61, q3 84, max 436) cho thấy ngưỡng "cao"=60 nằm sát ngay dưới trung vị nên gần một nửa mẫu rơi vào "cao" — không chọn lọc được nhóm nhỏ; ngưỡng "vừa"=20 gần như vô nghĩa vì giá trị nhỏ nhất quan sát đã là 37. Đây đúng là việc hợp đồng đã khai chờ owner chỉnh trước chiến dịch đầu, và tứ phân vị được ghi lại đủ để owner thấy và quyết. (3) Có: 49/49 hồ sơ có số điện thoại (100%, xấu nhất 48/48=100%) — đủ để mở một chiến dịch gọi điện. Cả bốn số liệu AC-14 yêu cầu (lấy được, bị chặn, tỷ lệ số điện thoại, tứ phân vị) đều được ghi lại trong live-run.log và live-batch.json, đủ căn cứ cho quyết định mở chiến dịch đầu.
+  rationale: Panel 2/3 lens UNCERTAIN, đề xuất chung UNCERTAIN — hai ngưỡng phân loại sản lượng "Trung"=20 và "Thấp"=1 chưa chạm dữ liệu thật (sàn mẫu min=37), và 49/49 số điện thoại trong live-batch.json đều cùng một giá trị placeholder "09xxxxxxxx" nên chưa xác nhận là số thật. spec-alignment cho PASS vì đọc đúng nghĩa hẹp của AC-14 (bốn số liệu có được ghi lại, không chặn bot phá chi phí) nhưng không bác bỏ hai khoảng trống trên.
+  required_evidence:
+    - Một lượt cào bổ sung (hoặc lượt thật kế tiếp) có hồ sơ với tin_dang bắc ngang mốc 20 — ví dụ cào từ một địa bàn/trang danh bạ có mật độ tin thấp hơn — rồi đính live-batch.json và live-run.log mới có tứ phân vị chạm được vùng dưới 60 (lý tưởng là vài hồ sơ trên và dưới 20); thiếu bằng chứng này thì không thể trả lời ngưỡng 20 và 1 có hợp lý hay không, và có bằng chứng này verdict câu 2 mới đổi từ UNCERTAIN sang PASS/FAIL cụ thể.
+    - Một bản live-batch.json (hoặc live-run.log kèm mẫu) có ít nhất vài giá trị `phone` không đồng nhất/không phải chuỗi placeholder "09xxxxxxxx" — ví dụ che một phần theo quy ước thật (09xxxxx123, đủ 10 ký tự số khác nhau giữa các mục) — để xác nhận số điện thoại lấy được là số thật, không phải placeholder cố định.
+    - Một lượt cào thật (live-run.log + live-batch.json mới) có ít nhất vài hồ sơ với tin_dang/tin_moi_30_ngay dưới 20 hoặc gần 1, để kiểm chứng hai ngưỡng «Trung»=20 và «Thấp»=1 có phân biệt đúng broker sản lượng thấp hay không — mẫu hiện tại có sàn min=37 nên chưa chạm hai ngưỡng đó.
   human_override:
 
 - eval: E22
@@ -235,55 +269,11 @@ Phán xét E19 trả UNCERTAIN — việc của người ở Cổng Bằng chứ
   exit_code: 0
   baseline: red
   verifier: config:executors.script.tt_crawl_to_ingest
-  verified_at: 2026-09-05T06:20:00+07:00
+  verified_at: 2026-09-05T04:10:00Z
   output: |
      0 fail
      3 expect() calls
-    Ran 1 test across 1 file. [272.00ms]
-
-- eval: E24
-  run_id: minted-tiep-thi-tuyen-doi-tac-E24-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.tt_api
-  verified_at: 2026-09-05T06:20:00+07:00
-  output: |
-     0 fail
-     91 expect() calls
-    Ran 23 tests across 2 files. [1273.00ms]
-
-- eval: E25
-  run_id: minted-tiep-thi-tuyen-doi-tac-E25-r3
-  exit_code: 0
-  baseline: green
-  verifier: config:executors.test.tt_app
-  verified_at: 2026-09-05T06:20:00+07:00
-  output: |
-     0 fail
-     209 expect() calls
-    Ran 30 tests across 2 files. [543.00ms]
-
-### Lệnh suite (hồi quy)
-
-- cmd: bun run db:test && bun run test
-  run_id: minted-tiep-thi-tuyen-doi-tac-SUITE-bun_run_db_test_bun_run_test-r3
-  exit_code: 0
-  verified_at: 2026-09-05T06:20:00+07:00
-
-- cmd: bunx turbo run check-types --force
-  run_id: minted-tiep-thi-tuyen-doi-tac-SUITE-bunx_turbo_run_check_types_force-r3
-  exit_code: 0
-  verified_at: 2026-09-05T06:20:00+07:00
-
-- cmd: bunx turbo run lint --force
-  run_id: minted-tiep-thi-tuyen-doi-tac-SUITE-bunx_turbo_run_lint_force-r3
-  exit_code: 0
-  verified_at: 2026-09-05T06:20:00+07:00
-
-- cmd: bun run lint:slop
-  run_id: minted-tiep-thi-tuyen-doi-tac-SUITE-bun_run_lint_slop-r3
-  exit_code: 0
-  verified_at: 2026-09-05T06:20:00+07:00
+    Ran 1 test across 1 file. [230.00ms]
 
 ## Known limits
 
@@ -291,21 +281,22 @@ Phán xét E19 trả UNCERTAIN — việc của người ở Cổng Bằng chứ
 
 ## Analyst
 
-E16, E25 — green trên cả HEAD lẫn baseline (cmd: cd apps/app && bun test test/messages-guard.spec.ts test/campaign-states.spec.ts). Đây là bài khẳng định quan hệ trạng thái–câu chữ trên UI đã có từ trước (m.loading.list / m.empty.list / m.empty.noViews), đóng vai guard hồi quy có chủ ý cho AC-12, không phải hành vi mới do round này thêm vào — giữ nguyên, không cần viết lại.
+E16, E25 (cmd: `cd apps/app && bun test test/messages-guard.spec.ts test/campaign-states.spec.ts`) — pass trên cả HEAD và diffBase (baseline: green), không phân biệt được feature này. Bài kiểm liệt kê `campaignMessages` trong danh sách MODULE và khẳng định quan hệ trạng thái→câu chữ (loading/empty/no-views) — cả hai mảng đó không đổi theo thay đổi nghiệp vụ chiến dịch round này, nên đây là regression-guard có chủ ý (chống lùi bản dịch/nhãn màn hình), không phải lỗ hổng đo lường; không cần viết lại.
 
 ## Variance
 
-none — không có eval nào mang field runs > 1 trong round này (mọi eval deterministic, runs=1).
+none — không eval nào trong vòng này có `runs` > 1, không có phương sai để người quyết.
 
 ## Iterations
 
-Round 1: E15, E20 BLOCKED — bộ ráng UI (chiến-dịch.mjs chữ/thiết-kế) không dựng được, exit không trả về (cannot_run). Trả về triển khai.
-Round 2: E15, E20 đã chạy được và PASS; nhưng E21 (AC-15, bề rộng 1024/768px) FAIL — RẢNG CỤT: không suy được slug từ http://localhost:3000/ (trả 200 mà không có header Location), phiên hỏng hoặc kho chưa có nơi làm việc. Verdict REJECT — trả về triển khai.
-Round 3: Bộ đo round này không còn nhắc bảy eval UI-check/script gắn ảnh chụp của round 2 (E6, E9, E12, E15, E20, E21, E23) — không có dữ liệu đo cho chúng ở round này. 17 eval máy còn lại trong hợp đồng hiện hành (E1-E5, E7, E8, E10, E11, E13, E14, E16, E17, E18, E22, E24, E25) đều PASS trên HEAD; E19 (judgment, AC-14) vẫn PENDING vì hội đồng chia phiếu — domain-correctness PASS, operational-feasibility và spec-alignment UNCERTAIN — trên câu ngưỡng sản lượng 20/1 chưa có hồ sơ thật nào kiểm chứng được (mẫu live thấp nhất quan sát là 37 tin đăng). Verdict PENDING-JUDGMENT — chờ người quyết ở Cổng 2.
+Round 1: E15, E20 (chân "chủ" và "thiết kế") không chạy được — BLOCKED, driver/dev server chưa sẵn sàng khi verify. Quay lại triển khai.
+Round 2: E21 (chân "bề rộng" — cắt cột theo bề rộng màn hình) fail exit 2. REJECT. Quay lại triển khai.
+Round 3: Toàn bộ 17 eval máy PASS (test/script, cả AC-1 đến AC-16); E19 (ngưỡng phân loại sản lượng AC-14) UNCERTAIN từ panel (2/3 lens), E16/E25 non-discriminating trên baseline. PENDING-JUDGMENT — chờ người ở Cổng 2.
+
 
 ---
 
-## Lượt lái trình duyệt
+## Lượt lái trình duyệt (commit 3856984)
 
 
 # Evidence Report: tiep-thi-tuyen-doi-tac

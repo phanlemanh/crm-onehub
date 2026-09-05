@@ -1,186 +1,152 @@
-# Phát hiện — vòng 3, hai lượt
+# Phát hiện — vòng 3
 
-Cả hai lượt: **0 phát hiện trong hợp đồng**. Mọi mục dưới đây nằm NGOÀI
-hợp đồng — chúng là việc của người ở Cổng Bằng chứng, không phải việc máy
-tự sửa.
+Lượt máy bản cuối: **1 trong hợp đồng, 21 ngoài**.
+Lượt lái: **0 trong hợp đồng, 13 ngoài**.
+Mọi mục ngoài hợp đồng là việc của người ở Cổng Bằng chứng.
 
-## Lượt máy
+## Lượt máy (bản cuối)
 
 ## Trong hợp đồng
+
+- **Lỗi giữa lô nạp trả 500 trắng và để lại phần đã ghi**
+  file: `apps/api/src/listings/listing-ingest.service.ts:76`
+  severity: medium
+  detail: `ingest()` lặp `for (const item of batch.items)` với một transaction cho MỖI item, nên lỗi ở item thứ n giữ nguyên n-1 item đã ghi. Lỗi đó lại là `Error` trần: `optionId()` ném `new Error(...)` (dòng 53) khi nhãn option không khớp — ví dụ rep đổi tên option "Cao" trong Settings → Fields — và dòng 99 ném `new Error` khi thiếu định nghĩa trường. Controller chỉ dịch `InvalidInput` thành BadRequest (listings.controller.ts:79-84), mọi thứ khác thành 500 không thông điệp. Trái luật "Services throw Nest's HttpException family" và trái luật "Anything a self-hoster might not have is optional and must never throw".
+  source: conventions
+  AC: AC-3
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **campaigns.touch writes an Activity directly and skips ActivityStampService**
-  Người dùng thấy gì: Bấm ghi kết quả cuộc gọi không cập nhật đúng thời điểm liên hệ gần nhất của môi giới, nên bộ lọc theo hoạt động gần đây và dòng thời gian của công ty có thể không phản ánh cuộc gọi vừa ghi.
+- **campaigns.touch ghi Activity thẳng, bỏ ActivityStampService và bỏ companyId**
+  Người dùng thấy gì: Ghi kết quả cuộc gọi trong chiến dịch không cập nhật mốc hoạt động gần nhất của cá nhân và công ty, nên bảng danh bạ có thể hiện sai thời điểm liên hệ gần nhất sau khi nhân viên gọi qua chiến dịch.
   file: `apps/api/src/campaigns/campaigns.service.ts`
   severity: high
   Đề xuất: known-limits
 
-- **campaigns.touch accepts any contactId — no existence check, no segment-membership check**
-  Người dùng thấy gì: Có thể ghi nhận một cuộc gọi cho người đã bị xoá hoặc người không thuộc phân khúc của chiến dịch, khiến số liệu chiến dịch không phản ánh đúng ai thực sự nằm trong phân khúc.
+- **campaigns.touch để lỗi Prisma thô thoát ra thay vì HttpException, và không kiểm tra contact thuộc phân khúc**
+  Người dùng thấy gì: Khi ghi kết quả cho một cá nhân không hợp lệ, hệ thống trả lỗi chung chung thay vì thông báo rõ ràng, và không kiểm tra người đó có thuộc phân khúc của chiến dịch hay không.
   file: `apps/api/src/campaigns/campaigns.service.ts`
   severity: high
   Đề xuất: known-limits
 
-- **Saved-view delete refuses forever, but the message tells the user to finish the campaign**
-  Người dùng thấy gì: Một góc nhìn đã lưu từng dùng cho chiến dịch sẽ không bao giờ xoá được, kể cả sau khi chiến dịch đã kết thúc từ lâu, dù thông báo lỗi bảo người dùng kết thúc chiến dịch để xoá được.
-  file: `apps/api/src/saved-views/saved-views.service.ts`
-  severity: high
-  Đề xuất: known-limits
-
-- **uncalledPage paginates in application memory over up to 50 full contacts.list calls**
-  Người dùng thấy gì: Với phân khúc rất lớn (trên khoảng năm nghìn người), bộ lọc "chưa gọi" có thể báo tổng số thành viên bị thiếu và bỏ sót một số người ở cuối danh sách — giới hạn này đã được ghi nhận trước.
-  file: `apps/api/src/campaigns/campaigns.service.ts`
-  severity: high
-  Đề xuất: known-limits
-
-- **savedViews.list is N+1: one filterableFieldsFor + one contact.count per view**
-  Người dùng thấy gì: Menu góc nhìn đã lưu có thể tải chậm hơn cần thiết khi workspace có nhiều góc nhìn.
-  file: `apps/api/src/saved-views/saved-views.service.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **FIELD_FILTER_PREFIX is now defined twice on two sides of a package boundary**
-  Người dùng thấy gì: Nếu quy ước đặt tên bộ lọc bị đổi ở một chỗ mà quên đổi ở chỗ kia, một chiến dịch có thể âm thầm gọi nhầm sang một danh sách rộng hơn góc nhìn đã duyệt, mà không có cảnh báo nào.
-  file: `apps/api/src/campaigns/campaigns-config.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **contactListFor hand-copies the contacts facet list; a new facet silently widens the segment**
-  Người dùng thấy gì: Nếu sau này có thêm một tiêu chí lọc mới trên màn cá nhân, chiến dịch dựng từ góc nhìn dùng tiêu chí đó có thể âm thầm bỏ qua tiêu chí đó và gọi nhầm sang một danh sách rộng hơn phân khúc đã chọn.
-  file: `apps/api/src/campaigns/campaigns.service.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Member-list search replaces the saved view's q instead of narrowing it**
-  Người dùng thấy gì: Khi nhân viên gõ tìm trong danh sách thành viên chiến dịch, kết quả có thể hiện cả người ngoài phân khúc đã chọn, không chỉ thu hẹp trong đúng phân khúc đó.
-  file: `apps/api/src/campaigns/campaigns.service.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Touch note is stored as an empty string, not null**
-  Người dùng thấy gì: Hai cuộc gọi đều không có ghi chú có thể được lưu khác nhau trong hệ thống, khiến việc lọc hay đếm theo "có ghi chú hay không" không nhất quán.
-  file: `apps/api/src/campaigns/campaigns.service.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **campaigns.list takes no input and returns every campaign unpaginated**
-  Người dùng thấy gì: Trang danh sách chiến dịch tải toàn bộ chiến dịch một lần thay vì theo trang, nên có thể chậm dần khi workspace tích luỹ nhiều chiến dịch qua thời gian.
-  file: `apps/api/src/campaigns/campaigns.router.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **campaigns.create validates savedViewId but not ownerId**
-  Người dùng thấy gì: Nếu người phụ trách được chọn cho chiến dịch đã bị xoá khỏi hệ thống, việc tạo chiến dịch có thể báo lỗi khó hiểu thay vì một thông báo rõ ràng.
-  file: `apps/api/src/campaigns/campaigns.service.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Listing ingest creates Contact rows without the AgentTrigger and without a race guard the sibling intake has**
-  Người dùng thấy gì: Nếu cùng một hồ sơ từ sàn được nạp trùng lúc bởi hai lượt chạy chồng nhau, hệ thống có thể tạo ra hai cá nhân trùng nhau trong CRM cho cùng một môi giới.
-  file: `apps/api/src/listings/listing-ingest.service.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **optionId throws a bare Error mid-batch, leaving a partially ingested batch and a 500**
-  Người dùng thấy gì: Nếu một mục trong lô có giá trị không khớp danh sách lựa chọn hợp lệ (ví dụ hình thái hay chứng chỉ lạ), việc nạp lô có thể dừng giữa chừng — các mục nạp trước đó vẫn được lưu nhưng không ai biết đã lưu đến đâu để nạp lại.
-  file: `apps/api/src/listings/listing-ingest.service.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **LISTING.maxItems is dead and duplicates LISTING_BATCH_MAX_ITEMS**
-  Người dùng thấy gì: Không ảnh hưởng người dùng — đây chỉ là một cấu hình thừa trong mã, dễ gây nhầm lẫn về sau cho người muốn đổi giới hạn số mục mỗi lô.
-  file: `apps/api/src/listings/listings-config.ts`
-  severity: low
-  Đề xuất: wont-fix
-
-- **usedViewIds returns campaign names, not ids**
-  Người dùng thấy gì: Không ảnh hưởng người dùng trực tiếp — chỉ là tên gọi nội bộ dễ gây nhầm lẫn cho người sửa mã sau này.
-  file: `apps/api/src/campaigns/campaigns.service.ts`
-  severity: low
-  Đề xuất: wont-fix
-
-- **New API surfaces are not documented in docs/api.md or docs/environment.md**
-  Người dùng thấy gì: Không ảnh hưởng người dùng trực tiếp — tài liệu kỹ thuật nội bộ chưa được cập nhật để phản ánh hai module mới.
-  file: `docs/api.md`
-  severity: low
-  Đề xuất: wont-fix
-
-- **Lưu trữ (archive) một trong chín trường sàn làm hỏng vĩnh viễn cổng tiếp nhận bằng lỗi 500**
-  Người dùng thấy gì: Nếu quản trị viên lưu trữ (ẩn) một trong chín trường sản lượng hoặc địa bàn, mọi lượt nạp hồ sơ mới từ sàn sau đó có thể lỗi hoàn toàn cho tới khi trường đó được khôi phục.
-  file: `apps/api/src/listings/listing-fields.service.ts`
-  severity: high
-  Đề xuất: known-limits
-
-- **Trang chi tiết chiến dịch quay vòng vĩnh viễn khi truy vấn hỏng**
-  Người dùng thấy gì: Mở một chiến dịch không tồn tại, hoặc khi hệ thống đang gặp sự cố, có thể làm trang quay vòng tải mãi mãi, không có thông báo lỗi hay đường quay lại.
-  file: `apps/app/app/(app)/[slug]/campaigns/[campaignId]/campaign-detail.tsx`
-  severity: high
-  Đề xuất: known-limits
-
-- **Lỗi tải danh sách chiến dịch và danh sách thành viên hiện ra thành trạng thái rỗng**
-  Người dùng thấy gì: Khi hệ thống gặp sự cố tạm thời, danh sách chiến dịch hoặc danh sách thành viên phân khúc có thể hiện ra như thể trống trơn, khiến người dùng tưởng nhầm dữ liệu của mình đã bị mất.
+- **campaigns.list trả cả bảng không phân trang; bảng sắp xếp và cắt trang trong trình duyệt**
+  Người dùng thấy gì: Danh sách chiến dịch tải toàn bộ dữ liệu về trình duyệt rồi mới sắp xếp và cắt trang, nên màn hình sẽ chậm dần khi số chiến dịch trong workspace tăng lên.
   file: `apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx`
   severity: high
   Đề xuất: known-limits
 
-- **Bộ cào không chia lô theo trần 500 mục; batch_size trong config là chữ chết, và lượt gửi hỏng là mất trắng cả lượt cào**
-  Người dùng thấy gì: Một lượt cào không giới hạn số lượng có thể chạy hàng giờ rồi thất bại toàn bộ ở bước cuối cùng, và một lượt gửi bị lỗi (sai cấu hình, hết hạn khoá) có thể làm mất trắng toàn bộ kết quả đã cào được, không có gì để gửi lại.
-  file: `tools/listing-crawl/listing_crawl/__main__.py`
+- **campaignMembersInput tự đúc phân trang riêng, vượt trần pageSize của listInput**
+  Người dùng thấy gì: Trang thành viên của chiến dịch có thể tải tới 200 cá nhân một lần thay vì giới hạn 100 áp dụng ở nơi khác trong sản phẩm, khiến trang tải chậm hơn với phân khúc lớn.
+  file: `apps/api/src/campaigns/campaigns.contracts.ts`
   severity: high
   Đề xuất: known-limits
 
-- **Nạp lô từ sàn không nguyên tử: lỗi giữa chừng để lại phần đã ghi và trả 500 trắng**
-  Người dùng thấy gì: Nếu một lô nạp hồ sơ bị lỗi giữa chừng, các hồ sơ nạp trước đó trong cùng lô vẫn được lưu, nhưng người vận hành chỉ nhận về một lỗi chung, không biết đã lưu bao nhiêu để quyết định gửi lại hay không.
+- **Nạp lô từ sàn là writer thứ hai của FieldValue, bỏ qua writeValues của @crm/db/fields**
+  Người dùng thấy gì: Việc nạp dữ liệu từ sàn ghi giá trị các trường tuỳ chỉnh bằng một đường ghi riêng, không dùng lại đường ghi chuẩn của hệ thống; khi tin không có địa bàn, trường địa bàn có thể lưu chuỗi rỗng thay vì để trống.
   file: `apps/api/src/listings/listing-ingest.service.ts`
-  severity: medium
+  severity: high
   Đề xuất: known-limits
 
-- **Chặn xoá góc nhìn tính cả chiến dịch ĐÃ KẾT THÚC, và thông điệp bảo người dùng làm việc không gỡ được nút**
-  Người dùng thấy gì: Một góc nhìn từng dùng cho chiến dịch, kể cả chiến dịch đã kết thúc từ lâu, không bao giờ xoá được, và giao diện không có cách nào để gỡ liên kết đó.
+- **ListingFieldsService tự tạo FieldDefinition, và kiểm tồn tại bằng bộ lọc archivedAt: null**
+  Người dùng thấy gì: Nếu một trường tuỳ chỉnh từ sàn từng bị nhân viên lưu trữ (ẩn) trong Cài đặt, lượt nạp dữ liệu từ sàn tiếp theo có thể lỗi liên tục và không nạp được tin nào cho tới khi có người can thiệp kỹ thuật.
+  file: `apps/api/src/listings/listing-fields.service.ts`
+  severity: high
+  Đề xuất: known-limits
+
+- **savedViews.list thành N+1: mỗi góc nhìn một filterableFieldsFor và một contact.count**
+  Người dùng thấy gì: Màn Danh bạ chậm hơn khi workspace có nhiều góc nhìn đã lưu vì mỗi góc nhìn tính lại kích thước riêng; khi phép tính lỗi, số hiển thị lặng lẽ thành 0 giống hệt phân khúc thật sự trống.
   file: `apps/api/src/saved-views/saved-views.service.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **contactListFor dựng ContactListInput trong tiến trình, đi vòng qua validate của biên tRPC**
-  Người dùng thấy gì: Một góc nhìn đã lưu chứa một giá trị lọc không hợp lệ có thể làm trang chiến dịch hoặc trang danh sách góc nhìn báo lỗi thay vì hiển thị bình thường.
+- **statsFor/countsFor/controlFor kéo toàn bộ hàng CampaignTouch về tiến trình để đếm distinct trong JS**
+  Người dùng thấy gì: Các số liệu so sánh trên trang chiến dịch (đã gọi, trả lời, hẹn gặp) được tính bằng cách tải nhiều dữ liệu về xử lý thay vì đếm trực tiếp trong cơ sở dữ liệu, nên trang có thể chậm dần khi số lượt gọi tăng.
   file: `apps/api/src/campaigns/campaigns.service.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Sơ đồ site tải hỏng bị ghi log thành "sơ đồ site không có địa chỉ" — chẩn đoán sai nguyên nhân**
-  Người dùng thấy gì: Khi sàn nhatot chặn bộ cào, nhật ký vận hành có thể ghi nhầm nguyên nhân thành "sơ đồ site trống", khiến người vận hành dễ sửa nhầm chỗ.
-  file: `tools/listing-crawl/listing_crawl/__main__.py`
-  severity: low
+- **FIELD_FILTER_PREFIX khai hai lần ở hai phía biên gói**
+  Người dùng thấy gì: Quy ước đặt tên bộ lọc theo trường tuỳ biến được khai ở hai nơi tách rời trong mã nguồn; nếu một bên đổi mà bên kia không đổi theo, bộ lọc theo trường tuỳ biến trên phân khúc chiến dịch sẽ lặng lẽ ngừng hoạt động.
+  file: `apps/api/src/campaigns/campaigns-config.ts`
+  severity: medium
   Đề xuất: known-limits
 
-- **Đo CHỈ DẪN thay vì ĐẦU RA — E14/E5 khai file kiểm thử mà lệnh tt_api không bao giờ nạp**
-  Người dùng thấy gì: Một phần bằng chứng kiểm thử cho tính năng này có thể chưa thực sự chạy đúng như hồ sơ khai, nên chưa có gì đảm bảo chắc chắn một số ràng buộc dữ liệu và nhãn tiếng Việt của các trường đã được kiểm tra đầy đủ.
-  file: `_acceptance/config.yaml`
+- **usedViewIds trả về TÊN chiến dịch, không phải id**
+  Người dùng thấy gì: Một phần mã nguồn nội bộ đặt tên gây hiểu lầm, nhưng thông báo hiển thị cho người dùng khi xoá góc nhìn vẫn đúng và đủ tên chiến dịch.
+  file: `apps/api/src/campaigns/campaigns.service.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Nhãn điều hướng "Chiến dịch" viết cứng trong app-icon-rail, không đi qua lib/messages**
+  Người dùng thấy gì: Mục điều hướng "Chiến dịch" trên thanh biểu tượng bên luôn hiện tiếng Việt bất kể ngôn ngữ người dùng đang chọn, khác với các mục lân cận.
+  file: `apps/app/components/app-icon-rail.tsx`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Type CoKhoa — tự đúc từ tiếng Việt cho định danh kỹ thuật**
+  Người dùng thấy gì: Một định danh kỹ thuật trong mã nguồn dùng tên tiếng Việt thay vì tiếng Anh như phần còn lại của ứng dụng; không ảnh hưởng người dùng, chỉ ảnh hưởng người đọc code sau này.
+  file: `apps/app/app/(app)/[slug]/campaigns/campaign-state.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Campaign search replaces the segment's own search term, letting non-members into the list**
+  Người dùng thấy gì: Khi nhân viên gõ từ khoá tìm trong danh sách thành viên chiến dịch, ô tìm kiếm thay thế hẳn bộ lọc gốc của phân khúc thay vì tìm trong phạm vi phân khúc đó — cá nhân ngoài phân khúc có thể xuất hiện, được gọi, và bị ghi lượt gọi vào chiến dịch dù không thuộc đối tượng nhắm tới.
+  file: `apps/api/src/campaigns/campaigns.service.ts`
+  severity: high
+  Đề xuất: new-contract
+
+- **Recording a call outcome never stamps lastActivityAt or attaches the company**
+  Người dùng thấy gì: Ghi kết quả cuộc gọi trong chiến dịch không cập nhật mốc hoạt động gần nhất của cá nhân, và cuộc gọi đó không xuất hiện trên dòng thời gian của công ty liên quan.
+  file: `apps/api/src/campaigns/campaigns.service.ts`
   severity: high
   Đề xuất: known-limits
 
-- **Tuyên quét LỚP nhưng chỉ có điểm-case — ma trận 7 cột × bề rộng của COT_THANH_VIEN chỉ được IN, không có assert nào**
-  Người dùng thấy gì: Bảng thành viên chiến dịch có thể ẩn hoặc hiện sai cột ở các cỡ màn hình khác nhau mà không có phép kiểm nào phát hiện ra.
+- **Saved-view delete guard gives two fixes, neither of which works**
+  Người dùng thấy gì: Khi một góc nhìn bị chặn xoá vì đang gắn với chiến dịch đã kết thúc, thông báo gợi ý hai cách xử lý nhưng không cách nào thực sự làm được trong sản phẩm hiện tại — góc nhìn đó vĩnh viễn không xoá được.
+  file: `apps/api/src/saved-views/saved-views.service.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Failed campaign queries render as loading or as legitimate empty states**
+  Người dùng thấy gì: Khi trang chi tiết chiến dịch tải dữ liệu lỗi (mất mạng, lỗi máy chủ), màn hình đứng ở trạng thái đang tải mãi mãi thay vì báo lỗi cho nhân viên biết.
+  file: `apps/app/app/(app)/[slug]/campaigns/[campaignId]/campaign-detail.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Campaign list and segment picker show "nothing here" when their query failed**
+  Người dùng thấy gì: Khi danh sách chiến dịch hoặc danh sách góc nhìn để chọn phân khúc tải lỗi, màn hình hiện thông điệp "chưa có gì" y hệt trường hợp thật sự trống, khiến nhân viên tưởng nhầm là chưa từng tạo chiến dịch nào.
+  file: `apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Segment picker claims only shared views appear, but private views are listed and accepted**
+  Người dùng thấy gì: Hộp tạo chiến dịch ghi chú chỉ hiện góc nhìn dùng chung, nhưng thực tế cũng liệt kê góc nhìn riêng tư và cho phép tạo chiến dịch từ đó — đồng nghiệp mở chiến dịch sau này vẫn thấy danh sách thành viên dù không có quyền xem góc nhìn gốc.
+  file: `apps/app/app/(app)/[slug]/campaigns/create-campaign-sheet.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Tuyên quét LỚP cột nhưng chỉ đo điểm-case — 7 cột khai trước không hề được đối chiếu (hình dạng 5)**
+  Người dùng thấy gì: Bài kiểm tra tự động cho việc cắt cột ở màn hình nhỏ không thực sự đối chiếu đủ danh sách cột đã cam kết; một cột bị ẩn nhầm hoặc biến mất khỏi màn hình có thể không bị bài kiểm này phát hiện.
   file: `_acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Assertion âm-tính-một-mình — toThrow() trần cho lô rỗng và lô 501 mục, không ghim thông điệp, không đối chứng dương ở biên 500**
-  Người dùng thấy gì: Việc lô rỗng hay lô quá lớn bị từ chối có thể đang đúng vì một lý do khác hẳn (ví dụ một lỗi hệ thống) mà không ai phát hiện ra nếu giới hạn thật sự bị hỏng sau này.
-  file: `packages/validation/test/listing-ingest.spec.ts`
+- **Fixture che danh tính viết tay đúng khuôn bên đọc, không round-trip từ parser (hình dạng 2)**
+  Người dùng thấy gì: Bộ dữ liệu mẫu dùng để kiểm tra tính năng che thông tin cá nhân được viết tay theo đúng khuôn của bên xử lý, không lấy từ đầu ra thật của bộ cào; nếu bộ cào sau này thêm một trường mang thông tin cá nhân mới, bài kiểm có thể không phát hiện được rò rỉ.
+  file: `tools/listing-crawl/tests/test_redact.py`
   severity: medium
   Đề xuất: known-limits
 
-- **Assert số ĐẾM trong khi lời hứa là QUAN HỆ giữa giá trị tệp và giá trị đã ghi — vòng khép kín E22 không so một giá trị nào**
-  Người dùng thấy gì: Một trong chín giá trị trường của môi giới nạp từ sàn có thể bị lưu nhầm sang trường khác (ví dụ nhầm lẫn giữa tổng tin và tin mới) mà bài kiểm hiện tại không phát hiện ra.
+- **Vòng khép kín chỉ khẳng định SỐ ĐẾM, không khẳng định quan hệ giá trị đã hứa (hình dạng 3)**
+  Người dùng thấy gì: Bài kiểm tra việc nạp dữ liệu từ sàn chỉ đếm số bản ghi được tạo ra, không đối chiếu từng giá trị trường với dữ liệu gốc; một lỗi hoán đổi giá trị giữa hai trường vẫn có thể lọt qua mà bài kiểm báo đạt.
   file: `apps/api/test/listing-fixture-batch.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 4/28 lỗi rơi vào file không bộ đo nào phủ (docs/api.md, _acceptance/config.yaml, _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs, packages/validation/test/listing-ingest.spec.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+⚠ Cụm ngoài vùng phủ: 2/22 lỗi rơi vào file không bộ đo nào phủ (apps/app/components/app-icon-rail.tsx, _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+
 
 ---
 
