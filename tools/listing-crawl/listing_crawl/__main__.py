@@ -7,7 +7,14 @@ import sys
 from pathlib import Path
 from statistics import quantiles
 
-from listing_crawl.emit import build_batch, post_batch, validate_batch, write_batch
+from listing_crawl.emit import (
+    PostFailed,
+    build_batch,
+    post_batch,
+    split_items,
+    validate_batch,
+    write_batch,
+)
 from listing_crawl.parse import directory_urls, next_data_of, parse_profile
 from listing_crawl.redact import Redactor
 from listing_crawl.tiers import config
@@ -26,6 +33,8 @@ if (button) { button.click(); await new Promise((done) => setTimeout(done, 1500)
 """
 
 EXIT_NO_SEED = 2
+EXIT_NOT_SENT = 1
+DEFAULT_SPOOL = Path("batch.json")
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -248,13 +257,58 @@ def summary(items: list[dict], counts: dict) -> dict:
     }
 
 
+def batch_path(base: Path, index: int, total: int) -> Path:
+    if total <= 1:
+        return base
+    return base.with_name(f"{base.stem}-{index:03d}{base.suffix or '.json'}")
+
+
+def spool_batches(
+    chunks: list[list[dict]], base: Path, redactor: Redactor | None
+) -> list[tuple[Path, dict]]:
+    spooled: list[tuple[Path, dict]] = []
+    for index, chunk in enumerate(chunks, start=1):
+        batch = build_batch(chunk)
+        if redactor:
+            batch = redactor.batch(batch)
+        spooled.append((write_batch(batch, batch_path(base, index, len(chunks))), batch))
+    return spooled
+
+
+def deliver(
+    spooled: list[tuple[Path, dict]], url: str, secret: str
+) -> tuple[list[Path], list[Path]]:
+    sent: list[Path] = []
+    stuck: list[Path] = []
+
+    for path, batch in spooled:
+        try:
+            validate_batch(batch)
+        except ValueError as error:
+            stuck.append(path)
+            LOGGER.error("lô %s chưa gửi — %s", path, error)
+            continue
+
+        try:
+            status = post_batch(batch, url, secret)
+        except PostFailed as error:
+            stuck.append(path)
+            LOGGER.error("lô %s chưa gửi — cổng trả %s", path, error)
+            continue
+
+        sent.append(path)
+        LOGGER.info("lô %s gửi xong: cổng trả %s (%s mục)", path, status, len(batch["items"]))
+
+    return sent, stuck
+
+
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     redactor = Redactor() if args.redact else None
     setup_logging(args.log, redactor)
 
-    if args.redact and not (args.dry_run or args.out):
-        LOGGER.error("--redact chỉ dùng khi ghi lô ra tệp — thêm --dry-run hoặc --out")
+    if args.redact and not args.dry_run:
+        LOGGER.error("--redact che danh tính nên không gửi lên cổng được — thêm --dry-run")
         return EXIT_NO_SEED
 
     if args.limit is not None and args.limit <= 0:
@@ -279,23 +333,52 @@ def main(argv: list[str] | None = None) -> int:
             len(items),
         )
 
-    batch = build_batch(items)
-    if redactor:
-        batch = redactor.batch(batch)
-    validate_batch(batch)
+    ingest = config()["ingest"]
+    try:
+        chunks = split_items(
+            items, int(ingest["batch_size"]), int(ingest["body_limit_bytes"])
+        )
+    except ValueError as error:
+        LOGGER.error("không chia lô được: %s", error)
+        return EXIT_NOT_SENT
 
-    if args.dry_run or args.out:
-        target = write_batch(batch, args.out or Path("batch.json"))
-        LOGGER.info("đã ghi %s (%s mục)", target, len(items))
-        return 0
+    spooled = spool_batches(chunks, args.out or DEFAULT_SPOOL, redactor)
+    LOGGER.info(
+        "đã ghi %s lô ra đĩa trước khi gửi (%s mục): %s",
+        len(spooled),
+        len(items),
+        ", ".join(str(path) for path, _ in spooled),
+    )
+
+    if args.dry_run:
+        stuck = []
+        for path, batch in spooled:
+            try:
+                validate_batch(batch)
+            except ValueError as error:
+                stuck.append(path)
+                LOGGER.error("lô %s không hợp lược đồ — %s", path, error)
+        LOGGER.info("chạy khô: %s lô nằm trên đĩa, không gửi lô nào", len(spooled))
+        return EXIT_NOT_SENT if stuck else 0
 
     secret = os.environ.get("LISTING_INGEST_SECRET")
     if not secret:
-        LOGGER.error("LISTING_INGEST_SECRET vắng — không gửi được lô")
-        return 1
+        LOGGER.error(
+            "LISTING_INGEST_SECRET vắng — %s lô nằm trên đĩa, chưa gửi lô nào: %s",
+            len(spooled),
+            ", ".join(str(path) for path, _ in spooled),
+        )
+        return EXIT_NOT_SENT
 
-    status = post_batch(batch, config()["ingest"]["url"], secret)
-    LOGGER.info("cổng tiếp nhận trả %s (%s mục)", status, len(items))
+    sent, stuck = deliver(spooled, ingest["url"], secret)
+    LOGGER.info("gửi được %s/%s lô", len(sent), len(spooled))
+    if stuck:
+        LOGGER.error(
+            "%s lô còn trên đĩa, gửi lại được: %s",
+            len(stuck),
+            ", ".join(str(path) for path in stuck),
+        )
+        return EXIT_NOT_SENT
     return 0
 
 

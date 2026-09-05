@@ -17,3 +17,4 @@ stealth = true
 [ingest]
 url = "http://localhost:3001/internal/listings/ingest"
 batch_size = 200
+body_limit_bytes = 2097152

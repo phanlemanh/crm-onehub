@@ -3,7 +3,8 @@
 Đứng ngoài CRM. Đọc sơ đồ site của nhatot, tải trang hồ sơ môi giới, bóc bằng
 khuôn CSS/JSON cố định, xếp mức sản lượng, rồi phát ra một lô JSON đúng lược đồ
 `schemas/listing-ingest.schema.json`. Lô đó đi vào cổng
-`POST /internal/listings/ingest` của API, hoặc ra tệp khi chạy `--dry-run`.
+`POST /internal/listings/ingest` của API. Lô luôn ra tệp trước khi gửi; với
+`--dry-run` thì dừng ở tệp.
 
 ## Dựng
 
@@ -31,10 +32,26 @@ cd tools/listing-crawl
 |---|---|
 | `--limit N` | trần số địa chỉ gieo. `--limit 0` thoát mã 2. |
 | `--fixtures` | chạy trên mẫu đã lưu trong `tests/fixtures/`, không ra mạng |
-| `--dry-run` | ghi lô ra tệp thay vì gửi lên cổng |
-| `--out PATH` | đường dẫn tệp lô |
+| `--dry-run` | ghi lô ra đĩa rồi dừng, không gửi lên cổng |
+| `--out PATH` | đường dẫn gốc của tệp lô. Nhiều lô thì thành `PATH-001`, `PATH-002`… |
 | `--log PATH` | ghi nhật ký lượt chạy ra tệp |
-| `--redact` | che danh tính trước khi ghi lô và nhật ký; chỉ đi cùng `--dry-run` hoặc `--out` |
+| `--redact` | che danh tính trước khi ghi lô và nhật ký; chỉ đi cùng `--dry-run` |
+
+## Chia lô, và lô nằm trên đĩa trước khi gửi
+
+Một lượt cào không gửi trọn kết quả trong một yêu cầu. `[ingest] batch_size`
+trong `config.toml` là số mục mỗi lô; bộ cào hạ nó xuống trần của lược đồ
+(500 mục) khi nó lớn hơn, rồi cắt tiếp bất kỳ lô nào vượt
+`[ingest] body_limit_bytes` — trần thân yêu cầu thật của cổng
+`/internal/listings`, 2 MiB. Hai con số phải khớp với
+`LISTING_INGEST.bodyLimitBytes` ở `apps/api/src/listings/listings-config.ts`.
+
+Mỗi lô ghi ra đĩa **trước** khi gửi. Lô gửi hỏng — 413, 403, 500, hay đứt mạng —
+không kéo các lô khác xuống: bộ cào ghi rõ lô nào gửi xong, lô nào còn trên đĩa,
+rồi thoát mã 1. Gửi lại chỉ cần các tệp đó, không cào lại.
+
+Không có `--dry-run` thì lô vẫn ghi ra đĩa; `--out` chỉ đổi chỗ ghi, mặc định là
+`batch.json` ở thư mục đang đứng.
 
 ## Bằng chứng luôn che danh tính
 

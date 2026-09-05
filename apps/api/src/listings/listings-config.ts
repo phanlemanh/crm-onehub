@@ -7,6 +7,14 @@ export const TIER_LABELS = {
 	ngu: "Ngủ",
 } as const;
 
+const KB = 1024;
+const MB = 1024 * KB;
+
+export const LISTING_INGEST = {
+	path: "/internal/listings",
+	bodyLimitBytes: 2 * MB,
+} as const;
+
 export const LISTING = {
 	maxItems: 500,
 	fields: [
