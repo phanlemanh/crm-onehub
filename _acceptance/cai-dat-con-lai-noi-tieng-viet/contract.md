@@ -134,3 +134,54 @@ hôm nay** nhưng sẽ giấu khi dân số lớn hơn:
 - **Giới hạn ba trạng thái rỗng khai NẶNG hơn sự thật.** Workspace có sẵn một chủ sở hữu và giàn đo hỗ trợ `NGUOI=`; đo bằng chủ sở hữu thì dựng được 4/6 và mở thêm một vật chép.
 - **Năm chỗ giữ nguyên chữ "workspace"** trong bản dịch — ba chỗ nói về workspace của Slack (có lý), hai chỗ mơ hồ. Máy không thấy được vì từ nằm trong câu có dấu.
 
+
+### Vòng chấm hai — ba chiều đỏ mù đã vá, phần còn lại thành nợ
+
+Vòng chấm hai ra thêm mười một chỗ. **Năm chỗ đã đóng**, mỗi chỗ có cặp hai
+chiều chạy được trên cây này:
+
+- **Cửa thoát `route_khong_dung_duoc` giờ có răng.** Trước: thêm một route vào
+  danh sách kèm lý do bịa thì chân vẫn xanh — cửa do chính tôi mở, không ai
+  kiểm. Nay mỗi dòng khai bị **mở thật bằng trình duyệt**; mở được và đứng đúng
+  chỗ là ĐỎ. Xanh 0 với bản khai thật · đỏ 1 khi bịa `/settings/members`.
+  Bài học đắt: bản vá đầu dùng mã HTTP, và nó **mù hai lần** — cookie là đối
+  tượng nên mọi lượt gọi đều 307 (chưa đăng nhập), rồi khi sửa xong thì hoá ra
+  `redirect()` của Next trả **200** kèm lệnh chuyển hướng phía trình duyệt, nên
+  mã trạng thái không bao giờ nói lên "vào được hay không". Chân nay có thêm
+  một **neo**: route đầu của lát phải mở được, không thì thoát mã 2 — để không
+  bao giờ xanh vì mọi thứ đều hỏng.
+- **Ma trận OAuth không còn im lặng nuốt một màn.** Trước: màn nào không mở được
+  thì in `TU CHOI DO` rồi đi tiếp; ô lẽ ra *quan sát trên màn* tụt xuống *đọc
+  mã*, tổng vẫn bằng 20, chân thoát 0. Nay một màn từ chối là **tiền đề thiếu →
+  mã 2**; tập chữ gom rỗng cũng mã 2. Xanh 0 hôm nay · đỏ 2 khi ép một màn
+  chuyển hướng.
+- **Tập ứng viên đoạn mã chép sinh từ MỌI route đã khai**, không còn hai route
+  gõ tay. Bốn route, hai lượt tiếng.
+- **Chân nói ra tầm với của chính nó.** Trong 16 khối tìm được, chỉ **2 khối
+  `<pre>`/`<code>` là chứng cứ** — bỏ thuộc tính bọc chúng thì chân đỏ (đã thử).
+  14 khối còn lại được **tìm thấy bằng chính `translate="no"`**, nên chúng không
+  khai được gì về việc thiếu thuộc tính. Dòng này in ra mỗi lượt chạy.
+- **`.sh` giờ được so bằng bộ tách thân của chính nó.** `khoiSh()` viết ra mà
+  chưa từng gọi; `.sh` lọt vào dân số nhưng thân do bộ phân tích TypeScript đọc
+  hộ. Nay chép `be-rong-do-lib.sh` sang lát này thì chân đỏ, gọi đúng tên hai
+  file và dải dòng 2–61.
+- `neo.file_vat_chep` sửa **6 → 5** cho khớp AC-12; mảng `canCo` bỏ phần tử rỗng.
+
+**Sáu chỗ còn lại là nợ có tên** — không chỗ nào giấu một lỗi sản phẩm hôm nay:
+
+- **E13 và E16 không có đường nào thoát 0 trên máy này**, mà `expected` của chúng
+  vẫn ghi 0. E13 (bề rộng 360px) đỏ vì bốn nhãn tràn ở **cả hai lượt tiếng** —
+  ba nhãn chỉ-đọc-màn-hình cao 1px và một nút tràn sẵn ở bản Anh; E16 (đoạn mã
+  chép) mã 2 vì ba vật cần vai chủ sở hữu hoặc Slack đã cắm. Cả hai màu là
+  **thật**, chỉ là `expected` khai sai kỳ vọng.
+- **Chân trạng thái rỗng chưa có lưới "tập rỗng không bao giờ là đạt"** ở vế màn.
+- **Ba trong bốn con số neo vẫn không ai đọc** (`route`, `file_vat_chep`,
+  `file_quyen`) — nợ này mang từ vòng một sang, chưa trả.
+- **Sáu dòng `decisions.jsonl` trùng `id`** với dòng khác: bộ sinh `id` va nhau
+  trong cùng giây. Sổ là append-only nên không sửa lùi; lần sau đổi bộ sinh.
+- **Chữ "workspace" giữ nguyên ở BẢY chuỗi `vi`, không phải năm** như nợ vòng
+  một ghi. Đếm bằng cách nạp kho chuỗi rồi duyệt mọi giá trị, ngày 05/09.
+- **Chờ người: 13 chuỗi tiếng Việt đã viết "OneHub" trong khi bản `en` vẫn là
+  "Comp AI"** — đếm cùng cách, cùng ngày. Hợp đồng dành chỗ này cho người ở
+  Cổng Phạm vi, và nó **chọi với tên ứng dụng Slack đã đăng ký**. Máy đã đi tiếp
+  theo làn V; đây là ô để veto.

@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { GOC } from "../../man-cai-dat-noi-tieng-viet/rang/lat.mjs";
 import {
+	APP,
 	CAO,
 	CHI_SO,
 	CHROME,
@@ -112,6 +113,25 @@ const BIEU_THUC = {
 function routeKhaiKhongDung() {
 	const khai = docKhai(`${HERE}/lat-cai-dat-2.json`, "lat-cai-dat-2");
 	return khai.route_khong_dung_duoc ?? [];
+}
+
+async function chotRouteKhaiChet(cookie, slug, khai, neo) {
+	const mo = async (route) => {
+		const ra = await moManMem(cookie, slug, route, "vi", RONG);
+		await ra.trang.close();
+		return ra.loi;
+	};
+	if ((await mo(neo)) !== null)
+		await khongDo(
+			`KHONG DO DUOC: tien de thieu — neo ${neo} khong mo duoc, nen moi route deu trong giong route khai chet va chot nay mu.`,
+		);
+	const chet = [];
+	for (const x of khai)
+		if ((await mo(x.route)) === null)
+			chet.push(
+				`ROUTE KHAI CHET: ${x.route} khai khong dung duoc (${x.vi_sao}) nhung no mo duoc va dung dung cho — go dong khai di.`,
+			);
+	return chet;
 }
 
 function batLuat(bang, ten) {
@@ -451,6 +471,9 @@ async function chanHaiTieng(cookie, slug) {
 		`mien dau (tu muon tieng Viet khong them dau): ${soDau} chuoi — ${lanDauTong} lan duoc mien o ve 3.`,
 	);
 	const chet = chetNgoaiLat(mt.khoiNgoai, thayNgoai, daDo);
+	chet.push(
+		...(await chotRouteKhaiChet(cookie, slug, routeKhaiKhongDung(), r.do[0])),
+	);
 	if (daDo.size > 0)
 		for (const c of mt.mienDau.keys())
 			if (!thayDau.has(c))
@@ -747,6 +770,7 @@ async function chanOauth(cookie, slug) {
 		await ket(2);
 	}
 	const tren = new Set();
+	const tuChoi = [];
 	for (const man of [
 		"/settings/connections",
 		...bang.nguon
@@ -764,12 +788,25 @@ async function chanOauth(cookie, slug) {
 		const mo = await moManMem(cookie, slug, man, "vi", RONG);
 		if (mo.loi !== null) {
 			await mo.trang.close();
-			console.log(`   TU CHOI DO man ${man}: ${mo.loi[0]}`);
+			tuChoi.push(`${man}: ${mo.loi[0]}`);
 			continue;
 		}
 		const gia = await gomTrang(mo.trang);
 		await mo.trang.close();
 		for (const g of gia ?? []) tren.add(g.chu);
+	}
+	if (tuChoi.length > 0) {
+		for (const t of tuChoi) console.log(`   TU CHOI DO man ${t}`);
+		console.log(
+			`KHONG DO DUOC: tien de thieu — ${tuChoi.length} man cua ma tran khong mo duoc. O nao le ra quan sat tren man se tut xuong muc ma ma tong van bang ${doi}, nen ket qua nay khong noi len dieu gi.`,
+		);
+		await ket(2);
+	}
+	if (tren.size === 0) {
+		console.log(
+			"KHONG DO DUOC: bon man ket noi gom ra 0 chuoi. Tap quan sat rong khong bao gio la dat.",
+		);
+		await ket(2);
 	}
 	let quanSat = 0;
 	let mucMa = 0;
@@ -858,12 +895,14 @@ async function docDoanTrenMan(trang) {
 				the: el.tagName.toLowerCase(),
 				chu: (el.tagName === "INPUT" ? el.value : el.textContent) ?? "",
 				khongDich: Boolean(el.closest('[translate="no"]')),
+				chungCu: el.matches("pre, code"),
 			}))
 			.concat(
 				[...document.querySelectorAll("input[translate='no']")].map((el) => ({
 					the: "input",
 					chu: el.value ?? "",
 					khongDich: true,
+					chungCu: false,
 				})),
 			)
 			.filter((o) => o.chu.trim() !== ""),
@@ -903,7 +942,6 @@ async function chanDoanMaChep(cookie, slug) {
 		"add-sso-provider-sheet",
 		"sso-table",
 		"slack-channels",
-		,
 	];
 	const coFile = new Set(
 		bang.doan.map((d) =>
@@ -919,6 +957,14 @@ async function chanDoanMaChep(cookie, slug) {
 	const khongDo2 = [];
 	const daDo = [];
 	const ungVien = new Map();
+
+	const buocPhaiCo = bang.doan.filter((d) => d.phai_co_translate_no !== true);
+	if (buocPhaiCo.length > 0) {
+		console.log(
+			`KHONG DO DUOC: ${buocPhaiCo.length} dong khai phai_co_translate_no khac true (${buocPhaiCo.map((d) => d.ten).join(" · ")}). Chan nay chi cai dat ve TRUE — no doi thuoc tinh o MOI ung vien, nen mot dong khai false se duoc cham sai.`,
+		);
+		await ket(2);
+	}
 
 	for (const tieng of ["vi", "en"]) {
 		const ra = await doTheScript(cookie, slug, tieng);
@@ -1030,6 +1076,20 @@ async function chanDoanMaChep(cookie, slug) {
 		);
 	}
 
+	for (const route of [...new Set(bang.doan.map((d) => d.route))].sort())
+		for (const tieng of ["vi", "en"]) {
+			const mo = await moManMem(cookie, slug, route, tieng, RONG);
+			if (mo.loi !== null) {
+				await mo.trang.close();
+				khongDo2.push(`ung vien tren ${route} (lang=${tieng}) — ${mo.loi[0]}`);
+				continue;
+			}
+			const doan = await docDoanTrenMan(mo.trang);
+			await mo.trang.close();
+			for (const d of doan)
+				ungVien.set(d.chu.replace(/\s+/g, " ").trim(), d);
+		}
+
 	if (!tt.ssoCauHinh.canConfigure)
 		khongDo2.push(
 			`URI chuyen huong o hop them nha cung cap SSO — sso.settings tra canConfigure=false cho vai tro "${tt.noiLam.viewerRole}", nut them bi khoa`,
@@ -1051,6 +1111,10 @@ async function chanDoanMaChep(cookie, slug) {
 		console.log(
 			`   ${o.khongDich ? 'translate="no"' : "KHONG CO thuoc tinh"} <${o.the}> ${JSON.stringify(chu.slice(0, 70))}`,
 		);
+	const chungCu = [...ungVien.values()].filter((o) => o.chungCu);
+	console.log(
+		`   trong do ${chungCu.length} khoi <pre>/<code> la CHUNG CU — go thuoc tinh boc chung la chan nay do; ${ungVien.size - chungCu.length} khoi con lai TIM THAY BANG CHINH thuoc tinh translate="no", nen chung khong khai duoc gi ve viec thieu thuoc tinh.`,
+	);
 	const khongMangThuocTinh = [...ungVien.values()].filter((o) => !o.khongDich);
 
 	console.log(`\n-- da do: ${daDo.length} luot`);

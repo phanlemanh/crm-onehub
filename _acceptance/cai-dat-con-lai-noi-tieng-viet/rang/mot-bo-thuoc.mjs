@@ -49,11 +49,16 @@ const MUI = [
 
 
 function khoiSh(duong) {
-	const dong = readFileSync(duong, "utf8")
-		.split("\n")
-		.map((d) => d.replace(/\s+/g, " ").trim())
-		.filter((d) => d.length > 0 && !d.startsWith("#"));
-	return [{ ten: "than script", dong }];
+	const dong = [];
+	const tho = readFileSync(duong, "utf8").split("\n");
+	for (let i = 0; i < tho.length; i++) {
+		const chuan = tho[i].replace(/\s+/g, " ").trim();
+		if (chuan !== "" && !chuan.startsWith("#"))
+			dong.push({ so: i + 1, chuan });
+	}
+	return [{ ten: "than script", ham: false, dong }].filter(
+		(k) => k.dong.length >= NGUONG,
+	);
 }
 
 function chotTienDe() {
@@ -231,7 +236,7 @@ function runChung(a, b) {
 const bang = new Map();
 for (const f of [...fileMot, ...fileHai]) {
 	try {
-		bang.set(f, khoiCuaFile(f));
+		bang.set(f, f.endsWith(".sh") ? khoiSh(f) : khoiCuaFile(f));
 	} catch (e) {
 		khongDo(
 			`KHONG DO DUOC: khong doc duoc than ham cua ${relative(GOC, f)} — ${e.message}`,
@@ -382,7 +387,7 @@ if (trung.length > 0 || lech.length > 0) process.exit(1);
 chotTienDe();
 
 console.log(
-	`ve 1: ${fileMot.length} file .mjs cua dot mot va ${fileHai.length} cua lat nay, ${soKhoi} than ham va than mo-dun, ${fileMot.length * fileHai.length} cap file — 0 khoi trung tu ${NGUONG} dong tro len.`,
+	`ve 1: ${fileMot.length} file .mjs/.sh cua dot mot va ${fileHai.length} cua lat nay, ${soKhoi} than ham va than mo-dun, ${fileMot.length * fileHai.length} cap file — 0 khoi trung tu ${NGUONG} dong tro len.`,
 );
 console.log(
 	`XANH: mot bo thuoc, khong ban chep nao troi; ${MUI.length} mui goi cua dot mot chay khong tham so van dung con so da ky.`,

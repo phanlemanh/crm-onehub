@@ -15,9 +15,9 @@
 	"neo": {
 		"file": 33,
 		"route": 10,
-		"file_vat_chep": 6,
+		"file_vat_chep": 5,
 		"file_quyen": 9,
-		"ghi_chu": "Bon con so lay tu kiem ke S0 ngay 04/09, DOC LAP voi luat quet — de dan so sinh ra co thu de so. Lech la thoat ma 2 kem diff."
+		"ghi_chu": "Bon con so lay tu kiem ke S0 ngay 04/09, DOC LAP voi luat quet — de dan so sinh ra co thu de so. Lech la thoat ma 2 kem diff. file_vat_chep sua 6->5 ngay 05/09: sau la con so dem SAI cua design (google-connection khong co vat chep nao), AC-12 chot nam. GIOI HAN: ba trong bon so nay hien KHONG chan nao doc — xem no co ten."
 	},
 	"them": [],
 	"khong_quet": [],
