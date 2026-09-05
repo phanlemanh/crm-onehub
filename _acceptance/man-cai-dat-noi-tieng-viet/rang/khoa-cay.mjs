@@ -19,7 +19,11 @@ function song(pid) {
 }
 
 function docPid(f) {
-	return Number(readFileSync(`${O}/${f}`, "utf8"));
+	try {
+		return Number(readFileSync(`${O}/${f}`, "utf8"));
+	} catch {
+		return Number.NaN;
+	}
 }
 
 function donRac() {

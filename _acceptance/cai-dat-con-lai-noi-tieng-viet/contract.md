@@ -142,6 +142,33 @@ hôm nay** nhưng sẽ giấu khi dân số lớn hơn:
 - **Năm chỗ giữ nguyên chữ "workspace"** trong bản dịch — ba chỗ nói về workspace của Slack (có lý), hai chỗ mơ hồ. Máy không thấy được vì từ nằm trong câu có dấu.
 
 
+### Vòng chấm bốn — điều khoản dừng-vá đã kích
+
+Vòng bốn (05/09): **18/19 phép đo máy xanh**. E2 đỏ vì một cuộc đua trong chính
+khoá cây tôi viết ở vòng ba — chân đọc một tệp khoá vừa bị chân khác xoá; đã vá
+và chứng bằng sáu lượt đọc chạy song song với một lượt đột biến. Giám khảo
+E19 ra 1 đạt · 1 chưa chắc · 1 không đạt, và **cả hai phiếu không-xanh chỉ vào
+cùng một lỗi sản phẩm thật**: chữ *workspace* giữ nguyên ở bốn chỗ nhưng dịch
+thành *"công ty này"* ở một chỗ, trong khi `CONTEXT.md` khoá **Công ty** là một
+doanh nghiệp trong mạng lưới, không phải nơi làm việc của chính CRM. Đã sửa cho
+nhất quán.
+
+**Ba phát hiện đo lường còn lại — vòng thứ tư liên tiếp cùng một lớp lỗi**, nên
+điều khoản dừng-vá của bộ kit đã kích: vá tiếp là đường người phải chọn tường
+minh, không phải mặc định. Ghi thành nợ có tên:
+
+- **AC-12 hứa đối chiếu hai chiều DOM ↔ bảng, mã không làm.** `ungVien` dựng từ
+  DOM nhưng không bao giờ so với `bang.doan`; thứ đóng vai đối chiếu là một mảng
+  **năm tên file gõ cứng trong chính script** — bảng khai tay so với bảng khai
+  tay. Thêm một dòng khai cho đoạn mã đã biến mất, hoặc để lọt một khối
+  `<pre>`/`<code>` mới không khai, đều không làm chân đỏ. Giá: khoảng 40 phút.
+- **`chanDanSo` (AC-9) không chạy nền trước khi cắm vết, và tính mã 2 là bắt
+  được.** Chân đỏ sẵn vì lý do khác thì thí nghiệm vẫn "đạt". Đây đúng là chỗ
+  `dot-bien-lib.mjs` đã sửa ở vòng ba mà bản sinh đôi của nó thì chưa. ~15 phút.
+- **`chanKhongDich` (AC-6) cắt cụt tập ứng viên bằng `Math.min`** và không kiểm
+  hai độ dài có bằng nhau, nên chiều *thừa* mù với phần đuôi — đúng khúc mà một
+  nhãn mới chưa dịch tạo ra. ~5 phút.
+
 ### Vòng chấm ba — ba chỗ đo lường đã vá, một chỗ thành nợ
 
 Vòng chấm ba (05/09) trả REJECT với bốn phát hiện đo lường trong hợp đồng. **Ba

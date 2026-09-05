@@ -548,7 +548,7 @@ const vi = {
 	},
 	tiepNhan: {
 		tieuDe: "Điểm nhận dữ liệu",
-		moTa: "Kết nối này chưa dùng được. Chưa có điểm nhận, khoá API hay hoạt động nhận nào được tạo cho công ty này.",
+		moTa: "Kết nối này chưa dùng được. Chưa có điểm nhận, khoá API hay hoạt động nhận nào được tạo cho workspace này.",
 		quayLai: "Về màn kết nối",
 	},
 } satisfies KetNoiMessages;
