@@ -1,10 +1,10 @@
 {
   "source": "nhatot",
-  "crawledAt": "2026-09-04T23:15:29.112682Z",
+  "crawledAt": "2026-09-05T00:00:26.670906Z",
   "items": [
     {
-      "url": "https://nhatot.com/moi-gioi-mau-05",
-      "shopName": "Chuyên trang 05",
+      "url": "https://nhatot.com/moi-gioi-mau-03",
+      "shopName": "Chuyên trang 03",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -19,8 +19,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-06",
-      "shopName": "Chuyên trang 06",
+      "url": "https://nhatot.com/moi-gioi-mau-04",
+      "shopName": "Chuyên trang 04",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -35,8 +35,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-07",
-      "shopName": "Chuyên trang 07",
+      "url": "https://nhatot.com/moi-gioi-mau-05",
+      "shopName": "Chuyên trang 05",
       "isCompany": true,
       "hasLicense": true,
       "districts": [
@@ -47,26 +47,26 @@
       "listingsTotal": 164,
       "listingsNew30d": 164,
       "tier": "cao",
-      "personName": "Môi giới 07",
+      "personName": "Môi giới 05",
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-08",
-      "shopName": "Chuyên trang 08",
+      "url": "https://nhatot.com/moi-gioi-mau-06",
+      "shopName": "Chuyên trang 06",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
         "Thành phố Thủ Đức"
       ],
       "city": "Tp Hồ Chí Minh",
-      "listingsTotal": 149,
-      "listingsNew30d": 149,
+      "listingsTotal": 148,
+      "listingsNew30d": 148,
       "tier": "cao",
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-09",
-      "shopName": "Chuyên trang 09",
+      "url": "https://nhatot.com/moi-gioi-mau-07",
+      "shopName": "Chuyên trang 07",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -79,8 +79,24 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-10",
-      "shopName": "Chuyên trang 10",
+      "url": "https://nhatot.com/moi-gioi-mau-08",
+      "shopName": "Chuyên trang 08",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 6",
+        "Quận 10",
+        "Quận 11"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 118,
+      "listingsNew30d": 118,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-09",
+      "shopName": "Chuyên trang 09",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -93,8 +109,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-11",
-      "shopName": "Chuyên trang 11",
+      "url": "https://nhatot.com/moi-gioi-mau-10",
+      "shopName": "Chuyên trang 10",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -107,8 +123,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-12",
-      "shopName": "Chuyên trang 12",
+      "url": "https://nhatot.com/moi-gioi-mau-11",
+      "shopName": "Chuyên trang 11",
       "isCompany": true,
       "hasLicense": true,
       "districts": [
@@ -119,12 +135,12 @@
       "listingsTotal": 100,
       "listingsNew30d": 100,
       "tier": "cao",
-      "personName": "Môi giới 12",
+      "personName": "Môi giới 11",
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-13",
-      "shopName": "Chuyên trang 13",
+      "url": "https://nhatot.com/moi-gioi-mau-12",
+      "shopName": "Chuyên trang 12",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -139,8 +155,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-14",
-      "shopName": "Chuyên trang 14",
+      "url": "https://nhatot.com/moi-gioi-mau-13",
+      "shopName": "Chuyên trang 13",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -153,8 +169,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-15",
-      "shopName": "Chuyên trang 15",
+      "url": "https://nhatot.com/moi-gioi-mau-14",
+      "shopName": "Chuyên trang 14",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -169,8 +185,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-16",
-      "shopName": "Chuyên trang 16",
+      "url": "https://nhatot.com/moi-gioi-mau-15",
+      "shopName": "Chuyên trang 15",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -183,8 +199,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-17",
-      "shopName": "Chuyên trang 17",
+      "url": "https://nhatot.com/moi-gioi-mau-16",
+      "shopName": "Chuyên trang 16",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -197,8 +213,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-18",
-      "shopName": "Chuyên trang 18",
+      "url": "https://nhatot.com/moi-gioi-mau-17",
+      "shopName": "Chuyên trang 17",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -211,8 +227,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-19",
-      "shopName": "Chuyên trang 19",
+      "url": "https://nhatot.com/moi-gioi-mau-18",
+      "shopName": "Chuyên trang 18",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -227,8 +243,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-20",
-      "shopName": "Chuyên trang 20",
+      "url": "https://nhatot.com/moi-gioi-mau-19",
+      "shopName": "Chuyên trang 19",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -244,8 +260,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-21",
-      "shopName": "Chuyên trang 21",
+      "url": "https://nhatot.com/moi-gioi-mau-20",
+      "shopName": "Chuyên trang 20",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -259,8 +275,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-22",
-      "shopName": "Chuyên trang 22",
+      "url": "https://nhatot.com/moi-gioi-mau-21",
+      "shopName": "Chuyên trang 21",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -273,8 +289,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-23",
-      "shopName": "Chuyên trang 23",
+      "url": "https://nhatot.com/moi-gioi-mau-22",
+      "shopName": "Chuyên trang 22",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -289,8 +305,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-24",
-      "shopName": "Chuyên trang 24",
+      "url": "https://nhatot.com/moi-gioi-mau-23",
+      "shopName": "Chuyên trang 23",
       "isCompany": true,
       "hasLicense": true,
       "districts": [
@@ -300,12 +316,12 @@
       "listingsTotal": 66,
       "listingsNew30d": 66,
       "tier": "cao",
-      "personName": "Môi giới 24",
+      "personName": "Môi giới 23",
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-25",
-      "shopName": "Chuyên trang 25",
+      "url": "https://nhatot.com/moi-gioi-mau-24",
+      "shopName": "Chuyên trang 24",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -318,8 +334,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-26",
-      "shopName": "Chuyên trang 26",
+      "url": "https://nhatot.com/moi-gioi-mau-25",
+      "shopName": "Chuyên trang 25",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -334,8 +350,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-27",
-      "shopName": "Chuyên trang 27",
+      "url": "https://nhatot.com/moi-gioi-mau-26",
+      "shopName": "Chuyên trang 26",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -348,8 +364,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-28",
-      "shopName": "Chuyên trang 28",
+      "url": "https://nhatot.com/moi-gioi-mau-27",
+      "shopName": "Chuyên trang 27",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -362,8 +378,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-29",
-      "shopName": "Chuyên trang 29",
+      "url": "https://nhatot.com/moi-gioi-mau-28",
+      "shopName": "Chuyên trang 28",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -378,8 +394,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-30",
-      "shopName": "Chuyên trang 30",
+      "url": "https://nhatot.com/moi-gioi-mau-29",
+      "shopName": "Chuyên trang 29",
       "isCompany": true,
       "hasLicense": true,
       "districts": [
@@ -391,12 +407,12 @@
       "listingsTotal": 58,
       "listingsNew30d": 58,
       "tier": "vua",
-      "personName": "Môi giới 30",
+      "personName": "Môi giới 29",
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-31",
-      "shopName": "Chuyên trang 31",
+      "url": "https://nhatot.com/moi-gioi-mau-30",
+      "shopName": "Chuyên trang 30",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -409,8 +425,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-32",
-      "shopName": "Chuyên trang 32",
+      "url": "https://nhatot.com/moi-gioi-mau-31",
+      "shopName": "Chuyên trang 31",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -423,8 +439,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-33",
-      "shopName": "Chuyên trang 33",
+      "url": "https://nhatot.com/moi-gioi-mau-32",
+      "shopName": "Chuyên trang 32",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -437,8 +453,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-34",
-      "shopName": "Chuyên trang 34",
+      "url": "https://nhatot.com/moi-gioi-mau-33",
+      "shopName": "Chuyên trang 33",
       "isCompany": true,
       "hasLicense": true,
       "districts": [
@@ -449,12 +465,12 @@
       "listingsTotal": 48,
       "listingsNew30d": 48,
       "tier": "vua",
-      "personName": "Môi giới 34",
+      "personName": "Môi giới 33",
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-35",
-      "shopName": "Chuyên trang 35",
+      "url": "https://nhatot.com/moi-gioi-mau-34",
+      "shopName": "Chuyên trang 34",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -467,8 +483,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-36",
-      "shopName": "Chuyên trang 36",
+      "url": "https://nhatot.com/moi-gioi-mau-35",
+      "shopName": "Chuyên trang 35",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -481,8 +497,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-37",
-      "shopName": "Chuyên trang 37",
+      "url": "https://nhatot.com/moi-gioi-mau-36",
+      "shopName": "Chuyên trang 36",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -498,8 +514,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-38",
-      "shopName": "Chuyên trang 38",
+      "url": "https://nhatot.com/moi-gioi-mau-37",
+      "shopName": "Chuyên trang 37",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -514,8 +530,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-39",
-      "shopName": "Chuyên trang 39",
+      "url": "https://nhatot.com/moi-gioi-mau-38",
+      "shopName": "Chuyên trang 38",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -531,8 +547,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-40",
-      "shopName": "Chuyên trang 40",
+      "url": "https://nhatot.com/moi-gioi-mau-39",
+      "shopName": "Chuyên trang 39",
       "isCompany": true,
       "hasLicense": true,
       "districts": [
@@ -543,12 +559,12 @@
       "listingsTotal": 43,
       "listingsNew30d": 43,
       "tier": "vua",
-      "personName": "Môi giới 40",
+      "personName": "Môi giới 39",
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-41",
-      "shopName": "Chuyên trang 41",
+      "url": "https://nhatot.com/moi-gioi-mau-40",
+      "shopName": "Chuyên trang 40",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -563,8 +579,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-42",
-      "shopName": "Chuyên trang 42",
+      "url": "https://nhatot.com/moi-gioi-mau-41",
+      "shopName": "Chuyên trang 41",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -580,8 +596,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-43",
-      "shopName": "Chuyên trang 43",
+      "url": "https://nhatot.com/moi-gioi-mau-42",
+      "shopName": "Chuyên trang 42",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -594,8 +610,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-44",
-      "shopName": "Chuyên trang 44",
+      "url": "https://nhatot.com/moi-gioi-mau-43",
+      "shopName": "Chuyên trang 43",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -610,8 +626,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-45",
-      "shopName": "Chuyên trang 45",
+      "url": "https://nhatot.com/moi-gioi-mau-44",
+      "shopName": "Chuyên trang 44",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -624,8 +640,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-46",
-      "shopName": "Chuyên trang 46",
+      "url": "https://nhatot.com/moi-gioi-mau-45",
+      "shopName": "Chuyên trang 45",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -638,12 +654,28 @@
       "phone": "09xxxxxxxx"
     },
     {
+      "url": "https://nhatot.com/moi-gioi-mau-46",
+      "shopName": "Chuyên trang 46",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 39,
+      "listingsNew30d": 39,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
       "url": "https://nhatot.com/moi-gioi-mau-47",
       "shopName": "Chuyên trang 47",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
-        "Quận 12"
+        "Quận 6",
+        "Quận 8",
+        "Huyện Bình Chánh"
       ],
       "city": "Tp Hồ Chí Minh",
       "listingsTotal": 39,
@@ -659,7 +691,8 @@
       "districts": [
         "Quận 6",
         "Quận 8",
-        "Huyện Bình Chánh"
+        "Quận 10",
+        "Quận 11"
       ],
       "city": "Tp Hồ Chí Minh",
       "listingsTotal": 39,
@@ -673,23 +706,6 @@
       "isCompany": true,
       "hasLicense": false,
       "districts": [
-        "Quận 6",
-        "Quận 8",
-        "Quận 10",
-        "Quận 11"
-      ],
-      "city": "Tp Hồ Chí Minh",
-      "listingsTotal": 39,
-      "listingsNew30d": 39,
-      "tier": "vua",
-      "phone": "09xxxxxxxx"
-    },
-    {
-      "url": "https://nhatot.com/moi-gioi-mau-50",
-      "shopName": "Chuyên trang 50",
-      "isCompany": true,
-      "hasLicense": false,
-      "districts": [
         "Quận Gò Vấp"
       ],
       "city": "Tp Hồ Chí Minh",
@@ -699,8 +715,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-51",
-      "shopName": "Chuyên trang 51",
+      "url": "https://nhatot.com/moi-gioi-mau-50",
+      "shopName": "Chuyên trang 50",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
@@ -716,8 +732,8 @@
       "phone": "09xxxxxxxx"
     },
     {
-      "url": "https://nhatot.com/moi-gioi-mau-52",
-      "shopName": "Chuyên trang 52",
+      "url": "https://nhatot.com/moi-gioi-mau-51",
+      "shopName": "Chuyên trang 51",
       "isCompany": true,
       "hasLicense": false,
       "districts": [
