@@ -82,8 +82,13 @@ export function SlackPeopleMatches({
 						key={row.crmUserId}
 					>
 						<div className="min-w-0 flex-1 pr-4 sm:max-w-75">
-							<p className="font-medium text-sm">{row.name}</p>
-							<p className="truncate text-muted-foreground text-xs">
+							<p className="font-medium text-sm" translate="no">
+								{row.name}
+							</p>
+							<p
+								className="truncate text-muted-foreground text-xs"
+								translate="no"
+							>
 								{row.email}
 							</p>
 						</div>

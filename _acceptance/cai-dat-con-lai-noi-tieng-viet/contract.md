@@ -142,6 +142,38 @@ hôm nay** nhưng sẽ giấu khi dân số lớn hơn:
 - **Năm chỗ giữ nguyên chữ "workspace"** trong bản dịch — ba chỗ nói về workspace của Slack (có lý), hai chỗ mơ hồ. Máy không thấy được vì từ nằm trong câu có dấu.
 
 
+### Vòng chấm năm — lỗ phủ đã đóng
+
+Vòng năm (05/09) trả BLOCKED **vì hạ tầng, không vì sản phẩm**: một agent chết
+giữa chừng nên E16 không có kết quả; `failed_evals` và `failed_commands` đều
+rỗng, 18/19 phép đo còn lại xanh và giám khảo E19 **đạt**. Nhưng lượt soi mã tìm
+ra một lỗ thật, và nó nặng hơn một verdict:
+
+- **Màn `/settings/connections/slack` vẫn hiện tiếng Anh.** `components/slack/
+  channel-picker.tsx` viết thẳng bảy chuỗi (`Add`, `Comp AI is in`, `Not read
+  from Slack yet`, `Comp AI can join this one`, `Private. Comp AI joins as
+  you`, `Private. Waiting on an invite`, `Private. Someone inside has to invite
+  Comp AI`). Trên màn thật, tiêu đề khối đọc *"Kênh OneHub với tới được"* còn
+  từng dòng bên dưới đọc *"Comp AI can join this one"*.
+  **Không thước nào bắt được** vì bản khai `thu_muc` chỉ liệt `settings/**`,
+  còn `components/slack/` nằm ngoài dân số — màu xanh của các chân là **lỗ phủ,
+  không phải bằng chứng đã dịch**. Đã dịch bảy chuỗi và **kéo file vào dân số**
+  bằng khoá `them`; dân số 33 → 34 file quét.
+- **Tên và email thành viên trên `/settings/connections/slack/people` không mang
+  `translate="no"`**, trong khi `slackHandle` cùng hàng thì có. Bảng dữ liệu
+  người nhập kê tay năm ô nên không ai đọc tới file đó. Đã đánh dấu, và **thêm
+  ô thứ sáu vào bảng** — gỡ một thuộc tính thì chân đỏ đúng dòng (đã thử).
+
+**Giới hạn còn lại của hai chỗ này:**
+
+- `channel-picker.tsx` là component **dùng chung** — agent-builder cũng gọi — mà
+  nay đọc kho chuỗi của khu vực Cài đặt (`settings-ket-noi`). Chữ trên màn
+  agent-builder vì thế do kho "settings" quyết định. Tách ra kho riêng là việc
+  của đợt agent-builder, vốn sở hữu component đó.
+- Route `/settings/connections/slack/people` vẫn không dựng được khi Slack chưa
+  cắm, nên ô thứ sáu chỉ đo được **ở mức mã**, không chứng màn hiện đúng.
+- Lệnh mời `/invite @Comp AI` vẫn gõ cứng — nợ có tên từ vòng bốn, chưa trả.
+
 ### Vòng chấm bốn — điều khoản dừng-vá đã kích
 
 Vòng bốn (05/09): **18/19 phép đo máy xanh**. E2 đỏ vì một cuộc đua trong chính

@@ -403,6 +403,7 @@ describe("kho chuoi cua vong ③a", () => {
 			"settings-ket-noi:slack.goHoi": ["Gỡ 1?", "Gỡ 12?"],
 			"settings-ket-noi:quyen.dem": ["1 rộng trên A", "12 rộng trên A"],
 			"settings-ket-noi:kenh.chonKenh": ["Chọn kênh #1", "Chọn kênh #12"],
+			"settings-ket-noi:kenh.soNguoi": [" · 1 người", " · 12 người"],
 			"settings-ket-noi:kenh.khongKhop": [
 				"Không kênh nào khớp “1”.",
 				"Không kênh nào khớp “12”.",

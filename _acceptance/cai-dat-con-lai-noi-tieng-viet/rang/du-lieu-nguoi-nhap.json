@@ -40,6 +40,14 @@
 			"do_san_duoc": true,
 			"route": "/settings/members",
 			"nguon_san": "thanhVien.rows[].email"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/connections/slack/people/slack-people-matches.tsx",
+			"truong": "ten va email thanh vien",
+			"gieo_duoc": false,
+			"vi_sao": "khong tao thanh vien moi tu phien do",
+			"do_san_duoc": false,
+			"vi_sao_san": "route /settings/connections/slack/people redirect ve man cha khi Slack chua cam — khai o route_khong_dung_duoc"
 		}
 	]
 }
