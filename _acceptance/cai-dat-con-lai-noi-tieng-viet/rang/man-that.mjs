@@ -779,6 +779,7 @@ async function chanTrangThaiRong(cookie, slug) {
 	const tt = await trangThai(cookie);
 	const doDuoc = [];
 	const khongDung = [];
+	const sai = [];
 	let khongDau = 0;
 	for (const c of CAU_RONG) {
 		const cho = giaTriKho(c.kho, "vi", c.khoa);
@@ -812,8 +813,8 @@ async function chanTrangThaiRong(cookie, slug) {
 		);
 		await mo.trang.close();
 		if (!chu.includes(cho)) {
-			khongDung.push(
-				`${c.ten} — dung xong ma man khong hien cau rong ${JSON.stringify(cho)}`,
+			sai.push(
+				`${c.ten} — trang thai DUNG DUOC va man mo duoc, nhung man khong hien cau rong ${JSON.stringify(cho)}. Day KHONG phai gioi han: o nay do duoc va no sai.`,
 			);
 			continue;
 		}
@@ -829,9 +830,10 @@ async function chanTrangThaiRong(cookie, slug) {
 	console.log("-- khong dung duoc:");
 	for (const d of khongDung) console.log(`   ${d}`);
 	console.log(
-		`\nket qua: dung duoc=${doDuoc.length} · khong dung duoc=${khongDung.length} · o dung duoc ma khong co dau tieng Viet=${khongDau}`,
+		`\nket qua: dung duoc=${doDuoc.length} · khong dung duoc=${khongDung.length} · o dung duoc ma khong co dau tieng Viet=${khongDau} · o do duoc ma man hien sai=${sai.length}`,
 	);
-	if (khongDau > 0) await ket(1);
+	for (const d of sai) console.log(`   DO: ${d}`);
+	if (khongDau > 0 || sai.length > 0) await ket(1);
 	if (doDuoc.length === 0) {
 		console.log(
 			"KHONG DO DUOC: khong dung duoc o nao. Tap quan sat rong khong bao gio la dat.",
@@ -932,7 +934,14 @@ async function chanOauth(cookie, slug) {
 			hong += 1;
 			continue;
 		}
-		if (!DAU_VIET.test(chuVi) && chuVi !== chuEn) {
+		if (chuVi === chuEn) {
+			console.log(
+				`   O HONG: ${ten} — ban vi cua ${o.khoa} y het ban en, tuc khoa nay chua dich: ${JSON.stringify(chuVi)}`,
+			);
+			hong += 1;
+			continue;
+		}
+		if (!DAU_VIET.test(chuVi)) {
 			console.log(
 				`   O HONG: ${ten} — ban vi cua ${o.khoa} khong mang dau: ${JSON.stringify(chuVi)}`,
 			);

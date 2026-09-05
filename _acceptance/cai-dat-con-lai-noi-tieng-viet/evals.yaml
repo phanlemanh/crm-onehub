@@ -85,7 +85,8 @@ evals:
       Sau cau rong ke thanh bang. Dung tren may chu that; trang thai nao dung duoc thi doc
       chu nguoi doc thay va doi hoi tieng Viet co dau; trang thai nao KHONG dung duoc thi
       GOI TEN kem ly do duoi nhan GIOI HAN DA KHAI, TUYET DOI khong ha xuong doc ma roi ghi
-      dat. Khong dung duoc o nao la thoat ma 2 (tap rong). Ket qua in ro hai danh sach:
+      dat. Trang thai DUNG DUOC ma man hien SAI cau la DO (ma 1), khong duoc don vao cung
+      ro voi "khong dung duoc" — hai nguyen nhan khac han nhau. Khong dung duoc o nao la thoat ma 2 (tap rong). Ket qua in ro hai danh sach:
       dung duoc / khong dung duoc — mang sang cong ky. (Sua 05/09: ban truoc doi ma 2 khi
       CO o khong dung duoc, nen tren may nay eval khong bao gio co duong ve 0.)
     paths:
@@ -101,7 +102,12 @@ evals:
       exit 0. MA TRAN DONG 4 nguon x 5 trang thai = 20 o trong ban khai; moi o la mot khoa
       kho chuoi, hoac "dung chung voi o X", hoac "khong ton tai trong ma" kem ly do.
       Doi hoi: so o quan sat tren man (trang thai dang hien cua onehub) + so o do muc ma
-      (moi khoa con dung mot nut AST doc no, ban vi co dau) + so o khai khong-ton-tai = 20.
+      (moi khoa con dung mot nut AST doc no) + so o khai khong-ton-tai = 20.
+      MOI o bi doi hai ve RIENG: ban vi khong duoc y het ban en (khoa chua dich), VA ban vi
+      phai mang dau. Khong ve nao mien tru ve nao.
+      GIOI HAN: ve "thay chu tren man" gom chu bon man o trang thai song hien tai vao mot tap
+      phang roi hoi "chuoi nay co nam dau do khong" — no KHONG dung trang thai, nen khong
+      chung duoc quan he nguon x trang thai.
       Thieu mot o la thoat ma 2 goi ten o. Ma tran in ra output. KHONG dung luong OAuth that.
       Chieu do: xoa nut doc khoa cua o "Microsoft x cam lai" thi chan do goi ten o do —
       khong phai "liet nhung gi tim thay" ma la "doi du 20".
