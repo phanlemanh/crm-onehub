@@ -109,3 +109,4 @@
 {"ts":"2026-09-05T09:30:00Z","sha":"49a9f63","round":3,"evalId":"E22","run_id":"minted-tiep-thi-tuyen-doi-tac-E22-r3","exit_code":0,"cmd":"cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --fixtures --dry-run --out ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/fixture-batch.json && cd ../.. && bun run db:test && cd apps/api && bun run test listing-fixture-batch"}
 {"ts":"2026-09-05T09:30:00Z","sha":"49a9f63","round":3,"kind":"baseline","evals_hash":"round3d-xac-nhan-cuoi","non_discriminating":[{"cmd":"cd apps/app && bun test test/messages-guard.spec.ts test/campaign-states.spec.ts","evals":["E16","E25"]}]}
 {"ts":"2026-09-05T09:30:00Z","sha":"49a9f63","round":3,"kind":"round-tally","verdict":"PENDING-JUDGMENT","expected":5,"returned":5,"blocked":0}
+{"ts":"2026-09-05T06:31:08Z","kind":"repin","run_id":"repin-tiep-thi-tuyen-doi-tac-20260905T063108Z","sha":"8b98a3d3329941a17df7ec226aeee9eb29f9d5db","suites_exit":[0,0,0,0]}
