@@ -116,7 +116,9 @@ evals:
     cmd: config:executors.script.cd2_khong_dich
     expected: >-
       exit 0. Tap ung vien sinh tu man that tren MOI route cua lat; doi chieu bang khai
-      ca hai chieu; thieu hay thua deu thoat ma 2 goi ten. Chieu do: bo translate="no"
+      ca hai chieu; thieu hay thua deu thoat ma 2 goi ten. Hai luot phai ra CUNG SO phan tu
+      co chu tren moi route — lech la DO goi ten route (khong con cat cut bang Math.min).
+      Chieu do: bo translate="no"
       khoi mot ten thuong hieu thi chan do; them mot URL moi vao man ma khong khai thi
       chan cung do.
     paths:
@@ -179,7 +181,9 @@ evals:
       exit 0. Truoc het: so file quet ra BANG so neo trong ban khai (33 · 10 route · 6 file
       vat chep · 9 file canManage) — lech la thoat ma 2 kem diff ten file; ban khai liet du
       MUOI thu muc. Roi hai thi nghiem: (a) tha mot file .tsx mang chu tieng Anh vao thu muc
-      lat → dan so tang 1 VA moi-chuoi + chu-cung deu DO; (b) CAN GAT khong_quet —
+      lat → dan so tang 1 VA moi-chuoi + chu-cung deu DO — nhung TRUOC do phai chay NEN:
+      ca hai chan xanh tren cay lanh, khong thi thoat ma 2. Chan tra ma 2 khi co vet la
+      chua do duoc (ma 2), KHONG tinh la da bat. (b) CAN GAT khong_quet —
       khai file do vao khong_quet cua ban khai (tren ban sao ban khai) → chan van DO vi
       file bi loai tru ma con tieng Anh, in ten file. Ca hai deu don sach, git status
       bang nhau. Chieu (b) la cai dot mot chua co.
@@ -237,9 +241,11 @@ evals:
       The script so voi tracking.settings.snippet / .tagManagerSnippet cua chinh may chu —
       KHONG voi ban go tay trong phep do. Man xuong dong cho de doc nen hai ben cung gom
       khoang trang TRANG TRI truoc khi so; moi ky tu khac so tung byte.
-      Tap ung vien SINH TU DOM tren MOI route (nut chep, hoac code/pre trong translate=no),
-      doi chieu hai chieu voi bang; bang PHAI co it nhat mot dong cho moi trong 6 file
-      design neu — thieu file nao la thoat ma 2 goi ten file. Lech mot byte so voi nguon
+      So file rieng trong bang BANG neo file_vat_chep cua AC-9 (5) — lech la ma 2.
+      DOI CHIEU HAI CHIEU trong tam voi: (a) moi dong cua bang phai hoac DA DO, hoac co
+      dong khai ly do khong do duoc — dong khong roi vao dau ca la ma 2 goi ten; (b) moi
+      khoi pre/code sinh tu DOM tren moi route da khai phai khop mot nguon da so — khoi la
+      tren man ma bang khong co dong nao la DO. Lech mot byte so voi nguon
       la DO kem ten doan va vi tri byte. Vat khong gieo duoc (can vai chu so huu hoac Slack
       that) GOI TEN duoi nhan GIOI HAN DA KHAI va mang sang cong ky; 0 vat do duoc la
       thoat ma 2. (Sua 05/09: ban truoc doi ma 2 khi CO vat khong gieo duoc.) Chieu do: sua template dung chung (doi mot dau

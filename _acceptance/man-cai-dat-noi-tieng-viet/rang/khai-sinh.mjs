@@ -94,6 +94,20 @@ function chanDanSo() {
 		execFileSync("git", ["status", "--porcelain"], { cwd: GOC, encoding: "utf8" });
 	const gocTruoc = sach();
 
+	const nen = {
+		moiChuoi: chay([`${HERE}/moi-chuoi.mjs`, ...LAT_ARG]).ma,
+		chuCung: chay([`${HERE}/chu-cung-lat.mjs`, ...LAT_ARG]).ma,
+	};
+	const nenHong = Object.entries(nen).filter(([, m]) => m !== 0);
+	if (nenHong.length > 0) {
+		console.log(
+			`KHONG DO DUOC: chua tha file nao ma ${nenHong.length} chan da khong xanh: ` +
+				`${nenHong.map(([t, m]) => `${t}(${m})`).join(" · ")}. Chieu xanh gay thi chieu do khong noi len dieu gi.`,
+		);
+		process.exit(2);
+	}
+	console.log(`chieu xanh: ca hai chan xanh tren cay lanh truoc khi tha file thu.`);
+
 	let sau;
 	let ma;
 	try {
@@ -123,11 +137,24 @@ function chanDanSo() {
 		process.exit(2);
 	}
 
-	const mu = Object.entries(ma).filter(([, m]) => m === 0).map(([t]) => t);
+	const mu = Object.entries(ma)
+		.filter(([, m]) => m === 0)
+		.map(([t]) => t);
+	const chuaDo = Object.entries(ma)
+		.filter(([, m]) => m !== 0 && m !== 1)
+		.map(([t, m]) => `${t}(${m})`);
 	console.log(
 		`tha them mot file .tsx mang chu tieng Anh: dan so ${truoc.soTuDia} -> ${sau.soTuDia} · ` +
 			`moi-chuoi(${ma.moiChuoi}) chu-cung-jsx(${ma.chuCung}) · cay da don sach`,
 	);
+
+	if (chuaDo.length > 0) {
+		console.log(
+			`\nKHONG DO DUOC: ${chuaDo.length} chan tra ma khac 0 va 1 khi co file moi: ${chuaDo.join(" · ")}. ` +
+				"Ma 2 la tien de thieu — KHONG duoc tinh la da bat duoc vet.",
+		);
+		process.exit(2);
+	}
 
 	if (mu.length > 0) {
 		console.log(
