@@ -274,12 +274,12 @@ evals:
       tieng Anh da thanh mot cau Viet tu nhien, danh tu theo CONTEXT.md (cong ty · ca nhan ·
       thoa thuan), va cho nao con la chu dich may thi neu dich danh khoa?
     inputs:
-      - apps/app/lib/messages/settings-ket-noi.ts
-      - apps/app/lib/messages/settings-theo-doi.ts
-      - apps/app/lib/messages/settings-khoa-api.ts
-      - apps/app/lib/messages/settings-sso.ts
-      - apps/app/lib/messages/settings-thanh-vien.ts
-      - CONTEXT.md
+      - ../../apps/app/lib/messages/settings-ket-noi.ts
+      - ../../apps/app/lib/messages/settings-theo-doi.ts
+      - ../../apps/app/lib/messages/settings-khoa-api.ts
+      - ../../apps/app/lib/messages/settings-sso.ts
+      - ../../apps/app/lib/messages/settings-thanh-vien.ts
+      - ../../CONTEXT.md
     expected: >-
       Ban dich doc nhu tieng Viet cua nguoi lam nghe. Ba phep thu cua dot mot, cong mot:
       cau ghep so nhieu tieng Anh (${n === 1 ? "is" : "are"}) da thanh mot cau tieng Viet
