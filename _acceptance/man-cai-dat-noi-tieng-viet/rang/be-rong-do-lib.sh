@@ -12,7 +12,7 @@ BE_RONG="${BE_RONG_HEP:-360}"
 
 cd "$ROOT" || exit 2
 node "$RANG/khoa-cay.mjs" viet $$ || exit 2
-export KHOA_CAY_CHU=$
+export KHOA_CAY_CHU=$$
 cp "$KHO" "$GIU"
 tra() { cp "$GIU" "$KHO"; rm -f "$GIU"; node "$RANG/khoa-cay.mjs" tha $$; }
 trap tra EXIT

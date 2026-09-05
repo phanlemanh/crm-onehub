@@ -1,0 +1,24 @@
+{"ts":"2026-09-05T12:21:52Z","kind":"round","run_id":"s4r7-20260905T122152Z-16596","sha":"296564f2aef813e016177f34a049779a46871c27","round":1,"verdict":"PASS","suites_exit":[0,0,0,0]}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E1","eval":"E1","criterion":"AC-1","verifier":"config:executors.script.cd2_hai_tieng","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E2","eval":"E2","criterion":"AC-1b","verifier":"config:executors.script.cd2_chu_cung_jsx","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E3","eval":"E3","criterion":"AC-2","verifier":"config:executors.script.cd2_toast","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E4","eval":"E4","criterion":"AC-3","verifier":"config:executors.script.cd2_tieu_de","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E5","eval":"E5","criterion":"AC-4","verifier":"config:executors.script.cd2_khong_du_quyen","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E6","eval":"E6","criterion":"AC-5","verifier":"config:executors.script.cd2_trang_thai_rong","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E7","eval":"E7","criterion":"AC-5b","verifier":"config:executors.script.cd2_oauth","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E8","eval":"E8","criterion":"AC-6","verifier":"config:executors.script.cd2_khong_dich","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E9","eval":"E9","criterion":"AC-6b","verifier":"config:executors.script.cd2_du_lieu_nguoi_nhap","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E10","eval":"E10","criterion":"AC-7","verifier":"config:executors.script.cd2_dot_bien","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E11","eval":"E11","criterion":"AC-8","verifier":"config:executors.script.cd2_khai_sinh","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E12","eval":"E12","criterion":"AC-9","verifier":"config:executors.script.cd2_dan_so_tu_dia","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E13","eval":"E13","criterion":"AC-10","verifier":"config:executors.script.cd2_be_rong","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E14","eval":"E14","criterion":"AC-10b","verifier":"config:executors.script.cd2_be_rong_do","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E15","eval":"E15","criterion":"AC-11","verifier":"config:executors.script.cd2_moi_chuoi","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E16","eval":"E16","criterion":"AC-12","verifier":"config:executors.script.cd2_doan_ma_chep","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E17","eval":"E17","criterion":"AC-13","verifier":"config:executors.script.cd2_mot_bo_thuoc","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"eval","run_id":"s4r7-20260905T122152Z-16596-E18","eval":"E18","criterion":"AC-1","verifier":"config:executors.test.rang3_khoa_chet","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"panel","run_id":"s4r7-20260905T122152Z-16596-E19","eval":"E19","criterion":"AC-1","verifier":"judge panel (fresh context)","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"suite","run_id":"s4r7-20260905T122152Z-16596-S1","eval":"SUITE-S1","verifier":"bun run db:test && bunx turbo run test --force --concurrency=1","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"suite","run_id":"s4r7-20260905T122152Z-16596-S2","eval":"SUITE-S2","verifier":"bunx turbo run check-types --force","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"suite","run_id":"s4r7-20260905T122152Z-16596-S3","eval":"SUITE-S3","verifier":"bunx turbo run lint --force","exit_code":0}
+{"ts":"2026-09-05T12:21:52Z","kind":"suite","run_id":"s4r7-20260905T122152Z-16596-S4","eval":"SUITE-S4","verifier":"bun run lint:slop","exit_code":0}

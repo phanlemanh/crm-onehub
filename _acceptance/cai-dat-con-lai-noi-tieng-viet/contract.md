@@ -5,7 +5,7 @@ slug: cai-dat-con-lai-noi-tieng-viet
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-09-05T07:18:41Z
 veto_state: mo
