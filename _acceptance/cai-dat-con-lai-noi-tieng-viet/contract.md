@@ -6,8 +6,8 @@ owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [ui]
 status: implemented
-approved_by:
-approved_at:
+approved_by: Manh Phan
+approved_at: 2026-09-05T07:18:41Z
 veto_state: mo
 veto_opened_at: 2026-09-04T14:02:57Z
 design_doc: docs/superpowers/specs/2026-09-04-cai-dat-con-lai-noi-tieng-viet-design.md
