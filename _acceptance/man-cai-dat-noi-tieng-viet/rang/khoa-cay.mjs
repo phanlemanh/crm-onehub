@@ -78,15 +78,14 @@ export async function giuViet(pid = process.pid) {
 	for (;;) {
 		donRac();
 		writeFileSync(toi, String(pid));
-		const khac = nguoiViet(pid);
-		if (khac.length === 0 || Math.min(...khac) > pid) break;
+		if (nguoiViet(pid).length === 0) break;
 		rmSync(toi, { force: true });
 		hetHan(han, "mot chan dot bien khac giu cay");
 		if (!daBao) {
 			console.log("cho: mot chan dot bien khac dang sua cay — xep hang sau no.");
 			daBao = true;
 		}
-		await ngu(NHIP_MS);
+		await ngu(NHIP_MS + Math.floor(Math.random() * 1500));
 	}
 	while (soNguoiDoc() > 0) {
 		if (Date.now() > han) rmSync(toi, { force: true });
@@ -97,6 +96,12 @@ export async function giuViet(pid = process.pid) {
 		process.env.KHOA_CAY_CHU = String(pid);
 		process.on("exit", () => rmSync(toi, { force: true }));
 	}
+}
+
+export async function nangLenViet() {
+	if (process.env.KHOA_CAY_CHU) return;
+	rmSync(`${O}/doc-${process.pid}`, { force: true });
+	await giuViet();
 }
 
 export function thaViet(pid) {

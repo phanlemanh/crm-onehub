@@ -2,7 +2,7 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { GOC } from "../../man-cai-dat-noi-tieng-viet/rang/lat.mjs";
-import { giuDoc } from "../../man-cai-dat-noi-tieng-viet/rang/khoa-cay.mjs";
+import { giuDoc, nangLenViet } from "../../man-cai-dat-noi-tieng-viet/rang/khoa-cay.mjs";
 
 import {
 	APP,
@@ -588,7 +588,13 @@ async function chanKhongDich(cookie, slug) {
 }
 
 async function chanDuLieuNguoiNhap(cookie, slug) {
+	await nangLenViet();
 	const bang = docKhai(`${HERE}/du-lieu-nguoi-nhap.json`, "du-lieu-nguoi-nhap");
+	const donKhongXong = [];
+	const don = async (ten, duong, vao) => {
+		const r = await goiApiTao(cookie, duong, vao);
+		if (r.loi !== undefined) donKhongXong.push(`${ten} — ${r.loi}`);
+	};
 	console.log(
 		'-- CHAN MA: phan tu JSX boc bieu thuc truong phai mang translate="no"',
 	);
@@ -648,12 +654,12 @@ async function chanDuLieuNguoiNhap(cookie, slug) {
 		const mo = await moManMem(cookie, slug, "/settings/api-keys", "vi", RONG);
 		if (mo.loi !== null) {
 			await mo.trang.close();
-			await goiApiTao(cookie, "apiKeys.revoke", { id: tao.gia.id });
+			await don("khoa API gieo thu", "apiKeys.revoke", { id: tao.gia.id });
 			await khongDo(`KHONG DO DUOC: ${mo.loi[0]}`);
 		}
 		const gia = await gomTrang(mo.trang);
 		await mo.trang.close();
-		await goiApiTao(cookie, "apiKeys.revoke", { id: tao.gia.id });
+		await don("khoa API gieo thu", "apiKeys.revoke", { id: tao.gia.id });
 		const cho = (gia ?? []).filter((g) => g.chu === ten);
 		if (cho.length === 0) {
 			console.log(
@@ -677,7 +683,7 @@ async function chanDuLieuNguoiNhap(cookie, slug) {
 		khongGieo.push(`ten mien duoc phep — ${themMien.loi}`);
 	} else {
 		gieoDuoc.push("ten mien duoc phep — da them mot ten mien");
-		await goiApiTao(cookie, "tracking.removeDomain", { id: themMien.gia.id });
+		await don("ten mien gieo thu", "tracking.removeDomain", { id: themMien.gia.id });
 	}
 
 	const san = (tt.theoDoi.domains ?? []).map((d) => d.host);
@@ -695,6 +701,13 @@ async function chanDuLieuNguoiNhap(cookie, slug) {
 	);
 	if (thieuMa > 0 || thieuMan > 0) await ket(1);
 	if (khongMap > 0) await ket(2);
+	if (donKhongXong.length > 0) {
+		for (const d of donKhongXong) console.log(`   DON KHONG XONG: ${d}`);
+		console.log(
+			"KHONG DO DUOC: du lieu gieo thu co the con o lai workspace — lenh don that bai, khong duoc tinh la dat.",
+		);
+		await ket(2);
+	}
 	await ket(0);
 }
 
