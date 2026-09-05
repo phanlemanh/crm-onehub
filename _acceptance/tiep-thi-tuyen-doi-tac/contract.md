@@ -5,7 +5,7 @@ slug: tiep-thi-tuyen-doi-tac
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, cli]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-04
 design_doc: docs/superpowers/specs/2026-09-04-tiep-thi-tuyen-doi-tac-design.md
@@ -110,3 +110,31 @@ làm) · gửi hàng loạt (câu «gửi» pháp lý chưa trả lời).
 - **Giới hạn đã khai — hai trạng thái rỗng toàn cục.** «Chưa có chiến dịch nào» và «chưa có góc nhìn cá nhân dùng chung» chỉ tồn tại trước chiến dịch đầu tiên của workspace duy nhất, nên phép đo trình duyệt không dựng lại được sau lượt đầu. Chúng đo ở mức đơn vị: hàm chọn trạng thái thuần và chuỗi trong kho (`apps/app/test/campaign-states.spec.ts`). Lệnh tái lập: `cd apps/app && bun test test/campaign-states.spec.ts`.
 - Lược đồ JSON mà bộ cào dùng để tự kiểm (`tools/listing-crawl/schemas/listing-ingest.schema.json`) do một script `bun` sinh từ chính lược đồ Zod; một bài kiểm so bản đã commit với bản sinh lại, lệch là đỏ — không có bản chép tay nào giữa hai ngôn ngữ.
 - Phản biện context sạch 2026-09-04 (`gap-probe.md`): một P0 về đường đo đã sửa trong bản này nhưng **ngưỡng vẫn là của người** — người ký Cổng Phạm vi đọc lại hai dòng đường đo còn lại và dòng bỏ có tên.
+
+### Giới hạn đã biết — người ký Cổng Bằng chứng nhận, 2026-09-05
+
+Mười bảy mục dưới đây là lỗi thật, nằm NGOÀI phạm vi đã duyệt ở Cổng 1. Người ký chọn ghi vào giới hạn đã biết và phát hành bản này.
+
+- **Ngoài-1 (high).** Ghi kết quả cuộc gọi trong chiến dịch không cập nhật mốc hoạt động gần nhất của cá nhân và công ty, nên bảng danh bạ có thể hiện sai thời điểm liên hệ gần nhất sau khi nhân viên gọi qua chiến dịch.
+- **Ngoài-2 (high).** Khi ghi kết quả cho một cá nhân không hợp lệ, hệ thống trả lỗi chung chung thay vì thông báo rõ ràng, và không kiểm tra người đó có thuộc phân khúc của chiến dịch hay không.
+- **Ngoài-3 (high).** Danh sách chiến dịch tải toàn bộ dữ liệu về trình duyệt rồi mới sắp xếp và cắt trang, nên màn hình sẽ chậm dần khi số chiến dịch trong workspace tăng lên.
+- **Ngoài-4 (high).** Trang thành viên của chiến dịch có thể tải tới 200 cá nhân một lần thay vì giới hạn 100 áp dụng ở nơi khác trong sản phẩm, khiến trang tải chậm hơn với phân khúc lớn.
+- **Ngoài-5 (high).** Việc nạp dữ liệu từ sàn ghi giá trị các trường tuỳ chỉnh bằng một đường ghi riêng, không dùng lại đường ghi chuẩn của hệ thống; khi tin không có địa bàn, trường địa bàn có thể lưu chuỗi rỗng thay vì để trống.
+- **Ngoài-6 (high).** Nếu một trường tuỳ chỉnh từ sàn từng bị nhân viên lưu trữ (ẩn) trong Cài đặt, lượt nạp dữ liệu từ sàn tiếp theo có thể lỗi liên tục và không nạp được tin nào cho tới khi có người can thiệp kỹ thuật.
+- **Ngoài-7 (medium).** Màn Danh bạ chậm hơn khi workspace có nhiều góc nhìn đã lưu vì mỗi góc nhìn tính lại kích thước riêng; khi phép tính lỗi, số hiển thị lặng lẽ thành 0 giống hệt phân khúc thật sự trống.
+- **Ngoài-8 (medium).** Các số liệu so sánh trên trang chiến dịch (đã gọi, trả lời, hẹn gặp) được tính bằng cách tải nhiều dữ liệu về xử lý thay vì đếm trực tiếp trong cơ sở dữ liệu, nên trang có thể chậm dần khi số lượt gọi tăng.
+- **Ngoài-9 (medium).** Quy ước đặt tên bộ lọc theo trường tuỳ biến được khai ở hai nơi tách rời trong mã nguồn; nếu một bên đổi mà bên kia không đổi theo, bộ lọc theo trường tuỳ biến trên phân khúc chiến dịch sẽ lặng lẽ ngừng hoạt động.
+- **Ngoài-14 (high).** Ghi kết quả cuộc gọi trong chiến dịch không cập nhật mốc hoạt động gần nhất của cá nhân, và cuộc gọi đó không xuất hiện trên dòng thời gian của công ty liên quan.
+- **Ngoài-15 (medium).** Khi một góc nhìn bị chặn xoá vì đang gắn với chiến dịch đã kết thúc, thông báo gợi ý hai cách xử lý nhưng không cách nào thực sự làm được trong sản phẩm hiện tại — góc nhìn đó vĩnh viễn không xoá được.
+- **Ngoài-16 (medium).** Khi trang chi tiết chiến dịch tải dữ liệu lỗi (mất mạng, lỗi máy chủ), màn hình đứng ở trạng thái đang tải mãi mãi thay vì báo lỗi cho nhân viên biết.
+- **Ngoài-17 (medium).** Khi danh sách chiến dịch hoặc danh sách góc nhìn để chọn phân khúc tải lỗi, màn hình hiện thông điệp "chưa có gì" y hệt trường hợp thật sự trống, khiến nhân viên tưởng nhầm là chưa từng tạo chiến dịch nào.
+- **Ngoài-18 (low).** Hộp tạo chiến dịch ghi chú chỉ hiện góc nhìn dùng chung, nhưng thực tế cũng liệt kê góc nhìn riêng tư và cho phép tạo chiến dịch từ đó — đồng nghiệp mở chiến dịch sau này vẫn thấy danh sách thành viên dù không có quyền xem góc nhìn gốc.
+- **Ngoài-19 (medium).** Bài kiểm tra tự động cho việc cắt cột ở màn hình nhỏ không thực sự đối chiếu đủ danh sách cột đã cam kết; một cột bị ẩn nhầm hoặc biến mất khỏi màn hình có thể không bị bài kiểm này phát hiện.
+- **Ngoài-20 (medium).** Bộ dữ liệu mẫu dùng để kiểm tra tính năng che thông tin cá nhân được viết tay theo đúng khuôn của bên xử lý, không lấy từ đầu ra thật của bộ cào; nếu bộ cào sau này thêm một trường mang thông tin cá nhân mới, bài kiểm có thể không phát hiện được rò rỉ.
+- **Ngoài-21 (medium).** Bài kiểm tra việc nạp dữ liệu từ sàn chỉ đếm số bản ghi được tạo ra, không đối chiếu từng giá trị trường với dữ liệu gốc; một lỗi hoán đổi giá trị giữa hai trường vẫn có thể lọt qua mà bài kiểm báo đạt.
+
+Ba mục nhẹ được nhận nguyên trạng, không sửa: Ngoài-10 — Một phần mã nguồn nội bộ đặt tên gây hiểu lầm, nhưng thông báo hiển thị cho người dùng khi xoá góc nhìn vẫn đúng và đủ tên chiến dịch; Ngoài-11 — Mục điều hướng "Chiến dịch" trên thanh biểu tượng bên luôn hiện tiếng Việt bất kể ngôn ngữ người dùng đang chọn, khác với các mục lân cận; Ngoài-12 — Một định danh kỹ thuật trong mã nguồn dùng tên tiếng Việt thay vì tiếng Anh như phần còn lại của ứng dụng; không ảnh hưởng người dùng, chỉ ảnh hưởng người đọc code sau này.
+
+Một mục tách thành hồ sơ riêng: **Ngoài-13** — Khi nhân viên gõ từ khoá tìm trong danh sách thành viên chiến dịch, ô tìm kiếm thay thế hẳn bộ lọc gốc của phân khúc thay vì tìm trong phạm vi phân khúc đó — cá nhân ngoài phân khúc có thể xuất hiện, được gọi, và bị ghi lượt gọi vào chiến dịch dù không thuộc đối tượng nhắm tới. Hồ sơ mới: `_acceptance/tim-trong-phan-khuc/`.
+
+**Còn hở, khai chứ không sửa (TRONG hợp đồng, AC-3).** Cổng tiếp nhận ghi mỗi mục một giao dịch riêng, nên hỏng ở mục thứ n để lại n−1 mục đã ghi, và lỗi trả về là 500 không thông điệp (`apps/api/src/listings/listing-ingest.service.ts:76`). Máy dừng theo luật lỗi-cùng-lớp và đã cạn lượt chấm; người ký nhận điều này khi ký.

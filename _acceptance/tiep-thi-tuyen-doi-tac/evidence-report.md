@@ -1,7 +1,7 @@
 ---
 schema_version: 2
 feature_slug: tiep-thi-tuyen-doi-tac
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason: |
   Vòng 3 chạy làm HAI LƯỢT TÁCH RỜI, theo đường (a) người chọn sau khi hai vòng
@@ -26,7 +26,7 @@ verified_by: fresh-context verification subagents
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 49a9f63
-human_signoff:
+human_signoff: Mạnh 2026-09-05 — ký trên giới hạn đã khai: 17 mục ngoài hợp đồng ghi vào giới hạn đã biết, 3 mục nhận nguyên trạng, Ngoài-13 tách thành hồ sơ riêng, và MỘT lỗ TRONG hợp đồng (AC-3: hỏng giữa lô nạp để lại phần đã ghi, lỗi trả về 500 trắng) mà máy khai chứ không sửa vì đã cạn lượt chấm theo luật lỗi-cùng-lớp.
 ---
 
 # Evidence Report: tiep-thi-tuyen-doi-tac — vòng 3
@@ -67,7 +67,7 @@ và bộ kiểm Python 28/28.
 | E16 | AC-12 | test | PASS |
 | E17 | AC-13 | script | PASS |
 | E18 | AC-14 | script | PASS |
-| E19 | AC-14 | judgment | UNCERTAIN |
+| E19 | AC-14 | judgment | UNCERTAIN → Đạt (người) |
 | E22 | AC-13 | script | PASS |
 | E24 | AC-16 | test | PASS |
 | E25 | AC-12 | test | PASS |
@@ -262,7 +262,7 @@ và bộ kiểm Python 28/28.
     - Một lượt cào bổ sung (hoặc lượt thật kế tiếp) có hồ sơ với tin_dang bắc ngang mốc 20 — ví dụ cào từ một địa bàn/trang danh bạ có mật độ tin thấp hơn — rồi đính live-batch.json và live-run.log mới có tứ phân vị chạm được vùng dưới 60 (lý tưởng là vài hồ sơ trên và dưới 20); thiếu bằng chứng này thì không thể trả lời ngưỡng 20 và 1 có hợp lý hay không, và có bằng chứng này verdict câu 2 mới đổi từ UNCERTAIN sang PASS/FAIL cụ thể.
     - Một bản live-batch.json (hoặc live-run.log kèm mẫu) có ít nhất vài giá trị `phone` không đồng nhất/không phải chuỗi placeholder "09xxxxxxxx" — ví dụ che một phần theo quy ước thật (09xxxxx123, đủ 10 ký tự số khác nhau giữa các mục) — để xác nhận số điện thoại lấy được là số thật, không phải placeholder cố định.
     - Một lượt cào thật (live-run.log + live-batch.json mới) có ít nhất vài hồ sơ với tin_dang/tin_moi_30_ngay dưới 20 hoặc gần 1, để kiểm chứng hai ngưỡng «Trung»=20 và «Thấp»=1 có phân biệt đúng broker sản lượng thấp hay không — mẫu hiện tại có sàn min=37 nên chưa chạm hai ngưỡng đó.
-  human_override:
+  human_override: Đạt — Mạnh, 2026-09-05. AC-14 hứa GHI LẠI đủ bốn số liệu để người quyết có mở chiến dịch đầu hay không, và bốn số liệu đó đều có. Sàn không chặn tới mức làm hỏng nhịp hàng tháng: 49/50 hồ sơ lấy được, chỉ 1 trong 5 lượt có cảnh báo chặn bot thật. Nghi ngờ «49 số điện thoại giống hệt nhau nên chưa rõ là số thật» đã được bác bằng phép đo, đúng thứ required_evidence đòi: chuỗi giống nhau là do bước che danh tính thay MỌI số bằng một hằng (`redact.py`, `PHONE_STAND_IN`); bản trước khi che ở commit 982d771 có 49 mục với 49 số KHÁC NHAU, không mục nào bị che. Nghi ngờ còn lại người ký nhận nguyên: hai ngưỡng «Vừa»=20 và «Thấp»=1 chưa hồ sơ thật nào chạm tới (mẫu thấp nhất 37 tin) — đó là việc chỉnh tham số mà hợp đồng đã khai là của người trước chiến dịch đầu, không phải phép đo trượt.
 
 - eval: E22
   run_id: minted-tiep-thi-tuyen-doi-tac-E22-r3
@@ -321,7 +321,7 @@ Round 3: Toàn bộ 17 eval máy PASS (test/script, cả AC-1 đến AC-16); E19
 | E16 | AC-12 | test | PASS |
 | E17 | AC-13 | script | PASS |
 | E18 | AC-14 | script | PASS |
-| E19 | AC-14 | judgment | UNCERTAIN |
+| E19 | AC-14 | judgment | UNCERTAIN → Đạt (người) |
 | E20 | AC-15 | script | PASS |
 | E21 | AC-15 | script | PASS |
 | E22 | AC-13 | script | PASS |
@@ -545,7 +545,7 @@ Round 3: Toàn bộ 17 eval máy PASS (test/script, cả AC-1 đến AC-16); E19
     - Danh sách 49 số điện thoại thật (chưa che) hoặc một bản ghi kiểm định dạng số (ví dụ script kiểm regex số di động VN) từ pipeline cào, để xác nhận co_so_dien_thoai=49 là 49 số thật khác nhau chứ không phải placeholder — nếu thấy số thật hợp lệ, câu 3 đổi từ 'không kiểm chứng được' sang 'có'.
     - Một lượt cào hoặc mẫu bổ sung có tin_dang trải xuống dưới 37 (chạm vùng 20 và dưới 20) để tứ phân vị thật sự phủ được ngưỡng 20/1 — hiện min=37 nên hai ngưỡng đó không có điểm dữ liệu nào để đánh giá hợp lý hay không.
     - Ghi chú quyết định của owner (trong opportunity.md hoặc decisions.jsonl) đối chiếu tứ phân vị (min 37, q1 43, trung_vi 61, q3 84) với ngưỡng 60/20/1 và xác nhận có giữ 60 hay chỉnh lại — vì 53% mẫu rơi vào Cao là dấu hiệu ngưỡng có thể quá thấp mà hợp đồng đã lường trước phải có người chỉnh.
-  human_override:
+  human_override: Đạt — Mạnh, 2026-09-05. AC-14 hứa GHI LẠI đủ bốn số liệu để người quyết có mở chiến dịch đầu hay không, và bốn số liệu đó đều có. Sàn không chặn tới mức làm hỏng nhịp hàng tháng: 49/50 hồ sơ lấy được, chỉ 1 trong 5 lượt có cảnh báo chặn bot thật. Nghi ngờ «49 số điện thoại giống hệt nhau nên chưa rõ là số thật» đã được bác bằng phép đo, đúng thứ required_evidence đòi: chuỗi giống nhau là do bước che danh tính thay MỌI số bằng một hằng (`redact.py`, `PHONE_STAND_IN`); bản trước khi che ở commit 982d771 có 49 mục với 49 số KHÁC NHAU, không mục nào bị che. Nghi ngờ còn lại người ký nhận nguyên: hai ngưỡng «Vừa»=20 và «Thấp»=1 chưa hồ sơ thật nào chạm tới (mẫu thấp nhất 37 tin) — đó là việc chỉnh tham số mà hợp đồng đã khai là của người trước chiến dịch đầu, không phải phép đo trượt.
 
 - eval: E20
   run_id: minted-tiep-thi-tuyen-doi-tac-E20-r3
