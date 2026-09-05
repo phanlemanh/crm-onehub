@@ -1,0 +1,16 @@
+{
+	"lat": "man-cai-dat-noi-tieng-viet",
+	"ghi_chu": "Hai cau CHI hien khi nguoi dung khong phai chu so huu va khong phai quan tri. Phien phat trien dang nhap bang chu so huu nen trinh duyet KHONG BAO GIO ve chung ra — do o muc ma, gioi han khai o AC-4. Ghim (file, khoa kho chuoi) — KHONG ghim so dong: so dong troi ngay khi ma doi, va mot con so khong ai doc thi muc im lang.",
+	"o": [
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/workspace-form.tsx",
+			"khoa": "congTy.khongDuQuyen",
+			"co_khi": "canRename === false"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx",
+			"khoa": "tienTe.khongDuQuyen",
+			"co_khi": "canManage === false"
+		}
+	]
+}

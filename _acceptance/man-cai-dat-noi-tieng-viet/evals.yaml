@@ -1,0 +1,327 @@
+schema_version: 1
+feature_slug: man-cai-dat-noi-tieng-viet
+evals:
+
+  - id: E13
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.cai_dat_hai_tieng
+    expected: >-
+      exit 0. Dung man General VA man Currencies tren may chu that HAI LUOT — lang=vi
+      va lang=en — roi doc chu NGUOI DOC THAY cua tung luot. KHONG doc ma nguon.
+      Khang dinh ba ve tren cung tap quan sat:
+      (1) so chuoi hai luot BANG nhau;
+      (2) moi cap chuoi cung vi tri KHAC nhau, tru cac gia tri cua bang mien tru AC-6;
+      (3) moi chuoi luot vi mang dau tieng Viet.
+      Tap quan sat rong la THOAT MA 2 — khong phai mot luot dat.
+      Day la eval bat duoc lop loi ma doc ma KHONG bat duoc: mot trang server quen
+      await getLocale() thi kho chuoi van du dau va khong con chuoi viet thang, nhung
+      ca man hien sai tieng.
+      Chieu do: sua mot trang ve goi settingsMessages("vi") cung tren ban sao thi luot
+      en hien tieng Viet, cap (2) gay, chan do va goi ten trang do.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/*.tsx"
+      - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"
+      - "apps/app/lib/messages/settings.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E1
+    criterion: AC-1b
+    executor: script
+    cmd: config:executors.script.cai_dat_chu_cung_jsx
+    expected: >-
+      exit 0. Chan boc bo quet ③a, chay tren dan so lat sinh TU DIA.
+      Truoc khi cham diem no khang dinh so file bo quet doc BANG so file lat sinh ra;
+      lech mot file thi THOAT MA 2 va goi ten hai con so — khong phai mot luot dat.
+      Xanh nghia la 0 chuoi nguoi doc thay con viet thang trong JSX cua muoi file,
+      ngoai cac dong mien tru co ten; va MOI dong mien tru deu con doi tuong that.
+      Mot dong mien tru khong con ai dung toi lam chan DO va goi ten dong do.
+      Chieu do: cam lai mot chuoi tieng Anh vao JSX cua mot ban sao thi chan do va
+      in NGUYEN VAN chuoi do kem ten file. Cap hai chieu chay tren cung ban sao.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/*.tsx"
+      - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.cai_dat_chu_ngoai_jsx
+    expected: >-
+      exit 0. Chan do MOI — doc cung cay cu phap TypeScript nhung bat lop chu bo quet
+      JSX KHONG nhin thay: doi so chuoi cua toast.*(). Chay tren dan so lat sinh tu dia.
+      MA TRAN TOAN PHAN, viet truoc: bang dong toast-cua-lat.json khai muoi hai loi goi theo (file, khoa kho chuoi),
+      KHONG ghim so dong hay hinh dang cu phap: ca hai la tinh chat cua cay CHUA dich —
+      sau khi dich thi 10/12 so dong sai va 12/12 hinh dang thanh vo nghia, ma phep do
+      van xanh vi no chi so DEM. Nay doi chieu TUNG MUC, ca hai chieu.
+      So loi goi chan do NHAN RA phai BANG so dong cua bang; thieu mot dong la THOAT MA 2
+      va goi ten dong thieu. Dem SO VAT nhan ra, khong chi so file da mo — mot chan mo
+      du muoi file ma bo sot ca ba chuoi-mau van cho ba con so file bang
+      nhau [thuoc-cua-lat-3a-co-rang#F1].
+      Xanh nghia la khong loi goi nao trong bang con mang chuoi tieng Anh viet thang.
+      Chuyen tiep error.message KHONG tinh — ngoai pham vi; chan do phai in so luot bo
+      qua vi ly do do.
+      Chieu do: doi mot khoa trong bang thanh khoa khong ai doc thi TONG VAN 12=12 nhung
+      chan thoat ma 2, in ca muc THIEU lan muc THUA.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/*.tsx"
+      - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.cai_dat_tieu_de
+    expected: >-
+      exit 0. Cung chan do moi, hinh dang thu hai — gia tri title: trong
+      export const metadata va trong mang khai thanh ben.
+      So o nhan ra phai BANG chin (con so khai trong tieu-de-cua-lat.json); lech la
+      THOAT MA 2 va in tung o da thay.
+      Tam nhan dich duoc doc tu kho chuoi va co ban tieng Viet co dau.
+      MOT dong giu nguyen CO TEN — "SSO", dinh danh ky thuat — giu nguyen van; dong giu
+      nguyen nao khong con doi tuong that lam chan DO (mien tru chet).
+      Lat nay KHONG co ten thuong hieu nao trong o title.
+      Chieu do: doi mot nhan dich duoc ve chuoi viet thang thi chan do va goi ten khoa do.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/*.tsx"
+      - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.cai_dat_khong_du_quyen
+    expected: >-
+      exit 0. HAI o ghim — cau o workspace-form va cau o currency-settings, ca hai chi
+      hien khi canManage la false. Chan do doc ma: moi cau phai doc tu kho chuoi
+      (KHONG viet thang), va ban tieng Viet cua khoa do phai mang dau.
+      So o do duoc phai BANG hai; thieu mot o la THOAT MA 2.
+      DAY LA PHEP DO MUC MA, KHONG PHAI MUC MAN — no chung chuoi da nam dung cho,
+      no KHONG chung man hien dung. Gioi han nay khai trong hop dong.
+      Chieu do: doi mot trong hai cau ve chuoi viet thang thi chan do va goi ten file.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/workspace-form.tsx"
+      - "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx"
+      - "apps/app/lib/messages/settings.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.cai_dat_trang_thai_rong
+    expected: >-
+      THOAT MA 2 la ket qua DA KHAI TRUOC cua eval nay, khong phai that bai: hop dong
+      AC-5 khai san rang hai trong ba o KHONG dung duoc trong kho nay.
+      Dung man Currencies tren may chu that o mot workspace CHUA co ty gia va
+      CHUA co deal nao co so tien — hai trang thai rong that, khong gia lap.
+      BUOC GIEO da khai: tao mot workspace MOI qua dung luong nguoi dung (workspace moi
+      chua co ty gia va chua co deal nao), KHONG cham co so du lieu. Buoc nay phai chay
+      duoc truoc khi cham diem; khong dung duoc thi THOAT MA 2 va goi ten tien de thieu,
+      TUYET DOI KHONG ha xuong muc doc ma roi ghi dat.
+      Doc chu NGUOI DOC THAY tren man, khong doc ma nguon. Hai cau rong hien bang
+      tieng Viet co dau; va luot tieng Anh hien ban tieng Anh da ghim.
+      O thu ba — "khong model nao khop" trong o tim cua man General — mo bang cach go
+      mot chuoi khong khop vao o do.
+      So o do duoc phai BANG ba; thieu mot o la THOAT MA 2 va goi ten o thieu, khong
+      phai mot luot dat.
+      Chieu do: go khoa cua mot trong ba cau ve tieng Anh tren ban sao thi chan do.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"
+      - "apps/app/app/(app)/[slug]/settings/agent-model.tsx"
+      - "apps/app/lib/messages/settings.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.cai_dat_khong_dich
+    expected: >-
+      exit 0. Dung man o ca hai thu tieng tren may chu that.
+      Tap ung vien SINH TU MAN THAT, khong go tay: moi phan tu mang translate="no",
+      HOP voi moi chuoi hien giong het nhau o hai luot locale.
+      Doi tap sinh ra BANG bang khai theo CA HAI CHIEU:
+      thieu mot dong cua bang → THOAT MA 2, goi ten dong thieu;
+      thua mot gia tri tren man ma bang khong khai → CUNG THOAT MA 2, goi ten gia tri do.
+      Mot bang chi khop voi chinh no thi khong do duoc cai no sinh ra de do — day la
+      ly do chieu thu hai bat buoc.
+      Ten workspace nguoi nhap KHONG nam trong bang (no doi theo workspace): no do bang
+      AC-6b, mot luat — phan tu chua no mang translate="no".
+      Chieu do: bo translate="no" khoi mot phan tu tren ban sao thi chan do va goi ten
+      gia tri do; them mot ma tien te moi vao man ma khong khai vao bang thi chan cung do.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/*.tsx"
+      - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.cai_dat_dot_bien
+    expected: >-
+      exit 0. Day la phep do CUA CAC PHEP DO. No cam lai
+      mot cau tieng Anh vao TUNG lop — mot vao JSX, mot vao title, va mot vao MOI HINH
+      DANG toast khai trong toast-cua-lat.json (khong phai mot luot duy nhat: cam vao
+      dung hinh dang chan do von da thay thi chieu do xanh gia) —
+      roi chay lai chan do tuong ung va doi hoi TUNG chan DO.
+      Chan nao khong do khi vat da bi pha thi chan do la thuoc mu: eval nay DO va goi
+      ten chan mu do. CHI ma 1 tinh la "bat duoc" — ma 2 la tien de thieu, khong phai
+      san pham hong, va mot cay thuoc chet se nem ma 2 voi moi sua doi.
+      Va chieu con lai: tren ban sao KHONG bi pha, ca ba chan deu xanh.
+      Thieu mot trong hai chieu thi eval nay DO — mot thuoc chua tung do khong phan
+      biet duoc "sach" voi "chua chay".
+      CACH LAM da doi o S3, va khai thang: no sua TAI CHO tren lat that roi tra nguyen
+      trang tu ban giu trong bo nho (finally), chu KHONG chep sang ban sao — ban sao
+      thu cong khong du de bo quet ③a chay duoc.
+      Doi lai co mot rui ro da biet: tien trinh bi giet giua chung thi mot file o lai
+      trang thai hong, va may chu dev dang chay se nap ban hong do. Chan tu khang dinh
+      `git status --porcelain` truoc va sau BANG NHAU; khac di la thoat ma 2.
+    paths:
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.cai_dat_khai_sinh
+    expected: >-
+      exit 0. Doi chieu HAI HANG so tren cung mot luot.
+      Hang FILE: so file lat sinh ra tu dia, so file chan ③a doc, so file chan
+      ngoai-JSX doc — ba so bang nhau.
+      Hang VAT: so loi goi toast chan ngoai-JSX nhan ra so voi so dong cua
+      toast-cua-lat.json, va so o title nhan ra so voi chin — bang nhau.
+      Hang vat la cai hang file KHONG bat duoc: mot chan mo du muoi file ma nhan ra 0
+      vat van cho ba con so file bang nhau.
+      Lech bat ky cap nao la THOAT MA 2 va in ca hai hang kem ten chan lech.
+      Tap quan sat rong (0 file HOAC 0 vat) cung la THOAT MA 2.
+      Chieu do: bo mot file khoi dan so, VA rieng le bo mot dong khoi bang toast, tren
+      ban sao — moi lan eval phai do va goi ten dung con so lech.
+    paths:
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.cai_dat_dan_so_tu_dia
+    expected: >-
+      exit 0. Dan so cua lat sinh bang cach QUET THU MUC tren dia, khong doc tu mot
+      danh sach go tay. Eval chung dieu do bang cach — tren mot ban sao — them mot
+      file .tsx moi mang mot chuoi tieng Anh vao thu muc cua lat, roi chay lai chan do:
+      chan do phai TU THAY file moi va DO.
+      Chan khong thay file moi nghia la dan so dang go tay: eval DO va noi ro dieu do.
+      Va chieu con lai: khong them file thi chan xanh.
+      Ban khai co the co dong loai tru CO TEN; moi dong loai tru phai con doi tuong
+      that, dong chet lam eval do.
+    paths:
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.cai_dat_be_rong
+    expected: >-
+      exit 0. Dung hai man tren may chu that tai be rong GHIM 360 pixel, HAI LUOT —
+      vi va en. Do bang hop bao cua tung phan tu mang nhan, khong bang mat.
+      Voi MOI phan tu mang nhan dich duoc: scrollWidth KHONG duoc lon hon clientWidth.
+      KHONG CO MIEN TRU cho "truncate co y" — thiet ke bat moi vung chua nhan phai mang
+      truncate, nen mot mien tru nhu the phu dung tap can bat.
+      DOI CHUNG DUONG: luot en chay cung phep do. Chi cho nao luot en vua ma luot vi
+      tran moi la loi cua ban dich; cho nao ca hai luot deu tran la loi bo cuc co san,
+      bao rieng chu khong tinh vao chan nay.
+      Cot so cua bang ty gia giu font-variant-numeric tabular-nums.
+      So phan tu do duoc phai lon hon 0 — tap rong la THOAT MA 2, khong phai xanh.
+      Chieu do: nhet mot nhan dai gap ba vao ban sao thi chan do va goi ten nhan do kem
+      hai con so scrollWidth va clientWidth.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/*.tsx"
+      - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.rang3_khoa_chet
+    expected: >-
+      exit 0. Bo canh kho chuoi da co, mo rong sang kho settings moi: moi gia tri
+      tieng Viet trong kho phai mang dau, ngoai tap mien tru co ten.
+      Kho settings PHAI nam trong danh sach MODULE cua bai kiem — vang mat thi bai
+      kiem van xanh trong khi kho moi chua ai canh, nen eval nay doi hoi tim thay ten
+      kho do trong file bai kiem.
+      Chieu do: doi mot gia tri tieng Viet trong kho settings thanh chuoi khong dau
+      thi bai kiem do va goi ten khoa do.
+    paths:
+      - "apps/app/lib/messages/settings.ts"
+      - "apps/app/test/messages-guard.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-1
+    executor: judgment
+    inputs:
+      - apps/app/lib/messages/settings.ts
+      - CONTEXT.md
+    expected: >-
+      Ban dich doc nhu tieng Viet cua nguoi lam nghe, khong phai tieng Anh dich may.
+      Ba phep thu: (1) nhan mang phan ngu canh CHUA cap — xoa mot chu ma nguoi dung o
+      man do van hieu dung thi chu do thua; (2) danh tu san pham theo CONTEXT.md —
+      "cong ty" va "ca nhan", khong khoa vao giai doan moi gioi; (3) khong tu duc tu
+      ghep cho thuat ngu ky thuat — giu ten that trong ngoac khi can.
+
+  - id: E14
+    criterion: AC-6b
+    executor: script
+    cmd: config:executors.script.cai_dat_khong_dich
+    expected: >-
+      exit 0. Cung o cam voi E6, chan thu hai — LUAT chu khong phai bang dong.
+      Ten workspace do nguoi nhap doi theo tung workspace nen khong dong thanh bang
+      duoc. Khang dinh: phan tu chua ten workspace tren man mang translate="no",
+      o ca hai luot locale.
+      Khong tim thay phan tu chua ten workspace la THOAT MA 2 (tien de thieu), khong
+      phai mot luot dat.
+      Chieu do: bo translate="no" khoi phan tu do tren ban sao thi chan do.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/workspace-form.tsx"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.cai_dat_moi_chuoi
+    expected: >-
+      exit 0. Chan SINH ROI TRU — nguoc voi lieu ke tung cho nap.
+      Lay MOI chuoi trong muoi file (StringLiteral, template, JsxText) roi tru theo luat
+      CO TEN trong khong-phai-chu-nguoi-doc.json: chuoi nhap khau, chi thi dau file,
+      thuoc tinh ky thuat, ham ky thuat, va ban khai giu-nguyen.
+      Con lai ma la tieng Anh thi DO, in ten file, so dong, boi canh, va nguyen van chuoi.
+      Quet ra 0 chuoi la THOAT MA 2 — bo quet hong chu khong phai lat sach.
+      Dong giu-nguyen nao khong con doi tuong that lam chan DO (mien tru chet).
+      Chieu do: cam mot cau tieng Anh vao BAT KY cho nao trong muoi file — JSX, toast,
+      title, toan tu ba ngoi, thuoc tinh khong ky thuat — thi chan phai DO. Day la chieu
+      do manh hon cac chan khac: no khong phu thuoc vao viec doan dung cho nap.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/*.tsx"
+      - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E16
+    criterion: AC-10b
+    executor: script
+    cmd: config:executors.script.cai_dat_be_rong_do
+    expected: >-
+      exit 0. Cam mot nhan tieng Viet dai vao kho chuoi (khoa moc daCam), cho HMR, chay
+      chan be-rong o be rong ghim, doi hoi con so "vi tran ma en vua" LON HON 0, roi tra
+      kho chuoi ve nguyen trang.
+      So do bang 0 nghia la chan be-rong MU: eval nay DO va noi thang dieu do.
+      Khong tim thay khoa moc nghia la vet da lac hau so voi ma: THOAT MA 2, khong phai dat.
+      Cay lam viec phai tro ve dung trang thai truoc khi chay — khac di la thoat ma 2.
+      Ket qua that da quan sat: vi 274/198px tran, en 60/60px vua, tai 360px.
+    paths:
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
+      - "apps/app/lib/messages/settings.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

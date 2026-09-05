@@ -9,25 +9,26 @@ import {
 	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { getLocale } from "@/lib/locale/server";
+import { settingsMessages } from "@/lib/messages/settings";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { CurrencySettings } from "./currency-settings";
 
-export const metadata: Metadata = {
-	title: "Currencies",
-};
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: settingsMessages(await getLocale()).tieuDeTab.tienTe };
+}
 
-export default function CurrenciesSettingsPage() {
+export default async function CurrenciesSettingsPage() {
+	const t = settingsMessages(await getLocale());
+
 	return (
 		<PageShell>
 			<PageShellHeader>
 				<PageShellHeading>
-					<PageShellTitle>Currencies</PageShellTitle>
-					<PageShellDescription>
-						What your numbers are reported in, and how the other currencies get
-						there.
-					</PageShellDescription>
+					<PageShellTitle>{t.tienTe.tieuDe}</PageShellTitle>
+					<PageShellDescription>{t.tienTe.moTa}</PageShellDescription>
 				</PageShellHeading>
 			</PageShellHeader>
 

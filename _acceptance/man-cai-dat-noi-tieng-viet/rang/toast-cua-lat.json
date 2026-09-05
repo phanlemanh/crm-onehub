@@ -1,0 +1,18 @@
+{
+	"lat": "man-cai-dat-noi-tieng-viet",
+	"ghi_chu": "Bang dong muoi hai loi goi toast MANG CHU trong lat. Ghim (file, khoa kho chuoi) — KHONG ghim so dong hay hinh dang cu phap: ca hai la tinh chat cua cay CHUA dich va troi ngay khi ma doi. Loi goi chi chuyen tiep error.message khong nam trong bang (ngoai pham vi: cau chu sinh o apps/api, la t3_paths).",
+	"loi_goi": [
+		{ "file": "apps/app/app/(app)/[slug]/settings/agent-model.tsx", "khoa": "model.daLuu" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/archive-retention.tsx", "khoa": "luuTru.daLuu" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/archive-retention.tsx", "khoa": "luuTru.phaiLaSo" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/copy-value.tsx", "khoa": "chep.hong" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/copy-value.tsx", "khoa": "chep.xong" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx", "khoa": "tienTe.daDoi" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx", "khoa": "tienTe.daLuuTyGia" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx", "khoa": "tienTe.daGo" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx", "khoa": "tienTe.daLamMoi" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/currencies/currency-settings.tsx", "khoa": "tienTe.phaiLonHonKhong" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/research-key.tsx", "khoa": "nghienCuu.daLuu" },
+		{ "file": "apps/app/app/(app)/[slug]/settings/workspace-form.tsx", "khoa": "congTy.daLuu" }
+	]
+}

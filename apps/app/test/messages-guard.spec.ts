@@ -7,6 +7,7 @@ import { contactMessages } from "@/lib/messages/contacts";
 import { crmMessages } from "@/lib/messages/crm";
 import { dealMessages } from "@/lib/messages/deals";
 import { recordSheetMessages } from "@/lib/messages/record-sheet";
+import { settingsMessages } from "@/lib/messages/settings";
 import { docDuongGoi, taoSong } from "./duong-goi";
 
 const DAU_TIENG_VIET =
@@ -20,6 +21,7 @@ const MODULE = [
 	["record-sheet", recordSheetMessages],
 	["crm", crmMessages],
 	["auth", authMessages],
+	["settings", settingsMessages],
 ] as const;
 
 type GiaTri = string | ((...doiSo: string[]) => string);
@@ -62,6 +64,12 @@ const KHONG_DAU = new Set([
 	"company.websitePlaceholder",
 	"shell.eyebrow",
 	"onboarding.website",
+	"thanhBen.sso",
+	"congTy.tenGoiY",
+	"congTy.website",
+	"congTy.websiteTienTo",
+	"congTy.websiteGoiY",
+	"model.nhan",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -309,6 +317,35 @@ describe("kho chuoi cua vong ③a", () => {
 				"Gỡ 12 khỏi thoả thuận này",
 			],
 			"record-sheet:deal.namePlaceholder": ["1 — OneHub", "12 — OneHub"],
+			"settings:chep.xong": ["Đã chép 1.", "Đã chép 12."],
+			"settings:chep.hong": [
+				"Không chép được 1. Bôi đen rồi chép tay.",
+				"Không chép được 12. Bôi đen rồi chép tay.",
+			],
+			"settings:model.gia": [
+				"1 vào · A ra trên 1 triệu token",
+				"12 vào · A ra trên 1 triệu token",
+			],
+			"settings:model.nguCanhTrieu": [
+				"ngữ cảnh 1 triệu token",
+				"ngữ cảnh 12 triệu token",
+			],
+			"settings:model.nguCanhNghin": [
+				"ngữ cảnh 1 nghìn token",
+				"ngữ cảnh 12 nghìn token",
+			],
+			"settings:model.khongVoiToi": [
+				"Không với tới AI Gateway để lấy danh sách model. Tác nhân vẫn đang chạy 1.",
+				"Không với tới AI Gateway để lấy danh sách model. Tác nhân vẫn đang chạy 12.",
+			],
+			"settings:tienTe.daDoi": [
+				"Từ giờ mọi tổng báo cáo bằng 1.",
+				"Từ giờ mọi tổng báo cáo bằng 12.",
+			],
+			"settings:tienTe.khongQuyDoiDuoc": [
+				"1 thoả thuận không quy đổi được, nên chúng nằm ngoài mọi tổng.",
+				"12 thoả thuận không quy đổi được, nên chúng nằm ngoài mọi tổng.",
+			],
 		} satisfies Record<string, [string, string]>;
 
 		const ham: string[] = [];

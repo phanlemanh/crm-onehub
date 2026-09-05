@@ -9,6 +9,8 @@ import {
 	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { getLocale } from "@/lib/locale/server";
+import { settingsMessages } from "@/lib/messages/settings";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
@@ -17,19 +19,19 @@ import { ArchiveRetention } from "./archive-retention";
 import { ResearchKey } from "./research-key";
 import { WorkspaceForm } from "./workspace-form";
 
-export const metadata: Metadata = {
-	title: "General",
-};
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: settingsMessages(await getLocale()).tieuDeTab.chung };
+}
 
-export default function GeneralSettingsPage() {
+export default async function GeneralSettingsPage() {
+	const t = settingsMessages(await getLocale());
+
 	return (
 		<PageShell>
 			<PageShellHeader>
 				<PageShellHeading>
-					<PageShellTitle>General</PageShellTitle>
-					<PageShellDescription>
-						Who you are, and the model the research agent thinks with.
-					</PageShellDescription>
+					<PageShellTitle>{t.chung.tieuDe}</PageShellTitle>
+					<PageShellDescription>{t.chung.moTa}</PageShellDescription>
 				</PageShellHeading>
 			</PageShellHeader>
 
