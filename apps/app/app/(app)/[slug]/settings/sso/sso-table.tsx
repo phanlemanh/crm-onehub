@@ -15,10 +15,12 @@ import {
 import { Button } from "@crm/ui/components/button";
 import { DataTable, type DataTableColumn } from "@crm/ui/components/data-table";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ListSearch } from "@/components/data-table/list-search";
 import { useTableQuery } from "@/components/data-table/use-table-query";
+import { type SsoMessages, ssoMessages } from "@/lib/messages/settings-sso";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -28,6 +30,7 @@ import { ssoSearchParams } from "./sso-search-params";
 type ProviderRow = RouterOutputs["sso"]["list"]["rows"][number];
 
 function columns(
+	t: SsoMessages,
 	canConfigure: boolean,
 	onRemove: (provider: ProviderRow) => void,
 	pending: boolean,
@@ -35,58 +38,64 @@ function columns(
 	return [
 		{
 			id: "providerId",
-			header: "Provider",
+			header: t.bang.nhaCungCap,
 			sortable: true,
 			hideable: false,
 			width: "w-[30%]",
 			cell: (row) => (
 				<span className="flex min-w-0 flex-col">
-					<span className="truncate font-medium">{row.name}</span>
+					<span className="truncate font-medium" translate="no">
+						{row.name}
+					</span>
 					<span className="truncate text-muted-foreground text-xs">
-						{row.type === "saml" ? "SAML" : "OpenID Connect"}
-						{row.clientIdLastFour ? ` · client …${row.clientIdLastFour}` : ""}
+						{row.type === "saml" ? t.bang.chuanSaml : t.bang.chuanOidc}
+						{row.clientIdLastFour ? t.bang.maClient(row.clientIdLastFour) : ""}
 					</span>
 				</span>
 			),
 		},
 		{
 			id: "domain",
-			header: "Email domain",
+			header: t.bang.tenMien,
 			sortable: true,
 			width: "w-[22%]",
 			hideBelow: "sm",
 			cell: (row) => (
-				<span className="truncate text-muted-foreground">
+				<span className="truncate text-muted-foreground" translate="no">
 					{row.domains.join(", ")}
 				</span>
 			),
 		},
 		{
 			id: "issuer",
-			header: "Issuer",
+			header: t.bang.issuer,
 			sortable: true,
 			width: "w-[22%]",
 			hideBelow: "md",
 			cell: (row) => (
-				<span className="truncate text-muted-foreground">{row.issuer}</span>
+				<span className="truncate text-muted-foreground" translate="no">
+					{row.issuer}
+				</span>
 			),
 		},
 		{
 			id: "callbackURL",
-			header: "Redirect URI",
+			header: t.bang.uriChuyenHuong,
 			width: "w-[20%]",
 			hideBelow: "lg",
 			cell: (row) => (
 				<span className="flex min-w-0 items-center gap-1 text-muted-foreground">
-					<span className="truncate">{row.callbackURL}</span>
-					<CopyValue value={row.callbackURL} label="Redirect URI" />
+					<span className="truncate" translate="no">
+						{row.callbackURL}
+					</span>
+					<CopyValue value={row.callbackURL} label={t.bang.uriChuyenHuong} />
 				</span>
 			),
 		},
 		{
 			id: "actions",
-			header: <span className="sr-only">Actions</span>,
-			label: "Actions",
+			header: <span className="sr-only">{t.bang.hanhDong}</span>,
+			label: t.bang.hanhDong,
 			hideable: false,
 			align: "right",
 			width: "w-[6%]",
@@ -96,26 +105,25 @@ function columns(
 						<AlertDialogTrigger asChild>
 							<Button variant="ghost" size="icon" disabled={pending}>
 								<Icon icon={TrashCan} />
-								<span className="sr-only">Remove {row.name}</span>
+								<span className="sr-only">{t.go.choNha(row.name)}</span>
 							</Button>
 						</AlertDialogTrigger>
 
 						<AlertDialogContent>
 							<AlertDialogHeader>
-								<AlertDialogTitle>Remove {row.name}?</AlertDialogTitle>
-								<AlertDialogDescription>
-									Nobody can sign in through it again. If this is the only
-									provider, the sign-in page goes back to Google.
-								</AlertDialogDescription>
+								<AlertDialogTitle>
+									{t.go.nhan} <span translate="no">{row.name}</span>?
+								</AlertDialogTitle>
+								<AlertDialogDescription>{t.go.moTa}</AlertDialogDescription>
 							</AlertDialogHeader>
 
 							<AlertDialogFooter>
-								<AlertDialogCancel>Cancel</AlertDialogCancel>
+								<AlertDialogCancel>{t.go.huy}</AlertDialogCancel>
 								<AlertDialogAction
 									variant="destructive"
 									onClick={() => onRemove(row)}
 								>
-									Remove
+									{t.go.nhan}
 								</AlertDialogAction>
 							</AlertDialogFooter>
 						</AlertDialogContent>
@@ -126,6 +134,7 @@ function columns(
 }
 
 export function SsoTable() {
+	const t = ssoMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const { query, input } = useTableQuery(ssoSearchParams);
@@ -140,7 +149,7 @@ export function SsoTable() {
 		trpc.sso.remove.mutationOptions({
 			onSuccess: async () => {
 				await cache.sso();
-				toast.success("Identity provider removed.");
+				toast.success(t.go.xong);
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -149,8 +158,9 @@ export function SsoTable() {
 	return (
 		<DataTable
 			query={query}
-			search={<ListSearch placeholder="Search by name, domain or issuer…" />}
+			search={<ListSearch placeholder={t.bang.tim} />}
 			columns={columns(
+				t,
 				settings.data?.canConfigure ?? false,
 				(provider) => remove.mutate({ providerId: provider.providerId }),
 				remove.isPending,
@@ -159,7 +169,7 @@ export function SsoTable() {
 			total={providers.data?.total ?? 0}
 			getRowId={(row) => row.providerId}
 			loading={providers.isFetching}
-			empty="No identity provider yet — everyone signs in with Google."
+			empty={t.bang.trong}
 		/>
 	);
 }

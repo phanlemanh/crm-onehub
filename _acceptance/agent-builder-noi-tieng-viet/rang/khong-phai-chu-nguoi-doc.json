@@ -1,0 +1,248 @@
+{
+	"lat": "agent-builder-noi-tieng-viet",
+	"ghi_chu": "Luat tru cho lat agent-builder dot mot. Moi dong giu_nguyen phai con doi tuong that trong lat — dong chet la DO (AC-1b).",
+	"ham_ky_thuat": [
+		"cn",
+		"clsx",
+		"twMerge",
+		"require",
+		"import"
+	],
+	"giu_nguyen": [
+		{
+			"chu": "working",
+			"vi_sao": "khoa trang thai hoi thoai, so bang === chu khong ve ra man"
+		},
+		{
+			"chu": "unread",
+			"vi_sao": "khoa trang thai hoi thoai, so bang ==="
+		},
+		{
+			"chu": "deployed",
+			"vi_sao": "khoa trang thai hoi thoai, so bang ==="
+		},
+		{
+			"chu": "team",
+			"vi_sao": "doan route giu cho, so bang === de tra notFound()"
+		},
+		{
+			"chu": "short",
+			"vi_sao": "tuy chon cua Intl.DateTimeFormat"
+		},
+		{
+			"chu": "numeric",
+			"vi_sao": "tuy chon cua Intl.DateTimeFormat"
+		},
+		{
+			"chu": "2-digit",
+			"vi_sao": "tuy chon cua Intl.DateTimeFormat"
+		},
+		{
+			"chu": "none",
+			"vi_sao": "tuy chon refetchType cua react-query"
+		},
+		{
+			"chu": "Today",
+			"vi_sao": "khoa cua kieu ChatDateGroup — chu hien ra lay tu kho chuoi"
+		},
+		{
+			"chu": "Yesterday",
+			"vi_sao": "khoa cua kieu ChatDateGroup"
+		},
+		{
+			"chu": "Last 7 days",
+			"vi_sao": "khoa cua kieu ChatDateGroup"
+		},
+		{
+			"chu": "This agent",
+			"vi_sao": "nhan chan doan truyen vao parse() de dung trong thong diep Error nem ra — khong ve ra man"
+		},
+		{
+			"chu": "runs",
+			"vi_sao": "khoa cua ngan xem trong hop luot chay, so bang ==="
+		},
+		{
+			"chu": "code",
+			"vi_sao": "khoa che do xem cua bang ma, so bang ==="
+		},
+		{
+			"chu": "changes",
+			"vi_sao": "khoa che do xem cua bang ma, so bang ==="
+		},
+		{
+			"chu": "open",
+			"vi_sao": "khoa trang thai o bang ma"
+		},
+		{
+			"chu": "added",
+			"vi_sao": "khoa loai thay doi cua tep, so bang ==="
+		},
+		{
+			"chu": "modified",
+			"vi_sao": "khoa loai thay doi cua tep"
+		},
+		{
+			"chu": "light",
+			"vi_sao": "khoa chu de sang/toi truyen cho bo hien ma"
+		},
+		{
+			"chu": "dark",
+			"vi_sao": "khoa chu de sang/toi"
+		},
+		{
+			"chu": "pierre-dark-soft",
+			"vi_sao": "ten chu de mau cua bo hien ma, la dinh danh cua thu vien"
+		},
+		{
+			"chu": "pierre-light-soft",
+			"vi_sao": "ten chu de mau cua bo hien ma"
+		},
+		{
+			"chu": "unified",
+			"vi_sao": "tuy chon cach hien khac biet cua bo hien ma"
+		},
+		{
+			"chu": "32rem",
+			"vi_sao": "gia tri CSS truyen vao bo hien ma"
+		},
+		{
+			"chu": "auto",
+			"vi_sao": "gia tri CSS truyen vao bo hien ma"
+		},
+		{
+			"chu": "list_deals",
+			"vi_sao": "ten cong cu tac nhan goi, so bang === voi ket qua tra ve"
+		},
+		{
+			"chu": "all",
+			"vi_sao": "khoa bo loc cua bang thoa thuan, so bang ==="
+		},
+		{
+			"chu": "deal",
+			"vi_sao": "khoa loai ban ghi truyen cho lop ghi nho — khong ve ra man"
+		}
+	],
+	"khoa_kieu": {
+		"ghi_chu": "Khoa cua kieu chi muc vao kho chuoi — gia tri la TEN KHOA, khong phai chu nguoi doc. Khai o day thay vi mien tru tung gia tri, vi danh sach gia tri se dai theo so muc thanh ben.",
+		"duong": [
+			"settings-sidebar.tsx: SettingsNavItem.khoa",
+			"settings-sidebar.tsx: keyof SettingsMessages[\"thanhBen\"]"
+		]
+	},
+	"thuoc_jsx_ky_thuat": [
+		"className",
+		"class",
+		"id",
+		"key",
+		"ref",
+		"href",
+		"src",
+		"srcSet",
+		"to",
+		"as",
+		"type",
+		"name",
+		"value",
+		"defaultValue",
+		"htmlFor",
+		"role",
+		"variant",
+		"size",
+		"side",
+		"align",
+		"orientation",
+		"mode",
+		"tone",
+		"icon",
+		"entity",
+		"kind",
+		"slug",
+		"locale",
+		"lang",
+		"dir",
+		"target",
+		"rel",
+		"method",
+		"action",
+		"accept",
+		"autoComplete",
+		"autoCapitalize",
+		"autoCorrect",
+		"inputMode",
+		"pattern",
+		"format",
+		"color",
+		"fill",
+		"stroke",
+		"viewBox",
+		"d",
+		"path",
+		"style",
+		"width",
+		"height",
+		"translate",
+		"form",
+		"default",
+		"data-icon",
+		"data-checked",
+		"transitionTypes",
+		"queryKey",
+		"prefetch",
+		"aria-current",
+		"aria-busy",
+		"aria-hidden",
+		"aria-live",
+		"aria-controls",
+		"aria-expanded",
+		"khoa",
+		"motion",
+		"trigger",
+		"options",
+		"onClick",
+		"oldFile"
+	],
+	"khoa_object_ky_thuat": [
+		"id",
+		"href",
+		"src",
+		"key",
+		"className",
+		"class",
+		"slug",
+		"khoa",
+		"viewBox",
+		"path",
+		"queryKey",
+		"style",
+		"align",
+		"width",
+		"height",
+		"size",
+		"variant",
+		"tone",
+		"type",
+		"side",
+		"orientation"
+	],
+	"khoa_object_mang_chu": {
+		"ghi_chu": "Khoa object KHONG duoc dua vao danh sach ky thuat, du chung cung ten voi mot thuoc tinh JSX ky thuat. Gia tri cua chung la chu nguoi doc thay.",
+		"khoa": [
+			"name",
+			"value",
+			"label",
+			"title",
+			"header",
+			"srLabel",
+			"description",
+			"placeholder",
+			"text"
+		]
+	},
+	"mau_ky_thuat": {
+		"ghi_chu": "Chuoi mau chi gom duong dan/URL — khong mang chu nguoi doc. KHONG dung mau nay cho chuoi mau GHEP CAU: nhung cai do phai dich.",
+		"mau": [
+			"^\\$\\{…\\}/",
+			"^https?://"
+		]
+	}
+}

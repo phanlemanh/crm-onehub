@@ -9,27 +9,29 @@ import {
 	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { getLocale } from "@/lib/locale/server";
+import { thanhVienMessages } from "@/lib/messages/settings-thanh-vien";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { membersSearchParams } from "./members-search-params";
 import { MembersTable } from "./members-table";
 
-export const metadata: Metadata = {
-	title: "Members",
-};
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: thanhVienMessages(await getLocale()).trang.tieuDeTab };
+}
 
-export default function MembersSettingsPage({
+export default async function MembersSettingsPage({
 	searchParams,
 }: PageProps<"/[slug]/settings/members">) {
+	const t = thanhVienMessages(await getLocale());
+
 	return (
 		<PageShell className="min-h-0">
 			<PageShellHeader>
 				<PageShellHeading>
-					<PageShellTitle>Members</PageShellTitle>
-					<PageShellDescription>
-						Everyone who has access to your CRM.
-					</PageShellDescription>
+					<PageShellTitle>{t.trang.tieuDe}</PageShellTitle>
+					<PageShellDescription>{t.trang.moTa}</PageShellDescription>
 				</PageShellHeading>
 			</PageShellHeader>
 

@@ -30,15 +30,34 @@ import {
 } from "@crm/ui/components/card";
 import { Icon } from "@crm/ui/components/icon";
 import { Label } from "@crm/ui/components/label";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { Switch } from "@crm/ui/components/switch";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
+import { theoDoiMessages } from "@/lib/messages/settings-theo-doi";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
+const OPEN_TAG = "<script";
+const CLOSE_TAG = "></script>";
+const SITE_ATTRIBUTE = "data-site";
+const TAM_DUNG = { khoa: "paused" } as const;
+const GTM = { id: "gtm" } as const;
+
+function SnippetText({
+	value,
+	className,
+}: {
+	value: string;
+	className?: string;
+}) {
+	return <span className={className}>{value}</span>;
+}
+
 export function TrackingScript() {
+	const t = theoDoiMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const tracking = useQuery(trpc.tracking.settings.queryOptions());
@@ -48,11 +67,7 @@ export function TrackingScript() {
 		trpc.tracking.setFlag.mutationOptions({
 			onSuccess: async (_result, input) => {
 				await cache.tracking();
-				toast.success(
-					input.enabled
-						? "Tracking paused. The script stops recording within five minutes."
-						: "Tracking resumed.",
-				);
+				toast.success(input.enabled ? t.doanMa.daTamDung : t.doanMa.daChayLai);
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -62,7 +77,7 @@ export function TrackingScript() {
 		trpc.tracking.rotateSiteId.mutationOptions({
 			onSuccess: async () => {
 				await cache.tracking();
-				toast.success("Site ID rotated. Paste the new tag on your website.");
+				toast.success(t.doanMa.daDoiSiteId);
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -84,14 +99,14 @@ export function TrackingScript() {
 		const clipboard = navigator.clipboard;
 
 		if (!value || !clipboard) {
-			toast.error("Could not copy the script. Select it instead.");
+			toast.error(t.doanMa.khongChepBoiDen);
 			return;
 		}
 
 		clipboard
 			.writeText(value)
-			.then(() => toast.success("Script copied."))
-			.catch(() => toast.error("Could not copy the script."));
+			.then(() => toast.success(t.doanMa.daChep))
+			.catch(() => toast.error(t.doanMa.khongChep));
 	};
 
 	return (
@@ -99,34 +114,32 @@ export function TrackingScript() {
 			<CardHeader>
 				<CardTitle>
 					<div className="flex items-center gap-2">
-						Tracking script
+						{t.doanMa.tieuDe}
 						<StatusIndicator
 							size="sm"
 							tone={paused ? "warning" : receivingSince ? "success" : "neutral"}
 							label={
 								paused
-									? "Paused"
+									? t.doanMa.trangThai.tamDung
 									: receivingSince
-										? "Receiving page views"
-										: "No page views yet"
+										? t.doanMa.trangThai.dangNhan
+										: t.doanMa.trangThai.chuaNhan
 							}
 						/>
 					</div>
 				</CardTitle>
-				<CardDescription>
-					One tag, 4 KB, in the head of every page you measure.
-				</CardDescription>
+				<CardDescription>{t.doanMa.moTa}</CardDescription>
 
 				<CardAction>
 					<Button
 						size="sm"
 						onClick={() =>
-							copy(section === "gtm" ? tagManagerSnippet : snippet)
+							copy(section === GTM.id ? tagManagerSnippet : snippet)
 						}
 						type="button"
 					>
 						<Icon icon={Copy} data-icon="inline-start" />
-						Copy
+						{t.doanMa.chep}
 					</Button>
 				</CardAction>
 			</CardHeader>
@@ -139,53 +152,69 @@ export function TrackingScript() {
 					onValueChange={setSection}
 				>
 					<AccordionItem value="html">
-						<AccordionTrigger>Paste it into your HTML</AccordionTrigger>
+						<AccordionTrigger>{t.doanMa.danHtml}</AccordionTrigger>
 						<AccordionContent className="flex flex-col gap-4">
-							<pre className="overflow-x-auto rounded-md border bg-muted p-4 font-mono text-code-foreground text-xs/5">
-								<span className="text-code-accent">{"<script"}</span>
-								{"\n  src="}
-								<span className="text-code-string">{`"${scriptUrl}"`}</span>
-								{"\n  data-site="}
-								<span className="text-code-string">{`"${siteId}"`}</span>
-								{"\n  async\n  defer\n"}
-								<span className="text-code-accent">{"></script>"}</span>
+							<pre
+								translate="no"
+								className="overflow-x-auto rounded-md border bg-muted p-4 font-mono text-code-foreground text-xs/5"
+							>
+								<SnippetText value={OPEN_TAG} className="text-code-accent" />
+								<SnippetText value={"\n  src="} />
+								<SnippetText
+									value={`"${scriptUrl}"`}
+									className="text-code-string"
+								/>
+								<SnippetText value={`\n  ${SITE_ATTRIBUTE}=`} />
+								<SnippetText
+									value={`"${siteId}"`}
+									className="text-code-string"
+								/>
+								<SnippetText value={"\n  async\n  defer\n"} />
+								<SnippetText value={CLOSE_TAG} className="text-code-accent" />
 							</pre>
 							<p className="text-muted-foreground text-xs/relaxed">
-								Site ID{" "}
-								<span className="font-mono text-foreground">{siteId}</span> ·
-								Rotating it stops every copy of the old script at once.
+								<span translate="no">{t.doanMa.siteIdNhan}</span>{" "}
+								<span className="font-mono text-foreground" translate="no">
+									{siteId}
+								</span>{" "}
+								{t.doanMa.siteIdMoTa}
 							</p>
 						</AccordionContent>
 					</AccordionItem>
 
-					<AccordionItem value="gtm">
-						<AccordionTrigger>
-							Add it through Google Tag Manager
-						</AccordionTrigger>
+					<AccordionItem value={GTM.id}>
+						<AccordionTrigger>{t.doanMa.themQuaGtm}</AccordionTrigger>
 						<AccordionContent className="flex flex-col gap-4">
-							<pre className="overflow-x-auto rounded-md border bg-muted p-4 font-mono text-code-foreground text-xs/5">
-								<span className="text-code-accent">{"<script"}</span>
-								{"\n  src="}
-								<span className="text-code-string">{`"${scriptUrl}?site=${siteId}"`}</span>
-								{"\n  async\n  defer\n"}
-								<span className="text-code-accent">{"></script>"}</span>
+							<pre
+								translate="no"
+								className="overflow-x-auto rounded-md border bg-muted p-4 font-mono text-code-foreground text-xs/5"
+							>
+								<SnippetText value={OPEN_TAG} className="text-code-accent" />
+								<SnippetText value={"\n  src="} />
+								<SnippetText
+									value={`"${scriptUrl}?site=${siteId}"`}
+									className="text-code-string"
+								/>
+								<SnippetText value={"\n  async\n  defer\n"} />
+								<SnippetText value={CLOSE_TAG} className="text-code-accent" />
 							</pre>
 							<ol className="flex list-decimal flex-col gap-1 pl-4 text-muted-foreground text-xs/relaxed">
-								<li>In Tag Manager, add a new Custom HTML tag.</li>
+								<li>{t.doanMa.buoc1}</li>
+								<li>{t.doanMa.buoc2}</li>
 								<li>
-									Paste this snippet — not the one above — as the tag's HTML.
-								</li>
-								<li>
-									Trigger it on All Pages, then publish the container. Keep{" "}
-									<span className="font-mono text-foreground">{scriptUrl}</span>{" "}
-									off any consent-blocked category you do not need.
+									{t.doanMa.buoc3Dau}{" "}
+									<span className="font-mono text-foreground" translate="no">
+										{scriptUrl}
+									</span>{" "}
+									{t.doanMa.buoc3Cuoi}
 								</li>
 							</ol>
 							<p className="text-muted-foreground text-xs/relaxed">
-								Tag Manager drops a{" "}
-								<span className="font-mono text-foreground">data-site</span>{" "}
-								attribute when it injects a script, so this form carries the
-								site ID in the URL instead.
+								{t.doanMa.ghiChuDau}{" "}
+								<span className="font-mono text-foreground" translate="no">
+									data-site
+								</span>{" "}
+								{t.doanMa.ghiChuCuoi}
 							</p>
 						</AccordionContent>
 					</AccordionItem>
@@ -196,10 +225,9 @@ export function TrackingScript() {
 						htmlFor="tracking-paused"
 						className="flex flex-col items-start gap-1"
 					>
-						<span className="text-sm">Pause tracking</span>
+						<span className="text-sm">{t.doanMa.tamDungNhan}</span>
 						<span className="font-normal text-muted-foreground text-xs">
-							The script keeps loading and records nothing. Your domains and
-							settings are kept
+							{t.doanMa.tamDungMoTa}
 						</span>
 					</Label>
 
@@ -208,7 +236,7 @@ export function TrackingScript() {
 						checked={paused}
 						disabled={!canManage || setFlag.isPending}
 						onCheckedChange={(enabled) =>
-							setFlag.mutate({ flag: "paused", enabled })
+							setFlag.mutate({ flag: TAM_DUNG.khoa, enabled })
 						}
 					/>
 				</div>
@@ -222,28 +250,25 @@ export function TrackingScript() {
 									size="xs"
 									disabled={!canManage || rotate.isPending}
 								>
-									Rotate site ID
+									{t.doanMa.doiSiteId}
 								</Button>
 							</AlertDialogTrigger>
 
 							<AlertDialogContent>
 								<AlertDialogHeader>
-									<AlertDialogTitle>Rotate the site ID?</AlertDialogTitle>
+									<AlertDialogTitle>{t.doanMa.hoiDoi}</AlertDialogTitle>
 									<AlertDialogDescription>
-										Every copy of the old script stops recording at once,
-										including any you have forgotten about. You will need to
-										paste the new tag on every page that carries the old one.
-										Nothing already collected is lost.
+										{t.doanMa.hoiDoiMoTa}
 									</AlertDialogDescription>
 								</AlertDialogHeader>
 
 								<AlertDialogFooter>
-									<AlertDialogCancel>Cancel</AlertDialogCancel>
+									<AlertDialogCancel>{t.doanMa.huy}</AlertDialogCancel>
 									<AlertDialogAction
 										variant="destructive"
 										onClick={() => rotate.mutate()}
 									>
-										Rotate
+										{t.doanMa.doi}
 									</AlertDialogAction>
 								</AlertDialogFooter>
 							</AlertDialogContent>

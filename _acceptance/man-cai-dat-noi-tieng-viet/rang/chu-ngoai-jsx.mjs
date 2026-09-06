@@ -1,14 +1,20 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
-import { GOC, lat } from "./lat.mjs";
+import { GOC, KHAI_MAC_DINH, khaiTuArgv, lat } from "./lat.mjs";
+import { giuDoc } from "./khoa-cay.mjs";
+
+
+await giuDoc();
 
 const ts = createRequire(import.meta.url)("typescript");
 const HERE = dirname(fileURLToPath(import.meta.url));
-const BANG = JSON.parse(readFileSync(`${HERE}/toast-cua-lat.json`, "utf8"));
-const KHOA = JSON.parse(readFileSync(`${HERE}/khong-du-quyen.json`, "utf8"));
-const TD = JSON.parse(readFileSync(`${HERE}/tieu-de-cua-lat.json`, "utf8"));
+const KHAI_PATH = khaiTuArgv(KHAI_MAC_DINH);
+const KHAI_DIR = dirname(KHAI_PATH);
+const BANG = JSON.parse(readFileSync(`${KHAI_DIR}/toast-cua-lat.json`, "utf8"));
+const KHOA = JSON.parse(readFileSync(`${KHAI_DIR}/khong-du-quyen.json`, "utf8"));
+const TD = JSON.parse(readFileSync(`${KHAI_DIR}/tieu-de-cua-lat.json`, "utf8"));
 
 const SO_TIEU_DE = TD.so_o;
 const GIU_NGUYEN = new Set(TD.giu_nguyen.map((g) => g.chu));
@@ -123,6 +129,7 @@ function quetTieuDe(files) {
 				});
 
 			if (
+				TD.co_thanh_ben === true &&
 				ts.isPropertyAssignment(n) &&
 				ts.isIdentifier(n.name) &&
 				n.name.text === "khoa" &&
@@ -153,7 +160,7 @@ function tuKhoChuoi(duong) {
 }
 
 function chanToast() {
-	const L = lat();
+	const L = lat(KHAI_PATH);
 	const { thay, boQua } = quetToast(L.file);
 
 	const daKhai = new Set(BANG.loi_goi.map((l) => `${l.file}|${l.khoa}`));
@@ -193,20 +200,34 @@ function chanToast() {
 }
 
 function khoaThanhBen() {
-	const kho = readFileSync(`${GOC}/apps/app/lib/messages/settings.ts`, "utf8");
+	const thuMucKho = `${GOC}/apps/app/lib/messages`;
+	const kho = readdirSync(thuMucKho)
+		.filter((t) => t.endsWith(".ts"))
+		.map((t) => readFileSync(`${thuMucKho}/${t}`, "utf8"))
+		.join("\n");
 	const khoi = /thanhBen:\s*\{([^}]*)\}/.exec(kho);
 	if (!khoi) return null;
 	return new Set([...khoi[1].matchAll(/^\s*([A-Za-z][A-Za-z0-9]*):/gm)].map((m) => m[1]));
 }
 
 function chanTieuDe() {
-	const L = lat();
+	const L = lat(KHAI_PATH);
 	const o = quetTieuDe(L.file);
-	const khoKhoa = khoaThanhBen();
+	const khoKhoa = TD.co_thanh_ben === true ? khoaThanhBen() : new Set();
 
-	if (khoKhoa === null || khoKhoa.size === 0) {
+	if (TD.co_thanh_ben === true && (khoKhoa === null || khoKhoa.size === 0)) {
 		console.log(
 			"KHONG DO DUOC: khong doc duoc nhom thanhBen trong kho chuoi — khong co gi de doi chieu nhan thanh ben",
+		);
+		process.exit(2);
+	}
+
+	if (o.length === 0) {
+		console.log(
+			"KHONG DO DUOC: chan tieu de khong co doi tuong o lat nay — 0 o tieu de.",
+		);
+		console.log(
+			"  Tap quan sat rong khong bao gio la dat: mot lat khong so huu page.tsx nao thi phai KHAI ra dieu do, khong duoc nhan mot mau xanh tren khong.",
 		);
 		process.exit(2);
 	}
@@ -265,9 +286,86 @@ function chanTieuDe() {
 	console.log(`XANH: ca ${o.length} o nhan deu doc tu kho chuoi.`);
 }
 
+function canhGac(coKhi) {
+	const m = /^(.+?)\s*===\s*false$/.exec(coKhi.trim());
+	return m === null ? null : m[1].trim();
+}
+
+function khoaTrongNhanh(nut, nguon) {
+	const ra = new Set();
+	const di = (n) => {
+		if (
+			ts.isPropertyAccessExpression(n) &&
+			n.expression.getText(nguon).startsWith("t.")
+		)
+			ra.add(
+				`${n.expression.getText(nguon).replace(/^t\./, "")}.${n.name.text}`,
+			);
+		ts.forEachChild(n, di);
+	};
+	di(nut);
+	return ra;
+}
+
+function khoaSinhTuMa(file, cacCoKhi) {
+	const nguon = cay(file);
+	const ra = new Map();
+	for (const c of cacCoKhi) ra.set(c, new Set());
+	const di = (n) => {
+		if (ts.isConditionalExpression(n)) {
+			const test = n.condition.getText(nguon).trim();
+			for (const c of cacCoKhi) {
+				const gac = canhGac(c);
+				if (gac !== null && test === gac)
+					for (const k of khoaTrongNhanh(n.whenFalse, nguon)) ra.get(c).add(k);
+			}
+		}
+		ts.forEachChild(n, di);
+	};
+	ts.forEachChild(nguon, di);
+	return ra;
+}
+
+function chanThuaKhongDuQuyen(o) {
+	const thua = [];
+	const khongDoc = [];
+	const theoFile = new Map();
+	for (const m of o) {
+		if (!theoFile.has(m.file)) theoFile.set(m.file, new Map());
+		const b = theoFile.get(m.file);
+		if (!b.has(m.co_khi)) b.set(m.co_khi, new Set());
+		b.get(m.co_khi).add(m.khoa);
+	}
+	for (const [file, b] of theoFile) {
+		const sinh = khoaSinhTuMa(file, [...b.keys()]);
+		for (const [coKhi, daKhai] of b) {
+			if (canhGac(coKhi) === null) {
+				khongDoc.push(
+					`${file} — dieu kien ${JSON.stringify(coKhi)} khong theo khuon "<bieu thuc> === false", nen chan nay khong sinh duoc ung vien tu ma de doi chieu.`,
+				);
+				continue;
+			}
+			const tuMa = sinh.get(coKhi);
+			console.log(
+				`   ${file} · ${coKhi} — ma sinh ra ${tuMa.size} khoa, ban khai co ${daKhai.size}`,
+			);
+			for (const k of tuMa)
+				if (!daKhai.has(k))
+					thua.push(
+						`${file} — ${k} hien o dung nhanh ${coKhi} ma ban khai khong co. Bang nay tuyen la BANG DONG cua lop do, nen thieu mot o la thuoc do sot.`,
+					);
+		}
+	}
+	return { thua, khongDoc };
+}
+
 function chanKhongDuQuyen() {
 	const o = KHOA.o;
-	const kho = readFileSync(`${GOC}/apps/app/lib/messages/settings.ts`, "utf8");
+	const thuMucKho = `${GOC}/apps/app/lib/messages`;
+	const kho = readdirSync(thuMucKho)
+		.filter((t) => t.endsWith(".ts"))
+		.map((t) => readFileSync(`${thuMucKho}/${t}`, "utf8"))
+		.join("\n");
 	const do_ = [];
 
 	for (const m of o) {
@@ -302,13 +400,24 @@ function chanKhongDuQuyen() {
 		}
 		const banVi = cac[cac.length - 1];
 		const gt = new RegExp(`${ten}:\\s*"([^"]*)"`).exec(banVi);
-		if (!gt) do_.push(`${m.khoa} — khong tim thay khoa nay trong ban vi cua kho chuoi`);
-		else if (!DAU.test(gt[1]))
+		const ham = new RegExp(`${ten}:\\s*\\([^)]*\\)\\s*=>\\s*([^,\\n]*)`).exec(banVi);
+		if (!gt && !ham)
+			do_.push(`${m.khoa} — khong tim thay khoa nay trong ban vi cua kho chuoi`);
+		else if (gt && !DAU.test(gt[1]))
 			do_.push(`${m.khoa} — ban tieng Viet ${JSON.stringify(gt[1])} khong mang dau`);
+		else if (ham && !DAU.test(ham[1]))
+			do_.push(
+				`${m.khoa} — ban tieng Viet la ham, than ${JSON.stringify(ham[1].trim())} khong mang dau`,
+			);
 	}
 
+	console.log("\n-- CHIEU THUA: ung vien sinh tu cay cu phap, doi chieu voi ban khai");
+	const { thua, khongDoc } = chanThuaKhongDuQuyen(o);
+	for (const d of khongDoc) console.log(`   KHONG DO DUOC: ${d}`);
+	for (const d of thua) console.log(`   THUA: ${d}`);
+
 	console.log(
-		`do ${o.length} o ghim — trang thai khong du quyen. PHEP DO MUC MA: moi o phai con MOT NUT doc dung ` +
+		`\ndo ${o.length} o ghim — trang thai khong du quyen. PHEP DO MUC MA: moi o phai con MOT NUT doc dung ` +
 			"khoa da khai, va ban tieng Viet cua khoa do phai mang dau. Khong chung man hien dung (gioi han khai o AC-4).",
 	);
 
@@ -316,11 +425,13 @@ function chanKhongDuQuyen() {
 		for (const d of do_) console.log(`KHONG DU QUYEN: ${d}`);
 		process.exit(1);
 	}
+	if (thua.length > 0) process.exit(1);
+	if (khongDoc.length > 0) process.exit(2);
 	console.log(`XANH: ca ${o.length} o deu con nut doc dung khoa, va ban tieng Viet co dau.`);
 }
 
 function chanDoiChieu() {
-	const L = lat();
+	const L = lat(KHAI_PATH);
 	daMo = 0;
 	const { thay } = quetToast(L.file);
 	const soMoToast = daMo;
@@ -345,10 +456,91 @@ const chan = process.argv.includes("--chan")
 	? process.argv[process.argv.indexOf("--chan") + 1]
 	: "tat-ca";
 
+
+function chanThuocTinh() {
+	const L = lat(KHAI_PATH);
+	const duong = `${KHAI_DIR}/thuoc-tinh-cua-lat.json`;
+	if (!existsSync(duong)) {
+		console.log(
+			`KHONG DO DUOC: tien de thieu — chua co ban khai thuoc-tinh-cua-lat.json tai ${duong.replace(`${GOC}/`, "")}.`,
+		);
+		process.exit(2);
+	}
+	const KH = JSON.parse(readFileSync(duong, "utf8"));
+	const kyThuat = new Set(KH.ten_ky_thuat.map((x) => x.ten));
+	const dungToi = new Set();
+	const chuThang = [];
+	let tuKho = 0;
+	let kyThuatDem = 0;
+
+	for (const f of L.file) {
+		const nguon = cay(f);
+		const di = (n) => {
+			if (ts.isJsxAttribute(n) && n.initializer) {
+				const ten = n.name.getText(nguon);
+				const gt = n.initializer;
+				const laChuoi =
+					ts.isStringLiteral(gt) ||
+					(ts.isJsxExpression(gt) &&
+						gt.expression &&
+						(ts.isStringLiteral(gt.expression) ||
+							ts.isNoSubstitutionTemplateLiteral(gt.expression) ||
+							ts.isTemplateExpression(gt.expression)));
+				const docKho =
+					ts.isJsxExpression(gt) &&
+					gt.expression &&
+					/\bt\.[A-Za-z]/.test(gt.expression.getText(nguon));
+				const rong =
+					ts.isStringLiteral(gt) && gt.text.trim() === "";
+				const the = n.parent?.parent?.tagName?.getText(nguon) ?? "";
+				const khoaBieuMau =
+					(ten === "name" || ten === "value") && /^[a-z]/.test(the);
+				if (docKho) tuKho += 1;
+				else if (rong || khoaBieuMau) {
+					kyThuatDem += 1;
+				} else if (laChuoi) {
+					if (kyThuat.has(ten)) {
+						kyThuatDem += 1;
+						dungToi.add(ten);
+					} else
+						chuThang.push(
+							`${f}:${dong(n, nguon)} thuoc tinh ${ten} mang chuoi viet thang ${JSON.stringify(gt.getText(nguon).slice(0, 60))}`,
+						);
+				}
+			}
+			ts.forEachChild(n, di);
+		};
+		ts.forEachChild(nguon, di);
+	}
+
+	const chet = KH.ten_ky_thuat.filter((x) => !dungToi.has(x.ten));
+	console.log(
+		`quet ${L.file.length} file · ${tuKho} thuoc tinh doc tu kho chuoi · ${kyThuatDem} thuoc tinh ky thuat co ten · ${chuThang.length} thuoc tinh con chuoi viet thang`,
+	);
+	for (const d of chuThang) console.log(`   CHU THANG: ${d}`);
+	for (const d of chet)
+		console.log(
+			`   TEN KY THUAT CHET: ${d.ten} (${d.vi_sao}) khong con thuoc tinh nao dung — go no khoi ban khai`,
+		);
+
+	if (chuThang.length > 0 || chet.length > 0) process.exit(1);
+
+	if (tuKho === 0) {
+		console.log(
+			"KHONG DO DUOC: 0 thuoc tinh nao doc tu kho chuoi. Tap quan sat rong khong bao gio la dat.",
+		);
+		process.exit(2);
+	}
+	console.log(
+		`XANH: ${tuKho} thuoc tinh doc tu kho chuoi, va khong thuoc tinh nao ngoai danh sach ky thuat con mang chuoi viet thang.`,
+	);
+}
+
 if (chan === "toast") chanToast();
 else if (chan === "tieu-de") chanTieuDe();
 else if (chan === "khong-du-quyen") chanKhongDuQuyen();
 else if (chan === "doi-chieu") chanDoiChieu();
+else if (chan === "thuoc-tinh") chanThuocTinh();
 else {
 	chanToast();
 	console.log("");

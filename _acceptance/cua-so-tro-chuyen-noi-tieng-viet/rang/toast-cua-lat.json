@@ -1,0 +1,62 @@
+{
+	"lat": "cua-so-tro-chuyen-noi-tieng-viet",
+	"ghi_chu": "Bang DONG moi loi goi toast cua lat, ghim (file, khoa kho chuoi) — KHONG ghim so dong. Doi chieu CA HAI CHIEU: thieu hay thua mot muc deu thoat ma 2 in ca hai danh sach.",
+	"loi_goi": [
+		{
+			"file": "apps/app/components/agent-builder/agent-builder-chat.tsx",
+			"khoa": "traLoi.daChepMarkdown"
+		},
+		{
+			"file": "apps/app/components/agent-builder/agent-builder-chat.tsx",
+			"khoa": "traLoi.daChepMarkdown"
+		},
+		{
+			"file": "apps/app/components/agent-builder/agent-builder-chat.tsx",
+			"khoa": "dung.daXinDung"
+		},
+		{
+			"file": "apps/app/components/agent-builder/agent-builder-chat.tsx",
+			"khoa": "dung.dungHong"
+		},
+		{
+			"file": "apps/app/components/agent-builder/agent-builder-chat.tsx",
+			"khoa": "tacNhanSong.daXep"
+		},
+		{
+			"file": "apps/app/components/agent-builder/agent-composer.tsx",
+			"khoa": "oSoan.dinhTepHong"
+		},
+		{
+			"file": "apps/app/components/agent-builder/agent-composer.tsx",
+			"khoa": "tep.rong"
+		},
+		{
+			"file": "apps/app/components/agent-builder/agent-composer.tsx",
+			"khoa": "tep.quaLon"
+		},
+		{
+			"file": "apps/app/components/agent-builder/agent-composer.tsx",
+			"khoa": "tep.tenQuaDai"
+		},
+		{
+			"file": "apps/app/components/agent-builder/agent-composer.tsx",
+			"khoa": "tep.loaiKhongNhan"
+		},
+		{
+			"file": "apps/app/components/agent-builder/agent-composer.tsx",
+			"khoa": "tep.khongDocDuoc"
+		},
+		{
+			"file": "apps/app/components/agent-builder/delete-chat-action.tsx",
+			"khoa": "xoa.daXoa"
+		},
+		{
+			"file": "apps/app/components/agent-builder/share-chat-dialog.tsx",
+			"khoa": "chiaSe.daHuyLink"
+		},
+		{
+			"file": "apps/app/components/agent-builder/share-chat-dialog.tsx",
+			"khoa": "chiaSe.daChep"
+		}
+	]
+}

@@ -4,7 +4,6 @@ import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const GOC = resolve(HERE, "../../..");
-const KHAI = JSON.parse(readFileSync(`${HERE}/lat-cai-dat.json`, "utf8"));
 
 function quetThuMuc(goc) {
 	return readdirSync(goc, { withFileTypes: true })
@@ -12,7 +11,15 @@ function quetThuMuc(goc) {
 		.map((m) => relative(GOC, join(goc, m.name)));
 }
 
-export function lat() {
+export function khaiTuArgv(macDinh) {
+	const i = process.argv.indexOf("--lat");
+	return i >= 0 && process.argv[i + 1] ? resolve(process.argv[i + 1]) : macDinh;
+}
+
+export const KHAI_MAC_DINH = `${HERE}/lat-cai-dat.json`;
+
+export function lat(khai = KHAI_MAC_DINH) {
+	const KHAI = JSON.parse(readFileSync(khai, "utf8"));
 	const tuDia = KHAI.thu_muc.flatMap((d) => quetThuMuc(`${GOC}/${d}`));
 	const them = KHAI.them;
 

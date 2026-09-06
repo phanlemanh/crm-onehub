@@ -3,8 +3,10 @@
 import ArrowRight from "@carbon/icons-react/es/ArrowRight";
 import Bot from "@carbon/icons-react/es/Bot";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { khungMessages } from "@/lib/messages/agent-builder-khung";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -12,6 +14,7 @@ import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 type Agents = RouterOutputs["agents"]["list"];
 
 export function TeamAgentsIndex({ initialAgents }: { initialAgents: Agents }) {
+	const t = khungMessages(useLocale());
 	const trpc = useTRPC();
 	const workspaceUrl = useWorkspaceUrl();
 	const agents = useQuery({
@@ -36,7 +39,10 @@ export function TeamAgentsIndex({ initialAgents }: { initialAgents: Agents }) {
 							</span>
 							<span className="min-w-0 flex-1">
 								<span className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
-									<span className="min-w-0 wrap-break-word font-medium text-sm sm:truncate">
+									<span
+										className="min-w-0 wrap-break-word font-medium text-sm sm:truncate"
+										translate="no"
+									>
 										{agent.name}
 									</span>
 									<span className="shrink-0 text-muted-foreground text-xs">
@@ -44,14 +50,14 @@ export function TeamAgentsIndex({ initialAgents }: { initialAgents: Agents }) {
 									</span>
 								</span>
 								<span className="mt-1 block wrap-break-word text-muted-foreground text-xs sm:mt-0 sm:truncate">
-									{agent.description ?? "No description"}
+									{agent.description ?? t.doi.khongMoTa}
 								</span>
 								<span className="mt-2 block font-mono text-muted-foreground text-xs sm:hidden">
-									{agent.runCount} runs
+									{t.doi.soLuotChay(String(agent.runCount))}
 								</span>
 							</span>
 							<span className="hidden shrink-0 font-mono text-muted-foreground text-xs sm:inline">
-								{agent.runCount} runs
+								{t.doi.soLuotChay(String(agent.runCount))}
 							</span>
 							<Icon
 								icon={ArrowRight}
@@ -63,16 +69,15 @@ export function TeamAgentsIndex({ initialAgents }: { initialAgents: Agents }) {
 			) : (
 				<div className="flex min-h-64 flex-col items-center justify-center rounded-lg border border-dashed px-6 text-center">
 					<Icon icon={Bot} className="size-6 text-muted-foreground" />
-					<h2 className="mt-4 font-medium text-sm">No team agents yet</h2>
+					<h2 className="mt-4 font-medium text-sm">{t.doi.trong}</h2>
 					<p className="mt-1 text-muted-foreground text-xs">
-						Create one from a private chat, then review its access before
-						deploying it.
+						{t.doi.trongMoTa}
 					</p>
 					<Link
 						href={workspaceUrl("/chat")}
 						className="mt-4 text-primary text-xs hover:underline"
 					>
-						Open chat
+						{t.doi.moHoiThoai}
 					</Link>
 				</div>
 			)}

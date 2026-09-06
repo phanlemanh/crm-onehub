@@ -1,0 +1,2389 @@
+{
+	"apps/app/components/agent-builder/chat-chips.tsx": [
+		{
+			"xuat": "ChatAttachmentChip",
+			"dong": [
+				"TEP · 10 B"
+			],
+			"mo": [
+				"TEP · 10 B"
+			],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ChatCommandChip",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'icon.displayName')",
+			"loi_mo": "undefined is not an object (evaluating 'icon.displayName')"
+		},
+		{
+			"xuat": "ChatReferenceChip",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'icon.displayName')",
+			"loi_mo": "undefined is not an object (evaluating 'icon.displayName')"
+		},
+		{
+			"xuat": "ChatReferenceIdentity",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'icon.displayName')",
+			"loi_mo": "undefined is not an object (evaluating 'icon.displayName')"
+		}
+	],
+	"apps/app/components/crm/inline-field.tsx": [
+		{
+			"xuat": "InlineDateField",
+			"dong": [
+				"Navigation bar",
+				"Go to the previous month",
+				"Go to the next month",
+				"Choose the month",
+				"Jan",
+				"Feb",
+				"Mar",
+				"Apr",
+				"May",
+				"Jun",
+				"Jul",
+				"Aug",
+				"Sep",
+				"Oct",
+				"Nov",
+				"Dec",
+				"Choose the year",
+				"September 2026",
+				"Sunday",
+				"Su",
+				"Monday",
+				"Mo",
+				"Tuesday",
+				"Tu",
+				"Wednesday",
+				"We",
+				"Thursday",
+				"Th",
+				"Friday",
+				"Fr",
+				"Saturday",
+				"Sa",
+				"Sunday, August 30th, 2026",
+				"Monday, August 31st, 2026",
+				"Tuesday, September 1st, 2026",
+				"Wednesday, September 2nd, 2026",
+				"Thursday, September 3rd, 2026",
+				"Friday, September 4th, 2026",
+				"Saturday, September 5th, 2026",
+				"Today, Sunday, September 6th, 2026",
+				"Monday, September 7th, 2026",
+				"Tuesday, September 8th, 2026",
+				"Wednesday, September 9th, 2026",
+				"Thursday, September 10th, 2026",
+				"Friday, September 11th, 2026",
+				"Saturday, September 12th, 2026",
+				"Sunday, September 13th, 2026",
+				"Monday, September 14th, 2026",
+				"Tuesday, September 15th, 2026",
+				"Wednesday, September 16th, 2026",
+				"Thursday, September 17th, 2026",
+				"Friday, September 18th, 2026",
+				"Saturday, September 19th, 2026",
+				"Sunday, September 20th, 2026",
+				"Monday, September 21st, 2026",
+				"Tuesday, September 22nd, 2026",
+				"Wednesday, September 23rd, 2026",
+				"Thursday, September 24th, 2026",
+				"Friday, September 25th, 2026",
+				"Saturday, September 26th, 2026",
+				"Sunday, September 27th, 2026",
+				"Monday, September 28th, 2026",
+				"Tuesday, September 29th, 2026",
+				"Wednesday, September 30th, 2026",
+				"Thursday, October 1st, 2026",
+				"Friday, October 2nd, 2026",
+				"Saturday, October 3rd, 2026"
+			],
+			"mo": [
+				"Navigation bar",
+				"Go to the previous month",
+				"Go to the next month",
+				"Choose the month",
+				"Jan",
+				"Feb",
+				"Mar",
+				"Apr",
+				"May",
+				"Jun",
+				"Jul",
+				"Aug",
+				"Sep",
+				"Oct",
+				"Nov",
+				"Dec",
+				"Choose the year",
+				"September 2026",
+				"Sunday",
+				"Su",
+				"Monday",
+				"Mo",
+				"Tuesday",
+				"Tu",
+				"Wednesday",
+				"We",
+				"Thursday",
+				"Th",
+				"Friday",
+				"Fr",
+				"Saturday",
+				"Sa",
+				"Sunday, August 30th, 2026",
+				"Monday, August 31st, 2026",
+				"Tuesday, September 1st, 2026",
+				"Wednesday, September 2nd, 2026",
+				"Thursday, September 3rd, 2026",
+				"Friday, September 4th, 2026",
+				"Saturday, September 5th, 2026",
+				"Today, Sunday, September 6th, 2026",
+				"Monday, September 7th, 2026",
+				"Tuesday, September 8th, 2026",
+				"Wednesday, September 9th, 2026",
+				"Thursday, September 10th, 2026",
+				"Friday, September 11th, 2026",
+				"Saturday, September 12th, 2026",
+				"Sunday, September 13th, 2026",
+				"Monday, September 14th, 2026",
+				"Tuesday, September 15th, 2026",
+				"Wednesday, September 16th, 2026",
+				"Thursday, September 17th, 2026",
+				"Friday, September 18th, 2026",
+				"Saturday, September 19th, 2026",
+				"Sunday, September 20th, 2026",
+				"Monday, September 21st, 2026",
+				"Tuesday, September 22nd, 2026",
+				"Wednesday, September 23rd, 2026",
+				"Thursday, September 24th, 2026",
+				"Friday, September 25th, 2026",
+				"Saturday, September 26th, 2026",
+				"Sunday, September 27th, 2026",
+				"Monday, September 28th, 2026",
+				"Tuesday, September 29th, 2026",
+				"Wednesday, September 30th, 2026",
+				"Thursday, October 1st, 2026",
+				"Friday, October 2nd, 2026",
+				"Saturday, October 3rd, 2026"
+			],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "InlineField",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "InlineSelectField",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'options.map')",
+			"loi_mo": "undefined is not an object (evaluating 'options.map')"
+		},
+		{
+			"xuat": "InlineTextArea",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "InlineTextCell",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"apps/app/components/crm/stage-change.tsx": [
+		{
+			"xuat": "CloseReasonDialog",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "[nuqs] nuqs requires an adapter to work with your framework.\n  See https://nuqs.dev/NUQS-404",
+			"loi_mo": "[nuqs] nuqs requires an adapter to work with your framework.\n  See https://nuqs.dev/NUQS-404"
+		},
+		{
+			"xuat": "DealStageMenu",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "[nuqs] nuqs requires an adapter to work with your framework.\n  See https://nuqs.dev/NUQS-404",
+			"loi_mo": "[nuqs] nuqs requires an adapter to work with your framework.\n  See https://nuqs.dev/NUQS-404"
+		}
+	],
+	"apps/app/components/data-table/list-search-params.ts": [
+		{
+			"xuat": "*",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "khong phai component — file nay khong ve gi ra man",
+			"loi_mo": "khong phai component — file nay khong ve gi ra man"
+		}
+	],
+	"apps/app/components/detail-sheet.tsx": [
+		{
+			"xuat": "DetailSheet",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DetailSheetBody",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DetailSheetEmpty",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'icon.displayName')",
+			"loi_mo": "undefined is not an object (evaluating 'icon.displayName')"
+		},
+		{
+			"xuat": "DetailSheetHeader",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogTitle` must be used within `Dialog`",
+			"loi_mo": "`DialogTitle` must be used within `Dialog`"
+		},
+		{
+			"xuat": "DetailSheetMain",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DetailSheetPending",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'fields.length')",
+			"loi_mo": "undefined is not an object (evaluating 'fields.length')"
+		},
+		{
+			"xuat": "DetailSheetProperties",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DetailSheetProperty",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DetailSheetProse",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DetailSheetRail",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DetailSheetSection",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DetailSheetSplit",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DetailSheetStat",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DetailSheetStats",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DetailSheetTabs",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'tabs.map')",
+			"loi_mo": "undefined is not an object (evaluating 'tabs.map')"
+		}
+	],
+	"apps/app/lib/trpc/cache.ts": [
+		{
+			"xuat": "*",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "khong phai component — file nay khong ve gi ra man",
+			"loi_mo": "khong phai component — file nay khong ve gi ra man"
+		}
+	],
+	"packages/ui/src/components/ai-elements/artifact.tsx": [
+		{
+			"xuat": "Artifact",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ArtifactAction",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ArtifactActions",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ArtifactClose",
+			"dong": [
+				"Close"
+			],
+			"mo": [
+				"Close"
+			],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ArtifactContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ArtifactDescription",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ArtifactHeader",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ArtifactTitle",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/ai-elements/chain-of-thought.tsx": [],
+	"packages/ui/src/components/ai-elements/checkpoint.tsx": [
+		{
+			"xuat": "Checkpoint",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "CheckpointIcon",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "CheckpointTrigger",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/ai-elements/message.tsx": [
+		{
+			"xuat": "Message",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "MessageAction",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "MessageActions",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "MessageAttachment",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'data.filename')",
+			"loi_mo": "undefined is not an object (evaluating 'data.filename')"
+		},
+		{
+			"xuat": "MessageAttachments",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "MessageBranch",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "MessageBranchContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "MessageBranch components must be used within MessageBranch",
+			"loi_mo": "MessageBranch components must be used within MessageBranch"
+		},
+		{
+			"xuat": "MessageBranchNext",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "MessageBranch components must be used within MessageBranch",
+			"loi_mo": "MessageBranch components must be used within MessageBranch"
+		},
+		{
+			"xuat": "MessageBranchPage",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "MessageBranch components must be used within MessageBranch",
+			"loi_mo": "MessageBranch components must be used within MessageBranch"
+		},
+		{
+			"xuat": "MessageBranchPrevious",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "MessageBranch components must be used within MessageBranch",
+			"loi_mo": "MessageBranch components must be used within MessageBranch"
+		},
+		{
+			"xuat": "MessageBranchSelector",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "MessageBranch components must be used within MessageBranch",
+			"loi_mo": "MessageBranch components must be used within MessageBranch"
+		},
+		{
+			"xuat": "MessageContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "MessageToolbar",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/ai-elements/model-selector.tsx": [
+		{
+			"xuat": "ModelSelector",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ModelSelectorContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogPortal` must be used within `Dialog`",
+			"loi_mo": "`DialogPortal` must be used within `Dialog`"
+		},
+		{
+			"xuat": "ModelSelectorDialog",
+			"dong": [
+				"Command Palette",
+				"Search for a command to run..."
+			],
+			"mo": [
+				"Command Palette",
+				"Search for a command to run..."
+			],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ModelSelectorEmpty",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
+			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
+		},
+		{
+			"xuat": "ModelSelectorGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
+			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
+		},
+		{
+			"xuat": "ModelSelectorInput",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
+			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
+		},
+		{
+			"xuat": "ModelSelectorItem",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
+			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
+		},
+		{
+			"xuat": "ModelSelectorList",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
+			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
+		},
+		{
+			"xuat": "ModelSelectorLogo",
+			"dong": [
+				"undefined logo"
+			],
+			"mo": [
+				"undefined logo"
+			],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ModelSelectorLogoGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ModelSelectorName",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ModelSelectorSeparator",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
+			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
+		},
+		{
+			"xuat": "ModelSelectorShortcut",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ModelSelectorTrigger",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogTrigger` must be used within `Dialog`",
+			"loi_mo": "`DialogTrigger` must be used within `Dialog`"
+		}
+	],
+	"packages/ui/src/components/ai-elements/prompt-input.tsx": [
+		{
+			"xuat": "PromptInput",
+			"dong": [
+				"Upload files"
+			],
+			"mo": [
+				"Upload files"
+			],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputActionAddAttachments",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider",
+			"loi_mo": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider"
+		},
+		{
+			"xuat": "PromptInputActionMenu",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputActionMenuContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`MenuPortal` must be used within `Menu`",
+			"loi_mo": "`MenuPortal` must be used within `Menu`"
+		},
+		{
+			"xuat": "PromptInputActionMenuItem",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`MenuItem` must be used within `Menu`",
+			"loi_mo": "`MenuItem` must be used within `Menu`"
+		},
+		{
+			"xuat": "PromptInputActionMenuTrigger",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DropdownMenuTrigger` must be used within `DropdownMenu`",
+			"loi_mo": "`DropdownMenuTrigger` must be used within `DropdownMenu`"
+		},
+		{
+			"xuat": "PromptInputAttachment",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider",
+			"loi_mo": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider"
+		},
+		{
+			"xuat": "PromptInputAttachments",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider",
+			"loi_mo": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider"
+		},
+		{
+			"xuat": "PromptInputBody",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputButton",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputCommand",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputCommandEmpty",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
+			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
+		},
+		{
+			"xuat": "PromptInputCommandGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
+			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
+		},
+		{
+			"xuat": "PromptInputCommandInput",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
+			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
+		},
+		{
+			"xuat": "PromptInputCommandItem",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
+			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
+		},
+		{
+			"xuat": "PromptInputCommandList",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
+			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
+		},
+		{
+			"xuat": "PromptInputCommandSeparator",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
+			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
+		},
+		{
+			"xuat": "PromptInputFooter",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputHeader",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputHoverCard",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputHoverCardContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`HoverCardPortal` must be used within `HoverCard`",
+			"loi_mo": "`HoverCardPortal` must be used within `HoverCard`"
+		},
+		{
+			"xuat": "PromptInputHoverCardTrigger",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`HoverCardTrigger` must be used within `HoverCard`",
+			"loi_mo": "`HoverCardTrigger` must be used within `HoverCard`"
+		},
+		{
+			"xuat": "PromptInputProvider",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputSelect",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputSelectContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`SelectContent` must be used within `Select`",
+			"loi_mo": "`SelectContent` must be used within `Select`"
+		},
+		{
+			"xuat": "PromptInputSelectItem",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`SelectItem` must be used within `Select`",
+			"loi_mo": "`SelectItem` must be used within `Select`"
+		},
+		{
+			"xuat": "PromptInputSelectTrigger",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`SelectTrigger` must be used within `Select`",
+			"loi_mo": "`SelectTrigger` must be used within `Select`"
+		},
+		{
+			"xuat": "PromptInputSelectValue",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`SelectValue` must be used within `Select`",
+			"loi_mo": "`SelectValue` must be used within `Select`"
+		},
+		{
+			"xuat": "PromptInputSpeechButton",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputSubmit",
+			"dong": [
+				"Submit"
+			],
+			"mo": [
+				"Submit"
+			],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputTab",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputTabBody",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputTabItem",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputTabLabel",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputTabsList",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PromptInputTextarea",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider",
+			"loi_mo": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider"
+		},
+		{
+			"xuat": "PromptInputTools",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/ai-elements/shimmer.tsx": [],
+	"packages/ui/src/components/ai-elements/suggestion.tsx": [
+		{
+			"xuat": "Suggestion",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "Suggestions",
+			"dong": [
+				"[data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}"
+			],
+			"mo": [
+				"[data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}"
+			],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/alert-dialog.tsx": [
+		{
+			"xuat": "AlertDialog",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AlertDialogAction",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogClose` must be used within `Dialog`",
+			"loi_mo": "`DialogClose` must be used within `Dialog`"
+		},
+		{
+			"xuat": "AlertDialogCancel",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`AlertDialogCancel` must be used within `AlertDialogContent`",
+			"loi_mo": "`AlertDialogCancel` must be used within `AlertDialogContent`"
+		},
+		{
+			"xuat": "AlertDialogContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogPortal` must be used within `Dialog`",
+			"loi_mo": "`DialogPortal` must be used within `Dialog`"
+		},
+		{
+			"xuat": "AlertDialogDescription",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogDescription` must be used within `Dialog`",
+			"loi_mo": "`DialogDescription` must be used within `Dialog`"
+		},
+		{
+			"xuat": "AlertDialogFooter",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AlertDialogHeader",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AlertDialogOverlay",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogOverlay` must be used within `Dialog`",
+			"loi_mo": "`DialogOverlay` must be used within `Dialog`"
+		},
+		{
+			"xuat": "AlertDialogPortal",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogPortal` must be used within `Dialog`",
+			"loi_mo": "`DialogPortal` must be used within `Dialog`"
+		},
+		{
+			"xuat": "AlertDialogTitle",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogTitle` must be used within `Dialog`",
+			"loi_mo": "`DialogTitle` must be used within `Dialog`"
+		},
+		{
+			"xuat": "AlertDialogTrigger",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogTrigger` must be used within `Dialog`",
+			"loi_mo": "`DialogTrigger` must be used within `Dialog`"
+		}
+	],
+	"packages/ui/src/components/attachment.tsx": [
+		{
+			"xuat": "Attachment",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AttachmentAction",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AttachmentActions",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AttachmentContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AttachmentDescription",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AttachmentGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AttachmentMedia",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AttachmentTitle",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AttachmentTrigger",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/avatar.tsx": [
+		{
+			"xuat": "Avatar",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AvatarBadge",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AvatarFallback",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`AvatarFallback` must be used within `Avatar`",
+			"loi_mo": "`AvatarFallback` must be used within `Avatar`"
+		},
+		{
+			"xuat": "AvatarGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AvatarGroupCount",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "AvatarImage",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`AvatarImage` must be used within `Avatar`",
+			"loi_mo": "`AvatarImage` must be used within `Avatar`"
+		}
+	],
+	"packages/ui/src/components/badge.tsx": [
+		{
+			"xuat": "Badge",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/bubble.tsx": [
+		{
+			"xuat": "Bubble",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "BubbleContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "BubbleGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "BubbleReactions",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/button-group.tsx": [
+		{
+			"xuat": "ButtonGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ButtonGroupSeparator",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ButtonGroupText",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/button.tsx": [
+		{
+			"xuat": "Button",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/calendar.tsx": [
+		{
+			"xuat": "Calendar",
+			"dong": [
+				"Navigation bar",
+				"Go to the Previous Month",
+				"Go to the Next Month",
+				"September 2026",
+				"Sunday",
+				"Su",
+				"Monday",
+				"Mo",
+				"Tuesday",
+				"Tu",
+				"Wednesday",
+				"We",
+				"Thursday",
+				"Th",
+				"Friday",
+				"Fr",
+				"Saturday",
+				"Sa",
+				"Sunday, August 30th, 2026",
+				"Monday, August 31st, 2026",
+				"Tuesday, September 1st, 2026",
+				"Wednesday, September 2nd, 2026",
+				"Thursday, September 3rd, 2026",
+				"Friday, September 4th, 2026",
+				"Saturday, September 5th, 2026",
+				"Today, Sunday, September 6th, 2026",
+				"Monday, September 7th, 2026",
+				"Tuesday, September 8th, 2026",
+				"Wednesday, September 9th, 2026",
+				"Thursday, September 10th, 2026",
+				"Friday, September 11th, 2026",
+				"Saturday, September 12th, 2026",
+				"Sunday, September 13th, 2026",
+				"Monday, September 14th, 2026",
+				"Tuesday, September 15th, 2026",
+				"Wednesday, September 16th, 2026",
+				"Thursday, September 17th, 2026",
+				"Friday, September 18th, 2026",
+				"Saturday, September 19th, 2026",
+				"Sunday, September 20th, 2026",
+				"Monday, September 21st, 2026",
+				"Tuesday, September 22nd, 2026",
+				"Wednesday, September 23rd, 2026",
+				"Thursday, September 24th, 2026",
+				"Friday, September 25th, 2026",
+				"Saturday, September 26th, 2026",
+				"Sunday, September 27th, 2026",
+				"Monday, September 28th, 2026",
+				"Tuesday, September 29th, 2026",
+				"Wednesday, September 30th, 2026",
+				"Thursday, October 1st, 2026",
+				"Friday, October 2nd, 2026",
+				"Saturday, October 3rd, 2026"
+			],
+			"mo": [
+				"Navigation bar",
+				"Go to the Previous Month",
+				"Go to the Next Month",
+				"September 2026",
+				"Sunday",
+				"Su",
+				"Monday",
+				"Mo",
+				"Tuesday",
+				"Tu",
+				"Wednesday",
+				"We",
+				"Thursday",
+				"Th",
+				"Friday",
+				"Fr",
+				"Saturday",
+				"Sa",
+				"Sunday, August 30th, 2026",
+				"Monday, August 31st, 2026",
+				"Tuesday, September 1st, 2026",
+				"Wednesday, September 2nd, 2026",
+				"Thursday, September 3rd, 2026",
+				"Friday, September 4th, 2026",
+				"Saturday, September 5th, 2026",
+				"Today, Sunday, September 6th, 2026",
+				"Monday, September 7th, 2026",
+				"Tuesday, September 8th, 2026",
+				"Wednesday, September 9th, 2026",
+				"Thursday, September 10th, 2026",
+				"Friday, September 11th, 2026",
+				"Saturday, September 12th, 2026",
+				"Sunday, September 13th, 2026",
+				"Monday, September 14th, 2026",
+				"Tuesday, September 15th, 2026",
+				"Wednesday, September 16th, 2026",
+				"Thursday, September 17th, 2026",
+				"Friday, September 18th, 2026",
+				"Saturday, September 19th, 2026",
+				"Sunday, September 20th, 2026",
+				"Monday, September 21st, 2026",
+				"Tuesday, September 22nd, 2026",
+				"Wednesday, September 23rd, 2026",
+				"Thursday, September 24th, 2026",
+				"Friday, September 25th, 2026",
+				"Saturday, September 26th, 2026",
+				"Sunday, September 27th, 2026",
+				"Monday, September 28th, 2026",
+				"Tuesday, September 29th, 2026",
+				"Wednesday, September 30th, 2026",
+				"Thursday, October 1st, 2026",
+				"Friday, October 2nd, 2026",
+				"Saturday, October 3rd, 2026"
+			],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "CalendarDayButton",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'modifiers.focused')",
+			"loi_mo": "undefined is not an object (evaluating 'modifiers.focused')"
+		}
+	],
+	"packages/ui/src/components/carousel.tsx": [
+		{
+			"xuat": "Carousel",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "CarouselContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "useCarousel must be used within a <Carousel />",
+			"loi_mo": "useCarousel must be used within a <Carousel />"
+		},
+		{
+			"xuat": "CarouselItem",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "useCarousel must be used within a <Carousel />",
+			"loi_mo": "useCarousel must be used within a <Carousel />"
+		},
+		{
+			"xuat": "CarouselNext",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "useCarousel must be used within a <Carousel />",
+			"loi_mo": "useCarousel must be used within a <Carousel />"
+		},
+		{
+			"xuat": "CarouselPrevious",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "useCarousel must be used within a <Carousel />",
+			"loi_mo": "useCarousel must be used within a <Carousel />"
+		}
+	],
+	"packages/ui/src/components/chart.tsx": [
+		{
+			"xuat": "CartesianGrid",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "Cell",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ChartContainer",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "Object.entries requires that input parameter not be null or undefined",
+			"loi_mo": "Object.entries requires that input parameter not be null or undefined"
+		},
+		{
+			"xuat": "ChartLegendContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "useChart must be used within a <ChartContainer />",
+			"loi_mo": "useChart must be used within a <ChartContainer />"
+		},
+		{
+			"xuat": "ChartStyle",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "Object.entries requires that input parameter not be null or undefined",
+			"loi_mo": "Object.entries requires that input parameter not be null or undefined"
+		},
+		{
+			"xuat": "ChartTooltip",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ChartTooltipContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "useChart must be used within a <ChartContainer />",
+			"loi_mo": "useChart must be used within a <ChartContainer />"
+		},
+		{
+			"xuat": "Label",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "Pie",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PolarAngleAxis",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PolarGrid",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PolarRadiusAxis",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "RadialBar",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "RechartsTooltip",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ReferenceLine",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/combobox.tsx": [
+		{
+			"xuat": "Combobox",
+			"dong": [
+				"Select an option",
+				"Search…",
+				"Suggestions",
+				"MUC",
+				"Nothing matches."
+			],
+			"mo": [
+				"Select an option",
+				"Search…",
+				"Suggestions",
+				"MUC",
+				"Nothing matches."
+			],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/dashboard-chart.tsx": [
+		{
+			"xuat": "AreaTrend",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "BarStat",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'data.map')",
+			"loi_mo": "undefined is not an object (evaluating 'data.map')"
+		},
+		{
+			"xuat": "BarTrend",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DonutStat",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'data.map')",
+			"loi_mo": "undefined is not an object (evaluating 'data.map')"
+		}
+	],
+	"packages/ui/src/components/dashboard.tsx": [
+		{
+			"xuat": "ChartCard",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DashboardGrid",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DashboardRow",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DashboardSection",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "KpiCard",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "StatGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/dropdown-menu.tsx": [
+		{
+			"xuat": "DropdownMenu",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DropdownMenuCheckboxItem",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`MenuItem` must be used within `Menu`",
+			"loi_mo": "`MenuItem` must be used within `Menu`"
+		},
+		{
+			"xuat": "DropdownMenuContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`MenuPortal` must be used within `Menu`",
+			"loi_mo": "`MenuPortal` must be used within `Menu`"
+		},
+		{
+			"xuat": "DropdownMenuGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DropdownMenuItem",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`MenuItem` must be used within `Menu`",
+			"loi_mo": "`MenuItem` must be used within `Menu`"
+		},
+		{
+			"xuat": "DropdownMenuLabel",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DropdownMenuPortal",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`MenuPortal` must be used within `Menu`",
+			"loi_mo": "`MenuPortal` must be used within `Menu`"
+		},
+		{
+			"xuat": "DropdownMenuRadioGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DropdownMenuRadioItem",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`MenuItem` must be used within `Menu`",
+			"loi_mo": "`MenuItem` must be used within `Menu`"
+		},
+		{
+			"xuat": "DropdownMenuSeparator",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DropdownMenuShortcut",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "DropdownMenuSub",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`MenuSub` must be used within `Menu`",
+			"loi_mo": "`MenuSub` must be used within `Menu`"
+		},
+		{
+			"xuat": "DropdownMenuSubContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`MenuContent` must be used within `Menu`",
+			"loi_mo": "`MenuContent` must be used within `Menu`"
+		},
+		{
+			"xuat": "DropdownMenuSubTrigger",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`MenuSubTrigger` must be used within `Menu`",
+			"loi_mo": "`MenuSubTrigger` must be used within `Menu`"
+		},
+		{
+			"xuat": "DropdownMenuTrigger",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DropdownMenuTrigger` must be used within `DropdownMenu`",
+			"loi_mo": "`DropdownMenuTrigger` must be used within `DropdownMenu`"
+		}
+	],
+	"packages/ui/src/components/empty.tsx": [
+		{
+			"xuat": "Empty",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "EmptyContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "EmptyDescription",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "EmptyHeader",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "EmptyMedia",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "EmptyTitle",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/entity-logo.tsx": [
+		{
+			"xuat": "EntityLogo",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/field.tsx": [
+		{
+			"xuat": "Field",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "FieldContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "FieldDescription",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "FieldError",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "FieldGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "FieldLabel",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "FieldLegend",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "FieldSeparator",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "FieldSet",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "FieldTitle",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/hover-card.tsx": [
+		{
+			"xuat": "HoverCard",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "HoverCardContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`HoverCardPortal` must be used within `HoverCard`",
+			"loi_mo": "`HoverCardPortal` must be used within `HoverCard`"
+		},
+		{
+			"xuat": "HoverCardTrigger",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`HoverCardTrigger` must be used within `HoverCard`",
+			"loi_mo": "`HoverCardTrigger` must be used within `HoverCard`"
+		}
+	],
+	"packages/ui/src/components/input-group.tsx": [
+		{
+			"xuat": "InputGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "InputGroupAddon",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "InputGroupButton",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "InputGroupInput",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "InputGroupText",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "InputGroupTextarea",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/marker.tsx": [
+		{
+			"xuat": "Marker",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "MarkerContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "MarkerIcon",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/message-scroller.tsx": [
+		{
+			"xuat": "MessageScroller",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "useMessageScroller must be used within a MessageScroller.",
+			"loi_mo": "useMessageScroller must be used within a MessageScroller."
+		},
+		{
+			"xuat": "MessageScrollerButton",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "useMessageScroller must be used within a MessageScroller.",
+			"loi_mo": "useMessageScroller must be used within a MessageScroller."
+		},
+		{
+			"xuat": "MessageScrollerContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "useMessageScroller must be used within a MessageScroller.",
+			"loi_mo": "useMessageScroller must be used within a MessageScroller."
+		},
+		{
+			"xuat": "MessageScrollerItem",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "MessageScrollerItem must be used within a MessageScroller.",
+			"loi_mo": "MessageScrollerItem must be used within a MessageScroller."
+		},
+		{
+			"xuat": "MessageScrollerProvider",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "MessageScrollerViewport",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "useMessageScroller must be used within a MessageScroller.",
+			"loi_mo": "useMessageScroller must be used within a MessageScroller."
+		}
+	],
+	"packages/ui/src/components/message.tsx": [
+		{
+			"xuat": "Message",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "MessageAvatar",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "MessageContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "MessageFooter",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "MessageGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "MessageHeader",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/person-avatar.tsx": [
+		{
+			"xuat": "PersonAvatar",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/popover.tsx": [
+		{
+			"xuat": "Popover",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PopoverAnchor",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`PopoverAnchor` must be used within `Popover`",
+			"loi_mo": "`PopoverAnchor` must be used within `Popover`"
+		},
+		{
+			"xuat": "PopoverContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`PopoverPortal` must be used within `Popover`",
+			"loi_mo": "`PopoverPortal` must be used within `Popover`"
+		},
+		{
+			"xuat": "PopoverDescription",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PopoverHeader",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PopoverTitle",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "PopoverTrigger",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`PopoverTrigger` must be used within `Popover`",
+			"loi_mo": "`PopoverTrigger` must be used within `Popover`"
+		}
+	],
+	"packages/ui/src/components/questionnaire.tsx": [
+		{
+			"xuat": "Questionnaire",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "QuestionnaireActions",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "QuestionnaireChoice",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "Questionnaire.Choice must be used within a Questionnaire.Item component.",
+			"loi_mo": "Questionnaire.Choice must be used within a Questionnaire.Item component."
+		},
+		{
+			"xuat": "QuestionnaireChoices",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "Questionnaire.Choices must be used within a Questionnaire.Item component.",
+			"loi_mo": "Questionnaire.Choices must be used within a Questionnaire.Item component."
+		},
+		{
+			"xuat": "QuestionnaireDescription",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "Questionnaire.Description must be used within a Questionnaire.Item component.",
+			"loi_mo": "Questionnaire.Description must be used within a Questionnaire.Item component."
+		},
+		{
+			"xuat": "QuestionnaireError",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "Questionnaire.Error must be used within a Questionnaire.Item component.",
+			"loi_mo": "Questionnaire.Error must be used within a Questionnaire.Item component."
+		},
+		{
+			"xuat": "QuestionnaireInput",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "Questionnaire.Input must be used within a Questionnaire.Item component.",
+			"loi_mo": "Questionnaire.Input must be used within a Questionnaire.Item component."
+		},
+		{
+			"xuat": "QuestionnaireItem",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "Questionnaire.Item must be used within a Questionnaire.Root component.",
+			"loi_mo": "Questionnaire.Item must be used within a Questionnaire.Root component."
+		},
+		{
+			"xuat": "QuestionnaireNext",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "Questionnaire.Next must be used within a Questionnaire.Root component.",
+			"loi_mo": "Questionnaire.Next must be used within a Questionnaire.Root component."
+		},
+		{
+			"xuat": "QuestionnairePrevious",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "Questionnaire.Previous must be used within a Questionnaire.Root component.",
+			"loi_mo": "Questionnaire.Previous must be used within a Questionnaire.Root component."
+		},
+		{
+			"xuat": "QuestionnaireProgress",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "Questionnaire.Progress must be used within a Questionnaire.Root component.",
+			"loi_mo": "Questionnaire.Progress must be used within a Questionnaire.Root component."
+		},
+		{
+			"xuat": "QuestionnaireSkip",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "Questionnaire.Skip must be used within a Questionnaire.Root component.",
+			"loi_mo": "Questionnaire.Skip must be used within a Questionnaire.Root component."
+		},
+		{
+			"xuat": "QuestionnaireSubmit",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "Questionnaire.Submit must be used within a Questionnaire.Root component.",
+			"loi_mo": "Questionnaire.Submit must be used within a Questionnaire.Root component."
+		},
+		{
+			"xuat": "QuestionnaireTitle",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "Questionnaire.Title must be used within a Questionnaire.Item component.",
+			"loi_mo": "Questionnaire.Title must be used within a Questionnaire.Item component."
+		}
+	],
+	"packages/ui/src/components/scroll-area.tsx": [
+		{
+			"xuat": "ScrollArea",
+			"dong": [
+				"[data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}"
+			],
+			"mo": [
+				"[data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}"
+			],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ScrollBar",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`ScrollAreaScrollbar` must be used within `ScrollArea`",
+			"loi_mo": "`ScrollAreaScrollbar` must be used within `ScrollArea`"
+		}
+	],
+	"packages/ui/src/components/select.tsx": [
+		{
+			"xuat": "Select",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "SelectContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`SelectContent` must be used within `Select`",
+			"loi_mo": "`SelectContent` must be used within `Select`"
+		},
+		{
+			"xuat": "SelectGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "SelectItem",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`SelectItem` must be used within `Select`",
+			"loi_mo": "`SelectItem` must be used within `Select`"
+		},
+		{
+			"xuat": "SelectLabel",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`SelectLabel` must be used within `SelectGroup`",
+			"loi_mo": "`SelectLabel` must be used within `SelectGroup`"
+		},
+		{
+			"xuat": "SelectScrollDownButton",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`SelectScrollDownButton` must be used within `SelectContent`",
+			"loi_mo": "`SelectScrollDownButton` must be used within `SelectContent`"
+		},
+		{
+			"xuat": "SelectScrollUpButton",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`SelectScrollUpButton` must be used within `SelectContent`",
+			"loi_mo": "`SelectScrollUpButton` must be used within `SelectContent`"
+		},
+		{
+			"xuat": "SelectSeparator",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "SelectTrigger",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`SelectTrigger` must be used within `Select`",
+			"loi_mo": "`SelectTrigger` must be used within `Select`"
+		},
+		{
+			"xuat": "SelectValue",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`SelectValue` must be used within `Select`",
+			"loi_mo": "`SelectValue` must be used within `Select`"
+		}
+	],
+	"packages/ui/src/components/separator.tsx": [
+		{
+			"xuat": "Separator",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/sheet.tsx": [
+		{
+			"xuat": "Sheet",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "SheetClose",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogClose` must be used within `Dialog`",
+			"loi_mo": "`DialogClose` must be used within `Dialog`"
+		},
+		{
+			"xuat": "SheetContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogPortal` must be used within `Dialog`",
+			"loi_mo": "`DialogPortal` must be used within `Dialog`"
+		},
+		{
+			"xuat": "SheetDescription",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogDescription` must be used within `Dialog`",
+			"loi_mo": "`DialogDescription` must be used within `Dialog`"
+		},
+		{
+			"xuat": "SheetFooter",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "SheetHeader",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "SheetTitle",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogTitle` must be used within `Dialog`",
+			"loi_mo": "`DialogTitle` must be used within `Dialog`"
+		},
+		{
+			"xuat": "SheetTrigger",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`DialogTrigger` must be used within `Dialog`",
+			"loi_mo": "`DialogTrigger` must be used within `Dialog`"
+		}
+	],
+	"packages/ui/src/components/simple-table.tsx": [
+		{
+			"xuat": "SimpleTable",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "undefined is not an object (evaluating 'columns.map')",
+			"loi_mo": "undefined is not an object (evaluating 'columns.map')"
+		},
+		{
+			"xuat": "SimpleTableRow",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/sonner.tsx": [
+		{
+			"xuat": "Toaster",
+			"dong": [
+				"Notifications alt+T"
+			],
+			"mo": [
+				"Notifications alt+T"
+			],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/status-indicator.tsx": [
+		{
+			"xuat": "IndicatorDot",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "StatusIndicator",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/switch.tsx": [
+		{
+			"xuat": "Switch",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	],
+	"packages/ui/src/components/tabs.tsx": [
+		{
+			"xuat": "Tabs",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "TabsContent",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`TabsContent` must be used within `Tabs`",
+			"loi_mo": "`TabsContent` must be used within `Tabs`"
+		},
+		{
+			"xuat": "TabsList",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`TabsList` must be used within `Tabs`",
+			"loi_mo": "`TabsList` must be used within `Tabs`"
+		},
+		{
+			"xuat": "TabsTrigger",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`TabsTrigger` must be used within `Tabs`",
+			"loi_mo": "`TabsTrigger` must be used within `Tabs`"
+		}
+	],
+	"packages/ui/src/components/toggle-group.tsx": [
+		{
+			"xuat": "ToggleGroup",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		},
+		{
+			"xuat": "ToggleGroupItem",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "`ToggleGroupItem` must be used within `ToggleGroup`",
+			"loi_mo": "`ToggleGroupItem` must be used within `ToggleGroup`"
+		}
+	],
+	"packages/ui/src/components/toggle.tsx": [
+		{
+			"xuat": "Toggle",
+			"dong": [],
+			"mo": [],
+			"loi_dong": null,
+			"loi_mo": null
+		}
+	]
+}

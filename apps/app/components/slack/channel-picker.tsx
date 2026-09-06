@@ -4,7 +4,12 @@ import Checkmark from "@carbon/icons-react/es/Checkmark";
 import Locked from "@carbon/icons-react/es/Locked";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { cn } from "@crm/ui/lib/utils";
+import {
+	type KetNoiMessages,
+	ketNoiMessages,
+} from "@/lib/messages/settings-ket-noi";
 
 export type PickerChannel = {
 	id: string;
@@ -35,6 +40,7 @@ export function ChannelPicker({
 	pending?: boolean;
 	value?: string | null;
 }) {
+	const t = ketNoiMessages(useLocale());
 	return (
 		<div className="flex flex-col divide-y overflow-hidden rounded-lg border">
 			{channels.length === 0 ? empty : null}
@@ -56,7 +62,7 @@ export function ChannelPicker({
 					>
 						{onSelect && selectable ? (
 							<button
-								aria-label={`Choose #${channel.name}`}
+								aria-label={t.kenh.chonKenh(channel.name)}
 								aria-pressed={selected}
 								className="absolute inset-0"
 								disabled={pending}
@@ -80,10 +86,10 @@ export function ChannelPicker({
 									!selected && !channel.isMember && "text-muted-foreground",
 								)}
 							>
-								{channel.name}
+								<span translate="no">{channel.name}</span>
 							</span>
 							<span className="text-muted-foreground text-xs">
-								{describe(channel, canInviteItself)}
+								{describe(channel, canInviteItself, t)}
 							</span>
 						</span>
 
@@ -101,7 +107,7 @@ export function ChannelPicker({
 									size="xs"
 									variant="outline"
 								>
-									{channel.inviteRequestedAt ? "Ask again" : "Request"}
+									{channel.inviteRequestedAt ? t.kenh.xinLai : t.kenh.xinVao}
 								</Button>
 							) : !channel.isMember && onAdd ? (
 								<Button
@@ -110,7 +116,7 @@ export function ChannelPicker({
 									size="xs"
 									variant="outline"
 								>
-									Add
+									{t.kenh.themNgan}
 								</Button>
 							) : null}
 						</span>
@@ -121,15 +127,20 @@ export function ChannelPicker({
 	);
 }
 
-function describe(channel: PickerChannel, canInviteItself: boolean): string {
+function describe(
+	channel: PickerChannel,
+	canInviteItself: boolean,
+	t: KetNoiMessages,
+): string {
 	const people =
-		channel.memberCount === null ? "" : ` · ${channel.memberCount} people`;
+		channel.memberCount === null
+			? ""
+			: t.kenh.soNguoi(String(channel.memberCount));
 
-	if (channel.isMember) return `Comp AI is in${people}`;
-	if (!channel.classified) return `Not read from Slack yet${people}`;
-	if (!channel.isPrivate) return `Comp AI can join this one${people}`;
-	if (canInviteItself) return `Private. Comp AI joins as you${people}`;
-	if (channel.inviteRequestedAt)
-		return `Private. Waiting on an invite${people}`;
-	return `Private. Someone inside has to invite Comp AI${people}`;
+	if (channel.isMember) return `${t.kenh.moTaDaVao}${people}`;
+	if (!channel.classified) return `${t.kenh.moTaChuaDoc}${people}`;
+	if (!channel.isPrivate) return `${t.kenh.moTaVaoDuoc}${people}`;
+	if (canInviteItself) return `${t.kenh.moTaVaoTheoBan}${people}`;
+	if (channel.inviteRequestedAt) return `${t.kenh.moTaChoMoi}${people}`;
+	return `${t.kenh.moTaNhoNguoiTrong}${people}`;
 }

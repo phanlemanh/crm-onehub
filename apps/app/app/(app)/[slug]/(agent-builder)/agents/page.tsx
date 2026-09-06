@@ -10,19 +10,24 @@ import {
 	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { getLocale } from "@/lib/locale/server";
+import { khungMessages } from "@/lib/messages/agent-builder-khung";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 
-export const metadata: Metadata = { title: "Agents" };
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: khungMessages(await getLocale()).trang.tieuDeDanhSach };
+}
 
-export default function AgentsPage() {
+export default async function AgentsPage() {
+	const locale = await getLocale();
 	return (
 		<PageShell className="min-h-0">
 			<PageShellHeader>
 				<PageShellHeading>
-					<PageShellTitle>Team agents</PageShellTitle>
+					<PageShellTitle>{khungMessages(locale).doi.tieuDe}</PageShellTitle>
 					<PageShellDescription>
-						Durable automations created from private agent-builder chats.
+						{khungMessages(locale).doi.moTa}
 					</PageShellDescription>
 				</PageShellHeading>
 			</PageShellHeader>

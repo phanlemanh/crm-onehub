@@ -21,7 +21,7 @@ export function DatePicker({
 	id,
 	value,
 	onChange,
-	placeholder = "Select a date",
+	placeholder,
 	variant,
 }: {
 	id?: string;
@@ -52,7 +52,7 @@ export function DatePicker({
 					className={cn(selectTriggerVariants({ variant }), "w-full")}
 				>
 					<span className="line-clamp-1">
-						{selected ? formatDay(value, locale) : placeholder}
+						{selected ? formatDay(value, locale) : (placeholder ?? msg.macDinh.chonNgay)}
 					</span>
 					<Icon
 						icon={CalendarGlyph}

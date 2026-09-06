@@ -4,6 +4,7 @@ import type { ReactElement } from "react";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { renderToStaticMarkup } from "react-dom/server";
+import { AsyncButtonContent } from "../src/components/async-action";
 import { AttendeeList } from "../src/components/attendee-list";
 import {
 	Carousel,
@@ -12,6 +13,8 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from "../src/components/carousel";
+import { Combobox } from "../src/components/combobox";
+import { CommandDialog } from "../src/components/command";
 import { DataTable } from "../src/components/data-table";
 import { DatePicker } from "../src/components/date-picker";
 import {
@@ -20,6 +23,7 @@ import {
 	DialogFooter,
 	DialogTitle,
 } from "../src/components/dialog";
+import { DotMatrix } from "../src/components/dot-matrix";
 import { LocaleProvider } from "../src/components/locale-provider";
 import {
 	MessageScrollerButton,
@@ -28,15 +32,17 @@ import {
 import { Reasoning } from "../src/components/reasoning";
 import { Sheet, SheetContent, SheetTitle } from "../src/components/sheet";
 import { SkeletonSwap } from "../src/components/skeleton-swap";
+import { Toaster } from "../src/components/sonner";
 import { SortableItem } from "../src/components/sortable-list";
 import { Spinner } from "../src/components/spinner";
 import { Suggestion } from "../src/components/suggestion";
 import { TablePagination } from "../src/components/table-pagination";
+import { ThinkingIndicator } from "../src/components/thinking-indicator";
 import { ThreadMessage } from "../src/components/thread-message";
 import { TooltipProvider } from "../src/components/tooltip";
 import { DEFAULT_LOCALE, type Locale } from "../src/lib/locale";
 import type { TableQueryState } from "../src/lib/table-query";
-import { TRUNG_TINH } from "./du-lieu";
+import { DU_LIEU, TRUNG_TINH } from "./du-lieu";
 
 const DOC_NGHE_DUOC = [
 	"title",
@@ -160,6 +166,29 @@ const CA: Ca[] = [
 		),
 	},
 	{ ten: "Spinner", ve: () => <Spinner /> },
+	{ ten: "DotMatrix", ve: () => <DotMatrix /> },
+	{ ten: "ThinkingIndicator", ve: () => <ThinkingIndicator /> },
+	{
+		ten: "AsyncAction",
+		ve: () => (
+			<AsyncButtonContent status="success">
+				{DU_LIEU.tenNguoi}
+			</AsyncButtonContent>
+		),
+	},
+	{
+		ten: "Combobox",
+		ve: () => <Combobox options={[]} value="" onValueChange={() => {}} />,
+	},
+	{
+		ten: "Command",
+		ve: () => (
+			<CommandDialog open>
+				<span>{DU_LIEU.tenNguoi}</span>
+			</CommandDialog>
+		),
+	},
+	{ ten: "Sonner", ve: () => <Toaster /> },
 	{
 		ten: "Dialog",
 		ve: () => (

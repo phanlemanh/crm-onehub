@@ -1,0 +1,47 @@
+{
+	"lat": "cai-dat-con-lai-noi-tieng-viet",
+	"thu_muc": [
+		"apps/app/app/(app)/[slug]/settings/tracking",
+		"apps/app/app/(app)/[slug]/settings/connections",
+		"apps/app/app/(app)/[slug]/settings/connections/slack",
+		"apps/app/app/(app)/[slug]/settings/connections/slack/people",
+		"apps/app/app/(app)/[slug]/settings/connections/google",
+		"apps/app/app/(app)/[slug]/settings/connections/microsoft",
+		"apps/app/app/(app)/[slug]/settings/connections/intake",
+		"apps/app/app/(app)/[slug]/settings/api-keys",
+		"apps/app/app/(app)/[slug]/settings/members",
+		"apps/app/app/(app)/[slug]/settings/sso"
+	],
+	"neo": {
+		"file": 33,
+		"route": 10,
+		"file_vat_chep": 5,
+		"file_quyen": 9,
+		"quyen_mau": "canManage",
+		"ghi_chu": "Bon con so lay tu kiem ke S0 ngay 04/09, DOC LAP voi luat quet — de dan so sinh ra co thu de so. Lech la thoat ma 2 kem diff. file_vat_chep sua 6->5 ngay 05/09: sau la con so dem SAI cua design (google-connection khong co vat chep nao), AC-12 chot nam. Tu 05/09 ca bon so deu co chan doc: file va route va file_quyen (dem file khop quyen_mau tren dia) o khai-sinh; file_vat_chep o chan doan-ma-chep, so voi so file rieng trong bang. Tu 05/09 them channel-picker.tsx (component dung chung) vao dan so bang khoa them: no ve tren /settings/connections/slack ma thu_muc khong voi toi, va vong cham bon tim ra bay chuoi tieng Anh nam do. neo.file van dem thu_muc, khong dem them."
+	},
+	"them": [
+		"apps/app/components/slack/channel-picker.tsx"
+	],
+	"khong_quet": [],
+	"mien_tru": [
+		{
+			"chuoi": "https://acme.okta.com",
+			"vi_sao": "URL mau trong o nhap Issuer — dinh danh, khach thay de biet dang hinh"
+		},
+		{
+			"chuoi": "data-site",
+			"vi_sao": "ten thuoc tinh HTML trong the theo doi — khach dan nguyen van"
+		},
+		{
+			"chuoi": "https://",
+			"vi_sao": "tien to giao thuc, dinh danh"
+		}
+	],
+	"route_khong_dung_duoc": [
+		{
+			"route": "/settings/connections/slack/people",
+			"vi_sao": "trang redirect() ve /settings/connections/slack khi Slack chua cam; khong dung duoc neu khong co Slack that"
+		}
+	]
+}

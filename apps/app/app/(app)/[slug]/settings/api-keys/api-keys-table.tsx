@@ -16,11 +16,16 @@ import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { DataTable, type DataTableColumn } from "@crm/ui/components/data-table";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ListSearch } from "@/components/data-table/list-search";
 import { useTableQuery } from "@/components/data-table/use-table-query";
 import { LocalRelativeTime } from "@/components/local-date-time";
+import {
+	type KhoaApiMessages,
+	khoaApiMessages,
+} from "@/lib/messages/settings-khoa-api";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -33,34 +38,37 @@ function isExpired(expiresAt: string | null): boolean {
 }
 
 function columns(
+	t: KhoaApiMessages,
 	onRevoke: (apiKey: ApiKeyRow) => void,
 	pending: boolean,
 ): DataTableColumn<ApiKeyRow>[] {
 	return [
 		{
 			id: "name",
-			header: "Name",
+			header: t.bang.ten,
 			sortable: true,
 			hideable: false,
 			width: "w-[28%]",
 			cell: (row) => (
-				<span className="truncate font-medium">
-					{row.name ?? "Untitled key"}
+				<span className="truncate font-medium" translate="no">
+					{row.name ?? t.bang.chuaDatTen}
 				</span>
 			),
 		},
 		{
 			id: "start",
-			header: "Key",
+			header: t.bang.khoa,
 			width: "w-[20%]",
 			hideBelow: "sm",
 			cell: (row) => (
-				<Badge variant="mono">{row.start ? `${row.start}…` : "—"}</Badge>
+				<Badge variant="mono" translate="no">
+					{row.start ? `${row.start}…` : "—"}
+				</Badge>
 			),
 		},
 		{
 			id: "createdAt",
-			header: "Created",
+			header: t.bang.ngayTao,
 			sortable: true,
 			width: "w-[16%]",
 			hideBelow: "md",
@@ -72,8 +80,8 @@ function columns(
 		},
 		{
 			id: "lastRequest",
-			header: "Last used",
-			label: "Last used date",
+			header: t.bang.dungLanCuoi,
+			label: t.bang.dungLanCuoiDayDu,
 			sortable: true,
 			width: "w-[16%]",
 			hideBelow: "lg",
@@ -82,14 +90,14 @@ function columns(
 					{row.lastRequest ? (
 						<LocalRelativeTime date={row.lastRequest} />
 					) : (
-						"Never"
+						t.bang.chuaDung
 					)}
 				</span>
 			),
 		},
 		{
 			id: "expiresAt",
-			header: "Expires",
+			header: t.bang.hetHan,
 			sortable: true,
 			width: "w-[14%]",
 			hideBelow: "lg",
@@ -105,13 +113,13 @@ function columns(
 						<LocalRelativeTime date={row.expiresAt} />
 					</span>
 				) : (
-					<span className="text-muted-foreground">Never</span>
+					<span className="text-muted-foreground">{t.bang.khongHetHan}</span>
 				),
 		},
 		{
 			id: "actions",
-			header: <span className="sr-only">Actions</span>,
-			label: "Actions",
+			header: <span className="sr-only">{t.bang.hanhDong}</span>,
+			label: t.bang.hanhDong,
 			hideable: false,
 			align: "right",
 			width: "w-[6%]",
@@ -121,7 +129,7 @@ function columns(
 						<Button variant="ghost" size="icon" disabled={pending}>
 							<Icon icon={TrashCan} />
 							<span className="sr-only">
-								Revoke {row.name ?? "this API key"}
+								{t.thuHoi.choKhoa(row.name ?? t.thuHoi.khoaNay)}
 							</span>
 						</Button>
 					</AlertDialogTrigger>
@@ -129,21 +137,19 @@ function columns(
 					<AlertDialogContent>
 						<AlertDialogHeader>
 							<AlertDialogTitle>
-								Revoke {row.name ?? "this API key"}?
+								{t.thuHoi.nhan}{" "}
+								<span translate="no">{row.name ?? t.thuHoi.khoaNay}</span>?
 							</AlertDialogTitle>
-							<AlertDialogDescription>
-								Anything using it stops working immediately. This cannot be
-								undone.
-							</AlertDialogDescription>
+							<AlertDialogDescription>{t.thuHoi.moTa}</AlertDialogDescription>
 						</AlertDialogHeader>
 
 						<AlertDialogFooter>
-							<AlertDialogCancel>Cancel</AlertDialogCancel>
+							<AlertDialogCancel>{t.thuHoi.huy}</AlertDialogCancel>
 							<AlertDialogAction
 								variant="destructive"
 								onClick={() => onRevoke(row)}
 							>
-								Revoke
+								{t.thuHoi.nhan}
 							</AlertDialogAction>
 						</AlertDialogFooter>
 					</AlertDialogContent>
@@ -154,6 +160,7 @@ function columns(
 }
 
 export function ApiKeysTable() {
+	const t = khoaApiMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const { query, input } = useTableQuery(apiKeysSearchParams);
@@ -170,7 +177,7 @@ export function ApiKeysTable() {
 					await query.setPage(query.page - 1);
 				}
 				await cache.apiKeys();
-				toast.success("API key revoked.");
+				toast.success(t.thuHoi.xong);
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -179,8 +186,9 @@ export function ApiKeysTable() {
 	return (
 		<DataTable
 			query={query}
-			search={<ListSearch placeholder="Search by name…" />}
+			search={<ListSearch placeholder={t.bang.tim} />}
 			columns={columns(
+				t,
 				(apiKey) => revoke.mutate({ id: apiKey.id }),
 				revoke.isPending,
 			)}
@@ -188,7 +196,7 @@ export function ApiKeysTable() {
 			total={apiKeys.data?.total ?? 0}
 			getRowId={(row) => row.id}
 			loading={apiKeys.isFetching}
-			empty="No API keys yet."
+			empty={t.bang.trong}
 		/>
 	);
 }

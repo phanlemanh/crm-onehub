@@ -1,4 +1,5 @@
 import { cn } from "@crm/ui/lib/utils";
+import { useMessages } from "@crm/ui/components/locale-provider";
 
 const GRID = 5;
 const CELLS = Array.from({ length: GRID * GRID }, (_, index) => index);
@@ -14,17 +15,18 @@ function delayFor(index: number): number {
 
 export function DotMatrix({
 	className,
-	label = "Loading",
+	label,
 	decorative = false,
 }: {
 	className?: string;
 	label?: string;
 	decorative?: boolean;
 }) {
+	const msg = useMessages();
 	return (
 		<span
 			aria-hidden={decorative ? "true" : undefined}
-			aria-label={decorative ? undefined : label}
+			aria-label={decorative ? undefined : (label ?? msg.macDinh.dangTai)}
 			className={cn(
 				"grid size-3.5 shrink-0 grid-cols-5 grid-rows-5 gap-px text-current",
 				className,

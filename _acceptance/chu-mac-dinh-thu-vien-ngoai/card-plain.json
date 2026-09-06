@@ -1,0 +1,38 @@
+{
+ "feature_plain": "Cái thước cho lớp chữ tiếng Anh mà mọi bộ quét của kho đều mù — chữ do thư viện ngoài sinh ra — cộng phần vá cái nó tìm ra.",
+ "decisions": [
+  {
+   "id": "E10",
+   "q": "Chữ vòng này ghi đè có đọc như tiếng Việt của người làm nghề không?",
+   "why": "Vòng này chỉ ghi đè một nhãn: vùng thông báo, nay là «Thông báo»."
+  }
+ ],
+ "analyst_plain": "",
+ "scope_plain": "Nội dung giả trong CSS · thông báo sống cho trình đọc màn hình · lái từng component ra màn — ba thứ này hoãn.",
+ "decisions_plain": [
+  {
+   "id": "d-20260906T093200Z-9203",
+   "p": "Phép đo tự định nghĩa «chữ trên màn mà không file nguồn nào chứa» thay vì quét theo danh sách tên thư viện — đổi lại một chữ trùng tình cờ sẽ lọt."
+  },
+  {
+   "id": "d-20260906T093300Z-9204",
+   "p": "KHÔNG lái từng component ra màn; khai giới hạn thành bảng đếm được — đổi lại độ phủ thật hẹp hơn vẻ ngoài."
+  },
+  {
+   "id": "d-20260906T101500Z-9205",
+   "p": "Sửa bốn con số trong hợp đồng SAU khi duyệt: chúng đến từ phép đếm tay, và chính chân đo là bên phát hiện."
+  },
+  {
+   "id": "d-20260906T104500Z-9206",
+   "p": "Sửa số lần hai: vá xong một component thì chính nó rời khỏi nhóm cần khai."
+  },
+  {
+   "id": "d-20260906T093000Z-9201",
+   "p": "KHÔNG dựng bản bấm được để duyệt giao diện — vòng này không đổi giao diện."
+  },
+  {
+   "id": "d-20260906T093100Z-9202",
+   "p": "KHÔNG viết đặc tả cấu trúc màn — vòng này không dựng màn nào."
+  }
+ ]
+}

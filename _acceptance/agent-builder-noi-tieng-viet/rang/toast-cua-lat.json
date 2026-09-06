@@ -1,0 +1,46 @@
+{
+	"lat": "agent-builder-noi-tieng-viet",
+	"ghi_chu": "Bang DONG cac loi goi toast cua lat, ghim (file, khoa kho chuoi) — KHONG ghim so dong. Ke tu ma sau khi dich, doi chieu HAI CHIEU: thieu hay thua mot muc deu la thoat ma 2. Cac luot toast.error(error.message) chuyen tiep chu tu API dem rieng, khong tinh la chua dich. GIOI HAN CUA BO QUET DUNG CHUNG: no ghi MOT khoa cho moi loi goi toast (khoa t.x.y dau tien trong loi goi), nen mot cau dung tu bieu thuc ba ngoi chi gop nhanh dau. O day la toast.success(result.cancelled ? chiTiet.daDung : chiTiet.daXongTruocDo) — bang khai chiTiet.daDung, con chiTiet.daXongTruocDo do chan MOI CHUOI (AC-10) canh. KHONG sua bo quet: hai ho so DA KY dua vao dung hanh vi nay (ba loi goi nhieu khoa o slack-channels va tracking-script), sua no la lam do bang chung da ky.",
+	"loi_goi": [
+		{
+			"file": "apps/app/components/agent-builder/agent-capabilities.tsx",
+			"khoa": "viec.daLuu"
+		},
+		{
+			"file": "apps/app/components/agent-builder/agent-capabilities.tsx",
+			"khoa": "viec.daNhoMoi"
+		},
+		{
+			"file": "apps/app/components/agent-builder/agent-code.tsx",
+			"khoa": "ma.daLuu"
+		},
+		{
+			"file": "apps/app/components/agent-builder/create-channel-dialog.tsx",
+			"khoa": "kenh.dangTao"
+		},
+		{
+			"file": "apps/app/components/agent-builder/team-agent-detail.tsx",
+			"khoa": "chiTiet.daXepLuot"
+		},
+		{
+			"file": "apps/app/components/agent-builder/team-agent-detail.tsx",
+			"khoa": "chiTiet.daXepLai"
+		},
+		{
+			"file": "apps/app/components/agent-builder/team-agent-detail.tsx",
+			"khoa": "chiTiet.daDung"
+		},
+		{
+			"file": "apps/app/components/agent-builder/team-agent-detail.tsx",
+			"khoa": "chiTiet.daDuaVaoChay"
+		},
+		{
+			"file": "apps/app/components/agent-builder/team-agent-detail.tsx",
+			"khoa": "chiTiet.daXoa"
+		},
+		{
+			"file": "apps/app/components/agent-builder/new-agent-dialog.tsx",
+			"khoa": "moi.traoTayHong"
+		}
+	]
+}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Sheet,
 	SheetContent,
@@ -8,16 +9,14 @@ import {
 	SheetTitle,
 } from "@crm/ui/components/sheet";
 import { useState } from "react";
+import { tacNhanMessages } from "@/lib/messages/agent-builder-tac-nhan";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { AgentActivity, AgentRuns } from "./agent-history";
 
 type Runs = RouterOutputs["agents"]["history"];
 type Activity = RouterOutputs["agents"]["activity"];
 
-const VIEWS = [
-	{ id: "runs", label: "Runs" },
-	{ id: "activity", label: "Activity" },
-] as const;
+const VIEWS = [{ id: "runs" }, { id: "activity" }] as const;
 
 type View = (typeof VIEWS)[number]["id"];
 
@@ -41,6 +40,7 @@ export function AgentRunsDrawer({
 	retryingRunId?: string;
 	runs: Runs;
 }) {
+	const t = tacNhanMessages(useLocale());
 	const [view, setView] = useState<View>("runs");
 	const [wasOpen, setWasOpen] = useState(open);
 
@@ -53,10 +53,8 @@ export function AgentRunsDrawer({
 		<Sheet onOpenChange={onOpenChange} open={open}>
 			<SheetContent className="flex flex-col gap-0 p-0" side="right" size="xl">
 				<SheetHeader className="gap-1 border-b px-5 py-4">
-					<SheetTitle>History</SheetTitle>
-					<SheetDescription>
-						Every run and every change, newest first.
-					</SheetDescription>
+					<SheetTitle>{t.luot.lichSu}</SheetTitle>
+					<SheetDescription>{t.luot.lichSuMoTa}</SheetDescription>
 				</SheetHeader>
 
 				<div className="flex h-9 shrink-0 items-end gap-5 border-b px-5">
@@ -71,7 +69,7 @@ export function AgentRunsDrawer({
 							onClick={() => setView(entry.id)}
 							type="button"
 						>
-							{entry.label}{" "}
+							{t.luot.nhan[entry.id]}{" "}
 							<span className="font-mono text-muted-foreground">
 								{entry.id === "runs" ? runs.length : activity.length}
 							</span>

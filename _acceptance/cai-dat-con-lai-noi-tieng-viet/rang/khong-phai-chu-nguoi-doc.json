@@ -1,0 +1,255 @@
+{
+	"lat": "cai-dat-con-lai-noi-tieng-viet",
+	"ghi_chu": "Sinh dan so bang cach lay MOI chuoi roi TRU theo luat CO TEN. Hai danh sach TACH BIET (thuoc tinh JSX / khoa object) — dung chung la cho lop loi chui qua. Moi dong giu_nguyen phai con doi tuong that; dong chet lam chan DO. MOI dong duoi day da duoc doc trong ngu canh truoc khi khai, khong khai theo hinh dang chuoi.",
+	"ham_ky_thuat": [
+		"cn",
+		"clsx",
+		"twMerge",
+		"require",
+		"import"
+	],
+	"giu_nguyen": [
+		{
+			"chu": "<script",
+			"vi_sao": "manh the HTML cua doan ma nguoi chep — la vat chep, khong phai chu doc"
+		},
+		{
+			"chu": "></script>",
+			"vi_sao": "manh the HTML cua doan ma nguoi chep"
+		},
+		{
+			"chu": "data-site",
+			"vi_sao": "ten thuoc tinh HTML trong the theo doi — khach dan nguyen van"
+		},
+		{
+			"chu": "html",
+			"vi_sao": "ten ngon ngu cho khoi ma"
+		},
+		{
+			"chu": "saml",
+			"vi_sao": "dinh danh giao thuc SSO"
+		},
+		{
+			"chu": "add-sso-provider",
+			"vi_sao": "id cua form"
+		},
+		{
+			"chu": "create-api-key",
+			"vi_sao": "id cua form"
+		},
+		{
+			"chu": "google",
+			"vi_sao": "ma nha cung cap, gui len API — khong phai nhan tren man"
+		},
+		{
+			"chu": "microsoft",
+			"vi_sao": "ma nha cung cap, gui len API"
+		},
+		{
+			"chu": "slack",
+			"vi_sao": "ma nha cung cap, gui len API"
+		},
+		{
+			"chu": "syncing",
+			"vi_sao": "thanh vien union type SlackSync"
+		},
+		{
+			"chu": "stalled",
+			"vi_sao": "thanh vien union type SlackSync"
+		},
+		{
+			"chu": "found",
+			"vi_sao": "gia tri enum result.status, so sanh trong ma"
+		},
+		{
+			"chu": "missing",
+			"vi_sao": "gia tri enum result.status"
+		},
+		{
+			"chu": "unreachable",
+			"vi_sao": "gia tri enum result.status"
+		},
+		{
+			"chu": "never",
+			"vi_sao": "gia tri cua o chon han dung — nhan hien ra la 'No expiration', dich rieng"
+		},
+		{
+			"chu": "reconnect",
+			"vi_sao": "khoa loi trong chuoi mau gui len telemetry"
+		},
+		{
+			"chu": "record",
+			"vi_sao": "che do settle cua cache"
+		},
+		{
+			"chu": "lg",
+			"vi_sao": "kich thuoc component cua packages/ui"
+		},
+		{
+			"chu": "md",
+			"vi_sao": "kich thuoc component"
+		},
+		{
+			"chu": "sm",
+			"vi_sao": "kich thuoc component"
+		},
+		{
+			"chu": "console.cloud.google.com",
+			"vi_sao": "danh sach trang ten mien de LOC link trong thong bao loi cua Google — so sanh trong ma, khong hien ra man"
+		},
+		{
+			"chu": "console.developers.google.com",
+			"vi_sao": "danh sach trang ten mien de loc link"
+		},
+		{
+			"chu": "support.google.com",
+			"vi_sao": "danh sach trang ten mien de loc link"
+		},
+		{
+			"chu": "myaccount.google.com",
+			"vi_sao": "danh sach trang ten mien de loc link"
+		},
+		{
+			"chu": "https:",
+			"vi_sao": "so sanh url.protocol"
+		},
+		{
+			"chu": "groups:read",
+			"vi_sao": "ma scope cua Slack, gui len Slack API"
+		},
+		{
+			"chu": "groups:history",
+			"vi_sao": "ma scope cua Slack"
+		},
+		{
+			"chu": "none",
+			"vi_sao": "gia tri co motion cua component Icon — tat hoat anh"
+		},
+		{
+			"chu": "pending",
+			"vi_sao": "gia tri trang thai cua useAsyncAction, so sanh trong ma"
+		},
+		{
+			"chu": "true",
+			"vi_sao": "gia tri aria-disabled"
+		}
+	],
+	"khoa_kieu": {
+		"ghi_chu": "Khoa cua kieu chi muc vao kho chuoi — gia tri la TEN KHOA, khong phai chu nguoi doc. Khai o day thay vi mien tru tung gia tri, vi danh sach gia tri se dai theo so muc thanh ben.",
+		"duong": [
+			"settings-sidebar.tsx: SettingsNavItem.khoa",
+			"settings-sidebar.tsx: keyof SettingsMessages[\"thanhBen\"]"
+		]
+	},
+	"thuoc_jsx_ky_thuat": [
+		"className",
+		"class",
+		"id",
+		"key",
+		"ref",
+		"href",
+		"src",
+		"srcSet",
+		"to",
+		"as",
+		"type",
+		"name",
+		"value",
+		"defaultValue",
+		"htmlFor",
+		"role",
+		"variant",
+		"size",
+		"side",
+		"align",
+		"orientation",
+		"mode",
+		"tone",
+		"icon",
+		"entity",
+		"kind",
+		"slug",
+		"locale",
+		"lang",
+		"dir",
+		"target",
+		"rel",
+		"method",
+		"action",
+		"accept",
+		"autoComplete",
+		"autoCapitalize",
+		"autoCorrect",
+		"inputMode",
+		"pattern",
+		"format",
+		"color",
+		"fill",
+		"stroke",
+		"viewBox",
+		"d",
+		"path",
+		"style",
+		"width",
+		"height",
+		"translate",
+		"form",
+		"default",
+		"data-icon",
+		"data-checked",
+		"transitionTypes",
+		"queryKey",
+		"prefetch",
+		"aria-current",
+		"aria-busy",
+		"aria-hidden",
+		"aria-live",
+		"aria-controls",
+		"aria-expanded",
+		"khoa"
+	],
+	"khoa_object_ky_thuat": [
+		"id",
+		"href",
+		"src",
+		"key",
+		"className",
+		"class",
+		"slug",
+		"khoa",
+		"viewBox",
+		"path",
+		"queryKey",
+		"style",
+		"align",
+		"width",
+		"height",
+		"size",
+		"variant",
+		"tone",
+		"type",
+		"side",
+		"orientation"
+	],
+	"khoa_object_mang_chu": {
+		"ghi_chu": "Khoa object KHONG duoc dua vao danh sach ky thuat, du chung cung ten voi mot thuoc tinh JSX ky thuat. Gia tri cua chung la chu nguoi doc thay.",
+		"khoa": [
+			"name",
+			"value",
+			"label",
+			"title",
+			"header",
+			"srLabel",
+			"description",
+			"placeholder",
+			"text"
+		]
+	},
+	"mau_ky_thuat": {
+		"ghi_chu": "Chuoi mau chi gom duong dan/URL — khong mang chu nguoi doc. KHONG dung mau nay cho chuoi mau GHEP CAU: nhung cai do phai dich.",
+		"mau": [
+			"^\\$\\{…\\}/",
+			"^https?://"
+		]
+	}
+}

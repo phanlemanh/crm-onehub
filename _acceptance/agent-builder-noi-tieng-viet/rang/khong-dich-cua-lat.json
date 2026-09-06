@@ -1,0 +1,40 @@
+{
+	"lat": "agent-builder-noi-tieng-viet",
+	"ghi_chu": "Bang DONG cac gia tri KHONG duoc dich tren man cua lat. Doi chieu HAI CHIEU voi tap ung vien sinh tu man that; VA moi dong duoc so GIA TRI giua hai luot tieng — chuoi phai Y HET nhau.",
+	"luat": [
+		{
+			"ten": "ten thuong hieu",
+			"vi_sao": "ten rieng cua san pham ngoai, dich la sai"
+		},
+		{
+			"ten": "dinh danh ky thuat",
+			"vi_sao": "ma may doc, khong phai chu nguoi doc"
+		},
+		{
+			"ten": "du lieu nguoi nhap",
+			"vi_sao": "chu cua nguoi dung, khong phai chu cua san pham"
+		}
+	],
+	"dong": [
+		{
+			"gia_tri": "Slack",
+			"luat": "ten thuong hieu",
+			"ngoai_man_do_duoc": true,
+			"vi_sao": "Ten nay ve ra o cum Viec lam duoc tren /agents/[agentId] (Slack) va o thanh dieu huong ung dung (OneHub) — mot cho nam duoi gioi han route can ban ghi, mot cho nam ngoai goc gom chu cua bo thuoc man. Dong van chiu chieu do: neu no VE RA tren mot man do duoc, hai luot phai Y HET nhau, lech la DO."
+		},
+		{
+			"gia_tri": "OneHub",
+			"luat": "ten thuong hieu",
+			"ngoai_man_do_duoc": true,
+			"vi_sao": "Ten san pham ve ra o thanh dieu huong ung dung, nam ngoai goc gom chu cua bo thuoc man (goc la phan tu cha cua main). Dong van chiu chieu do: ve ra tren man do duoc ma hai luot lech nhau la DO."
+		}
+	],
+	"ngoai_lat": {
+		"ghi_chu": "Chuoi NGOAI LAT: dot HAI da dich xong sau file hoan, nen khoi nay RONG co chu y. Giu khoi lai chu KHONG xoa — vang mat han la duong sach-gia, va chan ngoai-lat-rong cua dot hai bat dung dieu do.",
+		"khoi": [],
+		"mien_dau": [
+			"/"
+		]
+	},
+	"mien_dau": []
+}

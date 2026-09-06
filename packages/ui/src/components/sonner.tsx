@@ -8,15 +8,18 @@ import {
 	TriangleAlertIcon,
 } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useMessages } from "@crm/ui/components/locale-provider";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
 const Toaster = ({ ...props }: ToasterProps) => {
 	const { theme = "system" } = useTheme();
+	const msg = useMessages();
 
 	return (
 		<Sonner
 			theme={theme as ToasterProps["theme"]}
 			position="bottom-left"
+			containerAriaLabel={msg.thongBao.vung}
 			className="toaster group"
 			icons={{
 				success: <CircleCheckIcon className="size-4" />,

@@ -1,0 +1,89 @@
+{
+	"ghi_chu": "Cac gia tri mac dinh CHU-NGUOI-DOC ma chan lai tim ra ngay 06/09, kem dinh doat cua tung dong. Bang chiu chieu do: dong khai 'da va' ma file van con gia tri mac dinh tieng Anh do la DO; dong khai 'da va' ma khoa kho chuoi khong co that cung la DO; dong khai 'da khai' ma khong co ly do doc duoc la DO.",
+	"dong": [
+		{
+			"file": "packages/ui/src/components/ai-elements/conversation.tsx",
+			"tham_so": "title",
+			"gia_tri_cu": "No messages yet",
+			"dinh_doat": "da va",
+			"khoa": "macDinh.chuaCoTin"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/conversation.tsx",
+			"tham_so": "description",
+			"gia_tri_cu": "Start a conversation to see messages here",
+			"dinh_doat": "da va",
+			"khoa": "macDinh.batDauTroChuyen"
+		},
+		{
+			"file": "packages/ui/src/components/async-action.tsx",
+			"tham_so": "successLabel",
+			"gia_tri_cu": "Done",
+			"dinh_doat": "da va",
+			"khoa": "macDinh.daXong"
+		},
+		{
+			"file": "packages/ui/src/components/async-action.tsx",
+			"tham_so": "errorLabel",
+			"gia_tri_cu": "Try again",
+			"dinh_doat": "da va",
+			"khoa": "macDinh.thuLai"
+		},
+		{
+			"file": "packages/ui/src/components/combobox.tsx",
+			"tham_so": "placeholder",
+			"gia_tri_cu": "Select an option",
+			"dinh_doat": "da va",
+			"khoa": "macDinh.chonMuc"
+		},
+		{
+			"file": "packages/ui/src/components/combobox.tsx",
+			"tham_so": "searchPlaceholder",
+			"gia_tri_cu": "Search…",
+			"dinh_doat": "da va",
+			"khoa": "macDinh.timMuc"
+		},
+		{
+			"file": "packages/ui/src/components/combobox.tsx",
+			"tham_so": "empty",
+			"gia_tri_cu": "Nothing matches.",
+			"dinh_doat": "da va",
+			"khoa": "macDinh.khongKhop"
+		},
+		{
+			"file": "packages/ui/src/components/command.tsx",
+			"tham_so": "title",
+			"gia_tri_cu": "Command Palette",
+			"dinh_doat": "da va",
+			"khoa": "macDinh.bangLenh"
+		},
+		{
+			"file": "packages/ui/src/components/command.tsx",
+			"tham_so": "description",
+			"gia_tri_cu": "Search for a command to run...",
+			"dinh_doat": "da va",
+			"khoa": "macDinh.timLenh"
+		},
+		{
+			"file": "packages/ui/src/components/date-picker.tsx",
+			"tham_so": "placeholder",
+			"gia_tri_cu": "Select a date",
+			"dinh_doat": "da va",
+			"khoa": "macDinh.chonNgay"
+		},
+		{
+			"file": "packages/ui/src/components/dot-matrix.tsx",
+			"tham_so": "label",
+			"gia_tri_cu": "Loading",
+			"dinh_doat": "da va",
+			"khoa": "macDinh.dangTai"
+		},
+		{
+			"file": "packages/ui/src/components/thinking-indicator.tsx",
+			"tham_so": "label",
+			"gia_tri_cu": "Thinking",
+			"dinh_doat": "da va",
+			"khoa": "macDinh.dangNghi"
+		}
+	]
+}

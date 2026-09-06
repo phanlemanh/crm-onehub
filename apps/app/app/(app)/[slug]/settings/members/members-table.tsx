@@ -14,28 +14,32 @@ import {
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ListSearch } from "@/components/data-table/list-search";
 import { useTableQuery } from "@/components/data-table/use-table-query";
 import { LocalRelativeTime } from "@/components/local-date-time";
+import {
+	type ThanhVienMessages,
+	thanhVienMessages,
+} from "@/lib/messages/settings-thanh-vien";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { membersSearchParams } from "./members-search-params";
 
-const ROLE_LABEL = {
-	owner: "Owner",
-	admin: "Admin",
-	member: "Member",
-} as const;
-
-type Role = keyof typeof ROLE_LABEL;
+type Role = keyof ThanhVienMessages["vaiTro"];
 
 type MemberRow = RouterOutputs["workspace"]["members"]["rows"][number];
 
+function roles(t: ThanhVienMessages): Role[] {
+	return Object.keys(t.vaiTro) as Role[];
+}
+
 function columns(
+	t: ThanhVienMessages,
 	canChangeRoles: boolean,
 	onChangeRole: (member: MemberRow, role: Role) => void,
 	pending: boolean,
@@ -43,10 +47,10 @@ function columns(
 	return [
 		{
 			id: "name",
-			header: "Name",
+			header: t.bang.ten,
 			sortable: true,
 			hideable: false,
-			width: "w-[34%]",
+			width: "w-[30%]",
 			cell: (row) => (
 				<span className="flex min-w-0 items-center gap-2">
 					<PersonAvatar
@@ -55,36 +59,40 @@ function columns(
 						name={row.name}
 						email={row.email}
 					/>
-					<span className="truncate font-medium">{row.name}</span>
+					<span className="truncate font-medium" translate="no">
+						{row.name}
+					</span>
 					{row.isViewer ? (
-						<span className="text-muted-foreground text-xs">You</span>
+						<span className="text-muted-foreground text-xs">{t.bang.ban}</span>
 					) : null}
 				</span>
 			),
 		},
 		{
 			id: "email",
-			header: "Email",
+			header: t.bang.email,
 			sortable: true,
 			width: "w-[32%]",
 			hideBelow: "md",
 			cell: (row) => (
-				<span className="truncate text-muted-foreground">{row.email}</span>
+				<span className="truncate text-muted-foreground" translate="no">
+					{row.email}
+				</span>
 			),
 		},
 		{
 			id: "role",
-			header: "Role",
+			header: t.bang.vaiTro,
 			sortable: true,
-			width: "w-[14%]",
+			width: "w-[18%]",
 			cell: (row) => (
-				<span className="text-muted-foreground">{ROLE_LABEL[row.role]}</span>
+				<span className="text-muted-foreground">{t.vaiTro[row.role]}</span>
 			),
 		},
 		{
 			id: "joinedAt",
-			header: "Joined",
-			label: "Joined date",
+			header: t.bang.thamGia,
+			label: t.bang.thamGiaDayDu,
 			sortable: true,
 			align: "right",
 			width: "w-[14%]",
@@ -97,8 +105,8 @@ function columns(
 		},
 		{
 			id: "actions",
-			header: <span className="sr-only">Actions</span>,
-			label: "Actions",
+			header: <span className="sr-only">{t.bang.hanhDong}</span>,
+			label: t.bang.hanhDong,
 			hideable: false,
 			align: "right",
 			width: "w-[6%]",
@@ -108,12 +116,12 @@ function columns(
 						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" size="icon" disabled={pending}>
 								<Icon icon={OverflowMenuHorizontal} />
-								<span className="sr-only">Change {row.name}'s role</span>
+								<span className="sr-only">{t.bang.doiVaiTro(row.name)}</span>
 							</Button>
 						</DropdownMenuTrigger>
 
 						<DropdownMenuContent align="end">
-							{(Object.keys(ROLE_LABEL) as Role[]).map((role) => (
+							{roles(t).map((role) => (
 								<DropdownMenuItem
 									key={role}
 									data-checked={row.role === role}
@@ -122,7 +130,7 @@ function columns(
 										onChangeRole(row, role);
 									}}
 								>
-									{ROLE_LABEL[role]}
+									{t.vaiTro[role]}
 								</DropdownMenuItem>
 							))}
 						</DropdownMenuContent>
@@ -133,6 +141,7 @@ function columns(
 }
 
 export function MembersTable() {
+	const t = thanhVienMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const { query, input } = useTableQuery(membersSearchParams);
@@ -147,7 +156,7 @@ export function MembersTable() {
 		trpc.workspace.setMemberRole.mutationOptions({
 			onSuccess: async () => {
 				await cache.workspace();
-				toast.success("Role changed.");
+				toast.success(t.bang.daDoi);
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -158,10 +167,10 @@ export function MembersTable() {
 	const facets: DataTableFacet[] = [
 		{
 			id: "role",
-			label: "Role",
-			options: (Object.keys(ROLE_LABEL) as Role[]).flatMap((role) =>
+			label: t.bang.vaiTro,
+			options: roles(t).flatMap((role) =>
 				(facetCounts?.role?.[role] ?? 0) > 0
-					? [{ value: role, label: ROLE_LABEL[role] }]
+					? [{ value: role, label: t.vaiTro[role] }]
 					: [],
 			),
 		},
@@ -170,8 +179,9 @@ export function MembersTable() {
 	return (
 		<DataTable
 			query={query}
-			search={<ListSearch placeholder="Search by name or email…" />}
+			search={<ListSearch placeholder={t.bang.tim} />}
 			columns={columns(
+				t,
 				workspace.data?.canChangeRoles ?? false,
 				(member, role) => setRole.mutate({ memberId: member.id, role }),
 				setRole.isPending,
@@ -182,7 +192,7 @@ export function MembersTable() {
 			facets={facets}
 			getRowId={(row) => row.id}
 			loading={members.isFetching}
-			empty="Nobody matches this view."
+			empty={t.bang.trong}
 		/>
 	);
 }

@@ -20,6 +20,11 @@ import { Icon } from "@crm/ui/components/icon";
 import Link from "next/link";
 import { Suspense } from "react";
 import { NewAgentDialog } from "@/components/agent-builder/new-agent-dialog";
+import { getLocale } from "@/lib/locale/server";
+import {
+	type KetNoiMessages,
+	ketNoiMessages,
+} from "@/lib/messages/settings-ket-noi";
 import { requireSession } from "@/lib/session";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { ConnectionPage, ConnectionPageLoading } from "../connection-page";
@@ -36,18 +41,6 @@ const PRIVATE_CHANNEL_SCOPES = [
 	"groups:read",
 	"groups:history",
 	SLACK_USER_GRANT.scope,
-];
-
-const never = [
-	"Send anything at all until you build an automation and switch it on",
-	"Post anywhere except the destination approved in that automation",
-	"Read a direct message between two people",
-];
-
-const suggestions = [
-	["When a deal is created", "Post the deal to an approved sales channel."],
-	["When a deal is won", "Tell an approved channel that the deal closed."],
-	["When a deal reopens", "Notify one approved channel or teammate."],
 ];
 
 type SlackConnectionPageProps = {
@@ -68,67 +61,60 @@ async function SlackConnectionPageContent({
 	searchParams,
 }: SlackConnectionPageProps) {
 	await requireSession();
+	const t = ketNoiMessages(await getLocale());
 	const [{ slug }, query] = await Promise.all([params, searchParams]);
 	const queryClient = getServerQueryClient();
 	const status = await queryClient.fetchQuery(
 		getServerTrpc().slack.status.queryOptions(),
 	);
 	return status.connected ? (
-		<ConnectedSlack slug={slug} status={status} />
+		<ConnectedSlack slug={slug} status={status} t={t} />
 	) : (
 		<ConnectionPage centered className="max-w-(--container-page)">
 			<header className="flex flex-col gap-3 px-(--spacing-block-inline)">
 				<div className="flex items-center gap-3">
 					<SlackLogo className="size-6" />
-					<h1 className="font-medium text-xl">Slack</h1>
+					<h1 className="font-medium text-xl" translate="no">
+						{t.ten.slack}
+					</h1>
 					<span className="ml-auto text-muted-foreground text-sm">
-						Not connected
+						{t.chung.chuaCam}
 					</span>
 				</div>
 				<p className="text-muted-foreground text-sm leading-relaxed">
-					Connecting Slack gives the CRM a way in and a way out. What it
-					actually does with that is up to you afterwards, one automation at a
-					time.
+					{t.slack.gioiThieu}
 				</p>
 			</header>
 			<SlackScopeGroups
 				groups={groupScopes([...SLACK_REQUESTED_SCOPES])}
-				title="What you are handing over"
+				title={t.slack.banGiao}
 				withheld={[]}
 			/>
 			<PlainList
-				title="What it will never do"
-				items={never}
+				title={t.slack.khongBaoGio}
+				items={t.slack.khongBaoGioMuc}
 				icon={Close}
 				tone="text-muted-foreground"
 			/>
-			<div className="flex items-center gap-4 border-y px-(--spacing-block-inline) py-5">
+			<div className="flex flex-wrap items-center gap-4 border-y px-(--spacing-block-inline) py-5">
 				<SlackConnectButton
 					slug={slug}
 					configured={status.configured}
 					connectError={connectErrorOf(query, "slack")}
 				/>
-				<p className="text-muted-foreground text-xs">
-					You approve the workspace in Slack. You can disconnect it here at any
-					time.
-				</p>
+				<p className="text-muted-foreground text-xs">{t.slack.duyetOSlack}</p>
 			</div>
 			<section className="flex flex-col gap-3 px-(--spacing-block-inline)">
 				<div>
-					<h2 className="font-medium text-sm">
-						Afterwards, most teams start with one of these
-					</h2>
-					<p className="text-muted-foreground text-xs">
-						Suggestions, not settings. None of them exist until you pick one and
-						switch it on.
-					</p>
+					<h2 className="font-medium text-sm">{t.slack.goiYTieuDe}</h2>
+					<p className="text-muted-foreground text-xs">{t.slack.goiYMoTa}</p>
 				</div>
 				<div className="grid gap-3 md:grid-cols-3">
-					{suggestions.map(([name, description]) => (
-						<div className="rounded-lg border p-4" key={name}>
-							<h3 className="font-medium text-sm">{name}</h3>
+					{t.slack.goiY.map((goiY) => (
+						<div className="rounded-lg border p-4" key={goiY.ten}>
+							<h3 className="font-medium text-sm">{goiY.ten}</h3>
 							<p className="mt-2 text-muted-foreground text-xs leading-relaxed">
-								{description}
+								{goiY.moTa}
 							</p>
 						</div>
 					))}
@@ -160,6 +146,7 @@ function groupScopes(scopes: string[]) {
 function ConnectedSlack({
 	slug,
 	status,
+	t,
 }: {
 	slug: string;
 	status: {
@@ -175,6 +162,7 @@ function ConnectedSlack({
 		canManage: boolean;
 		people: { matched: number; reviewed: number };
 	};
+	t: KetNoiMessages;
 }) {
 	const agents = status.agents;
 	const drift = slackScopeDrift(status.scopes);
@@ -186,9 +174,14 @@ function ConnectedSlack({
 			<header className="flex flex-col gap-2 px-(--spacing-block-inline)">
 				<div className="flex items-center gap-3">
 					<SlackLogo className="size-6" />
-					<h1 className="font-medium text-xl">Slack</h1>
-					<span className="ml-auto text-muted-foreground text-sm">
-						{status.workspace ?? "Connected"}
+					<h1 className="font-medium text-xl" translate="no">
+						{t.ten.slack}
+					</h1>
+					<span
+						className="ml-auto text-muted-foreground text-sm"
+						translate={status.workspace ? "no" : undefined}
+					>
+						{status.workspace ?? t.chung.daCam}
 					</span>
 					<SlackDisconnectButton
 						canManage={status.canManage}
@@ -196,34 +189,32 @@ function ConnectedSlack({
 					/>
 				</div>
 				<p className="text-muted-foreground text-sm">
-					{status.canManage
-						? "Here is what Slack gave us. Agents only post where their automation says."
-						: "Here is what Slack gave us. Only an owner or an admin can disconnect it."}
+					{status.canManage ? t.slack.moTaQuanTri : t.slack.moTaThuong}
 				</p>
 			</header>
-			<MissingGrant missing={missing} slug={slug} />
+			<MissingGrant missing={missing} slug={slug} t={t} />
 			<SlackScopeGroups
 				groups={groupScopes(status.scopes)}
-				title="What this workspace granted"
+				title={t.slack.daCap}
 				withheld={missing.map(toLine)}
 			/>
 			<SlackChannels />
 			<section className="flex flex-col gap-3 border-y px-(--spacing-block-inline) py-5">
 				<div className="flex items-end justify-between gap-4">
 					<div>
-						<h2 className="font-medium text-sm">Agents that use Slack</h2>
+						<h2 className="font-medium text-sm">{t.slack.tacNhanTieuDe}</h2>
 						<p className="text-muted-foreground text-xs">
-							Built in chat, not here. Open one to change it.
+							{t.slack.tacNhanMoTa}
 						</p>
 					</div>
 					<NewAgentDialog>
-						<Button size="sm">New agent</Button>
+						<Button size="sm">{t.slack.tacNhanMoi}</Button>
 					</NewAgentDialog>
 				</div>
 				<div className="flex flex-col divide-y rounded-lg border">
 					{agents.length === 0 ? (
 						<p className="px-(--spacing-block-inline) py-4 text-muted-foreground text-sm">
-							No deployed agents use Slack yet.
+							{t.slack.tacNhanTrong}
 						</p>
 					) : null}
 					{agents.map(
@@ -239,7 +230,9 @@ function ConnectedSlack({
 								key={agent.id}
 							>
 								<div className="min-w-0 flex-1">
-									<h3 className="font-medium text-sm">{agent.name}</h3>
+									<h3 className="font-medium text-sm" translate="no">
+										{agent.name}
+									</h3>
 									<p className="truncate text-muted-foreground text-xs">
 										{agent.description}
 									</p>
@@ -248,7 +241,7 @@ function ConnectedSlack({
 									<span
 										className={`size-2 rounded-full ${agent.status === "LIVE" ? "bg-success" : "bg-muted-foreground"}`}
 									/>
-									{agent.status === "LIVE" ? "Running" : "Paused"}
+									{agent.status === "LIVE" ? t.slack.dangChay : t.slack.tamDung}
 								</span>
 							</Link>
 						),
@@ -257,19 +250,22 @@ function ConnectedSlack({
 						className="px-(--spacing-block-inline) py-4 font-medium text-sm hover:bg-muted/50"
 						href={`/${slug}/chat`}
 					>
-						Describe another agent in chat
+						{t.slack.taChatTiep}
 					</Link>
 				</div>
 			</section>
 			<div className="flex items-center justify-between gap-4 px-(--spacing-block-inline)">
 				<p className="text-sm">
 					{status.people.reviewed === 0
-						? "No workspace people have been reviewed yet."
-						: `${status.people.matched} of ${status.people.reviewed} reviewed people are matched.`}
+						? t.slack.chuaSoatAi
+						: t.slack.daKhopNguoi(
+								String(status.people.matched),
+								String(status.people.reviewed),
+							)}
 				</p>
 				<Button asChild variant="outline" size="sm">
 					<Link href={`/${slug}/settings/connections/slack/people`}>
-						Review
+						{t.slack.soat}
 					</Link>
 				</Button>
 			</div>
@@ -280,9 +276,11 @@ function ConnectedSlack({
 function MissingGrant({
 	slug,
 	missing,
+	t,
 }: {
 	slug: string;
 	missing: SlackScope[];
+	t: KetNoiMessages;
 }) {
 	if (missing.length === 0) return null;
 
@@ -296,11 +294,11 @@ function MissingGrant({
 				<Icon icon={Warning} />
 				<AlertTitle>
 					{privateChannels
-						? "Comp AI cannot reach private channels"
-						: `Slack held back ${missing.length} permission${missing.length === 1 ? "" : "s"}`}
+						? t.slack.thieuRiengTu
+						: t.slack.thieuQuyen(String(missing.length))}
 				</AlertTitle>
 				<AlertDescription>
-					<span>Reconnect to ask again. You lose nothing.</span>
+					<span>{t.slack.camLaiMoTa}</span>
 					<ul className="mt-2 flex flex-col gap-1.5">
 						{missing.map((entry) => (
 							<li className="flex items-start gap-2" key={entry.scope}>
@@ -329,7 +327,7 @@ function PlainList({
 	tone,
 }: {
 	title: string;
-	items: string[];
+	items: readonly string[];
 	icon: React.ComponentType;
 	tone: string;
 }) {

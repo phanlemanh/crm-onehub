@@ -1,0 +1,39 @@
+{
+	"lat": "agent-builder-noi-tieng-viet",
+	"ghi_chu": "Bang DONG (hinh dang, chan chuyen trach). Moi vet phai bi DUNG chan chuyen trach cua hinh dang do bat — khong nhan 'mot chan nao do bat duoc', vi mot chan hong van co the duoc chan bat-het che lap. Bang lech voi bo vet la thoat ma 2.",
+	"hinh_dang": [
+		{
+			"ten": "van-ban-jsx",
+			"chan_chuyen_trach": "chu-cung-jsx"
+		},
+		{
+			"ten": "thuoc-tinh",
+			"chan_chuyen_trach": "thuoc-tinh"
+		},
+		{
+			"ten": "tieu-de",
+			"chan_chuyen_trach": "tieu-de"
+		},
+		{
+			"ten": "toast",
+			"chan_chuyen_trach": "moi-chuoi",
+			"ghi_chu": "Chan toast bao lech bang bang MA 2 (tien de/bang lech) chu khong bao gio ma 1, nen theo luat 'chi ma 1 tinh la bat duoc' no khong the la chan bat cua bo dot bien. Chieu do HAI CHIEU cua bang toast duoc chung RIENG: ngay 06/09 no bat dung mot dong thieu (moi.traoTayHong) va thoat ma 2 goi ten. Ghi ra day de khong ai tuong hinh dang nay khong co chieu do."
+		},
+		{
+			"ten": "khoa-object",
+			"chan_chuyen_trach": "moi-chuoi"
+		},
+		{
+			"ten": "tu-dien",
+			"chan_chuyen_trach": "tu-dien"
+		},
+		{
+			"ten": "trang-thai",
+			"chan_chuyen_trach": "trang-thai",
+			"ghi_chu": "Vet GO chu khoi man chu khong them tieng Anh, nen khong chan tinh nao thay. Chi chan dung tren man that moi bat duoc — day la chieu do chung minh chan trang-thai do MAN, khong do KHO CHUOI."
+		}
+	],
+	"khong_co_doi_tuong": {
+		"component-dung-chung": "Hop dong ke sau hinh dang, trong do co 'component dung chung ngoai thu muc lat'. Lat NAY co `them: []` — khong keo component dung chung nao vao dan so, vi component duy nhat dung chung (components/slack/channel-picker.tsx) thuoc dan so cua vong Cai dat da ky. Cam mot vet vao no la lam do bang chung cua vong khac, khong phai do vong nay. Hinh dang do vi vay KHONG CO DOI TUONG o lat nay — khai ra day thay vi bia mot vet gia."
+	}
+}

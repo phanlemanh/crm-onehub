@@ -1,0 +1,16 @@
+{"ts":"2026-09-06T14:51:03.711Z","kind":"round","run_id":"s4r1-20260906T145103Z-21187","sha":"972df8bc7c572c3826ef1ba3f2d41bf9237ae8dd","round":1}
+{"ts":"2026-09-06T14:51:03.929Z","kind":"eval","run_id":"s4r1-20260906T145103Z-21187-E1","eval":"E1","criterion":"AC-1","verifier":"config:executors.script.cl_dan_so","exit_code":0}
+{"ts":"2026-09-06T14:51:05.870Z","kind":"eval","run_id":"s4r1-20260906T145103Z-21187-E2","eval":"E2","criterion":"AC-2","verifier":"config:executors.script.cl_lai_ra_man","exit_code":0}
+{"ts":"2026-09-06T14:51:09.061Z","kind":"eval","run_id":"s4r1-20260906T145103Z-21187-E3","eval":"E3","criterion":"AC-3","verifier":"config:executors.script.cl_phan_biet","exit_code":0}
+{"ts":"2026-09-06T14:51:10.603Z","kind":"eval","run_id":"s4r1-20260906T145103Z-21187-E4","eval":"E4","criterion":"AC-4","verifier":"config:executors.script.cl_mo_nguyen_ban","exit_code":0}
+{"ts":"2026-09-06T14:51:12.111Z","kind":"eval","run_id":"s4r1-20260906T145103Z-21187-E5","eval":"E5","criterion":"AC-5","verifier":"config:executors.script.cl_ban_khai_da_do","exit_code":0}
+{"ts":"2026-09-06T14:51:12.136Z","kind":"eval","run_id":"s4r1-20260906T145103Z-21187-E6","eval":"E6","criterion":"AC-6","verifier":"config:executors.script.cl_dinh_doat","exit_code":0}
+{"ts":"2026-09-06T14:51:13.792Z","kind":"eval","run_id":"s4r1-20260906T145103Z-21187-E7","eval":"E7","criterion":"AC-7","verifier":"config:executors.test.cl_tieng_viet_den_man","exit_code":0}
+{"ts":"2026-09-06T14:51:13.805Z","kind":"eval","run_id":"s4r1-20260906T145103Z-21187-E8","eval":"E8","criterion":"AC-8","verifier":"config:executors.test.tv_canh_kho_ui","exit_code":0}
+{"ts":"2026-09-06T14:51:13.860Z","kind":"eval","run_id":"s4r1-20260906T145103Z-21187-E9","eval":"E9","criterion":"AC-9","verifier":"config:executors.script.cl_mot_bo_thuoc","exit_code":0}
+{"ts":"2026-09-06T14:51:14.077Z","kind":"eval","run_id":"s4r1-20260906T145103Z-21187-E11","eval":"E11","criterion":"AC-11","verifier":"config:executors.script.cl_khong_danh_sach_ten","exit_code":0}
+{"ts":"2026-09-06T14:51:34.945Z","kind":"suite","run_id":"s4r1-20260906T145103Z-21187-suite-test","cmd":"test","exit_code":0}
+{"ts":"2026-09-06T14:51:48.760Z","kind":"suite","run_id":"s4r1-20260906T145103Z-21187-suite-check-types","cmd":"check-types","exit_code":0}
+{"ts":"2026-09-06T14:51:49.433Z","kind":"suite","run_id":"s4r1-20260906T145103Z-21187-suite-lint","cmd":"lint","exit_code":0}
+{"ts":"2026-09-06T14:51:49.898Z","kind":"suite","run_id":"s4r1-20260906T145103Z-21187-suite-lint:slop","cmd":"lint:slop","exit_code":0}
+{"ts":"2026-09-06T21:46:11Z","kind":"repin","run_id":"repin-20260906T214517Z-82885","sha":"538796cf4a0f334454dc9fc3f44f3f836a6b0ebf","suites_exit":[0,0,0,0]}

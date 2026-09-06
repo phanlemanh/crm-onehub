@@ -1,43 +1,56 @@
 import { describe, expect, it } from "bun:test";
+import { readdirSync } from "node:fs";
 import { join } from "node:path";
-import { authMessages } from "@/lib/messages/auth";
-import { campaignMessages } from "@/lib/messages/campaigns";
-import { companyMessages } from "@/lib/messages/companies";
-import { contactMessages } from "@/lib/messages/contacts";
-import { crmMessages } from "@/lib/messages/crm";
-import { dealMessages } from "@/lib/messages/deals";
-import { recordSheetMessages } from "@/lib/messages/record-sheet";
-import { settingsMessages } from "@/lib/messages/settings";
+import type { Locale } from "@crm/ui/lib/locale";
 import { docDuongGoi, taoSong } from "./duong-goi";
 
 const DAU_TIENG_VIET =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
 
-const MODULE = [
-	["campaigns", campaignMessages],
-	["companies", companyMessages],
-	["contacts", contactMessages],
-	["deals", dealMessages],
-	["record-sheet", recordSheetMessages],
-	["crm", crmMessages],
-	["auth", authMessages],
-	["settings", settingsMessages],
-] as const;
-
 type GiaTri = string | ((...doiSo: string[]) => string);
 type Nhanh = { readonly [khoa: string]: GiaTri | Nhanh };
+
+const THU_MUC_KHO = join(import.meta.dir, "..", "lib", "messages");
+
+const TEN_KHO = readdirSync(THU_MUC_KHO)
+	.filter((t) => t.endsWith(".ts"))
+	.map((t) => t.replace(/\.ts$/, ""))
+	.sort();
+
+const MODULE: readonly (readonly [string, (locale: Locale) => Nhanh])[] =
+	await Promise.all(
+		TEN_KHO.map(async (ten) => {
+			const ns: unknown = await import(`@/lib/messages/${ten}`);
+			const lay = Object.values(ns as object).find(
+				(v): v is (locale: Locale) => Nhanh => v instanceof Function,
+			);
+			if (!lay) throw new Error(`kho chuoi ${ten} khong xuat mot ham lay`);
+			return [ten, lay] as const;
+		}),
+	);
 
 function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 	return Object.entries(o).flatMap(([k, v]): [string, GiaTri][] =>
 		v instanceof Function
 			? [[`${tien}${k}`, v]]
-			: v instanceof Object
-				? phang(v, `${tien}${k}.`)
-				: [[`${tien}${k}`, v]],
+			: v instanceof Map
+				? phang(Object.fromEntries(v) as Nhanh, `${tien}${k}.`)
+				: v instanceof Object
+					? phang(v, `${tien}${k}.`)
+					: [[`${tien}${k}`, v]],
 	);
 }
 
 const KHONG_DAU = new Set([
+	"chiaSe.xong",
+	"tep.kiloByte",
+	"tep.megaByte",
+	"dung.xong",
+	"luot.thanhCong",
+	"luot.model",
+	"trangThai.SUCCEEDED",
+	"ma.xong",
+	"kenh.tenViDu",
 	"headers.email",
 	"tabs.emails",
 	"contact.emails",
@@ -70,6 +83,19 @@ const KHONG_DAU = new Set([
 	"congTy.websiteTienTo",
 	"congTy.websiteGoiY",
 	"model.nhan",
+	"doanMa.siteIdNhan",
+	"kiemTra.trangGoiY",
+	"tenMien.tenGoiY",
+	"cookie.tieuDe",
+	"ten.google",
+	"ten.googleWorkspace",
+	"ten.gmail",
+	"ten.slack",
+	"ten.microsoft",
+	"ten.microsoft365",
+	"ten.outlook",
+	"ten.stripe",
+	"ten.docusign",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -139,6 +165,10 @@ describe("kho chuoi cua vong ③a", () => {
 	it("moi ham ghep bien co khang dinh, va so ham bang so khang dinh", () => {
 		const GHIM = {
 			"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
+			"crm:views.inUse": [
+				"Đang là phân khúc của 1",
+				"Đang là phân khúc của 12",
+			],
 			"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
 			"auth:grantAccess.grant": ["Cấp quyền 1", "Cấp quyền 12"],
 			"companies:bulk.reassigned": [
@@ -154,10 +184,6 @@ describe("kho chuoi cua vong ③a", () => {
 			"companies:bulk.deleted": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
 			"companies:bulk.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
 			"crm:views.remove": ["Xoá 1", "Xoá 12"],
-			"crm:views.inUse": [
-				"Đang là phân khúc của 1",
-				"Đang là phân khúc của 12",
-			],
 			"crm:bulkMenu.leftAlone": ["1 A bị bỏ quaB", "12 A bị bỏ quaB"],
 			"record-sheet:company.manyDeals": [
 				"Cả 1 thoả thuận của công ty",
@@ -349,6 +375,156 @@ describe("kho chuoi cua vong ③a", () => {
 			"settings:tienTe.khongQuyDoiDuoc": [
 				"1 thoả thuận không quy đổi được, nên chúng nằm ngoài mọi tổng.",
 				"12 thoả thuận không quy đổi được, nên chúng nằm ngoài mọi tổng.",
+			],
+			"settings-theo-doi:kiemTra.khongCoScriptMoTa": [
+				"Trang trả lời trong 1 ms, nhưng thẻ không nằm trong HTML. Kiểm lại xem thẻ có nằm trong head, phía trên mọi thứ viết lại trang, hay không.",
+				"Trang trả lời trong 12 ms, nhưng thẻ không nằm trong HTML. Kiểm lại xem thẻ có nằm trong head, phía trên mọi thứ viết lại trang, hay không.",
+			],
+			"settings-theo-doi:kiemTra.cungDocContainer": [
+				" Đã đọc cả container Tag Manager 1, và thẻ cũng không có trong đó.",
+				" Đã đọc cả container Tag Manager 12, và thẻ cũng không có trong đó.",
+			],
+			"settings-theo-doi:kiemTra.gtmRoiSiteIdMoTa": [
+				"Container 1 có mang thẻ, nhưng site ID không nằm trong URL của script. Tag Manager chỉ giữ lại URL khi chèn script, nên thuộc tính data-site không bao giờ tới được trang và bộ theo dõi không khởi động. Chép đoạn mã Tag Manager ở trên rồi thay phần HTML của thẻ.",
+				"Container 12 có mang thẻ, nhưng site ID không nằm trong URL của script. Tag Manager chỉ giữ lại URL khi chèn script, nên thuộc tính data-site không bao giờ tới được trang và bộ theo dõi không khởi động. Chép đoạn mã Tag Manager ở trên rồi thay phần HTML của thẻ.",
+			],
+			"settings-theo-doi:kiemTra.thayMoTaDau": [
+				"Trả lời trong 1 ms. Site ID",
+				"Trả lời trong 12 ms. Site ID",
+			],
+			"settings-ket-noi:chung.daXoa": [
+				"Đã xoá 1 mục đã kéo về.",
+				"Đã xoá 12 mục đã kéo về.",
+			],
+			"settings-ket-noi:danhSach.daCamVoi": ["Đã cắm vào 1", "Đã cắm vào 12"],
+			"settings-ket-noi:them.daCamRoi": ["1 đã cắm rồi.", "12 đã cắm rồi."],
+			"settings-ket-noi:google.dongBoHong": [
+				"Đồng bộ hỏng: 1",
+				"Đồng bộ hỏng: 12",
+			],
+			"settings-ket-noi:slack.daKhopNguoi": [
+				"Đã khớp 1 trên A người đã soát.",
+				"Đã khớp 12 trên A người đã soát.",
+			],
+			"settings-ket-noi:slack.thieuQuyen": [
+				"Slack giữ lại 1 quyền",
+				"Slack giữ lại 12 quyền",
+			],
+			"settings-ket-noi:slack.camHongMac": [
+				"Không cắm được Slack (1).",
+				"Không cắm được Slack (12).",
+			],
+			"settings-ket-noi:slack.goHoi": ["Gỡ 1?", "Gỡ 12?"],
+			"settings-ket-noi:quyen.dem": ["1 rộng trên A", "12 rộng trên A"],
+			"settings-ket-noi:kenh.chonKenh": ["Chọn kênh #1", "Chọn kênh #12"],
+			"settings-ket-noi:kenh.soNguoi": [" · 1 người", " · 12 người"],
+			"settings-ket-noi:kenh.khongKhop": [
+				"Không kênh nào khớp “1”.",
+				"Không kênh nào khớp “12”.",
+			],
+			"settings-ket-noi:kenh.themHoi": [
+				"Thêm OneHub vào #1?",
+				"Thêm OneHub vào #12?",
+			],
+			"settings-ket-noi:kenh.nhoThemMoTa": [
+				"Chưa thêm OneHub vào kênh riêng tư được. Một người đã ở trong #1 phải chạy lệnh này.",
+				"Chưa thêm OneHub vào kênh riêng tư được. Một người đã ở trong #12 phải chạy lệnh này.",
+			],
+			"settings-ket-noi:nguoi.demKhop": [
+				"Đã khớp 1 trên A",
+				"Đã khớp 12 trên A",
+			],
+			"settings-khoa-api:thuHoi.choKhoa": ["Thu hồi 1", "Thu hồi 12"],
+			"settings-sso:bang.maClient": [" · mã client …1", " · mã client …12"],
+			"settings-sso:go.choNha": ["Gỡ 1", "Gỡ 12"],
+			"settings-sso:them.daLuu": ["Đã lưu 1.", "Đã lưu 12."],
+			"settings-thanh-vien:bang.doiVaiTro": [
+				"Đổi vai trò của 1",
+				"Đổi vai trò của 12",
+			],
+			"agent-builder-khung:doi.soLuotChay": ["1 lượt chạy", "12 lượt chạy"],
+			"agent-builder-khung:nha.chaoHoi": [
+				"1 cần gì hôm nay?",
+				"12 cần gì hôm nay?",
+			],
+			"agent-builder-tac-nhan:chiTiet.daXoa": ["Đã xoá 1.", "Đã xoá 12."],
+			"agent-builder-tac-nhan:chiTiet.xoaHoi": ["Xoá 1?", "Xoá 12?"],
+			"agent-builder-tac-nhan:kenh.slackGoiLa": [
+				"Slack sẽ gọi nó là #1.",
+				"Slack sẽ gọi nó là #12.",
+			],
+			"agent-builder-tac-nhan:moi.daOTrong": [
+				"OneHub đã ở trong #1 rồi.",
+				"OneHub đã ở trong #12 rồi.",
+			],
+			"agent-builder-tac-nhan:moi.seVao": [
+				"OneHub chưa ở trong #1. Nó vào khi bạn tạo cái này.",
+				"OneHub chưa ở trong #12. Nó vào khi bạn tạo cái này.",
+			],
+			"agent-builder-tac-nhan:viec.chuyenKenh": [
+				"Chuyển từ #1 sang #A",
+				"Chuyển từ #12 sang #A",
+			],
+			"agent-builder-tac-nhan:viec.go": ["Gỡ 1", "Gỡ 12"],
+			"agent-builder-tac-nhan:viec.vaoKenh": [
+				"OneHub vào #1 và ở lại #1 cho tới khi bạn gỡ.",
+				"OneHub vào #12 và ở lại #12 cho tới khi bạn gỡ.",
+			],
+			"agent-builder-ket-qua:ma.soTep": ["1 tệp", "12 tệp"],
+			"agent-builder-ket-qua:ma.soTepDoi": [
+				"1 tệp đã đổi. Lưu là ghi thành một bản mới.",
+				"12 tệp đã đổi. Lưu là ghi thành một bản mới.",
+			],
+			"agent-builder-ket-qua:thoaThuan.duongOng": [
+				"đường ống 1",
+				"đường ống 12",
+			],
+			"agent-builder-ket-qua:thoaThuan.ngayNamIm": [
+				"nằm im từ 1 ngày",
+				"nằm im từ 12 ngày",
+			],
+			"agent-builder-ket-qua:thoaThuan.soThoaThuan": [
+				"1 thoả thuận",
+				"12 thoả thuận",
+			],
+			"agent-builder-tro-chuyen:luot.soHieu": ["Lượt #1", "Lượt #12"],
+			"agent-builder-tro-chuyen:luot.banSo": ["· Bản 1", "· Bản 12"],
+			"agent-builder-tro-chuyen:luot.soViecNgoai": [
+				"1 việc ra ngoài",
+				"12 việc ra ngoài",
+			],
+			"agent-builder-tro-chuyen:luot.catBot": [
+				"Đang hiện 1 bước đầu trong A. Lượt chạy này dài quá nên không hiện hết được.",
+				"Đang hiện 12 bước đầu trong A. Lượt chạy này dài quá nên không hiện hết được.",
+			],
+			"agent-builder-tro-chuyen:dung.dangGhi": ["Đang ghi 1", "Đang ghi 12"],
+			"agent-builder-tro-chuyen:dung.tienDo": ["1 trên 4", "12 trên 4"],
+			"agent-builder-tro-chuyen:man.chiaSeBoi": ["1 chia sẻ", "12 chia sẻ"],
+			"agent-builder-tro-chuyen:tacNhanSong.daSong": [
+				"1 đã vào chạy.",
+				"12 đã vào chạy.",
+			],
+			"agent-builder-o-soan:tep.rong": ["1 rỗng.", "12 rỗng."],
+			"agent-builder-o-soan:tep.quaLon": [
+				"1 lớn hơn 2 MB.",
+				"12 lớn hơn 2 MB.",
+			],
+			"agent-builder-o-soan:tep.loaiKhongNhan": [
+				"1 thuộc loại tệp không nhận được.",
+				"12 thuộc loại tệp không nhận được.",
+			],
+			"agent-builder-o-soan:tep.khongDocDuoc": [
+				"1 đọc không được.",
+				"12 đọc không được.",
+			],
+			"agent-builder-o-soan:tep.kiloByte": ["1 KB", "12 KB"],
+			"agent-builder-o-soan:tep.megaByte": ["1 MB", "12 MB"],
+			"agent-builder-o-soan:the.go": ["Gỡ 1", "Gỡ 12"],
+			"agent-builder-hoi-thoai-thao-tac:xoa.xoaMot": ["Xoá 1", "Xoá 12"],
+			"agent-builder-hoi-thoai-thao-tac:xoa.xoaHoi": ["Xoá 1?", "Xoá 12?"],
+			"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [
+				"Cả đội · 1",
+				"Cả đội · 12",
 			],
 		} satisfies Record<string, [string, string]>;
 

@@ -13,8 +13,10 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@crm/ui/components/dialog";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ketNoiMessages } from "@/lib/messages/settings-ket-noi";
 
 export function AddConnectionDialog({
 	slug,
@@ -25,6 +27,7 @@ export function AddConnectionDialog({
 	open: boolean;
 	connected: string[];
 }) {
+	const t = ketNoiMessages(useLocale());
 	const router = useRouter();
 	return (
 		<Dialog
@@ -35,57 +38,60 @@ export function AddConnectionDialog({
 		>
 			<DialogContent className="max-w-(--container-narrow) gap-0 p-0 md:left-[calc(50%+calc((56px+213px)/2))]">
 				<DialogHeader className="gap-2 px-(--spacing-block-inline) pt-5 pb-4">
-					<DialogTitle className="text-base">Add a connection</DialogTitle>
-					<DialogDescription>
-						Nothing moves until you finish setting one up.
-					</DialogDescription>
+					<DialogTitle className="text-base">{t.them.tieuDe}</DialogTitle>
+					<DialogDescription>{t.them.moTa}</DialogDescription>
 				</DialogHeader>
 				<div className="flex flex-col border-y px-2 py-2">
-					{!connected.includes("Google Workspace") ? (
+					{!connected.includes(t.ten.googleWorkspace) ? (
 						<CatalogRow
 							logo={GoogleLogo}
-							name="Google Workspace"
-							description="Bring in Gmail messages and Google Calendar meetings"
+							name={t.ten.googleWorkspace}
+							brand
+							description={t.them.googleMoTa}
 							href={`/${slug}/settings/connections/google`}
 						/>
 					) : null}
-					{!connected.includes("Slack") ? (
+					{!connected.includes(t.ten.slack) ? (
 						<CatalogRow
 							logo={SlackLogo}
-							name="Slack"
-							description="Let deployed agents notify approved channels and people"
+							name={t.ten.slack}
+							brand
+							description={t.them.slackMoTa}
 							href={`/${slug}/settings/connections/slack`}
 						/>
 					) : null}
-					{!connected.includes("Microsoft 365") ? (
+					{!connected.includes(t.ten.microsoft365) ? (
 						<CatalogRow
 							logo={MicrosoftLogo}
-							name="Microsoft 365"
-							description="Bring in Outlook email and the people on it"
+							name={t.ten.microsoft365}
+							brand
+							description={t.them.microsoftMoTa}
 							href={`/${slug}/settings/connections/microsoft`}
 						/>
 					) : null}
 					<CatalogRow
 						logo={StripeLogo}
-						name="Stripe"
-						description="Coming soon"
+						name={t.ten.stripe}
+						brand
+						description={t.them.sapCo}
 					/>
 					<CatalogRow
 						logo={DocusignLogo}
-						name="Docusign"
-						description="Coming soon"
+						name={t.ten.docusign}
+						brand
+						description={t.them.sapCo}
 					/>
 					<CatalogRow
 						logo={Plug}
-						name="Anything else"
-						description="The intake API is not available yet"
+						name={t.them.thuKhac}
+						description={t.them.thuKhacMoTa}
 						href={`/${slug}/settings/connections/intake`}
 					/>
 				</div>
 				<p className="px-(--spacing-block-inline) py-4 text-muted-foreground text-xs">
 					{connected.length > 0
-						? `${connected.join(", ")} ${connected.length === 1 ? "is" : "are"} already connected.`
-						: "Nothing is connected yet."}
+						? t.them.daCamRoi(connected.join(", "))
+						: t.them.chuaCamGi}
 				</p>
 			</DialogContent>
 		</Dialog>
@@ -95,11 +101,13 @@ export function AddConnectionDialog({
 function CatalogRow({
 	logo: Logo,
 	name,
+	brand,
 	description,
 	href,
 }: {
 	logo: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 	name: string;
+	brand?: boolean;
 	description: string;
 	href?: string;
 }) {
@@ -107,7 +115,9 @@ function CatalogRow({
 		<>
 			<Logo className="size-5 shrink-0" />
 			<div>
-				<p className="font-medium text-sm">{name}</p>
+				<p className="font-medium text-sm" translate={brand ? "no" : undefined}>
+					{name}
+				</p>
 				<p className="text-muted-foreground text-xs">{description}</p>
 			</div>
 		</>

@@ -8,26 +8,18 @@ import {
 	CardTitle,
 } from "@crm/ui/components/card";
 import { Label } from "@crm/ui/components/label";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Switch } from "@crm/ui/components/switch";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { theoDoiMessages } from "@/lib/messages/settings-theo-doi";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
-const RULES = [
-	{
-		flag: "crossDomain",
-		label: "Automatic cross-domain linking",
-		hint: "Carry the visitor between the domains below, so one journey is not counted as two people",
-	},
-	{
-		flag: "limitToDomains",
-		label: "Limit tracking to the domains below",
-		hint: "On any other domain the script loads and then does nothing",
-	},
-] as const;
+const RULES = [{ khoa: "crossDomain" }, { khoa: "limitToDomains" }] as const;
 
 export function TrackingRules() {
+	const t = theoDoiMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
@@ -47,34 +39,32 @@ export function TrackingRules() {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Tracking rules</CardTitle>
-				<CardDescription>
-					Where the script may run, and how it follows a visitor.
-				</CardDescription>
+				<CardTitle>{t.luat.tieuDe}</CardTitle>
+				<CardDescription>{t.luat.moTa}</CardDescription>
 			</CardHeader>
 
 			<CardContent>
 				{RULES.map((rule) => (
 					<div
-						key={rule.flag}
+						key={rule.khoa}
 						className="flex items-center justify-between gap-6"
 					>
 						<Label
-							htmlFor={`tracking-${rule.flag}`}
+							htmlFor={`tracking-${rule.khoa}`}
 							className="flex flex-col items-start gap-1"
 						>
-							<span className="text-sm">{rule.label}</span>
+							<span className="text-sm">{t.luat.co[rule.khoa].nhan}</span>
 							<span className="font-normal text-muted-foreground text-xs">
-								{rule.hint}
+								{t.luat.co[rule.khoa].goiY}
 							</span>
 						</Label>
 
 						<Switch
-							id={`tracking-${rule.flag}`}
-							checked={tracking.data[rule.flag]}
+							id={`tracking-${rule.khoa}`}
+							checked={tracking.data[rule.khoa]}
 							disabled={!canManage || setFlag.isPending}
 							onCheckedChange={(enabled) =>
-								setFlag.mutate({ flag: rule.flag, enabled })
+								setFlag.mutate({ flag: rule.khoa, enabled })
 							}
 						/>
 					</div>

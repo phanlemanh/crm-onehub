@@ -1,0 +1,21 @@
+{
+ "feature_plain": "Bắt bốn lệnh chứng của cổng nói thật — không lệnh nào được trả về một màu xanh phát lại từ bộ nhớ đệm — và bắt bộ nhớ đệm của thư viện giao diện khai đủ những file nó thật sự đọc ở ngoài gói.",
+ "decisions": [
+  {
+   "id": "E8",
+   "q": "Mỗi lượt chấm của cổng tốn thêm 21 giây — cái giá ấy có đáng không?",
+   "why": "Lượt có cache 1,1 giây nhưng KHÔNG chạy gì; lượt cưỡng bức 22,3 giây và chạy thật cả 11 gói."
+  }
+ ],
+ "analyst_plain": "",
+ "scope_plain": "Ép chạy lại cho lệnh hằng ngày · tắt hẳn bộ nhớ đệm · đưa trạng thái cơ sở dữ liệu vào khoá đệm · dời bộ vẽ ra khỏi thư viện giao diện — bốn thứ này hoãn.",
+ "decisions_plain": [
+  { "id": "d-20260906T190000Z-9601", "p": "Đo HÀNH VI của bộ nhớ đệm thay vì soi danh sách khai — đổi lại thước phải chạy công cụ thật nên chậm hơn." },
+  { "id": "d-20260906T190100Z-9602", "p": "CHỈ lệnh của cổng bị ép chạy lại; lệnh hằng ngày giữ nguyên — đổi lại có hai đường chạy khác nhau." },
+  { "id": "d-20260906T190200Z-9603", "p": "Giải tên script trước khi kết luận thay vì đoán theo tên — đổi lại chỉ giải được một bậc." },
+  { "id": "d-20260906T190300Z-9604", "p": "KHÔNG dựng bản bấm được để duyệt giao diện — vòng này không chạm màn nào." },
+  { "id": "d-20260906T190400Z-9605", "p": "KHÔNG viết đặc tả cấu trúc màn — vòng này không dựng màn nào." },
+  { "id": "d-20260906T200000Z-9606", "p": "Sửa một cột của bảng trong hợp đồng SAU khi duyệt: dự đoán cần hai cơ chế là sai, đo thật thì một là đủ — chính phép đo là bên sửa nó." },
+  { "id": "d-20260906T200100Z-9607", "p": "Đổi cách chạm file sang nội dung chưa từng có — trước đó chiều đỏ trả về một kết quả đệm giả, và chính thước kia là bên phát hiện." }
+ ]
+}

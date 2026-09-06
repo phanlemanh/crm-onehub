@@ -1,0 +1,703 @@
+{
+	"nguoi_doc": [
+		{
+			"file": "packages/ui/src/components/async-action.tsx",
+			"dong": 124,
+			"tham_so": "successLabel",
+			"gia_tri": "Done"
+		},
+		{
+			"file": "packages/ui/src/components/async-action.tsx",
+			"dong": 125,
+			"tham_so": "errorLabel",
+			"gia_tri": "Try again"
+		},
+		{
+			"file": "packages/ui/src/components/combobox.tsx",
+			"dong": 36,
+			"tham_so": "placeholder",
+			"gia_tri": "Select an option"
+		},
+		{
+			"file": "packages/ui/src/components/combobox.tsx",
+			"dong": 37,
+			"tham_so": "searchPlaceholder",
+			"gia_tri": "Search…"
+		},
+		{
+			"file": "packages/ui/src/components/combobox.tsx",
+			"dong": 38,
+			"tham_so": "empty",
+			"gia_tri": "Nothing matches."
+		},
+		{
+			"file": "packages/ui/src/components/command.tsx",
+			"dong": 38,
+			"tham_so": "title",
+			"gia_tri": "Command Palette"
+		},
+		{
+			"file": "packages/ui/src/components/command.tsx",
+			"dong": 39,
+			"tham_so": "description",
+			"gia_tri": "Search for a command to run..."
+		},
+		{
+			"file": "packages/ui/src/components/date-picker.tsx",
+			"dong": 24,
+			"tham_so": "placeholder",
+			"gia_tri": "Select a date"
+		}
+	],
+	"ky_thuat": [
+		{
+			"file": "packages/ui/src/components/ai-elements/artifact.tsx",
+			"dong": 46,
+			"tham_so": "size",
+			"gia_tri": "sm"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/artifact.tsx",
+			"dong": 47,
+			"tham_so": "variant",
+			"gia_tri": "ghost"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/artifact.tsx",
+			"dong": 104,
+			"tham_so": "size",
+			"gia_tri": "sm"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/artifact.tsx",
+			"dong": 105,
+			"tham_so": "variant",
+			"gia_tri": "ghost"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/checkpoint.tsx",
+			"dong": 48,
+			"tham_so": "variant",
+			"gia_tri": "ghost"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/checkpoint.tsx",
+			"dong": 49,
+			"tham_so": "size",
+			"gia_tri": "sm"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/message.tsx",
+			"dong": 82,
+			"tham_so": "variant",
+			"gia_tri": "ghost"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/message.tsx",
+			"dong": 83,
+			"tham_so": "size",
+			"gia_tri": "icon-sm"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/model-selector.tsx",
+			"dong": 40,
+			"tham_so": "title",
+			"gia_tri": "Model Selector"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/prompt-input.tsx",
+			"dong": 412,
+			"tham_so": "label",
+			"gia_tri": "Add photos or files"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/prompt-input.tsx",
+			"dong": 822,
+			"tham_so": "placeholder",
+			"gia_tri": "What would you like to know?"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/prompt-input.tsx",
+			"dong": 960,
+			"tham_so": "variant",
+			"gia_tri": "ghost"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/prompt-input.tsx",
+			"dong": 1027,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/prompt-input.tsx",
+			"dong": 1028,
+			"tham_so": "size",
+			"gia_tri": "icon-sm"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/prompt-input.tsx",
+			"dong": 1293,
+			"tham_so": "align",
+			"gia_tri": "start"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/suggestion.tsx",
+			"dong": 35,
+			"tham_so": "variant",
+			"gia_tri": "outline"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/suggestion.tsx",
+			"dong": 36,
+			"tham_so": "size",
+			"gia_tri": "sm"
+		},
+		{
+			"file": "packages/ui/src/components/alert-dialog.tsx",
+			"dong": 145,
+			"tham_so": "variant",
+			"gia_tri": "outline"
+		},
+		{
+			"file": "packages/ui/src/components/attachment.tsx",
+			"dong": 44,
+			"tham_so": "state",
+			"gia_tri": "done"
+		},
+		{
+			"file": "packages/ui/src/components/attachment.tsx",
+			"dong": 45,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/attachment.tsx",
+			"dong": 46,
+			"tham_so": "orientation",
+			"gia_tri": "horizontal"
+		},
+		{
+			"file": "packages/ui/src/components/attachment.tsx",
+			"dong": 82,
+			"tham_so": "variant",
+			"gia_tri": "icon"
+		},
+		{
+			"file": "packages/ui/src/components/attachment.tsx",
+			"dong": 163,
+			"tham_so": "size",
+			"gia_tri": "icon-xs"
+		},
+		{
+			"file": "packages/ui/src/components/avatar.tsx",
+			"dong": 9,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/avatar.tsx",
+			"dong": 29,
+			"tham_so": "referrerPolicy",
+			"gia_tri": "no-referrer"
+		},
+		{
+			"file": "packages/ui/src/components/badge.tsx",
+			"dong": 34,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/bubble.tsx",
+			"dong": 45,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/bubble.tsx",
+			"dong": 46,
+			"tham_so": "align",
+			"gia_tri": "start"
+		},
+		{
+			"file": "packages/ui/src/components/bubble.tsx",
+			"dong": 106,
+			"tham_so": "side",
+			"gia_tri": "bottom"
+		},
+		{
+			"file": "packages/ui/src/components/bubble.tsx",
+			"dong": 107,
+			"tham_so": "align",
+			"gia_tri": "end"
+		},
+		{
+			"file": "packages/ui/src/components/button-group.tsx",
+			"dong": 62,
+			"tham_so": "orientation",
+			"gia_tri": "vertical"
+		},
+		{
+			"file": "packages/ui/src/components/button.tsx",
+			"dong": 49,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/button.tsx",
+			"dong": 50,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/calendar.tsx",
+			"dong": 20,
+			"tham_so": "captionLayout",
+			"gia_tri": "label"
+		},
+		{
+			"file": "packages/ui/src/components/calendar.tsx",
+			"dong": 21,
+			"tham_so": "buttonVariant",
+			"gia_tri": "ghost"
+		},
+		{
+			"file": "packages/ui/src/components/carousel.tsx",
+			"dong": 49,
+			"tham_so": "orientation",
+			"gia_tri": "horizontal"
+		},
+		{
+			"file": "packages/ui/src/components/carousel.tsx",
+			"dong": 180,
+			"tham_so": "variant",
+			"gia_tri": "outline"
+		},
+		{
+			"file": "packages/ui/src/components/carousel.tsx",
+			"dong": 181,
+			"tham_so": "size",
+			"gia_tri": "icon-sm"
+		},
+		{
+			"file": "packages/ui/src/components/carousel.tsx",
+			"dong": 211,
+			"tham_so": "variant",
+			"gia_tri": "outline"
+		},
+		{
+			"file": "packages/ui/src/components/carousel.tsx",
+			"dong": 212,
+			"tham_so": "size",
+			"gia_tri": "icon-sm"
+		},
+		{
+			"file": "packages/ui/src/components/chart.tsx",
+			"dong": 122,
+			"tham_so": "indicator",
+			"gia_tri": "dot"
+		},
+		{
+			"file": "packages/ui/src/components/chart.tsx",
+			"dong": 271,
+			"tham_so": "verticalAlign",
+			"gia_tri": "bottom"
+		},
+		{
+			"file": "packages/ui/src/components/combobox.tsx",
+			"dong": 42,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/dashboard-chart.tsx",
+			"dong": 216,
+			"tham_so": "variant",
+			"gia_tri": "gradient"
+		},
+		{
+			"file": "packages/ui/src/components/dashboard-chart.tsx",
+			"dong": 217,
+			"tham_so": "bloom",
+			"gia_tri": "low"
+		},
+		{
+			"file": "packages/ui/src/components/dashboard.tsx",
+			"dong": 52,
+			"tham_so": "split",
+			"gia_tri": "hero"
+		},
+		{
+			"file": "packages/ui/src/components/dropdown-menu.tsx",
+			"dong": 35,
+			"tham_so": "align",
+			"gia_tri": "start"
+		},
+		{
+			"file": "packages/ui/src/components/dropdown-menu.tsx",
+			"dong": 66,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/empty.tsx",
+			"dong": 21,
+			"tham_so": "width",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/empty.tsx",
+			"dong": 65,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/entity-logo.tsx",
+			"dong": 32,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/field.tsx",
+			"dong": 25,
+			"tham_so": "variant",
+			"gia_tri": "legend"
+		},
+		{
+			"file": "packages/ui/src/components/field.tsx",
+			"dong": 74,
+			"tham_so": "orientation",
+			"gia_tri": "vertical"
+		},
+		{
+			"file": "packages/ui/src/components/hover-card.tsx",
+			"dong": 24,
+			"tham_so": "align",
+			"gia_tri": "center"
+		},
+		{
+			"file": "packages/ui/src/components/input-group.tsx",
+			"dong": 47,
+			"tham_so": "align",
+			"gia_tri": "inline-start"
+		},
+		{
+			"file": "packages/ui/src/components/input-group.tsx",
+			"dong": 87,
+			"tham_so": "type",
+			"gia_tri": "button"
+		},
+		{
+			"file": "packages/ui/src/components/input-group.tsx",
+			"dong": 88,
+			"tham_so": "variant",
+			"gia_tri": "ghost"
+		},
+		{
+			"file": "packages/ui/src/components/input-group.tsx",
+			"dong": 89,
+			"tham_so": "size",
+			"gia_tri": "xs"
+		},
+		{
+			"file": "packages/ui/src/components/input-group.tsx",
+			"dong": 134,
+			"tham_so": "size",
+			"gia_tri": "sm"
+		},
+		{
+			"file": "packages/ui/src/components/marker.tsx",
+			"dong": 23,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/message-scroller.tsx",
+			"dong": 86,
+			"tham_so": "direction",
+			"gia_tri": "end"
+		},
+		{
+			"file": "packages/ui/src/components/message-scroller.tsx",
+			"dong": 90,
+			"tham_so": "variant",
+			"gia_tri": "secondary"
+		},
+		{
+			"file": "packages/ui/src/components/message-scroller.tsx",
+			"dong": 91,
+			"tham_so": "size",
+			"gia_tri": "icon-sm"
+		},
+		{
+			"file": "packages/ui/src/components/message.tsx",
+			"dong": 17,
+			"tham_so": "align",
+			"gia_tri": "start"
+		},
+		{
+			"file": "packages/ui/src/components/person-avatar.tsx",
+			"dong": 13,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/popover.tsx",
+			"dong": 37,
+			"tham_so": "align",
+			"gia_tri": "center"
+		},
+		{
+			"file": "packages/ui/src/components/questionnaire.tsx",
+			"dong": 202,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/questionnaire.tsx",
+			"dong": 203,
+			"tham_so": "variant",
+			"gia_tri": "outline"
+		},
+		{
+			"file": "packages/ui/src/components/questionnaire.tsx",
+			"dong": 227,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/questionnaire.tsx",
+			"dong": 228,
+			"tham_so": "variant",
+			"gia_tri": "outline"
+		},
+		{
+			"file": "packages/ui/src/components/questionnaire.tsx",
+			"dong": 252,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/questionnaire.tsx",
+			"dong": 253,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/questionnaire.tsx",
+			"dong": 277,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/questionnaire.tsx",
+			"dong": 278,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/scroll-area.tsx",
+			"dong": 33,
+			"tham_so": "orientation",
+			"gia_tri": "vertical"
+		},
+		{
+			"file": "packages/ui/src/components/select.tsx",
+			"dong": 53,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/select.tsx",
+			"dong": 79,
+			"tham_so": "position",
+			"gia_tri": "popper"
+		},
+		{
+			"file": "packages/ui/src/components/select.tsx",
+			"dong": 80,
+			"tham_so": "align",
+			"gia_tri": "start"
+		},
+		{
+			"file": "packages/ui/src/components/separator.tsx",
+			"dong": 9,
+			"tham_so": "orientation",
+			"gia_tri": "horizontal"
+		},
+		{
+			"file": "packages/ui/src/components/sheet.tsx",
+			"dong": 75,
+			"tham_so": "side",
+			"gia_tri": "right"
+		},
+		{
+			"file": "packages/ui/src/components/simple-table.tsx",
+			"dong": 40,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/simple-table.tsx",
+			"dong": 41,
+			"tham_so": "surface",
+			"gia_tri": "popover"
+		},
+		{
+			"file": "packages/ui/src/components/sonner.tsx",
+			"dong": 15,
+			"tham_so": "theme",
+			"gia_tri": "system"
+		},
+		{
+			"file": "packages/ui/src/components/status-indicator.tsx",
+			"dong": 31,
+			"tham_so": "tone",
+			"gia_tri": "neutral"
+		},
+		{
+			"file": "packages/ui/src/components/status-indicator.tsx",
+			"dong": 34,
+			"tham_so": "bloom",
+			"gia_tri": "low"
+		},
+		{
+			"file": "packages/ui/src/components/status-indicator.tsx",
+			"dong": 69,
+			"tham_so": "tone",
+			"gia_tri": "neutral"
+		},
+		{
+			"file": "packages/ui/src/components/status-indicator.tsx",
+			"dong": 74,
+			"tham_so": "bloom",
+			"gia_tri": "low"
+		},
+		{
+			"file": "packages/ui/src/components/status-indicator.tsx",
+			"dong": 75,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/switch.tsx",
+			"dong": 10,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/tabs.tsx",
+			"dong": 10,
+			"tham_so": "orientation",
+			"gia_tri": "horizontal"
+		},
+		{
+			"file": "packages/ui/src/components/tabs.tsx",
+			"dong": 43,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/toggle-group.tsx",
+			"dong": 26,
+			"tham_so": "orientation",
+			"gia_tri": "horizontal"
+		},
+		{
+			"file": "packages/ui/src/components/toggle-group.tsx",
+			"dong": 63,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/toggle-group.tsx",
+			"dong": 64,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/toggle.tsx",
+			"dong": 33,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "packages/ui/src/components/toggle.tsx",
+			"dong": 34,
+			"tham_so": "size",
+			"gia_tri": "default"
+		},
+		{
+			"file": "apps/app/components/agent-builder/chat-chips.tsx",
+			"dong": 48,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "apps/app/components/agent-builder/chat-chips.tsx",
+			"dong": 136,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "apps/app/components/agent-builder/chat-chips.tsx",
+			"dong": 192,
+			"tham_so": "variant",
+			"gia_tri": "default"
+		},
+		{
+			"file": "apps/app/components/crm/inline-field.tsx",
+			"dong": 54,
+			"tham_so": "type",
+			"gia_tri": "text"
+		},
+		{
+			"file": "apps/app/components/crm/inline-field.tsx",
+			"dong": 339,
+			"tham_so": "placeholder",
+			"gia_tri": "None"
+		},
+		{
+			"file": "apps/app/components/detail-sheet.tsx",
+			"dong": 55,
+			"tham_so": "size",
+			"gia_tri": "2xl"
+		}
+	],
+	"khong_ve_duoc": [
+		{
+			"file": "packages/ui/src/components/ai-elements/chain-of-thought.tsx",
+			"dong": 124,
+			"tham_so": "status",
+			"gia_tri": "complete",
+			"ly_do": "khong co xuat nao ve duoc"
+		},
+		{
+			"file": "packages/ui/src/components/ai-elements/shimmer.tsx",
+			"dong": 23,
+			"tham_so": "Component",
+			"gia_tri": "p",
+			"ly_do": "khong co xuat nao ve duoc"
+		},
+		{
+			"file": "apps/app/components/crm/stage-change.tsx",
+			"dong": 60,
+			"tham_so": "variant",
+			"gia_tri": "inline",
+			"ly_do": "[nuqs] nuqs requires an adapter to work with your framework.\n  See https://nuqs.dev/NUQS-404"
+		},
+		{
+			"file": "apps/app/components/data-table/list-search-params.ts",
+			"dong": 95,
+			"tham_so": "defaultDir",
+			"gia_tri": "asc",
+			"ly_do": "khong phai component — file nay khong ve gi ra man"
+		},
+		{
+			"file": "apps/app/lib/trpc/cache.ts",
+			"dong": 54,
+			"tham_so": "settle",
+			"gia_tri": "all",
+			"ly_do": "khong phai component — file nay khong ve gi ra man"
+		}
+	]
+}

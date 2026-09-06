@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@crm/ui/components/button";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { SaveBar } from "@crm/ui/components/save-bar";
 import {
 	type FileContents,
@@ -12,6 +13,7 @@ import { EditProvider, File, FileDiff, Virtualizer } from "@pierre/diffs/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
+import { ketQuaMessages } from "@/lib/messages/agent-builder-ket-qua";
 import { useTRPC } from "@/lib/trpc/client";
 
 const FILE_OPTIONS: FileOptions<undefined> = {
@@ -41,6 +43,7 @@ export function AgentCode({
 	agentId: string;
 	canManage: boolean;
 }) {
+	const t = ketQuaMessages(useLocale());
 	const trpc = useTRPC();
 	const queryClient = useQueryClient();
 
@@ -95,8 +98,8 @@ export function AgentCode({
 		if (failed || remaining.length > 0) return;
 
 		setEditing(false);
-		toast.success("Saved.");
-	}, [agentId, queryClient, save, trpc]);
+		toast.success(t.ma.daLuu);
+	}, [agentId, queryClient, save, trpc, t.ma.daLuu]);
 
 	const editorOptions = useMemo<EditorOptions<undefined>>(
 		() => ({
@@ -146,9 +149,7 @@ export function AgentCode({
 	if (files.length === 0) {
 		return (
 			<p className="text-muted-foreground text-sm">
-				{code.isPending
-					? "Reading the agent's files…"
-					: "This agent has no files yet. The builder writes them when it deploys."}
+				{code.isPending ? t.ma.dangDocTep : t.ma.chuaCoTep}
 			</p>
 		);
 	}
@@ -158,10 +159,10 @@ export function AgentCode({
 			<section className="flex flex-col gap-3.5">
 				<div className="flex items-end justify-between gap-4">
 					<div>
-						<h2 className="font-semibold text-lg tracking-tight">Code</h2>
-						<p className="text-muted-foreground text-sm">
-							What the agent actually runs.
-						</p>
+						<h2 className="font-semibold text-lg tracking-tight">
+							{t.ma.tieuDe}
+						</h2>
+						<p className="text-muted-foreground text-sm">{t.ma.moTa}</p>
 					</div>
 
 					<div className="flex items-center gap-2">
@@ -171,7 +172,7 @@ export function AgentCode({
 								size="sm"
 								variant="outline"
 							>
-								{showDiff ? "Hide changes" : "Changes"}
+								{showDiff ? t.ma.anThayDoi : t.ma.xemThayDoi}
 							</Button>
 						) : null}
 						{canManage ? (
@@ -183,7 +184,7 @@ export function AgentCode({
 								size="sm"
 								variant="outline"
 							>
-								{editing ? "Done" : "Edit"}
+								{editing ? t.ma.xong : t.ma.sua}
 							</Button>
 						) : null}
 					</div>
@@ -228,12 +229,12 @@ export function AgentCode({
 			</section>
 
 			<SaveBar
-				description={`${changed.length} file${changed.length === 1 ? "" : "s"} changed. Saving writes a new revision.`}
+				description={t.ma.soTepDoi(String(changed.length))}
 				open={changed.length > 0}
-				title="Unsaved code"
+				title={t.ma.chuaLuu}
 			>
 				<Button disabled={saving} onClick={discard} size="sm" variant="outline">
-					Discard
+					{t.ma.boQua}
 				</Button>
 				<Button
 					disabled={saving}
@@ -242,7 +243,7 @@ export function AgentCode({
 					}}
 					size="sm"
 				>
-					{saving ? "Saving…" : "Save"}
+					{saving ? t.ma.dangLuu : t.ma.luu}
 				</Button>
 			</SaveBar>
 		</EditProvider>

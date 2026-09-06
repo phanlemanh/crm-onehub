@@ -2,11 +2,15 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { AgentBuilderHome } from "@/components/agent-builder/agent-builder-home";
 import { AgentBuilderHomeFallback } from "@/components/agent-builder/agent-builder-route-fallback";
+import { getLocale } from "@/lib/locale/server";
+import { khungMessages } from "@/lib/messages/agent-builder-khung";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 
-export const metadata: Metadata = { title: "Chat" };
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: khungMessages(await getLocale()).trang.tieuDeHoiThoai };
+}
 
 export default function ChatPage() {
 	return (

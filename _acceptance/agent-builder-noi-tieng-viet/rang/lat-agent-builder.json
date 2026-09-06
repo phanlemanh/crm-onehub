@@ -1,0 +1,54 @@
+{
+	"lat": "agent-builder-noi-tieng-viet",
+	"ghi_chu": "Dot MOT cua hai dot. Dan so quet khong de quy tung thu muc. Sau file cua cua so tro chuyen nam trong khong_quet: chung DA BAN GIAO cho ho so cua-so-tro-chuyen-noi-tieng-viet, va ho so do quet chung. Quan he lien-ho-so do o chan ban-giao cua ben nhan: ho so duoc goi ten phai ton tai VA ban khai cua no phai that su chua file do.",
+	"thu_muc": [
+		"apps/app/components/agent-builder",
+		"apps/app/app/(app)/[slug]/(agent-builder)",
+		"apps/app/app/(app)/[slug]/(agent-builder)/agents",
+		"apps/app/app/(app)/[slug]/(agent-builder)/agents/[agentId]",
+		"apps/app/app/(app)/[slug]/(agent-builder)/chat",
+		"apps/app/app/(app)/[slug]/(agent-builder)/chat/[chatId]"
+	],
+	"them": [],
+	"khong_quet": [
+		{
+			"duong": "apps/app/components/agent-builder/agent-builder-chat.tsx",
+			"vi_sao": "cua so tro chuyen — dot hai",
+			"chuyen_giao": "cua-so-tro-chuyen-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/agent-composer.tsx",
+			"vi_sao": "o soan cua cua so tro chuyen — dot hai",
+			"chuyen_giao": "cua-so-tro-chuyen-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/agent-history.tsx",
+			"vi_sao": "dong thoi gian cua cua so tro chuyen — dot hai",
+			"chuyen_giao": "cua-so-tro-chuyen-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/share-chat-dialog.tsx",
+			"vi_sao": "hop chia se hoi thoai — dot hai",
+			"chuyen_giao": "cua-so-tro-chuyen-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/chat-chips.tsx",
+			"vi_sao": "the goi y trong cua so tro chuyen — dot hai",
+			"chuyen_giao": "cua-so-tro-chuyen-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/delete-chat-action.tsx",
+			"vi_sao": "nut xoa hoi thoai — dot hai",
+			"chuyen_giao": "cua-so-tro-chuyen-noi-tieng-viet"
+		}
+	],
+	"mien_tru": [],
+	"neo": {
+		"file": 26,
+		"file_quet": 20,
+		"chuoi": 237,
+		"van_ban": 180,
+		"thuoc_tinh": 57,
+		"ghi_chu": "Do bang chinh ban khai nay ngay 06/09, sau khi ban khai nhap sot hai thu muc route. file = so .tsx tren dia trong sau thu muc; file_quet = con lai sau khi tru sau file hoan; chuoi = ung vien truoc khi tru mien tru, tach thanh van_ban + thuoc_tinh. Lech la thoat ma 2 kem diff ten file."
+	}
+}

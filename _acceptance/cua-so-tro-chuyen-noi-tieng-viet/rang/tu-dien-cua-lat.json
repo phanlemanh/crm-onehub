@@ -1,0 +1,21 @@
+{
+	"lat": "cua-so-tro-chuyen-noi-tieng-viet",
+	"ghi_chu": "Danh tu trung tam cua lat phai co muc trong CONTEXT.md, VA ban vi cua lat phai that su dung muc do. Muc bi go khoi CONTEXT.md la DO; muc co trong tu dien ma khong kho chuoi nao dung cung la DO.",
+	"muc": [
+		{
+			"tu": "Ô soạn",
+			"kho": "agent-builder-o-soan",
+			"duong": "oSoan.nhanOSoan"
+		},
+		{
+			"tu": "Hội thoại",
+			"kho": "agent-builder-tro-chuyen",
+			"duong": "man.hoiThoai"
+		},
+		{
+			"tu": "Lượt chạy",
+			"kho": "agent-builder-tro-chuyen",
+			"duong": "luot.trong"
+		}
+	]
+}

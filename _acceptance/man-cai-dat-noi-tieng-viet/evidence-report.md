@@ -10,7 +10,7 @@ slug: man-cai-dat-noi-tieng-viet
 verdict: PASS
 round: 3
 run_id: s4r3d-20260904T130156Z-16359
-verified_commit: e582e04faac15159865dae2dc9b7cd224cba960a
+verified_commit: a99f80a2bf02c873af1500ddd1ca48bc1b6c153f
 verified_at: 2026-09-04T13:04:00Z
 human_signoff: Manh Phan 2026-09-04
 ---
@@ -345,3 +345,8 @@ Máy không quyết được bốn điều này:
 3. **Ba nợ có tên** — chấp nhận trả sau, hay đòi trả trước khi ký.
 4. **`workspace` chưa có mục trong `CONTEXT.md`.** Thanh bên nay đọc *"Cài đặt công ty"*,
    trong khi *"công ty"* trên màn khác lại là một bản ghi. Cùng một chữ, hai vật.
+
+### Re-pin lần 1 — 07/09, do chuỗi sáu vòng Việt hoá hợp nhất vào cùng cây
+
+run_id: repin-20260906T215006Z-88260
+sha: a99f80a2bf02c873af1500ddd1ca48bc1b6c153f · suites: 4 lệnh exit 0

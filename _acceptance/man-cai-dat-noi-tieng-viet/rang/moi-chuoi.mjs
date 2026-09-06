@@ -2,11 +2,17 @@ import { readFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
-import { GOC, lat } from "./lat.mjs";
+import { GOC, KHAI_MAC_DINH, khaiTuArgv, lat } from "./lat.mjs";
+import { giuDoc } from "./khoa-cay.mjs";
+
+
+await giuDoc();
 
 const ts = createRequire(import.meta.url)("typescript");
 const HERE = dirname(fileURLToPath(import.meta.url));
-const KHAI = JSON.parse(readFileSync(`${HERE}/khong-phai-chu-nguoi-doc.json`, "utf8"));
+const KHAI_PATH = khaiTuArgv(KHAI_MAC_DINH);
+const KHAI_DIR = dirname(KHAI_PATH);
+const KHAI = JSON.parse(readFileSync(`${KHAI_DIR}/khong-phai-chu-nguoi-doc.json`, "utf8"));
 
 const DAU =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
@@ -15,6 +21,7 @@ const THUOC_JSX = new Set(KHAI.thuoc_jsx_ky_thuat);
 const KHOA_OBJECT = new Set(KHAI.khoa_object_ky_thuat);
 const HAM_KY_THUAT = new Set(KHAI.ham_ky_thuat);
 const GIU_NGUYEN = new Map(KHAI.giu_nguyen.map((g) => [g.chu, g]));
+const MAU = (KHAI.mau_ky_thuat?.mau ?? []).map((m) => new RegExp(m));
 const NOI_NGUOI_DOC = new Set(["chu-con", "khac"]);
 
 function cay(duong) {
@@ -30,6 +37,7 @@ function cay(duong) {
 function chuNguoiCoTheDoc(chu, boi_canh) {
 	if (chu.trim().length < 2) return false;
 	if (chu.startsWith("/")) return false;
+	if (MAU.some((m) => m.test(chu))) return false;
 	if (!/[A-Za-z]{2}/.test(chu)) return false;
 	if (/^[a-z0-9-]+(\/[a-z0-9._-]+)+$/.test(chu)) return false;
 	if (/^[A-Z][A-Z0-9_]*$/.test(chu)) return false;
@@ -112,14 +120,16 @@ export function quet(files) {
 	return ra;
 }
 
-const L = lat();
+const L = lat(KHAI_PATH);
 
 if (L.soTuDia === 0) {
 	console.log("KHONG DO DUOC: lat sinh ra 0 file — tap rong khong bao gio la dat");
 	process.exit(2);
 }
 
-const tatCa = quet(L.file);
+const chiI = process.argv.indexOf("--chi");
+const chi = chiI >= 0 ? process.argv[chiI + 1] : null;
+const tatCa = quet(chi ? [chi] : L.file);
 
 if (tatCa.length === 0) {
 	console.log(

@@ -10,6 +10,8 @@ import {
 	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { getLocale } from "@/lib/locale/server";
+import { khoaApiMessages } from "@/lib/messages/settings-khoa-api";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
@@ -17,22 +19,21 @@ import { apiKeysSearchParams } from "./api-keys-search-params";
 import { ApiKeysTable } from "./api-keys-table";
 import { CreateApiKeySheet } from "./create-api-key-sheet";
 
-export const metadata: Metadata = {
-	title: "API Keys",
-};
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: khoaApiMessages(await getLocale()).trang.tieuDeTab };
+}
 
-export default function ApiKeysSettingsPage({
+export default async function ApiKeysSettingsPage({
 	searchParams,
 }: PageProps<"/[slug]/settings/api-keys">) {
+	const t = khoaApiMessages(await getLocale());
+
 	return (
 		<PageShell className="min-h-0">
 			<PageShellHeader>
 				<PageShellHeading>
-					<PageShellTitle>API Keys</PageShellTitle>
-					<PageShellDescription>
-						Personal keys for calling the CRM API. Each one acts as you —
-						anything it can read or change is exactly what you can.
-					</PageShellDescription>
+					<PageShellTitle>{t.trang.tieuDe}</PageShellTitle>
+					<PageShellDescription>{t.trang.moTa}</PageShellDescription>
 				</PageShellHeading>
 
 				<PageShellActions>

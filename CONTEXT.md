@@ -110,6 +110,28 @@ _Avoid_: đã đặt lịch demo, đủ điều kiện để mua
 Vì sao: dịch một bước không xảy ra là in cái sai ra màn hình bằng thứ tiếng
 người đọc hiểu được.
 
+**Tác nhân**: một việc tự động do người dùng dựng ra trong CRM, chạy theo mốc
+kích hoạt hoặc chạy tay. Trên màn hình đang hiện dưới `Agents`. Chốt 2026-09-06.
+_Avoid_: bot, trợ lý, agent
+Vì sao: "bot" nghe như hộp thoại trả lời sẵn; "trợ lý" hứa một thứ nó không
+làm; giữ "agent" tiếng Anh thì màn lẫn hai thứ tiếng ngay trong một câu.
+
+**Hội thoại**: một buổi trao đổi riêng giữa người dùng và bộ dựng để nặn ra một
+tác nhân. Trên màn hình đang hiện dưới `Chats`. Chốt 2026-09-06.
+_Avoid_: cuộc trò chuyện, chat
+Vì sao: "cuộc trò chuyện" dài và mềm cho một thứ có sản phẩm đầu ra; "chat"
+để nguyên thì thanh bên lẫn tiếng.
+
+**Lượt chạy**: một lần tác nhân thực thi. Trên màn hình đang hiện dưới `Runs`.
+Chốt 2026-09-06.
+_Avoid_: lần chạy, phiên chạy, run
+Vì sao: "lượt" nói đúng chuyện xếp hàng — tác nhân được xếp lượt rồi mới chạy.
+
+**Ô soạn**: khung người gõ tin nhắn cho bộ dựng tác nhân, kèm chỗ gắn bản ghi CRM
+và đính tệp. Chốt 2026-09-06.
+_Avoid_: composer, khung nhập, editor
+Vì sao: người dùng gọi nó theo việc họ làm ở đó — soạn một tin — chứ không theo
+tên component trong mã.
 **Chiến dịch**: một đợt gọi có tên, chạy trên đúng một phân khúc, có lúc bắt đầu
 và lúc kết thúc; mỗi cuộc gọi ghi lại một kết quả. Trên màn hình đang hiện dưới
 `Campaigns`.

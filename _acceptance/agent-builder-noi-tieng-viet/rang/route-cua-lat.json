@@ -1,0 +1,16 @@
+{
+	"lat": "agent-builder-noi-tieng-viet",
+	"ghi_chu": "Route SINH TU THU MUC (agent-builder): moi page.tsx la mot route, nhom trong ngoac don khong hien tren duong dan. Route can mot ban ghi that moi dung duoc thi khai o can_vat — chan tu doc khoa nay, khong go tay danh sach route. Bang nay co CHIEU DO: chan mo tung route can_vat bang mot dinh danh khong co that; route nao van ve ra chu la DO — ban khai da cu.",
+	"can_vat": [
+		{
+			"route": "/agents/[agentId]",
+			"vat": "mot tac nhan cua doi",
+			"vi_sao_chua_do": "Tac nhan khong sinh ra bang mot thu tuc ghi truc tiep: no ra doi tu mot hoi thoai dung roi moi duoc dua vao chay. Dung luong gieo that (conversations.createBuilder roi deploy) la mot viec rieng, co the can ca bo chay tac nhan. Vong nay KHONG gieo, va khai thang ra day."
+		},
+		{
+			"route": "/chat/[chatId]",
+			"vat": "mot hoi thoai dung",
+			"vi_sao_chua_do": "Cung mot luong gieo voi route tren. Ngoai ra cua so tro chuyen la dot HAI cua lat nay, nen man do cung chua phai cua vong nay."
+		}
+	]
+}

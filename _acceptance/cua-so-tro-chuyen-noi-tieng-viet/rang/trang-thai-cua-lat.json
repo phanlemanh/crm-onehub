@@ -1,0 +1,40 @@
+{
+	"lat": "cua-so-tro-chuyen-noi-tieng-viet",
+	"ghi_chu": "Bang DONG ba trang thai nhat thoi cua o soan. Moi dong tro mot DUONG vao kho chuoi o-soan — chu mong doi doc tu do, khong go tay. Duong chet la thoat ma 2. Hai chieu tren cung mot vat: dong khai dung_duoc ma chu KHONG ve ra la DO; dong khai khong dung duoc ma chu VE RA la DO. Ba nhan nhat thoi do duoc vi chung luon nam trong DOM cho trinh doc man hinh — xem ghi_chu cua tung dong.",
+	"o": [
+		{
+			"ma": "ST-dang-gui",
+			"man": "/chat",
+			"duong": "oSoan.dangGui",
+			"dung_duoc": true,
+			"ghi_chu": "Nhan nay luon nam trong DOM duoi dang chu chi danh cho trinh doc man hinh, nen do duoc BAN THAN NHAN. GIOI HAN DA KHAI: day la phep do 'nhan da toi noi', KHONG phai 'trang thai da xay ra' — lai o soan vao dung trang thai can mot luot tac nhan tra loi that, ton token tren mot khoa co tran."
+		},
+		{
+			"ma": "ST-da-gui",
+			"man": "/chat",
+			"duong": "oSoan.daGui",
+			"dung_duoc": true,
+			"ghi_chu": "Nhan nay luon nam trong DOM duoi dang chu chi danh cho trinh doc man hinh, nen do duoc BAN THAN NHAN. GIOI HAN DA KHAI: day la phep do 'nhan da toi noi', KHONG phai 'trang thai da xay ra' — lai o soan vao dung trang thai can mot luot tac nhan tra loi that, ton token tren mot khoa co tran."
+		},
+		{
+			"ma": "ST-gui-hong",
+			"man": "/chat",
+			"duong": "oSoan.guiHong",
+			"dung_duoc": true,
+			"ghi_chu": "Nhan nay luon nam trong DOM duoi dang chu chi danh cho trinh doc man hinh, nen do duoc BAN THAN NHAN. GIOI HAN DA KHAI: day la phep do 'nhan da toi noi', KHONG phai 'trang thai da xay ra' — lai o soan vao dung trang thai can mot luot tac nhan tra loi that, ton token tren mot khoa co tran."
+		},
+		{
+			"ma": "ST-o-soan-rong",
+			"man": "/chat",
+			"duong": "oSoan.datCauHoi",
+			"dung_duoc": false,
+			"vi_sao": "Cau moi go nam o thuoc tinh placeholder; bo gom chu doc not van ban va @aria-label, khong doc placeholder. Do o muc ma bang chan thuoc tinh."
+		},
+		{
+			"ma": "ST-goi-y",
+			"man": "/chat",
+			"duong": "oSoan.moLenh",
+			"dung_duoc": true
+		}
+	]
+}

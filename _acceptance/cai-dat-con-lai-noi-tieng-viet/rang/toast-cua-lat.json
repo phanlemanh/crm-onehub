@@ -1,0 +1,98 @@
+{
+	"lat": "cai-dat-con-lai-noi-tieng-viet",
+	"ghi_chu": "Bang dong toast ghim (file, khoa kho chuoi) — sinh tu cay DA DICH o Task 5. Rong truoc do la co y: chan toast thoat ma 2 va in THUA cho moi loi goi mang chu, do chinh la bang nhap.",
+	"loi_goi": [
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/api-keys/api-keys-table.tsx",
+			"khoa": "thuHoi.xong"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/connections/google-connection.tsx",
+			"khoa": "google.khongVoiToi"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/connections/google-connection.tsx",
+			"khoa": "chung.daXoa"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/connections/microsoft-connection.tsx",
+			"khoa": "microsoft.khongVoiToi"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/connections/microsoft-connection.tsx",
+			"khoa": "chung.daXoa"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx",
+			"khoa": "kenh.daOTrong"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx",
+			"khoa": "kenh.dangDoc"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx",
+			"khoa": "kenh.chepHong"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-channels.tsx",
+			"khoa": "kenh.daChep"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-connect-button.tsx",
+			"khoa": "slack.khongCamDuoc"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-connect-button.tsx",
+			"khoa": "slack.khongCamDuoc"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/connections/slack/slack-disconnect-button.tsx",
+			"khoa": "slack.daGo"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/members/members-table.tsx",
+			"khoa": "bang.daDoi"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/sso/add-sso-provider-sheet.tsx",
+			"khoa": "them.daLuu"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/sso/sso-table.tsx",
+			"khoa": "go.xong"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/tracking/allowed-domains.tsx",
+			"khoa": "tenMien.daGo"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/tracking/allowed-domains.tsx",
+			"khoa": "tenMien.daThem"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/tracking/tracking-cookies.tsx",
+			"khoa": "cookie.daLuuHan"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx",
+			"khoa": "doanMa.daTamDung"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx",
+			"khoa": "doanMa.daDoiSiteId"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx",
+			"khoa": "doanMa.khongChepBoiDen"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx",
+			"khoa": "doanMa.daChep"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx",
+			"khoa": "doanMa.khongChep"
+		}
+	]
+}

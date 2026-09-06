@@ -1,0 +1,274 @@
+schema_version: 1
+feature_slug: agent-builder-noi-tieng-viet
+evals:
+
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.ab_hai_tieng
+    expected: >-
+      exit 0. Danh sach route SINH TU THU MUC (agent-builder), khong go tay. Moi route
+      dung hai luot vi/en tren may chu that, redirect: manual. Ba ve tren TUNG route:
+      so chuoi bang nhau · moi cap khac nhau tru bang AC-6 · luot vi co dau tru dong
+      mien_dau co ten. Tap rong tren mot route la thoat ma 2 goi ten route.
+      Bang dong route-cua-lat.json chia route thanh dung-duoc-ngay va can-mot-ban-ghi-that.
+      Bang do chiu CHIEU DO: chan mo tung route can_vat bang mot dinh danh KHONG CO THAT;
+      route nao van ve ra chu la DO goi ten — ban khai da cu. Route can ban ghi mang sang
+      cong ky duoi nhan GIOI HAN DA KHAI, khong ha xuong doc ma roi ghi dat.
+      Chieu do: ghim mot kho chuoi ve "vi" trong mot trang thi luot en hien tieng Viet,
+      ve 2 gay, chan do goi ten trang va duong DOM.
+    paths:
+      - "apps/app/components/agent-builder/**"
+      - "apps/app/app/(app)/[slug]/(agent-builder)/**"
+      - "apps/app/lib/messages/agent-builder-*.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-1b
+    executor: script
+    cmd: config:executors.script.ab_chu_cung_jsx
+    expected: >-
+      exit 0. Mui goi tro ve chu-cung-lat.mjs cua dot mot kem --lat tro toi ban khai lat
+      nay. Dan so sinh tu dia; bo quet doc BANG so file lat sinh; 0 chuoi viet thang trong
+      JSX ngoai mien tru co ten; mien tru chet la DO goi ten dong.
+    paths:
+      - "apps/app/components/agent-builder/**"
+      - "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.ab_toast
+    expected: >-
+      exit 0. Bang dong toast ghim (file, khoa kho chuoi); doi chieu TUNG MUC ca hai chieu;
+      lech mot muc la thoat ma 2 in ca THIEU lan THUA. In so luot chuyen tiep error.message
+      da bo qua. Chieu do: doi mot khoa trong bang thanh khoa khong ai doc thi tong van bang
+      nhau nhung chan thoat ma 2.
+    paths:
+      - "apps/app/components/agent-builder/**"
+      - "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.ab_tieu_de
+    expected: >-
+      exit 0. Dem O tieu de, khong dem chuoi: bon generateMetadata. So o nhan ra BANG bon,
+      lech la thoat ma 2 liet tung o. Ca bon doc tu kho chuoi.
+      Chieu do: doi mot ve chuoi viet thang thi chan do goi ten o.
+    paths:
+      - "apps/app/app/(app)/[slug]/(agent-builder)/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.ab_thuoc_tinh
+    expected: >-
+      exit 0. DANH SACH TEN THUOC TINH SINH TU CAY, khong ke tay: lay MOI ten thuoc tinh mang
+      chuoi roi TRU theo danh sach ky thuat khai co ten. Mot ten thuoc tinh mang chu nguoi doc
+      ma khong nam trong danh sach ky thuat va cung khong doc tu kho chuoi la DO goi ten
+      file:dong:ten-thuoc-tinh. So thuoc tinh mang chu bat duoc phai BANG neo 57 — lech la
+      thoat ma 2 kem diff. Moi dong mien tru ky thuat phai con doi tuong that.
+      Chieu do: doi mot aria-label ve chuoi viet thang thi chan do dung dong.
+    paths:
+      - "apps/app/components/agent-builder/**"
+      - "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.ab_trang_thai
+    expected: >-
+      exit 0. Bang dong chin o trang thai (tam o ST-* cua design cong o rong cua thanh ben).
+      Moi o tro mot DUONG vao kho chuoi cua san pham — chu mong doi doc tu do, khong go tay.
+      Duong chet la thoat ma 2 (thieu tien de). O khai dung duoc ma chu KHONG ve ra la DO;
+      o khai KHONG dung duoc ma chu VE RA la DO — ban khai da cu. It nhat MOT o phai dung
+      duoc; khong o nao dung duoc la thoat ma 2. O khong dung duoc GOI TEN kem ly do duoi
+      nhan GIOI HAN DA KHAI va mang sang cong ky — khong ha xuong doc ma roi ghi dat.
+      Chieu do da chung 06/09: (a) lat mot o dung-duoc thanh khong-dung-duoc -> ma 1 goi ten;
+      (b) tro mot o vao duong kho chuoi khong ton tai -> ma 2 goi ten; (c) vet dot bien
+      go {t.doi.trong} khoi man -> CHI chan nay bat, chung rang no do MAN chu khong do KHO.
+    paths:
+      - "apps/app/components/agent-builder/**"
+      - "apps/app/lib/messages/agent-builder-*.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.ab_khong_dich
+    expected: >-
+      exit 0. Bang dong cong chin chuoi ngoai_lat sinh tu sau file hoan sang dot hai.
+      Moi gia tri duoc so theo VI TRI trong cay DOM: cho nao luot vi ve ra gia tri do thi
+      luot en o dung vi tri ay phai ve ra Y HET chuoi do — khac nhau la DO goi ten route,
+      vi tri va chuoi ben kia. Dong khai trong bang ma khong vi tri nao ve ra la thoat ma 2,
+      tru dong khai ro doi tuong nam ngoai man do duoc kem ly do. Khong vi tri nao doi chieu
+      duoc la thoat ma 2.
+      Chieu do da chung 06/09: (a) them mot chuoi DA DICH vao bang -> ma 1, goi dung route,
+      duong DOM va chuoi ben kia; (b) them mot chuoi khong he ve ra -> ma 2 goi ten.
+      Ghi chu: phep so theo GIA TRI (chuoi === chuoi) la mot phep so voi chinh no va da
+      duoc thay bang phep so theo vi tri ngay 06/09.
+    paths:
+      - "apps/app/components/agent-builder/**"
+      - "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-6b
+    executor: script
+    cmd: config:executors.script.ab_du_lieu_nguoi_nhap
+    expected: >-
+      exit 0. Bang dong (file, bieu thuc). Chan doc CAY CU PHAP: phan tu JSX boc dung
+      bieu thuc do phai mang translate="no". Thieu thuoc tinh la DO goi ten file:dong va
+      the; bieu thuc khong con trong file la thoat ma 2 (ban khai da cu); bang rong la
+      thoat ma 2. O co doi tuong ngoai thu muc lat khai o ngoai_lat va chiu cung phep do.
+      GIOI HAN DA KHAI: nua do-tren-man-that nam sau cung quyet dinh gieo voi AC-1 —
+      workspace do co 0 tac nhan, 0 hoi thoai.
+      Chieu do da chung 06/09: (a) go translate="no" khoi mot phan tu -> ma 1 goi dung
+      file:dong; (b) tro mot dong vao mot bieu thuc khong ton tai -> ma 2 goi ten.
+    paths:
+      - "apps/app/components/agent-builder/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.ab_dot_bien
+    expected: >-
+      exit 0. Bang DONG ghim (hinh dang, chan chuyen trach) cho sau hinh dang cua truc A: van
+      ban JSX · thuoc tinh · tieu de · toast · khoa object · component dung chung. Moi vet phai
+      bi dung CHAN CHUYEN TRACH cua hinh dang do bat voi MA 1 — khong nhan "mot chan nao do bat
+      duoc", vi mot chan hong van co the duoc chan bat-het che lap. Vet cua hinh dang component
+      dung chung phai cam o file NGOAI components/agent-builder, khai duong dan nguyen van.
+      Ma 2 in rieng va KHONG tinh la bat duoc — vet ma MOI chan tra ma 2 la KHONG DO DUOC (ma 2).
+      Vet nam trong ma may chu chay khai cho_ms de cho nap lai. Cay lanh thi moi chan xanh;
+      git status truoc/sau bang nhau.
+    paths:
+      - "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.ab_khai_sinh
+    expected: >-
+      exit 0. Hang FILE tu ba nguon doc lap bang nhau; hang VAT so theo TAP cho toast va so
+      o tieu de. So quet ra BANG bon con so neo trong ban khai — lech la thoat ma 2 kem diff
+      ten file. Lech la thoat ma 2 in ca hai hang.
+    paths:
+      - "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.ab_dan_so_tu_dia
+    expected: >-
+      exit 0. Truoc het chay NEN: hai chan xanh tren cay lanh, khong thi thoat ma 2 —
+      chieu xanh gay thi chieu do khong noi len dieu gi. Roi hai thi nghiem: (a) tha mot
+      file .tsx mang chu tieng Anh vao thu muc lat → dan so tang 1 VA hai chan deu DO;
+      (b) CAN GAT khong_quet do bang QUAN HE, khong bang "con tieng Anh" — sau file hoan CON
+      tieng Anh la dung thiet ke: so dong khong_quet phai BANG sau (thua hay thieu mot dong la
+      thoat ma 2 goi ten file), va mot file bi loai tru mang chuoi TRUNG voi mot gia tri cua ba
+      kho chuoi moi la DO — nghia la chu cua dot nay da ro sang vung hoan. Chan tra ma 2 khi co vet la chua do duoc, KHONG tinh la bat.
+      Ca hai deu don sach, git status bang nhau.
+    paths:
+      - "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+      - "apps/app/components/agent-builder/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.ab_be_rong
+    expected: >-
+      exit 0. Moi route dung duoc cua lat o 360px hai luot; chi tinh phan tu NHIN THAY DUOC
+      (bo qua phan tu nam trong hop <=1px, vd chu chi danh cho trinh doc man hinh);
+      scrollWidth > clientWidth la DO; en la doi chung duong; khong mien tru truncate;
+      tap rong thoat ma 2. Gioi han ke thua noi ro trong output: mu voi vung chua xuong dong.
+    paths:
+      - "apps/app/components/agent-builder/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.ab_moi_chuoi
+    expected: >-
+      exit 0. Mui goi tro ve moi-chuoi.mjs cua dot mot kem --lat. Lay MOI chuoi, tru theo
+      luat co ten voi hai danh sach TACH BIET (thuoc tinh JSX / khoa object). Con tieng Anh
+      la DO in file:dong:boi canh:nguyen van. 0 chuoi quet ra la thoat ma 2. Giu-nguyen chet
+      la DO.
+      CA CHAN-KHONG-DUOC-NO (ranh gioi): mot dong giu-nguyen CON doi tuong that trong ma thi
+      chan KHONG duoc do vi no — ghim so dong giu-nguyen song va doi chan van thoat 0. Thieu
+      ca nay thi "0 chuoi tieng Anh" khong phan biet duoc "da dich het" voi "mien tru nuot het".
+    paths:
+      - "apps/app/components/agent-builder/**"
+      - "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.ab_mot_bo_thuoc
+    expected: >-
+      exit 0. So than ham va than mo-dun giua rang/ cua lat nay va rang/ cua ba lat truoc:
+      mot khoi trung tu 12 dong tro len la DO kem ten hai file va dai dong — bat ca file
+      .mjs lan .sh. Chan tu chot tien de: moi script ma o cam ab_* tro toi phai co mat,
+      thieu la thoat ma 2. Chieu do chung bang chep mot thuoc cua vong truoc sang rang/
+      lat nay.
+    paths:
+      - "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+      - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
+      - "_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E16
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.rang3_khoa_chet
+    expected: >-
+      exit 0. Bo canh kho chuoi: moi gia tri vi co dau tru mien tru co ten, khong gia tri
+      nao y het en, moi ham ghep bien co khang dinh ghim va so ham bang so khang dinh,
+      khong khoa chet. Ba kho agent-builder-* tu dong nam trong MODULE vi bo canh sinh
+      danh sach tu readdirSync(lib/messages).
+    paths:
+      - "apps/app/lib/messages/agent-builder-*.ts"
+      - "apps/app/test/messages-guard.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.ab_tu_dien
+    expected: >-
+      exit 0. CONTEXT.md co muc cho danh tu trung tam cua lat (Tac nhan), va moi tu khai
+      trong muc do that su xuat hien trong ban vi cua ba kho chuoi moi — muc tu dien chet
+      (khai mot tu ma khong kho nao dung) la DO goi ten tu.
+      Chieu do: them mot tu khong ai dung vao muc thi chan do.
+    paths:
+      - "CONTEXT.md"
+      - "apps/app/lib/messages/agent-builder-*.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E18
+    criterion: AC-13
+    executor: judgment
+    question: >-
+      Ba kho chuoi nay doc nhu tieng Viet cua nguoi quan tri khong: danh tu theo CONTEXT.md
+      (tac nhan · hoi thoai · luot chay · cong ty · ca nhan), thuat ngu ky thuat giu ten
+      that (manifest, webhook, API), cau ghep so nhieu tieng Anh da thanh cau Viet tu nhien,
+      va cho nao con la chu dich may thi neu dich danh khoa?
+    expected: >-
+      Ban dich doc nhu tieng Viet cua nguoi lam nghe. Khong chuoi nao la chu go loi hay chu
+      thu nghiem con sot. Danh tu trung tam dung nhat quan mot chu, khong lan giua hai cach
+      goi trong cung mot kho.
+    inputs:
+      - apps/app/lib/messages/agent-builder-khung.ts
+      - apps/app/lib/messages/agent-builder-tac-nhan.ts
+      - apps/app/lib/messages/agent-builder-ket-qua.ts
+      - CONTEXT.md

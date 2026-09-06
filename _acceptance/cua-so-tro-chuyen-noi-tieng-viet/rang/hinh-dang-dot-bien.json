@@ -1,0 +1,31 @@
+{
+	"lat": "cua-so-tro-chuyen-noi-tieng-viet",
+	"ghi_chu": "Bang DONG (hinh dang, chan chuyen trach). Moi vet phai bi DUNG chan chuyen trach cua hinh dang do bat — khong nhan 'mot chan nao do bat duoc', vi mot chan hong van co the duoc chan bat-het che lap. Bang lech voi bo vet la thoat ma 2.",
+	"hinh_dang": [
+		{
+			"ten": "van-ban-jsx",
+			"chan_chuyen_trach": "chu-cung-jsx"
+		},
+		{
+			"ten": "thuoc-tinh",
+			"chan_chuyen_trach": "thuoc-tinh"
+		},
+		{
+			"ten": "khoa-object",
+			"chan_chuyen_trach": "moi-chuoi"
+		},
+		{
+			"ten": "ban-giao",
+			"chan_chuyen_trach": "ban-giao"
+		},
+		{
+			"ten": "tu-dien",
+			"chan_chuyen_trach": "tu-dien"
+		}
+	],
+	"khong_co_doi_tuong": {
+		"tieu-de-tai-lieu": "Lat nay khong so huu page.tsx nao nen khong co o tieu de de cam vet. Chinh dieu do la mot tieu chi rieng (AC-4) va co chan boc riêng.",
+		"trang-thai-tren-man": "Cam mot vet vao nhan trang thai se lam CA chan moi-chuoi bat duoc truoc, nen no khong phan biet duoc chan trang thai co song hay khong. Chieu do cua chan trang thai da duoc chung RIENG bang hai luot lat ban khai.",
+		"toast": "Chan toast bao lech bang bang MA 2 (tien de/bang lech) chu khong bao gio ma 1, nen theo luat 'chi ma 1 tinh la bat duoc' no khong the la chan bat cua bo dot bien. Va chan MOI CHUOI co y bo qua chuoi nam trong toast.* — hai chan chia viec — nen no cung khong bat. Chieu do HAI CHIEU cua bang toast duoc chung RIENG ngay 06/09: go mot dong khoi bang -> ma 2 goi dung ten dong thua. Ghi ra day de khong ai tuong hinh dang nay khong co chieu do."
+	}
+}

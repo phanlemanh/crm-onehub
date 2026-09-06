@@ -28,6 +28,7 @@ import {
 } from "@crm/ui/components/card";
 import { Icon } from "@crm/ui/components/icon";
 import { Label } from "@crm/ui/components/label";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { Switch } from "@crm/ui/components/switch";
@@ -36,33 +37,29 @@ import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import { LocalRelativeTime } from "@/components/local-date-time";
+import {
+	type KetNoiMessages,
+	ketNoiMessages,
+} from "@/lib/messages/settings-ket-noi";
 import { isSyncing, SYNC_POLL_MS } from "@/lib/sync-status";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
-const AUTO_CREATE = "Add the company and contact when you reply to someone new";
-
-const CONNECT_ERRORS = new Map([
-	[
-		"email_doesn't_match",
-		"That Microsoft account has a different email address to the one you sign in with, so it cannot be attached to your account. Connect the Microsoft account that matches your sign-in address.",
-	],
-]);
-
-function MicrosoftUnavailable() {
+function MicrosoftUnavailable({ t }: { t: KetNoiMessages }) {
 	return (
 		<Card>
 			<CardHeader>
 				<CardTitle>
 					<div className="flex items-center gap-2">
-						Microsoft
-						<StatusIndicator size="sm" tone="neutral" label="Not configured" />
+						<span translate="no">{t.ten.microsoft}</span>
+						<StatusIndicator
+							size="sm"
+							tone="neutral"
+							label={t.chung.chuaCauHinh}
+						/>
 					</div>
 				</CardTitle>
-				<CardDescription>
-					Set MICROSOFT_CLIENT_ID and MICROSOFT_CLIENT_SECRET in the root .env
-					file and restart.
-				</CardDescription>
+				<CardDescription>{t.microsoft.chuaCauHinhMoTa}</CardDescription>
 			</CardHeader>
 		</Card>
 	);
@@ -75,11 +72,12 @@ function ConnectMicrosoft({
 	slug: string;
 	connectError?: string;
 }) {
+	const t = ketNoiMessages(useLocale());
 	const [pending, setPending] = useState(false);
 
 	function fail(message?: string) {
 		setPending(false);
-		toast.error(message ?? "Could not reach Microsoft.");
+		toast.error(message ?? t.microsoft.khongVoiToi);
 	}
 
 	async function handleConnect() {
@@ -102,14 +100,11 @@ function ConnectMicrosoft({
 			<CardHeader>
 				<CardTitle>
 					<div className="flex items-center gap-2">
-						Microsoft
-						<StatusIndicator size="sm" tone="neutral" label="Not connected" />
+						<span translate="no">{t.ten.microsoft}</span>
+						<StatusIndicator size="sm" tone="neutral" label={t.chung.chuaCam} />
 					</div>
 				</CardTitle>
-				<CardDescription>
-					Read-only Outlook mail. Only conversations with companies in the CRM
-					are stored.
-				</CardDescription>
+				<CardDescription>{t.microsoft.chuaCamMoTa}</CardDescription>
 
 				<CardAction>
 					<Button
@@ -125,7 +120,7 @@ function ConnectMicrosoft({
 						) : (
 							<MicrosoftLogo data-icon="inline-start" className="size-4" />
 						)}
-						Connect
+						{t.chung.cam}
 					</Button>
 				</CardAction>
 			</CardHeader>
@@ -134,10 +129,9 @@ function ConnectMicrosoft({
 				<CardContent>
 					<Alert variant="destructive">
 						<Icon icon={Warning} />
-						<AlertTitle>Microsoft did not finish connecting</AlertTitle>
+						<AlertTitle>{t.microsoft.camHong}</AlertTitle>
 						<AlertDescription>
-							{CONNECT_ERRORS.get(connectError) ??
-								"Microsoft returned an error before the connection was made. Try again."}
+							{t.microsoft.loiCam.get(connectError) ?? t.microsoft.camHongMoTa}
 						</AlertDescription>
 					</Alert>
 				</CardContent>
@@ -153,6 +147,7 @@ export function MicrosoftConnection({
 	slug: string;
 	connectError?: string;
 }) {
+	const t = ketNoiMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
@@ -168,7 +163,7 @@ export function MicrosoftConnection({
 		trpc.microsoft.purgeSyncedData.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.microsoft();
-				toast.success(`Removed ${result.purged} synced items.`);
+				toast.success(t.chung.daXoa(String(result.purged)));
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -203,7 +198,7 @@ export function MicrosoftConnection({
 	const { sources, hasRefreshToken, configured, linked, required } =
 		status.data;
 
-	if (!configured) return <MicrosoftUnavailable />;
+	if (!configured) return <MicrosoftUnavailable t={t} />;
 	if (!linked) {
 		return <ConnectMicrosoft slug={slug} connectError={connectError} />;
 	}
@@ -224,17 +219,15 @@ export function MicrosoftConnection({
 			<CardHeader>
 				<CardTitle>
 					<div className="flex items-center gap-2">
-						Microsoft
+						<span translate="no">{t.ten.microsoft}</span>
 						<StatusIndicator
 							size="sm"
 							tone={healthy ? "success" : "warning"}
-							label={healthy ? "Connected" : "Needs attention"}
+							label={healthy ? t.chung.daCam : t.chung.canXemLai}
 						/>
 					</div>
 				</CardTitle>
-				<CardDescription>
-					Email threads land on the matching company as they happen.
-				</CardDescription>
+				<CardDescription>{t.microsoft.daCamMoTa}</CardDescription>
 
 				<CardAction>
 					<Button
@@ -243,7 +236,7 @@ export function MicrosoftConnection({
 						disabled={syncNow.isPending}
 						onClick={() => syncNow.mutate()}
 					>
-						{syncNow.isPending ? "Checking…" : "Check now"}
+						{syncNow.isPending ? t.chung.dangKiem : t.chung.kiemNgay}
 					</Button>
 				</CardAction>
 			</CardHeader>
@@ -252,16 +245,16 @@ export function MicrosoftConnection({
 				{!hasRefreshToken ? (
 					<Alert variant="destructive">
 						<Icon icon={Warning} />
-						<AlertTitle>Microsoft did not return a refresh token</AlertTitle>
-						<AlertDescription>Sign out and back in.</AlertDescription>
+						<AlertTitle>{t.microsoft.khongCoKhoaLamMoi}</AlertTitle>
+						<AlertDescription>{t.chung.vaoLai}</AlertDescription>
 					</Alert>
 				) : failing.length > 0 ? (
 					failing.map((source) => (
 						<Alert key={source.source} variant="destructive">
 							<Icon icon={Warning} />
-							<AlertTitle>Email sync failed</AlertTitle>
+							<AlertTitle>{t.microsoft.dongBoHong}</AlertTitle>
 							<AlertDescription>
-								{source.lastError ?? "Microsoft needs reconnecting."}
+								{source.lastError ?? t.microsoft.canCamLai}
 							</AlertDescription>
 						</Alert>
 					))
@@ -269,10 +262,10 @@ export function MicrosoftConnection({
 					<p className="text-muted-foreground text-xs">
 						{lastSyncedAt ? (
 							<>
-								Last checked <LocalRelativeTime date={lastSyncedAt} />
+								{t.chung.kiemLanCuoi} <LocalRelativeTime date={lastSyncedAt} />
 							</>
 						) : (
-							"Waiting for the first check"
+							t.chung.chuaKiemLanNao
 						)}
 					</p>
 				)}
@@ -286,9 +279,9 @@ export function MicrosoftConnection({
 							htmlFor={`auto-create-${source.source}`}
 							className="flex flex-col items-start gap-1"
 						>
-							<span className="text-sm">Email</span>
+							<span className="text-sm">{t.microsoft.nhanEmail}</span>
 							<span className="font-normal text-muted-foreground text-xs">
-								{AUTO_CREATE}
+								{t.microsoft.tuTao}
 							</span>
 						</Label>
 
@@ -308,27 +301,25 @@ export function MicrosoftConnection({
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
 								<Button variant="ghost" size="xs" disabled={purge.isPending}>
-									Delete synced data
+									{t.chung.xoaDuLieu}
 								</Button>
 							</AlertDialogTrigger>
 
 							<AlertDialogContent>
 								<AlertDialogHeader>
-									<AlertDialogTitle>Delete synced data?</AlertDialogTitle>
+									<AlertDialogTitle>{t.chung.xoaDuLieuHoi}</AlertDialogTitle>
 									<AlertDialogDescription>
-										Every email brought in from Outlook is removed from the CRM.
-										The next check starts from now, so nothing deleted here
-										comes back.
+										{t.microsoft.xoaDuLieuMoTa}
 									</AlertDialogDescription>
 								</AlertDialogHeader>
 
 								<AlertDialogFooter>
-									<AlertDialogCancel>Cancel</AlertDialogCancel>
+									<AlertDialogCancel>{t.chung.huy}</AlertDialogCancel>
 									<AlertDialogAction
 										variant="destructive"
 										onClick={() => purge.mutate()}
 									>
-										Delete
+										{t.chung.xoa}
 									</AlertDialogAction>
 								</AlertDialogFooter>
 							</AlertDialogContent>
@@ -337,29 +328,26 @@ export function MicrosoftConnection({
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
 								<Button variant="ghost" size="xs" disabled={revoke.isPending}>
-									Disconnect Microsoft
+									{t.microsoft.go}
 								</Button>
 							</AlertDialogTrigger>
 
 							<AlertDialogContent>
 								<AlertDialogHeader>
-									<AlertDialogTitle>Disconnect Microsoft?</AlertDialogTitle>
+									<AlertDialogTitle>{t.microsoft.goHoi}</AlertDialogTitle>
 									<AlertDialogDescription>
-										{required
-											? "You will be signed out, and you cannot use the CRM again until you grant access."
-											: "New email stops arriving. Everything already synced stays, and you can connect Microsoft again from this page."}{" "}
-										Microsoft has no way for us to withdraw the consent itself —
-										remove this app from your Microsoft account to do that.
+										{required ? t.chung.batBuoc : t.microsoft.goMoTa}{" "}
+										{t.microsoft.goThem}
 									</AlertDialogDescription>
 								</AlertDialogHeader>
 
 								<AlertDialogFooter>
-									<AlertDialogCancel>Cancel</AlertDialogCancel>
+									<AlertDialogCancel>{t.chung.huy}</AlertDialogCancel>
 									<AlertDialogAction
 										variant="destructive"
 										onClick={() => revoke.mutate()}
 									>
-										Disconnect
+										{t.microsoft.goNut}
 									</AlertDialogAction>
 								</AlertDialogFooter>
 							</AlertDialogContent>
@@ -371,7 +359,7 @@ export function MicrosoftConnection({
 								target="_blank"
 								rel="noreferrer"
 							>
-								Manage in your Microsoft account
+								{t.microsoft.quanLyTaiKhoan}
 							</Link>
 						</Button>
 					</div>

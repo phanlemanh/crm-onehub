@@ -1,0 +1,50 @@
+{
+	"lat": "chu-mac-dinh-thu-vien-ngoai",
+	"ghi_chu": "Bang DONG. man: danh sach man va so chuoi nhin thay duoc TOI THIEU, neo tu so do 06/09 — man ve ra it hon neo la thoat ma 2 (man chuyen huong ve dang nhap van tra vai chuoi nen khong bat duoc bang guard tap-rong). loai_tru: tap thu muc bo qua khi hoi nguon. dong: nam ly do hop le cho mot chuoi khong co trong file nguon nao. dong: moi dong hoac ghim mot CHUOI nguyen van, hoac mot MAU (bieu thuc chinh quy) — dong theo mau phai khop it nhat mot chuoi tren man, khong khop chuoi nao la DO.",
+	"loai_tru": [
+		"node_modules",
+		".next",
+		"dist",
+		"build"
+	],
+	"man": [
+		{
+			"duong": "/agents",
+			"toi_thieu": 15
+		},
+		{
+			"duong": "/chat",
+			"toi_thieu": 15
+		},
+		{
+			"duong": "/companies",
+			"toi_thieu": 20
+		},
+		{
+			"duong": "/deals",
+			"toi_thieu": 20
+		}
+	],
+	"dong": [
+		{
+			"mau": "^\\d{1,2} thg \\d{1,2}, \\d{4}$",
+			"ly_do": "du lieu nguoi dung",
+			"ghi_chu": "ngay sinh tu phep dinh dang tren du lieu ban ghi — khong ton tai nguyen van trong file nguon nao, va khong the ke tung ngay"
+		},
+		{
+			"chu": "Open Tanstack query devtools",
+			"ly_do": "chi co o ban dev",
+			"ghi_chu": "nut cua bo cong cu dev, khong di theo ban dung"
+		},
+		{
+			"chu": "manh.phan",
+			"ly_do": "du lieu nguoi dung",
+			"ghi_chu": "ten tai khoan trong workspace do"
+		},
+		{
+			"chu": "phanlemanh",
+			"ly_do": "du lieu nguoi dung",
+			"ghi_chu": "ten tai khoan trong workspace do"
+		}
+	]
+}

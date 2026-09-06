@@ -2,48 +2,29 @@
 
 import { authClient } from "@crm/auth/client";
 import { Button } from "@crm/ui/components/button";
+import { useLocale } from "@crm/ui/components/locale-provider";
+import type { Locale } from "@crm/ui/lib/locale";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ketNoiMessages } from "@/lib/messages/settings-ket-noi";
 
-const CONNECT_ERRORS = new Map([
-	[
-		"access_denied",
-		"Slack installation was cancelled before access was granted.",
-	],
-	[
-		"account_already_linked_to_different_user",
-		"That Slack installer is already linked to another CRM account.",
-	],
-	[
-		"email_doesn't_match",
-		"The Slack installer's email must match the CRM account you are signed in with.",
-	],
-	[
-		"oauth_code_verification_failed",
-		"Slack rejected the app credentials or redirect URL. Check the client ID, client secret, and OAuth redirect URL, then try again.",
-	],
-	[
-		"user_info_is_missing",
-		"Slack did not return the installer's profile. Confirm the app has users:read and users:read.email, reinstall it, then try again.",
-	],
-]);
-
-async function startSlackOAuth(slug: string) {
+async function startSlackOAuth(slug: string, locale: Locale) {
+	const t = ketNoiMessages(locale);
 	try {
 		const { error } = await authClient.oauth2.link({
 			providerId: "slack",
 			callbackURL: `${window.location.origin}/${slug}/settings/connections/slack/people`,
 			errorCallbackURL: `${window.location.origin}/${slug}/settings/connections/slack?provider=slack`,
 		});
-		if (error) toast.error(error.message || "Could not connect Slack.");
+		if (error) toast.error(error.message || t.slack.khongCamDuoc);
 	} catch (error) {
-		toast.error(
-			error instanceof Error ? error.message : "Could not connect Slack.",
-		);
+		toast.error(error instanceof Error ? error.message : t.slack.khongCamDuoc);
 	}
 }
 
 export function SlackReconnectButton({ slug }: { slug: string }) {
+	const locale = useLocale();
+	const t = ketNoiMessages(locale);
 	const [pending, setPending] = useState(false);
 
 	return (
@@ -51,13 +32,13 @@ export function SlackReconnectButton({ slug }: { slug: string }) {
 			disabled={pending}
 			onClick={async () => {
 				setPending(true);
-				await startSlackOAuth(slug);
+				await startSlackOAuth(slug, locale);
 				setPending(false);
 			}}
 			size="xs"
 			variant="contrast"
 		>
-			{pending ? "Opening Slack…" : "Reconnect"}
+			{pending ? t.slack.dangMoSlack : t.slack.camLai}
 		</Button>
 	);
 }
@@ -71,25 +52,27 @@ export function SlackConnectButton({
 	configured: boolean;
 	connectError?: string;
 }) {
+	const locale = useLocale();
+	const t = ketNoiMessages(locale);
 	const [pending, setPending] = useState(false);
 	const connect = async () => {
 		setPending(true);
-		await startSlackOAuth(slug);
+		await startSlackOAuth(slug, locale);
 		setPending(false);
 	};
 	return (
 		<div className="flex min-w-0 flex-col gap-2">
 			<Button onClick={() => void connect()} disabled={!configured || pending}>
 				{pending
-					? "Opening Slack…"
+					? t.slack.dangMoSlack
 					: configured
-						? "Connect Slack"
-						: "Slack is not configured"}
+						? t.slack.camSlack
+						: t.slack.chuaCauHinh}
 			</Button>
 			{connectError ? (
 				<p role="alert" className="max-w-sm text-destructive text-xs">
-					{CONNECT_ERRORS.get(connectError) ??
-						`Slack could not be connected (${connectError.replaceAll("_", " ")}).`}
+					{t.slack.loiCam.get(connectError) ??
+						t.slack.camHongMac(connectError.replaceAll("_", " "))}
 				</p>
 			) : null}
 		</div>

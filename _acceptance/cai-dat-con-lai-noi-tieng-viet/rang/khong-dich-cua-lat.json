@@ -1,0 +1,83 @@
+{
+	"lat": "cai-dat-con-lai-noi-tieng-viet",
+	"ghi_chu": "Bang khai gia tri KHONG DUOC DICH tren muoi man con lai cua Cai dat. Chan `man-that.mjs khong-dich` sinh tap ung vien TU MAN THAT (moi phan tu mang translate=\"no\", hop voi moi chuoi hien giong het nhau o hai luot locale) tren MOI route cua lat, roi doi chieu CA HAI CHIEU voi bang nay. Ba luat co ten duoi day tru truoc nhung gia tri may tu suy duoc tu may chu — so, du lieu nguoi nhap, vat khach chep — de bang khong phinh theo du lieu cua tung may.",
+	"luat": [
+		{
+			"ten": "so-thuan",
+			"vi_sao": "Chuoi chi gom chu so va dau cau khong mang tu nao de dich: so dong cua bang, dau ngoac quanh so, gach ngang thay cho o trong."
+		},
+		{
+			"ten": "du-lieu-nguoi-nhap",
+			"vi_sao": "Ten cong ty, dia chi website, slug, ten va email tung thanh vien, chu cai dau tren anh dai dien, ten mien duoc phep. Nguoi go vao, doi theo tung may, nen khong dong thanh bang duoc — AC-6b do chung bang luat translate=\"no\"."
+		},
+		{
+			"ten": "doan-ma-chep",
+			"vi_sao": "Manh cua the script theo doi: scriptUrl, siteId va cac manh dau the. Chung lay tu tRPC tracking.settings — nguon that ngoai man — chu khong phai chu cua man. Luat chi an khi manh do nam trong phan tu mang translate=\"no\"."
+		}
+	],
+	"dong": [
+		{
+			"gia_tri": "SSO",
+			"vi_sao": "Dinh danh ky thuat tren thanh ben. Luat kho cam duc tu ghep tieng Viet cho thuat ngu ky thuat."
+		},
+		{
+			"gia_tri": "Site ID",
+			"vi_sao": "Kho chuoi khai cung mot chu o ca hai ban: nhan nay la dinh danh nguoi dung phai doc lai nguyen van khi doi chieu voi he thong khac."
+		},
+		{
+			"gia_tri": "https://",
+			"vi_sao": "Tien to giao thuc dat truoc o nhap dia chi. Khong phai chu nguoi doc."
+		},
+		{
+			"gia_tri": "acme.com/pricing",
+			"vi_sao": "Dia chi mau trong o goi y cua buoc kiem tra cai dat. Giu nguyen o ca hai ban."
+		},
+		{
+			"gia_tri": "Google",
+			"vi_sao": "Ten thuong hieu."
+		},
+		{
+			"gia_tri": "Google Workspace",
+			"vi_sao": "Ten san pham cua Google."
+		},
+		{
+			"gia_tri": "Microsoft",
+			"vi_sao": "Ten thuong hieu."
+		},
+		{
+			"gia_tri": "Microsoft 365",
+			"vi_sao": "Ten san pham cua Microsoft."
+		},
+		{
+			"gia_tri": "Slack",
+			"vi_sao": "Ten thuong hieu."
+		}
+	],
+	"ngoai_lat": {
+		"ghi_chu": "Chuoi tieng Anh hien tren man cua lat nhung NGUON nam ngoai lat va ngoai pham vi vong. Khai co ten de chan do khong do oan; chung van la GIOI HAN da khai, khong phai da dich.",
+		"khoi": [
+			{
+				"nguon": "packages/auth/src/slack-scopes.ts",
+				"vi_sao": "packages/auth la t3_paths — keo vao la doi hang vong va them mot cong duyet ke hoach; khai ngoai pham vi tu Cong 1",
+				"route": "/settings/connections/slack",
+				"chuoi": [
+					"Channels it can read",
+					"Messages it can send",
+					"Channels it can change",
+					"People",
+					"Names and email addresses, so it can match a Slack account to a CRM record.",
+					"Names and topics of public channels, and the messages in any channel it has been added to.",
+					"Post as the app, open a direct message, and preview a link it posts.",
+					"Join, create, rename, archive, and invite people to channels."
+				],
+				"ghi_chu": "Bon nhan nhom quyen cong bon cau tom tat cua chung — deu tu SLACK_SCOPE_GROUPS. Liet DU, khong dem tom tat: chan do chi mien theo chuoi[], nen mot con so dem la mot dong khai khong ai doc."
+			}
+		]
+	},
+	"mien_dau": [
+		{
+			"chuoi": "Cookie",
+			"vi_sao": "ban dich dung cua 'Cookies' — tu muon, tieng Viet khong them dau cho no. Ve dau cua AC-1 la phep do gan dung; day la cho no bao oan."
+		}
+	]
+}

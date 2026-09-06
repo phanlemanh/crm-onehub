@@ -1,0 +1,24 @@
+{
+	"lat": "agent-builder-noi-tieng-viet",
+	"ghi_chu": "Du lieu NGUOI NHAP hien tren man cua lat — phan tu JSX boc no phai mang translate=\"no\". Chan doc CAY CU PHAP nen luon chay duoc, khong phu thuoc vat that. Moi dong ghim mot BIEU THUC nguyen van: chan tim phan tu JSX co con la bieu thuc do roi doi thuoc tinh. Bieu thuc khong con trong file la thoat ma 2 — ban khai da cu.",
+	"o": [
+		{
+			"file": "apps/app/components/agent-builder/agent-builder-sidebar.tsx",
+			"truong": "tieu de hoi thoai",
+			"bieu_thuc": "title"
+		},
+		{
+			"file": "apps/app/components/agent-builder/team-agents-index.tsx",
+			"truong": "ten tac nhan",
+			"bieu_thuc": "agent.name"
+		}
+	],
+	"ngoai_lat": [
+		{
+			"file": "apps/app/components/slack/channel-picker.tsx",
+			"truong": "ten kenh Slack",
+			"bieu_thuc": "channel.name",
+			"vi_sao": "Component dung chung, thuoc dan so cua vong Cai dat da ky — vong do da danh dau no. Chan van doi chieu dong nay: mat dau la DO, vi man cua lat NAY hien ten kenh qua dung component do."
+		}
+	]
+}

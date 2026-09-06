@@ -1,0 +1,46 @@
+{
+ "feature_plain": "Một cái thước lái từng thành phần giao diện ra màn — mở nó ra, bấm vào nó — rồi đọc chữ nó thật sự vẽ, để bắt lớp chữ tiếng Anh chỉ hiện khi người gọi bỏ trống một tham số; cộng phần vá mười hai chỗ nó tìm ra.",
+ "decisions": [
+  {
+   "id": "E10",
+   "q": "Mười hai chữ vòng này đưa về kho chung có đọc như tiếng Việt của người làm nghề không?",
+   "why": "Gồm nhãn chỗ trống, nhãn tìm, câu khi không có kết quả, bảng lệnh, chọn ngày, đang tải, đang nghĩ."
+  }
+ ],
+ "analyst_plain": "",
+ "scope_plain": "Lái ra trình duyệt thật · dịch nốt các chuỗi khác của thư viện giao diện · nội dung giả trong CSS và thông báo sống — bốn thứ này hoãn.",
+ "decisions_plain": [
+  {
+   "id": "d-20260906T140000Z-9401",
+   "p": "Trọng tâm đổi sau một phép đo thử: mười thành phần của bảng vòng trước không mang chữ tiếng Anh nào, nên lớp thật sự có đối tượng là giá trị mặc định của tham số — đổi lại, phạm vi khác câu chữ lúc mở hồ sơ."
+  },
+  {
+   "id": "d-20260906T140100Z-9402",
+   "p": "Phân nhóm theo ĐÍCH ĐẾN chứ không theo tên tham số — đổi lại, một chuỗi chỉ vẽ ra ở nhánh mà giá trị mặc định không chạm tới sẽ bị xếp nhầm nhóm."
+  },
+  {
+   "id": "d-20260906T140200Z-9403",
+   "p": "Đo trên bản vẽ giả thay vì lái ra trình duyệt thật — đổi lại, thứ chỉ sai khi có kiểu trình bày thật, như chữ bị cắt hay tràn, nằm ngoài tầm."
+  },
+  {
+   "id": "d-20260906T140300Z-9404",
+   "p": "KHÔNG dựng bản bấm được để duyệt giao diện — vòng này không dựng màn nào."
+  },
+  {
+   "id": "d-20260906T140400Z-9405",
+   "p": "KHÔNG viết đặc tả cấu trúc màn — vòng này không dựng màn nào."
+  },
+  {
+   "id": "d-20260906T160000Z-9406",
+   "p": "Sửa hai mốc số SAU khi duyệt: dân số 119 xuống 107 và bảng 10 xuống 9 — cả hai vì chính vòng này vá; cả hai do chân đo bắt, không do đọc lại."
+  },
+  {
+   "id": "d-20260906T160100Z-9407",
+   "p": "Sửa bốn con số của một hồ sơ NGƯỜI ĐÃ KÝ, làm mà không xin phép trước — đổi lại ba chân của hồ sơ ấy xanh trở lại trên cây hôm nay; anh phê hoặc veto ở cổng này."
+  },
+  {
+   "id": "d-20260906T170000Z-9408",
+   "p": "Bắt thước dựng lại dân số mỗi lượt thay vì tái dùng kết quả cũ — trước đó cặp hai chiều từng XANH GIẢ, và chính nó là bên phát hiện."
+  }
+ ]
+}
