@@ -31,17 +31,22 @@ Phép đo thử ngày 06/09 (mount chín trên mười ở trạng thái MỞ) t
 **When** chân dân số chạy
 **Then** nó tự đi cây `packages/ui/src` · `apps/app/components` · `apps/app/lib` ·
 `apps/app/app`, loại trừ tập ghim tên (`node_modules` · `.next` · `dist` · `build`),
-và in ra các con số neo: **389 file** `.ts`/`.tsx` · **119 giá trị mặc định là chuỗi
-có chữ cái** · **10 dòng** trong bảng giới hạn của vòng trước · số phần tử của TỪNG
-nhóm sau khi phân (chữ-người-đọc và kỹ thuật), không chỉ tổng.
+và in ra các con số neo: **389 file** `.ts`/`.tsx` · giá trị mặc định là chuỗi có chữ
+cái — **119 tại Cổng 1, neo hiện tại 107** vì chính vòng này vá 12 chỗ nên chúng rời
+khỏi dân số · dòng trong bảng giới hạn của vòng trước — **10 tại Cổng 1, neo hiện tại
+9** vì `combobox` nay đọc kho chuỗi nên rời nhóm bọc-mà-không-đọc · số phần tử của
+TỪNG nhóm sau khi phân (chữ-người-đọc và kỹ thuật), không chỉ tổng.
 **Đỏ khi** một neo lệch — kể cả lệch vì kho đổi thật.
 
-Neo **10** là neo ĐỘC LẬP, ghim ở đây chứ không rút từ chính
+Neo dòng-bảng là neo ĐỘC LẬP, ghim ở đây chứ không rút từ chính
 `gioi-han-bam-moi-hien.json`; nếu rút từ đó thì AC-4 sẽ tự so với chính mình.
+
+Hai con số đổi SAU khi duyệt, cả hai do chân đo bắt — sổ quyết định ghi ở entry
+`d-20260906T160000Z-9406`.
 
 ### AC-2 — Ranh giới chữ-người-đọc / kỹ thuật do BẢN VẼ quyết, không do tên prop
 
-**Given** 119 giá trị mặc định
+**Given** các giá trị mặc định của dân số hiện tại
 **When** chân lái mount component sở hữu từng giá trị **ở CẢ HAI trạng thái** — đóng,
 và mở với mọi component có trạng thái mở
 **Then** giá trị nào **có mặt** trong tập chữ-người-đọc của một trong hai bản vẽ thì
@@ -62,7 +67,10 @@ chữ-người-đọc dùng lại nguyên `DOC_NGHE_DUOC` của
 
 **Đỏ khi** một trong năm dòng ấy rơi vào nhóm kỹ thuật — đó chính là ca hỏng mà phép
 mount-một-trạng-thái sinh ra: component đóng thì vẽ rỗng, chuỗi không có mặt, và cả
-hai bảng vẫn cộng đủ 119.
+hai bảng vẫn cộng đủ tổng.
+
+Ma trận này chạy như ĐỐI CHỨNG DƯƠNG trong chân hai chiều (AC-3), không phải như điều
+kiện của trạng thái cuối — vì chính vòng này xoá năm dòng ấy đi khi vá chúng.
 
 ### AC-3 — Hai chiều của phép phân biệt, trên cùng một vật
 
@@ -75,11 +83,11 @@ hai bảng vẫn cộng đủ 119.
 ### AC-4 — Bảng mười dòng của vòng trước được giải toả bằng ĐO
 
 **Given** `_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/gioi-han-bam-moi-hien.json`
-**When** chân mở-nguyên-bản mount cả mười dòng ở trạng thái MỞ
+**When** chân mở-nguyên-bản mount cả các dòng của bảng ở trạng thái MỞ
 **Then** với từng dòng nó in ra tập chữ nguyên bản tự sinh, khai rõ dòng nào rỗng dòng
 nào có, và ghi kết quả ra tạo phẩm `evidence/mo-nguyen-ban.json`. Số dòng mount được
-phải bằng **neo 10 của AC-1** — không phải bằng số dòng đọc từ chính file bảng.
-**Đỏ khi** một dòng không mount được, hoặc số dòng đọc được lệch neo 10 (khi đó nêu
+phải bằng **neo dòng-bảng của AC-1** — không phải bằng số dòng đọc từ chính file bảng.
+**Đỏ khi** một dòng không mount được, hoặc số dòng đọc được lệch neo ấy (khi đó nêu
 tên dòng đã mất).
 
 ### AC-5 — Bản khai của vòng trước đổi từ «chưa đo được» sang «đã đo»
