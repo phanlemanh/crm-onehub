@@ -109,3 +109,30 @@ hợp tác của OneHub.
 _Avoid_: đã đặt lịch demo, đủ điều kiện để mua
 Vì sao: dịch một bước không xảy ra là in cái sai ra màn hình bằng thứ tiếng
 người đọc hiểu được.
+
+**Chiến dịch**: một đợt gọi có tên, chạy trên đúng một phân khúc, có lúc bắt đầu
+và lúc kết thúc; mỗi cuộc gọi ghi lại một kết quả. Trên màn hình đang hiện dưới
+`Campaigns`.
+_Avoid_: chiến dịch quảng cáo, campaign, đợt khuyến mãi
+Vì sao: đây là danh sách gọi của nhân viên quan hệ đối tác, không phải một đợt
+chi tiền mua chỗ hiển thị.
+
+**Phân khúc**: nhóm cá nhân mà một bộ lọc trên màn Cá nhân chọn ra và đã lưu
+thành góc nhìn dùng chung. Một chiến dịch gọi đúng một phân khúc, và danh sách
+người được tính lại theo bộ lọc mỗi lần mở.
+_Avoid_: tệp khách, danh sách khách hàng, segment
+Vì sao: nó là một bộ lọc đã lưu chứ không phải một danh sách đóng băng, và người
+trong đó không mua gì của OneHub.
+
+**Sản lượng**: mức tin đăng của một cá nhân trên sàn, do bộ cào tính rồi ghi vào
+bản ghi. Bốn mức: `Cao` · `Vừa` · `Thấp` · `Ngủ`.
+_Avoid_: doanh số, hiệu suất, điểm số, xếp hạng
+Vì sao: OneHub không biết họ bán được bao nhiêu, chỉ đếm được họ đăng bao nhiêu
+tin — hai chuyện khác nhau, và gọi nhầm tên biến một phép đếm thành một lời khen.
+
+**Số chứng chỉ**: **KHÔNG CÓ TRONG SẢN PHẨM.** Sàn chỉ gắn huy hiệu có hoặc
+không cho chứng chỉ hành nghề môi giới, không lộ mã số nào. CRM ghi trường
+`Chứng chỉ` với đúng hai giá trị `Có` · `Không`.
+_Avoid_: số chứng chỉ, mã chứng chỉ, số giấy phép hành nghề
+Vì sao: in một ô «số chứng chỉ» ra màn hình là hứa một dữ liệu không ai có;
+người đọc đi tìm rồi thấy trống, và lần sau họ không tin cột nào nữa.

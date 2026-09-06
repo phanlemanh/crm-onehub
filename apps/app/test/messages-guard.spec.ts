@@ -1,6 +1,7 @@
 import { describe, expect, it } from "bun:test";
 import { join } from "node:path";
 import { authMessages } from "@/lib/messages/auth";
+import { campaignMessages } from "@/lib/messages/campaigns";
 import { companyMessages } from "@/lib/messages/companies";
 import { contactMessages } from "@/lib/messages/contacts";
 import { crmMessages } from "@/lib/messages/crm";
@@ -13,6 +14,7 @@ const DAU_TIENG_VIET =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
 
 const MODULE = [
+	["campaigns", campaignMessages],
 	["companies", companyMessages],
 	["contacts", contactMessages],
 	["deals", dealMessages],
@@ -136,6 +138,7 @@ describe("kho chuoi cua vong ③a", () => {
 
 	it("moi ham ghep bien co khang dinh, va so ham bang so khang dinh", () => {
 		const GHIM = {
+			"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 			"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
 			"auth:grantAccess.grant": ["Cấp quyền 1", "Cấp quyền 12"],
 			"companies:bulk.reassigned": [

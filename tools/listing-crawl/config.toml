@@ -1,0 +1,20 @@
+[tiers]
+cao = 60
+vua = 20
+thap = 1
+
+[crawl]
+sitemap = "https://www.nhatot.com/sitemap-index.xml"
+directory = "https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh"
+profile_prefix = "/moi-gioi-"
+respect_robots = true
+directory_max_pages = 8
+render_wait_seconds = 4.0
+phone_reveal_cap = 200
+request_delay_seconds = 1.5
+stealth = true
+
+[ingest]
+url = "http://localhost:3001/internal/listings/ingest"
+batch_size = 200
+body_limit_bytes = 2097152

@@ -40,6 +40,7 @@ export const savedViewOutput = z.object({
 	name: z.string(),
 	shared: z.boolean(),
 	filters: savedViewFilters,
+	size: z.number().int().nullable(),
 	mine: z.boolean(),
 	createdAt: z.string(),
 	updatedAt: z.string(),

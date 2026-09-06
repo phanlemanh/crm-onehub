@@ -14,12 +14,14 @@
 		"./eve-tool": "./src/eve-tool.ts",
 		"./field-backfill": "./src/field-backfill.ts",
 		"./field-templates": "./src/field-templates.ts",
+		"./listing-ingest": "./src/listing-ingest.ts",
 		"./saved-view": "./src/saved-view.ts"
 	},
 	"scripts": {
 		"check-types": "tsc --noEmit",
 		"lint": "biome check .",
 		"test": "bun test",
+		"schema:listing-ingest": "bun scripts/listing-ingest-schema.ts",
 		"clean": "rm -rf .turbo node_modules"
 	},
 	"dependencies": {

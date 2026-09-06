@@ -1,0 +1,53 @@
+{
+  "feature_plain": "Đội tiếp thị chạy trọn một chiến dịch tuyển môi giới trong CRM: lọc ra nhóm cần gọi, gọi, ghi kết quả, và xem nhóm này trả lời khá hơn hay kém hơn phần còn lại.",
+  "scope_plain": "Vòng đầu chỉ lấy một sàn, chỉ làn cá nhân, chỉ kênh người gọi tay — không có gửi hàng loạt, không có chấm điểm bằng mô hình, không có lịch chạy tự động.",
+  "decisions": [
+    {
+      "id": "E19",
+      "q": "Lượt cào thật vừa rồi có đủ người để mở chiến dịch đầu tiên không?",
+      "why": "Máy lấy được 49 trên 50 hồ sơ, 1 hồ sơ bị sàn chặn, và số tin mỗi người trải từ 37 đến 436. Ba mắt chấm không thống nhất câu «sàn chặn tới mức làm hỏng nhịp hàng tháng không» — đó là câu người quyết, không phải câu máy đo."
+    }
+  ],
+  "decisions_plain": [
+    { "id": "d-20260904T120000Z-nguon", "p": "Lấy người từ một sàn duy nhất vì chỉ sàn đó công bố sản lượng — đổi lại số điện thoại nằm sau nút, phải bấm ra." },
+    { "id": "d-20260904T120100Z-lan", "p": "Vòng đầu tuyển từng môi giới cá nhân — đổi lại gọi vào số riêng chứ không vào tổng đài công ty." },
+    { "id": "d-20260904T120200Z-phankhuc", "p": "Phân khúc dùng đúng góc nhìn đã lưu của màn cá nhân, không dựng bảng riêng — đổi lại không lọc thẳng được theo số tin." },
+    { "id": "d-20260904T120300Z-luotgoi", "p": "Mỗi lượt gọi ghi hai chỗ cùng lúc: một dòng để đếm và một dòng trên lịch sử — đổi lại phải giữ hai chỗ luôn cùng số phận." },
+    { "id": "d-20260904T120400Z-cong", "p": "Bộ cào nộp dữ liệu qua một cổng có khoá thay vì ghi thẳng cơ sở dữ liệu — đổi lại thêm một khoá bí mật phải quản." },
+    { "id": "d-20260904T120500Z-nguong", "p": "KHÔNG làm màn chỉnh ngưỡng sản lượng — đổi lại muốn đổi mức Cao/Vừa/Thấp thì phải nhờ người sửa tệp cấu hình." },
+    { "id": "d-20260904T120600Z-loso", "p": "KHÔNG làm nút lộ số theo yêu cầu — đổi lại chỉ mức Cao có số, tối đa 200 số mỗi lượt cào." },
+    { "id": "d-20260904T120700Z-batdongsan", "p": "KHÔNG lấy sàn thứ hai ở vòng này — đổi lại chưa có tổng đài công ty để gọi." },
+    { "id": "d-20260904T120800Z-designpass", "p": "KHÔNG chạy nghi thức duyệt thiết kế riêng — đổi lại hai màn mới bám khuôn màn sẵn có, không có bản mẫu để soi trước." },
+    { "id": "d-20260904T120900Z-fieldkey", "p": "KHÔNG sửa bộ đặt tên trường dùng chung để nó chịu được tiếng Việt — đổi lại chín trường của tính năng này ghi tên bằng tay, phải tự giữ đủ cột." },
+    { "id": "d-20260904T121000Z-thanhvien", "p": "Danh sách người trong chiến dịch tính lại mỗi lần mở — đổi lại nhóm đổi theo góc nhìn, không đóng băng lúc bấm bắt đầu." },
+    { "id": "d-20260904T130000Z-duongnen", "p": "KHÔNG dựng đường nền tỷ lệ trả lời trước khi bật — đổi lại chiến dịch đầu tiên không có mốc cũ để so." },
+    { "id": "d-20260904T130100Z-doichung", "p": "So một chiến dịch với tất cả chiến dịch khác, không tính chính nó — đổi lại chiến dịch đầu tiên hiện «chưa có đối chứng»." },
+    { "id": "d-20260904T130200Z-giuso", "p": "Lô nạp thiếu số điện thoại thì giữ số đang có — đổi lại số cũ sai vẫn ở lại cho tới khi có số mới đè lên." },
+    { "id": "d-20260904T150000Z-plan-fields", "p": "Chín trường mới đặt tên bằng chữ không dấu cố định — đổi lại một chỗ ghi trường không đi qua đường dùng chung." },
+    { "id": "d-20260904T150100Z-plan-python", "p": "Bộ cào sống tách khỏi kho chính, ghim đúng bản thư viện của nó — đổi lại máy nào chạy phép đo cũng cần cài thêm Python 3.12." },
+    { "id": "d-20260904T150200Z-plan-thutu", "p": "Mười lăm việc phần lớn nối chuỗi nên làm tuần tự — đổi lại đường tới bằng chứng dài." },
+    { "id": "d-20260904T160000Z-gate15", "p": "Người duyệt kế hoạch mười lăm việc, không sửa — đổi lại máy chạy trọn tới Cổng Bằng chứng, không hỏi giữa chừng." },
+    { "id": "d-20260904T160100Z-tuantu", "p": "KHÔNG chạy song song hai cặp việc độc lập — đổi lại chậm vài phút nhưng không trộn nhánh trên lược đồ dữ liệu." },
+    { "id": "d-20260904T170000Z-nhan-viet", "p": "Dòng lịch sử ghi kết quả bằng tiếng Việt chứ không bằng mã — đổi lại bảng nhãn sống ở máy chủ, đổi chữ phải sửa hai chỗ." },
+    { "id": "d-20260904T170100Z-quet-tran", "p": "Lọc «chưa gọi» quét theo lô và dừng ở năm nghìn người — đổi lại góc nhìn to hơn năm nghìn sẽ bị cắt." },
+    { "id": "d-20260904T173000Z-chan-giao-dich", "p": "Thêm một phép đo ép chỗ ghi thứ hai hỏng — đổi lại chứng minh được lượt gọi hỏng thì dòng lịch sử cũng không ở lại." },
+    { "id": "d-20260904T180000Z-gieo", "p": "Sơ đồ của sàn không liệt trang môi giới nên lượt gieo phải dò đường khác — đổi lại danh sách đầu vào không lấy sẵn được một lần." },
+    { "id": "d-20260904T180100Z-mau", "p": "Hai con số trong hồ sơ dựng sẵn đặt theo bài kiểm chứ không theo bản chụp — đổi lại hồ sơ dựng sẵn không khớp trang thật từng con số." },
+    { "id": "d-20260904T200000Z-loading", "p": "Ba trạng thái màn hình đo ở mức đơn vị thay vì mở trình duyệt — đổi lại chưa có bằng chứng ảnh cho ba trạng thái đó." },
+    { "id": "d-20260904T200100Z-cot", "p": "Chia lại bề rộng bảy cột và rút gọn hai nhãn cột — đổi lại bảng đọc được ở màn hẹp." },
+    { "id": "d-20260904T232000Z-tang-hinh", "p": "Bộ cào lấy trang ở chế độ ẩn dấu vết trình duyệt — đổi lại vẫn tuân tệp khai báo của sàn và vẫn chờ giữa hai lượt gọi." },
+    { "id": "d-20260904T232100Z-nhip", "p": "Nhịp chờ giữa hai lượt gọi trước khai một-rưỡi giây nhưng chạy thật hai phần mười — nay chờ thật — đổi lại lượt cào lâu hơn." },
+    { "id": "d-20260904T232200Z-nguong-lech", "p": "Lượt cào thật cho thấy ngưỡng 60/20/1 không chia được ai với ai — đổi lại ngưỡng phải đặt lại sau khi đọc phân phối thật." },
+    { "id": "d-20260905T000000Z-r1", "p": "Vòng chấm 1 hỏng vì hạ tầng chứ không vì tính năng — đổi lại phải chấm lại từ đầu." },
+    { "id": "d-20260905T000100Z-hai-so", "p": "Bộ bóc không tách được tổng tin với tin mới 30 ngày trên trang thật — đổi lại hồ sơ dựng sẵn xanh trong khi trang thật không xanh." },
+    { "id": "d-20260905T010000Z-mot-so", "p": "Sàn chỉ công bố MỘT con số cho cả hai trường, đo trên 49 hồ sơ thật — đổi lại «tin mới 30 ngày» hiện nay chỉ là bản sao của tổng tin, và đó là câu người quyết." },
+    { "id": "d-20260905T010100Z-alias", "p": "Địa chỉ hồ sơ trước dựng sai nên mọi liên kết trong lô cũ đều hỏng — nay lấy đúng địa chỉ sàn công bố." },
+    { "id": "d-20260905T030000Z-cung-lop", "p": "Vòng 2 hỏng cùng một nguyên nhân với vòng 1 nên máy DỪNG thay vì vá tiếp — đổi lại người phải chọn đường đi tiếp." },
+    { "id": "d-20260905T040000Z-tach-lan", "p": "Người chọn tách làm hai lượt chấm rời nhau — đổi lại hồ sơ bằng chứng phải nói rõ nó chạy hai lượt ở hai commit khác nhau." },
+    { "id": "d-20260905T070000Z-r3-xong", "p": "Vòng 3 chạy xong hai lượt, không phép đo nào trượt — đổi lại phán quyết vẫn treo ở một câu người phải trả lời." },
+    { "id": "d-20260905T080000Z-lenh-thieu", "p": "Lệnh chấm chỉ nạp hai trong năm tệp kiểm nên hai tiêu chí chưa từng chạy — nay nạp đủ, và chính bộ chấm bắt được lỗi này." },
+    { "id": "d-20260905T083000Z-co-lap", "p": "Ba tệp kiểm từng xoá cả dữ liệu người dùng — nay mỗi tệp chỉ dọn đúng hàng mình dựng, đã chứng minh hai chiều." },
+    { "id": "d-20260905T090000Z-chia-lo", "p": "Bộ cào nay gửi từng lô và ghi ra đĩa trước khi gửi — đổi lại lời hứa «lô tới năm trăm mục» mới thành sự thật, có phép đo gửi thật." },
+    { "id": "d-20260905T100000Z-giua-lo", "p": "CÒN HỞ: hỏng giữa lô thì phần đã ghi ở lại và lỗi trả về là màn hình trắng — máy khai chứ không sửa, vì đã cạn lượt chấm và đã hứa lượt vừa rồi là lượt cuối." }
+  ]
+}

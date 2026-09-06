@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ba màn bàn giao — tiếp thị tuyển đối tác</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:  #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 2.5rem 2rem;
+  }
+  .frame { max-width: 1400px; width: 100%; }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 1100px; display: block; }
+  .notes {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 2rem 3rem;
+  }
+  .notes h2 {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .notes p { font-size: 0.86rem; line-height: 1.6; color: var(--ink); }
+  .notes p + p { margin-top: 0.6rem; }
+  .notes .quiet { color: var(--muted); }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+    line-height: 1.7;
+  }
+  @media (max-width: 860px) { .notes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="card">
+<svg viewBox="0 0 1504 752" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wireflow ba màn của tính năng tiếp thị: danh sách chiến dịch với nút Chiến dịch mới, hộp trượt tạo chiến dịch chọn phân khúc từ góc nhìn cá nhân dùng chung, và trang chiến dịch đang chạy với dải số đo hai hàng, bảng thành viên có số điện thoại và năm nút kết quả; sau Kết thúc quay về danh sách">
+<defs>
+<marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+<marker id="arrow-faint" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="rgba(23,23,23,0.42)"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#fafafa"/>
+<text x="32" y="28" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em">KẾT QUẢ BÀN GIAO · HÌNH A · BA MÀN CHIẾN DỊCH · TIẾP THỊ TUYỂN ĐỐI TÁC</text>
+<text x="32" y="60" fill="#171717" font-size="22" font-family="'Lora', Georgia, serif">Ba màn đội tiếp thị sẽ nhận: danh sách chiến dịch, hộp tạo chiến dịch, trang chiến dịch đang chạy</text>
+<line x1="440" y1="148" x2="504" y2="148" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="760" y1="148" x2="824" y2="148" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+<path d="M 912 528 V 560 Q 912 568 904 568 H 240 Q 232 568 232 560 V 460" fill="none" stroke="rgba(23,23,23,0.42)" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow-faint)"/>
+<rect x="440" y="110" width="64" height="28" rx="2" fill="#fafafa" stroke="none" stroke-width="1"/>
+<text x="472" y="121" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CHIẾN DỊCH</text>
+<text x="472" y="133" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">MỚI</text>
+<rect x="760" y="110" width="64" height="28" rx="2" fill="#fafafa" stroke="none" stroke-width="1"/>
+<text x="792" y="121" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">TẠO, RỒI</text>
+<text x="792" y="133" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">BẮT ĐẦU</text>
+<rect x="564" y="546" width="136" height="16" rx="2" fill="#fafafa" stroke="none" stroke-width="1"/>
+<text x="632" y="558" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KẾT THÚC → VỀ DANH SÁCH</text>
+<rect x="32" y="96" width="408" height="360" rx="6" fill="#fafafa" stroke="none" stroke-width="1"/>
+<rect x="32" y="96" width="408" height="360" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+<path d="M 38 96 H 434 Q 440 96 440 102 V 120 H 32 V 102 Q 32 96 38 96 Z" fill="#f2f2f2"/>
+<line x1="32" y1="120" x2="440" y2="120" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+<text x="44" y="112" fill="#171717" font-size="10" font-weight="600" font-family="'Geist', sans-serif">Danh sách chiến dịch</text>
+<text x="428" y="112" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.10em">MÀN 1</text>
+<text x="48" y="148" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif">Chiến dịch</text>
+<text x="48" y="164" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Gọi theo phân khúc và ghi kết quả từng cuộc.</text>
+<rect x="320" y="136" width="104" height="24" rx="5" fill="#006B4F" stroke="none" stroke-width="1"/>
+<text x="372.0" y="151.0" fill="#ffffff" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Chiến dịch mới</text>
+<rect x="48" y="184" width="160" height="24" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="56" y="199.0" fill="#666666" font-size="9" font-family="'Geist', sans-serif">Tìm chiến dịch…</text>
+<rect x="216" y="184" width="40" height="24" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="236.0" y="199.0" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Lọc</text>
+<rect x="264" y="184" width="80" height="24" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="304.0" y="199.0" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Góc nhìn ▾</text>
+<text x="48" y="237" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif">Tên</text>
+<text x="148" y="237" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif">Phân khúc</text>
+<text x="236" y="237" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif">Trạng thái</text>
+<text x="320" y="237" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="end">Đã gọi</text>
+<text x="352" y="237" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="end">Trả lời</text>
+<text x="356" y="237" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif">Phụ trách</text>
+<text x="396" y="237" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif">Tạo lúc</text>
+<line x1="48" y1="244" x2="424" y2="244" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+<text x="48" y="259" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif">Quận 7 — đợt 1</text>
+<text x="148" y="259" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Cao · Quận 7</text>
+<circle cx="240" cy="256" r="3" fill="#171717" stroke="#171717" stroke-width="1"/>
+<text x="248" y="259" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Đang chạy</text>
+<text x="320" y="259" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">37</text>
+<text x="352" y="259" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">16</text>
+<text x="364" y="259" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Hằng</text>
+<text x="396" y="259" fill="#575757" font-size="9" font-family="'Geist', sans-serif">03/09</text>
+<line x1="48" y1="268" x2="424" y2="268" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="48" y="283" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif">Thủ Đức — đợt 1</text>
+<text x="148" y="283" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Chứng chỉ · T. Đức</text>
+<circle cx="240" cy="280" r="3" fill="#171717" stroke="#171717" stroke-width="1"/>
+<text x="248" y="283" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Đang chạy</text>
+<text x="320" y="283" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">12</text>
+<text x="352" y="283" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">3</text>
+<text x="364" y="283" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Tuấn</text>
+<text x="396" y="283" fill="#575757" font-size="9" font-family="'Geist', sans-serif">02/09</text>
+<line x1="48" y1="292" x2="424" y2="292" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="48" y="307" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif">Quận 2 — đợt 1</text>
+<text x="148" y="307" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Vừa · Quận 2</text>
+<circle cx="240" cy="304" r="3" fill="#666666" stroke="#666666" stroke-width="1"/>
+<text x="248" y="307" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đã kết thúc</text>
+<text x="320" y="307" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">85</text>
+<text x="352" y="307" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">18</text>
+<text x="364" y="307" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Hằng</text>
+<text x="396" y="307" fill="#575757" font-size="9" font-family="'Geist', sans-serif">20/08</text>
+<line x1="48" y1="316" x2="424" y2="316" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="48" y="331" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif">B. Thạnh — công ty</text>
+<text x="148" y="331" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Công ty · B. Thạnh</text>
+<circle cx="240" cy="328" r="3" fill="none" stroke="#171717" stroke-width="1"/>
+<text x="248" y="331" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Nháp</text>
+<text x="320" y="331" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">0</text>
+<text x="352" y="331" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">0</text>
+<text x="364" y="331" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Linh</text>
+<text x="396" y="331" fill="#575757" font-size="9" font-family="'Geist', sans-serif">04/09</text>
+<line x1="48" y1="340" x2="424" y2="340" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="48" y="355" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif">Gò Vấp — đợt 1</text>
+<text x="148" y="355" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Cao · Gò Vấp</text>
+<circle cx="240" cy="352" r="3" fill="#666666" stroke="#666666" stroke-width="1"/>
+<text x="248" y="355" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đã kết thúc</text>
+<text x="320" y="355" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">40</text>
+<text x="352" y="355" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">6</text>
+<text x="364" y="355" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Tuấn</text>
+<text x="396" y="355" fill="#575757" font-size="9" font-family="'Geist', sans-serif">12/08</text>
+<line x1="48" y1="364" x2="424" y2="364" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="48" y="392" fill="#666666" font-size="8" font-family="'Geist', sans-serif">1–5 trong số 5</text>
+<rect x="328" y="376" width="44" height="20" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="350.0" y="389.0" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Trước</text>
+<rect x="380" y="376" width="44" height="20" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="402.0" y="389.0" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Tiếp</text>
+<rect x="504" y="96" width="256" height="432" rx="6" fill="#fafafa" stroke="none" stroke-width="1"/>
+<rect x="504" y="96" width="256" height="432" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+<path d="M 510 96 H 754 Q 760 96 760 102 V 120 H 504 V 102 Q 504 96 510 96 Z" fill="#f2f2f2"/>
+<line x1="504" y1="120" x2="760" y2="120" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+<text x="516" y="112" fill="#171717" font-size="10" font-weight="600" font-family="'Geist', sans-serif">Chiến dịch mới</text>
+<text x="748" y="112" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.10em">HỘP TRƯỢT · MÀN 2</text>
+<text x="520" y="144" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif">Tên</text>
+<rect x="520" y="150" width="224" height="24" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="528" y="165.0" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Quận 7 — đợt 2</text>
+<text x="520" y="194" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif">Phân khúc</text>
+<rect x="520" y="200" width="224" height="24" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="528" y="215.0" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Sản lượng cao · Quận 7 — 84 cá nhân</text>
+<text x="736" y="215" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="end">▾</text>
+<rect x="520" y="228" width="224" height="72" rx="8" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<rect x="524" y="232" width="216" height="20" rx="4" fill="#f2f2f2" stroke="none" stroke-width="1"/>
+<text x="532" y="246" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Sản lượng cao · Quận 7 — 84 cá nhân</text>
+<text x="532" y="270" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Có chứng chỉ · Thủ Đức — 39 cá nhân</text>
+<text x="532" y="294" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Sản lượng vừa · Quận 2 — 113 cá nhân</text>
+<text x="732" y="246" fill="#171717" font-size="9" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">✓</text>
+<text x="520" y="316" fill="#666666" font-size="8" font-family="'Geist', sans-serif">Chỉ góc nhìn cá nhân dùng chung, kèm số kết quả.</text>
+<text x="520" y="340" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif">Lời chào</text>
+<rect x="520" y="346" width="224" height="56" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="528" y="362" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Chào anh/chị, em là Hằng bên OneHub.</text>
+<text x="528" y="376" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Bên em đang mở mạng lưới môi giới</text>
+<text x="528" y="390" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Quận 7, muốn hẹn anh/chị 15 phút…</text>
+<rect x="640" y="414" width="104" height="24" rx="5" fill="#006B4F" stroke="none" stroke-width="1"/>
+<text x="692.0" y="429.0" fill="#ffffff" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Tạo chiến dịch</text>
+<rect x="520" y="452" width="224" height="64" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="528" y="466" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" letter-spacing="0.08em">KHI CHƯA CÓ GÓC NHÌN DÙNG CHUNG</text>
+<text x="528" y="484" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chưa có góc nhìn cá nhân dùng chung.</text>
+<text x="528" y="500" fill="#1f4f7a" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-decoration="underline">Mở màn Cá nhân →</text>
+<rect x="824" y="96" width="648" height="432" rx="6" fill="#fafafa" stroke="none" stroke-width="1"/>
+<rect x="824" y="96" width="648" height="432" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+<path d="M 830 96 H 1466 Q 1472 96 1472 102 V 120 H 824 V 102 Q 824 96 830 96 Z" fill="#f2f2f2"/>
+<line x1="824" y1="120" x2="1472" y2="120" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+<text x="836" y="112" fill="#171717" font-size="10" font-weight="600" font-family="'Geist', sans-serif">Trang chiến dịch</text>
+<text x="1460" y="112" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.10em">MÀN 3</text>
+<text x="840" y="148" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif">Quận 7 — đợt 1</text>
+<rect x="948" y="134" width="76" height="20" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<circle cx="960" cy="144" r="3" fill="#171717"/>
+<text x="968" y="147" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif">Đang chạy</text>
+<text x="840" y="164" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Phân khúc</text>
+<text x="888" y="164" fill="#1f4f7a" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-decoration="underline">Sản lượng cao · Quận 7</text>
+<text x="996" y="164" fill="#575757" font-size="9" font-family="'Geist', sans-serif">· 84 cá nhân · bắt đầu 03/09 · phụ trách Hằng</text>
+<rect x="1384" y="136" width="72" height="24" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1420.0" y="151.0" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Kết thúc</text>
+<rect x="840" y="184" width="616" height="88" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+<text x="1036" y="200" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Thành viên</text>
+<text x="1108" y="200" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Đã gọi</text>
+<text x="1180" y="200" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Trả lời</text>
+<text x="1252" y="200" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Hẹn gặp</text>
+<text x="1324" y="200" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Tỷ lệ trả lời</text>
+<text x="1396" y="200" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Tỷ lệ hẹn</text>
+<text x="848" y="228" fill="#171717" font-size="9" font-weight="600" font-family="'Geist', sans-serif">Chiến dịch này</text>
+<text x="1036" y="230" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle" font-variant-numeric="tabular-nums">84</text>
+<text x="1108" y="230" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle" font-variant-numeric="tabular-nums">37</text>
+<text x="1180" y="230" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle" font-variant-numeric="tabular-nums">16</text>
+<text x="1252" y="230" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle" font-variant-numeric="tabular-nums">6</text>
+<text x="1324" y="230" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle" font-variant-numeric="tabular-nums">43 %</text>
+<text x="1396" y="230" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle" font-variant-numeric="tabular-nums">16 %</text>
+<line x1="848" y1="240" x2="1448" y2="240" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="848" y="259" fill="#575757" font-size="9" font-weight="500" font-family="'Geist', sans-serif">Đối chứng · chiến dịch khác</text>
+<text x="1036" y="260" fill="#575757" font-size="12" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle" font-variant-numeric="tabular-nums">236</text>
+<text x="1108" y="260" fill="#575757" font-size="12" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle" font-variant-numeric="tabular-nums">137</text>
+<text x="1180" y="260" fill="#575757" font-size="12" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle" font-variant-numeric="tabular-nums">27</text>
+<text x="1252" y="260" fill="#575757" font-size="12" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle" font-variant-numeric="tabular-nums">8</text>
+<text x="1324" y="260" fill="#575757" font-size="12" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle" font-variant-numeric="tabular-nums">20 %</text>
+<text x="1396" y="260" fill="#575757" font-size="12" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle" font-variant-numeric="tabular-nums">6 %</text>
+<text x="840" y="288" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif">Lời chào</text>
+<text x="888" y="288" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Chào anh/chị, em là Hằng bên OneHub. Bên em đang mở mạng lưới môi giới Quận 7, muốn hẹn anh/chị 15 phút để…</text>
+<text x="1448" y="288" fill="#1f4f7a" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="end" text-decoration="underline">Xem đầy đủ</text>
+<rect x="840" y="304" width="160" height="24" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="848" y="319.0" fill="#666666" font-size="9" font-family="'Geist', sans-serif">Tìm thành viên…</text>
+<rect x="1008" y="304" width="88" height="24" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1052.0" y="319.0" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Chưa gọi · 47</text>
+<rect x="1104" y="304" width="40" height="24" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1124.0" y="319.0" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Lọc</text>
+<text x="840" y="349" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif">Tên</text>
+<text x="924" y="349" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif">Số điện thoại</text>
+<text x="996" y="349" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif">Sản lượng</text>
+<text x="1096" y="349" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="end">Tin mới 30 ngày</text>
+<text x="1104" y="349" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif">Địa bàn</text>
+<text x="1188" y="349" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif">Kết quả gần nhất</text>
+<text x="1260" y="349" fill="#575757" font-size="8" font-weight="500" font-family="'Geist', sans-serif">Ghi kết quả</text>
+<line x1="840" y1="356" x2="1456" y2="356" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+<text x="840" y="373" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" translate="no">Nguyễn Văn Hùng</text>
+<text x="924" y="373" fill="#1f4f7a" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-decoration="underline" translate="no">090 123 4567</text>
+<text x="996" y="373" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Cao</text>
+<text x="1096" y="373" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">164</text>
+<text x="1104" y="373" fill="#171717" font-size="9" font-family="'Geist', sans-serif" translate="no">Quận 7, Nhà Bè</text>
+<text x="1188" y="373" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Hẹn gặp</text>
+<rect x="1256" y="360" width="196" height="20" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1280.0" y="373" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Không nghe</text>
+<line x1="1304" y1="360" x2="1304" y2="380" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1322.0" y="373" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Trả lời</text>
+<line x1="1340" y1="360" x2="1340" y2="380" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1360.0" y="373" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Hẹn gặp</text>
+<line x1="1380" y1="360" x2="1380" y2="380" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1398.0" y="373" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Từ chối</text>
+<line x1="1416" y1="360" x2="1416" y2="380" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1434.0" y="373" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Sai số</text>
+<line x1="840" y1="384" x2="1456" y2="384" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="840" y="401" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" translate="no">Trần Thị Mai</text>
+<text x="924" y="401" fill="#1f4f7a" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-decoration="underline" translate="no">091 234 5678</text>
+<text x="996" y="401" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Cao</text>
+<text x="1096" y="401" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">92</text>
+<text x="1104" y="401" fill="#171717" font-size="9" font-family="'Geist', sans-serif" translate="no">Quận 7</text>
+<text x="1188" y="401" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Trả lời</text>
+<rect x="1256" y="388" width="196" height="20" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1280.0" y="401" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Không nghe</text>
+<line x1="1304" y1="388" x2="1304" y2="408" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1322.0" y="401" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Trả lời</text>
+<line x1="1340" y1="388" x2="1340" y2="408" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1360.0" y="401" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Hẹn gặp</text>
+<line x1="1380" y1="388" x2="1380" y2="408" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1398.0" y="401" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Từ chối</text>
+<line x1="1416" y1="388" x2="1416" y2="408" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1434.0" y="401" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Sai số</text>
+<line x1="840" y1="412" x2="1456" y2="412" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="840" y="429" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" translate="no">Lê Minh Tuấn</text>
+<text x="924" y="429" fill="#666666" font-size="9" font-family="'Geist', sans-serif">Chưa có số</text>
+<text x="996" y="429" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Cao</text>
+<text x="1096" y="429" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">71</text>
+<text x="1104" y="429" fill="#171717" font-size="9" font-family="'Geist', sans-serif" translate="no">Quận 7, Quận 4</text>
+<text x="1188" y="429" fill="#666666" font-size="9" font-family="'Geist', sans-serif">—</text>
+<rect x="1256" y="416" width="196" height="20" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1280.0" y="429" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Không nghe</text>
+<line x1="1304" y1="416" x2="1304" y2="436" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1322.0" y="429" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Trả lời</text>
+<line x1="1340" y1="416" x2="1340" y2="436" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1360.0" y="429" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Hẹn gặp</text>
+<line x1="1380" y1="416" x2="1380" y2="436" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1398.0" y="429" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Từ chối</text>
+<line x1="1416" y1="416" x2="1416" y2="436" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1434.0" y="429" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Sai số</text>
+<line x1="840" y1="440" x2="1456" y2="440" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="840" y="457" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" translate="no">Phạm Quốc Bảo</text>
+<text x="924" y="457" fill="#1f4f7a" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-decoration="underline" translate="no">093 456 7890</text>
+<text x="996" y="457" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Cao</text>
+<text x="1096" y="457" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">68</text>
+<text x="1104" y="457" fill="#171717" font-size="9" font-family="'Geist', sans-serif" translate="no">Quận 7</text>
+<text x="1188" y="457" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Không nghe</text>
+<rect x="1256" y="444" width="196" height="20" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1280.0" y="457" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Không nghe</text>
+<line x1="1304" y1="444" x2="1304" y2="464" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1322.0" y="457" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Trả lời</text>
+<line x1="1340" y1="444" x2="1340" y2="464" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1360.0" y="457" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Hẹn gặp</text>
+<line x1="1380" y1="444" x2="1380" y2="464" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1398.0" y="457" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Từ chối</text>
+<line x1="1416" y1="444" x2="1416" y2="464" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1434.0" y="457" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Sai số</text>
+<line x1="840" y1="468" x2="1456" y2="468" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="840" y="485" fill="#171717" font-size="9" font-weight="500" font-family="'Geist', sans-serif" translate="no">Võ Thị Lan</text>
+<text x="924" y="485" fill="#1f4f7a" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-decoration="underline" translate="no">094 567 8901</text>
+<text x="996" y="485" fill="#171717" font-size="9" font-family="'Geist', sans-serif">Cao</text>
+<text x="1096" y="485" fill="#171717" font-size="9" font-family="'Geist', sans-serif" text-anchor="end" font-variant-numeric="tabular-nums">63</text>
+<text x="1104" y="485" fill="#171717" font-size="9" font-family="'Geist', sans-serif" translate="no">Quận 7, Quận 8</text>
+<text x="1188" y="485" fill="#666666" font-size="9" font-family="'Geist', sans-serif">—</text>
+<rect x="1256" y="472" width="196" height="20" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1280.0" y="485" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Không nghe</text>
+<line x1="1304" y1="472" x2="1304" y2="492" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1322.0" y="485" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Trả lời</text>
+<line x1="1340" y1="472" x2="1340" y2="492" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1360.0" y="485" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Hẹn gặp</text>
+<line x1="1380" y1="472" x2="1380" y2="492" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1398.0" y="485" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Từ chối</text>
+<line x1="1416" y1="472" x2="1416" y2="492" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1434.0" y="485" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Sai số</text>
+<line x1="840" y1="496" x2="1456" y2="496" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="840" y="514" fill="#666666" font-size="8" font-family="'Geist', sans-serif">1–50 trong số 84</text>
+<rect x="1360" y="500" width="44" height="20" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1382.0" y="513.0" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Trước</text>
+<rect x="1412" y="500" width="44" height="20" rx="5" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="1434.0" y="513.0" fill="#171717" font-size="8" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Tiếp</text>
+<path d="M 1352 532 V 596" fill="none" stroke="rgba(23,23,23,0.42)" stroke-width="1" stroke-dasharray="4,3"/>
+<circle cx="1352" cy="600" r="2" fill="#171717"/>
+<text x="1472" y="624" fill="#171717" font-size="13" font-family="'Lora', Georgia, serif" text-anchor="end" font-style="italic">Ở nháp và đã kết thúc, bảng thành viên chỉ đọc — năm nút kết quả không hiện.</text>
+<line x1="32" y1="656" x2="1472" y2="656" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="32" y="680" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Dữ liệu cá nhân trên hình là mẫu giả: tên, số điện thoại, số tin đều bịa để cho thấy bố cục, không phải người thật.</text>
+<text x="32" y="696" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Màn Cá nhân hiện có thêm chín trường từ sàn: Sản lượng · Tin đang đăng · Tin mới 30 ngày · Địa bàn · Hình thái · Chứng chỉ · Tên chuyên trang · Trang nhatot · Sàn cập nhật lúc.</text>
+<text x="32" y="712" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Phân khúc được tạo ở màn Cá nhân: lọc theo các trường đó rồi lưu góc nhìn dùng chung. Màn Chiến dịch chỉ chọn phân khúc, không lọc lại.</text>
+<text x="32" y="728" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Hàng «Đối chứng» tính trên mọi chiến dịch khác, không tính chính nó; chưa có chiến dịch nào khác thì hàng này ghi «chưa có đối chứng» thay vì số.</text>
+</svg>
+  </div>
+
+  <div class="notes">
+    <div>
+      <h2>Đọc hình thế nào</h2>
+      <p>Trái sang phải là đường suôn sẻ: từ danh sách bấm «Chiến dịch mới», điền tên, chọn một phân khúc trong ô chọn (mỗi dòng là một góc nhìn cá nhân dùng chung, kèm số người hiện tại), viết lời chào, bấm «Tạo chiến dịch». Trang chiến dịch mở ở nháp; bấm «Bắt đầu» thì bảng thành viên hiện năm nút kết quả và số điện thoại bấm gọi được. Bấm «Kết thúc» trả người dùng về danh sách.</p>
+      <p>Dải số đo có hai hàng vì một hàng không đọc được gì: tỷ lệ trả lời của chiến dịch này chỉ có nghĩa khi đặt cạnh tỷ lệ của các chiến dịch khác. Ngưỡng «phân khúc trả lời ≥ 2× đối chứng» của Cổng Đáng đọc thẳng từ hai hàng này.</p>
+    </div>
+    <div>
+      <h2>Bố cục kế thừa</h2>
+      <p>Khung trang, ô tìm kiếm, nút Lọc, menu Góc nhìn và dòng phân trang lấy y nguyên từ màn Công ty và màn Thoả thuận đang chạy, nên người dùng không học khuôn mới. Cái mới duy nhất là dải số đo hai hàng và cụm năm nút kết quả trên mỗi dòng.</p>
+      <p class="quiet">Trạng thái không vẽ ở đây: đang tải, danh sách rỗng, phân khúc rỗng, đang lưu, lỗi ghi kết quả — cả mười hai trạng thái liệt ở bảng trạng thái của bản thiết kế, mục 8.3.</p>
+    </div>
+  </div>
+
+  <footer>Hình A · kết quả bàn giao · hồ sơ tiep-thi-tuyen-doi-tac · nguồn: bản thiết kế 2026-09-04, mục 4.2 · 7.1 · 8 · dữ liệu cá nhân trên hình là mẫu giả</footer>
+</div>
+</body>
+</html>

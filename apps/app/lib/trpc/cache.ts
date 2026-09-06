@@ -25,6 +25,8 @@ export type CrmCache = {
 	company(id?: string, options?: Options): Promise<void>;
 	contact(id?: string, options?: Options): Promise<void>;
 	deal(id?: string, options?: Options): Promise<void>;
+	campaign(id?: string, options?: Options): Promise<void>;
+	campaignList(options?: Options): Promise<void>;
 	fields(entity?: RecordKind, options?: Options): Promise<void>;
 	fieldCoverage(id?: string, options?: Options): Promise<void>;
 	savedViews(entity?: RecordKind, options?: Options): Promise<void>;
@@ -209,6 +211,24 @@ export function useCrmCache(): CrmCache {
 					trpc.dashboard.summary.queryKey(),
 					trpc.currency.settings.queryKey(),
 				],
+				options,
+			),
+
+		campaign: (id, options) =>
+			run(
+				[
+					id
+						? trpc.campaigns.byId.queryKey({ id })
+						: trpc.campaigns.byId.queryKey(),
+				],
+				[trpc.campaigns.list.queryKey(), trpc.campaigns.members.pathKey()],
+				options,
+			),
+
+		campaignList: (options) =>
+			run(
+				[trpc.campaigns.list.queryKey()],
+				[trpc.campaigns.byId.queryKey()],
 				options,
 			),
 

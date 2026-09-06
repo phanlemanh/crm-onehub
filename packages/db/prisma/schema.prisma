@@ -33,6 +33,10 @@ model User {
   fieldValues    FieldValue[]        @relation("FieldValueUser")
   savedViews     SavedView[]         @relation("SavedViewOwner")
 
+  campaignsOwned   Campaign[]      @relation("CampaignOwner")
+  campaignsCreated Campaign[]      @relation("CampaignAuthor")
+  campaignTouches  CampaignTouch[] @relation("CampaignTouchAuthor")
+
   createdAgentDefinitions AgentDefinition[]             @relation("AgentDefinitionCreator")
   createdAgentVersions    AgentVersion[]                @relation("AgentVersionCreator")
   createdAgentTriggers    AgentTrigger[]                @relation("AgentTriggerCreator")
@@ -202,6 +206,25 @@ enum RecordSource {
   EMAIL
   CALENDAR
   TRACKING
+  LISTING
+}
+
+enum CampaignChannel {
+  PHONE
+}
+
+enum CampaignStatus {
+  DRAFT
+  RUNNING
+  FINISHED
+}
+
+enum TouchOutcome {
+  NO_ANSWER
+  ANSWERED
+  MEETING
+  DECLINED
+  WRONG_NUMBER
 }
 
 enum AgentConversationKind {
@@ -386,6 +409,7 @@ model Contact {
 
   deals           DealContact[]
   activities      Activity[]
+  campaignTouches CampaignTouch[]
   emailThreads    EmailThread[]
   calendarEvents  CalendarEvent[]
   eventAttendance CalendarAttendee[]
@@ -1098,12 +1122,66 @@ model SavedView {
   ownerId String
   owner   User   @relation("SavedViewOwner", fields: [ownerId], references: [id], onDelete: Cascade)
 
+  campaigns Campaign[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([entity, ownerId, name])
   @@index([entity, shared])
   @@map("savedView")
+}
+
+model Campaign {
+  id      String          @id @default(cuid())
+  name    String
+  channel CampaignChannel @default(PHONE)
+  status  CampaignStatus  @default(DRAFT)
+  script  String?
+
+  savedViewId String
+  savedView   SavedView @relation(fields: [savedViewId], references: [id], onDelete: Restrict)
+
+  ownerId     String?
+  owner       User?   @relation("CampaignOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  createdById String
+  createdBy   User    @relation("CampaignAuthor", fields: [createdById], references: [id])
+
+  startedAt  DateTime?
+  finishedAt DateTime?
+
+  touches CampaignTouch[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@index([savedViewId])
+  @@index([ownerId])
+  @@map("campaign")
+}
+
+model CampaignTouch {
+  id String @id @default(cuid())
+
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  contactId  String
+  contact    Contact  @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  activityId String   @unique
+  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+
+  outcome TouchOutcome
+  note    String?
+
+  createdById String
+  createdBy   User   @relation("CampaignTouchAuthor", fields: [createdById], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([campaignId, contactId])
+  @@index([contactId])
+  @@map("campaignTouch")
 }
 
 model Activity {
@@ -1131,6 +1209,7 @@ model Activity {
   emailThread     EmailThread?   @relation(fields: [emailThreadId], references: [id], onDelete: Cascade)
   calendarEventId String?        @unique
   calendarEvent   CalendarEvent? @relation(fields: [calendarEventId], references: [id], onDelete: Cascade)
+  campaignTouch   CampaignTouch?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

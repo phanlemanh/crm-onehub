@@ -151,6 +151,14 @@ export class ContactsService {
 		};
 	}
 
+	async countMatching(input: ContactListInput): Promise<number> {
+		const filterableFields = await this.fields.filterableFieldsFor("CONTACT");
+
+		return this.db.contact.count({
+			where: this.buildWhere(input, filterableFields),
+		});
+	}
+
 	async byId(id: string) {
 		const contact = await this.db.contact.findUnique({
 			where: { id },
