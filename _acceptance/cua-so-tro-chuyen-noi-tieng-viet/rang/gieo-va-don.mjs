@@ -123,7 +123,9 @@ async function don() {
 	process.exit(0);
 }
 
-const dong = process.argv[2] ?? "gieo";
-if (dong === "gieo") await gieo();
-else if (dong === "don") await don();
-else hong(`KHONG DO DUOC: chua biet dong tu ${JSON.stringify(dong)} — dung gieo hoac don.`);
+if (process.argv[1]?.endsWith("gieo-va-don.mjs")) {
+	const dong = process.argv[2] ?? "gieo";
+	if (dong === "gieo") await gieo();
+	else if (dong === "don") await don();
+	else hong(`KHONG DO DUOC: chua biet dong tu ${JSON.stringify(dong)} — dung gieo hoac don.`);
+}

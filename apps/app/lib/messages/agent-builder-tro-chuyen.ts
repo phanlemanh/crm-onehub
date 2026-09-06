@@ -16,6 +16,7 @@ const en = {
 		khongMo: "Chat unavailable",
 		khongMoMoTa: "This chat does not exist or you do not have access to it.",
 		tinKhongMo: "Message unavailable",
+		vungTin: "Messages",
 		guiHong: "This message could not be sent.",
 	},
 	dung: {
@@ -169,6 +170,7 @@ const vi = {
 		khongMo: "Không mở được hội thoại",
 		khongMoMoTa: "Hội thoại này không có, hoặc bạn không được vào.",
 		tinKhongMo: "Không mở được tin nhắn",
+		vungTin: "Vùng tin nhắn",
 		guiHong: "Tin này gửi không được.",
 	},
 	dung: {

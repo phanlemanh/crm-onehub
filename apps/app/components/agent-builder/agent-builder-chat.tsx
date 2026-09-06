@@ -421,7 +421,7 @@ export function AgentBuilderChat({
 
 			<MessageScrollerProvider autoScroll defaultScrollPosition="last-anchor">
 				<MessageScroller className="flex-1">
-					<MessageScrollerViewport>
+					<MessageScrollerViewport aria-label={t.man.vungTin}>
 						<MessageScrollerContent
 							aria-busy={working}
 							className="mx-auto w-full max-w-3xl gap-4 px-4 py-6 sm:gap-5 sm:px-5 sm:py-9"
@@ -689,7 +689,10 @@ function SharedAgentChat({
 	return (
 		<main className="flex min-h-0 flex-1 flex-col">
 			<header className="flex h-12 shrink-0 items-center gap-3 border-b px-5">
-				<h1 className="min-w-0 flex-1 truncate font-medium text-sm">
+				<h1
+					className="min-w-0 flex-1 truncate font-medium text-sm"
+					translate="no"
+				>
 					{conversation.agent?.name ?? conversation.title ?? t.man.boDung}
 				</h1>
 				<span className="text-muted-foreground text-xs">{t.man.chiDoc}</span>
@@ -697,7 +700,7 @@ function SharedAgentChat({
 
 			<MessageScrollerProvider autoScroll defaultScrollPosition="last-anchor">
 				<MessageScroller className="flex-1">
-					<MessageScrollerViewport>
+					<MessageScrollerViewport aria-label={t.man.vungTin}>
 						<MessageScrollerContent
 							aria-busy={working}
 							className="mx-auto w-full max-w-3xl gap-4 px-4 py-6 sm:gap-5 sm:px-5 sm:py-9"
@@ -774,7 +777,9 @@ function ChatHeader({
 	return (
 		<header className="flex h-12 shrink-0 items-center gap-2 border-b px-4 sm:gap-2.5 sm:pr-4 sm:pl-5">
 			<div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-				<h1 className="truncate font-medium text-sm">{title}</h1>
+				<h1 className="truncate font-medium text-sm" translate="no">
+					{title}
+				</h1>
 				<span className="hidden shrink-0 text-muted-foreground text-xs sm:inline">
 					{t.man.rieng}
 				</span>

@@ -1,0 +1,35 @@
+{
+	"lat": "cua-so-tro-chuyen-noi-tieng-viet",
+	"ghi_chu": "Bang DONG cac gia tri KHONG duoc dich tren man cua lat. So theo VI TRI trong cay DOM giua hai luot tieng. mien_dau: ky tu phan cach, khong phai chu.",
+	"dong": [
+		{
+			"gia_tri": "OneHub",
+			"luat": "ten thuong hieu",
+			"ngoai_man_do_duoc": true,
+			"vi_sao": "ten san pham ve ra o thanh dau ung dung, nam ngoai goc gom chu cua bo thuoc man"
+		},
+		{
+			"gia_tri": "Markdown",
+			"luat": "ten dinh dang, danh tu rieng",
+			"ngoai_man_do_duoc": true,
+			"vi_sao": "chi xuat hien ben trong mot cau da dich (nhan chep cau tra loi), khong dung mot minh tren man"
+		},
+		{
+			"gia_tri": "Slack",
+			"luat": "ten thuong hieu",
+			"ngoai_man_do_duoc": true,
+			"vi_sao": "chi ve ra o cum Viec lam duoc cua man chi tiet tac nhan — thuoc ho so dot mot"
+		}
+	],
+	"mien_dau": [
+		"/"
+	],
+	"vung_du_lieu": {
+		"ghi_chu": "Vung DOM ma chu ben trong la du lieu nguoi nhap hoac noi dung tac nhan sinh — phai Y HET nhau o ca hai luot tieng. Khai bang bo chon; vung khong con doi tuong la thoat ma 2. Chi ap cho NOT VAN BAN, khong ap cho @aria-label: nhan tro nang luon la chu do minh viet, khong bao gio la du lieu nguoi nhap.",
+		"bo_chon": [
+			"[data-slot=\"message-scroller-item\"]",
+			"[data-composer-text]",
+			"[translate=\"no\"]"
+		]
+	}
+}
