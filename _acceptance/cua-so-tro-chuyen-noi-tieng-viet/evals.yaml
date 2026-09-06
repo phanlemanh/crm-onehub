@@ -325,3 +325,18 @@ evals:
       nghe — danh tu theo CONTEXT.md, thuat ngu ky thuat giu ten that, khong con dau vet
       dich may. May KHONG cham muc nay.
     evidence_required: [run_id, verified_at]
+
+  - id: E21
+    criterion: AC-5
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ct_don
+    expected: >-
+      exit 0. Chay SAU moi chan man. Doc vet hoi thoai gieo, goi conversations.remove,
+      xoa vet, roi CHUNG cay da sach bang mot nhan chung DOC LAP: chay chan trang thai
+      cua ho so dot mot va doi no xanh — khong nhan loi tu khai cua chinh chan nay.
+      Lenh don that bai la thoat ma 2. Vang vet la thoat ma 2 (chan gieo chua chay).
+      Chieu do da chung 06/09: chay don khi khong co vet -> ma 2 goi ten.
+    paths:
+      - "_acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
