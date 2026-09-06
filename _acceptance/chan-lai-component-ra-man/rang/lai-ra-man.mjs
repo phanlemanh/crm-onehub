@@ -73,7 +73,7 @@ function chayBanVe() {
 }
 
 export function phanNhom() {
-	if (!existsSync(join(EV, "mac-dinh.json"))) danSo();
+	ghi("mac-dinh.json", docMacDinh(GOC));
 	chayBanVe();
 	const duong = join(EV, "ve-that.json");
 	if (!existsSync(duong)) {

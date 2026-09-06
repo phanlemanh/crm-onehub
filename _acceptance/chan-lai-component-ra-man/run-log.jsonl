@@ -1,0 +1,15 @@
+{"ts":"2026-09-06T14:50:04.041Z","kind":"round","run_id":"s4r1-20260906T145004Z-20894","sha":"057b1f37db5d719d53dc34e216b53df8a8471b7e","round":1}
+{"ts":"2026-09-06T14:50:04.261Z","kind":"eval","run_id":"s4r1-20260906T145004Z-20894-E1","eval":"E1","criterion":"AC-1","verifier":"config:executors.script.cl_dan_so","exit_code":0}
+{"ts":"2026-09-06T14:50:06.129Z","kind":"eval","run_id":"s4r1-20260906T145004Z-20894-E2","eval":"E2","criterion":"AC-2","verifier":"config:executors.script.cl_lai_ra_man","exit_code":0}
+{"ts":"2026-09-06T14:50:09.401Z","kind":"eval","run_id":"s4r1-20260906T145004Z-20894-E3","eval":"E3","criterion":"AC-3","verifier":"config:executors.script.cl_phan_biet","exit_code":0}
+{"ts":"2026-09-06T14:50:11.000Z","kind":"eval","run_id":"s4r1-20260906T145004Z-20894-E4","eval":"E4","criterion":"AC-4","verifier":"config:executors.script.cl_mo_nguyen_ban","exit_code":0}
+{"ts":"2026-09-06T14:50:12.587Z","kind":"eval","run_id":"s4r1-20260906T145004Z-20894-E5","eval":"E5","criterion":"AC-5","verifier":"config:executors.script.cl_ban_khai_da_do","exit_code":0}
+{"ts":"2026-09-06T14:50:12.615Z","kind":"eval","run_id":"s4r1-20260906T145004Z-20894-E6","eval":"E6","criterion":"AC-6","verifier":"config:executors.script.cl_dinh_doat","exit_code":0}
+{"ts":"2026-09-06T14:50:14.326Z","kind":"eval","run_id":"s4r1-20260906T145004Z-20894-E7","eval":"E7","criterion":"AC-7","verifier":"config:executors.test.cl_tieng_viet_den_man","exit_code":0}
+{"ts":"2026-09-06T14:50:14.339Z","kind":"eval","run_id":"s4r1-20260906T145004Z-20894-E8","eval":"E8","criterion":"AC-8","verifier":"config:executors.test.tv_canh_kho_ui","exit_code":0}
+{"ts":"2026-09-06T14:50:14.397Z","kind":"eval","run_id":"s4r1-20260906T145004Z-20894-E9","eval":"E9","criterion":"AC-9","verifier":"config:executors.script.cl_mot_bo_thuoc","exit_code":0}
+{"ts":"2026-09-06T14:50:14.616Z","kind":"eval","run_id":"s4r1-20260906T145004Z-20894-E11","eval":"E11","criterion":"AC-11","verifier":"config:executors.script.cl_khong_danh_sach_ten","exit_code":0}
+{"ts":"2026-09-06T14:50:36.307Z","kind":"suite","run_id":"s4r1-20260906T145004Z-20894-suite-test","cmd":"test","exit_code":0}
+{"ts":"2026-09-06T14:50:50.351Z","kind":"suite","run_id":"s4r1-20260906T145004Z-20894-suite-check-types","cmd":"check-types","exit_code":0}
+{"ts":"2026-09-06T14:50:51.039Z","kind":"suite","run_id":"s4r1-20260906T145004Z-20894-suite-lint","cmd":"lint","exit_code":0}
+{"ts":"2026-09-06T14:50:51.506Z","kind":"suite","run_id":"s4r1-20260906T145004Z-20894-suite-lint:slop","cmd":"lint:slop","exit_code":0}
