@@ -174,17 +174,6 @@
 			]
 		},
 		{
-			"component": "sonner.tsx",
-			"nguyen_ban": [
-				"CircleCheckIcon (lucide-react)",
-				"InfoIcon (lucide-react)",
-				"Loader2Icon (lucide-react)",
-				"OctagonXIcon (lucide-react)",
-				"TriangleAlertIcon (lucide-react)",
-				"Sonner (sonner)"
-			]
-		},
-		{
 			"component": "switch.tsx",
 			"nguyen_ban": [
 				"SwitchPrimitive (radix-ui)"

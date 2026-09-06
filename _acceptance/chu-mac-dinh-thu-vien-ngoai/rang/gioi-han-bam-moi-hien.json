@@ -1,0 +1,73 @@
+{
+	"lat": "chu-mac-dinh-thu-vien-ngoai",
+	"ghi_chu": "GIOI HAN DA KHAI: phep do tren man chi thay thu DANG HIEN. Cac component duoi day boc mot nguyen ban co trang thai mo/dong — chung chi ve ra sau khi bam, nen phep do tren man KHONG voi toi. Bang chiu chieu do: dong tro mot component khong boc thu vien la DO; va so dong phai BANG so chan dem duoc tu dia.",
+	"dong": [
+		{
+			"component": "accordion.tsx",
+			"nguyen_ban": [
+				"ChevronDownIcon (lucide-react)",
+				"ChevronUpIcon (lucide-react)",
+				"AccordionPrimitive (radix-ui)"
+			]
+		},
+		{
+			"component": "alert-dialog.tsx",
+			"nguyen_ban": [
+				"AlertDialogPrimitive (radix-ui)"
+			]
+		},
+		{
+			"component": "combobox.tsx",
+			"nguyen_ban": [
+				"ChevronDownIcon (lucide-react)"
+			]
+		},
+		{
+			"component": "drawer.tsx",
+			"nguyen_ban": [
+				"DrawerPrimitive (vaul)"
+			]
+		},
+		{
+			"component": "dropdown-menu.tsx",
+			"nguyen_ban": [
+				"CheckIcon (lucide-react)",
+				"ChevronRightIcon (lucide-react)",
+				"DropdownMenuPrimitive (radix-ui)"
+			]
+		},
+		{
+			"component": "hover-card.tsx",
+			"nguyen_ban": [
+				"HoverCardPrimitive (radix-ui)"
+			]
+		},
+		{
+			"component": "popover.tsx",
+			"nguyen_ban": [
+				"PopoverPrimitive (radix-ui)"
+			]
+		},
+		{
+			"component": "select.tsx",
+			"nguyen_ban": [
+				"CheckIcon (lucide-react)",
+				"ChevronDownIcon (lucide-react)",
+				"ChevronUpIcon (lucide-react)",
+				"SelectPrimitive (radix-ui)"
+			]
+		},
+		{
+			"component": "tabs.tsx",
+			"nguyen_ban": [
+				"TabsPrimitive (radix-ui)"
+			]
+		},
+		{
+			"component": "tooltip.tsx",
+			"nguyen_ban": [
+				"TooltipPrimitive (radix-ui)"
+			]
+		}
+	]
+}

@@ -1,0 +1,26 @@
+{
+	"lat": "chu-mac-dinh-thu-vien-ngoai",
+	"ghi_chu": "Bang DONG (hinh dang, chan chuyen trach). Moi vet phai bi DUNG chan chuyen trach bat voi ma 1 — khong nhan 'mot chan nao do bat duoc'. Bang lech voi bo vet la thoat ma 2.",
+	"hinh_dang": [
+		{
+			"ten": "go phep ghi de nhan vung thong bao",
+			"chan_chuyen_trach": "chu-la",
+			"ghi_chu": "Chan bat phai in thong diep chua NGUYEN VAN Notifications — day la doi chung duong cho AC-4, thay cho mot khang dinh phu dinh."
+		},
+		{
+			"ten": "dong khai chet",
+			"chan_chuyen_trach": "chu-la"
+		},
+		{
+			"ten": "ban khai component lech",
+			"chan_chuyen_trach": "boc-ma-khong-doc"
+		},
+		{
+			"ten": "bang gioi han thieu dong",
+			"chan_chuyen_trach": "gioi-han-bam-moi-hien"
+		}
+	],
+	"khong_co_doi_tuong": {
+		"chuoi la moi tren man": "Cam mot chuoi tieng Anh moi vao man thi no NAM trong file nguon, nen phep thu nguon tra ve 'co' va chan khong bat — dung thiet ke. Hinh dang nay khong co doi tuong cam duoc; chieu do that cua chan chu-la la vet 'go phep ghi de', vi no lam mot chuoi KHONG con trong file nguon nao xuat hien tro lai."
+	}
+}
