@@ -3,10 +3,22 @@ import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { MAX_ATTEMPTS } from "@crm/db/agent-tasks";
+import { z } from "zod";
 import * as current from "../agent/lib/tasks";
 
 type Tasks = typeof current;
-type Captured = { query: string; params: unknown[] };
+
+const queryParams = z.array(
+	z.union([
+		z.iso.datetime({ offset: true }).transform((iso) => new Date(iso)),
+		z.string(),
+		z.number(),
+		z.boolean(),
+		z.null(),
+	]),
+);
+
+type Captured = { query: string; params: z.infer<typeof queryParams> };
 
 const PRE_FIX_SHA = "746d3ef8ef8667c5e59545bf5f9b71b97d98f2c9";
 const SOURCE = "apps/agent/agent/lib/tasks.ts";
@@ -53,7 +65,10 @@ async function currentSource(): Promise<string> {
 let latest: Captured | null = null;
 db.$on("query", (event) => {
 	if (event.query.includes('UPDATE "agentTask"')) {
-		latest = { query: event.query, params: JSON.parse(event.params) };
+		latest = {
+			query: event.query,
+			params: queryParams.parse(JSON.parse(event.params)),
+		};
 	}
 });
 
@@ -88,14 +103,6 @@ async function staleStatistics() {
 	}
 }
 
-function typed(params: unknown[]): unknown[] {
-	return params.map((value) =>
-		typeof value === "string" && /^\d{4}-\d{2}-\d{2}T/.test(value)
-			? new Date(value)
-			: value,
-	);
-}
-
 async function lockRowsLoops(
 	mod: Tasks,
 ): Promise<{ loops: number; cte: boolean }> {
@@ -111,7 +118,7 @@ async function lockRowsLoops(
 		.$transaction(async (tx) => {
 			const rows = await tx.$queryRawUnsafe<{ "QUERY PLAN": string }[]>(
 				`EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) ${captured.query}`,
-				...typed(captured.params),
+				...captured.params,
 			);
 			for (const row of rows) plan.push(row["QUERY PLAN"]);
 			throw new Error("rollback");

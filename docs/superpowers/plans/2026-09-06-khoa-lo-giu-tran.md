@@ -95,10 +95,22 @@ import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { MAX_ATTEMPTS } from "@crm/db/agent-tasks";
+import { z } from "zod";
 import * as current from "../agent/lib/tasks";
 
 type Tasks = typeof current;
-type Captured = { query: string; params: unknown[] };
+
+const queryParams = z.array(
+	z.union([
+		z.iso.datetime({ offset: true }).transform((iso) => new Date(iso)),
+		z.string(),
+		z.number(),
+		z.boolean(),
+		z.null(),
+	]),
+);
+
+type Captured = { query: string; params: z.infer<typeof queryParams> };
 
 const PRE_FIX_SHA = "746d3ef8ef8667c5e59545bf5f9b71b97d98f2c9";
 const SOURCE = "apps/agent/agent/lib/tasks.ts";
@@ -145,7 +157,10 @@ async function currentSource(): Promise<string> {
 let latest: Captured | null = null;
 db.$on("query", (event) => {
 	if (event.query.includes('UPDATE "agentTask"')) {
-		latest = { query: event.query, params: JSON.parse(event.params) };
+		latest = {
+			query: event.query,
+			params: queryParams.parse(JSON.parse(event.params)),
+		};
 	}
 });
 
@@ -180,14 +195,6 @@ async function staleStatistics() {
 	}
 }
 
-function typed(params: unknown[]): unknown[] {
-	return params.map((value) =>
-		typeof value === "string" && /^\d{4}-\d{2}-\d{2}T/.test(value)
-			? new Date(value)
-			: value,
-	);
-}
-
 async function lockRowsLoops(
 	mod: Tasks,
 ): Promise<{ loops: number; cte: boolean }> {
@@ -203,7 +210,7 @@ async function lockRowsLoops(
 		.$transaction(async (tx) => {
 			const rows = await tx.$queryRawUnsafe<{ "QUERY PLAN": string }[]>(
 				`EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY OFF) ${captured.query}`,
-				...typed(captured.params),
+				...captured.params,
 			);
 			for (const row of rows) plan.push(row["QUERY PLAN"]);
 			throw new Error("rollback");
@@ -340,8 +347,19 @@ prepare_db() {
   (cd "$ROOT" && bun run db:test >/dev/null 2>&1) || { echo "không dựng được cơ sở dữ liệu ${name}"; exit 2; }
 }
 
-run_test() {
+run_once() {
   (cd "$AGENT" && CRM_TELEMETRY_DISABLED=1 KHOA_LO_RANG=1 PRISMA_LOG_QUERIES=true bun test "$@" 2>&1)
+}
+
+run_test() {
+  local out
+  out="$(run_once "$@")"
+  if printf '%s' "$out" | grep -q "Cannot find module '\./internal/"; then
+    echo "nạp lại một lần: Prisma client đang được sinh lại bởi lệnh khác (turbo ^build)" >&2
+    sleep 5
+    out="$(run_once "$@")"
+  fi
+  printf '%s' "$out"
 }
 
 count() { printf '%s' "$1" | grep -Eo "^ *[0-9]+ $2" | tail -1 | grep -Eo '[0-9]+'; }
@@ -364,13 +382,33 @@ tree_untouched() {
   [ -z "$(git -C "$ROOT" status --porcelain apps/agent/agent/lib/tasks.ts)" ] || { echo "RANG DO: tasks.ts có thay đổi chưa commit sau khi chạy"; exit 1; }
 }
 
+next_paragraph() {
+  awk -v RS= '/claimDue.*sorts what it claims/{ if ((getline para) > 0) print para; exit }' "$1"
+}
+
 doc_rule() {
-  local text
-  text="$(awk '/claimDue.*sorts what it claims/{on=1} on&&/^### /{exit} on{print}' "$1")"
-  [ -n "$text" ] || { echo "RANG DO: không thấy luật 'claimDue sorts what it claims' trong $1"; return 1; }
-  for word in claimDue retireExhausted MATERIALIZED; do
-    printf '%s' "$text" | grep -q "$word" || { echo "RANG DO: đoạn luật thiếu $word"; return 1; }
+  local para
+  para="$(next_paragraph "$1")"
+  [ -n "$para" ] || { echo "RANG DO: không thấy luật neo 'claimDue sorts what it claims' hoặc không có đoạn nào ngay sau nó"; return 1; }
+  printf '%s' "$para" | grep -q 'MATERIALIZED' || { echo "RANG DO: đoạn ngay sau luật neo không phải luật CTE (thiếu MATERIALIZED)"; return 1; }
+  for word in claimDue retireExhausted; do
+    printf '%s' "$para" | grep -q "$word" || { echo "RANG DO: đoạn luật thiếu $word"; return 1; }
   done
+}
+
+drop_word_after_anchor() {
+  awk -v w="$2" 'found{gsub(w,"")} /sorts what it claims/{found=1} {print}' "$1"
+}
+
+wedge_after_anchor() {
+  awk 'p&&/^$/{print; print "Một đoạn chen vào giữa luật neo và luật CTE."; print ""; p=0; next} /sorts what it claims/{p=1} {print}' "$1"
+}
+
+expect_red() {
+  local file="$1" pin="$2" out
+  out="$(doc_rule "$file" 2>&1)" && { echo "RANG CUN: bản sao hỏng mà răng vẫn xanh (mong: $pin)"; return 1; }
+  printf '%s' "$out" | grep -qF "$pin" || { echo "RANG DO: bản sao hỏng đỏ nhưng sai thông điệp — mong '$pin', nhận '$out'"; return 1; }
+  echo "  chiều đỏ ghim: $out"
 }
 
 case "$CHAN" in
@@ -440,11 +478,14 @@ case "$CHAN" in
     echo "rang toan-tep: 19 pass 0 fail, spec-diff.patch khớp diff sống"
     ;;
   tai-lieu)
-    doc_rule "$ROOT/docs/agent.md" || exit 1
+    DOC="$ROOT/docs/agent.md"
+    doc_rule "$DOC" || exit 1
     FIX="$(mktemp)"; trap 'rm -f "$FIX"' EXIT
-    sed 's/MATERIALIZED//g' "$ROOT/docs/agent.md" > "$FIX"
-    if doc_rule "$FIX" >/dev/null 2>&1; then echo "RANG CUN: bỏ MATERIALIZED khỏi bản sao mà răng vẫn xanh"; exit 1; fi
-    echo "rang tai-lieu: luật nêu claimDue, retireExhausted, MATERIALIZED ngay sau 'claimDue sorts what it claims'; bản sao thiếu MATERIALIZED thì đỏ"
+    drop_word_after_anchor "$DOC" MATERIALIZED > "$FIX"; expect_red "$FIX" "không phải luật CTE (thiếu MATERIALIZED)" || exit 1
+    drop_word_after_anchor "$DOC" claimDue > "$FIX"; expect_red "$FIX" "đoạn luật thiếu claimDue" || exit 1
+    drop_word_after_anchor "$DOC" retireExhausted > "$FIX"; expect_red "$FIX" "đoạn luật thiếu retireExhausted" || exit 1
+    wedge_after_anchor "$DOC" > "$FIX"; expect_red "$FIX" "không phải luật CTE" || exit 1
+    echo "rang tai-lieu: đoạn ngay sau 'claimDue sorts what it claims' nêu claimDue, retireExhausted, MATERIALIZED; bốn bản sao hỏng đỏ đúng thông điệp"
     ;;
   *)
     echo "rang: chân lạ $CHAN"; exit 2 ;;
