@@ -70,7 +70,7 @@ evals:
       exit 0. DANH SACH TEN THUOC TINH SINH TU CAY, khong ke tay: lay MOI ten thuoc tinh mang
       chuoi roi TRU theo danh sach ky thuat khai co ten. Mot ten thuoc tinh mang chu nguoi doc
       ma khong nam trong danh sach ky thuat va cung khong doc tu kho chuoi la DO goi ten
-      file:dong:ten-thuoc-tinh. So thuoc tinh mang chu bat duoc phai BANG neo 50 — lech la
+      file:dong:ten-thuoc-tinh. So thuoc tinh mang chu bat duoc phai BANG neo 57 — lech la
       thoat ma 2 kem diff. Moi dong mien tru ky thuat phai con doi tuong that.
       Chieu do: doi mot aria-label ve chuoi viet thang thi chan do dung dong.
     paths:
