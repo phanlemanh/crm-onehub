@@ -69,8 +69,9 @@ const en = {
 		themViec: "More agent actions",
 		xoaTacNhan: "Delete agent",
 		xoa: "Delete",
+		xoaHoi: (ten: string) => `Delete ${ten}?`,
 		xoaMoTa:
-			"This removes it from the team agent list, disables its triggers, and cancels queued runs. It cannot be undone.",
+			"This removes it from the team agent list, disables its triggers, and cancels queued runs. Its run and action history stays in the audit log. A run already in progress may finish.",
 		huy: "Cancel",
 		dangXoa: "Deleting",
 		daXoaXong: "Deleted",
@@ -193,8 +194,9 @@ const vi = {
 		themViec: "Thêm thao tác với tác nhân",
 		xoaTacNhan: "Xoá tác nhân",
 		xoa: "Xoá",
+		xoaHoi: (ten: string) => `Xoá ${ten}?`,
 		xoaMoTa:
-			"Việc này gỡ nó khỏi danh sách tác nhân của đội, tắt mọi mốc kích hoạt, và huỷ các lượt đang xếp. Không hoàn tác được.",
+			"Việc này gỡ nó khỏi danh sách tác nhân của đội, tắt mọi mốc kích hoạt, và huỷ các lượt đang xếp. Lịch sử chạy và thao tác vẫn nằm trong sổ kiểm. Lượt đang chạy dở có thể chạy nốt.",
 		huy: "Huỷ",
 		dangXoa: "Đang xoá",
 		daXoaXong: "Đã xoá",

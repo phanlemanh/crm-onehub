@@ -223,7 +223,7 @@ export function TeamAgentDetail({
 						</span>
 						<span className="font-mono text-sm">
 							{isDraft
-								? "Private draft"
+								? t.chiTiet.banNhap
 								: nextRun
 									? formatDate(nextRun, locale)
 									: triggerSummary}
@@ -445,7 +445,7 @@ function DeleteAgentAction({
 					}),
 				]);
 				setConfirming(false);
-				toast.success(`${name} was deleted.`);
+				toast.success(t.chiTiet.daXoa(name));
 				router.replace(workspaceUrl("/agents"));
 			},
 			onError: (error) => toast.error(error.message),
@@ -487,11 +487,9 @@ function DeleteAgentAction({
 			>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Delete {name}?</AlertDialogTitle>
+						<AlertDialogTitle>{t.chiTiet.xoaHoi(name)}</AlertDialogTitle>
 						<AlertDialogDescription>
-							This removes it from the team agent list, disables its triggers,
-							and cancels queued runs. Its run and action history stays in the
-							audit log. A run already in progress may finish.
+							{t.chiTiet.xoaMoTa}
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 

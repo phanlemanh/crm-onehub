@@ -240,7 +240,7 @@ export function AgentCapabilities({
 							{resource.label}
 							{canManage ? (
 								<button
-									aria-label={`Remove ${resource.label}`}
+									aria-label={t.viec.go(resource.label)}
 									className="text-muted-foreground hover:text-foreground"
 									onClick={() =>
 										setResources(
@@ -333,7 +333,7 @@ function ResourcePicker({ onPick }: { onPick: (resource: Resource) => void }) {
 					type="button"
 				>
 					<Icon className="size-3" icon={Add} motion="none" />
-					Add a record type
+					{t.viec.themLoaiBanGhi}
 				</button>
 			</PopoverTrigger>
 
