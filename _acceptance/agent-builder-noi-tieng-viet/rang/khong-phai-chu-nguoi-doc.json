@@ -76,10 +76,6 @@
 		{
 			"chu": "runs",
 			"vi_sao": "khoa cua ngan xem trong hop luot chay, so bang ==="
-		},
-		{
-			"chu": "activity",
-			"vi_sao": "khoa cua ngan xem trong hop luot chay"
 		}
 	],
 	"khoa_kieu": {

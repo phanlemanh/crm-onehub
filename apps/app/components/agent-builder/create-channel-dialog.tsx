@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale } from "@crm/ui/components/locale-provider";
+import { tacNhanMessages } from "@/lib/messages/agent-builder-tac-nhan";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
@@ -25,6 +27,7 @@ export function CreateChannelDialog({
 	children: React.ReactNode;
 	onCreated: () => Promise<void> | void;
 }) {
+	const t = tacNhanMessages(useLocale());
 	const trpc = useTRPC();
 	const queryClient = useQueryClient();
 	const [open, setOpen] = useState(false);
@@ -40,7 +43,7 @@ export function CreateChannelDialog({
 				await onCreated();
 				setOpen(false);
 				setName("");
-				toast.success("Creating the channel in Slack.");
+				toast.success(t.kenh.dangTao);
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -55,16 +58,15 @@ export function CreateChannelDialog({
 
 			<DialogContent className="sm:max-w-(--container-narrow)">
 				<DialogHeader>
-					<DialogTitle>Create a channel</DialogTitle>
+					<DialogTitle>{t.kenh.tieuDe}</DialogTitle>
 					<DialogDescription>
-						Comp AI makes it in Slack and joins it. You can put the agent in it
-						straight after.
+						{t.kenh.moTa}
 					</DialogDescription>
 				</DialogHeader>
 
 				<div className="flex flex-col gap-4">
 					<div className="flex flex-col gap-1.5">
-						<Label htmlFor="channel-name">Name</Label>
+						<Label htmlFor="channel-name">{t.kenh.ten}</Label>
 						<Input
 							id="channel-name"
 							onChange={(event) => setName(event.target.value)}
@@ -73,8 +75,8 @@ export function CreateChannelDialog({
 						/>
 						<p className="text-muted-foreground text-xs">
 							{slug && !valid
-								? "Use lowercase letters, numbers and dashes."
-								: `Slack will call it #${slug || "renewals"}.`}
+								? t.kenh.luatTen
+								: t.kenh.slackGoiLa(slug || "renewals")}
 						</p>
 					</div>
 
@@ -85,7 +87,7 @@ export function CreateChannelDialog({
 							onCheckedChange={setIsPrivate}
 						/>
 						<Label htmlFor="channel-private">
-							Private. Only people you invite can see it.
+							{t.kenh.riengTu}
 						</Label>
 					</div>
 				</div>
@@ -96,13 +98,13 @@ export function CreateChannelDialog({
 						onClick={() => setOpen(false)}
 						variant="outline"
 					>
-						Cancel
+						{t.kenh.huy}
 					</Button>
 					<Button
 						disabled={!valid || create.isPending}
 						onClick={() => create.mutate({ name: slug, isPrivate })}
 					>
-						{create.isPending ? "Creating…" : "Create channel"}
+						{create.isPending ? t.kenh.dangTaoNut : t.kenh.tao}
 					</Button>
 				</DialogFooter>
 			</DialogContent>
