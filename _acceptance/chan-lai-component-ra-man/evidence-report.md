@@ -142,7 +142,6 @@ human_signoff: Manh Phan 2026-09-06
 - eval: E10
   judged_by: nguoi — chu kho, Cong 2
   verdict: PASS
-  run_id: s4r1-20260906T145103Z-21187-E10
   verified_at: 2026-09-06T14:52:28Z
   human_override: Đạt — Manh Phan 2026-09-06
   rationale: |
@@ -161,6 +160,11 @@ Tat ca ma 0, chay CUONG BUC (--force) va NOI TIEP (--concurrency=1), 0 cache:
 Muoi chan may deu ma 0 trong mot luot chay CO GHI SO — moi run_id mint luc thuc thi
 va co mat trong run-log.jsonl. O thu muoi mot la phan xet cua nguoi (E10), da cham Dat
 o Cong 2.
+
+O E10 KHONG mang run_id, va do la co y: khong luot chay may nao cham no. Ban dau toi
+co ghi mot run_id cho no — mot so TU DUC, vi bo chay S4 khong he ghi so dong nao cho
+o phan xet. Luoi L2 PROVENANCE cua pre-merge bat dung cho do. Day la lan thu hai lop
+loi lam-gia-xuat-xu nay xuat hien trong chuoi vong nay.
 
 ## So do
 
