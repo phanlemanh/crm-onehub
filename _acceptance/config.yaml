@@ -157,6 +157,13 @@ executors:
     ct_dot_bien: "node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/dot-bien.mjs"
     ct_mot_bo_thuoc: "node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/mot-bo-thuoc.mjs"
     ct_tu_dien: "node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/tu-dien.mjs"
+    tv_chu_la_tren_man: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/chu-la.mjs quet"
+    tv_dong_khai_song: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/chu-la.mjs dong-khai"
+    tv_khai_sinh: "node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/khai-sinh.mjs"
+    tv_boc_ma_khong_doc: "node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/boc-ma-khong-doc.mjs"
+    tv_gioi_han_bam_moi_hien: "node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/gioi-han-bam-moi-hien.mjs"
+    tv_dot_bien: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/dot-bien.mjs"
+    tv_mot_bo_thuoc: "node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/mot-bo-thuoc.mjs"
     rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
     rang_t1_im: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"
   design:

@@ -1,0 +1,158 @@
+schema_version: 1
+feature_slug: chu-mac-dinh-thu-vien-ngoai
+evals:
+
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tv_chu_la_tren_man
+    expected: >-
+      exit 0. Bang dong ghim (man, so chuoi nhin thay duoc toi thieu) neo tu so do 06/09.
+      SO MAN dung duoc BANG so dong ban khai, va so chuoi moi man KHONG THAP HON neo —
+      lech la thoat ma 2 goi ten man kem hai con so. Day la ma tran toan phan viet truoc:
+      guard "tap rong la ma 2" mot minh chi chan duoc ca rong tuyet doi, khong chan duoc
+      ca man chuyen huong ve dang nhap hay khoi tai cham chua kip ve.
+      TAP LOAI TRU cua phep thu nguon ghim ten: node_modules · .next · dist · build. Chan
+      phai IN so file da quet khi hoi nguon — o kho nay bun gom node_modules len goc nen
+      apps/*/node_modules gan nhu rong, tuc phep do TINH CO dung neu khong loai tru; ghim
+      de no thoi phu thuoc vao cach trinh quan ly goi xep thu muc.
+      Chuoi KHONG co trong file nguon nao ma cung KHONG nam trong bang dong NAM ly do la
+      DO goi ten man:thuoc tinh:nguyen van. Dong thuoc ly do thu nam (sinh tu kho chuoi
+      qua ham ghep hoac phep dinh dang) phai TRO mot khoa CO THAT trong kho chuoi; khoa
+      chet la DO goi ten khoa.
+      Chieu do da phai chung: go phep ghi de nhan vung thong bao cua sonner -> ma 1, thong
+      diep chua NGUYEN VAN "Notifications".
+    paths:
+      - "packages/ui/src/**"
+      - "apps/app/**"
+      - "_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-1b
+    executor: script
+    cmd: config:executors.script.tv_dong_khai_song
+    expected: >-
+      exit 0. Moi dong trong bang dong bon ly do phai con ve ra tren mot man nao do —
+      dong chet la DO goi ten. Bang rong la thoat ma 2.
+      Chieu do: them mot dong khai cho mot chuoi khong he ve ra -> ma 1 goi ten dong.
+    paths:
+      - "_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.tv_khai_sinh
+    expected: >-
+      exit 0. Dung lai ba danh sach TU DIA va doi ba con so bang neo: 79 component trong
+      packages/ui · 35 boc thu vien ngoai · 15 doc kho chuoi dung chung. Lech la thoat
+      ma 2 kem diff ten file. Danh sach "boc thu vien" sinh tu cau lenh nhap trong file,
+      KHONG go tay ten goi.
+    paths:
+      - "packages/ui/src/components/**"
+      - "_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.tv_boc_ma_khong_doc
+    expected: >-
+      exit 0. Bang dong ghim (component, nguyen ban no boc) cho moi component boc thu vien
+      ma khong doc kho chuoi. Moi dong phai tro mot component CO THAT con boc dung nguyen
+      ban da khai — tro vao component khong con boc thu vien nao la DO goi ten ca hai.
+      So dong bang BANG so component boc-ma-khong-doc chan dem ra; lech la thoat ma 2 in
+      ca hai danh sach.
+      Chieu do: doi mot dong sang mot component khong boc thu vien -> ma 1 goi ten.
+    paths:
+      - "packages/ui/src/components/**"
+      - "_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tv_chu_la_tren_man
+    expected: >-
+      exit 0. Ban khai man PHAI chua it nhat mot man co dung vung thong bao, va chan phai
+      IN RA nhan no doc duoc o trang thai xanh — mot khang dinh am tinh ("AC-1 khong con
+      bat duoc no") mot minh KHONG phan biet duoc "da va" voi "chua bao gio nhin toi".
+      Chieu do khong nam o day ma nam trong bo dot bien: hinh dang "go phep ghi de nhan
+      vung thong bao" co mot vet rieng, va chan bat phai in thong diep chua NGUYEN VAN
+      "Notifications".
+    paths:
+      - "packages/ui/src/components/sonner.tsx"
+      - "packages/ui/src/lib/messages.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.rang3_khoa_chet
+    expected: >-
+      exit 0. Tron bo canh kho chuoi van xanh sau khi vong nay them khoa: moi gia tri vi
+      co dau tru dong khai co ten · khong gia tri nao y het en · moi ham ghep bien co
+      khang dinh ghim · khong khoa chet.
+    paths:
+      - "packages/ui/src/lib/messages.ts"
+      - "apps/app/lib/messages/**"
+      - "apps/app/test/messages-guard.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.tv_dot_bien
+    expected: >-
+      exit 0. Bang DONG (hinh dang, chan chuyen trach) cho moi hinh dang CO DOI TUONG:
+      chuoi la tren man · dong khai chet · ban khai component lech · **go phep ghi de nhan
+      vung thong bao** (chan bat phai in thong diep chua NGUYEN VAN "Notifications"). Moi vet phai bi DUNG
+      chan chuyen trach bat voi ma 1; ma 2 in rieng va KHONG tinh la bat duoc. Cay lanh
+      thi moi chan xanh; git status truoc va sau bang nhau. Hinh dang khong co doi tuong
+      phai khai ra thay vi bia vet.
+    paths:
+      - "packages/ui/src/**"
+      - "_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.tv_mot_bo_thuoc
+    expected: >-
+      exit 0. So thu muc rang/ cua vong nay voi nam vong truoc: khong than ham hay than
+      mo-dun nao trung tu 12 dong tro len. Trung la DO kem ten hai file.
+    paths:
+      - "_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.tv_gioi_han_bam_moi_hien
+    expected: >-
+      exit 0. Bang co ten liet cac component CHI HIEN SAU KHI BAM, moi dong kem nguyen ban
+      no boc. Bang chiu chieu do: dong khai tro mot component KHONG boc thu vien nao la DO
+      goi ten ca hai.
+      VA BANG PHAI DU, do bang so: so dong BANG so component boc-thu-vien-ma-khong-doc-kho
+      thuoc loai chi-hien-sau-khi-bam ma chan dem duoc TU DIA — lech la thoat ma 2 in ca
+      hai danh sach. Moi dong phai chung loai do bang mot dau hieu DOC DUOC TU MA (boc mot
+      nguyen ban co trang thai mo/dong), khong bang loi khai. Mot bang khai mot dong khong
+      duoc di qua nhu mot bang da ke het.
+      Chieu do: doi mot dong sang mot component khong boc thu vien -> ma 1; bo bot mot dong
+      -> ma 2 in ca hai danh sach.
+    paths:
+      - "packages/ui/src/components/**"
+      - "_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-9
+    executor: judgment
+    cmd: judgment
+    expected: >-
+      Nguoi doc nhu mot nguoi quan tri OneHub: cac chuoi vong nay ghi de doc nhu tieng Viet
+      cua nguoi lam nghe — danh tu theo CONTEXT.md, thuat ngu ky thuat giu ten that. May
+      KHONG cham muc nay.
+    evidence_required: [run_id, verified_at]
