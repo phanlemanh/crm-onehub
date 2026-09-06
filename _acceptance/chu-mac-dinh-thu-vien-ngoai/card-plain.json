@@ -1,0 +1,102 @@
+{
+ "feature_plain": "Dựng một cái thước cho lớp chữ tiếng Anh mà mọi bộ quét của kho đều mù — chữ do thư viện ngoài sinh ra — rồi vá đúng số ít nó tìm ra.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ hỏi từng chữ trên màn: file nguồn nào của kho chứa nó? Không có file nào thì nó là chữ của thư viện ngoài, và phải được ghi đè hoặc khai có tên."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ đếm lại từ đĩa ba con số: 79 component giao diện, 35 cái bọc một thư viện ngoài, 15 cái đọc kho chuỗi chung."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ bắt 20 component bọc thư viện mà chưa đọc kho chuỗi phải khai từng cái một, kèm tên thư viện nó bọc."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ vá cái đã tìm được: nhãn vùng thông báo đang hiện tiếng Anh."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ khai thành bảng đếm được những chỗ phép đo này KHÔNG với tới — component chỉ hiện sau khi bấm."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "—",
+   "p": "Sẽ KHÔNG sửa chữ ngay trong thư viện tải về — bản vá đó bay mất ở lần cài kế tiếp."
+  },
+  {
+   "id": "—",
+   "p": "Sẽ KHÔNG quét theo một danh sách tên thư viện gõ tay — danh sách sẽ trôi, và đúng cái quên khai là cái sót."
+  },
+  {
+   "id": "—",
+   "p": "Sẽ KHÔNG lái từng component ra màn để đo — cần một bộ máy riêng, đắt; vòng này khai giới hạn thay vì làm."
+  },
+  {
+   "id": "—",
+   "p": "Sẽ KHÔNG nâng cấp thư viện để lấy bản có sẵn tiếng Việt — đó là đổi phụ thuộc, không phải đổi chữ."
+  }
+ ],
+ "scope_plain": "Nội dung giả trong CSS · thông báo sống cho trình đọc màn hình · lái từng component ra màn — ba thứ này hoãn.",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Chữ đến từ đâu: bốn nguồn. Nguồn «thư viện ngoài» là lỗ vừa đo được thật ở cổng trước; ba nguồn kia đã có phép đo ở bốn vòng đã ký."
+  },
+  {
+   "i": 1,
+   "p": "Chữ nấp ở đâu trên màn: bốn chỗ. Cả hai ca thật bắt được đều nằm ở nhãn trợ năng; hai chỗ cuối CHƯA từng đo ở kho này."
+  },
+  {
+   "i": 2,
+   "p": "Điều kiện hiện ra: ba điều kiện. Phần lớn 20 component chưa đọc kho là loại bấm-mới-hiện — đây là trục quyết định độ phủ thật của vòng."
+  },
+  {
+   "i": 3,
+   "p": "Áp mọi ô: danh sách sinh từ đĩa và từ màn · mỗi phép đo mới phải đỏ được thật · mọi dòng khai phải còn đối tượng · không chép thước · mọi phép đo trả tập rỗng phải tự khai chưa-đo-được."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Phép đo hỏi «file nguồn nào chứa chữ này» mà quên loại trừ thư mục thư viện tải về — mọi chữ của thư viện đều tìm thấy ở đó, nên phép đo sẽ luôn báo sạch. Đã sửa: ghim tập loại trừ, và bắt in số file đã quét. Đo được: ở kho này nó tình cờ đúng, vì trình quản lý gói gom thư viện lên gốc — một sự may, không phải bảo đảm."
+  },
+  {
+   "i": 1,
+   "p": "Bảng lý do thiếu một ô: chữ ghép từ kho chuỗi (kiểu «còn 3 ngày») không tồn tại nguyên văn trong file nào, nên phép đo sẽ báo đỏ oan mãi, hoặc người ta khai bừa. Đã sửa: thêm lý do thứ năm, và nó phải trỏ một khoá có thật trong kho."
+  },
+  {
+   "i": 2,
+   "p": "Phép đo quét cả một lớp mà không ghim trước số màn và số chữ mỗi màn. Một màn đá về đăng nhập vẫn trả vài chữ, nên nó không kêu, và hồ sơ đọc như một lượt quét đầy đủ. Đã sửa: ghim bảng số tối thiểu cho từng màn."
+  },
+  {
+   "i": 3,
+   "p": "Lời hứa «đã vá cái tìm được» chỉ được kiểm bằng một khẳng định phủ định — «không còn bắt được nó». Nếu không màn nào dựng vùng thông báo thì nó xanh mà chưa từng nhìn tới. Đã sửa: bắt bản khai có màn đó, bắt in ra nhãn đọc được, và thêm một vết đột biến riêng."
+  },
+  {
+   "i": 4,
+   "p": "Bảng khai «chỗ phép đo không với tới» không có điều khoản đếm — khai một dòng cũng qua, trong khi 19 chỗ còn lại vẫn vô hình. Đã sửa: số dòng phải bằng số máy đếm được từ đĩa."
+  }
+ ],
+ "decisions_plain": [
+  {
+   "id": "d-20260906T093000Z-9201",
+   "p": "KHÔNG dựng bản bấm được để duyệt giao diện — vòng này không đổi giao diện."
+  },
+  {
+   "id": "d-20260906T093100Z-9202",
+   "p": "KHÔNG viết đặc tả cấu trúc màn — vòng này không dựng màn nào."
+  },
+  {
+   "id": "d-20260906T093200Z-9203",
+   "p": "Phép đo tự định nghĩa «chữ trên màn mà không file nguồn nào chứa» thay vì quét theo danh sách tên thư viện — đổi lại một chữ của thư viện trùng tình cờ với chữ của kho sẽ lọt."
+  },
+  {
+   "id": "d-20260906T093300Z-9204",
+   "p": "KHÔNG lái từng component ra màn; khai giới hạn thành bảng đếm được — đổi lại độ phủ thật của vòng hẹp hơn vẻ ngoài."
+  }
+ ]
+}
