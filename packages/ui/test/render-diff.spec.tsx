@@ -28,6 +28,7 @@ import {
 import { Reasoning } from "../src/components/reasoning";
 import { Sheet, SheetContent, SheetTitle } from "../src/components/sheet";
 import { SkeletonSwap } from "../src/components/skeleton-swap";
+import { Toaster } from "../src/components/sonner";
 import { SortableItem } from "../src/components/sortable-list";
 import { Spinner } from "../src/components/spinner";
 import { Suggestion } from "../src/components/suggestion";
@@ -160,6 +161,7 @@ const CA: Ca[] = [
 		),
 	},
 	{ ten: "Spinner", ve: () => <Spinner /> },
+	{ ten: "Sonner", ve: () => <Toaster /> },
 	{
 		ten: "Dialog",
 		ve: () => (

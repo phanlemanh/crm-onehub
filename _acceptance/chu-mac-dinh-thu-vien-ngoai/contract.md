@@ -5,7 +5,7 @@ slug: chu-mac-dinh-thu-vien-ngoai
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-09-06
 design_doc: docs/superpowers/specs/2026-09-06-chu-mac-dinh-thu-vien-ngoai-design.md
