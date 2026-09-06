@@ -142,7 +142,14 @@ ba cảnh báo có sẵn) · lint:slop 0 lỗi.
 cưỡng bức song song thì `api#test` đỏ ở `mailbox-thread-writer` — nhiều gói dùng
 CHUNG một cơ sở dữ liệu test nên đụng ràng buộc duy nhất `rfcMessageId`. Chạy nối
 tiếp (`--concurrency=1`) thì xanh, và chạy riêng `apps/api` cũng xanh (385 pass, 0
-fail). Đây là tính chất của LỆNH CHỨNG, không phải của mã vòng này.
+fail).
+
+> **Đính chính 07/09.** Câu cuối của đoạn trên nguyên văn là «Đây là tính chất của
+> LỆNH CHỨNG, không phải của mã vòng này» — **sai**. Lệnh chứng của kho là
+> `turbo run test --concurrency=1`, đã nối tiếp sẵn; màu đỏ ấy đến từ lệnh tự gõ
+> trong phiên (`bunx turbo run test --force`, thiếu `--concurrency=1`). Phần đo còn
+> lại của đoạn vẫn đúng. Người viết báo cáo tự đính chính, không đụng verdict, chữ
+> ký hay con số nào.
 
 ## Vì sao PASS
 
