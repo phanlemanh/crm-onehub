@@ -1,16 +1,24 @@
 ---
 schema_version: 1
 slug: tiep-thi-tuyen-doi-tac
-ran_at: 2026-09-06T09:20:00Z
+ran_at: 2026-09-06T10:40:00Z
 variant: ui
-chan: 1
-lac: 1
-kho_chiu: 7
-vat: 3
-chuyen_phien_nguoi: 7
+chan: 0
+lac: 2
+kho_chiu: 8
+vat: 2
+chuyen_phien_nguoi: 6
 ---
 
-# Lái-thử Người-lạ — ván 1, biến thể UI
+# Lái-thử Người-lạ — biến thể UI · hai ván
+
+> Frontmatter mang số của **ván 2**, ván mới nhất và ván đang có hiệu lực.
+> `chan: 0` — điều kiện «sản phẩm bấm được» của phiên nghiệm thu nay là bằng chứng.
+> Ván 1 giữ nguyên bên dưới làm sử liệu.
+
+---
+
+# Ván 1 — 06/09 09:20Z, trước bản sửa
 
 Phiên lái là một phiên Claude Code hoàn toàn mới, đóng vai **nhân viên tiếp thị
 ngày đầu đi làm**, được đưa một máy đã đăng nhập sẵn và câu «tuần này em gọi
@@ -130,3 +138,75 @@ Ván 1 cho: **1 CHẶN + 1 LẠC**, cộng năm mục KHÓ-CHỊU mới. Không 
 lớp lỗi nghi thức sinh ra để bắt. Riêng CHẶN-11 và vấp 6 là hai giới hạn đã khai
 được một cặp mắt không-ngữ-cảnh tìm lại độc lập, tức danh sách giới hạn đã biết
 mô tả đúng sản phẩm thật.
+
+---
+
+# Ván 2 — 06/09 10:40Z, sau bản sửa `go-khoa-goc-nhin`
+
+Cùng năm mục tiêu, cùng khuôn đề bài, phiên lái mới hoàn toàn. Môi trường dựng
+lại về đúng điểm xuất phát của ván 1: 95 cá nhân (46 mẫu + 49 môi giới), 0 chiến
+dịch, 0 góc nhìn. Cây chạy ở commit `5bb506c`.
+
+## Vấp CHẶN của ván 1 đã hết
+
+| | Ván 1 | Ván 2 |
+|---|---|---|
+| MT5 «thử bỏ nhóm đã giữ» | **CHẶN** — bấm x, máy bảo đi kết thúc chiến dịch đã kết thúc, không đường nào khác | **XONG** — menu ghi «Đang là phân khúc của Goi moi gioi s…» ngay dưới tên góc nhìn, không còn nút x để bấm vào ngõ cụt |
+| Lời người-lạ | *«Nó bảo tôi đi làm đúng cái việc tôi vừa làm xong»* | *«Hệ thống không cho bỏ nhóm, và nói lý do ngay dưới tên»* |
+| Bằng chứng | `SD-MT5-step4.png` | `SD2-MT5-step2.png` |
+
+Người điều phối soi `SD2-MT5-step2.png` trên vật: dòng trên là tên góc nhìn
+«Moi gioi dang nhieu tin», dòng dưới là lý do màu mờ, và không có nút xoá. Mục
+tiêu MT5 hoàn thành trong 3 bước.
+
+## Nhật ký vấp ván 2
+
+Một vấp phiên lái xếp CHẶN đã được đo lại và hạ loại — **cùng một ca môi trường
+với ván 1**: kho có đúng một chiến dịch, mà đối chứng theo thiết kế là «mọi
+chiến dịch KHÁC», nên n=0.
+
+| # | Loại | MT | Vấp gì (nguyên văn người-lạ) | Bằng chứng · đối chiếu |
+|---|---|---|---|---|
+| 1 | LẠC | MT1 | Cột trái chỉ có 6 biểu tượng không chữ. Tôi phải đoán cái nào là danh bạ, và sau đó còn bấm nhầm 2 lần nữa ở MT4. | `SD2-MT1-step1.png` — lặp lại ván 1 |
+| 2 | KHÓ-CHỊU | MT1 | Cột Tên cụt còn «Chuy…», tiêu đề cột cụt «Tin mới …», «Tin đang…». Tôi không đọc được tên một người nào trong danh bạ. | `SD2-MT1-step2.png` — lặp lại ván 1, và nay thêm cả tiêu đề cột cũng cụt |
+| 3 | KHÓ-CHỊU | MT1 | Lọc Sản lượng chỉ có Cao và Vừa, và không chỗ nào nói Cao là từ bao nhiêu tin. Tôi giữ một nhóm mà không biết mình vừa giữ ngưỡng nào. | `SD2-MT1-step4.png` — trùng việc-của-người về ngưỡng |
+| 4 | VẶT | MT1 | Hộp thoại Lưu bảng xem làm nền sau đen kịt hoàn toàn — mất luôn cái bảng mình đang lưu. | `SD2-MT1-step7.png` — lặp lại ván 1 |
+| 5 | KHÓ-CHỊU | MT2 | Ba tên cho cùng một thứ: màn Chiến dịch gọi là «phân khúc» và «góc nhìn dùng chung», màn Cá nhân gọi là «bảng xem». | `SD2-MT2-step1.png` — lặp lại ván 1 |
+| 6 | KHÓ-CHỊU | MT2 | Chú thích «Chỉ hiện góc nhìn cá nhân đang dùng chung» nói sai: bảng xem của tôi CHƯA bật chia sẻ mà vẫn hiện trong danh sách. | `SD2-MT2-step3.png` — **trùng Ngoài-18**, tìm lại độc lập lần thứ hai |
+| 7 | KHÓ-CHỊU | MT4 | Cuộn trang ở màn chiến dịch không ăn. Tôi chỉ thấy 3 hàng trong 27, không xuống được phần dưới. | `SD2-MT4-step1.png` — **MỚI**, ván 1 không thấy |
+| 8 | KHÓ-CHỊU | MT4 | Không có màn báo cáo nào. Chỗ duy nhất so sánh là ô «Mọi chiến dịch khác» và nó ghi «Chưa có đối chứng». | `SD2-MT4-step4.png` — **HẠ TỪ CHẶN.** Đo lại: kho có đúng 1 chiến dịch (`Goi moi gioi san luong cao tuan 36`, FINISHED), đối chứng là mọi chiến dịch KHÁC nên n=0. Cùng ca môi trường với ván 1 |
+| 9 | LẠC | MT4 | Đi tìm báo cáo, tôi bấm nhầm sang màn Công ty rồi màn Chat rồi màn Thoả thuận. Ba bước mất trắng. | `SD2-MT4-step2.png` · `-step3.png` · `-step5.png` — **MỚI**, hệ quả đo được của vấp #1 |
+| 10 | KHÓ-CHỊU | MT4 | Dữ liệu lạc chỗ: Công ty toàn Supabase, Stripe, Retool; Thoả thuận ghi giai đoạn tiếng Anh; màn Chat toàn tiếng Anh — giữa một phần mềm tiếng Việt. | `SD2-MT4-step2.png` · `-step5.png` — vùng mẫu của hãng, thuộc hồ sơ `tieng-viet-cho-crm` đang xếp lại sau |
+| 11 | KHÓ-CHỊU | MT5 | «Kết thúc» đóng đợt gọi ngay, không hỏi xác nhận, không có nút mở lại. 24 người chưa gọi mất đường gọi tiếp sau một cú bấm. | `SD2-MT5-step1.png` — lặp lại ván 1, và nay có thêm con số: 24 trong 27 người chưa gọi |
+| 12 | VẶT | MT4 | Cột Phụ trách của chiến dịch trống dù chính tôi vừa tạo nó. | `SD2-MT4-step4.png` — **MỚI** |
+
+**Ba mục KHÔNG tính là vấp của sản phẩm**, đều là môi trường người điều phối
+dựng, khai y như ván 1: số điện thoại `09xxxxxxxx` (lô nạp đã che), tên người
+là «Chuyên trang NN» (cùng lô che), và huy hiệu «N Issues» của máy chủ dev đè
+lên thông báo nổi.
+
+## Chuyển phiên người — ván 2
+
+1. Có đáng cho xoá bảng xem khi chiến dịch dùng nó đã kết thúc không?
+2. Có đáng có một màn so sánh nhóm này với phần còn lại của danh bạ không, hay chỉ so chiến dịch với chiến dịch là đủ?
+3. Có đáng hiện ngưỡng thật của «Cao» và «Vừa» — từ bao nhiêu tin — không?
+4. Có đáng bắt xác nhận trước khi «Kết thúc» một đợt gọi còn 24 người chưa gọi không?
+5. Có đáng cho mở lại một đợt gọi đã kết thúc không?
+6. Có đáng hiện số điện thoại thật cho người đang đi gọi không?
+
+## Bằng chứng ván 2
+
+26 frame ở `_acceptance/tiep-thi-tuyen-doi-tac/evidence/SD2-MT<n>-step<n>.png`,
+mỗi frame đã được phiên lái mở lại và ghi `observed:`; người điều phối soi lại
+`SD2-MT5-step2.png` trên vật. Phiên lái tự khai không phá luật nào.
+
+## Hai ván nói gì với thước của nghi thức
+
+Thước pilot đếm số vấp CHẶN hoặc LẠC mà bốn bộ kiểm S4 xanh không bắt được.
+
+- **Ván 1:** 1 CHẶN + 1 LẠC. CHẶN đó (`Ngoài-15`) đã được nâng thành vòng sửa `go-khoa-goc-nhin`, sửa xong, chấm tươi PASS.
+- **Ván 2 trên cây đã sửa:** **0 CHẶN** + 2 LẠC, và ba vấp MỚI không ván nào trước bắt được (cuộn chết ở màn chiến dịch, cột Phụ trách trống, lạc ba màn vì thanh bên không chữ).
+
+Hai ván, hai lần nghi thức trả về thứ mà 4 bộ kiểm xanh không thấy. Theo thước
+§5 của đề bài — «≥1 CHẶN hoặc ≥2 LẠC sau 2 ván» — nghi thức này đã trả tiền cho
+chi phí của nó, và câu hỏi codify thành skill nay có số liệu để bàn.
