@@ -36,3 +36,39 @@
 - **claude-sonnet-5**: 14 agent · 107 calls · out 13,428 · in 214 · cache_read 6,859,443 · cache_create 808,949
 - **claude-haiku-4-5-20251001**: 12 agent · 30 calls · out 1,357 · in 266 · cache_read 1,075,474 · cache_create 222,690
 
+### S4 round 2 — wf_f9801187-475 (27 agent, 34,467 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| refute:tasks.integration.spec.ts | claude-sonnet-5 | 15 | 6,083 | 30 | 1,203,621 | 249 |
+| review:conventions | claude-fable-5-1 | 9 | 5,877 | 258 | 616,323 | 164 |
+| review:bugs | claude-fable-5-1 | 12 | 5,838 | 354 | 902,520 | 298 |
+| review:measurement | claude-fable-5-1 | 5 | 4,780 | 130 | 305,786 | 138 |
+| judge:E13:operational-feasibility | claude-sonnet-5 | 2 | 3,711 | 4 | 98,253 | 56 |
+| judge:E13:spec-alignment | claude-sonnet-5 | 3 | 3,330 | 6 | 169,736 | 51 |
+| refute:khoa-lo-giu-tran.rang.ts | claude-sonnet-5 | 15 | 2,060 | 30 | 1,088,703 | 171 |
+| machine:bun run db:test && bun run test | claude-haiku-4-5-20251001 | 5 | 815 | 42 | 206,058 | 28 |
+| refute:tasks.integration.spec.ts | claude-sonnet-5 | 11 | 440 | 22 | 707,855 | 64 |
+| machine:bash _acceptance/khoa-lo-giu-tran/rang.s | claude-haiku-4-5-20251001 | 2 | 434 | 18 | 69,673 | 11 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 417 | 18 | 69,646 | 17 |
+| refute:khoa-lo-giu-tran.rang.ts | claude-sonnet-5 | 9 | 366 | 18 | 573,008 | 142 |
+| synthesize:report | claude-sonnet-5 | 2 | 135 | 4 | 71,731 | 222 |
+| refute:khoa-lo-giu-tran.rang.ts | claude-sonnet-5 | 14 | 65 | 28 | 1,002,829 | 165 |
+| judge:E13:domain-correctness | claude-sonnet-5 | 8 | 28 | 16 | 525,798 | 116 |
+| refute:rang.sh | claude-sonnet-5 | 6 | 26 | 12 | 361,956 | 47 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 8 | 18 | 69,644 | 17 |
+| capture:provenance | claude-sonnet-5 | 2 | 8 | 4 | 59,799 | 12 |
+| triage | claude-sonnet-5 | 2 | 7 | 4 | 62,571 | 49 |
+| machine:bash _acceptance/khoa-lo-giu-tran/rang.s | claude-haiku-4-5-20251001 | 3 | 6 | 26 | 113,358 | 29 |
+| machine:bash _acceptance/khoa-lo-giu-tran/rang.s | claude-haiku-4-5-20251001 | 3 | 6 | 26 | 113,561 | 20 |
+| machine:bash _acceptance/khoa-lo-giu-tran/rang.s | claude-haiku-4-5-20251001 | 2 | 5 | 18 | 41,142 | 12 |
+| machine:bash _acceptance/khoa-lo-giu-tran/rang.s | claude-haiku-4-5-20251001 | 2 | 5 | 18 | 69,671 | 15 |
+| machine:bash _acceptance/khoa-lo-giu-tran/rang.s | claude-haiku-4-5-20251001 | 2 | 5 | 18 | 69,673 | 22 |
+| machine:bash _acceptance/khoa-lo-giu-tran/rang.s | claude-haiku-4-5-20251001 | 2 | 5 | 18 | 69,672 | 12 |
+| machine:bunx turbo run check-types --force | claude-haiku-4-5-20251001 | 2 | 4 | 18 | 69,650 | 19 |
+| machine:bash _acceptance/khoa-lo-giu-tran/rang.s | claude-haiku-4-5-20251001 | 2 | 3 | 18 | 69,672 | 38 |
+
+- **claude-sonnet-5**: 12 agent · 89 calls · out 16,259 · in 178 · cache_read 5,925,860 · cache_create 725,082
+- **claude-fable-5-1**: 3 agent · 26 calls · out 16,495 · in 742 · cache_read 1,824,629 · cache_create 218,623
+- **claude-haiku-4-5-20251001**: 12 agent · 29 calls · out 1,713 · in 256 · cache_read 1,031,420 · cache_create 221,476
+
