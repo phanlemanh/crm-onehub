@@ -1,0 +1,30 @@
+{
+	"lat": "agent-builder-noi-tieng-viet",
+	"ghi_chu": "Du lieu NGUOI NHAP hien tren man cua lat — phan tu chua chung phai mang translate=no. Chan MA doc cay cu phap (luon chay duoc). Chan MAN chi do duoc khi co vat that; o nao can vat ma workspace do chua co thi khai vi_sao_san.",
+	"o": [
+		{
+			"file": "apps/app/components/agent-builder/agent-builder-sidebar.tsx",
+			"truong": "tieu de hoi thoai",
+			"gieo_duoc": false,
+			"vi_sao": "cach gieo mot hoi thoai dung chua chot — cung quyet dinh voi route-cua-lat.json",
+			"do_san_duoc": false,
+			"vi_sao_san": "workspace do co 0 hoi thoai"
+		},
+		{
+			"file": "apps/app/components/agent-builder/team-agents-index.tsx",
+			"truong": "ten tac nhan",
+			"gieo_duoc": false,
+			"vi_sao": "cach gieo mot tac nhan chua chot",
+			"do_san_duoc": false,
+			"vi_sao_san": "workspace do co 0 tac nhan"
+		},
+		{
+			"file": "apps/app/components/agent-builder/agent-capabilities.tsx",
+			"truong": "ten kenh Slack",
+			"gieo_duoc": false,
+			"vi_sao": "can Slack da cam that",
+			"do_san_duoc": false,
+			"vi_sao_san": "Slack chua cam vao workspace nay"
+		}
+	]
+}

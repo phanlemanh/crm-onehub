@@ -1,0 +1,51 @@
+{
+	"lat": "agent-builder-noi-tieng-viet",
+	"ghi_chu": "Bang DONG cac gia tri KHONG duoc dich tren man cua lat. Doi chieu HAI CHIEU voi tap ung vien sinh tu man that; VA moi dong duoc so GIA TRI giua hai luot tieng — chuoi phai Y HET nhau.",
+	"luat": [
+		{
+			"ten": "ten thuong hieu",
+			"vi_sao": "ten rieng cua san pham ngoai, dich la sai"
+		},
+		{
+			"ten": "dinh danh ky thuat",
+			"vi_sao": "ma may doc, khong phai chu nguoi doc"
+		},
+		{
+			"ten": "du lieu nguoi nhap",
+			"vi_sao": "chu cua nguoi dung, khong phai chu cua san pham"
+		}
+	],
+	"dong": [
+		{
+			"gia_tri": "Slack",
+			"luat": "ten thuong hieu"
+		},
+		{
+			"gia_tri": "OneHub",
+			"luat": "ten thuong hieu"
+		}
+	],
+	"ngoai_lat": {
+		"ghi_chu": "Chuoi NGOAI LAT: chung ve tren man cua lat nhung sinh tu SAU FILE HOAN sang dot hai (cua so tro chuyen). Day la GIOI HAN DA KHAI, KHONG phai da dich. Moi dong phai con ve ra tren man — dong chet la DO, vi no nghia la file hoan da doi ma ban khai chua theo.",
+		"khoi": [
+			{
+				"file": "apps/app/components/agent-builder/agent-composer.tsx",
+				"vi_sao": "o soan cua cua so tro chuyen — hoan sang dot hai, ve tren /chat vi trang chu lat nhung o soan vao",
+				"chuoi": [
+					"Sending",
+					"Sent",
+					"Send failed",
+					"Message the agent builder",
+					"Tag CRM records and integrations",
+					"Attach files",
+					"Open slash commands",
+					"Send message"
+				]
+			}
+		],
+		"mien_dau": [
+			"/"
+		]
+	},
+	"mien_dau": []
+}

@@ -1,0 +1,18 @@
+{
+	"lat": "agent-builder-noi-tieng-viet",
+	"ghi_chu": "Route SINH TU THU MUC (agent-builder): moi page.tsx la mot route, nhom trong ngoac don khong hien tren duong dan. Route can mot ban ghi that moi dung duoc thi khai o can_vat, kem CACH GIEO — chan tu doc khoa nay, khong go tay danh sach route.",
+	"can_vat": [
+		{
+			"route": "/agents/[agentId]",
+			"vat": "mot tac nhan cua doi",
+			"cach_gieo": "CHUA CHOT — thu tuc agents.save KHONG TON TAI (doc nham saveFile). Tac nhan sinh ra tu mot hoi thoai dung roi moi dua vao chay. Ba duong dang cho nguoi chon.",
+			"trang_thai": "cho-nguoi-chon"
+		},
+		{
+			"route": "/chat/[chatId]",
+			"vat": "mot hoi thoai dung",
+			"cach_gieo": "CHUA CHOT — cung mot quyet dinh voi route tren",
+			"trang_thai": "cho-nguoi-chon"
+		}
+	]
+}
