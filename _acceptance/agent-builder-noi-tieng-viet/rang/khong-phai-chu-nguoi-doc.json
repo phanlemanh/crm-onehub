@@ -122,8 +122,8 @@
 			"vi_sao": "khoa bo loc cua bang thoa thuan, so bang ==="
 		},
 		{
-			"chu": "stale",
-			"vi_sao": "khoa bo loc cua bang thoa thuan"
+			"chu": "deal",
+			"vi_sao": "khoa loai ban ghi truyen cho lop ghi nho — khong ve ra man"
 		}
 	],
 	"khoa_kieu": {
