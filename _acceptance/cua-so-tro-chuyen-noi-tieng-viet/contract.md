@@ -5,7 +5,7 @@ slug: cua-so-tro-chuyen-noi-tieng-viet
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-06
 design_doc: docs/superpowers/specs/2026-09-06-cua-so-tro-chuyen-noi-tieng-viet-design.md
