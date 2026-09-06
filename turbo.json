@@ -60,6 +60,7 @@
 			"dependsOn": ["topo", "^build"]
 		},
 		"test": {
+			"cache": false,
 			"dependsOn": ["topo", "^build"]
 		},
 		"dev": {

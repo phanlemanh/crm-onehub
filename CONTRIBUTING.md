@@ -72,7 +72,9 @@ you are deliberately pushing to ask about — `git push --no-verify` skips it, a
 skips it for a whole shell.
 
 **The suite runs against `TEST_DATABASE_URL`, never `DATABASE_URL`, and refuses to start without
-it.** `bun run db:test` creates the database and migrates it; the name has to end in `_test`.
+it.** `bun run test` mints a `TEST_RUN_ID`, creates `crm_<id>_test` beside it for that run alone
+and drops it afterwards, so two runs on one machine never share rows; the name has to end in
+`_test`. `docs/setup.md` has the whole account.
 These tests write and delete real rows, and the hook above runs them on every push — so without
 that split, one `git push` reaches whatever database your `.env` happens to name, which for a
 self-hoster is production. That is not hypothetical: a run that was interrupted between deleting

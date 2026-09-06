@@ -15,10 +15,10 @@ executors:
   test:
     cua_vao_chon_tieng: "cd apps/app && bun test test/locale-resolve.spec.ts"
     cua_vao_kho_chuoi: "cd apps/app && bun test test/auth-messages.spec.ts"
-    api: "bun run db:test && bun run test"
-    api_khong_cache_tru_agent: "bun run db:test && bunx turbo run test --concurrency=1 --force --filter=!agent"
+    api: "bun run test"
+    api_khong_cache_tru_agent: "bun run test -- --force --filter=!agent"
     rang3_khoa_chet: "cd apps/app && bun test test/messages-guard.spec.ts"
-    tt_api: bun run db:test && cd apps/api && bun run test listing-ingest.integration listing-fields listing-fixture-batch campaigns.spec campaign-schema
+    tt_api: bun run test -- "cd apps/api && bun run test listing-ingest.integration listing-fields listing-fixture-batch campaigns.spec campaign-schema"
     tt_app: cd apps/app && bun test test/messages-guard.spec.ts test/campaign-states.spec.ts
   script:
     cua_vao_loi_mang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"
@@ -43,18 +43,18 @@ executors:
     lint_slop: "bun run lint:slop"
     check_types: "bun run check-types"
     check_types_khong_cache: "bunx turbo run check-types --force"
-    rang_suite_sach: "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan sach"
-    rang_suite_thu_tu: "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan thu-tu"
+    rang_suite_sach: bun run test -- "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan sach"
+    rang_suite_thu_tu: bun run test -- "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan thu-tu"
     rang_config_doi: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan doi"
     rang_config_o_cam: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam"
     rang_config_o_cam_duong: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam-duong"
     rang_config_o_cam_do: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam-do"
     rang_config_o_cam_trung_tinh: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam-trung-tinh"
     rang_config_khai_thac: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan khai-thac"
-    rang_microsoft_duong: "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan duong"
-    rang_microsoft_do: "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan do"
-    rang_microsoft_nguon_env: "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan nguon-env"
-    rang_microsoft_hinh_thuc: "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan hinh-thuc"
+    rang_microsoft_duong: bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan duong"
+    rang_microsoft_do: bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan do"
+    rang_microsoft_nguon_env: bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan nguon-env"
+    rang_microsoft_hinh_thuc: bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan hinh-thuc"
     rang_hook_ep_chay: "bash _acceptance/luoi-day-do-that/rang-hook.sh --chan ep-chay"
     rang_hinh_hinh: "bash _acceptance/hinh-cua-luoi/rang-hinh.sh --chan hinh"
     rang_hinh_tan_cong: "bash _acceptance/hinh-cua-luoi/rang-hinh.sh --chan tan-cong"
@@ -115,7 +115,7 @@ executors:
     tt_ui_trang_thai: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs trang-thai
     tt_ui_be_rong: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs be-rong
     tt_ui_thiet_ke: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs thiet-ke
-    tt_crawl_to_ingest: cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --fixtures --dry-run --out ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/fixture-batch.json && cd ../.. && bun run db:test && cd apps/api && bun run test listing-fixture-batch
+    tt_crawl_to_ingest: bun run test -- "cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --fixtures --dry-run --out ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/fixture-batch.json && cd ../../apps/api && bun run test listing-fixture-batch"
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT}/scripts/design-gate.mjs"
     ui_check: "${CLAUDE_PLUGIN_ROOT}/scripts/design-scan.js"
