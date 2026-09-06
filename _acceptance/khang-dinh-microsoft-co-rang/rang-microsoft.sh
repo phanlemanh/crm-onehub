@@ -28,7 +28,7 @@ if [ -f "$ENVLOCAL" ] && [ "$(cat "$ENVLOCAL")" = "$FIXTURE_ENV" ]; then
   rm -f "$ENVLOCAL"
 fi
 
-TDB="$(grep '^TEST_DATABASE_URL=' "$ROOT/.env" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"')"
+TDB="${TEST_DATABASE_URL:-$(grep '^TEST_DATABASE_URL=' "$ROOT/.env" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"')}"
 [ -n "$TDB" ] || { echo "khong doc duoc TEST_DATABASE_URL tu .env goc"; exit 2; }
 
 chay() {

@@ -3,30 +3,45 @@ import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import pg from "pg";
+import {
+	databaseName,
+	runScopedUrl,
+	TEST_DATABASE,
+} from "../src/test-database";
+import {
+	dropDatabase,
+	maintenanceUrl,
+	markRunDatabase,
+	sweepStaleRunDatabases,
+} from "./test-db-admin";
 
 const SCHEMA = join(dirname(import.meta.dirname), "prisma", "schema.prisma");
 const MIGRATIONS = join(dirname(import.meta.dirname), "prisma", "migrations");
 
-const url = resolve();
+const base = resolve();
 
-if (!url) {
+if (!base) {
 	fail([
 		"Neither TEST_DATABASE_URL nor DATABASE_URL is set.",
 		"Copy .env.example to .env at the repo root.",
 	]);
 }
 
-const name = databaseName(url);
+const baseName = databaseName(base);
 
-if (!name.endsWith("_test")) {
+if (!baseName.endsWith(TEST_DATABASE.suffix)) {
 	fail([
-		`TEST_DATABASE_URL names "${name}", which does not end in _test.`,
+		`TEST_DATABASE_URL names "${baseName}", which does not end in ${TEST_DATABASE.suffix}.`,
 		"The suite refuses anything else, because it deletes rows it expects to",
 		"put back and an interrupted run leaves them deleted.",
 	]);
 }
 
-await create(url, name, process.argv.includes("--reset"));
+const runId = process.env.TEST_RUN_ID;
+const url = runScopedUrl(base, runId);
+const name = databaseName(url);
+
+await create(url, name, process.argv.includes("--reset"), runId);
 migrate(url);
 
 if (!process.env.TEST_DATABASE_URL) {
@@ -35,22 +50,23 @@ if (!process.env.TEST_DATABASE_URL) {
 			"",
 			"  Add this to .env so the suite finds it:",
 			"",
-			`    TEST_DATABASE_URL="${url}"`,
+			`    TEST_DATABASE_URL="${base}"`,
 			"",
 		].join("\n"),
 	);
+}
+
+if (runId) {
+	console.log(`  TEST_RUN_ID=${runId} runs against ${name}`);
 }
 
 async function create(
 	target: string,
 	database: string,
 	forced: boolean,
+	runId: string | undefined,
 ): Promise<void> {
-	const maintenance = new URL(target);
-	maintenance.pathname = "/postgres";
-	maintenance.search = "";
-
-	const client = new pg.Client({ connectionString: maintenance.toString() });
+	const client = new pg.Client({ connectionString: maintenanceUrl(target) });
 
 	try {
 		await client.connect();
@@ -69,6 +85,10 @@ async function create(
 			[database],
 		);
 
+		for (const stale of await sweepStaleRunDatabases(client, baseName)) {
+			console.log(`  dropped ${stale}: an older run left it behind`);
+		}
+
 		if (existing.rowCount) {
 			const reason = forced
 				? "you asked for --reset"
@@ -80,23 +100,15 @@ async function create(
 			}
 
 			console.log(`  rebuilding ${database}: ${reason}`);
-			await drop(client, database);
+			await dropDatabase(client, database);
 		}
 
 		await client.query(`CREATE DATABASE "${database}"`);
+		if (runId) await markRunDatabase(client, database, runId);
 		console.log(`  created ${database}`);
 	} finally {
 		await client.end();
 	}
-}
-
-async function drop(client: pg.Client, database: string): Promise<void> {
-	await client.query(
-		`SELECT pg_terminate_backend(pid) FROM pg_stat_activity
-		 WHERE datname = $1 AND pid <> pg_backend_pid()`,
-		[database],
-	);
-	await client.query(`DROP DATABASE IF EXISTS "${database}"`);
 }
 
 async function stale(target: string, database: string): Promise<string | null> {
@@ -191,19 +203,11 @@ function resolve(): string | null {
 		const database = parsed.pathname.replace(/^\//, "");
 		if (!database) return null;
 
-		parsed.pathname = `/${database.endsWith("_test") ? database : `${database}_test`}`;
+		parsed.pathname = `/${database.endsWith(TEST_DATABASE.suffix) ? database : `${database}${TEST_DATABASE.suffix}`}`;
 
 		return parsed.toString();
 	} catch {
 		return null;
-	}
-}
-
-function databaseName(value: string): string {
-	try {
-		return new URL(value).pathname.replace(/^\//, "");
-	} catch {
-		return value;
 	}
 }
 

@@ -2,6 +2,7 @@ import "@crm/env/load";
 
 import { PrismaPg } from "@prisma/adapter-pg";
 import { type Prisma, PrismaClient } from "./generated/prisma/client";
+import { databaseName, runScopedUrl, TEST_DATABASE } from "./test-database";
 
 const connectionString =
 	process.env.NODE_ENV === "test" ? testDatabase() : liveDatabase();
@@ -40,21 +41,13 @@ function testDatabase(): string {
 		);
 	}
 
-	if (!databaseName(url).endsWith("_test")) {
+	if (!databaseName(url).endsWith(TEST_DATABASE.suffix)) {
 		throw new Error(
-			`TEST_DATABASE_URL must name a database ending in _test, so it cannot be one somebody is using. It names "${databaseName(url)}".`,
+			`TEST_DATABASE_URL must name a database ending in ${TEST_DATABASE.suffix}, so it cannot be one somebody is using. It names "${databaseName(url)}".`,
 		);
 	}
 
-	return url;
-}
-
-function databaseName(url: string): string {
-	try {
-		return new URL(url).pathname.replace(/^\//, "");
-	} catch {
-		return url;
-	}
+	return runScopedUrl(url, process.env.TEST_RUN_ID);
 }
 
 export interface PrismaLogRecord {
