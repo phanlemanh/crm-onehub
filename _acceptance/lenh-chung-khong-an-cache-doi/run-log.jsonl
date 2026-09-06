@@ -1,0 +1,13 @@
+{"ts":"2026-09-06T15:35:20.265Z","kind":"round","run_id":"s4r1-20260906T153520Z-37144","sha":"ed221f4b3803b6d1251b1a4667b5cbed21ffdd26","round":1}
+{"ts":"2026-09-06T15:35:20.291Z","kind":"eval","run_id":"s4r1-20260906T153520Z-37144-E1","eval":"E1","criterion":"AC-1","verifier":"config:executors.script.kc_suite_cuong_buc","exit_code":0}
+{"ts":"2026-09-06T15:35:20.368Z","kind":"eval","run_id":"s4r1-20260906T153520Z-37144-E2","eval":"E2","criterion":"AC-2","verifier":"config:executors.script.kc_dan_so_tu_config","exit_code":0}
+{"ts":"2026-09-06T15:35:24.873Z","kind":"eval","run_id":"s4r1-20260906T153520Z-37144-E3","eval":"E3","criterion":"AC-3","verifier":"config:executors.script.kc_cache_noi_that","exit_code":0}
+{"ts":"2026-09-06T15:35:26.802Z","kind":"eval","run_id":"s4r1-20260906T153520Z-37144-E4","eval":"E4","criterion":"AC-4","verifier":"config:executors.script.kc_do_hanh_vi","exit_code":0}
+{"ts":"2026-09-06T15:35:26.828Z","kind":"eval","run_id":"s4r1-20260906T153520Z-37144-E5","eval":"E5","criterion":"AC-5","verifier":"config:executors.script.kc_lenh_hang_ngay","exit_code":0}
+{"ts":"2026-09-06T15:35:51.122Z","kind":"eval","run_id":"s4r1-20260906T153520Z-37144-E6","eval":"E6","criterion":"AC-6","verifier":"config:executors.test.api_khong_cache","exit_code":0}
+{"ts":"2026-09-06T15:35:51.184Z","kind":"eval","run_id":"s4r1-20260906T153520Z-37144-E7","eval":"E7","criterion":"AC-7","verifier":"config:executors.script.kc_mot_bo_thuoc","exit_code":0}
+{"ts":"2026-09-06T15:35:51.184Z","kind":"eval","run_id":"s4r1-20260906T153520Z-37144-E8","eval":"E8","criterion":"AC-8","verifier":"judgment","exit_code":0}
+{"ts":"2026-09-06T15:36:12.803Z","kind":"suite","run_id":"s4r1-20260906T153520Z-37144-suite-test","cmd":"test","exit_code":0}
+{"ts":"2026-09-06T15:36:28.915Z","kind":"suite","run_id":"s4r1-20260906T153520Z-37144-suite-check-types","cmd":"check-types","exit_code":0}
+{"ts":"2026-09-06T15:36:29.674Z","kind":"suite","run_id":"s4r1-20260906T153520Z-37144-suite-lint","cmd":"lint","exit_code":0}
+{"ts":"2026-09-06T15:36:30.201Z","kind":"suite","run_id":"s4r1-20260906T153520Z-37144-suite-lint:slop","cmd":"lint:slop","exit_code":0}

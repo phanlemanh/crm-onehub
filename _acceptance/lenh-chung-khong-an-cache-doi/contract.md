@@ -5,7 +5,7 @@ slug: lenh-chung-khong-an-cache-doi
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: approved
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-09-06
 design_doc: docs/superpowers/specs/2026-09-06-lenh-chung-khong-an-cache-doi-design.md
@@ -62,7 +62,13 @@ chế khác nhau** — bảng viết TRƯỚC khi chân chạy:
 | # | file thật | loại phụ thuộc | turbo vá bằng |
 | --- | --- | --- | --- |
 | 1 | `_acceptance/chan-lai-component-ra-man/rang/da-tim-thay.json` | ĐỌC lúc chạy | `inputs` của task |
-| 2 | `apps/app/components/agent-builder/chat-chips.tsx` | NHẬP như mô-đun | cạnh phụ thuộc gói |
+| 2 | `apps/app/components/agent-builder/chat-chips.tsx` | NHẬP như mô-đun | `inputs` của task |
+
+**Đính chính sau khi duyệt (phép đo buộc):** bên phản biện dự đoán hai loại này cần
+hai cơ chế khác nhau — `inputs` và cạnh phụ thuộc gói. Đo thật thì **cả hai đều vá
+được bằng `inputs`**, vì `inputs` chỉ là danh sách file góp vào khoá cache, không quan
+tâm file ấy được đọc hay được nhập. Bảng trên đã sửa theo số đo; sổ quyết định ghi ở
+`d-20260906T200000Z-9606`.
 
 **When** chân chạy, với **từng dòng**, đúng BA lượt theo thứ tự:
 1. **mồi** — chạy một lượt cho cache ấm;
