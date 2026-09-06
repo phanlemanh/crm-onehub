@@ -8,7 +8,24 @@
 		"require",
 		"import"
 	],
-	"giu_nguyen": [],
+	"giu_nguyen": [
+		{
+			"chuoi": "working",
+			"vi_sao": "khoa trang thai hoi thoai, so bang === chu khong ve ra man"
+		},
+		{
+			"chuoi": "unread",
+			"vi_sao": "khoa trang thai hoi thoai, so bang ==="
+		},
+		{
+			"chuoi": "deployed",
+			"vi_sao": "khoa trang thai hoi thoai, so bang ==="
+		},
+		{
+			"chuoi": "team",
+			"vi_sao": "doan route giu cho, so bang === de tra notFound()"
+		}
+	],
 	"khoa_kieu": {
 		"ghi_chu": "Khoa cua kieu chi muc vao kho chuoi — gia tri la TEN KHOA, khong phai chu nguoi doc. Khai o day thay vi mien tru tung gia tri, vi danh sach gia tri se dai theo so muc thanh ben.",
 		"duong": [
@@ -81,7 +98,10 @@
 		"aria-live",
 		"aria-controls",
 		"aria-expanded",
-		"khoa"
+		"khoa",
+		"motion",
+		"trigger",
+		"options"
 	],
 	"khoa_object_ky_thuat": [
 		"id",
