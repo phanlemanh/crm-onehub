@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ed221f4b3803b6d1251b1a4667b5cbed21ffdd26
+verified_commit: 538796cf4a0f334454dc9fc3f44f3f836a6b0ebf
 run_id: s4r1-20260906T153520Z-37144
 human_signoff: Manh Phan 2026-09-07
 ---
@@ -151,3 +151,8 @@ co mat trong run-log.jsonl. O thu tam la phan xet cua nguoi (E8), da cham Dat o 
 Va mot dinh chinh cho ban thiet ke: ben phan bien du doan hai loai phu thuoc ngoai goi
 can HAI co che khac nhau. Do that thi ca hai va duoc bang `inputs` — mot ban va thay
 vi hai.
+
+### Re-pin lần 1 — 07/09, do hợp nhất 88 commit của onehub vào chuỗi trước khi giao
+
+run_id: repin-20260906T214517Z-82885
+sha: 538796cf4a0f334454dc9fc3f44f3f836a6b0ebf · suites: 4 lệnh exit 0

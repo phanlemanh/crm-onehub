@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent (chay tuan tu — dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 296564f2aef813e016177f34a049779a46871c27
+verified_commit: 538796cf4a0f334454dc9fc3f44f3f836a6b0ebf
 human_signoff: Manh Phan 2026-09-05
 ---
 
@@ -297,3 +297,8 @@ none — every multi-run eval is uniform
 Round 1: PASS. Sau vong chay fan-out bi bo phan loai giet agent hai lan lien tiep,
 luot nay di duong verify TUAN TU theo dieu khoan CLASSIFIER-FALLBACK: mot phien tuoi
 chay lan luot 19 eval va 4 lenh suite, tat ca deu xanh.
+
+### Re-pin lần 1 — 07/09, do hợp nhất 88 commit của onehub vào chuỗi trước khi giao
+
+run_id: repin-20260906T214517Z-82885
+sha: 538796cf4a0f334454dc9fc3f44f3f836a6b0ebf · suites: 4 lệnh exit 0

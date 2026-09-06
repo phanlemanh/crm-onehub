@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 09c73f966828d9296881852a0dd38a54c8e5134c
+verified_commit: 538796cf4a0f334454dc9fc3f44f3f836a6b0ebf
 run_id: s4r1-20260906T091355Z-66825
 human_signoff: Manh Phan 2026-09-06
 ---
@@ -252,3 +252,8 @@ lớp lỗi vòng này tồn tại để chặn.
 - **Bộ đột biến 5/5**, mỗi vết bị đúng chân chuyên trách bắt, cây trả nguyên trạng.
 - **21 dòng bàn giao** đối chiếu hai chiều; neo của hồ sơ đã ký **đo lại trên đĩa**
   vẫn đúng (20 file quét, `khong_quet` 6 dòng).
+
+### Re-pin lần 1 — 07/09, do hợp nhất 88 commit của onehub vào chuỗi trước khi giao
+
+run_id: repin-20260906T214517Z-82885
+sha: 538796cf4a0f334454dc9fc3f44f3f836a6b0ebf · suites: 4 lệnh exit 0
