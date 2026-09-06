@@ -1,35 +1,21 @@
 {
  "feature_plain": "Bắt bốn lệnh chứng của cổng nói thật — không lệnh nào được trả về một màu xanh phát lại từ bộ nhớ đệm — và bắt bộ nhớ đệm của thư viện giao diện khai đủ những file nó thật sự đọc ở ngoài gói.",
- "will_do": [
-  { "id": "AC-1", "p": "Sẽ soi từng lệnh chứng của cổng, GIẢI tên script trước khi kết luận, và đòi lệnh test giữ cả hai vế: dựng lại cơ sở dữ liệu test, và ép chạy lại." },
-  { "id": "AC-2", "p": "Sẽ lấy danh sách lệnh từ cấu hình chứ không gõ tay, và chứng bằng cách gọi CHÍNH cái thước ấy trên một bản sao đã cấy lỗi." },
-  { "id": "AC-3", "p": "Sẽ đo HAI loại phụ thuộc ngoài gói bằng hai cặp riêng — file đọc lúc chạy, và mô-đun nhập vào — vì công cụ vá chúng bằng hai cơ chế khác nhau." },
-  { "id": "AC-4", "p": "Sẽ chứng cái thước đọc kết quả thật của công cụ chứ không đọc bản khai: tự chạy một lượt độc lập rồi so hai cặp số." },
-  { "id": "AC-6", "p": "Sẽ giữ bốn lệnh chứng xanh sau khi đổi, với ứng dụng về đúng ba cảnh báo có sẵn." }
+ "decisions": [
+  {
+   "id": "E8",
+   "q": "Mỗi lượt chấm của cổng tốn thêm 21 giây — cái giá ấy có đáng không?",
+   "why": "Lượt có cache 1,1 giây nhưng KHÔNG chạy gì; lượt cưỡng bức 22,3 giây và chạy thật cả 11 gói."
+  }
  ],
- "wont_do": [
-  { "id": "AC-5", "p": "Sẽ KHÔNG ép lệnh hằng ngày của người viết code chạy lại — họ cần vòng lặp nhanh; chỉ cổng mới cần sự thật. Có thước canh đúng điều đó." },
-  { "id": "AC-7", "p": "Sẽ KHÔNG chép thước: khối từ 12 dòng trở lên trùng một chân đã có là đỏ." }
- ],
+ "analyst_plain": "",
  "scope_plain": "Ép chạy lại cho lệnh hằng ngày · tắt hẳn bộ nhớ đệm · đưa trạng thái cơ sở dữ liệu vào khoá đệm · dời bộ vẽ ra khỏi thư viện giao diện — bốn thứ này hoãn.",
- "coverage_plain": [
-  { "i": 0, "p": "Một màu xanh có thể dối theo ba đường: lệnh không hề chạy, lệnh chạy nhưng khoá đệm thiếu file, và lệnh chạy đủ nhưng trạng thái bên ngoài — cơ sở dữ liệu — không nằm trong khoá. Cả ba đã đo thật hôm nay trên chính kho này (AC-1, AC-3)." },
-  { "i": 1, "p": "Ai chịu cái giá: cổng chấp nhận chậm để có sự thật, người viết code cần nhanh, và máy chủ tích hợp. Bốn lệnh chứng là hợp đồng với người viết code nên không được đụng vào (AC-5, AC-8)." },
-  { "i": 2, "p": "Đo bằng gì: đọc bản khai, đọc kết quả thật của công cụ, hay đo hành vi hai chiều. Năm vòng đã ký đều trả giá cho lớp đo-bản-khai-thay-vì-đo-vật (AC-3, AC-4)." },
-  { "i": 3, "p": "Áp cho mọi ô: dân số lấy từ cấu hình chứ không gõ tay, mỗi phép đo mới có cặp hai chiều, tập rỗng phải báo không-đo-được, không chép thước (AC-2, AC-3, AC-7)." }
- ],
- "gap_probe_plain": [
-  { "i": 0, "p": "Bên phản biện bắt lỗ nặng nhất: bộ vẽ phụ thuộc ra ngoài gói theo HAI cách khác nhau — đọc file lúc chạy, và nhập mô-đun — mà công cụ vá hai cách ấy bằng hai cơ chế riêng. Tôi chỉ định đo một. Sửa một thành phần ở ứng dụng xong thì thước vẫn báo xanh cũ, đúng con bọ vòng này lập ra để giết. Đã sửa: bảng hai dòng ghim tên, mỗi dòng một cặp riêng." },
-  { "i": 1, "p": "Trên một bộ nhớ đệm còn lạnh, cả hai chiều đều xanh mà không chứng gì — chiều đỏ vỡ vì không có gì để đệm, chiều dương thoả «không bằng không». Đã sửa: thêm lượt mồi và đòi số việc phải lớn hơn không." },
-  { "i": 2, "p": "Cái thước cho điều «đọc kết quả thật chứ không đọc bản khai» lại đi tìm chuỗi trong mã nguồn — tức đo chỉ dẫn chứ không đo đầu ra, và hỏng cả hai chiều. Đã sửa: nay nó tự chạy một lượt độc lập rồi so số." },
-  { "i": 3, "p": "Nguồn dối thứ ba — trạng thái cơ sở dữ liệu — không tiêu chí nào đo. Ai đó rút vế dựng lại cơ sở dữ liệu thì thước vẫn xanh, rồi một vòng sau sẽ đỏ mà không ai chỉ được nguyên nhân. Đã sửa: tiêu chí đòi cả hai vế." },
-  { "i": 4, "p": "Chiều đỏ của thước thứ nhất là một lượt chạy lịch sử, không tái lập được sau khi vòng đóng. Đã sửa: thước nhận đường dẫn cấu hình, nên chiều đỏ chạy lại được bất cứ lúc nào trên một bản sao." }
- ],
  "decisions_plain": [
-  { "id": "d-20260906T190000Z-9601", "p": "Đo HÀNH VI của bộ nhớ đệm thay vì soi danh sách khai — đổi lại thước phải chạy công cụ thật nên chậm hơn, và nó phụ thuộc định dạng đầu ra của công cụ ấy." },
-  { "id": "d-20260906T190100Z-9602", "p": "CHỈ lệnh của cổng bị ép chạy lại; lệnh hằng ngày giữ nguyên — đổi lại có hai đường chạy khác nhau, nên lỗi chỉ lộ ở đường ép sẽ đến với người viết code muộn hơn." },
-  { "id": "d-20260906T190200Z-9603", "p": "Giải tên script trước khi kết luận thay vì đoán theo tên — đổi lại chỉ giải được một bậc, script lồng nhiều bậc sẽ lọt." },
+  { "id": "d-20260906T190000Z-9601", "p": "Đo HÀNH VI của bộ nhớ đệm thay vì soi danh sách khai — đổi lại thước phải chạy công cụ thật nên chậm hơn." },
+  { "id": "d-20260906T190100Z-9602", "p": "CHỈ lệnh của cổng bị ép chạy lại; lệnh hằng ngày giữ nguyên — đổi lại có hai đường chạy khác nhau." },
+  { "id": "d-20260906T190200Z-9603", "p": "Giải tên script trước khi kết luận thay vì đoán theo tên — đổi lại chỉ giải được một bậc." },
   { "id": "d-20260906T190300Z-9604", "p": "KHÔNG dựng bản bấm được để duyệt giao diện — vòng này không chạm màn nào." },
-  { "id": "d-20260906T190400Z-9605", "p": "KHÔNG viết đặc tả cấu trúc màn — vòng này không dựng màn nào." }
+  { "id": "d-20260906T190400Z-9605", "p": "KHÔNG viết đặc tả cấu trúc màn — vòng này không dựng màn nào." },
+  { "id": "d-20260906T200000Z-9606", "p": "Sửa một cột của bảng trong hợp đồng SAU khi duyệt: dự đoán cần hai cơ chế là sai, đo thật thì một là đủ — chính phép đo là bên sửa nó." },
+  { "id": "d-20260906T200100Z-9607", "p": "Đổi cách chạm file sang nội dung chưa từng có — trước đó chiều đỏ trả về một kết quả đệm giả, và chính thước kia là bên phát hiện." }
  ]
 }
