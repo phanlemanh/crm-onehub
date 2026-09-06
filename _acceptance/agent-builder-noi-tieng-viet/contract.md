@@ -72,3 +72,8 @@ một vòng đã ký.
 - **Đổi bố cục, component, luồng** — vòng này chỉ đổi chữ, trừ chỗ nhãn tiếng Việt tràn ở 360px thì nới trong giới hạn thang có sẵn.
 
 ## Notes
+
+### Known limits
+
+- **Bộ quét dùng chung ghi MỘT khoá cho mỗi lời gọi toast** (khoá `t.x.y` đầu tiên trong lời gọi). Một câu dựng từ biểu thức ba ngôi vì thế chỉ góp nhánh đầu vào bảng đóng: ở lát này là `toast.success(result.cancelled ? chiTiet.daDung : chiTiet.daXongTruocDo)`. Nhánh thứ hai do chân MỌI CHUỖI (AC-10) canh, không phải bảng toast. **Không sửa bộ quét trong vòng này**: hai hồ sơ đã ký dựa vào đúng hành vi đó — ba lời gọi nhiều khoá ở `slack-channels.tsx` và `tracking-script.tsx` — nên đổi nó là làm đỏ bằng chứng đã ký. Sửa cho đúng là một việc riêng, đụng cả ba hồ sơ.
+- **Bảng không-đủ-quyền của lát này RỖNG có chủ ý.** Mọi chỗ gác quyền trong cụm dựng tác nhân đều ẩn nút thay vì đổi chữ, nên không có câu nào thuộc lớp đó. Chiều THỪA sinh từ cây cú pháp sẽ đỏ nếu sau này xuất hiện một câu như vậy mà bảng không khai.

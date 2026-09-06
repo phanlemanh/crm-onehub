@@ -158,7 +158,7 @@ export function AgentCapabilities({
 								}}
 							>
 								<Button size="sm" variant="outline">
-									Create a channel
+									{t.viec.taoKenh}
 								</Button>
 							</CreateChannelDialog>
 						) : null
