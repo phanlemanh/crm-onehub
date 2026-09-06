@@ -3,3 +3,4 @@
 {"id":"d-20260906T190200Z-9603","type":"approach","stage":"S1","at":"2026-09-06T19:02:00Z","decision":"Giai ten script qua package.json truoc khi ket luan mot lenh co an cache khong, thay vi doan theo ten","impact":"tiet kiem: het bao dong gia — lan chay dau tien da ket oan `bun run lint:slop` vi ten bat dau bang lint · rui ro: chi giai duoc mot bac `bun run X`, script long nhau nhieu bac se lot"}
 {"id":"d-20260906T190300Z-9604","type":"descope","stage":"S1","at":"2026-09-06T19:03:00Z","decision":"bỏ design-pass — vòng này không chạm giao diện nào, nó sửa cấu hình bộ chạy và khai input cache","impact":"Gate 1 duyệt UI bằng chữ — mất khoảnh khắc visual trước duyệt"}
 {"id":"d-20260906T190400Z-9605","type":"descope","stage":"S1","at":"2026-09-06T19:04:00Z","decision":"bỏ đặc-tả-UX — vòng này không dựng màn nào","impact":"cấu trúc không khai trước — owner thấy nó lần đầu trong code"}
+{"id":"d-20260906T193000Z-seal","type":"seal","gate":1,"at":"2026-09-06T19:30:00Z"}

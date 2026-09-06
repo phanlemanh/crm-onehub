@@ -5,7 +5,9 @@ slug: lenh-chung-khong-an-cache-doi
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: draft
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-09-06
 design_doc: docs/superpowers/specs/2026-09-06-lenh-chung-khong-an-cache-doi-design.md
 ---
 
