@@ -56,3 +56,5 @@ _acceptance/**/.anh-chup/
 tools/listing-crawl/.venv/
 __pycache__/
 *.pyc
+
+apps/agent/rang/.tmp/
