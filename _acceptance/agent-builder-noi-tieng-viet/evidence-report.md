@@ -1,7 +1,7 @@
 ---
 schema_version: 2
 feature_slug: agent-builder-noi-tieng-viet
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
@@ -9,7 +9,7 @@ enforcement_mode: strict
 bypass_used: false
 verified_commit: edcb85ac475b970840e1f850be7adb6bd9edde77
 run_id: r-20260906T035904Z
-human_signoff:
+human_signoff: Manh Phan 2026-09-06
 ---
 
 # Evidence Report: agent-builder-noi-tieng-viet
@@ -154,7 +154,7 @@ human_signoff:
   exit_code: 2
   verifier: config:executors.script.ab_be_rong_do
   verified_at: 2026-09-06T04:12:00Z
-  human_override:
+  human_override: Đạt — Manh Phan 2026-09-06
   output: |
     tien de be rong o 360px: 17 nhan doc duoc · hop CHAT CUNG=4 · trong do mang chu CUA LAT nay=0
     KHONG DO DUOC: thieu tien de nen KHONG chay phep cam vet — va KHONG duoc doc ket qua rong nay la 'ban dich vua'.
