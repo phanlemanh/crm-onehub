@@ -5,6 +5,7 @@ evals:
   - id: E0
     criterion: AC-5
     executor: script
+    layer: backend-effect
     cmd: config:executors.script.ct_gieo_va_don
     expected: >-
       exit 0. Chan nay chay TRUOC moi chan man. TIEN KIEM truoc: may chu API tra loi ·

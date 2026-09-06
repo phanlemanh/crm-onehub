@@ -1,0 +1,114 @@
+{
+ "feature_plain": "Cửa sổ trò chuyện của bộ dựng tác nhân nói tiếng Việt — nốt 276 chuỗi cuối, và tháo ba mối nối với hồ sơ đợt một đã ký.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ đưa 276 chuỗi tiếng Anh trên sáu file về 0, đo trên danh sách file sinh từ đĩa chứ không gõ tay."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ bắt phép đo tiêu đề tài liệu tự khai «không có đối tượng» thay vì trả xanh trên tập rỗng — kèm một đối chứng dương ở màn khác để chứng nó còn sống."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ gieo một hội thoại thật rồi đo cả hai màn trò chuyện bằng hai thứ tiếng, và dọn sạch kể cả khi đo hỏng."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ đo ba trạng thái lúc gửi tin — đang gửi, đã gửi, gửi hỏng — trên màn thật."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ chứng rằng phép đo bề rộng thật sự nhìn thấy nhãn dài, chứ không phải đang mù."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ tháo mối nối với hồ sơ đợt một mà không làm sai một con số nào của nó."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ đóng màn trò chuyện đang lẫn hai thứ tiếng, và chứng nó đã thuần tiếng Việt."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "—",
+   "p": "Sẽ KHÔNG đụng cụm Tác nhân của đội — đã ký ở đợt một."
+  },
+  {
+   "id": "—",
+   "p": "Sẽ KHÔNG sửa hai lỗ anh đã quyết «mở hợp đồng mới» ở cổng trước: thanh bên nằm ngoài tầm phép đo, và trạng thái tác nhân còn tiếng Anh."
+  },
+  {
+   "id": "—",
+   "p": "Sẽ KHÔNG dịch chữ do tác nhân sinh ra — đó là thứ phải giữ nguyên, không phải thứ để dịch."
+  },
+  {
+   "id": "—",
+   "p": "Sẽ KHÔNG đổi bố cục hay component; chỉ đổi chữ."
+  }
+ ],
+ "scope_plain": "Đo màn chia sẻ hội thoại với người thứ hai · nhiều hội thoại cùng lúc · mất mạng giữa chừng — ba thứ này hoãn.",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Chữ nấp ở đâu: bảy chỗ, mỗi chỗ là một lần đã sót thật ở bốn vòng trước. Vòng này đo được 183 văn bản · 93 thuộc tính · 14 lời báo · 0 tiêu đề."
+  },
+  {
+   "i": 1,
+   "p": "Điều kiện hiện ra: sáu điều kiện, trong đó «nhất thời» là mới — ba nhãn lúc gửi tin, chính là ba chuỗi đợt một đã khai là giới hạn."
+  },
+  {
+   "i": 2,
+   "p": "Thứ không được dịch: bốn lớp, trong đó «chữ do tác nhân sinh ra» là lớp mới và đã nhìn thấy trên màn gieo."
+  },
+  {
+   "i": 3,
+   "p": "Mối nối giữa hai hồ sơ: bốn chỗ, cả bốn đã đo được trong lúc thiết kế chứ không phải phỏng đoán."
+  },
+  {
+   "i": 4,
+   "p": "Áp mọi ô: danh sách sinh từ đĩa · mỗi phép đo mới phải đỏ được thật · mọi dòng miễn trừ phải còn đối tượng · không chép thước · và mọi phép đo trả tập rỗng phải tự khai chưa-đo-được."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Phép đo bề rộng định cắm nhãn dài vào một nhãn chỉ hiện lúc đang gửi — mà lúc đo thì màn đứng yên, nhãn ấy không có trên màn. Phép đo sẽ báo đỏ oan. Đã sửa: khoá được cắm phải nằm trong đúng tập mà phép đo xuôi nhìn thấy."
+  },
+  {
+   "i": 1,
+   "p": "Đã chốt «chỉ gieo một lần cho cả lượt đo» nhưng bốn phép đo lại tự gieo riêng — gấp bốn lần tiền token trên một khoá có trần. Đã sửa: một chân gieo chạy trước, ba chân kia đọc lại, và số lần gieo phải bằng một."
+  },
+  {
+   "i": 2,
+   "p": "Hồ sơ khai đây là việc thuần giao diện, trong khi nó gọi thẳng vào máy chủ API. Người duyệt sẽ không dựng API, rồi các phép đo về cổng ký TRỐNG chứ không đỏ — không có gì để dừng lại. Đã sửa: khai đúng hai mặt, và thêm bước tiền kiểm."
+  },
+  {
+   "i": 3,
+   "p": "Phép đo canh năm con số của hồ sơ đợt một chỉ so hai chuỗi chữ do người viết với nhau, không chạm đĩa. Đã sửa: phải đo lại trên đĩa rồi mới so."
+  },
+  {
+   "i": 4,
+   "p": "Phép đo canh «tập rỗng vẫn đạt» chỉ kiểm được một chiều, nên một phép đo chết vì lý do khác cũng cho ra cùng kết quả. Đã sửa: phải chạy thêm một lần ở chỗ có đối tượng thật."
+  }
+ ],
+ "decisions_plain": [
+  {
+   "id": "d-20260906T070000Z-9001",
+   "p": "KHÔNG dựng bản bấm được để duyệt giao diện — vòng này không đổi giao diện, chỉ đổi chữ."
+  },
+  {
+   "id": "d-20260906T070100Z-9002",
+   "p": "KHÔNG viết đặc tả cấu trúc màn — cấu trúc giữ nguyên như đợt một đã duyệt."
+  },
+  {
+   "id": "d-20260906T070200Z-9003",
+   "p": "Tháo mối nối bằng cách đổi LÝ DO loại trừ thay vì gỡ dòng — đổi lại hồ sơ đã ký không phải mở lại, nhưng phép đo nay phải đọc cả hai bản khai."
+  },
+  {
+   "id": "d-20260906T070300Z-9004",
+   "p": "Gieo một hội thoại thật để đo, thay vì giữ giới hạn như đợt một — đổi lại mỗi lượt đo tốn token thật trên một khoá có trần."
+  }
+ ]
+}
