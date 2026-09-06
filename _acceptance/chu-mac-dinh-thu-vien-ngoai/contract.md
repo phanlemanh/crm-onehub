@@ -5,7 +5,7 @@ slug: chu-mac-dinh-thu-vien-ngoai
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-06
 design_doc: docs/superpowers/specs/2026-09-06-chu-mac-dinh-thu-vien-ngoai-design.md
@@ -68,6 +68,7 @@ chỗ trong `node_modules` · quét theo danh sách tên thư viện gõ tay.
 
 ### Known limits
 
+- **known-limit (Ngoài-1, người chốt ở Cổng 2, 06/09):** bộ chấm bản vẽ của `packages/ui` đòi một ca cho mỗi component đọc bảng dịch — `packages/ui/test/render-diff.spec.tsx`. Ràng buộc ấy đúng và vòng này đã thoả (thêm ca cho `sonner`), nhưng nó chưa từng được nêu trong hợp đồng nào. Ghi lại để vòng sau biết trước: thêm một chỗ đọc kho chuỗi thì kéo theo một ca vẽ.
 - **Phép thử nguồn có tập loại trừ ghim tên.** `node_modules` · `.next` · `dist` · `build`. Ở kho này `bun` gom `node_modules` lên gốc nên `apps/*/node_modules` gần như rỗng (4 file `.ts` ngày 06/09) — phép đo *tình cờ* đúng nếu không loại trừ, và đó là một sự may chứ không phải một bảo đảm. Ghim tập loại trừ để nó thôi phụ thuộc vào cách trình quản lý gói xếp thư mục.
 - **Phép đo trên màn chỉ thấy thứ ĐANG HIỆN.** Component chỉ hiện sau khi bấm nằm ngoài tầm nó. Phép đo ở mức mã biết component ấy chưa đọc kho, nhưng KHÔNG biết nguyên bản có sinh chữ hay không. Hai phép đo cộng lại không thay được một chân lái; AC-8 bắt khai giới hạn này thành bảng có chiều đỏ chứ không để nó sống trong văn xuôi.
 - **`grep` trong `apps/` và `packages/` là phép thử "chữ này có phải của kho không".** Nó nhận nhầm theo hướng an toàn: một chuỗi thư viện TÌNH CỜ trùng với một chuỗi trong mã của kho sẽ lọt. Đổi lại, nó không cần biết trước tên gói nào — và danh sách tên gói mới là thứ chắc chắn sẽ trôi.

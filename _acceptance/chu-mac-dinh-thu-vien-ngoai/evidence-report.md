@@ -1,7 +1,7 @@
 ---
 schema_version: 2
 feature_slug: chu-mac-dinh-thu-vien-ngoai
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
@@ -9,7 +9,7 @@ enforcement_mode: strict
 bypass_used: false
 verified_commit: 3a71e509e039603d969b33fdfb4b12ad4ae57bd6
 run_id: s4r1-20260906T102507Z-35290
-human_signoff:
+human_signoff: Manh Phan 2026-09-06
 ---
 
 # Evidence Report: chu-mac-dinh-thu-vien-ngoai
@@ -25,7 +25,7 @@ human_signoff:
 | E7 | AC-6 | script | PASS |
 | E8 | AC-7 | script | PASS |
 | E9 | AC-8 | script | PASS |
-| E10 | AC-9 | judgment | UNCERTAIN |
+| E10 | AC-9 | judgment | PASS |
 
 ## Evidence
 
@@ -115,10 +115,10 @@ human_signoff:
 
 - eval: E10
   judged_by: nguoi — chu kho, Cong 2
-  verdict: UNCERTAIN
+  verdict: PASS
   run_id: s4r1-20260906T102507Z-35290-E10
   verified_at: 2026-09-06T10:30:22Z
-  human_override:
+  human_override: Đạt — Manh Phan 2026-09-06
   rationale: |
     Cac chuoi vong nay ghi de — nhan vung thong bao — co doc nhu tieng Viet cua nguoi
     lam nghe khong. May KHONG cham muc nay.
@@ -128,10 +128,11 @@ human_signoff:
 Tất cả mã 0: `bun run db:test && bun run test` · `bun run check-types` ·
 `bun run lint` · `bun run lint:slop`.
 
-## Vì sao PENDING-JUDGMENT
+## Vì sao PASS
 
-Chín chân máy đều mã 0 trong một lượt chạy CÓ GHI SỔ. Ô thứ mười là phán xét của
-người (E10) — chỉ người trả lời được.
+Chín chân máy đều mã 0 trong một lượt chạy CÓ GHI SỔ — mỗi `run_id` mint lúc thực
+thi và có mặt trong `run-log.jsonl`. Ô thứ mười là phán xét của người (E10), đã
+chấm Đạt ở Cổng 2.
 
 ## Số đo
 
