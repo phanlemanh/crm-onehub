@@ -1,8 +1,7 @@
 import { expect, test } from "bun:test";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { createElement, type ReactElement } from "react";
-import { act } from "react";
+import { act, createElement, type ReactElement } from "react";
 import { createRoot } from "react-dom/client";
 import { LocaleProvider } from "../src/components/locale-provider";
 import { TooltipProvider } from "../src/components/tooltip";
@@ -52,13 +51,14 @@ const NUT_LAI = [
 	'[data-slot$="trigger"]',
 	'[role="combobox"]',
 	"button",
-	'[aria-haspopup]',
+	"[aria-haspopup]",
 ];
 
 async function laiMoRa() {
 	const thay = new Set<Element>();
 	for (const chon of NUT_LAI)
-		for (const n of Array.from(document.body.querySelectorAll(chon))) thay.add(n);
+		for (const n of Array.from(document.body.querySelectorAll(chon)))
+			thay.add(n);
 	for (const n of Array.from(thay)) {
 		if (n instanceof HTMLElement === false) continue;
 		try {
@@ -103,7 +103,7 @@ async function ve(
 	}
 }
 
-const CA_RIENG: Record<string, Record<string, unknown>[]> = {
+const CA_RIENG = {
 	"packages/ui/src/components/combobox.tsx": [
 		{
 			options: [{ value: "a", label: "MUC" }],
@@ -123,12 +123,16 @@ const CA_RIENG: Record<string, Record<string, unknown>[]> = {
 			label: "MUC",
 		},
 	],
-};
+} satisfies Record<string, object[]>;
 
 const KHONG_PHAI_COMPONENT = [
 	"apps/app/components/data-table/list-search-params.ts",
 	"apps/app/lib/trpc/cache.ts",
 ];
+
+type XuatCuaModule = Record<string, ((...doi_so: never[]) => unknown) | string>;
+
+type MoNguyenBan = Record<string, { chu: string[]; loi: string | null }>;
 
 type BanVe = {
 	xuat: string;
@@ -154,9 +158,9 @@ async function laiMotFile(
 		];
 	}
 	const ra: BanVe[] = [];
-	let mod: Record<string, unknown>;
+	let mod: XuatCuaModule;
 	try {
-		mod = (await import(join(GOC_KHO, duongUi))) as Record<string, unknown>;
+		mod = (await import(join(GOC_KHO, duongUi))) as XuatCuaModule;
 	} catch (e) {
 		return [
 			{
@@ -171,7 +175,9 @@ async function laiMotFile(
 	for (const [ten, gt] of Object.entries(mod)) {
 		if (gt instanceof Function === false) continue;
 		if (!/^[A-Z]/.test(ten)) continue;
-		const bo = CA_RIENG[duongUi] ?? [{}];
+		const bo = Object.hasOwn(CA_RIENG, duongUi)
+			? CA_RIENG[duongUi as keyof typeof CA_RIENG]
+			: [{}];
 		const chuDong = new Set<string>();
 		const chuMo = new Set<string>();
 		let loiDong: string | null = null;
@@ -203,7 +209,7 @@ async function laiMotFile(
 	return ra;
 }
 
-function ghi(ten: string, gt: unknown) {
+function ghi(ten: string, gt: Record<string, BanVe[]> | MoNguyenBan) {
 	const duong = join(HO_SO, "evidence", ten);
 	mkdirSync(dirname(duong), { recursive: true });
 	writeFileSync(duong, `${JSON.stringify(gt, null, "\t")}\n`);
@@ -220,7 +226,9 @@ test("lai tung component ra man, doc chu ban ve that su ve", async () => {
 	for (const f of file) banVe[f] = await laiMotFile(f);
 	ghi("ve-that.json", banVe);
 
-	const veDuoc = Object.values(banVe).flat().filter((b) => b.loi_dong === null);
+	const veDuoc = Object.values(banVe)
+		.flat()
+		.filter((b) => b.loi_dong === null);
 	expect(veDuoc.length).toBeGreaterThan(0);
 });
 
@@ -228,12 +236,13 @@ test("mo tung nguyen ban cua bang gioi han vong truoc", async () => {
 	const bang = JSON.parse(readFileSync(BANG_CU, "utf8")) as {
 		dong: { component: string; nguyen_ban: string[] }[];
 	};
-	const ra: Record<string, { chu: string[]; loi: string | null }> = {};
+	const ra: MoNguyenBan = {};
 	for (const d of bang.dong) {
 		const duong = `packages/ui/src/components/${d.component}`;
 		const ban = await laiMotFile(duong);
 		const chu = new Set<string>();
-		let loi: string | null = ban.length === 0 ? "khong co xuat nao ve duoc" : null;
+		let loi: string | null =
+			ban.length === 0 ? "khong co xuat nao ve duoc" : null;
 		for (const b of ban) {
 			for (const c of b.mo) chu.add(c);
 			for (const c of b.dong) chu.add(c);
@@ -249,10 +258,7 @@ test("mo tung nguyen ban cua bang gioi han vong truoc", async () => {
 
 test("chuoi da va den man bang tieng Viet, va so ca bang so dong da va", async () => {
 	const bang = JSON.parse(
-		readFileSync(
-			join(HO_SO, "rang", "da-tim-thay.json"),
-			"utf8",
-		),
+		readFileSync(join(HO_SO, "rang", "da-tim-thay.json"), "utf8"),
 	) as { dong: { file: string; khoa: string; dinh_doat: string }[] };
 	const daVa = bang.dong.filter((d) => d.dinh_doat === "da va");
 	expect(daVa.length).toBeGreaterThan(0);
