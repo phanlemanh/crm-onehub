@@ -2,52 +2,44 @@
 
 Vòng chấm ngày 06/09, chạy tuần tự từng lệnh (điều khoản CLASSIFIER-FALLBACK).
 
-## Trong hợp đồng — đã vá trong vòng này
+## Trong hợp đồng
 
-1. **`agents.save` không tồn tại.** AC-1 và AC-5 hứa phép đo "gieo một tác nhân
-   qua `agents.save`". Không có thủ tục nào tên đó — đọc nhầm `saveFile`. Tác
-   nhân sinh ra từ một hội thoại dựng rồi mới đưa vào chạy. **Vá bằng cách thu
-   phạm vi**: hai route cần bản ghi thành giới hạn đã khai, và bản khai chịu
-   chiều đỏ (mở bằng một định danh không có thật; route nào vẫn vẽ ra chữ là ĐỎ).
-2. **Chân `du-lieu-nguoi-nhap` không kiểm gì.** Nó chỉ đọc bảng của chính mình
-   rồi báo lại — đúng lớp lỗi "phép đo trông như có kiểm mà không kiểm". Nay nó
-   đọc cây cú pháp: phần tử JSX bọc đúng biểu thức phải mang `translate="no"`.
-   Ba ô, cả ba xanh sau khi vá sản phẩm (hai `<span>` trong lát này).
-3. **Chân `khong-dich` so chuỗi với chính nó.** Bảng tra khoá bằng chính giá trị
-   chuỗi, nên nhánh "vi khác en" là mã chết — không đầu vào nào chạm tới. Nay so
-   theo VỊ TRÍ trong cây DOM, và chiều đỏ đã chứng.
-4. **AC-5 không có chân nào.** Ổ cắm `ab_trang_thai` trỏ vào một chân chưa viết;
-   nó thoát mã 2 với câu "chưa biết chân". Nay có chân thật, chín ô, hai chiều.
+Bốn phép đo giả bị bắt và vá ngay trong vòng này.
 
-4. **E11 chưa từng chạy trong vòng này, và nó đỏ.** Chân dân-số-từ-đĩa cấm mọi
-   dòng loại trừ còn chuỗi tiếng Anh, với lý lẽ "loại trừ chỉ hợp lệ cho file
-   KHÔNG phải bề mặt của lát". AC-8 của lát này nói ngược lại một cách có chủ ý:
-   sáu file bề mặt hoãn sang đợt hai *phải* còn tiếng Anh. Đã thêm cờ **`hoan`**
-   cho dòng loại trừ — chọn tham gia, nên hai hồ sơ đã ký (cả hai có
-   `khong_quet` rỗng) không đi qua nhánh này. Cờ có chiều đỏ riêng: một dòng khai
-   hoãn mà file đó KHÔNG còn chuỗi tiếng Anh nào là ĐỎ, vì bản khai đã cũ.
+- **`agents.save` không tồn tại** — AC: AC-1, AC-5.
+  AC-1 và AC-5 hứa phép đo "gieo một tác nhân qua `agents.save`". Không có thủ
+  tục nào tên đó — đọc nhầm `saveFile`. Tác nhân sinh ra từ một hội thoại dựng
+  rồi mới đưa vào chạy. Vá bằng cách thu phạm vi, và bản khai chịu chiều đỏ: mở
+  hai route đó bằng một định danh không có thật, route nào vẫn vẽ ra chữ là ĐỎ.
+- **Chân `du-lieu-nguoi-nhap` không kiểm gì** — AC: AC-6b.
+  Nó chỉ đọc bảng của chính mình rồi báo lại. Nay đọc cây cú pháp: phần tử JSX
+  bọc đúng biểu thức phải mang `translate="no"`. Vá luôn hai `<span>` thiếu.
+- **Chân `khong-dich` so chuỗi với chính nó** — AC: AC-6.
+  Bảng tra khoá bằng chính giá trị chuỗi, nên nhánh "vi khác en" là mã chết. Nay
+  so theo VỊ TRÍ trong cây DOM; chiều đỏ đã chứng.
+- **AC-5 không có chân nào, và E11 chưa từng được chạy** — AC: AC-5, AC-8.
+  Ổ cắm `ab_trang_thai` trỏ vào một chân chưa ai viết. E11 thì đỏ vì cấm mọi
+  dòng loại trừ còn tiếng Anh, trong khi AC-8 cố ý cho phép sáu file hoãn. Đã
+  dựng chân trạng thái thật, và thêm cờ `hoan` chọn-tham-gia có chiều đỏ riêng.
 
-## Ngoài hợp đồng
+## Ngoài hợp đồng — người quyết ở Gate 2
 
-1. **Gốc gom chữ của bộ thước màn dùng chung không chứa thanh bên.** Gốc là phần
-   tử cha của `main`; thanh bên của khung dựng tác nhân là anh em của một tổ tiên
-   khác. Hệ quả: `hai-tieng`, `khong-dich`, `be-rong` mù với chữ thanh bên — ở cả
-   BA hồ sơ dùng chung bộ thước. Chỗ này bắt được vì chân trạng thái mới hỏi
-   "chữ này có vẽ ra không" và câu trả lời sai với mắt thường.
-   *Đề xuất:* mở hợp đồng mới. Nới gốc là kéo cả thanh điều hướng ứng dụng — vùng
-   của một hồ sơ khác còn tiếng Anh — vào phép đo của ba hồ sơ, nên không sửa tại
-   chỗ được.
-2. **`{agent.status.toLowerCase()}` vẽ ra một enum tiếng Anh.**
-   `team-agents-index.tsx:49` in thẳng `DRAFT | DEPLOYING | LIVE | PAUSED` ở dạng
-   chữ thường. Không thước nào thấy: nó không phải chuỗi hằng nên bộ quét chữ bỏ
-   qua, và nó chỉ vẽ ra khi đội đã có tác nhân — tức sau giới hạn route.
-   *Đề xuất:* mở hợp đồng mới, chung với đợt hai.
-3. **Chiều đỏ của chân bề rộng không chứng được trên lát này — nay đã ĐO.**
-   Chân `be-rong-tien-de` đếm các hộp chặt cứng (nowrap / ellipsis / overflow ẩn)
-   trên hai màn dựng được: 4 hộp, và **0 hộp mang chữ của lát này** — cả bốn mang
-   chữ của cửa sổ trò chuyện, tức đợt hai. Thiếu tiền đề thì không cắm vết, và
-   không được đọc kết quả rỗng là "bản dịch vừa".
-   Đã thử dựng tiền đề bằng tay (thêm `whitespace-nowrap overflow-hidden` vào
-   tiêu đề câu rỗng): tiền đề bật lên 1/5 nhưng vết vẫn không tràn, vì phần tử đó
-   rộng tự do trong một cột không chặn bề ngang — chữ chỉ kéo hộp dài ra.
-   *Đề xuất:* ghi Known limits.
+Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
+
+- **Gốc gom chữ của bộ thước màn không chứa thanh bên**
+  Người dùng thấy gì: chữ trên thanh bên của khung dựng tác nhân không được phép đo màn nào nhìn thấy, ở cả ba hồ sơ Việt hoá dùng chung bộ thước — một câu tiếng Anh sót ở đó sẽ đi qua mọi cổng mà không ai bắt.
+  file: `_acceptance/man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs`
+  severity: P1
+  Đề xuất: new-contract — nới gốc là kéo cả thanh điều hướng ứng dụng, vùng còn tiếng Anh của hồ sơ khác, vào phép đo của ba hồ sơ; không sửa tại chỗ được
+- **Trạng thái tác nhân hiện ra bằng tiếng Anh**
+  Người dùng thấy gì: danh sách tác nhân của đội in trạng thái là `draft`, `live`, `paused` — chữ tiếng Anh viết thường, giữa một màn đã tiếng Việt.
+  file: `apps/app/components/agent-builder/team-agents-index.tsx:49`
+  severity: P2
+  Đề xuất: new-contract — nó không phải chuỗi hằng nên không bộ quét nào thấy, và chỉ vẽ ra khi đội đã có tác nhân, tức sau giới hạn route; gộp với đợt hai
+- **Chiều đỏ của chân bề rộng không chứng được trên lát này**
+  Người dùng thấy gì: phép đo "nhãn tiếng Việt dài có tràn khỏi hộp không" chưa từng đỏ một lần nào trên lát này, nên nó không phân biệt được "bản dịch vừa" với "thước đang mù".
+  file: `_acceptance/agent-builder-noi-tieng-viet/rang/be-rong-do.sh`
+  severity: P2
+  Đề xuất: known-limits — nay đã ĐO chứ không còn ghi tay: bốn hộp chặt cứng trên hai màn tới được, 0 hộp mang chữ của lát này; màn có nhãn trong hộp hẹp nằm dưới cùng giới hạn với AC-1
+
+Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
