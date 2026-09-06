@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 2a72fed4c93b69bfeb479556ac616d5a789b4b98
-human_signoff:
+human_signoff: Mạnh 2026-09-06 — ký trên giới hạn đã khai: 6 mục ngoài hợp đồng ghi vào giới hạn đã biết, cắt/hoãn đồng ý, Treo phê hết, và MỘT lỗ TRONG hợp đồng (AC-3: chân can chưa có chiều đỏ tự chạy) máy khai chứ không sửa vì đã hết ba vòng chấm.
 ---
 
 # Evidence Report: khoa-lo-giu-tran

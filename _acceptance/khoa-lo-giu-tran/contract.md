@@ -5,7 +5,7 @@ slug: khoa-lo-giu-tran
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -73,3 +73,13 @@ Răng nghiệm thu nằm ở `apps/agent/rang/khoa-lo-giu-tran.rang.ts` (ngoài 
 kiểm của bun, chạy bằng đường dẫn tường minh) và `_acceptance/khoa-lo-giu-tran/rang.sh`.
 Bản trước sửa và đột biến chỉ sống trong `apps/agent/rang/.tmp/` (gitignore, tên có
 PID). Mỗi chân dùng cơ sở dữ liệu riêng `crm_khoa_lo_<chân>_test`.
+
+### Known limits
+
+- **Tệp răng sống trong cây app** (`apps/agent/rang/khoa-lo-giu-tran.rang.ts`), không trong hồ sơ như 14 tiền lệ, vì `@crm/db` chỉ nối trong `apps/agent`. `tsconfig`, `knip`, `oxlint` của app không khai thư mục này. Tái lập: `grep -n include apps/agent/tsconfig.json`.
+- **Bộ dựng và răng xoá toàn bảng `agentTask`** để thống kê thấy đúng một hàng. Suite chạy tuần tự nên chưa đỏ; chạy răng tay ngoài `rang.sh` thì xoá hàng của gói khác trên cơ sở dữ liệu thử chung. Tái lập: `grep -n "deleteMany({})" apps/agent/test/tasks.integration.spec.ts apps/agent/rang/khoa-lo-giu-tran.rang.ts`.
+- **Hai bài "the fixture bites" chốt lựa chọn của bộ lập kế hoạch Postgres 17.** Đổi bản Postgres có thể đỏ với `Expected length: 3` dù bản sửa vẫn đúng. Khi đỏ: `bash _acceptance/khoa-lo-giu-tran/rang.sh --chan giai-thich` xem `EXPLAIN` trước khi sửa mã.
+- **Hai bài "bites" đo cùng một điểm**: truy vấn thăm dò không đọc cột `attempts`, nên lớp {cạn lượt, đến hạn} chỉ có một điểm đo thật. Tái lập: `grep -n "function probe" -A14 apps/agent/test/tasks.integration.spec.ts`.
+- **Hai ô thống-kê-cũ × đồng-thời không có phép đo.** Câu "kê tay đủ" ở Coverage đúng theo lề, không đúng theo ô.
+- **Trong hợp đồng, máy khai chứ không sửa vì đã hết ba vòng chấm:** chân `can` (AC-3) chưa có chiều đỏ tự chạy; chiều đỏ `statistics drifted` chứng bằng tay ngày 06/09. Tái lập: chép `tasks.integration.spec.ts` sang `apps/agent/rang/.tmp/drift.rang.ts`, chèn `ANALYZE "agentTask"` sau vòng chèn của `staleStatistics`, chạy `bun test ./rang/.tmp/drift.rang.ts -t "the fixture bites"` → `statistics drifted: reltuples=3`.
+- **Từ vòng chấm 1, máy khai:** biến `KHOA_LO_RANG` chưa có mục ở `.env.example`; tám key `khoa_lo_*` trong `_acceptance/config.yaml` không đặt ngoặc kép như các key khác; `prepare_db` trong `rang.sh` rơi về cơ sở dữ liệu chung nếu tên cơ sở dữ liệu có ký tự ngoài `[A-Za-z0-9_]`. Tái lập: `TEST_DATABASE_URL=postgresql://u:p@localhost:5432/crm-test bash _acceptance/khoa-lo-giu-tran/rang.sh --chan can` sẽ không tách tên.
