@@ -19,6 +19,7 @@ executors:
     api_khong_cache_tru_agent: "bun run db:test && bunx turbo run test --concurrency=1 --force --filter=!agent"
     rang3_khoa_chet: "cd apps/app && bun test test/messages-guard.spec.ts"
     tv_canh_kho_ui: "cd packages/ui && bun test test/messages-guard.spec.ts"
+    api_khong_cache: "bun run db:test && bunx turbo run test --force --concurrency=1"
     cl_tieng_viet_den_man: "node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs dan-so && cd packages/ui && bun test --preload ./test/setup-dom.ts test/lai-ra-man.spec.tsx"
   script:
     cua_vao_loi_mang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"
@@ -174,6 +175,12 @@ executors:
     cl_dinh_doat: "node _acceptance/chan-lai-component-ra-man/rang/dinh-doat.mjs"
     cl_mot_bo_thuoc: "node _acceptance/chan-lai-component-ra-man/rang/mot-bo-thuoc.mjs"
     cl_khong_danh_sach_ten: "node _acceptance/chan-lai-component-ra-man/rang/khong-danh-sach-ten.mjs"
+    kc_suite_cuong_buc: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/suite-cuong-buc.mjs"
+    kc_dan_so_tu_config: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/dan-so-tu-config.mjs"
+    kc_cache_noi_that: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/cache-noi-that.mjs"
+    kc_do_hanh_vi: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/do-hanh-vi.mjs"
+    kc_lenh_hang_ngay: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/lenh-hang-ngay.mjs"
+    kc_mot_bo_thuoc: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/mot-bo-thuoc.mjs"
     rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
     rang_t1_im: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"
   design:
