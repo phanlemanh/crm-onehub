@@ -196,6 +196,9 @@ giả trong CSS · thông báo sống `aria-live`. Ô Never: dịch tại chỗ 
 
 ### Known limits
 
+- **known-limit (Ngoài-1, người chốt ở Cổng 2, 06/09):** vòng này sửa bốn con số của hồ sơ ĐÃ KÝ `chu-mac-dinh-thu-vien-ngoai` — `doc_kho` 16 → 21, bảng bọc-mà-không-đọc 29 → 26, bảng giới hạn 10 → 9. Nguyên nhân duy nhất: vá năm component thì chúng rời khỏi nhóm bọc-mà-không-đọc. Người đã phê. Đổi lại, một artifact đã ký nay mang số khác lúc ký, và bằng chứng của nó chỉ còn đúng khi đọc kèm bản đính chính ở phần Notes của chính nó.
+- **known-limit (Ngoài-2, người chốt 06/09):** văn xuôi AC-2 và AC-3 của hợp đồng đã ký ấy vẫn ghi «16» và «29». Giữ nguyên làm bản ghi tại thời điểm ký; bản đính chính sống ở Notes. Đọc riêng AC mà không đọc Notes thì thấy số cũ.
+- **known-limit (Ngoài-3, người chốt 06/09):** năm giá trị mặc định không dựng ra màn được — `chain-of-thought` · `shimmer` · `stage-change` và hai file không phải component — nên phép đo KHÔNG trả lời được chúng có phải chữ người đọc hay không. Cả năm trông như tên kỹ thuật, nhưng đó là mắt người nhìn chứ không phải phép đo.
 - **Chín trên mười nguyên bản của bảng vòng trước không mang chữ.** Đã đo ngày 06/09.
   Nghĩa là bảng ấy, dù khai đúng là *chưa đo*, hoá ra phần lớn rỗng — công của vòng
   này ở lớp mặc-định-tham-số nhiều hơn ở mười dòng đó.
