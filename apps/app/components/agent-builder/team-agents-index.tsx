@@ -1,12 +1,12 @@
 "use client";
 
 import ArrowRight from "@carbon/icons-react/es/ArrowRight";
-import { useLocale } from "@crm/ui/components/locale-provider";
-import { khungMessages } from "@/lib/messages/agent-builder-khung";
 import Bot from "@carbon/icons-react/es/Bot";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { khungMessages } from "@/lib/messages/agent-builder-khung";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";

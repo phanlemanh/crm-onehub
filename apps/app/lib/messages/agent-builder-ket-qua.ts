@@ -13,13 +13,15 @@ const en = {
 		cayTep: "Agent files",
 		daLuu: "Saved.",
 		dangDocTep: "Reading the agent's files…",
-		chuaCoTep: "This agent has no files yet. The builder writes them when it deploys.",
+		chuaCoTep:
+			"This agent has no files yet. The builder writes them when it deploys.",
 		moTa: "What the agent actually runs.",
 		anThayDoi: "Hide changes",
 		xong: "Done",
 		sua: "Edit",
 		chuaLuu: "Unsaved code",
-		soTepDoi: (so: string) => `${so} files changed. Saving writes a new revision.`,
+		soTepDoi: (so: string) =>
+			`${so} files changed. Saving writes a new revision.`,
 		boQua: "Discard",
 		dangLuu: "Saving…",
 		luu: "Save",
@@ -61,7 +63,8 @@ const vi = {
 		cayTep: "Cây tệp của tác nhân",
 		daLuu: "Đã lưu.",
 		dangDocTep: "Đang đọc các tệp của tác nhân…",
-		chuaCoTep: "Tác nhân này chưa có tệp nào. Bộ dựng ghi chúng khi đưa vào chạy.",
+		chuaCoTep:
+			"Tác nhân này chưa có tệp nào. Bộ dựng ghi chúng khi đưa vào chạy.",
 		moTa: "Thứ tác nhân thật sự chạy.",
 		anThayDoi: "Ẩn thay đổi",
 		xong: "Xong",

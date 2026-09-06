@@ -1,9 +1,5 @@
 "use client";
 
-import {
-	type KetQuaMessages,
-	ketQuaMessages,
-} from "@/lib/messages/agent-builder-ket-qua";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
@@ -22,6 +18,10 @@ import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { LocalDay } from "@/components/local-date-time";
 import type { DealListItem, DealListResult } from "@/lib/agent-transcript";
 import { DEAL_STAGE_OPTIONS } from "@/lib/deal-stage";
+import {
+	type KetQuaMessages,
+	ketQuaMessages,
+} from "@/lib/messages/agent-builder-ket-qua";
 
 function cotBang(t: KetQuaMessages): SimpleTableColumn[] {
 	return [
@@ -36,7 +36,12 @@ function cotBang(t: KetQuaMessages): SimpleTableColumn[] {
 		},
 		{ id: "owner", header: t.thoaThuan.cot.owner, width: "w-[14%]" },
 		{ id: "close", header: t.thoaThuan.cot.closeDate, width: "w-[12%]" },
-		{ id: "idle", header: t.thoaThuan.cot.idle, width: "w-[8%]", align: "right" },
+		{
+			id: "idle",
+			header: t.thoaThuan.cot.idle,
+			width: "w-[8%]",
+			align: "right",
+		},
 	];
 }
 
@@ -116,9 +121,7 @@ export function DealListResultTable({ result }: { result: DealListResult }) {
 								<TableCell
 									className="overflow-hidden px-3 py-3 text-right text-muted-foreground tabular-nums"
 									title={
-										deal.neverActive
-											? t.thoaThuan.chuaCoHoatDong
-											: undefined
+										deal.neverActive ? t.thoaThuan.chuaCoHoatDong : undefined
 									}
 								>
 									{deal.daysSinceLastActivity}d
@@ -159,7 +162,11 @@ function tableTitle(result: DealListResult, t: KetQuaMessages): string {
 	return `${t.thoaThuan.soThoaThuan(String(count))}${stale}${status}`;
 }
 
-function tableMeta(result: DealListResult, locale: Locale, t: KetQuaMessages): string {
+function tableMeta(
+	result: DealListResult,
+	locale: Locale,
+	t: KetQuaMessages,
+): string {
 	const details = [
 		t.thoaThuan.soThoaThuan(String(result.deals.length)),
 		pipelineTotal(result.deals, locale, t),

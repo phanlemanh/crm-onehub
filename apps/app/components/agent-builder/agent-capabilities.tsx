@@ -1,13 +1,12 @@
 "use client";
 
-import { useLocale } from "@crm/ui/components/locale-provider";
-import { tacNhanMessages } from "@/lib/messages/agent-builder-tac-nhan";
 import Add from "@carbon/icons-react/es/Add";
 import Close from "@carbon/icons-react/es/Close";
 import Warning from "@carbon/icons-react/es/Warning";
 import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Popover,
 	PopoverContent,
@@ -23,6 +22,7 @@ import {
 	type PickerChannel,
 } from "@/components/slack/channel-picker";
 import { useSlackChannels } from "@/components/slack/use-slack-channels";
+import { tacNhanMessages } from "@/lib/messages/agent-builder-tac-nhan";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { CreateChannelDialog } from "./create-channel-dialog";
@@ -179,10 +179,7 @@ export function AgentCapabilities({
 				</Section>
 			) : null}
 
-			<Section
-				summary={t.viec.lamGiMoTa}
-				title={t.viec.lamGiTieuDe}
-			>
+			<Section summary={t.viec.lamGiMoTa} title={t.viec.lamGiTieuDe}>
 				<div className="flex flex-col">
 					{capabilities.actions.map((action) => (
 						<div
@@ -191,7 +188,8 @@ export function AgentCapabilities({
 						>
 							<div className="min-w-0 flex-1">
 								<p className="text-sm">
-									{t.viec.nhan[action.type as keyof typeof t.viec.nhan] ?? action.type}
+									{t.viec.nhan[action.type as keyof typeof t.viec.nhan] ??
+										action.type}
 								</p>
 								<p className="text-muted-foreground text-xs">
 									{action.summary || action.provider}
@@ -219,9 +217,7 @@ export function AgentCapabilities({
 			</Section>
 
 			<Section
-				summary={
-					capabilities.dataScope?.summary || t.viec.thayGiMoTa
-				}
+				summary={capabilities.dataScope?.summary || t.viec.thayGiMoTa}
 				title={t.viec.thayGiTieuDe}
 			>
 				<div className="flex flex-wrap gap-2">
@@ -282,9 +278,7 @@ export function AgentCapabilities({
 			<SaveBar
 				description={
 					blocked ??
-					(channelChanged
-						? t.viec.vaoKenh(to ?? "")
-						: t.viec.banCuGiuLai)
+					(channelChanged ? t.viec.vaoKenh(to ?? "") : t.viec.banCuGiuLai)
 				}
 				open={dirty}
 				title={

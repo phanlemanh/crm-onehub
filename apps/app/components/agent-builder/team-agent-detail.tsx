@@ -1,6 +1,5 @@
 "use client";
 
-import { tacNhanMessages } from "@/lib/messages/agent-builder-tac-nhan";
 import OverflowMenuVertical from "@carbon/icons-react/es/OverflowMenuVertical";
 import Pause from "@carbon/icons-react/es/Pause";
 import Play from "@carbon/icons-react/es/Play";
@@ -44,6 +43,7 @@ import {
 	PageShellHeading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { tacNhanMessages } from "@/lib/messages/agent-builder-tac-nhan";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -198,7 +198,8 @@ export function TeamAgentDetail({
 	const nextRun =
 		enabledTriggers.length === 1 ? enabledTriggers[0]?.nextRunAt : null;
 	const triggerSummary =
-		enabledTriggers.map((trigger) => trigger.name).join(" · ") || t.chiTiet.chayTay;
+		enabledTriggers.map((trigger) => trigger.name).join(" · ") ||
+		t.chiTiet.chayTay;
 
 	return (
 		<PageShell className="min-h-0" contained>
@@ -236,7 +237,9 @@ export function TeamAgentDetail({
 								</span>
 							</Button>
 							<Button asChild variant="outline">
-								<Link href={workspaceUrl("/chat")}>{t.chiTiet.moTrongHoiThoai}</Link>
+								<Link href={workspaceUrl("/chat")}>
+									{t.chiTiet.moTrongHoiThoai}
+								</Link>
 							</Button>
 							{isDraft && data.canManage ? (
 								<DraftAgentActions
@@ -488,9 +491,7 @@ function DeleteAgentAction({
 				<AlertDialogContent>
 					<AlertDialogHeader>
 						<AlertDialogTitle>{t.chiTiet.xoaHoi(name)}</AlertDialogTitle>
-						<AlertDialogDescription>
-							{t.chiTiet.xoaMoTa}
-						</AlertDialogDescription>
+						<AlertDialogDescription>{t.chiTiet.xoaMoTa}</AlertDialogDescription>
 					</AlertDialogHeader>
 
 					<AlertDialogFooter>
@@ -537,9 +538,7 @@ function AgentOverview({ agent }: { agent: AgentDetail }) {
 		<SaveBarViewport>
 			<div className="flex flex-col gap-9">
 				{deployed ? null : (
-					<p className="text-muted-foreground text-sm">
-						{t.chiTiet.conLaNhap}
-					</p>
+					<p className="text-muted-foreground text-sm">{t.chiTiet.conLaNhap}</p>
 				)}
 				<AgentCapabilities
 					agentId={agent.id}

@@ -11,8 +11,10 @@ const en = {
 		daNhoMoi: "Asked someone to invite OneHub.",
 		khongDocDuocManifest: "This version's manifest cannot be read",
 		manifestLa: "The manifest is not in a shape we know.",
-		phaiConMotViec: "Leave one action on. An agent that does nothing cannot be saved.",
-		phaiConMotBanGhi: "Add one record. An empty list opens every record in the workspace.",
+		phaiConMotViec:
+			"Leave one action on. An agent that does nothing cannot be saved.",
+		phaiConMotBanGhi:
+			"Add one record. An empty list opens every record in the workspace.",
 		kenhMoTa: "One channel. OneHub joins it when you save.",
 		kenhTieuDe: "Lives in",
 		lamGiMoTa: "If it is off here, it cannot do it.",
@@ -22,7 +24,8 @@ const en = {
 		thayGiTieuDe: "What it can see",
 		moiBanGhi: "Every record in the workspace",
 		go: (ten: string) => `Remove ${ten}`,
-		vaoKenh: (kenh: string) => `OneHub joins #${kenh}. It stays in #${kenh} until you remove it.`,
+		vaoKenh: (kenh: string) =>
+			`OneHub joins #${kenh}. It stays in #${kenh} until you remove it.`,
 		banCuGiuLai: "The old version stays in the history.",
 		khongLuuDuoc: "This change cannot be saved",
 		chuyenKenh: (tu: string, den: string) => `Moving from #${tu} to #${den}`,
@@ -76,13 +79,13 @@ const en = {
 		dangXoa: "Deleting",
 		daXoaXong: "Deleted",
 		chuaDuaVaoChay: "This agent has no deployed version yet.",
-		conLaNhap: "This is a draft. Deploy it to the team before you change what it can do.",
+		conLaNhap:
+			"This is a draft. Deploy it to the team before you change what it can do.",
 	},
 	moi: {
 		traoTayHong: "Could not hand this to the builder.",
 		tieuDe: "New agent",
-		moTa:
-			"Say what it is and where it lives. The builder writes the rest. You can change all of it later.",
+		moTa: "Say what it is and where it lives. The builder writes the rest. You can change all of it later.",
 		ten: "Name",
 		tenViDu: "Renewal prep brief",
 		lamGi: "What it should do",
@@ -91,7 +94,8 @@ const en = {
 		songO: "Lives in",
 		chonKenh: "Pick a Slack channel",
 		daOTrong: (kenh: string) => `OneHub is already in #${kenh}.`,
-		seVao: (kenh: string) => `OneHub is not in #${kenh} yet. It joins when you create this.`,
+		seVao: (kenh: string) =>
+			`OneHub is not in #${kenh} yet. It joins when you create this.`,
 		deTrong: "Leave this empty and the builder will ask.",
 		duocPhep: "Allowed to",
 		chuaGuiGi: "Nothing sends until you turn it on.",
@@ -102,8 +106,7 @@ const en = {
 	kenh: {
 		dangTao: "Creating the channel in Slack.",
 		tieuDe: "Create a channel",
-		moTa:
-			"OneHub makes it in Slack and joins it. You can put the agent in it straight after.",
+		moTa: "OneHub makes it in Slack and joins it. You can put the agent in it straight after.",
 		ten: "Name",
 		luatTen: "Use lowercase letters, numbers and dashes.",
 		slackGoiLa: (ten: string) => `Slack will call it #${ten}.`,
@@ -136,8 +139,10 @@ const vi = {
 		daNhoMoi: "Đã nhờ người trong kênh mời OneHub vào.",
 		khongDocDuocManifest: "Không đọc được manifest của bản này",
 		manifestLa: "Manifest không theo hình dạng nào đã biết.",
-		phaiConMotViec: "Để lại ít nhất một việc. Tác nhân không làm gì thì không lưu được.",
-		phaiConMotBanGhi: "Thêm một loại bản ghi. Danh sách rỗng nghĩa là mở mọi bản ghi.",
+		phaiConMotViec:
+			"Để lại ít nhất một việc. Tác nhân không làm gì thì không lưu được.",
+		phaiConMotBanGhi:
+			"Thêm một loại bản ghi. Danh sách rỗng nghĩa là mở mọi bản ghi.",
 		kenhMoTa: "Một kênh. OneHub vào kênh đó khi bạn lưu.",
 		kenhTieuDe: "Sống ở đâu",
 		lamGiMoTa: "Tắt ở đây thì nó không làm được.",
@@ -147,7 +152,8 @@ const vi = {
 		thayGiTieuDe: "Nó thấy được gì",
 		moiBanGhi: "Mọi bản ghi trong workspace",
 		go: (ten: string) => `Gỡ ${ten}`,
-		vaoKenh: (kenh: string) => `OneHub vào #${kenh} và ở lại #${kenh} cho tới khi bạn gỡ.`,
+		vaoKenh: (kenh: string) =>
+			`OneHub vào #${kenh} và ở lại #${kenh} cho tới khi bạn gỡ.`,
 		banCuGiuLai: "Bản cũ vẫn nằm trong lịch sử.",
 		khongLuuDuoc: "Thay đổi này không lưu được",
 		chuyenKenh: (tu: string, den: string) => `Chuyển từ #${tu} sang #${den}`,
@@ -201,13 +207,13 @@ const vi = {
 		dangXoa: "Đang xoá",
 		daXoaXong: "Đã xoá",
 		chuaDuaVaoChay: "Tác nhân này chưa có bản nào đưa vào chạy.",
-		conLaNhap: "Đây còn là bản nháp. Đưa cho đội trước, rồi mới đổi việc nó làm được.",
+		conLaNhap:
+			"Đây còn là bản nháp. Đưa cho đội trước, rồi mới đổi việc nó làm được.",
 	},
 	moi: {
 		traoTayHong: "Không trao được việc này cho bộ dựng.",
 		tieuDe: "Tác nhân mới",
-		moTa:
-			"Nói nó là gì và sống ở đâu. Bộ dựng viết phần còn lại. Về sau bạn đổi lại được hết.",
+		moTa: "Nói nó là gì và sống ở đâu. Bộ dựng viết phần còn lại. Về sau bạn đổi lại được hết.",
 		ten: "Tên",
 		tenViDu: "Tóm tắt trước hạn gia hạn",
 		lamGi: "Nó cần làm gì",
@@ -216,7 +222,8 @@ const vi = {
 		songO: "Sống ở đâu",
 		chonKenh: "Chọn một kênh Slack",
 		daOTrong: (kenh: string) => `OneHub đã ở trong #${kenh} rồi.`,
-		seVao: (kenh: string) => `OneHub chưa ở trong #${kenh}. Nó vào khi bạn tạo cái này.`,
+		seVao: (kenh: string) =>
+			`OneHub chưa ở trong #${kenh}. Nó vào khi bạn tạo cái này.`,
 		deTrong: "Để trống thì bộ dựng sẽ hỏi.",
 		duocPhep: "Được phép",
 		chuaGuiGi: "Chưa gửi gì cho tới khi bạn bật.",
@@ -227,8 +234,7 @@ const vi = {
 	kenh: {
 		dangTao: "Đang tạo kênh trong Slack.",
 		tieuDe: "Tạo một kênh",
-		moTa:
-			"OneHub tạo kênh trong Slack rồi vào luôn. Ngay sau đó bạn đặt tác nhân vào kênh được.",
+		moTa: "OneHub tạo kênh trong Slack rồi vào luôn. Ngay sau đó bạn đặt tác nhân vào kênh được.",
 		ten: "Tên",
 		luatTen: "Dùng chữ thường, số và dấu gạch ngang.",
 		slackGoiLa: (ten: string) => `Slack sẽ gọi nó là #${ten}.`,

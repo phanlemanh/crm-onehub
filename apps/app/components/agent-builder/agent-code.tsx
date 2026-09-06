@@ -1,8 +1,7 @@
 "use client";
 
-import { useLocale } from "@crm/ui/components/locale-provider";
-import { ketQuaMessages } from "@/lib/messages/agent-builder-ket-qua";
 import { Button } from "@crm/ui/components/button";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { SaveBar } from "@crm/ui/components/save-bar";
 import {
 	type FileContents,
@@ -14,6 +13,7 @@ import { EditProvider, File, FileDiff, Virtualizer } from "@pierre/diffs/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
+import { ketQuaMessages } from "@/lib/messages/agent-builder-ket-qua";
 import { useTRPC } from "@/lib/trpc/client";
 
 const FILE_OPTIONS: FileOptions<undefined> = {
@@ -99,7 +99,7 @@ export function AgentCode({
 
 		setEditing(false);
 		toast.success(t.ma.daLuu);
-	}, [agentId, queryClient, save, trpc]);
+	}, [agentId, queryClient, save, trpc, t.ma.daLuu]);
 
 	const editorOptions = useMemo<EditorOptions<undefined>>(
 		() => ({
@@ -149,9 +149,7 @@ export function AgentCode({
 	if (files.length === 0) {
 		return (
 			<p className="text-muted-foreground text-sm">
-				{code.isPending
-					? t.ma.dangDocTep
-					: t.ma.chuaCoTep}
+				{code.isPending ? t.ma.dangDocTep : t.ma.chuaCoTep}
 			</p>
 		);
 	}
@@ -161,10 +159,10 @@ export function AgentCode({
 			<section className="flex flex-col gap-3.5">
 				<div className="flex items-end justify-between gap-4">
 					<div>
-						<h2 className="font-semibold text-lg tracking-tight">{t.ma.tieuDe}</h2>
-						<p className="text-muted-foreground text-sm">
-							{t.ma.moTa}
-						</p>
+						<h2 className="font-semibold text-lg tracking-tight">
+							{t.ma.tieuDe}
+						</h2>
+						<p className="text-muted-foreground text-sm">{t.ma.moTa}</p>
 					</div>
 
 					<div className="flex items-center gap-2">

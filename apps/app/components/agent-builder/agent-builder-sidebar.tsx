@@ -1,19 +1,19 @@
 "use client";
 
 import Add from "@carbon/icons-react/es/Add";
-import { useLocale } from "@crm/ui/components/locale-provider";
-import { khungMessages } from "@/lib/messages/agent-builder-khung";
 import Bot from "@carbon/icons-react/es/Bot";
 import CheckmarkFilled from "@carbon/icons-react/es/CheckmarkFilled";
 import CircleFilled from "@carbon/icons-react/es/CircleFilled";
 import Renew from "@carbon/icons-react/es/Renew";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { cn } from "@crm/ui/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type ChatDateGroup, chatDateGroup } from "@/lib/chat-date-group";
+import { khungMessages } from "@/lib/messages/agent-builder-khung";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useHydrated } from "@/lib/use-hydrated";
@@ -93,7 +93,10 @@ export function AgentBuilderSidebar({
 				</Button>
 			</div>
 
-			<nav aria-label={t.thanhBen.danhSachHoiThoai} className="min-h-0 flex-1 overflow-y-auto">
+			<nav
+				aria-label={t.thanhBen.danhSachHoiThoai}
+				className="min-h-0 flex-1 overflow-y-auto"
+			>
 				{groups.map((group) => (
 					<div key={group.label}>
 						<div className="flex h-8 items-end pb-1 pl-2 font-medium text-[11px] text-muted-foreground uppercase tracking-[0.08em]">

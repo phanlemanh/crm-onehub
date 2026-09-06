@@ -1,7 +1,5 @@
 "use client";
 
-import { useLocale } from "@crm/ui/components/locale-provider";
-import { tacNhanMessages } from "@/lib/messages/agent-builder-tac-nhan";
 import Checkmark from "@carbon/icons-react/es/Checkmark";
 import { Button } from "@crm/ui/components/button";
 import {
@@ -16,6 +14,7 @@ import {
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import { Label } from "@crm/ui/components/label";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Select,
 	SelectContent,
@@ -31,6 +30,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useSlackChannels } from "@/components/slack/use-slack-channels";
 import { handoffBrief, handoffResources } from "@/lib/agent-handoff";
+import { tacNhanMessages } from "@/lib/messages/agent-builder-tac-nhan";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
@@ -96,9 +96,7 @@ export function NewAgentDialog({ children }: { children: React.ReactNode }) {
 			});
 		} catch (error) {
 			toast.error(
-				error instanceof InvalidInput
-					? error.message
-					: t.moi.traoTayHong,
+				error instanceof InvalidInput ? error.message : t.moi.traoTayHong,
 			);
 		}
 	};
@@ -110,9 +108,7 @@ export function NewAgentDialog({ children }: { children: React.ReactNode }) {
 			<DialogContent className="sm:max-w-(--container-sheet)">
 				<DialogHeader>
 					<DialogTitle>{t.moi.tieuDe}</DialogTitle>
-					<DialogDescription>
-						{t.moi.moTa}
-					</DialogDescription>
+					<DialogDescription>{t.moi.moTa}</DialogDescription>
 				</DialogHeader>
 
 				<div className="flex flex-col gap-4">

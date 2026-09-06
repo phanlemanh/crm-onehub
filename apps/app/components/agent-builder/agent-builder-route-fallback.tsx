@@ -1,7 +1,7 @@
 "use client";
 
-import { Skeleton } from "@crm/ui/components/skeleton";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { Skeleton } from "@crm/ui/components/skeleton";
 import { khungMessages } from "@/lib/messages/agent-builder-khung";
 
 export function AgentBuilderHomeFallback() {

@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { khungMessages } from "@/lib/messages/agent-builder-khung";
-import { getLocale } from "@/lib/locale/server";
 import { Suspense } from "react";
 import { TeamAgentsIndex } from "@/components/agent-builder/team-agents-index";
 import {
@@ -12,6 +10,8 @@ import {
 	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { getLocale } from "@/lib/locale/server";
+import { khungMessages } from "@/lib/messages/agent-builder-khung";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 

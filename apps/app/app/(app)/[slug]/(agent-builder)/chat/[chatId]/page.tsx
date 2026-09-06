@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { khungMessages } from "@/lib/messages/agent-builder-khung";
-import { getLocale } from "@/lib/locale/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { AgentBuilderChat } from "@/components/agent-builder/agent-builder-chat";
 import { AgentBuilderChatFallback } from "@/components/agent-builder/agent-builder-route-fallback";
 import { isSharedChatToken } from "@/lib/chat-route";
+import { getLocale } from "@/lib/locale/server";
+import { khungMessages } from "@/lib/messages/agent-builder-khung";
 import { getServerTrpcClient } from "@/lib/trpc/server";
 import { nullIfMissing } from "../../missing-record";
 

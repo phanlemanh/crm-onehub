@@ -1,7 +1,5 @@
 "use client";
 
-import { useLocale } from "@crm/ui/components/locale-provider";
-import { tacNhanMessages } from "@/lib/messages/agent-builder-tac-nhan";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
@@ -14,10 +12,12 @@ import {
 } from "@crm/ui/components/dialog";
 import { Input } from "@crm/ui/components/input";
 import { Label } from "@crm/ui/components/label";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Switch } from "@crm/ui/components/switch";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
+import { tacNhanMessages } from "@/lib/messages/agent-builder-tac-nhan";
 import { useTRPC } from "@/lib/trpc/client";
 
 export function CreateChannelDialog({
@@ -59,9 +59,7 @@ export function CreateChannelDialog({
 			<DialogContent className="sm:max-w-(--container-narrow)">
 				<DialogHeader>
 					<DialogTitle>{t.kenh.tieuDe}</DialogTitle>
-					<DialogDescription>
-						{t.kenh.moTa}
-					</DialogDescription>
+					<DialogDescription>{t.kenh.moTa}</DialogDescription>
 				</DialogHeader>
 
 				<div className="flex flex-col gap-4">
@@ -86,9 +84,7 @@ export function CreateChannelDialog({
 							id="channel-private"
 							onCheckedChange={setIsPrivate}
 						/>
-						<Label htmlFor="channel-private">
-							{t.kenh.riengTu}
-						</Label>
+						<Label htmlFor="channel-private">{t.kenh.riengTu}</Label>
 					</div>
 				</div>
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { tacNhanMessages } from "@/lib/messages/agent-builder-tac-nhan";
 import {
 	Sheet,
 	SheetContent,
@@ -10,6 +9,7 @@ import {
 	SheetTitle,
 } from "@crm/ui/components/sheet";
 import { useState } from "react";
+import { tacNhanMessages } from "@/lib/messages/agent-builder-tac-nhan";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { AgentActivity, AgentRuns } from "./agent-history";
 
@@ -54,9 +54,7 @@ export function AgentRunsDrawer({
 			<SheetContent className="flex flex-col gap-0 p-0" side="right" size="xl">
 				<SheetHeader className="gap-1 border-b px-5 py-4">
 					<SheetTitle>{t.luot.lichSu}</SheetTitle>
-					<SheetDescription>
-						{t.luot.lichSuMoTa}
-					</SheetDescription>
+					<SheetDescription>{t.luot.lichSuMoTa}</SheetDescription>
 				</SheetHeader>
 
 				<div className="flex h-9 shrink-0 items-end gap-5 border-b px-5">

@@ -1,11 +1,10 @@
 "use client";
 
-import { useLocale } from "@crm/ui/components/locale-provider";
-import { ketQuaMessages } from "@/lib/messages/agent-builder-ket-qua";
 import Checkmark from "@carbon/icons-react/es/Checkmark";
 import Renew from "@carbon/icons-react/es/Renew";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { File, MultiFileDiff } from "@pierre/diffs/react";
 import {
 	FileTree,
@@ -15,6 +14,7 @@ import {
 import { useTheme } from "next-themes";
 import { useState } from "react";
 import { latestBuilderArtifacts } from "@/lib/agent-builder-state";
+import { ketQuaMessages } from "@/lib/messages/agent-builder-ket-qua";
 import { useHydrated } from "@/lib/use-hydrated";
 
 export type AgentCodeArtifact = {
@@ -38,7 +38,6 @@ export function AgentCodeWorkspace({
 	working: boolean;
 	versionId?: string | null;
 }) {
-	const t = ketQuaMessages(useLocale());
 	const latest = latestBuilderArtifacts(artifacts, versionId);
 	const paths = [...latest.keys()].sort();
 	const treeKey = paths
