@@ -24,6 +24,54 @@
 		{
 			"chu": "team",
 			"vi_sao": "doan route giu cho, so bang === de tra notFound()"
+		},
+		{
+			"chu": "slack.message.post",
+			"vi_sao": "ma dinh danh loai viec cua tac nhan, so bang === va gui len API"
+		},
+		{
+			"chu": "crm.activity.create",
+			"vi_sao": "ma dinh danh loai viec cua tac nhan"
+		},
+		{
+			"chu": "run.summary",
+			"vi_sao": "ma dinh danh loai viec cua tac nhan"
+		},
+		{
+			"chu": "short",
+			"vi_sao": "tuy chon cua Intl.DateTimeFormat"
+		},
+		{
+			"chu": "numeric",
+			"vi_sao": "tuy chon cua Intl.DateTimeFormat"
+		},
+		{
+			"chu": "2-digit",
+			"vi_sao": "tuy chon cua Intl.DateTimeFormat"
+		},
+		{
+			"chu": "none",
+			"vi_sao": "tuy chon refetchType cua react-query"
+		},
+		{
+			"chu": "Today",
+			"vi_sao": "khoa cua kieu ChatDateGroup — chu hien ra lay tu kho chuoi"
+		},
+		{
+			"chu": "Yesterday",
+			"vi_sao": "khoa cua kieu ChatDateGroup"
+		},
+		{
+			"chu": "Last 7 days",
+			"vi_sao": "khoa cua kieu ChatDateGroup"
+		},
+		{
+			"chu": "renewals",
+			"vi_sao": "ten kenh Slack lam vi du — Slack chi nhan chu thuong khong dau"
+		},
+		{
+			"chu": "This agent",
+			"vi_sao": "nhan chan doan truyen vao parse() de dung trong thong diep Error nem ra — khong ve ra man"
 		}
 	],
 	"khoa_kieu": {
