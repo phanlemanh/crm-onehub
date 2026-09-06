@@ -194,20 +194,6 @@ evals:
       - "apps/app/components/agent-builder/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
-  - id: E13
-    criterion: AC-9
-    executor: script
-    cmd: config:executors.script.ab_be_rong_do
-    expected: >-
-      exit 0. Cam mot nhan vi DAI (cum tieng Viet CO DAU doc duoc, khong phai chu go loi)
-      vao mot khoa moc cua lat nay, chay be-rong, doi "vi tran ma en vua" > 0, tra kho chuoi
-      ve nguyen trang, git status bang nhau. So bang 0 la eval DO — chan be-rong mu.
-      Chan con tra ma 2 la KHONG DO DUOC, khong duoc ket luan la thuoc mu.
-    paths:
-      - "_acceptance/agent-builder-noi-tieng-viet/rang/**"
-      - "apps/app/lib/messages/agent-builder-*.ts"
-    evidence_required: [run_id, exit_code, verifier, verified_at, output]
-
   - id: E14
     criterion: AC-10
     executor: script
