@@ -5,7 +5,7 @@ slug: tiep-thi-tuyen-doi-tac
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, cli]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-04
 design_doc: docs/superpowers/specs/2026-09-04-tiep-thi-tuyen-doi-tac-design.md
@@ -138,3 +138,20 @@ Ba mục nhẹ được nhận nguyên trạng, không sửa: Ngoài-10 — Mộ
 Một mục tách thành hồ sơ riêng: **Ngoài-13** — Khi nhân viên gõ từ khoá tìm trong danh sách thành viên chiến dịch, ô tìm kiếm thay thế hẳn bộ lọc gốc của phân khúc thay vì tìm trong phạm vi phân khúc đó — cá nhân ngoài phân khúc có thể xuất hiện, được gọi, và bị ghi lượt gọi vào chiến dịch dù không thuộc đối tượng nhắm tới. Hồ sơ mới: `_acceptance/tim-trong-phan-khuc/`.
 
 **Còn hở, khai chứ không sửa (TRONG hợp đồng, AC-3).** Cổng tiếp nhận ghi mỗi mục một giao dịch riêng, nên hỏng ở mục thứ n để lại n−1 mục đã ghi, và lỗi trả về là 500 không thông điệp (`apps/api/src/listings/listing-ingest.service.ts:76`). Máy dừng theo luật lỗi-cùng-lớp và đã cạn lượt chấm; người ký nhận điều này khi ký.
+
+### Giới hạn đã biết bổ sung — vòng chấm 4, người ký nhận 2026-09-06
+
+Mười mục dưới đây do vòng chấm 4 nêu, tất cả NGOÀI phạm vi 16 tiêu chí đã duyệt. Người ký chọn ghi vào giới hạn đã biết và phát hành. Ba mục cuối là chuyện của bộ đo và môi trường máy chủ dev, không phải khuyết tật sản phẩm.
+
+- **Ngoài-1 (vòng 4).** E13 khai ba bài, kho chỉ có hai — vế «chưa gọi ai thì tỷ lệ là null» không có chân
+- **Ngoài-2 (vòng 4).** E5 khai bài «lọc được», kho chỉ khẳng định cái cờ
+- **Ngoài-3 (vòng 4).** Lệnh chấm `tt_api` bỏ sót tệp kiểm giữ chân 500 mục của AC-1
+- **Ngoài-4 (vòng 4).** Mục Ngoài-21 trong giới hạn đã biết có vẻ đã cũ
+- **Ngoài-5 (vòng 4).** Thay đổi ở menu góc nhìn không có khung hình nào chứng minh trên màn
+- **Ngoài-6 (vòng 4).** Ba mã trạng thái của E15 dùng chung một tệp ảnh, trùng từng byte
+- **Ngoài-7 (vòng 4).** Tệp đường dây `E6-network.txt` còn là của vòng 3
+- **Ngoài-8 (vòng 4).** Hàng đối chứng luôn hiện «Thành viên —» trong mọi khung hình
+- **Ngoài-9 (vòng 4).** Thanh điều hướng bên vẫn trộn tiếng Anh với một mục tiếng Việt
+- **Ngoài-10 (vòng 4).** Lớp phủ nhà phát triển che góc dưới-trái mọi khung hình bằng chứng
+
+Hai mục đáng chú ý nhất là lỗ trong CHÍNH BỘ ĐO chứ không trong sản phẩm: E13 khai ba bài mà kho chỉ có hai (vế «chưa gọi ai thì tỷ lệ để trống» không có chân), và E5 chứng minh chín trường được đánh dấu lọc-được nhưng chưa lần nào thực sự lọc theo một trường sàn. Cả hai có trước vòng 3, không phải hồi quy của vòng 4.

@@ -26,7 +26,7 @@ verified_by: fresh-context verification subagents (hai làn)
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 7a1e18d439b1674e60b46b1a42e392349d8f7958
-human_signoff:
+human_signoff: Mạnh 2026-09-06 — ký lại trên bằng chứng vòng 4 sau khi bản sửa `go-khoa-goc-nhin` làm mốc cũ lệch cây. Mười mục ngoài hợp đồng ghi vào giới hạn đã biết; phạm vi đã cắt giữ nguyên; phê toàn bộ quyết định ghi sau Cổng 1. Chấm E19 và các định đoạt ngày 05/09 giữ nguyên hiệu lực, không làm lại.
 ---
 
 # Evidence Report: tiep-thi-tuyen-doi-tac — vòng 4
