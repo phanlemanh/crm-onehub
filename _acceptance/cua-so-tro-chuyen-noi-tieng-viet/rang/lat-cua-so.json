@@ -1,0 +1,86 @@
+{
+	"lat": "cua-so-tro-chuyen-noi-tieng-viet",
+	"ghi_chu": "Dot HAI cua lat dung tac nhan: cua so tro chuyen. Dan so = thu muc components/agent-builder TRU 15 file da dich o dot mot. Moi dong loai tru khai chuyen_giao tro ve ho so da nhan chung — chieu do: ho so duoc goi ten phai ton tai va ban khai cua no phai that su chua file do.",
+	"thu_muc": [
+		"apps/app/components/agent-builder"
+	],
+	"them": [],
+	"khong_quet": [
+		{
+			"duong": "apps/app/components/agent-builder/agent-builder-home.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/agent-builder-route-fallback.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/agent-builder-shell.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/agent-builder-sidebar.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/agent-capabilities.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/agent-code-workspace.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/agent-code.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/agent-result.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/agent-runs-drawer.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/agent-scope-badges.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/create-channel-dialog.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/deal-list-result.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/new-agent-dialog.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/team-agent-detail.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		},
+		{
+			"duong": "apps/app/components/agent-builder/team-agents-index.tsx",
+			"vi_sao": "da dich o dot mot",
+			"chuyen_giao": "agent-builder-noi-tieng-viet"
+		}
+	],
+	"mien_tru": []
+}

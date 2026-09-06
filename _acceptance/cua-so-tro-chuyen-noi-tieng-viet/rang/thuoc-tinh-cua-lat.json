@@ -1,0 +1,78 @@
+{
+	"lat": "cua-so-tro-chuyen-noi-tieng-viet",
+	"ghi_chu": "BAN NHAP S1 — ke thua danh sach ky thuat cua dot mot de do kich thuoc; S3 phai dead-check tung dong.",
+	"ten_ky_thuat": [
+		{
+			"ten": "motion",
+			"vi_sao": "tuy chon chuyen dong cua bo bieu tuong, gia tri la enum none/auto"
+		},
+		{
+			"ten": "trigger",
+			"vi_sao": "khoa hanh vi cua hop thoai, gia tri la enum"
+		},
+		{
+			"ten": "className",
+			"vi_sao": "lop CSS"
+		},
+		{
+			"ten": "id",
+			"vi_sao": "dinh danh phan tu"
+		},
+		{
+			"ten": "htmlFor",
+			"vi_sao": "dinh danh phan tu ma nhan tro toi"
+		},
+		{
+			"ten": "type",
+			"vi_sao": "loai phan tu HTML"
+		},
+		{
+			"ten": "variant",
+			"vi_sao": "bien the cua component dung chung"
+		},
+		{
+			"ten": "size",
+			"vi_sao": "co cua component dung chung"
+		},
+		{
+			"ten": "align",
+			"vi_sao": "huong can le cua component dung chung"
+		},
+		{
+			"ten": "role",
+			"vi_sao": "vai tro ARIA"
+		},
+		{
+			"ten": "aria-busy",
+			"vi_sao": "trang thai ARIA, gia tri true/false"
+		},
+		{
+			"ten": "aria-hidden",
+			"vi_sao": "trang thai ARIA, gia tri true/false"
+		},
+		{
+			"ten": "key",
+			"vi_sao": "khoa React"
+		},
+		{
+			"ten": "mode",
+			"vi_sao": "khoa che do cua component"
+		},
+		{
+			"ten": "data-icon",
+			"vi_sao": "thuoc tinh data cua bo giao dien, gia tri la enum vi tri bieu tuong"
+		},
+		{
+			"ten": "side",
+			"vi_sao": "huong mo cua ngan truot"
+		},
+		{
+			"ten": "translate",
+			"vi_sao": "co bao trinh duyet khong dich, gia tri la no"
+		},
+		{
+			"ten": "headerHeight",
+			"vi_sao": "lop chieu cao dong tieu de cua bang dung chung"
+		}
+	]
+}
