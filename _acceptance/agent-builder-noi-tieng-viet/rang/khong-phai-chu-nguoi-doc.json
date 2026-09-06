@@ -10,19 +10,19 @@
 	],
 	"giu_nguyen": [
 		{
-			"chuoi": "working",
+			"chu": "working",
 			"vi_sao": "khoa trang thai hoi thoai, so bang === chu khong ve ra man"
 		},
 		{
-			"chuoi": "unread",
+			"chu": "unread",
 			"vi_sao": "khoa trang thai hoi thoai, so bang ==="
 		},
 		{
-			"chuoi": "deployed",
+			"chu": "deployed",
 			"vi_sao": "khoa trang thai hoi thoai, so bang ==="
 		},
 		{
-			"chuoi": "team",
+			"chu": "team",
 			"vi_sao": "doan route giu cho, so bang === de tra notFound()"
 		}
 	],
