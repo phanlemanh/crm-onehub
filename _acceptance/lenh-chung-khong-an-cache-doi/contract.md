@@ -5,7 +5,7 @@ slug: lenh-chung-khong-an-cache-doi
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-06
 design_doc: docs/superpowers/specs/2026-09-06-lenh-chung-khong-an-cache-doi-design.md
@@ -161,6 +161,8 @@ kiểm cache của CI từ xa. Ô Never: tắt hẳn cache turbo · ép `--force
 
 ### Known limits
 
+- **known-limit (Ngoài-2, người chốt ở Cổng 2, 07/09):** chỉ `@crm/ui#test` được đo hai chiều. Kho có 11 gói chạy test cộng nhiều task check-types và lint; khoá cache của chúng vẫn có thể thiếu input mà không ai biết. Cổng đã miễn nhiễm nhờ ép chạy lại, nhưng người viết code chạy lệnh hằng ngày trên một task khác thì không.
+- **known-limit (Ngoài-3, người chốt 07/09):** ép chạy lại vô hiệu hoá triệu chứng chứ không chữa gốc. Chữa gốc nghĩa là khai input đúng cho mọi task của mọi gói, và không công cụ nào ở đây kiểm được điều đó tự động.
 - **`--force` không làm khoá cache trung thực, nó chỉ bỏ qua khoá.** Sau vòng này, cổng
   không bao giờ đọc một bản phát lại nữa — nhưng khoá cache của các task khác vẫn có
   thể thiếu input mà không ai biết. Chỉ `@crm/ui#test` được đo hai chiều ở đây.

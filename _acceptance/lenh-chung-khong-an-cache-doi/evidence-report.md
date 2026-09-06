@@ -1,7 +1,7 @@
 ---
 schema_version: 2
 feature_slug: lenh-chung-khong-an-cache-doi
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
@@ -9,7 +9,7 @@ enforcement_mode: strict
 bypass_used: false
 verified_commit: ed221f4b3803b6d1251b1a4667b5cbed21ffdd26
 run_id: s4r1-20260906T153520Z-37144
-human_signoff:
+human_signoff: Manh Phan 2026-09-07
 ---
 
 # Evidence Report: lenh-chung-khong-an-cache-doi
@@ -23,7 +23,7 @@ human_signoff:
 | E5 | AC-5 | script | PASS |
 | E6 | AC-6 | test | PASS |
 | E7 | AC-7 | script | PASS |
-| E8 | AC-8 | judgment | UNCERTAIN |
+| E8 | AC-8 | judgment | PASS |
 
 ## Evidence
 
@@ -108,10 +108,10 @@ human_signoff:
 
 - eval: E8
   judged_by: nguoi — chu kho, Cong 2
-  verdict: UNCERTAIN
+  verdict: PASS
   run_id: s4r1-20260906T153520Z-37144-E8
   verified_at: 2026-09-06T15:37:21Z
-  human_override:
+  human_override: Đạt — Manh Phan 2026-09-07
   rationale: |
     Ep chay lai lam moi luot cham cua cong ton them 21 giay. Cai gia ay co dang doi
     lay mot mau xanh co nghia khong. May KHONG cham muc nay.
@@ -120,10 +120,11 @@ human_signoff:
 
 Tat ca ma 0, chay CUONG BUC va NOI TIEP, 0 cache.
 
-## Vi sao PENDING-JUDGMENT
+## Vi sao PASS
 
-Bay chan may deu ma 0 trong mot luot chay CO GHI SO. O thu tam la phan xet cua nguoi
-(E8) — cai gia cua viec ep chay lai.
+Bay chan may deu ma 0 trong mot luot chay CO GHI SO — moi run_id mint luc thuc thi va
+co mat trong run-log.jsonl. O thu tam la phan xet cua nguoi (E8), da cham Dat o Cong 2:
+21 giay them moi luot cham la cai gia dang doi lay mot mau xanh co nghia.
 
 ## So do
 
