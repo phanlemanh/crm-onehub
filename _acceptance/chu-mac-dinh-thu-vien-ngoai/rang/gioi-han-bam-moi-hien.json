@@ -1,6 +1,6 @@
 {
 	"lat": "chu-mac-dinh-thu-vien-ngoai",
-	"ghi_chu": "GIOI HAN DA KHAI: phep do tren man chi thay thu DANG HIEN. Cac component duoi day boc mot nguyen ban co trang thai mo/dong — chung chi ve ra sau khi bam, nen phep do tren man KHONG voi toi. Bang chiu chieu do: dong tro mot component khong boc thu vien la DO; va so dong phai BANG so chan dem duoc tu dia.",
+	"ghi_chu": "DA DO ngay 06/09 boi ho so chan-lai-component-ra-man: tung dong duoc mount o trang thai MO roi doc chu ban ve that su ve. Bang van chiu chieu do cu: dong tro mot component khong boc thu vien la DO; so dong phai BANG so chan dem duoc tu dia.",
 	"dong": [
 		{
 			"component": "accordion.tsx",
@@ -69,5 +69,22 @@
 				"TooltipPrimitive (radix-ui)"
 			]
 		}
-	]
+	],
+	"da_do": {
+		"ho_so": "chan-lai-component-ra-man",
+		"ngay": "2026-09-06",
+		"cach": "mount tung component roi bam moi nut lai duoc, doc text node va thuoc tinh nguoi-doc",
+		"ket_qua": {
+			"accordion.tsx": "rong",
+			"alert-dialog.tsx": "rong",
+			"combobox.tsx": "co 5 chuoi",
+			"drawer.tsx": "rong",
+			"dropdown-menu.tsx": "rong",
+			"hover-card.tsx": "rong",
+			"popover.tsx": "rong",
+			"select.tsx": "rong",
+			"tabs.tsx": "rong",
+			"tooltip.tsx": "rong"
+		}
+	}
 }
