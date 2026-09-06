@@ -7,7 +7,7 @@ const GOC = join(import.meta.dirname, "..", "..", "..");
 const HO_SO = join(GOC, "_acceptance", "chan-lai-component-ra-man");
 const EV = join(HO_SO, "evidence");
 
-const NEO = { file: 389, mac_dinh: 107, dong_bang_cu: 9 };
+const NEO = { file: 398, mac_dinh: 107, dong_bang_cu: 9 };
 
 function banVeRong(banVe) {
 	return Object.values(banVe)
