@@ -25,7 +25,7 @@ reason: |
 verified_by: fresh-context verification subagents
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8b98a3d3329941a17df7ec226aeee9eb29f9d5db
+verified_commit: d8240a5f90b1a9790f404f4bf62ab90c45af94a1
 human_signoff: Mạnh 2026-09-05 — ký trên giới hạn đã khai: 17 mục ngoài hợp đồng ghi vào giới hạn đã biết, 3 mục nhận nguyên trạng, Ngoài-13 tách thành hồ sơ riêng, và MỘT lỗ TRONG hợp đồng (AC-3: hỏng giữa lô nạp để lại phần đã ghi, lỗi trả về 500 trắng) mà máy khai chứ không sửa vì đã cạn lượt chấm theo luật lỗi-cùng-lớp.
 ---
 
@@ -665,3 +665,13 @@ merge. Không mã nào của vòng này đổi — mười tệp trong danh sác
 Cài đặt. Làn máy chạy lại trọn tại cây đã gộp: 1320 bài kiểm, 0 trượt, 0 hit đệm
 (lượt đầu trả xanh từ đệm nên đã ép chạy lại bằng `--force`), cộng 28 bài của bộ cào.
 Chữ ký người không bị đụng.
+
+### Re-pin lần 2 — 2026-09-06, do nhánh nền nhận hai vòng khác sau lần ghim trước
+run_id: repin-lai-thu-20260906T095455Z
+sha: d8240a5f90b1a9790f404f4bf62ab90c45af94a1 · suites: 4 lệnh exit 0
+
+Sau lần ghim trước, `onehub` nhận vòng một-lượt-một-cơ-sở-dữ-liệu và vòng khoá lô
+bằng CTE vật chất hoá — hai vòng đó đổi mã ngoài thư mục hồ sơ, nên mốc cũ lệch cây.
+Không mã nào của vòng này đổi. Làn máy chạy lại trọn trên cây hiện tại bằng bộ chạy
+một-lượt-một-DB: 1334 bài kiểm, 0 trượt, 9/9 chân kiểm chạy thật không hit đệm, cộng
+28 bài của bộ cào. Chữ ký người không bị đụng.
