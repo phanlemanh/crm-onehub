@@ -7,16 +7,6 @@
 		"chu": [],
 		"loi": null
 	},
-	"combobox.tsx": {
-		"chu": [
-			"Select an option",
-			"Search…",
-			"Suggestions",
-			"MUC",
-			"Nothing matches."
-		],
-		"loi": null
-	},
 	"drawer.tsx": {
 		"chu": [],
 		"loi": null

@@ -17,12 +17,6 @@
 			]
 		},
 		{
-			"component": "combobox.tsx",
-			"nguyen_ban": [
-				"ChevronDownIcon (lucide-react)"
-			]
-		},
-		{
 			"component": "drawer.tsx",
 			"nguyen_ban": [
 				"DrawerPrimitive (vaul)"
@@ -77,7 +71,6 @@
 		"ket_qua": {
 			"accordion.tsx": "rong",
 			"alert-dialog.tsx": "rong",
-			"combobox.tsx": "co 5 chuoi",
 			"drawer.tsx": "rong",
 			"dropdown-menu.tsx": "rong",
 			"hover-card.tsx": "rong",

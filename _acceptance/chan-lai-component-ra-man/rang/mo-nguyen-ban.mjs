@@ -8,7 +8,7 @@ const TAO_PHAM = join(
 	"_acceptance/chan-lai-component-ra-man/evidence/mo-nguyen-ban.json",
 );
 
-export const NEO_DONG = 10;
+export const NEO_DONG = 9;
 
 export function chayBoVe() {
 	try {

@@ -68,6 +68,8 @@ chỗ trong `node_modules` · quét theo danh sách tên thư viện gõ tay.
 
 ### Known limits
 
+- **Ba con số neo đã sửa ngày 06/09 bởi vòng `chan-lai-component-ra-man`.** `doc_kho` 16 → **21**, bảng bọc-mà-không-đọc 29 → **26**, bảng giới hạn 10 → **9**. Nguyên nhân duy nhất: vòng ấy vá năm component (`dot-matrix` · `thinking-indicator` · `async-action` · `combobox` · `command`) nên chúng rời khỏi nhóm bọc-mà-không-đọc — đúng cơ chế hồ sơ này đã ghi hai lần trong sổ quyết định của chính nó. Phạm vi hợp đồng KHÔNG đổi; chỉ số đếm đổi. Người phê hoặc veto việc sửa này ở Cổng 2 của vòng ấy.
+
 - **known-limit (Ngoài-1, người chốt ở Cổng 2, 06/09):** bộ chấm bản vẽ của `packages/ui` đòi một ca cho mỗi component đọc bảng dịch — `packages/ui/test/render-diff.spec.tsx`. Ràng buộc ấy đúng và vòng này đã thoả (thêm ca cho `sonner`), nhưng nó chưa từng được nêu trong hợp đồng nào. Ghi lại để vòng sau biết trước: thêm một chỗ đọc kho chuỗi thì kéo theo một ca vẽ.
 - **Phép thử nguồn có tập loại trừ ghim tên.** `node_modules` · `.next` · `dist` · `build`. Ở kho này `bun` gom `node_modules` lên gốc nên `apps/*/node_modules` gần như rỗng (4 file `.ts` ngày 06/09) — phép đo *tình cờ* đúng nếu không loại trừ, và đó là một sự may chứ không phải một bảo đảm. Ghim tập loại trừ để nó thôi phụ thuộc vào cách trình quản lý gói xếp thư mục.
 - **Phép đo trên màn chỉ thấy thứ ĐANG HIỆN.** Component chỉ hiện sau khi bấm nằm ngoài tầm nó. Phép đo ở mức mã biết component ấy chưa đọc kho, nhưng KHÔNG biết nguyên bản có sinh chữ hay không. Hai phép đo cộng lại không thay được một chân lái; AC-8 bắt khai giới hạn này thành bảng có chiều đỏ chứ không để nó sống trong văn xuôi.

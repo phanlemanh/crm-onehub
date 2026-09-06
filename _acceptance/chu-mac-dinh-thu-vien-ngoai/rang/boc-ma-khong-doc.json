@@ -17,15 +17,6 @@
 			]
 		},
 		{
-			"component": "async-action.tsx",
-			"nguyen_ban": [
-				"CircleAlertIcon (lucide-react)",
-				"CheckIcon (lucide-react)",
-				"LazyMotion (motion/react)",
-				"m (motion/react)"
-			]
-		},
-		{
 			"component": "avatar.tsx",
 			"nguyen_ban": [
 				"AvatarPrimitive (radix-ui)"
@@ -57,20 +48,6 @@
 			"component": "collapsible.tsx",
 			"nguyen_ban": [
 				"CollapsiblePrimitive (radix-ui)"
-			]
-		},
-		{
-			"component": "combobox.tsx",
-			"nguyen_ban": [
-				"ChevronDownIcon (lucide-react)"
-			]
-		},
-		{
-			"component": "command.tsx",
-			"nguyen_ban": [
-				"CommandPrimitive (cmdk)",
-				"CheckIcon (lucide-react)",
-				"SearchIcon (lucide-react)"
 			]
 		},
 		{
