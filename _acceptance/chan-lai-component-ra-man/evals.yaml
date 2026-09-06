@@ -1,0 +1,172 @@
+schema_version: 1
+slug: chan-lai-component-ra-man
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.cl_dan_so
+    paths:
+      - "packages/ui/src/**"
+      - "apps/app/components/**"
+      - "apps/app/lib/**"
+      - "apps/app/app/**"
+      - "_acceptance/chan-lai-component-ra-man/rang/**"
+    expected: |
+      Xanh: cac neo khop dia — 389 file · 119 gia tri mac dinh la chuoi co chu · 10
+      dong trong bang gioi han cua vong truoc (neo DOC LAP, ghim trong contract) · so
+      phan tu TUNG nhom sau khi phan (chu-nguoi-doc va ky thuat), khong chi tong.
+      Chieu do da chay: doi mot neo trong ban khai -> ma 1, neu ten neo lech va ca hai
+      con so.
+      Tap rong (khong doc duoc cay nguon) -> ma 2, KHONG xanh.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.cl_lai_ra_man
+    paths:
+      - "packages/ui/src/**"
+      - "apps/app/components/**"
+      - "_acceptance/chan-lai-component-ra-man/rang/**"
+    expected: |
+      Xanh: moi gia tri mac dinh duoc xep nhom bang cach MOUNT component o CA HAI
+      trang thai — dong, va mo voi moi component co trang thai mo — roi doc tap
+      chu-nguoi-doc cua ban ve.
+      MA TRAN TOI THIEU viet TRUOC (5 dong ghim ten trong contract AC-2): combobox
+      placeholder · combobox empty · date-picker placeholder · command title ·
+      async-action errorLabel — ca nam PHAI roi vao nhom chu-nguoi-doc. Sai mot dong
+      la ma 1, neu ten dong.
+      In ra so phan tu TUNG nhom, khong chi tong; tong bang 119.
+      Component nao khong mount duoc phai khai trong so ca kem ly do; so khong-mount
+      duoc + so mount duoc = so component co gia tri mac dinh.
+      Chieu do da chay: mount CHI trang thai dong -> nam dong ma tran roi sang nhom ky
+      thuat -> ma 1. Day dung la ca hong ma phep mount-mot-trang-thai sinh ra.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.cl_phan_biet
+    paths:
+      - "packages/ui/src/**"
+      - "_acceptance/chan-lai-component-ra-man/rang/**"
+    expected: |
+      CAP HAI CHIEU tren CUNG mot fixture:
+      chieu xanh — vat lanh: `variant = "ghost"` nam o nhom ky thuat, ma 0.
+      chieu do — trong ban sao, doi gia tri mac dinh ay thanh mot chuoi that su ve ra
+      man: chan phai chuyen no sang nhom chu-nguoi-doc va thoat ma 1, thong diep ghim
+      neu dung `file:dong`.
+      Chan tu chay ca hai chieu trong mot luot va tu don ban sao.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.cl_mo_nguyen_ban
+    paths:
+      - "packages/ui/src/components/**"
+      - "_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/gioi-han-bam-moi-hien.json"
+      - "_acceptance/chan-lai-component-ra-man/rang/**"
+    expected: |
+      Xanh: ca 10 dong cua bang vong truoc mount duoc o trang thai MO, moi dong in tap
+      chu nguyen ban tu sinh (rong hay khong), va ket qua ghi ra tao pham
+      evidence/mo-nguyen-ban.json.
+      So dong doc duoc phai BANG NEO 10 cua AC-1 — mot neo DOC LAP ghim trong contract,
+      KHONG rut tu chinh file bang (rut tu do la tu so voi chinh minh).
+      Chieu do da chay: bo mot dong khoi bang -> so dong lech neo 10 -> ma 1, neu ten
+      dong da mat.
+      Khong dong nao mount duoc -> ma 2, KHONG xanh.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.cl_ban_khai_da_do
+    paths:
+      - "_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/gioi-han-bam-moi-hien.json"
+      - "_acceptance/chan-lai-component-ra-man/rang/**"
+    expected: |
+      Xanh: chan doc tao pham evidence/mo-nguyen-ban.json do E4 sinh, roi so TUNG DONG
+      voi ghi chu trong ban khai vong truoc: ten dong va trang thai rong-hay-co phai
+      khop dung dau ra may.
+      Chieu do: go tay "9 tren 10 rong" trong khi may do 7 -> ma 1, neu ten dong lech.
+      Vang tao pham -> ma 2 (doi chieu voi mot tao pham khong ton tai thi khong duoc
+      xanh).
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.cl_dinh_doat
+    paths:
+      - "packages/ui/src/**"
+      - "_acceptance/chan-lai-component-ra-man/rang/**"
+    expected: |
+      Xanh: moi dong trong nhom chu-nguoi-doc o dung mot trong hai trang thai — da va
+      (khong con gia tri mac dinh tieng Anh, doc kho chuoi) hoac da khai trong bang
+      hoan kem ly do doc duoc.
+      Chieu do: xoa mot dong khoi bang hoan trong khi no chua duoc va -> ma 1.
+      Nhom chu-nguoi-doc rong -> ma 2 (khong co doi tuong thi khong duoc xanh).
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.cl_tieng_viet_den_man
+    paths:
+      - "packages/ui/src/**"
+      - "packages/ui/test/**"
+    expected: |
+      Xanh: SO CA BANG DUNG so dong "da va" trong bang cua E6, con so lay tu tao pham
+      chu KHONG go tay. Moi ca mount component o trang thai mac dinh voi locale `vi` —
+      chuoi ve ra la ban tieng Viet; voi locale `en` van la ban tieng Anh.
+      Chieu do: tra mot chuoi ve gia tri mac dinh cung -> case do, neu ten component;
+      thieu mot ca -> so lech -> do, neu ten component thieu ca.
+      Tap ca rong -> ma 2.
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.tv_canh_kho_ui
+    paths:
+      - "packages/ui/src/lib/messages.ts"
+      - "packages/ui/test/**"
+    expected: |
+      Xanh: bo canh kho chuoi cua packages/ui va bo cham ban ve deu qua — moi gia tri
+      `vi` co dau tru dong khai trong KHONG_DAU, khong gia tri nao y het `en`, moi ham
+      ghep bien co khang dinh GHIM, khong khoa chet, va moi component doc kho chuoi co
+      mot ca trong render-diff.
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.cl_mot_bo_thuoc
+    paths:
+      - "_acceptance/**/rang/**"
+    expected: |
+      Xanh: khong khoi nao tu 12 dong tro len trong chan cua vong nay trung voi mot
+      chan da co o bon ho so truoc.
+      Chieu do da chay: chep 12 dong tu mot chan cu vao mot chan moi -> ma 1, neu ten
+      ca hai file va so dong trung.
+      Tap so sanh rong -> ma 2.
+
+  - id: E11
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.cl_khong_danh_sach_ten
+    paths:
+      - "_acceptance/chan-lai-component-ra-man/rang/**"
+    expected: |
+      CAP HAI CHIEU tren CUNG mot fixture:
+      chieu xanh — vat lanh: chan lai khong chua hang nao la danh sach chuoi ten tham
+      so dung de phan nhom, ma 0.
+      chieu do — them mot allowlist ten prop vao ban sao cua chan: ma 1, thong diep
+      ghim neu dung `file:dong` cua hang vua them.
+      Vi sao can chan rieng: O Never cua Coverage cam dung dieu nay, ma E9
+      (mot-bo-thuoc) do viec khac han — khoi trung tu 12 dong. Mot allowlist ngan lot
+      qua ca hai neu khong co chan nay.
+
+  - id: E10
+    criterion: AC-10
+    executor: judgment
+    cmd: judgment
+    inputs:
+      - packages/ui/src/lib/messages.ts
+    expected: |
+      Nguoi doc cac chuoi vong nay ghi de va cham: co doc nhu tieng Viet cua nguoi lam
+      nghe khong. May KHONG cham muc nay.

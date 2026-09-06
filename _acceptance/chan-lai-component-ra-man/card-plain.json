@@ -1,0 +1,38 @@
+{
+ "feature_plain": "Một cái thước lái từng thành phần giao diện ra màn rồi đọc chữ nó thật sự vẽ, để bắt lớp chữ tiếng Anh chỉ hiện khi người gọi bỏ trống một tham số — cộng phần vá cái nó tìm ra.",
+ "will_do": [
+  { "id": "AC-1", "p": "Sẽ tự đi cây nguồn mà đếm, không gõ tay: 389 file, 119 giá trị mặc định là chuỗi có chữ, 10 dòng của bảng vòng trước, và số phần tử từng nhóm sau khi phân." },
+  { "id": "AC-2", "p": "Sẽ mount từng thành phần ở CẢ HAI trạng thái — đóng và mở — rồi để chính bản vẽ trả lời chuỗi nào đến mắt người, thay vì đoán theo tên tham số." },
+  { "id": "AC-3", "p": "Sẽ chứng phép phân biệt bằng cặp hai chiều trên cùng một vật: đổi một giá trị kỹ thuật thành chuỗi thật sự vẽ ra thì thước phải đỏ và nêu đúng file với dòng." },
+  { "id": "AC-4", "p": "Sẽ mở cả mười thành phần của bảng vòng trước ra rồi đếm, và ghi kết quả thành một tạo phẩm để các phép đo sau đối chiếu." },
+  { "id": "AC-5", "p": "Sẽ đối chiếu ghi chú trong bản khai vòng trước với đúng đầu ra của máy, từng dòng một — gõ tay một con số sai là đỏ." },
+  { "id": "AC-6", "p": "Sẽ buộc mọi chuỗi tiếng Anh tìm ra phải ở một trong hai trạng thái: đã vá, hoặc đã khai trong bảng hoãn có lý do đọc được." },
+  { "id": "AC-7", "p": "Sẽ chứng chuỗi đã vá thật sự đến màn bằng tiếng Việt, và số ca phải bằng đúng số dòng đã vá." },
+  { "id": "AC-8", "p": "Sẽ giữ bộ canh kho chuỗi và bộ chấm bản vẽ của thư viện giao diện còn xanh." }
+ ],
+ "wont_do": [
+  { "id": "AC-9", "p": "Sẽ KHÔNG chép thước: khối từ 12 dòng trở lên trùng một chân đã có là đỏ." },
+  { "id": "AC-11", "p": "Chặn chính cách làm ẩu mà vòng này dễ sa vào — thước không được đọc một danh sách tên tham số gõ tay để phân nhóm." }
+ ],
+ "scope_plain": "Lái ra trình duyệt thật · dịch nốt các chuỗi khác của thư viện giao diện · nội dung giả trong CSS và thông báo sống — bốn thứ này hoãn.",
+ "coverage_plain": [
+  { "i": 0, "p": "Chữ nấp ở đâu trong mã: nội dung thẻ, thuộc tính, GIÁ TRỊ MẶC ĐỊNH CỦA THAM SỐ, chữ do thư viện sinh. Ba loại đầu đã có phép đo ở năm vòng đã ký; loại thứ ba là lỗ vừa đo được, 119 chỗ trên đĩa (AC-1, AC-2, AC-3)." },
+  { "i": 1, "p": "Điều kiện hiện ra: ngay khi vẽ, CHỈ KHI người gọi bỏ trống tham số, chỉ sau khi bấm, nhất thời. Điều kiện thứ hai chính là thứ sinh ra cả lớp lỗi này (AC-2, AC-4)." },
+  { "i": 2, "p": "Chữ có đến được mắt người không: thành nội dung, thành nhãn trợ năng, thành tên lớp trình bày, hay không bao giờ vẽ. Đây là trục phân biệt, và phép đo để chính bản vẽ trả lời (AC-2, AC-3)." },
+  { "i": 3, "p": "Áp cho mọi ô: dân số sinh từ đĩa, mỗi phép đo mới có cặp hai chiều, tập rỗng phải báo không-đo-được chứ không được xanh, không chép thước (AC-1, AC-3, AC-9)." }
+ ],
+ "gap_probe_plain": [
+  { "i": 0, "p": "Bên phản biện bắt được ca hỏng nặng nhất: nếu chỉ vẽ thành phần ở trạng thái ĐÓNG thì đúng năm ví dụ đầu bài sẽ vẽ rỗng, bị xếp nhầm sang nhóm kỹ thuật, mà tổng vẫn đủ 119 nên thước vẫn xanh — vòng đóng lại mà bỏ sót chính lớp nó đi tìm. Đã sửa: vẽ cả hai trạng thái, và ghim sẵn năm dòng ấy thành ma trận tối thiểu." },
+  { "i": 1, "p": "Chiều đỏ của phép đo mười dòng tự so với chính mình: cả hai vế đều lấy từ một file, nên xoá một dòng thì hai vế vẫn bằng nhau và thước không bao giờ đỏ được. Đã sửa: ghim số 10 thành một mốc độc lập." },
+  { "i": 2, "p": "Điều mà phần «sẽ không làm» cấm lại không có phép đo nào canh — một danh sách tên tham số ngắn lọt qua mọi thước hiện có. Đã sửa: tách thành một tiêu chí riêng có cặp hai chiều." },
+  { "i": 3, "p": "Phép đo đối chiếu bản khai chỉ kiểm một cụm chữ biến mất, nên gõ tay một con số sai vẫn xanh. Đã sửa: nay nó đọc tạo phẩm của máy và so từng dòng." },
+  { "i": 4, "p": "Bộ ca tiếng Việt không có mốc số, nên vá bốn chỗ mà chỉ viết một ca thì vẫn xanh. Đã sửa: số ca phải bằng đúng số dòng đã vá, lấy từ tạo phẩm." }
+ ],
+ "decisions_plain": [
+  { "id": "d-20260906T140000Z-9401", "p": "Trọng tâm đổi sau một phép đo thử: mười thành phần của bảng vòng trước KHÔNG mang chữ tiếng Anh nào, nên lớp thật sự có đối tượng là giá trị mặc định của tham số — đổi lại, phạm vi khác câu chữ lúc mở hồ sơ, nên đây là thứ phải được gật ở cổng này." },
+  { "id": "d-20260906T140100Z-9402", "p": "Phân nhóm theo ĐÍCH ĐẾN chứ không theo tên tham số — đổi lại, một chuỗi chỉ vẽ ra ở nhánh mà giá trị mặc định không chạm tới sẽ bị xếp nhầm nhóm." },
+  { "id": "d-20260906T140200Z-9403", "p": "Đo trên bản vẽ giả thay vì lái ra trình duyệt thật — đổi lại, thứ chỉ sai khi có kiểu trình bày thật, như chữ bị cắt hay tràn, nằm ngoài tầm." },
+  { "id": "d-20260906T140300Z-9404", "p": "KHÔNG dựng bản bấm được để duyệt giao diện — vòng này không dựng màn nào." },
+  { "id": "d-20260906T140400Z-9405", "p": "KHÔNG viết đặc tả cấu trúc màn — vòng này không dựng màn nào." }
+ ]
+}

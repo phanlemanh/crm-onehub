@@ -19,6 +19,7 @@ executors:
     api_khong_cache_tru_agent: "bun run db:test && bunx turbo run test --concurrency=1 --force --filter=!agent"
     rang3_khoa_chet: "cd apps/app && bun test test/messages-guard.spec.ts"
     tv_canh_kho_ui: "cd packages/ui && bun test test/messages-guard.spec.ts"
+    cl_tieng_viet_den_man: "cd packages/ui && bun test test/lai-ra-man.spec.tsx"
   script:
     cua_vao_loi_mang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"
     cua_vao_chon_tieng_may_chu: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chon-tieng-may-chu"
@@ -165,6 +166,14 @@ executors:
     tv_gioi_han_bam_moi_hien: "node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/gioi-han-bam-moi-hien.mjs"
     tv_dot_bien: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/dot-bien.mjs"
     tv_mot_bo_thuoc: "node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/mot-bo-thuoc.mjs"
+    cl_dan_so: "node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs dan-so"
+    cl_lai_ra_man: "node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs phan-nhom"
+    cl_phan_biet: "node _acceptance/chan-lai-component-ra-man/rang/phan-biet-hai-chieu.mjs"
+    cl_mo_nguyen_ban: "node _acceptance/chan-lai-component-ra-man/rang/mo-nguyen-ban.mjs"
+    cl_ban_khai_da_do: "node _acceptance/chan-lai-component-ra-man/rang/ban-khai-da-do.mjs"
+    cl_dinh_doat: "node _acceptance/chan-lai-component-ra-man/rang/dinh-doat.mjs"
+    cl_mot_bo_thuoc: "node _acceptance/chan-lai-component-ra-man/rang/mot-bo-thuoc.mjs"
+    cl_khong_danh_sach_ten: "node _acceptance/chan-lai-component-ra-man/rang/khong-danh-sach-ten.mjs"
     rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
     rang_t1_im: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"
   design:
