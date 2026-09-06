@@ -26,18 +26,6 @@
 			"vi_sao": "doan route giu cho, so bang === de tra notFound()"
 		},
 		{
-			"chu": "slack.message.post",
-			"vi_sao": "ma dinh danh loai viec cua tac nhan, so bang === va gui len API"
-		},
-		{
-			"chu": "crm.activity.create",
-			"vi_sao": "ma dinh danh loai viec cua tac nhan"
-		},
-		{
-			"chu": "run.summary",
-			"vi_sao": "ma dinh danh loai viec cua tac nhan"
-		},
-		{
 			"chu": "short",
 			"vi_sao": "tuy chon cua Intl.DateTimeFormat"
 		},
