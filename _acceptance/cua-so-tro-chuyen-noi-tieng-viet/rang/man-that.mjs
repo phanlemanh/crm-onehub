@@ -1,4 +1,7 @@
-import { dirname } from "node:path";
+import { spawnSync } from "node:child_process";
+import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import {
@@ -11,13 +14,37 @@ import {
 	phien,
 	suySlug,
 } from "../../man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs";
+import { GOC } from "../../man-cai-dat-noi-tieng-viet/rang/lat.mjs";
 import { docHoiThoaiGieo } from "./gieo-va-don.mjs";
 
+const ts = createRequire(import.meta.url)("typescript");
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const RONG = 1280;
 const CAO = 900;
 const HEP = Number(process.env.BE_RONG_HEP ?? 360);
+
+function khoOSoan() {
+	const ma = [
+		'import {oSoanMessages} from "./lib/messages/agent-builder-o-soan";',
+		'console.log(JSON.stringify(oSoanMessages("vi")));',
+	].join("\n");
+	const r = spawnSync("bun", ["-e", ma], { cwd: join(GOC, "apps/app"), encoding: "utf8" });
+	if (r.status !== 0) {
+		console.log(`KHONG DO DUOC: khong doc duoc kho chuoi o soan — ${(r.stderr ?? "").trim().split("\n").slice(-2).join(" | ")}`);
+		process.exit(2);
+	}
+	return JSON.parse(r.stdout);
+}
+
+function laySau(goc, duong) {
+	let o = goc;
+	for (const b of duong.split(".")) {
+		if (!(o instanceof Object) || !(b in o)) return null;
+		o = o[b];
+	}
+	return String(o) === o && o.length > 0 ? o : null;
+}
 const CHO_LANG = Number(process.env.CHO_LANG_MS ?? 6000);
 const DAU = /[àáâãèéêìíòóôõùúýăđĩũơưạ-ỹ]/i;
 const VUNG_DU_LIEU = [
@@ -122,6 +149,60 @@ function batBuocCoGieo() {
 		process.exit(2);
 	}
 	return gieo;
+}
+
+function daDanhDau(nguon, bieuThuc) {
+	const cay = ts.createSourceFile("x.tsx", nguon, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+	let ra = null;
+	const di = (n) => {
+		if (ts.isJsxElement(n)) {
+			const con = n.children.some(
+				(c) => ts.isJsxExpression(c) && c.expression !== undefined && c.expression.getText() === bieuThuc,
+			);
+			if (con) {
+				const th = n.openingElement.attributes.properties.find(
+					(a) => ts.isJsxAttribute(a) && a.name.getText() === "translate",
+				);
+				const gia = th?.initializer;
+				ra = {
+					co: gia !== undefined && ts.isStringLiteral(gia) && gia.text === "no",
+					the: n.openingElement.tagName.getText(),
+					dong: cay.getLineAndCharacterOfPosition(n.getStart()).line + 1,
+				};
+			}
+		}
+		if (ra === null) ts.forEachChild(n, di);
+	};
+	di(cay);
+	return ra;
+}
+
+function chanDuLieuNguoiNhap() {
+	const bang = docKhai(`${HERE}/du-lieu-nguoi-nhap.json`, "du-lieu-nguoi-nhap");
+	if (bang.o.length === 0) {
+		console.log("KHONG DO DUOC: bang du lieu nguoi nhap rong. Tap quan sat rong khong bao gio la dat.");
+		process.exit(2);
+	}
+	const mat = [];
+	const thieu = [];
+	for (const o of bang.o) {
+		const thay = daDanhDau(readFileSync(`${GOC}/${o.file}`, "utf8"), o.bieu_thuc);
+		if (thay === null) {
+			thieu.push(`${o.truong}: khong con phan tu JSX nao boc {${o.bieu_thuc}} trong ${o.file} — ban khai da cu`);
+			continue;
+		}
+		if (thay.co) {
+			console.log(`   XANH ${o.truong}: <${thay.the}> boc {${o.bieu_thuc}} mang translate="no" (${o.file.split("/").pop()}:${thay.dong})`);
+			continue;
+		}
+		mat.push(`${o.truong}: <${thay.the}> boc {${o.bieu_thuc}} KHONG mang translate="no" — ${o.file}:${thay.dong}`);
+	}
+	for (const d of mat) console.log(`   HONG: ${d}`);
+	for (const d of thieu) console.log(`   KHONG DO DUOC: ${d}`);
+	console.log(`\nket qua: ${bang.o.length} o · xanh=${bang.o.length - mat.length - thieu.length} · hong=${mat.length} · ban khai cu=${thieu.length}`);
+	if (mat.length > 0) process.exit(1);
+	if (thieu.length > 0) process.exit(2);
+	process.exit(0);
 }
 
 async function chanHaiTieng(cookie, slug, gieo) {
@@ -242,6 +323,56 @@ async function chanKhongDich(cookie, slug, gieo) {
 	await ket(0);
 }
 
+async function chanTrangThai(cookie, slug, gieo) {
+	const bang = docKhai(`${HERE}/trang-thai-cua-lat.json`, "trang-thai-cua-lat");
+	const kho = khoOSoan();
+	const chet = [];
+	for (const o of bang.o)
+		if (laySau(kho, o.duong) === null)
+			chet.push(`${o.ma} tro vao ${o.duong} — khong con gia tri that trong kho chuoi`);
+	if (chet.length > 0) {
+		console.log("KHONG DO DUOC: ban khai trang thai co duong chet — thieu tien de.");
+		for (const d of chet) console.log(`   ${d}`);
+		await ket(2);
+	}
+
+	const doDuoc = bang.o.filter((o) => o.dung_duoc === true);
+	if (doDuoc.length === 0) {
+		console.log("KHONG DO DUOC: khong o trang thai nao khai dung duoc. Tap quan sat rong khong bao gio la dat.");
+		await ket(2);
+	}
+
+	const veRa = new Map();
+	for (const man of [...new Set(bang.o.map((o) => o.man))]) {
+		const duongMan = man === "/chat/[chatId]" ? `/chat/${gieo.id}` : man;
+		const gia = await gomMan(cookie, slug, duongMan, "vi");
+		veRa.set(man, gia.map((g) => g.chu));
+	}
+
+	let hong = 0;
+	for (const o of bang.o) {
+		const mong = laySau(kho, o.duong);
+		const co = (veRa.get(o.man) ?? []).some((c) => c.includes(mong));
+		if (o.dung_duoc === true) {
+			if (co) console.log(`   XANH ${o.ma} tren ${o.man}: ${JSON.stringify(mong)}`);
+			else {
+				console.log(`   HONG ${o.ma}: khai dung duoc tren ${o.man} ma chu cua no khong ve ra — ${JSON.stringify(mong)}`);
+				hong += 1;
+			}
+			continue;
+		}
+		if (co) {
+			console.log(`   HONG ${o.ma}: khai KHONG dung duoc ma chu cua no VE RA tren ${o.man} — ban khai da cu, ${JSON.stringify(mong)}`);
+			hong += 1;
+			continue;
+		}
+		console.log(`   GIOI HAN ${o.ma} (${o.man}): ${o.vi_sao}`);
+	}
+	console.log(`\nket qua: ${bang.o.length} o trang thai · do duoc ${doDuoc.length} · gioi han da khai ${bang.o.length - doDuoc.length} · hong=${hong}`);
+	if (hong > 0) await ket(1);
+	await ket(0);
+}
+
 async function chanBeRong(cookie, slug, gieo) {
 	let nhan = 0;
 	let tran = 0;
@@ -289,6 +420,7 @@ async function chanBeRong(cookie, slug, gieo) {
 }
 
 const chan = process.argv[2];
+if (chan === "du-lieu-nguoi-nhap") chanDuLieuNguoiNhap();
 const gieo = batBuocCoGieo();
 const cookie = phien();
 const slug = await suySlug(cookie);
@@ -304,6 +436,7 @@ datTrinhDuyet(
 if (chan === "hai-tieng") await chanHaiTieng(cookie, slug, gieo);
 else if (chan === "khong-dich") await chanKhongDich(cookie, slug, gieo);
 else if (chan === "be-rong") await chanBeRong(cookie, slug, gieo);
+else if (chan === "trang-thai") await chanTrangThai(cookie, slug, gieo);
 else {
 	console.log(`KHONG DO DUOC: chua biet chan ${JSON.stringify(chan)}.`);
 	await ket(2);

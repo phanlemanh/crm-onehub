@@ -1,0 +1,16 @@
+{
+	"lat": "cua-so-tro-chuyen-noi-tieng-viet",
+	"ghi_chu": "Du lieu NGUOI NHAP hien tren man cua lat — phan tu JSX boc no phai mang translate=\"no\". Chan doc CAY CU PHAP nen luon chay duoc. Moi dong ghim mot BIEU THUC nguyen van; bieu thuc khong con trong file la thoat ma 2.",
+	"o": [
+		{
+			"file": "apps/app/components/agent-builder/agent-builder-chat.tsx",
+			"truong": "tieu de hoi thoai o thanh dau",
+			"bieu_thuc": "title"
+		},
+		{
+			"file": "apps/app/components/agent-builder/chat-chips.tsx",
+			"truong": "nhan ban ghi CRM nguoi gan vao tin",
+			"bieu_thuc": "resource.label"
+		}
+	]
+}

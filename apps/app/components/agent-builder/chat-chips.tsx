@@ -117,7 +117,7 @@ export function ChatReferenceIdentity({
 				</AvatarFallback>
 			</Avatar>
 			<span className={cn("min-w-0 max-w-48", compact && "max-w-40")}>
-				<span className="block truncate font-medium text-xs">
+				<span className="block truncate font-medium text-xs" translate="no">
 					{resource.label}
 				</span>
 				{showDetail && resource.detail ? (
