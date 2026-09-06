@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 73c2b317d6ecd633da31a8b89a934efebe355f4b
+verified_commit: 6f581bbf35c8a205959db40a00093d24fedb4ea3
 human_signoff: Manh Phan 2026-09-01
 ---
 
@@ -223,3 +223,11 @@ hand. Round 3: the E8 leg runs the real preload and the real spec against a real
 root fixture in both directions, every eval green at commit 73c2b31, and the
 verifier tested the three safety properties of the new leg and reports three
 defects in them under Known limits.
+
+### Re-pin lần 1 — 2026-09-06, do PR #6 sửa một dòng `rang-*.sh` của hồ sơ này (ưu tiên TEST_DATABASE_URL từ môi trường)
+run_id: repin-lane-6-20260906T084038Z
+sha: 6f581bbf35c8a205959db40a00093d24fedb4ea3 · suites: 4 lệnh exit 0
+
+Làn máy chạy trên cây #6 đã gộp `onehub`, bằng bộ chạy mới một-lượt-một-DB. Lượt đầu bị bác vì
+turbo phát lại log từ đệm (9/9 task kiểm cache hit); sửa `turbo.json` cho task `test` không đệm,
+chạy lại: 9/9 task kiểm chạy thật, 1330 bài, 0 trượt. Chữ ký người không đụng.

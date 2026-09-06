@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7ce1c733599c83f20c975bdd06132a762ea4df29
+verified_commit: 6f581bbf35c8a205959db40a00093d24fedb4ea3
 human_signoff: Manh Phan 2026-09-01
 ---
 
@@ -427,3 +427,11 @@ its intended result, but a top-level evidence block is the wrong place to say
 so. The diagnostic moved inside E2's block as `attribution_check`, keeping its
 run_id, its timestamp and its purpose. Nothing was removed, no verdict changed,
 and the bypass was not used.
+
+### Re-pin lần 1 — 2026-09-06, do PR #6 sửa một dòng `rang-*.sh` của hồ sơ này (ưu tiên TEST_DATABASE_URL từ môi trường)
+run_id: repin-lane-6-20260906T084038Z
+sha: 6f581bbf35c8a205959db40a00093d24fedb4ea3 · suites: 4 lệnh exit 0
+
+Làn máy chạy trên cây #6 đã gộp `onehub`, bằng bộ chạy mới một-lượt-một-DB. Lượt đầu bị bác vì
+turbo phát lại log từ đệm (9/9 task kiểm cache hit); sửa `turbo.json` cho task `test` không đệm,
+chạy lại: 9/9 task kiểm chạy thật, 1330 bài, 0 trượt. Chữ ký người không đụng.
