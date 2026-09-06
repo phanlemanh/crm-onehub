@@ -1,0 +1,56 @@
+{
+ "feature_plain": "Bộ điều phối của tác nhân nghiên cứu lấy đúng số việc nó xin mỗi nhịp, kể cả khi thống kê bảng của Postgres đang lỗi thời; trước đây có lúc nó lấy cả hàng đợi dù chỉ xin hai.",
+ "scope_plain": "Không đổi cách xoá dữ liệu thử, không sửa cách suite chung dùng chung cơ sở dữ liệu, không dùng khuôn mảng, không gửi vá lên hãng vòng này, không chạm lớp điều phối gọi hai hàm.",
+ "decisions": [],
+ "analyst_plain": "Bộ kiểm chung, kiểm kiểu và lint không phân biệt bản trước và sau sửa vì lỗi chỉ hiện khi thống kê lỗi thời; phép đo phân biệt nằm ở tám chân răng riêng.",
+ "decisions_plain": [
+  {
+   "id": "d-20260906T080034Z-26753",
+   "p": "Chọn khuôn câu lệnh mà Postgres cam kết bằng tài liệu chỉ chọn lô một lần — đổi lại câu lệnh dài hơn vài dòng."
+  },
+  {
+   "id": "d-20260906T080034Z-30104",
+   "p": "Sửa luôn chỗ giao việc đến hạn dù đề bài chỉ nêu chỗ nghỉ hưu, vì cùng bộ dựng chứng minh nó cũng lấy quá tay — đổi lại diff rộng hơn đề bài."
+  },
+  {
+   "id": "d-20260906T080034Z-13285",
+   "p": "Dùng bản mã cũ thật từ lịch sử làm chiều đỏ, vì đổi một từ khoá trong câu lệnh mới không làm lỗi quay lại — đổi lại phụ thuộc một mốc git đã ghim."
+  },
+  {
+   "id": "d-20260906T080034Z-11033",
+   "p": "Mỗi phép đo dùng một cơ sở dữ liệu thử riêng để không xoá dữ liệu của suite chung khi chạy song song — đổi lại tốn thêm vài giây dựng mỗi chân."
+  },
+  {
+   "id": "d-20260906T080034Z-15924",
+   "p": "KHÔNG quét không gian tiêu chí bằng máy vì không gian chỉ có tám ô, kê tay đủ — đổi lại không có bằng chứng độ phủ ngoài ba trục kê tay."
+  },
+  {
+   "id": "d-20260906T080034Z-20159",
+   "p": "KHÔNG viết đặc tả giao diện vì việc này không có màn hình."
+  },
+  {
+   "id": "d-20260906T080034Z-4204",
+   "p": "KHÔNG chạy phiên soi thiết kế vì việc này không có bề mặt web."
+  },
+  {
+   "id": "d-20260906T080034Z-2283",
+   "p": "KHÔNG đổi cách bộ dựng xoá sạch bảng thử, vì thống kê phải thấy đúng một hàng — đổi lại chạy chung với tệp kiểm khác trên cùng cơ sở dữ liệu thử sẽ xoá hàng của họ."
+  },
+  {
+   "id": "d-20260906T080820Z-30870",
+   "p": "Đặt tệp răng trong thư mục riêng của tác nhân vì chỉ ở đó mới nối được tới lớp dữ liệu, và tên ngoài khuôn tệp kiểm để suite chung không nạp — đổi lại tệp đo sống trong cây mã của app."
+  },
+  {
+   "id": "d-20260906T080820Z-20274",
+   "p": "Chiều đỏ của phép đo đồng thời là bản sao bỏ khoá hàng, đã đo thấy lấy trùng thật — đổi lại chân này sinh thêm một tệp tạm."
+  },
+  {
+   "id": "d-20260906T082947Z-28295",
+   "p": "Vòng chấm 1 bị chặn vì công cụ lint của kho và vì phép đo tài liệu đo chưa đúng chỗ; đã sửa cả hai và thêm đường nạp lại khi hai lệnh chạy đè lên nhau — không đổi mã sản phẩm."
+  },
+  {
+   "id": "d-20260906T084401Z-31092",
+   "p": "Vòng chấm 2 báo trượt một phép đo nhưng đó là máy chấm chép sai mã thoát; không sửa gì, chạy lại vòng 3 và phép đo xanh."
+  }
+ ]
+}
