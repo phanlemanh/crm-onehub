@@ -45,8 +45,8 @@ evals:
     executor: script
     cmd: config:executors.script.tv_khai_sinh
     expected: >-
-      exit 0. Dung lai ba danh sach TU DIA va doi ba con so bang neo: 79 component trong
-      packages/ui · 35 boc thu vien ngoai · 15 doc kho chuoi dung chung. Lech la thoat
+      exit 0. Dung lai ba danh sach TU DIA va doi ba con so bang neo: 76 component .tsx trong
+      packages/ui · 37 boc thu vien ngoai · 15 doc kho chuoi dung chung. Lech la thoat
       ma 2 kem diff ten file. Danh sach "boc thu vien" sinh tu cau lenh nhap trong file,
       KHONG go tay ten goi.
     paths:
@@ -89,11 +89,12 @@ evals:
   - id: E6
     criterion: AC-5
     executor: test
-    cmd: config:executors.test.rang3_khoa_chet
+    cmd: config:executors.test.tv_canh_kho_ui
     expected: >-
-      exit 0. Tron bo canh kho chuoi van xanh sau khi vong nay them khoa: moi gia tri vi
-      co dau tru dong khai co ten · khong gia tri nao y het en · moi ham ghep bien co
-      khang dinh ghim · khong khoa chet.
+      exit 0. Bo canh cua CHINH kho chuoi ma vong nay them khoa — packages/ui/src/lib/messages.ts
+      — van xanh: moi gia tri vi co dau tru dong khai co ten · khong gia tri nao y het en ·
+      khong khoa chet. Chay bo canh cua apps/app o day la do NHAM KHO: khoa moi khong nam
+      trong do.
     paths:
       - "packages/ui/src/lib/messages.ts"
       - "apps/app/lib/messages/**"

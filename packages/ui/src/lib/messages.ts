@@ -33,6 +33,10 @@ const en = {
 		toEnd: "Scroll to end",
 		toStart: "Scroll to start",
 	},
+	thongBao: {
+		vung: "Notifications",
+		dong: "Close notification",
+	},
 	dialog: {
 		close: "Close",
 	},
@@ -109,6 +113,10 @@ const vi = {
 	messageScroller: {
 		toEnd: "Xuống cuối",
 		toStart: "Lên đầu",
+	},
+	thongBao: {
+		vung: "Thông báo",
+		dong: "Đóng thông báo",
 	},
 	dialog: {
 		close: "Đóng",
