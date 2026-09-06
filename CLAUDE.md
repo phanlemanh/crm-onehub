@@ -75,16 +75,18 @@ màn đó vẫn hiểu đúng thì chữ đó thừa. Dữ liệu người nhậ
 Từ gốc kho, không cần export gì:
 
 ```
-bun run db:test && bun run test
+bun run test
 bun run check-types
 bun run lint
 bun run lint:slop
 ```
 
 Hai lỗi môi trường cũ đã vá 2026-09-01 — cách lách cũ (tự export khoá Google
-giả) nay sai, đừng dùng lại. `agent#test` đỏ ở `retireExhausted` khi cơ sở dữ
-liệu còn hàng `AgentTask` của một lượt chạy bị cắt ngang: chạy `bun run db:test`
-cho sạch rồi mới tin màu đỏ.
+giả) nay sai, đừng dùng lại. Mỗi lượt `bun run test` có cơ sở dữ liệu riêng
+`crm_<id>_test`, tạo trước và drop sau, nên hàng `AgentTask` của một lượt bị cắt
+ngang không sang được lượt kế. Chỉ `bun test` trần trong một gói mới dùng chung
+`crm_test`; thấy `agent#test` đỏ ở `retireExhausted` theo lối đó thì chạy
+`bun run db:test --reset` rồi mới tin màu đỏ. Chi tiết ở `docs/setup.md`.
 
 `bun run dev` ở gốc không chạy trong phiên không có TTY. Chạy từng app:
 `apps/app` 3000, `apps/api` 3001, `apps/agent` 2000. Đăng nhập không cần OAuth:
