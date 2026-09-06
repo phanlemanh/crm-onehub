@@ -42,6 +42,8 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 }
 
 const KHONG_DAU = new Set([
+	"ma.xong",
+	"kenh.tenViDu",
 	"headers.email",
 	"tabs.emails",
 	"contact.emails",
@@ -427,6 +429,51 @@ describe("kho chuoi cua vong ③a", () => {
 			"settings-thanh-vien:bang.doiVaiTro": [
 				"Đổi vai trò của 1",
 				"Đổi vai trò của 12",
+			],
+			"agent-builder-khung:doi.soLuotChay": ["1 lượt chạy", "12 lượt chạy"],
+			"agent-builder-khung:nha.chaoHoi": [
+				"1 cần gì hôm nay?",
+				"12 cần gì hôm nay?",
+			],
+			"agent-builder-tac-nhan:chiTiet.daXoa": ["Đã xoá 1.", "Đã xoá 12."],
+			"agent-builder-tac-nhan:chiTiet.xoaHoi": ["Xoá 1?", "Xoá 12?"],
+			"agent-builder-tac-nhan:kenh.slackGoiLa": [
+				"Slack sẽ gọi nó là #1.",
+				"Slack sẽ gọi nó là #12.",
+			],
+			"agent-builder-tac-nhan:moi.daOTrong": [
+				"OneHub đã ở trong #1 rồi.",
+				"OneHub đã ở trong #12 rồi.",
+			],
+			"agent-builder-tac-nhan:moi.seVao": [
+				"OneHub chưa ở trong #1. Nó vào khi bạn tạo cái này.",
+				"OneHub chưa ở trong #12. Nó vào khi bạn tạo cái này.",
+			],
+			"agent-builder-tac-nhan:viec.chuyenKenh": [
+				"Chuyển từ #1 sang #A",
+				"Chuyển từ #12 sang #A",
+			],
+			"agent-builder-tac-nhan:viec.go": ["Gỡ 1", "Gỡ 12"],
+			"agent-builder-tac-nhan:viec.vaoKenh": [
+				"OneHub vào #1 và ở lại #1 cho tới khi bạn gỡ.",
+				"OneHub vào #12 và ở lại #12 cho tới khi bạn gỡ.",
+			],
+			"agent-builder-ket-qua:ma.soTep": ["1 tệp", "12 tệp"],
+			"agent-builder-ket-qua:ma.soTepDoi": [
+				"1 tệp đã đổi. Lưu là ghi thành một bản mới.",
+				"12 tệp đã đổi. Lưu là ghi thành một bản mới.",
+			],
+			"agent-builder-ket-qua:thoaThuan.duongOng": [
+				"đường ống 1",
+				"đường ống 12",
+			],
+			"agent-builder-ket-qua:thoaThuan.ngayNamIm": [
+				"nằm im từ 1 ngày",
+				"nằm im từ 12 ngày",
+			],
+			"agent-builder-ket-qua:thoaThuan.soThoaThuan": [
+				"1 thoả thuận",
+				"12 thoả thuận",
 			],
 		} satisfies Record<string, [string, string]>;
 

@@ -11,10 +11,10 @@ evals:
       dung hai luot vi/en tren may chu that, redirect: manual. Ba ve tren TUNG route:
       so chuoi bang nhau · moi cap khac nhau tru bang AC-6 · luot vi co dau tru dong
       mien_dau co ten. Tap rong tren mot route la thoat ma 2 goi ten route.
-      GIEO mot tac nhan qua agents.save — thu tuc ghi cua chinh san pham — roi do tren ban
-      ghi do, nen route_khong_dung_duoc phai RONG cho /agents/[agentId]; khai route do la
-      khong-dung-duoc ma no mo duoc la DO goi ten. Vat gieo phai duoc don sau khi do; lenh
-      don that bai la thoat ma 2.
+      Bang dong route-cua-lat.json chia route thanh dung-duoc-ngay va can-mot-ban-ghi-that.
+      Bang do chiu CHIEU DO: chan mo tung route can_vat bang mot dinh danh KHONG CO THAT;
+      route nao van ve ra chu la DO goi ten — ban khai da cu. Route can ban ghi mang sang
+      cong ky duoi nhan GIOI HAN DA KHAI, khong ha xuong doc ma roi ghi dat.
       Chieu do: ghim mot kho chuoi ve "vi" trong mot trang thi luot en hien tieng Viet,
       ve 2 gay, chan do goi ten trang va duong DOM.
     paths:
@@ -83,12 +83,15 @@ evals:
     executor: script
     cmd: config:executors.script.ab_trang_thai
     expected: >-
-      exit 0 khi moi trang thai dung duoc deu doc tieng Viet co dau. Tam trang thai ST-* ke o
-      design. Vi phep do gieo mot tac nhan that, IT NHAT SAU trong tam trang thai phai dung
-      duoc — duoi sau la thoat ma 2 kem danh sach o hut. Trang thai KHONG dung duoc thi GOI TEN
-      kem ly do duoi nhan GIOI HAN DA KHAI va mang sang cong ky — tuyet doi khong ha xuong
-      doc ma roi ghi dat. Khong dung duoc trang thai nao la thoat ma 2 (tap rong).
-      Chieu do: doi cau rong cua danh sach doi ve tieng Anh thi chan do goi ten trang thai.
+      exit 0. Bang dong chin o trang thai (tam o ST-* cua design cong o rong cua thanh ben).
+      Moi o tro mot DUONG vao kho chuoi cua san pham — chu mong doi doc tu do, khong go tay.
+      Duong chet la thoat ma 2 (thieu tien de). O khai dung duoc ma chu KHONG ve ra la DO;
+      o khai KHONG dung duoc ma chu VE RA la DO — ban khai da cu. It nhat MOT o phai dung
+      duoc; khong o nao dung duoc la thoat ma 2. O khong dung duoc GOI TEN kem ly do duoi
+      nhan GIOI HAN DA KHAI va mang sang cong ky — khong ha xuong doc ma roi ghi dat.
+      Chieu do da chung 06/09: (a) lat mot o dung-duoc thanh khong-dung-duoc -> ma 1 goi ten;
+      (b) tro mot o vao duong kho chuoi khong ton tai -> ma 2 goi ten; (c) vet dot bien
+      go {t.doi.trong} khoi man -> CHI chan nay bat, chung rang no do MAN chu khong do KHO.
     paths:
       - "apps/app/components/agent-builder/**"
       - "apps/app/lib/messages/agent-builder-*.ts"
@@ -99,14 +102,16 @@ evals:
     executor: script
     cmd: config:executors.script.ab_khong_dich
     expected: >-
-      exit 0. Tap ung vien sinh tu man that tren MOI route dung duoc; doi chieu bang khai ca
-      hai chieu; thieu hay thua deu thoat ma 2 goi ten. Hai luot phai ra CUNG SO phan tu co
-      chu tren moi route — lech la DO goi ten route. VA moi dong cua bang duoc so GIA TRI giua
-      hai luot: chuoi phai Y HET nhau, so dong so duoc BANG so dong bang; mot gia tri khac nhau
-      giua vi va en la DO goi ten phan tu va route. Dem so phan tu la dieu kien can, khong phai
-      phep do cua lop nay.
-      Chieu do: doi mot gia tri thuong hieu trong ban vi thi chan do dung phan tu; va bo
-      translate="no" khoi mot ten thuong hieu thi chan cung do.
+      exit 0. Bang dong cong chin chuoi ngoai_lat sinh tu sau file hoan sang dot hai.
+      Moi gia tri duoc so theo VI TRI trong cay DOM: cho nao luot vi ve ra gia tri do thi
+      luot en o dung vi tri ay phai ve ra Y HET chuoi do — khac nhau la DO goi ten route,
+      vi tri va chuoi ben kia. Dong khai trong bang ma khong vi tri nao ve ra la thoat ma 2,
+      tru dong khai ro doi tuong nam ngoai man do duoc kem ly do. Khong vi tri nao doi chieu
+      duoc la thoat ma 2.
+      Chieu do da chung 06/09: (a) them mot chuoi DA DICH vao bang -> ma 1, goi dung route,
+      duong DOM va chuoi ben kia; (b) them mot chuoi khong he ve ra -> ma 2 goi ten.
+      Ghi chu: phep so theo GIA TRI (chuoi === chuoi) la mot phep so voi chinh no va da
+      duoc thay bang phep so theo vi tri ngay 06/09.
     paths:
       - "apps/app/components/agent-builder/**"
       - "_acceptance/agent-builder-noi-tieng-viet/rang/**"
@@ -117,11 +122,14 @@ evals:
     executor: script
     cmd: config:executors.script.ab_du_lieu_nguoi_nhap
     expected: >-
-      exit 0. Chan MA: bang dong (file, truong) ke o S3; doc cay cu phap, phan tu JSX boc
-      bieu thuc truong do phai mang translate="no". Chan MAN: moi o khai do_san_duoc phai
-      lay gia tri THAT tu cung luot goi API, mo dung route, va doi translate="no" tren dung
-      gia tri do; nguon rong hoac gia tri khong hien tren man deu la DO.
-      Chieu do: go thuoc tinh khoi mot phan tu thi chan ma do dung dong.
+      exit 0. Bang dong (file, bieu thuc). Chan doc CAY CU PHAP: phan tu JSX boc dung
+      bieu thuc do phai mang translate="no". Thieu thuoc tinh la DO goi ten file:dong va
+      the; bieu thuc khong con trong file la thoat ma 2 (ban khai da cu); bang rong la
+      thoat ma 2. O co doi tuong ngoai thu muc lat khai o ngoai_lat va chiu cung phep do.
+      GIOI HAN DA KHAI: nua do-tren-man-that nam sau cung quyet dinh gieo voi AC-1 —
+      workspace do co 0 tac nhan, 0 hoi thoai.
+      Chieu do da chung 06/09: (a) go translate="no" khoi mot phan tu -> ma 1 goi dung
+      file:dong; (b) tro mot dong vao mot bieu thuc khong ton tai -> ma 2 goi ten.
     paths:
       - "apps/app/components/agent-builder/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

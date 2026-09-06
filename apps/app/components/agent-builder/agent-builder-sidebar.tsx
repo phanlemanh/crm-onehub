@@ -129,7 +129,9 @@ export function AgentBuilderSidebar({
 										)}
 									>
 										<ConversationState state={conversation.state} />
-										<span className="min-w-0 flex-1 truncate">{title}</span>
+										<span className="min-w-0 flex-1 truncate" translate="no">
+											{title}
+										</span>
 									</Link>
 									<DeleteChatAction
 										conversationId={conversation.id}

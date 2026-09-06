@@ -18,11 +18,15 @@
 	"dong": [
 		{
 			"gia_tri": "Slack",
-			"luat": "ten thuong hieu"
+			"luat": "ten thuong hieu",
+			"ngoai_man_do_duoc": true,
+			"vi_sao": "Ten nay ve ra o cum Viec lam duoc tren /agents/[agentId] (Slack) va o thanh dieu huong ung dung (OneHub) — mot cho nam duoi gioi han route can ban ghi, mot cho nam ngoai goc gom chu cua bo thuoc man. Dong van chiu chieu do: neu no VE RA tren mot man do duoc, hai luot phai Y HET nhau, lech la DO."
 		},
 		{
 			"gia_tri": "OneHub",
-			"luat": "ten thuong hieu"
+			"luat": "ten thuong hieu",
+			"ngoai_man_do_duoc": true,
+			"vi_sao": "Ten san pham ve ra o thanh dieu huong ung dung, nam ngoai goc gom chu cua bo thuoc man (goc la phan tu cha cua main). Dong van chiu chieu do: ve ra tren man do duoc ma hai luot lech nhau la DO."
 		}
 	],
 	"ngoai_lat": {

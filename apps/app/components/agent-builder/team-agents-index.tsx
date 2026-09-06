@@ -39,7 +39,10 @@ export function TeamAgentsIndex({ initialAgents }: { initialAgents: Agents }) {
 							</span>
 							<span className="min-w-0 flex-1">
 								<span className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
-									<span className="min-w-0 wrap-break-word font-medium text-sm sm:truncate">
+									<span
+										className="min-w-0 wrap-break-word font-medium text-sm sm:truncate"
+										translate="no"
+									>
 										{agent.name}
 									</span>
 									<span className="shrink-0 text-muted-foreground text-xs">

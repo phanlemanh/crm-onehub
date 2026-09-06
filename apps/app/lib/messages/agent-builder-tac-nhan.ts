@@ -72,7 +72,6 @@ const en = {
 		daXoa: (ten: string) => `${ten} was deleted.`,
 		themViec: "More agent actions",
 		xoaTacNhan: "Delete agent",
-		xoa: "Delete",
 		xoaHoi: (ten: string) => `Delete ${ten}?`,
 		xoaMoTa:
 			"This removes it from the team agent list, disables its triggers, and cancels queued runs. Its run and action history stays in the audit log. A run already in progress may finish.",
@@ -122,7 +121,6 @@ const en = {
 			runs: "Runs",
 			activity: "Activity",
 		},
-		soLuot: (so: string) => `${so} runs`,
 		lichSu: "History",
 		lichSuMoTa: "Every run and every change, newest first.",
 	},
@@ -202,7 +200,6 @@ const vi = {
 		daXoa: (ten: string) => `Đã xoá ${ten}.`,
 		themViec: "Thêm thao tác với tác nhân",
 		xoaTacNhan: "Xoá tác nhân",
-		xoa: "Xoá",
 		xoaHoi: (ten: string) => `Xoá ${ten}?`,
 		xoaMoTa:
 			"Việc này gỡ nó khỏi danh sách tác nhân của đội, tắt mọi mốc kích hoạt, và huỷ các lượt đang xếp. Lịch sử chạy và thao tác vẫn nằm trong sổ kiểm. Lượt đang chạy dở có thể chạy nốt.",
@@ -252,7 +249,6 @@ const vi = {
 			runs: "Lượt chạy",
 			activity: "Hoạt động",
 		},
-		soLuot: (so: string) => `${so} lượt chạy`,
 		lichSu: "Lịch sử",
 		lichSuMoTa: "Mọi lượt chạy và mọi thay đổi, mới nhất trước.",
 	},

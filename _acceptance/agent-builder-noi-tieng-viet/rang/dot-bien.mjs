@@ -19,6 +19,7 @@ const CHAN = [
 	{ ten: "toast", lenh: [join(TRUOC, "chu-ngoai-jsx.mjs"), "--lat", KHAI, "--chan", "toast"] },
 	{ ten: "tieu-de", lenh: [join(TRUOC, "chu-ngoai-jsx.mjs"), "--lat", KHAI, "--chan", "tieu-de"] },
 	{ ten: "tu-dien", lenh: [join(HERE, "tu-dien.mjs")] },
+	{ ten: "trang-thai", lenh: [join(HERE, "man-that.mjs"), "trang-thai"] },
 ];
 
 const khoaToast = BANG.loi_goi[0];
@@ -64,6 +65,14 @@ const VET = [
 			s.replace('const VIEWS = [{ id: "runs" }, { id: "activity" }] as const;',
 				'const VIEWS = [{ id: "runs", nhan: "Runs" }, { id: "activity" }] as const;'),
 		chan: ["moi-chuoi"],
+	},
+	{
+		ten: "go chu trang thai rong khoi man",
+		hinh_dang: "trang-thai",
+		file: `${LAT}/team-agents-index.tsx`,
+		cam: (s) => s.replace("{t.doi.trong}", "{null}"),
+		chan: ["moi-chuoi", "chu-cung-jsx", "trang-thai"],
+		cho_ms: 6000,
 	},
 	{
 		ten: "go muc tu dien khoi CONTEXT.md",

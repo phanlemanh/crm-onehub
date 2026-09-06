@@ -1,0 +1,80 @@
+{
+	"lat": "agent-builder-noi-tieng-viet",
+	"ghi_chu": "Bang DONG cac trang thai cua lat. Chu mong doi KHONG go tay: moi dong tro mot duong vao chinh kho chuoi cua san pham, chan doc gia tri 'vi' tu do. Duong chet la thieu tien de (ma 2). Hai chieu tren cung mot vat: dong khai dung_duoc=true ma chu KHONG ve ra man la DO; dong khai dung_duoc=false ma chu VE RA la DO — ban khai da cu.",
+	"kho": {
+		"khung": "lib/messages/agent-builder-khung.ts#khungMessages",
+		"tac-nhan": "lib/messages/agent-builder-tac-nhan.ts#tacNhanMessages",
+		"ket-qua": "lib/messages/agent-builder-ket-qua.ts#ketQuaMessages"
+	},
+	"o": [
+		{
+			"ma": "ST-doi-rong",
+			"man": "/agents",
+			"kho": "khung",
+			"duong": "doi.trong",
+			"dung_duoc": true
+		},
+		{
+			"ma": "ST-thanhben-rong",
+			"man": "/agents",
+			"kho": "khung",
+			"duong": "thanhBen.trongBayNgay",
+			"dung_duoc": true
+		},
+		{
+			"ma": "ST-doi-dang-tai",
+			"man": "/agents",
+			"dung_duoc": false,
+			"vi_sao": "khung xuong danh sach khong mang chu nao — khong co chuoi de doc, nen hinh dang nay KHONG CO DOI TUONG o lat nay. Khai ra day thay vi tro vao mot duong kho chuoi khong phai cua no.",
+			"khong_co_chu": true
+		},
+		{
+			"ma": "ST-chitiet-chua-chay",
+			"man": "/agents/[agentId]",
+			"kho": "ket-qua",
+			"duong": "thoaThuan.chuaCoHoatDong",
+			"dung_duoc": false,
+			"vi_sao": "man chi tiet can mot ban ghi that; cach gieo chua chot — xem route-cua-lat.json"
+		},
+		{
+			"ma": "ST-chitiet-dang-luu",
+			"man": "/agents/[agentId]",
+			"kho": "tac-nhan",
+			"duong": "viec.dangLuu",
+			"dung_duoc": false,
+			"vi_sao": "can mot ban ghi that, va con la trang thai nhat thoi trong mot luot ghi"
+		},
+		{
+			"ma": "ST-chitiet-da-luu",
+			"man": "/agents/[agentId]",
+			"kho": "tac-nhan",
+			"duong": "viec.daLuu",
+			"dung_duoc": false,
+			"vi_sao": "can mot ban ghi that, va con la trang thai nhat thoi sau mot luot ghi"
+		},
+		{
+			"ma": "ST-chitiet-chan-luu",
+			"man": "/agents/[agentId]",
+			"kho": "tac-nhan",
+			"duong": "viec.khongLuuDuoc",
+			"dung_duoc": false,
+			"vi_sao": "can mot ban ghi that roi tat het viec lam duoc cua no"
+		},
+		{
+			"ma": "ST-kenh-chua-cam",
+			"man": "/agents/[agentId]",
+			"kho": "tac-nhan",
+			"duong": "viec.kenhMoTa",
+			"dung_duoc": false,
+			"vi_sao": "can mot ban ghi that; va cau bao 'Slack chua cam' thuoc components/slack/channel-picker.tsx — kho chuoi cua vong Cai dat da ky, khong phai kho cua lat nay"
+		},
+		{
+			"ma": "ST-ma-dang-ghi",
+			"man": "/agents/[agentId]",
+			"kho": "ket-qua",
+			"duong": "ma.dangGhi",
+			"dung_duoc": false,
+			"vi_sao": "can mot ban ghi that dang co mot luot dung ma chay do"
+		}
+	]
+}

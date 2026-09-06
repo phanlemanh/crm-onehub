@@ -68,6 +68,7 @@ sáu file hoãn là sáu file đã khai, không phải sáu file bị bỏ quên
 | ST-chitiet-chan-luu | Chi tiết tác nhân | Câu chặn: tắt hết việc thì không lưu được | Bật lại một việc |
 | ST-kenh-chua-cam | Việc làm được | Không chọn được kênh vì Slack chưa cắm | Cắm Slack ở Cài đặt |
 | ST-ma-dang-ghi | Bảng mã | Câu "đang ghi mã tác nhân" | Chờ |
+| ST-thanhben-rong | Thanh bên | Câu rỗng: không có hội thoại nào trong 7 ngày qua | Mở một hội thoại |
 <!-- UX-STATE-TABLE>>> -->
 
 ### 4. Hành vi

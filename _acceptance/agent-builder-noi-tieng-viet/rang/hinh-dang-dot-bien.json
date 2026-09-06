@@ -26,6 +26,11 @@
 		{
 			"ten": "tu-dien",
 			"chan_chuyen_trach": "tu-dien"
+		},
+		{
+			"ten": "trang-thai",
+			"chan_chuyen_trach": "trang-thai",
+			"ghi_chu": "Vet GO chu khoi man chu khong them tieng Anh, nen khong chan tinh nao thay. Chi chan dung tren man that moi bat duoc — day la chieu do chung minh chan trang-thai do MAN, khong do KHO CHUOI."
 		}
 	],
 	"khong_co_doi_tuong": {
