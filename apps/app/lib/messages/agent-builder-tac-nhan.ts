@@ -2,9 +2,11 @@ import type { Locale } from "@crm/ui/lib/locale";
 
 const en = {
 	viec: {
-		dangTin: "Post a message",
-		ghiChu: "Write a note or task on the record",
-		tomTat: "Write a summary of the run",
+		nhan: {
+			"slack.message.post": "Post a message",
+			"crm.activity.create": "Write a note or task on the record",
+			"run.summary": "Write a summary of the run",
+		},
 		daLuu: "Saved. A new version is live.",
 		daNhoMoi: "Asked someone to invite OneHub.",
 		khongDocDuocManifest: "This version's manifest cannot be read",
@@ -124,9 +126,11 @@ export type TacNhanMessages = typeof en;
 
 const vi = {
 	viec: {
-		dangTin: "Đăng một tin nhắn",
-		ghiChu: "Ghi chú hoặc tạo việc trên bản ghi",
-		tomTat: "Viết tóm tắt lượt chạy",
+		nhan: {
+			"slack.message.post": "Đăng một tin nhắn",
+			"crm.activity.create": "Ghi chú hoặc tạo việc trên bản ghi",
+			"run.summary": "Viết tóm tắt lượt chạy",
+		},
 		daLuu: "Đã lưu. Một bản mới đang chạy.",
 		daNhoMoi: "Đã nhờ người trong kênh mời OneHub vào.",
 		khongDocDuocManifest: "Không đọc được manifest của bản này",

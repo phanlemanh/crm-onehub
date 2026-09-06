@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale } from "@crm/ui/components/locale-provider";
+import { tacNhanMessages } from "@/lib/messages/agent-builder-tac-nhan";
 import Add from "@carbon/icons-react/es/Add";
 import Close from "@carbon/icons-react/es/Close";
 import Warning from "@carbon/icons-react/es/Warning";
@@ -32,12 +34,6 @@ export type Resource = Extract<
 	{ readable: true }
 >["dataScope"]["resources"][number];
 
-const ACTION_LABELS = new Map([
-	["slack.message.post", "Post a message"],
-	["crm.activity.create", "Write a note or task on the record"],
-	["run.summary", "Write a summary of the run"],
-]);
-
 export function AgentCapabilities({
 	agentId,
 	canManage,
@@ -47,6 +43,7 @@ export function AgentCapabilities({
 	canManage: boolean;
 	capabilities: Capabilities;
 }) {
+	const t = tacNhanMessages(useLocale());
 	const trpc = useTRPC();
 	const queryClient = useQueryClient();
 
@@ -73,7 +70,7 @@ export function AgentCapabilities({
 					queryKey: trpc.agents.byId.pathKey(),
 				});
 				reset();
-				toast.success("Saved. A new version is live.");
+				toast.success(t.viec.daLuu);
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -83,7 +80,7 @@ export function AgentCapabilities({
 		trpc.slack.joinChannel.mutationOptions({
 			onSuccess: async () => {
 				await channels.reload();
-				toast.success("Asked someone to invite Comp AI.");
+				toast.success(t.viec.daNhoMoi);
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -93,9 +90,9 @@ export function AgentCapabilities({
 		return (
 			<Alert variant="warning">
 				<Icon icon={Warning} />
-				<AlertTitle>This version's manifest cannot be read</AlertTitle>
+				<AlertTitle>{t.viec.khongDocDuocManifest}</AlertTitle>
 				<AlertDescription>
-					{capabilities.problem ?? "The manifest is not in a shape we know."}
+					{capabilities.problem ?? t.viec.manifestLa}
 				</AlertDescription>
 			</Alert>
 		);
@@ -119,9 +116,9 @@ export function AgentCapabilities({
 		shownResources.length === 0 &&
 		capabilities.dataScope?.mode !== "WORKSPACE";
 	const blocked = everyActionOff
-		? "Leave one action on. An agent that does nothing cannot be saved."
+		? t.viec.phaiConMotViec
 		: scopeEmptied
-			? "Add one record. An empty list opens every record in the workspace."
+			? t.viec.phaiConMotBanGhi
 			: null;
 
 	const save = () => {
@@ -166,8 +163,8 @@ export function AgentCapabilities({
 							</CreateChannelDialog>
 						) : null
 					}
-					summary="One channel. Comp AI joins it when you save."
-					title="Lives in"
+					summary={t.viec.kenhMoTa}
+					title={t.viec.kenhTieuDe}
 				>
 					<ChannelPicker
 						canInviteItself={canInviteItself}
@@ -183,8 +180,8 @@ export function AgentCapabilities({
 			) : null}
 
 			<Section
-				summary="If it is off here, it cannot do it."
-				title="What it can do there"
+				summary={t.viec.lamGiMoTa}
+				title={t.viec.lamGiTieuDe}
 			>
 				<div className="flex flex-col">
 					{capabilities.actions.map((action) => (
@@ -194,7 +191,7 @@ export function AgentCapabilities({
 						>
 							<div className="min-w-0 flex-1">
 								<p className="text-sm">
-									{ACTION_LABELS.get(action.type) ?? action.type}
+									{t.viec.nhan[action.type as keyof typeof t.viec.nhan] ?? action.type}
 								</p>
 								<p className="text-muted-foreground text-xs">
 									{action.summary || action.provider}
@@ -215,7 +212,7 @@ export function AgentCapabilities({
 					))}
 					{capabilities.actions.length === 0 ? (
 						<p className="text-muted-foreground text-sm">
-							Nothing outside the CRM.
+							{t.viec.khongRaNgoai}
 						</p>
 					) : null}
 				</div>
@@ -223,15 +220,15 @@ export function AgentCapabilities({
 
 			<Section
 				summary={
-					capabilities.dataScope?.summary || "What it reads to do its job."
+					capabilities.dataScope?.summary || t.viec.thayGiMoTa
 				}
-				title="What it can see"
+				title={t.viec.thayGiTieuDe}
 			>
 				<div className="flex flex-wrap gap-2">
 					{shownResources.length === 0 &&
 					capabilities.dataScope?.mode === "WORKSPACE" ? (
 						<span className="flex h-7 items-center rounded-md border px-2.5 text-sm">
-							Every record in the workspace
+							{t.viec.moiBanGhi}
 						</span>
 					) : null}
 
@@ -286,16 +283,16 @@ export function AgentCapabilities({
 				description={
 					blocked ??
 					(channelChanged
-						? `Comp AI joins #${to}. It stays in #${from} until you remove it.`
-						: "The old version stays in the history.")
+						? t.viec.vaoKenh(to ?? "")
+						: t.viec.banCuGiuLai)
 				}
 				open={dirty}
 				title={
 					blocked
-						? "This change cannot be saved"
+						? t.viec.khongLuuDuoc
 						: channelChanged
-							? `Moving from #${from} to #${to}`
-							: "Changing what this agent can do"
+							? t.viec.chuyenKenh(from ?? "", to ?? "")
+							: t.viec.doiViecLamDuoc
 				}
 			>
 				<Button
@@ -304,14 +301,14 @@ export function AgentCapabilities({
 					size="sm"
 					variant="outline"
 				>
-					Discard
+					{t.viec.boQua}
 				</Button>
 				<Button
 					disabled={revise.isPending || blocked !== null}
 					onClick={save}
 					size="sm"
 				>
-					{revise.isPending ? "Saving…" : "Save"}
+					{revise.isPending ? t.viec.dangLuu : t.viec.luu}
 				</Button>
 			</SaveBar>
 		</div>
@@ -319,6 +316,7 @@ export function AgentCapabilities({
 }
 
 function ResourcePicker({ onPick }: { onPick: (resource: Resource) => void }) {
+	const t = tacNhanMessages(useLocale());
 	const trpc = useTRPC();
 	const [open, setOpen] = useState(false);
 	const [query, setQuery] = useState("");
@@ -343,7 +341,7 @@ function ResourcePicker({ onPick }: { onPick: (resource: Resource) => void }) {
 				<input
 					className="w-full border-b bg-transparent px-3 py-2.5 text-sm outline-none"
 					onChange={(event) => setQuery(event.target.value)}
-					placeholder="Search records and integrations"
+					placeholder={t.viec.timBanGhi}
 					value={query}
 				/>
 				<div className="flex max-h-64 flex-col overflow-y-auto py-1">
@@ -371,7 +369,7 @@ function ResourcePicker({ onPick }: { onPick: (resource: Resource) => void }) {
 					))}
 					{(results.data ?? []).length === 0 ? (
 						<p className="px-3 py-2 text-muted-foreground text-sm">
-							Nothing matches.
+							{t.viec.khongKhop}
 						</p>
 					) : null}
 				</div>
