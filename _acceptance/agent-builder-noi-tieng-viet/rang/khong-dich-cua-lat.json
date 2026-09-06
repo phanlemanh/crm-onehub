@@ -30,23 +30,8 @@
 		}
 	],
 	"ngoai_lat": {
-		"ghi_chu": "Chuoi NGOAI LAT: chung ve tren man cua lat nhung sinh tu SAU FILE HOAN sang dot hai (cua so tro chuyen). Day la GIOI HAN DA KHAI, KHONG phai da dich. Moi dong phai con ve ra tren man — dong chet la DO, vi no nghia la file hoan da doi ma ban khai chua theo.",
-		"khoi": [
-			{
-				"file": "apps/app/components/agent-builder/agent-composer.tsx",
-				"vi_sao": "o soan cua cua so tro chuyen — hoan sang dot hai, ve tren /chat vi trang chu lat nhung o soan vao",
-				"chuoi": [
-					"Sending",
-					"Sent",
-					"Send failed",
-					"Message the agent builder",
-					"Tag CRM records and integrations",
-					"Attach files",
-					"Open slash commands",
-					"Send message"
-				]
-			}
-		],
+		"ghi_chu": "Chuoi NGOAI LAT: dot HAI da dich xong sau file hoan, nen khoi nay RONG co chu y. Giu khoi lai chu KHONG xoa — vang mat han la duong sach-gia, va chan ngoai-lat-rong cua dot hai bat dung dieu do.",
+		"khoi": [],
 		"mien_dau": [
 			"/"
 		]

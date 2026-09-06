@@ -1,6 +1,6 @@
 {
 	"lat": "agent-builder-noi-tieng-viet",
-	"ghi_chu": "Dot MOT cua hai dot. Dan so quet khong de quy tung thu muc. Sau file cua cua so tro chuyen nam trong khong_quet: chung se duoc dich o dot hai, va viec chung con tieng Anh la DUNG THIET KE — can gat khong_quet o day do bang QUAN HE (chu cua dot nay ro sang vung hoan) chu khong bang 'con tieng Anh'.",
+	"ghi_chu": "Dot MOT cua hai dot. Dan so quet khong de quy tung thu muc. Sau file cua cua so tro chuyen nam trong khong_quet: chung DA BAN GIAO cho ho so cua-so-tro-chuyen-noi-tieng-viet, va ho so do quet chung. Quan he lien-ho-so do o chan ban-giao cua ben nhan: ho so duoc goi ten phai ton tai VA ban khai cua no phai that su chua file do.",
 	"thu_muc": [
 		"apps/app/components/agent-builder",
 		"apps/app/app/(app)/[slug]/(agent-builder)",
@@ -14,32 +14,32 @@
 		{
 			"duong": "apps/app/components/agent-builder/agent-builder-chat.tsx",
 			"vi_sao": "cua so tro chuyen — dot hai",
-			"hoan": true
+			"chuyen_giao": "cua-so-tro-chuyen-noi-tieng-viet"
 		},
 		{
 			"duong": "apps/app/components/agent-builder/agent-composer.tsx",
 			"vi_sao": "o soan cua cua so tro chuyen — dot hai",
-			"hoan": true
+			"chuyen_giao": "cua-so-tro-chuyen-noi-tieng-viet"
 		},
 		{
 			"duong": "apps/app/components/agent-builder/agent-history.tsx",
 			"vi_sao": "dong thoi gian cua cua so tro chuyen — dot hai",
-			"hoan": true
+			"chuyen_giao": "cua-so-tro-chuyen-noi-tieng-viet"
 		},
 		{
 			"duong": "apps/app/components/agent-builder/share-chat-dialog.tsx",
 			"vi_sao": "hop chia se hoi thoai — dot hai",
-			"hoan": true
+			"chuyen_giao": "cua-so-tro-chuyen-noi-tieng-viet"
 		},
 		{
 			"duong": "apps/app/components/agent-builder/chat-chips.tsx",
 			"vi_sao": "the goi y trong cua so tro chuyen — dot hai",
-			"hoan": true
+			"chuyen_giao": "cua-so-tro-chuyen-noi-tieng-viet"
 		},
 		{
 			"duong": "apps/app/components/agent-builder/delete-chat-action.tsx",
 			"vi_sao": "nut xoa hoi thoai — dot hai",
-			"hoan": true
+			"chuyen_giao": "cua-so-tro-chuyen-noi-tieng-viet"
 		}
 	],
 	"mien_tru": [],
