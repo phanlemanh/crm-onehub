@@ -76,17 +76,34 @@ function chanDanSo() {
 	const loaiRa = khai.khong_quet ?? [];
 	if (loaiRa.length > 0) {
 		const conAnh = [];
+		const hoan = [];
 		for (const k of loaiRa) {
 			const ma = chay([`${HERE}/moi-chuoi.mjs`, "--lat", KHAI_PATH, "--chi", k.duong]).ma;
-			if (ma === 1) conAnh.push(k);
+			if (ma !== 1) continue;
+			if (k.hoan === true) hoan.push(k);
+			else conAnh.push(k);
 		}
 		for (const k of conAnh)
 			console.log(
 				`LOAI TRU CHE GIAU: "${k.duong}" (${k.vi_sao}) van con chuoi tieng Anh — ` +
 					"loai tru chi hop le cho file KHONG phai be mat cua lat, khong phai cho file kho dich.",
 			);
-		if (conAnh.length > 0) process.exit(1);
-		console.log(`can gat khong_quet: ${loaiRa.length} dong, khong dong nao che giau chu tieng Anh`);
+		const hoanChet = loaiRa.filter((k) => {
+			if (k.hoan !== true) return false;
+			const ma = chay([`${HERE}/moi-chuoi.mjs`, "--lat", KHAI_PATH, "--chi", k.duong]).ma;
+			return ma !== 1;
+		});
+		for (const k of hoanChet)
+			console.log(
+				`DONG HOAN DA CHET: "${k.duong}" khai la be mat HOAN sang dot sau ma khong con chuoi tieng Anh nao — ` +
+					"dot sau da lam roi, hay dong khai da cu. Go no khoi khong_quet va dua vao dan so quet.",
+			);
+		if (conAnh.length > 0 || hoanChet.length > 0) process.exit(1);
+		if (hoan.length > 0)
+			console.log(
+				`can gat khong_quet: ${hoan.length} dong khai HOAN sang dot sau — con tieng Anh la dung thiet ke, va quan he "chu cua dot nay ro sang vung hoan" do o chan khai-sinh.`,
+			);
+		console.log(`can gat khong_quet: ${loaiRa.length} dong, khong dong nao che giau chu tieng Anh ngoai cac dong khai hoan.`);
 	}
 	const thuMucDau = JSON.parse(readFileSync(KHAI_PATH, "utf8")).thu_muc[0];
 	const moi = `${GOC}/${thuMucDau}/zz-tam-do-dan-so.tsx`;

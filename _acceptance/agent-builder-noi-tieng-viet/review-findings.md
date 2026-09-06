@@ -19,6 +19,14 @@ Vòng chấm ngày 06/09, chạy tuần tự từng lệnh (điều khoản CLAS
 4. **AC-5 không có chân nào.** Ổ cắm `ab_trang_thai` trỏ vào một chân chưa viết;
    nó thoát mã 2 với câu "chưa biết chân". Nay có chân thật, chín ô, hai chiều.
 
+4. **E11 chưa từng chạy trong vòng này, và nó đỏ.** Chân dân-số-từ-đĩa cấm mọi
+   dòng loại trừ còn chuỗi tiếng Anh, với lý lẽ "loại trừ chỉ hợp lệ cho file
+   KHÔNG phải bề mặt của lát". AC-8 của lát này nói ngược lại một cách có chủ ý:
+   sáu file bề mặt hoãn sang đợt hai *phải* còn tiếng Anh. Đã thêm cờ **`hoan`**
+   cho dòng loại trừ — chọn tham gia, nên hai hồ sơ đã ký (cả hai có
+   `khong_quet` rỗng) không đi qua nhánh này. Cờ có chiều đỏ riêng: một dòng khai
+   hoãn mà file đó KHÔNG còn chuỗi tiếng Anh nào là ĐỎ, vì bản khai đã cũ.
+
 ## Ngoài hợp đồng
 
 1. **Gốc gom chữ của bộ thước màn dùng chung không chứa thanh bên.** Gốc là phần

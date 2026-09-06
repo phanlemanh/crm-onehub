@@ -13,27 +13,33 @@
 	"khong_quet": [
 		{
 			"duong": "apps/app/components/agent-builder/agent-builder-chat.tsx",
-			"vi_sao": "cua so tro chuyen — dot hai"
+			"vi_sao": "cua so tro chuyen — dot hai",
+			"hoan": true
 		},
 		{
 			"duong": "apps/app/components/agent-builder/agent-composer.tsx",
-			"vi_sao": "o soan cua cua so tro chuyen — dot hai"
+			"vi_sao": "o soan cua cua so tro chuyen — dot hai",
+			"hoan": true
 		},
 		{
 			"duong": "apps/app/components/agent-builder/agent-history.tsx",
-			"vi_sao": "dong thoi gian cua cua so tro chuyen — dot hai"
+			"vi_sao": "dong thoi gian cua cua so tro chuyen — dot hai",
+			"hoan": true
 		},
 		{
 			"duong": "apps/app/components/agent-builder/share-chat-dialog.tsx",
-			"vi_sao": "hop chia se hoi thoai — dot hai"
+			"vi_sao": "hop chia se hoi thoai — dot hai",
+			"hoan": true
 		},
 		{
 			"duong": "apps/app/components/agent-builder/chat-chips.tsx",
-			"vi_sao": "the goi y trong cua so tro chuyen — dot hai"
+			"vi_sao": "the goi y trong cua so tro chuyen — dot hai",
+			"hoan": true
 		},
 		{
 			"duong": "apps/app/components/agent-builder/delete-chat-action.tsx",
-			"vi_sao": "nut xoa hoi thoai — dot hai"
+			"vi_sao": "nut xoa hoi thoai — dot hai",
+			"hoan": true
 		}
 	],
 	"mien_tru": [],
