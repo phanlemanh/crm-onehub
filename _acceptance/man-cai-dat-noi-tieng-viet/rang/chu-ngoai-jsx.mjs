@@ -222,6 +222,16 @@ function chanTieuDe() {
 		process.exit(2);
 	}
 
+	if (o.length === 0) {
+		console.log(
+			"KHONG DO DUOC: chan tieu de khong co doi tuong o lat nay — 0 o tieu de.",
+		);
+		console.log(
+			"  Tap quan sat rong khong bao gio la dat: mot lat khong so huu page.tsx nao thi phai KHAI ra dieu do, khong duoc nhan mot mau xanh tren khong.",
+		);
+		process.exit(2);
+	}
+
 	const thanhBen = o.filter((x) => x.loai === "nhan-thanh-ben");
 	const lac = thanhBen.filter((x) => x.khoa === null || !khoKhoa.has(x.khoa));
 	for (const x of lac)

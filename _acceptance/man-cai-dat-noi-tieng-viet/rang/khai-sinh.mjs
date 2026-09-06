@@ -80,7 +80,7 @@ function chanDanSo() {
 		for (const k of loaiRa) {
 			const ma = chay([`${HERE}/moi-chuoi.mjs`, "--lat", KHAI_PATH, "--chi", k.duong]).ma;
 			if (ma !== 1) continue;
-			if (k.hoan === true) hoan.push(k);
+			if (k.hoan === true || String(k.chuyen_giao) === k.chuyen_giao) hoan.push(k);
 			else conAnh.push(k);
 		}
 		for (const k of conAnh)
@@ -90,6 +90,7 @@ function chanDanSo() {
 			);
 		const hoanChet = loaiRa.filter((k) => {
 			if (k.hoan !== true) return false;
+			if (String(k.chuyen_giao) === k.chuyen_giao) return false;
 			const ma = chay([`${HERE}/moi-chuoi.mjs`, "--lat", KHAI_PATH, "--chi", k.duong]).ma;
 			return ma !== 1;
 		});
@@ -99,9 +100,14 @@ function chanDanSo() {
 					"dot sau da lam roi, hay dong khai da cu. Go no khoi khong_quet va dua vao dan so quet.",
 			);
 		if (conAnh.length > 0 || hoanChet.length > 0) process.exit(1);
-		if (hoan.length > 0)
+		const banGiao = loaiRa.filter((k) => String(k.chuyen_giao) === k.chuyen_giao);
+		if (hoan.length - banGiao.length > 0)
 			console.log(
-				`can gat khong_quet: ${hoan.length} dong khai HOAN sang dot sau — con tieng Anh la dung thiet ke, va quan he "chu cua dot nay ro sang vung hoan" do o chan khai-sinh.`,
+				`can gat khong_quet: ${hoan.length - banGiao.length} dong khai HOAN sang dot sau — con tieng Anh la dung thiet ke.`,
+			);
+		if (banGiao.length > 0)
+			console.log(
+				`can gat khong_quet: ${banGiao.length} dong khai BAN GIAO cho ho so khac — quan he lien-ho-so do o chan ban-giao cua ho so nhan, KHONG do o day.`,
 			);
 		console.log(`can gat khong_quet: ${loaiRa.length} dong, khong dong nao che giau chu tieng Anh ngoai cac dong khai hoan.`);
 	}
