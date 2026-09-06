@@ -2,7 +2,9 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const GOC = join(import.meta.dirname, "..", "..", "..");
-const CAU_HINH = join(GOC, "_acceptance", "config.yaml");
+const co = process.argv.indexOf("--config");
+const CAU_HINH =
+	co === -1 ? join(GOC, "_acceptance", "config.yaml") : process.argv[co + 1];
 
 const SCRIPT = JSON.parse(
 	readFileSync(join(GOC, "package.json"), "utf8"),
@@ -62,7 +64,12 @@ for (const k of khoa) {
 	for (const than of giaiLenh(lenh, SCRIPT))
 		console.log(`              ${than === lenh ? than : `→ ${than}`}`);
 	if (an) thieu.push(`${k} — lenh "${lenh}" chay qua turbo ma KHONG co --force`);
+	if (k.startsWith("executors.test.") && !/\bdb:test\b/.test(lenh))
+		thieu.push(
+			`${k} — o cam test cua cong THIEU ve dung lai co so du lieu test (db:test); --force mot minh khong cham toi trang thai ngoai khoa cache`,
+		);
 }
+console.log(`da soi ${khoa.length} lenh`);
 
 if (thieu.length > 0) {
 	for (const t of thieu)

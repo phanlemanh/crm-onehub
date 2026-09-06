@@ -38,7 +38,7 @@ nó: rút vế `db:test` thì `agent#test` sẽ đỏ ở `retireExhausted` vì 
 sót lại — đúng cái bẫy `CLAUDE.md` đã ghi — mà không chân nào chỉ được nguyên nhân.
 
 Việc **giải tên script** là bắt buộc chứ không phải tinh tế thừa: đoán theo tên đã cho
-một báo động giả ngay lần chạy đầu — `bun run lint:slop` trông như một lệnh lint nhưng
+một báo động giả ngay lượt chạy đầu — `bun run lint:slop` trông như một lệnh lint nhưng
 giải ra là `oxlint` chạy thẳng, không qua turbo.
 
 ### AC-2 — Dân số lấy từ config, không gõ tay

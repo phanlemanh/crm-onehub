@@ -5,7 +5,7 @@ recheck: strict
 feature_loop:
   ui_standards_skill: web-design-guidelines
   suite_keys:
-    - executors.test.api
+    - executors.test.api_khong_cache
     - executors.script.check_types_khong_cache
     - executors.script.lint_khong_cache
     - executors.script.lint_slop
