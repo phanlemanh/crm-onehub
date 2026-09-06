@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3a71e509e039603d969b33fdfb4b12ad4ae57bd6
+verified_commit: 7705ef6b07754baa39374895e8843ac76ff49c5a
 run_id: s4r1-20260906T102507Z-35290
 human_signoff: Manh Phan 2026-09-06
 ---
@@ -127,6 +127,22 @@ human_signoff: Manh Phan 2026-09-06
 
 Tất cả mã 0: `bun run db:test && bun run test` · `bun run check-types` ·
 `bun run lint` · `bun run lint:slop`.
+
+### Re-pin lần 1 — 06/09, do một ca test lọt vào commit gói bằng chứng sau lượt chấm
+
+run_id: repin-20260906T131500Z-88301
+sha: 7705ef6b07754baa39374895e8843ac76ff49c5a · suites: 4 lệnh exit 0
+
+`packages/ui/test/render-diff.spec.tsx` — ca vẽ cho `Sonner` — đổi SAU mốc ghim cũ
+`3a71e509`, nên lưới stale của pre-merge chặn đúng. Lượt lane này chạy CƯỠNG BỨC
+(`--force`), 0 cache: test 11/11 · check-types 13/13 · lint 9/9 (`apps/app` về đúng
+ba cảnh báo có sẵn) · lint:slop 0 lỗi.
+
+**Lượt chạy cache đã che một màu đỏ.** Chạy lại có cache thì cả bốn lệnh mã 0; chạy
+cưỡng bức song song thì `api#test` đỏ ở `mailbox-thread-writer` — nhiều gói dùng
+CHUNG một cơ sở dữ liệu test nên đụng ràng buộc duy nhất `rfcMessageId`. Chạy nối
+tiếp (`--concurrency=1`) thì xanh, và chạy riêng `apps/api` cũng xanh (385 pass, 0
+fail). Đây là tính chất của LỆNH CHỨNG, không phải của mã vòng này.
 
 ## Vì sao PASS
 
