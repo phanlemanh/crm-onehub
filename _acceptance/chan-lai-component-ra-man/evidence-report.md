@@ -1,7 +1,7 @@
 ---
 schema_version: 2
 feature_slug: chan-lai-component-ra-man
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
@@ -9,7 +9,7 @@ enforcement_mode: strict
 bypass_used: false
 verified_commit: 972df8bc7c572c3826ef1ba3f2d41bf9237ae8dd
 run_id: s4r1-20260906T145103Z-21187
-human_signoff:
+human_signoff: Manh Phan 2026-09-06
 ---
 
 # Evidence Report: chan-lai-component-ra-man
@@ -26,7 +26,7 @@ human_signoff:
 | E8 | AC-8 | test | PASS |
 | E9 | AC-9 | script | PASS |
 | E11 | AC-11 | script | PASS |
-| E10 | AC-10 | judgment | UNCERTAIN |
+| E10 | AC-10 | judgment | PASS |
 
 ## Evidence
 
@@ -141,10 +141,10 @@ human_signoff:
 
 - eval: E10
   judged_by: nguoi — chu kho, Cong 2
-  verdict: UNCERTAIN
+  verdict: PASS
   run_id: s4r1-20260906T145103Z-21187-E10
   verified_at: 2026-09-06T14:52:28Z
-  human_override:
+  human_override: Đạt — Manh Phan 2026-09-06
   rationale: |
     Muoi hai chuoi vong nay dua ve kho chuoi dung chung — nhan cho, nhan tim, nhan
     trong, bang lenh, chon ngay, dang tai, dang nghi — co doc nhu tieng Viet cua
@@ -156,10 +156,11 @@ Tat ca ma 0, chay CUONG BUC (--force) va NOI TIEP (--concurrency=1), 0 cache:
 `bun run db:test && bun run test` · `bun run check-types` · `bun run lint`
 (apps/app ve dung ba canh bao co san) · `bun run lint:slop`.
 
-## Vi sao PENDING-JUDGMENT
+## Vi sao PASS
 
 Muoi chan may deu ma 0 trong mot luot chay CO GHI SO — moi run_id mint luc thuc thi
-va co mat trong run-log.jsonl. O thu muoi mot la phan xet cua nguoi (E10).
+va co mat trong run-log.jsonl. O thu muoi mot la phan xet cua nguoi (E10), da cham Dat
+o Cong 2.
 
 ## So do
 

@@ -5,7 +5,7 @@ slug: chan-lai-component-ra-man
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-06
 design_doc: docs/superpowers/specs/2026-09-06-chan-lai-component-ra-man-design.md
