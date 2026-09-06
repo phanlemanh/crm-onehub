@@ -21,6 +21,7 @@ import {
 	InputGroupAddon,
 	InputGroupInput,
 } from "@crm/ui/components/input-group";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Popover,
 	PopoverContent,
@@ -40,6 +41,10 @@ import {
 	consumeBuilderCommand,
 	consumeBuilderIntent,
 } from "@/lib/agent-builder";
+import {
+	type OSoanMessages,
+	oSoanMessages,
+} from "@/lib/messages/agent-builder-o-soan";
 import { useTRPC } from "@/lib/trpc/client";
 import { AGENT_COMPOSER_CLASS_NAME } from "../agent-composer-frame";
 import {
@@ -85,8 +90,7 @@ type PendingSubmission = {
 
 const CREATE_AGENT_COMMAND = {
 	commandType: "CREATE_AGENT" as const,
-	invocation: "/Create agent",
-	label: "Create agent",
+	invocation: "/create-agent",
 };
 
 type ComposerCommand = typeof CREATE_AGENT_COMMAND;
@@ -414,6 +418,7 @@ export function AgentComposer({
 		clientRequestId: string,
 	) => Promise<void>;
 }) {
+	const t = oSoanMessages(useLocale());
 	const trpc = useTRPC();
 	const pendingSubmission = useRef<PendingSubmission | null>(null);
 	const editor = useRef<HTMLDivElement>(null);
@@ -535,7 +540,7 @@ export function AgentComposer({
 					disabled={!canSend}
 					aria-busy={submitAction.pending || state.attachmentsReading}
 					aria-label={
-						state.attachmentsReading ? "Preparing attachments" : "Send message"
+						state.attachmentsReading ? t.oSoan.dangChuanBiTep : t.oSoan.gui
 					}
 					onClick={submit}
 					className="rounded-full"
@@ -544,11 +549,13 @@ export function AgentComposer({
 						status={state.attachmentsReading ? "pending" : submitAction.status}
 						pendingLabel={
 							<span className="sr-only">
-								{state.attachmentsReading ? "Preparing attachments" : "Sending"}
+								{state.attachmentsReading
+									? t.oSoan.dangChuanBiTep
+									: t.oSoan.dangGui}
 							</span>
 						}
-						successLabel={<span className="sr-only">Sent</span>}
-						errorLabel={<span className="sr-only">Send failed</span>}
+						successLabel={<span className="sr-only">{t.oSoan.daGui}</span>}
+						errorLabel={<span className="sr-only">{t.oSoan.guiHong}</span>}
 					>
 						<Icon icon={ArrowUp} />
 					</AsyncButtonContent>
@@ -589,11 +596,9 @@ function ComposerEditor({
 	onRemoveContext: (key: string) => void;
 	onSubmit: () => void;
 }) {
+	const t = oSoanMessages(useLocale());
 	const parts = composerEditorParts(state);
-	const placeholder =
-		mode === "home"
-			? "Ask about your CRM or automate a task…"
-			: "Send a message";
+	const placeholder = mode === "home" ? t.oSoan.datCauHoi : t.oSoan.guiTin;
 	const commit = () => {
 		const root = editorRef.current;
 		if (!root || composingRef.current) return;
@@ -610,7 +615,7 @@ function ComposerEditor({
 			ref={editorRef}
 			role="textbox"
 			tabIndex={disabled ? -1 : 0}
-			aria-label="Message the agent builder"
+			aria-label={t.oSoan.nhanOSoan}
 			aria-multiline="true"
 			aria-disabled={disabled}
 			data-empty={state.draft.length === 0 && state.anchors.length === 0}
@@ -770,12 +775,13 @@ function ComposerContextToken({
 	disabled: boolean;
 	onRemove: (key: string) => void;
 }) {
+	const t = oSoanMessages(useLocale());
 	const remove = disabled ? undefined : () => onRemove(anchor.key);
 	let content: React.ReactNode = null;
 	if (anchor.key === COMMAND_CONTEXT_KEY && state.command) {
 		content = (
 			<ChatCommandChip
-				label={state.command.label}
+				label={t.oSoan.taoTacNhan}
 				icon={Application}
 				variant="composer"
 				onRemove={remove}
@@ -1232,6 +1238,7 @@ function ResourcePicker({
 	getInsertionOffset: () => number;
 	onPicked: (key: string) => void;
 }) {
+	const t = oSoanMessages(useLocale());
 	const add = (resource: BuilderResource) => {
 		dispatch({
 			type: "resource.added",
@@ -1253,7 +1260,7 @@ function ResourcePicker({
 				<Button
 					variant="ghost"
 					size="icon-sm"
-					aria-label="Tag CRM records and integrations"
+					aria-label={t.oSoan.gan}
 					disabled={disabled}
 				>
 					<Icon icon={Add} />
@@ -1270,8 +1277,8 @@ function ResourcePicker({
 									value: event.target.value,
 								})
 							}
-							placeholder="Search CRM"
-							aria-label="Search CRM"
+							placeholder={t.oSoan.timCrm}
+							aria-label={t.oSoan.timCrm}
 							disabled={disabled}
 						/>
 						<InputGroupAddon>
@@ -1303,7 +1310,7 @@ function ResourcePicker({
 					})}
 					<SkeletonSwap
 						loading={loading}
-						label="CRM records"
+						label={t.oSoan.nhomBanGhi}
 						skeleton={<ResourceResultsSkeleton />}
 					>
 						{resources.map((resource) => (
@@ -1318,7 +1325,7 @@ function ResourcePicker({
 						))}
 						{ready && connectedGoogle.length === 0 && resources.length === 0 ? (
 							<p className="px-3 py-5 text-center text-muted-foreground text-xs">
-								No matching records.
+								{t.oSoan.khongKhop}
 							</p>
 						) : null}
 					</SkeletonSwap>
@@ -1341,12 +1348,13 @@ function AttachmentPicker({
 	getInsertionOffset: () => number;
 	onPicked: (key: string) => void;
 }) {
+	const t = oSoanMessages(useLocale());
 	const input = useRef<HTMLInputElement>(null);
 	const addFiles = async (files: FileList | null) => {
 		if (!files || files.length === 0) return;
 		dispatch({ type: "attachments.reading.started" });
 		try {
-			const attachments = await readFiles(files);
+			const attachments = await readFiles(t, files);
 			const accepted = attachments.slice(0, remaining);
 			const lastAccepted = accepted.at(-1);
 			if (lastAccepted) {
@@ -1358,7 +1366,7 @@ function AttachmentPicker({
 				onPicked(attachmentContextKey(lastAccepted));
 			}
 		} catch {
-			toast.error("Those files could not be attached. Try again.");
+			toast.error(t.oSoan.dinhTepHong);
 		} finally {
 			dispatch({ type: "attachments.reading.finished" });
 		}
@@ -1380,7 +1388,7 @@ function AttachmentPicker({
 			<Button
 				variant="ghost"
 				size="icon-sm"
-				aria-label="Attach files"
+				aria-label={t.oSoan.dinhTep}
 				disabled={disabled}
 				onClick={() => input.current?.click()}
 			>
@@ -1403,6 +1411,7 @@ function CommandPicker({
 	getInsertionOffset: () => number;
 	onPicked: (key: string) => void;
 }) {
+	const t = oSoanMessages(useLocale());
 	return (
 		<Popover
 			open={disabled ? false : open}
@@ -1414,7 +1423,7 @@ function CommandPicker({
 				<Button
 					variant="ghost"
 					size="icon-sm"
-					aria-label="Open slash commands"
+					aria-label={t.oSoan.moLenh}
 					disabled={disabled}
 					className="font-mono text-sm"
 				>
@@ -1435,9 +1444,7 @@ function CommandPicker({
 					disabled={disabled}
 				>
 					<Icon icon={Application} className="size-4 text-muted-foreground" />
-					<span className="font-medium text-xs">
-						/{CREATE_AGENT_COMMAND.label}
-					</span>
+					<span className="font-medium text-xs">{t.oSoan.taoTacNhan}</span>
 				</button>
 			</PopoverContent>
 		</Popover>
@@ -1500,6 +1507,7 @@ function ResourceButton({
 }
 
 async function readFiles(
+	t: OSoanMessages,
 	files: FileList | null,
 ): Promise<BuilderUploadAttachment[]> {
 	if (!files) return [];
@@ -1507,19 +1515,19 @@ async function readFiles(
 
 	for (const file of Array.from(files).slice(0, 5)) {
 		if (file.size === 0) {
-			toast.error(`${file.name} is empty.`);
+			toast.error(t.tep.rong(file.name));
 			continue;
 		}
 		if (file.size > 2_000_000) {
-			toast.error(`${file.name} is larger than 2 MB.`);
+			toast.error(t.tep.quaLon(file.name));
 			continue;
 		}
 		if (file.name.length > 180) {
-			toast.error("That file name is too long.");
+			toast.error(t.tep.tenQuaDai);
 			continue;
 		}
 		if (file.type.length > 120) {
-			toast.error(`${file.name} has an unsupported file type.`);
+			toast.error(t.tep.loaiKhongNhan(file.name));
 			continue;
 		}
 		acceptedFiles.push(file);
@@ -1537,7 +1545,7 @@ async function readFiles(
 					),
 				};
 			} catch {
-				toast.error(`${file.name} could not be read.`);
+				toast.error(t.tep.khongDocDuoc(file.name));
 				return null;
 			}
 		}),

@@ -24,10 +24,12 @@ import {
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { hoiThoaiThaoTacMessages } from "@/lib/messages/agent-builder-hoi-thoai-thao-tac";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -47,6 +49,7 @@ export function DeleteChatAction({
 	returnToChatList?: boolean;
 	onDeleted?: () => void;
 }) {
+	const t = hoiThoaiThaoTacMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const router = useRouter();
@@ -57,7 +60,7 @@ export function DeleteChatAction({
 			onSuccess: async () => {
 				await cache.conversationRemoved(conversationId);
 				setConfirming(false);
-				toast.success("Chat deleted.");
+				toast.success(t.xoa.daXoa);
 				onDeleted?.();
 
 				if (returnToChatList) {
@@ -79,7 +82,7 @@ export function DeleteChatAction({
 					size="icon-xs"
 					className={className}
 					disabled={removeAction.pending}
-					aria-label={`Delete ${title}`}
+					aria-label={t.xoa.xoaMot(title)}
 					onClick={() => setConfirming(true)}
 				>
 					<Icon icon={Close} />
@@ -93,7 +96,7 @@ export function DeleteChatAction({
 							disabled={removeAction.pending}
 						>
 							<Icon icon={OverflowMenuVertical} />
-							<span className="sr-only">More chat actions</span>
+							<span className="sr-only">{t.xoa.themThaoTac}</span>
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
@@ -102,7 +105,7 @@ export function DeleteChatAction({
 							onSelect={() => setConfirming(true)}
 						>
 							<Icon icon={TrashCan} />
-							Delete chat
+							{t.xoa.xoaHoiThoai}
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
@@ -116,15 +119,12 @@ export function DeleteChatAction({
 			>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Delete {title}?</AlertDialogTitle>
-						<AlertDialogDescription>
-							This permanently deletes the chat, its messages, attachments, and
-							shared link. Any agent created from it stays available.
-						</AlertDialogDescription>
+						<AlertDialogTitle>{t.xoa.xoaHoi(title)}</AlertDialogTitle>
+						<AlertDialogDescription>{t.xoa.xoaMoTa}</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
 						<AlertDialogCancel disabled={removeAction.pending}>
-							Cancel
+							{t.xoa.huy}
 						</AlertDialogCancel>
 						<Button
 							variant="destructive"
@@ -134,11 +134,11 @@ export function DeleteChatAction({
 						>
 							<AsyncButtonContent
 								status={removeAction.status}
-								pendingLabel="Deleting"
-								successLabel="Deleted"
-								errorLabel="Try again"
+								pendingLabel={t.xoa.dangXoa}
+								successLabel={t.xoa.daXong}
+								errorLabel={t.xoa.thuLai}
 							>
-								Delete chat
+								{t.xoa.xoa}
 							</AsyncButtonContent>
 						</Button>
 					</AlertDialogFooter>

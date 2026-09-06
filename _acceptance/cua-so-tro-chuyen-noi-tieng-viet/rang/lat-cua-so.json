@@ -82,7 +82,36 @@
 			"chuyen_giao": "agent-builder-noi-tieng-viet"
 		}
 	],
-	"mien_tru": [],
+	"mien_tru": [
+		{
+			"chuoi": "sending: ",
+			"vi_sao": "tien to dinh danh muc trong bo cuon (thuoc tinh messageId) — khong ve ra man"
+		},
+		{
+			"chuoi": "thinking: ",
+			"vi_sao": "tien to dinh danh muc trong bo cuon (thuoc tinh messageId) — khong ve ra man"
+		},
+		{
+			"chuoi": "building-agent: ",
+			"vi_sao": "tien to dinh danh muc trong bo cuon (thuoc tinh messageId) — khong ve ra man"
+		},
+		{
+			"chuoi": "agent-workspace: ",
+			"vi_sao": "tien to dinh danh muc trong bo cuon (thuoc tinh messageId) — khong ve ra man"
+		},
+		{
+			"chuoi": "builder-failure: ",
+			"vi_sao": "tien to dinh danh muc trong bo cuon (thuoc tinh messageId) — khong ve ra man"
+		},
+		{
+			"chuoi": "review-agent: ",
+			"vi_sao": "tien to dinh danh muc trong bo cuon (thuoc tinh messageId) — khong ve ra man"
+		},
+		{
+			"chuoi": "deployed-agent: ",
+			"vi_sao": "tien to dinh danh muc trong bo cuon (thuoc tinh messageId) — khong ve ra man"
+		}
+	],
 	"neo": {
 		"file": 21,
 		"file_quet": 6,

@@ -42,6 +42,9 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 }
 
 const KHONG_DAU = new Set([
+	"chiaSe.xong",
+	"tep.kiloByte",
+	"tep.megaByte",
 	"dung.xong",
 	"luot.thanhCong",
 	"luot.model",
@@ -496,6 +499,24 @@ describe("kho chuoi cua vong ③a", () => {
 				"1 đã vào chạy.",
 				"12 đã vào chạy.",
 			],
+			"agent-builder-o-soan:tep.rong": ["1 rỗng.", "12 rỗng."],
+			"agent-builder-o-soan:tep.quaLon": [
+				"1 lớn hơn 2 MB.",
+				"12 lớn hơn 2 MB.",
+			],
+			"agent-builder-o-soan:tep.loaiKhongNhan": [
+				"1 thuộc loại tệp không nhận được.",
+				"12 thuộc loại tệp không nhận được.",
+			],
+			"agent-builder-o-soan:tep.khongDocDuoc": [
+				"1 đọc không được.",
+				"12 đọc không được.",
+			],
+			"agent-builder-o-soan:tep.kiloByte": ["1 KB", "12 KB"],
+			"agent-builder-o-soan:tep.megaByte": ["1 MB", "12 MB"],
+			"agent-builder-o-soan:the.go": ["Gỡ 1", "Gỡ 12"],
+			"agent-builder-hoi-thoai-thao-tac:xoa.xoaMot": ["Xoá 1", "Xoá 12"],
+			"agent-builder-hoi-thoai-thao-tac:xoa.xoaHoi": ["Xoá 1?", "Xoá 12?"],
 		} satisfies Record<string, [string, string]>;
 
 		const ham: string[] = [];

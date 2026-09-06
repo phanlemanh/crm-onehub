@@ -96,6 +96,134 @@
 		{
 			"chu": "idle",
 			"vi_sao": "gia tri trang thai ky thuat cua nut hanh dong"
+		},
+		{
+			"chu": "command:create-agent",
+			"vi_sao": "dinh danh lenh trong o soan"
+		},
+		{
+			"chu": "editor.changed",
+			"vi_sao": "ten su kien do duong"
+		},
+		{
+			"chu": "command.selected",
+			"vi_sao": "ten su kien"
+		},
+		{
+			"chu": "context.removed",
+			"vi_sao": "ten su kien"
+		},
+		{
+			"chu": "command.open.changed",
+			"vi_sao": "ten su kien"
+		},
+		{
+			"chu": "resource.open.changed",
+			"vi_sao": "ten su kien"
+		},
+		{
+			"chu": "resource.query.changed",
+			"vi_sao": "ten su kien"
+		},
+		{
+			"chu": "resource.added",
+			"vi_sao": "ten su kien"
+		},
+		{
+			"chu": "attachments.added",
+			"vi_sao": "ten su kien"
+		},
+		{
+			"chu": "attachments.reading.started",
+			"vi_sao": "ten su kien"
+		},
+		{
+			"chu": "attachments.reading.finished",
+			"vi_sao": "ten su kien"
+		},
+		{
+			"chu": "submitted",
+			"vi_sao": "ten su kien"
+		},
+		{
+			"chu": "home",
+			"vi_sao": "khoa vi tri con tro, so bang ==="
+		},
+		{
+			"chu": "text",
+			"vi_sao": "khoa loai muc, so bang ==="
+		},
+		{
+			"chu": "start",
+			"vi_sao": "gia tri vi tri con tro"
+		},
+		{
+			"chu": "previous",
+			"vi_sao": "huong di chuyen, so bang ==="
+		},
+		{
+			"chu": "next",
+			"vi_sao": "huong di chuyen, so bang ==="
+		},
+		{
+			"chu": "[data-composer-text]",
+			"vi_sao": "bo chon CSS"
+		},
+		{
+			"chu": "[data-composer-token-key]",
+			"vi_sao": "bo chon CSS"
+		},
+		{
+			"chu": "false",
+			"vi_sao": "gia tri thuoc tinh ARIA dang chuoi"
+		},
+		{
+			"chu": "first",
+			"vi_sao": "khoa vi tri the, so bang ==="
+		},
+		{
+			"chu": "second",
+			"vi_sao": "khoa vi tri the"
+		},
+		{
+			"chu": "third",
+			"vi_sao": "khoa vi tri the"
+		},
+		{
+			"chu": "default",
+			"vi_sao": "khoa kieu the, so bang ==="
+		},
+		{
+			"chu": "composer",
+			"vi_sao": "khoa ngu canh the, so bang ==="
+		},
+		{
+			"chu": "calendar",
+			"vi_sao": "khoa loai ket noi, so bang ==="
+		},
+		{
+			"chu": "Google Calendar",
+			"vi_sao": "ten thuong hieu"
+		},
+		{
+			"chu": "Gmail",
+			"vi_sao": "ten thuong hieu"
+		},
+		{
+			"chu": "resource:${…}:${…}",
+			"vi_sao": "khoa ngu canh cua the, khong ve ra man"
+		},
+		{
+			"chu": "attachment:${…}",
+			"vi_sao": "khoa ngu canh cua the, khong ve ra man"
+		},
+		{
+			"chu": "data:${…};base64,${…}",
+			"vi_sao": "URL du lieu cua anh xem truoc, khong ve ra chu"
+		},
+		{
+			"chu": "close",
+			"vi_sao": "khoa kieu nut mo hop, so bang ==="
 		}
 	],
 	"khoa_kieu": {
@@ -178,7 +306,11 @@
 		"oldFile",
 		"messageId",
 		"scrollAnchor",
-		"defaultScrollPosition"
+		"defaultScrollPosition",
+		"onKeyDown",
+		"aria-multiline",
+		"compact",
+		"state"
 	],
 	"khoa_object_ky_thuat": [
 		"id",

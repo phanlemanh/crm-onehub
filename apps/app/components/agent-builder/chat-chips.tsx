@@ -10,12 +10,17 @@ import {
 } from "@crm/ui/components/attachment";
 import { Avatar, AvatarFallback, AvatarImage } from "@crm/ui/components/avatar";
 import { type CarbonIcon, Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	TokenFieldAction,
 	TokenFieldItem,
 } from "@crm/ui/components/token-field";
 import { cn } from "@crm/ui/lib/utils";
 import Image from "next/image";
+import {
+	type OSoanMessages,
+	oSoanMessages,
+} from "@/lib/messages/agent-builder-o-soan";
 
 type ChatChipVariant = "default" | "composer";
 
@@ -47,6 +52,7 @@ export function ChatReferenceChip({
 	onRemove?: () => void;
 	variant?: ChatChipVariant;
 }) {
+	const t = oSoanMessages(useLocale());
 	const identity = (
 		<ChatReferenceIdentity
 			resource={resource}
@@ -62,7 +68,7 @@ export function ChatReferenceChip({
 				{identity}
 				{onRemove ? (
 					<TokenFieldAction
-						aria-label={`Remove ${resource.label}`}
+						aria-label={t.the.go(resource.label)}
 						onClick={onRemove}
 					>
 						<Icon icon={Close} className="size-3" />
@@ -78,7 +84,7 @@ export function ChatReferenceChip({
 			{onRemove ? (
 				<button
 					type="button"
-					aria-label={`Remove ${resource.label}`}
+					aria-label={t.the.go(resource.label)}
 					onClick={onRemove}
 					className="flex size-6 shrink-0 items-center justify-center rounded-sm text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
 				>
@@ -133,7 +139,8 @@ export function ChatAttachmentChip({
 	onRemove?: () => void;
 	variant?: ChatChipVariant;
 }) {
-	const label = `${attachment.name} · ${formatBytes(attachment.size)}`;
+	const t = oSoanMessages(useLocale());
+	const label = `${attachment.name} · ${formatBytes(t, attachment.size)}`;
 	const image = isPreviewableImage(attachment.type)
 		? (attachment.previewUrl ??
 			(attachment.contentBase64
@@ -167,7 +174,7 @@ export function ChatAttachmentChip({
 				<AttachmentActions>
 					<AttachmentAction
 						type="button"
-						aria-label={`Remove ${attachment.name}`}
+						aria-label={t.the.go(attachment.name)}
 						onClick={onRemove}
 					>
 						<Icon icon={Close} />
@@ -189,13 +196,14 @@ export function ChatCommandChip({
 	onRemove?: () => void;
 	variant?: ChatChipVariant;
 }) {
+	const t = oSoanMessages(useLocale());
 	if (variant === "composer") {
 		return (
 			<TokenFieldItem className="pl-1.5">
 				<Icon icon={icon} className="size-3.5" />
 				<span className="font-medium">{label}</span>
 				{onRemove ? (
-					<TokenFieldAction aria-label={`Remove ${label}`} onClick={onRemove}>
+					<TokenFieldAction aria-label={t.the.go(label)} onClick={onRemove}>
 						<Icon icon={Close} className="size-3" />
 					</TokenFieldAction>
 				) : null}
@@ -210,7 +218,7 @@ export function ChatCommandChip({
 			{onRemove ? (
 				<button
 					type="button"
-					aria-label={`Remove ${label}`}
+					aria-label={t.the.go(label)}
 					onClick={onRemove}
 					className="-mr-1 flex size-5 items-center justify-center rounded-sm outline-none hover:bg-primary-foreground/15 focus-visible:ring-2 focus-visible:ring-primary-foreground/60"
 				>
@@ -221,10 +229,11 @@ export function ChatCommandChip({
 	);
 }
 
-function formatBytes(bytes: number): string {
+function formatBytes(t: OSoanMessages, bytes: number): string {
 	if (bytes < 1024) return `${bytes} B`;
-	if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
-	return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+	if (bytes < 1024 * 1024)
+		return t.tep.kiloByte(String(Math.round(bytes / 1024)));
+	return t.tep.megaByte((bytes / (1024 * 1024)).toFixed(1));
 }
 
 function isPreviewableImage(mediaType: string): boolean {
