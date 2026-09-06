@@ -42,6 +42,7 @@ export const savedViewOutput = z.object({
 	filters: savedViewFilters,
 	size: z.number().int().nullable(),
 	mine: z.boolean(),
+	usedBy: z.array(z.string()),
 	createdAt: z.string(),
 	updatedAt: z.string(),
 });

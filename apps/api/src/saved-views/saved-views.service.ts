@@ -41,8 +41,11 @@ export class SavedViewsService {
 		});
 
 		const sizes = await Promise.all(rows.map((row) => this.sizeOf(row)));
+		const used = await this.campaigns.usedByViews(rows.map((row) => row.id));
 
-		return rows.map((row, index) => this.serialize(row, userId, sizes[index]));
+		return rows.map((row, index) =>
+			this.serialize(row, userId, sizes[index], used.get(row.id) ?? []),
+		);
 	}
 
 	async create(
@@ -101,7 +104,7 @@ export class SavedViewsService {
 		const used = await this.campaigns.usedViewIds(id);
 		if (used.length > 0) {
 			throw new ConflictException(
-				`This view is the segment of ${used.join(", ")}. Finish or repoint those campaigns first.`,
+				`This view is the segment of ${used.join(", ")}. Point those campaigns at another view first; the view stays as long as one of them uses it.`,
 			);
 		}
 
@@ -136,6 +139,7 @@ export class SavedViewsService {
 		row: SavedViewRow,
 		userId: string,
 		size: number | null | undefined,
+		usedBy: string[] = [],
 	): SavedView {
 		return {
 			id: row.id,
@@ -145,6 +149,7 @@ export class SavedViewsService {
 			filters: parseSavedViewFilters(row.filters),
 			size: size ?? null,
 			mine: row.ownerId === userId,
+			usedBy,
 			createdAt: row.createdAt.toISOString(),
 			updatedAt: row.updatedAt.toISOString(),
 		};

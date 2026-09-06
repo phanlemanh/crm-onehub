@@ -29,6 +29,7 @@ import type {
 	CampaignMember,
 	CampaignMembers,
 	CampaignMembersInput,
+	CampaignRepointInput,
 	CampaignStats,
 	CampaignSummary,
 	CampaignTouchInput,
@@ -316,6 +317,60 @@ export class CampaignsService {
 		});
 
 		return rows.map((row) => row.name);
+	}
+
+	async usedByViews(savedViewIds: string[]): Promise<Map<string, string[]>> {
+		const used = new Map<string, string[]>();
+		if (savedViewIds.length === 0) return used;
+
+		const rows = await this.db.campaign.findMany({
+			where: { savedViewId: { in: savedViewIds } },
+			select: { name: true, savedViewId: true },
+			orderBy: { name: "asc" },
+		});
+
+		for (const row of rows) {
+			const names = used.get(row.savedViewId) ?? [];
+			names.push(row.name);
+			used.set(row.savedViewId, names);
+		}
+
+		return used;
+	}
+
+	async repoint(input: CampaignRepointInput): Promise<CampaignDetail> {
+		const campaign = await this.require(input.id);
+		if (campaign.savedViewId === input.savedViewId) {
+			return this.byId(input.id);
+		}
+
+		const view = await this.db.savedView.findUnique({
+			where: { id: input.savedViewId },
+			select: { id: true, entity: true },
+		});
+		if (!view) {
+			throw new NotFoundException(
+				`No saved view with id ${input.savedViewId}.`,
+			);
+		}
+		if (view.entity !== "CONTACT") {
+			throw new BadRequestException(
+				`A campaign segment must be a contact view; ${input.savedViewId} is a ${view.entity} view.`,
+			);
+		}
+
+		await this.db.campaign.update({
+			where: { id: input.id },
+			data: { savedViewId: input.savedViewId },
+		});
+
+		this.logger.log({
+			message: "Campaign segment repointed",
+			campaignId: input.id,
+			savedViewId: input.savedViewId,
+		});
+
+		return this.byId(input.id);
 	}
 
 	async memberCount(filters: SavedViewFilters): Promise<number> {

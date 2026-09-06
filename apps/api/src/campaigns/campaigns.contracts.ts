@@ -13,6 +13,13 @@ export const touchOutcome = z.enum([
 
 export const campaignIdInput = z.object({ id: z.string() });
 
+export const campaignRepointInput = z.object({
+	id: z.string(),
+	savedViewId: z.string(),
+});
+
+export type CampaignRepointInput = z.infer<typeof campaignRepointInput>;
+
 export const campaignCreateInput = z.object({
 	name: z.string().trim().min(CAMPAIGNS.name.min).max(CAMPAIGNS.name.max),
 	savedViewId: z.string(),

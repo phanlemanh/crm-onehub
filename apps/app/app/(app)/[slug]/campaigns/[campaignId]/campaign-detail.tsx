@@ -8,6 +8,13 @@ import { DataTable, type DataTableColumn } from "@crm/ui/components/data-table";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { Link } from "@crm/ui/components/link";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@crm/ui/components/select";
 import { Spinner } from "@crm/ui/components/spinner";
 import { StatCard } from "@crm/ui/components/stat-card";
 import { formatPercent } from "@crm/ui/lib/format";
@@ -357,6 +364,19 @@ export function CampaignDetail({ id }: { id: string }) {
 
 	const start = useMutation(trpc.campaigns.start.mutationOptions(settle));
 	const finish = useMutation(trpc.campaigns.finish.mutationOptions(settle));
+	const views = useQuery(
+		trpc.savedViews.list.queryOptions({ entity: "CONTACT" }),
+	);
+	const repoint = useMutation(
+		trpc.campaigns.repoint.mutationOptions({
+			onSuccess: async () => {
+				await cache.campaign(id);
+				await cache.savedViews("contact");
+				toast.success(m.detail.segmentChanged);
+			},
+			onError: (error: { message: string }) => toast.error(error.message),
+		}),
+	);
 
 	if (!campaign.data) return <PageShellLoading />;
 
@@ -389,6 +409,22 @@ export function CampaignDetail({ id }: { id: string }) {
 					<Badge variant={STATUS_VARIANT[row.status]}>
 						{statusLabel(m, row.status)}
 					</Badge>
+					<Select
+						value={row.savedViewId}
+						disabled={repoint.isPending}
+						onValueChange={(savedViewId) => repoint.mutate({ id, savedViewId })}
+					>
+						<SelectTrigger aria-label={m.detail.changeSegment} size="sm">
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent>
+							{(views.data ?? []).map((view) => (
+								<SelectItem key={view.id} value={view.id}>
+									<span translate="no">{view.name}</span>
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
 					{row.status === "DRAFT" ? (
 						<Button
 							disabled={start.isPending}

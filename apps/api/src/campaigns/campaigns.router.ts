@@ -18,6 +18,7 @@ import {
 	campaignListOutput,
 	campaignMembersInput,
 	campaignMembersOutput,
+	campaignRepointInput,
 	campaignTouchInput,
 	campaignTouchOutput,
 } from "./campaigns.contracts";
@@ -84,6 +85,15 @@ export class CampaignsRouter {
 	})
 	async finish(@Input("id") id: string) {
 		return this.campaigns.finish(id);
+	}
+
+	@Mutation({
+		input: campaignRepointInput,
+		output: campaignDetailOutput,
+		meta: restMeta("POST", "/campaigns/{id}/segment", ["Campaigns"]),
+	})
+	async repoint(@Input() input: z.infer<typeof campaignRepointInput>) {
+		return this.campaigns.repoint(input);
 	}
 
 	@Mutation({

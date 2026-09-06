@@ -59,6 +59,8 @@ const en = {
 		uncalledOnly: "Not called",
 		search: "Search this list",
 		openView: "Open the view",
+		changeSegment: "Change segment",
+		segmentChanged: "Segment changed.",
 		saving: "Recording…",
 	},
 	stats: {
@@ -148,6 +150,8 @@ const vi = {
 		uncalledOnly: "Chưa gọi",
 		search: "Tìm trong danh sách",
 		openView: "Mở góc nhìn",
+		changeSegment: "Đổi phân khúc",
+		segmentChanged: "Đã đổi phân khúc.",
 		saving: "Đang ghi…",
 	},
 	stats: {

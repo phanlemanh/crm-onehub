@@ -154,6 +154,10 @@ describe("kho chuoi cua vong ③a", () => {
 			"companies:bulk.deleted": ["Đã xoá vĩnh viễn 1.", "Đã xoá vĩnh viễn 12."],
 			"companies:bulk.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
 			"crm:views.remove": ["Xoá 1", "Xoá 12"],
+			"crm:views.inUse": [
+				"Đang là phân khúc của 1",
+				"Đang là phân khúc của 12",
+			],
 			"crm:bulkMenu.leftAlone": ["1 A bị bỏ quaB", "12 A bị bỏ quaB"],
 			"record-sheet:company.manyDeals": [
 				"Cả 1 thoả thuận của công ty",
