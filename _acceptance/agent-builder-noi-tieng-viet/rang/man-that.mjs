@@ -8,7 +8,7 @@ import {
 	canhCong,
 	datTrinhDuyet,
 	docKhai,
-	doRongTrang,
+	doRongMan,
 	gomTrang,
 	ket,
 	khongDo,
@@ -205,18 +205,8 @@ async function chanBeRong(cookie, slug) {
 	let viTran = 0;
 	let caHai = 0;
 	for (const man of doDuoc) {
-		const lay = async (tieng) => {
-			const mo = await moManMem(cookie, slug, man, tieng, HEP);
-			if (mo.loi !== null) {
-				await mo.trang.close();
-				return null;
-			}
-			const gia = await doRongTrang(mo.trang);
-			await mo.trang.close();
-			return gia === null ? null : new Map(gia.map((g) => [g.khoa, g]));
-		};
-		const vi = await lay("vi");
-		const en = await lay("en");
+		const vi = await doRongMan(cookie, slug, man, "vi", HEP);
+		const en = await doRongMan(cookie, slug, man, "en", HEP);
 		if (vi === null || en === null) {
 			console.log(`\n-- man ${man} o ${HEP}px: TU CHOI DO`);
 			continue;

@@ -18,7 +18,16 @@ function dongThuc(duong) {
 	return readFileSync(duong, "utf8")
 		.split("\n")
 		.map((d, i) => ({ so: i + 1, chuan: d.replace(/\s+/g, " ").trim() }))
-		.filter((d) => d.chuan !== "" && !d.chuan.startsWith("//") && !d.chuan.startsWith("#"));
+		.filter(
+			(d) =>
+				d.chuan !== "" &&
+				!d.chuan.startsWith("//") &&
+				!d.chuan.startsWith("#") &&
+				!d.chuan.startsWith("import ") &&
+				!d.chuan.startsWith("export ") &&
+				!/^[});,\]]+$/.test(d.chuan) &&
+				!/^[A-Za-z][A-Za-z0-9_]*,$/.test(d.chuan),
+		);
 }
 
 function tep(thuMuc) {

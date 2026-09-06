@@ -403,6 +403,17 @@ export async function doRongTrang(trang) {
 	return trang.evaluate(DO_RONG);
 }
 
+export async function doRongMan(cookie, slug, man, tieng, rong) {
+	const mo = await moManMem(cookie, slug, man, tieng, rong);
+	if (mo.loi !== null) {
+		await mo.trang.close();
+		return null;
+	}
+	const gia = await doRongTrang(mo.trang);
+	await mo.trang.close();
+	return gia === null ? null : new Map(gia.map((g) => [g.khoa, g]));
+}
+
 export function soCap(vi, en, boi) {
 	const n = Math.min(vi.length, en.length);
 	const ra = { soCap: n, lech: [], trung: [], khongDau: [] };
