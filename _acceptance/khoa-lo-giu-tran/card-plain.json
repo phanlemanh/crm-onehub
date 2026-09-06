@@ -1,0 +1,125 @@
+{
+ "feature_plain": "Bộ điều phối của tác nhân nghiên cứu lấy đúng số việc nó xin mỗi nhịp, kể cả khi thống kê bảng của Postgres đang lỗi thời; trước đây có lúc nó lấy cả hàng đợi dù chỉ xin hai.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ nghỉ hưu đúng hai việc đã cạn lượt khi được bảo lấy hai, dù thống kê bảng nói bảng chỉ có một hàng; việc thứ ba còn nguyên."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ giao đúng hai việc đến hạn cho tác nhân khi được bảo lấy hai, trong cùng điều kiện thống kê lỗi thời; việc thứ ba chưa ai nhận."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ tự chứng minh bộ dựng thử có cắn: câu lệnh kiểu cũ trên cùng dữ liệu lấy cả ba việc dù chỉ xin hai, và thống kê trôi thì báo đúng chữ thống kê trôi, không đổ cho Postgres."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ làm bản mã cũ đỏ trên cùng dữ liệu, với đúng thông điệp xin hai mà nhận ba, mà không đụng vào tệp mã đang dùng."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ cho thấy Postgres chỉ chọn lô một lần cho câu lệnh mới, còn câu lệnh cũ chọn lô ba lần, đo trên chính câu lệnh phần mềm gửi đi."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ để tám nhịp điều phối chạy cùng lúc mà không việc nào bị hai nhịp cùng lấy; bỏ khoá hàng đi thì việc bị lấy trùng ngay."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ giữ nguyên mọi hành vi cũ của việc giao việc: thứ tự ưu tiên, thuê việc, đếm lượt thử, và ghi lại diff của bài kiểm để ai cũng soi được không có bài nào bị nới."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ xanh toàn bộ bộ kiểm, kiểm kiểu và lint của kho khi chạy không dùng bộ nhớ đệm."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ ghi luật này vào tài liệu của tác nhân, ngay cạnh luật sắp xếp việc đã có, để lần sau không ai viết lại khuôn cũ."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ được người soi xác nhận sửa dựa trên cam kết có tài liệu của Postgres chứ không phải may rủi, và phép đo đo cơ chế chứ không đo triệu chứng."
+  }
+ ],
+ "wont_do": [],
+ "scope_plain": "Không đổi cách xoá dữ liệu thử, không sửa cách suite chung dùng chung cơ sở dữ liệu, không dùng khuôn mảng, không gửi vá lên hãng vòng này, không chạm lớp điều phối gọi hai hàm.",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Cả hai chỗ khoá lô đều được đo: nghỉ hưu việc cạn lượt (AC-1, AC-4, AC-5, AC-6) và giao việc đến hạn (AC-2, AC-4, AC-7); bằng chứng đủ là chỉ hai chỗ trong tệp có khoá hàng, đếm được."
+  },
+  {
+   "i": 1,
+   "p": "Cả hai trạng thái thống kê đều được đo: lỗi thời (AC-1 đến AC-5) và đúng cỡ (AC-6, AC-7); bằng chứng đủ là bộ dựng tự đọc con số thống kê của Postgres trước khi đo."
+  },
+  {
+   "i": 2,
+   "p": "Cả hai chiều đều được đo: bản đúng giữ trần (AC-1, AC-2, AC-6, AC-7, AC-8) và bản hỏng đỏ với đúng thông điệp (AC-3, AC-4, AC-5, AC-6); bằng chứng đủ là bốn tiêu chí có chiều đỏ ghim thông điệp, đếm trong bảng đo."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Thiếu cách nạp bản mã cũ mà không đè lên tệp đang dùng; nếu đè, các phép đo chạy song song sẽ đọc nhầm bản và có thể để lại bản cũ. Đã xử: bản cũ chỉ sống trong thư mục tạm bị git bỏ qua, tên có số tiến trình, và mỗi chân kiểm tệp mã sạch sau khi chạy."
+  },
+  {
+   "i": 1,
+   "p": "Tệp răng đặt trong thư mục kiểm chung sẽ bị suite chung nạp và xoá dữ liệu của bài khác. Đã xử: răng nằm ở thư mục riêng, tên ngoài khuôn tệp kiểm, chỉ chạy khi gọi đích danh; đã đo suite chung không nạp nó."
+  },
+  {
+   "i": 2,
+   "p": "Bộ dựng chưa tự kiểm con số thống kê nên đỏ vì thống kê trôi sẽ bị đọc nhầm thành Postgres đổi kế hoạch. Đã xử: bộ dựng đọc con số đó và báo riêng chữ thống kê trôi."
+  },
+  {
+   "i": 3,
+   "p": "Người chấm câu hỏi có bài kiểm cũ nào bị nới không chỉ được xem bản hiện tại, không có diff. Đã xử: ghi diff của tệp kiểm vào hồ sơ, người chấm phải trích đúng dòng diff, và một chân đo giữ diff đó luôn khớp bản sống."
+  },
+  {
+   "i": 4,
+   "p": "Chiều đỏ của phép đo đồng thời chỉ là giả lập, chưa phá mã thật. Đã xử: đo với bản sao bỏ khoá hàng, tám nhịp cùng lúc lấy trùng việc ở cả ba lần thử; bản sửa không trùng lần nào."
+  }
+ ],
+ "decisions_plain": [
+  {
+   "id": "d-20260906T080034Z-26753",
+   "p": "Chọn khuôn câu lệnh mà Postgres cam kết bằng tài liệu chỉ chọn lô một lần — đổi lại câu lệnh dài hơn vài dòng."
+  },
+  {
+   "id": "d-20260906T080034Z-30104",
+   "p": "Sửa luôn chỗ giao việc đến hạn dù đề bài chỉ nêu chỗ nghỉ hưu, vì cùng bộ dựng chứng minh nó cũng lấy quá tay — đổi lại diff rộng hơn đề bài."
+  },
+  {
+   "id": "d-20260906T080034Z-13285",
+   "p": "Dùng bản mã cũ thật từ lịch sử làm chiều đỏ, vì đổi một từ khoá trong câu lệnh mới không làm lỗi quay lại — đổi lại phụ thuộc một mốc git đã ghim."
+  },
+  {
+   "id": "d-20260906T080034Z-11033",
+   "p": "Mỗi phép đo dùng một cơ sở dữ liệu thử riêng để không xoá dữ liệu của suite chung khi chạy song song — đổi lại tốn thêm vài giây dựng mỗi chân."
+  },
+  {
+   "id": "d-20260906T080034Z-15924",
+   "p": "KHÔNG quét không gian tiêu chí bằng máy vì không gian chỉ có tám ô, kê tay đủ — đổi lại không có bằng chứng độ phủ ngoài ba trục kê tay."
+  },
+  {
+   "id": "d-20260906T080034Z-20159",
+   "p": "KHÔNG viết đặc tả giao diện vì việc này không có màn hình."
+  },
+  {
+   "id": "d-20260906T080034Z-4204",
+   "p": "KHÔNG chạy phiên soi thiết kế vì việc này không có bề mặt web."
+  },
+  {
+   "id": "d-20260906T080034Z-2283",
+   "p": "KHÔNG đổi cách bộ dựng xoá sạch bảng thử, vì thống kê phải thấy đúng một hàng — đổi lại chạy chung với tệp kiểm khác trên cùng cơ sở dữ liệu thử sẽ xoá hàng của họ."
+  },
+  {
+   "id": "d-20260906T080820Z-30870",
+   "p": "Đặt tệp răng trong thư mục riêng của tác nhân vì chỉ ở đó mới nối được tới lớp dữ liệu, và tên ngoài khuôn tệp kiểm để suite chung không nạp — đổi lại tệp đo sống trong cây mã của app."
+  },
+  {
+   "id": "d-20260906T080820Z-20274",
+   "p": "Chiều đỏ của phép đo đồng thời là bản sao bỏ khoá hàng, đã đo thấy lấy trùng thật — đổi lại chân này sinh thêm một tệp tạm."
+  }
+ ]
+}
