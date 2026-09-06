@@ -82,5 +82,13 @@
 			"chuyen_giao": "agent-builder-noi-tieng-viet"
 		}
 	],
-	"mien_tru": []
+	"mien_tru": [],
+	"neo": {
+		"file": 21,
+		"file_quet": 6,
+		"chuoi": 276,
+		"van_ban": 183,
+		"thuoc_tinh": 93,
+		"ghi_chu": "Do bang chinh ban khai nay ngay 06/09. file = so .tsx tren dia trong thu muc lat; file_quet = con lai sau khi tru 15 file da ban giao; chuoi = ung vien truoc khi tru mien tru, tach thanh van_ban + thuoc_tinh. Lech la thoat ma 2 kem diff ten file."
+	}
 }

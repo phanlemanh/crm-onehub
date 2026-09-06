@@ -1,6 +1,6 @@
 {
-	"lat": "agent-builder-noi-tieng-viet",
-	"ghi_chu": "Luat tru cho lat agent-builder dot mot. Moi dong giu_nguyen phai con doi tuong that trong lat — dong chet la DO (AC-1b).",
+	"lat": "cua-so-tro-chuyen-noi-tieng-viet",
+	"ghi_chu": "Dan so dot HAI. Moi dong giu_nguyen phai con doi tuong that trong sau file — dong chet la DO. Danh sach ke thua tu dot mot da duoc dead-check ngay 06/09: 24 dong khong con doi tuong da go.",
 	"ham_ky_thuat": [
 		"cn",
 		"clsx",
@@ -9,22 +9,6 @@
 		"import"
 	],
 	"giu_nguyen": [
-		{
-			"chu": "working",
-			"vi_sao": "khoa trang thai hoi thoai, so bang === chu khong ve ra man"
-		},
-		{
-			"chu": "unread",
-			"vi_sao": "khoa trang thai hoi thoai, so bang ==="
-		},
-		{
-			"chu": "deployed",
-			"vi_sao": "khoa trang thai hoi thoai, so bang ==="
-		},
-		{
-			"chu": "team",
-			"vi_sao": "doan route giu cho, so bang === de tra notFound()"
-		},
 		{
 			"chu": "short",
 			"vi_sao": "tuy chon cua Intl.DateTimeFormat"
@@ -38,88 +22,16 @@
 			"vi_sao": "tuy chon cua Intl.DateTimeFormat"
 		},
 		{
-			"chu": "none",
-			"vi_sao": "tuy chon refetchType cua react-query"
-		},
-		{
-			"chu": "Today",
-			"vi_sao": "khoa cua kieu ChatDateGroup — chu hien ra lay tu kho chuoi"
-		},
-		{
-			"chu": "Yesterday",
-			"vi_sao": "khoa cua kieu ChatDateGroup"
-		},
-		{
-			"chu": "Last 7 days",
-			"vi_sao": "khoa cua kieu ChatDateGroup"
-		},
-		{
-			"chu": "This agent",
-			"vi_sao": "nhan chan doan truyen vao parse() de dung trong thong diep Error nem ra — khong ve ra man"
-		},
-		{
-			"chu": "runs",
-			"vi_sao": "khoa cua ngan xem trong hop luot chay, so bang ==="
-		},
-		{
-			"chu": "code",
-			"vi_sao": "khoa che do xem cua bang ma, so bang ==="
-		},
-		{
-			"chu": "changes",
-			"vi_sao": "khoa che do xem cua bang ma, so bang ==="
-		},
-		{
-			"chu": "open",
-			"vi_sao": "khoa trang thai o bang ma"
-		},
-		{
-			"chu": "added",
-			"vi_sao": "khoa loai thay doi cua tep, so bang ==="
-		},
-		{
-			"chu": "modified",
-			"vi_sao": "khoa loai thay doi cua tep"
-		},
-		{
-			"chu": "light",
-			"vi_sao": "khoa chu de sang/toi truyen cho bo hien ma"
-		},
-		{
-			"chu": "dark",
-			"vi_sao": "khoa chu de sang/toi"
-		},
-		{
-			"chu": "pierre-dark-soft",
-			"vi_sao": "ten chu de mau cua bo hien ma, la dinh danh cua thu vien"
-		},
-		{
-			"chu": "pierre-light-soft",
-			"vi_sao": "ten chu de mau cua bo hien ma"
-		},
-		{
-			"chu": "unified",
-			"vi_sao": "tuy chon cach hien khac biet cua bo hien ma"
-		},
-		{
-			"chu": "32rem",
-			"vi_sao": "gia tri CSS truyen vao bo hien ma"
-		},
-		{
-			"chu": "auto",
-			"vi_sao": "gia tri CSS truyen vao bo hien ma"
-		},
-		{
-			"chu": "list_deals",
-			"vi_sao": "ten cong cu tac nhan goi, so bang === voi ket qua tra ve"
-		},
-		{
-			"chu": "all",
-			"vi_sao": "khoa bo loc cua bang thoa thuan, so bang ==="
-		},
-		{
 			"chu": "deal",
 			"vi_sao": "khoa loai ban ghi truyen cho lop ghi nho — khong ve ra man"
+		},
+		{
+			"chu": "event",
+			"vi_sao": "khoa phan biet cua dong thoi gian (kind), so bang === chu khong ve ra man"
+		},
+		{
+			"chu": "action",
+			"vi_sao": "khoa phan biet cua dong thoi gian (kind), so bang ==="
 		}
 	],
 	"khoa_kieu": {

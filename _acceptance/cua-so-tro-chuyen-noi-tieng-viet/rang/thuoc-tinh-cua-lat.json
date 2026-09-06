@@ -1,6 +1,6 @@
 {
 	"lat": "cua-so-tro-chuyen-noi-tieng-viet",
-	"ghi_chu": "BAN NHAP S1 — ke thua danh sach ky thuat cua dot mot de do kich thuoc; S3 phai dead-check tung dong.",
+	"ghi_chu": "Ten thuoc tinh KY THUAT cua dot hai — moi dong phai con thuoc tinh that dung no. Ke thua tu dot mot, dead-check ngay 06/09: 4 ten khong con doi tuong da go.",
 	"ten_ky_thuat": [
 		{
 			"ten": "motion",
@@ -13,14 +13,6 @@
 		{
 			"ten": "className",
 			"vi_sao": "lop CSS"
-		},
-		{
-			"ten": "id",
-			"vi_sao": "dinh danh phan tu"
-		},
-		{
-			"ten": "htmlFor",
-			"vi_sao": "dinh danh phan tu ma nhan tro toi"
 		},
 		{
 			"ten": "type",
@@ -65,14 +57,6 @@
 		{
 			"ten": "side",
 			"vi_sao": "huong mo cua ngan truot"
-		},
-		{
-			"ten": "translate",
-			"vi_sao": "co bao trinh duyet khong dich, gia tri la no"
-		},
-		{
-			"ten": "headerHeight",
-			"vi_sao": "lop chieu cao dong tieu de cua bang dung chung"
 		}
 	]
 }

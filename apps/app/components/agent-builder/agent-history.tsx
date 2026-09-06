@@ -24,6 +24,10 @@ import { cn } from "@crm/ui/lib/utils";
 import { useState } from "react";
 import { z } from "zod";
 import { runFailureReason } from "@/lib/agent-run-failure";
+import {
+	type TroChuyenMessages,
+	troChuyenMessages,
+} from "@/lib/messages/agent-builder-tro-chuyen";
 import type { RouterOutputs } from "@/lib/trpc/types";
 
 type Runs = RouterOutputs["agents"]["history"];
@@ -81,6 +85,7 @@ export function AgentRuns({
 	retryingRunId?: string;
 }) {
 	const locale = useLocale();
+	const t = troChuyenMessages(locale);
 	const [outcome, setOutcome] = useState("ALL");
 	const [expanded, setExpanded] = useState<string | null>(null);
 	const [confirming, setConfirming] = useState<string | null>(null);
@@ -97,16 +102,16 @@ export function AgentRuns({
 				<select
 					value={outcome}
 					onChange={(event) => setOutcome(event.target.value)}
-					aria-label="Filter run outcomes"
+					aria-label={t.luot.locGiaLoc}
 					className="h-7 rounded-md border bg-muted px-2.5 font-medium text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
 				>
-					<option value="ALL">All outcomes</option>
-					<option value="SUCCEEDED">Succeeded</option>
-					<option value="FAILED">Failed</option>
-					<option value="RUNNING">Running</option>
-					<option value="QUEUED">Queued</option>
-					<option value="WAITING_FOR_APPROVAL">Waiting for approval</option>
-					<option value="CANCELLED">Cancelled</option>
+					<option value="ALL">{t.luot.moiKetCuc}</option>
+					<option value="SUCCEEDED">{t.luot.thanhCong}</option>
+					<option value="FAILED">{t.luot.hong}</option>
+					<option value="RUNNING">{t.luot.dangChay}</option>
+					<option value="QUEUED">{t.luot.dangXep}</option>
+					<option value="WAITING_FOR_APPROVAL">{t.luot.choDuyet}</option>
+					<option value="CANCELLED">{t.luot.daDung}</option>
 				</select>
 			</div>
 
@@ -126,7 +131,9 @@ export function AgentRuns({
 							<span className="min-w-0 flex-1">
 								<span className="flex flex-wrap items-center gap-x-3 gap-y-1">
 									<span className="font-semibold text-sm">
-										Run #{String(runNumbers.get(run.id)).padStart(3, "0")}
+										{t.luot.soHieu(
+											String(runNumbers.get(run.id)).padStart(3, "0"),
+										)}
 									</span>
 									<span
 										className={cn(
@@ -134,13 +141,13 @@ export function AgentRuns({
 											run.status === "FAILED" && "text-destructive",
 										)}
 									>
-										{humanStatus(run.status)}
+										{nhanTrangThai(t, run.status)}
 									</span>
 								</span>
 								<span className="mt-1 block wrap-break-word font-mono text-muted-foreground text-xs leading-5 sm:mt-0">
-									{humanStatus(run.triggerType)} ·{" "}
-									{formatDate(run.createdAt, locale)} · Version{" "}
-									{run.version.number}
+									{nhanTrangThai(t, run.triggerType)} ·{" "}
+									{formatDate(run.createdAt, locale)}{" "}
+									{t.luot.banSo(String(run.version.number))}
 								</span>
 								{run.status === "FAILED" || run.status === "CANCELLED" ? (
 									<span className="mt-1.5 flex min-w-0 items-start gap-2 rounded-md bg-destructive/10 px-2.5 py-1.5">
@@ -155,11 +162,8 @@ export function AgentRuns({
 								) : null}
 							</span>
 							<span className="flex min-w-0 items-center justify-between gap-3 font-mono text-muted-foreground text-xs sm:shrink-0 sm:justify-start sm:gap-4">
-								<span>{duration(run.startedAt, run.finishedAt)}</span>
-								<span>
-									{run.actions.length} external{" "}
-									{run.actions.length === 1 ? "action" : "actions"}
-								</span>
+								<span>{duration(t, run.startedAt, run.finishedAt)}</span>
+								<span>{t.luot.soViecNgoai(String(run.actions.length))}</span>
 								<Icon
 									icon={expanded === run.id ? ChevronUp : ChevronDown}
 									className="size-3.5"
@@ -176,7 +180,7 @@ export function AgentRuns({
 									onClick={() => onRetry(run.id)}
 								>
 									<Icon icon={Renew} data-icon="inline-start" />
-									Retry
+									{t.luot.chayLai}
 								</Button>
 							</span>
 						) : null}
@@ -189,7 +193,7 @@ export function AgentRuns({
 									disabled={cancelling}
 									onClick={() => setConfirming(run.id)}
 								>
-									Stop
+									{t.luot.dung}
 								</Button>
 							</span>
 						) : null}
@@ -205,16 +209,12 @@ export function AgentRuns({
 			>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Stop this run?</AlertDialogTitle>
-						<AlertDialogDescription>
-							The agent stops where it is and the run is recorded as cancelled.
-							Anything it has already done — a note, a task, a Slack message —
-							stays done.
-						</AlertDialogDescription>
+						<AlertDialogTitle>{t.luot.dungHoi}</AlertDialogTitle>
+						<AlertDialogDescription>{t.luot.dungMoTa}</AlertDialogDescription>
 					</AlertDialogHeader>
 
 					<AlertDialogFooter>
-						<AlertDialogCancel>Keep running</AlertDialogCancel>
+						<AlertDialogCancel>{t.luot.chayTiep}</AlertDialogCancel>
 						<AlertDialogAction
 							variant="destructive"
 							onClick={() => {
@@ -222,7 +222,7 @@ export function AgentRuns({
 								setConfirming(null);
 							}}
 						>
-							Stop run
+							{t.luot.dungLuot}
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>
@@ -230,7 +230,7 @@ export function AgentRuns({
 
 			{visible.length === 0 ? (
 				<p className="py-12 text-center text-muted-foreground text-sm">
-					No runs match this outcome.
+					{t.luot.trong}
 				</p>
 			) : null}
 		</div>
@@ -238,6 +238,8 @@ export function AgentRuns({
 }
 
 function ExpandedRun({ run }: { run: RunRow }) {
+	const locale = useLocale();
+	const t = troChuyenMessages(locale);
 	const events = runEvents.parse(run.events);
 	const timeline = [
 		...events.map((event) => ({
@@ -255,13 +257,16 @@ function ExpandedRun({ run }: { run: RunRow }) {
 	return (
 		<div className="min-w-0 border-t">
 			<div className="grid grid-cols-2 gap-x-4 gap-y-3 border-b bg-background px-4 py-3 sm:min-h-[58px] sm:grid-cols-4 sm:items-center sm:gap-0 sm:px-5 sm:py-2">
-				<RunMeta label="Trigger" value={humanStatus(run.triggerType)} />
+				<RunMeta label={t.luot.moc} value={nhanTrangThai(t, run.triggerType)} />
 				<RunMeta
-					label="Initiated by"
+					label={t.luot.nguoiMo}
 					value={run.initiatedBy?.name ?? "Eve scheduler"}
 				/>
-				<RunMeta label="Model" value={run.modelId ?? "Gateway default"} />
-				<RunMeta label="Version" value={String(run.version.number)} last />
+				<RunMeta
+					label={t.luot.model}
+					value={run.modelId ?? "Gateway default"}
+				/>
+				<RunMeta label={t.luot.ban} value={String(run.version.number)} last />
 			</div>
 
 			<div>
@@ -272,13 +277,13 @@ function ExpandedRun({ run }: { run: RunRow }) {
 							className="grid min-h-8 min-w-0 grid-cols-[68px_minmax(0,1fr)] items-start gap-x-3 border-t px-4 py-2 first:border-t-0 sm:flex sm:items-center sm:gap-5 sm:px-5 sm:py-1.5"
 						>
 							<span className="shrink-0 font-mono text-muted-foreground text-xs sm:w-[78px]">
-								{formatTime(entry.at)}
+								{formatTime(entry.at, locale)}
 							</span>
 							<span className="min-w-0 flex-1 wrap-break-word text-sm">
 								{eventLabel(entry.event)}
 							</span>
 							<span className="hidden shrink-0 font-mono text-muted-foreground text-xs sm:inline">
-								event
+								{t.luot.buoc}
 							</span>
 						</div>
 					) : (
@@ -287,14 +292,15 @@ function ExpandedRun({ run }: { run: RunRow }) {
 							className="grid min-h-12 min-w-0 grid-cols-[68px_minmax(0,1fr)] items-start gap-x-3 gap-y-1 border-t px-4 py-3 first:border-t-0 sm:flex sm:gap-5 sm:px-5"
 						>
 							<span className="shrink-0 font-mono text-muted-foreground text-xs sm:w-[78px]">
-								{formatTime(entry.at)}
+								{formatTime(entry.at, locale)}
 							</span>
 							<span className="min-w-0 flex-1">
 								<span className="block wrap-break-word text-sm">
 									{entry.action.summary}
 								</span>
 								<span className="block wrap-break-word text-muted-foreground text-xs">
-									{entry.action.provider} · {humanStatus(entry.action.status)}
+									{entry.action.provider} ·{" "}
+									{nhanTrangThai(t, entry.action.status)}
 									{entry.action.targetLabel
 										? ` · ${entry.action.targetLabel}`
 										: ""}
@@ -308,8 +314,7 @@ function ExpandedRun({ run }: { run: RunRow }) {
 				)}
 				{run.eventsTruncated ? (
 					<div className="flex min-h-9 items-center border-t px-4 py-2 text-warning text-xs sm:px-5">
-						Showing the first {events.length} of {run.totalEvents} steps. This
-						run is too long to display in full.
+						{t.luot.catBot(String(events.length), String(run.totalEvents))}
 					</div>
 				) : null}
 			</div>
@@ -341,6 +346,7 @@ function RunMeta({
 
 export function AgentActivity({ activity }: { activity: Activity }) {
 	const locale = useLocale();
+	const t = troChuyenMessages(locale);
 	const [kind, setKind] = useState("ALL");
 	const visible = activity.filter(
 		(event) => kind === "ALL" || event.type.startsWith(kind),
@@ -352,12 +358,12 @@ export function AgentActivity({ activity }: { activity: Activity }) {
 				<select
 					value={kind}
 					onChange={(event) => setKind(event.target.value)}
-					aria-label="Filter activity"
+					aria-label={t.hoatDong.locThayDoi}
 					className="h-7 rounded-md border bg-muted px-2.5 font-medium text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
 				>
-					<option value="ALL">All changes</option>
-					<option value="agent.">Agent changes</option>
-					<option value="run.">Run requests</option>
+					<option value="ALL">{t.hoatDong.moiThayDoi}</option>
+					<option value="agent.">{t.hoatDong.tacNhanDoi}</option>
+					<option value="run.">{t.hoatDong.yeuCauChay}</option>
 				</select>
 				<Button
 					variant="outline"
@@ -365,16 +371,18 @@ export function AgentActivity({ activity }: { activity: Activity }) {
 					onClick={() => exportJson("agent-activity.json", visible)}
 				>
 					<Icon icon={Download} data-icon="inline-start" />
-					Export
+					{t.hoatDong.xuatRa}
 				</Button>
 			</div>
 
 			<div className="min-w-0 overflow-hidden rounded-lg border bg-card">
 				<div className="hidden h-9 items-center border-b bg-background px-5 text-muted-foreground text-xs sm:flex">
-					<span className="w-[166px] shrink-0">Time</span>
-					<span className="min-w-0 flex-1">Change</span>
-					<span className="w-[140px] shrink-0">Actor</span>
-					<span className="w-[118px] shrink-0 text-right">Request</span>
+					<span className="w-[166px] shrink-0">{t.hoatDong.gio}</span>
+					<span className="min-w-0 flex-1">{t.hoatDong.thayDoi}</span>
+					<span className="w-[140px] shrink-0">{t.hoatDong.nguoiLam}</span>
+					<span className="w-[118px] shrink-0 text-right">
+						{t.hoatDong.yeuCau}
+					</span>
 				</div>
 				{visible.map((event) => (
 					<div
@@ -395,18 +403,22 @@ export function AgentActivity({ activity }: { activity: Activity }) {
 							) : null}
 						</span>
 						<span className="min-w-0 wrap-break-word text-xs sm:w-[140px] sm:shrink-0 sm:text-sm">
-							<span className="text-muted-foreground sm:hidden">Actor · </span>
+							<span className="text-muted-foreground sm:hidden">
+								{t.hoatDong.nguoiLamNgan}
+							</span>
 							{event.actorUser?.name ?? event.actorId ?? event.actorType}
 						</span>
 						<span className="min-w-0 wrap-break-word font-mono text-muted-foreground text-xs sm:w-[118px] sm:shrink-0 sm:text-right">
-							<span className="font-sans sm:hidden">Request · </span>
+							<span className="font-sans sm:hidden">
+								{t.hoatDong.yeuCauNgan}
+							</span>
 							{event.requestId?.slice(0, 12) ?? "—"}
 						</span>
 					</div>
 				))}
 				{visible.length === 0 ? (
 					<p className="px-5 py-12 text-center text-muted-foreground text-sm">
-						No changes match this filter.
+						{t.hoatDong.trong}
 					</p>
 				) : null}
 			</div>
@@ -414,7 +426,10 @@ export function AgentActivity({ activity }: { activity: Activity }) {
 	);
 }
 
-function humanStatus(value: string): string {
+function nhanTrangThai(t: TroChuyenMessages, value: string): string {
+	const bang: Record<string, string> = t.trangThai;
+	const co = bang[value];
+	if (String(co) === co) return co;
 	return value
 		.toLowerCase()
 		.replace(/_/g, " ")
@@ -425,13 +440,17 @@ function formatDate(value: string, locale: Locale): string {
 	return dateFormat(locale, DATE_OPTIONS).format(new Date(value));
 }
 
-function formatTime(value: string): string {
-	return dateFormat("en", TIME_OPTIONS).format(new Date(value));
+function formatTime(value: string, locale: Locale): string {
+	return dateFormat(locale, TIME_OPTIONS).format(new Date(value));
 }
 
-function duration(startedAt: string | null, finishedAt: string | null): string {
+function duration(
+	t: TroChuyenMessages,
+	startedAt: string | null,
+	finishedAt: string | null,
+): string {
 	if (!startedAt) return "—";
-	if (!finishedAt) return "In progress";
+	if (!finishedAt) return t.luot.dangChayDo;
 
 	const milliseconds =
 		new Date(finishedAt).getTime() - new Date(startedAt).getTime();
@@ -439,10 +458,7 @@ function duration(startedAt: string | null, finishedAt: string | null): string {
 }
 
 function eventLabel(event: RunEvent): string {
-	return (
-		eventSummary.parse(event.data) ??
-		humanStatus(event.type.replace(/\./g, " "))
-	);
+	return eventSummary.parse(event.data) ?? event.type.replace(/\./g, " ");
 }
 
 function changeDetail(event: AuditRow): string | null {
