@@ -40,7 +40,7 @@ const vi = {
 		taoTacNhan: "Tạo tác nhân",
 		datCauHoi: "Hỏi về CRM của bạn, hoặc tả một việc cần tự động…",
 		guiTin: "Gửi một tin",
-		nhanOSoan: "Nhắn cho bộ dựng tác nhân",
+		nhanOSoan: "Ô soạn tin cho bộ dựng tác nhân",
 		gui: "Gửi tin",
 		dangChuanBiTep: "Đang chuẩn bị tệp",
 		dangGui: "Đang gửi",

@@ -126,3 +126,9 @@ Vì sao: "cuộc trò chuyện" dài và mềm cho một thứ có sản phẩm 
 Chốt 2026-09-06.
 _Avoid_: lần chạy, phiên chạy, run
 Vì sao: "lượt" nói đúng chuyện xếp hàng — tác nhân được xếp lượt rồi mới chạy.
+
+**Ô soạn**: khung người gõ tin nhắn cho bộ dựng tác nhân, kèm chỗ gắn bản ghi CRM
+và đính tệp. Chốt 2026-09-06.
+_Avoid_: composer, khung nhập, editor
+Vì sao: người dùng gọi nó theo việc họ làm ở đó — soạn một tin — chứ không theo
+tên component trong mã.

@@ -373,6 +373,63 @@ async function chanTrangThai(cookie, slug, gieo) {
 	await ket(0);
 }
 
+async function chanBeRongTienDe(cookie, slug, gieo) {
+	const kho = khoOSoan();
+	const cuaLat = new Set();
+	const gom = (o) => {
+		for (const v of Object.values(o))
+			if (v instanceof Object) gom(v);
+			else if (String(v) === v) cuaLat.add(v);
+	};
+	gom(kho);
+	let nhan = 0;
+	const chat = [];
+	for (const man of routeCuaLat(gieo)) {
+		const mo = await moMan(cookie, slug, man, "vi", HEP);
+		if (mo.loi !== null) {
+			await mo.trang.close();
+			console.log(`KHONG DO DUOC: ${mo.loi}`);
+			await ket(2);
+		}
+		const ra = await mo.trang.evaluate(() => {
+			const ds = [];
+			for (const el of document.body.querySelectorAll("*")) {
+				if (el.children.length > 0) continue;
+				const chu = (el.textContent ?? "").trim();
+				if (chu === "") continue;
+				const r = el.getBoundingClientRect();
+				if (r.width <= 1 || r.height <= 1) continue;
+				const st = getComputedStyle(el);
+				ds.push({
+					chu,
+					chat:
+						st.whiteSpace === "nowrap" ||
+						st.textOverflow === "ellipsis" ||
+						st.overflowX === "hidden",
+				});
+			}
+			return ds;
+		});
+		await mo.trang.close();
+		nhan += ra.length;
+		for (const o of ra) if (o.chat && cuaLat.has(o.chu)) chat.push(`${man}: ${JSON.stringify(o.chu)}`);
+	}
+	console.log(`tien de be rong o ${HEP}px: ${nhan} nhan nhin thay duoc · hop CHAT CUNG mang chu CUA LAT=${chat.length}`);
+	for (const d of chat.slice(0, 10)) console.log(`   HOP CHAT: ${d}`);
+	if (nhan === 0) {
+		console.log("KHONG DO DUOC: 0 nhan nhin thay duoc.");
+		await ket(2);
+	}
+	if (chat.length === 0) {
+		console.log(
+			"KHONG DO DUOC: khong chu nao CUA LAT nay nam trong mot hop chat cung tren man do duoc — moi hop deu CHO XUONG DONG, nen mot nhan dai chi wrap chu khong bao gio tran. Thieu tien de de chung chieu do cua chan be-rong.",
+		);
+		await ket(2);
+	}
+	console.log(`XANH: co ${chat.length} cho de cam vet — khoa moc phai nam trong danh sach nay.`);
+	await ket(0);
+}
+
 async function chanBeRong(cookie, slug, gieo) {
 	let nhan = 0;
 	let tran = 0;
@@ -437,6 +494,7 @@ if (chan === "hai-tieng") await chanHaiTieng(cookie, slug, gieo);
 else if (chan === "khong-dich") await chanKhongDich(cookie, slug, gieo);
 else if (chan === "be-rong") await chanBeRong(cookie, slug, gieo);
 else if (chan === "trang-thai") await chanTrangThai(cookie, slug, gieo);
+else if (chan === "be-rong-tien-de") await chanBeRongTienDe(cookie, slug, gieo);
 else {
 	console.log(`KHONG DO DUOC: chua biet chan ${JSON.stringify(chan)}.`);
 	await ket(2);

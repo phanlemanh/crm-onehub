@@ -73,6 +73,10 @@
 		{
 			"ten": "aria-multiline",
 			"vi_sao": "co ARIA dang chuoi true/false, khong phai chu nguoi doc"
+		},
+		{
+			"ten": "translate",
+			"vi_sao": "co bao trinh duyet khong dich, gia tri la \"no\" — khong phai chu nguoi doc"
 		}
 	]
 }
