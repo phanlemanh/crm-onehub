@@ -200,7 +200,7 @@ human_signoff:
   exit_code:
   verifier: judgment
   verified_at:
-  human_override:
+  human_override: Đạt — Manh Phan 2026-09-06
   rationale: |
     Ban dich co doc nhu tieng Viet cua nguoi lam nghe khong — danh tu theo CONTEXT.md,
     thuat ngu ky thuat giu ten that, khong con dau vet dich may. Chi nguoi tra loi duoc.
