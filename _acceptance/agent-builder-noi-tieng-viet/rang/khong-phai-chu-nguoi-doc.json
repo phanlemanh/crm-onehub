@@ -64,6 +64,66 @@
 		{
 			"chu": "runs",
 			"vi_sao": "khoa cua ngan xem trong hop luot chay, so bang ==="
+		},
+		{
+			"chu": "code",
+			"vi_sao": "khoa che do xem cua bang ma, so bang ==="
+		},
+		{
+			"chu": "changes",
+			"vi_sao": "khoa che do xem cua bang ma, so bang ==="
+		},
+		{
+			"chu": "open",
+			"vi_sao": "khoa trang thai o bang ma"
+		},
+		{
+			"chu": "added",
+			"vi_sao": "khoa loai thay doi cua tep, so bang ==="
+		},
+		{
+			"chu": "modified",
+			"vi_sao": "khoa loai thay doi cua tep"
+		},
+		{
+			"chu": "light",
+			"vi_sao": "khoa chu de sang/toi truyen cho bo hien ma"
+		},
+		{
+			"chu": "dark",
+			"vi_sao": "khoa chu de sang/toi"
+		},
+		{
+			"chu": "pierre-dark-soft",
+			"vi_sao": "ten chu de mau cua bo hien ma, la dinh danh cua thu vien"
+		},
+		{
+			"chu": "pierre-light-soft",
+			"vi_sao": "ten chu de mau cua bo hien ma"
+		},
+		{
+			"chu": "unified",
+			"vi_sao": "tuy chon cach hien khac biet cua bo hien ma"
+		},
+		{
+			"chu": "32rem",
+			"vi_sao": "gia tri CSS truyen vao bo hien ma"
+		},
+		{
+			"chu": "auto",
+			"vi_sao": "gia tri CSS truyen vao bo hien ma"
+		},
+		{
+			"chu": "list_deals",
+			"vi_sao": "ten cong cu tac nhan goi, so bang === voi ket qua tra ve"
+		},
+		{
+			"chu": "all",
+			"vi_sao": "khoa bo loc cua bang thoa thuan, so bang ==="
+		},
+		{
+			"chu": "stale",
+			"vi_sao": "khoa bo loc cua bang thoa thuan"
 		}
 	],
 	"khoa_kieu": {
@@ -141,7 +201,9 @@
 		"khoa",
 		"motion",
 		"trigger",
-		"options"
+		"options",
+		"onClick",
+		"oldFile"
 	],
 	"khoa_object_ky_thuat": [
 		"id",
