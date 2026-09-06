@@ -57,6 +57,18 @@
 		{
 			"ten": "side",
 			"vi_sao": "huong mo cua ngan truot"
+		},
+		{
+			"ten": "messageId",
+			"vi_sao": "dinh danh muc trong bo cuon, khong ve ra man"
+		},
+		{
+			"ten": "scrollAnchor",
+			"vi_sao": "co danh dau moc cuon"
+		},
+		{
+			"ten": "defaultScrollPosition",
+			"vi_sao": "vi tri cuon mac dinh cua bo cuon"
 		}
 	]
 }

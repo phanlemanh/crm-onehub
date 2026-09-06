@@ -28,6 +28,7 @@ import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { DotMatrix } from "@crm/ui/components/dot-matrix";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	MessageScroller,
 	MessageScrollerButton,
@@ -77,6 +78,10 @@ import {
 	toTranscript,
 } from "@/lib/agent-transcript";
 import { isSharedChatToken } from "@/lib/chat-route";
+import {
+	type TroChuyenMessages,
+	troChuyenMessages,
+} from "@/lib/messages/agent-builder-tro-chuyen";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -99,7 +104,6 @@ import { ShareChatDialog } from "./share-chat-dialog";
 type Conversation = RouterOutputs["conversations"]["builderById"];
 type SharedConversation = RouterOutputs["conversations"]["shared"];
 
-const BUILDER_STEPS = ["Scope", "Instructions", "Manifest", "Review"] as const;
 const BUILDER_STEP_ARTIFACTS = [
 	null,
 	"agent/instructions.md",
@@ -196,6 +200,7 @@ export function AgentBuilderChat({
 	conversationId: string;
 	initialData: Conversation | SharedConversation | null;
 }) {
+	const t = troChuyenMessages(useLocale());
 	const trpc = useTRPC();
 	const queryClient = useQueryClient();
 	const sharedChat = isSharedChatToken(conversationId);
@@ -285,7 +290,7 @@ export function AgentBuilderChat({
 					className="flex flex-1 items-center justify-center p-8"
 					aria-busy="true"
 				>
-					<span className="text-muted-foreground text-sm">Opening chat…</span>
+					<span className="text-muted-foreground text-sm">{t.man.dangMo}</span>
 				</main>
 			);
 		}
@@ -670,6 +675,7 @@ function SharedAgentChat({
 }: {
 	conversation: SharedConversation;
 }) {
+	const t = troChuyenMessages(useLocale());
 	const submissions = builderSubmissions.parse(conversation.submissions);
 	const events = streamEvents.parse(conversation.events);
 	const messages = messagesFromEvents(events);
@@ -684,9 +690,9 @@ function SharedAgentChat({
 		<main className="flex min-h-0 flex-1 flex-col">
 			<header className="flex h-12 shrink-0 items-center gap-3 border-b px-5">
 				<h1 className="min-w-0 flex-1 truncate font-medium text-sm">
-					{conversation.agent?.name ?? conversation.title ?? "Agent builder"}
+					{conversation.agent?.name ?? conversation.title ?? t.man.boDung}
 				</h1>
-				<span className="text-muted-foreground text-xs">Read-only</span>
+				<span className="text-muted-foreground text-xs">{t.man.chiDoc}</span>
 			</header>
 
 			<MessageScrollerProvider autoScroll defaultScrollPosition="last-anchor">
@@ -699,11 +705,10 @@ function SharedAgentChat({
 							<MessageScrollerItem messageId="shared-chat-notice">
 								<div className="rounded-lg border bg-card px-4 py-3 text-sm">
 									<p className="font-medium">
-										Shared by {conversation.ownerName}
+										{t.man.chiaSeBoi(conversation.ownerName)}
 									</p>
 									<p className="mt-1 text-muted-foreground text-xs">
-										You can read this builder chat, but only its owner can
-										continue or change it.
+										{t.man.chiaSeMoTa}
 									</p>
 								</div>
 							</MessageScrollerItem>
@@ -759,18 +764,19 @@ function ChatHeader({
 	working: boolean;
 	creatingAgent: boolean;
 }) {
+	const t = troChuyenMessages(useLocale());
 	const workspaceUrl = useWorkspaceUrl();
 	const title =
 		(creatingAgent ? conversation.agent?.name : null) ??
 		conversation.title ??
-		"Agent chat";
+		t.man.hoiThoai;
 
 	return (
 		<header className="flex h-12 shrink-0 items-center gap-2 border-b px-4 sm:gap-2.5 sm:pr-4 sm:pl-5">
 			<div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
 				<h1 className="truncate font-medium text-sm">{title}</h1>
 				<span className="hidden shrink-0 text-muted-foreground text-xs sm:inline">
-					Private
+					{t.man.rieng}
 				</span>
 				{working ? (
 					<span className="flex shrink-0 items-center gap-2 text-muted-foreground text-xs">
@@ -779,15 +785,15 @@ function ChatHeader({
 							className="size-3.5 animate-spin text-ring"
 							motion="none"
 						/>
-						<span className="sr-only">Working in background</span>
+						<span className="sr-only">{t.man.chayNen}</span>
 						<span aria-hidden="true" className="hidden sm:inline">
-							Working in background
+							{t.man.chayNen}
 						</span>
 					</span>
 				) : null}
 			</div>
 			<Button asChild variant="ghost" size="icon-sm">
-				<Link href={workspaceUrl("/chat")} aria-label="Start a new chat">
+				<Link href={workspaceUrl("/chat")} aria-label={t.man.moMoi}>
 					<Icon icon={Add} />
 				</Link>
 			</Button>
@@ -813,8 +819,9 @@ function UserSubmission({
 	error: string | null;
 	sending?: boolean;
 }) {
+	const t = troChuyenMessages(useLocale());
 	const message = submission.message;
-	const messageText = message.text ?? "Message unavailable";
+	const messageText = message.text ?? t.man.tinKhongMo;
 	const command =
 		submission.commandType === "CREATE_AGENT"
 			? consumeBuilderCommand(messageText)
@@ -839,12 +846,12 @@ function UserSubmission({
 				{response ? (
 					<div className="flex items-center gap-1.5 text-muted-foreground text-xs">
 						<Icon icon={Reply} className="size-3.5" />
-						<span>Answer to follow-up</span>
+						<span>{t.traLoi.traLoiHoiThem}</span>
 					</div>
 				) : null}
 				{submission.commandType === "CREATE_AGENT" ? (
 					<div className="flex flex-wrap gap-1">
-						<ChatCommandChip label="Create agent" icon={Application} />
+						<ChatCommandChip label={t.traLoi.taoTacNhan} icon={Application} />
 					</div>
 				) : null}
 				<p className="wrap-break-word">{text}</p>
@@ -867,7 +874,7 @@ function UserSubmission({
 				) : null}
 				{failed ? (
 					<p className="mt-2 text-destructive text-xs">
-						{error ?? "This message could not be sent."}
+						{error ?? t.man.guiHong}
 					</p>
 				) : null}
 			</div>
@@ -961,12 +968,13 @@ function FollowUpTranscriptItem({
 	question: EveMessageInputRequest;
 	answered: boolean;
 }) {
+	const t = troChuyenMessages(useLocale());
 	return (
 		<div className="w-full max-w-sm border-ring/50 border-l-2 bg-muted/40 px-3 py-2.5">
 			<div className="flex items-center justify-between gap-3 text-xs">
-				<span className="font-medium">Follow-up</span>
+				<span className="font-medium">{t.traLoi.hoiThem}</span>
 				<span className="text-muted-foreground">
-					{answered ? "Answered" : "Waiting for your answer"}
+					{answered ? t.traLoi.daTraLoi : t.traLoi.choTraLoi}
 				</span>
 			</div>
 			<MessageResponse className="mt-1.5 text-sm leading-5">
@@ -977,12 +985,13 @@ function FollowUpTranscriptItem({
 }
 
 function CopyResponseAction({ markdown }: { markdown: string }) {
+	const t = troChuyenMessages(useLocale());
 	return (
 		<div className="flex h-7 items-center">
 			<Button
 				variant="ghost"
 				size="icon-xs"
-				aria-label="Copy response as Markdown"
+				aria-label={t.traLoi.chepMarkdown}
 				onClick={() => {
 					void navigator.clipboard.writeText(markdown);
 					toast.success("Response copied as Markdown.");
@@ -1003,6 +1012,7 @@ function ResponseActions({
 	messageId: string;
 	markdown: string;
 }) {
+	const t = troChuyenMessages(useLocale());
 	const trpc = useTRPC();
 	const initial = conversation.feedback.find(
 		(item) => item.messageId === messageId,
@@ -1025,7 +1035,7 @@ function ResponseActions({
 			<Button
 				variant="ghost"
 				size="icon-xs"
-				aria-label="Copy response as Markdown"
+				aria-label={t.traLoi.chepMarkdown}
 				onClick={() => {
 					void navigator.clipboard.writeText(markdown);
 					toast.success("Response copied as Markdown.");
@@ -1036,7 +1046,7 @@ function ResponseActions({
 			<Button
 				variant="ghost"
 				size="icon-xs"
-				aria-label="Rate response helpful"
+				aria-label={t.traLoi.hopIch}
 				aria-pressed={rating === "UP"}
 				className={cn(rating === "UP" && "bg-muted text-foreground")}
 				onClick={() => choose("UP")}
@@ -1046,7 +1056,7 @@ function ResponseActions({
 			<Button
 				variant="ghost"
 				size="icon-xs"
-				aria-label="Rate response not helpful"
+				aria-label={t.traLoi.khongHopIch}
 				aria-pressed={rating === "DOWN"}
 				className={cn(rating === "DOWN" && "bg-muted text-foreground")}
 				onClick={() => choose("DOWN")}
@@ -1068,6 +1078,7 @@ function BuildingAgentCard({
 	artifacts: Conversation["builderArtifacts"];
 	startedAt: string | null;
 }) {
+	const t = troChuyenMessages(useLocale());
 	const completed = completedBuilderSteps(artifacts, startedAt, sessionId);
 	const stop = useAsyncAction({
 		action: async () => {
@@ -1078,8 +1089,8 @@ function BuildingAgentCard({
 			});
 			if (!response.ok) throw new Error(await response.text());
 		},
-		onSuccess: () => toast.success("Stop requested."),
-		onError: () => toast.error("The agent could not be stopped. Try again."),
+		onSuccess: () => toast.success(t.dung.daXinDung),
+		onError: () => toast.error(t.dung.dungHong),
 	});
 
 	const writingPath =
@@ -1090,17 +1101,16 @@ function BuildingAgentCard({
 			<div className="overflow-hidden rounded-lg border bg-card">
 				<div className="flex items-center gap-2 px-4 pt-4">
 					<span className="min-w-0 flex-1 font-medium text-sm">
-						Building the agent
+						{t.dung.dangDung}
 					</span>
 					<span className="shrink-0 font-mono text-muted-foreground text-xs">
-						{completed} of 4
+						{t.dung.tienDo(String(completed))}
 					</span>
 				</div>
-				<ol className="flex flex-col gap-1 p-3" aria-label="Agent creation">
-					{BUILDER_STEPS.map((label, index) => {
+				<ol className="flex flex-col gap-1 p-3" aria-label={t.dung.nhanTienDo}>
+					{t.man.buoc.map((label: string, index: number) => {
 						const done = index < completed;
-						const active =
-							index === completed && completed < BUILDER_STEPS.length;
+						const active = index === completed && completed < t.man.buoc.length;
 						const artifact = BUILDER_STEP_ARTIFACTS[index];
 
 						return (
@@ -1146,15 +1156,15 @@ function BuildingAgentCard({
 										{done && artifact
 											? artifact.replace("agent/", "")
 											: done
-												? "Done"
+												? t.dung.xong
 												: active
-													? "Working"
-													: "Queued"}
+													? t.dung.dangLam
+													: t.dung.dangXep}
 									</span>
 								</div>
 								{active && writingPath ? (
 									<p className="pl-7 font-mono text-muted-foreground text-xs">
-										Writing {writingPath}
+										{t.dung.dangGhi(writingPath)}
 									</p>
 								) : null}
 							</li>
@@ -1163,7 +1173,7 @@ function BuildingAgentCard({
 				</ol>
 				<footer className="flex items-center gap-2 border-t bg-muted px-4 py-3">
 					<p className="min-w-0 flex-1 text-pretty text-muted-foreground text-xs">
-						Runs in the background
+						{t.dung.chayNen}
 					</p>
 					<Button
 						variant="outline"
@@ -1174,11 +1184,11 @@ function BuildingAgentCard({
 					>
 						<AsyncButtonContent
 							status={stop.status}
-							pendingLabel="Stopping"
-							successLabel="Stopping"
-							errorLabel="Try again"
+							pendingLabel={t.dung.dangDungLai}
+							successLabel={t.dung.dangDungLai}
+							errorLabel={t.dung.thuLai}
 						>
-							Stop
+							{t.dung.dungLai}
 						</AsyncButtonContent>
 					</Button>
 				</footer>
@@ -1198,14 +1208,15 @@ function BuilderFailureCard({
 	retrying: boolean;
 	onRetry: (() => void) | null;
 }) {
+	const t = troChuyenMessages(useLocale());
 	const message =
 		failure.kind === "rate-limit"
-			? "Vercel AI Gateway rate-limited this model before it could start. Try again in a moment or add AI Gateway credits in Vercel."
+			? t.loi.choPhut
 			: failure.kind === "restricted"
-				? "This model requires paid AI Gateway credits. Add credits in Vercel, then try again."
+				? t.loi.canTra
 				: failure.kind === "credits"
-					? "Vercel AI Gateway has no available credits. Add credits in Vercel, then try again."
-					: "The builder could not finish this request. Try again.";
+					? t.loi.hetTien
+					: t.loi.chung;
 
 	return (
 		<div
@@ -1216,7 +1227,7 @@ function BuilderFailureCard({
 				<Icon icon={WarningAlt} className="mt-0.5 size-4 text-destructive" />
 				<div className="min-w-0 flex-1">
 					<p className="font-medium text-sm">
-						{creatingAgent ? "Agent creation stopped" : "Response stopped"}
+						{creatingAgent ? t.dung.daDungTao : t.dung.daDungTraLoi}
 					</p>
 					<p className="mt-0.5 text-pretty text-muted-foreground text-xs leading-5">
 						{message}
@@ -1233,9 +1244,9 @@ function BuilderFailureCard({
 				>
 					<AsyncButtonContent
 						status={retrying ? "pending" : "idle"}
-						pendingLabel="Retrying"
+						pendingLabel={t.dung.dangThuLai}
 					>
-						Try again
+						{t.dung.thuLai}
 					</AsyncButtonContent>
 				</Button>
 			) : null}
@@ -1250,6 +1261,7 @@ function ReviewAgentCard({
 	conversation: Conversation;
 	versionId: string;
 }) {
+	const t = troChuyenMessages(useLocale());
 	const workspaceUrl = useWorkspaceUrl();
 	const version = conversation.createdVersions.find(
 		(candidate) => candidate.id === versionId,
@@ -1257,32 +1269,35 @@ function ReviewAgentCard({
 	const agent = conversation.agent;
 
 	if (!version || !agent) return null;
-	const manifest = manifestOf(version.manifest);
+	const manifest = manifestOf(t, version.manifest);
 
 	return (
 		<div className="flex flex-col gap-5">
 			<p className="max-w-[640px] text-pretty text-sm leading-5">
-				Your private draft is ready to review.
+				{t.banNhap.sanSang}
 			</p>
-			<AgentCardShell name={manifest.name ?? agent.name} status="Private">
+			<AgentCardShell
+				name={manifest.name ?? agent.name}
+				status={t.banNhap.rieng}
+			>
 				<div className="flex flex-col gap-2 p-4">
-					<ReviewRow label="When" value={manifest.trigger} />
-					<ReviewRow label="Find" value={manifest.looksAt} />
-					<ReviewRow label="Then" value={manifest.action} />
-					<ReviewRow label="Scope">
+					<ReviewRow label={t.banNhap.khiNao} value={manifest.trigger} />
+					<ReviewRow label={t.banNhap.tim} value={manifest.looksAt} />
+					<ReviewRow label={t.banNhap.roi} value={manifest.action} />
+					<ReviewRow label={t.banNhap.pham}>
 						<AgentScopeBadges
 							scopes={manifest.access}
-							fallback="Bounded CRM read access"
+							fallback={t.banNhap.phamMacDinh}
 						/>
 					</ReviewRow>
 				</div>
-				<AgentCardFooter note="Sandboxed · credentials never enter the sandbox">
+				<AgentCardFooter note={t.banNhap.hopKin}>
 					<Button asChild size="sm">
 						<Link
 							href={workspaceUrl(`/agents/${agent.id}`)}
 							transitionTypes={["nav-forward"]}
 						>
-							View details
+							{t.banNhap.xemChiTiet}
 							<Icon icon={ArrowRight} data-icon="inline-end" />
 						</Link>
 					</Button>
@@ -1357,6 +1372,7 @@ function DeployedAgentCard({
 	conversation: Conversation;
 	onFollowUp: (message: string) => Promise<void>;
 }) {
+	const t = troChuyenMessages(useLocale());
 	const trpc = useTRPC();
 	const workspaceUrl = useWorkspaceUrl();
 	const queryClient = useQueryClient();
@@ -1367,7 +1383,7 @@ function DeployedAgentCard({
 				await queryClient.invalidateQueries({
 					queryKey: trpc.agents.history.pathKey(),
 				});
-				toast.success("Agent run queued.");
+				toast.success(t.tacNhanSong.daXep);
 			},
 			onError: (error) => toast.error(error.message),
 		}),
@@ -1385,21 +1401,21 @@ function DeployedAgentCard({
 	const nextRun =
 		enabledTriggers.length === 1 ? enabledTriggers[0]?.nextRunAt : null;
 	const triggerSummary =
-		enabledTriggers.map((trigger) => trigger.name).join(" · ") || "Manual only";
+		enabledTriggers.map((trigger) => trigger.name).join(" · ") ||
+		t.tacNhanSong.chayTay;
 
 	return (
 		<div className="flex flex-col gap-[18px]">
 			<div className="flex flex-col gap-1">
-				<p className="text-sm leading-5">{agent.name} is live.</p>
+				<p className="text-sm leading-5">{t.tacNhanSong.daSong(agent.name)}</p>
 				<p className="text-muted-foreground text-sm leading-5">
-					I created the Eve agent, applied its bounded CRM and integration
-					access, and made it live for the team.
+					{t.tacNhanSong.daSongMoTa}
 				</p>
 			</div>
-			<AgentCardShell name={agent.name} status="Live">
+			<AgentCardShell name={agent.name} status={t.tacNhanSong.nhanSong}>
 				<div className="flex flex-col gap-2 p-4">
 					<ReviewRow
-						label="Trigger"
+						label={t.tacNhanSong.moc}
 						value={
 							nextRun ? (
 								<LocalDateTime
@@ -1416,10 +1432,16 @@ function DeployedAgentCard({
 							)
 						}
 					/>
-					<ReviewRow label="Runs in" value="Eve runtime · isolated sandbox" />
-					<ReviewRow label="Owner" value={`Team · ${agent.createdBy.name}`} />
+					<ReviewRow
+						label={t.tacNhanSong.chayO}
+						value="Eve runtime · isolated sandbox"
+					/>
+					<ReviewRow
+						label={t.tacNhanSong.chu}
+						value={`Team · ${agent.createdBy.name}`}
+					/>
 				</div>
-				<AgentCardFooter note="The chat stays private. The agent is team-owned.">
+				<AgentCardFooter note={t.tacNhanSong.ghiChuRieng}>
 					<div className="flex items-center gap-2">
 						<Button
 							variant="outline"
@@ -1430,17 +1452,17 @@ function DeployedAgentCard({
 						>
 							<AsyncButtonContent
 								status={runAction.status}
-								pendingLabel="Queueing"
-								successLabel="Queued"
-								errorLabel="Try again"
+								pendingLabel={t.tacNhanSong.dangXep}
+								successLabel={t.tacNhanSong.daXepNhan}
+								errorLabel={t.tacNhanSong.thuLai}
 							>
 								<Icon icon={Play} data-icon="inline-start" />
-								Run now
+								{t.tacNhanSong.chayNgay}
 							</AsyncButtonContent>
 						</Button>
 						<Button asChild size="sm">
 							<Link href={workspaceUrl(`/agents/${agent.id}`)}>
-								Open agent
+								{t.tacNhanSong.moTacNhan}
 								<Icon icon={ArrowRight} data-icon="inline-end" />
 							</Link>
 						</Button>
@@ -1450,9 +1472,9 @@ function DeployedAgentCard({
 
 			<div>
 				<p className="flex h-7 items-center text-muted-foreground text-sm">
-					Suggested follow-ups
+					{t.traLoi.goiYHoiThem}
 				</p>
-				{["Add another teammate to the notification"].map((suggestion) => (
+				{[t.traLoi.themNguoiVaoTin].map((suggestion) => (
 					<button
 						key={suggestion}
 						type="button"
@@ -1471,17 +1493,18 @@ function DeployedAgentCard({
 }
 
 function ChatUnavailable() {
+	const t = troChuyenMessages(useLocale());
 	const workspaceUrl = useWorkspaceUrl();
 
 	return (
 		<main className="flex flex-1 items-center justify-center p-8">
 			<div className="max-w-md text-center">
-				<h1 className="font-medium text-lg">Chat unavailable</h1>
+				<h1 className="font-medium text-lg">{t.man.khongMo}</h1>
 				<p className="mt-2 text-muted-foreground text-sm">
-					This chat does not exist or you do not have access to it.
+					{t.man.khongMoMoTa}
 				</p>
 				<Button asChild variant="outline" className="mt-5">
-					<Link href={workspaceUrl("/chat")}>Start a new chat</Link>
+					<Link href={workspaceUrl("/chat")}>{t.man.moMoi}</Link>
 				</Button>
 			</div>
 		</main>
@@ -1551,28 +1574,24 @@ function sharedConversationNeedsPolling(
 	return !eventStreamSettled(conversation.events);
 }
 
-function manifestOf(manifest: AgentManifestSummary) {
+function manifestOf(t: TroChuyenMessages, manifest: AgentManifestSummary) {
 	return {
 		name: manifest.name?.trim() || null,
 		trigger:
 			manifest.triggers
 				.map((trigger) =>
 					trigger.type === "MANUAL"
-						? "On demand"
+						? t.tacNhanSong.theoYeuCau
 						: compactSummary(
 								trigger.summary,
-								trigger.type === "EVENT" ? "On CRM event" : "On schedule",
+								trigger.type === "EVENT"
+									? t.tacNhanSong.theoSuKien
+									: t.tacNhanSong.theoLich,
 							),
 				)
-				.join(" · ") || "On demand",
-		looksAt: textOf(
-			manifest.dataScope.summary,
-			"CRM records in the approved scope",
-		),
-		action: compactSummary(
-			manifest.actions[0]?.summary,
-			"Perform the requested team action",
-		),
+				.join(" · ") || t.tacNhanSong.theoYeuCau,
+		looksAt: textOf(manifest.dataScope.summary, t.tacNhanSong.phamDocDuoc),
+		action: compactSummary(manifest.actions[0]?.summary, t.tacNhanSong.viecLam),
 		access: manifest.access,
 	};
 }

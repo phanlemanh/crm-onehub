@@ -32,6 +32,70 @@
 		{
 			"chu": "action",
 			"vi_sao": "khoa phan biet cua dong thoi gian (kind), so bang ==="
+		},
+		{
+			"chu": "agent/README.md",
+			"vi_sao": "duong dan tep trong hop lam viec cua tac nhan"
+		},
+		{
+			"chu": "agent/",
+			"vi_sao": "tien to duong dan, cat di bang replace()"
+		},
+		{
+			"chu": "integration",
+			"vi_sao": "khoa loai ban ghi trong lo trinh Zod"
+		},
+		{
+			"chu": "company",
+			"vi_sao": "khoa loai ban ghi trong lo trinh Zod"
+		},
+		{
+			"chu": "contact",
+			"vi_sao": "khoa loai ban ghi trong lo trinh Zod"
+		},
+		{
+			"chu": "submission",
+			"vi_sao": "khoa phan biet cua muc trong dong hoi thoai, so bang ==="
+		},
+		{
+			"chu": "x-crm-builder-conversation",
+			"vi_sao": "ten header HTTP"
+		},
+		{
+			"chu": "warning",
+			"vi_sao": "khoa sac thai cua muc, so bang ==="
+		},
+		{
+			"chu": "said",
+			"vi_sao": "khoa phan biet muc phien ban ghi, so bang ==="
+		},
+		{
+			"chu": "reasoned",
+			"vi_sao": "khoa phan biet muc phien ban ghi, so bang ==="
+		},
+		{
+			"chu": "did",
+			"vi_sao": "khoa phan biet muc phien ban ghi, so bang ==="
+		},
+		{
+			"chu": "rate-limit",
+			"vi_sao": "khoa loai that bai cua bo dung, so bang ==="
+		},
+		{
+			"chu": "restricted",
+			"vi_sao": "khoa loai that bai cua bo dung, so bang ==="
+		},
+		{
+			"chu": "credits",
+			"vi_sao": "khoa loai that bai cua bo dung, so bang ==="
+		},
+		{
+			"chu": "pending",
+			"vi_sao": "gia tri trang thai ky thuat cua nut hanh dong"
+		},
+		{
+			"chu": "idle",
+			"vi_sao": "gia tri trang thai ky thuat cua nut hanh dong"
 		}
 	],
 	"khoa_kieu": {
@@ -111,7 +175,10 @@
 		"trigger",
 		"options",
 		"onClick",
-		"oldFile"
+		"oldFile",
+		"messageId",
+		"scrollAnchor",
+		"defaultScrollPosition"
 	],
 	"khoa_object_ky_thuat": [
 		"id",

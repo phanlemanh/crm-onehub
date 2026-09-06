@@ -42,6 +42,7 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 }
 
 const KHONG_DAU = new Set([
+	"dung.xong",
 	"luot.thanhCong",
 	"luot.model",
 	"trangThai.SUCCEEDED",
@@ -487,6 +488,13 @@ describe("kho chuoi cua vong ③a", () => {
 			"agent-builder-tro-chuyen:luot.catBot": [
 				"Đang hiện 1 bước đầu trong A. Lượt chạy này dài quá nên không hiện hết được.",
 				"Đang hiện 12 bước đầu trong A. Lượt chạy này dài quá nên không hiện hết được.",
+			],
+			"agent-builder-tro-chuyen:dung.dangGhi": ["Đang ghi 1", "Đang ghi 12"],
+			"agent-builder-tro-chuyen:dung.tienDo": ["1 trên 4", "12 trên 4"],
+			"agent-builder-tro-chuyen:man.chiaSeBoi": ["1 chia sẻ", "12 chia sẻ"],
+			"agent-builder-tro-chuyen:tacNhanSong.daSong": [
+				"1 đã vào chạy.",
+				"12 đã vào chạy.",
 			],
 		} satisfies Record<string, [string, string]>;
 
