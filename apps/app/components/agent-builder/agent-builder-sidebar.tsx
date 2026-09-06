@@ -1,6 +1,8 @@
 "use client";
 
 import Add from "@carbon/icons-react/es/Add";
+import { useLocale } from "@crm/ui/components/locale-provider";
+import { khungMessages } from "@/lib/messages/agent-builder-khung";
 import Bot from "@carbon/icons-react/es/Bot";
 import CheckmarkFilled from "@carbon/icons-react/es/CheckmarkFilled";
 import CircleFilled from "@carbon/icons-react/es/CircleFilled";
@@ -35,6 +37,7 @@ export function AgentBuilderSidebar({
 	onNavigate?: () => void;
 	initialData?: SidebarData;
 }) {
+	const t = khungMessages(useLocale());
 	const pathname = usePathname();
 	const workspaceUrl = useWorkspaceUrl();
 	const trpc = useTRPC();
@@ -78,11 +81,11 @@ export function AgentBuilderSidebar({
 	return (
 		<aside className={cn("min-h-0 min-w-0 flex-col p-4 font-sans", className)}>
 			<div className="flex h-7 shrink-0 items-center justify-between pl-2">
-				<span className="font-medium text-xs">Chats</span>
+				<span className="font-medium text-xs">{t.thanhBen.hoiThoai}</span>
 				<Button asChild variant="ghost" size="icon-xs">
 					<Link
 						href={workspaceUrl("/chat")}
-						aria-label="New agent chat"
+						aria-label={t.thanhBen.hoiThoaiMoi}
 						onClick={onNavigate}
 					>
 						<Icon icon={Add} />
@@ -90,16 +93,16 @@ export function AgentBuilderSidebar({
 				</Button>
 			</div>
 
-			<nav aria-label="Agent chats" className="min-h-0 flex-1 overflow-y-auto">
+			<nav aria-label={t.thanhBen.danhSachHoiThoai} className="min-h-0 flex-1 overflow-y-auto">
 				{groups.map((group) => (
 					<div key={group.label}>
 						<div className="flex h-8 items-end pb-1 pl-2 font-medium text-[11px] text-muted-foreground uppercase tracking-[0.08em]">
-							{group.label}
+							{t.thanhBen.nhom[group.label]}
 						</div>
 						{group.items.map((conversation) => {
 							const href = workspaceUrl(`/chat/${conversation.id}`);
 							const active = pathname === href;
-							const title = conversation.title ?? "Untitled chat";
+							const title = conversation.title ?? t.thanhBen.chuaDatTen;
 							return (
 								<div
 									key={conversation.id}
@@ -141,7 +144,7 @@ export function AgentBuilderSidebar({
 
 				{groups.length === 0 ? (
 					<p className="px-2 py-3 text-muted-foreground text-xs">
-						No chats in the last 7 days.
+						{t.thanhBen.trongBayNgay}
 					</p>
 				) : null}
 
@@ -164,6 +167,7 @@ function TeamAgents({
 	pathname: string;
 	onNavigate?: () => void;
 }) {
+	const t = khungMessages(useLocale());
 	const workspaceUrl = useWorkspaceUrl();
 
 	return (
@@ -174,7 +178,7 @@ function TeamAgents({
 				onClick={onNavigate}
 				className="flex h-8 items-end gap-2 rounded-sm px-2 pb-1 font-medium text-[11px] text-muted-foreground uppercase tracking-[0.08em] outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
 			>
-				<span className="min-w-0 flex-1">Team agents</span>
+				<span className="min-w-0 flex-1">{t.thanhBen.tacNhanCuaDoi}</span>
 				<span className="shrink-0 font-mono">{agents.length}</span>
 			</Link>
 			{agents.map((agent) => {

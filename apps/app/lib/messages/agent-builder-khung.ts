@@ -8,9 +8,11 @@ const en = {
 		chuaDatTen: "Untitled chat",
 		trongBayNgay: "No chats in the last 7 days.",
 		tacNhanCuaDoi: "Team agents",
-		homNay: "Today",
-		homQua: "Yesterday",
-		bayNgayQua: "Last 7 days",
+		nhom: {
+			Today: "Today",
+			Yesterday: "Yesterday",
+			"Last 7 days": "Last 7 days",
+		},
 		dangMoDieuHuong: "Loading agent navigation…",
 	},
 	trang: {
@@ -56,9 +58,11 @@ const vi = {
 		chuaDatTen: "Hội thoại chưa đặt tên",
 		trongBayNgay: "Không có hội thoại nào trong 7 ngày qua.",
 		tacNhanCuaDoi: "Tác nhân của đội",
-		homNay: "Hôm nay",
-		homQua: "Hôm qua",
-		bayNgayQua: "7 ngày qua",
+		nhom: {
+			Today: "Hôm nay",
+			Yesterday: "Hôm qua",
+			"Last 7 days": "7 ngày qua",
+		},
 		dangMoDieuHuong: "Đang mở thanh điều hướng…",
 	},
 	trang: {
