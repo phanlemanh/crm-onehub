@@ -1,0 +1,140 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bằng chứng · agent-builder-noi-tieng-viet</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+</style></head><body><div class="wrap">
+<h1>Lát dựng tác nhân nói tiếng Việt — đợt một: khung điều hướng, cụm Tác nhân của đội, và bảng kết quả/mã đọc đúng tiếng của người quản trị</h1><div class="sub">Trang bằng chứng · <span class="mono">agent-builder-noi-tieng-viet</span> · tier T2</div>
+<div class="card" style="margin-top:12px"><span class="badge pend">PENDING-JUDGMENT</span>
+<div class="meta"><span>Verified by: <b>sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E1</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-1b</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E2</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-2</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E3</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-3</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E4</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-4</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E5</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E6">E6</a></td><td>AC-5</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E6</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-6</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E7</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-6b</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E8</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-7</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E9</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E10">E10</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E10</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E11">E11</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E11</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E12">E12</a></td><td>AC-9</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E12</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E13">E13</a></td><td>AC-9</td><td>script</td><td><span class="badge pend">UNCERTAIN</span></td><td class="mono">r-20260906T035904Z-E13</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E14">E14</a></td><td>AC-10</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E14</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E15">E15</a></td><td>AC-11</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E15</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E16">E16</a></td><td>AC-12</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E16</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E17">E17</a></td><td>AC-12</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">r-20260906T035904Z-E17</td><td class="mono">2026-09-06T04:12:00Z</td></tr>
+<tr><td><a href="#E18">E18</a></td><td>AC-13</td><td>judgment</td><td><span class="badge pend">UNCERTAIN</span></td><td class="mono">r-20260906T035904Z-E18</td><td class="mono">—</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · script</h3><p class="crit">AC-1: Given mọi route của lát — danh sách SINH TỪ THƯ MỤC `(agent-builder)`, không gõ tay — và bảng đóng `route-cua-lat.json` chia chúng thành *dựng được ngay* và *cần một bản ghi thật*, When phép đo dựng từng route dựng được trên máy chủ thật hai lượt `vi`/`en` và đọc chữ người đọc thấy, Then trên từng route: số chuỗi hai lượt BẰNG nhau; mỗi cặp cùng vị trí KHÁC nhau trừ bảng không-dịch AC-6; mọi chuỗi lượt `vi` mang dấu trừ dòng `mien_dau` khai có tên. **Bảng chia route phải chịu CHIỀU ĐỎ**: phép đo mở từng route khai là cần-bản-ghi bằng một định danh KHÔNG CÓ THẬT; route nào vẫn vẽ ra chữ là ĐỎ gọi tên — bản khai đã cũ. Tập rỗng trên một route là thoát mã 2.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_hai_tieng</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">ket qua: route do duoc 2/4 (thu muc sinh ra 4, chua chot cach gieo 2) · 22 cap doi chieu · ngoai lat=9 · hong=0 · tu choi do=0
+GIOI HAN DA KHAI: 2 route can mot ban ghi that — va ca 2 da duoc chung la THAT SU khong dung duoc bang mot dinh danh khong co that.</pre>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · script</h3><p class="crit">AC-1b</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_chu_cung_jsx</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">ket qua: 26 file .tsx tren dia, tru 6 loai tru co ten, cong 0 khai them = 20 file quet. 0 chuoi khoa cung ngoai 0 dong mien tru.</pre>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · script</h3><p class="crit">AC-2: Given mọi lời gọi toast của lát, kê thành bảng đóng ghim `(file, khoá kho chuỗi)`, When phép đo đối chiếu, Then bảng khớp mã theo CẢ HAI CHIỀU — thiếu hay thừa một mục đều thoát mã 2 in cả hai danh sách. Lượt chuyển tiếp `error.message` từ API đếm riêng, không tính là chưa dịch.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_toast</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">XANH: khong loi goi toast nao con mang chu tieng Anh viet thang.</pre>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · script</h3><p class="crit">AC-3: Given bốn tiêu đề tài liệu của lát đang là `export const metadata`, When trang dựng, Then cả bốn thành `generateMetadata` đọc từ kho chuỗi; phép đo đếm Ô tiêu đề chứ không đếm chuỗi, và số ô nhận ra phải BẰNG bốn.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_tieu_de</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">XANH: ca 4 o nhan deu doc tu kho chuoi.</pre>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · script</h3><p class="crit">AC-4: Given kiểm kê đếm **57 chuỗi nằm trong thuộc tính JSX**, When phép đo đọc cây cú pháp, Then **danh sách tên thuộc tính SINH TỪ CÂY, không kê tay**: lấy mọi tên thuộc tính mang chuỗi rồi TRỪ theo danh sách kỹ thuật khai có tên; một tên thuộc tính mang chữ người đọc mà không nằm trong danh sách kỹ thuật và cũng không đọc từ kho chuỗi là ĐỎ gọi tên `file:dòng:tên-thuộc-tính`. Số thuộc tính mang chữ bắt được phải BẰNG con số neo 57; lệch là thoát mã 2 kèm diff. Mỗi dòng miễn trừ kỹ thuật phải còn đối tượng thật.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E5</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_thuoc_tinh</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">XANH: 39 thuoc tinh doc tu kho chuoi, va khong thuoc tinh nao ngoai danh sach ky thuat con mang chuoi viet thang.</pre>
+</div>
+<div class="card eval" id="E6"><h3><span class="badge pass">PASS</span> &nbsp;E6 · script</h3><p class="crit">AC-5: Given bảng đóng chín ô trạng thái của lát (tám ô `ST-*` của design cộng ô rỗng của thanh bên), mỗi ô trỏ một ĐƯỜNG vào chính kho chuỗi của sản phẩm chứ không gõ tay chữ mong đợi, When phép đo dựng trên máy chủ thật, Then đường chết là thoát mã 2 — thiếu tiền đề; ô khai *dựng được* mà chữ của nó KHÔNG vẽ ra là ĐỎ; ô khai *không dựng được* mà chữ của nó VẼ RA là ĐỎ, bản khai đã cũ. **Ít nhất MỘT ô phải dựng được**; không ô nào dựng được là thoát mã 2. Ô không dựng được GỌI TÊN kèm lý do dưới nhãn *GIỚI HẠN ĐÃ KHAI* và mang sang cổng ký — tuyệt đối không hạ xuống đọc mã rồi ghi đạt.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E6</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_trang_thai</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">ket qua: 9 o trang thai · do duoc 2 · gioi han da khai 7 · hong=0
+XANH ST-doi-rong tren /agents · XANH ST-thanhben-rong tren /agents</pre>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge pass">PASS</span> &nbsp;E7 · script</h3><p class="crit">AC-6: Given các giá trị không được dịch — tên thương hiệu, định danh kỹ thuật — kê thành bảng đóng, cộng chín chuỗi `ngoai_lat` sinh từ sáu file hoãn sang đợt hai, When màn dựng hai lượt tiếng, Then mỗi giá trị được so **theo VỊ TRÍ trong cây DOM**: chỗ nào lượt `vi` vẽ ra giá trị đó thì lượt `en` ở đúng vị trí ấy phải vẽ ra Y HỆT chuỗi đó — khác nhau là ĐỎ gọi tên route, vị trí và chuỗi bên kia. Dòng khai trong bảng mà không vị trí nào vẽ ra là thoát mã 2, trừ dòng khai rõ đối tượng của nó nằm ngoài màn đo được kèm lý do. Không vị trí nào đối chiếu được là thoát mã 2.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E7</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_khong_dich</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">ket qua: 2 dong bang + 8 chuoi ngoai lat · so vi tri doi chieu HAI LUOT=8 · gioi han da khai=2 · thieu=0 · bi dich=0</pre>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · script</h3><p class="crit">AC-6b</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E8</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_du_lieu_nguoi_nhap</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">ket qua: 3 o · xanh=3 · hong=0 · ban khai cu=0</pre>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pass">PASS</span> &nbsp;E9 · script</h3><p class="crit">AC-7: Given bộ đột biến, When cắm một vết cho TỪNG hình dạng của trục A (văn bản JSX · thuộc tính · tiêu đề · toast · khoá object · component dùng chung), Then bảng ĐÓNG ghim `(hình dạng, chân chuyên trách)` — mỗi vết phải bị đúng CHÂN CHUYÊN TRÁCH của hình dạng đó bắt với mã 1, không nhận «một chân nào đó bắt được»; vết của hình dạng *component dùng chung* phải cắm ở file NGOÀI `components/agent-builder`, khai đường dẫn nguyên văn; mã 2 in riêng và KHÔNG tính là bắt được; cây lành thì mọi chân xanh; `git status` trước và sau bằng nhau.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E9</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_dot_bien</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">bang dong: 7 hinh dang, moi hinh dang mot vet va mot chan chuyen trach.
+XANH: ca 7 vet deu bi it nhat mot chan bat, va cay lanh thi ca 7 chan deu xanh.</pre>
+</div>
+<div class="card eval" id="E10"><h3><span class="badge pass">PASS</span> &nbsp;E10 · script</h3><p class="crit">AC-8: Given ba nguồn đếm độc lập (bản khai lát · bộ quét JSX · bộ quét ngoài JSX) và bản khai lát liệt đủ thư mục của lát cộng `them` cho component dùng chung, và ghim **năm con số neo đo bằng chính bản khai này ngày 06/09, độc lập với luật quét — 26 file trên đĩa · 20 file quét · 237 chuỗi ứng viên · 180 văn bản · 57 thuộc tính**, When chân đo dựng danh sách, Then ba con số file BẰNG nhau, số vật (toast, ô tiêu đề) khớp bảng khai theo TẬP chứ không theo tổng, và số quét ra BẰNG số neo — lệch là thoát mã 2 kèm diff tên file. **Sáu file hoãn sang đợt hai phải nằm trong `khong_quet` kèm lý do**, số dòng `khong_quet` BẰNG sáu — thừa hay thiếu một dòng là thoát mã 2 gọi tên file. Cần gạt đó đo bằng QUAN HỆ, không bằng «còn tiếng Anh» (sáu file đó còn tiếng Anh là đúng thiết kế): một file bị loại trừ mà mang chuỗi TRÙNG với một giá trị của ba kho chuỗi mới là ĐỎ — nghĩa là chữ của đợt này đã rò sang vùng hoãn. Thí nghiệm thả một file `.tsx` mang chữ tiếng Anh vào thư mục lát phải chạy NỀN trước, và chân trả mã 2 khi có vết là *chưa đo được*, không tính là đã bắt.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E10</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_khai_sinh</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">XANH: 20 file, ba chan doc bang nhau; 10 loi goi toast va 4 o tieu de, khop bang khai.</pre>
+</div>
+<div class="card eval" id="E11"><h3><span class="badge pass">PASS</span> &nbsp;E11 · script</h3><p class="crit">AC-8: Given ba nguồn đếm độc lập (bản khai lát · bộ quét JSX · bộ quét ngoài JSX) và bản khai lát liệt đủ thư mục của lát cộng `them` cho component dùng chung, và ghim **năm con số neo đo bằng chính bản khai này ngày 06/09, độc lập với luật quét — 26 file trên đĩa · 20 file quét · 237 chuỗi ứng viên · 180 văn bản · 57 thuộc tính**, When chân đo dựng danh sách, Then ba con số file BẰNG nhau, số vật (toast, ô tiêu đề) khớp bảng khai theo TẬP chứ không theo tổng, và số quét ra BẰNG số neo — lệch là thoát mã 2 kèm diff tên file. **Sáu file hoãn sang đợt hai phải nằm trong `khong_quet` kèm lý do**, số dòng `khong_quet` BẰNG sáu — thừa hay thiếu một dòng là thoát mã 2 gọi tên file. Cần gạt đó đo bằng QUAN HỆ, không bằng «còn tiếng Anh» (sáu file đó còn tiếng Anh là đúng thiết kế): một file bị loại trừ mà mang chuỗi TRÙNG với một giá trị của ba kho chuỗi mới là ĐỎ — nghĩa là chữ của đợt này đã rò sang vùng hoãn. Thí nghiệm thả một file `.tsx` mang chữ tiếng Anh vào thư mục lát phải chạy NỀN trước, và chân trả mã 2 khi có vết là *chưa đo được*, không tính là đã bắt.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E11</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_dan_so_tu_dia</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">neo: 26/26 file — khop. can gat khong_quet: 6 dong khai HOAN sang dot sau.
+XANH: dan so tu thay file moi, va ca hai chan deu do vi no.</pre>
+</div>
+<div class="card eval" id="E12"><h3><span class="badge pass">PASS</span> &nbsp;E12 · script</h3><p class="crit">AC-9: Given bản `vi` dài hơn bản `en`, When mọi route dựng được của lát dựng ở 360px hai lượt, Then với mọi phần tử NHÌN THẤY ĐƯỢC mang nhãn dịch được, `scrollWidth ≤ clientWidth`; lượt `en` là đối chứng dương. **Giới hạn kế thừa:** mù với vùng chứa cho xuống dòng.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E12</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_be_rong</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">ket qua 360px: 10 nhan dich duoc · vi tran ma en vua=0 · tran ca hai luot=0</pre>
+</div>
+<div class="card eval" id="E13"><h3><span class="badge pend">UNCERTAIN</span> &nbsp;E13 · script</h3><p class="crit">AC-9: Given bản `vi` dài hơn bản `en`, When mọi route dựng được của lát dựng ở 360px hai lượt, Then với mọi phần tử NHÌN THẤY ĐƯỢC mang nhãn dịch được, `scrollWidth ≤ clientWidth`; lượt `en` là đối chứng dương. **Giới hạn kế thừa:** mù với vùng chứa cho xuống dòng.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E13</b></span><span>exit_code <b>2</b></span><span>verifier <b class="mono">config:executors.script.ab_be_rong_do</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">tien de be rong o 360px: 17 nhan doc duoc · hop CHAT CUNG=4 · trong do mang chu CUA LAT nay=0
+KHONG DO DUOC: thieu tien de nen KHONG chay phep cam vet — va KHONG duoc doc ket qua rong nay la &#39;ban dich vua&#39;.</pre>
+</div>
+<div class="card eval" id="E14"><h3><span class="badge pass">PASS</span> &nbsp;E14 · script</h3><p class="crit">AC-10: Given MỌI chuỗi trong 20 file quét (không riêng JSX), When bộ quét lấy hết rồi trừ theo luật có tên với hai danh sách tách biệt (thuộc tính JSX / khoá object), Then 0 chuỗi người đọc thấy còn tiếng Anh, in `file:dòng:bối cảnh:nguyên văn` khi đỏ; 0 chuỗi quét ra là thoát mã 2; dòng giữ-nguyên chết là ĐỎ.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E14</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_moi_chuoi</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">XANH: khong chuoi nguoi doc thay nao con la tieng Anh.</pre>
+</div>
+<div class="card eval" id="E15"><h3><span class="badge pass">PASS</span> &nbsp;E15 · script</h3><p class="crit">AC-11: Given thư mục `rang/` của lát này và của ba lát trước, When so sánh, Then không thân hàm hay thân mô-đun nào trùng từ 12 dòng trở lên — lát này dùng lại thước qua `--lat` và ổ cắm, KHÔNG chép; trùng là ĐỎ kèm tên hai file.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E15</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_mot_bo_thuoc</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">XANH: mot bo thuoc, khong ban chep nao troi.</pre>
+</div>
+<div class="card eval" id="E16"><h3><span class="badge pass">PASS</span> &nbsp;E16 · test</h3><p class="crit">AC-12: Given `CONTEXT.md` chưa có mục nào cho danh từ trung tâm của lát, When vòng này đóng, Then từ điển có mục **Tác nhân** (và các từ đi kèm mà lát này dùng lặp), và ba kho chuỗi mới qua trọn bộ canh kho chuỗi: mọi giá trị `vi` có dấu trừ miễn trừ có tên, không giá trị nào y hệt `en`, mọi hàm ghép biến có khẳng định ghim, không khoá chết.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E16</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.rang3_khoa_chet</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">51 pass, 0 fail — bo canh kho chuoi xanh lan dau cho ba kho moi.</pre>
+</div>
+<div class="card eval" id="E17"><h3><span class="badge pass">PASS</span> &nbsp;E17 · script</h3><p class="crit">AC-12: Given `CONTEXT.md` chưa có mục nào cho danh từ trung tâm của lát, When vòng này đóng, Then từ điển có mục **Tác nhân** (và các từ đi kèm mà lát này dùng lặp), và ba kho chuỗi mới qua trọn bộ canh kho chuỗi: mọi giá trị `vi` có dấu trừ miễn trừ có tên, không giá trị nào y hệt `en`, mọi hàm ghép biến có khẳng định ghim, không khoá chết.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E17</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.ab_tu_dien</b></span><span>verified_at <b>2026-09-06T04:12:00Z</b></span></div>
+<pre class="out">XANH: ca 3 muc deu co trong CONTEXT.md va deu duoc ban vi cua lat dung.</pre>
+</div>
+<div class="card eval" id="E18"><h3><span class="badge pend">UNCERTAIN</span> &nbsp;E18 · judgment</h3><p class="crit">AC-13: Given ba kho chuỗi mới, When người đọc như người quản trị OneHub, Then bản dịch đọc như tiếng Việt của người làm nghề: danh từ theo `CONTEXT.md`, thuật ngữ kỹ thuật giữ tên thật, không còn dấu vết dịch máy.</p>
+<div class="kv"><span>run_id <b>r-20260906T035904Z-E18</b></span><span>exit_code <b></b></span><span>verifier <b class="mono">judgment</b></span></div>
+<p class="note"><b>Phán đoán:</b> Ban dich co doc nhu tieng Viet cua nguoi lam nghe khong — danh tu theo CONTEXT.md,
+thuat ngu ky thuat giu ten that, khong con dau vet dich may. Chi nguoi tra loi duoc.</p>
+<pre class="out">Muc phan xet — may khong cham.</pre>
+<div class="ov">human_override: CHƯA điền (việc của bạn ở Gate 2)</div>
+</div>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>
