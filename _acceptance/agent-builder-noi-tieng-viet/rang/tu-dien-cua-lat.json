@@ -1,0 +1,14 @@
+{
+	"lat": "agent-builder-noi-tieng-viet",
+	"ghi_chu": "Danh tu trung tam cua lat phai co MUC trong CONTEXT.md, va moi muc khai o day phai duoc ban vi cua kho chuoi lat nay thuc su dung — muc tu dien chet la DO. Hai chieu: thieu muc la DO, muc khong ai dung cung la DO.",
+	"kho": [
+		"apps/app/lib/messages/agent-builder-khung.ts",
+		"apps/app/lib/messages/agent-builder-tac-nhan.ts",
+		"apps/app/lib/messages/agent-builder-ket-qua.ts"
+	],
+	"muc": [
+		{ "tu": "Tác nhân", "vi_sao": "danh tu trung tam cua ca lat" },
+		{ "tu": "Hội thoại", "vi_sao": "ten cua buoi trao doi rieng voi bo dung" },
+		{ "tu": "Lượt chạy", "vi_sao": "don vi mot lan tac nhan thuc thi" }
+	]
+}
