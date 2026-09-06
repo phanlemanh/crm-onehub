@@ -264,6 +264,12 @@ describe("a limited lock subquery when the planner re-runs it per row", () => {
 		await insert(0, attempts);
 		await db.$executeRaw`ANALYZE "agentTask"`;
 		for (let index = 1; index < rows; index++) await insert(index, attempts);
+		const [stats] = await db.$queryRaw<{ reltuples: number }[]>`
+			SELECT reltuples::float8 AS reltuples FROM pg_class WHERE relname = 'agentTask'
+		`;
+		if (!stats || stats.reltuples > 1) {
+			throw new Error(`statistics drifted: reltuples=${stats?.reltuples}`);
+		}
 	}
 
 	function probe() {
@@ -295,10 +301,18 @@ describe("a limited lock subquery when the planner re-runs it per row", () => {
 	it("retireExhausted still retires exactly the limit", async () => {
 		await staleStatistics(MAX_ATTEMPTS);
 		expect(await retireExhausted(limit)).toHaveLength(limit);
+		expect(
+			await db.agentTask.count({ where: { kind, finishedAt: null } }),
+		).toBe(rows - limit);
 	});
 
 	it("claimDue still claims exactly the limit", async () => {
 		await staleStatistics(0);
 		expect(await claimDue(limit, RESEARCH)).toHaveLength(limit);
+		expect(
+			await db.agentTask.count({
+				where: { kind, leasedUntil: { lt: new Date() } },
+			}),
+		).toBe(rows - limit);
 	});
 });

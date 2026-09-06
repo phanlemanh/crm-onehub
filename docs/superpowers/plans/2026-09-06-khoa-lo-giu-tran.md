@@ -188,12 +188,15 @@ function typed(params: unknown[]): unknown[] {
 	);
 }
 
-async function lockRowsLoops(mod: Tasks): Promise<{ loops: number; cte: boolean }> {
+async function lockRowsLoops(
+	mod: Tasks,
+): Promise<{ loops: number; cte: boolean }> {
 	await staleStatistics();
 	latest = null;
 	await mod.retireExhausted(limit);
 	const captured = latest as Captured | null;
-	if (!captured) throw new Error("no UPDATE captured from the Prisma query event");
+	if (!captured)
+		throw new Error("no UPDATE captured from the Prisma query event");
 	await staleStatistics();
 	const plan: string[] = [];
 	await db
@@ -210,7 +213,8 @@ async function lockRowsLoops(mod: Tasks): Promise<{ loops: number; cte: boolean 
 		});
 	const lock = plan.find((line) => line.includes("LockRows"));
 	const loops = Number(/loops=(\d+)/.exec(lock ?? "")?.[1] ?? Number.NaN);
-	if (Number.isNaN(loops)) throw new Error(`no LockRows node in plan:\n${plan.join("\n")}`);
+	if (Number.isNaN(loops))
+		throw new Error(`no LockRows node in plan:\n${plan.join("\n")}`);
 	return { loops, cte: plan.some((line) => line.includes("CTE Scan")) };
 }
 
@@ -218,7 +222,9 @@ function assertDisjoint(results: { id: string }[][]): Set<string> {
 	const ids = results.flat().map((row) => row.id);
 	const unique = new Set(ids);
 	if (unique.size !== ids.length) {
-		throw new Error(`duplicate ids: ${ids.length - unique.size} of ${ids.length}`);
+		throw new Error(
+			`duplicate ids: ${ids.length - unique.size} of ${ids.length}`,
+		);
 	}
 	return unique;
 }
@@ -255,12 +261,16 @@ describe.skipIf(!armed)("khoa-lo-giu-tran rang", () => {
 		const results = await concurrent(current);
 		const unique = assertDisjoint(results);
 		console.log(`unique=${unique.size}/${callers * limit} (fixed)`);
-		for (const batch of results) expect(batch.length).toBeLessThanOrEqual(limit);
+		for (const batch of results)
+			expect(batch.length).toBeLessThanOrEqual(limit);
 		expect(unique.size).toBe(callers * limit);
 	});
 
 	it("concurrent no-lock: dropping FOR UPDATE SKIP LOCKED hands out duplicates", async () => {
-		const source = (await currentSource()).replaceAll("FOR UPDATE SKIP LOCKED", "");
+		const source = (await currentSource()).replaceAll(
+			"FOR UPDATE SKIP LOCKED",
+			"",
+		);
 		const noLock = await load("no-lock", source);
 		const results = await concurrent(noLock);
 		const ids = results.flat().map((row) => row.id);
