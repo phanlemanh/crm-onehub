@@ -994,7 +994,7 @@ function CopyResponseAction({ markdown }: { markdown: string }) {
 				aria-label={t.traLoi.chepMarkdown}
 				onClick={() => {
 					void navigator.clipboard.writeText(markdown);
-					toast.success("Response copied as Markdown.");
+					toast.success(t.traLoi.daChepMarkdown);
 				}}
 			>
 				<Icon icon={Copy} />
@@ -1038,7 +1038,7 @@ function ResponseActions({
 				aria-label={t.traLoi.chepMarkdown}
 				onClick={() => {
 					void navigator.clipboard.writeText(markdown);
-					toast.success("Response copied as Markdown.");
+					toast.success(t.traLoi.daChepMarkdown);
 				}}
 			>
 				<Icon icon={Copy} />
@@ -1434,11 +1434,11 @@ function DeployedAgentCard({
 					/>
 					<ReviewRow
 						label={t.tacNhanSong.chayO}
-						value="Eve runtime · isolated sandbox"
+						value={t.tacNhanSong.chayOEve}
 					/>
 					<ReviewRow
 						label={t.tacNhanSong.chu}
-						value={`Team · ${agent.createdBy.name}`}
+						value={t.tacNhanSong.chuLaDoi(agent.createdBy.name)}
 					/>
 				</div>
 				<AgentCardFooter note={t.tacNhanSong.ghiChuRieng}>

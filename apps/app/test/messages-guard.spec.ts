@@ -517,6 +517,10 @@ describe("kho chuoi cua vong ③a", () => {
 			"agent-builder-o-soan:the.go": ["Gỡ 1", "Gỡ 12"],
 			"agent-builder-hoi-thoai-thao-tac:xoa.xoaMot": ["Xoá 1", "Xoá 12"],
 			"agent-builder-hoi-thoai-thao-tac:xoa.xoaHoi": ["Xoá 1?", "Xoá 12?"],
+			"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [
+				"Cả đội · 1",
+				"Cả đội · 12",
+			],
 		} satisfies Record<string, [string, string]>;
 
 		const ham: string[] = [];

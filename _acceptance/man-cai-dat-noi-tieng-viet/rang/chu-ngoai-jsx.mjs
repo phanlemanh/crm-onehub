@@ -490,8 +490,15 @@ function chanThuocTinh() {
 					ts.isJsxExpression(gt) &&
 					gt.expression &&
 					/\bt\.[A-Za-z]/.test(gt.expression.getText(nguon));
+				const rong =
+					ts.isStringLiteral(gt) && gt.text.trim() === "";
+				const the = n.parent?.parent?.tagName?.getText(nguon) ?? "";
+				const khoaBieuMau =
+					(ten === "name" || ten === "value") && /^[a-z]/.test(the);
 				if (docKho) tuKho += 1;
-				else if (laChuoi) {
+				else if (rong || khoaBieuMau) {
+					kyThuatDem += 1;
+				} else if (laChuoi) {
 					if (kyThuat.has(ten)) {
 						kyThuatDem += 1;
 						dungToi.add(ten);

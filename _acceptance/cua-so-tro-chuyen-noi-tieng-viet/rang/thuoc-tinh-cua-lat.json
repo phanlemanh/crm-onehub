@@ -63,12 +63,16 @@
 			"vi_sao": "dinh danh muc trong bo cuon, khong ve ra man"
 		},
 		{
-			"ten": "scrollAnchor",
-			"vi_sao": "co danh dau moc cuon"
-		},
-		{
 			"ten": "defaultScrollPosition",
 			"vi_sao": "vi tri cuon mac dinh cua bo cuon"
+		},
+		{
+			"ten": "state",
+			"vi_sao": "gia tri trang thai ky thuat cua the dinh kem, so bang ==="
+		},
+		{
+			"ten": "aria-multiline",
+			"vi_sao": "co ARIA dang chuoi true/false, khong phai chu nguoi doc"
 		}
 	]
 }
