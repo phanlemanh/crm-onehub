@@ -7,6 +7,7 @@ import { createRoot } from "react-dom/client";
 import { LocaleProvider } from "../src/components/locale-provider";
 import { TooltipProvider } from "../src/components/tooltip";
 import type { Locale } from "../src/lib/locale";
+import { messages } from "../src/lib/messages";
 
 const GOC_KHO = join(import.meta.dir, "..", "..", "..");
 const HO_SO = join(GOC_KHO, "_acceptance", "chan-lai-component-ra-man");
@@ -137,7 +138,10 @@ type BanVe = {
 	loi_mo: string | null;
 };
 
-async function laiMotFile(duongUi: string): Promise<BanVe[]> {
+async function laiMotFile(
+	duongUi: string,
+	tieng: Locale = "en",
+): Promise<BanVe[]> {
 	if (KHONG_PHAI_COMPONENT.includes(duongUi)) {
 		return [
 			{
@@ -173,13 +177,13 @@ async function laiMotFile(duongUi: string): Promise<BanVe[]> {
 		let loiDong: string | null = null;
 		let loiMo: string | null = null;
 		for (const rieng of bo) {
-			const dong = await ve(createElement(gt as never, rieng as never));
+			const dong = await ve(createElement(gt as never, rieng as never), tieng);
 			const mo = await ve(
-				createElement(gt as never, {
-					...rieng,
-					open: true,
-					defaultOpen: true,
-				} as never),
+				createElement(
+					gt as never,
+					{ ...rieng, open: true, defaultOpen: true } as never,
+				),
+				tieng,
 			);
 			for (const c of dong.chu) chuDong.add(c);
 			for (const c of mo.chu) chuMo.add(c);
@@ -241,4 +245,44 @@ test("mo tung nguyen ban cua bang gioi han vong truoc", async () => {
 	}
 	ghi("mo-nguyen-ban.json", ra);
 	expect(Object.keys(ra).length).toBe(bang.dong.length);
+});
+
+test("chuoi da va den man bang tieng Viet, va so ca bang so dong da va", async () => {
+	const bang = JSON.parse(
+		readFileSync(
+			join(HO_SO, "rang", "da-tim-thay.json"),
+			"utf8",
+		),
+	) as { dong: { file: string; khoa: string; dinh_doat: string }[] };
+	const daVa = bang.dong.filter((d) => d.dinh_doat === "da va");
+	expect(daVa.length).toBeGreaterThan(0);
+
+	const file = [...new Set(daVa.map((d) => d.file))];
+	let soCa = 0;
+	for (const d of daVa) {
+		const [nhom, ten] = d.khoa.split(".") as [
+			keyof ReturnType<typeof messages>,
+			string,
+		];
+		const chuVi = (messages("vi")[nhom] as Record<string, string>)[ten];
+		const chuEn = (messages("en")[nhom] as Record<string, string>)[ten];
+		expect(chuVi).toBeString();
+		expect(chuVi).not.toBe(chuEn);
+
+		const banVi = await laiMotFile(d.file, "vi");
+		const banEn = await laiMotFile(d.file, "en");
+		const gom = (b: BanVe[]) => {
+			const ra = new Set<string>();
+			for (const x of b) {
+				for (const c of x.dong) ra.add(c);
+				for (const c of x.mo) ra.add(c);
+			}
+			return ra;
+		};
+		expect([d.khoa, [...gom(banVi)].includes(chuVi)]).toEqual([d.khoa, true]);
+		expect([d.khoa, [...gom(banEn)].includes(chuEn)]).toEqual([d.khoa, true]);
+		soCa += 1;
+	}
+	expect(soCa).toBe(daVa.length);
+	expect(file.length).toBeGreaterThan(0);
 });

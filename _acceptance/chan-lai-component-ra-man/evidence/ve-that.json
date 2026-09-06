@@ -433,42 +433,6 @@
 			"loi_mo": null
 		}
 	],
-	"packages/ui/src/components/ai-elements/conversation.tsx": [
-		{
-			"xuat": "Conversation",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "ConversationContent",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "use-stick-to-bottom component context must be used within a StickToBottom component",
-			"loi_mo": "use-stick-to-bottom component context must be used within a StickToBottom component"
-		},
-		{
-			"xuat": "ConversationEmptyState",
-			"dong": [
-				"No messages yet",
-				"Start a conversation to see messages here"
-			],
-			"mo": [
-				"No messages yet",
-				"Start a conversation to see messages here"
-			],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "ConversationScrollButton",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "use-stick-to-bottom component context must be used within a StickToBottom component",
-			"loi_mo": "use-stick-to-bottom component context must be used within a StickToBottom component"
-		}
-	],
 	"packages/ui/src/components/ai-elements/message.tsx": [
 		{
 			"xuat": "Message",
@@ -1041,23 +1005,6 @@
 			"loi_mo": "`DialogTrigger` must be used within `Dialog`"
 		}
 	],
-	"packages/ui/src/components/async-action.tsx": [
-		{
-			"xuat": "AsyncButtonContent",
-			"dong": [
-				"Loading",
-				"Done",
-				"Try again"
-			],
-			"mo": [
-				"Loading",
-				"Done",
-				"Try again"
-			],
-			"loi_dong": null,
-			"loi_mo": null
-		}
-	],
 	"packages/ui/src/components/attachment.tsx": [
 		{
 			"xuat": "Attachment",
@@ -1527,77 +1474,6 @@
 			"loi_mo": null
 		}
 	],
-	"packages/ui/src/components/command.tsx": [
-		{
-			"xuat": "Command",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "CommandDialog",
-			"dong": [
-				"Command Palette",
-				"Search for a command to run..."
-			],
-			"mo": [
-				"Command Palette",
-				"Search for a command to run..."
-			],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "CommandEmpty",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "CommandGroup",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "CommandInput",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "CommandItem",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "CommandList",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "CommandSeparator",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "CommandShortcut",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		}
-	],
 	"packages/ui/src/components/dashboard-chart.tsx": [
 		{
 			"xuat": "AreaTrend",
@@ -1668,166 +1544,6 @@
 			"xuat": "StatGroup",
 			"dong": [],
 			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		}
-	],
-	"packages/ui/src/components/date-picker.tsx": [
-		{
-			"xuat": "DatePicker",
-			"dong": [
-				"Select a date",
-				"Navigation bar",
-				"Go to the previous month",
-				"Go to the next month",
-				"Choose the month",
-				"Jan",
-				"Feb",
-				"Mar",
-				"Apr",
-				"May",
-				"Jun",
-				"Jul",
-				"Aug",
-				"Sep",
-				"Oct",
-				"Nov",
-				"Dec",
-				"Choose the year",
-				"September 2026",
-				"Sunday",
-				"Su",
-				"Monday",
-				"Mo",
-				"Tuesday",
-				"Tu",
-				"Wednesday",
-				"We",
-				"Thursday",
-				"Th",
-				"Friday",
-				"Fr",
-				"Saturday",
-				"Sa",
-				"Sunday, August 30th, 2026",
-				"Monday, August 31st, 2026",
-				"Tuesday, September 1st, 2026",
-				"Wednesday, September 2nd, 2026",
-				"Thursday, September 3rd, 2026",
-				"Friday, September 4th, 2026",
-				"Saturday, September 5th, 2026",
-				"Today, Sunday, September 6th, 2026",
-				"Monday, September 7th, 2026",
-				"Tuesday, September 8th, 2026",
-				"Wednesday, September 9th, 2026",
-				"Thursday, September 10th, 2026",
-				"Friday, September 11th, 2026",
-				"Saturday, September 12th, 2026",
-				"Sunday, September 13th, 2026",
-				"Monday, September 14th, 2026",
-				"Tuesday, September 15th, 2026",
-				"Wednesday, September 16th, 2026",
-				"Thursday, September 17th, 2026",
-				"Friday, September 18th, 2026",
-				"Saturday, September 19th, 2026",
-				"Sunday, September 20th, 2026",
-				"Monday, September 21st, 2026",
-				"Tuesday, September 22nd, 2026",
-				"Wednesday, September 23rd, 2026",
-				"Thursday, September 24th, 2026",
-				"Friday, September 25th, 2026",
-				"Saturday, September 26th, 2026",
-				"Sunday, September 27th, 2026",
-				"Monday, September 28th, 2026",
-				"Tuesday, September 29th, 2026",
-				"Wednesday, September 30th, 2026",
-				"Thursday, October 1st, 2026",
-				"Friday, October 2nd, 2026",
-				"Saturday, October 3rd, 2026"
-			],
-			"mo": [
-				"Select a date",
-				"Navigation bar",
-				"Go to the previous month",
-				"Go to the next month",
-				"Choose the month",
-				"Jan",
-				"Feb",
-				"Mar",
-				"Apr",
-				"May",
-				"Jun",
-				"Jul",
-				"Aug",
-				"Sep",
-				"Oct",
-				"Nov",
-				"Dec",
-				"Choose the year",
-				"September 2026",
-				"Sunday",
-				"Su",
-				"Monday",
-				"Mo",
-				"Tuesday",
-				"Tu",
-				"Wednesday",
-				"We",
-				"Thursday",
-				"Th",
-				"Friday",
-				"Fr",
-				"Saturday",
-				"Sa",
-				"Sunday, August 30th, 2026",
-				"Monday, August 31st, 2026",
-				"Tuesday, September 1st, 2026",
-				"Wednesday, September 2nd, 2026",
-				"Thursday, September 3rd, 2026",
-				"Friday, September 4th, 2026",
-				"Saturday, September 5th, 2026",
-				"Today, Sunday, September 6th, 2026",
-				"Monday, September 7th, 2026",
-				"Tuesday, September 8th, 2026",
-				"Wednesday, September 9th, 2026",
-				"Thursday, September 10th, 2026",
-				"Friday, September 11th, 2026",
-				"Saturday, September 12th, 2026",
-				"Sunday, September 13th, 2026",
-				"Monday, September 14th, 2026",
-				"Tuesday, September 15th, 2026",
-				"Wednesday, September 16th, 2026",
-				"Thursday, September 17th, 2026",
-				"Friday, September 18th, 2026",
-				"Saturday, September 19th, 2026",
-				"Sunday, September 20th, 2026",
-				"Monday, September 21st, 2026",
-				"Tuesday, September 22nd, 2026",
-				"Wednesday, September 23rd, 2026",
-				"Thursday, September 24th, 2026",
-				"Friday, September 25th, 2026",
-				"Saturday, September 26th, 2026",
-				"Sunday, September 27th, 2026",
-				"Monday, September 28th, 2026",
-				"Tuesday, September 29th, 2026",
-				"Wednesday, September 30th, 2026",
-				"Thursday, October 1st, 2026",
-				"Friday, October 2nd, 2026",
-				"Saturday, October 3rd, 2026"
-			],
-			"loi_dong": null,
-			"loi_mo": null
-		}
-	],
-	"packages/ui/src/components/dot-matrix.tsx": [
-		{
-			"xuat": "DotMatrix",
-			"dong": [
-				"Loading"
-			],
-			"mo": [
-				"Loading"
-			],
 			"loi_dong": null,
 			"loi_mo": null
 		}
@@ -2643,19 +2359,6 @@
 			"mo": [],
 			"loi_dong": "`TabsTrigger` must be used within `Tabs`",
 			"loi_mo": "`TabsTrigger` must be used within `Tabs`"
-		}
-	],
-	"packages/ui/src/components/thinking-indicator.tsx": [
-		{
-			"xuat": "ThinkingIndicator",
-			"dong": [
-				"Thinking"
-			],
-			"mo": [
-				"Thinking"
-			],
-			"loi_dong": null,
-			"loi_mo": null
 		}
 	],
 	"packages/ui/src/components/toggle-group.tsx": [
