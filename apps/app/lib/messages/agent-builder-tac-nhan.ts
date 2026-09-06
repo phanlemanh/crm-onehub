@@ -110,8 +110,10 @@ const en = {
 		tao: "Create channel",
 	},
 	luot: {
-		tieuDe: "Runs",
-		hoatDong: "Activity",
+		nhan: {
+			runs: "Runs",
+			activity: "Activity",
+		},
 		soLuot: (so: string) => `${so} runs`,
 		lichSu: "History",
 		lichSuMoTa: "Every run and every change, newest first.",
@@ -230,8 +232,10 @@ const vi = {
 		tao: "Tạo kênh",
 	},
 	luot: {
-		tieuDe: "Lượt chạy",
-		hoatDong: "Hoạt động",
+		nhan: {
+			runs: "Lượt chạy",
+			activity: "Hoạt động",
+		},
 		soLuot: (so: string) => `${so} lượt chạy`,
 		lichSu: "Lịch sử",
 		lichSuMoTa: "Mọi lượt chạy và mọi thay đổi, mới nhất trước.",

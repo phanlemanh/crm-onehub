@@ -72,6 +72,14 @@
 		{
 			"chu": "This agent",
 			"vi_sao": "nhan chan doan truyen vao parse() de dung trong thong diep Error nem ra — khong ve ra man"
+		},
+		{
+			"chu": "runs",
+			"vi_sao": "khoa cua ngan xem trong hop luot chay, so bang ==="
+		},
+		{
+			"chu": "activity",
+			"vi_sao": "khoa cua ngan xem trong hop luot chay"
 		}
 	],
 	"khoa_kieu": {
