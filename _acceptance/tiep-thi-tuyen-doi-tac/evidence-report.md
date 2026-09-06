@@ -25,7 +25,7 @@ reason: |
 verified_by: fresh-context verification subagents
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 49a9f63
+verified_commit: 8b98a3d3329941a17df7ec226aeee9eb29f9d5db
 human_signoff: Mạnh 2026-09-05 — ký trên giới hạn đã khai: 17 mục ngoài hợp đồng ghi vào giới hạn đã biết, 3 mục nhận nguyên trạng, Ngoài-13 tách thành hồ sơ riêng, và MỘT lỗ TRONG hợp đồng (AC-3: hỏng giữa lô nạp để lại phần đã ghi, lỗi trả về 500 trắng) mà máy khai chứ không sửa vì đã cạn lượt chấm theo luật lỗi-cùng-lớp.
 ---
 
@@ -653,3 +653,15 @@ none — không có eval nào mang field runs > 1 trong round này (mọi eval d
 Round 1: E15, E20 BLOCKED — bộ rang UI (chien-dich.mjs chu / thiet-ke) không dựng được, exit không trả về (cannot_run). Trả về triển khai.
 Round 2: E15, E20 đã chạy được và PASS; nhưng E21 (AC-15, bề rộng 1024/768px) FAIL — RANG CỤN: không suy được slug từ http://localhost:3000/ (trả 200 mà không có header Location), phiên hỏng hoặc kho chưa có nơi làm việc. Verdict REJECT — trả về triển khai.
 Round 3: Tách lượt máy và lượt lái trình duyệt (quyết định d-20260905T040000Z-tach-lan) — lượt máy chạy trước (sinh lại bộ khách, dựng lại cơ sở dữ liệu thử), lượt lái trình duyệt chạy sau khi cây đã tĩnh. E21 (bề rộng 1024/768px) nay PASS: ở 1024px không cột nào bị cắt, ở 768px mọi chỗ cắt có ba chấm và chữ đầy đủ. E6, E9, E12, E15, E20, E23 chạy lại trên cùng lượt và giữ PASS. failed_evals rỗng.
+
+### Re-pin lần 1 — 2026-09-05, do gộp nhánh nền mang vòng màn Cài đặt vào cây
+
+run_id: repin-tiep-thi-tuyen-doi-tac-20260905T063108Z
+sha: 8b98a3d3329941a17df7ec226aeee9eb29f9d5db · suites: 4 lệnh exit 0
+
+Nhánh nền đi trước 21 commit của một vòng khác (`man-cai-dat-noi-tieng-viet`).
+Gộp về làm cây đổi, nên mốc bằng chứng cũ (`49a9f63`) lệch cây và chốt chặn chặn
+merge. Không mã nào của vòng này đổi — mười tệp trong danh sách lệch đều thuộc màn
+Cài đặt. Làn máy chạy lại trọn tại cây đã gộp: 1320 bài kiểm, 0 trượt, 0 hit đệm
+(lượt đầu trả xanh từ đệm nên đã ép chạy lại bằng `--force`), cộng 28 bài của bộ cào.
+Chữ ký người không bị đụng.

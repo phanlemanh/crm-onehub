@@ -123,10 +123,10 @@ Giả định 1 kiểm được ngay trên dữ liệu đang có.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] Đội tiếp thị chạy trọn một chiến dịch tuyển đối tác trong CRM mà không phải xuất ra bảng tính không, và phân khúc có làm tỷ lệ phản hồi chênh nhau không?
-- Kết quả nào là SỐNG: [đề xuất] Bốn tuần sau khi bật, đội tiếp thị chạy trọn ít nhất ba chiến dịch trong CRM — phân khúc định nghĩa trong hệ, danh sách tự sinh, kết quả gắn ngược về đúng chiến dịch — và ít nhất một phân khúc cho tỷ lệ trả lời cao hơn trung bình toàn tập từ 2 lần trở lên.
-- Kết quả nào là CHẾT: [đề xuất] Đội vẫn xuất bảng tính để chạy; hoặc kết quả không gắn ngược về chiến dịch được; hoặc mọi phân khúc cho tỷ lệ trả lời như nhau — khi đó việc làm giàu không mua được gì.
-- Timebox: [đề xuất] Năm ngày công cho vòng đầu — một trục phân khúc, một kênh, một chiến dịch. Quá năm ngày nghĩa là đang dựng cả bốn bước cho cả hai làn.
+- Câu hỏi phép đo trả lời: Đội tiếp thị chạy trọn một chiến dịch tuyển đối tác trong CRM mà không phải xuất ra bảng tính không, và phân khúc có làm tỷ lệ phản hồi chênh nhau không?
+- Kết quả nào là SỐNG: Bốn tuần sau khi bật, đội tiếp thị chạy trọn ít nhất ba chiến dịch trong CRM — phân khúc định nghĩa trong hệ, danh sách tự sinh, kết quả gắn ngược về đúng chiến dịch — và ít nhất một phân khúc cho tỷ lệ trả lời cao hơn trung bình toàn tập từ 2 lần trở lên.
+- Kết quả nào là CHẾT: Đội vẫn xuất bảng tính để chạy; hoặc kết quả không gắn ngược về chiến dịch được; hoặc mọi phân khúc cho tỷ lệ trả lời như nhau — khi đó việc làm giàu không mua được gì.
+- Timebox: Năm ngày công cho vòng đầu — một trục phân khúc, một kênh, một chiến dịch. Quá năm ngày nghĩa là đang dựng cả bốn bước cho cả hai làn.
 
 Căn cứ của con số: **2 lần là ngưỡng chứng minh việc làm giàu có giá trị** — dưới
 mức đó thì chia nhóm không hơn chia ngẫu nhiên ở cỡ vài trăm lượt chạm. Ba chiến
@@ -215,7 +215,7 @@ bước chuẩn hoá yêu cầu phải quyết bật nó, và máy đề xuất 
 
 - **decision = build.** Người ký: Mạnh, 2026-09-04. Căn cứ: OneHub đang chạy nhưng chưa có CRM cho việc thu hút và giữ đối tác; thị phần tăng bằng cách kéo môi giới vào mạng lưới, nên đây là việc không có ngày kết thúc. Vế pháp lý — cái chặn bước tiếp cận — owner đã hỏi và trả lời cùng ngày.
 - **disposition = archive.** Căn cứ: buổi khai thác không dựng bản thử nào, nên không có mã nào để giữ.
-- **Ngưỡng UAT chốt cùng lúc ký:** **CHƯA CHỐT.** Bốn dòng ở mục Ngưỡng vẫn mang tiền tố `[đề xuất]` — đó là lời của máy, không phải lời người ký. Người gỡ tiền tố mới là chốt. Cùng nếp với hồ sơ `tieng-viet-cho-crm`.
+- **Ngưỡng UAT chốt:** Mạnh, 2026-09-05, sau khi vòng đã ký Cổng Bằng chứng và mở PR — gỡ tiền tố đề-xuất-của-máy khỏi bốn dòng ở mục Ngưỡng, giữ nguyên chữ máy đề xuất. Ngưỡng SỐNG đo bốn tuần sau khi bật, nên phiên nghiệm thu lên lịch khi cửa sổ đó khép; trước đó mọi ô đo là CHƯA ĐO. Dòng «trung bình toàn tập» đo bằng đối chứng trong CRM (mọi chiến dịch khác), không cần đường nền trước khi bật.
 
 ### Điều owner khai tại Cổng Đáng, và ranh giới của nó
 

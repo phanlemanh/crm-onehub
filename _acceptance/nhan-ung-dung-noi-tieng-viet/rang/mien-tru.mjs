@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -16,14 +16,24 @@ function docJson(duong, vi) {
 
 const danhSach = docJson(join(RANG, "danh-sach-chan.json"), "ban khai chan do");
 
-const KHO = ["companies", "contacts", "deals", "crm", "record-sheet"];
+const KHO = readdirSync(`${GOC}/apps/app/lib/messages`)
+	.filter((t) => t.endsWith(".ts"))
+	.map((t) => t.replace(/\.ts$/, ""))
+	.sort();
+
+if (KHO.length === 0) {
+	console.log(
+		"KHONG DO DUOC: khong thay kho chuoi nao trong apps/app/lib/messages — tap rong khong bao gio la dat",
+	);
+	process.exit(2);
+}
 
 function duongKhoa() {
 	const kichBan = `
 const ra = {};
-${KHO.map((k, i) => `import { ${["companyMessages", "contactMessages", "dealMessages", "crmMessages", "recordSheetMessages"][i]} as m${i} } from "${GOC}/apps/app/lib/messages/${k}";`).join("\n")}
+${KHO.map((k, i) => `import * as ns${i} from "${GOC}/apps/app/lib/messages/${k}";`).join("\n")}
 const kho = ${JSON.stringify(KHO)};
-const lay = [m0, m1, m2, m3, m4];
+const lay = [${KHO.map((_, i) => `Object.values(ns${i}).find((v) => v instanceof Function)`).join(", ")}];
 function phang(o, tien = "") {
   return Object.entries(o).flatMap(([k, v]) =>
     v instanceof Function || !(v instanceof Object)
