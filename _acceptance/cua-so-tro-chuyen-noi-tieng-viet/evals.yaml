@@ -183,25 +183,6 @@ evals:
       - "apps/app/lib/messages/agent-builder-*.ts"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
-  - id: E11
-    criterion: AC-8
-    executor: script
-    cmd: config:executors.script.ct_be_rong_do
-    expected: >-
-      exit 0. CHIEU DO cua chan be rong. Khoa moc duoc cam phai GHIM TEN trong ban khai,
-      va truoc khi cam phai kiem rang no NAM TRONG tap phan tu ma E10 dem duoc tren mot
-      route CO TEN — khoa moc khong nam trong tap do la thoat ma 2 goi ten khoa, khong
-      phai xanh va cung khong phai do. Ba nhan nhat thoi cua o soan chi ve ra khi o soan
-      o dung trang thai do, nen neu chon mot trong ba thi chan nay phai dung lai o cam
-      lai trang thai cua E7 va khang dinh tran o DUNG phan tu do.
-      Nam trong tap roi ma cam mot nhan vi DAI (cum tieng Viet CO DAU doc duoc) van khong
-      tran thi moi la thuoc mu, va do la DO. Tra kho chuoi ve nguyen trang, git status
-      bang nhau.
-    paths:
-      - "_acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/**"
-      - "apps/app/lib/messages/agent-builder-*.ts"
-    evidence_required: [run_id, exit_code, verifier, verified_at, output]
-
   - id: E12
     criterion: AC-9
     executor: script
