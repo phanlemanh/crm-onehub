@@ -63,6 +63,18 @@ top two are what a rep reads *before* deciding what to open.
 **`claimDue` sorts what it claims** — Postgres does not order `UPDATE … RETURNING` by
 its sub-select's `ORDER BY`.
 
+**The locking sub-select is a `MATERIALIZED` CTE, never a `FROM` subquery or an
+`IN (…)`.** Both `claimDue` and `retireExhausted` lock a batch with `LIMIT n FOR
+UPDATE SKIP LOCKED` and update it. When the planner's statistics say the table is
+tiny — autoanalyze ran between two tests, when it held one row — it puts the target
+table on the outer side of a nested loop and re-runs the sub-select once per outer
+row without materialising it. `LockRows` skips the rows this command already
+updated, so every rerun hands out a fresh batch and the `UPDATE` walks the whole
+table: `LIMIT 2` retired 3 rows in CI, and 6 when 6 were exhausted. `WITH … AS
+MATERIALIZED` is the documented way to have the sub-select evaluated exactly once;
+`tasks.integration.spec.ts` rebuilds those statistics and proves the `FROM` form
+still bites before checking that both functions hold their limit.
+
 ### Dispatch on demand
 
 `POST /internal/crm/dispatch` drains **both lanes**; `AgentTriggerService.poke()` calls

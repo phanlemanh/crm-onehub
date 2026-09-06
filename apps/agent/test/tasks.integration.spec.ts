@@ -239,3 +239,66 @@ describe("scheduleTask", () => {
 		expect(await db.agentTask.count({ where: { kind } })).toBe(1);
 	});
 });
+
+describe("a limited lock subquery when the planner re-runs it per row", () => {
+	const limit = 2;
+	const rows = 3;
+
+	async function insert(index: number, attempts: number) {
+		return db.agentTask.create({
+			data: {
+				kind,
+				reason: "stale",
+				dueAt: new Date(Date.now() - (rows - index) * 60_000),
+				priority: 0,
+				budget: 4,
+				attempts,
+				leasedUntil: new Date(Date.now() - 1000),
+			},
+			select: { id: true },
+		});
+	}
+
+	async function staleStatistics(attempts: number) {
+		await db.agentTask.deleteMany({});
+		await insert(0, attempts);
+		await db.$executeRaw`ANALYZE "agentTask"`;
+		for (let index = 1; index < rows; index++) await insert(index, attempts);
+	}
+
+	function probe() {
+		return db.$queryRaw<{ id: string }[]>`
+			UPDATE "agentTask" AS t
+			SET "outcome" = 'probe'
+			FROM (
+				SELECT c.id FROM "agentTask" AS c
+				WHERE c.kind = ${kind} AND c."finishedAt" IS NULL
+				ORDER BY c."dueAt" ASC
+				LIMIT ${limit}
+				FOR UPDATE SKIP LOCKED
+			) AS due
+			WHERE t.id = due.id
+			RETURNING t.id;
+		`;
+	}
+
+	it("the fixture bites: a subquery joined in FROM hands out every row", async () => {
+		await staleStatistics(MAX_ATTEMPTS);
+		expect(await probe()).toHaveLength(rows);
+	});
+
+	it("the fixture bites for due work too", async () => {
+		await staleStatistics(0);
+		expect(await probe()).toHaveLength(rows);
+	});
+
+	it("retireExhausted still retires exactly the limit", async () => {
+		await staleStatistics(MAX_ATTEMPTS);
+		expect(await retireExhausted(limit)).toHaveLength(limit);
+	});
+
+	it("claimDue still claims exactly the limit", async () => {
+		await staleStatistics(0);
+		expect(await claimDue(limit, RESEARCH)).toHaveLength(limit);
+	});
+});
