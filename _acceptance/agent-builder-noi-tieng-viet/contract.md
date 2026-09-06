@@ -5,7 +5,7 @@ slug: agent-builder-noi-tieng-viet
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [ui]
-status: signed-off
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-09-06
 design_doc: docs/superpowers/specs/2026-09-05-agent-builder-noi-tieng-viet-design.md
