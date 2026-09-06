@@ -19,6 +19,7 @@
 		"MICROSOFT_TENANT_ID",
 		"AUTH_COOKIE_DOMAIN",
 		"CRON_SECRET",
+		"LISTING_INGEST_SECRET",
 		"REDIS_URL",
 		"CACHE_TTL_MS",
 		"PORT",
@@ -59,6 +60,7 @@
 			"dependsOn": ["topo", "^build"]
 		},
 		"test": {
+			"cache": false,
 			"dependsOn": ["topo", "^build"]
 		},
 		"dev": {

@@ -5,7 +5,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 CHAN="${2:-}"
 [ "${1:-}" = "--chan" ] || { echo "rang-suite: dùng --chan sach|thu-tu"; exit 2; }
 
-TDB="$(grep '^TEST_DATABASE_URL=' "$ROOT/.env" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"')"
+TDB="${TEST_DATABASE_URL:-$(grep '^TEST_DATABASE_URL=' "$ROOT/.env" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"')}"
 [ -n "$TDB" ] || { echo "khong doc duoc TEST_DATABASE_URL tu .env goc"; exit 2; }
 
 run_sach() {

@@ -1,0 +1,38 @@
+2026-09-05 00:05:46,904 WARNING sơ đồ site không có địa chỉ /moi-gioi- — gieo từ trang danh bạ https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh
+2026-09-05 00:10:14,584 WARNING bỏ qua https://nhatot.com/moi-gioi-mau-50: isCompany: không bóc được từ dữ liệu nhúng
+2026-09-05 00:12:04,249 INFO lượt chạy: {'gieo': 50, 'lay_duoc': 49, 'bi_chan': 1, 'lan_thu': 68, 'lan_thu_hong': 6, 'lan_thu_so_do': 13, 'lan_thu_danh_ba': 5, 'lan_thu_ho_so': 50, 'lan_thu_lo_so': 0, 'co_so_dien_thoai': 49, 'tong_bang_tin_moi': 49, 'tong_khac_tin_moi': 0, 'tin_dang': {'min': 37, 'q1': 43, 'trung_vi': 61, 'q3': 84, 'max': 436}, 'tin_moi_30_ngay': {'min': 37, 'q1': 43, 'trung_vi': 61, 'q3': 84, 'max': 436}}
+2026-09-05 00:12:04,249 WARNING 49/49 hồ sơ có tổng tin bằng tin mới 30 ngày — sàn chỉ công bố một con số
+2026-09-05 00:12:04,251 INFO đã ghi ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json (49 mục)
+2026-09-05 00:50:50,438 WARNING sơ đồ site không có địa chỉ /moi-gioi- — gieo từ trang danh bạ https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh
+2026-09-05 00:55:12,728 WARNING bỏ qua https://nhatot.com/moi-gioi-mau-02: isCompany: không bóc được từ dữ liệu nhúng
+2026-09-05 00:57:00,209 INFO lượt chạy: {'gieo': 50, 'lay_duoc': 49, 'bi_chan': 1, 'lan_thu': 68, 'lan_thu_hong': 6, 'lan_thu_so_do': 13, 'lan_thu_danh_ba': 5, 'lan_thu_ho_so': 50, 'lan_thu_lo_so': 0, 'co_so_dien_thoai': 49, 'tong_bang_tin_moi': 49, 'tong_khac_tin_moi': 0, 'tin_dang': {'min': 37, 'q1': 43, 'trung_vi': 61, 'q3': 84, 'max': 436}, 'tin_moi_30_ngay': {'min': 37, 'q1': 43, 'trung_vi': 61, 'q3': 84, 'max': 436}}
+2026-09-05 00:57:00,209 WARNING 49/49 hồ sơ có tổng tin bằng tin mới 30 ngày — sàn chỉ công bố một con số
+2026-09-05 00:57:00,211 INFO đã ghi ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json (49 mục)
+2026-09-05 06:09:27,791 WARNING sơ đồ site không có địa chỉ /moi-gioi- — gieo từ trang danh bạ https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh
+2026-09-05 06:10:40,152 WARNING bỏ qua https://nhatot.com/moi-gioi-mau-02: Blocked by anti-bot protection: Structural: minimal_text, no_content_elements (60 bytes, 21 chars visible)
+2026-09-05 06:13:44,274 WARNING bỏ qua https://nhatot.com/moi-gioi-mau-04: isCompany: không bóc được từ dữ liệu nhúng
+2026-09-05 06:15:29,112 INFO lượt chạy: {'gieo': 50, 'lay_duoc': 48, 'bi_chan': 2, 'lan_thu': 68, 'lan_thu_hong': 7, 'lan_thu_so_do': 13, 'lan_thu_danh_ba': 5, 'lan_thu_ho_so': 50, 'lan_thu_lo_so': 0, 'co_so_dien_thoai': 48, 'tong_bang_tin_moi': 48, 'tong_khac_tin_moi': 0, 'tin_dang': {'min': 37, 'q1': 43, 'trung_vi': 60, 'q3': 80, 'max': 436}, 'tin_moi_30_ngay': {'min': 37, 'q1': 43, 'trung_vi': 60, 'q3': 80, 'max': 436}}
+2026-09-05 06:15:29,112 WARNING 48/48 hồ sơ có tổng tin bằng tin mới 30 ngày — sàn chỉ công bố một con số
+2026-09-05 06:15:29,114 INFO đã ghi ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json (48 mục)
+2026-09-05 06:54:28,337 WARNING sơ đồ site không có địa chỉ /moi-gioi- — gieo từ trang danh bạ https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh
+2026-09-05 06:58:42,817 WARNING bỏ qua https://nhatot.com/moi-gioi-mau-02: isCompany: không bóc được từ dữ liệu nhúng
+2026-09-05 07:00:26,670 INFO lượt chạy: {'gieo': 50, 'lay_duoc': 49, 'bi_chan': 1, 'lan_thu': 68, 'lan_thu_hong': 6, 'lan_thu_so_do': 13, 'lan_thu_danh_ba': 5, 'lan_thu_ho_so': 50, 'lan_thu_lo_so': 0, 'co_so_dien_thoai': 49, 'tong_bang_tin_moi': 49, 'tong_khac_tin_moi': 0, 'tin_dang': {'min': 37, 'q1': 43, 'trung_vi': 61, 'q3': 84, 'max': 436}, 'tin_moi_30_ngay': {'min': 37, 'q1': 43, 'trung_vi': 61, 'q3': 84, 'max': 436}}
+2026-09-05 07:00:26,670 WARNING 49/49 hồ sơ có tổng tin bằng tin mới 30 ngày — sàn chỉ công bố một con số
+2026-09-05 07:00:26,673 INFO đã ghi ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json (49 mục)
+2026-09-05 07:29:37,391 WARNING sơ đồ site không có địa chỉ /moi-gioi- — gieo từ trang danh bạ https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh
+2026-09-05 07:33:59,344 WARNING bỏ qua https://nhatot.com/moi-gioi-mau-02: isCompany: không bóc được từ dữ liệu nhúng
+2026-09-05 07:35:43,821 INFO lượt chạy: {'gieo': 50, 'lay_duoc': 49, 'bi_chan': 1, 'lan_thu': 68, 'lan_thu_hong': 6, 'lan_thu_so_do': 13, 'lan_thu_danh_ba': 5, 'lan_thu_ho_so': 50, 'lan_thu_lo_so': 0, 'co_so_dien_thoai': 49, 'tong_bang_tin_moi': 49, 'tong_khac_tin_moi': 0, 'tin_dang': {'min': 37, 'q1': 43, 'trung_vi': 61, 'q3': 84, 'max': 436}, 'tin_moi_30_ngay': {'min': 37, 'q1': 43, 'trung_vi': 61, 'q3': 84, 'max': 436}}
+2026-09-05 07:35:43,821 WARNING 49/49 hồ sơ có tổng tin bằng tin mới 30 ngày — sàn chỉ công bố một con số
+2026-09-05 07:35:43,824 INFO đã ghi ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json (49 mục)
+2026-09-05 08:06:06,046 WARNING sơ đồ site không có địa chỉ /moi-gioi- — gieo từ trang danh bạ https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh
+2026-09-05 08:10:33,356 WARNING bỏ qua https://nhatot.com/moi-gioi-mau-02: isCompany: không bóc được từ dữ liệu nhúng
+2026-09-05 08:12:21,575 INFO lượt chạy: {'gieo': 50, 'lay_duoc': 49, 'bi_chan': 1, 'lan_thu': 68, 'lan_thu_hong': 6, 'lan_thu_so_do': 13, 'lan_thu_danh_ba': 5, 'lan_thu_ho_so': 50, 'lan_thu_lo_so': 0, 'co_so_dien_thoai': 49, 'tong_bang_tin_moi': 49, 'tong_khac_tin_moi': 0, 'tin_dang': {'min': 37, 'q1': 43, 'trung_vi': 61, 'q3': 84, 'max': 436}, 'tin_moi_30_ngay': {'min': 37, 'q1': 43, 'trung_vi': 61, 'q3': 84, 'max': 436}}
+2026-09-05 08:12:21,575 WARNING 49/49 hồ sơ có tổng tin bằng tin mới 30 ngày — sàn chỉ công bố một con số
+2026-09-05 08:12:21,576 INFO đã ghi 1 lô ra đĩa trước khi gửi (49 mục): ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json
+2026-09-05 08:12:21,578 INFO chạy khô: 1 lô nằm trên đĩa, không gửi lô nào
+2026-09-05 08:15:31,589 WARNING sơ đồ site không có địa chỉ /moi-gioi- — gieo từ trang danh bạ https://www.nhatot.com/chuyen-trang-moi-gioi-bat-dong-san-tp-ho-chi-minh
+2026-09-05 08:19:50,140 WARNING bỏ qua https://nhatot.com/moi-gioi-mau-02: isCompany: không bóc được từ dữ liệu nhúng
+2026-09-05 08:21:34,926 INFO lượt chạy: {'gieo': 50, 'lay_duoc': 49, 'bi_chan': 1, 'lan_thu': 68, 'lan_thu_hong': 6, 'lan_thu_so_do': 13, 'lan_thu_danh_ba': 5, 'lan_thu_ho_so': 50, 'lan_thu_lo_so': 0, 'co_so_dien_thoai': 49, 'tong_bang_tin_moi': 49, 'tong_khac_tin_moi': 0, 'tin_dang': {'min': 37, 'q1': 43, 'trung_vi': 61, 'q3': 84, 'max': 436}, 'tin_moi_30_ngay': {'min': 37, 'q1': 43, 'trung_vi': 61, 'q3': 84, 'max': 436}}
+2026-09-05 08:21:34,926 WARNING 49/49 hồ sơ có tổng tin bằng tin mới 30 ngày — sàn chỉ công bố một con số
+2026-09-05 08:21:34,929 INFO đã ghi 1 lô ra đĩa trước khi gửi (49 mục): ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json
+2026-09-05 08:21:34,931 INFO chạy khô: 1 lô nằm trên đĩa, không gửi lô nào

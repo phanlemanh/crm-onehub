@@ -1,6 +1,7 @@
 "use client";
 
 import Building from "@carbon/icons-react/es/Building";
+import Bullhorn from "@carbon/icons-react/es/Bullhorn";
 import Close from "@carbon/icons-react/es/Close";
 import Dashboard from "@carbon/icons-react/es/Dashboard";
 import Partnership from "@carbon/icons-react/es/Partnership";
@@ -57,6 +58,7 @@ const ITEMS: RailItem[] = [
 		match: "prefix",
 	},
 	{ title: "Deals", href: "/deals", icon: Partnership, match: "prefix" },
+	{ title: "Chiến dịch", href: "/campaigns", icon: Bullhorn, match: "prefix" },
 	{ title: "Settings", href: "/settings", icon: Settings, match: "prefix" },
 ];
 

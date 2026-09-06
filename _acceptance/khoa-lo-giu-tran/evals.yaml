@@ -1,0 +1,102 @@
+schema_version: 1
+feature_slug: khoa-lo-giu-tran
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.khoa_lo_tran_retire
+    expected: "exit 0; bun test in '1 pass' cho bai 'retireExhausted still retires exactly the limit' va con 1 hang mo — cung fixture, ban truoc sua do o E4"
+    paths: [apps/agent/agent/lib/tasks.ts, apps/agent/test/tasks.integration.spec.ts, _acceptance/khoa-lo-giu-tran/rang.sh]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.khoa_lo_tran_claim
+    expected: "exit 0; bun test in '1 pass' cho bai 'claimDue still claims exactly the limit' va con 1 hang chua thue — cung fixture, ban truoc sua do o E4"
+    paths: [apps/agent/agent/lib/tasks.ts, apps/agent/test/tasks.integration.spec.ts, _acceptance/khoa-lo-giu-tran/rang.sh]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.khoa_lo_can
+    expected: "exit 0; hai bai 'the fixture bites' pass — probe khuon FROM tra du 3 hang du LIMIT 2; do vi thong ke troi thi thong diep 'statistics drifted', do vi Postgres doi ke hoach thi thong diep 'Expected length: 3' — hai nguyen nhan hai thong diep"
+    paths: [apps/agent/test/tasks.integration.spec.ts, _acceptance/khoa-lo-giu-tran/rang.sh]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.khoa_lo_chieu_do
+    expected: "exit 0; ban tasks.ts truoc sua (git show 746d3ef8) nap vao apps/agent/rang/.tmp/, cung fixture: dung 2 fail mang 'Expected length: 2' + 'Received length: 3', 2 bai bites pass; ban sua thi 4 pass (E1-E3) — cap hai chieu; sau khi chay git status --porcelain tasks.ts rong; sha vang thi exit 2"
+    paths: [apps/agent/agent/lib/tasks.ts, apps/agent/test/tasks.integration.spec.ts, _acceptance/khoa-lo-giu-tran/rang.sh]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.khoa_lo_giai_thich
+    expected: "exit 0; EXPLAIN ANALYZE cau SQL bat tu su kien query cua Prisma: ban sua co 'CTE Scan' va LockRows loops=1; ban truoc sua LockRows loops=3 — cung fixture, hai chieu"
+    paths: [apps/agent/agent/lib/tasks.ts, apps/agent/rang/khoa-lo-giu-tran.rang.ts, _acceptance/khoa-lo-giu-tran/rang.sh]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.khoa_lo_dong_thoi
+    expected: "exit 0; ban sua: 8 luot song song retireExhausted(2) moi luot <= 2, tong 16, 16 id khac nhau; chieu do cung fixture: ban sao tasks.ts bo FOR UPDATE SKIP LOCKED (sinh vao rang/.tmp) tra it hon 16 id khac nhau, thong diep ghim 'duplicate ids'"
+    paths: [apps/agent/agent/lib/tasks.ts, apps/agent/rang/khoa-lo-giu-tran.rang.ts, _acceptance/khoa-lo-giu-tran/rang.sh]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.khoa_lo_toan_tep
+    expected: "exit 0; tron tep tasks.integration.spec.ts: 19 pass, 0 fail; evidence/spec-diff.patch bang dung git diff 746d3ef8 -- tep kiem tai HEAD (lech thi 'spec-diff.patch stale')"
+    paths: [apps/agent/agent/lib/tasks.ts, apps/agent/test/tasks.integration.spec.ts, _acceptance/khoa-lo-giu-tran/rang.sh]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.api
+    expected: "exit 0; db:test thoat 0 roi turbo test moi goi xanh (agent 371, api 414, app 213 tai thoi diem viet)"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E9
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.check_types_khong_cache
+    expected: "exit 0; moi task kiem kieu thanh cong, 0 cached"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.lint_khong_cache
+    expected: "exit 0; moi task lint thanh cong, 0 cached"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.lint_slop
+    expected: "exit 0; 0 errors"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.khoa_lo_tai_lieu
+    expected: "exit 0; doan luat trong docs/agent.md ke ngay sau 'claimDue sorts what it claims' chua ca claimDue, retireExhausted va MATERIALIZED; chieu do: fixture bo tu MATERIALIZED thi rang do"
+    paths: [docs/agent.md, _acceptance/khoa-lo-giu-tran/rang.sh]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-10
+    executor: judgment
+    question: "Sua trong tasks.ts dua tren cam ket co tai lieu cua Postgres (CTE MATERIALIZED tinh mot lan) hay tren may rui cua bo lap ke hoach? Bon bai 'planner re-runs it per row' va tep rang apps/agent/rang/khoa-lo-giu-tran.rang.ts do dung co che (so hang duoi thong ke thu dich, so luot LockRows) hay chi do trieu chung? Co bai kiem cu nao trong tasks.integration.spec.ts bi noi de xanh khong?"
+    inputs: [contract.md, ../../apps/agent/agent/lib/tasks.ts, ../../apps/agent/test/tasks.integration.spec.ts, ../../apps/agent/rang/khoa-lo-giu-tran.rang.ts, ../../docs/superpowers/specs/2026-09-06-khoa-lo-giu-tran-design.md, evidence/spec-diff.patch]
+    evidence_required: [judged_by, verdict, rationale]
+    rationale_must_cite: "dong diff trong evidence/spec-diff.patch cho cau 'noi de xanh'"

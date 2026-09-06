@@ -31,6 +31,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import type { TableQuery } from "./use-table-query";
+import { viewRemoval } from "./view-removal";
 
 type SavedView = RouterOutputs["savedViews"]["list"][number];
 
@@ -195,19 +196,34 @@ function ViewItem({
 	onDelete: () => void;
 }) {
 	const m = crmMessages(useLocale());
+	const removal = viewRemoval(view);
+	if (removal.kind === "removable") {
+		return (
+			<div className="flex items-center gap-1">
+				<DropdownMenuItem className="min-w-0 flex-1" onSelect={onApply}>
+					<span className="truncate">{view.name}</span>
+				</DropdownMenuItem>
+				<DropdownMenuItem
+					variant="destructive"
+					className="shrink-0"
+					onSelect={onDelete}
+				>
+					<Close />
+					<span className="sr-only">{m.views.remove(view.name)}</span>
+				</DropdownMenuItem>
+			</div>
+		);
+	}
+
 	return (
-		<div className="flex items-center gap-1">
-			<DropdownMenuItem className="min-w-0 flex-1" onSelect={onApply}>
-				<span className="truncate">{view.name}</span>
-			</DropdownMenuItem>
-			<DropdownMenuItem
-				variant="destructive"
-				className="shrink-0"
-				onSelect={onDelete}
-			>
-				<Close />
-				<span className="sr-only">{m.views.remove(view.name)}</span>
-			</DropdownMenuItem>
-		</div>
+		<DropdownMenuItem
+			className="min-w-0 flex-col items-start gap-0.5"
+			onSelect={onApply}
+		>
+			<span className="w-full truncate">{view.name}</span>
+			<span className="w-full truncate text-muted-foreground text-xs">
+				{m.views.inUse(removal.usedBy.join(", "))}
+			</span>
+		</DropdownMenuItem>
 	);
 }

@@ -1,0 +1,15 @@
+  A truoc-khi-sua: khong tang hinh, tre 1.5s | https://nhatot.com/moi-gioi-mau-03 -> ok=True http=301 bytes=196899 next_data=True 
+  A truoc-khi-sua: khong tang hinh, tre 1.5s | https://nhatot.com/moi-gioi-mau-07 -> ok=False http=307 bytes=28444 next_data=False Blocked by anti-bot protection: Cloudflare JS challenge
+  A truoc-khi-sua: khong tang hinh, tre 1.5s | https://nhatot.com/moi-gioi-mau-05 -> ok=False http=403 bytes=28475 next_data=False Blocked by anti-bot protection: Cloudflare JS challenge
+  A truoc-khi-sua: khong tang hinh, tre 1.5s | https://nhatot.com/moi-gioi-mau-10 -> ok=False http=403 bytes=28472 next_data=False Blocked by anti-bot protection: Cloudflare JS challenge
+TONG A truoc-khi-sua: khong tang hinh, tre 1.5s: lay_duoc=1 bi_chan=3
+  B tang hinh: enable_stealth=True | https://nhatot.com/moi-gioi-mau-03 -> ok=True http=301 bytes=103120 next_data=True 
+  B tang hinh: enable_stealth=True | https://nhatot.com/moi-gioi-mau-07 -> ok=True http=301 bytes=151716 next_data=True 
+  B tang hinh: enable_stealth=True | https://nhatot.com/moi-gioi-mau-05 -> ok=True http=301 bytes=252224 next_data=True 
+  B tang hinh: enable_stealth=True | https://nhatot.com/moi-gioi-mau-10 -> ok=True http=301 bytes=191894 next_data=True 
+TONG B tang hinh: enable_stealth=True: lay_duoc=4 bi_chan=0
+  C tang hinh + mo phong nguoi: simulate_user/override_navigator/magic | https://nhatot.com/moi-gioi-mau-03 -> ok=True http=301 bytes=196643 next_data=True 
+  C tang hinh + mo phong nguoi: simulate_user/override_navigator/magic | https://nhatot.com/moi-gioi-mau-07 -> ok=False http=307 bytes=28557 next_data=False Blocked by anti-bot protection: Cloudflare JS challenge
+  C tang hinh + mo phong nguoi: simulate_user/override_navigator/magic | https://nhatot.com/moi-gioi-mau-05 -> ok=False http=403 bytes=28603 next_data=False Blocked by anti-bot protection: Cloudflare JS challenge
+  C tang hinh + mo phong nguoi: simulate_user/override_navigator/magic | https://nhatot.com/moi-gioi-mau-10 -> ok=False http=403 bytes=28579 next_data=False Blocked by anti-bot protection: Cloudflare JS challenge
+TONG C tang hinh + mo phong nguoi: simulate_user/override_navigator/magic: lay_duoc=1 bi_chan=3

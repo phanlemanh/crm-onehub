@@ -149,11 +149,38 @@ bun run --filter=api test
 bun run --filter=agent test    # integration specs need DATABASE_URL + real Postgres
 ```
 
+### One run, one database
+
+`bun run test` is `packages/db/scripts/test-run.ts`. It mints a `TEST_RUN_ID` when
+none is set, creates `crm_<id>_test` next to `TEST_DATABASE_URL`, runs the suite on
+it, and drops it when the suite exits. Two runs on one machine — two Claude Code
+sessions, a pre-push hook beside a browser lane, an acceptance executor beside
+anything — never see each other's rows, because they never share a database. The
+run id is the same value the specs use to suffix their fixtures, so a leaked row
+names the run that wrote it. The rule that turns a base name and a run id into a
+database name is `packages/db/src/test-database.ts`; `client.ts` and `db:test`
+both read it, so a process that carries `TEST_RUN_ID` lands on that run's database
+whichever way it was started.
+
+- `bun run test -- --filter=api --force` forwards flags to `turbo run test`.
+- `bun run test -- "cd apps/api && bun test test/bulk.spec.ts"` runs any shell
+  command in a fresh lane. Every executor in `_acceptance/config.yaml` that touches
+  a database goes through this form.
+- To iterate on one spec by hand, pick an id once: `TEST_RUN_ID=me bun run db:test`
+  builds `crm_me_test`, and `TEST_RUN_ID=me bun test …` in any package lands there.
+  Without `TEST_RUN_ID`, a bare `bun test` uses `crm_test` itself, which is the
+  one database two people can still collide on.
+
+A run that is killed leaves its database behind. Every run database carries a
+`COMMENT ON DATABASE` with its creation time, and `db:test` drops any such
+database that has no connection and is older than `TEST_DATABASE.run.maxAgeMs`
+(six hours). It never drops a database it did not mark.
+
 ### The test database rebuilds itself when it drifts
 
-`bun run db:test` creates `crm_test` and runs `migrate deploy` on it. The database
-name must end in `_test`; the suite deletes rows it expects to put back, so it
-refuses anything else.
+`bun run db:test` creates `crm_test` and runs `migrate deploy` on it — or, with
+`TEST_RUN_ID` set, `crm_<id>_test`. The database name must end in `_test`; the
+suite deletes rows it expects to put back, so it refuses anything else.
 
 **`migrate deploy` only applies migrations that are missing. It never removes a
 table, a column or a constraint the database has and the schema does not.** A

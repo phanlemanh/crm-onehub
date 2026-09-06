@@ -1,0 +1,749 @@
+{
+  "source": "nhatot",
+  "crawledAt": "2026-09-05T01:21:34.927855Z",
+  "items": [
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-03",
+      "shopName": "Chuyên trang 03",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12",
+        "Quận Gò Vấp",
+        "Quận Tân Bình"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 436,
+      "listingsNew30d": 436,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-04",
+      "shopName": "Chuyên trang 04",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12",
+        "Quận Gò Vấp",
+        "Quận Tân Bình"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 247,
+      "listingsNew30d": 247,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-05",
+      "shopName": "Chuyên trang 05",
+      "isCompany": true,
+      "hasLicense": true,
+      "districts": [
+        "Quận 7",
+        "Huyện Nhà Bè"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 164,
+      "listingsNew30d": 164,
+      "tier": "cao",
+      "personName": "Môi giới 05",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-06",
+      "shopName": "Chuyên trang 06",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Thành phố Thủ Đức"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 150,
+      "listingsNew30d": 150,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-07",
+      "shopName": "Chuyên trang 07",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 6"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 129,
+      "listingsNew30d": 129,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-08",
+      "shopName": "Chuyên trang 08",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 6",
+        "Quận 10",
+        "Quận 11"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 118,
+      "listingsNew30d": 118,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-09",
+      "shopName": "Chuyên trang 09",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 10"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 108,
+      "listingsNew30d": 108,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-10",
+      "shopName": "Chuyên trang 10",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 6"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 103,
+      "listingsNew30d": 103,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-11",
+      "shopName": "Chuyên trang 11",
+      "isCompany": true,
+      "hasLicense": true,
+      "districts": [
+        "Quận 7",
+        "Huyện Nhà Bè"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 99,
+      "listingsNew30d": 99,
+      "tier": "cao",
+      "personName": "Môi giới 11",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-12",
+      "shopName": "Chuyên trang 12",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Bình Tân",
+        "Quận Tân Bình",
+        "Quận Tân Phú"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 91,
+      "listingsNew30d": 91,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-13",
+      "shopName": "Chuyên trang 13",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 6"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 88,
+      "listingsNew30d": 88,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-14",
+      "shopName": "Chuyên trang 14",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Bình Thạnh",
+        "Quận Gò Vấp",
+        "Quận Phú Nhuận"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 87,
+      "listingsNew30d": 87,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-15",
+      "shopName": "Chuyên trang 15",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 7"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 81,
+      "listingsNew30d": 81,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-16",
+      "shopName": "Chuyên trang 16",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Thành phố Thủ Đức"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 78,
+      "listingsNew30d": 78,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-17",
+      "shopName": "Chuyên trang 17",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 77,
+      "listingsNew30d": 77,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-18",
+      "shopName": "Chuyên trang 18",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 1",
+        "Quận 3",
+        "Quận Phú Nhuận"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 77,
+      "listingsNew30d": 77,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-19",
+      "shopName": "Chuyên trang 19",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 1",
+        "Quận 3",
+        "Quận 5",
+        "Quận 10"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 72,
+      "listingsNew30d": 72,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-20",
+      "shopName": "Chuyên trang 20",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 1",
+        "Quận 7"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 69,
+      "listingsNew30d": 69,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-21",
+      "shopName": "Chuyên trang 21",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 68,
+      "listingsNew30d": 68,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-22",
+      "shopName": "Chuyên trang 22",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12",
+        "Quận Bình Thạnh",
+        "Quận Gò Vấp"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 68,
+      "listingsNew30d": 68,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-23",
+      "shopName": "Chuyên trang 23",
+      "isCompany": true,
+      "hasLicense": true,
+      "districts": [
+        "Quận Tân Phú"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 66,
+      "listingsNew30d": 66,
+      "tier": "cao",
+      "personName": "Môi giới 23",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-24",
+      "shopName": "Chuyên trang 24",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 64,
+      "listingsNew30d": 64,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-25",
+      "shopName": "Chuyên trang 25",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Bình Thạnh",
+        "Quận Gò Vấp",
+        "Quận Phú Nhuận"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 64,
+      "listingsNew30d": 64,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-26",
+      "shopName": "Chuyên trang 26",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 4"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 63,
+      "listingsNew30d": 63,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-27",
+      "shopName": "Chuyên trang 27",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 7"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 61,
+      "listingsNew30d": 61,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-28",
+      "shopName": "Chuyên trang 28",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12",
+        "Quận Gò Vấp",
+        "Huyện Hóc Môn"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 60,
+      "listingsNew30d": 60,
+      "tier": "cao",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-29",
+      "shopName": "Chuyên trang 29",
+      "isCompany": true,
+      "hasLicense": true,
+      "districts": [
+        "Quận 5",
+        "Quận 6",
+        "Quận 8"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 56,
+      "listingsNew30d": 56,
+      "tier": "vua",
+      "personName": "Môi giới 29",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-30",
+      "shopName": "Chuyên trang 30",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Tân Bình"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 57,
+      "listingsNew30d": 57,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-31",
+      "shopName": "Chuyên trang 31",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Gò Vấp"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 48,
+      "listingsNew30d": 48,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-32",
+      "shopName": "Chuyên trang 32",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Huyện Nhà Bè"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 48,
+      "listingsNew30d": 48,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-33",
+      "shopName": "Chuyên trang 33",
+      "isCompany": true,
+      "hasLicense": true,
+      "districts": [
+        "Quận 7",
+        "Quận 8"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 48,
+      "listingsNew30d": 48,
+      "tier": "vua",
+      "personName": "Môi giới 33",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-34",
+      "shopName": "Chuyên trang 34",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 48,
+      "listingsNew30d": 48,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-35",
+      "shopName": "Chuyên trang 35",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 8"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 47,
+      "listingsNew30d": 47,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-36",
+      "shopName": "Chuyên trang 36",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 1",
+        "Quận 3",
+        "Quận 10",
+        "Quận Phú Nhuận"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 47,
+      "listingsNew30d": 47,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-37",
+      "shopName": "Chuyên trang 37",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 1",
+        "Quận 7",
+        "Huyện Nhà Bè"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 45,
+      "listingsNew30d": 45,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-38",
+      "shopName": "Chuyên trang 38",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Bình Tân",
+        "Quận Gò Vấp",
+        "Quận Tân Bình",
+        "Quận Tân Phú"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 45,
+      "listingsNew30d": 45,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-39",
+      "shopName": "Chuyên trang 39",
+      "isCompany": true,
+      "hasLicense": true,
+      "districts": [
+        "Quận 7",
+        "Huyện Nhà Bè"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 43,
+      "listingsNew30d": 43,
+      "tier": "vua",
+      "personName": "Môi giới 39",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-40",
+      "shopName": "Chuyên trang 40",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12",
+        "Quận Bình Thạnh",
+        "Quận Gò Vấp"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 43,
+      "listingsNew30d": 43,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-41",
+      "shopName": "Chuyên trang 41",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 6",
+        "Quận Bình Tân",
+        "Quận Tân Bình",
+        "Quận Tân Phú"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 43,
+      "listingsNew30d": 43,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-42",
+      "shopName": "Chuyên trang 42",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Gò Vấp"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 43,
+      "listingsNew30d": 43,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-43",
+      "shopName": "Chuyên trang 43",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12",
+        "Huyện Củ Chi",
+        "Huyện Hóc Môn"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 43,
+      "listingsNew30d": 43,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-44",
+      "shopName": "Chuyên trang 44",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 8"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 41,
+      "listingsNew30d": 41,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-45",
+      "shopName": "Chuyên trang 45",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 6"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 40,
+      "listingsNew30d": 40,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-46",
+      "shopName": "Chuyên trang 46",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 39,
+      "listingsNew30d": 39,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-47",
+      "shopName": "Chuyên trang 47",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 6",
+        "Quận 8",
+        "Huyện Bình Chánh"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 39,
+      "listingsNew30d": 39,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-48",
+      "shopName": "Chuyên trang 48",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 6",
+        "Quận 8",
+        "Quận 10",
+        "Quận 11"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 39,
+      "listingsNew30d": 39,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-49",
+      "shopName": "Chuyên trang 49",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Gò Vấp"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 38,
+      "listingsNew30d": 38,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-50",
+      "shopName": "Chuyên trang 50",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận Bình Thạnh",
+        "Quận Gò Vấp",
+        "Quận Phú Nhuận",
+        "Quận Tân Bình"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 38,
+      "listingsNew30d": 38,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    },
+    {
+      "url": "https://nhatot.com/moi-gioi-mau-51",
+      "shopName": "Chuyên trang 51",
+      "isCompany": true,
+      "hasLicense": false,
+      "districts": [
+        "Quận 12"
+      ],
+      "city": "Tp Hồ Chí Minh",
+      "listingsTotal": 37,
+      "listingsNew30d": 37,
+      "tier": "vua",
+      "phone": "09xxxxxxxx"
+    }
+  ]
+}

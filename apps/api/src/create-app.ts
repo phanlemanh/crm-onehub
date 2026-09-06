@@ -1,12 +1,12 @@
 import { API_KEY_HEADER, apiUrl, SESSION_COOKIE_NAME } from "@crm/auth";
-import { ValidationPipe } from "@nestjs/common";
+import { PayloadTooLargeException, ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import {
 	ExpressAdapter,
 	type NestExpressApplication,
 } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import type { NextFunction, Request, Response } from "express";
+import { json, type NextFunction, type Request, type Response } from "express";
 import helmet from "helmet";
 import { AppRouterHost } from "nestjs-trpc";
 import {
@@ -14,6 +14,7 @@ import {
 	generateOpenApiDocument,
 } from "trpc-to-openapi";
 import { AppModule } from "./app.module";
+import { LISTING_INGEST } from "./listings/listings-config";
 import { ContextLogger } from "./logging/context-logger";
 import { REST_BRIDGE_PATH } from "./trpc/openapi";
 import { createBaseTrpcContext } from "./trpc/trpc.context";
@@ -26,6 +27,24 @@ export async function createApp(): Promise<NestExpressApplication> {
 	);
 
 	app.use(helmet());
+	app.use(
+		LISTING_INGEST.path,
+		json({ limit: LISTING_INGEST.bodyLimitBytes }),
+		(
+			error: Error,
+			_request: Request,
+			_response: Response,
+			next: NextFunction,
+		) => {
+			next(
+				error.name === "PayloadTooLargeError"
+					? new PayloadTooLargeException(
+							`A listing batch must be ${LISTING_INGEST.bodyLimitBytes} bytes or smaller. Send it in batches.`,
+						)
+					: error,
+			);
+		},
+	);
 	app.useGlobalPipes(
 		new ValidationPipe({
 			whitelist: true,

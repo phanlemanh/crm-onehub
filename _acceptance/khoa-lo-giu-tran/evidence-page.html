@@ -1,0 +1,113 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bằng chứng · khoa-lo-giu-tran</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+</style></head><body><div class="wrap">
+<h1>Khoá lô hàng agentTask trong CTE MATERIALIZED để LIMIT giữ đúng trần dưới thống kê cũ</h1><div class="sub">Trang bằng chứng · <span class="mono">khoa-lo-giu-tran</span> · tier T2</div>
+<div class="card" style="margin-top:12px"><span class="badge pass">PASS</span>
+<div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-lo-giu-tran-E1-r2</td><td class="mono">2026-09-06T08:30:04Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-2</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-lo-giu-tran-E2-r2</td><td class="mono">2026-09-06T08:30:04Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-3</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-lo-giu-tran-E3-r2</td><td class="mono">2026-09-06T08:30:04Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-4</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-lo-giu-tran-E4-r2</td><td class="mono">2026-09-06T08:30:04Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-5</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-lo-giu-tran-E5-r2</td><td class="mono">2026-09-06T08:30:04Z</td></tr>
+<tr><td><a href="#E6">E6</a></td><td>AC-6</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-lo-giu-tran-E6-r3</td><td class="mono">2026-09-06T08:45:00Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-7</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-lo-giu-tran-E7-r2</td><td class="mono">2026-09-06T08:30:04Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-8</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-lo-giu-tran-E8-r3</td><td class="mono">2026-09-06T08:47:00Z</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-lo-giu-tran-E9-r3</td><td class="mono">2026-09-06T08:49:00Z</td></tr>
+<tr><td><a href="#E10">E10</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-lo-giu-tran-E10-r3</td><td class="mono">2026-09-06T08:50:00Z</td></tr>
+<tr><td><a href="#E11">E11</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-lo-giu-tran-E11-r3</td><td class="mono">2026-09-06T08:51:00Z</td></tr>
+<tr><td><a href="#E12">E12</a></td><td>AC-9</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-khoa-lo-giu-tran-E12-r2</td><td class="mono">2026-09-06T08:30:04Z</td></tr>
+<tr><td><a href="#E13">E13</a></td><td>AC-10</td><td>judgment</td><td><span class="badge neutral">PASS (ĐỀ XUẤT PANEL, CARRIED R2)</span></td><td class="mono">—</td><td class="mono">—</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · script</h3><p class="crit">AC-1: Given bảng `agentTask` được `ANALYZE` lúc chỉ có 1 hàng rồi thêm 2 hàng, cả 3 đều cạn lượt và `dueAt` tăng theo thứ tự chèn, When gọi `retireExhausted(2)`, Then hàm trả đúng 2 hàng và còn đúng 1 hàng cạn lượt chưa nghỉ hưu.</p>
+<div class="kv"><span>run_id <b>minted-khoa-lo-giu-tran-E1-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.khoa_lo_tran_retire</b></span><span>verified_at <b>2026-09-06T08:30:04Z</b></span></div>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · script</h3><p class="crit">AC-2: Given cùng bộ dựng nhưng 3 hàng đến hạn với 0 lượt thử, When gọi `claimDue(2, { except: DIRECT_KINDS })`, Then hàm trả đúng 2 hàng và còn đúng 1 hàng chưa được thuê.</p>
+<div class="kv"><span>run_id <b>minted-khoa-lo-giu-tran-E2-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.khoa_lo_tran_claim</b></span><span>verified_at <b>2026-09-06T08:30:04Z</b></span></div>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · script</h3><p class="crit">AC-3: Given cùng bộ dựng, và `pg_class.reltuples` của `agentTask` đọc ngay trước khi thăm dò không vượt 1 (vượt thì ném lỗi ghim `statistics drifted`), When chạy truy vấn thăm dò khuôn `UPDATE … FROM (SELECT … LIMIT 2 FOR UPDATE SKIP LOCKED)`, Then nó cập nhật đủ 3 hàng — bộ dựng chứng minh nó cắn; Postgres đổi cách lập kế hoạch thì phép đo này đỏ với thông điệp độ dài, không xanh lặng.</p>
+<div class="kv"><span>run_id <b>minted-khoa-lo-giu-tran-E3-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.khoa_lo_can</b></span><span>verified_at <b>2026-09-06T08:30:04Z</b></span></div>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · script</h3><p class="crit">AC-4: Given bản `tasks.ts` trước sửa (git sha 746d3ef8) nạp vào tệp tạm trong `apps/agent/rang/.tmp/`, không ghi vào cây làm việc, When chạy chính bốn bài &quot;planner re-runs it per row&quot; trên module đó, Then đúng hai bài trần đỏ với thông điệp ghim `Expected length: 2` và `Received length: 3`, hai bài &quot;the fixture bites&quot; xanh, và `git status --porcelain apps/agent/agent/lib/tasks.ts` rỗng sau khi chạy; sha không có trong clone thì chân thoát mã 2.</p>
+<div class="kv"><span>run_id <b>minted-khoa-lo-giu-tran-E4-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.khoa_lo_chieu_do</b></span><span>verified_at <b>2026-09-06T08:30:04Z</b></span></div>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · script</h3><p class="crit">AC-5: Given bộ dựng thống kê cũ, When `EXPLAIN (ANALYZE)` đúng câu SQL mà `retireExhausted` gửi, bắt từ sự kiện query của Prisma, Then nút `LockRows` chạy `loops=1` và kế hoạch có `CTE Scan`; cùng bộ dựng với bản trước sửa, `LockRows` chạy `loops=3`.</p>
+<div class="kv"><span>run_id <b>minted-khoa-lo-giu-tran-E5-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.khoa_lo_giai_thich</b></span><span>verified_at <b>2026-09-06T08:30:04Z</b></span></div>
+</div>
+<div class="card eval" id="E6"><h3><span class="badge pass">PASS</span> &nbsp;E6 · script</h3><p class="crit">AC-6: Given 40 hàng cạn lượt và thống kê mới, When 8 lượt `retireExhausted(2)` chạy đồng thời, Then mỗi lượt trả tối đa 2 hàng, tổng đúng 16, không id nào xuất hiện hai lần; cùng bộ dựng với bản sao `tasks.ts` bỏ `FOR UPDATE SKIP LOCKED` khỏi CTE, số id khác nhau nhỏ hơn 16 với thông điệp ghim về id trùng.</p>
+<div class="kv"><span>run_id <b>minted-khoa-lo-giu-tran-E6-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.khoa_lo_dong_thoi</b></span><span>verified_at <b>2026-09-06T08:45:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">rang dong-thoi: 8 lượt song song, bản sửa 16/16 id khác nhau, bản bỏ khoá chỉ 4/16</pre>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge pass">PASS</span> &nbsp;E7 · script</h3><p class="crit">AC-7: Given tệp `apps/agent/test/tasks.integration.spec.ts`, When chạy trọn tệp, Then 19 pass và 0 fail — thứ tự ưu tiên, thuê, đếm lượt của `claimDue` không đổi; và `_acceptance/khoa-lo-giu-tran/evidence/spec-diff.patch` bằng đúng `git diff 746d3ef8 -- apps/agent/test/tasks.integration.spec.ts` tại HEAD.</p>
+<div class="kv"><span>run_id <b>minted-khoa-lo-giu-tran-E7-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.khoa_lo_toan_tep</b></span><span>verified_at <b>2026-09-06T08:30:04Z</b></span></div>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · test</h3><p class="crit">AC-8: Given toàn cây tại HEAD, When chạy suite (`bun run db:test &amp;&amp; bun run test`), kiểm kiểu, lint và lint:slop không dùng bộ nhớ đệm, Then cả bốn thoát 0.</p>
+<div class="kv"><span>run_id <b>minted-khoa-lo-giu-tran-E8-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.api</b></span><span>verified_at <b>2026-09-06T08:47:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">  Time:    25ms &gt;&gt;&gt; FULL TURBO
+
+EXIT_CODE: 0</pre>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pass">PASS</span> &nbsp;E9 · script</h3><p class="crit">AC-8: Given toàn cây tại HEAD, When chạy suite (`bun run db:test &amp;&amp; bun run test`), kiểm kiểu, lint và lint:slop không dùng bộ nhớ đệm, Then cả bốn thoát 0.</p>
+<div class="kv"><span>run_id <b>minted-khoa-lo-giu-tran-E9-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.check_types_khong_cache</b></span><span>verified_at <b>2026-09-06T08:49:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out"> Tasks:    13 successful, 13 total
+Cached:    0 cached, 13 total
+  Time:    4.422s</pre>
+</div>
+<div class="card eval" id="E10"><h3><span class="badge pass">PASS</span> &nbsp;E10 · script</h3><p class="crit">AC-8: Given toàn cây tại HEAD, When chạy suite (`bun run db:test &amp;&amp; bun run test`), kiểm kiểu, lint và lint:slop không dùng bộ nhớ đệm, Then cả bốn thoát 0.</p>
+<div class="kv"><span>run_id <b>minted-khoa-lo-giu-tran-E10-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.lint_khong_cache</b></span><span>verified_at <b>2026-09-06T08:50:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out"> Tasks:    9 successful, 9 total
+Cached:    0 cached, 9 total
+  Time:    223ms</pre>
+</div>
+<div class="card eval" id="E11"><h3><span class="badge pass">PASS</span> &nbsp;E11 · script</h3><p class="crit">AC-8: Given toàn cây tại HEAD, When chạy suite (`bun run db:test &amp;&amp; bun run test`), kiểm kiểu, lint và lint:slop không dùng bộ nhớ đệm, Then cả bốn thoát 0.</p>
+<div class="kv"><span>run_id <b>minted-khoa-lo-giu-tran-E11-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.lint_slop</b></span><span>verified_at <b>2026-09-06T08:51:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">$ oxlint --format=default
+Found 0 warnings and 0 errors.
+Finished in 457ms on 813 files with 9 rules using 18 threads.</pre>
+</div>
+<div class="card eval" id="E12"><h3><span class="badge pass">PASS</span> &nbsp;E12 · script</h3><p class="crit">AC-9: Given `docs/agent.md`, When đọc mục Two lanes, Then có một đoạn nêu tên cả `claimDue` lẫn `retireExhausted` và từ `MATERIALIZED`, đứng ngay sau luật &quot;claimDue sorts what it claims&quot;.</p>
+<div class="kv"><span>run_id <b>minted-khoa-lo-giu-tran-E12-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.khoa_lo_tai_lieu</b></span><span>verified_at <b>2026-09-06T08:30:04Z</b></span></div>
+</div>
+<div class="card eval" id="E13"><h3><span class="badge neutral">PASS (ĐỀ XUẤT PANEL, CARRIED R2)</span> &nbsp;E13 · judgment</h3><p class="crit">AC-10: Given mã sửa, bài kiểm, thiết kế và diff của tệp kiểm so với bản trước sửa, When người đọc soi, Then sửa dựa trên cam kết có tài liệu của Postgres chứ không phải may rủi của bộ lập kế hoạch, phép đo đo đúng cơ chế (số hàng dưới thống kê thù địch, số lượt `LockRows`) chứ không đo triệu chứng, và không bài kiểm cũ nào bị nới để xanh.</p>
+<div class="kv"><span>judged_by <b>judge panel (fresh context) — domain-correctness, operational-feasibility, spec-alignment</b></span></div>
+<div class="ov">human_override: CHƯA điền (việc của bạn ở Gate 2)</div>
+</div>
+<h2>Eval không phân biệt (Analyst)</h2><div class="flag fred">carried tu round 1 — baseline khong do lai round nay
+- E8 (`bun run db:test &amp;&amp; bun run test`)
+- E9 (`bunx turbo run check-types --force`)
+- E10 (`bunx turbo run lint --force`)</div>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1: E4 (chieu-do) cannot run — đua với prisma generate lúc nạp client (turbo ^build của E8), không lặp lại. Verdict BLOCKED, quay lại rang.sh in lý do khi nạp lại.</li><li>Round 2: E6 (dong-thoi) FAIL, exit khác 0 trên lệnh `rang.sh --chan dong-thoi` — verdict REJECT, quay lại implementation.</li><li>Round 3: xác định REJECT vòng 2 là verifier ghi sai mã thoát (dòng chép là nhánh thành công, chữ chép sai &quot;song parallel&quot;), chạy lại E6 tại chỗ 3 lần đều thoát 0; cùng 11 eval máy carry-forward và panel E13 giữ nguyên — verdict PASS.</li></ul>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>
