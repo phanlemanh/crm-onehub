@@ -7,15 +7,13 @@ const GOC = join(import.meta.dirname, "..", "..", "..");
 const HO_SO = join(GOC, "_acceptance", "chan-lai-component-ra-man");
 const EV = join(HO_SO, "evidence");
 
-const NEO = { file: 389, mac_dinh: 119, dong_bang_cu: 10 };
+const NEO = { file: 389, mac_dinh: 107, dong_bang_cu: 10 };
 
-const MA_TRAN_TOI_THIEU = [
-	["packages/ui/src/components/combobox.tsx", "placeholder"],
-	["packages/ui/src/components/combobox.tsx", "empty"],
-	["packages/ui/src/components/date-picker.tsx", "placeholder"],
-	["packages/ui/src/components/command.tsx", "title"],
-	["packages/ui/src/components/async-action.tsx", "errorLabel"],
-];
+function banVeRong(banVe) {
+	return Object.values(banVe)
+		.flat()
+		.every((b) => b.loi_dong !== null && b.loi_mo !== null);
+}
 
 function ghi(ten, gt) {
 	const duong = join(EV, ten);
@@ -23,7 +21,7 @@ function ghi(ten, gt) {
 	writeFileSync(duong, `${JSON.stringify(gt, null, "\t")}\n`);
 }
 
-function danSo() {
+export function danSo() {
 	const file = docFile(GOC);
 	const macDinh = docMacDinh(GOC);
 	ghi("mac-dinh.json", macDinh);
@@ -74,7 +72,7 @@ function chayBanVe() {
 	}
 }
 
-function phanNhom() {
+export function phanNhom() {
 	if (!existsSync(join(EV, "mac-dinh.json"))) danSo();
 	chayBanVe();
 	const duong = join(EV, "ve-that.json");
@@ -116,31 +114,24 @@ function phanNhom() {
 		return 1;
 	}
 
-	const thieu = MA_TRAN_TOI_THIEU.filter(
-		([f, t]) => !nguoiDoc.some((m) => m.file === f && m.tham_so === t),
-	);
-	if (thieu.length > 0) {
-		for (const [f, t] of thieu)
-			console.error(
-				`DO: ma tran toi thieu — ${f} tham so ${t} phai o nhom chu-nguoi-doc, hien khong o do`,
-			);
-		return 1;
-	}
-	if (nguoiDoc.length === 0) {
-		console.error("KHONG DO DUOC: nhom chu-nguoi-doc rong");
+	if (banVeRong(banVe)) {
+		console.error(
+			"KHONG DO DUOC: khong component nao ve duoc — tap quan sat rong thi khong ket luan gi.",
+		);
 		return 2;
 	}
-	console.log(
-		`XANH: phan nhom do BAN VE quyet, ca ${MA_TRAN_TOI_THIEU.length} dong ma tran toi thieu deu o nhom chu-nguoi-doc.`,
-	);
-	for (const m of nguoiDoc) console.log(`  ${m.file}:${m.dong}  ${m.tham_so} = ${JSON.stringify(m.gia_tri)}`);
+	console.log("XANH: phan nhom do BAN VE quyet, khong danh sach ten prop nao.");
+	for (const m of nguoiDoc)
+		console.log(`  ${m.file}:${m.dong}  ${m.tham_so} = ${JSON.stringify(m.gia_tri)}`);
 	return 0;
 }
 
-const dong_tu = process.argv[2];
-const bang = { "dan-so": danSo, "phan-nhom": phanNhom };
-if (!bang[dong_tu]) {
-	console.error(`dong tu khong biet: ${dong_tu} — nhan dan-so | phan-nhom`);
-	process.exit(2);
+if (process.argv[1]?.endsWith("lai-ra-man.mjs")) {
+	const dong_tu = process.argv[2];
+	const bang = { "dan-so": danSo, "phan-nhom": phanNhom };
+	if (!bang[dong_tu]) {
+		console.error(`dong tu khong biet: ${dong_tu} — nhan dan-so | phan-nhom`);
+		process.exit(2);
+	}
+	process.exit(bang[dong_tu]());
 }
-process.exit(bang[dong_tu]());

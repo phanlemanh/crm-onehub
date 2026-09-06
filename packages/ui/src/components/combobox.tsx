@@ -15,6 +15,7 @@ import {
 } from "@crm/ui/components/popover";
 import { selectTriggerVariants } from "@crm/ui/components/select";
 import { cn } from "@crm/ui/lib/utils";
+import { useMessages } from "@crm/ui/components/locale-provider";
 import type { VariantProps } from "class-variance-authority";
 import { ChevronDownIcon } from "lucide-react";
 import type * as React from "react";
@@ -32,9 +33,9 @@ function Combobox({
 	selectedOption,
 	value,
 	onValueChange,
-	placeholder = "Select an option",
-	searchPlaceholder = "Search…",
-	empty = "Nothing matches.",
+	placeholder,
+	searchPlaceholder,
+	empty,
 	search,
 	onSearchChange,
 	stale,
@@ -57,6 +58,7 @@ function Combobox({
 		size?: "sm" | "default";
 	}) {
 	const [open, setOpen] = useState(false);
+	const msg = useMessages();
 	const selected =
 		selectedOption?.value === value
 			? selectedOption
@@ -83,7 +85,7 @@ function Combobox({
 					className={cn(selectTriggerVariants({ variant }), className)}
 					{...props}
 				>
-					<span data-slot="select-value">{selected?.label ?? placeholder}</span>
+					<span data-slot="select-value">{selected?.label ?? placeholder ?? msg.macDinh.chonMuc}</span>
 					<ChevronDownIcon className="pointer-events-none size-4 text-muted-foreground" />
 				</button>
 			</PopoverTrigger>
@@ -95,12 +97,12 @@ function Combobox({
 			>
 				<Command shouldFilter={onSearchChange === undefined}>
 					<CommandInput
-						placeholder={searchPlaceholder}
+						placeholder={searchPlaceholder ?? msg.macDinh.timMuc}
 						value={search}
 						onValueChange={onSearchChange}
 					/>
 					<CommandList>
-						<CommandEmpty>{empty}</CommandEmpty>
+						<CommandEmpty>{empty ?? msg.macDinh.khongKhop}</CommandEmpty>
 						<CommandGroup>
 							{options.map((option) => (
 								<CommandItem

@@ -30,14 +30,19 @@ import { Sheet, SheetContent, SheetTitle } from "../src/components/sheet";
 import { SkeletonSwap } from "../src/components/skeleton-swap";
 import { Toaster } from "../src/components/sonner";
 import { SortableItem } from "../src/components/sortable-list";
+import { AsyncButtonContent } from "../src/components/async-action";
+import { Combobox } from "../src/components/combobox";
+import { CommandDialog } from "../src/components/command";
+import { DotMatrix } from "../src/components/dot-matrix";
 import { Spinner } from "../src/components/spinner";
+import { ThinkingIndicator } from "../src/components/thinking-indicator";
 import { Suggestion } from "../src/components/suggestion";
 import { TablePagination } from "../src/components/table-pagination";
 import { ThreadMessage } from "../src/components/thread-message";
 import { TooltipProvider } from "../src/components/tooltip";
 import { DEFAULT_LOCALE, type Locale } from "../src/lib/locale";
 import type { TableQueryState } from "../src/lib/table-query";
-import { TRUNG_TINH } from "./du-lieu";
+import { DU_LIEU, TRUNG_TINH } from "./du-lieu";
 
 const DOC_NGHE_DUOC = [
 	"title",
@@ -161,6 +166,26 @@ const CA: Ca[] = [
 		),
 	},
 	{ ten: "Spinner", ve: () => <Spinner /> },
+	{ ten: "DotMatrix", ve: () => <DotMatrix /> },
+	{ ten: "ThinkingIndicator", ve: () => <ThinkingIndicator /> },
+	{
+		ten: "AsyncAction",
+		ve: () => (
+			<AsyncButtonContent status="success">{DU_LIEU.tenNguoi}</AsyncButtonContent>
+		),
+	},
+	{
+		ten: "Combobox",
+		ve: () => <Combobox options={[]} value="" onValueChange={() => {}} />,
+	},
+	{
+		ten: "Command",
+		ve: () => (
+			<CommandDialog open>
+				<span>{DU_LIEU.tenNguoi}</span>
+			</CommandDialog>
+		),
+	},
 	{ ten: "Sonner", ve: () => <Toaster /> },
 	{
 		ten: "Dialog",
