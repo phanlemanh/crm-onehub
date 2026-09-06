@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { khungMessages } from "@/lib/messages/agent-builder-khung";
+import { getLocale } from "@/lib/locale/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { TeamAgentDetail } from "@/components/agent-builder/team-agent-detail";
@@ -6,7 +8,9 @@ import { PageShellFallback } from "@/components/page-shell";
 import { getServerTrpcClient } from "@/lib/trpc/server";
 import { nullIfMissing } from "../../missing-record";
 
-export const metadata: Metadata = { title: "Team agent" };
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: khungMessages(await getLocale()).trang.tieuDeMotTacNhan };
+}
 
 export default function TeamAgentPage({
 	params,

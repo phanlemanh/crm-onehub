@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { khungMessages } from "@/lib/messages/agent-builder-khung";
+import { getLocale } from "@/lib/locale/server";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { AgentBuilderChat } from "@/components/agent-builder/agent-builder-chat";
@@ -7,7 +9,9 @@ import { isSharedChatToken } from "@/lib/chat-route";
 import { getServerTrpcClient } from "@/lib/trpc/server";
 import { nullIfMissing } from "../../missing-record";
 
-export const metadata: Metadata = { title: "Agent chat" };
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: khungMessages(await getLocale()).trang.tieuDeMotHoiThoai };
+}
 
 export default function AgentChatPage({
 	params,
