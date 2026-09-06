@@ -209,6 +209,9 @@ evals:
       luat co ten voi hai danh sach TACH BIET (thuoc tinh JSX / khoa object). Con tieng Anh
       la DO in file:dong:boi canh:nguyen van. 0 chuoi quet ra la thoat ma 2. Giu-nguyen chet
       la DO.
+      CA CHAN-KHONG-DUOC-NO (ranh gioi): mot dong giu-nguyen CON doi tuong that trong ma thi
+      chan KHONG duoc do vi no — ghim so dong giu-nguyen song va doi chan van thoat 0. Thieu
+      ca nay thi "0 chuoi tieng Anh" khong phan biet duoc "da dich het" voi "mien tru nuot het".
     paths:
       - "apps/app/components/agent-builder/**"
       - "_acceptance/agent-builder-noi-tieng-viet/rang/**"
