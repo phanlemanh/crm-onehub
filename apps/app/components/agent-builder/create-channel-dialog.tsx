@@ -68,13 +68,13 @@ export function CreateChannelDialog({
 						<Input
 							id="channel-name"
 							onChange={(event) => setName(event.target.value)}
-							placeholder="renewals"
+							placeholder={t.kenh.tenViDu}
 							value={name}
 						/>
 						<p className="text-muted-foreground text-xs">
 							{slug && !valid
 								? t.kenh.luatTen
-								: t.kenh.slackGoiLa(slug || "renewals")}
+								: t.kenh.slackGoiLa(slug || t.kenh.tenViDu)}
 						</p>
 					</div>
 

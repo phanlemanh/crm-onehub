@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
@@ -446,10 +446,84 @@ const chan = process.argv.includes("--chan")
 	? process.argv[process.argv.indexOf("--chan") + 1]
 	: "tat-ca";
 
+
+function chanThuocTinh() {
+	const L = lat(KHAI_PATH);
+	const duong = `${KHAI_DIR}/thuoc-tinh-cua-lat.json`;
+	if (!existsSync(duong)) {
+		console.log(
+			`KHONG DO DUOC: tien de thieu — chua co ban khai thuoc-tinh-cua-lat.json tai ${duong.replace(`${GOC}/`, "")}.`,
+		);
+		process.exit(2);
+	}
+	const KH = JSON.parse(readFileSync(duong, "utf8"));
+	const kyThuat = new Set(KH.ten_ky_thuat.map((x) => x.ten));
+	const dungToi = new Set();
+	const chuThang = [];
+	let tuKho = 0;
+	let kyThuatDem = 0;
+
+	for (const f of L.file) {
+		const nguon = cay(f);
+		const di = (n) => {
+			if (ts.isJsxAttribute(n) && n.initializer) {
+				const ten = n.name.getText(nguon);
+				const gt = n.initializer;
+				const laChuoi =
+					ts.isStringLiteral(gt) ||
+					(ts.isJsxExpression(gt) &&
+						gt.expression &&
+						(ts.isStringLiteral(gt.expression) ||
+							ts.isNoSubstitutionTemplateLiteral(gt.expression) ||
+							ts.isTemplateExpression(gt.expression)));
+				const docKho =
+					ts.isJsxExpression(gt) &&
+					gt.expression &&
+					/\bt\.[A-Za-z]/.test(gt.expression.getText(nguon));
+				if (docKho) tuKho += 1;
+				else if (laChuoi) {
+					if (kyThuat.has(ten)) {
+						kyThuatDem += 1;
+						dungToi.add(ten);
+					} else
+						chuThang.push(
+							`${f}:${dong(n, nguon)} thuoc tinh ${ten} mang chuoi viet thang ${JSON.stringify(gt.getText(nguon).slice(0, 60))}`,
+						);
+				}
+			}
+			ts.forEachChild(n, di);
+		};
+		ts.forEachChild(nguon, di);
+	}
+
+	const chet = KH.ten_ky_thuat.filter((x) => !dungToi.has(x.ten));
+	console.log(
+		`quet ${L.file.length} file · ${tuKho} thuoc tinh doc tu kho chuoi · ${kyThuatDem} thuoc tinh ky thuat co ten · ${chuThang.length} thuoc tinh con chuoi viet thang`,
+	);
+	for (const d of chuThang) console.log(`   CHU THANG: ${d}`);
+	for (const d of chet)
+		console.log(
+			`   TEN KY THUAT CHET: ${d.ten} (${d.vi_sao}) khong con thuoc tinh nao dung — go no khoi ban khai`,
+		);
+
+	if (chuThang.length > 0 || chet.length > 0) process.exit(1);
+
+	if (tuKho === 0) {
+		console.log(
+			"KHONG DO DUOC: 0 thuoc tinh nao doc tu kho chuoi. Tap quan sat rong khong bao gio la dat.",
+		);
+		process.exit(2);
+	}
+	console.log(
+		`XANH: ${tuKho} thuoc tinh doc tu kho chuoi, va khong thuoc tinh nao ngoai danh sach ky thuat con mang chuoi viet thang.`,
+	);
+}
+
 if (chan === "toast") chanToast();
 else if (chan === "tieu-de") chanTieuDe();
 else if (chan === "khong-du-quyen") chanKhongDuQuyen();
 else if (chan === "doi-chieu") chanDoiChieu();
+else if (chan === "thuoc-tinh") chanThuocTinh();
 else {
 	chanToast();
 	console.log("");

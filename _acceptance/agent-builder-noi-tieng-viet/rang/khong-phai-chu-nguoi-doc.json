@@ -54,10 +54,6 @@
 			"vi_sao": "khoa cua kieu ChatDateGroup"
 		},
 		{
-			"chu": "renewals",
-			"vi_sao": "ten kenh Slack lam vi du — Slack chi nhan chu thuong khong dau"
-		},
-		{
 			"chu": "This agent",
 			"vi_sao": "nhan chan doan truyen vao parse() de dung trong thong diep Error nem ra — khong ve ra man"
 		},
