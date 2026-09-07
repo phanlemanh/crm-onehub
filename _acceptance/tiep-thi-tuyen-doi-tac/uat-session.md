@@ -134,7 +134,35 @@ lượt chạy `ttmtpo…`/`ttmtpp…` của bộ chặn lái vòng 4, và 1 cá
 người-lạ số 2. Chúng đã mồ côi vì không chiến dịch nào dùng nên không khoá ngoại
 nào chặn. Bản sao lưu nằm cùng tệp với hai nhóm trên.
 
-**Kho lúc này, điểm xuất phát thật của cửa sổ đo:** 144 cá nhân (98 nguồn sàn +
+### Đổi lớn 07/09 — CRM đã lên Vercel
+
+Mạnh báo CRM nay chạy trên Vercel. Đo lại trên kho, hai điều kiện ở trên đảo
+chiều — một đóng hẳn, một mở lại và khó hơn trước:
+
+**Điều 1 ĐÓNG, tốt hơn mức đã ghi.** `docs/reference/trien-khai-vercel.md` khai
+ba dự án Vercel với **nhánh production là `onehub`**, và bản sửa chiến dịch
+`776c6cd` là tổ tiên của HEAD — tức tính năng đã ở sản xuất thật, không phải bản
+dev trên máy lập trình như mục ghi ngày 06/09 nói. Câu đó nay lỗi thời.
+
+**Điều 2 MỞ LẠI.** Lượt cào thật 06/09 nạp vào `http://localhost:3001` — đo được
+ở `tools/listing-crawl/config.toml` dòng 18, chưa ai đổi kể từ `f3b0726`. Máy này
+có `DATABASE_URL` trỏ `localhost:5432/crm` và **không có biến nào của Vercel**.
+Nên 49 môi giới thật nằm trong cơ sở dữ liệu dev của máy lập trình, KHÔNG nằm
+trong cơ sở dữ liệu sản xuất mà đội tiếp thị đang mở.
+
+Máy không nhìn được cơ sở dữ liệu sản xuất từ đây, nên đây là suy ra từ cấu hình
+đo được, không phải phép đo trực tiếp. **Việc phải làm trước khi cửa sổ đo có
+nghĩa:** mở CRM trên Vercel, vào Danh bạ, xem có môi giới nào không. Nếu rỗng —
+chạy lại lượt cào với `[ingest] url` trỏ vào API sản xuất và khoá
+`LISTING_INGEST_SECRET` của sản xuất (khoá trên máy này là khoá dev, không dùng
+được).
+
+**Một rủi ro của chính cách triển khai, tài liệu tự khai:** bản xem trước dùng
+CHUNG cơ sở dữ liệu production, và bản mang migration mới sẽ áp thẳng lên dữ
+liệu thật. Kho đang có nhiều vòng chạy song song, nên đây là chỗ cần biết trước
+khi mở pull request có migration.
+
+**Kho DEV lúc này, điểm xuất phát của cửa sổ đo nếu đội dùng bản dev:** 144 cá nhân (98 nguồn sàn +
 46 mẫu của hãng), **0 góc nhìn · 0 chiến dịch · 0 lượt gọi**. Mọi con số phiên
 nghiệm thu đọc ngày 04/10 đều sinh ra sau mốc này — không còn gì phải lọc ở
 phía chiến dịch, chỉ còn một việc: loại 49 hồ sơ che khi tính tỷ lệ trả lời.

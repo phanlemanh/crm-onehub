@@ -25,7 +25,7 @@ reason: |
 verified_by: fresh-context verification subagents (hai làn)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 24c6d58660898fe9b74743243e7568feabd61ed9
+verified_commit: f8f72ab99b4efebb09cfcf9374d612337a24879d
 human_signoff: Mạnh 2026-09-06 — ký lại trên bằng chứng vòng 4 sau khi bản sửa `go-khoa-goc-nhin` làm mốc cũ lệch cây. Mười mục ngoài hợp đồng ghi vào giới hạn đã biết; phạm vi đã cắt giữ nguyên; phê toàn bộ quyết định ghi sau Cổng 1. Chấm E19 và các định đoạt ngày 05/09 giữ nguyên hiệu lực, không làm lại.
 ---
 
@@ -606,3 +606,17 @@ Nhánh nhận vòng «thước cache hết đối tượng»: `packages/db/turbo
 thật dù lệnh không kèm `--force`** — tức đổi cấu hình đệm không làm log bị phát
 lại. `@crm/ui:test` vẫn chạy đủ 92 bài dù tệp cấu hình riêng của gói đã bị xoá.
 Cộng 28 bài của bộ cào. Chữ ký người không bị đụng.
+
+### Re-pin lần 3 — 2026-09-07, do kéo về bản có tài liệu triển khai Vercel
+run_id: repin-len-vercel-20260907T110027Z
+sha: f8f72ab99b4efebb09cfcf9374d612337a24879d · suites: 4 lệnh exit 0
+
+Nhánh nhận thêm 34 commit, trong đó có tài liệu ba dự án Vercel và bảng nợ của
+cổng. 14 tệp mã đổi, **0 tệp** thuộc vùng hồ sơ này phủ — đo lại tám đường có tên
+trong hợp đồng, tất cả đều 0. Làn máy tại cây mới: 1413 bài kiểm, 0 trượt, 9/9
+chân kiểm chạy thật không hit đệm, cộng 28 bài của bộ cào. Chữ ký người không bị
+đụng.
+
+Đây là lượt ghim lại thứ năm của hồ sơ này, và là lượt thứ tư không có tệp nào
+thuộc vùng nó phủ. Chi phí đó đã ghi thành số ở chip `cong-chan-theo-ho-so-khong-theo-diff`
+của kho kit.
