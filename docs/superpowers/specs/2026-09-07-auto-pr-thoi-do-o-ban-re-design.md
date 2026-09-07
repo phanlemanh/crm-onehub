@@ -54,29 +54,42 @@ Lệch bản hãng đúng **một dòng thêm vào** — dạng lệch merge s�
 
 ## Đo thế nào
 
-Bốn chân trong `_acceptance/auto-pr-thoi-do-o-ban-re/rang/khoa-auto-pr.mjs`, mỗi chân
-một chiều đỏ tái lập được:
+Ba tiêu chí, đo bằng **lệnh trần** — không script riêng nào của vòng này.
 
-| Chân | Đo gì | Chiều đỏ |
+| Đo gì | Lệnh | Chiều đỏ |
 | --- | --- | --- |
-| `khoa` | job `open` có đúng một `if`, trỏ đúng kho hãng, và kho tại chỗ khác kho hãng | bản sao workflow bỏ dòng `if`; bản sao trỏ nhầm sang chính kho này |
-| `lech-mot-dong` | lệch `origin/release` đúng +1/−0 | `--nen HEAD` → không lệch dòng nào |
-| `mot-tep` | vòng này chạm đúng một tệp dưới `.github/` | `--nen HEAD` → không tệp nào |
-| `chay-that` | check-run thật của commit kết luận `skipped` | `--sha <onehub trước bản vá>` → `failure` |
+| Hành vi thật ở kho này | `gh api …/commits/c042478/check-runs` rồi `grep -qx 'Open a pull request into main = skipped'` | đổi sha sang `5ac85ef` → `… = failure` |
+| Lệch bản hãng: số dòng | `git diff --numstat origin/release -- <tệp>` khớp `1 0 …` | đổi nền sang `HEAD` → không lệch |
+| Lệch bản hãng: nội dung dòng | `git diff -U0 …` rồi `grep -qxF "+    if: …"` | đổi khuôn sang hai dấu cách → tầng sai |
+| Tác dụng phụ | bốn lệnh chứng sẵn có của kho | — |
 
-Chân `chay-that` là chân mang cả lời hứa: cùng một script, cùng một kho, hai commit —
-`5ac85ef` (trước) trả `failure`, `c042478` (sau) trả `skipped`. Không phải suy luận,
-là số đọc từ GitHub.
+Mỗi chiều đỏ chỉ khác chiều xanh **một tham số**, nên không lượt nào là một lời khai
+suông. Phép đo mang cả lời hứa là dòng đầu: cùng một lệnh, cùng một kho, hai commit —
+`5ac85ef` trả `failure`, `c042478` trả `skipped`. Không suy luận, là số GitHub đã ghi.
 
-Ba chân còn lại đo tĩnh vì chúng nói về **hình dạng** của bản vá, không nói về hành vi.
+### Vì sao bảng này ngắn hơn bảng cũ
+
+Hai vòng chấm đầu dựng một bộ đo riêng 260 dòng JavaScript với bốn chân và một ma trận
+11 ô. Hai vòng phản biện xác nhận **25 lỗi trong bộ đo, 0 lỗi trong bản vá**. Vòng 2 tái
+sinh đúng ba lớp lỗi của vòng 1 ngay trong đoạn mã viết ra để diệt chúng: so tập hợp
+dòng thay vì so diff, ô đỏ so tệp với chính nó nên đúng theo cấu tạo, và lỗi git bị nuốt
+thành mã đạt.
+
+Bài học ghi lại cho vòng sau: **bộ đo không được phức tạp hơn thứ nó đo.** Vật ở đây là
+một dòng YAML; mọi dòng mã viết thêm để chấm nó đều là bề mặt lỗi mới, và số liệu cho
+thấy bề mặt ấy hỏng chắc chắn hơn vật.
 
 ## Giới hạn đã biết
 
-**Không đo được hành vi ở kho hãng.** Chân `khoa` khẳng định điều kiện trỏ đúng chuỗi
-`trycompai/crm` và kho tại chỗ khác chuỗi đó — đủ để kết luận job không chạy *ở đây*,
-không đủ để chứng minh nó *vẫn chạy ở kia*. Muốn số thật thì phải có quyền đẩy lên kho
-hãng, thứ bản rẽ không có và không nên có. Đây là suy luận từ ngữ nghĩa `if` của GitHub
-Actions, khai ra chứ không giấu vào màu xanh.
+**Không đo được hành vi ở kho hãng.** Check-run của `c042478` chứng minh job không chạy
+*ở đây*, không chứng minh nó *vẫn chạy ở kia*. Muốn số thật thì phải có quyền đẩy lên
+kho hãng, thứ bản rẽ không có và không nên có. Kết luận "ở hãng vẫn như cũ" là suy luận
+từ ngữ nghĩa `if` của GitHub Actions — khai ra chứ không giấu vào màu xanh.
+
+**AC-1 phụ thuộc `gh` đã đăng nhập và mạng tới GitHub.** Thiếu một trong hai thì lệnh
+thất bại, và thất bại ấy phải đọc là *không đo được*, không phải *bản vá sai*. Lệnh trần
+không phân biệt hai loại ấy bằng mã thoát. Đó là cái giá của việc bỏ bộ đo tự chế, và
+giá này rẻ hơn 25 lỗi trong bộ đo.
 
 **`pr-base.yml` mang đúng bệnh, không sửa vòng này.** Nó `gh pr edit --base main` cho PR
 mở vào `release`. Ở bản rẽ không ai PR vào `release` nên nó đang ngủ. Nằm ngoài phạm vi.
