@@ -1,0 +1,37 @@
+{
+ "feature_plain": "Vòng SỬA cho hồ sơ ký hôm qua rồi hỏng ngay khi hợp nhất: gỡ hai tiêu chí không còn vật để đo, gỡ một bản khai vô tác dụng, sửa ô cắm chạy test đang đi vòng qua cửa chính của kho, và thay bằng một bất biến sống sót cả hai cách vá.",
+ "will_do": [
+  { "id": "AC-1", "p": "Sẽ đọc trạng thái đệm của từng việc từ cấu hình ĐÃ GIẢI — cấu hình gói đè cấu hình gốc — chứ không gõ tay danh sách." },
+  { "id": "AC-2", "p": "Sẽ viết một bất biến đúng với CẢ HAI cách vá: mọi việc mà lệnh chứng chạy phải hoặc tắt đệm, hoặc bị ép chạy lại. Không đường thứ ba." },
+  { "id": "AC-3", "p": "Sẽ bắt lớp «bản khai vô tác dụng»: khai input cho một việc không đệm thì trông như bảo đảm mà không bảo đảm gì." },
+  { "id": "AC-4", "p": "Sẽ chứng bằng ĐO TOÀN KHO — 10 gói, 30 việc còn đệm — rằng hai tiêu chí cũ thật sự hết đối tượng, kèm một đối chứng dương ghim tên bắt buộc phải nổ." },
+  { "id": "AC-8", "p": "Sẽ sửa ô cắm chạy test của cổng để nó đi qua đúng cửa chạy test của kho, và chứng bằng cách so tên cơ sở dữ liệu của hai lượt liên tiếp." },
+  { "id": "AC-5", "p": "Sẽ chứng hồ sơ cũ dựng lại được: chạy lại đúng sáu phép đo còn lại, đối chiếu theo TÊN chứ không theo số." }
+ ],
+ "wont_do": [
+  { "id": "AC-6", "p": "Sẽ KHÔNG chép thước: khối từ 12 dòng trở lên trùng một chân đã có là đỏ." },
+  { "id": "AC-7", "p": "Sẽ KHÔNG viết lại tiêu chí trong hợp đồng đã ký — chỉ gỡ cái hết đối tượng và khai lý do đọc được." }
+ ],
+ "scope_plain": "Vá lỗ re-pin của bộ kit · bật lại đệm cho việc chạy test · viết lại tiêu chí trong hợp đồng đã ký · chạy lại phép đo của mọi hồ sơ sau mỗi lần hợp nhất — bốn thứ này hoãn.",
+ "coverage_plain": [
+  { "i": 0, "p": "Vì sao một phép đo mất giá trị: vật bị xoá, vật đổi cơ chế, TIỀN ĐỀ BỊ NGƯỜI KHÁC VÁ MẤT, hay phép đo vốn đã sai. Giá trị thứ ba vừa xảy ra thật hôm qua (AC-4, AC-5)." },
+  { "i": 1, "p": "Một bản khai có tác dụng không: khai đúng chỗ, khai sai chỗ, hay không khai. Bản khai tôi thêm hôm qua là ca thật của loại giữa (AC-3)." },
+  { "i": 2, "p": "Bất biến được viết ở mức nào: mức một cách vá, mức cả hai cách vá, hay mức không đo được. Hồ sơ cũ viết ở mức một cách vá nên chết khi cách kia thắng (AC-2)." },
+  { "i": 3, "p": "Áp cho mọi ô: dân số từ cấu hình đã giải chứ không gõ tay, mỗi phép đo mới có cặp hai chiều, tập rỗng phải báo không-đo-được, không chép thước (AC-1, AC-2, AC-3, AC-6)." }
+ ],
+ "gap_probe_plain": [
+  { "i": 0, "p": "Bên phản biện bắt: bất biến mới không khai dân số. Nếu thước chỉ soi ô cắm chạy test thì nó còn đúng một phần tử vốn đã tắt đệm — xanh vĩnh viễn dù ai thêm việc mới, đúng cái nó tự nhận là chặn. Đã sửa: bảng toàn phần viết trước, bắt in số dòng." },
+  { "i": 1, "p": "Nặng nhất: tôi kết luận «hết đối tượng» sau khi đo ĐÚNG MỘT gói, trong khi kho có 10 gói và 30 việc còn đệm. Đã đo lại toàn kho — chỉ 2 file trong mọi gói trỏ ra ngoài, cả hai nằm trong thư mục test, là việc duy nhất không đệm. Tiền đề đứng, nhưng giờ nó có số thay vì có niềm tin." },
+  { "i": 2, "p": "Phép đo «có đọc ngoài gói không» thiếu đối chứng dương: cả bảng báo «không đọc» vừa có thể là sự thật vừa có thể là triệu chứng của một phép chạm hỏng — lớp lỗi này đã xanh giả một lần rồi. Đã sửa: một cặp ghim tên bắt buộc phải nổ, không nổ thì báo không-đo-được." },
+  { "i": 3, "p": "Tiêu chí «hồ sơ cũ dựng lại được» so số với chính file nó đọc, nên gỡ nhầm ba phép đo vẫn xanh. Đã sửa: ghim đúng sáu mã và đối chiếu theo tên." },
+  { "i": 4, "p": "Tiêu chí về cửa chạy test đo bằng sự có mặt của một chuỗi lệnh, trong khi lời hứa là một quan hệ. Ai đó đổi cửa ấy thì chuỗi vẫn còn và thước vẫn xanh — hết đối tượng đúng kiểu vừa giết hồ sơ hôm qua. Đã sửa: so tên cơ sở dữ liệu của hai lượt liên tiếp." }
+ ],
+ "decisions_plain": [
+  { "id": "d-20260907T110000Z-9901", "p": "GỠ hai tiêu chí cũ thay vì nhắm lại — vì đã đo: không việc nào vừa đệm vừa đọc ngoài gói. Đổi lại, nếu một ngày có việc như thế, không còn thước nào canh." },
+  { "id": "d-20260907T110100Z-9902", "p": "Viết bất biến ở mức CẢ HAI cách vá — đổi lại nó không nói cách nào tốt hơn, nên hai cách cùng tồn tại trong kho." },
+  { "id": "d-20260907T110200Z-9903", "p": "KHÔNG dựng bản bấm được — vòng này không chạm màn nào." },
+  { "id": "d-20260907T110300Z-9904", "p": "KHÔNG viết đặc tả cấu trúc màn — vòng này không dựng màn nào." },
+  { "id": "d-20260907T110400Z-9905", "p": "KHÔNG vá lỗ re-pin của bộ kit ở đây — đổi lại lỗ ấy VẪN CÒN, và nó chính là thứ đã cho một hồ sơ ký hỏng đi thẳng vào nhánh chính hôm nay." },
+  { "id": "d-20260907T111000Z-9906", "p": "Thêm tiêu chí về cửa chạy test TRƯỚC khi duyệt: ô cắm vòng trước đi vòng qua cửa chính, nên cổng chạy test trên nền dùng chung trong khi kho đã chuyển sang nền theo lượt." }
+ ]
+}
