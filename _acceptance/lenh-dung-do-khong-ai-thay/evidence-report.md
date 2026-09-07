@@ -7,8 +7,8 @@ reason:
 verified_by: sequential per-eval verify, run_id minted at execution
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5324ff805a25c6d8e86dae3e76529ac3375cf7ff
-run_id: s4r1-20260907T045150Z-29244
+verified_commit: 3c89429987efb6a070ba4d028208b6af01295827
+run_id: s4r2-20260907T073015Z-17429
 human_signoff: Manh Phan 2026-09-07
 ---
 
@@ -70,10 +70,10 @@ human_signoff: Manh Phan 2026-09-07
     XANH: khong than generateMetadata nao doi mot ky tu so voi sha ghim.
 
 - eval: E5
-  run_id: s4r1-20260907T045150Z-29244-E5b
+  run_id: s4r2-20260907T073015Z-17429-E5
   exit_code: 0
   verifier: config:executors.script.ld_ba_noi_deu_chay
-  verified_at: 2026-09-07T04:56:42.913Z
+  verified_at: 2026-09-07T07:31:51.473Z
   output: |
     dat  dieu 1a: o cam executors.script.build_khong_cache = bunx turbo run build --force
     dat  dieu 1b: suite_keys goi ten o cam ay (5 khoa)
@@ -139,3 +139,29 @@ human_signoff: Manh Phan 2026-09-07
 | `lint` | s4r1-20260907T045150Z-29244-suite-lint | 0 |
 | `lint-slop` | s4r1-20260907T045150Z-29244-suite-lint-slop | 0 |
 | `build` | s4r1-20260907T045150Z-29244-suite-build | 0 |
+
+## Vòng 2 — 2026-09-07
+
+Job `lệnh dựng` mà vòng 1 thêm vào `acceptance.yml` **đỏ trên CI** dù xanh ở máy:
+`bun install` chạy postinstall của `@crm/db`, vốn gọi prisma và đòi `DATABASE_URL`,
+mà job mới thiếu khối `env`. Đã chép đúng khối `env` của `ci.yml`.
+
+Mã đổi nằm trong `.github/workflows/acceptance.yml`.
+
+**Chạy lại:** E5 — phép đo duy nhất đọc file ấy — và cả năm lệnh chứng.
+
+**Mang sang (carry-forward):** E1 · E2 · E3 · E4 · E6 · E7 · E8 · E9. Lý do: không
+phép đo nào trong số đó đọc `.github/workflows/**`; `paths` của chúng chỉ gồm
+`apps/app/**`, `packages/**`, `_acceptance/**` và `.githooks/pre-push` — không
+file nào trong đó đổi ở vòng này.
+
+run_id: s4r2-20260907T073015Z-17429
+
+| Lệnh | run_id | exit |
+|---|---|---|
+| `test` | s4r2-20260907T073015Z-17429-suite-test | 0 |
+| `check-types` | s4r2-20260907T073015Z-17429-suite-check-types | 0 |
+| `lint` | s4r2-20260907T073015Z-17429-suite-lint | 0 |
+| `lint-slop` | s4r2-20260907T073015Z-17429-suite-lint-slop | 0 |
+| `build` | s4r2-20260907T073015Z-17429-suite-build | 0 |
+
