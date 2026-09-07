@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f4b2ea9d72b5f03de89ab1009b40a3f86c374e59
+verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
 human_signoff: Manh Phan 2026-09-01
 ---
 
@@ -189,3 +189,8 @@ none — every eval is deterministic and ran once per round.
 
 Round 1 (commit eef6b4a): all nine evals cleared. The verifier raised two weaknesses in the measure itself — four criteria bound to one exit code, and a red leg that stripped only one design socket.
 Round 2 (commit f4b2ea9): both weaknesses addressed before any red. Three separate legs replace the single socket command, and the red leg strips each design socket in turn with a self-count guard. All nine evals cleared again. The judge was re-run because both judged files changed.
+
+### Re-pin lần 1 — 07/09, do vòng sửa `thuoc-cache-het-doi-tuong` chạm hai file cấu hình turbo
+
+run_id: repin-20260907T005455Z-44758
+sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0

@@ -1,0 +1,23 @@
+{
+ "feature_plain": "Vòng SỬA cho hồ sơ ký hôm qua rồi hỏng ngay khi hợp nhất: gỡ hai tiêu chí không còn vật để đo, gỡ hai bản khai vô tác dụng, đưa ô cắm chạy test về đúng cửa của kho, và thay bằng một bất biến sống sót cả hai cách vá.",
+ "decisions": [
+  {
+   "id": "E7",
+   "q": "Ba dòng giải thích vừa ghi vào hồ sơ cũ, sáu tháng sau đọc có hiểu không?",
+   "why": "Chúng phải nói được: vì sao hai tiêu chí biến mất, ai vá bằng cách nào, và commit nào."
+  }
+ ],
+ "analyst_plain": "",
+ "scope_plain": "Vá lỗ re-pin của bộ kit · bật lại đệm cho việc chạy test · viết lại tiêu chí trong hợp đồng đã ký · chạy lại phép đo của mọi hồ sơ sau mỗi lần hợp nhất — bốn thứ này hoãn.",
+ "decisions_plain": [
+  { "id": "d-20260907T110000Z-9901", "p": "GỠ hai tiêu chí cũ thay vì nhắm lại — đã đo: không việc nào vừa đệm vừa đọc ngoài gói. Đổi lại, nếu một ngày có việc như thế, không còn thước nào canh." },
+  { "id": "d-20260907T110100Z-9902", "p": "Viết bất biến ở mức CẢ HAI cách vá — đổi lại nó không nói cách nào tốt hơn, nên hai cách cùng tồn tại trong kho." },
+  { "id": "d-20260907T110200Z-9903", "p": "KHÔNG dựng bản bấm được — vòng này không chạm màn nào." },
+  { "id": "d-20260907T110300Z-9904", "p": "KHÔNG viết đặc tả cấu trúc màn — vòng này không dựng màn nào." },
+  { "id": "d-20260907T110400Z-9905", "p": "KHÔNG vá lỗ re-pin của bộ kit ở đây — đổi lại lỗ ấy VẪN CÒN, và chính nó đã cho một hồ sơ ký hỏng đi thẳng vào nhánh chính hôm qua." },
+  { "id": "d-20260907T111000Z-9906", "p": "Thêm tiêu chí về cửa chạy test TRƯỚC khi duyệt: ô cắm vòng trước đi vòng qua cửa chính nên cổng chạy test trên nền dùng chung." },
+  { "id": "d-20260907T121000Z-9907", "p": "Sửa mốc số sau khi duyệt: 30 xuống 46 cặp, 25 còn đệm — phép đếm sơ bộ của tôi không kiểm gói có thật sự khai việc ấy không." },
+  { "id": "d-20260907T130000Z-9908", "p": "GỠ hai tiêu chí khỏi bộ chấm của một hồ sơ NGƯỜI ĐÃ KÝ, kèm ba dòng giải thích — anh phê hoặc veto ở cổng này." },
+  { "id": "d-20260907T131000Z-9909", "p": "Sửa một thước của hồ sơ cũ từ đo-chuỗi sang đo-quan-hệ: nó bắt oan một bản vá đúng, vì chữ nó tìm nằm bên trong cửa chạy test chứ không nằm trong ô cắm." }
+ ]
+}

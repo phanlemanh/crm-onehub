@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 59b6515c4a8941729de3de8aab7239a2f745da3b
+verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
 human_signoff: Manh Phan 2026-09-01
 ---
 
@@ -173,3 +173,8 @@ none — every eval is deterministic and ran once.
 Round 1: all seven machine evals green at `59b6515`. Every round-2 finding is
 closed and was re-attacked here rather than read. Two coverage gaps survive, both
 listed under Known limits, neither of them a failing eval.
+
+### Re-pin lần 1 — 07/09, do vòng sửa `thuoc-cache-het-doi-tuong` chạm hai file cấu hình turbo
+
+run_id: repin-20260907T005455Z-44758
+sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0

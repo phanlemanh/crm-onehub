@@ -1,0 +1,141 @@
+schema_version: 1
+slug: thuoc-cache-het-doi-tuong
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tc_trang_thai_dem
+    paths:
+      - "turbo.json"
+      - "**/turbo.json"
+      - "_acceptance/thuoc-cache-het-doi-tuong/rang/**"
+    expected: |
+      Xanh: chan giai cau hinh turbo theo dung thu tu turbo giai — cau hinh goi de cau
+      hinh goc — roi in bang (goi, task, dem) cho moi task ma lenh chung cua cong cham.
+      Neo do 07/09: test = cache TAT · check-types · lint · build = con dem.
+      Chieu do: doi `cache: false` cua task test trong ban sao -> bang doi theo, chan
+      neu dung task da doi.
+      Khong doc duoc turbo.json nao -> ma 2.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.tc_khong_duong_thu_ba
+    paths:
+      - "turbo.json"
+      - "**/turbo.json"
+      - "_acceptance/config.yaml"
+      - "package.json"
+      - "_acceptance/thuoc-cache-het-doi-tuong/rang/**"
+    expected: |
+      CAP HAI CHIEU tren CUNG mot vat (ban sao cay cau hinh):
+      DAN SO VIET TRUOC: moi o cam trong suite_keys x moi task no chay, mot dong,
+      cot (o cam, goi, task, dem hieu luc, co --force, thoa). Chan IN SO DONG, phai
+      bang so cap giai duoc tu cau hinh. Do 07/09: 4 o cam · 10 goi · 30 cap con dem.
+      Dan so hep la ca hong that: chi soi o cam test thi bat bien con dung mot phan tu
+      von da cache:false, nen xanh vinh vien du ai them suite moi.
+      chieu xanh — cay that: moi task ma lenh chung cua cong chay deu HOAC khai
+      `cache: false` HOAC duoc ep `--force`, ma 0.
+      chieu do — trong ban sao: bo `cache: false` khoi task test VA bo `--force` khoi
+      o cam test -> ma 1, goi dung ten task `test`, ten goi, ten o cam, va ve nao thieu.
+      Bat bien nay thay AC-3/AC-4 cua ho so cu vi no dung voi CA HAI cach va, nen khong
+      het doi tuong khi mot trong hai doi.
+      Khong o cam nao -> ma 2.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.tc_khai_vo_tac_dung
+    paths:
+      - "**/turbo.json"
+      - "_acceptance/thuoc-cache-het-doi-tuong/rang/**"
+    expected: |
+      Xanh: khong khai `inputs` nao nam tren mot task `cache: false`.
+      Chieu do CO SAN tren cay TRUOC khi sua: packages/ui/turbo.json khai inputs cho
+      task test, ma test la cache:false -> chan phai bat dung no, neu `file · goi · task`.
+      Sau khi go, chieu do tai lap bang cach cay lai khai ay vao ban sao.
+      Khong turbo.json nao co inputs -> ma 2 (khong co doi tuong thi khong duoc xanh).
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tc_het_doi_tuong
+    paths:
+      - "**/turbo.json"
+      - "packages/ui/test/**"
+      - "_acceptance/thuoc-cache-het-doi-tuong/rang/**"
+    expected: |
+      Xanh: chan quet TOAN KHO — danh sach goi lay tu `workspaces` cua package.json goc,
+      KHONG go tay — va in bang (goi, task con dem, co doc file ngoai do thi khong),
+      chung rang KHONG dong nao thoa ca hai.
+      DOI CHUNG DUONG GHIM TEN, bat buoc: cap packages/ui#test x
+      _acceptance/chan-lai-component-ra-man/rang/da-tim-thay.json DA BIET la co doc;
+      phep cham ay PHAI lam task ay chay lai. Doi chung duong khong no -> ma 2, KHONG
+      phai ma 0. Vi sao can: "ca bang deu khong doc" vua co the la su that vua co the
+      la trieu chung cua mot phep cham hong — lop loi nay da XANH GIA mot lan roi.
+      Noi dung cham la chuoi chua tung co va phai in ra log.
+      Chieu do: mot dong vua dem vua doc ngoai do thi ma hai tieu chi van bi go -> ma 1.
+      Bang rong, hoac so goi quet duoc NHO HON so goi khai trong workspaces -> ma 2.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.tc_ho_so_cu_xanh
+    paths:
+      - "_acceptance/lenh-chung-khong-an-cache-doi/**"
+      - "_acceptance/thuoc-cache-het-doi-tuong/rang/**"
+    expected: |
+      Xanh: chay lai MOI eval script con lai cua ho so lenh-chung-khong-an-cache-doi
+      tren cay hom nay — tat ca ma 0 — va DANH SACH ma eval da chay khop DUNG danh sach
+      GHIM trong contract: E1 · E2 · E5 · E6 · E7 · E8 (bo cu tru E3 va E4).
+      Ghim danh sach chu khong ghim so: hai ve rut tu cung mot file thi go nham ba eval
+      van cho "so chay bang so khai" va van xanh.
+      Chieu do: mot eval do -> ma 1, neu ten eval va o cam. Danh sach lech -> ma 1, neu
+      ten thua va ten thieu.
+      Khong eval script nao con lai -> ma 2.
+      Day la tieu chi chung rang vong SUA that su sua: ho so cu phai dung lai duoc, chu
+      khong chi duoc khai la da sua.
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.tc_dung_cua_chay_test
+    paths:
+      - "_acceptance/config.yaml"
+      - "package.json"
+      - "packages/db/scripts/**"
+      - "_acceptance/thuoc-cache-het-doi-tuong/rang/**"
+    expected: |
+      Do QUAN HE, khong do chuoi: chay o cam test HAI luot lien tiep, doc ten co so du
+      lieu hieu luc cua moi luot; hai ten phai KHAC NHAU va moi ten phai mang ma luot.
+      Viec o cam chua chuoi `bun run test` chi la dieu kien phu, in kem.
+      Chieu do CO SAN tren cay truoc khi sua: `api_khong_cache` goi thang
+      `bunx turbo run test`, di vong qua test-run.ts -> hai luot dung CHUNG mot co so
+      du lieu -> ma 1, neu ten o cam, than lenh, va ca hai ten co so du lieu.
+      Vi sao do quan he: do bang chuoi thi het doi tuong dung kieu vua giet ho so hom
+      qua — ai do doi scripts.test ve `turbo run test` thi o cam van chua nguyen chuoi
+      va thuoc van xanh.
+      Khong o cam test nao trong suite_keys, hoac khong doc duoc ten co so du lieu -> ma 2.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.tc_mot_bo_thuoc
+    paths:
+      - "_acceptance/**/rang/**"
+    expected: |
+      Xanh: khong khoi 12 dong nao cua lat nay trung voi mot chan da co o bay ho so
+      truoc.
+      Chieu do: chep mot khoi dac 12 dong tu mot chan cu -> ma 1, neu ten ca hai file.
+      Tap so sanh rong -> ma 2.
+
+  - id: E7
+    criterion: AC-7
+    executor: judgment
+    cmd: judgment
+    inputs:
+      - _acceptance/lenh-chung-khong-an-cache-doi/contract.md
+    expected: |
+      Nguoi doc phan Known limits vua ghi vao ho so cu: sau thang sau mo ra, co hieu vi
+      sao hai tieu chi bien mat, ai va bang cach nao, commit nao khong. May KHONG cham.
