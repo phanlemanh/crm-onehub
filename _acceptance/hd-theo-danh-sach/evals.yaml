@@ -71,8 +71,8 @@ evals:
 
   - id: E4
     criterion: AC-4
-    executor: script
-    cmd: config:executors.script.hd_cau_tu_choi
+    executor: test
+    cmd: config:executors.test.hd_cau_tu_choi
     paths:
       - "packages/auth/src/auth.ts"
       - "_acceptance/hd-theo-danh-sach/rang/**"
@@ -80,7 +80,8 @@ evals:
       Do QUAN HE, khong do chuoi co mat: goi THAT duong tu choi voi hai hinh dang danh
       sach va khang dinh thong diep NHAN DUOC khop bang hai dong ghim truoc:
         onemount.com                        -> cau neu domain
-        onemount.com,phanlemanh@gmail.com   -> cau allow-list
+        onemount.com,phanlemanh@gmail.com   -> cau neu domain (GIU NGUYEN)
+        phanlemanh@gmail.com                -> cau allow-list
       Mot dong nhan sai cau -> ma 1, in ca hai cau.
       Khong goi duoc duong tu choi -> ma 2.
       Vi sao do quan he: nhanh chon cau bi dao hay thanh ma chet thi ca hai chuoi van

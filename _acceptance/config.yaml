@@ -22,6 +22,7 @@ executors:
     hd_bang_ba_dong: "cd packages/auth && bun test test/hosted-domain.spec.ts"
     hd_cau_hinh_onehub: "cd packages/auth && bun test test/hosted-domain.spec.ts -t onehub"
     hd_khong_de_lai_hang: "cd packages/auth && bun test test/tu-choi-khong-de-lai-hang.integration.spec.ts"
+    hd_cau_tu_choi: "cd packages/auth && bun test test/cau-tu-choi.spec.ts"
     cl_tieng_viet_den_man: "node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs dan-so && cd packages/ui && bun test --preload ./test/setup-dom.ts test/lai-ra-man.spec.tsx"
     tt_api: bun run test -- "cd apps/api && bun run test listing-ingest.integration listing-fields listing-fixture-batch campaigns.spec campaign-schema"
     tt_app: cd apps/app && bun test test/messages-guard.spec.ts test/campaign-states.spec.ts
@@ -196,7 +197,6 @@ executors:
     tc_dung_cua_chay_test: "node _acceptance/thuoc-cache-het-doi-tuong/rang/dung-cua-chay-test.mjs"
     hd_ham_thuan: "node _acceptance/hd-theo-danh-sach/rang/ham-thuan.mjs"
     hd_cua_phan_quyen_nguyen_ven: "node _acceptance/hd-theo-danh-sach/rang/cua-phan-quyen-nguyen-ven.mjs"
-    hd_cau_tu_choi: "node _acceptance/hd-theo-danh-sach/rang/cau-tu-choi.mjs"
     hd_mot_bo_thuoc: "node _acceptance/hd-theo-danh-sach/rang/mot-bo-thuoc.mjs"
     rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
     rang_t1_im: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"

@@ -96,7 +96,17 @@ dạng danh sách và khẳng định thông điệp nhận được khớp bả
 | `ALLOWED_SIGN_IN` | người bị từ chối nhận |
 | --- | --- |
 | `onemount.com` | câu nêu domain — «Sign in with your @onemount.com account.» |
-| `onemount.com,phanlemanh@gmail.com` | câu allow-list — «That address is not on the allow-list.» |
+| `onemount.com,phanlemanh@gmail.com` | câu nêu domain — **giữ nguyên** |
+| `phanlemanh@gmail.com` | câu allow-list — «That address is not on the allow-list.» |
+
+**Đính chính sau khi duyệt (phép đo buộc):** bảng ban đầu ghi danh sách trộn nhận câu
+allow-list. Đó là **kỳ vọng tôi chép từ đề xuất của bên phản biện mà không đo**. Đo thật
+thì `primaryWorkspaceDomain()` trả domain bất kể có địa chỉ lẻ, nên ca trộn vẫn nhận câu
+nêu domain — và với **người lạ**, đó là chỉ dẫn đúng và hữu ích hơn. Câu allow-list chỉ
+xuất hiện khi danh sách **không có domain nào**, nên bảng nay có dòng thứ ba cho đúng ca
+ấy. Người mà vòng này mở đường cho — `phanlemanh@gmail.com` — **được cho vào**, nên không
+bao giờ đi đường từ chối; kịch bản «nhận chỉ dẫn sai» không thành hiện thực.
+Sổ quyết định: `d-20260907T170500Z-a012`.
 
 **Đỏ khi** một dòng nhận sai câu.
 **Mã 2 khi** không gọi được đường từ chối.
