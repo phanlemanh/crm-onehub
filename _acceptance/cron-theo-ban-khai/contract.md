@@ -5,7 +5,7 @@ slug: cron-theo-ban-khai
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [api, ci]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -146,3 +146,20 @@ Thước CE: **bản đang chạy ngoài internet**. Không phải suy luận �
   tảng, không phải của mã.
 
 ## Notes
+
+### Known limits
+
+- **Bản xem trước của API dùng chung cơ sở dữ liệu production.** Vòng này cắm
+  `DATABASE_URL` cho môi trường preview để phép đo AC-8 chạy được trước khi merge;
+  trước đó không bản xem trước nào dựng nổi. `docs/setup.md` của hãng đã khai đây
+  là tình trạng hiện tại, nhưng rủi ro là thật: một bản xem trước mang migration
+  mới sẽ áp thẳng lên dữ liệu thật. Tách cơ sở dữ liệu cho preview là một hồ sơ
+  riêng. Ghi 07/09 tại Cổng 2, chủ kho phê.
+- **Nhịp `*/5 * * * *` cần gói Pro; trên gói Hobby nó âm thầm thành hằng ngày.**
+  Vòng này làm cho năm việc được đăng ký, nhưng không đo chúng chạy đúng nhịp trên
+  gói hiện tại. Đo điều đó cần theo dõi lượt chạy thật qua nhiều ngày.
+  Ghi 07/09 tại Cổng 2, chủ kho phê.
+- **`/internal/listings/ingest` không nằm trong lịch nào.** Đường này tồn tại và tự
+  canh cửa, nhưng không cron nào gọi nó — có thể đúng, vì nó là đầu vào cho bộ thu
+  thập ở `tools/listing-crawl` chứ không phải việc theo lịch. Ghi lại để lần sau ai
+  đọc bản khai không tưởng là sót. Ghi 07/09 tại Cổng 2, chủ kho phê.

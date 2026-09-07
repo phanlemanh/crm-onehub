@@ -9,7 +9,7 @@ enforcement_mode: strict
 bypass_used: false
 verified_commit: 3d5b732459d262b0afe7c01c5ba2d92c2e508849
 run_id: s4r1-20260907T084712Z-30364
-human_signoff:
+human_signoff: Manh Phan 2026-09-07
 ---
 
 # Evidence Report: cron-theo-ban-khai
