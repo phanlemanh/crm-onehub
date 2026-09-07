@@ -79,7 +79,13 @@ bun run test
 bun run check-types
 bun run lint
 bun run lint:slop
+bun run build
 ```
+
+`bun run build` là lệnh thứ năm, thêm 07/09. Bốn lệnh đầu không dựng ứng dụng, nên
+một hồi quy làm `next build` đỏ đã đi qua bốn vòng đã ký mà không cổng nào thấy.
+Hình dạng cổng khai ở `.githooks/gate-shape.json`; thêm task mà không khai là
+`verify-gate-shape.mjs` cắn.
 
 Hai lỗi môi trường cũ đã vá 2026-09-01 — cách lách cũ (tự export khoá Google
 giả) nay sai, đừng dùng lại. Mỗi lượt `bun run test` có cơ sở dữ liệu riêng

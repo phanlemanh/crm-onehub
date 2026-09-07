@@ -1,0 +1,6 @@
+{
+  "feature_plain": "Làm ứng dụng dựng được trở lại, và bắt chính lệnh dựng phải chạy ở mọi cổng để lỗi kiểu này không còn vô hình.",
+  "decisions": [],
+  "scope_plain": "Không đổi cách giải tiếng, không dựng lối chọn tiếng qua đường dẫn, không chạm CI của hãng.",
+  "decisions_plain": []
+}

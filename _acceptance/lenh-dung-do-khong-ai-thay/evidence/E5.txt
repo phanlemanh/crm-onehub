@@ -1,0 +1,7 @@
+dat  dieu 1a: o cam executors.script.build_khong_cache = bunx turbo run build --force
+dat  dieu 1b: suite_keys goi ten o cam ay (5 khoa)
+dat  dieu 2: ci.yml cua hang khong doi mot ky tu
+dat  dieu 3: danh sach task cua pre-push: check-types lint lint:slop test build
+dat  dieu 4: doi chung duong ma 0 va CO chay lenh dung; cay loi cu vao apps/app/app/layout.tsx -> pre-push ma 1
+dat  dieu 5: 1 buoc chay lenh dung, khong buoc nao mang continue-on-error hay if
+XANH: ca nam dieu deu dat — hai dieu doc ban khai, ba dieu do hanh vi.
