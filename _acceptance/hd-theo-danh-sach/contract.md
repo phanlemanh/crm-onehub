@@ -5,7 +5,9 @@ slug: hd-theo-danh-sach
 owner: manh.phan@onemount.com
 risk_tier: T3
 surfaces: [auth]
-status: draft
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-09-07
 design_doc: docs/superpowers/specs/2026-09-07-hd-theo-danh-sach-design.md
 ---
 
