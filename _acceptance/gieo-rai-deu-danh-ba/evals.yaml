@@ -1,0 +1,50 @@
+schema_version: 1
+feature_slug: gieo-rai-deu-danh-ba
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.gieo_rai_test
+    expected: "exit 0; bài «mẫu trải khắp dải» pass — bộ dựng sẵn 200 địa chỉ với trần 20, khẳng định có địa chỉ thuộc một phần tư CUỐI dải; khuôn cắt-đầu cũ làm bài này đỏ"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/seed.py, tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_seed.py]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.gieo_rai_test
+    expected: "exit 0; bài «ít hơn trần thì trả nguyên» pass — đầu vào 5 địa chỉ trần 20 trả đúng 5 địa chỉ đúng thứ tự"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/seed.py, tools/listing-crawl/tests/test_seed.py]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.gieo_rai_test
+    expected: "exit 0; bài «đúng số lượng, không lặp» pass trên nhiều cỡ dải và trần khác nhau"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/seed.py, tools/listing-crawl/tests/test_seed.py]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.gieo_rai_test
+    expected: "exit 0; bài «hai lượt cho cùng kết quả» pass"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/seed.py, tools/listing-crawl/tests/test_seed.py]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.gieo_rai_test
+    expected: "exit 0; bài «không trần thì trả hết» pass ở cả hàm rải lẫn vòng gieo"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/seed.py, tools/listing-crawl/tests/test_seed.py]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.gieo_rai_test
+    expected: "exit 0; bài «đọc hết trần trang, không dừng sớm» pass — bộ dựng sẵn đếm số trang đã đọc và khẳng định bằng directory_max_pages dù trần nhỏ hơn nhiều; khuôn cũ chỉ đọc vài trang nên bài này đỏ"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_seed.py]

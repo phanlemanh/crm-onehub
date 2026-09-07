@@ -17,6 +17,7 @@ from listing_crawl.emit import (
 )
 from listing_crawl.parse import directory_urls, next_data_of, parse_profile
 from listing_crawl.redact import Redactor
+from listing_crawl.seed import sample_across
 from listing_crawl.tiers import config
 
 LOGGER = logging.getLogger("listing_crawl")
@@ -207,8 +208,6 @@ async def seed_urls(fetch, run, settings: dict, limit: int | None) -> list[str]:
     )
 
     for number in range(1, int(settings["directory_max_pages"]) + 1):
-        if limit is not None and len(found) >= limit:
-            break
         page = await fetch(f"{settings['directory']}?page={number}", run, "danh_ba")
         if not page.success or not page.html:
             LOGGER.warning("trang danh bạ %s không tải được", number)
@@ -225,7 +224,7 @@ async def seed_urls(fetch, run, settings: dict, limit: int | None) -> list[str]:
             seen.add(url)
             found.append(url)
 
-    return found[:limit] if limit is not None else found
+    return sample_across(found, limit)
 
 
 async def reveal_phones(fetch, run, items: list[dict], cap: int) -> None:
