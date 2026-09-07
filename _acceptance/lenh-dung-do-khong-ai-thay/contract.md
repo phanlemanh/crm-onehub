@@ -5,7 +5,7 @@ slug: lenh-dung-do-khong-ai-thay
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [app, ci]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -169,3 +169,17 @@ sửa 19 màn mà không đóng lỗ thì vòng sau lọt lại.
   việc riêng sau.
 
 ## Notes
+
+### Known limits
+
+- **Vỏ tĩnh của toàn ứng dụng là ô chờ rỗng.** Mọi route stream sau một ranh
+  `<Suspense>` ở root layout, nên byte đầu tiên trình duyệt nhận không còn nội
+  dung nào. Vòng này không đo thời gian tới nội dung đầu tiên; nếu nó chậm đi thì
+  không phép đo nào thấy. Đo tốc độ tải là một hồ sơ riêng có ngưỡng của nó.
+  Ghi 07/09 tại Cổng 2, chủ kho phê.
+- **`lang` đúng chỉ từ khi nhánh theo tiếng tới, không từ byte đầu.** Thẻ
+  `<html lang>` in ra `vi` cho mọi lượt; lượt tiếng Anh được sửa lại bằng một
+  đoạn script ngay sau đó. Với sản phẩm tiếng Việt thì mặc định `vi` là đúng
+  chiều, nhưng vẫn có một khoảng ngắn khai sai. Giữ `lang` đúng ngay byte đầu đòi
+  lối chọn tiếng qua middleware — thiết kế khác, đã khai ngoài phạm vi ở Cổng 1.
+  Ghi 07/09 tại Cổng 2, chủ kho phê.

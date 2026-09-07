@@ -9,7 +9,7 @@ enforcement_mode: strict
 bypass_used: false
 verified_commit: 5324ff805a25c6d8e86dae3e76529ac3375cf7ff
 run_id: s4r1-20260907T045150Z-29244
-human_signoff:
+human_signoff: Manh Phan 2026-09-07
 ---
 
 # Evidence Report: lenh-dung-do-khong-ai-thay
