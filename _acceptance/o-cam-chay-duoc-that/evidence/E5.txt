@@ -1,0 +1,3 @@
+file evidence-report: 25 (neo >= 25) · khoa verifier distinct: 222 (neo >= 222)
+khoa khong giai duoc: 0
+XANH: ca 222 khoa verifier tren 25 bao cao deu giai duoc, va ca 16 khoa vong nay sua deu co mat.

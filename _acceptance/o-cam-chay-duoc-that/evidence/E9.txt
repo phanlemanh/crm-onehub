@@ -1,0 +1,6 @@
+nap resolveConfigKey tu: /Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.8.0/lib/evidence-core.cjs
+  gia tri tran: "bun run test"
+  boc nhay kep tron ven: "bunx turbo run build --force"
+  ket thuc bang nhay kep khong boc: "bun run test -- \"cd apps/api && bun test x"
+  cat sau dau thang: "bun run lint"
+XANH: bon dau van hanh vi khop — cat sau dau thang, boc dung mot ngoac moi dau.

@@ -1,0 +1,17 @@
+  ok  test.tt_api · y dinh ma 0 · nay ma 0
+  ok  test.go_khoa_api · y dinh ma 0 · nay ma 0
+  ok  test.go_khoa_app · y dinh ma 0 · nay ma 0
+  ok  script.rang_suite_sach · y dinh ma 0 · nay ma 0
+  ok  script.rang_suite_thu_tu · y dinh ma 1 · nay ma 1
+  ok  script.rang_microsoft_duong · y dinh ma 0 · nay ma 0
+  ok  script.rang_microsoft_do · y dinh ma 0 · nay ma 0
+  ok  script.rang_microsoft_nguon_env · y dinh ma 0 · nay ma 0
+  ok  script.rang_microsoft_hinh_thuc · y dinh ma 0 · nay ma 0
+  ok  script.tt_crawl_to_ingest · y dinh ma 127 · nay ma 127
+  ok  script.apr_lech_so_dong_do · y dinh ma 0 · nay ma 0
+  ok  script.apr_check_run · y dinh ma 0 · nay ma 0
+  ok  script.apr_lech_so_dong · y dinh ma 0 · nay ma 0
+  ok  script.apr_lech_noi_dung · y dinh ma 0 · nay ma 0
+  ok  script.apr_check_run_do · y dinh ma 0 · nay ma 0
+  ok  script.apr_lech_noi_dung_do · y dinh ma 0 · nay ma 0
+XANH: ca 16 o cam cho CUNG mot ma thoat voi y dinh tac gia tai sha ghim — sua cach viet, khong doi viec lenh lam.
