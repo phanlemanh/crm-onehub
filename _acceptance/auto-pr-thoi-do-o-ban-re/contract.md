@@ -5,7 +5,7 @@ slug: auto-pr-thoi-do-o-ban-re
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: implemented
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-07
 veto_state: mo
@@ -132,7 +132,12 @@ Ba trục, sau khi thu phạm vi.
 | B — mặt đo | hành vi thật (check-run) · hình dạng bản vá (diff) · tác dụng phụ (bốn lệnh chứng) |
 | C — chiều | xanh · đỏ |
 
-**Thước CE — 10/10 ô chiều được ĐĂNG KÝ thành eval, không còn ô nào là lời khai.**
+**Thước CE — 5 ô xanh đo thật; 5 ô đỏ đã đăng ký nhưng KHÔNG đo được gì.**
+
+Đính chính 07/09, sau vòng chấm 5: bản trước của dòng này viết «10/10 ô chiều được ĐĂNG
+KÝ… không còn ô nào là lời khai». Đúng về hình thức, **sai về thực chất** — năm ô đỏ có
+mặt trong `evals.yaml` nhưng ghim hằng số và không đọc cây đang kiểm. Xoá bản vá đi thì
+cả năm vẫn xanh. Đo được, ghi ở `evidence-report.md` mục Known limits 1.
 
 Năm eval máy của AC-1 và AC-2 mỗi cái có một eval chiều đỏ riêng, theo đúng khuôn kho
 đã có (`rang_microsoft_duong`/`rang_microsoft_do`):

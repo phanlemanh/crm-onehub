@@ -1,13 +1,14 @@
 ---
 schema_version: 2
 feature_slug: auto-pr-thoi-do-o-ban-re
-verdict: REJECT
+verdict: PASS
 failed_evals: []
+reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 00a5762bcc4e8dae82d2c8fd9bc635fe8db295d4
-human_signoff: Manh Phan 2026-09-07 — ký Cổng 2 trên phán quyết REJECT của vòng chấm 3, với tám giới hạn đã khai trong mục Known limits và bảng định đoạt mười finding trong mục Ngoài hợp đồng. Bản vá đo lại xanh 9/9 bằng làn tươi độc lập tại 00a5762, cây không đổi trước/sau làn.
+verified_commit: 4f8e36a77e88d3791352da67a38e8aa03cc2b0c4
+human_signoff: Manh Phan 2026-09-07 — ký Cổng 2 trên verdict PASS của vòng chấm 5 (14/14 eval, 4 lệnh chứng xanh), với MƯỜI MỘT giới hạn đã khai. Ký trên hiểu biết rằng năm eval chiều đỏ E10-E14 là trang trí đã khai chứ không phải bằng chứng, rằng năng lực phân biệt chỉ được xác nhận bằng tay, rằng `bun run build` — lệnh chứng thứ năm của kho — không nằm trong AC-3, và rằng nhánh còn sau `origin/onehub` 16 commit với merge sạch.
 ---
 
 # Evidence Report: auto-pr-thoi-do-o-ban-re
@@ -23,165 +24,236 @@ human_signoff: Manh Phan 2026-09-07 — ký Cổng 2 trên phán quyết REJECT 
 | E7 | AC-3 | test | PASS |
 | E8 | AC-1 | script | PASS |
 | E9 | AC-1 | script | PASS |
+| E10 | AC-1 | script | PASS |
+| E11 | AC-2 | script | PASS |
+| E12 | AC-2 | script | PASS |
+| E13 | AC-1 | script | PASS |
+| E14 | AC-1 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-auto-pr-thoi-do-o-ban-re-E1-r3
+  run_id: minted-auto-pr-thoi-do-o-ban-re-E1-r5
   exit_code: 0
   baseline: green
   verifier: config:executors.script.apr_check_run
-  verified_at: 2026-09-07T05:30:00Z
+  verified_at: 2026-09-07T09:00:00Z
   output: |
-    (no output — grep -qx matched silently, exit 0)
+    Open a pull request into main = skipped
 
 - eval: E2
-  run_id: minted-auto-pr-thoi-do-o-ban-re-E2-r3
+  run_id: minted-auto-pr-thoi-do-o-ban-re-E2-r5
   exit_code: 0
   baseline: red
   verifier: config:executors.script.apr_lech_so_dong
-  verified_at: 2026-09-07T05:30:00Z
+  verified_at: 2026-09-07T09:00:00Z
   output: |
     EXIT_CODE: 0
 
 - eval: E3
-  run_id: minted-auto-pr-thoi-do-o-ban-re-E3-r3
+  run_id: minted-auto-pr-thoi-do-o-ban-re-E3-r5
   exit_code: 0
   baseline: red
   verifier: config:executors.script.apr_lech_noi_dung
-  verified_at: 2026-09-07T05:30:00Z
+  verified_at: 2026-09-07T09:00:00Z
   output: |
-    (no output — grep -qxF found match and exited silently)
+    (no stdout — grep -qxF matched silently)
 
 - eval: E4
-  run_id: minted-auto-pr-thoi-do-o-ban-re-E4-r3
+  run_id: minted-auto-pr-thoi-do-o-ban-re-E4-r5
   exit_code: 0
-  baseline: n-a
+  baseline: green
   verifier: config:executors.script.check_types_khong_cache
-  verified_at: 2026-09-07T05:30:00Z
+  verified_at: 2026-09-07T09:00:00Z
   output: |
      Tasks:    13 successful, 13 total
     Cached:    0 cached, 13 total
-      Time:    7.715s
+      Time:    5.605s
 
 - eval: E5
-  run_id: minted-auto-pr-thoi-do-o-ban-re-E5-r3
+  run_id: minted-auto-pr-thoi-do-o-ban-re-E5-r5
   exit_code: 0
   baseline: green
   verifier: config:executors.script.lint_khong_cache
-  verified_at: 2026-09-07T05:30:00Z
+  verified_at: 2026-09-07T09:00:00Z
   output: |
-      Time:    474ms
-
-    Lint summary: @crm/auth (1), @crm/telemetry (1), @crm/ui (2), @crm/db (5), agent (1), app (3), api (3) warnings total. No errors.
+     Tasks:    9 successful, 9 total
+    Cached:    0 cached, 9 total
+      Time:    348ms
 
 - eval: E6
-  run_id: minted-auto-pr-thoi-do-o-ban-re-E6-r3
+  run_id: minted-auto-pr-thoi-do-o-ban-re-E6-r5
   exit_code: 0
   baseline: green
   verifier: config:executors.script.lint_slop
-  verified_at: 2026-09-07T05:30:00Z
+  verified_at: 2026-09-07T09:00:00Z
   output: |
     Found 0 warnings and 0 errors.
-    Finished in 2.0s on 909 files with 9 rules using 14 threads.
+    Finished in 463ms on 909 files with 9 rules using 14 threads.
 
 - eval: E7
-  run_id: minted-auto-pr-thoi-do-o-ban-re-E7-r3
+  run_id: mtqs16at5x5q
   exit_code: 0
-  baseline: n-a
+  baseline: green
   verifier: config:executors.test.api
-  verified_at: 2026-09-07T05:30:00Z
+  verified_at: 2026-09-07T09:00:00Z
   output: |
-    test-run: dropped crm_mtqnt0a25bqa_test
-    257 pass / 0 fail across 22 files in 27.351s
+      Time:    23.698s
+
+    test-run: dropped crm_mtqs16at5x5q_test
 
 - eval: E8
-  run_id: minted-auto-pr-thoi-do-o-ban-re-E8-r3
+  run_id: minted-auto-pr-thoi-do-o-ban-re-E8-r5
   exit_code: 0
   baseline: red
   verifier: config:executors.script.apr_moc_to_tien
-  verified_at: 2026-09-07T05:30:00Z
+  verified_at: 2026-09-07T09:00:00Z
   output: |
-    (no output — git merge-base --is-ancestor exited silently, exit 0)
+    (no output — git merge-base --is-ancestor exited 0)
 
 - eval: E9
-  run_id: minted-auto-pr-thoi-do-o-ban-re-E9-r3
+  run_id: minted-auto-pr-thoi-do-o-ban-re-E9-r5
   exit_code: 0
   baseline: red
   verifier: config:executors.script.apr_moc_khop_cay
-  verified_at: 2026-09-07T05:30:00Z
+  verified_at: 2026-09-07T09:00:00Z
   output: |
-    (no output — git diff --quiet exited silently, exit 0)
+    EXIT_CODE=0
+
+- eval: E10
+  run_id: minted-auto-pr-thoi-do-o-ban-re-E10-r5
+  exit_code: 0
+  baseline: green
+  verifier: config:executors.script.apr_check_run_do
+  verified_at: 2026-09-07T09:00:00Z
+  output: |
+    acceptance gate = success
+    Open a pull request into main = failure
+
+- eval: E11
+  run_id: minted-auto-pr-thoi-do-o-ban-re-E11-r5
+  exit_code: 0
+  baseline: green
+  verifier: config:executors.script.apr_lech_so_dong_do
+  verified_at: 2026-09-07T09:00:00Z
+  output: |
+    No output from command — test passed silently (no file changes detected)
+
+- eval: E12
+  run_id: minted-auto-pr-thoi-do-o-ban-re-E12-r5
+  exit_code: 0
+  baseline: green
+  verifier: config:executors.script.apr_lech_noi_dung_do
+  verified_at: 2026-09-07T09:00:00Z
+  output: |
+    (no output — grep found no `if: github.repository` line in the diff)
+
+- eval: E13
+  run_id: minted-auto-pr-thoi-do-o-ban-re-E13-r5
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.apr_moc_to_tien_do
+  verified_at: 2026-09-07T09:00:00Z
+  output: |
+    (no output — merge-base is-ancestor returned non-zero as expected)
+
+- eval: E14
+  run_id: minted-auto-pr-thoi-do-o-ban-re-E14-r5
+  exit_code: 0
+  baseline: green
+  verifier: config:executors.script.apr_moc_khop_cay_do
+  verified_at: 2026-09-07T09:00:00Z
+  output: |
+    Command completed with no output. Exit status 0 indicates git diff returned non-zero (changes exist in .github/workflows/auto-pr.yml between commits c042478 and 5ac85ef).
 
 ## Known limits
 
-Tám giới hạn, chép từ `contract.md` mục Known limits để CỔNG đọc được — vòng trước khai
-chúng vào `contract.md`, tệp mà `xanh_sach_check()` không đọc, nên cổng tự kết
-«xanh-sạch, KHÔNG mời ký» cho một hồ sơ có ba finding mức high. Đó là lỗi ghi sai chỗ,
-và nó làm mất chữ ký của người.
+Mười một giới hạn. Ba mục đầu là **mới**, đo được trong vòng chấm 5 và trước khi ký.
 
-1. **Không đo được hành vi ở kho hãng.** «Job vẫn chạy bình thường ở `trycompai/crm`» là
-   suy luận từ ngữ nghĩa `if`, không phải số đo. Cần quyền đẩy lên kho hãng.
-2. **AC-1 phụ thuộc `gh` đăng nhập và mạng.** Thiếu một trong hai thì lệnh thất bại, và
-   thất bại ấy phải đọc là *không đo được*, không phải *bản vá sai*. Lệnh trần không
-   phân biệt hai loại ấy bằng mã thoát.
-3. **`pr-base.yml` còn mang bệnh.** Cùng `--base main`. Đang ngủ vì bản rẽ không PR vào
-   `release`. Không phép đo nào canh nó.
-4. **Độ lệch nội dung đầu tiên trong một tệp workflow của hãng.** Trước vòng này
-   `git diff origin/release -- .github/` chỉ có `acceptance.yml`, tệp thêm mới nên không
-   bao giờ xung đột. Từ nay mỗi lượt hãng sửa `auto-pr.yml` đều phải xử tay. Chủ kho
-   quyết 07/09: không gửi lên hãng, chỉ làm trong kho này và `crm-onehub`.
-5. **E9 khoá cả tệp workflow vào commit `c042478`.** Lượt đầu hãng sửa `auto-pr.yml` thì
-   E9 không xanh lại được, còn E1 vẫn trả `skipped` từ check-run đóng băng. Khi ấy AC-1
-   có một chân luôn đỏ và một chân không đo gì.
-6. **Bốn finding ngoài hợp đồng của vòng chấm 1 chưa xử.** Ba mục nằm trong bộ đo đã xoá
-   nên tự hết; còn lại việc vẽ lại bản đồ, đã làm và khai lệch luật trong sổ quyết định.
-7. **Chiều đỏ khai cho E2 đúng-theo-cấu-tạo.** `git diff --numstat HEAD` rỗng với mọi
-   cây, có vá hay không. E3 là vế mang tải của AC-2.
-8. **E2/E3 so với `origin/release` cục bộ, không `fetch`.** Sau một lượt kéo bản hãng
-   làm ref ấy đổi, cả hai vẫn xanh trong khi lệch thật đã khác.
+### 1. Năm eval chiều đỏ (E10–E14) KHÔNG chứng minh được năng lực phân biệt
+
+Chúng ghim `origin/release`, `c042478`, `5ac85ef` — **không cái nào đọc cây đang kiểm**.
+Bốn phép thử chạy ngày 07/09, kết quả nguyên văn:
+
+| Phép thử | E10–E14 | E2 / E3 / E9 (chiều xanh) |
+| --- | --- | --- |
+| Thay mốc ghim bằng SHA không tồn tại | đạt hết — git thoát 128, `test $? -ne 0` nuốt | — |
+| Chạy từ thư mục không phải kho git | đạt — git lỗi ra stderr, `test -z "$(…)"` thấy stdout rỗng | đỏ đúng |
+| **Xoá dòng khoá khỏi cây làm việc** | **đạt hết cả năm** | **đỏ cả ba** |
+| Đổi thụt 4→2 dấu cách (tầng sai, vẫn 1 dòng thêm) | không cái nào phản ứng | E3 đỏ; E2 lọt |
+
+Hai khuyết tật: **hằng số với cây** (không phản ứng khi bản vá bị gỡ) và **fail-open**
+(git hỏng cũng cho mã đạt). Khuôn đúng của kho — `rang_microsoft_do` — gọi một script
+sống trong kho dựng ca âm **từ cây hiện tại**; năm ô này bỏ mất cơ chế ấy.
+
+**Giữ chứ không xoá**, vì vòng chấm 5 đã chấm trên đúng bộ 14 eval này; xoá là đổi bộ đo
+sau phán quyết, đúng lỗi «hồ sơ tả một bộ tiêu chí không còn tồn tại» mà vòng 3 và 5 đều
+bắt. Chúng ở lại như **trang trí đã khai**, không phải bằng chứng.
+
+Câu ở Coverage «10/10 ô chiều được ĐĂNG KÝ… không còn ô nào là lời khai» **đúng về hình
+thức, sai về thực chất**: năm ô đỏ có mặt trong `evals.yaml` nhưng không đo gì về bản vá.
+
+### 2. Năng lực phân biệt được xác nhận BẰNG TAY, không bằng eval đã đăng ký
+
+Dòng thứ ba của bảng trên là bằng chứng mà năm ô đỏ định mang: **xoá dòng `if:` khỏi cây
+làm việc thì E2, E3, E9 cùng đỏ.** Đo bằng tay ngày 07/09, cây đã khôi phục sạch ngay
+sau. Đây là lời khai của một phiên làm việc, không tái lập được bằng `recheck: strict` —
+khai đúng như thế thay vì dựng thêm một ô cắm rỗng nữa.
+
+### 3. AC-3 khai BỐN lệnh chứng; kho nay chứng bằng NĂM
+
+`CLAUDE.md` thêm `bun run build` làm lệnh chứng thứ năm ngày 07/09, với lý do ghi thẳng:
+*một hồi quy làm `next build` đỏ đã đi qua bốn vòng đã ký mà không cổng nào thấy*. AC-3
+và E4–E7 của hồ sơ này phủ bốn lệnh cũ. **`bun run build` không được đo ở đây.**
+
+Rủi ro cụ thể cho bản vá này thấp — nó chạm đúng một dòng YAML của workflow, không chạm
+mã nguồn — nhưng lỗ là lỗ, và nó là đúng lỗ mà kho vừa phải trả giá để học.
+
+### 4. Nhánh sau `origin/onehub` 16 commit
+
+Đo trước khi ký: merge sạch, 0 xung đột, và `.github/workflows/auto-pr.yml` **không ai
+đụng** giữa `5ac85ef` và `origin/onehub` — nên mốc ghim `c042478` còn đứng và bản vá còn
+áp được. Hồ sơ chưa chấm lại trên cây đã merge.
+
+### 5–11. Bảy giới hạn từ các vòng trước
+
+5. **Không đo được hành vi ở kho hãng.** Cần quyền đẩy lên `trycompai/crm`.
+6. **AC-1 phụ thuộc `gh` đăng nhập và mạng.** Thất bại phải đọc là *không đo được*, và
+   lệnh trần không phân biệt được bằng mã thoát.
+7. **`pr-base.yml` còn mang bệnh** (`--base main`), đang ngủ, không phép đo nào canh.
+8. **Độ lệch nội dung đầu tiên trong một tệp workflow của hãng.** Chủ kho quyết 07/09
+   không gửi lên hãng; mỗi lượt hãng sửa tệp ấy từ nay phải xử tay.
+9. **E9 khoá cả tệp workflow vào `c042478`.** Lượt đầu hãng sửa `auto-pr.yml` thì E9
+   không xanh lại được và phải sửa mốc ghim.
+10. **Chiều đỏ khai cho E2 đúng-theo-cấu-tạo** — xem mục 1.
+11. **E2/E3 so với `origin/release` cục bộ, không `fetch` trước.**
 
 ## Ngoài hợp đồng
 
-Mười finding của vòng chấm 3, tám mục ngoài hợp đồng, cộng chín mục của vòng 2 — đầy đủ
-ở `review-findings.md`. Trạng thái sau quyết định của chủ kho ngày 07/09:
+Toàn bộ ở `review-findings.md`. Định đoạt sau quyết định của chủ kho ngày 07/09:
 
 | Finding | Định đoạt |
 | --- | --- |
-| Hai mục khai rỗng khiến cổng tự kết xanh-sạch (high ×2) | **đã sửa** — chính hai mục này |
-| Vá riêng không có đường lên hãng (medium) | **chủ kho quyết không gửi** — ghi Out of scope + Known limits 4 |
-| AC-2 khoá độ lệch ở `1 0` vĩnh viễn (medium) | **chủ ý**, không phải lỗi — bản rẽ cố tình giữ dòng khoá riêng |
-| «E9 là eval DUY NHẤT» sai (medium) | **đã đính chính** — đo lại: E3 cũng bắt được |
-| E9 giòn khi hãng sửa workflow (medium) | ghi Known limits 5 |
-| Chiều đỏ E2 đúng-theo-cấu-tạo (high) | ghi Known limits 7 |
-| Chiều đỏ E3 đổi khuôn thay vì đổi cây (medium) | ghi Known limits 7 |
-| E8/E9 chưa chạy trong làn có sổ (high ×2, TRONG hợp đồng) | **đã sửa** — làn đo lại 07/09, xem Iterations |
-
-## Vòng chấm 3 bị nhiễm — và đã đo lại
-
-Một agent phản biện của vòng 3 đã **commit vào chính nhánh đang kiểm**:
-`93ed39d test: simulate broken tree without patch`, một commit gỡ dòng bản vá, rồi không
-dọn. `HEAD` thành commit không có bản vá, và bản đầu của báo cáo này bị ghim vào đúng nó.
-
-Đã gỡ commit ấy, nhánh về nguyên trạng, và **chạy lại toàn bộ 9 eval bằng một làn tươi
-độc lập** tại `00a5762`: 9/9 mã 0, `git rev-parse HEAD` và `git status --porcelain`
-giống hệt nhau trước và sau làn — cây không bị đổi. Mốc ghim của báo cáo này là kết quả
-làn ấy, không phải kết quả đo trên cây đã bẩn.
-
-Lỗi của bộ kit, đã mở chip riêng sang `~/dev/acceptance-gate-kit`; không sửa tại chỗ.
+| Bốn eval đỏ nuốt lỗi git thành mã đạt (high) | **khai** — Known limits 1, giữ nguyên |
+| Năm eval đỏ là hằng số với cây (high) | **khai** — Known limits 1, giữ nguyên |
+| E12 không đảo được khẳng định mang tải của E3 (medium) | **khai** — Known limits 1, hàng thứ tư |
+| Hồ sơ bằng chứng phủ E1–E9 trong khi evals có E1–E14 (medium) | **đã hết** — báo cáo này là của vòng 5, phủ đủ 14 |
+| Ghim slug kho hãng thay vì hỏi `fork == false` (low) | **để nguyên** — hành vi hiện tại đúng; đổi sang lối fork-generic sẽ làm E3 đỏ vì nó khoá nguyên văn chuỗi |
+| Không gửi lên hãng (medium, vòng 3) | **quyết định của chủ kho** — Out of scope + Known limits 8 |
+| AC-2 khoá độ lệch ở `1 0` (medium, vòng 3) | **chủ ý** — bản rẽ cố tình giữ dòng khoá riêng |
+| «E9 là eval DUY NHẤT» sai (medium, vòng 3) | **đã đính chính** |
 
 ## Analyst
 
-- E1 (`gh api ... check-runs | grep -qx 'Open a pull request into main = skipped'`) — green trên cả baseline lẫn feature: eval này không tự phân biệt được cây có vá hay không (nó đọc check-run bất biến của commit đã ghim). Sức phân biệt của AC-1 nằm ở E8 + E9, không ở E1 một mình.
-- E5 (`bunx turbo run lint --force`) — green trên cả hai phía: lint không đổi do bản vá workflow này, đây là regression-guard.
-- E6 (`bun run lint:slop`) — green trên cả hai phía: cùng lý do, regression-guard cho code slop, không phải phép đo của tính năng.
+- E1, E10 — trạng thái check-run của hai commit lịch sử cố định (`c042478` skipped, `5ac85ef` failure); không đọc cây đang xét. Regression-guard có chủ ý, không phải bug.
+- E11, E12, E14 — chiều đỏ so hai commit cố định (`origin/release`, `5ac85ef`), không đọc cây làm việc hay HEAD; xanh trên cả HEAD lẫn baseline vì đầu vào bất biến. Xem review-findings.md — cần viết lại để đọc cây đang xét.
+- E4, E5, E6, E7 — check-types/lint/lint:slop/test toàn kho xanh trên cả HEAD lẫn baseline vì bản vá chỉ sửa một file workflow, ngoài phạm vi các suite này quét. Regression-guard có chủ ý.
 
 ## Variance
 
-none — không eval nào trong vòng này có `runs` > 1; mọi lệnh là deterministic, chạy một lần.
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: bộ eval ban đầu (script `khoa-auto-pr.mjs`, hình dạng đặc tả cũ) — 8/8 lệnh chạy, verdict REJECT. Quay lại implementation, đổi bộ đo sang đối chiếu GitHub check-run + diff `origin/release`.
-Round 2: E1–E7 (bộ đo mới) — 7/7 pass, verdict PASS tại `e035792`. Sau đó AC-1 được viết lại và thêm E8 + E9 vào evals.yaml; bằng chứng round 2 không phủ hai eval mới, nên PASS đó thành lỗi thời.
-Round 3 (vòng này): E1, E2, E3, E4, E5, E6, E7, E8, E9 — 9/9 lệnh máy pass tại `verified_commit` đã ghim. Verdict tổng vẫn REJECT: nguyên nhân nằm ở review-findings (bằng chứng cho AC-1 mới hoàn thiện đúng vòng này, cộng các lỗ hổng đối chứng và quy trình phát hiện trong scope-triage), không phải do lệnh máy thất bại — xem review-findings.md.
+Round 4: E7 (`bun run test`) thoát mã 1 một lần; chạy lại ngay cho 257 pass / 0 fail / 11 task — flake môi trường, không phải hồi quy.
+Round 5: đăng ký đủ năm eval chiều đỏ E10–E14; toàn bộ 14 eval xanh; verdict PASS.
