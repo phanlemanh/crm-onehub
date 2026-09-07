@@ -1,0 +1,164 @@
+schema_version: 1
+slug: o-cam-chay-duoc-that
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.oc_moi_o_cam_chay_duoc
+    paths:
+      - "_acceptance/config.yaml"
+      - "_acceptance/o-cam-chay-duoc-that/rang/**"
+    expected: |
+      Dan so sinh TU DIA: quet moi khoa duoi `executors.*` trong config.yaml.
+      So o cam giai duoc phai bang NEO 235 (227 ke thua + 8 o cam vong nay them);
+      lech -> ma 2, vi mot phep do tu chon dan so thi khong bao gio do.
+      Voi tung o cam: goi CHINH ham `resolveConfigKey` cua bo kit (nap tu
+      `lib/evidence-core.cjs` qua resolve-plugin, KHONG viet lai), roi dua chuoi
+      tra ve qua `bash -n -c`.
+      Xanh: khong o cam nao tra ma khac 0.
+      Chieu do: bo dau nhay dong cua mot o cam trong BAN SAO -> ma 1, neu ten o cam
+      va thong diep cua bash.
+      Khong nap duoc ham cua bo kit -> ma 2, KHONG duoc viet lai ham ay: viet lai
+      la do mot luat khac voi luat dang chay.
+      CHANG THU HAI, bat buoc: `bash -n` chi chung CU PHAP. Voi moi gia tri o cam,
+      rut moi duong dan file no tro toi (`_acceptance/...`, `apps/...`, `scripts/...`)
+      va khang dinh file ay TON TAI, KHAC RONG, DOC DUOC. Mot file script quen
+      `git add` van cho lenh hop le cu phap tuyet doi ma chet khi chay.
+      Thieu mot file -> ma 1, neu duong dan va o cam tro toi no.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.oc_yaml_doc_duoc
+    paths:
+      - "_acceptance/config.yaml"
+      - "_acceptance/o-cam-chay-duoc-that/rang/**"
+    expected: |
+      Nap `_acceptance/config.yaml` bang mot trinh doc YAML dung chuan
+      (`Bun.YAML.parse`).
+      Xanh: khong nem loi, VA doc ra duoc `executors.script`, `executors.test`,
+      `feature_loop.suite_keys` — deu khac rong.
+      Chieu do: cay mot gia tri chua `: ` ngoai ngoac vao ban sao -> phai nem loi;
+      neu khong nem thi chan tra ma 1, vi khi ay phep do khong phan biet duoc file
+      lanh voi file hong.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.oc_hai_trinh_doc_bang_nhau
+    paths:
+      - "_acceptance/config.yaml"
+      - "_acceptance/o-cam-chay-duoc-that/rang/**"
+    expected: |
+      Day la bat bien THAT cua vong: AC-1 va AC-2 moi cai chi canh MOT trinh doc.
+      Voi tung o cam trong dan so 235: doc bang `resolveConfigKey` cua bo kit VA
+      doc bang `Bun.YAML.parse`, roi so hai chuoi TUNG KY TU.
+      Mot o cam lech -> ma 1, in ten o cam va CA HAI chuoi.
+      Dan so khac 235 -> ma 2.
+      Chieu do: sua mot gia tri thanh dang `... "` (thua mot nhay cuoi) trong ban
+      sao -> hai trinh doc lech -> ma 1.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.oc_khoa_khong_doi
+    paths:
+      - "_acceptance/config.yaml"
+      - "_acceptance/o-cam-chay-duoc-that/rang/**"
+    expected: |
+      Rut tap khoa duoi `executors.*` tai SHA GHIM (bang `git show <sha>:...`) va
+      tai cay lam viec, roi so HAI TAP.
+      Xanh: giong het — khong them, khong bot, khong doi ten.
+      So voi CAY LAM VIEC (`git show <sha>` vs file tren dia), khong phai
+      `<sha>..HEAD`, de sua chua commit cung bi bat.
+      Mot khoa lech -> ma 1, in khoa thieu va khoa thua.
+      Tap tai sha ghim rong -> ma 2.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.oc_verifier_con_giai_duoc
+    paths:
+      - "_acceptance/config.yaml"
+      - "_acceptance/*/evidence-report*.md"
+      - "_acceptance/o-cam-chay-duoc-that/rang/**"
+    expected: |
+      Quet moi `_acceptance/*/evidence-report*.md`, rut moi dong
+      `verifier: config:<khoa>`, roi giai tung khoa bang `resolveConfigKey`.
+      Xanh: moi khoa giai ra gia tri khac rong.
+      SAN DAN SO LA SO GHIM, khong phai "lon hon 0": phai soi duoc it nhat 25 file
+      `evidence-report*.md` va 222 khoa distinct. Thap hon neo -> ma 2 — mot khuon
+      rut bo sot vai dong van cho "lon hon 0" va van xanh.
+      VA phai khang dinh ca 16 khoa vong nay sua deu co mat trong tap rut duoc;
+      thieu mot -> ma 2.
+      Mot khoa khong giai duoc -> ma 1, neu ho so va khoa.
+      Chieu do: xoa mot dong o cam dang duoc trich trong ban sao -> ma 1.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.oc_lenh_van_lam_dung_viec
+    paths:
+      - "_acceptance/config.yaml"
+      - "_acceptance/o-cam-chay-duoc-that/rang/**"
+    expected: |
+      DOI CHUNG DUONG cua ca vong: sua cach viet ma lam hong viec lenh dang lam thi
+      moi tieu chi kia van xanh.
+      Chay THAT ca 16 o cam da sua, ghim ten nguyen van trong chan (danh sach o muc
+      Moc ghim cua hop dong). So lenh chay phai bang 16; lech -> ma 2.
+      KHONG lay "nam cai dai dien": nam dai dien co the roi trung nam o cam hinh dang
+      A von da lanh, de lot ca nam o cam hinh dang B — chinh nhom phai dua vao file
+      script va do do de sai duong dan nhat.
+      Xanh: ca 16 tra ma 0.
+      Mot lenh khac 0 -> ma 1, neu ten o cam, ma thoat, va tam dong cuoi cua dau ra.
+      Chan phai IN ra lenh no chay, de nguoi doi chieu duoc voi config.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.oc_chan_ho_so_da_ky_chay_lai
+    paths:
+      - "_acceptance/config.yaml"
+      - "_acceptance/lenh-dung-do-khong-ai-thay/rang/**"
+      - "_acceptance/o-cam-chay-duoc-that/rang/**"
+    expected: |
+      Chay hai chan cua ho so DA KY `lenh-dung-do-khong-ai-thay` von dung
+      `Bun.YAML.parse` va dang crash truoc vong nay.
+      Xanh: ca hai tra ma 0.
+      Chieu do CO SAN, va chan phai CHUNG no: chay lai chinh hai chan ay tren
+      config.yaml TAI SHA GHIM (ghi ra file tam) -> phai crash. Neu ban cu KHONG
+      crash thi tien de cua vong sai va chan tra ma 2, khong phai ma 0.
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.oc_ham_kit_chua_doi
+    paths:
+      - "_acceptance/o-cam-chay-duoc-that/rang/**"
+    expected: |
+      DAU VAN HANH VI cua `resolveConfigKey` — ham nap tu plugin NGOAI kho.
+      Cho no ba chuoi mau ghim nguyen van trong chan:
+        1. gia tri tran, khong ngoac
+        2. gia tri boc nhay kep tron ven
+        3. gia tri KET THUC bang nhay kep ma khong boc (dung hinh dang loi cua vong)
+      Doi dau ra khop TUNG KY TU voi luat da khai: cat sau ` #`, boc dung MOT ngoac
+      moi dau.
+      Lech -> MA 2 kem cau "ham cua bo kit da doi, moi neo cua vong nay het hieu luc".
+      Chan phai IN duong dan `evidence-core.cjs` no da nap.
+      Vi sao bat buoc: ca bo do dung tren ham ay, ma chinh thiet ke cua vong lai de
+      nghi mo chip sua no. Chip kia xong truoc thi E1 va E3 xanh voi MOI o cam ke ca
+      chua sua — ho so tuyen mot dieu no khong con do.
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.oc_nam_lenh_chung
+    paths:
+      - "apps/**"
+      - "packages/**"
+    expected: |
+      Chay `bun run test`, `check-types`, `lint`, `lint:slop`, `build`, in ma tung lenh.
+      Xanh: ca nam ma 0, VA `apps/app` ra dung ba canh bao lint — so ba la con so
+      GHIM cua kho, lech hai chieu deu la do.
+      Mot lenh khac 0 -> ma 1, neu ten lenh va ma.

@@ -27,14 +27,17 @@ tích ở biên chứ không truyền `Record<string, unknown>`. Bảng chỉ m�
 trước khi chạm gì" của nó là bảng duy nhất — theo đúng bảng đó, và nói ra đã
 đọc gì.
 
-Ba mục hành vi của hãng KHÔNG áp dụng ở kho này:
+Ba mục hành vi của hãng đã **xoá khỏi `AGENTS.md`** ở kho này, không phải tắt
+bằng lời: khuôn báo cáo `## Issues`, `"Use ASD-STE100"`, và `"Median Tasks"`
+cùng mục commit theo mã `MDN-…`. Ngôn ngữ, giọng và cách báo cáo theo cấu hình
+cá nhân của người dùng. Mã việc của hãng (`CMP-…`) chỉ dùng khi thật sự vá cho
+hãng.
 
-- **"Use ASD-STE100"** — không viết tiếng Anh theo khuôn hãng. Ngôn ngữ và
-  giọng theo cấu hình cá nhân của người dùng.
-- **Khuôn báo cáo `## Issues`** — không bắt buộc. Cách báo cáo theo cấu hình
-  cá nhân.
-- **"Median Tasks"** — chết: kho không có `.median/config.json`, máy không có
-  `mdn`. Đừng gọi. Mã việc của hãng (`CMP-…`) chỉ dùng khi thật sự vá cho hãng.
+Xoá, chứ không phủ định, vì phủ định đã thử và hỏng: bản cũ ghi khuôn `## Issues`
+là "không bắt buộc" — mà không bắt buộc là *cho phép*. Cái khuôn có sẵn mẫu và ví
+dụ trong `AGENTS.md` thắng một dòng chối bỏ trong `CLAUDE.md`, nên nó vẫn bám vào
+cuối câu trả lời qua nhiều phiên. Đây là chỗ rẽ cố ý so với `release`: kéo bản mới
+của hãng về mà thấy ba mục đó quay lại thì xoá tiếp, đừng tưởng sót merge.
 
 ## Bốn cổng, và vòng lặp là đường mặc định
 
