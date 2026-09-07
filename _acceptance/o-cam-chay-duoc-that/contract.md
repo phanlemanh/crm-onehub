@@ -190,3 +190,18 @@ vào **thư mục tạm**, không đụng file thật. Và mọi chân phải k�
 «chân đã để lại rác».
 
 ## Notes
+
+### Known limits
+
+- **Kho nay phải viết `_acceptance/config.yaml` theo một luật hẹp hơn YAML, và
+  luật ấy chỉ sống trong một chân đo.** Ai thêm một ổ cắm mới với giá trị chứa cả
+  `"` lẫn `'` sẽ lại tạo ra một lệnh cụt. Chân E3 bắt được — nhưng chỉ khi có
+  người chạy nó, mà nó không nằm trong năm lệnh chứng. Đưa E3 vào một móc chạy
+  mỗi lượt là việc của bộ kit hoặc của một vòng riêng. Ghi 07/09 tại Cổng 2, chủ
+  kho phê.
+- **`api_khong_cache` vẫn là một ref hỏng.**
+  `_acceptance/lenh-chung-khong-an-cache-doi/evals.yaml` trỏ tới một ổ cắm không
+  tồn tại. Có trước vòng này, đã kiểm bằng bản backup. Thuộc lớp khác — khoá
+  không tồn tại, không phải giá trị đọc lệch — nên vòng này khai ngoài phạm vi.
+  Một dòng sửa, nhưng nó thuộc hồ sơ khác và cần biết ổ cắm đúng là cái nào.
+  Ghi 07/09 tại Cổng 2, chủ kho phê.
