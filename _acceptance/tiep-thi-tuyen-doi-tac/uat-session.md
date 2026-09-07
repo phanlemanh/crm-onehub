@@ -74,6 +74,33 @@ tự loại:
    chỉ đo được Cao so với Vừa. Chỉnh `directory_max_pages` hoặc đặt lại ngưỡng
    là việc người quyết trước chiến dịch đầu.
 
+### Đính chính hai công thức lọc — Mạnh, 2026-09-07, đo lại trên kho
+
+Hai câu ở mục 1 và mục 2 ngay trên nói SAI trên vật. Giữ nguyên văn bản gốc và
+đính chính ở đây, vì đó là công thức người đọc số ngày 04/10 sẽ dùng.
+
+**Mục 1 nói phân khúc «Sản lượng = Cao» có 49 người. Đo lại: có 70.** Ngoài 26
+hồ sơ che và 44 môi giới thật, còn **21 cá nhân nguồn MANUAL** do bộ chặn lái
+trình duyệt của vòng chấm 4 dựng ra — chúng mang giá trị Sản lượng nhưng không
+phải môi giới. Lọc `phone = '09xxxxxxxx'` chỉ bỏ được 26; 21 hồ sơ kia ở lại.
+
+Công thức đúng cho môi giới thật, đủ cả ba nguồn nhiễu:
+
+    source = 'LISTING' AND phone NOT LIKE '%x%'    → 49 hồ sơ
+
+**Mục 2 nói 13 chiến dịch thử là của vòng chấm 05/09 và bảo lọc theo ngày tạo
+2026-09-05. Đo lại: cả 13 đều tạo ngày 2026-09-06**, nên lọc theo 05/09 không bỏ
+được gì — công thức chạy nhưng vô hiệu. Mười hai cái do chặn lái vòng 4 dựng lúc
+10:51–10:53Z (tên mang mã lượt `ttmtpo…`, `ttmtpp…`), một cái là chiến dịch của
+ván lái-thử người-lạ số 2 lúc 10:27Z.
+
+Công thức đúng — mọi chiến dịch có trước lúc lượt cào thật xong (15:44Z 06/09):
+
+    createdAt < '2026-09-06T15:00:00Z'             → bỏ đúng 13
+
+Nói cách khác: tính tới 07/09, **chưa chiến dịch nào của đội tiếp thị tồn tại**.
+Ngưỡng «≥ 3 chiến dịch chạy trọn» đếm từ 0.
+
 ## Người dự
 
 | Tên | Vai | Đại diện cho ai |
