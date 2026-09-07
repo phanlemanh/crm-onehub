@@ -15,6 +15,7 @@ const CHO_PHEP = [
 	"_acceptance/config.yaml",
 	"_acceptance/auto-pr-thoi-do-o-ban-re/",
 	"docs/superpowers/specs/2026-09-07-auto-pr-thoi-do-o-ban-re-design.md",
+	"docs/superpowers/plans/2026-09-07-auto-pr-thoi-do-o-ban-re.md",
 ];
 
 function thamSo(ten, mac) {
@@ -188,7 +189,7 @@ function chanChayThat() {
 			do1(1, `DO [chay-that]: ${sha} do duoc \`skipped\` nhung KHONG phai to tien cua HEAD — so do la cua mot cay khac, khong noi gi ve cay dang merge`);
 		}
 		const tai = git("show", `${day}:${TEP_MAC_DINH}`);
-		const nay = readFileSync(join(GOC, TEP_MAC_DINH), "utf8");
+		const nay = readFileSync(join(GOC, TEP_MAC_DINH), "utf8").trim();
 		if (tai !== nay) {
 			do1(1, `DO [chay-that]: ${TEP_MAC_DINH} tai ${sha} KHAC ban tren cay hien tai — so \`skipped\` do o ${sha} khong con noi ve cay nay`);
 		}

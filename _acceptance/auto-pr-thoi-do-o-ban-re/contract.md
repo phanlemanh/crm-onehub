@@ -5,9 +5,11 @@ slug: auto-pr-thoi-do-o-ban-re
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: draft
+status: implemented
 approved_by:
 approved_at:
+veto_state: mo
+veto_opened_at: 2026-09-07T01:50:06Z
 design_doc: docs/superpowers/specs/2026-09-07-auto-pr-thoi-do-o-ban-re-design.md
 ---
 
@@ -25,15 +27,22 @@ nguyên bản hãng, xoá là mua một xung đột delete/modify vĩnh viễn m
 
 ## Acceptance Criteria
 
-### AC-1 — Ở kho này, job không chạy
+### AC-1 — Ở kho này, job không chạy — đo trên chính commit mang bản vá
 
-**Given** một commit của bản vá đã đẩy lên `phanlemanh/crm-onehub`
+**Given** commit `c042478` đã đẩy lên `phanlemanh/crm-onehub`
 **When** chân đọc check-runs của commit đó qua `gh api`
-**Then** check-run `Open a pull request into main` kết luận `skipped`.
-**Đỏ khi** kết luận là `failure` (hoặc bất cứ gì khác `skipped`) — nêu đúng commit rút
-gọn và kết luận đọc được.
-**Mã 2 khi** commit chưa đẩy, chưa chạy xong, hoặc `gh` chưa đăng nhập — không đo được
-thì không được xanh.
+**Then** check-run `Open a pull request into main` kết luận `skipped`; **và** `c042478`
+là tổ tiên của `HEAD`; **và** `.github/workflows/auto-pr.yml` tại `c042478` bằng đúng
+bản trên cây hiện tại.
+**Đỏ khi** kết luận khác `skipped` · commit không phải tổ tiên của `HEAD` · tệp
+workflow đã đổi kể từ đó — nêu đúng vế sai.
+**Mã 2 khi** commit chưa đẩy, chưa chạy xong, hoặc `gh` chưa đăng nhập.
+
+Mốc xanh **ghim cứng** chứ không lấy `HEAD`, đối xứng với mốc đỏ. Lý do: `HEAD` là mốc
+di động — ở vòng chấm nó là commit hồ sơ vừa tạo, chưa đẩy và chưa chạy xong, nên chân
+sẽ trả mã 2 và chặn cổng vì một lý do không liên quan đến bản vá. Hai vế đối chiếu
+(tổ tiên + tệp không đổi) là thứ giữ cho một số đo ghim cứng vẫn nói về cây đang merge,
+chứ không thành một con số chết.
 
 Chiều đỏ tái lập được và đã chạy: cùng chân, cùng kho, `--sha 5ac85ef` (đầu `onehub`
 trước bản vá) trả `failure`. Đây là chân duy nhất đo hành vi thật; ba chân còn lại đo
@@ -42,41 +51,62 @@ hình dạng.
 ### AC-2 — Khoá là một điều kiện duy nhất, trỏ đúng kho hãng
 
 **Given** tệp `.github/workflows/auto-pr.yml`
-**When** chân đọc thân job `open`
+**When** chân đọc thân job `open`, và rút `owner/repo` **từ** URL của remote `origin`
+(không so nguyên URL với slug)
 **Then** job có **đúng một** dòng `if`, nội dung đúng bằng
-`github.repository == 'trycompai/crm'`; **và** kho tại chỗ (suy từ `git remote get-url
-origin`) khác chuỗi đó.
-**Đỏ khi** vắng dòng `if` · có nhiều hơn một `if` · điều kiện khác chuỗi mong đợi · kho
-tại chỗ bằng đúng kho hãng (khi đó khoá không loại trừ gì) — nêu đúng vế sai.
-**Mã 2 khi** không đọc được tệp.
+`github.repository == 'trycompai/crm'`; **và** slug rút được khác chuỗi đó.
+**Đỏ khi** vắng dòng `if` · **có nhiều hơn một `if`** (in ra tất cả các dòng đọc được)
+· điều kiện khác chuỗi mong đợi · slug rút được bằng đúng kho hãng.
+**Mã 2 khi** không đọc được tệp, hoặc không rút được `owner/repo` từ remote.
 
-Vế "đúng một `if`" không phải cầu kỳ: hai điều kiện chồng nhau thì không đọc được bằng
-mắt job chạy ở đâu, và đó chính là thứ vòng này đang sửa.
+Trục B có **bốn** hình dạng, và cả bốn phải có một lượt chạy — không phải một lượt xanh
+rồi suy ra ba lượt kia. Bốn lượt đã chạy ngày 07/09.
 
-Vế "kho tại chỗ khác kho hãng" là chỗ chân tự chặn một màu xanh dối: nếu ai đó chạy
-chân này *trong* kho hãng, kết luận "job không chạy" là sai, và chân phải đỏ chứ không
-được xanh theo quán tính.
+Vế "nhiều `if`" không phải cầu kỳ: một lượt kéo bản mới của hãng về hoàn toàn có thể
+thêm một `if` thứ hai ở tầng job. Khi đó điều kiện chồng nhau và không ai đọc được bằng
+mắt job chạy ở đâu — đúng thứ AC này tự nhận là chặn.
 
-### AC-3 — Lệch bản hãng đúng một dòng
+Vế "slug khác kho hãng" là chỗ chân tự chặn một màu xanh dối: chạy chân này *trong* kho
+hãng thì kết luận "job không chạy" là sai, và chân phải đỏ. Vế này là một assertion âm
+tính, nên nó có chiều đỏ riêng — bơm remote giả `https://github.com/trycompai/crm.git`
+qua `--remote`; đã chạy, mã 1. Không có lượt ấy thì vế này có thể là một hằng đúng mà
+không ai biết.
 
-**Given** `origin/release` — bản gương của hãng trong kho, đã đối chiếu khớp từng dòng
-với `upstream/HEAD` cho tệp này
-**When** chân chạy `git diff --numstat` cho riêng `.github/workflows/auto-pr.yml`
-**Then** kết quả đúng `+1 / −0`.
-**Đỏ khi** không lệch dòng nào (bản vá chưa có mặt) hoặc lệch nhiều hơn +1/−0 — nêu con
-số đọc được.
+### AC-3 — Lệch bản hãng đúng một dòng, và dòng ấy đúng là dòng khoá
+
+**Given** `origin/release` — bản gương của hãng trong kho
+**When** chân đọc `git diff -U0` cho riêng `.github/workflows/auto-pr.yml`
+**Then** đúng một dòng thêm, không dòng nào bớt; **và** dòng thêm bằng đúng
+`    if: github.repository == 'trycompai/crm'` — kể cả **bốn dấu cách** đầu dòng, vì
+bốn dấu cách mới là tầng job; **và** khi `upstream/HEAD` giải được ở máy đang chạy, kết
+quả so với nó cũng đúng như vậy.
+**Đỏ khi** không lệch dòng nào · lệch khác +1/−0 · dòng thêm khác nội dung mong đợi ·
+`origin/release` không còn gương đúng bản hãng — in ra dòng đọc được.
 **Mã 2 khi** không giải được ref nền.
 
-Mỗi dòng lệch thêm là một mối xung đột phải xử khi kéo bản mới của hãng về. Tiêu chí này
-là cách giữ lời hứa "chọn khoá thay vì xoá" thành một con số, không phải một ý định.
+Đếm dòng là **đo con số** trong khi lời hứa là **quan hệ**: một dòng trống, một dòng
+`env`, hay một `if` đặt nhầm ở tầng step đều cho +1/−0. Nên tiêu chí này khẳng định nội
+dung và độ thụt, không chỉ số lượng. Chiều đỏ đã chạy: thay dòng khoá bằng một dòng
+trống thì chân đỏ và in ra dòng đọc được.
 
-### AC-4 — Vòng này chỉ chạm đúng một tệp dưới `.github/`
+Vế đối chiếu `upstream/HEAD` biến tiền đề "`origin/release` khớp bản hãng" từ một câu
+văn xuôi thành một phép đo. Máy nào không có remote `upstream` thì chân nói rõ nó chỉ
+đo trên nền `origin/release`, chứ không im lặng bỏ qua.
 
-**Given** nền so là `origin/onehub`
-**When** chân liệt kê tệp đổi dưới `.github/`
-**Then** đúng một tệp, và là `.github/workflows/auto-pr.yml`.
-**Đỏ khi** số tệp khác 1, hoặc tệp không phải tệp đó — liệt kê tên đọc được.
+### AC-4 — Vòng này chỉ chạm những tệp đã ghim tên
+
+**Given** nền so là `origin/onehub`, và danh sách cho phép ghim tên:
+`.github/workflows/auto-pr.yml` · `_acceptance/config.yaml` ·
+`_acceptance/auto-pr-thoi-do-o-ban-re/**` · design doc và bản kế hoạch của vòng
+**When** chân liệt kê **toàn bộ** tệp đổi (không giới hạn dưới `.github/`)
+**Then** mọi tệp nằm trong danh sách, và `auto-pr.yml` có mặt.
+**Đỏ khi** có tệp ngoài danh sách (in tên) · không tệp nào đổi · `auto-pr.yml` vắng.
 **Mã 2 khi** không giải được ref nền.
+
+Bản đầu của tiêu chí này chỉ nhìn dưới `.github/`, nên một tệp sửa lây ở `packages/`
+hay `.env.example` sẽ lọt qua trong khi Coverage khai đã phủ trục C. Nay chân nhìn toàn
+bộ diff. Chiều đỏ đã chạy: đổi nền sang `origin/release` thì 897 tệp rơi ngoài danh
+sách và chân in tên ra.
 
 `pr-base.yml` mang đúng bệnh nhưng đang ngủ (không ai PR vào `release` ở bản rẽ). Nó
 nằm ngoài phạm vi vòng này, và AC-4 là chân giữ cho nó ở ngoài thật.
@@ -89,7 +119,8 @@ nằm ngoài phạm vi vòng này, và AC-4 là chân giữ cho nó ở ngoài t
 **Đỏ khi** bất kỳ lệnh nào khác 0.
 
 Bản vá không chạm mã nguồn, nên tiêu chí này là lưới chống tác dụng phụ ngoài dự đoán,
-không phải phép đo lời hứa chính.
+không phải phép đo lời hứa chính. `--force` bắt buộc: một màu xanh phát lại không phân
+biệt được cây lành với thước chưa từng chạy.
 
 ## Coverage
 
@@ -102,10 +133,18 @@ Quét theo bốn trục. Ô Core là ô vòng này phải phủ; ô Later/Never 
 | C — bề mặt lệch | `auto-pr.yml` · workflow khác dưới `.github/` · ngoài `.github/` |
 | D — chiều đo | tĩnh (đọc tệp/diff) · động (check-run thật) |
 
-**Thước CE — 11/12 ô Core được phủ.** A×D: (bản rẽ, động) phủ bởi AC-1; (bản rẽ, tĩnh)
-phủ bởi AC-2. **(kho hãng, động) KHÔNG phủ được** — bản rẽ không có quyền đẩy lên kho
-hãng; đây là giới hạn đã khai ở design doc, không phải ô bị quên. B: cả bốn giá trị phủ
-bởi AC-2 và hai chiều đỏ đã chạy. C: cả ba phủ bởi AC-3 + AC-4.
+**Thước CE — 11/12 ô Core được phủ, mỗi ô bằng một lượt chạy có thật.**
+
+- **A×D.** (bản rẽ, động) → AC-1, hai lượt: `c042478` xanh, `5ac85ef` đỏ. (bản rẽ,
+  tĩnh) → AC-2. **(kho hãng, động) KHÔNG phủ được** — bản rẽ không có quyền đẩy lên kho
+  hãng; giới hạn đã khai ở design doc, không phải ô bị quên. (kho hãng, tĩnh) → AC-2,
+  lượt bơm remote giả.
+- **B — bốn giá trị, bốn lượt.** đúng một `if` → lượt xanh; vắng `if` → đỏ 1; trỏ nhầm
+  kho → đỏ 2; nhiều `if` → đỏ 3. Cả bốn đã chạy 07/09.
+- **C — ba giá trị.** `auto-pr.yml` → AC-3. Workflow khác dưới `.github/` **và** tệp
+  ngoài `.github/` → cùng do AC-4 phủ, vì chân nay quét toàn bộ diff theo danh sách
+  ghim tên chứ không giới hạn thư mục.
+- **D.** tĩnh → AC-2, AC-3, AC-4. động → AC-1.
 
 ## Out of scope
 
@@ -121,3 +160,7 @@ bởi AC-2 và hai chiều đỏ đã chạy. C: cả ba phủ bởi AC-3 + AC-4
 
 Chân `chay-that` phụ thuộc `gh` đã đăng nhập và commit đã đẩy. Chạy trong máy chưa
 đăng nhập sẽ trả mã 2 (không đo được), không trả xanh.
+
+Chân `lech-mot-dong` đo thêm trên `upstream/HEAD` khi remote ấy có ở máy đang chạy.
+Trong CI của GitHub Actions remote đó không tồn tại, nên chân nói rõ nó chỉ đo trên
+`origin/release`. Vế ấy là thêm chứ không phải thay.
