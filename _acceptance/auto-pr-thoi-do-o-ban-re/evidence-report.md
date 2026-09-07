@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6dc14a87440fb662aff03525258a0bb217b2fa37
+verified_commit: c0d20eb24e41bab6e6665d514595093e83da7c25
 human_signoff: Manh Phan 2026-09-07 — ký Cổng 2 trên verdict PASS của vòng chấm 5 (14/14 eval, 4 lệnh chứng xanh), với MƯỜI MỘT giới hạn đã khai. Ký trên hiểu biết rằng năm eval chiều đỏ E10-E14 là trang trí đã khai chứ không phải bằng chứng, rằng năng lực phân biệt chỉ được xác nhận bằng tay, rằng `bun run build` — lệnh chứng thứ năm của kho — không nằm trong AC-3, và rằng nhánh còn sau `origin/onehub` 16 commit với merge sạch.
 ---
 
@@ -200,38 +200,46 @@ làm việc thì E2, E3, E9 cùng đỏ.** Đo bằng tay ngày 07/09, cây đã
 sau. Đây là lời khai của một phiên làm việc, không tái lập được bằng `recheck: strict` —
 khai đúng như thế thay vì dựng thêm một ô cắm rỗng nữa.
 
-### 3. AC-3 khai BỐN lệnh chứng; kho nay chứng bằng NĂM — và lệnh thứ năm ĐANG ĐỎ TRÊN `onehub`
+### 3. AC-3 khai BỐN lệnh chứng; kho chứng bằng NĂM — lệnh thứ năm nay ĐÃ ĐO, và XANH
 
 `CLAUDE.md` thêm `bun run build` làm lệnh chứng thứ năm ngày 07/09, với lý do ghi thẳng:
 *một hồi quy làm `next build` đỏ đã đi qua bốn vòng đã ký mà không cổng nào thấy*. AC-3
-và E4–E7 của hồ sơ này phủ bốn lệnh cũ. **`bun run build` không được đo ở đây.**
+và E4–E7 của hồ sơ này khai bốn lệnh cũ, và **văn bản hợp đồng vẫn khai bốn** vì nó đã
+được ký; không sửa hợp đồng sau chữ ký.
 
-**Đo được ngày 07/09 trên cây đã merge `onehub`:** `bun run build` trả mã 1 —
-`Export encountered an error on /(app)/[slug]/settings/page`. Bốn suite còn lại xanh.
+Nhưng lệnh thứ năm **đã được đo**, và đây là toàn bộ diễn biến — kể cả một khẳng định
+sai của chính hồ sơ này, do CI bắt:
 
-Lỗi ấy **không phải của bản vá này**, và đây là chuỗi nhân quả đo được, không phải lời
-bào chữa:
+| Lúc | Cây | `bun run build` |
+| --- | --- | --- |
+| Re-pin lần 1, `6dc14a8` | merge `onehub` **trước** `e55a9e8` | **mã 1** — `Export encountered an error on /(app)/[slug]/settings/page` |
+| CI của PR #17, cùng lúc | GitHub merge với `onehub` **đã có** `e55a9e8` | job `lệnh dựng` **xanh** |
+| Re-pin lần 2, `c0d20eb` | merge `onehub` hiện tại | **mã 0** |
 
-1. Bản vá chạm đúng một dòng trong `.github/workflows/auto-pr.yml`. `next build` không
-   đọc `.github/`. Không có đường nhân quả.
-2. Trang hỏng, `settings/page`, **không đổi** trong 16 commit merge vào
-   (`git diff --name-only 5ac85ef origin/onehub -- 'apps/app/app/(app)/[slug]/settings/*'`
-   trả về rỗng).
-3. Bản vá cho chính lỗi này **đã tồn tại nhưng chưa vào `onehub`**: commit `6b45fc2`
-   *«dựng vỏ tĩnh được trở lại — root layout và 15 màn đọc tiếng trong Suspense»*, nhắm
-   `apps/app/app/layout.tsx` đọc thẳng `cookies()` + `headers()` nên *«chặn mọi route kể
-   cả /_not-found»*. Nó nằm trên nhánh `feat/lenh-dung-do-khong-ai-thay`, cùng với commit
-   `5324ff8` đưa `bun run build` thành lệnh chứng thứ năm. Cả hai chưa merge.
+**Đính chính:** bản trước của mục này viết *«`onehub` hôm nay đỏ ở `bun run build`»*. Sai
+tại thời điểm viết, và CI của PR #17 bác ngay trong vòng vài phút. Suy luận nhân quả thì
+đúng — bản vá `6b45fc2` *«dựng vỏ tĩnh được trở lại — root layout và 15 màn đọc tiếng
+trong Suspense»* nhắm đúng `apps/app/app/layout.tsx` đọc thẳng `cookies()` + `headers()`,
+thứ *«chặn mọi route kể cả /_not-found»* — nhưng kết luận đã lỗi thời trước khi mực khô:
+`e55a9e8 Merge vòng T2: kho dựng được trở lại` đưa nó vào `onehub` ngay sau đó.
 
-Nói thẳng: **`onehub` hôm nay đỏ ở `bun run build`.** Hồ sơ này không sửa việc đó và
-không giả vờ đo nó. `feature_loop.suite_keys` trên cây đã merge vẫn khai bốn lệnh, nên
-làn re-pin chạy đúng bốn lệnh ấy — xanh cả bốn.
+**Số đo cuối, và nó không phải màu xanh phát lại.** Làn re-pin lần 2 chạy `bun run build`
+thấy `app:build: cache hit, replaying logs` — tức không đo gì, đúng lớp «cache dối» mà hồ
+sơ `lenh-chung-khong-an-cache-doi` sinh ra để chặn. Chạy lại có cưỡng bức ở vòng chính:
 
-### 4. Nhánh sau `origin/onehub` 16 commit
+```
+bunx turbo run build --force   →  EXIT=0 · Tasks: 4 successful, 4 total · Cached: 0 cached
+```
 
-Đo trước khi ký: merge sạch, 0 xung đột, và `.github/workflows/auto-pr.yml` **không ai
-đụng** giữa `5ac85ef` và `origin/onehub` — nên mốc ghim `c042478` còn đứng và bản vá còn
-áp được. Hồ sơ chưa chấm lại trên cây đã merge.
+Xuất xứ của số ấy: **đo ở vòng chính, không phải làn tươi.** Bốn suite đã khai vẫn do làn
+tươi độc lập đo, và dòng `repin` trong `run-log.jsonl` chỉ ghi bốn số ấy.
+
+### 4. Nhánh đã merge `onehub` HAI lần, và đã chấm lại trên cây merge
+
+Câu ký nói *«nhánh còn sau `origin/onehub` 16 commit với merge sạch»*. Cả hai lần merge
+đã thực hiện, sạch đúng như đo, và `.github/workflows/auto-pr.yml` **không ai đụng** qua
+cả hai — mốc ghim `c042478` còn đứng, dòng khoá còn nguyên. Bằng chứng đã re-pin hai lần
+sang cây merge; chữ ký người giữ nguyên, không đụng.
 
 ### 5–11. Bảy giới hạn từ các vòng trước
 
@@ -293,3 +301,16 @@ merge, và không có đường nhân quả nào từ một dòng YAML trong `.g
 Chữ ký người giữ nguyên, không đụng. Một chi tiết trong câu ký nay lỗi thời theo đúng
 nghĩa tốt: nó viết *«nhánh còn sau `origin/onehub` 16 commit với merge sạch»* — merge ấy
 đã thực hiện, sạch đúng như đo, và đây là dòng ghi lại điều đó.
+
+### Re-pin lần 2 — 07/09, do `onehub` nhích tiếp và mang bản vá dựng vào
+
+run_id: repin-20260907T081500Z-9264
+sha: c0d20eb24e41bab6e6665d514595093e83da7c25 · suites: 4 lệnh exit 0
+
+Giữa re-pin lần 1 và lần này, `onehub` nhận `e55a9e8 Merge vòng T2: kho dựng được trở
+lại, và lệnh dựng thành lệnh chứng thứ năm`. Merge bản ấy vào nhánh làm mốc ghim lần 1
+lệch, nên phải ghim lại. Làn đo tươi độc lập tại `c0d20eb24e41bab6e6665d514595093e83da7c25`: bốn suite đã khai đều mã 0,
+`git rev-parse HEAD` và `git status --porcelain` giống hệt trước và sau làn.
+
+Lần này `bun run build` cũng xanh — xem Known limits 3 cho toàn bộ diễn biến, kể cả một
+khẳng định sai của hồ sơ mà CI của PR #17 bác trong vài phút.
