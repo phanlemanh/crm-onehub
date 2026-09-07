@@ -1,0 +1,4 @@
+(1) diff voi sha ghim 5ac85ef9: 0 dong
+(2) bo test chay that: 8 ca xanh · 0 ca do
+(3) doi chung hanh vi: 10 ca cua bo test cu chay lai
+XANH: apps/api/test/workspace.spec.ts khong doi mot ky tu so voi sha ghim, 8 ca cua no van xanh, va 10 ca hanh vi chay lai cho ket qua y het.

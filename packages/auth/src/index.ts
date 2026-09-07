@@ -73,6 +73,7 @@ export {
 	ssoProviderName,
 } from "./sso";
 export {
+	googleHostedDomain,
 	hasSignInAllowList,
 	isWorkspaceEmail,
 	primaryWorkspaceDomain,

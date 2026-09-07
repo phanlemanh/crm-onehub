@@ -1,0 +1,3 @@
+nhap tu ./workspace: googleHostedDomain · hasSignInAllowList · isWorkspaceEmail · primaryWorkspaceDomain
+  packages/auth/src/auth.ts:50  hostedDomain -> googleHostedDomain()  goi ham thuan
+XANH: quyet dinh hd nam trong mot ham thuan nhap tu ./workspace, auth.ts chi goi.
