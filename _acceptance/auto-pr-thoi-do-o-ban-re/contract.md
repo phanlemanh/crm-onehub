@@ -132,16 +132,30 @@ Ba trục, sau khi thu phạm vi.
 | B — mặt đo | hành vi thật (check-run) · hình dạng bản vá (diff) · tác dụng phụ (bốn lệnh chứng) |
 | C — chiều | xanh · đỏ |
 
-**Thước CE — 5/6 ô Core được phủ, mỗi ô bằng một lượt chạy có thật.**
+**Thước CE — 10/10 ô chiều được ĐĂNG KÝ thành eval, không còn ô nào là lời khai.**
 
-- **A×B, bản rẽ.** hành vi thật → AC-1, ba eval (E1 đọc số GitHub, E8+E9 buộc số ấy vào
-  cây đang kiểm), mỗi eval hai chiều. hình dạng → AC-2, hai lệnh × hai chiều. tác dụng
-  phụ → AC-3.
-- **A×B, kho hãng.** **KHÔNG phủ được.** Bản rẽ không có quyền đẩy lên `trycompai/crm`
-  nên không quan sát được job có còn chạy ở đó không. Xem Known limits — đây là giới
-  hạn đã khai, không phải ô bị quên.
-- **C.** Mọi eval máy của AC-1 và AC-2 đều có chiều đỏ đã chạy, mỗi chiều chỉ khác chiều
-  xanh **một tham số**. AC-3 không có chiều đỏ riêng: nó là lưới, không phải lời hứa.
+Năm eval máy của AC-1 và AC-2 mỗi cái có một eval chiều đỏ riêng, theo đúng khuôn kho
+đã có (`rang_microsoft_duong`/`rang_microsoft_do`):
+
+| Xanh | Đỏ | Chiều đỏ đọc gì |
+| --- | --- | --- |
+| E1 check-run tại `c042478` = `skipped` | E10 | check-run tại `5ac85ef` = `failure` |
+| E2 lệch `origin/release` là `1 0` | E11 | hai cây cùng **không** có bản vá → diff rỗng |
+| E3 dòng thêm đúng nguyên văn | E12 | hai cây cùng không có bản vá → không dòng nào mang `if: github.repository` |
+| E8 `c042478` là tổ tiên của `HEAD` | E13 | `c042478` **không** là tổ tiên của `5ac85ef` |
+| E9 tệp trên cây bằng bản tại mốc | E14 | tệp tại `5ac85ef` **khác** bản tại mốc |
+
+Ba vòng trước, năm ô đỏ này tồn tại dưới dạng câu «đã chạy bằng tay ngày 07/09» trong
+`expected` — tức lời khai, không phải phép đo. Vòng chấm bắt đúng lỗi ấy ba lần, và hai
+lần đầu tôi vá bằng cách **chạy thêm lượt rồi viết vào hồ sơ**, tức lặp lại chính lỗi.
+Nay mỗi chiều là một ô cắm, một lệnh, một dòng log — `recheck: strict` tái lập được cả
+mười, không còn nửa nào sống bằng trí nhớ của một phiên làm việc.
+
+Mỗi chiều đỏ đọc **trạng thái git hoặc GitHub thật**, không đột biến gì, không tham số
+giả: `5ac85ef` là đầu `onehub` trước bản vá, một commit có thật trong kho.
+
+**Ô Core không phủ được: 1** — hành vi ở kho hãng. Bản rẽ không có quyền đẩy lên
+`trycompai/crm`. Xem Known limits 1.
 
 ## Out of scope
 

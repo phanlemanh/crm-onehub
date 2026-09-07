@@ -214,6 +214,11 @@ executors:
     apr_lech_noi_dung: git diff -U0 origin/release -- .github/workflows/auto-pr.yml | grep -qxF "+    if: github.repository == 'trycompai/crm'"
     apr_moc_to_tien: git merge-base --is-ancestor c042478 HEAD
     apr_moc_khop_cay: git diff --quiet c042478 -- .github/workflows/auto-pr.yml
+    apr_check_run_do: gh api repos/phanlemanh/crm-onehub/commits/5ac85ef/check-runs --jq '.check_runs[] | .name + " = " + (.conclusion // .status)' | grep -qx 'Open a pull request into main = failure'
+    apr_lech_so_dong_do: test -z "$(git diff --numstat origin/release 5ac85ef -- .github/workflows/auto-pr.yml)"
+    apr_lech_noi_dung_do: test -z "$(git diff -U0 origin/release 5ac85ef -- .github/workflows/auto-pr.yml | grep -F 'if: github.repository')"
+    apr_moc_to_tien_do: git merge-base --is-ancestor c042478 5ac85ef; test $? -ne 0
+    apr_moc_khop_cay_do: git diff --quiet c042478 5ac85ef -- .github/workflows/auto-pr.yml; test $? -ne 0
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT}/scripts/design-gate.mjs"
     ui_check: "${CLAUDE_PLUGIN_ROOT}/scripts/design-scan.js"
