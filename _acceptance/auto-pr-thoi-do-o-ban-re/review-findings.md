@@ -1,67 +1,79 @@
 ## Trong hợp đồng
 
-Không có finding nào ánh xạ được vào AC-1..AC-3 của hợp đồng hiện tại.
+- **Hồ sơ bằng chứng chứng cho một bộ tiêu chí không còn tồn tại — E8/E9 chưa từng chạy trong làn có sổ**
+  AC: AC-1
+  file: `_acceptance/auto-pr-thoi-do-o-ban-re/evidence-report.md:10`
+  severity: high
+  Commit cuối `47cea41` viết lại AC-1 trong contract.md và thêm E8 + E9 vào evals.yaml (dòng 103, 118) cùng hai executor mới trong config.yaml — SAU khi `44c2315` đã ghi evidence-report.md.
+
+  Tại HEAD (trước vòng này), evidence-report.md vẫn khai `verdict: PASS`, `verified_commit: e035792` (lùi hai commit), bảng chỉ có E1–E7, và run-log.jsonl dòng round-tally cuối ghi `expected: 7, returned: 7`. Không có dòng `round: 3` nào trong run-log.jsonl, và không có dòng nào mang evalId E8/E9 của bộ đo mới.
+
+  Chính contract.md tự khai: «E9 là eval DUY NHẤT trong hồ sơ bắt được việc gỡ bản vá khỏi cây làm việc.» Eval mang tải đó có 0 lượt chạy được ghi sổ.
+
+  Backstop staleness của kho KHÔNG bắt được: `scripts/pre-merge-check.sh` (dòng 219-220) khai rõ mọi thay đổi dưới `_acceptance/` không làm cũ bằng chứng. Nên PASS lỗi thời này đi qua CI xanh.
+
+  Tiền lệ trong chính kho: feature liền trước làm đúng cách — commit `7e5f425 verify(hd-theo-danh-sach): re-verify under one logged lane` chạy lại cả làn và cập nhật evidence-report + run-log khi bằng chứng phải đổi. Vòng này thiếu commit tương đương.
+
+  Sửa: chạy lại làn S4 với đủ 9 eval, cập nhật evidence-report.md (bảng, verified_commit) và ghi round 3 vào run-log.jsonl.
+  source: conventions
+
+- **E8/E9 added after the PASS was minted — no evidence entry, no lane, and nothing detects the drift**
+  AC: AC-1
+  file: `_acceptance/auto-pr-thoi-do-o-ban-re/evidence-report.md:5`
+  severity: high
+  Commit 47cea41 added E8 (apr_moc_to_tien) and E9 (apr_moc_khop_cay) to evals.yaml plus two executors to _acceptance/config.yaml, but did not touch evidence-report.md or run-log.jsonl. The record therefore still claims verdict: PASS with failed_evals: [] over E1-E7 only (verified_commit: e035792, run-log round-2 tally `"expected":7,"returned":7`), while contract.md AC-1 now states "Ba eval E1 + E8 + E9 cùng nhau mới là AC-1". Nothing catches the mismatch: stale_files() in scripts/pre-merge-check.sh:483 skips every `_acceptance/*` path, so changing the eval set post-verify never marks evidence stale, and `evals_hash` recorded in run-log.jsonl has zero consumers (`grep -rn evals_hash scripts/` returns nothing). Ran `bash scripts/pre-merge-check.sh . --base 5ac85ef` and it printed `pre-merge-check: clean`. Net effect: the two evals that exist specifically to bind the pinned marker to the working tree have never run under a logged lane, and the gate reports the feature as fully evidenced anyway.
+  source: bugs
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **Hồ sơ bằng chứng tả một bộ đo đã bị xoá, và mang verdict REJECT**
-  Người dùng thấy gì: Báo cáo bằng chứng đang mô tả một vòng chấm cũ đã bị bỏ, không phải bản vá đang xét — người quyết định có thể đọc nhầm kết quả và ký duyệt sai.
-  file: `_acceptance/auto-pr-thoi-do-o-ban-re/evidence-report.md:4`
+- **Hai mục Known limits / Ngoài hợp đồng rỗng khiến cổng tự kết «xanh-sạch, KHÔNG mời ký» cho hồ sơ có 3 finding severity high**
+  Người dùng thấy gì: Tính năng có thể được gộp vào nhánh chính mà không ai đọc qua các hạn chế và vấn đề đã biết, vì hồ sơ trình cho người duyệt hiển thị trống dù thực tế có nhiều mục chưa xử lý.
+  file: `_acceptance/auto-pr-thoi-do-o-ban-re/evidence-report.md`
   severity: high
-  Đề xuất: known-limits
+  Đề xuất: new-contract
 
-- **review-findings.md: cả bảy finding trỏ vào tệp không còn trong cây**
-  Người dùng thấy gì: Danh sách vấn đề còn lại trỏ tới phần đã bị gỡ bỏ khỏi bản vá — người đọc không biết các cảnh báo này còn giá trị hay đã hết hiệu lực.
-  file: `_acceptance/auto-pr-thoi-do-o-ban-re/review-findings.md:4`
+- **Vá riêng vào tệp của hãng mà không có đường gửi lên hãng — và AC-2 khoá vĩnh viễn độ lệch ở đúng một dòng**
+  Người dùng thấy gì: Bản sửa này chỉ áp dụng riêng cho bản rẽ mà chưa có quyết định rõ ràng về việc gửi lên bản gốc của hãng, nên khác biệt với bản hãng sẽ tồn tại lâu dài và mỗi lần cập nhật từ hãng sẽ tốn thêm công xử lý tay.
+  file: `.github/workflows/auto-pr.yml`
   severity: medium
   Đề xuất: known-limits
 
-- **Hồ sơ bằng chứng mô tả bộ đo đã bị xoá — không eval nào của bộ hiện tại từng chạy**
-  Người dùng thấy gì: Không có bằng chứng cho thấy các phép kiểm tra hiện tại đã thực sự được chạy — người ký duyệt đang ký mà chưa thấy kết quả thật của bản vá.
-  file: `_acceptance/auto-pr-thoi-do-o-ban-re/evidence-report.md:33`
+- **Known limits written into contract.md instead of evidence-report.md silently suppresses the Gate-2 signature**
+  Người dùng thấy gì: Tính năng có thể được gộp vào nhánh chính mà không ai đọc qua các hạn chế đã biết, vì nơi ghi hạn chế không phải là nơi hệ thống duyệt tự động đọc để quyết định có cần người ký hay không.
+  file: `_acceptance/auto-pr-thoi-do-o-ban-re/evidence-report.md`
   severity: high
-  Đề xuất: known-limits
+  Đề xuất: new-contract
 
-- **E2/E3 so với `origin/release` cục bộ, không kiểm ref có mới không, và mất hẳn đối chiếu `upstream/HEAD`**
-  Người dùng thấy gì: Phép đo dùng để so bản vá với một bản sao lưu trong máy thay vì bản gốc của hãng — nếu bản sao đó cũ, kết quả có thể báo đạt dù thực tế đã lệch.
-  file: `_acceptance/config.yaml:213`
+- **AC-1's pinned-commit evals go permanently red / permanently blind the next time auto-pr.yml legitimately changes**
+  Người dùng thấy gì: Nếu sau này ai đó sửa đúng cách vào quy trình mở PR tự động, phép kiểm tra hiện tại sẽ báo lỗi mãi mãi cho tới khi có người cập nhật lại phép kiểm tra bằng tay.
+  file: `_acceptance/config.yaml`
   severity: medium
   Đề xuất: known-limits
 
-- **Lỗi `gh` bị nuốt thành cùng mã thoát với hồi quy thật**
-  Người dùng thấy gì: Khi công cụ kiểm tra không kết nối được mạng hoặc chưa đăng nhập, hệ thống có thể báo bản vá lỗi dù bản vá không có vấn đề gì.
-  file: `_acceptance/config.yaml:212`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 6 — mốc ghim cứng ngoài cây: E1 đo commit c042478 trên GitHub, không đo cây đang kiểm**
-  Người dùng thấy gì: Phép kiểm cố định vào một lần đẩy cũ trên GitHub thay vì đo bản mã hiện tại — nếu dòng khoá bị xoá sau này, phép kiểm vẫn báo đạt mãi mãi.
-  file: `_acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml:8`
-  severity: high
-  Đề xuất: known-limits
-
-- **Hình dạng 6 (biến thể) — evidence-report.md chứng nhận PASS cho bộ đo không còn tồn tại trong cây**
-  Người dùng thấy gì: Báo cáo ghi nhận đạt cho những tiêu chí đã không còn áp dụng cho bản vá hiện tại — người đọc có thể tin nhầm rằng nhiều điều đã được kiểm chứng hơn thực tế.
-  file: `_acceptance/auto-pr-thoi-do-o-ban-re/evidence-report.md:21`
-  severity: high
-  Đề xuất: known-limits
-
-- **Hình dạng 4 — chiều đỏ của E2 là đối chứng giả: `git diff --numstat HEAD` rỗng với mọi cây, có vá hay không**
-  Người dùng thấy gì: Phép thử dùng để chứng minh công cụ đo có nhạy với lỗi hay không, thực ra không phân biệt được có bản vá hay không — độ tin cậy của phép đo thấp hơn báo cáo.
-  file: `_acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml:37`
+- **Record claims E9 is the only eval that catches removal of the patch — E2 and E3 catch it too**
+  Người dùng thấy gì: Tài liệu nói chỉ có một phép kiểm tra phát hiện việc gỡ bản vá, nhưng thực ra có ba phép kiểm tra cùng phát hiện — mức bảo vệ thật sự tốt hơn những gì tài liệu mô tả.
+  file: `_acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 3 — lời hứa là quan hệ với BẢN HÃNG, phép đo chỉ so với ref cục bộ `origin/release`**
-  Người dùng thấy gì: Lời hứa là khớp với bản gốc của hãng, nhưng phép đo chỉ so với một bản sao lưu trong máy — hai thứ có thể lệch nhau mà không ai biết.
-  file: `_acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml:33`
+- **Đối chứng âm-tính-một-mình — chiều đỏ của E2 đỏ trên MỌI cây, có vá hay không**
+  Người dùng thấy gì: Một trong các phép thử đối chứng không thật sự phân biệt được bản đúng với bản sai, nhưng đây là hạn chế chủ sản phẩm đã biết và đã chấp nhận từ trước, không ảnh hưởng tới việc bản vá chính có hoạt động đúng hay không.
+  file: `_acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml`
+  severity: high
+  Đề xuất: known-limits
+
+- **Đối chứng âm-tính-một-mình — chiều đỏ của E3 cũng đổi khuôn thay vì đổi cây, làm hỏng lối thoát mà hợp đồng dựa vào**
+  Người dùng thấy gì: Cách ghi lại để chứng minh phép thử thứ hai hoạt động đúng chưa thật sự chứng minh được điều đó, dù bản thân phép thử vẫn phát hiện đúng khi thử trên bản có lỗi thật.
+  file: `_acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml`
   severity: medium
   Đề xuất: known-limits
 
-## Chưa adversarial-verify (refuter chết)
+- **Khẳng định phủ sóng không có phép đo đỡ — «E9 là eval DUY NHẤT» sai, kiểm được bằng một lượt chạy**
+  Người dùng thấy gì: Tài liệu nói chỉ có một phép kiểm tra phát hiện việc gỡ bản vá, nhưng thực ra có ba phép kiểm tra cùng phát hiện — mức bảo vệ thật sự tốt hơn những gì tài liệu mô tả.
+  file: `_acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml`
+  severity: medium
+  Đề xuất: known-limits
 
-Không có finding nào cờ unverified=true trong vòng này.
-
-⚠ Cụm ngoài vùng phủ: 9/9 lỗi rơi vào file không bộ đo nào phủ (_acceptance/auto-pr-thoi-do-o-ban-re/evidence-report.md, _acceptance/auto-pr-thoi-do-o-ban-re/review-findings.md, _acceptance/config.yaml, _acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+⚠ Cụm ngoài vùng phủ: 9/10 lỗi rơi vào file không bộ đo nào phủ (_acceptance/auto-pr-thoi-do-o-ban-re/evidence-report.md, _acceptance/config.yaml, _acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
