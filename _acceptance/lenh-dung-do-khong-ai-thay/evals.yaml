@@ -1,0 +1,158 @@
+schema_version: 1
+slug: lenh-dung-do-khong-ai-thay
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.ld_lenh_dung_xanh
+    paths:
+      - "apps/app/**"
+      - "packages/ui/**"
+    expected: |
+      Chan chay `bun run build` tu goc kho, EP chay lai (khong an dem), in ma thoat.
+      Xanh: ma 0.
+      Chieu do la AC-7 (E7) — cung mot vat, cay lai loi goi cu thi lenh nay do.
+      Khong chay duoc lenh dung (thieu phu thuoc, het gio) -> ma 2, khong phai ma 1.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.ld_khong_doc_ngoai_suspense
+    paths:
+      - "apps/app/app/**"
+      - "_acceptance/lenh-dung-do-khong-ai-thay/rang/**"
+    expected: |
+      Dan so sinh TU DIA: quet `apps/app/app/**` tim moi file goi `getLocale`.
+      So file tim duoc phai bang NEO 25 ghim trong hop dong — lech len hay xuong
+      deu la ma 2. Dan so khong duoc lay bang chinh ket qua cua phep do.
+      Do KHA NANG DI TOI, khong do cho dung tu vung: tu ham xuat mac dinh, bam
+      tham chieu JSX MOT CHANG sang component con trong cung file; MOI duong tu
+      ham xuat mac dinh toi mot loi goi `getLocale()` phai di qua mot ranh
+      `<Suspense>`. Luat "nam trong than ham xuat mac dinh" la SAI cho vong nay:
+      chinh cach sua dua loi goi sang mot ham anh em NGOAI than ay, nen luat tu
+      vung se xanh oan tren dung ca no phai bat.
+      Doc bang AST, khong bang tim chuoi.
+      In ba con so: file co goi getLocale · file dat · neo.
+      Chieu do: cay mot loi goi NGOAI ranh Suspense vao ban sao -> ma 1, neu
+      `file:dong`. Chieu xanh dong thoi phai chung: mot man da sua (loi goi nam
+      trong component con duoc Suspense boc) van DAT — mau duong ghim ten.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ld_chu_khong_doi
+    paths:
+      - "apps/app/app/**"
+      - "apps/app/lib/messages/**"
+      - "apps/app/test/**"
+    expected: |
+      Do QUAN HE giua HAI CAY, khong do chuoi co mat trong mot cay:
+      dan so la tap man phai sua lay TAI SHA GHIM (neo 19), KHONG lay bang "man nao
+      vong nay da sua" — lay the la tu so voi chinh minh.
+      Voi tung man: doc khoa kho chuoi man ay dung o SHA GHIM, doc khoa man ay dung
+      o HEAD, roi so gia tri `vi` va `en` cua hai ben TUNG KY TU.
+      Dieu kien phu: `vi` khac `en`.
+      So ca chay phai bang 19; lech, hoac tap rong -> ma 2.
+      Mot man lech -> do, neu ten man, khoa hai ben, va ca hai chuoi.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.ld_metadata_nguyen_ven
+    paths:
+      - "apps/app/app/**"
+      - "_acceptance/lenh-dung-do-khong-ai-thay/rang/**"
+    expected: |
+      HAI dieu:
+      1. `git diff <sha ghim> -- <cac file co generateMetadata>` khong co dong nao
+         cham vao than `generateMetadata` — so bang AST, khong bang so dong diff,
+         vi vong nay CO sua cac file ay o cho khac.
+      2. Dem so man con `generateMetadata` phai bang so truoc khi sua.
+      Moc la mot SHA CO DINH ghim trong hop dong, KHONG phai ten nhanh — ten nhanh
+      la moc di dong, sau merge hoa thanh HEAD nen diff rong vo dieu kien.
+      So sanh voi CAY LAM VIEC (`git diff <sha>`), khong phai `<sha>..HEAD`, de
+      sua chua commit cung bi bat.
+      Chieu do: sua mot than generateMetadata trong ban sao -> ma 1, in ten ham.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.ld_ba_noi_deu_chay
+    paths:
+      - "_acceptance/config.yaml"
+      - ".githooks/pre-push"
+      - ".github/workflows/**"
+      - "_acceptance/lenh-dung-do-khong-ai-thay/rang/**"
+    expected: |
+      NAM dieu. Hai dieu dau doc ban khai; ba dieu sau do HANH VI — vi cau mo dau
+      cua vong nay la "mot lenh khong ai chay thi khong phai bang chung", va mot
+      ban khai khong ai chay cung the.
+      1. `_acceptance/config.yaml` co mot o cam chay `build`, VA `feature_loop.suite_keys`
+         goi ten dung o cam ay.
+      2. `.github/workflows/ci.yml` KHONG doi mot ky tu so voi sha ghim.
+      3. `.githooks/pre-push` co `build` trong danh sach task — doc bang cach TACH
+         danh sach that (bien vong `for task in ...`), khong grep chuoi "build".
+      4. HANH VI cua pre-push: tren BAN SAO da cay lai loi cu (mot loi goi getLocale
+         o than mot man), chay `.githooks/pre-push` -> ma KHAC 0. Doi chung duong:
+         ban sao chua cay thi pre-push ma 0. Khong co doi chung duong -> ma 2.
+      5. `.github/workflows/acceptance.yml`: buoc chay lenh dung KHONG mang
+         `continue-on-error: true`, va KHONG nam duoi mot `if:` khong bao gio dung —
+         doc bang trinh phan tich YAML, khong bang tim chuoi.
+      Thieu mot trong nam -> ma 1, neu dieu nao.
+      Chieu do: go `build` khoi suite_keys trong ban sao -> ma 1 neu dung dieu 1;
+      them `continue-on-error: true` vao buoc ay -> ma 1 neu dung dieu 5.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.ld_o_cam_ep_chay_lai
+    paths:
+      - "_acceptance/config.yaml"
+      - "_acceptance/lenh-dung-do-khong-ai-thay/rang/**"
+    expected: |
+      CAP HAI CHIEU tren cung mot vat, do bang DAU VET turbo chu khong bang thoi gian:
+      chieu xanh: chay o cam MOI hai luot lien tiep khong doi gi -> ca hai luot deu
+      that su dung (turbo bao "cache bypass" hoac tuong duong), khong luot nao
+      "FULL TURBO"/"cache hit".
+      chieu do: bo co ep trong ban sao -> luot hai an dem -> chan tra ma 1, neu ra
+      dong turbo chung minh no an dem.
+      Khong doc duoc dau vet turbo -> ma 2, khong doan theo thoi gian chay.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.ld_bat_duoc_lop_loi
+    paths:
+      - "apps/app/app/**"
+      - "_acceptance/lenh-dung-do-khong-ai-thay/rang/**"
+    expected: |
+      Chan tu dung lai hien truong trong BAN SAO, ba buoc, thu tu co rang:
+      1. DOI CHUNG DUONG TRUOC: ban sao CHUA cay phai `bun run build` ma 0. Khong
+         xanh -> ma 2 ngay, vi mot ban sao von da hong khong chung duoc gi.
+      2. Cay dung HINH DANG LOI CU vao mot man GHIM TEN (ghi nguyen van trong chan):
+         dua loi goi `getLocale()` len than ham xuat mac dinh, CU PHAP VAN HOP LE.
+         Chan phai tu kiem cu phap con hop le truoc khi chay lenh dung.
+      3. `bun run build` -> ma KHAC 0, VA thong diep phai chua ten man ay VA khop
+         chan doan vo tinh cua Next: `uncached or runtime data during prerendering`.
+         Do khac 0 ma thong diep la loi bien dich hay loi kieu -> ma 1, khong nhan:
+         bang chung thu duoc khi ay la "lenh dung bat duoc loi cu phap", khong phai
+         bat duoc lop loi vo tinh, va Cong 2 se ky mot loi khai manh hon thu da do.
+      4. Khoi phuc ban sao, chay lai, doi ma 0.
+      Day la cap hai chieu cua AC-1: mot lenh chung chua bao gio do thi khong phan
+      biet duoc "kho lanh" voi "lenh chua bao gio chay".
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.ld_bon_lenh_cu
+    paths:
+      - "apps/app/**"
+      - "packages/**"
+      - "apps/api/**"
+      - "apps/agent/**"
+    expected: |
+      Chay `bun run test`, `check-types`, `lint`, `lint:slop`, in ma thoat tung lenh.
+      Xanh: ca bon ma 0, VA `apps/app` ra dung ba canh bao lint — so ba la con so
+      GHIM cua kho, lech len hay xuong deu la do.
+      Mot lenh khac 0 -> ma 1, neu ten lenh va ma.
