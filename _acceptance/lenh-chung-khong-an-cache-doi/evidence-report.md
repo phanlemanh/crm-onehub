@@ -86,7 +86,7 @@ human_signoff: Manh Phan 2026-09-07
 - eval: E6
   run_id: s4r1-20260906T153520Z-37144-E6
   exit_code: 0
-  verifier: config:executors.test.api_khong_cache
+  verifier: config:executors.test.api
   verified_at: 2026-09-06T15:37:21Z
   output: |
     app:test:  809 expect() calls
@@ -156,3 +156,14 @@ vi hai.
 
 run_id: repin-20260906T214517Z-82885
 sha: 538796cf4a0f334454dc9fc3f44f3f836a6b0ebf · suites: 4 lệnh exit 0
+
+### Đính chính trích dẫn — 07/09
+
+Lượt chấm ngày 07/09 chạy ô cắm `executors.test.api_khong_cache`. Vòng sửa
+`thuoc-cache-het-doi-tuong` gỡ ô cắm ấy — nó gọi thẳng `bunx turbo run test`, đi vòng
+qua `packages/db/scripts/test-run.ts` nơi đúc cơ sở dữ liệu theo lượt — và chuyển vai
+«lệnh chứng test của cổng» sang `executors.test.api` = `bun run test`.
+
+Dòng `verifier` của E6 nay trích khoá đang giữ vai đó, để hồ sơ không trỏ vào một khoá
+không còn tồn tại. **Lệnh thật của lượt chấm cũ nằm nguyên trong `run-log.jsonl`** —
+bản ghi lượt chạy không bị sửa.
