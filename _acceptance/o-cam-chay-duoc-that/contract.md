@@ -5,7 +5,7 @@ slug: o-cam-chay-duoc-that
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [acceptance]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo

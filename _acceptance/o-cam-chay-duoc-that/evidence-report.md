@@ -9,7 +9,7 @@ enforcement_mode: strict
 bypass_used: false
 verified_commit: bfe4bd42b762527523887e7b546f5db9817fc1f4
 run_id: s4r1-20260907T105205Z-7027
-human_signoff:
+human_signoff: Manh Phan 2026-09-07
 ---
 
 # Evidence Report: o-cam-chay-duoc-that
