@@ -7,8 +7,8 @@ reason:
 verified_by: sequential per-eval verify, run_id minted at execution
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ec21c3bd557378cf105ccd3cc3e5d03ee4338278
-run_id: s4r1-20260907T020741Z
+verified_commit: fd895bc0c01bb3bacb5315ad27321fcd3615f23c
+run_id: s4r2-20260907T021447Z-5948
 human_signoff: Manh Phan 2026-09-07
 ---
 
@@ -28,32 +28,32 @@ human_signoff: Manh Phan 2026-09-07
 ## Evidence
 
 - eval: E1
-  run_id: r-20260907T020741Z-11325
+  run_id: s4r2-20260907T021447Z-5948-E1
   exit_code: 0
   verifier: config:executors.test.hd_bang_ba_dong
-  verified_at: 2026-09-07T02:07:41Z
+  verified_at: 2026-09-07T02:14:47.608Z
   output: |
     bun test v1.3.10 (30e609e0)
      7 pass
      0 fail
      16 expect() calls
-    Ran 7 tests across 1 file. [14.00ms]
+    Ran 7 tests across 1 file. [13.00ms]
 
 - eval: E2
-  run_id: r-20260907T020741Z-32460
+  run_id: s4r2-20260907T021447Z-5948-E2
   exit_code: 0
   verifier: config:executors.script.hd_ham_thuan
-  verified_at: 2026-09-07T02:07:41Z
+  verified_at: 2026-09-07T02:14:47.726Z
   output: |
     nhap tu ./workspace: googleHostedDomain · hasSignInAllowList · isWorkspaceEmail · primaryWorkspaceDomain
       packages/auth/src/auth.ts:50  hostedDomain -> googleHostedDomain()  goi ham thuan
     XANH: quyet dinh hd nam trong mot ham thuan nhap tu ./workspace, auth.ts chi goi.
 
 - eval: E3
-  run_id: r-20260907T020741Z-28241
+  run_id: s4r2-20260907T021447Z-5948-E3
   exit_code: 0
   verifier: config:executors.script.hd_cua_phan_quyen_nguyen_ven
-  verified_at: 2026-09-07T02:07:41Z
+  verified_at: 2026-09-07T02:14:47.822Z
   output: |
     (1) diff voi sha ghim 5ac85ef9: 0 dong
     (2) bo test chay that: 8 ca xanh · 0 ca do
@@ -61,62 +61,69 @@ human_signoff: Manh Phan 2026-09-07
     XANH: apps/api/test/workspace.spec.ts khong doi mot ky tu so voi sha ghim, 8 ca cua no van xanh, va 10 ca hanh vi chay lai cho ket qua y het.
 
 - eval: E4
-  run_id: r-20260907T020741Z-22046
+  run_id: s4r2-20260907T021447Z-5948-E4
   exit_code: 0
   verifier: config:executors.test.hd_cau_tu_choi
-  verified_at: 2026-09-07T02:07:41Z
+  verified_at: 2026-09-07T02:14:48.021Z
   output: |
     bun test v1.3.10 (30e609e0)
      3 pass
      0 fail
      3 expect() calls
-    Ran 3 tests across 1 file. [175.00ms]
+    Ran 3 tests across 1 file. [173.00ms]
 
 - eval: E5
-  run_id: r-20260907T020741Z-20826
+  run_id: s4r2-20260907T021447Z-5948-E5
   exit_code: 0
   verifier: config:executors.test.hd_cau_hinh_onehub
-  verified_at: 2026-09-07T02:07:41Z
+  verified_at: 2026-09-07T02:14:48.055Z
   output: |
     bun test v1.3.10 (30e609e0)
      1 pass
      6 filtered out
      0 fail
      4 expect() calls
-    Ran 1 test across 1 file. [11.00ms]
+    Ran 1 test across 1 file. [10.00ms]
 
 - eval: E8
-  run_id: r-20260907T020741Z-4556
+  run_id: s4r2-20260907T021447Z-5948-E8
   exit_code: 0
   verifier: config:executors.test.hd_khong_de_lai_hang
-  verified_at: 2026-09-07T02:07:41Z
+  verified_at: 2026-09-07T02:14:48.304Z
   output: |
     bun test v1.3.10 (30e609e0)
      2 pass
      0 fail
      4 expect() calls
-    Ran 2 tests across 1 file. [228.00ms]
+    Ran 2 tests across 1 file. [221.00ms]
 
 - eval: E6
-  run_id: r-20260907T020741Z-23958
+  run_id: s4r2-20260907T021447Z-5948-E6
   exit_code: 0
   verifier: config:executors.script.hd_mot_bo_thuoc
-  verified_at: 2026-09-07T02:07:41Z
+  verified_at: 2026-09-07T02:14:48.390Z
   output: |
     chan cua lat: 3 · chan doi chieu: 87 · dau van 12 dong: 10666
     XANH: khong cua so 12 dong nao cua lat nay trung dau van voi mot chan da co.
 
 - eval: E7
-  exit_code:
-  verifier: judgment
+  judged_by: nguoi — chu kho, Cong 2
+  verdict: PASS
   verified_at: 2026-09-07
-  human_override: PASS — Manh Phan 2026-09-07: dong y mo tai khoan phanlemanh@gmail.com; cai gia "bi tu choi sau khi da chon tai khoan" la dang.
-  output: |
-    Muc phan xet — may KHONG cham. Nguoi doc cau tu choi ma mot dia chi ngoai
-    domain nhan sau khi da chon tai khoan Google, roi quyet cai gia ay co dang
-    de mo duong cho mot dia chi ngoai domain khong.
-    Cau do la: "That address is not on the allow-list." khi danh sach khong co
-    domain nao; "Sign in with your @onemount.com account." khi danh sach co
-    domain — ke ca danh sach tron, do primaryWorkspaceDomain() van tra domain.
-    Voi cau hinh onehub da chon (onemount.com + phanlemanh@gmail.com), mot nguoi
-    la se nhan cau NEU DOMAIN, khong phai cau allow-list.
+  human_override: Đạt — Manh Phan 2026-09-07
+  rationale: |
+    Cau tu choi ma mot dia chi ngoai domain nhan sau khi da chon tai khoan Google:
+    voi cau hinh onehub (onemount.com + phanlemanh@gmail.com) la "Sign in with your
+    @onemount.com account.", vi primaryWorkspaceDomain() van tra domain ke ca khi
+    danh sach tron. Chu kho dong y mo tai khoan phanlemanh@gmail.com va nhan cai gia
+    ay: nguoi ngoai bi tu choi SAU khi da chon tai khoan, thay vi khong thay nut.
+    May KHONG cham muc nay.
+
+## Lệnh chứng
+
+| Lệnh | run_id | exit |
+|---|---|---|
+| `test` | s4r2-20260907T021447Z-5948-suite-test | 0 |
+| `check-types` | s4r2-20260907T021447Z-5948-suite-check-types | 0 |
+| `lint` | s4r2-20260907T021447Z-5948-suite-lint | 0 |
+| `lint-slop` | s4r2-20260907T021447Z-5948-suite-lint-slop | 0 |
