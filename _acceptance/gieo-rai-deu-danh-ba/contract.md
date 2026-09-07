@@ -5,7 +5,7 @@ slug: gieo-rai-deu-danh-ba
 owner: omre.cnsp4@onemount.com
 risk_tier: T2
 surfaces: [cli]
-status: implemented
+status: verified
 approved_by:
 approved_at:
 veto_state: mo
@@ -52,5 +52,5 @@ Source input: `_acceptance/tiep-thi-tuyen-doi-tac/uat-session.md` rủi ro 3 · 
 
 ## Notes
 
-- Đổi lấy: mỗi lượt cào nay đọc tới hết trần trang thay vì dừng khi đủ, nên tốn thêm thời gian đọc danh bạ. Với trần 30 trang và nhịp 1,5 giây, thêm khoảng 40 giây mỗi lượt.
+- Đổi lấy: mỗi lượt cào nay đọc tới hết trần trang thay vì dừng khi đủ, nên tốn thêm thời gian đọc danh bạ. Ở trần đang ship là 8 trang, lượt cào cũ dừng sau khoảng 2 trang, nên phần thêm là 6 lượt tải danh bạ. Trần nâng lên 30 thì phần thêm là 28 lượt.
 - Hàm rải là hàm thuần, đặt ở mô-đun riêng để kiểm được ở mức đơn vị, theo đúng nếp một-việc-một-mô-đun của gói.

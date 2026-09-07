@@ -93,7 +93,12 @@ lượt tải), `lan_thu_hong`, và tách theo việc — `lan_thu_so_do`, `lan_
 cả `tin_dang` lẫn `tin_moi_30_ngay`.
 
 Gieo địa chỉ: đọc sơ đồ site trước; rỗng thì lật trang danh bạ theo `?page=N` tới
-`directory_max_pages` cho đủ `--limit`.
+hết `directory_max_pages` — đọc hết chứ không dừng khi đủ `--limit` — rồi rải mẫu
+đều theo bước cố định qua `listing_crawl/seed.py`. Danh bạ nhatot xếp sản lượng
+giảm dần, nên dừng khi đủ trần đồng nghĩa lấy trọn phần đầu bảng và bỏ hẳn mức
+Thấp với Ngủ. Rải mẫu chỉ có tác dụng khi `directory_max_pages` mở đủ rộng để cả
+danh bạ nhiều hơn `--limit`: ở trần 8 trang, danh bạ chỉ ra khoảng 98 hồ sơ nên
+`--limit 200` lấy hết, không rải gì.
 
 ## Lược đồ là một chiều, không có bản chép tay
 
