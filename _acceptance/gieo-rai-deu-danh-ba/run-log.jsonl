@@ -4,3 +4,9 @@
 {"ts": "2026-09-07T14:56:16Z", "round": 1, "evalId": "E4", "run_id": "gieo-rai-deu-danh-ba-E4-20260907T145616Z", "exit_code": 0, "cmd": "cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v"}
 {"ts": "2026-09-07T14:56:16Z", "round": 1, "evalId": "E5", "run_id": "gieo-rai-deu-danh-ba-E5-20260907T145616Z", "exit_code": 0, "cmd": "cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v"}
 {"ts": "2026-09-07T14:56:16Z", "round": 1, "evalId": "E6", "run_id": "gieo-rai-deu-danh-ba-E6-20260907T145616Z", "exit_code": 0, "cmd": "cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v"}
+{"ts": "2026-09-07T15:00:39Z", "round": 2, "evalId": "E1", "run_id": "gieo-rai-deu-danh-ba-E1-20260907T150039Z", "exit_code": 0, "cmd": "cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v"}
+{"ts": "2026-09-07T15:00:39Z", "round": 2, "evalId": "E2", "run_id": "gieo-rai-deu-danh-ba-E2-20260907T150039Z", "exit_code": 0, "cmd": "cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v"}
+{"ts": "2026-09-07T15:00:39Z", "round": 2, "evalId": "E3", "run_id": "gieo-rai-deu-danh-ba-E3-20260907T150039Z", "exit_code": 0, "cmd": "cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v"}
+{"ts": "2026-09-07T15:00:39Z", "round": 2, "evalId": "E4", "run_id": "gieo-rai-deu-danh-ba-E4-20260907T150039Z", "exit_code": 0, "cmd": "cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v"}
+{"ts": "2026-09-07T15:00:39Z", "round": 2, "evalId": "E5", "run_id": "gieo-rai-deu-danh-ba-E5-20260907T150039Z", "exit_code": 0, "cmd": "cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v"}
+{"ts": "2026-09-07T15:00:39Z", "round": 2, "evalId": "E6", "run_id": "gieo-rai-deu-danh-ba-E6-20260907T150039Z", "exit_code": 0, "cmd": "cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v"}

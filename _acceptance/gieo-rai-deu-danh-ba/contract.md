@@ -5,7 +5,7 @@ slug: gieo-rai-deu-danh-ba
 owner: omre.cnsp4@onemount.com
 risk_tier: T2
 surfaces: [cli]
-status: implemented
+status: verified
 approved_by:
 approved_at:
 veto_state: mo
