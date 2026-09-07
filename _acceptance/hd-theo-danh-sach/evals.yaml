@@ -1,0 +1,147 @@
+schema_version: 1
+slug: hd-theo-danh-sach
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.hd_bang_ba_dong
+    paths:
+      - "packages/auth/src/workspace.ts"
+      - "packages/auth/test/**"
+    expected: |
+      BANG VIET TRUOC, SAU dong, chan phai chay va in du sau — moi dong khai ca `hd`
+      lan ket qua isWorkspaceEmail:
+        1 onemount.com                        -> hd "onemount.com" · allow true
+        2 onemount.com,phanlemanh@gmail.com   -> hd undefined      · allow true
+        3 phanlemanh@gmail.com                -> hd undefined      · allow false
+        4 onemount.com,partner.com            -> hd undefined      · allow true
+        5 (bien chua dat)                     -> hd undefined      · allow false
+        6 ""                                  -> hd undefined      · allow false
+      LUAT: dat hd chi khi danh sach co DUNG MOT domain va khong dia chi le. Dong 4 la
+      ca hong ma luat hep "khong co dia chi le" bo sot — hd chi nhan mot domain nen dat
+      no bang domain dau tien se khoa partner.com, cung lop loi vong nay tuyen la da sua.
+      Dong 5 va 6 la ca fail-closed: khong co danh sach thi khong ai vao duoc.
+      Day la CAP HAI CHIEU tren cung mot ham: dong 1 la chieu duong (co dat hd), nam
+      dong sau la chieu am. Ca sau chay trong MOT luot, khong nap lai module.
+      Sai mot dong -> do, neu dau vao, gia tri mong doi, gia tri nhan duoc.
+      Ham khong ton tai, khong xuat ra duoc, hoac so dong chay khac 6 -> ma 2.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.hd_ham_thuan
+    paths:
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/src/workspace.ts"
+      - "_acceptance/hd-theo-danh-sach/rang/**"
+    expected: |
+      Xanh: quyet dinh dat hay khong dat `hd` nam trong mot ham THUAN o workspace.ts,
+      va auth.ts chi GOI ham ay chu khong tu tinh.
+      Do bang AST chu khong bang tim chuoi: trong auth.ts, bieu thuc gan cho `google.hd`
+      phai la mot loi goi ham nhap tu ./workspace, KHONG duoc chua bieu thuc dieu kien
+      doc `addresses` hay `domains` tai cho.
+      Chieu do: cay lai logic vao than dung provider trong ban sao -> ma 1, neu `file:dong`.
+      Khong tim thay cho gan `google.hd` -> ma 2.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.hd_cua_phan_quyen_nguyen_ven
+    paths:
+      - "apps/api/test/workspace.spec.ts"
+      - "packages/auth/src/workspace.ts"
+      - "_acceptance/hd-theo-danh-sach/rang/**"
+    expected: |
+      BA dieu, ca ba do duoc:
+      1. `git diff 5ac85ef..HEAD -- apps/api/test/workspace.spec.ts` RONG — moc la mot
+         SHA CO DINH ghim trong contract, KHONG phai ten nhanh: "goc nhanh" la moc di
+         dong, sau khi merge no hoa thanh HEAD nen diff rong vo dieu kien va tieu chi
+         quan trong nhat cua vong xanh vinh vien duoi recheck: strict.
+      2. Bo test ay CHAY THAT, chan in ra so ca xanh.
+      3. DOI CHUNG HANH VI: chay lai chinh cac hinh dang danh sach cua bo ca cu va so
+         ket qua tung ca — byte khong doi ma hanh vi doi van la do. Can dieu nay vi vong
+         nay them mot ham doc CUNG danh sach vao CUNG file, nen mot ham tach chuoi dung
+         chung bi sua se doi hanh vi ma than isWorkspaceEmail van nguyen byte.
+      Chieu do: sua mot dong cua file test trong ban sao -> ma 1, in ra diff.
+      Khong doc duoc sha ghim, hoac bo test khong chay duoc -> ma 2.
+      Day la tieu chi quan trong nhat: phai sua test cua cua phan quyen de vong nay xanh
+      nghia la phan quyen da doi, va cai gia khong con la "trai nghiem bi tu choi xau
+      hon" nua.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.hd_cau_tu_choi
+    paths:
+      - "packages/auth/src/auth.ts"
+      - "_acceptance/hd-theo-danh-sach/rang/**"
+    expected: |
+      Do QUAN HE, khong do chuoi co mat: goi THAT duong tu choi voi hai hinh dang danh
+      sach va khang dinh thong diep NHAN DUOC khop bang hai dong ghim truoc:
+        onemount.com                        -> cau neu domain
+        onemount.com,phanlemanh@gmail.com   -> cau allow-list
+      Mot dong nhan sai cau -> ma 1, in ca hai cau.
+      Khong goi duoc duong tu choi -> ma 2.
+      Vi sao do quan he: nhanh chon cau bi dao hay thanh ma chet thi ca hai chuoi van
+      nam nguyen trong file va thuoc van xanh, trong khi phanlemanh@gmail.com — chinh
+      nguoi vong nay mo duong cho — nhan mot chi dan sai.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.hd_cau_hinh_onehub
+    paths:
+      - "packages/auth/src/workspace.ts"
+      - "packages/auth/test/**"
+    expected: |
+      Voi ALLOWED_SIGN_IN = "onemount.com,phanlemanh@gmail.com" — cau hinh THAT cua lo
+      trinh trien khai — bon khang dinh trong MOT ca:
+        hd khong duoc dat
+        isWorkspaceEmail("ai-do@onemount.com")   -> true
+        isWorkspaceEmail("phanlemanh@gmail.com") -> true
+        isWorkspaceEmail("nguoi-la@gmail.com")   -> false
+      Sai mot khang dinh -> do, neu khang dinh nao.
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hd_khong_de_lai_hang
+    paths:
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/test/**"
+    expected: |
+      Do HE QUA trong CO SO DU LIEU, khong do tham so ta gui di:
+      voi ALLOWED_SIGN_IN tron, cho mot dia chi NGOAI danh sach di tron duong callback,
+      dem so hang user, account, session, verification TRUOC va SAU — bon cap phai bang
+      nhau. Chan in du tam con so.
+      VA ghim rang phep kiem nam o databaseHooks.user.create.BEFORE, tuc truoc khi ghi.
+      Doi chung duong bat buoc: mot dia chi TRONG danh sach di cung duong PHAI tao dung
+      mot hang user — neu khong tao thi phep do khong phan biet duoc "chan dung" voi
+      "duong callback khong chay", va chan tra ma 2 chu khong ma 0.
+      Mot bang tang hang -> ma 1, neu ten bang va hai con so.
+      Khong dung duoc luot callback de dem -> ma 2.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.hd_mot_bo_thuoc
+    paths:
+      - "_acceptance/**/rang/**"
+    expected: |
+      Xanh: khong khoi 12 dong nao cua lat nay trung voi mot chan da co o tam ho so
+      truoc.
+      Chieu do: chep mot khoi dac 12 dong tu mot chan cu -> ma 1, neu ten ca hai file.
+      Tap so sanh rong -> ma 2.
+
+  - id: E7
+    criterion: AC-7
+    executor: judgment
+    cmd: judgment
+    inputs:
+      - packages/auth/src/auth.ts
+    expected: |
+      Nguoi doc cau tu choi ma mot nguoi ngoai domain se nhan sau khi da chon tai khoan
+      Google, roi quyet danh doi ay co dang de mo duong cho mot dia chi ngoai domain
+      khong. May KHONG cham muc nay.
