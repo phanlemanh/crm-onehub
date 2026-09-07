@@ -43,52 +43,6 @@ rules and skills you read.
   installed version. Read the relevant guide before writing eve code rather than
   working from memory — guessing typechecks, builds, and then behaves differently.
 
-## Report every issue. Use ASD-STE100
-
-Do not bury a known problem inside a paragraph. A problem inside prose is a
-problem nobody reads. Report **every** issue, including ones you caused, in a
-list at the end of your reply.
-
-Write every message, every report and every issue in **ASD-STE100**
-(Simplified Technical English):
-
-- One idea per sentence. Maximum 20 words.
-- Active voice. Present tense. No conditionals.
-- One word for one meaning. Do not use synonyms for variety.
-- Say the effect, not only the cause.
-- No hedging: never "may", "might", "possibly", "somewhat".
-
-Use exactly this shape:
-
-```
-## Issues
-
-1. BROKEN — Slack is not connected. Agents that post to Slack fail.
-   Fix: connect Slack in Settings → Connections.
-2. RISK — A run longer than 5 minutes is cancelled. Work is lost.
-   Fix: not done. Needs a separate execution lease.
-3. NOT DONE — The manual run button shows on event-only agents.
-```
-
-Rules for the list:
-
-- One line for the problem. One line for the fix.
-- Start each with **BROKEN**, **RISK**, **NOT DONE**, or **UNKNOWN**.
-- **BROKEN** is failing now. **RISK** fails later. **NOT DONE** is unbuilt.
-  **UNKNOWN** is not investigated.
-- If you introduced it, write **I caused this** on the fix line.
-- Zero issues? Write `## Issues` then `None.`
-
-**Don't** — bury it in prose:
-
-> The fix works well. One honest limit: abandoning a sweep unblocks the queue but
-> doesn't cancel the underlying hung promise, so it leaks until restart.
-
-**Do** — put it in the list:
-
-> 1. RISK — An abandoned sweep leaks its promise. Memory grows until restart.
->    Fix: not done. Needs cancellation in `receive()`. I caused this.
-
 ## A server page computes. A client component renders.
 
 A client component must never import a server package. `@crm/auth` and `@crm/db`
@@ -250,54 +204,3 @@ it:
 ## Design
 
 @docs/design.md
-
-## Median Tasks
-
-Median can use a project-local workspace binding. If this repository has
-`.median/config.json`, run `mdn` commands from inside this repository so the
-correct Median workspace profile is selected. The local config stores only a
-profile name; API keys stay in your user config.
-
-To bind this repository to a workspace:
-
-```
-mdn setup --local
-```
-
-Before starting work, check your assigned tasks:
-
-```
-mdn tasks --agent <your-agent-name>
-```
-
-When picking up a task:
-
-```
-mdn status <TASK-CODE> in_progress --agent <your-agent-name>
-```
-
-When completing a task:
-
-```
-mdn status <TASK-CODE> ready --agent <your-agent-name>
-```
-
-To create a new task:
-
-```
-mdn create --title "Description" --status todo --priority medium --agent <your-agent-name>
-```
-
-## Commit Messages & Pull Requests
-
-Always include the Median task ID in commit messages and PR titles so tasks get marked automatically.
-
-```
-git commit -m "MDN-42 fix: resolve auth token expiry"
-```
-
-For pull requests, include the task ID in the title:
-
-```
-MDN-42 fix: resolve auth token expiry
-```

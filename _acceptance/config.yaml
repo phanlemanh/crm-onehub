@@ -25,10 +25,10 @@ executors:
     hd_khong_de_lai_hang: "cd packages/auth && bun test test/tu-choi-khong-de-lai-hang.integration.spec.ts"
     hd_cau_tu_choi: "cd packages/auth && bun test test/cau-tu-choi.spec.ts"
     cl_tieng_viet_den_man: "node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs dan-so && cd packages/ui && bun test --preload ./test/setup-dom.ts test/lai-ra-man.spec.tsx"
-    tt_api: bun run test -- "cd apps/api && bun run test listing-ingest.integration listing-fields listing-fixture-batch campaigns.spec campaign-schema"
+    tt_api: 'bun run test -- "cd apps/api && bun run test listing-ingest.integration listing-fields listing-fixture-batch campaigns.spec campaign-schema"'
     tt_app: cd apps/app && bun test test/messages-guard.spec.ts test/campaign-states.spec.ts
-    go_khoa_api: bun run test -- "cd apps/api && bun test test/saved-views-in-use.spec.ts test/campaigns.spec.ts"
-    go_khoa_app: bun run test -- "cd apps/app && bun test test/saved-views-in-use.spec.ts test/messages-guard.spec.ts"
+    go_khoa_api: 'bun run test -- "cd apps/api && bun test test/saved-views-in-use.spec.ts test/campaigns.spec.ts"'
+    go_khoa_app: 'bun run test -- "cd apps/app && bun test test/saved-views-in-use.spec.ts test/messages-guard.spec.ts"'
   script:
     cua_vao_loi_mang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"
     cua_vao_chon_tieng_may_chu: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chon-tieng-may-chu"
@@ -52,7 +52,16 @@ executors:
     lint_slop: "bun run lint:slop"
     check_types: "bun run check-types"
     check_types_khong_cache: "bunx turbo run check-types --force"
-    build_khong_cache: "bunx turbo run build --force"
+    build_khong_cache: 'bunx turbo run build --force'
+    oc_moi_o_cam_chay_duoc: bun _acceptance/o-cam-chay-duoc-that/rang/moi-o-cam-chay-duoc.mjs
+    oc_yaml_doc_duoc: bun _acceptance/o-cam-chay-duoc-that/rang/yaml-doc-duoc.mjs
+    oc_hai_trinh_doc_bang_nhau: bun _acceptance/o-cam-chay-duoc-that/rang/hai-trinh-doc-bang-nhau.mjs
+    oc_khoa_khong_doi: bun _acceptance/o-cam-chay-duoc-that/rang/khoa-khong-doi.mjs
+    oc_verifier_con_giai_duoc: bun _acceptance/o-cam-chay-duoc-that/rang/verifier-con-giai-duoc.mjs
+    oc_lenh_van_lam_dung_viec: bun _acceptance/o-cam-chay-duoc-that/rang/lenh-van-lam-dung-viec.mjs
+    oc_chan_ho_so_da_ky_chay_lai: bun _acceptance/o-cam-chay-duoc-that/rang/chan-ho-so-da-ky-chay-lai.mjs
+    oc_ham_kit_chua_doi: bun _acceptance/o-cam-chay-duoc-that/rang/ham-kit-chua-doi.mjs
+    oc_nam_lenh_chung: bun _acceptance/o-cam-chay-duoc-that/rang/nam-lenh-chung.mjs
     cr_dung_ban_khai: "bun _acceptance/cron-theo-ban-khai/rang/dung-ban-khai.mjs"
     cr_khong_ghim_cung: "bun _acceptance/cron-theo-ban-khai/rang/khong-ghim-cung.mjs"
     cr_vang_khai_thi_dung: "bun _acceptance/cron-theo-ban-khai/rang/vang-khai-thi-dung.mjs"
@@ -70,18 +79,18 @@ executors:
     ld_bat_duoc_lop_loi: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/bat-duoc-lop-loi.mjs"
     ld_bon_lenh_cu: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs"
     ld_lang_theo_tieng: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/lang-theo-tieng.mjs"
-    rang_suite_sach: bun run test -- "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan sach"
-    rang_suite_thu_tu: bun run test -- "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan thu-tu"
+    rang_suite_sach: 'bun run test -- "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan sach"'
+    rang_suite_thu_tu: 'bun run test -- "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan thu-tu"'
     rang_config_doi: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan doi"
     rang_config_o_cam: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam"
     rang_config_o_cam_duong: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam-duong"
     rang_config_o_cam_do: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam-do"
     rang_config_o_cam_trung_tinh: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam-trung-tinh"
     rang_config_khai_thac: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan khai-thac"
-    rang_microsoft_duong: bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan duong"
-    rang_microsoft_do: bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan do"
-    rang_microsoft_nguon_env: bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan nguon-env"
-    rang_microsoft_hinh_thuc: bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan hinh-thuc"
+    rang_microsoft_duong: 'bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan duong"'
+    rang_microsoft_do: 'bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan do"'
+    rang_microsoft_nguon_env: 'bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan nguon-env"'
+    rang_microsoft_hinh_thuc: 'bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan hinh-thuc"'
     rang_hook_ep_chay: "bash _acceptance/luoi-day-do-that/rang-hook.sh --chan ep-chay"
     rang_hinh_hinh: "bash _acceptance/hinh-cua-luoi/rang-hinh.sh --chan hinh"
     rang_hinh_tan_cong: "bash _acceptance/hinh-cua-luoi/rang-hinh.sh --chan tan-cong"
@@ -221,7 +230,7 @@ executors:
     tt_ui_trang_thai: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs trang-thai
     tt_ui_be_rong: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs be-rong
     tt_ui_thiet_ke: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs thiet-ke
-    tt_crawl_to_ingest: bun run test -- "cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --fixtures --dry-run --out ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/fixture-batch.json && cd ../../apps/api && bun run test listing-fixture-batch"
+    tt_crawl_to_ingest: 'bun run test -- "cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --fixtures --dry-run --out ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/fixture-batch.json && cd ../../apps/api && bun run test listing-fixture-batch"'
     khoa_lo_tran_retire: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan tran-retire
     khoa_lo_tran_claim: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan tran-claim
     khoa_lo_can: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan can
@@ -230,14 +239,14 @@ executors:
     khoa_lo_dong_thoi: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan dong-thoi
     khoa_lo_toan_tep: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan toan-tep
     khoa_lo_tai_lieu: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan tai-lieu
-    apr_check_run: gh api repos/phanlemanh/crm-onehub/commits/c042478/check-runs --jq '.check_runs[] | .name + " = " + (.conclusion // .status)' | grep -qx 'Open a pull request into main = skipped'
-    apr_lech_so_dong: git diff --numstat origin/release -- .github/workflows/auto-pr.yml | tr '\t' ' ' | grep -qx '1 0 .github/workflows/auto-pr.yml'
-    apr_lech_noi_dung: git diff -U0 origin/release -- .github/workflows/auto-pr.yml | grep -qxF "+    if: github.repository == 'trycompai/crm'"
+    apr_check_run: bash _acceptance/auto-pr-thoi-do-o-ban-re/rang-check-run.sh
+    apr_lech_so_dong: bash _acceptance/auto-pr-thoi-do-o-ban-re/rang-lech-so-dong.sh
+    apr_lech_noi_dung: bash _acceptance/auto-pr-thoi-do-o-ban-re/rang-lech-noi-dung.sh
     apr_moc_to_tien: git merge-base --is-ancestor c042478 HEAD
     apr_moc_khop_cay: git diff --quiet c042478 -- .github/workflows/auto-pr.yml
-    apr_check_run_do: gh api repos/phanlemanh/crm-onehub/commits/5ac85ef/check-runs --jq '.check_runs[] | .name + " = " + (.conclusion // .status)' | grep -qx 'Open a pull request into main = failure'
-    apr_lech_so_dong_do: test -z "$(git diff --numstat origin/release 5ac85ef -- .github/workflows/auto-pr.yml)"
-    apr_lech_noi_dung_do: test -z "$(git diff -U0 origin/release 5ac85ef -- .github/workflows/auto-pr.yml | grep -F 'if: github.repository')"
+    apr_check_run_do: bash _acceptance/auto-pr-thoi-do-o-ban-re/rang-check-run-do.sh
+    apr_lech_so_dong_do: 'test -z "$(git diff --numstat origin/release 5ac85ef -- .github/workflows/auto-pr.yml)"'
+    apr_lech_noi_dung_do: bash _acceptance/auto-pr-thoi-do-o-ban-re/rang-lech-noi-dung-do.sh
     apr_moc_to_tien_do: git merge-base --is-ancestor c042478 5ac85ef; test $? -ne 0
     apr_moc_khop_cay_do: git diff --quiet c042478 5ac85ef -- .github/workflows/auto-pr.yml; test $? -ne 0
   design:

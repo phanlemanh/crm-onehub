@@ -1,0 +1,4 @@
+config.yaml tai sha ghim parse duoc bang YAML: KHONG
+  ok  ba-noi-deu-chay.mjs · ma 0
+  ok  o-cam-ep-chay-lai.mjs · ma 0
+XANH: ban cu nem loi YAML (tien de dung), va ca 2 chan cua ho so da ky nay chay duoc.
