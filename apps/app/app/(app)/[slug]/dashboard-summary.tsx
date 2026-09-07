@@ -26,7 +26,7 @@ import {
 import { Spinner } from "@crm/ui/components/spinner";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { TableCell } from "@crm/ui/components/table";
-import { formatCount, formatMoneyCompact } from "@crm/ui/lib/format";
+import { formatMoneyCompact } from "@crm/ui/lib/format";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useQueryState } from "nuqs";
@@ -38,6 +38,10 @@ import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { LocalRelativeTime } from "@/components/local-date-time";
 import { activityLabel } from "@/lib/activity-presentation";
 import { dealStageColor } from "@/lib/deal-stage";
+import {
+	type TongQuanMessages,
+	tongQuanMessages,
+} from "@/lib/messages/tong-quan";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
@@ -46,52 +50,63 @@ import { overviewParsers } from "./overview-search-params";
 import { SalesDashboard } from "./sales-dashboard";
 
 const CELL = "px-3 py-2.5 align-middle";
-const OPEN_COLUMNS: SimpleTableColumn[] = [
-	{ id: "deal", header: "Deal" },
-	{
-		id: "stage",
-		header: "Stage",
-		width: "w-32",
-		className: "hidden lg:table-cell",
-	},
-	{
-		id: "share",
-		srLabel: "Share of the largest",
-		width: "w-24",
-		className: "hidden sm:table-cell",
-	},
-	{ id: "value", header: "Value", width: "w-20", align: "right" },
-];
-const TASK_COLUMNS: SimpleTableColumn[] = [
-	{ id: "done", srLabel: "Done", width: "w-8" },
-	{ id: "task", header: "Task" },
-	{ id: "overdue", header: "Overdue", width: "w-24", align: "right" },
-];
-const ACTIVITY_COLUMNS: SimpleTableColumn[] = [
-	{ id: "activity", header: "Activity" },
-	{
-		id: "company",
-		header: "Company",
-		width: "w-44",
-		className: "hidden md:table-cell",
-	},
-	{
-		id: "deal",
-		header: "Deal",
-		width: "w-48",
-		className: "hidden lg:table-cell",
-	},
-	{
-		id: "who",
-		header: "Who",
-		width: "w-32",
-		className: "hidden md:table-cell",
-	},
-	{ id: "when", header: "When", width: "w-20", align: "right" },
-];
+
+function cot(m: TongQuanMessages) {
+	const open: SimpleTableColumn[] = [
+		{ id: "deal", header: m.open.cols.deal },
+		{
+			id: "stage",
+			header: m.open.cols.stage,
+			width: "w-32",
+			className: "hidden lg:table-cell",
+		},
+		{
+			id: "share",
+			srLabel: m.open.cols.share,
+			width: "w-24",
+			className: "hidden sm:table-cell",
+		},
+		{ id: "value", header: m.open.cols.value, width: "w-20", align: "right" },
+	];
+	const tasks: SimpleTableColumn[] = [
+		{ id: "done", srLabel: m.tasks.cols.done, width: "w-8" },
+		{ id: "task", header: m.tasks.cols.task },
+		{
+			id: "overdue",
+			header: m.tasks.cols.overdue,
+			width: "w-24",
+			align: "right",
+		},
+	];
+	const activity: SimpleTableColumn[] = [
+		{ id: "activity", header: m.activity.cols.activity },
+		{
+			id: "company",
+			header: m.activity.cols.company,
+			width: "w-44",
+			className: "hidden md:table-cell",
+		},
+		{
+			id: "deal",
+			header: m.activity.cols.deal,
+			width: "w-48",
+			className: "hidden lg:table-cell",
+		},
+		{
+			id: "who",
+			header: m.activity.cols.who,
+			width: "w-32",
+			className: "hidden md:table-cell",
+		},
+		{ id: "when", header: m.activity.cols.when, width: "w-20", align: "right" },
+	];
+	return { open, tasks, activity };
+}
 
 export function DashboardSummary() {
 	const locale = useLocale();
+	const m = tongQuanMessages(locale);
+	const COT = cot(m);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const openRecord = useOpenRecord();
@@ -136,27 +151,19 @@ export function DashboardSummary() {
 			<div className="grid gap-6 @3xl/page-content:grid-cols-2">
 				<Card className="min-w-0">
 					<CardHeader>
-						<CardTitle>Deals in progress</CardTitle>
-						<CardDescription>
-							The largest open deals, and how long each has sat in its stage
-						</CardDescription>
+						<CardTitle>{m.open.title}</CardTitle>
+						<CardDescription>{m.open.description}</CardDescription>
 						<CardAction>
 							<Button asChild variant="contrast" size="sm">
-								<Link href={workspaceUrl("/deals")}>Open deals</Link>
+								<Link href={workspaceUrl("/deals")}>{m.open.button}</Link>
 							</Button>
 						</CardAction>
 					</CardHeader>
 					<CardPanel>
 						{biggestOpen.length === 0 ? (
-							<CardPanelEmpty>
-								Nothing open. Time to fill the pipeline.
-							</CardPanelEmpty>
+							<CardPanelEmpty>{m.open.empty}</CardPanelEmpty>
 						) : (
-							<SimpleTable
-								variant="panel"
-								surface="page"
-								columns={OPEN_COLUMNS}
-							>
+							<SimpleTable variant="panel" surface="page" columns={COT.open}>
 								{biggestOpen.map((deal) => (
 									<SimpleTableRow
 										key={deal.id}
@@ -204,36 +211,32 @@ export function DashboardSummary() {
 
 				<Card className="min-w-0">
 					<CardHeader>
-						<CardTitle>Overdue tasks</CardTitle>
+						<CardTitle>{m.tasks.title}</CardTitle>
 						<CardDescription>
 							{overdueTasks.length === 0
-								? "Every task you have logged is either done or still to come"
-								: `${formatCount(overdueTasks.length, "task", "en")} past due`}
+								? m.tasks.allDone
+								: m.tasks.pastDue(String(overdueTasks.length))}
 						</CardDescription>
 					</CardHeader>
 					<CardPanel>
 						{overdueTasks.length === 0 ? (
-							<CardPanelEmpty>Nothing overdue. Good.</CardPanelEmpty>
+							<CardPanelEmpty>{m.tasks.empty}</CardPanelEmpty>
 						) : (
-							<SimpleTable
-								variant="panel"
-								surface="page"
-								columns={TASK_COLUMNS}
-							>
+							<SimpleTable variant="panel" surface="page" columns={COT.tasks}>
 								{overdueTasks.map((task) => (
 									<SimpleTableRow key={task.id}>
 										<TableCell className={CELL}>
 											<Checkbox
 												checked={false}
 												disabled={complete.isPending}
-												aria-label="Mark as done"
+												aria-label={m.tasks.markDone}
 												onCheckedChange={() =>
 													complete.mutate({ id: task.id, completed: true })
 												}
 											/>
 										</TableCell>
 										<TableCell className={CELL}>
-											<span className="flex min-w-0 flex-col">
+											<span className="flex min-w-0 flex-col" translate="no">
 												<span className="truncate">{task.subject}</span>
 												<span className="flex min-w-0 text-muted-foreground">
 													{task.deal ? (
@@ -255,7 +258,7 @@ export function DashboardSummary() {
 													task.dueAt ? (
 														<LocalRelativeTime date={task.dueAt} />
 													) : (
-														"No due date"
+														m.tasks.noDueDate
 													)
 												}
 											/>
@@ -271,34 +274,38 @@ export function DashboardSummary() {
 			<Card className="min-w-0">
 				<CardHeader>
 					<CardTitle>
-						{mine ? "Your recent activity" : "Recent activity"}
+						{mine ? m.activity.titleMine : m.activity.title}
 					</CardTitle>
 					<CardDescription>
-						{mine
-							? "Every note, task and stage change you have logged"
-							: "Every note, task and stage change across the workspace"}
+						{mine ? m.activity.descMine : m.activity.desc}
 					</CardDescription>
 					<CardAction>
 						<Button asChild variant="contrast" size="sm">
-							<Link href={workspaceUrl("/companies")}>All companies</Link>
+							<Link href={workspaceUrl("/companies")}>{m.activity.button}</Link>
 						</Button>
 					</CardAction>
 				</CardHeader>
 				{recentActivity.length === 0 ? (
-					<CardTableEmpty>Nothing has happened yet.</CardTableEmpty>
+					<CardTableEmpty>{m.activity.empty}</CardTableEmpty>
 				) : (
-					<SimpleTable columns={ACTIVITY_COLUMNS}>
+					<SimpleTable columns={COT.activity}>
 						{recentActivity.map((entry) => (
 							<SimpleTableRow key={entry.id}>
 								<TableCell className={CELL}>
-									<span className="truncate">
-										{entry.subject ?? activityLabel(entry.type, locale)}
-									</span>
+									{entry.subject ? (
+										<span className="truncate" translate="no">
+											{entry.subject}
+										</span>
+									) : (
+										<span className="truncate">
+											{activityLabel(entry.type, locale)}
+										</span>
+									)}
 								</TableCell>
 								<TableCell className={`${CELL} hidden md:table-cell`}>
 									{entry.company ? (
 										<RecordLink kind="company" id={entry.company.id}>
-											{entry.company.name}
+											<span translate="no">{entry.company.name}</span>
 										</RecordLink>
 									) : (
 										<EmptyCellValue />
@@ -307,7 +314,7 @@ export function DashboardSummary() {
 								<TableCell className={`${CELL} hidden lg:table-cell`}>
 									{entry.deal ? (
 										<RecordLink kind="deal" id={entry.deal.id}>
-											{entry.deal.name}
+											<span translate="no">{entry.deal.name}</span>
 										</RecordLink>
 									) : (
 										<EmptyCellValue />
@@ -315,6 +322,7 @@ export function DashboardSummary() {
 								</TableCell>
 								<TableCell
 									className={`${CELL} hidden truncate text-muted-foreground md:table-cell`}
+									translate="no"
 								>
 									{entry.createdBy.name}
 								</TableCell>
@@ -355,7 +363,7 @@ function DealCell({
 				name={company.name}
 				size="sm"
 			/>
-			<span className="flex min-w-0 flex-col">
+			<span className="flex min-w-0 flex-col" translate="no">
 				<span className="truncate font-medium">{name}</span>
 				<span className="truncate text-muted-foreground">
 					{meta ? (

@@ -20,15 +20,11 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { AreaTrend, DonutStat } from "@/components/dashboard-charts";
 import { dealStageColor, dealStageLabel } from "@/lib/deal-stage";
+import { tongQuanMessages } from "@/lib/messages/tong-quan";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
 type Summary = RouterOutputs["dashboard"]["summary"];
-
-const TREND_CONFIG: ChartConfig = {
-	won: { label: "Closed won", color: "var(--success)" },
-	created: { label: "New pipeline", color: "var(--chart-1)" },
-};
 
 function changeDelta(
 	current: number,
@@ -47,6 +43,12 @@ function changeDelta(
 export function SalesDashboard({ summary }: { summary: Summary }) {
 	const locale = useLocale();
 	const workspaceUrl = useWorkspaceUrl();
+	const m = tongQuanMessages(locale);
+	const trendConfig: ChartConfig = {
+		won: { label: m.trend.won, color: "var(--success)" },
+		created: { label: m.trend.created, color: "var(--chart-1)" },
+	};
+	const soThoaThuan = (n: number) => formatCount(n, m.stats.dealNoun, locale);
 
 	const {
 		pipeline,
@@ -84,22 +86,28 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 		<div className="flex flex-col gap-6">
 			<StatGroup>
 				<StatCard
-					label="Closed won this month"
+					label={m.stats.closedWon}
 					value={money(wonThisMonth.valueCents)}
 					delta={changeDelta(
 						wonThisMonth.valueCents,
 						wonPrevMonth.valueCents,
-						"vs. last month",
+						m.stats.vsLastMonth,
 					)}
-					description={`${formatCount(wonThisMonth.count, "deal", "en")} · ${money(wonPrevMonth.valueCents)} last month`}
+					description={m.stats.closedWonDesc(
+						soThoaThuan(wonThisMonth.count),
+						money(wonPrevMonth.valueCents),
+					)}
 				/>
 				<StatCard
-					label="Open pipeline"
+					label={m.stats.openPipeline}
 					value={money(pipeline.totalCents)}
-					description={`${formatCount(pipeline.totalDeals, "deal", "en")} in progress · ${money(closingThisMonthTotal.valueCents)} due this month`}
+					description={m.stats.openPipelineDesc(
+						soThoaThuan(pipeline.totalDeals),
+						money(closingThisMonthTotal.valueCents),
+					)}
 				/>
 				<StatCard
-					label={`Win rate (${performance.windowDays}d)`}
+					label={m.stats.winRate(String(performance.windowDays))}
 					value={
 						performance.winRate === null
 							? "—"
@@ -107,12 +115,15 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 					}
 					description={
 						performance.wins + performance.losses === 0
-							? "Nothing has closed yet"
-							: `${performance.wins} won · ${performance.losses} lost`
+							? m.stats.nothingClosed
+							: m.stats.wonLost(
+									String(performance.wins),
+									String(performance.losses),
+								)
 					}
 				/>
 				<StatCard
-					label={`Average deal (${performance.windowDays}d)`}
+					label={m.stats.avgDeal(String(performance.windowDays))}
 					value={
 						performance.avgDealCents === null
 							? "—"
@@ -120,40 +131,36 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 					}
 					description={
 						performance.avgCycleDays === null
-							? "No wins to measure"
-							: `${performance.avgCycleDays}-day average cycle`
+							? m.stats.noWins
+							: m.stats.avgCycle(String(performance.avgCycleDays))
 					}
 				/>
 			</StatGroup>
 
 			{unconverted.count > 0 ? (
 				<p className="text-muted-foreground text-xs">
-					Every figure above is in {reportingCurrency}.{" "}
-					{formatCount(unconverted.count, "deal", "en")} in{" "}
-					{unconverted.currencies.join(", ")}{" "}
-					{unconverted.count === 1 ? "is" : "are"} not included — there is no
-					rate to convert {unconverted.currencies.length === 1 ? "it" : "them"}{" "}
-					with.{" "}
+					{m.unconverted.sentence(
+						soThoaThuan(unconverted.count),
+						unconverted.currencies.join(", "),
+						reportingCurrency,
+					)}{" "}
 					<Link
 						href={workspaceUrl("/settings/currencies")}
 						className="underline hover:no-underline"
 					>
-						Set one
+						{m.unconverted.setOne}
 					</Link>
 					.
 				</p>
 			) : null}
 
 			<DashboardRow split="hero">
-				<ChartPanel
-					title="Closed won vs. new pipeline"
-					description="Last six months, by the month a deal closed or was created"
-				>
+				<ChartPanel title={m.trend.title} description={m.trend.description}>
 					{hasTrend ? (
 						<div className="flex flex-1 flex-col justify-center py-4">
 							<AreaTrend
 								data={trend}
-								config={TREND_CONFIG}
+								config={trendConfig}
 								xKey="month"
 								height={196}
 								variant="gradient"
@@ -163,21 +170,18 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 							/>
 						</div>
 					) : (
-						<EmptyChart label="No deals closed or created yet" />
+						<EmptyChart label={m.trend.empty} />
 					)}
 				</ChartPanel>
 
-				<ChartPanel
-					title="Open pipeline by stage"
-					description="Where the value sits right now"
-				>
+				<ChartPanel title={m.byStage.title} description={m.byStage.description}>
 					{stageSlices.length > 0 ? (
 						<div className="flex flex-1 flex-col justify-between gap-1 pt-4">
 							<DonutStat
 								data={stageSlices}
 								height={168}
 								centerValue={money(pipeline.totalCents)}
-								centerLabel="open"
+								centerLabel={m.byStage.center}
 								formatValue={exact}
 							/>
 							<ul className="flex flex-col px-5 pb-1 md:px-6">
@@ -192,7 +196,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 												className="size-1.5 shrink-0"
 												style={{ backgroundColor: slice.color }}
 											/>
-											<span className="min-w-0 flex-1 truncate">
+											<span className="min-w-0 flex-1 truncate" lang="en">
 												{slice.label}
 											</span>
 											<span className="shrink-0 text-muted-foreground tabular-nums">
@@ -207,7 +211,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 							</ul>
 						</div>
 					) : (
-						<EmptyChart label="Nothing open" />
+						<EmptyChart label={m.byStage.empty} />
 					)}
 				</ChartPanel>
 			</DashboardRow>

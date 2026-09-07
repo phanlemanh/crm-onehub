@@ -11,6 +11,7 @@ import { Button } from "@crm/ui/components/button";
 import type { CarbonIcon } from "@crm/ui/components/icon";
 import { Icon } from "@crm/ui/components/icon";
 import Bot from "@crm/ui/components/icons/bot";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Sheet,
 	SheetContent,
@@ -29,46 +30,34 @@ import { useMemo } from "react";
 import { AgentBuilderSidebar } from "@/components/agent-builder/agent-builder-sidebar";
 import { usePrefetchSection } from "@/components/crm/section-prefetch";
 import { useMobileNav } from "@/components/mobile-nav";
+import {
+	laMucHoiThoai,
+	MUC_RAIL,
+	type MucRail,
+	type MucRailKey,
+	mucDangMo,
+} from "@/lib/khung-dieu-huong";
+import { khungUngDungMessages } from "@/lib/messages/khung-ung-dung";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
-type RailItem = {
-	title: string;
-	href: string;
-	icon: CarbonIcon;
-	iconClassName?: string;
-	match: "exact" | "prefix";
-	related?: string[];
+const ICON: Record<MucRailKey, { icon: CarbonIcon; className?: string }> = {
+	overview: { icon: Dashboard },
+	chat: { icon: Bot, className: "size-5" },
+	companies: { icon: Building },
+	contacts: { icon: UserMultiple },
+	deals: { icon: Partnership },
+	campaigns: { icon: Bullhorn },
+	settings: { icon: Settings },
 };
 
-const ITEMS: RailItem[] = [
-	{ title: "Overview", href: "/", icon: Dashboard, match: "exact" },
-	{
-		title: "Chat",
-		href: "/chat",
-		icon: Bot,
-		iconClassName: "size-5",
-		match: "prefix",
-		related: ["/agents"],
-	},
-	{ title: "Companies", href: "/companies", icon: Building, match: "prefix" },
-	{
-		title: "Contacts",
-		href: "/contacts",
-		icon: UserMultiple,
-		match: "prefix",
-	},
-	{ title: "Deals", href: "/deals", icon: Partnership, match: "prefix" },
-	{ title: "Chiến dịch", href: "/campaigns", icon: Bullhorn, match: "prefix" },
-	{ title: "Settings", href: "/settings", icon: Settings, match: "prefix" },
-];
-
-function isActive(item: RailItem, pathname: string): boolean {
-	return (
-		pathname === item.href ||
-		(item.match === "prefix" && pathname.startsWith(item.href)) ||
-		Boolean(item.related?.some((prefix) => pathname.startsWith(prefix)))
-	);
-}
+type RailItem = {
+	muc: MucRail;
+	title: string;
+	href: string;
+	section: string;
+	icon: CarbonIcon;
+	iconClassName?: string;
+};
 
 function RailLink({
 	item,
@@ -139,7 +128,7 @@ function MobileRailLink({
 				aria-current={active ? "page" : undefined}
 				onClick={onNavigate}
 				transitionTypes={[
-					item.title === "Chat" ? "nav-forward" : "nav-lateral",
+					laMucHoiThoai(item.muc) ? "nav-forward" : "nav-lateral",
 				]}
 			>
 				<Icon icon={item.icon} className={item.iconClassName} />
@@ -187,22 +176,23 @@ function MobileRailIconLink({
 }
 
 export function AppIconRailFallback() {
+	const m = khungUngDungMessages(useLocale());
 	return (
 		<nav
-			aria-label="Primary"
+			aria-label={m.nav.primary}
 			aria-busy="true"
 			className="hidden w-14 shrink-0 flex-col items-center gap-1 border-r py-3 md:flex [view-transition-name:app-rail]"
 		>
-			{ITEMS.map((item) => (
+			{MUC_RAIL.map((muc) => (
 				<Button
-					key={item.href}
+					key={muc.href}
 					variant="ghost"
 					size="icon"
 					disabled
 					className="text-muted-foreground"
 				>
-					<Icon icon={item.icon} className={item.iconClassName} />
-					<span className="sr-only">{item.title}</span>
+					<Icon icon={ICON[muc.key].icon} className={ICON[muc.key].className} />
+					<span className="sr-only">{m.rail[muc.key]}</span>
 				</Button>
 			))}
 		</nav>
@@ -214,32 +204,37 @@ export function AppIconRail() {
 	const workspaceUrl = useWorkspaceUrl();
 	const { open, setOpen } = useMobileNav();
 	const prefetchSection = usePrefetchSection();
+	const m = khungUngDungMessages(useLocale());
 
 	const items = useMemo(
 		() =>
-			ITEMS.map((item) => ({
-				...item,
-				section: item.href,
-				href: workspaceUrl(item.href),
-				related: item.related?.map((path) => workspaceUrl(path)),
-			})),
-		[workspaceUrl],
+			MUC_RAIL.map(
+				(muc): RailItem => ({
+					muc,
+					title: m.rail[muc.key],
+					section: muc.href,
+					href: workspaceUrl(muc.href),
+					icon: ICON[muc.key].icon,
+					iconClassName: ICON[muc.key].className,
+				}),
+			),
+		[workspaceUrl, m],
 	);
-	const inChat = items.some(
-		(item) => item.title === "Chat" && isActive(item, pathname),
-	);
+	const active = (item: RailItem) =>
+		mucDangMo(item.muc, pathname, workspaceUrl);
+	const inChat = items.some((item) => laMucHoiThoai(item.muc) && active(item));
 
 	return (
 		<>
 			<nav
-				aria-label="Primary"
+				aria-label={m.nav.primary}
 				className="hidden w-14 shrink-0 flex-col items-center gap-1 border-r py-3 md:flex [view-transition-name:app-rail]"
 			>
 				{items.map((item) => (
 					<RailLink
 						key={item.href}
 						item={item}
-						active={isActive(item, pathname)}
+						active={active(item)}
 						onPrefetch={() => prefetchSection(item.section)}
 					/>
 				))}
@@ -253,16 +248,16 @@ export function AppIconRail() {
 						className="w-5/6 max-w-sm flex-row gap-0 p-0"
 					>
 						<SheetHeader className="sr-only">
-							<SheetTitle>Navigation and agent chats</SheetTitle>
+							<SheetTitle>{m.nav.mobileChat}</SheetTitle>
 						</SheetHeader>
 						<nav
-							aria-label="Primary"
+							aria-label={m.nav.mobileChat}
 							className="flex w-14 shrink-0 flex-col items-center gap-1 border-r py-3"
 						>
 							<Button
 								variant="ghost"
 								size="icon"
-								aria-label="Close navigation"
+								aria-label={m.nav.close}
 								onClick={() => setOpen(false)}
 							>
 								<Icon icon={Close} />
@@ -272,7 +267,7 @@ export function AppIconRail() {
 								<MobileRailIconLink
 									key={item.href}
 									item={item}
-									active={isActive(item, pathname)}
+									active={active(item)}
 									onNavigate={() => setOpen(false)}
 									onPrefetch={() => prefetchSection(item.section)}
 								/>
@@ -286,17 +281,17 @@ export function AppIconRail() {
 				) : (
 					<SheetContent side="left" className="w-64 gap-0 p-0">
 						<SheetHeader>
-							<SheetTitle>Navigation</SheetTitle>
+							<SheetTitle>{m.nav.title}</SheetTitle>
 						</SheetHeader>
 						<nav
-							aria-label="Primary"
+							aria-label={m.nav.mobile}
 							className="flex flex-1 flex-col gap-1 p-2"
 						>
 							{items.map((item) => (
 								<MobileRailLink
 									key={item.href}
 									item={item}
-									active={isActive(item, pathname)}
+									active={active(item)}
 									onNavigate={() => setOpen(false)}
 									onPrefetch={() => prefetchSection(item.section)}
 								/>

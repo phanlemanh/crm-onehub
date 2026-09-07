@@ -34,6 +34,7 @@ import {
 	LANG_COOKIE,
 	type Locale,
 } from "@/lib/locale/locale";
+import { khungUngDungMessages } from "@/lib/messages/khung-ung-dung";
 import { signOutAndRedirect } from "@/lib/sign-out";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -47,6 +48,7 @@ export function AppHeader({ user }: { user: User }) {
 	const workspaceUrl = useWorkspaceUrl();
 	const workspace = useQuery(trpc.workspace.get.queryOptions());
 	const label = workspaceLabel(workspace.data?.name);
+	const m = khungUngDungMessages(useLocale());
 
 	return (
 		<header className="flex h-12 shrink-0 items-center gap-2 border-b px-3 [view-transition-name:app-header]">
@@ -55,20 +57,22 @@ export function AppHeader({ user }: { user: User }) {
 					variant="ghost"
 					size="icon"
 					className="md:hidden"
-					aria-label="Open navigation"
+					aria-label={m.nav.open}
 					onClick={() => setMobileNavOpen(true)}
 				>
 					<Menu />
 				</Button>
 				<Link
 					href={workspaceUrl()}
-					aria-label="Homepage"
+					aria-label={m.header.homepage}
 					className="hidden size-8 items-center justify-center text-foreground md:flex"
 				>
 					<Logo className="size-5" />
 				</Link>
 				<Separator orientation="vertical" className="mx-1 h-5 bg-transparent" />
-				<span className="min-w-0 truncate font-medium text-sm">{label}</span>
+				<span className="min-w-0 truncate font-medium text-sm" translate="no">
+					{label}
+				</span>
 			</div>
 
 			<div className="ml-auto flex shrink-0 items-center gap-1.5">
@@ -76,8 +80,8 @@ export function AppHeader({ user }: { user: User }) {
 				<UserMenu
 					user={user}
 					onSignOut={() => {
-						signOutAndRedirect().catch(() =>
-							toast.error("Could not sign out."),
+						signOutAndRedirect(m.header.signOutFailed).catch(() =>
+							toast.error(m.header.signOutFailed),
 						);
 					}}
 				/>
@@ -87,6 +91,7 @@ export function AppHeader({ user }: { user: User }) {
 }
 
 export function AppHeaderFallback() {
+	const m = khungUngDungMessages(useLocale());
 	return (
 		<header
 			className="flex h-12 shrink-0 items-center gap-2 border-b px-3 [view-transition-name:app-header]"
@@ -106,23 +111,19 @@ export function AppHeaderFallback() {
 				</Avatar>
 			</div>
 			<span role="status" className="sr-only">
-				Loading workspace header…
+				{m.header.loading}
 			</span>
 		</header>
 	);
 }
-
-const OTHER_LOCALE = {
-	en: { next: "vi", label: "Tiếng Việt" },
-	vi: { next: "en", label: "English" },
-} satisfies Record<Locale, { next: Locale; label: string }>;
 
 function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
 	const { resolvedTheme, setTheme } = useTheme();
 	const isDark = resolvedTheme === "dark";
 	const locale = useLocale();
 	const router = useRouter();
-	const other = OTHER_LOCALE[locale];
+	const m = khungUngDungMessages(locale);
+	const tiengKia: Locale = locale === "vi" ? "en" : "vi";
 
 	const chooseLocale = (next: Locale) => {
 		document.cookie = `${LANG_COOKIE}=${next}; Max-Age=${COOKIE_MAX_AGE}; Path=${COOKIE_PATH}; SameSite=${COOKIE_SAME_SITE}`;
@@ -135,7 +136,7 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
 				<Button
 					variant="ghost"
 					size="icon"
-					aria-label="Account menu"
+					aria-label={m.header.accountMenu}
 					className="hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent"
 				>
 					<Avatar className="size-7">
@@ -149,7 +150,9 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
 			<DropdownMenuContent align="end" className="min-w-56">
 				<DropdownMenuLabel className="flex items-center gap-2">
 					<UserAvatar />
-					<span className="min-w-0 truncate">{user.email}</span>
+					<span className="min-w-0 truncate" translate="no">
+						{user.email}
+					</span>
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem
@@ -159,21 +162,21 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
 					}}
 				>
 					{isDark ? <Light /> : <Asleep />}
-					{isDark ? "Light mode" : "Dark mode"}
+					{isDark ? m.header.lightMode : m.header.darkMode}
 				</DropdownMenuItem>
 				<DropdownMenuItem
 					onSelect={(event) => {
 						event.preventDefault();
-						chooseLocale(other.next);
+						chooseLocale(tiengKia);
 					}}
 				>
 					<Language />
-					{other.label}
+					{m.header.otherLocale}
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem onClick={onSignOut}>
 					<Logout />
-					Sign out
+					{m.header.signOut}
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
