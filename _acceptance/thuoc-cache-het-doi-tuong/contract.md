@@ -5,7 +5,9 @@ slug: thuoc-cache-het-doi-tuong
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: draft
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-09-07
 design_doc: docs/superpowers/specs/2026-09-07-thuoc-cache-het-doi-tuong-design.md
 ---
 
