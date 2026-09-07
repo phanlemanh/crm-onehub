@@ -19,15 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: khungMessages(await getLocale()).trang.tieuDeDanhSach };
 }
 
-export default function AgentsPage() {
-	return (
-		<Suspense fallback={<PageShellLoading />}>
-			<AgentsPageShell />
-		</Suspense>
-	);
-}
-
-async function AgentsPageShell() {
+export default async function AgentsPage() {
 	const locale = await getLocale();
 	return (
 		<PageShell className="min-h-0">

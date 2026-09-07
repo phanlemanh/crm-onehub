@@ -40,21 +40,18 @@ evals:
 
   - id: E3
     criterion: AC-3
-    executor: test
-    cmd: config:executors.test.ld_chu_khong_doi
+    executor: script
+    cmd: config:executors.script.ld_man_khong_doi
     paths:
-      - "apps/app/app/**"
-      - "apps/app/lib/messages/**"
-      - "apps/app/test/**"
+      - "apps/app/**"
     expected: |
-      Do QUAN HE giua HAI CAY, khong do chuoi co mat trong mot cay:
-      dan so la tap man phai sua lay TAI SHA GHIM (neo 19), KHONG lay bang "man nao
-      vong nay da sua" — lay the la tu so voi chinh minh.
-      Voi tung man: doc khoa kho chuoi man ay dung o SHA GHIM, doc khoa man ay dung
-      o HEAD, roi so gia tri `vi` va `en` cua hai ben TUNG KY TU.
-      Dieu kien phu: `vi` khac `en`.
-      So ca chay phai bang 19; lech, hoac tap rong -> ma 2.
-      Mot man lech -> do, neu ten man, khoa hai ben, va ca hai chuoi.
+      Dem chinh cai diff: `git diff --name-only <sha ghim> -- apps/app` phai liet
+      DUNG MOT file, va do la `apps/app/app/layout.tsx`.
+      Vi sao phep do nay manh hon phep so 15 man cua ban truoc: ban va nay LA mot
+      file, nen "khong man nao doi mot ky tu" do duoc bang chinh danh sach file doi,
+      khong can suy qua kho chuoi.
+      File nao khac -> ma 1, neu ten file.
+      Khong file nao doi -> ma 2: ban va chua co thi phep do khong con nghia.
 
   - id: E4
     criterion: AC-4
@@ -141,6 +138,23 @@ evals:
       4. Khoi phuc ban sao, chay lai, doi ma 0.
       Day la cap hai chieu cua AC-1: mot lenh chung chua bao gio do thi khong phan
       biet duoc "kho lanh" voi "lenh chua bao gio chay".
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.ld_lang_theo_tieng
+    paths:
+      - "apps/app/app/layout.tsx"
+      - "apps/app/components/inline-script.tsx"
+      - "_acceptance/lenh-dung-do-khong-ai-thay/rang/**"
+    expected: |
+      Do HTML THAT do may chu tra ve, khong do cau truc ma nguon:
+      dung may chu apps/app, goi trang goc HAI lan voi `Cookie: lang=vi` va
+      `Cookie: lang=en`, roi doc gia tri ma trang dat cho `document.documentElement.lang`.
+      Xanh: moi luot nhan dung tieng cua no.
+      Chieu do: go doan dat lang khoi layout -> ca hai luot "khong thay" -> ma 1.
+      Cong da co may chu khac tra loi -> ma 2: chan se do mot cay khong phai cay dang
+      xet. May chu khong len duoc -> ma 2.
 
   - id: E8
     criterion: AC-8

@@ -23,17 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: khoaApiMessages(await getLocale()).trang.tieuDeTab };
 }
 
-export default function ApiKeysSettingsPage(
-	props: PageProps<"/[slug]/settings/api-keys">,
-) {
-	return (
-		<Suspense fallback={<PageShellLoading />}>
-			<ApiKeysSettingsPageShell {...props} />
-		</Suspense>
-	);
-}
-
-async function ApiKeysSettingsPageShell({
+export default async function ApiKeysSettingsPage({
 	searchParams,
 }: PageProps<"/[slug]/settings/api-keys">) {
 	const t = khoaApiMessages(await getLocale());

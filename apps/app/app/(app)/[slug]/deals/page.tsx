@@ -23,15 +23,9 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: dealMessages(await getLocale()).title };
 }
 
-export default function DealsPage(props: PageProps<"/[slug]/deals">) {
-	return (
-		<Suspense fallback={<PageShellLoading />}>
-			<DealsPageShell {...props} />
-		</Suspense>
-	);
-}
-
-async function DealsPageShell({ searchParams }: PageProps<"/[slug]/deals">) {
+export default async function DealsPage({
+	searchParams,
+}: PageProps<"/[slug]/deals">) {
 	const m = dealMessages(await getLocale());
 
 	return (

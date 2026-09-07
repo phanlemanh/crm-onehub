@@ -19,9 +19,8 @@ design_doc: docs/superpowers/specs/2026-09-07-lenh-dung-do-khong-ai-thay-design.
 
 `bun run build` đỏ và đã đỏ suốt bốn vòng Việt hoá đã ký, vì `cacheComponents:
 true` đòi mỗi màn dựng nổi một vỏ tĩnh, còn `getLocale()` đọc `cookies()` +
-`headers()` ở vỏ tĩnh của **16 chỗ**: 15 màn và — quan trọng hơn cả — **root
-layout**, thứ chặn mọi route kể cả `/_not-found`. Bốn lệnh chứng của kho không có
-`build`, nên không cổng nào thấy.
+`headers()` ở vỏ tĩnh của **root layout**, thứ chặn mọi route kể cả
+`/_not-found`. Bốn lệnh chứng của kho không có `build`, nên không cổng nào thấy.
 
 Ba số đo xác định đây là lỗi của bản rẽ: `apps/app/lib/locale/server.ts` không
 có trên `release`; không màn nào của hãng gọi `getLocale`; hãng đã bật
@@ -41,13 +40,12 @@ không phép đo nào được lấy dân số bằng chính kết quả của m
 | Neo | Số |
 | --- | --- |
 | file dưới `apps/app/app/**` đọc dữ liệu lượt truy cập (`getLocale` · `cookies` · `headers` · `draftMode`) | 26 |
-| trong đó có lỗ ở **vỏ tĩnh** — tập phải sửa | 16 |
-| trong 16 ấy: màn | 15 |
-| trong 16 ấy: **root layout** `apps/app/app/layout.tsx` | 1 |
+| trong đó chặn được vỏ tĩnh của **mọi** route — tập phải sửa | **1** (`apps/app/app/layout.tsx`) |
+| màn đọc dữ liệu lượt truy cập nhưng **nằm trong ranh `<Suspense>` của layout** | 15 |
 | file đọc dữ liệu lượt truy cập trong `generateMetadata` — **không** phải lỗ | 22 |
 
 Bốn số này thay bộ ba đầu tiên (25 · 19 · 22), vốn đếm bằng một luật từ vựng sai.
-Ba điều đã đo lại, không suy:
+Bốn điều đã đo lại, không suy:
 
 - Luật phải là **đọc dữ liệu lượt truy cập**, không phải «gọi `getLocale`»: root
   layout đọc thẳng `cookies()` + `headers()`, nên luật hẹp bỏ sót đúng nguyên
@@ -57,6 +55,10 @@ Ba điều đã đo lại, không suy:
 - `generateMetadata` đọc dữ liệu lượt truy cập ở 22 file mà lượt dựng **vẫn
   xanh** — Next cho metadata động. Đã chứng bằng lượt dựng xanh với cả 22 file
   còn nguyên.
+- **15 màn KHÔNG cần sửa.** Cấy lại đúng lỗi cũ vào một màn → lượt dựng **vẫn
+  xanh**, vì ranh `<Suspense>` của layout đã bọc mọi màn. Cấy vào layout → **đỏ**.
+  Nên bản vá là **một file**. Vá thêm 15 màn còn làm UX xấu đi — tiêu đề màn bị
+  đẩy vào ô chờ — và cộng thêm 15 file phân kỳ với bản hãng mà không mua được gì.
 
 ## Acceptance criteria
 
@@ -79,17 +81,18 @@ cách sửa của vòng này đưa lời gọi sang một hàm anh em ngoài th�
 Số file chân soi phải bằng neo **26**; lệch lên hay xuống đều là mã 2.
 Lời gọi trong `generateMetadata` được đếm và in ra nhưng **không** tính là lỗ —
 đã đo là Next cho phép.
-Chiều đỏ: cấy lại một lời gọi ngoài ranh Suspense trong bản sao thì chân trả mã 1
-và nêu `file:dòng`.
+**Hai** chiều đỏ, cả hai đã chạy thật: (1) cấy một lời gọi vào layout ngoài ranh
+Suspense → mã 1, nêu `layout.tsx:dòng`; (2) gỡ ranh `<Suspense>` của layout → mã
+1, và 15 màn lập tức hoá lỗ. Chiều thứ hai là thứ chứng luật xuyên file có răng.
 
-**AC-3 — Chữ trên màn không đổi.**
-Given tập **màn** phải sửa, lấy **tại SHA ghim** (neo **15** — layout không có
-khoá kho chuỗi nên không thuộc phép đo này), chứ không lấy bằng
-«màn nào vòng này đã sửa» — lấy thế là tự so với chính mình,
-When với mỗi màn, so từng khoá kho chuỗi màn ấy dùng ở SHA ghim với khoá màn ấy
-dùng ở HEAD,
-Then trùng từng ký tự, cho cả `vi` lẫn `en`. Điều kiện phụ: `vi` khác `en`.
-Số ca chạy phải bằng **15**; lệch, hoặc tập rỗng, là mã 2.
+**AC-3 — Không màn nào đổi một ký tự.**
+Given SHA ghim,
+When so cây làm việc với SHA ấy trên `apps/app/**`,
+Then đúng **một** file đổi, và đó là `apps/app/app/layout.tsx`. Không màn nào,
+không kho chuỗi nào, không khoá nào đổi — nên chữ trên màn không thể đổi.
+Đây thay phép so 15 màn của bản trước: bản vá nay là một file, nên phép đo mạnh
+hơn và rẻ hơn là đếm chính cái diff.
+Chiều đỏ: sửa một ký tự ở một màn bất kỳ → mã 1, nêu tên file.
 
 **AC-4 — `generateMetadata` không bị đụng.**
 Given các màn có `generateMetadata`,
@@ -120,10 +123,10 @@ cờ ép trong bản sao thì lượt hai ăn đệm và chân trả mã 1.
 Given bản sao kho ở trạng thái đã vá, và **đối chứng dương**: bản sao ấy dựng
 xanh TRƯỚC khi cấy — không xanh thì mã 2, vì một bản sao vốn đã hỏng không chứng
 được gì,
-When cấy đúng hình dạng lỗi cũ vào một màn **ghim tên**: đưa lời gọi `getLocale()`
-lên thân hàm xuất mặc định, cú pháp vẫn hợp lệ,
-Then `bun run build` trả mã khác 0, thông điệp nêu tên màn ấy **và** khớp chẩn
-đoán vỏ tĩnh của Next (`uncached or runtime data during prerendering`) — không
+When cấy đúng hình dạng lỗi cũ vào **root layout** — nơi duy nhất đã đo là chặn
+được lượt dựng: thêm một lời gọi `cookies()` vào thân hàm xuất mặc định, cú pháp
+vẫn hợp lệ,
+Then `bun run build` trả mã khác 0 **và** khớp chẩn đoán vỏ tĩnh của Next (`uncached or runtime data during prerendering`) — không
 nhận một lỗi biên dịch nào khác thay thế. Đây là cặp hai chiều của AC-1: một lệnh
 chứng chưa bao giờ đỏ thì không phân biệt được «kho lành» với «lệnh chưa chạy».
 

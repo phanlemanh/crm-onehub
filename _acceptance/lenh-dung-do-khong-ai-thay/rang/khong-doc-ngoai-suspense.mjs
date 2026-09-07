@@ -11,7 +11,7 @@ const iGoc = doi.indexOf("--goc");
 const GOC = iGoc === -1 ? MAC_DINH : resolve(doi[iGoc + 1]);
 const iNeo = doi.indexOf("--neo");
 const NEO = iNeo === -1 ? 26 : Number(doi[iNeo + 1]);
-const MAU_DUONG = "apps/app/app/(app)/[slug]/settings/connections/page.tsx";
+const LAYOUT_GOC = "apps/app/app/layout.tsx";
 
 function quet(thuMuc, ra = []) {
 	for (const ten of readdirSync(thuMuc)) {
@@ -55,7 +55,11 @@ function khaiBaoHam(nguon) {
 	const bang = new Map();
 	const di = (nut) => {
 		if (ts.isFunctionDeclaration(nut) && nut.name) bang.set(nut.name.text, nut);
-		if (ts.isVariableDeclaration(nut) && ts.isIdentifier(nut.name) && nut.initializer) {
+		if (
+			ts.isVariableDeclaration(nut) &&
+			ts.isIdentifier(nut.name) &&
+			nut.initializer
+		) {
 			if (
 				ts.isArrowFunction(nut.initializer) ||
 				ts.isFunctionExpression(nut.initializer)
@@ -97,8 +101,7 @@ function soiFile(duong) {
 	const daDi = new Set();
 
 	const diTrong = (nut, daChe) => {
-		if (docDuLieuLuot(nut) && !daChe)
-			hoLo.push(dongCua(nguon, nut));
+		if (docDuLieuLuot(nut) && !daChe) hoLo.push(dongCua(nguon, nut));
 
 		let cheTiep = daChe;
 		if (ts.isJsxElement(nut) || ts.isJsxSelfClosingElement(nut)) {
@@ -148,8 +151,43 @@ if (tatCa.length !== NEO) {
 	process.exit(2);
 }
 
+const duongLayout = tatCa.find((d) => relative(GOC, d) === LAYOUT_GOC);
+if (!duongLayout) {
+	console.error(
+		`MA 2: khong thay ${LAYOUT_GOC} trong dan so — layout goc la vat trung tam cua phep do nay`,
+	);
+	process.exit(2);
+}
+
+const layoutBocCon = (() => {
+	const nguon = cay(duongLayout);
+	const goc = xuatMacDinh(nguon);
+	if (!goc) return false;
+	let boc = false;
+	const di = (nut, daChe) => {
+		if (
+			ts.isJsxExpression(nut) &&
+			nut.expression &&
+			ts.isIdentifier(nut.expression) &&
+			nut.expression.text === "children" &&
+			daChe
+		)
+			boc = true;
+		let cheTiep = daChe;
+		if (
+			(ts.isJsxElement(nut) || ts.isJsxSelfClosingElement(nut)) &&
+			tenThe(nut) === "Suspense"
+		)
+			cheTiep = true;
+		ts.forEachChild(nut, (con) => di(con, cheTiep));
+	};
+	di(goc, false);
+	return boc;
+})();
+
 const do_ = [];
 const doMeta = [];
+const doCheBoiLayout = [];
 let dat = 0;
 for (const duong of tatCa) {
 	const r = soiFile(duong);
@@ -158,15 +196,13 @@ for (const duong of tatCa) {
 		console.error(`MA 2: ${ten} khong thay ham xuat mac dinh`);
 		process.exit(2);
 	}
+	const laLayoutGoc = ten === LAYOUT_GOC;
 	if (r.hoLo.length === 0) dat += 1;
-	for (const dong of r.hoLo) do_.push(`${ten}:${dong}`);
+	for (const dong of r.hoLo) {
+		if (!laLayoutGoc && layoutBocCon) doCheBoiLayout.push(`${ten}:${dong}`);
+		else do_.push(`${ten}:${dong}`);
+	}
 	for (const dong of r.hoLoMeta) doMeta.push(`${ten}:${dong}`);
-}
-
-const mauDuong = tatCa.find((d) => relative(GOC, d) === MAU_DUONG);
-if (!mauDuong) {
-	console.error(`MA 2: khong thay mau duong ghim ten ${MAU_DUONG}`);
-	process.exit(2);
 }
 
 console.log(
@@ -174,18 +210,26 @@ console.log(
 );
 
 console.log(
-	`ho o THAN: ${do_.length} loi goi / ${new Set(do_.map((d) => d.split(":")[0])).size} file`,
+	`root layout boc {children} trong <Suspense>: ${layoutBocCon ? "co" : "KHONG"}`,
+);
+console.log(
+	`ho THAT o vo tinh: ${do_.length} loi goi / ${new Set(do_.map((d) => d.split(":")[0])).size} file`,
+);
+console.log(
+	`doc du lieu luot o man, da duoc ranh cua layout che: ${doCheBoiLayout.length} loi goi / ${new Set(doCheBoiLayout.map((d) => d.split(":")[0])).size} file`,
 );
 console.log(
 	`generateMetadata doc du lieu luot: ${doMeta.length} loi goi / ${new Set(doMeta.map((d) => d.split(":")[0])).size} file — KHONG tinh la ho, da do: Next cho metadata dong`,
 );
 
 if (do_.length > 0) {
-	console.error("DO: doc du lieu luot o vo tinh, khong di qua ranh <Suspense>:");
+	console.error(
+		"DO: doc du lieu luot o vo tinh, khong di qua ranh <Suspense>:",
+	);
 	for (const d of do_) console.error(`  ${d}`);
 	process.exit(1);
 }
 
 console.log(
-	"XANH: moi duong tu ham xuat mac dinh toi getLocale deu di qua mot ranh <Suspense>.",
+	"XANH: khong cho nao doc du lieu luot ma khong co mot ranh <Suspense> che — ke ca ranh cua root layout.",
 );

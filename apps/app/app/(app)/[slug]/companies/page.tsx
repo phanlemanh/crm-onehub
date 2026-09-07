@@ -23,15 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: companyMessages(await getLocale()).title };
 }
 
-export default function CompaniesPage(props: PageProps<"/[slug]/companies">) {
-	return (
-		<Suspense fallback={<PageShellLoading />}>
-			<CompaniesPageShell {...props} />
-		</Suspense>
-	);
-}
-
-async function CompaniesPageShell({
+export default async function CompaniesPage({
 	searchParams,
 }: PageProps<"/[slug]/companies">) {
 	const m = companyMessages(await getLocale());

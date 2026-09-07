@@ -20,15 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: theoDoiMessages(await getLocale()).trang.tab };
 }
 
-export default function TrackingSettingsPage() {
-	return (
-		<Suspense fallback={<PageShellLoading />}>
-			<TrackingSettingsPageShell />
-		</Suspense>
-	);
-}
-
-async function TrackingSettingsPageShell() {
+export default async function TrackingSettingsPage() {
 	const t = theoDoiMessages(await getLocale());
 
 	return (

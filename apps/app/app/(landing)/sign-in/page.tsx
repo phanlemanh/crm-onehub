@@ -52,15 +52,9 @@ async function currentSession() {
 	}
 }
 
-export default function SignInPage(props: PageProps<"/sign-in">) {
-	return (
-		<Suspense fallback={null}>
-			<SignInPageShell {...props} />
-		</Suspense>
-	);
-}
-
-async function SignInPageShell({ searchParams }: PageProps<"/sign-in">) {
+export default async function SignInPage({
+	searchParams,
+}: PageProps<"/sign-in">) {
 	const m = authMessages(await getLocale()).signIn;
 
 	return (

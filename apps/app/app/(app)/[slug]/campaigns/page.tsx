@@ -22,15 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: campaignMessages(await getLocale()).title };
 }
 
-export default function CampaignsPage() {
-	return (
-		<Suspense fallback={<PageShellLoading />}>
-			<CampaignsPageShell />
-		</Suspense>
-	);
-}
-
-async function CampaignsPageShell() {
+export default async function CampaignsPage() {
 	const m = campaignMessages(await getLocale());
 
 	return (
