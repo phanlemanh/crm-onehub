@@ -7,7 +7,7 @@ reason:
 verified_by: same-context implementation run
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 2ac1ab0a783d39cda80ef1f905aa5dc7b451a0f7
+verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
 human_signoff: Manh Phan 2026-09-01
 ---
 
@@ -291,3 +291,8 @@ deterministic and ran at least twice.
 One round. The four regression attacks were replayed against the built frame
 rather than reasoned about, and the fifth and sixth attacks were found by asking
 what else the derived expectation could not see; both are now legs.
+
+### Re-pin lần 1 — 07/09, do vòng sửa `thuoc-cache-het-doi-tuong` chạm hai file cấu hình turbo
+
+run_id: repin-20260907T005455Z-44758
+sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0

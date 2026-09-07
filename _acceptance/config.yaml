@@ -5,7 +5,7 @@ recheck: strict
 feature_loop:
   ui_standards_skill: web-design-guidelines
   suite_keys:
-    - executors.test.api_khong_cache
+    - executors.test.api
     - executors.script.check_types_khong_cache
     - executors.script.lint_khong_cache
     - executors.script.lint_slop
@@ -19,7 +19,6 @@ executors:
     api_khong_cache_tru_agent: "bun run test -- --force --filter=!agent"
     rang3_khoa_chet: "cd apps/app && bun test test/messages-guard.spec.ts"
     tv_canh_kho_ui: "cd packages/ui && bun test test/messages-guard.spec.ts"
-    api_khong_cache: "bun run db:test && bunx turbo run test --force --concurrency=1"
     cl_tieng_viet_den_man: "node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs dan-so && cd packages/ui && bun test --preload ./test/setup-dom.ts test/lai-ra-man.spec.tsx"
     tt_api: bun run test -- "cd apps/api && bun run test listing-ingest.integration listing-fields listing-fixture-batch campaigns.spec campaign-schema"
     tt_app: cd apps/app && bun test test/messages-guard.spec.ts test/campaign-states.spec.ts
@@ -185,6 +184,13 @@ executors:
     kc_do_hanh_vi: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/do-hanh-vi.mjs"
     kc_lenh_hang_ngay: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/lenh-hang-ngay.mjs"
     kc_mot_bo_thuoc: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/mot-bo-thuoc.mjs"
+    tc_trang_thai_dem: "node _acceptance/thuoc-cache-het-doi-tuong/rang/trang-thai-dem.mjs"
+    tc_khong_duong_thu_ba: "node _acceptance/thuoc-cache-het-doi-tuong/rang/khong-duong-thu-ba.mjs"
+    tc_khai_vo_tac_dung: "node _acceptance/thuoc-cache-het-doi-tuong/rang/khai-vo-tac-dung.mjs"
+    tc_het_doi_tuong: "node _acceptance/thuoc-cache-het-doi-tuong/rang/het-doi-tuong.mjs"
+    tc_ho_so_cu_xanh: "node _acceptance/thuoc-cache-het-doi-tuong/rang/ho-so-cu-xanh.mjs"
+    tc_mot_bo_thuoc: "node _acceptance/thuoc-cache-het-doi-tuong/rang/mot-bo-thuoc.mjs"
+    tc_dung_cua_chay_test: "node _acceptance/thuoc-cache-het-doi-tuong/rang/dung-cua-chay-test.mjs"
     rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
     rang_t1_im: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"
     tt_crawl_test: cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v

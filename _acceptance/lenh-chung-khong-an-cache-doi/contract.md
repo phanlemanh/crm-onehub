@@ -161,6 +161,12 @@ kiểm cache của CI từ xa. Ô Never: tắt hẳn cache turbo · ép `--force
 
 ### Known limits
 
+- **AC-3 và AC-4 đã GỠ ngày 07/09 — hết đối tượng, không phải hết giá trị.** Hai tiêu chí ấy đo khoá cache của `@crm/ui#test`. Ngày 06/09 lúc 15:38, commit `6f581bb` («tắt đệm turbo cho task test») đặt `cache: false` cho task `test`, nên chiều dương *«không đổi gì thì cache phải trúng»* **không bao giờ đúng được nữa**: task ấy không bao giờ trúng cache. Vòng này rẽ nhánh TRƯỚC commit đó nên không thấy.
+  Vòng sửa `thuoc-cache-het-doi-tuong` đo lại toàn kho — **10 gói · 46 cặp (gói, task) · 25 còn đệm** — và chứng rằng **không task còn đệm nào đọc file ngoài đồ thị workspace**: đúng 2 file trong mọi gói trỏ ra ngoài (`apps/api/test/listing-fixture-batch.spec.ts`, `packages/ui/test/lai-ra-man.spec.tsx`), cả hai nằm trong `test/` — task duy nhất tắt đệm. Task phân tích (`lint`, `check-types`) chỉ đọc VĂN BẢN file đó, mà văn bản nằm trong khoá, nên không dối được.
+  Bất biến thay thế sống ở hồ sơ ấy: *mọi task mà một lệnh chứng chạy phải hoặc tắt đệm, hoặc bị ép chạy lại* — đúng với **cả hai** cách vá, nên nó không chết khi một cách thắng.
+- **Bản khai `inputs` trong `packages/ui/turbo.json` đã gỡ** — nó khai cho task `test`, task không đệm, nên không góp vào khoá nào. Bản khai vô tác dụng.
+- **Ô cắm `api_khong_cache` đã gỡ.** Nó gọi thẳng `bunx turbo run test`, đi vòng qua `packages/db/scripts/test-run.ts` — nơi đúc một cơ sở dữ liệu riêng cho mỗi lượt — nên cổng chạy test trên nền dùng chung trong khi kho đã chuyển sang nền theo lượt. `suite_keys` nay trỏ `executors.test.api` = `bun run test`.
+
 - **known-limit (Ngoài-2, người chốt ở Cổng 2, 07/09):** chỉ `@crm/ui#test` được đo hai chiều. Kho có 11 gói chạy test cộng nhiều task check-types và lint; khoá cache của chúng vẫn có thể thiếu input mà không ai biết. Cổng đã miễn nhiễm nhờ ép chạy lại, nhưng người viết code chạy lệnh hằng ngày trên một task khác thì không.
 - **known-limit (Ngoài-3, người chốt 07/09):** ép chạy lại vô hiệu hoá triệu chứng chứ không chữa gốc. Chữa gốc nghĩa là khai input đúng cho mọi task của mọi gói, và không công cụ nào ở đây kiểm được điều đó tự động.
 - **`--force` không làm khoá cache trung thực, nó chỉ bỏ qua khoá.** Sau vòng này, cổng

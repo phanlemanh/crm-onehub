@@ -64,10 +64,15 @@ for (const k of khoa) {
 	for (const than of giaiLenh(lenh, SCRIPT))
 		console.log(`              ${than === lenh ? than : `→ ${than}`}`);
 	if (an) thieu.push(`${k} — lenh "${lenh}" chay qua turbo ma KHONG co --force`);
-	if (k.startsWith("executors.test.") && !/\bdb:test\b/.test(lenh))
-		thieu.push(
-			`${k} — o cam test cua cong THIEU ve dung lai co so du lieu test (db:test); --force mot minh khong cham toi trang thai ngoai khoa cache`,
-		);
+	if (k.startsWith("executors.test.")) {
+		const than = giaiLenh(lenh, SCRIPT).join(" ");
+		const quaCua = /test-run\.ts/.test(than);
+		const coDbTest = /\bdb:test\b/.test(`${lenh} ${than}`);
+		if (!quaCua && !coDbTest)
+			thieu.push(
+				`${k} — o cam test cua cong khong dung lai co so du lieu test: khong chua db:test VA khong di qua cua chay test cua kho (test-run.ts, noi duc mot co so du lieu rieng cho moi luot)`,
+			);
+	}
 }
 console.log(`da soi ${khoa.length} lenh`);
 
