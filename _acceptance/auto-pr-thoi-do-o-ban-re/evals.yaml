@@ -26,6 +26,8 @@ evals:
       lenh nay tu `/tmp`, mot thu muc khong co kho git nao, van tra ma 0. E8 va E9 la hai
       ve buoc moc ghim vao cay; thieu chung thi xoa dong `if:` khoi workflow ma E1 van
       xanh vinh vien. Ba eval E1+E8+E9 cung nhau moi la AC-1.
+      GIOI HAN DA KHAI (Known limits muc 5): E9 khoa ca tep workflow vao commit c042478.
+      Luot dau hang sua auto-pr.yml thi E9 khong xanh lai duoc va phai sua moc ghim.
 
   - id: E2
     criterion: AC-2
@@ -131,4 +133,8 @@ evals:
       do  — XOA dong `if:` khoi cay lam viec (chua commit): ma 1. Da chay ngay 07/09, va
       trong CUNG luot ay E1 van tra ma 0 — dung ca ma finding «moc ghim ngoai cay» neu.
       Cay da khoi phuc sau luot do.
-      Day la eval DUY NHAT trong ho so bat duoc viec go bo ban va khoi cay lam viec.
+      DINH CHINH 07/09: ban truoc cua muc nay viet «eval DUY NHAT bat duoc viec go bo ban
+      va». SAI — vong cham 3 bat duoc. Do lai tai cho: xoa dong `if:` khoi cay lam viec
+      thi E3 CUNG ma 1, vi no doi khop dong them so voi `origin/release`. HAI eval bat
+      duoc, khong phai mot. E9 van co gia tri rieng: no do so voi MOC GHIM cua E1, con E3
+      do so voi ban hang — hai neo khac nhau.

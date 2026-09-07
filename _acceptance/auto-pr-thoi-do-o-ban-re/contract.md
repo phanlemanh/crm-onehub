@@ -79,8 +79,13 @@ Vế đầu: commit mang số đo phải nằm trong lịch sử của `HEAD`. V
 so với cây chứ không so với `HEAD`; bản so hai-commit sẽ bỏ lọt mọi sửa chưa commit.
 
 Đã kiểm chứng đúng ca finding nêu: xoá dòng `if:` khỏi cây làm việc thì E1 vẫn mã 0
-trong khi vế thứ hai mã 1. Ba eval E1 + E8 + E9 cùng nhau mới là AC-1; **E9 là eval duy
-nhất trong hồ sơ bắt được việc gỡ bản vá khỏi cây làm việc.**
+trong khi vế thứ hai mã 1. Ba eval E1 + E8 + E9 cùng nhau mới là AC-1.
+
+**Đính chính 07/09:** bản trước của mục này viết «E9 là eval DUY NHẤT bắt được việc gỡ
+bản vá». Sai, và vòng chấm 3 bắt được. Đo lại tại chỗ: xoá dòng `if:` khỏi cây làm việc
+thì **E3 cũng mã 1** — nó đối khớp dòng thêm so với `origin/release`, nên mất dòng là nó
+đỏ. Hai eval bắt được, không phải một. Câu «duy nhất» là một khẳng định phủ sóng không có
+phép đo đỡ, và nó nằm trong hồ sơ ba vòng trước khi bị bắt.
 
 ### AC-2 — Lệch bản hãng đúng một dòng, và dòng ấy đúng là dòng khoá
 
@@ -151,6 +156,12 @@ Ba trục, sau khi thu phạm vi.
 - **Dựng một workflow auto-pr riêng nhắm `onehub`** — tính năng mới, không phải bản vá
   màu đỏ.
 - **Đo hành vi ở kho hãng** — cần quyền đẩy lên `trycompai/crm`.
+- **Gửi dòng khoá lên hãng.** `CLAUDE.md` nêu đường này đầu tiên, và dòng `if` đúng là
+  dạng gửi-được: no-op ở kho hãng, có lợi cho mọi bản rẽ. Chủ kho quyết **không gửi**
+  ngày 07/09 — vòng này và các vòng sau chỉ làm trong kho này và trên `crm-onehub`.
+  Kèm theo: AC-2 khoá độ lệch ở đúng `1 0` là **chủ ý**, vì bản rẽ cố tình giữ dòng khoá
+  của riêng mình. Nếu về sau đổi ý và hãng nhận bản vá, độ lệch về 0 sẽ làm E2/E3 đỏ —
+  lúc ấy phải sửa hợp đồng trước, và đó không phải hồi quy.
 
 ## Known limits
 
@@ -166,17 +177,27 @@ Ba trục, sau khi thu phạm vi.
 3. **`pr-base.yml` còn mang bệnh.** Nó ngủ, không đỏ, và không có phép đo nào canh nó.
    Nó nổ ngay lượt đầu có người mở PR vào `release`.
 
-4. **Bốn finding ngoài hợp đồng của vòng chấm 1 chưa xử.** Bản đồ chưa vẽ lại (đã vẽ ở
+4. **Độ lệch nội dung đầu tiên trong một tệp workflow của hãng.** Trước vòng này,
+   `git diff origin/release -- .github/` chỉ có `acceptance.yml`, một tệp **thêm mới**
+   nên không bao giờ xung đột. Từ nay mỗi lượt hãng sửa `auto-pr.yml` đều phải xử bằng
+   tay. Đã cân, chủ kho chọn thế.
+
+5. **`git diff --quiet c042478` khoá cả tệp workflow vào một commit.** Lượt đầu hãng sửa
+   `auto-pr.yml` — luồng bình thường của kho — E9 không xanh lại được, trong khi E1 vẫn
+   trả `skipped` từ một check-run đóng băng. Khi ấy AC-1 có một chân luôn đỏ và một chân
+   không đo gì, và phải sửa mốc ghim.
+
+6. **Bốn finding ngoài hợp đồng của vòng chấm 1 chưa xử.** Bản đồ chưa vẽ lại (đã vẽ ở
    vòng 2, khai lệch luật trong sổ quyết định) · thiếu kiểm `null` · bảng design doc lỗi
    thời · ba lời gọi git ngoài `try`. Ba mục sau nằm trong bộ đo đã xoá nên tự hết.
 
-5. **Chiều đỏ khai cho E2 là đối chứng đúng-theo-cấu-tạo.** `git diff --numstat HEAD`
+7. **Chiều đỏ khai cho E2 là đối chứng đúng-theo-cấu-tạo.** `git diff --numstat HEAD`
    rỗng với **mọi** cây, có vá hay không — nên nó không chứng minh E2 biết bắt lỗi. Đã
    đo: cùng lệnh với nền `5ac85ef` trả `1 0`, với nền `HEAD` trả rỗng. Chủ kho chọn khai
    thay vì đuổi tiếp ngày 07/09. E3 (đối khớp nguyên văn dòng) mới là vế mang tải của
    AC-2; chiều đỏ của E3 — đổi khuôn sang hai dấu cách — là chiều đỏ thật.
 
-6. **E2 và E3 so với `origin/release` cục bộ, không `fetch` trước.** Không phép đo nào
+8. **E2 và E3 so với `origin/release` cục bộ, không `fetch` trước.** Không phép đo nào
    kiểm ref theo dõi ấy có còn khớp bản hãng không. Vòng 1 từng có vế đối chiếu
    `upstream/HEAD` cho việc này, và `gap-probe.md` ghi P1 ấy là `fixed`; vòng thu phạm vi
    xoá vế đó cùng cả bộ đo, nên **ghi `fixed` trong `gap-probe.md` nay là ghi lỗi thời**
