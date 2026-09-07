@@ -162,7 +162,29 @@ CHUNG cơ sở dữ liệu production, và bản mang migration mới sẽ áp t
 liệu thật. Kho đang có nhiều vòng chạy song song, nên đây là chỗ cần biết trước
 khi mở pull request có migration.
 
-**Kho DEV lúc này, điểm xuất phát của cửa sổ đo nếu đội dùng bản dev:** 144 cá nhân (98 nguồn sàn +
+### Đo trực tiếp trên bản Vercel — 07/09, không còn là suy ra
+
+Mở `https://crm-onehub-app.vercel.app` bằng trình duyệt, đăng nhập bằng phiên
+Google sẵn có, xem tận mắt. Kết quả:
+
+| Đo gì | Thấy gì |
+|---|---|
+| Danh bạ sản xuất | **RỖNG** — «No contacts match this view», «No results» |
+| Số cột của bảng danh bạ | **6** (Name · Title · Email · Company · Owner · Last activity) — không có cột nào của chín trường sàn, tức chưa lượt nạp nào chạy ở đây |
+| Màn Chiến dịch | **CÓ**, hiện đúng trạng thái rỗng «No campaigns yet» |
+| Nhánh đã triển khai | `9e17015`, tự lên sản xuất lúc 11:01 cả ba dự án |
+| Ngôn ngữ mặc định | **tiếng Anh**; đổi sang tiếng Việt bằng menu tài khoản góc phải trên → «Tiếng Việt» |
+
+Vậy điều 2 nay là phép đo chứ không phải suy luận: **tính năng đã ở sản xuất,
+dữ liệu môi giới thì chưa.** Cửa sổ đo bốn tuần chưa bắt đầu đếm được gì, vì đội
+tiếp thị mở CRM lên sẽ thấy danh bạ trắng.
+
+Việc phải làm để cửa sổ đo có nghĩa: chạy lượt cào với `[ingest] url` trỏ vào API
+sản xuất và khoá `LISTING_INGEST_SECRET` của sản xuất. Khoá trên máy lập trình là
+khoá dev, không dùng được; nó nằm ở biến môi trường của dự án `crm-onehub-api`
+trên Vercel.
+
+**Kho DEV lúc này, chỉ còn là sử liệu — đội không dùng bản này:** 144 cá nhân (98 nguồn sàn +
 46 mẫu của hãng), **0 góc nhìn · 0 chiến dịch · 0 lượt gọi**. Mọi con số phiên
 nghiệm thu đọc ngày 04/10 đều sinh ra sau mốc này — không còn gì phải lọc ở
 phía chiến dịch, chỉ còn một việc: loại 49 hồ sơ che khi tính tỷ lệ trả lời.

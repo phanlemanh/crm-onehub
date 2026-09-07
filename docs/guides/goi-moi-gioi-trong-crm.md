@@ -3,6 +3,10 @@
 Bản 07/09/2026. Viết cho bản đang chạy hôm nay, kể cả những chỗ chưa làm được.
 Bản trình bày có hình: <https://claude.ai/code/artifact/0a1e3c2c-f571-466c-a516-df2218af3faa>
 
+**Vào đâu:** <https://crm-onehub-app.vercel.app>, đăng nhập bằng tài khoản Google
+công ty. Màn hình mặc định tiếng Anh — bấm ảnh đại diện góc phải trên rồi chọn
+**Tiếng Việt** một lần, các nhãn trong hướng dẫn này sẽ khớp.
+
 Lọc ra nhóm môi giới đáng gọi nhất, gọi, ghi kết quả bằng một cú bấm, rồi đọc
 xem nhóm mình chọn có trả lời khá hơn phần còn lại không — tất cả trong CRM,
 không xuất bảng tính.
