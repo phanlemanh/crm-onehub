@@ -32,3 +32,13 @@ Bốn finding đúng hoàn toàn ở cả tầng artifact lẫn tầng mã. Find
 hằng đúng — nhưng `expected` không khai điều đó, và vế ấy chưa từng có một lượt đỏ, nên
 phê bình vẫn đứng và bản sửa vẫn cần. Bên phản biện không được đọc mã theo đúng thiết
 kế; nó phán artifact, và artifact thì thiếu thật.
+
+## Đính chính 07/09 — một mục ghi `fixed` đã lỗi thời
+
+Finding P1 thứ tư ở trên (AC-3 đo con số thay vì quan hệ) ghi `fixed` bằng cách thêm vế
+đối chiếu `git diff upstream/HEAD` vào chân đo. Vòng thu phạm vi cùng ngày **xoá vế đó
+cùng toàn bộ bộ đo tự chế**, và ba lệnh trần thay thế không mang nó trở lại.
+
+Nên ô `fixed` ấy nay mô tả một cây không còn tồn tại. Lỗ quay lại nguyên trạng và được
+khai thẳng ở `contract.md` mục Known limits số 6, thay vì để nguyên một ghi chép nói
+rằng nó đã được vá. Vòng chấm 2 phát hiện, chủ kho chọn khai chứ không đuổi tiếp.

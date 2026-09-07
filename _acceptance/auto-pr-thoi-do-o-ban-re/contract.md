@@ -5,7 +5,7 @@ slug: auto-pr-thoi-do-o-ban-re
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
@@ -64,6 +64,24 @@ Mốc **ghim cứng** `c042478` chứ không lấy `HEAD`: ở vòng chấm, `HE
 vừa tạo, chưa đẩy và chưa chạy CI, nên lấy `HEAD` sẽ chặn cổng vì một lý do không liên
 quan đến bản vá.
 
+**Nhưng một mốc ghim cứng, một mình, không đo cây đang kiểm.** Vòng chấm 2 bắt đúng lỗ
+này và tôi đã kiểm chứng bằng tay: chạy lệnh trên **từ `/tmp`, một thư mục không có kho
+git nào**, nó vẫn trả mã 0. Xoá dòng `if:` khỏi workflow thì nó vẫn xanh, vĩnh viễn —
+check-run tại `c042478` là bất biến. Nên tiêu chí này có **hai vế buộc mốc vào cây**:
+
+```
+git merge-base --is-ancestor c042478 HEAD
+git diff --quiet c042478 -- .github/workflows/auto-pr.yml
+```
+
+Vế đầu: commit mang số đo phải nằm trong lịch sử của `HEAD`. Vế sau: tệp workflow trên
+**cây làm việc** phải bằng đúng bản tại mốc — dạng hai-chấm không có ref thứ hai, nên nó
+so với cây chứ không so với `HEAD`; bản so hai-commit sẽ bỏ lọt mọi sửa chưa commit.
+
+Đã kiểm chứng đúng ca finding nêu: xoá dòng `if:` khỏi cây làm việc thì E1 vẫn mã 0
+trong khi vế thứ hai mã 1. Ba eval E1 + E8 + E9 cùng nhau mới là AC-1; **E9 là eval duy
+nhất trong hồ sơ bắt được việc gỡ bản vá khỏi cây làm việc.**
+
 ### AC-2 — Lệch bản hãng đúng một dòng, và dòng ấy đúng là dòng khoá
 
 Hai khẳng định, hai eval, vì một eval một khẳng định thì đọc một dòng là biết nó đo gì.
@@ -111,8 +129,9 @@ Ba trục, sau khi thu phạm vi.
 
 **Thước CE — 5/6 ô Core được phủ, mỗi ô bằng một lượt chạy có thật.**
 
-- **A×B, bản rẽ.** hành vi thật → AC-1, hai chiều. hình dạng → AC-2, hai lệnh × hai
-  chiều. tác dụng phụ → AC-3.
+- **A×B, bản rẽ.** hành vi thật → AC-1, ba eval (E1 đọc số GitHub, E8+E9 buộc số ấy vào
+  cây đang kiểm), mỗi eval hai chiều. hình dạng → AC-2, hai lệnh × hai chiều. tác dụng
+  phụ → AC-3.
 - **A×B, kho hãng.** **KHÔNG phủ được.** Bản rẽ không có quyền đẩy lên `trycompai/crm`
   nên không quan sát được job có còn chạy ở đó không. Xem Known limits — đây là giới
   hạn đã khai, không phải ô bị quên.
@@ -150,3 +169,16 @@ Ba trục, sau khi thu phạm vi.
 4. **Bốn finding ngoài hợp đồng của vòng chấm 1 chưa xử.** Bản đồ chưa vẽ lại (đã vẽ ở
    vòng 2, khai lệch luật trong sổ quyết định) · thiếu kiểm `null` · bảng design doc lỗi
    thời · ba lời gọi git ngoài `try`. Ba mục sau nằm trong bộ đo đã xoá nên tự hết.
+
+5. **Chiều đỏ khai cho E2 là đối chứng đúng-theo-cấu-tạo.** `git diff --numstat HEAD`
+   rỗng với **mọi** cây, có vá hay không — nên nó không chứng minh E2 biết bắt lỗi. Đã
+   đo: cùng lệnh với nền `5ac85ef` trả `1 0`, với nền `HEAD` trả rỗng. Chủ kho chọn khai
+   thay vì đuổi tiếp ngày 07/09. E3 (đối khớp nguyên văn dòng) mới là vế mang tải của
+   AC-2; chiều đỏ của E3 — đổi khuôn sang hai dấu cách — là chiều đỏ thật.
+
+6. **E2 và E3 so với `origin/release` cục bộ, không `fetch` trước.** Không phép đo nào
+   kiểm ref theo dõi ấy có còn khớp bản hãng không. Vòng 1 từng có vế đối chiếu
+   `upstream/HEAD` cho việc này, và `gap-probe.md` ghi P1 ấy là `fixed`; vòng thu phạm vi
+   xoá vế đó cùng cả bộ đo, nên **ghi `fixed` trong `gap-probe.md` nay là ghi lỗi thời**
+   — xem ghi chú đã thêm ở cuối tệp đó. Hệ quả: sau một lượt kéo bản mới của hãng làm
+   `origin/release` đổi, E2/E3 vẫn xanh trong khi lệch thật với hãng đã khác.
