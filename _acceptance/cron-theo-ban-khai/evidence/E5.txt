@@ -1,0 +1,4 @@
+/internal/sync/google: googleViaGet, googleViaPost -> goi { run }
+/internal/sync/mailboxes:      mailboxesViaGet, mailboxesViaPost -> goi { run }
+cron duoc dang ky: 5 · ban khai: 5
+XANH: bi danh khong con duoc dang ky, /internal/sync/mailboxes co mat dung nhip, va hai duong uy cho CUNG mot cho.

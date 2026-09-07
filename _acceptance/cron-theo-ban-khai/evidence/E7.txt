@@ -1,0 +1,7 @@
+test: ma 0
+check-types: ma 0
+lint: ma 0
+lint:slop: ma 0
+build: ma 0
+apps/app canh bao lint: 3 · ghim: 3
+XANH: ca nam lenh chung ma 0, canh bao lint dung ghim.
