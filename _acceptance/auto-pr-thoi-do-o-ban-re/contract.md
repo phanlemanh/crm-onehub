@@ -59,8 +59,11 @@ hình dạng.
 · điều kiện khác chuỗi mong đợi · slug rút được bằng đúng kho hãng.
 **Mã 2 khi** không đọc được tệp, hoặc không rút được `owner/repo` từ remote.
 
-Trục B có **bốn** hình dạng, và cả bốn phải có một lượt chạy — không phải một lượt xanh
-rồi suy ra ba lượt kia. Bốn lượt đã chạy ngày 07/09.
+Trục B có **bốn** hình dạng, và cả bốn phải có một lượt chạy **bên trong phép đo** —
+không phải một lượt xanh rồi suy ra ba lượt kia, và cũng không phải bốn lượt chạy tay
+trong một phiên làm việc rồi khai vào `expected`. Vòng 1 mắc đúng lỗi thứ hai: eval chỉ
+chạy một lệnh trong khi hồ sơ khai năm lượt. Nay ma trận nằm trong chân `ma-tran`
+(E9) — một lần gọi, 11 ô, chân tự dựng bản đột biến trong bộ nhớ và tự đối chiếu.
 
 Vế "nhiều `if`" không phải cầu kỳ: một lượt kéo bản mới của hãng về hoàn toàn có thể
 thêm một `if` thứ hai ở tầng job. Khi đó điều kiện chồng nhau và không ai đọc được bằng
@@ -68,9 +71,8 @@ mắt job chạy ở đâu — đúng thứ AC này tự nhận là chặn.
 
 Vế "slug khác kho hãng" là chỗ chân tự chặn một màu xanh dối: chạy chân này *trong* kho
 hãng thì kết luận "job không chạy" là sai, và chân phải đỏ. Vế này là một assertion âm
-tính, nên nó có chiều đỏ riêng — bơm remote giả `https://github.com/trycompai/crm.git`
-qua `--remote`; đã chạy, mã 1. Không có lượt ấy thì vế này có thể là một hằng đúng mà
-không ai biết.
+tính, nên nó có chiều đỏ riêng, và chiều đỏ ấy nằm trong ma trận E9 chứ không chạy tay.
+Không có lượt ấy thì vế này có thể là một hằng đúng mà không ai biết.
 
 ### AC-3 — Lệch bản hãng đúng một dòng, và dòng ấy đúng là dòng khoá
 
@@ -86,27 +88,42 @@ quả so với nó cũng đúng như vậy.
 
 Đếm dòng là **đo con số** trong khi lời hứa là **quan hệ**: một dòng trống, một dòng
 `env`, hay một `if` đặt nhầm ở tầng step đều cho +1/−0. Nên tiêu chí này khẳng định nội
-dung và độ thụt, không chỉ số lượng. Chiều đỏ đã chạy: thay dòng khoá bằng một dòng
-trống thì chân đỏ và in ra dòng đọc được.
+dung và độ thụt, không chỉ số lượng. Hai chiều đỏ nằm trong ma trận E9: không lệch dòng
+nào, và dòng thêm là một dòng trống.
 
 Vế đối chiếu `upstream/HEAD` biến tiền đề "`origin/release` khớp bản hãng" từ một câu
 văn xuôi thành một phép đo. Máy nào không có remote `upstream` thì chân nói rõ nó chỉ
 đo trên nền `origin/release`, chứ không im lặng bỏ qua.
 
+Nhánh dự phòng ấy ở vòng 1 là **mã chết**: hàm đọc diff tự gọi `process.exit(2)` khi
+không giải được ref, mà `process.exit` không ném lỗi nên `catch` của bên gọi không bao
+giờ chạy. Hệ quả: trên mọi bản sao không có remote `upstream` — trong đó có runner CI,
+đúng ví dụ hợp đồng nêu tên — chân trả "không đo được" thay vì xanh, ngược hẳn lời hứa.
+Vòng 2 đổi hàm đó sang **trả giá trị** thay vì thoát tiến trình.
+
 ### AC-4 — Vòng này chỉ chạm những tệp đã ghim tên
 
 **Given** nền so là `origin/onehub`, và danh sách cho phép ghim tên:
-`.github/workflows/auto-pr.yml` · `_acceptance/config.yaml` ·
+`.github/workflows/auto-pr.yml` · `PRODUCT-MAP.md` · `_acceptance/config.yaml` ·
 `_acceptance/auto-pr-thoi-do-o-ban-re/**` · design doc và bản kế hoạch của vòng
-**When** chân liệt kê **toàn bộ** tệp đổi (không giới hạn dưới `.github/`)
+**When** chân liệt kê **toàn bộ** tệp đổi — diff theo commit **cộng** tệp chưa commit
+và tệp untracked (`git status --porcelain -z`), không giới hạn dưới `.github/`
 **Then** mọi tệp nằm trong danh sách, và `auto-pr.yml` có mặt.
 **Đỏ khi** có tệp ngoài danh sách (in tên) · không tệp nào đổi · `auto-pr.yml` vắng.
 **Mã 2 khi** không giải được ref nền.
 
 Bản đầu của tiêu chí này chỉ nhìn dưới `.github/`, nên một tệp sửa lây ở `packages/`
-hay `.env.example` sẽ lọt qua trong khi Coverage khai đã phủ trục C. Nay chân nhìn toàn
-bộ diff. Chiều đỏ đã chạy: đổi nền sang `origin/release` thì 897 tệp rơi ngoài danh
-sách và chân in tên ra.
+hay `.env.example` sẽ lọt qua trong khi Coverage khai đã phủ trục C. Bản thứ hai nhìn
+toàn bộ diff nhưng chỉ theo **commit** (`...HEAD`), nên vẫn mù với tệp chưa commit và
+tệp untracked — đã kiểm chứng: một tệp untracked lọt qua, chân vẫn xanh. Vòng 2 cộng
+`git status --porcelain -z` vào tập tệp.
+
+`PRODUCT-MAP.md` **phải** nằm trong danh sách. Cổng CI của kho chạy
+`product-map --check` và đòi bản đồ được vẽ lại mỗi khi thêm một hồ sơ; thiếu nó thì hai
+cổng loại trừ nhau — thêm bản đồ thì AC-4 đỏ, không thêm thì workflow `Acceptance` đỏ.
+
+Ba chiều đỏ nằm trong ma trận E9: không tệp nào · nền rộng 896 tệp ngoài danh sách ·
+một tệp untracked lạc.
 
 `pr-base.yml` mang đúng bệnh nhưng đang ngủ (không ai PR vào `release` ở bản rẽ). Nó
 nằm ngoài phạm vi vòng này, và AC-4 là chân giữ cho nó ở ngoài thật.
@@ -145,6 +162,10 @@ Quét theo bốn trục. Ô Core là ô vòng này phải phủ; ô Later/Never 
   ngoài `.github/` → cùng do AC-4 phủ, vì chân nay quét toàn bộ diff theo danh sách
   ghim tên chứ không giới hạn thư mục.
 - **D.** tĩnh → AC-2, AC-3, AC-4. động → AC-1.
+
+Mọi ô đỏ ở trên chạy **bên trong** ma trận E9, trừ một ô: chiều đỏ của AC-1
+(`--sha 5ac85ef` → `failure`) cần gọi mạng tới GitHub nên chạy tay một lần. Đó là ô
+duy nhất còn chiều đỏ ngoài phép đo, và nó được khai chứ không giấu.
 
 ## Out of scope
 

@@ -18,10 +18,13 @@ evals:
       chieu do — `--sha 5ac85ef --doi-chieu khong` (dau onehub TRUOC ban va): ket luan
       `failure`, ma 1, thong diep ghim ten check-run va ket luan doc duoc.
       Ca hai chieu DA CHAY ngay 07/09.
-      Moc xanh GHIM CUNG chu KHONG lay HEAD, doi xung voi moc do. Ly do: HEAD la moc di
-      dong — o vong cham no la commit ho so vua tao, chua day va chua chay xong, nen
-      chan tra ma 2 va chan cong vi mot ly do khong lien quan den ban va. Hai ve doi
-      chieu la thu giu cho mot so do ghim cung van noi ve cay dang merge.
+      Moc xanh GHIM CUNG chu KHONG lay HEAD, doi xung voi moc do. Ly do: HEAD la moc
+      di dong — o vong cham no la commit ho so vua tao, chua day va chua chay xong,
+      nen chan tra ma 2 va chan cong vi mot ly do khong lien quan den ban va. Hai ve
+      doi chieu la thu giu cho mot so do ghim cung van noi ve cay dang merge.
+      GIOI HAN DA KHAI: chieu do cua chan nay chay BANG TAY (mot lan goi
+      `--sha 5ac85ef`), KHONG nam trong ma tran E9, vi E9 khong goi mang. Day la o duy
+      nhat con chieu do ngoai phep do.
       Day la chan DUY NHAT do hanh vi that; ba chan con lai do hinh dang.
       Commit chua day / chua chay xong / `gh` chua dang nhap -> ma 2, TUYET DOI khong
       tra xanh.
@@ -34,24 +37,15 @@ evals:
       - ".github/workflows/auto-pr.yml"
       - "_acceptance/auto-pr-thoi-do-o-ban-re/rang/**"
     expected: |
-      MA TRAN TOAN PHAN truc B — BON hinh dang khoa, BON luot chay, khong luot nao suy
-      ra tu luot khac. Cong mot luot cho ve remote. Tat ca DA CHAY ngay 07/09:
-      1. xanh — tep that: job `open` co DUNG MOT dong `if` = `github.repository ==
-         'trycompai/crm'`, va slug rut tu remote (`phanlemanh/crm-onehub`) khac chuoi
-         do -> ma 0.
-      2. do — ban sao BO dong `if` (`--workflow`): ma 1, ghim "KHONG co dong `if`".
-      3. do — ban sao doi khoa sang `phanlemanh/crm-onehub`: ma 1, in ca dieu kien doc
-         duoc lan dieu kien mong doi.
-      4. do — ban sao co HAI dong `if` o tang job: ma 1, in RA CA HAI dong doc duoc.
-         Luot nay bit lo P0 cua phan bien: truc B khai bon gia tri ma chi ba luot co
-         assert, trong khi Coverage khai da phu — so hoc khong khop.
-      5. do — bom remote gia `--remote https://github.com/trycompai/crm.git`: ma 1,
-         ghim "kho tai cho ... dung bang kho hang".
-      Ve "slug khac kho hang" la ASSERTION AM TINH nen phai co chieu do rieng (luot 5):
-      khong co luot ay thi ve nay co the la mot hang dung ma khong ai biet — dung lop
-      loi doi-chung-tu-so-voi-chinh-minh cua [chan-lai-component-ra-man#F2].
-      Phep so la RUT `owner/repo` tu URL remote roi so voi slug, KHONG so nguyen URL
-      voi slug.
+      Chieu XANH cua truc B: tep that co DUNG MOT dong `if` =
+      `github.repository == 'trycompai/crm'`, va slug rut tu URL remote
+      (`phanlemanh/crm-onehub`) khac chuoi do -> ma 0.
+      Phep so la RUT `owner/repo` tu URL remote roi so voi slug, KHONG so nguyen URL.
+      BA CHIEU DO cua truc B va chieu do cua ve remote KHONG nam trong eval nay —
+      chung nam trong E9 (`ma-tran`), noi moi hinh dang co MOT luot chay that BEN
+      TRONG phep do. Vong 1 khai nam luot trong `expected` nhung eval chi chay MOT;
+      bon luot kia chay bang tay ngoai phep do, nen mot lan chay lai bat ky chi do
+      duoc mot hinh dang. Do la lo P0 vong 2 bit.
       Khong doc duoc tep / khong rut duoc owner-repo -> ma 2.
 
   - id: E3
@@ -62,21 +56,16 @@ evals:
       - ".github/workflows/auto-pr.yml"
       - "_acceptance/auto-pr-thoi-do-o-ban-re/rang/**"
     expected: |
-      CAP HAI CHIEU, va chan do QUAN HE chu khong do CON SO:
-      chieu xanh — nen `origin/release`: dung 1 dong them, 0 dong bot, VA dong them
+      Chieu XANH: nen `origin/release` — dung 1 dong them, 0 dong bot, VA dong them
       bang dung `    if: github.repository == 'trycompai/crm'` ke ca BON DAU CACH dau
-      dong (bon dau cach moi la tang job), VA khi `upstream/HEAD` giai duoc thi ket qua
-      so voi no cung dung nhu vay -> ma 0.
-      chieu do 1 — nen `HEAD`: khong lech dong nao -> ma 1, ghim "ban va chua co mat".
-      chieu do 2 — thay dong khoa bang mot dong TRONG trong cay lam viec: van +1/-0
-      nhung noi dung khac -> ma 1, in ra dong doc duoc.
-      Ca ba luot DA CHAY ngay 07/09; cay da khoi phuc sau luot do 2.
-      Chieu do 2 bit lo P1 cua phan bien: dem dong la DO CON SO trong khi loi hua la
-      QUAN HE — mot dong trong, mot dong `env`, hay mot `if` dat nham o tang step deu
-      cho +1/-0 va deu se lot.
-      Ve doi chieu `upstream/HEAD` bien tien de "origin/release khop ban hang" tu mot
-      cau van xuoi thanh mot phep do. May khong co remote `upstream` thi chan NOI RO no
-      chi do tren `origin/release`, khong im lang bo qua.
+      dong (bon dau cach moi la tang job) -> ma 0.
+      Khi `upstream/HEAD` giai duoc thi so voi no cung phai dung nhu vay; khong giai
+      duoc thi chan NOI RO no chi do tren `origin/release` va VAN tra ma 0.
+      Nhanh du phong ay vong 1 la MA CHET: ham `dongThem` tu goi `process.exit(2)`
+      nen `catch` cua ben goi khong bao gio chay, va tren clone khong co remote
+      `upstream` — trong do co runner CI — chan tra ma 2 chu khong phai ma 0. Vong 2
+      doi ham do sang tra gia tri thay vi thoat tien trinh, nen nhanh du phong SONG.
+      HAI CHIEU DO (khong lech; dong them la dong TRONG) nam trong E9.
       Khong giai duoc ref nen -> ma 2.
 
   - id: E4
@@ -87,18 +76,20 @@ evals:
       - ".github/workflows/**"
       - "_acceptance/auto-pr-thoi-do-o-ban-re/rang/**"
     expected: |
-      CAP HAI CHIEU tren TOAN BO diff, khong gioi han duoi `.github/`:
-      chieu xanh — nen `origin/onehub`: moi tep doi deu nam trong danh sach ghim ten
-      (auto-pr.yml · _acceptance/config.yaml · _acceptance/<slug>/** · design doc cua
-      vong), va auto-pr.yml co mat -> ma 0.
-      chieu do 1 — nen `HEAD`: 0 tep -> ma 1.
-      chieu do 2 — nen `origin/release`: 897 tep roi ngoai danh sach -> ma 1, in ten ra.
-      Ca ba luot DA CHAY ngay 07/09.
-      Ban dau cua chan nay chi nhin duoi `.github/`, nen mot tep sua lay o `packages/`
-      hay `.env.example` se lot qua trong khi Coverage khai da phu truc C — lo P2 cua
-      phan bien. Nay chan quet toan bo diff.
-      Chan nay giu `pr-base.yml` (cung benh, dang ngu) o NGOAI pham vi vong nay that,
-      chu khong chi trong loi hua.
+      Chieu XANH: nen `origin/onehub`, tap tep = diff theo commit CONG tep chua commit
+      va tep untracked (`git status --porcelain -z`). Moi tep phai nam trong danh sach
+      ghim ten (auto-pr.yml · PRODUCT-MAP.md · _acceptance/config.yaml ·
+      _acceptance/<slug>/** · design doc va ban ke hoach cua vong), va auto-pr.yml co
+      mat -> ma 0.
+      Vong 1 chi doc `${nen}...HEAD` (ba cham) nen MU voi tep chua commit va untracked:
+      da kiem chung — mot tep la untracked lot qua, chan van xanh. Vong 2 cong
+      `git status --porcelain -z` vao tap. Dung `-z` chu khong phai `--porcelain`
+      thuong vi ham git bao boc cat khoang trang, an mat dau cach dau dong va phep cat
+      3 ky tu an lem vao ten tep — chinh o ma tran nay bat ra loi ay.
+      PRODUCT-MAP.md phai nam trong danh sach: cong CI cua kho (`product-map --check`)
+      DOI tep ay co trong diff moi khi them mot ho so. Thieu no thi hai cong loai tru
+      nhau — them thi E4 do, khong them thi workflow Acceptance do.
+      BA CHIEU DO (khong tep nao; nen rong 896 tep; tep untracked lac) nam trong E9.
       Khong giai duoc ref nen -> ma 2.
 
   - id: E5
@@ -146,3 +137,29 @@ evals:
     expected: |
       `bun run test` ma 0 tren cay mang ban va. Moi luot chay dung mot co so du lieu
       rieng `crm_<id>_test` nen hang AgentTask cua luot khac khong lan sang.
+
+  - id: E9
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.apr_ma_tran
+    paths:
+      - ".github/workflows/auto-pr.yml"
+      - "_acceptance/auto-pr-thoi-do-o-ban-re/rang/**"
+    expected: |
+      MA TRAN TOAN PHAN chay BEN TRONG mot lan goi: 11 o, moi o mot hinh dang, chan in
+      tung dong `ok`/`LECH` roi tra ma 0 chi khi ca 11 o dung ket qua mong doi.
+      Truc B (4 o): dung mot `if` -> 0 · vang `if` -> 1 · tro nham kho -> 1 ·
+      nhieu `if` -> 1.
+      Truc A (1 o): kho tai cho la kho hang -> 1 (ve tu chan mot mau xanh doi).
+      Truc C, lech (3 o): lech dung mot dong -> 0 · khong lech -> 1 · dong them la
+      dong TRONG -> 1.
+      Truc C, pham vi (3 o): pham vi dung -> 0 · nen rong 896 tep -> 1 · tep untracked
+      lac -> 1.
+      Vi sao eval nay ton tai: vong 1 khai "nam luot da chay" trong `expected` cua E2
+      nhung eval chi chay MOT lenh. Bon luot kia chay bang tay trong phien lam viec,
+      khong nam trong phep do — nen mot lan chay lai bat ky chi do duoc mot hinh dang,
+      va ba nang luc bat loi kia bien mat khong dau vet. Ma tran dua chung VAO phep do.
+      Da chay 07/09: 11/11 o dung. Va chinh no bat ra mot loi cat chuoi trong ban sua
+      vong 2 (`RODUCT-MAP.md` thieu chu P) ma khong chan don le nao thay.
+      Gioi han da khai: ma tran KHONG phu chieu do cua E1 (`chay-that`) vi o ay can goi
+      mang toi GitHub; chieu do ay chay bang tay mot lan tren `5ac85ef`.

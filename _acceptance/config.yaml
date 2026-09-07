@@ -213,6 +213,7 @@ executors:
     apr_lech_mot_dong: node _acceptance/auto-pr-thoi-do-o-ban-re/rang/khoa-auto-pr.mjs lech-mot-dong
     apr_mot_tep: node _acceptance/auto-pr-thoi-do-o-ban-re/rang/khoa-auto-pr.mjs mot-tep
     apr_chay_that: node _acceptance/auto-pr-thoi-do-o-ban-re/rang/khoa-auto-pr.mjs chay-that
+    apr_ma_tran: node _acceptance/auto-pr-thoi-do-o-ban-re/rang/khoa-auto-pr.mjs ma-tran
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT}/scripts/design-gate.mjs"
     ui_check: "${CLAUDE_PLUGIN_ROOT}/scripts/design-scan.js"
