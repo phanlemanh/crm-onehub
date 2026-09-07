@@ -1,0 +1,119 @@
+schema_version: 1
+slug: auto-pr-thoi-do-o-ban-re
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.apr_chay_that
+    paths:
+      - ".github/workflows/auto-pr.yml"
+      - "_acceptance/auto-pr-thoi-do-o-ban-re/rang/**"
+    expected: |
+      CAP HAI CHIEU tren CUNG mot chan, cung kho, hai commit:
+      chieu xanh — `--sha` mac dinh (HEAD, commit mang ban va): check-run
+      `Open a pull request into main` ket luan `skipped`, ma 0.
+      chieu do — `--sha 5ac85ef9f1a811afb4d101c832904fd5a691cfca` (dau onehub TRUOC ban
+      va): ket luan `failure`, ma 1, thong diep ghim ten check-run va ket luan doc duoc.
+      Ca hai chieu DA CHAY va deu dung ngay 07/09.
+      Day la chan DUY NHAT do hanh vi that; ba chan con lai do hinh dang.
+      Commit chua day / chua chay xong / `gh` chua dang nhap -> ma 2 (khong do duoc),
+      TUYET DOI khong tra xanh.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.apr_khoa
+    paths:
+      - ".github/workflows/auto-pr.yml"
+      - "_acceptance/auto-pr-thoi-do-o-ban-re/rang/**"
+    expected: |
+      CAP HAI CHIEU tren ban sao workflow qua tham so `--workflow <duong dan>`:
+      chieu xanh — tep that: job `open` co DUNG MOT dong `if`, noi dung bang
+      `github.repository == 'trycompai/crm'`, va kho tai cho (`phanlemanh/crm-onehub`)
+      khac chuoi do -> ma 0.
+      chieu do 1 — ban sao BO dong `if`: ma 1, thong diep ghim "KHONG co dong `if`".
+      chieu do 2 — ban sao doi khoa thanh `phanlemanh/crm-onehub`: ma 1, thong diep in
+      ca dieu kien doc duoc lan dieu kien mong doi.
+      Ca ba luot DA CHAY ngay 07/09.
+      Ve "kho tai cho khac kho hang" la chan tu chan mot mau xanh doi: chay chan nay
+      TRONG kho hang thi ket luan "job khong chay" la sai, chan phai do.
+      Khong doc duoc tep -> ma 2.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.apr_lech_mot_dong
+    paths:
+      - ".github/workflows/auto-pr.yml"
+      - "_acceptance/auto-pr-thoi-do-o-ban-re/rang/**"
+    expected: |
+      CAP HAI CHIEU qua tham so `--nen <ref>`:
+      chieu xanh — nen `origin/release` (ban guong cua hang, da doi chieu khop tung dong
+      voi `upstream/HEAD` cho tep nay): `git diff --numstat` tra +1/-0 -> ma 0.
+      chieu do — nen `HEAD`: khong lech dong nao -> ma 1, thong diep ghim "ban va chua
+      co mat".
+      Ca hai chieu DA CHAY ngay 07/09.
+      Lech nhieu hon +1/-0 cung do, in con so doc duoc — moi dong lech them la mot moi
+      xung dot phai xu khi keo ban moi cua hang ve.
+      Khong giai duoc ref nen -> ma 2.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.apr_mot_tep
+    paths:
+      - ".github/workflows/**"
+      - "_acceptance/auto-pr-thoi-do-o-ban-re/rang/**"
+    expected: |
+      CAP HAI CHIEU qua tham so `--nen <ref>`:
+      chieu xanh — nen `origin/onehub`: dung MOT tep doi duoi `.github/`, va la
+      `.github/workflows/auto-pr.yml` -> ma 0.
+      chieu do — nen `HEAD`: 0 tep -> ma 1, thong diep in so tep va danh sach ten.
+      Ca hai chieu DA CHAY ngay 07/09.
+      Chan nay giu `pr-base.yml` (cung benh, dang ngu) o NGOAI pham vi vong nay that,
+      chu khong chi trong loi hua.
+      Khong giai duoc ref nen -> ma 2.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.check_types_khong_cache
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      `bunx turbo run check-types --force` ma 0 tren cay mang ban va.
+      Ban va khong cham ma nguon nen day la luoi chong tac dung phu ngoai du doan.
+      `--force` bat buoc: mot mau xanh phat lai khong phan biet duoc "cay lanh" voi
+      "thuoc chua bao gio chay" — dung bai hoc cua ho so lenh-chung-khong-an-cache-doi.
+
+  - id: E6
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.lint_khong_cache
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      `bunx turbo run lint --force` ma 0 tren cay mang ban va. Ly do `--force` nhu E5.
+
+  - id: E7
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.lint_slop
+    paths:
+      - ".github/workflows/auto-pr.yml"
+      - "_acceptance/auto-pr-thoi-do-o-ban-re/rang/**"
+    expected: |
+      `bun run lint:slop` ma 0. Chan nay giai ra `oxlint` chay thang, KHONG qua turbo —
+      nen khong can `--force` va khong an cache doi duoc.
+      No cung soi chinh script `rang/khoa-auto-pr.mjs` vong nay viet.
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.api
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      `bun run test` ma 0 tren cay mang ban va. Moi luot chay dung mot co so du lieu
+      rieng `crm_<id>_test` nen hang AgentTask cua luot khac khong lan sang.
