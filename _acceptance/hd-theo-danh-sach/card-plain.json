@@ -1,39 +1,9 @@
 {
- "feature_plain": "Cho phép danh sách đăng nhập trộn một tên miền công ty với vài địa chỉ lẻ — đúng như tài liệu và bộ test của kho đã công bố — bằng cách thôi khoá màn chọn tài khoản Google vào tên miền đầu tiên.",
- "will_do": [
-  { "id": "AC-1", "p": "Sẽ chỉ khoá màn chọn của Google khi danh sách có ĐÚNG MỘT tên miền và không địa chỉ lẻ nào — sáu hình dạng danh sách, ghim sẵn kết quả từng cái." },
-  { "id": "AC-2", "p": "Sẽ đưa quyết định ấy ra một hàm thuần, để đo được cả sáu hình dạng trong một lượt chạy thay vì phải nạp lại chương trình." },
-  { "id": "AC-5", "p": "Sẽ chứng cấu hình thật của OneHub chạy đúng: cả người của công ty lẫn địa chỉ cá nhân đều vào được, người lạ thì không." },
-  { "id": "AC-8", "p": "Sẽ đo HỆ QUẢ trong cơ sở dữ liệu sau một lượt bị từ chối — không bảng nào được thêm một hàng nào — vì đó mới là thứ thật sự đổi." }
- ],
- "wont_do": [
-  { "id": "AC-3", "p": "Sẽ KHÔNG động vào cửa phân quyền. Bộ test của nó phải không đổi một ký tự, so với một mốc cố định, và phải chạy thật — nếu phải sửa test ấy để vòng này xanh thì phân quyền đã đổi." },
-  { "id": "AC-4", "p": "Sẽ KHÔNG đổi câu từ chối — và chứng bằng cách gọi thật, xem ai nhận câu nào, chứ không phải xem chuỗi còn nằm trong file." },
-  { "id": "AC-6", "p": "Sẽ KHÔNG chép thước." }
- ],
- "scope_plain": "Đụng cửa phân quyền · đổi câu từ chối · thêm cách đăng nhập khác · đo bằng một lượt đăng nhập Google thật — bốn thứ này hoãn.",
- "coverage_plain": [
-  { "i": 0, "p": "Hình dạng danh sách: một tên miền, NHIỀU tên miền, chỉ địa chỉ, trộn, rỗng. Giá trị «nhiều tên miền» là ca hỏng bên phản biện tìm ra và bảng nay có dòng cho nó (AC-1, AC-5)." },
-  { "i": 1, "p": "Ai chặn ở đâu: Google chặn ở màn chọn, CRM chặn ở lúc quay về, hay không ai chặn. Giá trị thứ ba là ca không bao giờ được phép xảy ra (AC-3, AC-4)." },
-  { "i": 2, "p": "Phép đo đứng ở đâu: hàm thuần, thân dựng chương trình, hay chỉ đo qua trình duyệt thật. Chỗ mã đang nằm là loại giữa, và nó không đo được trong một lượt chạy (AC-2)." },
-  { "i": 3, "p": "Cái gì bị đo: tham số ta GỬI ĐI, hệ quả trong CƠ SỞ DỮ LIỆU, hay hành vi thật của Google. Loại giữa là thứ vòng này suýt không đo, và nó mới là cái thật sự đổi (AC-8)." },
-  { "i": 4, "p": "Áp cho mọi ô: bảng viết trước đủ dòng, mỗi phép đo có cặp hai chiều, không chép thước, không đụng cửa phân quyền, và tiêu chí xuyên lớp phải có phép đo ở lớp cơ sở dữ liệu." }
- ],
- "gap_probe_plain": [
-  { "i": 0, "p": "Nặng nhất: không tiêu chí nào đo CÁI THẬT SỰ ĐỔI. Bỏ khoá màn chọn nghĩa là mọi tài khoản Google trên internet đi tới được bước quay về, thay vì bị Google chặn từ đầu. Câu «phân quyền không yếu đi» của tôi chỉ là lời khai, bằng chứng duy nhất là hai file không đổi. Đã thêm một tiêu chí đếm số hàng trong bốn bảng trước và sau một lượt bị từ chối, kèm đối chứng dương." },
-  { "i": 1, "p": "Luật tôi viết chỉ bịt một chiều: danh sách NHIỀU tên miền vẫn bị khoá vào tên miền đầu tiên — cùng lớp lỗi vòng này tuyên là đã sửa, chỉ đổi hình dạng đầu vào. Đã sửa luật thành «đúng một tên miền và không địa chỉ lẻ»." },
-  { "i": 2, "p": "Bảng ba dòng của tôi không phủ hết chính cái trục nó khai: thiếu ca danh sách rỗng. Nếu ai đó xoá biến ấy lúc triển khai mà rỗng lại nghĩa là cho qua thì cửa mở toang. Đã thêm hai dòng, và cả hai phải fail-closed." },
-  { "i": 3, "p": "Tiêu chí quan trọng nhất của vòng lại so với một mốc DI ĐỘNG — sau khi nhánh merge, mốc ấy hoá thành chính nó nên phép so rỗng vô điều kiện và tiêu chí xanh vĩnh viễn. Đã ghim một mốc cố định, bắt chạy bộ test thật, và thêm đối chứng hành vi." },
-  { "i": 4, "p": "Tiêu chí về câu từ chối đo chuỗi còn nằm trong file, trong khi lời hứa là ai nhận câu nào. Nhánh chọn câu bị đảo thì chuỗi vẫn còn và thước vẫn xanh, còn người vòng này mở đường cho lại nhận một chỉ dẫn sai. Đã đổi sang gọi thật." }
- ],
- "decisions_plain": [
-  { "id": "d-20260907T150000Z-a001", "p": "Đặt khoá màn chọn có điều kiện thay vì bỏ hẳn — đổi lại có hai đường hành vi tuỳ hình dạng danh sách." },
-  { "id": "d-20260907T150100Z-a002", "p": "Đưa quyết định ra hàm thuần — đổi lại bề mặt công khai của gói xác thực rộng thêm một hàm." },
-  { "id": "d-20260907T150200Z-a003", "p": "Bắt bộ test của cửa phân quyền không đổi một ký tự — đổi lại nếu một ngày nó cần sửa vì lý do chính đáng khác, tiêu chí này sẽ đỏ oan." },
-  { "id": "d-20260907T150300Z-a004", "p": "KHÔNG dựng bản bấm được — vòng này không chạm màn nào." },
-  { "id": "d-20260907T150400Z-a005", "p": "KHÔNG viết đặc tả cấu trúc màn — vòng này không dựng màn nào." },
-  { "id": "d-20260907T150500Z-a006", "p": "Vá ở bản rẽ để không chặn lộ trình triển khai, RỒI gửi ngược lên hãng — đổi lại thêm một điểm rẽ, đúng cái mà kho gọi là phí bản rẽ." },
-  { "id": "d-20260907T153000Z-a007", "p": "Đổi luật thành «đúng một tên miền và không địa chỉ lẻ» sau khi bên phản biện tìm ra ca nhiều tên miền." },
-  { "id": "d-20260907T153100Z-a008", "p": "Thêm tiêu chí đo hệ quả trong cơ sở dữ liệu — đổi lại vòng chấm chậm hơn vì cần một cơ sở dữ liệu thật." }
- ]
+  "feature_plain": "Cho phép danh sách trộn — cả một domain công ty lẫn vài địa chỉ gmail lẻ — thật sự đăng nhập được, thay vì bị Google chặn từ màn chọn tài khoản.",
+  "decisions": [
+    { "id": "E7", "q": "Người ngoài domain bị từ chối SAU khi đã chọn tài khoản — cái giá đó có đáng không?" }
+  ],
+  "analyst_plain": "Máy không chấm mục này: nó là câu hỏi về trải nghiệm bị từ chối, không phải về đúng-sai của mã.",
+  "scope_plain": "Không thêm cách đăng nhập nào khác, không đụng cửa phân quyền, không đổi câu từ chối.",
+  "decisions_plain": []
 }
