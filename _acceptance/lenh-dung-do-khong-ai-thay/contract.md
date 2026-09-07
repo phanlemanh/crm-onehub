@@ -5,7 +5,7 @@ slug: lenh-dung-do-khong-ai-thay
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [app, ci]
-status: signed-off
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo

@@ -30,3 +30,14 @@
   file: `apps/app/app/layout.tsx`
   severity: P2
   Đề xuất: known-limits — giữ `lang` đúng ngay byte đầu đòi lối chọn tiếng qua middleware, tức thiết kế khác đã khai ngoài phạm vi ở Cổng 1
+
+- **Kho khai `engines: node >=22` nhưng `eve build` đòi >=24**
+  Người dùng thấy gì: một máy cài Node 22 — đúng như kho khai là đủ — sẽ không dựng
+  nổi `apps/agent`. CI của hãng chưa bao giờ thấy vì nó không dựng; vòng này thêm
+  lệnh dựng vào CI riêng nên lộ ra ngay ở lượt chạy đầu.
+  file: `package.json`
+  severity: P2
+  Đề xuất: new-contract — sửa `engines` là chạm khai báo của hãng, và đây là thứ nên
+  gửi ngược lên hãng chứ không vá riêng; vòng này ghim Node 24 trong job CI để cổng
+  chạy được
+
