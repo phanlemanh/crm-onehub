@@ -1,0 +1,192 @@
+schema_version: 1
+slug: auto-pr-thoi-do-o-ban-re
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.apr_check_run
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      CHIEU DO cua eval nay DA DUOC DANG KY thanh eval rieng E10 — mot o cam,
+      mot lenh, chay lai duoc. KHONG con loi khai «da chay bang tay».
+      Doc check-runs THAT cua commit `c042478` tren GitHub va khang dinh dong
+      `Open a pull request into main = skipped` co mat.
+      chinh lenh nay; hop dong ghi nguyen van lenh do o AC-1 de ai cung lap lai duoc.
+      Moc GHIM CUNG `c042478` chu khong lay HEAD: HEAD o vong cham la commit ho so vua
+      tao, chua day va chua chay CI, nen lay HEAD se chan cong vi mot ly do khong lien
+      quan den ban va.
+      `gh` chua dang nhap / commit chua day / CI chua chay xong -> lenh that bai, va
+      that bai ay phai doc la KHONG DO DUOC chu khong phai ban va sai. Xem Known limits.
+      QUAN TRONG: eval nay MOT MINH khong do cay dang kiem. Da kiem chung — chay chinh
+      lenh nay tu `/tmp`, mot thu muc khong co kho git nao, van tra ma 0. E8 va E9 la hai
+      ve buoc moc ghim vao cay; thieu chung thi xoa dong `if:` khoi workflow ma E1 van
+      xanh vinh vien. Ba eval E1+E8+E9 cung nhau moi la AC-1.
+      GIOI HAN DA KHAI (Known limits muc 5): E9 khoa ca tep workflow vao commit c042478.
+      Luot dau hang sua auto-pr.yml thi E9 khong xanh lai duoc va phai sua moc ghim.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.apr_lech_so_dong
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      CHIEU DO cua eval nay DA DUOC DANG KY thanh eval rieng E11 — mot o cam,
+      mot lenh, chay lai duoc. KHONG con loi khai «da chay bang tay».
+      `git diff --numstat origin/release` cho rieng tep workflow phai la dung
+      `1 0 .github/workflows/auto-pr.yml` — mot dong them, khong dong nao bot.
+      Eval nay mot minh KHONG du: no dem con so, ma loi hua la quan he. E3 la ve con
+      lai. Tach lam hai vi mot eval mot khang dinh thi doc mot dong la biet no do gi.
+
+  - id: E3
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.apr_lech_noi_dung
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      CHIEU DO cua eval nay DA DUOC DANG KY thanh eval rieng E12 — mot o cam,
+      mot lenh, chay lai duoc. KHONG con loi khai «da chay bang tay».
+      Dong THEM VAO phai la dung `+    if: github.repository == 'trycompai/crm'`,
+      doi khop nguyen van ca dong (`grep -qxF`) ke ca BON DAU CACH dau dong — bon dau
+      cach moi la tang job; hai dau cach la tang khac va se sai.
+      E2 dem, E3 doc noi dung. Thieu E3 thi mot dong trong, mot dong `env`, hay mot
+      `if` dat nham tang deu cho 1/0 va deu lot — dung lop loi do-con-so-thay-quan-he.
+
+  - id: E4
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.check_types_khong_cache
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      `bunx turbo run check-types --force` ma 0 tren cay mang ban va.
+      `--force` bat buoc: mot mau xanh phat lai khong phan biet duoc cay lanh voi
+      thuoc chua bao gio chay — bai hoc ho so lenh-chung-khong-an-cache-doi.
+
+  - id: E5
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.lint_khong_cache
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      `bunx turbo run lint --force` ma 0 tren cay mang ban va. Ly do `--force` nhu E4.
+
+  - id: E6
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.lint_slop
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      `bun run lint:slop` ma 0. Chan nay giai ra `oxlint` chay thang, KHONG qua turbo,
+      nen khong an cache doi duoc.
+
+  - id: E7
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.api
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      `bun run test` ma 0 tren cay mang ban va. Moi luot chay dung mot co so du lieu
+      rieng `crm_<id>_test` nen hang AgentTask cua luot khac khong lan sang.
+
+  - id: E8
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.apr_moc_to_tien
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      CHIEU DO cua eval nay DA DUOC DANG KY thanh eval rieng E13 — mot o cam,
+      mot lenh, chay lai duoc. KHONG con loi khai «da chay bang tay».
+      `git merge-base --is-ancestor c042478 HEAD` -> ma 0.
+      Ve thu nhat buoc moc ghim vao cay: so do `skipped` cua E1 chi noi ve cay dang
+      merge khi commit mang so do ay nam TRONG lich su cua HEAD.
+
+  - id: E9
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.apr_moc_khop_cay
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      CHIEU DO cua eval nay DA DUOC DANG KY thanh eval rieng E14 — mot o cam,
+      mot lenh, chay lai duoc. KHONG con loi khai «da chay bang tay».
+      `git diff --quiet c042478 -- .github/workflows/auto-pr.yml` -> ma 0.
+      Ve thu hai: tep workflow tren CAY LAM VIEC phai bang dung ban tai moc ghim. Dung
+      dang hai-cham KHONG co ref thu hai — no so moc voi CAY LAM VIEC, khong phai voi
+      HEAD; ban so hai-commit se bo lot moi sua chua commit.
+      Cay da khoi phuc sau luot do.
+      DINH CHINH 07/09: ban truoc cua muc nay viet «eval DUY NHAT bat duoc viec go bo ban
+      va». SAI — vong cham 3 bat duoc. Do lai tai cho: xoa dong `if:` khoi cay lam viec
+      thi E3 CUNG ma 1, vi no doi khop dong them so voi `origin/release`. HAI eval bat
+      duoc, khong phai mot. E9 van co gia tri rieng: no do so voi MOC GHIM cua E1, con E3
+      do so voi ban hang — hai neo khac nhau.
+
+  - id: E10
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.apr_check_run_do
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      CHIEU DO cua E1, dang ky thanh o cam rieng theo khuon san co cua kho
+      (`rang_microsoft_duong`/`rang_microsoft_do`).
+      Doc check-runs tai `5ac85ef` — dau `onehub` TRUOC ban va — va khang dinh dong
+      `Open a pull request into main = failure` co mat -> ma 0.
+      Day la khang dinh DUONG TINH ve gia tri do, khong phai phu dinh cua chieu xanh:
+      no doi dung chu `failure`, nen mot ket luan khac (vd `skipped`) cung lam no do.
+      Cap E1/E10 la cap hai chieu THAT: cung mot lenh, cung mot kho, hai commit, ca hai
+      deu dang ky va chay lai duoc.
+
+  - id: E11
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.apr_lech_so_dong_do
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      CHIEU DO cua E2. So HAI cay CUNG KHONG co ban va (`origin/release` va `5ac85ef`):
+      diff cua chung phai RONG -> ma 0.
+      Y nghia: khi khong co ban va thi phep dem cua E2 KHONG duoc khop `1 0`. Vong truoc
+      khai chieu do la nen `HEAD`, thu rong voi MOI cay nen dung-theo-cau-tao; ban nay
+      doc hai cay THAT va co doi chieu — chay chinh lenh nay tren cay CO va thi no ma 1.
+
+  - id: E12
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.apr_lech_noi_dung_do
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      CHIEU DO cua E3. So hai cay cung khong co ban va: diff KHONG duoc chua dong nao
+      mang `if: github.repository` -> ma 0.
+      Y nghia: mat dong khoa thi phep doi khop cua E3 khong tim thay gi. Doc cay that,
+      khong doi khuon doi khop nhu ban truoc.
+
+  - id: E13
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.apr_moc_to_tien_do
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      CHIEU DO cua E8. `c042478` KHONG phai to tien cua `5ac85ef` (5ac85ef co truoc),
+      nen `git merge-base --is-ancestor` phai tra khac 0; eval nay khang dinh dieu do.
+      Doc lich su that cua kho, khong dung tham so gia.
+
+  - id: E14
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.apr_moc_khop_cay_do
+    paths:
+      - ".github/workflows/auto-pr.yml"
+    expected: |
+      CHIEU DO cua E9. Tep workflow tai `5ac85ef` PHAI khac ban tai moc ghim `c042478`,
+      nen `git diff --quiet` phai tra khac 0; eval nay khang dinh dieu do.
+      Y nghia: neu ban va bi go khoi cay thi E9 do. Doc hai cay that.
