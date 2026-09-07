@@ -101,6 +101,38 @@ Công thức đúng — mọi chiến dịch có trước lúc lượt cào th�
 Nói cách khác: tính tới 07/09, **chưa chiến dịch nào của đội tiếp thị tồn tại**.
 Ngưỡng «≥ 3 chiến dịch chạy trọn» đếm từ 0.
 
+### Đã dọn kho — Mạnh, 2026-09-07
+
+Sau khi đọc hai công thức trên, Mạnh cho dọn hai trong ba nguồn nhiễu. Sao lưu
+ra `~/dev/crm-onehub-backups/2026-09-07/` trước khi xoá. Đã xoá:
+
+- **20 cá nhân nguồn MANUAL** do bộ chặn lái vòng 4 dựng (tên `…Rangttmtpo…`,
+  tạo 06/09 10:51Z) cùng 60 giá trị trường và 3 hoạt động của chúng. Con số 21
+  ở mục đính chính trên là đếm trong riêng phân khúc Cao; mục thứ 21 là một cá
+  nhân mẫu của hãng có mang giá trị Sản lượng, KHÔNG phải rác, nên giữ.
+- **13 chiến dịch thử** và 6 lượt gọi của chúng.
+
+Kho sau khi dọn: 144 cá nhân (98 nguồn sàn + 46 mẫu của hãng), 0 chiến dịch,
+0 lượt gọi.
+
+**Hai công thức lọc ở trên vì thế phần lớn không còn cần.** Công thức chiến dịch
+(`createdAt < …`) nay lọc trên tập rỗng. Công thức cá nhân vẫn cần, nhưng chỉ
+còn một nguồn nhiễu thay vì ba:
+
+| Phân khúc | Thành viên | Trong đó GỌI ĐƯỢC |
+|---|---|---|
+| Sản lượng Cao | 50 | **23** |
+| Sản lượng Vừa | 49 | **26** |
+| Sản lượng Thấp / Ngủ | 0 | 0 |
+
+49 hồ sơ che cũ vẫn nằm trong kho theo lựa chọn ở mục 1 — nên **chưa tới một
+nửa mỗi phân khúc gọi được**. Người đọc số ngày 04/10 vẫn phải loại chúng bằng
+`phone NOT LIKE '%x%'` trước khi tính tỷ lệ trả lời, kẻo mẫu số phồng gấp đôi.
+
+**Còn 11 góc nhìn rác** trong ô chọn phân khúc (10 mang mã lượt chạy
+`ttmtpo…`/`ttmtpp…`, 1 của ván lái-thử người-lạ số 2). Chúng nay mồ côi vì
+không chiến dịch nào dùng, và xoá được — Mạnh chưa quyết.
+
 ## Người dự
 
 | Tên | Vai | Đại diện cho ai |
