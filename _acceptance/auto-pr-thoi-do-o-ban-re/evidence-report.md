@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4f8e36a77e88d3791352da67a38e8aa03cc2b0c4
+verified_commit: 6dc14a87440fb662aff03525258a0bb217b2fa37
 human_signoff: Manh Phan 2026-09-07 — ký Cổng 2 trên verdict PASS của vòng chấm 5 (14/14 eval, 4 lệnh chứng xanh), với MƯỜI MỘT giới hạn đã khai. Ký trên hiểu biết rằng năm eval chiều đỏ E10-E14 là trang trí đã khai chứ không phải bằng chứng, rằng năng lực phân biệt chỉ được xác nhận bằng tay, rằng `bun run build` — lệnh chứng thứ năm của kho — không nằm trong AC-3, và rằng nhánh còn sau `origin/onehub` 16 commit với merge sạch.
 ---
 
@@ -200,14 +200,32 @@ làm việc thì E2, E3, E9 cùng đỏ.** Đo bằng tay ngày 07/09, cây đã
 sau. Đây là lời khai của một phiên làm việc, không tái lập được bằng `recheck: strict` —
 khai đúng như thế thay vì dựng thêm một ô cắm rỗng nữa.
 
-### 3. AC-3 khai BỐN lệnh chứng; kho nay chứng bằng NĂM
+### 3. AC-3 khai BỐN lệnh chứng; kho nay chứng bằng NĂM — và lệnh thứ năm ĐANG ĐỎ TRÊN `onehub`
 
 `CLAUDE.md` thêm `bun run build` làm lệnh chứng thứ năm ngày 07/09, với lý do ghi thẳng:
 *một hồi quy làm `next build` đỏ đã đi qua bốn vòng đã ký mà không cổng nào thấy*. AC-3
 và E4–E7 của hồ sơ này phủ bốn lệnh cũ. **`bun run build` không được đo ở đây.**
 
-Rủi ro cụ thể cho bản vá này thấp — nó chạm đúng một dòng YAML của workflow, không chạm
-mã nguồn — nhưng lỗ là lỗ, và nó là đúng lỗ mà kho vừa phải trả giá để học.
+**Đo được ngày 07/09 trên cây đã merge `onehub`:** `bun run build` trả mã 1 —
+`Export encountered an error on /(app)/[slug]/settings/page`. Bốn suite còn lại xanh.
+
+Lỗi ấy **không phải của bản vá này**, và đây là chuỗi nhân quả đo được, không phải lời
+bào chữa:
+
+1. Bản vá chạm đúng một dòng trong `.github/workflows/auto-pr.yml`. `next build` không
+   đọc `.github/`. Không có đường nhân quả.
+2. Trang hỏng, `settings/page`, **không đổi** trong 16 commit merge vào
+   (`git diff --name-only 5ac85ef origin/onehub -- 'apps/app/app/(app)/[slug]/settings/*'`
+   trả về rỗng).
+3. Bản vá cho chính lỗi này **đã tồn tại nhưng chưa vào `onehub`**: commit `6b45fc2`
+   *«dựng vỏ tĩnh được trở lại — root layout và 15 màn đọc tiếng trong Suspense»*, nhắm
+   `apps/app/app/layout.tsx` đọc thẳng `cookies()` + `headers()` nên *«chặn mọi route kể
+   cả /_not-found»*. Nó nằm trên nhánh `feat/lenh-dung-do-khong-ai-thay`, cùng với commit
+   `5324ff8` đưa `bun run build` thành lệnh chứng thứ năm. Cả hai chưa merge.
+
+Nói thẳng: **`onehub` hôm nay đỏ ở `bun run build`.** Hồ sơ này không sửa việc đó và
+không giả vờ đo nó. `feature_loop.suite_keys` trên cây đã merge vẫn khai bốn lệnh, nên
+làn re-pin chạy đúng bốn lệnh ấy — xanh cả bốn.
 
 ### 4. Nhánh sau `origin/onehub` 16 commit
 
@@ -257,3 +275,21 @@ none — every multi-run eval is uniform
 
 Round 4: E7 (`bun run test`) thoát mã 1 một lần; chạy lại ngay cho 257 pass / 0 fail / 11 task — flake môi trường, không phải hồi quy.
 Round 5: đăng ký đủ năm eval chiều đỏ E10–E14; toàn bộ 14 eval xanh; verdict PASS.
+
+### Re-pin lần 1 — 07/09, do merge `onehub` vào nhánh trước khi mở PR
+
+run_id: repin-20260907T075500Z-4182
+sha: 6dc14a87440fb662aff03525258a0bb217b2fa37 · suites: 4 lệnh exit 0
+
+Vì sao phải re-pin: merge `onehub` mang 16 commit mã mới vào cây, nên mốc ghim cũ
+`4f8e36a` thành lệch và cổng trả *«evidence is stale — code changed after verify»*. Làn
+đo tươi độc lập chạy tại `6dc14a87440fb662aff03525258a0bb217b2fa37`: bốn suite đã khai đều mã 0, `git rev-parse HEAD` và
+`git status --porcelain` giống hệt trước và sau làn — cây không bị đổi.
+
+Làn ấy chạy thêm `bun run build` (lệnh thứ năm, ngoài `suite_keys`) và nó **mã 1**. Xem
+Known limits 3: lỗi đã có sẵn trên `onehub`, bản vá cho nó nằm trên một nhánh khác chưa
+merge, và không có đường nhân quả nào từ một dòng YAML trong `.github/` tới `next build`.
+
+Chữ ký người giữ nguyên, không đụng. Một chi tiết trong câu ký nay lỗi thời theo đúng
+nghĩa tốt: nó viết *«nhánh còn sau `origin/onehub` 16 commit với merge sạch»* — merge ấy
+đã thực hiện, sạch đúng như đo, và đây là dòng ghi lại điều đó.
