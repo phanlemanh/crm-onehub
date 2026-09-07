@@ -5,9 +5,9 @@ slug: auto-pr-thoi-do-o-ban-re
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: implemented
-approved_by:
-approved_at:
+status: signed-off
+approved_by: Manh Phan
+approved_at: 2026-09-07
 veto_state: mo
 veto_opened_at: 2026-09-07T01:50:06Z
 design_doc: docs/superpowers/specs/2026-09-07-auto-pr-thoi-do-o-ban-re-design.md

@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 00a5762bcc4e8dae82d2c8fd9bc635fe8db295d4
-human_signoff:
+human_signoff: Manh Phan 2026-09-07 — ký Cổng 2 trên phán quyết REJECT của vòng chấm 3, với tám giới hạn đã khai trong mục Known limits và bảng định đoạt mười finding trong mục Ngoài hợp đồng. Bản vá đo lại xanh 9/9 bằng làn tươi độc lập tại 00a5762, cây không đổi trước/sau làn.
 ---
 
 # Evidence Report: auto-pr-thoi-do-o-ban-re
