@@ -1,0 +1,9 @@
+{
+  "feature_plain": "Cho phép danh sách trộn — cả một domain công ty lẫn vài địa chỉ gmail lẻ — thật sự đăng nhập được, thay vì bị Google chặn từ màn chọn tài khoản.",
+  "decisions": [
+    { "id": "E7", "q": "Người ngoài domain bị từ chối SAU khi đã chọn tài khoản — cái giá đó có đáng không?" }
+  ],
+  "analyst_plain": "Máy không chấm mục này: nó là câu hỏi về trải nghiệm bị từ chối, không phải về đúng-sai của mã.",
+  "scope_plain": "Không thêm cách đăng nhập nào khác, không đụng cửa phân quyền, không đổi câu từ chối.",
+  "decisions_plain": []
+}
