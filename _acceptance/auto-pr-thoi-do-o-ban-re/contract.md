@@ -5,7 +5,7 @@ slug: auto-pr-thoi-do-o-ban-re
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: signed-off
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-09-07
 veto_state: mo
