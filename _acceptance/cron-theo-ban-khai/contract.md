@@ -39,11 +39,17 @@ Neo, đếm tại SHA ấy:
 | --- | --- |
 | cron khai trong `apps/api/vercel.json` | 5 |
 | cron mà `build-func.mjs` ghi vào `config.json` | 1 |
-| đường `/internal/*` có thật trên bản đang chạy (trả 403, không 404) | 6 |
+| đường `/internal/*` API khai trên đĩa | 7 |
+| trong đó thuộc lịch chạy nền (năm của bản khai + bí danh) | 6 |
+| ngoài lịch: `/internal/listings/ingest` | 1 |
 
-Sáu đường ấy, ghim tên để AC-4 có ma trận toàn phần: `/internal/sync/mailboxes` ·
-`/internal/sync/rates` · `/internal/telemetry/rollup` · `/internal/tracking/retention` ·
-`/internal/archive/prune` · `/internal/sync/google`.
+Bảy đường ấy: `/internal/archive/prune` · `/internal/listings/ingest` ·
+`/internal/sync/google` · `/internal/sync/mailboxes` · `/internal/sync/rates` ·
+`/internal/telemetry/rollup` · `/internal/tracking/retention`.
+
+Con số **7** thay con số 6 tôi ghi lúc mở vòng: 6 là số đường tôi đã thử bằng
+`curl`, không phải số đường API khai. `/internal/listings/ingest` không nằm trong
+lịch nên tôi không thử tới nó.
 
 ## Acceptance criteria
 
@@ -77,15 +83,14 @@ bước: một `config.json` sót lại từ bước trước làm bước sau x
 Vì sao: một lịch chạy nền biến mất lặng lẽ là đúng lớp lỗi vòng này đóng.
 
 **AC-4 — Mỗi đường cron trỏ tới một route có thật.**
-Given năm `path` trong bản khai và **ma trận toàn phần viết trước**: đúng **sáu**
-đường `/internal/*` — năm của bản khai cộng bí danh `/internal/sync/google` — lấy
-từ neo đã đo trên bản đang chạy,
+Given năm `path` trong bản khai,
 When quét `apps/api/src` bằng AST lấy mọi route `/internal/*` mà API khai,
-Then tập tìm được **bằng đúng sáu đường ấy**, và mỗi `path` của bản khai khớp đúng
-một route.
-Số route tìm được khác 6 → **mã 2**, in cả danh sách tìm được lẫn danh sách thiếu:
-chốt «lớn hơn 0» quá lỏng — một bộ quét chỉ bắt được hai đường vẫn qua chốt ấy rồi
-đỏ oan trên ba đường còn lại.
+Then **mỗi** `path` của bản khai khớp đúng một route đã quét được.
+Hai chốt chống bộ-quét-bắt-thiếu, thay cho chốt «lớn hơn 0» vốn quá lỏng:
+tập quét được **rỗng** → mã 2; và bộ quét **phải** tìm thấy bí danh
+`/internal/sync/google` → không thấy là mã 2, vì chính bí danh ấy là thứ đang chạy
+trên bản thật, nên một bộ quét bỏ sót nó là bộ quét không tin được.
+Chân in trọn danh sách quét được để người đối chiếu.
 
 **AC-5 — Bí danh cũ không còn được đăng ký, và cái thay nó làm ĐÚNG việc ấy.**
 Given `config.json` sau lượt dựng,

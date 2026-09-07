@@ -172,12 +172,30 @@ writeFileSync(
 		regions: ["iad1"],
 	}),
 );
+const vercelJsonPath = join(apiDir, "vercel.json");
+
+if (!existsSync(vercelJsonPath)) {
+	console.error(
+		`build-func: ${vercelJsonPath} is missing. Schedules are declared there, and a build that quietly ships none is worse than a build that stops.`,
+	);
+	process.exit(1);
+}
+
+const declaredCrons = JSON.parse(readFileSync(vercelJsonPath, "utf8")).crons;
+
+if (!Array.isArray(declaredCrons) || declaredCrons.length === 0) {
+	console.error(
+		`build-func: ${vercelJsonPath} declares no crons. Every scheduled job the API needs is listed there; an empty list ships an API that never syncs, never prunes and never rolls up.`,
+	);
+	process.exit(1);
+}
+
 writeFileSync(
 	join(outDir, "config.json"),
 	JSON.stringify({
 		version: 3,
 		routes: [{ src: "/(.*)", dest: "/api/index" }],
-		crons: [{ path: "/internal/sync/google", schedule: "*/5 * * * *" }],
+		crons: declaredCrons,
 	}),
 );
 
