@@ -1,0 +1,3 @@
+file cua apps/app doi so voi sha ghim: 1
+  apps/app/app/layout.tsx
+XANH: dung mot file doi, va do la apps/app/app/layout.tsx.

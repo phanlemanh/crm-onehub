@@ -1,0 +1,3 @@
+soi /Users/manhphan/dev/crm/apps/api/scripts/build-func.mjs
+object literal mang ca hai khoa path+schedule: 0
+XANH: khong cron nao ghim cung, va script co doc vercel.json.

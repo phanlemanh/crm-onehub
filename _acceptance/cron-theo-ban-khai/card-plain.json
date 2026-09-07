@@ -1,0 +1,6 @@
+{
+  "feature_plain": "Làm cho năm việc chạy nền của hệ thống thật sự chạy — trước đó chỉ một việc được đăng ký, bốn việc kia im lặng không bao giờ chạy.",
+  "decisions": [],
+  "scope_plain": "Không đổi route nào, không đổi nhịp nào, không đụng CI của hãng.",
+  "decisions_plain": []
+}

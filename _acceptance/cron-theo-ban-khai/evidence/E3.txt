@@ -1,0 +1,5 @@
+  1 doi chung duong: ma 0 · config co (5 dong) · doc /Users/manhphan/dev/crm/.vercel/output/config.json
+  2 vang han file: ma 1 · config khong co · doc /Users/manhphan/dev/crm/.vercel/output/config.json
+  3 khong co khoa crons: ma 1 · config khong co · doc /Users/manhphan/dev/crm/.vercel/output/config.json
+  4 mang crons RONG: ma 1 · config khong co · doc /Users/manhphan/dev/crm/.vercel/output/config.json
+XANH: ca ba hinh dang hong deu lam luot dung DUNG lai va neu ten file; doi chung duong ma 0 voi du 5 dong.

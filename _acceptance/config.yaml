@@ -9,6 +9,7 @@ feature_loop:
     - executors.script.check_types_khong_cache
     - executors.script.lint_khong_cache
     - executors.script.lint_slop
+    - executors.script.build_khong_cache
 design_pass:
   ds_skill: web-design-guidelines
 executors:
@@ -51,6 +52,24 @@ executors:
     lint_slop: "bun run lint:slop"
     check_types: "bun run check-types"
     check_types_khong_cache: "bunx turbo run check-types --force"
+    build_khong_cache: "bunx turbo run build --force"
+    cr_dung_ban_khai: "bun _acceptance/cron-theo-ban-khai/rang/dung-ban-khai.mjs"
+    cr_khong_ghim_cung: "bun _acceptance/cron-theo-ban-khai/rang/khong-ghim-cung.mjs"
+    cr_vang_khai_thi_dung: "bun _acceptance/cron-theo-ban-khai/rang/vang-khai-thi-dung.mjs"
+    cr_duong_co_that: "bun _acceptance/cron-theo-ban-khai/rang/duong-co-that.mjs"
+    cr_khong_con_bi_danh: "bun _acceptance/cron-theo-ban-khai/rang/khong-con-bi-danh.mjs"
+    cr_phan_con_lai_khong_doi: "bun _acceptance/cron-theo-ban-khai/rang/phan-con-lai-khong-doi.mjs"
+    cr_ban_trien_khai_that: "bun _acceptance/cron-theo-ban-khai/rang/ban-trien-khai-that.mjs"
+    cr_nam_lenh_chung: "bun _acceptance/cron-theo-ban-khai/rang/nam-lenh-chung.mjs"
+    ld_lenh_dung_xanh: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/lenh-dung-xanh.mjs"
+    ld_khong_doc_ngoai_suspense: "node _acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs"
+    ld_man_khong_doi: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/man-khong-doi.mjs"
+    ld_metadata_nguyen_ven: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/metadata-nguyen-ven.mjs"
+    ld_ba_noi_deu_chay: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs"
+    ld_o_cam_ep_chay_lai: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/o-cam-ep-chay-lai.mjs"
+    ld_bat_duoc_lop_loi: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/bat-duoc-lop-loi.mjs"
+    ld_bon_lenh_cu: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs"
+    ld_lang_theo_tieng: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/lang-theo-tieng.mjs"
     rang_suite_sach: bun run test -- "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan sach"
     rang_suite_thu_tu: bun run test -- "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan thu-tu"
     rang_config_doi: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan doi"
@@ -216,6 +235,16 @@ executors:
     khoa_lo_dong_thoi: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan dong-thoi
     khoa_lo_toan_tep: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan toan-tep
     khoa_lo_tai_lieu: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan tai-lieu
+    apr_check_run: gh api repos/phanlemanh/crm-onehub/commits/c042478/check-runs --jq '.check_runs[] | .name + " = " + (.conclusion // .status)' | grep -qx 'Open a pull request into main = skipped'
+    apr_lech_so_dong: git diff --numstat origin/release -- .github/workflows/auto-pr.yml | tr '\t' ' ' | grep -qx '1 0 .github/workflows/auto-pr.yml'
+    apr_lech_noi_dung: git diff -U0 origin/release -- .github/workflows/auto-pr.yml | grep -qxF "+    if: github.repository == 'trycompai/crm'"
+    apr_moc_to_tien: git merge-base --is-ancestor c042478 HEAD
+    apr_moc_khop_cay: git diff --quiet c042478 -- .github/workflows/auto-pr.yml
+    apr_check_run_do: gh api repos/phanlemanh/crm-onehub/commits/5ac85ef/check-runs --jq '.check_runs[] | .name + " = " + (.conclusion // .status)' | grep -qx 'Open a pull request into main = failure'
+    apr_lech_so_dong_do: test -z "$(git diff --numstat origin/release 5ac85ef -- .github/workflows/auto-pr.yml)"
+    apr_lech_noi_dung_do: test -z "$(git diff -U0 origin/release 5ac85ef -- .github/workflows/auto-pr.yml | grep -F 'if: github.repository')"
+    apr_moc_to_tien_do: git merge-base --is-ancestor c042478 5ac85ef; test $? -ne 0
+    apr_moc_khop_cay_do: git diff --quiet c042478 5ac85ef -- .github/workflows/auto-pr.yml; test $? -ne 0
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT}/scripts/design-gate.mjs"
     ui_check: "${CLAUDE_PLUGIN_ROOT}/scripts/design-scan.js"
