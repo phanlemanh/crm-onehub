@@ -5,7 +5,7 @@ slug: thuoc-cache-het-doi-tuong
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-07
 design_doc: docs/superpowers/specs/2026-09-07-thuoc-cache-het-doi-tuong-design.md
@@ -179,6 +179,8 @@ chạy lại eval của MỌI hồ sơ đã ký sau mỗi lần hợp nhất. Ô
 
 ### Known limits
 
+- **known-limit (Ngoài-1, người chốt ở Cổng 2, 07/09):** vòng này gỡ AC-3 và AC-4 khỏi bộ chấm của hồ sơ ĐÃ KÝ `lenh-chung-khong-an-cache-doi`. Khác các lần sửa neo trước, đây là **phạm vi hẹp lại thật**, không chỉ số đếm đổi. Lý do: tiền đề của hai tiêu chí ấy bị commit `6f581bb` vá mất, nên chúng không thể xanh lại — và giữ một phép đo không bao giờ xanh là đúng lớp lỗi cả chuỗi này tồn tại để chặn. Người đã phê.
+- **known-limit (Ngoài-3, người chốt 07/09):** AC-5 chỉ chạy lại phép đo của MỘT hồ sơ. Sáu hồ sơ đã ký khác chưa ai kiểm sau lần hợp nhất 88 commit của `onehub`; nếu một trong số chúng cũng mất tiền đề, vòng này không thấy.
 - **Vòng này chỉ chứng cho MỘT hồ sơ.** AC-5 chạy lại eval của
   `lenh-chung-khong-an-cache-doi`. Sáu hồ sơ đã ký khác không được chạy lại ở đây; nếu
   một trong số chúng cũng mất tiền đề sau lần hợp nhất, vòng này không thấy.

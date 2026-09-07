@@ -1,7 +1,7 @@
 ---
 schema_version: 2
 feature_slug: thuoc-cache-het-doi-tuong
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
@@ -9,7 +9,7 @@ enforcement_mode: strict
 bypass_used: false
 verified_commit: a1b0d289259a2e7d106d761620e1041c24baca5a
 run_id: s4r1-20260907T004622Z-36796
-human_signoff:
+human_signoff: Manh Phan 2026-09-07
 ---
 
 # Evidence Report: thuoc-cache-het-doi-tuong
@@ -23,7 +23,7 @@ human_signoff:
 | E5 | AC-5 | script | PASS |
 | E8 | AC-8 | script | PASS |
 | E6 | AC-6 | script | PASS |
-| E7 | AC-7 | judgment | UNCERTAIN |
+| E7 | AC-7 | judgment | PASS |
 
 ## Evidence
 
@@ -116,9 +116,9 @@ human_signoff:
 
 - eval: E7
   judged_by: nguoi — chu kho, Cong 2
-  verdict: UNCERTAIN
+  verdict: PASS
   verified_at: 2026-09-07T00:48:08Z
-  human_override:
+  human_override: Đạt — Manh Phan 2026-09-07
   rationale: |
     Ba gach Known limits vua ghi vao ho so lenh-chung-khong-an-cache-doi: sau thang
     sau mo ra, co hieu duoc vi sao hai tieu chi bien mat, ai va bang cach nao, commit
@@ -129,10 +129,10 @@ human_signoff:
 Tat ca ma 0. O cam test nay la `bun run test` — cua chay test cua kho — chu khong
 con goi thang turbo.
 
-## Vi sao PENDING-JUDGMENT
+## Vi sao PASS
 
-Bay chan may deu ma 0 trong mot luot chay CO GHI SO. O thu tam la phan xet cua nguoi
-(E7) — loi khai gioi han co doc duoc cho vong sau khong.
+Bay chan may deu ma 0 trong mot luot chay CO GHI SO — moi run_id mint luc thuc thi va
+co mat trong run-log.jsonl. O thu tam la phan xet cua nguoi (E7), da cham Dat o Cong 2.
 
 ## So do
 
