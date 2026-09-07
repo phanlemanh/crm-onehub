@@ -139,3 +139,4 @@
 {"ts":"2026-09-06T10:53:34Z","round":4,"evalId":"E21","run_id":"minted-tiep-thi-tuyen-doi-tac-E21-r4","exit_code":0,"cmd":"APP_URL=http://localhost:3000 API_URL=http://localhost:3001 node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs be-rong"}
 {"ts":"2026-09-06T10:53:46Z","round":4,"evalId":"E20","run_id":"minted-tiep-thi-tuyen-doi-tac-E20-r4","exit_code":0,"cmd":"APP_URL=http://localhost:3000 API_URL=http://localhost:3001 node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs thiet-ke"}
 {"ts":"2026-09-06T10:56:05Z","round":4,"evalId":"E15","run_id":"ttmtpozhlf","exit_code":0,"cmd":"APP_URL=http://localhost:3000 API_URL=http://localhost:3001 node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs chu"}
+{"ts":"2026-09-07T01:04:30Z","kind":"repin","run_id":"repin-sau-131-20260907T010430Z","sha":"c7b02d56dbebbcf040d5578ccee8f3f195f95565","suites_exit":[0,0,0,0]}

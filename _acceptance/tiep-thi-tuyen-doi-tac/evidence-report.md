@@ -25,7 +25,7 @@ reason: |
 verified_by: fresh-context verification subagents (hai làn)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7a1e18d439b1674e60b46b1a42e392349d8f7958
+verified_commit: c7b02d56dbebbcf040d5578ccee8f3f195f95565
 human_signoff: Mạnh 2026-09-06 — ký lại trên bằng chứng vòng 4 sau khi bản sửa `go-khoa-goc-nhin` làm mốc cũ lệch cây. Mười mục ngoài hợp đồng ghi vào giới hạn đã biết; phạm vi đã cắt giữ nguyên; phê toàn bộ quyết định ghi sau Cổng 1. Chấm E19 và các định đoạt ngày 05/09 giữ nguyên hiệu lực, không làm lại.
 ---
 
@@ -582,3 +582,15 @@ was tool-killed and none hit its preflight refusal path.
 
 Round 4: browser lane re-run after the follow-up UI fix (campaign header segment picker,
 saved-views reason line). All seven browser evals pass on the re-run.
+
+### Re-pin lần 1 — 2026-09-07, do kéo 131 commit của sáu vòng Việt hoá về nhánh
+run_id: repin-sau-131-20260907T010430Z
+sha: c7b02d56dbebbcf040d5578ccee8f3f195f95565 · suites: 4 lệnh exit 0
+
+Nhánh nền nhận sáu vòng Việt hoá và vài bản vá lệnh chứng. 79 tệp mã đổi, nhưng
+**không tệp nào** nằm trong vùng hồ sơ này phủ — đo từng đường: `apps/api/src/campaigns`
+0, `apps/api/src/listings` 0, `apps/api/src/saved-views` 0, `packages/validation/src/listing-ingest.ts`
+0, `tools/listing-crawl` 0, giao diện chiến dịch 0, `apps/app/components/data-table` 0,
+kho chuỗi chiến dịch 0, và `packages/db/prisma` 0. Vì thế đây là ghim lại chứ không
+phải chấm lại. Làn máy chạy trọn tại cây mới: 1401 bài kiểm, 0 trượt, 9/9 chân kiểm
+chạy thật không hit đệm, cộng 28 bài của bộ cào. Chữ ký người không bị đụng.
