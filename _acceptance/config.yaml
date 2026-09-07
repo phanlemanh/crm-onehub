@@ -9,6 +9,7 @@ feature_loop:
     - executors.script.check_types_khong_cache
     - executors.script.lint_khong_cache
     - executors.script.lint_slop
+    - executors.script.build_khong_cache
 design_pass:
   ds_skill: web-design-guidelines
 executors:
@@ -51,6 +52,16 @@ executors:
     lint_slop: "bun run lint:slop"
     check_types: "bun run check-types"
     check_types_khong_cache: "bunx turbo run check-types --force"
+    build_khong_cache: "bunx turbo run build --force"
+    ld_lenh_dung_xanh: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/lenh-dung-xanh.mjs"
+    ld_khong_doc_ngoai_suspense: "node _acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs"
+    ld_man_khong_doi: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/man-khong-doi.mjs"
+    ld_metadata_nguyen_ven: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/metadata-nguyen-ven.mjs"
+    ld_ba_noi_deu_chay: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs"
+    ld_o_cam_ep_chay_lai: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/o-cam-ep-chay-lai.mjs"
+    ld_bat_duoc_lop_loi: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/bat-duoc-lop-loi.mjs"
+    ld_bon_lenh_cu: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs"
+    ld_lang_theo_tieng: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/lang-theo-tieng.mjs"
     rang_suite_sach: bun run test -- "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan sach"
     rang_suite_thu_tu: bun run test -- "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan thu-tu"
     rang_config_doi: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan doi"

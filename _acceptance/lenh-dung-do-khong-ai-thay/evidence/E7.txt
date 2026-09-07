@@ -1,0 +1,5 @@
+doi chung duong: cay chua cay -> lenh dung ma 0
+cay loi cu vao apps/app/app/layout.tsx -> lenh dung ma 1
+thong diep khop chan doan vo tinh cua Next: uncached or runtime data during prerendering
+khoi phuc roi dung lai -> ma 0
+XANH: lenh dung xanh khi lanh, do dung chan doan vo tinh khi cay lai loi cu, va sach sau khi khoi phuc.

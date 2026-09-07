@@ -1,0 +1,6 @@
+file co getLocale: 26 · file dat: 11 · neo: 26
+root layout boc {children} trong <Suspense>: co
+ho THAT o vo tinh: 0 loi goi / 0 file
+doc du lieu luot o man, da duoc ranh cua layout che: 15 loi goi / 15 file
+generateMetadata doc du lieu luot: 22 loi goi / 22 file — KHONG tinh la ho, da do: Next cho metadata dong
+XANH: khong cho nao doc du lieu luot ma khong co mot ranh <Suspense> che — ke ca ranh cua root layout.

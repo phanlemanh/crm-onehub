@@ -1,7 +1,10 @@
 {
 	"note": "The shape of the pre-push gate. Written in the negative: it lists exemptions, never packages, so adding a package raises the bar with no edit here. scripts/verify-gate-shape.mjs compares the running gate to this file at the end of every push.",
 	"rootsNote": "A floor, not the list. Every workspace glob in the root package.json counts too, so a new workspace root raises the bar with no edit here.",
-	"roots": ["apps", "packages"],
+	"roots": [
+		"apps",
+		"packages"
+	],
 	"checkers": [
 		{
 			"id": "check-types",
@@ -28,6 +31,19 @@
 			"id": "lint:slop",
 			"kind": "oxlint",
 			"note": "Runs oxlint directly, not through turbo, so it leaves no run summary. It reports its own file and rule count, and the verifier compares those to a reference run made straight after the gate."
+		},
+		{
+			"id": "build",
+			"kind": "turbo",
+			"note": "Added 2026-09-07. The gate ran four commands and none of them built the app, so a regression that broke `next build` reached the branch through four signed rounds. See _acceptance/lenh-dung-do-khong-ai-thay/.",
+			"exempt": {
+				"@crm/typescript-config": "Ships tsconfig JSON only. There is nothing to build.",
+				"@crm/auth": "Source-only package. The apps that import it list it in transpilePackages, so it is built as part of their build, never on its own.",
+				"@crm/env": "Source-only package, built by whichever app imports it.",
+				"@crm/telemetry": "Source-only package, built by whichever app imports it.",
+				"@crm/ui": "Source-only package. apps/app lists it in transpilePackages and compiles it there; a separate build step would be a second, drifting copy.",
+				"@crm/validation": "Source-only package, built by whichever app imports it."
+			}
 		}
 	]
 }

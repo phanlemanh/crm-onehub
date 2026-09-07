@@ -1,0 +1,2 @@
+generateMetadata nguyen ven: 22/22
+XANH: khong than generateMetadata nao doi mot ky tu so voi sha ghim.
