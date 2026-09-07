@@ -7,8 +7,8 @@ reason:
 verified_by: sequential per-eval verify, run_id minted at execution
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3c89429987efb6a070ba4d028208b6af01295827
-run_id: s4r2-20260907T073015Z-17429
+verified_commit: c5a79ddcddbe2ebbc2be28f802f6d97a859e0925
+run_id: s4r3-20260907T074041Z-16302
 human_signoff: Manh Phan 2026-09-07
 ---
 
@@ -70,10 +70,10 @@ human_signoff: Manh Phan 2026-09-07
     XANH: khong than generateMetadata nao doi mot ky tu so voi sha ghim.
 
 - eval: E5
-  run_id: s4r2-20260907T073015Z-17429-E5
+  run_id: s4r3-20260907T074041Z-16302-E5
   exit_code: 0
   verifier: config:executors.script.ld_ba_noi_deu_chay
-  verified_at: 2026-09-07T07:31:51.473Z
+  verified_at: 2026-09-07T07:42:12.888Z
   output: |
     dat  dieu 1a: o cam executors.script.build_khong_cache = bunx turbo run build --force
     dat  dieu 1b: suite_keys goi ten o cam ay (5 khoa)
@@ -164,4 +164,28 @@ run_id: s4r2-20260907T073015Z-17429
 | `lint` | s4r2-20260907T073015Z-17429-suite-lint | 0 |
 | `lint-slop` | s4r2-20260907T073015Z-17429-suite-lint-slop | 0 |
 | `build` | s4r2-20260907T073015Z-17429-suite-build | 0 |
+
+## Vòng 3 — 2026-09-07
+
+Lượt CI thứ hai vẫn đỏ, và lần này lộ ra một điều máy chỉ thấy được khi CI thật
+sự dựng: `apps/agent` chạy `eve build`, đòi **Node ≥ 24**, còn runner mặc định
+cho Node 22 — trong khi `package.json` của kho khai `engines: node >=22`. Kho tự
+khai một ngưỡng mà chính nó không dựng nổi. Đã ghim `actions/setup-node@v4` với
+`node-version: 24` trong job; điều lệch giữa `engines` và `eve` ghi thành mục
+ngoài hợp đồng.
+
+Mã đổi nằm trong `.github/workflows/acceptance.yml`.
+
+**Chạy lại:** E5 và cả năm lệnh chứng. **Mang sang:** E1 · E2 · E3 · E4 · E6 · E7 ·
+E8 · E9 — `paths` của chúng không chạm `.github/workflows/**`.
+
+run_id: s4r3-20260907T074041Z-16302
+
+| Lệnh | run_id | exit |
+|---|---|---|
+| `test` | s4r3-20260907T074041Z-16302-suite-test | 0 |
+| `check-types` | s4r3-20260907T074041Z-16302-suite-check-types | 0 |
+| `lint` | s4r3-20260907T074041Z-16302-suite-lint | 0 |
+| `lint-slop` | s4r3-20260907T074041Z-16302-suite-lint-slop | 0 |
+| `build` | s4r3-20260907T074041Z-16302-suite-build | 0 |
 
