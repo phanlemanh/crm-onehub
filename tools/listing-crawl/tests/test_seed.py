@@ -49,6 +49,14 @@ class RaiDeu(unittest.TestCase):
             f"bước rải không đều: {sorted(set(buoc))}",
         )
 
+    def test_tran_khong_duong_thi_bao_loi_chu_khong_no(self):
+        urls = ["/a", "/b", "/c"]
+
+        for tran in (0, -1):
+            with self.subTest(tran=tran):
+                with self.assertRaises(ValueError):
+                    sample_across(urls, tran)
+
     def test_it_hon_tran_thi_tra_nguyen(self):
         urls = ["/a", "/b", "/c", "/d", "/e"]
 
@@ -94,17 +102,24 @@ class GieoTuDanhBa(unittest.IsolatedAsyncioTestCase):
 
     def setUp(self):
         self.da_doc = []
+        self.lap = None
+        self.nhan_doi = False
 
     async def fetch(self, url, run, kind):
         self.da_doc.append(url)
         if kind == "so_do":
             return Trang(False, "")
         so_trang = int(url.rsplit("=", 1)[1])
+        if self.lap is not None and so_trang == self.lap:
+            so_trang -= 1
         dau = (so_trang - 1) * self.SETTINGS["moi_trang"]
+        thu_tu = list(range(self.SETTINGS["moi_trang"]))
+        if self.nhan_doi:
+            thu_tu = [thu // 2 for thu in thu_tu]
         the = "".join(
             f'<div class="cwnfqzr"><div class="absz92k">'
             f'<a href="/moi-gioi-{dau + thu}"><h2>x</h2></a></div></div>'
-            for thu in range(self.SETTINGS["moi_trang"])
+            for thu in thu_tu
         )
         return Trang(True, f"<html><body>{the}</body></html>")
 
@@ -123,6 +138,32 @@ class GieoTuDanhBa(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(
             trang_cuoi & set(lay),
             "không địa chỉ nào của trang danh bạ cuối lọt vào mẫu",
+        )
+
+    async def test_mot_trang_lap_giua_chung_khong_cat_luot_doc(self):
+        self.lap = 3
+
+        lay = await seed_urls(self.fetch, None, self.SETTINGS, 20)
+
+        danh_ba = [url for url in self.da_doc if "danh-ba" in url]
+        self.assertEqual(
+            len(danh_ba),
+            self.SETTINGS["directory_max_pages"],
+            "một trang danh bạ lặp lại giữa chừng đã cắt cụt lượt đọc",
+        )
+        cuoi = self.SETTINGS["directory_max_pages"] * self.SETTINGS["moi_trang"]
+        trang_cuoi = {f"/moi-gioi-{so}" for so in range(cuoi - 10, cuoi)}
+        self.assertTrue(trang_cuoi & set(lay))
+
+    async def test_the_trung_trong_cung_mot_trang_chi_gieo_mot_lan(self):
+        self.nhan_doi = True
+
+        lay = await seed_urls(self.fetch, None, self.SETTINGS, None)
+
+        self.assertEqual(
+            len(lay),
+            len(set(lay)),
+            "một người bị gieo hai lần vì thẻ trùng trong cùng một trang",
         )
 
     async def test_khong_tran_thi_tra_het(self):

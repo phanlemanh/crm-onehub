@@ -5,7 +5,7 @@ evals:
     criterion: AC-1
     executor: script
     cmd: config:executors.script.gieo_rai_test
-    expected: "exit 0; bài «mẫu trải khắp dải» pass — bộ dựng sẵn 200 địa chỉ với trần 20, khẳng định có địa chỉ thuộc một phần tư CUỐI dải; khuôn cắt-đầu cũ làm bài này đỏ"
+    expected: "exit 0; ba bài của AC-1 pass — test_mau_trai_khap_dai (có địa chỉ thuộc phần tư CUỐI dải), test_moi_phan_tu_dai_deu_gop_mau (mỗi phần tư dải góp đúng phần của nó), test_khoang_cach_giua_hai_mau_lien_nhau_khong_lech_qua_mot (bước rải lệch nhau không quá một), cộng test_mau_cham_ca_trang_cuoi ở tầng vòng gieo; khuôn cắt-đầu và khuôn đầu-cộng-đuôi mỗi khuôn làm đỏ một phần của bộ ba này"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [tools/listing-crawl/listing_crawl/seed.py, tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_seed.py]
 
@@ -21,9 +21,9 @@ evals:
     criterion: AC-3
     executor: script
     cmd: config:executors.script.gieo_rai_test
-    expected: "exit 0; bài «đúng số lượng, không lặp» pass trên nhiều cỡ dải và trần khác nhau"
+    expected: "exit 0; test_dung_so_luong_khong_lap pass trên nhiều cỡ dải và trần khác nhau, test_the_trung_trong_cung_mot_trang_chi_gieo_mot_lan pass ở tầng vòng gieo (thẻ trùng trong cùng một trang chỉ gieo một lần), test_tran_khong_duong_thi_bao_loi_chu_khong_no pass"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [tools/listing-crawl/listing_crawl/seed.py, tools/listing-crawl/tests/test_seed.py]
+    paths: [tools/listing-crawl/listing_crawl/seed.py, tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_seed.py]
 
   - id: E4
     criterion: AC-4
@@ -45,6 +45,6 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.gieo_rai_test
-    expected: "exit 0; bài «đọc hết trần trang, không dừng sớm» pass — bộ dựng sẵn đếm số trang đã đọc và khẳng định bằng directory_max_pages dù trần nhỏ hơn nhiều; khuôn cũ chỉ đọc vài trang nên bài này đỏ"
+    expected: "exit 0; test_doc_het_tran_trang_khong_dung_som pass (đếm số trang đã đọc, phải bằng directory_max_pages dù trần nhỏ hơn nhiều) và test_mot_trang_lap_giua_chung_khong_cat_luot_doc pass (một trang lặp lại giữa chừng không cắt cụt lượt đọc); cả hai cú dừng sớm cũ đều làm hai bài này đỏ"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_seed.py]

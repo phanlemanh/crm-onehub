@@ -219,8 +219,11 @@ async def seed_urls(fetch, run, settings: dict, limit: int | None) -> list[str]:
             continue
         fresh = [url for url in urls if url not in seen]
         if not fresh:
-            break
+            LOGGER.warning("trang danh bạ %s không có địa chỉ mới", number)
+            continue
         for url in fresh:
+            if url in seen:
+                continue
             seen.add(url)
             found.append(url)
 
