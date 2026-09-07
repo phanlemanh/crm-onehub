@@ -11,7 +11,7 @@ evals:
       - "_acceptance/o-cam-chay-duoc-that/rang/**"
     expected: |
       Dan so sinh TU DIA: quet moi khoa duoi `executors.*` trong config.yaml.
-      So o cam giai duoc phai bang NEO 235 (227 ke thua + 8 o cam vong nay them);
+      So o cam giai duoc phai bang NEO 236 (227 ke thua + 9 o cam vong nay them);
       lech -> ma 2, vi mot phep do tu chon dan so thi khong bao gio do.
       Voi tung o cam: goi CHINH ham `resolveConfigKey` cua bo kit (nap tu
       `lib/evidence-core.cjs` qua resolve-plugin, KHONG viet lai), roi dua chuoi
@@ -52,10 +52,10 @@ evals:
       - "_acceptance/o-cam-chay-duoc-that/rang/**"
     expected: |
       Day la bat bien THAT cua vong: AC-1 va AC-2 moi cai chi canh MOT trinh doc.
-      Voi tung o cam trong dan so 235: doc bang `resolveConfigKey` cua bo kit VA
+      Voi tung o cam trong dan so 236: doc bang `resolveConfigKey` cua bo kit VA
       doc bang `Bun.YAML.parse`, roi so hai chuoi TUNG KY TU.
       Mot o cam lech -> ma 1, in ten o cam va CA HAI chuoi.
-      Dan so khac 235 -> ma 2.
+      Dan so khac 236 -> ma 2.
       Chieu do: sua mot gia tri thanh dang `... "` (thua mot nhay cuoi) trong ban
       sao -> hai trinh doc lech -> ma 1.
 

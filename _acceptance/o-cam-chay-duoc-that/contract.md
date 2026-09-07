@@ -5,7 +5,7 @@ slug: o-cam-chay-duoc-that
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [acceptance]
-status: approved
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
@@ -40,8 +40,8 @@ cộng `bash -n`:
 | Neo | Số |
 | --- | --- |
 | ổ cắm giải được **tại SHA ghim** | 227 |
-| ổ cắm vòng này THÊM (tám chân đo của chính nó) | 8 |
-| ổ cắm giải được **ở HEAD sau vòng** | **235** |
+| ổ cắm vòng này THÊM (chín chân đo của chính nó) | 9 |
+| ổ cắm giải được **ở HEAD sau vòng** | **236** |
 | giải ra lệnh không hợp lệ cú pháp bash | **16** |
 | trong 16: hình dạng A — không chứa nháy đơn, sửa bằng bọc nháy | 11 |
 | trong 16: hình dạng B — có chứa nháy đơn, sửa bằng file script | 5 |
@@ -58,7 +58,7 @@ cộng `bash -n`:
 **`script.apr_check_run`** · **`script.apr_lech_so_dong`** · **`script.apr_lech_noi_dung`** ·
 **`script.apr_check_run_do`** · **`script.apr_lech_noi_dung_do`**
 
-**Tám ổ cắm vòng này thêm, ghim nguyên văn:** `oc_moi_o_cam_chay_duoc` ·
+**Chín ổ cắm vòng này thêm, ghim nguyên văn:** `oc_moi_o_cam_chay_duoc` ·
 `oc_yaml_doc_duoc` · `oc_hai_trinh_doc_bang_nhau` · `oc_khoa_khong_doi` ·
 `oc_verifier_con_giai_duoc` · `oc_lenh_van_lam_dung_viec` ·
 `oc_chan_ho_so_da_ky_chay_lai` · `oc_ham_kit_chua_doi` · `oc_nam_lenh_chung`
@@ -70,7 +70,7 @@ Given `_acceptance/config.yaml`,
 When với **mỗi** ổ cắm dưới `executors.*`, gọi `resolveConfigKey` của bộ kit rồi
 đưa chuỗi trả về qua `bash -n -c`,
 Then **không ổ cắm nào** trả mã khác 0.
-Dân số phải bằng neo **235** (227 kế thừa + 8 ổ cắm vòng này thêm); lệch là mã 2 —
+Dân số phải bằng neo **236** (227 kế thừa + 9 ổ cắm vòng này thêm); lệch là mã 2 —
 một phép đo tự chọn dân số thì không bao giờ đỏ.
 **Và `bash -n` chỉ chứng CÚ PHÁP.** Nên thêm một chặng: mọi đường dẫn file mà một
 giá trị ổ cắm trỏ tới phải **tồn tại, khác rỗng, đọc được** — nếu không, một file
@@ -88,7 +88,7 @@ Chiều đỏ: cấy lại một giá trị chứa `: ` ngoài ngoặc → phả
 **AC-3 — Hai trình đọc trả về CÙNG một chuỗi.**
 Given cùng một ổ cắm,
 When đọc bằng `resolveConfigKey` của bộ kit và bằng trình đọc YAML,
-Then hai chuỗi **trùng từng ký tự**, với **mọi** ổ cắm trong dân số 235.
+Then hai chuỗi **trùng từng ký tự**, với **mọi** ổ cắm trong dân số 236.
 Đây là bất biến thật của vòng: AC-1 và AC-2 mỗi cái chỉ canh một trình đọc; chỉ
 tiêu chí này bắt được ca hai bên cùng «đọc được» mà đọc ra hai thứ khác nhau.
 Một ổ cắm lệch → mã 1, in cả hai chuỗi.
@@ -97,9 +97,9 @@ Một ổ cắm lệch → mã 1, in cả hai chuỗi.
 Given tập khoá dưới `executors.*` tại SHA ghim,
 When so với tập khoá ở HEAD,
 Then **mọi khoá cũ còn nguyên** — không bớt, không đổi tên — và mọi khoá thêm phải
-nằm trong danh sách **tám tên `oc_*`** ghim ở mục Mốc ghim. Thêm một khoá ngoài
+nằm trong danh sách **chín tên `oc_*`** ghim ở mục Mốc ghim. Thêm một khoá ngoài
 danh sách ấy là mã 1.
-Vì sao không phải «giống hệt»: chính vòng này phải thêm tám ổ cắm cho tám chân đo
+Vì sao không phải «giống hệt»: chính vòng này phải thêm chín ổ cắm cho chín chân đo
 của nó, nên luật «giống hệt» sẽ đỏ oan và cách duy nhất làm nó xanh là xoá chân đo
 của chính vòng.
 Vì sao: 16 khoá ấy đang bị các `evidence-report.md` đã ký trích ở dòng
@@ -118,12 +118,19 @@ không nhận sửa nó.
 
 **AC-6 — Lệnh của năm hồ sơ bị chạm vẫn LÀM đúng việc cũ.**
 Given **cả 16 ổ cắm đã sửa**, ghim tên nguyên văn ở mục Mốc ghim,
-When chạy từng lệnh sau khi sửa,
-Then mỗi lệnh trả mã 0.
+When chạy **hai** lệnh cho mỗi ổ cắm — thứ tác giả viết ra ở SHA ghim (nguyên văn
+sau `key: `, tức ý định của họ) và thứ ổ cắm giải ra ở HEAD,
+Then hai lệnh cho **cùng một mã thoát**.
+Không đo «mọi lệnh phải mã 0»: đã chạy thật và thấy hai ổ cắm trả mã khác 0 vì lý
+do không liên quan tới vòng này — `rang_suite_thu_tu` là một chân **chiều đỏ** vốn
+phải đỏ, và `tt_crawl_to_ingest` cần một venv Python không có trên máy. Một tiêu
+chí đòi tất cả mã 0 sẽ đỏ oan, và cách duy nhất làm nó xanh là dựng môi trường
+không liên quan.
 Không lấy «năm cái đại diện»: năm đại diện có thể rơi trúng năm ổ cắm hình dạng A
 vốn đã lành, để lọt cả năm ổ cắm hình dạng B — chính nhóm phải đưa vào file script
 và do đó dễ sai đường dẫn nhất.
-Số lệnh chạy phải bằng **16**; lệch là mã 2.
+Số ổ cắm so phải bằng **16**; lệch là mã 2. Không đọc được ý định tác giả tại SHA
+ghim cũng là mã 2.
 Đây là đối chứng dương của cả vòng: sửa cách viết mà làm hỏng việc lệnh đang làm
 thì mọi tiêu chí trên vẫn xanh.
 Một lệnh khác 0 → mã 1, nêu tên ổ cắm và mã.
