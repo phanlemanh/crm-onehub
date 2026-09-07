@@ -25,7 +25,7 @@ reason: |
 verified_by: fresh-context verification subagents (hai làn)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7a1e18d439b1674e60b46b1a42e392349d8f7958
+verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
 human_signoff: Mạnh 2026-09-06 — ký lại trên bằng chứng vòng 4 sau khi bản sửa `go-khoa-goc-nhin` làm mốc cũ lệch cây. Mười mục ngoài hợp đồng ghi vào giới hạn đã biết; phạm vi đã cắt giữ nguyên; phê toàn bộ quyết định ghi sau Cổng 1. Chấm E19 và các định đoạt ngày 05/09 giữ nguyên hiệu lực, không làm lại.
 ---
 
@@ -582,3 +582,8 @@ was tool-killed and none hit its preflight refusal path.
 
 Round 4: browser lane re-run after the follow-up UI fix (campaign header segment picker,
 saved-views reason line). All seven browser evals pass on the re-run.
+
+### Re-pin lần 1 — 07/09, do vòng sửa `thuoc-cache-het-doi-tuong` chạm hai file cấu hình turbo
+
+run_id: repin-20260907T005455Z-44758
+sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0

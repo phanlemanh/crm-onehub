@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 538796cf4a0f334454dc9fc3f44f3f836a6b0ebf
+verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
 run_id: s4r1-20260906T102507Z-35290
 human_signoff: Manh Phan 2026-09-06
 ---
@@ -186,3 +186,8 @@ component đọc bảng dịch đều phải có một ca trong bộ chấm bả
 
 run_id: repin-20260906T214517Z-82885
 sha: 538796cf4a0f334454dc9fc3f44f3f836a6b0ebf · suites: 4 lệnh exit 0
+
+### Re-pin lần 3 — 07/09, do vòng sửa `thuoc-cache-het-doi-tuong` chạm hai file cấu hình turbo
+
+run_id: repin-20260907T005455Z-44758
+sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0

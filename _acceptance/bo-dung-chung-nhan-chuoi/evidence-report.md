@@ -7,7 +7,7 @@ reason: Bốn vòng chấm ngữ cảnh sạch. Chín tiêu chí có bằng ch�
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 26bffdaa9bdbe347361905a9b74b1583bf158bd8
+verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
 human_signoff: Manh Phan 2026-09-01
 ---
 
@@ -290,3 +290,8 @@ Lựa chọn ngôn ngữ được nhớ qua tải lại trang. Menu `Sắp xếp
 nhất cả app. Tìm kiếm bỏ dấu chạy được cả hai chiều trên chữ Latin có dấu. Gõ
 "Công ty Cổ phần Địa ốc Phú Mỹ Hưng" vào ô tên: dấu hiện đúng, không lỗi phông.
 Ở 390px bố cục đọc dễ hơn hẳn 768px.
+
+### Re-pin lần 1 — 07/09, do vòng sửa `thuoc-cache-het-doi-tuong` chạm hai file cấu hình turbo
+
+run_id: repin-20260907T005455Z-44758
+sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0

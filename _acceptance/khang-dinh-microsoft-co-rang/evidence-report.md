@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6f581bbf35c8a205959db40a00093d24fedb4ea3
+verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
 human_signoff: Manh Phan 2026-09-01
 ---
 
@@ -231,3 +231,8 @@ sha: 6f581bbf35c8a205959db40a00093d24fedb4ea3 · suites: 4 lệnh exit 0
 Làn máy chạy trên cây #6 đã gộp `onehub`, bằng bộ chạy mới một-lượt-một-DB. Lượt đầu bị bác vì
 turbo phát lại log từ đệm (9/9 task kiểm cache hit); sửa `turbo.json` cho task `test` không đệm,
 chạy lại: 9/9 task kiểm chạy thật, 1330 bài, 0 trượt. Chữ ký người không đụng.
+
+### Re-pin lần 2 — 07/09, do vòng sửa `thuoc-cache-het-doi-tuong` chạm hai file cấu hình turbo
+
+run_id: repin-20260907T005455Z-44758
+sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0

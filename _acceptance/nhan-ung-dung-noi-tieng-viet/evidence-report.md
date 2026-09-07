@@ -24,7 +24,7 @@ reason: |
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e695eb33a79878721447554d5d0807c3f9db30cf
+verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
 human_signoff:
 ---
 
@@ -342,3 +342,8 @@ Round 9: BLOCKED — máy chủ dev tại localhost:3000 không phản hồi khi
 ### Re-pin lần 1 — 2026-09-04, do ba hồ sơ chứng cho cây cũ (87 · 9 · 4 file mã đã đổi), ghim lại vào cây sắp ký
 run_id: repin-20260904T030617Z-17073
 sha: e695eb33a79878721447554d5d0807c3f9db30cf · suites: 4 lệnh exit 0
+
+### Re-pin lần 2 — 07/09, do vòng sửa `thuoc-cache-het-doi-tuong` chạm hai file cấu hình turbo
+
+run_id: repin-20260907T005455Z-44758
+sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0

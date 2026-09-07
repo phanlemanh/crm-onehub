@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 538796cf4a0f334454dc9fc3f44f3f836a6b0ebf
+verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
 run_id: s4r1-20260906T153520Z-37144
 human_signoff: Manh Phan 2026-09-07
 ---
@@ -167,3 +167,8 @@ qua `packages/db/scripts/test-run.ts` nơi đúc cơ sở dữ liệu theo lư�
 Dòng `verifier` của E6 nay trích khoá đang giữ vai đó, để hồ sơ không trỏ vào một khoá
 không còn tồn tại. **Lệnh thật của lượt chấm cũ nằm nguyên trong `run-log.jsonl`** —
 bản ghi lượt chạy không bị sửa.
+
+### Re-pin lần 2 — 07/09, do vòng sửa `thuoc-cache-het-doi-tuong` chạm hai file cấu hình turbo
+
+run_id: repin-20260907T005455Z-44758
+sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0
