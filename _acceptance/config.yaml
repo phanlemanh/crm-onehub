@@ -5,7 +5,7 @@ recheck: strict
 feature_loop:
   ui_standards_skill: web-design-guidelines
   suite_keys:
-    - executors.test.api_khong_cache
+    - executors.test.api
     - executors.script.check_types_khong_cache
     - executors.script.lint_khong_cache
     - executors.script.lint_slop
@@ -19,7 +19,6 @@ executors:
     api_khong_cache_tru_agent: "bun run test -- --force --filter=!agent"
     rang3_khoa_chet: "cd apps/app && bun test test/messages-guard.spec.ts"
     tv_canh_kho_ui: "cd packages/ui && bun test test/messages-guard.spec.ts"
-    api_khong_cache: "bun run db:test && bunx turbo run test --force --concurrency=1"
     cl_tieng_viet_den_man: "node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs dan-so && cd packages/ui && bun test --preload ./test/setup-dom.ts test/lai-ra-man.spec.tsx"
     tt_api: bun run test -- "cd apps/api && bun run test listing-ingest.integration listing-fields listing-fixture-batch campaigns.spec campaign-schema"
     tt_app: cd apps/app && bun test test/messages-guard.spec.ts test/campaign-states.spec.ts

@@ -42,8 +42,7 @@ nào.
 
 **Dân số viết TRƯỚC, và chân phải IN SỐ DÒNG:** mỗi ô cắm trong `suite_keys` × mỗi
 task nó chạy, một dòng, cột `(ô cắm, gói, task, đệm hiệu lực, có --force, thoả)`. Số
-dòng phải bằng số cặp giải được từ cấu hình. Đo 07/09: **4 ô cắm · 10 gói · 30 cặp
-(gói, task) còn đệm**.
+dòng phải bằng số cặp giải được từ cấu hình. Đo 07/09: **4 ô cắm · 10 gói · 46 cặp (gói, task) giải được, trong đó 25 còn đệm**.
 
 Dân số hẹp là ca hỏng thật: nếu chân chỉ soi ô cắm test, bất biến còn đúng một phần tử
 vốn đã `cache: false`, nên nó xanh vĩnh viễn bất kể ai thêm một suite mới — đúng cái
@@ -86,7 +85,7 @@ thật vừa có thể là triệu chứng của một phép chạm hỏng: cặ
 biết là CÓ đọc; phép chạm ấy **phải** làm task ấy chạy lại. Đối chứng dương không nổ →
 mã 2, không phải mã 0. Nội dung chạm là chuỗi chưa từng có và phải in ra log.
 
-Đo 07/09 trên toàn kho: **10 gói · 30 task còn đệm**, và **đúng 2 file** trong mọi gói
+Đo 07/09 trên toàn kho: **10 gói · 46 cặp (gói, task) · 25 còn đệm**, và **đúng 2 file** trong mọi gói
 trỏ ra ngoài đồ thị workspace — `apps/api/test/listing-fixture-batch.spec.ts` và
 `packages/ui/test/lai-ra-man.spec.tsx` — **cả hai nằm trong `test/`**, task duy nhất
 khai `cache: false`.
