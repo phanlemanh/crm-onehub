@@ -129,9 +129,15 @@ còn một nguồn nhiễu thay vì ba:
 nửa mỗi phân khúc gọi được**. Người đọc số ngày 04/10 vẫn phải loại chúng bằng
 `phone NOT LIKE '%x%'` trước khi tính tỷ lệ trả lời, kẻo mẫu số phồng gấp đôi.
 
-**Còn 11 góc nhìn rác** trong ô chọn phân khúc (10 mang mã lượt chạy
-`ttmtpo…`/`ttmtpp…`, 1 của ván lái-thử người-lạ số 2). Chúng nay mồ côi vì
-không chiến dịch nào dùng, và xoá được — Mạnh chưa quyết.
+**11 góc nhìn rác cũng đã xoá** cùng ngày, sau khi Mạnh quyết: 10 cái mang mã
+lượt chạy `ttmtpo…`/`ttmtpp…` của bộ chặn lái vòng 4, và 1 cái của ván lái-thử
+người-lạ số 2. Chúng đã mồ côi vì không chiến dịch nào dùng nên không khoá ngoại
+nào chặn. Bản sao lưu nằm cùng tệp với hai nhóm trên.
+
+**Kho lúc này, điểm xuất phát thật của cửa sổ đo:** 144 cá nhân (98 nguồn sàn +
+46 mẫu của hãng), **0 góc nhìn · 0 chiến dịch · 0 lượt gọi**. Mọi con số phiên
+nghiệm thu đọc ngày 04/10 đều sinh ra sau mốc này — không còn gì phải lọc ở
+phía chiến dịch, chỉ còn một việc: loại 49 hồ sơ che khi tính tỷ lệ trả lời.
 
 ## Người dự
 
