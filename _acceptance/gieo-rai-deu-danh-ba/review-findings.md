@@ -62,7 +62,7 @@ Giữ nguyên văn phát hiện, thêm dòng cách đóng. Thẻ cổng không h
   Người dùng thấy gì: người ký cổng đọc «trần 30 trang, nhịp 1,5 giây, thêm khoảng
   40 giây mỗi lượt» rồi cân nhắc trên con số đó. Không con số nào trong câu ấy là
   con số đang chạy.
-  Đề xuất: hợp đồng mới
+  Đề xuất: new-contract
   Bằng chứng: `config.toml` khai `directory_max_pages = 8`, không phải 30 — và
   chính hợp đồng để việc đổi số đó ngoài phạm vi, nên trần 30 là cấu hình hợp đồng
   tự cấm với tới. Mỗi lượt tải một trang tốn `request_delay_seconds = 1.5` cộng
@@ -78,7 +78,7 @@ Giữ nguyên văn phát hiện, thêm dòng cách đóng. Thẻ cổng không h
   Người dùng thấy gì: đọc riêng AC-3, người ta hiểu mỗi lượt gieo luôn trả đúng số
   địa chỉ đã xin. Thực tế ở cấu hình đang ship, xin 200 thì nhận 98 — và đó mới là
   đường đi thường ngày.
-  Đề xuất: hợp đồng mới
+  Đề xuất: new-contract
   Bằng chứng: AC-3 đọc trần vô điều kiện, còn AC-2 lại nói nhánh «ít hơn trần» trả
   nguyên. Bài `test_dung_so_luong_khong_lap` chỉ chạy bốn cặp mà dải luôn lớn hơn
   trần (200/20, 97/30, 11/10, 1000/1), nên nhánh mà người dùng thật rơi vào không
@@ -132,7 +132,7 @@ Không có.
   «Thấp» và «Ngủ» của trục Sản lượng vẫn rỗng, thước «phân khúc này so phần còn
   lại» vẫn chỉ chia được Cao với Vừa. Ai đọc hồ sơ nghiệm thu này rồi chạy lại bộ
   cào sẽ tưởng vấn đề đã chữa, mà số trên màn hình không nhúc nhích.
-  Đề xuất: hợp đồng mới
+  Đề xuất: new-contract
   Bằng chứng: `directory_max_pages = 8` cho ra 98 hồ sơ (đúng con số hợp đồng nêu
   ở mục Context). README dòng 28 khai lệnh chạy thật là `--limit 200`. Chạy đối
   chiếu khuôn cũ (`found[:limit]` cộng dừng sớm) với khuôn mới trên dải 98 địa chỉ:
