@@ -101,6 +101,12 @@ ngang không sang được lượt kế. Chỉ `bun test` trần trong một gó
 `apps/app` 3000, `apps/api` 3001, `apps/agent` 2000. Đăng nhập không cần OAuth:
 `cd apps/api && bun run dev:session <email>`.
 
+Ba cổng đó cũng là mặc định của các phép đo trong `_acceptance/config.yaml`
+(`APP_URL:-http://localhost:3000`, `API_URL:-http://localhost:3001`). Hệ quả: một
+bản dev đang chạy ở checkout chính bị đo thay cho cây đang xét, và kết quả vẫn in
+ra như thường. Đo một cây khác thì đặt `APP_URL` và `API_URL` tay. `dot-bien.mjs`
+dựng bản sao riêng ở `CONG_SAO` (mặc định 3200) đúng vì lý do đó.
+
 Đẩy lên `origin` cần `http.version HTTP/1.1` (đã đặt trong git config của kho);
 HTTP/2 trả 400. `pre-push` chạy `check-types`, `lint`, `lint:slop`, `test`. Đừng
 `--no-verify` trừ khi có lý do nói được thành lời.
