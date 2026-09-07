@@ -5,7 +5,7 @@ slug: gieo-rai-deu-danh-ba
 owner: omre.cnsp4@onemount.com
 risk_tier: T2
 surfaces: [cli]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -54,3 +54,5 @@ Source input: `_acceptance/tiep-thi-tuyen-doi-tac/uat-session.md` rủi ro 3 · 
 
 - Đổi lấy: mỗi lượt cào nay đọc tới hết trần trang thay vì dừng khi đủ, nên tốn thêm thời gian đọc danh bạ. Ở trần đang ship là 8 trang, lượt cào cũ dừng sau khoảng 2 trang, nên phần thêm là 6 lượt tải danh bạ. Trần nâng lên 30 thì phần thêm là 28 lượt.
 - Hàm rải là hàm thuần, đặt ở mô-đun riêng để kiểm được ở mức đơn vị, theo đúng nếp một-việc-một-mô-đun của gói.
+- known-limits (Ngoài-2, ký 08/09): danh bạ bị Cloudflare chặn giữa chừng thì mẫu tụt về đầu bảng, và bản tổng kết vẫn in `gieo` đủ trần như một lượt khoẻ. Người đọc số không có cách nào biết mẫu đã hỏng; tín hiệu duy nhất là `lan_thu_hong` tăng và mỗi trang hỏng ghi một dòng cảnh báo.
+- known-limits (Ngoài-3, ký 08/09): số điện thoại trong lô gửi lên cổng sẽ giảm mạnh. `reveal_phones` chỉ lộ số cho hồ sơ mức «cao», nên mẫu rải đều mang về nhiều môi giới mức thấp mà không gọi được. Đo trên dải 200 hồ sơ với ngưỡng thật: `--limit 50` cắt-đầu cho 50 lượt lộ số, rải đều cho 16.
