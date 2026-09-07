@@ -25,7 +25,7 @@ reason: |
 verified_by: fresh-context verification subagents (hai làn)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c7b02d56dbebbcf040d5578ccee8f3f195f95565
+verified_commit: 24c6d58660898fe9b74743243e7568feabd61ed9
 human_signoff: Mạnh 2026-09-06 — ký lại trên bằng chứng vòng 4 sau khi bản sửa `go-khoa-goc-nhin` làm mốc cũ lệch cây. Mười mục ngoài hợp đồng ghi vào giới hạn đã biết; phạm vi đã cắt giữ nguyên; phê toàn bộ quyết định ghi sau Cổng 1. Chấm E19 và các định đoạt ngày 05/09 giữ nguyên hiệu lực, không làm lại.
 ---
 
@@ -594,3 +594,15 @@ Nhánh nền nhận sáu vòng Việt hoá và vài bản vá lệnh chứng. 79
 kho chuỗi chiến dịch 0, và `packages/db/prisma` 0. Vì thế đây là ghim lại chứ không
 phải chấm lại. Làn máy chạy trọn tại cây mới: 1401 bài kiểm, 0 trượt, 9/9 chân kiểm
 chạy thật không hit đệm, cộng 28 bài của bộ cào. Chữ ký người không bị đụng.
+
+### Re-pin lần 2 — 2026-09-07, do vòng sửa cấu hình đệm của bộ kiểm
+run_id: repin-cache-config-20260907T020636Z
+sha: 24c6d58660898fe9b74743243e7568feabd61ed9 · suites: 4 lệnh exit 0
+
+Nhánh nhận vòng «thước cache hết đối tượng»: `packages/db/turbo.json` sửa và
+`packages/ui/turbo.json` xoá hẳn. Hai tệp đó chỉnh chính cách đệm bộ kiểm nên
+đáng chạy lại, dù không tệp nào của vòng này đổi — đo từng đường vùng hồ sơ phủ
+đều 0. Làn máy tại cây mới: 1401 bài kiểm, 0 trượt, và **9/9 chân kiểm chạy
+thật dù lệnh không kèm `--force`** — tức đổi cấu hình đệm không làm log bị phát
+lại. `@crm/ui:test` vẫn chạy đủ 92 bài dù tệp cấu hình riêng của gói đã bị xoá.
+Cộng 28 bài của bộ cào. Chữ ký người không bị đụng.
