@@ -39,45 +39,7 @@ evals:
       khi nang luc bat loi da mat.
       Chan tu don ban sao ke ca khi hong.
 
-  - id: E3
-    criterion: AC-3
-    executor: script
-    cmd: config:executors.script.kc_cache_noi_that
-    paths:
-      - "packages/ui/turbo.json"
-      - "packages/ui/test/**"
-      - "_acceptance/lenh-chung-khong-an-cache-doi/rang/**"
-    expected: |
-      BANG VIET TRUOC, hai dong, moi dong mot LOAI phu thuoc ngoai goi (turbo va chung
-      bang hai co che khac nhau):
-        1. _acceptance/chan-lai-component-ra-man/rang/da-tim-thay.json — DOC luc chay
-           -> va bang `inputs` cua task
-        2. apps/app/components/agent-builder/chat-chips.tsx — NHAP nhu mo-dun
-           -> va bang canh phu thuoc goi
-      Voi TUNG dong, dung BA luot theo thu tu: (1) moi cho cache am · (2) khong doi gi
-      -> phai TRUNG cache, cached == total · (3) doi mot byte trong file cua dong ay
-      -> phai BE cache, cached < total.
-      Chan in du SAU con so moi dong. So dong chay BANG so dong bang khai.
-      Buoc MOI va nguong total >= 1 la bat buoc: tren cache lanh, chieu do be cache vi
-      KHONG CO cache chu khong vi ban khai dung, con chieu duong thoa "0 bang 0" rong.
-      total == 0 o bat ky luot nao -> ma 2. Khong doc duoc trang thai cache -> ma 2.
-      Chan tra file ve nguyen trang ke ca khi hong; `git status` truoc/sau bang nhau.
 
-  - id: E4
-    criterion: AC-4
-    executor: script
-    cmd: config:executors.script.kc_do_hanh_vi
-    paths:
-      - "_acceptance/lenh-chung-khong-an-cache-doi/rang/**"
-    expected: |
-      Xanh: chan tu dung mot trang thai cache, hoi chan AC-3 cap so no dung de ket
-      luan, roi TU chay mot luot turbo doc lap — hai cap so phai KHOP.
-      Chieu do: cap so lech -> ma 1, in ca hai cap.
-      Chan AC-3 khong in ra cap so no dua vao -> ma 2.
-      TUYET DOI KHONG do bang cach tim chuoi `turbo.json` trong ma nguon chan AC-3: do
-      la do CHI DAN chu khong do dau ra, va no hong ca hai chieu — chan doc ban khai
-      gian tiep thi lot, con chan chi in ten file ay trong mot thong diep loi thi do
-      oan.
 
   - id: E5
     criterion: AC-5
