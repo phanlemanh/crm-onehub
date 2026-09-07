@@ -24,7 +24,17 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: settingsMessages(await getLocale()).thanhBen.sso };
 }
 
-export default async function SsoSettingsPage({
+export default function SsoSettingsPage(
+	props: PageProps<"/[slug]/settings/sso">,
+) {
+	return (
+		<Suspense fallback={<PageShellLoading />}>
+			<SsoSettingsPageShell {...props} />
+		</Suspense>
+	);
+}
+
+async function SsoSettingsPageShell({
 	searchParams,
 }: PageProps<"/[slug]/settings/sso">) {
 	const locale = await getLocale();

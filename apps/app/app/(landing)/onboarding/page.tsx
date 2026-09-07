@@ -1,5 +1,6 @@
 import { DEFAULT_WORKSPACE_NAME } from "@crm/auth";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { AuthHeading, AuthShell } from "@/components/auth-shell";
 import { getLocale } from "@/lib/locale/server";
 import { authMessages } from "@/lib/messages/auth";
@@ -12,7 +13,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const instant = false;
 
-export default async function OnboardingPage() {
+export default function OnboardingPage() {
+	return (
+		<Suspense fallback={null}>
+			<OnboardingPageShell />
+		</Suspense>
+	);
+}
+
+async function OnboardingPageShell() {
 	await requireMailboxAccess();
 
 	const m = authMessages(await getLocale()).onboarding;

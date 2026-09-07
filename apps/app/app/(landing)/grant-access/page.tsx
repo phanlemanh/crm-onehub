@@ -1,6 +1,7 @@
 import { mailboxGrantsNeeded } from "@crm/auth";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import { AuthHeading, AuthShell } from "@/components/auth-shell";
 import { getLocale } from "@/lib/locale/server";
 import { authMessages } from "@/lib/messages/auth";
@@ -13,7 +14,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export const instant = false;
 
-export default async function GrantAccessPage() {
+export default function GrantAccessPage() {
+	return (
+		<Suspense fallback={null}>
+			<GrantAccessPageShell />
+		</Suspense>
+	);
+}
+
+async function GrantAccessPageShell() {
 	const { user } = await requireSession();
 
 	const providers = mailboxGrantsNeeded(await signInAccounts(user.id));

@@ -20,7 +20,15 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: settingsMessages(await getLocale()).tieuDeTab.tienTe };
 }
 
-export default async function CurrenciesSettingsPage() {
+export default function CurrenciesSettingsPage() {
+	return (
+		<Suspense fallback={<PageShellLoading />}>
+			<CurrenciesSettingsPageShell />
+		</Suspense>
+	);
+}
+
+async function CurrenciesSettingsPageShell() {
 	const t = settingsMessages(await getLocale());
 
 	return (

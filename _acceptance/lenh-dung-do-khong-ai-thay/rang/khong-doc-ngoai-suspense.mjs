@@ -10,7 +10,7 @@ const doi = process.argv.slice(2);
 const iGoc = doi.indexOf("--goc");
 const GOC = iGoc === -1 ? MAC_DINH : resolve(doi[iGoc + 1]);
 const iNeo = doi.indexOf("--neo");
-const NEO = iNeo === -1 ? 25 : Number(doi[iNeo + 1]);
+const NEO = iNeo === -1 ? 26 : Number(doi[iNeo + 1]);
 const MAU_DUONG = "apps/app/app/(app)/[slug]/settings/connections/page.tsx";
 
 function quet(thuMuc, ra = []) {
@@ -41,11 +41,13 @@ function tenThe(the) {
 	return ten && ts.isIdentifier(ten) ? ten.text : undefined;
 }
 
-function goiGetLocale(nut) {
+const DOC_LUOT = new Set(["getLocale", "cookies", "headers", "draftMode"]);
+
+function docDuLieuLuot(nut) {
 	return (
 		ts.isCallExpression(nut) &&
 		ts.isIdentifier(nut.expression) &&
-		nut.expression.text === "getLocale"
+		DOC_LUOT.has(nut.expression.text)
 	);
 }
 
@@ -89,12 +91,13 @@ function soiFile(duong) {
 	const bang = khaiBaoHam(nguon);
 	const goc = xuatMacDinh(nguon);
 	const hoLo = [];
+	const hoLoMeta = [];
 	if (!goc) return { coGoi: true, hoLo, khongThayGoc: true };
 
 	const daDi = new Set();
 
 	const diTrong = (nut, daChe) => {
-		if (goiGetLocale(nut) && !daChe)
+		if (docDuLieuLuot(nut) && !daChe)
 			hoLo.push(dongCua(nguon, nut));
 
 		let cheTiep = daChe;
@@ -122,20 +125,21 @@ function soiFile(duong) {
 			nut.name?.text === "generateMetadata"
 		) {
 			const di = (n) => {
-				if (goiGetLocale(n)) hoLo.push(dongCua(nguon, n));
+				if (docDuLieuLuot(n)) hoLoMeta.push(dongCua(nguon, n));
 				ts.forEachChild(n, di);
 			};
 			di(nut);
 		}
 	}
 
-	return { coGoi: true, hoLo, khongThayGoc: false };
+	return { coGoi: true, hoLo, hoLoMeta, khongThayGoc: false };
 }
 
 const thuMucMan = join(GOC, "apps", "app", "app");
-const tatCa = quet(thuMucMan).filter((d) =>
-	readFileSync(d, "utf8").includes("getLocale"),
-);
+const tatCa = quet(thuMucMan).filter((d) => {
+	const chu = readFileSync(d, "utf8");
+	return [...DOC_LUOT].some((ten) => chu.includes(`${ten}(`));
+});
 
 if (tatCa.length !== NEO) {
 	console.error(
@@ -145,6 +149,7 @@ if (tatCa.length !== NEO) {
 }
 
 const do_ = [];
+const doMeta = [];
 let dat = 0;
 for (const duong of tatCa) {
 	const r = soiFile(duong);
@@ -154,7 +159,8 @@ for (const duong of tatCa) {
 		process.exit(2);
 	}
 	if (r.hoLo.length === 0) dat += 1;
-	else for (const dong of r.hoLo) do_.push(`${ten}:${dong}`);
+	for (const dong of r.hoLo) do_.push(`${ten}:${dong}`);
+	for (const dong of r.hoLoMeta) doMeta.push(`${ten}:${dong}`);
 }
 
 const mauDuong = tatCa.find((d) => relative(GOC, d) === MAU_DUONG);
@@ -167,8 +173,15 @@ console.log(
 	`file co getLocale: ${tatCa.length} · file dat: ${dat} · neo: ${NEO}`,
 );
 
+console.log(
+	`ho o THAN: ${do_.length} loi goi / ${new Set(do_.map((d) => d.split(":")[0])).size} file`,
+);
+console.log(
+	`generateMetadata doc du lieu luot: ${doMeta.length} loi goi / ${new Set(doMeta.map((d) => d.split(":")[0])).size} file — KHONG tinh la ho, da do: Next cho metadata dong`,
+);
+
 if (do_.length > 0) {
-	console.error("DO: cac loi goi getLocale khong di qua ranh <Suspense>:");
+	console.error("DO: doc du lieu luot o vo tinh, khong di qua ranh <Suspense>:");
 	for (const d of do_) console.error(`  ${d}`);
 	process.exit(1);
 }

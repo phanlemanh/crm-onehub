@@ -23,7 +23,15 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: settingsMessages(await getLocale()).tieuDeTab.chung };
 }
 
-export default async function GeneralSettingsPage() {
+export default function GeneralSettingsPage() {
+	return (
+		<Suspense fallback={<PageShellLoading />}>
+			<GeneralSettingsPageShell />
+		</Suspense>
+	);
+}
+
+async function GeneralSettingsPageShell() {
 	const t = settingsMessages(await getLocale());
 
 	return (

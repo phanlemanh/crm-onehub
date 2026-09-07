@@ -21,7 +21,17 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: thanhVienMessages(await getLocale()).trang.tieuDeTab };
 }
 
-export default async function MembersSettingsPage({
+export default function MembersSettingsPage(
+	props: PageProps<"/[slug]/settings/members">,
+) {
+	return (
+		<Suspense fallback={<PageShellLoading />}>
+			<MembersSettingsPageShell {...props} />
+		</Suspense>
+	);
+}
+
+async function MembersSettingsPageShell({
 	searchParams,
 }: PageProps<"/[slug]/settings/members">) {
 	const t = thanhVienMessages(await getLocale());

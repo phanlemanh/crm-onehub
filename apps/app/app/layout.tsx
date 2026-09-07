@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import "@crm/ui/globals.css";
 import { LocaleProvider } from "@crm/ui/components/locale-provider";
 import { Toaster } from "@crm/ui/components/sonner";
@@ -7,9 +8,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { cookies, headers } from "next/headers";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { InlineScript } from "@/components/inline-script";
 import { LocalDateTimeHydrator } from "@/components/local-date-time";
 import { ThemeProvider } from "@/components/theme-provider";
-import { LANG_COOKIE } from "@/lib/locale/locale";
+import { DEFAULT_LOCALE, LANG_COOKIE } from "@/lib/locale/locale";
 import { resolveLocale } from "@/lib/locale/resolve";
 import { TRPCReactProvider } from "@/lib/trpc/client";
 
@@ -39,11 +41,29 @@ export const metadata: Metadata = {
 	manifest: "/site.webmanifest",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	return (
+		<html
+			lang={DEFAULT_LOCALE}
+			suppressHydrationWarning
+			className={cn(fontSans.variable, fontMono.variable, "h-full antialiased")}
+		>
+			<body className="flex min-h-full flex-col font-sans">
+				<Suspense fallback={null}>
+					<TheoTieng>{children}</TheoTieng>
+				</Suspense>
+			</body>
+		</html>
+	);
+}
+
+async function TheoTieng({
+	children,
+}: Readonly<{ children: React.ReactNode }>) {
 	const [cookieStore, headerList] = await Promise.all([cookies(), headers()]);
 	const locale = resolveLocale(
 		cookieStore.get(LANG_COOKIE)?.value,
@@ -51,24 +71,21 @@ export default async function RootLayout({
 	);
 
 	return (
-		<html
-			lang={locale}
-			suppressHydrationWarning
-			className={cn(fontSans.variable, fontMono.variable, "h-full antialiased")}
-		>
-			<body className="flex min-h-full flex-col font-sans">
-				<LocaleProvider locale={locale}>
-					<NuqsAdapter>
-						<TRPCReactProvider>
-							<ThemeProvider>
-								<TooltipProvider>{children}</TooltipProvider>
-								<Toaster richColors />
-							</ThemeProvider>
-						</TRPCReactProvider>
-					</NuqsAdapter>
-				</LocaleProvider>
-				<LocalDateTimeHydrator locale={locale} />
-			</body>
-		</html>
+		<>
+			<InlineScript
+				html={`document.documentElement.lang=${JSON.stringify(locale)}`}
+			/>
+			<LocaleProvider locale={locale}>
+				<NuqsAdapter>
+					<TRPCReactProvider>
+						<ThemeProvider>
+							<TooltipProvider>{children}</TooltipProvider>
+							<Toaster richColors />
+						</ThemeProvider>
+					</TRPCReactProvider>
+				</NuqsAdapter>
+			</LocaleProvider>
+			<LocalDateTimeHydrator locale={locale} />
+		</>
 	);
 }

@@ -19,8 +19,9 @@ design_doc: docs/superpowers/specs/2026-09-07-lenh-dung-do-khong-ai-thay-design.
 
 `bun run build` đỏ và đã đỏ suốt bốn vòng Việt hoá đã ký, vì `cacheComponents:
 true` đòi mỗi màn dựng nổi một vỏ tĩnh, còn `getLocale()` đọc `cookies()` +
-`headers()` ở thân **19 màn**. Bốn lệnh chứng của kho không có `build`, nên
-không cổng nào thấy.
+`headers()` ở vỏ tĩnh của **16 chỗ**: 15 màn và — quan trọng hơn cả — **root
+layout**, thứ chặn mọi route kể cả `/_not-found`. Bốn lệnh chứng của kho không có
+`build`, nên không cổng nào thấy.
 
 Ba số đo xác định đây là lỗi của bản rẽ: `apps/app/lib/locale/server.ts` không
 có trên `release`; không màn nào của hãng gọi `getLocale`; hãng đã bật
@@ -34,14 +35,28 @@ SHA cố định của cây TRƯỚC vòng này, dùng cho AC-4 và AC-5:
 3c97e759a6c87bc8b6f0621d3854cb486728b442
 ```
 
-Ba con số neo, đếm **tại SHA ấy**, dùng làm mốc độc lập cho AC-2, AC-3 và AC-4 —
+Bốn con số neo, đếm **tại SHA ấy**, dùng làm mốc độc lập cho AC-2, AC-3 và AC-4 —
 không phép đo nào được lấy dân số bằng chính kết quả của mình:
 
 | Neo | Số |
 | --- | --- |
-| file dưới `apps/app/app/**` gọi `getLocale` | 25 |
-| trong đó gọi ở **thân** hàm xuất mặc định — tập phải sửa | 19 |
-| file có `generateMetadata` | 22 |
+| file dưới `apps/app/app/**` đọc dữ liệu lượt truy cập (`getLocale` · `cookies` · `headers` · `draftMode`) | 26 |
+| trong đó có lỗ ở **vỏ tĩnh** — tập phải sửa | 16 |
+| trong 16 ấy: màn | 15 |
+| trong 16 ấy: **root layout** `apps/app/app/layout.tsx` | 1 |
+| file đọc dữ liệu lượt truy cập trong `generateMetadata` — **không** phải lỗ | 22 |
+
+Bốn số này thay bộ ba đầu tiên (25 · 19 · 22), vốn đếm bằng một luật từ vựng sai.
+Ba điều đã đo lại, không suy:
+
+- Luật phải là **đọc dữ liệu lượt truy cập**, không phải «gọi `getLocale`»: root
+  layout đọc thẳng `cookies()` + `headers()`, nên luật hẹp bỏ sót đúng nguyên
+  nhân chính.
+- Root layout chặn **mọi** route, kể cả `/_not-found` — đây là gốc lớn nhất, và
+  nó không nằm trong 25 màn.
+- `generateMetadata` đọc dữ liệu lượt truy cập ở 22 file mà lượt dựng **vẫn
+  xanh** — Next cho metadata động. Đã chứng bằng lượt dựng xanh với cả 22 file
+  còn nguyên.
 
 ## Acceptance criteria
 
@@ -50,25 +65,31 @@ Given kho ở HEAD của vòng này,
 When chạy `bun run build` từ gốc kho,
 Then mã thoát 0.
 
-**AC-2 — Không màn nào còn đọc dữ liệu lượt truy cập ở vỏ tĩnh.**
-Given danh sách màn của `apps/app` sinh **từ đĩa**, không gõ tay,
+**AC-2 — Không chỗ nào còn đọc dữ liệu lượt truy cập ở vỏ tĩnh.**
+Given danh sách file của `apps/app/app/**` sinh **từ đĩa**, không gõ tay — gồm cả
+layout, không riêng màn,
 When đi từ hàm xuất mặc định của từng màn, bám tham chiếu JSX **một chặng** sang
 component con,
-Then **mọi đường** từ hàm xuất mặc định tới một lời gọi `getLocale()` đều phải đi
-qua một ranh `<Suspense>`. Đo khả năng ĐI TỚI, không đo chỗ đứng từ vựng: chính
+Then **mọi đường** từ hàm xuất mặc định tới một lời gọi đọc dữ liệu lượt truy cập
+— `getLocale` · `cookies` · `headers` · `draftMode` — đều phải đi qua một ranh
+`<Suspense>`. Luật phải theo **hành vi đọc**, không theo tên `getLocale`: root
+layout đọc thẳng `cookies()` và đó là nguyên nhân lớn nhất. Đo khả năng ĐI TỚI, không đo chỗ đứng từ vựng: chính
 cách sửa của vòng này đưa lời gọi sang một hàm anh em ngoài thân hàm xuất mặc
 định, nên luật «nằm trong thân» sẽ xanh oan.
-Số màn chân soi phải bằng neo **25**; lệch lên hay xuống đều là mã 2.
+Số file chân soi phải bằng neo **26**; lệch lên hay xuống đều là mã 2.
+Lời gọi trong `generateMetadata` được đếm và in ra nhưng **không** tính là lỗ —
+đã đo là Next cho phép.
 Chiều đỏ: cấy lại một lời gọi ngoài ranh Suspense trong bản sao thì chân trả mã 1
 và nêu `file:dòng`.
 
 **AC-3 — Chữ trên màn không đổi.**
-Given tập màn phải sửa, lấy **tại SHA ghim** (neo **19**), chứ không lấy bằng
+Given tập **màn** phải sửa, lấy **tại SHA ghim** (neo **15** — layout không có
+khoá kho chuỗi nên không thuộc phép đo này), chứ không lấy bằng
 «màn nào vòng này đã sửa» — lấy thế là tự so với chính mình,
 When với mỗi màn, so từng khoá kho chuỗi màn ấy dùng ở SHA ghim với khoá màn ấy
 dùng ở HEAD,
 Then trùng từng ký tự, cho cả `vi` lẫn `en`. Điều kiện phụ: `vi` khác `en`.
-Số ca chạy phải bằng **19**; lệch, hoặc tập rỗng, là mã 2.
+Số ca chạy phải bằng **15**; lệch, hoặc tập rỗng, là mã 2.
 
 **AC-4 — `generateMetadata` không bị đụng.**
 Given các màn có `generateMetadata`,
@@ -106,6 +127,16 @@ Then `bun run build` trả mã khác 0, thông điệp nêu tên màn ấy **và
 nhận một lỗi biên dịch nào khác thay thế. Đây là cặp hai chiều của AC-1: một lệnh
 chứng chưa bao giờ đỏ thì không phân biệt được «kho lành» với «lệnh chưa chạy».
 
+**AC-9 — Thuộc tính `lang` của trang vẫn theo tiếng của lượt truy cập.**
+Given vỏ tĩnh nay không đọc được dữ liệu lượt truy cập nên `<html lang>` in ra là
+mặc định,
+When trang tải xong phần theo tiếng,
+Then `document.documentElement.lang` bằng đúng tiếng đã giải cho lượt ấy. Vì sao
+có tiêu chí này: `lang` sai làm trình duyệt tự dịch một màn vốn đã tiếng Việt, và
+làm trình đọc màn đọc sai giọng — `CLAUDE.md` đã đòi đánh dấu để trình duyệt
+không tự dịch.
+Chiều đỏ: gỡ đoạn đặt `lang` thì phép đo phải đỏ.
+
 **AC-8 — Bốn lệnh chứng cũ còn xanh.**
 Given HEAD của vòng này,
 When chạy `bun run test`, `check-types`, `lint`, `lint:slop`,
@@ -127,7 +158,8 @@ sửa 19 màn mà không đóng lỗ thì vòng sau lọt lại.
 - **Không đổi `getLocale()`** — hàm đúng, chỗ gọi sai.
 - **Không dựng lối chọn tiếng qua middleware hay đoạn đường dẫn** — thiết kế
   khác, đắt hơn nhiều, không cần để dựng được.
-- **Không đụng `generateMetadata`** — đã đo là không phải nguyên nhân.
+- **Không đụng `generateMetadata`** — đã đo bằng lượt dựng xanh với cả 22 file còn
+  nguyên: Next cho metadata đọc dữ liệu lượt truy cập.
 - **Không thêm `build` vào `.github/workflows/ci.yml`** — `CLAUDE.md` cấm chạm CI
   của hãng.
 - **Không triển khai** — vòng này chỉ làm kho dựng được; việc đưa lên Vercel là

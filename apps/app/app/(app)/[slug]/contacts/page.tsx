@@ -23,7 +23,15 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: contactMessages(await getLocale()).title };
 }
 
-export default async function ContactsPage({
+export default function ContactsPage(props: PageProps<"/[slug]/contacts">) {
+	return (
+		<Suspense fallback={<PageShellLoading />}>
+			<ContactsPageShell {...props} />
+		</Suspense>
+	);
+}
+
+async function ContactsPageShell({
 	searchParams,
 }: PageProps<"/[slug]/contacts">) {
 	const m = contactMessages(await getLocale());
