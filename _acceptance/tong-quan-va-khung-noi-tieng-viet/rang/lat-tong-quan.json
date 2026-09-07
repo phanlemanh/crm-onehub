@@ -1,0 +1,28 @@
+{
+	"lat": "tong-quan-va-khung-noi-tieng-viet",
+	"thu_muc": [
+		"apps/app/app/(app)/[slug]"
+	],
+	"neo": {
+		"file": 6,
+		"route": 1,
+		"ghi_chu": "Hai con so lay tu kiem ke 08/09, DOC LAP voi luat quet. file dem .tsx KHONG de quy trong thu_muc (dashboard-summary · layout · overview-greeting · overview-scope · page · sales-dashboard); route dem page.tsx trong thu_muc. Bay file khung khai bang them vi chung nam rai o components/ va lib/ — quet ca thu muc components/ la keo hon 20 file cua lat khac vao. neo.file van dem thu_muc, khong dem them."
+	},
+	"them": [
+		"apps/app/components/app-icon-rail.tsx",
+		"apps/app/components/app-header.tsx",
+		"apps/app/components/mobile-nav.tsx",
+		"apps/app/components/page-shell.tsx",
+		"apps/app/components/enrichment-queue.tsx",
+		"apps/app/components/crm/quick-switcher.tsx",
+		"apps/app/lib/sign-out.ts"
+	],
+	"khong_quet": [],
+	"mien_tru": [
+		{
+			"chuoi": "OneHub",
+			"vi_sao": "ten thuong hieu — giu nguyen o ca hai ban"
+		}
+	],
+	"route_khong_dung_duoc": []
+}
