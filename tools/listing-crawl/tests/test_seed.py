@@ -23,6 +23,32 @@ class RaiDeu(unittest.TestCase):
             "mẫu không chạm phần tư cuối dải — vẫn đang cắt đầu bảng",
         )
 
+    def test_moi_phan_tu_dai_deu_gop_mau(self):
+        urls = [f"/moi-gioi-{number}" for number in range(200)]
+
+        lay = set(sample_across(urls, 20))
+
+        for thu in range(4):
+            phan = set(urls[thu * 50 : (thu + 1) * 50])
+            self.assertEqual(
+                len(phan & lay),
+                5,
+                f"phần tư thứ {thu + 1} của dải không góp đúng 5 địa chỉ — mẫu dồn về một phía",
+            )
+
+    def test_khoang_cach_giua_hai_mau_lien_nhau_khong_lech_qua_mot(self):
+        urls = [f"/moi-gioi-{number}" for number in range(97)]
+
+        lay = sample_across(urls, 30)
+        cho = [urls.index(url) for url in lay]
+        buoc = [sau - truoc for truoc, sau in zip(cho, cho[1:])]
+
+        self.assertLessEqual(
+            max(buoc) - min(buoc),
+            1,
+            f"bước rải không đều: {sorted(set(buoc))}",
+        )
+
     def test_it_hon_tran_thi_tra_nguyen(self):
         urls = ["/a", "/b", "/c", "/d", "/e"]
 
