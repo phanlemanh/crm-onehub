@@ -32,7 +32,7 @@ Source input: `_acceptance/tiep-thi-tuyen-doi-tac/uat-session.md` rủi ro 3 · 
 
 - AC-1: Given trang danh bạ cho nhiều địa chỉ hơn trần `--limit`, When gieo, Then danh sách trả về trải khắp dải — có ít nhất một địa chỉ thuộc phần cuối dải, không phải toàn phần đầu.
 - AC-2: Given số địa chỉ tìm được không vượt trần, When gieo, Then trả về đủ mọi địa chỉ, đúng thứ tự, không cắt và không rải.
-- AC-3: Given một trần, When rải mẫu, Then trả về ĐÚNG số lượng bằng trần, và không địa chỉ nào lặp lại.
+- AC-3: Given một trần NHỎ HƠN số địa chỉ tìm được, When rải mẫu, Then trả về ĐÚNG số lượng bằng trần, và không địa chỉ nào lặp lại — kể cả khi một trang danh bạ liệt hai thẻ trỏ cùng một người. (Trần lớn hơn hoặc bằng số tìm được là nhánh của AC-2.)
 - AC-4: Given cùng một dải đầu vào, When rải mẫu hai lần, Then hai lần cho cùng một kết quả — không có yếu tố ngẫu nhiên.
 - AC-5: Given không khai trần, When gieo, Then trả về mọi địa chỉ tìm được.
 - AC-6: Given đường gieo từ trang danh bạ, When gieo với một trần nhỏ hơn số địa chỉ có, Then bộ gieo vẫn đọc tới hết `directory_max_pages` chứ không dừng sớm vì đã đủ trần — chính cú dừng sớm đó làm mẫu dồn về đầu bảng.
