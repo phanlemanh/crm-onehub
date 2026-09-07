@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const GOC = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const SHA = "3c97e759a6c87bc8b6f0621d3854cb486728b442";
 const O_CAM = "build_khong_cache";
-const MAN_CAY = "apps/app/app/(app)/[slug]/settings/page.tsx";
+const VAT_CAY = "apps/app/app/layout.tsx";
 
 const doc = (p) => readFileSync(join(GOC, p), "utf8");
 const dat = [];
@@ -72,7 +72,7 @@ const chayPrePush = () => {
 	return { ma: r.status, chu: `${r.stdout}${r.stderr}` };
 };
 
-const duongMan = join(GOC, MAN_CAY);
+const duongMan = join(GOC, VAT_CAY);
 const banGoc = readFileSync(duongMan, "utf8");
 try {
 	const truoc = chayPrePush();
@@ -91,10 +91,15 @@ try {
 		process.exit(2);
 	}
 
-	const daCay = banGoc.replace(
-		"export default function GeneralSettingsPage() {",
-		"export default async function GeneralSettingsPage() {\n\tconst _t = settingsMessages(await getLocale());",
-	);
+	const daCay = banGoc
+		.replace(
+			"export default function RootLayout({",
+			"export default async function RootLayout({",
+		)
+		.replace(
+			"}>) {\n\treturn (\n\t\t<html",
+			"}>) {\n\tconst _c = await cookies();\n\treturn (\n\t\t<html",
+		);
 	if (daCay === banGoc) {
 		console.error(
 			"MA 2: doan cay KHONG ap duoc — moc cay da lech, phep do khong con nghia.",
@@ -107,7 +112,7 @@ try {
 	ghi(
 		sau.ma !== 0,
 		"dieu 4",
-		`doi chung duong ma 0 va CO chay lenh dung; cay da cay loi cu -> pre-push ma ${sau.ma}`,
+		`doi chung duong ma 0 va CO chay lenh dung; cay loi cu vao ${VAT_CAY} -> pre-push ma ${sau.ma}`,
 	);
 } finally {
 	writeFileSync(duongMan, banGoc);

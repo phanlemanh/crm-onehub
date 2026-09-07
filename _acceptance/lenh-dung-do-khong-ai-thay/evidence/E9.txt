@@ -1,0 +1,3 @@
+cookie lang=vi -> documentElement.lang = vi
+cookie lang=en -> documentElement.lang = en
+XANH: moi luot truy cap deu duoc dat documentElement.lang dung tieng cua no.

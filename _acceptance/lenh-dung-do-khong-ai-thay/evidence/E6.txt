@@ -1,0 +1,5 @@
+o cam: bunx turbo run build --force
+  luot 1: bypass=4 hit=0 fullTurbo=false
+  luot 2: bypass=4 hit=0 fullTurbo=false
+  doi chieu (khong co --force): bypass=0 hit=4 fullTurbo=true
+XANH: hai luot cua o cam deu that su dung, trong khi lenh khong co --force an dem — cap hai chieu tren cung mot vat.

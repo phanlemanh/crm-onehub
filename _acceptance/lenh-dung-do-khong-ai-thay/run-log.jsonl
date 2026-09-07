@@ -1,0 +1,16 @@
+{"ts": "2026-09-07T04:51:50.711Z", "kind": "round", "run_id": "s4r1-20260907T045150Z-29244", "sha": "5324ff805a25c6d8e86dae3e76529ac3375cf7ff", "round": 1}
+{"ts": "2026-09-07T04:52:02.696Z", "kind": "eval", "run_id": "s4r1-20260907T045150Z-29244-E2", "eval": "E2", "criterion": "AC-2", "verifier": "config:executors.script.ld_khong_doc_ngoai_suspense", "exit_code": 0}
+{"ts": "2026-09-07T04:52:02.749Z", "kind": "eval", "run_id": "s4r1-20260907T045150Z-29244-E3", "eval": "E3", "criterion": "AC-3", "verifier": "config:executors.script.ld_man_khong_doi", "exit_code": 0}
+{"ts": "2026-09-07T04:52:03.124Z", "kind": "eval", "run_id": "s4r1-20260907T045150Z-29244-E4", "eval": "E4", "criterion": "AC-4", "verifier": "config:executors.script.ld_metadata_nguyen_ven", "exit_code": 0}
+{"ts": "2026-09-07T04:52:04.478Z", "kind": "eval", "run_id": "s4r1-20260907T045150Z-29244-E9", "eval": "E9", "criterion": "AC-9", "verifier": "config:executors.script.ld_lang_theo_tieng", "exit_code": 0}
+{"ts": "2026-09-07T04:52:18.242Z", "kind": "eval", "run_id": "s4r1-20260907T045150Z-29244-E1", "eval": "E1", "criterion": "AC-1", "verifier": "config:executors.script.ld_lenh_dung_xanh", "exit_code": 0}
+{"ts": "2026-09-07T04:52:30.820Z", "kind": "eval", "run_id": "s4r1-20260907T045150Z-29244-E6", "eval": "E6", "criterion": "AC-6", "verifier": "config:executors.script.ld_o_cam_ep_chay_lai", "exit_code": 0}
+{"ts": "2026-09-07T04:53:04.414Z", "kind": "eval", "run_id": "s4r1-20260907T045150Z-29244-E7", "eval": "E7", "criterion": "AC-7", "verifier": "config:executors.script.ld_bat_duoc_lop_loi", "exit_code": 0}
+{"ts": "2026-09-07T04:54:00.670Z", "kind": "eval", "run_id": "s4r1-20260907T045150Z-29244-E5", "eval": "E5", "criterion": "AC-5", "verifier": "config:executors.script.ld_ba_noi_deu_chay", "exit_code": 2}
+{"ts": "2026-09-07T04:54:33.336Z", "kind": "eval", "run_id": "s4r1-20260907T045150Z-29244-E8", "eval": "E8", "criterion": "AC-8", "verifier": "config:executors.script.ld_bon_lenh_cu", "exit_code": 0}
+{"ts": "2026-09-07T04:56:42.913Z", "kind": "eval", "run_id": "s4r1-20260907T045150Z-29244-E5b", "eval": "E5", "criterion": "AC-5", "verifier": "config:executors.script.ld_ba_noi_deu_chay", "exit_code": 0, "note": "chay lai sau khi doi moc cay tu man sang layout \u2014 luot truoc tra ma 2 vi moc lech"}
+{"ts": "2026-09-07T04:57:07.696Z", "kind": "suite", "run_id": "s4r1-20260907T045150Z-29244-suite-test", "cmd": "test", "exit_code": 0}
+{"ts": "2026-09-07T04:57:23.108Z", "kind": "suite", "run_id": "s4r1-20260907T045150Z-29244-suite-check-types", "cmd": "check-types", "exit_code": 0}
+{"ts": "2026-09-07T04:57:23.862Z", "kind": "suite", "run_id": "s4r1-20260907T045150Z-29244-suite-lint", "cmd": "lint", "exit_code": 0}
+{"ts": "2026-09-07T04:57:24.397Z", "kind": "suite", "run_id": "s4r1-20260907T045150Z-29244-suite-lint-slop", "cmd": "lint-slop", "exit_code": 0}
+{"ts": "2026-09-07T04:57:37.905Z", "kind": "suite", "run_id": "s4r1-20260907T045150Z-29244-suite-build", "cmd": "build", "exit_code": 0}
