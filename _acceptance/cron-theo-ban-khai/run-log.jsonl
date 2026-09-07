@@ -13,3 +13,17 @@
 {"ts": "2026-09-07T08:53:22.937Z", "kind": "suite", "run_id": "s4r1-20260907T084712Z-30364-suite-lint", "cmd": "lint", "exit_code": 0}
 {"ts": "2026-09-07T08:53:23.423Z", "kind": "suite", "run_id": "s4r1-20260907T084712Z-30364-suite-lint-slop", "cmd": "lint-slop", "exit_code": 0}
 {"ts": "2026-09-07T08:53:36.333Z", "kind": "suite", "run_id": "s4r1-20260907T084712Z-30364-suite-build", "cmd": "build", "exit_code": 0}
+{"ts": "2026-09-07T09:14:21.100Z", "kind": "round", "run_id": "s4r2-20260907T091421Z-14559", "sha": "d1169481ca205c2bc33df75493ae6ac9655bfc6c", "round": 2}
+{"ts": "2026-09-07T09:14:22.247Z", "kind": "eval", "run_id": "s4r2-20260907T091421Z-14559-E8", "eval": "E8", "criterion": "AC-8", "verifier": "config:executors.script.cr_ban_trien_khai_that", "exit_code": 0}
+{"ts": "2026-09-07T09:14:22.367Z", "kind": "eval", "run_id": "s4r2-20260907T091421Z-14559-E2", "eval": "E2", "criterion": "AC-2", "verifier": "config:executors.script.cr_khong_ghim_cung", "exit_code": 0}
+{"ts": "2026-09-07T09:14:22.496Z", "kind": "eval", "run_id": "s4r2-20260907T091421Z-14559-E4", "eval": "E4", "criterion": "AC-4", "verifier": "config:executors.script.cr_duong_co_that", "exit_code": 0}
+{"ts": "2026-09-07T09:14:24.919Z", "kind": "eval", "run_id": "s4r2-20260907T091421Z-14559-E5", "eval": "E5", "criterion": "AC-5", "verifier": "config:executors.script.cr_khong_con_bi_danh", "exit_code": 0}
+{"ts": "2026-09-07T09:14:29.476Z", "kind": "eval", "run_id": "s4r2-20260907T091421Z-14559-E1", "eval": "E1", "criterion": "AC-1", "verifier": "config:executors.script.cr_dung_ban_khai", "exit_code": 0}
+{"ts": "2026-09-07T09:14:35.097Z", "kind": "eval", "run_id": "s4r2-20260907T091421Z-14559-E3", "eval": "E3", "criterion": "AC-3", "verifier": "config:executors.script.cr_vang_khai_thi_dung", "exit_code": 0}
+{"ts": "2026-09-07T09:14:37.929Z", "kind": "eval", "run_id": "s4r2-20260907T091421Z-14559-E6", "eval": "E6", "criterion": "AC-6", "verifier": "config:executors.script.cr_phan_con_lai_khong_doi", "exit_code": 0}
+{"ts": "2026-09-07T09:15:31.271Z", "kind": "eval", "run_id": "s4r2-20260907T091421Z-14559-E7", "eval": "E7", "criterion": "AC-7", "verifier": "config:executors.script.cr_nam_lenh_chung", "exit_code": 0}
+{"ts": "2026-09-07T09:15:54.309Z", "kind": "suite", "run_id": "s4r2-20260907T091421Z-14559-suite-test", "cmd": "test", "exit_code": 0}
+{"ts": "2026-09-07T09:16:07.945Z", "kind": "suite", "run_id": "s4r2-20260907T091421Z-14559-suite-check-types", "cmd": "check-types", "exit_code": 0}
+{"ts": "2026-09-07T09:16:08.667Z", "kind": "suite", "run_id": "s4r2-20260907T091421Z-14559-suite-lint", "cmd": "lint", "exit_code": 0}
+{"ts": "2026-09-07T09:16:09.185Z", "kind": "suite", "run_id": "s4r2-20260907T091421Z-14559-suite-lint-slop", "cmd": "lint-slop", "exit_code": 0}
+{"ts": "2026-09-07T09:16:21.803Z", "kind": "suite", "run_id": "s4r2-20260907T091421Z-14559-suite-build", "cmd": "build", "exit_code": 0}

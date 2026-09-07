@@ -1,4 +1,4 @@
-sha dang xet: 3d5b7324 · ban trien khai READY khop sha: 1
+sha dang xet: d1169481 · ban trien khai READY khop sha: 2
 nen tang dang ky: 5 · ban khai: 5
   */5 * * * *  /internal/sync/mailboxes
   0 6 * * *  /internal/sync/rates

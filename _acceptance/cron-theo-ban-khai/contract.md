@@ -5,7 +5,7 @@ slug: cron-theo-ban-khai
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [api, ci]
-status: implemented
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
