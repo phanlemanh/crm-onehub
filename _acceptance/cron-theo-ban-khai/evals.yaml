@@ -1,0 +1,153 @@
+schema_version: 1
+slug: cron-theo-ban-khai
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.cr_dung_ban_khai
+    paths:
+      - "apps/api/scripts/build-func.mjs"
+      - "apps/api/vercel.json"
+      - "_acceptance/cron-theo-ban-khai/rang/**"
+    expected: |
+      Chay `build-func.mjs` that trong mot BAN SAO, roi doc
+      `.vercel/output/config.json`. So khoi `crons` voi khoi `crons` cua
+      `apps/api/vercel.json` — so TUNG PHAN TU (path + schedule), khong so so dem.
+      CAP HAI CHIEU tren cung mot vat, ca hai deu phai chay that:
+        chieu 1: THEM mot dong vao vercel.json cua ban sao -> config.json phai co
+                 them dung dong ay.
+        chieu 2: GO mot dong -> config.json phai mat dung dong ay.
+      Neu doi mot chieu ma config.json khong doi -> ma 1: khi ay no khong doc ban
+      khai, no chi tinh co trung.
+      San dan so: ban khai co 0 cron -> ma 2; hai ben cung rong thi "bang nhau"
+      khong noi len dieu gi.
+      Ban sao phai la he quy chieu DUY NHAT: chan chay build-func voi cwd tai goc
+      ban sao va doc `config.json` bang duong suy tu goc ban sao. Chan phai IN duong
+      tuyet doi no vua doc; duong ay nam ngoai ban sao -> ma 2.
+      Khong chay duoc build-func -> ma 2.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.cr_khong_ghim_cung
+    paths:
+      - "apps/api/scripts/build-func.mjs"
+      - "_acceptance/cron-theo-ban-khai/rang/**"
+    expected: |
+      Doc `build-func.mjs` bang AST: khong duoc co mang cron nao viet san trong ma —
+      tuc khong object literal nao mang ca hai khoa `path` va `schedule`.
+      Do bang AST chu khong tim chuoi "cron": chu ay con xuat hien hop le o cho khac.
+      Chieu do: cay lai mot mang cron ghim cung vao ban sao -> ma 1, neu `file:dong`.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.cr_vang_khai_thi_dung
+    paths:
+      - "apps/api/scripts/build-func.mjs"
+      - "_acceptance/cron-theo-ban-khai/rang/**"
+    expected: |
+      BON buoc, MOI BUOC MOT BAN SAO MOI — khong dung chung mot ban sao, vi mot
+      `config.json` sot lai tu buoc truoc lam buoc sau xanh oan:
+      1. DOI CHUNG DUONG: ban sao co ban khai du -> `build-func.mjs` ma 0 VA
+         config.json co du 5 dong. Khong dat -> ma 2.
+      2. Xoa `apps/api/vercel.json` -> ma KHAC 0, thong diep neu ten file. Va
+         `.vercel/output/config.json` KHONG duoc ton tai voi crons rong.
+      3. Co vercel.json nhung KHONG co khoa `crons` -> ma khac 0, neu ten file.
+      4. Co khoa `crons` nhung MANG RONG -> ma khac 0, neu ten file. Day la hinh
+         dang thu ba cung lop, va la ca de lot nhat: mot mang hop le, rong.
+      Ma 0 o buoc 2, 3 hoac 4 -> ma 1.
+      Moi buoc phai IN duong tuyet doi cua ban sao va cua file vua doc; doc trung
+      file cua kho that -> ma 2.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.cr_duong_co_that
+    paths:
+      - "apps/api/vercel.json"
+      - "apps/api/src/**"
+      - "_acceptance/cron-theo-ban-khai/rang/**"
+    expected: |
+      MA TRAN TOAN PHAN VIET TRUOC — sau duong, ghim nguyen van trong chan, lay tu
+      neo da do tren ban dang chay:
+        /internal/sync/mailboxes · /internal/sync/rates · /internal/telemetry/rollup
+        /internal/tracking/retention · /internal/archive/prune · /internal/sync/google
+      Dan so sinh TU DIA bang AST: quet `apps/api/src`, ghep `@Controller` prefix voi
+      duong cua tung method, lay moi route `/internal/*`.
+      Tap tim duoc phai BANG DUNG sau duong ay. Khac 6 -> ma 2, IN ca danh sach tim
+      duoc lan danh sach thieu. Chot "lon hon 0" qua long: mot bo quet chi bat duoc
+      hai duong van qua chot ay roi do oan tren ba duong con lai.
+      Voi tung `path` trong vercel.json: phai khop dung mot route.
+      Mot path khong co route -> ma 1, neu path.
+      Chieu do: doi mot path trong ban khai cua ban sao thanh duong khong ton tai -> ma 1.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.cr_khong_con_bi_danh
+    paths:
+      - "apps/api/vercel.json"
+      - "_acceptance/cron-theo-ban-khai/rang/**"
+    expected: |
+      HAI dieu:
+      1. `config.json` sau luot dung KHONG chua `/internal/sync/google`, VA
+         `/internal/sync/mailboxes` co mat voi dung nhip `*/5 * * * *`.
+      2. DO QUAN HE, khong do chuoi co mat: hai duong ay phai tro ve CUNG MOT PHUONG
+         THUC XU LY trong bang route cua API — doc bang AST, ghep `@Controller` prefix
+         voi duong cua method, roi so ten method.
+         Hai handler khac nhau -> ma 1, NEU TEN CA HAI: khi ay go bi danh la dung
+         lang le viec nen DUY NHAT dang chay.
+      Vi sao dieu 2 bat buoc: neo "403" chi chung duong TON TAI, khong chung no LAM
+      viec ay. Loi hua "bo bi danh van an toan" phai dung tren dau ra cua ma.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.cr_phan_con_lai_khong_doi
+    paths:
+      - "apps/api/scripts/build-func.mjs"
+      - "_acceptance/cron-theo-ban-khai/rang/**"
+    expected: |
+      Dung config.json tai SHA GHIM (chay build-func cua ban cu trong mot ban sao)
+      va config.json cua HEAD, roi so:
+        `version` va `routes` phai TRUNG TUNG KY TU.
+        chi khoi `crons` duoc khac.
+      Va `.vercel/output/functions/api/index.func/index.mjs` phai ton tai va khong
+      rong sau luot dung cua HEAD.
+      Mot khoa ngoai `crons` doi -> ma 1, neu ten khoa va ca hai gia tri.
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.cr_ban_trien_khai_that
+    paths:
+      - "apps/api/vercel.json"
+      - "apps/api/scripts/build-func.mjs"
+      - "_acceptance/cron-theo-ban-khai/rang/**"
+    expected: |
+      Do tren BAN TRIEN KHAI THAT, khong do file tren dia:
+      doc khoi `crons` cua ban triem khai production moi nhat cua `crm-onehub-api`
+      qua API cua nen tang — DUNG dung cu da lap neo "mot cron" truoc vong.
+      Xanh: dung NAM muc, va tung cap `path` + `schedule` khop `apps/api/vercel.json`.
+      Lech mot muc -> ma 1, in ca hai danh sach.
+      Khong doc duoc ban trien khai (het han xac thuc, khong co ban nao) -> ma 2,
+      KHONG phai ma 0.
+      Vi sao eval nay bat buoc: moi eval khac dung o mot file tren dia. Mot luot dung
+      ghi dung nam dong vao `.vercel/output` ma nen tang van dang ky lich cu la ca
+      hong ma ca bay eval kia deu xanh — dung lop loi vong nay tuyen dong.
+      GHI CHU: eval nay chi chay duoc SAU khi vong len production.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.cr_nam_lenh_chung
+    paths:
+      - "apps/**"
+      - "packages/**"
+    expected: |
+      Chay `bun run test`, `check-types`, `lint`, `lint:slop`, `build`, in ma tung lenh.
+      Xanh: ca nam ma 0, VA `apps/app` ra dung ba canh bao lint — so ba la con so GHIM
+      cua kho, lech hai chieu deu la do.
+      Mot lenh khac 0 -> ma 1, neu ten lenh va ma.
