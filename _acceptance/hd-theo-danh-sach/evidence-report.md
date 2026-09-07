@@ -1,7 +1,7 @@
 ---
 schema_version: 2
 feature_slug: hd-theo-danh-sach
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: sequential per-eval verify, run_id minted at execution
@@ -9,7 +9,7 @@ enforcement_mode: strict
 bypass_used: false
 verified_commit: ec21c3bd557378cf105ccd3cc3e5d03ee4338278
 run_id: s4r1-20260907T020741Z
-human_signoff:
+human_signoff: Manh Phan 2026-09-07
 ---
 
 # Evidence Report: hd-theo-danh-sach
@@ -23,7 +23,7 @@ human_signoff:
 | E5 | AC-5 | test | PASS |
 | E8 | AC-8 | test | PASS |
 | E6 | AC-6 | script | PASS |
-| E7 | AC-7 | judgment | UNCERTAIN |
+| E7 | AC-7 | judgment | PASS |
 
 ## Evidence
 
@@ -109,7 +109,8 @@ human_signoff:
 - eval: E7
   exit_code:
   verifier: judgment
-  verified_at:
+  verified_at: 2026-09-07
+  human_override: PASS — Manh Phan 2026-09-07: dong y mo tai khoan phanlemanh@gmail.com; cai gia "bi tu choi sau khi da chon tai khoan" la dang.
   output: |
     Muc phan xet — may KHONG cham. Nguoi doc cau tu choi ma mot dia chi ngoai
     domain nhan sau khi da chon tai khoan Google, roi quyet cai gia ay co dang
