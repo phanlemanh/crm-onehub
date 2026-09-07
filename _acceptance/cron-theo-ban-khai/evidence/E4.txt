@@ -1,0 +1,10 @@
+route /internal/* tim duoc tren dia: 7
+  /internal/archive/prune
+  /internal/listings/ingest
+  /internal/sync/google
+  /internal/sync/mailboxes
+  /internal/sync/rates
+  /internal/telemetry/rollup
+  /internal/tracking/retention
+path trong ban khai: 5 · thieu route: 0
+XANH: ca 5 path cua ban khai deu tro toi mot route co that, va bo quet bat duoc ca bi danh /internal/sync/google.

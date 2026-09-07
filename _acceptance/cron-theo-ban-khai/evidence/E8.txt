@@ -1,0 +1,8 @@
+sha dang xet: 3d5b7324 · ban trien khai READY khop sha: 1
+nen tang dang ky: 5 · ban khai: 5
+  */5 * * * *  /internal/sync/mailboxes
+  0 6 * * *  /internal/sync/rates
+  0 7 * * *  /internal/telemetry/rollup
+  0 4 * * *  /internal/tracking/retention
+  0 5 * * *  /internal/archive/prune
+XANH: ban trien khai that cua crm-onehub-api dang ky dung 5 viec, tung cap path va nhip khop ban khai.

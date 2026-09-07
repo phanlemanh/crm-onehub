@@ -1,0 +1,15 @@
+{"ts": "2026-09-07T08:47:12.647Z", "kind": "round", "run_id": "s4r1-20260907T084712Z-30364", "sha": "3d5b732459d262b0afe7c01c5ba2d92c2e508849", "round": 1}
+{"ts": "2026-09-07T08:47:12.766Z", "kind": "eval", "run_id": "s4r1-20260907T084712Z-30364-E2", "eval": "E2", "criterion": "AC-2", "verifier": "config:executors.script.cr_khong_ghim_cung", "exit_code": 0}
+{"ts": "2026-09-07T08:47:12.885Z", "kind": "eval", "run_id": "s4r1-20260907T084712Z-30364-E4", "eval": "E4", "criterion": "AC-4", "verifier": "config:executors.script.cr_duong_co_that", "exit_code": 0}
+{"ts": "2026-09-07T08:47:13.602Z", "kind": "eval", "run_id": "s4r1-20260907T084712Z-30364-E8", "eval": "E8", "criterion": "AC-8", "verifier": "config:executors.script.cr_ban_trien_khai_that", "exit_code": 2}
+{"ts": "2026-09-07T08:47:15.844Z", "kind": "eval", "run_id": "s4r1-20260907T084712Z-30364-E5", "eval": "E5", "criterion": "AC-5", "verifier": "config:executors.script.cr_khong_con_bi_danh", "exit_code": 0}
+{"ts": "2026-09-07T08:47:19.940Z", "kind": "eval", "run_id": "s4r1-20260907T084712Z-30364-E1", "eval": "E1", "criterion": "AC-1", "verifier": "config:executors.script.cr_dung_ban_khai", "exit_code": 0}
+{"ts": "2026-09-07T08:51:35.580Z", "kind": "eval", "run_id": "s4r1-20260907T084712Z-30364-E8b", "eval": "E8", "criterion": "AC-8", "verifier": "config:executors.script.cr_ban_trien_khai_that", "exit_code": 0}
+{"ts": "2026-09-07T08:51:52.006Z", "kind": "eval", "run_id": "s4r1-20260907T084712Z-30364-E3", "eval": "E3", "criterion": "AC-3", "verifier": "config:executors.script.cr_vang_khai_thi_dung", "exit_code": 0}
+{"ts": "2026-09-07T08:51:54.746Z", "kind": "eval", "run_id": "s4r1-20260907T084712Z-30364-E6", "eval": "E6", "criterion": "AC-6", "verifier": "config:executors.script.cr_phan_con_lai_khong_doi", "exit_code": 0}
+{"ts": "2026-09-07T08:52:37.810Z", "kind": "eval", "run_id": "s4r1-20260907T084712Z-30364-E7", "eval": "E7", "criterion": "AC-7", "verifier": "config:executors.script.cr_nam_lenh_chung", "exit_code": 0}
+{"ts": "2026-09-07T08:53:08.754Z", "kind": "suite", "run_id": "s4r1-20260907T084712Z-30364-suite-test", "cmd": "test", "exit_code": 0}
+{"ts": "2026-09-07T08:53:22.298Z", "kind": "suite", "run_id": "s4r1-20260907T084712Z-30364-suite-check-types", "cmd": "check-types", "exit_code": 0}
+{"ts": "2026-09-07T08:53:22.937Z", "kind": "suite", "run_id": "s4r1-20260907T084712Z-30364-suite-lint", "cmd": "lint", "exit_code": 0}
+{"ts": "2026-09-07T08:53:23.423Z", "kind": "suite", "run_id": "s4r1-20260907T084712Z-30364-suite-lint-slop", "cmd": "lint-slop", "exit_code": 0}
+{"ts": "2026-09-07T08:53:36.333Z", "kind": "suite", "run_id": "s4r1-20260907T084712Z-30364-suite-build", "cmd": "build", "exit_code": 0}
