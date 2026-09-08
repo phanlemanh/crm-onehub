@@ -185,7 +185,13 @@ async def live_run(limit: int | None) -> tuple[list[dict], dict]:
                 blocked += 1
                 LOGGER.warning("bỏ qua %s: %s", url, error)
 
-        await reveal_phones(fetch, run, items, int(settings["phone_reveal_cap"]))
+        await reveal_phones(
+            fetch,
+            run,
+            items,
+            int(settings["phone_reveal_cap"]),
+            settings["phone_reveal_tiers"],
+        )
         return items, {
             "gieo": len(seeds),
             "lay_duoc": len(items),
@@ -276,8 +282,10 @@ async def seed_urls(
     }
 
 
-async def reveal_phones(fetch, run, items: list[dict], cap: int) -> None:
-    targets = [item for item in items if item["tier"] == "cao" and "phone" not in item][:cap]
+async def reveal_phones(fetch, run, items: list[dict], cap: int, tiers) -> None:
+    muc = tuple(tiers)
+    hop_le = [item for item in items if item["tier"] in muc and "phone" not in item]
+    targets = sample_across(hop_le, cap) if cap > 0 else []
     if not targets:
         return
     reveal = run.clone(js_code=PHONE_REVEAL_JS)
