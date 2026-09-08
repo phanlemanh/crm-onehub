@@ -39,7 +39,7 @@ don_du() {
 }
 don_du
 
-TAC_VU="check-types lint lint:slop test"
+TAC_VU="check-types lint lint:slop test build"
 
 SHA="$(git -C "$ROOT" rev-parse HEAD)"
 REF() { printf 'refs/heads/onehub %s refs/heads/onehub %s\n' "$SHA" "$SHA"; }
