@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 80f872e410525a68116613714b22e8f9479726dc
+verified_commit: 17b1a736c7793987150a13a1205745324e648ef3
 human_signoff: Phan Le Manh 2026-09-09 — ký Cổng 2 trên verdict PASS của vòng chấm 9 (25/25 eval, hội đồng đạt, 5/5 lệnh chứng xanh), với BA giới hạn đã khai. Ký trên hiểu biết rằng mười một trong hai mươi lăm phép đo chạy qua làn nối tiếp do chính phiên viết mã chạy, rằng bốn vòng chấm trước hỏng vì tầng tác nhân chứ không vì mã, và rằng mười ba mục ngoài hợp đồng đã được định đoạt từng mục ở lượt ký này.
 ---
 
@@ -465,3 +465,7 @@ none — không có eval nào mang field runs>1 trong vòng này; không có k�
 ## Iterations
 
 Round 9: E1-E25 (24 eval máy + 1 judgment) và năm lệnh suite hồi quy (bun run test, turbo check-types, turbo lint, lint:slop, turbo build) đều pass, không eval nào fail — verdict PASS. Lịch sử các vòng trước không có trong dữ liệu đưa vào lần tổng hợp này.
+
+### Re-pin lần 1 — 2026-09-08, do bang chung neo o 80f872e; diff tu do toi HEAD chi cham ho so _acceptance va PRODUCT-MAP va thu muc evidence lac o goc kho, khong cham file nao trong paths cua eval nao
+run_id: repin-20260908T233212Z-34776
+sha: 17b1a736c7793987150a13a1205745324e648ef3 · suites: 5 lệnh exit 0 · evals: 23 eval máy exit 0
