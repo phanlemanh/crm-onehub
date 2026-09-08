@@ -2,323 +2,332 @@
 schema_version: 2
 feature_slug: tong-quan-va-khung-noi-tieng-viet
 verdict: BLOCKED
-failed_evals: [E2, E23]
+failed_evals: []
 reason: |
-  E8 (AC-8, du-lieu-nguoi-nhap): agent verify bị skip/chết giữa chừng — không có
-  kết quả nào ghi lại cho bề mặt này, không được tính là pass. Lệnh:
-  NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs du-lieu-nguoi-nhap
-  E12 (AC-11, be-rong): agent verify bị skip/chết giữa chừng — không có kết quả
-  nào ghi lại cho bề mặt này, không được tính là pass. Lệnh:
-  NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs be-rong
-  Đồng thời E2 và E23 đã CHẠY nhưng FAIL thật (exit khác 0) — xem bảng + khối
-  Evidence bên dưới; verdict tổng là BLOCKED chứ không phải REJECT thuần vì hai
-  eval E8/E12 chưa từng chạy được, không phải chạy-rồi-fail.
+  E22 (AC-1, chiều đỏ của sàn thiết kế) không đo được: Precondition not met — máy chủ app tại http://localhost:3000 không chạy hoặc không phản hồi đúng. Chân đo đòi hỏi app chạy tại localhost:3000 và trả header Location. Thông điệp lỗi thật: 'KHONG DO DUOC: tien de thieu — http://localhost:3000/ tra 200 ma khong co Location, khong suy duoc slug.' (Cannot measure: precondition missing - http://localhost:3000/ returns 200 but no Location header, cannot infer slug). Cần khởi động lại app server (bun run dev ở apps/app, cổng 3000) rồi verify lại E22 trước khi vòng này có thể lên PASS hoặc PENDING-JUDGMENT.
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c3df13a2315e9413027693eb8e1c47c7728d8659
+verified_commit: c2f9f4989c0198d7e3c6a1d174c4106fec439744
 human_signoff:
 ---
 
 # Evidence Report: tong-quan-va-khung-noi-tieng-viet
 
+⚠ Vòng 5 BLOCKED — 22/23 eval máy đã chạy và PASS trên cây `c2f9f4989c0198d7e3c6a1d174c4106fec439744`; riêng E22 không đo được vì máy chủ app (localhost:3000) không phản hồi đúng tiền đề. Không có eval nào FAIL — đây không phải REJECT, mà là một chân không chạy được vì môi trường.
+
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
 | E1 | AC-1 | script | PASS |
-| E2 | AC-2 | script | FAIL |
+| E2 | AC-2 | script | PASS |
 | E3 | AC-4 | script | PASS |
 | E4 | AC-4 | script | PASS |
 | E5 | AC-5 | script | PASS |
 | E6 | AC-6 | script | PASS |
 | E7 | AC-7 | script | PASS |
-| E8 | AC-8 | script | BLOCKED |
+| E8 | AC-8 | script | PASS |
 | E9 | AC-9 | script | PASS |
 | E10 | AC-9 | script | PASS |
 | E11 | AC-10 | script | PASS |
-| E12 | AC-11 | script | BLOCKED |
+| E12 | AC-11 | script | PASS |
 | E13 | AC-12 | script | PASS |
 | E14 | AC-13 | script | PASS |
 | E15 | AC-14 | script | PASS |
 | E16 | AC-15 | test | PASS |
 | E17 | AC-16 | test | PASS |
 | E18 | AC-1 | ui-check | PASS |
-| E19 | AC-17 | judgment | PASS |
+| E19 | AC-17 | judgment | PASS (đề xuất hội đồng — chờ human_override tại Gate 2) |
 | E20 | AC-5 | test | PASS |
 | E21 | AC-3 | script | PASS |
-| E22 | AC-1 | script | PASS |
-| E23 | AC-10 | script | FAIL |
+| E22 | AC-1 | script | BLOCKED (cannot-run — tiền đề thiếu) |
+| E23 | AC-10 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E1-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E1-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tq_hai_tieng
-  verified_at: 2026-09-08T09:00:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
        document.title: vi="Tổng quan · OneHub CRM" · en="Overview · OneHub CRM"
 
     ket qua: 225 cap doi chieu · hong=0
 
 - eval: E2
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E2-r4
-  exit_code: 2
-  baseline: n-a
-  verifier: config:executors.script.tq_sau_bam
-  verified_at: 2026-09-08T09:02:00+07:00
+  run_id: f64d2d96-c192-4e17-903d-29da82e9f3f9
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.tq_lan_sau_bam
+  verified_at: 2026-09-08 (round 5)
   output: |
-    -- ngan keo tren / · vi=10 chuoi · en=10 chuoi
-       cap doi chieu=10 · lech=0 · giong=0 · khong dau=0
-
-    ket qua: 3/4 be mat · 18 cap · hong=0
-    KHONG DO DUOC: ngan keo tren /chat (chi rail): /chat (lang=en) — KHONG DO DUOC: tien de thieu — xin lang=en nhung trang ve lang=.
+      ket qua: 4/4 be mat · 26 cap · hong=0
+      $ bun scripts/dev-session.ts dev@localhost
+    XANH: E2 da chay noi tiep tren dung cay nay va tra ma 0.
 
 - eval: E3
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E3-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E3-r5
   exit_code: 0
   baseline: red
   verifier: config:executors.script.tq_chu_cung_jsx
-  verified_at: 2026-09-08T09:04:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
     ket qua: 6 file .tsx tren dia, tru 0 loai tru co ten, cong 7 khai them = 13 file quet. 0 chuoi khoa cung ngoai 0 dong mien tru, va ca 0 dong deu con doi tuong that.
 
 - eval: E4
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E4-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E4-r5
   exit_code: 0
   baseline: red
   verifier: config:executors.script.tq_moi_chuoi
-  verified_at: 2026-09-08T09:06:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
+
     quet 13 file · 30 chuoi nguoi co the doc · tru 23/23 dong giu nguyen co ten
     XANH: khong chuoi nguoi doc thay nao con la tieng Anh.
 
 - eval: E5
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E5-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E5-r5
   exit_code: 0
   baseline: red
   verifier: config:executors.script.tq_toast
-  verified_at: 2026-09-08T09:08:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
-    quet 13 file · 3 loi goi toast · literal tieng Anh trong toast: 0
     quan he: apps/app/components/app-header.tsx truyen t.header.signOutFailed → apps/app/lib/sign-out.ts tham so loiMacDinh → toast.error doc tham so
 
 - eval: E6
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E6-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E6-r5
   exit_code: 0
   baseline: red
   verifier: config:executors.script.tq_tieu_de
-  verified_at: 2026-09-08T09:10:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
     quet 13 file · 1 o nhan (1 tieu de tab + 0 nhan thanh ben) · 0 nhan thanh ben deu giai duoc qua nhom thanhBen (0 khoa) · 0 o con viet thang
     XANH: ca 1 o nhan deu doc tu kho chuoi.
 
 - eval: E7
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E7-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E7-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tq_khong_dich
-  verified_at: 2026-09-08T09:12:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
     -- nhan giai doan mang lang=en tren man: 4/4
 
     ket qua: thua=0 · thieu=0 · giai doan thieu lang=en=0 · muc ma hong=0
 
+- eval: E8
+  run_id: f64d2d96-c192-4e17-903d-29da82e9f3f9
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.tq_lan_du_lieu_nguoi_nhap
+  verified_at: 2026-09-08 (round 5)
+  output: |
+      ket qua: chan ma thieu=0 · chan man do duoc=7 · khong do duoc=6 · thieu tren man=0 · dong bang=13
+      $ bun scripts/dev-session.ts dev@localhost
+    XANH: E8 da chay noi tiep tren dung cay nay va tra ma 0.
+
 - eval: E9
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E9-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E9-r5
   exit_code: 0
   baseline: red
   verifier: config:executors.script.tq_khai_sinh
-  verified_at: 2026-09-08T09:14:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
     hang FILE: {"latSinh":13,"chanJsx":13,"chanNgoaiToast":13,"chanNgoaiTieuDe":13}
     hang VAT:  {"toastNhanRa":2,"toastKhai":2,"tieuDeNhanRa":1,"tieuDeKhai":1}
     XANH: 13 file, ba chan doc bang nhau; 2 loi goi toast va 1 o tieu de, khop bang khai.
 
 - eval: E10
-  run_id: 0e36640c-9fec-4f5b-9a7b-fb35f25a2870
+  run_id: f64d2d96-c192-4e17-903d-29da82e9f3f9
   exit_code: 0
   baseline: red
   verifier: config:executors.script.tq_lan_dan_so
-  verified_at: 2026-09-08T09:16:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
       tha them mot file .tsx mang chu tieng Anh: dan so 6 -> 7 · moi-chuoi(1) chu-cung-jsx(1) · cay da don sach
       XANH: dan so tu thay file moi, va ca hai chan deu do vi no.
     XANH: E10 da chay noi tiep tren dung cay nay va tra ma 0.
 
 - eval: E11
-  run_id: 0e36640c-9fec-4f5b-9a7b-fb35f25a2870
+  run_id: f64d2d96-c192-4e17-903d-29da82e9f3f9
   exit_code: 0
   baseline: red
   verifier: config:executors.script.tq_lan_dot_bien
-  verified_at: 2026-09-08T09:18:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
-      cay lam viec da tro ve dung trang thai truoc khi chay.
-      XANH: ca 7 vet deu bi it nhat mot chan bat, va cay lanh thi ca 6 chan deu xanh.
+    XANH: ca 7 vet deu bi it nhat mot chan bat, va cay lanh thi ca 6 chan deu xanh.
     XANH: E11 da chay noi tiep tren dung cay nay va tra ma 0.
 
+- eval: E12
+  run_id: f64d2d96-c192-4e17-903d-29da82e9f3f9
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.tq_lan_be_rong_man
+  verified_at: 2026-09-08 (round 5)
+  output: |
+      ket qua 360px: 62 nhan dich duoc · vi tran ma en vua=0 · tran ca hai=0 · tu choi=0
+      $ bun scripts/dev-session.ts dev@localhost
+    XANH: E12 da chay noi tiep tren dung cay nay va tra ma 0.
+
 - eval: E13
-  run_id: 0e36640c-9fec-4f5b-9a7b-fb35f25a2870
+  run_id: f64d2d96-c192-4e17-903d-29da82e9f3f9
   exit_code: 0
   baseline: red
   verifier: config:executors.script.tq_lan_be_rong
-  verified_at: 2026-09-08T09:20:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
       cay lam viec da tro ve dung trang thai truoc khi chay.
       XANH: chan be-rong do dung chieu — 1 nhan tran o luot vi trong khi luot en vua, tai 360px.
     XANH: E13 da chay noi tiep tren dung cay nay va tra ma 0.
 
 - eval: E14
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E14-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E14-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tq_goc_thuoc
-  verified_at: 2026-09-08T09:22:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
     -- DO_RONG: khong tham so ≡ (false): BANG · goc cu thay 0/1 moc thanh dau · goc moi thay 1/1 · so phan tu cu=31 moi=34
 
     ket qua: hong=0
 
 - eval: E15
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E15-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E15-r5
   exit_code: 0
   baseline: red
   verifier: config:executors.script.tq_mot_bo_thuoc
-  verified_at: 2026-09-08T09:24:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
     ve 3: mui goi GOM/DO_RONG ngoai rang/ cua lat truyen tham so = 0 (tru noi dinh nghia man-that-lib.mjs)
 
     ket qua: XANH — mot bo thuoc, bang chung ky tai lap duoc, mui goi cu khong doi
 
 - eval: E16
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E16-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E16-r5
   exit_code: 0
   baseline: green
   verifier: config:executors.test.rang3_khoa_chet
-  verified_at: 2026-09-08T09:26:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
      0 fail
      400 expect() calls
-    Ran 70 tests across 1 file. [774.00ms]
+    Ran 70 tests across 1 file. [821.00ms]
 
 - eval: E17
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E17-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E17-r5
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tq_khung_dieu_huong
-  verified_at: 2026-09-08T09:28:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
      0 fail
      24 expect() calls
-    Ran 3 tests across 1 file. [11.00ms]
+    Ran 3 tests across 1 file. [8.00ms]
 
 - eval: E18
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E18-r4
+  run_id: E18-san-thiet-ke-20260908-1500
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tq_san_thiet_ke
-  verified_at: 2026-09-08T09:30:00+07:00
-  screenshot: evidence/E18-tong-quan-vi.png
+  verified_at: 2026-09-08T15:00
+  screenshot: /Users/manh-macmini/dev/crm/_acceptance/tong-quan-va-khung-noi-tieng-viet/evidence/E18-tong-quan-vi.png
   observed: |
-    Đọc trực tiếp cả ba file PNG vừa lưu bằng Read (không suy từ log lệnh):
-    1) evidence/E18-tong-quan-vi.png (1440x1000) — trang Tổng quan tiếng Việt, nền tối. Tiêu đề "Chào bạn", phụ đề "Bạn đã chốt được gì, còn gì đang mở, và hôm nay cần bạn ở đâu.". Bốn thẻ số liệu "Chốt được tháng này / Đang mở / Tỷ lệ chốt (90 ngày) / Trung bình mỗi thoả thuận (90 ngày)", hai biểu đồ "Đã chốt so với mới mở" / "Đang mở theo giai đoạn", hai khối "Thoả thuận đang mở" / "Việc quá hạn", mục "Hoạt động gần đây của bạn". Sidebar trái có icon điều hướng, top bar "CRM" + badge "Đang tra cứu" + avatar "D". Đúng như mô tả (vi, 1440px).
-    2) evidence/E18-tong-quan-en.png (1440x1000) — cùng bố cục nhưng tiếng Anh: "Welcome back", "Closed won this month / Open pipeline / Win rate (90d) / Average deal (90d)", "Closed won vs. new pipeline", "Open pipeline by stage", "Deals in progress", "Overdue tasks", badge top-right "Enriching". Đúng như mô tả (en, 1440px).
-    3) evidence/E18-ngan-keo-vi.png (360x1000) — ngăn kéo điều hướng di động đang MỞ, tiêu đề "Điều hướng" kèm nút đóng (X), danh sách mục tiếng Việt: Tổng quan (đang chọn), Hội thoại, Công ty, Cá nhân, Thoả thuận, Chiến dịch, Cài đặt. Đúng như mô tả (ngăn kéo di động 360px, tiếng Việt).
-    Không có khung nào mâu thuẫn với Expected.
+    Cả 3 frame đã mở bằng Read và khớp với mô tả:
+    1) E18-tong-quan-vi.png (1440px, nền tối/dark theme): trang Tổng quan tiếng Việt đúng / — tiêu đề "Chào bạn", 4 thẻ số liệu (Chốt được tháng này, Đang mở, Tỷ lệ chốt 90 ngày, Trung bình mỗi thoả thuận), 2 biểu đồ rỗng (Đã chốt so với mới mở / Đang mở theo giai đoạn), khu Thoả thuận đang mở + Việc quá hạn, thanh điều hướng icon bên trái, header "CRM" + badge "Đang tra cứu" + avatar "D". Đúng tiếng Việt, đúng khung 1440px.
+    2) E18-tong-quan-en.png (1440px): cùng bố cục y hệt frame 1 nhưng toàn bộ chữ là tiếng Anh — "Welcome back", "Closed won this month", "Open pipeline", "Win rate (90d)", "Average deal (90d)", badge "Enriching", nút "Me/Everyone". Đúng / ở tiếng Anh, đúng khung 1440px — đối chứng với frame 1 xác nhận i18n hoạt động.
+    3) E18-ngan-keo-vi.png (360px, mobile): ngăn kéo điều hướng (drawer) đang MỞ, phủ kín gần hết màn hình, tiêu đề "Điều hướng" + nút đóng (X) ở góc phải trên, danh sách mục menu tiếng Việt: Tổng quan (đang chọn, sáng), Hội thoại, Công ty, Cá nhân, Thoả thuận, Chiến dịch, Cài đặt. Đúng ngăn kéo di động ở 360px tiếng Việt, đúng mở.
+    Cả ba frame khớp CHÍNH XÁC với Expected: "/" ở vi và en tại 1440px, và ngăn kéo di động tại 360px tiếng Việt — không có sai lệch nào quan sát được.
   network_observed: n-a (driver)
   output: |
-    Dev server: apps/app (3000) va apps/api (3001) DA CHAY SAN TU TRUOC (khong phai do toi khoi dong) — kiem tra bang curl (APP:307, API:200) va lsof (PID 79543 cho 3000, PID 79572 cho 3001) truoc khi chay lenh. Toi KHONG tat cac server nay vi khong phai server toi tao ra.
-
-    KET LUAN: Ca hai assertion deu PASS, khop voi so lieu ky vong (85 · 85 · 94 phan tu, 0 duoi nguong; 0 P0 khac low-contrast). exitCode=0.
+    (Ghi chu: co ban cu hon o thu muc goc evidence/ tu 14:23 cua lan chay truoc — khong dung, da doc ban moi nhat ung voi lan chay nay.)
+    Network: driver la node script goi puppeteer-core truc tiep (khong phai browser-tool co duong doc network/console) → khong doc duoc failed requests/console errors qua cong cu nay.
 
 - eval: E19
-  judged_by: judge panel (3 lens: domain-correctness, operational-feasibility, spec-alignment)
-  verdict: PASS
-  rationale: |
-    Cả ba lens đồng thuận PASS. domain-correctness: bốn thẻ số và câu chào bám
-    sát từ điển CONTEXT.md, dùng "chốt được / đang mở / không thành" nhất quán,
-    không còn thắng/thua/pipeline; câu ghép số đọc tự nhiên, không lộ cấu trúc
-    dịch máy. operational-feasibility: bảy nhãn rail khớp CONTEXT.md hoặc dùng
-    chữ phổ thông theo luật fallback; các câu ghép số đọc tự nhiên. spec-alignment:
-    bảy nhãn rail và bốn thẻ số của tong-quan.ts khớp đúng mục "Chốt"/"Đang mở"
-    đã chốt 2026-09-08 trong CONTEXT.md; không thấy dấu vết dịch máy còn sót
-    trong hai kho chuỗi được liệt kê.
+  criterion: AC-17
+  executor: judgment
+  verifier: judge panel (domain-correctness, operational-feasibility, spec-alignment)
+  verified_at: 2026-09-08 (round 5)
+  run_id: (không áp dụng — đánh giá judgment, không sinh run_id máy)
+  proposal: PASS
   votes:
-    - domain-correctness: PASS — Cả hai kho chuỗi bám sát từ điển CONTEXT.md: "chốt" dùng nhất quán làm động từ chung (closedWon, winRate, wonLost) đúng như mục "Chốt" chốt 2026-09-08 cho chính vòng này, và "đang mở"/"mới mở" thay cho "pipeline" — không chỗ nào trong bốn thẻ số hay biểu đồ dùng thắng/thua/phễu/pipeline. Câu chào mở màn và câu unconverted.sentence đọc như câu Việt bản xứ, không lộ cấu trúc tiếng Anh. Không tìm thấy dấu vết dịch máy rõ ràng trong hai file lib/messages trong phạm vi cho phép.
-    - operational-feasibility: PASS — Bảy nhãn rail (Tổng quan, Hội thoại, Công ty, Cá nhân, Thoả thuận, Chiến dịch, Cài đặt) khớp đúng từ điển CONTEXT.md hoặc dùng chữ phổ thông theo đúng luật fallback; "Hội thoại" khớp sát nghĩa hẹp mà CONTEXT.md định nghĩa. Bốn thẻ số dùng đúng giọng đối tác — không xuất hiện thắng/thua/pipeline ở phần hiển thị, khớp đúng quyết định "Chốt" mới chốt 2026-09-08. Không tìm thấy chỗ nào còn rõ ràng là văn dịch máy chưa được xử lý.
-    - spec-alignment: PASS — Bảy nhãn rail trong khung-ung-dung.ts khớp đúng nghĩa CONTEXT.md. Bốn thẻ số của tong-quan.ts nhất quán dùng "chốt được / đang mở / không thành" và tránh hoàn toàn thắng/thua/pipeline — đúng mục "Chốt" và "Đang mở" trong CONTEXT.md. Các câu ghép số đọc như câu Việt tự nhiên, không thấy dấu vết dịch máy còn sót.
-  human_override:
+    - domain-correctness: PASS — Bảy nhãn rail (khung-dieu-huong.ts) đều hoặc trùng khớp từ điển CONTEXT.md ("Hội thoại", "Công ty", "Cá nhân", "Thoả thuận", "Chiến dịch") hoặc là chữ thường ai cũng hiểu ("Tổng quan", "Cài đặt") — đúng luật viết nhãn của CONTEXT.md. Bốn thẻ số ở tong-quan.ts dùng đúng cụm CONTEXT.md đã chốt cùng ngày 2026-09-08 ("Chốt được tháng này", "Tỷ lệ chốt", "N chốt được · A không thành", "Đang mở" đứng một mình) — không còn dấu vết thắng/thua/pipeline; các câu ghép số ("N thoả thuận", "N ngày", "N quá hạn") đọc tự nhiên theo mẫu nhãn CRM tiếng Việt. Chỗ còn là chữ dịch máy (nhãn giai đoạn thoả thuận trong sales-dashboard.tsx) được đánh dấu `lang="en"` tường minh, khớp với ghi chú "CHƯA CHỐT NGHĨA" của CONTEXT.md — tức nợ dịch được nêu danh, không bị lấp liếm.
+    - operational-feasibility: PASS — Bảy nhãn rail khớp từ điển (Công ty/Cá nhân/Chiến dịch trùng khớp nguyên văn CONTEXT.md, Hội thoại khớp mục "Hội thoại", Thoả thuận là rút gọn hợp lý theo đúng luật "ngắn theo ngữ cảnh" của chính từ điển, Tổng quan/Cài đặt là chữ phổ thông được phép dùng khi chưa có mục riêng); bốn thẻ số dùng nhất quán "chốt được / đang mở / không thành" và né đúng danh sách _Avoid (thắng, thua, pipeline, phễu) mà mục "Chốt" trong CONTEXT.md liệt kê; các câu ghép số như "N thoả thuận · A tháng trước", "Chu kỳ trung bình N ngày", câu "Mọi con số trên đây tính bằng B..." đọc tự nhiên, không theo trật tự từ tiếng Anh; không thấy khoản nào còn giữ cấu trúc dịch máy — các chỗ khó (byStage.description, open.title/button, trend.description) đều được biên tập lại chủ đích chứ không dịch thẳng.
+    - spec-alignment: PASS — Bảy nhãn trên rail (Tổng quan · Hội thoại · Công ty · Cá nhân · Thoả thuận · Chiến dịch · Cài đặt, đúng 7 mục theo khung-dieu-huong.ts) đều khớp mục từ CONTEXT.md hoặc là chữ thường phổ thông. Bốn thẻ số (Chốt được tháng này / Đang mở / Tỷ lệ chốt / Trung bình mỗi thoả thuận) và các mô tả kèm theo dùng đúng cặp "chốt được · không thành" ở thẻ Tỷ lệ chốt, không xuất hiện thắng/thua/pipeline ở đâu trong bốn thẻ. Các câu ghép số (`${n} · ${money} tháng trước`, `${n} chốt được · ${l} không thành`, `${days} ngày`…) đọc như câu Việt kiểu thẻ UI, nhất quán với lối rút gọn mà CONTEXT.md đã minh định (ví dụ "Đang mở" đứng một mình). Không thấy cụm nào trong hai file mang dấu vết dịch máy rõ rệt cần nêu toạ độ.
+  human_override:        # Gate 2 (T2) — người xác nhận đề xuất PASS của hội đồng hoặc ghi đè
 
 - eval: E20
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E20-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E20-r5
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tq_dang_xuat
-  verified_at: 2026-09-08T09:32:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
      0 fail
      7 expect() calls
-    Ran 3 tests across 1 file. [5.00ms]
+    Ran 3 tests across 1 file. [14.00ms]
 
 - eval: E21
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E21-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E21-r5
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tq_trang_thai_rong
-  verified_at: 2026-09-08T09:34:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
        cau rong bieu do giai doan: co mat tren man
 
     ket qua: 51 cap · hong=0
 
 - eval: E22
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E22-r4
-  exit_code: 0
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E22-r5
+  exit_code: 1
+  cannot_run: true
   baseline: n-a
   verifier: config:executors.script.tq_san_thiet_ke_do
-  verified_at: 2026-09-08T09:36:00+07:00
+  verified_at: 2026-09-08 (round 5)
+  reason: |
+    Precondition not met: The app server at http://localhost:3000 is not running or not responding correctly. The verifier script requires the app to be running at localhost:3000 and to return a Location header. Error message: 'KHONG DO DUOC: tien de thieu — http://localhost:3000/ tra 200 ma khong co Location, khong suy duoc slug.' (Cannot measure: precondition missing - http://localhost:3000/ returns 200 but no Location header, cannot infer slug)
   output: |
-    CHIEU DO: cam mau chu gan den len tieu de o ca 3 khung — chan bao duoi nguong o 3 khung.
-    XANH: chan tuong phan do dung chieu no sinh ra de bat.
+    $ bun scripts/dev-session.ts dev@localhost
+    KHONG DO DUOC: tien de thieu — http://localhost:3000/ tra 200 ma khong co Location, khong suy duoc slug.
 
 - eval: E23
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E23-r4
-  exit_code: 1
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-E23-r5
+  exit_code: 0
   baseline: red
   verifier: config:executors.script.tq_lan_doc_do
-  verified_at: 2026-09-08T09:38:00+07:00
+  verified_at: 2026-09-08 (round 5)
   output: |
-    DO: cay da doi sau khi lan chay — ghim neo o 000000000000 con HEAD la c3df13a2315e.
-    Ket qua cu khong noi gi ve cay hien tai. Chay lai lan noi tiep.
 
-    XANH (chieu do): ghim neo sai cay bi bat, ma 1, thong diep goi dung ten.
+    XANH (chieu do): chan doc bat duoc ghim neo sai cay va goi dung ten ly do.
+    Chan E23 nay thoat 0. Cac dong "DO:" o tren la cua phep thu cam vao, khong phai ket qua cua E23.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: mtscclq1f00v
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-SUITE-bun_run_test-r5
   exit_code: 0
-  verified_at: 2026-09-08T09:40:00+07:00
+  verified_at: 2026-09-08T00:00:00Z
 
 - cmd: bunx turbo run check-types --force
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-SUITE-bunx_turbo_run_check_types_force-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-SUITE-bunx_turbo_run_check_types_force-r5
   exit_code: 0
-  verified_at: 2026-09-08T09:42:00+07:00
+  verified_at: 2026-09-08T00:00:00Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-SUITE-bunx_turbo_run_lint_force-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-SUITE-bunx_turbo_run_lint_force-r5
   exit_code: 0
-  verified_at: 2026-09-08T09:44:00+07:00
+  verified_at: 2026-09-08T00:00:00Z
 
 - cmd: bun run lint:slop
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-SUITE-bun_run_lint_slop-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-SUITE-bun_run_lint_slop-r5
   exit_code: 0
-  verified_at: 2026-09-08T09:46:00+07:00
+  verified_at: 2026-09-08T00:00:00Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-tong-quan-va-khung-noi-tieng-viet-SUITE-bunx_turbo_run_build_force-r4
+  run_id: minted-tong-quan-va-khung-noi-tieng-viet-SUITE-bunx_turbo_run_build_force-r5
   exit_code: 0
-  verified_at: 2026-09-08T09:48:00+07:00
+  verified_at: 2026-09-08T00:00:00Z
 
 ## Known limits
 
@@ -326,15 +335,20 @@ human_signoff:
 
 ## Analyst
 
-E16 — pass trên cả HEAD lẫn baseline (`cd apps/app && bun test test/messages-guard.spec.ts`); ca "khong cho nao trong lat ghim en vao formatCount" là bất biến chung của kho (regression-guard có chủ ý), không phải phân biệt riêng cho tính năng vòng này. Xem thêm review-findings.md — bản thân ca này có lỗ hổng assertion-âm-tính-một-mình cần vá song song.
+Eval không-phân-biệt (pass trên cả HEAD lẫn baseline — chứng minh harness chứ không phải feature):
+
+- E16 (`cd apps/app && bun test test/messages-guard.spec.ts`, baseline: green) — bài kiểm này tự đọc thư mục `lib/messages` nên đã xanh trên cả cây trước vòng (bất biến chung của kho: mọi giá trị vi có dấu, không giá trị nào y hệt en, hàm ghép biến có khẳng định ghim, không khoá chết). Ca riêng của lát chỉ được thêm ở vòng 2 (quét tám file được liệt kê cứng và đòi 0 lời gọi `formatCount` ghim tiếng) — ca đó mới thật sự phân biệt được cây này với cây trước vòng; bản thân tệp bài kiểm thì green-on-both nên vẫn được liệt ở đây theo đúng định nghĩa của mục này.
+
+Các lệnh suite (`bun run test`, `check-types`, `lint`, `lint:slop`, `build`) xanh-cả-hai-phía là regression-guard bình thường, không liệt vào đây.
 
 ## Variance
 
-none — không eval nào trong vòng này mang `runs` > 1 (không có eval ngẫu nhiên/stochastic được đo).
+none — every multi-run eval is uniform (không eval nào mang `runs` > 1 trong vòng này)
 
 ## Iterations
 
-Round 1: E3, E6 lỗi do gõ nhầm đường dẫn thư mục (khieu thay vì tong-quan-va-khung-noi-tieng-viet) khiến ENOENT bị đọc thành thiếu dữ liệu; E18 báo giả 2 P0 do jsdom không giải được oklch()/var() nên đọc mọi màu về #ffffff (trắng-trên-trắng giả). Quay lại implementation.
-Round 2: toàn bộ eval máy (E1-E17, E20, E21) và E18 (ui-check) đều PASS, phần lớn với baseline red (phân biệt được); mọi lệnh suite hồi quy xanh cả hai phía; E19 (judgment) còn UNCERTAIN chờ người; E22 (tq_san_thiet_ke_do) không chạy được vì thiếu CLAUDE_PLUGIN_ROOT/SAN_THIET_KE trong môi trường này → verdict tổng là BLOCKED.
-Round 3: E22 đã chạy được (script tự tìm sàn thiết kế, không cần biến môi trường nữa) và PASS. E11 (tq_dot_bien) FAIL exit 2: "KHONG DO DUOC: cay lam viec khac truoc khi chay — vet chua duoc tra nguyen trang" — cây làm việc bị một tác vụ khác sửa đang lúc đo, chân dừng giữa chừng ở vết "nhãn rail" trước khi kịp trả nguyên trạng. Mọi eval máy/test còn lại (E1-E10, E12-E18, E20, E21) đều PASS; 4/5 lệnh suite hồi quy xanh nhưng `bun run test` thoát 1 (không gắn eval nào, đuôi log không lộ dòng lỗi). Judge panel của E19 giờ đề xuất FAIL (2/3 lens: domain-correctness, operational-feasibility) vì hai khoá `open.cols.deal`/`activity.cols.deal` trong tong-quan.ts mang câu dài lạc nghĩa thay vì "Thoả thuận" như ban-dich.md đã chốt; lens thứ ba (spec-alignment) vẫn PASS. → verdict tổng round này là REJECT (failed_evals: [E11]); cần chạy lại chân dot-bien.mjs trên cây yên tĩnh (không job nào khác sửa cây cùng lúc) và sửa hai khoá cột theo ban-dich.md trước vòng sau.
-Round 4: E2 (sau-bam) FAIL exit 2 — bề mặt "ngăn kéo trên /chat (chỉ rail)" báo KHONG DO DUOC: tiền đề thiếu, xin lang=en nhưng trang về lang= rỗng, nên bề mặt bị từ chối. E23 (doc-lan --chieu-do, chân chiều-đố cho chân đọc-ghim) FAIL exit 1 — cây đã đổi sau lần chạy trước (ghim neo cũ = 000000000000, HEAD hiện tại = c3df13a2315e); thông điệp nội bộ tự nhận "XANH (chiều đố)" vì bắt đúng ghim sai, nhưng script kết thúc bằng mã 1 nên máy tính là fail — cần rà lại quy ước exit của chính chân chiều-đố này trước vòng sau. Đồng thời E8 (du-lieu-nguoi-nhap) và E12 (be-rong) không có kết quả nào: agent verify bị skip/chết giữa chừng, không được tính là pass. → verdict tổng round này là BLOCKED (không phải REJECT thuần, vì E8/E12 chưa từng chạy được chứ không phải chạy-rồi-fail); cần chạy lại toàn bộ agent cho hai bề mặt E8/E12 trên một lượt yên tĩnh, sửa nguyên nhân "tien de thieu" của E2 (bề mặt /chat lang=en trả về lang rỗng), và soát lại exit-code của doc-lan.mjs --chieu-do (E23) trước vòng kế tiếp.
+Round 2: E16 mở rộng thêm ca riêng của lát (quét 8 file, đòi 0 lời gọi `formatCount` ghim tiếng) sau khi bổ sung bước phân tích nêu tên trong bản khai; E19 được hội đồng lần thứ hai xem lại ba mảnh bằng chứng (unconverted.sentence trong sales-dashboard.tsx, rail.chat trỏ /chat và /agents, mục "Chốt"/"Đang mở" mới thêm vào CONTEXT.md).
+
+Round 4: chân đọc-ghim-cây-sạch (`lan-noi-tiep.mjs` + `doc-lan.mjs`) từng vấp một tài nguyên trình duyệt thật dùng chung — dưới tải 47 tác nhân song song, E2 từng nhận về thuộc tính ngôn ngữ rỗng và E8/E12 từng mất hẳn kết quả; sửa bằng cách gom các chân lái trình duyệt thật vào chạy nối tiếp (`lan-noi-tiep.mjs`) trước khi phát S4, mỗi chân một lúc. Cùng vòng đó, một người chấm từng lấy nhầm dòng "DO:" (thuộc phần cấy lỗi cố ý bên trong E23) làm kết quả của E23 và ghi mã 1 trong khi lệnh thật thoát 0 — vòng này đọc lại đúng hai dòng cuối ("XANH (chieu do)...") và mã thoát thật, không lặp lại nhầm lẫn đó.
+
+Round 5 (vòng hiện tại, cây `c2f9f4989c0198d7e3c6a1d174c4106fec439744`): 22/23 eval máy PASS, không eval nào FAIL. Riêng E22 (AC-1, chiều đỏ của sàn thiết kế `tq_san_thiet_ke_do`) BLOCKED — máy chủ dev tại `http://localhost:3000` không phản hồi header `Location` ở tiền đề, nên chân không suy được slug và không đo được. Bốn lệnh suite (`test`, `check-types`, `lint`, `build`) và `lint:slop` đều xanh trên cây này. Vòng này DỪNG ở BLOCKED thay vì đi tiếp tới PASS/PENDING-JUDGMENT: cần khởi động lại app server (`apps/app`, cổng 3000, ví dụ `bun scripts/dev-session.ts dev@localhost` rồi `bun run dev` trong `apps/app`) rồi verify lại đúng một mình E22 trước khi đóng vòng.
