@@ -901,11 +901,9 @@ export function builderSessionAttributes(input: {
 
 export function builderCommandType(
 	commandType: string,
-	value: Prisma.JsonValue,
+	_value: Prisma.JsonValue,
 ): string {
-	const { requestId, optionId, text } =
-		builderSubmissionMessage.parse(value).inputResponse;
-	return requestId && (optionId || text) ? "CREATE_AGENT" : commandType;
+	return commandType;
 }
 
 type BuilderDeliveryAttachment = {

@@ -29,7 +29,7 @@ import {
 import { DISPATCH } from "../lib/dispatch-config";
 import { settle } from "../lib/enrichment";
 import { finishRun, runResultOf } from "../lib/run-runtime";
-import { attribute } from "../lib/session-purpose";
+import { attribute, builderTurnAuthorized } from "../lib/session-purpose";
 import { createSlackChannel } from "../lib/slack-membership";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
 import { completeTask, taskSubject } from "../lib/tasks";
@@ -245,6 +245,7 @@ export default defineChannel({
 				data,
 				channel.continuationToken,
 				attribute(ctx, "conversationId"),
+				builderTurnAuthorized(ctx),
 			);
 		},
 

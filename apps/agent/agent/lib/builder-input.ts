@@ -1,6 +1,7 @@
 import { db, type Prisma } from "@crm/db";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
 import { type InputRequested, parse, schemas } from "@crm/validation";
+import { BUILDER_AUTHORIZATION_KEY } from "@crm/validation/builder-question";
 import type { ChannelEvents } from "eve/channels";
 import {
 	builderIdFromToken,
@@ -20,7 +21,8 @@ type InputRequestedEvent = Parameters<
 export async function persistBuilderInputRequest(
 	data: InputRequestedEvent,
 	continuationToken: string | undefined,
-	authenticatedConversationId?: string | null,
+	authenticatedConversationId: string | null | undefined,
+	authorized: boolean,
 ): Promise<boolean> {
 	const conversationId =
 		authenticatedConversationId?.trim() ||
@@ -86,7 +88,10 @@ export async function persistBuilderInputRequest(
 			where: { id: conversation.id },
 			data: {
 				continuationToken: builderToken(conversation.id),
-				pendingInputRequest: question as Prisma.InputJsonValue,
+				pendingInputRequest: {
+					...question,
+					[BUILDER_AUTHORIZATION_KEY]: authorized,
+				} as Prisma.InputJsonValue,
 			},
 		});
 
