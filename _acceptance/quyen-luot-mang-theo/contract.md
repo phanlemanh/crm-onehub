@@ -5,7 +5,7 @@ slug: quyen-luot-mang-theo
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent, api]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
