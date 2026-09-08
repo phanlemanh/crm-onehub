@@ -179,12 +179,16 @@ evals:
       - "apps/agent/agent/channels/crm.ts"
       - "apps/agent/test/chan-uy-thac.spec.ts"
     expected: |
-      VE AGENT cua cap cross-layer AC-8, tu lai bang nonce cua chinh no.
-      Chay mot luot builder bi tu choi duoi mot conversationId do bai do tu sinh, roi
-      DOC LAI hang hoi thoai ay: continuationToken phai KHAC null.
-      Do tren hang that vua ghi, khong assert tren gia tri tra ve cua ham goi.
-      Chieu do: bo buoc ghi continuationToken trong ban sao -> ma 1, IN conversationId.
-      San dan so: khong doc lai duoc hang vua ghi -> ma 2.
+      VE AGENT cua cap cross-layer AC-8: hoi thoai DA NHAN ma khong bao gio settle
+      phai duoc THU HOI.
+      CAP HAI CHIEU tren cung vi tu builderTurnAbandoned:
+        chieu 1 (do): sessionId co, continuationToken null, acceptedAt qua han
+                      -> true (bi thu hoi).
+        chieu 2 (doi chung duong): BA hinh dang KHONG duoc thu hoi, kiem CA BA —
+                      (i) da co continuationToken; (ii) chua co sessionId;
+                      (iii) acceptedAt CHUA qua han. So assert bang 3.
+      Chieu do them: bo dieu kien continuationToken khoi vi tu trong ban sao -> ma 1.
+      San dan so: tap ba hinh dang dem ra khac 3 -> ma 2.
 
   - id: E9
     criterion: AC-9
@@ -214,12 +218,16 @@ evals:
       - "apps/agent/agent/lib/custom-agent-dispatch.ts"
       - "apps/agent/test/chan-uy-thac.spec.ts"
     expected: |
-      VE AGENT cua cap cross-layer AC-9. Mot tool builder nem exception KHONG di qua
-      cua policy -> luot phai settle thanh that bai va PHAT su kien that bai vao dong
-      su kien.
-      Xuat dong su kien ay ra lam vat cho E9 doc; khong duoc bia dong su kien.
-      Chieu do: nuot exception (khong phat su kien that bai) trong ban sao -> ma 1.
-      San dan so: luot khong sinh su kien nao -> ma 2.
+      VE AGENT cua cap cross-layer AC-9: luot thu hoi phai duoc NOI VAO dung cua vao
+      cua lich dispatch, khong phai mot ham mo coi khong ai goi.
+      Do QUAN HE chu khong do chuoi-co-mat o pham vi file: doc THAN cua
+      pendingBuilderSubmissionIds (cua vao ma schedules/dispatch.ts chay moi phut)
+      va doi hoi no goi recoverStalledBuilderTurns.
+      Chieu do: go loi goi ay khoi than ham trong ban sao -> ma 1.
+      San dan so: khong dinh vi duoc than ham -> ma 2.
+      GIOI HAN DA BIET: luot thu hoi chay theo lease 15 phut, nen day la bao dam
+      "tu go trong vong 15 phut", KHONG phai "hong ra mat ngay" nhu ban chot pham vi
+      hua — xem muc Notes cua contract va entry approach stage S3 trong decisions.jsonl.
 
   - id: E10
     criterion: AC-10

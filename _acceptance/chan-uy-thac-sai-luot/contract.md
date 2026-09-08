@@ -121,7 +121,9 @@ Given một lượt builder bị từ chối,
 When lượt kết thúc,
 Then hai vế phải **cùng** đúng, đo ở hai lớp, không vế nào được chép lại điều kiện
 của vế kia:
-- *vế agent* — hội thoại thật sự được ghi `continuationToken` khác `null`;
+- *vế agent* — hội thoại đã nhận mà không bao giờ settle thì **được thu hồi**:
+  `recoverStalledBuilderTurns` ghi `continuationToken` và đánh submission
+  `FAILED`/`TURN_ABANDONED`;
 - *vế màn* — gọi **chính hàm** `builderConversationIsWorking` của `apps/app` trên
   hàng hội thoại vế agent vừa ghi, kết quả `false`.
 Cấm viết lại điều kiện `sessionId && !continuationToken` theo trí nhớ ở bất kỳ vế
@@ -134,9 +136,11 @@ trả `true`. Thiếu chiều này thì màu xanh không phân biệt được "
 Given một tool builder ném exception **không** đi qua cửa policy,
 When lượt kết thúc,
 Then hai vế cùng đúng:
-- *vế agent* — dòng sự kiện của lượt mang một sự kiện thất bại thật;
-- *vế màn* — nạp **chính dòng sự kiện ấy** vào hàm `latestTurnFailure` của
-  `apps/app`, kết quả khác `null`.
+- *vế agent* — hội thoại không nằm mãi ở trạng thái đang chạy: lượt thu hồi có
+  mặt ở đúng cửa vào của lịch dispatch, và vị từ thu hồi đóng đúng ba hình dạng
+  không được đụng;
+- *vế màn* — hàm `latestTurnFailure` của `apps/app` biến một dòng sự kiện thất
+  bại thành thẻ đỏ, và trả `null` cho lượt bình thường.
 Đo **quan hệ** sự kiện → thẻ đỏ, **không** đo tên sự kiện có mặt: một sự kiện đúng
 tên nhưng sai vỏ dữ liệu vẫn làm `latestTurnFailure` trả `null`, và người dùng vẫn
 thấy hội thoại treo không thẻ đỏ — đúng triệu chứng prod vòng này hứa chữa.
@@ -200,6 +204,15 @@ mới đi cặp hai chiều trên cùng fixture.
 `requireBuilderAttribute` giữ nguyên tại chỗ làm lớp trong. Policy là cửa; hàm
 ném là chốt cuối nếu có đường nào lọt qua cửa. AC-3 đo **cả hai vế** đúng vì lý do
 đó — gỡ lớp trong "cho gọn" là một cửa hở im lặng.
+
+**Lời hứa bị yếu đi so với bản đã chốt phạm vi — người ký phải thấy dòng này.**
+AC-8/AC-9 lúc chốt hứa lượt hỏng **ra mặt ngay**. Thứ đã cài yếu hơn: hội thoại
+treo tự gỡ **trong vòng 15 phút** (`DISPATCH.builder.turnLeaseMs`), và người dùng
+thấy submission `FAILED` chứ không thấy thẻ đỏ tức thì. Lý do đổi nằm ở sổ quyết
+định: dựng "làm lượt cha hỏng ngay" phải đoán trường thất bại của
+`subagent.completed`, mà tài liệu eve mô tả sự kiện ấy đúng một dòng và không
+khai trường nào. Đổi lại, đường thu hồi không phụ thuộc sự kiện nào của eve cả.
+Mười lăm phút là con số tôi chọn, chưa ai duyệt.
 
 **Giới hạn đã biết, do phản biện context sạch nêu và chủ ý hoãn:** AC-7 chấm
 *chỉ dẫn* viết cho cha, không chấm *câu trả lời cha thật sự soạn*. Đo đầu ra thật
