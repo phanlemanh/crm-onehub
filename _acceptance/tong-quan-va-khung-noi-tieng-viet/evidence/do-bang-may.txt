@@ -1,0 +1,51 @@
+Do bang MAY, noi tiep, tren cay sach — khong co tac nhan nao doc va phan xet.
+Commit: ed57f1e83347290b6d2b3384780e79269779dca0
+Luc: 2026-09-08T21:50Z
+
+Muc dich cua ban do nay: Cong 2 nhan mot verdict BLOCKED tu vong cham 7, va ca
+hai mau do cua vong do deu sinh ra o tang tac nhan cham (mot tac nhan go sai ten
+thu muc, mot tac nhan doc dong "DO:" cua phep thu cam vao lam ket qua). Ban do
+nay tra loi cau hoi con lai: neu bo tang tac nhan ra, cay nay dat bao nhieu.
+
+LAN NOI TIEP (cay sach truoc va sau tung chan)
+  E2  sau-bam                 XANH
+  E8  du-lieu-nguoi-nhap      XANH
+  E10 dan-so tu dia           XANH
+  E11 dot bien 7 vet          XANH
+  E12 be rong 360px           XANH
+  E13 be rong chieu do        XANH
+  → 6/6
+
+CHAN DOC GHIM (neo dung HEAD, cay khong co sua chua ghi)
+  E2 E8 E10 E11 E12 E13       XANH
+  E23 chieu do hai phep thu   XANH
+
+DOT DO TRUC TIEP
+  E1  hai tieng               XANH
+  E3  chu cung JSX            XANH
+  E4  moi chuoi               XANH
+  E5  toast + dang xuat       XANH
+  E6  tieu de + quan he       XANH
+  E7  khong dich              XANH
+  E9  khai sinh               XANH
+  E14 goc thuoc               XANH
+  E15 mot bo thuoc            XANH
+  E16 messages-guard          XANH
+  E17 khung dieu huong        XANH
+  E18 san thiet ke            XANH
+  E20 dang xuat don vi        XANH
+  E21 trang thai rong         XANH
+  E22 san thiet ke chieu do   XANH
+  E24 quan he tieu de chieu do XANH
+  E25 trung lap chieu do      XANH
+
+NAM BO KIEM HOI QUY CUA KHO
+  bun run test                XANH
+  turbo run check-types       XANH
+  turbo run lint              XANH
+  bun run lint:slop           XANH
+  turbo run build             XANH
+
+TONG: 25/25 eval may + 5/5 suite.
+Hoi dong E19 (judgment) de xuat PASS o ca bon vong 4, 5, 6, 7 — hoi dong la
+tac nhan, khong chay lai duoc bang may, nen no khong nam trong bang tren.
