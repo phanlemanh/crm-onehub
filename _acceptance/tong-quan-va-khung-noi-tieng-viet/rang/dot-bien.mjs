@@ -12,14 +12,29 @@ const KHO_KHUNG = "apps/app/lib/messages/khung-ung-dung.ts";
 
 const CHAN = [
 	{ ten: "moi-chuoi", lenh: [join(DOT_MOT, "moi-chuoi.mjs"), "--lat", KHAI] },
-	{ ten: "chu-cung-jsx", lenh: [join(DOT_MOT, "chu-cung-lat.mjs"), "--lat", KHAI] },
+	{
+		ten: "chu-cung-jsx",
+		lenh: [join(DOT_MOT, "chu-cung-lat.mjs"), "--lat", KHAI],
+	},
 	{
 		ten: "toast",
-		lenh: [join(DOT_MOT, "chu-ngoai-jsx.mjs"), "--chan", "toast", "--lat", KHAI],
+		lenh: [
+			join(DOT_MOT, "chu-ngoai-jsx.mjs"),
+			"--chan",
+			"toast",
+			"--lat",
+			KHAI,
+		],
 	},
 	{
 		ten: "tieu-de",
-		lenh: [join(DOT_MOT, "chu-ngoai-jsx.mjs"), "--chan", "tieu-de", "--lat", KHAI],
+		lenh: [
+			join(DOT_MOT, "chu-ngoai-jsx.mjs"),
+			"--chan",
+			"tieu-de",
+			"--lat",
+			KHAI,
+		],
 	},
 	{ ten: "dang-xuat", lenh: [join(HERE, "dang-xuat.mjs")] },
 	{ ten: "hai-tieng", lenh: [join(HERE, "man-that.mjs"), "hai-tieng"] },
@@ -39,13 +54,21 @@ const VET = [
 	{
 		ten: "van ban JSX",
 		file: `${MAN}/overview-greeting.tsx`,
-		cam: (s) => s.replace("<PageShellTitle>{m.title}</PageShellTitle>", "<PageShellTitle>Welcome back</PageShellTitle>"),
+		cam: (s) =>
+			s.replace(
+				"<PageShellTitle>{m.title}</PageShellTitle>",
+				"<PageShellTitle>Welcome back</PageShellTitle>",
+			),
 		chan: ["chu-cung-jsx"],
 	},
 	{
 		ten: "thuoc tinh JSX",
 		file: `${MAN}/overview-scope.tsx`,
-		cam: (s) => s.replace("\t\t\taria-label={m.label}\n\t\t>\n\t\t\t{OVERVIEW_SCOPES.map((value) => (\n\t\t\t\t<ToggleGroupItem key={value} value={value}>\n\t\t\t\t\t{m[value]}\n\t\t\t\t</ToggleGroupItem>\n\t\t\t))}\n\t\t</ToggleGroup>\n\t);\n}\n", '\t\t\taria-label="Whose numbers to show"\n\t\t>\n\t\t\t{OVERVIEW_SCOPES.map((value) => (\n\t\t\t\t<ToggleGroupItem key={value} value={value}>\n\t\t\t\t\t{m[value]}\n\t\t\t\t</ToggleGroupItem>\n\t\t\t))}\n\t\t</ToggleGroup>\n\t);\n}\n'),
+		cam: (s) =>
+			s.replace(
+				"\t\t\taria-label={m.label}\n\t\t>\n\t\t\t{OVERVIEW_SCOPES.map((value) => (\n\t\t\t\t<ToggleGroupItem key={value} value={value}>\n\t\t\t\t\t{m[value]}\n\t\t\t\t</ToggleGroupItem>\n\t\t\t))}\n\t\t</ToggleGroup>\n\t);\n}\n",
+				'\t\t\taria-label="Whose numbers to show"\n\t\t>\n\t\t\t{OVERVIEW_SCOPES.map((value) => (\n\t\t\t\t<ToggleGroupItem key={value} value={value}>\n\t\t\t\t\t{m[value]}\n\t\t\t\t</ToggleGroupItem>\n\t\t\t))}\n\t\t</ToggleGroup>\n\t);\n}\n',
+			),
 		chan: ["moi-chuoi"],
 	},
 	{
@@ -61,19 +84,31 @@ const VET = [
 	{
 		ten: "tieu de tai lieu",
 		file: `${MAN}/page.tsx`,
-		cam: (s) => s.replace("return { title: tongQuanMessages(await getLocale()).title };", 'return { title: "Overview" };'),
+		cam: (s) =>
+			s.replace(
+				"return { title: tongQuanMessages(await getLocale()).title };",
+				'return { title: "Overview" };',
+			),
 		chan: ["tieu-de"],
 	},
 	{
 		ten: "khoa object",
 		file: `${MAN}/sales-dashboard.tsx`,
-		cam: (s) => s.replace('"use client";', '"use client";\n\nconst CHU_THICH = { label: "Closed won" };'),
+		cam: (s) =>
+			s.replace(
+				'"use client";',
+				'"use client";\n\nconst CHU_THICH = { label: "Closed won" };',
+			),
 		chan: ["moi-chuoi"],
 	},
 	{
 		ten: "ham ghep cau",
 		file: `${MAN}/dashboard-summary.tsx`,
-		cam: (s) => s.replace(": m.tasks.pastDue(String(overdueTasks.length))}", ": `${overdueTasks.length} past due`}"),
+		cam: (s) =>
+			s.replace(
+				": m.tasks.pastDue(\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tformatCount(overdueTasks.length, m.tasks.taskNoun, locale),\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t)}",
+				": `${overdueTasks.length} past due`}",
+			),
 		chan: ["moi-chuoi"],
 	},
 	{
@@ -89,7 +124,9 @@ console.log("bang dong (hinh dang, chan chuyen trach):");
 for (const [h, c] of BANG_HINH_DANG) console.log(`   ${h.padEnd(18)} -> ${c}`);
 const thieu = BANG_HINH_DANG.filter(([h]) => !VET.some((v) => v.ten === h));
 if (thieu.length > 0) {
-	console.log(`KHONG DO DUOC: ${thieu.length} hinh dang khong co vet: ${thieu.map(([h]) => h).join(" · ")}`);
+	console.log(
+		`KHONG DO DUOC: ${thieu.length} hinh dang khong co vet: ${thieu.map(([h]) => h).join(" · ")}`,
+	);
 	process.exit(2);
 }
 await chayDotBien({ HERE, CHAN, VET });
