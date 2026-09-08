@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-08T14:23:03Z",
-  "generated_sha": "1f581c6c932d34558d44eb4b388721d504490f79",
+  "generated_at": "2026-09-08T14:25:34Z",
+  "generated_sha": "edd02ec10f742b3257eade3705133fe9c3fffe26",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
@@ -12,7 +12,7 @@
     {
       "id": "E1",
       "criterion": "AC-1",
-      "cmd": "bun run test -- \"cd apps/agent && bun test test/builder-runtime.integration.spec.ts",
+      "cmd": "bun run test -- \"cd apps/agent && bun test test/builder-runtime.integration.spec.ts\"",
       "expected": "Luot HOI duoc phep -> ban ghi mang quyen \"duoc phep\"; luot HOI khong duoc phep\n-> ban ghi mang quyen nguoc lai.\nCAP HAI CHIEU tren CUNG mot fixture ctx, khac dung MOT truong (commandType).\nDoi mot truong ma ban ghi khong lat -> ma 1: khi ay cho ghi khong doc ctx.\nSan dan so: khong dung duoc ctx cua hook -> ma 2.\nCAM tu bia ban ghi roi assert tren no: bai do PHAI goi CHINH ham\npersistBuilderInputRequest cua apps/agent, roi DOC LAI hang trong co so du lieu\nva doi hang do mang co quyen. Fixture dung tay dung khuon ben doc -> ma 2.",
       "executor": "test",
       "paths": [
@@ -76,14 +76,16 @@
     {
       "id": "E6",
       "criterion": "AC-6",
-      "cmd": "cd apps/api && bun test test/quyen-luot.spec.ts",
+      "cmd": "cd apps/app && bun test test/quyen-luot.spec.ts",
       "expected": "MA TRAN TOAN PHAN tren BA duong khong phai hoi-dap, ghim cung ba ten trong\nchinh bai do: nut Tao tac nhan · go tay trong hoi thoai · follow-up tren agent\nda deploy. So assert bang dung 3.\nMoi duong phai bang DUNG gia tri da GHIM trong bai do, do tai SHA 9ec0251 —\nKHONG so voi hien trang sau khi sua:\nnut Tao tac nhan (new-agent-dialog.tsx)      -> \"CREATE_AGENT\"\ngo tay (agent-composer.tsx)                  -> suy tu slash-command, mac dinh \"CHAT\"\nfollow-up tren agent da deploy (agent-builder-chat.tsx) -> \"CREATE_AGENT\"\nChieu do: doi commandType cua DUNG MOT duong trong ban sao -> ma 1, neu TEN\nduong.\nVi sao so voi so ghim: nguoi viet bai do SAU khi sua se chep lai hien trang da\nhong lam ky vong, ba assert van xanh trong khi duong follow-up da mat quyen.",
       "executor": "test",
       "paths": [
-        "apps/api/src/conversations/conversations.service.ts",
-        "apps/api/test/quyen-luot.spec.ts"
+        "apps/app/components/agent-builder/new-agent-dialog.tsx",
+        "apps/app/components/agent-builder/agent-composer.tsx",
+        "apps/app/components/agent-builder/agent-builder-chat.tsx",
+        "apps/app/test/quyen-luot.spec.ts"
       ],
-      "ref": "config:executors.test.ql_api_doc_ban_ghi"
+      "ref": "config:executors.test.ql_ba_duong_vao"
     },
     {
       "id": "E7",
@@ -132,6 +134,11 @@
     "bunx turbo run check-types --force",
     "bunx turbo run lint --force",
     "bun run lint:slop",
+    "bunx turbo run build --force",
+    "bun run test",
+    "bunx turbo run check-types --force",
+    "bunx turbo run lint --force",
+    "bun run lint:slop",
     "bunx turbo run build --force"
   ],
   "diffBase": "564cf56defb87e95fbc6ff934cc6b5e9acfa30ab",
@@ -140,8 +147,8 @@
   "templatePath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.8.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
   "contractPath": "/Users/manhphan/dev/crm-onehub-cutl/_acceptance/quyen-luot-mang-theo/contract.md",
-  "invokedAt": "2026-09-08T14:23:03Z",
-  "invokedSha": "1f581c6c932d34558d44eb4b388721d504490f79",
-  "evalsHash": "7e5f0ceb813ed9c612102ea49e82c7e311e69b91936eabe9fcb9e76be8f1ceb6",
+  "invokedAt": "2026-09-08T14:25:34Z",
+  "invokedSha": "edd02ec10f742b3257eade3705133fe9c3fffe26",
+  "evalsHash": "88d1bc069890433fe01a1cb17cc1f621e565e054ea4ce15c6d71c3f2d39d71e2",
   "runBaseline": true
 }
