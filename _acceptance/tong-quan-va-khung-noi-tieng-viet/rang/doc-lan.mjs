@@ -61,14 +61,20 @@ if (process.argv.includes("--chieu-do")) {
 		env: { ...process.env, LAN_GHIM: gia },
 	});
 	const ra = `${r.stdout ?? ""}${r.stderr ?? ""}`;
-	process.stdout.write(ra);
+	console.log("--- ben trong: chan doc chay tren mot GHIM GIA neo sai cay ---");
+	console.log("--- moi dong duoi day la cua phep thu cam vao; DO o day la DUNG y muon ---");
+	for (const d of ra.split("\n")) console.log(`  | ${d}`);
+	console.log(`--- het phan cam vao · ma thoat cua phep thu: ${r.status} ---`);
 	if (r.status === 0) {
 		chet(1, "DO: cam mot ghim neo sai cay ma chan doc van bao XANH — chan nay khong do dung chieu no sinh ra de bat.");
 	}
 	if (!ra.includes(LOI_SHA)) {
 		chet(1, `DO: chan doc co bao do nhung khong goi ten ly do — thieu chuoi ghim "${LOI_SHA}".`);
 	}
-	console.log(`\nXANH (chieu do): ghim neo sai cay bi bat, ma ${r.status}, thong diep goi dung ten.`);
+	console.log(
+		`\nXANH (chieu do): chan doc bat duoc ghim neo sai cay va goi dung ten ly do.`,
+	);
+	console.log("Chan E23 nay thoat 0. Cac dong \"DO:\" o tren la cua phep thu cam vao, khong phai ket qua cua E23.");
 	process.exit(0);
 }
 

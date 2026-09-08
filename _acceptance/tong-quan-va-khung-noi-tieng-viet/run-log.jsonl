@@ -79,3 +79,4 @@
 {"ts":"2026-09-08T04:30:00Z","sha":"d1258ef5","round":3,"evalId":"SUITE-bunx_turbo_run_build_force","run_id":"minted-tong-quan-va-khung-noi-tieng-viet-SUITE-bunx_turbo_run_build_force-r3","exit_code":0,"cmd":"bunx turbo run build --force"}
 {"ts":"2026-09-08T04:30:00Z","sha":"d1258ef5","round":3,"evalId":"E18","run_id":"minted-tong-quan-va-khung-noi-tieng-viet-E18-r3","exit_code":0,"cmd":"ui-check:E18"}
 {"ts":"2026-09-08T04:30:00Z","sha":"d1258ef5","round":3,"kind":"round-tally","verdict":"REJECT","expected":26,"returned":26,"blocked":0}
+{"ts":"2026-09-08T07:47:12Z","kind":"round","round":4,"verdict":"BLOCKED","sha":"c3df13a2315e9413027693eb8e1c47c7728d8659","failed_evals":["E2","E23"],"blocked":["E8","E12"],"note":"E23 do vi nguoi cham doc nham dong DO cua phep thu cam vao; E2 chap chon duoi tai (chay lai 4/4 be mat dat); E8 va E12 agent chet khong tra ket qua"}
