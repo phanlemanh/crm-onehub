@@ -8,7 +8,7 @@ evals:
     cmd: config:executors.test.ql_quyen_ke_thua
     paths:
       - "apps/agent/agent/lib/builder-input.ts"
-      - "packages/validation/src/builder-input-request.ts"
+      - "packages/validation/src/builder-question.ts"
       - "apps/agent/test/quyen-luot.spec.ts"
     expected: |
       Luot HOI duoc phep -> ban ghi mang quyen "duoc phep"; luot HOI khong duoc phep
@@ -24,7 +24,7 @@ evals:
     executor: test
     cmd: config:executors.test.ql_quyen_ke_thua
     paths:
-      - "packages/validation/src/builder-input-request.ts"
+      - "packages/validation/src/builder-question.ts"
       - "apps/api/src/conversations/conversations.service.ts"
       - "apps/agent/agent/lib/builder-input.ts"
       - "apps/agent/test/quyen-luot.spec.ts"
@@ -49,7 +49,7 @@ evals:
     cmd: config:executors.test.ql_api_doc_ban_ghi
     paths:
       - "apps/api/src/conversations/conversations.service.ts"
-      - "packages/validation/src/builder-input-request.ts"
+      - "packages/validation/src/builder-question.ts"
       - "apps/api/test/quyen-luot.spec.ts"
     expected: |
       ROUND-TRIP, khong tu dung fixture dung khuon ben doc: ban ghi PHAI do CHINH
@@ -169,7 +169,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.ql_cong_dong_that
     paths:
-      - "packages/validation/src/builder-input-request.ts"
+      - "packages/validation/src/builder-question.ts"
       - "apps/agent/agent/lib/custom-agent-dispatch.ts"
       - "apps/agent/agent/lib/session-purpose.ts"
       - "apps/agent/agent/subagents/agent_builder/lib/authorization.ts"

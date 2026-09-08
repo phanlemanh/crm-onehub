@@ -96,7 +96,7 @@ là `CHAT`. Ba hình dạng nguồn quyền — đủ · vắng · hỏng khuôn
 
 | File | Việc |
 | --- | --- |
-| `packages/validation/src/builder-input-request.ts` (mới) | khuôn `pendingInputRequest` + quyền, parse ở biên |
+| `packages/validation/src/builder-question.ts` (mở rộng) | khuôn `pendingInputRequest` + quyền, parse ở biên |
 | `apps/agent/agent/lib/builder-input.ts` | ghi quyền của lượt hỏi |
 | `apps/agent/agent/lib/custom-agent-dispatch.ts` | xoá luật suy diễn |
 | `apps/api/src/conversations/conversations.service.ts` | đọc bản ghi thay vì ghim cứng |
