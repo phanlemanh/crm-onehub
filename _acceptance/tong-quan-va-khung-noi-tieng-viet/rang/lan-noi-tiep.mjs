@@ -19,6 +19,8 @@ const CHAN = [
 	{ id: "E24", khoa: "tq_tieu_de_quan_he_do" },
 	{ id: "E25", khoa: "tq_mot_bo_thuoc_do" },
 	{ id: "E22", khoa: "tq_san_thiet_ke_do" },
+	{ id: "E3", khoa: "tq_chu_cung_jsx" },
+	{ id: "E21", khoa: "tq_trang_thai_rong" },
 ];
 
 function chet(ma, ...loi) {

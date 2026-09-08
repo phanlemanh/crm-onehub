@@ -56,12 +56,17 @@ evals:
   - id: E3
     criterion: AC-4
     executor: script
-    cmd: config:executors.script.tq_chu_cung_jsx
+    cmd: config:executors.script.tq_lan_chu_cung
     expected: >-
       exit 0. Mui goi ve chu-cung-lat.mjs cua ③b voi --lat tro ban khai lat nay. Dan so
       sinh tu dia (6 thu muc + 7 them = 13); 0 chuoi viet thang trong JSX ngoai mien
       tru co ten; mien tru chet la DO. Chieu do: dat lai mot cau tieng Anh vao JSX cua
       overview-greeting.tsx thi chan do goi ten file:dong.
+      Chan nay chay o LAN NOI TIEP truoc khi phat S4; lenh o day la chan DOC ghim, tuc
+      mot cai MAY doc ma thoat da ghi thay vi mot tac nhan tu go lai lenh. Ly do: qua
+      nam vong cham, moi chan da vao lan deu dat moi lan, con moi mau do con lai deu
+      roi dung vao chan ma tac nhan tu chay lenh — vong 7 va vong 8 deu co nguoi cham
+      go sai mot chu trong ten thu muc roi khai la tep khong ton tai.
     paths:
       - "apps/app/app/(app)/[slug]/*.tsx"
       - "apps/app/components/app-icon-rail.tsx"
@@ -361,7 +366,7 @@ evals:
   - id: E21
     criterion: AC-3
     executor: script
-    cmd: config:executors.script.tq_trang_thai_rong
+    cmd: config:executors.script.tq_lan_trang_thai_rong
     expected: >-
       exit 0. Kiem tien de qua nguon_san: tai khoan do khong so huu thoa thuan, viec,
       hoat dong (dashboard.summary scope=me tra ba mang rong); khong dat la ma 2 goi
@@ -370,6 +375,11 @@ evals:
       doc tu kho) neu so lieu ca workspace khong rong, goi ten. Chieu do: xoa prop cau
       rong cua bang Viec qua han thi chan do goi ten bang (chu mac dinh cua thu vien
       hoac o trong thay cho cau kho).
+      Chan nay chay o LAN NOI TIEP truoc khi phat S4; lenh o day la chan DOC ghim, tuc
+      mot cai MAY doc ma thoat da ghi thay vi mot tac nhan tu go lai lenh. Ly do: qua
+      nam vong cham, moi chan da vao lan deu dat moi lan, con moi mau do con lai deu
+      roi dung vao chan ma tac nhan tu chay lenh — vong 7 va vong 8 deu co nguoi cham
+      go sai mot chu trong ten thu muc roi khai la tep khong ton tai.
     paths:
       - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"
       - "apps/app/app/(app)/[slug]/sales-dashboard.tsx"

@@ -276,6 +276,8 @@ executors:
     tq_lan_tieu_de_do: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E24
     tq_lan_trung_lap_do: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E25
     tq_lan_san_thiet_ke_do: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E22
+    tq_lan_chu_cung: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E3
+    tq_lan_trang_thai_rong: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E21
     tq_tieu_de_quan_he_do: node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/tieu-de-quan-he.mjs --chieu-do
     tq_mot_bo_thuoc_do: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/mot-bo-thuoc.mjs --chieu-do
     tq_mot_bo_thuoc: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/mot-bo-thuoc.mjs
