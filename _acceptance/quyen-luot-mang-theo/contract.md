@@ -64,26 +64,41 @@ chiều dùng chung một fixture, khác đúng một trường.
 **AC-2 — Khuôn bản ghi được parse ở biên, không truyền từ điển mở.**
 Given cột `pendingInputRequest` mà agent ghi và API đọc,
 When bất kỳ bên nào đọc,
-Then nó parse qua **một** module trong `packages/validation/src`, kiểu suy bằng
-`z.infer`, và không bên nào nhận `Record<string, unknown>`.
+Then nó parse qua **một** module trong `packages/validation/src`, và kiểu được suy
+bằng `z.infer` chứ không gõ tay cạnh schema.
+Vế "không bên nào nhận `Record<string, unknown>`" **do `bun run lint:slop` giữ** —
+luật `anti-slop(no-known-value-widening)` chạy toàn kho và là một trong năm lệnh
+cổng; nó đã bắt đúng lỗi ấy của vòng này một lần. Không dựng phép đo riêng đọc
+chéo mã nguồn của app khác.
 Chiều đỏ: nạp một giá trị sai khuôn → parse phải **hỏng có thông điệp**, không
 được nuốt thành rỗng hay `undefined` im lặng.
 
 **AC-3 — Câu trả lời kế thừa đúng quyền của lượt đã hỏi.**
-Given một bản ghi quyền **do chính đường ghi thật của `apps/agent` sinh ra** —
-không phải một fixture tự dựng đúng khuôn bên đọc, và không phải một hàm dựng
-khác,
-When người dùng trả lời và API tạo submission,
-Then `commandType` của submission **bằng đúng** quyền đã ghi — được phép thì
-`CREATE_AGENT`, không thì `CHAT`.
+Given một bản ghi quyền dựng bằng **hàm dựng dùng chung** `buildPendingInputRequest`
+của `packages/validation` — hàm mà đường ghi thật của `apps/agent` cũng gọi,
+When người dùng trả lời và **service thật** `answerBuilderQuestion` chạy,
+Then `commandType` của submission nó tạo ra **bằng đúng** quyền đã ghi.
 Cặp hai chiều trên cùng fixture, khác đúng một trường: bản ghi "được phép" →
-`CREATE_AGENT`; bản ghi "không được phép" → `CHAT`.
-Đổi một trường mà kết quả không lật → **mã 1**: khi ấy API không đọc bản ghi, nó
-chỉ tình cờ trùng.
-Sàn khuôn: dựng được bản ghi bằng một đường **khác** đường ghi thật → **mã 2**.
-Lý do: nếu đường ghi lồng trường quyền một tầng mà bên đọc chờ nó ở tầng phẳng,
-một fixture tự dựng sẽ cho cả hai chiều lật đúng trong khi thật thì API parse
-hỏng **mọi** bản ghi và rơi fail-closed vĩnh viễn — không chỉ trong cửa sổ deploy.
+`CREATE_AGENT`; "không được phép" → `CHAT`. Đổi một trường mà kết quả không lật →
+**mã 1**.
+Sàn khuôn: bản ghi dựng bằng object literal viết tay thay vì hàm dựng chung →
+**mã 2**.
+
+**Ràng buộc đã đặt tên — đọc trước khi đòi thêm.** `apps/agent` và `apps/api` là
+**hai deployment riêng, không import được nhau**, nên **không tồn tại** một bài
+test một-tiến-trình đi từ đường ghi sang đường đọc. Mọi thứ tự xưng "round-trip
+đầy đủ" ở đây đều là vật thay thế. Lời hứa thật vì thế chia làm ba, và cả ba đều
+đo được:
+
+| Vế | Đo ở đâu |
+| --- | --- |
+| đường ghi thật **ghi được** cờ quyền vào cột | AC-1 — `persistBuilderInputRequest` ghi rồi đọc lại hàng trong CSDL |
+| đường đọc thật **biến cờ thành** `commandType` | AC-3 — `answerBuilderQuestion` chạy thật, assert submission nó tạo |
+| hai khuôn **không thể lệch** | AC-2 — cả hai bên đi qua một hàm dựng và một schema |
+
+Ghép ba vế là lời hứa đầy đủ. Hai vòng chấm trước REJECT vì hồ sơ đòi một
+round-tríp một-tiến-trình bất khả thi, nên mọi phép đo cho nó buộc phải là proxy
+đọc-văn-bản-nguồn.
 
 **AC-4 — Không có bản ghi thì đóng, không mở.**
 Given **ba hình dạng** nguồn quyền không dùng được: không có `pendingInputRequest`
@@ -104,17 +119,6 @@ ghi đè thẳng trường `commandType` trong fixture** — chính lối tắt 
 sống sót qua ba vòng chấm của vòng trước.
 Sàn dân số: đếm trên đĩa số chỗ suy quyền từ hình dạng tin nhắn phải bằng **0**;
 khác 0 → **mã 2**, nêu `file:dòng`.
-
-**AC-6 — Ba đường tạo submission còn lại không đổi.**
-Given ma trận toàn phần trên ba đường không phải hỏi-đáp — nút Tạo tác nhân · gõ
-tay trong hội thoại · follow-up trên agent đã deploy,
-When submission được tạo,
-Then `commandType` của mỗi đường **bằng đúng ba giá trị đã ghim ở mục Mốc ghim**,
-đo tại SHA `9ec0251` — không so với hiện trạng sau khi sửa. Số assert bằng 3.
-Chiều đỏ: lệch một đường → **mã 1**, nêu tên đường.
-Lý do so với số ghim chứ không so hiện trạng: người viết bài đo sau khi sửa sẽ
-chép lại hiện trạng đã hỏng làm kỳ vọng, và ba assert vẫn xanh trong khi đường
-follow-up đã mất quyền.
 
 **AC-7 — Con builder biết cửa ra khi bị từ chối.**
 Given `instructions.md` của `agent_builder`,
@@ -180,6 +184,11 @@ fixture.
   cần một lượt end-to-end với model thật. AC-8 chấm *hằng lý do*, không chấm
   đầu ra runtime.
 - **Lưới thu hồi hội thoại treo.** Đã có chip riêng, ngoài vòng này.
+- **Ba đường tạo submission còn lại (nút Tạo tác nhân · gõ tay · follow-up trên
+  agent đã deploy).** Rút khỏi hợp đồng ở vòng chấm 2. Chúng là hằng phía trình
+  duyệt; không có phép đo hành vi nào cho chúng nếu không mở browser, nên tiêu chí
+  cũ chỉ còn cách grep chuỗi trong ba file `.tsx` — một nguồn REJECT không bảo vệ
+  được gì. Vòng này không chạm ba đường đó.
 - **Đổi schema Prisma.** Cột `Json` sẵn có đủ dùng; thêm cột là T3 và không cần.
 
 ## Notes

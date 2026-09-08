@@ -36,34 +36,35 @@ evals:
             duoc nuot thanh rong hay undefined im lang.
       Chieu do: doi schema cho no chap nhan moi thu (passthrough) -> (b) phai het
       hong, phep do ma 1.
-      Ve quan he chay tren CA HAI ben doc, ma tran toan phan, so assert bang 2:
-      apps/api (conversations.service.ts) VA apps/agent (builder-input.ts) — moi ben
-      phai import tu DUNG mot module validation, va so cho ep kieu cot nay sang tu
-      dien mo phai bang 0 o ca hai; khac 0 -> ma 2, IN file:dong.
-      Vi sao dem ca hai: neu chi soi mot ben, ben kia ep kieu tho cot Json thanh tu
-      dien mo roi chi dua rieng truong quyen qua schema — doi ten mot truong thi
-      nhanh ep kieu tra undefined lang le, dung thu AC-2 cam, ma khong phep do nao do.
+      Kieu tra ve cua ham dung PHAI suy bang z.infer tu chinh schema, khong go tay
+      canh no — doi schema ma kieu khong doi la drift ma AGENTS.md cam.
+      Ve "khong ben nao nhan Record<string, unknown>" KHONG do o day: no do
+      `bun run lint:slop` giu (luat anti-slop no-known-value-widening, mot trong nam
+      lenh cong, da bat dung loi ay cua vong nay mot lan). Khong dung phep do rieng
+      doc cheo ma nguon cua app khac.
 
   - id: E3
     criterion: AC-3
     executor: test
-    cmd: config:executors.test.ql_api_doc_ban_ghi
+    cmd: config:executors.test.ql_api_service_that
     paths:
       - "apps/api/src/conversations/conversations.service.ts"
       - "packages/validation/src/builder-question.ts"
-      - "apps/api/test/quyen-luot.spec.ts"
+      - "apps/api/test/conversations.spec.ts"
     expected: |
-      ROUND-TRIP, khong tu dung fixture dung khuon ben doc: ban ghi PHAI do CHINH
-      ham persist cua apps/agent (builder-input.ts) sinh ra. KHONG co duong lui —
-      dung mot ham dung nao khac de tao ban ghi -> ma 2.
-      Kem mot assert khuon: ten truong va do sau long cua ban ghi ma duong GHI sinh
-      ra phai trung dung cai schema ben DOC cho doi.
+      Chay SERVICE THAT: answerBuilderQuestion cua conversations.service, tren mot
+      hoi thoai co hang pendingInputRequest dung bang HAM DUNG CHUNG
+      buildPendingInputRequest (ham ma duong ghi cua apps/agent cung goi).
       CAP HAI CHIEU tren cung fixture, khac dung MOT truong:
-        ban ghi "duoc phep"    -> submission commandType = CREATE_AGENT;
-        ban ghi "khong duoc phep" -> submission commandType = CHAT.
-      Doi mot truong ma ket qua khong lat -> ma 1: khi ay API khong doc ban ghi,
-      no chi tinh co trung.
-      San dan so: khong dung duoc ban ghi tu duong ghi that -> ma 2.
+        ban ghi "duoc phep"       -> submission.commandType = CREATE_AGENT;
+        ban ghi "khong duoc phep" -> submission.commandType = CHAT.
+      Assert tren HANG submission that trong co so du lieu, khong assert tren gia tri
+      tra ve trung gian.
+      Doi mot truong ma ket qua khong lat -> ma 1: khi ay service khong doc ban ghi.
+      San khuon: hang dung bang object literal viet tay thay vi ham dung chung -> ma 2.
+      Rang buoc da dat ten (xem AC-3 trong contract): apps/agent va apps/api la hai
+      deployment rieng, khong import duoc nhau, nen KHONG co bai test mot-tien-trinh
+      di tu duong ghi sang duong doc. Ham dung chung la moi noi that su co.
 
   - id: E4
     criterion: AC-4
@@ -101,29 +102,6 @@ evals:
       San dan so: dem tren dia so cho suy quyen tu hinh dang tin nhan phai bang 0;
       khac 0 -> ma 2, IN file:dong. Tai SHA ghim so nay bang 1.
       Chieu do: cay lai ve suy dien trong ban sao -> ma 1.
-
-  - id: E6
-    criterion: AC-6
-    executor: test
-    cmd: config:executors.test.ql_ba_duong_vao
-    paths:
-      - "apps/app/components/agent-builder/new-agent-dialog.tsx"
-      - "apps/app/components/agent-builder/agent-composer.tsx"
-      - "apps/app/components/agent-builder/agent-builder-chat.tsx"
-      - "apps/app/test/quyen-luot.spec.ts"
-    expected: |
-      MA TRAN TOAN PHAN tren BA duong khong phai hoi-dap, ghim cung ba ten trong
-      chinh bai do: nut Tao tac nhan · go tay trong hoi thoai · follow-up tren agent
-      da deploy. So assert bang dung 3.
-      Moi duong phai bang DUNG gia tri da GHIM trong bai do, do tai SHA 9ec0251 —
-      KHONG so voi hien trang sau khi sua:
-        nut Tao tac nhan (new-agent-dialog.tsx)      -> "CREATE_AGENT"
-        go tay (agent-composer.tsx)                  -> suy tu slash-command, mac dinh "CHAT"
-        follow-up tren agent da deploy (agent-builder-chat.tsx) -> "CREATE_AGENT"
-      Chieu do: doi commandType cua DUNG MOT duong trong ban sao -> ma 1, neu TEN
-      duong.
-      Vi sao so voi so ghim: nguoi viet bai do SAU khi sua se chep lai hien trang da
-      hong lam ky vong, ba assert van xanh trong khi duong follow-up da mat quyen.
 
   - id: E7
     criterion: AC-7

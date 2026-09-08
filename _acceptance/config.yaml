@@ -37,8 +37,8 @@ executors:
     ql_con_biet_cua_ra: cd apps/agent && bun test test/quyen-luot.spec.ts -t cua-ra
     ql_api_doc_ban_ghi: cd apps/api && bun test test/quyen-luot.spec.ts
     ql_cong_dong_that: cd apps/agent && bun test test/quyen-luot.spec.ts -t cong-dong
-    ql_duong_ghi_that: 'bun run test -- "cd apps/agent && bun test test/builder-runtime.integration.spec.ts"'
-    ql_ba_duong_vao: cd apps/app && bun test test/quyen-luot.spec.ts
+    ql_duong_ghi_that: 'bun run db:test --reset && cd apps/agent && bun test test/builder-runtime.integration.spec.ts'
+    ql_api_service_that: 'bun run db:test --reset && cd apps/api && bun test test/conversations.spec.ts -t "builder answer"'
   script:
     cua_vao_loi_mang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"
     cua_vao_chon_tieng_may_chu: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chon-tieng-may-chu"

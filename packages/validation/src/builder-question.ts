@@ -48,9 +48,7 @@ const authorizationEnvelope = z.object({
 	[BUILDER_AUTHORIZATION_KEY]: z.boolean(),
 });
 
-export type BuilderAuthorizationFlag = {
-	[BUILDER_AUTHORIZATION_KEY]: boolean;
-};
+export type BuilderAuthorizationFlag = z.infer<typeof authorizationEnvelope>;
 
 export function buildPendingInputRequest<T extends object>(
 	question: T,

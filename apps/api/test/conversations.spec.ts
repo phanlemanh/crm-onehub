@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { DEFAULT_WORKSPACE_NAME, WORKSPACE_ID } from "@crm/auth";
 import { db } from "@crm/db";
 import { workspaceSlug } from "@crm/db/workspace";
-import { BUILDER_AUTHORIZATION_KEY } from "@crm/validation/builder-question";
+import { buildPendingInputRequest } from "@crm/validation/builder-question";
 import { z } from "zod";
 import {
 	builderConversationCreateInput,
@@ -699,14 +699,16 @@ describe("ConversationsService", () => {
 			data: {
 				sessionId,
 				continuationToken: `crm:builder:${conversation.id}`,
-				pendingInputRequest: {
-					kind: "question",
-					requestId: "question-1",
-					prompt: "Where should this go?",
-					display: "select",
-					options: [{ id: "crm-task", label: "Create a CRM task" }],
-					[BUILDER_AUTHORIZATION_KEY]: true,
-				},
+				pendingInputRequest: buildPendingInputRequest(
+					{
+						kind: "question",
+						requestId: "question-1",
+						prompt: "Where should this go?",
+						display: "select",
+						options: [{ id: "crm-task", label: "Create a CRM task" }],
+					},
+					true,
+				),
 			},
 		});
 
@@ -748,6 +750,53 @@ describe("ConversationsService", () => {
 				},
 			},
 		});
+	});
+
+	it("keeps a pending builder answer in chat mode when the asking turn had no grant", async () => {
+		const conversation = await service.createBuilder(
+			{
+				clientRequestId: crypto.randomUUID(),
+				commandType: "CREATE_AGENT",
+				message: "/Create agent Flag overdue invoices",
+				resources: [],
+				attachments: [],
+			},
+			userId,
+		);
+		await db.agentConversation.update({
+			where: { id: conversation.id },
+			data: {
+				sessionId: `builder-question-${suffix}-chat`,
+				continuationToken: `crm:builder:${conversation.id}`,
+				pendingInputRequest: buildPendingInputRequest(
+					{
+						kind: "question",
+						requestId: "question-2",
+						prompt: "Where should this go?",
+						display: "select",
+						options: [{ id: "crm-task", label: "Create a CRM task" }],
+					},
+					false,
+				),
+			},
+		});
+
+		const response = await service.answerBuilderQuestion(
+			{
+				id: conversation.id,
+				clientRequestId: crypto.randomUUID(),
+				requestId: "question-2",
+				optionId: "crm-task",
+			},
+			userId,
+		);
+
+		expect(
+			await db.agentConversationSubmission.findUnique({
+				where: { id: response.id },
+				select: { commandType: true, inputRequestId: true },
+			}),
+		).toMatchObject({ commandType: "CHAT", inputRequestId: "question-2" });
 	});
 
 	it("rejects an answer when the conversation has no durable question", async () => {

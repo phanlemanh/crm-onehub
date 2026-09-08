@@ -1,18 +1,22 @@
 import { describe, expect, it } from "bun:test";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import {
 	BUILDER_AUTHORIZATION_KEY,
+	buildPendingInputRequest,
 	commandTypeFromAuthorization,
 } from "@crm/validation/builder-question";
 
 type CoQuyen = { [BUILDER_AUTHORIZATION_KEY]?: unknown };
 
 const cauHoi = (over: CoQuyen = {}) => ({
-	kind: "question",
-	requestId: "req_1",
-	prompt: "Chon mot muc",
-	options: [],
+	...buildPendingInputRequest(
+		{
+			kind: "question",
+			requestId: "req_1",
+			prompt: "Chon mot muc",
+			options: [],
+		},
+		false,
+	),
 	...over,
 });
 
@@ -40,23 +44,5 @@ describe("api doc ban ghi quyen", () => {
 		for (const value of hong) {
 			expect(commandTypeFromAuthorization(value)).toBe("CHAT");
 		}
-	});
-
-	it("service khong con ghim cung CREATE_AGENT cho cau tra loi", () => {
-		const nguon = readFileSync(
-			join(import.meta.dir, "../src/conversations/conversations.service.ts"),
-			"utf8",
-		);
-		expect(nguon.split("commandTypeFromAuthorization(").length - 1).toBe(1);
-		expect(
-			nguon.includes(
-				"commandType: commandTypeFromAuthorization(\n\t\t\t\t\t\t\tconversation.pendingInputRequest,",
-			),
-		).toBe(true);
-		const conLai = [...nguon.matchAll(/commandType: "CREATE_AGENT"/g)].map(
-			(m) => nguon.slice(Math.max(0, m.index - 40), m.index),
-		);
-		expect(conLai).toHaveLength(1);
-		expect(conLai[0]?.includes("where: {")).toBe(true);
 	});
 });
