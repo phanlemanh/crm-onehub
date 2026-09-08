@@ -422,10 +422,26 @@ evals:
     executor: script
     cmd: config:executors.script.tq_lan_doc_do
     expected: >-
-      exit 0. Chieu do cua chan DOC ghim: cam mot ghim gia neo o sha toan so khong roi
-      doi chan doc bao DO va GOI TEN ly do ("cay da doi sau khi lan chay"). Bao XANH tren
-      ghim neo sai cay, hoac bao do ma khong goi ten, deu la ma 1 — mot chan doc khong
-      phan biet duoc "da chay tren cay nay" voi "da chay o dau do" thi khong ghim duoc gi.
+      exit 0. Chieu do cua chan DOC ghim, HAI phep thu cam vao noi tiep:
+      (1) ghim gia neo o sha toan so khong → chan phai bao DO va goi ten
+      "cay da doi sau khi lan chay";
+      (2) ghim THAT dung HEAD nhung bom them mot duong ban gia
+      (" M apps/app/lib/messages/tong-quan.ts") → chan phai bao DO va goi ten
+      "cay co sua chua ghi sau khi lan chay". Khe bom LAN_BAN_GIA chi HOP them duong
+      vao ket qua that cua git status, khong bao gio bot di, nen no khong the dung de
+      lam cho cay ban trong nhu sach.
+      Phep thu (2) dong lo ho-mo ma vong 5 goi ten: truoc do chan chi so sha, ma sha
+      khong doi khi co sua chua ghi, nen sau chan deu bao XANH cho ma chua tung chay
+      qua. Cay duoc coi la sach khi khong duong nao NGOAI _acceptance/<lat>/evidence/
+      va s4-args.json bi sua — hai duong nay la vat sinh ra trong luc cham, khong phai
+      ma duoc do.
+      Bat duoc o mot trong hai phep thu, hoac bao do ma khong goi ten, deu la ma 1.
+      CHU Y KHI DOC OUTPUT: chan nay CO Y in lai output cua ca hai phep thu, moi dong
+      duoc thut vao va bao boc giua "--- ben trong ..." va "--- het phan cam vao ...".
+      Cac dong "DO:" o do la ket qua DUNG Y MUON cua phep thu, KHONG phai ket qua cua
+      E23. Ket qua cua E23 la hai dong cuoi ("XANH (chieu do)...") va ma thoat that
+      cua lenh, phai la 0. O vong 4 mot nguoi cham da lay dong "DO:" cua phan cam vao
+      lam ket qua va ghi ma 1 trong khi lenh thoat 0 — dung lap lai.
     paths:
       - "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
