@@ -6,9 +6,9 @@ owner: omre.cnsp4@onemount.com
 risk_tier: T2
 surfaces: [cli]
 design_doc: docs/superpowers/specs/2026-09-08-nang-tran-trang-danh-ba-design.md
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Mạnh
+approved_at: 2026-09-08
 veto_state: mo
 veto_opened_at: 2026-09-08T01:35:48Z
 ---
