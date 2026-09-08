@@ -5,7 +5,7 @@ slug: tong-quan-va-khung-noi-tieng-viet
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-07T22:56:40Z
 design_doc: docs/superpowers/specs/2026-09-08-tong-quan-va-khung-noi-tieng-viet-design.md
@@ -94,6 +94,15 @@ khi bảy giai đoạn thoả thuận được chốt nghĩa? Máy khuyên dịc
 ### Known limits
 
 Khai trước ở S1; S3 bổ sung khi thước đo được.
+
+Chốt ở Cổng 2 ngày 2026-09-09 — sáu mục ngoài hợp đồng nhận vào phần hạn chế đã biết:
+
+- Ngoài-3: _acceptance/config.yaml.bak — bản sao cũ 298 dòng của cấu hình cổng được commit vào kho
+- Ngoài-4: nhanRail xuất ra nhưng không đường sản phẩm nào gọi — chỉ bài kiểm gọi
+- Ngoài-7: `_acceptance/config.yaml.bak` — bản sao cũ của cấu hình cổng bị commit vào kho
+- Ngoài-9: Đọc `git status --porcelain` bằng `slice(3)` vỡ khi git bọc ngoặc kép đường dẫn phi-ASCII
+- Ngoài-10: `doRongHai` vứt câu lỗi mà `lai()` trả về, khác với `docHai` cùng file
+- Ngoài-12: Tuyên quét LỚP nhưng danh sách file gõ tay chỉ phủ 8/13 file của lát
 
 - Máy viết hợp đồng này chưa có `bun`, `.env`, Postgres — S3 và S4 chạy ở máy có môi trường dev đầy đủ.
 - Chân màn của AC-8 đo trên vật sẵn có của DB thử (seed của kho: 18 công ty, 27 thoả thuận); workspace trống thì bảng Tổng quan rỗng và chân chỉ chứng được tên workspace và email.

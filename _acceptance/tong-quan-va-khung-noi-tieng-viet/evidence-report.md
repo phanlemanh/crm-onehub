@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 80f872e410525a68116613714b22e8f9479726dc
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-09 — ký Cổng 2 trên verdict PASS của vòng chấm 9 (25/25 eval, hội đồng đạt, 5/5 lệnh chứng xanh), với BA giới hạn đã khai. Ký trên hiểu biết rằng mười một trong hai mươi lăm phép đo chạy qua làn nối tiếp do chính phiên viết mã chạy, rằng bốn vòng chấm trước hỏng vì tầng tác nhân chứ không vì mã, và rằng mười ba mục ngoài hợp đồng đã được định đoạt từng mục ở lượt ký này.
 ---
 
 # Evidence Report: tong-quan-va-khung-noi-tieng-viet
