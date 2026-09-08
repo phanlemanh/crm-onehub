@@ -365,10 +365,10 @@ evals:
       (thang / thua / pipeline); cau ghep so (N thoa thuan, N ngay) la mot cau Viet
       tu nhien; cho nao con la chu dich may thi neu dich danh khoa?
     inputs:
-      - ../../apps/app/lib/messages/tong-quan.ts
-      - ../../apps/app/lib/messages/khung-ung-dung.ts
-      - ban-dich.md
-      - ../../CONTEXT.md
+      - apps/app/lib/messages/tong-quan.ts
+      - apps/app/lib/messages/khung-ung-dung.ts
+      - _acceptance/tong-quan-va-khung-noi-tieng-viet/ban-dich.md
+      - CONTEXT.md
     expected: >-
       Ban dich doc nhu tieng Viet cua nguoi lam nghe. Danh tu: cong ty · ca nhan ·
       thoa thuan · hoi thoai · chien dich · cai dat. The so: "Chot duoc thang nay" ·
