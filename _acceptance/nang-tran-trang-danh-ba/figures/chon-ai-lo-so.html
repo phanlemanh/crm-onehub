@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chọn ai được lộ số — trần vẫn cắt 200, cái đổi là ai nằm trong 200</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --page:   #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:   #171717;
+      --ink:    #fafafa;
+      --muted:  #b4b4b4;
+      --soft:   #9a9a9a;
+      --rule:   rgba(250,250,250,0.16);
+      --accent: #2f9b7a;
+    }
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1240px; width: 100%; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .standfirst {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 68ch;
+    margin-bottom: 1.75rem;
+  }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 1040px; display: block; }
+  .notes {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 0.95fr;
+    gap: 2rem;
+  }
+  .notes h2 {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .notes p { font-size: 0.86rem; line-height: 1.6; color: var(--ink); }
+  .notes p + p { margin-top: 0.6rem; }
+  .notes .quiet { color: var(--muted); }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+    line-height: 1.7;
+  }
+  @media (max-width: 900px) { .notes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Cổng 1 · Hình 2 · AC-5 AC-6 · nang-tran-trang-danh-ba</p>
+  <h1>Chọn ai được lộ số — trần vẫn cắt 200, cái đổi là ai nằm trong 200</h1>
+  <p class="standfirst">Ba chặng: lấy cả lô, giữ lại hồ sơ thuộc tầng đã khai, rồi so số còn lại với trần. Lô xếp theo trang danh bạ nên sản lượng giảm dần theo lô — lấy 200 người đầu lô là lộ số cho đúng nhóm đội tiếp thị đã có. Dải bên dưới cho thấy cùng một lô, hai cách chọn, cùng đúng 200 lượt lộ.</p>
+
+  <div class="card">
+  <svg viewBox="0 0 1560 980" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ luồng ngang ba chặng: lô hồ sơ sắp gửi, giữ lại hồ sơ thuộc tầng đã khai trong phone_reveal_tiers, so số còn lại với trần phone_reveal_cap bằng 200; chưa vượt thì lộ số cho cả lô, vượt thì rải khắp lô rồi lộ đúng 200 số. Dải minh hoạ bên dưới so hai cách chọn trên cùng một lô xếp theo sản lượng giảm dần: lấy 200 người đầu lô cho mẫu dồn về đầu lô chỉ chạm mức cao, còn rải khắp lô cho mẫu trải đều chạm cả mức thấp và ngủ">
+    <defs>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');
+        svg {
+          --paper:#fafafa; --node:#ffffff; --ink:#171717; --muted:#575757;
+          --soft:#666666; --rule:rgba(23,23,23,0.12); --accent:#006B4F;
+          --tint:rgba(0,107,79,0.08); --leader:rgba(23,23,23,0.42);
+          --badge:rgba(23,23,23,0.34); --tick:rgba(23,23,23,0.55);
+          --b1:rgba(23,23,23,0.11); --b2:rgba(23,23,23,0.075);
+          --b3:rgba(23,23,23,0.045); --b4:rgba(23,23,23,0.02);
+        }
+        @media (prefers-color-scheme: dark) {
+          svg {
+            --paper:#171717; --node:#212121; --ink:#fafafa; --muted:#b4b4b4;
+            --soft:#9a9a9a; --rule:rgba(250,250,250,0.16); --accent:#2f9b7a;
+            --tint:rgba(47,155,122,0.14); --leader:rgba(250,250,250,0.42);
+            --badge:rgba(250,250,250,0.38); --tick:rgba(250,250,250,0.62);
+            --b1:rgba(250,250,250,0.14); --b2:rgba(250,250,250,0.10);
+            --b3:rgba(250,250,250,0.06); --b4:rgba(250,250,250,0.03);
+          }
+        }
+        .bg   { fill: var(--paper); }
+        .mask { fill: var(--paper); }
+        .node { fill: var(--node); stroke: var(--ink); stroke-width: 1; }
+        .focal{ fill: var(--tint); stroke: var(--accent); stroke-width: 1.4; }
+        .edge { fill: none; stroke: var(--muted); stroke-width: 1; }
+        .mk   { fill: var(--muted); }
+        .name { fill: var(--ink); font: 600 16px 'Geist', system-ui, sans-serif; }
+        .rown { fill: var(--ink); font: 600 14px 'Geist', system-ui, sans-serif; }
+        .sub  { fill: var(--muted); font: 400 12px 'Geist', system-ui, sans-serif; }
+        .subm { fill: var(--muted); font: 400 12px 'Geist Mono', ui-monospace, monospace; }
+        .suba { fill: var(--accent); font: 500 12px 'Geist', system-ui, sans-serif; }
+        .alab { fill: var(--soft); font: 400 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.06em; }
+        .bdg  { fill: none; stroke: var(--badge); stroke-width: 0.8; }
+        .bdga { fill: none; stroke: var(--accent); stroke-width: 0.9; }
+        .bdgt { fill: var(--muted); font: 500 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.08em; }
+        .bdgta{ fill: var(--accent); font: 500 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.08em; }
+        .call { fill: var(--ink); font: italic 400 17px 'Lora', Georgia, serif; }
+        .lead { fill: none; stroke: var(--leader); stroke-width: 1; stroke-dasharray: 4,3; }
+        .dot  { fill: var(--ink); }
+        .hr   { stroke: var(--rule); stroke-width: 0.8; }
+        .guide{ stroke: var(--rule); stroke-width: 0.8; stroke-dasharray: 3,4; }
+        .band { stroke: var(--rule); stroke-width: 0.8; }
+        .blab { fill: var(--muted); font: 500 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.14em; }
+        .tickA{ fill: var(--tick); }
+        .tickB{ fill: var(--accent); }
+        .lgl  { fill: var(--muted); font: 500 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.16em; }
+        .lgi  { fill: var(--muted); font: 400 11px 'Geist Mono', ui-monospace, monospace; }
+        .sect { fill: var(--muted); font: 500 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.16em; }
+      </style>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon class="mk" points="0 0, 8 3, 0 6"/>
+      </marker>
+    </defs>
+
+    <rect class="bg" width="100%" height="100%"/>
+
+    <!-- ======================= CHẶNG 1–3 · ĐƯỜNG NỐI ======================= -->
+    <path class="edge" d="M 340 188 H 412" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 740 188 H 804" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 1148 188 H 1220" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 980 252 V 340" marker-end="url(#arrow)"/>
+
+    <!-- ======================= NHÃN TRÊN ĐƯỜNG ======================= -->
+    <rect class="mask" x="352" y="160" width="52" height="18" rx="2"/>
+    <text class="alab" x="378" y="174" text-anchor="middle">CẢ LÔ</text>
+
+    <rect class="mask" x="742" y="160" width="60" height="18" rx="2"/>
+    <text class="alab" x="772" y="174" text-anchor="middle">CÒN LẠI</text>
+
+    <rect class="mask" x="1154" y="160" width="60" height="18" rx="2"/>
+    <text class="alab" x="1184" y="174" text-anchor="middle">CHƯA</text>
+
+    <rect class="mask" x="988" y="286" width="56" height="18" rx="2"/>
+    <text class="alab" x="994" y="300">RỒI</text>
+
+    <!-- ======================= NÚT ======================= -->
+
+    <!-- N1 — lô hồ sơ -->
+    <rect class="mask" x="60" y="124" width="280" height="128" rx="6"/>
+    <rect class="node" x="60" y="124" width="280" height="128" rx="6"/>
+    <text class="name" x="84" y="166">lô hồ sơ sắp gửi</text>
+    <text class="sub"  x="84" y="192">xếp theo trang danh bạ</text>
+    <text class="sub"  x="84" y="214">sản lượng giảm dần theo lô</text>
+
+    <!-- N2 — lọc theo tầng -->
+    <rect class="mask" x="420" y="124" width="320" height="128" rx="6"/>
+    <rect class="node" x="420" y="124" width="320" height="128" rx="6"/>
+    <rect class="bdg"  x="436" y="140" width="52" height="20" rx="4"/>
+    <text class="bdgt" x="462" y="154" text-anchor="middle">AC-5</text>
+    <text class="name" x="436" y="190">giữ hồ sơ thuộc tầng đã khai</text>
+    <text class="subm" x="436" y="212">phone_reveal_tiers</text>
+    <text class="sub"  x="436" y="234">cao · vừa · thấp · ngủ</text>
+
+    <!-- D — so với trần -->
+    <polygon class="mask" points="980,124 1148,188 980,252 812,188"/>
+    <polygon class="node" points="980,124 1148,188 980,252 812,188"/>
+    <text class="name" x="980" y="182" text-anchor="middle">vượt trần 200 chưa?</text>
+    <text class="subm" x="980" y="206" text-anchor="middle">phone_reveal_cap = 200</text>
+
+    <!-- O1 — lô nhỏ hơn trần -->
+    <rect class="mask" x="1228" y="140" width="272" height="96" rx="20"/>
+    <rect class="node" x="1228" y="140" width="272" height="96" rx="20"/>
+    <text class="name" x="1256" y="182">lộ số cho cả lô</text>
+    <text class="sub"  x="1256" y="206">số lượt lộ = số hồ sơ còn lại</text>
+
+    <!-- O2 — lô lớn hơn trần: rải khắp -->
+    <rect class="mask"  x="724" y="348" width="512" height="136" rx="20"/>
+    <rect class="focal" x="724" y="348" width="512" height="136" rx="20"/>
+    <rect class="bdga"  x="748" y="368" width="52" height="20" rx="4"/>
+    <text class="bdgta" x="774" y="382" text-anchor="middle">AC-6</text>
+    <text class="name"  x="748" y="418">rải khắp lô rồi lộ đúng 200 số</text>
+    <text class="sub"   x="748" y="442">bước đều qua cả lô, không lấy phần đầu</text>
+    <text class="sub"   x="748" y="464">số lượt lộ bằng ĐÚNG trần</text>
+
+    <!-- ghi chú lề -->
+    <text class="call" x="60" y="400">Trần vẫn cắt đúng 200.</text>
+    <text class="call" x="60" y="428">Cái đổi là ai nằm trong 200 ấy.</text>
+    <path class="lead" d="M 316 424 Q 520 438 712 420"/>
+    <circle class="dot" cx="718" cy="419" r="2.5"/>
+
+    <!-- ======================= DẢI SO SÁNH ======================= -->
+    <line class="hr" x1="60" y1="524" x2="1500" y2="524"/>
+    <text class="sect" x="60" y="556">CÙNG MỘT LÔ · HAI CÁCH CHỌN 200 NGƯỜI</text>
+
+    <!-- bốn mức trên trục lô -->
+    <rect class="band" x="280"  y="580" width="200" height="32" fill="var(--b1)"/>
+    <rect class="band" x="480"  y="580" width="240" height="32" fill="var(--b2)"/>
+    <rect class="band" x="720"  y="580" width="600" height="32" fill="var(--b3)"/>
+    <rect class="band" x="1320" y="580" width="120" height="32" fill="var(--b4)"/>
+    <text class="blab" x="380"  y="601" text-anchor="middle">CAO</text>
+    <text class="blab" x="600"  y="601" text-anchor="middle">VỪA</text>
+    <text class="blab" x="1020" y="601" text-anchor="middle">THẤP</text>
+    <text class="blab" x="1380" y="601" text-anchor="middle">NGỦ</text>
+    <text class="blab" x="60"   y="601">MỨC SẢN LƯỢNG</text>
+    <text class="alab" x="280"  y="636">ĐẦU LÔ</text>
+    <text class="alab" x="1440" y="636" text-anchor="end">CUỐI LÔ</text>
+
+    <!-- vạch mốc giữa bốn mức, kéo xuống cả hai hàng -->
+    <line class="guide" x1="480"  y1="616" x2="480"  y2="812"/>
+    <line class="guide" x1="720"  y1="616" x2="720"  y2="812"/>
+    <line class="guide" x1="1320" y1="616" x2="1320" y2="812"/>
+
+    <!-- HÀNG A — lấy 200 người đầu lô -->
+    <text class="rown" x="60" y="676">lấy 200 người đầu lô</text>
+    <text class="alab" x="60" y="698">CÁCH CŨ</text>
+    <rect class="tickA" x="288" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="300" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="312" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="324" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="336" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="348" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="360" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="372" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="384" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="396" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="408" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="420" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="432" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="444" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="456" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="468" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="480" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="492" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="504" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="516" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="528" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="540" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="552" y="664" width="4" height="24" rx="1"/>
+    <rect class="tickA" x="564" y="664" width="4" height="24" rx="1"/>
+    <text class="sub" x="288" y="724">mẫu dồn về đầu lô — không ai ở mức thấp hay ngủ được lộ số</text>
+
+    <line class="hr" x1="60" y1="752" x2="1440" y2="752"/>
+
+    <!-- HÀNG B — rải khắp lô -->
+    <text class="rown" x="60" y="796">rải khắp lô</text>
+    <text class="alab" x="60" y="818">CÁCH VÒNG NÀY</text>
+    <rect class="tickB" x="308" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="356" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="404" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="452" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="500" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="548" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="596" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="644" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="692" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="740" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="788" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="836" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="884" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="932" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="980" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="1028" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="1076" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="1124" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="1172" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="1220" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="1268" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="1316" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="1364" y="784" width="4" height="24" rx="1"/>
+    <rect class="tickB" x="1412" y="784" width="4" height="24" rx="1"/>
+    <rect class="bdga"  x="288" y="824" width="52" height="20" rx="4"/>
+    <text class="bdgta" x="314" y="838" text-anchor="middle">AC-6</text>
+    <text class="suba"  x="352" y="838">mẫu trải đều — mức thấp và ngủ đều có người được lộ số</text>
+
+    <!-- ======================= CHÚ GIẢI ======================= -->
+    <line class="hr" x1="60" y1="896" x2="1500" y2="896"/>
+    <text class="lgl" x="60" y="926">CHÚ GIẢI</text>
+    <text class="lgi" x="200" y="926">mỗi vạch = một lượt lộ số · hai hàng cùng 24 vạch</text>
+    <text class="lgi" x="640" y="926">bề rộng bốn mức trên dải là minh hoạ, không phải số đo</text>
+    <text class="lgi" x="1136" y="926">nét xanh = cách vòng này chọn</text>
+  </svg>
+  </div>
+
+  <div class="notes">
+    <div>
+      <h2>Vì sao phần đầu lô là bẫy</h2>
+      <p>Lô xếp theo trang danh bạ, mà tin hiện có giảm đơn điệu theo trang. Nên «200 người đầu lô» gần như trùng với mức cao — đúng nhóm đội tiếp thị đã có số. Lời hứa của cả vòng chết ở đó, trong khi mọi phép đo vẫn xanh: đủ 200 lượt lộ, không lỗi, không cảnh báo.</p>
+    </div>
+    <div>
+      <h2>Trần không đổi</h2>
+      <p><span class="quiet">phone_reveal_cap</span> giữ nguyên ở 200. Nới danh sách tầng mà bỏ trần là mở một đường chi phí không đáy trên dữ liệu cá nhân của người thật. Nay trần là chỗ chặn duy nhất, nên nó phải thật sự chặn — số lượt lộ bằng ĐÚNG 200, không hơn.</p>
+    </div>
+    <div>
+      <h2>Hai tiêu chí, hai chặng</h2>
+      <p>AC-5 nằm ở chặng lọc: danh sách tầng khai đủ bốn mức thì hồ sơ mức thấp và ngủ mới lọt qua được. AC-6 nằm ở chặng cắt: lọt qua rồi vẫn có thể bị trần gạt hết nếu chọn theo phần đầu lô.</p>
+      <p class="quiet">Bốn mức là bốn ngăn của trục Sản lượng, không phải bốn lời hứa rằng ngăn nào cũng có người.</p>
+    </div>
+  </div>
+
+  <footer>
+    Vẽ theo thiết kế S1 ở docs/superpowers/specs/2026-09-08-nang-tran-trang-danh-ba-design.md, mục «Năm thứ vòng này đổi», ý 3 và 4.<br>
+    Bộ rải dùng lại bộ rải đều của vòng gieo-rai-deu-danh-ba · hình dựng 08/09/2026
+  </footer>
+</div>
+</body>
+</html>

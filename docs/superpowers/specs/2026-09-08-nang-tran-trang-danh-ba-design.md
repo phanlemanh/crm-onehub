@@ -19,15 +19,18 @@ kéo theo số điện thoại, mà `reveal_phones` hiện chỉ lộ số cho m
 
 Bốn lượt dò danh bạ thật, dùng đúng bộ nạp và nhịp của bộ cào:
 
-| Số đo | Giá trị |
-| --- | --- |
-| Thẻ mỗi trang | 11, đều tăm tắp qua mọi trang đọc được |
-| Tin hiện có, trang 1 | 83 đến 458 |
-| Tin hiện có, trang 43 | 8 |
-| Trang đầu tiên cả trang dưới 20 tin | 16 |
-| Trang bị chặn trong lượt dò 40 trang | 3 (các trang 10, 27, 34) |
+| Số đo | Giá trị | Lượt dò |
+| --- | --- | --- |
+| Thẻ mỗi trang | 11, đều qua cả 74 trang đọc được | 1–5 |
+| Tin hiện có, trang 1 | 83 đến 458 | 1 |
+| Trang đầu tiên cả trang dưới 20 tin | 16 | 1 |
+| Tin hiện có, trang 93 | 1 | 4 |
+| Trang sâu nhất còn người | **93, vẫn đầy 11 thẻ** | 4 |
+| **Đáy danh bạ** | **CHƯA ĐO ĐƯỢC** — lượt dò dừng vì chuỗi trang không tải được, không vì hết người | 4 |
+| Trang hỏng, vùng 1–40 | 3 trên 40 — 7,5% | 1 |
+| Trang hỏng, vùng 45–93 | 12 trên 49 — **24%** | 4 |
 
-Hai điều lượt dò lật ngửa mà không ai đoán trước:
+Ba điều lượt dò lật ngửa mà không ai đoán trước:
 
 **Danh bạ có LỖ ở giữa.** Trang 44 trả về 0 thẻ, hai lần đo đều vậy, không mang
 dấu hiệu chặn nào. Trang 45 lại có đủ 11 thẻ. Nghĩa là **một trang rỗng KHÔNG
@@ -35,31 +38,50 @@ phải dấu hiệu hết danh bạ** — đây đúng là ca mà vòng trước
 fresh: break` thành `continue`), và nay nó có bằng chứng từ danh bạ thật chứ
 không chỉ từ bộ dựng sẵn.
 
+**Trang hỏng cũng «không ra người mới».** Ở vùng trang sâu cứ bốn trang có một
+trang không tải được. Nếu phép đếm để dừng đọc gộp trang-hỏng với
+trang-đọc-được-mà-rỗng, thì một chuỗi ba trang bị chặn sẽ dừng lượt cào ở giữa
+danh bạ, cờ «đã chạm trần» KHÔNG bật vì chưa chạm trần, và bản tổng kết in ra
+một lượt trông khoẻ. Đó đúng là lớp lỗi vòng này sinh ra để chữa, chỉ im lặng
+hơn. Làn phản biện context sạch bắt được điều này, không phải tôi.
+
 **Trần trang là chính sách sai chỗ.** Số đúng cho hôm nay là số sai cho tháng
 sau: danh bạ mọc thêm người thì trần cứng lại cắt đúng phần đuôi. Trần nên là
 lan can an toàn, còn chính sách phải là «đọc tới khi hết».
 
-## Ba thứ vòng này đổi
+## Năm thứ vòng này đổi
 
 **1. Bộ gieo đọc tới khi danh bạ cạn, trần thành lan can.**
 Vòng đọc dừng khi gặp `directory_stop_after_empty` trang LIÊN TIẾP không ra
 người mới (mặc định 3 — trang 44 chứng minh 1 là quá ít), hoặc khi chạm
-`directory_max_pages`. Trần nâng từ 8 lên một số cao hơn đáy đo được, đủ để
-không cắt nhầm mà vẫn chặn được chi phí nếu sàn đổi cách phân trang.
+`directory_max_pages`. Trần nâng từ 8 lên **120**, chọn theo CHI PHÍ chứ không
+theo đáy: đáy chưa ai chạm, còn 120 trang là khoảng 11 phút đọc.
 
-**2. `reveal_phones` lộ số theo danh sách tầng khai trong cấu hình.**
+**2. Phép đếm để dừng CHỈ tính trang đọc được.**
+Trang không tải được không cộng vào biến đếm dừng. Nó cộng vào số trang hỏng
+của bản tổng kết. Đây là mục nặng nhất làn phản biện bắt được, và số đo 24%
+trang hỏng ở vùng sâu làm nó thành chuyện thường chứ không phải ca hiếm.
+
+**3. `reveal_phones` lộ số theo danh sách tầng khai trong cấu hình, và rải khắp lô.**
 Thay `item["tier"] == "cao"` cứng bằng `phone_reveal_tiers` trong `config.toml`.
 Đội tiếp thị cần gọi người mức thấp thì danh sách gồm cả bốn mức. Trần
 `phone_reveal_cap = 200` giữ nguyên — nó vẫn là chỗ chặn chi phí, và nay là chỗ
 chặn DUY NHẤT nên nó phải thật sự chặn.
 
-**3. Bản tổng kết khai sức khoẻ của mẫu.**
+**4. Khi lô lớn hơn trần lộ số, chọn ai lộ bằng cách RẢI KHẮP lô.**
+Lô xếp theo trang danh bạ, mà tin hiện có giảm đơn điệu theo trang. Lấy 200
+người đầu lô là lộ số cho đúng nhóm đội tiếp thị đã có — lời hứa của cả vòng
+chết trong khi mọi phép đo vẫn xanh. Dùng lại bộ rải của vòng trước.
+
+**5. Bản tổng kết khai sức khoẻ của mẫu.**
 Đây là mục Ngoài-2 vòng trước ký nhận làm hạn chế đã biết: danh bạ bị chặn giữa
 chừng thì mẫu tụt về đầu bảng mà bản tổng kết vẫn in `gieo` đủ trần như một lượt
 khoẻ. Ở trần 8 trang một trang chặn mất 11 người. Ở trần 45 trang với mẫu rải
 đều, một trang chặn lấy mất một lát của cả dải — im lặng thì người đọc số không
-có cách nào biết. Bản tổng kết nay thêm ba số: số trang danh bạ đã đọc, số trang
-hỏng, và cờ «đã chạm trần» (nghĩa là danh bạ có thể còn nữa).
+có cách nào biết. Bản tổng kết nay thêm bốn thứ: số trang danh bạ đã đọc, số trang
+hỏng, cờ «đã chạm trần» (nghĩa là danh bạ có thể còn nữa), và bảng đếm hồ sơ
+theo bốn mức Sản lượng — bảng đó là thứ phiên nghiệm thu sẽ đọc để trả lời câu
+«rải mẫu có ăn thua không».
 
 ## Quét không gian tiêu chí
 
@@ -88,12 +110,15 @@ thoại» và đặt hạn mức riêng cho vế sau — Apollo.io và ZoomInfo 
 1. **trần × Thấp/Ngủ** — nâng trần thì mới có người mức thấp để rải vào mẫu.
 2. **điều kiện dừng × trang rỗng giữa danh bạ** — trang 44 rỗng mà 45 có người;
    dừng ở trang rỗng đầu tiên là cắt mất phần đuôi.
-3. **điều kiện dừng × danh bạ cạn trước trần** — cạn thật thì phải dừng, không
+3. **điều kiện dừng × trang bị chặn** — trang hỏng cũng «không ra người mới»;
+   gộp nó vào phép đếm dừng là dựng lại đúng lỗi cũ, im hơn.
+4. **điều kiện dừng × danh bạ cạn trước trần** — cạn thật thì phải dừng, không
    đọc nốt lan can cho tốn.
-4. **danh sách tầng lộ số × Thấp/Ngủ** — gọi được hay không nằm ở đây.
-5. **trần lộ số × mọi tầng** — nới tầng thì trần thành chỗ chặn chi phí duy nhất.
-6. **trang bị chặn × mọi tầng** — mẫu lệch phải hiện trên bản tổng kết.
-7. **chạm trần khi danh bạ còn × mọi tầng** — cùng lý do: im lặng là nói dối.
+5. **danh sách tầng lộ số × Thấp/Ngủ** — gọi được hay không nằm ở đây.
+6. **trần lộ số × Thấp/Ngủ** — nới tầng rồi lấy phần đầu lô là lộ số cho đúng
+   nhóm đã có; trần phải cắt mà không cắt mất mức thấp.
+7. **trang bị chặn × mọi tầng** — mẫu lệch phải hiện trên bản tổng kết.
+8. **chạm trần khi danh bạ còn × mọi tầng** — cùng lý do: im lặng là nói dối.
 
 ### Later
 
@@ -128,11 +153,15 @@ thứ ba bằng quyết định của người:
 
 ## Đổi lấy
 
-Lượt cào dài ra đáng kể. Ước từ số đo: mỗi trang danh bạ tốn khoảng 5,5 giây
-(`request_delay_seconds` 1,5 cộng `render_wait_seconds` 4,0). Trần 45 trang là
-khoảng 4 phút đọc danh bạ, so với 44 giây ở trần 8. Cộng thêm phần lộ số nay
-chạm tới 200 người thay vì chỉ số ít người mức cao — mỗi lượt lộ số là một lượt
-tải trang nữa.
+Lượt cào dài ra đáng kể. Mỗi trang danh bạ tốn khoảng 5,5 giây (`request_delay_seconds`
+1,5 cộng `render_wait_seconds` 4,0):
+
+| Phần | Trước | Sau |
+| --- | --- | --- |
+| Đọc danh bạ | 8 trang, 44 giây | tới 120 trang, khoảng 11 phút |
+| Tải hồ sơ ở `--limit 200` | 200 lượt, khoảng 18 phút | không đổi |
+| Lộ số điện thoại | số ít người mức cao | tới 200 lượt, khoảng 18 phút |
+| **Một lượt nạp trọn** | **khoảng 20 phút** | **khoảng 45 phút** |
 
 Đây là việc chạy theo đợt, không phải việc chạy liên tục, nên đắt về thời gian
 chấp nhận được. Cái KHÔNG chấp nhận được là đắt mà im: vì vậy mục 3 nằm trong
