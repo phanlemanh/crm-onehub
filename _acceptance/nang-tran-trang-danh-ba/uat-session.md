@@ -43,14 +43,43 @@ Chưa họp.
 
 ## Số đo thật đặt cạnh ngưỡng
 
+Lượt đo: 09/09/2026, `--limit 200 --dry-run`, cấu hình đang ship (trần 120,
+ngưỡng dừng 3, lộ số đủ bốn mức). Bắt đầu 22:18:29Z, xong 22:53:46Z.
+
 | Thước | Ngưỡng | Số đo được | SỐNG/CHẾT |
 | --- | --- | --- | --- |
-| Mức Thấp có người thật | ≥ 50 | CHƯA ĐO | |
-| Gọi được người mức thấp | ≥ 30 | CHƯA ĐO | |
-| Chi phí một lượt | < 75 phút, hỏng < 35% | CHƯA ĐO | |
+| Mức Thấp có người thật | ≥ 50 | **128** trên 154 hồ sơ | **SỐNG** |
+| Gọi được người mức thấp | ≥ 30 | **128** hồ sơ Thấp có số điện thoại | **SỐNG** |
+| Chi phí một lượt | < 75 phút, hỏng < 35% | **35 phút**, trang hỏng **0%** | **SỐNG** |
 
-Cần một lượt cào thật khoảng 45 phút vào nhatot, chế độ `--dry-run` để không nạp
-gì vào kho.
+Bản tổng kết nguyên văn của lượt đo:
+
+```
+gieo 200 · lay_duoc 154 · bi_chan 46
+trang_danh_ba_doc 113 · trang_danh_ba_rong 4 · trang_danh_ba_hong 0
+bi_tran_cat False
+phan_bo_tang {'cao': 4, 'vua': 22, 'thap': 128, 'ngu': 0}
+tin_moi_30_ngay {'min': 1, 'q1': 3, 'trung_vi': 8, 'q3': 14, 'max': 458}
+co_so_dien_thoai 154 · lan_thu_lo_so 0
+```
+
+### Ba điều số đo nói ra mà ngưỡng không hỏi
+
+**Mức «Ngủ» rỗng, và rỗng vì NGUỒN chứ không vì bộ cào.** Hợp đồng đã cảnh báo
+điều này trước khi ký. Nay có bằng chứng: cả 154 hồ sơ đều có tin-hiện-có bằng
+tin-mới-30-ngày (`tong_bang_tin_moi` 154 trên 154) — sàn chỉ công bố MỘT con số.
+Không ai có thể vừa còn tin đăng vừa có tin-mới bằng 0, nên ngăn «Ngủ» không với
+tới được từ nguồn này. **Thước phân khúc chia được BA mức, không phải bốn.**
+
+**Bước lộ số điện thoại chưa từng chạy** (`lan_thu_lo_so` bằng 0). Cả 154 hồ sơ
+đã mang sẵn số điện thoại từ chính trang hồ sơ, nên bộ lọc «chưa có số» loại hết.
+Nghĩa là phần việc AC-5 và AC-6 của vòng này — lộ số theo danh sách tầng, và rải
+khắp lô khi vượt trần — **không được dùng tới ở cấu hình hôm nay**. Nó đúng theo
+bài kiểm, nhưng hôm nay là mã ngủ. Thước thứ hai SỐNG nhờ sàn, không nhờ vòng này.
+
+**46 trên 200 địa chỉ gieo không lấy được hồ sơ** (23%). Không ngưỡng nào hỏi con
+số này. Mẫu cuối còn 154 người thay vì 200, và không ai biết 46 người mất đi
+nghiêng về mức nào.
 
 ## Quyết định Cổng Giá trị
 
