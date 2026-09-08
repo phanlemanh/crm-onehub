@@ -40,6 +40,32 @@ describe("ke-thua", () => {
 		}
 	});
 
+	it("ke-thua: ca HAI ben doc deu qua module validation, khong ben nao ep kieu mo", () => {
+		const benDoc = [
+			{ ten: "apps/agent", duong: "../agent/lib/builder-input.ts" },
+			{
+				ten: "apps/api",
+				duong: "../../api/src/conversations/conversations.service.ts",
+			},
+		];
+		expect(benDoc).toHaveLength(2);
+		const epKieu: string[] = [];
+		for (const ben of benDoc) {
+			const nguon = readFileSync(join(import.meta.dir, ben.duong), "utf8");
+			expect(nguon.includes('from "@crm/validation/builder-question"')).toBe(
+				true,
+			);
+			nguon.split("\n").forEach((dong, i) => {
+				if (/pendingInputRequest[^\n]*as\s+Record</.test(dong)) {
+					epKieu.push(`${ben.ten}:${i + 1}`);
+				}
+			});
+		}
+		if (epKieu.length > 0) {
+			throw new Error(`ep kieu cot sang tu dien mo: ${epKieu.join(", ")}`);
+		}
+	});
+
 	it("ke-thua: ham dung ban ghi la mot, va no tu choi cau hoi sai khuon", () => {
 		expect(banGhi(true)[BUILDER_AUTHORIZATION_KEY]).toBe(true);
 		expect(banGhi(false)[BUILDER_AUTHORIZATION_KEY]).toBe(false);
@@ -78,12 +104,33 @@ describe("suy-dien", () => {
 		}
 	});
 
-	it("suy-dien: khong con cho nao suy quyen tu hinh dang tin nhan", () => {
-		const nguon = readFileSync(
-			join(import.meta.dir, "../agent/lib/custom-agent-dispatch.ts"),
-			"utf8",
+	it("suy-dien: dem tren dia so cho suy quyen tu hinh dang tin nhan phai bang 0", () => {
+		const demTrong = (nguon: string) =>
+			nguon
+				.split("\n")
+				.map((dong, i) => ({ dong, so: i + 1 }))
+				.filter(({ dong }) => /\?\s*["']CREATE_AGENT["']\s*:/.test(dong));
+
+		const chung =
+			'return requestId && (optionId || text) ? "CREATE_AGENT" : commandType;';
+		expect(demTrong(chung)).toHaveLength(1);
+
+		const soi = [
+			"../agent/lib/custom-agent-dispatch.ts",
+			"../agent/lib/builder-input.ts",
+			"../../api/src/conversations/conversations.service.ts",
+		];
+		expect(soi).toHaveLength(3);
+		const dinh = soi.flatMap((duong) =>
+			demTrong(readFileSync(join(import.meta.dir, duong), "utf8")).map(
+				({ so }) => `${duong}:${so}`,
+			),
 		);
-		expect(nguon.includes('? "CREATE_AGENT" :')).toBe(false);
+		if (dinh.length > 0) {
+			throw new Error(
+				`con suy quyen tu hinh dang tin nhan: ${dinh.join(", ")}`,
+			);
+		}
 	});
 });
 

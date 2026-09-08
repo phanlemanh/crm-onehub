@@ -105,10 +105,12 @@ evals:
   - id: E6
     criterion: AC-6
     executor: test
-    cmd: config:executors.test.ql_api_doc_ban_ghi
+    cmd: config:executors.test.ql_ba_duong_vao
     paths:
-      - "apps/api/src/conversations/conversations.service.ts"
-      - "apps/api/test/quyen-luot.spec.ts"
+      - "apps/app/components/agent-builder/new-agent-dialog.tsx"
+      - "apps/app/components/agent-builder/agent-composer.tsx"
+      - "apps/app/components/agent-builder/agent-builder-chat.tsx"
+      - "apps/app/test/quyen-luot.spec.ts"
     expected: |
       MA TRAN TOAN PHAN tren BA duong khong phai hoi-dap, ghim cung ba ten trong
       chinh bai do: nut Tao tac nhan · go tay trong hoi thoai · follow-up tren agent
