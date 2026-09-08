@@ -17,6 +17,7 @@ import {
 	RONG,
 	suySlug,
 } from "../../man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs";
+import { giuViet } from "../../man-cai-dat-noi-tieng-viet/rang/khoa-cay.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(HERE, "../../..");
@@ -250,6 +251,8 @@ function chamSan(ten) {
 }
 
 chotSan();
+await giuViet();
+
 const cookie = phien();
 const slug = await suySlug(cookie);
 const trinhDuyet = await puppeteer.launch({

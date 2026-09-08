@@ -181,12 +181,16 @@ evals:
   - id: E10
     criterion: AC-9
     executor: script
-    cmd: config:executors.script.tq_dan_so_tu_dia
+    cmd: config:executors.script.tq_lan_dan_so
     expected: >-
       exit 0. Chay NEN tren cay lanh truoc (hai chan xanh; khong thi ma 2), roi tha
       mot file .tsx mang chu tieng Anh vao thu muc lat: dan so doi VA hai chan do goi
       ten file; ma 2 khi co vet la "chua do duoc", khong tinh la bat. Cay tra nguyen
       trang.
+      Chan nay cam vet vao MA NGUON, nen no khong chay trong dot toa cua S4: no chay o LAN
+      NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot chan mot luc, tren cay sach.
+      Lenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai, chan phai co mat,
+      ma phai 0 va cay phai sach sau khi chay. Ghim neo cay khac → do, goi ten.
     paths:
       - "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -194,7 +198,7 @@ evals:
   - id: E11
     criterion: AC-10
     executor: script
-    cmd: config:executors.script.tq_dot_bien
+    cmd: config:executors.script.tq_lan_dot_bien
     expected: >-
       exit 0. Bang DONG (hinh dang, chan chuyen trach) bay hang: JSX → chu-cung-jsx ·
       thuoc tinh → moi-chuoi · toast → toast · tieu de → tieu-de · khoa object →
@@ -202,6 +206,10 @@ evals:
       khung-ung-dung.ts, chan man). Moi vet bi dung chan cua no bat ma 1; ma 2 khong
       tinh; cay lanh moi chan xanh; git status truoc/sau bang nhau. Chan dot bien giu
       khoa cay (khoa-cay.mjs) nhu ③b.
+      Chan nay cam vet vao MA NGUON, nen no khong chay trong dot toa cua S4: no chay o LAN
+      NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot chan mot luc, tren cay sach.
+      Lenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai, chan phai co mat,
+      ma phai 0 va cay phai sach sau khi chay. Ghim neo cay khac → do, goi ten.
     paths:
       - "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -227,13 +235,17 @@ evals:
   - id: E13
     criterion: AC-12
     executor: script
-    cmd: config:executors.script.tq_be_rong_do
+    cmd: config:executors.script.tq_lan_be_rong
     expected: >-
       exit 0. Cam mot cum tieng Viet dai co dau vao khoa cols.deal ("Thoa thuan") cua
       tong-quan.ts — nhan DUY NHAT cua lat ma chan be-rong-tien-de DO duoc la tran duoc
       (17/82 hop chat cung mang nhan cua lat, dung 1 tran duoc) — roi chay lai chan be
       rong: DO dung chieu "vi tran ma en vua" kem hai cap so; cay tra nguyen trang.
       Chan giu khoa cay. Thut ba tang khai qua bien THUT cua be-rong-do-lib.sh.
+      Chan nay cam vet vao MA NGUON, nen no khong chay trong dot toa cua S4: no chay o LAN
+      NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot chan mot luc, tren cay sach.
+      Lenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai, chan phai co mat,
+      ma phai 0 va cay phai sach sau khi chay. Ghim neo cay khac → do, goi ten.
     paths:
       - "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -379,6 +391,19 @@ evals:
       cua lan chay, khong cham file nao.
     paths:
       - "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E23
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.tq_lan_doc_do
+    expected: >-
+      exit 0. Chieu do cua chan DOC ghim: cam mot ghim gia neo o sha toan so khong roi
+      doi chan doc bao DO va GOI TEN ly do ("cay da doi sau khi lan chay"). Bao XANH tren
+      ghim neo sai cay, hoac bao do ma khong goi ten, deu la ma 1 — mot chan doc khong
+      phan biet duoc "da chay tren cay nay" voi "da chay o dau do" thi khong ghim duoc gi.
+    paths:
+      - "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E19

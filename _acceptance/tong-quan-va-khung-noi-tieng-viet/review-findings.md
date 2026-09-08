@@ -61,6 +61,7 @@ Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt 
   file: `apps/api/src/dashboard/dashboard.service.ts`
   severity: high
   Đề xuất: new-contract
+  ĐÃ SỬA 08/09 — chủ kho cho phép sửa ngoài hợp đồng vì là hồi quy do chính vòng này gây ra (commit 2e1cced).
 
 - **Hợp đồng tRPC vẫn khai month: z.string() sau khi ý nghĩa trường đổi thành khoá ISO YYYY-MM**
   Người dùng thấy gì: Nếu dữ liệu tháng từ máy chủ sai định dạng, biểu đồ có thể hiện chuỗi thô khó hiểu (như '2026-13') thay vì báo lỗi rõ ràng cho người dùng.
@@ -73,6 +74,15 @@ Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt 
   file: `apps/app/lib/messages/tong-quan.ts`
   severity: medium
   Đề xuất: known-limits
+  ĐÃ SỬA 08/09 — chủ kho cho phép sửa ngoài hợp đồng vì là hồi quy do chính vòng này gây ra (commit 2e1cced).
+
+- **Cửa sổ cắm vết vẫn mở với giám khảo và với bộ chạy kiểm thử của kho — nợ ③b, nay đã đốt ba vòng chấm**
+  Người dùng thấy gì: Không ảnh hưởng người dùng cuối. Đây là nợ hạ tầng đo lường: nó làm vòng chấm trả kết quả sai, khiến lỗi thật lẫn với báo động giả và mỗi vòng chấm tốn thêm một lượt.
+  file: `_acceptance/man-cai-dat-noi-tieng-viet/rang/khoa-cay.mjs`
+  severity: high
+  Đề xuất: new-contract
+  Lai lịch: hồ sơ ③b `cai-dat-con-lai-noi-tieng-viet` gọi tên đúng cửa sổ này ở contract.md dòng 160-169 rồi hoãn sang «đợt sau». Vì nó nằm trong phần tường thuật vòng chấm chứ không ở mục Ngoài hợp đồng, nó chưa bao giờ vào bảng `_acceptance/NO-CAN-TRA.md`. Vòng ③c-1 này trả REJECT hai lần và BLOCKED một lần; cả ba màu đỏ đều do cửa sổ đó, và cả ba đều xanh khi chạy nối tiếp.
+  Vì sao ngoài hợp đồng: khoá cây là hạ tầng dùng chung của mọi hồ sơ Việt hoá, không AC nào của hợp đồng này bao nó. Vòng này chỉ giảm nhẹ bằng làn nối tiếp (`rang/lan-noi-tiep.mjs`): kéo ba chân cắm vết ra khỏi đợt toả của S4 nên không lượt đọc nào rơi vào cửa sổ. Khử hẳn thì phải cắm vết trên một bản sao cây và trỏ máy chủ dev sang đó, đúng như ③b viết; bản sao cây đã có tiền lệ chạy được ở `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/dot-bien.mjs`.
 
 - **Tên công ty/cá nhân trong hàng đợi tra cứu chưa đánh dấu translate="no"**
   Người dùng thấy gì: Khi trình duyệt tự động dịch trang, tên công ty hoặc cá nhân hiển thị trong hàng đợi tra cứu có thể bị dịch sai thành cụm từ khác, gây hiểu lầm về danh tính khách hàng.
@@ -91,6 +101,7 @@ Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt 
   file: `apps/api/src/dashboard/dashboard.service.ts`
   severity: high
   Đề xuất: new-contract
+  ĐÃ SỬA 08/09 — chủ kho cho phép sửa ngoài hợp đồng vì là hồi quy do chính vòng này gây ra (commit 2e1cced).
 
 - **formatMonth nuốt lỗi định dạng, trả nguyên chuỗi ISO ra trục biểu đồ**
   Người dùng thấy gì: Nếu dữ liệu backend đổi định dạng bất ngờ, trục thời gian của biểu đồ có thể hiện lẫn lộn chuỗi thô khó hiểu mà không có cảnh báo nào cho người vận hành.
