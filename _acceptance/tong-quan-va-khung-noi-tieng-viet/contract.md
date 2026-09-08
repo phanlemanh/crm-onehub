@@ -121,6 +121,32 @@ Bộ đột biến chứng cả bảy: văn bản JSX → `chu-cung-jsx` · thu�
 - **Bốn dòng bảng không-dịch không dựng được trên màn**: ba giai đoạn đóng (`Closed won` · `Closed lost` · `Unqualified`) không có chỗ trên màn Tổng quan vì nó chỉ vẽ thoả thuận đang mở, và mã tiền tệ chỉ hiện khi có thoả thuận chưa quy đổi. Cả bốn đo ở mức mã và gọi tên.
 - **Chân bề rộng mù với vùng chứa cho xuống dòng** — giới hạn kế thừa từ ③b.
 
+### Vòng chấm ba (08/09) — điều khoản dừng-vá đã kích, và cả ba cái đỏ là một nguyên nhân
+
+Ba lượt chấm, ba verdict: REJECT · BLOCKED · REJECT. Nhưng **lớp lỗi của vòng ba
+trùng lớp lỗi của vòng một**, nên điều khoản dừng-vá của bộ kit kích và vòng
+dừng ở đây chờ người chọn đường — không tự tung vòng bốn.
+
+**Ba cái đỏ của vòng ba, một nguyên nhân: bộ chạy fan-out cho lệnh cắm-vết và
+lệnh quan-sát chạy cùng lúc.**
+
+| Cái đỏ | Vật đo được |
+|---|---|
+| Hội đồng chấm AC-17 **FAIL** | Cả hai người chấm trượt trích cùng một chuỗi: `Thoả thuận của người dùng trong công ty và toàn bộ quyền đi kèm`. Chuỗi ấy **chưa từng nằm trong commit nào** (`git log -S` trả 0) và trên đĩa hai khoá đó là `"Thoả thuận"`. Nó do `be-rong-do-lib.sh:31` sinh ra và sống trên cây khoảng 15 giây — chính cửa sổ mà E13 mở. Người chấm đọc file đúng lúc đó |
+| E11 bộ đột biến **mã 2** | Bắt đủ **bảy trên bảy** vết, rồi trượt ở bước cuối: *"cây làm việc khác trước khi chạy"*. Thủ phạm là script sàn thiết kế của chính vòng này — nó ghi `evidence/E18-*.png` và `.html` vào cây trong lúc bộ đột biến so `git status` |
+| `bun run test` **mã 1** | Suite đọc cây giữa lúc bộ đột biến cắm vết. Khoá cây của ③b xếp hàng các *chân đo* với nhau nhưng không phủ bốn bộ kiểm của kho |
+
+**Chạy tuần tự, cả ba đều XANH** — đo lại 08/09 ngay sau vòng chấm: `dot-bien`
+xanh với bảy vết, `bun run test` xanh, `be-rong-do` xanh đúng chiều.
+
+**Đây đúng là lớp lỗi ③b đã gọi tên rồi hoãn.** Hợp đồng `cai-dat-con-lai` mục
+*Vòng chấm sáu* ghi: ba giám khảo chấm trượt oan vì đọc file trong cửa sổ vết của
+`be-rong-do.sh`; ③b giảm nhẹ bằng cách làm vết thành cụm tiếng Việt đọc được,
+rồi viết thẳng: *"Cửa sổ vẫn còn... Khử hẳn thì phải cắm vết trên một bản sao cây
+và trỏ máy chủ dev sang đó — việc của đợt sau"*. Vòng này là đợt sau, và nó vấp
+đúng chỗ đó — lần này nặng hơn vì vết dài của lát rơi vào một **tiêu đề cột**,
+đọc ra thành câu lạc đề nên người chấm kết luận bản dịch sai.
+
 ### Vòng chấm một (08/09) — hai cái đỏ oan và một sàn không chạy được
 
 - **E6 đỏ oan.** Phiên chấm chạy mũi tiêu đề với đường dẫn gõ nhầm — `tong-quan-va-khieu-noi-tieng-viet` thiếu ba chữ so với thư mục thật — rồi đọc `ENOENT` thành *"input data missing from the codebase"*. Tệp có thật; chạy đúng đường dẫn thì xanh. Không có gì để sửa trong sản phẩm.

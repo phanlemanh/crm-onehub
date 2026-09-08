@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-08T02:50:08Z",
-  "generated_sha": "d5790936ebb9d651077d49b872b42c4b73515ed2",
+  "generated_at": "2026-09-08T03:24:08Z",
+  "generated_sha": "d1258ef5eeb4eeb31089e750e6b0edc17ab0908a",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "tong-quan-va-khung-noi-tieng-viet",
-  "round": 2,
+  "round": 3,
   "riskTier": "T2",
   "evals": [
     {
@@ -447,14 +447,16 @@
     {
       "id": "E19",
       "criterion": "AC-17",
-      "expected": "Ban dich doc nhu tieng Viet cua nguoi lam nghe. Danh tu: cong ty · ca nhan ·\nthoa thuan · hoi thoai · chien dich · cai dat. The so: \"Chot duoc thang nay\" ·\n\"Dang mo\" · \"Ty le chot\" · \"Trung binh moi thoa thuan\"; khong con \"thang/thua\".\nKhong dau vet dich may; thuat ngu ky thuat giu ten that.",
+      "expected": "Ban dich doc nhu tieng Viet cua nguoi lam nghe. Danh tu: cong ty · ca nhan ·\nthoa thuan · hoi thoai · chien dich · cai dat. The so: \"Chot duoc thang nay\" ·\n\"Dang mo\" · \"Ty le chot\" · \"Trung binh moi thoa thuan\"; khong con \"thang/thua\".\nKhong dau vet dich may; thuat ngu ky thuat giu ten that.\nBA MANH BANG CHUNG hoi dong vong 2 doi, nay nam trong inputs:\n(1) NOI GOI cua cau ghep unconverted.sentence la sales-dashboard.tsx — no truyen\nsoThoaThuan(n) = formatCount(n, m.stats.dealNoun, locale), tuc \"3 thoa thuan\" o\nluot vi chu KHONG phai so tran, nen cau doc du danh tu;\n(2) rail.chat tro /chat va /agents trong lib/khung-dieu-huong.ts — dung tinh nang\nma CONTEXT.md dinh nghia la Hoi thoai;\n(3) CONTEXT.md nay CO muc \"Chot\" va muc \"Dang mo\" chot giong cua bon the so\n(them 08/09, ghi lai quyet dinh cua chu kho o Cong Pham vi) — tieu chi giong-doi-tac\nkhong con la hai cach doc.\nKHONG co co che danh dau no dich trong kho (grep TODO/chua dich/dich may tren\nlib/messages tra 0 dong) — nen ve thu tu doc bang chinh ban dich, khong doc dau.",
       "question": "Hai kho chuoi nay doc nhu tieng Viet cua mot nhan vien quan he doi tac OneHub\nmo man dau tien khong: bay nhan thanh ben dung tu dien CONTEXT.md; bon the so\nnoi giong doi tac (chot / dang mo / khong thanh) chu khong giong pheu ban hang\n(thang / thua / pipeline); cau ghep so (N thoa thuan, N ngay) la mot cau Viet\ntu nhien; cho nao con la chu dich may thi neu dich danh khoa?",
       "executor": "judgment",
       "inputs": [
         "/Users/manh-macmini/dev/crm/apps/app/lib/messages/tong-quan.ts",
         "/Users/manh-macmini/dev/crm/apps/app/lib/messages/khung-ung-dung.ts",
         "/Users/manh-macmini/dev/crm/_acceptance/tong-quan-va-khung-noi-tieng-viet/ban-dich.md",
-        "/Users/manh-macmini/dev/crm/CONTEXT.md"
+        "/Users/manh-macmini/dev/crm/CONTEXT.md",
+        "/Users/manh-macmini/dev/crm/apps/app/app/(app)/[slug]/sales-dashboard.tsx",
+        "/Users/manh-macmini/dev/crm/apps/app/lib/khung-dieu-huong.ts"
       ],
       "evidence_required": [
         "run_id",
@@ -462,7 +464,7 @@
         "verified_at",
         "rationale"
       ],
-      "inputsHash": "efc37c67f11a536915cf2afedf517a4aab5f0127e02de9ecbc59ed15a97acf41"
+      "inputsHash": "5657aee32b02d11e298e92251175f0d944718322fe38ab02a615102e9bc40235"
     }
   ],
   "suiteCommands": [
@@ -478,8 +480,8 @@
   "templatePath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.9.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
   "contractPath": "/Users/manh-macmini/dev/crm/_acceptance/tong-quan-va-khung-noi-tieng-viet/contract.md",
-  "invokedAt": "2026-09-08T02:50:08Z",
-  "invokedSha": "d5790936ebb9d651077d49b872b42c4b73515ed2",
-  "evalsHash": "c2b5d3749d813d0fe4879ced34daafa8845b034ca39962599856f3600bdd1ebc",
+  "invokedAt": "2026-09-08T03:24:08Z",
+  "invokedSha": "d1258ef5eeb4eeb31089e750e6b0edc17ab0908a",
+  "evalsHash": "4861b4efb699250df9cf2e17fde3786644cbf02dc35432178f806abddb7d93ab",
   "runBaseline": true
 }
