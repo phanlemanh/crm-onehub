@@ -191,7 +191,7 @@ case "$CHAN" in
       grep -F "$cho" <<<"$out" | head -2 | sed 's/^/    /'
     }
 
-    sed 's/^for task in check-types lint lint:slop test; do$/for task in check-types lint lint:slop; do/' \
+    sed 's/^for task in check-types lint lint:slop test build; do$/for task in check-types lint lint:slop build; do/' \
       "$LUU/pre-push" > "$HOOK"
     if [ "$(diff <(cat "$LUU/pre-push") "$HOOK" | grep -c '^<')" -ne 1 ]; then
       echo "don 1 khong cai duoc: dong vong lap cua luoi da doi"
@@ -206,7 +206,7 @@ case "$CHAN" in
       echo "don 2 khong cai duoc: than vong lap cua luoi da doi"
       exit 2
     fi
-    if ! grep -q '^for task in check-types lint lint:slop test; do$' "$HOOK"; then
+    if ! grep -q '^for task in check-types lint lint:slop test build; do$' "$HOOK"; then
       echo "don 2 sai: dong danh sach tac vu phai giu nguyen"
       exit 2
     fi
