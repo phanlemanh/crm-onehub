@@ -15,7 +15,7 @@ from listing_crawl.emit import (
     validate_batch,
     write_batch,
 )
-from listing_crawl.parse import directory_urls, next_data_of, parse_profile
+from listing_crawl.parse import directory_scan, next_data_of, parse_profile
 from listing_crawl.redact import Redactor
 from listing_crawl.seed import sample_across
 from listing_crawl.tiers import config
@@ -121,6 +121,7 @@ def fixture_run(limit: int | None) -> tuple[list[dict], dict]:
         "lay_duoc": len(items),
         "bi_chan": blocked,
         "trang_danh_ba_doc": 0,
+        "trang_danh_ba_rong": 0,
         "trang_danh_ba_hong": 0,
         "bi_tran_cat": False,
         **ledger,
@@ -224,6 +225,7 @@ async def seed_urls(
     if found:
         return (found[:limit] if limit is not None else found), {
             "trang_danh_ba_doc": 0,
+            "trang_danh_ba_rong": 0,
             "trang_danh_ba_hong": 0,
             "bi_tran_cat": False,
         }
@@ -235,9 +237,10 @@ async def seed_urls(
     )
 
     doc = 0
+    rong = 0
     hong = 0
     rong_lien_tiep = 0
-    bi_tran_cat = False
+    het_tran = True
     nguong_rong = int(settings.get("directory_stop_after_empty", 3))
 
     for number in range(1, int(settings["directory_max_pages"]) + 1):
@@ -247,23 +250,29 @@ async def seed_urls(
             LOGGER.warning("trang danh bạ %s không tải được", number)
             continue
         try:
-            urls = directory_urls(page.html)
+            urls, so_the = directory_scan(page.html)
         except ValueError as error:
-            if doc == 0:
-                hong += 1
-                LOGGER.error(
-                    "trang danh bạ %s không có thẻ nào và chưa trang nào đọc được — bộ chọn hỏng? %s",
-                    number,
-                    error,
-                )
-                continue
-            urls = []
-        doc += 1
+            hong += 1
+            LOGGER.error("trang danh bạ %s không phân tích được: %s", number, error)
+            continue
+        if so_the and not urls:
+            hong += 1
+            LOGGER.error(
+                "trang danh bạ %s có %s thẻ nhưng không thẻ nào mang địa chỉ — hình dạng sàn đổi?",
+                number,
+                so_the,
+            )
+            continue
+        if so_the == 0:
+            rong += 1
+        else:
+            doc += 1
         fresh = [url for url in urls if url not in seen]
         if not fresh:
             rong_lien_tiep += 1
             LOGGER.warning("trang danh bạ %s không có địa chỉ mới", number)
             if rong_lien_tiep >= nguong_rong:
+                het_tran = False
                 break
             continue
         rong_lien_tiep = 0
@@ -272,13 +281,12 @@ async def seed_urls(
                 continue
             seen.add(url)
             found.append(url)
-    else:
-        bi_tran_cat = True
 
     return sample_across(found, limit), {
         "trang_danh_ba_doc": doc,
+        "trang_danh_ba_rong": rong,
         "trang_danh_ba_hong": hong,
-        "bi_tran_cat": bi_tran_cat,
+        "bi_tran_cat": het_tran and rong_lien_tiep == 0 and doc > 0,
     }
 
 

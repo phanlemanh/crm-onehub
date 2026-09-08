@@ -31,7 +31,7 @@ evals:
     executor: script
     cmd: config:executors.script.bo_cao_test
     layer: backend-effect
-    expected: "exit 0; bài «chạm trần thì bật cờ» pass — danh bạ dài hơn trần; khẳng định vòng dừng đúng ở trần VÀ bản tổng kết do summary() dựng mang bi_tran_cat bật. Cặp hai chiều nằm cùng E2: cạn thật thì cờ tắt, chạm trần thì cờ bật, hai lượt cùng một bộ dựng sẵn khác nhau đúng một điều kiện."
+    expected: "exit 0; bài «chạm trần thì bật cờ» pass — danh bạ dài hơn trần; khẳng định vòng dừng đúng ở trần VÀ cờ bi_tran_cat BẬT. Cờ chỉ bật khi CÓ BẰNG CHỨNG danh bạ còn người: chạy hết trần, chuỗi trang không-ra-người-mới bằng 0, và ít nhất một trang đọc được thẻ. Ba bài đối chứng: lượt cạn thật (cờ tắt), lượt bị chặn sạch không đọc được trang nào (cờ tắt), lượt mọi trang rỗng (cờ tắt). Chiều đỏ: bật cờ chỉ vì chạy hết trần làm bài «lượt bị chặn sạch» đỏ với thông điệp ghim «tín hiệu ngược»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_seed.py]
 
@@ -55,7 +55,7 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.bo_cao_test
-    expected: "exit 0; bài «bản tổng kết khai sức khoẻ mẫu» pass — dựng hai lượt gieo khác nhau đúng một điều: một lượt khoẻ, một lượt có trang hỏng; khẳng định hai lượt cho hai bộ số trang_danh_ba_doc và trang_danh_ba_hong KHÁC nhau, và bảng phan_bo_tang đếm đủ bốn mức với tổng bằng số hồ sơ. Chiều đỏ: bản tổng kết cũ không có ba trường này nên bài đỏ ngay ở phép đọc khoá."
+    expected: "exit 0; bài «bản tổng kết khai sức khoẻ mẫu» pass — dựng hai lượt gieo khác nhau đúng một điều: một lượt khoẻ, một lượt có trang hỏng; khẳng định hai lượt cho hai bộ số trang_danh_ba_doc và trang_danh_ba_hong KHÁC nhau, và bảng phan_bo_tang đếm đủ bốn mức với tổng bằng số hồ sơ. Bản tổng kết phân biệt BA loại trang: đọc được thẻ (trang_danh_ba_doc), tải được mà không thẻ nào (trang_danh_ba_rong), và không tải được hoặc có thẻ mà không đọc nổi (trang_danh_ba_hong). Chiều đỏ: bản tổng kết cũ không có ba trường này nên bài đỏ ngay ở phép đọc khoá."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_seed.py]
 
@@ -64,7 +64,7 @@ evals:
     executor: script
     cmd: config:executors.script.bo_cao_cli
     layer: backend-effect
-    expected: "exit 0; bài chạy LỆNH THẬT `python -m listing_crawl --fixtures --dry-run` qua main() và đọc chính dòng «lượt chạy:» mà lệnh IN RA, khẳng định dòng đó mang đủ bốn tên khoá mới ghim nguyên văn: trang_danh_ba_doc, trang_danh_ba_hong, bi_tran_cat, phan_bo_tang. Đây là nửa ĐO-SAU: E7 chứng giá trị tính đúng, E7b chứng bộ in thật sự in ra. Chiều đỏ: tính đúng mà không in làm E7b đỏ trong khi E7 vẫn xanh."
+    expected: "exit 0; bài chạy LỆNH THẬT `python -m listing_crawl --fixtures --dry-run` qua main() và đọc chính dòng «lượt chạy:» mà lệnh IN RA, hai bài. Bài một khẳng định dòng đó mang đủ NĂM tên khoá ghim nguyên văn: trang_danh_ba_doc, trang_danh_ba_rong, trang_danh_ba_hong, bi_tran_cat, phan_bo_tang. Bài hai đọc NGƯỢC dòng in ra thành dữ liệu rồi khẳng định QUAN HỆ giữa các giá trị: bảng bốn mức cộng lại bằng số hồ sơ lấy được, cờ đúng kiểu luận lý, và đường bộ dựng sẵn cho hai số trang bằng không. Đây là nửa ĐO-SAU: E7 chứng giá trị tính đúng, E7b chứng bộ in in ra và in đúng."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_cli.py]
 

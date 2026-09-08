@@ -114,6 +114,20 @@ def parse_directory(html: str) -> list[dict]:
     return rows
 
 
+def directory_scan(html: str) -> tuple[list[str], int]:
+    try:
+        tree = lxml_html.fromstring(html)
+    except Exception as error:
+        raise ValueError(f"trang danh bạ không phân tích được: {error}") from error
+    cards = tree.cssselect(SELECTORS["directory_card"])
+    found: list[str] = []
+    for card in cards:
+        link = card.cssselect(SELECTORS["directory_link"])
+        if link and link[0].get("href"):
+            found.append(link[0].get("href"))
+    return found, len(cards)
+
+
 def directory_urls(html: str) -> list[str]:
     tree = lxml_html.fromstring(html)
     found: list[str] = []
