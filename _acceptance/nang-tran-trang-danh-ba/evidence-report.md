@@ -3,17 +3,16 @@ schema_version: 2
 feature_slug: nang-tran-trang-danh-ba
 verdict: REJECT
 failed_evals: []
-reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e15f459405ebc29e262efe67e947616492de4d72
+verified_commit: ae52a944830cf326e383e67992e122386625d255
 human_signoff:
 ---
 
-# Evidence Report: nang-tran-trang-danh-ba
+# Evidence Report: nang-tran-trang-danh-ba (round 2)
 
-Toàn bộ 10 eval đã khai (E1-E9, E7b) đều PASS. Verdict tổng là REJECT vì lệnh suite `bunx turbo run check-types --force` thoát mã 2 — hai lỗi TS7006 tại `src/telemetry/rollup.service.ts:384` và `:395` — lệnh này không gắn eval nào nên không xuất hiện ở `failed_evals`, chi tiết ở mục Lệnh suite bên dưới và ở Iterations.
+Mọi eval máy và mọi lệnh suite dưới đây exit 0. Verdict tổng vẫn là REJECT: review adversarial-verify xác nhận (CONFIRMED) 4 lỗi nằm trong hợp đồng — hai lỗi map AC-4 (`bi_tran_cat` bật/tắt sai khi trang cuối trong trần là trang trùng lặp) và hai lỗi hình dạng đo (AC-4/AC-7 bài `test_cli.py` chỉ khẳng định hằng số của đường fixture chứ chưa chạm `live_run` thật; bảng bốn mức Sản lượng ở AC-7 chỉ ghim một trong bốn ô). Bốn lỗi này là bằng chứng phản chứng thật, đã tái hiện được, cho thấy bộ eval hiện tại xanh nhưng chưa đủ để chứng minh hợp đồng — không phải một tín hiệu UNCERTAIN chờ người, mà là REJECT: quay lại implementation để sửa `bi_tran_cat` (loại điều kiện `rong_lien_tiep == 0` sai ở __main__.py:289) và bổ sung phép đo có thể đỏ cho AC-4/AC-7 trước khi verify lại. Chi tiết đầy đủ nằm ở `review-findings.md`, mục "## Trong hợp đồng".
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -31,141 +30,141 @@ Toàn bộ 10 eval đã khai (E1-E9, E7b) đều PASS. Verdict tổng là REJECT
 ## Evidence
 
 - eval: E1
-  run_id: minted-nang-tran-trang-danh-ba-E1-r1
+  run_id: minted-nang-tran-trang-danh-ba-E1-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.bo_cao_test
-  verified_at: 2026-09-08T09:00:00Z
+  verified_at: 2026-09-08T03:00:00Z
   output: |
-    Ran 61 tests in 0.097s
+    Ran 65 tests in 0.103s
 
     OK
 
 - eval: E2
-  run_id: minted-nang-tran-trang-danh-ba-E2-r1
+  run_id: minted-nang-tran-trang-danh-ba-E2-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.bo_cao_test
-  verified_at: 2026-09-08T09:00:00Z
+  verified_at: 2026-09-08T03:00:00Z
   output: |
-    Ran 61 tests in 0.097s
+    Ran 65 tests in 0.103s
 
     OK
 
 - eval: E3
-  run_id: minted-nang-tran-trang-danh-ba-E3-r1
+  run_id: minted-nang-tran-trang-danh-ba-E3-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.bo_cao_test
-  verified_at: 2026-09-08T09:00:00Z
+  verified_at: 2026-09-08T03:00:00Z
   output: |
-    Ran 61 tests in 0.097s
+    Ran 65 tests in 0.103s
 
     OK
 
 - eval: E4
-  run_id: minted-nang-tran-trang-danh-ba-E4-r1
+  run_id: minted-nang-tran-trang-danh-ba-E4-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.bo_cao_test
-  verified_at: 2026-09-08T09:00:00Z
+  verified_at: 2026-09-08T03:00:00Z
   output: |
-    Ran 61 tests in 0.097s
+    Ran 65 tests in 0.103s
 
     OK
 
 - eval: E5
-  run_id: minted-nang-tran-trang-danh-ba-E5-r1
+  run_id: minted-nang-tran-trang-danh-ba-E5-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.bo_cao_test
-  verified_at: 2026-09-08T09:00:00Z
+  verified_at: 2026-09-08T03:00:00Z
   output: |
-    Ran 61 tests in 0.097s
+    Ran 65 tests in 0.103s
 
     OK
 
 - eval: E6
-  run_id: minted-nang-tran-trang-danh-ba-E6-r1
+  run_id: minted-nang-tran-trang-danh-ba-E6-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.bo_cao_test
-  verified_at: 2026-09-08T09:00:00Z
+  verified_at: 2026-09-08T03:00:00Z
   output: |
-    Ran 61 tests in 0.097s
+    Ran 65 tests in 0.103s
 
     OK
 
 - eval: E7
-  run_id: minted-nang-tran-trang-danh-ba-E7-r1
+  run_id: minted-nang-tran-trang-danh-ba-E7-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.bo_cao_test
-  verified_at: 2026-09-08T09:00:00Z
+  verified_at: 2026-09-08T03:00:00Z
   output: |
-    Ran 61 tests in 0.097s
-
-    OK
-
-- eval: E8
-  run_id: minted-nang-tran-trang-danh-ba-E8-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.bo_cao_test
-  verified_at: 2026-09-08T09:00:00Z
-  output: |
-    Ran 61 tests in 0.097s
-
-    OK
-
-- eval: E9
-  run_id: minted-nang-tran-trang-danh-ba-E9-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.bo_cao_test
-  verified_at: 2026-09-08T09:00:00Z
-  output: |
-    Ran 61 tests in 0.097s
+    Ran 65 tests in 0.103s
 
     OK
 
 - eval: E7b
-  run_id: minted-nang-tran-trang-danh-ba-E7b-r1
+  run_id: minted-nang-tran-trang-danh-ba-E7b-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.bo_cao_cli
-  verified_at: 2026-09-08T09:00:00Z
+  verified_at: 2026-09-08T03:00:00Z
   output: |
-    Ran 1 test in 0.005s
+    Ran 2 tests in 0.006s
+
+    OK
+
+- eval: E8
+  run_id: minted-nang-tran-trang-danh-ba-E8-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.bo_cao_test
+  verified_at: 2026-09-08T03:00:00Z
+  output: |
+    Ran 65 tests in 0.103s
+
+    OK
+
+- eval: E9
+  run_id: minted-nang-tran-trang-danh-ba-E9-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.bo_cao_test
+  verified_at: 2026-09-08T03:00:00Z
+  output: |
+    Ran 65 tests in 0.103s
 
     OK
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: mts3w0gbpsk1
+  run_id: minted-nang-tran-trang-danh-ba-SUITE-bun_run_test-r2
   exit_code: 0
-  verified_at: 2026-09-08T09:00:00Z
+  verified_at: 2026-09-08T03:00:00Z
 
 - cmd: bunx turbo run check-types --force
-  run_id: minted-nang-tran-trang-danh-ba-SUITE-bunx_turbo_run_check_types_force-r1
-  exit_code: 2
-  verified_at: 2026-09-08T09:00:00Z
+  run_id: minted-nang-tran-trang-danh-ba-SUITE-bunx_turbo_run_check_types_force-r2
+  exit_code: 0
+  verified_at: 2026-09-08T03:00:00Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-nang-tran-trang-danh-ba-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-nang-tran-trang-danh-ba-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-08T09:00:00Z
+  verified_at: 2026-09-08T03:00:00Z
 
 - cmd: bun run lint:slop
-  run_id: minted-nang-tran-trang-danh-ba-SUITE-bun_run_lint_slop-r1
+  run_id: minted-nang-tran-trang-danh-ba-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-08T09:00:00Z
+  verified_at: 2026-09-08T03:00:00Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-nang-tran-trang-danh-ba-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-nang-tran-trang-danh-ba-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-08T09:00:00Z
+  verified_at: 2026-09-08T03:00:00Z
 
 ## Known limits
 
@@ -173,12 +172,14 @@ Toàn bộ 10 eval đã khai (E1-E9, E7b) đều PASS. Verdict tổng là REJECT
 
 ## Analyst
 
-none — moi eval feature deu red tren baseline (co phan biet)
+carried từ round trước — baseline không đo lại round này.
+
+none — round này không đo lại baseline (P2), không eval nào có dữ liệu green-on-both để xét không-phân-biệt.
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — không có eval nào mang runs > 1 ở vòng này; mọi eval đều deterministic (runs: 1, exit 0/1).
 
 ## Iterations
 
-Round 1: cả 10 eval đã khai (E1-E9, E7b) PASS, exit 0, baseline red trên diffBase. Lệnh suite `bunx turbo run check-types --force` FAIL (exit 2) tại `api:check-types` — hai lỗi TS7006 ("Parameter 'row' implicitly has an 'any' type") ở `src/telemetry/rollup.service.ts:384` và `:395`, không gắn eval nào trong contract. Verdict tổng REJECT vì cổng đo thứ năm (`bun run build` cùng nhóm check-types/lint/test/build) không xanh toàn bộ. Trả về implementation để gõ kiểu tường minh cho tham số `row` tại hai dòng đó rồi chạy lại.
+Round 2: mọi eval máy (E1-E9, E7b) và mọi lệnh suite (bun run test, turbo check-types, turbo lint, lint:slop, turbo build) đều exit 0, nhưng adversarial-verify xác nhận 4 lỗi trong hợp đồng — `bi_tran_cat` bật/tắt sai ở __main__.py:289 (AC-4) và hai lỗi hình dạng đo (AC-4/AC-7: test_cli.py chưa chạm live_run thật; bảng bốn mức AC-7 chỉ ghim một ô) — nên verdict là REJECT, quay lại implementation để sửa điều kiện cờ và bổ sung phép đo trước khi verify lại.
