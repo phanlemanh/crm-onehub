@@ -26,7 +26,7 @@ import {
 import { Spinner } from "@crm/ui/components/spinner";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { TableCell } from "@crm/ui/components/table";
-import { formatMoneyCompact } from "@crm/ui/lib/format";
+import { formatCount, formatMoneyCompact } from "@crm/ui/lib/format";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useQueryState } from "nuqs";
@@ -215,7 +215,9 @@ export function DashboardSummary() {
 						<CardDescription>
 							{overdueTasks.length === 0
 								? m.tasks.allDone
-								: m.tasks.pastDue(String(overdueTasks.length))}
+								: m.tasks.pastDue(
+										formatCount(overdueTasks.length, m.tasks.taskNoun, locale),
+									)}
 						</CardDescription>
 					</CardHeader>
 					<CardPanel>

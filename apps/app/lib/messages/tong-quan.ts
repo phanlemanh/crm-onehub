@@ -26,7 +26,7 @@ const en = {
 	},
 	unconverted: {
 		sentence: (n: string, currencies: string, reporting: string) =>
-			`Every figure above is in ${reporting}. ${n} in ${currencies} not included — there is no rate to convert with.`,
+			`Every figure above is in ${reporting}. Left out: ${n} in ${currencies} — no conversion rate available.`,
 		setOne: "Set one",
 	},
 	trend: {
@@ -59,6 +59,7 @@ const en = {
 		title: "Overdue tasks",
 		allDone: "Every task you have logged is either done or still to come",
 		pastDue: (n: string) => `${n} past due`,
+		taskNoun: "task",
 		empty: "Nothing overdue. Good.",
 		markDone: "Mark as done",
 		noDueDate: "No due date",
@@ -140,7 +141,8 @@ const vi = {
 	tasks: {
 		title: "Việc quá hạn",
 		allDone: "Mọi việc bạn ghi đều đã xong hoặc chưa tới hạn",
-		pastDue: (n: string) => `${n} việc quá hạn`,
+		pastDue: (n: string) => `${n} quá hạn`,
+		taskNoun: "việc",
 		empty: "Không có việc quá hạn.",
 		markDone: "Đánh dấu đã xong",
 		noDueDate: "Chưa có hạn",

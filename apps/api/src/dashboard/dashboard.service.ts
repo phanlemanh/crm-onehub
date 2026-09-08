@@ -21,7 +21,7 @@ const RATE_WINDOW_DAYS = 90;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 function monthIso(date: Date): string {
-	return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}`;
+	return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 }
 
 function monthStart(from: Date, offset: number): Date {

@@ -51,7 +51,7 @@
 | `enrichment.bookedMany` | N records are booked for a later look | N bản ghi hẹn tra cứu sau |
 | `enrichment.bookedMore` | N more are booked but not listed here | Còn N bản ghi nữa chưa liệt kê ở đây |
 
-## `tong-quan.ts` — 58 khoá
+## `tong-quan.ts` — 59 khoá
 
 | Khoá | Tiếng Anh | Tiếng Việt |
 |---|---|---|
@@ -74,7 +74,7 @@
 | `stats.noWins` | No wins to measure | Chưa có thoả thuận chốt được để tính |
 | `stats.avgCycle` | N-day average cycle | Chu kỳ trung bình N ngày |
 | `stats.dealNoun` | deal | thoả thuận |
-| `unconverted.sentence` | Every figure above is in B. N in A not included — there is no rate to convert with. | Mọi con số trên đây tính bằng B. N bằng A không được tính vì chưa có tỷ giá để quy đổi. |
+| `unconverted.sentence` | Every figure above is in B. Left out: N in A — no conversion rate available. | Mọi con số trên đây tính bằng B. N bằng A không được tính vì chưa có tỷ giá để quy đổi. |
 | `unconverted.setOne` | Set one | Đặt tỷ giá |
 | `trend.title` | Closed won vs. new pipeline | Đã chốt so với mới mở |
 | `trend.description` | Last six months, by the month a deal closed or was created | Sáu tháng gần nhất, theo tháng thoả thuận chốt hoặc được mở |
@@ -95,7 +95,8 @@
 | `open.cols.value` | Value | Giá trị |
 | `tasks.title` | Overdue tasks | Việc quá hạn |
 | `tasks.allDone` | Every task you have logged is either done or still to come | Mọi việc bạn ghi đều đã xong hoặc chưa tới hạn |
-| `tasks.pastDue` | N past due | N việc quá hạn |
+| `tasks.pastDue` | N past due | N quá hạn |
+| `tasks.taskNoun` | task | việc |
 | `tasks.empty` | Nothing overdue. Good. | Không có việc quá hạn. |
 | `tasks.markDone` | Mark as done | Đánh dấu đã xong |
 | `tasks.noDueDate` | No due date | Chưa có hạn |
@@ -114,4 +115,4 @@
 | `activity.cols.who` | Who | Người ghi |
 | `activity.cols.when` | When | Khi nào |
 
-Tổng: 101 khoá trên hai kho.
+Tổng: 102 khoá trên hai kho.

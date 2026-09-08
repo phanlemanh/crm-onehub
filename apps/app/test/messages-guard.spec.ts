@@ -463,7 +463,7 @@ describe("kho chuoi cua vong ③a", () => {
 				"Mọi con số trên đây tính bằng B. 1 bằng A không được tính vì chưa có tỷ giá để quy đổi.",
 				"Mọi con số trên đây tính bằng B. 12 bằng A không được tính vì chưa có tỷ giá để quy đổi.",
 			],
-			"tong-quan:tasks.pastDue": ["1 việc quá hạn", "12 việc quá hạn"],
+			"tong-quan:tasks.pastDue": ["1 quá hạn", "12 quá hạn"],
 			"settings-ket-noi:kenh.khongKhop": [
 				"Không kênh nào khớp “1”.",
 				"Không kênh nào khớp “12”.",
