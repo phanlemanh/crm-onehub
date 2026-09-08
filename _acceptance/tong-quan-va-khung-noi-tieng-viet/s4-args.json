@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-08T02:01:07Z",
-  "generated_sha": "3e601a536f9b4a7495c3f2319f2e3c57324531bd",
+  "generated_at": "2026-09-08T02:50:08Z",
+  "generated_sha": "d5790936ebb9d651077d49b872b42c4b73515ed2",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "tong-quan-va-khung-noi-tieng-viet",
-  "round": 1,
+  "round": 2,
   "riskTier": "T2",
   "evals": [
     {
@@ -269,7 +269,7 @@
       "id": "E13",
       "criterion": "AC-12",
       "cmd": "NGUOI=${NGUOI:-dev@localhost} bash _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/be-rong-do.sh",
-      "expected": "exit 0. Cam mot nhan vi dai (cum tieng Viet co dau, doc duoc) vao khoa nhan the\nso \"Dang mo\" trong tong-quan.ts, chay lai chan be rong: DO dung chieu \"vi tran\nma en vua\" kem hai cap so; cay tra nguyen trang. Chan giu khoa cay.",
+      "expected": "exit 0. Cam mot cum tieng Viet dai co dau vao khoa cols.deal (\"Thoa thuan\") cua\ntong-quan.ts — nhan DUY NHAT cua lat ma chan be-rong-tien-de DO duoc la tran duoc\n(17/82 hop chat cung mang nhan cua lat, dung 1 tran duoc) — roi chay lai chan be\nrong: DO dung chieu \"vi tran ma en vua\" kem hai cap so; cay tra nguyen trang.\nChan giu khoa cay. Thut ba tang khai qua bien THUT cua be-rong-do-lib.sh.",
       "executor": "script",
       "paths": [
         "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
@@ -325,7 +325,7 @@
       "id": "E16",
       "criterion": "AC-15",
       "cmd": "cd apps/app && bun test test/messages-guard.spec.ts",
-      "expected": "exit 0. messages-guard.spec.ts tu doc thu muc lib/messages nen hai kho moi vao\ndan so khong can khai: moi gia tri vi co dau tru mien tru co ten, khong gia tri\nnao y het en, ham ghep bien co khang dinh ghim, khong khoa chet. Cong mot ca\nmoi: khong con formatCount(..., \"en\") trong lat. Chieu do: dat mot gia tri vi\ny het en trong tong-quan.ts thi bai kiem do goi ten khoa.",
+      "expected": "exit 0. messages-guard.spec.ts tu doc thu muc lib/messages nen hai kho moi vao\ndan so khong can khai: moi gia tri vi co dau tru mien tru co ten, khong gia tri\nnao y het en, ham ghep bien co khang dinh ghim, khong khoa chet. Cac ca do la\ncanh BAT BIEN CHUNG cua kho — chung xanh tren ca cay truoc vong, va giu nguyen\nla co y. Ca RIENG cua lat, them o vong 2 sau khi bo phan tich neu ten: quet tam\nfile cua lat va doi 0 loi goi formatCount ghim tieng — ca nay phan biet duoc cay\nnay voi cay truoc vong. Chieu do: tra mot loi goi ve formatCount(n, \"deal\", \"en\")\nthi ca do goi ten file va loi goi.",
       "executor": "test",
       "paths": [
         "apps/app/lib/messages/tong-quan.ts",
@@ -403,19 +403,18 @@
     {
       "id": "E18",
       "criterion": "AC-1",
-      "cmd": "node ${CLAUDE_PLUGIN_ROOT}/scripts/design-gate.mjs",
-      "expected": "exit 0. San thiet ke: khong vi pham P0 nao tren ba anh. Chan nay do SAN, khong\nthay E12 — E12 do be rong chu that. Kho chua wire executors.design.static nen\nKHONG co static eval per-surface; dieu do phai hien trong goi Cong 2.",
+      "cmd": "NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs",
+      "expected": "exit 0. Mot lenh cua kho lam tron: dung / o vi va en (1440px) va ngan keo di dong o\n360px tieng Viet, noi tuyen moi quy tac CSS vao trang truoc khi luu (jsdom KHONG tai\nduoc stylesheet tro duong goc-tuong-doi tu file tren dia), roi chay san thiet ke cua\nkit voi --jsdom tro node_modules cua kho.\nHAI NGUON, va cho mu cua nguon yeu duoc GOI TEN va THAY: (1) san cua kit cham moi\nluat con lai — P0 khong phai low-contrast la DO; (2) luat low-contrast cua san BI BO\nvi jsdom khong giai duoc oklch() va var() cua he token nen no doc moi mau ve #ffffff\nroi bao trang-tren-trang (do 08/09: 2 P0 gia tren ca ba khung), thay bang chan do\ntuong phan chay TRONG TRINH DUYET — moi phan tu nhin thay mang chu, mau va nen tinh\nxong, nguong 4.5:1 (chu thuong) va 3:1 (chu to). 0 phan tu mang chu la ma 2.\nDo 08/09: 0 cho duoi nguong tren 85 · 85 · 94 phan tu.",
       "executor": "ui-check",
       "steps": [
-        "Dung / o tieng Viet tren may chu dang chay (1440px), chup evidence/E18-tong-quan-vi.png",
-        "Dung / o tieng Anh, chup evidence/E18-tong-quan-en.png",
-        "Mo ngan keo di dong o 360px tieng Viet, chup evidence/E18-ngan-keo-vi.png",
-        "Chay san thiet ke tren ba anh do va doc muc P0"
+        "Chay lenh — no tu dang nhap, dung ba khung hinh, noi tuyen CSS, luu .png/.html vao evidence/, roi cham",
+        "Doc ba anh evidence/E18-*.png bang Read va noi ba khung co dung nhu mo ta khong"
       ],
       "paths": [
         "apps/app/app/(app)/[slug]/*.tsx",
         "apps/app/components/app-icon-rail.tsx",
-        "apps/app/components/app-header.tsx"
+        "apps/app/components/app-header.tsx",
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs"
       ],
       "evidence_required": [
         "run_id",
@@ -425,7 +424,25 @@
         "output",
         "screenshot"
       ],
-      "ref": "config:executors.design.gate"
+      "ref": "config:executors.script.tq_san_thiet_ke"
+    },
+    {
+      "id": "E22",
+      "criterion": "AC-1",
+      "cmd": "NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs --chieu-do",
+      "expected": "exit 0. Chieu do cua chan tuong phan: cam mau chu gan den (rgb(20,20,20)) len tieu de\n— von nam tren nen den — o ca ba khung hinh, roi doi chinh chan do bao DUOI NGUONG.\nBat duoc o 0 khung la DO: mot thuoc chua tung do o dung chieu no sinh ra de bat thi\nkhong phan biet duoc \"man dat\" voi \"phep do mu\". Cay khong bi sua — vet cam trong DOM\ncua lan chay, khong cham file nao.",
+      "executor": "script",
+      "paths": [
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_san_thiet_ke_do"
     },
     {
       "id": "E19",
@@ -444,7 +461,8 @@
         "verifier",
         "verified_at",
         "rationale"
-      ]
+      ],
+      "inputsHash": "efc37c67f11a536915cf2afedf517a4aab5f0127e02de9ecbc59ed15a97acf41"
     }
   ],
   "suiteCommands": [
@@ -460,8 +478,8 @@
   "templatePath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.9.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
   "contractPath": "/Users/manh-macmini/dev/crm/_acceptance/tong-quan-va-khung-noi-tieng-viet/contract.md",
-  "invokedAt": "2026-09-08T02:01:07Z",
-  "invokedSha": "3e601a536f9b4a7495c3f2319f2e3c57324531bd",
-  "evalsHash": "0809455f5298fcbae892da179225f2f103710ecd9942fe276b68e51abe741696",
+  "invokedAt": "2026-09-08T02:50:08Z",
+  "invokedSha": "d5790936ebb9d651077d49b872b42c4b73515ed2",
+  "evalsHash": "c2b5d3749d813d0fe4879ced34daafa8845b034ca39962599856f3600bdd1ebc",
   "runBaseline": true
 }

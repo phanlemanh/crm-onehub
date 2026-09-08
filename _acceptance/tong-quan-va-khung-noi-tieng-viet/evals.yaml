@@ -395,9 +395,22 @@ evals:
       - apps/app/lib/messages/khung-ung-dung.ts
       - _acceptance/tong-quan-va-khung-noi-tieng-viet/ban-dich.md
       - CONTEXT.md
+      - apps/app/app/(app)/[slug]/sales-dashboard.tsx
+      - apps/app/lib/khung-dieu-huong.ts
     expected: >-
       Ban dich doc nhu tieng Viet cua nguoi lam nghe. Danh tu: cong ty · ca nhan ·
       thoa thuan · hoi thoai · chien dich · cai dat. The so: "Chot duoc thang nay" ·
       "Dang mo" · "Ty le chot" · "Trung binh moi thoa thuan"; khong con "thang/thua".
       Khong dau vet dich may; thuat ngu ky thuat giu ten that.
+      BA MANH BANG CHUNG hoi dong vong 2 doi, nay nam trong inputs:
+      (1) NOI GOI cua cau ghep unconverted.sentence la sales-dashboard.tsx — no truyen
+      soThoaThuan(n) = formatCount(n, m.stats.dealNoun, locale), tuc "3 thoa thuan" o
+      luot vi chu KHONG phai so tran, nen cau doc du danh tu;
+      (2) rail.chat tro /chat va /agents trong lib/khung-dieu-huong.ts — dung tinh nang
+      ma CONTEXT.md dinh nghia la Hoi thoai;
+      (3) CONTEXT.md nay CO muc "Chot" va muc "Dang mo" chot giong cua bon the so
+      (them 08/09, ghi lai quyet dinh cua chu kho o Cong Pham vi) — tieu chi giong-doi-tac
+      khong con la hai cach doc.
+      KHONG co co che danh dau no dich trong kho (grep TODO/chua dich/dich may tren
+      lib/messages tra 0 dong) — nen ve thu tu doc bang chinh ban dich, khong doc dau.
     evidence_required: [run_id, verifier, verified_at, rationale]

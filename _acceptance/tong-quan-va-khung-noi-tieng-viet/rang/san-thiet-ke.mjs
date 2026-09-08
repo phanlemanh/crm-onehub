@@ -1,5 +1,10 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import {
+	existsSync,
+	mkdirSync,
+	readdirSync,
+	writeFileSync,
+} from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
@@ -24,9 +29,40 @@ const CHO_BAM = 700;
 // la chan mu — mot thuoc chua tung do khong phan biet duoc "dat" voi "khong do".
 const CHIEU_DO = process.argv.includes("--chieu-do");
 
-const SAN =
-	process.env.SAN_THIET_KE ??
-	`${process.env.CLAUDE_PLUGIN_ROOT ?? ""}/scripts/design-gate.mjs`;
+// San thiet ke song trong plugin acceptance-gate. Ba nguon, theo thu tu:
+// bien SAN_THIET_KE (khai tay) → CLAUDE_PLUGIN_ROOT (harness dat) → tu quet
+// cache plugin. Vong chấm 2 chan o day vi phien cham KHONG co bien nao trong
+// hai bien tren; mot phep do chi chay duoc khi harness nho dat bien la mot phep
+// do biet truoc se co luc khong chay.
+function timSan() {
+	if (process.env.SAN_THIET_KE) return process.env.SAN_THIET_KE;
+	const tuBien = process.env.CLAUDE_PLUGIN_ROOT
+		? `${process.env.CLAUDE_PLUGIN_ROOT}/scripts/design-gate.mjs`
+		: null;
+	if (tuBien && existsSync(tuBien)) return tuBien;
+	// Cache sap theo CHU thi 1.9.2 dung sau 1.20.1 — so theo SO tung doan.
+	const soSanh = (a, b) => {
+		const x = a.split(".").map(Number);
+		const y = b.split(".").map(Number);
+		for (let i = 0; i < 3; i += 1)
+			if ((x[i] ?? 0) !== (y[i] ?? 0)) return (y[i] ?? 0) - (x[i] ?? 0);
+		return 0;
+	};
+	const nha = `${process.env.HOME}/.claude/plugins/cache`;
+	if (!existsSync(nha)) return tuBien ?? "";
+	const ban = [];
+	for (const cho of readdirSync(nha)) {
+		const thuMuc = `${nha}/${cho}/acceptance-gate`;
+		if (!existsSync(thuMuc)) continue;
+		for (const v of readdirSync(thuMuc))
+			if (/^\d+\.\d+\.\d+$/.test(v) && existsSync(`${thuMuc}/${v}/scripts/design-gate.mjs`))
+				ban.push({ v, duong: `${thuMuc}/${v}/scripts/design-gate.mjs` });
+	}
+	ban.sort((a, b) => soSanh(a.v, b.v));
+	return ban[0]?.duong ?? tuBien ?? "";
+}
+
+const SAN = timSan();
 
 const KHUNG = (await import(`${GOC}/apps/app/lib/messages/khung-ung-dung.ts`))
 	.khungUngDungMessages;
@@ -62,7 +98,7 @@ const NOI_TUYEN_CSS = () => {
 function chotSan() {
 	if (!existsSync(SAN)) {
 		console.log(
-			`KHONG DO DUOC: khong thay san thiet ke tai ${SAN}. Dat CLAUDE_PLUGIN_ROOT (goc plugin acceptance-gate) hoac SAN_THIET_KE.`,
+			`KHONG DO DUOC: khong tim duoc san thiet ke (da thu SAN_THIET_KE, CLAUDE_PLUGIN_ROOT, va quet cache plugin theo semver). Duong da thu: ${JSON.stringify(SAN)}.`,
 		);
 		process.exit(2);
 	}
