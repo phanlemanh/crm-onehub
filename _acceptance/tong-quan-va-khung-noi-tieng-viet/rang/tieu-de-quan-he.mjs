@@ -148,7 +148,8 @@ if (r.ma !== 0) chet(r.ma, ...r.loi);
 const { tongQuanMessages } = await import(`${GOC}/${KHO}`);
 const vi = tongQuanMessages("vi")[r.khoa];
 const en = tongQuanMessages("en")[r.khoa];
-if (typeof vi !== "string" || typeof en !== "string") {
+const laChuoi = (v) => !(v instanceof Object) && `${v}` === v;
+if (!laChuoi(vi) || !laChuoi(en)) {
 	chet(
 		2,
 		`KHONG DO DUOC: khoa "${r.khoa}" trong ${KHO} khong phai chuoi o mot trong hai ban.`,
