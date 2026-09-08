@@ -65,9 +65,9 @@ Nâng trần trang không miễn phí, và đó là lý do nó tách thành vòn
 
 | Thước | Đọc ở đâu | Sống | Chết |
 | --- | --- | --- | --- |
-| [đề xuất] Mức Thấp có người thật | `phan_bo_tang.thap` | ≥ 50 trên 200 hồ sơ | < 20 |
-| [đề xuất] Gọi được người mức thấp | số hồ sơ mức `thap` có trường `phone` | ≥ 30 | < 10 |
-| [đề xuất] Chi phí một lượt còn chịu được | đồng hồ, và `trang_danh_ba_hong` chia `trang_danh_ba_doc` cộng `rong` cộng `hong` | dưới 75 phút VÀ trang hỏng dưới 35% | quá 120 phút HOẶC trang hỏng từ 50% |
+| Mức Thấp có người thật | `phan_bo_tang.thap` | ≥ 50 trên 200 hồ sơ | < 20 |
+| Gọi được người mức thấp | số hồ sơ mức `thap` có trường `phone` | ≥ 30 | < 10 |
+| Chi phí một lượt còn chịu được | đồng hồ, và `trang_danh_ba_hong` chia `trang_danh_ba_doc` cộng `rong` cộng `hong` | dưới 75 phút VÀ trang hỏng dưới 35% | quá 120 phút HOẶC trang hỏng từ 50% |
 
 Căn cứ của từng con số, để người chốt biết cái nào có nền và cái nào không:
 
@@ -87,8 +87,8 @@ Căn cứ của từng con số, để người chốt biết cái nào có nề
   12 trên 49 ở vùng trang sâu; ngưỡng 35% đặt trên mức đã thấy để không đỏ oan,
   ngưỡng chết 50% là mức mà mẫu coi như thủng.
 
-Ba dòng trên còn mang dấu `[đề xuất]`, tức CHƯA phải ngưỡng của người. Bỏ dấu đó
-đi là chốt; sửa số rồi bỏ dấu cũng là chốt.
+**Ba ngưỡng trên đã CHỐT** — Mạnh, 09/09/2026, nguyên số máy đề xuất. Từ đây
+chúng là hằng số: đổi phép đo sau khi đã thấy số là gian.
 
 ## Ngả làm (chưa quyết)
 
