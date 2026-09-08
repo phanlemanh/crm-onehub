@@ -15,12 +15,14 @@ from listing_crawl.emit import (
     validate_batch,
     write_batch,
 )
-from listing_crawl.parse import directory_urls, next_data_of, parse_profile
+from listing_crawl.parse import directory_scan, next_data_of, parse_profile
 from listing_crawl.redact import Redactor
 from listing_crawl.seed import sample_across
 from listing_crawl.tiers import config
 
 LOGGER = logging.getLogger("listing_crawl")
+
+TEN_TANG = ("cao", "vua", "thap", "ngu")
 
 FIXTURES = Path(__file__).resolve().parent.parent / "tests" / "fixtures"
 PROFILE_FIXTURES = ("profile.html", "profile-b.html")
@@ -116,7 +118,16 @@ def fixture_run(limit: int | None) -> tuple[list[dict], dict]:
             ledger["lan_thu_hong"] += 1
             LOGGER.warning("bỏ qua %s: %s", name, error)
 
-    return items, {"gieo": len(names), "lay_duoc": len(items), "bi_chan": blocked, **ledger}
+    return items, {
+        "gieo": len(names),
+        "lay_duoc": len(items),
+        "bi_chan": blocked,
+        "trang_danh_ba_doc": 0,
+        "trang_danh_ba_rong": 0,
+        "trang_danh_ba_hong": 0,
+        "bi_tran_cat": False,
+        **ledger,
+    }
 
 
 def paced_fetch(crawler, delay: float, ledger: dict[str, int]):
@@ -137,11 +148,53 @@ def paced_fetch(crawler, delay: float, ledger: dict[str, int]):
     return fetch
 
 
+async def gieo_va_cao(
+    fetch, run, settings: dict, limit: int | None, ledger: dict
+) -> tuple[list[dict], dict]:
+    seeds, suc_khoe = await seed_urls(fetch, run, settings, limit)
+    if not seeds:
+        return [], {
+            "gieo": 0,
+            "lay_duoc": 0,
+            "bi_chan": 0,
+            **suc_khoe,
+            **ledger,
+        }
+
+    items: list[dict] = []
+    blocked = 0
+    for url in seeds:
+        result = await fetch(url, run, "ho_so")
+        if not result.success or not result.html:
+            blocked += 1
+            LOGGER.warning("bỏ qua %s: %s", url, result.error_message)
+            continue
+        try:
+            items.append(parse_profile(result.html, next_data_of(result.html)))
+        except ValueError as error:
+            blocked += 1
+            LOGGER.warning("bỏ qua %s: %s", url, error)
+
+    await reveal_phones(
+        fetch,
+        run,
+        items,
+        int(settings["phone_reveal_cap"]),
+        settings["phone_reveal_tiers"],
+    )
+    return items, {
+        "gieo": len(seeds),
+        "lay_duoc": len(items),
+        "bi_chan": blocked,
+        **suc_khoe,
+        **ledger,
+    }
+
+
 async def live_run(limit: int | None) -> tuple[list[dict], dict]:
     from crawl4ai import AsyncWebCrawler, BrowserConfig, CacheMode, CrawlerRunConfig
 
     settings = config()["crawl"]
-    delay = float(settings["request_delay_seconds"])
     ledger = new_ledger()
     run = CrawlerRunConfig(
         cache_mode=CacheMode.BYPASS,
@@ -152,35 +205,13 @@ async def live_run(limit: int | None) -> tuple[list[dict], dict]:
     browser = BrowserConfig(headless=True, enable_stealth=bool(settings["stealth"]))
 
     async with AsyncWebCrawler(config=browser) as crawler:
-        fetch = paced_fetch(crawler, delay, ledger)
-        seeds = await seed_urls(fetch, run, settings, limit)
-        if not seeds:
-            return [], {"gieo": 0, "lay_duoc": 0, "bi_chan": 0, **ledger}
-
-        items: list[dict] = []
-        blocked = 0
-        for url in seeds:
-            result = await fetch(url, run, "ho_so")
-            if not result.success or not result.html:
-                blocked += 1
-                LOGGER.warning("bỏ qua %s: %s", url, result.error_message)
-                continue
-            try:
-                items.append(parse_profile(result.html, next_data_of(result.html)))
-            except ValueError as error:
-                blocked += 1
-                LOGGER.warning("bỏ qua %s: %s", url, error)
-
-        await reveal_phones(fetch, run, items, int(settings["phone_reveal_cap"]))
-        return items, {
-            "gieo": len(seeds),
-            "lay_duoc": len(items),
-            "bi_chan": blocked,
-            **ledger,
-        }
+        fetch = paced_fetch(crawler, float(settings["request_delay_seconds"]), ledger)
+        return await gieo_va_cao(fetch, run, settings, limit, ledger)
 
 
-async def seed_urls(fetch, run, settings: dict, limit: int | None) -> list[str]:
+async def seed_urls(
+    fetch, run, settings: dict, limit: int | None
+) -> tuple[list[str], dict]:
     prefix = settings["profile_prefix"]
     found: list[str] = []
     seen: set[str] = set()
@@ -199,7 +230,12 @@ async def seed_urls(fetch, run, settings: dict, limit: int | None) -> list[str]:
                 found.append(url)
 
     if found:
-        return found[:limit] if limit is not None else found
+        return (found[:limit] if limit is not None else found), {
+            "trang_danh_ba_doc": 0,
+            "trang_danh_ba_rong": 0,
+            "trang_danh_ba_hong": 0,
+            "bi_tran_cat": False,
+        }
 
     LOGGER.warning(
         "sơ đồ site không có địa chỉ %s — gieo từ trang danh bạ %s",
@@ -207,31 +243,64 @@ async def seed_urls(fetch, run, settings: dict, limit: int | None) -> list[str]:
         settings["directory"],
     )
 
+    doc = 0
+    rong = 0
+    hong = 0
+    rong_lien_tiep = 0
+    het_tran = True
+    nguong_rong = int(settings.get("directory_stop_after_empty", 3))
+
     for number in range(1, int(settings["directory_max_pages"]) + 1):
         page = await fetch(f"{settings['directory']}?page={number}", run, "danh_ba")
         if not page.success or not page.html:
+            hong += 1
             LOGGER.warning("trang danh bạ %s không tải được", number)
             continue
         try:
-            urls = directory_urls(page.html)
+            urls, so_the = directory_scan(page.html)
         except ValueError as error:
-            LOGGER.warning("trang danh bạ %s: %s", number, error)
+            hong += 1
+            LOGGER.error("trang danh bạ %s không phân tích được: %s", number, error)
             continue
+        if so_the and not urls:
+            hong += 1
+            LOGGER.error(
+                "trang danh bạ %s có %s thẻ nhưng không thẻ nào mang địa chỉ — hình dạng sàn đổi?",
+                number,
+                so_the,
+            )
+            continue
+        if so_the == 0:
+            rong += 1
+        else:
+            doc += 1
         fresh = [url for url in urls if url not in seen]
         if not fresh:
+            rong_lien_tiep += 1
             LOGGER.warning("trang danh bạ %s không có địa chỉ mới", number)
+            if rong_lien_tiep >= nguong_rong:
+                het_tran = False
+                break
             continue
+        rong_lien_tiep = 0
         for url in fresh:
             if url in seen:
                 continue
             seen.add(url)
             found.append(url)
 
-    return sample_across(found, limit)
+    return sample_across(found, limit), {
+        "trang_danh_ba_doc": doc,
+        "trang_danh_ba_rong": rong,
+        "trang_danh_ba_hong": hong,
+        "bi_tran_cat": het_tran and doc > 0,
+    }
 
 
-async def reveal_phones(fetch, run, items: list[dict], cap: int) -> None:
-    targets = [item for item in items if item["tier"] == "cao" and "phone" not in item][:cap]
+async def reveal_phones(fetch, run, items: list[dict], cap: int, tiers) -> None:
+    muc = tuple(tiers)
+    hop_le = [item for item in items if item["tier"] in muc and "phone" not in item]
+    targets = sample_across(hop_le, cap) if cap > 0 else []
     if not targets:
         return
     reveal = run.clone(js_code=PHONE_REVEAL_JS)
@@ -256,6 +325,9 @@ def summary(items: list[dict], counts: dict) -> dict:
         "tong_khac_tin_moi": len(items) - same,
         "tin_dang": spread([item["listingsTotal"] for item in items]),
         "tin_moi_30_ngay": spread([item["listingsNew30d"] for item in items]),
+        "phan_bo_tang": {
+            ten: sum(1 for item in items if item["tier"] == ten) for ten in TEN_TANG
+        },
     }
 
 

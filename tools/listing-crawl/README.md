@@ -92,13 +92,23 @@ lượt tải), `lan_thu_hong`, và tách theo việc — `lan_thu_so_do`, `lan_
 `co_so_dien_thoai`, `tong_bang_tin_moi`, `tong_khac_tin_moi`, và tứ phân vị của
 cả `tin_dang` lẫn `tin_moi_30_ngay`.
 
-Gieo địa chỉ: đọc sơ đồ site trước; rỗng thì lật trang danh bạ theo `?page=N` tới
-hết `directory_max_pages` — đọc hết chứ không dừng khi đủ `--limit` — rồi rải mẫu
-đều theo bước cố định qua `listing_crawl/seed.py`. Danh bạ nhatot xếp sản lượng
-giảm dần, nên dừng khi đủ trần đồng nghĩa lấy trọn phần đầu bảng và bỏ hẳn mức
-Thấp với Ngủ. Rải mẫu chỉ có tác dụng khi `directory_max_pages` mở đủ rộng để cả
-danh bạ nhiều hơn `--limit`: ở trần 8 trang, danh bạ chỉ ra khoảng 98 hồ sơ nên
-`--limit 200` lấy hết, không rải gì.
+Sức khoẻ của mẫu cũng nằm trên dòng đó, để người đọc số biết mẫu có trải hết dải
+hay không: `trang_danh_ba_doc` (số trang đọc được thẻ), `trang_danh_ba_rong`
+(tải được mà không thẻ nào), `trang_danh_ba_hong` (không tải được, hoặc có thẻ mà
+không đọc nổi), `bi_tran_cat` (chạm trần khi danh bạ còn người), và
+`phan_bo_tang` — bảng đếm hồ sơ theo bốn mức Sản lượng.
+
+Gieo địa chỉ: đọc sơ đồ site trước; rỗng thì lật trang danh bạ theo `?page=N`.
+Vòng đọc dừng khi gặp `directory_stop_after_empty` trang LIÊN TIẾP không ra người
+mới, hoặc khi chạm `directory_max_pages` — trần là lan can, không phải chính
+sách. Trang không tải được KHÔNG tính vào phép đếm dừng, vì trang bị chặn cũng
+«không ra người mới» và gộp hai thứ đó sẽ cắt cụt lượt cào giữa danh bạ mà không
+cờ nào bật. Rồi rải mẫu đều theo bước cố định qua `listing_crawl/seed.py`.
+
+Danh bạ nhatot xếp sản lượng giảm dần, nên dừng khi đủ trần đồng nghĩa lấy trọn
+phần đầu bảng và bỏ hẳn mức Thấp với Ngủ. Đo ngày 08/09: 11 thẻ mỗi trang, danh
+bạ sâu **ít nhất 93 trang** và đáy chưa chạm tới; tin hiện có giảm từ 458 xuống
+1. Ở vùng trang sâu cứ bốn trang có một trang không tải được.
 
 ## Lược đồ là một chiều, không có bản chép tay
 
@@ -282,8 +292,16 @@ Trước đây nó truyền vào `CrawlerRunConfig(mean_delay=...)`, mà `mean_d
 qua nó hoàn toàn, và thực đo là ~0,2 giây một lượt. Cấu hình khai 1,5 giây mà
 máy chạy 0,2 giây là sai lời khai; nay đã đúng.
 
-Lộ số điện thoại chỉ chạy cho hồ sơ mức Cao và có trần `phone_reveal_cap`, vì đó
-là bước đắt nhất và nhạy nhất — không lộ số của người không định gọi.
+Lộ số điện thoại chạy cho những mức khai ở `phone_reveal_tiers`, và có trần
+`phone_reveal_cap`. Cấu hình đang ship khai **đủ bốn mức** (`cao`, `vua`, `thap`,
+`ngu`), vì đội tiếp thị cần gọi tuyển cả môi giới sản lượng thấp — nên một lượt
+cào lộ tới `phone_reveal_cap` = 200 số điện thoại trải khắp bốn mức, không phải
+chỉ mức Cao như trước 08/09. Đây là bước đắt nhất và nhạy nhất của lượt cào, và
+trần là chỗ chặn chi phí DUY NHẤT.
+
+Khi số hồ sơ đủ điều kiện vượt trần, tập được lộ số RẢI KHẮP lô chứ không lấy
+phần đầu — lô xếp theo trang danh bạ mà sản lượng giảm dần, nên lấy phần đầu là
+lộ số cho đúng nhóm đội tiếp thị đã có.
 
 ## Bài kiểm
 

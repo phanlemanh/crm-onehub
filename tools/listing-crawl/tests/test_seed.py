@@ -1,8 +1,11 @@
+import json
 import unittest
 from dataclasses import dataclass
+from pathlib import Path
 
-from listing_crawl.__main__ import seed_urls
+from listing_crawl.__main__ import seed_urls, summary
 from listing_crawl.seed import sample_across
+from listing_crawl.tiers import tier_of
 
 
 @dataclass
@@ -92,24 +95,38 @@ class RaiDeu(unittest.TestCase):
 
 
 class GieoTuDanhBa(unittest.IsolatedAsyncioTestCase):
-    SETTINGS = {
+    MAC_DINH = {
         "profile_prefix": "/moi-gioi-",
         "sitemap": "https://vi-du/sitemap.xml",
         "directory": "https://vi-du/danh-ba",
         "directory_max_pages": 8,
+        "directory_stop_after_empty": 3,
         "moi_trang": 10,
     }
 
     def setUp(self):
+        self.SETTINGS = dict(self.MAC_DINH)
         self.da_doc = []
         self.lap = None
         self.nhan_doi = False
+        self.hong = set()
+        self.het_tu = None
+        self.vo_hinh = set()
 
     async def fetch(self, url, run, kind):
         self.da_doc.append(url)
         if kind == "so_do":
             return Trang(False, "")
         so_trang = int(url.rsplit("=", 1)[1])
+        if so_trang in self.hong:
+            return Trang(False, "")
+        if self.het_tu is not None and so_trang >= self.het_tu:
+            return Trang(True, "<html><body></body></html>")
+        if so_trang in self.vo_hinh:
+            return Trang(
+                True,
+                '<html><body><div class="cwnfqzr"><span>không có địa chỉ</span></div></body></html>',
+            )
         if self.lap is not None and so_trang == self.lap:
             so_trang -= 1
         dau = (so_trang - 1) * self.SETTINGS["moi_trang"]
@@ -124,13 +141,13 @@ class GieoTuDanhBa(unittest.IsolatedAsyncioTestCase):
         return Trang(True, f"<html><body>{the}</body></html>")
 
     async def test_doc_het_tran_trang_khong_dung_som(self):
-        await seed_urls(self.fetch, None, self.SETTINGS, 20)
+        _ = await seed_urls(self.fetch, None, self.SETTINGS, 20)
 
         danh_ba = [url for url in self.da_doc if "danh-ba" in url]
         self.assertEqual(len(danh_ba), self.SETTINGS["directory_max_pages"])
 
     async def test_mau_cham_ca_trang_cuoi(self):
-        lay = await seed_urls(self.fetch, None, self.SETTINGS, 20)
+        lay, _ = await seed_urls(self.fetch, None, self.SETTINGS, 20)
 
         cuoi = self.SETTINGS["directory_max_pages"] * self.SETTINGS["moi_trang"]
         trang_cuoi = {f"/moi-gioi-{so}" for so in range(cuoi - 10, cuoi)}
@@ -143,7 +160,7 @@ class GieoTuDanhBa(unittest.IsolatedAsyncioTestCase):
     async def test_mot_trang_lap_giua_chung_khong_cat_luot_doc(self):
         self.lap = 3
 
-        lay = await seed_urls(self.fetch, None, self.SETTINGS, 20)
+        lay, _ = await seed_urls(self.fetch, None, self.SETTINGS, 20)
 
         danh_ba = [url for url in self.da_doc if "danh-ba" in url]
         self.assertEqual(
@@ -158,7 +175,7 @@ class GieoTuDanhBa(unittest.IsolatedAsyncioTestCase):
     async def test_the_trung_trong_cung_mot_trang_chi_gieo_mot_lan(self):
         self.nhan_doi = True
 
-        lay = await seed_urls(self.fetch, None, self.SETTINGS, None)
+        lay, _ = await seed_urls(self.fetch, None, self.SETTINGS, None)
 
         self.assertEqual(
             len(lay),
@@ -167,6 +184,172 @@ class GieoTuDanhBa(unittest.IsolatedAsyncioTestCase):
         )
 
     async def test_khong_tran_thi_tra_het(self):
-        lay = await seed_urls(self.fetch, None, self.SETTINGS, None)
+        lay, _ = await seed_urls(self.fetch, None, self.SETTINGS, None)
 
         self.assertEqual(len(lay), 80)
+
+    async def test_trang_hong_khong_tinh_vao_phep_dem_dung(self):
+        self.hong = {3, 4, 5}
+        self.SETTINGS["directory_max_pages"] = 8
+
+        lay, suc_khoe = await seed_urls(self.fetch, None, self.SETTINGS, None)
+
+        self.assertIn(
+            "/moi-gioi-70",
+            lay,
+            "chuỗi trang HỎNG đã cắt cụt lượt đọc — trang hỏng không được tính vào phép đếm dừng",
+        )
+        self.assertEqual(suc_khoe["trang_danh_ba_hong"], 3)
+        self.assertEqual(suc_khoe["trang_danh_ba_doc"], 5)
+
+    async def test_ba_trang_rong_lien_tiep_thi_dung(self):
+        self.het_tu = 6
+        self.SETTINGS["directory_max_pages"] = 40
+
+        _, suc_khoe = await seed_urls(self.fetch, None, self.SETTINGS, None)
+
+        self.assertEqual(suc_khoe["trang_danh_ba_doc"], 5)
+        self.assertEqual(suc_khoe["trang_danh_ba_rong"], 3)
+        self.assertFalse(
+            suc_khoe["bi_tran_cat"], "danh bạ cạn thật thì cờ bị-trần-cắt phải TẮT"
+        )
+
+    async def test_bo_chon_hong_hien_ra_o_doc_bang_khong(self):
+        self.het_tu = 1
+        self.SETTINGS["directory_max_pages"] = 5
+
+        lay, suc_khoe = await seed_urls(self.fetch, None, self.SETTINGS, None)
+
+        self.assertEqual(lay, [])
+        self.assertEqual(
+            suc_khoe["trang_danh_ba_doc"],
+            0,
+            "bộ chọn hỏng phải hiện ra bằng số trang ĐỌC ĐƯỢC bằng không",
+        )
+        self.assertGreater(suc_khoe["trang_danh_ba_rong"], 0)
+        self.assertFalse(suc_khoe["bi_tran_cat"])
+
+    async def test_khong_doc_duoc_trang_nao_thi_KHONG_bat_co_cham_tran(self):
+        self.hong = set(range(1, 6))
+        self.SETTINGS["directory_max_pages"] = 5
+
+        lay, suc_khoe = await seed_urls(self.fetch, None, self.SETTINGS, None)
+
+        self.assertEqual(lay, [])
+        self.assertFalse(
+            suc_khoe["bi_tran_cat"],
+            "lượt bị chặn sạch mà cờ vẫn báo «danh bạ sâu hơn trần» — tín hiệu ngược",
+        )
+        self.assertEqual(suc_khoe["trang_danh_ba_doc"], 0)
+        self.assertEqual(suc_khoe["trang_danh_ba_hong"], 5)
+
+    async def test_moi_trang_rong_thi_KHONG_bat_co_cham_tran(self):
+        self.het_tu = 1
+        self.SETTINGS["directory_max_pages"] = 5
+
+        lay, suc_khoe = await seed_urls(self.fetch, None, self.SETTINGS, None)
+
+        self.assertEqual(lay, [])
+        self.assertFalse(suc_khoe["bi_tran_cat"])
+        self.assertEqual(suc_khoe["trang_danh_ba_rong"], 3)
+        self.assertEqual(
+            suc_khoe["trang_danh_ba_hong"],
+            0,
+            "trang tải được mà không có thẻ nào là trang RỖNG, không phải trang hỏng",
+        )
+
+    async def test_trang_co_the_ma_khong_doc_noi_thi_tinh_la_hong(self):
+        self.vo_hinh = {2, 3, 4}
+        self.SETTINGS["directory_max_pages"] = 6
+
+        lay, suc_khoe = await seed_urls(self.fetch, None, self.SETTINGS, None)
+
+        self.assertEqual(
+            suc_khoe["trang_danh_ba_hong"],
+            3,
+            "trang có thẻ mà không đọc nổi bị nuốt lỗi và đếm là «đã đọc»",
+        )
+        self.assertEqual(suc_khoe["trang_danh_ba_rong"], 0)
+        self.assertIn("/moi-gioi-50", lay)
+
+    async def test_cham_tran_khi_danh_ba_con_thi_bat_co(self):
+        self.SETTINGS["directory_max_pages"] = 4
+
+        _, suc_khoe = await seed_urls(self.fetch, None, self.SETTINGS, None)
+
+        self.assertTrue(
+            suc_khoe["bi_tran_cat"], "chạm trần khi danh bạ còn người mà cờ không bật"
+        )
+        self.assertEqual(suc_khoe["trang_danh_ba_doc"], 4)
+
+    async def test_hai_luot_khac_nhau_cho_hai_bo_so_khac_nhau(self):
+        self.SETTINGS["directory_max_pages"] = 8
+        _, khoe = await seed_urls(self.fetch, None, self.SETTINGS, None)
+
+        self.setUp()
+        self.hong = {2, 5}
+        _, om = await seed_urls(self.fetch, None, self.SETTINGS, None)
+
+        self.assertEqual(khoe["trang_danh_ba_hong"], 0)
+        self.assertEqual(om["trang_danh_ba_hong"], 2)
+        self.assertNotEqual(khoe["trang_danh_ba_doc"], om["trang_danh_ba_doc"])
+
+
+class BanTongKet(unittest.TestCase):
+    def test_bang_dem_ghim_DU_BON_O_khong_chi_mot_o(self):
+        dan_so = {"cao": 5, "vua": 3, "thap": 2, "ngu": 4}
+        moc = {"cao": 80, "vua": 30, "thap": 5, "ngu": 0}
+        items = [
+            {"listingsTotal": moc[ten] + 1, "listingsNew30d": moc[ten], "tier": tier_of(moc[ten])}
+            for ten, so in dan_so.items()
+            for _ in range(so)
+        ]
+
+        bang = summary(items, {"gieo": len(items)})["phan_bo_tang"]
+
+        self.assertEqual(set(bang), set(dan_so))
+        for ten, cho in dan_so.items():
+            self.assertEqual(
+                bang[ten], cho, f"ô «{ten}» đếm {bang[ten]}, phải là {cho}"
+            )
+        self.assertEqual(sum(bang.values()), len(items))
+
+    def test_muc_rong_van_co_khoa_voi_gia_tri_khong(self):
+        items = [{"listingsTotal": 100, "listingsNew30d": 80, "tier": "cao"}]
+
+        bang = summary(items, {"gieo": 1})["phan_bo_tang"]
+
+        self.assertEqual(bang["ngu"], 0, "mức rỗng phải hiện là 0, không được vắng khoá")
+        self.assertEqual(set(bang), {"cao", "vua", "thap", "ngu"})
+
+
+class ChamDuocDuoiNguongVua(unittest.TestCase):
+    def setUp(self):
+        duong = Path(__file__).resolve().parent / "fixtures" / "phan-bo-danh-ba.json"
+        self.tin = json.loads(duong.read_text(encoding="utf-8"))["tin_hien_co"]
+
+    def test_mau_cham_toi_day_dai(self):
+        mau = sample_across(self.tin, 200)
+
+        self.assertEqual(
+            min(mau),
+            min(self.tin),
+            "mẫu không chạm tới đáy dải — vẫn dồn về đầu bảng",
+        )
+
+    def test_mau_chua_nguoi_khong_the_la_cao_hay_vua(self):
+        mau = sample_across(self.tin, 200)
+
+        self.assertTrue(
+            any(tin < 20 for tin in mau),
+            "mẫu không chạm được ai dưới ngưỡng vừa",
+        )
+
+    def test_khuon_cat_dau_KHONG_cham_day(self):
+        cat_dau = self.tin[:200]
+
+        self.assertGreater(
+            min(cat_dau),
+            min(self.tin),
+            "bộ dựng sẵn không phân biệt được hai khuôn — bài đối chứng vô nghĩa",
+        )
