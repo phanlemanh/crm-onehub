@@ -61,7 +61,7 @@ Source input: `_acceptance/nang-tran-trang-danh-ba/opportunity.md` · sổ quy�
 - AC-5: Given `phone_reveal_tiers` khai gồm cả mức thấp, When lộ số, Then hồ sơ mức «thấp» và «ngủ» cũng được lộ số — không chỉ mức «cao».
 - AC-6: Given số hồ sơ đủ điều kiện lộ số vượt `phone_reveal_cap`, When lộ số, Then số lượt lộ số bằng ĐÚNG trần, và tập được lộ TRẢI KHẮP lô chứ không phải phần đầu — số hồ sơ mức «thấp» cộng «ngủ» được lộ số lớn hơn 0 kể cả khi mọi hồ sơ mức «cao» xếp đầu lô.
 - AC-7 (cross-layer): Given một hoặc nhiều trang danh bạ tải hỏng giữa lượt, When kết thúc, Then bản tổng kết mà lệnh IN RA khai đúng số trang danh bạ đã đọc, số trang hỏng, và bảng đếm hồ sơ theo bốn mức Sản lượng.
-- AC-9: Given bộ dựng sẵn là phân bố tin-hiện-có ĐO ĐƯỢC từ danh bạ thật (`tests/fixtures/phan-bo-danh-ba.json`, 407 người, 9 tới 458 tin, đã bỏ tên và địa chỉ), When rải mẫu 200 người qua cả dải, Then mẫu chứa ít nhất một người có tin hiện có DƯỚI ngưỡng «vừa» — vì tin hiện có là chặn trên của tin-mới-30-ngày, người đó không thể là mức «cao» hay «vừa». Đối chứng: khuôn cắt-đầu trên cùng bộ dựng sẵn KHÔNG thoả.
+- AC-9: Given bộ dựng sẵn là phân bố tin-hiện-có ĐO ĐƯỢC từ danh bạ thật (`tests/fixtures/phan-bo-danh-ba.json`, 407 người, 9 tới 458 tin, đã bỏ tên và địa chỉ), When rải mẫu 200 người qua cả dải, Then mẫu CHẠM TỚI ĐÁY dải — người ít tin nhất trong mẫu đúng bằng người ít tin nhất của cả danh bạ — và mẫu chứa người có tin hiện có dưới ngưỡng «vừa». Đối chứng: khuôn cắt-đầu trên cùng bộ dựng sẵn KHÔNG chạm đáy.
 - AC-8: Given cấu hình đang ship, When đọc `config.toml`, Then `directory_max_pages` bằng ĐÚNG 120, `directory_stop_after_empty` bằng ĐÚNG 3, và `phone_reveal_tiers` khai đủ bốn tên mức mà `tiers.tier_of` sinh ra.
 
 ## Coverage

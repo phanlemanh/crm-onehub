@@ -80,6 +80,6 @@ evals:
     criterion: AC-9
     executor: script
     cmd: config:executors.script.bo_cao_test
-    expected: "exit 0; bài «mẫu chạm được người dưới ngưỡng vừa» pass — bộ dựng sẵn là phân bố ĐO ĐƯỢC từ danh bạ thật (tests/fixtures/phan-bo-danh-ba.json, 407 người, tin hiện có 9 tới 458, không có dữ liệu cá nhân); rải mẫu 200 rồi khẳng định mẫu chứa ít nhất một người có tin hiện có dưới 20, tức không thể là mức cao hay vừa. ĐỐI CHỨNG trong cùng bài: khuôn cắt-đầu trên đúng bộ dựng sẵn đó cho mẫu toàn người từ 26 tin trở lên, không thoả."
+    expected: "exit 0; bài «mẫu chạm được người dưới ngưỡng vừa» pass — bộ dựng sẵn là phân bố ĐO ĐƯỢC từ danh bạ thật (tests/fixtures/phan-bo-danh-ba.json, 407 người, tin hiện có 9 tới 458, không có dữ liệu cá nhân); rải mẫu 200 rồi khẳng định người ít tin nhất trong mẫu ĐÚNG BẰNG người ít tin nhất của cả dải (9), và mẫu có người dưới ngưỡng vừa. ĐỐI CHỨNG trong cùng bài: khuôn cắt-đầu trên đúng bộ dựng sẵn đó cho người ít tin nhất là 16, tức KHÔNG chạm đáy. Đo được: ở trần 200 trên dải 407, cắt-đầu vẫn có 55 người dưới 20 nên phép đo «có người dưới 20» một mình KHÔNG phân biệt được hai khuôn — phép đo chạm-đáy mới phân biệt."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [tools/listing-crawl/listing_crawl/seed.py, tools/listing-crawl/tests/test_seed.py, tools/listing-crawl/tests/fixtures/phan-bo-danh-ba.json]

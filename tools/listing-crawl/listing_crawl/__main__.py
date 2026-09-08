@@ -302,6 +302,10 @@ def summary(items: list[dict], counts: dict) -> dict:
         "tong_khac_tin_moi": len(items) - same,
         "tin_dang": spread([item["listingsTotal"] for item in items]),
         "tin_moi_30_ngay": spread([item["listingsNew30d"] for item in items]),
+        "phan_bo_tang": {
+            ten: sum(1 for item in items if item["tier"] == ten)
+            for ten in ("cao", "vua", "thap", "ngu")
+        },
     }
 
 

@@ -1,8 +1,11 @@
+import json
 import unittest
 from dataclasses import dataclass
+from pathlib import Path
 
-from listing_crawl.__main__ import seed_urls
+from listing_crawl.__main__ import seed_urls, summary
 from listing_crawl.seed import sample_across
+from listing_crawl.tiers import tier_of
 
 
 @dataclass
@@ -239,3 +242,57 @@ class GieoTuDanhBa(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(khoe["trang_danh_ba_hong"], 0)
         self.assertEqual(om["trang_danh_ba_hong"], 2)
         self.assertNotEqual(khoe["trang_danh_ba_doc"], om["trang_danh_ba_doc"])
+
+
+class BanTongKet(unittest.TestCase):
+    def test_bang_dem_muc_du_bon_khoa_va_tong_dung(self):
+        items = [
+            {"listingsTotal": t, "listingsNew30d": n, "tier": tier_of(n)}
+            for t, n in ((100, 80), (50, 30), (10, 5), (3, 0))
+        ]
+
+        bang = summary(items, {"gieo": 4})["phan_bo_tang"]
+
+        self.assertEqual(set(bang), {"cao", "vua", "thap", "ngu"})
+        self.assertEqual(sum(bang.values()), len(items))
+        self.assertEqual(bang["ngu"], 1)
+
+    def test_muc_rong_van_co_khoa_voi_gia_tri_khong(self):
+        items = [{"listingsTotal": 100, "listingsNew30d": 80, "tier": "cao"}]
+
+        bang = summary(items, {"gieo": 1})["phan_bo_tang"]
+
+        self.assertEqual(bang["ngu"], 0, "mức rỗng phải hiện là 0, không được vắng khoá")
+        self.assertEqual(set(bang), {"cao", "vua", "thap", "ngu"})
+
+
+class ChamDuocDuoiNguongVua(unittest.TestCase):
+    def setUp(self):
+        duong = Path(__file__).resolve().parent / "fixtures" / "phan-bo-danh-ba.json"
+        self.tin = json.loads(duong.read_text(encoding="utf-8"))["tin_hien_co"]
+
+    def test_mau_cham_toi_day_dai(self):
+        mau = sample_across(self.tin, 200)
+
+        self.assertEqual(
+            min(mau),
+            min(self.tin),
+            "mẫu không chạm tới đáy dải — vẫn dồn về đầu bảng",
+        )
+
+    def test_mau_chua_nguoi_khong_the_la_cao_hay_vua(self):
+        mau = sample_across(self.tin, 200)
+
+        self.assertTrue(
+            any(tin < 20 for tin in mau),
+            "mẫu không chạm được ai dưới ngưỡng vừa",
+        )
+
+    def test_khuon_cat_dau_KHONG_cham_day(self):
+        cat_dau = self.tin[:200]
+
+        self.assertGreater(
+            min(cat_dau),
+            min(self.tin),
+            "bộ dựng sẵn không phân biệt được hai khuôn — bài đối chứng vô nghĩa",
+        )
