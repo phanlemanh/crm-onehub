@@ -1,61 +1,49 @@
 ## Trong hợp đồng
 
-### Hình dạng 3 — Assert "chuỗi có mặt" cho lời hứa "lớp trong còn chốt" (dòng import là đủ để xanh)
-- file: `apps/agent/test/chan-uy-thac.spec.ts:130`
-- severity: high
-- AC: AC-3
-- source: measurement
-
-Vế (b) của AC-3 hứa mỗi tool VẪN GỌI `requireBuilderAttribute` trong `execute`. Phép đo lại là `expect(readFileSync(TOOL_DIR/<name>.ts)).toContain("requireBuilderAttribute")` (dòng 130-133). Chuỗi ấy đã có mặt trong chính dòng `import { requireBuilderAttribute } from "../../../lib/session-purpose";` ở đầu cả ba tool, nên xoá toàn bộ call site trong `execute` mà giữ import vẫn cho màu xanh — đúng cửa hở im lặng mà AC-3 (contract.md dòng 82-85) nói mình đang chặn. Cùng bộ lọc chuỗi này còn dùng làm dân số đĩa ở dòng 112-116, nên một tool chỉ import mà không gọi vẫn được đếm là "có chốt". Test bên cạnh (dòng 129) đã import thật module và soi `mod.default.approval` — vế lớp trong hoàn toàn có thể đo cùng cách đó.
-
-Rationale: AC-3 đòi đếm trên đĩa số tool THỰC SỰ GỌI requireBuilderAttribute; phép đo hiện tại chỉ soi chuỗi xuất hiện trong file (kể cả dòng import), nên xoá lời gọi thật mà giữ import vẫn qua — đúng cửa hở mà AC-3 nói phải chặn.
-
-### Hình dạng 3 — Đo chuỗi trong mã nguồn thay vì quan hệ gọi, và cửa sổ "thân hàm" cắt sai
-- file: `apps/agent/test/chan-uy-thac.spec.ts:218`
-- severity: medium
-- AC: AC-9
-- source: measurement
-
-Test "luot thu hoi duoc noi vao dung cua vao cua lich dispatch" đọc text `custom-agent-dispatch.ts`, `src.slice(src.indexOf("export async function pendingBuilderSubmissionIds"))` rồi `than.slice(0, than.indexOf("}"))` và `toContain("recoverStalledBuilderTurns")`. Hai vấn đề nhìn thấy trực tiếp: (a) đây là grep chuỗi, không phải quan hệ gọi — hàm không hề được chạy, một `recoverStalledBuilderTurns` chết cũng qua; (b) `than.indexOf("}")` KHÔNG phải cuối thân hàm: dấu `}` đầu tiên sau tên hàm nằm trong object literal lồng của Prisma (`OR: [{ sessionId: null }, ...]`, custom-agent-dispatch.ts), nên cửa sổ chỉ là ~8 dòng đầu. Test xanh hiện nay chỉ vì lời gọi tình cờ đứng ở dòng 2 của thân hàm; chuyển lời gọi xuống sau `findMany` (vẫn đúng) là đỏ giả, còn phần lớn thân hàm thật thì không được soi.
-
-Rationale: AC-9 vế agent đòi lượt thu hồi "có mặt ở đúng cửa vào của lịch dispatch"; phép đo hiện tại là grep chuỗi trên văn bản (không chạy hàm, không xét quan hệ gọi thật) và còn cắt sai vùng thân hàm, nên không chứng minh được đúng điều AC-9 yêu cầu.
-
-### Hình dạng 4 — Ma trận AC-4 không ghim thông điệp từ chối
-- file: `apps/agent/test/chan-uy-thac.spec.ts:66`
-- severity: low
-- AC: AC-4
-- source: measurement
-
-Test "ma tran toan phan purpose nhan commandType" (dòng 66-77) chỉ assert giá trị boolean của `builderTurnAuthorized`, không hề chạm `builderTurnApproval` hay `BUILDER_DENIED_REASON`. AC-4 (contract.md) và E4 (evals.yaml dòng 74+) đòi "Moi to hop TRU (builder + CREATE_AGENT) deu phai TU CHOI, KEM DUNG HANG GHIM". Hàng ghim chỉ được kiểm đúng một ca ở test E2 (`commandType: "CHAT"`); năm tổ hợp còn lại — đặc biệt `team-agent`, ca mà E4 nêu đích danh là lỗ phản biện bắt được — không phân biệt được "bị policy từ chối kèm lời giải" với "rơi xuống `requireBuilderAttribute` và ném Error", vì `builderTurnAuthorized` trả false ở cả hai đường.
-
-Rationale: AC-4 nêu rõ mọi tổ hợp bị từ chối phải "cùng chuỗi lý do ghim"; phép đo ma trận chỉ chấm giá trị đúng/sai của việc cho phép, không chấm chuỗi lý do cho 5/6 tổ hợp, nên không đo đủ điều AC-4 hứa.
+(không có finding nào ánh xạ được vào AC ở vòng này.)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **recoverStalledBuilderTurns thu hồi nhầm submission cũ, nhả khoá lượt đang chạy**
-  Người dùng thấy gì: Một tin nhắn cũ trong cuộc trò chuyện đã được trả lời xong có thể tự nhiên đổi thành trạng thái lỗi "chưa hoàn thành", và tin nhắn đang được xử lý ngay lúc đó có thể bị ngắt ngang giữa chừng.
-  file: `apps/agent/agent/lib/custom-agent-dispatch.ts`
+- **evidence-report.md ở HEAD là hồ sơ cũ: ghim SHA lệch, verdict REJECT, và còn PASS cho hai AC đã rút**
+  Người dùng thấy gì: Hồ sơ dùng để người quyết định ký duyệt tính năng này hiện là bản cũ: nó vẫn ghi PASS cho hai tiêu chí đã bị rút khỏi lần giao này, nên người ký có thể duyệt dựa trên thông tin không còn đúng.
+  file: `_acceptance/chan-uy-thac-sai-luot/evidence-report.md`
   severity: high
-  Đề xuất: new-contract
+  Đề xuất: known-limits
 
-- **Nhận vơ (claim) không lặp lại vị từ quá hạn trong giao dịch — lệch pattern của chính file**
-  Người dùng thấy gì: Trong một số thời điểm trùng hợp hiếm gặp, một cuộc trò chuyện đang diễn ra bình thường có thể bị đánh dấu nhầm là lỗi.
-  file: `apps/agent/agent/lib/custom-agent-dispatch.ts`
-  severity: medium
-  Đề xuất: new-contract
-
-- **docs/agent.md không cập nhật trong khi diff đổi đúng hai bất biến nó khai**
-  Người dùng thấy gì: Tài liệu mô tả cách tính năng này hoạt động chưa được cập nhật theo đúng thay đổi vừa làm, nên người đọc tài liệu sau này có thể hiểu sai hành vi hiện tại.
+- **docs/agent.md khai "Every builder tool carries the shared approval policy" — trên đĩa là 3/11 tool**
+  Người dùng thấy gì: Tài liệu nội bộ hướng dẫn người sau khi thêm công cụ mới cho tính năng dựng agent lại nói sai rằng mọi công cụ đều tự động có lớp bảo vệ — có thể khiến người thêm công cụ mới tin nhầm là đã an toàn trong khi chưa.
   file: `docs/agent.md`
   severity: medium
   Đề xuất: known-limits
 
-- **recoverStalledBuilderTurns đánh dấu FAILED nhầm submission cũ đã xong, và nhả continuationToken khi lượt hiện tại vẫn đang chạy**
-  Người dùng thấy gì: Một tin nhắn cũ đã được trả lời xong có thể tự nhiên hiện lỗi giả, và cuộc trò chuyện đang chạy ngay lúc đó có thể bị hai tin nhắn chồng lên nhau xử lý cùng lúc, gây kết quả lộn xộn.
-  file: `apps/agent/agent/lib/custom-agent-dispatch.ts`
-  severity: high
+- **Hai executor trong _acceptance/config.yaml trỏ vào test đã xoá, chạy là đỏ**
+  Người dùng thấy gì: Nếu ai đó chấm lại tính năng này sau, hệ thống đo sẽ tự báo đỏ vì trỏ vào hai phép đo đã xoá — không phải vì tính năng có lỗi — gây mất thời gian điều tra nhầm và có thể làm hoang mang người xem kết quả.
+  file: `_acceptance/config.yaml`
+  severity: medium
+  Đề xuất: known-limits
+
+- **evidence-report.md vẫn ghi PASS cho E8/E9/E8b/E9b đã bị rút khỏi evals.yaml**
+  Người dùng thấy gì: Hồ sơ nghiệm thu vẫn khai bốn phép đo "đã qua" cho phần thu hồi hội thoại treo — phần mà quyết định gần nhất đã công khai rút khỏi lần giao này — nên người đọc hồ sơ dễ tưởng nhầm là tính năng đó đã có và đã kiểm chứng.
+  file: `_acceptance/chan-uy-thac-sai-luot/evidence-report.md`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 6 — input của E7 ghim đường dẫn tuyệt đối theo checkout của tác giả**
+  Người dùng thấy gì: Nếu phép đo cho tiêu chí AC-7 được chấm lại trên một máy khác, hệ thống có thể âm thầm đọc nhầm sang một cây mã khác trên máy tác giả thay vì cây đang xét, mà không có cảnh báo nào — làm sai lệch kết quả chấm lại mà không ai biết.
+  file: `_acceptance/chan-uy-thac-sai-luot/s4-args.json`
+  severity: low
   Đề xuất: new-contract
 
-Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
+## Chưa phân loại (triage-failed)
+
+phân loại phạm vi không chạy được — không lỗi nào bị máy tự sửa, người xem lại toàn bộ.
+
+- **Hình dạng 1 (biến thể văn-bản-nguồn) — vế "lớp trong không bị gỡ" của AC-3 đo bằng grep chuỗi trong file .ts, không gọi tool**
+  file:line: `apps/agent/test/chan-uy-thac.spec.ts:136`
+  severity: medium
+  detail: AC-3 đòi mỗi tool thoả CẢ HAI VẾ: (a) khai policy dùng chung, (b) VẪN giữ `requireBuilderAttribute` làm lớp trong; Notes của contract nói rõ vai trò lớp trong là "chốt cuối nếu có đường nào lọt qua cửa". Vế (a) đo đúng bằng import thật + so danh tính đối tượng (dòng 133: `expect(mod.default.approval).toBe(builderTurnApproval)`). Vế (b) thì đo bằng `readFileSync` rồi `expect(than).toContain("requireBuilderAttribute(")` (dòng 134-137) — chỉ khẳng định VĂN BẢN NGUỒN có chuỗi ấy, không hề chứng minh chốt cuối THẬT SỰ ném khi ctx không được phép. Bài đo không một lần nào gọi `mod.default.execute(...)` với một ctx không được phép, nên trạng thái "ném Error" — chính hành vi mà AC-3 gọi là chốt cuối — chưa từng được quan sát. Ba tool đều có `execute(input, ctx)` đơn giản và fixture `phienThat({ commandType: "CHAT" })` đã có sẵn trong cùng file, nên phép đo hành vi là khả thi ngay tại chỗ. Cụ thể cái lọt lưới: dời `requireBuilderAttribute` sang một nhánh không chạy, hoặc gọi nó rồi vứt kết quả và đọc thẳng `ctx.session.auth.current.attributes`, thì chuỗi vẫn nằm trong file, `-t moi-tool` vẫn xanh, mà lớp trong đã mất. Đáng chú ý: chính `expected` của E3 (evals.yaml:71-72) đã CẤM kỹ thuật tìm-chuỗi-trong-file cho vế (a) — "đọc bằng AST hoặc import thật module rồi soi thuộc tính" — nhưng vế (b) lại rơi đúng vào kỹ thuật đã bị cấm ấy.
+  source: measurement
+
+⚠ Cụm ngoài vùng phủ: 5/6 lỗi rơi vào file không bộ đo nào phủ (_acceptance/chan-uy-thac-sai-luot/evidence-report.md, docs/agent.md, _acceptance/config.yaml, _acceptance/chan-uy-thac-sai-luot/s4-args.json) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
