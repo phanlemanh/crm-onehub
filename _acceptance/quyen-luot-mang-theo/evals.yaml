@@ -5,7 +5,7 @@ evals:
   - id: E1
     criterion: AC-1
     executor: test
-    cmd: config:executors.test.ql_duong_ghi_that
+    cmd: config:executors.test.ql_hai_duong_that
     paths:
       - "apps/agent/agent/lib/builder-input.ts"
       - "packages/validation/src/builder-question.ts"
@@ -46,7 +46,7 @@ evals:
   - id: E3
     criterion: AC-3
     executor: test
-    cmd: config:executors.test.ql_api_service_that
+    cmd: config:executors.test.ql_hai_duong_that
     paths:
       - "apps/api/src/conversations/conversations.service.ts"
       - "packages/validation/src/builder-question.ts"
