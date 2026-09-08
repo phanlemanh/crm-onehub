@@ -108,8 +108,11 @@ for (const c of CHAN) {
 	const con_vet = sau !== truoc;
 	if (con_vet) {
 		console.log(
-			`  KHONG DO DUOC: ${c.id} de lai thay doi tren cay — vet chua duoc tra nguyen trang:`,
+			`  KHONG DO DUOC: ${c.id} de lai thay doi tren cay — vet chua duoc tra nguyen trang.`,
 		);
+		console.log(`  truoc lan (${truoc.split("\n").filter(Boolean).length} duong):`);
+		for (const d of truoc.split("\n").filter(Boolean)) console.log(`    ${d}`);
+		console.log(`  sau chan (${sau.split("\n").filter(Boolean).length} duong):`);
 		for (const d of sau.split("\n").filter(Boolean)) console.log(`    ${d}`);
 	}
 	console.log(`  ${c.id}: ma ${ma}${con_vet ? " · cay ban" : " · cay sach"}`);
