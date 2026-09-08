@@ -26,7 +26,7 @@ function chet(ma, ...loi) {
 	process.exit(ma);
 }
 
-function git(...args) {
+function gitTho(...args) {
 	const r = spawnSync("git", args, { cwd: GOC, encoding: "utf8" });
 	if (r.status !== 0)
 		chet(
@@ -34,7 +34,11 @@ function git(...args) {
 			`KHONG DO DUOC: git ${args.join(" ")} that bai`,
 			r.stderr?.trim() ?? "",
 		);
-	return r.stdout.trim();
+	return r.stdout;
+}
+
+function git(...args) {
+	return gitTho(...args).trim();
 }
 
 const HO_SO_TEN = "tong-quan-va-khung-noi-tieng-viet";
@@ -45,7 +49,7 @@ const CHO_PHEP = [
 
 function banCay() {
 	const ra = [];
-	for (const d of git("status", "--porcelain").split("\n")) {
+	for (const d of gitTho("status", "--porcelain").split("\n")) {
 		if (d.trim() === "") continue;
 		const duong = d.slice(3);
 		const cuoi = duong.includes(" -> ") ? duong.split(" -> ")[1] : duong;
@@ -110,9 +114,13 @@ for (const c of CHAN) {
 		console.log(
 			`  KHONG DO DUOC: ${c.id} de lai thay doi tren cay — vet chua duoc tra nguyen trang.`,
 		);
-		console.log(`  truoc lan (${truoc.split("\n").filter(Boolean).length} duong):`);
+		console.log(
+			`  truoc lan (${truoc.split("\n").filter(Boolean).length} duong):`,
+		);
 		for (const d of truoc.split("\n").filter(Boolean)) console.log(`    ${d}`);
-		console.log(`  sau chan (${sau.split("\n").filter(Boolean).length} duong):`);
+		console.log(
+			`  sau chan (${sau.split("\n").filter(Boolean).length} duong):`,
+		);
 		for (const d of sau.split("\n").filter(Boolean)) console.log(`    ${d}`);
 	}
 	console.log(`  ${c.id}: ma ${ma}${con_vet ? " · cay ban" : " · cay sach"}`);
