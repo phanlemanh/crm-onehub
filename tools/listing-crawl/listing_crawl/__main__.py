@@ -116,7 +116,15 @@ def fixture_run(limit: int | None) -> tuple[list[dict], dict]:
             ledger["lan_thu_hong"] += 1
             LOGGER.warning("bỏ qua %s: %s", name, error)
 
-    return items, {"gieo": len(names), "lay_duoc": len(items), "bi_chan": blocked, **ledger}
+    return items, {
+        "gieo": len(names),
+        "lay_duoc": len(items),
+        "bi_chan": blocked,
+        "trang_danh_ba_doc": 0,
+        "trang_danh_ba_hong": 0,
+        "bi_tran_cat": False,
+        **ledger,
+    }
 
 
 def paced_fetch(crawler, delay: float, ledger: dict[str, int]):
@@ -153,9 +161,15 @@ async def live_run(limit: int | None) -> tuple[list[dict], dict]:
 
     async with AsyncWebCrawler(config=browser) as crawler:
         fetch = paced_fetch(crawler, delay, ledger)
-        seeds = await seed_urls(fetch, run, settings, limit)
+        seeds, suc_khoe = await seed_urls(fetch, run, settings, limit)
         if not seeds:
-            return [], {"gieo": 0, "lay_duoc": 0, "bi_chan": 0, **ledger}
+            return [], {
+                "gieo": 0,
+                "lay_duoc": 0,
+                "bi_chan": 0,
+                **suc_khoe,
+                **ledger,
+            }
 
         items: list[dict] = []
         blocked = 0
@@ -176,11 +190,14 @@ async def live_run(limit: int | None) -> tuple[list[dict], dict]:
             "gieo": len(seeds),
             "lay_duoc": len(items),
             "bi_chan": blocked,
+            **suc_khoe,
             **ledger,
         }
 
 
-async def seed_urls(fetch, run, settings: dict, limit: int | None) -> list[str]:
+async def seed_urls(
+    fetch, run, settings: dict, limit: int | None
+) -> tuple[list[str], dict]:
     prefix = settings["profile_prefix"]
     found: list[str] = []
     seen: set[str] = set()
@@ -199,7 +216,11 @@ async def seed_urls(fetch, run, settings: dict, limit: int | None) -> list[str]:
                 found.append(url)
 
     if found:
-        return found[:limit] if limit is not None else found
+        return (found[:limit] if limit is not None else found), {
+            "trang_danh_ba_doc": 0,
+            "trang_danh_ba_hong": 0,
+            "bi_tran_cat": False,
+        }
 
     LOGGER.warning(
         "sơ đồ site không có địa chỉ %s — gieo từ trang danh bạ %s",
@@ -207,27 +228,52 @@ async def seed_urls(fetch, run, settings: dict, limit: int | None) -> list[str]:
         settings["directory"],
     )
 
+    doc = 0
+    hong = 0
+    rong_lien_tiep = 0
+    bi_tran_cat = False
+    nguong_rong = int(settings.get("directory_stop_after_empty", 3))
+
     for number in range(1, int(settings["directory_max_pages"]) + 1):
         page = await fetch(f"{settings['directory']}?page={number}", run, "danh_ba")
         if not page.success or not page.html:
+            hong += 1
             LOGGER.warning("trang danh bạ %s không tải được", number)
             continue
         try:
             urls = directory_urls(page.html)
         except ValueError as error:
-            LOGGER.warning("trang danh bạ %s: %s", number, error)
-            continue
+            if doc == 0:
+                hong += 1
+                LOGGER.error(
+                    "trang danh bạ %s không có thẻ nào và chưa trang nào đọc được — bộ chọn hỏng? %s",
+                    number,
+                    error,
+                )
+                continue
+            urls = []
+        doc += 1
         fresh = [url for url in urls if url not in seen]
         if not fresh:
+            rong_lien_tiep += 1
             LOGGER.warning("trang danh bạ %s không có địa chỉ mới", number)
+            if rong_lien_tiep >= nguong_rong:
+                break
             continue
+        rong_lien_tiep = 0
         for url in fresh:
             if url in seen:
                 continue
             seen.add(url)
             found.append(url)
+    else:
+        bi_tran_cat = True
 
-    return sample_across(found, limit)
+    return sample_across(found, limit), {
+        "trang_danh_ba_doc": doc,
+        "trang_danh_ba_hong": hong,
+        "bi_tran_cat": bi_tran_cat,
+    }
 
 
 async def reveal_phones(fetch, run, items: list[dict], cap: int) -> None:
