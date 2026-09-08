@@ -10,12 +10,18 @@ export default defineAgent({
 		fallback: DEFAULT_AGENT_MODEL.id,
 		events: { "session.started": () => selectedModel() },
 	}),
-	outputSchema: z.object({
-		status: z.literal("draft_ready"),
-		summary: z.string().min(1).max(1000),
-		agentId: z.string().min(1),
-		versionId: z.string().min(1),
-	}),
+	outputSchema: z.discriminatedUnion("status", [
+		z.object({
+			status: z.literal("draft_ready"),
+			summary: z.string().min(1).max(1000),
+			agentId: z.string().min(1),
+			versionId: z.string().min(1),
+		}),
+		z.object({
+			status: z.literal("not_authorized"),
+			reason: z.string().min(1).max(1000),
+		}),
+	]),
 	limits: {
 		maxInputTokensPerSession: 100_000,
 		maxOutputTokensPerSession: 10_000,

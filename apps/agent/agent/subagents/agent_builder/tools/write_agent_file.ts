@@ -5,9 +5,11 @@ import {
 	writeBuilderArtifact,
 } from "../../../lib/builder-runtime";
 import { requireBuilderAttribute } from "../../../lib/session-purpose";
+import { builderTurnApproval } from "../lib/authorization";
 import { assertBuilderDraftOpen } from "../lib/execution-state";
 
 export default defineTool({
+	approval: builderTurnApproval,
 	description:
 		"Write one durable agent file revision so the user can follow the build live. Write instructions and the manifest before saving the final draft.",
 	inputSchema: z.object({

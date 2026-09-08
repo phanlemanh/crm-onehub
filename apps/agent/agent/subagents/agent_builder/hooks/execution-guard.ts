@@ -1,4 +1,5 @@
 import { defineHook } from "eve/hooks";
+import { builderTurnAuthorized } from "../../../lib/session-purpose";
 import {
 	builderExecutionState,
 	markBuilderDraftSaveFinished,
@@ -7,12 +8,13 @@ import {
 
 export default defineHook({
 	events: {
-		"actions.requested"(event) {
+		"actions.requested"(event, ctx) {
 			const next = recordBuilderActions(
 				builderExecutionState.get(),
 				event.data.turnId,
 				event.data.stepIndex,
 				event.data.actions,
+				builderTurnAuthorized(ctx),
 			);
 			builderExecutionState.update(() => next);
 		},

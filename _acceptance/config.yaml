@@ -29,6 +29,11 @@ executors:
     tt_app: cd apps/app && bun test test/messages-guard.spec.ts test/campaign-states.spec.ts
     go_khoa_api: 'bun run test -- "cd apps/api && bun test test/saved-views-in-use.spec.ts test/campaigns.spec.ts"'
     go_khoa_app: 'bun run test -- "cd apps/app && bun test test/saved-views-in-use.spec.ts test/messages-guard.spec.ts"'
+    cu_quyen_hai_chieu: cd apps/agent && bun test test/chan-uy-thac.spec.ts -t quyen
+    cu_phu_moi_tool: cd apps/agent && bun test test/chan-uy-thac.spec.ts -t moi-tool
+    cu_ket_thuc_sach: cd apps/agent && bun test test/chan-uy-thac.spec.ts -t ket-thuc
+    cu_khong_treo: cd apps/agent && bun test test/chan-uy-thac.spec.ts -t khong-treo
+    cu_man_khong_treo: cd apps/app && bun test test/chan-uy-thac.spec.ts
   script:
     cua_vao_loi_mang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"
     cua_vao_chon_tieng_may_chu: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chon-tieng-may-chu"

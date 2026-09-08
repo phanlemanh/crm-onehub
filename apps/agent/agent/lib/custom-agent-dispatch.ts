@@ -18,6 +18,7 @@ const BUILDER_BATCH = DISPATCH.builder.batch;
 const RUN_BATCH = DISPATCH.run.batch;
 const MAX_BUILDER_ATTEMPTS = DISPATCH.builder.maxAttempts;
 const BUILDER_LEASE_MS = DISPATCH.builder.leaseMs;
+const BUILDER_TURN_LEASE_MS = DISPATCH.builder.turnLeaseMs;
 const RUN_DELIVERY_LEASE_MS = DISPATCH.run.deliveryLeaseMs;
 
 type BuilderMessageParts = Extract<Parameters<SendFn>[0], readonly unknown[]>;
@@ -46,8 +47,83 @@ const builderSubmissionMessage = z
 		inputResponse: { requestId: "", optionId: "", text: "" },
 	});
 
+export function builderTurnAbandoned(
+	row: {
+		sessionId: string | null;
+		continuationToken: string | null;
+		acceptedAt: Date | null;
+	},
+	now: Date,
+): boolean {
+	if (!row.sessionId || row.continuationToken || !row.acceptedAt) return false;
+	return now.getTime() - row.acceptedAt.getTime() >= BUILDER_TURN_LEASE_MS;
+}
+
+export async function recoverStalledBuilderTurns(): Promise<number> {
+	const now = new Date();
+	const rows = await db.agentConversationSubmission.findMany({
+		where: {
+			status: "ACCEPTED",
+			acceptedAt: { lt: new Date(now.getTime() - BUILDER_TURN_LEASE_MS) },
+			conversation: { kind: "BUILDER", continuationToken: null },
+		},
+		orderBy: [{ acceptedAt: "asc" }, { id: "asc" }],
+		take: BUILDER_BATCH * 3,
+		select: {
+			id: true,
+			acceptedAt: true,
+			conversationId: true,
+			conversation: {
+				select: { sessionId: true, continuationToken: true },
+			},
+		},
+	});
+
+	let recovered = 0;
+	for (const row of rows) {
+		if (
+			!builderTurnAbandoned(
+				{
+					sessionId: row.conversation.sessionId,
+					continuationToken: row.conversation.continuationToken,
+					acceptedAt: row.acceptedAt,
+				},
+				now,
+			)
+		) {
+			continue;
+		}
+		await db.$transaction(async (tx) => {
+			const conversation = await lockBuilderConversation(
+				tx,
+				row.conversationId,
+			);
+			if (conversation?.kind !== "BUILDER" || conversation.continuationToken) {
+				return;
+			}
+			const claimed = await tx.agentConversationSubmission.updateMany({
+				where: { id: row.id, status: "ACCEPTED" },
+				data: {
+					status: "FAILED",
+					errorCode: "TURN_ABANDONED",
+					errorMessage:
+						"The builder stopped without finishing this message. Try again.",
+				},
+			});
+			if (claimed.count === 0) return;
+			await tx.agentConversation.updateMany({
+				where: { id: row.conversationId, kind: "BUILDER" },
+				data: { continuationToken: builderToken(row.conversationId) },
+			});
+			recovered += 1;
+		});
+	}
+	return recovered;
+}
+
 export async function pendingBuilderSubmissionIds(): Promise<string[]> {
 	await recoverBuilderSubmissions();
+	await recoverStalledBuilderTurns();
 	const rows = await db.agentConversationSubmission.findMany({
 		where: {
 			status: "PENDING",
@@ -168,17 +244,14 @@ export async function dispatchBuilderSubmission(
 					authenticator: "crm-builder",
 					principalType: "user",
 					principalId: submission.conversation.userId,
-					attributes: {
-						purpose: "builder",
-						commandType: builderCommandType(
-							submission.commandType,
-							submission.message,
-						),
-						needsTitle: submission.conversation.title ? "false" : "true",
+					attributes: builderSessionAttributes({
+						commandType: submission.commandType,
+						message: submission.message,
 						conversationId,
 						userId: submission.conversation.userId,
 						submissionId: submission.id,
-					},
+						hasTitle: Boolean(submission.conversation.title),
+					}),
 				},
 				continuationToken: builderToken(conversationId),
 				title: submission.conversation.title ?? "Agent builder",
@@ -873,6 +946,33 @@ export function builderDeliveryMessage(
 	}
 
 	return parts;
+}
+
+export type BuilderSessionAttributes = {
+	purpose: "builder";
+	commandType: string;
+	needsTitle: "true" | "false";
+	conversationId: string;
+	userId: string;
+	submissionId: string;
+};
+
+export function builderSessionAttributes(input: {
+	commandType: string;
+	message: Prisma.JsonValue;
+	conversationId: string;
+	userId: string;
+	submissionId: string;
+	hasTitle: boolean;
+}): BuilderSessionAttributes {
+	return {
+		purpose: "builder",
+		commandType: builderCommandType(input.commandType, input.message),
+		needsTitle: input.hasTitle ? "false" : "true",
+		conversationId: input.conversationId,
+		userId: input.userId,
+		submissionId: input.submissionId,
+	};
 }
 
 export function builderCommandType(

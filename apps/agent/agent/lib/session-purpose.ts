@@ -38,14 +38,18 @@ export function requireAttribute(ctx: PurposeContext, key: string): string {
 	return value;
 }
 
+export function builderTurnAuthorized(ctx: PurposeContext): boolean {
+	return (
+		purposeOf(ctx) === "builder" &&
+		attribute(ctx, "commandType") === "CREATE_AGENT"
+	);
+}
+
 export function requireBuilderAttribute(
 	ctx: PurposeContext,
 	key: string,
 ): string {
-	if (
-		purposeOf(ctx) !== "builder" ||
-		attribute(ctx, "commandType") !== "CREATE_AGENT"
-	) {
+	if (!builderTurnAuthorized(ctx)) {
 		throw new Error(
 			"Agent creation requires an explicit request to create or build an agent.",
 		);

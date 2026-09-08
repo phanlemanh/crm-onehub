@@ -34,6 +34,7 @@ export function recordBuilderActions(
 	turnId: string,
 	stepIndex: number,
 	actions: readonly BuilderAction[],
+	authorized = true,
 ): BuilderExecutionState {
 	const current =
 		state.turnId === turnId
@@ -61,7 +62,7 @@ export function recordBuilderActions(
 				"The draft is already saved. Return the saved draft now without calling another tool.",
 			);
 		}
-		if (!current.saved && action.toolName === "final_output") {
+		if (authorized && !current.saved && action.toolName === "final_output") {
 			throw new Error("Save the draft before returning draft_ready.");
 		}
 		if (savePending) {
