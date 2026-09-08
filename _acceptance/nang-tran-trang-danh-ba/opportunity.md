@@ -58,6 +58,38 @@ Nâng trần trang không miễn phí, và đó là lý do nó tách thành vòn
   (`phone_reveal_cap = 200`) và là một quyết định về dữ liệu cá nhân, không phải
   một con số cấu hình.
 
+## Ngưỡng chết / ngưỡng UAT
+
+Đo bằng ĐÚNG MỘT lượt nạp thật `--limit 200` với cấu hình đang ship, đọc từ dòng
+`lượt chạy:` mà lệnh in ra. Ba thước, mỗi thước một trường có sẵn.
+
+| Thước | Đọc ở đâu | Sống | Chết |
+| --- | --- | --- | --- |
+| [đề xuất] Mức Thấp có người thật | `phan_bo_tang.thap` | ≥ 50 trên 200 hồ sơ | < 20 |
+| [đề xuất] Gọi được người mức thấp | số hồ sơ mức `thap` có trường `phone` | ≥ 30 | < 10 |
+| [đề xuất] Chi phí một lượt còn chịu được | đồng hồ, và `trang_danh_ba_hong` chia `trang_danh_ba_doc` cộng `rong` cộng `hong` | dưới 75 phút VÀ trang hỏng dưới 35% | quá 120 phút HOẶC trang hỏng từ 50% |
+
+Căn cứ của từng con số, để người chốt biết cái nào có nền và cái nào không:
+
+- **Thước 1 có nền đo.** Lượt dò 08/09 đọc 407 người qua 37 trang: 262 người
+  (64%) có tin hiện có dưới 20, tức chặn trên của họ nằm dưới ngưỡng «Vừa» nên
+  không thể là Cao hay Vừa. Ở trần 120 trang danh bạ ra hơn 1000 người, nên mẫu
+  rải đều 200 người phải chạm nhóm đó rất nhiều. Ngưỡng 50 là mức thấp có chủ ý:
+  nó vẫn đỏ nếu bộ rải hỏng, mà không đỏ oan vì một lượt cào bị chặn vài trang.
+- **Thước 2 KHÔNG có nền đo — đây là thước yếu nhất trong ba.** Chưa ai đo tỉ lệ
+  lộ số thành công cho hồ sơ mức thấp; sàn có thể ẩn số của tài khoản ít hoạt
+  động. Con số 30 là mức đủ để đội tiếp thị chạy một tuần gọi, không phải suy ra
+  từ dữ liệu. Nếu thước này đỏ thì đó chính là điều đáng biết nhất của cả vòng.
+- **Thước 3 có nền đo một nửa.** Mỗi trang tốn khoảng 5,5 giây (`request_delay_seconds`
+  1,5 cộng `render_wait_seconds` 4,0), nên 120 trang là khoảng 11 phút đọc danh bạ,
+  cộng 200 lượt tải hồ sơ và tới 200 lượt lộ số — ước khoảng 45 phút. Ngưỡng 75
+  phút cho biên an toàn. Phần trang hỏng đo được: 3 trên 40 ở vùng trang đầu,
+  12 trên 49 ở vùng trang sâu; ngưỡng 35% đặt trên mức đã thấy để không đỏ oan,
+  ngưỡng chết 50% là mức mà mẫu coi như thủng.
+
+Ba dòng trên còn mang dấu `[đề xuất]`, tức CHƯA phải ngưỡng của người. Bỏ dấu đó
+đi là chốt; sửa số rồi bỏ dấu cũng là chốt.
+
 ## Ngả làm (chưa quyết)
 
 1. Chỉ nâng `directory_max_pages` và đo lại phân bố mức. Rẻ nhất, trả lời được câu
