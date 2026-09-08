@@ -32,6 +32,11 @@ executors:
     cu_quyen_hai_chieu: cd apps/agent && bun test test/chan-uy-thac.spec.ts -t quyen
     cu_phu_moi_tool: cd apps/agent && bun test test/chan-uy-thac.spec.ts -t moi-tool
     cu_ket_thuc_sach: cd apps/agent && bun test test/chan-uy-thac.spec.ts -t ket-thuc
+    ql_quyen_ke_thua: cd apps/agent && bun test test/quyen-luot.spec.ts -t ke-thua
+    ql_khong_suy_dien: cd apps/agent && bun test test/quyen-luot.spec.ts -t suy-dien
+    ql_con_biet_cua_ra: cd apps/agent && bun test test/quyen-luot.spec.ts -t cua-ra
+    ql_api_doc_ban_ghi: cd apps/api && bun test test/quyen-luot.spec.ts
+    ql_cong_dong_that: cd apps/agent && bun test test/quyen-luot.spec.ts -t cong-dong
   script:
     cua_vao_loi_mang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"
     cua_vao_chon_tieng_may_chu: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chon-tieng-may-chu"
