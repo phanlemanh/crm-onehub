@@ -15,6 +15,28 @@ import { recordBuilderActions } from "../agent/subagents/agent_builder/lib/execu
 
 const PURPOSES = ["research", "team-agent", "builder"] as const;
 
+const GHIM =
+	"This turn is not an agent-creation request. Tell the user that building an agent starts from the Create agent action, then answer what they actually asked.";
+
+const boDongImport = (src: string) =>
+	src.replace(/^import[\s\S]*?from\s+"[^"]+";$/gm, "");
+
+const thanHam = (src: string, ten: string) => {
+	const dau = src.indexOf(ten);
+	if (dau < 0) return "";
+	const moNgoac = src.indexOf("{", src.indexOf(")", dau));
+	if (moNgoac < 0) return "";
+	let sau = 0;
+	for (let i = moNgoac; i < src.length; i += 1) {
+		if (src[i] === "{") sau += 1;
+		else if (src[i] === "}") {
+			sau -= 1;
+			if (sau === 0) return src.slice(moNgoac, i + 1);
+		}
+	}
+	return "";
+};
+
 const phienThat = (over: Record<string, string> = {}) => ({
 	session: {
 		auth: {
@@ -72,6 +94,9 @@ describe("quyen", () => {
 			const duocPhep =
 				c.purpose === "builder" && c.commandType === "CREATE_AGENT";
 			expect(builderTurnAuthorized(phienThat(c))).toBe(duocPhep);
+			expect(chamPolicy(phienThat(c))).toEqual(
+				duocPhep ? "not-applicable" : { type: "denied", reason: GHIM },
+			);
 		}
 	});
 
@@ -88,8 +113,6 @@ describe("quyen", () => {
 	});
 
 	it("quyen: policy tra denied kem hang ghim, khong nem", () => {
-		const GHIM =
-			"This turn is not an agent-creation request. Tell the user that building an agent starts from the Create agent action, then answer what they actually asked.";
 		expect(BUILDER_DENIED_REASON).toBe(GHIM);
 		const denied = chamPolicy(phienThat({ commandType: "CHAT" }));
 		expect(denied).toEqual({ type: "denied", reason: GHIM });
@@ -111,8 +134,8 @@ describe("moi-tool", () => {
 	it("moi-tool: dan so tren dia phai bang danh sach ghim", () => {
 		const trenDia = readdirSync(TOOL_DIR)
 			.filter((f) =>
-				readFileSync(join(TOOL_DIR, f), "utf8").includes(
-					"requireBuilderAttribute",
+				boDongImport(readFileSync(join(TOOL_DIR, f), "utf8")).includes(
+					"requireBuilderAttribute(",
 				),
 			)
 			.map((f) => f.replace(/\.ts$/, ""))
@@ -127,9 +150,10 @@ describe("moi-tool", () => {
 				`../agent/subagents/agent_builder/tools/${name}`
 			);
 			expect(mod.default.approval).toBe(builderTurnApproval);
-			expect(readFileSync(join(TOOL_DIR, `${name}.ts`), "utf8")).toContain(
-				"requireBuilderAttribute",
+			const than = boDongImport(
+				readFileSync(join(TOOL_DIR, `${name}.ts`), "utf8"),
 			);
+			expect(than).toContain("requireBuilderAttribute(");
 		}
 	});
 
@@ -215,11 +239,11 @@ describe("khong-treo", () => {
 			join(import.meta.dir, "../agent/lib/custom-agent-dispatch.ts"),
 			"utf8",
 		);
-		const than = src.slice(
-			src.indexOf("export async function pendingBuilderSubmissionIds"),
+		const than = thanHam(
+			src,
+			"export async function pendingBuilderSubmissionIds",
 		);
-		expect(than.slice(0, than.indexOf("}"))).toContain(
-			"recoverStalledBuilderTurns",
-		);
+		expect(than.length).toBeGreaterThan(200);
+		expect(than).toContain("recoverStalledBuilderTurns(");
 	});
 });
