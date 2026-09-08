@@ -1,49 +1,44 @@
 ## Trong hợp đồng
 
-(không có finding nào ánh xạ được vào AC ở vòng này.)
+- **Hình dạng 5 — ma trận AC-4 tuyên quét toàn lớp `purposeOf` nhưng dân số là mảng hardcode trong bài đo, thiếu sàn dân số bắt buộc**
+  file:line: `apps/agent/test/chan-uy-thac.spec.ts:13`
+  severity: medium
+  detail: AC-4 và `expected` của E4 đòi hai thứ: (a) ma trận toàn phần, số assert bằng số phần tử — bài đo làm đúng (`cases` 6 phần tử, `expect(cases).toHaveLength(6)`, dòng 69-73); và (b) **sàn dân số**: "tập giá trị `purposeOf` đếm ra khác 3 → mã 2, nêu giá trị lạ". Vế (b) không có trong bài đo. Dân số của ma trận là `const PURPOSES = ["research", "team-agent", "builder"] as const` (dòng 13) — một mảng viết tay trong file test, không đối chiếu với nguồn sự thật nào. `SessionPurpose` là union type của TypeScript nên bị xoá lúc chạy, và session-purpose.ts không export mảng runtime nào để so; bài đo cũng không đọc nguồn để đếm. So sánh trực tiếp: cùng file, phép đo dân số tool (`moi-tool: dan so tren dia phai bang danh sach ghim`, dòng ~118) LÀM đúng việc này — đọc `TOOL_DIR` trên đĩa và `expect(trenDia).toEqual([...TOOLS_GHIM].sort())` — nên khoảng trống ở AC-4 không phải vì bất khả thi. Cụ thể cái lọt lưới: thêm một giá trị thứ tư vào `SessionPurpose` và một nhánh trả nó trong `purposeOf` (đúng kiểu `team-agent` đã được thêm và từng lọt cửa ở vòng chấm trước) thì `PURPOSES` vẫn 3, `cases` vẫn 6, `toHaveLength(6)` vẫn xanh, và mục đích phiên mới đi qua policy mà không một assert nào chạm tới.
+  source: measurement
+  AC: AC-4
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **evidence-report.md ở HEAD là hồ sơ cũ: ghim SHA lệch, verdict REJECT, và còn PASS cho hai AC đã rút**
-  Người dùng thấy gì: Hồ sơ dùng để người quyết định ký duyệt tính năng này hiện là bản cũ: nó vẫn ghi PASS cho hai tiêu chí đã bị rút khỏi lần giao này, nên người ký có thể duyệt dựa trên thông tin không còn đúng.
-  file: `_acceptance/chan-uy-thac-sai-luot/evidence-report.md`
+- **Cửa ra not_authorized không được khai ở chỉ dẫn con — con nhận hàng lý do viết cho cha**
+  Người dùng thấy gì: Khi hệ thống từ chối yêu cầu tạo tác nhân, tác nhân con chưa được dạy phải báo kết quả đúng cách, nên cuộc trò chuyện có thể vẫn bị treo giống lỗi cũ thay vì báo lỗi rõ ràng cho người dùng.
+  file: `apps/agent/agent/subagents/agent_builder/instructions.md`
   severity: high
   Đề xuất: known-limits
 
-- **docs/agent.md khai "Every builder tool carries the shared approval policy" — trên đĩa là 3/11 tool**
-  Người dùng thấy gì: Tài liệu nội bộ hướng dẫn người sau khi thêm công cụ mới cho tính năng dựng agent lại nói sai rằng mọi công cụ đều tự động có lớp bảo vệ — có thể khiến người thêm công cụ mới tin nhầm là đã an toàn trong khi chưa.
-  file: `docs/agent.md`
+- **Danh sách tool ghim policy được suy ra bằng grep chuỗi, nên bất biến "không ambient" trong docs chỉ được bảo vệ một nửa**
+  Người dùng thấy gì: Cách kiểm tra tự động hiện tại có thể bỏ sót một cách viết tính năng dựng tác nhân mới theo kiểu khác, khiến tính năng đó lách qua được bước xin phép mà không ai phát hiện.
+  file: `apps/agent/test/chan-uy-thac.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Hai executor trong _acceptance/config.yaml trỏ vào test đã xoá, chạy là đỏ**
-  Người dùng thấy gì: Nếu ai đó chấm lại tính năng này sau, hệ thống đo sẽ tự báo đỏ vì trỏ vào hai phép đo đã xoá — không phải vì tính năng có lỗi — gây mất thời gian điều tra nhầm và có thể làm hoang mang người xem kết quả.
-  file: `_acceptance/config.yaml`
-  severity: medium
-  Đề xuất: known-limits
-
-- **evidence-report.md vẫn ghi PASS cho E8/E9/E8b/E9b đã bị rút khỏi evals.yaml**
-  Người dùng thấy gì: Hồ sơ nghiệm thu vẫn khai bốn phép đo "đã qua" cho phần thu hồi hội thoại treo — phần mà quyết định gần nhất đã công khai rút khỏi lần giao này — nên người đọc hồ sơ dễ tưởng nhầm là tính năng đó đã có và đã kiểm chứng.
-  file: `_acceptance/chan-uy-thac-sai-luot/evidence-report.md`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 6 — input của E7 ghim đường dẫn tuyệt đối theo checkout của tác giả**
-  Người dùng thấy gì: Nếu phép đo cho tiêu chí AC-7 được chấm lại trên một máy khác, hệ thống có thể âm thầm đọc nhầm sang một cây mã khác trên máy tác giả thay vì cây đang xét, mà không có cảnh báo nào — làm sai lệch kết quả chấm lại mà không ai biết.
-  file: `_acceptance/chan-uy-thac-sai-luot/s4-args.json`
-  severity: low
+- **Cổng uỷ quyền mới bị vượt bởi bất kỳ câu trả lời ask_question nào**
+  Người dùng thấy gì: Khi người dùng chỉ đang trả lời một câu hỏi phụ trong đoạn chat bình thường, hệ thống có thể hiểu nhầm thành lệnh tạo tác nhân và cho phép các thao tác dựng tác nhân chạy ngoài ý muốn của người dùng.
+  file: `apps/agent/agent/lib/custom-agent-dispatch.ts`
+  severity: high
   Đề xuất: new-contract
 
-## Chưa phân loại (triage-failed)
+- **apps/agent/test/** nằm ngoài tsconfig — bài đo mới không qua check-types**
+  Người dùng thấy gì: Các bài kiểm tra mới cho tính năng chặn quyền này chưa được máy tự rà lỗi kiểu dữ liệu, nên nếu sau này cách kiểm tra quyền bị đổi sai, bài kiểm tra vẫn có thể báo đạt trong khi bản chạy thật đã hỏng.
+  file: `apps/agent/tsconfig.json`
+  severity: low
+  Đề xuất: known-limits
 
-phân loại phạm vi không chạy được — không lỗi nào bị máy tự sửa, người xem lại toàn bộ.
+- **Hình dạng 1 — E7/AC-7 đo CHỈ DẪN viết cho cha, không đo câu trả lời cha thật sự soạn**
+  Người dùng thấy gì: Phép đo cho tiêu chí 'trả lời không dùng từ kỹ thuật' hiện chỉ kiểm tra bản hướng dẫn viết sẵn, chứ chưa kiểm câu trả lời thật hệ thống đưa ra cho người dùng, nên câu trả lời thật vẫn có thể lộ thông tin kỹ thuật dù hồ sơ báo đạt.
+  file: `_acceptance/chan-uy-thac-sai-luot/evals.yaml`
+  severity: high
+  Đề xuất: known-limits
 
-- **Hình dạng 1 (biến thể văn-bản-nguồn) — vế "lớp trong không bị gỡ" của AC-3 đo bằng grep chuỗi trong file .ts, không gọi tool**
-  file:line: `apps/agent/test/chan-uy-thac.spec.ts:136`
-  severity: medium
-  detail: AC-3 đòi mỗi tool thoả CẢ HAI VẾ: (a) khai policy dùng chung, (b) VẪN giữ `requireBuilderAttribute` làm lớp trong; Notes của contract nói rõ vai trò lớp trong là "chốt cuối nếu có đường nào lọt qua cửa". Vế (a) đo đúng bằng import thật + so danh tính đối tượng (dòng 133: `expect(mod.default.approval).toBe(builderTurnApproval)`). Vế (b) thì đo bằng `readFileSync` rồi `expect(than).toContain("requireBuilderAttribute(")` (dòng 134-137) — chỉ khẳng định VĂN BẢN NGUỒN có chuỗi ấy, không hề chứng minh chốt cuối THẬT SỰ ném khi ctx không được phép. Bài đo không một lần nào gọi `mod.default.execute(...)` với một ctx không được phép, nên trạng thái "ném Error" — chính hành vi mà AC-3 gọi là chốt cuối — chưa từng được quan sát. Ba tool đều có `execute(input, ctx)` đơn giản và fixture `phienThat({ commandType: "CHAT" })` đã có sẵn trong cùng file, nên phép đo hành vi là khả thi ngay tại chỗ. Cụ thể cái lọt lưới: dời `requireBuilderAttribute` sang một nhánh không chạy, hoặc gọi nó rồi vứt kết quả và đọc thẳng `ctx.session.auth.current.attributes`, thì chuỗi vẫn nằm trong file, `-t moi-tool` vẫn xanh, mà lớp trong đã mất. Đáng chú ý: chính `expected` của E3 (evals.yaml:71-72) đã CẤM kỹ thuật tìm-chuỗi-trong-file cho vế (a) — "đọc bằng AST hoặc import thật module rồi soi thuộc tính" — nhưng vế (b) lại rơi đúng vào kỹ thuật đã bị cấm ấy.
-  source: measurement
-
-⚠ Cụm ngoài vùng phủ: 5/6 lỗi rơi vào file không bộ đo nào phủ (_acceptance/chan-uy-thac-sai-luot/evidence-report.md, docs/agent.md, _acceptance/config.yaml, _acceptance/chan-uy-thac-sai-luot/s4-args.json) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+⚠ Cụm ngoài vùng phủ: 4/6 lỗi rơi vào file không bộ đo nào phủ (apps/agent/agent/subagents/agent_builder/instructions.md, apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/tsconfig.json, _acceptance/chan-uy-thac-sai-luot/evals.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
