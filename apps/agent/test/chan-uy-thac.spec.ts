@@ -187,13 +187,31 @@ describe("ket-thuc", () => {
 		expect(schema.safeParse({ status: "not_authorized" }).success).toBe(false);
 	});
 
-	it("ket-thuc: luot khong duoc phep goi final_output ma chua luu thi khong bi chan", () => {
-		const actions = [{ callId: "c1", kind: "tool", toolName: "final_output" }];
+	it("ket-thuc: chot khoa theo STATUS tra ve, khong theo co quyen", () => {
 		expect(() =>
-			recordBuilderActions(trangThaiMoi(), "t1", 0, actions, false),
+			recordBuilderActions(trangThaiMoi(), "t1", 0, [
+				{
+					callId: "c1",
+					kind: "tool-call",
+					toolName: "final_output",
+					input: { status: "not_authorized", reason: "khong duoc phep" },
+				},
+			]),
 		).not.toThrow();
 		expect(() =>
-			recordBuilderActions(trangThaiMoi(), "t1", 0, actions, true),
+			recordBuilderActions(trangThaiMoi(), "t1", 0, [
+				{
+					callId: "c1",
+					kind: "tool-call",
+					toolName: "final_output",
+					input: {
+						status: "draft_ready",
+						summary: "x",
+						agentId: "a",
+						versionId: "v",
+					},
+				},
+			]),
 		).toThrow("Save the draft before returning draft_ready.");
 	});
 });

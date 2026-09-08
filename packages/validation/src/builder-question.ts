@@ -60,16 +60,6 @@ export function buildPendingInputRequest<T extends object>(
 	return { ...question, [BUILDER_AUTHORIZATION_KEY]: authorized };
 }
 
-export function readBuilderAuthorization(value: unknown): boolean {
-	const parsed = authorizationEnvelope.safeParse(value);
-	if (!parsed.success) {
-		throw new Error(
-			"Builder input request is missing a usable authorization flag.",
-		);
-	}
-	return parsed.data[BUILDER_AUTHORIZATION_KEY];
-}
-
 export function commandTypeFromAuthorization(
 	value: unknown,
 ): "CHAT" | "CREATE_AGENT" {

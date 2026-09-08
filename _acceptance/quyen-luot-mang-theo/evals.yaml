@@ -30,12 +30,17 @@ evals:
       - "apps/agent/agent/lib/builder-input.ts"
       - "apps/agent/test/quyen-luot.spec.ts"
     expected: |
-      Parse THAT bang schema trong packages/validation, khong doc chuoi nguon:
-        (a) ban ghi du truong -> parse THANH CONG, kieu suy bang z.infer;
-        (b) ban ghi SAI KHUON -> parse HONG va nem/tra loi CO THONG DIEP, khong
-            duoc nuot thanh rong hay undefined im lang.
-      Chieu do: doi schema cho no chap nhan moi thu (passthrough) -> (b) phai het
-      hong, phep do ma 1.
+      HAI BIEN, HAI HANH VI KHAC NHAU — cham dung thu SAN PHAM CHAY, khong cham
+      ham chet:
+      (a) bien GHI (buildPendingInputRequest, duong ghi that goi): cau hoi sai khuon
+      -> NEM loi co thong diep ghim. Loi parse o luc ghi la loi that.
+      (b) bien DOC (commandTypeFromAuthorization, service that goi): ban ghi sai
+      khuon -> FAIL-CLOSED tra "CHAT", KHONG nem. Do la thiet ke, va AC-4 la cho
+      do no.
+      San dan so: mot trong hai ham khong co nguoi goi nao trong ma chay that thi
+      phep do dang cham code chet -> ma 2, IN ten ham.
+      Chieu do: doi schema cho no chap nhan moi thu (passthrough) -> (a) phai het
+      nem, phep do ma 1.
       Kieu tra ve cua ham dung PHAI suy bang z.infer tu chinh schema, khong go tay
       canh no — doi schema ma kieu khong doi la drift ma AGENTS.md cam.
       Ve "khong ben nao nhan Record<string, unknown>" KHONG do o day: no do

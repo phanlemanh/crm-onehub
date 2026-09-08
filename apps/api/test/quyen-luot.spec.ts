@@ -35,9 +35,16 @@ describe("api doc ban ghi quyen", () => {
 	});
 
 	it("ba hinh dang nguon quyen khong dung duoc deu cho CHAT", () => {
+		const khongCoTruong = {
+			kind: "question",
+			requestId: "req_1",
+			prompt: "Chon mot muc",
+			options: [],
+		};
+		expect(BUILDER_AUTHORIZATION_KEY in khongCoTruong).toBe(false);
 		const hong = [
 			null,
-			cauHoi(),
+			khongCoTruong,
 			cauHoi({ [BUILDER_AUTHORIZATION_KEY]: "co" }),
 		];
 		expect(hong).toHaveLength(3);

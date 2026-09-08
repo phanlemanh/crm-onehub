@@ -99,6 +99,7 @@ describe("builder persistence", () => {
 		expect(
 			await persistBuilderInputRequest(event, undefined, conversationId, true),
 		).toBe(true);
+
 		expect(
 			await db.agentConversation.findUnique({
 				where: { id: conversationId },
@@ -170,6 +171,54 @@ describe("builder persistence", () => {
 				},
 			}),
 		).toBe(0);
+	});
+
+	it("records the asking turn's refusal so the answer cannot inherit a grant", async () => {
+		const conversation = await db.agentConversation.create({
+			data: {
+				kind: "BUILDER",
+				userId,
+				sessionId: `builder-ungranted-${suffix}`,
+			},
+			select: { id: true },
+		});
+		conversationIds.push(conversation.id);
+
+		const request = {
+			kind: "question",
+			requestId: "cau-hoi-khong-duoc-phep",
+			prompt: "Which stage?",
+			action: {
+				kind: "tool-call",
+				callId: "call-ungranted",
+				toolName: "ask_question",
+				input: { prompt: "Which stage?" },
+			},
+			display: "text",
+		};
+
+		expect(
+			await persistBuilderInputRequest(
+				{
+					requests: [request],
+					sequence: 1,
+					stepIndex: 0,
+					turnId: "turn-ungranted",
+				},
+				undefined,
+				conversation.id,
+				false,
+			),
+		).toBe(true);
+
+		expect(
+			(
+				await db.agentConversation.findUnique({
+					where: { id: conversation.id },
+					select: { pendingInputRequest: true },
+				})
+			)?.pendingInputRequest,
+		).toMatchObject({ [BUILDER_AUTHORIZATION_KEY]: false });
 	});
 
 	it("ignores a delayed question from a turn the session has already left", async () => {

@@ -1,11 +1,10 @@
 import { describe, expect, it } from "bun:test";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
 	BUILDER_AUTHORIZATION_KEY,
 	buildPendingInputRequest,
 	commandTypeFromAuthorization,
-	readBuilderAuthorization,
 } from "@crm/validation/builder-question";
 import { builderCommandType } from "../agent/lib/custom-agent-dispatch";
 
@@ -22,11 +21,14 @@ const banGhi = (authorized: boolean) =>
 
 describe("ke-thua", () => {
 	it("ke-thua: doc duoc ca hai chieu tren cung khuon", () => {
-		expect(readBuilderAuthorization(banGhi(true))).toBe(true);
-		expect(readBuilderAuthorization(banGhi(false))).toBe(false);
+		expect(commandTypeFromAuthorization(banGhi(true))).toBe("CREATE_AGENT");
+		expect(commandTypeFromAuthorization(banGhi(false))).toBe("CHAT");
 	});
 
-	it("ke-thua: sai khuon thi nem loi CO THONG DIEP, khong nuot", () => {
+	it("ke-thua: hai bien lam hai viec khac nhau, dung nhu san pham chay", () => {
+		expect(() => buildPendingInputRequest({ kind: "question" }, true)).toThrow(
+			"Builder input request is not a usable question.",
+		);
 		const hong = [
 			null,
 			{ kind: "question", requestId: "req_1", prompt: "x", options: [] },
@@ -34,9 +36,7 @@ describe("ke-thua", () => {
 		];
 		expect(hong).toHaveLength(3);
 		for (const value of hong) {
-			expect(() => readBuilderAuthorization(value)).toThrow(
-				"Builder input request is missing a usable authorization flag.",
-			);
+			expect(commandTypeFromAuthorization(value)).toBe("CHAT");
 		}
 	});
 
@@ -89,14 +89,21 @@ describe("suy-dien", () => {
 			'return requestId && (optionId || text) ? "CREATE_AGENT" : commandType;';
 		expect(demTrong(chung)).toHaveLength(1);
 
-		const soi = [
-			"../agent/lib/custom-agent-dispatch.ts",
-			"../agent/lib/builder-input.ts",
+		const goc = [
+			join(import.meta.dir, "../agent"),
+			join(import.meta.dir, "../../api/src"),
 		];
-		expect(soi).toHaveLength(2);
-		const dinh = soi.flatMap((duong) =>
-			demTrong(readFileSync(join(import.meta.dir, duong), "utf8")).map(
-				({ so }) => `${duong}:${so}`,
+		const quet = (thuMuc: string): string[] =>
+			readdirSync(thuMuc, { withFileTypes: true }).flatMap((muc) => {
+				const duong = join(thuMuc, muc.name);
+				if (muc.isDirectory()) return quet(duong);
+				return muc.name.endsWith(".ts") ? [duong] : [];
+			});
+		const tepTs = goc.flatMap(quet);
+		expect(tepTs.length).toBeGreaterThan(50);
+		const dinh = tepTs.flatMap((duong) =>
+			demTrong(readFileSync(duong, "utf8")).map(
+				({ so }) => `${duong.slice(duong.indexOf("apps/"))}:${so}`,
 			),
 		);
 		if (dinh.length > 0) {

@@ -1,10 +1,18 @@
 import { defineState } from "eve/context";
+import { z } from "zod";
 
 type BuilderAction = {
 	callId: string;
 	kind: string;
 	toolName?: string;
+	input?: unknown;
 };
+
+const traVeTuChoi = z.object({ status: z.literal("not_authorized") });
+
+function tuChoiQuyen(action: BuilderAction): boolean {
+	return traVeTuChoi.safeParse(action.input).success;
+}
 
 type BuilderExecutionState = {
 	turnId: string | null;
@@ -34,7 +42,6 @@ export function recordBuilderActions(
 	turnId: string,
 	stepIndex: number,
 	actions: readonly BuilderAction[],
-	authorized: boolean,
 ): BuilderExecutionState {
 	const current =
 		state.turnId === turnId
@@ -62,7 +69,11 @@ export function recordBuilderActions(
 				"The draft is already saved. Return the saved draft now without calling another tool.",
 			);
 		}
-		if (authorized && !current.saved && action.toolName === "final_output") {
+		if (
+			!current.saved &&
+			action.toolName === "final_output" &&
+			!tuChoiQuyen(action)
+		) {
 			throw new Error("Save the draft before returning draft_ready.");
 		}
 		if (savePending) {
