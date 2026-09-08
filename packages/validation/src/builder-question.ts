@@ -41,3 +41,29 @@ const askedQuestion = z
 export type BuilderQuestion = z.infer<typeof askedQuestion>;
 
 export const builderQuestion = askedQuestion.nullable().catch(null);
+
+export const BUILDER_AUTHORIZATION_KEY = "builderAuthorized";
+
+const authorizationEnvelope = z.object({
+	[BUILDER_AUTHORIZATION_KEY]: z.boolean(),
+});
+
+export function readBuilderAuthorization(value: unknown): boolean {
+	const parsed = authorizationEnvelope.safeParse(value);
+	if (!parsed.success) {
+		throw new Error(
+			"Builder input request is missing a usable authorization flag.",
+		);
+	}
+	return parsed.data[BUILDER_AUTHORIZATION_KEY];
+}
+
+export function commandTypeFromAuthorization(
+	value: unknown,
+): "CHAT" | "CREATE_AGENT" {
+	try {
+		return readBuilderAuthorization(value) ? "CREATE_AGENT" : "CHAT";
+	} catch {
+		return "CHAT";
+	}
+}
