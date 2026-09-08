@@ -406,13 +406,19 @@ evals:
   - id: E22
     criterion: AC-1
     executor: script
-    cmd: config:executors.script.tq_san_thiet_ke_do
+    cmd: config:executors.script.tq_lan_san_thiet_ke_do
     expected: >-
       exit 0. Chieu do cua chan tuong phan: cam mau chu gan den (rgb(20,20,20)) len tieu de
       — von nam tren nen den — o ca ba khung hinh, roi doi chinh chan do bao DUOI NGUONG.
       Bat duoc o 0 khung la DO: mot thuoc chua tung do o dung chieu no sinh ra de bat thi
       khong phan biet duoc "man dat" voi "phep do mu". Cay khong bi sua — vet cam trong DOM
       cua lan chay, khong cham file nao.
+      Chan nay chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, va lenh o day
+      la chan DOC ghim: mot cai MAY doc ma thoat da ghi, thay vi mot tac nhan doc van
+      xuoi. Ly do: output cua chieu do CO Y chua nhung dong "DO:" cua phep thu cam vao,
+      va o vong 4 lan vong 7 da co nguoi cham lay dong do lam ket qua roi ghi ma 1 trong
+      khi lenh thoat 0. Chan doc in lai output cu trong mot khoi co nhan va noi ro ma
+      thoat that; ghim phai neo dung HEAD va cay khong duoc co sua chua ghi.
     paths:
       - "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -449,13 +455,19 @@ evals:
   - id: E24
     criterion: AC-6
     executor: script
-    cmd: config:executors.script.tq_tieu_de_quan_he_do
+    cmd: config:executors.script.tq_lan_tieu_de_do
     expected: >-
       exit 0. Chieu do cua chan quan he tieu de: cam mot ban sao page.tsx co
       title: "Tổng quan" viet thang — CO DAU, doc duoc, chi mat quan he voi kho — roi
       doi chan bao ma 1 va noi ro la mat quan he. Chan bao xanh, hoac bao do vi ly do
       khac (thieu dau), deu la ma 1: do la dung hinh dang lo ma vong 5 goi ten. Cay
       khong bi sua — vet cam trong bo nho.
+      Chan nay chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, va lenh o day
+      la chan DOC ghim: mot cai MAY doc ma thoat da ghi, thay vi mot tac nhan doc van
+      xuoi. Ly do: output cua chieu do CO Y chua nhung dong "DO:" cua phep thu cam vao,
+      va o vong 4 lan vong 7 da co nguoi cham lay dong do lam ket qua roi ghi ma 1 trong
+      khi lenh thoat 0. Chan doc in lai output cu trong mot khoi co nhan va noi ro ma
+      thoat that; ghim phai neo dung HEAD va cay khong duoc co sua chua ghi.
     paths:
       - "apps/app/app/(app)/[slug]/page.tsx"
       - "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
@@ -464,7 +476,7 @@ evals:
   - id: E25
     criterion: AC-14
     executor: script
-    cmd: config:executors.script.tq_mot_bo_thuoc_do
+    cmd: config:executors.script.tq_lan_trung_lap_do
     expected: >-
       exit 0. Chieu do cua ve 1 (khong trung ma voi bon lat truoc): chep THAN MO-DUN
       cua dot-bien.mjs thuoc lat ③b vao mot file gia cua lat nay, roi doi ve 1 bat
@@ -472,6 +484,12 @@ evals:
       da — con cho trung san thi chieu do khong noi len gi va cung la ma 1. Truoc
       08/09 ve 1 chi cua so hoa THAN HAM nen ma cap mo-dun di lot; do la lo hong vong
       5 goi ten. Cay khong bi sua — vet cam trong bo nho.
+      Chan nay chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, va lenh o day
+      la chan DOC ghim: mot cai MAY doc ma thoat da ghi, thay vi mot tac nhan doc van
+      xuoi. Ly do: output cua chieu do CO Y chua nhung dong "DO:" cua phep thu cam vao,
+      va o vong 4 lan vong 7 da co nguoi cham lay dong do lam ket qua roi ghi ma 1 trong
+      khi lenh thoat 0. Chan doc in lai output cu trong mot khoi co nhan va noi ro ma
+      thoat that; ghim phai neo dung HEAD va cay khong duoc co sua chua ghi.
     paths:
       - "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

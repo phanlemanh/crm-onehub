@@ -16,6 +16,9 @@ const CHAN = [
 	{ id: "E2", khoa: "tq_sau_bam" },
 	{ id: "E8", khoa: "tq_du_lieu_nguoi_nhap" },
 	{ id: "E12", khoa: "tq_be_rong" },
+	{ id: "E24", khoa: "tq_tieu_de_quan_he_do" },
+	{ id: "E25", khoa: "tq_mot_bo_thuoc_do" },
+	{ id: "E22", khoa: "tq_san_thiet_ke_do" },
 ];
 
 function chet(ma, ...loi) {
@@ -34,12 +37,21 @@ function git(...args) {
 	return r.stdout.trim();
 }
 
+const HO_SO_TEN = "tong-quan-va-khung-noi-tieng-viet";
+const CHO_PHEP = [
+	`_acceptance/${HO_SO_TEN}/evidence/`,
+	`_acceptance/${HO_SO_TEN}/s4-args.json`,
+];
+
 function banCay() {
-	return git("status", "--porcelain")
-		.split("\n")
-		.filter(Boolean)
-		.sort()
-		.join("\n");
+	const ra = [];
+	for (const d of git("status", "--porcelain").split("\n")) {
+		if (d.trim() === "") continue;
+		const duong = d.slice(3);
+		const cuoi = duong.includes(" -> ") ? duong.split(" -> ")[1] : duong;
+		if (!CHO_PHEP.some((c) => cuoi.startsWith(c))) ra.push(cuoi);
+	}
+	return [...new Set(ra)].sort().join("\n");
 }
 
 function docLenh() {
