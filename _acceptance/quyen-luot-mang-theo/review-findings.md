@@ -1,73 +1,50 @@
 ## Trong hợp đồng
 
-### Assertion một chiều: đường ghi chỉ đo nhánh "được phép", không có chiều đối chứng
-- file: `apps/agent/test/builder-runtime.integration.spec.ts:100`
-- severity: high
-- AC: AC-1
-- source: measurement
+- **Fixture VIẾT TAY đúng khuôn bên đọc — bản ghi quyền bịa tại chỗ thay vì gọi buildPendingInputRequest**
+  file: `apps/agent/test/custom-agent-runtime.spec.ts:75`
+  severity: low
+  source: measurement
+  AC: AC-3
+  Dòng 75-91: hai assert mới gọi `commandTypeFromAuthorization({ kind: "question", requestId: "question-1", prompt: "Which one", options: [], [BUILDER_AUTHORIZATION_KEY]: true })` (và bản `false`) trên một object literal viết thẳng trong bài đo. File chỉ import `BUILDER_AUTHORIZATION_KEY` + `commandTypeFromAuthorization` (bên ĐỌC), không import `buildPendingInputRequest` (bên GHI) — nên đây là fixture dựng đúng khuôn reader, không phải bản ghi rút-từ-writer-đọc-bằng-reader.
 
-E1 của quyen-luot-mang-theo hứa: "CAP HAI CHIEU tren CUNG mot fixture ctx, khac dung MOT truong (commandType). Doi mot truong ma ban ghi khong lat -> ma 1". Nhưng cả 6 lời gọi persistBuilderInputRequest trong file (dòng 100, 136, 140, 143, 201, 215) đều truyền `true` cho tham số `authorized` mới, và cả 3 assert đọc lại hàng trong DB (dòng 109, 163, 234) đều mong `[BUILDER_AUTHORIZATION_KEY]: true`. Không có một lượt nào truyền `false`. Đây là hình dạng 4 — assertion một-mình-một-chiều, không đối chứng. Hệ quả cụ thể: nếu apps/agent/agent/lib/builder-input.ts dòng 91-94 bị viết thành `buildPendingInputRequest(question, true)` (bỏ qua tham số `authorized`), toàn bộ file test này vẫn xanh, trong khi đúng lỗ hổng mà AC-1 sinh ra để chặn — lượt hỏi không được phép vẫn ghi bản ghi mang quyền — lọt nguyên. Chiều "khác đúng một trường" mà eval bắt buộc chưa được cài ở đường ghi (đường đọc của apps/api thì có đủ hai chiều tại conversations.spec.ts dòng 685 và 755).
+  Đối chiếu ngay trong cùng diff: apps/api/test/conversations.spec.ts và apps/agent/test/quyen-luot.spec.ts đều đã chuyển sang dựng bản ghi bằng `buildPendingInputRequest(...)`, và E1 của _acceptance/quyen-luot-mang-theo/evals.yaml ghim rõ "Fixture dung tay dung khuon ben doc -> ma 2". Chỗ này là chỗ duy nhất còn bịa.
 
-Vì sao map AC-1: AC-1 đòi rõ hai chiều dùng chung một fixture, khác đúng một trường (authorized true/false); finding chỉ ra cả 6 lời gọi đều truyền true, chiều đỏ hoàn toàn vắng mặt.
+  Hệ quả: `buildPendingInputRequest` còn làm một việc nữa là `askedQuestion.safeParse` rồi NÉM nếu câu hỏi sai khuôn (packages/validation/src/builder-question.ts:56-63). Fixture bịa đi vòng qua bước đó, nên nó có thể mã hoá một bản ghi mà đường ghi thật không bao giờ sinh ra được, và mọi thay đổi ở writer (bọc cờ vào nhánh con, đổi hình dạng envelope) sẽ không làm hai assert này đỏ.
 
-### Ma trận lớp khai 3 hình dạng nhưng chỉ có 2: nhánh "thiếu trường quyền" thật ra là trường có mặt = false
-- file: `apps/api/test/quyen-luot.spec.ts:40`
-- severity: high
-- AC: AC-4
-- source: measurement
-
-Test "ba hinh dang nguon quyen khong dung duoc deu cho CHAT" (dòng 37-47) khai đúng ba hình dạng của E4: (i) không có pendingInputRequest, (ii) có nhưng THIẾU trường quyền, (iii) có nhưng SAI KHUÔN. Phần tử thứ hai của mảng `hong` là `cauHoi()` (dòng 40). Nhưng `cauHoi` (dòng 10-21) dựng bằng `buildPendingInputRequest(question, false)`, và hàm đó ở packages/validation/src/builder-question.ts dòng 60 luôn trả `{ ...question, [BUILDER_AUTHORIZATION_KEY]: authorized }` — tức khóa quyền CÓ mặt và bằng `false`. Vậy phần tử (ii) không phải "thiếu trường quyền" mà là bản ghi hợp lệ mang quyền phủ định, và nó trùng byte-với-byte trường hợp đã assert ở test trước đó (dòng 30-34: `cauHoi({ [BUILDER_AUTHORIZATION_KEY]: false })` -> CHAT). Hình dạng thật sự nguy hiểm — hàng pendingInputRequest cũ đã nằm trong cơ sở dữ liệu từ trước migration, hoàn toàn KHÔNG có khóa quyền — không hề được đo. `expect(hong).toHaveLength(3)` ở dòng 39 đếm chính mảng vừa dựng nên nó vẫn xanh và tạo cảm giác ma trận đã đủ (hình dạng 5). So sánh: cùng ba hình dạng ấy ở apps/agent/test/quyen-luot.spec.ts dòng 32-35 làm đúng — phần tử (ii) là object literal viết tay KHÔNG có khóa quyền.
-
-Vì sao map AC-4: AC-4 đòi đúng ba hình dạng riêng biệt (không có bản ghi · thiếu trường quyền · sai khuôn); finding chỉ ra hình dạng "thiếu trường quyền" thực chất trùng với hình dạng "có trường quyền=false" đã đo ở chỗ khác, nên một trong ba hình dạng bắt buộc không được đo.
-
-### Tuyên "đếm trên đĩa" nhưng chỉ quét danh sách hai file viết cứng
-- file: `apps/agent/test/quyen-luot.spec.ts:93`
-- severity: medium
-- AC: AC-5
-- source: measurement
-
-E5 khai sàn dân số: "dem tren dia so cho suy quyen tu hinh dang tin nhan phai bang 0; khac 0 -> ma 2, IN file:dong". Test "suy-dien: dem tren dia..." (dòng 81-107) không quét cây nguồn: `soi` ở dòng 93-96 là mảng literal đúng hai đường dẫn (`../agent/lib/custom-agent-dispatch.ts`, `../agent/lib/builder-input.ts`), và `expect(soi).toHaveLength(2)` là phép đếm trên chính mảng vừa viết ra, luôn đúng. Đây là hình dạng 5: lời hứa quét LỚP ("trên đĩa") nhưng phép đo là điểm-case trên hai file được chọn tay. Hệ quả: lối suy quyền từ hình dạng tin nhắn (`requestId && (optionId || text) ? "CREATE_AGENT" : ...`) mọc lại ở bất kỳ file thứ ba nào — kể cả một file khác trong apps/agent, hay apps/api/src/conversations/conversations.service.ts — đều không bị bắt, trong khi phép đo vẫn báo 0. Phần đối chứng dương của test thì làm đúng (dòng 88-90 chạy regex trên chuỗi mẫu `chung` và bắt buộc khớp 1 lần), nên chỉ riêng dân số là chỗ hở.
-
-Vì sao map AC-5: AC-5 đòi sàn dân số là phép đếm trên đĩa số chỗ suy quyền từ hình dạng tin nhắn; finding chỉ ra phép đếm thực chất là mảng hai đường dẫn viết tay, không quét cây nguồn, nên không bắt được chỗ suy quyền mới mọc lại ở file thứ ba.
+  Rationale khớp AC: AC-3 nêu đúng sàn khuôn này: "bản ghi dựng bằng object literal viết tay thay vì hàm dựng chung → mã 2" — file này dựng bản ghi quyền bằng object literal thay vì gọi buildPendingInputRequest, đúng hình dạng thất bại AC-3 đã đặt tên.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **Chốt "phải save trước final_output" nay khoá theo quyền chứ không theo status, nên draft_ready bịa vẫn lọt**
-  Người dùng thấy gì: Khi một yêu cầu bị từ chối quyền, hệ thống vẫn có thể báo với người dùng rằng bản nháp agent đã sẵn sàng để duyệt dù chưa có gì được lưu thật, khiến người dùng duyệt nhầm một bản nháp không tồn tại.
-  file: `apps/agent/agent/subagents/agent_builder/lib/execution-state.ts`
-  severity: medium
-  Đề xuất: new-contract
-
-- **buildPendingInputRequest parse lại một domain type đã parse, và throw nằm trong transaction**
-  Người dùng thấy gì: Nếu hai định nghĩa mô tả câu hỏi lệch khỏi nhau, một câu hỏi hợp lệ có thể bị từ chối lưu và cả nhật ký liên quan cũng bị huỷ theo, dù rủi ro này chưa xảy ra với dữ liệu hiện tại.
-  file: `apps/agent/agent/lib/builder-input.ts`
-  severity: low
+- **pendingInputRequest bị parse hai lần bằng hai schema khác nhau — trái luật "parse ở biên, một module sở hữu một shape"**
+  Người dùng thấy gì: Nếu sau này ai đó đổi cấu trúc dữ liệu câu hỏi đang chờ trả lời, phần quyết định có cho tạo tác nhân hay không có thể ngưng hoạt động đúng mà không ai nhận ra ngay, vì thông tin này đang được đọc lại rời rạc ở hai chỗ khác nhau trong cùng một luồng xử lý.
+  file: `apps/api/src/conversations/conversations.service.ts`
+  severity: high
   Đề xuất: known-limits
 
-- **Hàm "không nuốt lỗi" readBuilderAuthorization không có người gọi nào trong code chạy thật**
-  Người dùng thấy gì: Không ảnh hưởng người dùng hiện tại vì đường xử lý thật vẫn tự động từ chối an toàn khi dữ liệu sai khuôn; đây chỉ là một khoảng hở trong cách kiểm thử, chưa phải hành vi sai trên sản phẩm.
+- **buildPendingInputRequest validate rồi vứt kết quả parse, trả về T thô**
+  Người dùng thấy gì: Dữ liệu câu hỏi được lưu xuống có thể chưa được làm sạch đầy đủ trước khi lưu, nên các phần khác của hệ thống đọc lại dữ liệu này về sau có thể thấy thông tin không hoàn toàn nhất quán với những gì đáng lẽ được chuẩn hoá.
   file: `packages/validation/src/builder-question.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Lượt không được phép có thể trả draft_ready mà chưa lưu gì — chốt cơ học duy nhất đã bị tắt**
-  Người dùng thấy gì: Trên một yêu cầu bị từ chối quyền, hệ thống agent vẫn có thể báo bản nháp đã sẵn sàng để người dùng duyệt trong khi không có gì thật sự được lưu, dẫn đến việc duyệt một bản nháp không tồn tại.
+- **Shape not_authorized khai hai nơi, sẽ trôi khỏi nhau**
+  Người dùng thấy gì: Nếu sau này tên trạng thái "bị từ chối quyền" của tác nhân dựng agent bị đổi ở một chỗ mà quên đổi chỗ còn lại, hội thoại có thể lại bị kẹt mãi ở trạng thái đang xử lý không bao giờ dừng, giống sự cố đã từng xảy ra trước đây.
   file: `apps/agent/agent/subagents/agent_builder/lib/execution-state.ts`
-  severity: medium
-  Đề xuất: new-contract
-
-- **commandType vẫn do client tự khai trên createBuilder/submitBuilder — chuỗi quyền mới không chặn đường này**
-  Người dùng thấy gì: Bất kỳ thành viên nào trong workspace cũng có thể tự đánh dấu một tin nhắn trò chuyện bình thường thành yêu cầu tạo agent đã được duyệt, khiến hệ thống thực hiện một hành động lẽ ra cần được cấp quyền rõ ràng.
-  file: `apps/api/src/conversations/conversations.contracts.ts`
-  severity: low
-  Đề xuất: new-contract
-
-- **Dân số ma trận purpose là hằng viết tay, sàn dân số mà E4 đòi chỉ là phép đếm tự quy chiếu**
-  Người dùng thấy gì: Nếu sau này hệ thống có thêm một loại phiên làm việc mới, phép kiểm tra quyền tương ứng cho loại phiên đó có thể không được kiểm tra dù báo cáo kiểm thử vẫn hiện xanh.
-  file: `apps/agent/test/chan-uy-thac.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 4/9 lỗi rơi vào file không bộ đo nào phủ (apps/agent/agent/subagents/agent_builder/lib/execution-state.ts, apps/api/src/conversations/conversations.contracts.ts, apps/agent/test/chan-uy-thac.spec.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+- **Hai bài test quét văn bản mã nguồn bằng regex, một bài còn với sang app khác**
+  Người dùng thấy gì: Một số phép đo tự động chỉ kiểm tra hình dạng chữ trong mã nguồn thay vì chạy thử hành vi thật, và một phép đo còn phải mở sang bộ mã của ứng dụng khác để đếm — nên nếu sau này có người viết lại đúng logic đó theo cách khác, phép đo có thể báo nhầm là lỗi, hoặc vỡ khi hai ứng dụng được tách triển khai riêng hẳn.
+  file: `apps/agent/test/quyen-luot.spec.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **Trần một-lần-uỷ-thác bị tắt đúng trên lượt không có quyền — nhánh not_authorized không có chốt cứng**
+  Người dùng thấy gì: Khi tác nhân dựng agent bị từ chối quyền, hệ thống cha có thể thử gọi lại nhiều lần trong cùng một lượt vì không có gì chặn cứng việc gọi lại — chỉ có lời khuyên trong chỉ dẫn nói đừng thử lại — nên mỗi lượt bị từ chối có thể tốn thêm thời gian chờ và chi phí xử lý không cần thiết.
+  file: `apps/agent/agent/hooks/builder-delegation.ts`
+  severity: medium
+  Đề xuất: new-contract
+
+⚠ Cụm ngoài vùng phủ: 3/6 lỗi rơi vào file không bộ đo nào phủ (apps/agent/agent/subagents/agent_builder/lib/execution-state.ts, apps/agent/agent/hooks/builder-delegation.ts, apps/agent/test/custom-agent-runtime.spec.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
