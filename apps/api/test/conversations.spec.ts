@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { DEFAULT_WORKSPACE_NAME, WORKSPACE_ID } from "@crm/auth";
 import { db } from "@crm/db";
 import { workspaceSlug } from "@crm/db/workspace";
+import { BUILDER_AUTHORIZATION_KEY } from "@crm/validation/builder-question";
 import { z } from "zod";
 import {
 	builderConversationCreateInput,
@@ -704,6 +705,7 @@ describe("ConversationsService", () => {
 					prompt: "Where should this go?",
 					display: "select",
 					options: [{ id: "crm-task", label: "Create a CRM task" }],
+					[BUILDER_AUTHORIZATION_KEY]: true,
 				},
 			},
 		});

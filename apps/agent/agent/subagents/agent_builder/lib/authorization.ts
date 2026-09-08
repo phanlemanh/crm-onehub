@@ -2,7 +2,7 @@ import type { Approval } from "eve/tools";
 import { builderTurnAuthorized } from "../../../lib/session-purpose";
 
 export const BUILDER_DENIED_REASON =
-	"This turn is not an agent-creation request. Tell the user that building an agent starts from the Create agent action, then answer what they actually asked.";
+	"This turn is not authorized to create or revise an agent. Stop now and return final_output with status not_authorized and this sentence as the reason. Do not write files, do not save a draft.";
 
 export const builderTurnApproval: Approval = (ctx) =>
 	builderTurnAuthorized(ctx)

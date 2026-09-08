@@ -4,6 +4,7 @@ import { readAgentManifestSummary } from "@crm/validation/agent-manifest";
 import {
 	type BuilderQuestion,
 	builderQuestion,
+	commandTypeFromAuthorization,
 } from "@crm/validation/builder-question";
 import {
 	BadRequestException,
@@ -581,7 +582,9 @@ export class ConversationsService {
 						submittedById: userId,
 						clientRequestId: input.clientRequestId,
 						inputRequestId: input.requestId,
-						commandType: "CREATE_AGENT",
+						commandType: commandTypeFromAuthorization(
+							conversation.pendingInputRequest,
+						),
 						message: {
 							text: displayText,
 							resources: [],

@@ -84,6 +84,79 @@ describe("suy-dien", () => {
 			join(import.meta.dir, "../agent/lib/custom-agent-dispatch.ts"),
 			"utf8",
 		);
-		expect(nguon).not.toContain('? "CREATE_AGENT" :');
+		expect(nguon.includes('? "CREATE_AGENT" :')).toBe(false);
+	});
+});
+
+describe("cua-ra", () => {
+	it("cua-ra: chi dan cua con khai not_authorized, va schema nhan dung ten do", async () => {
+		const chiDan = readFileSync(
+			join(import.meta.dir, "../agent/subagents/agent_builder/instructions.md"),
+			"utf8",
+		);
+		expect(chiDan.includes("not_authorized")).toBe(true);
+		const agentBuilder = (
+			await import("../agent/subagents/agent_builder/agent")
+		).default;
+		expect(
+			agentBuilder.outputSchema.safeParse({
+				status: "not_authorized",
+				reason: "khong duoc phep",
+			}).success,
+		).toBe(true);
+	});
+
+	it("cua-ra: hang ly do noi voi con, khong noi voi cha", async () => {
+		const { BUILDER_DENIED_REASON } = await import(
+			"../agent/subagents/agent_builder/lib/authorization"
+		);
+		expect(BUILDER_DENIED_REASON.includes("not_authorized")).toBe(true);
+		expect(BUILDER_DENIED_REASON.includes("Tell the user")).toBe(false);
+		expect(
+			BUILDER_DENIED_REASON.includes("answer what they actually asked"),
+		).toBe(false);
+	});
+});
+
+describe("cong-dong", () => {
+	const GHIM =
+		"This turn is not authorized to create or revise an agent. Stop now and return final_output with status not_authorized and this sentence as the reason. Do not write files, do not save a draft.";
+
+	const chuoiQuyen = async (authorized: boolean) => {
+		const { builderSessionAttributes } = await import(
+			"../agent/lib/custom-agent-dispatch"
+		);
+		const { builderTurnApproval } = await import(
+			"../agent/subagents/agent_builder/lib/authorization"
+		);
+		const commandType = commandTypeFromAuthorization(banGhi(authorized));
+		const attributes = builderSessionAttributes({
+			commandType,
+			message: {
+				text: "co",
+				resources: [],
+				inputResponse: { requestId: "req_1", text: "co" },
+			},
+			conversationId: "conv_1",
+			userId: "user_1",
+			submissionId: "sub_1",
+			hasTitle: true,
+		});
+		return builderTurnApproval({
+			session: { auth: { current: { attributes }, initiator: null } },
+			toolName: "inspect_context",
+		});
+	};
+
+	it("cong-dong: ban ghi khong duoc phep -> policy tu choi kem hang ghim", async () => {
+		const { BUILDER_DENIED_REASON } = await import(
+			"../agent/subagents/agent_builder/lib/authorization"
+		);
+		expect(BUILDER_DENIED_REASON).toBe(GHIM);
+		expect(await chuoiQuyen(false)).toEqual({ type: "denied", reason: GHIM });
+	});
+
+	it("cong-dong: ban ghi duoc phep -> policy cho di tiep", async () => {
+		expect(await chuoiQuyen(true)).toBe("not-applicable");
 	});
 });

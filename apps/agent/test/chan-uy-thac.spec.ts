@@ -13,7 +13,7 @@ import { recordBuilderActions } from "../agent/subagents/agent_builder/lib/execu
 const PURPOSES = ["research", "team-agent", "builder"] as const;
 
 const GHIM =
-	"This turn is not an agent-creation request. Tell the user that building an agent starts from the Create agent action, then answer what they actually asked.";
+	"This turn is not authorized to create or revise an agent. Stop now and return final_output with status not_authorized and this sentence as the reason. Do not write files, do not save a draft.";
 
 const boDongImport = (src: string) =>
 	src.replace(/^import[\s\S]*?from\s+"[^"]+";$/gm, "");
