@@ -22,6 +22,8 @@ from listing_crawl.tiers import config
 
 LOGGER = logging.getLogger("listing_crawl")
 
+TEN_TANG = ("cao", "vua", "thap", "ngu")
+
 FIXTURES = Path(__file__).resolve().parent.parent / "tests" / "fixtures"
 PROFILE_FIXTURES = ("profile.html", "profile-b.html")
 
@@ -146,11 +148,53 @@ def paced_fetch(crawler, delay: float, ledger: dict[str, int]):
     return fetch
 
 
+async def gieo_va_cao(
+    fetch, run, settings: dict, limit: int | None, ledger: dict
+) -> tuple[list[dict], dict]:
+    seeds, suc_khoe = await seed_urls(fetch, run, settings, limit)
+    if not seeds:
+        return [], {
+            "gieo": 0,
+            "lay_duoc": 0,
+            "bi_chan": 0,
+            **suc_khoe,
+            **ledger,
+        }
+
+    items: list[dict] = []
+    blocked = 0
+    for url in seeds:
+        result = await fetch(url, run, "ho_so")
+        if not result.success or not result.html:
+            blocked += 1
+            LOGGER.warning("bỏ qua %s: %s", url, result.error_message)
+            continue
+        try:
+            items.append(parse_profile(result.html, next_data_of(result.html)))
+        except ValueError as error:
+            blocked += 1
+            LOGGER.warning("bỏ qua %s: %s", url, error)
+
+    await reveal_phones(
+        fetch,
+        run,
+        items,
+        int(settings["phone_reveal_cap"]),
+        settings["phone_reveal_tiers"],
+    )
+    return items, {
+        "gieo": len(seeds),
+        "lay_duoc": len(items),
+        "bi_chan": blocked,
+        **suc_khoe,
+        **ledger,
+    }
+
+
 async def live_run(limit: int | None) -> tuple[list[dict], dict]:
     from crawl4ai import AsyncWebCrawler, BrowserConfig, CacheMode, CrawlerRunConfig
 
     settings = config()["crawl"]
-    delay = float(settings["request_delay_seconds"])
     ledger = new_ledger()
     run = CrawlerRunConfig(
         cache_mode=CacheMode.BYPASS,
@@ -161,45 +205,8 @@ async def live_run(limit: int | None) -> tuple[list[dict], dict]:
     browser = BrowserConfig(headless=True, enable_stealth=bool(settings["stealth"]))
 
     async with AsyncWebCrawler(config=browser) as crawler:
-        fetch = paced_fetch(crawler, delay, ledger)
-        seeds, suc_khoe = await seed_urls(fetch, run, settings, limit)
-        if not seeds:
-            return [], {
-                "gieo": 0,
-                "lay_duoc": 0,
-                "bi_chan": 0,
-                **suc_khoe,
-                **ledger,
-            }
-
-        items: list[dict] = []
-        blocked = 0
-        for url in seeds:
-            result = await fetch(url, run, "ho_so")
-            if not result.success or not result.html:
-                blocked += 1
-                LOGGER.warning("bỏ qua %s: %s", url, result.error_message)
-                continue
-            try:
-                items.append(parse_profile(result.html, next_data_of(result.html)))
-            except ValueError as error:
-                blocked += 1
-                LOGGER.warning("bỏ qua %s: %s", url, error)
-
-        await reveal_phones(
-            fetch,
-            run,
-            items,
-            int(settings["phone_reveal_cap"]),
-            settings["phone_reveal_tiers"],
-        )
-        return items, {
-            "gieo": len(seeds),
-            "lay_duoc": len(items),
-            "bi_chan": blocked,
-            **suc_khoe,
-            **ledger,
-        }
+        fetch = paced_fetch(crawler, float(settings["request_delay_seconds"]), ledger)
+        return await gieo_va_cao(fetch, run, settings, limit, ledger)
 
 
 async def seed_urls(
@@ -286,7 +293,7 @@ async def seed_urls(
         "trang_danh_ba_doc": doc,
         "trang_danh_ba_rong": rong,
         "trang_danh_ba_hong": hong,
-        "bi_tran_cat": het_tran and rong_lien_tiep == 0 and doc > 0,
+        "bi_tran_cat": het_tran and doc > 0,
     }
 
 
@@ -319,8 +326,7 @@ def summary(items: list[dict], counts: dict) -> dict:
         "tin_dang": spread([item["listingsTotal"] for item in items]),
         "tin_moi_30_ngay": spread([item["listingsNew30d"] for item in items]),
         "phan_bo_tang": {
-            ten: sum(1 for item in items if item["tier"] == ten)
-            for ten in ("cao", "vua", "thap", "ngu")
+            ten: sum(1 for item in items if item["tier"] == ten) for ten in TEN_TANG
         },
     }
 

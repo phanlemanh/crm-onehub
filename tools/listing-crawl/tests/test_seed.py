@@ -296,17 +296,23 @@ class GieoTuDanhBa(unittest.IsolatedAsyncioTestCase):
 
 
 class BanTongKet(unittest.TestCase):
-    def test_bang_dem_muc_du_bon_khoa_va_tong_dung(self):
+    def test_bang_dem_ghim_DU_BON_O_khong_chi_mot_o(self):
+        dan_so = {"cao": 5, "vua": 3, "thap": 2, "ngu": 4}
+        moc = {"cao": 80, "vua": 30, "thap": 5, "ngu": 0}
         items = [
-            {"listingsTotal": t, "listingsNew30d": n, "tier": tier_of(n)}
-            for t, n in ((100, 80), (50, 30), (10, 5), (3, 0))
+            {"listingsTotal": moc[ten] + 1, "listingsNew30d": moc[ten], "tier": tier_of(moc[ten])}
+            for ten, so in dan_so.items()
+            for _ in range(so)
         ]
 
-        bang = summary(items, {"gieo": 4})["phan_bo_tang"]
+        bang = summary(items, {"gieo": len(items)})["phan_bo_tang"]
 
-        self.assertEqual(set(bang), {"cao", "vua", "thap", "ngu"})
+        self.assertEqual(set(bang), set(dan_so))
+        for ten, cho in dan_so.items():
+            self.assertEqual(
+                bang[ten], cho, f"ô «{ten}» đếm {bang[ten]}, phải là {cho}"
+            )
         self.assertEqual(sum(bang.values()), len(items))
-        self.assertEqual(bang["ngu"], 1)
 
     def test_muc_rong_van_co_khoa_voi_gia_tri_khong(self):
         items = [{"listingsTotal": 100, "listingsNew30d": 80, "tier": "cao"}]
