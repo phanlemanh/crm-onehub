@@ -17,14 +17,7 @@
 		{
 			"ten": "so-tien",
 			"vi_sao": "So tien da dinh dang (231 N US$, 11,5 Tr ¥, 120,5 N CA$) — la SO, khong phai nhan. Nhan dien bang cach BOC: tru het chu so, dau cau, khoang trang, roi tru MOT don vi rut gon trong danh sach dong [N · Tr · T · K · M · B]; phan con lai phai la ky hieu tien te hoac ma ba chu. Chuoi khong bi tru gi (con nguyen) KHONG phai so tien.",
-			"don_vi_rut_gon": [
-				"N",
-				"Tr",
-				"T",
-				"K",
-				"M",
-				"B"
-			]
+			"don_vi_rut_gon": ["N", "Tr", "T", "K", "M", "B"]
 		},
 		{
 			"ten": "o-nhap",

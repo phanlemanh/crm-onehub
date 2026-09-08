@@ -261,7 +261,7 @@ executors:
     tq_chu_cung_jsx: node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-cung-lat.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json
     tq_moi_chuoi: node _acceptance/man-cai-dat-noi-tieng-viet/rang/moi-chuoi.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json
     tq_toast: node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json --chan toast && node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/dang-xuat.mjs
-    tq_tieu_de: node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json --chan tieu-de
+    tq_tieu_de: node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json --chan tieu-de && node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/tieu-de-quan-he.mjs
     tq_khai_sinh: node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json
     tq_dan_so_tu_dia: node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json --chan dan-so
     tq_dot_bien: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/dot-bien.mjs
@@ -273,6 +273,8 @@ executors:
     tq_lan_sau_bam: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E2
     tq_lan_du_lieu_nguoi_nhap: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E8
     tq_lan_be_rong_man: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E12
+    tq_tieu_de_quan_he_do: node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/tieu-de-quan-he.mjs --chieu-do
+    tq_mot_bo_thuoc_do: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/mot-bo-thuoc.mjs --chieu-do
     tq_mot_bo_thuoc: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/mot-bo-thuoc.mjs
     tq_trang_thai_rong: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs trang-thai-rong
     tq_be_rong_tien_de: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs be-rong-tien-de

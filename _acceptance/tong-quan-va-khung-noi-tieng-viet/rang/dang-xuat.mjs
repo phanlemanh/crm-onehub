@@ -109,7 +109,9 @@ console.log(
 );
 for (const d of do_) console.log(`DO: ${d}`);
 if (thay.goi === 0) {
-	console.log("KHONG DO DUOC: 0 loi goi toast trong lat — tap rong khong bao gio la dat.");
+	console.log(
+		"KHONG DO DUOC: 0 loi goi toast trong lat — tap rong khong bao gio la dat.",
+	);
 	process.exit(2);
 }
 process.exit(do_.length > 0 ? 1 : 0);

@@ -10,8 +10,8 @@ import {
 	CHI_SO,
 	CHROME,
 	DAU_VIET,
-	datTrinhDuyet,
 	DO_RONG,
+	datTrinhDuyet,
 	docCay,
 	docKhai,
 	GOM,
@@ -40,7 +40,9 @@ const laSoTien = (chu) => {
 	const con = chu
 		.replace(/[\d.,\s\u00a0+\-−%]/g, "")
 		.replace(new RegExp(`^(${DON_VI_RUT_GON.join("|")})`), "");
-	return con !== chu && /^[^\p{L}]*$|^(US\$|CA\$|A\$|NZ\$|HK\$|[A-Z]{3})$/u.test(con);
+	return (
+		con !== chu && /^[^\p{L}]*$|^(US\$|CA\$|A\$|NZ\$|HK\$|[A-Z]{3})$/u.test(con)
+	);
 };
 
 const KHUNG = (await import(`${GOC}/apps/app/lib/messages/khung-ung-dung.ts`))
@@ -63,9 +65,7 @@ async function goiApiTho(cookie, duong, vao) {
 	const url = `${API}/api/trpc/${duong}?input=${encodeURIComponent(JSON.stringify(vao))}`;
 	const res = await fetch(url, { redirect: "manual", headers: mu(cookie) });
 	if (!res.ok)
-		await khongDo(
-			`KHONG DO DUOC: tien de thieu — ${duong} tra ${res.status}.`,
-		);
+		await khongDo(`KHONG DO DUOC: tien de thieu — ${duong} tra ${res.status}.`);
 	return (await res.json()).result.data;
 }
 
@@ -77,7 +77,8 @@ async function moTrang(cookie, slug, duong, tieng, rong) {
 		{ name: cookie.ten, value: cookie.gia, domain: "localhost", path: "/" },
 		{ name: "lang", value: tieng, domain: "localhost", path: "/" },
 	);
-	const duoi = duong === "/" ? "" : duong.startsWith("/?") ? duong.slice(1) : duong;
+	const duoi =
+		duong === "/" ? "" : duong.startsWith("/?") ? duong.slice(1) : duong;
 	const dich = new URL(`/${slug}${duoi}`, APP);
 	const res = await trang.goto(dich.href, {
 		waitUntil: "networkidle0",
@@ -91,7 +92,8 @@ async function moTrang(cookie, slug, duong, tieng, rong) {
 			: ve.pathname.replace(/\/$/, "") !== dich.pathname.replace(/\/$/, "")
 				? `xin ${dich.pathname} nhung dung o ${ve.pathname}`
 				: null;
-	if (loi !== null) return { trang, loi: `KHONG DO DUOC: tien de thieu — ${loi}.` };
+	if (loi !== null)
+		return { trang, loi: `KHONG DO DUOC: tien de thieu — ${loi}.` };
 	await new Promise((r) => setTimeout(r, CHO_LANG));
 	const langThat = await trang.evaluate(() => document.documentElement.lang);
 	if (langThat !== tieng)
@@ -181,11 +183,17 @@ function baVe(ten, hai, boi) {
 	}
 	const k = soCap(hai.vi, hai.en, boi);
 	for (const l of k.lech.slice(0, 5))
-		console.log(`   VE 1 HONG: cap ${l.so} lech duong DOM — vi=${l.vi} · en=${l.en}`);
+		console.log(
+			`   VE 1 HONG: cap ${l.so} lech duong DOM — vi=${l.vi} · en=${l.en}`,
+		);
 	for (const o of k.trung)
-		console.log(`   VE 2 HONG: ${JSON.stringify(o.chu)} giong het hai luot — ${o.khoa}`);
+		console.log(
+			`   VE 2 HONG: ${JSON.stringify(o.chu)} giong het hai luot — ${o.khoa}`,
+		);
 	for (const o of k.khongDau)
-		console.log(`   VE 3 HONG: luot vi khong dau — ${JSON.stringify(o.chu)} — ${o.khoa}`);
+		console.log(
+			`   VE 3 HONG: luot vi khong dau — ${JSON.stringify(o.chu)} — ${o.khoa}`,
+		);
 	hong += k.lech.length + k.trung.length + k.khongDau.length;
 	console.log(
 		`   cap doi chieu=${k.soCap} · lech=${k.lech.length} · giong=${k.trung.length} · khong dau=${k.khongDau.length}`,
@@ -210,9 +218,13 @@ function navKhacNhau(ten, hai) {
 
 function tieuDeHaiLuot(hai) {
 	const { vi, en } = hai.title;
-	console.log(`   document.title: vi=${JSON.stringify(vi)} · en=${JSON.stringify(en)}`);
+	console.log(
+		`   document.title: vi=${JSON.stringify(vi)} · en=${JSON.stringify(en)}`,
+	);
 	if (vi === en || !DAU_VIET.test(vi)) {
-		console.log("   TIEU DE HONG: hai luot phai khac nhau va luot vi phai co dau.");
+		console.log(
+			"   TIEU DE HONG: hai luot phai khac nhau va luot vi phai co dau.",
+		);
 		return 1;
 	}
 	return 0;
@@ -268,9 +280,21 @@ function laiNganKeo(trang, tieng) {
 }
 
 const BE_MAT = [
-	{ ten: "menu tai khoan", duong: "/", rong: RONG, goc: SLOT.menu, lai: laiMenu },
+	{
+		ten: "menu tai khoan",
+		duong: "/",
+		rong: RONG,
+		goc: SLOT.menu,
+		lai: laiMenu,
+	},
 	{ ten: "hop ⌘K", duong: "/", rong: RONG, goc: SLOT.ck, lai: laiCk },
-	{ ten: "ngan keo tren /", duong: "/", rong: HEP, goc: SLOT.nganKeo, lai: laiNganKeo },
+	{
+		ten: "ngan keo tren /",
+		duong: "/",
+		rong: HEP,
+		goc: SLOT.nganKeo,
+		lai: laiNganKeo,
+	},
 	{
 		ten: "ngan keo tren /chat (chi rail)",
 		duong: "/chat",
@@ -310,13 +334,16 @@ async function chanSauBam(cookie, slug) {
 		hong += r.hong + navKhacNhau(b.ten, hai);
 		capTong += r.soCap;
 	}
-	console.log(`\nket qua: ${BE_MAT.length - tuChoi.length}/${BE_MAT.length} be mat · ${capTong} cap · hong=${hong}`);
+	console.log(
+		`\nket qua: ${BE_MAT.length - tuChoi.length}/${BE_MAT.length} be mat · ${capTong} cap · hong=${hong}`,
+	);
 	if (hong > 0) await ket(1);
 	if (tuChoi.length > 0) {
 		for (const t of tuChoi) console.log(`KHONG DO DUOC: ${t}`);
 		await ket(2);
 	}
-	if (capTong === 0) await khongDo("KHONG DO DUOC: 0 cap doi chieu tren ba be mat.");
+	if (capTong === 0)
+		await khongDo("KHONG DO DUOC: 0 cap doi chieu tren ba be mat.");
 	await ket(0);
 }
 
@@ -332,7 +359,11 @@ async function chanTrangThaiRong(cookie, slug) {
 	const { gia: khongDich } = bangKhongDich();
 	const hai = await docHai(cookie, slug, "/?scope=me", RONG, true);
 	if (hai.tuChoi !== undefined) await khongDo(`KHONG DO DUOC: ${hai.tuChoi}`);
-	const r = baVe("man /?scope=me (rong)", hai, boiChung(mienDauCuaLat(), khongDich, hai.langEn));
+	const r = baVe(
+		"man /?scope=me (rong)",
+		hai,
+		boiChung(mienDauCuaLat(), khongDich, hai.langEn),
+	);
 	let hong = r.hong;
 	const m = TONG_QUAN("vi");
 	const cauRong = [
@@ -343,13 +374,25 @@ async function chanTrangThaiRong(cookie, slug) {
 	const co = new Set(hai.vi.map((g) => g.chu));
 	for (const [ten, cau] of cauRong) {
 		const thay = co.has(cau);
-		console.log(`   cau rong ${ten}: ${thay ? "co mat" : "KHONG CO MAT"} — ${JSON.stringify(cau)}`);
+		console.log(
+			`   cau rong ${ten}: ${thay ? "co mat" : "KHONG CO MAT"} — ${JSON.stringify(cau)}`,
+		);
 		if (!thay) hong += 1;
 	}
-	const nguon = readFileSync(`${GOC}/apps/app/app/(app)/[slug]/sales-dashboard.tsx`, "utf8");
-	for (const [ten, khoa] of [["bieu do xu huong", "m.trend.empty"], ["bieu do giai doan", "m.byStage.empty"]]) {
-		const trenMan = co.has(ten === "bieu do xu huong" ? m.trend.empty : m.byStage.empty);
-		const trongMa = new RegExp(`<EmptyChart label=\\{${khoa.replace(/\./g, "\\.")}\\} />`).test(nguon);
+	const nguon = readFileSync(
+		`${GOC}/apps/app/app/(app)/[slug]/sales-dashboard.tsx`,
+		"utf8",
+	);
+	for (const [ten, khoa] of [
+		["bieu do xu huong", "m.trend.empty"],
+		["bieu do giai doan", "m.byStage.empty"],
+	]) {
+		const trenMan = co.has(
+			ten === "bieu do xu huong" ? m.trend.empty : m.byStage.empty,
+		);
+		const trongMa = new RegExp(
+			`<EmptyChart label=\\{${khoa.replace(/\./g, "\\.")}\\} />`,
+		).test(nguon);
 		console.log(
 			`   cau rong ${ten}: ${trenMan ? "co mat tren man" : `khong dung duoc tren man (so lieu ca workspace) — do o muc ma: ${trongMa ? "prop doc tu kho" : "KHONG doc tu kho"}`}`,
 		);
@@ -362,9 +405,13 @@ async function chanTrangThaiRong(cookie, slug) {
 
 async function chanKhongDich(cookie, slug) {
 	const { khai, gia } = bangKhongDich();
-	const tomTat = await goiApiTho(cookie, "dashboard.summary", { scope: "everyone" });
+	const tomTat = await goiApiTho(cookie, "dashboard.summary", {
+		scope: "everyone",
+	});
 	const giaiDoanHien = new Set([
-		...tomTat.pipeline.stages.filter((s) => s.valueCents > 0).map((s) => s.stage),
+		...tomTat.pipeline.stages
+			.filter((s) => s.valueCents > 0)
+			.map((s) => s.stage),
 		...tomTat.biggestOpen.map((d) => d.stage),
 	]);
 	const dat = new Map();
@@ -379,21 +426,32 @@ async function chanKhongDich(cookie, slug) {
 		if (ok) dat.set(gt, d);
 		else khongDo_.push({ gt, d });
 	}
-	console.log(`-- dieu kien: ${dat.size} dong dat · ${khongDo_.length} dong khong dung duoc tren man (do o muc ma)`);
-	const nguonGiaiDoan = readFileSync(`${GOC}/apps/app/app/(app)/[slug]/sales-dashboard.tsx`, "utf8");
+	console.log(
+		`-- dieu kien: ${dat.size} dong dat · ${khongDo_.length} dong khong dung duoc tren man (do o muc ma)`,
+	);
+	const nguonGiaiDoan = readFileSync(
+		`${GOC}/apps/app/app/(app)/[slug]/sales-dashboard.tsx`,
+		"utf8",
+	);
 	let hongMa = 0;
 	for (const { gt, d } of khongDo_) {
 		const coLangEn =
 			d.stage !== undefined
 				? /lang="en"[\s\S]{0,80}\{slice\.label\}/.test(nguonGiaiDoan)
-				: /m\.unconverted\.sentence\([\s\S]{0,200}reportingCurrency/.test(nguonGiaiDoan);
-		console.log(`   KHONG DO DUOC TREN MAN: ${JSON.stringify(gt)} — ${d.dieu_kien} · muc ma: ${coLangEn ? (d.stage !== undefined ? "phan tu render mang lang=en" : "gia tri la tham so cua cau, khong phai chu dich") : "KHONG dat"}`);
+				: /m\.unconverted\.sentence\([\s\S]{0,200}reportingCurrency/.test(
+						nguonGiaiDoan,
+					);
+		console.log(
+			`   KHONG DO DUOC TREN MAN: ${JSON.stringify(gt)} — ${d.dieu_kien} · muc ma: ${coLangEn ? (d.stage !== undefined ? "phan tu render mang lang=en" : "gia tri la tham so cua cau, khong phai chu dich") : "KHONG dat"}`,
+		);
 		if (!coLangEn) hongMa += 1;
 	}
 	const hai = await docHai(cookie, slug, "/?scope=everyone", RONG, true);
 	if (hai.tuChoi !== undefined) await khongDo(`KHONG DO DUOC: ${hai.tuChoi}`);
 	if (hai.vi.length !== hai.en.length) {
-		console.log(`DO: hai luot lech so phan tu (vi=${hai.vi.length}, en=${hai.en.length}) — tap ung vien khong doi xung.`);
+		console.log(
+			`DO: hai luot lech so phan tu (vi=${hai.vi.length}, en=${hai.en.length}) — tap ung vien khong doi xung.`,
+		);
 		await ket(1);
 	}
 	const ung = new Map();
@@ -402,22 +460,47 @@ async function chanKhongDich(cookie, slug) {
 		const b = hai.en[i];
 		const kd = a.khongDich || b.khongDich;
 		if (!kd && !(a.khoa === b.khoa && a.chu === b.chu)) continue;
-		if (CHI_SO.test(a.chu) || laSoTien(a.chu) || kd || hai.langEn.has(a.chu) || a.khoa.endsWith("@value")) continue;
+		if (
+			CHI_SO.test(a.chu) ||
+			laSoTien(a.chu) ||
+			kd ||
+			hai.langEn.has(a.chu) ||
+			a.khoa.endsWith("@value")
+		)
+			continue;
 		ung.set(a.chu, (ung.get(a.chu) ?? 0) + 1);
 	}
 	console.log(`-- ung vien sinh tu man (sau ba luat): ${ung.size} gia tri`);
 	const thua = [...ung.keys()].filter((v) => !dat.has(v));
-	const thieu = [...dat.keys()].filter((v) => !ung.has(v) && !hai.langEn.has(v));
-	for (const v of thua) console.log(`THUA: man co ${JSON.stringify(v)} ma bang khong khai`);
-	for (const v of thieu) console.log(`THIEU: bang khai ${JSON.stringify(v)} (dieu kien dat) ma man khong co`);
-	const giaiDoanTrenMan = [...dat.values()].filter((d) => d.stage !== undefined && hai.langEn.has(d.gia_tri)).length;
-	console.log(`-- nhan giai doan mang lang=en tren man: ${giaiDoanTrenMan}/${[...dat.values()].filter((d) => d.stage !== undefined).length}`);
-	const giaiDoanThieuLangEn = [...dat.values()].filter((d) => d.stage !== undefined && !hai.langEn.has(d.gia_tri));
-	for (const d of giaiDoanThieuLangEn) console.log(`DO: ${JSON.stringify(d.gia_tri)} hien tren man ma khong nam trong phan tu lang=en`);
-	console.log(`\nket qua: thua=${thua.length} · thieu=${thieu.length} · giai doan thieu lang=en=${giaiDoanThieuLangEn.length} · muc ma hong=${hongMa}`);
+	const thieu = [...dat.keys()].filter(
+		(v) => !ung.has(v) && !hai.langEn.has(v),
+	);
+	for (const v of thua)
+		console.log(`THUA: man co ${JSON.stringify(v)} ma bang khong khai`);
+	for (const v of thieu)
+		console.log(
+			`THIEU: bang khai ${JSON.stringify(v)} (dieu kien dat) ma man khong co`,
+		);
+	const giaiDoanTrenMan = [...dat.values()].filter(
+		(d) => d.stage !== undefined && hai.langEn.has(d.gia_tri),
+	).length;
+	console.log(
+		`-- nhan giai doan mang lang=en tren man: ${giaiDoanTrenMan}/${[...dat.values()].filter((d) => d.stage !== undefined).length}`,
+	);
+	const giaiDoanThieuLangEn = [...dat.values()].filter(
+		(d) => d.stage !== undefined && !hai.langEn.has(d.gia_tri),
+	);
+	for (const d of giaiDoanThieuLangEn)
+		console.log(
+			`DO: ${JSON.stringify(d.gia_tri)} hien tren man ma khong nam trong phan tu lang=en`,
+		);
+	console.log(
+		`\nket qua: thua=${thua.length} · thieu=${thieu.length} · giai doan thieu lang=en=${giaiDoanThieuLangEn.length} · muc ma hong=${hongMa}`,
+	);
 	if (thua.length + giaiDoanThieuLangEn.length + hongMa > 0) await ket(1);
 	if (thieu.length > 0) await ket(2);
-	if (khai.dong.length === 0) await khongDo("KHONG DO DUOC: bang khong-dich rong.");
+	if (khai.dong.length === 0)
+		await khongDo("KHONG DO DUOC: bang khong-dich rong.");
 	await ket(0);
 }
 
@@ -427,8 +510,20 @@ function bocTranslateNo(file, bieuThuc) {
 	const ra = [];
 	const mang = (n) => {
 		for (let e = n; e; e = e.parent) {
-			const mo = ts.isJsxElement(e) ? e.openingElement : ts.isJsxSelfClosingElement(e) ? e : null;
-			if (mo && mo.attributes.properties.some((p) => ts.isJsxAttribute(p) && p.name.getText(nguon) === "translate" && p.initializer?.getText(nguon) === '"no"'))
+			const mo = ts.isJsxElement(e)
+				? e.openingElement
+				: ts.isJsxSelfClosingElement(e)
+					? e
+					: null;
+			if (
+				mo &&
+				mo.attributes.properties.some(
+					(p) =>
+						ts.isJsxAttribute(p) &&
+						p.name.getText(nguon) === "translate" &&
+						p.initializer?.getText(nguon) === '"no"',
+				)
+			)
 				return true;
 		}
 		return false;
@@ -439,7 +534,10 @@ function bocTranslateNo(file, bieuThuc) {
 			(ts.isJsxElement(n.parent) || ts.isJsxFragment(n.parent)) &&
 			n.expression?.getText(nguon) === bieuThuc
 		)
-			ra.push({ dong: nguon.getLineAndCharacterOfPosition(n.getStart(nguon)).line + 1, co: mang(n) });
+			ra.push({
+				dong: nguon.getLineAndCharacterOfPosition(n.getStart(nguon)).line + 1,
+				co: mang(n),
+			});
 		ts.forEachChild(n, di);
 	};
 	di(nguon);
@@ -454,27 +552,43 @@ async function chanDuLieuNguoiNhap(cookie, slug) {
 	for (const o of bang.o) {
 		const thay = bocTranslateNo(o.file, o.bieu_thuc);
 		if (thay.length === 0) {
-			console.log(`   KHONG DO DUOC: ${o.file} khong con JSX nao boc ${JSON.stringify(o.bieu_thuc)} — ban khai da cu`);
+			console.log(
+				`   KHONG DO DUOC: ${o.file} khong con JSX nao boc ${JSON.stringify(o.bieu_thuc)} — ban khai da cu`,
+			);
 			chet += 1;
 			continue;
 		}
 		for (const t of thay) {
-			console.log(`   ${t.co ? "co  " : "THIEU"} translate="no" — ${o.file}:${t.dong} boc ${JSON.stringify(o.bieu_thuc)}`);
+			console.log(
+				`   ${t.co ? "co  " : "THIEU"} translate="no" — ${o.file}:${t.dong} boc ${JSON.stringify(o.bieu_thuc)}`,
+			);
 			if (!t.co) thieuMa += 1;
 		}
 	}
 	if (chet > 0) await ket(2);
-	console.log("\n-- CHAN MAN: vat san co tren workspace, gia tri lay tu API trong cung luot");
+	console.log(
+		"\n-- CHAN MAN: vat san co tren workspace, gia tri lay tu API trong cung luot",
+	);
 	const ws = await goiApiTho(cookie, "workspace.get", undefined);
-	const tomTat = await goiApiTho(cookie, "dashboard.summary", { scope: "everyone" });
+	const tomTat = await goiApiTho(cookie, "dashboard.summary", {
+		scope: "everyone",
+	});
 	const NGUON = {
 		"workspace.get.name": ws.name,
 		"phien.email": process.env.NGUOI ?? "dev@localhost",
-		"phien.chuCaiDau": (process.env.NGUOI ?? "dev@localhost").split("@")[0].split(" ").map((p) => p[0]).filter(Boolean).slice(0, 2).join("").toUpperCase(),
+		"phien.chuCaiDau": (process.env.NGUOI ?? "dev@localhost")
+			.split("@")[0]
+			.split(" ")
+			.map((p) => p[0])
+			.filter(Boolean)
+			.slice(0, 2)
+			.join("")
+			.toUpperCase(),
 		"biggestOpen[0].name": tomTat.biggestOpen[0]?.name,
 		"biggestOpen[0].company.name": tomTat.biggestOpen[0]?.company?.name,
 		"overdueTasks[0].subject": tomTat.overdueTasks[0]?.subject,
-		"recentActivity[0].createdBy.name": tomTat.recentActivity[0]?.createdBy?.name,
+		"recentActivity[0].createdBy.name":
+			tomTat.recentActivity[0]?.createdBy?.name,
 		"recentActivity[0].subject": tomTat.recentActivity[0]?.subject ?? undefined,
 	};
 	const mo = await moTrang(cookie, slug, "/?scope=everyone", "vi", RONG);
@@ -494,22 +608,32 @@ async function chanDuLieuNguoiNhap(cookie, slug) {
 		const gt = NGUON[o.nguon_san];
 		if (gt === undefined || gt === null || gt === "") {
 			khongDoDuoc += 1;
-			console.log(`   KHONG DO TREN MAN: ${o.truong} — nguon ${o.nguon_san} rong tren workspace nay`);
+			console.log(
+				`   KHONG DO TREN MAN: ${o.truong} — nguon ${o.nguon_san} rong tren workspace nay`,
+			);
 			continue;
 		}
-		const cho = gia.filter((g) => g.chu === String(gt).replace(/\s+/g, " ").trim());
+		const cho = gia.filter(
+			(g) => g.chu === String(gt).replace(/\s+/g, " ").trim(),
+		);
 		if (cho.length === 0) {
-			console.log(`   DO: ${o.truong} = ${JSON.stringify(gt)} co o API ma khong hien tren man`);
+			console.log(
+				`   DO: ${o.truong} = ${JSON.stringify(gt)} co o API ma khong hien tren man`,
+			);
 			thieuMan += 1;
 			continue;
 		}
 		doDuoc += 1;
 		for (const c of cho) {
-			console.log(`   ${c.khongDich ? "co  " : "THIEU"} translate="no" — ${o.truong} ${c.khoa} = ${JSON.stringify(c.chu)}`);
+			console.log(
+				`   ${c.khongDich ? "co  " : "THIEU"} translate="no" — ${o.truong} ${c.khoa} = ${JSON.stringify(c.chu)}`,
+			);
 			if (!c.khongDich) thieuMan += 1;
 		}
 	}
-	console.log(`\nket qua: chan ma thieu=${thieuMa} · chan man do duoc=${doDuoc} · khong do duoc=${khongDoDuoc} · thieu tren man=${thieuMan} · dong bang=${bang.o.length}`);
+	console.log(
+		`\nket qua: chan ma thieu=${thieuMa} · chan man do duoc=${doDuoc} · khong do duoc=${khongDoDuoc} · thieu tren man=${thieuMan} · dong bang=${bang.o.length}`,
+	);
 	if (thieuMa + thieuMan > 0) await ket(1);
 	if (doDuoc + khongDoDuoc !== bang.o.length) {
 		console.log("KHONG DO DUOC: do duoc + khong do duoc != so dong bang.");
@@ -550,7 +674,9 @@ async function chanBeRong(cookie, slug) {
 			tuChoi.push(b.ten);
 			continue;
 		}
-		const cap = [...hai.vi.keys()].filter((k) => hai.en.has(k) && hai.en.get(k).chu !== hai.vi.get(k).chu);
+		const cap = [...hai.vi.keys()].filter(
+			(k) => hai.en.has(k) && hai.en.get(k).chu !== hai.vi.get(k).chu,
+		);
 		console.log(`\n-- ${b.ten} o ${HEP}px · nhan dich duoc=${cap.length}`);
 		nhan += cap.length;
 		for (const k of cap) {
@@ -560,15 +686,21 @@ async function chanBeRong(cookie, slug) {
 			const tb = c.scrollWidth > c.clientWidth;
 			if (ta && tb) {
 				caHai += 1;
-				console.log(`   TRAN CA HAI LUOT: ${JSON.stringify(a.chu)} — vi ${a.scrollWidth}/${a.clientWidth} · en ${c.scrollWidth}/${c.clientWidth} — ${k}`);
+				console.log(
+					`   TRAN CA HAI LUOT: ${JSON.stringify(a.chu)} — vi ${a.scrollWidth}/${a.clientWidth} · en ${c.scrollWidth}/${c.clientWidth} — ${k}`,
+				);
 			} else if (ta) {
 				viTran += 1;
-				console.log(`   TRAN: ${JSON.stringify(a.chu)} — vi ${a.scrollWidth}/${a.clientWidth}px · en ${c.scrollWidth}/${c.clientWidth}px vua — ${k}`);
+				console.log(
+					`   TRAN: ${JSON.stringify(a.chu)} — vi ${a.scrollWidth}/${a.clientWidth}px · en ${c.scrollWidth}/${c.clientWidth}px vua — ${k}`,
+				);
 			}
 		}
 	}
 	console.log(`\nGIOI HAN KE THUA: mu voi vung chua cho xuong dong.`);
-	console.log(`ket qua ${HEP}px: ${nhan} nhan dich duoc · vi tran ma en vua=${viTran} · tran ca hai=${caHai} · tu choi=${tuChoi.length}`);
+	console.log(
+		`ket qua ${HEP}px: ${nhan} nhan dich duoc · vi tran ma en vua=${viTran} · tran ca hai=${caHai} · tu choi=${tuChoi.length}`,
+	);
 	if (viTran + caHai > 0) await ket(1);
 	if (nhan === 0) await khongDo(`KHONG DO DUOC: 0 nhan dich duoc o ${HEP}px.`);
 	if (tuChoi.length > 0) await ket(2);
@@ -585,7 +717,10 @@ async function chanGocThuoc(cookie, slug) {
 		DO_RONG: [ws.name],
 	};
 	let hong = 0;
-	for (const [ten, HAM] of [["GOM", GOM], ["DO_RONG", DO_RONG]]) {
+	for (const [ten, HAM] of [
+		["GOM", GOM],
+		["DO_RONG", DO_RONG],
+	]) {
 		const a = await mo.trang.evaluate(HAM);
 		const b = await mo.trang.evaluate(HAM, false);
 		const c = await mo.trang.evaluate(HAM, true);
@@ -602,11 +737,15 @@ async function chanGocThuoc(cookie, slug) {
 		}
 		if (cuThay.length > 0) {
 			hong += 1;
-			console.log(`   DO ${ten}: goc cu thay thanh dau — ${cuThay.join(" · ")}`);
+			console.log(
+				`   DO ${ten}: goc cu thay thanh dau — ${cuThay.join(" · ")}`,
+			);
 		}
 		if (moiThay.length < MOC[ten].length) {
 			hong += 1;
-			console.log(`   DO ${ten}: goc moi thieu ${MOC[ten].filter((m) => !moiThay.includes(m)).join(" · ")}`);
+			console.log(
+				`   DO ${ten}: goc moi thieu ${MOC[ten].filter((m) => !moiThay.includes(m)).join(" · ")}`,
+			);
 		}
 	}
 	await mo.trang.close();
@@ -632,7 +771,9 @@ const HOP_CO_TRAN = (duoi) => {
 			(n) => n.nodeType === 3 && (n.nodeValue ?? "").trim() !== "",
 		);
 		if (nut.length === 0) continue;
-		const chu = nut.map((n) => n.nodeValue.replace(/\s+/g, " ").trim()).join(" ");
+		const chu = nut
+			.map((n) => n.nodeValue.replace(/\s+/g, " ").trim())
+			.join(" ");
 		const giu = nut[0].nodeValue;
 		nut[0].nodeValue = `${giu}${duoi}`;
 		const tran = el.scrollWidth > el.clientWidth;
@@ -685,7 +826,8 @@ async function chanBeRongTienDe(cookie, slug) {
 			`-- ${b.ten} o ${HEP}px: ${hop.length} hop chat cung mang chu · ${hop.filter((h) => h.tran).length} hop tran khi noi chu`,
 		);
 	}
-	for (const v of tranDuoc) console.log(`   NHAN CUA LAT TRAN DUOC KHI NOI CHU: ${v}`);
+	for (const v of tranDuoc)
+		console.log(`   NHAN CUA LAT TRAN DUOC KHI NOI CHU: ${v}`);
 	console.log(
 		`\nket qua: ${cuaLat}/${tong} hop chat cung mang nhan cua lat · ${tranDuoc.length} trong so do TRAN DUOC khi noi chu. ${tranDuoc.length === 0 ? "Chieu do cua chan be-rong KHONG CO DOI TUONG o lat nay: moi nhan cua lat nam trong hop tu nong ra hoac cho xuong dong, nen mot nhan dai chi lam hop rong ra chu khong bao gio tran." : "Chieu do co doi tuong — cam vet vao mot trong cac nhan tren."}`,
 	);
@@ -705,7 +847,9 @@ const BO_CHAN = {
 
 const chan = process.argv[2] ?? "";
 if (BO_CHAN[chan] === undefined) {
-	console.log(`KHONG DO DUOC: chan phai la mot trong: ${Object.keys(BO_CHAN).join(" | ")}. Nhan duoc: ${JSON.stringify(chan)}`);
+	console.log(
+		`KHONG DO DUOC: chan phai la mot trong: ${Object.keys(BO_CHAN).join(" | ")}. Nhan duoc: ${JSON.stringify(chan)}`,
+	);
 	process.exit(2);
 }
 
@@ -717,5 +861,7 @@ TD = await puppeteer.launch({
 	args: ["--no-sandbox", `--window-size=${RONG},${CAO}`],
 });
 datTrinhDuyet(TD);
-console.log(`-- kho ${GOC} · workspace "${slug}" · lat ${KHAI.lat} · chan ${chan}`);
+console.log(
+	`-- kho ${GOC} · workspace "${slug}" · lat ${KHAI.lat} · chan ${chan}`,
+);
 await BO_CHAN[chan](cookie, slug);

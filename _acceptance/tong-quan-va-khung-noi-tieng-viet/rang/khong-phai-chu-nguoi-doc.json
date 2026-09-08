@@ -1,13 +1,7 @@
 {
 	"lat": "tong-quan-va-khung-noi-tieng-viet",
 	"ghi_chu": "Sinh dan so bang cach lay MOI chuoi roi TRU theo luat CO TEN. Bay danh sach ky thuat chep nguyen tu ③b (chung la luat quet, khong phai du lieu cua lat). giu_nguyen la cua lat nay: moi dong doc trong ngu canh truoc khi khai, dong chet lam chan DO.",
-	"ham_ky_thuat": [
-		"cn",
-		"clsx",
-		"twMerge",
-		"require",
-		"import"
-	],
+	"ham_ky_thuat": ["cn", "clsx", "twMerge", "require", "import"],
 	"giu_nguyen": [
 		{
 			"chu": "px-3 py-2.5 align-middle",
@@ -222,9 +216,6 @@
 	},
 	"mau_ky_thuat": {
 		"ghi_chu": "Chuoi mau chi gom duong dan/URL — khong mang chu nguoi doc. KHONG dung mau nay cho chuoi mau GHEP CAU: nhung cai do phai dich.",
-		"mau": [
-			"^\\$\\{…\\}/",
-			"^https?://"
-		]
+		"mau": ["^\\$\\{…\\}/", "^https?://"]
 	}
 }

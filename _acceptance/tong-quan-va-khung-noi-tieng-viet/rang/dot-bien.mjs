@@ -1,6 +1,9 @@
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { chayDotBien } from "../../man-cai-dat-noi-tieng-viet/rang/dot-bien-lib.mjs";
+import {
+	chanChung,
+	chayDotBien,
+} from "../../man-cai-dat-noi-tieng-viet/rang/dot-bien-lib.mjs";
 
 process.env.NGUOI ??= "dev@localhost";
 
@@ -11,31 +14,7 @@ const MAN = "apps/app/app/(app)/[slug]";
 const KHO_KHUNG = "apps/app/lib/messages/khung-ung-dung.ts";
 
 const CHAN = [
-	{ ten: "moi-chuoi", lenh: [join(DOT_MOT, "moi-chuoi.mjs"), "--lat", KHAI] },
-	{
-		ten: "chu-cung-jsx",
-		lenh: [join(DOT_MOT, "chu-cung-lat.mjs"), "--lat", KHAI],
-	},
-	{
-		ten: "toast",
-		lenh: [
-			join(DOT_MOT, "chu-ngoai-jsx.mjs"),
-			"--chan",
-			"toast",
-			"--lat",
-			KHAI,
-		],
-	},
-	{
-		ten: "tieu-de",
-		lenh: [
-			join(DOT_MOT, "chu-ngoai-jsx.mjs"),
-			"--chan",
-			"tieu-de",
-			"--lat",
-			KHAI,
-		],
-	},
+	...chanChung(DOT_MOT, KHAI),
 	{ ten: "dang-xuat", lenh: [join(HERE, "dang-xuat.mjs")] },
 	{ ten: "hai-tieng", lenh: [join(HERE, "man-that.mjs"), "hai-tieng"] },
 ];

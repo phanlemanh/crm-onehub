@@ -13,7 +13,8 @@ const KHO = [
 	],
 	[
 		"tong-quan",
-		(await import(`${GOC}/apps/app/lib/messages/tong-quan.ts`)).tongQuanMessages,
+		(await import(`${GOC}/apps/app/lib/messages/tong-quan.ts`))
+			.tongQuanMessages,
 	],
 ];
 

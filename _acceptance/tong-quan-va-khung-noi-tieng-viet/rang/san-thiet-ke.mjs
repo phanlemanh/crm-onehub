@@ -1,13 +1,9 @@
 import { execFileSync } from "node:child_process";
-import {
-	existsSync,
-	mkdirSync,
-	readdirSync,
-	writeFileSync,
-} from "node:fs";
+import { existsSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
+import { giuViet } from "../../man-cai-dat-noi-tieng-viet/rang/khoa-cay.mjs";
 import {
 	APP,
 	CAO,
@@ -17,7 +13,6 @@ import {
 	RONG,
 	suySlug,
 } from "../../man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs";
-import { giuViet } from "../../man-cai-dat-noi-tieng-viet/rang/khoa-cay.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(HERE, "../../..");
@@ -56,7 +51,10 @@ function timSan() {
 		const thuMuc = `${nha}/${cho}/acceptance-gate`;
 		if (!existsSync(thuMuc)) continue;
 		for (const v of readdirSync(thuMuc))
-			if (/^\d+\.\d+\.\d+$/.test(v) && existsSync(`${thuMuc}/${v}/scripts/design-gate.mjs`))
+			if (
+				/^\d+\.\d+\.\d+$/.test(v) &&
+				existsSync(`${thuMuc}/${v}/scripts/design-gate.mjs`)
+			)
 				ban.push({ v, duong: `${thuMuc}/${v}/scripts/design-gate.mjs` });
 	}
 	ban.sort((a, b) => soSanh(a.v, b.v));
@@ -215,7 +213,11 @@ const DO_TUONG_PHAN = () => {
 		const r = el.getBoundingClientRect();
 		if (r.width <= 1 || r.height <= 1) continue;
 		const st = getComputedStyle(el);
-		if (st.visibility === "hidden" || st.display === "none" || st.opacity === "0")
+		if (
+			st.visibility === "hidden" ||
+			st.display === "none" ||
+			st.opacity === "0"
+		)
 			continue;
 		const mau = soRGB(st.color);
 		if (!mau) continue;
@@ -281,7 +283,9 @@ try {
 		try {
 			bao = JSON.parse(s.ra);
 		} catch {
-			console.log(`KHONG DO DUOC: ${k.ten} — san khong tra JSON doc duoc (ma ${s.ma}).`);
+			console.log(
+				`KHONG DO DUOC: ${k.ten} — san khong tra JSON doc duoc (ma ${s.ma}).`,
+			);
 			await trinhDuyet.close();
 			process.exit(2);
 		}
@@ -291,7 +295,8 @@ try {
 			`   san thiet ke: ma ${s.ma} · P0 tong ${p0.length} (low-contrast ${p0.length - p0Khac.length} — jsdom mu voi oklch/var, thay bang chan trinh duyet) · P0 khac ${p0Khac.length}`,
 		);
 		for (const f of p0Khac) console.log(`      P0 ${f.rule}: ${f.detail}`);
-		if (p0Khac.length > 0) do_.push(`${k.ten}: ${p0Khac.length} P0 khong phai tuong phan`);
+		if (p0Khac.length > 0)
+			do_.push(`${k.ten}: ${p0Khac.length} P0 khong phai tuong phan`);
 		console.log(
 			`   tuong phan do trong trinh duyet: ${c.viPham.length} cho duoi nguong tren ${c.soChu} phan tu mang chu`,
 		);
@@ -299,9 +304,14 @@ try {
 			console.log(
 				`      DUOI NGUONG ${v.ty}:1 (can ${v.nguong}) — ${JSON.stringify(v.chu)} · ${v.mau} tren ${v.nen}`,
 			);
-		if (c.viPham.length > 0) do_.push(`${k.ten}: ${c.viPham.length} cho tuong phan duoi nguong (do that)`);
+		if (c.viPham.length > 0)
+			do_.push(
+				`${k.ten}: ${c.viPham.length} cho tuong phan duoi nguong (do that)`,
+			);
 		if (c.soChu === 0) {
-			console.log(`KHONG DO DUOC: ${k.ten} — 0 phan tu mang chu de do tuong phan.`);
+			console.log(
+				`KHONG DO DUOC: ${k.ten} — 0 phan tu mang chu de do tuong phan.`,
+			);
 			await trinhDuyet.close();
 			process.exit(2);
 		}
@@ -319,7 +329,9 @@ if (daCham === 0) {
 	process.exit(2);
 }
 if (CHIEU_DO) {
-	const batDuoc = do_.filter((d) => d.includes("tuong phan duoi nguong")).length;
+	const batDuoc = do_.filter((d) =>
+		d.includes("tuong phan duoi nguong"),
+	).length;
 	console.log(
 		`\nCHIEU DO: cam mau chu gan den len tieu de o ca ${KHUNG_HINH.length} khung — chan bao duoi nguong o ${batDuoc} khung.`,
 	);

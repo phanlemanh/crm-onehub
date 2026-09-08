@@ -1,8 +1,6 @@
 {
 	"lat": "tong-quan-va-khung-noi-tieng-viet",
-	"thu_muc": [
-		"apps/app/app/(app)/[slug]"
-	],
+	"thu_muc": ["apps/app/app/(app)/[slug]"],
 	"neo": {
 		"file": 6,
 		"route": 1,

@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-08T07:16:59Z",
-  "generated_sha": "c3df13a2315e9413027693eb8e1c47c7728d8659",
+  "generated_at": "2026-09-08T07:54:23Z",
+  "generated_sha": "c2f9f4989c0198d7e3c6a1d174c4106fec439744",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "tong-quan-va-khung-noi-tieng-viet",
-  "round": 4,
+  "round": 5,
   "riskTier": "T2",
   "evals": [
     {
@@ -36,8 +36,8 @@
     {
       "id": "E2",
       "criterion": "AC-2",
-      "cmd": "NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs sau-bam",
-      "expected": "exit 0. Ba be mat lai ra bang puppeteer: bam avatar → gom DropdownMenuContent;\ngui Meta+K roi GO mot chuoi ≥2 ky tu khong khop (\"zzqx\") → gom CommandDialog\n(cau \"khong khop\" phai co mat); viewport 360 bam nut mo dieu huong → gom\nSheetContent (hai bien the: tren / gom ca ngan keo; tren /chat CHI gom nav rail\ntheo selector ghim, in so chuoi da tru kem ten ho so chu\ncua-so-tro-chuyen-noi-tieng-viet). Moi be mat hai luot tieng, cung ba ve cua E1\ntren tap chu cua rieng be mat do; them mot ve: aria-label cua cac nav cung hien\ntrong be mat KHAC nhau. Be mat khong lai ra duoc la ma 2 goi ten be mat. Chieu\ndo: ghim tieu de hop ⌘K ve \"Search\" o ban vi thi cap trung, chan do goi ten be\nmat \"ck\".",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E2",
+      "expected": "exit 0. Ba be mat lai ra bang puppeteer: bam avatar → gom DropdownMenuContent;\ngui Meta+K roi GO mot chuoi ≥2 ky tu khong khop (\"zzqx\") → gom CommandDialog\n(cau \"khong khop\" phai co mat); viewport 360 bam nut mo dieu huong → gom\nSheetContent (hai bien the: tren / gom ca ngan keo; tren /chat CHI gom nav rail\ntheo selector ghim, in so chuoi da tru kem ten ho so chu\ncua-so-tro-chuyen-noi-tieng-viet). Moi be mat hai luot tieng, cung ba ve cua E1\ntren tap chu cua rieng be mat do; them mot ve: aria-label cua cac nav cung hien\ntrong be mat KHAC nhau. Be mat khong lai ra duoc la ma 2 goi ten be mat. Chieu\ndo: ghim tieu de hop ⌘K ve \"Search\" o ban vi thi cap trung, chan do goi ten be\nmat \"ck\".\nChan nay lai trinh duyet that qua may chu dev dang chay. No khong cam vet, nhung\nno tranh mot tai nguyen duy nhat, va o vong 4 duoi tai 47 tac nhan song song no\nda mot lan nhan ve thuoc tinh ngon ngu rong (E2) va hai lan mat han ket qua\n(E8, E12). Nay no chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot\nchan mot luc. Lenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai,\nchan phai co mat, ma phai 0 va cay phai sach sau khi chay.",
       "executor": "script",
       "paths": [
         "apps/app/components/app-header.tsx",
@@ -53,7 +53,7 @@
         "verified_at",
         "output"
       ],
-      "ref": "config:executors.script.tq_sau_bam"
+      "ref": "config:executors.script.tq_lan_sau_bam"
     },
     {
       "id": "E3",
@@ -169,8 +169,8 @@
     {
       "id": "E8",
       "criterion": "AC-8",
-      "cmd": "NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs du-lieu-nguoi-nhap",
-      "expected": "exit 0. Chan MA: moi o cua du-lieu-nguoi-nhap.json — phan tu JSX boc dung bieu\nthuc mang translate=no; thieu la DO file:dong; bieu thuc khong con la ma 2. Chan\nMAN: o khai do_san_duoc mo / va doi chieu gia tri that (ten workspace, email\nnguoi dang nhap, ten thoa thuan dau bang) nam trong phan tu translate=no; in\ndanh sach do duoc / khong do duoc, va so do duoc + so khong do duoc BANG so dong\nbang — dong khong roi vao dau la ma 2 goi ten. 0 o do duoc la ma 2. Chieu do: go\ntranslate=no khoi deal.name thi chan ma do dung dong.",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E8",
+      "expected": "exit 0. Chan MA: moi o cua du-lieu-nguoi-nhap.json — phan tu JSX boc dung bieu\nthuc mang translate=no; thieu la DO file:dong; bieu thuc khong con la ma 2. Chan\nMAN: o khai do_san_duoc mo / va doi chieu gia tri that (ten workspace, email\nnguoi dang nhap, ten thoa thuan dau bang) nam trong phan tu translate=no; in\ndanh sach do duoc / khong do duoc, va so do duoc + so khong do duoc BANG so dong\nbang — dong khong roi vao dau la ma 2 goi ten. 0 o do duoc la ma 2. Chieu do: go\ntranslate=no khoi deal.name thi chan ma do dung dong.\nChan nay lai trinh duyet that qua may chu dev dang chay. No khong cam vet, nhung\nno tranh mot tai nguyen duy nhat, va o vong 4 duoi tai 47 tac nhan song song no\nda mot lan nhan ve thuoc tinh ngon ngu rong (E2) va hai lan mat han ket qua\n(E8, E12). Nay no chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot\nchan mot luc. Lenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai,\nchan phai co mat, ma phai 0 va cay phai sach sau khi chay.",
       "executor": "script",
       "paths": [
         "apps/app/app/(app)/[slug]/dashboard-summary.tsx",
@@ -185,7 +185,7 @@
         "verified_at",
         "output"
       ],
-      "ref": "config:executors.script.tq_du_lieu_nguoi_nhap"
+      "ref": "config:executors.script.tq_lan_du_lieu_nguoi_nhap"
     },
     {
       "id": "E9",
@@ -245,8 +245,8 @@
     {
       "id": "E12",
       "criterion": "AC-11",
-      "cmd": "NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs be-rong",
-      "expected": "exit 0. / o 360px hai luot va ngan keo di dong mo: DO_RONG(toanMan=true) — moi\nphan tu NHIN THAY mang nhan dich duoc co scrollWidth ≤ clientWidth; luot en la\ndoi chung duong; in so nhan do duoc. Chu trong hop ≤1px (sr-only) bo qua o chan\nnay nhung KHONG bo o E1.",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E12",
+      "expected": "exit 0. / o 360px hai luot va ngan keo di dong mo: DO_RONG(toanMan=true) — moi\nphan tu NHIN THAY mang nhan dich duoc co scrollWidth ≤ clientWidth; luot en la\ndoi chung duong; in so nhan do duoc. Chu trong hop ≤1px (sr-only) bo qua o chan\nnay nhung KHONG bo o E1.\nChan nay lai trinh duyet that qua may chu dev dang chay. No khong cam vet, nhung\nno tranh mot tai nguyen duy nhat, va o vong 4 duoi tai 47 tac nhan song song no\nda mot lan nhan ve thuoc tinh ngon ngu rong (E2) va hai lan mat han ket qua\n(E8, E12). Nay no chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot\nchan mot luc. Lenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai,\nchan phai co mat, ma phai 0 va cay phai sach sau khi chay.",
       "executor": "script",
       "paths": [
         "apps/app/app/(app)/[slug]/*.tsx",
@@ -263,7 +263,7 @@
         "verified_at",
         "output"
       ],
-      "ref": "config:executors.script.tq_be_rong"
+      "ref": "config:executors.script.tq_lan_be_rong_man"
     },
     {
       "id": "E13",
@@ -498,8 +498,8 @@
   "templatePath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.9.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
   "contractPath": "/Users/manh-macmini/dev/crm/_acceptance/tong-quan-va-khung-noi-tieng-viet/contract.md",
-  "invokedAt": "2026-09-08T07:16:59Z",
-  "invokedSha": "c3df13a2315e9413027693eb8e1c47c7728d8659",
-  "evalsHash": "94920d4dcb66f1d99058d867744f055c49b7d6515e4db455f2fff62796d51837",
+  "invokedAt": "2026-09-08T07:54:23Z",
+  "invokedSha": "c2f9f4989c0198d7e3c6a1d174c4106fec439744",
+  "evalsHash": "8e1932a82f06bb73bf89f3c951e7ab4f89a6a9fd4dab2d57e2059e7f460eca82",
   "runBaseline": true
 }
