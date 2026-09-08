@@ -229,9 +229,11 @@ evals:
     executor: script
     cmd: config:executors.script.tq_be_rong_do
     expected: >-
-      exit 0. Cam mot nhan vi dai (cum tieng Viet co dau, doc duoc) vao khoa nhan the
-      so "Dang mo" trong tong-quan.ts, chay lai chan be rong: DO dung chieu "vi tran
-      ma en vua" kem hai cap so; cay tra nguyen trang. Chan giu khoa cay.
+      exit 0. Cam mot cum tieng Viet dai co dau vao khoa cols.deal ("Thoa thuan") cua
+      tong-quan.ts — nhan DUY NHAT cua lat ma chan be-rong-tien-de DO duoc la tran duoc
+      (17/82 hop chat cung mang nhan cua lat, dung 1 tran duoc) — roi chay lai chan be
+      rong: DO dung chieu "vi tran ma en vua" kem hai cap so; cay tra nguyen trang.
+      Chan giu khoa cay. Thut ba tang khai qua bien THUT cua be-rong-do-lib.sh.
     paths:
       - "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
@@ -279,9 +281,12 @@ evals:
     expected: >-
       exit 0. messages-guard.spec.ts tu doc thu muc lib/messages nen hai kho moi vao
       dan so khong can khai: moi gia tri vi co dau tru mien tru co ten, khong gia tri
-      nao y het en, ham ghep bien co khang dinh ghim, khong khoa chet. Cong mot ca
-      moi: khong con formatCount(..., "en") trong lat. Chieu do: dat mot gia tri vi
-      y het en trong tong-quan.ts thi bai kiem do goi ten khoa.
+      nao y het en, ham ghep bien co khang dinh ghim, khong khoa chet. Cac ca do la
+      canh BAT BIEN CHUNG cua kho — chung xanh tren ca cay truoc vong, va giu nguyen
+      la co y. Ca RIENG cua lat, them o vong 2 sau khi bo phan tich neu ten: quet tam
+      file cua lat va doi 0 loi goi formatCount ghim tieng — ca nay phan biet duoc cay
+      nay voi cay truoc vong. Chieu do: tra mot loi goi ve formatCount(n, "deal", "en")
+      thi ca do goi ten file va loi goi.
     paths:
       - "apps/app/lib/messages/tong-quan.ts"
       - "apps/app/lib/messages/khung-ung-dung.ts"
@@ -339,21 +344,42 @@ evals:
   - id: E18
     criterion: AC-1
     executor: ui-check
-    cmd: config:executors.design.gate
+    cmd: config:executors.script.tq_san_thiet_ke
     steps:
-      - "Dung / o tieng Viet tren may chu dang chay (1440px), chup evidence/E18-tong-quan-vi.png"
-      - "Dung / o tieng Anh, chup evidence/E18-tong-quan-en.png"
-      - "Mo ngan keo di dong o 360px tieng Viet, chup evidence/E18-ngan-keo-vi.png"
-      - "Chay san thiet ke tren ba anh do va doc muc P0"
+      - "Chay lenh — no tu dang nhap, dung ba khung hinh, noi tuyen CSS, luu .png/.html vao evidence/, roi cham"
+      - "Doc ba anh evidence/E18-*.png bang Read va noi ba khung co dung nhu mo ta khong"
     expected: >-
-      exit 0. San thiet ke: khong vi pham P0 nao tren ba anh. Chan nay do SAN, khong
-      thay E12 — E12 do be rong chu that. Kho chua wire executors.design.static nen
-      KHONG co static eval per-surface; dieu do phai hien trong goi Cong 2.
+      exit 0. Mot lenh cua kho lam tron: dung / o vi va en (1440px) va ngan keo di dong o
+      360px tieng Viet, noi tuyen moi quy tac CSS vao trang truoc khi luu (jsdom KHONG tai
+      duoc stylesheet tro duong goc-tuong-doi tu file tren dia), roi chay san thiet ke cua
+      kit voi --jsdom tro node_modules cua kho.
+      HAI NGUON, va cho mu cua nguon yeu duoc GOI TEN va THAY: (1) san cua kit cham moi
+      luat con lai — P0 khong phai low-contrast la DO; (2) luat low-contrast cua san BI BO
+      vi jsdom khong giai duoc oklch() va var() cua he token nen no doc moi mau ve #ffffff
+      roi bao trang-tren-trang (do 08/09: 2 P0 gia tren ca ba khung), thay bang chan do
+      tuong phan chay TRONG TRINH DUYET — moi phan tu nhin thay mang chu, mau va nen tinh
+      xong, nguong 4.5:1 (chu thuong) va 3:1 (chu to). 0 phan tu mang chu la ma 2.
+      Do 08/09: 0 cho duoi nguong tren 85 · 85 · 94 phan tu.
     paths:
       - "apps/app/app/(app)/[slug]/*.tsx"
       - "apps/app/components/app-icon-rail.tsx"
       - "apps/app/components/app-header.tsx"
+      - "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs"
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E22
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tq_san_thiet_ke_do
+    expected: >-
+      exit 0. Chieu do cua chan tuong phan: cam mau chu gan den (rgb(20,20,20)) len tieu de
+      — von nam tren nen den — o ca ba khung hinh, roi doi chinh chan do bao DUOI NGUONG.
+      Bat duoc o 0 khung la DO: mot thuoc chua tung do o dung chieu no sinh ra de bat thi
+      khong phan biet duoc "man dat" voi "phep do mu". Cay khong bi sua — vet cam trong DOM
+      cua lan chay, khong cham file nao.
+    paths:
+      - "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E19
     criterion: AC-17

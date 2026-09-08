@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { readdirSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Locale } from "@crm/ui/lib/locale";
 import { docDuongGoi, taoSong } from "./duong-goi";
@@ -592,6 +592,29 @@ describe("kho chuoi cua vong ③a", () => {
 			expect(f("1", "A", "B")).toBe(mot);
 			expect(f("12", "A", "B")).toBe(nhieu);
 		}
+	});
+});
+
+describe("dinh dang theo tieng cua lat Tong quan", () => {
+	it('khong cho nao trong lat ghim "en" vao formatCount', () => {
+		const THU_MUC = join(import.meta.dir, "..");
+		const FILE = [
+			"app/(app)/[slug]/dashboard-summary.tsx",
+			"app/(app)/[slug]/sales-dashboard.tsx",
+			"app/(app)/[slug]/overview-greeting.tsx",
+			"app/(app)/[slug]/overview-scope.tsx",
+			"components/app-header.tsx",
+			"components/app-icon-rail.tsx",
+			"components/enrichment-queue.tsx",
+			"components/crm/quick-switcher.tsx",
+		];
+		const ghim = FILE.flatMap((f) => {
+			const chu = readFileSync(join(THU_MUC, f), "utf8");
+			return [...chu.matchAll(/formatCount\([^)]*"(en|vi)"[^)]*\)/g)].map(
+				(m) => `${f}: ${m[0]}`,
+			);
+		});
+		expect(ghim).toEqual([]);
 	});
 });
 

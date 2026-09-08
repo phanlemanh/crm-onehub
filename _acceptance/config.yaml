@@ -268,6 +268,8 @@ executors:
     tq_mot_bo_thuoc: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/mot-bo-thuoc.mjs
     tq_trang_thai_rong: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs trang-thai-rong
     tq_be_rong_tien_de: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs be-rong-tien-de
+    tq_san_thiet_ke: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs
+    tq_san_thiet_ke_do: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs --chieu-do
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT}/scripts/design-gate.mjs"
     ui_check: "${CLAUDE_PLUGIN_ROOT}/scripts/design-scan.js"
