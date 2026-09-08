@@ -1,106 +1,97 @@
-# Review Findings — tong-quan-va-khung-noi-tieng-viet (vòng chấm 7)
+# Review Findings — tong-quan-va-khung-noi-tieng-viet (vòng chấm 9, PASS)
 
-> Bảy vòng chấm. Bản này thay bản vòng ba; lịch sử từng vòng nằm ở `run-log.jsonl`
-> và mục Iterations của `evidence-report.md`.
+> Chín vòng chấm. Lịch sử từng vòng ở `run-log.jsonl` và mục Iterations của
+> `evidence-report.md`.
 
 ## Trong hợp đồng
 
-Vòng bảy: **không mục nào**. Hai mục trong hợp đồng của vòng năm — AC-6 đo quan
-hệ tiêu đề, và AC-14 vế trùng lặp chỉ nhìn thân hàm — đã sửa ở `7d2e102`. Một
-mục của vòng sáu — bộ thước mới dùng `typeof` lúc chạy — đã sửa ở `ab80e52`.
+Vòng chín: **không mục nào**. Các mục trong hợp đồng của những vòng trước đều đã
+sửa: AC-6 đo quan hệ tiêu đề và AC-14 vế trùng lặp nhìn cả thân mô-đun ở `7d2e102`;
+lối kiểm kiểu lúc chạy ở `ab80e52`.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
-Các mục dưới đây là lỗi THẬT, đã qua phản biện và giữ lại, nhưng nằm ngoài
-phạm vi đã duyệt ở Cổng 1 — chủ kho quyết, máy không tự sửa. Cột «Đề xuất»
-là khuyến nghị của máy; anh đổi được từng mục ở thẻ.
-
-- **Hàng đợi tra cứu: dòng trạng thái và hạn vẫn tiếng Anh vì API tự đúc chữ hiển thị**
-  file: `apps/app/components/enrichment-queue.tsx`:231
+- **Locale switch: nhãn và đích chuyển ngôn ngữ bị tách khỏi nhau, mất tính vét cạn theo type**
+  file: `apps/app/components/app-header.tsx`:126
   severity: high
   Đề xuất: new-contract
-  Người dùng thấy gì: Vòng này kéo enrichment-queue.tsx vào diện Việt hoá và dịch toàn bộ phần khung (nút, tiêu đề, rỗng, footer, collapsible), nhưng hai chuỗi thân — row.line (dòng 231) và row.due (dòng ~305) — đến thẳng từ API và không đi qua kho chuỗi nào. Đã truy tới nguồn: apps/api/src/enrichment/enrichment.service.ts:193 gọi enrichmentQueueLine(state, task.kind) và dòng 207 gọi enrichmentDueLabel(task.dueAt, now)…
+  Người dùng thấy gì: Diff xoá bảng `OTHER_LOCALE = { en: {next:"vi", label:"Tiếng Việt"}, vi: {next:"en", label:"English"} } satisfies Record<Locale, …>` và thay bằng HAI nguồn độc lập: đích là `const tiengKia: Locale = locale === "vi" ? "en" : "vi"` (app-header.tsx:126, dùng ở dòng 170) còn nhãn là `t.header.otherLocale` nằm ở apps/app/lib/messages/khung-ung-dung.ts:29 (en → "Tiếng Việt") và :86 (vi → "English"). Bản cũ khoá cặp (next, …
 
-- **Hợp đồng tRPC vẫn khai month: z.string() sau khi trường đổi thành khoá máy YYYY-MM**
+- **Bảo vệ chống ghim tiếng vào formatCount không thể bắt được thứ nó hứa bắt**
+  file: `apps/app/test/messages-guard.spec.ts`:613
+  severity: medium
+  Đề xuất: new-contract
+  Người dùng thấy gì: Chân `describe("dinh dang theo tieng cua lat Tong quan")` (dòng 598) là phép đo duy nhất giữ cho lát Tổng quan không ghim `"en"` vào `formatCount`. Nó có hai lỗ: 1. Biểu thức `/formatCount\([^)]*"(en|vi)"[^)]*\)/g` dùng `[^)]*`, nên KHÔNG bao giờ vượt qua một dấu `)` lồng bên trong. Đã chạy thử: `formatCount(x.length, "task", "en")` → bắt được; `formatCount(count(x), "task", "en")` → LỌT; `formatCount(rows.filter((r)…
+
+- **_acceptance/config.yaml.bak — bản sao cũ 298 dòng của cấu hình cổng được commit vào kho**
+  file: `_acceptance/config.yaml.bak`:1
+  severity: medium
+  Đề xuất: known-limits
+  Người dùng thấy gì: Commit 35b60b8 trong dải diff này thêm `_acceptance/config.yaml.bak` (33 KB, 298 dòng) nằm ngay cạnh `_acceptance/config.yaml` đang sống. Đã grep toàn kho (trừ node_modules/.git): KHÔNG file nào tham chiếu tới nó — không script, không workflow, không `gate-shape.json`. CLAUDE.md khai `_acceptance/config.yaml` là nơi duy nhất giữ `enforcement: strict` / `recheck: strict` và danh sách executor. Một bản sao đầy đủ, cũ h…
+
+- **nhanRail xuất ra nhưng không đường sản phẩm nào gọi — chỉ bài kiểm gọi**
+  file: `apps/app/lib/khung-dieu-huong.ts`:47
+  severity: medium
+  Đề xuất: known-limits
+  Người dùng thấy gì: `export function nhanRail(muc: MucRail, locale: Locale)` được thêm mới ở dòng 47. Grep toàn kho: chỉ `apps/app/test/khung-dieu-huong.spec.ts:28-29` gọi nó. Component thật — `apps/app/components/app-icon-rail.tsx` — KHÔNG gọi `nhanRail`; nó đọc thẳng `m.rail[muc.key]` (dòng 218 và 189). Hai hệ quả: 1. Mã sản phẩm chết. Vi phạm YAGNI trong luật coding-style, và `refactor-cleaner` sẽ xoá nó ở lượt dọn kế tiếp — kéo theo…
+
+- **API đổi trend.month sang khoá YYYY-MM nhưng hợp đồng vẫn khai z.string(), và bên đọc nuốt lỗi phân tích**
   file: `apps/api/src/dashboard/dashboard.contracts.ts`:46
   severity: medium
   Đề xuất: new-contract
-  Người dùng thấy gì: dashboard.service.ts thay MONTH_LABEL = new Intl.DateTimeFormat("en-US", {month:"short"}) bằng monthIso(), nên trend[].month đổi nghĩa từ nhãn hiển thị ("Sep") thành khoá máy ("2026-09") mà bên khách phải phân tích bằng formatMonth. Lược đồ ra vẫn để nguyên month: z.string(). Lược đồ này thật sự có hiệu lực: apps/api/src/dashboard/dashboard.router.ts:22 khai output: dashboardSummaryOutput, và dash…
+  Người dùng thấy gì: `dashboard.service.ts:185` đổi `month` từ nhãn hiển thị (`Intl.DateTimeFormat("en-US", {month:"short"})` → "Sep") sang khoá máy đọc `monthIso()` → "2026-09". Hướng đi đúng (đẩy việc hiển thị ra biên), nhưng hai đầu của hợp đồng mới không được siết: 1. `dashboard.contracts.ts:46` vẫn là `month: z.string()` — thứ lỏng nhất phân tích được. AGENTS.md nói thẳng: "The schema describes what is **actually stored**, not the l…
 
-- **Tên công ty/cá nhân trong hàng đợi tra cứu chưa đánh dấu translate="no"**
-  file: `apps/app/components/enrichment-queue.tsx`:221
-  severity: medium
-  Đề xuất: new-contract
-  Người dùng thấy gì: CLAUDE.md, mục "Ngôn ngữ sản phẩm": «Dữ liệu người nhập không dịch, và đánh dấu để trình duyệt không tự dịch». Chính diff này thêm translate="no" đúng luật ở khắp nơi khác — dashboard-summary.tsx (task.subject, entry.company.name, entry.deal.name, entry.createdBy.name, DealCell), quick-switcher.tsx (hit.label), app-header.tsx (tên workspace, user.email, initials) — nhưng bỏ sót hai chỗ trong chính…
-
-- **san-thiet-ke.mjs có 19 chú thích trong mã, ngược luật và ngược mọi chân anh em**
-  file: `_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs`:23
-  severity: medium
-  Đề xuất: known-limits
-  Người dùng thấy gì: AGENTS.md, mục "Always true": «Never add code comments. Not to new code, not to code you edit.» — luật này CLAUDE.md giữ nguyên hiệu lực («không viết chú thích trong code»). File mới thêm ở commit 35b60b8 có 19 dòng chú thích (dòng 23-25, 28-32, 39, 75-78, 169-172, 189-190), phần lớn là đoạn giải thích dài về jsdom, oklch, cache plugin. Đây không phải chuyện áp luật của mã sản phẩm lên script kiểm…
-
-- **nhanRail là export chỉ bài kiểm dùng, chép lại đúng việc component làm thẳng**
-  file: `apps/app/lib/khung-dieu-huong.ts`:47
-  severity: low
-  Đề xuất: known-limits
-  Người dùng thấy gì: nhanRail(muc, locale) chỉ gọi khungUngDungMessages(locale).rail[muc.key]. Grep toàn kho: chỗ gọi duy nhất là apps/app/test/khung-dieu-huong.spec.ts (dòng 28-29). Mã sản phẩm không dùng — app-icon-rail.tsx đọc thẳng m.rail[muc.key] ở hai chỗ (dòng ~197 và ~217). Hai hệ quả: (a) YAGNI/mã thừa — coding-style cấm dựng trừu tượng trước khi cần; knip không bắt vì test/**/*.spec.ts là entry của apps/app;…
-
-- **Sàn thiết kế: verdict và mã thoát bị bỏ qua, `bao.findings ?? []` biến báo cáo BLOCKED thành "0 P0" xanh**
+- **Sàn thiết kế nuốt lỗi của design-gate: mã thoát bị bỏ qua và `findings` thiếu bị đọc thành "không có lỗi"**
   file: `_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs`:292
-  severity: high
-  Đề xuất: new-contract
-  Người dùng thấy gì: `chamSan()` bắt lỗi của design-gate và trả `{ma, ra}`. Mã `s.ma` chỉ được IN ra (dòng 295), không bao giờ dùng để đánh trượt; trường `verdict` không được đọc ở đâu cả. Chỗ chấm duy nhất là `const p0 = (bao.findings ?? []).filter(f => f.pTier === "P0")`. Đối chiếu với chính script sàn (`~/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.9.0/scripts/design-gate.mjs`, hàm `emit`): khi sàn …
-
-- **`chanSauBam` thoát 1 trước khi in danh sách bề mặt bị từ chối — bề mặt chưa hề đo được biến mất khỏi báo cáo**
-  file: `_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs`:340
   severity: medium
   Đề xuất: new-contract
-  Người dùng thấy gì: Trong `chanSauBam`, bề mặt nào mở không được (`hai.tuChoi`) chỉ được đẩy vào mảng `tuChoi` rồi `continue` — nó không đóng góp gì vào `hong`. Cuối hàm thứ tự là: ``` if (hong > 0) await ket(1); if (tuChoi.length > 0) { for (const t of tuChoi) console.log(`KHONG DO DUOC: ${t}`); await ket(2); } ``` `ket()` gọi `process.exit`, nên khi có bất kỳ bề mặt nào hỏng thật (`hong > 0`), toàn bộ vòng lặp in `…
+  Người dùng thấy gì: `chamSan()` trả về `{ma, ra}`, nhưng `ma` (mã thoát của design-gate) CHỈ được in ra ở dòng 295 — không có chỗ nào đọc nó để quyết định đỏ/xanh. Ngay dưới, `const p0 = (bao.findings ?? []).filter(...)` biến một báo cáo không có khoá `findings` thành mảng rỗng. Hệ quả cụ thể: design-gate chạy lỗi (thiếu jsdom nội bộ, HTML sai định dạng, lỗi tự nó) và thoát khác 0 nhưng vẫn in ra JSON hợp lệ dạng `{"error": "..."}` — kh…
 
-- **`chanDuLieuNguoiNhap` vứt chuỗi lỗi của `laiMenu` — click hỏng bị quy thành lỗi sản phẩm**
-  file: `_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs`:596
-  severity: medium
-  Đề xuất: new-contract
-  Người dùng thấy gì: `laiMenu()` (dòng 255-262) không ném lỗi: nó `.catch(e => \`khong bam duoc menu tai khoan: ${e.message}\`)` và TRẢ VỀ chuỗi lỗi. Ở dòng 596 giá trị trả về bị bỏ: `await laiMenu(mo.trang, "vi");`. Hai dòng trong `du-lieu-nguoi-nhap.json` chỉ hiện SAU khi menu tài khoản mở: `email nguoi dang nhap (menu tai khoan)` (nguon_san `phien.email`) và `chu cai dau cua ten nguoi dang nhap (avatar)` (nguon_san…
-
-- **`phien.chuCaiDau` chép tay `initials()` và đọc từ email thay vì `user.name`**
-  file: `_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs`:579
+- **`_acceptance/config.yaml.bak` — bản sao cũ của cấu hình cổng bị commit vào kho**
+  file: `_acceptance/config.yaml.bak`:1
   severity: medium
   Đề xuất: known-limits
-  Người dùng thấy gì: Bản khai `du-lieu-nguoi-nhap.json` nói giá trị đối chiếu "lay tu API trong cung luot". Thực tế `NGUON["phien.chuCaiDau"]` dựng từ biến môi trường: ``` (process.env.NGUOI ?? "dev@localhost").split("@")[0].split(" ").map(p => p[0]).filter(Boolean).slice(0,2).join("").toUpperCase() ``` Giao diện thì render `initials(user.name)` (`apps/app/components/app-header.tsx:145`, hàm ở dòng 186) — nguồn là `us…
+  Người dùng thấy gì: File này được thêm mới trong diff (298 dòng) và đang được git theo dõi. Nó là ảnh chụp giữa chừng của `_acceptance/config.yaml` (314 dòng): `diff` giữa hai file cho thấy bản .bak thiếu 15 executor đã có ở bản thật — toàn bộ nhóm `tq_lan_*` (13 mục doc-lan/lan-noi-tiep), `tq_tieu_de_quan_he_do`, `tq_mot_bo_thuoc_do` — và `tq_tieu_de` của nó dừng ở `chu-ngoai-jsx.mjs`, chưa nối `&& node ... tieu-de-quan-he.mjs`. Đây là…
 
-- **`chanBeRongTienDe` luôn thoát 0 và bỏ qua lỗi mở ngăn kéo — kết luận "không có đối tượng chiều đỏ" có thể do ngăn kéo chưa mở**
-  file: `_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs`:816
+- **Chân canh `formatCount` ghim tiếng dùng regex `[^)]*`, mù với lời gọi có ngoặc lồng và chỉ soi 8 file cứng**
+  file: `apps/app/test/messages-guard.spec.ts`:613
+  severity: medium
+  Đề xuất: new-contract
+  Người dùng thấy gì: Chân mới `khong cho nao trong lat ghim "en" vao formatCount` quét bằng `/formatCount\([^)]*"(en|vi)"[^)]*\)/g`. Lớp ký tự `[^)]*` dừng ở dấu `)` ĐẦU TIÊN, nên bất kỳ lời gọi nào có ngoặc lồng trong đối số đều vô hình với nó — ví dụ `formatCount(rows.filter(r => r.overdue).length, "task", "en")` hay `formatCount(Number(x), "deal", "en")` đều KHÔNG khớp và chân vẫn xanh. Thêm nữa, danh sách `FILE` là 8 đường dẫn gõ cứn…
+
+- **Đọc `git status --porcelain` bằng `slice(3)` vỡ khi git bọc ngoặc kép đường dẫn phi-ASCII**
+  file: `_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs`:38
   severity: low
+  Đề xuất: known-limits
+  Người dùng thấy gì: Cả `doc-lan.mjs:38` (`duongBan()`) và `lan-noi-tiep.mjs:56` (`banCay()`) đều cắt `d.slice(3)` rồi so `cuoi.startsWith(c)` với danh sách cho phép `_acceptance/<lat>/evidence/`. Với `core.quotepath` mặc định (= true), git bọc mọi đường dẫn chứa byte phi-ASCII trong ngoặc kép và escape theo kiểu C: một file bằng chứng tên tiếng Việt sẽ hiện là `?? "_acceptance/tong-quan.../evidence/\341\272\243nh.png"`. Sau `slice(3)` c…
+
+- **`doRongHai` vứt câu lỗi mà `lai()` trả về, khác với `docHai` cùng file**
+  file: `_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs`:654
+  severity: low
+  Đề xuất: known-limits
+  Người dùng thấy gì: `docHai` (dòng 121-127) kiểm `const loiLai = await lai(mo.trang, tieng); if (loiLai) { ...; return { tuChoi: ... } }` — nó dùng câu lỗi mà `laiNganKeo`/`laiMenu` trả về để nói ra vì sao. `doRongHai` ở dòng 654 chỉ viết `if (lai !== undefined) await lai(mo.trang, tieng);` — giá trị trả về bị bỏ. `laiNganKeo` bắt lỗi bấm bằng `.catch(e => "khong bam duoc nut mo dieu huong: " + e.message)` chứ không ném, nên khi nút mở …
+
+- **Assertion âm-tính-một-mình: chan formatCount chỉ khẳng định tập rỗng, không có đối chứng dương**
+  file: `apps/app/test/messages-guard.spec.ts`:617
+  severity: medium
   Đề xuất: new-contract
-  Người dùng thấy gì: Ở dòng 816 `if (b.lai !== undefined) await b.lai(mo.trang, "vi");` — `laiNganKeo` trả chuỗi lỗi khi click hỏng (nó `.catch` chứ không ném), và giá trị trả về bị bỏ. Sau đó `HOP_CO_TRAN` quét `document.body`, và bề mặt "ngan keo di dong" đơn giản không đóng góp hộp nào. Hàm kết thúc bằng `await ket(0)` vô điều kiện, in câu kết luận "Chieu do cua chan be-rong KHONG CO DOI TUONG o lat nay" khi `tranD…
+  Người dùng thấy gì: Cả ca kiểm chỉ có một assert duy nhất: `expect(ghim).toEqual([])` trên kết quả của `chu.matchAll(/formatCount\([^)]*"(en|vi)"[^)]*\)/g)`. Không có ca đối chứng dương nào chứng minh regex đó CÓ THỂ ra khác rỗng, và không có thông điệp lỗi nào được ghim. Hệ quả cụ thể: hôm nay chỉ 2/8 file trong danh sách thực sự chứa `formatCount` (sales-dashboard.tsx, dashboard-summary.tsx), nên tập rỗng là trạng thái mặc định — đổi …
 
-- **Hình dạng 4 — assertion âm-tính-một-mình: grep formatCount không có đối chứng dương, không ghim thông điệp**
-  file: `apps/app/test/messages-guard.spec.ts`:599
-  severity: high
-  Đề xuất: known-limits
-  Người dùng thấy gì: Ca duy nhất phân biệt cây này với cây trước vòng (theo chính lời khai của E16) là `expect(ghim).toEqual([])` ở dòng 617, với `ghim` gom từ `chu.matchAll(/formatCount\([^)]*"(en|vi)"[^)]*\)/g)` trên 8 file khai cứng ở dòng 601-610. Đây là assertion âm-tính đứng một mình: không có một assert dương nào chứng minh biểu thức chính quy này CÓ THỂ khớp cái gì, và không ghim số lời gọi formatCount tìm thấ…
-
-- **Hình dạng 2 — fixture viết tay đúng khuôn bên đọc: `wu` chép lại logic của workspaceUrl() thay vì round-trip qua chính hàm thật**
-  file: `apps/app/test/khung-dieu-huong.spec.ts`:11
+- **Tuyên quét LỚP nhưng danh sách file gõ tay chỉ phủ 8/13 file của lát**
+  file: `apps/app/test/messages-guard.spec.ts`:601
   severity: medium
   Đề xuất: known-limits
-  Người dùng thấy gì: Dòng 11 dựng bên tạo URL bằng tay: `const wu = (p: string) => `/onehub${p === "/" ? "" : p}`;` rồi truyền vào `mucDangMo(...)` ở tất cả sáu assert (dòng 35-40). Hàm thật là `workspaceUrl(slug, path)` ở apps/app/lib/workspace-url.ts — thuần, không phụ thuộc React, export sẵn, và chính là thứ `app-icon-rail.tsx:229` truyền vào `mucDangMo` (qua `useWorkspaceUrl()` → `workspaceUrl(slug, path)`). `wu` …
-
-- **Hình dạng 5 — mucDangMo tuyên theo lớp MUC_RAIL nhưng chỉ có điểm-case 3/7 mục**
-  file: `apps/app/test/khung-dieu-huong.spec.ts`:34
-  severity: medium
-  Đề xuất: known-limits
-  Người dùng thấy gì: `MUC_RAIL` (lib/khung-dieu-huong.ts:20-28) là một lớp 7 phần tử với hai chế độ khớp (`exact` / `prefix`) và một nhánh `related`. Ca "muc dang mo theo pathname cua workspace" (dòng 34-41) chỉ chạm 3 phần tử: overview, chat, companies — bốn mục còn lại (contacts, deals, campaigns, settings) không có assert nào, nên nhánh `prefix` của chúng chưa từng được đo. Rõ là điểm-case chứ không phải ma trận to…
+  Người dùng thấy gì: Tên ca là "khong cho nao trong lat ghim \"en\" vao formatCount" — một tuyên bố quét cả lớp "lát Tổng quan". Nhưng mảng `FILE` là 8 đường dẫn gõ tay, trong khi bản khai của chính lát (`_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json`) định nghĩa lát là 6 file .tsx trong `apps/app/app/(app)/[slug]` cộng 7 đường ở `them` = 13 file. Năm file đã khai mà ca này không đọc: `app/(app)/[slug]/layout.tsx`…
 
 - **Cửa sổ cắm vết vẫn mở với giám khảo và với bộ chạy kiểm thử của kho — nợ ③b**
   file: `_acceptance/man-cai-dat-noi-tieng-viet/rang/khoa-cay.mjs`
   severity: high
   Đề xuất: new-contract
-  Người dùng thấy gì: Không ảnh hưởng người dùng cuối. Đây là nợ hạ tầng đo lường: nó làm vòng chấm trả kết quả sai, khiến lỗi thật lẫn với báo động giả và mỗi vòng chấm tốn thêm một lượt. Hồ sơ ③b gọi tên đúng cửa sổ này ở contract.md:160-169 rồi hoãn sang «đợt sau» nhưng viết ngoài mục Ngoài hợp đồng nên chưa từng vào bảng nợ. Vòng này giảm nhẹ bằng làn nối tiếp; khử hẳn cần một bản sao cây và máy chủ dev riêng.
+  Người dùng thấy gì: Không ảnh hưởng người dùng cuối. Nợ hạ tầng đo lường: nó làm vòng chấm trả kết quả sai. Hồ sơ ③b gọi tên cửa sổ này ở contract.md:160-169 rồi hoãn, nhưng viết ngoài mục Ngoài hợp đồng nên chưa từng vào bảng nợ. Vòng này giảm nhẹ bằng làn nối tiếp; khử hẳn cần một bản sao cây và máy chủ dev riêng.
 
 ## Đã sửa trong vòng, ngoài hợp đồng, có chủ kho cho phép
 
 - Nhãn tháng lệch một tháng ở mọi múi giờ dương — `apps/api/src/dashboard/dashboard.service.ts`, sửa ở `2e1cced`.
 - Câu tiếng Anh về tiền chưa quy đổi mất động từ, và đếm việc quá hạn mất danh từ — `apps/app/lib/messages/tong-quan.ts`, sửa ở `2e1cced`.
 - Chân đọc ghim chỉ neo vào mã commit, không kiểm cây sạch — `_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs`, sửa ở `742d8dd`.
+- Làn cắt khoảng trắng đầu dòng trạng thái git nên xén mất một ký tự của đường dẫn — `_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lan-noi-tiep.mjs`, sửa ở `f620c56`.
