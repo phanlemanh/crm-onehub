@@ -51,6 +51,7 @@ yarn-error.log*
 # Agent scratch files
 .scratch/
 _acceptance/**/.anh-chup/
+_acceptance/**/.lan/
 
 # Bộ cào listing: venv riêng ngoài turborepo, không commit thư viện
 tools/listing-crawl/.venv/

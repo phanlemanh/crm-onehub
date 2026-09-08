@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(HERE, "../../..");
 const HO_SO = resolve(HERE, "..");
-const PIN = `${HO_SO}/evidence/lan-noi-tiep.json`;
+const PIN = `${HO_SO}/.lan/noi-tiep.json`;
 
 const CHAN = [
 	{ id: "E10", khoa: "tq_dan_so_tu_dia" },
@@ -84,7 +84,7 @@ for (const c of CHAN) {
 	ket.push({ id: c.id, khoa: c.khoa, lenh: c.lenh, exit: ma, cay_sach: !con_vet, duoi });
 }
 
-mkdirSync(`${HO_SO}/evidence`, { recursive: true });
+mkdirSync(`${HO_SO}/.lan`, { recursive: true });
 writeFileSync(
 	PIN,
 	`${JSON.stringify({ run_id, sha, bat_dau: batDau, xong: new Date().toISOString(), chan: ket }, null, "\t")}\n`,

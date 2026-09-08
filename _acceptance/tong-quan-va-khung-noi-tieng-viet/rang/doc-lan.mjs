@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(HERE, "../../..");
-const PIN = process.env.LAN_GHIM ?? resolve(HERE, "../evidence/lan-noi-tiep.json");
+const PIN = process.env.LAN_GHIM ?? resolve(HERE, "../.lan/noi-tiep.json");
 const LOI_SHA = "cay da doi sau khi lan chay";
 
 function chet(ma, ...loi) {

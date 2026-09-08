@@ -106,7 +106,7 @@ const VET = [
 		file: `${MAN}/dashboard-summary.tsx`,
 		cam: (s) =>
 			s.replace(
-				": m.tasks.pastDue(\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tformatCount(overdueTasks.length, m.tasks.taskNoun, locale),\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t)}",
+				/: m\.tasks\.pastDue\(\s*formatCount\([^)]*\),\s*\)\}/,
 				": `${overdueTasks.length} past due`}",
 			),
 		chan: ["moi-chuoi"],
