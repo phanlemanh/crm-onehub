@@ -1,0 +1,99 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bằng chứng · quyen-luot-mang-theo</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+</style></head><body><div class="wrap">
+<h1>Quyền của lượt builder mang theo tường minh — bỏ luật suy commandType từ hình dạng tin nhắn, câu trả lời kế thừa đúng quyền của lượt đã hỏi, và dạy con agent_builder cửa ra not_authorized</h1><div class="sub">Trang bằng chứng · <span class="mono">quyen-luot-mang-theo</span> · tier T2</div>
+<div class="card" style="margin-top:12px"><span class="badge pass">PASS</span>
+<div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-quyen-luot-mang-theo-E1-r4</td><td class="mono">2026-09-08T22:49:15Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-2</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-quyen-luot-mang-theo-E2-r4</td><td class="mono">2026-09-08T22:49:15Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-3</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-quyen-luot-mang-theo-E3-r4</td><td class="mono">2026-09-08T22:49:15Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-4</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-quyen-luot-mang-theo-E4-r4</td><td class="mono">2026-09-08T22:49:15Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-5</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-quyen-luot-mang-theo-E5-r4</td><td class="mono">2026-09-08T22:49:15Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-7</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-quyen-luot-mang-theo-E7-r4</td><td class="mono">2026-09-08T22:49:15Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-8</td><td>judgment</td><td><span class="badge pass">PASS</span></td><td class="mono">—</td><td class="mono">—</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-9</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-quyen-luot-mang-theo-E9-r4</td><td class="mono">2026-09-08T22:49:15Z</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · test</h3><p class="crit">AC-1</p>
+<div class="kv"><span>run_id <b>minted-quyen-luot-mang-theo-E1-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.ql_hai_duong_that</b></span><span>verified_at <b>2026-09-08T22:49:15Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out"> 0 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [434.00ms]</pre>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · test</h3><p class="crit">AC-2</p>
+<div class="kv"><span>run_id <b>minted-quyen-luot-mang-theo-E2-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.ql_quyen_ke_thua</b></span><span>verified_at <b>2026-09-08T22:49:15Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out"> 0 fail
+ 15 expect() calls
+Ran 4 tests across 1 file. [73.00ms]</pre>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · test</h3><p class="crit">AC-3</p>
+<div class="kv"><span>run_id <b>minted-quyen-luot-mang-theo-E3-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.ql_hai_duong_that</b></span><span>verified_at <b>2026-09-08T22:49:15Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out"> 0 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [434.00ms]</pre>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · test</h3><p class="crit">AC-4</p>
+<div class="kv"><span>run_id <b>minted-quyen-luot-mang-theo-E4-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.ql_api_doc_ban_ghi</b></span><span>verified_at <b>2026-09-08T22:49:15Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out"> 0 fail
+ 7 expect() calls
+Ran 2 tests across 1 file. [25.00ms]</pre>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · test</h3><p class="crit">AC-5</p>
+<div class="kv"><span>run_id <b>minted-quyen-luot-mang-theo-E5-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.ql_khong_suy_dien</b></span><span>verified_at <b>2026-09-08T22:49:15Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out"> 0 fail
+ 7 expect() calls
+Ran 2 tests across 1 file. [133.00ms]</pre>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge pass">PASS</span> &nbsp;E7 · test</h3><p class="crit">AC-7</p>
+<div class="kv"><span>run_id <b>minted-quyen-luot-mang-theo-E7-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.ql_con_biet_cua_ra</b></span><span>verified_at <b>2026-09-08T22:49:15Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out"> 0 fail
+ 5 expect() calls
+Ran 2 tests across 1 file. [61.00ms]</pre>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · judgment</h3><p class="crit">AC-8</p>
+<div class="kv"><span>judged_by <b>judge panel (fresh context, 3 lenses — domain-correctness, operational-feasibility, spec-alignment)</b></span></div>
+<p class="note"><b>Phán đoán:</b> Cả ba lăng kính đồng thuận PASS — hàng lý do (BUILDER_DENIED_REASON) chỉ giao cho CON đúng ba việc nằm trong tay CON (dừng, gọi final_output status not_authorized, không ghi file/lưu draft), khớp với instructions.md dòng 106-109; việc &quot;nói với người dùng&quot; và &quot;trả lời câu hỏi gốc&quot; thuộc về chat cha sau khi nhận lại not_authorized, không nằm trong BUILDER_DENIED_REASON. Giới hạn đã biết: phép đo này chỉ chạm hàng lý do và chỉ dẫn, không chạm văn bản runtime cha thực sự soạn (xem Out of scope của contract).</p>
+<div class="ov">human_override: CHƯA điền (việc của bạn ở Gate 2)</div>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pass">PASS</span> &nbsp;E9 · test</h3><p class="crit">AC-9</p>
+<div class="kv"><span>run_id <b>minted-quyen-luot-mang-theo-E9-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.ql_cong_dong_that</b></span><span>verified_at <b>2026-09-08T22:49:15Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out"> 0 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [60.00ms]</pre>
+</div>
+<h2>Eval không phân biệt (Analyst)</h2><div class="flag fred">E1, E3 — lệnh `bun run db:test --reset &amp;&amp; cd apps/agent &amp;&amp; bun test test/builder-runtime.integration.spec.ts &amp;&amp; cd ../api &amp;&amp; bun test test/conversations.spec.ts -t &quot;builder answer&quot;` pass trên cả HEAD lẫn baseline (diffBase): eval không tự phân biệt được feature mới, cùng một kết quả không đổi từ round 3. Cần viết lại để assert hành vi mới, hoặc xác nhận đây là regression-guard có chủ ý (giữ nguyên hành vi round-trip đã có từ trước diff này).</div>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1: mọi eval máy (E1-E7, E9) và mọi lệnh cổng (bun run test, check-types, lint, lint:slop, build) đều xanh, cả chín eval đều red-trên-baseline (có phân biệt), và hội đồng judge cho E8 đồng thuận PASS ba lăng kính — nhưng review đối kháng tìm thấy 7 phát hiện thật ánh xạ được vào AC-1, AC-2, AC-3, AC-5, AC-6 (bản ghi lưu bằng cast không schema; fixture băng ghi tự bịa đúng khuôn bên đọc thay vì round-trip qua đường ghi thật apps/agent/agent/lib/builder-input.ts; bài đo round-trip duy nhất của đường ghi ghim đúng trạng thái THIẾU cờ quyền và vẫn xanh; assert bằng grep chuỗi nguồn thay vì hành vi ghi; mốc đếm suy diễn ghim ở SHA chưa từng được kiểm; hai eval (E2, E6) tuyên ma trận toàn phần nhưng executor gắn vào chỉ điểm-case một phần) — REJECT vì phát hiện, không phải vì lệnh đỏ.</li><li>Round 2: E1 (AC-1) đỏ — lệnh `bun run test -- &quot;cd apps/agent &amp;&amp; bun test test/builder-runtime.integration.spec.ts&quot;` thoát mã 1 (0 pass/1 fail/1 error); baseline của E1 là green (bài này từng xanh trên code cũ diffBase), nên trên HEAD đây là một hồi quy thật, không phải eval mới chưa từng chạy được. Tám eval còn lại (E2-E7, E9 máy; E8 judgment ba lăng kính đồng thuận PASS) và cả năm lệnh cổng (bun run test, check-types, lint, lint:slop, build) đều xanh. Review đối kháng vòng này ánh xạ thêm 4 phát hiện trong hợp đồng (AC-2 ×1, AC-3 ×3 — xem review-findings.md) và 3 phát hiện ngoài hợp đồng — nhưng REJECT của vòng này là vì E1 đỏ, không phải vì các phát hiện đó; findings trong hợp đồng chờ được sửa cùng lúc với E1 ở vòng kế.</li><li>Round 3: tất cả 7 eval máy (E1, E2, E3, E4, E5, E7, E9) đều xanh (exit 0), E8 judgment ba lăng kính đồng thuận PASS, cả năm lệnh cổng (bun run test, check-types, lint, lint:slop, build) đều xanh, và E6 đã rút khỏi hợp đồng từ vòng chấm 2 (Out of scope) nên không còn ở bảng — không còn lệnh đỏ nào so với round 2. Nhưng review đối kháng vòng này tìm thấy 3 phát hiện đo lường mức cao/trung ánh xạ được vào AC-1, AC-4, AC-5: đường ghi builder-runtime chỉ đo một chiều &quot;được phép&quot;, thiếu chiều đối chứng &quot;không được phép&quot; trên cùng fixture; ma trận ba hình dạng của AC-4 thực chất chỉ có hai hình dạng phân biệt vì &quot;thiếu trường quyền&quot; trùng byte-với-byte với &quot;trường quyền=false&quot; đã đo ở chỗ khác; sàn dân số &quot;đếm trên đĩa&quot; của AC-5 thực chất là một mảng hai đường dẫn viết tay, không quét cây nguồn. Các eval này XANH mà KHÔNG chứng minh được đúng điều AC đòi hỏi — REJECT vì phát hiện đo lường, không phải vì lệnh đỏ.</li><li>Round 4: tất cả 7 eval máy (E1, E2, E3, E4, E5, E7, E9) đều xanh (exit 0) — E1/E3 vẫn baseline green (không phân biệt, xem Analyst), năm eval còn lại (E2, E4, E5, E7, E9) baseline red (có phân biệt, đã sửa đúng lỗ hổng round 3 nêu: cặp hai chiều thật trên cùng fixture, ma trận ba hình dạng thật sự khác nhau, sàn đếm-trên-đĩa quét cây nguồn thật). E8 judgment ba lăng kính đồng thuận PASS, cả năm lệnh cổng (bun run test, check-types, lint, lint:slop, build) đều xanh. Review đối kháng vòng này chỉ còn 1 phát hiện trong hợp đồng (AC-3, severity low — fixture viết tay đúng khuôn bên đọc ở apps/agent/test/custom-agent-runtime.spec.ts:75, không lật kết quả AC-3) và 5 phát hiện ngoài hợp đồng để người quyết ở Cổng 2 (xem review-findings.md) — PASS.</li></ul>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>

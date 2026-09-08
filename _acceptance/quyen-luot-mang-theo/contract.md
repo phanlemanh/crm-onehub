@@ -193,6 +193,19 @@ fixture.
 
 ## Notes
 
+### Hạn chế đã biết — người ký định đoạt ở Cổng Bằng chứng, vòng chấm 4
+
+- Ô câu hỏi đang chờ bị đọc hai lần bằng hai khuôn khác nhau trong cùng một hàm
+  của phần API. Chưa hỏng, nhưng hai khuôn sẽ trôi khỏi nhau; khuôn sở hữu shape
+  hiện lọc bỏ cờ quyền nên đường chính không đọc được nó.
+- Hàm dựng bản ghi kiểm khuôn xong rồi bỏ kết quả kiểm, trả lại đúng thứ nhận
+  vào. Chuẩn hoá của khuôn vì thế không áp lên giá trị ghi xuống.
+- Tên trạng thái `not_authorized` khai ở hai nơi và không nối nhau bằng kiểu nào.
+  Đổi tên ở một nơi thì chốt chặn lặng lẽ mất tác dụng.
+- Hai bài đo còn quét chữ trong mã nguồn, một bài đọc sang phần chạy riêng khác.
+  Loại luật đó thuộc về bộ soi mã, không thuộc bộ đo đơn vị.
+
+
 **Hai hàm trùng tên, đừng lẫn:** `builderCommandType` ở `apps/app/lib/agent-builder.ts`
 đọc slash-command phía trình duyệt; `builderCommandType` ở
 `apps/agent/agent/lib/custom-agent-dispatch.ts` là hàm mang luật suy diễn mà vòng
