@@ -27,7 +27,7 @@ evals:
   - id: E2
     criterion: AC-2
     executor: script
-    cmd: config:executors.script.tq_sau_bam
+    cmd: config:executors.script.tq_lan_sau_bam
     expected: >-
       exit 0. Ba be mat lai ra bang puppeteer: bam avatar → gom DropdownMenuContent;
       gui Meta+K roi GO mot chuoi ≥2 ky tu khong khop ("zzqx") → gom CommandDialog
@@ -39,6 +39,12 @@ evals:
       trong be mat KHAC nhau. Be mat khong lai ra duoc la ma 2 goi ten be mat. Chieu
       do: ghim tieu de hop ⌘K ve "Search" o ban vi thi cap trung, chan do goi ten be
       mat "ck".
+      Chan nay lai trinh duyet that qua may chu dev dang chay. No khong cam vet, nhung
+      no tranh mot tai nguyen duy nhat, va o vong 4 duoi tai 47 tac nhan song song no
+      da mot lan nhan ve thuoc tinh ngon ngu rong (E2) va hai lan mat han ket qua
+      (E8, E12). Nay no chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot
+      chan mot luc. Lenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai,
+      chan phai co mat, ma phai 0 va cay phai sach sau khi chay.
     paths:
       - "apps/app/components/app-header.tsx"
       - "apps/app/components/app-icon-rail.tsx"
@@ -149,7 +155,7 @@ evals:
   - id: E8
     criterion: AC-8
     executor: script
-    cmd: config:executors.script.tq_du_lieu_nguoi_nhap
+    cmd: config:executors.script.tq_lan_du_lieu_nguoi_nhap
     expected: >-
       exit 0. Chan MA: moi o cua du-lieu-nguoi-nhap.json — phan tu JSX boc dung bieu
       thuc mang translate=no; thieu la DO file:dong; bieu thuc khong con la ma 2. Chan
@@ -158,6 +164,12 @@ evals:
       danh sach do duoc / khong do duoc, va so do duoc + so khong do duoc BANG so dong
       bang — dong khong roi vao dau la ma 2 goi ten. 0 o do duoc la ma 2. Chieu do: go
       translate=no khoi deal.name thi chan ma do dung dong.
+      Chan nay lai trinh duyet that qua may chu dev dang chay. No khong cam vet, nhung
+      no tranh mot tai nguyen duy nhat, va o vong 4 duoi tai 47 tac nhan song song no
+      da mot lan nhan ve thuoc tinh ngon ngu rong (E2) va hai lan mat han ket qua
+      (E8, E12). Nay no chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot
+      chan mot luc. Lenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai,
+      chan phai co mat, ma phai 0 va cay phai sach sau khi chay.
     paths:
       - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"
       - "apps/app/components/app-header.tsx"
@@ -217,12 +229,18 @@ evals:
   - id: E12
     criterion: AC-11
     executor: script
-    cmd: config:executors.script.tq_be_rong
+    cmd: config:executors.script.tq_lan_be_rong_man
     expected: >-
       exit 0. / o 360px hai luot va ngan keo di dong mo: DO_RONG(toanMan=true) — moi
       phan tu NHIN THAY mang nhan dich duoc co scrollWidth ≤ clientWidth; luot en la
       doi chung duong; in so nhan do duoc. Chu trong hop ≤1px (sr-only) bo qua o chan
       nay nhung KHONG bo o E1.
+      Chan nay lai trinh duyet that qua may chu dev dang chay. No khong cam vet, nhung
+      no tranh mot tai nguyen duy nhat, va o vong 4 duoi tai 47 tac nhan song song no
+      da mot lan nhan ve thuoc tinh ngon ngu rong (E2) va hai lan mat han ket qua
+      (E8, E12). Nay no chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot
+      chan mot luc. Lenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai,
+      chan phai co mat, ma phai 0 va cay phai sach sau khi chay.
     paths:
       - "apps/app/app/(app)/[slug]/*.tsx"
       - "apps/app/components/app-icon-rail.tsx"

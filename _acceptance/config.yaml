@@ -270,6 +270,9 @@ executors:
     tq_lan_be_rong: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E13
     tq_lan_dot_bien: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E11
     tq_lan_doc_do: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs --chieu-do
+    tq_lan_sau_bam: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E2
+    tq_lan_du_lieu_nguoi_nhap: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E8
+    tq_lan_be_rong_man: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E12
     tq_mot_bo_thuoc: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/mot-bo-thuoc.mjs
     tq_trang_thai_rong: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs trang-thai-rong
     tq_be_rong_tien_de: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs be-rong-tien-de

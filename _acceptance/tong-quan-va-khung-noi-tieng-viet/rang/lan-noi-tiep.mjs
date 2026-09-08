@@ -13,6 +13,9 @@ const CHAN = [
 	{ id: "E10", khoa: "tq_dan_so_tu_dia" },
 	{ id: "E13", khoa: "tq_be_rong_do" },
 	{ id: "E11", khoa: "tq_dot_bien" },
+	{ id: "E2", khoa: "tq_sau_bam" },
+	{ id: "E8", khoa: "tq_du_lieu_nguoi_nhap" },
+	{ id: "E12", khoa: "tq_be_rong" },
 ];
 
 function chet(ma, ...loi) {
@@ -92,4 +95,4 @@ writeFileSync(
 
 console.log(`\nghim: ${PIN.slice(GOC.length + 1)}`);
 if (hong > 0) chet(1, `DO: ${hong}/${CHAN.length} chan trong lan noi tiep khong xanh.`);
-console.log(`XANH: ${CHAN.length}/${CHAN.length} chan cam vet chay noi tiep tren cay sach, deu tra nguyen trang.`);
+console.log(`XANH: ${CHAN.length}/${CHAN.length} chan chay noi tiep tren cay sach, deu tra nguyen trang.`);
