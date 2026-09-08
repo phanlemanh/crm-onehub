@@ -6,7 +6,7 @@ owner: omre.cnsp4@onemount.com
 risk_tier: T2
 surfaces: [cli]
 design_doc: docs/superpowers/specs/2026-09-08-nang-tran-trang-danh-ba-design.md
-status: verified
+status: signed-off
 approved_by: Mạnh
 approved_at: 2026-09-08
 veto_state: mo
@@ -103,4 +103,11 @@ hứa rằng ngăn nào cũng có người.
 - AC-7 kéo mục **Ngoài-2** của vòng `gieo-rai-deu-danh-ba` từ «hạn chế đã biết» vào phạm vi. Lý do: ở trần 8 trang một trang chặn mất 11 người ở cùng một chỗ trong dải; ở trần 45 trang với mẫu rải đều, một trang chặn lấy mất một lát của cả dải, và im lặng thì không ai biết mẫu đã hỏng.
 - `directory_max_pages = 120` là lan can, không phải chính sách. Đáy danh bạ CHƯA đo được (lượt dò dừng ở trang 93 vì chuỗi trang không tải được, không vì hết người), nên 120 chọn theo chi phí: 120 trang là khoảng 11 phút đọc, và nếu danh bạ dài hơn thế thì cờ bị-trần-cắt của AC-4 bật để người biết mà nâng.
 - Chênh số cần nói rõ: `opportunity.md` ghi «khoảng 98 hồ sơ» ở trần 8, lượt dò 08/09 đo được 11 thẻ mỗi trang tức 88. 98 là số hồ sơ NẠP ĐƯỢC của lượt cào thật ngày 05/09, chạy trước khi bộ gieo được sửa và với số trang đọc được khác. Con số dùng cho mọi phép nhân trong hồ sơ này là **11 thẻ mỗi trang, đo được**.
+- known-limits (Ngoài-4, ký 08/09): bốn tên mức viết cứng trong `TEN_TANG` là bản sao thứ ba của cùng bộ từ vựng, cạnh nguồn thật là `tier_of`. Đổi tên một mức thì bảng đếm lặng lẽ ra 0 cho mức đó.
+- known-limits (Ngoài-5, ký 08/09): `directory_stop_after_empty` đọc bằng `.get` với số 3 dự phòng viết cứng, lệch với mọi khoá khác trong cùng hàm vốn vỡ to nếu thiếu. Bỏ khoá khỏi cấu hình thì bộ cào vẫn dừng theo con số không ai khai.
+- known-limits (Ngoài-6, ký 08/09): `directory_urls` thành mã chết sau khi `directory_scan` thay chỗ. Hai hàm đọc cùng bộ chọn với hai hành vi khác nhau ở ca rỗng; kho không có bộ soi mã chết cho Python.
+- known-limits (Ngoài-7, ký 08/09): hình dạng bốn trường sức khoẻ khai bằng dict viết tay ở ba chỗ, không module nào sở hữu. Thêm một số thứ năm là phải nhớ sửa đủ ba chỗ.
+- known-limits (Ngoài-8, ký 08/09): `sample_across` khai `list[str]` nhưng đường lộ số truyền `list[dict]` vào. Chạy đúng vì hàm chỉ đánh chỉ số, nhưng chú kiểu nói sai và việc sửa-tại-chỗ các mục hồ sơ là hợp đồng ngầm mà chữ ký hàm phủ nhận.
+- known-limits (Ngoài-11, ký 08/09): `reveal_phones` nuốt trọn lỗi phân tích khi lộ số — không log, không đếm. Một lượt lộ số hỏng hàng loạt không hiện ở đâu.
+- known-limits (Ngoài-13, ký 08/09): bộ dựng sẵn của bài kiểm viết tay đúng khuôn bên đọc, không round-trip từ bên ghi thật. Sàn đổi hình dạng thẻ thì bộ dựng sẵn vẫn khớp bộ đọc cũ.
 - Số điện thoại là dữ liệu cá nhân của người thật. Bằng chứng của vòng này dùng `--redact`; lượt nạp thật thì không.

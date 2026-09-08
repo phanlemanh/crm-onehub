@@ -75,7 +75,7 @@ evals:
     layer: backend-effect
     expected: "exit 0; bài chạy LỆNH THẬT `python -m listing_crawl --fixtures --dry-run` qua main() và đọc chính dòng «lượt chạy:» mà lệnh IN RA, hai bài. Bài một khẳng định dòng đó mang đủ NĂM tên khoá ghim nguyên văn: trang_danh_ba_doc, trang_danh_ba_rong, trang_danh_ba_hong, bi_tran_cat, phan_bo_tang. Bài hai đọc NGƯỢC dòng in ra thành dữ liệu rồi khẳng định QUAN HỆ giữa các giá trị: bảng bốn mức cộng lại bằng số hồ sơ lấy được, cờ đúng kiểu luận lý, và đường bộ dựng sẵn cho hai số trang bằng không. Đây là nửa ĐO-SAU: E7 chứng giá trị tính đúng, E7b chứng bộ in in ra và in đúng."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_cli.py]
+    paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_duong_chay.py, tools/listing-crawl/tests/test_cli.py]
 
   - id: E8
     criterion: AC-8
