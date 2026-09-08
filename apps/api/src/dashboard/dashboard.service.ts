@@ -20,7 +20,9 @@ const RATE_WINDOW_DAYS = 90;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-const MONTH_LABEL = new Intl.DateTimeFormat("en-US", { month: "short" });
+function monthIso(date: Date): string {
+	return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}`;
+}
 
 function monthStart(from: Date, offset: number): Date {
 	return new Date(from.getFullYear(), from.getMonth() + offset, 1);
@@ -180,7 +182,7 @@ export class DashboardService {
 
 		const firstBucket = monthKey(trendStart);
 		const trend = Array.from({ length: TREND_MONTHS }, (_, index) => ({
-			month: MONTH_LABEL.format(monthStart(trendStart, index)),
+			month: monthIso(monthStart(trendStart, index)),
 			won: 0,
 			created: 0,
 		}));

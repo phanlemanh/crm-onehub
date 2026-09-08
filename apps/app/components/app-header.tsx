@@ -48,7 +48,7 @@ export function AppHeader({ user }: { user: User }) {
 	const workspaceUrl = useWorkspaceUrl();
 	const workspace = useQuery(trpc.workspace.get.queryOptions());
 	const label = workspaceLabel(workspace.data?.name);
-	const m = khungUngDungMessages(useLocale());
+	const t = khungUngDungMessages(useLocale());
 
 	return (
 		<header className="flex h-12 shrink-0 items-center gap-2 border-b px-3 [view-transition-name:app-header]">
@@ -57,14 +57,14 @@ export function AppHeader({ user }: { user: User }) {
 					variant="ghost"
 					size="icon"
 					className="md:hidden"
-					aria-label={m.nav.open}
+					aria-label={t.nav.open}
 					onClick={() => setMobileNavOpen(true)}
 				>
 					<Menu />
 				</Button>
 				<Link
 					href={workspaceUrl()}
-					aria-label={m.header.homepage}
+					aria-label={t.header.homepage}
 					className="hidden size-8 items-center justify-center text-foreground md:flex"
 				>
 					<Logo className="size-5" />
@@ -80,8 +80,8 @@ export function AppHeader({ user }: { user: User }) {
 				<UserMenu
 					user={user}
 					onSignOut={() => {
-						signOutAndRedirect(m.header.signOutFailed).catch(() =>
-							toast.error(m.header.signOutFailed),
+						signOutAndRedirect(t.header.signOutFailed).catch(() =>
+							toast.error(t.header.signOutFailed),
 						);
 					}}
 				/>
@@ -91,7 +91,7 @@ export function AppHeader({ user }: { user: User }) {
 }
 
 export function AppHeaderFallback() {
-	const m = khungUngDungMessages(useLocale());
+	const t = khungUngDungMessages(useLocale());
 	return (
 		<header
 			className="flex h-12 shrink-0 items-center gap-2 border-b px-3 [view-transition-name:app-header]"
@@ -111,7 +111,7 @@ export function AppHeaderFallback() {
 				</Avatar>
 			</div>
 			<span role="status" className="sr-only">
-				{m.header.loading}
+				{t.header.loading}
 			</span>
 		</header>
 	);
@@ -122,7 +122,7 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
 	const isDark = resolvedTheme === "dark";
 	const locale = useLocale();
 	const router = useRouter();
-	const m = khungUngDungMessages(locale);
+	const t = khungUngDungMessages(locale);
 	const tiengKia: Locale = locale === "vi" ? "en" : "vi";
 
 	const chooseLocale = (next: Locale) => {
@@ -136,12 +136,12 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
 				<Button
 					variant="ghost"
 					size="icon"
-					aria-label={m.header.accountMenu}
+					aria-label={t.header.accountMenu}
 					className="hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent"
 				>
 					<Avatar className="size-7">
 						{user.image && <AvatarImage alt={user.name} src={user.image} />}
-						<AvatarFallback className="text-xs">
+						<AvatarFallback className="text-xs" translate="no">
 							{initials(user.name)}
 						</AvatarFallback>
 					</Avatar>
@@ -162,7 +162,7 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
 					}}
 				>
 					{isDark ? <Light /> : <Asleep />}
-					{isDark ? m.header.lightMode : m.header.darkMode}
+					{isDark ? t.header.lightMode : t.header.darkMode}
 				</DropdownMenuItem>
 				<DropdownMenuItem
 					onSelect={(event) => {
@@ -171,12 +171,12 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
 					}}
 				>
 					<Language />
-					{m.header.otherLocale}
+					{t.header.otherLocale}
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem onClick={onSignOut}>
 					<Logout />
-					{m.header.signOut}
+					{t.header.signOut}
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

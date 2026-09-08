@@ -5,7 +5,7 @@ slug: tong-quan-va-khung-noi-tieng-viet
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-09-07T22:56:40Z
 design_doc: docs/superpowers/specs/2026-09-08-tong-quan-va-khung-noi-tieng-viet-design.md
@@ -52,8 +52,8 @@ Source input: lượt audit 08/09 (`docs/superpowers/specs/2026-09-08-tong-quan-
 - AC-10: Given bộ đột biến, When một câu tiếng Anh được cắm lại vào TỪNG hình dạng của trục A — văn bản JSX · thuộc tính · toast · tiêu đề · khoá object/mảng lựa chọn · hàm ghép câu · **nhãn rail** — Then bảng ĐÓNG `(hình dạng, chân chuyên trách)`: mỗi vết bị đúng chân của hình dạng đó bắt với mã 1; mã 2 không tính là bắt; cây lành thì mọi chân xanh; `git status` trước và sau bằng nhau.
 - AC-11: Given bản `vi` dài hơn bản `en`, When `/` dựng ở 360px hai lượt (rail ẩn, thanh đầu, thẻ số, bảng) và ngăn kéo di động mở, Then với mọi phần tử NHÌN THẤY mang nhãn dịch được `scrollWidth ≤ clientWidth`; lượt `en` là đối chứng dương. Giới hạn kế thừa: mù với vùng chứa cho xuống dòng.
 - AC-12: Given chân bề rộng, When một nhãn `vi` dài được cắm vào một phần tử không xuống dòng của lát, Then chân ĐỎ đúng chiều "vi tràn mà en vừa" kèm hai cặp số, và cây trả nguyên trạng.
-- AC-13: Given `GOM` và `DO_RONG` của bộ thước dùng chung nhận tham số `toanMan` với mặc định là gốc cũ, When phép đo gom chữ trên CÙNG một trang `/` hai cách, Then cặp hai chiều cho CẢ HAI hàm: gốc mới CHỨA đủ bảy nhãn rail (đọc từ kho chuỗi), gốc cũ vắng cả bảy; mũi gọi không tham số cho ra tập BẰNG gốc cũ (`GOM()` ≡ `GOM(false)`, `DO_RONG()` ≡ `DO_RONG(false)`). Một chiều gãy là ĐỎ gọi tên hàm và chiều.
-- AC-14: Given thư mục `rang/` của lát này và của ③a, ③b, lát dựng tác nhân, When so sánh, Then ba vế: (1) mọi thân hàm và thân mô-đun là riêng — trùng từ 12 dòng trở lên là ĐỎ kèm tên hai file; lát dùng lại thước qua `--lat` và ổ cắm — và mọi `rang/*.mjs` của lát suy gốc kho từ `import.meta.url`, không ghim đường tuyệt đối; (2) **phép đo MÀN của một hồ sơ đã ký** (`man-cai-dat-noi-tieng-viet/rang/man-that.mjs hai-tieng`, gọi không tham số) chạy lại trên máy chủ thật vẫn thoát 0 và số chuỗi gom được trên hai route của nó BẰNG con số ghim trong `evidence-report.md` đã ký — bằng chứng đã ký tái lập được sau khi sửa `man-that-lib.mjs`; (3) chân cây cú pháp đếm mọi mũi gọi `GOM(` và `DO_RONG(` ngoài `rang/` của lát này: tất cả KHÔNG truyền tham số, đếm khác 0 là ĐỎ kèm `file:dòng`.
+- AC-13: Given `GOM` và `DO_RONG` của bộ thước dùng chung nhận tham số `toanMan` với mặc định là gốc cũ, When phép đo gom chữ trên CÙNG một trang `/` hai cách, Then cặp hai chiều cho CẢ HAI hàm, mốc là THANH ĐẦU (đo 08/09: rail là anh em của `main` trong cùng khung nên gốc cũ vốn thấy rail; thứ gốc cũ không thấy là thanh đầu): gốc mới CHỨA nhãn trang chủ và menu tài khoản (đọc từ kho chuỗi, `GOM`) và tên workspace (`DO_RONG`), gốc cũ vắng cả ba; mũi gọi không tham số cho ra tập BẰNG gốc cũ (`GOM()` ≡ `GOM(false)`, `DO_RONG()` ≡ `DO_RONG(false)`). Một chiều gãy là ĐỎ gọi tên hàm và chiều.
+- AC-14: Given thư mục `rang/` của lát này và của ③a, ③b, lát dựng tác nhân, When so sánh, Then ba vế: (1) mọi thân hàm và thân mô-đun là riêng — trùng từ 12 dòng trở lên là ĐỎ kèm tên hai file; lát dùng lại thước qua `--lat` và ổ cắm — và mọi `rang/*.mjs` của lát suy gốc kho từ `import.meta.url`, không ghim đường tuyệt đối; (2) **phép đo MÀN của một hồ sơ đã ký** (`man-cai-dat-noi-tieng-viet/rang/man-that.mjs hai-tieng`, gọi không tham số) chạy lại trên máy chủ thật vẫn thoát 0 và số chuỗi gom được trên hai route của nó BẰNG con số đo bằng thư viện TRƯỚC KHI SỬA trên cùng dữ liệu (ghim trong `rang/goc-thuoc.json`; đo 08/09: số đã ký 42/118 phụ thuộc dữ liệu máy cũ — tỷ giá, tên workspace — nên không phải neo hợp lệ giữa hai máy) — phép đo của hồ sơ đã ký tái lập được sau khi sửa `man-that-lib.mjs`; (3) chân cây cú pháp đếm mọi mũi gọi `GOM(` và `DO_RONG(` ngoài `rang/` của lát này: tất cả KHÔNG truyền tham số, đếm khác 0 là ĐỎ kèm `file:dòng`.
 - AC-15: Given hai kho chuỗi mới, When bộ canh kho chuỗi của `apps/app` chạy, Then mọi giá trị `vi` có dấu trừ miễn trừ có tên, không giá trị nào y hệt `en`, mọi hàm ghép biến có khẳng định ghim, không khoá chết; và không còn chỗ nào trong lát ghim `"en"` vào `formatCount`.
 - AC-16: Given nhãn rail đã tách khỏi khoá điều khiển (`lib/khung-dieu-huong.ts`), When bài kiểm đơn vị chạy với lượt `vi`, Then mục Hội thoại vẫn được nhận ra là mục hội thoại (`laMucHoiThoai`) và mục đang mở vẫn đúng theo `pathname`; đảo về so sánh bằng nhãn là bài kiểm ĐỎ.
 - AC-17 (judgment): Given hai kho chuỗi mới, When người đọc như một nhân viên quan hệ đối tác của OneHub mở màn đầu tiên, Then bản dịch đọc như tiếng Việt của người làm nghề: danh từ theo `CONTEXT.md` (công ty · cá nhân · thoả thuận · hội thoại · chiến dịch), thẻ số nói giọng đối tác chứ không giọng phễu bán hàng (`chốt` thay cho thắng/thua), thuật ngữ kỹ thuật giữ tên thật, không dấu vết dịch máy.
@@ -97,6 +97,28 @@ Khai trước ở S1; S3 bổ sung khi thước đo được.
 
 - Máy viết hợp đồng này chưa có `bun`, `.env`, Postgres — S3 và S4 chạy ở máy có môi trường dev đầy đủ.
 - Chân màn của AC-8 đo trên vật sẵn có của DB thử (seed của kho: 18 công ty, 27 thoả thuận); workspace trống thì bảng Tổng quan rỗng và chân chỉ chứng được tên workspace và email.
-- Tiêu chí AC-13 chứng gốc mới THẤY rail; nó không chứng rail đã dịch — vế đó là AC-1.
+- Tiêu chí AC-13 chứng gốc mới THẤY thanh đầu; nó không chứng khung đã dịch — vế đó là AC-1.
+
+### Đo được ở S3 — bốn chỗ hợp đồng nói chưa đúng vật thật, và ba chỗ kéo thêm ngoài lát
+
+- **Gốc cũ của thước VỐN ĐÃ thấy thanh bên.** Thiết kế đoán rail nằm ngoài gốc cũ; chân `goc-thuoc` chạy lần đầu trả ĐỎ với *"goc cu thay 7/7 nhan rail"*. Rail là anh em của `main` trong cùng khung nên gốc cũ (cha của `main`) chứa nó. Thứ gốc cũ thật sự không thấy là **thanh đầu**. Mốc của AC-13 đổi sang nhãn trang chủ, menu tài khoản và tên workspace; đo lại: gốc cũ 0/2, gốc mới 2/2 (`GOM`), và 0/1 → 1/1 (`DO_RONG`); số phần tử 42→51 và 31→34.
+- **Neo của AC-14 không dùng được con số đã ký.** Bằng chứng của `man-cai-dat` ghi 42/118 chuỗi, đo trên máy cũ với dữ liệu khác. Trên máy này cùng bộ dữ liệu, thư viện **trước** và **sau** khi sửa cùng ra 41/86 — đó mới là neo chứng được điều hợp đồng hứa. Cả hai số ghim ở `rang/goc-thuoc.json`.
+- **Nhãn tháng của biểu đồ do máy chủ đúc bằng `en-US`.** `apps/api/src/dashboard/dashboard.service.ts` ghim `Intl.DateTimeFormat("en-US", { month: "short" })`, nên trục X đọc *May · Jun · Jul* ở cả hai lượt tiếng. Đã sửa: máy chủ trả tháng dạng trung tính `2026-05`, khách định dạng theo tiếng qua `formatMonth` mới trong `packages/ui/src/lib/format.ts`. Đây là **kéo thêm chỗ ngoài lát** — cùng lý do ③b kéo nhãn hạn cookie và `channel-picker` vào vòng: chúng hiện trên màn của lát nên bỏ qua thì AC-1 đỏ. `apps/api/src/dashboard` không nằm trong `t3_paths`.
+- **Ba chỗ đổi bố cục, ngoài lời hứa chỉ-đổi-chữ.** Nhãn thẻ số chỉ cắt cụt từ ngưỡng bốn cột (`packages/ui/src/components/stat-card.tsx`, một lớp Tailwind) — ở 360px nó cho xuống dòng thay vì tràn; **bản tiếng Anh cũng đã tràn 150/131px trước vòng này**. Hai ô tiền nới `w-14`→`w-16` và cột giá trị `w-20`→`w-24` vì số tiền tiếng Việt (`120,5 N CA$`) rộng hơn bản Anh.
+- **Thư viện cắm vết dùng chung nhận thêm tham số thụt.** `be-rong-do-lib.sh` ghim hai tầng thụt; nhãn cần cắm của lát này nằm ở ba tầng. Thêm biến `THUT`, mặc định giữ hai tầng nên bốn hồ sơ cũ không đổi.
+
+### Chiều đỏ của chân bề rộng — CÓ đối tượng, và điều đó được ĐO
+
+Chân `be-rong-tien-de` (ổ cắm `tq_be_rong_tien_de`) đếm hộp chặt cứng trên hai bề mặt ở 360px, rồi **nối chữ ngay trên DOM** để hỏi hộp nào thật sự tràn được — `nowrap` một mình không đủ, hộp tự nong ra thì không bao giờ tràn. Đo 08/09: **17 trên 82** hộp chặt cứng mang nhãn của lát, và **đúng 1** trong số đó tràn được: tiêu đề cột `Thoả thuận`. Vết của `be-rong-do.sh` cắm vào đúng nhãn đó, và chân đỏ đúng chiều: `vi 375/230px · en 230/230px vừa`.
+
+### Bảy hình dạng, bảy chân chuyên trách — đo 08/09
+
+Bộ đột biến chứng cả bảy: văn bản JSX → `chu-cung-jsx` · thuộc tính → `moi-chuoi` · toast → `toast` · tiêu đề → `tieu-de` · khoá object → `moi-chuoi` · hàm ghép câu → `moi-chuoi` · **nhãn rail → `hai-tieng`** (vết cắm vào kho chuỗi, chờ 12 giây cho máy chủ nạp lại, chân màn bắt). Sáu chân xanh trên cây lành; cây trả nguyên trạng.
+
+### Giới hạn còn lại
+
+- **Sáu trên mười ba ô dữ liệu người nhập không đo được trên màn**, gọi tên trong output: bảng việc quá hạn rỗng trên bộ dữ liệu mẫu (ba ô), hoạt động đầu bảng là đổi giai đoạn nên không gắn công ty hay thoả thuận riêng (hai ô), và kết quả ⌘K cần API tìm kiếm khớp (một ô). Bảy ô còn lại đo được trên vật sẵn có; chân mã phủ cả mười ba.
+- **Bốn dòng bảng không-dịch không dựng được trên màn**: ba giai đoạn đóng (`Closed won` · `Closed lost` · `Unqualified`) không có chỗ trên màn Tổng quan vì nó chỉ vẽ thoả thuận đang mở, và mã tiền tệ chỉ hiện khi có thoả thuận chưa quy đổi. Cả bốn đo ở mức mã và gọi tên.
+- **Chân bề rộng mù với vùng chứa cho xuống dòng** — giới hạn kế thừa từ ③b.
 - `ban-dich.md` do S3 sinh từ hai kho chuỗi (như ③a), là đầu vào PHỤ của E19; hai kho thật là chính. Bốn bản khai `rang/*.json` (toast · không-dịch · dữ liệu người nhập · lát) viết ở S3 sau khi thước AST đếm, trừ `lat-tong-quan.json` viết ở S1 với hai con số neo.
 - Trạng thái rỗng (AC-3) dựng bằng `?scope=me` của tài khoản không sở hữu gì; những ô số liệu tính trên cả workspace (thẻ số, biểu đồ) không rỗng theo cách đó — câu rỗng của hai biểu đồ đo ở mức mã và gọi tên.

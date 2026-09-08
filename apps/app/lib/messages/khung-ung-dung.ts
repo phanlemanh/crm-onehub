@@ -34,6 +34,7 @@ const en = {
 		placeholder: "Search companies, contacts and deals…",
 		typeMore: "Type at least two characters.",
 		noMatch: "Nothing matches.",
+		results: "Results",
 		groups: { company: "Companies", contact: "Contacts", deal: "Deals" },
 	},
 	enrichment: {
@@ -50,6 +51,7 @@ const en = {
 		show: "Show",
 		bookedOne: "1 record is booked for a later look",
 		bookedMany: (n: string) => `${n} records are booked for a later look`,
+		bookedMore: (n: string) => `${n} more are booked but not listed here`,
 	},
 };
 
@@ -89,6 +91,7 @@ const vi = {
 		placeholder: "Tìm công ty, cá nhân, thoả thuận…",
 		typeMore: "Gõ ít nhất hai ký tự.",
 		noMatch: "Không có gì khớp.",
+		results: "Kết quả",
 		groups: { company: "Công ty", contact: "Cá nhân", deal: "Thoả thuận" },
 	},
 	enrichment: {
@@ -105,6 +108,7 @@ const vi = {
 		show: "Hiện",
 		bookedOne: "1 bản ghi hẹn tra cứu sau",
 		bookedMany: (n: string) => `${n} bản ghi hẹn tra cứu sau`,
+		bookedMore: (n: string) => `Còn ${n} bản ghi nữa chưa liệt kê ở đây`,
 	},
 } satisfies KhungUngDungMessages;
 

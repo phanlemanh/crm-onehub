@@ -427,6 +427,10 @@ describe("kho chuoi cua vong ③a", () => {
 				"1 bản ghi hẹn tra cứu sau",
 				"12 bản ghi hẹn tra cứu sau",
 			],
+			"khung-ung-dung:enrichment.bookedMore": [
+				"Còn 1 bản ghi nữa chưa liệt kê ở đây",
+				"Còn 12 bản ghi nữa chưa liệt kê ở đây",
+			],
 			"khung-ung-dung:enrichment.moreQueued": [
 				"Còn 1 đang xếp hàng",
 				"Còn 12 đang xếp hàng",

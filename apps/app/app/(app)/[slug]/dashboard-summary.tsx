@@ -66,7 +66,7 @@ function cot(m: TongQuanMessages) {
 			width: "w-24",
 			className: "hidden sm:table-cell",
 		},
-		{ id: "value", header: m.open.cols.value, width: "w-20", align: "right" },
+		{ id: "value", header: m.open.cols.value, width: "w-24", align: "right" },
 	];
 	const tasks: SimpleTableColumn[] = [
 		{ id: "done", srLabel: m.tasks.cols.done, width: "w-8" },

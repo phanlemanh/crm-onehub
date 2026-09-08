@@ -309,7 +309,7 @@ function ScheduledSection({
 
 				{total > rows.length ? (
 					<div className="px-4 py-3 text-muted-foreground text-xs">
-						{total - rows.length} more are booked but not listed here
+						{m.bookedMore(String(total - rows.length))}
 					</div>
 				) : null}
 			</CollapsibleContent>

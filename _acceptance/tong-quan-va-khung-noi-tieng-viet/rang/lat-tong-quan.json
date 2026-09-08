@@ -6,7 +6,7 @@
 	"neo": {
 		"file": 6,
 		"route": 1,
-		"ghi_chu": "Hai con so lay tu kiem ke 08/09, DOC LAP voi luat quet. file dem .tsx KHONG de quy trong thu_muc (dashboard-summary · layout · overview-greeting · overview-scope · page · sales-dashboard); route dem page.tsx trong thu_muc. Bay file khung khai bang them vi chung nam rai o components/ va lib/ — quet ca thu muc components/ la keo hon 20 file cua lat khac vao. neo.file van dem thu_muc, khong dem them."
+		"ghi_chu": "Hai con so lay tu kiem ke 08/09, DOC LAP voi luat quet. file dem .tsx KHONG de quy trong thu_muc (dashboard-summary · layout · overview-greeting · overview-scope · page · sales-dashboard); route dem page.tsx trong thu_muc. Bay file khung khai bang them vi chung nam rai o components/ va lib/ — quet ca thu muc components/ la keo hon 20 file cua lat khac vao. neo.file van dem thu_muc, khong dem them. mien_tru rong: OneHub chi hien o root layout, ngoai lat."
 	},
 	"them": [
 		"apps/app/components/app-icon-rail.tsx",
@@ -18,11 +18,12 @@
 		"apps/app/lib/sign-out.ts"
 	],
 	"khong_quet": [],
-	"mien_tru": [
+	"mien_tru": [],
+	"route_khong_dung_duoc": [],
+	"mien_dau": [
 		{
-			"chuoi": "OneHub",
-			"vi_sao": "ten thuong hieu — giu nguyen o ca hai ban"
+			"chuoi": "English",
+			"vi_sao": "ten tieng kia tren nut doi tieng — luot vi hien English"
 		}
-	],
-	"route_khong_dung_duoc": []
+	]
 }

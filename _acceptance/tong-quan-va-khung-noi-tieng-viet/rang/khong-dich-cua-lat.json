@@ -1,0 +1,56 @@
+{
+	"lat": "tong-quan-va-khung-noi-tieng-viet",
+	"ghi_chu": "Bang dong gia tri KHONG DUOC DICH tren / va khung. Moi dong khai dieu_kien: luon-hien | can-thoa-thuan-o-giai-doan | can-thoa-thuan-chua-quy-doi. Bay nhan giai doan doc THAT tu lib/deal-stage.ts qua import (dong nguon), khong chep tay. Chan man-that.mjs khong-dich kiem dieu kien qua dashboard.summary truoc khi gom; dong khong dat do o muc ma (phan tu render mang lang=en).",
+	"luat": [
+		{
+			"ten": "so-thuan",
+			"vi_sao": "chuoi chi so, dau cau, ky hieu — khong mang tu de dich"
+		},
+		{
+			"ten": "du-lieu-nguoi-nhap",
+			"vi_sao": "phan tu mang translate=no — do o AC-8"
+		},
+		{
+			"ten": "lang-en",
+			"vi_sao": "phan tu mang lang=en la nhan giu tieng Anh co chu y (giai doan thoa thuan)"
+		},
+		{
+			"ten": "so-tien",
+			"vi_sao": "So tien da dinh dang (231 N US$, 11,5 Tr ¥, 120,5 N CA$) — la SO, khong phai nhan. Nhan dien bang cach BOC: tru het chu so, dau cau, khoang trang, roi tru MOT don vi rut gon trong danh sach dong [N · Tr · T · K · M · B]; phan con lai phai la ky hieu tien te hoac ma ba chu. Chuoi khong bi tru gi (con nguyen) KHONG phai so tien.",
+			"don_vi_rut_gon": [
+				"N",
+				"Tr",
+				"T",
+				"K",
+				"M",
+				"B"
+			]
+		},
+		{
+			"ten": "o-nhap",
+			"vi_sao": "gia tri cua o input/textarea (khoa @value) la chu nguoi go"
+		}
+	],
+	"dong": [
+		{
+			"gia_tri": "OneHub",
+			"vi_sao": "thuong hieu — aria-label cua logo o thanh dau",
+			"dieu_kien": "luon-hien"
+		},
+		{
+			"nguon": "lib/deal-stage.ts",
+			"vi_sao": "bay nhan giai doan thoa thuan — CONTEXT.md chua chot nghia; bon giai doan mo hien o donut va cot Giai doan khi co thoa thuan, ba giai doan dong khong co cho tren /",
+			"dieu_kien": "can-thoa-thuan-o-giai-doan"
+		},
+		{
+			"gia_tri": "USD",
+			"vi_sao": "ma tien te bao cao trong cau chua quy doi",
+			"dieu_kien": "can-thoa-thuan-chua-quy-doi"
+		},
+		{
+			"gia_tri": "Open Tanstack query devtools",
+			"vi_sao": "aria-label cua nut devtools TanStack Query — chi mount o ban dev, khong co trong ban dung; khong phai chu cua san pham",
+			"dieu_kien": "ban-dev"
+		}
+	]
+}

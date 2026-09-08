@@ -14,6 +14,7 @@ import {
 	formatCount,
 	formatMoney,
 	formatMoneyCompact,
+	formatMonth,
 	formatPercent,
 } from "@crm/ui/lib/format";
 import Link from "next/link";
@@ -49,6 +50,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 		created: { label: m.trend.created, color: "var(--chart-1)" },
 	};
 	const soThoaThuan = (n: number) => formatCount(n, m.stats.dealNoun, locale);
+	const thang = (iso: string) => formatMonth(iso, locale);
 
 	const {
 		pipeline,
@@ -162,6 +164,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 								data={trend}
 								config={trendConfig}
 								xKey="month"
+								formatX={thang}
 								height={196}
 								variant="gradient"
 								bloom="high"
@@ -202,7 +205,7 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 											<span className="shrink-0 text-muted-foreground tabular-nums">
 												{slice.count}
 											</span>
-											<span className="w-14 shrink-0 text-right font-medium tabular-nums">
+											<span className="w-16 shrink-0 text-right font-medium tabular-nums">
 												{money(slice.value)}
 											</span>
 										</Link>

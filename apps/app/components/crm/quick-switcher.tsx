@@ -75,7 +75,7 @@ export function QuickSwitcher() {
 					value={query}
 					onValueChange={setQuery}
 				/>
-				<CommandList>
+				<CommandList label={m.results}>
 					<CommandEmpty>
 						{query.trim().length < 2 ? m.typeMore : m.noMatch}
 					</CommandEmpty>

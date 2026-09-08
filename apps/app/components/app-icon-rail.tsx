@@ -40,19 +40,21 @@ import {
 import { khungUngDungMessages } from "@/lib/messages/khung-ung-dung";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
-const ICON: Record<MucRailKey, { icon: CarbonIcon; className?: string }> = {
-	overview: { icon: Dashboard },
-	chat: { icon: Bot, className: "size-5" },
-	companies: { icon: Building },
-	contacts: { icon: UserMultiple },
-	deals: { icon: Partnership },
-	campaigns: { icon: Bullhorn },
-	settings: { icon: Settings },
-};
+const ICON = {
+	overview: Dashboard,
+	chat: Bot,
+	companies: Building,
+	contacts: UserMultiple,
+	deals: Partnership,
+	campaigns: Bullhorn,
+	settings: Settings,
+} satisfies Record<MucRailKey, CarbonIcon>;
+
+const LOP_ICON_HOI_THOAI = "size-5";
 
 type RailItem = {
 	muc: MucRail;
-	title: string;
+	label: string;
 	href: string;
 	section: string;
 	icon: CarbonIcon;
@@ -90,11 +92,11 @@ function RailLink({
 						transitionTypes={["nav-lateral"]}
 					>
 						<Icon icon={item.icon} className={item.iconClassName} />
-						<span className="sr-only">{item.title}</span>
+						<span className="sr-only">{item.label}</span>
 					</Link>
 				</Button>
 			</TooltipTrigger>
-			<TooltipContent side="right">{item.title}</TooltipContent>
+			<TooltipContent side="right">{item.label}</TooltipContent>
 		</Tooltip>
 	);
 }
@@ -132,7 +134,7 @@ function MobileRailLink({
 				]}
 			>
 				<Icon icon={item.icon} className={item.iconClassName} />
-				<span>{item.title}</span>
+				<span>{item.label}</span>
 			</Link>
 		</Button>
 	);
@@ -169,7 +171,7 @@ function MobileRailIconLink({
 				onClick={onNavigate}
 			>
 				<Icon icon={item.icon} className={item.iconClassName} />
-				<span className="sr-only">{item.title}</span>
+				<span className="sr-only">{item.label}</span>
 			</Link>
 		</Button>
 	);
@@ -191,7 +193,10 @@ export function AppIconRailFallback() {
 					disabled
 					className="text-muted-foreground"
 				>
-					<Icon icon={ICON[muc.key].icon} className={ICON[muc.key].className} />
+					<Icon
+						icon={ICON[muc.key]}
+						className={laMucHoiThoai(muc) ? LOP_ICON_HOI_THOAI : undefined}
+					/>
 					<span className="sr-only">{m.rail[muc.key]}</span>
 				</Button>
 			))}
@@ -211,11 +216,11 @@ export function AppIconRail() {
 			MUC_RAIL.map(
 				(muc): RailItem => ({
 					muc,
-					title: m.rail[muc.key],
+					label: m.rail[muc.key],
 					section: muc.href,
 					href: workspaceUrl(muc.href),
-					icon: ICON[muc.key].icon,
-					iconClassName: ICON[muc.key].className,
+					icon: ICON[muc.key],
+					iconClassName: laMucHoiThoai(muc) ? LOP_ICON_HOI_THOAI : undefined,
 				}),
 			),
 		[workspaceUrl, m],
