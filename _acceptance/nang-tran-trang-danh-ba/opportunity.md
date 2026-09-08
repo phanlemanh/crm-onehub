@@ -3,10 +3,10 @@ schema_version: 1
 slug: nang-tran-trang-danh-ba
 feature: Nâng trần trang danh bạ để bộ gieo rải mẫu thật sự chạm được môi giới sản lượng thấp
 owner: omre.cnsp4@onemount.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: held
+decision: release
+decided_by: Mạnh
+decided_at: 2026-09-09T00:00:00Z
 ---
 
 ## Vấn đề & ai gặp
@@ -98,3 +98,32 @@ chúng là hằng số: đổi phép đo sau khi đã thấy số là gian.
    tiếp thị thật sự dùng được.
 3. Đo trước, quyết sau: chạy một lượt `--dry-run` với trần cao để biết danh bạ có
    bao nhiêu trang và phân bố thật ra sao, rồi mới chọn số.
+
+## Kết quả đo sau ship (09/09/2026)
+
+Một lượt cào thật `--limit 200 --dry-run` với cấu hình đang ship. Đây là input của
+retro, không phải của cổng.
+
+| Câu hỏi | Mức phải đạt | Đo được |
+| --- | --- | --- |
+| Người ít đăng tin lấy được | ≥ 50 | **128** trên 154 |
+| Trong đó có số điện thoại | ≥ 30 | **128** |
+| Một lượt chạy | < 75 phút, mất < 35% trang | **35 phút**, mất **0** trang |
+
+Phân bố bốn nhóm: Cao 4 · Vừa 22 · Thấp 128 · **Ngủ 0**. Trung vị tin-30-ngày là
+8, so với sàn cũ 26 — quá nửa danh sách nay nằm dưới hẳn vùng mà cách cũ chạm tới.
+
+Danh sách môi giới của nhatot hết ở khoảng trang 114, chừng 1250 người. Câu «đáy
+danh bạ CHƯA ĐO ĐƯỢC» của hợp đồng nay có đáp án.
+
+**Ba điều cho vòng sau:**
+
+1. Nhóm «Ngủ» không thể có ai từ nguồn này — nhatot chỉ công bố một con số. Muốn
+   thước phân khúc chia bốn mức thì phải đổi nguồn hoặc đổi định nghĩa mức.
+2. Phần mã lấy số điện thoại chạy 0 lần vì hồ sơ đã hiện sẵn số. Nó là mã ngủ ở
+   cấu hình hôm nay; đáng cân xem có nên giữ không.
+3. 23% địa chỉ thử lấy không mở được hồ sơ. Chưa ai đo nhóm rơi rụng đó nghiêng
+   về đâu, nên chưa ai biết danh sách cuối có lệch không.
+
+Verdict Cổng Giá trị: **release** — Mạnh, 09/09/2026. Phiên không mời người dự và
+không thu chấm kín; verdict đứng trên số đo.

@@ -3,10 +3,10 @@ schema_version: 1
 slug: nang-tran-trang-danh-ba
 feature: Bộ gieo đọc danh bạ tới khi cạn thay vì tới một trần đoán, và lộ số điện thoại theo danh sách tầng khai trong cấu hình
 owner: omre.cnsp4@onemount.com
-stage: scheduled
-verdict:
-decided_by:
-decided_at:
+stage: held
+verdict: release
+decided_by: Mạnh
+decided_at: 2026-09-09T00:00:00Z
 ---
 
 # Phiên nghiệm thu — nang-tran-trang-danh-ba
@@ -24,22 +24,24 @@ hình đang ship, đọc từ dòng `lượt chạy:` mà lệnh in ra.
 
 ## Người dự
 
-| Tên | Vai | Đại diện cho ai |
-| --- | --- | --- |
-| | | |
+**KHÔNG MỜI AI.** Người ký quyết định trên số đo, không qua phòng.
 
-Chưa mời. Người dùng đại diện thật ưu tiên hơn người trong đội.
+Đây là chỗ phiên này lệch khỏi nghi thức, ghi ra để chữ ký không bị đọc thành
+thứ nó không dựa vào: không có người dùng đại diện nào chấm, nên không có điểm
+nào của người ngoài đội trong hồ sơ này.
 
 ## Chấm kín (thu TRƯỚC mọi thảo luận chung)
 
-Chưa thu. Không có nhật-ký lái-thử người-lạ cho vòng này nên không có câu gợi
-sẵn — cờ vàng, không chặn phiên.
+**KHÔNG THU.** Không có người dự thì không có gì để chấm kín, và câu ràng buộc
+«anh/chị sẽ gọi cho môi giới nào, khi nào?» không ai trả lời.
 
-Câu ràng buộc hỏi từng người: «anh/chị sẽ gọi cho môi giới nào, khi nào?»
+Hệ quả cần biết khi đọc verdict: phiên này đứng trên MỘT chân — số đo của một
+lượt cào — chứ không phải hai chân số-đo cộng phản ứng người dùng. Cũng không có
+nhật-ký lái-thử người-lạ cho vòng này.
 
 ## Thảo luận sau khi đã chấm
 
-Chưa họp.
+Không họp.
 
 ## Số đo thật đặt cạnh ngưỡng
 
@@ -83,5 +85,20 @@ nghiêng về mức nào.
 
 ## Quyết định Cổng Giá trị
 
-Chưa ký. KILL ở cổng này là THÀNH CÔNG của quy trình — câu trả lời mua bằng giá
-một vòng dựng, không phải thất bại của người làm.
+**release** — Mạnh, 09/09/2026.
+
+Ba câu hỏi đều đạt, và đạt rộng: 128 người ít đăng tin trên mức phải đạt là 50;
+cả 128 đều có số điện thoại trên mức phải đạt là 30; lượt chạy 35 phút trên trần
+75 và không mất trang nào.
+
+Ba điều hồ sơ này khai thẳng, và người ký biết khi ký:
+
+1. Nhóm «Ngủ» trống vì nguồn — nhatot chỉ công bố một con số nên ngăn đó không
+   thể có ai. CRM chia được ba nhóm, không phải bốn như hồ sơ cơ hội mong.
+2. Phần mã lấy số điện thoại của vòng này chạy 0 lần. Câu hỏi thứ hai đạt nhờ
+   nhatot hiện sẵn số, không nhờ vòng này.
+3. 23% địa chỉ thử lấy không mở được hồ sơ, và không ai biết họ nghiêng về nhóm
+   nào.
+
+Phiên không mời người dự và không thu chấm kín, nên verdict đứng trên số đo chứ
+không trên phản ứng người dùng.
