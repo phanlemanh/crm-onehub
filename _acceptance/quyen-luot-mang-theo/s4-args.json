@@ -1,0 +1,146 @@
+{
+  "generated_at": "2026-09-08T13:56:25Z",
+  "generated_sha": "6e92182952d60bcadd61f42ba924cec315df9d9d",
+  "mainBranchInfo": {
+    "branch": "onehub",
+    "source": "remote"
+  },
+  "slug": "quyen-luot-mang-theo",
+  "round": 1,
+  "riskTier": "T2",
+  "evals": [
+    {
+      "id": "E1",
+      "criterion": "AC-1",
+      "cmd": "cd apps/agent && bun test test/quyen-luot.spec.ts -t ke-thua",
+      "expected": "Luot HOI duoc phep -> ban ghi mang quyen \"duoc phep\"; luot HOI khong duoc phep\n-> ban ghi mang quyen nguoc lai.\nCAP HAI CHIEU tren CUNG mot fixture ctx, khac dung MOT truong (commandType).\nDoi mot truong ma ban ghi khong lat -> ma 1: khi ay cho ghi khong doc ctx.\nSan dan so: khong dung duoc ctx cua hook -> ma 2.\nCAM tu bia ban ghi roi assert tren no: phai goi CHINH duong ghi that cua\napps/agent (ham persist cua builder-input), roi doc lai gia tri no ghi ra.",
+      "executor": "test",
+      "paths": [
+        "apps/agent/agent/lib/builder-input.ts",
+        "packages/validation/src/builder-question.ts",
+        "apps/agent/test/quyen-luot.spec.ts"
+      ],
+      "ref": "config:executors.test.ql_quyen_ke_thua"
+    },
+    {
+      "id": "E2",
+      "criterion": "AC-2",
+      "cmd": "cd apps/agent && bun test test/quyen-luot.spec.ts -t ke-thua",
+      "expected": "Parse THAT bang schema trong packages/validation, khong doc chuoi nguon:\n(a) ban ghi du truong -> parse THANH CONG, kieu suy bang z.infer;\n(b) ban ghi SAI KHUON -> parse HONG va nem/tra loi CO THONG DIEP, khong\nduoc nuot thanh rong hay undefined im lang.\nChieu do: doi schema cho no chap nhan moi thu (passthrough) -> (b) phai het\nhong, phep do ma 1.\nVe quan he chay tren CA HAI ben doc, ma tran toan phan, so assert bang 2:\napps/api (conversations.service.ts) VA apps/agent (builder-input.ts) — moi ben\nphai import tu DUNG mot module validation, va so cho ep kieu cot nay sang tu\ndien mo phai bang 0 o ca hai; khac 0 -> ma 2, IN file:dong.\nVi sao dem ca hai: neu chi soi mot ben, ben kia ep kieu tho cot Json thanh tu\ndien mo roi chi dua rieng truong quyen qua schema — doi ten mot truong thi\nnhanh ep kieu tra undefined lang le, dung thu AC-2 cam, ma khong phep do nao do.",
+      "executor": "test",
+      "paths": [
+        "packages/validation/src/builder-question.ts",
+        "apps/api/src/conversations/conversations.service.ts",
+        "apps/agent/agent/lib/builder-input.ts",
+        "apps/agent/test/quyen-luot.spec.ts"
+      ],
+      "ref": "config:executors.test.ql_quyen_ke_thua"
+    },
+    {
+      "id": "E3",
+      "criterion": "AC-3",
+      "cmd": "cd apps/api && bun test test/quyen-luot.spec.ts",
+      "expected": "ROUND-TRIP, khong tu dung fixture dung khuon ben doc: ban ghi PHAI do CHINH\nham persist cua apps/agent (builder-input.ts) sinh ra. KHONG co duong lui —\ndung mot ham dung nao khac de tao ban ghi -> ma 2.\nKem mot assert khuon: ten truong va do sau long cua ban ghi ma duong GHI sinh\nra phai trung dung cai schema ben DOC cho doi.\nCAP HAI CHIEU tren cung fixture, khac dung MOT truong:\nban ghi \"duoc phep\"    -> submission commandType = CREATE_AGENT;\nban ghi \"khong duoc phep\" -> submission commandType = CHAT.\nDoi mot truong ma ket qua khong lat -> ma 1: khi ay API khong doc ban ghi,\nno chi tinh co trung.\nSan dan so: khong dung duoc ban ghi tu duong ghi that -> ma 2.",
+      "executor": "test",
+      "paths": [
+        "apps/api/src/conversations/conversations.service.ts",
+        "packages/validation/src/builder-question.ts",
+        "apps/api/test/quyen-luot.spec.ts"
+      ],
+      "ref": "config:executors.test.ql_api_doc_ban_ghi"
+    },
+    {
+      "id": "E4",
+      "criterion": "AC-4",
+      "cmd": "cd apps/api && bun test test/quyen-luot.spec.ts",
+      "expected": "BA hinh dang nguon quyen khong dung duoc, cung mot lop loi, kiem CA BA:\n(i) khong co pendingInputRequest;\n(ii) co nhung THIEU truong quyen;\n(iii) co nhung SAI KHUON.\nCa ba deu phai cho CHAT (fail-closed). So assert bang 3; chi kiem mot hinh\ndang -> chua du.\nChieu do (doi chung duong): ban ghi \"duoc phep\" hop le tren cung fixture ->\nphai cho CREATE_AGENT. Thieu chieu nay thi \"luon CHAT\" khong phan biet duoc\nvoi \"doc dung\".",
+      "executor": "test",
+      "paths": [
+        "apps/api/src/conversations/conversations.service.ts",
+        "apps/api/test/quyen-luot.spec.ts"
+      ],
+      "ref": "config:executors.test.ql_api_doc_ban_ghi"
+    },
+    {
+      "id": "E5",
+      "criterion": "AC-5",
+      "cmd": "cd apps/agent && bun test test/quyen-luot.spec.ts -t suy-dien",
+      "expected": "Goi HAM THAT builderCommandType(commandType, message) voi message mang\ninputResponse DAY DU (requestId + text, va bien the requestId + optionId):\ncommandType \"CHAT\"          -> ket qua VAN la \"CHAT\";\ncommandType \"CREATE_AGENT\"  -> ket qua \"CREATE_AGENT\" (khong lam mat duong cu).\nCAM ghi de thang truong commandType trong fixture roi assert — chinh loi tat\nay lam lo nay song sot qua ba vong cham cua vong truoc: sau phep do xanh\ntrong khi cong van mo.\nSan dan so: dem tren dia so cho suy quyen tu hinh dang tin nhan phai bang 0;\nkhac 0 -> ma 2, IN file:dong. Tai SHA ghim so nay bang 1.\nChieu do: cay lai ve suy dien trong ban sao -> ma 1.",
+      "executor": "test",
+      "paths": [
+        "apps/agent/agent/lib/custom-agent-dispatch.ts",
+        "apps/agent/test/quyen-luot.spec.ts"
+      ],
+      "ref": "config:executors.test.ql_khong_suy_dien"
+    },
+    {
+      "id": "E6",
+      "criterion": "AC-6",
+      "cmd": "cd apps/api && bun test test/quyen-luot.spec.ts",
+      "expected": "MA TRAN TOAN PHAN tren BA duong khong phai hoi-dap, ghim cung ba ten trong\nchinh bai do: nut Tao tac nhan · go tay trong hoi thoai · follow-up tren agent\nda deploy. So assert bang dung 3.\nMoi duong phai bang DUNG gia tri da GHIM trong bai do, do tai SHA 9ec0251 —\nKHONG so voi hien trang sau khi sua:\nnut Tao tac nhan (new-agent-dialog.tsx)      -> \"CREATE_AGENT\"\ngo tay (agent-composer.tsx)                  -> suy tu slash-command, mac dinh \"CHAT\"\nfollow-up tren agent da deploy (agent-builder-chat.tsx) -> \"CREATE_AGENT\"\nChieu do: doi commandType cua DUNG MOT duong trong ban sao -> ma 1, neu TEN\nduong.\nVi sao so voi so ghim: nguoi viet bai do SAU khi sua se chep lai hien trang da\nhong lam ky vong, ba assert van xanh trong khi duong follow-up da mat quyen.",
+      "executor": "test",
+      "paths": [
+        "apps/api/src/conversations/conversations.service.ts",
+        "apps/api/test/quyen-luot.spec.ts"
+      ],
+      "ref": "config:executors.test.ql_api_doc_ban_ghi"
+    },
+    {
+      "id": "E7",
+      "criterion": "AC-7",
+      "cmd": "cd apps/agent && bun test test/quyen-luot.spec.ts -t cua-ra",
+      "expected": "instructions.md cua agent_builder phai khai cua ra khi bi tu choi: goi\nfinal_output voi status not_authorized, va KHONG co lua chon nao khac.\nDo CA HAI ve, khong chi dem chuoi:\n(a) van ban co nhac not_authorized (san dan so: 0 lan -> ma 1; tai SHA ghim\nso nay bang 0);\n(b) gia tri status ay PARSE DUOC bang outputSchema cua agent_builder — tuc\nchi dan va schema noi cung mot thu, khong lech ten.\nChieu do: doi ten trang thai trong chi dan (vd \"unauthorized\") -> (b) phai\nhong, phep do ma 1.",
+      "executor": "test",
+      "paths": [
+        "apps/agent/agent/subagents/agent_builder/instructions.md",
+        "apps/agent/test/quyen-luot.spec.ts"
+      ],
+      "ref": "config:executors.test.ql_con_biet_cua_ra"
+    },
+    {
+      "id": "E8",
+      "criterion": "AC-8",
+      "cmd": "judgment",
+      "expected": "Hang ly do noi voi CON, bang viec con lam duoc. Doc ba file cung luc phai thay\nsu phan vai ro: con nhan lenh tra not_authorized; cha moi la ben noi voi nguoi\ndung va tra loi tiep cau hoi goc. Neu hang ly do van mang cau \"Tell the user\"\nhoac \"answer what they actually asked\" thi FAIL, trich nguyen van cau do.\nGIOI HAN DA BIET, khai o day de khong ai tuong da do: phep do nay cham HANG VA\nCHI DAN, KHONG cham van ban runtime ma cha that su soan — xem muc Out of scope\ncua contract.",
+      "question": "Hang BUILDER_DENIED_REASON — chuoi ma eve giao cho CON khi policy tu choi —\nco dang bao CON lam viec con lam duoc khong: tra not_authorized ngay? Hay no\ndang bao con \"noi voi nguoi dung\" va \"tra loi cau ho hoi\", hai viec ma con\nkhong the lam vi no chay task mode, khong co kenh nguoi dung va phan lon tool\nda tat?",
+      "executor": "judgment",
+      "inputs": [
+        "/Users/manhphan/dev/crm-onehub-cutl/apps/agent/agent/subagents/agent_builder/lib/authorization.ts",
+        "/Users/manhphan/dev/crm-onehub-cutl/apps/agent/agent/subagents/agent_builder/instructions.md",
+        "/Users/manhphan/dev/crm-onehub-cutl/apps/agent/agent/instructions/task.ts"
+      ]
+    },
+    {
+      "id": "E9",
+      "criterion": "AC-9",
+      "cmd": "cd apps/agent && bun test test/quyen-luot.spec.ts -t cong-dong",
+      "expected": "Chay HET CHUOI bang cac ham THAT, khong dung tay khuc nao:\nban ghi quyen -> ham suy commandType (dung chung o packages/validation)\n-> builderSessionAttributes -> builderTurnApproval.\nCAP HAI CHIEU tren cung fixture, khac dung MOT truong:\nban ghi \"khong duoc phep\" -> policy tra TU CHOI kem hang ly do ghim (so\nnguyen van chuoi literal viet trong bai do, KHONG so voi chinh hang da\nimport — so hang voi chinh no la hang-dung);\nban ghi \"duoc phep\"       -> policy tra cho di tiep.\nSan dan so: chuoi thieu mot mat (mot khuc dung tay thay vi goi ham that) ->\nma 2, NEU mat nao.\nVi sao co phep do nay: tam eval tren deu dung o commandType — mot GIA TRI\nTRUNG GIAN. Neu runtime lay quyen tu nguon khac trong ctx, hoac\nbuilderTurnAuthorized doc truong khac ten, thi ca tam van xanh trong khi cong\nvan mo. Do dung hinh dang da xay ra o vong truoc.",
+      "executor": "test",
+      "paths": [
+        "packages/validation/src/builder-question.ts",
+        "apps/agent/agent/lib/custom-agent-dispatch.ts",
+        "apps/agent/agent/lib/session-purpose.ts",
+        "apps/agent/agent/subagents/agent_builder/lib/authorization.ts",
+        "apps/agent/test/quyen-luot.spec.ts"
+      ],
+      "ref": "config:executors.test.ql_cong_dong_that"
+    }
+  ],
+  "suiteCommands": [
+    "bun run test",
+    "bunx turbo run check-types --force",
+    "bunx turbo run lint --force",
+    "bun run lint:slop",
+    "bunx turbo run build --force"
+  ],
+  "diffBase": "564cf56defb87e95fbc6ff934cc6b5e9acfa30ab",
+  "repoRoot": "/Users/manhphan/dev/crm-onehub-cutl",
+  "personasPath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.8.0/skills/acceptance/references/judge-personas.md",
+  "templatePath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.8.0/skills/acceptance/references/evidence-report-template.md",
+  "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
+  "contractPath": "/Users/manhphan/dev/crm-onehub-cutl/_acceptance/quyen-luot-mang-theo/contract.md",
+  "invokedAt": "2026-09-08T13:56:25Z",
+  "invokedSha": "6e92182952d60bcadd61f42ba924cec315df9d9d",
+  "evalsHash": "a79adb08301420823ae7889aaa8ec1bcda9152ab2a4fb7883d9b1ec2c6ca7193",
+  "runBaseline": true
+}

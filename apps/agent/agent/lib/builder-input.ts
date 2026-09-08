@@ -1,7 +1,7 @@
 import { db, type Prisma } from "@crm/db";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
 import { type InputRequested, parse, schemas } from "@crm/validation";
-import { BUILDER_AUTHORIZATION_KEY } from "@crm/validation/builder-question";
+import { buildPendingInputRequest } from "@crm/validation/builder-question";
 import type { ChannelEvents } from "eve/channels";
 import {
 	builderIdFromToken,
@@ -88,10 +88,10 @@ export async function persistBuilderInputRequest(
 			where: { id: conversation.id },
 			data: {
 				continuationToken: builderToken(conversation.id),
-				pendingInputRequest: {
-					...question,
-					[BUILDER_AUTHORIZATION_KEY]: authorized,
-				} as Prisma.InputJsonValue,
+				pendingInputRequest: buildPendingInputRequest(
+					question,
+					authorized,
+				) as Prisma.InputJsonValue,
 			},
 		});
 

@@ -34,7 +34,7 @@ export function recordBuilderActions(
 	turnId: string,
 	stepIndex: number,
 	actions: readonly BuilderAction[],
-	authorized = true,
+	authorized: boolean,
 ): BuilderExecutionState {
 	const current =
 		state.turnId === turnId

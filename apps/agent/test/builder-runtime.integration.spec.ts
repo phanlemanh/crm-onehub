@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
+import { BUILDER_AUTHORIZATION_KEY } from "@crm/validation/builder-question";
 import { persistBuilderInputRequest } from "../agent/lib/builder-input";
 import {
 	saveBuilderDraft,
@@ -96,7 +97,7 @@ describe("builder persistence", () => {
 		};
 
 		expect(
-			await persistBuilderInputRequest(event, undefined, conversationId),
+			await persistBuilderInputRequest(event, undefined, conversationId, true),
 		).toBe(true);
 		expect(
 			await db.agentConversation.findUnique({
@@ -105,7 +106,7 @@ describe("builder persistence", () => {
 			}),
 		).toEqual({
 			continuationToken: builderToken(conversationId),
-			pendingInputRequest: request,
+			pendingInputRequest: { ...request, [BUILDER_AUTHORIZATION_KEY]: true },
 		});
 		expect(
 			await db.agentEvent.findUnique({
@@ -132,11 +133,11 @@ describe("builder persistence", () => {
 			],
 		};
 		expect(
-			await persistBuilderInputRequest(newer, undefined, conversationId),
+			await persistBuilderInputRequest(newer, undefined, conversationId, true),
 		).toBe(true);
 
 		expect(
-			await persistBuilderInputRequest(event, undefined, conversationId),
+			await persistBuilderInputRequest(event, undefined, conversationId, true),
 		).toBe(false);
 		expect(
 			await persistBuilderInputRequest(
@@ -147,6 +148,7 @@ describe("builder persistence", () => {
 				},
 				undefined,
 				conversationId,
+				true,
 			),
 		).toBe(false);
 
@@ -155,7 +157,12 @@ describe("builder persistence", () => {
 				where: { id: conversationId },
 				select: { pendingInputRequest: true },
 			}),
-		).toEqual({ pendingInputRequest: newer.requests[0] });
+		).toEqual({
+			pendingInputRequest: {
+				...newer.requests[0],
+				[BUILDER_AUTHORIZATION_KEY]: true,
+			},
+		});
 		expect(
 			await db.agentEvent.count({
 				where: {
@@ -200,6 +207,7 @@ describe("builder persistence", () => {
 				},
 				undefined,
 				conversation.id,
+				true,
 			),
 		).toBe(true);
 
@@ -213,6 +221,7 @@ describe("builder persistence", () => {
 				},
 				undefined,
 				conversation.id,
+				true,
 			),
 		).toBe(false);
 
@@ -221,7 +230,9 @@ describe("builder persistence", () => {
 				where: { id: conversation.id },
 				select: { pendingInputRequest: true },
 			}),
-		).toEqual({ pendingInputRequest: current });
+		).toEqual({
+			pendingInputRequest: { ...current, [BUILDER_AUTHORIZATION_KEY]: true },
+		});
 		expect(
 			await db.agentEvent.count({
 				where: {

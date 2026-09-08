@@ -3,18 +3,22 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
 	BUILDER_AUTHORIZATION_KEY,
+	buildPendingInputRequest,
 	commandTypeFromAuthorization,
 	readBuilderAuthorization,
 } from "@crm/validation/builder-question";
 import { builderCommandType } from "../agent/lib/custom-agent-dispatch";
 
-const banGhi = (authorized: boolean) => ({
-	kind: "question",
-	requestId: "req_1",
-	prompt: "Chon mot muc",
-	options: [],
-	[BUILDER_AUTHORIZATION_KEY]: authorized,
-});
+const banGhi = (authorized: boolean) =>
+	buildPendingInputRequest(
+		{
+			kind: "question",
+			requestId: "req_1",
+			prompt: "Chon mot muc",
+			options: [],
+		},
+		authorized,
+	);
 
 describe("ke-thua", () => {
 	it("ke-thua: doc duoc ca hai chieu tren cung khuon", () => {
@@ -36,18 +40,13 @@ describe("ke-thua", () => {
 		}
 	});
 
-	it("ke-thua: cho ghi truyen quyen cua luot hoi, khong tu bia", () => {
-		const nguon = readFileSync(
-			join(import.meta.dir, "../agent/lib/builder-input.ts"),
-			"utf8",
+	it("ke-thua: ham dung ban ghi la mot, va no tu choi cau hoi sai khuon", () => {
+		expect(banGhi(true)[BUILDER_AUTHORIZATION_KEY]).toBe(true);
+		expect(banGhi(false)[BUILDER_AUTHORIZATION_KEY]).toBe(false);
+		expect(banGhi(true).requestId).toBe("req_1");
+		expect(() => buildPendingInputRequest({ kind: "question" }, true)).toThrow(
+			"Builder input request is not a usable question.",
 		);
-		expect(nguon).toContain("BUILDER_AUTHORIZATION_KEY");
-		expect(nguon).not.toContain(`"${BUILDER_AUTHORIZATION_KEY}"`);
-		const goi = readFileSync(
-			join(import.meta.dir, "../agent/channels/crm.ts"),
-			"utf8",
-		);
-		expect(goi).toContain("builderTurnAuthorized(ctx)");
 	});
 
 	it("ke-thua: suy commandType dong khi khong doc duoc", () => {

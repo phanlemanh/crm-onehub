@@ -5,19 +5,20 @@ evals:
   - id: E1
     criterion: AC-1
     executor: test
-    cmd: config:executors.test.ql_quyen_ke_thua
+    cmd: config:executors.test.ql_duong_ghi_that
     paths:
       - "apps/agent/agent/lib/builder-input.ts"
       - "packages/validation/src/builder-question.ts"
-      - "apps/agent/test/quyen-luot.spec.ts"
+      - "apps/agent/test/builder-runtime.integration.spec.ts"
     expected: |
       Luot HOI duoc phep -> ban ghi mang quyen "duoc phep"; luot HOI khong duoc phep
       -> ban ghi mang quyen nguoc lai.
       CAP HAI CHIEU tren CUNG mot fixture ctx, khac dung MOT truong (commandType).
       Doi mot truong ma ban ghi khong lat -> ma 1: khi ay cho ghi khong doc ctx.
       San dan so: khong dung duoc ctx cua hook -> ma 2.
-      CAM tu bia ban ghi roi assert tren no: phai goi CHINH duong ghi that cua
-      apps/agent (ham persist cua builder-input), roi doc lai gia tri no ghi ra.
+      CAM tu bia ban ghi roi assert tren no: bai do PHAI goi CHINH ham
+      persistBuilderInputRequest cua apps/agent, roi DOC LAI hang trong co so du lieu
+      va doi hang do mang co quyen. Fixture dung tay dung khuon ben doc -> ma 2.
 
   - id: E2
     criterion: AC-2

@@ -47,10 +47,16 @@ describe("api doc ban ghi quyen", () => {
 			join(import.meta.dir, "../src/conversations/conversations.service.ts"),
 			"utf8",
 		);
-		expect(nguon.includes("commandTypeFromAuthorization(")).toBe(true);
-		const tao = nguon.slice(nguon.indexOf("inputRequestId: input.requestId"));
-		expect(tao.slice(0, 220).includes('commandType: "CREATE_AGENT"')).toBe(
-			false,
+		expect(nguon.split("commandTypeFromAuthorization(").length - 1).toBe(1);
+		expect(
+			nguon.includes(
+				"commandType: commandTypeFromAuthorization(\n\t\t\t\t\t\t\tconversation.pendingInputRequest,",
+			),
+		).toBe(true);
+		const conLai = [...nguon.matchAll(/commandType: "CREATE_AGENT"/g)].map(
+			(m) => nguon.slice(Math.max(0, m.index - 40), m.index),
 		);
+		expect(conLai).toHaveLength(1);
+		expect(conLai[0]?.includes("where: {")).toBe(true);
 	});
 });

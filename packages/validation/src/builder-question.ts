@@ -48,6 +48,20 @@ const authorizationEnvelope = z.object({
 	[BUILDER_AUTHORIZATION_KEY]: z.boolean(),
 });
 
+export type BuilderAuthorizationFlag = {
+	[BUILDER_AUTHORIZATION_KEY]: boolean;
+};
+
+export function buildPendingInputRequest<T extends object>(
+	question: T,
+	authorized: boolean,
+): T & BuilderAuthorizationFlag {
+	if (!askedQuestion.safeParse(question).success) {
+		throw new Error("Builder input request is not a usable question.");
+	}
+	return { ...question, [BUILDER_AUTHORIZATION_KEY]: authorized };
+}
+
 export function readBuilderAuthorization(value: unknown): boolean {
 	const parsed = authorizationEnvelope.safeParse(value);
 	if (!parsed.success) {
@@ -61,9 +75,7 @@ export function readBuilderAuthorization(value: unknown): boolean {
 export function commandTypeFromAuthorization(
 	value: unknown,
 ): "CHAT" | "CREATE_AGENT" {
-	try {
-		return readBuilderAuthorization(value) ? "CREATE_AGENT" : "CHAT";
-	} catch {
-		return "CHAT";
-	}
+	const parsed = authorizationEnvelope.safeParse(value);
+	if (!parsed.success) return "CHAT";
+	return parsed.data[BUILDER_AUTHORIZATION_KEY] ? "CREATE_AGENT" : "CHAT";
 }
