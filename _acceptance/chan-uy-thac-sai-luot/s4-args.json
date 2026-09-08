@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-08T08:08:55Z",
-  "generated_sha": "1517d7c76c9dbee2351c031e90ea3712a1db39df",
+  "generated_at": "2026-09-08T08:51:27Z",
+  "generated_sha": "c45418ca69ffda3408ce1958fad2435fef439da1",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "chan-uy-thac-sai-luot",
-  "round": 1,
+  "round": 2,
   "riskTier": "T2",
   "evals": [
     {
@@ -98,57 +98,8 @@
       "inputs": [
         "/Users/manhphan/dev/crm-onehub-cutl/apps/agent/agent/instructions/task.ts",
         "/Users/manhphan/dev/crm-onehub-cutl/CONTEXT.md"
-      ]
-    },
-    {
-      "id": "E8",
-      "criterion": "AC-8",
-      "cmd": "cd apps/app && bun test test/chan-uy-thac.spec.ts",
-      "expected": "VE MAN cua cap cross-layer AC-8. Goi CHINH ham builderConversationIsWorking cua\napps/app — import that, CAM viet lai dieu kien (sessionId && !continuationToken)\ntheo tri nho, vi viet lai la duong lui tu cham.\nNap hang hoi thoai do ve agent (E8b) ghi ra, khong tu bia hang:\nchieu 1: hang da settle (continuationToken khac null) -> tra false.\nchieu 2 (do): hang chua settle (continuationToken = null) -> tra true.\nThieu chieu 2 thi mau xanh khong phan biet duoc \"khong treo\" voi \"thuoc chua\nbao gio chay\".",
-      "executor": "test",
-      "paths": [
-        "apps/app/lib/agent-builder-state.ts",
-        "apps/app/test/chan-uy-thac.spec.ts"
       ],
-      "ref": "config:executors.test.cu_man_khong_treo"
-    },
-    {
-      "id": "E8b",
-      "criterion": "AC-8",
-      "cmd": "cd apps/agent && bun test test/chan-uy-thac.spec.ts -t khong-treo",
-      "expected": "VE AGENT cua cap cross-layer AC-8: hoi thoai DA NHAN ma khong bao gio settle\nphai duoc THU HOI.\nCAP HAI CHIEU tren cung vi tu builderTurnAbandoned:\nchieu 1 (do): sessionId co, continuationToken null, acceptedAt qua han\n-> true (bi thu hoi).\nchieu 2 (doi chung duong): BA hinh dang KHONG duoc thu hoi, kiem CA BA —\n(i) da co continuationToken; (ii) chua co sessionId;\n(iii) acceptedAt CHUA qua han. So assert bang 3.\nChieu do them: bo dieu kien continuationToken khoi vi tu trong ban sao -> ma 1.\nSan dan so: tap ba hinh dang dem ra khac 3 -> ma 2.",
-      "executor": "test",
-      "paths": [
-        "apps/agent/agent/lib/custom-agent-dispatch.ts",
-        "apps/agent/agent/channels/crm.ts",
-        "apps/agent/test/chan-uy-thac.spec.ts"
-      ],
-      "ref": "config:executors.test.cu_khong_treo"
-    },
-    {
-      "id": "E9",
-      "criterion": "AC-9",
-      "cmd": "cd apps/app && bun test test/chan-uy-thac.spec.ts",
-      "expected": "VE MAN cua cap cross-layer AC-9. Nap dong su kien do ve agent (E9b) sinh ra vao\nCHINH ham latestTurnFailure cua apps/app.\nDo QUAN HE su kien -> the do, KHONG do ten su kien co mat: mot su kien dung ten\nnhung sai vo du lieu van lam latestTurnFailure tra null, va nguoi dung van thay\nhoi thoai treo khong the do — dung trieu chung prod vong nay hua chua.\nCAP HAI CHIEU tren cung nguon su kien:\nchieu 1 (do): dong su kien cua luot bi nem -> tra KHAC null.\nchieu 2 (doi chung duong): dong su kien cua mot luot binh thuong -> tra null.\nSan dan so: dong su kien rong -> ma 2.",
-      "executor": "test",
-      "paths": [
-        "apps/app/lib/agent-transcript.ts",
-        "apps/app/test/chan-uy-thac.spec.ts"
-      ],
-      "ref": "config:executors.test.cu_man_khong_treo"
-    },
-    {
-      "id": "E9b",
-      "criterion": "AC-9",
-      "cmd": "cd apps/agent && bun test test/chan-uy-thac.spec.ts -t khong-treo",
-      "expected": "VE AGENT cua cap cross-layer AC-9: luot thu hoi phai duoc NOI VAO dung cua vao\ncua lich dispatch, khong phai mot ham mo coi khong ai goi.\nDo QUAN HE chu khong do chuoi-co-mat o pham vi file: doc THAN cua\npendingBuilderSubmissionIds (cua vao ma schedules/dispatch.ts chay moi phut)\nva doi hoi no goi recoverStalledBuilderTurns.\nChieu do: go loi goi ay khoi than ham trong ban sao -> ma 1.\nSan dan so: khong dinh vi duoc than ham -> ma 2.\nGIOI HAN DA BIET: luot thu hoi chay theo lease 15 phut, nen day la bao dam\n\"tu go trong vong 15 phut\", KHONG phai \"hong ra mat ngay\" nhu ban chot pham vi\nhua — xem muc Notes cua contract va entry approach stage S3 trong decisions.jsonl.",
-      "executor": "test",
-      "paths": [
-        "apps/agent/agent/channels/crm.ts",
-        "apps/agent/agent/lib/custom-agent-dispatch.ts",
-        "apps/agent/test/chan-uy-thac.spec.ts"
-      ],
-      "ref": "config:executors.test.cu_khong_treo"
+      "inputsHash": "e1615d175282d1326f6304f49cb798f132ab2e09737af8c823997f99a243726b"
     },
     {
       "id": "E10",
@@ -179,8 +130,8 @@
   "templatePath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.8.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
   "contractPath": "/Users/manhphan/dev/crm-onehub-cutl/_acceptance/chan-uy-thac-sai-luot/contract.md",
-  "invokedAt": "2026-09-08T08:08:55Z",
-  "invokedSha": "1517d7c76c9dbee2351c031e90ea3712a1db39df",
-  "evalsHash": "6c0161d49ae910094eaf5a5e9562a69787eb5034acfc4d31b71b89a5da391bd0",
+  "invokedAt": "2026-09-08T08:51:27Z",
+  "invokedSha": "c45418ca69ffda3408ce1958fad2435fef439da1",
+  "evalsHash": "bb237ebd17d94cf94a177187c72284f15084c37a59fbdb21b9b480215249897a",
   "runBaseline": true
 }

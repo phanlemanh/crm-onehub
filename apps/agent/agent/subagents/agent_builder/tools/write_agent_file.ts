@@ -17,10 +17,12 @@ export default defineTool({
 		content: z.string().min(1).max(40_000),
 	}),
 	async execute(input, ctx) {
+		const conversationId = requireBuilderAttribute(ctx, "conversationId");
+		const userId = requireBuilderAttribute(ctx, "userId");
 		assertBuilderDraftOpen();
 		return writeBuilderArtifact(
-			requireBuilderAttribute(ctx, "conversationId"),
-			requireBuilderAttribute(ctx, "userId"),
+			conversationId,
+			userId,
 			input.path,
 			input.content,
 		);

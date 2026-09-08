@@ -131,10 +131,22 @@ describe("moi-tool", () => {
 				`../agent/subagents/agent_builder/tools/${name}`
 			);
 			expect(mod.default.approval).toBe(builderTurnApproval);
-			const than = boDongImport(
-				readFileSync(join(TOOL_DIR, `${name}.ts`), "utf8"),
+			await expect(
+				mod.default.execute({}, phienThat({ commandType: "CHAT" })),
+			).rejects.toThrow(
+				"Agent creation requires an explicit request to create or build an agent.",
 			);
-			expect(than).toContain("requireBuilderAttribute(");
+		}
+	});
+
+	it("moi-tool: luot duoc phep KHONG bi lop trong chan", async () => {
+		for (const name of TOOLS_GHIM) {
+			const mod = await import(
+				`../agent/subagents/agent_builder/tools/${name}`
+			);
+			await expect(mod.default.execute({}, phienThat())).rejects.not.toThrow(
+				"Agent creation requires an explicit request to create or build an agent.",
+			);
 		}
 	});
 

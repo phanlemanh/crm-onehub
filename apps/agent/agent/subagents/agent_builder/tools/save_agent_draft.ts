@@ -14,10 +14,12 @@ export default defineTool({
 		"Validate and save one immutable agent version for human review. Copy selected CRM records exactly into resources. Put connected read sources only in integrations. This never deploys the agent.",
 	inputSchema: builderDraftToolInput,
 	async execute(input, ctx) {
+		const conversationId = requireBuilderAttribute(ctx, "conversationId");
+		const userId = requireBuilderAttribute(ctx, "userId");
 		assertBuilderDraftOpen();
 		const result = await saveBuilderDraft(
-			requireBuilderAttribute(ctx, "conversationId"),
-			requireBuilderAttribute(ctx, "userId"),
+			conversationId,
+			userId,
 			draftInputFromTool(input),
 		);
 		markBuilderDraftSaveFinished(result.saved);

@@ -320,10 +320,14 @@ instructions, tools and deny-all sandboxes. They inherit nothing from the root. 
 root built-in `agent` copy tool is disabled; these two named specialists are the only
 delegation paths for custom agents.
 
-- **Creation requires the current `CREATE_AGENT` turn.** Every builder tool carries the
-  shared `approval` policy in `subagents/agent_builder/lib/authorization.ts`, which
-  reads purpose and command type from session auth and returns
-  `{ type: "denied", reason }` before the tool runs. `requireBuilderAttribute` stays
+- **Creation requires the current `CREATE_AGENT` turn.** The three builder tools that
+  read or write draft context — `inspect_context`, `write_agent_file`,
+  `save_agent_draft` — carry the shared `approval` policy in
+  `subagents/agent_builder/lib/authorization.ts`, which reads purpose and command type
+  from session auth and returns `{ type: "denied", reason }` before the tool runs. The
+  builder's other tools do not carry it and do not need to: none of them can create an
+  agent. Add a tool that can, and it joins that pinned list — the policy is not
+  ambient. `requireBuilderAttribute` stays
   inside each `execute` as the inner layer. A normal builder chat cannot create a
   draft by prompt alone.
 
