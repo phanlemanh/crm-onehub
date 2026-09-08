@@ -17,7 +17,6 @@ export const DISPATCH = {
 		batch: 20,
 		maxAttempts: 3,
 		leaseMs: 5 * MINUTE_MS,
-		turnLeaseMs: 15 * MINUTE_MS,
 	},
 
 	run: {

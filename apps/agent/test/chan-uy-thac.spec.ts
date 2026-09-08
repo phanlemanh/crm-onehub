@@ -1,10 +1,7 @@
 import { describe, expect, it } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import {
-	builderSessionAttributes,
-	builderTurnAbandoned,
-} from "../agent/lib/custom-agent-dispatch";
+import { builderSessionAttributes } from "../agent/lib/custom-agent-dispatch";
 import { builderTurnAuthorized, purposeOf } from "../agent/lib/session-purpose";
 import agentBuilder from "../agent/subagents/agent_builder/agent";
 import {
@@ -20,22 +17,6 @@ const GHIM =
 
 const boDongImport = (src: string) =>
 	src.replace(/^import[\s\S]*?from\s+"[^"]+";$/gm, "");
-
-const thanHam = (src: string, ten: string) => {
-	const dau = src.indexOf(ten);
-	if (dau < 0) return "";
-	const moNgoac = src.indexOf("{", src.indexOf(")", dau));
-	if (moNgoac < 0) return "";
-	let sau = 0;
-	for (let i = moNgoac; i < src.length; i += 1) {
-		if (src[i] === "{") sau += 1;
-		else if (src[i] === "}") {
-			sau -= 1;
-			if (sau === 0) return src.slice(moNgoac, i + 1);
-		}
-	}
-	return "";
-};
 
 const phienThat = (over: Record<string, string> = {}) => ({
 	session: {
@@ -202,48 +183,5 @@ describe("ket-thuc", () => {
 		expect(() =>
 			recordBuilderActions(trangThaiMoi(), "t1", 0, actions, true),
 		).toThrow("Save the draft before returning draft_ready.");
-	});
-});
-
-describe("khong-treo", () => {
-	const luc = (phut: number) => new Date(Date.UTC(2026, 8, 8, 8, phut, 0));
-	const bayGio = luc(30);
-
-	it("khong-treo: hoi thoai da nhan ma khong settle qua han thi bi thu hoi", () => {
-		const treo = {
-			sessionId: "wrun_1",
-			continuationToken: null,
-			acceptedAt: luc(0),
-		};
-		expect(builderTurnAbandoned(treo, bayGio)).toBe(true);
-	});
-
-	it("khong-treo: ba hinh dang KHONG duoc thu hoi", () => {
-		const khong = [
-			{
-				sessionId: "wrun_1",
-				continuationToken: "crm:builder:c",
-				acceptedAt: luc(0),
-			},
-			{ sessionId: null, continuationToken: null, acceptedAt: luc(0) },
-			{ sessionId: "wrun_1", continuationToken: null, acceptedAt: luc(29) },
-		];
-		expect(khong).toHaveLength(3);
-		for (const row of khong) {
-			expect(builderTurnAbandoned(row, bayGio)).toBe(false);
-		}
-	});
-
-	it("khong-treo: luot thu hoi duoc noi vao dung cua vao cua lich dispatch", () => {
-		const src = readFileSync(
-			join(import.meta.dir, "../agent/lib/custom-agent-dispatch.ts"),
-			"utf8",
-		);
-		const than = thanHam(
-			src,
-			"export async function pendingBuilderSubmissionIds",
-		);
-		expect(than.length).toBeGreaterThan(200);
-		expect(than).toContain("recoverStalledBuilderTurns(");
 	});
 });

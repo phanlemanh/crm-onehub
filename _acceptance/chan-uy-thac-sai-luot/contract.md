@@ -116,38 +116,6 @@ Then câu ấy chỉ đường dựng tác nhân bắt đầu từ nút Tạo t�
 câu người dùng vừa hỏi; không đổ lỗi cho người dùng, không dùng từ kỹ thuật
 (`commandType`, `subagent`, `schema`), không trình bày như một lỗi hệ thống.
 
-**AC-8 — Hội thoại không bao giờ kẹt "đang chạy nền".** (cross-layer)
-Given một lượt builder bị từ chối,
-When lượt kết thúc,
-Then hai vế phải **cùng** đúng, đo ở hai lớp, không vế nào được chép lại điều kiện
-của vế kia:
-- *vế agent* — hội thoại đã nhận mà không bao giờ settle thì **được thu hồi**:
-  `recoverStalledBuilderTurns` ghi `continuationToken` và đánh submission
-  `FAILED`/`TURN_ABANDONED`;
-- *vế màn* — gọi **chính hàm** `builderConversationIsWorking` của `apps/app` trên
-  hàng hội thoại vế agent vừa ghi, kết quả `false`.
-Cấm viết lại điều kiện `sessionId && !continuationToken` theo trí nhớ ở bất kỳ vế
-nào — đó là đường lùi tự chấm.
-Chiều đỏ: hàng hội thoại chưa settle (`continuationToken = null`) → vế màn phải
-trả `true`. Thiếu chiều này thì màu xanh không phân biệt được "không treo" với
-"thước chưa bao giờ chạy".
-
-**AC-9 — Builder ném ở đường khác thì lượt hỏng ra mặt, không treo.** (cross-layer)
-Given một tool builder ném exception **không** đi qua cửa policy,
-When lượt kết thúc,
-Then hai vế cùng đúng:
-- *vế agent* — hội thoại không nằm mãi ở trạng thái đang chạy: lượt thu hồi có
-  mặt ở đúng cửa vào của lịch dispatch, và vị từ thu hồi đóng đúng ba hình dạng
-  không được đụng;
-- *vế màn* — hàm `latestTurnFailure` của `apps/app` biến một dòng sự kiện thất
-  bại thành thẻ đỏ, và trả `null` cho lượt bình thường.
-Đo **quan hệ** sự kiện → thẻ đỏ, **không** đo tên sự kiện có mặt: một sự kiện đúng
-tên nhưng sai vỏ dữ liệu vẫn làm `latestTurnFailure` trả `null`, và người dùng vẫn
-thấy hội thoại treo không thẻ đỏ — đúng triệu chứng prod vòng này hứa chữa.
-Đối chứng dương: dòng sự kiện của một lượt bình thường → `latestTurnFailure` trả
-`null`.
-Sàn dân số: dòng sự kiện rỗng → **mã 2**.
-
 **AC-10 — Lý do từ chối là hằng có tên, dùng chung một chỗ.**
 Given chuỗi lý do,
 When bất kỳ tool nào từ chối,
@@ -194,6 +162,8 @@ mới đi cặp hai chiều trên cùng fixture.
   không dính vụ này. Lưu ý phân biệt: phiên `purpose=team-agent` **chạm tool của
   builder** thì **nằm trong** phạm vi và do AC-4 phủ — chính chỗ này là lỗ mà
   phản biện bắt được.
+- **Lưới thu hồi hội thoại treo.** Rút khỏi vòng này sau vòng chấm 1 (xem Notes);
+  thuộc hợp đồng riêng, cần AC cấm đụng lượt đang bay và cấm nhả khoá giữa lượt.
 - **Ô "lượt bị huỷ" của trục C.** Huỷ đã có đường riêng đã đo
   (`agents.cancelRun` settle trong một giao dịch, `turn.cancelled` cũng settle —
   `docs/agent.md`), và huỷ không đi qua cửa policy. Không AC nào phủ ô này, có
@@ -205,16 +175,20 @@ mới đi cặp hai chiều trên cùng fixture.
 ném là chốt cuối nếu có đường nào lọt qua cửa. AC-3 đo **cả hai vế** đúng vì lý do
 đó — gỡ lớp trong "cho gọn" là một cửa hở im lặng.
 
-**Lời hứa bị yếu đi so với bản đã chốt phạm vi — người ký phải thấy dòng này.**
-AC-8/AC-9 lúc chốt hứa lượt hỏng **ra mặt ngay**. Thứ đã cài yếu hơn: hội thoại
-treo tự gỡ **trong vòng 15 phút** (`DISPATCH.builder.turnLeaseMs`), và người dùng
-thấy submission `FAILED` chứ không thấy thẻ đỏ tức thì. Lý do đổi nằm ở sổ quyết
-định: dựng "làm lượt cha hỏng ngay" phải đoán trường thất bại của
-`subagent.completed`, mà tài liệu eve mô tả sự kiện ấy đúng một dòng và không
-khai trường nào. Đổi lại, đường thu hồi không phụ thuộc sự kiện nào của eve cả.
-Mười lăm phút là con số tôi chọn, chưa ai duyệt.
+**Đã rút khỏi phạm vi sau vòng chấm 1 — AC-8 và AC-9.** Bản chốt phạm vi có hai
+tiêu chí về "hội thoại không bao giờ kẹt". Lưới an toàn cài cho chúng
+(`recoverStalledBuilderTurns`) bị phản biện vòng 1 bắt một lỗi mức cao: `ACCEPTED`
+là trạng thái cuối nên mọi tin cũ nằm mãi ở đó, và lượt quét khớp lên tin cũ nhất
+giữa lúc một lượt mới đang chạy — đánh hỏng một tin đã xong và nhả khoá
+một-lượt-một-lần. Người ký chọn **gỡ hẳn lưới khỏi vòng này** thay vì vá tại chỗ.
 
-**Giới hạn đã biết, do phản biện context sạch nêu và chủ ý hoãn:** AC-7 chấm
+Vòng này vì thế **không hứa** gì về thu hồi hội thoại treo. Nó hứa cái nhỏ hơn và
+đúng gốc: con builder nay kết thúc sạch được bằng `not_authorized`, nên lượt tự
+settle theo đường `session.waiting` sẵn có thay vì chết giữa chừng. Đó là nguyên
+nhân của ca prod 08/09; lưới an toàn là phòng thủ theo chiều sâu cho các nguyên
+nhân khác, và nó thuộc một hợp đồng riêng.
+
+**Giới hạn đã biết, do phản biện context sạch nêu**Giới hạn đã biết, do phản biện context sạch nêu và chủ ý hoãn:** AC-7 chấm
 *chỉ dẫn* viết cho cha, không chấm *câu trả lời cha thật sự soạn*. Đo đầu ra thật
 cần một lượt chạy end-to-end với model thật và cơ sở dữ liệu (đường
 `bun run --filter=agent eval`), vòng này không dựng. Hệ quả: chỉ dẫn có thể đúng
