@@ -39,6 +39,8 @@ executors:
     ql_cong_dong_that: cd apps/agent && bun test test/quyen-luot.spec.ts -t cong-dong
     ql_hai_duong_that: 'bun run db:test --reset && cd apps/agent && bun test test/builder-runtime.integration.spec.ts && cd ../api && bun test test/conversations.spec.ts -t "builder answer"'
     api_khong_cache_tron_bo: "bun run db:test && bunx turbo run test --concurrency=1 --force"
+    dq_cong_quyen: "cd apps/agent && bun test test/quyen-luot.spec.ts"
+    dq_ho_so_cu_con_chay: bash _acceptance/do-quyen-luot-bang-hanh-vi/rang/ho-so-cu-con-chay.sh
   script:
     cua_vao_loi_mang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"
     cua_vao_chon_tieng_may_chu: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chon-tieng-may-chu"
@@ -263,6 +265,13 @@ executors:
     bo_cao_test: cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v
     bo_cao_cli: cd tools/listing-crawl && ./.venv/bin/python -m unittest tests.test_cli -v
     bo_cao_duong_chay: cd tools/listing-crawl && ./.venv/bin/python -m unittest tests.test_duong_chay -v
+    dq_cong_quyen_do: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/cong-quyen-do.mjs
+    dq_khong_cam_tin_nhan: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/khong-cam-tin-nhan.mjs
+    dq_nguon_ghi: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs
+    dq_mang_theo_do: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/mang-theo-do.mjs
+    dq_bo_do_grep: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/bo-do-grep.mjs
+    dq_khai_sinh: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/khai-sinh.mjs
+    dq_vet_ho_so_cu: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/vet-ho-so-cu.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT}/scripts/design-gate.mjs"
     ui_check: "${CLAUDE_PLUGIN_ROOT}/scripts/design-scan.js"

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sàn nguồn ghi — dân số nhỏ, liệt kê được, và fail-closed</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --page:  #fafafa;
+    --card:  #fafafa;
+    --ink:   #171717;
+    --muted: #575757;
+    --soft:  #666666;
+    --rule:  rgba(23,23,23,0.12);
+    --accent:#006B4F;
+    --sans:  'Geist', system-ui, sans-serif;
+    --serif: 'Lora', Georgia, serif;
+    --mono:  'Geist Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:  #171717;
+      --ink:   #fafafa;
+      --muted: #b4b4b4;
+      --soft:  #9a9a9a;
+      --rule:  rgba(250,250,250,0.16);
+      --accent:#2f9b7a;
+    }
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1180px; width: 100%; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .standfirst {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 70ch;
+    margin-bottom: 1.75rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+  svg { width: 100%; min-width: 980px; display: block; }
+  .notes {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 0.9fr;
+    gap: 2rem;
+  }
+  .notes h2 {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .notes p { font-size: 0.86rem; line-height: 1.6; color: var(--ink); }
+  .notes p + p { margin-top: 0.6rem; }
+  .notes .quiet { color: var(--muted); }
+  code { font-family: var(--mono); font-size: 0.92em; }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+  }
+  @media (max-width: 860px) { .notes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Cổng 1 · Hình 2 · AC-3</p>
+  <h1>Sàn nguồn ghi — dân số nhỏ, liệt kê được, và fail-closed</h1>
+  <p class="standfirst">Sàn cũ chứng minh một phủ định trên cả kho, nên không bao giờ đo đủ. Sàn mới đo một bất biến đếm được: mọi chỗ ghi <code>commandType</code> vào một <code>data</code> của Prisma phải lấy giá trị từ đúng hai nguồn đã đặt tên. Thừa hay thiếu một phần tử đều đỏ.</p>
+
+  <div class="card">
+  <svg viewBox="0 0 1440 824" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cây quyết định: dân số là mọi chỗ ghi commandType trong data của Prisma ở apps/api/src; nhánh loại khỏi dân số gồm select where orderBy include; nhánh vào dân số rẽ tiếp thành hai nguồn hợp lệ và ba nhánh đỏ; bốn vectơ đột biến ghim-cung, bien-trung-gian, quan-he-long, duoi-select">
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+      <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+    </defs>
+
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <!-- ===== ĐƯỜNG NỐI (vẽ trước) ===== -->
+    <path d="M 380,300 H 432 Q 440,300 440,292 V 104 Q 440,96 448,96 H 474" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+    <line x1="380" y1="344" x2="474" y2="344" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+    <line x1="880" y1="96" x2="994" y2="96" stroke="#1f4f7a" stroke-width="1.2" marker-end="url(#arrow-link)"/>
+
+    <line x1="880" y1="344" x2="940" y2="344" stroke="#575757" stroke-width="1.2"/>
+    <line x1="940" y1="228" x2="940" y2="660" stroke="#575757" stroke-width="1.2"/>
+    <path d="M 940,228 Q 940,220 948,220 H 994" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <path d="M 940,332 H 994" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <path d="M 940,444 H 994" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 940,556 H 994" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <path d="M 940,660 Q 940,668 948,668 H 994" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+    <!-- ===== DÂN SỐ ===== -->
+    <rect x="40" y="272" width="340" height="144" rx="6" fill="#fafafa"/>
+    <rect x="40" y="272" width="340" height="144" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <rect x="52" y="282" width="68" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="86" y="295" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">DÂN SỐ</text>
+    <text x="210" y="326" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">mọi chỗ GHI commandType</text>
+    <text x="210" y="348" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">apps/api/src — đọc bằng AST</text>
+    <text x="210" y="366" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">trong object data của lời gọi</text>
+    <text x="210" y="384" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">Prisma create / update / upsert</text>
+    <text x="210" y="402" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">kể cả object create lồng của quan hệ</text>
+
+    <!-- ===== NHÁNH LOẠI KHỎI DÂN SỐ ===== -->
+    <rect x="480" y="48" width="400" height="96" rx="6" fill="#fafafa"/>
+    <rect x="480" y="48" width="400" height="96" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1" stroke-dasharray="5,4"/>
+    <rect x="492" y="58" width="116" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.28)" stroke-width="0.8"/>
+    <text x="550" y="71" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LOẠI KHỎI DÂN SỐ</text>
+    <text x="680" y="102" fill="#575757" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đây là đọc, không phải ghi</text>
+    <text x="680" y="122" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">select · where · orderBy · include</text>
+    <text x="680" y="138" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">kiểm bằng tổ tiên trong cây AST, không bằng tên tệp</text>
+
+    <!-- ===== NHÁNH VÀO DÂN SỐ ===== -->
+    <rect x="480" y="272" width="400" height="144" rx="6" fill="#fafafa"/>
+    <rect x="480" y="272" width="400" height="144" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <rect x="492" y="282" width="88" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="536" y="295" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">VÀO DÂN SỐ</text>
+    <rect x="708" y="282" width="88" height="18" rx="4" fill="#171717"/>
+    <text x="752" y="295" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">quan-he-long</text>
+    <rect x="804" y="282" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="836" y="295" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
+    <text x="680" y="328" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">nằm trong object ghi</text>
+    <text x="680" y="350" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">data của create / update / upsert</text>
+    <text x="680" y="368" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">kể cả object create lồng của quan hệ</text>
+    <text x="680" y="392" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">vectơ quan-he-long dời một chỗ ghi vào</text>
+    <text x="680" y="408" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">quan hệ lồng — thước vẫn phải thấy nó</text>
+
+    <!-- ===== VECTƠ PHẢI VẪN XANH ===== -->
+    <rect x="1000" y="48" width="400" height="96" rx="6" fill="#fafafa"/>
+    <rect x="1000" y="48" width="400" height="96" rx="6" fill="#ffffff" stroke="#1f4f7a" stroke-width="1.4"/>
+    <rect x="1012" y="58" width="88" height="18" rx="4" fill="#1f4f7a"/>
+    <text x="1056" y="71" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">duoi-select</text>
+    <rect x="1108" y="58" width="64" height="18" rx="4" fill="none" stroke="#1f4f7a" stroke-width="1"/>
+    <text x="1140" y="71" fill="#1f4f7a" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 0</text>
+    <text x="1200" y="102" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">vectơ phải VẪN XANH</text>
+    <text x="1200" y="124" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">dời một commandType xuống select</text>
+    <text x="1200" y="140" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">thước không được đỏ — nếu đỏ là đỏ oan</text>
+
+    <!-- ===== HAI NGUỒN HỢP LỆ ===== -->
+    <rect x="1000" y="176" width="400" height="88" rx="6" fill="#fafafa"/>
+    <rect x="1000" y="176" width="400" height="88" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="1012" y="186" width="72" height="18" rx="4" fill="none" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
+    <text x="1048" y="199" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">HỢP LỆ</text>
+    <text x="1200" y="228" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">&lt;x&gt;.commandType</text>
+    <text x="1200" y="250" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">lời khai đã parse ở biên bằng zod enum</text>
+
+    <rect x="1000" y="288" width="400" height="88" rx="6" fill="#fafafa"/>
+    <rect x="1000" y="288" width="400" height="88" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="1012" y="298" width="72" height="18" rx="4" fill="none" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
+    <text x="1048" y="311" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">HỢP LỆ</text>
+    <text x="1200" y="340" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">commandTypeFromAuthorization(...)</text>
+    <text x="1200" y="362" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">máy chủ suy từ câu hỏi treo đã lưu</text>
+
+    <!-- ===== BA NHÁNH ĐỎ ===== -->
+    <rect x="1000" y="400" width="400" height="88" rx="6" fill="#fafafa"/>
+    <rect x="1000" y="400" width="400" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <rect x="1012" y="410" width="76" height="18" rx="4" fill="#171717"/>
+    <text x="1050" y="423" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ghim-cung</text>
+    <rect x="1096" y="410" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="1128" y="423" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
+    <text x="1200" y="452" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chuỗi ghim cứng</text>
+    <text x="1200" y="472" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">commandType: "CREATE_AGENT"</text>
+
+    <rect x="1000" y="512" width="400" height="88" rx="6" fill="#fafafa"/>
+    <rect x="1000" y="512" width="400" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <rect x="1012" y="522" width="108" height="18" rx="4" fill="#171717"/>
+    <text x="1066" y="535" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">bien-trung-gian</text>
+    <rect x="1128" y="522" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="1160" y="535" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
+    <text x="1200" y="564" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">biến trung gian</text>
+    <text x="1200" y="584" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">commandType: loai</text>
+
+    <rect x="1000" y="624" width="400" height="88" rx="6" fill="#fafafa"/>
+    <rect x="1000" y="624" width="400" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <rect x="1012" y="634" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="1044" y="647" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
+    <text x="1200" y="676" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">hàm mới</text>
+    <text x="1200" y="696" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">một nguồn thứ ba mọc lên im lặng</text>
+
+    <!-- ===== MA TRẬN TOÀN PHẦN ===== -->
+    <rect x="40" y="472" width="860" height="136" rx="6" fill="#fafafa"/>
+    <rect x="40" y="472" width="860" height="136" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="0.8" stroke-dasharray="4,4"/>
+    <text x="60" y="498" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">MA TRẬN TOÀN PHẦN, KHÔNG PHẢI MỘT CẬN DƯỚI</text>
+    <text x="60" y="526" fill="#171717" font-size="9" font-family="'Geist Mono', monospace">tập tìm được phải BẰNG ĐÚNG danh sách file:dòng đã ghim trong chân đo</text>
+    <text x="60" y="546" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">thừa một phần tử hay thiếu một phần tử đều là mã 2 — in cả hai danh sách</text>
+    <text x="60" y="572" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">thêm một nguồn hợp lệ thứ ba là việc phải sửa danh sách nguồn,</text>
+    <text x="60" y="590" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">không phải việc để thước đỏ oan — thông điệp đỏ phải nói được điều đó</text>
+
+    <!-- ===== CHÚ GIẢI ===== -->
+    <line x1="40" y1="752" x2="1400" y2="752" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="40" y="772" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+    <rect x="40" y="790" width="20" height="16" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="68" y="802" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">nhánh hợp lệ — hai nguồn đã đặt tên</text>
+
+    <rect x="388" y="790" width="20" height="16" rx="3" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="416" y="802" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">loại khỏi dân số — đọc, không ghi</text>
+
+    <rect x="736" y="790" width="20" height="16" rx="3" fill="#171717"/>
+    <text x="764" y="802" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">vectơ đỏ — thước phải thoát mã 2</text>
+
+    <rect x="1084" y="790" width="20" height="16" rx="3" fill="#1f4f7a"/>
+    <text x="1112" y="802" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">vectơ phải vẫn xanh — thước thoát 0</text>
+  </svg>
+  </div>
+
+  <div class="notes">
+    <div>
+      <h2>Vì sao đổi mệnh đề, không chỉ đổi bộ dò</h2>
+      <p>Sàn cũ chứng minh một phủ định trên cả kho — hình dạng bài toán ấy không bao giờ đo đủ, vì luôn còn một cách viết nữa. Sàn mới đo một bất biến đếm được trên một dân số nhỏ, liệt kê được.</p>
+      <p class="quiet">Điểm quyết định <code>d-…-20461</code>: ba nhánh đã cân là giữ mệnh đề cũ với AST rộng hơn, đổi mệnh đề, hoặc bỏ hẳn sàn.</p>
+    </div>
+    <div>
+      <h2>Vì sao phân biệt ghi với đọc bằng tổ tiên</h2>
+      <p>Một <code>commandType</code> dưới <code>select</code>, <code>where</code>, <code>orderBy</code> hay <code>include</code> là đọc. Kiểm bằng tổ tiên trong cây AST, không bằng tên tệp — nên vectơ <code>duoi-select</code> phải để thước vẫn xanh.</p>
+      <p class="quiet">Một vectơ đòi màu xanh là cách duy nhất bắt được thước đỏ oan.</p>
+    </div>
+    <div>
+      <h2>Giá của fail-closed</h2>
+      <p>Ai thêm một đường ghi <code>commandType</code> hợp lệ sẽ thấy thước đỏ và phải sửa danh sách nguồn. Đó là ý định, không phải lỗi — nên thông điệp đỏ phải nói ra được điều đó, chứ không chỉ in <code>file:dòng</code>.</p>
+    </div>
+  </div>
+
+  <footer>Hình 2 / 3 · điểm quyết định ở Cổng 1 · do-quyen-luot-bang-hanh-vi · AC-3</footer>
+</div>
+</body>
+</html>
