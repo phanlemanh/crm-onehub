@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const GOC_KHO = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
-const NHANH_NEN_MAC_DINH = "origin/docs/luat-chat-ai-elements";
+const NHANH_CHINH_MAC_DINH = "origin/onehub";
 
 const DANH_SACH_TRANG = [
   "packages/ui/src/components/ai-elements/**",
@@ -40,7 +40,18 @@ function nhanhNen() {
   if (tuThamSo && tuThamSo.trim() !== "") return tuThamSo.trim();
   const tuMoiTruong = process.env.NHANH_NEN ?? process.env.BASE_REF;
   if (tuMoiTruong && tuMoiTruong.trim() !== "") return tuMoiTruong.trim();
-  return NHANH_NEN_MAC_DINH;
+  return diemRe(NHANH_CHINH_MAC_DINH);
+}
+
+function diemRe(nhanhChinh) {
+  try {
+    return execFileSync("git", ["merge-base", "HEAD", nhanhChinh], {
+      cwd: GOC_KHO,
+      encoding: "utf8",
+    }).trim();
+  } catch {
+    return null;
+  }
 }
 
 function git(doiSo) {
@@ -55,11 +66,27 @@ function trongDanhSachTrang(duong) {
 
 const nen = nhanhNen();
 
+if (nen === null) {
+  console.error(
+    `RĂNG PHẠM VI KHÔNG ĐO ĐƯỢC: không giải được điểm rẽ với "${NHANH_CHINH_MAC_DINH}" trong kho ${GOC_KHO}.`,
+  );
+  console.error(
+    "Mã 2 nghĩa là THIẾU PHÉP ĐO, không phải cây sạch và cũng không phải có vi phạm.",
+  );
+  console.error("Truyền nhánh nền tay: NHANH_NEN=<ref hoặc sha> node <script>.");
+  process.exit(2);
+}
+
 try {
   git(["rev-parse", "--verify", "--quiet", `${nen}^{commit}`]);
 } catch {
-  console.error(`RĂNG PHẠM VI: không tìm thấy nhánh nền "${nen}" trong kho ${GOC_KHO}.`);
-  process.exit(1);
+  console.error(
+    `RĂNG PHẠM VI KHÔNG ĐO ĐƯỢC: không tìm thấy nhánh nền "${nen}" trong kho ${GOC_KHO}.`,
+  );
+  console.error(
+    "Mã 2 nghĩa là THIẾU PHÉP ĐO, không phải cây sạch và cũng không phải có vi phạm.",
+  );
+  process.exit(2);
 }
 
 let thoRaw;
