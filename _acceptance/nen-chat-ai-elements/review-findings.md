@@ -1,51 +1,85 @@
 ## Trong hợp đồng
 
-(rỗng — không finding nào map được vào AC nào của hợp đồng này)
+### Assert "chuỗi có mặt" trong khi lời hứa là QUAN HỆ giữa các giá trị — ca (a) của AC-4 không đo đường đi của errorText
+
+- file: `packages/ui/test/eve-to-ai-sdk.spec.ts:102`
+- severity: high
+- AC: AC-4
+- source: measurement
+
+AC-4 ca (a) hứa một QUAN HỆ giữa đầu vào và đầu ra: "state gốc là output-error kèm chuỗi lỗi → output-error mang ĐÚNG CHUỖI ĐÓ" (contract.md, mục AC-4; E8 của evals.yaml chép lại nguyên văn: "(a) state goc output-error kem chuoi loi -> output-error mang dung chuoi do").
+
+Bài kiểm ghim ca này (dòng 96-109) lại chỉ so:
+
+  expect({ tone: item.tone, errorText: item.errorText, state: part.state })
+    .toEqual({ tone: "warning", errorText: "hết lượt gọi trong ngày", state: "output-error" });
+
+`item` là VẬT THỬ đã phân tích (dòng 97: `const item = didAt("m3:call-warning")`), nên `item.errorText` ở dòng 102 chỉ khẳng định vật thử tự nó mang chuỗi đó — một điều hiển nhiên đúng vì chính fixtures/eve-turns.json:85 viết ra nó. Vế duy nhất nói về đầu ra là `part.state`. Không dòng nào chạm `part.errorText`.
+
+Đây đúng là hình dạng "đo chuỗi có mặt thay vì đo quan hệ": chuỗi lỗi có mặt ở đầu VÀO được lấy làm bằng chứng cho lời hứa về đầu RA.
+
+Hiệu ứng cụ thể: trong packages/ui/src/lib/eve-to-ai-sdk.ts:54, nhánh failed viết `errorText: item.errorText ?? messages(locale).chatTool.failed`. Đổi dòng đó thành `errorText: messages(locale).chatTool.failed` (bỏ hẳn chuỗi lỗi thật, mọi lượt hỏng đều hiện "Bước này lỗi") thì:
+  - ca (a) vẫn xanh, vì nó không assert part.errorText;
+  - ca (b) (dòng 111-131) cũng vẫn xanh, vì nó ghim đúng chuỗi mặc định `messages("vi").chatTool.failed` và `messages("en").chatTool.failed`;
+  - ca (c) và các ca còn lại không đi qua nhánh failed.
+Cả bộ suite xanh trong khi người dùng mất nguyên văn lý do lỗi trên màn.
+
+Grep toàn kho xác nhận không có phép đo nào khác bịt lỗ này: "hết lượt gọi trong ngày" chỉ xuất hiện ở packages/ui/test/eve-to-ai-sdk.spec.ts:106, packages/ui/test/fixtures/eve-turns.json:85 và apps/app/test/agent-transcript.spec.ts:759 (bài kiểm round-trip của toTranscript, không gọi toToolPart). packages/validation/test/agent-transcript.spec.ts:29 chỉ kiểm schema đọc lại đúng trường, không kiểm lớp chuyển.
+
+Đối chiếu với hai ca kia cho thấy khuôn đúng đã có sẵn ngay trong cùng tệp: ca (b) dòng 124-130 assert `part` bằng toMatchObject kèm errorText, ca (c) dòng 146-149 assert cả `state` lẫn `output`. Chỉ ca (a) — ca có chuỗi lỗi thật, tức ca duy nhất chứng minh chuỗi thật đi xuyên qua được lớp chuyển — là thiếu vế đầu ra.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **Hồ sơ bằng chứng đã ký của một vòng khác bị ghi đè trong diff của vòng này**
-  Người dùng thấy gì: Bằng chứng đã được ký duyệt của một đợt làm việc trước đó bị ghi đè, nên sau này không ai còn cách kiểm lại đợt đó từng được duyệt trên phiên bản nào.
-  file: `_acceptance/chan-lai-component-ra-man/evidence/ve-that.json`
+- **Xoá 9/14 component "Adopted" mà không sửa bảng đăng ký ở docs/chat-ui.md**
+  Người dùng thấy gì: Tài liệu hướng dẫn nội bộ cho các phiên làm việc sau vẫn liệt kê một số thành phần chat đã bị gỡ bỏ khỏi kho là "đã dùng được", có thể khiến người làm tiếp theo tưởng nhầm và cấu hình sai theo hướng dẫn cũ.
+  file: `docs/chat-ui.md`
   severity: high
-  Đề xuất: new-contract
+  Đề xuất: known-limits
 
-- **Nhãn vai trong bản tải về là chuỗi cứng tiếng Anh, nằm ngoài bảng chuỗi và ngoài tầm răng chu-cung**
-  Người dùng thấy gì: Khi người dùng chọn giao diện tiếng Việt và tải cuộc trò chuyện về máy, nhãn người nói trong tệp tải về vẫn hiện bằng tiếng Anh.
+- **suite_keys mất check_types_khong_cache cho MỌI vòng sau, trong khi lý do chỉ áp cho vòng này**
+  Người dùng thấy gì: Từ nay, các lần kiểm tra tính năng tiếp theo trong toàn bộ dự án sẽ không còn tự động kiểm tra lỗi kiểu dữ liệu nữa, dù tài liệu nội bộ vẫn ghi là có — vấn đề kiểu dữ liệu chỉ được phát hiện muộn hơn, lúc dựng ứng dụng hoặc ngay trước khi đẩy code lên.
+  file: `_acceptance/config.yaml`
+  severity: high
+  Đề xuất: known-limits
+
+- **className đè màu của Button ở hai chỗ trong conversation.tsx**
+  Người dùng thấy gì: Hai nút (cuộn xuống đáy và tải hội thoại) trong khung chat có thể hiện màu nền hơi lệch chuẩn giao diện chung ở chế độ tối, vì màu được ấn định riêng tại chỗ dùng thay vì lấy từ bộ giao diện dùng chung của toàn sản phẩm.
   file: `packages/ui/src/components/ai-elements/conversation.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **source.url khai lỏng hơn schema đang thật sự sinh ra nó, trong khi giá trị chảy thẳng vào href**
-  Người dùng thấy gì: Một đường liên kết nguồn tham khảo do AI tìm ra có thể trỏ tới một đoạn mã thay vì một trang web thật, mà hệ thống chưa cảnh báo trước khi người dùng bấm vào.
-  file: `packages/validation/src/agent-transcript.ts`
+- **Nhãn vai trong bản tải hội thoại là chuỗi tiếng Anh dựng bằng code, ngoài bảng chuỗi**
+  Người dùng thấy gì: Khi người dùng tải file hội thoại về máy, nhãn người nói trong file luôn hiện bằng tiếng Anh (User/Assistant) dù giao diện sản phẩm đang ở tiếng Việt.
+  file: `packages/ui/src/components/ai-elements/conversation.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **toToolPart biến kết quả "chạy xong nhưng không ghi" thành lỗi giả và nuốt mất output**
-  Người dùng thấy gì: Khi trợ lý làm xong một việc bình thường nhưng công cụ báo chưa lưu được, màn hình có thể hiện thành một lỗi nghiêm trọng kèm thông báo lỗi không có thật, và lý do thật của việc chưa lưu biến mất khỏi màn hình.
-  file: `packages/ui/src/lib/eve-to-ai-sdk.ts`
-  severity: high
-  Đề xuất: new-contract
+- **Lý do giữ pham-vi-diff ngoài cổng đã sai sự thật, và không gì bắt được**
+  Người dùng thấy gì: Một trong các bước kiểm tra tự động của dự án đang được miễn kiểm tra dựa trên một lý do đã không còn đúng với thực tế, mà không có cơ chế nào tự phát hiện việc lý do đó đã lỗi thời.
+  file: `.githooks/gate-shape.json`
+  severity: medium
+  Đề xuất: known-limits
 
-- **so-lech-chuan.mjs rò thư mục tạm ở mọi đường thoát lỗi — process.exit bỏ qua finally**
-  Người dùng thấy gì: Mỗi lần công cụ đo nội bộ báo lỗi, một thư mục tạm bị bỏ quên lại trên máy chạy phép đo, tích tụ dần theo thời gian.
+- **so-lech-chuan.mjs bỏ lại sân tạm trên mọi đường "KHÔNG ĐO ĐƯỢC"**
+  Người dùng thấy gì: Nếu quá trình kiểm tra tự động bị lỗi mạng giữa chừng, công cụ có thể để lại các thư mục tạm chứa bản sao mã nguồn trên máy chủ dựng, dồn lại qua nhiều lần chạy mà không có cảnh báo nào.
   file: `_acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 5 — tuyên quét cả lớp component nhưng chỉ assert một điểm: 6 tệp không nạp được vẫn xanh**
-  Người dùng thấy gì: Nếu sau này một component trò chuyện bị xoá hay đổi tên gây lỗi khi tải, bài kiểm liên quan vẫn báo đạt, nên lỗi đó không bị phát hiện qua bộ kiểm tự động.
-  file: `packages/ui/test/lai-ra-man.spec.tsx`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 3 — assert tên công cụ có mặt trong khi lời hứa của chính bài kiểm là quan hệ output-vào ≡ output-ra**
-  Người dùng thấy gì: Bài kiểm đứng tên bảo đảm nội dung phản hồi của công cụ được giữ nguyên khi hiển thị, nhưng thực ra không kiểm tra điều đó, nên nội dung có thể bị rơi mất mà không ai phát hiện qua bộ kiểm tự động.
-  file: `packages/ui/test/eve-to-ai-sdk.spec.ts`
+- **content-visibility trên mọi con của ConversationContent: chiều cao ước lượng và cắt tràn**
+  Người dùng thấy gì: Khi màn hình thật sau này dùng lại khung cuộn hội thoại, có nguy cơ vòng viền lấy nét ở mép mỗi lượt chat bị cắt xén, và vị trí thanh cuộn có thể trôi nhẹ khi người dùng cuộn ngược lên xem tin nhắn cũ.
+  file: `packages/ui/src/components/ai-elements/conversation.tsx`
   severity: low
   Đề xuất: known-limits
+
+- **ConversationDownload thu hồi blob URL ngay sau click — tải có thể im lặng không xảy ra**
+  Người dùng thấy gì: Nếu nút tải hội thoại này được đưa vào dùng thật, người dùng dùng trình duyệt Firefox hoặc Safari có thể bấm tải mà không có tệp nào được lưu xuống máy, và không có thông báo lỗi nào hiện ra.
+  file: `packages/ui/src/components/ai-elements/conversation.tsx`
+  severity: low
+  Đề xuất: wont-fix
+
+## Chưa adversarial-verify (refuter chết)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

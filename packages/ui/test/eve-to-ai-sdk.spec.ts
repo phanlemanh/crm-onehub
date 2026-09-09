@@ -97,14 +97,10 @@ describe("toToolPart — state của một lượt did", () => {
 		const item = didAt("m3:call-warning");
 		const part = toToolPart(item);
 
-		expect({
-			tone: item.tone,
-			errorText: item.errorText,
-			state: part.state,
-		}).toEqual({
-			tone: "warning",
-			errorText: "hết lượt gọi trong ngày",
+		expect(item.errorText).toBe("hết lượt gọi trong ngày");
+		expect(part).toMatchObject({
 			state: "output-error",
+			errorText: item.errorText,
 		});
 	});
 
