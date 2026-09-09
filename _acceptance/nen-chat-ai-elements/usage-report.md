@@ -11,3 +11,12 @@
 
 - **claude-opus-5**: 6 agent · 297 calls · out 47,993 · in 594 · cache_read 29,140,838 · cache_create 626,049
 
+### S3 fan-out đợt 2 (2 việc) — wf_d0a5ebc6-745 (2 agent, 16,160 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| exec:T9 | claude-opus-5 | 51 | 9,557 | 102 | 5,582,954 | 751 |
+| exec:T4 | claude-opus-5 | 62 | 6,603 | 124 | 8,781,118 | 594 |
+
+- **claude-opus-5**: 2 agent · 113 calls · out 16,160 · in 226 · cache_read 14,364,072 · cache_create 333,478
+

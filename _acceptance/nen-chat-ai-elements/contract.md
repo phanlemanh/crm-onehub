@@ -74,8 +74,14 @@ danh sách này và không đường nào ngoài nó:
 `packages/ui/package.json` · `packages/validation/src/**` ·
 `packages/validation/package.json` · `apps/app/lib/agent-transcript.ts` ·
 `apps/app/test/agent-transcript.spec.ts` · `packages/ui/test/**` ·
-`_acceptance/**` · `docs/**` · `.githooks/gate-shape.json` · `turbo.json` ·
-`knip.json` · `package.json`.
+`packages/validation/test/**` · `_acceptance/**` · `docs/**` ·
+`.githooks/gate-shape.json` · `turbo.json` · `knip.json` · `package.json` ·
+`bun.lock`.
+
+Hai đường cuối được thêm sau khi răng phạm vi đỏ trên chính vòng này: `bun.lock`
+là hệ quả tất yếu của việc `packages/ui` nhận thêm một phụ thuộc trong nội bộ
+kho, và `packages/validation/test/**` là chỗ ở của bài kiểm mà AC-4 đòi. Cả hai
+thuộc về ý định đã duyệt; danh sách khai thiếu chứ phạm vi không nới.
 
 Sáu tập tin chat 109 KB nằm ngoài danh sách và phải nguyên vẹn.
 
@@ -142,7 +148,10 @@ Ngưỡng 1,2 là số người chọn tại Cổng 1, không phải số máy s
 để phép đo có quan hệ chứ không chỉ có mặt.
 
 **AC-8** — Cho mỗi tập tin trong `ai-elements/` khác bản thượng nguồn, khi mở
-sổ lệch chuẩn của vòng này, thì có một mục nêu tên tập tin, đổi gì, và vì sao;
+sổ lệch chuẩn của vòng này, thì có một mục nêu tên tập tin, đổi gì, và vì sao,
+kèm **vân tay của phần lệch** — không phải danh sách số dòng. Số dòng là hồ sơ
+giòn: chèn một dòng phía trên làm lệch hết, trong khi thay một dòng bằng một
+dòng khác vẫn giữ nguyên số. Vân tay bắt đúng lớp lỗi mà số dòng định bắt;
 và sổ đó nêu thành lời việc chạy lại lệnh thêm sẽ ghi đè im lặng, cùng các
 bước phải làm sau mỗi lần kéo bản mới.
 

@@ -82,8 +82,11 @@ evals:
       - "_acceptance/nen-chat-ai-elements/**"
     expected: |
       Xanh: chay CLI cua AI Elements vao mot thu muc tam, roi so tung dong ban CLI voi
-      ban trong cay. Moi dong khac nhau PHAI co mot muc mang dung so dong do trong so
-      lech chuan cua AC-8. In ra so dong khac + so muc trong so; hai so bang nhau.
+      ban trong cay. Tep lech PHAI co mot muc trong so lech chuan cua AC-8, va muc do
+      phai mang dung SO DONG KHAC cong VAN TAY cua phan lech. In ra ca hai.
+      Khong ghim danh sach so dong: chen mot dong phia tren lam lech het danh sach,
+      con thay mot dong bang mot dong khac thi so dong khong doi — van tay bat duoc ca
+      hai ca, danh sach so dong khong bat duoc ca nao.
       Chieu do da chay tren CUNG fixture: sua mot dong cua conversation.tsx ma khong
       ghi vao so -> ma 1, thong diep neu so dong va chu "khong co trong so lech chuan".
       CLI khong chay duoc (mang, quyen) -> ma 2, KHONG xanh, va khong duoc coi la

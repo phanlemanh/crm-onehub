@@ -13,6 +13,7 @@ const DANH_SACH_TRANG = [
   "packages/ui/package.json",
   "packages/validation/src/**",
   "packages/validation/package.json",
+  "packages/validation/test/**",
   "apps/app/lib/agent-transcript.ts",
   "apps/app/test/agent-transcript.spec.ts",
   "packages/ui/test/**",
@@ -22,6 +23,7 @@ const DANH_SACH_TRANG = [
   "turbo.json",
   "knip.json",
   "package.json",
+  "bun.lock",
 ];
 
 const SAU_TEP_CHAT = [
