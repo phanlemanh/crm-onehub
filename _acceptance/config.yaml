@@ -38,6 +38,15 @@ executors:
     ql_api_doc_ban_ghi: cd apps/api && bun test test/quyen-luot.spec.ts
     ql_cong_dong_that: cd apps/agent && bun test test/quyen-luot.spec.ts -t cong-dong
     ql_hai_duong_that: 'bun run db:test --reset && cd apps/agent && bun test test/builder-runtime.integration.spec.ts && cd ../api && bun test test/conversations.spec.ts -t "builder answer"'
+    tr_khong_quyen_chan_lan_hai: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t khong-quyen
+    tr_co_quyen_khong_hoi_quy: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t co-quyen
+    tr_lan_mot_van_lot: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t lan-mot
+    tr_lap_callid: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t lap-callid
+    tr_luot_moi: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t luot-moi
+    tr_ngoai_kenh_builder: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t ngoai-kenh
+    tr_cung_mot_batch: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t cung-batch
+    tr_mot_cau_thong_diep: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t mot-cau
+    tr_khong_co_loi_goi: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t khong-loi-goi
   script:
     cua_vao_loi_mang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"
     cua_vao_chon_tieng_may_chu: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chon-tieng-may-chu"

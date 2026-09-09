@@ -1,0 +1,186 @@
+schema_version: 1
+slug: tran-mot-lan-uy-thac
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tr_khong_quyen_chan_lan_hai
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/lib/session-purpose.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+    expected: |
+      Ca ma ban tai 41ba0a7 BO LOT. Luot KHONG co quyen goi agent_builder lan thu
+      HAI trong cung mot turnId, hai callId khac nhau -> PHAI nem, thong diep chua
+      "only once".
+      San khuon, quan trong hon ket qua: bai do PHAI chay CHINH hook — lay handler
+      qua hook.events["actions.requested"] cua
+      apps/agent/agent/hooks/builder-delegation.ts va goi no. Bai do goi ham thuan
+      recordBuilderDelegation thay cho hook -> ma 2, IN ro ten ham da goi. Lo nam o
+      dieu kien BEN TRONG hook; do ham ben duoi khong cham toi no, va do la dung
+      lop loi ma vong cham truoc da nhat len o quyen-luot.spec.ts.
+      San khuon 2: ngu canh eve phai la ContextContainer THAT cua eve, nap bang
+      duong tuyet doi suy tu require.resolve("eve/package.json"). Duong viet cung,
+      hoac mot thung tu che trong bai do -> ma 2. Khong resolve duoc thi bai do NEM
+      co ten ("bo cuc eve da doi"), TUYET DOI khong skip — skip la xanh gia.
+      CAM tu bia ban ghi quyen: fixture di tu buildPendingInputRequest (ben ghi
+      that) -> commandTypeFromAuthorization -> builderSessionAttributes. Object
+      literal viet tay dung khuon ben doc -> ma 2.
+      CHIEU DO chay that trong cung bai: cung bo dung, doi dung MOT truong sang
+      "duoc phep" -> cung phai nem. Hai chieu cung nem la dung o day; cho phan biet
+      that nam o E3.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tr_co_quyen_khong_hoi_quy
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+    expected: |
+      Khong hoi quy chieu cu. Luot CO quyen, hai callId khac nhau cung turnId ->
+      nem.
+      CHIEU DO chay that: cung fixture, goi DUNG MOT lan -> KHONG duoc nem. Thieu ve
+      nay thi "luon nem" khong phan biet duoc voi "chan dung luc".
+      Chay qua hook that, khong qua ham thuan. Ngu canh eve nhu E1.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tr_lan_mot_van_lot
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+    expected: |
+      Chong va-qua-tay. Luot KHONG co quyen, goi DUNG MOT lan -> khong nem, va
+      trang thai ghi lai dung callId ay. Day la duong ra not_authorized ma vong
+      quyen-luot-mang-theo vua dung; chan ngay lan mot la pha dung thu vua xay.
+      Assert phai doc trang thai sau loi goi (callId da ghi), khong chi assert
+      "khong nem" — "khong nem" mot minh khong phan biet duoc voi "hook return som
+      va khong lam gi", tuc dung ca bug dang sua.
+      CHIEU DO chay that: them loi goi thu hai khac callId tren cung fixture ->
+      phai nem.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.tr_lap_callid
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+    expected: |
+      Idempotent. Hook nhan lai DUNG callId da ghi trong cung turnId -> khong nem,
+      trang thai khong doi. Do o CA HAI chieu quyen: so assert bang 2, khong phai
+      mot chieu roi suy ra chieu kia.
+      CHIEU DO chay that: doi dung callId sang gia tri khac tren cung fixture ->
+      phai nem, ca hai chieu.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.tr_luot_moi
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+    expected: |
+      Tran mo lai theo luot. Da co mot loi goi o turnId cu; loi goi moi o turnId
+      KHAC -> khong nem, va trang thai mang turnId moi cung dung callId moi.
+      Do o CA HAI chieu quyen: so assert bang 2.
+      Assert phai doc trang thai, khong chi "khong nem" — mot hook return som cung
+      cho "khong nem".
+      CHIEU DO chay that: giu nguyen turnId cu tren cung fixture -> phai nem.
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.tr_ngoai_kenh_builder
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/session-purpose.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+    expected: |
+      MA TRAN TOAN PHAN, viet truoc, so assert BANG so o: purpose in
+      {builder, team-agent, research} x commandType in {CREATE_AGENT, CHAT} = 6 o.
+      Moi o chay hook hai lan, hai callId khac nhau, cung turnId.
+      DUNG HAI o purpose=builder nem; BON o con lai khong nem.
+      Hai o nem chinh la doi chung duong cua bon o im — khong duoc bo, vi mot ma
+      tran toan "khong nem" khong phan biet duoc voi mot hook chet han.
+      Bai do khai so o bang mot bieu thuc sinh tu tich Descartes cua hai truc, roi
+      assert do dai bang 6 — dem-roi-vut (sinh ma tran nhung chi assert mot vai o)
+      -> ma 1.
+      SAN KHUON: ca SAU o phai dung tu MOT bo dung — dau ra that cua
+      builderSessionAttributes trai ra roi de dung hai truong purpose va
+      commandType. Sau o di hai duong dung khac nhau -> ma 2. Vi sao: khong co ben
+      ghi that nao sinh purpose team-agent/research (builderSessionAttributes ghim
+      cung "builder"), nen neu bon o kia di mot khuon rieng va khuon ay sai thi
+      purposeOf tra ve duong mac dinh o ca bon va chung xanh vi SAI KHUON chu khong
+      vi hook dung. Dung chung mot bo thi hai o nem la chot kiem khuon: khuon hong
+      thi chung thoi nem va bai do do.
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.tr_cung_mot_batch
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+    expected: |
+      Hinh dang that bi bo quen: MOT su kien actions.requested mang HAI
+      subagent-call toi agent_builder voi hai callId khac nhau. No khong di qua
+      nhanh "lan chay thu hai cua handler", nen phai do rieng.
+      -> nem. Do o CA HAI chieu quyen: so assert bang 2.
+      CHIEU DO chay that: cung su kien ay nhung loi goi thu hai toi mot subagent
+      KHAC (khong phai agent_builder) -> khong nem.
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.tr_mot_cau_thong_diep
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+    expected: |
+      Cau nem lay tu LAN NEM THAT cua hook, khong doc hang trong ma nguon.
+      Thong diep phai BANG DUNG:
+      "The agent builder can be delegated only once per turn."
+      va phai KHONG chua chu "creation" — luot khong co quyen khong phai creation
+      turn, ma cau nay di nguyen van ra turn.failed (crm.ts doc
+      eveTurnFailure.parse(data).message) nen no la cau nguoi dung co the thay.
+      Do cau tu CA HAI chieu quyen va doi hai cau BANG NHAU — bang nhau la loi hua,
+      khong phai "deu chua only once".
+      CHIEU DO chay that: assert phai do neu chu "creation" con trong cau.
+      PHAM VI DA DO, khong duoc noi qua: eval nay dung o dau ra cua hook. Cau nem
+      co di tiep toi turn.failed, nhung latestTurnFailure o apps/app chi phan loai
+      restricted/rate-limit/credits/unknown va KHONG file nao trong apps/app,
+      apps/api, packages khop theo cau tran — cau nay roi vao "unknown" ca truoc lan
+      sau vong. Nen KHONG dung them eval lop tieu thu cho AC nay; xem finding P0
+      cua gap-probe.
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.tr_khong_co_loi_goi
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+    expected: |
+      Duong MOI mo ra boi chinh vong nay, va la cho ban kinh rong ra: ban tai
+      41ba0a7 return som o moi luot CHAT nen khong luot tro chuyen nao cua kenh
+      builder tung cham hook. Bo ve commandType mo no cho MOI luot.
+      Phien builder, CA HAI chieu quyen, hook nhan actions.requested KHONG mang loi
+      goi agent_builder nao — mot su kien actions RONG, va mot su kien chi co
+      subagent-call toi subagent KHAC — chay hai lan cung turnId.
+      -> khong nem, VA trang thai doc ra khong mang callId nao. Phai assert trang
+      thai; "khong nem" mot minh khong phan biet duoc voi mot hook chet.
+      So assert bang 4 — hai hinh dang su kien nhan hai chieu quyen.
+      CHIEU DO chay that: tren cung fixture, doi subagentName sang agent_builder cho
+      ca hai lan -> phai nem.

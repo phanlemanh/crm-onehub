@@ -1,0 +1,41 @@
+{
+  "feature_plain": "Khi trợ lý bị từ chối quyền dựng tác nhân, hệ thống chặn cứng việc gọi lại chuyên gia dựng tác nhân trong cùng một lượt — thay vì chỉ dặn bằng lời trong chỉ dẫn.",
+  "will_do": [
+    { "id": "AC-4", "p": "Sẽ không báo lỗi oan khi cùng một lời gọi được nhận lại lần nữa trong một lượt." },
+    { "id": "AC-5", "p": "Sẽ mở lại quyền gọi chuyên gia ở lượt trò chuyện kế tiếp — trần đếm theo từng lượt, không đếm dồn." },
+    { "id": "AC-8", "p": "Sẽ dùng một câu báo lỗi duy nhất cho cả hai chiều, bỏ chữ chỉ đúng với lượt tạo tác nhân." }
+  ],
+  "wont_do": [
+    { "id": "AC-1", "p": "Chặn lời gọi chuyên gia lần thứ hai trên lượt KHÔNG có quyền — đây là ca bản đang chạy bỏ lọt, và là lý do vòng này tồn tại." },
+    { "id": "AC-2", "p": "Chặn lời gọi lần thứ hai trên lượt CÓ quyền y như trước — không được để vòng này làm hỏng đường cũ." },
+    { "id": "AC-3", "p": "Sẽ KHÔNG chặn lời gọi thứ nhất trên lượt không có quyền — đó là đường để trợ lý giải thích tử tế cho người dùng, vòng trước vừa dựng nó." },
+    { "id": "AC-6", "p": "Sẽ KHÔNG đụng tới các phiên ngoài khung trò chuyện dựng tác nhân — tác nhân đã phát hành và tác nhân nghiên cứu không chịu trần này." },
+    { "id": "AC-7", "p": "Chặn cả trường hợp hai lời gọi phát ra cùng một lúc, không chỉ trường hợp gọi lại sau." },
+    { "id": "AC-9", "p": "Sẽ KHÔNG gây lỗi cho những lượt trò chuyện bình thường không gọi chuyên gia — đây là vùng vòng này mới chạm tới lần đầu." }
+  ],
+  "scope_plain": "Giữ nguyên lời dặn trong chỉ dẫn, không chặn lời gọi đầu tiên, không nới trần, và không đụng ba hạn chế đã biết mà vòng trước ghi nhận.",
+  "coverage_plain": [
+    { "i": 0, "p": "Chiều quyền của lượt — cả lượt được phép lẫn lượt bị từ chối đều bật trần, đo trên cùng một bộ hồ sơ dựng sẵn. Phục vụ AC-1 (ca đang bỏ lọt) và AC-2 (không làm hỏng đường cũ)." },
+    { "i": 1, "p": "Số lần và hình dạng lời gọi — năm hình dạng: không gọi, gọi một lần, gọi lại lần hai, nhận lại đúng lời gọi cũ, và hai lời gọi phát cùng lúc. Mỗi hình dạng một tiêu chí riêng, không hình dạng nào suy ra từ hình dạng khác." },
+    { "i": 2, "p": "Ranh giới giữa các lượt — trần mở lại ở lượt kế tiếp, đo ở cả hai chiều quyền. Phục vụ AC-5 (trần đếm theo lượt)." },
+    { "i": 3, "p": "Loại phiên — bảng đủ sáu ô, hai ô báo lỗi làm đối chứng cho bốn ô im lặng. Bằng chứng đủ là số phép kiểm bằng đúng số ô. Phục vụ AC-6 (không đụng phiên ngoài khung dựng tác nhân)." }
+  ],
+  "gap_probe_plain": [
+    { "i": 0, "p": "Người soi cho rằng câu báo lỗi có thể thôi khớp với chỗ phân loại lỗi ở màn hình, khiến người dùng thấy thẻ lỗi chung chung. Đã kiểm và điều đó không đúng: màn hình chỉ phân loại bốn nhóm lỗi, không nhóm nào bắt theo câu này, nên đổi chữ không dời gì. Phần đúng còn lại — hợp đồng viện màn hình để biện minh mà không đo màn hình — đã sửa: hợp đồng nay nói thẳng phép đo dừng ở đâu. Đẩy lên anh quyết vì đây là mức nặng nhất." },
+    { "i": 1, "p": "Bốn ô loại phiên nằm ngoài khung dựng tác nhân có thể im lặng vì hồ sơ thử dựng sai khuôn, chứ không phải vì hệ thống làm đúng. Đã sửa: cả sáu ô nay dựng từ một khuôn duy nhất, nên hai ô báo lỗi trở thành chốt kiểm khuôn cho bốn ô kia." },
+    { "i": 2, "p": "Bỏ sót đúng vùng vòng này mở rộng: những lượt trò chuyện không gọi chuyên gia lần nào, trước đây không chạm tới đoạn xử lý này. Đã sửa: thêm một tiêu chí riêng cho vùng đó, và bảng độ phủ nay liệt kê đủ mười bốn ô, không ô nào để trống." },
+    { "i": 3, "p": "Hợp đồng hứa một điều không có cách nào kiểm được — đếm số câu báo lỗi trong mã. Đã sửa bằng cách bỏ lời hứa, không bằng cách thêm một phép kiểm quét chữ trong mã: chính lối kiểm đó là thứ vòng chấm trước đã bắt lỗi." },
+    { "i": 4, "p": "Không phép kiểm nào giữ hai câu dặn trong chỉ dẫn khỏi bị gỡ. Đã cân nhắc và không làm: đếm câu trong tệp chỉ dẫn là thước giòn, sửa câu chữ hợp lệ cũng làm nó báo đỏ. Con số đã ghi trong mốc của hợp đồng, và chỗ bắt là lúc soi thay đổi ở cổng bằng chứng." }
+  ],
+  "decisions_plain": [
+    { "id": "d-20260909T001715Z-14489", "p": "Làm trên nền của vòng trước chứ không trên nhánh chính — vì đường bị-từ-chối chỉ tồn tại ở đó; đổi lại việc này phải chờ vòng trước về nhánh chính rồi mới về theo." },
+    { "id": "d-20260909T001715Z-20751", "p": "Một câu báo lỗi chung cho cả hai chiều — đổi lại thẻ lỗi vẫn mang từ nội bộ ở ca hiếm khi trợ lý cãi chỉ dẫn." },
+    { "id": "d-20260909T001715Z-17192", "p": "Phép đo chạy đúng đoạn xử lý thật thay vì hàm bên dưới nó — đổi lại phép đo chạm vào nội tạng của thư viện tác nhân, nên thư viện nâng bản có thể làm nó báo đỏ." },
+    { "id": "d-20260909T001715Z-5768", "p": "Giữ nguyên lời dặn trong chỉ dẫn — đổi lại hai lớp cùng nói một luật, sửa một lớp mà quên lớp kia thì lệch." },
+    { "id": "d-20260909T001715Z-31133", "p": "KHÔNG làm bảng thước đo giá trị — việc này đi từ lỗi vòng trước tìm ra, không từ một hồ sơ cơ hội; đổi lại cổng giá trị sẽ không có số để đọc." },
+    { "id": "d-20260909T001715Z-21964", "p": "KHÔNG viết đặc tả giao diện — vòng này không chạm màn hình nào." },
+    { "id": "d-20260909T002448Z-8370", "p": "Bỏ một lời hứa không đo được thay vì thêm một phép kiểm quét chữ trong mã — đổi lại nếu ai đó thêm một câu báo lỗi thứ hai ở nhánh không phép kiểm nào đi qua thì không thước nào bắt." },
+    { "id": "d-20260909T002448Z-13640", "p": "Không đo tới màn hình cho câu báo lỗi, vì đã kiểm được không chỗ nào ở màn hình bắt theo câu này — đổi lại nếu sau này có người thêm một nhánh bắt theo nó thì không thước nào giữ." },
+    { "id": "d-20260909T002448Z-18815", "p": "Không ràng số câu dặn trong chỉ dẫn bằng phép kiểm — đổi lại có thể gỡ mà chín phép kiểm vẫn xanh; chỗ bắt là lúc soi thay đổi ở cổng bằng chứng." }
+  ]
+}
