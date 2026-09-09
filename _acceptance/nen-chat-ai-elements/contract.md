@@ -128,10 +128,17 @@ nó phải hiện thành việc chứ không thành hồi quy im lặng.
 
 **AC-6** — Cho mỗi component còn lại trong `ai-elements/`, khi quét lớp CSS
 của nó bằng **danh sách trắng đóng** — mọi lớp khớp `text-` · `bg-` · `border-`
-· `ring-` · `fill-` · `stroke-` phải là một token có tên trong bảng của
-`docs/design.md`, mọi lớp khớp `rounded-` phải thuộc thang
+· `ring-` · `fill-` · `stroke-` phải là một token **có khai trong
+`packages/ui/src/styles/globals.css`**, mọi lớp khớp `rounded-` phải thuộc thang
 `rounded-sm | rounded-md | rounded-lg | rounded-none` — thì không lớp nào rơi
 ngoài danh sách trắng, và phép đo in ra mọi lớp lạ kèm tên tập tin và số dòng.
+
+Nguồn của hai vế khác nhau, và phải nói đúng nguồn: bảng tên màu là các
+`--color-*` khai trong `globals.css` — đó là danh sách token thật của kho;
+`docs/design.md` cấp thang bán kính và luật "chỉ hai thứ được tô", nhưng nó
+không chứa bảng tên màu nào. Một lớp như `bg-accent` vì vậy **hợp lệ** (kho có
+`--color-accent`, và `message.tsx:400` đang dùng `hover:bg-accent`); lớp bị bắt
+là lớp mang tên màu thượng nguồn không có trong bảng, ví dụ `text-amber-500`.
 
 Hai vế có dân số khác nhau và phải đọc khác nhau. **Bán kính: 4 chỗ thật phải
 sửa** — `message.tsx` hai `rounded-full` (dòng 362, 390), `conversation.tsx`

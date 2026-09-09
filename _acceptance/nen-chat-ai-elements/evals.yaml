@@ -166,7 +166,8 @@ evals:
     expected: |
       Xanh: quet lop CSS moi file con lai bang DANH SACH TRANG DONG, khong phai danh
       sach den. Moi lop khop text- / bg- / border- / ring- / fill- / stroke- phai la
-      mot token CO TEN trong bang cua docs/design.md; moi lop khop rounded- phai thuoc
+      mot token CO KHAI trong packages/ui/src/styles/globals.css (cac --color-*); moi
+      lop khop rounded- phai thuoc
       {rounded-sm, rounded-md, rounded-lg, rounded-none}. In ra MOI lop la kem ten tep
       va so dong. Danh sach den la sai khuon o day: mot lop chua ai nghi toi
       (bg-accent, text-amber-500) se lot.
@@ -178,9 +179,12 @@ evals:
       conversation keo tuoi va moi component phase sau keo ve.
       Chieu do da chay tren CUNG fixture, hai luot rieng vi hai ve khac dan so:
       (a) dat rounded-full vao reasoning.tsx -> ma 1, neu ten tep va so dong;
-      (b) dat bg-accent — mot lop CHUA TUNG co trong kho, khong nam trong bat ky danh
-      sach den nao — vao message.tsx -> ma 1, neu nguyen van "bg-accent". Ve (b) xanh
-      truoc bg-accent nghia la phep do van dang chay danh sach den.
+      (b) dat text-amber-500 — mot ten mau thuong nguon KHONG co trong bang token cua
+      globals.css — vao message.tsx -> ma 1, neu nguyen van "text-amber-500".
+      KHONG duoc dung bg-accent lam ca do: kho CO khai --color-accent va message.tsx
+      dong 400 dang dung hover:bg-accent, nen no la token hop le. Ghim mot ca do bang
+      mot lop von hop le la doi chung VO HIEU — no xanh vi dung ra phai xanh, chu
+      khong phai vi phep do hong.
 
   - id: E11
     criterion: AC-7
