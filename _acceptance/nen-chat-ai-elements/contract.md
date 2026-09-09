@@ -6,7 +6,7 @@ owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
 design_doc: docs/superpowers/specs/2026-09-09-nen-chat-ai-elements-design.md
-status: approved
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
@@ -34,15 +34,20 @@ trong file bị xoá. Còn lại trong ba file sống sót:
 
 | | `message` | `reasoning` | `shimmer` | `conversation` | tổng |
 | --- | --- | --- | --- | --- | --- |
-| chuỗi tiếng Anh cứng | 8 | 4 | 0 | 2 | **14** |
+| chuỗi tiếng Anh cứng | 10 | 4 | 0 | 2 | **16** |
 | bán kính ngoài thang | 2 × `rounded-full` | 0 | 0 | 2 × `rounded-full` | **4** |
 | màu ngoài bảng | 0 | 0 | 0 | 0 | **0** |
 
-Mười bốn chuỗi rơi vào **ba lớp**, và lớp thứ ba là lớp kho đã trả giá để học ở
-`_acceptance/chan-lai-component-ra-man`: 7 chuỗi là chữ giữa thẻ · 5 chuỗi nằm
-trong thuộc tính (`aria-label`, `alt`) · **2 chuỗi là giá trị mặc định của tham
-số** (`conversation.tsx:45-46`). Một phép quét chỉ đọc chữ giữa thẻ bỏ đúng một
-nửa; thêm thuộc tính vẫn còn bỏ hai chuỗi cuối.
+Mười sáu chuỗi rơi vào **bốn lớp**, và bốn lớp đó là lý do phép đo phải đảo
+khuôn: chữ giữa thẻ · chuỗi trong thuộc tính (`aria-label`, `alt`) · giá trị mặc
+định của tham số (`conversation.tsx:45-46`, lớp kho đã trả giá để học ở
+`_acceptance/chan-lai-component-ra-man`) · **biến trung gian**
+(`message.tsx:348`, `const attachmentLabel = … "Image" : "Attachment"`).
+
+Một phép đo liệt kê từng hình dạng cú pháp bỏ sót lớp mới ở mỗi lần đọc lại — đã
+xảy ra hai lần trong chính vòng này. Nên AC-10 đo bằng **danh sách trắng đóng**:
+quét mọi chuỗi có chữ cái rồi trừ đi các nhóm không-thể-tới-mắt-người đã khai,
+mỗi nhóm một lý do. Cây hiện tại: 132 chuỗi xét, 132 miễn, 0 còn lại.
 
 Bốn tập tin sống là `message`, `reasoning`, `shimmer` (do `reasoning` nhập) và
 `conversation` (giữ cho phép đo AC-3). Con số 0 ở hàng cuối là cố ý và phải đọc
@@ -105,11 +110,12 @@ hiển thị của nó, thì không chuỗi nào là văn bản tiếng Anh vi�
 hiển thị đọc từ `useMessages()`, và khoá tương ứng có mặt trong cả bảng `vi`
 lẫn bảng `en` của `packages/ui/src/lib/messages.ts`.
 
-Dân số vào vòng này là **14 chuỗi**, ghim từng chỗ để phép đo không tự chọn dân
+Dân số vào vòng này là **16 chuỗi**, ghim từng chỗ để phép đo không tự chọn dân
 số hẹp:
 
-- `message.tsx` (8) — `aria-label`: "Previous branch", "Next branch", "Remove
-  attachment" hai lần; `alt`: "attachment"; chữ giữa thẻ: "of", "Remove" hai lần.
+- `message.tsx` (10) — `aria-label`: "Previous branch", "Next branch", "Remove
+  attachment" hai lần; `alt`: "attachment"; chữ giữa thẻ: "of", "Remove" hai
+  lần; **biến trung gian** (dòng 348): "Image", "Attachment".
 - `reasoning.tsx` (4) — chữ giữa thẻ: "Thinking...", "Thought for a few
   seconds", "Thought for", "seconds".
 - `conversation.tsx` (2) — **giá trị mặc định của tham số**, dòng 45 và 46:
@@ -166,8 +172,9 @@ test` hoặc trong `pre-push`, có khai ở `.githooks/gate-shape.json`, và
 và chỉ chạy khi có người gõ tay thì không chặn được ai.
 
 **AC-10** *(cross-layer)* — Cho một chuỗi tiếng Anh viết cứng đặt vào một
-component trong `ai-elements/` — kiểm cả chữ giữa thẻ lẫn chuỗi trong
-`aria-label`, `placeholder`, `title`, `alt` — khi chạy **lệnh cổng của kho**,
+component trong `ai-elements/` **theo bất kỳ lớp nào trong bốn lớp** — chữ giữa
+thẻ · thuộc tính hiển thị · giá trị mặc định của tham số · biến trung gian —
+khi chạy **lệnh cổng của kho**,
 thì lệnh cổng đỏ và nêu đích danh tập tin cùng chuỗi đó. Cùng ràng buộc nối
 cổng như AC-9.
 
@@ -223,8 +230,8 @@ thật trong kho.
   đã sửa vào chính các tiêu chí trên. Xem `gap-probe.md`.
 - Ngưỡng 1,2 lần ở AC-7 và danh sách đường ở AC-2 là hai chỗ người duyệt nên
   soi kỹ nhất — chúng là số và ranh giới do máy đề nghị, không phải do đo.
-- Bảng dân số đã sửa hai lần trong lúc làm, cả hai lần trước khi hợp đồng được
-  ký: 8 chuỗi → 14 và 3 bán kính → 4, sau khi bản CLI tươi của `conversation`
+- Bảng dân số đã sửa ba lần trong lúc làm, cả ba lần trước khi hợp đồng được
+  ký: 8 → 14 → 16 chuỗi, và 3 → 4 bán kính, sau khi bản CLI tươi của `conversation`
   về cây và sau khi răng chuỗi được vá để thấy lớp giá trị mặc định. Số hiện tại
   do chính răng đo, không do phép đếm bằng tay.
 - Răng mồ côi có **miễn trừ có tên** cho `conversation.tsx`, kèm lý do và điều
