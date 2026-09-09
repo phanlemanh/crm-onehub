@@ -14,9 +14,7 @@ const did = {
 	output: { rows: 3 },
 	tone: "warning",
 	pending: false,
-	sources: [
-		{ url: "https://example.com/a", title: "A", network: "web" },
-	],
+	sources: [{ url: "https://example.com/a", title: "A", network: "web" }],
 	tool: "read_crm_history",
 	errorText: "hết lượt gọi",
 };
@@ -32,21 +30,41 @@ describe("agentTranscriptItem", () => {
 	});
 
 	test("nhận ba dạng said, reasoned, did", () => {
-		expect(parseAgentTranscriptItem({ kind: "said", id: "a", mine: true, text: "chào" }).kind).toBe("said");
-		expect(parseAgentTranscriptItem({ kind: "reasoned", id: "b", streaming: false, text: "nghĩ" }).kind).toBe("reasoned");
+		expect(
+			parseAgentTranscriptItem({
+				kind: "said",
+				id: "a",
+				mine: true,
+				text: "chào",
+			}).kind,
+		).toBe("said");
+		expect(
+			parseAgentTranscriptItem({
+				kind: "reasoned",
+				id: "b",
+				streaming: false,
+				text: "nghĩ",
+			}).kind,
+		).toBe("reasoned");
 		expect(parseAgentTranscriptItem(did).kind).toBe("did");
 	});
 
 	test("thiếu kind thì ném lỗi nêu tên trường", () => {
-		expect(() => parseAgentTranscriptItem({ id: "x", text: "y" })).toThrow(/kind/);
+		expect(() => parseAgentTranscriptItem({ id: "x", text: "y" })).toThrow(
+			/kind/,
+		);
 	});
 
 	test("dạng asked không thuộc hình dạng này — nó ở lại apps/app", () => {
-		expect(() => parseAgentTranscriptItem({ kind: "asked", id: "q", question: {} })).toThrow(/kind/);
+		expect(() =>
+			parseAgentTranscriptItem({ kind: "asked", id: "q", question: {} }),
+		).toThrow(/kind/);
 	});
 
 	test("tone ngoài ba giá trị thì ném lỗi nêu tên trường", () => {
-		expect(() => parseAgentTranscriptItem({ ...did, tone: "panic" })).toThrow(/tone/);
+		expect(() => parseAgentTranscriptItem({ ...did, tone: "panic" })).toThrow(
+			/tone/,
+		);
 	});
 
 	test("schema xuất ra dùng được trực tiếp", () => {
@@ -58,7 +76,11 @@ describe("agentTranscriptItem", () => {
 describe("kiểu suy ra từ schema", () => {
 	test("Tone và Source là kiểu, không phải interface viết tay", () => {
 		const tone: Tone = "success";
-		const source: Source = { url: "https://x.dev", title: "X", network: "github" };
+		const source: Source = {
+			url: "https://x.dev",
+			title: "X",
+			network: "github",
+		};
 		expect(tone).toBe("success");
 		expect(source.network).toBe("github");
 	});

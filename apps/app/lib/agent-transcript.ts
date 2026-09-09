@@ -1,3 +1,10 @@
+import type {
+	DidItem,
+	ReasonedItem,
+	SaidItem,
+	Source,
+	Tone,
+} from "@crm/validation/agent-transcript";
 import {
 	type EveStreamEvent,
 	eveTurnFailure,
@@ -18,13 +25,6 @@ import {
 	type EveMessageInputRequest,
 	type EveMessagePart,
 } from "eve/react";
-import {
-	type DidItem,
-	type ReasonedItem,
-	type SaidItem,
-	type Source,
-	type Tone,
-} from "@crm/validation/agent-transcript";
 import { z } from "zod";
 
 export type TranscriptItem =
