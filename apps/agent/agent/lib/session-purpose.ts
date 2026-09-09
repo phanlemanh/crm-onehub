@@ -1,10 +1,12 @@
 import { z } from "zod";
 
-export type SessionPurpose = "builder" | "team-agent" | "research";
+export const SESSION_PURPOSES = ["builder", "team-agent", "research"] as const;
+
+export type SessionPurpose = (typeof SESSION_PURPOSES)[number];
 
 type SessionAttributes = Readonly<Record<string, string | readonly string[]>>;
 
-type PurposeContext = {
+export type PurposeContext = {
 	readonly session: {
 		readonly auth: {
 			readonly current: {
@@ -19,10 +21,10 @@ type PurposeContext = {
 
 const attributeText = z.string().trim().min(1).nullable().catch(null);
 
+const sessionPurpose = z.enum(SESSION_PURPOSES).catch("research");
+
 export function purposeOf(ctx: PurposeContext): SessionPurpose {
-	const purpose = attribute(ctx, "purpose");
-	if (purpose === "builder" || purpose === "team-agent") return purpose;
-	return "research";
+	return sessionPurpose.parse(attribute(ctx, "purpose"));
 }
 
 export function attribute(ctx: PurposeContext, key: string): string | null {
@@ -38,14 +40,18 @@ export function requireAttribute(ctx: PurposeContext, key: string): string {
 	return value;
 }
 
+export function builderTurnAuthorized(ctx: PurposeContext): boolean {
+	return (
+		purposeOf(ctx) === "builder" &&
+		attribute(ctx, "commandType") === "CREATE_AGENT"
+	);
+}
+
 export function requireBuilderAttribute(
 	ctx: PurposeContext,
 	key: string,
 ): string {
-	if (
-		purposeOf(ctx) !== "builder" ||
-		attribute(ctx, "commandType") !== "CREATE_AGENT"
-	) {
+	if (!builderTurnAuthorized(ctx)) {
 		throw new Error(
 			"Agent creation requires an explicit request to create or build an agent.",
 		);

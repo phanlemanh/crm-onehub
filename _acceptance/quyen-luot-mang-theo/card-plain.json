@@ -1,0 +1,72 @@
+{
+ "feature_plain": "Người dùng chỉ dựng được tác nhân ở lượt thật sự xin dựng — trả lời một câu hỏi trong trò chuyện thường không còn tự cấp quyền ấy.",
+ "scope_plain": "Không dọn câu hỏi cũ đang treo, không đo câu trả lời trợ lý thật sự soạn, không đụng lưới thu hồi hội thoại treo.",
+ "decisions": [],
+ "analyst_plain": "",
+ "decisions_plain": [
+  {
+   "id": "d-20260908T134105Z-28305",
+   "p": "Quyền dựng tác nhân nay đi kèm theo lượt hỏi, thay vì đoán từ hình dạng tin nhắn."
+  },
+  {
+   "id": "d-20260908T134105Z-2696",
+   "p": "KHÔNG làm: dọn các câu hỏi còn treo lúc phát hành. Ai đang dựng dở mà trả lời một câu hỏi cũ sẽ phải bấm Tạo tác nhân lại."
+  },
+  {
+   "id": "d-20260908T134105Z-9289",
+   "p": "KHÔNG làm: đặc tả giao diện — việc này không chạm màn hình nào."
+  },
+  {
+   "id": "d-20260908T134758Z-22558",
+   "p": "Đặt cờ quyền vào ngay ô câu hỏi đang chờ, không thêm cột mới. Đổi lại phải kiểm khuôn ở biên."
+  },
+  {
+   "id": "d-20260908T135011Z-2042",
+   "p": "Làm tuần tự, không chia việc song song — năm phần đều chạm cùng một mạch."
+  },
+  {
+   "id": "d-20260908T135618Z-25354",
+   "p": "Viết lại một bài đo cũ cho khớp cách cấp quyền mới."
+  },
+  {
+   "id": "d-20260908T142224Z-17348",
+   "p": "Sửa bảy chỗ vòng chấm đầu chỉ ra, trong đó có việc mọi bản ghi đi qua một hàm dựng duy nhất."
+  },
+  {
+   "id": "d-20260908T142224Z-11345",
+   "p": "KHÔNG làm: mở thư mục bài đo của tác nhân cho bộ kiểm kiểu — nó lộ ra 59 lỗi có sẵn ở việc khác."
+  },
+  {
+   "id": "d-20260908T142532Z-29569",
+   "p": "Ba phép đo trước chỉ tuyên mà chưa làm, nay cài thật."
+  },
+  {
+   "id": "d-20260908T144550Z-5799",
+   "p": "Dừng lại theo luật dừng-vá khi hai vòng liền sinh cùng một lớp lỗi, thay vì vá tiếp."
+  },
+  {
+   "id": "d-20260908T220319Z-15410",
+   "p": "Đổi cách đo: đặt tên ràng buộc hai phần chạy riêng không gọi được nhau, rồi chia lời hứa thành ba vế đo được."
+  },
+  {
+   "id": "d-20260908T220319Z-10040",
+   "p": "KHÔNG làm: canh ba đường tạo yêu cầu còn lại — chúng là hằng phía trình duyệt, không đo được hành vi nếu không mở trình duyệt."
+  },
+  {
+   "id": "d-20260908T222416Z-24266",
+   "p": "Dừng ở trần ba vòng và trình người quyết, vì loại lỗi đã đổi từ cách đo sang lỗi thật."
+  },
+  {
+   "id": "d-20260908T223228Z-24245",
+   "p": "Chốt chặn nay khoá theo thứ đang trả về, không theo ai đang hỏi — người dùng không còn bị báo có bản nháp không tồn tại."
+  },
+  {
+   "id": "d-20260908T223228Z-24082",
+   "p": "Xoá một hàm không ai gọi, và cho bài đo chấm đúng hai chỗ sản phẩm thật chạy."
+  },
+  {
+   "id": "d-20260908T223228Z-661",
+   "p": "Bịt ba chỗ bài đo xanh giả: thêm chiều ngược cho đường ghi, ba trạng thái hỏng thật sự khác nhau, và phép đếm quét cả cây."
+  }
+ ]
+}

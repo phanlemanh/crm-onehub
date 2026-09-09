@@ -1,4 +1,8 @@
 import { describe, expect, it } from "bun:test";
+import {
+	buildPendingInputRequest,
+	commandTypeFromAuthorization,
+} from "@crm/validation/builder-question";
 import { builderTaskMarkdown } from "../agent/instructions/task";
 import { AGENT_ACTION_EXECUTORS } from "../agent/lib/agent-actions";
 import { recordBuilderDelegation } from "../agent/lib/builder-delegation";
@@ -66,16 +70,25 @@ describe("custom agent continuation tokens", () => {
 });
 
 describe("builder delivery messages", () => {
-	it("keeps clarification answers in agent-creation mode without coercing chat", () => {
+	it("keeps clarification answers in agent-creation mode, now from the recorded grant", () => {
+		const banGhi = (authorized: boolean) =>
+			buildPendingInputRequest(
+				{
+					kind: "question",
+					requestId: "question-1",
+					prompt: "Which one",
+					options: [],
+				},
+				authorized,
+			);
+		expect(commandTypeFromAuthorization(banGhi(true))).toBe("CREATE_AGENT");
+		expect(commandTypeFromAuthorization(banGhi(false))).toBe("CHAT");
 		expect(
 			builderCommandType("CHAT", {
 				inputResponse: { requestId: "question-1", optionId: "crm-task" },
 			}),
-		).toBe("CREATE_AGENT");
+		).toBe("CHAT");
 		expect(builderCommandType("CHAT", { text: "Also add a note" })).toBe(
-			"CHAT",
-		);
-		expect(builderCommandType("CHAT", { text: "Research this company" })).toBe(
 			"CHAT",
 		);
 	});
