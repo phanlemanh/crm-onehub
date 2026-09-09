@@ -16,6 +16,7 @@ const DANH_SACH_TRANG = [
   "packages/validation/test/**",
   "apps/app/lib/agent-transcript.ts",
   "apps/app/test/agent-transcript.spec.ts",
+  "apps/app/test/agent-results.spec.ts",
   "packages/ui/test/**",
   "_acceptance/**",
   "docs/**",

@@ -46,7 +46,7 @@ export function toToolPart(
 		};
 	}
 
-	if (item.tone === "warning") {
+	if (item.failed) {
 		return {
 			...head,
 			state: EVE_TO_AI_SDK.toolState.failed,

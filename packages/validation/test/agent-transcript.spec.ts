@@ -17,6 +17,7 @@ const did = {
 	sources: [{ url: "https://example.com/a", title: "A", network: "web" }],
 	tool: "read_crm_history",
 	errorText: "hết lượt gọi",
+	failed: true,
 };
 
 describe("agentTranscriptItem", () => {

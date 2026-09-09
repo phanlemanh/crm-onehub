@@ -765,6 +765,14 @@ const LUOT_EVE = [
 				errorText: "   ",
 				input: { url: "https://acme.example/khong-loi" },
 			}),
+			tool("set_contact_socials", {
+				toolCallId: "call-khong-ghi",
+				input: { contactId: "c1" },
+				output: {
+					stored: false,
+					reason: "tài khoản đứng tên người khác",
+				},
+			}),
 			tool("web_search", {
 				toolCallId: "call-pending",
 				state: "input-available",

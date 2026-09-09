@@ -245,6 +245,7 @@ export function toTranscript(
 							input: input(part),
 							output: output(part),
 							errorText: errorTextOf(part),
+							failed: state === "output-error",
 							tone: outcomeTone(part),
 							pending:
 								state === "input-streaming" ||

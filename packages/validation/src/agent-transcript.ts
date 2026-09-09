@@ -38,6 +38,7 @@ const did = z.object({
 	sources: z.array(source),
 	tool: z.string(),
 	errorText: z.string().nullable(),
+	failed: z.boolean(),
 });
 
 export const agentTranscriptItem = z.discriminatedUnion("kind", [

@@ -38,6 +38,7 @@
 					"rows": 3
 				},
 				"errorText": null,
+				"failed": false,
 				"tone": "neutral",
 				"pending": false,
 				"sources": [],
@@ -61,6 +62,7 @@
 					"sourceUrl": "https://www.linkedin.com/in/acme"
 				},
 				"errorText": null,
+				"failed": false,
 				"tone": "success",
 				"pending": false,
 				"sources": [
@@ -81,6 +83,7 @@
 				},
 				"output": null,
 				"errorText": "hết lượt gọi trong ngày",
+				"failed": true,
 				"tone": "warning",
 				"pending": false,
 				"sources": [],
@@ -95,10 +98,29 @@
 				},
 				"output": null,
 				"errorText": null,
+				"failed": true,
 				"tone": "warning",
 				"pending": false,
 				"sources": [],
 				"tool": "web_fetch"
+			},
+			{
+				"kind": "did",
+				"id": "m3:call-khong-ghi",
+				"label": "Checked a profile against the account itself — tài khoản đứng tên người khác",
+				"input": {
+					"contactId": "c1"
+				},
+				"output": {
+					"stored": false,
+					"reason": "tài khoản đứng tên người khác"
+				},
+				"errorText": null,
+				"failed": false,
+				"tone": "warning",
+				"pending": false,
+				"sources": [],
+				"tool": "set_contact_socials"
 			},
 			{
 				"kind": "did",
@@ -109,6 +131,7 @@
 				},
 				"output": null,
 				"errorText": null,
+				"failed": false,
 				"tone": "neutral",
 				"pending": true,
 				"sources": [],

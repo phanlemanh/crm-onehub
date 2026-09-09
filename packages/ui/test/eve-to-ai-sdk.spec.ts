@@ -130,6 +130,25 @@ describe("toToolPart — state của một lượt did", () => {
 		});
 	});
 
+	it("did chạy xong mà công cụ báo không ghi được vẫn là output-available, giữ nguyên output", () => {
+		const item = didAt("m3:call-khong-ghi");
+		const part = toToolPart(item);
+
+		expect({
+			tone: item.tone,
+			errorText: item.errorText,
+			state: part.state,
+		}).toEqual({
+			tone: "warning",
+			errorText: null,
+			state: "output-available",
+		});
+		expect(part).toMatchObject({
+			state: "output-available",
+			output: { stored: false, reason: "tài khoản đứng tên người khác" },
+		});
+	});
+
 	it("did tone success vẫn là output-available", () => {
 		expect(toToolPart(didAt("m3:call-success")).state).toBe("output-available");
 	});

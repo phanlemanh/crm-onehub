@@ -106,11 +106,21 @@ evals:
       Dang thu tu `asked` co y KHONG di qua lop chuyen (docs/chat-ui.md giu form hoi
       lai o shadcn); phai co mot assert KHANG DINH lop chuyen TU CHOI no bang loi co
       neu ten dang, chu khong bo lung.
-      Ca ghim rieng: did mang Tone=warning kem chuoi loi -> state bao loi
-      (output-error), KHONG phai output-available. Day la ca de sai nhat vi ca hai
-      deu la "did da xong".
-      Chieu do da chay tren CUNG fixture: doi anh xa warning sang output-available ->
-      bai kiem do, thong diep neu chu "warning" va ten state cho doi.
+      BA ca ghim rieng, phai cung xanh, vi ca ba deu la "did da xong":
+      (a) state goc output-error kem chuoi loi -> output-error mang dung chuoi do;
+      (b) state goc output-error ma errorText rong/khoang trang -> VAN output-error,
+      chuoi lay tu bang chuoi chatTool.failed;
+      (c) output mang stored:false / written:false ma state goc KHONG phai
+      output-error -> output-available, GIU NGUYEN output va reason.
+      Ca (c) la ca doi chieu: outcomeTone() tra "warning" cho ca hai nguon, nen mot
+      phep do chi nhin `tone` khong tach duoc (a)(b) khoi (c). Bai kiem phai assert
+      CA `state` LAN `output` cua (c) — assert mot minh `state` bo lot nua sau cua
+      loi (mat du lieu).
+      Chieu do da chay tren CUNG fixture, hai luot:
+      (1) doi anh xa nhanh loi sang output-available -> (a) va (b) do, thong diep neu
+      ten state cho doi;
+      (2) khoa nhanh loi vao `tone === "warning"` (dung ban cf9109f) -> (c) do, thong
+      diep neu state ra output-error.
 
   - id: E9
     criterion: AC-5

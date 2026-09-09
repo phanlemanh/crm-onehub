@@ -78,15 +78,22 @@ danh sách này và không đường nào ngoài nó:
 `packages/ui/src/components/ai-elements/**` · `packages/ui/src/lib/**` ·
 `packages/ui/package.json` · `packages/validation/src/**` ·
 `packages/validation/package.json` · `apps/app/lib/agent-transcript.ts` ·
-`apps/app/test/agent-transcript.spec.ts` · `packages/ui/test/**` ·
+`apps/app/test/agent-transcript.spec.ts` · `apps/app/test/agent-results.spec.ts` ·
+`packages/ui/test/**` ·
 `packages/validation/test/**` · `_acceptance/**` · `docs/**` ·
 `.githooks/gate-shape.json` · `turbo.json` · `knip.json` · `package.json` ·
 `bun.lock`.
 
-Hai đường cuối được thêm sau khi răng phạm vi đỏ trên chính vòng này: `bun.lock`
+Hai đường được thêm sau khi răng phạm vi đỏ trên chính vòng này: `bun.lock`
 là hệ quả tất yếu của việc `packages/ui` nhận thêm một phụ thuộc trong nội bộ
 kho, và `packages/validation/test/**` là chỗ ở của bài kiểm mà AC-4 đòi. Cả hai
 thuộc về ý định đã duyệt; danh sách khai thiếu chứ phạm vi không nới.
+
+`apps/app/test/agent-results.spec.ts` được thêm ở lượt vá ca (c) của AC-4, cùng
+lý do: `DidItem` nhận thêm trường bắt buộc `failed`, mà tệp này dựng sẵn một
+lượt `did` để thử phần kết quả trong bản ghi. Thiếu một trường bắt buộc là dữ
+liệu không thể tồn tại, nên nó phải khai trường đó — một dòng, không đổi hành vi
+bài kiểm nào. Vẫn là hệ quả của ý định đã duyệt, không phải phạm vi mới.
 
 Sáu tập tin chat 109 KB nằm ngoài danh sách và phải nguyên vẹn.
 
@@ -113,23 +120,46 @@ những dòng có tên trong sổ lệch chuẩn của AC-8.
 
 **AC-4** — Cho một lượt eve thật thuộc mỗi dạng `said`, `reasoned`, `did`,
 khi đưa qua lớp chuyển kiểu, thì kết quả mang đúng `role` và đúng `state` của
-AI SDK cho dạng đó; và cho một lượt `did` mang `Tone = warning`, thì kết quả
-mang state báo lỗi chứ không phải state hoàn tất — **kể cả khi không có chuỗi
-lỗi**.
+AI SDK cho dạng đó; và cho một lượt `did` **hỏng thật**, thì kết quả mang state
+báo lỗi chứ không phải state hoàn tất — **kể cả khi không có chuỗi lỗi**; còn
+một lượt `did` **chạy xong bình thường** mà công cụ báo nó không ghi được thì
+mang state hoàn tất và **giữ nguyên `output`**.
 
-Hai ca warning phải cùng có mặt, và ca thứ hai là ca vừa vá: **kèm chuỗi lỗi**,
-và **không có chuỗi lỗi** (eve trả `errorText` rỗng hoặc chỉ khoảng trắng, nên
-`errorTextOf()` ở `apps/app/lib/agent-transcript.ts` trả `null`). Bản cũ của
-tiêu chí này chỉ đòi ca thứ nhất, nên một lỗ thật lọt qua hợp đồng một cách hợp
-lệ: lớp chuyển khoá nhánh lỗi vào `tone === "warning" && errorText !== null`,
-mà hai trường đó do hai đường độc lập sinh ra, nên một lượt gọi công cụ hỏng
-thật rơi xuống nhánh cuối và vẽ ra màn như đã chạy xong với kết quả rỗng.
+Ba ca phải cùng có mặt, và ca (c) là ca vừa vá:
 
-Nhánh lỗi vì vậy phải khoá vào `tone` một mình — thứ duy nhất trong `DidItem`
-còn nói lên trạng thái sau khi `state` gốc của AI SDK đã bị gộp đi. Khi
-`errorText` là `null`, chuỗi hiển thị lấy từ bảng chuỗi
-(`packages/ui/src/lib/messages.ts`, khoá có trong cả `en` lẫn `vi`), không viết
-cứng trong lớp chuyển.
+- **(a)** `state` gốc là `"output-error"` kèm chuỗi lỗi → `output-error` mang
+  đúng chuỗi đó.
+- **(b)** `state` gốc là `"output-error"` mà `errorText` rỗng hoặc chỉ khoảng
+  trắng (nên `errorTextOf()` ở `apps/app/lib/agent-transcript.ts` trả `null`)
+  → vẫn `output-error`, chuỗi hiển thị lấy từ bảng chuỗi
+  (`packages/ui/src/lib/messages.ts`, khoá `chatTool.failed`, có trong cả `vi`
+  lẫn `en`), không viết cứng trong lớp chuyển.
+- **(c)** `output` mang `stored === false` hoặc `written === false` mà `state`
+  gốc **không** phải `"output-error"` → `output-available`, `output` và `reason`
+  còn nguyên trong kết quả.
+
+**Nhánh lỗi khoá vào trạng thái gốc, không vào `tone`.** Hai bản trước đều hỏng
+vì khoá vào `tone`, mỗi bản một chiều. Bản đầu khoá vào
+`tone === "warning" && errorText !== null`: hai trường đó do hai đường độc lập
+sinh ra, nên một lượt hỏng thật có `errorText` rỗng rơi xuống nhánh cuối và vẽ
+ra màn như đã chạy xong. Bản vá sau nới xuống `tone === "warning"` một mình, và
+hỏng theo chiều ngược: `outcomeTone()` trả `"warning"` cho **hai nguồn độc
+lập** — `state === "output-error"` (hỏng thật) và `stored === false ||
+written === false` (chạy xong, công cụ từ chối ghi) — nên ca (c) thành đỏ giả
+kèm câu lỗi bịa, mất cả `output` lẫn `reason`.
+
+`tone` là một suy diễn để hiển thị, trộn hai nguồn, nên nó không đủ tư cách
+quyết định `state` của AI SDK. `DidItem` vì vậy mang thêm trường `failed`, đặt
+từ `part.state === "output-error"` ở `toTranscript`, và lớp chuyển đọc đúng
+trường đó.
+
+**Không nhánh nào được đánh rơi kết quả lượt gọi thật sự mang.** Trong cây hôm
+nay chỉ ca (c) vừa mang kết quả vừa trông như hỏng, và nó đã về nhánh hoàn tất
+nên `output` còn nguyên. Nhánh lỗi không chép `output` sang được: cả
+`EveDynamicToolPart` của `eve` lẫn `DynamicToolUIPart` của `ai@7.0.85` đều khai
+`output?: never` ở biến thể `output-error`, nên một lượt hỏng không có chỗ chứa
+kết quả ở cả hai đầu. Đây là ràng buộc của thư viện, không phải lựa chọn của
+kho; ghi ra để lần sau không ai đọc AC này rồi đi thêm một ép kiểu.
 
 Dạng thứ tư — `asked` — **cố ý không đi qua lớp chuyển**, và phép đo phải
 khẳng định điều đó chứ không bỏ lửng: `docs/chat-ui.md` xếp form hỏi lại vào
@@ -278,6 +308,16 @@ thật trong kho.
   chính `toTranscript` như mọi lượt khác trong `packages/ui/test/fixtures/eve-turns.json`;
   bài kiểm ở `packages/ui/test/eve-to-ai-sdk.spec.ts`. Ca này đỏ (mã thoát 1,
   `state` ra `output-available`) trên bản trước khi vá và xanh sau khi vá.
+- Ca (c) thêm vào AC-4 sau lượt kiểm thứ tư, khi lượt kiểm đã PASS: bản vá
+  `cf9109f` sửa chiều thứ nhất bằng cách nới nhánh lỗi xuống `tone === "warning"`
+  một mình, và mở ra chiều thứ hai — một lượt gọi hợp lệ báo `stored: false`
+  hiện thành đỏ và mất luôn `reason`. Hợp đồng cũ chỉ khai hai ca warning nên
+  chiều đó lọt qua một cách hợp lệ; đó là lỗi của hợp đồng trước khi là lỗi của
+  mã. Vật thử là lượt `m3:call-khong-ghi`, sinh từ chính `toTranscript` như mọi
+  lượt khác trong `packages/ui/test/fixtures/eve-turns.json`; bài kiểm ở
+  `packages/ui/test/eve-to-ai-sdk.spec.ts`. Ca này đỏ (mã thoát 1, `state` ra
+  `output-error`, không có trường `output`) trên bản trước khi vá và xanh sau khi
+  vá; hai ca (a) và (b) xanh ở cả hai bản.
 - Bài kiểm vật thử ở `apps/app/test/agent-transcript.spec.ts` **chỉ đọc**. Cửa
   ghi cũ (`GHI_VAT_THU=1`) đã bỏ hẳn: nó chạy lúc gom bài kiểm chứ không trong
   một `it`, và khi bật thì phép so bên dưới so `toTranscript` với tệp mà chính
