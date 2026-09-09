@@ -1,13 +1,19 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
 import { BUILDER_AUTHORIZATION_KEY } from "@crm/validation/builder-question";
-import { persistBuilderInputRequest } from "../agent/lib/builder-input";
+import {
+	persistBuilderInputRequest,
+	recordBuilderInputRequest,
+} from "../agent/lib/builder-input";
 import {
 	saveBuilderDraft,
 	writeBuilderArtifact,
 } from "../agent/lib/builder-runtime";
 import { setBuilderConversationTitle } from "../agent/lib/conversation-title";
-import { builderToken } from "../agent/lib/custom-agent-dispatch";
+import {
+	builderSessionAttributes,
+	builderToken,
+} from "../agent/lib/custom-agent-dispatch";
 
 const suffix = crypto.randomUUID();
 const userId = `builder-runtime-user-${suffix}`;
@@ -173,52 +179,74 @@ describe("builder persistence", () => {
 		).toBe(0);
 	});
 
-	it("records the asking turn's refusal so the answer cannot inherit a grant", async () => {
-		const conversation = await db.agentConversation.create({
-			data: {
-				kind: "BUILDER",
-				userId,
-				sessionId: `builder-ungranted-${suffix}`,
-			},
-			select: { id: true },
-		});
-		conversationIds.push(conversation.id);
+	it("derives the stored grant from the asking turn's own context", async () => {
+		const askingTurn = async (commandType: string) => {
+			const conversation = await db.agentConversation.create({
+				data: {
+					kind: "BUILDER",
+					userId,
+					sessionId: `builder-grant-${commandType}-${suffix}`,
+				},
+				select: { id: true },
+			});
+			conversationIds.push(conversation.id);
 
-		const request = {
-			kind: "question",
-			requestId: "cau-hoi-khong-duoc-phep",
-			prompt: "Which stage?",
-			action: {
-				kind: "tool-call",
-				callId: "call-ungranted",
-				toolName: "ask_question",
-				input: { prompt: "Which stage?" },
-			},
-			display: "text",
-		};
+			const requestId = `cau-hoi-${commandType}`;
+			const request = {
+				kind: "question",
+				requestId,
+				prompt: "Which stage?",
+				action: {
+					kind: "tool-call",
+					callId: `call-${requestId}`,
+					toolName: "ask_question",
+					input: { prompt: "Which stage?" },
+				},
+				display: "text",
+			};
 
-		expect(
-			await persistBuilderInputRequest(
+			const written = await recordBuilderInputRequest(
 				{
 					requests: [request],
 					sequence: 1,
 					stepIndex: 0,
-					turnId: "turn-ungranted",
+					turnId: `turn-${commandType}`,
 				},
 				undefined,
-				conversation.id,
-				false,
-			),
-		).toBe(true);
+				{
+					session: {
+						auth: {
+							current: {
+								attributes: builderSessionAttributes({
+									commandType,
+									message: { text: "dung mot tac nhan" },
+									conversationId: conversation.id,
+									userId,
+									submissionId: `sub-${commandType}`,
+									hasTitle: true,
+								}),
+							},
+							initiator: null,
+						},
+					},
+				},
+			);
+			expect(written).toBe(true);
 
-		expect(
-			(
+			return (
 				await db.agentConversation.findUnique({
 					where: { id: conversation.id },
 					select: { pendingInputRequest: true },
 				})
-			)?.pendingInputRequest,
-		).toMatchObject({ [BUILDER_AUTHORIZATION_KEY]: false });
+			)?.pendingInputRequest;
+		};
+
+		expect(await askingTurn("CREATE_AGENT")).toMatchObject({
+			[BUILDER_AUTHORIZATION_KEY]: true,
+		});
+		expect(await askingTurn("CHAT")).toMatchObject({
+			[BUILDER_AUTHORIZATION_KEY]: false,
+		});
 	});
 
 	it("ignores a delayed question from a turn the session has already left", async () => {

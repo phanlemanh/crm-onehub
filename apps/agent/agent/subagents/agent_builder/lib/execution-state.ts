@@ -1,5 +1,6 @@
 import { defineState } from "eve/context";
 import { z } from "zod";
+import { BUILDER_STATUS } from "./authorization";
 
 type BuilderAction = {
 	callId: string;
@@ -8,10 +9,12 @@ type BuilderAction = {
 	input?: unknown;
 };
 
-const traVeTuChoi = z.object({ status: z.literal("not_authorized") });
+const notAuthorizedOutput = z.object({
+	status: z.literal(BUILDER_STATUS.notAuthorized),
+});
 
-function tuChoiQuyen(action: BuilderAction): boolean {
-	return traVeTuChoi.safeParse(action.input).success;
+function returnsNotAuthorized(action: BuilderAction): boolean {
+	return notAuthorizedOutput.safeParse(action.input).success;
 }
 
 type BuilderExecutionState = {
@@ -72,9 +75,11 @@ export function recordBuilderActions(
 		if (
 			!current.saved &&
 			action.toolName === "final_output" &&
-			!tuChoiQuyen(action)
+			!returnsNotAuthorized(action)
 		) {
-			throw new Error("Save the draft before returning draft_ready.");
+			throw new Error(
+				`Save the draft before returning ${BUILDER_STATUS.draftReady}.`,
+			);
 		}
 		if (savePending) {
 			throw new Error(

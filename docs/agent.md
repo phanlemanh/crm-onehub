@@ -343,9 +343,15 @@ delegation paths for custom agents.
 - **Builder clarification is durable HITL.** The specialist calls eve's built-in
   `ask_question` directly; descendant input requests are proxied to the root channel,
   and the same child turn resumes when the user answers. The authored
-  `tools/ask_question.ts` disable override must stay absent. Builder task output is a
-  discriminated union on `status`: `draft_ready` carries the immutable version ids and
-  only after save, `not_authorized` carries a reason and no ids.
+  `tools/ask_question.ts` disable override must stay absent. Builder task output is one
+  object keyed by `status`: `draft_ready` carries the immutable version ids and only
+  after save, `not_authorized` carries a reason and no ids; a `superRefine` enforces
+  which fields each status requires. It is one object rather than a
+  `discriminatedUnion` on purpose — eve hands `outputSchema` to the model unchanged as
+  `final_output`'s input schema (`toInputSchema` does not wrap it), and a union lowers
+  to a root `oneOf` with no `type: "object"`, which a provider may reject outright.
+  Every other subagent's schema already serializes to a root object; keep this one
+  that way too.
 - **Empty never means all.** A version chooses `SELECTED` or `WORKSPACE` record scope.
   Selected scope requires at least one record tagged in that private conversation;
   workspace scope is an explicit grant and cannot also list selected records.

@@ -2,15 +2,17 @@ import { describe, expect, it } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { builderSessionAttributes } from "../agent/lib/custom-agent-dispatch";
-import { builderTurnAuthorized, purposeOf } from "../agent/lib/session-purpose";
+import {
+	builderTurnAuthorized,
+	purposeOf,
+	SESSION_PURPOSES,
+} from "../agent/lib/session-purpose";
 import agentBuilder from "../agent/subagents/agent_builder/agent";
 import {
 	BUILDER_DENIED_REASON,
 	builderTurnApproval,
 } from "../agent/subagents/agent_builder/lib/authorization";
 import { recordBuilderActions } from "../agent/subagents/agent_builder/lib/execution-state";
-
-const PURPOSES = ["research", "team-agent", "builder"] as const;
 
 const GHIM =
 	"This turn is not authorized to create or revise an agent. Stop now and return final_output with status not_authorized and this sentence as the reason. Do not write files, do not save a draft.";
@@ -67,10 +69,14 @@ describe("quyen", () => {
 	});
 
 	it("quyen: ma tran toan phan purpose nhan commandType", () => {
-		const cases = PURPOSES.flatMap((purpose) =>
+		expect(SESSION_PURPOSES).toHaveLength(3);
+		const cases = SESSION_PURPOSES.flatMap((purpose) =>
 			["CREATE_AGENT", "CHAT"].map((commandType) => ({ purpose, commandType })),
 		);
-		expect(cases).toHaveLength(6);
+		expect(cases).toHaveLength(SESSION_PURPOSES.length * 2);
+		for (const purpose of SESSION_PURPOSES) {
+			expect(purposeOf(phienThat({ purpose }))).toBe(purpose);
+		}
 		for (const c of cases) {
 			const duocPhep =
 				c.purpose === "builder" && c.commandType === "CREATE_AGENT";
