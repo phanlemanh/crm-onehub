@@ -1,49 +1,53 @@
 ## Trong hợp đồng
 
-- **Sàn dân số lọc theo chính thuộc tính đang assert — chỉ bắt chiều gỡ, mù chiều thêm (tuyên quét lớp nhưng đo điểm-case)**
-  file: `apps/agent/test/chan-uy-thac.spec.ts:123`
-  severity: medium
-  AC: AC-3
-  source: measurement
-  detail: AC-3/E3 tuyên "Chốt phủ mọi cửa vào" của agent_builder và cài một sàn dân số đọc đĩa. Nhưng bộ lọc đĩa là `.filter((f) => boDongImport(readFileSync(join(TOOL_DIR, f), "utf8")).includes("requireBuilderAttribute("))` — nó chỉ giữ lại đúng những file ĐÃ có cái guard đang được assert, rồi so bằng `expect(trenDia).toEqual([...TOOLS_GHIM].sort())`. Hệ quả: dân số của phép đo không bao giờ là dân số của lớp. Thư mục `apps/agent/agent/subagents/agent_builder/tools/` hiện có 11 file; chỉ 3 file (inspect_context, write_agent_file, save_agent_draft) khai `builderTurnApproval`. Tám file còn lại hôm nay vô hại vì đều là `export default disableTool()`, nhưng phép đo không hề đọc điều đó — nó không phân biệt "tool bị tắt" với "tool đang bật mà quên guard". Thêm một tool builder thật vào thư mục mà quên cả `builderTurnApproval` lẫn `requireBuilderAttribute`: bộ lọc bỏ qua nó, `trenDia` vẫn đúng 3 tên, `TOOLS_GHIM` vẫn 3, ba assert trong vòng lặp vẫn xanh — một cửa vào hở hoàn toàn đi qua cổng không ai thấy. Dân số đúng cho lời hứa "mọi cửa vào" phải là "mọi file trong TOOL_DIR không phải disableTool()", rồi đòi từng file đó khai policy; dân số hiện tại là tập con tự-khớp.
-  rationale: Đúng nguyên văn sàn dân số của AC-3: bộ lọc đĩa tự khớp theo thuộc tính đang assert nên 'mọi cửa vào' không còn được đo như một dân số thật.
-
-- **Fixture viết tay đúng khuôn bên đọc — không round-trip qua writer `buildPendingInputRequest`**
-  file: `apps/agent/test/custom-agent-runtime.spec.ts:75`
-  severity: medium
+- **Assertion âm-tính-một-mình: `rejects.not.toThrow` ghim luồng cho-đi-tiếp bằng đúng việc mọi tool đều phải HỎNG**
+  file: `apps/agent/test/chan-uy-thac.spec.ts:160`
+  severity: high
   AC: AC-1
   source: measurement
-  detail: Bài đo tên là "keeps clarification answers in agent-creation mode, now from the recorded grant", tức lời hứa là quyền đọc ra ĐÚNG cái mà đường ghi đã ghi. Nhưng cả hai chiều đều dựng bằng object literal viết tay ngay tại chỗ: `commandTypeFromAuthorization({ kind: "question", requestId: "question-1", prompt: "Which one", options: [], [BUILDER_AUTHORIZATION_KEY]: true })` (dòng 75-82) và bản `false` (dòng 84-91). Hàm ghi duy nhất sinh ra bản ghi ấy — `buildPendingInputRequest` trong packages/validation/src/builder-question.ts, chính là hàm mà apps/agent/agent/lib/builder-input.ts gọi khi lưu `pendingInputRequest` — không hề được import trong file này. Nên phép đo chỉ chứng minh reader đọc lại đúng cái literal mà chính bài đo vừa viết ra theo khuôn của reader: nếu writer đặt cờ dưới khuôn khác (bọc lồng, ghi chuỗi "true", hoặc bỏ trường khi authorized=true) thì cặp assert này vẫn xanh cả hai chiều, trong khi "grant đã ghi" thực tế không đọc được. Không có bài đo nào 'recorded' cái gì ở đây — không có DB, không có writer.
-  rationale: Đúng nguyên văn sàn khuôn fixture của AC-1: fixture tự dựng đúng khuôn bên đọc thay vì round-trip qua đường runtime ghi.
+  detail: Bài `moi-tool: luot duoc phep KHONG bi lop trong chan` (dòng 155-164) chỉ có một assert duy nhất: `await expect(mod.default.execute({}, phienThat())).rejects.not.toThrow("Agent creation requires an explicit request to create or build an agent.")`. `.rejects` BẮT BUỘC promise phải reject — nên bài đo đang khẳng định cả ba tool ghim đều NÉM trên một lượt ĐƯỢC PHÉP, chỉ khác thông điệp. Nó xanh vì lý do hoàn toàn ngoài lời hứa: `inspect_context.execute` gọi thẳng `builderContext("conv_1","user_1")` đập vào DB thật (apps/agent/agent/lib/builder-runtime.ts:143) — hội thoại không tồn tại, hoặc chỉ cần mất kết nối DB, là đã có reject; `write_agent_file` và `save_agent_draft` ném từ `assertBuilderDraftOpen()` / `draftInputFromTool({})` vì chạy ngoài eve session. Không ghim thông điệp thực nhận, không có đối chứng dương nào cho chiều 'được phép đi tiếp' ở tầng execute. Hệ quả hai mặt: (a) gỡ `approval` hoặc gỡ `requireBuilderAttribute` khỏi một tool vẫn không làm bài này đỏ; (b) nếu sau này một tool chạy được thật trên `{}` thì bài đi ĐỎ vì hết reject — tức phép đo thưởng cho hỏng và phạt cho đúng.
+  rationale: AC-1 hứa lượt purpose=builder+CREATE_AGENT phải "cho đi tiếp, và mọi tool builder chạy như trước vòng này"; bài đo duy nhất phủ chiều này chỉ xác nhận có reject xảy ra (bất kể lý do), không xác nhận thật sự cho-đi-tiếp, nên có thể xanh ngay cả khi AC-1 đã hỏng.
 
-- **Cặp hai chiều dựng bằng cách ghi đè trường quyền bằng tay; tham số `authorized` của writer bị ghim cứng `false`**
-  file: `apps/api/test/quyen-luot.spec.ts:10`
-  severity: low
-  AC: AC-1
+- **Assert chuỗi-vắng-mặt trong khi lời hứa (E10) là QUAN HỆ 'mọi tool import hằng dùng chung'**
+  file: `apps/agent/test/chan-uy-thac.spec.ts:168`
+  severity: high
+  AC: AC-10
   source: measurement
-  detail: Helper `cauHoi` gọi `buildPendingInputRequest(question, false)` với đối số `authorized` ghim cứng `false` (dòng 11-19), rồi spread `...over` lên trên. Cả hai chiều của cặp đối chứng đều được tạo bằng cách ghi đè trường bằng tay chứ không phải bằng cách hỏi writer: `cauHoi({ [BUILDER_AUTHORIZATION_KEY]: true })` -> kỳ vọng CREATE_AGENT (dòng 27), `cauHoi({ [BUILDER_AUTHORIZATION_KEY]: false })` -> kỳ vọng CHAT (dòng 32). Vì `authorized` không bao giờ nhận `true`, nhánh ghi "lượt được phép" của `buildPendingInputRequest` không được chạy lần nào trong file này. Nếu writer sai đúng ở nhánh đó (ví dụ luôn ghi `false`, hoặc ghi cờ dưới key khác khi authorized), cả hai assert vẫn xanh — phép đo chỉ đang đo `commandTypeFromAuthorization` đọc lại field mà bài đo tự dán vào. Ghi chú kèm: E4 khai paths là `apps/api/src/conversations/conversations.service.ts` nhưng file này không import service; chiều hai-chiều chạm service thật nằm ở apps/api/test/conversations.spec.ts.
-  rationale: Cùng vi phạm sàn khuôn fixture của AC-1: authorized bị ghim cứng false nên nhánh ghi hợp lệ của writer chưa từng chạy, cặp đối chứng chỉ đọc lại field tự gán tay.
+  detail: E10 trong `_acceptance/chan-uy-thac-sai-luot/evals.yaml` khai nguyên văn: "Do QUAN HE chu khong do chuoi-co-mat: khong file tool nao chua chuoi ly do viet thang tai cho — moi tool phai IMPORT hang ay." Bài `moi-tool: khong tool nao viet lai hang ly do tai cho` (dòng 166-172) chỉ làm nửa âm: `expect(readFileSync(join(TOOL_DIR, `${name}.ts`), "utf8")).not.toContain(BUILDER_DENIED_REASON)`. Không có assert nào chạm vế dương 'import hằng ấy'. Một file tool trống rỗng, không policy, không import, không tham chiếu gì tới `BUILDER_DENIED_REASON` vẫn qua bài này. Vế dương lại còn không đúng với mã: ba tool import `builderTurnApproval`, không tool nào import `BUILDER_DENIED_REASON` (xem apps/agent/agent/subagents/agent_builder/tools/{inspect_context,write_agent_file,save_agent_draft}.ts), nên quan hệ mà E10 hứa đo hiện không được đo ở bất kỳ đâu.
+  rationale: AC-10 hứa "chuỗi đến từ một hằng được export, không phải chuỗi viết lại ở mỗi tool" — tức đòi cả vế dương (phải import hằng); bài đo chỉ chấm vế âm (không chứa chuỗi viết tay), bỏ trống hoàn toàn vế dương mà AC-10 đòi.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **Stray probe script committed into apps/agent, outside every gate, importing an undeclared dependency**
-  Người dùng thấy gì: Một đoạn mã thử nghiệm còn sót lại trong sản phẩm có thể tự động gọi mô hình AI tốn phí mà không ai chủ đích dùng đến, mỗi khi hệ thống được dựng lại.
-  file: `apps/agent/thu-schema-that.ts`
-  severity: high
-  Đề xuất: known-limits
-
-- **The pendingInputRequest Json column is written by spread and read back by two partial schemas — no module owns the stored shape**
-  Người dùng thấy gì: Khi một cuộc hỏi-đáp bị lưu sai định dạng, hệ thống có thể âm thầm coi đó là một tin nhắn trò chuyện bình thường thay vì báo lỗi, khiến người dùng không biết vì sao yêu cầu dựng tác nhân của họ không được ghi nhận.
-  file: `packages/validation/src/builder-question.ts`
+- **builderCommandType đã thành hàm identity, còn giữ tham số chết `_value`**
+  Người dùng thấy gì: Không ảnh hưởng gì tới người dùng cuối — đây là một hàm nội bộ còn giữ tham số thừa, không làm thay đổi hành vi sản phẩm.
+  file: `apps/agent/agent/lib/custom-agent-dispatch.ts`
   severity: medium
-  Đề xuất: new-contract
+  Đề xuất: wont-fix
 
-- **The anti-inference guard test scopes out apps/app, where authorization is still derived from message text and sent by the client**
-  Người dùng thấy gì: Ở màn hình soạn tin nhắn, hệ thống vẫn có thể tự đoán ý định tạo tác nhân từ nội dung gõ vào thay vì chỉ tin vào việc bấm đúng nút, nên một câu hỏi bình thường đôi khi có thể bị hiểu nhầm thành yêu cầu dựng tác nhân.
+- **Biến chết `boDongImport` trong file test mới — biome đang cảnh báo**
+  Người dùng thấy gì: Không ảnh hưởng người dùng; đây chỉ là một dòng thừa trong bộ kiểm thử gây cảnh báo lint, không tác động tới sản phẩm thật.
+  file: `apps/agent/test/chan-uy-thac.spec.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Bài đo "đếm suy diễn trên đĩa = 0" quét theo từng dòng, chỉ cần format lại là mù**
+  Người dùng thấy gì: Người dùng không thấy khác biệt ngay, nhưng nếu sau này có ai vô tình đưa lại kiểu suy luận quyền theo nội dung tin nhắn — chỉ cần trình bày code khác một chút — hệ thống kiểm tra sẽ không phát hiện, để lọt đúng loại lỗi từng gây treo hội thoại trước đây.
   file: `apps/agent/test/quyen-luot.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 5/6 lỗi rơi vào file không bộ đo nào phủ (apps/agent/thu-schema-that.ts, packages/validation/src/builder-question.ts, apps/agent/test/quyen-luot.spec.ts, apps/agent/test/custom-agent-runtime.spec.ts, apps/api/test/quyen-luot.spec.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+- **Assertion âm-tính-một-mình: hai chuỗi cấm chọn tay, sập thành boolean nên không in được thông điệp thực**
+  Người dùng thấy gì: Không ảnh hưởng người dùng ngay lúc này; nhưng đây là một phép kiểm thử yếu — nếu sau này lý do từ chối vô tình viết theo giọng nói trực tiếp với người dùng thay vì với hệ thống, phép kiểm thử này sẽ không phát hiện ra.
+  file: `apps/agent/test/quyen-luot.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Tuyên 'ma trận toàn phần' nhưng một trục là literal viết tay, không có sàn dân số viết trước**
+  Người dùng thấy gì: Không ảnh hưởng người dùng ở phiên bản hiện tại; nhưng nếu tương lai có thêm một loại lệnh mới, phép kiểm thử tự xưng là 'phủ toàn bộ tổ hợp quyền' có thể lặng lẽ bỏ sót tổ hợp mới đó mà vẫn báo xanh.
+  file: `apps/agent/test/chan-uy-thac.spec.ts`
+  severity: low
+  Đề xuất: known-limits
+
+⚠ Cụm ngoài vùng phủ: 3/7 lỗi rơi vào file không bộ đo nào phủ (apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/test/quyen-luot.spec.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
