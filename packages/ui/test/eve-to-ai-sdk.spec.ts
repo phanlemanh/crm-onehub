@@ -7,6 +7,7 @@ import {
 	toToolPart,
 	toUIMessage,
 } from "../src/lib/eve-to-ai-sdk";
+import { messages } from "../src/lib/messages";
 
 type RawTurn = { kind: string; id: string };
 
@@ -104,6 +105,28 @@ describe("toToolPart — state của một lượt did", () => {
 			tone: "warning",
 			errorText: "hết lượt gọi trong ngày",
 			state: "output-error",
+		});
+	});
+
+	it("did tone warning KHÔNG có chuỗi lỗi vẫn là output-error, kèm chuỗi mặc định", () => {
+		const item = didAt("m3:call-warning-trong");
+		const part = toToolPart(item);
+
+		expect({
+			tone: item.tone,
+			errorText: item.errorText,
+			state: part.state,
+		}).toEqual({
+			tone: "warning",
+			errorText: null,
+			state: "output-error",
+		});
+		expect(part).toMatchObject({
+			state: "output-error",
+			errorText: messages("vi").chatTool.failed,
+		});
+		expect(toToolPart(item, "en")).toMatchObject({
+			errorText: messages("en").chatTool.failed,
 		});
 	});
 

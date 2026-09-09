@@ -100,6 +100,9 @@ const en = {
 		removeAttachment: "Remove attachment",
 		remove: "Remove",
 	},
+	chatTool: {
+		failed: "This step failed",
+	},
 	threadMessage: {
 		empty: "No message body.",
 	},
@@ -206,6 +209,9 @@ const vi = {
 		unnamedAttachment: "Tệp đính kèm",
 		removeAttachment: "Xoá tệp đính kèm",
 		remove: "Xoá",
+	},
+	chatTool: {
+		failed: "Bước này lỗi",
 	},
 	threadMessage: {
 		empty: "Thư không có nội dung.",

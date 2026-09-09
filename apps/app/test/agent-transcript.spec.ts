@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import type { EveToolInput, EveToolOutput } from "@crm/validation/eve-tool";
 import type { EveMessage } from "eve/react";
 import { z } from "zod";
@@ -759,6 +759,12 @@ const LUOT_EVE = [
 				errorText: "hết lượt gọi trong ngày",
 				input: { url: "https://acme.example" },
 			}),
+			tool("web_fetch", {
+				toolCallId: "call-warning-trong",
+				state: "output-error",
+				errorText: "   ",
+				input: { url: "https://acme.example/khong-loi" },
+			}),
 			tool("web_search", {
 				toolCallId: "call-pending",
 				state: "input-available",
@@ -818,12 +824,78 @@ const truongCua = (giaTri: NutJson, goc = ""): string[] => {
 	});
 };
 
+type ChoDung = { co: true; gt: NutJson | undefined } | { co: false };
+
+const VANG = { co: false } as const satisfies ChoDung;
+
+const doiChieu = (vatThu: ChoDung, daGhi: ChoDung, duong: string): string[] => {
+	if (!vatThu.co) {
+		return [
+			`${duong}: vật thử thiếu trường này, toTranscript ghi ${JSON.stringify(daGhi.co ? daGhi.gt : null)}`,
+		];
+	}
+	if (!daGhi.co) {
+		return [
+			`${duong}: vật thử còn giữ ${JSON.stringify(vatThu.gt)}, toTranscript không còn ghi trường này`,
+		];
+	}
+	return lechGiua(vatThu.gt ?? null, daGhi.gt ?? null, duong);
+};
+
+const lechGiua = (vatThu: NutJson, daGhi: NutJson, goc = ""): string[] => {
+	if (JSON.stringify(vatThu) === JSON.stringify(daGhi)) return [];
+
+	const duong = goc || "gốc";
+
+	const mangVatThu = mangJson.safeParse(vatThu);
+	const mangDaGhi = mangJson.safeParse(daGhi);
+	if (mangVatThu.success && mangDaGhi.success) {
+		const dai = Math.max(mangVatThu.data.length, mangDaGhi.data.length);
+		return Array.from({ length: dai }, (_, i) =>
+			doiChieu(
+				i < mangVatThu.data.length
+					? { co: true, gt: mangVatThu.data[i] }
+					: VANG,
+				i < mangDaGhi.data.length ? { co: true, gt: mangDaGhi.data[i] } : VANG,
+				`${goc}[${i}]`,
+			),
+		).flat();
+	}
+
+	const doiVatThu = doiTuongJson.safeParse(vatThu);
+	const doiDaGhi = doiTuongJson.safeParse(daGhi);
+	if (doiVatThu.success && doiDaGhi.success) {
+		const khoas = [
+			...new Set([
+				...Object.keys(doiVatThu.data),
+				...Object.keys(doiDaGhi.data),
+			]),
+		];
+		return khoas.flatMap((khoa) =>
+			doiChieu(
+				khoa in doiVatThu.data ? { co: true, gt: doiVatThu.data[khoa] } : VANG,
+				khoa in doiDaGhi.data ? { co: true, gt: doiDaGhi.data[khoa] } : VANG,
+				goc ? `${goc}.${khoa}` : khoa,
+			),
+		);
+	}
+
+	return [
+		`${duong}: vật thử ${JSON.stringify(vatThu)} ≠ toTranscript ${JSON.stringify(daGhi)}`,
+	];
+};
+
+const banCao = (lech: string[]): string =>
+	lech.length === 0
+		? ""
+		: [
+				`Vật thử ${DUONG_VAT_THU.pathname} lệch ${lech.length} chỗ so với toTranscript.`,
+				"Bài kiểm không tự ghi vật thử — sửa tay tệp trên cho khớp vế phải của từng dòng:",
+				...lech,
+			].join("\n");
+
 describe("vật thử của lớp chuyển sinh từ chính toTranscript", () => {
 	const sinhRa = toTranscript(LUOT_EVE as unknown as EveMessage[]);
-
-	if (process.env.GHI_VAT_THU === "1") {
-		writeFileSync(DUONG_VAT_THU, `${JSON.stringify(sinhRa, null, "\t")}\n`);
-	}
 
 	const vatThu = nutJson.parse(JSON.parse(readFileSync(DUONG_VAT_THU, "utf8")));
 	const daGhi = nutJson.parse(JSON.parse(JSON.stringify(sinhRa)));
@@ -833,7 +905,7 @@ describe("vật thử của lớp chuyển sinh từ chính toTranscript", () =>
 	});
 
 	it("mang đúng giá trị mà toTranscript viết ra", () => {
-		expect(vatThu).toEqual(daGhi);
+		expect(banCao(lechGiua(vatThu, daGhi))).toBe("");
 	});
 
 	it("phủ cả bốn dạng lượt và cả hai trạng thái của reasoned", () => {

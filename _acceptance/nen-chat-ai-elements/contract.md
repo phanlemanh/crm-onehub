@@ -113,8 +113,23 @@ những dòng có tên trong sổ lệch chuẩn của AC-8.
 
 **AC-4** — Cho một lượt eve thật thuộc mỗi dạng `said`, `reasoned`, `did`,
 khi đưa qua lớp chuyển kiểu, thì kết quả mang đúng `role` và đúng `state` của
-AI SDK cho dạng đó; và cho một lượt `did` mang `Tone = warning` kèm chuỗi lỗi,
-thì kết quả mang state báo lỗi chứ không phải state hoàn tất.
+AI SDK cho dạng đó; và cho một lượt `did` mang `Tone = warning`, thì kết quả
+mang state báo lỗi chứ không phải state hoàn tất — **kể cả khi không có chuỗi
+lỗi**.
+
+Hai ca warning phải cùng có mặt, và ca thứ hai là ca vừa vá: **kèm chuỗi lỗi**,
+và **không có chuỗi lỗi** (eve trả `errorText` rỗng hoặc chỉ khoảng trắng, nên
+`errorTextOf()` ở `apps/app/lib/agent-transcript.ts` trả `null`). Bản cũ của
+tiêu chí này chỉ đòi ca thứ nhất, nên một lỗ thật lọt qua hợp đồng một cách hợp
+lệ: lớp chuyển khoá nhánh lỗi vào `tone === "warning" && errorText !== null`,
+mà hai trường đó do hai đường độc lập sinh ra, nên một lượt gọi công cụ hỏng
+thật rơi xuống nhánh cuối và vẽ ra màn như đã chạy xong với kết quả rỗng.
+
+Nhánh lỗi vì vậy phải khoá vào `tone` một mình — thứ duy nhất trong `DidItem`
+còn nói lên trạng thái sau khi `state` gốc của AI SDK đã bị gộp đi. Khi
+`errorText` là `null`, chuỗi hiển thị lấy từ bảng chuỗi
+(`packages/ui/src/lib/messages.ts`, khoá có trong cả `en` lẫn `vi`), không viết
+cứng trong lớp chuyển.
 
 Dạng thứ tư — `asked` — **cố ý không đi qua lớp chuyển**, và phép đo phải
 khẳng định điều đó chứ không bỏ lửng: `docs/chat-ui.md` xếp form hỏi lại vào
@@ -258,6 +273,16 @@ thật trong kho.
   ký: 8 → 14 → 16 chuỗi, và 3 → 4 bán kính, sau khi bản CLI tươi của `conversation`
   về cây và sau khi răng chuỗi được vá để thấy lớp giá trị mặc định. Số hiện tại
   do chính răng đo, không do phép đếm bằng tay.
+- Ca vừa thêm vào AC-4 sau lượt kiểm thứ ba: lượt `did` mang `tone = warning`
+  mà **không** có chuỗi lỗi. Vật thử là lượt `m3:call-warning-trong`, sinh từ
+  chính `toTranscript` như mọi lượt khác trong `packages/ui/test/fixtures/eve-turns.json`;
+  bài kiểm ở `packages/ui/test/eve-to-ai-sdk.spec.ts`. Ca này đỏ (mã thoát 1,
+  `state` ra `output-available`) trên bản trước khi vá và xanh sau khi vá.
+- Bài kiểm vật thử ở `apps/app/test/agent-transcript.spec.ts` **chỉ đọc**. Cửa
+  ghi cũ (`GHI_VAT_THU=1`) đã bỏ hẳn: nó chạy lúc gom bài kiểm chứ không trong
+  một `it`, và khi bật thì phép so bên dưới so `toTranscript` với tệp mà chính
+  `toTranscript` vừa ghi, nên nó không thể đỏ. Lệch thì bài kiểm in đường trường
+  cùng cả hai giá trị để người sửa tay vật thử.
 - Răng mồ côi có **miễn trừ có tên** cho `conversation.tsx`, kèm lý do và điều
   kiện hết hạn: Phase 1 nối `Conversation` vào màn thật thì bỏ mục miễn trừ. Một
   miễn trừ hết hạn hiện chỉ được cảnh báo chứ không làm cổng đỏ — chỗ này người

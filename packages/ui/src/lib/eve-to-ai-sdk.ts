@@ -3,6 +3,8 @@ import type {
 	DidItem,
 } from "@crm/validation/agent-transcript";
 import type { DynamicToolUIPart, UIMessage } from "ai";
+import { DEFAULT_LOCALE, type Locale } from "./locale";
+import { messages } from "./messages";
 
 export const EVE_TO_AI_SDK = {
 	turn: {
@@ -25,7 +27,10 @@ type TurnSpec = (typeof EVE_TO_AI_SDK.turn)[TurnKind];
 
 type MessagePart = UIMessage["parts"][number];
 
-export function toToolPart(item: DidItem): DynamicToolUIPart {
+export function toToolPart(
+	item: DidItem,
+	locale: Locale = DEFAULT_LOCALE,
+): DynamicToolUIPart {
 	const head = {
 		type: EVE_TO_AI_SDK.turn.did.part,
 		toolName: item.tool,
@@ -41,12 +46,12 @@ export function toToolPart(item: DidItem): DynamicToolUIPart {
 		};
 	}
 
-	if (item.tone === "warning" && item.errorText !== null) {
+	if (item.tone === "warning") {
 		return {
 			...head,
 			state: EVE_TO_AI_SDK.toolState.failed,
 			input: item.input,
-			errorText: item.errorText,
+			errorText: item.errorText ?? messages(locale).chatTool.failed,
 		};
 	}
 
@@ -58,7 +63,10 @@ export function toToolPart(item: DidItem): DynamicToolUIPart {
 	};
 }
 
-export function toUIMessage(item: AgentTranscriptItem): UIMessage {
+export function toUIMessage(
+	item: AgentTranscriptItem,
+	locale: Locale = DEFAULT_LOCALE,
+): UIMessage {
 	const spec: TurnSpec = EVE_TO_AI_SDK.turn[item.kind];
 
 	if (spec === null) {
@@ -70,11 +78,11 @@ export function toUIMessage(item: AgentTranscriptItem): UIMessage {
 	return {
 		id: item.id,
 		role: item.kind === "said" && item.mine ? spec.mineRole : spec.role,
-		parts: [toPart(item)],
+		parts: [toPart(item, locale)],
 	};
 }
 
-function toPart(item: AgentTranscriptItem): MessagePart {
+function toPart(item: AgentTranscriptItem, locale: Locale): MessagePart {
 	if (item.kind === "said") {
 		return { type: EVE_TO_AI_SDK.turn.said.part, text: item.text };
 	}
@@ -90,5 +98,5 @@ function toPart(item: AgentTranscriptItem): MessagePart {
 		};
 	}
 
-	return toToolPart(item);
+	return toToolPart(item, locale);
 }

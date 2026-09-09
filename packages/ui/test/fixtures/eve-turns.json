@@ -88,6 +88,20 @@
 			},
 			{
 				"kind": "did",
+				"id": "m3:call-warning-trong",
+				"label": "Read a web page",
+				"input": {
+					"url": "https://acme.example/khong-loi"
+				},
+				"output": null,
+				"errorText": null,
+				"tone": "warning",
+				"pending": false,
+				"sources": [],
+				"tool": "web_fetch"
+			},
+			{
+				"kind": "did",
 				"id": "m3:call-pending",
 				"label": "Searched the web",
 				"input": {
