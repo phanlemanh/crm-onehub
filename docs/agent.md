@@ -340,6 +340,14 @@ delegation paths for custom agents.
   `not_authorized` branch is what lets the child end cleanly and the turn settle. The
   one-per-turn guard in `execution-state.ts` that demands a save before `final_output`
   is skipped on an unauthorized turn for the same reason.
+- **One delegation per turn, on every turn.** `hooks/builder-delegation.ts` gates on
+  `purpose` alone, not on `commandType`. It has to: the `not_authorized` branch makes an
+  unauthorized turn a legal path that still delegates once, and gating on `CREATE_AGENT`
+  left that path with no hard stop at all — only the sentence in `instructions/task.ts`
+  telling the root not to retry. A hook can only observe, so the stop is a throw, which
+  surfaces as `turn.failed`: the turn settles with a failure card instead of burning a
+  fresh child session per retry. The message says `per turn`, not `per creation turn`,
+  because it now fires on turns that create nothing.
 - **Builder clarification is durable HITL.** The specialist calls eve's built-in
   `ask_question` directly; descendant input requests are proxied to the root channel,
   and the same child turn resumes when the user answers. The authored

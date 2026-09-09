@@ -169,3 +169,28 @@ describe("lan-mot", () => {
 		});
 	});
 });
+
+const cauNem = (authorized: boolean): string =>
+	trongLuot(() => {
+		const ctx = phien({}, authorized);
+		chay(ctx, suKien("turn-1", goiBuilder("call-1")));
+		try {
+			chay(ctx, suKien("turn-1", goiBuilder("call-2")));
+		} catch (loi) {
+			return (loi as Error).message;
+		}
+		throw new Error("tran khong bat: khong co lan nem nao de doc cau");
+	});
+
+describe("mot-cau", () => {
+	it("mot-cau: cau nem dung nguyen van, khong con chu creation", () => {
+		expect(cauNem(false)).toBe(
+			"The agent builder can be delegated only once per turn.",
+		);
+		expect(cauNem(false)).not.toContain("creation");
+	});
+
+	it("mot-cau: hai chieu quyen cho cau BANG NHAU", () => {
+		expect(cauNem(true)).toBe(cauNem(false));
+	});
+});
