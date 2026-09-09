@@ -37,7 +37,7 @@ Lỗ thứ ba nói ra một câu hỏi thiết kế, không phải một lỗi �
 | `apps/app/components/agent-builder/new-agent-dialog.tsx:92` | ghim `CREATE_AGENT` — nút Tạo tác nhân |
 | `conversations.service.ts:424` (`createBuilder`) | `input.commandType` |
 | `conversations.service.ts:478` (`submitBuilder`) | `input.commandType` |
-| `conversations.service.ts:585` (`respondToQuestion`) | `commandTypeFromAuthorization(...)` |
+| `conversations.service.ts:585` (`answerBuilderQuestion`) | `commandTypeFromAuthorization(...)` |
 | `custom-agent-dispatch.ts:902` | `builderCommandType` — hàm đồng nhất |
 | `subagents/agent_builder/lib/authorization.ts` | cổng thật: `builderTurnAuthorized(ctx)` |
 
@@ -196,7 +196,7 @@ mới. AC-8 khai tường minh vùng nào đóng băng (AC-5 và khối E5) và 
 - Không đổi hình dạng input tRPC, không tách điểm vào (phương án A).
 - Không siết đường nâng quyền giữa hội thoại (phương án C).
 - Không đụng `apps/app`: bộ dò ý định của ô soạn giữ nguyên.
-- Không thêm phép đo tích hợp chạm cơ sở dữ liệu thật cho `respondToQuestion` —
+- Không thêm phép đo tích hợp chạm cơ sở dữ liệu thật cho `answerBuilderQuestion` —
   fixture của AC-1 là một object hàng viết trong bộ nhớ, không đọc DB.
 - Không đổi `t3_paths` của `_acceptance/config.yaml` (xem Rủi ro).
 
