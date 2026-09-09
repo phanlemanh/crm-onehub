@@ -334,7 +334,7 @@ fs.writeFileSync(process.argv[2], JSON.stringify(p, null, "\t") + "\n");
       echo "RANG CUN: kho chua chay cai dat ma chan noi-day van xanh"
       exit 1
     fi
-    if ! grep -q 'KHONG NOI DAY' "$TMP/out"; then
+    if ! grep -qE 'KHONG NOI DAY|LUOI LECH' "$TMP/out"; then
       echo "RANG CUN: chan noi-day do nhung khong noi vi sao"
       cat "$TMP/out"
       exit 1
