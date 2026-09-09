@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
+verified_commit: 49605940ace8cf52b90e71c54c7076244cad9eef
 run_id: s4r1-20260906T145103Z-21187
 human_signoff: Manh Phan 2026-09-06
 ---
@@ -202,3 +202,7 @@ sha: 538796cf4a0f334454dc9fc3f44f3f836a6b0ebf · suites: 4 lệnh exit 0
 
 run_id: repin-20260907T005455Z-44758
 sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0
+
+### Re-pin lần 3 — 2026-09-08, do mốc cũ lệch cây sau khi kho nhận kit 2.9.0, lệnh dựng thành cổng thứ năm, và hai bản sửa tài liệu
+run_id: repin-20260908T060804Z-76253
+sha: 49605940ace8cf52b90e71c54c7076244cad9eef · suites: 5 lệnh exit 0 · evals: 10 eval máy exit 0

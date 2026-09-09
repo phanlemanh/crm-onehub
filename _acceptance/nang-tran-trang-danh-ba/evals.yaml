@@ -1,0 +1,94 @@
+schema_version: 1
+feature_slug: nang-tran-trang-danh-ba
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.bo_cao_test
+    expected: "exit 0; bài «trang rỗng giữa danh bạ không cắt lượt đọc» pass — bộ dựng sẵn cho trang k ĐỌC ĐƯỢC nhưng 0 thẻ, trang k+1 có đủ người; khẳng định người ở k+1 nằm trong mẫu VÀ số trang đã đọc vượt qua k. Chiều đỏ: dừng ở trang rỗng đầu tiên làm bài này đỏ với thông điệp ghim tên trang."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_seed.py]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.bo_cao_test
+    expected: "exit 0; bài «danh bạ cạn thì dừng ngay» pass — trần 40, danh bạ hết người từ trang 6; khẳng định số trang đã đọc bằng 6 cộng directory_stop_after_empty, KHÔNG bằng 40. Cùng bài mang ĐỐI CHỨNG cờ: lượt cạn thật thì cờ bi_tran_cat TẮT. Chiều đỏ: đọc hết trần, hoặc bật cờ vô điều kiện, đều làm bài này đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_seed.py]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.bo_cao_test
+    layer: backend-effect
+    expected: "exit 0; bài «trang hỏng không tính vào phép đếm dừng» pass — bộ dựng sẵn cho 3 trang LIÊN TIẾP trả lỗi tải (nhiều hơn hoặc bằng directory_stop_after_empty) rồi trang thứ 4 có đủ 11 người; khẳng định vòng đọc KHÔNG dừng ở chuỗi hỏng và người ở trang 4 vào được mẫu. ĐỐI CHỨNG DƯƠNG trong cùng bài: 3 trang ĐỌC ĐƯỢC mà rỗng thì dừng đúng. Chiều đỏ: gộp hai loại trang vào một biến đếm làm nửa đầu đỏ với thông điệp ghim số trang đã đọc."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_seed.py]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.bo_cao_test
+    layer: backend-effect
+    expected: "exit 0; bài «chạm trần thì bật cờ» pass — danh bạ dài hơn trần; khẳng định vòng dừng đúng ở trần VÀ cờ bi_tran_cat BẬT. Cờ chỉ bật khi CÓ BẰNG CHỨNG danh bạ còn người: chạy hết trần, chuỗi trang không-ra-người-mới bằng 0, và ít nhất một trang đọc được thẻ. Ba bài đối chứng: lượt cạn thật (cờ tắt), lượt bị chặn sạch không đọc được trang nào (cờ tắt), lượt mọi trang rỗng (cờ tắt). Chiều đỏ: bật cờ chỉ vì chạy hết trần làm bài «lượt bị chặn sạch» đỏ với thông điệp ghim «tín hiệu ngược»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_seed.py]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.bo_cao_test
+    expected: "exit 0; bài «lộ số theo danh sách tầng» pass — dựng hồ sơ đủ bốn mức; với phone_reveal_tiers đủ bốn mức thì cả bốn mức có người được lộ số, với danh sách chỉ có «cao» thì ĐÚNG những hồ sơ mức cao được lộ và không hồ sơ nào khác. Hai chiều trong cùng một bài, cùng bộ dựng sẵn, khác đúng một khoá cấu hình."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_reveal.py]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.bo_cao_test
+    expected: "exit 0; bài «trần lộ số chặn thật VÀ không cắt mất mức thấp» pass — dựng số hồ sơ đủ điều kiện GẤP ĐÔI trần, xếp cố ý TOÀN BỘ hồ sơ mức cao lên đầu lô; khẳng định số lượt gọi lộ số bằng ĐÚNG trần, VÀ số hồ sơ mức «thấp» cộng «ngủ» được lộ số lớn hơn 0. Chiều đỏ: lấy phần đầu lô làm bài đỏ ở vế thứ hai với số đếm ghim; bỏ phép cắt theo trần làm bài đỏ ở vế thứ nhất."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_reveal.py]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.bo_cao_test
+    expected: "exit 0; bài «bản tổng kết khai sức khoẻ mẫu» pass — dựng hai lượt gieo khác nhau đúng một điều: một lượt khoẻ, một lượt có trang hỏng; khẳng định hai lượt cho hai bộ số trang_danh_ba_doc và trang_danh_ba_hong KHÁC nhau, và bảng phan_bo_tang đếm đủ bốn mức với tổng bằng số hồ sơ. Bản tổng kết phân biệt BA loại trang: đọc được thẻ (trang_danh_ba_doc), tải được mà không thẻ nào (trang_danh_ba_rong), và không tải được hoặc có thẻ mà không đọc nổi (trang_danh_ba_hong). Chiều đỏ: bản tổng kết cũ không có ba trường này nên bài đỏ ngay ở phép đọc khoá."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_seed.py]
+
+  - id: E4b
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.bo_cao_duong_chay
+    layer: backend-effect
+    expected: "exit 0; BỘ LÁI ĐẦU-CUỐI: bài dựng danh bạ giả rồi cho LỆNH THẬT chạy trọn đường live_run, và đọc chính dòng «lượt chạy:» lệnh in ra. Hai ca đối nhau: chạm trần khi danh bạ còn người thì dòng in ra báo cờ BẬT; danh bạ cạn thật thì báo TẮT. Thêm ca trang cuối trong trần chỉ toàn địa chỉ trùng — cờ vẫn phải BẬT vì danh bạ còn người. Chiều đỏ đã chứng: thêm điều kiện rong_lien_tiep == 0 vào cờ làm ca trang-trùng đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_duong_chay.py]
+
+  - id: E7b
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.bo_cao_duong_chay
+    layer: backend-effect
+    expected: "exit 0; bài chạy LỆNH THẬT `python -m listing_crawl --fixtures --dry-run` qua main() và đọc chính dòng «lượt chạy:» mà lệnh IN RA, hai bài. Bài một khẳng định dòng đó mang đủ NĂM tên khoá ghim nguyên văn: trang_danh_ba_doc, trang_danh_ba_rong, trang_danh_ba_hong, bi_tran_cat, phan_bo_tang. Bài hai đọc NGƯỢC dòng in ra thành dữ liệu rồi khẳng định QUAN HỆ giữa các giá trị: bảng bốn mức cộng lại bằng số hồ sơ lấy được, cờ đúng kiểu luận lý, và đường bộ dựng sẵn cho hai số trang bằng không. Đây là nửa ĐO-SAU: E7 chứng giá trị tính đúng, E7b chứng bộ in in ra và in đúng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/__main__.py, tools/listing-crawl/tests/test_duong_chay.py, tools/listing-crawl/tests/test_cli.py]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.bo_cao_test
+    expected: "exit 0; bài «cấu hình đang ship» pass — đọc config.toml thật, khẳng định directory_max_pages bằng ĐÚNG 120, directory_stop_after_empty bằng ĐÚNG 3, và phone_reveal_tiers bằng đúng tập bốn tên mức mà tiers.tier_of sinh ra (lấy từ mã, không chép tay). Chiều đỏ: hạ trần về 8, đổi ngưỡng dừng, hoặc bỏ một mức khỏi danh sách đều làm bài đỏ với giá trị ghim."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/config.toml, tools/listing-crawl/tests/test_cau_hinh.py]
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.bo_cao_test
+    expected: "exit 0; bài «mẫu chạm được người dưới ngưỡng vừa» pass — bộ dựng sẵn là phân bố ĐO ĐƯỢC từ danh bạ thật (tests/fixtures/phan-bo-danh-ba.json, 407 người, tin hiện có 9 tới 458, không có dữ liệu cá nhân); rải mẫu 200 rồi khẳng định người ít tin nhất trong mẫu ĐÚNG BẰNG người ít tin nhất của cả dải (9), và mẫu có người dưới ngưỡng vừa. ĐỐI CHỨNG trong cùng bài: khuôn cắt-đầu trên đúng bộ dựng sẵn đó cho người ít tin nhất là 16, tức KHÔNG chạm đáy. Đo được: ở trần 200 trên dải 407, cắt-đầu vẫn có 55 người dưới 20 nên phép đo «có người dưới 20» một mình KHÔNG phân biệt được hai khuôn — phép đo chạm-đáy mới phân biệt."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [tools/listing-crawl/listing_crawl/seed.py, tools/listing-crawl/tests/test_seed.py, tools/listing-crawl/tests/fixtures/phan-bo-danh-ba.json]
