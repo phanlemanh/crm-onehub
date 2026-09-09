@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import {
-	BUILDER_AUTHORIZATION_KEY,
+	buildPendingInputRequest,
 	commandTypeFromAuthorization,
 } from "@crm/validation/builder-question";
 import { builderTaskMarkdown } from "../agent/instructions/task";
@@ -71,24 +71,18 @@ describe("custom agent continuation tokens", () => {
 
 describe("builder delivery messages", () => {
 	it("keeps clarification answers in agent-creation mode, now from the recorded grant", () => {
-		expect(
-			commandTypeFromAuthorization({
-				kind: "question",
-				requestId: "question-1",
-				prompt: "Which one",
-				options: [],
-				[BUILDER_AUTHORIZATION_KEY]: true,
-			}),
-		).toBe("CREATE_AGENT");
-		expect(
-			commandTypeFromAuthorization({
-				kind: "question",
-				requestId: "question-1",
-				prompt: "Which one",
-				options: [],
-				[BUILDER_AUTHORIZATION_KEY]: false,
-			}),
-		).toBe("CHAT");
+		const banGhi = (authorized: boolean) =>
+			buildPendingInputRequest(
+				{
+					kind: "question",
+					requestId: "question-1",
+					prompt: "Which one",
+					options: [],
+				},
+				authorized,
+			);
+		expect(commandTypeFromAuthorization(banGhi(true))).toBe("CREATE_AGENT");
+		expect(commandTypeFromAuthorization(banGhi(false))).toBe("CHAT");
 		expect(
 			builderCommandType("CHAT", {
 				inputResponse: { requestId: "question-1", optionId: "crm-task" },

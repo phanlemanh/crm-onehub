@@ -5,33 +5,21 @@ import {
 	commandTypeFromAuthorization,
 } from "@crm/validation/builder-question";
 
-type CoQuyen = { [BUILDER_AUTHORIZATION_KEY]?: unknown };
-
-const cauHoi = (over: CoQuyen = {}) => ({
-	...buildPendingInputRequest(
+const cauHoi = (authorized: boolean) =>
+	buildPendingInputRequest(
 		{
 			kind: "question",
 			requestId: "req_1",
 			prompt: "Chon mot muc",
 			options: [],
 		},
-		false,
-	),
-	...over,
-});
+		authorized,
+	);
 
 describe("api doc ban ghi quyen", () => {
 	it("cap hai chieu tren cung ban ghi, khac dung mot truong", () => {
-		expect(
-			commandTypeFromAuthorization(
-				cauHoi({ [BUILDER_AUTHORIZATION_KEY]: true }),
-			),
-		).toBe("CREATE_AGENT");
-		expect(
-			commandTypeFromAuthorization(
-				cauHoi({ [BUILDER_AUTHORIZATION_KEY]: false }),
-			),
-		).toBe("CHAT");
+		expect(commandTypeFromAuthorization(cauHoi(true))).toBe("CREATE_AGENT");
+		expect(commandTypeFromAuthorization(cauHoi(false))).toBe("CHAT");
 	});
 
 	it("ba hinh dang nguon quyen khong dung duoc deu cho CHAT", () => {
@@ -45,7 +33,7 @@ describe("api doc ban ghi quyen", () => {
 		const hong = [
 			null,
 			khongCoTruong,
-			cauHoi({ [BUILDER_AUTHORIZATION_KEY]: "co" }),
+			{ ...cauHoi(true), [BUILDER_AUTHORIZATION_KEY]: "co" },
 		];
 		expect(hong).toHaveLength(3);
 		for (const value of hong) {

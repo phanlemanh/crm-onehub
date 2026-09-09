@@ -119,16 +119,22 @@ const TOOLS_GHIM = [
 ] as const;
 
 describe("moi-tool", () => {
-	it("moi-tool: dan so tren dia phai bang danh sach ghim", () => {
-		const trenDia = readdirSync(TOOL_DIR)
-			.filter((f) =>
-				boDongImport(readFileSync(join(TOOL_DIR, f), "utf8")).includes(
-					"requireBuilderAttribute(",
-				),
-			)
+	it("moi-tool: moi tool con song tren dia deu nam trong danh sach ghim", async () => {
+		const tatCa = readdirSync(TOOL_DIR)
+			.filter((f) => f.endsWith(".ts"))
 			.map((f) => f.replace(/\.ts$/, ""))
 			.sort();
-		expect(trenDia).toEqual([...TOOLS_GHIM].sort());
+		expect(tatCa.length).toBeGreaterThan(TOOLS_GHIM.length);
+
+		const conSong: string[] = [];
+		for (const name of tatCa) {
+			const mod = await import(
+				`../agent/subagents/agent_builder/tools/${name}`
+			);
+			if (mod.default.kind === "eve:disabled-tool") continue;
+			conSong.push(name);
+		}
+		expect(conSong.sort()).toEqual([...TOOLS_GHIM].sort());
 	});
 
 	it("moi-tool: moi tool ghim deu khai policy VA giu lop trong", async () => {
