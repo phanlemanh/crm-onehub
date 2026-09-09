@@ -194,3 +194,64 @@ describe("mot-cau", () => {
 		expect(cauNem(true)).toBe(cauNem(false));
 	});
 });
+
+const HAI_CHIEU = [
+	{ nhan: "duoc phep", authorized: true },
+	{ nhan: "khong duoc phep", authorized: false },
+] as const;
+
+describe("lap-callid", () => {
+	it("lap-callid: nhan lai dung callId thi khong nem, trang thai khong doi", () => {
+		expect(HAI_CHIEU).toHaveLength(2);
+		for (const { authorized } of HAI_CHIEU) {
+			trongLuot(() => {
+				const ctx = phien({}, authorized);
+				chay(ctx, suKien("turn-1", goiBuilder("call-1")));
+				const truoc = builderDelegationState.get();
+				chay(ctx, suKien("turn-1", goiBuilder("call-1")));
+				expect(builderDelegationState.get()).toEqual(truoc);
+			});
+		}
+	});
+
+	it("lap-callid: chieu do — doi dung callId sang gia tri khac thi chan, ca hai chieu", () => {
+		for (const { authorized } of HAI_CHIEU) {
+			trongLuot(() => {
+				const ctx = phien({}, authorized);
+				chay(ctx, suKien("turn-1", goiBuilder("call-1")));
+				expect(() => chay(ctx, suKien("turn-1", goiBuilder("call-2")))).toThrow(
+					"only once",
+				);
+			});
+		}
+	});
+});
+
+describe("luot-moi", () => {
+	it("luot-moi: turnId khac thi tran mo lai, trang thai mang luot moi", () => {
+		expect(HAI_CHIEU).toHaveLength(2);
+		for (const { authorized } of HAI_CHIEU) {
+			trongLuot(() => {
+				const ctx = phien({}, authorized);
+				chay(ctx, suKien("turn-1", goiBuilder("call-1")));
+				chay(ctx, suKien("turn-2", goiBuilder("call-2")));
+				expect(builderDelegationState.get()).toEqual({
+					turnId: "turn-2",
+					callIds: ["call-2"],
+				});
+			});
+		}
+	});
+
+	it("luot-moi: chieu do — giu nguyen turnId cu thi chan, ca hai chieu", () => {
+		for (const { authorized } of HAI_CHIEU) {
+			trongLuot(() => {
+				const ctx = phien({}, authorized);
+				chay(ctx, suKien("turn-1", goiBuilder("call-1")));
+				expect(() => chay(ctx, suKien("turn-1", goiBuilder("call-2")))).toThrow(
+					"only once",
+				);
+			});
+		}
+	});
+});
