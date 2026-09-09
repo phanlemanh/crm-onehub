@@ -258,6 +258,39 @@ Hồ sơ này không có `opportunity.md` — xem entry `descope` trong
   (parse hai lần ở `conversations.service.ts`, `buildPendingInputRequest` vứt
   kết quả parse, `not_authorized` khai hai nơi).
 
+
+## Known limits — người ký chấp nhận 2026-09-09
+
+Sáu mục dưới đây là lỗi thật, nằm ngoài phạm vi đã duyệt ở Cổng 1, người ký
+chọn ghi lại và ship bản này. Mục thứ bảy tách thành hợp đồng riêng.
+
+- **Bộ đo không phát hiện được khi thân hook chết.** Kiểm bằng đột biến: thay
+  thân hook thành một dòng vô hại thì cả 22 bài vẫn xanh. Bộ đo trước đó (bản
+  nạp `ContextContainer` từ `dist/`) bắt được — 14 đỏ. Đây là cái giá của
+  đường "đổi khuôn đo" chọn ở điểm dừng vòng 2: đổi lấy việc hết phụ thuộc
+  `dist/` của gói ghim `^0.29.4`. Người dùng thấy gì: nếu chốt chặn hỏng hẳn
+  khi lên môi trường thật, bộ đo này không báo trước.
+- **Phép đo gác ghim nguyên văn câu lỗi của eve.** `guides/state.md` cam kết
+  `get()`/`update()` gọi ngoài ngữ cảnh thì **ném**, nhưng không cam kết câu
+  chữ. eve đổi câu trong một bản vá thì ma trận sáu ô và năm bài "gác cho qua"
+  đỏ hàng loạt trong khi sản phẩm vẫn đúng.
+- **`recordBuilderDelegation` so chuỗi trên kiểu tự viết tay.**
+  `BuilderDelegationAction` khai `kind: string` và `subagentName?: string`,
+  không suy từ `HookEvent<"actions.requested">` của eve. eve đổi tên nhãn thì
+  không sinh lỗi biên dịch; bộ đo mới có bắt (14/18 ở đột biến đã thử), nhưng
+  `check-types` thì không.
+- **Bản tiếng Anh của mục thứ nhất** — cùng một lỗi, hai người soi độc lập.
+- **Phép đo gác đọc tín hiệu môi trường thay vì đầu ra của hàm.** Cùng gốc với
+  mục thứ hai.
+- **`.not.toThrow()` ở vài chỗ không đọc trạng thái kèm theo.**
+
+Việc tách riêng: **trần khoá theo `callId` do mô hình sinh.** eve khuyến nghị
+khoá chốt một-lần-mỗi-lượt theo `turnId`/`stepIndex`/`sequence`, vì một step bị
+ngắt sẽ chạy lại **cùng `turnId`** với `callId` mới. Chốt hiện tại vì thế giết
+đúng cái lượt mà eve đang cố cứu, và trạng thái bền nên mọi lần thử lại sau đó
+cũng hỏng. Cách khoá này có trước vòng này; vòng này nới nó ra mọi lượt của
+kênh builder. Người ký chọn mở hợp đồng riêng.
+
 ## Notes
 
 Ràng buộc đã đặt tên: hook của eve **chỉ quan sát**
