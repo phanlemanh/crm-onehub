@@ -6,15 +6,18 @@ import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(HERE, "../../..");
-const LAT = "tong-quan-va-khung-noi-tieng-viet";
 const PIN = process.env.LAN_GHIM ?? resolve(HERE, "../.lan/noi-tiep.json");
 const LOI_SHA = "cay da doi sau khi lan chay";
 const LOI_BAN = "cay co sua chua ghi sau khi lan chay";
 
-const CHO_PHEP = [
-	`_acceptance/${LAT}/evidence/`,
-	`_acceptance/${LAT}/s4-args.json`,
-];
+const LAT_TOI = "tong-quan-va-khung-noi-tieng-viet";
+const BANG_CHUNG = /^_acceptance\/[^/]+\/evidence\//;
+
+function duocPhep(duong) {
+	return (
+		BANG_CHUNG.test(duong) || duong === `_acceptance/${LAT_TOI}/s4-args.json`
+	);
+}
 
 function chet(ma, ...loi) {
 	for (const d of loi) console.log(d);
@@ -37,7 +40,7 @@ function duongBan() {
 		if (d.trim() === "") continue;
 		const duong = d.slice(3);
 		const cuoi = duong.includes(" -> ") ? duong.split(" -> ")[1] : duong;
-		if (!CHO_PHEP.some((c) => cuoi.startsWith(c))) ra.push(cuoi);
+		if (!duocPhep(cuoi)) ra.push(cuoi);
 	}
 	return [...new Set(ra)].sort();
 }
@@ -50,7 +53,7 @@ function doc(id) {
 		chet(
 			2,
 			`KHONG DO DUOC: chua co ghim cua lan noi tiep tai ${PIN.replace(`${GOC}/`, "")}.`,
-			`Chay \`node _acceptance/${LAT}/rang/lan-noi-tiep.mjs\` truoc khi cham vong nay.`,
+			`Chay \`node _acceptance/${LAT_TOI}/rang/lan-noi-tiep.mjs\` truoc khi cham vong nay.`,
 		);
 	}
 	const nay = git("rev-parse", "HEAD").trim();

@@ -43,11 +43,14 @@ function git(...args) {
 	return gitTho(...args).trim();
 }
 
-const HO_SO_TEN = "tong-quan-va-khung-noi-tieng-viet";
-const CHO_PHEP = [
-	`_acceptance/${HO_SO_TEN}/evidence/`,
-	`_acceptance/${HO_SO_TEN}/s4-args.json`,
-];
+const LAT_TOI = "tong-quan-va-khung-noi-tieng-viet";
+const BANG_CHUNG = /^_acceptance\/[^/]+\/evidence\//;
+
+function duocPhep(duong) {
+	return (
+		BANG_CHUNG.test(duong) || duong === `_acceptance/${LAT_TOI}/s4-args.json`
+	);
+}
 
 function banCay() {
 	const ra = [];
@@ -55,7 +58,7 @@ function banCay() {
 		if (d.trim() === "") continue;
 		const duong = d.slice(3);
 		const cuoi = duong.includes(" -> ") ? duong.split(" -> ")[1] : duong;
-		if (!CHO_PHEP.some((c) => cuoi.startsWith(c))) ra.push(cuoi);
+		if (!duocPhep(cuoi)) ra.push(cuoi);
 	}
 	return [...new Set(ra)].sort().join("\n");
 }
