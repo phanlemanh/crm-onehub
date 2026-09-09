@@ -61,11 +61,13 @@ evals:
       Moi tool phai thoa CA HAI VE:
         (a) khai policy dung chung;
         (b) VAN giu requireBuilderAttribute (lop trong).
-      CAM lay dan so tu dia lam dan so cua phep do. Dia chi dung de DOI CHIEU: dem
-      so tool goi requireBuilderAttribute tren dia, khac 3 -> ma 2, IN ten tool thua
-      hoac thieu. Vi sao: neu dan so troi theo dia thi go requireBuilderAttribute
-      khoi write_agent_file se lam "dem duoc 2 thi doi 2" tu khop, va mot cua vao
-      builder ho hoan toan van cho mau xanh.
+      SAN DAN SO (da cai lai o vong 6): dan so cua lop la MOI file .ts trong TOOL_DIR
+      ma import that ra KHONG phai eve:disabled-tool. Dan so ay KHONG duoc loc theo
+      chinh thuoc tinh dang assert — bo loc cu giu lai dung nhung file da co
+      requireBuilderAttribute nen no tu khop, va mot tool builder moi quen ca hai
+      guard se bi bo qua lang le. Bai do doi tap "con song" bang dung TOOLS_GHIM, va
+      assert tong so file tren dia LON HON 3 de dan so that su duoc quet.
+      Chieu do: them mot tool con song quen guard vao TOOL_DIR -> phep do phai DO.
       Chieu do: go policy khoi DUNG MOT tool trong ban sao -> ma 1, neu TEN tool.
       Go requireBuilderAttribute khoi DUNG MOT tool -> cung ma 1.
       Cam do bang cach tim chuoi "approval" trong file: doc bang AST hoac import that
