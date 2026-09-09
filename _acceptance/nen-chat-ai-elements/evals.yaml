@@ -101,10 +101,18 @@ evals:
       - "packages/validation/src/**"
       - "apps/app/lib/agent-transcript.ts"
     expected: |
-      Xanh: bai kiem don vi chay tren PAYLOAD EVE THAT rut tu fixture san co o
-      apps/app/test/agent-transcript.spec.ts, khong phai vat tu dung theo khuon ben
-      doc. MA TRAN TOAN PHAN viet truoc: BA dang said/reasoned/did di qua lop chuyen, moi dang
-      mot assert ve role, cong mot assert ve state cho did. So assert = so phan tu.
+      Xanh: vat thu phai co ROUND-TRIP THAT, chay lai duoc, NAM TRONG kho — mot bai
+      kiem o apps/app/test chay toTranscript that roi doi chieu ket qua voi
+      packages/ui/test/fixtures/eve-turns.json theo ca tap duong truong lan tap gia
+      tri. Fixture viet tay khop khuon BEN DOC khong tinh: writer doi hinh dang thi
+      fixture van hop le voi reader va ca bo bai kiem van xanh.
+      Chieu do cua round-trip: doi ten mot truong trong apps/app/lib/agent-transcript.ts
+      -> bai kiem DO va in ten truong lech. MA TRAN TOAN PHAN viet truoc: BA dang said/reasoned/did di qua lop chuyen, moi dang
+      mot assert ve role, cong mot assert ve state cho did. So assert = so phan tu —
+      DEM THAT, gom ca reasoningState.settled ("done"), khong duoc bo phan tu nao.
+      Fixture phai co mot luot reasoned mang streaming:false, di qua dung duong
+      round-trip o tren chu khong viet tay.
+      Chieu do: dao hang settled sang chuoi khac -> bai kiem do, neu ten state.
       Dang thu tu `asked` co y KHONG di qua lop chuyen (docs/chat-ui.md giu form hoi
       lai o shadcn); phai co mot assert KHANG DINH lop chuyen TU CHOI no bang loi co
       neu ten dang, chu khong bo lung.
@@ -183,18 +191,26 @@ evals:
       - "packages/ui/src/components/message-scroller.tsx"
       - "_acceptance/nen-chat-ai-elements/rang/**"
     expected: |
-      Xanh: dung hoi thoai gia o 50, 200, 500 luot tren trinh duyet that
-      (puppeteer-core, da co san cho ui:capture) va do thoi gian bo cuc cho ca
-      MessageScroller lan Conversation. Ghi du SAU o vao evidence/so-do-cuon.json;
-      khong o nao null.
+      Xanh: do tren VAT THAT, khong phai tren trang HTML/CSS chep tay. Dong goi chinh
+      Conversation/ConversationContent va MessageScroller* that (bun build), React
+      dung cay that trong trinh duyet that, CSS do tailwind dich chinh
+      packages/ui/src/styles/globals.css cua kho. Cam chep hang CSS bang tay: mot
+      trang thu tu bat class se "dat" ngay ca khi ban va that da bi go khoi
+      conversation.tsx.
+      Ghi du SAU o vao evidence/so-do-cuon.json; khong o nao null.
+      Co "ban va da ap dung" phai do bang HIEU UNG (getComputedStyle cua tung luot
+      trong cay that), KHONG bang chuoi co mat trong tep nguon, va phai VAO tieu chi
+      do — khong duoc chi in mot dong luu y sau khi da in "dat".
       THUOC LA QUAN HE, KHONG PHAI CO MAT: o ca 500 luot, in ba so — Conversation
       truoc va, Conversation sau va, MessageScroller — cong TI SO
       Conversation/MessageScroller. Ti so cuoi cung > 1.2 -> ma 1, thong diep neu ca
       ba so va ti so. Mot ban va co mat ma ti so van 7.0 la KHONG dat; day dung la lop
       loi do-co-mat-thay-vi-do-quan-he.
-      Chieu do da chay tren CUNG fixture: go content-visibility khoi
-      MessageScrollerItem trong ban sao -> so ca 500 cua MessageScroller xau di ro
-      ret va ti so tut xuong. Neu go ma ti so khong doi thi phep do dang do thu khac
+      Chieu do CHINH, chay tren cay that: go [&>*]:[content-visibility:auto] khoi
+      ConversationContent -> so ca 500 cua Conversation xau di ro ret, ti so vuot 1.2,
+      ma 1. Ca nay truoc day thoat 0 — do la lop loi phep-do-khong-cham-vat-that.
+      Chieu do phu: go content-visibility khoi MessageScrollerItem -> so ca 500 cua
+      MessageScroller xau di ro ret va ti so tut xuong. Neu go ma ti so khong doi thi phep do dang do thu khac
       chu khong do bo cuc -> ma 1, thong diep neu chu "thuoc khong phan ung".
       Trinh duyet khong khoi dong duoc -> ma 2, KHONG xanh.
 
@@ -215,8 +231,14 @@ evals:
       NHAU: khong thieu, khong thua.
       Moi muc phai co du ba phan — ten tep, doi gi, vi sao; thieu phan nao thi neu ten
       muc va ten phan thieu.
-      Kiem QUAN HE, khong phai chuoi co mat: so phai noi thanh loi viec chay lai lenh
-      them se ghi de im lang, va liet ke cac buoc phai lam sau moi lan keo ban moi.
+      Kiem QUAN HE, khong phai chuoi co mat. Cau canh bao phai nam TRONG DUNG MUC noi
+      ve viec ghi de, khong phai bat ky dau trong tep (mot cau phu dinh hay mot dong
+      muc luc khong tinh), va phai goi ten dung lenh them ma chinh rang chay.
+      Cac buoc phai neu duoc vat CO THAT: thu muc ai-elements, packages/ui/package.json,
+      bun.lock, va moi lenh cong doc tu .githooks/gate-shape.json — cong moc lenh thu
+      sau thi so do.
+      Chieu do: doi bon buoc thanh bon dong danh so rong nghia -> ma 1; doi cau canh
+      bao ra muc luc (van con trong tep) -> ma 1.
       Chieu do da chay tren CUNG fixture: sua mot dong cua reasoning.tsx ma khong them
       muc -> ma 1, neu ten tep; them mot muc cho tep khong lech -> ma 1, neu ten muc
       thua.
