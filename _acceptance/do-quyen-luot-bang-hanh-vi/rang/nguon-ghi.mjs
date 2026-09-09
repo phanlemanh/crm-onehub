@@ -6,6 +6,7 @@ import {
 	coCo,
 	GOC,
 	hong,
+	hongGian,
 	RANG,
 	voiCaySao,
 } from "./chung.mjs";
@@ -62,7 +63,8 @@ function khoiData(goi) {
 
 function thuDanSo(goc) {
 	const dan = quetTs(join(goc, "apps", "api", "src"));
-	if (dan.length === 0) hong(`${GHIM}\n  dan so rong: khong tep .ts nao duoi apps/api/src`);
+	if (dan.length === 0)
+		hong(`${GHIM}\n  dan so rong: khong tep .ts nao duoi apps/api/src`);
 
 	const thay = [];
 	for (const duong of dan) {
@@ -70,12 +72,14 @@ function thuDanSo(goc) {
 		duyet(sf, (node) => {
 			if (!ts.isCallExpression(node)) return;
 			const goi = node.expression;
-			if (!ts.isPropertyAccessExpression(goi) || !VIET.has(goi.name.text)) return;
+			if (!ts.isPropertyAccessExpression(goi) || !VIET.has(goi.name.text))
+				return;
 			const data = khoiData(node);
 			if (!data) return;
 			duyet(data, (con) => {
 				const laTen =
-					(ts.isPropertyAssignment(con) || ts.isShorthandPropertyAssignment(con)) &&
+					(ts.isPropertyAssignment(con) ||
+						ts.isShorthandPropertyAssignment(con)) &&
 					ts.isIdentifier(con.name) &&
 					con.name.text === "commandType";
 				if (!laTen || duoiKhoaDoc(con)) return;
@@ -92,7 +96,7 @@ function thuDanSo(goc) {
 
 function cham(goc) {
 	const thay = thuDanSo(goc);
-	const khoaThay = [...new Set(thay.map((t) => t.khoa))].sort();
+	const khoaThay = thay.map((t) => t.khoa).sort();
 	const khoaGhim = [...DA_GHIM].sort();
 
 	const la = thay.filter((t) => t.nguon === "la");
@@ -111,7 +115,8 @@ function cham(goc) {
 		hong(
 			[
 				GHIM,
-				"  ma tran toan phan lech — tap tim duoc phai BANG DUNG danh sach da ghim",
+				`  ma tran toan phan lech — tim duoc ${thay.length} cho ghi, da ghim ${DA_GHIM.length}`,
+				"  so SANH CO BOI: mot cho ghi thu hai trong cung mot ham la mot phan tu rieng",
 				"  tim duoc:",
 				...thay.map((t) => `    ${t.khoa}   (${t.viTri})`),
 				"  da ghim:",
@@ -130,7 +135,8 @@ function cham(goc) {
 function doiTrongSao(sao, duong, tim, thay) {
 	const d = join(sao, duong);
 	const nguon = readFileSync(d, "utf8");
-	if (!nguon.includes(tim)) hong(`khong tim thay moc de dot bien trong ${d}`);
+	if (!nguon.includes(tim))
+		hongGian(`khong tim thay moc de dot bien trong ${d}`);
 	writeFileSync(d, nguon.replace(tim, thay));
 }
 
@@ -179,13 +185,18 @@ chayRang(() => {
 		return;
 	}
 	const dotBien = VECTO[ten];
-	if (!dotBien) hong(`khong co vecto ten "${ten}" — co: ${Object.keys(VECTO).join(", ")}`);
+	if (!dotBien)
+		hongGian(
+			`khong co vecto ten "${ten}" — co: ${Object.keys(VECTO).join(", ")}`,
+		);
 	const mong = MONG_DOI[ten];
 
 	const ma = voiCaySao(({ sao }) => {
 		const truoc = chay(GOC, ["node", TOI, "--goc", sao]);
 		if (truoc.ma !== 0) {
-			hong(`doi chung duong hong: cay sao chua dot bien da do\n${truoc.chu}`);
+			hongGian(
+				`doi chung duong hong: cay sao chua dot bien da do\n${truoc.chu}`,
+			);
 		}
 		dotBien(sao);
 		const sau = chay(GOC, ["node", TOI, "--goc", sao]);
@@ -197,10 +208,10 @@ chayRang(() => {
 		}
 		if (mong !== 0) {
 			if (!sau.chu.includes(GHIM)) {
-				hong(`vecto "${ten}" do nhung thieu thong diep ghim: ${GHIM}`);
+				hongGian(`vecto "${ten}" do nhung thieu thong diep ghim: ${GHIM}`);
 			}
 			if (!/apps\/api\/[^\s]+:\d+/.test(sau.chu)) {
-				hong(`vecto "${ten}" do nhung khong in file:dong`);
+				hongGian(`vecto "${ten}" do nhung khong in file:dong`);
 			}
 		}
 		return sau.ma;

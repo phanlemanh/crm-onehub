@@ -38,5 +38,7 @@ chayRang(() => {
 	} finally {
 		writeFileSync(duong, goc);
 	}
-	process.stdout.write("khung: cay sao mang ma dang xet, doi chung duong xanh\n");
+	process.stdout.write(
+		"khung: cay sao mang ma dang xet, doi chung duong xanh\n",
+	);
 });

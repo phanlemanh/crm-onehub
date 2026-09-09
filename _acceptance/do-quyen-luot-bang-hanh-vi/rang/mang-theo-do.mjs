@@ -5,11 +5,13 @@ import {
 	chay,
 	chayRang,
 	coCo,
+	GOC,
 	hong,
+	hongGian,
 	voiCaySao,
 } from "./chung.mjs";
 
-const GHIM = "cau tra loi ke thua quyen cua luot da hoi";
+const BAI_PHAI_DO = "ke-thua: doc duoc ca hai chieu tren cung khuon";
 const DUONG_CAU_HOI = "packages/validation/src/builder-question.ts";
 
 const VECTO = {
@@ -19,7 +21,9 @@ const VECTO = {
 		const moc = `	const parsed = authorizationEnvelope.safeParse(value);
 	if (!parsed.success) return "CHAT";
 	return parsed.data[BUILDER_AUTHORIZATION_KEY] ? "CREATE_AGENT" : "CHAT";`;
-		if (!nguon.includes(moc)) hong(`khong tim thay moc de dot bien trong ${duong}`);
+		if (!nguon.includes(moc)) {
+			hongGian(`khong tim thay moc de dot bien trong ${duong}`);
+		}
 		writeFileSync(duong, nguon.replace(moc, '	return "CREATE_AGENT";'));
 	},
 };
@@ -27,30 +31,59 @@ const VECTO = {
 const chayBaiDo = (sao) =>
 	chay(join(sao, "apps", "agent"), ["bun", "test", "test/quyen-luot.spec.ts"]);
 
-chayRang(() => {
-	const ten = coCo("--vecto");
-	if (!ten) hong(`can --vecto <ten> — co: ${Object.keys(VECTO).join(", ")}`);
+function chayMotVecto(ten) {
 	const dotBien = VECTO[ten];
-	if (!dotBien) hong(`khong co vecto ten "${ten}" — co: ${Object.keys(VECTO).join(", ")}`);
-
-	const ma = voiCaySao(({ sao }) => {
+	if (!dotBien) {
+		hongGian(
+			`khong co vecto ten "${ten}" — co: ${Object.keys(VECTO).join(", ")}`,
+		);
+	}
+	return voiCaySao(({ sao }) => {
 		assertDanhTinh(sao);
 		const truoc = chayBaiDo(sao);
 		if (truoc.ma !== 0) {
-			hong(
+			hongGian(
 				`doi chung duong hong: cay sao chua dot bien da do (ma ${truoc.ma})\n  cay sao: ${sao}\n${truoc.chu}`,
+			);
+		}
+		if (truoc.chu.includes(BAI_PHAI_DO) && /\(fail\)/.test(truoc.chu)) {
+			hongGian(
+				`doi chung duong hong: bai "${BAI_PHAI_DO}" da do truoc khi dot bien`,
 			);
 		}
 		dotBien(sao);
 		const sau = chayBaiDo(sao);
-		process.stdout.write(`cay sao: ${sao}\nvecto: ${ten}\n`);
+		process.stdout.write(`cay sao: ${sao}\nvecto: ${ten}\n${sau.chu}`);
 		if (sau.ma === 0) {
-			hong(
-				`${GHIM}\n  vecto "${ten}" ra XANH — thuoc dang khong do duong mang theo\n  cay sao: ${sao}`,
+			hongGian(`vecto "${ten}" ra XANH — thuoc dang khong do duong mang theo`);
+		}
+		if (!sau.chu.includes(BAI_PHAI_DO)) {
+			hongGian(
+				`vecto "${ten}" lam suite do NHUNG khong phai o bai mang loi hua: khong thay "${BAI_PHAI_DO}" trong output`,
 			);
 		}
-		process.stdout.write(`${GHIM}\n  vecto "${ten}" lam bai do do, ma ${sau.ma}\n`);
 		return sau.ma;
 	});
-	process.exitCode = ma;
+}
+
+chayRang(() => {
+	const ten = coCo("--vecto");
+	if (ten) {
+		process.exitCode = chayMotVecto(ten);
+		return;
+	}
+	const lech = [];
+	for (const v of Object.keys(VECTO)) {
+		const ma = chayMotVecto(v);
+		process.stdout.write(`vecto "${v}": bai do do, ma ${ma}\n`);
+		if (ma === 0) lech.push(v);
+	}
+	if (lech.length > 0) {
+		hong(
+			`cau tra loi ke thua quyen cua luot da hoi\n  vecto ra XANH: ${lech.join(", ")}`,
+		);
+	}
+	process.stdout.write(
+		`mang-theo-do: ${Object.keys(VECTO).length} vecto deu lam bai "${BAI_PHAI_DO}" do\n`,
+	);
 });

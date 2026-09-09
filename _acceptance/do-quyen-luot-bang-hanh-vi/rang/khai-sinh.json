@@ -2,77 +2,132 @@
 	{
 		"id": "E2",
 		"vecto": "mo-cong",
-		"chay": ["node", "_acceptance/do-quyen-luot-bang-hanh-vi/rang/cong-quyen-do.mjs", "--vecto", "mo-cong"],
-		"ghim": "cong dong khi hang khai CHAT",
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/cong-quyen-do.mjs",
+			"--vecto",
+			"mo-cong"
+		],
+		"ghim": "suy-dien: hang khai CHAT thi cong dong",
 		"ma": 1
 	},
 	{
 		"id": "E2",
 		"vecto": "ternary-xuong-dong",
-		"chay": ["node", "_acceptance/do-quyen-luot-bang-hanh-vi/rang/cong-quyen-do.mjs", "--vecto", "ternary-xuong-dong"],
-		"ghim": "cong dong khi hang khai CHAT",
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/cong-quyen-do.mjs",
+			"--vecto",
+			"ternary-xuong-dong"
+		],
+		"ghim": "suy-dien: hang khai CHAT thi cong dong",
 		"ma": 1
 	},
 	{
 		"id": "E3",
 		"vecto": "cay-lai-tham-so",
-		"chay": ["node", "_acceptance/do-quyen-luot-bang-hanh-vi/rang/khong-cam-tin-nhan.mjs", "--vecto", "cay-lai-tham-so"],
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/khong-cam-tin-nhan.mjs",
+			"--vecto",
+			"cay-lai-tham-so"
+		],
 		"ghim": "apps/agent con cam tin nhan o cho quyet quyen",
 		"ma": 2
 	},
 	{
 		"id": "E3",
 		"vecto": "cho-goi-tinh-toan",
-		"chay": ["node", "_acceptance/do-quyen-luot-bang-hanh-vi/rang/khong-cam-tin-nhan.mjs", "--vecto", "cho-goi-tinh-toan"],
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/khong-cam-tin-nhan.mjs",
+			"--vecto",
+			"cho-goi-tinh-toan"
+		],
 		"ghim": "apps/agent con cam tin nhan o cho quyet quyen",
 		"ma": 2
 	},
 	{
 		"id": "E4",
 		"vecto": "ghim-cung",
-		"chay": ["node", "_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs", "--vecto", "ghim-cung"],
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs",
+			"--vecto",
+			"ghim-cung"
+		],
 		"ghim": "nguon ghi commandType khong nam trong danh sach da ghim",
 		"ma": 2
 	},
 	{
 		"id": "E4",
 		"vecto": "bien-trung-gian",
-		"chay": ["node", "_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs", "--vecto", "bien-trung-gian"],
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs",
+			"--vecto",
+			"bien-trung-gian"
+		],
 		"ghim": "nguon ghi commandType khong nam trong danh sach da ghim",
 		"ma": 2
 	},
 	{
 		"id": "E4",
 		"vecto": "quan-he-long",
-		"chay": ["node", "_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs", "--vecto", "quan-he-long"],
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs",
+			"--vecto",
+			"quan-he-long"
+		],
 		"ghim": "nguon ghi commandType khong nam trong danh sach da ghim",
 		"ma": 2
 	},
 	{
 		"id": "E4",
 		"vecto": "duoi-select",
-		"chay": ["node", "_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs", "--vecto", "duoi-select"],
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs",
+			"--vecto",
+			"duoi-select"
+		],
 		"ghim": "khop dung danh sach da ghim",
 		"ma": 0
 	},
 	{
 		"id": "E5",
 		"vecto": "mang-theo-luon-mo",
-		"chay": ["node", "_acceptance/do-quyen-luot-bang-hanh-vi/rang/mang-theo-do.mjs", "--vecto", "mang-theo-luon-mo"],
-		"ghim": "cau tra loi ke thua quyen cua luot da hoi",
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/mang-theo-do.mjs",
+			"--vecto",
+			"mang-theo-luon-mo"
+		],
+		"ghim": "ke-thua: doc duoc ca hai chieu tren cung khuon",
 		"ma": 1
 	},
 	{
 		"id": "E6",
 		"vecto": "cay-lai-bo-do",
-		"chay": ["node", "_acceptance/do-quyen-luot-bang-hanh-vi/rang/bo-do-grep.mjs", "--vecto", "cay-lai-bo-do"],
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/bo-do-grep.mjs",
+			"--vecto",
+			"cay-lai-bo-do"
+		],
 		"ghim": "bo do theo dong moc lai",
 		"ma": 2
 	},
 	{
 		"id": "E9",
 		"vecto": "sua-mot-ky-tu",
-		"chay": ["node", "_acceptance/do-quyen-luot-bang-hanh-vi/rang/vet-ho-so-cu.mjs", "--vecto", "sua-mot-ky-tu"],
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/vet-ho-so-cu.mjs",
+			"--vecto",
+			"sua-mot-ky-tu"
+		],
 		"ghim": "chu cua ho so cu da doi",
 		"ma": 2
 	}

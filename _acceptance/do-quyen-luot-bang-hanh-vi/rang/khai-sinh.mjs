@@ -16,7 +16,9 @@ function evalsScript() {
 		const executor = k.match(/^\s{4}executor:\s*(\S+)/m)?.[1];
 		if (executor !== "script") continue;
 		const than = k.slice(k.indexOf("expected:"));
-		const ten = [...boMaNgoac(than).matchAll(/vecto "([^"]+)"/g)].map((m) => m[1]);
+		const ten = [...boMaNgoac(than).matchAll(/vecto "([^"]+)"/g)].map(
+			(m) => m[1],
+		);
 		ra.push({ id, ten });
 	}
 	return ra;
@@ -51,15 +53,22 @@ function doiChieu(khai) {
 			continue;
 		}
 		const a = [...ten].sort().join(" · ");
-		const b = dong.map((d) => d.vecto).sort().join(" · ");
+		const b = dong
+			.map((d) => d.vecto)
+			.sort()
+			.join(" · ");
 		if (a !== b) {
-			lech.push(`  ${id}: ten vecto lech\n      expected: ${a}\n      ban khai: ${b}`);
+			lech.push(
+				`  ${id}: ten vecto lech\n      expected: ${a}\n      ban khai: ${b}`,
+			);
 		}
 	}
 	const idEval = new Set(evalsScript().map((e) => e.id));
 	for (const dong of khai) {
 		if (!idEval.has(dong.id)) {
-			lech.push(`  ${dong.id}: ban khai co dong cho mot eval khong phai executor script`);
+			lech.push(
+				`  ${dong.id}: ban khai co dong cho mot eval khong phai executor script`,
+			);
 		}
 	}
 	if (lech.length > 0) hong(`${GHIM_LECH}\n${lech.join("\n")}`);
@@ -90,7 +99,9 @@ function chayBanKhai(khai) {
 	if (hongDong.length > 0) {
 		hong(`ban khai sinh khong chay dung nhu khai\n${hongDong.join("\n")}`);
 	}
-	process.stdout.write(`khai-sinh: ${khai.length} dong khai deu chay dung nhu khai\n`);
+	process.stdout.write(
+		`khai-sinh: ${khai.length} dong khai deu chay dung nhu khai\n`,
+	);
 }
 
 chayRang(() => {
@@ -98,13 +109,16 @@ chayRang(() => {
 	if (ten === "khai-thieu-vecto") {
 		const day = docKhai();
 		const thieu = day.filter(
-			(d, i) => i !== day.findIndex((x) => x.id === "E4" && x.vecto === "quan-he-long"),
+			(d, i) =>
+				i !== day.findIndex((x) => x.id === "E4" && x.vecto === "quan-he-long"),
 		);
 		process.stdout.write(
 			`vecto: khai-thieu-vecto — bo dong E4 · quan-he-long, con ${thieu.length} dong\n`,
 		);
 		doiChieu(thieu);
-		hong(`vecto "khai-thieu-vecto" ra XANH — doi chieu khong bat duoc dong khai bi bo`);
+		hong(
+			`vecto "khai-thieu-vecto" ra XANH — doi chieu khong bat duoc dong khai bi bo`,
+		);
 	}
 	if (ten) hong(`khong co vecto ten "${ten}" — co: khai-thieu-vecto`);
 

@@ -7,6 +7,7 @@ import {
 	DUONG_DISPATCH,
 	GOC,
 	hong,
+	hongGian,
 	RANG,
 	voiCaySao,
 } from "./chung.mjs";
@@ -17,7 +18,8 @@ const TOI = join(RANG, "khong-cam-tin-nhan.mjs");
 
 function cham(goc) {
 	const dan = quetTs(join(goc, "apps", "agent", "agent"));
-	if (dan.length === 0) hong(`${GHIM}\n  dan so rong: khong tep .ts nao duoi apps/agent/agent`);
+	if (dan.length === 0)
+		hong(`${GHIM}\n  dan so rong: khong tep .ts nao duoi apps/agent/agent`);
 
 	const loi = [];
 	let soChoGoi = 0;
@@ -33,7 +35,9 @@ function cham(goc) {
 				thayKhaiBao = true;
 				const kieu = node.parameters[0]?.type;
 				if (!kieu || !ts.isTypeLiteralNode(kieu)) {
-					loi.push(`${viTri(sf, node, goc)} — khong doc duoc kieu tham so input`);
+					loi.push(
+						`${viTri(sf, node, goc)} — khong doc duoc kieu tham so input`,
+					);
 					return;
 				}
 				for (const thanhVien of kieu.members) {
@@ -62,7 +66,9 @@ function cham(goc) {
 				soChoGoi += 1;
 				const doi = node.arguments?.[0];
 				if (!doi || !ts.isObjectLiteralExpression(doi)) {
-					loi.push(`${viTri(sf, node, goc)} — doi so cua cho goi khong phai object literal`);
+					loi.push(
+						`${viTri(sf, node, goc)} — doi so cua cho goi khong phai object literal`,
+					);
 					return;
 				}
 				for (const thuocTinh of doi.properties) {
@@ -88,7 +94,9 @@ function cham(goc) {
 	}
 
 	if (!thayKhaiBao) {
-		hong(`${GHIM}\n  khong tim thay khai bao builderSessionAttributes trong dan so`);
+		hong(
+			`${GHIM}\n  khong tim thay khai bao builderSessionAttributes trong dan so`,
+		);
 	}
 	if (soChoGoi === 0) {
 		hong(`${GHIM}\n  dan so rong: 0 cho goi builderSessionAttributes`);
@@ -105,8 +113,10 @@ const VECTO = {
 	"cay-lai-tham-so": (sao) => {
 		const duong = join(sao, DUONG_DISPATCH);
 		const nguon = readFileSync(duong, "utf8");
-		const moc = "export function builderSessionAttributes(input: {\n\tcommandType: string;";
-		if (!nguon.includes(moc)) hong(`khong tim thay moc de dot bien trong ${duong}`);
+		const moc =
+			"export function builderSessionAttributes(input: {\n\tcommandType: string;";
+		if (!nguon.includes(moc))
+			hongGian(`khong tim thay moc de dot bien trong ${duong}`);
 		writeFileSync(
 			duong,
 			nguon.replace(moc, `${moc}\n\tmessage: Prisma.JsonValue;`),
@@ -116,7 +126,8 @@ const VECTO = {
 		const duong = join(sao, DUONG_DISPATCH);
 		const nguon = readFileSync(duong, "utf8");
 		const moc = "\t\t\tcommandType: row.commandType,";
-		if (!nguon.includes(moc)) hong(`khong tim thay moc de dot bien trong ${duong}`);
+		if (!nguon.includes(moc))
+			hongGian(`khong tim thay moc de dot bien trong ${duong}`);
 		writeFileSync(
 			duong,
 			nguon.replace(
@@ -139,24 +150,29 @@ chayRang(() => {
 		return;
 	}
 	const dotBien = VECTO[ten];
-	if (!dotBien) hong(`khong co vecto ten "${ten}" — co: ${Object.keys(VECTO).join(", ")}`);
+	if (!dotBien)
+		hongGian(
+			`khong co vecto ten "${ten}" — co: ${Object.keys(VECTO).join(", ")}`,
+		);
 
 	const ma = voiCaySao(({ sao }) => {
 		const truoc = chay(GOC, ["node", TOI, "--goc", sao]);
 		if (truoc.ma !== 0) {
-			hong(`doi chung duong hong: cay sao chua dot bien da do\n${truoc.chu}`);
+			hongGian(
+				`doi chung duong hong: cay sao chua dot bien da do\n${truoc.chu}`,
+			);
 		}
 		dotBien(sao);
 		const sau = chay(GOC, ["node", TOI, "--goc", sao]);
 		process.stdout.write(`cay sao: ${sao}\nvecto: ${ten}\n${sau.chu}`);
 		if (sau.ma === 0) {
-			hong(`vecto "${ten}" ra XANH — thuoc khong bat duoc dot bien nay`);
+			hongGian(`vecto "${ten}" ra XANH — thuoc khong bat duoc dot bien nay`);
 		}
 		if (!sau.chu.includes(GHIM)) {
-			hong(`vecto "${ten}" do nhung thieu thong diep ghim: ${GHIM}`);
+			hongGian(`vecto "${ten}" do nhung thieu thong diep ghim: ${GHIM}`);
 		}
 		if (!/apps\/agent\/[^\s]+:\d+/.test(sau.chu)) {
-			hong(`vecto "${ten}" do nhung khong in file:dong`);
+			hongGian(`vecto "${ten}" do nhung khong in file:dong`);
 		}
 		return sau.ma;
 	});

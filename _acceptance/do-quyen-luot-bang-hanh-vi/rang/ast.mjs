@@ -62,7 +62,8 @@ export function hamBao(sf, node) {
 			ts.isVariableDeclaration(n) &&
 			ts.isIdentifier(n.name) &&
 			n.initializer &&
-			(ts.isArrowFunction(n.initializer) || ts.isFunctionExpression(n.initializer))
+			(ts.isArrowFunction(n.initializer) ||
+				ts.isFunctionExpression(n.initializer))
 		) {
 			return n.name.text;
 		}

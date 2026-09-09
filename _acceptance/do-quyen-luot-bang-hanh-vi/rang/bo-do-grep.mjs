@@ -7,6 +7,7 @@ import {
 	DUONG_SPEC,
 	GOC,
 	hong,
+	hongGian,
 	RANG,
 	voiCaySao,
 } from "./chung.mjs";
@@ -61,8 +62,7 @@ function cham(goc) {
 		}
 		if (ten === "split") {
 			const doi = node.arguments?.[0];
-			const laXuongDong =
-				doi && ts.isStringLiteral(doi) && doi.text === "\n";
+			const laXuongDong = doi && ts.isStringLiteral(doi) && doi.text === "\n";
 			if (!laXuongDong) return;
 			const bao = khoiBao(node);
 			if (bao && coRegex(bao)) {
@@ -95,7 +95,8 @@ const VECTO = {
 		const duong = join(sao, DUONG_SPEC);
 		const nguon = readFileSync(duong, "utf8");
 		const moc = 'describe("suy-dien", () => {';
-		if (!nguon.includes(moc)) hong(`khong tim thay moc de dot bien trong ${duong}`);
+		if (!nguon.includes(moc))
+			hongGian(`khong tim thay moc de dot bien trong ${duong}`);
 		const cay = [
 			moc,
 			'\tit("suy-dien: dem tren dia so cho suy quyen phai bang 0", () => {',
@@ -117,24 +118,29 @@ chayRang(() => {
 		return;
 	}
 	const dotBien = VECTO[ten];
-	if (!dotBien) hong(`khong co vecto ten "${ten}" — co: ${Object.keys(VECTO).join(", ")}`);
+	if (!dotBien)
+		hongGian(
+			`khong co vecto ten "${ten}" — co: ${Object.keys(VECTO).join(", ")}`,
+		);
 
 	const ma = voiCaySao(({ sao }) => {
 		const truoc = chay(GOC, ["node", TOI, "--goc", sao]);
 		if (truoc.ma !== 0) {
-			hong(`doi chung duong hong: cay sao chua dot bien da do\n${truoc.chu}`);
+			hongGian(
+				`doi chung duong hong: cay sao chua dot bien da do\n${truoc.chu}`,
+			);
 		}
 		dotBien(sao);
 		const sau = chay(GOC, ["node", TOI, "--goc", sao]);
 		process.stdout.write(`cay sao: ${sao}\nvecto: ${ten}\n${sau.chu}`);
 		if (sau.ma === 0) {
-			hong(`vecto "${ten}" ra XANH — thuoc khong bat duoc dot bien nay`);
+			hongGian(`vecto "${ten}" ra XANH — thuoc khong bat duoc dot bien nay`);
 		}
 		if (!sau.chu.includes(GHIM)) {
-			hong(`vecto "${ten}" do nhung thieu thong diep ghim: ${GHIM}`);
+			hongGian(`vecto "${ten}" do nhung thieu thong diep ghim: ${GHIM}`);
 		}
 		if (!/apps\/agent\/[^\s]+:\d+/.test(sau.chu)) {
-			hong(`vecto "${ten}" do nhung khong in file:dong`);
+			hongGian(`vecto "${ten}" do nhung khong in file:dong`);
 		}
 		return sau.ma;
 	});

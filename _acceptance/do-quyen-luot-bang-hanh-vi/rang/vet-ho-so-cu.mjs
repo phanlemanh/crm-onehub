@@ -7,6 +7,7 @@ import {
 	coCo,
 	GOC,
 	hong,
+	hongGian,
 	RANG,
 	voiCaySao,
 } from "./chung.mjs";
@@ -29,7 +30,9 @@ function khoi(nguon, dau, cuoi, ten) {
 	const a = nguon.indexOf(dau);
 	const b = nguon.indexOf(cuoi);
 	if (a === -1 || b === -1 || b <= a) {
-		hong(`${GHIM}\n  khong cat duoc khoi ${ten}: khong tim thay moc "${dau}" hoac "${cuoi}"`);
+		hong(
+			`${GHIM}\n  khong cat duoc khoi ${ten}: khong tim thay moc "${dau}" hoac "${cuoi}"`,
+		);
 	}
 	return nguon.slice(a, b);
 }
@@ -79,7 +82,10 @@ function cham(goc) {
 			`${GHIM}\n  ## Notes cua ho so cu khong co dong nao neu ten slug ${SLUG}`,
 		);
 	}
-	if (!/expected/.test(dong) || !/khong\s+còn mô tả|không\s+còn mô tả/.test(dong)) {
+	if (
+		!/expected/.test(dong) ||
+		!/khong\s+còn mô tả|không\s+còn mô tả/.test(dong)
+	) {
 		hong(
 			`${GHIM}\n  dong Notes neu slug nhung khong noi ro rang expected da ghim cua E5 khong con mo ta thu lenh cua no chay:\n  ${dong}`,
 		);
@@ -93,7 +99,8 @@ const VECTO = {
 		const duong = join(sao, DUONG_HD);
 		const nguon = readFileSync(duong, "utf8");
 		const moc = "**AC-5 — Không chỗ nào còn suy quyền từ hình dạng tin nhắn.**";
-		if (!nguon.includes(moc)) hong(`khong tim thay moc de dot bien trong ${duong}`);
+		if (!nguon.includes(moc))
+			hongGian(`khong tim thay moc de dot bien trong ${duong}`);
 		writeFileSync(
 			duong,
 			nguon.replace(
@@ -111,24 +118,29 @@ chayRang(() => {
 		return;
 	}
 	const dotBien = VECTO[ten];
-	if (!dotBien) hong(`khong co vecto ten "${ten}" — co: ${Object.keys(VECTO).join(", ")}`);
+	if (!dotBien)
+		hongGian(
+			`khong co vecto ten "${ten}" — co: ${Object.keys(VECTO).join(", ")}`,
+		);
 
 	const ma = voiCaySao(({ sao }) => {
 		const truoc = chay(GOC, ["node", TOI, "--goc", sao]);
 		if (truoc.ma !== 0) {
-			hong(`doi chung duong hong: cay sao chua dot bien da do\n${truoc.chu}`);
+			hongGian(
+				`doi chung duong hong: cay sao chua dot bien da do\n${truoc.chu}`,
+			);
 		}
 		dotBien(sao);
 		const sau = chay(GOC, ["node", TOI, "--goc", sao]);
 		process.stdout.write(`cay sao: ${sao}\nvecto: ${ten}\n${sau.chu}`);
 		if (sau.ma === 0) {
-			hong(`vecto "${ten}" ra XANH — thuoc khong bat duoc mot ky tu doi`);
+			hongGian(`vecto "${ten}" ra XANH — thuoc khong bat duoc mot ky tu doi`);
 		}
 		if (!sau.chu.includes(GHIM)) {
-			hong(`vecto "${ten}" do nhung thieu thong diep ghim: ${GHIM}`);
+			hongGian(`vecto "${ten}" do nhung thieu thong diep ghim: ${GHIM}`);
 		}
 		if (!/da ghim [0-9a-f]{64}/.test(sau.chu)) {
-			hong(`vecto "${ten}" do nhung khong in ca hai sha`);
+			hongGian(`vecto "${ten}" do nhung khong in ca hai sha`);
 		}
 		return sau.ma;
 	});

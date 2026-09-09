@@ -21,16 +21,54 @@ export const DUONG_SPEC = "apps/agent/test/quyen-luot.spec.ts";
 const git = (args, cwd = GOC) =>
 	execFileSync("git", args, { cwd, encoding: "utf8" }).trim();
 
+const GIT_CHUNG = resolve(
+	GOC,
+	execFileSync("git", ["rev-parse", "--git-common-dir"], {
+		cwd: GOC,
+		encoding: "utf8",
+	}).trim(),
+);
+const KHOA = join(GIT_CHUNG, "dq-cay-sao.khoa");
+
+function giuKhoa(viec) {
+	const han = Date.now() + 120_000;
+	for (;;) {
+		try {
+			mkdirSync(KHOA);
+			break;
+		} catch (loi) {
+			if (loi.code !== "EEXIST") throw loi;
+			if (Date.now() > han) {
+				rmSync(KHOA, { recursive: true, force: true });
+				continue;
+			}
+			execFileSync("sleep", ["0.2"]);
+		}
+	}
+	try {
+		return viec();
+	} finally {
+		rmSync(KHOA, { recursive: true, force: true });
+	}
+}
+
+export const MA_VI_PHAM = 2;
+export const MA_GIAN_HONG = 3;
+
 export class RangLoi extends Error {
-	constructor(chu, ma = 2) {
+	constructor(chu, ma = MA_VI_PHAM) {
 		super(chu);
 		this.name = "RangLoi";
 		this.ma = ma;
 	}
 }
 
-export function hong(chu, ma = 2) {
+export function hong(chu, ma = MA_VI_PHAM) {
 	throw new RangLoi(chu, ma);
+}
+
+export function hongGian(chu) {
+	throw new RangLoi(`GIAN DO HONG — ${chu}`, MA_GIAN_HONG);
 }
 
 export function chayRang(fn) {
@@ -39,9 +77,13 @@ export function chayRang(fn) {
 	} catch (loi) {
 		if (loi instanceof RangLoi) {
 			process.stderr.write(`${loi.message}\n`);
-			process.exit(loi.ma);
+			process.exitCode = loi.ma;
+			return;
 		}
-		throw loi;
+		process.stderr.write(
+			`GIAN DO HONG — ngoai le chua bat trong rang:\n${loi && loi.stack ? loi.stack : String(loi)}\n`,
+		);
+		process.exitCode = MA_GIAN_HONG;
 	}
 }
 
@@ -113,7 +155,7 @@ export function dungCaySao() {
 		`dq-sao-${process.pid}-${Math.random().toString(36).slice(2, 8)}`,
 	);
 	rmSync(sao, { recursive: true, force: true });
-	git(["worktree", "add", "--detach", "--quiet", sao, sha]);
+	giuKhoa(() => git(["worktree", "add", "--detach", "--quiet", sao, sha]));
 
 	const chuaTheoDoi = git(["ls-files", "--others", "--exclude-standard"])
 		.split("\n")
@@ -133,16 +175,14 @@ export function dungCaySao() {
 		symlinkSync(nguon, join(sao, ten));
 	}
 
-	const don = () => {
-		try {
-			git(["worktree", "remove", "--force", sao]);
-		} catch {
-			rmSync(sao, { recursive: true, force: true });
-		}
-		try {
-			git(["worktree", "prune"]);
-		} catch {}
-	};
+	const don = () =>
+		giuKhoa(() => {
+			try {
+				git(["worktree", "remove", "--force", sao]);
+			} catch {
+				rmSync(sao, { recursive: true, force: true });
+			}
+		});
 	return { sao, sha, don };
 }
 
@@ -180,7 +220,7 @@ export function assertDanhTinh(sao) {
 		thieu.push("builderSessionAttributes con tham so message");
 	}
 	if (thieu.length > 0) {
-		hong(
+		hongGian(
 			`cay sao khong chua ma dang xet: ${thieu.join(" · ")}\n  cay sao: ${sao}`,
 		);
 	}
@@ -190,17 +230,20 @@ export function chay(cwd, argv, env = {}) {
 	const r = spawnSync(argv[0], argv.slice(1), {
 		cwd,
 		encoding: "utf8",
+		maxBuffer: 64 * 1024 * 1024,
 		env: { ...process.env, ...env },
 	});
-	return { ma: r.status, chu: `${r.stdout ?? ""}${r.stderr ?? ""}` };
-}
-
-export function doiTep(duong, tim, thay) {
-	const nguon = readFileSync(duong, "utf8");
-	if (!nguon.includes(tim)) {
-		hong(`khong tim thay moc de dot bien trong ${duong}:\n  ${tim}`);
+	const chu = `${r.stdout ?? ""}${r.stderr ?? ""}`;
+	if (r.error) {
+		hongGian(`khong chay duoc ${argv.join(" ")}: ${r.error.message}`);
 	}
-	return { nguon, moi: nguon.replace(tim, thay) };
+	if (r.signal) {
+		hongGian(`${argv.join(" ")} bi tin hieu ${r.signal} ngat`);
+	}
+	if (r.status === null) {
+		hongGian(`${argv.join(" ")} khong tra ma thoat`);
+	}
+	return { ma: r.status, chu };
 }
 
 export function coCo(ten) {
