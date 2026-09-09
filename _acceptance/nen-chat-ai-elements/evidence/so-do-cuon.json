@@ -1,5 +1,5 @@
 {
-  "sinhLuc": "2026-09-09T09:37:54.853Z",
+  "sinhLuc": "2026-09-09T10:34:38.690Z",
   "donVi": "mili giay, thoi gian bo cuc dong bo cua lan gan cay vao trang",
   "trinhDuyet": {
     "duong": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
@@ -27,93 +27,93 @@
     "nguon": "trang thu tai dung lai dung hai thuoc tinh CSS doc tu message-scroller.tsx; jsdom khong bo cuc nen khong do o do"
   },
   "oDo": {
-    "messageScroller_50": 0.11,
-    "conversation_50": 3.38,
-    "messageScroller_200": 0.41,
-    "conversation_200": 11.99,
-    "messageScroller_500": 0.84,
-    "conversation_500": 27.8
+    "messageScroller_50": 0.09,
+    "conversation_50": 2.58,
+    "messageScroller_200": 0.32,
+    "conversation_200": 10.41,
+    "messageScroller_500": 0.76,
+    "conversation_500": 26.49
   },
   "chiTiet": {
     "messageScroller": {
       "50": {
-        "giua": 0.11,
-        "nhoNhat": 0.09,
+        "giua": 0.09,
+        "nhoNhat": 0.08,
         "lonNhat": 0.12,
         "soMau": 15,
         "vongMoiMau": 10
       },
       "200": {
-        "giua": 0.41,
-        "nhoNhat": 0.37,
-        "lonNhat": 0.53,
+        "giua": 0.32,
+        "nhoNhat": 0.3,
+        "lonNhat": 0.39,
         "soMau": 15,
         "vongMoiMau": 10
       },
       "500": {
-        "giua": 0.84,
-        "nhoNhat": 0.8,
-        "lonNhat": 1.04,
+        "giua": 0.76,
+        "nhoNhat": 0.7,
+        "lonNhat": 0.78,
         "soMau": 15,
         "vongMoiMau": 10
       }
     },
     "conversation": {
       "50": {
-        "giua": 3.38,
-        "nhoNhat": 2.95,
-        "lonNhat": 3.81,
+        "giua": 2.58,
+        "nhoNhat": 2.46,
+        "lonNhat": 3.22,
         "soMau": 15,
         "vongMoiMau": 10
       },
       "200": {
-        "giua": 11.99,
-        "nhoNhat": 11.13,
-        "lonNhat": 12.78,
+        "giua": 10.41,
+        "nhoNhat": 9.89,
+        "lonNhat": 11.71,
         "soMau": 15,
         "vongMoiMau": 10
       },
       "500": {
-        "giua": 27.8,
-        "nhoNhat": 26.46,
-        "lonNhat": 28.29,
+        "giua": 26.49,
+        "nhoNhat": 25.75,
+        "lonNhat": 27.09,
         "soMau": 15,
         "vongMoiMau": 10
       }
     },
     "conversationSauVa": {
-      "giua": 0.86,
-      "nhoNhat": 0.8,
-      "lonNhat": 1.23,
+      "giua": 0.76,
+      "nhoNhat": 0.73,
+      "lonNhat": 0.81,
       "soMau": 15,
       "vongMoiMau": 10
     },
     "messageScrollerGoNhin": {
-      "giua": 27.33,
-      "nhoNhat": 26.42,
-      "lonNhat": 27.81,
+      "giua": 26.19,
+      "nhoNhat": 25.76,
+      "lonNhat": 27.3,
       "soMau": 15,
       "vongMoiMau": 10
     },
     "thuTuDo": "vong tron xen ke: moi vong do mot mau cho tung cau hinh, vi tri xoay theo so vong de trieu tieu troi may"
   },
   "ca500": {
-    "conversationTruocVa": 27.8,
-    "conversationSauVa": 0.86,
-    "messageScroller": 0.84,
-    "tiSoTruocVa": 33.1,
-    "tiSoSauVa": 1.02,
+    "conversationTruocVa": 26.49,
+    "conversationSauVa": 0.76,
+    "messageScroller": 0.76,
+    "tiSoTruocVa": 34.86,
+    "tiSoSauVa": 1,
     "nguong": 1.2,
     "dat": true
   },
   "chieuDo": {
     "mo_ta": "go content-visibility khoi MessageScrollerItem ngay trong trang thu, khong sua tep nguon",
-    "messageScroller500CoNhin": 0.84,
-    "messageScroller500GoNhin": 27.33,
-    "boiPhanUng": 32.54,
+    "messageScroller500CoNhin": 0.76,
+    "messageScroller500GoNhin": 26.19,
+    "boiPhanUng": 34.46,
     "nguongPhanUng": 1.5,
-    "tiSoTruocKhiGo": 33.1,
-    "tiSoSauKhiGo": 1.02,
+    "tiSoTruocKhiGo": 34.86,
+    "tiSoSauKhiGo": 1.01,
     "thuocPhanUng": true
   },
   "banVaThat": {
