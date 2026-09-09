@@ -73,3 +73,44 @@
 - **claude-opus-5**: 3 agent · 98 calls · out 17,300 · in 196 · cache_read 8,435,475 · cache_create 230,277
 - **claude-haiku-4-5-20251001**: 14 agent · 30 calls · out 2,546 · in 268 · cache_read 1,068,643 · cache_create 232,206
 
+### S4 round 3 — wf_deed5576-f43 (32 agent, 102,889 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| refute:tran-uy-thac.spec.ts | claude-sonnet-5 | 28 | 12,911 | 56 | 2,124,812 | 311 |
+| refute:builder-delegation.ts | claude-sonnet-5 | 13 | 10,205 | 26 | 973,966 | 244 |
+| refute:builder-delegation.ts | claude-sonnet-5 | 25 | 9,728 | 50 | 1,924,424 | 194 |
+| triage | claude-sonnet-5 | 3 | 7,505 | 6 | 143,999 | 155 |
+| refute:tran-uy-thac.spec.ts | claude-sonnet-5 | 16 | 6,623 | 32 | 1,164,827 | 169 |
+| refute:tran-uy-thac.spec.ts | claude-sonnet-5 | 29 | 5,988 | 58 | 2,354,592 | 293 |
+| refute:tran-uy-thac.spec.ts | claude-sonnet-5 | 14 | 5,808 | 28 | 1,116,778 | 222 |
+| review:measurement | claude-opus-5 | 20 | 5,667 | 40 | 1,493,245 | 320 |
+| synthesize:report | claude-sonnet-5 | 8 | 5,481 | 16 | 660,051 | 209 |
+| refute:tran-uy-thac.spec.ts | claude-sonnet-5 | 19 | 5,162 | 38 | 1,320,010 | 153 |
+| refute:tran-uy-thac.spec.ts | claude-sonnet-5 | 14 | 4,996 | 28 | 1,029,777 | 231 |
+| review:bugs | claude-opus-5 | 48 | 4,761 | 96 | 4,670,232 | 444 |
+| refute:tran-uy-thac.spec.ts | claude-sonnet-5 | 27 | 4,672 | 54 | 2,251,410 | 363 |
+| refute:builder-delegation.ts | claude-sonnet-5 | 23 | 4,400 | 46 | 1,580,980 | 136 |
+| refute:tran-uy-thac.spec.ts | claude-sonnet-5 | 17 | 2,907 | 34 | 1,196,805 | 132 |
+| review:conventions | claude-opus-5 | 43 | 2,013 | 86 | 3,759,433 | 384 |
+| baseline:diffBase | claude-sonnet-5 | 10 | 896 | 20 | 600,654 | 59 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 879 | 18 | 69,813 | 20 |
+| capture:provenance | claude-sonnet-5 | 2 | 875 | 4 | 59,825 | 16 |
+| machine:cd apps/agent && bun test test/tran-uy-t | claude-haiku-4-5-20251001 | 2 | 422 | 18 | 69,846 | 9 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 417 | 18 | 69,811 | 11 |
+| machine:bunx turbo run check-types --force | claude-haiku-4-5-20251001 | 2 | 337 | 18 | 69,817 | 16 |
+| machine:bun run test | claude-haiku-4-5-20251001 | 3 | 199 | 26 | 114,274 | 45 |
+| machine:cd apps/agent && bun test test/tran-uy-t | claude-haiku-4-5-20251001 | 2 | 6 | 18 | 69,841 | 9 |
+| machine:cd apps/agent && bun test test/tran-uy-t | claude-haiku-4-5-20251001 | 2 | 5 | 18 | 69,842 | 9 |
+| machine:cd apps/agent && bun test test/tran-uy-t | claude-haiku-4-5-20251001 | 2 | 5 | 18 | 41,319 | 10 |
+| machine:cd apps/agent && bun test test/tran-uy-t | claude-haiku-4-5-20251001 | 2 | 4 | 18 | 69,842 | 12 |
+| machine:cd apps/agent && bun test test/tran-uy-t | claude-haiku-4-5-20251001 | 2 | 4 | 18 | 69,844 | 10 |
+| machine:cd apps/agent && bun test test/tran-uy-t | claude-haiku-4-5-20251001 | 2 | 4 | 18 | 69,843 | 10 |
+| machine:cd apps/agent && bun test test/tran-uy-t | claude-haiku-4-5-20251001 | 2 | 4 | 18 | 69,842 | 11 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 3 | 18 | 69,813 | 17 |
+| machine:cd apps/agent && bun test test/tran-uy-t | claude-haiku-4-5-20251001 | 2 | 2 | 18 | 69,842 | 10 |
+
+- **claude-sonnet-5**: 15 agent · 248 calls · out 88,157 · in 496 · cache_read 18,502,910 · cache_create 1,029,406
+- **claude-opus-5**: 3 agent · 111 calls · out 12,441 · in 222 · cache_read 9,922,910 · cache_create 271,744
+- **claude-haiku-4-5-20251001**: 14 agent · 29 calls · out 2,291 · in 260 · cache_read 993,589 · cache_create 257,474
+
