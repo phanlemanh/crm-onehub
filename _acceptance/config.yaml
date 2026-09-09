@@ -6,7 +6,6 @@ feature_loop:
   ui_standards_skill: web-design-guidelines
   suite_keys:
     - executors.test.api
-    - executors.script.check_types_khong_cache
     - executors.script.lint_khong_cache
     - executors.script.lint_slop
     - executors.script.build_khong_cache

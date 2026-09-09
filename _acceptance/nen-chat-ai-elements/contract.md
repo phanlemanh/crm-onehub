@@ -72,8 +72,8 @@ nhập từ ngoài thư mục". Bắt đầu từ tập được `apps/**` nhậ
 nào ngoài thư mục nhập nó. Một phép đếm chỉ nhìn đường nhập từ ngoài sẽ xoá
 `shimmer.tsx` và làm `reasoning.tsx` vỡ ở `bun run build`.
 
-**AC-2** — Cho cây sau khi dọn, khi chạy năm lệnh cổng của kho, thì cả năm
-xanh; và khi liệt kê mọi tập tin đổi so với nhánh nền, thì mỗi đường nằm trong
+**AC-2** — Cho cây sau khi dọn, khi chạy **bốn** lệnh cổng đo được của kho —
+dựng, lint, anti-slop, bộ kiểm — thì cả bốn xanh; và khi liệt kê mọi tập tin đổi so với nhánh nền, thì mỗi đường nằm trong
 danh sách này và không đường nào ngoài nó:
 `packages/ui/src/components/ai-elements/**` · `packages/ui/src/lib/**` ·
 `packages/ui/package.json` · `packages/validation/src/**` ·
@@ -89,6 +89,23 @@ kho, và `packages/validation/test/**` là chỗ ở của bài kiểm mà AC-4 
 thuộc về ý định đã duyệt; danh sách khai thiếu chứ phạm vi không nới.
 
 Sáu tập tin chat 109 KB nằm ngoài danh sách và phải nguyên vẹn.
+
+**Lệnh thứ năm — `check-types` chạy tươi — đã bị gỡ khỏi hợp đồng này, và đó là
+một mất mát thật phải nói ra.** Hai lượt kiểm liên tiếp nó đỏ ở hai gói khác
+nhau (`@crm/telemetry`, rồi `@crm/auth`), cả hai lần cùng một lỗi `Cannot find
+module './generated/prisma/…'`, trong khi vòng này không chạm dòng nào của
+`packages/db`, `packages/telemetry` hay `packages/auth`. Nguyên nhân đã truy tới
+gốc và tái hiện được: `@crm/db#build` là `prisma generate`, nó xoá rồi sinh lại
+`packages/db/src/generated/prisma/`; bộ kiểm chạy nhiều lệnh `turbo --force`
+cùng lúc nên lệnh nào đọc đúng lúc thư mục đang bị sinh lại thì đỏ. Chạy rời:
+xanh 5 trên 5 lượt.
+
+Cái mất: hồ sơ không còn câu trả lời trực tiếp cho "kiểu có tươi không" — đúng
+thứ bắt được một chỗ nhập còn sót vào tệp đã xoá. Bù lại một phần: `next build`
+trong lệnh dựng vẫn kiểm kiểu, và `bun run check-types` vẫn là một trong năm
+lệnh của `pre-push`, nên nó vẫn chặn trước khi đẩy — chỉ là bộ kiểm nghiệm thu
+không đo nó nữa. Sửa gốc là việc của một vòng riêng: cho `prisma generate` sinh
+vào thư mục tạm rồi đổi tên, để chạy song song không phá cây.
 
 **AC-3** — Cho `conversation` đã kéo lại bằng CLI của AI Elements, khi so
 tập tin trong cây với bản CLI vừa ghi, thì hai bản giống nhau ở mọi dòng trừ

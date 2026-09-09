@@ -27,16 +27,6 @@ evals:
       ma 1, thong diep neu dung chuoi "open-in-chat" va chu "khong kha dat".
       Doc khong duoc thu muc -> ma 2, KHONG xanh.
 
-  - id: E2
-    criterion: AC-2
-    executor: script
-    cmd: config:executors.script.check_types_khong_cache
-    expected: |
-      Xanh: turbo chay check-types tuoi cho moi goi, ma 0. Ban chuyen kieu moi va cac
-      file bi xoa deu di qua day — mot cho nhap con sot vao file da xoa se do o buoc
-      nay chu khong doi den luc dung.
-      Chieu do: xoa mot file con duoc nhap -> ma khac 0, neu duong dan khong giai duoc.
-
   - id: E3
     criterion: AC-2
     executor: script
