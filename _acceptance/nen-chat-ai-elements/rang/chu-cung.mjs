@@ -1,6 +1,14 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+
+let ts = null;
+try {
+	ts = createRequire(import.meta.url)("typescript");
+} catch {
+	ts = null;
+}
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(HERE, "..", "..", "..");
@@ -197,6 +205,95 @@ function quetTep(nguon) {
 	return may.thay;
 }
 
+function nhatTen(n, ra) {
+	if (ts.isIdentifier(n)) {
+		ra.add(n.text);
+		return;
+	}
+	if (ts.isPropertyAccessExpression(n)) {
+		nhatTen(n.expression, ra);
+		return;
+	}
+	if (ts.isJsxAttribute(n)) {
+		if (n.initializer) nhatTen(n.initializer, ra);
+		return;
+	}
+	if (ts.isJsxOpeningElement(n) || ts.isJsxSelfClosingElement(n)) {
+		for (const a of n.attributes.properties) nhatTen(a, ra);
+		return;
+	}
+	if (ts.isJsxClosingElement(n)) return;
+	if (ts.isPropertyAssignment(n)) {
+		nhatTen(n.initializer, ra);
+		return;
+	}
+	ts.forEachChild(n, (con) => nhatTen(con, ra));
+}
+
+function tenHienThi(sf) {
+	const ra = new Set();
+	const nhat = (n) => nhatTen(n, ra);
+	const di = (n) => {
+		if (
+			ts.isJsxExpression(n) &&
+			n.expression &&
+			(ts.isJsxElement(n.parent) || ts.isJsxFragment(n.parent))
+		) {
+			nhat(n.expression);
+		}
+		if (
+			ts.isJsxAttribute(n) &&
+			THUOC_TINH.has(n.name.getText(sf)) &&
+			n.initializer &&
+			ts.isJsxExpression(n.initializer) &&
+			n.initializer.expression
+		) {
+			nhat(n.initializer.expression);
+		}
+		ts.forEachChild(n, di);
+	};
+	di(sf);
+	return ra;
+}
+
+function quetMacDinh(nguon, nhanTep) {
+	const sf = ts.createSourceFile(
+		nhanTep,
+		nguon,
+		ts.ScriptTarget.Latest,
+		true,
+		ts.ScriptKind.TSX,
+	);
+	const hienThi = tenHienThi(sf);
+	const ra = [];
+	const di = (n) => {
+		if (ts.isBindingElement(n) && n.initializer) {
+			const gt = n.initializer;
+			const laChuoi =
+				ts.isStringLiteral(gt) || ts.isNoSubstitutionTemplateLiteral(gt);
+			if (laChuoi && coChu(gt.text) && hienThi.has(n.name.getText(sf))) {
+				const { line } = sf.getLineAndCharacterOfPosition(n.getStart(sf));
+				ra.push({ kieu: "giá trị mặc định", chu: gt.text, dong: line + 1 });
+			}
+		}
+		ts.forEachChild(n, di);
+	};
+	di(sf);
+	return ra;
+}
+
+function gopKhongTrung(thay, them) {
+	const da = new Set(thay.map((v) => `${v.dong}\u0000${v.chu}`));
+	for (const m of them) {
+		const khoa = `${m.dong}\u0000${m.chu}`;
+		if (da.has(khoa)) continue;
+		da.add(khoa);
+		thay.push(m);
+	}
+	thay.sort((a, b) => a.dong - b.dong);
+	return thay;
+}
+
 function boGiaTri(nguon, i) {
 	let tron = 0;
 	while (i < nguon.length) {
@@ -310,6 +407,13 @@ function thoat(ma, loi) {
 const nhan = relative(GOC, THU_MUC);
 process.stdout.write(`Răng chuỗi cứng — ${nhan}\n\n`);
 
+if (!ts) {
+	thoat(
+		2,
+		"Không nạp được typescript — không đọc được lớp giá trị mặc định, không kết luận gì.",
+	);
+}
+
 let tep = [];
 try {
 	if (!statSync(THU_MUC).isDirectory()) {
@@ -350,8 +454,8 @@ process.stdout.write(`Tệp quét: ${tep.length}\n`);
 const rong = Math.max(...tep.map((t) => relative(GOC, t).length));
 for (const duong of tep) {
 	const nguon = readFileSync(duong, "utf8");
-	const thay = quetTep(nguon);
 	const ngan = relative(GOC, duong);
+	const thay = gopKhongTrung(quetTep(nguon), quetMacDinh(nguon, ngan));
 	process.stdout.write(`  ${ngan.padEnd(rong)}  ${thay.length}\n`);
 	for (const v of thay) viPham.push({ tep: ngan, ...v });
 	for (const { khoa, dong } of khoaDung(nguon)) {

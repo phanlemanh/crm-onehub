@@ -17,6 +17,18 @@ const BO_QUA = new Set([
 	"coverage",
 ]);
 
+const MIEN_TRU = [
+	{
+		tep: "conversation.tsx",
+		ly_do:
+			"AC-1 và AC-3 của contract.md cố ý giữ bản kéo tươi bằng CLI làm mốc cho phép đo cuộn AC-7 và cho sổ lệch chuẩn AC-8; vòng này không nối nó vào màn nào, nên không khả đạt là đúng hợp đồng chứ không phải rác",
+		het_han:
+			"Phase 1 của docs/plan/chat-ai-elements-rebuild.md nối Conversation vào màn thật thì bỏ mục này",
+	},
+];
+
+const boMienTru = new Map(MIEN_TRU.map((m) => [m.tep, m]));
+
 function boCuoc(loi) {
 	console.log(`KHONG DO DUOC: ${loi}`);
 	process.exit(2);
@@ -127,7 +139,10 @@ while (hangDoi.length > 0) {
 	}
 }
 
-const chet = tep.filter((t) => !song.has(t));
+const moCoi = tep.filter((t) => !song.has(t));
+const mienTru = moCoi.filter((t) => boMienTru.has(t));
+const chet = moCoi.filter((t) => !boMienTru.has(t));
+const mienTruThua = MIEN_TRU.filter((m) => !moCoi.includes(m.tep));
 const songSap = [...song].sort();
 
 console.log(
@@ -140,6 +155,17 @@ for (const t of songSap) {
 		? "apps/** nhap thang"
 		: `${nhapBoi.join(", ")} nhap qua duong tuong doi`;
 	console.log(`   ${t} — ${boi}`);
+}
+console.log(`MIEN TRU (${mienTru.length}):`);
+for (const t of mienTru) {
+	const m = boMienTru.get(t);
+	console.log(`   ${t} — miễn trừ: ${m.ly_do}`);
+	console.log(`      het han: ${m.het_han}`);
+}
+for (const m of mienTruThua) {
+	console.log(
+		`   MIEN TRU THUA: ${m.tep} — khai trong MIEN_TRU nhung khong con mo coi (hoac khong con trong cay); xoa muc nay khoi script`,
+	);
 }
 console.log(`CHET (${chet.length}):`);
 for (const t of chet) {
@@ -156,5 +182,5 @@ if (chet.length > 0) {
 }
 
 console.log(
-	`XANH: ca ${tep.length} tep trong ${relative(GOC, THU_MUC)} deu kha dat tu apps/**, khong co mo coi.`,
+	`XANH: ${tep.length} tep trong ${relative(GOC, THU_MUC)} — ${song.size} kha dat tu apps/**, ${mienTru.length} mien tru co ten, khong mo coi nao ngoai danh sach mien tru.`,
 );
