@@ -103,8 +103,11 @@ evals:
     expected: |
       Xanh: bai kiem don vi chay tren PAYLOAD EVE THAT rut tu fixture san co o
       apps/app/test/agent-transcript.spec.ts, khong phai vat tu dung theo khuon ben
-      doc. MA TRAN TOAN PHAN viet truoc: bon dang said/reasoned/asked/did, moi dang
+      doc. MA TRAN TOAN PHAN viet truoc: BA dang said/reasoned/did di qua lop chuyen, moi dang
       mot assert ve role, cong mot assert ve state cho did. So assert = so phan tu.
+      Dang thu tu `asked` co y KHONG di qua lop chuyen (docs/chat-ui.md giu form hoi
+      lai o shadcn); phai co mot assert KHANG DINH lop chuyen TU CHOI no bang loi co
+      neu ten dang, chu khong bo lung.
       Ca ghim rieng: did mang Tone=warning kem chuoi loi -> state bao loi
       (output-error), KHONG phai output-available. Day la ca de sai nhat vi ca hai
       deu la "did da xong".
@@ -120,14 +123,29 @@ evals:
       - "packages/ui/src/lib/messages.ts"
       - "_acceptance/nen-chat-ai-elements/rang/**"
     expected: |
-      Xanh: quet chuoi hien thi trong moi file con lai cua ai-elements/ — chu trong
-      JSX, placeholder, aria-label, title, alt. In DANH SACH file kem so chuoi cung
-      tim thay; moi so phai la 0.
+      Xanh: DANH SACH TRANG DONG, khong phai liet ke tung hinh dang cu phap. Quet MOI
+      chuoi ky tu co chu cai trong bon tep con lai cua ai-elements/, roi TRU DI cac
+      nhom da khai la khong-the-toi-mat-nguoi (lop CSS, duong nhap, gia tri enum bien
+      the, khoa ky thuat, ten the, ten kieu...), moi nhom mot ly do bang chu.
+      In: tong so chuoi co chu da xet · so duoc mien theo TUNG nhom · so con lai (phai
+      la 0) · danh sach chuoi con lai kem tep, dong, nguyen van.
+      Vi sao khuon nay: phep do liet ke tung hinh dang cu phap da bo sot HAI lan trong
+      chinh vong nay — lan mot lop 'gia tri mac dinh cua tham so', lan hai lop 'bien
+      trung gian' (message.tsx:348). Cung mot lop loi, nen doi khuon chu khong va lan
+      ba.
+      BON LOP phai cung bi bat boi MOT khuon, khong khai them hinh dang nao:
+      chu giua the · thuoc tinh hien thi · gia tri mac dinh cua tham so · bien trung
+      gian.
       Kiem doi ung: moi khoa duoc goi qua useMessages() phai co mat trong CA HAI bang
       vi va en cua packages/ui/src/lib/messages.ts; thieu ben nao neu ten khoa va ten
       bang.
-      Chieu do da chay tren CUNG fixture: dat chuoi "Copy message" vao message.tsx ->
-      ma 1, thong diep neu duong dan file va nguyen van chuoi do.
+      Kiem doi ung: moi khoa goi qua useMessages() phai co mat trong CA HAI bang vi va
+      en cua packages/ui/src/lib/messages.ts; thieu ben nao neu ten khoa va ten bang.
+      Chieu do da chay tren CUNG fixture, BON ca cho bon lop, moi ca ma 1 neu nguyen
+      van: (a) <span>Copy message</span>; (b) aria-label="Collapse reasoning";
+      (c) nhan = "Send now"; (d) const x = "Retry later" roi render {x}.
+      DOI CHUNG AM bat buoc, rang phai XANH: (e) variant = "ghost" va size = "icon-sm";
+      (f) className="text-balance". Do o hai ca nay la rang qua tay.
       Khong tim thay file nao de quet -> ma 2, KHONG xanh (tap rong khong phai la sach).
 
   - id: E10
@@ -145,8 +163,8 @@ evals:
       va so dong. Danh sach den la sai khuon o day: mot lop chua ai nghi toi
       (bg-accent, text-amber-500) se lot.
       Hai ve co DAN SO KHAC NHAU, in rieng tung ve, khong gop mot con so:
-      (1) ban kinh — dan so vao vong la 3, ghim cho: message.tsx hai rounded-full,
-      conversation.tsx mot. Sau khi sua phai la 0.
+      (1) ban kinh — dan so vao vong la 4, ghim cho: message.tsx hai rounded-full,
+      conversation.tsx hai. Sau khi sua phai la 0.
       (2) mau — dan so vao vong la 0 (ca 6 cho deu o tool va web-preview, hai tep bi
       AC-1 xoa). Ve nay la RANG chong tai phat, khong phai viec chuan hoa: no canh ban
       conversation keo tuoi va moi component phase sau keo ve.
