@@ -6,7 +6,7 @@ owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
 design_doc: docs/superpowers/specs/2026-09-09-nen-chat-ai-elements-design.md
-status: implemented
+status: verified
 approved_by:
 approved_at:
 veto_state: mo
