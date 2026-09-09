@@ -88,7 +88,11 @@ evals:
       hoac thieu thuoc tinh" se de phien team-agent lot cua, roi roi xuong
       requireBuilderAttribute va nem Error — quay lai dung chuoi thu-lai roi treo ma
       vong nay sinh ra de chan.
-      San dan so: tap gia tri purposeOf tra ve dem ra khac 3 -> ma 2, IN gia tri la.
+      San dan so (da cai, do duoc): dan so lop lay tu hang chay duoc SESSION_PURPOSES
+      trong session-purpose.ts — chinh hang ma SessionPurpose suy ra va purposeOf parse
+      theo. Bai do assert SESSION_PURPOSES dai 3 VA so o bang so phan tu nhan 2.
+      Them mot purpose thu tu vao hang ay -> phep do phai DO. Neu dan so van den tu
+      mot literal viet tay trong bai do -> ma 2.
       Chieu do (doi chung duong): to hop builder + CREATE_AGENT phai CHO DI TIEP.
       Neu no cung bi tu choi -> ma 1: khi ay "tu choi tat" khong phan biet duoc voi
       "policy luon dong".
@@ -119,10 +123,20 @@ evals:
       Parse THAT bang outputSchema cua agent_builder, khong doc chuoi nguon:
         (a) { status: "not_authorized", reason: <chuoi khong rong> } -> parse THANH CONG;
         (b) { status: "draft_ready", summary, agentId, versionId } -> van parse THANH CONG
-            (chong hoi quy: mo union khong duoc lam mat nhanh cu);
-        (c) { status: "not_authorized" } thieu reason -> parse HONG.
-      Chieu do: go nhanh not_authorized khoi schema trong ban sao -> (a) phai hong,
-      phep do ma 1.
+            (chong hoi quy: them cua ra khong duoc lam mat nhanh cu);
+        (c) { status: "not_authorized" } thieu reason -> parse HONG;
+        (d) { status: "draft_ready" } thieu agentId/versionId -> parse HONG.
+      VE THU HAI, HINH DANG DAY LEN MODEL: serialize outputSchema ra JSON Schema va
+      assert goc co type "object", khong co oneOf, khong co anyOf. Ly do khong phai
+      thi hieu: eve giao thang outputSchema lam inputSchema cua tool final_output
+      (toInputSchema khong boc lai), nen mot goc oneOf tran co the bi provider tu choi
+      va giet MOI luot builder, ca hai nhanh. Moi subagent khac trong kho da serialize
+      ra goc object.
+      Chieu do: cay lai discriminatedUnion trong ban sao -> ve hinh dang phai DO.
+      Go nhanh not_authorized khoi schema -> (a) phai hong, phep do ma 1.
+      GIOI HAN DA BIET: phep do nay cham HINH DANG SCHEMA, khong cham mot luot chay
+      that qua gateway. Provider co nhan hay khong thi chi mot luot voi model that moi
+      tra loi duoc.
 
   - id: E7
     criterion: AC-7

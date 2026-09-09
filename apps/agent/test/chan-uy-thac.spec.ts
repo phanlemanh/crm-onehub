@@ -1,6 +1,7 @@
 import { describe, expect, it } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { z } from "zod";
 import { builderSessionAttributes } from "../agent/lib/custom-agent-dispatch";
 import {
 	builderTurnAuthorized,
@@ -191,6 +192,18 @@ describe("ket-thuc", () => {
 			}).success,
 		).toBe(true);
 		expect(schema.safeParse({ status: "not_authorized" }).success).toBe(false);
+		expect(
+			schema.safeParse({ status: "draft_ready", summary: "xong" }).success,
+		).toBe(false);
+	});
+
+	it("ket-thuc: goc JSON Schema la object, vi eve giao thang cho final_output", () => {
+		const shape = z.toJSONSchema(agentBuilder.outputSchema, {
+			target: "draft-7",
+		});
+		expect(shape.type).toBe("object");
+		expect(shape.oneOf).toBeUndefined();
+		expect(shape.anyOf).toBeUndefined();
 	});
 
 	it("ket-thuc: chot khoa theo STATUS tra ve, khong theo co quyen", () => {

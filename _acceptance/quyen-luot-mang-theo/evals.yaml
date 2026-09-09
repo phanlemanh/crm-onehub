@@ -16,9 +16,16 @@ evals:
       CAP HAI CHIEU tren CUNG mot fixture ctx, khac dung MOT truong (commandType).
       Doi mot truong ma ban ghi khong lat -> ma 1: khi ay cho ghi khong doc ctx.
       San dan so: khong dung duoc ctx cua hook -> ma 2.
-      CAM tu bia ban ghi roi assert tren no: bai do PHAI goi CHINH ham
-      persistBuilderInputRequest cua apps/agent, roi DOC LAI hang trong co so du lieu
-      va doi hang do mang co quyen. Fixture dung tay dung khuon ben doc -> ma 2.
+      CAM tu bia ban ghi roi assert tren no, VA cam tu tay dua co quyen vao phep do:
+      bai do PHAI goi recordBuilderInputRequest — ham nhan ctx cua luot hoi va tu SUY
+      ra co quyen bang builderTurnAuthorized — roi DOC LAI hang trong co so du lieu.
+      Fixture ctx dung builderSessionAttributes, cap hai chieu khac dung mot truong
+      commandType. Fixture dung tay dung khuon ben doc -> ma 2.
+      Vi sao sieu chat hon vong truoc: vong 4 truyen co quyen tay vao
+      persistBuilderInputRequest, nen doi duong sinh that thanh hang true van cho
+      30/30 xanh. Sau khi tach, chinh dot bien ay lam phep do do.
+      SAN: channels/crm.ts chi con noi day mot dong; moi phan suy quyen nam trong ham
+      do duoc. Neu suy quyen quay lai nam trong than hook -> ma 2.
 
   - id: E2
     criterion: AC-2
