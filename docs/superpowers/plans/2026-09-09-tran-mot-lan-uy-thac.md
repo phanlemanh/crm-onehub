@@ -712,13 +712,15 @@ Expected: hai bài pass.
 ```bash
 cd apps/agent
 cp agent/lib/builder-delegation.ts /tmp/lib-that.ts
-sed -i '' 's|action.kind !== "subagent-call" \|\||false \|\||' agent/lib/builder-delegation.ts
-bun test test/tran-uy-thac.spec.ts -t khong-loi-goi; echo "phe ve kind = $?"
+sed -i '' 's|action.subagentName !== "agent_builder" \|\||false \|\||' agent/lib/builder-delegation.ts
+bun test test/tran-uy-thac.spec.ts -t khong-loi-goi; echo "phe ve ten subagent = $?"
 cp /tmp/lib-that.ts agent/lib/builder-delegation.ts
 bun test test/tran-uy-thac.spec.ts; echo "ma thoat sau khi tra lai = $?"
 ```
 
-Expected: lượt phá **mã thoát khác 0** — bỏ vế lọc `kind` thì action của subagent khác lọt vào và ô "chỉ có subagent khác" ném oan. Lượt cuối mã thoát 0.
+Expected: lượt phá **mã thoát khác 0** — bỏ vế lọc tên subagent thì action `agent_runner` được ghi vào `callIds`, nên ô "chỉ có subagent khác" có `callIds` khác rỗng và assert đỏ. Lượt cuối mã thoát 0.
+
+**Đã thử một chỗ phá SAI trước khi tìm ra chỗ đúng, ghi lại để khỏi lặp:** phá vế lọc `kind` (`action.kind !== "subagent-call"`) **không** làm bài này đỏ, vì action `agent_runner` vẫn bị vế lọc *tên subagent* loại ra. Hệ quả đã biết: **không bài đo nào trong hồ sơ này ghim vế lọc `kind`.** Hợp đồng không đòi nó, và hình dạng "một `tool-call` mang `subagentName: agent_builder`" chưa từng thấy trong runtime — nhưng đây là một khoảng trống có thật, không phải một chỗ đã đo.
 
 - [ ] **Step 4: Cả năm lệnh cổng**
 

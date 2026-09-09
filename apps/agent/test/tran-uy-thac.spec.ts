@@ -315,3 +315,45 @@ describe("cung-batch", () => {
 		}
 	});
 });
+
+describe("khong-loi-goi", () => {
+	it("khong-loi-goi: su kien khong mang agent_builder thi im lang, ca hai chieu", () => {
+		const hinhDang = [
+			{ nhan: "actions rong", actions: [] as readonly HanhDong[] },
+			{
+				nhan: "chi co subagent khac",
+				actions: [
+					{
+						kind: "subagent-call",
+						callId: "call-1",
+						subagentName: "agent_runner",
+					},
+				] as readonly HanhDong[],
+			},
+		];
+		const o = hinhDang.flatMap((h) => HAI_CHIEU.map((c) => ({ ...h, ...c })));
+		expect(o).toHaveLength(4);
+		for (const { actions, authorized } of o) {
+			trongLuot(() => {
+				const ctx = phien({}, authorized);
+				expect(() => {
+					chay(ctx, suKien("turn-1", ...actions));
+					chay(ctx, suKien("turn-1", ...actions));
+				}).not.toThrow();
+				expect(builderDelegationState.get().callIds).toEqual([]);
+			});
+		}
+	});
+
+	it("khong-loi-goi: chieu do — doi subagentName sang agent_builder thi chan", () => {
+		for (const { authorized } of HAI_CHIEU) {
+			trongLuot(() => {
+				const ctx = phien({}, authorized);
+				expect(() => {
+					chay(ctx, suKien("turn-1", goiBuilder("call-1")));
+					chay(ctx, suKien("turn-1", goiBuilder("call-2")));
+				}).toThrow("only once");
+			});
+		}
+	});
+});
