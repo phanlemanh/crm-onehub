@@ -121,5 +121,17 @@
 				}
 			}
 		]
+	},
+	{
+		"id": "m4",
+		"mine": false,
+		"items": [
+			{
+				"kind": "reasoned",
+				"id": "m4:0",
+				"streaming": false,
+				"text": "Đã đủ dữ kiện để trả lời."
+			}
+		]
 	}
 ]

@@ -1,7 +1,8 @@
 import { describe, expect, it } from "bun:test";
-import { readdirSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import type { EveToolInput, EveToolOutput } from "@crm/validation/eve-tool";
 import type { EveMessage } from "eve/react";
+import { z } from "zod";
 import {
 	conversationTimeline,
 	dealListResultOf,
@@ -719,5 +720,136 @@ describe("tool call details", () => {
 			"did",
 			"said",
 		]);
+	});
+});
+
+const DUONG_VAT_THU = new URL(
+	"../../../packages/ui/test/fixtures/eve-turns.json",
+	import.meta.url,
+);
+
+const LUOT_EVE = [
+	message([{ type: "text", text: "Cho tôi biết về Acme." }], "user", "m1"),
+	message(
+		[
+			{ type: "reasoning", state: "streaming", text: "Cần xem lịch sử CRM." },
+			{ type: "text", text: "Đang tra cứu." },
+			tool("read_crm_history", {
+				toolCallId: "call-neutral",
+				input: { contactId: "c1" },
+				output: { rows: 3 },
+			}),
+		],
+		"assistant",
+		"m2",
+	),
+	message(
+		[
+			tool("record_fact", {
+				toolCallId: "call-success",
+				input: { fact: "Acme đổi trụ sở" },
+				output: {
+					applied: true,
+					sourceUrl: "https://www.linkedin.com/in/acme",
+				},
+			}),
+			tool("web_fetch", {
+				toolCallId: "call-warning",
+				state: "output-error",
+				errorText: "hết lượt gọi trong ngày",
+				input: { url: "https://acme.example" },
+			}),
+			tool("web_search", {
+				toolCallId: "call-pending",
+				state: "input-available",
+				input: { query: "acme funding" },
+			}),
+			{
+				type: "dynamic-tool",
+				toolName: "ask_question",
+				state: "approval-requested",
+				toolCallId: "call-asked",
+				toolMetadata: {
+					eve: {
+						inputRequest: {
+							kind: "question",
+							requestId: "req-1",
+							display: "select",
+							prompt: "Ghi vào bản ghi nào?",
+							options: [
+								{ id: "acme", label: "Acme" },
+								{ id: "acme-vn", label: "Acme Việt Nam" },
+							],
+						},
+					},
+				},
+			},
+		],
+		"assistant",
+		"m3",
+	),
+	message(
+		[{ type: "reasoning", state: "done", text: "Đã đủ dữ kiện để trả lời." }],
+		"assistant",
+		"m4",
+	),
+];
+
+const nutJson = z.json();
+
+type NutJson = z.infer<typeof nutJson>;
+
+const mangJson = z.array(nutJson);
+
+const doiTuongJson = z.record(z.string(), nutJson);
+
+const truongCua = (giaTri: NutJson, goc = ""): string[] => {
+	const mang = mangJson.safeParse(giaTri);
+	if (mang.success) {
+		return mang.data.flatMap((phanTu, i) => truongCua(phanTu, `${goc}[${i}]`));
+	}
+
+	const doiTuong = doiTuongJson.safeParse(giaTri);
+	if (!doiTuong.success) return [];
+
+	return Object.entries(doiTuong.data).flatMap(([khoa, con]) => {
+		const duong = goc ? `${goc}.${khoa}` : khoa;
+		return [duong, ...truongCua(con, duong)];
+	});
+};
+
+describe("vật thử của lớp chuyển sinh từ chính toTranscript", () => {
+	const sinhRa = toTranscript(LUOT_EVE as unknown as EveMessage[]);
+
+	if (process.env.GHI_VAT_THU === "1") {
+		writeFileSync(DUONG_VAT_THU, `${JSON.stringify(sinhRa, null, "\t")}\n`);
+	}
+
+	const vatThu = nutJson.parse(JSON.parse(readFileSync(DUONG_VAT_THU, "utf8")));
+	const daGhi = nutJson.parse(JSON.parse(JSON.stringify(sinhRa)));
+
+	it("mang đúng những trường mà toTranscript viết ra, không thừa không thiếu", () => {
+		expect(truongCua(vatThu).sort()).toEqual(truongCua(daGhi).sort());
+	});
+
+	it("mang đúng giá trị mà toTranscript viết ra", () => {
+		expect(vatThu).toEqual(daGhi);
+	});
+
+	it("phủ cả bốn dạng lượt và cả hai trạng thái của reasoned", () => {
+		const items = sinhRa.flatMap((row) => row.items);
+
+		expect([...new Set(items.map((item) => item.kind))].sort()).toEqual([
+			"asked",
+			"did",
+			"reasoned",
+			"said",
+		]);
+		expect(
+			items
+				.filter((item) => item.kind === "reasoned")
+				.map((item) => item.streaming)
+				.sort(),
+		).toEqual([false, true]);
 	});
 });

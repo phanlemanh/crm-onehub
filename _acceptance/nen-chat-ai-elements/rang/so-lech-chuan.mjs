@@ -15,7 +15,8 @@ import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const HERE = dirname(fileURLToPath(import.meta.url));
+const TEP_RANG = fileURLToPath(import.meta.url);
+const HERE = dirname(TEP_RANG);
 const GOC = resolve(HERE, "..", "..", "..");
 const HO_SO = resolve(HERE, "..");
 const THU_MUC = join(GOC, "packages", "ui", "src", "components", "ai-elements");
@@ -36,9 +37,16 @@ const BA_PHAN = [
 	["viSao", NHAN.viSao],
 ];
 
-const CAU_GHI_DE = "ghi đè im lặng";
+const LENH_THEM = ["bunx", "--bun", "ai-elements@latest", "add"];
+const LENH_THEM_CHU = LENH_THEM.join(" ");
+const TIEU_DE_GHI_DE = "## Chạy lại lệnh thêm sẽ ghi đè im lặng";
 const TIEU_DE_BUOC = "## Sau mỗi lần kéo bản mới";
 const SO_BUOC_TOI_THIEU = 4;
+const SO_CHU_TOI_THIEU = 10;
+const LUAT_CHAT = join(GOC, "docs", "chat-ui.md");
+const HINH_CONG = join(GOC, ".githooks", "gate-shape.json");
+const TEP_CLI_SUA = ["packages/ui/package.json", "bun.lock"];
+const THU_MUC_TUONG_DOI = "packages/ui/src/components/ai-elements";
 
 function boCuoc(dong) {
 	console.error("");
@@ -95,8 +103,8 @@ function dungSanTam(ten) {
 	);
 	copyFileSync(COMPONENTS_JSON, join(tam, "components.json"));
 	const chay = spawnSync(
-		"bunx",
-		["--bun", "ai-elements@latest", "add", ...ten.map((t) => t.replace(/\.tsx$/, ""))],
+		LENH_THEM[0],
+		[...LENH_THEM.slice(1), ...ten.map((t) => t.replace(/\.tsx$/, ""))],
 		{ cwd: tam, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
 	);
 	return { tam, chay };
@@ -334,24 +342,148 @@ for (const [ten, muc] of so.muc) {
 	}
 }
 
-if (chiTep.length === 0) {
-	if (!so.chu.includes(CAU_GHI_DE)) {
-		van.push(
-			`SỔ KHUYẾT: không có câu nào nói "${CAU_GHI_DE}" — AC-8 đòi sổ nói thành lời việc chạy lại lệnh thêm sẽ ghi đè bản vá.`,
-		);
+function thanMuc(chu, tieuDe) {
+	const dong = tach(chu);
+	const dau = dong.findIndex((d) => d.trim() === tieuDe);
+	if (dau === -1) return null;
+	const than = [];
+	for (let i = dau + 1; i < dong.length; i += 1) {
+		if (/^##\s+/.test(dong[i])) break;
+		than.push(dong[i]);
 	}
-	const at = so.chu.indexOf(TIEU_DE_BUOC);
-	if (at === -1) {
-		van.push(`SỔ KHUYẾT: không có mục "${TIEU_DE_BUOC}" — AC-8 đòi liệt kê các bước sau mỗi lần kéo bản mới.`);
+	return than;
+}
+
+function docBuoc(than) {
+	const buoc = [];
+	let dangMo = null;
+	for (const d of than) {
+		const dau = /^\s*(\d+)\.\s+(.*)$/.exec(d);
+		if (dau) {
+			dangMo = { so: Number(dau[1]), dong: [dau[2]] };
+			buoc.push(dangMo);
+			continue;
+		}
+		if (dangMo && d.trim() !== "") dangMo.dong.push(d.trim());
+	}
+	return buoc.map((b) => ({ so: b.so, chu: b.dong.join(" ").trim() }));
+}
+
+function demChu(chu) {
+	return chu
+		.replace(/`[^`]*`/g, " ")
+		.replace(/[*_#>-]/g, " ")
+		.split(/\s+/)
+		.filter((t) => /\p{L}/u.test(t)).length;
+}
+
+function vatThat() {
+	const can = [];
+
+	can.push({
+		can: LENH_THEM_CHU,
+		vi_sao: `lệnh thêm mà chính răng này chạy, và ${relative(GOC, LUAT_CHAT)} kê ở Rule 2`,
+	});
+
+	can.push({
+		can: relative(GOC, TEP_RANG),
+		vi_sao: "chính răng đọc sổ này; không nêu thì không ai biết chạy lại cái gì",
+	});
+
+	can.push({
+		can: THU_MUC_TUONG_DOI,
+		vi_sao: "thư mục mang bốn tệp vendored, nơi bản vá phải chép lại vào",
+	});
+
+	for (const t of TEP_CLI_SUA) {
+		can.push({ can: t, vi_sao: "tệp mà lệnh thêm tự sửa, phải hoàn nguyên tay" });
+	}
+
+	for (const c of JSON.parse(doc(HINH_CONG)).checkers) {
+		can.push({
+			can: `bun run ${c.id}`,
+			vi_sao: `lệnh cổng khai ở ${relative(GOC, HINH_CONG)}`,
+		});
+	}
+
+	return can;
+}
+
+if (chiTep.length === 0) {
+	for (const duong of [LUAT_CHAT, HINH_CONG, ...TEP_CLI_SUA.map((t) => join(GOC, t)), join(GOC, THU_MUC_TUONG_DOI)]) {
+		if (!existsSync(duong)) {
+			boCuoc([
+				`KHÔNG ĐO ĐƯỢC: ${relative(GOC, duong)} không còn trong kho.`,
+				"Răng này kiểm sổ bằng quan hệ với vật có thật; vật mất thì phép đo không còn chỗ neo.",
+			]);
+		}
+	}
+
+	if (!doc(LUAT_CHAT).includes(LENH_THEM_CHU)) {
+		boCuoc([
+			`KHÔNG ĐO ĐƯỢC: ${relative(GOC, LUAT_CHAT)} không còn nêu lệnh "${LENH_THEM_CHU}".`,
+			"Lệnh trong sổ phải là lệnh mà luật của kho kê; luật đổi thì sửa cả hai chỗ rồi chạy lại.",
+		]);
+	}
+
+	const thanGhiDe = thanMuc(so.chu, TIEU_DE_GHI_DE);
+	if (thanGhiDe === null) {
+		van.push(
+			`SỔ KHUYẾT: không có mục "${TIEU_DE_GHI_DE}" — AC-8 đòi sổ nói thành lời việc chạy lại lệnh thêm sẽ ghi đè bản vá, và nói ở đúng mục của nó.`,
+		);
 	} else {
-		const sau = so.chu.slice(at + TIEU_DE_BUOC.length);
-		const het = sau.indexOf("\n## ");
-		const than = het === -1 ? sau : sau.slice(0, het);
-		const buoc = than.split("\n").filter((d) => /^\s*\d+\.\s+\S/.test(d)).length;
-		if (buoc < SO_BUOC_TOI_THIEU) {
+		const chuGhiDe = thanGhiDe.join(" ");
+		if (!chuGhiDe.includes(LENH_THEM_CHU)) {
 			van.push(
-				`SỔ KHUYẾT: mục "${TIEU_DE_BUOC}" chỉ có ${buoc} bước đánh số, cần ít nhất ${SO_BUOC_TOI_THIEU}.`,
+				`SỔ KHUYẾT: mục "${TIEU_DE_GHI_DE}" không nêu lệnh thật "${LENH_THEM_CHU}" — răng này chạy đúng lệnh đó và ${relative(GOC, LUAT_CHAT)} kê đúng lệnh đó. Cảnh báo không gọi tên thứ gây hại thì không ai tránh được nó.`,
 			);
+		}
+		const cauCanhBao = chuGhiDe
+			.split(/(?<=[.!?])\s+/)
+			.filter(
+				(c) =>
+					c.includes("ghi đè") &&
+					(c.includes("không hỏi") ||
+						c.includes("không báo") ||
+						c.includes("im lặng")),
+			);
+		if (cauCanhBao.length === 0) {
+			van.push(
+				`SỔ KHUYẾT: mục "${TIEU_DE_GHI_DE}" không có câu nào vừa nói "ghi đè" vừa nói việc đó xảy ra không hỏi, không báo. Tiêu đề một mục không phải là lời cảnh báo.`,
+			);
+		}
+	}
+
+	const thanBuoc = thanMuc(so.chu, TIEU_DE_BUOC);
+	if (thanBuoc === null) {
+		van.push(
+			`SỔ KHUYẾT: không có mục "${TIEU_DE_BUOC}" — AC-8 đòi liệt kê các bước sau mỗi lần kéo bản mới.`,
+		);
+	} else {
+		const buoc = docBuoc(thanBuoc);
+		if (buoc.length < SO_BUOC_TOI_THIEU) {
+			van.push(
+				`SỔ KHUYẾT: mục "${TIEU_DE_BUOC}" chỉ có ${buoc.length} bước đánh số, cần ít nhất ${SO_BUOC_TOI_THIEU}.`,
+			);
+		}
+
+		for (const b of buoc) {
+			const soChu = demChu(b.chu);
+			const coNeo = /`[^`]+`/.test(b.chu);
+			if (soChu < SO_CHU_TOI_THIEU || !coNeo) {
+				van.push(
+					`BƯỚC RỖNG NGHĨA: bước ${b.so} có ${soChu} chữ và ${coNeo ? "" : "không "}nêu vật nào trong dấu nháy ngược — một bước phải nói làm gì (từ ${SO_CHU_TOI_THIEU} chữ) và gọi tên vật phải chạm.`,
+				);
+			}
+		}
+
+		const chuBuoc = buoc.map((b) => b.chu).join("\n");
+		for (const v of vatThat()) {
+			if (!chuBuoc.includes(v.can)) {
+				van.push(
+					`BƯỚC THIẾU VẬT: không bước nào nêu "${v.can}" — ${v.vi_sao}. Bước không gọi tên vật thì không ai làm lại được nó.`,
+				);
+			}
 		}
 	}
 }

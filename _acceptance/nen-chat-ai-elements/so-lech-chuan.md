@@ -32,6 +32,16 @@ Vân tay đổi **không** phải lỗi. Nó là chuông báo rằng phải đ�
 đó, sửa phần "đổi gì" cho đúng, rồi chép con số mới vào. Sửa mỗi con số mà không
 đọc diff là làm hồ sơ lệch.
 
+Vế đọc sổ cũng chịu chiều đỏ, và cũng bằng quan hệ chứ không bằng chuỗi có mặt.
+Câu cảnh báo ghi đè phải nằm trong **đúng mục** `## Chạy lại lệnh thêm sẽ ghi đè
+im lặng`, phải gọi tên đúng lệnh mà răng này chạy và `docs/chat-ui.md` kê ở Rule
+2, và phải có một câu vừa nói "ghi đè" vừa nói việc đó xảy ra không hỏi, không
+báo — một tiêu đề không phải là lời cảnh báo. Các bước ở mục cuối phải nói đủ
+chữ, phải gọi tên vật trong dấu nháy ngược, và giữa chúng phải nêu đủ: lệnh thêm,
+đường của chính răng này, thư mục `packages/ui/src/components/ai-elements`, hai
+tệp mà lệnh thêm tự sửa, và **mọi lệnh cổng khai ở `.githooks/gate-shape.json`**.
+Cổng mọc thêm một lệnh thì sổ đỏ cho tới khi bước 6 nhắc lệnh đó.
+
 ## Hai loại lệch, và tại sao phải tách chúng ra
 
 Mỗi mục dưới đây tách hai thứ hoàn toàn khác nhau:
@@ -264,15 +274,15 @@ Bảy bước, theo thứ tự. Bỏ bước nào cũng là để một bản v�
 1. **Chép bản trong cây ra `_acceptance/<vòng>/evidence/<tên>-truoc.tsx` trước
    khi chạy bất cứ lệnh nào.** Không có bản trước thì không có gì để so, và git
    sẽ chỉ cho bạn thấy kết quả chứ không cho biết cái gì đã mất.
-2. **Chạy lệnh thêm trong sân tạm ngoài kho**, không chạy thẳng trong
-   `packages/ui`. Nếu buộc phải chạy trong cây thì `git status` phải sạch trước
-   đó, để diff sau đó đọc được.
+2. **Chạy `bunx --bun ai-elements@latest add <tên>` trong sân tạm ngoài kho**,
+   không chạy thẳng trong `packages/ui`. Nếu buộc phải chạy trong cây thì
+   `git status` phải sạch trước đó, để diff sau đó đọc được.
 3. **Hoàn nguyên `packages/ui/package.json` và `bun.lock`** nếu lệnh đã chạm vào
    chúng. Đọc kỹ danh sách phụ thuộc mới ở mục trên trước khi giữ lại bất cứ gói
    nào.
-4. **Chép lại tay từng bản vá đã ghi trong mục của tệp đó ở sổ này** — chuỗi về
-   `useMessages()`, bán kính về thang, `content-visibility` cho `conversation`.
-   Đọc mục, không đọc trí nhớ.
+4. **Chép lại tay từng bản vá đã ghi trong mục của tệp đó ở sổ này**, vào đúng
+   `packages/ui/src/components/ai-elements` — chuỗi về `useMessages()`, bán kính
+   về thang, `content-visibility` cho `conversation`. Đọc mục, không đọc trí nhớ.
 5. **Chạy `node _acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs`**, đọc
    số dòng khác và vân tay mới, rồi cập nhật mục của tệp đó: phần "đổi gì" trước,
    hai con số sau. Đổi con số mà không đọc diff là làm hồ sơ lệch.

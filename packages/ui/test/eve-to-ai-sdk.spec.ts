@@ -2,7 +2,11 @@ import { describe, expect, it } from "bun:test";
 import { readFileSync } from "node:fs";
 import type { DidItem } from "@crm/validation/agent-transcript";
 import { parseAgentTranscriptItem } from "@crm/validation/agent-transcript";
-import { toToolPart, toUIMessage } from "../src/lib/eve-to-ai-sdk";
+import {
+	EVE_TO_AI_SDK,
+	toToolPart,
+	toUIMessage,
+} from "../src/lib/eve-to-ai-sdk";
 
 type RawTurn = { kind: string; id: string };
 
@@ -58,6 +62,16 @@ describe("toUIMessage — vai của từng dạng", () => {
 		});
 	});
 
+	it("reasoned đã lắng mang state done, không phải streaming", () => {
+		const message = toUIMessage(itemAt("m4:0"));
+
+		expect(message.role).toBe("assistant");
+		expect(message.parts[0]).toMatchObject({
+			type: "reasoning",
+			state: "done",
+		});
+	});
+
 	it("did mang vai assistant", () => {
 		expect(toUIMessage(didAt("m2:call-neutral")).role).toBe("assistant");
 	});
@@ -106,5 +120,43 @@ describe("dạng asked không đi qua lớp chuyển", () => {
 		expect(() =>
 			toUIMessage(asked as unknown as Parameters<typeof toUIMessage>[0]),
 		).toThrow(/asked/);
+	});
+});
+
+describe("ma trận EVE_TO_AI_SDK — số assert bằng số phần tử", () => {
+	it("mỗi phần tử của bảng đều do một lượt vật thử chạy qua thật", () => {
+		const daQuan = new Set<string>();
+
+		for (const turn of turns) {
+			if (turn.kind === "asked") continue;
+			const item = itemAt(turn.id);
+			const message = toUIMessage(item);
+			const part = message.parts[0] as { type: string; state?: string };
+			daQuan.add(
+				`${item.kind}|${message.role}|${part.type}|${part.state ?? "-"}`,
+			);
+		}
+
+		expect([...daQuan].sort()).toEqual([
+			"did|assistant|dynamic-tool|input-available",
+			"did|assistant|dynamic-tool|output-available",
+			"did|assistant|dynamic-tool|output-error",
+			"reasoned|assistant|reasoning|done",
+			"reasoned|assistant|reasoning|streaming",
+			"said|assistant|text|-",
+			"said|user|text|-",
+		]);
+	});
+
+	it("bảng ghim đúng chuỗi mà AI SDK đọc, không phải chuỗi nào cũng được", () => {
+		expect(EVE_TO_AI_SDK.reasoningState).toEqual({
+			streaming: "streaming",
+			settled: "done",
+		});
+		expect(EVE_TO_AI_SDK.toolState).toEqual({
+			pending: "input-available",
+			failed: "output-error",
+			settled: "output-available",
+		});
 	});
 });
