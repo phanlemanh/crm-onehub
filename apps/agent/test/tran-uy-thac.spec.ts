@@ -316,22 +316,35 @@ describe("cung-batch", () => {
 	});
 });
 
+const HINH_DANG_KHONG_GOI = [
+	{ nhan: "actions rong", actions: [] as readonly HanhDong[] },
+	{
+		nhan: "chi co subagent khac",
+		actions: [
+			{
+				kind: "subagent-call",
+				callId: "call-1",
+				subagentName: "agent_runner",
+			},
+		] as readonly HanhDong[],
+	},
+] as const;
+
+const doiSangBuilder = (
+	actions: readonly HanhDong[],
+	callId: string,
+): readonly HanhDong[] =>
+	actions.map((action) => ({
+		...action,
+		callId,
+		subagentName: "agent_builder",
+	}));
+
 describe("khong-loi-goi", () => {
 	it("khong-loi-goi: su kien khong mang agent_builder thi im lang, ca hai chieu", () => {
-		const hinhDang = [
-			{ nhan: "actions rong", actions: [] as readonly HanhDong[] },
-			{
-				nhan: "chi co subagent khac",
-				actions: [
-					{
-						kind: "subagent-call",
-						callId: "call-1",
-						subagentName: "agent_runner",
-					},
-				] as readonly HanhDong[],
-			},
-		];
-		const o = hinhDang.flatMap((h) => HAI_CHIEU.map((c) => ({ ...h, ...c })));
+		const o = HINH_DANG_KHONG_GOI.flatMap((h) =>
+			HAI_CHIEU.map((c) => ({ ...h, ...c })),
+		);
 		expect(o).toHaveLength(4);
 		for (const { actions, authorized } of o) {
 			trongLuot(() => {
@@ -345,15 +358,38 @@ describe("khong-loi-goi", () => {
 		}
 	});
 
-	it("khong-loi-goi: chieu do — doi subagentName sang agent_builder thi chan", () => {
-		for (const { authorized } of HAI_CHIEU) {
+	it("khong-loi-goi: chieu do — CUNG fixture, doi subagentName sang agent_builder thi chan", () => {
+		const coLoiGoi = HINH_DANG_KHONG_GOI.filter((h) => h.actions.length > 0);
+		expect(coLoiGoi).toHaveLength(1);
+		const o = coLoiGoi.flatMap((h) => HAI_CHIEU.map((c) => ({ ...h, ...c })));
+		expect(o).toHaveLength(2);
+		for (const { actions, authorized } of o) {
 			trongLuot(() => {
 				const ctx = phien({}, authorized);
 				expect(() => {
-					chay(ctx, suKien("turn-1", goiBuilder("call-1")));
-					chay(ctx, suKien("turn-1", goiBuilder("call-2")));
+					chay(ctx, suKien("turn-1", ...doiSangBuilder(actions, "call-a")));
+					chay(ctx, suKien("turn-1", ...doiSangBuilder(actions, "call-b")));
 				}).toThrow("only once");
 			});
+		}
+	});
+
+	it("khong-loi-goi: chieu do — CUNG fixture, doi subagentName lam trang thai het rong", () => {
+		const coLoiGoi = HINH_DANG_KHONG_GOI.filter((h) => h.actions.length > 0);
+		expect(coLoiGoi).toHaveLength(1);
+		for (const { authorized } of HAI_CHIEU) {
+			for (const { actions } of coLoiGoi) {
+				trongLuot(() => {
+					const ctx = phien({}, authorized);
+					chay(ctx, suKien("turn-1", ...actions));
+					expect(builderDelegationState.get().callIds).toEqual([]);
+				});
+				trongLuot(() => {
+					const ctx = phien({}, authorized);
+					chay(ctx, suKien("turn-1", ...doiSangBuilder(actions, "call-1")));
+					expect(builderDelegationState.get().callIds).toEqual(["call-1"]);
+				});
+			}
 		}
 	});
 });
