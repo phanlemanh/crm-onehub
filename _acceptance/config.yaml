@@ -30,6 +30,7 @@ executors:
     go_khoa_api: 'bun run test -- "cd apps/api && bun test test/saved-views-in-use.spec.ts test/campaigns.spec.ts"'
     go_khoa_app: 'bun run test -- "cd apps/app && bun test test/saved-views-in-use.spec.ts test/messages-guard.spec.ts"'
     api_khong_cache_tron_bo: "bun run db:test && bunx turbo run test --concurrency=1 --force"
+    nc_lop_chuyen: cd packages/ui && bun test test/eve-to-ai-sdk.spec.ts
   script:
     cua_vao_loi_mang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"
     cua_vao_chon_tieng_may_chu: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chon-tieng-may-chu"
@@ -254,6 +255,14 @@ executors:
     bo_cao_test: cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v
     bo_cao_cli: cd tools/listing-crawl && ./.venv/bin/python -m unittest tests.test_cli -v
     bo_cao_duong_chay: cd tools/listing-crawl && ./.venv/bin/python -m unittest tests.test_duong_chay -v
+    nc_mo_coi: node _acceptance/nen-chat-ai-elements/rang/mo-coi.mjs
+    nc_chu_trong_component: node _acceptance/nen-chat-ai-elements/rang/chu-cung.mjs
+    nc_mau_ban_kinh: node _acceptance/nen-chat-ai-elements/rang/mau-ban-kinh.mjs
+    nc_so_do_cuon: node _acceptance/nen-chat-ai-elements/rang/so-do-cuon.mjs
+    nc_so_lech_chuan: node _acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs
+    nc_conversation_tuoi: node _acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs --tep conversation.tsx
+    nc_pham_vi_diff: node _acceptance/nen-chat-ai-elements/rang/pham-vi-diff.mjs
+    nc_rang_qua_cong: bun run test
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT}/scripts/design-gate.mjs"
     ui_check: "${CLAUDE_PLUGIN_ROOT}/scripts/design-scan.js"
