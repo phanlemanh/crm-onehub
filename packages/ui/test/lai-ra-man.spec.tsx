@@ -113,6 +113,7 @@ const CA_RIENG = {
 		{ options: [], value: "", onValueChange: () => {} },
 	],
 	"packages/ui/src/components/toggle-group.tsx": [{ type: "single" }],
+	"packages/ui/src/components/ai-elements/conversation.tsx": [{ messages: [] }],
 	"packages/ui/src/components/dashboard-chart.tsx": [
 		{ config: { a: { label: "MUC" } }, series: [{ a: 1 }] },
 	],

@@ -5,6 +5,7 @@ import {
   ButtonGroup,
   ButtonGroupText,
 } from "@crm/ui/components/button-group";
+import { useMessages } from "@crm/ui/components/locale-provider";
 import {
   Tooltip,
   TooltipContent,
@@ -243,10 +244,11 @@ export const MessageBranchPrevious = ({
   ...props
 }: MessageBranchPreviousProps) => {
   const { goToPrevious, totalBranches } = useMessageBranch();
+  const msg = useMessages();
 
   return (
     <Button
-      aria-label="Previous branch"
+      aria-label={msg.chatMessage.previousBranch}
       disabled={totalBranches <= 1}
       onClick={goToPrevious}
       size="icon-sm"
@@ -267,10 +269,11 @@ export const MessageBranchNext = ({
   ...props
 }: MessageBranchNextProps) => {
   const { goToNext, totalBranches } = useMessageBranch();
+  const msg = useMessages();
 
   return (
     <Button
-      aria-label="Next branch"
+      aria-label={msg.chatMessage.nextBranch}
       disabled={totalBranches <= 1}
       onClick={goToNext}
       size="icon-sm"
@@ -290,6 +293,7 @@ export const MessageBranchPage = ({
   ...props
 }: MessageBranchPageProps) => {
   const { currentBranch, totalBranches } = useMessageBranch();
+  const msg = useMessages();
 
   return (
     <ButtonGroupText
@@ -299,7 +303,10 @@ export const MessageBranchPage = ({
       )}
       {...props}
     >
-      {currentBranch + 1} of {totalBranches}
+      {msg.chatMessage.branchPage(
+        String(currentBranch + 1),
+        String(totalBranches)
+      )}
     </ButtonGroupText>
   );
 };
@@ -333,6 +340,7 @@ export function MessageAttachment({
   onRemove,
   ...props
 }: MessageAttachmentProps) {
+  const msg = useMessages();
   const filename = data.filename || "";
   const mediaType =
     data.mediaType?.startsWith("image/") && data.url ? "image" : "file";
@@ -350,7 +358,7 @@ export function MessageAttachment({
       {isImage ? (
         <>
           <img
-            alt={filename || "attachment"}
+            alt={filename || msg.chatMessage.attachment}
             className="size-full object-cover"
             height={100}
             src={data.url}
@@ -358,8 +366,8 @@ export function MessageAttachment({
           />
           {onRemove && (
             <Button
-              aria-label="Remove attachment"
-              className="absolute top-2 right-2 size-6 rounded-full bg-background/80 p-0 opacity-0 backdrop-blur-sm transition-opacity hover:bg-background group-hover:opacity-100 [&>svg]:size-3"
+              aria-label={msg.chatMessage.removeAttachment}
+              className="absolute top-2 right-2 size-6 rounded-sm bg-background/80 p-0 opacity-0 backdrop-blur-sm transition-opacity hover:bg-background group-hover:opacity-100 [&>svg]:size-3"
               onClick={(e) => {
                 e.stopPropagation();
                 onRemove();
@@ -368,7 +376,7 @@ export function MessageAttachment({
               variant="ghost"
             >
               <XIcon />
-              <span className="sr-only">Remove</span>
+              <span className="sr-only">{msg.chatMessage.remove}</span>
             </Button>
           )}
         </>
@@ -386,8 +394,8 @@ export function MessageAttachment({
           </Tooltip>
           {onRemove && (
             <Button
-              aria-label="Remove attachment"
-              className="size-6 shrink-0 rounded-full p-0 opacity-0 transition-opacity hover:bg-accent group-hover:opacity-100 [&>svg]:size-3"
+              aria-label={msg.chatMessage.removeAttachment}
+              className="size-6 shrink-0 rounded-sm p-0 opacity-0 transition-opacity hover:bg-accent group-hover:opacity-100 [&>svg]:size-3"
               onClick={(e) => {
                 e.stopPropagation();
                 onRemove();
@@ -396,7 +404,7 @@ export function MessageAttachment({
               variant="ghost"
             >
               <XIcon />
-              <span className="sr-only">Remove</span>
+              <span className="sr-only">{msg.chatMessage.remove}</span>
             </Button>
           )}
         </>
