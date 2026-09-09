@@ -15,16 +15,17 @@ evals:
       Ca ma ban tai 41ba0a7 BO LOT. Luot KHONG co quyen goi agent_builder lan thu
       HAI trong cung mot turnId, hai callId khac nhau -> PHAI nem, thong diep chua
       "only once".
-      San khuon, quan trong hon ket qua: bai do PHAI chay CHINH hook — lay handler
-      qua hook.events["actions.requested"] cua
-      apps/agent/agent/hooks/builder-delegation.ts va goi no. Bai do goi ham thuan
-      recordBuilderDelegation thay cho hook -> ma 2, IN ro ten ham da goi. Lo nam o
-      dieu kien BEN TRONG hook; do ham ben duoi khong cham toi no, va do la dung
-      lop loi ma vong cham truoc da nhat len o quyen-luot.spec.ts.
-      San khuon 2: ngu canh eve phai la ContextContainer THAT cua eve, nap bang
-      duong tuyet doi suy tu require.resolve("eve/package.json"). Duong viet cung,
-      hoac mot thung tu che trong bai do -> ma 2. Khong resolve duoc thi bai do NEM
-      co ten ("bo cuc eve da doi"), TUYET DOI khong skip — skip la xanh gia.
+      KHUON DO DA DOI sau vong 2, nguoi ky chon tai diem dung cua dieu khoan dung-va.
+      San khuon: DIEU KIEN GAC cua hook phai do bang CHINH hook — lay handler qua
+      hook.events["actions.requested"] va goi no voi ctx dung tu duong ghi that.
+      Phan biet hai ket cuc bang hanh vi eve CO TAI LIEU (guides/state.md: get/update
+      goi ngoai ngu canh thi NEM): gac chan -> handler return im; gac cho qua -> cham
+      builderDelegationState.get() -> nem "No active eve context".
+      CAM dung ngu canh eve bang cach nap dist/ hay doc Symbol.for("eve.context-storage")
+      — ngoai exports map la ma 2. Phan LOGIC cua tran do tren ham thuan
+      recordBuilderDelegation, dung loi chan-uy-thac.spec.ts cua kho.
+      Kieu fixture phai suy tu HookEvent<"actions.requested"> — type CONG KHAI cua
+      eve/hooks — chu KHONG tu kieu tu viet tay trong lib/builder-delegation.ts.
       CAM tu bia ban ghi quyen: fixture di tu buildPendingInputRequest (ben ghi
       that) -> commandTypeFromAuthorization -> builderSessionAttributes. Object
       literal viet tay dung khuon ben doc -> ma 2.
@@ -45,7 +46,8 @@ evals:
       nem.
       CHIEU DO chay that: cung fixture, goi DUNG MOT lan -> KHONG duoc nem. Thieu ve
       nay thi "luon nem" khong phan biet duoc voi "chan dung luc".
-      Chay qua hook that, khong qua ham thuan. Ngu canh eve nhu E1.
+      Bai do phai co ca ve GAC (goi handler that, xem no cham trang thai khong)
+      lan ve LOGIC (ham thuan). San khuon nhu E1.
 
   - id: E3
     criterion: AC-3
@@ -74,9 +76,9 @@ evals:
       - "apps/agent/agent/lib/builder-delegation.ts"
       - "apps/agent/test/tran-uy-thac.spec.ts"
     expected: |
-      Idempotent. Hook nhan lai DUNG callId da ghi trong cung turnId -> khong nem,
-      trang thai khong doi. Do o CA HAI chieu quyen: so assert bang 2, khong phai
-      mot chieu roi suy ra chieu kia.
+      Idempotent. Nhan lai DUNG callId da ghi trong cung turnId -> khong nem, trang
+      thai khong doi. Chieu quyen KHONG phai tham so cua ham thuan, nen ve "ca hai
+      chieu" do o GAC (E6) chu khong nhan doi o logic.
       CHIEU DO chay that: doi dung callId sang gia tri khac tren cung fixture ->
       phai nem, ca hai chieu.
 
@@ -91,9 +93,8 @@ evals:
     expected: |
       Tran mo lai theo luot. Da co mot loi goi o turnId cu; loi goi moi o turnId
       KHAC -> khong nem, va trang thai mang turnId moi cung dung callId moi.
-      Do o CA HAI chieu quyen: so assert bang 2.
-      Assert phai doc trang thai, khong chi "khong nem" — mot hook return som cung
-      cho "khong nem".
+      Ve "ca hai chieu" do o GAC (E6).
+      Assert phai doc trang thai, khong chi "khong nem".
       CHIEU DO chay that: giu nguyen turnId cu tren cung fixture -> phai nem.
 
   - id: E6
@@ -107,10 +108,12 @@ evals:
     expected: |
       MA TRAN TOAN PHAN, viet truoc, so assert BANG so o: purpose in
       {builder, team-agent, research} x commandType in {CREATE_AGENT, CHAT} = 6 o.
-      Moi o chay hook hai lan, hai callId khac nhau, cung turnId.
-      DUNG HAI o purpose=builder nem; BON o con lai khong nem.
-      Hai o nem chinh la doi chung duong cua bon o im — khong duoc bo, vi mot ma
-      tran toan "khong nem" khong phan biet duoc voi mot hook chet han.
+      Moi o goi handler cua hook mot lan.
+      DUNG HAI o purpose=builder cho gac qua (cham trang thai -> nem "No active eve
+      context"); BON o con lai bi gac chan (return im).
+      Hai o cho qua chinh la doi chung duong cua bon o chan — khong duoc bo, vi mot
+      ma tran toan "bi chan" khong phan biet duoc voi mot hook chet han.
+      DAY la noi ve "ca hai chieu quyen" cua E4, E5, E7, E9 duoc do.
       Bai do khai so o bang mot bieu thuc sinh tu tich Descartes cua hai truc, roi
       assert do dai bang 6 — dem-roi-vut (sinh ma tran nhung chi assert mot vai o)
       -> ma 1.
@@ -135,9 +138,9 @@ evals:
       Hinh dang that bi bo quen: MOT su kien actions.requested mang HAI
       subagent-call toi agent_builder voi hai callId khac nhau. No khong di qua
       nhanh "lan chay thu hai cua handler", nen phai do rieng.
-      -> nem. Do o CA HAI chieu quyen: so assert bang 2.
+      -> nem. Ve "ca hai chieu" do o GAC (E6).
       CHIEU DO chay that: cung su kien ay nhung loi goi thu hai toi mot subagent
-      KHAC (khong phai agent_builder) -> khong nem.
+      KHAC -> khong nem, VA trang thai chi ghi callId cua loi goi builder.
 
   - id: E8
     criterion: AC-8
@@ -148,14 +151,16 @@ evals:
       - "apps/agent/agent/lib/builder-delegation.ts"
       - "apps/agent/test/tran-uy-thac.spec.ts"
     expected: |
-      Cau nem lay tu LAN NEM THAT cua hook, khong doc hang trong ma nguon.
+      Cau nem lay tu LAN NEM THAT cua recordBuilderDelegation, KHONG doc hang trong
+      ma nguon va KHONG so voi mot chuoi chep tay o cho khac.
       Thong diep phai BANG DUNG:
       "The agent builder can be delegated only once per turn."
       va phai KHONG chua chu "creation" — luot khong co quyen khong phai creation
       turn, ma cau nay di nguyen van ra turn.failed (crm.ts doc
       eveTurnFailure.parse(data).message) nen no la cau nguoi dung co the thay.
-      Do cau tu CA HAI chieu quyen va doi hai cau BANG NHAU — bang nhau la loi hua,
-      khong phai "deu chua only once".
+      Ve "den duoc ca hai chieu quyen" do bang GAC (E6): gac cho qua ca hai chieu
+      nen cau ay den duoc ca hai. Doi cau BANG DUNG hang, khong phai "co chua only
+      once".
       CHIEU DO chay that: assert phai do neu chu "creation" con trong cau.
       PHAM VI DA DO, khong duoc noi qua: eval nay dung o dau ra cua hook. Cau nem
       co di tiep toi turn.failed, nhung latestTurnFailure o apps/app chi phan loai
@@ -179,8 +184,14 @@ evals:
       Phien builder, CA HAI chieu quyen, hook nhan actions.requested KHONG mang loi
       goi agent_builder nao — mot su kien actions RONG, va mot su kien chi co
       subagent-call toi subagent KHAC — chay hai lan cung turnId.
-      -> khong nem, VA trang thai doc ra khong mang callId nao. Phai assert trang
-      thai; "khong nem" mot minh khong phan biet duoc voi mot hook chet.
-      So assert bang 4 — hai hinh dang su kien nhan hai chieu quyen.
-      CHIEU DO chay that: tren cung fixture, doi subagentName sang agent_builder cho
-      ca hai lan -> phai nem.
+      -> khong nem, VA trang thai doc ra khong mang callId nao.
+      Ve "ca hai chieu" do o GAC (E6).
+      CHIEU DO chay that: tren CUNG fixture, doi dung truong subagentName sang
+      agent_builder -> callIds phai LAT tu [] sang ["call-1"]. Ve lat nay BAT BUOC
+      vi [] dung bang gia tri mac dinh cua trang thai, nen assert [] mot minh khong
+      phan biet duoc "bo qua dung" voi "ham chet".
+      GIOI HAN DA BIET, khai ro chu khong giau: ve loc action.kind KHONG do duoc.
+      Duoi kieu that cua eve, actions la discriminated union — bien the khong phai
+      subagent-call KHONG co truong subagentName, nen mot object vua khac kind vua
+      mang subagentName agent_builder khong ton tai. Ve kind la thua so voi ve ten
+      subagent.

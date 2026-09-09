@@ -120,9 +120,16 @@ Chiều đỏ: dựng cùng fixture ấy, đổi đúng một trường sang **�
 phải ném. Hai chiều cùng ném là điều đúng ở đây; chiều phân biệt thật nằm ở
 tiêu chí AC-3 (lời gọi thứ nhất lọt) và ở mốc ghim "chốt cứng trên lượt `CHAT` = 0" tại
 `41ba0a7`.
-Sàn khuôn: bài đo gọi hàm thuần `recordBuilderDelegation` thay vì chạy hook →
-**mã 2**. Lỗ nằm ở điều kiện *trong* hook, nên đo hàm bên dưới không chạm tới
-nó.
+Sàn khuôn: điều kiện gác của hook phải đo bằng **chính hook** —
+`hook.events["actions.requested"]` gọi với `ctx` dựng từ đường ghi thật. Phân
+biệt hai kết cục bằng hành vi eve **có tài liệu** (`guides/state.md`:
+*"`get()` and `update()` require an active eve context … Calling them outside …
+throws"*): gác chặn → handler return im; gác cho qua → chạm
+`builderDelegationState.get()` → ném `No active eve context`.
+**Cấm** dựng ngữ cảnh eve bằng cách nạp `dist/` hay đọc
+`Symbol.for("eve.context-storage")` — ngoài `exports` map là **mã 2**. Phần
+*logic* của trần đo trên hàm thuần `recordBuilderDelegation`, đúng lối
+`chan-uy-thac.spec.ts` của kho.
 
 - **AC-2 — Lượt CÓ quyền vẫn bị chặn như cũ, không hồi quy.**
 Given cùng bộ dựng của AC-1 với bản ghi **được phép**,
@@ -142,22 +149,24 @@ Chiều đỏ: thêm một lời gọi thứ hai khác `callId` trên cùng fixt
 Given phiên builder, ở **cả hai** chiều quyền,
 When hook nhận lại đúng `callId` đã ghi trong cùng `turnId`,
 Then không ném, và trạng thái không đổi.
-Số assert bằng 2 — một cho mỗi chiều quyền.
+Chiều quyền không phải tham số của hàm thuần, nên vế "cả hai chiều" đo ở **gác**
+(AC-6) chứ không nhân đôi ở logic: gác cho qua cả hai chiều thì logic áp cho cả
+hai theo cấu tạo.
 Chiều đỏ: đổi đúng `callId` sang giá trị khác trên cùng fixture → phải ném.
 
 - **AC-5 — `turnId` mới thì trần mở lại.**
 Given phiên builder, ở **cả hai** chiều quyền, đã có một lời gọi ở `turnId` cũ,
 When hook nhận một lời gọi mới ở `turnId` **khác**,
 Then không ném, và trạng thái mang `turnId` mới cùng đúng `callId` mới.
-Số assert bằng 2 — một cho mỗi chiều quyền.
+Vế "cả hai chiều" đo ở gác (AC-6), như AC-4.
 Chiều đỏ: giữ nguyên `turnId` cũ trên cùng fixture → phải ném.
 
 - **AC-6 — Hook không đụng phiên ngoài kênh builder.**
 Given ma trận **toàn phần** `purpose × commandType`: `purpose` ∈ {`builder`,
 `team-agent`, `research`} × `commandType` ∈ {`CREATE_AGENT`, `CHAT`},
-When hook chạy hai lần với hai `callId` khác nhau trong cùng `turnId` cho từng
-ô,
-Then đúng **hai** ô `purpose = builder` ném; **bốn** ô còn lại không ném.
+When handler của hook chạy cho từng ô,
+Then đúng **hai** ô `purpose = builder` cho gác qua (chạm trạng thái → ném
+`No active eve context`); **bốn** ô còn lại bị gác chặn (return im).
 Số assert bằng 6 — số ô của ma trận.
 Chiều đỏ đã nằm trong chính ma trận: hai ô ném là đối chứng dương của bốn ô im.
 Sàn khuôn: **cả sáu** ô phải dựng từ **một** bộ dựng — đầu ra thật của
@@ -176,9 +185,9 @@ When một sự kiện `actions.requested` mang **hai** `subagent-call` tới
 Then ném.
 Đây là hình dạng thật: một step của mô hình phát nhiều lời gọi cùng lúc, và nó
 không đi qua nhánh "lượt chạy thứ hai của handler".
-Số assert bằng 2 — một cho mỗi chiều quyền.
+Vế "cả hai chiều" đo ở gác (AC-6), như AC-4.
 Chiều đỏ: cùng sự kiện ấy nhưng lời gọi thứ hai tới **subagent khác** →
-không ném.
+không ném, và trạng thái chỉ ghi `callId` của lời gọi builder.
 
 - **AC-8 — Một câu thông điệp, đúng cho cả hai chiều.**
 Given câu ném của trần,
@@ -206,11 +215,28 @@ When hook nhận `actions.requested` không mang lời gọi `agent_builder` nà
 sự kiện `actions` **rỗng**, và một sự kiện chỉ có `subagent-call` tới subagent
 **khác** — chạy hai lần trong cùng `turnId`,
 Then không ném, và trạng thái đọc ra không mang `callId` nào.
-Số assert bằng 4 — hai hình dạng sự kiện × hai chiều quyền.
-Chiều đỏ: trên cùng fixture, đổi `subagentName` của lời gọi sang
-`agent_builder` cho cả hai lần → phải ném.
+Vế "cả hai chiều" đo ở gác (AC-6), như AC-4.
+Chiều đỏ: trên **cùng** fixture, đổi đúng trường `subagentName` sang
+`agent_builder` → `callIds` phải **lật** từ `[]` sang `["call-1"]`. Vế lật này
+bắt buộc vì `[]` đúng bằng giá trị mặc định của trạng thái, nên assert `[]` một
+mình không phân biệt được "bỏ qua đúng" với "hàm chết".
 Đây là ô "0 lần" của trục B. Bán kính vòng này rộng ra đúng ở đây: trước vòng,
 mọi hội thoại của kênh builder không chạm hook lần nào.
+
+## Sửa sau Cổng 1 — khuôn đo
+
+Ngày 2026-09-09, sau vòng chấm 2, người ký chọn đường **đổi khuôn đo** tại điểm
+dừng của điều khoản dừng-vá. Lời hứa hành vi của cả chín tiêu chí **không đổi**;
+thứ đổi là **cách đo**:
+
+- Điều kiện gác của hook đo bằng hành vi eve có tài liệu, thay vì nạp
+  `ContextContainer` từ `dist/` và đọc `Symbol.for("eve.context-storage")`.
+- Phần logic của trần đo trên hàm thuần, đúng lối `chan-uy-thac.spec.ts`.
+- Kiểu của fixture suy từ `HookEvent<"actions.requested">` — type **công khai**
+  của `eve/hooks` — thay vì từ kiểu tự viết tay trong `lib/builder-delegation.ts`.
+- Vế "cả hai chiều quyền" gom về AC-6 (gác), thôi nhân đôi ở phần logic.
+
+Xem entry `supersedes` trong `decisions.jsonl`.
 
 ## Đường đo
 
