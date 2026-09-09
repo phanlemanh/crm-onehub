@@ -5,10 +5,11 @@ import {
 	mkdirSync,
 	readFileSync,
 	readdirSync,
+	readlinkSync,
 	rmSync,
 	symlinkSync,
 } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const RANG = dirname(fileURLToPath(import.meta.url));
@@ -64,6 +65,47 @@ function cacNodeModules() {
 	return ra;
 }
 
+function cacSinhRa() {
+	const ra = [];
+	for (const nhom of ["apps", "packages"]) {
+		const goc = join(GOC, nhom);
+		if (!existsSync(goc)) continue;
+		for (const muc of readdirSync(goc, { withFileTypes: true })) {
+			if (!muc.isDirectory()) continue;
+			const duong = `${nhom}/${muc.name}/src/generated`;
+			if (existsSync(join(GOC, duong))) ra.push(duong);
+		}
+	}
+	return ra;
+}
+
+function noiNodeModules(sao, duong) {
+	const nguon = join(GOC, duong);
+	const dich = join(sao, duong);
+	if (existsSync(dich)) return;
+	const scope = join(nguon, "@crm");
+	if (!existsSync(scope)) {
+		mkdirSync(dirname(dich), { recursive: true });
+		symlinkSync(nguon, dich);
+		return;
+	}
+	mkdirSync(dich, { recursive: true });
+	for (const ten of readdirSync(nguon)) {
+		if (ten === "@crm") continue;
+		symlinkSync(join(nguon, ten), join(dich, ten));
+	}
+	const dichScope = join(dich, "@crm");
+	mkdirSync(dichScope, { recursive: true });
+	for (const goi of readdirSync(scope)) {
+		const dinh = resolve(scope, readlinkSync(join(scope, goi)));
+		if (!dinh.startsWith(`${GOC}/`)) {
+			symlinkSync(dinh, join(dichScope, goi));
+			continue;
+		}
+		symlinkSync(join(sao, relative(GOC, dinh)), join(dichScope, goi));
+	}
+}
+
 export function dungCaySao() {
 	const sha = trangThaiDangXet();
 	const sao = join(
@@ -82,7 +124,9 @@ export function dungCaySao() {
 		cpSync(join(GOC, duong), dich, { recursive: true });
 	}
 
-	for (const ten of [...cacNodeModules(), ".env"]) {
+	for (const duong of cacNodeModules()) noiNodeModules(sao, duong);
+
+	for (const ten of [...cacSinhRa(), ".env"]) {
 		const nguon = join(GOC, ten);
 		if (!existsSync(nguon) || existsSync(join(sao, ten))) continue;
 		mkdirSync(dirname(join(sao, ten)), { recursive: true });
