@@ -18,9 +18,6 @@ import { recordBuilderActions } from "../agent/subagents/agent_builder/lib/execu
 const GHIM =
 	"This turn is not authorized to create or revise an agent. Stop now and return final_output with status not_authorized and this sentence as the reason. Do not write files, do not save a draft.";
 
-const boDongImport = (src: string) =>
-	src.replace(/^import[\s\S]*?from\s+"[^"]+";$/gm, "");
-
 const phienThat = (over: Record<string, string> = {}) => ({
 	session: {
 		auth: {
@@ -152,19 +149,18 @@ describe("moi-tool", () => {
 		}
 	});
 
-	it("moi-tool: luot duoc phep KHONG bi lop trong chan", async () => {
+	it("moi-tool: ly do tu choi cua moi tool la mot chuoi duy nhat", async () => {
+		expect(TOOLS_GHIM).toHaveLength(3);
 		for (const name of TOOLS_GHIM) {
 			const mod = await import(
 				`../agent/subagents/agent_builder/tools/${name}`
 			);
-			await expect(mod.default.execute({}, phienThat())).rejects.not.toThrow(
-				"Agent creation requires an explicit request to create or build an agent.",
-			);
-		}
-	});
-
-	it("moi-tool: khong tool nao viet lai hang ly do tai cho", () => {
-		for (const name of TOOLS_GHIM) {
+			expect(
+				mod.default.approval({
+					...phienThat({ commandType: "CHAT" }),
+					toolName: name,
+				}),
+			).toEqual({ type: "denied", reason: GHIM });
 			expect(readFileSync(join(TOOL_DIR, `${name}.ts`), "utf8")).not.toContain(
 				BUILDER_DENIED_REASON,
 			);

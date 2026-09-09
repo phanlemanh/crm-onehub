@@ -59,8 +59,13 @@ evals:
       inspect_context, write_agent_file, save_agent_draft. So assert bang dung 3,
       khong duoc chay vong lap roi vut so dem.
       Moi tool phai thoa CA HAI VE:
-        (a) khai policy dung chung;
-        (b) VAN giu requireBuilderAttribute (lop trong).
+        (a) khai policy dung chung (so DONG NHAT voi builderTurnApproval da import);
+        (b) VAN giu requireBuilderAttribute (lop trong), do bang CHIEU AM: goi
+            execute tren luot CHAT phai NEM dung thong diep ghim.
+      GIOI HAN DA BIET (chot vong 6): chieu duong o tang execute KHONG do duoc —
+      xem muc Notes cua contract. Bai do cu dung `rejects.not.toThrow` da xoa han
+      chu khong va: `.rejects` bat buoc promise phai reject nen bai ay khang dinh
+      moi tool deu NEM tren luot duoc phep, va no xanh vi ly do ngoai loi hua.
       SAN DAN SO (da cai lai o vong 6): dan so cua lop la MOI file .ts trong TOOL_DIR
       ma import that ra KHONG phai eve:disabled-tool. Dan so ay KHONG duoc loc theo
       chinh thuoc tinh dang assert — bo loc cu giu lai dung nhung file da co
@@ -179,8 +184,14 @@ evals:
       - "apps/agent/agent/subagents/agent_builder/tools/save_agent_draft.ts"
       - "apps/agent/test/chan-uy-thac.spec.ts"
     expected: |
-      Chuoi ly do den tu MOT hang duoc export, dung chung. Do QUAN HE chu khong do
-      chuoi-co-mat: khong file tool nao chua chuoi ly do viet thang tai cho — moi tool
-      phai IMPORT hang ay.
-      Chieu do: viet lai chuoi ay tai cho o mot tool trong ban sao -> ma 1, neu
-      file:dong.
+      Chuoi ly do den tu MOT hang duoc export, dung chung. Do QUAN HE bang HANH VI,
+      khong do chuoi-co-mat, VA do CA HAI VE tren tung tool ghim:
+        (a) DUONG: goi CHINH policy cua tool do tren mot ctx khong quyen, ket qua phai
+            BANG { type: "denied", reason: <literal ghim viet trong bai do> } — so
+            nguyen van, khong so voi hang da import (so hang voi chinh no la hang-dung);
+        (b) AM: file tool khong chua chuoi ly do viet thang tai cho.
+      Ve (a) la ve quan trong: mot file tool rong tuech, khong policy, khong import gi,
+      van qua duoc neu chi co ve (b).
+      Chieu do 1: mot tool tra ly do KHAC (vd "Nope.") -> (a) do, VA phai IN ra chuoi
+      thuc nhan duoc.
+      Chieu do 2: viet lai nguyen van chuoi ay tai cho o mot tool -> (b) do.

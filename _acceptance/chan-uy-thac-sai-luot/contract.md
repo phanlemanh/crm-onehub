@@ -175,6 +175,17 @@ mới đi cặp hai chiều trên cùng fixture.
 ném là chốt cuối nếu có đường nào lọt qua cửa. AC-3 đo **cả hai vế** đúng vì lý do
 đó — gỡ lớp trong "cho gọn" là một cửa hở im lặng.
 
+**Giới hạn đã biết — chiều dương ở tầng `execute` không đo được (chốt vòng 6).**
+AC-3 đo lớp trong bằng chiều âm: lượt `CHAT` gọi `execute` phải ném đúng thông
+điệp ghim. Chiều dương — lượt được phép đi qua được lớp trong — **không có phép
+đo nào**, và sẽ không có chừng nào chưa dựng harness chạy một lượt eve thật.
+Vòng 6 từng có một bài tự nhận đo chiều ấy bằng `rejects.not.toThrow`; nó dối:
+`.rejects` bắt buộc promise phải reject, nên bài đo đang khẳng định cả ba tool
+đều ném trên lượt được phép, và nó xanh vì `inspect_context` đập vào cơ sở dữ
+liệu còn hai tool kia ném do chạy ngoài eve session. Gỡ policy khỏi một tool vẫn
+không làm nó đỏ. Bài ấy đã xoá thay vì vá — một phép đo dối tệ hơn không có phép
+đo, vì nó chiếm chỗ.
+
 **Đã rút khỏi phạm vi sau vòng chấm 1 — AC-8 và AC-9.** Bản chốt phạm vi có hai
 tiêu chí về "hội thoại không bao giờ kẹt". Lưới an toàn cài cho chúng
 (`recoverStalledBuilderTurns`) bị phản biện vòng 1 bắt một lỗi mức cao: `ACCEPTED`
