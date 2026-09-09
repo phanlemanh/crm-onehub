@@ -57,7 +57,7 @@ evals:
   - id: E6
     criterion: AC-6
     executor: test
-    cmd: config:executors.test.api_khong_cache
+    cmd: config:executors.test.api_khong_cache_tron_bo
     paths:
       - "packages/**"
       - "apps/**"

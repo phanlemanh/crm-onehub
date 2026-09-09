@@ -21,8 +21,8 @@ export function docSuiteKeys(nguon) {
 
 export function docLenh(nguon, khoa) {
 	const ten = khoa.split(".").pop();
-	const m = nguon.match(new RegExp(`^\\s+${ten}: "(.+)"$`, "m"));
-	return m === null ? null : m[1];
+	const m = nguon.match(new RegExp(`^\\s+${ten}: (?:"(.+)"|'(.+)')$`, "m"));
+	return m === null ? null : (m[1] ?? m[2]);
 }
 
 export function giaiLenh(lenh, script) {
