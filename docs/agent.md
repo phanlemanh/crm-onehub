@@ -349,9 +349,14 @@ delegation paths for custom agents.
   which fields each status requires. It is one object rather than a
   `discriminatedUnion` on purpose — eve hands `outputSchema` to the model unchanged as
   `final_output`'s input schema (`toInputSchema` does not wrap it), and a union lowers
-  to a root `oneOf` with no `type: "object"`, which a provider may reject outright.
-  Every other subagent's schema already serializes to a root object; keep this one
-  that way too.
+  to a root `oneOf` with no `type: "object"`. **Measured on 2026-09-09: the gateway
+  accepts both shapes.** Two real calls to `zai/glm-5.2-fast` through the AI Gateway,
+  one with the bare `oneOf` and one with the root object, both returned HTTP 200 and
+  both called `final_output` correctly. So the object form is not fixing a live bug:
+  it is here because every other subagent already serializes to a root object, and
+  because a provider that requires `input_schema.type === "object"` would reject the
+  union outright — the model in use today does not. Keep the root an object; that is
+  what the shape floor in `apps/agent/test/chan-uy-thac.spec.ts` asserts.
 - **Empty never means all.** A version chooses `SELECTED` or `WORKSPACE` record scope.
   Selected scope requires at least one record tagged in that private conversation;
   workspace scope is an explicit grant and cannot also list selected records.
