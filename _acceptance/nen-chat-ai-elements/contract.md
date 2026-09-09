@@ -34,9 +34,15 @@ trong file bị xoá. Còn lại trong ba file sống sót:
 
 | | `message` | `reasoning` | `shimmer` | `conversation` | tổng |
 | --- | --- | --- | --- | --- | --- |
-| chuỗi tiếng Anh cứng | 6, trong đó 4 ở `aria-label` | 2 | 0 | 0 | **8** |
-| bán kính ngoài thang | 2 × `rounded-full` | 0 | 0 | 1 × `rounded-full` | **3** |
+| chuỗi tiếng Anh cứng | 8 | 4 | 0 | 2 | **14** |
+| bán kính ngoài thang | 2 × `rounded-full` | 0 | 0 | 2 × `rounded-full` | **4** |
 | màu ngoài bảng | 0 | 0 | 0 | 0 | **0** |
+
+Mười bốn chuỗi rơi vào **ba lớp**, và lớp thứ ba là lớp kho đã trả giá để học ở
+`_acceptance/chan-lai-component-ra-man`: 7 chuỗi là chữ giữa thẻ · 5 chuỗi nằm
+trong thuộc tính (`aria-label`, `alt`) · **2 chuỗi là giá trị mặc định của tham
+số** (`conversation.tsx:45-46`). Một phép quét chỉ đọc chữ giữa thẻ bỏ đúng một
+nửa; thêm thuộc tính vẫn còn bỏ hai chuỗi cuối.
 
 Bốn tập tin sống là `message`, `reasoning`, `shimmer` (do `reasoning` nhập) và
 `conversation` (giữ cho phép đo AC-3). Con số 0 ở hàng cuối là cố ý và phải đọc
@@ -93,12 +99,20 @@ hiển thị của nó, thì không chuỗi nào là văn bản tiếng Anh vi�
 hiển thị đọc từ `useMessages()`, và khoá tương ứng có mặt trong cả bảng `vi`
 lẫn bảng `en` của `packages/ui/src/lib/messages.ts`.
 
-Dân số vào vòng này là 8 chuỗi, ghim từng chỗ để phép đo không tự chọn dân số
-hẹp: `reasoning.tsx` — "Thinking...", "Thought for a few seconds";
-`message.tsx` — "Previous branch", "Next branch", hai lần "Remove attachment"
-(cả bốn là `aria-label`), và hai lần "Remove" (chữ giữa thẻ). **Bốn trong tám
-nằm trong thuộc tính, không phải chữ giữa thẻ** — một phép quét chỉ đọc chữ
-giữa thẻ sẽ bỏ đúng một nửa và vẫn xanh.
+Dân số vào vòng này là **14 chuỗi**, ghim từng chỗ để phép đo không tự chọn dân
+số hẹp:
+
+- `message.tsx` (8) — `aria-label`: "Previous branch", "Next branch", "Remove
+  attachment" hai lần; `alt`: "attachment"; chữ giữa thẻ: "of", "Remove" hai lần.
+- `reasoning.tsx` (4) — chữ giữa thẻ: "Thinking...", "Thought for a few
+  seconds", "Thought for", "seconds".
+- `conversation.tsx` (2) — **giá trị mặc định của tham số**, dòng 45 và 46:
+  "No messages yet", "Start a conversation to see messages here".
+
+Hai chuỗi cuối là lớp khó nhất: chúng không phải chữ giữa thẻ, cũng không phải
+thuộc tính. Bản `conversation.tsx` cũ đọc chúng qua `useMessages()`; bản CLI
+tươi trả chúng về chuỗi cứng — đó là cái giá của việc kéo bản thượng nguồn, và
+nó phải hiện thành việc chứ không thành hồi quy im lặng.
 
 **AC-6** — Cho mỗi component còn lại trong `ai-elements/`, khi quét lớp CSS
 của nó bằng **danh sách trắng đóng** — mọi lớp khớp `text-` · `bg-` · `border-`
@@ -107,8 +121,9 @@ của nó bằng **danh sách trắng đóng** — mọi lớp khớp `text-` ·
 `rounded-sm | rounded-md | rounded-lg | rounded-none` — thì không lớp nào rơi
 ngoài danh sách trắng, và phép đo in ra mọi lớp lạ kèm tên tập tin và số dòng.
 
-Hai vế có dân số khác nhau và phải đọc khác nhau. **Bán kính: 3 chỗ thật phải
-sửa** — `message.tsx` hai `rounded-full`, `conversation.tsx` một. **Màu: 0 chỗ
+Hai vế có dân số khác nhau và phải đọc khác nhau. **Bán kính: 4 chỗ thật phải
+sửa** — `message.tsx` hai `rounded-full` (dòng 362, 390), `conversation.tsx`
+hai (dòng 88, 156). **Màu: 0 chỗ
 trong cây hôm nay** — vế này là răng canh bản `conversation` kéo tươi và mọi
 component phase sau kéo về, nên nó phải đỏ trước một lớp màu lạ chưa từng có
 trong kho, không chỉ trước danh sách màu đã biết.
@@ -199,3 +214,11 @@ thật trong kho.
   đã sửa vào chính các tiêu chí trên. Xem `gap-probe.md`.
 - Ngưỡng 1,2 lần ở AC-7 và danh sách đường ở AC-2 là hai chỗ người duyệt nên
   soi kỹ nhất — chúng là số và ranh giới do máy đề nghị, không phải do đo.
+- Bảng dân số đã sửa hai lần trong lúc làm, cả hai lần trước khi hợp đồng được
+  ký: 8 chuỗi → 14 và 3 bán kính → 4, sau khi bản CLI tươi của `conversation`
+  về cây và sau khi răng chuỗi được vá để thấy lớp giá trị mặc định. Số hiện tại
+  do chính răng đo, không do phép đếm bằng tay.
+- Răng mồ côi có **miễn trừ có tên** cho `conversation.tsx`, kèm lý do và điều
+  kiện hết hạn: Phase 1 nối `Conversation` vào màn thật thì bỏ mục miễn trừ. Một
+  miễn trừ hết hạn hiện chỉ được cảnh báo chứ không làm cổng đỏ — chỗ này người
+  duyệt nên biết.
