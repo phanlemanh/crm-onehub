@@ -255,3 +255,63 @@ describe("luot-moi", () => {
 		}
 	});
 });
+
+const PURPOSES = ["builder", "team-agent", "research"] as const;
+const COMMAND_TYPES = ["CREATE_AGENT", "CHAT"] as const;
+
+describe("ngoai-kenh", () => {
+	it("ngoai-kenh: ma tran toan phan purpose nhan commandType, sau o", () => {
+		const o = PURPOSES.flatMap((purpose) =>
+			COMMAND_TYPES.map((commandType) => ({ purpose, commandType })),
+		);
+		expect(o).toHaveLength(6);
+		for (const { purpose, commandType } of o) {
+			const goi = () =>
+				trongLuot(() => {
+					const ctx = phien({ purpose, commandType });
+					chay(ctx, suKien("turn-1", goiBuilder("call-1")));
+					chay(ctx, suKien("turn-1", goiBuilder("call-2")));
+				});
+			if (purpose === "builder") {
+				expect(goi).toThrow("only once");
+			} else {
+				expect(goi).not.toThrow();
+			}
+		}
+	});
+});
+
+describe("cung-batch", () => {
+	it("cung-batch: hai loi goi khac callId trong CUNG mot actions thi chan", () => {
+		expect(HAI_CHIEU).toHaveLength(2);
+		for (const { authorized } of HAI_CHIEU) {
+			trongLuot(() => {
+				const ctx = phien({}, authorized);
+				expect(() =>
+					chay(
+						ctx,
+						suKien("turn-1", goiBuilder("call-1"), goiBuilder("call-2")),
+					),
+				).toThrow("only once");
+			});
+		}
+	});
+
+	it("cung-batch: chieu do — loi goi thu hai toi subagent KHAC thi khong chan", () => {
+		for (const { authorized } of HAI_CHIEU) {
+			trongLuot(() => {
+				const ctx = phien({}, authorized);
+				expect(() =>
+					chay(
+						ctx,
+						suKien("turn-1", goiBuilder("call-1"), {
+							kind: "subagent-call",
+							callId: "call-2",
+							subagentName: "agent_runner",
+						}),
+					),
+				).not.toThrow();
+			});
+		}
+	});
+});
