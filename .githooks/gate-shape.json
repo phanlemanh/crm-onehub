@@ -40,7 +40,7 @@
 					{
 						"id": "chu-cung",
 						"script": "_acceptance/nen-chat-ai-elements/rang/chu-cung.mjs",
-						"vi_sao": "AC-10. Đọc đĩa, không cần mạng. Bắt cả chữ giữa thẻ lẫn chuỗi trong aria-label, placeholder, title, alt — năm trong mười bốn chuỗi của dân số nằm trong thuộc tính."
+						"vi_sao": "AC-10. Đọc đĩa, không cần mạng. Danh sách trắng đóng: nó quét MỌI chuỗi có chữ rồi trừ đi các mục miễn đã khai kèm lý do, nên nó đỏ trước một hình dạng cú pháp chưa ai nghĩ tới. Khuôn cũ liệt kê từng hình dạng có chuỗi hiển thị và đã bỏ sót hai lần — giá trị mặc định của tham số, rồi biến trung gian."
 					},
 					{
 						"id": "mau-ban-kinh",

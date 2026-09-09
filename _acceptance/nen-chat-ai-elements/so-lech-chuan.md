@@ -83,20 +83,22 @@ nó chậm hơn `MessageScroller` quá ngưỡng 1,2 lần mà Cổng 1 đã ký
 
 **Tệp:** `packages/ui/src/components/ai-elements/message.tsx`
 
-**Số dòng khác:** 212
+**Số dòng khác:** 214
 
-**Vân tay lệch:** `18ab41c6550c3886`
+**Vân tay lệch:** `c6cc192e6eb2eecc`
 
 **Đổi gì:** Hai loại lệch trộn trong một tệp.
 
 Bản vá của kho:
 
-- Thêm `useMessages`; tám chuỗi tiếng Anh về bảng chuỗi —
+- Thêm `useMessages`; mười chuỗi tiếng Anh về bảng chuỗi —
   `aria-label` "Previous branch" và "Next branch" → `msg.chatMessage.previousBranch`
   · `.nextBranch`; `{currentBranch + 1} of {totalBranches}` →
   `msg.chatMessage.branchPage(...)`; `alt="attachment"` → `msg.chatMessage.attachment`;
   hai `aria-label="Remove attachment"` → `msg.chatMessage.removeAttachment`; hai
-  `<span className="sr-only">Remove</span>` → `msg.chatMessage.remove`.
+  `<span className="sr-only">Remove</span>` → `msg.chatMessage.remove`; và biến
+  trung gian `attachmentLabel` bỏ hai chuỗi dự phòng "Image" · "Attachment" để
+  đọc `msg.chatMessage.unnamedImage` · `.unnamedAttachment`.
 - Hai `rounded-full` trên nút gỡ tệp đính kèm đổi sang `rounded-sm`.
 
 Bản trong cây cũ hơn thượng nguồn:
@@ -115,9 +117,9 @@ Bản trong cây cũ hơn thượng nguồn:
 - `MessageBranchContextType` thượng nguồn là `interface`, trong cây là `type`.
 - `MessageResponse` thượng nguồn so thêm `isAnimating` khi memo hoá.
 
-**Vì sao:** Vế bản vá là AC-5 (tám trong mười bốn chuỗi của dân số nằm ở đây, năm
-trong số đó nằm trong thuộc tính chứ không phải chữ giữa thẻ) và AC-6 (thang bán
-kính). Vế cũ hơn thượng nguồn thì **cố ý không đụng ở vòng này**: AC-2 khoá phạm
+**Vì sao:** Vế bản vá là AC-5 (mười trong mười sáu chuỗi của dân số nằm ở đây,
+năm trong số đó nằm trong thuộc tính chứ không phải chữ giữa thẻ, và hai chuỗi
+cuối nằm trong một biến trung gian) và AC-6 (thang bán kính). Vế cũ hơn thượng nguồn thì **cố ý không đụng ở vòng này**: AC-2 khoá phạm
 vi, và kéo lại `message.tsx` sẽ xoá sạch tám chuỗi vừa vá cùng hai bán kính, đổi
 hình dạng `MessageBranchSelector` mà `apps/app` đang gọi, và bỏ mất hai export
 đính kèm. Việc kéo lại thuộc phase sau, và phải đi kèm đúng nghi thức ở cuối sổ
@@ -153,7 +155,7 @@ Bản trong cây cũ hơn thượng nguồn:
 - Thượng nguồn bọc `handleOpenChange` và `contextValue` trong `useCallback`/`useMemo`.
 - `ReasoningContextValue` thượng nguồn là `interface`, trong cây là `type`.
 
-**Vì sao:** Vế bản vá là AC-5, bốn trong mười bốn chuỗi của dân số. Vế cũ hơn
+**Vì sao:** Vế bản vá là AC-5, bốn trong mười sáu chuỗi của dân số. Vế cũ hơn
 thượng nguồn cố ý để nguyên, cùng lý do như `message.tsx`: kéo lại là xoá bốn
 chuỗi vừa vá, và nó đổi cả cách tự mở tự đóng của khối suy nghĩ — một thay đổi
 hành vi mà vòng này đã hứa là không màn nào đổi bố cục.

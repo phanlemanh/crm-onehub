@@ -3,6 +3,104 @@ import { createRequire } from "node:module";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+const HERE = dirname(fileURLToPath(import.meta.url));
+const GOC = resolve(HERE, "..", "..", "..");
+const THU_MUC = join(GOC, "packages", "ui", "src", "components", "ai-elements");
+const TEP_BANG = join(GOC, "packages", "ui", "src", "lib", "messages.ts");
+const BANG_CAN = ["vi", "en"];
+const DUOI_QUET = [".ts", ".tsx"];
+
+const NGUYEN_TAC =
+	"Một chuỗi được miễn khi nó KHÔNG THỂ tới mắt người dùng. Nghi ngờ thì không miễn: răng thà đỏ oan một lần rồi thêm mục miễn có lý do, còn hơn xanh giả.";
+
+const THUOC_TINH_LOP = new Set(["className", "class"]);
+
+const THUOC_TINH_HIEN = new Set([
+	"aria-label",
+	"aria-description",
+	"aria-roledescription",
+	"aria-placeholder",
+	"aria-valuetext",
+	"alt",
+	"title",
+	"placeholder",
+	"label",
+]);
+
+const CHI_THI = new Set(["use client", "use server", "use strict"]);
+
+const MIEN_VI_TRI = {
+	"chi-thi":
+		'Chỉ thị đầu tệp ("use client"). Trình đóng gói đọc nó, không màn nào hiện nó.',
+	"duong-nhap":
+		"Đường nhập mô-đun và tên gói. Trình đóng gói phân giải lúc dựng; chuỗi không còn mặt lúc chạy.",
+	kieu: "Chuỗi đứng trong vị trí kiểu (LiteralType). TypeScript xoá hết lúc biên dịch, không có gì để hiện.",
+	"lop-css":
+		"Tên lớp Tailwind — đối số của cn() hoặc giá trị của className. Nó chảy vào thuộc tính class chứ không thành chữ, và mau-ban-kinh.mjs đã canh chúng bằng thước riêng.",
+	"ten-devtools":
+		"Vế phải của phép gán .displayName. React DevTools đọc; cây DOM không mang nó.",
+	"loi-bat-bien":
+		"Thông điệp của `throw new Error` cho vi phạm bất biến API — chỉ nổ khi lập trình viên lắp sai component, và không nhánh render nào đưa nó ra màn người dùng.",
+};
+
+const MIEN_GIA_TRI = {
+	"bien-the": {
+		vi_sao:
+			"Giá trị enum của biến thể component trong @crm/ui. Chúng chọn hình dạng, không phải chữ; đây là nguồn dương tính giả chính khi quét mọi chuỗi.",
+		muc: {
+			ghost: "biến thể Button — chip trắng, không nền tô",
+			outline: "biến thể Button — chip có viền",
+			icon: "cỡ Button — ô vuông vừa đúng một icon",
+			"icon-sm": "cỡ Button — ô vuông nhỏ",
+		},
+	},
+	"enum-may": {
+		vi_sao:
+			"Giá trị enum của thuộc tính HTML/ARIA và của prop thư viện. Trình duyệt và thư viện đọc chúng như mã, không in ra.",
+		muc: {
+			button: "giá trị thuộc tính type của thẻ button",
+			log: "giá trị vai trò ARIA role=log",
+			horizontal: "hướng của ButtonGroup",
+			smooth: "giá trị prop initial và resize của StickToBottom",
+		},
+	},
+	"ten-the": {
+		vi_sao:
+			"Tên thẻ HTML dùng làm component động hoặc dựng bằng createElement. Chúng là tên phần tử, không phải nội dung phần tử.",
+		muc: {
+			p: "thẻ mặc định của Shimmer khi không ai truyền as",
+			a: "thẻ dựng tạm để kích hoạt tải tệp rồi gỡ ngay",
+		},
+	},
+	"khoa-ky-thuat": {
+		vi_sao:
+			"Khoá kỹ thuật, tên trường dữ liệu và định dạng máy đọc. Chúng đi vào phép so sánh hoặc vào siêu dữ liệu, không đi vào câu chữ.",
+		muc: {
+			text: "giá trị trường type của một part trong UIMessage",
+			user: "giá trị trường role của UIMessage",
+			image: "nhãn nội bộ phân loại tệp đính kèm",
+			file: "nhãn nội bộ phân loại tệp đính kèm",
+			"image/": "tiền tố MIME đem đi startsWith",
+			"text/markdown": "MIME của blob hội thoại tải về",
+			"conversation.md":
+				"tên tệp máy đọc của bản tải về. Nó CÓ thể hiện ở thanh tải của trình duyệt; miễn ở đây là quyết định có ý thức vì nó là định danh tập tin kèm đuôi, không phải câu trên màn.",
+		},
+	},
+	"gia-tri-css": {
+		vi_sao:
+			"Giá trị CSS và tên biến CSS viết ngoài chuỗi lớp — chúng vào thuộc tính style hoặc vào tham số hoạt hoạ, không vào nội dung.",
+		muc: {
+			"0% center": "vị trí nền cuối của hoạt hoạ shimmer",
+			"100% center": "vị trí nền đầu của hoạt hoạ shimmer",
+			"--spread": "tên biến CSS tuỳ biến",
+			px: "đơn vị CSS nối sau số trong chuỗi mẫu",
+			"var(--bg), linear-gradient(var(--color-muted-foreground), var(--color-muted-foreground))":
+				"giá trị backgroundImage của shimmer",
+			linear: "tên hàm nội suy của motion",
+		},
+	},
+};
+
 let ts = null;
 try {
 	ts = createRequire(import.meta.url)("typescript");
@@ -10,12 +108,14 @@ try {
 	ts = null;
 }
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-const GOC = resolve(HERE, "..", "..", "..");
-const THU_MUC = join(GOC, "packages", "ui", "src", "components", "ai-elements");
-const TEP_BANG = join(GOC, "packages", "ui", "src", "lib", "messages.ts");
-const THUOC_TINH = new Set(["aria-label", "placeholder", "title", "alt"]);
-const BANG_CAN = ["vi", "en"];
+function thoat(ma, loi) {
+	if (loi) process.stdout.write(`${loi}\n`);
+	process.exit(ma);
+}
+
+function coChu(chu) {
+	return /\p{L}/u.test(chu);
+}
 
 function ganDong(nguon) {
 	const dau = [0];
@@ -35,228 +135,138 @@ function ganDong(nguon) {
 	};
 }
 
-function doiChuoi(nguon, i) {
-	const nhay = nguon[i];
-	let j = i + 1;
-	let val = "";
-	while (j < nguon.length) {
-		if (nguon[j] === "\\") {
-			val += nguon[j + 1] ?? "";
-			j += 2;
+function docChuoi(n, nguon) {
+	if (ts.isJsxText(n)) {
+		const tho = nguon.slice(n.pos, n.end);
+		const lech = tho.length - tho.trimStart().length;
+		return { chu: tho.trim(), tai: n.pos + lech, jsx: true };
+	}
+	const laMau =
+		n.kind === ts.SyntaxKind.TemplateHead ||
+		n.kind === ts.SyntaxKind.TemplateMiddle ||
+		n.kind === ts.SyntaxKind.TemplateTail;
+	if (ts.isStringLiteral(n) || ts.isNoSubstitutionTemplateLiteral(n) || laMau) {
+		return { chu: n.text, tai: n.getStart(), jsx: false };
+	}
+	return null;
+}
+
+function tenThuocTinh(a) {
+	return ts.isIdentifier(a.name) ? a.name.text : a.name.getText();
+}
+
+function thuocTinhBao(n) {
+	const cha = n.parent;
+	if (cha && ts.isJsxAttribute(cha)) return tenThuocTinh(cha);
+	if (cha && ts.isJsxExpression(cha) && cha.parent && ts.isJsxAttribute(cha.parent)) {
+		return tenThuocTinh(cha.parent);
+	}
+	return null;
+}
+
+function laLopCss(n) {
+	let con = n;
+	let cha = n.parent;
+	while (cha) {
+		if (
+			ts.isParenthesizedExpression(cha) ||
+			ts.isArrayLiteralExpression(cha) ||
+			ts.isTemplateSpan(cha) ||
+			ts.isTemplateExpression(cha) ||
+			ts.isJsxExpression(cha)
+		) {
+			con = cha;
+			cha = cha.parent;
 			continue;
 		}
-		if (nguon[j] === nhay) return { ket: j + 1, val };
-		val += nguon[j];
-		j += 1;
-	}
-	return { ket: nguon.length, val };
-}
-
-const TU_KHOA = new Set([
-	"return",
-	"await",
-	"yield",
-	"case",
-	"else",
-	"do",
-	"default",
-	"typeof",
-	"void",
-	"delete",
-	"in",
-	"of",
-	"instanceof",
-]);
-
-function tokenTruoc(nguon, i) {
-	let j = i - 1;
-	while (j >= 0 && /\s/.test(nguon[j])) j -= 1;
-	if (j < 0) return { loai: "dau", chu: "" };
-	if (!/[A-Za-z0-9_$]/.test(nguon[j])) return { loai: "ky", chu: nguon[j] };
-	let k = j;
-	while (k >= 0 && /[A-Za-z0-9_$]/.test(nguon[k])) k -= 1;
-	return { loai: "tu", chu: nguon.slice(k + 1, j + 1) };
-}
-
-function laMoThe(truoc, sau) {
-	if (!sau) return false;
-	if (!/[A-Za-z_$>/]/.test(sau)) return false;
-	if (truoc.loai === "dau") return true;
-	if (truoc.loai === "tu") return TU_KHOA.has(truoc.chu);
-	return !/[)\].]/.test(truoc.chu);
-}
-
-function coChu(chu) {
-	return /\p{L}/u.test(chu);
-}
-
-function moThe(may, i) {
-	const dongThe = may.nguon[i + 1] === "/";
-	may.ngan.push({ loai: "the", dongThe, ten: null, cho: null });
-	return i + (dongThe ? 2 : 1);
-}
-
-function dayChu(may) {
-	const chu = may.dem.trim();
-	if (chu && coChu(chu)) {
-		may.thay.push({ kieu: "chữ giữa thẻ", chu, dong: may.dongTai(may.demTu) });
-	}
-	may.dem = "";
-	may.demTu = -1;
-}
-
-function ghiThuocTinh(may, ten, val, i) {
-	if (ten && THUOC_TINH.has(ten) && coChu(val)) {
-		may.thay.push({ kieu: ten, chu: val, dong: may.dongTai(i) });
-	}
-}
-
-function buocText(may, i) {
-	const c = may.nguon[i];
-	if (c === "<") {
-		dayChu(may);
-		return moThe(may, i);
-	}
-	if (c === "{") {
-		dayChu(may);
-		may.ngan.push({ loai: "code", sau: 0, goc: false, attr: null });
-		return i + 1;
-	}
-	if (may.demTu < 0 && !/\s/.test(c)) may.demTu = i;
-	may.dem += c;
-	return i + 1;
-}
-
-function buocThe(may, i, ctx) {
-	const c = may.nguon[i];
-	if (c === '"' || c === "'") {
-		const { ket, val } = doiChuoi(may.nguon, i);
-		ghiThuocTinh(may, ctx.cho, val, i);
-		ctx.cho = null;
-		return ket;
-	}
-	if (c === "{") {
-		may.ngan.push({ loai: "code", sau: 0, goc: false, attr: ctx.cho });
-		ctx.cho = null;
-		return i + 1;
-	}
-	if (c === "/" && may.nguon[i + 1] === ">") {
-		may.ngan.pop();
-		return i + 2;
-	}
-	if (c === ">") {
-		may.ngan.pop();
-		if (!ctx.dongThe) may.ngan.push({ loai: "text" });
-		else if (may.ngan[may.ngan.length - 1]?.loai === "text") may.ngan.pop();
-		return i + 1;
-	}
-	const ten = /^[A-Za-z_$][\w$-]*/.exec(may.nguon.slice(i));
-	if (!ten) return i + 1;
-	if (ctx.ten === null) ctx.ten = ten[0];
-	else ctx.cho = ten[0];
-	return i + ten[0].length;
-}
-
-function buocCode(may, i, ctx) {
-	const c = may.nguon[i];
-	const sau = may.nguon[i + 1];
-	if (c === "/" && sau === "/") {
-		const xuong = may.nguon.indexOf("\n", i);
-		return xuong < 0 ? may.nguon.length : xuong;
-	}
-	if (c === "/" && sau === "*") {
-		const dong = may.nguon.indexOf("*/", i);
-		return dong < 0 ? may.nguon.length : dong + 2;
-	}
-	if (c === '"' || c === "'" || c === "`") {
-		const { ket, val } = doiChuoi(may.nguon, i);
-		ghiThuocTinh(may, ctx.attr, val, i);
-		return ket;
-	}
-	if (c === "{") {
-		ctx.sau += 1;
-		return i + 1;
-	}
-	if (c === "}") {
-		if (ctx.sau > 0) ctx.sau -= 1;
-		else if (!ctx.goc) may.ngan.pop();
-		return i + 1;
-	}
-	if (c === "<" && laMoThe(tokenTruoc(may.nguon, i), sau)) return moThe(may, i);
-	return i + 1;
-}
-
-function quetTep(nguon) {
-	const may = {
-		nguon,
-		dongTai: ganDong(nguon),
-		thay: [],
-		ngan: [{ loai: "code", sau: 0, goc: true, attr: null }],
-		dem: "",
-		demTu: -1,
-	};
-	let i = 0;
-	while (i < nguon.length) {
-		const ctx = may.ngan[may.ngan.length - 1];
-		if (ctx.loai === "text") i = buocText(may, i);
-		else if (ctx.loai === "the") i = buocThe(may, i, ctx);
-		else i = buocCode(may, i, ctx);
-	}
-	return may.thay;
-}
-
-function nhatTen(n, ra) {
-	if (ts.isIdentifier(n)) {
-		ra.add(n.text);
-		return;
-	}
-	if (ts.isPropertyAccessExpression(n)) {
-		nhatTen(n.expression, ra);
-		return;
-	}
-	if (ts.isJsxAttribute(n)) {
-		if (n.initializer) nhatTen(n.initializer, ra);
-		return;
-	}
-	if (ts.isJsxOpeningElement(n) || ts.isJsxSelfClosingElement(n)) {
-		for (const a of n.attributes.properties) nhatTen(a, ra);
-		return;
-	}
-	if (ts.isJsxClosingElement(n)) return;
-	if (ts.isPropertyAssignment(n)) {
-		nhatTen(n.initializer, ra);
-		return;
-	}
-	ts.forEachChild(n, (con) => nhatTen(con, ra));
-}
-
-function tenHienThi(sf) {
-	const ra = new Set();
-	const nhat = (n) => nhatTen(n, ra);
-	const di = (n) => {
-		if (
-			ts.isJsxExpression(n) &&
-			n.expression &&
-			(ts.isJsxElement(n.parent) || ts.isJsxFragment(n.parent))
-		) {
-			nhat(n.expression);
+		if (ts.isConditionalExpression(cha)) {
+			if (cha.whenTrue !== con && cha.whenFalse !== con) return false;
+			con = cha;
+			cha = cha.parent;
+			continue;
 		}
-		if (
-			ts.isJsxAttribute(n) &&
-			THUOC_TINH.has(n.name.getText(sf)) &&
-			n.initializer &&
-			ts.isJsxExpression(n.initializer) &&
-			n.initializer.expression
-		) {
-			nhat(n.initializer.expression);
+		if (ts.isBinaryExpression(cha)) {
+			const dau = cha.operatorToken.kind;
+			const laGiaTri =
+				dau === ts.SyntaxKind.BarBarToken ||
+				dau === ts.SyntaxKind.QuestionQuestionToken ||
+				(dau === ts.SyntaxKind.AmpersandAmpersandToken && cha.right === con);
+			if (!laGiaTri) return false;
+			con = cha;
+			cha = cha.parent;
+			continue;
 		}
-		ts.forEachChild(n, di);
-	};
-	di(sf);
-	return ra;
+		if (ts.isCallExpression(cha)) {
+			return (
+				ts.isIdentifier(cha.expression) &&
+				cha.expression.text === "cn" &&
+				cha.arguments.includes(con)
+			);
+		}
+		if (ts.isJsxAttribute(cha)) return THUOC_TINH_LOP.has(tenThuocTinh(cha));
+		return false;
+	}
+	return false;
 }
 
-function quetMacDinh(nguon, nhanTep) {
+function nhomViTri(n, chu) {
+	const cha = n.parent;
+	if (!cha) return null;
+	if (
+		CHI_THI.has(chu) &&
+		ts.isExpressionStatement(cha) &&
+		cha.expression === n &&
+		ts.isSourceFile(cha.parent)
+	) {
+		return "chi-thi";
+	}
+	if (
+		(ts.isImportDeclaration(cha) || ts.isExportDeclaration(cha)) &&
+		cha.moduleSpecifier === n
+	) {
+		return "duong-nhap";
+	}
+	if (
+		ts.isCallExpression(cha) &&
+		cha.arguments[0] === n &&
+		(cha.expression.kind === ts.SyntaxKind.ImportKeyword ||
+			(ts.isIdentifier(cha.expression) && cha.expression.text === "require"))
+	) {
+		return "duong-nhap";
+	}
+	if (ts.isLiteralTypeNode(cha)) {
+		return ts.isImportTypeNode(cha.parent) ? "duong-nhap" : "kieu";
+	}
+	if (
+		ts.isBinaryExpression(cha) &&
+		cha.operatorToken.kind === ts.SyntaxKind.EqualsToken &&
+		cha.right === n &&
+		ts.isPropertyAccessExpression(cha.left) &&
+		cha.left.name.text === "displayName"
+	) {
+		return "ten-devtools";
+	}
+	if (
+		ts.isNewExpression(cha) &&
+		ts.isIdentifier(cha.expression) &&
+		cha.expression.text.endsWith("Error") &&
+		cha.parent &&
+		ts.isThrowStatement(cha.parent)
+	) {
+		return "loi-bat-bien";
+	}
+	if (laLopCss(n)) return "lop-css";
+	return null;
+}
+
+function nhomGiaTri(chu) {
+	for (const [ten, nhom] of Object.entries(MIEN_GIA_TRI)) {
+		if (Object.hasOwn(nhom.muc, chu)) return ten;
+	}
+	return null;
+}
+
+function xetTep(nguon, nhanTep) {
 	const sf = ts.createSourceFile(
 		nhanTep,
 		nguon,
@@ -264,34 +274,30 @@ function quetMacDinh(nguon, nhanTep) {
 		true,
 		ts.ScriptKind.TSX,
 	);
-	const hienThi = tenHienThi(sf);
-	const ra = [];
+	const dongTai = ganDong(nguon);
+	const ra = { xet: 0, mien: new Map(), con: [] };
 	const di = (n) => {
-		if (ts.isBindingElement(n) && n.initializer) {
-			const gt = n.initializer;
-			const laChuoi =
-				ts.isStringLiteral(gt) || ts.isNoSubstitutionTemplateLiteral(gt);
-			if (laChuoi && coChu(gt.text) && hienThi.has(n.name.getText(sf))) {
-				const { line } = sf.getLineAndCharacterOfPosition(n.getStart(sf));
-				ra.push({ kieu: "giá trị mặc định", chu: gt.text, dong: line + 1 });
+		const doc = docChuoi(n, nguon);
+		if (doc && coChu(doc.chu)) {
+			ra.xet += 1;
+			const nhan = thuocTinhBao(n);
+			const hien = nhan !== null && THUOC_TINH_HIEN.has(nhan);
+			let nhom = hien ? null : nhomViTri(n, doc.chu);
+			if (!nhom && !hien && !doc.jsx) nhom = nhomGiaTri(doc.chu);
+			if (nhom) ra.mien.set(nhom, (ra.mien.get(nhom) ?? 0) + 1);
+			else {
+				ra.con.push({
+					dong: dongTai(doc.tai),
+					chu: doc.chu,
+					cho: doc.jsx ? "chữ giữa thẻ" : (nhan ?? "chuỗi trong mã"),
+				});
 			}
 		}
 		ts.forEachChild(n, di);
 	};
 	di(sf);
+	ra.con.sort((a, b) => a.dong - b.dong);
 	return ra;
-}
-
-function gopKhongTrung(thay, them) {
-	const da = new Set(thay.map((v) => `${v.dong}\u0000${v.chu}`));
-	for (const m of them) {
-		const khoa = `${m.dong}\u0000${m.chu}`;
-		if (da.has(khoa)) continue;
-		da.add(khoa);
-		thay.push(m);
-	}
-	thay.sort((a, b) => a.dong - b.dong);
-	return thay;
 }
 
 function boGiaTri(nguon, i) {
@@ -299,7 +305,16 @@ function boGiaTri(nguon, i) {
 	while (i < nguon.length) {
 		const c = nguon[i];
 		if (c === '"' || c === "'" || c === "`") {
-			i = doiChuoi(nguon, i).ket;
+			let j = i + 1;
+			while (j < nguon.length) {
+				if (nguon[j] === "\\") {
+					j += 2;
+					continue;
+				}
+				if (nguon[j] === c) break;
+				j += 1;
+			}
+			i = j + 1;
 			continue;
 		}
 		if (c === "(" || c === "[" || c === "{") {
@@ -389,37 +404,57 @@ function khoaDung(nguon) {
 	return ra;
 }
 
-function gomTsx(thuMuc) {
+function gomTep(thuMuc) {
 	const ra = [];
 	for (const muc of readdirSync(thuMuc, { withFileTypes: true })) {
 		const duong = join(thuMuc, muc.name);
-		if (muc.isDirectory()) ra.push(...gomTsx(duong));
-		else if (muc.isFile() && muc.name.endsWith(".tsx")) ra.push(duong);
+		if (muc.isDirectory()) ra.push(...gomTep(duong));
+		else if (muc.isFile() && DUOI_QUET.some((d) => muc.name.endsWith(d))) {
+			ra.push(duong);
+		}
 	}
 	return ra.sort();
 }
 
-function thoat(ma, loi) {
-	if (loi) process.stdout.write(`${loi}\n`);
-	process.exit(ma);
-}
-
 const nhan = relative(GOC, THU_MUC);
-process.stdout.write(`Răng chuỗi cứng — ${nhan}\n\n`);
+process.stdout.write(`Răng chuỗi cứng — ${nhan}\n`);
+process.stdout.write(
+	"Khuôn: quét MỌI chuỗi có chữ trong tệp, rồi trừ đi danh sách trắng đã khai.\n",
+);
+process.stdout.write(`Nguyên tắc phân định: ${NGUYEN_TAC}\n\n`);
 
 if (!ts) {
 	thoat(
 		2,
-		"Không nạp được typescript — không đọc được lớp giá trị mặc định, không kết luận gì.",
+		"Không nạp được typescript — không dựng được cây cú pháp, không kết luận gì.",
 	);
 }
+
+process.stdout.write("Danh sách trắng — miễn theo VỊ TRÍ:\n");
+for (const [ten, viSao] of Object.entries(MIEN_VI_TRI)) {
+	process.stdout.write(`  ${ten}: ${viSao}\n`);
+}
+
+let demKhai = 0;
+process.stdout.write("\nDanh sách trắng — miễn theo GIÁ TRỊ (đóng):\n");
+for (const [ten, nhomMien] of Object.entries(MIEN_GIA_TRI)) {
+	const muc = Object.entries(nhomMien.muc);
+	demKhai += muc.length;
+	process.stdout.write(`  ${ten}: ${nhomMien.vi_sao}\n`);
+	for (const [gia, ly] of muc) {
+		process.stdout.write(`      "${gia}" — ${ly}\n`);
+	}
+}
+process.stdout.write(
+	`\nTổng mục khai theo giá trị: ${demKhai}. Chuỗi trong thuộc tính hiển thị (${[...THUOC_TINH_HIEN].join(", ")}) và chữ giữa thẻ KHÔNG bao giờ được miễn theo giá trị.\n\n`,
+);
 
 let tep = [];
 try {
 	if (!statSync(THU_MUC).isDirectory()) {
 		thoat(2, `Không phải thư mục: ${nhan}. Không có gì để quét.`);
 	}
-	tep = gomTsx(THU_MUC);
+	tep = gomTep(THU_MUC);
 } catch {
 	thoat(2, `Không đọc được thư mục: ${nhan}. Không có gì để quét.`);
 }
@@ -427,7 +462,7 @@ try {
 if (tep.length === 0) {
 	thoat(
 		2,
-		`Không tìm thấy tệp .tsx nào trong ${nhan}. Tập rỗng không phải là sạch.`,
+		`Không tìm thấy tệp .ts/.tsx nào trong ${nhan}. Tập rỗng không phải là sạch.`,
 	);
 }
 
@@ -447,17 +482,27 @@ for (const ten of BANG_CAN) {
 	bang.set(ten, bo);
 }
 
-const viPham = [];
+const conLai = [];
 const thieuKhoa = [];
+const mienTong = new Map();
+let xetTong = 0;
 
 process.stdout.write(`Tệp quét: ${tep.length}\n`);
 const rong = Math.max(...tep.map((t) => relative(GOC, t).length));
 for (const duong of tep) {
 	const nguon = readFileSync(duong, "utf8");
 	const ngan = relative(GOC, duong);
-	const thay = gopKhongTrung(quetTep(nguon), quetMacDinh(nguon, ngan));
-	process.stdout.write(`  ${ngan.padEnd(rong)}  ${thay.length}\n`);
-	for (const v of thay) viPham.push({ tep: ngan, ...v });
+	const ket = xetTep(nguon, ngan);
+	xetTong += ket.xet;
+	let mienTep = 0;
+	for (const [ten, so] of ket.mien) {
+		mienTep += so;
+		mienTong.set(ten, (mienTong.get(ten) ?? 0) + so);
+	}
+	process.stdout.write(
+		`  ${ngan.padEnd(rong)}  xét ${ket.xet} · miễn ${mienTep} · còn ${ket.con.length}\n`,
+	);
+	for (const v of ket.con) conLai.push({ tep: ngan, ...v });
 	for (const { khoa, dong } of khoaDung(nguon)) {
 		for (const ten of BANG_CAN) {
 			if (!bang.get(ten).has(khoa)) {
@@ -467,11 +512,22 @@ for (const duong of tep) {
 	}
 }
 
-process.stdout.write(`\nTổng chuỗi cứng: ${viPham.length}\n`);
-if (viPham.length > 0) {
-	process.stdout.write("\nChuỗi cứng (mọi số phải là 0):\n");
-	for (const v of viPham) {
-		process.stdout.write(`  ${v.tep}:${v.dong}  ${v.kieu}  "${v.chu}"\n`);
+process.stdout.write(`\nTổng chuỗi có chữ đã xét: ${xetTong}\n`);
+process.stdout.write("Miễn theo nhóm:\n");
+const tenNhom = [...Object.keys(MIEN_VI_TRI), ...Object.keys(MIEN_GIA_TRI)];
+let mienTongSo = 0;
+for (const ten of tenNhom) {
+	const so = mienTong.get(ten) ?? 0;
+	mienTongSo += so;
+	process.stdout.write(`  ${ten.padEnd(16)} ${so}\n`);
+}
+process.stdout.write(`  ${"cộng".padEnd(16)} ${mienTongSo}\n`);
+process.stdout.write(`\nCòn lại (phải là 0): ${conLai.length}\n`);
+
+if (conLai.length > 0) {
+	process.stdout.write("\nChuỗi còn lại — không mục miễn nào phủ:\n");
+	for (const v of conLai) {
+		process.stdout.write(`  ${v.tep}:${v.dong}  ${v.cho}  "${v.chu}"\n`);
 	}
 }
 
@@ -482,7 +538,7 @@ for (const k of thieuKhoa) {
 	);
 }
 
-if (viPham.length > 0 || thieuKhoa.length > 0) {
+if (conLai.length > 0 || thieuKhoa.length > 0) {
 	process.stdout.write("\nRăng đỏ.\n");
 	process.exit(1);
 }

@@ -345,7 +345,9 @@ export function MessageAttachment({
   const mediaType =
     data.mediaType?.startsWith("image/") && data.url ? "image" : "file";
   const isImage = mediaType === "image";
-  const attachmentLabel = filename || (isImage ? "Image" : "Attachment");
+  const attachmentLabel =
+    filename ||
+    (isImage ? msg.chatMessage.unnamedImage : msg.chatMessage.unnamedAttachment);
 
   return (
     <div
