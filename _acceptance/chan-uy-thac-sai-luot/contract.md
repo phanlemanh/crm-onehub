@@ -5,7 +5,7 @@ slug: chan-uy-thac-sai-luot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-09
 veto_state: mo
@@ -199,10 +199,28 @@ settle theo đường `session.waiting` sẵn có thay vì chết giữa chừng
 nhân của ca prod 08/09; lưới an toàn là phòng thủ theo chiều sâu cho các nguyên
 nhân khác, và nó thuộc một hợp đồng riêng.
 
-**Giới hạn đã biết, do phản biện context sạch nêu**Giới hạn đã biết, do phản biện context sạch nêu và chủ ý hoãn:** AC-7 chấm
+**Giới hạn đã biết, do phản biện context sạch nêu và chủ ý hoãn:** AC-7 chấm
 *chỉ dẫn* viết cho cha, không chấm *câu trả lời cha thật sự soạn*. Đo đầu ra thật
 cần một lượt chạy end-to-end với model thật và cơ sở dữ liệu (đường
 `bun run --filter=agent eval`), vòng này không dựng. Hệ quả: chỉ dẫn có thể đúng
 giọng mà runtime vẫn dán trường `reason` kỹ thuật vào mặt người dùng, và hồ sơ
 vẫn PASS. Đã ghim danh sách từ cấm và yêu cầu trả lời tiếp câu hỏi gốc vào E7 để
 thu hẹp khe hở.
+
+**Giới hạn đã biết, chốt ở Cổng 2 ngày 2026-09-09.**
+
+- `builderCommandType` nay là hàm đồng nhất; trường `message` còn được truyền
+  xuyên suốt `builderSessionAttributes` và `dispatchBuilderSubmission` chỉ để nạp
+  cho một tham số không bao giờ đọc. Người dọn sau sẽ thấy bài đo khẳng định
+  chính tính đồng nhất ấy.
+- Bài đo quét chữ của AC-5 sẽ báo đỏ nhầm nếu sau này có dòng hợp lệ dạng
+  `x ? "CREATE_AGENT" : "CHAT"`, và thông điệp đỏ sẽ trỏ sai nguyên nhân.
+- `buildPendingInputRequest` kiểm khuôn rồi vứt kết quả parse và ghi giá trị thô,
+  nên cột `pendingInputRequest` không có schema nào mô tả trọn thứ thật sự nằm
+  trong cơ sở dữ liệu; hai bên đọc mỗi bên parse một mảnh.
+- Hội thoại builder đang đỗ ở một câu hỏi vào đúng lúc deploy sẽ bị hạ xuống
+  `CHAT` khi người dùng trả lời: bản nháp mất, không log, không thẻ lỗi. Nhất
+  quán với quyết định đóng-không-dọn đã chốt ở S1. Điều chưa khai trước đây:
+  bản ghi cũ và một lượt thật sự không được phép **không phân biệt được** ở chỗ
+  parse, nên không ai đo được cửa sổ ấy kéo dài bao lâu.
+
