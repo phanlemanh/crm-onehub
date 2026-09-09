@@ -18,36 +18,26 @@ import {
 	type EveMessageInputRequest,
 	type EveMessagePart,
 } from "eve/react";
+import {
+	type DidItem,
+	type ReasonedItem,
+	type SaidItem,
+	type Source,
+	type Tone,
+} from "@crm/validation/agent-transcript";
 import { z } from "zod";
 
 export type TranscriptItem =
-	| { kind: "said"; id: string; mine: boolean; text: string }
-	| { kind: "reasoned"; id: string; streaming: boolean; text: string }
+	| SaidItem
+	| ReasonedItem
 	| {
 			kind: "asked";
 			id: string;
 			question: EveMessageInputRequest;
 	  }
-	| {
-			kind: "did";
-			id: string;
-			label: string;
-			input: EveToolInput;
-			output: EveToolOutput;
-			tone: Tone;
-			pending: boolean;
-			sources: Source[];
-			tool: string;
-			errorText: string | null;
-	  };
+	| DidItem;
 
-export type Tone = "neutral" | "success" | "warning";
-
-export type Source = {
-	url: string;
-	title: string;
-	network: "linkedin" | "github" | "web";
-};
+export type { Source, Tone };
 
 export type AgentTurnFailure = {
 	code: string;

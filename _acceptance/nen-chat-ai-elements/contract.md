@@ -77,10 +77,16 @@ Sáu tập tin chat 109 KB nằm ngoài danh sách và phải nguyên vẹn.
 tập tin trong cây với bản CLI vừa ghi, thì hai bản giống nhau ở mọi dòng trừ
 những dòng có tên trong sổ lệch chuẩn của AC-8.
 
-**AC-4** — Cho một lượt eve thật thuộc mỗi dạng `said`, `reasoned`, `asked`,
-`did`, khi đưa qua lớp chuyển kiểu, thì kết quả mang đúng `role` và đúng
-`state` của AI SDK cho dạng đó; và cho một lượt `did` mang `Tone = warning`
-kèm chuỗi lỗi, thì kết quả mang state báo lỗi chứ không phải state hoàn tất.
+**AC-4** — Cho một lượt eve thật thuộc mỗi dạng `said`, `reasoned`, `did`,
+khi đưa qua lớp chuyển kiểu, thì kết quả mang đúng `role` và đúng `state` của
+AI SDK cho dạng đó; và cho một lượt `did` mang `Tone = warning` kèm chuỗi lỗi,
+thì kết quả mang state báo lỗi chứ không phải state hoàn tất.
+
+Dạng thứ tư — `asked` — **cố ý không đi qua lớp chuyển**, và phép đo phải
+khẳng định điều đó chứ không bỏ lửng: `docs/chat-ui.md` xếp form hỏi lại vào
+nhóm ngoại lệ giữ shadcn, vì `Confirmation` của AI Elements là đồng ý/từ chối
+chứ không phải một biểu mẫu. Nó cũng là dạng duy nhất mang kiểu của thư viện
+`eve`, mà phân tích kiểu đó ở biên sẽ phải sửa ba tệp AC-2 cấm chạm.
 
 **AC-5** — Cho mỗi component còn lại trong `ai-elements/`, khi quét chuỗi
 hiển thị của nó, thì không chuỗi nào là văn bản tiếng Anh viết cứng; mọi chuỗi
