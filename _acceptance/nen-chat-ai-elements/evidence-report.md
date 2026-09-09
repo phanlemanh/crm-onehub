@@ -187,6 +187,30 @@ human_signoff:
 
 ## Ngoài hợp đồng
 
+Bảy mục dưới đây là lỗi THẬT nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1.
+Máy không tự sửa chúng — người quyết ở Cổng 2. Xếp theo mức nặng.
+
+- **[high]** Hồ sơ bằng chứng đã ký của một vòng khác bị ghi đè trong diff của vòng này
+  - chỗ: `_acceptance/chan-lai-component-ra-man/evidence/ve-that.json`:78
+
+- **[high]** toToolPart biến kết quả "chạy xong nhưng không ghi" thành lỗi giả và nuốt mất output
+  - chỗ: `packages/ui/src/lib/eve-to-ai-sdk.ts`:49
+
+- **[medium]** Nhãn vai trong bản tải về là chuỗi cứng tiếng Anh, nằm ngoài bảng chuỗi và ngoài tầm răng chu-cung
+  - chỗ: `packages/ui/src/components/ai-elements/conversation.tsx`:128
+
+- **[medium]** source.url khai lỏng hơn schema đang thật sự sinh ra nó, trong khi giá trị chảy thẳng vào href
+  - chỗ: `packages/validation/src/agent-transcript.ts`:9
+
+- **[medium]** Hình dạng 5 — tuyên quét cả lớp component nhưng chỉ assert một điểm: 6 tệp không nạp được vẫn xanh
+  - chỗ: `packages/ui/test/lai-ra-man.spec.tsx`:233
+
+- **[low]** so-lech-chuan.mjs rò thư mục tạm ở mọi đường thoát lỗi — process.exit bỏ qua finally
+  - chỗ: `_acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs`:257
+
+- **[low]** Hình dạng 3 — assert tên công cụ có mặt trong khi lời hứa của chính bài kiểm là quan hệ output-vào ≡ output-ra
+  - chỗ: `packages/ui/test/eve-to-ai-sdk.spec.ts`:89
+
 ## Analyst
 
 E4, E5, E6, E13, E14
