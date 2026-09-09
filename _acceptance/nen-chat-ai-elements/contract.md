@@ -18,12 +18,12 @@ veto_opened_at: 2026-09-09T08:49:27Z
 ## Context
 
 Phase 0 của việc chuyển chat sang AI Elements. Kho đang chứa 23 component
-vendored mà chỉ 2 được nhập; 21 file còn lại vô hình với `knip` vì
+vendored mà chỉ 4 còn khả đạt từ ứng dụng; 19 file còn lại vô hình với `knip` vì
 `knip.json:36` khai mỗi component là một điểm vào. Một trong 21 file là
 `open-in-chat`, thứ `docs/chat-ui.md` cấm vì nó gửi truy vấn sang ChatGPT,
 Claude và v0.
 
-Vòng này dọn 21 file đó, dựng lớp chuyển kiểu giữa hình dạng lượt của eve và
+Vòng này dọn 19 file đó, dựng lớp chuyển kiểu giữa hình dạng lượt của eve và
 kiểu của AI SDK, chuẩn hoá phần còn lại về `docs/design.md`, và đặt hai răng
 cho hai lớp lỗi hiện không có thước nào: file mồ côi, và chuỗi tiếng Anh nằm
 trong component. Không màn nào đổi bố cục.
@@ -32,14 +32,15 @@ trong component. Không màn nào đổi bố cục.
 chuỗi tiếng Anh qua 12 file và 6 chỗ dùng màu ngoài bảng, nhưng phần lớn nằm
 trong file bị xoá. Còn lại trong ba file sống sót:
 
-| | `message` | `reasoning` | `conversation` | tổng |
-| --- | --- | --- | --- | --- |
-| chuỗi tiếng Anh cứng | 6, trong đó 4 ở `aria-label` | 2 | 0 | **8** |
-| bán kính ngoài thang | 2 × `rounded-full` | 0 | 1 × `rounded-full` | **3** |
-| màu ngoài bảng | 0 | 0 | 0 | **0** |
+| | `message` | `reasoning` | `shimmer` | `conversation` | tổng |
+| --- | --- | --- | --- | --- | --- |
+| chuỗi tiếng Anh cứng | 6, trong đó 4 ở `aria-label` | 2 | 0 | 0 | **8** |
+| bán kính ngoài thang | 2 × `rounded-full` | 0 | 0 | 1 × `rounded-full` | **3** |
+| màu ngoài bảng | 0 | 0 | 0 | 0 | **0** |
 
-Con số 0 ở hàng cuối là cố ý và phải đọc đúng: cả 6 chỗ dùng màu đều ở `tool`
-và `web-preview`, hai file bị AC-1 xoá. **Vế màu của AC-6 vì vậy là răng chống
+Bốn tập tin sống là `message`, `reasoning`, `shimmer` (do `reasoning` nhập) và
+`conversation` (giữ cho phép đo AC-3). Con số 0 ở hàng cuối là cố ý và phải đọc
+đúng: cả 6 chỗ dùng màu đều ở `tool` và `web-preview`, hai file bị AC-1 xoá. **Vế màu của AC-6 vì vậy là răng chống
 tái phát, không phải việc chuẩn hoá** — nó canh bản `conversation` kéo tươi và
 mọi component phase sau kéo về, chứ không sửa gì trong cây hôm nay.
 
@@ -49,9 +50,16 @@ bằng AI SDK", thu về Phase 0 tại Cổng Đáng của vòng này.
 ## Criteria
 
 **AC-1** — Cho một cây đã dọn, khi liệt kê `packages/ui/src/components/ai-elements/`,
-thì chỉ còn các file có ít nhất một chỗ ngoài thư mục đó nhập vào, cộng
-`conversation.tsx`; 21 file không ai nhập — kể cả `open-in-chat.tsx` và
+thì chỉ còn đúng bốn tập tin: `message.tsx`, `reasoning.tsx`, `shimmer.tsx`,
+`conversation.tsx`. 19 tập tin còn lại — kể cả `open-in-chat.tsx` và
 `loader.tsx` — không còn trong cây.
+
+**"Không ai nhập" nghĩa là không KHẢ ĐẠT BẮC CẦU**, không phải "không có chỗ
+nhập từ ngoài thư mục". Bắt đầu từ tập được `apps/**` nhập (`message`,
+`reasoning`), đi theo mọi đường nhập tương đối rồi lấy bao đóng.
+`reasoning.tsx:14` nhập `./shimmer`, nên `shimmer.tsx` sống dù không tập tin
+nào ngoài thư mục nhập nó. Một phép đếm chỉ nhìn đường nhập từ ngoài sẽ xoá
+`shimmer.tsx` và làm `reasoning.tsx` vỡ ở `bun run build`.
 
 **AC-2** — Cho cây sau khi dọn, khi chạy năm lệnh cổng của kho, thì cả năm
 xanh; và khi liệt kê mọi tập tin đổi so với nhánh nền, thì mỗi đường nằm trong
@@ -180,7 +188,7 @@ thật trong kho.
   `content-visibility`; kho không có Playwright hay Lighthouse. Đường khả dĩ là
   `puppeteer-core`, đã có sẵn cho `ui:capture`.
 - AC-9 và AC-10 là Phase 8 của kế hoạch, kéo lên vòng này vì vòng này vừa dọn
-  21 file và không có răng thì cây đầy lại y như cũ.
+  19 file và không có răng thì cây đầy lại y như cũ.
 - Phản biện context sạch trả về 2 lỗ P0 và 3 lỗ P1 trên bản nháp trước; cả năm
   đã sửa vào chính các tiêu chí trên. Xem `gap-probe.md`.
 - Ngưỡng 1,2 lần ở AC-7 và danh sách đường ở AC-2 là hai chỗ người duyệt nên

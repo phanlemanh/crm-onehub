@@ -11,16 +11,20 @@ evals:
       - "apps/**"
       - "_acceptance/nen-chat-ai-elements/rang/**"
     expected: |
-      Xanh: quet moi file trong packages/ui/src/components/ai-elements/, voi moi file
-      tim cho nhap no tu NGOAI thu muc do (theo subpath @crm/ui/components/ai-elements/<ten>
-      va duong dan tuong doi); in ra DANH SACH ten file con lai kem so cho nhap tung
-      file, khong chi tong. Danh sach phai la tap con cua {message, reasoning,
-      conversation} va moi ten trong do co it nhat 1 cho nhap, tru conversation duoc
-      mien vi AC-3 giu no cho phep do.
-      Ghim ten: open-in-chat va loader PHAI vang mat — hai ten nay kiem rieng, vi mot
-      la thu register cam va mot la file thuong nguon da bo.
+      Xanh: tinh tap KHA DAT BAC CAU, khong phai dem cho-nhap-tu-ngoai. Bat dau tu tap
+      tep trong ai-elements/ duoc apps/** nhap, roi di theo MOI duong nhap tuong doi
+      ("./x") va lay bao dong. Tep ngoai bao dong la mo coi.
+      In ra CA HAI danh sach — song va chet — kem so phan tu tung ben, khong chi tong.
+      Song phai la dung {message, reasoning, shimmer, conversation}; chet phai la 19
+      tep.
+      Ghim ten hai ca doi lap, ca hai deu phai dung:
+      (a) open-in-chat va loader PHAI vang mat — mot la thu register cam vi du lieu CRM
+      khong roi kho, mot la tep thuong nguon da bo;
+      (b) shimmer PHAI con — khong tep nao NGOAI thu muc nhap no, nhung reasoning.tsx
+      dong 14 nhap "./shimmer". Mot phep dem chi nhin duong nhap tu ngoai se xep
+      shimmer vao nhom chet; do la ca hong chinh cua phep do nay.
       Chieu do da chay tren CUNG fixture: cheo lai open-in-chat.tsx vao ban sao cay ->
-      ma 1, thong diep neu dung chuoi "open-in-chat" va chu "khong ai nhap".
+      ma 1, thong diep neu dung chuoi "open-in-chat" va chu "khong kha dat".
       Doc khong duoc thu muc -> ma 2, KHONG xanh.
 
   - id: E2

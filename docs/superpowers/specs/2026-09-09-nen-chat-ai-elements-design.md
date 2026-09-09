@@ -14,17 +14,17 @@ chín phase; đây là Phase 0 của nó, có sửa ở ba chỗ kế hoạch n�
 | Đo | Số |
 | --- | --- |
 | File vendored | 23 |
-| File có ít nhất một chỗ ngoài thư mục đó nhập vào | **2** (`message` 2 lượt, `reasoning` 1 lượt) |
-| File không ai nhập | **21** |
+| File khả đạt bắc cầu từ `apps/**` | **3** (`message`, `reasoning`, và `shimmer` do `reasoning.tsx:14` nhập) |
+| File không khả đạt | **20** — trừ `conversation` được giữ cho phép đo, còn **19** bị xoá |
 | Chuỗi tiếng Anh cứng | ~70, qua 12 file |
 | Chỗ dùng màu ngoài bảng | 6, ở `tool` và `web-preview` |
 | File có bán kính ngoài thang | 7 |
 
-21 file nằm đó là hệ quả trực tiếp của `knip.json:36`: `packages/ui` khai entry
+20 file nằm đó là hệ quả trực tiếp của `knip.json:36`: `packages/ui` khai entry
 là `src/components/**/*.tsx`, nên mỗi component tự là điểm vào và một file mồ
 côi không thể bị báo. Cây không có cách nào nói cho ai biết nó đang chứa gì.
 
-Trong 21 file đó có `open-in-chat.tsx`. Nó dựng URL sang `chatgpt.com`,
+Trong số đó có `open-in-chat.tsx`. Nó dựng URL sang `chatgpt.com`,
 `claude.ai`, `v0.app`, `scira.ai`, `t3.chat`, `cursor.com`. `docs/chat-ui.md`
 xếp nó vào nhóm "Never" với lý do viết thẳng: dữ liệu CRM nội bộ không rời kho.
 Chưa ai nhập nó — nhưng khoảng cách giữa "không ai nhập" và "có người nhập" là
@@ -32,7 +32,11 @@ một dòng, và không có răng nào canh dòng đó.
 
 ## Việc của vòng này
 
-1. **Dọn** — xoá 21 file không ai nhập. Giữ `message.tsx`, `reasoning.tsx`.
+1. **Dọn** — xoá 19 file không khả đạt. Giữ `message.tsx`, `reasoning.tsx`,
+   `shimmer.tsx`. "Không ai nhập" phải hiểu là **không khả đạt bắc cầu** từ tập
+   được `apps/**` nhập: `shimmer` không có chỗ nhập nào từ ngoài thư mục nhưng
+   `reasoning.tsx:14` nhập `./shimmer`, nên một phép đếm nông sẽ xoá nó và làm
+   `reasoning` vỡ.
 2. **Kéo lại `conversation`** bằng CLI (`bunx --bun ai-elements@latest add
    conversation`), vì phép đo cuộn cần nó, và bản tươi cho một mốc so sạch.
 3. **Lớp chuyển kiểu** — eve → kiểu của AI SDK, đặt ở `packages/ui`.
@@ -194,7 +198,7 @@ trước giao diện do máy sinh, ở đây không có gì sinh giao diện.
 
 ## Cái giá, nói thẳng
 
-- 21 file biến mất; phase sau kéo về từng cái, và vá lại từ đầu mỗi lần.
+- 19 file biến mất; phase sau kéo về từng cái, và vá lại từ đầu mỗi lần.
 - Một phép đo hiệu năng phải dựng từ không, trên `puppeteer-core`.
 - Hai răng mới, mỗi răng là một tác vụ cổng phải khai ở
   `.githooks/gate-shape.json` nếu nó vào bộ cổng đẩy.
