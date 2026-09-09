@@ -5,7 +5,7 @@ slug: chan-uy-thac-sai-luot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent]
-status: implemented
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-09-09
 veto_state: mo
