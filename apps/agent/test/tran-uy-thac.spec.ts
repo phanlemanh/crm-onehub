@@ -1,37 +1,26 @@
 import { describe, expect, it } from "bun:test";
-import type { HookEvent } from "eve/hooks";
 import {
 	BUILDER_DELEGATION_LIMIT_MESSAGE,
 	EMPTY_BUILDER_DELEGATION,
 	recordBuilderDelegation,
 } from "../agent/lib/builder-delegation";
+import {
+	type DuLieuHook,
+	datSlot,
+	duLieu,
+	goiBuilder,
+	goiKhac,
+	type HanhDong,
+	layHandler,
+	phien,
+	suKien,
+} from "./tran-uy-thac/chuoi-cuong-che";
 
-type SuKien = HookEvent<"actions.requested">;
-type DuLieu = SuKien["data"];
-type HanhDong = DuLieu["actions"][number];
 type TrangThai = Parameters<typeof recordBuilderDelegation>[0];
 
-const goi = (callId: string, subagentName: string): HanhDong => ({
-	callId,
-	description: "dung ban nhap tac nhan",
-	input: {},
-	kind: "subagent-call",
-	name: subagentName,
-	nodeId: "node-1",
-	subagentName,
-});
+const handler = await layHandler();
 
-const goiBuilder = (callId: string) => goi(callId, "agent_builder");
-const goiKhac = (callId: string) => goi(callId, "agent_runner");
-
-const duLieu = (
-	turnId: string,
-	stepIndex: number,
-	sequence: number,
-	...actions: HanhDong[]
-): DuLieu => ({ actions, sequence, stepIndex, turnId });
-
-const ghi = (state: TrangThai, data: DuLieu) =>
+const ghi = (state: TrangThai, data: DuLieuHook) =>
 	recordBuilderDelegation(state, data);
 
 const DA_GHI: TrangThai = { turnId: "turn-1", stepIndex: 2, sequence: 0 };
@@ -255,5 +244,122 @@ describe("mot-cau", () => {
 
 	it("mot-cau: chieu do — cau khong con chu creation", () => {
 		expect(cauNem()).not.toContain("creation");
+	});
+});
+
+describe("khong-xoa-slot", () => {
+	it("khong-xoa-slot: su kien 0 loi goi dung GIUA hai lan uy thac khong xoa toa do", () => {
+		const slot = datSlot();
+		handler(suKien(duLieu("turn-1", 2, 0, goiBuilder("call-a"))), phien());
+		expect(slot.doc()).toEqual({ turnId: "turn-1", stepIndex: 2, sequence: 0 });
+
+		handler(suKien(duLieu("turn-1", 3, 0, goiKhac("call-x"))), phien());
+		expect(slot.doc()).toEqual({ turnId: "turn-1", stepIndex: 2, sequence: 0 });
+
+		expect(() =>
+			handler(suKien(duLieu("turn-1", 4, 0, goiBuilder("call-b"))), phien()),
+		).toThrow("only once");
+	});
+
+	it("khong-xoa-slot: chieu do — lan chay lai cua CHINH step da ghi thi khong nem", () => {
+		const slot = datSlot();
+		handler(suKien(duLieu("turn-1", 2, 0, goiBuilder("call-a"))), phien());
+		handler(suKien(duLieu("turn-1", 3, 0, goiKhac("call-x"))), phien());
+		expect(() =>
+			handler(suKien(duLieu("turn-1", 2, 0, goiBuilder("call-b"))), phien()),
+		).not.toThrow();
+		expect(slot.doc()).toEqual({ turnId: "turn-1", stepIndex: 2, sequence: 0 });
+	});
+
+	it("khong-xoa-slot: hook that su ghi ben — su kien builder co ca get va update", () => {
+		const slot = datSlot();
+		handler(suKien(duLieu("turn-1", 2, 0, goiBuilder("call-a"))), phien());
+		expect(slot.nhatKy).toEqual(["get", "update"]);
+	});
+});
+
+describe("khong-quyen", () => {
+	it("khong-quyen: hook CHAM chot cung tren luot khong co quyen", () => {
+		const slot = datSlot();
+		handler(
+			suKien(duLieu("turn-1", 2, 0, goiBuilder("call-a"))),
+			phien({}, false),
+		);
+		expect(slot.nhatKy).toEqual(["get", "update"]);
+		expect(slot.doc()).toEqual({ turnId: "turn-1", stepIndex: 2, sequence: 0 });
+	});
+
+	it("khong-quyen: loi goi thu hai khac toa do trong cung luot thi chan", () => {
+		datSlot();
+		handler(
+			suKien(duLieu("turn-1", 2, 0, goiBuilder("call-a"))),
+			phien({}, false),
+		);
+		expect(() =>
+			handler(
+				suKien(duLieu("turn-1", 3, 0, goiBuilder("call-b"))),
+				phien({}, false),
+			),
+		).toThrow("only once");
+	});
+
+	it("khong-quyen: chieu do — CUNG bo dung, doi mot truong sang duoc phep, van chan", () => {
+		datSlot();
+		handler(
+			suKien(duLieu("turn-1", 2, 0, goiBuilder("call-a"))),
+			phien({}, true),
+		);
+		expect(() =>
+			handler(
+				suKien(duLieu("turn-1", 3, 0, goiBuilder("call-b"))),
+				phien({}, true),
+			),
+		).toThrow("only once");
+	});
+});
+
+describe("co-quyen", () => {
+	it("co-quyen: luot co quyen van bi chan o loi goi thu hai", () => {
+		datSlot();
+		handler(
+			suKien(duLieu("turn-1", 2, 0, goiBuilder("call-a"))),
+			phien({}, true),
+		);
+		expect(() =>
+			handler(
+				suKien(duLieu("turn-1", 3, 0, goiBuilder("call-b"))),
+				phien({}, true),
+			),
+		).toThrow("only once");
+	});
+
+	it("co-quyen: chieu do — goi dung mot lan thi KHONG chan, va trang thai ghi toa do", () => {
+		const slot = datSlot();
+		expect(() =>
+			handler(
+				suKien(duLieu("turn-1", 2, 0, goiBuilder("call-a"))),
+				phien({}, true),
+			),
+		).not.toThrow();
+		expect(slot.doc()).toEqual({ turnId: "turn-1", stepIndex: 2, sequence: 0 });
+	});
+});
+
+describe("ngoai-kenh", () => {
+	it("ngoai-kenh: ma tran toan phan purpose nhan commandType, sau o", () => {
+		const PURPOSES = ["builder", "team-agent", "research"] as const;
+		const COMMAND_TYPES = ["CREATE_AGENT", "CHAT"] as const;
+		const o = PURPOSES.flatMap((purpose) =>
+			COMMAND_TYPES.map((commandType) => ({ purpose, commandType })),
+		);
+		expect(o).toHaveLength(6);
+		for (const { purpose, commandType } of o) {
+			const slot = datSlot();
+			handler(
+				suKien(duLieu("turn-1", 2, 0, goiBuilder("call-a"))),
+				phien({ purpose, commandType }),
+			);
+			expect(slot.nhatKy.length > 0).toBe(purpose === "builder");
+		}
 	});
 });
