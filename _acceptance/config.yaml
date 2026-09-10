@@ -47,9 +47,10 @@ executors:
     tr_cung_mot_batch: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t cung-batch
     tr_mot_cau_thong_diep: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t mot-cau
     tr_khong_co_loi_goi: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t khong-loi-goi
-    tc_step_chay_lai: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t step-chay-lai
+    tc_gioi_han_chay_lai: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t gioi-han-chay-lai
     tc_goi_song_song: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t goi-song-song
-    tc_toa_do_step_khac: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t toa-do-step-khac
+    tc_lap_callid: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t lap-callid
+    tc_chuoi_cuong_che: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t chuoi-cuong-che
     tc_luot_moi: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t luot-moi
     tc_lan_dau: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t lan-dau
     tc_cung_batch: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t cung-batch

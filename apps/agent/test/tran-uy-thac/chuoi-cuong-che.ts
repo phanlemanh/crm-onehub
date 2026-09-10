@@ -26,8 +26,6 @@ export const DUONG_HOOK = resolve(
 export type SuKienHanhDong = HookEvent<"actions.requested">;
 export type DuLieuHanhDong = SuKienHanhDong["data"];
 export type HanhDong = DuLieuHanhDong["actions"][number];
-export type DuLieuStep = HookEvent<"step.started">["data"];
-
 let kho: BuilderDelegationState = { ...EMPTY_BUILDER_DELEGATION };
 let nhatKy: string[] = [];
 
@@ -64,10 +62,6 @@ export async function layHookTu(duong: string) {
 			event: SuKienHanhDong,
 			ctx: never,
 		) => void,
-		stepBatDau: hook.events["step.started"] as (
-			event: { data: DuLieuStep },
-			ctx: never,
-		) => void,
 	};
 }
 
@@ -77,7 +71,7 @@ export type Hook = Awaited<ReturnType<typeof layHookTu>>;
 
 export const CHUOI_SONG = {
 	daGhi: true,
-	oSauLanMot: { turnId: "turn-1", stepIndex: 2, callIds: ["call-a"] },
+	oSauLanMot: { turnId: "turn-1", callIds: ["call-a"] },
 	nemOLanHai: true,
 } as const;
 
@@ -113,12 +107,6 @@ export const duLieu = (
 	stepIndex: number,
 	...actions: HanhDong[]
 ): DuLieuHanhDong => ({ actions, sequence: 0, stepIndex, turnId });
-
-export const duLieuStep = (turnId: string, stepIndex: number): DuLieuStep => ({
-	sequence: 0,
-	stepIndex,
-	turnId,
-});
 
 export const suKien = (data: DuLieuHanhDong) =>
 	({ data }) as unknown as SuKienHanhDong;

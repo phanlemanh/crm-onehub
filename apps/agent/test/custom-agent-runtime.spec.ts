@@ -6,7 +6,6 @@ import {
 import { builderTaskMarkdown } from "../agent/instructions/task";
 import { AGENT_ACTION_EXECUTORS } from "../agent/lib/agent-actions";
 import {
-	clearBuilderDelegationStep,
 	EMPTY_BUILDER_DELEGATION,
 	recordBuilderDelegation,
 } from "../agent/lib/builder-delegation";
@@ -395,11 +394,7 @@ describe("builder delegation guard", () => {
 			EMPTY_BUILDER_DELEGATION,
 			duLieu("turn-1", 2, "call-1"),
 		);
-		expect(first).toEqual({
-			turnId: "turn-1",
-			stepIndex: 2,
-			callIds: ["call-1"],
-		});
+		expect(first).toEqual({ turnId: "turn-1", callIds: ["call-1"] });
 
 		expect(
 			recordBuilderDelegation(first, duLieu("turn-1", 2, "call-1")),
@@ -412,22 +407,7 @@ describe("builder delegation guard", () => {
 		).toThrow("only once");
 		expect(
 			recordBuilderDelegation(first, duLieu("turn-2", 0, "call-2")),
-		).toEqual({ turnId: "turn-2", stepIndex: 0, callIds: ["call-2"] });
-	});
-
-	it("reopens the ceiling when the recorded step starts again", () => {
-		const first = recordBuilderDelegation(
-			EMPTY_BUILDER_DELEGATION,
-			duLieu("turn-1", 2, "call-1"),
-		);
-		const cleared = clearBuilderDelegationStep(first, {
-			sequence: 0,
-			stepIndex: 2,
-			turnId: "turn-1",
-		});
-		expect(
-			recordBuilderDelegation(cleared, duLieu("turn-1", 2, "call-2")),
-		).toEqual({ turnId: "turn-1", stepIndex: 2, callIds: ["call-2"] });
+		).toEqual({ turnId: "turn-2", callIds: ["call-2"] });
 	});
 });
 

@@ -5,6 +5,6 @@ import {
 } from "./builder-delegation";
 
 export const builderDelegationState = defineState<BuilderDelegationState>(
-	"crm.builder-delegation.v2",
+	"crm.builder-delegation",
 	() => ({ ...EMPTY_BUILDER_DELEGATION }),
 );
