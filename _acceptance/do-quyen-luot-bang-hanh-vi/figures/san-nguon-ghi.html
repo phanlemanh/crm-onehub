@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sàn nguồn ghi — dân số nhỏ, liệt kê được, và fail-closed</title>
+<title>Sàn nguồn ghi — đi từ chữ commandType, không đi từ hình dạng lời gọi</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -106,161 +106,220 @@
 <body>
 <div class="frame">
   <p class="eyebrow">Cổng 1 · Hình 2 · AC-3</p>
-  <h1>Sàn nguồn ghi — dân số nhỏ, liệt kê được, và fail-closed</h1>
-  <p class="standfirst">Sàn cũ chứng minh một phủ định trên cả kho, nên không bao giờ đo đủ. Sàn mới đo một bất biến đếm được: mọi chỗ ghi <code>commandType</code> vào một <code>data</code> của Prisma phải lấy giá trị từ đúng hai nguồn đã đặt tên. Thừa hay thiếu một phần tử đều đỏ.</p>
+  <h1>Sàn nguồn ghi — đi từ chữ <code>commandType</code>, không đi từ hình dạng lời gọi</h1>
+  <p class="standfirst">Khung cũ lấy dân số từ object <code>data</code> của một lời gọi Prisma, nên ba cách viết đã lọt qua với <code>CREATE_AGENT</code> ghim cứng mà thước vẫn xanh. Khung mới lấy dân số từ chính chữ <code>commandType</code>: đúng chín chỗ trong <code>apps/api/src</code>, so sánh có bội với danh sách đã ghim, mỗi chỗ xếp một trong bốn loại bằng luật máy.</p>
 
   <div class="card">
-  <svg viewBox="0 0 1440 824" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cây quyết định: dân số là mọi chỗ ghi commandType trong data của Prisma ở apps/api/src; nhánh loại khỏi dân số gồm select where orderBy include; nhánh vào dân số rẽ tiếp thành hai nguồn hợp lệ và ba nhánh đỏ; bốn vectơ đột biến ghim-cung, bien-trung-gian, quan-he-long, duoi-select">
+  <svg viewBox="0 0 1440 864" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="So sánh hai khung đo. Bên trái là khung đã loại, vẽ mờ và gạch chéo: dân số là object data của lời gọi Prisma create, update, upsert, với ba lỗ đã chứng minh bằng cây thử là upsert, updateMany và data là một biến. Bên phải là khung đã chọn: dân số là mọi chỗ viết ra khoá commandType trong apps/api/src, đúng chín chỗ, rẽ thành bốn loại doc, khai, suy, khac. Dưới cùng là luật đỏ cho loại khac và một hàng sáu vectơ đột biến.">
     <defs>
       <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
       <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
       <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      <pattern id="gach" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(23,23,23,0.09)" stroke-width="1"/>
+      </pattern>
     </defs>
 
     <rect width="100%" height="100%" fill="#fafafa"/>
 
     <!-- ===== ĐƯỜNG NỐI (vẽ trước) ===== -->
-    <path d="M 380,300 H 432 Q 440,300 440,292 V 104 Q 440,96 448,96 H 474" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
-    <line x1="380" y1="344" x2="474" y2="344" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <line x1="524" y1="164" x2="596" y2="164" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
 
-    <line x1="880" y1="96" x2="994" y2="96" stroke="#1f4f7a" stroke-width="1.2" marker-end="url(#arrow-link)"/>
+    <line x1="1000" y1="280" x2="1000" y2="328" stroke="#575757" stroke-width="1"/>
+    <path d="M 198,376 V 336 Q 198,328 206,328 H 1234 Q 1242,328 1242,336 V 376" fill="none" stroke="#575757" stroke-width="1"/>
+    <line x1="546" y1="328" x2="546" y2="376" stroke="#575757" stroke-width="1"/>
+    <line x1="894" y1="328" x2="894" y2="376" stroke="#575757" stroke-width="1"/>
 
-    <line x1="880" y1="344" x2="940" y2="344" stroke="#575757" stroke-width="1.2"/>
-    <line x1="940" y1="228" x2="940" y2="660" stroke="#575757" stroke-width="1.2"/>
-    <path d="M 940,228 Q 940,220 948,220 H 994" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
-    <path d="M 940,332 H 994" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
-    <path d="M 940,444 H 994" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
-    <path d="M 940,556 H 994" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
-    <path d="M 940,660 Q 940,668 948,668 H 994" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <line x1="1242" y1="488" x2="1242" y2="516" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
 
-    <!-- ===== DÂN SỐ ===== -->
-    <rect x="40" y="272" width="340" height="144" rx="6" fill="#fafafa"/>
-    <rect x="40" y="272" width="340" height="144" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
-    <rect x="52" y="282" width="68" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
-    <text x="86" y="295" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">DÂN SỐ</text>
-    <text x="210" y="326" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">mọi chỗ GHI commandType</text>
-    <text x="210" y="348" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">apps/api/src — đọc bằng AST</text>
-    <text x="210" y="366" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">trong object data của lời gọi</text>
-    <text x="210" y="384" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">Prisma create / update / upsert</text>
-    <text x="210" y="402" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">kể cả object create lồng của quan hệ</text>
+    <!-- ===== KHUNG ĐÃ LOẠI ===== -->
+    <rect x="40" y="48" width="480" height="232" rx="6" fill="#fafafa"/>
+    <rect x="40" y="48" width="480" height="232" rx="6" fill="rgba(23,23,23,0.02)"/>
+    <rect x="40" y="48" width="480" height="232" rx="6" fill="url(#gach)"/>
+    <rect x="40" y="48" width="480" height="232" rx="6" fill="none" stroke="rgba(23,23,23,0.28)" stroke-width="1" stroke-dasharray="5,4"/>
 
-    <!-- ===== NHÁNH LOẠI KHỎI DÂN SỐ ===== -->
-    <rect x="480" y="48" width="400" height="96" rx="6" fill="#fafafa"/>
-    <rect x="480" y="48" width="400" height="96" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1" stroke-dasharray="5,4"/>
-    <rect x="492" y="58" width="116" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.28)" stroke-width="0.8"/>
-    <text x="550" y="71" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LOẠI KHỎI DÂN SỐ</text>
-    <text x="680" y="102" fill="#575757" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đây là đọc, không phải ghi</text>
-    <text x="680" y="122" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">select · where · orderBy · include</text>
-    <text x="680" y="138" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">kiểm bằng tổ tiên trong cây AST, không bằng tên tệp</text>
+    <rect x="52" y="60" width="132" height="18" rx="4" fill="#fafafa"/>
+    <rect x="52" y="60" width="132" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.30)" stroke-width="0.8" stroke-dasharray="4,3"/>
+    <text x="118" y="73" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHUNG ĐÃ LOẠI</text>
 
-    <!-- ===== NHÁNH VÀO DÂN SỐ ===== -->
-    <rect x="480" y="272" width="400" height="144" rx="6" fill="#fafafa"/>
-    <rect x="480" y="272" width="400" height="144" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
-    <rect x="492" y="282" width="88" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
-    <text x="536" y="295" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">VÀO DÂN SỐ</text>
-    <rect x="708" y="282" width="88" height="18" rx="4" fill="#171717"/>
-    <text x="752" y="295" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">quan-he-long</text>
-    <rect x="804" y="282" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
-    <text x="836" y="295" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
-    <text x="680" y="328" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">nằm trong object ghi</text>
-    <text x="680" y="350" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">data của create / update / upsert</text>
-    <text x="680" y="368" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">kể cả object create lồng của quan hệ</text>
-    <text x="680" y="392" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">vectơ quan-he-long dời một chỗ ghi vào</text>
-    <text x="680" y="408" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">quan hệ lồng — thước vẫn phải thấy nó</text>
+    <text x="52" y="106" fill="#575757" font-size="12" font-weight="600" font-family="'Geist', sans-serif">dân số theo hình dạng lời gọi</text>
+    <line x1="52" y1="102" x2="236" y2="102" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+    <text x="52" y="128" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">object data của lời gọi Prisma create / update / upsert</text>
 
-    <!-- ===== VECTƠ PHẢI VẪN XANH ===== -->
-    <rect x="1000" y="48" width="400" height="96" rx="6" fill="#fafafa"/>
-    <rect x="1000" y="48" width="400" height="96" rx="6" fill="#ffffff" stroke="#1f4f7a" stroke-width="1.4"/>
-    <rect x="1012" y="58" width="88" height="18" rx="4" fill="#1f4f7a"/>
-    <text x="1056" y="71" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">duoi-select</text>
-    <rect x="1108" y="58" width="64" height="18" rx="4" fill="none" stroke="#1f4f7a" stroke-width="1"/>
-    <text x="1140" y="71" fill="#1f4f7a" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 0</text>
-    <text x="1200" y="102" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">vectơ phải VẪN XANH</text>
-    <text x="1200" y="124" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">dời một commandType xuống select</text>
-    <text x="1200" y="140" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">thước không được đỏ — nếu đỏ là đỏ oan</text>
+    <text x="52" y="158" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.12em">BA LỖ ĐÃ CHỨNG MINH BẰNG CÂY THỬ</text>
+    <text x="52" y="180" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">·</text>
+    <text x="64" y="180" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">upsert — khuôn Prisma không có khoá data</text>
+    <text x="52" y="198" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">·</text>
+    <text x="64" y="198" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">updateMany — ngoài tầm bộ dò theo hình dạng</text>
+    <text x="52" y="216" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">·</text>
+    <text x="64" y="216" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">data là một biến, không phải object literal</text>
 
-    <!-- ===== HAI NGUỒN HỢP LỆ ===== -->
-    <rect x="1000" y="176" width="400" height="88" rx="6" fill="#fafafa"/>
-    <rect x="1000" y="176" width="400" height="88" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
-    <rect x="1012" y="186" width="72" height="18" rx="4" fill="none" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
-    <text x="1048" y="199" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">HỢP LỆ</text>
-    <text x="1200" y="228" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">&lt;x&gt;.commandType</text>
-    <text x="1200" y="250" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">lời khai đã parse ở biên bằng zod enum</text>
+    <rect x="52" y="240" width="2" height="16" fill="#171717"/>
+    <text x="64" y="253" fill="#171717" font-size="9" font-family="'Geist Mono', monospace">cả ba đều ghim cứng CREATE_AGENT mà thước vẫn XANH</text>
 
-    <rect x="1000" y="288" width="400" height="88" rx="6" fill="#fafafa"/>
-    <rect x="1000" y="288" width="400" height="88" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
-    <rect x="1012" y="298" width="72" height="18" rx="4" fill="none" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
-    <text x="1048" y="311" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">HỢP LỆ</text>
-    <text x="1200" y="340" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">commandTypeFromAuthorization(...)</text>
-    <text x="1200" y="362" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">máy chủ suy từ câu hỏi treo đã lưu</text>
+    <!-- ===== nhãn mũi tên đổi khung ===== -->
+    <rect x="530" y="140" width="64" height="16" rx="2" fill="#fafafa"/>
+    <text x="562" y="152" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐỔI KHUNG</text>
 
-    <!-- ===== BA NHÁNH ĐỎ ===== -->
-    <rect x="1000" y="400" width="400" height="88" rx="6" fill="#fafafa"/>
-    <rect x="1000" y="400" width="400" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
-    <rect x="1012" y="410" width="76" height="18" rx="4" fill="#171717"/>
-    <text x="1050" y="423" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ghim-cung</text>
-    <rect x="1096" y="410" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
-    <text x="1128" y="423" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
-    <text x="1200" y="452" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chuỗi ghim cứng</text>
-    <text x="1200" y="472" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">commandType: "CREATE_AGENT"</text>
+    <!-- ===== KHUNG ĐÃ CHỌN ===== -->
+    <rect x="600" y="48" width="800" height="232" rx="6" fill="#fafafa"/>
+    <rect x="600" y="48" width="800" height="232" rx="6" fill="rgba(0,107,79,0.06)" stroke="#006B4F" stroke-width="1.4"/>
 
-    <rect x="1000" y="512" width="400" height="88" rx="6" fill="#fafafa"/>
-    <rect x="1000" y="512" width="400" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
-    <rect x="1012" y="522" width="108" height="18" rx="4" fill="#171717"/>
-    <text x="1066" y="535" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">bien-trung-gian</text>
-    <rect x="1128" y="522" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
-    <text x="1160" y="535" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
-    <text x="1200" y="564" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">biến trung gian</text>
-    <text x="1200" y="584" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">commandType: loai</text>
+    <rect x="612" y="60" width="132" height="18" rx="4" fill="none" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
+    <text x="678" y="73" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">KHUNG ĐÃ CHỌN</text>
 
-    <rect x="1000" y="624" width="400" height="88" rx="6" fill="#fafafa"/>
-    <rect x="1000" y="624" width="400" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
-    <rect x="1012" y="634" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
-    <text x="1044" y="647" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
-    <text x="1200" y="676" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">hàm mới</text>
-    <text x="1200" y="696" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">một nguồn thứ ba mọc lên im lặng</text>
+    <text x="612" y="108" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">mọi chỗ VIẾT RA khoá commandType</text>
+    <text x="612" y="132" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">apps/api/src — đọc bằng AST, đi từ CHỮ chứ không từ hình dạng lời gọi Prisma</text>
 
-    <!-- ===== MA TRẬN TOÀN PHẦN ===== -->
-    <rect x="40" y="472" width="860" height="136" rx="6" fill="#fafafa"/>
-    <rect x="40" y="472" width="860" height="136" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="0.8" stroke-dasharray="4,4"/>
-    <text x="60" y="498" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">MA TRẬN TOÀN PHẦN, KHÔNG PHẢI MỘT CẬN DƯỚI</text>
-    <text x="60" y="526" fill="#171717" font-size="9" font-family="'Geist Mono', monospace">tập tìm được phải BẰNG ĐÚNG danh sách file:dòng đã ghim trong chân đo</text>
-    <text x="60" y="546" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">thừa một phần tử hay thiếu một phần tử đều là mã 2 — in cả hai danh sách</text>
-    <text x="60" y="572" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">thêm một nguồn hợp lệ thứ ba là việc phải sửa danh sách nguồn,</text>
-    <text x="60" y="590" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">không phải việc để thước đỏ oan — thông điệp đỏ phải nói được điều đó</text>
+    <text x="612" y="162" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.12em">SO SÁNH CÓ BỘI VỚI DANH SÁCH ĐÃ GHIM</text>
+    <text x="612" y="184" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">mỗi lần xuất hiện là một phần tử riêng, không khử trùng</text>
+    <text x="612" y="202" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">thừa hay thiếu một phần tử đều là mã 2 — in cả hai danh sách</text>
+    <text x="612" y="220" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">một đường ghi quyền buộc phải viết khoá ấy ra ở đâu đó</text>
+
+    <rect x="1148" y="76" width="232" height="176" rx="6" fill="#ffffff" stroke="rgba(0,107,79,0.35)" stroke-width="1"/>
+    <text x="1264" y="146" fill="#006B4F" font-size="40" font-family="'Lora', Georgia, serif" text-anchor="middle">9</text>
+    <text x="1264" y="172" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chỗ viết ra khoá</text>
+    <text x="1264" y="188" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">commandType</text>
+    <line x1="1172" y1="204" x2="1356" y2="204" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="1264" y="226" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">3 doc · 2 khai · 1 suy · 3 khac</text>
+
+    <!-- ===== BỐN LOẠI ===== -->
+    <rect x="40" y="376" width="316" height="112" rx="6" fill="#fafafa"/>
+    <rect x="40" y="376" width="316" height="112" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <rect x="52" y="386" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="84" y="399" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">doc</text>
+    <text x="344" y="399" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">3 chỗ</text>
+    <text x="52" y="428" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">nằm dưới select / where /</text>
+    <text x="52" y="446" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">orderBy / include</text>
+    <text x="52" y="470" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">kiểm bằng tổ tiên trong cây AST</text>
+
+    <rect x="388" y="376" width="316" height="112" rx="6" fill="#fafafa"/>
+    <rect x="388" y="376" width="316" height="112" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <rect x="400" y="386" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="432" y="399" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">khai</text>
+    <text x="692" y="399" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">2 chỗ</text>
+    <text x="400" y="428" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">initializer là</text>
+    <text x="400" y="446" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">&lt;x&gt;.commandType</text>
+    <text x="400" y="470" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">createBuilder · submitBuilder</text>
+
+    <rect x="736" y="376" width="316" height="112" rx="6" fill="#fafafa"/>
+    <rect x="736" y="376" width="316" height="112" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <rect x="748" y="386" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="780" y="399" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">suy</text>
+    <text x="1040" y="399" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">1 chỗ</text>
+    <text x="748" y="428" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">initializer là lời gọi</text>
+    <text x="748" y="446" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">commandTypeFromAuthorization(...)</text>
+    <text x="748" y="470" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">answerBuilderQuestion</text>
+
+    <rect x="1084" y="376" width="316" height="112" rx="6" fill="#fafafa"/>
+    <rect x="1084" y="376" width="316" height="112" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <rect x="1096" y="386" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="1128" y="399" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">khac</text>
+    <text x="1388" y="399" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">3 chỗ</text>
+    <text x="1096" y="428" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">khai báo kiểu và khuôn zod</text>
+    <text x="1096" y="446" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">tất cả ở conversations.contracts.ts</text>
+    <text x="1096" y="470" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">một chỗ ra ngoài tệp ấy → mã 2</text>
+
+    <!-- ===== LUẬT ĐỎ ===== -->
+    <rect x="40" y="520" width="1360" height="88" rx="6" fill="#fafafa"/>
+    <rect x="40" y="520" width="1360" height="88" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="0.8" stroke-dasharray="4,4"/>
+    <text x="60" y="549" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LUẬT ĐỎ — ÁP LÊN LOẠI khac</text>
+    <rect x="1300" y="536" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="1332" y="549" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
+    <text x="60" y="574" fill="#171717" font-size="9" font-family="'Geist Mono', monospace">một phần tử khac nằm NGOÀI conversations.contracts.ts là một chỗ ghi không lấy từ hai nguồn đã đặt tên</text>
+    <text x="60" y="594" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">→ mã 2, in file:dòng — thêm một chỗ viết khoá ấy là việc phải sửa danh sách ghim, không phải việc để thước đỏ oan</text>
+
+    <!-- ===== SÁU VECTƠ ===== -->
+    <text x="40" y="648" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">SÁU VECTƠ ĐỘT BIẾN — MỖI CÁI PHẢI LÀM THƯỚC THOÁT MÃ 2</text>
+
+    <rect x="40" y="664" width="200" height="100" rx="6" fill="#fafafa"/>
+    <rect x="40" y="664" width="200" height="100" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.35)" stroke-width="1"/>
+    <rect x="52" y="674" width="176" height="18" rx="4" fill="#171717"/>
+    <text x="140" y="687" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ghim-cung</text>
+    <text x="140" y="716" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chứng bắt được chuỗi</text>
+    <text x="140" y="732" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ghim cứng CREATE_AGENT</text>
+    <rect x="108" y="740" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="140" y="753" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
+
+    <rect x="272" y="664" width="200" height="100" rx="6" fill="#fafafa"/>
+    <rect x="272" y="664" width="200" height="100" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.35)" stroke-width="1"/>
+    <rect x="284" y="674" width="176" height="18" rx="4" fill="#171717"/>
+    <text x="372" y="687" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">bien-trung-gian</text>
+    <text x="372" y="716" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chứng bắt được giá trị</text>
+    <text x="372" y="732" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">đi qua một biến trung gian</text>
+    <rect x="340" y="740" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="372" y="753" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
+
+    <rect x="504" y="664" width="200" height="100" rx="6" fill="#fafafa"/>
+    <rect x="504" y="664" width="200" height="100" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.35)" stroke-width="1"/>
+    <rect x="516" y="674" width="176" height="18" rx="4" fill="#171717"/>
+    <text x="604" y="687" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">quan-he-long</text>
+    <text x="604" y="716" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chứng bắt được chỗ ghi</text>
+    <text x="604" y="732" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">trong quan hệ create lồng</text>
+    <rect x="572" y="740" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="604" y="753" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
+
+    <rect x="736" y="664" width="200" height="100" rx="6" fill="#fafafa"/>
+    <rect x="736" y="664" width="200" height="100" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.35)" stroke-width="1"/>
+    <rect x="748" y="674" width="176" height="18" rx="4" fill="#171717"/>
+    <text x="836" y="687" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">upsert-ghim-cung</text>
+    <text x="836" y="716" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chứng không bỏ sót</text>
+    <text x="836" y="732" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">upsert</text>
+    <rect x="804" y="740" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="836" y="753" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
+
+    <rect x="968" y="664" width="200" height="100" rx="6" fill="#fafafa"/>
+    <rect x="968" y="664" width="200" height="100" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.35)" stroke-width="1"/>
+    <rect x="980" y="674" width="176" height="18" rx="4" fill="#171717"/>
+    <text x="1068" y="687" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">data-la-bien</text>
+    <text x="1068" y="716" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chứng không bỏ sót payload</text>
+    <text x="1068" y="732" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">không phải object literal</text>
+    <rect x="1036" y="740" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="1068" y="753" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
+
+    <rect x="1200" y="664" width="200" height="100" rx="6" fill="#fafafa"/>
+    <rect x="1200" y="664" width="200" height="100" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.35)" stroke-width="1"/>
+    <rect x="1212" y="674" width="176" height="18" rx="4" fill="#171717"/>
+    <text x="1300" y="687" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">select-thanh-doc</text>
+    <text x="1300" y="716" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chứng phân biệt đọc với ghi</text>
+    <text x="1300" y="732" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chỗ mới phải xếp loại doc</text>
+    <rect x="1268" y="740" width="64" height="18" rx="4" fill="none" stroke="#171717" stroke-width="1"/>
+    <text x="1300" y="753" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">MÃ 2</text>
 
     <!-- ===== CHÚ GIẢI ===== -->
-    <line x1="40" y1="752" x2="1400" y2="752" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
-    <text x="40" y="772" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+    <line x1="40" y1="792" x2="1400" y2="792" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="40" y="812" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
 
-    <rect x="40" y="790" width="20" height="16" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
-    <text x="68" y="802" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">nhánh hợp lệ — hai nguồn đã đặt tên</text>
+    <rect x="40" y="824" width="20" height="16" rx="3" fill="rgba(23,23,23,0.02)"/>
+    <rect x="40" y="824" width="20" height="16" rx="3" fill="url(#gach)"/>
+    <rect x="40" y="824" width="20" height="16" rx="3" fill="none" stroke="rgba(23,23,23,0.28)" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="68" y="836" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">khung đã loại — theo hình dạng lời gọi</text>
 
-    <rect x="388" y="790" width="20" height="16" rx="3" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1" stroke-dasharray="4,3"/>
-    <text x="416" y="802" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">loại khỏi dân số — đọc, không ghi</text>
+    <rect x="388" y="824" width="20" height="16" rx="3" fill="rgba(0,107,79,0.06)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="416" y="836" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">khung đã chọn — theo chữ commandType</text>
 
-    <rect x="736" y="790" width="20" height="16" rx="3" fill="#171717"/>
-    <text x="764" y="802" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">vectơ đỏ — thước phải thoát mã 2</text>
+    <rect x="736" y="824" width="20" height="16" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <text x="764" y="836" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">bốn loại — xếp bằng luật máy trên AST</text>
 
-    <rect x="1084" y="790" width="20" height="16" rx="3" fill="#1f4f7a"/>
-    <text x="1112" y="802" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">vectơ phải vẫn xanh — thước thoát 0</text>
+    <rect x="1084" y="824" width="20" height="16" rx="3" fill="#171717"/>
+    <text x="1112" y="836" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">vectơ đột biến — phải thoát mã 2</text>
   </svg>
   </div>
 
   <div class="notes">
     <div>
-      <h2>Vì sao đổi mệnh đề, không chỉ đổi bộ dò</h2>
-      <p>Sàn cũ chứng minh một phủ định trên cả kho — hình dạng bài toán ấy không bao giờ đo đủ, vì luôn còn một cách viết nữa. Sàn mới đo một bất biến đếm được trên một dân số nhỏ, liệt kê được.</p>
-      <p class="quiet">Điểm quyết định <code>d-…-20461</code>: ba nhánh đã cân là giữ mệnh đề cũ với AST rộng hơn, đổi mệnh đề, hoặc bỏ hẳn sàn.</p>
+      <h2>Vì sao đổi dân số, không chỉ nới bộ dò</h2>
+      <p>Khung cũ đi từ hình dạng lời gọi Prisma, nên nó chỉ thấy được cái có khoá <code>data</code> là một object literal. Cây thử đã chứng minh ba cách viết lọt: <code>upsert</code>, <code>updateMany</code>, và <code>data</code> là một biến — cả ba ghim cứng <code>CREATE_AGENT</code> mà thước vẫn xanh.</p>
+      <p class="quiet">Khung mới đi từ chữ: một đường ghi quyền buộc phải viết khoá <code>commandType</code> ra ở đâu đó, nên chính chữ ấy là dân số đúng.</p>
     </div>
     <div>
-      <h2>Vì sao phân biệt ghi với đọc bằng tổ tiên</h2>
-      <p>Một <code>commandType</code> dưới <code>select</code>, <code>where</code>, <code>orderBy</code> hay <code>include</code> là đọc. Kiểm bằng tổ tiên trong cây AST, không bằng tên tệp — nên vectơ <code>duoi-select</code> phải để thước vẫn xanh.</p>
-      <p class="quiet">Một vectơ đòi màu xanh là cách duy nhất bắt được thước đỏ oan.</p>
+      <h2>Bốn loại, xếp bằng luật máy</h2>
+      <p><code>doc</code> nằm dưới <code>select</code> / <code>where</code> / <code>orderBy</code> / <code>include</code>, kiểm bằng tổ tiên trong cây <code>AST</code> chứ không bằng tên tệp. <code>khai</code> có initializer là <code>&lt;x&gt;.commandType</code>. <code>suy</code> có initializer là <code>commandTypeFromAuthorization(...)</code>. Còn lại là <code>khac</code>.</p>
+      <p class="quiet">Vectơ <code>select-thanh-doc</code> thêm một chỗ đọc và đòi nó phải được xếp loại <code>doc</code> — đó là cách bắt bộ dò lẫn đọc với ghi.</p>
     </div>
     <div>
       <h2>Giá của fail-closed</h2>
-      <p>Ai thêm một đường ghi <code>commandType</code> hợp lệ sẽ thấy thước đỏ và phải sửa danh sách nguồn. Đó là ý định, không phải lỗi — nên thông điệp đỏ phải nói ra được điều đó, chứ không chỉ in <code>file:dòng</code>.</p>
+      <p>Tập tìm được phải bằng đúng danh sách đã ghim, so sánh có bội. Ai thêm một chỗ viết khoá <code>commandType</code> sẽ thấy thước đỏ và phải sửa danh sách ghim — đó là ý định, nên thông điệp đỏ phải in cả hai danh sách và nói ra được điều đó.</p>
     </div>
   </div>
 
