@@ -1,132 +1,119 @@
+# Review Findings: do-quyen-luot-bang-hanh-vi (round 4)
+
 ## Trong hợp đồng
 
-### nguon-ghi.mjs: ma trận "toàn phần" mù với khoá `commandType` viết bằng string literal hoặc computed key — chỗ ghi CREATE_AGENT ghim cứng vô hình, cổng vẫn thoát 0
-- file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs:40`
+### tenKhoa() bỏ qua computed key không phải string literal — chỗ ghi commandType leo quyền tàng hình với cả hai răng, cổng vẫn thoát 0
+- file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/ast.mjs:80`
 - severity: high
-- AC: AC-3
 - source: bugs
+- AC: AC-2, AC-3
 
-`laKhoaCommandType()` chỉ nhận node khi `ts.isIdentifier(node.name)`. Prisma payload viết `"commandType": "CREATE_AGENT"` (StringLiteral key) hoặc `["commandType"]: "CREATE_AGENT"` (ComputedPropertyName) đều là chỗ GHI hợp lệ nhưng không rơi vào dân số, nên vừa không bị đếm vừa không làm lệch ma trận đã ghim.
+tenKhoa() chỉ giải được ComputedPropertyName khi biểu thức bên trong là StringLiteral hoặc NoSubstitutionTemplateLiteral; mọi computed key khác trả null, nên laKhoa() coi node đó KHÔNG mang khoá commandType. Hệ quả: node biến mất khỏi dân số, không bị đếm, không làm lệch ma trận đã ghim, không in ra đâu cả.
 
-Repro (đã chạy): chép `apps/api/src` sang cây thử, thêm `probe-leak.ts` với một `create({ data: { "commandType": "CREATE_AGENT" } })` và một `update({ data: { ["commandType"]: "CREATE_AGENT" } })`, rồi `node rang/nguon-ghi.mjs --goc <cây thử>` → in đúng 9 phần tử cũ, "khop dung danh sach da ghim", exit 0. Hai đường leo thang quyền không hiện ở đâu cả.
+Đã chạy hai probe, cả hai đều thoát 0:
 
-Đây đúng lớp lỗi mà review vòng 2 đã bắt (upsert/updateMany/data-là-biến) và vòng 3 tuyên đã đóng bằng cách "đi từ CHỮ commandType chứ không từ hình dạng lời gọi" — nhưng chữ ấy vẫn chỉ được nhận diện qua Identifier. Sáu vectơ đột biến của E4 đều đột biến bằng key dạng Identifier nên không vectơ nào chạm điểm mù này. Sửa: nhận cả `ts.isStringLiteral(node.name)`, `ts.isNoSubstitutionTemplateLiteral(node.name)`, và ComputedPropertyName có literal bên trong.
-
-### khong-cam-tin-nhan.mjs: điều kiện "builderCommandType không còn tồn tại" bỏ sót export đổi tên và method — hàm suy diễn dựng lại được mà cổng vẫn xanh
-- file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/khong-cam-tin-nhan.mjs:56`
-- severity: medium
-- AC: AC-2
-- source: bugs
-
-Chân đo chỉ bắt `FunctionDeclaration` và `VariableDeclaration` mang tên `builderCommandType`, trong khi E3 điểm 2 khai là "khong khai bao ham nao, khong binding duoc export nao mang ten do trong apps/agent/agent". `export { suy as builderCommandType }` và `class Bo { builderCommandType(...) {} }` đều lọt.
-
-Repro (đã chạy): chép `apps/agent/agent` sang cây thử, thêm `lib/probe-suy.ts` chứa `const suy = (commandType, value) => JSON.stringify(value).includes("agent") ? "CREATE_AGENT" : commandType;` + `export { suy as builderCommandType };` + một method cùng tên → `node rang/khong-cam-tin-nhan.mjs --goc <cây thử>` in "sach", exit 0.
-
-Điểm 3 (initializer tại chỗ gọi phải là PropertyAccessExpression trần) vẫn chặn đường dùng thẳng, nhưng không chặn đường tính trước một dòng: `const row2 = { ...row, commandType: suy(row.commandType, row.message) }` rồi truyền `row2.commandType` — vẫn là PropertyAccessExpression trần nên qua cả điểm 2 lẫn điểm 3.
-
-### khai-sinh.mjs không ép `ma` khác 0 như bản khai tuyên, nên một dòng khai `"ma": 0` biến báo động "dòng khai ra xanh" thành một lượt qua
-- file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/khai-sinh.mjs:32`
-- severity: medium
-- AC: AC-7
-- source: bugs
-
-E8 điểm 2 khai rõ: `ma` là "so mong doi khac 0 — moi vecto cua vong nay la mot chieu DO, khong co dong doi-chung-duong nao trong ban khai". `docKhai()` chỉ kiểm `dong[truong] === undefined`, không kiểm giá trị. `chayBanKhai()` (dòng 79) đọc `dong.ma === 0` là nhãn "doi chung duong" và so `r.ma !== dong.ma`.
-
-Hệ quả: nếu một vectơ mất khả năng bắt đột biến, sửa `"ma": 2` thành `"ma": 0` trong `khai-sinh.json` làm E8 xanh trở lại, và nhánh cảnh báo nặng nhất (`dong.ma !== 0 && r.ma === 0` → "dong khai ra xanh") không bao giờ chạy nữa. Đúng thứ E8 sinh ra để chặn lại tự tắt được bằng dữ liệu khai. Sửa: thêm kiểm `typeof dong.ma === "number" && dong.ma !== 0` trong `docKhai()`.
-
-### Hình dạng 5 — tuyên quét lớp "mọi chỗ viết khoá commandType" nhưng bộ dò chỉ nhận tên khoá là Identifier
-- file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs:40`
-- severity: high
-- AC: AC-3
-- source: measurement
-
-AC-3/E4 tuyên "MA TRAN TOAN PHAN": gom MỌI chỗ viết ra khoá `commandType` ở apps/api/src rồi so có bội với DA_GHIM. Nhưng `laKhoaCommandType` (dòng 34-43) đòi `ts.isIdentifier(node.name)`, nên một PropertyAssignment có tên khoá là chuỗi hoặc ComputedPropertyName không bao giờ vào dân số. Đã chứng minh bằng cây thử: chép apps/api/src rồi thêm `apps/api/src/x/leo.ts` với
+1) nguon-ghi.mjs (AC-3, tuyên "MA TRAN TOAN PHAN" trên apps/api/src). Chép apps/api/src sang cây thử, thêm apps/api/src/leo/leo.ts:
 
     const KHOA = "commandType" as const;
-    db.agentConversationSubmission.create({ data: { id, [KHOA]: "CREATE_AGENT" } });
+    db.agentConversationSubmission.create({
+      data: { conversationId: id, [KHOA]: "CREATE_AGENT" },
+    });
 
-Chạy `node rang/nguon-ghi.mjs --goc <cây thử>` → vẫn in đúng 9 phần tử, "khop dung danh sach da ghim", thoát 0. Một chỗ ghi thẳng CREATE_AGENT ghim cứng không xuất hiện ở đâu cả. `bunx biome check` trên đúng tệp đó cũng im lặng (chỉ cảnh báo `any` của fixture thử), nên không có cổng thứ hai đỡ. Đây đúng cùng loại lỗ mà vòng chấm 2 đã bắt cho `upsert`/`updateMany`/`data` là biến — bịt theo hình dạng lời gọi thì mọc lại theo hình dạng tên khoá.
+   `node rang/nguon-ghi.mjs --goc <cây thử>` → in đúng 9 phần tử cũ, "khop dung danh sach da ghim", EXIT=0. Một chỗ ghi thẳng CREATE_AGENT ghim cứng không xuất hiện ở đâu.
 
-### Hình dạng 5 — AC-2 điểm 3 gọi tên "lời gọi hàm là mã 2" nhưng chỉ kiểm node ngoài cùng là PropertyAccessExpression
-- file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/khong-cam-tin-nhan.mjs:86`
-- severity: high
-- AC: AC-2
-- source: measurement
+2) khong-cam-tin-nhan.mjs (AC-2 điểm 3, tuyên: tại MỌI lời gọi builderSessionAttributes, initializer của commandType phải là truy cập thuộc tính trần). Chép apps/agent/agent sang cây thử, thêm lib/leo-quyen.ts gọi builderSessionAttributes lần thứ hai với
 
-AC-2 điểm 3 (và E3 điểm 3) khai: tại MỌI lời gọi `builderSessionAttributes(...)`, initializer của `commandType` phải là truy cập thuộc tính TRẦN `<x>.commandType`; "Ternary, CallExpression, template, toán tử — bất cứ biểu thức tính toán nào — là mã 2". Chân đo chỉ chạy `if (!ts.isPropertyAccessExpression(thuocTinh.initializer))`, tức chỉ xét node NGOÀI CÙNG, không đòi `<x>` là một identifier trần. Đã chứng minh: trong cây thử, sửa `custom-agent-dispatch.ts` thành `commandType: doanQuyen(row).commandType,` với `doanQuyen` suy quyền từ `JSON.stringify(row.message).includes("agent")` — chạy `node rang/khong-cam-tin-nhan.mjs --goc <cây thử>` → "122 tep, 1 cho goi builderSessionAttributes — sach", thoát 0. Đây đúng cái lỗ mà điểm 3 được thêm vào để bịt (gap-probe P0 #1): suy diễn dọn sang một dòng khác mà lời hứa "không suy quyền" vẫn xanh. Vectơ `cho-goi-tinh-toan` chỉ cấy một ternary nên không chạm tới hình dạng này.
+    const KHOA = "commandType" as const;
+    builderSessionAttributes({
+      [KHOA]: JSON.stringify(row.message).includes("agent") ? "CREATE_AGENT" : row.commandType,
+      ...
+    });
 
-### Hình dạng 5 — AC-2 điểm 2 tuyên "không export nào mang tên builderCommandType" nhưng chỉ soi FunctionDeclaration và VariableDeclaration
-- file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/khong-cam-tin-nhan.mjs:57`
-- severity: medium
-- AC: AC-2
-- source: measurement
+   → "khong-cam-tin-nhan: 123 tep, 2 cho goi builderSessionAttributes, ma tran 6 khoa — sach", EXIT=0. Đúng luật suy quyền từ hình dạng tin nhắn mà AC-2 sinh ra để cấm, đi qua sạch.
 
-AC-2 điểm 2 và E3 điểm 2 khai phạm vi là cả lớp: "không khai báo hàm nào, không binding được export nào mang tên đó trong apps/agent/agent". Chân đo (dòng 56-63) chỉ bắt `ts.isFunctionDeclaration(node) || ts.isVariableDeclaration(node)` có `node.name` là Identifier `builderCommandType`; ExportSpecifier (`export { x as builderCommandType }`), MethodDeclaration và PropertyAssignment cùng tên đều nằm ngoài. Đã chứng minh: thêm `apps/agent/agent/x/suy.ts` với `function suyTuTinNhan(...) { ... }` rồi `export { suyTuTinNhan as builderCommandType };` — chạy `node rang/khong-cam-tin-nhan.mjs --goc <cây thử>` → "123 tep ... sach", thoát 0, dù đúng cái tên AC-2 cấm đang được export và đúng luật suy diễn cũ đang sống trong thân hàm.
+Ghi chú: ở apps/agent, việc THAY một khoá đã ghim bằng computed key thì bị bắt (ma trận 6→5), nhưng THÊM một chỗ mới thì lọt — và thêm mới mới là đường leo quyền thật.
 
-### Hình dạng 2 — fixture viết tay đúng khuôn kiểu bên đọc, không round-trip từ hàng Prisma thật
-- file: `apps/agent/test/quyen-luot.spec.ts:65`
-- severity: medium
-- AC: AC-1
-- source: measurement
+Sửa: trong tenKhoa(), khi ComputedPropertyName có expression không phải literal, đừng trả null im lặng — trả một sentinel để laKhoa()/ma trận bắt buộc phải khai báo nó, hoặc báo lỗi "khoá tính toán không đọc được" ngay tại chỗ.
 
-AC-1/E1 đòi fixture là "một HÀNG submission đúng khuôn Prisma đọc ra ở custom-agent-dispatch.ts — có id, commandType, message, attachments, conversation.userId, conversation.title". `hangSubmission` được viết tay khớp đúng `BuilderAuthRow` — một type cũng viết tay ngay trong tệp bên đọc (custom-agent-dispatch.ts:874-879) — nên không gì buộc nó khớp `select` thật. Vết trôi thấy rõ ngay trong fixture: `attachments: []` nằm LỒNG TRONG `message`, trong khi `select` thật (custom-agent-dispatch.ts:131-153) và chỗ dùng thật (`submission.attachments` ở dòng ~167) đặt `attachments` ở cấp hàng; `conversation` của fixture chỉ có `{ userId, title }` còn select thật lấy `{ id, title, userId, kind }`. Trình biên dịch không bắt được vì `BuilderAuthRow` không nhắc tới hai trường đó. Hệ quả: `select` đổi tên/đổi tầng thì E1 vẫn xanh — mũi tên "giá trị thật sự được đặt ở đâu" vẫn chưa có phép đo nào đi qua, dù gap-probe P0 #1 đã đánh dấu là fixed.
+Rationale (map AC): Đã chứng minh bằng hai probe cụ thể: một chỗ ghi commandType qua computed key không phải literal lọt qua cả phép đo của AC-3 (ma trận toàn phần trên apps/api/src) lẫn điều 4 của AC-2 (ma trận khoá apps/agent), đúng hình dạng mà cả hai AC nêu tường minh phải bắt được ('kể cả... computed key').
+
+### Kiểm "thông điệp chứa chuỗi ghim" của khai-sinh.mjs là vô hiệu với E2/E5: chính răng in sẵn chuỗi ghim ra băng-rôn bất kể kết quả
+- file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/khai-sinh.mjs:91`
+- severity: low
+- source: bugs
+- AC: AC-7
+
+E8 điểm 3 tuyên: mỗi dòng khai phải có "thong diep (stdout + stderr) CHUA nguyen van chuoi `ghim`" — lớp kiểm độc lập thứ hai xác nhận cái đỏ đúng là cái đã hứa. khai-sinh.mjs:91 thực hiện bằng `r.chu.includes(dong.ghim)`.
+
+Với các dòng E2 (cong-quyen-do.mjs) và E5 (mang-theo-do.mjs), `ghim` là tên bài test ("suy-dien: hang khai CHAT thi cong dong", "ke-thua: doc duoc ca hai chieu tren cung khuon"). Nhưng cong-quyen-do.mjs:90-98 và mang-theo-do.mjs:58-66 in băng-rôn chẩn đoán chứa NGUYÊN VĂN chuỗi đó ra stdout, không điều kiện, TRƯỚC mọi nhánh phán xử:
+
+    `  bai mang loi hua "${BAI_PHAI_DO}": ${coBai ? "CO DO" : "KHONG DO"}`
+
+Và `chay()` (chung.mjs:236) gộp stdout + stderr vào `chu`. Nên `includes(dong.ghim)` luôn đúng, kể cả khi băng-rôn ghi "KHONG DO". Lớp kiểm thứ hai của E8 không phân biệt được gì cả với hai eval này; nó chỉ còn dựa vào so mã thoát.
+
+Sửa: đặt `ghim` cho các dòng E2/E5 là một chuỗi chỉ xuất hiện khi bài đúng tên đó đỏ (ví dụ dòng `(fail)` của bun), hoặc để răng thôi in nguyên văn tên bài trong băng-rôn thành công.
+
+Rationale (map AC): AC-7 đòi tường minh lớp kiểm độc lập thứ hai — thông điệp chứa nguyên văn chuỗi ghim — và đã chứng minh lớp kiểm này luôn đúng với E2/E5 bất kể kết quả thật, nên tiêu chí này thất bại trên hai dòng khai đó.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **Răng E3 vẫn cho phép lấy quyền từ tin nhắn: luật chỉ đòi "là truy cập thuộc tính", không đòi đúng cột commandType của hàng**
-  Người dùng thấy gì: Một vài đường suy quyền tinh vi từ nội dung tin nhắn vẫn có thể lọt qua lớp bảo vệ hiện tại, dù cơ chế chặn chính đã hoạt động đúng cho các trường hợp thông thường.
-  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/khong-cam-tin-nhan.mjs`
+- **tu-kiem-khung.mjs ghi đè tệp nguồn có theo dõi trong cây làm việc thật, và không nằm trong sổ executor**
+  Người dùng thấy gì: Nếu quá trình kiểm tra tự động bị dừng đột ngột giữa chừng (ví dụ bấm Ctrl-C), một file mã nguồn thật trong nhánh làm việc có thể bị để lại ở trạng thái đã sửa mà không được khôi phục lại, ảnh hưởng tới người làm việc tiếp trên cùng nhánh.
+  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/tu-kiem-khung.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **BuilderAuthRow bắt buộc trường `message` nhưng builderSessionAuthFromRow không bao giờ đọc nó**
-  Người dùng thấy gì: Đây là một chi tiết kỹ thuật nội bộ, không ảnh hưởng gì đến trải nghiệm hay quyền hạn của người dùng.
+- **BuilderAuthRow bắt buộc trường message nhưng builderSessionAuthFromRow không bao giờ đọc**
+  Người dùng thấy gì: Một mục dữ liệu không còn thực sự cần thiết vẫn buộc phải khai khi dựng thông tin xác thực cho một lượt, khiến việc viết thêm kịch bản thử nghiệm sau này phải bịa ra dữ liệu giả không mang ý nghĩa gì.
   file: `apps/agent/agent/lib/custom-agent-dispatch.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Khoá cây sao tự phá theo hạn của tiến trình chờ, không theo tuổi của khoá**
-  Người dùng thấy gì: Nếu có nhiều phiên làm việc chạy cùng lúc trên cùng một máy, có một nguy cơ nhỏ là hai tiến trình đo tranh nhau tài nguyên dùng chung, dẫn đến phải chạy lại bằng tay.
-  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/chung.mjs`
+- **Executor dq_mang_theo_do khai trong config nhưng không eval nào trỏ tới**
+  Người dùng thấy gì: Một mục cấu hình cũ không còn được dùng vẫn nằm trong sổ đăng ký, có thể gây nhầm lẫn cho người đọc sổ này sau này nhưng không ảnh hưởng gì tới người dùng sản phẩm.
+  file: `_acceptance/config.yaml`
   severity: low
   Đề xuất: known-limits
 
-- **Mọi commit của loạt này mang trailer Co-Authored-By, AGENTS.md cấm tuyệt đối**
-  Người dùng thấy gì: Toàn bộ các lần lưu thay đổi trong đợt này ghi thêm tên một trợ lý AI là đồng tác giả, trong khi quy tắc nội bộ của kho không cho phép việc này. Cần chọn một hướng: sửa lại quy tắc hoặc tắt việc ghi tên đó.
-  file: `AGENTS.md`
-  severity: low
-  Đề xuất: new-contract
-
-- **Ghi chú trong hồ sơ cũ vẫn mô tả builderCommandType như còn sống ở apps/agent**
-  Người dùng thấy gì: Một ghi chú trong tài liệu cũ vẫn nhắc tới một cơ chế đã bị gỡ bỏ, có thể khiến người đọc sau này đi tìm nhầm một chức năng không còn tồn tại.
-  file: `_acceptance/quyen-luot-mang-theo/contract.md`
-  severity: low
-  Đề xuất: known-limits
-
-- **Import GOC không dùng trong hai răng**
-  Người dùng thấy gì: Đây là một chi tiết kỹ thuật nội bộ trong công cụ kiểm tra, không ảnh hưởng đến người dùng.
-  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/cong-quyen-do.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-- **tu-kiem-khung.mjs sửa tệp nguồn có theo dõi trong cây làm việc thật; bộ bắt tín hiệu gọi process.exit nên finally khôi phục không chạy**
-  Người dùng thấy gì: Nếu quá trình kiểm tra tự động bị dừng đột ngột giữa chừng, một tệp mã nguồn dùng chung có thể bị bỏ lại ở trạng thái tạm sửa đổi, ảnh hưởng tới người khác đang dùng chung máy hoặc cây làm việc đó.
-  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/tu-kiem-khung.mjs`
-  severity: medium
-  Đề xuất: new-contract
-
-- **giuKhoa() phá khoá của tiến trình còn sống sau 120s và chủ cũ xoá tiếp khoá của chủ mới — loại trừ lẫn nhau mất tác dụng**
-  Người dùng thấy gì: Khi nhiều phiên làm việc chạy song song, cơ chế khoá bảo vệ có thể tự vô hiệu hoá, khiến hai quá trình cùng thao tác trên một cây làm việc dùng chung và có nguy cơ làm hỏng trạng thái của nó.
+- **don() nuốt lỗi `git worktree remove` bằng catch rỗng — đăng ký worktree rác tích lại trong git dir dùng chung, không ai được báo**
+  Người dùng thấy gì: Việc dọn các bản sao tạm dùng để chạy kiểm tra có thể thất bại âm thầm, để lại rác tích tụ dần trong hạ tầng dùng chung mà không có cảnh báo nào cho người vận hành.
   file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/chung.mjs`
   severity: medium
-  Đề xuất: new-contract
+  Đề xuất: known-limits
 
-- **don() nuốt lỗi `git worktree remove` — đăng ký worktree rác tích lại trong git dir dùng chung, không ai thấy**
-  Người dùng thấy gì: Khi việc dọn dẹp sau kiểm tra thất bại âm thầm, rác có thể tích tụ dần trong hạ tầng dùng chung mà không ai được cảnh báo.
+- **giuKhoa() phá khoá của tiến trình còn sống sau 120s, rồi chủ cũ xoá tiếp khoá của chủ mới — loại trừ lẫn nhau quanh `git worktree add` mất tác dụng, im lặng**
+  Người dùng thấy gì: Khi nhiều lượt kiểm tra chạy đồng thời, một lượt có thể bị chiếm mất tài nguyên tạm đang dùng dở mà không có cảnh báo, khiến kết quả của các lượt chạy song song khó tin cậy hoàn toàn trong một số trường hợp hiếm.
   file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/chung.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Assertion âm-tính không ghim thông điệp, trong khi hàm có hai đường ném khác nhau**
+  Người dùng thấy gì: Bài kiểm tra này vẫn báo đúng ngay cả khi lý do từ chối thật sự thay đổi, nên nếu cổng chặn dựng tác nhân bị nới lỏng nhầm trong tương lai, bài kiểm tra có thể không phát hiện ra.
+  file: `apps/agent/test/quyen-luot.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Ba luật của E6 chỉ có một vecto, và vecto đó kích hoạt hai luật cùng lúc**
+  Người dùng thấy gì: Một trong ba điều kiện mà bài kiểm tự nhận là đã bảo vệ thật ra chưa từng được thử nghiệm riêng lẻ, nên nếu chỉ riêng điều kiện đó bị phá vỡ sau này, hệ thống kiểm tra có thể không phát hiện ra.
+  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/bo-do-grep.mjs`
   severity: low
   Đề xuất: known-limits
+
+## Chưa phân loại (triage-failed)
+
+phân loại phạm vi không chạy được — không lỗi nào bị máy tự sửa, người xem lại toàn bộ.
+
+### Tuyên quét LỚP nhưng chỉ có điểm-case: ma trận E4 không phân biệt được nguồn của giá trị ghi
+- file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs:49`
+- severity: high
+- source: measurement
+
+loaiCua() xếp loại `khai` cho BẤT KỲ initializer nào là PropertyAccessExpression có tên cuối là `commandType` (dòng 48-54): chỉ kiểm `ts.isPropertyAccessExpression(dau) && dau.name.text === "commandType"`, không ràng buộc `dau.expression` phải là một định danh trần. Khoá ma trận lại là `<file> :: <hàm bao> :: <loại>` với số dòng bị cắt (dòng 80: `vt.replace(/:\d+$/, "")`), nên một chỗ ghi suy quyền từ tin nhắn vẫn giữ nguyên khoá và ma trận vẫn khớp DA_GHIM.
+
+Đã chứng minh trên bản sao apps/api/src: đổi `conversations.service.ts:424` từ `commandType: input.commandType,` thành `commandType: doanQuyen(input.message).commandType,` → `node rang/nguon-ghi.mjs --goc <bản sao>` in "9 cho viet khoa commandType, khop dung danh sach da ghim" và thoát 0. Đổi thành `commandType: input.message.commandType,` cũng thoát 0. Đúng hai hình dạng mà AC-3 tồn tại để cấm.
+
+Đây chính là bài học mà chan-đo anh em đã ghi thành mã: rang/khong-cam-tin-nhan.mjs dùng laTruyCapTran() (dòng 40-47) bắt buộc `ts.isIdentifier(dau.expression)`, và E3 điểm 3 nói thẳng "'La mot PropertyAccessExpression' la khong du: `row.message.commandType` cung la PropertyAccessExpression". nguon-ghi.mjs không mang ràng buộc đó. Tám vecto khai của E4 đều không đi qua lỗ này ("ghim-cung" → string literal, "bien-trung-gian" → CallExpression trần, cả hai rơi vào `khac`), nên chiều đỏ của E4 chỉ chứng minh được đúng các điểm-case mà vecto chạm tới, không chứng minh được lớp "mọi chỗ ghi đều lấy từ hai nguồn đã đặt tên" như expected tuyên.
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
