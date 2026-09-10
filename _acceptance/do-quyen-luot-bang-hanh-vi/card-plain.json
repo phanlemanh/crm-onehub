@@ -1,7 +1,154 @@
 {
   "feature_plain": "Vòng này không đổi thứ người dùng bấm — nó đổi cách chứng minh rằng một lượt trò chuyện thường không tự biến thành một lượt được phép dựng tác nhân.",
-  "analyst_plain": "Phân loại phạm vi KHÔNG chạy trọn ở vòng này. Không lỗi nào được máy tự sửa, và không lỗi nào được máy xác nhận là ngoài phạm vi — người ký phải tự đọc hết danh sách trong review-findings.md trước khi nâng lên đạt.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ chứng minh bằng chính đường chạy thật: một lượt trò chuyện thường, dù người gõ đúng câu xin dựng tác nhân, vẫn bị bộ dựng từ chối — và phép phá thử chứng chiều ngược lại, thay vì một thước riêng."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ chốt rằng chỉ có đúng chín chỗ trong phần máy chủ được viết ra khoá quyền — kể cả khoá viết bằng chuỗi, bằng biểu thức, hay qua một hằng — và chỗ thứ mười mọc lên là thước đỏ ngay, kèm số dòng."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ giữ nguyên điều đã sửa ở vòng trước: câu trả lời của người kế thừa đúng quyền của lượt đã hỏi, không nhiều hơn."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ nói thẳng trong tài liệu của đội rằng quyền của lượt đầu là do trình duyệt tự khai và máy chủ không đối chứng."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ bắt mỗi phép đo mới phải từng chạy ra ĐỎ một lần thật trên bản sao đã bị phá cố ý — nay là hai mươi mốt cách phá, mỗi cách một dòng khai."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ để nguyên từng chữ của hồ sơ vòng trước và chỉ phụ thêm một dòng ghi rõ chỗ nào của nó đã lỗi thời."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ bảo đảm bốn phép đo của vòng trước vẫn chạy xanh sau thay đổi này."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-2",
+      "p": "Chặn bốn đường bộ dựng có thể lấy lại quyền từ tin nhắn: giữ trường tin nhắn ở chỗ quyết quyền · hồi sinh hàm suy diễn dưới bất kỳ tên nào kể cả export đổi tên hay method · đọc quyền từ một tầng sâu hơn của hàng · hoặc tính sẵn ra một chỗ mới."
+    },
+    {
+      "id": "AC-5",
+      "p": "Chặn bộ dò cũ mọc lại: bài đo đọc mã theo từng dòng bị xoá, và không được viết một bài tương đương dưới tên khác."
+    }
+  ],
   "scope_plain": "Không đổi đường vào mà trình duyệt gọi, không cấm nâng quyền giữa hội thoại, không đụng bộ dò ý định của ô soạn, không thêm phép đo chạm cơ sở dữ liệu thật, không sửa bảng phân hạng rủi ro.",
-  "decisions": [],
-  "decisions_plain": []
+  "decisions_plain": [
+    {
+      "id": "d-20260909T143334Z-20324",
+      "p": "Quyen cua luot tao va luot submit la LOI KHAI cua client; may chu va agent khong bao gio NANG quyen tu hinh dang tin nhan (duong B+)."
+    },
+    {
+      "id": "d-20260909T143334Z-20461",
+      "p": "San dan so doi MENH DE: thay 'dem cho suy quyen tren ca kho = 0' bang bat bien NGUON GHI — moi commandType ghi vao Prisma data trong apps/api/src lay tu dung hai nguon da dat ten."
+    },
+    {
+      "id": "d-20260909T143334Z-20598",
+      "p": "Bo ham dong nhat builderCommandType(commandType, message) va bo tham so message khoi builderSessionAttributes."
+    },
+    {
+      "id": "d-20260909T143334Z-20735",
+      "p": "Khong viet lai chu cua AC-5 va E5 trong ho so quyen-luot-mang-theo; chi phu mot dong gioi han da biet vao ## Notes."
+    },
+    {
+      "id": "d-20260909T143334Z-20872",
+      "p": "bo dac-ta-UX — vong nay khong cham surface web-UI nao: chi apps/agent, apps/api (doc), docs va _acceptance."
+    },
+    {
+      "id": "d-20260909T143334Z-21009",
+      "p": "Khong them phep do tich hop cham co so du lieu that cho respondToQuestion."
+    },
+    {
+      "id": "d-20260909T143334Z-21146",
+      "p": "Giu tier T2 theo dung luat suy tu duong dan, khong tu nang len T3 du viec nay la chuoi quyen."
+    },
+    {
+      "id": "d-20260909T144100Z-31001",
+      "p": "Tach mot ham san pham moi builderSessionAuthFromRow(hang, conversationId) o custom-agent-dispatch.ts, va do AC-1 qua ham do thay vi qua builderSessionAttributes."
+    },
+    {
+      "id": "d-20260909T144100Z-31138",
+      "p": "Them AC-9 doi bon lenh may cua ho so quen-luot-mang-theo con thoat 0, thay vi chua expected da ghim cua E5 cu."
+    },
+    {
+      "id": "d-20260910T001500Z-41001",
+      "p": "San nguon ghi (AC-3) ghim danh sach theo khoa BEN `tep :: ham bao :: nguon` thay vi `file:dong` nhu chu cua AC-3, va VAN in file:dong trong thong diep do."
+    },
+    {
+      "id": "d-20260910T010000Z-42001",
+      "p": "Chay Task 5 va Task 8 TUAN TU trong main loop thay vi fan-out qua execute-parallel, du ca hai deu danh dau independent: true."
+    },
+    {
+      "id": "d-20260910T012000Z-43001",
+      "p": "Bo khung dung node_modules cua tung goi thanh THU MUC THAT trong cay sao, voi scope @crm tro vao packages/* CUA CAY SAO; va noi them packages/*/src/generated."
+    },
+    {
+      "id": "d-20260910T014000Z-44001",
+      "p": "San ma tran toan phan cua E4 bat duoc ten ham bao that la answerBuilderQuestion, khong phai respondToQuestion nhu S1 ghi. Sua design doc; KHONG sua contract.md va evals.yaml vi hai file do da duyet o Cong 1."
+    },
+    {
+      "id": "d-20260910T015500Z-45001",
+      "p": "Script E10 doi tu `if ! bun test ...; then ma=$?` sang bat ma thoat truc tiep roi moi kiem."
+    },
+    {
+      "id": "d-20260910T021000Z-46001",
+      "p": "Ban khai sinh doc chu cua E8 LONG hon chu da duyet, o ba cho."
+    },
+    {
+      "id": "d-20260910T022500Z-47001",
+      "p": "Xoa hai assertion goi builderCommandType trong apps/agent/test/custom-agent-runtime.spec.ts, va bo truong message khoi ba loi goi builderSessionAttributes trong ba bai test khac."
+    },
+    {
+      "id": "d-20260910T090000Z-50001",
+      "p": "Vong sua sau REJECT r1: (1) ba ma thoat tach bach — 0 xanh, 2 bat bien bi vi pham, 3 gian do hong; chayRang bat MOI ngoai le va tra 3; (2) khoa hoa thao tac git worktree de cac eval chay song song khong dam nhau, bo `worktree prun"
+    },
+    {
+      "id": "d-20260910T100000Z-51001",
+      "p": "DUNG theo dieu khoan dung-va: khong tu dispatch vong cham thu ba. Dua ba duong cho nguoi chon."
+    },
+    {
+      "id": "d-20260910T110000Z-52001",
+      "p": "Owner chon duong THU PHAM VI. Hai doi trong hop dong: (1) AC-3 doi dan so tu «object data cua loi goi Prisma» sang «moi cho VIET RA khoa commandType», so co boi; (2) AC-4 bo chan do rieng cho chieu do — chieu do do ban khai sinh ("
+    },
+    {
+      "id": "d-20260910T140000Z-54001",
+      "p": "DUNG o tran ba vong. Chan doan da du bang chung: rang nao IN OUTPUT cua luot bun test da dot bien ra stdout cua chinh no thi lan cham doc dong tong ket \"N fail\" ay va bao eval do, bat ke ma thoat."
+    },
+    {
+      "id": "d-20260910T150000Z-55001",
+      "p": "Trailer Co-Authored-By: giu nguyen 20 commit da co, va sua AGENTS.md khai mot ngoai le tuong minh cho phien may tu ky ten minh. Sua ca cau tuong ung trong CLAUDE.md."
+    },
+    {
+      "id": "d-20260910T150000Z-55002",
+      "p": "Ba sua sau vong cham 3: (1) hai rang chay bun test thoi in NGUYEN output cua luot dot bien, chi in ban rut gon co mang ten bai phai do; (2) san AC-3 nhan ca khoa viet bang string literal va computed key; (3) san AC-2 len BON dieu "
+    },
+    {
+      "id": "d-20260910T170000Z-57001",
+      "p": "Nguoi TRA LAI o Cong 2: sua hai muc HIGH trong hop dong truoc khi ky. Khong truong ky nao duoc ghi, verdict khong nang, hop dong ve implemented."
+    },
+    {
+      "id": "d-20260910T173000Z-57002",
+      "p": "Sua hai muc HIGH: (1) tenKhoa() giai duoc computed key tro toi mot HANG CHUOI trong cung tep; (2) loaiCua() cua nguon-ghi.mjs doi goc la DINH DANH TRAN, cung luat voi laTruyCapTran cua san AC-2. Them ba vecto: khoa-hang-chuoi, goc"
+    },
+    {
+      "id": "d-20260910T180000Z-58001",
+      "p": "DUNG. Khong tu dispatch vong cham 6. Chan doan cua toi o vong 4 la SAI: bo echo N fail khong chua duoc gi, vong 5 van ghi E2 exit 1 trong khi chay tay thoat 0 va output sach."
+    },
+    {
+      "id": "d-20260910T190000Z-59001",
+      "p": "Owner chon (a): bo han chan do rieng cho chieu do cua AC-1 (eval E2). Hai vecto mo-cong va ternary-xuong-dong chuyen sang khai o E1, ban khai sinh E8 van chay chung."
+    },
+    {
+      "id": "d-20260910T190000Z-59002",
+      "p": "Tach lai luat trailer theo khuon kho: XOA muc khoi AGENTS.md, khai cho re o CLAUDE.md cung khoi voi ba muc hanh vi kia, trong mot commit quan tri rieng."
+    }
+  ]
 }
