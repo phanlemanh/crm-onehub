@@ -29,35 +29,33 @@ function sha() {
 
 const HINH_DANG = [
 	{
-		ten: "than-hook-rong",
-		cam: () =>
-			[
-				'import { defineHook } from "eve/hooks";',
+		ten: "bo-than-hook",
+		cam: (nguon) =>
+			nguon.replaceAll(
+				/\t\t\tconst next = \w+\([\s\S]*?\);\n\t\t\tbuilderDelegationState\.update\(\(\) => next\);\n/g,
 				"",
-				"export default defineHook({",
-				"\tevents: {",
-				'\t\t"actions.requested"() {',
-				"\t\t\treturn;",
-				"\t\t},",
-				"\t},",
-				"});",
-				"",
-			].join("\n"),
+			),
 	},
 	{
 		ten: "bo-record-va-update",
 		cam: (nguon) =>
 			nguon
 				.replace(
-					/\t\t\tconst next = recordBuilderDelegation\([\s\S]*?\);\n/,
-					"\t\t\tbuilderDelegationState.get();\n",
+					/const next = recordBuilderDelegation\([\s\S]*?\);/,
+					"const next = builderDelegationState.get();",
 				)
-				.replace(/\t\t\tbuilderDelegationState\.update\(\(\) => next\);\n/, ""),
+				.replace(
+					/\t\t\tbuilderDelegationState\.update\(\(\) => next\);\n\t\t\},\n\t\t"step\.started"/,
+					'\t\t},\n\t\t"step.started"',
+				),
 	},
 	{
 		ten: "bo-update",
 		cam: (nguon) =>
-			nguon.replace(/\t\t\tbuilderDelegationState\.update\(\(\) => next\);\n/, ""),
+			nguon.replaceAll(
+				/\t\t\tbuilderDelegationState\.update\(\(\) => next\);\n/g,
+				"",
+			),
 	},
 ];
 
@@ -102,28 +100,16 @@ function vietSpec(ten, duongHook) {
 		duong,
 		[
 			'import { expect, it } from "bun:test";',
-			`import {`,
-			`\tdatSlot,`,
-			`\tduLieu,`,
-			`\tgoiBuilder,`,
-			`\tgoiKhac,`,
-			`\tphien,`,
-			`\tsuKien,`,
+			"import {",
+			"\tCHUOI_SONG,",
+			"\tkiemChuoiCuongChe,",
+			"\tlayHookTu,",
 			`} from "${CHUOI}";`,
 			"",
-			`const hook = (await import("${duongHook}")).default;`,
-			'const handler = hook.events["actions.requested"];',
-			"",
-			`it("${ten}: chuoi cuong che con song", () => {`,
-			"\tconst slot = datSlot();",
-			'\thandler(suKien(duLieu("turn-1", 2, 0, goiBuilder("call-a"))), phien());',
-			"\texpect(slot.nhatKy.length > 0).toBe(true);",
-			'\texpect(slot.doc()).toEqual({ turnId: "turn-1", stepIndex: 2, sequence: 0 });',
-			'\thandler(suKien(duLieu("turn-1", 3, 0, goiKhac("call-x"))), phien());',
-			'\texpect(slot.doc()).toEqual({ turnId: "turn-1", stepIndex: 2, sequence: 0 });',
-			"\texpect(() =>",
-			'\t\thandler(suKien(duLieu("turn-1", 4, 0, goiBuilder("call-b"))), phien()),',
-			'\t).toThrow("only once");',
+			`it("${ten}: chuoi cuong che con song", async () => {`,
+			`\texpect(kiemChuoiCuongChe(await layHookTu("${duongHook}"))).toEqual(`,
+			"\t\tCHUOI_SONG,",
+			"\t);",
 			"});",
 			"",
 		].join("\n"),
