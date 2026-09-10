@@ -104,7 +104,7 @@ evals:
          mang commandType tinh tu tin nhan la mot phan tu MOI trong ma tran.
       Vi pham bat ky dieu nao -> ma 2, in file:dong.
       San dan so: so loi goi builderSessionAttributes phai >= 1. Bang 0 -> ma 2.
-      Doi chung duong, NAM vecto tren ban sao, tat ca deu ma 2:
+      Doi chung duong, SAU vecto tren ban sao, tat ca deu ma 2:
         vecto "cay-lai-tham-so": cay tham so `message` vao chu ky
           builderSessionAttributes.
         vecto "cho-goi-tinh-toan": doi initializer commandType tai cho goi thanh
@@ -155,7 +155,7 @@ evals:
         khac — con lai (khai bao kieu, khuon zod).
       Mot phan tu `khac` nam NGOAI conversations.contracts.ts la mot cho ghi
       khong lay tu hai nguon da dat ten -> ma 2, IN file:dong.
-      Doi chung duong, SAU vecto tren ban sao, tat ca deu ma 2:
+      Doi chung duong, MUOI vecto tren ban sao, tat ca deu ma 2:
         vecto "ghim-cung": doi mot cho ghi thanh chuoi "CREATE_AGENT" -> loai
           doi tu khai sang khac -> ma 2, dung file:dong ay.
         vecto "bien-trung-gian": doi mot cho ghi thanh mot bien gan tu mot ham
