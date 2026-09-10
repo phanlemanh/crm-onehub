@@ -14,7 +14,8 @@ Gap-probe không có finding nào xử lý `human-gate1` — cả năm đều `f
 | d-…-31001 — tách `builderSessionAuthFromRow` | 2 nhánh (đo từ khối tham số / đo từ hàng) | gộp vào **chuoi-quyen** |
 | d-…-21009 — bỏ phép đo tích hợp chạm DB | 2 nhánh | gộp vào **chuoi-quyen** (vẽ đúng chỗ biên DB nằm) |
 | d-…-21146 — giữ tier T2 dù là chuỗi quyền | 2 nhánh (giữ T2 / nâng T3) | gộp vào **chuoi-quyen** (đánh dấu đường nào nằm trong `t3_paths`) |
-| d-…-20461 — sàn dân số đổi mệnh đề sang bất biến nguồn ghi | 3 nhánh (giữ mệnh đề + AST rộng · đổi mệnh đề · bỏ hẳn sàn) | **san-nguon-ghi** |
+| d-…-20461 + d-…-52001 — sàn dân số đổi mệnh đề, rồi **đổi khung lần hai** sau vòng chấm 2 | 3 nhánh ban đầu, cộng 2 nhánh ở lần đổi khung (đi từ hình dạng lời gọi Prisma · đi từ chữ `commandType`) | **san-nguon-ghi** (vẽ lại) |
+| d-…-51001 + d-…-52001 — dừng theo điều khoản dừng-vá, rồi thu phạm vi | 3 nhánh (đổi khuôn · thu phạm vi · ship với giới hạn đã biết) | người đã chọn trực tiếp — không vẽ thêm |
 | d-…-20735 + d-…-31138 — không viết lại hồ sơ cũ, và AC-9 sinh ra từ đó | 3 nhánh xử hồ sơ cũ, rồi 4 bước nối tiếp tới `recheck: strict` | **ho-so-cu** |
 | d-…-20872 — bỏ đặc-tả-UX | dưới ngưỡng: 0 nhánh rẽ (feature không chạm surface web-UI nào) | — |
 
@@ -35,7 +36,14 @@ chéo. Khoanh vùng `t3_paths` hiện hành và cho thấy `conversations` nằm
 vùng ấy. Ghi rõ biên DB nằm ở đâu để thấy phép đo AC-1 dừng trước nó.
 AC liên quan: AC-1, AC-2, AC-6.
 
-### san-nguon-ghi
+### san-nguon-ghi — VẼ LẠI sau vòng chấm 2
+
+Bản đầu vẽ khung cũ: dân số là object `data` của lời gọi Prisma. Vòng chấm 2
+chứng minh khung ấy bỏ sót `upsert`, `updateMany` và `data` là một biến — cả ba
+ghim cứng `CREATE_AGENT` mà thước vẫn xanh. Hình mới phải bày cả khung đã loại
+lẫn khung đã chọn, sáu vectơ, và bốn loại của ma trận chín chỗ.
+
+<details><summary>đề bài của bản đầu, giữ làm vết</summary>
 
 Sơ đồ tập hợp / cây quyết định. Trung tâm: **dân số** = mọi thuộc tính
 `commandType` trong object `data` của Prisma `create`/`update`/`upsert` trong
@@ -61,3 +69,4 @@ lệnh `ql_khong_suy_dien` lọc `-t suy-dien` → bài đầu của khối gọ
 chọn (giữ tên khối, thay ruột), cùng cái giá phải nói ra: `expected` đã ghim của
 E5 cũ không còn mô tả thứ lệnh của nó chạy.
 AC liên quan: AC-5, AC-8, AC-9.
+</details>

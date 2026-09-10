@@ -1,51 +1,178 @@
 {
   "feature_plain": "Vòng này không đổi thứ người dùng bấm — nó đổi cách chứng minh rằng một lượt trò chuyện thường không tự biến thành một lượt được phép dựng tác nhân.",
-
   "will_do": [
-    { "id": "AC-1", "p": "Sẽ chứng minh bằng chính đường chạy thật: một lượt trò chuyện thường, dù người gõ đúng câu xin dựng tác nhân, vẫn bị bộ dựng từ chối." },
-    { "id": "AC-3", "p": "Sẽ chốt rằng quyền của một lượt chỉ được ghi vào hồ sơ từ đúng hai chỗ đã đặt tên; chỗ thứ ba mọc lên là thước đỏ ngay, kèm số dòng." },
-    { "id": "AC-4", "p": "Sẽ giữ nguyên điều đã sửa ở vòng trước: câu trả lời của người kế thừa đúng quyền của lượt đã hỏi, không nhiều hơn." },
-    { "id": "AC-6", "p": "Sẽ nói thẳng trong tài liệu của đội rằng quyền của lượt đầu là do trình duyệt tự khai và máy chủ không đối chứng — để không ai đọc nhầm là đã có một phép kiểm." },
-    { "id": "AC-7", "p": "Sẽ bắt mỗi phép đo mới phải từng chạy ra ĐỎ một lần thật, trên một bản sao đã bị phá cố ý — thước chưa từng đỏ thì màu xanh của nó không nói lên gì." },
-    { "id": "AC-8", "p": "Sẽ để nguyên từng chữ của hồ sơ vòng trước và chỉ phụ thêm một dòng ghi rõ chỗ nào của nó đã lỗi thời." },
-    { "id": "AC-9", "p": "Sẽ bảo đảm bốn phép đo của vòng trước vẫn chạy xanh sau thay đổi này, để vòng mới không làm đỏ hồ sơ của vòng cũ." }
+    {
+      "id": "AC-1",
+      "p": "Sẽ chứng minh bằng chính đường chạy thật: một lượt trò chuyện thường, dù người gõ đúng câu xin dựng tác nhân, vẫn bị bộ dựng từ chối."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ chốt rằng chỉ có đúng chín chỗ trong phần máy chủ được viết ra khoá quyền, mỗi chỗ xếp đúng một loại; chỗ thứ mười mọc lên là thước đỏ ngay, kèm số dòng."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ giữ nguyên điều đã sửa ở vòng trước — câu trả lời của người kế thừa đúng quyền của lượt đã hỏi — và để phép phá thử chứng minh chiều đỏ, thay vì một thước riêng."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ nói thẳng trong tài liệu của đội rằng quyền của lượt đầu là do trình duyệt tự khai và máy chủ không đối chứng — để không ai đọc nhầm là đã có một phép kiểm."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ bắt mỗi phép đo mới phải từng chạy ra ĐỎ một lần thật, trên một bản sao đã bị phá cố ý — thước chưa từng đỏ thì màu xanh của nó không nói lên gì."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ để nguyên từng chữ của hồ sơ vòng trước và chỉ phụ thêm một dòng ghi rõ chỗ nào của nó đã lỗi thời."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ bảo đảm bốn phép đo của vòng trước vẫn chạy xanh sau thay đổi này, để vòng mới không làm đỏ hồ sơ của vòng cũ."
+    }
   ],
-
   "wont_do": [
-    { "id": "AC-2", "p": "Chặn việc bộ dựng còn cầm nội dung tin nhắn ở đúng chỗ nó quyết quyền — cả hàm cũ lẫn mọi chỗ gọi đều không được tính toán ra quyền từ chữ." },
-    { "id": "AC-5", "p": "Chặn bộ dò cũ mọc lại: bài đo đọc mã theo từng dòng bị xoá, và không được viết một bài tương đương dưới tên khác." }
+    {
+      "id": "AC-2",
+      "p": "Chặn việc bộ dựng còn cầm nội dung tin nhắn ở đúng chỗ nó quyết quyền — cả hàm cũ lẫn mọi chỗ gọi đều không được tính toán ra quyền từ chữ."
+    },
+    {
+      "id": "AC-5",
+      "p": "Chặn bộ dò cũ mọc lại: bài đo đọc mã theo từng dòng bị xoá, và không được viết một bài tương đương dưới tên khác."
+    }
   ],
-
   "coverage_plain": [
-    { "i": 0, "p": "Sáu chỗ trên đường đi của một lượt, từ ô soạn tới lúc bộ dựng chấm — mỗi chỗ đã trả lời được câu «quyền ở đây đến từ đâu», đọc thẳng từ mã đang chạy." },
-    { "i": 1, "p": "Năm cách một quyền có thể bị đúc ra mà không ai cấp — thước để nói «đủ» là sự cố thật ngày 08/09 cộng vòng chấm thứ bảy của việc trước, cộng chuẩn ngành về quyền quá tay của tác nhân." },
-    { "i": 2, "p": "Năm hình thức đo có thể chọn — thước để nói «đủ» là thực hành đột biến của ngành: một phép đo chưa từng đỏ không phân biệt được vật lành với thước chưa chạy." },
-    { "i": 3, "p": "Hoãn: chứng minh cả đường ghi vào cơ sở dữ liệu thật, không chỉ hàm thuần. Đắt hơn và chậm hơn." },
-    { "i": 4, "p": "Hoãn: đo lại chỗ máy chủ kiểm khuôn lời khai. Thư viện đã làm việc đó rồi." },
-    { "i": 5, "p": "Không làm: đo phía trình duyệt. Dưới đường đã chọn, mọi thứ trình duyệt làm đều chỉ là một lời khai, không phải một biên quyền." },
-    { "i": 6, "p": "Không làm: chặn việc nâng quyền dựa vào lịch sử hội thoại. Đường đó không có trong mã và sẽ không được dựng." },
-    { "i": 7, "p": "Không làm: giữ lối đo cũ đọc mã theo từng dòng. Chính nó là thứ vòng này loại bỏ." }
+    {
+      "i": 0,
+      "p": "Sáu chỗ trên đường đi của một lượt, từ ô soạn tới lúc bộ dựng chấm — mỗi chỗ đã trả lời được câu «quyền ở đây đến từ đâu», đọc thẳng từ mã đang chạy."
+    },
+    {
+      "i": 1,
+      "p": "Năm cách một quyền có thể bị đúc ra mà không ai cấp — thước để nói «đủ» là sự cố thật ngày 08/09 cộng vòng chấm thứ bảy của việc trước, cộng chuẩn ngành về quyền quá tay của tác nhân."
+    },
+    {
+      "i": 2,
+      "p": "Năm hình thức đo có thể chọn — thước để nói «đủ» là thực hành đột biến của ngành: một phép đo chưa từng đỏ không phân biệt được vật lành với thước chưa chạy."
+    },
+    {
+      "i": 3,
+      "p": "Hoãn: chứng minh cả đường ghi vào cơ sở dữ liệu thật, không chỉ hàm thuần. Đắt hơn và chậm hơn."
+    },
+    {
+      "i": 4,
+      "p": "Hoãn: đo lại chỗ máy chủ kiểm khuôn lời khai. Thư viện đã làm việc đó rồi."
+    },
+    {
+      "i": 5,
+      "p": "Không làm: đo phía trình duyệt. Dưới đường đã chọn, mọi thứ trình duyệt làm đều chỉ là một lời khai, không phải một biên quyền."
+    },
+    {
+      "i": 6,
+      "p": "Không làm: chặn việc nâng quyền dựa vào lịch sử hội thoại. Đường đó không có trong mã và sẽ không được dựng."
+    },
+    {
+      "i": 7,
+      "p": "Không làm: giữ lối đo cũ đọc mã theo từng dòng. Chính nó là thứ vòng này loại bỏ."
+    }
   ],
-
   "gap_probe_plain": [
-    { "i": 0, "p": "Bài đo bắt đầu quá muộn: nó nạp sẵn khối tham số thay vì bắt đầu từ hồ sơ đã lưu, nên chỗ mã rút quyền ra khỏi hồ sơ nằm ngoài tầm đo — ai cấy một phép đoán vào đúng chỗ đó thì mọi tiêu chí vẫn xanh. Đã sửa: bài đo nay bắt đầu từ hồ sơ, và thêm một tiêu chí cấm chỗ gọi tự tính ra quyền." },
-    { "i": 1, "p": "Bản sao dùng để phá thử được dựng từ bản đã lưu vào lịch sử, trong khi việc đang làm còn nằm trên bàn — thước sẽ chấm nhầm một cây khác cây đang xét rồi vẫn in ra màu như thường. Đã sửa: bản sao dựng từ đúng trạng thái đang xét, và phải tự khai đúng danh tính trước khi ai tin màu của nó." },
-    { "i": 2, "p": "Xoá một hàm cũ sẽ làm gãy một phép đo của việc trước, mà việc trước lại bị cấm sửa chữ. Không xử thì vòng này đỏ vì phép đo của vòng khác. Đã sửa: thêm một tiêu chí đòi bốn phép đo của việc trước vẫn chạy xanh, và nói rõ vùng nào của hồ sơ cũ được động vùng nào không." },
-    { "i": 3, "p": "Sàn đếm chỉ đặt mức tối thiểu, nên một bộ dò chỉ nhìn được tầng ngoài vẫn qua — đúng lỗi «tuyên quét cả lớp mà chỉ nhận một hình dạng» mà vòng này lập ra để chấm dứt. Đã sửa: chốt danh sách đúng từng dòng, thừa hay thiếu đều đỏ, và thêm hai phép phá thử cho tầng lồng bên trong." },
-    { "i": 4, "p": "Bản khai của các phép phá thử chỉ đòi mỗi phép đo có một dòng, trong khi nhiều phép đo có nhiều cách phá — cách phá nguy hiểm nhất có thể bị quên mà bản khai vẫn đủ. Đã sửa: đếm theo từng cách phá, và tên phải trùng nguyên văn." }
+    {
+      "i": 0,
+      "p": "Bài đo bắt đầu quá muộn: nó nạp sẵn khối tham số thay vì bắt đầu từ hồ sơ đã lưu, nên chỗ mã rút quyền ra khỏi hồ sơ nằm ngoài tầm đo — ai cấy một phép đoán vào đúng chỗ đó thì mọi tiêu chí vẫn xanh. Đã sửa: bài đo nay bắt đầu từ hồ sơ, và thêm một tiêu chí cấm chỗ gọi tự tính ra quyền."
+    },
+    {
+      "i": 1,
+      "p": "Bản sao dùng để phá thử được dựng từ bản đã lưu vào lịch sử, trong khi việc đang làm còn nằm trên bàn — thước sẽ chấm nhầm một cây khác cây đang xét rồi vẫn in ra màu như thường. Đã sửa: bản sao dựng từ đúng trạng thái đang xét, và phải tự khai đúng danh tính trước khi ai tin màu của nó."
+    },
+    {
+      "i": 2,
+      "p": "Xoá một hàm cũ sẽ làm gãy một phép đo của việc trước, mà việc trước lại bị cấm sửa chữ. Không xử thì vòng này đỏ vì phép đo của vòng khác. Đã sửa: thêm một tiêu chí đòi bốn phép đo của việc trước vẫn chạy xanh, và nói rõ vùng nào của hồ sơ cũ được động vùng nào không."
+    },
+    {
+      "i": 3,
+      "p": "Sàn đếm chỉ đặt mức tối thiểu, nên một bộ dò chỉ nhìn được tầng ngoài vẫn qua — đúng lỗi «tuyên quét cả lớp mà chỉ nhận một hình dạng» mà vòng này lập ra để chấm dứt. Đã sửa: chốt danh sách đúng từng dòng, thừa hay thiếu đều đỏ, và thêm hai phép phá thử cho tầng lồng bên trong."
+    },
+    {
+      "i": 4,
+      "p": "Bản khai của các phép phá thử chỉ đòi mỗi phép đo có một dòng, trong khi nhiều phép đo có nhiều cách phá — cách phá nguy hiểm nhất có thể bị quên mà bản khai vẫn đủ. Đã sửa: đếm theo từng cách phá, và tên phải trùng nguyên văn."
+    }
   ],
-
   "scope_plain": "Không đổi đường vào mà trình duyệt gọi, không cấm nâng quyền giữa hội thoại, không đụng bộ dò ý định của ô soạn, không thêm phép đo chạm cơ sở dữ liệu thật, không sửa bảng phân hạng rủi ro.",
-
   "decisions_plain": [
-    { "id": "d-20260909T143334Z-20324", "p": "Chọn: trình duyệt KHAI quyền, còn máy chủ và bộ dựng không bao giờ NÂNG nó. Đổi lại: quyền của lượt đầu vẫn không có gì phía máy chủ đối chứng — chấp nhận được vì biên duyệt của người là lúc phát hành tác nhân, không phải lúc lưu bản nháp." },
-    { "id": "d-20260909T143334Z-20461", "p": "Chọn: đổi hẳn lời hứa của phép đo, từ «không còn chỗ nào trên cả kho» sang «mỗi chỗ ghi quyền lấy từ đúng hai nguồn». Đổi lại: ai thêm một đường ghi hợp lệ mới sẽ thấy thước đỏ và phải sửa danh sách nguồn." },
-    { "id": "d-20260909T143334Z-20598", "p": "Chọn: bỏ hàm cũ đã rỗng ruột và thôi đưa nội dung tin nhắn vào chỗ quyết quyền. Đổi lại: lời hứa thành đúng theo cấu trúc chứ không chỉ theo một phép đo." },
-    { "id": "d-20260909T143334Z-20735", "p": "KHÔNG làm: viết lại chữ của hồ sơ vòng trước. Đổi lại: ai đọc hồ sơ cũ sẽ thấy một lời hứa rộng hơn sự thật, và phải đọc thêm một dòng ghi chú mới biết nó đã bị thay." },
-    { "id": "d-20260909T143334Z-20872", "p": "KHÔNG làm: viết đặc tả giao diện. Việc này không chạm màn hình nào." },
-    { "id": "d-20260909T143334Z-21009", "p": "KHÔNG làm: phép đo chạm cơ sở dữ liệu thật. Đổi lại: đường ghi chỉ được chứng minh ở mức hàm và ở mức đọc mã, không ở mức hàng đã lưu." },
-    { "id": "d-20260909T143334Z-21146", "p": "Chọn: giữ hạng rủi ro theo đúng luật suy từ đường dẫn, không tự nâng. Đổi lại: khu vực hội thoại không nằm trong danh sách đường rủi ro cao, nên một việc sau này sửa chuỗi quyền ở đó sẽ đi hạng thấp — bảng phân hạng có thể đang thiếu một dòng, và đó là việc người quyết ở cổng này." },
-    { "id": "d-20260909T144100Z-31001", "p": "Chọn: tách thêm một hàm để chỗ nối giữa hồ sơ đã lưu và bộ dựng trở nên đo được. Đổi lại: có thêm một mẩu mã sinh ra vì phép đo — nhận vào một cách cố ý, vì chính chỗ nối ấy là chỗ đáng canh." },
-    { "id": "d-20260909T144100Z-31138", "p": "Chọn: thêm một tiêu chí đòi bốn phép đo của việc trước vẫn xanh, thay vì sửa chữ đã đóng băng. Đổi lại: một phép đo của hồ sơ cũ từ nay mô tả không đúng thứ nó chạy — nên dòng ghi chú phụ vào hồ sơ cũ phải nói thẳng điều đó." }
+    {
+      "id": "d-20260909T143334Z-20324",
+      "p": "Chọn: trình duyệt KHAI quyền, còn máy chủ và bộ dựng không bao giờ NÂNG nó. Đổi lại: quyền của lượt đầu vẫn không có gì phía máy chủ đối chứng — chấp nhận được vì biên duyệt của người là lúc phát hành tác nhân, không phải lúc lưu bản nháp."
+    },
+    {
+      "id": "d-20260909T143334Z-20461",
+      "p": "Chọn: đổi hẳn lời hứa của phép đo, từ «không còn chỗ nào trên cả kho» sang «mỗi chỗ ghi quyền lấy từ đúng hai nguồn». Đổi lại: ai thêm một đường ghi hợp lệ mới sẽ thấy thước đỏ và phải sửa danh sách nguồn."
+    },
+    {
+      "id": "d-20260909T143334Z-20598",
+      "p": "Chọn: bỏ hàm cũ đã rỗng ruột và thôi đưa nội dung tin nhắn vào chỗ quyết quyền. Đổi lại: lời hứa thành đúng theo cấu trúc chứ không chỉ theo một phép đo."
+    },
+    {
+      "id": "d-20260909T143334Z-20735",
+      "p": "KHÔNG làm: viết lại chữ của hồ sơ vòng trước. Đổi lại: ai đọc hồ sơ cũ sẽ thấy một lời hứa rộng hơn sự thật, và phải đọc thêm một dòng ghi chú mới biết nó đã bị thay."
+    },
+    {
+      "id": "d-20260909T143334Z-20872",
+      "p": "KHÔNG làm: viết đặc tả giao diện. Việc này không chạm màn hình nào."
+    },
+    {
+      "id": "d-20260909T143334Z-21009",
+      "p": "KHÔNG làm: phép đo chạm cơ sở dữ liệu thật. Đổi lại: đường ghi chỉ được chứng minh ở mức hàm và ở mức đọc mã, không ở mức hàng đã lưu."
+    },
+    {
+      "id": "d-20260909T143334Z-21146",
+      "p": "Chọn: giữ hạng rủi ro theo đúng luật suy từ đường dẫn, không tự nâng. Đổi lại: khu vực hội thoại không nằm trong danh sách đường rủi ro cao, nên một việc sau này sửa chuỗi quyền ở đó sẽ đi hạng thấp — bảng phân hạng có thể đang thiếu một dòng, và đó là việc người quyết ở cổng này."
+    },
+    {
+      "id": "d-20260909T144100Z-31001",
+      "p": "Chọn: tách thêm một hàm để chỗ nối giữa hồ sơ đã lưu và bộ dựng trở nên đo được. Đổi lại: có thêm một mẩu mã sinh ra vì phép đo — nhận vào một cách cố ý, vì chính chỗ nối ấy là chỗ đáng canh."
+    },
+    {
+      "id": "d-20260909T144100Z-31138",
+      "p": "Chọn: thêm một tiêu chí đòi bốn phép đo của việc trước vẫn xanh, thay vì sửa chữ đã đóng băng. Đổi lại: một phép đo của hồ sơ cũ từ nay mô tả không đúng thứ nó chạy — nên dòng ghi chú phụ vào hồ sơ cũ phải nói thẳng điều đó."
+    },
+    {
+      "id": "d-20260910T001500Z-41001",
+      "p": "Chọn: ghim danh sách bằng một khoá bền (tệp · hàm · loại nguồn) thay vì theo số dòng. Đổi lại: sửa một dòng không liên quan phía trên không còn làm thước đỏ oan."
+    },
+    {
+      "id": "d-20260910T010000Z-42001",
+      "p": "KHÔNG làm: chạy hai việc độc lập song song. Bản sao mà máy dựng cho việc song song thiếu thư viện, mà chính phiên này đã vấp đúng chỗ đó."
+    },
+    {
+      "id": "d-20260910T012000Z-43001",
+      "p": "Chọn: dựng bản sao sao cho đột biến vào các gói dùng chung có tác dụng thật. Trước đó bản sao trỏ ngược về cây gốc, nên một phép đo đã báo XANH trên một đột biến thật."
+    },
+    {
+      "id": "d-20260910T014000Z-44001",
+      "p": "Chọn: sửa tên hàm ghi sai trong tài liệu thiết kế, không đụng hồ sơ đã ký. Sàn đếm-đủ bắt được lỗi ấy; một sàn chỉ đặt mức tối thiểu thì không bao giờ thấy."
+    },
+    {
+      "id": "d-20260910T015500Z-45001",
+      "p": "Chọn: bắt mã thoát trực tiếp thay vì đọc nó trong nhánh phủ định. Chiều đỏ bắt được một chỗ mà lệnh hỏng nhưng thước vẫn báo xanh."
+    },
+    {
+      "id": "d-20260910T021000Z-46001",
+      "p": "Chọn: bản khai các phép phá thử đọc chữ hợp đồng lỏng hơn chữ đã duyệt ở ba chỗ. Đổi lại: chữ ấy được viết trước khi bộ phá thử tồn tại, nên phải nói ra cho người ký biết."
+    },
+    {
+      "id": "d-20260910T022500Z-47001",
+      "p": "Chọn: gỡ hai khẳng định gọi hàm đã xoá, và ba chỗ khác còn truyền một trường thừa. Điều hai khẳng định ấy nói nay được đo mạnh hơn ở đường chạy thật."
+    },
+    {
+      "id": "d-20260910T090000Z-50001",
+      "p": "Chọn: tách ba mã thoát — xanh · vi phạm · giàn đo hỏng — và khoá hoá thao tác dựng bản sao. Đây là gốc của lần chấm đỏ thứ nhất: một phép đo chết giữa chừng đọc ra y hệt một phép đo thành công."
+    },
+    {
+      "id": "d-20260910T100000Z-51001",
+      "p": "Chọn: DỪNG, không tự chạy vòng chấm thứ ba, mà đưa ba đường cho người quyết. Hai vòng liên tiếp có một phép đo báo kết quả không phải kết quả thật của nó."
+    },
+    {
+      "id": "d-20260910T110000Z-52001",
+      "p": "Chọn: thu phạm vi. Đổi cách đếm của sàn quyền cho đúng, và bỏ một thước đã hai lần báo sai vì thứ nó đo đã được chứng ở nơi khác. Đổi lại: đây là đổi phạm vi của hợp đồng đã ký, nên phải duyệt lại."
+    }
   ]
 }
