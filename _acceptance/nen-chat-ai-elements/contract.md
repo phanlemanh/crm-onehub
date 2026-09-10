@@ -354,6 +354,16 @@ Chín phát hiện ngoài phạm vi đã duyệt, trình ở Cổng 2. Chủ kho
   tệp có trên đĩa, và nói thành lời rằng `add` một component rồi để nó không
   ai gọi sẽ làm răng mồ côi đỏ — ma sát cố ý, không phải hai luật đánh nhau.
 
+**Đã sửa thêm ở lượt ghim lại (10/09)**
+
+- Nhãn vai trong bản hội thoại tải về (`**User:**` / `**Assistant:**`) nay đọc
+  từ bảng chuỗi. Đây là **lớp chuỗi thứ năm** — chuỗi *suy ra* từ dữ liệu, không
+  có literal cho răng nhìn thấy. Nó là finding TRONG hợp đồng ở lượt ghim lại,
+  nên sửa chứ không đẩy sang đây.
+- `docs/plan/chat-ai-elements-rebuild.md` nay mở đầu bằng khối "Phase 0 đã xong"
+  đính chính bảy chỗ tài liệu mô tả một cái cây không còn. `AGENTS.md` trỏ tới
+  tệp đó, và điều kiện gỡ miễn trừ của răng mồ côi treo vào Phase 1 của nó.
+
 **Ship với giới hạn đã biết**
 
 - *(nặng)* `output-denied` và `approval-responded` rơi vào nhánh "đã xong":
@@ -376,5 +386,21 @@ Chín phát hiện ngoài phạm vi đã duyệt, trình ở Cổng 2. Chủ kho
   (vế round-trip chạy trong `bun run test` của E6); một assert đo tên công cụ
   có mặt thay vì đo quan hệ; `do_o` của răng ngoài cổng chỉ được kiểm là chuỗi
   khác rỗng.
+
+**Thêm ở lượt ghim lại (10/09)**
+
+- *(nặng)* Hình dạng biên nuốt lỗi phân tích: `input`/`output` của lượt `did`
+  dùng `.catch(null)` kế thừa từ `eve-tool`, nên một payload không đọc được ra
+  `null` mà không ném. `AGENTS.md` nói thẳng lỗi phân tích phải là lỗi thật có
+  thông điệp thật. Hệ quả: payload hỏng không phân biệt được với lượt chạy xong
+  trả rỗng.
+- *(nặng)* `check_types_khong_cache` bị gỡ khỏi `feature_loop.suite_keys` — cấu
+  hình **cấp kho**, nên mọi vòng sau cũng mất phép đo kiểu trong bộ nghiệm thu.
+  Lý do chỉ ghi ở hồ sơ vòng này; người đọc `config.yaml` sẽ không thấy. Vá
+  đúng là trả khoá về và sửa gốc cuộc đua Prisma, hoặc thay bằng một executor
+  chạy tuần tự.
+- Răng mồ côi chỉ gieo hạt từ `apps/**`, không xét `packages/ui` gọi nội bộ —
+  một component chỉ được `packages/ui` khác dùng sẽ bị báo mồ côi oan.
+- Miễn trừ hết hạn chỉ được in ra, không làm răng đỏ.
 
 Mỗi mục trên là một ứng viên hợp đồng riêng, không phải nợ vô chủ.

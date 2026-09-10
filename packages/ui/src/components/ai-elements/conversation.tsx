@@ -2,6 +2,7 @@
 
 import { Button } from "@crm/ui/components/button";
 import { useMessages } from "@crm/ui/components/locale-provider";
+import type { Messages } from "@crm/ui/lib/messages";
 import { cn } from "@crm/ui/lib/utils";
 import type { UIMessage } from "ai";
 import { ArrowDownIcon, DownloadIcon } from "lucide-react";
@@ -125,30 +126,34 @@ export type ConversationDownloadProps = Omit<
   formatMessage?: (message: UIMessage, index: number) => string;
 };
 
-const defaultFormatMessage = (message: UIMessage): string => {
-  const roleLabel =
-    message.role.charAt(0).toUpperCase() + message.role.slice(1);
-  return `**${roleLabel}:** ${getMessageText(message)}`;
-};
+const nhanVai = (message: UIMessage, msg: Messages): string =>
+  message.role === "user" ? msg.chatMessage.roleUser : msg.chatMessage.roleAssistant;
+
+const defaultFormatMessage =
+  (msg: Messages) =>
+  (message: UIMessage): string =>
+    `**${nhanVai(message, msg)}:** ${getMessageText(message)}`;
 
 export const messagesToMarkdown = (
   messages: UIMessage[],
-  formatMessage: (
-    message: UIMessage,
-    index: number
-  ) => string = defaultFormatMessage
-): string => messages.map((msg, i) => formatMessage(msg, i)).join("\n\n");
+  msg: Messages,
+  formatMessage?: (message: UIMessage, index: number) => string
+): string => {
+  const dinhDang = formatMessage ?? defaultFormatMessage(msg);
+  return messages.map((m, i) => dinhDang(m, i)).join("\n\n");
+};
 
 export const ConversationDownload = ({
   messages,
   filename = "conversation.md",
-  formatMessage = defaultFormatMessage,
+  formatMessage,
   className,
   children,
   ...props
 }: ConversationDownloadProps) => {
+  const msg = useMessages();
   const handleDownload = useCallback(() => {
-    const markdown = messagesToMarkdown(messages, formatMessage);
+    const markdown = messagesToMarkdown(messages, msg, formatMessage);
     const blob = new Blob([markdown], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -158,7 +163,7 @@ export const ConversationDownload = ({
     link.click();
     link.remove();
     URL.revokeObjectURL(url);
-  }, [messages, filename, formatMessage]);
+  }, [messages, filename, formatMessage, msg]);
 
   return (
     <Button

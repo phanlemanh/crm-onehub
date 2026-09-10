@@ -91,6 +91,8 @@ const en = {
 		thoughtFor: (seconds: string) => `Thought for ${seconds} seconds`,
 	},
 	chatMessage: {
+		roleUser: "You",
+		roleAssistant: "Assistant",
 		previousBranch: "Previous branch",
 		nextBranch: "Next branch",
 		branchPage: (current: string, total: string) => `${current} of ${total}`,
@@ -201,6 +203,8 @@ const vi = {
 		thoughtFor: (seconds: string) => `Đã nghĩ trong ${seconds} giây`,
 	},
 	chatMessage: {
+		roleUser: "Bạn",
+		roleAssistant: "Trợ lý",
 		previousBranch: "Nhánh trước",
 		nextBranch: "Nhánh sau",
 		branchPage: (current: string, total: string) => `${current} trên ${total}`,

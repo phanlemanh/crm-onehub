@@ -12,6 +12,41 @@ the family that ships those takes the whole conversation rather than half of it.
 Until this migration lands the tree is mixed. Every chat change moves toward the
 target, never away.
 
+## Phase 0 đã xong — đọc mục này trước phần còn lại
+
+**Cập nhật 10/09/2026, vòng `nen-chat-ai-elements`.** Phase 0 đã giao. Phần dưới
+của kế hoạch viết trước khi nó chạy, nên vài chỗ mô tả một cái cây không còn
+nữa. Sửa ở đây thay vì sửa rải rác, để không ai đọc nhầm một câu lẻ:
+
+- **Thư mục `ai-elements/` còn 4 tệp**, không phải 23: `message`, `reasoning`,
+  `shimmer` (do `reasoning` nhập), `conversation` (kéo tươi làm mốc cho phép đo
+  cuộn). 19 tệp còn lại đã xoá — không tệp nào khả đạt từ `apps/**`.
+- **Mọi component khác phải kéo lại bằng CLI trước khi dùng**, kể cả các tên ở
+  nhóm Adopted của `docs/chat-ui.md`. Câu "Only one component has to be fetched"
+  bên dưới không còn đúng.
+- **Kéo về là chưa xong.** Răng mồ côi chạy trong `bun run test` đỏ với bất kỳ
+  tệp nào trong thư mục đó mà `apps/**` không với tới. Component mới phải chạm
+  một màn trong cùng một thay đổi.
+- **B3 và B4 đã giao, nhưng trên một dân số khác** với dân số kế hoạch ghi: các
+  tệp mang màu thô (`tool`, `web-preview`) và phần lớn chuỗi tiếng Anh nằm trong
+  19 tệp đã xoá. Sổ lệch chuẩn của record là
+  `_acceptance/nen-chat-ai-elements/so-lech-chuan.md`, không phải các con số ở
+  mục "Local divergence" bên dưới.
+- **Khoá chuỗi của `packages/ui` sống ở `packages/ui/src/lib/messages.ts`**, không
+  phải `apps/app/lib/messages/agent-builder-*.ts` như B4 ghi — `packages/ui`
+  không được nhập gì từ `apps/app`.
+- **B2 đã dựng**: hình dạng lượt ở `packages/validation/src/agent-transcript.ts`,
+  lớp chuyển ở `packages/ui/src/lib/eve-to-ai-sdk.ts`. Dạng `asked` cố ý không đi
+  qua lớp chuyển.
+- **B1 đã đo trên trình duyệt thật**: `Conversation` chậm hơn `MessageScroller`
+  **32 lần** ở 500 lượt; sau khi thêm hai thuộc tính bỏ bố cục ngoài khung nhìn
+  còn 0,89 lần. Bản vá đã ở trong `conversation.tsx` và là một mục trong sổ lệch.
+- **`loader.tsx` đã xoá ở vòng này**, không phải ở Phase 1.
+
+**Phase 1 vẫn là bước kế**, và nó gánh thêm một việc: gỡ mục miễn trừ
+`conversation.tsx` trong `_acceptance/nen-chat-ai-elements/rang/mo-coi.mjs` khi
+`Conversation` được nối vào màn thật — điều kiện hết hạn ghi ngay trong script.
+
 ## What "the whole chat" is
 
 | Surface | Files | Size |
