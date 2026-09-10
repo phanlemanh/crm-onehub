@@ -5,7 +5,7 @@ slug: do-quyen-luot-bang-hanh-vi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent, api, docs]
-status: approved
+status: implemented
 approved_by: Mạnh
 approved_at: 2026-09-11
 design_doc: docs/superpowers/specs/2026-09-09-do-quyen-luot-bang-hanh-vi-design.md
