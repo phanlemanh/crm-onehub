@@ -13,7 +13,11 @@ function evalsCoVecto() {
 	const ra = [];
 	for (const k of khoi) {
 		const id = k.split("\n")[0].trim();
-		const than = k.slice(k.indexOf("expected:"));
+		const dau = k.indexOf("expected:");
+		if (dau === -1) {
+			hong(`${GHIM_LECH}\n  khoi eval "${id}" khong co truong expected:`);
+		}
+		const than = k.slice(dau);
 		const ten = [...boMaNgoac(than).matchAll(/vecto "([^"]+)"/g)].map(
 			(m) => m[1],
 		);
@@ -81,10 +85,20 @@ function chayBanKhai(khai) {
 			`${dong.id} · ${dong.vecto} (${nhan}): ma ${r.ma}, mong doi ${dong.ma}\n`,
 		);
 		if (r.ma !== dong.ma) {
+			const duoi = r.chu
+				.split("\n")
+				.filter(Boolean)
+				.slice(-12)
+				.map((d) => `      ${d}`)
+				.join("\n");
 			hongDong.push(
-				dong.ma !== 0 && r.ma === 0
-					? `  dong khai ra xanh: ${dong.id} · ${dong.vecto}`
-					: `  ${dong.id} · ${dong.vecto}: ma ${r.ma}, khai ${dong.ma}`,
+				[
+					dong.ma !== 0 && r.ma === 0
+						? `  dong khai ra xanh: ${dong.id} · ${dong.vecto}`
+						: `  ${dong.id} · ${dong.vecto}: ma ${r.ma}, khai ${dong.ma}`,
+					"    duoi thong diep cua dong nay:",
+					duoi,
+				].join("\n"),
 			);
 			continue;
 		}

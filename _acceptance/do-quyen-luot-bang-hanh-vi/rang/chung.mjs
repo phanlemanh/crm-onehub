@@ -18,8 +18,19 @@ export const GOC = resolve(RANG, "..", "..", "..");
 export const DUONG_DISPATCH = "apps/agent/agent/lib/custom-agent-dispatch.ts";
 export const DUONG_SPEC = "apps/agent/test/quyen-luot.spec.ts";
 
-const git = (args, cwd = GOC) =>
-	execFileSync("git", args, { cwd, encoding: "utf8" }).trim();
+const git = (args, cwd = GOC, them) => {
+	const chon = { cwd, encoding: "utf8" };
+	if (them) chon.env = { ...process.env, ...them };
+	return execFileSync("git", args, chon).trim();
+};
+
+const GIT_RIENG = resolve(
+	GOC,
+	execFileSync("git", ["rev-parse", "--git-dir"], {
+		cwd: GOC,
+		encoding: "utf8",
+	}).trim(),
+);
 
 const GIT_CHUNG = resolve(
 	GOC,
@@ -88,8 +99,18 @@ export function chayRang(fn) {
 }
 
 function trangThaiDangXet() {
-	const tam = git(["stash", "create"]);
-	return tam || git(["rev-parse", "HEAD"]);
+	const chiMuc = join(
+		process.env.TMPDIR ?? "/tmp",
+		`dq-chi-muc-${process.pid}-${Math.random().toString(36).slice(2, 8)}`,
+	);
+	const goc = join(GIT_RIENG, "index");
+	if (existsSync(goc)) cpSync(goc, chiMuc);
+	try {
+		const tam = git(["stash", "create"], GOC, { GIT_INDEX_FILE: chiMuc });
+		return tam || git(["rev-parse", "HEAD"]);
+	} finally {
+		rmSync(chiMuc, { force: true });
+	}
 }
 
 function cacNodeModules() {
