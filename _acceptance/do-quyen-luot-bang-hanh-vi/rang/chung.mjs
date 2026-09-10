@@ -7,7 +7,9 @@ import {
 	readdirSync,
 	readlinkSync,
 	rmSync,
+	statSync,
 	symlinkSync,
+	writeFileSync,
 } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -24,14 +26,6 @@ const git = (args, cwd = GOC, them) => {
 	return execFileSync("git", args, chon).trim();
 };
 
-const GIT_RIENG = resolve(
-	GOC,
-	execFileSync("git", ["rev-parse", "--git-dir"], {
-		cwd: GOC,
-		encoding: "utf8",
-	}).trim(),
-);
-
 const GIT_CHUNG = resolve(
 	GOC,
 	execFileSync("git", ["rev-parse", "--git-common-dir"], {
@@ -40,26 +34,60 @@ const GIT_CHUNG = resolve(
 	}).trim(),
 );
 const KHOA = join(GIT_CHUNG, "dq-cay-sao.khoa");
+const CHU_KHOA = join(KHOA, "chu");
+const KHOA_MO_COI_MS = 300_000;
+
+function chuConSong(pid) {
+	try {
+		process.kill(pid, 0);
+		return true;
+	} catch (loi) {
+		return loi.code === "EPERM";
+	}
+}
+
+function khoaDaChet() {
+	let chu;
+	try {
+		chu = Number.parseInt(readFileSync(CHU_KHOA, "utf8").trim(), 10);
+	} catch {
+		const tuoi = Date.now() - statSync(KHOA).mtimeMs;
+		return tuoi > KHOA_MO_COI_MS;
+	}
+	return Number.isFinite(chu) && !chuConSong(chu);
+}
 
 function giuKhoa(viec) {
 	const han = Date.now() + 120_000;
 	for (;;) {
 		try {
 			mkdirSync(KHOA);
+			writeFileSync(CHU_KHOA, String(process.pid));
 			break;
 		} catch (loi) {
 			if (loi.code !== "EEXIST") throw loi;
-			if (Date.now() > han) {
+			if (khoaDaChet()) {
 				rmSync(KHOA, { recursive: true, force: true });
 				continue;
+			}
+			if (Date.now() > han) {
+				hongGian(
+					`cho khoa cay sao qua 120s ma chu khoa van song: ${KHOA}\n  khong pha khoa cua tien trinh dang chay — chay lai khi may bot tai`,
+				);
 			}
 			execFileSync("sleep", ["0.2"]);
 		}
 	}
+	let cuaMinh = true;
 	try {
 		return viec();
 	} finally {
-		rmSync(KHOA, { recursive: true, force: true });
+		try {
+			cuaMinh = readFileSync(CHU_KHOA, "utf8").trim() === String(process.pid);
+		} catch {
+			cuaMinh = false;
+		}
+		if (cuaMinh) rmSync(KHOA, { recursive: true, force: true });
 	}
 }
 
@@ -98,19 +126,26 @@ export function chayRang(fn) {
 	}
 }
 
-function trangThaiDangXet() {
-	const chiMuc = join(
-		process.env.TMPDIR ?? "/tmp",
-		`dq-chi-muc-${process.pid}-${Math.random().toString(36).slice(2, 8)}`,
+const KHONG_KHOA = { GIT_OPTIONAL_LOCKS: "0" };
+
+function thayDoiDangXet() {
+	const chu = git(
+		["diff", "--name-status", "-z", "--no-renames", "HEAD"],
+		GOC,
+		KHONG_KHOA,
 	);
-	const goc = join(GIT_RIENG, "index");
-	if (existsSync(goc)) cpSync(goc, chiMuc);
-	try {
-		const tam = git(["stash", "create"], GOC, { GIT_INDEX_FILE: chiMuc });
-		return tam || git(["rev-parse", "HEAD"]);
-	} finally {
-		rmSync(chiMuc, { force: true });
+	const o = chu.split("\0").filter(Boolean);
+	const ra = [];
+	for (let i = 0; i + 1 < o.length; i += 2) {
+		ra.push({ trang: o[i], duong: o[i + 1] });
 	}
+	return ra;
+}
+
+function chuaTheoDoiDangXet() {
+	return git(["ls-files", "--others", "--exclude-standard"], GOC, KHONG_KHOA)
+		.split("\n")
+		.filter(Boolean);
 }
 
 function cacNodeModules() {
@@ -170,7 +205,7 @@ function noiNodeModules(sao, duong) {
 }
 
 export function dungCaySao() {
-	const sha = trangThaiDangXet();
+	const sha = git(["rev-parse", "HEAD"], GOC, KHONG_KHOA);
 	const sao = join(
 		process.env.TMPDIR ?? "/tmp",
 		`dq-sao-${process.pid}-${Math.random().toString(36).slice(2, 8)}`,
@@ -178,10 +213,17 @@ export function dungCaySao() {
 	rmSync(sao, { recursive: true, force: true });
 	giuKhoa(() => git(["worktree", "add", "--detach", "--quiet", sao, sha]));
 
-	const chuaTheoDoi = git(["ls-files", "--others", "--exclude-standard"])
-		.split("\n")
-		.filter(Boolean);
-	for (const duong of chuaTheoDoi) {
+	for (const { trang, duong } of thayDoiDangXet()) {
+		const dich = join(sao, duong);
+		if (trang.startsWith("D")) {
+			rmSync(dich, { recursive: true, force: true });
+			continue;
+		}
+		mkdirSync(dirname(dich), { recursive: true });
+		cpSync(join(GOC, duong), dich, { recursive: true });
+	}
+
+	for (const duong of chuaTheoDoiDangXet()) {
 		const dich = join(sao, duong);
 		mkdirSync(dirname(dich), { recursive: true });
 		cpSync(join(GOC, duong), dich, { recursive: true });
@@ -207,18 +249,37 @@ export function dungCaySao() {
 	return { sao, sha, don };
 }
 
-export function voiCaySao(fn) {
+const TIN_NGAT = ["SIGINT", "SIGTERM", "SIGHUP"];
+
+export function khiBiNgat(don) {
+	const bo = () => {
+		try {
+			don();
+		} finally {
+			process.exit(130);
+		}
+	};
+	for (const t of TIN_NGAT) process.on(t, bo);
+	return () => {
+		for (const t of TIN_NGAT) process.off(t, bo);
+	};
+}
+
+export function voiCaySao(fn, donThem) {
 	const cay = dungCaySao();
 	const bo = () => {
-		cay.don();
-		process.exit(130);
+		try {
+			if (donThem) donThem();
+			cay.don();
+		} finally {
+			process.exit(130);
+		}
 	};
-	const tin = ["SIGINT", "SIGTERM", "SIGHUP"];
-	for (const t of tin) process.on(t, bo);
+	for (const t of TIN_NGAT) process.on(t, bo);
 	try {
 		return fn(cay);
 	} finally {
-		for (const t of tin) process.off(t, bo);
+		for (const t of TIN_NGAT) process.off(t, bo);
 		cay.don();
 	}
 }
