@@ -5,9 +5,9 @@ slug: do-quyen-luot-bang-hanh-vi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent, api, docs]
-status: implemented
-approved_by: Mạnh
-approved_at: 2026-09-10
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-09-09-do-quyen-luot-bang-hanh-vi-design.md
 ---
 
@@ -60,7 +60,7 @@ ghim; đường dẫn trong răng suy từ vị trí script, không ghim cứng 
 
 Ô đã cắt:
 
-- **Later** — A×C "tích hợp chạm DB thật cho `respondToQuestion`": chứng minh cả
+- **Later** — A×C "tích hợp chạm DB thật cho `answerBuilderQuestion`": chứng minh cả
   đường ghi chứ không chỉ hàm thuần, nhưng cần `crm_<id>_test` và chậm hơn.
 - **Later** — "biên API parse lời khai": `zod` enum đã làm; đo lại là đo thư viện.
 - **Never** — mọi ô ở cột "client khai": dưới B+ mọi thứ client làm đều là lời

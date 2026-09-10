@@ -27,7 +27,7 @@ Sơ đồ luồng, một chiều trái→phải. Sáu nút nối tiếp: **ô so
 nhân** → **biên tRPC (`builderPromptShape`, zod enum)** → **hàng
 `AgentConversationSubmission`** → **`builderSessionAuthFromRow`** → **thuộc
 tính phiên** → **`builderTurnApproval`**. Nhánh thứ hai vào cùng hàng:
-**`respondToQuestion`** với nhãn `commandTypeFromAuthorization(câu hỏi treo)`.
+**`answerBuilderQuestion`** với nhãn `commandTypeFromAuthorization(câu hỏi treo)`.
 Đánh dấu: nút nào là **lời khai của client**, nút nào **máy chủ tự suy**, nút
 nào **agent chỉ đọc**. Vẽ ba đường đã cân bằng ba màu chú thích: **A** cắt ở
 biên tRPC (tách điểm vào), **C** cắt ở hàng (cấm nâng giữa hội thoại), **B+**

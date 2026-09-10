@@ -604,7 +604,7 @@ Phân loại nguồn:
 const GHIM = [
 	"apps/api/src/conversations/conversations.service.ts :: createBuilder :: khai",
 	"apps/api/src/conversations/conversations.service.ts :: submitBuilder :: khai",
-	"apps/api/src/conversations/conversations.service.ts :: respondToQuestion :: suy",
+	"apps/api/src/conversations/conversations.service.ts :: answerBuilderQuestion :: suy",
 ];
 ```
 
@@ -741,7 +741,7 @@ git commit -m "rang(do-quyen): E6 bo do theo dong khong moc lai"
 
 Thêm một gạch đầu dòng mới ngay sau gạch **Creation requires the current `CREATE_AGENT` turn.**, viết bằng giọng của tệp đó (tiếng Anh, câu ngắn, in đậm mệnh đề đầu). Ba điều phải nói được:
 1. `commandType` của lượt tạo và lượt submit là lời khai của client mà máy chủ **không đối chứng** — không có sự thật phía máy chủ nào để đối chứng, vì ý định chỉ tồn tại ở phía người bấm;
-2. máy chủ suy quyền của lượt trả lời từ câu hỏi treo đã lưu (`commandTypeFromAuthorization` ở `respondToQuestion`);
+2. máy chủ suy quyền của lượt trả lời từ câu hỏi treo đã lưu (`commandTypeFromAuthorization` ở `answerBuilderQuestion`);
 3. agent không bao giờ suy lại — nó đọc giá trị của hàng và chấm cổng.
 Kèm một câu nói vì sao thế là đủ: kẻ cổng này chặn là mô hình, và biên duyệt của người là lúc deploy.
 

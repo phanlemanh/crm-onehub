@@ -231,7 +231,7 @@ evals:
     expected: >-
       Tai lieu khai dung thu ma ma thuc su lam. Doc bon tep cung luc phai thay ba
       cau cua tai lieu khop voi ba cho trong ma: input.commandType o createBuilder
-      va submitBuilder; commandTypeFromAuthorization o respondToQuestion;
+      va submitBuilder; commandTypeFromAuthorization o answerBuilderQuestion;
       builderTurnAuthorized doc thuoc tinh phien. Tai lieu noi "may chu doi chung
       loi khai" hoac im lang ve chuyen ai khai, trong khi ma nhan thang gia tri
       client -> FAIL. Tai lieu dung dung ba cau nhung viet bang jargon schema/tool
