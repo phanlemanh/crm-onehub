@@ -196,25 +196,6 @@ Máy không tự sửa chúng — người quyết ở Cổng 2. Xếp theo mứ
 
 Chín mục dưới đây là lỗi THẬT nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1. Máy không tự sửa chúng — người quyết ở Cổng 2. Chi tiết đầy đủ nằm ở review-findings.md.
 
-- **[high]** Xoá 9/14 component thuộc nhóm "Adopted" mà không sửa bảng đăng ký ở docs/chat-ui.md
-  - chỗ: `docs/chat-ui.md`:105
-- **[medium]** Đè màu của component bằng className tại chỗ gọi — trái docs/design.md
-  - chỗ: `packages/ui/src/components/ai-elements/conversation.tsx`:98
-- **[medium]** Cổng test của packages/ui phụ thuộc vào thư mục hồ sơ của một vòng cụ thể
-  - chỗ: `packages/ui/test/rang-chat.spec.ts`:51
-- **[low]** Hai phụ thuộc thành mồ côi sau khi xoá 19 component, không lệnh cổng nào bắt
-  - chỗ: `packages/ui/package.json`:38
-- **[high]** output-denied / approval-responded rơi vào nhánh "đã xong" — lượt gọi bị từ chối hiện ra như thành công
-  - chỗ: `packages/ui/src/lib/eve-to-ai-sdk.ts`:58
-- **[low]** Lớp chuyển mặc định locale "vi", không đọc từ locale provider
-  - chỗ: `packages/ui/src/lib/eve-to-ai-sdk.ts`:32
-- **[medium]** Hình dạng 2 — E8 (AC-4) chỉ chạy vế ĐỌC, không chạy round-trip rút-từ-writer mà chính nó đòi
-  - chỗ: `_acceptance/nen-chat-ai-elements/evals.yaml`:69
-- **[medium]** Hình dạng 3 — assert tên công cụ có mặt trong khi lời hứa của chính bài kiểm là quan hệ output-vào ≡ output-ra
-  - chỗ: `packages/ui/test/eve-to-ai-sdk.spec.ts`:93
-- **[medium]** Hình dạng 3 — 'do_o' của răng ngoài cổng chỉ được assert là chuỗi khác rỗng, trong khi lời hứa là quan hệ tới eval có thật
-  - chỗ: `packages/ui/test/rang-chat.spec.ts`:91
-
 ## Analyst
 
 E4, E5, E6, E13, E14
