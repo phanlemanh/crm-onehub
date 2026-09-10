@@ -176,3 +176,45 @@
 - **claude-opus-5**: 3 agent · 93 calls · out 6,950 · in 186 · cache_read 9,969,483 · cache_create 367,334
 - **claude-haiku-4-5-20251001**: 12 agent · 27 calls · out 3,146 · in 240 · cache_read 944,489 · cache_create 229,974
 
+### S4 vòng 5 — PASS — wf_2bf6ffdf-494 (33 agent, 201,887 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5 | 11 | 28,043 | 22 | 1,012,863 | 321 |
+| baseline:diffBase | claude-sonnet-5 | 35 | 15,248 | 70 | 2,720,690 | 406 |
+| refute:eve-to-ai-sdk.ts | claude-sonnet-5 | 19 | 14,089 | 38 | 1,434,228 | 204 |
+| triage | claude-sonnet-5 | 2 | 13,267 | 4 | 66,712 | 158 |
+| refute:config.yaml | claude-sonnet-5 | 12 | 12,923 | 24 | 925,732 | 187 |
+| refute:eve-to-ai-sdk.ts | claude-sonnet-5 | 21 | 11,805 | 42 | 1,451,401 | 203 |
+| refute:lai-ra-man.spec.tsx | claude-sonnet-5 | 15 | 11,488 | 30 | 1,062,586 | 164 |
+| refute:rang-chat.spec.ts | claude-sonnet-5 | 11 | 9,495 | 22 | 775,783 | 134 |
+| refute:config.yaml | claude-sonnet-5 | 13 | 8,273 | 26 | 908,374 | 131 |
+| review:conventions | claude-opus-5 | 38 | 7,845 | 76 | 3,871,699 | 430 |
+| review:measurement | claude-opus-5 | 32 | 7,176 | 64 | 3,865,304 | 495 |
+| refute:eve-to-ai-sdk.ts | claude-sonnet-5 | 22 | 7,071 | 44 | 1,531,787 | 115 |
+| refute:conversation.tsx | claude-sonnet-5 | 10 | 6,767 | 20 | 698,547 | 113 |
+| refute:package.json | claude-sonnet-5 | 17 | 6,231 | 34 | 1,386,049 | 147 |
+| refute:rang-chat.spec.ts | claude-sonnet-5 | 16 | 5,662 | 32 | 1,138,466 | 99 |
+| refute:chat-ui.md | claude-sonnet-5 | 12 | 5,438 | 24 | 843,148 | 90 |
+| refute:agent-transcript.ts | claude-sonnet-5 | 14 | 5,434 | 28 | 995,672 | 129 |
+| refute:evals.yaml | claude-sonnet-5 | 17 | 5,296 | 34 | 1,303,892 | 94 |
+| refute:agent-transcript.ts | claude-sonnet-5 | 13 | 4,978 | 26 | 896,077 | 114 |
+| refute:mo-coi.mjs | claude-sonnet-5 | 12 | 4,869 | 24 | 835,396 | 141 |
+| review:bugs | claude-opus-5 | 47 | 2,531 | 94 | 4,681,696 | 296 |
+| refute:eve-to-ai-sdk.spec.ts | claude-sonnet-5 | 10 | 2,207 | 20 | 635,151 | 67 |
+| machine:node _acceptance/nen-chat-ai-elements/ra | claude-haiku-4-5-20251001 | 2 | 1,359 | 18 | 41,254 | 18 |
+| capture:provenance | claude-sonnet-5 | 2 | 1,310 | 4 | 59,816 | 18 |
+| machine:node _acceptance/nen-chat-ai-elements/ra | claude-haiku-4-5-20251001 | 2 | 692 | 18 | 69,749 | 16 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 509 | 18 | 69,726 | 10 |
+| machine:node _acceptance/nen-chat-ai-elements/ra | claude-haiku-4-5-20251001 | 2 | 504 | 18 | 69,748 | 15 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 431 | 18 | 69,724 | 12 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 341 | 18 | 69,726 | 19 |
+| machine:cd packages/ui && bun test test/eve-to-a | claude-haiku-4-5-20251001 | 2 | 321 | 18 | 69,746 | 8 |
+| machine:bun run test | claude-haiku-4-5-20251001 | 5 | 276 | 42 | 207,494 | 80 |
+| machine:node _acceptance/nen-chat-ai-elements/ra | claude-haiku-4-5-20251001 | 2 | 4 | 18 | 69,748 | 38 |
+| machine:node _acceptance/nen-chat-ai-elements/ra | claude-haiku-4-5-20251001 | 2 | 4 | 18 | 69,746 | 16 |
+
+- **claude-sonnet-5**: 20 agent · 284 calls · out 179,894 · in 568 · cache_read 20,682,370 · cache_create 1,237,730
+- **claude-opus-5**: 3 agent · 117 calls · out 17,552 · in 234 · cache_read 12,418,699 · cache_create 386,275
+- **claude-haiku-4-5-20251001**: 10 agent · 23 calls · out 4,441 · in 204 · cache_read 806,661 · cache_create 199,851
+
