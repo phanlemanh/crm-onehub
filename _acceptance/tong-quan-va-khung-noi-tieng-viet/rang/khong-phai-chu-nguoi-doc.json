@@ -1,0 +1,221 @@
+{
+	"lat": "tong-quan-va-khung-noi-tieng-viet",
+	"ghi_chu": "Sinh dan so bang cach lay MOI chuoi roi TRU theo luat CO TEN. Bay danh sach ky thuat chep nguyen tu ③b (chung la luat quet, khong phai du lieu cua lat). giu_nguyen la cua lat nay: moi dong doc trong ngu canh truoc khi khai, dong chet lam chan DO.",
+	"ham_ky_thuat": ["cn", "clsx", "twMerge", "require", "import"],
+	"giu_nguyen": [
+		{
+			"chu": "px-3 py-2.5 align-middle",
+			"vi_sao": "hang so lop CSS cua o bang (CELL) — khong phai chu doc"
+		},
+		{
+			"chu": "size-5",
+			"vi_sao": "lop Tailwind cho co bieu tuong Hoi thoai tren thanh ben (LOP_ICON_HOI_THOAI) — cung hang voi hang so lop o bang, khong phai chu doc"
+		},
+		{
+			"chu": "me",
+			"vi_sao": "dinh danh pham vi so lieu (scope=me) trong URL — nhan hien ra doc tu kho scope.me"
+		},
+		{
+			"chu": "deal",
+			"vi_sao": "dinh danh loai ban ghi (kind) truyen vao openRecord/RecordLink"
+		},
+		{
+			"chu": "company",
+			"vi_sao": "dinh danh loai ban ghi (kind)"
+		},
+		{
+			"chu": "contact",
+			"vi_sao": "dinh danh loai ban ghi (kind)"
+		},
+		{
+			"chu": "up",
+			"vi_sao": "dinh danh huong delta cua the so"
+		},
+		{
+			"chu": "down",
+			"vi_sao": "dinh danh huong delta cua the so"
+		},
+		{
+			"chu": "neutral",
+			"vi_sao": "dinh danh huong delta / tone cua cham trang thai"
+		},
+		{
+			"chu": "primary",
+			"vi_sao": "tone cua cham trang thai"
+		},
+		{
+			"chu": "error",
+			"vi_sao": "tone cua cham trang thai"
+		},
+		{
+			"chu": "var(--success)",
+			"vi_sao": "bien mau CSS cua duong xu huong"
+		},
+		{
+			"chu": "var(--chart-1)",
+			"vi_sao": "bien mau CSS cua duong xu huong"
+		},
+		{
+			"chu": "dark",
+			"vi_sao": "dinh danh chu de sang/toi cua next-themes va logo"
+		},
+		{
+			"chu": "light",
+			"vi_sao": "dinh danh chu de sang/toi"
+		},
+		{
+			"chu": "opaque",
+			"vi_sao": "dinh danh bien the logo"
+		},
+		{
+			"chu": "vi",
+			"vi_sao": "ma tieng (Locale)"
+		},
+		{
+			"chu": "en",
+			"vi_sao": "ma tieng (Locale)"
+		},
+		{
+			"chu": "${…}=${…}; Max-Age=${…}; Path=${…}; SameSite=${…}",
+			"vi_sao": "chuoi cookie lang= ghep tu hang so — khong phai chu doc"
+		},
+		{
+			"chu": "keydown",
+			"vi_sao": "ten su kien DOM"
+		},
+		{
+			"chu": "show-all",
+			"vi_sao": "dinh danh hanh dong chan trang hang doi (queueFooter.action)"
+		},
+		{
+			"chu": "load-more",
+			"vi_sao": "dinh danh hanh dong chan trang hang doi"
+		},
+		{
+			"chu": "useMobileNav must be used within a MobileNavProvider",
+			"vi_sao": "thong diep Error nem cho lap trinh vien khi dung sai context — khong bao gio ve ra man"
+		}
+	],
+	"khoa_kieu": {
+		"ghi_chu": "Khoa cua kieu chi muc vao kho chuoi — gia tri la TEN KHOA, khong phai chu nguoi doc. Khai o day thay vi mien tru tung gia tri, vi danh sach gia tri se dai theo so muc thanh ben.",
+		"duong": [
+			"settings-sidebar.tsx: SettingsNavItem.khoa",
+			"settings-sidebar.tsx: keyof SettingsMessages[\"thanhBen\"]"
+		]
+	},
+	"thuoc_jsx_ky_thuat": [
+		"className",
+		"class",
+		"id",
+		"key",
+		"ref",
+		"href",
+		"src",
+		"srcSet",
+		"to",
+		"as",
+		"type",
+		"name",
+		"value",
+		"defaultValue",
+		"htmlFor",
+		"role",
+		"variant",
+		"size",
+		"side",
+		"align",
+		"orientation",
+		"mode",
+		"tone",
+		"icon",
+		"entity",
+		"kind",
+		"slug",
+		"locale",
+		"lang",
+		"dir",
+		"target",
+		"rel",
+		"method",
+		"action",
+		"accept",
+		"autoComplete",
+		"autoCapitalize",
+		"autoCorrect",
+		"inputMode",
+		"pattern",
+		"format",
+		"color",
+		"fill",
+		"stroke",
+		"viewBox",
+		"d",
+		"path",
+		"style",
+		"width",
+		"height",
+		"translate",
+		"form",
+		"default",
+		"data-icon",
+		"data-checked",
+		"transitionTypes",
+		"queryKey",
+		"prefetch",
+		"aria-current",
+		"aria-busy",
+		"aria-hidden",
+		"aria-live",
+		"aria-controls",
+		"aria-expanded",
+		"khoa",
+		"data-slot",
+		"surface",
+		"split",
+		"xKey",
+		"bloom",
+		"onClick",
+		"onSelect"
+	],
+	"khoa_object_ky_thuat": [
+		"id",
+		"href",
+		"src",
+		"key",
+		"className",
+		"class",
+		"slug",
+		"khoa",
+		"viewBox",
+		"path",
+		"queryKey",
+		"style",
+		"align",
+		"width",
+		"height",
+		"size",
+		"variant",
+		"tone",
+		"type",
+		"side",
+		"orientation"
+	],
+	"khoa_object_mang_chu": {
+		"ghi_chu": "Khoa object KHONG duoc dua vao danh sach ky thuat, du chung cung ten voi mot thuoc tinh JSX ky thuat. Gia tri cua chung la chu nguoi doc thay.",
+		"khoa": [
+			"name",
+			"value",
+			"label",
+			"title",
+			"header",
+			"srLabel",
+			"description",
+			"placeholder",
+			"text"
+		]
+	},
+	"mau_ky_thuat": {
+		"ghi_chu": "Chuoi mau chi gom duong dan/URL — khong mang chu nguoi doc. KHONG dung mau nay cho chuoi mau GHEP CAU: nhung cai do phai dich.",
+		"mau": ["^\\$\\{…\\}/", "^https?://"]
+	}
+}

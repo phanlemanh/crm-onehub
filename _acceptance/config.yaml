@@ -29,6 +29,8 @@ executors:
     tt_app: cd apps/app && bun test test/messages-guard.spec.ts test/campaign-states.spec.ts
     go_khoa_api: 'bun run test -- "cd apps/api && bun test test/saved-views-in-use.spec.ts test/campaigns.spec.ts"'
     go_khoa_app: 'bun run test -- "cd apps/app && bun test test/saved-views-in-use.spec.ts test/messages-guard.spec.ts"'
+    tq_khung_dieu_huong: cd apps/app && bun test test/khung-dieu-huong.spec.ts
+    tq_dang_xuat: cd apps/app && bun test test/sign-out.spec.ts
     cu_quyen_hai_chieu: cd apps/agent && bun test test/chan-uy-thac.spec.ts -t quyen
     cu_phu_moi_tool: cd apps/agent && bun test test/chan-uy-thac.spec.ts -t moi-tool
     cu_ket_thuc_sach: cd apps/agent && bun test test/chan-uy-thac.spec.ts -t ket-thuc
@@ -259,6 +261,40 @@ executors:
     apr_lech_noi_dung_do: bash _acceptance/auto-pr-thoi-do-o-ban-re/rang-lech-noi-dung-do.sh
     apr_moc_to_tien_do: git merge-base --is-ancestor c042478 5ac85ef; test $? -ne 0
     apr_moc_khop_cay_do: git diff --quiet c042478 5ac85ef -- .github/workflows/auto-pr.yml; test $? -ne 0
+    tq_hai_tieng: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs hai-tieng
+    tq_sau_bam: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs sau-bam
+    tq_khong_dich: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs khong-dich
+    tq_du_lieu_nguoi_nhap: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs du-lieu-nguoi-nhap
+    tq_be_rong: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs be-rong
+    tq_be_rong_do: NGUOI=${NGUOI:-dev@localhost} bash _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/be-rong-do.sh
+    tq_goc_thuoc: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs goc-thuoc
+    tq_chu_cung_jsx: node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-cung-lat.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json
+    tq_moi_chuoi: node _acceptance/man-cai-dat-noi-tieng-viet/rang/moi-chuoi.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json
+    tq_toast: node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json --chan toast && node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/dang-xuat.mjs
+    tq_tieu_de: node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json --chan tieu-de && node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/tieu-de-quan-he.mjs
+    tq_khai_sinh: node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json
+    tq_dan_so_tu_dia: node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json --chan dan-so
+    tq_dot_bien: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/dot-bien.mjs
+    tq_lan_noi_tiep: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lan-noi-tiep.mjs
+    tq_lan_dan_so: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E10
+    tq_lan_be_rong: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E13
+    tq_lan_dot_bien: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E11
+    tq_lan_doc_do: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs --chieu-do
+    tq_lan_sau_bam: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E2
+    tq_lan_du_lieu_nguoi_nhap: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E8
+    tq_lan_be_rong_man: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E12
+    tq_lan_tieu_de_do: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E24
+    tq_lan_trung_lap_do: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E25
+    tq_lan_san_thiet_ke_do: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E22
+    tq_lan_chu_cung: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E3
+    tq_lan_trang_thai_rong: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E21
+    tq_tieu_de_quan_he_do: node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/tieu-de-quan-he.mjs --chieu-do
+    tq_mot_bo_thuoc_do: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/mot-bo-thuoc.mjs --chieu-do
+    tq_mot_bo_thuoc: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/mot-bo-thuoc.mjs
+    tq_trang_thai_rong: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs trang-thai-rong
+    tq_be_rong_tien_de: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs be-rong-tien-de
+    tq_san_thiet_ke: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs
+    tq_san_thiet_ke_do: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs --chieu-do
     gieo_rai_test: cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v
     bo_cao_test: cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v
     bo_cao_cli: cd tools/listing-crawl && ./.venv/bin/python -m unittest tests.test_cli -v

@@ -110,7 +110,9 @@ export function GrantAccess({
 			<Button
 				className="w-full"
 				onClick={() => {
-					signOutAndRedirect().catch(() => toast.error(nhan.error.signOut));
+					signOutAndRedirect(nhan.error.signOut).catch(() =>
+						toast.error(nhan.error.signOut),
+					);
 				}}
 				type="button"
 				variant="ghost"

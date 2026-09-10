@@ -9,6 +9,7 @@ ROOT="$(cd "$RANG/../../.." && pwd)"
 KHO="$ROOT/$KHO_CHUOI"
 GIU="$(mktemp)"
 BE_RONG="${BE_RONG_HEP:-360}"
+THUT="${THUT:-		}"
 
 cd "$ROOT" || exit 2
 node "$RANG/khoa-cay.mjs" viet $$ || exit 2
@@ -28,10 +29,11 @@ fi
 # va bat ky agent nao doc file trong cua so do se thay no. Vet khong dau, tu mo ta
 # la vet, tung lam ba giam khao cham AC-1 truot oan ngay 05/09.
 DAI="$GIA_TRI_MOC của người dùng trong công ty và toàn bộ quyền đi kèm"
-KHOA_MOC="$KHOA_MOC" GIA_TRI_MOC="$GIA_TRI_MOC" DAI="$DAI" perl -pi -e '
+KHOA_MOC="$KHOA_MOC" GIA_TRI_MOC="$GIA_TRI_MOC" DAI="$DAI" THUT="$THUT" perl -pi -e '
   my $k = quotemeta($ENV{KHOA_MOC});
   my $g = quotemeta($ENV{GIA_TRI_MOC});
-  s/^\t\t$k: "$g",$/\t\t$ENV{KHOA_MOC}: "$ENV{DAI}",/;
+  my $t = quotemeta($ENV{THUT});
+  s/^$t$k: "$g",$/$ENV{THUT}$ENV{KHOA_MOC}: "$ENV{DAI}",/;
 ' "$KHO"
 sleep "${CHO_HMR:-6}"
 
