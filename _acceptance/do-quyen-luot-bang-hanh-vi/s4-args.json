@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-09T23:34:29Z",
-  "generated_sha": "9d960d485700c4c03a4c62ef4d8a5c47a61aebe3",
+  "generated_at": "2026-09-10T01:27:36Z",
+  "generated_sha": "c4cc7128e08b93048b0383b835139d2ee199b777",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "do-quyen-luot-bang-hanh-vi",
-  "round": 2,
+  "round": 3,
   "riskTier": "T2",
   "evals": [
     {
@@ -53,7 +53,7 @@
       "id": "E4",
       "criterion": "AC-3",
       "cmd": "node _acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs",
-      "expected": "San NGUON GHI, doc bang AST. Dan so sinh TU DIA: quet de quy apps/api/src\nlay moi tep .ts; tim moi loi goi `<x>.create(...)`, `<x>.update(...)`,\n`<x>.upsert(...)`; lay object literal la gia tri cua khoa `data`; di XUONG\nca cac object `create`/`update` LONG cua quan he ben trong no.\nMA TRAN TOAN PHAN VIET TRUOC, khong phai can duoi: tap `file:dong` tim\nduoc phai BANG DUNG danh sach ghim san trong chinh chan do. Thua mot phan\ntu hay thieu mot phan tu deu la ma 2, IN CA HAI danh sach. Danh sach ghim\nlay tai luot dau va viet vao ma; them mot duong ghi hop le la viec phai\nsua danh sach, khong phai viec de thuoc do oan.\nTrong tap ay, moi thuoc tinh commandType phai co initializer la DUNG MOT\ntrong hai:\n(a) truy cap thuoc tinh dang `<x>.commandType` tren input da parse o bien;\n(b) loi goi `commandTypeFromAuthorization(...)`.\nKhac -> ma 2, IN file:dong, VA in cau noi ro rang them mot nguon hop le\nthu ba la viec phai sua danh sach nguon.\nLOAI khoi dan so: commandType nam duoi `select`, `where`, `orderBy`,\n`include`. Kiem bang TO TIEN trong cay AST, khong bang ten tep.\nDoi chung duong, BON vecto tren ban sao:\nvecto \"ghim-cung\": doi mot cho ghi thanh chuoi \"CREATE_AGENT\" -> ma 2,\ndung file:dong ay.\nvecto \"bien-trung-gian\": doi mot cho ghi thanh mot bien gan tu mot ham\nkhac -> ma 2, dung file:dong ay.\nvecto \"quan-he-long\": cay mot cho ghi commandType ghim cung nam trong\nobject `create` LONG cua quan he -> ma 2, dung file:dong ay. Vecto nay\nla thu duy nhat chung minh bo do di xuong duoc quan he long.\nvecto \"duoi-select\": cay mot commandType duoi `select` -> van XANH.\nRa do -> ma 2: bo do dang khong phan biet doc voi ghi.\nRa sai o vecto nao -> ma 2, in ten vecto.",
+      "expected": "San MA TRAN KHOA, doc bang AST. Di tu CHU `commandType` chu KHONG tu hinh\ndang loi goi Prisma: mot duong ghi quyen buoc phai viet khoa ay ra o dau\ndo, nen khung nay phu ca `upsert` (khuon khong co khoa `data`),\n`updateMany`, va `data` la mot bien — ba dang ma khung theo-hinh-dang-loi-goi\nbo sot.\nDan so sinh TU DIA: quet de quy apps/api/src lay moi tep .ts, gom MOI cho\nVIET RA khoa commandType (PropertyAssignment, ShorthandPropertyAssignment,\nPropertySignature).\nMA TRAN TOAN PHAN VIET TRUOC: tap tim duoc phai BANG DUNG danh sach ghim\nsan trong chinh chan do, SO SANH CO BOI — moi lan xuat hien la mot phan tu\nrieng, khong khu trung. Thua hay thieu mot phan tu deu la ma 2, IN CA HAI\ndanh sach. Them mot cho viet khoa commandType la viec phai sua danh sach\nghim, khong phai viec de thuoc do oan.\nMoi phan tu xep dung mot loai, bang luat may:\ndoc  — nam duoi `select` / `where` / `orderBy` / `include`, kiem bang TO\nTIEN trong cay AST chu khong bang ten tep;\nkhai — initializer la truy cap thuoc tinh `<x>.commandType`;\nsuy  — initializer la loi goi `commandTypeFromAuthorization(...)`;\nkhac — con lai (khai bao kieu, khuon zod).\nMot phan tu `khac` nam NGOAI conversations.contracts.ts la mot cho ghi\nkhong lay tu hai nguon da dat ten -> ma 2, IN file:dong.\nDoi chung duong, SAU vecto tren ban sao, tat ca deu ma 2:\nvecto \"ghim-cung\": doi mot cho ghi thanh chuoi \"CREATE_AGENT\" -> loai\ndoi tu khai sang khac -> ma 2, dung file:dong ay.\nvecto \"bien-trung-gian\": doi mot cho ghi thanh mot bien gan tu mot ham\nkhac -> loai doi sang khac -> ma 2.\nvecto \"quan-he-long\": cay mot cho ghi ghim cung nam trong object\n`create` LONG cua quan he -> ma tran thanh 10 phan tu -> ma 2.\nvecto \"upsert-ghim-cung\": cay mot `upsert` co commandType ghim cung o\nnhanh `update` — khuon KHONG co khoa `data` -> ma 2. Vecto nay la thu\nduy nhat chung minh khung khong bo sot upsert.\nvecto \"data-la-bien\": cay mot `createMany({ data: <bien> })` voi bien la\nmang object mang commandType ghim cung -> ma 2. Vecto nay chung minh\nkhung khong bo sot payload khong-phai-object-literal.\nvecto \"select-thanh-doc\": cay mot commandType duoi mot `select` -> ma 2\n(ma tran thanh 10), VA cho moi phai duoc xep loai `doc`. Xep sang loai\nkhac -> ma 2 voi thong diep rieng: bo do dang khong phan biet doc voi\nghi.\nRa sai o vecto nao -> ma 3 (gian do hong), in ten vecto.",
       "executor": "script",
       "paths": [
         "apps/api/src/**",
@@ -64,16 +64,14 @@
     {
       "id": "E5",
       "criterion": "AC-4",
-      "cmd": "node _acceptance/do-quyen-luot-bang-hanh-vi/rang/mang-theo-do.mjs",
-      "expected": "Duong MANG THEO van la cua may chu, va thuoc do no co chieu do that.\nCay sao mang MA DANG XET, khong phai HEAD — cung luat va cung assert danh\ntinh nhu E2; khong dat -> ma 2 voi chu \"cay sao khong chua ma dang xet\".\nDoi chung duong: cay sao chua dot bien -> `bun test\ntest/quyen-luot.spec.ts` trong apps/agent ma 0. Khong dat -> ma 2.\nvecto \"mang-theo-luon-mo\": doi commandTypeFromAuthorization cua\npackages/validation/src/builder-question.ts thanh ham tra thang\n\"CREATE_AGENT\" cho moi dau vao. Chay lai -> ma KHAC 0, thong diep chua\nten moc \"cau tra loi ke thua quyen cua luot da hoi\".\nRa xanh -> ma 2: thuoc dang khong do duong mang theo.\nMoi vecto mot cay sao moi. Don cay sao ke ca khi ngat giua chung.",
-      "executor": "script",
+      "cmd": "cd apps/agent && bun test test/quyen-luot.spec.ts -t ke-thua",
+      "expected": "CHIEU XANH cua duong MANG THEO, chay bang lenh may da co san cua ho so\ntruoc: khoi describe(\"ke-thua\") cua apps/agent/test/quyen-luot.spec.ts.\nCau hoi treo khai khong-duoc-phep -> \"CHAT\"; khai duoc-phep ->\n\"CREATE_AGENT\"; moi ban ghi sai khuon (null, thieu khoa, khoa mang chuoi\nthay vi boolean) -> \"CHAT\". Mot lenh khac 0 -> ma cua lenh ay.\nCHIEU DO cua AC-4 KHONG do o day: no do o ban khai sinh (E8), dong\nvecto \"mang-theo-luon-mo\": doi commandTypeFromAuthorization cua\npackages/validation/src/builder-question.ts thanh ham tra thang\n\"CREATE_AGENT\" cho moi dau vao -> bai \"ke-thua: doc duoc ca hai chieu\ntren cung khuon\" phai DO.\nVi sao tach: hai vong cham dau co mot chan do rieng cho chieu do nay va ca\nhai lan no bao ket qua khong phai ket qua that cua no (r1: chet bang ngoai\nle, Node thoat 1 trung ma da khai; r2: thoat 0 tren may nhung lan cham ghi\n1). Chieu do van duoc chung minh — boi E8, tren cung mot vecto — nhung\nduong thu hai toi cung mot su that thi bo di.",
+      "executor": "test",
       "paths": [
         "packages/validation/src/builder-question.ts",
-        "apps/api/src/conversations/conversations.service.ts",
-        "apps/agent/test/quyen-luot.spec.ts",
-        "_acceptance/do-quyen-luot-bang-hanh-vi/rang/**"
+        "apps/agent/test/quyen-luot.spec.ts"
       ],
-      "ref": "config:executors.script.dq_mang_theo_do"
+      "ref": "config:executors.test.ql_quyen_ke_thua"
     },
     {
       "id": "E6",
@@ -106,7 +104,7 @@
       "id": "E8",
       "criterion": "AC-7",
       "cmd": "node _acceptance/do-quyen-luot-bang-hanh-vi/rang/khai-sinh.mjs",
-      "expected": "Ban khai sinh phai DAY DU THEO VECTO va phai CHAY DUOC.\n1. Doc evals.yaml cua vong nay. Voi tung eval executor `script`, dem so\nVECTO khai trong `expected` — moi vecto la mot dong bat dau bang\n`vecto \"<ten>\"`. So dong trong khai-sinh.json mang `id` cua eval ay phai\nBANG DUNG so vecto do. Lech -> ma 2, in id eval va HAI con so.\n\"It nhat mot dong\" la khong du: E2, E3, E4 moi cai nhieu vecto, va vecto\nbi bo quen thuong la vecto nguy hiem nhat.\n2. Moi dong khai co du nam truong: `id` (id eval), `vecto` (ten vecto,\nTRUNG nguyen van ten trong expected), `chay` (mang argv), `ghim` (chuoi\nthong diep), `ma` (so mong doi khac 0). Ten vecto trong ban khai khong\nkhop tap ten trong expected -> ma 2, in ca hai tap.\n3. Chay tung dong tren mot ban sao MOI: ma thoat BANG `ma` da khai, va\nthong diep (stdout + stderr) CHUA nguyen van chuoi `ghim`. Sai mot\ntrong hai -> ma 2, in ten dong.\nMot dong khai ra XANH la ca do nang nhat: thuoc do khong bat duoc dot bien\nno tuyen bat. In ro chu \"dong khai ra xanh\" kem ten dong.\nSan dan so: khai-sinh.json co 0 dong -> ma 2.",
+      "expected": "Ban khai sinh phai DAY DU THEO VECTO va phai CHAY DUOC.\n1. Doc evals.yaml cua vong nay. Voi TUNG eval — moi executor, khong rieng\n`script`, vi E5 la eval `test` nhung van khai mot vecto — dem so VECTO\nkhai trong `expected`: moi vecto la mot cum `vecto \"<ten>\"` nam ngoai\ndoan trong dau ngoac ma. So dong trong khai-sinh.json mang `id` cua eval\nay phai BANG DUNG so vecto do. Lech -> ma 2, in id eval va HAI con so.\n\"It nhat mot dong\" la khong du: E2, E3, E4 moi cai nhieu vecto, va vecto\nbi bo quen thuong la vecto nguy hiem nhat.\n2. Moi dong khai co du nam truong: `id` (id eval), `vecto` (ten vecto,\nTRUNG nguyen van ten trong expected), `chay` (mang argv), `ghim` (chuoi\nthong diep), `ma` (so mong doi khac 0 — moi vecto cua vong nay la mot\nchieu DO, khong co dong doi-chung-duong nao trong ban khai). Ten vecto\ntrong ban khai khong khop tap ten trong expected -> ma 2, in ca hai tap.\n3. Chay tung dong tren mot ban sao MOI: ma thoat BANG `ma` da khai, va\nthong diep (stdout + stderr) CHUA nguyen van chuoi `ghim`. Sai mot\ntrong hai -> ma 2, in ten dong.\nMot dong khai ra XANH la ca do nang nhat: thuoc do khong bat duoc dot bien\nno tuyen bat. In ro chu \"dong khai ra xanh\" kem ten dong.\nSan dan so: khai-sinh.json co 0 dong -> ma 2.",
       "executor": "script",
       "paths": [
         "_acceptance/do-quyen-luot-bang-hanh-vi/rang/**",
@@ -154,19 +152,8 @@
   "templatePath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.8.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
   "contractPath": "/Users/manhphan/dev/crm-onehub/.claude/worktrees/agitated-kilby-4b9585/_acceptance/do-quyen-luot-bang-hanh-vi/contract.md",
-  "invokedAt": "2026-09-09T23:34:29Z",
-  "invokedSha": "9d960d485700c4c03a4c62ef4d8a5c47a61aebe3",
-  "evalsHash": "b8a3d8c0dc2bbe6e7abfc827e173601e51aebe25708023f28028397069c077cb",
-  "runBaseline": false,
-  "carriedAnalyst": {
-    "fromRound": 1,
-    "nonDiscriminating": [
-      {
-        "cmd": "cd apps/agent && bun test test/quyen-luot.spec.ts",
-        "evals": [
-          "E1"
-        ]
-      }
-    ]
-  }
+  "invokedAt": "2026-09-10T01:27:36Z",
+  "invokedSha": "c4cc7128e08b93048b0383b835139d2ee199b777",
+  "evalsHash": "4e1cc506f17a4b7a3faf3f9080c776977e32dc17fe5c597ec3b62f6034335d69",
+  "runBaseline": true
 }
