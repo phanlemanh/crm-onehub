@@ -1,15 +1,15 @@
 ---
 schema_version: 1
-feature: Nền chat AI Elements — dọn 21 component mồ côi, dựng lớp chuyển kiểu eve→AI SDK, chuẩn hoá phần còn lại, đặt răng chống tái phát
+feature: Nền chat AI Elements — dọn 19 component mồ côi, dựng lớp chuyển kiểu eve→AI SDK, chuẩn hoá phần còn lại, đặt răng chống tái phát
 slug: nen-chat-ai-elements
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
 design_doc: docs/superpowers/specs/2026-09-09-nen-chat-ai-elements-design.md
-status: verified
-approved_by:
-approved_at:
-veto_state: mo
+status: signed-off
+approved_by: Mạnh
+approved_at: 2026-09-09
+veto_state: dong
 veto_opened_at: 2026-09-09T08:49:27Z
 ---
 
@@ -341,3 +341,40 @@ thật trong kho.
   kiện hết hạn: Phase 1 nối `Conversation` vào màn thật thì bỏ mục miễn trừ. Một
   miễn trừ hết hạn hiện chỉ được cảnh báo chứ không làm cổng đỏ — chỗ này người
   duyệt nên biết.
+
+## Known limits
+
+Chín phát hiện ngoài phạm vi đã duyệt, trình ở Cổng 2. Chủ kho chọn **sửa bảng
+đăng ký trước rồi ký**; tám mục còn lại ship như hiện tại, ghi ở đây.
+
+**Đã sửa trước khi ký**
+
+- Bảng đăng ký `docs/chat-ui.md` nay khớp cây: thêm mục "What is in the tree
+  today — 4", nói rõ Adopted là phán quyết về hướng đi chứ không phải lời khai
+  tệp có trên đĩa, và nói thành lời rằng `add` một component rồi để nó không
+  ai gọi sẽ làm răng mồ côi đỏ — ma sát cố ý, không phải hai luật đánh nhau.
+
+**Ship với giới hạn đã biết**
+
+- *(nặng)* `output-denied` và `approval-responded` rơi vào nhánh "đã xong":
+  eve có 7 trạng thái cho một lượt gọi công cụ, `DidItem` chỉ giữ 2 bit. Người
+  bán **từ chối** một lượt gọi thì màn vẽ ra như nó chạy xong với kết quả trống.
+  Đây là lớp lỗi đã vá hai lần mà mỗi lần chỉ đóng một trạng thái; đóng hết cần
+  một quyết định về hình dạng `DidItem` — việc của một vòng riêng.
+- `className` đè màu biến thể `Button` ở `conversation.tsx:98` và `:166`
+  (`dark:bg-background dark:hover:bg-muted`). Đến từ bản CLI thượng nguồn nên
+  không nằm trong sổ lệch; `docs/design.md` cấm đè kiểu tại chỗ gọi.
+- Cổng `test` của cả kho nay phụ thuộc thư mục hồ sơ của một vòng: ba răng là
+  bất biến của kho nhưng sống ở `_acceptance/nen-chat-ai-elements/rang/`. Đổi
+  tên hay lưu trữ thư mục đó là `pre-push` đỏ.
+- `nanoid` và `tokenlens` thành mồ côi sau khi xoá `prompt-input` và `context`;
+  không lệnh cổng nào bắt vì `lint:dead` không nằm trong bộ năm.
+- Lớp chuyển mặc định `locale` là `vi`; nó là hàm thuần nên không đọc được
+  locale-provider. Chỗ gọi quên truyền thì một workspace tiếng Anh nhận đúng
+  một câu tiếng Việt.
+- Bốn chỗ phép đo nói rộng hơn điều nó chứng minh: lệnh của E8 chỉ chạy vế đọc
+  (vế round-trip chạy trong `bun run test` của E6); một assert đo tên công cụ
+  có mặt thay vì đo quan hệ; `do_o` của răng ngoài cổng chỉ được kiểm là chuỗi
+  khác rỗng.
+
+Mỗi mục trên là một ứng viên hợp đồng riêng, không phải nợ vô chủ.
