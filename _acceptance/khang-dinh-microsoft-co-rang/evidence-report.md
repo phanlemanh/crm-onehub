@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
+verified_commit: 8aab72fab4da6d9ef9d026364c8631baaa0361cf
 human_signoff: Manh Phan 2026-09-01
 ---
 
@@ -236,3 +236,7 @@ chạy lại: 9/9 task kiểm chạy thật, 1330 bài, 0 trượt. Chữ ký ng
 
 run_id: repin-20260907T005455Z-44758
 sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0
+
+### Re-pin lần 3 — 2026-09-10, do chiến dịch ghim lại theo mốc kit 2.10.0 (luật làn eval ADR 0014); sáu hồ sơ có eval đỏ SẴN tách ra, chờ chủ kho quyết
+run_id: repin-20260910T031950Z-42838
+sha: 8aab72fab4da6d9ef9d026364c8631baaa0361cf · suites: 5 lệnh exit 0 · evals: 9 eval máy exit 0
