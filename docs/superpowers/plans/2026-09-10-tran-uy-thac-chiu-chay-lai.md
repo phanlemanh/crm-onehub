@@ -815,8 +815,10 @@ Expected: in `doc ban ma:` + `moc cay:` + `chieu xanh:` + ba dòng `bi bat`, r�
 
 - [ ] **Step 3: Phá thử răng — đòi mã 1 và mã 2 gọi được tên**
 
-Phá thử một: trong `chuoi-cuong-che.ts` đổi `slot.nhatKy` thành luôn trả `["get"]`.
-Expected: răng vẫn mã 0 hoặc mã 2, nhưng **không** được mã 0 với ba dòng `bi bat` — nếu nó vẫn xanh thì răng đang không đo gì; hoàn nguyên và sửa răng.
+Phá thử một: trong `builder-delegation.ts` đổi cả hai chỗ `throw` thành `return`, tức trần không bao giờ ném trên **cây lành**.
+Expected: `KHONG DO DUOC: tren cay LANH bo do chuoi cuong che da khong xanh`, `ma=2` — răng từ chối chấm trên một cây mà chiều xanh đã đổ. Hoàn nguyên.
+
+Bản kế hoạch đầu ghi phép thử này là "làm cùn `slot.nhatKy`", và **đó là một đề sai**: bài đo sinh ra đứng trên ba assert (`nhatKy`, `slot.doc()`, vế ném), nên làm cùn một assert thì hai assert kia vẫn gánh và răng vẫn bắt đúng. Đổi sang phép thử ở trên vì nó đánh vào **chiều xanh** — thứ duy nhất mà một assert khác không thay thế được.
 
 Phá thử hai: đổi `HINH_DANG[2].cam` thành một regex không khớp gì.
 Expected: `KHONG DO DUOC: phep bien doi van ban cua hinh dang bo-update khong cam duoc vao ma`, `ma=2`. Hoàn nguyên.
