@@ -5,7 +5,7 @@ import { schemas } from "@crm/validation";
 import { eveTurnFailure } from "@crm/validation/eve-stream";
 import { defineChannel, GET, POST } from "eve/channels";
 import { z } from "zod";
-import { persistBuilderInputRequest } from "../lib/builder-input";
+import { recordBuilderInputRequest } from "../lib/builder-input";
 import { verifyKey } from "../lib/context-dev";
 import {
 	builderIdFromToken,
@@ -29,7 +29,6 @@ import {
 import { DISPATCH } from "../lib/dispatch-config";
 import { settle } from "../lib/enrichment";
 import { finishRun, runResultOf } from "../lib/run-runtime";
-import { attribute } from "../lib/session-purpose";
 import { createSlackChannel } from "../lib/slack-membership";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
 import { completeTask, taskSubject } from "../lib/tasks";
@@ -241,11 +240,7 @@ export default defineChannel({
 
 	events: {
 		async "input.requested"(data, channel, ctx) {
-			await persistBuilderInputRequest(
-				data,
-				channel.continuationToken,
-				attribute(ctx, "conversationId"),
-			);
+			await recordBuilderInputRequest(data, channel.continuationToken, ctx);
 		},
 
 		async "message.completed"(data, channel) {

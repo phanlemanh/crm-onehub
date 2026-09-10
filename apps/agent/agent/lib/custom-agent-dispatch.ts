@@ -168,17 +168,14 @@ export async function dispatchBuilderSubmission(
 					authenticator: "crm-builder",
 					principalType: "user",
 					principalId: submission.conversation.userId,
-					attributes: {
-						purpose: "builder",
-						commandType: builderCommandType(
-							submission.commandType,
-							submission.message,
-						),
-						needsTitle: submission.conversation.title ? "false" : "true",
+					attributes: builderSessionAttributes({
+						commandType: submission.commandType,
+						message: submission.message,
 						conversationId,
 						userId: submission.conversation.userId,
 						submissionId: submission.id,
-					},
+						hasTitle: Boolean(submission.conversation.title),
+					}),
 				},
 				continuationToken: builderToken(conversationId),
 				title: submission.conversation.title ?? "Agent builder",
@@ -875,13 +872,38 @@ export function builderDeliveryMessage(
 	return parts;
 }
 
+export type BuilderSessionAttributes = {
+	purpose: "builder";
+	commandType: string;
+	needsTitle: "true" | "false";
+	conversationId: string;
+	userId: string;
+	submissionId: string;
+};
+
+export function builderSessionAttributes(input: {
+	commandType: string;
+	message: Prisma.JsonValue;
+	conversationId: string;
+	userId: string;
+	submissionId: string;
+	hasTitle: boolean;
+}): BuilderSessionAttributes {
+	return {
+		purpose: "builder",
+		commandType: builderCommandType(input.commandType, input.message),
+		needsTitle: input.hasTitle ? "false" : "true",
+		conversationId: input.conversationId,
+		userId: input.userId,
+		submissionId: input.submissionId,
+	};
+}
+
 export function builderCommandType(
 	commandType: string,
-	value: Prisma.JsonValue,
+	_value: Prisma.JsonValue,
 ): string {
-	const { requestId, optionId, text } =
-		builderSubmissionMessage.parse(value).inputResponse;
-	return requestId && (optionId || text) ? "CREATE_AGENT" : commandType;
+	return commandType;
 }
 
 type BuilderDeliveryAttachment = {

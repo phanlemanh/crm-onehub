@@ -5,9 +5,11 @@ import {
 	writeBuilderArtifact,
 } from "../../../lib/builder-runtime";
 import { requireBuilderAttribute } from "../../../lib/session-purpose";
+import { builderTurnApproval } from "../lib/authorization";
 import { assertBuilderDraftOpen } from "../lib/execution-state";
 
 export default defineTool({
+	approval: builderTurnApproval,
 	description:
 		"Write one durable agent file revision so the user can follow the build live. Write instructions and the manifest before saving the final draft.",
 	inputSchema: z.object({
@@ -15,10 +17,12 @@ export default defineTool({
 		content: z.string().min(1).max(40_000),
 	}),
 	async execute(input, ctx) {
+		const conversationId = requireBuilderAttribute(ctx, "conversationId");
+		const userId = requireBuilderAttribute(ctx, "userId");
 		assertBuilderDraftOpen();
 		return writeBuilderArtifact(
-			requireBuilderAttribute(ctx, "conversationId"),
-			requireBuilderAttribute(ctx, "userId"),
+			conversationId,
+			userId,
 			input.path,
 			input.content,
 		);
