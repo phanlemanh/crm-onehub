@@ -248,7 +248,8 @@ Phạm vi đã đo, nói thẳng: đường phát nhiều lời gọi trong mộ
 `stream-actions.js` và `emitStepActions`, và chúng chỉ gom lời gọi **provider-executed**
 hoặc lời gọi **chưa** phát lẻ — subagent-call thường không đi đường đó. Nên tiêu
 chí này là **chốt phòng thủ**, không phải ca thường gặp; nó giữ nguyên lời hứa
-AC-7 của vòng `tran-mot-lan-uy-thac` và bịt đường nếu eve đổi cách gom.
+mà vòng `tran-mot-lan-uy-thac` đặt ở tiêu chí thứ bảy của nó, và bịt đường nếu
+eve đổi cách gom.
 Chiều đỏ: lời gọi thứ hai tới subagent **khác** → không ném.
 
 - **AC-7 — Lời gọi tới subagent khác không tính vào trần.**
