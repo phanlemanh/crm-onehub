@@ -348,6 +348,29 @@ delegation paths for custom agents.
   surfaces as `turn.failed`: the turn settles with a failure card instead of burning a
   fresh child session per retry. The message says `per turn`, not `per creation turn`,
   because it now fires on turns that create nothing.
+- **The ceiling counts `callId`s within one step, and `step.started` is the retry
+  boundary.** State (`lib/builder-delegation-state.ts`, slot `crm.builder-delegation.v2`)
+  holds `{ turnId, stepIndex, callIds }` — the step a delegation was recorded at, and the
+  call ids seen there. A second distinct `callId` in that step throws, and so does any
+  delegation at a different step in the same turn. Re-seeing a `callId` already recorded
+  is not a second delegation: hooks are at-least-once.
+  **Do not key this on `event.data.sequence`.** `guides/hooks.md` recommends
+  `(turnId, stepIndex, sequence)` for once-per-turn side effects, and for this eve version
+  that advice does not hold: `harness/emission.js` bumps `sequence` only in
+  `emitTurnEpilogue` and `emitRecoverableFailedTurn`, and mints `turnId` as
+  `turn_${sequence}`, so within a turn `sequence` is constant and carries nothing `turnId`
+  does not. Worse, `emitActionRequest` emits **one action per event** with the step's
+  coordinates, so two parallel `agent_builder` calls in one step arrive as two events with
+  identical coordinates — a coordinate-only key reads the second as a retry and lets it
+  through. Keying on coordinates alone was tried and reverted for exactly that reason.
+  The retry boundary is `step.started`: eve emits it from `prepareStep`, so a step that
+  runs again announces itself, and the hook clears the slot only when the event's
+  `(turnId, stepIndex)` matches the recorded delegation. A later step starting leaves the
+  slot alone, which is what keeps one-per-turn true across steps.
+- **The state slot is `.v2` because its shape changed.** The old shape was
+  `{ turnId, callIds }`; a session mid-flight at deploy time reads the new slot empty and
+  gets its ceiling reopened once. That is the accepted trade — the prompt in
+  `instructions/task.ts` is still the first fence, and the hook is the net behind it.
 - **Builder clarification is durable HITL.** The specialist calls eve's built-in
   `ask_question` directly; descendant input requests are proxied to the root channel,
   and the same child turn resumes when the user answers. The authored

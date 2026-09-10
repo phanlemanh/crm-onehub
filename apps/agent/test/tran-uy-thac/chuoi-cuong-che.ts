@@ -23,11 +23,12 @@ export const DUONG_HOOK = resolve(
 	"../../agent/hooks/builder-delegation.ts",
 );
 
-export type SuKienHook = HookEvent<"actions.requested">;
-export type DuLieuHook = SuKienHook["data"];
-export type HanhDong = DuLieuHook["actions"][number];
+export type SuKienHanhDong = HookEvent<"actions.requested">;
+export type DuLieuHanhDong = SuKienHanhDong["data"];
+export type HanhDong = DuLieuHanhDong["actions"][number];
+export type DuLieuStep = HookEvent<"step.started">["data"];
 
-let kho: BuilderDelegationState = EMPTY_BUILDER_DELEGATION;
+let kho: BuilderDelegationState = { ...EMPTY_BUILDER_DELEGATION };
 let nhatKy: string[] = [];
 
 mock.module(DUONG_STATE, () => ({
@@ -45,10 +46,8 @@ mock.module(DUONG_STATE, () => ({
 	},
 }));
 
-export function datSlot(
-	dau: BuilderDelegationState = EMPTY_BUILDER_DELEGATION,
-) {
-	kho = dau;
+export function datSlot() {
+	kho = { ...EMPTY_BUILDER_DELEGATION };
 	nhatKy = [];
 	return {
 		doc: () => kho,
@@ -58,12 +57,42 @@ export function datSlot(
 	};
 }
 
-export async function layHandler() {
-	const hook = (await import(DUONG_HOOK)).default;
-	return hook.events["actions.requested"] as (
-		event: SuKienHook,
-		ctx: never,
-	) => void;
+export async function layHookTu(duong: string) {
+	const hook = (await import(duong)).default;
+	return {
+		hanhDong: hook.events["actions.requested"] as (
+			event: SuKienHanhDong,
+			ctx: never,
+		) => void,
+		stepBatDau: hook.events["step.started"] as (
+			event: { data: DuLieuStep },
+			ctx: never,
+		) => void,
+	};
+}
+
+export const layHook = () => layHookTu(DUONG_HOOK);
+
+export type Hook = Awaited<ReturnType<typeof layHookTu>>;
+
+export const CHUOI_SONG = {
+	daGhi: true,
+	oSauLanMot: { turnId: "turn-1", stepIndex: 2, callIds: ["call-a"] },
+	nemOLanHai: true,
+} as const;
+
+export function kiemChuoiCuongChe(hook: Hook) {
+	const slot = datSlot();
+	hook.hanhDong(suKien(duLieu("turn-1", 2, goiBuilder("call-a"))), phien());
+	const daGhi = slot.nhatKy.length > 0;
+	const oSauLanMot = slot.doc();
+	let nemOLanHai = false;
+	try {
+		hook.hanhDong(suKien(duLieu("turn-1", 2, goiBuilder("call-b"))), phien());
+	} catch {
+		nemOLanHai = true;
+	}
+	return { daGhi, oSauLanMot, nemOLanHai };
 }
 
 const goi = (callId: string, subagentName: string): HanhDong => ({
@@ -82,11 +111,17 @@ export const goiKhac = (callId: string) => goi(callId, "agent_runner");
 export const duLieu = (
 	turnId: string,
 	stepIndex: number,
-	sequence: number,
 	...actions: HanhDong[]
-): DuLieuHook => ({ actions, sequence, stepIndex, turnId });
+): DuLieuHanhDong => ({ actions, sequence: 0, stepIndex, turnId });
 
-export const suKien = (data: DuLieuHook) => ({ data }) as unknown as SuKienHook;
+export const duLieuStep = (turnId: string, stepIndex: number): DuLieuStep => ({
+	sequence: 0,
+	stepIndex,
+	turnId,
+});
+
+export const suKien = (data: DuLieuHanhDong) =>
+	({ data }) as unknown as SuKienHanhDong;
 
 const banGhi = (authorized: boolean) =>
 	buildPendingInputRequest(

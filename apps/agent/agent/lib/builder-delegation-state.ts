@@ -1,7 +1,10 @@
 import { defineState } from "eve/context";
-import { EMPTY_BUILDER_DELEGATION } from "./builder-delegation";
+import {
+	type BuilderDelegationState,
+	EMPTY_BUILDER_DELEGATION,
+} from "./builder-delegation";
 
-export const builderDelegationState = defineState(
+export const builderDelegationState = defineState<BuilderDelegationState>(
 	"crm.builder-delegation.v2",
-	() => EMPTY_BUILDER_DELEGATION,
+	() => ({ ...EMPTY_BUILDER_DELEGATION }),
 );

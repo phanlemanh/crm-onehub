@@ -5,45 +5,58 @@ evals:
   - id: E1
     criterion: AC-1
     executor: test
-    cmd: config:executors.test.tc_toa_do_chay_lai
+    cmd: config:executors.test.tc_step_chay_lai
     paths:
       - "apps/agent/agent/hooks/builder-delegation.ts"
       - "apps/agent/agent/lib/builder-delegation.ts"
       - "apps/agent/agent/lib/builder-delegation-state.ts"
       - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
     expected: |
-      CA MA BAN TAI 83501f3 GIET OAN. Trang thai da ghi mot uy thac tai
-      (turn-1, step 2, seq 0). Su kien moi mang CUNG toa do ay, mot subagent-call
-      toi agent_builder, callId KHAC -> KHONG nem, trang thai KHONG doi.
-      SAN KHUON: hai lan phai co callId KHAC NHAU trong fixture. Fixture dung lai
-      dung callId khong do duoc gi — ban tai 83501f3 cung cho qua ca do, nen mot
-      bai do nhu vay xanh o ca hai ban va khong noi len dieu gi.
-      Kieu fixture suy tu HookEvent<"actions.requested">["data"] cua eve/hooks —
-      type CONG KHAI. Object literal viet tay theo khuon ben doc -> ma 2.
-      CHIEU DO chay that trong cung bai: cung fixture, doi dung MOT truong
-      sequence sang gia tri khac -> PHAI nem. "Khong nem" mot minh khong phan biet
-      duoc "nhan ra lan chay lai" voi "tran chet han".
+      CA MA BAN TAI 83501f3 GIET OAN, va RANH GIOI CHAY LAI la step.started —
+      KHONG phai sequence. Doi khuon sau vong cham 2; ly do o muc "Su that ve eve"
+      cua contract.
+      Trang thai da ghi mot uy thac tai (turn-1, step 2) voi call-a. Hook nhan
+      step.started mang CUNG (turn-1, step 2) -> xoa o (stepIndex ve null, callIds
+      rong). Roi mot subagent-call toi agent_builder voi callId MOI -> KHONG nem,
+      ghi o (turn-1, step 2, [call-b]).
+      SAN KHUON, ba dieu:
+      (a) Trang thai "da ghi" phai ROUND-TRIP qua chinh recordBuilderDelegation —
+          object literal viet tay dung khuon ben doc la ma 2 (finding trong hop
+          dong cua vong cham 2).
+      (b) callId hai lan phai KHAC nhau.
+      (c) step.started cua mot step KHAC phai de o NGUYEN — do trong cung nhom bai.
+      CHIEU DO chay that: tren cung fixture, BO step.started di -> loi goi thu hai
+      PHAI nem. Ve nay la cho phan biet duy nhat, va la ly do khoa theo toa do
+      khong lam duoc: khong co step.started thi hai ca co toa do y het.
 
   - id: E2
     criterion: AC-2
     executor: test
-    cmd: config:executors.test.tc_toa_do_rai_rac
+    cmd: config:executors.test.tc_goi_song_song
     paths:
       - "apps/agent/agent/hooks/builder-delegation.ts"
       - "apps/agent/agent/lib/builder-delegation.ts"
       - "apps/agent/agent/lib/builder-delegation-state.ts"
       - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
     expected: |
-      Trang thai da ghi (turn-1, step 2, seq 0). Su kien moi cung turnId, cung
-      stepIndex, sequence KHAC (seq 1) -> NEM, thong diep chua "only once".
-      Day la ca protocol/message.d.ts mo ta: "Calls may arrive incrementally
-      before execution" — mot step phat hai loi goi, giao thanh hai su kien.
-      E1 va E2 la MOT CAP tren cung bo dung, khac nhau DUNG MOT truong (sequence).
-      Do la cho toa do hon callId: callId doi o CA HAI ca nen khong the tach chung.
-      Bai do phai dung chung ham dung fixture voi E1 — hai duong dung khac nhau
-      thi cap hai-chieu mat y nghia -> ma 2.
-      CHIEU DO chay that: cung fixture, dua sequence ve BANG lan truoc -> khong
-      duoc nem.
+      CA MA BAN KHOA-THEO-TOA-DO CUA VONG CHAM 1 VA 2 CHO LOT. Hai nguoi soi doc
+      lap bat duoc, va da tu kiem lai tren dist/ cua eve 0.29.4.
+      Trang thai da ghi mot uy thac tai (turn-1, step 2) voi call-a. Mot su kien
+      actions.requested RIENG, cung (turn-1, step 2), mang mot subagent-call toi
+      agent_builder voi callId KHAC, va KHONG co step.started nao o giua -> NEM,
+      thong diep chua "only once".
+      Day la hinh dang eve THAT SU phat: harness/emission.js emitActionRequest phat
+      actions:[e] — MOT loi goi MOT su kien — voi toa do cua step. Nen mo hinh goi
+      agent_builder hai lan trong mot step thi hook thay hai su kien cung toa do,
+      va khong co step.started giua chung vi step khong chay lai.
+      SAN KHUON: phai co MOT bai lai qua CHINH HOOK THAT cho ca nay, khong chi goi
+      ham thuan — cai sai cua hai vong truoc nam dung o cho hook truyen gi xuong.
+      Trang thai "da ghi" round-trip qua ben ghi, nhu E1.
+      CHIEU DO chay that: cung fixture, dung lai DUNG callId cu -> KHONG duoc nem
+      va trang thai khong doi (hook la at-least-once, nhan lai cung loi goi la binh
+      thuong). Thieu ve nay thi "luon nem" khong phan biet duoc voi "chan dung luc".
 
   - id: E3
     criterion: AC-3
@@ -58,9 +71,10 @@ evals:
       Trang thai da ghi (turn-1, step 2, seq 0). Su kien moi cung turnId,
       stepIndex KHAC (step 3) -> NEM. Uy thac o mot step sau trong cung luot van
       la uy thac lan hai.
-      CHIEU DO chay that: cung fixture, dua CA HAI truong stepIndex va sequence ve
-      dung gia tri da ghi -> khong duoc nem. Ve "ca hai" bat buoc: dua rieng
-      stepIndex ve ma de sequence lech thi van nem, nen chieu do se xanh gia.
+      Nem KE CA khi step.started cua step moi da chay, vi step.started chi xoa o
+      khi stepIndex TRUNG o da ghi — do la ve phan biet "xoa dung cho" voi "xoa bua".
+      CHIEU DO chay that: dua stepIndex ve dung step da ghi VA dung lai callId cu
+      -> khong duoc nem.
 
   - id: E4
     criterion: AC-4
@@ -73,10 +87,11 @@ evals:
       - "apps/agent/test/tran-uy-thac.spec.ts"
     expected: |
       Tran mo lai theo luot. Da ghi mot uy thac o turn-1; loi goi moi o turnId
-      KHAC -> khong nem, VA trang thai mang toa do MOI: turnId moi, stepIndex va
-      sequence cua su kien moi.
-      Assert phai DOC TRANG THAI va so ca ba truong. Trang thai mang toa do cu ma
-      van khong nem la mot tran da chet, va "khong nem" mot minh khong thay dieu do.
+      KHAC -> khong nem, VA trang thai mang o MOI: turnId moi, stepIndex moi, va
+      callIds chi co loi goi moi.
+      Assert phai DOC TRANG THAI va so ca ba truong (turnId, stepIndex, callIds).
+      Trang thai mang o cu ma van khong nem la mot tran da chet, va "khong nem" mot
+      minh khong thay dieu do.
       CHIEU DO chay that: giu nguyen turnId cu, doi stepIndex -> phai nem.
 
   - id: E5
@@ -90,10 +105,10 @@ evals:
       - "apps/agent/test/tran-uy-thac.spec.ts"
     expected: |
       Chong va-qua-tay. Trang thai rong, dung mot subagent-call toi agent_builder
-      tai (turn-1, step 2, seq 0) -> khong nem, VA trang thai doc ra BANG DUNG
-      { turnId: "turn-1", stepIndex: 2, sequence: 0 }.
+      tai (turn-1, step 2) -> khong nem, VA trang thai doc ra BANG DUNG
+      { turnId: "turn-1", stepIndex: 2, callIds: ["call-a"] }.
       Assert phai so CA BA truong, khong chi "khong nem": ghi thieu stepIndex hoac
-      sequence lam E1 va E2 mat kha nang phan biet, ma "khong nem" thi khong thay.
+      callIds lam E1 va E2 mat kha nang phan biet, ma "khong nem" thi khong thay.
       Day la duong ra not_authorized ma vong quyen-luot-mang-theo dung; chan ngay
       lan mot la pha dung thu vua xay.
       CHIEU DO chay that: them mot su kien thu hai khac toa do tren cung fixture
@@ -110,8 +125,13 @@ evals:
       - "apps/agent/test/tran-uy-thac.spec.ts"
     expected: |
       MOT su kien actions.requested mang HAI subagent-call toi agent_builder voi
-      hai callId khac nhau -> NEM. No khong di qua nhanh "su kien thu hai" nen
-      phai do rieng. Giu nguyen loi hua AC-7 cua vong tran-mot-lan-uy-thac.
+      hai callId khac nhau -> NEM.
+      PHAM VI DA DO, khai ro sau vong cham 2: duong phat nhieu loi goi trong MOT su
+      kien la stream-actions.js va emitStepActions, va chung chi gom loi goi
+      provider-executed hoac loi goi CHUA phat le — subagent-call thuong khong di
+      duong do. Nen day la CHOT PHONG THU, khong phai ca thuong gap; no giu nguyen
+      loi hua AC-7 cua vong tran-mot-lan-uy-thac va bit duong neu eve doi cach gom.
+      Ca thuong gap la E2.
       CHIEU DO chay that: cung su kien ay nhung loi goi thu hai toi subagent KHAC
       -> khong nem (do la E7).
 
@@ -126,7 +146,7 @@ evals:
       - "apps/agent/test/tran-uy-thac.spec.ts"
     expected: |
       Mot su kien mang mot subagent-call toi agent_builder va mot toi agent_runner
-      -> khong nem, VA trang thai ghi toa do cua su kien ay.
+      -> khong nem, VA callIds chi co callId cua loi goi builder.
       CHIEU DO chay that: tren CUNG fixture, doi dung truong subagentName cua loi
       goi thu hai sang agent_builder -> phai nem.
       GIOI HAN DA BIET, khai ro chu khong giau: ve loc action.kind KHONG do duoc
@@ -147,15 +167,15 @@ evals:
     expected: |
       Phien builder, hook nhan mot su kien actions RONG, roi mot su kien chi co
       subagent-call toi subagent KHAC, ca hai cung turnId -> khong nem, VA trang
-      thai doc ra co stepIndex va sequence BANG null.
+      thai doc ra co stepIndex BANG null va callIds RONG.
       VE "KHONG GHI TOA DO" LA VE MOI VA NO LOAD-BEARING: ghi toa do o mot su kien
       khong co uy thac nao se CHIEM slot, lam loi goi that dau tien sau do bi chan
       oan — tuc va bug nay lai sinh dung mot bug cung loai. Mot bai do chi assert
       "khong nem" se xanh o ca hai ban.
       CHIEU DO chay that: tren CUNG fixture, doi dung truong subagentName sang
-      agent_builder -> stepIndex/sequence phai LAT tu null sang gia tri cua su
-      kien. Ve lat bat buoc vi null dung bang gia tri mac dinh cua trang thai, nen
-      assert null mot minh khong phan biet duoc "bo qua dung" voi "ham chet".
+      agent_builder -> callIds phai LAT tu RONG sang ["call-1"]. Ve lat bat buoc vi
+      rong dung bang gia tri mac dinh cua trang thai, nen assert rong mot minh khong
+      phan biet duoc "bo qua dung" voi "ham chet".
 
   - id: E9
     criterion: AC-9
@@ -226,8 +246,9 @@ evals:
       Chieu do thu hai: phep bien doi van ban khong cam duoc vao ma (ma da doi) ->
       ma 2 goi ten hinh dang, KHONG duoc lang le coi la "bat duoc".
       PHAM VI DA DO, khong noi qua: bo do chay in-process, thay module state bang
-      handle gia. No KHONG chung minh eve THAT truyen dung stepIndex/sequence
-      xuong hook. Ve do khai o Known limits.
+      handle gia. No KHONG chung minh eve THAT truyen dung stepIndex xuong hook,
+      cung khong chung minh eve phat step.started dung luc mot step chay lai. Hai ve
+      do khai o Known limits.
 
   - id: E10
     criterion: AC-10

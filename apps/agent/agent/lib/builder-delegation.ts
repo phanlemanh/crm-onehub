@@ -1,5 +1,4 @@
 import type { HookEvent } from "eve/hooks";
-import { z } from "zod";
 
 export const BUILDER_DELEGATION_SUBAGENT = "agent_builder";
 
@@ -8,42 +7,53 @@ export const BUILDER_DELEGATION_LIMIT_MESSAGE =
 
 export type ActionsRequestedData = HookEvent<"actions.requested">["data"];
 
-const builderDelegation = z.object({
-	turnId: z.string().nullable(),
-	stepIndex: z.number().int().nullable(),
-	sequence: z.number().int().nullable(),
-});
+export type StepStartedData = HookEvent<"step.started">["data"];
 
-export type BuilderDelegationState = z.infer<typeof builderDelegation>;
+export type BuilderDelegationState = {
+	turnId: string | null;
+	stepIndex: number | null;
+	callIds: readonly string[];
+};
 
 export const EMPTY_BUILDER_DELEGATION: BuilderDelegationState = {
 	turnId: null,
 	stepIndex: null,
-	sequence: null,
+	callIds: [],
 };
 
 export function recordBuilderDelegation(
 	state: BuilderDelegationState,
 	event: ActionsRequestedData,
 ): BuilderDelegationState {
-	const { actions, sequence, stepIndex, turnId } = event;
+	const { actions, stepIndex, turnId } = event;
 	const current = state.turnId === turnId ? state : EMPTY_BUILDER_DELEGATION;
-	const uyThac = actions.filter(
-		(action) =>
-			action.kind === "subagent-call" &&
-			action.subagentName === BUILDER_DELEGATION_SUBAGENT,
-	);
+	const moi = actions
+		.filter(
+			(action) =>
+				action.kind === "subagent-call" &&
+				action.subagentName === BUILDER_DELEGATION_SUBAGENT,
+		)
+		.map((action) => action.callId)
+		.filter((callId) => !current.callIds.includes(callId));
 
-	if (uyThac.length === 0) return { ...current, turnId };
-	if (uyThac.length > 1) throw new Error(BUILDER_DELEGATION_LIMIT_MESSAGE);
+	if (moi.length === 0) return { ...current, turnId };
 
-	const daGhi = current.stepIndex !== null && current.sequence !== null;
-	if (
-		daGhi &&
-		(current.stepIndex !== stepIndex || current.sequence !== sequence)
-	) {
+	if (current.callIds.length > 0 && current.stepIndex !== stepIndex) {
+		throw new Error(BUILDER_DELEGATION_LIMIT_MESSAGE);
+	}
+	if (current.callIds.length + moi.length > 1) {
 		throw new Error(BUILDER_DELEGATION_LIMIT_MESSAGE);
 	}
 
-	return { turnId, stepIndex, sequence };
+	return { turnId, stepIndex, callIds: [...current.callIds, ...moi] };
+}
+
+export function clearBuilderDelegationStep(
+	state: BuilderDelegationState,
+	event: StepStartedData,
+): BuilderDelegationState {
+	const { stepIndex, turnId } = event;
+	if (state.turnId !== turnId) return EMPTY_BUILDER_DELEGATION;
+	if (state.stepIndex !== stepIndex) return state;
+	return { turnId, stepIndex: null, callIds: [] };
 }

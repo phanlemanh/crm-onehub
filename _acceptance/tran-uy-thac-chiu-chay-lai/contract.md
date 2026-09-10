@@ -5,11 +5,9 @@ slug: tran-uy-thac-chiu-chay-lai
 owner: omre.cnsp4@onemount.com
 risk_tier: T2
 surfaces: [agent]
-status: implemented
+status: draft
 approved_by:
 approved_at:
-veto_state: mo
-veto_opened_at: 2026-09-10T07:28:10Z
 design_doc: docs/superpowers/specs/2026-09-10-tran-uy-thac-chiu-chay-lai-design.md
 ---
 
@@ -70,6 +68,27 @@ Neo, đếm tại SHA ấy:
 Ba dòng đột biến cuối là **số đo**, chạy tại SHA ấy trong cây worktree này,
 không phải suy đoán. Chúng là thước CE của trục C.
 
+### Sự thật về eve, đọc từ mã chứ không từ tài liệu
+
+Ba dòng dưới đây là **lý do vòng này phải sửa hợp đồng sau khi chốt phạm vi**. Bản
+hợp đồng đầu tin `guides/hooks.md` (*"keys well on the coordinates … turnId,
+stepIndex, sequence"*) mà không mở `dist/` ra kiểm. Hai vòng chấm bác nó, và tôi
+đã tự đọc lại `eve@0.29.4` đang cài để xác nhận:
+
+| Neo | Sự thật trong mã |
+| --- | --- |
+| `sequence` đổi ở đâu | chỉ ở `emitTurnEpilogue` và `emitRecoverableFailedTurn` — **biên lượt**. `advanceStep` chỉ tăng `stepIndex` |
+| `turnId` đúc từ đâu | `emitTurnPreamble`: `turn_${n.sequence}` — nên trong một lượt, `turnId` xác định hoàn toàn `sequence` |
+| một sự kiện mang mấy lời gọi | `emitActionRequest`: `actions:[e]` — **một lời gọi một sự kiện**, cùng toạ độ step. Subagent-call đi đúng đường này |
+| đường batch nhiều lời gọi | `stream-actions.js` và `emitStepActions` — chỉ cho tool **provider-executed** và cho lời gọi **chưa** phát lẻ |
+| `step.started` phát ở đâu | `buildStepHooks` → `prepareStep`, mang `{sequence, stepIndex, turnId}` — nên một step chạy lại **tự khai** |
+
+Hệ quả, và đây là điều làm hợp đồng cũ sai: khoá theo toạ độ **không phân biệt**
+được lần chạy lại với hai lời gọi song song trong cùng một step — cả hai đều cho
+toạ độ giống nhau. Bản khoá theo `callId` của vòng trước chặn được ca song song;
+bản khoá theo toạ độ **cho lọt**, tức nó là một hồi quy. Ranh giới chạy lại thật
+là `step.started`, không phải `sequence`.
+
 Cơ chế của phép đo cũng đã **chạy thử** tại SHA ấy trước khi viết hợp đồng, vì
 finding P0 thứ hai của `gap-probe.md` chất vấn đúng chỗ đó: một bản đột biến ghi
 dưới `apps/agent/node_modules/.cache/` với import đổi sang đường **tuyệt đối**
@@ -91,15 +110,19 @@ key mới), `[NGÀNH: Temporal]` (activity at-least-once, khoá suy từ toạ �
 
 | Trục | Giá trị | Thước CE |
 | --- | --- | --- |
-| A. Quan hệ toạ độ hai lần thấy uỷ thác | cùng `(turn,step,seq)` = chạy lại · cùng `(turn,step)` khác `seq` = đến rải rác · cùng `turn` khác `step` · khác `turn` | `guides/hooks.md` (retry khôi phục toạ độ) + `protocol/message.d.ts` (lời gọi đến rải rác) |
+| A. Quan hệ hai lần thấy uỷ thác | lặp đúng `callId` · `callId` khác cùng step · `callId` khác step khác · khác `turn` | `harness/emission.js` (một lời gọi một sự kiện, toạ độ step bất biến) — đọc từ mã, không từ tài liệu |
+| A'. Ranh giới chạy lại | có `step.started` trùng step đã ghi · có `step.started` step khác · không có `step.started` | `harness/step-hooks.js` (`prepareStep` phát `step.started` mỗi lần step chạy) |
 | B. Hình dạng lời gọi trong MỘT sự kiện | 0 · 1 · 2 cùng batch · 1 builder + 1 subagent khác | AC-7 và AC-9 của `tran-mot-lan-uy-thac` |
 | C. Mắt sống của chuỗi cưỡng chế | gác `purpose` · hook truyền đủ toạ độ · hàm ném · hook **ghi bền** | ba số đo đột biến ở mục Mốc ghim |
 | D. Phạm vi phiên | `builder` · `team-agent` · `research` | ma trận `purpose × commandType`, `tran-uy-thac.spec.ts` |
 
-- Trục A — phủ bởi AC-1, AC-2, AC-3, AC-4; bằng chứng "đủ" là **cả bốn** quan hệ
-  toạ độ đều có một tiêu chí riêng, và hai giá trị đầu cho **hai kết cục trái
-  nhau** (lọt / ném) trên cùng một bộ dựng. Đây là trục mà `callId` không phân
-  biệt được, nên nó là trục sinh ra vòng này.
+- Trục A — phủ bởi AC-2, AC-3, AC-4 và vế chiều đỏ của AC-2 (lặp đúng `callId`);
+  bằng chứng "đủ" là bốn quan hệ đều có tiêu chí riêng, và hai giá trị đầu cho
+  **hai kết cục trái nhau** trên cùng một bộ dựng.
+- Trục A' — phủ bởi AC-1 (trùng step → xoá ô) và AC-3 (step khác → để nguyên) và
+  AC-2 (không có `step.started` → chặn); bằng chứng "đủ" là **cả ba** giá trị đều
+  có một tiêu chí, và chúng cho ba kết cục khác nhau trên cùng một ô đã ghi. Đây
+  là trục mà hợp đồng đầu **không có** — nó tưởng `sequence` làm việc này.
 - Trục B — phủ bởi AC-5, AC-6, AC-7, AC-8; bằng chứng "đủ" là bốn hình dạng đều
   có tiêu chí riêng, không hình dạng nào suy ra từ hình dạng khác.
 - Trục C — phủ bởi AC-9 (chuỗi cưỡng chế sống) và AC-10 (siết kiểu); bằng chứng
@@ -122,11 +145,12 @@ Bảng đầy đủ, không ô nào để câm:
 
 | # | Ô | Nhãn | Đi đâu |
 | --- | --- | --- | --- |
-| 1 | cùng toạ độ × 1 lần | Core | AC-1 |
-| 2 | cùng `(turn,step)` khác `seq` × 1 lần | Core | AC-2 |
+| 1 | có `step.started` trùng step × 1 lần | Core | AC-1 |
+| 2 | không `step.started` × `callId` khác cùng step | Core | AC-2 |
 | 3 | cùng `turn` khác `step` × 1 lần | Core | AC-3 |
 | 4 | khác `turn` × 1 lần | Core | AC-4 |
 | 5 | chưa có tiền sử × 1 lần | Core | AC-5 |
+| 5b | lặp đúng `callId` cùng step | Core | AC-2 chiều đỏ |
 | 6 | 2 lời gọi cùng một `actions` | Core | AC-6 |
 | 7 | 1 builder + 1 subagent khác | Core | AC-7 |
 | 8 | 0 lời gọi | Core | AC-8 |
@@ -142,9 +166,11 @@ Bảng đầy đủ, không ô nào để câm:
 | 18 | D — `builder` | Core | AC-11 |
 | 19 | D — `team-agent` | Core | AC-11 |
 | 20 | D — `research` | Core | AC-11 |
-| 21 | trạng thái **đã** ghi toạ độ × 0 lời gọi | Core | AC-12 |
+| 21 | trạng thái **đã** ghi ô × 0 lời gọi | Core | AC-12 |
+| 22 | `step.started` step KHÁC × ô đã ghi | Core | AC-1, AC-3 |
+| 23 | `step.started` ở phiên ngoài kênh builder | Core | AC-11 |
 
-Core 16/21. Cao, và nói thẳng vì sao: preset `test-matrix` để full matrix cho
+Core 19/24. Cao, và nói thẳng vì sao: preset `test-matrix` để full matrix cho
 "luồng tiền và luồng pháp lý"; luồng ở đây là một chốt **giết lượt trò chuyện
 của người dùng** và vừa được chứng minh là giết oan, nên nó ăn cùng mức. Năm ô
 Later đều là ô **suy ra được** từ một ô Core, mỗi ô ghi lý do riêng ở trên.
@@ -155,178 +181,172 @@ viên chờ người gạch, không phải fact của sản phẩm.
 
 ## Criteria
 
-- **AC-1 — Lần chạy lại của một step KHÔNG bị coi là uỷ thác thứ hai.**
-*(đây là ca bản tại `83501f3` giết oan)*
-Given trạng thái đã ghi một lần uỷ thác `agent_builder` tại toạ độ
-`(turn-1, step 2, seq 0)`,
-When hook nhận một sự kiện `actions.requested` mang **cùng** toạ độ
-`(turn-1, step 2, seq 0)` với một `subagent-call` tới `agent_builder`, `callId`
-**khác** lần trước — đúng hình dạng của một lần chạy lại, vì eve khôi phục toạ
-độ từ input của step mà mô hình thì sinh `callId` mới,
-Then **không ném**, và trạng thái **không đổi**.
-Chiều đỏ: trên **cùng** fixture ấy, đổi đúng một trường `sequence` sang giá trị
-khác → **phải ném**. Vế này bắt buộc, vì "không ném" một mình không phân biệt
-được "nhận ra lần chạy lại" với "trần chết hẳn".
-Sàn khuôn: `callId` của hai lần **phải khác nhau** trong fixture. Fixture dùng
-lại đúng `callId` không đo được gì — bản tại `83501f3` cũng cho qua ca đó.
+Trạng thái của trần là `{ turnId, stepIndex, callIds }` — lượt đang xét, step mà
+lần uỷ thác đã ghi, và các `callId` đã thấy **ở step đó**. `sequence` không có
+trong khoá, vì trong một lượt nó là hằng (xem mục Mốc ghim).
 
-- **AC-2 — Lời gọi thứ hai đến rải rác trong CÙNG step vẫn bị chặn.**
-Given trạng thái đã ghi một lần uỷ thác tại `(turn-1, step 2, seq 0)`,
-When hook nhận một sự kiện mang cùng `turnId` và cùng `stepIndex` nhưng
-`sequence` **khác** (`seq 1`) với một `subagent-call` tới `agent_builder`,
+- **AC-1 — Một step chạy lại KHÔNG bị coi là uỷ thác thứ hai, và ranh giới ấy là `step.started`.**
+*(ca bản tại `83501f3` giết oan)*
+Given trạng thái đã ghi một uỷ thác `agent_builder` tại `(turn-1, step 2)` với
+`callId` `call-a` — trạng thái ấy **round-trip** qua chính `recordBuilderDelegation`,
+không phải object viết tay,
+When hook nhận `step.started` mang **cùng** `(turn-1, step 2)` — eve phát nó từ
+`prepareStep`, nên một step chạy lại tự khai — rồi nhận một `subagent-call` tới
+`agent_builder` với `callId` **mới**,
+Then `step.started` xoá ô của step ấy (`stepIndex` về `null`, `callIds` rỗng), và
+lời gọi mới **không ném**, ghi ô `(turn-1, step 2, [call-b])`.
+Chiều đỏ, trên **cùng** fixture: **bỏ** `step.started` đi → lời gọi thứ hai
+**phải ném**. Vế này là chỗ phân biệt duy nhất, và nó là lý do khoá theo toạ độ
+không làm được: không có `step.started`, hai ca có toạ độ y hệt.
+Sàn khuôn: `callId` hai lần phải khác nhau. Và `step.started` của một step **khác**
+phải để ô nguyên — đo trong cùng nhóm bài.
+
+- **AC-2 — Hai lời gọi song song trong CÙNG một step, đến thành HAI sự kiện, bị chặn.**
+*(ca mà bản khoá-theo-toạ-độ của vòng chấm 1 và 2 cho lọt)*
+Given trạng thái đã ghi một uỷ thác tại `(turn-1, step 2)` với `call-a`,
+When hook nhận một sự kiện `actions.requested` **riêng**, cùng `(turn-1, step 2)`,
+mang một `subagent-call` tới `agent_builder` với `callId` **khác** — và **không**
+có `step.started` nào ở giữa,
 Then **ném**, thông điệp chứa `only once`.
-Đây là ca `protocol/message.d.ts` mô tả: *"Calls may arrive incrementally before
-execution"* — một step phát hai lời gọi, giao thành hai sự kiện. Nó là uỷ thác
-lần hai thật, không phải chạy lại.
-Chiều đỏ: cùng fixture, đưa `sequence` về **bằng** lần trước → không được ném.
-Cặp tiêu chí này đứng trên **cùng một bộ dựng**, khác nhau đúng một trường. Đó là
-chỗ toạ độ hơn `callId`: `callId` đổi ở cả hai ca nên không thể tách chúng.
+Đây là hình dạng eve **thật sự phát**: `emitActionRequest` phát một lời gọi một
+sự kiện, nên mô hình gọi `agent_builder` hai lần trong một step thì hook thấy hai
+sự kiện cùng toạ độ. Không có `step.started` giữa chúng, vì step không chạy lại.
+Chiều đỏ: cùng fixture, dùng lại **đúng** `callId` cũ → **không** được ném, và
+trạng thái không đổi (hook là at-least-once, nhận lại cùng lời gọi là bình thường).
+Sàn khuôn: phải có **một** bài lái qua **chính hook thật** cho ca này, không chỉ
+gọi hàm thuần — vì cái sai của hai vòng trước nằm đúng ở chỗ hook truyền gì xuống.
 
 - **AC-3 — Uỷ thác ở một step KHÁC trong cùng lượt bị chặn.**
-Given trạng thái đã ghi một lần uỷ thác tại `(turn-1, step 2, seq 0)`,
-When hook nhận một sự kiện cùng `turnId`, `stepIndex` **khác** (`step 3`),
-Then **ném**.
-Chiều đỏ: đưa `stepIndex` về `2` **và** `sequence` về `0` → không được ném.
+Given trạng thái đã ghi một uỷ thác tại `(turn-1, step 2)`,
+When hook nhận một lời gọi ở cùng `turnId`, `stepIndex` **khác**,
+Then **ném** — kể cả khi `step.started` của step mới đã chạy, vì nó chỉ xoá ô khi
+`stepIndex` **trùng** ô đã ghi.
+Chiều đỏ: đưa `stepIndex` về đúng step đã ghi **và** dùng lại `callId` cũ → không ném.
 
 - **AC-4 — `turnId` mới thì trần mở lại.**
-Given trạng thái đã ghi một lần uỷ thác ở `turn-1`,
+Given trạng thái đã ghi một uỷ thác ở `turn-1`,
 When hook nhận một lời gọi ở `turnId` **khác**,
-Then không ném, và trạng thái mang toạ độ **mới** — `turnId` mới, `stepIndex` và
-`sequence` của sự kiện mới.
-Assert phải **đọc trạng thái**, không chỉ "không ném": trạng thái mang toạ độ cũ
-mà vẫn không ném là một trần đã chết, và "không ném" một mình không thấy điều đó.
+Then không ném, và trạng thái mang ô **mới** — `turnId` mới, `stepIndex` mới,
+`callIds` chỉ có lời gọi mới.
+Assert phải **đọc trạng thái** và so cả ba trường.
 Chiều đỏ: giữ nguyên `turnId` cũ, đổi `stepIndex` → phải ném.
 
-- **AC-5 — Uỷ thác lần đầu trong lượt vẫn lọt, và ghi đúng toạ độ.**
+- **AC-5 — Uỷ thác lần đầu trong lượt vẫn lọt, và ghi đúng ô.**
 Given trạng thái rỗng,
-When hook nhận đúng một `subagent-call` tới `agent_builder` tại
-`(turn-1, step 2, seq 0)`,
-Then không ném, và trạng thái đọc ra **bằng đúng** `{ turnId: "turn-1",
-stepIndex: 2, sequence: 0 }`.
-Đây là đường ra `not_authorized` mà vòng `quyen-luot-mang-theo` dựng và vòng
-`tran-mot-lan-uy-thac` giữ. Vá quá tay thành chặn-ngay-lần-một là phá đúng thứ
-vừa xây.
-Assert phải so **cả ba trường**, không chỉ "không ném": ghi thiếu `stepIndex`
-hoặc `sequence` làm AC-1 và AC-2 mất khả năng phân biệt, mà "không ném" thì
-không thấy.
-Chiều đỏ: thêm một sự kiện thứ hai khác toạ độ trên cùng fixture → phải ném.
+When hook nhận đúng một `subagent-call` tới `agent_builder` tại `(turn-1, step 2)`,
+Then không ném, và trạng thái đọc ra **bằng đúng**
+`{ turnId: "turn-1", stepIndex: 2, callIds: ["call-a"] }`.
+Đây là đường ra `not_authorized` mà vòng `quyen-luot-mang-theo` dựng. Vá quá tay
+thành chặn-ngay-lần-một là phá đúng thứ vừa xây.
+Chiều đỏ: thêm một sự kiện thứ hai khác `callId` → phải ném.
 
 - **AC-6 — Hai lời gọi trong CÙNG một `actions` bị chặn.**
 Given trạng thái rỗng,
-When **một** sự kiện `actions.requested` mang **hai** `subagent-call` tới
-`agent_builder` với hai `callId` khác nhau,
+When **một** sự kiện mang **hai** `subagent-call` tới `agent_builder`,
 Then **ném**.
-Một step phát nhiều lời gọi cùng lúc vẫn là hai lần uỷ thác, và nó không đi qua
-nhánh "sự kiện thứ hai" nên phải đo riêng. Tiêu chí này giữ nguyên lời hứa AC-7
-của vòng trước.
-Chiều đỏ: cùng sự kiện ấy nhưng lời gọi thứ hai tới subagent **khác** → không
-ném (đó là AC-7).
+Phạm vi đã đo, nói thẳng: đường phát nhiều lời gọi trong một sự kiện là
+`stream-actions.js` và `emitStepActions`, và chúng chỉ gom lời gọi **provider-executed**
+hoặc lời gọi **chưa** phát lẻ — subagent-call thường không đi đường đó. Nên tiêu
+chí này là **chốt phòng thủ**, không phải ca thường gặp; nó giữ nguyên lời hứa
+AC-7 của vòng `tran-mot-lan-uy-thac` và bịt đường nếu eve đổi cách gom.
+Chiều đỏ: lời gọi thứ hai tới subagent **khác** → không ném.
 
 - **AC-7 — Lời gọi tới subagent khác không tính vào trần.**
 Given trạng thái rỗng,
-When một sự kiện mang một `subagent-call` tới `agent_builder` và một tới
-`agent_runner`,
-Then không ném, và trạng thái ghi toạ độ của sự kiện ấy.
-Chiều đỏ: trên **cùng** fixture, đổi đúng trường `subagentName` của lời gọi thứ
-hai sang `agent_builder` → phải ném.
+When một sự kiện mang một `subagent-call` tới `agent_builder` và một tới `agent_runner`,
+Then không ném, và `callIds` chỉ có `callId` của lời gọi builder.
+Chiều đỏ: đổi đúng trường `subagentName` của lời gọi thứ hai sang `agent_builder`
+→ phải ném.
 
-- **AC-8 — Sự kiện không mang lời gọi `agent_builder` nào phải im lặng, và KHÔNG ghi toạ độ.**
+- **AC-8 — Sự kiện không mang lời gọi `agent_builder` nào phải im lặng, và KHÔNG chiếm ô.**
 Given trạng thái rỗng,
 When hook nhận một sự kiện `actions` **rỗng**, rồi một sự kiện chỉ có
-`subagent-call` tới subagent **khác**, cả hai trong cùng `turnId`,
-Then không ném, và trạng thái đọc ra có `stepIndex` và `sequence` **bằng `null`**.
-Vế "không ghi toạ độ" là vế mới và nó load-bearing: ghi toạ độ ở một sự kiện
-không có uỷ thác nào sẽ **chiếm** slot, làm lời gọi thật đầu tiên sau đó bị chặn
-oan — tức vá bug này lại sinh đúng một bug cùng loại.
+`subagent-call` tới subagent **khác**,
+Then không ném, và trạng thái đọc ra có `stepIndex` `null` và `callIds` rỗng.
 Chiều đỏ: trên **cùng** fixture, đổi đúng trường `subagentName` sang
-`agent_builder` → `stepIndex`/`sequence` phải **lật** từ `null` sang giá trị của
-sự kiện. Vế lật bắt buộc, vì `null` đúng bằng giá trị mặc định của trạng thái
-nên assert `null` một mình không phân biệt được "bỏ qua đúng" với "hàm chết".
+`agent_builder` → `callIds` phải **lật** từ rỗng sang `["call-1"]`.
 
 - **AC-9 — Chuỗi cưỡng chế của hook phải SỐNG, đo bằng đột biến chứ không bằng lời.**
-Given `builderDelegationState` tách sang module riêng, và một phép đo thay module
-ấy bằng handle giả có slot trong bộ nhớ (`mock.module` của `bun:test`), **giữ hàm
-thuần thật**, rồi gọi **chính hook thật** hai lần với hai toạ độ khác nhau,
-When thân hook bị đột biến theo từng hình dạng đã đo tại `83501f3`,
-Then bộ đo phải **ĐỎ** ở cả ba hình dạng:
-  1. thân hook rỗng,
-  2. giữ gác + `get()`, bỏ `record` và `update`,
-  3. giữ gác + `get` + `record`, bỏ `update`.
-Hình dạng 2 và 3 tại `83501f3` cho **22 xanh** — chúng là lý do tiêu chí này tồn
-tại. Ngưỡng là **cả ba** đỏ, không phải "phần lớn".
-Sàn khuôn: phép đo phải gọi hook qua `hook.events["actions.requested"]` và phải
-lái **hai** sự kiện liên tiếp qua **cùng một** handle giả. Một sự kiện thì không
-đo được vế ghi bền — đúng chỗ hình dạng 3 lọt qua bộ đo cũ.
-Chiều đỏ của chính phép đo: handle giả phải chứng được nó **có** ghi — assert
-trạng thái đọc lại từ handle sau sự kiện thứ nhất mang đúng toạ độ, chứ không chỉ
-assert sự kiện thứ hai ném.
-Phạm vi đã đo, nói thẳng để người duyệt không hiểu quá: phép đo này chạy
-in-process, nên nó **không** chứng minh eve THẬT truyền đúng
-`stepIndex`/`sequence` xuống hook. Vế đó khai ở Known limits.
+Given `builderDelegationState` ở module riêng, và một phép đo thay module ấy bằng
+handle giả (`mock.module`), giữ hàm thuần thật, rồi lái **chính hook thật**,
+When thân hook bị đột biến,
+Then bộ đo phải **ĐỎ** ở cả ba hình dạng: bỏ thân hook · bỏ `record` và `update` ·
+bỏ `update`. Hình dạng 2 và 3 tại `83501f3` cho **22 xanh** — chúng là lý do tiêu
+chí này tồn tại. Ngưỡng là **cả ba**.
+Sàn khuôn, sửa sau vòng chấm 2: **cả ba** bản đột biến phải **dẫn từ văn bản thật
+đọc từ đĩa**, không bản nào chép tay — bản chép tay làm chốt `banDotBien === nguon`
+không bao giờ nổ được cho nó. Và phép đo chuỗi cưỡng chế sống trong **một** hàm
+của module dùng chung (`kiemChuoiCuongChe`), được cả bộ đo thật lẫn bài đo do răng
+sinh ra gọi — bài sinh ra chỉ một dòng, nên nó không thể lạc hậu.
+Chiều đỏ của chính răng: trên cây **lành** phép đo phải xanh, chạy **trước** khi
+đột biến; không xanh → mã 2.
+Phạm vi đã đo: phép đo chạy in-process, nên **không** chứng minh eve THẬT truyền
+đúng `stepIndex` xuống hook. Khai ở Known limits.
 
-- **AC-10 — Kiểu tham số suy từ type công khai của eve, không khai tay.**
-Given `recordBuilderDelegation`,
-When đọc chữ ký của nó,
-Then tham số sự kiện có kiểu suy từ `HookEvent<"actions.requested">["data"]` của
-`eve/hooks`, và `lib/builder-delegation.ts` **không** còn khai tay
-`BuilderDelegationAction`.
-Đây là Known-limit thứ ba của `tran-mot-lan-uy-thac`, gạch trong vòng này.
-Hệ quả phải đo, không chỉ tuyên: hàm nhận **cả `event.data`**, nên hook truyền
-thiếu toạ độ là **lỗi biên dịch**. Chiều đỏ: một biến thể của hook truyền thiếu
-`stepIndex` phải làm `check-types` đỏ — đo bằng `tsc` trên một file thử, không
-đo bằng grep chuỗi trong mã nguồn.
+- **AC-10 — Kiểu tham số suy từ type công khai của eve, đo bằng QUAN HỆ.**
+Given `recordBuilderDelegation` và `clearBuilderDelegationStep`,
+When đọc chữ ký của chúng,
+Then tham số sự kiện có kiểu **tương đương hai chiều** với
+`HookEvent<"actions.requested">["data"]` và `HookEvent<"step.started">["data"]`.
+Đo bằng một phép tương đương ở tầng type, không đếm trường và không grep chuỗi.
+Sàn khuôn, sửa sau vòng chấm 1: chiều âm là một **phản-ví-dụ răng tự dựng** — cùng
+phép tương đương ấy áp cho một kiểu **khai tay** đủ trường; phản-ví-dụ qua được
+thì phép đo không có răng, và răng thoát mã 2 gọi tên điều đó.
 
-- **AC-11 — Không hồi quy: hook vẫn không đụng phiên ngoài kênh builder.**
+- **AC-11 — Không hồi quy: CẢ HAI handler không đụng phiên ngoài kênh builder.**
 Given ma trận **toàn phần** `purpose × commandType`: `purpose` ∈ {`builder`,
 `team-agent`, `research`} × `commandType` ∈ {`CREATE_AGENT`, `CHAT`},
-When handler của hook chạy cho từng ô,
-Then đúng **hai** ô `purpose = builder` cho gác qua; **bốn** ô còn lại bị gác
-chặn. Số assert bằng **6** — số ô của ma trận.
-Sàn khuôn giữ nguyên của vòng trước: cả sáu ô phải dựng từ **một** bộ dựng —
-đầu ra thật của `builderSessionAttributes` trải ra rồi đè đúng hai trường
-`purpose` và `commandType`. Sáu ô đi hai đường dựng khác nhau → mã 2.
-Chiều đỏ đã nằm trong chính ma trận: hai ô cho qua là đối chứng dương của bốn ô
-bị chặn.
+When handler `actions.requested` chạy cho từng ô,
+Then đúng **hai** ô `purpose = builder` cho gác qua; **bốn** ô còn lại bị gác chặn.
+Số assert bằng **6**.
+Và vế mới của vòng này: handler `step.started` cũng phải bị gác chặn ở phiên ngoài
+kênh builder, và cho qua ở phiên builder — đo trong cùng nhóm bài, vì một hook có
+hai handler thì gác phải áp cả hai.
+Sàn khuôn giữ nguyên: cả sáu ô dựng từ **một** bộ dựng — đầu ra thật của
+`builderSessionAttributes` trải ra rồi đè đúng hai trường.
+Chiều đỏ nằm trong chính ma trận: hai ô cho qua là đối chứng dương của bốn ô chặn.
 
-- **AC-12 — Sự kiện KHÔNG có uỷ thác không được XOÁ toạ độ đã ghi.**
-Given trạng thái đã ghi một uỷ thác tại `(turn-1, step 2, seq 0)`,
+- **AC-12 — Sự kiện KHÔNG có uỷ thác không được XOÁ ô đã ghi.**
+Given trạng thái đã ghi một uỷ thác tại `(turn-1, step 2)`,
 When hook nhận một sự kiện `actions.requested` **không** mang lời gọi
-`agent_builder` nào ở `(turn-1, step 3, seq 0)`, rồi **sau đó** nhận một uỷ thác
-thật ở `(turn-1, step 4, seq 0)`,
-Then sự kiện giữa **không ném** và trạng thái đọc lại **vẫn bằng đúng**
-`(turn-1, step 2, seq 0)`; uỷ thác ở step 4 **ném**.
-Đây là ô mà bản gạch đầu tiên của mục Coverage bỏ sót. AC-8 khởi từ trạng thái
-**rỗng** nên nó chỉ bắt được lỗi "chiếm slot", không bắt được lỗi "xoá slot": một
-cài đặt trả về toạ độ mới **vô điều kiện** sau mỗi sự kiện sẽ đưa slot về `null`
-ở step 3, và uỷ thác thật lần hai ở step 4 lọt — trần chết đúng trong lượt đó, mà
-mười một tiêu chí đầu vẫn xanh vì AC-2 và AC-3 nạp trạng thái trực tiếp thay vì cho một sự
-kiện 0-lời-gọi đứng **giữa** hai lần uỷ thác.
-Sàn khuôn: **ba** sự kiện liên tiếp qua **cùng một** handle, theo đúng thứ tự
-trên. Nạp trạng thái trực tiếp thay cho sự kiện thứ nhất → mã 2, vì đúng cái phải
-đo là hành vi của hook qua ba sự kiện.
-Chiều đỏ, đối chứng dương bắt buộc: đọc trạng thái **ngay sau** sự kiện giữa phải
-bằng đúng `(turn-1, step 2, seq 0)`. Chỉ assert "step 4 ném" là không đủ — nó
-cũng xanh nếu sự kiện giữa xoá slot rồi step 4 ghi lại và một lỗi khác làm nó ném.
+`agent_builder` nào ở `(turn-1, step 3)`, rồi một uỷ thác thật ở `(turn-1, step 4)`,
+Then sự kiện giữa không ném và ô đọc lại **vẫn bằng đúng** `(turn-1, step 2, [call-a])`;
+uỷ thác ở step 4 **ném**.
+Sàn khuôn: **ba** sự kiện liên tiếp qua **cùng một** handle, và sự kiện thứ nhất
+phải đi qua **chính hook**, không nạp trạng thái trực tiếp.
+Chiều đỏ: cùng ba sự kiện ấy nhưng thay sự kiện giữa bằng `step.started` của step
+**2** → ô **bị** xoá và lời gọi ở step 2 lọt. Cặp này phân biệt "xoá đúng chỗ" với
+"xoá bừa".
 
-- **AC-13 — Câu ném đúng TOÀN VĂN, không phải chứa một chuỗi con.**
+- **AC-13 — Câu ném đúng TOÀN VĂN.**
 Given câu ném của trần,
 When trần bật,
-Then thông điệp **bằng đúng**
-`The agent builder can be delegated only once per turn.`
+Then thông điệp **bằng đúng** `The agent builder can be delegated only once per turn.`
 Đo bằng so **toàn văn** với một hằng dùng chung giữa mã sản phẩm và bộ đo, lấy từ
-**lần ném thật**, không đọc hằng bằng grep trong mã nguồn.
-Vì sao tiêu chí này tồn tại: mục Out of scope hứa giữ câu "nguyên văn", mà tiêu chí
-trước chỉ đòi chuỗi `only once` **có mặt**. Vòng này viết lại chính khối type quanh câu
-ném, nên một biến thể vẫn chứa `only once` sẽ lọt — assert chuỗi-có-mặt trong khi
-lời hứa là quan hệ "đúng câu ấy".
+**lần ném thật**.
 Chiều đỏ: assert phải đỏ nếu câu bị đổi mà vẫn chứa `only once`.
-Phạm vi đã đo, nói thẳng: tiêu chí này dừng ở **đầu ra của hàm**. Câu ném có đi
-tiếp ra `turn.failed` và `crm.ts` đọc nó nguyên văn, nhưng vòng
-`tran-mot-lan-uy-thac` đã **kiểm và kết luận** không bên tiêu thụ nào khớp theo
-câu trần (`latestTurnFailure` chỉ phân loại `restricted` · `rate-limit` ·
-`credits` · `unknown`) — xem `[tran-mot-lan-uy-thac#F1]`. Nên đây **không** phải
-criterion xuyên lớp, và vế "người dùng thấy câu này" **không** được dùng làm căn
-cứ cho một lời hứa xuyên lớp nào ở vòng này.
+Phạm vi đã đo: dừng ở đầu ra của hàm. Vòng `tran-mot-lan-uy-thac` đã kiểm và kết
+luận không bên tiêu thụ nào khớp theo câu trần — xem `[tran-mot-lan-uy-thac#F1]`.
+Nên đây **không** phải criterion xuyên lớp.
+
+## Sửa sau khi chốt phạm vi — đổi khuôn, ngày 2026-09-10
+
+Người ký chọn đường **đổi khuôn** tại điểm dừng của điều khoản dừng-vá, sau khi hai
+vòng chấm liên tiếp REJECT với 13 eval xanh và 5 lệnh cổng xanh ở cả hai vòng.
+
+Lời hứa hành vi **không đổi**: một lần uỷ thác mỗi lượt, và một step chạy lại thì
+không bị tính là lần thứ hai. Thứ đổi là **cơ chế nhận ra lần thứ hai**, và ba chỗ
+hợp đồng cũ ghi **sai sự thật** về eve:
+
+- Khoá: từ `(turnId, stepIndex, sequence)` sang `(turnId, stepIndex)` + **tập
+  `callId` trong step đó**, cộng hook `step.started` làm ranh giới chạy lại.
+- AC-2 cũ đo hình dạng «cùng `turnId`, khác `sequence`» — eve **không phát** hình
+  dạng đó. AC-2 mới đo ca eve **thật sự phát** và là ca bản cũ cho lọt.
+- AC-6 giữ lời hứa nhưng nay khai rõ đường phát của nó, thay vì ngầm coi là ca thường.
+- Trường `sequence` rời khỏi trạng thái: nó là nhánh chết.
+
+Hai finding trong hợp đồng của vòng chấm 2 sửa cùng lượt: bản đột biến thứ nhất nay
+dẫn từ văn bản thật, và mọi fixture trạng thái round-trip qua chính bên ghi.
 
 ## Đường đo
 

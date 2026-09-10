@@ -6,6 +6,7 @@ import {
 import { builderTaskMarkdown } from "../agent/instructions/task";
 import { AGENT_ACTION_EXECUTORS } from "../agent/lib/agent-actions";
 import {
+	clearBuilderDelegationStep,
 	EMPTY_BUILDER_DELEGATION,
 	recordBuilderDelegation,
 } from "../agent/lib/builder-delegation";
@@ -382,14 +383,9 @@ describe("builder delegation guard", () => {
 		subagentName: "agent_builder",
 	});
 
-	const duLieu = (
-		turnId: string,
-		stepIndex: number,
-		sequence: number,
-		callId: string,
-	) => ({
+	const duLieu = (turnId: string, stepIndex: number, callId: string) => ({
 		actions: [goiBuilder(callId)],
-		sequence,
+		sequence: 0,
 		stepIndex,
 		turnId,
 	});
@@ -397,22 +393,41 @@ describe("builder delegation guard", () => {
 	it("allows one idempotent builder delegation per turn", () => {
 		const first = recordBuilderDelegation(
 			EMPTY_BUILDER_DELEGATION,
-			duLieu("turn-1", 2, 0, "call-1"),
+			duLieu("turn-1", 2, "call-1"),
 		);
-		expect(first).toEqual({ turnId: "turn-1", stepIndex: 2, sequence: 0 });
+		expect(first).toEqual({
+			turnId: "turn-1",
+			stepIndex: 2,
+			callIds: ["call-1"],
+		});
 
 		expect(
-			recordBuilderDelegation(first, duLieu("turn-1", 2, 0, "call-2")),
+			recordBuilderDelegation(first, duLieu("turn-1", 2, "call-1")),
 		).toEqual(first);
 		expect(() =>
-			recordBuilderDelegation(first, duLieu("turn-1", 3, 0, "call-2")),
+			recordBuilderDelegation(first, duLieu("turn-1", 2, "call-2")),
 		).toThrow("only once");
 		expect(() =>
-			recordBuilderDelegation(first, duLieu("turn-1", 2, 1, "call-2")),
+			recordBuilderDelegation(first, duLieu("turn-1", 3, "call-2")),
 		).toThrow("only once");
 		expect(
-			recordBuilderDelegation(first, duLieu("turn-2", 0, 0, "call-2")),
-		).toEqual({ turnId: "turn-2", stepIndex: 0, sequence: 0 });
+			recordBuilderDelegation(first, duLieu("turn-2", 0, "call-2")),
+		).toEqual({ turnId: "turn-2", stepIndex: 0, callIds: ["call-2"] });
+	});
+
+	it("reopens the ceiling when the recorded step starts again", () => {
+		const first = recordBuilderDelegation(
+			EMPTY_BUILDER_DELEGATION,
+			duLieu("turn-1", 2, "call-1"),
+		);
+		const cleared = clearBuilderDelegationStep(first, {
+			sequence: 0,
+			stepIndex: 2,
+			turnId: "turn-1",
+		});
+		expect(
+			recordBuilderDelegation(cleared, duLieu("turn-1", 2, "call-2")),
+		).toEqual({ turnId: "turn-1", stepIndex: 2, callIds: ["call-2"] });
 	});
 });
 
