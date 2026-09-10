@@ -7,7 +7,7 @@
     },
     {
       "id": "AC-3",
-      "p": "Sẽ chốt rằng chỉ có đúng chín chỗ trong phần máy chủ được viết ra khoá quyền, mỗi chỗ xếp đúng một loại; chỗ thứ mười mọc lên là thước đỏ ngay, kèm số dòng."
+      "p": "Sẽ chốt rằng chỉ có đúng chín chỗ trong phần máy chủ được viết ra khoá quyền — kể cả khi khoá viết bằng chuỗi hay bằng biểu thức — và chỗ thứ mười mọc lên là thước đỏ ngay, kèm số dòng."
     },
     {
       "id": "AC-4",
@@ -33,7 +33,7 @@
   "wont_do": [
     {
       "id": "AC-2",
-      "p": "Chặn việc bộ dựng còn cầm nội dung tin nhắn ở đúng chỗ nó quyết quyền — cả hàm cũ lẫn mọi chỗ gọi đều không được tính toán ra quyền từ chữ."
+      "p": "Chặn bốn đường bộ dựng có thể lấy lại quyền từ tin nhắn: giữ trường tin nhắn ở chỗ quyết quyền · hồi sinh hàm suy diễn dưới bất kỳ tên nào · đọc quyền từ một tầng sâu hơn của hàng · hoặc tính sẵn ra một chỗ mới. Chỗ nào viết ra khoá quyền cũng phải nằm trong danh sách đã chốt."
     },
     {
       "id": "AC-5",
@@ -173,6 +173,18 @@
     {
       "id": "d-20260910T110000Z-52001",
       "p": "Chọn: thu phạm vi. Đổi cách đếm của sàn quyền cho đúng, và bỏ một thước đã hai lần báo sai vì thứ nó đo đã được chứng ở nơi khác. Đổi lại: đây là đổi phạm vi của hợp đồng đã ký, nên phải duyệt lại."
+    },
+    {
+      "id": "d-20260910T140000Z-54001",
+      "p": "Chọn: DỪNG ở trần ba vòng, đưa ba đường cho người quyết. Một phép đo báo đỏ vì bộ chấm đọc dòng tổng kết của lượt phá thử, không vì vật đo sai."
+    },
+    {
+      "id": "d-20260910T150000Z-55001",
+      "p": "Chọn: giữ nguyên lịch sử commit và khai một ngoại lệ tường minh trong luật kho cho chữ ký của phiên máy. Đổi lại: đây là chỗ rẽ có ý thức so với bản gốc của hãng, kéo bản mới về phải merge lại."
+    },
+    {
+      "id": "d-20260910T150000Z-55002",
+      "p": "Chọn: bộ phá thử thôi in nguyên nhật ký của lượt đã phá, chỉ in bản rút gọn; và siết hai sàn đọc mã theo ba lỗ vừa được chứng minh là lọt. Đổi lại: hai siết sau đổi nội dung phép đo nên phải duyệt lại."
     }
   ]
 }
