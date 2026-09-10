@@ -1,119 +1,107 @@
-# Review Findings: do-quyen-luot-bang-hanh-vi (round 4)
+> Review Findings: do-quyen-luot-bang-hanh-vi (round 5)
 
 ## Trong hợp đồng
 
-### tenKhoa() bỏ qua computed key không phải string literal — chỗ ghi commandType leo quyền tàng hình với cả hai răng, cổng vẫn thoát 0
-- file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/ast.mjs:80`
-- severity: high
-- source: bugs
-- AC: AC-2, AC-3
-
-tenKhoa() chỉ giải được ComputedPropertyName khi biểu thức bên trong là StringLiteral hoặc NoSubstitutionTemplateLiteral; mọi computed key khác trả null, nên laKhoa() coi node đó KHÔNG mang khoá commandType. Hệ quả: node biến mất khỏi dân số, không bị đếm, không làm lệch ma trận đã ghim, không in ra đâu cả.
-
-Đã chạy hai probe, cả hai đều thoát 0:
-
-1) nguon-ghi.mjs (AC-3, tuyên "MA TRAN TOAN PHAN" trên apps/api/src). Chép apps/api/src sang cây thử, thêm apps/api/src/leo/leo.ts:
-
-    const KHOA = "commandType" as const;
-    db.agentConversationSubmission.create({
-      data: { conversationId: id, [KHOA]: "CREATE_AGENT" },
-    });
-
-   `node rang/nguon-ghi.mjs --goc <cây thử>` → in đúng 9 phần tử cũ, "khop dung danh sach da ghim", EXIT=0. Một chỗ ghi thẳng CREATE_AGENT ghim cứng không xuất hiện ở đâu.
-
-2) khong-cam-tin-nhan.mjs (AC-2 điểm 3, tuyên: tại MỌI lời gọi builderSessionAttributes, initializer của commandType phải là truy cập thuộc tính trần). Chép apps/agent/agent sang cây thử, thêm lib/leo-quyen.ts gọi builderSessionAttributes lần thứ hai với
-
-    const KHOA = "commandType" as const;
-    builderSessionAttributes({
-      [KHOA]: JSON.stringify(row.message).includes("agent") ? "CREATE_AGENT" : row.commandType,
-      ...
-    });
-
-   → "khong-cam-tin-nhan: 123 tep, 2 cho goi builderSessionAttributes, ma tran 6 khoa — sach", EXIT=0. Đúng luật suy quyền từ hình dạng tin nhắn mà AC-2 sinh ra để cấm, đi qua sạch.
-
-Ghi chú: ở apps/agent, việc THAY một khoá đã ghim bằng computed key thì bị bắt (ma trận 6→5), nhưng THÊM một chỗ mới thì lọt — và thêm mới mới là đường leo quyền thật.
-
-Sửa: trong tenKhoa(), khi ComputedPropertyName có expression không phải literal, đừng trả null im lặng — trả một sentinel để laKhoa()/ma trận bắt buộc phải khai báo nó, hoặc báo lỗi "khoá tính toán không đọc được" ngay tại chỗ.
-
-Rationale (map AC): Đã chứng minh bằng hai probe cụ thể: một chỗ ghi commandType qua computed key không phải literal lọt qua cả phép đo của AC-3 (ma trận toàn phần trên apps/api/src) lẫn điều 4 của AC-2 (ma trận khoá apps/agent), đúng hình dạng mà cả hai AC nêu tường minh phải bắt được ('kể cả... computed key').
-
-### Kiểm "thông điệp chứa chuỗi ghim" của khai-sinh.mjs là vô hiệu với E2/E5: chính răng in sẵn chuỗi ghim ra băng-rôn bất kể kết quả
-- file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/khai-sinh.mjs:91`
-- severity: low
-- source: bugs
-- AC: AC-7
-
-E8 điểm 3 tuyên: mỗi dòng khai phải có "thong diep (stdout + stderr) CHUA nguyen van chuoi `ghim`" — lớp kiểm độc lập thứ hai xác nhận cái đỏ đúng là cái đã hứa. khai-sinh.mjs:91 thực hiện bằng `r.chu.includes(dong.ghim)`.
-
-Với các dòng E2 (cong-quyen-do.mjs) và E5 (mang-theo-do.mjs), `ghim` là tên bài test ("suy-dien: hang khai CHAT thi cong dong", "ke-thua: doc duoc ca hai chieu tren cung khuon"). Nhưng cong-quyen-do.mjs:90-98 và mang-theo-do.mjs:58-66 in băng-rôn chẩn đoán chứa NGUYÊN VĂN chuỗi đó ra stdout, không điều kiện, TRƯỚC mọi nhánh phán xử:
-
-    `  bai mang loi hua "${BAI_PHAI_DO}": ${coBai ? "CO DO" : "KHONG DO"}`
-
-Và `chay()` (chung.mjs:236) gộp stdout + stderr vào `chu`. Nên `includes(dong.ghim)` luôn đúng, kể cả khi băng-rôn ghi "KHONG DO". Lớp kiểm thứ hai của E8 không phân biệt được gì cả với hai eval này; nó chỉ còn dựa vào so mã thoát.
-
-Sửa: đặt `ghim` cho các dòng E2/E5 là một chuỗi chỉ xuất hiện khi bài đúng tên đó đỏ (ví dụ dòng `(fail)` của bun), hoặc để răng thôi in nguyên văn tên bài trong băng-rôn thành công.
-
-Rationale (map AC): AC-7 đòi tường minh lớp kiểm độc lập thứ hai — thông điệp chứa nguyên văn chuỗi ghim — và đã chứng minh lớp kiểm này luôn đúng với E2/E5 bất kể kết quả thật, nên tiêu chí này thất bại trên hai dòng khai đó.
+_Không có finding nào khớp AC nào của hợp đồng vòng này._
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **tu-kiem-khung.mjs ghi đè tệp nguồn có theo dõi trong cây làm việc thật, và không nằm trong sổ executor**
-  Người dùng thấy gì: Nếu quá trình kiểm tra tự động bị dừng đột ngột giữa chừng (ví dụ bấm Ctrl-C), một file mã nguồn thật trong nhánh làm việc có thể bị để lại ở trạng thái đã sửa mà không được khôi phục lại, ảnh hưởng tới người làm việc tiếp trên cùng nhánh.
-  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/tu-kiem-khung.mjs`
+- **Lệnh cấm tuyệt đối trong AGENTS.md bị nới ngay giữa nhánh để hợp thức hoá 15 commit đã vi phạm trước đó**
+  Người dùng thấy gì: Việc nới lỏng quy định về đồng tác giả trong commit được gộp chung vào nhánh của một tính năng khác, nên người duyệt đọc theo tên nhánh có thể bỏ sót một thay đổi quy định áp dụng cho toàn bộ dự án.
+  file: `AGENTS.md`
+  severity: high
+  Đề xuất: new-contract
+
+- **Giới hạn đã khai của sàn khoá không có phép đo nào canh; hàm viết ra để canh nó là mã chết**
+  Người dùng thấy gì: Có một giới hạn đã biết trong việc phát hiện các cách viết quyền truy cập ẩn, nhưng không có cảnh báo tự động nào nếu số lượng trường hợp chưa được kiểm soát này tăng lên trong tương lai.
+  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/ast.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **BuilderAuthRow bắt buộc trường message nhưng builderSessionAuthFromRow không bao giờ đọc**
-  Người dùng thấy gì: Một mục dữ liệu không còn thực sự cần thiết vẫn buộc phải khai khi dựng thông tin xác thực cho một lượt, khiến việc viết thêm kịch bản thử nghiệm sau này phải bịa ra dữ liệu giả không mang ý nghĩa gì.
+- **Hồ sơ bằng chứng và thẻ Cổng 2 ở HEAD mô tả một bộ răng không còn tồn tại**
+  Người dùng thấy gì: Báo cáo bằng chứng đưa ra cho người quyết định đang mô tả một phiên bản mã cũ hơn phiên bản mới nhất, nên người đọc có thể tin rằng mọi thứ đã được xác minh đầy đủ trong khi thực tế mã đã thay đổi thêm sau đó.
+  file: `_acceptance/do-quyen-luot-bang-hanh-vi/evidence-report.md`
+  severity: medium
+  Đề xuất: known-limits
+
+- **khong-cam-tin-nhan.mjs khai lại hằng đường dẫn đã import từ chung.mjs**
+  Người dùng thấy gì: Nếu vị trí một tệp quan trọng trong hệ thống thay đổi trong tương lai, một phần của công cụ kiểm tra bảo vệ có thể không được cập nhật theo và âm thầm mất tác dụng.
+  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/khong-cam-tin-nhan.mjs`
+  severity: medium
+  Đề xuất: wont-fix
+
+- **giuKhoa() phá khoá của tiến trình còn sống sau 120s, rồi chủ cũ xoá khoá của chủ mới**
+  Người dùng thấy gì: Khi có nhiều thao tác kiểm tra chạy cùng lúc, chúng có thể giẫm lên nhau và làm mất đi lớp bảo vệ chống xung đột, khiến kết quả kiểm tra sau đó không còn đáng tin mà không có dấu hiệu cảnh báo nào.
+  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/chung.mjs`
+  severity: medium
+  Đề xuất: new-contract
+
+- **Hợp đồng đã niêm của vòng trước bị để lại với `expected` cố ý sai so với lệnh nó chạy**
+  Người dùng thấy gì: Người xem lại hồ sơ kiểm tra cũ trong tương lai có thể hiểu nhầm về hành vi đang thực sự được đo, vì lời đính chính nằm cách xa nội dung liên quan.
+  file: `_acceptance/quyen-luot-mang-theo/contract.md`
+  severity: medium
+  Đề xuất: wont-fix
+
+- **BuilderAuthRow bắt buộc trường `message` mà builderSessionAuthFromRow không bao giờ đọc**
+  Người dùng thấy gì: Người đọc định nghĩa dữ liệu có thể tưởng rằng nội dung tin nhắn vẫn ảnh hưởng đến việc cấp quyền, dù thực tế nó không còn được dùng cho việc đó nữa.
   file: `apps/agent/agent/lib/custom-agent-dispatch.ts`
   severity: low
   Đề xuất: known-limits
 
 - **Executor dq_mang_theo_do khai trong config nhưng không eval nào trỏ tới**
-  Người dùng thấy gì: Một mục cấu hình cũ không còn được dùng vẫn nằm trong sổ đăng ký, có thể gây nhầm lẫn cho người đọc sổ này sau này nhưng không ảnh hưởng gì tới người dùng sản phẩm.
+  Người dùng thấy gì: Danh sách các phép kiểm tra đang khai báo một mục không có phép kiểm tra chính thức nào sử dụng, có thể khiến người đọc tưởng nhầm có một lớp bảo vệ đang hoạt động ở đó.
   file: `_acceptance/config.yaml`
   severity: low
+  Đề xuất: wont-fix
+
+- **Hai răng import GOC nhưng không dùng**
+  Người dùng thấy gì: Đây là phần mã thừa không ảnh hưởng đến người dùng sản phẩm, chỉ là điểm gọn gàng chưa được dọn trong công cụ kiểm tra nội bộ.
+  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/cong-quyen-do.mjs`
+  severity: low
+  Đề xuất: wont-fix
+
+- **tenKhoa() trả null im lặng cho computed key không đọc được — chỗ ghi commandType leo quyền tàng hình với CẢ HAI răng ma trận, cả hai vẫn thoát 0**
+  Người dùng thấy gì: Một cách viết mã ít phổ biến có thể khiến việc gán quyền tạo trợ lý ảo đi qua mà không bị lớp kiểm tra bảo vệ phát hiện; đây là rủi ro đã được nhận diện và chấp nhận trước khi bàn giao, nhưng vẫn chưa có cách tự động cảnh báo khi nó thực sự xảy ra.
+  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/ast.mjs`
+  severity: high
   Đề xuất: known-limits
 
-- **don() nuốt lỗi `git worktree remove` bằng catch rỗng — đăng ký worktree rác tích lại trong git dir dùng chung, không ai được báo**
-  Người dùng thấy gì: Việc dọn các bản sao tạm dùng để chạy kiểm tra có thể thất bại âm thầm, để lại rác tích tụ dần trong hạ tầng dùng chung mà không có cảnh báo nào cho người vận hành.
-  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/chung.mjs`
+- **Rubric chấm của E7 neo vào một hàm không tồn tại (respondToQuestion) — judgment eval được chấm PASS trên một mỏ neo không thể tìm thấy**
+  Người dùng thấy gì: Một phần của việc chấm điểm tài liệu đang dựa vào một mốc tham chiếu không còn đúng, nên nếu sau này tài liệu ghi sai thông tin về quyền, phần chấm điểm này có thể không phát hiện ra.
+  file: `_acceptance/do-quyen-luot-bang-hanh-vi/evals.yaml`
   severity: medium
+  Đề xuất: wont-fix
+
+- **Nhánh báo "vecto ra XANH" của cong-quyen-do.mjs và mang-theo-do.mjs là mã chết — mã thoát thật là 3, không phải 2 như evals khai**
+  Người dùng thấy gì: Khi một trường hợp lẽ ra phải bị bắt lỗi mà lọt qua, thông báo hiện ra lại nói là do lỗi hạ tầng thay vì chỉ đích danh trường hợp bị lọt, khiến người xem khó biết chỗ nào thực sự cần chú ý.
+  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/cong-quyen-do.mjs`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Tuyên quét LỚP nhưng chỉ có điểm-case: "ma trận toàn phần" của E4/E3 âm thầm bỏ khỏi dân số mọi computed key nó không giải được**
+  Người dùng thấy gì: Lời hứa rằng phép kiểm tra bao trùm toàn bộ các cách viết quyền thực chất chỉ bao phủ một số cách viết phổ biến; các cách viết khác vẫn có thể lọt qua mà không bị phát hiện, đúng như giới hạn đã được ghi nhận và chấp nhận từ trước.
+  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/ast.mjs`
+  severity: high
   Đề xuất: known-limits
 
-- **giuKhoa() phá khoá của tiến trình còn sống sau 120s, rồi chủ cũ xoá tiếp khoá của chủ mới — loại trừ lẫn nhau quanh `git worktree add` mất tác dụng, im lặng**
-  Người dùng thấy gì: Khi nhiều lượt kiểm tra chạy đồng thời, một lượt có thể bị chiếm mất tài nguyên tạm đang dùng dở mà không có cảnh báo, khiến kết quả của các lượt chạy song song khó tin cậy hoàn toàn trong một số trường hợp hiếm.
-  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/chung.mjs`
-  severity: medium
-  Đề xuất: known-limits
+- **Assert "chuỗi có mặt" trong khi lời hứa là QUAN HỆ: lớp kiểm ghim của E8 luôn đúng với hai dòng khai E2 và dòng E5**
+  Người dùng thấy gì: Một trong hai lớp kiểm tra chéo để đảm bảo lỗi được bắt đúng lý do có thể luôn hiện diện bất kể kết quả đúng hay sai, khiến lớp bảo vệ thứ hai này không thực sự phân biệt được trường hợp đúng và sai cho một số bài kiểm tra.
+  file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/khai-sinh.mjs`
+  severity: high
+  Đề xuất: wont-fix
 
-- **Assertion âm-tính không ghim thông điệp, trong khi hàm có hai đường ném khác nhau**
-  Người dùng thấy gì: Bài kiểm tra này vẫn báo đúng ngay cả khi lý do từ chối thật sự thay đổi, nên nếu cổng chặn dựng tác nhân bị nới lỏng nhầm trong tương lai, bài kiểm tra có thể không phát hiện ra.
+- **Assertion âm-tính không ghim thông điệp: `.toThrow()` trần trong khi hàm có hai đường ném khác nhau**
+  Người dùng thấy gì: Một bài kiểm tra xác nhận rằng hệ thống từ chối đúng trường hợp, nhưng không phân biệt được nếu sau này nó từ chối vì một lý do sai khác, nên một lỗi mới có thể lọt qua mà bài kiểm tra này vẫn báo đạt.
   file: `apps/agent/test/quyen-luot.spec.ts`
   severity: medium
-  Đề xuất: known-limits
+  Đề xuất: wont-fix
 
-- **Ba luật của E6 chỉ có một vecto, và vecto đó kích hoạt hai luật cùng lúc**
-  Người dùng thấy gì: Một trong ba điều kiện mà bài kiểm tự nhận là đã bảo vệ thật ra chưa từng được thử nghiệm riêng lẻ, nên nếu chỉ riêng điều kiện đó bị phá vỡ sau này, hệ thống kiểm tra có thể không phát hiện ra.
+- **Tuyên ba luật nhưng chỉ có điểm-case cho hai: luật 3 của E6 không có vecto nào chạm tới, và vecto duy nhất kích hoạt hai luật cùng lúc**
+  Người dùng thấy gì: Một quy tắc nhằm ngăn việc âm thầm xoá bài kiểm tra quan trọng chưa từng được tự thử nghiệm để chắc chắn nó thật sự phát hiện được hành vi xoá đó, nên hiện chưa có gì đảm bảo quy tắc này hoạt động đúng như kỳ vọng.
   file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/bo-do-grep.mjs`
   severity: low
-  Đề xuất: known-limits
+  Đề xuất: wont-fix
 
-## Chưa phân loại (triage-failed)
-
-phân loại phạm vi không chạy được — không lỗi nào bị máy tự sửa, người xem lại toàn bộ.
-
-### Tuyên quét LỚP nhưng chỉ có điểm-case: ma trận E4 không phân biệt được nguồn của giá trị ghi
-- file: `_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs:49`
-- severity: high
-- source: measurement
-
-loaiCua() xếp loại `khai` cho BẤT KỲ initializer nào là PropertyAccessExpression có tên cuối là `commandType` (dòng 48-54): chỉ kiểm `ts.isPropertyAccessExpression(dau) && dau.name.text === "commandType"`, không ràng buộc `dau.expression` phải là một định danh trần. Khoá ma trận lại là `<file> :: <hàm bao> :: <loại>` với số dòng bị cắt (dòng 80: `vt.replace(/:\d+$/, "")`), nên một chỗ ghi suy quyền từ tin nhắn vẫn giữ nguyên khoá và ma trận vẫn khớp DA_GHIM.
-
-Đã chứng minh trên bản sao apps/api/src: đổi `conversations.service.ts:424` từ `commandType: input.commandType,` thành `commandType: doanQuyen(input.message).commandType,` → `node rang/nguon-ghi.mjs --goc <bản sao>` in "9 cho viet khoa commandType, khop dung danh sach da ghim" và thoát 0. Đổi thành `commandType: input.message.commandType,` cũng thoát 0. Đúng hai hình dạng mà AC-3 tồn tại để cấm.
-
-Đây chính là bài học mà chan-đo anh em đã ghi thành mã: rang/khong-cam-tin-nhan.mjs dùng laTruyCapTran() (dòng 40-47) bắt buộc `ts.isIdentifier(dau.expression)`, và E3 điểm 3 nói thẳng "'La mot PropertyAccessExpression' la khong du: `row.message.commandType` cung la PropertyAccessExpression". nguon-ghi.mjs không mang ràng buộc đó. Tám vecto khai của E4 đều không đi qua lỗ này ("ghim-cung" → string literal, "bien-trung-gian" → CallExpression trần, cả hai rơi vào `khac`), nên chiều đỏ của E4 chỉ chứng minh được đúng các điểm-case mà vecto chạm tới, không chứng minh được lớp "mọi chỗ ghi đều lấy từ hai nguồn đã đặt tên" như expected tuyên.
-
-Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
+⚠ Cụm ngoài vùng phủ: 3/16 lỗi rơi vào file không bộ đo nào phủ (AGENTS.md, _acceptance/do-quyen-luot-bang-hanh-vi/evidence-report.md, _acceptance/config.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
