@@ -1,12 +1,19 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
-import { persistBuilderInputRequest } from "../agent/lib/builder-input";
+import { BUILDER_AUTHORIZATION_KEY } from "@crm/validation/builder-question";
+import {
+	persistBuilderInputRequest,
+	recordBuilderInputRequest,
+} from "../agent/lib/builder-input";
 import {
 	saveBuilderDraft,
 	writeBuilderArtifact,
 } from "../agent/lib/builder-runtime";
 import { setBuilderConversationTitle } from "../agent/lib/conversation-title";
-import { builderToken } from "../agent/lib/custom-agent-dispatch";
+import {
+	builderSessionAttributes,
+	builderToken,
+} from "../agent/lib/custom-agent-dispatch";
 
 const suffix = crypto.randomUUID();
 const userId = `builder-runtime-user-${suffix}`;
@@ -96,8 +103,9 @@ describe("builder persistence", () => {
 		};
 
 		expect(
-			await persistBuilderInputRequest(event, undefined, conversationId),
+			await persistBuilderInputRequest(event, undefined, conversationId, true),
 		).toBe(true);
+
 		expect(
 			await db.agentConversation.findUnique({
 				where: { id: conversationId },
@@ -105,7 +113,7 @@ describe("builder persistence", () => {
 			}),
 		).toEqual({
 			continuationToken: builderToken(conversationId),
-			pendingInputRequest: request,
+			pendingInputRequest: { ...request, [BUILDER_AUTHORIZATION_KEY]: true },
 		});
 		expect(
 			await db.agentEvent.findUnique({
@@ -132,11 +140,11 @@ describe("builder persistence", () => {
 			],
 		};
 		expect(
-			await persistBuilderInputRequest(newer, undefined, conversationId),
+			await persistBuilderInputRequest(newer, undefined, conversationId, true),
 		).toBe(true);
 
 		expect(
-			await persistBuilderInputRequest(event, undefined, conversationId),
+			await persistBuilderInputRequest(event, undefined, conversationId, true),
 		).toBe(false);
 		expect(
 			await persistBuilderInputRequest(
@@ -147,6 +155,7 @@ describe("builder persistence", () => {
 				},
 				undefined,
 				conversationId,
+				true,
 			),
 		).toBe(false);
 
@@ -155,7 +164,12 @@ describe("builder persistence", () => {
 				where: { id: conversationId },
 				select: { pendingInputRequest: true },
 			}),
-		).toEqual({ pendingInputRequest: newer.requests[0] });
+		).toEqual({
+			pendingInputRequest: {
+				...newer.requests[0],
+				[BUILDER_AUTHORIZATION_KEY]: true,
+			},
+		});
 		expect(
 			await db.agentEvent.count({
 				where: {
@@ -163,6 +177,76 @@ describe("builder persistence", () => {
 				},
 			}),
 		).toBe(0);
+	});
+
+	it("derives the stored grant from the asking turn's own context", async () => {
+		const askingTurn = async (commandType: string) => {
+			const conversation = await db.agentConversation.create({
+				data: {
+					kind: "BUILDER",
+					userId,
+					sessionId: `builder-grant-${commandType}-${suffix}`,
+				},
+				select: { id: true },
+			});
+			conversationIds.push(conversation.id);
+
+			const requestId = `cau-hoi-${commandType}`;
+			const request = {
+				kind: "question",
+				requestId,
+				prompt: "Which stage?",
+				action: {
+					kind: "tool-call",
+					callId: `call-${requestId}`,
+					toolName: "ask_question",
+					input: { prompt: "Which stage?" },
+				},
+				display: "text",
+			};
+
+			const written = await recordBuilderInputRequest(
+				{
+					requests: [request],
+					sequence: 1,
+					stepIndex: 0,
+					turnId: `turn-${commandType}`,
+				},
+				undefined,
+				{
+					session: {
+						auth: {
+							current: {
+								attributes: builderSessionAttributes({
+									commandType,
+									message: { text: "dung mot tac nhan" },
+									conversationId: conversation.id,
+									userId,
+									submissionId: `sub-${commandType}`,
+									hasTitle: true,
+								}),
+							},
+							initiator: null,
+						},
+					},
+				},
+			);
+			expect(written).toBe(true);
+
+			return (
+				await db.agentConversation.findUnique({
+					where: { id: conversation.id },
+					select: { pendingInputRequest: true },
+				})
+			)?.pendingInputRequest;
+		};
+
+		expect(await askingTurn("CREATE_AGENT")).toMatchObject({
+			[BUILDER_AUTHORIZATION_KEY]: true,
+		});
+		expect(await askingTurn("CHAT")).toMatchObject({
+			[BUILDER_AUTHORIZATION_KEY]: false,
+		});
 	});
 
 	it("ignores a delayed question from a turn the session has already left", async () => {
@@ -200,6 +284,7 @@ describe("builder persistence", () => {
 				},
 				undefined,
 				conversation.id,
+				true,
 			),
 		).toBe(true);
 
@@ -213,6 +298,7 @@ describe("builder persistence", () => {
 				},
 				undefined,
 				conversation.id,
+				true,
 			),
 		).toBe(false);
 
@@ -221,7 +307,9 @@ describe("builder persistence", () => {
 				where: { id: conversation.id },
 				select: { pendingInputRequest: true },
 			}),
-		).toEqual({ pendingInputRequest: current });
+		).toEqual({
+			pendingInputRequest: { ...current, [BUILDER_AUTHORIZATION_KEY]: true },
+		});
 		expect(
 			await db.agentEvent.count({
 				where: {

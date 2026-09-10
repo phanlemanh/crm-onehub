@@ -28,6 +28,15 @@ executors:
     tt_app: cd apps/app && bun test test/messages-guard.spec.ts test/campaign-states.spec.ts
     go_khoa_api: 'bun run test -- "cd apps/api && bun test test/saved-views-in-use.spec.ts test/campaigns.spec.ts"'
     go_khoa_app: 'bun run test -- "cd apps/app && bun test test/saved-views-in-use.spec.ts test/messages-guard.spec.ts"'
+    cu_quyen_hai_chieu: cd apps/agent && bun test test/chan-uy-thac.spec.ts -t quyen
+    cu_phu_moi_tool: cd apps/agent && bun test test/chan-uy-thac.spec.ts -t moi-tool
+    cu_ket_thuc_sach: cd apps/agent && bun test test/chan-uy-thac.spec.ts -t ket-thuc
+    ql_quyen_ke_thua: cd apps/agent && bun test test/quyen-luot.spec.ts -t ke-thua
+    ql_khong_suy_dien: cd apps/agent && bun test test/quyen-luot.spec.ts -t suy-dien
+    ql_con_biet_cua_ra: cd apps/agent && bun test test/quyen-luot.spec.ts -t cua-ra
+    ql_api_doc_ban_ghi: cd apps/api && bun test test/quyen-luot.spec.ts
+    ql_cong_dong_that: cd apps/agent && bun test test/quyen-luot.spec.ts -t cong-dong
+    ql_hai_duong_that: 'bun run db:test --reset && cd apps/agent && bun test test/builder-runtime.integration.spec.ts && cd ../api && bun test test/conversations.spec.ts -t "builder answer"'
     api_khong_cache_tron_bo: "bun run db:test && bunx turbo run test --concurrency=1 --force"
     nc_lop_chuyen: cd packages/ui && bun test test/eve-to-ai-sdk.spec.ts
   script:

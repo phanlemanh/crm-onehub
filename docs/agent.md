@@ -320,14 +320,43 @@ instructions, tools and deny-all sandboxes. They inherit nothing from the root. 
 root built-in `agent` copy tool is disabled; these two named specialists are the only
 delegation paths for custom agents.
 
-- **Creation requires the current `CREATE_AGENT` turn.** Every builder tool checks the
-  purpose and command type in session auth. A normal builder chat cannot create a
+- **Creation requires the current `CREATE_AGENT` turn.** The three builder tools that
+  read or write draft context — `inspect_context`, `write_agent_file`,
+  `save_agent_draft` — carry the shared `approval` policy in
+  `subagents/agent_builder/lib/authorization.ts`, which reads purpose and command type
+  from session auth and returns `{ type: "denied", reason }` before the tool runs. The
+  builder's other tools do not carry it and do not need to: none of them can create an
+  agent. Add a tool that can, and it joins that pinned list — the policy is not
+  ambient. `requireBuilderAttribute` stays
+  inside each `execute` as the inner layer. A normal builder chat cannot create a
   draft by prompt alone.
+
+  **A denial is a result, not an exception.** That is the whole point: a thrown Error
+  reads to the model as a transient failure, so it retries — three times per tool on
+  the prod incident of 2026-09-08 — while the child, whose output schema then had only
+  `draft_ready`, had no legal way to finish. Nothing settled the turn, so
+  `continuationToken` stayed null and the conversation read *Working in background*
+  forever with no failure card, because a tool error never becomes `turn.failed`. The
+  `not_authorized` branch is what lets the child end cleanly and the turn settle. The
+  one-per-turn guard in `execution-state.ts` that demands a save before `final_output`
+  is skipped on an unauthorized turn for the same reason.
 - **Builder clarification is durable HITL.** The specialist calls eve's built-in
   `ask_question` directly; descendant input requests are proxied to the root channel,
   and the same child turn resumes when the user answers. The authored
-  `tools/ask_question.ts` disable override must stay absent. Builder task output is
-  typed as `draft_ready` and carries the immutable version ids only after save.
+  `tools/ask_question.ts` disable override must stay absent. Builder task output is one
+  object keyed by `status`: `draft_ready` carries the immutable version ids and only
+  after save, `not_authorized` carries a reason and no ids; a `superRefine` enforces
+  which fields each status requires. It is one object rather than a
+  `discriminatedUnion` on purpose — eve hands `outputSchema` to the model unchanged as
+  `final_output`'s input schema (`toInputSchema` does not wrap it), and a union lowers
+  to a root `oneOf` with no `type: "object"`. **Measured on 2026-09-09: the gateway
+  accepts both shapes.** Two real calls to `zai/glm-5.2-fast` through the AI Gateway,
+  one with the bare `oneOf` and one with the root object, both returned HTTP 200 and
+  both called `final_output` correctly. So the object form is not fixing a live bug:
+  it is here because every other subagent already serializes to a root object, and
+  because a provider that requires `input_schema.type === "object"` would reject the
+  union outright — the model in use today does not. Keep the root an object; that is
+  what the shape floor in `apps/agent/test/chan-uy-thac.spec.ts` asserts.
 - **Empty never means all.** A version chooses `SELECTED` or `WORKSPACE` record scope.
   Selected scope requires at least one record tagged in that private conversation;
   workspace scope is an explicit grant and cannot also list selected records.

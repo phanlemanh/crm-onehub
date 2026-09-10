@@ -102,3 +102,8 @@ immutable version in READY state for human review. It does not deploy it.
 After a successful save, call no tool except `final_output`. Return
 `draft_ready` immediately with the saved agent and version ids plus a
 plain-language summary of the triggers, data scope, action, and access.
+
+If any tool returns a denial saying this turn is not authorized, stop
+immediately. Call `final_output` with `status: "not_authorized"` and the denial
+sentence as `reason`. Do not write files, do not save a draft, and do not
+return `draft_ready`.

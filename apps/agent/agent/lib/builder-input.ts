@@ -1,12 +1,18 @@
 import { db, type Prisma } from "@crm/db";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
 import { type InputRequested, parse, schemas } from "@crm/validation";
+import { buildPendingInputRequest } from "@crm/validation/builder-question";
 import type { ChannelEvents } from "eve/channels";
 import {
 	builderIdFromToken,
 	builderToken,
 	lockBuilderConversation,
 } from "./custom-agent-dispatch";
+import {
+	attribute,
+	builderTurnAuthorized,
+	type PurposeContext,
+} from "./session-purpose";
 
 const BUILDER_INPUT = {
 	eventType: "input.requested",
@@ -17,10 +23,24 @@ type InputRequestedEvent = Parameters<
 	NonNullable<ChannelEvents["input.requested"]>
 >[0];
 
+export async function recordBuilderInputRequest(
+	data: InputRequestedEvent,
+	continuationToken: string | undefined,
+	ctx: PurposeContext,
+): Promise<boolean> {
+	return persistBuilderInputRequest(
+		data,
+		continuationToken,
+		attribute(ctx, "conversationId"),
+		builderTurnAuthorized(ctx),
+	);
+}
+
 export async function persistBuilderInputRequest(
 	data: InputRequestedEvent,
 	continuationToken: string | undefined,
-	authenticatedConversationId?: string | null,
+	authenticatedConversationId: string | null | undefined,
+	authorized: boolean,
 ): Promise<boolean> {
 	const conversationId =
 		authenticatedConversationId?.trim() ||
@@ -86,7 +106,10 @@ export async function persistBuilderInputRequest(
 			where: { id: conversation.id },
 			data: {
 				continuationToken: builderToken(conversation.id),
-				pendingInputRequest: question as Prisma.InputJsonValue,
+				pendingInputRequest: buildPendingInputRequest(
+					question,
+					authorized,
+				) as Prisma.InputJsonValue,
 			},
 		});
 
