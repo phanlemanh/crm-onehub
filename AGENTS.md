@@ -26,7 +26,15 @@ rules and skills you read.
 ## Always true
 
 - **Never add code comments.** Not to new code, not to code you edit.
-- **No coauthoring commits.** No `Co-Authored-By` trailer, ever.
+- **No coauthoring commits from a person.** No `Co-Authored-By` trailer naming a
+  human who did not write the commit.
+  **Exception, decided 2026-09-10 by Mạnh:** a machine session may sign its own
+  commits with `Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>`. This is a
+  deliberate divergence from `release`, in the same family as the three behaviour
+  rules `CLAUDE.md` deletes from this file — pulling a new vendor version back and
+  finding the absolute ban restored is a merge to redo, not a miss to accept. The
+  rule exists to stop attributing work to a person who did not do it; a machine
+  naming itself does the opposite.
 - **Intelligence lives in `apps/agent`, never in the API.** No vendor client, no
   enrichment, no scoring, no identity matching in Nest — it writes an `AgentTask`
   row and lets the agent decide. See `docs/api.md`.

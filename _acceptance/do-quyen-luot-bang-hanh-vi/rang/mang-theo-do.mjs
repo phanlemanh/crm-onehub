@@ -53,7 +53,17 @@ function chayMotVecto(ten) {
 		}
 		dotBien(sao);
 		const sau = chayBaiDo(sao);
-		process.stdout.write(`cay sao: ${sao}\nvecto: ${ten}\n${sau.chu}`);
+		const coBai = sau.chu.includes(BAI_PHAI_DO);
+		const soDo = (sau.chu.match(/^\s*(\d+) fail/m) ?? [])[1] ?? "?";
+		process.stdout.write(
+			[
+				`cay sao: ${sao}`,
+				`vecto: ${ten}`,
+				`  luot dot bien: ma thoat ${sau.ma}, so bai do ${soDo}`,
+				`  bai mang loi hua "${BAI_PHAI_DO}": ${coBai ? "CO DO" : "KHONG DO"}`,
+				"",
+			].join("\n"),
+		);
 		if (sau.ma === 0) {
 			hongGian(`vecto "${ten}" ra XANH — thuoc dang khong do duong mang theo`);
 		}

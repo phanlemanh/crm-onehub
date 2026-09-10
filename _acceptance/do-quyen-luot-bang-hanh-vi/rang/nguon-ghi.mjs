@@ -10,7 +10,16 @@ import {
 	RANG,
 	voiCaySao,
 } from "./chung.mjs";
-import { duoiKhoaDoc, duyet, hamBao, nap, quetTs, ts, viTri } from "./ast.mjs";
+import {
+	duoiKhoaDoc,
+	duyet,
+	hamBao,
+	laKhoa,
+	nap,
+	quetTs,
+	ts,
+	viTri,
+} from "./ast.mjs";
 
 const GHIM = "ma tran khoa commandType lech danh sach da ghim";
 const TOI = join(RANG, "nguon-ghi.mjs");
@@ -30,17 +39,6 @@ const DA_GHIM = [
 	`${DUONG_SERVICE} :: submitBuilder :: khai`,
 	`${DUONG_SERVICE} :: answerBuilderQuestion :: suy`,
 ];
-
-function laKhoaCommandType(node) {
-	return (
-		(ts.isPropertyAssignment(node) ||
-			ts.isShorthandPropertyAssignment(node) ||
-			ts.isPropertySignature(node)) &&
-		node.name &&
-		ts.isIdentifier(node.name) &&
-		node.name.text === "commandType"
-	);
-}
 
 function loaiCua(node) {
 	if (ts.isPropertySignature(node)) return "khac";
@@ -75,7 +73,7 @@ function thuMaTran(goc) {
 	for (const duong of dan) {
 		const sf = nap(duong);
 		duyet(sf, (node) => {
-			if (!laKhoaCommandType(node)) return;
+			if (!laKhoa(node, "commandType")) return;
 			const loai = loaiCua(node);
 			const vt = viTri(sf, node, goc);
 			thay.push({
@@ -174,6 +172,20 @@ const VECTO = {
 			DUONG_SERVICE,
 			"\n\tasync createBuilder(",
 			'\n\tasync banSaoNhieu(id: string) {\n\t\tconst hang = [{ conversationId: id, commandType: "CREATE_AGENT" }];\n\t\treturn this.db.agentConversationSubmission.createMany({ data: hang });\n\t}\n\n\tasync createBuilder(',
+		),
+	"khoa-chuoi": (sao) =>
+		doiTrongSao(
+			sao,
+			DUONG_SERVICE,
+			"\n\tasync createBuilder(",
+			'\n\tasync banSaoKhoaChuoi(id: string) {\n\t\treturn this.db.agentConversationSubmission.create({\n\t\t\tdata: { conversationId: id, "commandType": "CREATE_AGENT" },\n\t\t});\n\t}\n\n\tasync createBuilder(',
+		),
+	"khoa-computed": (sao) =>
+		doiTrongSao(
+			sao,
+			DUONG_SERVICE,
+			"\n\tasync createBuilder(",
+			'\n\tasync banSaoKhoaComputed(id: string) {\n\t\treturn this.db.agentConversationSubmission.create({\n\t\t\tdata: { conversationId: id, ["commandType"]: "CREATE_AGENT" },\n\t\t});\n\t}\n\n\tasync createBuilder(',
 		),
 	"select-thanh-doc": (sao) =>
 		doiTrongSao(

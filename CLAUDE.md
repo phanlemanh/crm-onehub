@@ -21,7 +21,9 @@ Phí bản rẽ là chi phí dài hạn lớn nhất ở đây. Sửa được �
 @AGENTS.md
 
 Luật kỹ thuật trong đó giữ nguyên hiệu lực: không viết chú thích trong code,
-không trailer đồng tác giả, trí khôn sống ở `apps/agent` chứ không ở API, một
+không trailer đồng tác giả **mang tên một người không viết commit** (phiên máy tự
+ký tên mình thì được — ngoại lệ chốt 10/09, khai ở `AGENTS.md`), trí khôn sống ở
+`apps/agent` chứ không ở API, một
 `.env` duy nhất ở gốc, `/packages/ui` là nguồn duy nhất của giao diện, phân
 tích ở biên chứ không truyền `Record<string, unknown>`. Bảng chỉ mục "đọc gì
 trước khi chạm gì" của nó là bảng duy nhất — theo đúng bảng đó, và nói ra đã

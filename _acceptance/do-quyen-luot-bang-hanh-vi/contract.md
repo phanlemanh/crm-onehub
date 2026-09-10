@@ -5,9 +5,9 @@ slug: do-quyen-luot-bang-hanh-vi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent, api, docs]
-status: implemented
-approved_by: Mạnh
-approved_at: 2026-09-10
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-09-09-do-quyen-luot-bang-hanh-vi-design.md
 ---
 
@@ -94,22 +94,31 @@ Cấm dựng thuộc tính phiên bằng tay, cấm ghi đè `commandType` sau k
 **AC-2 — `apps/agent` không cầm tin nhắn ở chỗ quyết quyền, và chỗ gọi không được tính toán.**
 Given `apps/agent/agent`,
 When soi bằng AST,
-Then đủ **ba** điều:
+Then đủ **bốn** điều:
 1. `builderSessionAttributes` không khai tham số `message`;
-2. hàm `builderCommandType` không còn tồn tại — không khai báo, không `export`
-   nào mang tên đó trong `apps/agent/agent`;
+2. **không một thứ nào** trong dân số mang tên `builderCommandType` — không hàm,
+   không biến, không lớp, không method, không thuộc tính, và không
+   `export { x as builderCommandType }`;
 3. tại **mọi** lời gọi `builderSessionAttributes(...)`, initializer của thuộc
-   tính `commandType` là một **truy cập thuộc tính trần** (`<x>.commandType`).
-   Ternary, lời gọi hàm, template, toán tử — bất cứ biểu thức tính toán nào —
-   là **mã 2**, in `file:dòng`.
-Điều 3 là chỗ người phản biện chỉ ra: bỏ hàm mà để chỗ gọi tính toán thì lời
-hứa "không suy quyền" xanh trong khi suy diễn đã dọn sang một dòng khác.
+   tính `commandType` là `<một định danh>.commandType` — truy cập **một tầng**
+   trên một định danh trần;
+4. **ma trận khoá**: mọi chỗ viết ra khoá `commandType` trong dân số — kể cả
+   khoá viết bằng string literal hay computed key — khớp **có bội** danh sách đã
+   ghim, mỗi phần tử xếp một loại (`doc` · `kieu` · `khai` · `khac`).
+Vi phạm bất kỳ điều nào → **mã 2**, in `file:dòng`.
+Ba chỗ siết ở vòng chấm 3, mỗi chỗ đều đã được dựng cây thử chứng minh là lọt
+trước khi siết: điều 2 chỉ bắt `FunctionDeclaration` và `VariableDeclaration` nên
+export đổi tên và method trùng tên đi qua; điều 3 chỉ đòi «là một truy cập thuộc
+tính» nên `row.message.commandType` — đọc quyền thẳng từ JSON trình duyệt gửi —
+đi qua; và không có điều 4 thì đường «tính trước một dòng rồi truyền
+`row2.commandType`» đi qua cả điều 2 lẫn điều 3.
 
 **AC-3 — Ma trận khoá `commandType` ở `apps/api/src` khớp đúng danh sách đã ghim.**
 Given `apps/api/src`,
 When đọc bằng AST và gom **mọi chỗ viết ra khoá `commandType`** — đi từ chính
 chữ ấy, không đi từ hình dạng lời gọi Prisma, vì một đường ghi quyền buộc phải
-viết khoá ấy ra ở đâu đó,
+viết khoá ấy ra ở đâu đó; **kể cả khi tên khoá viết bằng string literal
+(`"commandType"`) hay computed key (`["commandType"]`)**,
 Then tập tìm được phải **bằng đúng** danh sách đã ghim trong chân đo, **so sánh
 có bội**: mỗi lần xuất hiện là một phần tử riêng, không khử trùng. Thừa hay
 thiếu một phần tử đều là **mã 2**, in cả hai danh sách. Thêm một chỗ viết khoá
@@ -206,7 +215,11 @@ lại bị AC-8 chặn.
   `apps/api/src/conversations/**` không có trong danh sách đó. Vòng này chỉ
   **đọc** `conversations`. Bảng tier có thể đang thiếu một dòng — việc của người
   quyết ở Cổng 1, máy không tự nâng.
-- Bản này là bản **duyệt lại** sau hai vòng chấm REJECT. Hai chỗ đổi so với bản
+- Bản này là bản **duyệt lại lần hai**, sau ba vòng chấm REJECT. Vòng 3 siết
+  thêm: AC-2 lên bốn điều (thêm ma trận khoá, và hai chỗ nhận diện quá hẹp), và
+  AC-3 nhận cả khoá viết bằng string literal / computed key. Cả ba lỗ đều được
+  người soi dựng cây thử chứng minh là lọt trước khi siết.
+- Bản trước đó là bản **duyệt lại** sau hai vòng chấm REJECT. Hai chỗ đổi so với bản
   đã ký 2026-09-10: AC-3 đổi dân số từ "object `data` của lời gọi Prisma" sang
   "mọi chỗ viết ra khoá `commandType`" (khung cũ bỏ sót `upsert` · `updateMany` ·
   `data` là biến — đã chứng minh bằng cây thử); và AC-4 bỏ chân đo riêng cho

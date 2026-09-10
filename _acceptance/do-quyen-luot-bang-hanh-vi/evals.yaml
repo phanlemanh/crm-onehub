@@ -80,28 +80,42 @@ evals:
       - "apps/agent/agent/**"
       - "_acceptance/do-quyen-luot-bang-hanh-vi/rang/**"
     expected: |
-      Doc bang AST (typescript compiler API 5.9.2 o goc kho), KHONG tim chuoi:
-      chu "message" con xuat hien hop le o rat nhieu cho khac.
-      Dan so sinh TU DIA: quet de quy apps/agent/agent lay moi tep .ts.
-      BA dieu, ca ba deu phai dung:
+      Doc bang AST, KHONG tim chuoi. Dan so sinh TU DIA: quet de quy
+      apps/agent/agent lay moi tep .ts.
+      BON dieu, ca bon deu phai dung:
       1. builderSessionAttributes: tap khoa cua object type cua tham so `input`
-         KHONG chua "message". Con -> ma 2, in file:dong.
-      2. builderCommandType KHONG con ton tai: khong khai bao ham nao, khong
-         binding duoc export nao mang ten do trong apps/agent/agent.
-         Con -> ma 2, in file:dong.
-      3. Tai MOI loi goi builderSessionAttributes(...), initializer cua thuoc
-         tinh commandType la mot PropertyAccessExpression tran (`<x>.commandType`).
-         Ternary, CallExpression, template, toan tu -> ma 2, in file:dong.
-      San dan so: so loi goi builderSessionAttributes tim duoc phai >= 1. Bang 0
-      -> ma 2: mot dan so rong luon xanh.
-      Doi chung duong, HAI vecto tren ban sao:
+         KHONG chua "message".
+      2. KHONG mot thu nao trong dan so mang ten builderCommandType — khong ham,
+         khong bien, khong lop, khong method, khong thuoc tinh, VA khong
+         ExportSpecifier dang `export { x as builderCommandType }`. Chi bat
+         FunctionDeclaration voi VariableDeclaration la khong du: vong cham 3 da
+         dung cay thu chung minh export doi ten va method cung ten deu lot.
+      3. Tai MOI loi goi builderSessionAttributes(...), initializer cua thuoc tinh
+         commandType phai la `<mot dinh danh>.commandType` — truy cap MOT tang tren
+         mot dinh danh tran. "La mot PropertyAccessExpression" la khong du:
+         `row.message.commandType` cung la PropertyAccessExpression, ma do chinh la
+         doc quyen thang tu JSON do trinh duyet gui.
+      4. MA TRAN KHOA: gom moi cho VIET RA khoa commandType trong dan so (ke ca
+         khoa viet bang string literal hoac computed key), so CO BOI voi danh sach
+         ghim san trong chan do. Moi phan tu xep mot loai: `doc` (duoi select /
+         where / orderBy / include) · `kieu` (PropertySignature) · `khai`
+         (`<dinh danh>.commandType`) · `khac` (con lai). Lech -> ma 2, in ca hai
+         danh sach. Dieu nay dong duong "tinh truoc mot dong": mot object spread
+         mang commandType tinh tu tin nhan la mot phan tu MOI trong ma tran.
+      Vi pham bat ky dieu nao -> ma 2, in file:dong.
+      San dan so: so loi goi builderSessionAttributes phai >= 1. Bang 0 -> ma 2.
+      Doi chung duong, NAM vecto tren ban sao, tat ca deu ma 2:
         vecto "cay-lai-tham-so": cay tham so `message` vao chu ky
-          builderSessionAttributes -> ma 2 kem file:dong.
+          builderSessionAttributes.
         vecto "cho-goi-tinh-toan": doi initializer commandType tai cho goi thanh
-          mot ternary -> ma 2 kem file:dong.
-      Khong do o vecto nao -> ma 2, in ten vecto.
-      Ranh gioi: builderCommandType cua apps/app/lib/agent-builder.ts la HAM
-      KHAC, trung ten, o app khac — KHONG thuoc dan so nay.
+          mot ternary doc tu message.
+        vecto "doc-tu-tin-nhan": doi thanh `row.message.commandType` — van la
+          PropertyAccessExpression, nhung doc tu payload trinh duyet gui.
+        vecto "export-doi-ten": them `export { suyTuTinNhan as builderCommandType }`.
+        vecto "method-cung-ten": them mot lop co method ten builderCommandType.
+      Khong do o vecto nao -> ma 3 (gian do hong), in ten vecto.
+      Ranh gioi: builderCommandType cua apps/app/lib/agent-builder.ts la HAM KHAC,
+      trung ten, o app khac — KHONG thuoc dan so nay.
 
   - id: E4
     criterion: AC-3
@@ -118,7 +132,10 @@ evals:
       bo sot.
       Dan so sinh TU DIA: quet de quy apps/api/src lay moi tep .ts, gom MOI cho
       VIET RA khoa commandType (PropertyAssignment, ShorthandPropertyAssignment,
-      PropertySignature).
+      PropertySignature), ke ca khi ten khoa viet bang STRING LITERAL
+      (`"commandType": ...`) hoac COMPUTED KEY (`["commandType"]: ...`). Chi nhan
+      Identifier la khong du: vong cham 3 da dung cay thu chung minh hai dang do
+      deu lot voi CREATE_AGENT ghim cung.
       MA TRAN TOAN PHAN VIET TRUOC: tap tim duoc phai BANG DUNG danh sach ghim
       san trong chinh chan do, SO SANH CO BOI — moi lan xuat hien la mot phan tu
       rieng, khong khu trung. Thua hay thieu mot phan tu deu la ma 2, IN CA HAI
@@ -145,6 +162,10 @@ evals:
         vecto "data-la-bien": cay mot `createMany({ data: <bien> })` voi bien la
           mang object mang commandType ghim cung -> ma 2. Vecto nay chung minh
           khung khong bo sot payload khong-phai-object-literal.
+        vecto "khoa-chuoi": cay mot cho ghi voi ten khoa la string literal
+          `"commandType": "CREATE_AGENT"` -> ma 2.
+        vecto "khoa-computed": cay mot cho ghi voi ten khoa la computed key
+          `["commandType"]: "CREATE_AGENT"` -> ma 2.
         vecto "select-thanh-doc": cay mot commandType duoi mot `select` -> ma 2
           (ma tran thanh 10), VA cho moi phai duoc xep loai `doc`. Xep sang loai
           khac -> ma 2 voi thong diep rieng: bo do dang khong phan biet doc voi

@@ -71,6 +71,33 @@ export function hamBao(sf, node) {
 	return "<dinh tep>";
 }
 
+export function tenKhoa(ten) {
+	if (!ten) return null;
+	if (ts.isIdentifier(ten)) return ten.text;
+	if (ts.isStringLiteral(ten) || ts.isNoSubstitutionTemplateLiteral(ten)) {
+		return ten.text;
+	}
+	if (ts.isComputedPropertyName(ten)) {
+		const trong = ten.expression;
+		if (
+			ts.isStringLiteral(trong) ||
+			ts.isNoSubstitutionTemplateLiteral(trong)
+		) {
+			return trong.text;
+		}
+	}
+	return null;
+}
+
+export function laKhoa(node, ten) {
+	return (
+		(ts.isPropertyAssignment(node) ||
+			ts.isShorthandPropertyAssignment(node) ||
+			ts.isPropertySignature(node)) &&
+		tenKhoa(node.name) === ten
+	);
+}
+
 export function tenGoi(node) {
 	if (!ts.isCallExpression(node)) return null;
 	const goi = node.expression;
