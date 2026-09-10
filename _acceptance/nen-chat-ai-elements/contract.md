@@ -114,7 +114,7 @@ lệnh của `pre-push`, nên nó vẫn chặn trước khi đẩy — chỉ là
 không đo nó nữa. Sửa gốc là việc của một vòng riêng: cho `prisma generate` sinh
 vào thư mục tạm rồi đổi tên, để chạy song song không phá cây.
 
-**AC-3** — Cho `conversation` đã kéo lại bằng CLI của AI Elements, khi so
+**AC-3** *(đo bằng tay)* — Cho `conversation` đã kéo lại bằng CLI của AI Elements, khi so
 tập tin trong cây với bản CLI vừa ghi, thì hai bản giống nhau ở mọi dòng trừ
 những dòng có tên trong sổ lệch chuẩn của AC-8.
 
@@ -222,7 +222,7 @@ ngưỡng đó. Phép đo in ba số cho ca 500 (trước vá · sau vá · mố
 Ngưỡng 1,2 là số người chọn tại Cổng 1, không phải số máy suy ra; nó ghi ở đây
 để phép đo có quan hệ chứ không chỉ có mặt.
 
-**AC-8** — Cho mỗi tập tin trong `ai-elements/` khác bản thượng nguồn, khi mở
+**AC-8** *(đo bằng tay)* — Cho mỗi tập tin trong `ai-elements/` khác bản thượng nguồn, khi mở
 sổ lệch chuẩn của vòng này, thì có một mục nêu tên tập tin, đổi gì, và vì sao,
 kèm **vân tay của phần lệch** — không phải danh sách số dòng. Số dòng là hồ sơ
 giòn: chèn một dòng phía trên làm lệch hết, trong khi thay một dòng bằng một
