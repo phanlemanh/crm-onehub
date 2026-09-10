@@ -25,6 +25,7 @@ const DANH_SACH_TRANG = [
   "knip.json",
   "package.json",
   "bun.lock",
+  "PRODUCT-MAP.md",
 ];
 
 const SAU_TEP_CHAT = [

@@ -82,7 +82,7 @@ danh sách này và không đường nào ngoài nó:
 `packages/ui/test/**` ·
 `packages/validation/test/**` · `_acceptance/**` · `docs/**` ·
 `.githooks/gate-shape.json` · `turbo.json` · `knip.json` · `package.json` ·
-`bun.lock`.
+`bun.lock` · `PRODUCT-MAP.md`.
 
 Hai đường được thêm sau khi răng phạm vi đỏ trên chính vòng này: `bun.lock`
 là hệ quả tất yếu của việc `packages/ui` nhận thêm một phụ thuộc trong nội bộ
