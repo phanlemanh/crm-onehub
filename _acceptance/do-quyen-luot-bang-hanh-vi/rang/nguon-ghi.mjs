@@ -48,7 +48,8 @@ function loaiCua(node) {
 	if (
 		ts.isPropertyAccessExpression(dau) &&
 		ts.isIdentifier(dau.name) &&
-		dau.name.text === "commandType"
+		dau.name.text === "commandType" &&
+		ts.isIdentifier(dau.expression)
 	) {
 		return "khai";
 	}
@@ -186,6 +187,20 @@ const VECTO = {
 			DUONG_SERVICE,
 			"\n\tasync createBuilder(",
 			'\n\tasync banSaoKhoaComputed(id: string) {\n\t\treturn this.db.agentConversationSubmission.create({\n\t\t\tdata: { conversationId: id, ["commandType"]: "CREATE_AGENT" },\n\t\t});\n\t}\n\n\tasync createBuilder(',
+		),
+	"khoa-hang-chuoi": (sao) =>
+		doiTrongSao(
+			sao,
+			DUONG_SERVICE,
+			"\n\tasync createBuilder(",
+			'\n\tasync banSaoKhoaHang(id: string) {\n\t\tconst KHOA = "commandType" as const;\n\t\treturn this.db.agentConversationSubmission.create({\n\t\t\tdata: { conversationId: id, [KHOA]: "CREATE_AGENT" },\n\t\t});\n\t}\n\n\tasync createBuilder(',
+		),
+	"goc-khong-tran": (sao) =>
+		doiTrongSao(
+			sao,
+			DUONG_SERVICE,
+			"\n\t\t\t\t\t\tcommandType: input.commandType,",
+			"\n\t\t\t\t\t\tcommandType: input.message.commandType,",
 		),
 	"select-thanh-doc": (sao) =>
 		doiTrongSao(

@@ -71,6 +71,34 @@ export function hamBao(sf, node) {
 	return "<dinh tep>";
 }
 
+function goc(node) {
+	let n = node;
+	while (n.parent) n = n.parent;
+	return n;
+}
+
+function boAs(n) {
+	return ts.isAsExpression(n) ? n.expression : n;
+}
+
+function chuoiCuaHang(sf, ten) {
+	let ra = null;
+	duyet(sf, (n) => {
+		if (
+			ts.isVariableDeclaration(n) &&
+			ts.isIdentifier(n.name) &&
+			n.name.text === ten &&
+			n.initializer
+		) {
+			const dau = boAs(n.initializer);
+			if (ts.isStringLiteral(dau) || ts.isNoSubstitutionTemplateLiteral(dau)) {
+				ra = dau.text;
+			}
+		}
+	});
+	return ra;
+}
+
 export function tenKhoa(ten) {
 	if (!ten) return null;
 	if (ts.isIdentifier(ten)) return ten.text;
@@ -78,15 +106,22 @@ export function tenKhoa(ten) {
 		return ten.text;
 	}
 	if (ts.isComputedPropertyName(ten)) {
-		const trong = ten.expression;
+		const trong = boAs(ten.expression);
 		if (
 			ts.isStringLiteral(trong) ||
 			ts.isNoSubstitutionTemplateLiteral(trong)
 		) {
 			return trong.text;
 		}
+		if (ts.isIdentifier(trong)) return chuoiCuaHang(goc(ten), trong.text);
 	}
 	return null;
+}
+
+export function khoaTinhToanKhongDocDuoc(node) {
+	const ten = node.name;
+	if (!ten || !ts.isComputedPropertyName(ten)) return false;
+	return tenKhoa(ten) === null;
 }
 
 export function laKhoa(node, ten) {

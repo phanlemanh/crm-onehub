@@ -5,7 +5,7 @@ slug: do-quyen-luot-bang-hanh-vi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent, api, docs]
-status: verified
+status: implemented
 approved_by: Mạnh
 approved_at: 2026-09-10
 design_doc: docs/superpowers/specs/2026-09-09-do-quyen-luot-bang-hanh-vi-design.md
@@ -118,14 +118,17 @@ Given `apps/api/src`,
 When đọc bằng AST và gom **mọi chỗ viết ra khoá `commandType`** — đi từ chính
 chữ ấy, không đi từ hình dạng lời gọi Prisma, vì một đường ghi quyền buộc phải
 viết khoá ấy ra ở đâu đó; **kể cả khi tên khoá viết bằng string literal
-(`"commandType"`) hay computed key (`["commandType"]`)**,
+(`"commandType"`) hay computed key — kể cả computed key trỏ tới một hằng chuỗi
+trong cùng tệp (`const KHOA = "commandType"`)**,
 Then tập tìm được phải **bằng đúng** danh sách đã ghim trong chân đo, **so sánh
 có bội**: mỗi lần xuất hiện là một phần tử riêng, không khử trùng. Thừa hay
 thiếu một phần tử đều là **mã 2**, in cả hai danh sách. Thêm một chỗ viết khoá
 ấy là việc phải sửa danh sách ghim, không phải việc để thước đỏ oan.
 Mỗi phần tử xếp đúng một loại, bằng luật máy: `doc` (nằm dưới `select` /
 `where` / `orderBy` / `include`, kiểm bằng tổ tiên trong cây AST) · `khai`
-(initializer là `<x>.commandType`) · `suy` (initializer là lời gọi
+(initializer là `<một định danh trần>.commandType`, truy cập **một tầng** —
+cùng luật với AC-2 điểm 3; `input.message.commandType` là `khac`) · `suy`
+(initializer là lời gọi
 `commandTypeFromAuthorization(...)`) · `khac` (còn lại — khai báo kiểu, khuôn
 `zod`).
 Một phần tử `khac` nằm **ngoài** `conversations.contracts.ts` là một chỗ ghi
@@ -215,6 +218,12 @@ lại bị AC-8 chặn.
   `apps/api/src/conversations/**` không có trong danh sách đó. Vòng này chỉ
   **đọc** `conversations`. Bảng tier có thể đang thiếu một dòng — việc của người
   quyết ở Cổng 1, máy không tự nâng.
+- **Giới hạn đã khai của sàn khoá:** một computed key mà biểu thức là một biến
+  KHÔNG truy được về một hằng chuỗi trong cùng tệp (ví dụ `[column]` lấy từ
+  tham số) thì sàn không đọc được tên khoá, và một chỗ như thế sẽ không vào dân
+  số. Hai dân số hiện có 19 và 11 computed key dạng ấy, tất cả là khoá cột động
+  hợp lệ. Chặn hết chúng là dựng thêm một máy phát đỏ-oan, nên vòng này giải
+  đúng dạng hằng-chuỗi và **khai thẳng phần còn lại là chưa phủ**.
 - Bản này là bản **duyệt lại lần hai**, sau ba vòng chấm REJECT. Vòng 3 siết
   thêm: AC-2 lên bốn điều (thêm ma trận khoá, và hai chỗ nhận diện quá hẹp), và
   AC-3 nhận cả khoá viết bằng string literal / computed key. Cả ba lỗ đều được

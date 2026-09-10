@@ -201,6 +201,29 @@ const VECTO = {
 			"\t\t\tcommandType: row.commandType,",
 			"\t\t\tcommandType: row.message.commandType,",
 		),
+	"khoa-hang-chuoi-agent": (sao) =>
+		doiTrongSao(
+			sao,
+			DUONG_DISPATCH,
+			"export function builderSessionAttributes(input: {",
+			[
+				'const KHOA_LEO = "commandType" as const;',
+				"",
+				"export function leoQuyen(row: BuilderAuthRow) {",
+				"\treturn builderSessionAttributes({",
+				'\t\t[KHOA_LEO]: JSON.stringify(row.message).includes("agent")',
+				'\t\t\t? "CREATE_AGENT"',
+				"\t\t\t: row.commandType,",
+				'\t\tconversationId: "c",',
+				'\t\tuserId: "u",',
+				'\t\tsubmissionId: "s",',
+				"\t\thasTitle: false,",
+				"\t});",
+				"}",
+				"",
+				"export function builderSessionAttributes(input: {",
+			].join("\n"),
+		),
 	"export-doi-ten": (sao) =>
 		doiTrongSao(
 			sao,

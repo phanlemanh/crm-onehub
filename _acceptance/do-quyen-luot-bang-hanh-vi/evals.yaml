@@ -111,6 +111,9 @@ evals:
           mot ternary doc tu message.
         vecto "doc-tu-tin-nhan": doi thanh `row.message.commandType` — van la
           PropertyAccessExpression, nhung doc tu payload trinh duyet gui.
+        vecto "khoa-hang-chuoi-agent": them mot loi goi thu hai voi ten khoa la
+          computed key tro toi mot HANG CHUOI (`const KHOA = "commandType"`),
+          gia tri suy tu chu trong message.
         vecto "export-doi-ten": them `export { suyTuTinNhan as builderCommandType }`.
         vecto "method-cung-ten": them mot lop co method ten builderCommandType.
       Khong do o vecto nao -> ma 3 (gian do hong), in ten vecto.
@@ -133,7 +136,8 @@ evals:
       Dan so sinh TU DIA: quet de quy apps/api/src lay moi tep .ts, gom MOI cho
       VIET RA khoa commandType (PropertyAssignment, ShorthandPropertyAssignment,
       PropertySignature), ke ca khi ten khoa viet bang STRING LITERAL
-      (`"commandType": ...`) hoac COMPUTED KEY (`["commandType"]: ...`). Chi nhan
+      (`"commandType": ...`) hoac COMPUTED KEY — ke ca computed key tro toi mot
+      HANG CHUOI trong cung tep (`const KHOA = "commandType"`). Chi nhan
       Identifier la khong du: vong cham 3 da dung cay thu chung minh hai dang do
       deu lot voi CREATE_AGENT ghim cung.
       MA TRAN TOAN PHAN VIET TRUOC: tap tim duoc phai BANG DUNG danh sach ghim
@@ -144,7 +148,9 @@ evals:
       Moi phan tu xep dung mot loai, bang luat may:
         doc  — nam duoi `select` / `where` / `orderBy` / `include`, kiem bang TO
                TIEN trong cay AST chu khong bang ten tep;
-        khai — initializer la truy cap thuoc tinh `<x>.commandType`;
+        khai — initializer la `<mot dinh danh TRAN>.commandType`, truy cap MOT tang;
+       `input.message.commandType` va `doanQuyen(...).commandType` KHONG phai
+       loai nay — chung la `khac`;
         suy  — initializer la loi goi `commandTypeFromAuthorization(...)`;
         khac — con lai (khai bao kieu, khuon zod).
       Mot phan tu `khac` nam NGOAI conversations.contracts.ts la mot cho ghi
@@ -166,6 +172,13 @@ evals:
           `"commandType": "CREATE_AGENT"` -> ma 2.
         vecto "khoa-computed": cay mot cho ghi voi ten khoa la computed key
           `["commandType"]: "CREATE_AGENT"` -> ma 2.
+        vecto "khoa-hang-chuoi": cay mot cho ghi voi ten khoa la computed key
+          tro toi mot HANG CHUOI (`const KHOA = "commandType" as const`) -> ma 2.
+          Chi giai duoc chuoi hang VIET TRUC TIEP trong dau ngoac la khong du.
+        vecto "goc-khong-tran": doi mot cho ghi thanh `input.message.commandType`
+          -> loai phai la `khac` chu khong phai `khai` -> ma 2. Loai `khai` doi
+          initializer la `<mot dinh danh TRAN>.commandType`, cung luat voi AC-2
+          diem 3; chi doi "la mot PropertyAccessExpression" la khong du.
         vecto "select-thanh-doc": cay mot commandType duoi mot `select` -> ma 2
           (ma tran thanh 10), VA cho moi phai duoc xep loai `doc`. Xep sang loai
           khac -> ma 2 voi thong diep rieng: bo do dang khong phan biet doc voi
