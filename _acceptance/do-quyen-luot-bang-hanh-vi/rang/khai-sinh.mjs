@@ -7,19 +7,17 @@ const DUONG_EVALS = "_acceptance/do-quyen-luot-bang-hanh-vi/evals.yaml";
 
 const boMaNgoac = (chu) => chu.replace(/`[^`]*`/g, "");
 
-function evalsScript() {
+function evalsCoVecto() {
 	const nguon = readFileSync(join(GOC, DUONG_EVALS), "utf8");
 	const khoi = nguon.split(/^  - id: /m).slice(1);
 	const ra = [];
 	for (const k of khoi) {
 		const id = k.split("\n")[0].trim();
-		const executor = k.match(/^\s{4}executor:\s*(\S+)/m)?.[1];
-		if (executor !== "script") continue;
 		const than = k.slice(k.indexOf("expected:"));
 		const ten = [...boMaNgoac(than).matchAll(/vecto "([^"]+)"/g)].map(
 			(m) => m[1],
 		);
-		ra.push({ id, ten });
+		if (ten.length > 0) ra.push({ id, ten });
 	}
 	return ra;
 }
@@ -44,7 +42,7 @@ function docKhai() {
 
 function doiChieu(khai) {
 	const lech = [];
-	for (const { id, ten } of evalsScript()) {
+	for (const { id, ten } of evalsCoVecto()) {
 		const dong = khai.filter((d) => d.id === id);
 		if (dong.length !== ten.length) {
 			lech.push(
@@ -63,7 +61,7 @@ function doiChieu(khai) {
 			);
 		}
 	}
-	const idEval = new Set(evalsScript().map((e) => e.id));
+	const idEval = new Set(evalsCoVecto().map((e) => e.id));
 	for (const dong of khai) {
 		if (!idEval.has(dong.id)) {
 			lech.push(

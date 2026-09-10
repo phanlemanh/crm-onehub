@@ -5,9 +5,9 @@ slug: do-quyen-luot-bang-hanh-vi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent, api, docs]
-status: implemented
-approved_by: Mạnh
-approved_at: 2026-09-10
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-09-09-do-quyen-luot-bang-hanh-vi-design.md
 ---
 
@@ -105,30 +105,41 @@ Then đủ **ba** điều:
 Điều 3 là chỗ người phản biện chỉ ra: bỏ hàm mà để chỗ gọi tính toán thì lời
 hứa "không suy quyền" xanh trong khi suy diễn đã dọn sang một dòng khác.
 
-**AC-3 — Mọi chỗ ghi `commandType` lấy từ đúng hai nguồn đã đặt tên.**
+**AC-3 — Ma trận khoá `commandType` ở `apps/api/src` khớp đúng danh sách đã ghim.**
 Given `apps/api/src`,
-When đọc bằng AST và gom mọi thuộc tính tên `commandType` nằm trong một object
-literal là `data` của một lời gọi Prisma `create`/`update`/`upsert`, **kể cả
-object `create`/`update` lồng của quan hệ**,
-Then tập tìm được phải **bằng đúng** danh sách `file:dòng` đã ghim trong chính
-chân đo — thêm một phần tử hay bớt một phần tử đều là **mã 2**, in cả hai danh
-sách. Đây là ma trận toàn phần, không phải một cận dưới.
-Và mỗi thuộc tính trong tập ấy phải có initializer là **đúng một trong hai**:
-truy cập thuộc tính `<x>.commandType` trên input đã parse ở biên, hoặc lời gọi
-`commandTypeFromAuthorization(...)`.
-Initializer khác — chuỗi ghim cứng, biến trung gian, hàm mới — là **mã 2**, in
-`file:dòng` kèm câu nói rõ rằng thêm một nguồn hợp lệ thứ ba là việc phải sửa
-danh sách nguồn, không phải việc để thước đỏ oan.
-`commandType` nằm dưới `select`, `where`, `orderBy`, `include` là **đọc**,
-không vào dân số — kiểm bằng tổ tiên trong cây AST, không bằng tên tệp.
+When đọc bằng AST và gom **mọi chỗ viết ra khoá `commandType`** — đi từ chính
+chữ ấy, không đi từ hình dạng lời gọi Prisma, vì một đường ghi quyền buộc phải
+viết khoá ấy ra ở đâu đó,
+Then tập tìm được phải **bằng đúng** danh sách đã ghim trong chân đo, **so sánh
+có bội**: mỗi lần xuất hiện là một phần tử riêng, không khử trùng. Thừa hay
+thiếu một phần tử đều là **mã 2**, in cả hai danh sách. Thêm một chỗ viết khoá
+ấy là việc phải sửa danh sách ghim, không phải việc để thước đỏ oan.
+Mỗi phần tử xếp đúng một loại, bằng luật máy: `doc` (nằm dưới `select` /
+`where` / `orderBy` / `include`, kiểm bằng tổ tiên trong cây AST) · `khai`
+(initializer là `<x>.commandType`) · `suy` (initializer là lời gọi
+`commandTypeFromAuthorization(...)`) · `khac` (còn lại — khai báo kiểu, khuôn
+`zod`).
+Một phần tử `khac` nằm **ngoài** `conversations.contracts.ts` là một chỗ ghi
+không lấy từ hai nguồn đã đặt tên → **mã 2**, in `file:dòng`.
+Vì sao đi từ chữ chứ không từ hình dạng lời gọi: khung theo-hình-dạng bỏ sót
+`upsert` (khuôn không có khoá `data`), `updateMany`, và `data` là một biến — ba
+dạng mà vòng chấm 2 đã dựng cây thử và chứng minh là lọt, với `CREATE_AGENT`
+ghim cứng.
 
 **AC-4 — Đường mang theo vẫn là của máy chủ.**
 Given một câu hỏi treo đã lưu,
 When `commandTypeFromAuthorization` đọc nó,
 Then khai không-được-phép → `"CHAT"`, khai được-phép → `"CREATE_AGENT"`, và mọi
 bản ghi sai khuôn (`null`, thiếu khoá, khoá mang chuỗi thay vì boolean) → `"CHAT"`.
-Chiều đỏ: đột biến `commandTypeFromAuthorization` thành hàm trả thẳng
-`"CREATE_AGENT"` trong một bản sao → thước đỏ, thông điệp nêu tên mốc.
+**Chiều đỏ của AC-4 sống trong bản khai sinh (AC-7)**, không có chân đo riêng:
+dòng `mang-theo-luon-mo` đột biến `commandTypeFromAuthorization` thành hàm trả
+thẳng `"CREATE_AGENT"` và đòi bài `ke-thua: doc duoc ca hai chieu tren cung khuon`
+phải đỏ.
+Vì sao bỏ chân đo riêng: hai vòng chấm đầu đều có một chân đo riêng cho chiều
+đỏ này, và **cả hai lần nó báo một kết quả không phải kết quả thật của nó** —
+vòng 1 chết bằng ngoại lệ chưa bắt khiến Node thoát mã trùng mã đã khai, vòng 2
+thoát 0 trên máy nhưng làn chấm ghi 1. Chiều đỏ vẫn được chứng minh, trên đúng
+vectơ ấy, bởi bản khai sinh; đường thứ hai tới cùng một sự thật thì bỏ.
 
 **AC-5 — Bộ dò cũ không còn, và không có bộ dò regex-theo-dòng nào mọc lại.**
 Given `apps/agent/test/quyen-luot.spec.ts`,
@@ -195,5 +206,10 @@ lại bị AC-8 chặn.
   `apps/api/src/conversations/**` không có trong danh sách đó. Vòng này chỉ
   **đọc** `conversations`. Bảng tier có thể đang thiếu một dòng — việc của người
   quyết ở Cổng 1, máy không tự nâng.
+- Bản này là bản **duyệt lại** sau hai vòng chấm REJECT. Hai chỗ đổi so với bản
+  đã ký 2026-09-10: AC-3 đổi dân số từ "object `data` của lời gọi Prisma" sang
+  "mọi chỗ viết ra khoá `commandType`" (khung cũ bỏ sót `upsert` · `updateMany` ·
+  `data` là biến — đã chứng minh bằng cây thử); và AC-4 bỏ chân đo riêng cho
+  chiều đỏ, giao việc ấy cho bản khai sinh.
 - AC-6 là AC về tài liệu. Khai thẳng ở đây để nó không lẫn vào màu xanh của các
   phép đo máy.

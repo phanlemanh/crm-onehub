@@ -56,7 +56,7 @@
 			"--vecto",
 			"ghim-cung"
 		],
-		"ghim": "nguon ghi commandType khong nam trong danh sach da ghim",
+		"ghim": "ma tran khoa commandType lech danh sach da ghim",
 		"ma": 2
 	},
 	{
@@ -68,7 +68,7 @@
 			"--vecto",
 			"bien-trung-gian"
 		],
-		"ghim": "nguon ghi commandType khong nam trong danh sach da ghim",
+		"ghim": "ma tran khoa commandType lech danh sach da ghim",
 		"ma": 2
 	},
 	{
@@ -80,20 +80,44 @@
 			"--vecto",
 			"quan-he-long"
 		],
-		"ghim": "nguon ghi commandType khong nam trong danh sach da ghim",
+		"ghim": "ma tran khoa commandType lech danh sach da ghim",
 		"ma": 2
 	},
 	{
 		"id": "E4",
-		"vecto": "duoi-select",
+		"vecto": "upsert-ghim-cung",
 		"chay": [
 			"node",
 			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs",
 			"--vecto",
-			"duoi-select"
+			"upsert-ghim-cung"
 		],
-		"ghim": "khop dung danh sach da ghim",
-		"ma": 0
+		"ghim": "ma tran khoa commandType lech danh sach da ghim",
+		"ma": 2
+	},
+	{
+		"id": "E4",
+		"vecto": "data-la-bien",
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs",
+			"--vecto",
+			"data-la-bien"
+		],
+		"ghim": "ma tran khoa commandType lech danh sach da ghim",
+		"ma": 2
+	},
+	{
+		"id": "E4",
+		"vecto": "select-thanh-doc",
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs",
+			"--vecto",
+			"select-thanh-doc"
+		],
+		"ghim": "ma tran khoa commandType lech danh sach da ghim",
+		"ma": 2
 	},
 	{
 		"id": "E5",

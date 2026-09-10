@@ -85,9 +85,19 @@ thoại chat hiện đang được nhận qua `consumeBuilderIntent`.
 Sàn cũ chứng minh một **phủ định trên cả kho** — hình dạng bài toán không bao
 giờ đo đủ, vì luôn còn một cách viết nữa. Sàn mới đo một **bất biến đếm được**:
 
-> Mọi chỗ ghi `commandType` vào một `data` của Prisma trong `apps/api/src` phải
-> lấy giá trị từ đúng một trong hai nguồn: `input.commandType` (lời khai đã
-> parse ở biên) hoặc `commandTypeFromAuthorization(...)`.
+> Mọi chỗ **viết ra khoá** `commandType` trong `apps/api/src` — đúng chín chỗ —
+> khớp một danh sách đã ghim, so có bội, và mỗi chỗ xếp đúng một loại:
+> `doc` · `khai` · `suy` · `khac`. Một `khac` nằm ngoài tệp khuôn là một chỗ ghi
+> không lấy từ hai nguồn đã đặt tên.
+
+**Đi từ CHỮ, không đi từ hình dạng lời gọi.** Bản đầu của sàn này lấy dân số là
+"object `data` của một lời gọi Prisma `create`/`update`/`upsert`". Vòng chấm 2
+dựng cây thử và chứng minh khung ấy bỏ sót ba dạng, tất cả đều ghim cứng
+`CREATE_AGENT` mà vẫn xanh: `upsert` (khuôn Prisma của nó không có khoá `data`),
+`updateMany`, và `data` là một biến. Khung mới đi từ chính chữ `commandType`, nên
+ba dạng ấy không lọt được — một đường ghi quyền buộc phải viết khoá ấy ra ở đâu
+đó. Dân số cũng nhỏ hơn và ổn định hơn: chín chỗ, so với 178 lời gọi ghi trong
+đó 31 chỗ khung cũ không đọc nổi payload.
 
 Dân số nhỏ, liệt kê được, và fail-closed: một biến trung gian, một hàm mới, một
 chuỗi ghim cứng — bất cứ thứ gì không phải hai biểu thức đã đặt tên — đều đỏ,
@@ -225,3 +235,21 @@ tất cả đã sửa vào artifact trước Cổng 1, không mục nào đẩy 
 đổi hình dạng phép đo (fixture là hàng; cây sao mang mã đang xét). Một P1 sinh
 ra AC-9. Một P1 nâng sàn AST của AC-3 từ cận dưới lên ma trận toàn phần. P2 nâng
 bản khai sinh từ đếm theo răng lên đếm theo vectơ.
+
+## Hai vòng chấm REJECT, và cái chúng dạy
+
+Vòng 1 (E2 · E5 · E8 đỏ) và vòng 2 (E5 đỏ) đều quy về **một lớp lỗi**: kết quả
+được báo của một phép đo không phải kết quả thật của nó.
+
+- **Vòng 1.** `cong-quyen-do.mjs` chết bằng một ngoại lệ chưa bắt; Node thoát 1,
+  trùng đúng mã đã khai cho «đột biến bị giết». Chỉ phép kiểm chuỗi ghim cứu.
+  Sửa: ba mã thoát tách bạch — 0 xanh · 2 bất biến bị vi phạm · **3 giàn đo
+  hỏng** — và `chayRang` bắt mọi ngoại lệ. Thêm khoá hoá thao tác `git worktree`
+  ở git dir dùng chung, vì các eval chạy song song.
+- **Vòng 2.** `mang-theo-do.mjs` thoát 0 trên máy, hai lần, và output mà làn chấm
+  chép lại chính là output nhánh thành công — nhưng họ ghi `exitCode: 1`. Không
+  truy được nguyên nhân từ bằng chứng.
+
+Điều khoản dừng-vá bắt dừng ở đó thay vì chạy vòng ba. Owner chọn **thu phạm
+vi**: bỏ chân đo riêng cho chiều đỏ của AC-4 — nó là đường thứ hai tới một sự
+thật mà bản khai sinh đã chứng — và đổi khung dân số của AC-3 cho đúng.
