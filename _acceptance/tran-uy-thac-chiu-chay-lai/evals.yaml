@@ -241,16 +241,23 @@ evals:
       Kieu tham so cua recordBuilderDelegation suy tu
       HookEvent<"actions.requested">["data"] cua eve/hooks, va
       lib/builder-delegation.ts KHONG con khai tay BuilderDelegationAction.
-      Do bang HE QUA, khong bang grep chuoi trong ma nguon: rang ghi mot file thu
-      goi recordBuilderDelegation voi mot su kien THIEU truong stepIndex, chay tsc
-      len file ay, va doi tsc DO. Truong thieu phai bi bao ten trong thong diep
-      cua tsc.
-      Vi sao do the: grep "HookEvent" trong file la do TAI LIEU HUONG DAN chu khong
-      do DAU RA — ai do co the import HookEvent roi van khai tay ben canh, va grep
-      van xanh.
-      CHIEU DO chay that trong cung rang (doi chung duong, bat buoc): cung file thu
-      ay nhung DU ca bon truong -> tsc phai XANH. Thieu ve nay thi "tsc do" khong
-      phan biet duoc "kieu da siet" voi "file thu sai cu phap".
+      DO QUAN HE, khong do "du bon truong" va khong grep chuoi trong ma nguon.
+      Sua sau vong cham 1 theo finding TRONG hop dong: ban dau E10 chi doi bon
+      truong CO MAT (thieu stepIndex thi tsc do) cong mot chot grep
+      BuilderDelegationAction — nguoi soi dung PHAN VI DU cho thay ban do cho qua
+      mot kieu KHAI TAY du bon truong, doi ten nen grep khong thay. Tuc no do
+      "kieu co du truong", khong do "kieu suy tu eve".
+      Nay rang ghi mot file thu khai:
+        type Bang<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;
+        export const neoVaoEve: Bang<ActionsRequestedData,
+          HookEvent<"actions.requested">["data"]> = true;
+      Hai kieu KHONG tuong duong hai chieu thi Bang cho ra false, va phep gan true
+      lam tsc DO. Do la quan he that, khong phai dem truong.
+      CHIEU AM LA MOT PHAN VI DU RANG TU DUNG (bat buoc): cung phep tuong duong ay
+      nhung ap cho mot kieu KHAI TAY du bon truong -> tsc PHAI do. Phan vi du nay
+      qua duoc thi phep do khong co rang, va rang thoat ma 2 goi ten dieu do.
+      TIEN DE con giu: file thu goi recordBuilderDelegation du bon truong phai bien
+      dich duoc, va ban thieu stepIndex phai do voi thong diep goi ten truong.
       SAN KHUON, giong E9: moi duong dan suy tu fileURLToPath(import.meta.url),
       KHONG tu cwd; rang in duong dan tuyet doi cua file no doc va SHA cua cay ay.
       Va FILE THU phai ghi ra NGOAI tam voi cua tsconfig va cua git, don trong
