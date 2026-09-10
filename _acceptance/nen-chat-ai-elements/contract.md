@@ -118,6 +118,13 @@ vào thư mục tạm rồi đổi tên, để chạy song song không phá cây
 tập tin trong cây với bản CLI vừa ghi, thì hai bản giống nhau ở mọi dòng trừ
 những dòng có tên trong sổ lệch chuẩn của AC-8.
 
+**Phép đo này chạy bằng tay, không nằm trong bộ đo máy.** Nó gọi `bunx --bun
+ai-elements@latest add`, tức cần mạng và **ghi vào `node_modules`**; chạy song
+song với các lệnh khác thì nó làm hỏng cây giữa chừng — hai lượt kiểm liên tiếp
+bị chặn vì đúng lý do đó (`EEXIST` ở `js-yaml` và `json5`, và `bun run test`
+báo đỏ trong khi chạy rời thì xanh). Thước không đổi, chỉ đổi chỗ chạy. Kết quả
+kèm sha cây ghi ở `evidence/so-lech-chuan-do-tay.md`.
+
 **AC-4** — Cho một lượt eve thật thuộc mỗi dạng `said`, `reasoned`, `did`,
 khi đưa qua lớp chuyển kiểu, thì kết quả mang đúng `role` và đúng `state` của
 AI SDK cho dạng đó; và cho một lượt `did` **hỏng thật**, thì kết quả mang state
@@ -229,6 +236,13 @@ giòn: chèn một dòng phía trên làm lệch hết, trong khi thay một dò
 dòng khác vẫn giữ nguyên số. Vân tay bắt đúng lớp lỗi mà số dòng định bắt;
 và sổ đó nêu thành lời việc chạy lại lệnh thêm sẽ ghi đè im lặng, cùng các
 bước phải làm sau mỗi lần kéo bản mới.
+
+Cùng lý do như AC-3, phép đo này chạy bằng tay — xem
+`evidence/so-lech-chuan-do-tay.md`. Cái mất phải nói rõ: hai thước này không
+chạy trong mỗi lượt kiểm nữa, nên một thay đổi sau lượt đo tay sẽ không được
+chúng bắt cho tới lần chạy tay kế. Đổi lại chúng thôi làm hỏng mọi phép đo
+khác. Sửa gốc — cho răng dùng một bản CLI đã kéo sẵn thay vì kéo mới mỗi lượt —
+là việc của một vòng riêng.
 
 **AC-9** *(cross-layer)* — Cho một tập tin đặt vào
 `packages/ui/src/components/ai-elements/` mà không chỗ nào ngoài thư mục đó
