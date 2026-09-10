@@ -40,10 +40,37 @@ try {
 console.log(`doc ban ma: ${LIB}`);
 console.log(`moc cay: ${sha()}`);
 
-if (/BuilderDelegationAction/.test(nguon)) {
-	console.log("DO: ma san pham con khai tay BuilderDelegationAction.");
-	process.exit(1);
-}
+const QUAN_HE = [
+	'import type { HookEvent } from "eve/hooks";',
+	`import type { ActionsRequestedData } from "${LIB}";`,
+	"",
+	"type Bang<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;",
+	"",
+	"export const neoVaoEve: Bang<",
+	"\tActionsRequestedData,",
+	'\tHookEvent<"actions.requested">["data"]',
+	"> = true;",
+	"",
+].join("\n");
+
+const PHAN_VI_DU = [
+	'import type { HookEvent } from "eve/hooks";',
+	"",
+	"type TuVietTay = {",
+	"\tactions: readonly { callId: string; kind: string; subagentName?: string }[];",
+	"\tsequence: number;",
+	"\tstepIndex: number;",
+	"\tturnId: string;",
+	"};",
+	"",
+	"type Bang<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;",
+	"",
+	"export const neoVaoEve: Bang<",
+	"\tTuVietTay,",
+	'\tHookEvent<"actions.requested">["data"]',
+	"> = true;",
+	"",
+].join("\n");
 
 const DU = [
 	`import {`,
@@ -94,13 +121,41 @@ function chayTsc(ten, ma) {
 let ket = 0;
 mkdirSync(O, { recursive: true });
 try {
+	const quanHe = chayTsc("quan-he", QUAN_HE);
+	if (quanHe.ma !== 0) {
+		console.log(
+			"DO: kieu tham so KHONG tuong duong hai chieu voi type cong khai cua eve — no khong suy tu eve.",
+		);
+		console.log(quanHe.ra.slice(0, 800));
+		ket = 1;
+	} else {
+		console.log(
+			"chieu duong: kieu tham so tuong duong HAI CHIEU voi HookEvent<actions.requested>[data].",
+		);
+	}
+
+	const phanViDu = chayTsc("phan-vi-du", PHAN_VI_DU);
+	if (phanViDu.ma === 0) {
+		chet(
+			"phep do quan he KHONG co rang: mot kieu KHAI TAY du bon truong cung qua duoc phep tuong duong hai chieu, nen chieu duong khong phan biet duoc neo-vao-eve voi khai-tay",
+		);
+	}
+	if (!/stepIndex|assignable|TuVietTay/.test(phanViDu.ra)) {
+		chet(
+			`phan vi du do nhung thong diep khong noi ve phep tuong duong:\n${phanViDu.ra.slice(0, 800)}`,
+		);
+	}
+	console.log(
+		"chieu am (phan vi du): kieu khai tay du bon truong KHONG qua duoc phep tuong duong hai chieu.",
+	);
+
 	const duong = chayTsc("du-truong", DU);
 	if (duong.ma !== 0) {
 		chet(
-			`chieu duong da do — file thu DU ca bon truong van khong bien dich duoc:\n${duong.ra.slice(0, 800)}`,
+			`tien de thieu — file thu DU ca bon truong van khong bien dich duoc:\n${duong.ra.slice(0, 800)}`,
 		);
 	}
-	console.log("chieu duong: du ca bon truong thi bien dich duoc.");
+	console.log("tien de: du ca bon truong thi goi ham duoc.");
 
 	const thieu = chayTsc("thieu-stepindex", THIEU);
 	if (thieu.ma === 0) {
@@ -118,6 +173,8 @@ try {
 }
 
 if (ket === 0) {
-	console.log("\nXANH: kieu tham so suy tu type cong khai cua eve.");
+	console.log(
+		"\nXANH: kieu tham so TUONG DUONG HAI CHIEU voi type cong khai cua eve, va mot kieu khai tay du bon truong thi khong.",
+	);
 }
 process.exit(ket);
