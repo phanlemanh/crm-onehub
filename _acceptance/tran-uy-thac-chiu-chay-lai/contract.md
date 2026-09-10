@@ -5,7 +5,7 @@ slug: tran-uy-thac-chiu-chay-lai
 owner: omre.cnsp4@onemount.com
 risk_tier: T2
 surfaces: [agent]
-status: approved
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
