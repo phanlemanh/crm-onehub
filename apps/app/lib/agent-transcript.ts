@@ -1,3 +1,10 @@
+import type {
+	DidItem,
+	ReasonedItem,
+	SaidItem,
+	Source,
+	Tone,
+} from "@crm/validation/agent-transcript";
 import {
 	type EveStreamEvent,
 	eveTurnFailure,
@@ -21,33 +28,16 @@ import {
 import { z } from "zod";
 
 export type TranscriptItem =
-	| { kind: "said"; id: string; mine: boolean; text: string }
-	| { kind: "reasoned"; id: string; streaming: boolean; text: string }
+	| SaidItem
+	| ReasonedItem
 	| {
 			kind: "asked";
 			id: string;
 			question: EveMessageInputRequest;
 	  }
-	| {
-			kind: "did";
-			id: string;
-			label: string;
-			input: EveToolInput;
-			output: EveToolOutput;
-			tone: Tone;
-			pending: boolean;
-			sources: Source[];
-			tool: string;
-			errorText: string | null;
-	  };
+	| DidItem;
 
-export type Tone = "neutral" | "success" | "warning";
-
-export type Source = {
-	url: string;
-	title: string;
-	network: "linkedin" | "github" | "web";
-};
+export type { Source, Tone };
 
 export type AgentTurnFailure = {
 	code: string;
@@ -255,6 +245,7 @@ export function toTranscript(
 							input: input(part),
 							output: output(part),
 							errorText: errorTextOf(part),
+							failed: state === "output-error",
 							tone: outcomeTone(part),
 							pending:
 								state === "input-streaming" ||

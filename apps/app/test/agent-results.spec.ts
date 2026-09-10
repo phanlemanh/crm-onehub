@@ -39,6 +39,7 @@ const did = (
 	input: null,
 	output,
 	errorText: null,
+	failed: false,
 	tone: "neutral",
 	pending: false,
 	sources: [],

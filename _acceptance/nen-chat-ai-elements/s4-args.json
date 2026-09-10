@@ -1,0 +1,199 @@
+{
+  "generated_at": "2026-09-10T05:17:50Z",
+  "generated_sha": "040c52395de2d22cc907776952d69df231bae564",
+  "mainBranchInfo": {
+    "branch": "onehub",
+    "source": "remote"
+  },
+  "slug": "nen-chat-ai-elements",
+  "round": 7,
+  "riskTier": "T2",
+  "evals": [
+    {
+      "id": "E1",
+      "criterion": "AC-1",
+      "cmd": "node _acceptance/nen-chat-ai-elements/rang/mo-coi.mjs",
+      "expected": "Xanh: tinh tap KHA DAT BAC CAU, khong phai dem cho-nhap-tu-ngoai. Bat dau tu tap\ntep trong ai-elements/ duoc apps/** nhap, roi di theo MOI duong nhap tuong doi\n(\"./x\") va lay bao dong. Tep ngoai bao dong la mo coi.\nIn ra CA HAI danh sach — song va chet — kem so phan tu tung ben, khong chi tong.\nSong phai la dung {message, reasoning, shimmer, conversation}; chet phai la 19\ntep.\nGhim ten hai ca doi lap, ca hai deu phai dung:\n(a) open-in-chat va loader PHAI vang mat — mot la thu register cam vi du lieu CRM\nkhong roi kho, mot la tep thuong nguon da bo;\n(b) shimmer PHAI con — khong tep nao NGOAI thu muc nhap no, nhung reasoning.tsx\ndong 14 nhap \"./shimmer\". Mot phep dem chi nhin duong nhap tu ngoai se xep\nshimmer vao nhom chet; do la ca hong chinh cua phep do nay.\nChieu do da chay tren CUNG fixture: cheo lai open-in-chat.tsx vao ban sao cay ->\nma 1, thong diep neu dung chuoi \"open-in-chat\" va chu \"khong kha dat\".\nDoc khong duoc thu muc -> ma 2, KHONG xanh.",
+      "executor": "script",
+      "paths": [
+        "packages/ui/src/components/**",
+        "apps/**",
+        "_acceptance/nen-chat-ai-elements/rang/**"
+      ],
+      "ref": "config:executors.script.nc_mo_coi"
+    },
+    {
+      "id": "E3",
+      "criterion": "AC-2",
+      "cmd": "bunx turbo run build --force",
+      "expected": "Xanh: turbo chay build tuoi, ma 0. Day la lenh duy nhat dung ung dung that; bon\nlenh kia khong dung nen mot hoi quy lam next build do se lot neu thieu no.\nChieu do: bo mot export con duoc trang dung -> ma khac 0.",
+      "executor": "script",
+      "ref": "config:executors.script.build_khong_cache"
+    },
+    {
+      "id": "E4",
+      "criterion": "AC-2",
+      "cmd": "bunx turbo run lint --force",
+      "expected": "Xanh: turbo chay lint tuoi, ma 0.\nChieu do: them mot bien khong dung -> ma khac 0, neu ten file va dong.",
+      "executor": "script",
+      "ref": "config:executors.script.lint_khong_cache"
+    },
+    {
+      "id": "E5",
+      "criterion": "AC-2",
+      "cmd": "bun run lint:slop",
+      "expected": "Xanh: oxlint voi bo luat anti-slop, ma 0. Lop chuyen kieu la cho de sinh\nRecord<string, unknown> va type assertion day chuyen — hai luat no bat.\nChieu do: viet mot ep kieu day chuyen trong lop chuyen -> ma khac 0, neu ten luat.",
+      "executor": "script",
+      "ref": "config:executors.script.lint_slop"
+    },
+    {
+      "id": "E6",
+      "criterion": "AC-2",
+      "cmd": "bun run test",
+      "expected": "Xanh: tron bo bai kiem cua kho, ma 0. Bai kiem cu cua agent-transcript phai con\nxanh sau khi hinh dang TranscriptItem chuyen xuong packages/validation.\nChieu do: doi mot truong cua TranscriptItem ma khong sua cho doc -> ma khac 0,\nneu ten bai kiem.",
+      "executor": "test",
+      "ref": "config:executors.test.api"
+    },
+    {
+      "id": "E8",
+      "criterion": "AC-4",
+      "cmd": "cd packages/ui && bun test test/eve-to-ai-sdk.spec.ts",
+      "expected": "Xanh: vat thu phai co ROUND-TRIP THAT, chay lai duoc, NAM TRONG kho — mot bai\nkiem o apps/app/test chay toTranscript that roi doi chieu ket qua voi\npackages/ui/test/fixtures/eve-turns.json theo ca tap duong truong lan tap gia\ntri. Fixture viet tay khop khuon BEN DOC khong tinh: writer doi hinh dang thi\nfixture van hop le voi reader va ca bo bai kiem van xanh.\nChieu do cua round-trip: doi ten mot truong trong apps/app/lib/agent-transcript.ts\n-> bai kiem DO va in ten truong lech. MA TRAN TOAN PHAN viet truoc: BA dang said/reasoned/did di qua lop chuyen, moi dang\nmot assert ve role, cong mot assert ve state cho did. So assert = so phan tu —\nDEM THAT, gom ca reasoningState.settled (\"done\"), khong duoc bo phan tu nao.\nFixture phai co mot luot reasoned mang streaming:false, di qua dung duong\nround-trip o tren chu khong viet tay.\nChieu do: dao hang settled sang chuoi khac -> bai kiem do, neu ten state.\nDang thu tu `asked` co y KHONG di qua lop chuyen (docs/chat-ui.md giu form hoi\nlai o shadcn); phai co mot assert KHANG DINH lop chuyen TU CHOI no bang loi co\nneu ten dang, chu khong bo lung.\nBA ca ghim rieng, phai cung xanh, vi ca ba deu la \"did da xong\":\n(a) state goc output-error kem chuoi loi -> output-error mang dung chuoi do;\n(b) state goc output-error ma errorText rong/khoang trang -> VAN output-error,\nchuoi lay tu bang chuoi chatTool.failed;\n(c) output mang stored:false / written:false ma state goc KHONG phai\noutput-error -> output-available, GIU NGUYEN output va reason.\nCa (c) la ca doi chieu: outcomeTone() tra \"warning\" cho ca hai nguon, nen mot\nphep do chi nhin `tone` khong tach duoc (a)(b) khoi (c). Bai kiem phai assert\nCA `state` LAN `output` cua (c) — assert mot minh `state` bo lot nua sau cua\nloi (mat du lieu).\nChieu do da chay tren CUNG fixture, hai luot:\n(1) doi anh xa nhanh loi sang output-available -> (a) va (b) do, thong diep neu\nten state cho doi;\n(2) khoa nhanh loi vao `tone === \"warning\"` (dung ban cf9109f) -> (c) do, thong\ndiep neu state ra output-error.",
+      "executor": "test",
+      "paths": [
+        "packages/ui/src/lib/**",
+        "packages/validation/src/**",
+        "apps/app/lib/agent-transcript.ts"
+      ],
+      "ref": "config:executors.test.nc_lop_chuyen"
+    },
+    {
+      "id": "E9",
+      "criterion": "AC-5",
+      "cmd": "node _acceptance/nen-chat-ai-elements/rang/chu-cung.mjs",
+      "expected": "Xanh: DANH SACH TRANG DONG, khong phai liet ke tung hinh dang cu phap. Quet MOI\nchuoi ky tu co chu cai trong bon tep con lai cua ai-elements/, roi TRU DI cac\nnhom da khai la khong-the-toi-mat-nguoi (lop CSS, duong nhap, gia tri enum bien\nthe, khoa ky thuat, ten the, ten kieu...), moi nhom mot ly do bang chu.\nIn: tong so chuoi co chu da xet · so duoc mien theo TUNG nhom · so con lai (phai\nla 0) · danh sach chuoi con lai kem tep, dong, nguyen van.\nVi sao khuon nay: phep do liet ke tung hinh dang cu phap da bo sot HAI lan trong\nchinh vong nay — lan mot lop 'gia tri mac dinh cua tham so', lan hai lop 'bien\ntrung gian' (message.tsx:348). Cung mot lop loi, nen doi khuon chu khong va lan\nba.\nBON LOP phai cung bi bat boi MOT khuon, khong khai them hinh dang nao:\nchu giua the · thuoc tinh hien thi · gia tri mac dinh cua tham so · bien trung\ngian.\nKiem doi ung: moi khoa duoc goi qua useMessages() phai co mat trong CA HAI bang\nvi va en cua packages/ui/src/lib/messages.ts; thieu ben nao neu ten khoa va ten\nbang.\nKiem doi ung: moi khoa goi qua useMessages() phai co mat trong CA HAI bang vi va\nen cua packages/ui/src/lib/messages.ts; thieu ben nao neu ten khoa va ten bang.\nChieu do da chay tren CUNG fixture, BON ca cho bon lop, moi ca ma 1 neu nguyen\nvan: (a) <span>Copy message</span>; (b) aria-label=\"Collapse reasoning\";\n(c) nhan = \"Send now\"; (d) const x = \"Retry later\" roi render {x}.\nDOI CHUNG AM bat buoc, rang phai XANH: (e) variant = \"ghost\" va size = \"icon-sm\";\n(f) className=\"text-balance\". Do o hai ca nay la rang qua tay.\nKhong tim thay file nao de quet -> ma 2, KHONG xanh (tap rong khong phai la sach).",
+      "executor": "script",
+      "paths": [
+        "packages/ui/src/components/ai-elements/**",
+        "packages/ui/src/lib/messages.ts",
+        "_acceptance/nen-chat-ai-elements/rang/**"
+      ],
+      "ref": "config:executors.script.nc_chu_trong_component"
+    },
+    {
+      "id": "E10",
+      "criterion": "AC-6",
+      "cmd": "node _acceptance/nen-chat-ai-elements/rang/mau-ban-kinh.mjs",
+      "expected": "Xanh: quet lop CSS moi file con lai bang DANH SACH TRANG DONG, khong phai danh\nsach den. Moi lop khop text- / bg- / border- / ring- / fill- / stroke- phai la\nmot token CO KHAI trong packages/ui/src/styles/globals.css (cac --color-*); moi\nlop khop rounded- phai thuoc\n{rounded-sm, rounded-md, rounded-lg, rounded-none}. In ra MOI lop la kem ten tep\nva so dong. Danh sach den la sai khuon o day: mot lop chua ai nghi toi\n(bg-accent, text-amber-500) se lot.\nHai ve co DAN SO KHAC NHAU, in rieng tung ve, khong gop mot con so:\n(1) ban kinh — dan so vao vong la 4, ghim cho: message.tsx hai rounded-full,\nconversation.tsx hai. Sau khi sua phai la 0.\n(2) mau — dan so vao vong la 0 (ca 6 cho deu o tool va web-preview, hai tep bi\nAC-1 xoa). Ve nay la RANG chong tai phat, khong phai viec chuan hoa: no canh ban\nconversation keo tuoi va moi component phase sau keo ve.\nChieu do da chay tren CUNG fixture, hai luot rieng vi hai ve khac dan so:\n(a) dat rounded-full vao reasoning.tsx -> ma 1, neu ten tep va so dong;\n(b) dat text-amber-500 — mot ten mau thuong nguon KHONG co trong bang token cua\nglobals.css — vao message.tsx -> ma 1, neu nguyen van \"text-amber-500\".\nKHONG duoc dung bg-accent lam ca do: kho CO khai --color-accent va message.tsx\ndong 400 dang dung hover:bg-accent, nen no la token hop le. Ghim mot ca do bang\nmot lop von hop le la doi chung VO HIEU — no xanh vi dung ra phai xanh, chu\nkhong phai vi phep do hong.",
+      "executor": "script",
+      "paths": [
+        "packages/ui/src/components/ai-elements/**",
+        "_acceptance/nen-chat-ai-elements/rang/**"
+      ],
+      "ref": "config:executors.script.nc_mau_ban_kinh"
+    },
+    {
+      "id": "E11",
+      "criterion": "AC-7",
+      "cmd": "node _acceptance/nen-chat-ai-elements/rang/so-do-cuon.mjs",
+      "expected": "Xanh: do tren VAT THAT, khong phai tren trang HTML/CSS chep tay. Dong goi chinh\nConversation/ConversationContent va MessageScroller* that (bun build), React\ndung cay that trong trinh duyet that, CSS do tailwind dich chinh\npackages/ui/src/styles/globals.css cua kho. Cam chep hang CSS bang tay: mot\ntrang thu tu bat class se \"dat\" ngay ca khi ban va that da bi go khoi\nconversation.tsx.\nGhi du SAU o vao evidence/so-do-cuon.json; khong o nao null.\nCo \"ban va da ap dung\" phai do bang HIEU UNG (getComputedStyle cua tung luot\ntrong cay that), KHONG bang chuoi co mat trong tep nguon, va phai VAO tieu chi\ndo — khong duoc chi in mot dong luu y sau khi da in \"dat\".\nTHUOC LA QUAN HE, KHONG PHAI CO MAT: o ca 500 luot, in ba so — Conversation\ntruoc va, Conversation sau va, MessageScroller — cong TI SO\nConversation/MessageScroller. Ti so cuoi cung > 1.2 -> ma 1, thong diep neu ca\nba so va ti so. Mot ban va co mat ma ti so van 7.0 la KHONG dat; day dung la lop\nloi do-co-mat-thay-vi-do-quan-he.\nChieu do CHINH, chay tren cay that: go [&>*]:[content-visibility:auto] khoi\nConversationContent -> so ca 500 cua Conversation xau di ro ret, ti so vuot 1.2,\nma 1. Ca nay truoc day thoat 0 — do la lop loi phep-do-khong-cham-vat-that.\nChieu do phu: go content-visibility khoi MessageScrollerItem -> so ca 500 cua\nMessageScroller xau di ro ret va ti so tut xuong. Neu go ma ti so khong doi thi phep do dang do thu khac\nchu khong do bo cuc -> ma 1, thong diep neu chu \"thuoc khong phan ung\".\nTrinh duyet khong khoi dong duoc -> ma 2, KHONG xanh.",
+      "executor": "script",
+      "paths": [
+        "packages/ui/src/components/ai-elements/conversation.tsx",
+        "packages/ui/src/components/message-scroller.tsx",
+        "_acceptance/nen-chat-ai-elements/rang/**"
+      ],
+      "ref": "config:executors.script.nc_so_do_cuon"
+    },
+    {
+      "id": "E13",
+      "criterion": "AC-9",
+      "cmd": "bun run test",
+      "expected": "Day la ve NOI CONG cua rang mo coi, khac han E1: E1 hoi \"cay hien tai sach\nchua\", E13 hoi \"rang co chan duoc ai khong\".\nXanh: (1) rang mo coi la mot tac vu chay trong `bun run test` hoac trong\npre-push, khong phai script chi chay khi go tay; (2) no co khai trong\n.githooks/gate-shape.json; (3) verify-gate-shape.mjs xanh sau khi khai — in ra\nten tac vu tim thay o ca ba cho, khong chi tong.\nDOI CHUNG DUONG bat buoc: cay sach thi LENH CONG xanh.\nChieu do da chay tren CUNG fixture: chep mot tep moi khong ai nhap vao\nai-elements/ trong ban sao cay, roi chay DUNG LENH CONG cua kho — khong chay\nthang script rang — lenh cong phai tra ma khac 0 va neu DICH DANH ten tep vua\nchep. Rang chi do khi goi thang la rang chua noi vao cong, va do la ca hong AC-9\nsinh ra de bat.",
+      "executor": "script",
+      "paths": [
+        "packages/ui/src/components/**",
+        "apps/**",
+        ".githooks/gate-shape.json",
+        "turbo.json",
+        "package.json",
+        "_acceptance/nen-chat-ai-elements/rang/**"
+      ],
+      "ref": "config:executors.script.nc_rang_qua_cong"
+    },
+    {
+      "id": "E14",
+      "criterion": "AC-10",
+      "cmd": "bun run test",
+      "expected": "Ve NOI CONG cua rang chuoi, khac han E9 (E9 hoi cay sach chua).\nXanh: rang chuoi cung la tac vu trong bo cong, co khai o gate-shape.json,\nverify-gate-shape.mjs xanh; cay sach thi lenh cong xanh (doi chung duong).\nChieu do da chay tren CUNG fixture, HAI ca vi bon trong tam chuoi cua dan so\nnam trong thuoc tinh:\n(a) dat chu tieng Anh cung GIUA THE vao mot component -> chay LENH CONG -> ma\nkhac 0, neu dich danh duong dan tep va nguyen van chuoi;\n(b) dat chuoi tieng Anh vao mot aria-label -> chay LENH CONG -> ma khac 0, neu\ndich danh. Rang xanh o ca (b) la rang co lo dung nua dan so.",
+      "executor": "script",
+      "paths": [
+        "packages/ui/src/components/ai-elements/**",
+        "packages/ui/src/lib/messages.ts",
+        ".githooks/gate-shape.json",
+        "turbo.json",
+        "package.json",
+        "_acceptance/nen-chat-ai-elements/rang/**"
+      ],
+      "ref": "config:executors.script.nc_rang_qua_cong"
+    },
+    {
+      "id": "E15",
+      "criterion": "AC-2",
+      "cmd": "node _acceptance/nen-chat-ai-elements/rang/pham-vi-diff.mjs",
+      "expected": "Xanh: chay `git diff --name-only <nhanh nen>...HEAD` roi doi chieu tung duong\nvoi DANH SACH TRANG ghi nguyen van trong AC-2. In ra tong so tep doi va danh\nsach tep VI PHAM (rong khi xanh), khong chi mot chu OK.\nKiem rieng, ghim ten: sau tep chat 109 KB — agent-builder-chat.tsx,\nagent-composer.tsx, chat-chips.tsx, crm/agent-panel.tsx,\nagent-clarification-composer.tsx, agent-builder-route-fallback.tsx — phai KHONG\nxuat hien trong diff. Day la ve giu pham vi cua ca vong.\nChieu do da chay tren CUNG fixture: cham mot dong vao agent-composer.tsx trong\nban sao -> ma 1, thong diep neu dich danh duong dan do va chu \"ngoai pham vi da\nduyet\".\nDiff rong (khong tep nao doi) -> ma 2, KHONG xanh: chua lam gi khong phai la\ngiu dung pham vi.",
+      "executor": "script",
+      "paths": [
+        "**"
+      ],
+      "ref": "config:executors.script.nc_pham_vi_diff"
+    }
+  ],
+  "suiteCommands": [
+    "bun run test",
+    "bunx turbo run lint --force",
+    "bun run lint:slop",
+    "bunx turbo run build --force"
+  ],
+  "diffBase": "08cc6754282046494bd6eda63eae7066dad20707",
+  "repoRoot": "/Users/manhphan/dev/crm-onehub-chat",
+  "personasPath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.8.0/skills/acceptance/references/judge-personas.md",
+  "templatePath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.8.0/skills/acceptance/references/evidence-report-template.md",
+  "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
+  "contractPath": "/Users/manhphan/dev/crm-onehub-chat/_acceptance/nen-chat-ai-elements/contract.md",
+  "invokedAt": "2026-09-10T05:17:50Z",
+  "invokedSha": "040c52395de2d22cc907776952d69df231bae564",
+  "evalsHash": "2ee34f576f691107d10027ec0058179224b4a7ee555b01b508979137ef3b6649",
+  "runBaseline": false,
+  "carriedAnalyst": {
+    "fromRound": 6,
+    "nonDiscriminating": [
+      {
+        "cmd": "bunx turbo run build --force",
+        "evals": [
+          "E3"
+        ]
+      },
+      {
+        "cmd": "bunx turbo run lint --force",
+        "evals": [
+          "E4"
+        ]
+      },
+      {
+        "cmd": "bun run lint:slop",
+        "evals": [
+          "E5"
+        ]
+      },
+      {
+        "cmd": "bun run test",
+        "evals": [
+          "E6",
+          "E13",
+          "E14"
+        ]
+      }
+    ]
+  }
+}
