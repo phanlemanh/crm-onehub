@@ -1,52 +1,59 @@
 ## Trong hợp đồng
 
-- **Hình dạng 3 — assert chuỗi có/không có mặt trong khi lời hứa là QUAN HỆ giữa kiểu tham số và type công khai của eve**
-  file:line: `_acceptance/tran-uy-thac-chiu-chay-lai/rang/kieu-theo-eve.mjs:43`
+- **Hình dạng 2 — bản đột biến `than-hook-rong` VIẾT TAY, không dẫn từ văn bản thật đọc từ đĩa**
+  file: `_acceptance/tran-uy-thac-chiu-chay-lai/rang/hook-chet.mjs:33`
   severity: high
-  detail: AC-10/E10 hứa một quan hệ: kiểu tham số của `recordBuilderDelegation` SUY TỪ `HookEvent<"actions.requested">["data"]` của `eve/hooks`. Răng đo quan hệ đó bằng hai thứ, cả hai đều không phải quan hệ ấy: (1) dòng 43 `if (/BuilderDelegationAction/.test(nguon))` — một phép grep trên văn bản mã nguồn, chỉ bắt đúng MỘT cái tên; (2) dòng 48–63 + 105–115 — bài thử tsc chỉ đòi bốn trường `actions/sequence/stepIndex/turnId` có mặt, thiếu `stepIndex` thì tsc đỏ.
-
-    Đã dựng phản-ví dụ: một module khai TAY `type TuVietTay = { actions: …; sequence: number; stepIndex: number; turnId: string }` (không chứa chuỗi `BuilderDelegationAction`) chạy đúng dòng lệnh tsc ở dòng 69–86 cho ra `error TS2345 … Property 'stepIndex' is missing in type … but required in type 'TuVietTay'` — tức thoả cả chiều dương và chiều âm, và răng sẽ in "XANH: kieu tham so suy tu type cong khai cua eve". Nên kết luận XANH của E10 không phân biệt được "kiểu neo vào eve" với "kiểu tự viết tay đủ bốn trường, đổi tên"; hồi quy đúng loại mà AC-10 sinh ra để chặn vẫn lọt. Chính E10 tự khai "grep chuoi trong ma nguon" là cách đo sai, rồi dòng 43 làm đúng cái đó ở chiều phủ định.
+  AC: AC-9
+  detail: Hai hình dạng `bo-record-va-update` (dòng 49-56) và `bo-update` (dòng 58-61) nhận `nguon` — văn bản thật đọc từ `apps/agent/agent/hooks/builder-delegation.ts` ở dòng 70 — rồi biến đổi bằng regex. Hình dạng thứ nhất thì không: `cam: () => [...].join("\n")` (dòng 33-45) BỎ HẲN tham số `nguon` và trả về một thân hook 10 dòng chép tay. Hệ quả cụ thể: chốt chống lạc hậu ở dòng 149 `if (banDotBien === nguon) chet(...)` không bao giờ nổ được cho hình dạng này, vì chuỗi chép tay không bao giờ bằng `nguon` kể cả khi hook thật đã đổi hoàn toàn cấu trúc (ví dụ hook thật chuyển sang `defineHook({ events: { "actions.requested": handler } })` với handler tách file). Lúc đó bản đột biến vẫn nạp được, bộ đo replica vẫn đỏ, răng vẫn in "hình dang than-hook-rong -> bi bat" và E9 vẫn xanh — trong khi cái bị đột biến là một bản mã không còn tồn tại trong cây. Đây đúng điều E9 sàn khuôn (a) cấm: "Ban dot bien sinh tu VAN BAN THAT doc tu dia, KHONG phai ba ham chep tay trong bo do. Chep tay la hang-dung."
+  rationale: AC-9 đòi bộ đo đột biến phải đo đúng ba hình dạng "đã đo tại 83501f3" (tức đột biến trên văn bản thật); một hình dạng chép tay không mutate mã nguồn thật khiến kết quả ĐỎ của AC-9 cho hình dạng đó không còn chứng minh được điều AC-9 yêu cầu.
   source: measurement
-  AC: AC-10
+
+- **Hình dạng 2 — trạng thái "đã ghi" là object literal viết tay đúng khuôn bên đọc, không round-trip qua `recordBuilderDelegation`**
+  file: `apps/agent/test/tran-uy-thac.spec.ts:26`
+  severity: medium
+  AC: AC-1
+  detail: "`const DA_GHI: TrangThai = { turnId: \"turn-1\", stepIndex: 2, sequence: 0 }`" (dòng 26) được nạp thẳng làm tham số `state` cho `recordBuilderDelegation` ở E1 (dòng 30, 37), E3 (dòng 59, 64), E4/`luot-moi` (dòng 148, 157), `lap-callid` (dòng 134, 141) và `mot-cau` (dòng 231) — tức khuôn mà BÊN ĐỌC mong đợi, viết tay, không lấy từ giá trị trả về của chính bên ghi. Đường round-trip có sẵn và đã được dùng đúng ở chỗ khác: `apps/agent/test/custom-agent-runtime.spec.ts` lấy `first = recordBuilderDelegation(EMPTY_BUILDER_DELEGATION, duLieu(...))` rồi mới nạp `first` vào lượt sau, và trong cùng file này `lan-dau` (dòng 81-84) cùng `khong-xoa-slot` (dòng 253-261) cũng làm vậy. Hệ quả đo lường cụ thể ở E1: sàn khuôn của nó ghi "hai lan phai co callId KHAC NHAU trong fixture. Fixture dung lai dung callId khong do duoc gi", nhưng với `DA_GHI` thì cả fixture chỉ có ĐÚNG MỘT callId (`call-b` ở dòng 30) — lần uỷ thác thứ nhất không hề tồn tại như một lời gọi, nên điều kiện "hai callId khác nhau" không được thoả mà bài đo vẫn xanh.
+  rationale: AC-1 quy định rõ trong Sàn khuôn — "callId của hai lần phải khác nhau trong fixture; fixture dùng lại đúng callId không đo được gì" — dùng state DA_GHI viết tay khiến fixture chỉ còn một callId thật, đúng điều Sàn khuôn của AC-1 cấm.
+  source: measurement
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **Trần một-lần-uỷ-thác lọt khi hai lời gọi agent_builder đến trong CÙNG step nhưng hai sự kiện khác nhau**
-  Người dùng thấy gì: Nếu trợ lý gọi tính năng tạo agent (agent_builder) hai lần rất sát nhau trong cùng một bước xử lý của một lượt trò chuyện, giới hạn "chỉ được gọi một lần mỗi lượt" có thể không nhận ra và để lọt cả hai lần gọi thay vì chặn lần thứ hai.
+- **docs/agent.md không theo kịp vòng 2 — vẫn tả trần theo callId, không nói toạ độ sự kiện, không nói khoá state đã bump v2**
+  Người dùng thấy gì: Tài liệu hướng dẫn nội bộ về cách giới hạn này hoạt động chưa được cập nhật theo cách làm mới, nên người xử lý sự cố sau này có thể mất thêm thời gian hiểu đúng nguyên nhân khi có lỗi, dù bản thân tính năng vẫn chạy đúng.
+  file: `docs/agent.md`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Schema zod khai ra nhưng KHÔNG bao giờ parse — lệch pattern schema+parse của kho, và biên rehydrate state vẫn không ai kiểm**
+  Người dùng thấy gì: Trạng thái nội bộ của giới hạn uỷ thác không được kiểm tra hình dạng dữ liệu khi đọc lại từ bộ nhớ bền, nên nếu dữ liệu cũ có định dạng khác, hệ thống có thể âm thầm xử lý sai thay vì báo lỗi rõ ràng, gây khó khăn khi gỡ sự cố.
+  file: `apps/agent/agent/lib/builder-delegation.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **defineState trả về CHÍNH object EMPTY_BUILDER_DELEGATION làm giá trị khởi tạo, không phải object mới mỗi lần**
+  Người dùng thấy gì: Giá trị khởi tạo mặc định của giới hạn uỷ thác đang dùng chung một đối tượng cho mọi phiên làm việc; nếu một đoạn mã sau này lỡ sửa trực tiếp giá trị đó, các phiên khác có thể bị ảnh hưởng chéo nhau theo cách rất khó phát hiện ra nguyên nhân.
+  file: `apps/agent/agent/lib/builder-delegation-state.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **mock.module chạy lúc import ở helper test — mock và biến toàn cục kho/nhatKy rò sang mọi spec nạp sau trong cùng process**
+  Người dùng thấy gì: Cách dựng dữ liệu giả cho phần kiểm thử này có thể ảnh hưởng đến kết quả của các bài kiểm thử khác chạy sau nó trong cùng một lượt kiểm thử toàn bộ, khiến một lỗi thật có nguy cơ bị bỏ sót hoặc báo nhầm chỗ khác.
+  file: `apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **Trần uỷ thác không còn chặn hai lời gọi agent_builder trong CÙNG một step khi eve phát chúng thành hai sự kiện riêng**
+  Người dùng thấy gì: Nếu trợ lý gọi công cụ tạo agent con hai lần thật sự khác nhau nhưng hệ thống phát ra thành hai thông báo riêng cùng một bước xử lý, giới hạn "chỉ uỷ thác một lần mỗi lượt" có thể không nhận ra lần gọi thứ hai, khiến việc tạo agent con xảy ra nhiều hơn số lần cho phép trong một số tình huống hiếm.
   file: `apps/agent/agent/lib/builder-delegation.ts`
   severity: high
   Đề xuất: new-contract
 
-- **Tiêu chí và eval 'toạ độ rải rác' đo một hình dạng sự kiện eve không thể phát ra**
-  Người dùng thấy gì: Bài kiểm tra tự động cho ca "lời gọi thứ hai đến rải rác trong cùng bước xử lý" dùng dữ liệu giả không khớp với cách hệ thống thật vận hành, nên việc bài kiểm tra báo đạt chưa chắc chứng minh được ca đó được bảo vệ đúng trong thực tế.
-  file: `apps/agent/test/tran-uy-thac.spec.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Trần một-lần-uỷ-thác bị bỏ qua khi mô hình gọi agent_builder hai lần song song trong cùng một step**
-  Người dùng thấy gì: Nếu trợ lý gọi tạo agent hai lần cùng lúc (song song) trong một bước xử lý, giới hạn "một lần mỗi lượt" có thể bị bỏ qua và cả hai lời gọi đều được thực hiện thay vì chỉ một.
-  file: `apps/agent/agent/lib/builder-delegation.ts`
-  severity: high
-  Đề xuất: new-contract
-
-- **Nửa `sequence` của khoá là nhánh chết: sequence là số thứ tự LƯỢT, suy được từ turnId**
-  Người dùng thấy gì: Một phần điều kiện dùng để phân biệt các lần gọi khác nhau trong cùng một bước xử lý không bao giờ thực sự có tác dụng với dữ liệu thật, khiến khả năng phân biệt các ca gọi lặp so với mô tả kỹ thuật kém chắc chắn hơn mong đợi, dù chưa gây lỗi quan sát được ngay.
+- **`sequence` không thêm thông tin phân biệt: trong một lượt nó là hằng và suy được từ turnId, nên vài eval đang đo một hình dạng sự kiện eve không bao giờ phát**
+  Người dùng thấy gì: Một phần kịch bản kiểm thử cho giới hạn uỷ thác đang mô phỏng tình huống mà hệ thống thật có thể không bao giờ tạo ra, nên kết quả "đạt" ở phần đó không chắc chứng minh giới hạn hoạt động đúng trong tình huống tương ứng ngoài thực tế.
   file: `apps/agent/agent/lib/builder-delegation.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 2 — bản đột biến VIẾT TAY, không dẫn từ văn bản thật đọc từ đĩa; chốt chống lạc hậu vô hiệu cho nó**
-  Người dùng thấy gì: Một trong các bài kiểm tra chống hồi quy được viết cứng sẵn thay vì tự sinh từ mã nguồn thật đang chạy, nên nếu mã nguồn đổi cấu trúc sau này, bài kiểm tra đó có thể không còn phản ánh đúng mã hiện tại dù vẫn báo "đã kiểm tra thành công".
-  file: `_acceptance/tran-uy-thac-chiu-chay-lai/rang/hook-chet.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 2 — răng chạy bài đo CHÉP TAY 6 dòng, không chạy bộ đo chuỗi cưỡng chế thật lên bản đột biến**
-  Người dùng thấy gì: Bằng chứng cho thấy cơ chế chống hồi quy hoạt động dựa trên một bài kiểm tra rút gọn viết tay, chứ không phải bộ kiểm tra chính thức đầy đủ của tính năng, nên chưa rõ liệu bộ kiểm tra thật sự được giao có bắt được các lỗi hồi quy tương tự trong tương lai hay không.
-  file: `_acceptance/tran-uy-thac-chiu-chay-lai/rang/hook-chet.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
+⚠ Cụm ngoài vùng phủ: 2/8 lỗi rơi vào file không bộ đo nào phủ (docs/agent.md, apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
