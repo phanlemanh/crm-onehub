@@ -1,43 +1,49 @@
-import { defineState } from "eve/context";
+import type { HookEvent } from "eve/hooks";
+import { z } from "zod";
 
-type BuilderDelegationAction = {
-	callId: string;
-	kind: string;
-	subagentName?: string;
+export const BUILDER_DELEGATION_SUBAGENT = "agent_builder";
+
+export const BUILDER_DELEGATION_LIMIT_MESSAGE =
+	"The agent builder can be delegated only once per turn.";
+
+export type ActionsRequestedData = HookEvent<"actions.requested">["data"];
+
+const builderDelegation = z.object({
+	turnId: z.string().nullable(),
+	stepIndex: z.number().int().nullable(),
+	sequence: z.number().int().nullable(),
+});
+
+export type BuilderDelegationState = z.infer<typeof builderDelegation>;
+
+export const EMPTY_BUILDER_DELEGATION: BuilderDelegationState = {
+	turnId: null,
+	stepIndex: null,
+	sequence: null,
 };
-
-type BuilderDelegationState = {
-	turnId: string | null;
-	callIds: string[];
-};
-
-export const builderDelegationState = defineState<BuilderDelegationState>(
-	"crm.builder-delegation",
-	() => ({ turnId: null, callIds: [] }),
-);
 
 export function recordBuilderDelegation(
 	state: BuilderDelegationState,
-	turnId: string,
-	actions: readonly BuilderDelegationAction[],
+	event: ActionsRequestedData,
 ): BuilderDelegationState {
-	const current =
-		state.turnId === turnId ? state : { turnId, callIds: [] as string[] };
-	const callIds = new Set(current.callIds);
+	const { actions, sequence, stepIndex, turnId } = event;
+	const current = state.turnId === turnId ? state : EMPTY_BUILDER_DELEGATION;
+	const uyThac = actions.filter(
+		(action) =>
+			action.kind === "subagent-call" &&
+			action.subagentName === BUILDER_DELEGATION_SUBAGENT,
+	);
 
-	for (const action of actions) {
-		if (
-			action.kind !== "subagent-call" ||
-			action.subagentName !== "agent_builder" ||
-			callIds.has(action.callId)
-		) {
-			continue;
-		}
-		if (callIds.size > 0) {
-			throw new Error("The agent builder can be delegated only once per turn.");
-		}
-		callIds.add(action.callId);
+	if (uyThac.length === 0) return { ...current, turnId };
+	if (uyThac.length > 1) throw new Error(BUILDER_DELEGATION_LIMIT_MESSAGE);
+
+	const daGhi = current.stepIndex !== null && current.sequence !== null;
+	if (
+		daGhi &&
+		(current.stepIndex !== stepIndex || current.sequence !== sequence)
+	) {
+		throw new Error(BUILDER_DELEGATION_LIMIT_MESSAGE);
 	}
 
-	return { turnId, callIds: [...callIds] };
+	return { turnId, stepIndex, sequence };
 }

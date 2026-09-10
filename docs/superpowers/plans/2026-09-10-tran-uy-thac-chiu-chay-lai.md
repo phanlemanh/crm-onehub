@@ -17,7 +17,7 @@
 - **Không viết chú thích trong code.** Không vào mã mới, không vào mã sửa. (`AGENTS.md`)
 - **Parse tại biên bằng Zod.** Trạng thái bền là JSON từ ngoài process — parse ngay chỗ đọc, không truyền `Record<string, unknown>` đi xa. (`AGENTS.md`)
 - **Câu ném giữ nguyên nguyên văn:** `The agent builder can be delegated only once per turn.`
-- **Tên slot trạng thái giữ nguyên:** `crm.builder-delegation`.
+- **Tên slot trạng thái:** `crm.builder-delegation.v2`. Sửa ở S3 — bản kế hoạch đầu giữ tên cũ và thêm một hàm parse nhận `unknown`, nhưng `lint:slop` chặn đúng: `anti-slop/no-unknown-parameters` chỉ miễn cho `packages/validation/src/**`, và hình dạng này không vượt biên gói nên không thuộc về đó. Xem entry `fix` trong `decisions.jsonl`.
 - **Chín tên nhóm bài của vòng trước phải còn:** `khong-quyen` · `co-quyen` · `lan-mot` · `lap-callid` · `luot-moi` · `ngoai-kenh` · `cung-batch` · `mot-cau` · `khong-loi-goi`. Chín khoá `tr_*` trong `_acceptance/config.yaml` trỏ vào chúng và đó là bằng chứng **đã ký** của `tran-mot-lan-uy-thac`.
 - **Năm nhóm mới phải có:** `toa-do-chay-lai` · `toa-do-rai-rac` · `toa-do-step-khac` · `lan-dau` · `subagent-khac` · `khong-xoa-slot`.
 - **`apps/agent/tsconfig.json` chỉ gồm `agent/**` và `evals/**`** — `test/**` KHÔNG được `check-types` soi. Đừng dựa vào `check-types` để bắt lỗi kiểu trong bộ đo.
