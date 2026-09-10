@@ -203,7 +203,7 @@ evals:
     criterion: AC-9
     executor: script
     cmd: config:executors.script.nc_rang_qua_cong
-    layer: gate-config
+    layer: backend-effect
     paths:
       - "packages/ui/src/components/**"
       - "apps/**"
@@ -229,7 +229,7 @@ evals:
     criterion: AC-10
     executor: script
     cmd: config:executors.script.nc_rang_qua_cong
-    layer: gate-config
+    layer: backend-effect
     paths:
       - "packages/ui/src/components/ai-elements/**"
       - "packages/ui/src/lib/messages.ts"
