@@ -14,7 +14,6 @@
 ## Global Constraints
 
 - **Không viết chú thích trong code.** Không thêm vào code mới, không thêm khi sửa code cũ.
-- **Không trailer `Co-Authored-By` trong commit của repo này** — ngoại lệ: phiên này đã được cấu hình gắn trailer, giữ theo cấu hình phiên.
 - Trí khôn sống ở `apps/agent`, không ở API.
 - Một `.env` duy nhất ở gốc; vòng này không thêm biến môi trường nào.
 - Parse ở biên, không truyền `Record<string, unknown>`.

@@ -15,7 +15,6 @@
 ## Global Constraints
 
 - **Không viết chú thích trong code.** Không thêm vào code mới, không thêm khi sửa code cũ (`AGENTS.md`).
-- **Không trailer đồng tác giả trong commit.**
 - **Trí khôn không ở API.** Cổng tiếp nhận không chấm điểm, không khớp mờ, không gọi nhà cung cấp, không xếp `AgentTask`. Mức sản lượng do bộ cào tính.
 - **Một `.env` ở gốc kho.** Biến mới khai ở `.env.example` kèm ghi chú, và ở `apps/api/src/config/env.validation.ts`.
 - **Thiếu khoá là mất năng lực, không bao giờ ném lỗi lúc khởi động.** `LISTING_INGEST_SECRET` vắng → cổng trả 503.

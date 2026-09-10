@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Không chú thích trong code. Không `Co-Authored-By`. `/packages/ui` là nguồn duy nhất của UI — vòng không sửa component.
+- Không chú thích trong code. `/packages/ui` là nguồn duy nhất của UI — vòng không sửa component.
 - Kho chuỗi: nối vào `apps/app/lib/messages/settings.ts` hiện có; `const vi satisfies SettingsMessages`; hàm ghép biến nhận `string`.
 - Client: `settingsMessages(useLocale())` với `useLocale` từ `@crm/ui/components/locale-provider`. Server: `getLocale()` từ `@/lib/locale/server`; `export const metadata` → `generateMetadata`.
 - Mọi giá trị `vi` mang dấu, trừ miễn trừ có tên trong `KHONG_DAU`. Hàm ghép biến phải có dòng `GHIM`.
