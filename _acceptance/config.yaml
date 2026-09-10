@@ -265,10 +265,8 @@ executors:
     bo_cao_test: cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v
     bo_cao_cli: cd tools/listing-crawl && ./.venv/bin/python -m unittest tests.test_cli -v
     bo_cao_duong_chay: cd tools/listing-crawl && ./.venv/bin/python -m unittest tests.test_duong_chay -v
-    dq_cong_quyen_do: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/cong-quyen-do.mjs
     dq_khong_cam_tin_nhan: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/khong-cam-tin-nhan.mjs
     dq_nguon_ghi: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs
-    dq_mang_theo_do: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/mang-theo-do.mjs
     dq_bo_do_grep: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/bo-do-grep.mjs
     dq_khai_sinh: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/khai-sinh.mjs
     dq_vet_ho_so_cu: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/vet-ho-so-cu.mjs

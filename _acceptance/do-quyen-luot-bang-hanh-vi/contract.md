@@ -5,9 +5,9 @@ slug: do-quyen-luot-bang-hanh-vi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent, api, docs]
-status: implemented
-approved_by: Mạnh
-approved_at: 2026-09-10
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-09-09-do-quyen-luot-bang-hanh-vi-design.md
 ---
 
@@ -90,6 +90,15 @@ Fixture là **hàng**, không phải khối tham số: chỗ mã rút trường 
 tham số phải nằm TRONG đường đo, vì đó chính là chỗ một suy diễn mới sẽ mọc.
 Cấm dựng thuộc tính phiên bằng tay, cấm ghi đè `commandType` sau khi hàm thật
 đã trả về, cấm gọi hàm phụ thay cho cổng thật.
+**Chiều đỏ của AC-1 sống trong bản khai sinh (AC-7)**, không có chân đo riêng:
+hai dòng `mo-cong` và `ternary-xuong-dong` đột biến cổng và chỗ gọi, rồi đòi bài
+`suy-dien: hang khai CHAT thi cong dong` phải đỏ.
+Vì sao bỏ chân đo riêng: eval ấy đã **ba lần** báo một kết quả không phải kết
+quả thật của nó — vòng 2 dính răng chị em, vòng 3 và vòng 5 dính chính nó — và
+mỗi lượt chạy tay đều thoát 0 với output nhánh thành công, còn làn chấm ghi 1. Giả
+thuyết đưa ra ở vòng 4 (làn chấm đọc dòng tổng kết trong nhật ký răng in ra) đã
+được thử và **sai**. Nguyên nhân thật chưa truy được, nên bỏ đường thứ hai tới
+một sự thật mà bản khai sinh đã chứng — cùng cách đã làm với AC-4 ở vòng 3.
 
 **AC-2 — `apps/agent` không cầm tin nhắn ở chỗ quyết quyền, và chỗ gọi không được tính toán.**
 Given `apps/agent/agent`,
@@ -224,7 +233,11 @@ lại bị AC-8 chặn.
   số. Hai dân số hiện có 19 và 11 computed key dạng ấy, tất cả là khoá cột động
   hợp lệ. Chặn hết chúng là dựng thêm một máy phát đỏ-oan, nên vòng này giải
   đúng dạng hằng-chuỗi và **khai thẳng phần còn lại là chưa phủ**.
-- Bản này là bản **duyệt lại lần hai**, sau ba vòng chấm REJECT. Vòng 3 siết
+- Bản này là bản **duyệt lại lần ba**, sau năm vòng chấm. Đổi so với bản trước:
+  AC-1 bỏ chân đo riêng cho chiều đỏ (E2), giao cho bản khai sinh — chủ ý y hệt
+  lần bỏ chân đo riêng của AC-4; và AC-3 siết loại `khai` cho khớp AC-2, kèm một
+  giới hạn khai thẳng về computed key không truy được.
+- Bản trước đó là bản **duyệt lại lần hai**, sau ba vòng chấm REJECT. Vòng 3 siết
   thêm: AC-2 lên bốn điều (thêm ma trận khoá, và hai chỗ nhận diện quá hẹp), và
   AC-3 nhận cả khoá viết bằng string literal / computed key. Cả ba lỗ đều được
   người soi dựng cây thử chứng minh là lọt trước khi siết.

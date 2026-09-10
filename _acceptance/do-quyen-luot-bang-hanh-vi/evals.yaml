@@ -37,40 +37,21 @@ evals:
       Chi mot chieu chay -> ma 1: mot cong luon-dong va mot cong luon-mo deu cho
       mot mau xanh neu chi do mot chieu.
       Bai nay song trong khoi describe("suy-dien") — xem AC-5.
-
-  - id: E2
-    criterion: AC-1
-    executor: script
-    cmd: config:executors.script.dq_cong_quyen_do
-    paths:
-      - "apps/agent/agent/lib/custom-agent-dispatch.ts"
-      - "apps/agent/agent/lib/session-purpose.ts"
-      - "apps/agent/test/quyen-luot.spec.ts"
-      - "_acceptance/do-quyen-luot-bang-hanh-vi/rang/**"
-    expected: |
-      Chieu do cua E1, do bang DOT BIEN THAT chu khong khai trong expected.
-      CAY SAO PHAI MANG MA DANG XET, khong phai HEAD: S4 chay tren cay lam viec
-      va ma moi co the chua commit. Dung `git stash create` (hoac chep theo
-      `git ls-files` cong thay doi chua commit) roi worktree len object ay;
-      symlink node_modules va .env. Moi vecto MOT cay sao MOI.
-      ASSERT DANH TINH truoc moi vecto, tren ban sao CHUA dot bien:
-        builderCommandType KHONG ton tai VA builderSessionAttributes KHONG co
-        tham so message VA builderSessionAuthFromRow CO ton tai.
-      Khong dat -> ma 2 voi dung chu "cay sao khong chua ma dang xet". In duong
-      tuyet doi va sha da do.
-      Doi chung duong: cay sao chua dot bien -> `bun test
-      test/quyen-luot.spec.ts` trong apps/agent ma 0. Khong dat -> ma 2 (thuoc
-      chua bao gio chay thi mau do sau do khong noi len dieu gi).
-      vecto "mo-cong": doi builderTurnAuthorized cua session-purpose.ts thanh
-        `return true`. Chay lai -> ma KHAC 0, thong diep chua ten moc
-        "cong dong khi hang khai CHAT".
-      vecto "ternary-xuong-dong": cay lai vao CHO GOI builderSessionAttributes
-        mot buoc suy commandType tu chu trong message, viet duoi dang ternary
-        XUONG DONG — dung hinh dang ma bo do regex cu mu. Chay lai -> ma KHAC 0,
-        cung ten moc.
-      Vecto nao ra XANH -> ma 2, in ten vecto.
-      GOC suy tu vi tri script, khong ghim cung duong goc kho. Don cay sao ke ca
-      khi ngat giua chung.
+      CHIEU DO cua AC-1 KHONG do o day va KHONG co chan do rieng: no do o ban
+      khai sinh (E8), tren hai dong
+        vecto "mo-cong": doi builderTurnAuthorized cua session-purpose.ts thanh
+          `return true` -> bai "suy-dien: hang khai CHAT thi cong dong" phai DO.
+        vecto "ternary-xuong-dong": cay vao CHO GOI builderSessionAttributes mot
+          buoc suy commandType tu chu trong message, viet ternary XUONG DONG ->
+          cung bai ay phai DO.
+      Vi sao bo chan do rieng: eval do da BA LAN bao mot ket qua khong phai ket
+      qua that cua no (vong 2 dinh rang chi em, vong 3 va vong 5 dinh chinh no) —
+      moi lan chay tay deu thoat 0 voi output nhanh THANH CONG, con lan cham ghi
+      1. Gia thuyet "lan cham doc dong N fail trong nhat ky rang in ra" da duoc
+      thu o vong 4 va SAI: bo hen echo tho roi ma vong 5 van the. Nguyen nhan
+      that chua truy duoc. Chieu do van duoc chung minh — boi E8, tren dung hai
+      vecto ay — nen bo duong thu hai toi cung mot su that, giong dung cach da
+      lam voi AC-4 o vong 3.
 
   - id: E3
     criterion: AC-2

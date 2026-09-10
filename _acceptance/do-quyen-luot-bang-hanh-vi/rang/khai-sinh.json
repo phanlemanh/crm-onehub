@@ -1,6 +1,6 @@
 [
 	{
-		"id": "E2",
+		"id": "E1",
 		"vecto": "mo-cong",
 		"chay": [
 			"node",
@@ -12,7 +12,7 @@
 		"ma": 1
 	},
 	{
-		"id": "E2",
+		"id": "E1",
 		"vecto": "ternary-xuong-dong",
 		"chay": [
 			"node",
