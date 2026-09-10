@@ -1,85 +1,87 @@
 ## Trong hợp đồng
 
-### Assert "chuỗi có mặt" trong khi lời hứa là QUAN HỆ giữa các giá trị — ca (a) của AC-4 không đo đường đi của errorText
-
-- file: `packages/ui/test/eve-to-ai-sdk.spec.ts:102`
-- severity: high
-- AC: AC-4
-- source: measurement
-
-AC-4 ca (a) hứa một QUAN HỆ giữa đầu vào và đầu ra: "state gốc là output-error kèm chuỗi lỗi → output-error mang ĐÚNG CHUỖI ĐÓ" (contract.md, mục AC-4; E8 của evals.yaml chép lại nguyên văn: "(a) state goc output-error kem chuoi loi -> output-error mang dung chuoi do").
-
-Bài kiểm ghim ca này (dòng 96-109) lại chỉ so:
-
-  expect({ tone: item.tone, errorText: item.errorText, state: part.state })
-    .toEqual({ tone: "warning", errorText: "hết lượt gọi trong ngày", state: "output-error" });
-
-`item` là VẬT THỬ đã phân tích (dòng 97: `const item = didAt("m3:call-warning")`), nên `item.errorText` ở dòng 102 chỉ khẳng định vật thử tự nó mang chuỗi đó — một điều hiển nhiên đúng vì chính fixtures/eve-turns.json:85 viết ra nó. Vế duy nhất nói về đầu ra là `part.state`. Không dòng nào chạm `part.errorText`.
-
-Đây đúng là hình dạng "đo chuỗi có mặt thay vì đo quan hệ": chuỗi lỗi có mặt ở đầu VÀO được lấy làm bằng chứng cho lời hứa về đầu RA.
-
-Hiệu ứng cụ thể: trong packages/ui/src/lib/eve-to-ai-sdk.ts:54, nhánh failed viết `errorText: item.errorText ?? messages(locale).chatTool.failed`. Đổi dòng đó thành `errorText: messages(locale).chatTool.failed` (bỏ hẳn chuỗi lỗi thật, mọi lượt hỏng đều hiện "Bước này lỗi") thì:
-  - ca (a) vẫn xanh, vì nó không assert part.errorText;
-  - ca (b) (dòng 111-131) cũng vẫn xanh, vì nó ghim đúng chuỗi mặc định `messages("vi").chatTool.failed` và `messages("en").chatTool.failed`;
-  - ca (c) và các ca còn lại không đi qua nhánh failed.
-Cả bộ suite xanh trong khi người dùng mất nguyên văn lý do lỗi trên màn.
-
-Grep toàn kho xác nhận không có phép đo nào khác bịt lỗ này: "hết lượt gọi trong ngày" chỉ xuất hiện ở packages/ui/test/eve-to-ai-sdk.spec.ts:106, packages/ui/test/fixtures/eve-turns.json:85 và apps/app/test/agent-transcript.spec.ts:759 (bài kiểm round-trip của toTranscript, không gọi toToolPart). packages/validation/test/agent-transcript.spec.ts:29 chỉ kiểm schema đọc lại đúng trường, không kiểm lớp chuyển.
-
-Đối chiếu với hai ca kia cho thấy khuôn đúng đã có sẵn ngay trong cùng tệp: ca (b) dòng 124-130 assert `part` bằng toMatchObject kèm errorText, ca (c) dòng 146-149 assert cả `state` lẫn `output`. Chỉ ca (a) — ca có chuỗi lỗi thật, tức ca duy nhất chứng minh chuỗi thật đi xuyên qua được lớp chuyển — là thiếu vế đầu ra.
+(rỗng — vòng này scope-triage không chạy được nên không finding nào được xếp vào hợp đồng.)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **Xoá 9/14 component "Adopted" mà không sửa bảng đăng ký ở docs/chat-ui.md**
-  Người dùng thấy gì: Tài liệu hướng dẫn nội bộ cho các phiên làm việc sau vẫn liệt kê một số thành phần chat đã bị gỡ bỏ khỏi kho là "đã dùng được", có thể khiến người làm tiếp theo tưởng nhầm và cấu hình sai theo hướng dẫn cũ.
+- **Xoá 19 component nhưng không sửa bảng đăng ký ở docs/chat-ui.md — chính doc đó bắt sửa bảng trước**
+  Người dùng thấy gì: Tài liệu hướng dẫn nội bộ vẫn liệt kê các thành phần đã bị xoá khỏi kho, nên người đọc theo tài liệu này có thể đi tìm nhầm thứ không còn tồn tại.
   file: `docs/chat-ui.md`
-  severity: high
-  Đề xuất: known-limits
-
-- **suite_keys mất check_types_khong_cache cho MỌI vòng sau, trong khi lý do chỉ áp cho vòng này**
-  Người dùng thấy gì: Từ nay, các lần kiểm tra tính năng tiếp theo trong toàn bộ dự án sẽ không còn tự động kiểm tra lỗi kiểu dữ liệu nữa, dù tài liệu nội bộ vẫn ghi là có — vấn đề kiểu dữ liệu chỉ được phát hiện muộn hơn, lúc dựng ứng dụng hoặc ngay trước khi đẩy code lên.
-  file: `_acceptance/config.yaml`
-  severity: high
-  Đề xuất: known-limits
-
-- **className đè màu của Button ở hai chỗ trong conversation.tsx**
-  Người dùng thấy gì: Hai nút (cuộn xuống đáy và tải hội thoại) trong khung chat có thể hiện màu nền hơi lệch chuẩn giao diện chung ở chế độ tối, vì màu được ấn định riêng tại chỗ dùng thay vì lấy từ bộ giao diện dùng chung của toàn sản phẩm.
-  file: `packages/ui/src/components/ai-elements/conversation.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **Nhãn vai trong bản tải hội thoại là chuỗi tiếng Anh dựng bằng code, ngoài bảng chuỗi**
-  Người dùng thấy gì: Khi người dùng tải file hội thoại về máy, nhãn người nói trong file luôn hiện bằng tiếng Anh (User/Assistant) dù giao diện sản phẩm đang ở tiếng Việt.
-  file: `packages/ui/src/components/ai-elements/conversation.tsx`
+- **Vòng dựng răng chống mồ côi lại đẻ ra một tệp mồ côi mà chính răng đó không nhìn thấy**
+  Người dùng thấy gì: Một tệp mã mới được thêm vào nhưng hiện chưa nơi nào trong ứng dụng dùng tới; nếu việc kết nối nó vào màn thật bị bỏ dở, tệp này có thể nằm im trong kho mà không ai phát hiện, giống các tệp cũ vừa được dọn.
+  file: `packages/ui/src/lib/eve-to-ai-sdk.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Lý do giữ pham-vi-diff ngoài cổng đã sai sự thật, và không gì bắt được**
-  Người dùng thấy gì: Một trong các bước kiểm tra tự động của dự án đang được miễn kiểm tra dựa trên một lý do đã không còn đúng với thực tế, mà không có cơ chế nào tự phát hiện việc lý do đó đã lỗi thời.
+- **gate-shape.json: lý do miễn pham-vi-diff khỏi cổng sai sự thật ở cả hai vế, và không có gì bắt được**
+  Người dùng thấy gì: Lý do ghi trong cấu hình cổng để miễn kiểm tra phạm vi cho một bước không còn đúng với thực tế hiện tại; điều này không làm sai kết quả hôm nay nhưng khiến hồ sơ khó tin cậy nếu có người đọc lại sau này.
   file: `.githooks/gate-shape.json`
   severity: medium
   Đề xuất: known-limits
 
-- **so-lech-chuan.mjs bỏ lại sân tạm trên mọi đường "KHÔNG ĐO ĐƯỢC"**
-  Người dùng thấy gì: Nếu quá trình kiểm tra tự động bị lỗi mạng giữa chừng, công cụ có thể để lại các thư mục tạm chứa bản sao mã nguồn trên máy chủ dựng, dồn lại qua nhiều lần chạy mà không có cảnh báo nào.
-  file: `_acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-- **content-visibility trên mọi con của ConversationContent: chiều cao ước lượng và cắt tràn**
-  Người dùng thấy gì: Khi màn hình thật sau này dùng lại khung cuộn hội thoại, có nguy cơ vòng viền lấy nét ở mép mỗi lượt chat bị cắt xén, và vị trí thanh cuộn có thể trôi nhẹ khi người dùng cuộn ngược lên xem tin nhắn cũ.
+- **ConversationDownload thu hồi blob URL ngay sau click — tải im lặng không xảy ra trên Firefox/Safari**
+  Người dùng thấy gì: Nút tải xuống hội thoại có thể không hoạt động trên một số trình duyệt như Firefox và Safari — bấm vào nhưng không có tệp nào được tải về và không có thông báo lỗi. Tính năng này chưa được gắn vào màn hình thật nên chưa ai gặp phải.
   file: `packages/ui/src/components/ai-elements/conversation.tsx`
   severity: low
   Đề xuất: known-limits
 
-- **ConversationDownload thu hồi blob URL ngay sau click — tải có thể im lặng không xảy ra**
-  Người dùng thấy gì: Nếu nút tải hội thoại này được đưa vào dùng thật, người dùng dùng trình duyệt Firefox hoặc Safari có thể bấm tải mà không có tệp nào được lưu xuống máy, và không có thông báo lỗi nào hiện ra.
-  file: `packages/ui/src/components/ai-elements/conversation.tsx`
-  severity: low
-  Đề xuất: wont-fix
+- **suite_keys mất check_types_khong_cache ở cấp kho — mọi vòng nghiệm thu sau không còn đo kiểu**
+  Người dùng thấy gì: Một thay đổi cấu hình đo lường ở cấp toàn bộ kho đã tắt bước kiểm tra kiểu dữ liệu cho mọi tính năng chạy sau này, không riêng tính năng này. Quyết định này đã được ghi nhận có chủ đích kèm hẹn xem lại, nhưng nếu không ai nhớ quay lại sửa, lỗi kiểu dữ liệu ở nơi khác có thể lọt qua vòng nghiệm thu.
+  file: `_acceptance/config.yaml`
+  severity: medium
+  Đề xuất: known-limits
+
+## Chưa phân loại (triage-failed)
+
+phân loại phạm vi không chạy được — không lỗi nào bị máy tự sửa, người xem lại toàn bộ
+
+### Schema mới ở biên khai lỏng hơn dữ liệu thật — `url` là z.string() trần trong khi module anh em ép http(s)
+
+- file: `packages/validation/src/agent-transcript.ts:9`
+- severity: medium
+- source: conventions
+
+`packages/validation/src/agent-transcript.ts:8-12` khai:
+
+```ts
+export const source = z.object({
+	url: z.string(),
+	title: z.string(),
+	network: z.enum(["linkedin", "github", "web"]),
+});
+```
+
+Hai lối đã có sẵn trong chính kho, cả hai chặt hơn:
+- `packages/validation/src/eve-tool.ts:21-27` — mọi đường dẫn đi qua `const link = z.string().regex(/^https?:\/\//).nullable().catch(null)`.
+- `packages/validation/src/agent-manifest.ts`, tệp mà `AGENTS.md` gọi là khuôn mẫu — `z.string().trim().min(1).max(120)`.
+
+`AGENTS.md` mục "Parse at the boundary" viết: "The schema describes what is **actually stored**, not the loosest thing that parses." Ở đây nguồn sinh duy nhất là `sourcesOf()` (`apps/app/lib/agent-transcript.ts:305-313`), và nó chỉ lấy `result.sourceUrl / profileUrl / url` — ba trường đã qua `link`, tức đã chắc chắn http(s). Vậy schema mới lỏng hơn hẳn dữ liệu nó mô tả.
+
+Hệ quả không phải hôm nay (chưa gì render `sources`) mà ở Phase 5: `docs/chat-ui.md` xếp `sources`/`inline-citation` là việc sắp làm, và lúc `url` thành `href` thì `javascript:` qua biên không ai chặn.
+
+Cùng lớp, nhẹ hơn: `id`, `tool`, `label`, `text` đều là `z.string()` trần, không `.trim().min(1)`, nên một `id` rỗng — thứ không thể tồn tại vì `partId()` luôn ghép chuỗi — vẫn parse xanh.
+
+### so-lech-chuan.mjs: process.exit trong try làm finally không bao giờ chạy — sân tạm rò trên mọi đường "KHÔNG ĐO ĐƯỢC"
+
+- file: `_acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs:257`
+- severity: medium
+- source: bugs
+
+Khối `try` (dòng 231-259) dọn sân tạm bằng `finally { rmSync(san.tam, ...) }`, nhưng cả ba nhánh lỗi trong khối đó — `san.chay.error` (dòng 234), `san.chay.status !== 0` (dòng 240), CLI không ghi file (dòng 250) — đều gọi `boCuoc()` và `boCuoc` kết thúc bằng `process.exit(2)`. Trong Node, `process.exit()` chấm dứt tiến trình ngay, KHÔNG chạy `finally`. Đã xác minh bằng script tối thiểu: `try { process.exit(3) } finally { console.log("FINALLY RAN") }` in ra "in try" rồi thoát 3, không in "FINALLY RAN".
+
+Kịch bản hỏng: máy CI (hoặc máy Mạnh) mất mạng giữa chừng → `bunx --bun ai-elements@latest add` thoát khác 0 → boCuoc → exit 2 → thư mục `os.tmpdir()/so-lech-chuan-XXXX` (kèm `components.json`, `package.json`, `tsconfig.json`, và mọi tệp CLI đã kịp ghi) nằm lại. Mỗi lần chạy lại tạo một thư mục mới; không có gì dọn, không có cảnh báo. Chạy tay 20 lần trong một phiên nghiệm thu mạng chập chờn để lại 20 sân tạm.
+
+Sửa: đổi `boCuoc` trong phạm vi khối này sang `throw`, bắt ở ngoài sau khi `finally` đã chạy; hoặc gọi `rmSync(san.tam, {recursive:true, force:true})` ngay trước mỗi `boCuoc`; hoặc đăng ký dọn bằng `process.on("exit", ...)`.
+
+(Bằng chứng cụ thể: round này, chính hai lần gọi `bunx ai-elements@latest add` — cho E7 và cho E12 — đều thoát khác 0 vì lỗi liên kết dependency; theo đúng đường lỗi ở trên, mỗi lần gọi hỏng đó nhiều khả năng đã để lại một sân tạm chưa dọn trên máy chạy verify vòng này.)
 
 ## Chưa adversarial-verify (refuter chết)
+
+(rỗng — không có finding nào đánh dấu unverified trong vòng này.)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
