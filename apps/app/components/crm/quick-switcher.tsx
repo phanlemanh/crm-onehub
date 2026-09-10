@@ -13,25 +13,22 @@ import {
 	EntityLogo,
 	type EntityLogoTone,
 } from "@crm/ui/components/entity-logo";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
 import { useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
+import { khungUngDungMessages } from "@/lib/messages/khung-ung-dung";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
-
-const GROUP_LABEL = {
-	company: "Companies",
-	contact: "Contacts",
-	deal: "Deals",
-} as const;
 
 const KINDS = ["company", "contact", "deal"] as const;
 
 export function QuickSwitcher() {
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
+	const m = khungUngDungMessages(useLocale()).switcher;
 
 	const [open, setOpen] = useQueryState(
 		SEARCH_PARAM.dialog.switcher,
@@ -69,20 +66,18 @@ export function QuickSwitcher() {
 		<CommandDialog
 			open={open}
 			onOpenChange={(next) => setOpen(next || null)}
-			title="Search"
-			description="Jump to a company, contact or deal"
+			title={m.title}
+			description={m.description}
 		>
 			<Command shouldFilter={false}>
 				<CommandInput
-					placeholder="Search companies, contacts and deals…"
+					placeholder={m.placeholder}
 					value={query}
 					onValueChange={setQuery}
 				/>
-				<CommandList>
+				<CommandList label={m.results}>
 					<CommandEmpty>
-						{query.trim().length < 2
-							? "Type at least two characters."
-							: "Nothing matches."}
+						{query.trim().length < 2 ? m.typeMore : m.noMatch}
 					</CommandEmpty>
 
 					{KINDS.map((kind) => {
@@ -90,7 +85,7 @@ export function QuickSwitcher() {
 						if (group.length === 0) return null;
 
 						return (
-							<CommandGroup key={kind} heading={GROUP_LABEL[kind]}>
+							<CommandGroup key={kind} heading={m.groups[kind]}>
 								{group.map((hit) => (
 									<CommandItem
 										key={`${hit.kind}:${hit.id}`}
@@ -112,7 +107,7 @@ export function QuickSwitcher() {
 												size="sm"
 											/>
 										)}
-										<span className="flex min-w-0 flex-col">
+										<span className="flex min-w-0 flex-col" translate="no">
 											<span className="truncate">{hit.label}</span>
 											{hit.detail ? (
 												<span className="truncate text-muted-foreground text-xs">

@@ -1,0 +1,84 @@
+{
+	"lat": "tong-quan-va-khung-noi-tieng-viet",
+	"ghi_chu": "Du lieu NGUOI NHAP hien tren / va khung: (file, bieu_thuc) — phan tu JSX boc bieu thuc phai mang translate=no (chan ma, AST). Chan man doi chieu vat SAN CO qua nguon_san lay tu API trong cung luot; o khong co nguon khai vi_sao_san. do duoc + khong do duoc = so dong.",
+	"o": [
+		{
+			"file": "apps/app/app/(app)/[slug]/dashboard-summary.tsx",
+			"truong": "ten thoa thuan (bang dang mo)",
+			"bieu_thuc": "name",
+			"nguon_san": "biggestOpen[0].name"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/dashboard-summary.tsx",
+			"truong": "ten cong ty cua thoa thuan",
+			"bieu_thuc": "company.name",
+			"nguon_san": "biggestOpen[0].company.name"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/dashboard-summary.tsx",
+			"truong": "chu de viec qua han",
+			"bieu_thuc": "task.subject",
+			"nguon_san": "overdueTasks[0].subject"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/dashboard-summary.tsx",
+			"truong": "ten thoa thuan cua viec",
+			"bieu_thuc": "task.deal.name",
+			"vi_sao_san": "cung o voi chu de viec — bang viec rong tren seed"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/dashboard-summary.tsx",
+			"truong": "ten cong ty cua viec",
+			"bieu_thuc": "task.company.name",
+			"vi_sao_san": "cung o voi chu de viec — bang viec rong tren seed"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/dashboard-summary.tsx",
+			"truong": "chu de hoat dong",
+			"bieu_thuc": "entry.subject",
+			"nguon_san": "recentActivity[0].subject"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/dashboard-summary.tsx",
+			"truong": "ten cong ty cua hoat dong",
+			"bieu_thuc": "entry.company.name",
+			"vi_sao_san": "hoat dong seed dau bang la doi giai doan, khong gan cong ty rieng — do muc ma"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/dashboard-summary.tsx",
+			"truong": "ten thoa thuan cua hoat dong",
+			"bieu_thuc": "entry.deal.name",
+			"vi_sao_san": "nhu tren — do muc ma"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/dashboard-summary.tsx",
+			"truong": "nguoi ghi hoat dong",
+			"bieu_thuc": "entry.createdBy.name",
+			"nguon_san": "recentActivity[0].createdBy.name"
+		},
+		{
+			"file": "apps/app/components/app-header.tsx",
+			"truong": "ten workspace",
+			"bieu_thuc": "label",
+			"nguon_san": "workspace.get.name"
+		},
+		{
+			"file": "apps/app/components/app-header.tsx",
+			"truong": "email nguoi dang nhap (menu tai khoan)",
+			"bieu_thuc": "user.email",
+			"nguon_san": "phien.email"
+		},
+		{
+			"file": "apps/app/components/crm/quick-switcher.tsx",
+			"truong": "ten ket qua ⌘K",
+			"bieu_thuc": "hit.label",
+			"vi_sao_san": "ket qua ⌘K can API tim kiem khop — Later, do muc ma"
+		},
+		{
+			"file": "apps/app/components/app-header.tsx",
+			"truong": "chu cai dau cua ten nguoi dang nhap (avatar)",
+			"bieu_thuc": "initials(user.name)",
+			"nguon_san": "phien.chuCaiDau"
+		}
+	]
+}

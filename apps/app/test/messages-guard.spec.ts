@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { readdirSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Locale } from "@crm/ui/lib/locale";
 import { docDuongGoi, taoSong } from "./duong-goi";
@@ -96,6 +96,7 @@ const KHONG_DAU = new Set([
 	"ten.outlook",
 	"ten.stripe",
 	"ten.docusign",
+	"header.otherLocale",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -418,6 +419,51 @@ describe("kho chuoi cua vong ③a", () => {
 			"settings-ket-noi:quyen.dem": ["1 rộng trên A", "12 rộng trên A"],
 			"settings-ket-noi:kenh.chonKenh": ["Chọn kênh #1", "Chọn kênh #12"],
 			"settings-ket-noi:kenh.soNguoi": [" · 1 người", " · 12 người"],
+			"khung-ung-dung:enrichment.enrichingCount": [
+				"Đang tra cứu 1",
+				"Đang tra cứu 12",
+			],
+			"khung-ung-dung:enrichment.bookedMany": [
+				"1 bản ghi hẹn tra cứu sau",
+				"12 bản ghi hẹn tra cứu sau",
+			],
+			"khung-ung-dung:enrichment.bookedMore": [
+				"Còn 1 bản ghi nữa chưa liệt kê ở đây",
+				"Còn 12 bản ghi nữa chưa liệt kê ở đây",
+			],
+			"khung-ung-dung:enrichment.moreQueued": [
+				"Còn 1 đang xếp hàng",
+				"Còn 12 đang xếp hàng",
+			],
+			"tong-quan:stats.closedWonDesc": [
+				"1 · A tháng trước",
+				"12 · A tháng trước",
+			],
+			"tong-quan:stats.openPipelineDesc": [
+				"1 đang mở · A hạn chốt tháng này",
+				"12 đang mở · A hạn chốt tháng này",
+			],
+			"tong-quan:stats.winRate": [
+				"Tỷ lệ chốt (1 ngày)",
+				"Tỷ lệ chốt (12 ngày)",
+			],
+			"tong-quan:stats.wonLost": [
+				"1 chốt được · A không thành",
+				"12 chốt được · A không thành",
+			],
+			"tong-quan:stats.avgDeal": [
+				"Trung bình mỗi thoả thuận (1 ngày)",
+				"Trung bình mỗi thoả thuận (12 ngày)",
+			],
+			"tong-quan:stats.avgCycle": [
+				"Chu kỳ trung bình 1 ngày",
+				"Chu kỳ trung bình 12 ngày",
+			],
+			"tong-quan:unconverted.sentence": [
+				"Mọi con số trên đây tính bằng B. 1 bằng A không được tính vì chưa có tỷ giá để quy đổi.",
+				"Mọi con số trên đây tính bằng B. 12 bằng A không được tính vì chưa có tỷ giá để quy đổi.",
+			],
+			"tong-quan:tasks.pastDue": ["1 quá hạn", "12 quá hạn"],
 			"settings-ket-noi:kenh.khongKhop": [
 				"Không kênh nào khớp “1”.",
 				"Không kênh nào khớp “12”.",
@@ -546,6 +592,29 @@ describe("kho chuoi cua vong ③a", () => {
 			expect(f("1", "A", "B")).toBe(mot);
 			expect(f("12", "A", "B")).toBe(nhieu);
 		}
+	});
+});
+
+describe("dinh dang theo tieng cua lat Tong quan", () => {
+	it('khong cho nao trong lat ghim "en" vao formatCount', () => {
+		const THU_MUC = join(import.meta.dir, "..");
+		const FILE = [
+			"app/(app)/[slug]/dashboard-summary.tsx",
+			"app/(app)/[slug]/sales-dashboard.tsx",
+			"app/(app)/[slug]/overview-greeting.tsx",
+			"app/(app)/[slug]/overview-scope.tsx",
+			"components/app-header.tsx",
+			"components/app-icon-rail.tsx",
+			"components/enrichment-queue.tsx",
+			"components/crm/quick-switcher.tsx",
+		];
+		const ghim = FILE.flatMap((f) => {
+			const chu = readFileSync(join(THU_MUC, f), "utf8");
+			return [...chu.matchAll(/formatCount\([^)]*"(en|vi)"[^)]*\)/g)].map(
+				(m) => `${f}: ${m[0]}`,
+			);
+		});
+		expect(ghim).toEqual([]);
 	});
 });
 

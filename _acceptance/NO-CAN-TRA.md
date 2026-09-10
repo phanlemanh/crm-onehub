@@ -151,3 +151,18 @@ hồ sơ gốc `thuoc-cua-lat-3a-co-rang` · mức gốc `medium` · file `_acce
 **Người dùng thấy gì:** Tài liệu hướng dẫn chạy thử vẫn ghi hai cổng cũ; ai làm đúng theo hướng dẫn có thể vô tình kiểm tra nhầm phiên bản khác, mà kết quả vẫn trông bình thường.
 
 hồ sơ gốc `thuoc-cua-lat-3a-co-rang` · mức gốc `low` · file `CLAUDE.md:90`
+
+
+## Chờ Cổng 2 — chưa tính vào 18 mục trên
+
+> Mục dưới đây đã có ở `## Ngoài hợp đồng` của hồ sơ nguồn nhưng chủ kho
+> chưa định đoạt tại Cổng 2, nên nó chưa phải một dòng nợ chính thức. Khi
+> Cổng 2 của hồ sơ nguồn đóng, quét lại nguồn và chuyển nó lên đúng bậc.
+
+### Cửa sổ cắm vết vẫn mở với giám khảo và với bộ chạy kiểm thử của kho
+
+**Người dùng thấy gì:** Không ảnh hưởng người dùng cuối. Đây là nợ hạ tầng đo lường: nó làm vòng chấm trả kết quả sai, khiến lỗi thật lẫn với báo động giả và mỗi vòng chấm tốn thêm một lượt.
+
+**Vì sao chưa vào bảng chính:** hồ sơ ③b `cai-dat-con-lai-noi-tieng-viet` gọi tên đúng cửa sổ này ở `contract.md:160-169` rồi hoãn sang «đợt sau», nhưng viết trong phần tường thuật vòng chấm chứ không ở mục Ngoài hợp đồng — nên nó chưa từng được quét vào bảng. Vòng ③c-1 trả REJECT hai lần và BLOCKED một lần, cả ba màu đỏ đều do cửa sổ đó, và cả ba đều xanh khi chạy nối tiếp. Nay đã ghi đúng chỗ ở `_acceptance/tong-quan-va-khung-noi-tieng-viet/review-findings.md`.
+
+hồ sơ gốc `tong-quan-va-khung-noi-tieng-viet` · mức gốc `high` · file `_acceptance/man-cai-dat-noi-tieng-viet/rang/khoa-cay.mjs`
