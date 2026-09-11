@@ -1,3 +1,12 @@
+<!-- HO SO CUA KHUON CU — GIU LAM BAN GHI, KHONG PHAI BANG CHUNG CUA HOP DONG HIEN TAI -->
+
+> **Đây là bằng chứng của hai vòng chấm trên một hợp đồng KHÁC.** Chúng chấm
+> khuôn khoá-theo-toạ-độ và khuôn `step.started`, cả hai đã bị chính runtime của
+> eve bác và người ký đã chọn thu phạm vi. Hợp đồng hiện tại có 13 tiêu chí mới
+> và 14 phép đo mới, nên vòng chấm đếm lại từ round 1 — xem entry `revisit`
+> trong `decisions.jsonl`. Giữ file này vì hai vòng ấy **chính là** bằng chứng
+> cho phần «vì sao không vá được», thứ mà hợp đồng hiện tại viện dẫn.
+
 ---
 schema_version: 2
 feature_slug: tran-uy-thac-chiu-chay-lai

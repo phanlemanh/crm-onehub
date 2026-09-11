@@ -5,7 +5,7 @@ slug: tran-uy-thac-chiu-chay-lai
 owner: omre.cnsp4@onemount.com
 risk_tier: T2
 surfaces: [agent]
-status: approved
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-09-11
 design_doc: docs/superpowers/specs/2026-09-10-tran-uy-thac-chiu-chay-lai-design.md
