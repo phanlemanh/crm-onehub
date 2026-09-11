@@ -5,16 +5,16 @@ slug: tran-uy-thac-chiu-chay-lai
 owner: omre.cnsp4@onemount.com
 risk_tier: T2
 surfaces: [agent]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-09-11
 design_doc: docs/superpowers/specs/2026-09-10-tran-uy-thac-chiu-chay-lai-design.md
 ---
 
 # Acceptance Contract: tran-uy-thac-chiu-chay-lai
 
-> **Tên hồ sơ không còn mô tả đúng thứ nó giao.** Vòng mở ra để làm trần *chịu
-> được lần chạy lại*; hai khuôn liên tiếp bị chính runtime của eve bác, và người
+> **Tên hồ sơ không còn mô tả đúng thứ nó giao.** Vòng mở ra để làm trần *sống sót khi
+> một bước chạy lại*; hai khuôn liên tiếp bị chính runtime của eve bác, và người
 > ký chọn **thu phạm vi**. Tên giữ nguyên vì hai lượt phản biện, hai vòng bằng
 > chứng và sổ quyết định trong thư mục này **chính là** bản ghi vì sao việc ấy
 > không làm được ở lớp này — đổi slug là bỏ mất đúng phần có giá trị nhất.
@@ -236,7 +236,7 @@ Phạm vi đã đo: dừng ở đầu ra của hàm — xem `[tran-mot-lan-uy-th
 - **AC-13 — Giới hạn «chạy lại bị chặn» phải được GHIM bằng một phép đo có tên.**
 Given trạng thái đã ghi một uỷ thác trong lượt,
 When một lời gọi mới với `callId` khác đến trong **cùng** lượt — hình dạng mà một
-lần chạy lại của step sinh ra,
+lượt chạy lại của một bước của step sinh ra,
 Then **ném**.
 Tiêu chí này **không** thêm hành vi nào; nó ghim một điều đã quyết. Nhóm bài mang
 tên `gioi-han-chay-lai` để người sửa nó về sau đọc tên là biết mình đang đổi một
