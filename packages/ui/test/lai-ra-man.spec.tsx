@@ -236,7 +236,8 @@ function duongRa(ten: string): string {
 	const goc =
 		process.env.TLR_GHI_BANG_CHUNG === "1"
 			? join(HO_SO, "evidence")
-			: join(GOC_KHO, "node_modules", ".cache", "lai-ra-man");
+			: process.env.TLR_CHO_TAM ||
+				join(GOC_KHO, "node_modules", ".cache", "lai-ra-man");
 	return join(goc, ten);
 }
 

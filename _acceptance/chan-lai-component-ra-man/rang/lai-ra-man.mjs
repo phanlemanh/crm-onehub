@@ -19,7 +19,8 @@ function duongRa(ten) {
 	const goc =
 		process.env.TLR_GHI_BANG_CHUNG === "1"
 			? EV
-			: join(GOC, "node_modules", ".cache", "lai-ra-man");
+			: process.env.TLR_CHO_TAM ||
+				join(GOC, "node_modules", ".cache", "lai-ra-man");
 	return join(goc, ten);
 }
 
