@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e27489fa5f1a1483f03ad740a488ad427f048387
+verified_commit: d94ec00fcb72adb6e1e8c219b027da54eeba408c
 human_signoff: Manh Phan 2026-09-09
 ---
 
@@ -188,3 +188,7 @@ none — every multi-run eval is uniform
 Round 1: AC-9 (E9) sai fixture — bài chiều đỏ gọi thẳng `goiBuilder` thay vì đọc từ `HINH_DANG_KHONG_GOI`, không đo được nhánh đúng của hook. Trả về implementation, sửa lại ở commit 8485487.
 Round 2: Cả 9 eval E1-E9 pass qua `bun test` (`apps/agent/test/tran-uy-thac.spec.ts`), suite `bun run test` xanh (257 tests). `bunx turbo run check-types --force` thất bại (exit 2, `app#check-types`: `.next/types/cache-life.d.ts` / `validator.ts` not found) — lỗi này không gắn eval nào nhưng chặn cổng Bằng chứng. Verdict: REJECT.
 Round 3: Cả 9 eval E1-E9 pass, suite `bun run test` xanh, và `bunx turbo run check-types --force` nay pass (exit 0, 13/13 tasks) sau khi sửa lỗi `.next/types` từ round 2. `lint`, `lint:slop`, `build` đều xanh. Verdict: PASS.
+
+### Re-pin lần 1 — 2026-09-12, do gop onehub 140 commit vao nhanh da ky — code cua ho so doi that
+run_id: repin-20260912T080529Z-57082
+sha: d94ec00fcb72adb6e1e8c219b027da54eeba408c · suites: 4 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng
