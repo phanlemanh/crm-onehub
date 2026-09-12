@@ -15,8 +15,16 @@ function banVeRong(banVe) {
 		.every((b) => b.loi_dong !== null && b.loi_mo !== null);
 }
 
+function duongRa(ten) {
+	const goc =
+		process.env.TLR_GHI_BANG_CHUNG === "1"
+			? EV
+			: join(GOC, "node_modules", ".cache", "lai-ra-man");
+	return join(goc, ten);
+}
+
 function ghi(ten, gt) {
-	const duong = join(EV, ten);
+	const duong = duongRa(ten);
 	mkdirSync(dirname(duong), { recursive: true });
 	writeFileSync(duong, `${JSON.stringify(gt, null, "\t")}\n`);
 }
@@ -75,7 +83,7 @@ function chayBanVe() {
 export function phanNhom() {
 	ghi("mac-dinh.json", docMacDinh(GOC));
 	chayBanVe();
-	const duong = join(EV, "ve-that.json");
+	const duong = duongRa("ve-that.json");
 	if (!existsSync(duong)) {
 		console.error(
 			"KHONG DO DUOC: khong co tao pham ve-that.json — bo ve chua chay duoc, khong ket luan gi ve phan nhom.",

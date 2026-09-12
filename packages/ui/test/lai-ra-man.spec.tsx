@@ -231,8 +231,16 @@ async function laiMotFile(
 	return ra;
 }
 
+function duongRa(ten: string): string {
+	const goc =
+		process.env.TLR_GHI_BANG_CHUNG === "1"
+			? join(HO_SO, "evidence")
+			: join(GOC_KHO, "node_modules", ".cache", "lai-ra-man");
+	return join(goc, ten);
+}
+
 function ghi(ten: string, gt: Record<string, BanVe[]> | MoNguyenBan) {
-	const duong = join(HO_SO, "evidence", ten);
+	const duong = duongRa(ten);
 	mkdirSync(dirname(duong), { recursive: true });
 	writeFileSync(duong, `${JSON.stringify(gt, null, "\t")}\n`);
 }
