@@ -94,11 +94,16 @@ Cấm dựng thuộc tính phiên bằng tay, cấm ghi đè `commandType` sau k
 hai dòng `mo-cong` và `ternary-xuong-dong` đột biến cổng và chỗ gọi, rồi đòi bài
 `suy-dien: hang khai CHAT thi cong dong` phải đỏ.
 Vì sao bỏ chân đo riêng: eval ấy đã **ba lần** báo một kết quả không phải kết
-quả thật của nó — vòng 2 dính răng chị em, vòng 3 và vòng 5 dính chính nó — và
-mỗi lượt chạy tay đều thoát 0 với output nhánh thành công, còn làn chấm ghi 1. Giả
-thuyết đưa ra ở vòng 4 (làn chấm đọc dòng tổng kết trong nhật ký răng in ra) đã
-được thử và **sai**. Nguyên nhân thật chưa truy được, nên bỏ đường thứ hai tới
-một sự thật mà bản khai sinh đã chứng — cùng cách đã làm với AC-4 ở vòng 3.
+quả thật của nó — vòng 2 dính răng chị em, vòng 3 và vòng 5 dính chính nó — mỗi
+lượt chạy tay đều thoát 0, còn làn chấm ghi 1. Giả thuyết đưa ra ở vòng 4 (làn
+chấm đọc dòng tổng kết trong nhật ký răng in ra) đã được thử và **sai**. Hai
+nguyên nhân thật tìm được về sau, đều đã đo: (a) `git stash create` trong đường
+dựng cây sao ghi vào chỉ mục git dùng chung, chạy song song thì răng chết bằng
+ngoại lệ — vá ở vòng 7 bằng cách bỏ hẳn lệnh ấy; (b) làn chấm **ghi sai mã
+thoát** — vòng 8 bắt được tận tay: một script chỉ phát ra được 0/2/3 bị ghi là
+1, kèm nguyên văn output thành-công của nó. (b) là lỗ của bộ kit, đã mở chip
+riêng sang `~/dev/acceptance-gate-kit`. Đường thứ hai tới cùng một sự thật vẫn
+bỏ, vì bản khai sinh đã chứng — cùng cách đã làm với AC-4 ở vòng 3.
 
 **AC-2 — `apps/agent` không cầm tin nhắn ở chỗ quyết quyền, và chỗ gọi không được tính toán.**
 Given `apps/agent/agent`,
