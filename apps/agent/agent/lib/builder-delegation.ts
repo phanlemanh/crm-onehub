@@ -34,9 +34,7 @@ export function recordBuilderDelegation(
 			continue;
 		}
 		if (callIds.size > 0) {
-			throw new Error(
-				"The agent builder can be delegated only once per creation turn.",
-			);
+			throw new Error("The agent builder can be delegated only once per turn.");
 		}
 		callIds.add(action.callId);
 	}

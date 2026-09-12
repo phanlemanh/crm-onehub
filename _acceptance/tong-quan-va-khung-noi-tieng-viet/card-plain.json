@@ -1,0 +1,119 @@
+{
+ "feature_plain": "Màn đầu tiên nhân viên thấy sau khi đăng nhập, cùng thanh bên, thanh đầu và hộp tìm nhanh, nay đọc đúng tiếng người đó chọn.",
+ "scope_plain": "Bảy nhãn giai đoạn thoả thuận giữ tiếng Anh; câu lỗi máy chủ để vòng sau; lớp tác nhân chấm không nằm trong phạm vi vòng này.",
+ "analyst_plain": "Một bài kiểm của kho xanh trên cả cây trước lẫn cây sau vòng, vì nó canh bất biến chung của kho; phần riêng của vòng này mới là phần phân biệt được hai cây.",
+ "decisions_plain": [
+  {
+   "id": "d-20260907T223844Z-5905",
+   "p": "Chữ của màn Tổng quan và của khung điều hướng nằm trong hai kho riêng, không trộn vào kho chung — đổi lại phải nuôi thêm hai tệp."
+  },
+  {
+   "id": "d-20260907T223844Z-24637",
+   "p": "Thước đo màn nay nhìn được cả thanh bên và thanh đầu, nhưng chỉ khi được gọi kèm cờ mới — bốn hồ sơ đã ký giữ nguyên tầm nhìn cũ."
+  },
+  {
+   "id": "d-20260907T223844Z-18999",
+   "p": "KHÔNG làm: bảy nhãn giai đoạn thoả thuận vẫn hiện tiếng Anh, vì từ điển sản phẩm chưa chốt nghĩa cho chúng."
+  },
+  {
+   "id": "d-20260907T223844Z-31201",
+   "p": "Bốn thẻ số của Tổng quan nói giọng đối tác — chốt, đang mở, tỷ lệ chốt — thay vì giữ tiếng Anh."
+  },
+  {
+   "id": "d-20260907T223844Z-25638",
+   "p": "KHÔNG làm: bỏ phiên thiết kế trước cổng, vì vòng này chỉ đổi chữ trên bố cục đã có và máy chưa dựng được ứng dụng lúc đó."
+  },
+  {
+   "id": "d-20260907T223844Z-10320",
+   "p": "KHÔNG làm: hai trạng thái chỉ hiện sau khi bấm được đo ở mức mã, không dựng ra màn."
+  },
+  {
+   "id": "d-20260907T225042Z-29172",
+   "p": "Màn rỗng được kiểm bằng một tài khoản không sở hữu gì, thay vì dựng một không gian làm việc mới."
+  },
+  {
+   "id": "d-20260907T230640Z-17498",
+   "p": "Làm tuần tự trong một cây, không tách nhánh song song — chậm hơn nhưng ít chỗ hỏng hơn."
+  },
+  {
+   "id": "d-20260907T233500Z-18501",
+   "p": "Đổi mốc kiểm của một tiêu chí sau khi đã duyệt: thứ thước cũ không nhìn thấy là thanh đầu, không phải thanh bên."
+  },
+  {
+   "id": "d-20260907T233549Z-28363",
+   "p": "Nhãn thẻ số nay xuống dòng thay vì cắt cụt khi màn hẹp còn hai cột."
+  },
+  {
+   "id": "d-20260907T233759Z-25392",
+   "p": "Neo của một tiêu chí đổi từ con số đã ký sang con số đo lại trên chính máy này, vì dữ liệu hai máy khác nhau."
+  },
+  {
+   "id": "d-20260908T013852Z-4137",
+   "p": "Máy chủ thôi tự đúc tên tháng bằng tiếng Anh; nó trả tháng dạng máy đọc và phía màn định dạng theo tiếng người dùng."
+  },
+  {
+   "id": "d-20260908T024445Z-26454",
+   "p": "Sàn thiết kế nay là một lệnh của kho chụp ba khung hình, thay vì để tác nhân tự ứng biến."
+  },
+  {
+   "id": "d-20260908T024445Z-24644",
+   "p": "Bộ canh kho chuỗi thêm một ca riêng, đòi không chỗ nào ghim cứng tiếng khi đếm số."
+  },
+  {
+   "id": "d-20260908T032251Z-5250",
+   "p": "Từ điển sản phẩm thêm hai mục «Chốt» và «Đang mở», ghi lại giọng thẻ số chủ kho đã chốt ở cổng trước."
+  },
+  {
+   "id": "d-20260908T035711Z-20363",
+   "p": "Dừng vá sau vòng ba: cùng một lớp lỗi lặp lại nên khuôn giải sai, không phải chi tiết sai."
+  },
+  {
+   "id": "d-20260908T070627Z-16906",
+   "p": "Ba phép đo có cắm vết vào mã rời khỏi đợt chấm song song, chạy nối tiếp trước — hết đỏ oan, đổi lại chính phiên này chạy chúng."
+  },
+  {
+   "id": "d-20260908T070627Z-22855",
+   "p": "KHÔNG làm: chưa dựng bản sao cây và máy chủ riêng để khử hẳn cửa sổ cắm vết — ghi thành nợ."
+  },
+  {
+   "id": "d-20260908T074712Z-30187",
+   "p": "Phép thử cắm vào nay in ra có nhãn rõ, để người chấm không lấy nhầm dòng đỏ của nó làm kết quả."
+  },
+  {
+   "id": "d-20260908T075140Z-24381",
+   "p": "Ba phép đo lái trình duyệt thật cũng vào làn nối tiếp, sau khi chúng chập chờn dưới tải."
+  },
+  {
+   "id": "d-20260908T082919Z-9189",
+   "p": "Hai lỗ trong bộ thước đã vá: tiêu đề nay đo bằng quan hệ với kho chữ, và phép so trùng lặp nhìn cả mã cấp mô-đun."
+  },
+  {
+   "id": "d-20260908T083504Z-6000",
+   "p": "Chân đọc kết quả nay từ chối nếu cây có sửa chưa ghi, không chỉ so mã commit."
+  },
+  {
+   "id": "d-20260908T090938Z-6096",
+   "p": "Bỏ một lối kiểm kiểu lúc chạy mà luật kho cấm, thay bằng cách chặt hơn."
+  },
+  {
+   "id": "d-20260908T094712Z-888",
+   "p": "Dừng vá lần hai sau vòng bảy: lớp lỗi người chấm đọc nhầm tái xuất ở một chỗ khác."
+  },
+  {
+   "id": "d-20260908T214415Z-17228",
+   "p": "Chủ kho chọn chốt với giới hạn đã khai thay vì chạy thêm vòng chấm — ba giới hạn ghi rõ trong gói bằng chứng."
+  },
+  {
+   "id": "d-20260908T220239Z-222",
+   "p": "Ba phép đo chiều đỏ vào làn nối tiếp để máy đọc mã thoát, sau khi lệnh ký từ chối mọi verdict bị chặn."
+  },
+  {
+   "id": "d-20260908T224850Z-28849",
+   "p": "Hai phép đo cuối cũng vào làn, vì qua năm vòng mọi thứ trong làn đều đạt còn mọi màu đỏ đều rơi ngoài làn."
+  },
+  {
+   "id": "d-20260908T232239Z-11647",
+   "p": "Vòng chấm đạt; hợp đồng chuyển sang đã kiểm và trình Cổng 2 kèm ba giới hạn, máy không tự ký."
+  }
+ ]
+}

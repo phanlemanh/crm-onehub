@@ -21,32 +21,28 @@ Phí bản rẽ là chi phí dài hạn lớn nhất ở đây. Sửa được �
 @AGENTS.md
 
 Luật kỹ thuật trong đó giữ nguyên hiệu lực: không viết chú thích trong code,
-trí khôn sống ở `apps/agent` chứ không ở API, một
-`.env` duy nhất ở gốc, `/packages/ui` là nguồn duy nhất của giao diện, phân
-tích ở biên chứ không truyền `Record<string, unknown>`. Bảng chỉ mục "đọc gì
-trước khi chạm gì" của nó là bảng duy nhất — theo đúng bảng đó, và nói ra đã
-đọc gì.
+trí khôn sống ở `apps/agent` chứ không ở API, một `.env` duy nhất ở gốc,
+`/packages/ui` là nguồn duy nhất của giao diện, phân tích ở biên chứ không
+truyền `Record<string, unknown>`. Bảng chỉ mục "đọc gì trước khi chạm gì" của
+nó là bảng duy nhất — theo đúng bảng đó, và nói ra đã đọc gì.
 
-**Bốn** mục hành vi của hãng đã **xoá khỏi `AGENTS.md`** ở kho này, không phải
-tắt bằng lời: khuôn báo cáo `## Issues`, `"Use ASD-STE100"`, `"Median Tasks"`
-cùng mục commit theo mã `MDN-…`, và `"No coauthoring commits"`. Ngôn ngữ, giọng và cách báo cáo theo cấu hình
-cá nhân của người dùng. Mã việc của hãng (`CMP-…`) chỉ dùng khi thật sự vá cho
-hãng.
+Bốn mục hành vi của hãng đã **xoá khỏi `AGENTS.md`** ở kho này, không phải tắt
+bằng lời: khuôn báo cáo `## Issues`, `"Use ASD-STE100"`, `"Median Tasks"` cùng
+mục commit theo mã `MDN-…`, và lệnh cấm trailer đồng tác giả. Ngôn ngữ, giọng,
+cách báo cáo và cách quy công đều theo cấu hình cá nhân của người dùng. Mã việc
+của hãng (`CMP-…`) chỉ dùng khi thật sự vá cho hãng.
+
+Trailer đồng tác giả rời khỏi luật kho ngày 10/09 theo yêu cầu của chủ kho: gắn
+hay không gắn là chuyện quy công, không phải luật kỹ thuật của sản phẩm. Không
+hook nào, không lệnh CI nào cưỡng chế nó — nó chỉ sống bằng chữ ở hai file này —
+nên xoá chữ là xoá hẳn, và từ nay cấu hình cá nhân quyết. Xoá chứ không ghi
+"không bắt buộc", vì lý do ngay dưới đây.
 
 Xoá, chứ không phủ định, vì phủ định đã thử và hỏng: bản cũ ghi khuôn `## Issues`
 là "không bắt buộc" — mà không bắt buộc là *cho phép*. Cái khuôn có sẵn mẫu và ví
 dụ trong `AGENTS.md` thắng một dòng chối bỏ trong `CLAUDE.md`, nên nó vẫn bám vào
 cuối câu trả lời qua nhiều phiên. Đây là chỗ rẽ cố ý so với `release`: kéo bản mới
 của hãng về mà thấy bốn mục đó quay lại thì xoá tiếp, đừng tưởng sót merge.
-
-**Trailer đồng tác giả — chốt 10/09/2026.** Luật của hãng cấm tuyệt đối
-`Co-Authored-By`. Ở kho này: cấm trailer **mang tên một người không viết
-commit**; một phiên máy tự ký tên mình thì được. Luật gốc tồn tại để chặn việc
-gán công cho người không làm — máy tự xưng tên làm điều ngược lại.
-
-Chốt này ra đời từ một chỗ làm sai đáng ghi: phiên máy tự cho cấu hình phiên
-thắng luật kho, chạy ~15 commit mang trailer rồi mới đưa người quyết. Đáng ra
-phải hỏi ngay lượt đầu gặp xung đột. Lịch sử ấy giữ nguyên, có chủ đích.
 
 ## Bốn cổng, và vòng lặp là đường mặc định
 

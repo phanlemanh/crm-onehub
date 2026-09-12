@@ -87,6 +87,23 @@ const en = {
 	},
 	reasoning: {
 		thinking: "Thinking…",
+		thoughtBrief: "Thought for a few seconds",
+		thoughtFor: (seconds: string) => `Thought for ${seconds} seconds`,
+	},
+	chatMessage: {
+		roleUser: "You",
+		roleAssistant: "Assistant",
+		previousBranch: "Previous branch",
+		nextBranch: "Next branch",
+		branchPage: (current: string, total: string) => `${current} of ${total}`,
+		attachment: "attachment",
+		unnamedImage: "Image",
+		unnamedAttachment: "Attachment",
+		removeAttachment: "Remove attachment",
+		remove: "Remove",
+	},
+	chatTool: {
+		failed: "This step failed",
 	},
 	threadMessage: {
 		empty: "No message body.",
@@ -182,6 +199,23 @@ const vi = {
 	},
 	reasoning: {
 		thinking: "Đang suy nghĩ…",
+		thoughtBrief: "Đã nghĩ vài giây",
+		thoughtFor: (seconds: string) => `Đã nghĩ trong ${seconds} giây`,
+	},
+	chatMessage: {
+		roleUser: "Bạn",
+		roleAssistant: "Trợ lý",
+		previousBranch: "Nhánh trước",
+		nextBranch: "Nhánh sau",
+		branchPage: (current: string, total: string) => `${current} trên ${total}`,
+		attachment: "tệp đính kèm",
+		unnamedImage: "Ảnh",
+		unnamedAttachment: "Tệp đính kèm",
+		removeAttachment: "Xoá tệp đính kèm",
+		remove: "Xoá",
+	},
+	chatTool: {
+		failed: "Bước này lỗi",
 	},
 	threadMessage: {
 		empty: "Thư không có nội dung.",

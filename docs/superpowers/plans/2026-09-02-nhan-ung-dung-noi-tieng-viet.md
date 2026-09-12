@@ -20,7 +20,6 @@ puppeteer-core cho giàn đo trình duyệt · zod ở biên dữ liệu.
 ## Global Constraints
 
 - **Không viết chú thích trong code.** Không thêm vào mã mới, không thêm vào mã sửa. (`AGENTS.md`)
-- **Không trailer đồng tác giả trong commit.** (`AGENTS.md`)
 - **`/packages/ui` là nguồn duy nhất của giao diện.** Vòng này KHÔNG sửa component ở đó — vòng ② đã cho chúng nhận chuỗi từ ngoài.
 - **Một `.env` duy nhất ở gốc.** Vòng này không thêm biến môi trường nào.
 - **Phân tích ở biên bằng zod**, không truyền `Record<string, unknown>` đi vòng quanh. (`AGENTS.md`)

@@ -199,28 +199,158 @@ function chanToast() {
 	console.log("XANH: khong loi goi toast nao con mang chu tieng Anh viet thang.");
 }
 
-function khoaThanhBen() {
-	const thuMucKho = `${GOC}/apps/app/lib/messages`;
-	const kho = readdirSync(thuMucKho)
-		.filter((t) => t.endsWith(".ts"))
-		.map((t) => readFileSync(`${thuMucKho}/${t}`, "utf8"))
-		.join("\n");
-	const khoi = /thanhBen:\s*\{([^}]*)\}/.exec(kho);
-	if (!khoi) return null;
-	return new Set([...khoi[1].matchAll(/^\s*([A-Za-z][A-Za-z0-9]*):/gm)].map((m) => m[1]));
+const TIENG_DO = "vi";
+const boNhoTuyChon = new Map();
+
+function nhapDanhDinh(nguon) {
+	const ra = new Map();
+	const di = (n) => {
+		if (
+			ts.isImportDeclaration(n) &&
+			n.importClause &&
+			n.importClause.isTypeOnly !== true &&
+			n.importClause.namedBindings &&
+			ts.isNamedImports(n.importClause.namedBindings) &&
+			ts.isStringLiteral(n.moduleSpecifier)
+		)
+			for (const e of n.importClause.namedBindings.elements)
+				if (e.isTypeOnly !== true)
+					ra.set(e.name.text, {
+						ten: (e.propertyName ?? e.name).text,
+						tu: n.moduleSpecifier.text,
+					});
+		ts.forEachChild(n, di);
+	};
+	ts.forEachChild(nguon, di);
+	return ra;
 }
 
-function chanTieuDe() {
+function bienGoiKho(nguon, nhap) {
+	const ra = new Map();
+	const di = (n) => {
+		if (
+			ts.isVariableDeclaration(n) &&
+			ts.isIdentifier(n.name) &&
+			n.initializer &&
+			ts.isCallExpression(n.initializer) &&
+			ts.isIdentifier(n.initializer.expression) &&
+			nhap.has(n.initializer.expression.text)
+		)
+			ra.set(n.name.text, nhap.get(n.initializer.expression.text));
+		ts.forEachChild(n, di);
+	};
+	ts.forEachChild(nguon, di);
+	return ra;
+}
+
+function nhomTraCuu(nguon, bien) {
+	const ra = new Map();
+	const di = (n) => {
+		if (
+			ts.isElementAccessExpression(n) &&
+			ts.isPropertyAccessExpression(n.expression) &&
+			ts.isIdentifier(n.expression.expression) &&
+			bien.has(n.expression.expression.text)
+		) {
+			const kho = bien.get(n.expression.expression.text);
+			const nhom = n.expression.name.text;
+			ra.set(`${kho.tu}|${kho.ten}|${nhom}`, { ...kho, nhom });
+		}
+		ts.forEachChild(n, di);
+	};
+	ts.forEachChild(nguon, di);
+	return [...ra.values()];
+}
+
+function tsconfigGan(duong) {
+	let thuMuc = dirname(duong);
+	while (thuMuc.startsWith(GOC)) {
+		const ung = `${thuMuc}/tsconfig.json`;
+		if (existsSync(ung)) return ung;
+		thuMuc = dirname(thuMuc);
+	}
+	return null;
+}
+
+function tuyChonTs(tsconfig) {
+	if (!boNhoTuyChon.has(tsconfig)) {
+		let loi = null;
+		const doc = ts.getParsedCommandLineOfConfigFile(
+			tsconfig,
+			{},
+			{
+				...ts.sys,
+				onUnRecoverableConfigFileDiagnostic: (d) => {
+					loi = ts.flattenDiagnosticMessageText(d.messageText, " ");
+				},
+			},
+		);
+		boNhoTuyChon.set(
+			tsconfig,
+			doc === undefined
+				? { loi: loi ?? "khong doc duoc tsconfig.json" }
+				: { tuyChon: doc.options },
+		);
+	}
+	return boNhoTuyChon.get(tsconfig);
+}
+
+function ngan(duong) {
+	return duong.startsWith(`${GOC}/`) ? duong.slice(GOC.length + 1) : duong;
+}
+
+async function nhomKhoCuaFile(file) {
+	const duong = `${GOC}/${file}`;
+	const nguon = cay(file);
+	const ung = nhomTraCuu(nguon, bienGoiKho(nguon, nhapDanhDinh(nguon)));
+
+	if (ung.length !== 1)
+		return {
+			loi:
+				`${file} — doc duoc ${ung.length} cach tra cuu nhom kho chuoi bang khoa dong (cho doi dung 1)` +
+				`${ung.length > 1 ? `: ${ung.map((u) => `${u.ten}(...).${u.nhom}`).join(" · ")}` : ""}. ` +
+				"Khong xac dinh duoc nhom nao la nhom ma man nay that su doc.",
+		};
+
+	const { ten, tu, nhom } = ung[0];
+	const tsconfig = tsconfigGan(duong);
+	if (tsconfig === null)
+		return {
+			loi: `${file} — khong co tsconfig.json nao tren duong di len, nen khong giai duoc "${tu}" ve mot file tren dia.`,
+		};
+
+	const doc = tuyChonTs(tsconfig);
+	if (doc.loi !== undefined)
+		return { loi: `${ngan(tsconfig)} — ${doc.loi}` };
+
+	const khoDuong = ts.resolveModuleName(tu, duong, doc.tuyChon, ts.sys)
+		.resolvedModule?.resolvedFileName;
+	if (khoDuong === undefined)
+		return {
+			loi: `${file} — "${tu}" khong giai duoc ve file nao qua ${ngan(tsconfig)}.`,
+		};
+
+	const mo = await import(khoDuong);
+	if (!(mo[ten] instanceof Function))
+		return { loi: `${ngan(khoDuong)} — khong xuat ra ham "${ten}".` };
+
+	const nhomGT = mo[ten](TIENG_DO)?.[nhom];
+	if (!(nhomGT instanceof Object))
+		return {
+			loi: `${ngan(khoDuong)} — ${ten}("${TIENG_DO}").${nhom} khong phai mot nhom khoa.`,
+		};
+
+	return {
+		kho: ngan(khoDuong),
+		ham: ten,
+		nhom,
+		khoa: new Set(Object.keys(nhomGT)),
+	};
+}
+
+async function chanTieuDe() {
 	const L = lat(KHAI_PATH);
 	const o = quetTieuDe(L.file);
-	const khoKhoa = TD.co_thanh_ben === true ? khoaThanhBen() : new Set();
-
-	if (TD.co_thanh_ben === true && (khoKhoa === null || khoKhoa.size === 0)) {
-		console.log(
-			"KHONG DO DUOC: khong doc duoc nhom thanhBen trong kho chuoi — khong co gi de doi chieu nhan thanh ben",
-		);
-		process.exit(2);
-	}
 
 	if (o.length === 0) {
 		console.log(
@@ -233,11 +363,47 @@ function chanTieuDe() {
 	}
 
 	const thanhBen = o.filter((x) => x.loai === "nhan-thanh-ben");
-	const lac = thanhBen.filter((x) => x.khoa === null || !khoKhoa.has(x.khoa));
-	for (const x of lac)
+	const khoTheoFile = new Map();
+
+	if (TD.co_thanh_ben === true) {
+		const cacFile = [...new Set(thanhBen.map((x) => x.file))];
+		if (cacFile.length === 0) {
+			console.log(
+				"KHONG DO DUOC: lat khai co thanh ben ma khong file nao trong lat mang o nhan thanh ben.",
+			);
+			process.exit(2);
+		}
+		for (const f of cacFile) {
+			const r = await nhomKhoCuaFile(f);
+			if (r.loi !== undefined) {
+				console.log(`KHONG DO DUOC: ${r.loi}`);
+				console.log(
+					"  Nhan thanh ben phai doi chieu voi CHINH kho chuoi ma man nay nhap vao, khong phai voi mot nhom trung ten o kho khac.",
+				);
+				process.exit(2);
+			}
+			if (r.khoa.size === 0) {
+				console.log(
+					`KHONG DO DUOC: nhom ${r.nhom} trong ${r.kho} rong — khong co gi de doi chieu nhan thanh ben.`,
+				);
+				process.exit(2);
+			}
+			console.log(
+				`   ${f} -> ${r.ham}("${TIENG_DO}").${r.nhom} trong ${r.kho} (${r.khoa.size} khoa)`,
+			);
+			khoTheoFile.set(f, r);
+		}
+	}
+
+	const lac = thanhBen.filter(
+		(x) => x.khoa === null || !khoTheoFile.get(x.file).khoa.has(x.khoa),
+	);
+	for (const x of lac) {
+		const r = khoTheoFile.get(x.file);
 		console.log(
-			`NHAN THANH BEN LAC: ${x.file}:${x.dong} khoa ${JSON.stringify(x.khoa)} khong co trong nhom thanhBen cua kho chuoi`,
+			`NHAN THANH BEN LAC: ${x.file}:${x.dong} khoa ${JSON.stringify(x.khoa)} khong co trong nhom ${r.nhom} cua ${r.kho}`,
 		);
+	}
 	if (lac.length > 0) process.exit(1);
 
 	if (o.length !== SO_TIEU_DE) {
@@ -275,7 +441,7 @@ function chanTieuDe() {
 
 	console.log(
 		`\nquet ${L.file.length} file · ${o.length} o nhan (${o.filter((x) => x.loai === "tieu-de-tab").length} tieu de tab + ${thanhBen.length} nhan thanh ben) · ` +
-			`${thanhBen.length} nhan thanh ben deu giai duoc qua nhom thanhBen (${khoKhoa.size} khoa) · ${thang.length} o con viet thang`,
+			`${thanhBen.length} nhan thanh ben deu giai duoc qua ${[...khoTheoFile.values()].map((r) => `${r.ham}(...).${r.nhom} trong ${r.kho} (${r.khoa.size} khoa)`).join(" · ")} · ${thang.length} o con viet thang`,
 	);
 
 	if (con.length > 0 || chet.length > 0) {
@@ -537,12 +703,12 @@ function chanThuocTinh() {
 }
 
 if (chan === "toast") chanToast();
-else if (chan === "tieu-de") chanTieuDe();
+else if (chan === "tieu-de") await chanTieuDe();
 else if (chan === "khong-du-quyen") chanKhongDuQuyen();
 else if (chan === "doi-chieu") chanDoiChieu();
 else if (chan === "thuoc-tinh") chanThuocTinh();
 else {
 	chanToast();
 	console.log("");
-	chanTieuDe();
+	await chanTieuDe();
 }

@@ -25,6 +25,49 @@
 			"kind": "turbo",
 			"exempt": {
 				"@crm/typescript-config": "Ships tsconfig JSON only. There is no behaviour to test."
+			},
+			"rang": {
+				"note": "Răng của _acceptance/nen-chat-ai-elements. Added 2026-09-09. AC-9 và AC-10 đòi răng phải chặn được ở lệnh cổng, không chỉ khi có người gõ tay: một script nằm trong thư mục hồ sơ thì không chặn được ai. Chúng chạy trong @crm/ui#test, nên `bun run test` và pre-push đều đi qua. packages/ui/test/rang-chat.spec.ts đọc chính khối này để biết chạy răng nào — khai sai hoặc bỏ khai là bài kiểm đỏ, nên khối này là khai có hiệu lực chứ không phải chú thích.",
+				"runsIn": "@crm/ui#test",
+				"runner": "packages/ui/test/rang-chat.spec.ts",
+				"dir": "_acceptance/nen-chat-ai-elements/rang",
+				"checks": [
+					{
+						"id": "mo-coi",
+						"script": "_acceptance/nen-chat-ai-elements/rang/mo-coi.mjs",
+						"vi_sao": "AC-9. Đọc đĩa, không cần mạng, không cần trình duyệt, xong dưới một giây. Vòng này vừa xoá 19 tệp không khả đạt; không có răng thì thư mục đầy lại y như cũ."
+					},
+					{
+						"id": "chu-cung",
+						"script": "_acceptance/nen-chat-ai-elements/rang/chu-cung.mjs",
+						"vi_sao": "AC-10. Đọc đĩa, không cần mạng. Danh sách trắng đóng: nó quét MỌI chuỗi có chữ rồi trừ đi các mục miễn đã khai kèm lý do, nên nó đỏ trước một hình dạng cú pháp chưa ai nghĩ tới. Khuôn cũ liệt kê từng hình dạng có chuỗi hiển thị và đã bỏ sót hai lần — giá trị mặc định của tham số, rồi biến trung gian."
+					},
+					{
+						"id": "mau-ban-kinh",
+						"script": "_acceptance/nen-chat-ai-elements/rang/mau-ban-kinh.mjs",
+						"vi_sao": "AC-6. Đọc đĩa, không cần mạng. Danh sách trắng đóng dựng từ globals.css, nên nó đỏ trước cả lớp màu chưa ai nghĩ tới."
+					}
+				],
+				"notInGate": [
+					{
+						"id": "so-lech-chuan",
+						"script": "_acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs",
+						"vi_sao": "Cần MẠNG: nó chạy `bunx --bun ai-elements@latest add` vào một sân tạm để lấy bản thượng nguồn tươi. Một cổng đẩy đỏ vì mất mạng là một cổng dạy người ta dùng --no-verify.",
+						"do_o": "E7 và E12 của _acceptance/nen-chat-ai-elements/evals.yaml, chạy tay ở phiên nghiệm thu và sau mỗi lần kéo bản mới."
+					},
+					{
+						"id": "so-do-cuon",
+						"script": "_acceptance/nen-chat-ai-elements/rang/so-do-cuon.mjs",
+						"vi_sao": "Cần trình duyệt thật (puppeteer-core) và dựng hội thoại 500 lượt ba lần; chậm hàng phút. Đây là phép đo, không phải răng chặn.",
+						"do_o": "E11 của _acceptance/nen-chat-ai-elements/evals.yaml, kết quả ghi ở evidence/so-do-cuon.json."
+					},
+					{
+						"id": "pham-vi-diff",
+						"script": "_acceptance/nen-chat-ai-elements/rang/pham-vi-diff.mjs",
+						"vi_sao": "Đo phạm vi của ĐÚNG vòng này so với nhánh nền origin/docs/luat-chat-ai-elements, nên nó không phải bất biến của kho: mọi vòng sau sẽ đỏ oan, và nó cần một ref origin mà cây sạch chưa chắc có. Nó cũng đang đỏ trên nhánh này vì bun.lock và packages/validation/test/agent-transcript.spec.ts nằm ngoài danh sách trắng chép nguyên văn ở AC-2.",
+						"do_o": "E15 của _acceptance/nen-chat-ai-elements/evals.yaml, chạy tay ở phiên nghiệm thu."
+					}
+				]
 			}
 		},
 		{

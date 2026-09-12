@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Không viết chú thích trong mã. Không trailer đồng tác giả trong commit.
+- Không viết chú thích trong mã.
 - Răng KHÔNG ghi vào `apps/agent/agent/lib/tasks.ts`; bản cũ và đột biến chỉ sống ở `apps/agent/rang/.tmp/` (gitignore), tên có PID.
 - Mỗi chân dùng cơ sở dữ liệu riêng `crm_khoa_lo_<chân>_test`, dựng bằng `bun run db:test` với `TEST_DATABASE_URL` ghi đè.
 - Sha bản trước sửa: `746d3ef8ef8667c5e59545bf5f9b71b97d98f2c9`. Vắng trong clone → thoát mã 2.

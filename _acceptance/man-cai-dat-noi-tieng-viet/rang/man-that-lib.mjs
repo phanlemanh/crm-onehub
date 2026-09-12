@@ -136,11 +136,16 @@ export async function canhCong(cookie, slug) {
 	}
 }
 
-export const GOM = () => {
-	const goc = (
-		document.querySelector('[data-slot="page-shell-scroll"]') ??
-		document.querySelector("main")
-	)?.parentElement;
+export const GOM = (toanMan) => {
+	const goc =
+		toanMan === true
+			? document.body
+			: toanMan
+				? document.querySelector(toanMan)
+				: (
+						document.querySelector('[data-slot="page-shell-scroll"]') ??
+						document.querySelector("main")
+					)?.parentElement;
 	if (!goc) return null;
 	const nhinThay = (el) => {
 		const r = el.getBoundingClientRect();
@@ -201,11 +206,16 @@ export const GOM = () => {
 	return ra;
 };
 
-export const DO_RONG = () => {
-	const goc = (
-		document.querySelector('[data-slot="page-shell-scroll"]') ??
-		document.querySelector("main")
-	)?.parentElement;
+export const DO_RONG = (toanMan) => {
+	const goc =
+		toanMan === true
+			? document.body
+			: toanMan
+				? document.querySelector(toanMan)
+				: (
+						document.querySelector('[data-slot="page-shell-scroll"]') ??
+						document.querySelector("main")
+					)?.parentElement;
 	if (!goc) return null;
 	const nhinThay = (el) => {
 		for (let a = el; a && a !== goc; a = a.parentElement) {
@@ -395,12 +405,16 @@ export async function goiApiTao(cookie, duong, vao) {
 	return { gia: JSON.parse(chu).result.data };
 }
 
-export async function gomTrang(trang) {
-	return trang.evaluate(GOM);
+export async function gomTrang(trang, toanMan) {
+	return toanMan === undefined
+		? trang.evaluate(GOM)
+		: trang.evaluate(GOM, toanMan);
 }
 
-export async function doRongTrang(trang) {
-	return trang.evaluate(DO_RONG);
+export async function doRongTrang(trang, toanMan) {
+	return toanMan === undefined
+		? trang.evaluate(DO_RONG)
+		: trang.evaluate(DO_RONG, toanMan);
 }
 
 export async function doRongMan(cookie, slug, man, tieng, rong) {

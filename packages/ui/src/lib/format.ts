@@ -91,6 +91,14 @@ export function formatMoneyCompact(
 	}).format(cents / 100);
 }
 
+export function formatMonth(iso: string, locale: Locale): string {
+	const [nam, thang] = iso.split("-").map(Number);
+	if (!nam || !thang) return iso;
+	return dateFormat(locale, { month: "short", timeZone: "UTC" }).format(
+		new Date(Date.UTC(nam, thang - 1, 1)),
+	);
+}
+
 export function formatPercent(rate: number, locale: Locale): string {
 	return numberFormat(locale, {
 		style: "percent",

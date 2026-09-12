@@ -1,0 +1,298 @@
+schema_version: 1
+enforcement: strict
+gap_probe: advisory
+recheck: strict
+feature_loop:
+  ui_standards_skill: web-design-guidelines
+  suite_keys:
+    - executors.test.api
+    - executors.script.check_types_khong_cache
+    - executors.script.lint_khong_cache
+    - executors.script.lint_slop
+    - executors.script.build_khong_cache
+design_pass:
+  ds_skill: web-design-guidelines
+executors:
+  test:
+    cua_vao_chon_tieng: "cd apps/app && bun test test/locale-resolve.spec.ts"
+    cua_vao_kho_chuoi: "cd apps/app && bun test test/auth-messages.spec.ts"
+    api: "bun run test"
+    api_khong_cache_tru_agent: "bun run test -- --force --filter=!agent"
+    rang3_khoa_chet: "cd apps/app && bun test test/messages-guard.spec.ts"
+    tv_canh_kho_ui: "cd packages/ui && bun test test/messages-guard.spec.ts"
+    hd_bang_ba_dong: "cd packages/auth && bun test test/hosted-domain.spec.ts"
+    hd_cau_hinh_onehub: "cd packages/auth && bun test test/hosted-domain.spec.ts -t onehub"
+    hd_khong_de_lai_hang: "cd packages/auth && bun test test/tu-choi-khong-de-lai-hang.integration.spec.ts"
+    hd_cau_tu_choi: "cd packages/auth && bun test test/cau-tu-choi.spec.ts"
+    cl_tieng_viet_den_man: "node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs dan-so && cd packages/ui && bun test --preload ./test/setup-dom.ts test/lai-ra-man.spec.tsx"
+    tt_api: 'bun run test -- "cd apps/api && bun run test listing-ingest.integration listing-fields listing-fixture-batch campaigns.spec campaign-schema"'
+    tt_app: cd apps/app && bun test test/messages-guard.spec.ts test/campaign-states.spec.ts
+    go_khoa_api: 'bun run test -- "cd apps/api && bun test test/saved-views-in-use.spec.ts test/campaigns.spec.ts"'
+    go_khoa_app: 'bun run test -- "cd apps/app && bun test test/saved-views-in-use.spec.ts test/messages-guard.spec.ts"'
+    tq_khung_dieu_huong: cd apps/app && bun test test/khung-dieu-huong.spec.ts
+    tq_dang_xuat: cd apps/app && bun test test/sign-out.spec.ts
+  script:
+    cua_vao_loi_mang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"
+    cua_vao_chon_tieng_may_chu: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chon-tieng-may-chu"
+    cua_vao_dang_nhap: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs dang-nhap"
+    cua_vao_khai_bao: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs khai-bao"
+    cua_vao_khong_co_duong: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs khong-co-duong"
+    cua_vao_trang_thai_tam: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs trang-thai-tam"
+    cua_vao_dang_gui: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs dang-gui"
+    cua_vao_khong_dich: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs khong-dich"
+    cua_vao_ten_sso: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs ten-sso"
+    cua_vao_tieu_de_tai_lieu: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs tieu-de-tai-lieu"
+    cua_vao_be_rong: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs be-rong"
+    cua_vao_chan_trang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chan-trang"
+    cua_vao_chu_cung_jsx: "node _acceptance/cua-vao-noi-tieng-viet/rang/chu-cung-lat.mjs"
+    cua_vao_khai_sinh: "node _acceptance/cua-vao-noi-tieng-viet/rang/khai-sinh.mjs"
+    product_map: "node ${CLAUDE_PLUGIN_ROOT}/scripts/product-map.mjs --root . --check"
+    db_test: "bun run db:test"
+    resolve_plugin: "node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/product-map.mjs"
+    lint: "bun run lint"
+    lint_khong_cache: "bunx turbo run lint --force"
+    lint_slop: "bun run lint:slop"
+    check_types: "bun run check-types"
+    check_types_khong_cache: "bunx turbo run check-types --force"
+    build_khong_cache: 'bunx turbo run build --force'
+    oc_moi_o_cam_chay_duoc: bun _acceptance/o-cam-chay-duoc-that/rang/moi-o-cam-chay-duoc.mjs
+    oc_yaml_doc_duoc: bun _acceptance/o-cam-chay-duoc-that/rang/yaml-doc-duoc.mjs
+    oc_hai_trinh_doc_bang_nhau: bun _acceptance/o-cam-chay-duoc-that/rang/hai-trinh-doc-bang-nhau.mjs
+    oc_khoa_khong_doi: bun _acceptance/o-cam-chay-duoc-that/rang/khoa-khong-doi.mjs
+    oc_verifier_con_giai_duoc: bun _acceptance/o-cam-chay-duoc-that/rang/verifier-con-giai-duoc.mjs
+    oc_lenh_van_lam_dung_viec: bun _acceptance/o-cam-chay-duoc-that/rang/lenh-van-lam-dung-viec.mjs
+    oc_chan_ho_so_da_ky_chay_lai: bun _acceptance/o-cam-chay-duoc-that/rang/chan-ho-so-da-ky-chay-lai.mjs
+    oc_ham_kit_chua_doi: bun _acceptance/o-cam-chay-duoc-that/rang/ham-kit-chua-doi.mjs
+    oc_nam_lenh_chung: bun _acceptance/o-cam-chay-duoc-that/rang/nam-lenh-chung.mjs
+    cr_dung_ban_khai: "bun _acceptance/cron-theo-ban-khai/rang/dung-ban-khai.mjs"
+    cr_khong_ghim_cung: "bun _acceptance/cron-theo-ban-khai/rang/khong-ghim-cung.mjs"
+    cr_vang_khai_thi_dung: "bun _acceptance/cron-theo-ban-khai/rang/vang-khai-thi-dung.mjs"
+    cr_duong_co_that: "bun _acceptance/cron-theo-ban-khai/rang/duong-co-that.mjs"
+    cr_khong_con_bi_danh: "bun _acceptance/cron-theo-ban-khai/rang/khong-con-bi-danh.mjs"
+    cr_phan_con_lai_khong_doi: "bun _acceptance/cron-theo-ban-khai/rang/phan-con-lai-khong-doi.mjs"
+    cr_ban_trien_khai_that: "bun _acceptance/cron-theo-ban-khai/rang/ban-trien-khai-that.mjs"
+    cr_nam_lenh_chung: "bun _acceptance/cron-theo-ban-khai/rang/nam-lenh-chung.mjs"
+    ld_lenh_dung_xanh: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/lenh-dung-xanh.mjs"
+    ld_khong_doc_ngoai_suspense: "node _acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs"
+    ld_man_khong_doi: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/man-khong-doi.mjs"
+    ld_metadata_nguyen_ven: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/metadata-nguyen-ven.mjs"
+    ld_ba_noi_deu_chay: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs"
+    ld_o_cam_ep_chay_lai: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/o-cam-ep-chay-lai.mjs"
+    ld_bat_duoc_lop_loi: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/bat-duoc-lop-loi.mjs"
+    ld_bon_lenh_cu: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs"
+    ld_lang_theo_tieng: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/lang-theo-tieng.mjs"
+    rang_suite_sach: 'bun run test -- "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan sach"'
+    rang_suite_thu_tu: 'bun run test -- "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan thu-tu"'
+    rang_config_doi: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan doi"
+    rang_config_o_cam: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam"
+    rang_config_o_cam_duong: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam-duong"
+    rang_config_o_cam_do: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam-do"
+    rang_config_o_cam_trung_tinh: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan o-cam-trung-tinh"
+    rang_config_khai_thac: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan khai-thac"
+    rang_microsoft_duong: 'bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan duong"'
+    rang_microsoft_do: 'bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan do"'
+    rang_microsoft_nguon_env: 'bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan nguon-env"'
+    rang_microsoft_hinh_thuc: 'bun run test -- "bash _acceptance/khang-dinh-microsoft-co-rang/rang-microsoft.sh --chan hinh-thuc"'
+    rang_hook_ep_chay: "bash _acceptance/luoi-day-do-that/rang-hook.sh --chan ep-chay"
+    rang_hinh_hinh: "bash _acceptance/hinh-cua-luoi/rang-hinh.sh --chan hinh"
+    rang_hinh_tan_cong: "bash _acceptance/hinh-cua-luoi/rang-hinh.sh --chan tan-cong"
+    rang_hinh_bo_sot: "bash _acceptance/hinh-cua-luoi/rang-hinh.sh --chan bo-sot"
+    rang_hinh_noi_day: "bash _acceptance/hinh-cua-luoi/rang-hinh.sh --chan noi-day"
+    rang_hinh_noi_day_am: "bash _acceptance/hinh-cua-luoi/rang-hinh.sh --chan noi-day-am"
+    rang_hinh_noi_day_lech: "bash _acceptance/hinh-cua-luoi/rang-hinh.sh --chan noi-day-lech"
+    rang_hook_canary_slop: "bash _acceptance/luoi-day-do-that/rang-hook.sh --chan canary-slop"
+    rang_hook_con_rang: "bash _acceptance/luoi-day-do-that/rang-hook.sh --chan con-rang"
+    rang_hook_loi_thoat: "bash _acceptance/luoi-day-do-that/rang-hook.sh --chan loi-thoat"
+    rang_hook_tro_dung: "bash _acceptance/luoi-day-do-that/rang-hook.sh --chan tro-dung"
+    rang_ngon_ngu_la: "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan la"
+    rang_cookie: "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan cookie"
+    rang_du_lieu_khong_dich: "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan du-lieu-khong-dich"
+    rang_dinh_dang: "bash _acceptance/tieng-viet-cho-crm/rang-ngon-ngu.sh --chan dinh-dang"
+    rang3_ba_man: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs ba-man"
+    rang3_ho_so: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs ho-so"
+    rang3_dong_thoi_gian: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs dong-thoi-gian"
+    rang3_no_vong_1: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/no-vong-1.mjs"
+    rang3_trinh_doc_man_hinh: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs trinh-doc-man-hinh"
+    rang3_khai_tieng: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs khai-tieng"
+    rang3_doi_tieng: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs doi-tieng"
+    rang3_may_chu_ve: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bash _acceptance/nhan-ung-dung-noi-tieng-viet/rang/may-chu-ve.sh"
+    rang3_be_rong: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bash _acceptance/nhan-ung-dung-noi-tieng-viet/rang/be-rong.sh"
+    rang3_du_lieu_bien: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/du-lieu-bien.mjs"
+    rang3_dot_bien: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/dot-bien.mjs"
+    rang3_giai_doan: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs giai-doan"
+    rang3_khong_may_quet: "bash _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khong-may-quet.sh"
+    rang3_chu_cung_jsx: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/chu-cung-jsx.mjs"
+    rang3_khai_sinh: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.mjs"
+    rang3_khai_sinh_so: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.mjs --chan so"
+    rang3_khai_sinh_tap_rong: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-sinh.mjs --chan tap-rong"
+    rang3_mien_tru: "node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/mien-tru.mjs"
+    rang3_dot_bien_khoanh: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/nhan-ung-dung-noi-tieng-viet/rang/dot-bien.mjs --chan khoanh-vung"
+    start_scan: "bash _acceptance/o-cam-khai-thac-trung-tinh/rang-quet.sh"
+    cai_dat_chu_cung_jsx: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-cung-lat.mjs"
+    cai_dat_moi_chuoi: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/moi-chuoi.mjs"
+    cai_dat_chu_ngoai_jsx: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --chan toast"
+    cai_dat_tieu_de: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --chan tieu-de"
+    cai_dat_khong_du_quyen: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --chan khong-du-quyen"
+    cai_dat_khai_sinh: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs"
+    cai_dat_dan_so_tu_dia: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --chan dan-so"
+    cai_dat_be_rong_do: "bash _acceptance/man-cai-dat-noi-tieng-viet/rang/be-rong-do.sh"
+    cai_dat_dot_bien: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/dot-bien.mjs"
+    cai_dat_hai_tieng: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/man-cai-dat-noi-tieng-viet/rang/man-that.mjs hai-tieng"
+    cai_dat_trang_thai_rong: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/man-cai-dat-noi-tieng-viet/rang/man-that.mjs trang-thai-rong"
+    cai_dat_khong_dich: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/man-cai-dat-noi-tieng-viet/rang/man-that.mjs khong-dich"
+    cai_dat_be_rong: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/man-cai-dat-noi-tieng-viet/rang/man-that.mjs be-rong"
+    cd2_hai_tieng: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/man-that.mjs hai-tieng"
+    cd2_khong_dich: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/man-that.mjs khong-dich"
+    cd2_du_lieu_nguoi_nhap: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/man-that.mjs du-lieu-nguoi-nhap"
+    cd2_trang_thai_rong: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/man-that.mjs trang-thai-rong"
+    cd2_oauth: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/man-that.mjs oauth"
+    cd2_doan_ma_chep: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/man-that.mjs doan-ma-chep"
+    cd2_be_rong: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/man-that.mjs be-rong"
+    cd2_be_rong_do: "bash _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/be-rong-do.sh"
+    cd2_chu_cung_jsx: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-cung-lat.mjs --lat ${PWD}/_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/lat-cai-dat-2.json"
+    cd2_moi_chuoi: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/moi-chuoi.mjs --lat ${PWD}/_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/lat-cai-dat-2.json"
+    cd2_toast: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/lat-cai-dat-2.json --chan toast"
+    cd2_tieu_de: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/lat-cai-dat-2.json --chan tieu-de"
+    cd2_khong_du_quyen: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/lat-cai-dat-2.json --chan khong-du-quyen"
+    cd2_khai_sinh: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/lat-cai-dat-2.json"
+    cd2_dan_so_tu_dia: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/lat-cai-dat-2.json --chan dan-so"
+    cd2_dot_bien: "node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/dot-bien.mjs"
+    cd2_mot_bo_thuoc: "node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/mot-bo-thuoc.mjs"
+    ab_chu_cung_jsx: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-cung-lat.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json"
+    ab_moi_chuoi: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/moi-chuoi.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json"
+    ab_toast: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json --chan toast"
+    ab_tieu_de: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json --chan tieu-de"
+    ab_thuoc_tinh: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json --chan thuoc-tinh"
+    ab_khai_sinh: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json"
+    ab_dan_so_tu_dia: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json --chan dan-so"
+    ab_hai_tieng: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/agent-builder-noi-tieng-viet/rang/man-that.mjs hai-tieng"
+    ab_khong_dich: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/agent-builder-noi-tieng-viet/rang/man-that.mjs khong-dich"
+    ab_du_lieu_nguoi_nhap: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/agent-builder-noi-tieng-viet/rang/man-that.mjs du-lieu-nguoi-nhap"
+    ab_trang_thai: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/agent-builder-noi-tieng-viet/rang/man-that.mjs trang-thai"
+    ab_be_rong: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/agent-builder-noi-tieng-viet/rang/man-that.mjs be-rong"
+    ab_dot_bien: "node _acceptance/agent-builder-noi-tieng-viet/rang/dot-bien.mjs"
+    ab_mot_bo_thuoc: "node _acceptance/agent-builder-noi-tieng-viet/rang/mot-bo-thuoc.mjs"
+    ab_tu_dien: "node _acceptance/agent-builder-noi-tieng-viet/rang/tu-dien.mjs"
+    ct_gieo_va_don: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/gieo-va-don.mjs gieo"
+    ct_don: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/gieo-va-don.mjs don"
+    ct_chu_cung_jsx: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-cung-lat.mjs --lat ${PWD}/_acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/lat-cua-so.json"
+    ct_moi_chuoi: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/moi-chuoi.mjs --lat ${PWD}/_acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/lat-cua-so.json"
+    ct_toast: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/lat-cua-so.json --chan toast"
+    ct_thuoc_tinh: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/lat-cua-so.json --chan thuoc-tinh"
+    ct_tieu_de_khong_doi_tuong: "node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/tieu-de-khong-doi-tuong.mjs"
+    ct_khai_sinh: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/lat-cua-so.json"
+    ct_dan_so_tu_dia: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/lat-cua-so.json --chan dan-so"
+    ct_hai_tieng: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/man-that.mjs hai-tieng"
+    ct_khong_dich: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/man-that.mjs khong-dich"
+    ct_du_lieu_nguoi_nhap: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/man-that.mjs du-lieu-nguoi-nhap"
+    ct_trang_thai: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/man-that.mjs trang-thai"
+    ct_be_rong: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/man-that.mjs be-rong"
+    ct_ban_giao: "node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/ban-giao.mjs"
+    ct_ngoai_lat_rong: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/ngoai-lat-rong.mjs"
+    ct_dot_bien: "node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/dot-bien.mjs"
+    ct_mot_bo_thuoc: "node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/mot-bo-thuoc.mjs"
+    ct_tu_dien: "node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/tu-dien.mjs"
+    tv_chu_la_tren_man: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/chu-la.mjs quet"
+    tv_dong_khai_song: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/chu-la.mjs dong-khai"
+    tv_khai_sinh: "node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/khai-sinh.mjs"
+    tv_boc_ma_khong_doc: "node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/boc-ma-khong-doc.mjs"
+    tv_gioi_han_bam_moi_hien: "node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/gioi-han-bam-moi-hien.mjs"
+    tv_dot_bien: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/dot-bien.mjs"
+    tv_mot_bo_thuoc: "node _acceptance/chu-mac-dinh-thu-vien-ngoai/rang/mot-bo-thuoc.mjs"
+    cl_dan_so: "node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs dan-so"
+    cl_lai_ra_man: "node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs phan-nhom"
+    cl_phan_biet: "node _acceptance/chan-lai-component-ra-man/rang/phan-biet-hai-chieu.mjs"
+    cl_mo_nguyen_ban: "node _acceptance/chan-lai-component-ra-man/rang/mo-nguyen-ban.mjs"
+    cl_ban_khai_da_do: "node _acceptance/chan-lai-component-ra-man/rang/ban-khai-da-do.mjs"
+    cl_dinh_doat: "node _acceptance/chan-lai-component-ra-man/rang/dinh-doat.mjs"
+    cl_mot_bo_thuoc: "node _acceptance/chan-lai-component-ra-man/rang/mot-bo-thuoc.mjs"
+    cl_khong_danh_sach_ten: "node _acceptance/chan-lai-component-ra-man/rang/khong-danh-sach-ten.mjs"
+    kc_suite_cuong_buc: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/suite-cuong-buc.mjs"
+    kc_dan_so_tu_config: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/dan-so-tu-config.mjs"
+    kc_cache_noi_that: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/cache-noi-that.mjs"
+    kc_do_hanh_vi: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/do-hanh-vi.mjs"
+    kc_lenh_hang_ngay: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/lenh-hang-ngay.mjs"
+    kc_mot_bo_thuoc: "node _acceptance/lenh-chung-khong-an-cache-doi/rang/mot-bo-thuoc.mjs"
+    tc_trang_thai_dem: "node _acceptance/thuoc-cache-het-doi-tuong/rang/trang-thai-dem.mjs"
+    tc_khong_duong_thu_ba: "node _acceptance/thuoc-cache-het-doi-tuong/rang/khong-duong-thu-ba.mjs"
+    tc_khai_vo_tac_dung: "node _acceptance/thuoc-cache-het-doi-tuong/rang/khai-vo-tac-dung.mjs"
+    tc_het_doi_tuong: "node _acceptance/thuoc-cache-het-doi-tuong/rang/het-doi-tuong.mjs"
+    tc_ho_so_cu_xanh: "node _acceptance/thuoc-cache-het-doi-tuong/rang/ho-so-cu-xanh.mjs"
+    tc_mot_bo_thuoc: "node _acceptance/thuoc-cache-het-doi-tuong/rang/mot-bo-thuoc.mjs"
+    tc_dung_cua_chay_test: "node _acceptance/thuoc-cache-het-doi-tuong/rang/dung-cua-chay-test.mjs"
+    hd_ham_thuan: "node _acceptance/hd-theo-danh-sach/rang/ham-thuan.mjs"
+    hd_cua_phan_quyen_nguyen_ven: "node _acceptance/hd-theo-danh-sach/rang/cua-phan-quyen-nguyen-ven.mjs"
+    hd_mot_bo_thuoc: "node _acceptance/hd-theo-danh-sach/rang/mot-bo-thuoc.mjs"
+    rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
+    rang_t1_im: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"
+    tt_crawl_test: cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v
+    tt_crawl_live: cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --limit 50 --dry-run --redact --out ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json --log ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-run.log
+    tt_ui_luong: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs luong
+    tt_ui_chu: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs chu
+    tt_ui_trang_thai: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs trang-thai
+    tt_ui_be_rong: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs be-rong
+    tt_ui_thiet_ke: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs thiet-ke
+    tt_crawl_to_ingest: 'bun run test -- "cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --fixtures --dry-run --out ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/fixture-batch.json && cd ../../apps/api && bun run test listing-fixture-batch"'
+    khoa_lo_tran_retire: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan tran-retire
+    khoa_lo_tran_claim: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan tran-claim
+    khoa_lo_can: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan can
+    khoa_lo_chieu_do: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan chieu-do
+    khoa_lo_giai_thich: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan giai-thich
+    khoa_lo_dong_thoi: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan dong-thoi
+    khoa_lo_toan_tep: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan toan-tep
+    khoa_lo_tai_lieu: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan tai-lieu
+    apr_check_run: bash _acceptance/auto-pr-thoi-do-o-ban-re/rang-check-run.sh
+    apr_lech_so_dong: bash _acceptance/auto-pr-thoi-do-o-ban-re/rang-lech-so-dong.sh
+    apr_lech_noi_dung: bash _acceptance/auto-pr-thoi-do-o-ban-re/rang-lech-noi-dung.sh
+    apr_moc_to_tien: git merge-base --is-ancestor c042478 HEAD
+    apr_moc_khop_cay: git diff --quiet c042478 -- .github/workflows/auto-pr.yml
+    apr_check_run_do: bash _acceptance/auto-pr-thoi-do-o-ban-re/rang-check-run-do.sh
+    apr_lech_so_dong_do: 'test -z "$(git diff --numstat origin/release 5ac85ef -- .github/workflows/auto-pr.yml)"'
+    apr_lech_noi_dung_do: bash _acceptance/auto-pr-thoi-do-o-ban-re/rang-lech-noi-dung-do.sh
+    apr_moc_to_tien_do: git merge-base --is-ancestor c042478 5ac85ef; test $? -ne 0
+    apr_moc_khop_cay_do: git diff --quiet c042478 5ac85ef -- .github/workflows/auto-pr.yml; test $? -ne 0
+    tq_hai_tieng: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs hai-tieng
+    tq_sau_bam: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs sau-bam
+    tq_khong_dich: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs khong-dich
+    tq_du_lieu_nguoi_nhap: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs du-lieu-nguoi-nhap
+    tq_be_rong: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs be-rong
+    tq_be_rong_do: NGUOI=${NGUOI:-dev@localhost} bash _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/be-rong-do.sh
+    tq_goc_thuoc: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs goc-thuoc
+    tq_chu_cung_jsx: node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-cung-lat.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json
+    tq_moi_chuoi: node _acceptance/man-cai-dat-noi-tieng-viet/rang/moi-chuoi.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json
+    tq_toast: node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json --chan toast && node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/dang-xuat.mjs
+    tq_tieu_de: node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json --chan tieu-de
+    tq_khai_sinh: node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json
+    tq_dan_so_tu_dia: node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json --chan dan-so
+    tq_dot_bien: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/dot-bien.mjs
+    tq_mot_bo_thuoc: node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/mot-bo-thuoc.mjs
+    tq_trang_thai_rong: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs trang-thai-rong
+    tq_be_rong_tien_de: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs be-rong-tien-de
+    tq_san_thiet_ke: NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs
+  design:
+    gate: "node ${CLAUDE_PLUGIN_ROOT}/scripts/design-gate.mjs"
+    ui_check: "${CLAUDE_PLUGIN_ROOT}/scripts/design-scan.js"
+risk_tiers:
+  t1_skip_globs:
+    - "docs/**"
+    - "**/*.md"
+    - "PRODUCT-MAP.md"
+  t3_paths:
+    - "packages/auth/**"
+    - "packages/db/prisma/**"
+    - "apps/api/src/auth/**"
+    - "apps/api/src/api-keys/**"
+    - "apps/api/src/sso/**"
+    - "apps/api/src/users/**"
+    - "apps/api/src/workspace/**"
+    - "apps/api/src/tracking/**"
+    - "apps/api/src/mailbox/**"
+signoff:
+  required_for: [T2, T3]
+  approvers: ["Manh Phan"]
+dev_server:
+  start: "TURBO_UI=false bunx turbo run dev --ui=stream --filter=app --filter=api"
+  url: "http://localhost:3000"
+  api_base: ["http://localhost:3001"]
+capture:
+  ui: "bun run ui:capture"

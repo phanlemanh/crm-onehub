@@ -1,0 +1,16 @@
+{
+	"lat": "tong-quan-va-khung-noi-tieng-viet",
+	"ghi_chu": "Bang dong toast ghim (file, khoa). Dong khoa=null cua lib/sign-out.ts la co y: loi goi toast.error(error.message ?? loiMacDinh) doc THAM SO do app-header truyen tu khoa header.signOutFailed, khong doc kho truc tiep — quan he ay do o chan dang-xuat.mjs (AC-5) va bai kiem sign-out.spec.ts.",
+	"loi_goi": [
+		{
+			"file": "apps/app/components/app-header.tsx",
+			"khoa": "header.signOutFailed"
+		},
+		{
+			"file": "apps/app/lib/sign-out.ts",
+			"khoa": null,
+			"tham_so": "loiMacDinh",
+			"nguon": "apps/app/components/app-header.tsx → header.signOutFailed"
+		}
+	]
+}

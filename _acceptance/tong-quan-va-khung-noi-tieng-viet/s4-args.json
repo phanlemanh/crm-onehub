@@ -1,0 +1,542 @@
+{
+  "generated_at": "2026-09-08T22:55:22Z",
+  "generated_sha": "80f872e410525a68116613714b22e8f9479726dc",
+  "mainBranchInfo": {
+    "branch": "onehub",
+    "source": "remote"
+  },
+  "slug": "tong-quan-va-khung-noi-tieng-viet",
+  "round": 9,
+  "riskTier": "T2",
+  "evals": [
+    {
+      "id": "E1",
+      "criterion": "AC-1",
+      "cmd": "NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs hai-tieng",
+      "expected": "exit 0. Man / dung hai luot vi/en o 1440px tren may chu that, GOM(toanMan=true)\ngom chu tu body — ke ca rail va thanh dau. Ba ve: so chuoi bang nhau · moi cap\nkhac nhau tru bang khong-dich · luot vi co dau tru mien_dau. Redirect hoac tap\nrong la ma 2 goi ten. Doc them document.title hai luot: KHAC nhau, luot vi co\ndau (ve man cua AC-6). Chieu do: ghim mot khoa cua khung-ung-dung.ts ve chuoi\ntieng Anh o ca hai ban thi cap do TRUNG, chan do goi ten duong DOM cua rail —\nchinh cai goc cu khong bao gio thay.",
+      "executor": "script",
+      "paths": [
+        "apps/app/app/(app)/[slug]/*.tsx",
+        "apps/app/components/app-icon-rail.tsx",
+        "apps/app/components/app-header.tsx",
+        "apps/app/components/enrichment-queue.tsx",
+        "apps/app/lib/messages/tong-quan.ts",
+        "apps/app/lib/messages/khung-ung-dung.ts",
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_hai_tieng"
+    },
+    {
+      "id": "E2",
+      "criterion": "AC-2",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E2",
+      "expected": "exit 0. Ba be mat lai ra bang puppeteer: bam avatar → gom DropdownMenuContent;\ngui Meta+K roi GO mot chuoi ≥2 ky tu khong khop (\"zzqx\") → gom CommandDialog\n(cau \"khong khop\" phai co mat); viewport 360 bam nut mo dieu huong → gom\nSheetContent (hai bien the: tren / gom ca ngan keo; tren /chat CHI gom nav rail\ntheo selector ghim, in so chuoi da tru kem ten ho so chu\ncua-so-tro-chuyen-noi-tieng-viet). Moi be mat hai luot tieng, cung ba ve cua E1\ntren tap chu cua rieng be mat do; them mot ve: aria-label cua cac nav cung hien\ntrong be mat KHAC nhau. Be mat khong lai ra duoc la ma 2 goi ten be mat. Chieu\ndo: ghim tieu de hop ⌘K ve \"Search\" o ban vi thi cap trung, chan do goi ten be\nmat \"ck\".\nChan nay lai trinh duyet that qua may chu dev dang chay. No khong cam vet, nhung\nno tranh mot tai nguyen duy nhat, va o vong 4 duoi tai 47 tac nhan song song no\nda mot lan nhan ve thuoc tinh ngon ngu rong (E2) va hai lan mat han ket qua\n(E8, E12). Nay no chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot\nchan mot luc. Lenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai,\nchan phai co mat, ma phai 0 va cay phai sach sau khi chay.",
+      "executor": "script",
+      "paths": [
+        "apps/app/components/app-header.tsx",
+        "apps/app/components/app-icon-rail.tsx",
+        "apps/app/components/crm/quick-switcher.tsx",
+        "apps/app/lib/messages/khung-ung-dung.ts",
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_lan_sau_bam"
+    },
+    {
+      "id": "E3",
+      "criterion": "AC-4",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E3",
+      "expected": "exit 0. Mui goi ve chu-cung-lat.mjs cua ③b voi --lat tro ban khai lat nay. Dan so\nsinh tu dia (6 thu muc + 7 them = 13); 0 chuoi viet thang trong JSX ngoai mien\ntru co ten; mien tru chet la DO. Chieu do: dat lai mot cau tieng Anh vao JSX cua\noverview-greeting.tsx thi chan do goi ten file:dong.\nChan nay chay o LAN NOI TIEP truoc khi phat S4; lenh o day la chan DOC ghim, tuc\nmot cai MAY doc ma thoat da ghi thay vi mot tac nhan tu go lai lenh. Ly do: qua\nnam vong cham, moi chan da vao lan deu dat moi lan, con moi mau do con lai deu\nroi dung vao chan ma tac nhan tu chay lenh — vong 7 va vong 8 deu co nguoi cham\ngo sai mot chu trong ten thu muc roi khai la tep khong ton tai.",
+      "executor": "script",
+      "paths": [
+        "apps/app/app/(app)/[slug]/*.tsx",
+        "apps/app/components/app-icon-rail.tsx",
+        "apps/app/components/app-header.tsx",
+        "apps/app/components/mobile-nav.tsx",
+        "apps/app/components/page-shell.tsx",
+        "apps/app/components/enrichment-queue.tsx",
+        "apps/app/components/crm/quick-switcher.tsx",
+        "apps/app/lib/sign-out.ts",
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_lan_chu_cung"
+    },
+    {
+      "id": "E4",
+      "criterion": "AC-4",
+      "cmd": "node _acceptance/man-cai-dat-noi-tieng-viet/rang/moi-chuoi.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json",
+      "expected": "exit 0. Mui goi ve moi-chuoi.mjs cua ③b: lay MOI chuoi cua 13 file roi tru theo\nluat co ten (thuoc tinh ky thuat / khoa object ky thuat tach biet). 0 chuoi con\ntieng Anh; quet ra 0 chuoi la ma 2; dong giu-nguyen chet la DO. Chieu do: them\n{ label: \"Closed won\" } vao TREND_CONFIG thi chan do goi ten boi canh khoa-object.",
+      "executor": "script",
+      "paths": [
+        "apps/app/app/(app)/[slug]/*.tsx",
+        "apps/app/components/app-icon-rail.tsx",
+        "apps/app/components/app-header.tsx",
+        "apps/app/components/enrichment-queue.tsx",
+        "apps/app/components/crm/quick-switcher.tsx",
+        "apps/app/lib/sign-out.ts",
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_moi_chuoi"
+    },
+    {
+      "id": "E5",
+      "criterion": "AC-5",
+      "cmd": "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json --chan toast && node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/dang-xuat.mjs",
+      "expected": "exit 0. HAI LOP tach bach: (1) mot literal tieng Anh ben trong toast.*() o bat\nky file nao trong 13 file la MA 1 kem file:dong — day la lop dot bien E11 cam\nvet va cham; (2) bang dong toast-cua-lat.json ghim (file, khoa), doi chieu ca\nhai chieu, lech ma khong co literal la ma 2 in THIEU lan THUA; in so luot chuyen\ntiep error.message bo qua. Cong chan QUAN HE tren cay cu phap: app-header.tsx\ntruyen mot bieu thuc doc kho (m.<khoa>) vao signOutAndRedirect, va sign-out.ts\ntruyen dung tham so ay vao toast.error — thieu mot dau la DO goi ten. Chieu do:\ndat toast.error(\"Could not sign out.\") vao app-header thi ma 1 dung dong; doi\nkhoa trong bang thanh khoa khong ai doc thi ma 2 du tong bang nhau.",
+      "executor": "script",
+      "paths": [
+        "apps/app/app/(app)/[slug]/dashboard-summary.tsx",
+        "apps/app/components/app-header.tsx",
+        "apps/app/lib/sign-out.ts",
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_toast"
+    },
+    {
+      "id": "E6",
+      "criterion": "AC-6",
+      "cmd": "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json --chan tieu-de && node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/tieu-de-quan-he.mjs",
+      "expected": "exit 0. Dem O tieu de trong thu muc lat: dung MOT generateMetadata o page.tsx.\nDo QUAN HE, khong do import: gia tri title tra ve la thuoc tinh cua ket qua\ngoi tongQuanMessages(await getLocale()); ban vi cua khoa do co dau. So o nhan\nra BANG 1. Ve man (document.title hai luot) nam o E1. Chieu do: doi ve\nexport const metadata = { title: \"Overview\" } thi chan do goi ten o; doi sang\ntitle: \"Tong quan\" viet thang thi van do vi khong con quan he voi kho.\nVe QUAN HE do bang chan thu hai cua lenh ghep — tieu-de-quan-he.mjs — vi chan\ndung chung chu-ngoai-jsx.mjs chi bat literal ASCII khong dau, nen mot tieu de\nviet thang CO DAU di lot qua no (do 08/09, vong 5). Chan moi doc cay cu phap\ncua page.tsx: gia tri title phai la thuoc tinh cua ket qua goi tongQuanMessages,\nva loi goi ay phai nhan getLocale(); roi doc kho de doi chieu ban vi khac ban en\nva co dau. Mat quan he la ma 1 kem so dong.",
+      "executor": "script",
+      "paths": [
+        "apps/app/app/(app)/[slug]/page.tsx",
+        "apps/app/lib/messages/tong-quan.ts"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_tieu_de"
+    },
+    {
+      "id": "E7",
+      "criterion": "AC-7",
+      "cmd": "NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs khong-dich",
+      "expected": "exit 0. Truoc khi gom: KIEM DIEU KIEN tung dong bang qua nguon_san (dashboard.summary\ncua may chu that) — bay giai doan co thoa thuan hien tren / khong, co thoa thuan\ntien te chua quy doi khong; dong dieu kien khong dat di vao danh sach \"khong do\nduoc tren man\" va do o muc ma (phan tu render mang lang=en; bay nhan doc THAT tu\nlib/deal-stage.ts qua import, khong chep tay). Tap ung vien SINH TU MAN / (goc\ntoan man) = translate=no ∪ chuoi giong het hai luot, tru ba luat co ten\n(so-thuan · du-lieu-nguoi-nhap · lang-en). Doi chieu ca hai chieu voi PHAN bang\nco dieu kien dat. Hai luot lech so phan tu la DO goi ten. Chieu do: them mot\ndong bia (dieu_kien luon hien) vao bang thi chan ma 2 goi ten dong; bo\ntranslate=no khoi ten workspace thi ung vien thua mot muc, chan DO.",
+      "executor": "script",
+      "paths": [
+        "apps/app/app/(app)/[slug]/*.tsx",
+        "apps/app/components/app-header.tsx",
+        "apps/app/lib/deal-stage.ts",
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_khong_dich"
+    },
+    {
+      "id": "E8",
+      "criterion": "AC-8",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E8",
+      "expected": "exit 0. Chan MA: moi o cua du-lieu-nguoi-nhap.json — phan tu JSX boc dung bieu\nthuc mang translate=no; thieu la DO file:dong; bieu thuc khong con la ma 2. Chan\nMAN: o khai do_san_duoc mo / va doi chieu gia tri that (ten workspace, email\nnguoi dang nhap, ten thoa thuan dau bang) nam trong phan tu translate=no; in\ndanh sach do duoc / khong do duoc, va so do duoc + so khong do duoc BANG so dong\nbang — dong khong roi vao dau la ma 2 goi ten. 0 o do duoc la ma 2. Chieu do: go\ntranslate=no khoi deal.name thi chan ma do dung dong.\nChan nay lai trinh duyet that qua may chu dev dang chay. No khong cam vet, nhung\nno tranh mot tai nguyen duy nhat, va o vong 4 duoi tai 47 tac nhan song song no\nda mot lan nhan ve thuoc tinh ngon ngu rong (E2) va hai lan mat han ket qua\n(E8, E12). Nay no chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot\nchan mot luc. Lenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai,\nchan phai co mat, ma phai 0 va cay phai sach sau khi chay.",
+      "executor": "script",
+      "paths": [
+        "apps/app/app/(app)/[slug]/dashboard-summary.tsx",
+        "apps/app/components/app-header.tsx",
+        "apps/app/components/crm/quick-switcher.tsx",
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_lan_du_lieu_nguoi_nhap"
+    },
+    {
+      "id": "E9",
+      "criterion": "AC-9",
+      "cmd": "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json",
+      "expected": "exit 0. Mui goi ve khai-sinh.mjs cua ③b voi --lat: quet thu muc ra dung neo.file=6\nva neo.route=1; them 7 file; khong_quet rong. Lech la ma 2 kem diff ten file.\nBa chan doc (ban khai · bo quet JSX · bo quet ngoai JSX) ra cung mot so file.",
+      "executor": "script",
+      "paths": [
+        "apps/app/app/(app)/[slug]/*.tsx",
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/lat-tong-quan.json"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_khai_sinh"
+    },
+    {
+      "id": "E10",
+      "criterion": "AC-9",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E10",
+      "expected": "exit 0. Chay NEN tren cay lanh truoc (hai chan xanh; khong thi ma 2), roi tha\nmot file .tsx mang chu tieng Anh vao thu muc lat: dan so doi VA hai chan do goi\nten file; ma 2 khi co vet la \"chua do duoc\", khong tinh la bat. Cay tra nguyen\ntrang.\nChan nay cam vet vao MA NGUON, nen no khong chay trong dot toa cua S4: no chay o LAN\nNOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot chan mot luc, tren cay sach.\nLenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai, chan phai co mat,\nma phai 0 va cay phai sach sau khi chay. Ghim neo cay khac → do, goi ten.",
+      "executor": "script",
+      "paths": [
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_lan_dan_so"
+    },
+    {
+      "id": "E11",
+      "criterion": "AC-10",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E11",
+      "expected": "exit 0. Bang DONG (hinh dang, chan chuyen trach) bay hang: JSX → chu-cung-jsx ·\nthuoc tinh → moi-chuoi · toast → toast · tieu de → tieu-de · khoa object →\nmoi-chuoi · ham ghep cau → moi-chuoi · NHAN RAIL → hai-tieng (vet cam vao\nkhung-ung-dung.ts, chan man). Moi vet bi dung chan cua no bat ma 1; ma 2 khong\ntinh; cay lanh moi chan xanh; git status truoc/sau bang nhau. Chan dot bien giu\nkhoa cay (khoa-cay.mjs) nhu ③b.\nChan nay cam vet vao MA NGUON, nen no khong chay trong dot toa cua S4: no chay o LAN\nNOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot chan mot luc, tren cay sach.\nLenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai, chan phai co mat,\nma phai 0 va cay phai sach sau khi chay. Ghim neo cay khac → do, goi ten.",
+      "executor": "script",
+      "paths": [
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_lan_dot_bien"
+    },
+    {
+      "id": "E12",
+      "criterion": "AC-11",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E12",
+      "expected": "exit 0. / o 360px hai luot va ngan keo di dong mo: DO_RONG(toanMan=true) — moi\nphan tu NHIN THAY mang nhan dich duoc co scrollWidth ≤ clientWidth; luot en la\ndoi chung duong; in so nhan do duoc. Chu trong hop ≤1px (sr-only) bo qua o chan\nnay nhung KHONG bo o E1.\nChan nay lai trinh duyet that qua may chu dev dang chay. No khong cam vet, nhung\nno tranh mot tai nguyen duy nhat, va o vong 4 duoi tai 47 tac nhan song song no\nda mot lan nhan ve thuoc tinh ngon ngu rong (E2) va hai lan mat han ket qua\n(E8, E12). Nay no chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot\nchan mot luc. Lenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai,\nchan phai co mat, ma phai 0 va cay phai sach sau khi chay.",
+      "executor": "script",
+      "paths": [
+        "apps/app/app/(app)/[slug]/*.tsx",
+        "apps/app/components/app-icon-rail.tsx",
+        "apps/app/components/app-header.tsx",
+        "apps/app/lib/messages/tong-quan.ts",
+        "apps/app/lib/messages/khung-ung-dung.ts",
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_lan_be_rong_man"
+    },
+    {
+      "id": "E13",
+      "criterion": "AC-12",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E13",
+      "expected": "exit 0. Cam mot cum tieng Viet dai co dau vao khoa cols.deal (\"Thoa thuan\") cua\ntong-quan.ts — nhan DUY NHAT cua lat ma chan be-rong-tien-de DO duoc la tran duoc\n(17/82 hop chat cung mang nhan cua lat, dung 1 tran duoc) — roi chay lai chan be\nrong: DO dung chieu \"vi tran ma en vua\" kem hai cap so; cay tra nguyen trang.\nChan giu khoa cay. Thut ba tang khai qua bien THUT cua be-rong-do-lib.sh.\nChan nay cam vet vao MA NGUON, nen no khong chay trong dot toa cua S4: no chay o LAN\nNOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, mot chan mot luc, tren cay sach.\nLenh o day la chan DOC ghim: ghim phai neo dung HEAD hien tai, chan phai co mat,\nma phai 0 va cay phai sach sau khi chay. Ghim neo cay khac → do, goi ten.",
+      "executor": "script",
+      "paths": [
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_lan_be_rong"
+    },
+    {
+      "id": "E14",
+      "criterion": "AC-13",
+      "cmd": "NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/man-that.mjs goc-thuoc",
+      "expected": "exit 0. Cung mot trang / (vi), cho CA HAI ham GOM va DO_RONG, moc la THANH DAU\n(rail nam trong goc cu — do 08/09): (a) goi khong tham so va goi (false) ra tap\nBANG nhau va KHONG chua moc — GOM: aria-label trang chu va menu tai khoan doc tu\nkhung-ung-dung.ts; DO_RONG: ten workspace tu workspace.get; (b) goi (true) chua\ndu moc. Mot chieu gay la DO goi ten ham va chieu. Chieu do: tam doi mac dinh\ntoanMan sang true trong ban sao thi (a) do vi goc cu thay thanh dau.",
+      "executor": "script",
+      "paths": [
+        "_acceptance/man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs",
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_goc_thuoc"
+    },
+    {
+      "id": "E15",
+      "criterion": "AC-14",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/mot-bo-thuoc.mjs",
+      "expected": "exit 0. Ba ve: (1) khong than ham/mo-dun nao trong rang/ cua lat trung ≥12 dong\nvoi rang/ cua ③a, ③b, agent-builder, va moi rang/*.mjs cua lat suy goc kho tu\nimport.meta.url (khong co duong tuyet doi /Users/...); (2) phep do MAN cua ho so\nda ky — man-cai-dat-noi-tieng-viet/rang/man-that.mjs hai-tieng goi KHONG tham\nso — chay lai tren may chu that: thoat 0 va so chuoi gom tren /settings va\n/settings/currencies BANG con so do bang lib TRUOC KHI SUA tren cung du lieu\n(ghim o rang/goc-thuoc.json; so da ky 42/118 phu thuoc du lieu may cu);\n(3) chan cay cu phap: moi mui goi GOM( va DO_RONG( ngoai rang/ cua lat nay deu\nkhong truyen tham so, dem khac 0 la DO kem file:dong. Chieu do cua (2): tam doi\nselector goc cu trong ban sao thi so chuoi lech va chan do.",
+      "executor": "script",
+      "paths": [
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**",
+        "_acceptance/man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_mot_bo_thuoc"
+    },
+    {
+      "id": "E16",
+      "criterion": "AC-15",
+      "cmd": "cd apps/app && bun test test/messages-guard.spec.ts",
+      "expected": "exit 0. messages-guard.spec.ts tu doc thu muc lib/messages nen hai kho moi vao\ndan so khong can khai: moi gia tri vi co dau tru mien tru co ten, khong gia tri\nnao y het en, ham ghep bien co khang dinh ghim, khong khoa chet. Cac ca do la\ncanh BAT BIEN CHUNG cua kho — chung xanh tren ca cay truoc vong, va giu nguyen\nla co y. Ca RIENG cua lat, them o vong 2 sau khi bo phan tich neu ten: quet tam\nfile cua lat va doi 0 loi goi formatCount ghim tieng — ca nay phan biet duoc cay\nnay voi cay truoc vong. Chieu do: tra mot loi goi ve formatCount(n, \"deal\", \"en\")\nthi ca do goi ten file va loi goi.",
+      "executor": "test",
+      "paths": [
+        "apps/app/lib/messages/tong-quan.ts",
+        "apps/app/lib/messages/khung-ung-dung.ts",
+        "apps/app/test/messages-guard.spec.ts"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.test.rang3_khoa_chet"
+    },
+    {
+      "id": "E17",
+      "criterion": "AC-16",
+      "cmd": "cd apps/app && bun test test/khung-dieu-huong.spec.ts",
+      "expected": "exit 0. Bai kiem don vi tren lib/khung-dieu-huong.ts: laMucHoiThoai nhan ra muc\nkey=chat bat ke nhan; mucDangMo(pathname) dung cho /, /chat, /agents/x,\n/companies/y; nhan cua tung muc o luot vi la tieng Viet co dau. Chieu do: doi\nlaMucHoiThoai ve so sanh nhan === \"Chat\" thi ca hai ca dau DO.",
+      "executor": "test",
+      "paths": [
+        "apps/app/lib/khung-dieu-huong.ts",
+        "apps/app/test/khung-dieu-huong.spec.ts"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.test.tq_khung_dieu_huong"
+    },
+    {
+      "id": "E20",
+      "criterion": "AC-5",
+      "cmd": "cd apps/app && bun test test/sign-out.spec.ts",
+      "expected": "exit 0. Bai kiem don vi cua lib/sign-out.ts voi signOut gia lap: (a) dang xuat bi\ntu choi → toast.error duoc goi DUNG MOT lan voi chinh chuoi truyen vao va\nwindow.location.assign KHONG duoc goi; (b) dang xuat thanh cong → assign(\"/sign-in\")\nva khong toast. Doi chung duong cho chan quan he cua E5. Chieu do: giu catch\nrong cu thi (a) do vi toast khong duoc goi.",
+      "executor": "test",
+      "paths": [
+        "apps/app/lib/sign-out.ts",
+        "apps/app/test/sign-out.spec.ts"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.test.tq_dang_xuat"
+    },
+    {
+      "id": "E21",
+      "criterion": "AC-3",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E21",
+      "expected": "exit 0. Kiem tien de qua nguon_san: tai khoan do khong so huu thoa thuan, viec,\nhoat dong (dashboard.summary scope=me tra ba mang rong); khong dat la ma 2 goi\nten. Dung /?scope=me hai luot, gom toan man: ba ve cua E1 CONG nam khang dinh\n— ba cau rong bang co mat dung vi tri; hai cau rong bieu do do o muc ma (prop\ndoc tu kho) neu so lieu ca workspace khong rong, goi ten. Chieu do: xoa prop cau\nrong cua bang Viec qua han thi chan do goi ten bang (chu mac dinh cua thu vien\nhoac o trong thay cho cau kho).\nChan nay chay o LAN NOI TIEP truoc khi phat S4; lenh o day la chan DOC ghim, tuc\nmot cai MAY doc ma thoat da ghi thay vi mot tac nhan tu go lai lenh. Ly do: qua\nnam vong cham, moi chan da vao lan deu dat moi lan, con moi mau do con lai deu\nroi dung vao chan ma tac nhan tu chay lenh — vong 7 va vong 8 deu co nguoi cham\ngo sai mot chu trong ten thu muc roi khai la tep khong ton tai.",
+      "executor": "script",
+      "paths": [
+        "apps/app/app/(app)/[slug]/dashboard-summary.tsx",
+        "apps/app/app/(app)/[slug]/sales-dashboard.tsx",
+        "apps/app/lib/messages/tong-quan.ts",
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_lan_trang_thai_rong"
+    },
+    {
+      "id": "E18",
+      "criterion": "AC-1",
+      "cmd": "NGUOI=${NGUOI:-dev@localhost} APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node --no-warnings _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs",
+      "expected": "exit 0. Mot lenh cua kho lam tron: dung / o vi va en (1440px) va ngan keo di dong o\n360px tieng Viet, noi tuyen moi quy tac CSS vao trang truoc khi luu (jsdom KHONG tai\nduoc stylesheet tro duong goc-tuong-doi tu file tren dia), roi chay san thiet ke cua\nkit voi --jsdom tro node_modules cua kho.\nHAI NGUON, va cho mu cua nguon yeu duoc GOI TEN va THAY: (1) san cua kit cham moi\nluat con lai — P0 khong phai low-contrast la DO; (2) luat low-contrast cua san BI BO\nvi jsdom khong giai duoc oklch() va var() cua he token nen no doc moi mau ve #ffffff\nroi bao trang-tren-trang (do 08/09: 2 P0 gia tren ca ba khung), thay bang chan do\ntuong phan chay TRONG TRINH DUYET — moi phan tu nhin thay mang chu, mau va nen tinh\nxong, nguong 4.5:1 (chu thuong) va 3:1 (chu to). 0 phan tu mang chu la ma 2.\nDo 08/09: 0 cho duoi nguong tren 85 · 85 · 94 phan tu.",
+      "executor": "ui-check",
+      "steps": [
+        "Chay lenh — no tu dang nhap, dung ba khung hinh, noi tuyen CSS, luu .png/.html vao evidence/, roi cham",
+        "Doc ba anh evidence/E18-*.png bang Read va noi ba khung co dung nhu mo ta khong"
+      ],
+      "paths": [
+        "apps/app/app/(app)/[slug]/*.tsx",
+        "apps/app/components/app-icon-rail.tsx",
+        "apps/app/components/app-header.tsx",
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output",
+        "screenshot"
+      ],
+      "ref": "config:executors.script.tq_san_thiet_ke"
+    },
+    {
+      "id": "E22",
+      "criterion": "AC-1",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E22",
+      "expected": "exit 0. Chieu do cua chan tuong phan: cam mau chu gan den (rgb(20,20,20)) len tieu de\n— von nam tren nen den — o ca ba khung hinh, roi doi chinh chan do bao DUOI NGUONG.\nBat duoc o 0 khung la DO: mot thuoc chua tung do o dung chieu no sinh ra de bat thi\nkhong phan biet duoc \"man dat\" voi \"phep do mu\". Cay khong bi sua — vet cam trong DOM\ncua lan chay, khong cham file nao.\nChan nay chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, va lenh o day\nla chan DOC ghim: mot cai MAY doc ma thoat da ghi, thay vi mot tac nhan doc van\nxuoi. Ly do: output cua chieu do CO Y chua nhung dong \"DO:\" cua phep thu cam vao,\nva o vong 4 lan vong 7 da co nguoi cham lay dong do lam ket qua roi ghi ma 1 trong\nkhi lenh thoat 0. Chan doc in lai output cu trong mot khoi co nhan va noi ro ma\nthoat that; ghim phai neo dung HEAD va cay khong duoc co sua chua ghi.",
+      "executor": "script",
+      "paths": [
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/san-thiet-ke.mjs"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_lan_san_thiet_ke_do"
+    },
+    {
+      "id": "E23",
+      "criterion": "AC-10",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs --chieu-do",
+      "expected": "exit 0. Chieu do cua chan DOC ghim, HAI phep thu cam vao noi tiep:\n(1) ghim gia neo o sha toan so khong → chan phai bao DO va goi ten\n\"cay da doi sau khi lan chay\";\n(2) ghim THAT dung HEAD nhung bom them mot duong ban gia\n(\" M apps/app/lib/messages/tong-quan.ts\") → chan phai bao DO va goi ten\n\"cay co sua chua ghi sau khi lan chay\". Khe bom LAN_BAN_GIA chi HOP them duong\nvao ket qua that cua git status, khong bao gio bot di, nen no khong the dung de\nlam cho cay ban trong nhu sach.\nPhep thu (2) dong lo ho-mo ma vong 5 goi ten: truoc do chan chi so sha, ma sha\nkhong doi khi co sua chua ghi, nen sau chan deu bao XANH cho ma chua tung chay\nqua. Cay duoc coi la sach khi khong duong nao NGOAI _acceptance/<lat>/evidence/\nva s4-args.json bi sua — hai duong nay la vat sinh ra trong luc cham, khong phai\nma duoc do.\nBat duoc o mot trong hai phep thu, hoac bao do ma khong goi ten, deu la ma 1.\nCHU Y KHI DOC OUTPUT: chan nay CO Y in lai output cua ca hai phep thu, moi dong\nduoc thut vao va bao boc giua \"--- ben trong ...\" va \"--- het phan cam vao ...\".\nCac dong \"DO:\" o do la ket qua DUNG Y MUON cua phep thu, KHONG phai ket qua cua\nE23. Ket qua cua E23 la hai dong cuoi (\"XANH (chieu do)...\") va ma thoat that\ncua lenh, phai la 0. O vong 4 mot nguoi cham da lay dong \"DO:\" cua phan cam vao\nlam ket qua va ghi ma 1 trong khi lenh thoat 0 — dung lap lai.",
+      "executor": "script",
+      "paths": [
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_lan_doc_do"
+    },
+    {
+      "id": "E24",
+      "criterion": "AC-6",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E24",
+      "expected": "exit 0. Chieu do cua chan quan he tieu de: cam mot ban sao page.tsx co\ntitle: \"Tổng quan\" viet thang — CO DAU, doc duoc, chi mat quan he voi kho — roi\ndoi chan bao ma 1 va noi ro la mat quan he. Chan bao xanh, hoac bao do vi ly do\nkhac (thieu dau), deu la ma 1: do la dung hinh dang lo ma vong 5 goi ten. Cay\nkhong bi sua — vet cam trong bo nho.\nChan nay chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, va lenh o day\nla chan DOC ghim: mot cai MAY doc ma thoat da ghi, thay vi mot tac nhan doc van\nxuoi. Ly do: output cua chieu do CO Y chua nhung dong \"DO:\" cua phep thu cam vao,\nva o vong 4 lan vong 7 da co nguoi cham lay dong do lam ket qua roi ghi ma 1 trong\nkhi lenh thoat 0. Chan doc in lai output cu trong mot khoi co nhan va noi ro ma\nthoat that; ghim phai neo dung HEAD va cay khong duoc co sua chua ghi.",
+      "executor": "script",
+      "paths": [
+        "apps/app/app/(app)/[slug]/page.tsx",
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_lan_tieu_de_do"
+    },
+    {
+      "id": "E25",
+      "criterion": "AC-14",
+      "cmd": "node _acceptance/tong-quan-va-khung-noi-tieng-viet/rang/doc-lan.mjs E25",
+      "expected": "exit 0. Chieu do cua ve 1 (khong trung ma voi bon lat truoc): chep THAN MO-DUN\ncua dot-bien.mjs thuoc lat ③b vao mot file gia cua lat nay, roi doi ve 1 bat\nduoc cua so 12 dong ay va goi ten \"(than mo-dun)\". Cay sach phai trung=0 truoc\nda — con cho trung san thi chieu do khong noi len gi va cung la ma 1. Truoc\n08/09 ve 1 chi cua so hoa THAN HAM nen ma cap mo-dun di lot; do la lo hong vong\n5 goi ten. Cay khong bi sua — vet cam trong bo nho.\nChan nay chay o LAN NOI TIEP (lan-noi-tiep.mjs) truoc khi phat S4, va lenh o day\nla chan DOC ghim: mot cai MAY doc ma thoat da ghi, thay vi mot tac nhan doc van\nxuoi. Ly do: output cua chieu do CO Y chua nhung dong \"DO:\" cua phep thu cam vao,\nva o vong 4 lan vong 7 da co nguoi cham lay dong do lam ket qua roi ghi ma 1 trong\nkhi lenh thoat 0. Chan doc in lai output cu trong mot khoi co nhan va noi ro ma\nthoat that; ghim phai neo dung HEAD va cay khong duoc co sua chua ghi.",
+      "executor": "script",
+      "paths": [
+        "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.tq_lan_trung_lap_do"
+    },
+    {
+      "id": "E19",
+      "criterion": "AC-17",
+      "expected": "Ban dich doc nhu tieng Viet cua nguoi lam nghe. Danh tu: cong ty · ca nhan ·\nthoa thuan · hoi thoai · chien dich · cai dat. The so: \"Chot duoc thang nay\" ·\n\"Dang mo\" · \"Ty le chot\" · \"Trung binh moi thoa thuan\"; khong con \"thang/thua\".\nKhong dau vet dich may; thuat ngu ky thuat giu ten that.\nBA MANH BANG CHUNG hoi dong vong 2 doi, nay nam trong inputs:\n(1) NOI GOI cua cau ghep unconverted.sentence la sales-dashboard.tsx — no truyen\nsoThoaThuan(n) = formatCount(n, m.stats.dealNoun, locale), tuc \"3 thoa thuan\" o\nluot vi chu KHONG phai so tran, nen cau doc du danh tu;\n(2) rail.chat tro /chat va /agents trong lib/khung-dieu-huong.ts — dung tinh nang\nma CONTEXT.md dinh nghia la Hoi thoai;\n(3) CONTEXT.md nay CO muc \"Chot\" va muc \"Dang mo\" chot giong cua bon the so\n(them 08/09, ghi lai quyet dinh cua chu kho o Cong Pham vi) — tieu chi giong-doi-tac\nkhong con la hai cach doc.\nKHONG co co che danh dau no dich trong kho (grep TODO/chua dich/dich may tren\nlib/messages tra 0 dong) — nen ve thu tu doc bang chinh ban dich, khong doc dau.",
+      "question": "Hai kho chuoi nay doc nhu tieng Viet cua mot nhan vien quan he doi tac OneHub\nmo man dau tien khong: bay nhan thanh ben dung tu dien CONTEXT.md; bon the so\nnoi giong doi tac (chot / dang mo / khong thanh) chu khong giong pheu ban hang\n(thang / thua / pipeline); cau ghep so (N thoa thuan, N ngay) la mot cau Viet\ntu nhien; cho nao con la chu dich may thi neu dich danh khoa?",
+      "executor": "judgment",
+      "inputs": [
+        "/Users/manh-macmini/dev/crm/apps/app/lib/messages/tong-quan.ts",
+        "/Users/manh-macmini/dev/crm/apps/app/lib/messages/khung-ung-dung.ts",
+        "/Users/manh-macmini/dev/crm/_acceptance/tong-quan-va-khung-noi-tieng-viet/ban-dich.md",
+        "/Users/manh-macmini/dev/crm/CONTEXT.md",
+        "/Users/manh-macmini/dev/crm/apps/app/app/(app)/[slug]/sales-dashboard.tsx",
+        "/Users/manh-macmini/dev/crm/apps/app/lib/khung-dieu-huong.ts"
+      ],
+      "evidence_required": [
+        "run_id",
+        "verifier",
+        "verified_at",
+        "rationale"
+      ],
+      "inputsHash": "1ec06de75e7b564d6ebb6349495938b5056114c8c40e1d20c5fae6370b44df35"
+    }
+  ],
+  "suiteCommands": [
+    "bun run test",
+    "bunx turbo run check-types --force",
+    "bunx turbo run lint --force",
+    "bun run lint:slop",
+    "bunx turbo run build --force"
+  ],
+  "diffBase": "5912dccc3c1fce6c1ca2adf0c1e5f313c8ae9a76",
+  "repoRoot": "/Users/manh-macmini/dev/crm",
+  "personasPath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.9.0/skills/acceptance/references/judge-personas.md",
+  "templatePath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.9.0/skills/acceptance/references/evidence-report-template.md",
+  "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
+  "contractPath": "/Users/manh-macmini/dev/crm/_acceptance/tong-quan-va-khung-noi-tieng-viet/contract.md",
+  "invokedAt": "2026-09-08T22:55:22Z",
+  "invokedSha": "80f872e410525a68116613714b22e8f9479726dc",
+  "evalsHash": "b05f0c15627182d824996d2082f77e3bdddb5407797198880c76d4e6abbc8be9",
+  "runBaseline": true
+}
