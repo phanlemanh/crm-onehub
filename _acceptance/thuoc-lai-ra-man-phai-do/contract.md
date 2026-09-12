@@ -5,7 +5,7 @@ slug: thuoc-lai-ra-man-phai-do
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: approved
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-09-12T20:41:08Z
 design_doc: docs/superpowers/specs/2026-09-12-thuoc-lai-ra-man-phai-do-design.md
