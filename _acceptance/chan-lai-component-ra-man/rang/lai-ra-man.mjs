@@ -7,12 +7,12 @@ const GOC = join(import.meta.dirname, "..", "..", "..");
 const HO_SO = join(GOC, "_acceptance", "chan-lai-component-ra-man");
 const EV = join(HO_SO, "evidence");
 
-const NEO = { file: 398, mac_dinh: 107, dong_bang_cu: 9 };
+const NEO = { file: 383, mac_dinh: 92, dong_bang_cu: 9 };
 
 function banVeRong(banVe) {
 	return Object.values(banVe)
 		.flat()
-		.every((b) => b.loi_dong !== null && b.loi_mo !== null);
+		.every((b) => b.loi_dong !== null || b.loi_mo !== null);
 }
 
 function duongRa(ten) {
@@ -76,13 +76,18 @@ function chayBanVe() {
 		});
 	} catch (e) {
 		const ra = `${e.stdout ?? ""}${e.stderr ?? ""}`;
-		console.error(`bo ve khong chay tron:\n${ra.slice(-1200)}`);
+		console.error(
+			`BO-VE-CHET: buoc ve thoat ${e.status ?? "khac 0"}, khong cham tiep\n${ra.slice(-1200)}`,
+		);
+		return e.status ?? 1;
 	}
+	return 0;
 }
 
 export function phanNhom() {
 	ghi("mac-dinh.json", docMacDinh(GOC));
-	chayBanVe();
+	const maVe = chayBanVe();
+	if (maVe !== 0) return maVe;
 	const duong = duongRa("ve-that.json");
 	if (!existsSync(duong)) {
 		console.error(
@@ -98,8 +103,13 @@ export function phanNhom() {
 	const khongVeDuoc = [];
 	for (const m of macDinh) {
 		const ban = banVe[m.file] ?? [];
-		if (ban.length === 0 || ban.every((b) => b.loi_dong !== null && b.loi_mo !== null)) {
-			khongVeDuoc.push({ ...m, ly_do: ban[0]?.loi_dong ?? "khong co xuat nao ve duoc" });
+		const tron = ban.filter((b) => b.loi_dong === null && b.loi_mo === null);
+		if (tron.length === 0) {
+			khongVeDuoc.push({
+				...m,
+				ly_do:
+					ban[0]?.loi_dong ?? ban[0]?.loi_mo ?? "khong co xuat nao ve duoc",
+			});
 			continue;
 		}
 		const chu = new Set();
