@@ -1,0 +1,12 @@
+{
+	"ho_so": "man-cai-dat-noi-tieng-viet",
+	"ghi_chu": "Con so do bang man-that-lib.mjs TRUOC KHI SUA (git show HEAD) va SAU KHI SUA, tren CUNG du lieu cua may nay, ngay 08/09 — hai luot ra y het. Day la neo cua AC-14(2): thu vien sua xong khong duoc doi so do cua ho so da ky. So trong evidence-report.md da ky la 42/118, do tren may cu voi du lieu khac (ty gia, ten workspace), nen khong phai neo hop le giua hai may.",
+	"route": {
+		"/settings": 41,
+		"/settings/currencies": 86
+	},
+	"so_da_ky_tren_may_cu": {
+		"/settings": 42,
+		"/settings/currencies": 118
+	}
+}

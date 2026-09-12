@@ -14,7 +14,7 @@
 
 - SHA ghim: `3c97e759a6c87bc8b6f0621d3854cb486728b442`.
 - Ba số neo tại SHA ấy: **25** file gọi `getLocale` dưới `apps/app/app/**` · **19** trong đó gọi ở thân hàm xuất mặc định · **22** file có `generateMetadata`.
-- **Không viết chú thích trong code.** Không trailer đồng tác giả.
+- **Không viết chú thích trong code.**
 - Không `Record<string, unknown>`; không `typeof x === "..."`.
 - **Không đụng `.github/workflows/ci.yml`** của hãng.
 - **Không đụng thân `generateMetadata`** ở bất kỳ màn nào.

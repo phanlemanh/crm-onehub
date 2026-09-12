@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5bb506cb73fa87930ab460c8da87b637e7b0e82f
+verified_commit: cfc9e4a17fb05f456291afb5e0d73f50479669ff
 human_signoff:
 ---
 
@@ -230,3 +230,7 @@ sau đó cũ đi vì mã menu đổi ở commit 5bb506c.
 Round 2 (commit 5bb506c): chạy lại đúng hai lệnh đó ở HEAD mới; bảy eval xanh.
 Đọc lại mã menu xác nhận nhánh đang-dùng dựng cả tên góc nhìn lẫn dòng lý do
 tiếng Việt, và không dựng nút xoá.
+
+### Re-pin lần 1 — 2026-09-12, do ghim lại sau khi gộp onehub 193 commit — .githooks + workflow acceptance đổi sau verify; engine kit 2.11.0
+run_id: repin-20260912T031450Z-30729
+sha: cfc9e4a17fb05f456291afb5e0d73f50479669ff · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng

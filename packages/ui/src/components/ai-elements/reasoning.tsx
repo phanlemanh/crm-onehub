@@ -6,6 +6,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@crm/ui/components/collapsible";
+import { useMessages } from "@crm/ui/components/locale-provider";
 import { cn } from "@crm/ui/lib/utils";
 import { BrainIcon, ChevronDownIcon } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
@@ -115,19 +116,22 @@ export type ReasoningTriggerProps = ComponentProps<typeof CollapsibleTrigger> & 
   getThinkingMessage?: (isStreaming: boolean, duration?: number) => ReactNode;
 };
 
-const defaultGetThinkingMessage = (isStreaming: boolean, duration?: number) => {
-  if (isStreaming || duration === 0) {
-    return <Shimmer duration={1}>Thinking...</Shimmer>;
-  }
-  if (duration === undefined) {
-    return <p>Thought for a few seconds</p>;
-  }
-  return <p>Thought for {duration} seconds</p>;
-};
-
 export const ReasoningTrigger = memo(
-  ({ className, children, getThinkingMessage = defaultGetThinkingMessage, ...props }: ReasoningTriggerProps) => {
+  ({ className, children, getThinkingMessage, ...props }: ReasoningTriggerProps) => {
     const { isStreaming, isOpen, duration } = useReasoning();
+    const msg = useMessages();
+
+    const thinkingMessage =
+      getThinkingMessage ??
+      ((streaming: boolean, seconds?: number) => {
+        if (streaming || seconds === 0) {
+          return <Shimmer duration={1}>{msg.reasoning.thinking}</Shimmer>;
+        }
+        if (seconds === undefined) {
+          return <p>{msg.reasoning.thoughtBrief}</p>;
+        }
+        return <p>{msg.reasoning.thoughtFor(String(seconds))}</p>;
+      });
 
     return (
       <CollapsibleTrigger
@@ -140,7 +144,7 @@ export const ReasoningTrigger = memo(
         {children ?? (
           <>
             <BrainIcon className="size-4" />
-            {getThinkingMessage(isStreaming, duration)}
+            {thinkingMessage(isStreaming, duration)}
             <ChevronDownIcon
               className={cn(
                 "size-4 transition-transform",

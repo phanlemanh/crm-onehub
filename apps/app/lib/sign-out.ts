@@ -3,11 +3,11 @@
 import { signOut } from "@crm/auth/client";
 import { toast } from "sonner";
 
-export async function signOutAndRedirect() {
+export async function signOutAndRedirect(loiMacDinh: string) {
 	const { error } = await signOut();
 
 	if (error) {
-		toast.error(error.message ?? "Could not sign out.");
+		toast.error(error.message ?? loiMacDinh);
 		return;
 	}
 

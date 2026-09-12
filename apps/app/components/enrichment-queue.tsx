@@ -11,6 +11,7 @@ import {
 	EntityLogo,
 	type EntityLogoTone,
 } from "@crm/ui/components/entity-logo";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
 import {
 	Popover,
@@ -34,6 +35,7 @@ import {
 	ENRICHMENT_IDLE_POLL_MS,
 	ENRICHMENT_POLL_MS,
 } from "@/lib/enrichment-status";
+import { khungUngDungMessages } from "@/lib/messages/khung-ung-dung";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useSeconds } from "@/lib/use-seconds";
@@ -51,6 +53,7 @@ const STATE_TONE = {
 } satisfies Record<QueueRow["state"], StatusTone>;
 
 export function EnrichmentQueue() {
+	const m = khungUngDungMessages(useLocale()).enrichment;
 	const trpc = useTRPC();
 	const openRecord = useOpenRecord();
 	const [open, setOpen] = useState(false);
@@ -100,14 +103,14 @@ export function EnrichmentQueue() {
 						tone={total > 0 ? "primary" : "neutral"}
 						aria-hidden="true"
 					/>
-					{total > 0 ? `Enriching ${total}` : "Enriching"}
+					{total > 0 ? m.enrichingCount(String(total)) : m.enriching}
 				</Button>
 			</PopoverTrigger>
 
 			<PopoverContent align="end" size="panel">
 				<div className="flex items-center justify-between border-b px-4 py-3">
 					<span className="font-semibold text-popover-foreground text-sm">
-						Enriching now
+						{m.enrichingNow}
 					</span>
 					<span className="font-mono text-muted-foreground text-xs">
 						{total}
@@ -117,12 +120,9 @@ export function EnrichmentQueue() {
 				{visible.length === 0 ? (
 					<div className="flex flex-col gap-1 px-6 py-8 text-center">
 						<span className="font-medium text-popover-foreground text-sm">
-							Nothing right now
+							{m.emptyTitle}
 						</span>
-						<span className="text-muted-foreground text-xs">
-							New companies and contacts show up here while your agents look
-							them up.
-						</span>
+						<span className="text-muted-foreground text-xs">{m.emptyBody}</span>
 					</div>
 				) : (
 					<QueueRows
@@ -135,7 +135,7 @@ export function EnrichmentQueue() {
 				{footer.more > 0 ? (
 					<div className="flex items-center justify-between px-4 py-3 text-xs">
 						<span className="text-muted-foreground">
-							{footer.more} more queued
+							{m.moreQueued(String(footer.more))}
 						</span>
 						{footer.action === "show-all" ? (
 							<button
@@ -143,7 +143,7 @@ export function EnrichmentQueue() {
 								className="cursor-pointer text-primary"
 								onClick={() => setExpanded(true)}
 							>
-								Show all
+								{m.showAll}
 							</button>
 						) : null}
 						{footer.action === "load-more" ? (
@@ -156,7 +156,7 @@ export function EnrichmentQueue() {
 									)
 								}
 							>
-								Load more
+								{m.loadMore}
 							</button>
 						) : null}
 					</div>
@@ -278,16 +278,15 @@ function ScheduledSection({
 	onOpen: (row: ScheduledRow) => void;
 }) {
 	const [shown, setShown] = useState(false);
+	const m = khungUngDungMessages(useLocale()).enrichment;
 
 	return (
 		<Collapsible className="border-t" open={shown} onOpenChange={setShown}>
 			<CollapsibleTrigger className="flex w-full cursor-pointer items-center justify-between px-4 py-3 text-xs hover:bg-muted">
 				<span className="text-muted-foreground">
-					{total === 1
-						? "1 record is booked for a later look"
-						: `${total} records are booked for a later look`}
+					{total === 1 ? m.bookedOne : m.bookedMany(String(total))}
 				</span>
-				<span className="text-primary">{shown ? "Hide" : "Show"}</span>
+				<span className="text-primary">{shown ? m.hide : m.show}</span>
 			</CollapsibleTrigger>
 
 			<CollapsibleContent className="max-h-60 overflow-y-auto border-t">
@@ -310,7 +309,7 @@ function ScheduledSection({
 
 				{total > rows.length ? (
 					<div className="px-4 py-3 text-muted-foreground text-xs">
-						{total - rows.length} more are booked but not listed here
+						{m.bookedMore(String(total - rows.length))}
 					</div>
 				) : null}
 			</CollapsibleContent>

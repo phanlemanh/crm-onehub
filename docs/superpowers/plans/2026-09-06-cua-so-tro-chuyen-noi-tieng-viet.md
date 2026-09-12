@@ -14,7 +14,6 @@
 ## Global Constraints
 
 - **Không viết chú thích trong code.** Không thêm vào code mới, không thêm khi sửa code cũ.
-- **Không trailer đồng tác giả** trong commit.
 - Cấm `Record<string, unknown>`; phân tích ở biên bằng Zod.
 - Cấm `typeof x === "..."` — chân `lint:slop` bắt. Dùng `String(v) === v`, `v instanceof Object`, `Number.isInteger`.
 - Khuôn kho chuỗi: `const en` → `export type XMessages = typeof en` → `const vi satisfies XMessages` → `const BANG = { en, vi } satisfies Record<Locale, XMessages>` → `export function xMessages(locale: Locale)`. **KHÔNG `as const`** (đóng băng literal type).

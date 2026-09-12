@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-08T09:15:16Z",
-  "generated_sha": "d67b0788249d7b04f5c820fe99961b634102a7c4",
+  "generated_at": "2026-09-09T03:42:13Z",
+  "generated_sha": "5ccb176242f49b406cb3e0921406197c1d845171",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "chan-uy-thac-sai-luot",
-  "round": 3,
+  "round": 7,
   "riskTier": "T2",
   "evals": [
     {
@@ -39,7 +39,7 @@
       "id": "E3",
       "criterion": "AC-3",
       "cmd": "cd apps/agent && bun test test/chan-uy-thac.spec.ts -t moi-tool",
-      "expected": "Ma tran TOAN PHAN tren DANH SACH GHIM CUNG BA TEN trong chinh bai do:\ninspect_context, write_agent_file, save_agent_draft. So assert bang dung 3,\nkhong duoc chay vong lap roi vut so dem.\nMoi tool phai thoa CA HAI VE:\n(a) khai policy dung chung;\n(b) VAN giu requireBuilderAttribute (lop trong).\nCAM lay dan so tu dia lam dan so cua phep do. Dia chi dung de DOI CHIEU: dem\nso tool goi requireBuilderAttribute tren dia, khac 3 -> ma 2, IN ten tool thua\nhoac thieu. Vi sao: neu dan so troi theo dia thi go requireBuilderAttribute\nkhoi write_agent_file se lam \"dem duoc 2 thi doi 2\" tu khop, va mot cua vao\nbuilder ho hoan toan van cho mau xanh.\nChieu do: go policy khoi DUNG MOT tool trong ban sao -> ma 1, neu TEN tool.\nGo requireBuilderAttribute khoi DUNG MOT tool -> cung ma 1.\nCam do bang cach tim chuoi \"approval\" trong file: doc bang AST hoac import that\nmodule roi soi thuoc tinh, vi chuoi ay xuat hien hop le o cho khac.",
+      "expected": "Ma tran TOAN PHAN tren DANH SACH GHIM CUNG BA TEN trong chinh bai do:\ninspect_context, write_agent_file, save_agent_draft. So assert bang dung 3,\nkhong duoc chay vong lap roi vut so dem.\nMoi tool phai thoa CA HAI VE:\n(a) khai policy dung chung (so DONG NHAT voi builderTurnApproval da import);\n(b) VAN giu requireBuilderAttribute (lop trong), do bang CHIEU AM: goi\nexecute tren luot CHAT phai NEM dung thong diep ghim.\nGIOI HAN DA BIET (chot vong 6): chieu duong o tang execute KHONG do duoc —\nxem muc Notes cua contract. Bai do cu dung `rejects.not.toThrow` da xoa han\nchu khong va: `.rejects` bat buoc promise phai reject nen bai ay khang dinh\nmoi tool deu NEM tren luot duoc phep, va no xanh vi ly do ngoai loi hua.\nSAN DAN SO (da cai lai o vong 6): dan so cua lop la MOI file .ts trong TOOL_DIR\nma import that ra KHONG phai eve:disabled-tool. Dan so ay KHONG duoc loc theo\nchinh thuoc tinh dang assert — bo loc cu giu lai dung nhung file da co\nrequireBuilderAttribute nen no tu khop, va mot tool builder moi quen ca hai\nguard se bi bo qua lang le. Bai do doi tap \"con song\" bang dung TOOLS_GHIM, va\nassert tong so file tren dia LON HON 3 de dan so that su duoc quet.\nChieu do: them mot tool con song quen guard vao TOOL_DIR -> phep do phai DO.\nChieu do: go policy khoi DUNG MOT tool trong ban sao -> ma 1, neu TEN tool.\nGo requireBuilderAttribute khoi DUNG MOT tool -> cung ma 1.\nCam do bang cach tim chuoi \"approval\" trong file: doc bang AST hoac import that\nmodule roi soi thuoc tinh, vi chuoi ay xuat hien hop le o cho khac.",
       "executor": "test",
       "paths": [
         "apps/agent/agent/subagents/agent_builder/tools/inspect_context.ts",
@@ -54,7 +54,7 @@
       "id": "E4",
       "criterion": "AC-4",
       "cmd": "cd apps/agent && bun test test/chan-uy-thac.spec.ts -t quyen",
-      "expected": "MA TRAN TOAN PHAN tren tich: {research, team-agent, builder} x {co CREATE_AGENT,\nkhong co}. So assert bang so phan tu cua tich (6), khong duoc chi kiem\nresearch.\nMoi to hop TRU (builder + CREATE_AGENT) deu phai TU CHOI, kem dung hang ghim.\nTo hop team-agent PHAI co mat: policy viet theo dung chu \"tu choi khi research\nhoac thieu thuoc tinh\" se de phien team-agent lot cua, roi roi xuong\nrequireBuilderAttribute va nem Error — quay lai dung chuoi thu-lai roi treo ma\nvong nay sinh ra de chan.\nSan dan so: tap gia tri purposeOf tra ve dem ra khac 3 -> ma 2, IN gia tri la.\nChieu do (doi chung duong): to hop builder + CREATE_AGENT phai CHO DI TIEP.\nNeu no cung bi tu choi -> ma 1: khi ay \"tu choi tat\" khong phan biet duoc voi\n\"policy luon dong\".",
+      "expected": "MA TRAN TOAN PHAN tren tich: {research, team-agent, builder} x {co CREATE_AGENT,\nkhong co}. So assert bang so phan tu cua tich (6), khong duoc chi kiem\nresearch.\nMoi to hop TRU (builder + CREATE_AGENT) deu phai TU CHOI, kem dung hang ghim.\nTo hop team-agent PHAI co mat: policy viet theo dung chu \"tu choi khi research\nhoac thieu thuoc tinh\" se de phien team-agent lot cua, roi roi xuong\nrequireBuilderAttribute va nem Error — quay lai dung chuoi thu-lai roi treo ma\nvong nay sinh ra de chan.\nSan dan so (da cai, do duoc): dan so lop lay tu hang chay duoc SESSION_PURPOSES\ntrong session-purpose.ts — chinh hang ma SessionPurpose suy ra va purposeOf parse\ntheo. Bai do assert SESSION_PURPOSES dai 3 VA so o bang so phan tu nhan 2.\nThem mot purpose thu tu vao hang ay -> phep do phai DO. Neu dan so van den tu\nmot literal viet tay trong bai do -> ma 2.\nChieu do (doi chung duong): to hop builder + CREATE_AGENT phai CHO DI TIEP.\nNeu no cung bi tu choi -> ma 1: khi ay \"tu choi tat\" khong phan biet duoc voi\n\"policy luon dong\".",
       "executor": "test",
       "paths": [
         "apps/agent/agent/lib/session-purpose.ts",
@@ -80,7 +80,7 @@
       "id": "E6",
       "criterion": "AC-6",
       "cmd": "cd apps/agent && bun test test/chan-uy-thac.spec.ts -t ket-thuc",
-      "expected": "Parse THAT bang outputSchema cua agent_builder, khong doc chuoi nguon:\n(a) { status: \"not_authorized\", reason: <chuoi khong rong> } -> parse THANH CONG;\n(b) { status: \"draft_ready\", summary, agentId, versionId } -> van parse THANH CONG\n(chong hoi quy: mo union khong duoc lam mat nhanh cu);\n(c) { status: \"not_authorized\" } thieu reason -> parse HONG.\nChieu do: go nhanh not_authorized khoi schema trong ban sao -> (a) phai hong,\nphep do ma 1.",
+      "expected": "Parse THAT bang outputSchema cua agent_builder, khong doc chuoi nguon:\n(a) { status: \"not_authorized\", reason: <chuoi khong rong> } -> parse THANH CONG;\n(b) { status: \"draft_ready\", summary, agentId, versionId } -> van parse THANH CONG\n(chong hoi quy: them cua ra khong duoc lam mat nhanh cu);\n(c) { status: \"not_authorized\" } thieu reason -> parse HONG;\n(d) { status: \"draft_ready\" } thieu agentId/versionId -> parse HONG.\nVE THU HAI, HINH DANG DAY LEN MODEL: serialize outputSchema ra JSON Schema va\nassert goc co type \"object\", khong co oneOf, khong co anyOf. Ly do khong phai\nthi hieu: eve giao thang outputSchema lam inputSchema cua tool final_output\n(toInputSchema khong boc lai), nen mot goc oneOf tran co the bi provider tu choi\nva giet MOI luot builder, ca hai nhanh. Moi subagent khac trong kho da serialize\nra goc object.\nChieu do: cay lai discriminatedUnion trong ban sao -> ve hinh dang phai DO.\nGo nhanh not_authorized khoi schema -> (a) phai hong, phep do ma 1.\nGIOI HAN DA BIET: phep do nay cham HINH DANG SCHEMA, khong cham mot luot chay\nthat qua gateway. Provider co nhan hay khong thi chi mot luot voi model that moi\ntra loi duoc.",
       "executor": "test",
       "paths": [
         "apps/agent/agent/subagents/agent_builder/agent.ts",
@@ -98,14 +98,13 @@
       "inputs": [
         "/Users/manhphan/dev/crm-onehub-cutl/apps/agent/agent/instructions/task.ts",
         "/Users/manhphan/dev/crm-onehub-cutl/CONTEXT.md"
-      ],
-      "inputsHash": "e1615d175282d1326f6304f49cb798f132ab2e09737af8c823997f99a243726b"
+      ]
     },
     {
       "id": "E10",
       "criterion": "AC-10",
       "cmd": "cd apps/agent && bun test test/chan-uy-thac.spec.ts -t moi-tool",
-      "expected": "Chuoi ly do den tu MOT hang duoc export, dung chung. Do QUAN HE chu khong do\nchuoi-co-mat: khong file tool nao chua chuoi ly do viet thang tai cho — moi tool\nphai IMPORT hang ay.\nChieu do: viet lai chuoi ay tai cho o mot tool trong ban sao -> ma 1, neu\nfile:dong.",
+      "expected": "Chuoi ly do den tu MOT hang duoc export, dung chung. Do QUAN HE bang HANH VI,\nkhong do chuoi-co-mat, VA do CA HAI VE tren tung tool ghim:\n(a) DUONG: goi CHINH policy cua tool do tren mot ctx khong quyen, ket qua phai\nBANG { type: \"denied\", reason: <literal ghim viet trong bai do> } — so\nnguyen van, khong so voi hang da import (so hang voi chinh no la hang-dung);\n(b) AM: file tool khong chua chuoi ly do viet thang tai cho.\nVe (a) la ve quan trong: mot file tool rong tuech, khong policy, khong import gi,\nvan qua duoc neu chi co ve (b).\nChieu do 1: mot tool tra ly do KHAC (vd \"Nope.\") -> (a) do, VA phai IN ra chuoi\nthuc nhan duoc.\nChieu do 2: viet lai nguyen van chuoi ay tai cho o mot tool -> (b) do.",
       "executor": "test",
       "paths": [
         "apps/agent/agent/subagents/agent_builder/lib/authorization.ts",
@@ -130,12 +129,34 @@
   "templatePath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.8.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
   "contractPath": "/Users/manhphan/dev/crm-onehub-cutl/_acceptance/chan-uy-thac-sai-luot/contract.md",
-  "invokedAt": "2026-09-08T09:15:16Z",
-  "invokedSha": "d67b0788249d7b04f5c820fe99961b634102a7c4",
-  "evalsHash": "bb237ebd17d94cf94a177187c72284f15084c37a59fbdb21b9b480215249897a",
-  "runBaseline": false,
-  "carriedAnalyst": {
-    "fromRound": 2,
-    "nonDiscriminating": []
-  }
+  "invokedAt": "2026-09-09T03:42:13Z",
+  "invokedSha": "5ccb176242f49b406cb3e0921406197c1d845171",
+  "evalsHash": "ca3b786c6996d2e3e09b5576841b7a798c6979759ecfd8aff598e8afbe78f50b",
+  "runBaseline": true,
+  "carriedPanels": [
+    {
+      "evalId": "E7",
+      "proposal": "PASS",
+      "votes": [
+        {
+          "lens": "domain-correctness",
+          "verdict": "PASS"
+        },
+        {
+          "lens": "operational-feasibility",
+          "verdict": "UNCERTAIN",
+          "required_evidence": [
+            "Một bản chép nguyên văn (transcript) hoặc ảnh chụp câu trả lời thật của chat khi agent_builder trả not_authorized, để đối chiếu câu chữ thực tế có đổ lỗi cho người dùng hoặc có trình bày như lỗi hệ thống hay không — hiện chỉ có mã chỉ thị, chưa có output thật.",
+            "Nếu có, một lớp chỉ thị/style-guide runtime khác ngoài task.ts ràng buộc rõ 'không đổ lỗi cho người dùng' và 'không trình bày như lỗi hệ thống' — nếu tồn tại và phủ đúng hai vế này thì verdict đổi thành PASS; nếu xác nhận không có lớp nào khác thì verdict nghiêng về FAIL vì hai vế đó không được ràng buộc ở đâu cả."
+          ]
+        },
+        {
+          "lens": "spec-alignment",
+          "verdict": "PASS"
+        }
+      ],
+      "fromRound": 5,
+      "inputsHash": "e1615d175282d1326f6304f49cb798f132ab2e09737af8c823997f99a243726b"
+    }
+  ]
 }

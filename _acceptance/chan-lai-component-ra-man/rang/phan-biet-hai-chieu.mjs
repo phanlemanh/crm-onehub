@@ -121,7 +121,11 @@ try {
 	}
 } finally {
 	for (const [duong, nguon] of goc) writeFileSync(duong, nguon);
-	if (goc.size > 0) console.log(`da tra lai ${goc.size} file ve nguyen trang.`);
+	if (goc.size > 0) {
+		console.log(`da tra lai ${goc.size} file ve nguyen trang.`);
+		docPhanNhom();
+		console.log("da dung lai tao pham tu cay nguyen trang.");
+	}
 }
 
 if (ma === 0)

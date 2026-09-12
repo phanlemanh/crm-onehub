@@ -1,7 +1,8 @@
 import { describe, expect, it } from "bun:test";
-import { readdirSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import type { EveToolInput, EveToolOutput } from "@crm/validation/eve-tool";
 import type { EveMessage } from "eve/react";
+import { z } from "zod";
 import {
 	conversationTimeline,
 	dealListResultOf,
@@ -719,5 +720,216 @@ describe("tool call details", () => {
 			"did",
 			"said",
 		]);
+	});
+});
+
+const DUONG_VAT_THU = new URL(
+	"../../../packages/ui/test/fixtures/eve-turns.json",
+	import.meta.url,
+);
+
+const LUOT_EVE = [
+	message([{ type: "text", text: "Cho tôi biết về Acme." }], "user", "m1"),
+	message(
+		[
+			{ type: "reasoning", state: "streaming", text: "Cần xem lịch sử CRM." },
+			{ type: "text", text: "Đang tra cứu." },
+			tool("read_crm_history", {
+				toolCallId: "call-neutral",
+				input: { contactId: "c1" },
+				output: { rows: 3 },
+			}),
+		],
+		"assistant",
+		"m2",
+	),
+	message(
+		[
+			tool("record_fact", {
+				toolCallId: "call-success",
+				input: { fact: "Acme đổi trụ sở" },
+				output: {
+					applied: true,
+					sourceUrl: "https://www.linkedin.com/in/acme",
+				},
+			}),
+			tool("web_fetch", {
+				toolCallId: "call-warning",
+				state: "output-error",
+				errorText: "hết lượt gọi trong ngày",
+				input: { url: "https://acme.example" },
+			}),
+			tool("web_fetch", {
+				toolCallId: "call-warning-trong",
+				state: "output-error",
+				errorText: "   ",
+				input: { url: "https://acme.example/khong-loi" },
+			}),
+			tool("set_contact_socials", {
+				toolCallId: "call-khong-ghi",
+				input: { contactId: "c1" },
+				output: {
+					stored: false,
+					reason: "tài khoản đứng tên người khác",
+				},
+			}),
+			tool("web_search", {
+				toolCallId: "call-pending",
+				state: "input-available",
+				input: { query: "acme funding" },
+			}),
+			{
+				type: "dynamic-tool",
+				toolName: "ask_question",
+				state: "approval-requested",
+				toolCallId: "call-asked",
+				toolMetadata: {
+					eve: {
+						inputRequest: {
+							kind: "question",
+							requestId: "req-1",
+							display: "select",
+							prompt: "Ghi vào bản ghi nào?",
+							options: [
+								{ id: "acme", label: "Acme" },
+								{ id: "acme-vn", label: "Acme Việt Nam" },
+							],
+						},
+					},
+				},
+			},
+		],
+		"assistant",
+		"m3",
+	),
+	message(
+		[{ type: "reasoning", state: "done", text: "Đã đủ dữ kiện để trả lời." }],
+		"assistant",
+		"m4",
+	),
+];
+
+const nutJson = z.json();
+
+type NutJson = z.infer<typeof nutJson>;
+
+const mangJson = z.array(nutJson);
+
+const doiTuongJson = z.record(z.string(), nutJson);
+
+const truongCua = (giaTri: NutJson, goc = ""): string[] => {
+	const mang = mangJson.safeParse(giaTri);
+	if (mang.success) {
+		return mang.data.flatMap((phanTu, i) => truongCua(phanTu, `${goc}[${i}]`));
+	}
+
+	const doiTuong = doiTuongJson.safeParse(giaTri);
+	if (!doiTuong.success) return [];
+
+	return Object.entries(doiTuong.data).flatMap(([khoa, con]) => {
+		const duong = goc ? `${goc}.${khoa}` : khoa;
+		return [duong, ...truongCua(con, duong)];
+	});
+};
+
+type ChoDung = { co: true; gt: NutJson | undefined } | { co: false };
+
+const VANG = { co: false } as const satisfies ChoDung;
+
+const doiChieu = (vatThu: ChoDung, daGhi: ChoDung, duong: string): string[] => {
+	if (!vatThu.co) {
+		return [
+			`${duong}: vật thử thiếu trường này, toTranscript ghi ${JSON.stringify(daGhi.co ? daGhi.gt : null)}`,
+		];
+	}
+	if (!daGhi.co) {
+		return [
+			`${duong}: vật thử còn giữ ${JSON.stringify(vatThu.gt)}, toTranscript không còn ghi trường này`,
+		];
+	}
+	return lechGiua(vatThu.gt ?? null, daGhi.gt ?? null, duong);
+};
+
+const lechGiua = (vatThu: NutJson, daGhi: NutJson, goc = ""): string[] => {
+	if (JSON.stringify(vatThu) === JSON.stringify(daGhi)) return [];
+
+	const duong = goc || "gốc";
+
+	const mangVatThu = mangJson.safeParse(vatThu);
+	const mangDaGhi = mangJson.safeParse(daGhi);
+	if (mangVatThu.success && mangDaGhi.success) {
+		const dai = Math.max(mangVatThu.data.length, mangDaGhi.data.length);
+		return Array.from({ length: dai }, (_, i) =>
+			doiChieu(
+				i < mangVatThu.data.length
+					? { co: true, gt: mangVatThu.data[i] }
+					: VANG,
+				i < mangDaGhi.data.length ? { co: true, gt: mangDaGhi.data[i] } : VANG,
+				`${goc}[${i}]`,
+			),
+		).flat();
+	}
+
+	const doiVatThu = doiTuongJson.safeParse(vatThu);
+	const doiDaGhi = doiTuongJson.safeParse(daGhi);
+	if (doiVatThu.success && doiDaGhi.success) {
+		const khoas = [
+			...new Set([
+				...Object.keys(doiVatThu.data),
+				...Object.keys(doiDaGhi.data),
+			]),
+		];
+		return khoas.flatMap((khoa) =>
+			doiChieu(
+				khoa in doiVatThu.data ? { co: true, gt: doiVatThu.data[khoa] } : VANG,
+				khoa in doiDaGhi.data ? { co: true, gt: doiDaGhi.data[khoa] } : VANG,
+				goc ? `${goc}.${khoa}` : khoa,
+			),
+		);
+	}
+
+	return [
+		`${duong}: vật thử ${JSON.stringify(vatThu)} ≠ toTranscript ${JSON.stringify(daGhi)}`,
+	];
+};
+
+const banCao = (lech: string[]): string =>
+	lech.length === 0
+		? ""
+		: [
+				`Vật thử ${DUONG_VAT_THU.pathname} lệch ${lech.length} chỗ so với toTranscript.`,
+				"Bài kiểm không tự ghi vật thử — sửa tay tệp trên cho khớp vế phải của từng dòng:",
+				...lech,
+			].join("\n");
+
+describe("vật thử của lớp chuyển sinh từ chính toTranscript", () => {
+	const sinhRa = toTranscript(LUOT_EVE as unknown as EveMessage[]);
+
+	const vatThu = nutJson.parse(JSON.parse(readFileSync(DUONG_VAT_THU, "utf8")));
+	const daGhi = nutJson.parse(JSON.parse(JSON.stringify(sinhRa)));
+
+	it("mang đúng những trường mà toTranscript viết ra, không thừa không thiếu", () => {
+		expect(truongCua(vatThu).sort()).toEqual(truongCua(daGhi).sort());
+	});
+
+	it("mang đúng giá trị mà toTranscript viết ra", () => {
+		expect(banCao(lechGiua(vatThu, daGhi))).toBe("");
+	});
+
+	it("phủ cả bốn dạng lượt và cả hai trạng thái của reasoned", () => {
+		const items = sinhRa.flatMap((row) => row.items);
+
+		expect([...new Set(items.map((item) => item.kind))].sort()).toEqual([
+			"asked",
+			"did",
+			"reasoned",
+			"said",
+		]);
+		expect(
+			items
+				.filter((item) => item.kind === "reasoned")
+				.map((item) => item.streaming)
+				.sort(),
+		).toEqual([false, true]);
 	});
 });

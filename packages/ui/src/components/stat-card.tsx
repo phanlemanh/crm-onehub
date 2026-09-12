@@ -76,7 +76,7 @@ function StatCard({
 			{...props}
 		>
 			{label != null ? (
-				<span className="truncate text-sm font-medium text-muted-foreground">
+				<span className="text-pretty text-sm font-medium text-muted-foreground @2xl/stats:truncate">
 					{label}
 				</span>
 			) : null}

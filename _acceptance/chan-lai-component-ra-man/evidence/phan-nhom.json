@@ -1,54 +1,5 @@
 {
-	"nguoi_doc": [
-		{
-			"file": "packages/ui/src/components/async-action.tsx",
-			"dong": 124,
-			"tham_so": "successLabel",
-			"gia_tri": "Done"
-		},
-		{
-			"file": "packages/ui/src/components/async-action.tsx",
-			"dong": 125,
-			"tham_so": "errorLabel",
-			"gia_tri": "Try again"
-		},
-		{
-			"file": "packages/ui/src/components/combobox.tsx",
-			"dong": 36,
-			"tham_so": "placeholder",
-			"gia_tri": "Select an option"
-		},
-		{
-			"file": "packages/ui/src/components/combobox.tsx",
-			"dong": 37,
-			"tham_so": "searchPlaceholder",
-			"gia_tri": "Search…"
-		},
-		{
-			"file": "packages/ui/src/components/combobox.tsx",
-			"dong": 38,
-			"tham_so": "empty",
-			"gia_tri": "Nothing matches."
-		},
-		{
-			"file": "packages/ui/src/components/command.tsx",
-			"dong": 38,
-			"tham_so": "title",
-			"gia_tri": "Command Palette"
-		},
-		{
-			"file": "packages/ui/src/components/command.tsx",
-			"dong": 39,
-			"tham_so": "description",
-			"gia_tri": "Search for a command to run..."
-		},
-		{
-			"file": "packages/ui/src/components/date-picker.tsx",
-			"dong": 24,
-			"tham_so": "placeholder",
-			"gia_tri": "Select a date"
-		}
-	],
+	"nguoi_doc": [],
 	"ky_thuat": [
 		{
 			"file": "packages/ui/src/components/ai-elements/artifact.tsx",

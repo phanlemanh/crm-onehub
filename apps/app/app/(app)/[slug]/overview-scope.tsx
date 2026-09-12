@@ -1,7 +1,9 @@
 "use client";
 
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { useQueryState } from "nuqs";
+import { tongQuanMessages } from "@/lib/messages/tong-quan";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import {
 	OVERVIEW_SCOPES,
@@ -9,16 +11,12 @@ import {
 	overviewParsers,
 } from "./overview-search-params";
 
-const LABELS = {
-	me: "Me",
-	everyone: "Everyone",
-} satisfies Record<OverviewScope, string>;
-
 function isScope(value: string): value is OverviewScope {
 	return (OVERVIEW_SCOPES as readonly string[]).includes(value);
 }
 
 export function OverviewScopeToggleFallback() {
+	const m = tongQuanMessages(useLocale()).scope;
 	return (
 		<ToggleGroup
 			type="single"
@@ -26,11 +24,11 @@ export function OverviewScopeToggleFallback() {
 			size="sm"
 			spacing={0}
 			disabled
-			aria-label="Whose numbers to show"
+			aria-label={m.label}
 		>
 			{OVERVIEW_SCOPES.map((value) => (
 				<ToggleGroupItem key={value} value={value}>
-					{LABELS[value]}
+					{m[value]}
 				</ToggleGroupItem>
 			))}
 		</ToggleGroup>
@@ -38,6 +36,7 @@ export function OverviewScopeToggleFallback() {
 }
 
 export function OverviewScopeToggle() {
+	const m = tongQuanMessages(useLocale()).scope;
 	const [scope, setScope] = useQueryState(
 		SEARCH_PARAM.overview.scope,
 		overviewParsers[SEARCH_PARAM.overview.scope],
@@ -53,11 +52,11 @@ export function OverviewScopeToggle() {
 			onValueChange={(next) => {
 				if (isScope(next)) void setScope(next);
 			}}
-			aria-label="Whose numbers to show"
+			aria-label={m.label}
 		>
 			{OVERVIEW_SCOPES.map((value) => (
 				<ToggleGroupItem key={value} value={value}>
-					{LABELS[value]}
+					{m[value]}
 				</ToggleGroupItem>
 			))}
 		</ToggleGroup>

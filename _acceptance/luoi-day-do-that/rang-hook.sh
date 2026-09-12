@@ -39,7 +39,24 @@ don_du() {
 }
 don_du
 
-TAC_VU="check-types lint lint:slop test"
+TAC_VU="check-types lint lint:slop test build"
+
+KY_VONG_CACHE="$(cd "$ROOT" && TAC_VU="$TAC_VU" node -e '
+const fs = require("fs");
+const p = JSON.parse(fs.readFileSync("package.json", "utf8")).scripts || {};
+let n = 0;
+for (const t of String(process.env.TAC_VU || "").split(/\s+/).filter(Boolean)) {
+  const s = p[t] || "";
+  if (/turbo/.test(s)) { n += 1; continue; }
+  const m = s.match(/[\w./-]+\.ts/);
+  if (m && fs.existsSync(m[0]) && /turbo/.test(fs.readFileSync(m[0], "utf8"))) n += 1;
+}
+process.stdout.write(String(n));
+')"
+if ! printf '%s' "$KY_VONG_CACHE" | grep -qE '^[1-9][0-9]*$'; then
+  echo "rang-hook: khong suy duoc so tac vu qua bo dung (nhan duoc '$KY_VONG_CACHE')"
+  exit 2
+fi
 
 SHA="$(git -C "$ROOT" rev-parse HEAD)"
 REF() { printf 'refs/heads/onehub %s refs/heads/onehub %s\n' "$SHA" "$SHA"; }
@@ -67,8 +84,8 @@ case "$CHAN" in
       fi
     done
     DONG_CACHE="$(printf '%s' "$OUT" | grep -c 'Cached:')"
-    if [ "$DONG_CACHE" -ne 3 ]; then
-      echo "RANG CUN: thay $DONG_CACHE dong tong ket bo dung, ky vong dung 3"
+    if [ "$DONG_CACHE" -ne "$KY_VONG_CACHE" ]; then
+      echo "RANG CUN: thay $DONG_CACHE dong tong ket bo dung, ky vong dung $KY_VONG_CACHE"
       exit 1
     fi
     XAU="$(printf '%s' "$OUT" | grep 'Cached:' | grep -v 'Cached:[[:space:]]*0 cached')"
@@ -78,7 +95,7 @@ case "$CHAN" in
       exit 1
     fi
     printf '%s' "$OUT" | grep 'Cached:' | sed 's/^/  /'
-    echo "rang-hook ep-chay: du 4 tac vu duoc goi, 3 tac vu qua bo dung deu 0 doc tu dem"
+    echo "rang-hook ep-chay: du $(printf '%s\n' $TAC_VU | wc -l | tr -d ' ') tac vu duoc goi, $KY_VONG_CACHE tac vu qua bo dung deu 0 doc tu dem"
     ;;
   con-rang)
     if [ -e "$PLANT" ]; then

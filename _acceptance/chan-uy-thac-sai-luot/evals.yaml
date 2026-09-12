@@ -59,13 +59,20 @@ evals:
       inspect_context, write_agent_file, save_agent_draft. So assert bang dung 3,
       khong duoc chay vong lap roi vut so dem.
       Moi tool phai thoa CA HAI VE:
-        (a) khai policy dung chung;
-        (b) VAN giu requireBuilderAttribute (lop trong).
-      CAM lay dan so tu dia lam dan so cua phep do. Dia chi dung de DOI CHIEU: dem
-      so tool goi requireBuilderAttribute tren dia, khac 3 -> ma 2, IN ten tool thua
-      hoac thieu. Vi sao: neu dan so troi theo dia thi go requireBuilderAttribute
-      khoi write_agent_file se lam "dem duoc 2 thi doi 2" tu khop, va mot cua vao
-      builder ho hoan toan van cho mau xanh.
+        (a) khai policy dung chung (so DONG NHAT voi builderTurnApproval da import);
+        (b) VAN giu requireBuilderAttribute (lop trong), do bang CHIEU AM: goi
+            execute tren luot CHAT phai NEM dung thong diep ghim.
+      GIOI HAN DA BIET (chot vong 6): chieu duong o tang execute KHONG do duoc —
+      xem muc Notes cua contract. Bai do cu dung `rejects.not.toThrow` da xoa han
+      chu khong va: `.rejects` bat buoc promise phai reject nen bai ay khang dinh
+      moi tool deu NEM tren luot duoc phep, va no xanh vi ly do ngoai loi hua.
+      SAN DAN SO (da cai lai o vong 6): dan so cua lop la MOI file .ts trong TOOL_DIR
+      ma import that ra KHONG phai eve:disabled-tool. Dan so ay KHONG duoc loc theo
+      chinh thuoc tinh dang assert — bo loc cu giu lai dung nhung file da co
+      requireBuilderAttribute nen no tu khop, va mot tool builder moi quen ca hai
+      guard se bi bo qua lang le. Bai do doi tap "con song" bang dung TOOLS_GHIM, va
+      assert tong so file tren dia LON HON 3 de dan so that su duoc quet.
+      Chieu do: them mot tool con song quen guard vao TOOL_DIR -> phep do phai DO.
       Chieu do: go policy khoi DUNG MOT tool trong ban sao -> ma 1, neu TEN tool.
       Go requireBuilderAttribute khoi DUNG MOT tool -> cung ma 1.
       Cam do bang cach tim chuoi "approval" trong file: doc bang AST hoac import that
@@ -88,7 +95,11 @@ evals:
       hoac thieu thuoc tinh" se de phien team-agent lot cua, roi roi xuong
       requireBuilderAttribute va nem Error — quay lai dung chuoi thu-lai roi treo ma
       vong nay sinh ra de chan.
-      San dan so: tap gia tri purposeOf tra ve dem ra khac 3 -> ma 2, IN gia tri la.
+      San dan so (da cai, do duoc): dan so lop lay tu hang chay duoc SESSION_PURPOSES
+      trong session-purpose.ts — chinh hang ma SessionPurpose suy ra va purposeOf parse
+      theo. Bai do assert SESSION_PURPOSES dai 3 VA so o bang so phan tu nhan 2.
+      Them mot purpose thu tu vao hang ay -> phep do phai DO. Neu dan so van den tu
+      mot literal viet tay trong bai do -> ma 2.
       Chieu do (doi chung duong): to hop builder + CREATE_AGENT phai CHO DI TIEP.
       Neu no cung bi tu choi -> ma 1: khi ay "tu choi tat" khong phan biet duoc voi
       "policy luon dong".
@@ -119,10 +130,20 @@ evals:
       Parse THAT bang outputSchema cua agent_builder, khong doc chuoi nguon:
         (a) { status: "not_authorized", reason: <chuoi khong rong> } -> parse THANH CONG;
         (b) { status: "draft_ready", summary, agentId, versionId } -> van parse THANH CONG
-            (chong hoi quy: mo union khong duoc lam mat nhanh cu);
-        (c) { status: "not_authorized" } thieu reason -> parse HONG.
-      Chieu do: go nhanh not_authorized khoi schema trong ban sao -> (a) phai hong,
-      phep do ma 1.
+            (chong hoi quy: them cua ra khong duoc lam mat nhanh cu);
+        (c) { status: "not_authorized" } thieu reason -> parse HONG;
+        (d) { status: "draft_ready" } thieu agentId/versionId -> parse HONG.
+      VE THU HAI, HINH DANG DAY LEN MODEL: serialize outputSchema ra JSON Schema va
+      assert goc co type "object", khong co oneOf, khong co anyOf. Ly do khong phai
+      thi hieu: eve giao thang outputSchema lam inputSchema cua tool final_output
+      (toInputSchema khong boc lai), nen mot goc oneOf tran co the bi provider tu choi
+      va giet MOI luot builder, ca hai nhanh. Moi subagent khac trong kho da serialize
+      ra goc object.
+      Chieu do: cay lai discriminatedUnion trong ban sao -> ve hinh dang phai DO.
+      Go nhanh not_authorized khoi schema -> (a) phai hong, phep do ma 1.
+      GIOI HAN DA BIET: phep do nay cham HINH DANG SCHEMA, khong cham mot luot chay
+      that qua gateway. Provider co nhan hay khong thi chi mot luot voi model that moi
+      tra loi duoc.
 
   - id: E7
     criterion: AC-7
@@ -163,8 +184,14 @@ evals:
       - "apps/agent/agent/subagents/agent_builder/tools/save_agent_draft.ts"
       - "apps/agent/test/chan-uy-thac.spec.ts"
     expected: |
-      Chuoi ly do den tu MOT hang duoc export, dung chung. Do QUAN HE chu khong do
-      chuoi-co-mat: khong file tool nao chua chuoi ly do viet thang tai cho — moi tool
-      phai IMPORT hang ay.
-      Chieu do: viet lai chuoi ay tai cho o mot tool trong ban sao -> ma 1, neu
-      file:dong.
+      Chuoi ly do den tu MOT hang duoc export, dung chung. Do QUAN HE bang HANH VI,
+      khong do chuoi-co-mat, VA do CA HAI VE tren tung tool ghim:
+        (a) DUONG: goi CHINH policy cua tool do tren mot ctx khong quyen, ket qua phai
+            BANG { type: "denied", reason: <literal ghim viet trong bai do> } — so
+            nguyen van, khong so voi hang da import (so hang voi chinh no la hang-dung);
+        (b) AM: file tool khong chua chuoi ly do viet thang tai cho.
+      Ve (a) la ve quan trong: mot file tool rong tuech, khong policy, khong import gi,
+      van qua duoc neu chi co ve (b).
+      Chieu do 1: mot tool tra ly do KHAC (vd "Nope.") -> (a) do, VA phai IN ra chuoi
+      thuc nhan duoc.
+      Chieu do 2: viet lai nguyen van chuoi ay tai cho o mot tool -> (b) do.

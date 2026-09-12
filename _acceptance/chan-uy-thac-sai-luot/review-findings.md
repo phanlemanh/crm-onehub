@@ -1,44 +1,37 @@
 ## Trong hợp đồng
 
-- **Hình dạng 5 — ma trận AC-4 tuyên quét toàn lớp `purposeOf` nhưng dân số là mảng hardcode trong bài đo, thiếu sàn dân số bắt buộc**
-  file:line: `apps/agent/test/chan-uy-thac.spec.ts:13`
-  severity: medium
-  detail: AC-4 và `expected` của E4 đòi hai thứ: (a) ma trận toàn phần, số assert bằng số phần tử — bài đo làm đúng (`cases` 6 phần tử, `expect(cases).toHaveLength(6)`, dòng 69-73); và (b) **sàn dân số**: "tập giá trị `purposeOf` đếm ra khác 3 → mã 2, nêu giá trị lạ". Vế (b) không có trong bài đo. Dân số của ma trận là `const PURPOSES = ["research", "team-agent", "builder"] as const` (dòng 13) — một mảng viết tay trong file test, không đối chiếu với nguồn sự thật nào. `SessionPurpose` là union type của TypeScript nên bị xoá lúc chạy, và session-purpose.ts không export mảng runtime nào để so; bài đo cũng không đọc nguồn để đếm. So sánh trực tiếp: cùng file, phép đo dân số tool (`moi-tool: dan so tren dia phai bang danh sach ghim`, dòng ~118) LÀM đúng việc này — đọc `TOOL_DIR` trên đĩa và `expect(trenDia).toEqual([...TOOLS_GHIM].sort())` — nên khoảng trống ở AC-4 không phải vì bất khả thi. Cụ thể cái lọt lưới: thêm một giá trị thứ tư vào `SessionPurpose` và một nhánh trả nó trong `purposeOf` (đúng kiểu `team-agent` đã được thêm và từng lọt cửa ở vòng chấm trước) thì `PURPOSES` vẫn 3, `cases` vẫn 6, `toHaveLength(6)` vẫn xanh, và mục đích phiên mới đi qua policy mà không một assert nào chạm tới.
-  source: measurement
-  AC: AC-4
-
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **Cửa ra not_authorized không được khai ở chỉ dẫn con — con nhận hàng lý do viết cho cha**
-  Người dùng thấy gì: Khi hệ thống từ chối yêu cầu tạo tác nhân, tác nhân con chưa được dạy phải báo kết quả đúng cách, nên cuộc trò chuyện có thể vẫn bị treo giống lỗi cũ thay vì báo lỗi rõ ràng cho người dùng.
-  file: `apps/agent/agent/subagents/agent_builder/instructions.md`
-  severity: high
-  Đề xuất: known-limits
-
-- **Danh sách tool ghim policy được suy ra bằng grep chuỗi, nên bất biến "không ambient" trong docs chỉ được bảo vệ một nửa**
-  Người dùng thấy gì: Cách kiểm tra tự động hiện tại có thể bỏ sót một cách viết tính năng dựng tác nhân mới theo kiểu khác, khiến tính năng đó lách qua được bước xin phép mà không ai phát hiện.
-  file: `apps/agent/test/chan-uy-thac.spec.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Cổng uỷ quyền mới bị vượt bởi bất kỳ câu trả lời ask_question nào**
-  Người dùng thấy gì: Khi người dùng chỉ đang trả lời một câu hỏi phụ trong đoạn chat bình thường, hệ thống có thể hiểu nhầm thành lệnh tạo tác nhân và cho phép các thao tác dựng tác nhân chạy ngoài ý muốn của người dùng.
+- **builderCommandType is now an identity function; message is threaded through builderSessionAttributes for nothing**
+  Người dùng thấy gì: Không ảnh hưởng người dùng: có một đoạn mã cũ không còn tác dụng thực sự nhưng vẫn được giữ lại trong hệ thống, không gây lỗi hay thay đổi hành vi nào.
   file: `apps/agent/agent/lib/custom-agent-dispatch.ts`
-  severity: high
-  Đề xuất: new-contract
-
-- **apps/agent/test/** nằm ngoài tsconfig — bài đo mới không qua check-types**
-  Người dùng thấy gì: Các bài kiểm tra mới cho tính năng chặn quyền này chưa được máy tự rà lỗi kiểu dữ liệu, nên nếu sau này cách kiểm tra quyền bị đổi sai, bài kiểm tra vẫn có thể báo đạt trong khi bản chạy thật đã hỏng.
-  file: `apps/agent/tsconfig.json`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 1 — E7/AC-7 đo CHỈ DẪN viết cho cha, không đo câu trả lời cha thật sự soạn**
-  Người dùng thấy gì: Phép đo cho tiêu chí 'trả lời không dùng từ kỹ thuật' hiện chỉ kiểm tra bản hướng dẫn viết sẵn, chứ chưa kiểm câu trả lời thật hệ thống đưa ra cho người dùng, nên câu trả lời thật vẫn có thể lộ thông tin kỹ thuật dù hồ sơ báo đạt.
-  file: `_acceptance/chan-uy-thac-sai-luot/evals.yaml`
-  severity: high
+- **Source-text scanning test will fail on any legitimate future ternary producing "CREATE_AGENT"**
+  Người dùng thấy gì: Một bài kiểm tra nội bộ có thể báo lỗi nhầm trong tương lai khi có người viết thêm code hợp lệ khác nhưng tình cờ giống mẫu bị cấm trước đây; điều này chỉ làm chậm việc phát triển sau này, không ảnh hưởng đến trải nghiệm của người dùng hiện tại.
+  file: `apps/agent/test/quyen-luot.spec.ts`
+  severity: low
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 4/6 lỗi rơi vào file không bộ đo nào phủ (apps/agent/agent/subagents/agent_builder/instructions.md, apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/tsconfig.json, _acceptance/chan-uy-thac-sai-luot/evals.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+- **buildPendingInputRequest validates but discards the parsed value, so the JSON column keeps an unparsed shape**
+  Người dùng thấy gì: Dữ liệu câu hỏi đang chờ của tính năng dựng tác nhân được lưu chưa hoàn toàn chuẩn hoá; hiện tại chưa gây lỗi hiển thị nào cho người dùng, nhưng nếu định dạng dữ liệu thay đổi sau này thì dữ liệu cũ có thể bị đọc sai.
+  file: `packages/validation/src/builder-question.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **Câu hỏi builder đang treo lúc deploy bị hạ ngầm xuống CHAT (không có backfill)**
+  Người dùng thấy gì: Nếu một người dùng đang dở một cuộc trò chuyện dựng tác nhân đúng lúc bản cập nhật này được đưa lên, họ có thể bất ngờ nhận yêu cầu phải bấm lại nút Tạo tác nhân và mất bản nháp đang làm dở, dù họ không làm gì sai.
+  file: `packages/validation/src/builder-question.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Tuyên quét LỚP ("đếm trên đĩa = 0") nhưng bộ dò chỉ nhận đúng một điểm-case cú pháp (hình dạng 5)**
+  Người dùng thấy gì: Một phép đo nội bộ dùng để bảo đảm hệ thống không còn suy đoán quyền từ nội dung tin nhắn hiện chỉ nhận diện được một cách viết code cụ thể; các cách viết tương đương khác có thể lọt qua, khiến báo cáo có thể báo 'an toàn' trong khi một dạng lỗi tương tự vẫn còn tồn tại chưa được phát hiện.
+  file: `apps/agent/test/quyen-luot.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+⚠ Cụm ngoài vùng phủ: 5/5 lỗi rơi vào file không bộ đo nào phủ (apps/agent/agent/lib/custom-agent-dispatch.ts, apps/agent/test/quyen-luot.spec.ts, packages/validation/src/builder-question.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
