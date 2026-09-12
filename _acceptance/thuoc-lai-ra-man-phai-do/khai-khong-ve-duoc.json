@@ -1,0 +1,6 @@
+{
+	"apps/app/components/crm/stage-change.tsx": "nuqs doi adapter cua khung — lai ra man trong moi truong test khong dung duoc, chu cua no do ca khac canh",
+	"apps/app/components/data-table/list-search-params.ts": "khong phai component — file khai tham so tim kiem, khong ve gi ra man",
+	"apps/app/lib/trpc/cache.ts": "khong phai component — lop bo nho dem cua trpc, khong ve gi ra man",
+	"packages/ui/src/components/ai-elements/shimmer.tsx": "khong co xuat nao ve duoc — hieu ung nen, khong nhan chu nguoi doc"
+}

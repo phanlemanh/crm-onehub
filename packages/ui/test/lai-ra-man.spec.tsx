@@ -255,10 +255,25 @@ test("lai tung component ra man, doc chu ban ve that su ve", async () => {
 	for (const f of file) banVe[f] = await laiMotFile(f);
 	ghi("ve-that.json", banVe);
 
-	const veDuoc = Object.values(banVe)
-		.flat()
-		.filter((b) => b.loi_dong === null);
-	expect(veDuoc.length).toBeGreaterThan(0);
+	const khai = JSON.parse(
+		readFileSync(
+			join(
+				GOC_KHO,
+				"_acceptance",
+				"thuoc-lai-ra-man-phai-do",
+				"khai-khong-ve-duoc.json",
+			),
+			"utf8",
+		),
+	) as Record<string, string>;
+	const hong = Object.entries(banVe)
+		.filter(
+			([, b]) => !b.some((y) => y.loi_dong === null && y.loi_mo === null),
+		)
+		.map(([f]) => f);
+	const ngoaiKhai = hong.filter((f) => !(f in khai));
+	const dem = `DEM-DU: ve duoc ${file.length - hong.length}/${file.length}, ngoai khai: `;
+	expect(dem + (ngoaiKhai.join(", ") || "khong")).toBe(`${dem}khong`);
 });
 
 test("mo tung nguyen ban cua bang gioi han vong truoc", async () => {
