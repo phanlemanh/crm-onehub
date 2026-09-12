@@ -5,7 +5,7 @@ slug: tran-uy-thac-chiu-chay-lai
 owner: omre.cnsp4@onemount.com
 risk_tier: T2
 surfaces: [agent]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-11
 design_doc: docs/superpowers/specs/2026-09-10-tran-uy-thac-chiu-chay-lai-design.md
@@ -276,6 +276,34 @@ Hồ sơ này không có `opportunity.md` — xem entry `descope` trong `decisio
   (`bun test -t <nhãn>`) sẽ không bao giờ thấy triệu chứng — chỉ `bun run test`
   toàn suite mới thấy.
 - **Tiêu chí thứ năm đo một đường eve hiện không phát cho subagent-call.** Khai rõ ở chính tiêu chí ấy.
+
+## Known limits — người ký chấp nhận 2026-09-12
+
+Bốn mục dưới đây là lỗi thật của **bộ đo**, người ký đọc và chọn ship bản này.
+Hai mục đầu là mục ngoài hợp đồng của vòng chấm; hai mục sau nằm **trong** hợp
+đồng (AC-9) và người ký chọn ký lên chúng sau khi máy đã nêu rõ.
+
+- **Răng đột biến tính một lỗi bất kỳ thành «đã bắt được».** `chayBoDo` xếp mọi
+  đầu ra có `N fail` vào ngăn bị-bắt, nên một `TypeError` hay `ReferenceError`
+  không liên quan cũng được tính là đột biến bị bắt. Đã chạy thử: một `TypeError`
+  trong bài đo in `1 fail` và không khớp mẫu mã 2. Trái sàn khuôn (d) của chính
+  E9. Hôm nay ba hình dạng đều đỏ đúng ở `toEqual`, nên kết quả là thật — nhưng
+  răng không tự chứng minh được điều đó.
+- **Chốt chống-lạc-hậu chỉ so cả chuỗi, không kiểm từng phép cắt.**
+  `banDotBien === nguon` im khi một phép cắt ăn và một phép trượt, nên một hình
+  dạng đột biến có thể không được sinh ra mà răng vẫn báo đã đo.
+- **Hình dạng «bỏ cả `record` lẫn `update`» thực tế chỉ bỏ `record`.** Regex bỏ
+  `update` còn bám vào handler `step.started` đã gỡ lúc thu phạm vi, nên nó không
+  khớp gì. Đã chạy đúng hai phép cắt trên bản hook ở HEAD: phép hai trả về không
+  khớp, bản đột biến còn nguyên `update`. AC-9 khai đo ba hình dạng; thực tế đo
+  hai hình dạng và một biến thể khác.
+- **Bản trùng của mục trên**, hai người soi độc lập cùng bắt.
+
+Cái giá, nói thẳng: dòng «cả ba hình dạng đều bị bắt» của E9 đang báo cáo một
+hình dạng mà răng không sinh ra. Lần sau ai đó sửa mã hook, cũng chốt ấy sẽ tiếp
+tục giấu một phép cắt trượt. Vá là đổi ba chỗ trong một hàm của
+`rang/hook-chet.mjs` — máy đã nêu đường vá ở Cổng Bằng chứng, người ký chọn ship
+trước và để lại đây.
 
 ## Notes
 
