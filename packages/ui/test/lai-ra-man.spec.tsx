@@ -3,11 +3,11 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { act, createElement, type ReactElement } from "react";
 import { createRoot } from "react-dom/client";
+import { docMacDinh } from "../../../_acceptance/chan-lai-component-ra-man/rang/moi-mac-dinh.mjs";
 import { LocaleProvider } from "../src/components/locale-provider";
 import { TooltipProvider } from "../src/components/tooltip";
 import type { Locale } from "../src/lib/locale";
 import { messages } from "../src/lib/messages";
-import { docMacDinh } from "../../../_acceptance/chan-lai-component-ra-man/rang/moi-mac-dinh.mjs";
 
 const GOC_KHO = join(import.meta.dir, "..", "..", "..");
 const HO_SO = join(GOC_KHO, "_acceptance", "chan-lai-component-ra-man");
@@ -268,9 +268,7 @@ test("lai tung component ra man, doc chu ban ve that su ve", async () => {
 		),
 	) as Record<string, string>;
 	const hong = Object.entries(banVe)
-		.filter(
-			([, b]) => !b.some((y) => y.loi_dong === null && y.loi_mo === null),
-		)
+		.filter(([, b]) => !b.some((y) => y.loi_dong === null && y.loi_mo === null))
 		.map(([f]) => f);
 	const ngoaiKhai = hong.filter((f) => !(f in khai));
 	const dem = `DEM-DU: ve duoc ${file.length - hong.length}/${file.length}, ngoai khai: `;
