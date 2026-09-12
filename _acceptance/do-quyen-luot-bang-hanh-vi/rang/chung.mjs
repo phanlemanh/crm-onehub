@@ -51,8 +51,11 @@ function khoaDaChet() {
 	try {
 		chu = Number.parseInt(readFileSync(CHU_KHOA, "utf8").trim(), 10);
 	} catch {
-		const tuoi = Date.now() - statSync(KHOA).mtimeMs;
-		return tuoi > KHOA_MO_COI_MS;
+		try {
+			return Date.now() - statSync(KHOA).mtimeMs > KHOA_MO_COI_MS;
+		} catch {
+			return true;
+		}
 	}
 	return Number.isFinite(chu) && !chuConSong(chu);
 }

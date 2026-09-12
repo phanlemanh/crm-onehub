@@ -73,6 +73,18 @@
 	},
 	{
 		"id": "E3",
+		"vecto": "gan-thang-agent",
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/khong-cam-tin-nhan.mjs",
+			"--vecto",
+			"gan-thang-agent"
+		],
+		"ghim": "apps/agent con cam tin nhan o cho quyet quyen",
+		"ma": 2
+	},
+	{
+		"id": "E3",
 		"vecto": "export-doi-ten",
 		"chay": [
 			"node",
@@ -199,6 +211,18 @@
 			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs",
 			"--vecto",
 			"goc-khong-tran"
+		],
+		"ghim": "ma tran khoa commandType lech danh sach da ghim",
+		"ma": 2
+	},
+	{
+		"id": "E4",
+		"vecto": "gan-thang",
+		"chay": [
+			"node",
+			"_acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs",
+			"--vecto",
+			"gan-thang"
 		],
 		"ghim": "ma tran khoa commandType lech danh sach da ghim",
 		"ma": 2

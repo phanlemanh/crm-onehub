@@ -15,6 +15,7 @@ import {
 	duoiKhoaDoc,
 	duyet,
 	hamBao,
+	laGanKhoa,
 	laKhoa,
 	nap,
 	quetTs,
@@ -97,6 +98,15 @@ function cham(goc) {
 				loi.push(
 					`${viTri(sf, node, goc)} — con mot thu mang ten builderCommandType (${ts.SyntaxKind[node.kind]})`,
 				);
+			}
+
+			if (laGanKhoa(node, "commandType")) {
+				maTran.push({
+					khoa: `${viTri(sf, node, goc).replace(/:\d+$/, "")} :: ${hamBao(sf, node)} :: gan`,
+					viTri: viTri(sf, node, goc),
+					loai: "gan",
+					chu: node.getText(sf).split("\n")[0].slice(0, 60),
+				});
 			}
 
 			if (laKhoa(node, "commandType")) {
@@ -222,6 +232,19 @@ const VECTO = {
 				"}",
 				"",
 				"export function builderSessionAttributes(input: {",
+			].join("\n"),
+		),
+	"gan-thang-agent": (sao) =>
+		doiTrongSao(
+			sao,
+			DUONG_DISPATCH,
+			"\treturn {\n\t\tauthenticator: \"crm-builder\",",
+			[
+				'\trow.commandType = JSON.stringify(row.message).includes("agent")',
+				'\t\t? "CREATE_AGENT"',
+				"\t\t: row.commandType;",
+				"\treturn {",
+				'\t\tauthenticator: "crm-builder",',
 			].join("\n"),
 		),
 	"export-doi-ten": (sao) =>

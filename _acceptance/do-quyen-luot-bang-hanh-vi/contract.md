@@ -5,9 +5,9 @@ slug: do-quyen-luot-bang-hanh-vi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent, api, docs]
-status: implemented
-approved_by: Mạnh
-approved_at: 2026-09-11
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-09-09-do-quyen-luot-bang-hanh-vi-design.md
 ---
 
@@ -103,7 +103,7 @@ một sự thật mà bản khai sinh đã chứng — cùng cách đã làm v�
 **AC-2 — `apps/agent` không cầm tin nhắn ở chỗ quyết quyền, và chỗ gọi không được tính toán.**
 Given `apps/agent/agent`,
 When soi bằng AST,
-Then đủ **bốn** điều:
+Then đủ **năm** điều:
 1. `builderSessionAttributes` không khai tham số `message`;
 2. **không một thứ nào** trong dân số mang tên `builderCommandType` — không hàm,
    không biến, không lớp, không method, không thuộc tính, và không
@@ -113,7 +113,10 @@ Then đủ **bốn** điều:
    trên một định danh trần;
 4. **ma trận khoá**: mọi chỗ viết ra khoá `commandType` trong dân số — kể cả
    khoá viết bằng string literal hay computed key — khớp **có bội** danh sách đã
-   ghim, mỗi phần tử xếp một loại (`doc` · `kieu` · `khai` · `khac`).
+   ghim, mỗi phần tử xếp một loại (`doc` · `kieu` · `khai` · `khac` · `gan`);
+5. **phép gán cũng vào ma trận**: mọi `<x>.commandType = …` là một phần tử
+   riêng, loại `gan`. Một phép gán **ghi ra quyền mà không viết ra khoá**, nên
+   bốn điều trên đều mù với nó.
 Vi phạm bất kỳ điều nào → **mã 2**, in `file:dòng`.
 Ba chỗ siết ở vòng chấm 3, mỗi chỗ đều đã được dựng cây thử chứng minh là lọt
 trước khi siết: điều 2 chỉ bắt `FunctionDeclaration` và `VariableDeclaration` nên
@@ -121,6 +124,11 @@ export đổi tên và method trùng tên đi qua; điều 3 chỉ đòi «là m
 tính» nên `row.message.commandType` — đọc quyền thẳng từ JSON trình duyệt gửi —
 đi qua; và không có điều 4 thì đường «tính trước một dòng rồi truyền
 `row2.commandType`» đi qua cả điều 2 lẫn điều 3.
+Điều 5 thêm ở vòng chấm 8, cũng sau khi cấy thử: một chỗ leo quyền viết bằng
+phép gán (`row.commandType = <suy từ tin nhắn> ? "CREATE_AGENT" : …`) đặt ngay
+trước khối trả về đi qua **cả hai** sàn AST với mã 0. Bộ dò grep bị vòng này
+xoá thì bắt được đúng dạng ấy khi nó viết một dòng — nên đây là hồi quy độ phủ
+do chính vòng này gây ra, và điều 5 là chỗ vá.
 
 **AC-3 — Ma trận khoá `commandType` ở `apps/api/src` khớp đúng danh sách đã ghim.**
 Given `apps/api/src`,
@@ -139,9 +147,11 @@ Mỗi phần tử xếp đúng một loại, bằng luật máy: `doc` (nằm d�
 cùng luật với AC-2 điểm 3; `input.message.commandType` là `khac`) · `suy`
 (initializer là lời gọi
 `commandTypeFromAuthorization(...)`) · `khac` (còn lại — khai báo kiểu, khuôn
-`zod`).
+`zod`) · `gan` (một phép gán `<x>.commandType = …`).
 Một phần tử `khac` nằm **ngoài** `conversations.contracts.ts` là một chỗ ghi
-không lấy từ hai nguồn đã đặt tên → **mã 2**, in `file:dòng`.
+không lấy từ hai nguồn đã đặt tên → **mã 2**, in `file:dòng`. Một phần tử `gan`
+là vi phạm dù nằm ở tệp nào: phép gán ghi ra quyền mà không viết ra khoá, nên
+khung đi-từ-chữ-`commandType` mù với nó nếu chỉ bắt ba dạng thuộc tính.
 Vì sao đi từ chữ chứ không từ hình dạng lời gọi: khung theo-hình-dạng bỏ sót
 `upsert` (khuôn không có khoá `data`), `updateMany`, và `data` là một biến — ba
 dạng mà vòng chấm 2 đã dựng cây thử và chứng minh là lọt, với `CREATE_AGENT`

@@ -83,9 +83,13 @@ evals:
          (`<dinh danh>.commandType`) · `khac` (con lai). Lech -> ma 2, in ca hai
          danh sach. Dieu nay dong duong "tinh truoc mot dong": mot object spread
          mang commandType tinh tu tin nhan la mot phan tu MOI trong ma tran.
+      5. PHEP GAN cung vao ma tran: moi BinaryExpression toan tu `=` co ve trai
+      la `<x>.commandType` la mot phan tu rieng, loai `gan`. Mot phep gan ghi ra
+      quyen ma khong viet ra khoa nao, nen bon dieu tren deu mu voi no — vong
+      cham 8 da cay thu va ca hai san AST cung thoat 0.
       Vi pham bat ky dieu nao -> ma 2, in file:dong.
       San dan so: so loi goi builderSessionAttributes phai >= 1. Bang 0 -> ma 2.
-      Doi chung duong, SAU vecto tren ban sao, tat ca deu ma 2:
+      Doi chung duong, BAY vecto tren ban sao, tat ca deu ma 2:
         vecto "cay-lai-tham-so": cay tham so `message` vao chu ky
           builderSessionAttributes.
         vecto "cho-goi-tinh-toan": doi initializer commandType tai cho goi thanh
@@ -95,7 +99,12 @@ evals:
         vecto "khoa-hang-chuoi-agent": them mot loi goi thu hai voi ten khoa la
           computed key tro toi mot HANG CHUOI (`const KHOA = "commandType"`),
           gia tri suy tu chu trong message.
-        vecto "export-doi-ten": them `export { suyTuTinNhan as builderCommandType }`.
+        vecto "gan-thang-agent": cay mot cho leo quyen viet bang PHEP GAN
+      (`row.commandType = <suy tu tin nhan> ? "CREATE_AGENT" : row.commandType`)
+      ngay truoc khoi tra ve cua builderSessionAuthFromRow. Phep gan GHI RA
+      quyen ma khong VIET RA khoa, nen ba dieu dau va ma tran theo-khoa deu mu
+      voi no; dieu 5 la thu bat.
+      vecto "export-doi-ten": them `export { suyTuTinNhan as builderCommandType }`.
         vecto "method-cung-ten": them mot lop co method ten builderCommandType.
       Khong do o vecto nao -> ma 3 (gian do hong), in ten vecto.
       Ranh gioi: builderCommandType cua apps/app/lib/agent-builder.ts la HAM KHAC,
@@ -133,10 +142,14 @@ evals:
        `input.message.commandType` va `doanQuyen(...).commandType` KHONG phai
        loai nay — chung la `khac`;
         suy  — initializer la loi goi `commandTypeFromAuthorization(...)`;
-        khac — con lai (khai bao kieu, khuon zod).
+        khac — con lai (khai bao kieu, khuon zod);
+      gan  — mot BinaryExpression toan tu `=` co ve trai la `<x>.commandType`.
+      Phep gan GHI RA quyen ma khong VIET RA khoa, nen khung di-tu-chu-commandType
+      van mu voi no neu chi bat ba dang thuoc tinh; no phai la mot phan tu rieng
+      trong ma tran, va MOI phan tu loai `gan` deu la vi pham du nam o tep nao.
       Mot phan tu `khac` nam NGOAI conversations.contracts.ts la mot cho ghi
       khong lay tu hai nguon da dat ten -> ma 2, IN file:dong.
-      Doi chung duong, MUOI vecto tren ban sao, tat ca deu ma 2:
+      Doi chung duong, MUOI MOT vecto tren ban sao, tat ca deu ma 2:
         vecto "ghim-cung": doi mot cho ghi thanh chuoi "CREATE_AGENT" -> loai
           doi tu khai sang khac -> ma 2, dung file:dong ay.
         vecto "bien-trung-gian": doi mot cho ghi thanh mot bien gan tu mot ham
@@ -160,7 +173,13 @@ evals:
           -> loai phai la `khac` chu khong phai `khai` -> ma 2. Loai `khai` doi
           initializer la `<mot dinh danh TRAN>.commandType`, cung luat voi AC-2
           diem 3; chi doi "la mot PropertyAccessExpression" la khong du.
-        vecto "select-thanh-doc": cay mot commandType duoi mot `select` -> ma 2
+        vecto "gan-thang": cay vao than createBuilder mot phep GAN
+      (`input.commandType = <suy tu tin nhan> ? "CREATE_AGENT" : input.commandType`)
+      dat ngay truoc cho ghi hang -> ma tran thanh 10 phan tu, phan tu moi xep
+      loai `gan` -> ma 2. Vong cham 8 da do: truoc khi co dieu nay, dung mot
+      dot bien ay chay qua CA HAI san AST voi ma 0, con bo do grep cu (thu ma
+      vong nay xoa) thi bat duoc dang mot dong.
+      vecto "select-thanh-doc": cay mot commandType duoi mot `select` -> ma 2
           (ma tran thanh 10), VA cho moi phai duoc xep loai `doc`. Xep sang loai
           khac -> ma 2 voi thong diep rieng: bo do dang khong phan biet doc voi
           ghi.

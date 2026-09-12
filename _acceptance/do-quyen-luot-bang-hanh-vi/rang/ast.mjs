@@ -133,6 +133,16 @@ export function laKhoa(node, ten) {
 	);
 }
 
+export function laGanKhoa(node, ten) {
+	return (
+		ts.isBinaryExpression(node) &&
+		node.operatorToken.kind === ts.SyntaxKind.EqualsToken &&
+		ts.isPropertyAccessExpression(node.left) &&
+		ts.isIdentifier(node.left.name) &&
+		node.left.name.text === ten
+	);
+}
+
 export function tenGoi(node) {
 	if (!ts.isCallExpression(node)) return null;
 	const goi = node.expression;

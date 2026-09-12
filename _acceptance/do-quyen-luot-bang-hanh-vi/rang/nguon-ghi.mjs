@@ -14,6 +14,7 @@ import {
 	duoiKhoaDoc,
 	duyet,
 	hamBao,
+	laGanKhoa,
 	laKhoa,
 	nap,
 	quetTs,
@@ -74,6 +75,16 @@ function thuMaTran(goc) {
 	for (const duong of dan) {
 		const sf = nap(duong);
 		duyet(sf, (node) => {
+			if (laGanKhoa(node, "commandType")) {
+				const vt = viTri(sf, node, goc);
+				thay.push({
+					khoa: `${vt.replace(/:\d+$/, "")} :: ${hamBao(sf, node)} :: gan`,
+					viTri: vt,
+					loai: "gan",
+					chu: node.getText(sf).split("\n")[0].slice(0, 70),
+				});
+				return;
+			}
 			if (!laKhoa(node, "commandType")) return;
 			const loai = loaiCua(node);
 			const vt = viTri(sf, node, goc);
@@ -110,13 +121,15 @@ function cham(goc) {
 	}
 
 	const la = thay.filter(
-		(t) => t.loai === "khac" && !t.viTri.startsWith(DUONG_CONTRACTS),
+		(t) =>
+			t.loai === "gan" ||
+			(t.loai === "khac" && !t.viTri.startsWith(DUONG_CONTRACTS)),
 	);
 	if (la.length > 0) {
 		hong(
 			[
 				GHIM,
-				"  co cho ghi commandType khong lay tu hai nguon da dat ten:",
+				"  co cho ghi commandType khong lay tu hai nguon da dat ten (loai \"gan\" la mot phep GAN: ghi ra quyen ma khong viet ra khoa):",
 				...la.map((t) => `    ${t.viTri} — ${t.chu}`),
 			].join("\n"),
 		);
@@ -201,6 +214,19 @@ const VECTO = {
 			DUONG_SERVICE,
 			"\n\t\t\t\t\t\tcommandType: input.commandType,",
 			"\n\t\t\t\t\t\tcommandType: input.message.commandType,",
+		),
+	"gan-thang": (sao) =>
+		doiTrongSao(
+			sao,
+			DUONG_SERVICE,
+			"\t\tawait this.assertWorkspaceMember(userId);\n\t\tconst existing = await this.requestByClientId(input.clientRequestId);",
+			[
+				'\t\tinput.commandType = JSON.stringify(input.message).includes("agent")',
+				'\t\t\t? "CREATE_AGENT"',
+				"\t\t\t: input.commandType;",
+				"\t\tawait this.assertWorkspaceMember(userId);",
+				"\t\tconst existing = await this.requestByClientId(input.clientRequestId);",
+			].join("\n"),
 		),
 	"select-thanh-doc": (sao) =>
 		doiTrongSao(
