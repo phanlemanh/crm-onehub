@@ -206,6 +206,12 @@ fixture.
   Loại luật đó thuộc về bộ soi mã, không thuộc bộ đo đơn vị.
 
 
+- **Vòng `do-quyen-luot-bang-hanh-vi` thay bộ đo của AC-5.** Mệnh đề của AC-5 tuyên
+  rộng hơn thứ đo được, và bộ dò của nó chỉ nhận một hình dạng cú pháp. Chữ của AC-5
+  và của eval E5 giữ nguyên ở đây làm vết, nhưng `expected` đã ghim của E5 **không
+  còn mô tả thứ mà lệnh của nó chạy**: lệnh `ql_khong_suy_dien` nay chạy phép đo hành
+  vi của vòng mới trong cùng khối `describe("suy-dien")`.
+
 **Hai hàm trùng tên, đừng lẫn:** `builderCommandType` ở `apps/app/lib/agent-builder.ts`
 đọc slash-command phía trình duyệt; `builderCommandType` ở
 `apps/agent/agent/lib/custom-agent-dispatch.ts` là hàm mang luật suy diễn mà vòng

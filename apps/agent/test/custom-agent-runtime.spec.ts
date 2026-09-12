@@ -15,7 +15,6 @@ import {
 	slackDestinationIssues,
 } from "../agent/lib/builder-runtime";
 import {
-	builderCommandType,
 	builderDeliveryMessage,
 	builderIdFromToken,
 	builderToken,
@@ -86,14 +85,6 @@ describe("builder delivery messages", () => {
 			);
 		expect(commandTypeFromAuthorization(banGhi(true))).toBe("CREATE_AGENT");
 		expect(commandTypeFromAuthorization(banGhi(false))).toBe("CHAT");
-		expect(
-			builderCommandType("CHAT", {
-				inputResponse: { requestId: "question-1", optionId: "crm-task" },
-			}),
-		).toBe("CHAT");
-		expect(builderCommandType("CHAT", { text: "Also add a note" })).toBe(
-			"CHAT",
-		);
 	});
 
 	it("routes a selected answer back to the parked Eve input request", () => {

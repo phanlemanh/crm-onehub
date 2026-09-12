@@ -25,7 +25,6 @@ const phienThat = (over: Record<string, string> = {}) => ({
 				attributes: {
 					...builderSessionAttributes({
 						commandType: "CREATE_AGENT",
-						message: { text: "dung mot tac nhan" },
 						conversationId: "conv_1",
 						userId: "user_1",
 						submissionId: "sub_1",
@@ -47,7 +46,6 @@ describe("quyen", () => {
 		const keys = Object.keys(
 			builderSessionAttributes({
 				commandType: "CREATE_AGENT",
-				message: { text: "x" },
 				conversationId: "c",
 				userId: "u",
 				submissionId: "s",

@@ -61,6 +61,8 @@ executors:
     tc_khong_xoa_slot: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t khong-xoa-slot
     tc_mot_cau: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t mot-cau
     api_khong_cache_tron_bo: "bun run db:test && bunx turbo run test --concurrency=1 --force"
+    dq_cong_quyen: "cd apps/agent && bun test test/quyen-luot.spec.ts"
+    dq_ho_so_cu_con_chay: bash _acceptance/do-quyen-luot-bang-hanh-vi/rang/ho-so-cu-con-chay.sh
     nc_lop_chuyen: cd packages/ui && bun test test/eve-to-ai-sdk.spec.ts
   script:
     cua_vao_loi_mang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"
@@ -322,6 +324,11 @@ executors:
     bo_cao_test: cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v
     bo_cao_cli: cd tools/listing-crawl && ./.venv/bin/python -m unittest tests.test_cli -v
     bo_cao_duong_chay: cd tools/listing-crawl && ./.venv/bin/python -m unittest tests.test_duong_chay -v
+    dq_khong_cam_tin_nhan: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/khong-cam-tin-nhan.mjs
+    dq_nguon_ghi: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs
+    dq_bo_do_grep: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/bo-do-grep.mjs
+    dq_khai_sinh: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/khai-sinh.mjs
+    dq_vet_ho_so_cu: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/vet-ho-so-cu.mjs
     nc_mo_coi: node _acceptance/nen-chat-ai-elements/rang/mo-coi.mjs
     nc_chu_trong_component: node _acceptance/nen-chat-ai-elements/rang/chu-cung.mjs
     nc_mau_ban_kinh: node _acceptance/nen-chat-ai-elements/rang/mau-ban-kinh.mjs
