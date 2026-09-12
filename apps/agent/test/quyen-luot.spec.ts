@@ -82,6 +82,35 @@ const BIEN_THE = [
 	{ requestId: "req_1", optionId: "opt_1" },
 ];
 
+const KHOA_DA_GHIM = [
+	"commandType",
+	"conversationId",
+	"needsTitle",
+	"purpose",
+	"submissionId",
+	"userId",
+];
+
+const khoiThuocTinh = (
+	commandType: string,
+	inputResponse: Record<string, string>,
+) =>
+	builderSessionAuthFromRow(hangSubmission(commandType, inputResponse), "conv_1")
+		.attributes;
+
+describe("bat-bien", () => {
+	it("bat-bien: doi inputResponse thi khoi thuoc tinh khong doi mot byte", () => {
+		const [mot, hai] = BIEN_THE.map((ir) => khoiThuocTinh("CHAT", ir));
+		expect(mot).toEqual(hai);
+	});
+
+	it("bat-bien: tap khoa cua khoi thuoc tinh bang dung tap da ghim", () => {
+		expect(Object.keys(khoiThuocTinh("CHAT", BIEN_THE[0])).sort()).toEqual(
+			KHOA_DA_GHIM,
+		);
+	});
+});
+
 const chamCong = (
 	commandType: string,
 	inputResponse: Record<string, string>,
@@ -100,9 +129,9 @@ const chamCong = (
 
 describe("suy-dien", () => {
 	it("suy-dien: hang khai CHAT thi cong dong, du tin nhan dung khuon xin dung tac nhan", () => {
-		expect(BIEN_THE).toHaveLength(2);
-		for (const inputResponse of BIEN_THE) {
-			const { ctx, cham } = chamCong("CHAT", inputResponse);
+		const luot = BIEN_THE.map((ir) => chamCong("CHAT", ir));
+		expect(luot[0].cham).toEqual(luot[1].cham);
+		for (const { ctx, cham } of luot) {
 			expect(cham).toEqual({
 				type: "denied",
 				reason: BUILDER_DENIED_REASON,
@@ -112,9 +141,9 @@ describe("suy-dien", () => {
 	});
 
 	it("suy-dien: doi DUNG MOT truong commandType cua hang thi cong mo", () => {
-		expect(BIEN_THE).toHaveLength(2);
-		for (const inputResponse of BIEN_THE) {
-			const { ctx, cham } = chamCong("CREATE_AGENT", inputResponse);
+		const luot = BIEN_THE.map((ir) => chamCong("CREATE_AGENT", ir));
+		expect(luot[0].cham).toEqual(luot[1].cham);
+		for (const { ctx, cham } of luot) {
 			expect(cham).toBe("not-applicable");
 			expect(requireBuilderAttribute(ctx, "conversationId")).toBe("conv_1");
 		}
