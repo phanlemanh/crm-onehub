@@ -95,8 +95,10 @@ const khoiThuocTinh = (
 	commandType: string,
 	inputResponse: Record<string, string>,
 ) =>
-	builderSessionAuthFromRow(hangSubmission(commandType, inputResponse), "conv_1")
-		.attributes;
+	builderSessionAuthFromRow(
+		hangSubmission(commandType, inputResponse),
+		"conv_1",
+	).attributes;
 
 describe("bat-bien", () => {
 	it("bat-bien: doi inputResponse thi khoi thuoc tinh khong doi mot byte", () => {
