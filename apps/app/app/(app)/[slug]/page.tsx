@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
 	PageShell,
@@ -7,6 +8,8 @@ import {
 	PageShellHeading,
 	PageShellLoading,
 } from "@/components/page-shell";
+import { getLocale } from "@/lib/locale/server";
+import { tongQuanMessages } from "@/lib/messages/tong-quan";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
@@ -20,6 +23,10 @@ import {
 	OverviewScopeToggleFallback,
 } from "./overview-scope";
 import { loadOverviewSearchParams } from "./overview-search-params";
+
+export async function generateMetadata(): Promise<Metadata> {
+	return { title: tongQuanMessages(await getLocale()).title };
+}
 
 export default function OverviewPage({ searchParams }: PageProps<"/[slug]">) {
 	return (

@@ -1,8 +1,24 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { isAbsolute, join } from "node:path";
-import { GOC } from "./lat.mjs";
 import { giuViet } from "./khoa-cay.mjs";
+import { GOC } from "./lat.mjs";
+
+export function chanChung(dotMot, khai) {
+	const o = (t) => `${dotMot}/${t}`;
+	return [
+		{ ten: "moi-chuoi", lenh: [o("moi-chuoi.mjs"), "--lat", khai] },
+		{ ten: "chu-cung-jsx", lenh: [o("chu-cung-lat.mjs"), "--lat", khai] },
+		{
+			ten: "toast",
+			lenh: [o("chu-ngoai-jsx.mjs"), "--chan", "toast", "--lat", khai],
+		},
+		{
+			ten: "tieu-de",
+			lenh: [o("chu-ngoai-jsx.mjs"), "--chan", "tieu-de", "--lat", khai],
+		},
+	];
+}
 
 export function sach() {
 	return execFileSync("git", ["status", "--porcelain"], {

@@ -152,6 +152,22 @@ _Avoid_: doanh số, hiệu suất, điểm số, xếp hạng
 Vì sao: OneHub không biết họ bán được bao nhiêu, chỉ đếm được họ đăng bao nhiêu
 tin — hai chuyện khác nhau, và gọi nhầm tên biến một phép đếm thành một lời khen.
 
+**Chốt**: một thoả thuận hợp tác đi tới kết cục — hai bên bắt tay, hoặc thôi
+không theo nữa. Dùng làm động từ chung cho mọi con số của màn Tổng quan:
+`Chốt được tháng này` · `Tỷ lệ chốt` · `X chốt được · Y không thành`. Chốt
+2026-09-08 tại Cổng Phạm vi của vòng `tong-quan-va-khung-noi-tieng-viet`.
+_Avoid_: thắng, thua, thành công, phễu, pipeline, deal đóng
+Vì sao: từ điển đã dùng "chốt" ở nhóm lọc «Hạn chốt», nên đây là từ màn hình
+đã nói chứ không phải từ mới. Ba từ đầu trong danh sách tránh đọc thoả thuận
+hợp tác thành một trận đấu có kẻ thắng người thua — sai bản chất quan hệ mà
+mục **Thỏa thuận hợp tác** đã khoá. "Phễu" và "pipeline" là ẩn dụ bán hàng của
+kho gốc; OneHub không bán gì cho đối tác.
+
+**Đang mở**: một thoả thuận chưa tới kết cục. Trên thẻ số của màn Tổng quan
+đứng một mình vì màn đã nói nó đếm thoả thuận.
+_Avoid_: pipeline, đường ống, cơ hội đang chạy
+Vì sao: đây là trạng thái của quan hệ, không phải một khối hàng đang chảy.
+
 **Số chứng chỉ**: **KHÔNG CÓ TRONG SẢN PHẨM.** Sàn chỉ gắn huy hiệu có hoặc
 không cho chứng chỉ hành nghề môi giới, không lộ mã số nào. CRM ghi trường
 `Chứng chỉ` với đúng hai giá trị `Có` · `Không`.

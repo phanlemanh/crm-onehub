@@ -15,7 +15,7 @@
 ## Global Constraints
 
 - **KHÔNG đổi một chuỗi sản phẩm nào.** Không sửa `apps/app/lib/messages/*.ts`, không sửa chữ trong JSX. Bản dịch của ③a đã xong và đang xanh. Chân có răng mà phát hiện chuỗi thiếu thì việc đó đi vòng ③a lượt 9.
-- **Không viết chú thích trong code** (`AGENTS.md`). Không trailer `Co-Authored-By` trong commit.
+- **Không viết chú thích trong code** (`AGENTS.md`).
 - **Mã thoát 2 = không đo được** (hạ tầng, tập rỗng, workspace không giải được), kèm nguyên nhân gọi được tên. **Mã thoát 1 = vật hỏng.** **Mã thoát 0 = đạt.** Hạ tầng hỏng KHÔNG BAO GIỜ ra 0.
 - **Luật khai sinh:** mọi phép đo mới hay sửa chỉ tính XONG khi có cặp hai chiều trên CÙNG một fixture — vật lành thước im, phá vật thật thước đỏ với **thông điệp ghim**. `verify` của task phải chứa lượt phá-thử, không chỉ lượt xanh.
 - **Véc-tơ phá mặc định:** phục vụ đúng trang đó ở `lang=en` trên cùng máy chủ (`d-…-11024`). Ngoại lệ đã khai: E1 không dùng được nó (bảy giai đoạn cố ý ở lại tiếng Anh).

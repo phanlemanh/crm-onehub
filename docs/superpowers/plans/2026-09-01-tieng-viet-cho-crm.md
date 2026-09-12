@@ -14,7 +14,7 @@
 
 ## Global Constraints
 
-- Không viết chú thích trong mã. Không trailer đồng tác giả trong commit.
+- Không viết chú thích trong mã.
 - `/packages/ui` là nguồn duy nhất của giao diện. Không dựng biến thể tại chỗ gọi.
 - Hai ngôn ngữ duy nhất: `vi` và `en`. Mặc định `en`.
 - Cookie tên `lang`, thuộc tính bắt buộc: `Max-Age=31536000` · `Path=/` · `SameSite=Lax`.

@@ -1,8 +1,13 @@
 import { describe, expect, it } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { z } from "zod";
 import { builderSessionAttributes } from "../agent/lib/custom-agent-dispatch";
-import { builderTurnAuthorized, purposeOf } from "../agent/lib/session-purpose";
+import {
+	builderTurnAuthorized,
+	purposeOf,
+	SESSION_PURPOSES,
+} from "../agent/lib/session-purpose";
 import agentBuilder from "../agent/subagents/agent_builder/agent";
 import {
 	BUILDER_DENIED_REASON,
@@ -10,13 +15,8 @@ import {
 } from "../agent/subagents/agent_builder/lib/authorization";
 import { recordBuilderActions } from "../agent/subagents/agent_builder/lib/execution-state";
 
-const PURPOSES = ["research", "team-agent", "builder"] as const;
-
 const GHIM =
 	"This turn is not authorized to create or revise an agent. Stop now and return final_output with status not_authorized and this sentence as the reason. Do not write files, do not save a draft.";
-
-const boDongImport = (src: string) =>
-	src.replace(/^import[\s\S]*?from\s+"[^"]+";$/gm, "");
 
 const phienThat = (over: Record<string, string> = {}) => ({
 	session: {
@@ -67,10 +67,14 @@ describe("quyen", () => {
 	});
 
 	it("quyen: ma tran toan phan purpose nhan commandType", () => {
-		const cases = PURPOSES.flatMap((purpose) =>
+		expect(SESSION_PURPOSES).toHaveLength(3);
+		const cases = SESSION_PURPOSES.flatMap((purpose) =>
 			["CREATE_AGENT", "CHAT"].map((commandType) => ({ purpose, commandType })),
 		);
-		expect(cases).toHaveLength(6);
+		expect(cases).toHaveLength(SESSION_PURPOSES.length * 2);
+		for (const purpose of SESSION_PURPOSES) {
+			expect(purposeOf(phienThat({ purpose }))).toBe(purpose);
+		}
 		for (const c of cases) {
 			const duocPhep =
 				c.purpose === "builder" && c.commandType === "CREATE_AGENT";
@@ -112,16 +116,22 @@ const TOOLS_GHIM = [
 ] as const;
 
 describe("moi-tool", () => {
-	it("moi-tool: dan so tren dia phai bang danh sach ghim", () => {
-		const trenDia = readdirSync(TOOL_DIR)
-			.filter((f) =>
-				boDongImport(readFileSync(join(TOOL_DIR, f), "utf8")).includes(
-					"requireBuilderAttribute(",
-				),
-			)
+	it("moi-tool: moi tool con song tren dia deu nam trong danh sach ghim", async () => {
+		const tatCa = readdirSync(TOOL_DIR)
+			.filter((f) => f.endsWith(".ts"))
 			.map((f) => f.replace(/\.ts$/, ""))
 			.sort();
-		expect(trenDia).toEqual([...TOOLS_GHIM].sort());
+		expect(tatCa.length).toBeGreaterThan(TOOLS_GHIM.length);
+
+		const conSong: string[] = [];
+		for (const name of tatCa) {
+			const mod = await import(
+				`../agent/subagents/agent_builder/tools/${name}`
+			);
+			if (mod.default.kind === "eve:disabled-tool") continue;
+			conSong.push(name);
+		}
+		expect(conSong.sort()).toEqual([...TOOLS_GHIM].sort());
 	});
 
 	it("moi-tool: moi tool ghim deu khai policy VA giu lop trong", async () => {
@@ -139,19 +149,18 @@ describe("moi-tool", () => {
 		}
 	});
 
-	it("moi-tool: luot duoc phep KHONG bi lop trong chan", async () => {
+	it("moi-tool: ly do tu choi cua moi tool la mot chuoi duy nhat", async () => {
+		expect(TOOLS_GHIM).toHaveLength(3);
 		for (const name of TOOLS_GHIM) {
 			const mod = await import(
 				`../agent/subagents/agent_builder/tools/${name}`
 			);
-			await expect(mod.default.execute({}, phienThat())).rejects.not.toThrow(
-				"Agent creation requires an explicit request to create or build an agent.",
-			);
-		}
-	});
-
-	it("moi-tool: khong tool nao viet lai hang ly do tai cho", () => {
-		for (const name of TOOLS_GHIM) {
+			expect(
+				mod.default.approval({
+					...phienThat({ commandType: "CHAT" }),
+					toolName: name,
+				}),
+			).toEqual({ type: "denied", reason: GHIM });
 			expect(readFileSync(join(TOOL_DIR, `${name}.ts`), "utf8")).not.toContain(
 				BUILDER_DENIED_REASON,
 			);
@@ -185,6 +194,18 @@ describe("ket-thuc", () => {
 			}).success,
 		).toBe(true);
 		expect(schema.safeParse({ status: "not_authorized" }).success).toBe(false);
+		expect(
+			schema.safeParse({ status: "draft_ready", summary: "xong" }).success,
+		).toBe(false);
+	});
+
+	it("ket-thuc: goc JSON Schema la object, vi eve giao thang cho final_output", () => {
+		const shape = z.toJSONSchema(agentBuilder.outputSchema, {
+			target: "draft-7",
+		});
+		expect(shape.type).toBe("object");
+		expect(shape.oneOf).toBeUndefined();
+		expect(shape.anyOf).toBeUndefined();
 	});
 
 	it("ket-thuc: chot khoa theo STATUS tra ve, khong theo co quyen", () => {

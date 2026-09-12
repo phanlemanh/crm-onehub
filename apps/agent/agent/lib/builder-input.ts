@@ -8,6 +8,11 @@ import {
 	builderToken,
 	lockBuilderConversation,
 } from "./custom-agent-dispatch";
+import {
+	attribute,
+	builderTurnAuthorized,
+	type PurposeContext,
+} from "./session-purpose";
 
 const BUILDER_INPUT = {
 	eventType: "input.requested",
@@ -17,6 +22,19 @@ const BUILDER_INPUT = {
 type InputRequestedEvent = Parameters<
 	NonNullable<ChannelEvents["input.requested"]>
 >[0];
+
+export async function recordBuilderInputRequest(
+	data: InputRequestedEvent,
+	continuationToken: string | undefined,
+	ctx: PurposeContext,
+): Promise<boolean> {
+	return persistBuilderInputRequest(
+		data,
+		continuationToken,
+		attribute(ctx, "conversationId"),
+		builderTurnAuthorized(ctx),
+	);
+}
 
 export async function persistBuilderInputRequest(
 	data: InputRequestedEvent,

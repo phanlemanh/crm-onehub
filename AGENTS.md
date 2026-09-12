@@ -10,6 +10,7 @@ context until you read them, and the rules in them are not optional.
 | `apps/agent` — the eve research agent, tools, tasks, dispatch | `docs/agent.md` |
 | `.env`, configuration, which variables exist and why | `docs/environment.md` |
 | UI in `apps/app` or `packages/ui` | `docs/design.md` (below) |
+| Agent chat UI — AI Elements owns the conversation; check its register before building anything | `docs/chat-ui.md` |
 | Deal amounts, totals, charts, exchange rates | `docs/currency.md` |
 | The record sheet's Agent tab | `docs/agent-panel.md` |
 | `/settings/connections`, integrations, the intake endpoint | `docs/connections.md` |
@@ -25,7 +26,6 @@ rules and skills you read.
 ## Always true
 
 - **Never add code comments.** Not to new code, not to code you edit.
-- **No coauthoring commits.** No `Co-Authored-By` trailer, ever.
 - **Intelligence lives in `apps/agent`, never in the API.** No vendor client, no
   enrichment, no scoring, no identity matching in Nest — it writes an `AgentTask`
   row and lets the agent decide. See `docs/api.md`.

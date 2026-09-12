@@ -18,6 +18,27 @@ const BANG_CU = join(
 	"gioi-han-bam-moi-hien.json",
 );
 
+const NEO_NGAY = "2026-09-08T12:00:00+07:00";
+
+const DateThat = Date;
+const MOC = DateThat.parse(NEO_NGAY);
+
+class DateNeo extends DateThat {
+	constructor(...doi_so: unknown[]) {
+		if (doi_so.length === 0) super(MOC);
+		else super(...(doi_so as [number]));
+	}
+	static now(): number {
+		return MOC;
+	}
+}
+
+Object.defineProperty(globalThis, "Date", {
+	value: DateNeo,
+	writable: true,
+	configurable: true,
+});
+
 const DOC_NGHE_DUOC = [
 	"title",
 	"aria-label",
@@ -113,6 +134,7 @@ const CA_RIENG = {
 		{ options: [], value: "", onValueChange: () => {} },
 	],
 	"packages/ui/src/components/toggle-group.tsx": [{ type: "single" }],
+	"packages/ui/src/components/ai-elements/conversation.tsx": [{ messages: [] }],
 	"packages/ui/src/components/dashboard-chart.tsx": [
 		{ config: { a: { label: "MUC" } }, series: [{ a: 1 }] },
 	],

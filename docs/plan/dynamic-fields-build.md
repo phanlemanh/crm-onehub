@@ -335,7 +335,6 @@ Each phase ends green — typecheck, lint, tests — before the next begins.
   `@crm/db/fields`.
 - Do not put a vendor client, scoring or enrichment in `apps/api`.
 - Do not add code comments.
-- Do not add a `Co-Authored-By` trailer.
 - Do not add a per-package `.env`.
 - Do not hand-edit `apps/api/src/generated/server.ts` — regenerate it.
 - Do not build the MCP server. Keep the seam clean so it stays a wrapper.

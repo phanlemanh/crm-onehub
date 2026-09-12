@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
+verified_commit: 580ef79ac789b0966befa17df3a2642f6f980db5
 human_signoff: Manh Phan 2026-09-01
 ---
 
@@ -178,3 +178,7 @@ listed under Known limits, neither of them a failing eval.
 
 run_id: repin-20260907T005455Z-44758
 sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0
+
+### Re-pin lần 2 — 2026-09-09, do ba hồ sơ neo vào hình dạng cổng, vá xong mỏ neo và bộ đọc
+run_id: repin-20260909T003118Z-32102
+sha: 580ef79ac789b0966befa17df3a2642f6f980db5 · suites: 5 lệnh exit 0 · evals: 7 eval máy exit 0
