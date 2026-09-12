@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { docFile, docMacDinh } from "./moi-mac-dinh.mjs";
+import { docFile, docMacDinh, duongRa as duongChung } from "./moi-mac-dinh.mjs";
 
 const GOC = join(import.meta.dirname, "..", "..", "..");
 const HO_SO = join(GOC, "_acceptance", "chan-lai-component-ra-man");
@@ -16,12 +16,7 @@ function banVeRong(banVe) {
 }
 
 function duongRa(ten) {
-	const goc =
-		process.env.TLR_GHI_BANG_CHUNG === "1"
-			? EV
-			: process.env.TLR_CHO_TAM ||
-				join(GOC, "node_modules", ".cache", "lai-ra-man");
-	return join(goc, ten);
+	return duongChung(GOC, ten);
 }
 
 function ghi(ten, gt) {
@@ -71,7 +66,7 @@ export function danSo() {
 
 function chayBanVe() {
 	try {
-		execFileSync("bun", ["test", "--preload", "./test/setup-dom.ts", "test/lai-ra-man.spec.tsx"], {
+		execFileSync("bun", ["test", "--preload", "./test/setup-dom.ts", "test/lai-ra-man.spec.tsx", "-t", "lai tung component ra man"], {
 			cwd: join(GOC, "packages/ui"),
 			stdio: "pipe",
 		});

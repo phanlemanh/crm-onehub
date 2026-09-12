@@ -1,6 +1,7 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { duongRa } from "./moi-mac-dinh.mjs";
 
 const GOC = join(import.meta.dirname, "..", "..", "..");
 const HERE = import.meta.dirname;
@@ -50,13 +51,25 @@ function docPhanNhom() {
 			cwd: GOC,
 			stdio: "pipe",
 		});
-	} catch {}
-	return JSON.parse(
-		readFileSync(
-			join(GOC, "_acceptance/chan-lai-component-ra-man/evidence/phan-nhom.json"),
-			"utf8",
-		),
-	);
+	} catch (e) {
+		const ra = `${e.stdout ?? ""}${e.stderr ?? ""}`;
+		if (ra.includes("BO-VE-CHET"))
+			throw new Error(
+				`BO-VE-CHET: buoc ve thoat truoc khi phan nhom, khong cham tiep\n${ra.slice(-900)}`,
+			);
+		const neo = (ra.match(/DO: tong ba nhom [^\n]*/) || [])[0];
+		if (!neo)
+			throw new Error(
+				`KHONG DO DUOC: phan nhom thoat ${e.status ?? "khac 0"} vi ly do la\n${ra.slice(-900)}`,
+			);
+		console.log(`neo dan so lech vi ca nay co cay them gia tri — ${neo}`);
+	}
+	const duong = duongRa(GOC, "phan-nhom.json");
+	if (!existsSync(duong))
+		throw new Error(
+			"KHONG DO DUOC: khong co tao pham phan-nhom.json sau luot chay — khong ket luan gi.",
+		);
+	return JSON.parse(readFileSync(duong, "utf8"));
 }
 
 function co(nhom, file, thamSo) {
@@ -79,10 +92,9 @@ try {
 		);
 	}
 	if (!co(sach.ky_thuat, DOI_CHUNG_AM[0], DOI_CHUNG_AM[1])) {
-		console.error(
+		throw new Error(
 			`KHONG DO DUOC: doi chung am ${DOI_CHUNG_AM[0]} tham so ${DOI_CHUNG_AM[1]} khong co trong nhom ky thuat — khong con vat de so.`,
 		);
-		process.exit(2);
 	}
 	console.log(
 		`doi chung am: ${DOI_CHUNG_AM[0]} ${DOI_CHUNG_AM[1]} nam o nhom ky thuat, dung cho.`,
@@ -92,8 +104,7 @@ try {
 		const duong = join(GOC, c.file);
 		const nguon = readFileSync(duong, "utf8");
 		if (!nguon.includes(c.cu)) {
-			console.error(`KHONG DO DUOC: khong cay duoc vao ${c.file} — moc da doi.`);
-			process.exit(2);
+			throw new Error(`KHONG DO DUOC: khong cay duoc vao ${c.file} — moc da doi.`);
 		}
 		goc.set(duong, nguon);
 		writeFileSync(duong, nguon.replace(c.cu, c.moi));
@@ -119,12 +130,20 @@ try {
 		);
 		ma = 1;
 	}
+} catch (e) {
+	console.error(String(e.message ?? e));
+	ma = String(e.message ?? "").startsWith("KHONG DO DUOC") ? 2 : 1;
 } finally {
 	for (const [duong, nguon] of goc) writeFileSync(duong, nguon);
 	if (goc.size > 0) {
 		console.log(`da tra lai ${goc.size} file ve nguyen trang.`);
-		docPhanNhom();
-		console.log("da dung lai tao pham tu cay nguyen trang.");
+		try {
+			docPhanNhom();
+			console.log("da dung lai tao pham tu cay nguyen trang.");
+		} catch (e) {
+			console.error(`khong dung lai duoc tao pham: ${String(e.message ?? e)}`);
+			ma = ma === 0 ? 1 : ma;
+		}
 	}
 }
 

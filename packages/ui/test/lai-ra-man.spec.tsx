@@ -191,7 +191,7 @@ async function laiMotFile(
 				dong: [],
 				mo: [],
 				loi_dong: `khong nap duoc module: ${(e as Error).message.slice(0, 160)}`,
-				loi_mo: null,
+				loi_mo: `khong nap duoc module: ${(e as Error).message.slice(0, 160)}`,
 			},
 		];
 	}
@@ -290,7 +290,7 @@ test("mo tung nguyen ban cua bang gioi han vong truoc", async () => {
 			for (const c of b.mo) chu.add(c);
 			for (const c of b.dong) chu.add(c);
 		}
-		if (ban.every((b) => b.loi_dong !== null && b.loi_mo !== null)) {
+		if (!ban.some((b) => b.loi_dong === null && b.loi_mo === null)) {
 			loi = ban[0]?.loi_dong ?? "khong ve duoc";
 		}
 		ra[d.component] = { chu: [...chu], loi };

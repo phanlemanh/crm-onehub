@@ -12,6 +12,15 @@ export const GOC = [
 ];
 export const LOAI_TRU = ["node_modules", ".next", "dist", "build"];
 
+export function duongRa(goc, ten) {
+	const thuMuc =
+		process.env.TLR_GHI_BANG_CHUNG === "1"
+			? join(goc, "_acceptance", "chan-lai-component-ra-man", "evidence")
+			: process.env.TLR_CHO_TAM ||
+				join(goc, "node_modules", ".cache", "lai-ra-man");
+	return join(thuMuc, ten);
+}
+
 function diCay(thuMuc, ra) {
 	for (const ten of readdirSync(thuMuc)) {
 		if (LOAI_TRU.includes(ten)) continue;

@@ -1,12 +1,9 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { duongRa } from "./moi-mac-dinh.mjs";
 
 const GOC = join(import.meta.dirname, "..", "..", "..");
-const TAO_PHAM = join(
-	GOC,
-	"_acceptance/chan-lai-component-ra-man/evidence/mo-nguyen-ban.json",
-);
 
 export const NEO_DONG = 9;
 
@@ -14,22 +11,35 @@ export function chayBoVe() {
 	try {
 		execFileSync(
 			"bun",
-			["test", "--preload", "./test/setup-dom.ts", "test/lai-ra-man.spec.tsx"],
+			[
+				"test",
+				"--preload",
+				"./test/setup-dom.ts",
+				"test/lai-ra-man.spec.tsx",
+				"-t",
+				"mo tung nguyen ban",
+			],
 			{ cwd: join(GOC, "packages/ui"), stdio: "pipe" },
 		);
+		return 0;
 	} catch (e) {
 		const ra = `${e.stdout ?? ""}${e.stderr ?? ""}`;
-		console.error(`bo ve khong chay tron:\n${ra.slice(-900)}`);
+		console.error(
+			`BO-VE-CHET: buoc ve thoat ${e.status ?? "khac 0"}, khong cham tiep\n${ra.slice(-900)}`,
+		);
+		return e.status ?? 1;
 	}
 }
 
 export function docMoNguyenBan() {
-	if (!existsSync(TAO_PHAM)) return null;
-	return JSON.parse(readFileSync(TAO_PHAM, "utf8"));
+	const taoPham = duongRa(GOC, "mo-nguyen-ban.json");
+	if (!existsSync(taoPham)) return null;
+	return JSON.parse(readFileSync(taoPham, "utf8"));
 }
 
 function chan() {
-	chayBoVe();
+	const maVe = chayBoVe();
+	if (maVe !== 0) return maVe;
 	const ra = docMoNguyenBan();
 	if (ra === null) {
 		console.error(
