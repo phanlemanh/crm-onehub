@@ -7,6 +7,7 @@ import { LocaleProvider } from "../src/components/locale-provider";
 import { TooltipProvider } from "../src/components/tooltip";
 import type { Locale } from "../src/lib/locale";
 import { messages } from "../src/lib/messages";
+import { docMacDinh } from "../../../_acceptance/chan-lai-component-ra-man/rang/moi-mac-dinh.mjs";
 
 const GOC_KHO = join(import.meta.dir, "..", "..", "..");
 const HO_SO = join(GOC_KHO, "_acceptance", "chan-lai-component-ra-man");
@@ -246,9 +247,7 @@ function ghi(ten: string, gt: Record<string, BanVe[]> | MoNguyenBan) {
 }
 
 test("lai tung component ra man, doc chu ban ve that su ve", async () => {
-	const macDinh = JSON.parse(
-		readFileSync(join(HO_SO, "evidence", "mac-dinh.json"), "utf8"),
-	) as { file: string }[];
+	const macDinh = docMacDinh(GOC_KHO) as { file: string }[];
 	const file = [...new Set(macDinh.map((m) => m.file))].sort();
 	expect(file.length).toBeGreaterThan(0);
 
