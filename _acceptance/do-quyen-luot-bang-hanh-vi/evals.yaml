@@ -243,10 +243,10 @@ evals:
       cham cong. Va no co noi bang chu nguoi doc hieu, khong bat nguoi doc phai mo
       ma len moi biet quyen den tu dau?
     inputs:
-      - ../../docs/agent.md
-      - ../../apps/api/src/conversations/conversations.service.ts
-      - ../../apps/agent/agent/lib/custom-agent-dispatch.ts
-      - ../../apps/agent/agent/subagents/agent_builder/lib/authorization.ts
+      - docs/agent.md
+      - apps/api/src/conversations/conversations.service.ts
+      - apps/agent/agent/lib/custom-agent-dispatch.ts
+      - apps/agent/agent/subagents/agent_builder/lib/authorization.ts
     expected: >-
       Tai lieu khai dung thu ma ma thuc su lam. Doc bon tep cung luc phai thay ba
       cau cua tai lieu khop voi ba cho trong ma: input.commandType o createBuilder
