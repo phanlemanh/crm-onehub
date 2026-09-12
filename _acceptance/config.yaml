@@ -48,6 +48,18 @@ executors:
     tr_cung_mot_batch: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t cung-batch
     tr_mot_cau_thong_diep: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t mot-cau
     tr_khong_co_loi_goi: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t khong-loi-goi
+    tc_gioi_han_chay_lai: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t gioi-han-chay-lai
+    tc_goi_song_song: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t goi-song-song
+    tc_lap_callid: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t lap-callid
+    tc_chuoi_cuong_che: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t chuoi-cuong-che
+    tc_luot_moi: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t luot-moi
+    tc_lan_dau: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t lan-dau
+    tc_cung_batch: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t cung-batch
+    tc_subagent_khac: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t subagent-khac
+    tc_khong_loi_goi: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t khong-loi-goi
+    tc_ngoai_kenh: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t ngoai-kenh
+    tc_khong_xoa_slot: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t khong-xoa-slot
+    tc_mot_cau: cd apps/agent && bun test test/tran-uy-thac.spec.ts -t mot-cau
     api_khong_cache_tron_bo: "bun run db:test && bunx turbo run test --concurrency=1 --force"
     dq_cong_quyen: "cd apps/agent && bun test test/quyen-luot.spec.ts"
     dq_ho_so_cu_con_chay: bash _acceptance/do-quyen-luot-bang-hanh-vi/rang/ho-so-cu-con-chay.sh
@@ -66,6 +78,8 @@ executors:
     cua_vao_be_rong: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs be-rong"
     cua_vao_chan_trang: "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chan-trang"
     cua_vao_chu_cung_jsx: "node _acceptance/cua-vao-noi-tieng-viet/rang/chu-cung-lat.mjs"
+    tc_hook_chet: "node _acceptance/tran-uy-thac-chiu-chay-lai/rang/hook-chet.mjs"
+    tc_kieu_theo_eve: "node _acceptance/tran-uy-thac-chiu-chay-lai/rang/kieu-theo-eve.mjs"
     cua_vao_khai_sinh: "node _acceptance/cua-vao-noi-tieng-viet/rang/khai-sinh.mjs"
     product_map: "node ${CLAUDE_PLUGIN_ROOT}/scripts/product-map.mjs --root . --check"
     db_test: "bun run db:test"

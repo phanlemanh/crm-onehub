@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5ccb176242f49b406cb3e0921406197c1d845171
+verified_commit: 89ab347002554a499400ca7ee0c58d148fa79199
 human_signoff: Manh Phan 2026-09-09
 ---
 
@@ -158,3 +158,7 @@ none — không có eval nào chạy nhiều lần (runs=1, deterministic toàn 
 
 Round 6: E3 (AC-3) sàn dân số cũ tự khớp — bộ lọc quần thể trùng đúng thuộc tính đang assert nên một tool builder quên guard sẽ lọt qua; đã sửa bằng quần thể cố định TOOLS_GHIM cộng assert tổng số file trên đĩa > 3. E3 chuyển PASS từ round đó.
 Round 7: toàn bộ eval máy (E1, E2, E3, E4, E5, E6, E10) và các lệnh suite (test, check-types, lint, lint:slop, build) đều PASS trên HEAD; E7 (judgment) giữ nguyên phán quyết PASS carried từ round 5, không có eval nào failed. Verdict tổng: PASS.
+
+### Re-pin lần 1 — 2026-09-12, do khoi phuc apps/app/test/chan-uy-thac.spec.ts va gop onehub 46 commit
+run_id: repin-20260912T132520Z-86882
+sha: 89ab347002554a499400ca7ee0c58d148fa79199 · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng
