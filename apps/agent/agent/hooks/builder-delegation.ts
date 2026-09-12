@@ -1,8 +1,6 @@
 import { defineHook } from "eve/hooks";
-import {
-	builderDelegationState,
-	recordBuilderDelegation,
-} from "../lib/builder-delegation";
+import { recordBuilderDelegation } from "../lib/builder-delegation";
+import { builderDelegationState } from "../lib/builder-delegation-state";
 import { purposeOf } from "../lib/session-purpose";
 
 export default defineHook({
@@ -14,8 +12,7 @@ export default defineHook({
 
 			const next = recordBuilderDelegation(
 				builderDelegationState.get(),
-				event.data.turnId,
-				event.data.actions,
+				event.data,
 			);
 			builderDelegationState.update(() => next);
 		},
