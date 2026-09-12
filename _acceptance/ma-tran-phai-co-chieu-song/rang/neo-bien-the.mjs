@@ -131,7 +131,9 @@ function chayMotVecto(ten) {
 		const sau = chay(GOC, ["node", TOI, "--goc", sao]);
 		process.stdout.write(`cay sao: ${sao}\nvecto: ${ten}\n${sau.chu}`);
 		if (sau.ma === 0) {
-			hongGian(`vecto "${ten}" ra XANH — san khong bat duoc nhanh thu ba`);
+			hong(
+				`${GHIM}\n  vecto "${ten}" ra XANH — san khong bat duoc nhanh thu ba, tuc thuoc do thung`,
+			);
 		}
 		if (!sau.chu.includes(GHIM)) {
 			hongGian(`vecto "${ten}" do nhung thieu thong diep ghim: ${GHIM}`);
@@ -139,7 +141,7 @@ function chayMotVecto(ten) {
 		if (!sau.chu.includes("sinh 3 nhanh") || !sau.chu.includes("dung 2 hang")) {
 			hongGian(`vecto "${ten}" do nhung khong in ca hai con so`);
 		}
-		return sau.ma;
+		return 0;
 	});
 }
 
@@ -149,5 +151,15 @@ chayRang(() => {
 		process.exitCode = chayMotVecto(ten);
 		return;
 	}
-	cham(coCo("--goc") ?? GOC);
+	const goc = coCo("--goc");
+	if (goc) {
+		cham(goc);
+		return;
+	}
+	cham(GOC);
+	const tenVecto = Object.keys(VECTO);
+	for (const v of tenVecto) chayMotVecto(v);
+	process.stdout.write(
+		`neo-bien-the: ${tenVecto.length} vecto deu do dung nhu khai — ${tenVecto.join(", ")}\n`,
+	);
 });

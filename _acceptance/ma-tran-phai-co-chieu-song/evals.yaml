@@ -120,7 +120,10 @@ evals:
       vecto "cay-lai-it-each": cung hinh dang do viet bang it.each(BIEN_THE).
       Ba cach viet nay la ba duong ma chieu chet moc lai duoi ten khac; bat mot
       duong roi tuyen da chan ca lop chinh la lop loi vong nay ton tai de va.
-      Khong do o vecto nao -> ma 3 (gian do hong), in ten vecto.
+      Khong do o vecto nao -> ma 2 (THUOC DO THUNG, khong phai gian do hong):
+      mot dot bien song sot la vi pham cua chinh phep do, dung nghia ma 2.
+      LENH TRAN (khong co --vecto) chay CA san tinh LAN ba vecto roi moi thoat 0
+      — chieu do duoc noi vao chinh lenh cong, khong nam ngoai no.
   - id: E5
     criterion: AC-5
     executor: test
@@ -169,4 +172,6 @@ evals:
       ben doc ma khong round-trip tu noi gia tri sinh ra.
       Doi chung duong, vecto "them-nhanh-thu-ba": cay them mot nhanh thu ba vao
       bieu thuc ay trong ban sao (vi du nhanh fileId) -> so nhanh thanh 3 trong
-      khi bai do van dung 2 hang -> ma 2, in "3" va "2". Khong do -> ma 2.
+      khi bai do van dung 2 hang -> ma 2, in "3" va "2". Khong do -> ma 2 (thuoc do thung).
+      LENH TRAN (khong co --vecto) chay CA san dan so LAN vecto roi moi thoat 0
+      — chieu do duoc noi vao chinh lenh cong, khong nam ngoai no.
