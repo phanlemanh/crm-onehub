@@ -12,19 +12,25 @@ nào", "Hướng đã chốt", và "Bẫy".
 `tiep-thi-tuyen-doi-tac` đã giao và đang trong cửa sổ đo bốn tuần. Ngày bật
 06/09, khép **04/10**. Đây là thứ duy nhất trong kho có hạn không dời được.
 
-Điều kiện đã chốt 06/09: đội tiếp thị dùng **bản dev chạy từ checkout chính,
-nhánh `onehub`**, app 3000 / api 3001, ghi vào cơ sở dữ liệu `crm` trên
-localhost. Hai máy chủ khởi động lại 12/09 lúc 14:24 bằng `nohup` nên chúng sống
-độc lập với mọi phiên Claude — nhưng **chết nếu máy khởi động lại**. Kiểm bằng:
+**Đội tiếp thị dùng bản SẢN XUẤT trên Vercel**, không phải bản dev. Điều kiện
+06/09 (bản dev 3000/3001 từ checkout chính) đã lỗi thời kể từ 07/09 khi CRM lên
+Vercel — nhánh production là `onehub`, ba dự án `crm-onehub-{app,api,agent}`.
+Bản dev vẫn chạy ở 3000/3001 nhưng chỉ là chuyện vệ sinh kho, KHÔNG phải bản đo.
 
-```
-lsof -nP -iTCP:3000 -iTCP:3001 -sTCP:LISTEN
-curl -s http://localhost:3001/health
-```
+**Đo 12/09 trên sản xuất — cửa sổ đang đếm mà chưa có gì để đếm:**
 
-Hệ quả cho mọi phiên: **đừng đổi nhánh ở checkout chính.** Sáng 12/09 chính tôi
-tạo nhánh ở đó và để 3000/3001 phục vụ sai nhánh mười lăm phút. Mọi việc cần cây
-riêng thì dựng worktree.
+| Đo gì | Thấy gì |
+| --- | --- |
+| Danh bạ | **1 bản ghi** (một nhân viên OneMount, không phải môi giới) |
+| Chiến dịch | **«No campaigns yet»** |
+| Số cột danh bạ | 6 — không cột nào của chín trường sàn |
+
+Ngưỡng SỐNG đòi ba chiến dịch chạy trọn và một phân khúc cho tỷ lệ trả lời gấp
+đôi trung bình. Không có lượt nạp dữ liệu thật vào sản xuất thì **04/10 đọc toàn
+CHƯA ĐO**. Việc phải làm, nêu từ 07/09 và chưa ai làm: chạy lượt cào với
+`[ingest] url` trỏ API sản xuất và khoá `LISTING_INGEST_SECRET` của sản xuất
+(khoá trên máy lập trình là khoá dev, không dùng được). Ba lối và hệ quả từng
+lối ghi ở `_acceptance/tiep-thi-tuyen-doi-tac/uat-session.md`, mục 12/09.
 
 Ba rủi ro đã khai trong `_acceptance/tiep-thi-tuyen-doi-tac/uat-session.md`,
 người đọc số ngày 04/10 phải tự lọc: 49 hồ sơ che cũ mang `phone =
