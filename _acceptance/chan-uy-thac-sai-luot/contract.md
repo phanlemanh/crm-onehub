@@ -5,11 +5,9 @@ slug: chan-uy-thac-sai-luot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent]
-status: implemented
+status: draft
 approved_by:
 approved_at:
-veto_state: mo
-veto_opened_at: 2026-09-08T07:27:15Z
 design_doc: docs/superpowers/specs/2026-09-08-chan-uy-thac-sai-luot-design.md
 ---
 
