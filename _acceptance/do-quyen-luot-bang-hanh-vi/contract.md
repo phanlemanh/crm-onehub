@@ -5,7 +5,7 @@ slug: do-quyen-luot-bang-hanh-vi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent, api, docs]
-status: verified
+status: signed-off
 approved_by: Mạnh
 approved_at: 2026-09-12
 design_doc: docs/superpowers/specs/2026-09-09-do-quyen-luot-bang-hanh-vi-design.md
@@ -238,6 +238,18 @@ lại bị AC-8 chặn.
 
 ## Notes
 
+- **Giới hạn đã biết (người ký nhận ở Cổng 2, 12/09):** kiểu dữ liệu dựng quyền
+  của lượt vẫn bắt caller nộp nội dung tin nhắn vào dù không đường nào đọc nó —
+  thước AST không soi kiểu ấy, nên một lần sửa sau thò tay vào đó chỉ còn một
+  vectơ hành vi đỡ.
+- **Giới hạn đã biết (12/09):** giá trị quyết định quyền đi suốt đường bằng kiểu
+  chuỗi tự do thay vì kiểu liệt kê của cơ sở dữ liệu; đường này đóng-khi-nghi
+  nên một lỗi gõ thành quyền thấp nhất chứ không mở quyền, nhưng nó lặng.
+- **Giới hạn đã biết (12/09):** bấm Ctrl-C giữa lúc phép tự kiểm dựng bản sao
+  thì một tệp trợ giúp trong kho ở lại bẩn — đường trả lại chỉ chạy sau khi
+  tiến trình con đồng bộ kết thúc, vì Node hoãn tín hiệu trong lúc đó.
+- **Giới hạn đã biết (12/09):** khi dọn bản sao thất bại, lỗi bị nuốt im lặng và
+  bản đăng ký thừa tích lại trong kho dùng chung, chỉ lộ khi có người đi xem.
 - Tier suy từ đường dẫn ra **T2**: đường đụng dự kiến không khớp `t3_paths`, và
   `apps/api/src/conversations/**` không có trong danh sách đó. Vòng này chỉ
   **đọc** `conversations`. Bảng tier có thể đang thiếu một dòng — việc của người

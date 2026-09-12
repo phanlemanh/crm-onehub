@@ -36,11 +36,6 @@ const phien = (over: Record<string, string> = {}, authorized = true) => ({
 				attributes: {
 					...builderSessionAttributes({
 						commandType: commandTypeFromAuthorization(banGhi(authorized)),
-						message: {
-							text: "co",
-							resources: [],
-							inputResponse: { requestId: "req_1", text: "co" },
-						},
 						conversationId: "conv_1",
 						userId: "user_1",
 						submissionId: "sub_1",
