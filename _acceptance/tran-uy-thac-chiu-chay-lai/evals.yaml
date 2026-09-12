@@ -1,0 +1,290 @@
+schema_version: 1
+slug: tran-uy-thac-chiu-chay-lai
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tc_lan_dau
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation-state.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
+    expected: |
+      Trang thai rong, dung mot subagent-call toi agent_builder -> khong nem, VA
+      trang thai doc ra BANG DUNG { turnId: "turn-1", callIds: ["call-a"] }.
+      Assert phai so CA HAI truong, khong chi "khong nem".
+      CHIEU DO chay that: them mot loi goi thu hai khac callId -> phai nem.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tc_goi_song_song
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation-state.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
+    expected: |
+      CA MA BAN KHOA-THEO-TOA-DO CUA HAI VONG CHAM DAU CHO LOT. Trang thai da ghi
+      mot uy thac (round-trip qua chinh recordBuilderDelegation, khong phai object
+      viet tay). Mot su kien RIENG mang mot subagent-call toi agent_builder voi
+      callId KHAC — o CUNG step hoac step khac -> NEM, thong diep chua "only once".
+      Ve "cung step" la ca that: emitActionRequest phat actions:[e], mot loi goi mot
+      su kien, nen hai loi goi song song trong mot step co toa do y het. Ban khoa
+      theo callId chan duoc; ban khoa theo toa do doc thanh "chay lai" va cho lot.
+      SAN KHUON: phai co MOT bai lai qua CHINH HOOK THAT, khong chi ham thuan.
+      CHIEU DO chay that: cung fixture, dung lai DUNG callId cu -> KHONG duoc nem.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tc_lap_callid
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation-state.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
+    expected: |
+      Nhan lai DUNG callId da ghi -> khong nem, trang thai KHONG doi. Hook cua eve
+      la at-least-once nen day la duong binh thuong, khong phai uy thac thu hai.
+      CHIEU DO chay that: doi dung callId sang gia tri khac -> phai nem.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.tc_luot_moi
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation-state.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
+    expected: |
+      turnId khac -> khong nem, VA trang thai mang turnId moi cung chi callId moi.
+      Assert phai DOC TRANG THAI, khong chi "khong nem".
+      CHIEU DO chay that: giu nguyen turnId cu -> phai nem.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.tc_cung_batch
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation-state.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
+    expected: |
+      MOT su kien mang HAI subagent-call toi agent_builder -> NEM.
+      PHAM VI DA DO: duong phat nhieu loi goi trong mot su kien la stream-actions.js
+      va emitStepActions, chi cho tool provider-executed hoac loi goi CHUA phat le —
+      subagent-call thuong khong di duong do. Day la CHOT PHONG THU, giu loi hua cua
+      vong truoc va bit duong neu eve doi cach gom. Ca thuong gap la E2.
+      CHIEU DO chay that: loi goi thu hai toi subagent KHAC -> khong nem.
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.tc_subagent_khac
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation-state.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
+    expected: |
+      Mot su kien mang mot subagent-call toi agent_builder va mot toi agent_runner
+      -> khong nem, VA callIds chi co callId cua loi goi builder.
+      CHIEU DO chay that: tren CUNG fixture, doi dung truong subagentName cua loi goi
+      thu hai -> phai nem.
+      GIOI HAN DA BIET: ve loc action.kind khong do duoc rieng — duoi kieu that cua
+      eve, actions la discriminated union nen mot object vua khac kind vua mang
+      subagentName agent_builder khong ton tai.
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.tc_khong_loi_goi
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation-state.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
+    expected: |
+      Su kien actions RONG, roi su kien chi co subagent-call toi subagent KHAC ->
+      khong nem, VA callIds RONG.
+      CHIEU DO chay that: tren CUNG fixture, doi dung truong subagentName sang
+      agent_builder -> callIds phai LAT tu rong sang ["call-1"]. Ve lat bat buoc vi
+      rong dung bang gia tri mac dinh, nen assert rong mot minh khong phan biet duoc
+      "bo qua dung" voi "ham chet".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.tc_khong_xoa_slot
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation-state.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
+    expected: |
+      BA su kien lien tiep qua CUNG MOT handle, su kien dau di qua CHINH HOOK:
+      uy thac -> su kien 0 loi goi builder cung luot -> uy thac that.
+      Su kien giua khong nem VA o doc lai VAN NGUYEN; uy thac sau NEM.
+      SAN KHUON: nap trang thai truc tiep thay cho su kien dau -> ma 2.
+      CHIEU DO chay that: su kien giua o LUOT MOI -> o PHAI ve rong. Cap nay phan
+      biet "giu dung cho" voi "khong bao gio don".
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.tc_hook_chet
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation-state.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
+      - "_acceptance/tran-uy-thac-chiu-chay-lai/rang/hook-chet.mjs"
+    expected: |
+      DAY LA EVAL SINH RA VONG NAY. Rang dot bien doc NGUYEN VAN
+      apps/agent/agent/hooks/builder-delegation.ts tu dia, sinh BA ban dot bien bang
+      phep bien doi VAN BAN tren chinh no, roi chay phep do chuoi cuong che len tung
+      ban. Ba hinh dang la dung ba hinh dang da do tai 83501f3:
+      1. bo than hook                          (tai 83501f3: 8 do / 22)
+      2. giu gac + get(), bo record va update   (tai 83501f3: 22 XANH)
+      3. giu gac + get + record, bo update      (tai 83501f3: 22 XANH)
+      NGUONG: CA BA phai bi bat.
+      SAN KHUON, sau dieu, thieu mot la ma 2:
+      (a) CA BA ban dot bien dan tu VAN BAN THAT doc tu dia. Sua sau vong cham 2:
+          ban thu nhat truoc day chep tay nen chot banDotBien === nguon khong bao gio
+          no duoc cho no.
+      (b) Rang KHONG sua file trong cay lam viec — ghi duoi node_modules/.cache, ngoai
+          tam tsconfig, git va glob bo do, don trong finally.
+      (c) Rang KHONG in nhat ky cua luot dot bien ra stdout. Ba ma thoat tach ro:
+          0 = ca ba bi bat · 1 = co hinh dang khong bi bat · 2 = khong do duoc.
+      (d) Ban dot bien phai CHUNG DUOC no da song va da chay: dem so lan handle gia bi
+          cham, doi > 0. Phan biet ba loai su co, khong gop: AssertionError cua bo do
+          -> BI BAT; loi nap/giai module -> ma 2; bun test TU CHOI tim file (khi thieu
+          duong dang "./...") -> ma 2. Ca thu ba co that, da chung tai 83501f3.
+      (e) MOI duong dan suy tu fileURLToPath(import.meta.url), KHONG tu cwd; rang in
+          duong dan tuyet doi cua file no doc va SHA cua cay ay.
+      (f) TRON phep do song trong MOT ham cua module dung chung (kiemChuoiCuongChe +
+          hang CHUOI_SONG), duoc CA bo do that LAN spec do rang sinh goi. Spec sinh ra
+          chi mot dong assert nen khong the lac hau. Sua sau vong cham 2: ban truoc
+          chep 6 dong assert vao spec sinh, va chung lac hau ngay khi driver doi API.
+      CHIEU DO CUA CHINH RANG: tren cay LANH phep do phai XANH, chay TRUOC khi dot
+      bien; khong xanh -> ma 2.
+      PHAM VI DA DO: chay in-process, KHONG chung minh eve THAT truyen dung event.data
+      xuong hook. Khai o Known limits.
+
+  - id: E10
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.tc_chuoi_cuong_che
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation-state.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
+    expected: |
+      Ve thu hai cua AC-9: chinh bo do that cung goi kiemChuoiCuongChe cua module
+      dung chung va so voi hang CHUOI_SONG. Nho vay ham do duoc chay o CA HAI phia —
+      bo do that va rang — nen no khong the muc di ma khong ai thay.
+      CHIEU DO: nam trong chinh E9. Neu ham nay khong con phan biet duoc vat lanh voi
+      vat hong thi ba hinh dang dot bien cua E9 thoi bi bat va E9 do.
+
+  - id: E11
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.tc_kieu_theo_eve
+    paths:
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "_acceptance/tran-uy-thac-chiu-chay-lai/rang/kieu-theo-eve.mjs"
+    expected: |
+      DO QUAN HE, khong do "du truong" va khong grep chuoi trong ma nguon.
+      Sua sau vong cham 1: ban dau chi doi bon truong CO MAT cong mot chot grep —
+      nguoi soi dung PHAN VI DU cho thay ban do cho qua mot kieu KHAI TAY du truong,
+      doi ten nen grep khong thay.
+      Nay rang ghi mot file thu khai:
+        type Bang<A, B> = [A] extends [B] ? ([B] extends [A] ? true : false) : false;
+        export const neoVaoEve: Bang<ActionsRequestedData,
+          HookEvent<"actions.requested">["data"]> = true;
+      Hai kieu KHONG tuong duong hai chieu thi Bang cho ra false va phep gan lam tsc DO.
+      CHIEU AM LA PHAN VI DU RANG TU DUNG (bat buoc): cung phep tuong duong ay ap cho
+      mot kieu KHAI TAY du truong -> tsc PHAI do. Phan vi du qua duoc thi phep do khong
+      co rang, va rang thoat ma 2 goi ten dieu do.
+      SAN KHUON: moi duong dan suy tu import.meta.url; file thu ghi NGOAI tam tsconfig
+      va git, don trong finally — neu khong thi chinh file thu lam check-types cua cong do.
+
+  - id: E12
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.tc_ngoai_kenh
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation-state.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
+    expected: |
+      KHONG HOI QUY. MA TRAN TOAN PHAN, viet truoc, so assert BANG so o: purpose in
+      {builder, team-agent, research} x commandType in {CREATE_AGENT, CHAT} = 6 o.
+      DUNG HAI o purpose=builder cho gac qua; BON o con lai bi gac chan.
+      Hai o cho qua la doi chung duong cua bon o chan — mot ma tran toan "bi chan"
+      khong phan biet duoc voi mot hook chet han.
+      So o sinh tu tich Descartes roi assert do dai bang 6 — dem-roi-vut la ma 1.
+      SAN KHUON giu nguyen cua vong truoc: ca SAU o dung tu MOT bo dung — dau ra that
+      cua builderSessionAttributes trai ra roi de dung hai truong.
+      KHUON DO DA DOI (cai loi): "gac cho qua" nhan dien bang viec handle gia CO bi
+      cham, khong con ghim nguyen van cau loi cua eve. Hai Known limit cua vong truoc
+      thoi ap cho ma tran nay.
+
+  - id: E13
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.tc_mot_cau
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation-state.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
+    expected: |
+      Cau nem lay tu LAN NEM THAT, so TOAN VAN voi mot hang dung chung giua ma san
+      pham va bo do. KHONG so chuoi con, KHONG doc hang bang grep.
+      Thong diep phai BANG DUNG:
+      "The agent builder can be delegated only once per turn."
+      CHIEU DO chay that: assert phai DO neu cau bi doi ma van chua "only once".
+      PHAM VI DA DO: dung o dau ra cua ham — xem [tran-mot-lan-uy-thac#F1].
+
+  - id: E14
+    criterion: AC-13
+    executor: test
+    cmd: config:executors.test.tc_gioi_han_chay_lai
+    paths:
+      - "apps/agent/agent/hooks/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation.ts"
+      - "apps/agent/agent/lib/builder-delegation-state.ts"
+      - "apps/agent/test/tran-uy-thac.spec.ts"
+      - "apps/agent/test/tran-uy-thac/chuoi-cuong-che.ts"
+    expected: |
+      GHIM MOT GIOI HAN, khong them hanh vi. Mot loi goi moi voi callId khac trong
+      CUNG luot — hinh dang ma mot lan chay lai cua step sinh ra -> NEM.
+      Nhom bai mang ten gioi-han-chay-lai de nguoi sua no ve sau doc ten la biet minh
+      dang doi mot GIOI HAN DA KHAI, khong phai va mot bug moi phat hien.
+      Ly do no la gioi han, ghi o muc Moc ghim cua contract: ca "model thu lai trong
+      step" va ca "hai loi goi song song" KHONG phan biet duoc o lop actions.requested
+      — eve khong cap tin hieu nao tach chung. Khoa theo toa do tha ca hai (song song
+      lot); khoa theo callId chan ca hai (chay lai bi giet oan). Vong nay chon chan.
+      CHIEU DO chay that: cung fixture nhung o LUOT MOI -> khong duoc nem. Ve nay chung
+      gioi han chi ap trong mot luot, khong phai tran bi ket vinh vien.

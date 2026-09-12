@@ -340,6 +340,39 @@ delegation paths for custom agents.
   `not_authorized` branch is what lets the child end cleanly and the turn settle. The
   one-per-turn guard in `execution-state.ts` that demands a save before `final_output`
   is skipped on an unauthorized turn for the same reason.
+- **One delegation per turn, on every turn.** `hooks/builder-delegation.ts` gates on
+  `purpose` alone, not on `commandType`. It has to: the `not_authorized` branch makes an
+  unauthorized turn a legal path that still delegates once, and gating on `CREATE_AGENT`
+  left that path with no hard stop at all — only the sentence in `instructions/task.ts`
+  telling the root not to retry. A hook can only observe, so the stop is a throw, which
+  surfaces as `turn.failed`: the turn settles with a failure card instead of burning a
+  fresh child session per retry. The message says `per turn`, not `per creation turn`,
+  because it now fires on turns that create nothing.
+- **The ceiling counts `callId`s per turn, and that is a floor, not a preference.**
+  State (`lib/builder-delegation-state.ts`, slot `crm.builder-delegation`) holds
+  `{ turnId, callIds }`. A second distinct `callId` in the turn throws; re-seeing a
+  recorded one does not, because hooks are at-least-once. An event carrying no
+  builder call neither claims nor clears the slot.
+  **Do not re-key this on `event.data` coordinates, and do not use `step.started`
+  as a retry boundary.** Both were tried in `_acceptance/tran-uy-thac-chiu-chay-lai`
+  and both are wrong for this eve version:
+  `sequence` only advances in `emitTurnEpilogue` / `emitRecoverableFailedTurn`, and
+  `turnId` is minted as `turn_${sequence}`, so within a turn it is constant;
+  `emitActionRequest` emits **one action per event**, so two parallel `agent_builder`
+  calls in one step arrive with identical coordinates and a coordinate key reads the
+  second as a retry. `step.started` is wrong in both directions: every attempt after
+  the first in `runModelCallWithRetries` passes `suppressStepStartedEmission: true`
+  so a model retry inside a step emits none, while a runtime-action park keeps
+  `emissionState` untouched (`advanceStep` runs only where the step ends) so
+  returning from a subagent emits one at the *same* `stepIndex`.
+  The consequence is the design constraint: **a model retry inside a step and two
+  parallel calls in that step are indistinguishable at `actions.requested`** — same
+  events, same coordinates, no separating signal. Keying on coordinates lets the
+  parallel case through; keying on `callId` kills the retried turn. We keep the
+  ceiling and accept the second, pinned by the `gioi-han-chay-lai` tests.
+  A path not yet tried: count at `action.result` instead — an abandoned attempt's
+  request never produces one. That makes the ceiling after-the-fact rather than
+  preventive, and is its own piece of work.
 - **Builder clarification is durable HITL.** The specialist calls eve's built-in
   `ask_question` directly; descendant input requests are proxied to the root channel,
   and the same child turn resumes when the user answers. The authored
