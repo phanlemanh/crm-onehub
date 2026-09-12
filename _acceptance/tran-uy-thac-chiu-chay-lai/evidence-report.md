@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7d579249554edaa5d597e0e1d444da41681619bd
+verified_commit: 5a4f8ca2b6ea1310b8d475f613552815bf619807
 human_signoff: Manh Phan 2026-09-12
 ---
 
@@ -227,3 +227,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E1-E14 pass, ca bon lenh suite (test/check-types/lint/lint:slop/build) xanh — khong co that bai o vong dau.
+
+### Re-pin lần 1 — 2026-09-12, do hoá cũ do gộp onehub sau khi PR #31 merge
+run_id: repin-20260912T081828Z-52733
+sha: 5a4f8ca2b6ea1310b8d475f613552815bf619807 · suites: 4 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng
