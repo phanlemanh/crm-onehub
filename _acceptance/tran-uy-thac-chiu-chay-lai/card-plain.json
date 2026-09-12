@@ -1,0 +1,30 @@
+{
+  "feature_plain": "Bộ kiểm tra của chốt chặn gọi-lặp nay phát hiện được khi chính chốt ấy chết, và hồ sơ ghi lại bằng chứng vì sao ca «hệ thống tự thử lại một bước» không sửa được ở tầng này.",
+
+  "decisions": [],
+
+  "scope_plain": "Không sửa ca «hệ thống tự thử lại một bước» — ghi thành giới hạn có tên; không đổi câu thông báo; không thu hẹp phạm vi chốt chặn; không thử hướng đếm-sau-khi-chạy.",
+
+  "decisions_plain": [
+    { "id": "d-20260910T071503Z-31125", "p": "Đã chọn làm tiếp lên nhánh của hồ sơ trước thay vì chờ nó nhập về nhánh chính — đổi lại hai việc xếp chồng, phải nhập nhánh kia trước." },
+    { "id": "d-20260910T071503Z-15078", "p": "(Đã bỏ) Từng chọn nhận diện lần gọi thứ hai theo vị trí trong hội thoại — sau đó chứng minh là cho lọt hai lần gọi cùng lúc, nên thay bằng khuôn khác." },
+    { "id": "d-20260910T071503Z-30418", "p": "Đã chọn cách đo chạy ngay trong bộ kiểm tra sẵn có, thay chỗ ghi dấu bằng bản giả — rẻ và vào cổng được ngay, đổi lại không chứng minh được thư viện nền truyền đúng dữ liệu." },
+    { "id": "d-20260910T071503Z-32063", "p": "Đã chọn tách chỗ ghi dấu ra một mẩu riêng để thay được bằng bản giả — đổi lại người đọc phải mở hai chỗ mới thấy trọn chốt." },
+    { "id": "d-20260910T071503Z-18928", "p": "Đã chọn giữ nguyên chín tên nhóm phép kiểm của hồ sơ trước — chuỗi bằng chứng đã ký của hồ sơ đó không đứt." },
+    { "id": "d-20260910T071503Z-26710", "p": "Đã chọn cho phép đo tự-làm-chết-chốt viết bản thử ra ngoài cây làm việc — không tranh chấp với các phép đo khác đang chạy." },
+    { "id": "d-20260910T071503Z-1291", "p": "Đã chọn neo phần dữ liệu mà chốt nhận vào đúng khuôn của thư viện nền, và đo bằng hệ quả thật chứ không bằng dò chữ." },
+    { "id": "d-20260910T071503Z-19389", "p": "KHÔNG làm phần đường đo giá trị — hồ sơ đi từ một lỗi phát hiện ở vòng chấm trước chứ không từ một cơ hội có ngưỡng." },
+    { "id": "d-20260910T071503Z-31235", "p": "KHÔNG làm phần đặc tả giao diện — việc này chỉ chạm phần chạy nền." },
+    { "id": "d-20260910T071503Z-29999", "p": "KHÔNG làm phiên soi thẩm mỹ — không có bản bấm được nào để soi." },
+    { "id": "d-20260910T072528Z-4805", "p": "Đã chọn giữ phạm vi chốt chặn rộng như hiện tại, áp cho cả hội thoại thường — đó là lời hứa hồ sơ trước đã ký." },
+    { "id": "d-20260910T073452Z-19498", "p": "(Đã bỏ) Từng định kiểm lại dữ liệu cũ khi đọc — luật kho chặn cách viết đó, rồi việc thu phạm vi làm nó không còn cần." },
+    { "id": "d-20260910T073813Z-18655", "p": "(Đã bỏ) Từng đổi tên chỗ ghi dấu để tránh dữ liệu cũ — sau khi thu phạm vi, hình dạng dữ liệu trở về như cũ nên tên cũng trở về." },
+    { "id": "d-20260910T080818Z-24713", "p": "Đã chọn đo phần neo khuôn dữ liệu bằng quan hệ hai chiều, kèm một phản-ví-dụ tự dựng — vì cách đo cũ cho qua một khuôn khai tay đổi tên." },
+    { "id": "d-20260910T083101Z-3235", "p": "Đã dừng lần thứ nhất thay vì tự chạy vòng chấm thứ ba — vì sửa hai lỗi nhỏ sẽ cho ra một kết quả xanh trong khi chốt đã chứng minh là cho lọt." },
+    { "id": "d-20260910T114610Z-12495", "p": "(Đã bỏ) Từng đổi sang khuôn nhận diện theo tín hiệu «bước bắt đầu» — sau đó chứng minh là sai cả hai chiều." },
+    { "id": "d-20260910T114610Z-26283", "p": "Đã sửa ba chỗ hợp đồng ghi sai sự thật về thư viện nền — sửa sự thật, không đổi phạm vi." },
+    { "id": "d-20260910T115634Z-31125", "p": "Đã dừng lần thứ hai và không tự dựng khuôn thứ ba — hai khuôn liên tiếp bị chính mã thư viện bác, cùng một lớp lỗi." },
+    { "id": "d-20260910T234052Z-29212", "p": "KHÔNG sửa ca «hệ thống tự thử lại một bước»: đưa hành vi về đúng nhánh nền, giữ lại phần bộ đo và phần neo khuôn đã chứng là đúng — đổi lại lỗi gốc vẫn còn, nhưng nay có tên và có lý do." },
+    { "id": "d-20260911T002027Z-11006", "p": "Đã đếm lại vòng chấm từ đầu cho hợp đồng mới, và giữ hồ sơ của hai vòng trước dưới tên riêng thay vì ghi đè — vì hai vòng ấy chấm một hợp đồng khác." }
+  ]
+}
