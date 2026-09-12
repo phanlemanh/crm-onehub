@@ -63,7 +63,7 @@ evals:
     expected: |
       Doc bang AST, KHONG tim chuoi. Dan so sinh TU DIA: quet de quy
       apps/agent/agent lay moi tep .ts.
-      BON dieu, ca bon deu phai dung:
+      NAM dieu, ca nam deu phai dung:
       1. builderSessionAttributes: tap khoa cua object type cua tham so `input`
          KHONG chua "message".
       2. KHONG mot thu nao trong dan so mang ten builderCommandType — khong ham,
