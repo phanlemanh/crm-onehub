@@ -307,6 +307,13 @@ executors:
     nc_conversation_tuoi: node _acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs --tep conversation.tsx
     nc_pham_vi_diff: node _acceptance/nen-chat-ai-elements/rang/pham-vi-diff.mjs
     nc_rang_qua_cong: bun run test
+    tlr_mot_nguon: node _acceptance/thuoc-lai-ra-man-phai-do/rang/thuoc-phai-do.mjs mot-nguon
+    tlr_hong_mot_chieu: node _acceptance/thuoc-lai-ra-man-phai-do/rang/thuoc-phai-do.mjs hong-mot-chieu
+    tlr_bo_ve_chet: node _acceptance/thuoc-lai-ra-man-phai-do/rang/thuoc-phai-do.mjs bo-ve-chet
+    tlr_dem_du: node _acceptance/thuoc-lai-ra-man-phai-do/rang/thuoc-phai-do.mjs dem-du
+    tlr_khong_ban_cay: node _acceptance/thuoc-lai-ra-man-phai-do/rang/thuoc-phai-do.mjs khong-ban-cay
+    tlr_cap_hai_chieu: node _acceptance/thuoc-lai-ra-man-phai-do/rang/thuoc-phai-do.mjs cap-hai-chieu
+    tlr_qua_lenh_cong: node _acceptance/thuoc-lai-ra-man-phai-do/rang/thuoc-phai-do.mjs qua-lenh-cong
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT}/scripts/design-gate.mjs"
     ui_check: "${CLAUDE_PLUGIN_ROOT}/scripts/design-scan.js"

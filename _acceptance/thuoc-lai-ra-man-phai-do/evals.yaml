@@ -1,0 +1,143 @@
+schema_version: 1
+slug: thuoc-lai-ra-man-phai-do
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tlr_mot_nguon
+    paths:
+      - "packages/ui/test/lai-ra-man.spec.tsx"
+      - "_acceptance/chan-lai-component-ra-man/rang/**"
+      - "_acceptance/thuoc-lai-ra-man-phai-do/rang/**"
+    expected: |
+      NGUON RUT (ghim, chong ca tu so chinh no): danh sach ben VE rut TU VAT DUOC
+      GIAO — ban ve ma luot chay cua spec sinh ra o CHO TAM trong CHINH luot chay do
+      (doc khoa cap mot cua ban ve); danh sach ben CHAM rut bang `docMacDinh()`.
+      CAM ca tu goi `docMacDinh()` hai lan roi so chinh no.
+      Doi chung duong TRUOC: ban sao NGUYEN VEN — hai danh sach trung nhau tung
+      phan tu, ma 0, in so phan tu ca hai ben.
+      Chieu do 1 tren CUNG ban sao: xoa mot file component that (khong sua danh
+      sach nao) -> hai danh sach phai CUNG ngan di; ben VE con tro file da xoa ->
+      ma 1 ghim "MOT-NGUON: ben ve con tro <duong dan> ma cay khong con".
+      Chieu do 2 (tro dung lo L1): tiem LAI ban spec cu doc `evidence/mac-dinh.json`
+      vao ban sao roi xoa mot component -> PHAI ma 1 ghim "MOT-NGUON" kem duong dan
+      file chet. Thieu chieu nay thi ca khong phan biet duoc sua that voi chua sua.
+      Ca do QUAN HE giua hai danh sach, khong do chuoi co mat trong file.
+      Ban sao dung tu `git archive HEAD` (tron thu muc), khong chep danh sach tay.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.tlr_hong_mot_chieu
+    paths:
+      - "_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs"
+      - "_acceptance/thuoc-lai-ra-man-phai-do/rang/**"
+    expected: |
+      Doi chung duong TRUOC: ban ve co mot component lanh (ca hai loi deu null)
+      -> ben CHAM xep vao nhom ve-duoc, khong vao "khong ve duoc" — ma 0.
+      Chieu do SAU: tiem mot muc chi hong MOT chieu (loi_dong co gia tri,
+      loi_mo = null) vao ban ve cua ban sao -> ben CHAM PHAI xep vao "khong ve
+      duoc" va goi ten component do; khong xep -> ma 1 voi thong diep ghim
+      "HONG-MOT-CHIEU: <ten component> hong loi_dong nhung lot luoi".
+      Ma tran toi thieu viet TRUOC, 5 o: (loi_dong, loi_mo) = (co,null) ·
+      (null,co) · (co,co) · (null,null) — ba o dau phai vao nhom khong-ve-duoc,
+      o thu tu vao nhom ve-duoc; O5 = ROUND-TRIP: khong tiem tay, ma chay ben VE
+      that tren ban sao co MOT component bi pha cho ra dung mot trang thai loi,
+      roi doc ban ve that do bang CHINH ham ben CHAM dung — o nay phai roi vao
+      nhom khong-ve-duoc. 5 assert, moi assert neu ten o.
+      SAN KHUON (chong hai dau troi khoi nhau lan nua): so tap TEN TRUONG cua muc
+      trong ban ve THAT voi tap ten truong ben CHAM doc; lech mot ten -> ma 1 ghim
+      "SAN-KHUON: ban ve co <ten>, ben cham doc <ten>". Fixture tiem tay mot minh
+      khong tra duoc nghia vu nay.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.tlr_bo_ve_chet
+    paths:
+      - "_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs"
+      - "_acceptance/thuoc-lai-ra-man-phai-do/rang/**"
+    expected: |
+      Doi chung duong TRUOC: tren ban sao nguyen ven, buoc ve chay tron -> thuoc
+      ma 0.
+      Chieu do SAU tren CUNG ban sao: lam bo ve NO THAT (tiem loi cu phap vao
+      spec cua ban sao) -> thuoc PHAI ma khac 0 voi thong diep ghim
+      "BO-VE-CHET: buoc ve thoat <ma>, khong cham tiep".
+      Ban ve CU con sot tren dia trong ban sao cung khong duoc cuu mau xanh:
+      ca nay chay voi mot ban ve cu hop le nam san trong evidence/ cua ban sao.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tlr_dem_du
+    paths:
+      - "packages/ui/test/lai-ra-man.spec.tsx"
+      - "_acceptance/thuoc-lai-ra-man-phai-do/rang/**"
+    expected: |
+      Doi chung duong TRUOC: ban sao nguyen ven — so component ve duoc bang so
+      trong danh sach -> ma 0, in ca hai so.
+      Chieu do SAU: tiem mot muc hong vao ban ve cua ban sao (N-1 ve duoc tren
+      danh sach N) -> PHAI ma 1 voi thong diep ghim "DEM-DU: ve duoc <N-1>/<N>,
+      thieu: <ten>". Khong duoc xanh chi vi con >0 component ve duoc.
+      Assert do QUAN HE bang-nhau giua hai so, khong do nguong >0.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.tlr_khong_ban_cay
+    paths:
+      - "packages/ui/test/lai-ra-man.spec.tsx"
+      - "_acceptance/thuoc-lai-ra-man-phai-do/rang/**"
+    expected: |
+      Ba manh trong MOT ca, theo dung thu tu — manh (a) la dieu kien cua (c):
+      (a) CHUNG CU LUOT CHAY DA SONG: chay `bun run test` cua goi ui trong ban sao
+      -> ghim ma thoat 0 VA mot dau hieu do CHINH luot chay sinh (ban ve xuat hien
+      o cho tam voi so phan tu > 0). Lenh khong khoi dong duoc (vd ma 127) hay cho
+      tam rong -> ma 2 "KHONG DO DUOC: luot chay khong song", TUYET DOI khong ket
+      luan tu `git status`.
+      (b) CHIEU DO CHO CHINH VE SACH-CAY: tiem LAI duong ghi cu tro thang vao
+      `_acceptance/chan-lai-component-ra-man/evidence/` trong ban sao, chay lai ->
+      PHAI ma 1 ghim "KHONG-BAN-CAY: <duong dan file bi ban>". Khong do -> ca chet.
+      (c) CHI KHI (a) xanh moi doc `git status --porcelain`: khong dong nao duoi
+      `_acceptance/chan-lai-component-ra-man/evidence/` -> ma 0.
+      Ca ba manh cung mot fixture: cung ban sao, cung lan dung.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.tlr_cap_hai_chieu
+    paths:
+      - "_acceptance/thuoc-lai-ra-man-phai-do/rang/**"
+    expected: |
+      Do QUAN HE, khong do chuoi co mat trong loi tu xung cua ca. Moi ca E1..E5 va
+      E7 phai phat ra BA so lieu may doc duoc: ma thoat quan sat o chieu duong ·
+      ma thoat quan sat o chieu do · nguyen van thong diep bat duoc o chieu do.
+      Assert tung ca: ma chieu duong = 0 · ma chieu do KHAC 0 · thong diep chieu do
+      CHUA dung nhan ca da khai (MOT-NGUON, SAN-KHUON, HONG-MOT-CHIEU, BO-VE-CHET,
+      DEM-DU, KHONG-BAN-CAY, QUA-CONG). Lech mot o -> ma 1 goi ten ca va o lech.
+      Chieu do cua chinh E6: VO HIEU phep tiem cua MOT ca trong ban sao sao cho
+      ban-tiem TRUNG ban-goc -> ca do bao ma chieu-do = 0 -> E6 PHAI ma 1 va goi
+      dung ten ca do. Mot ca in hai dong moc vo dieu kien khong the qua E6 nua.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.tlr_qua_lenh_cong
+    layer: gate-config
+    paths:
+      - "_acceptance/config.yaml"
+      - ".githooks/**"
+      - "packages/ui/test/lai-ra-man.spec.tsx"
+      - "_acceptance/thuoc-lai-ra-man-phai-do/rang/**"
+    expected: |
+      Do DAY NOI, khong do script. Ca goi dung LENH CONG cua kho (lenh khai trong
+      `_acceptance/config.yaml` ma bo cong chay), KHONG goi thang thuoc-phai-do.mjs.
+      Doi chung duong TRUOC: ban sao nguyen ven -> lenh cong thoat 0.
+      Chieu do SAU tren CUNG ban sao: pha MOT component that (xoa file) -> lenh
+      cong PHAI thoat khac 0 va thong diep chua nhan "QUA-CONG" kem ten ca da do.
+      Lenh cong thoat 0 tren ban da pha -> ma 1 ghim "QUA-CONG: thuoc do duoc khi
+      goi thang nhung lenh cong khong goi toi no" — day la ca bat trang thai
+      thuoc-song-ma-khong-ai-goi.
+      Ca nay KHONG doi sua `.githooks/gate-shape.json`; no chi chung minh day noi
+      con song sau khi duong ban ve doi cho.
