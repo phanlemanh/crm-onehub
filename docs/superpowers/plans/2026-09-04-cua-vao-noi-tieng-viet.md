@@ -14,7 +14,6 @@
 ## Global Constraints
 
 - **Không viết chú thích trong code.** Không thêm vào mã mới, không thêm vào mã sửa.
-- **Không trailer `Co-Authored-By`** trong bất kỳ commit nào.
 - **`/packages/ui` là nguồn duy nhất của giao diện.** Không override style bằng `className` ở chỗ gọi.
 - **Client component không được nhập package máy chủ.** `@crm/auth` và `@crm/db` kéo theo Prisma → `pg` → `dns`. Trang máy chủ tính, client chỉ nhận dữ liệu đã xong.
 - **Kho chuỗi mới theo đúng khuôn năm kho anh em:** `const en` → `export type XMessages = typeof en` → `const vi = {...} satisfies XMessages` → `const BANG = { en, vi } satisfies Record<Locale, XMessages>` → `export function xMessages(locale: Locale): XMessages`.

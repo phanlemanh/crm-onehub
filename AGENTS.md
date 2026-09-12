@@ -26,7 +26,6 @@ rules and skills you read.
 ## Always true
 
 - **Never add code comments.** Not to new code, not to code you edit.
-- **No coauthoring commits.** No `Co-Authored-By` trailer, ever.
 - **Intelligence lives in `apps/agent`, never in the API.** No vendor client, no
   enrichment, no scoring, no identity matching in Nest — it writes an `AgentTask`
   row and lets the agent decide. See `docs/api.md`.

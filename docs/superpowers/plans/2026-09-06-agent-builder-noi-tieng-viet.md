@@ -16,7 +16,7 @@
 - Client: `useLocale()` từ `@crm/ui/components/locale-provider`. Server: `getLocale()` từ `@/lib/locale/server`.
 - Hàm ghép biến nhận `string`, không nhận `number` — bộ canh đòi vậy.
 - Cấm `Record<string, unknown>` (anti-slop) và cấm `typeof x === "number"` (dùng `Number.isInteger`).
-- Không viết chú thích trong mã. Không dòng đồng tác giả trong commit.
+- Không viết chú thích trong mã.
 - Mỗi phép đo mới xong khi có **cặp hai chiều**: vật lành → xanh, phá vật → đỏ với thông điệp ghim.
 - Từ vựng: **tác nhân** · **hội thoại** · **lượt chạy** · *manifest* giữ nguyên.
 

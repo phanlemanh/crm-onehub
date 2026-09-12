@@ -21,23 +21,28 @@ Phí bản rẽ là chi phí dài hạn lớn nhất ở đây. Sửa được �
 @AGENTS.md
 
 Luật kỹ thuật trong đó giữ nguyên hiệu lực: không viết chú thích trong code,
-không trailer đồng tác giả, trí khôn sống ở `apps/agent` chứ không ở API, một
-`.env` duy nhất ở gốc, `/packages/ui` là nguồn duy nhất của giao diện, phân
-tích ở biên chứ không truyền `Record<string, unknown>`. Bảng chỉ mục "đọc gì
-trước khi chạm gì" của nó là bảng duy nhất — theo đúng bảng đó, và nói ra đã
-đọc gì.
+trí khôn sống ở `apps/agent` chứ không ở API, một `.env` duy nhất ở gốc,
+`/packages/ui` là nguồn duy nhất của giao diện, phân tích ở biên chứ không
+truyền `Record<string, unknown>`. Bảng chỉ mục "đọc gì trước khi chạm gì" của
+nó là bảng duy nhất — theo đúng bảng đó, và nói ra đã đọc gì.
 
-Ba mục hành vi của hãng đã **xoá khỏi `AGENTS.md`** ở kho này, không phải tắt
-bằng lời: khuôn báo cáo `## Issues`, `"Use ASD-STE100"`, và `"Median Tasks"`
-cùng mục commit theo mã `MDN-…`. Ngôn ngữ, giọng và cách báo cáo theo cấu hình
-cá nhân của người dùng. Mã việc của hãng (`CMP-…`) chỉ dùng khi thật sự vá cho
-hãng.
+Bốn mục hành vi của hãng đã **xoá khỏi `AGENTS.md`** ở kho này, không phải tắt
+bằng lời: khuôn báo cáo `## Issues`, `"Use ASD-STE100"`, `"Median Tasks"` cùng
+mục commit theo mã `MDN-…`, và lệnh cấm trailer đồng tác giả. Ngôn ngữ, giọng,
+cách báo cáo và cách quy công đều theo cấu hình cá nhân của người dùng. Mã việc
+của hãng (`CMP-…`) chỉ dùng khi thật sự vá cho hãng.
+
+Trailer đồng tác giả rời khỏi luật kho ngày 10/09 theo yêu cầu của chủ kho: gắn
+hay không gắn là chuyện quy công, không phải luật kỹ thuật của sản phẩm. Không
+hook nào, không lệnh CI nào cưỡng chế nó — nó chỉ sống bằng chữ ở hai file này —
+nên xoá chữ là xoá hẳn, và từ nay cấu hình cá nhân quyết. Xoá chứ không ghi
+"không bắt buộc", vì lý do ngay dưới đây.
 
 Xoá, chứ không phủ định, vì phủ định đã thử và hỏng: bản cũ ghi khuôn `## Issues`
 là "không bắt buộc" — mà không bắt buộc là *cho phép*. Cái khuôn có sẵn mẫu và ví
 dụ trong `AGENTS.md` thắng một dòng chối bỏ trong `CLAUDE.md`, nên nó vẫn bám vào
 cuối câu trả lời qua nhiều phiên. Đây là chỗ rẽ cố ý so với `release`: kéo bản mới
-của hãng về mà thấy ba mục đó quay lại thì xoá tiếp, đừng tưởng sót merge.
+của hãng về mà thấy bốn mục đó quay lại thì xoá tiếp, đừng tưởng sót merge.
 
 ## Bốn cổng, và vòng lặp là đường mặc định
 

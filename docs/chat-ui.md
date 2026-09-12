@@ -77,14 +77,19 @@ surfaces:
 | Rendering assistant markdown | `MessageResponse` |
 | A message and its bubble | `Message` + `MessageContent` |
 | Row of actions under a turn (copy, rate) | `MessageActions` + `MessageAction` |
-| Anything that expands — reasoning, a tool call, a source list | `Reasoning`, `Tool`, `Sources`. Never a hand-rolled chevron. |
+| Anything that expands — reasoning, a tool call, a source list | `Reasoning` (in tree), plus `Tool` and `Sources` — **fetch first**, see the register |
 | Attachment in the transcript | `MessageAttachment` / `MessageAttachments` |
-| Attachment in the composer | `PromptInputAttachment` / `PromptInputAttachments` |
-| The composer itself | the `PromptInput` family |
-| Scrolling the transcript | `Conversation` + `ConversationScrollButton` |
-| Empty transcript | `ConversationEmptyState` |
-| Clickable prompt starters | `Suggestions` + `Suggestion` |
+| Attachment in the composer | `PromptInputAttachment` / `PromptInputAttachments` — **fetch first** |
+| The composer itself | the `PromptInput` family — **fetch first** |
+| Scrolling the transcript | `Conversation` + `ConversationScrollButton` (in tree) |
+| Empty transcript | `ConversationEmptyState` (in tree) |
+| Clickable prompt starters | `Suggestions` + `Suggestion` — **fetch first** |
 | "The agent is thinking" | `ThinkingIndicator` — see the orphan note below |
+
+"Fetch first" means the component is the right answer but is **not in the tree
+right now** — run the CLI (Rule 2), then wire it into a screen in the same
+change. See "What is in the tree today" below: leaving a freshly fetched
+component unreachable turns the orphan gate red on the next `bun run test`.
 
 If a surface needs a variation, it becomes a variant of that component in
 `packages/ui`. It does not become a second component with the same job.
@@ -106,7 +111,9 @@ A verdict per component. Changing one means editing this table first.
 
 ### Adopted — 14
 
-The chat spine plus the two growth areas the decision named.
+The chat spine plus the two growth areas the decision named. **Adopted is a
+verdict about direction, not a claim that the file is on disk** — see the next
+section for what is actually in the tree.
 
 `artifact` · `attachments` · `conversation` · `inline-citation` · `message` ·
 `model-selector` · `plan` · `prompt-input` · `reasoning` · `shimmer` · `sources` ·
@@ -116,9 +123,35 @@ The chat spine plus the two growth areas the decision named.
 started: `lib/agent-transcript.ts` already exports `sourcesOf()`, it is covered
 by three cases in `test/agent-transcript.spec.ts`, and **nothing renders it**.
 
+### What is in the tree today — 4
+
+`packages/ui/src/components/ai-elements/` holds exactly four files:
+
+| File | Why it is here |
+| --- | --- |
+| `message.tsx` | imported by the record sheet's Agent tab and the builder |
+| `reasoning.tsx` | imported by the builder |
+| `shimmer.tsx` | imported by `reasoning.tsx` — no file outside the folder touches it |
+| `conversation.tsx` | pulled fresh as the baseline for the scroll measurement; named exemption in the orphan gate, to be removed when Phase 1 wires it to a screen |
+
+The other 19 vendored files were deleted in the `nen-chat-ai-elements` round —
+nine of them Adopted (`artifact`, `inline-citation`, `model-selector`, `plan`,
+`prompt-input`, `sources`, `suggestion`, `task`, `tool`), the rest Available or
+Not-for-this-product. None of them was reachable from `apps/**`, and carrying
+21 unreachable files was the cost the round was opened to remove.
+
+**Two gates now hold this shape, and they pull against each other on purpose:**
+the orphan gate (`_acceptance/nen-chat-ai-elements/rang/mo-coi.mjs`, running
+inside `bun run test`) turns red on any file in this folder that no `apps/**`
+file reaches, transitively. So `bunx --bun ai-elements@latest add <name>` and a
+commit is **not** a complete change — the component has to reach a screen in
+the same change, or the gate blocks the push. That is the intended friction:
+the register says which component is right, the gate says it may not sit unused.
+
 ### Available — 7
 
-Not installed, no ceremony needed. When the need appears, run the CLI.
+Not installed, no ceremony needed. When the need appears, run the CLI — then
+wire it in, per the paragraph above.
 
 | Component | The need |
 | --- | --- |
@@ -143,8 +176,9 @@ Installing one of these needs a written reason first.
 
 ## The orphan — `loader`
 
-`packages/ui/src/components/ai-elements/loader.tsx` is vendored and **is not in
-the 48**. Upstream dropped it. Do not build on it; it will never receive a fix.
+`loader.tsx` was vendored and **is not in the 48**. Upstream dropped it. It was
+deleted in the `nen-chat-ai-elements` round along with the other unreachable
+files, so it is no longer in the tree. Do not build on it; it will never receive a fix.
 
 This is why Rule 1 says check the register rather than the folder: a file being
 present is not evidence that it is supported. `ThinkingIndicator` —
@@ -154,9 +188,24 @@ present is not evidence that it is supported. `ThinkingIndicator` —
 ## Local divergence, and re-applying it
 
 Several vendored files need edits to satisfy `docs/design.md` and
-`locale-provider`: raw palette colours in `tool` and `web-preview`, radii off our
-scale in seven files, and roughly 30 English strings across ten files.
-`conversation.tsx` already reads `useMessages()` and is the pattern.
+`locale-provider`. The counts below are for the four files in the tree today;
+the divergence ledger of record is
+`_acceptance/nen-chat-ai-elements/so-lech-chuan.md`, which carries one entry per
+file with a fingerprint of the diverging lines:
+
+- 16 English strings routed through `packages/ui/src/lib/messages.ts` — `message`
+  (10), `reasoning` (4), `conversation` (2). They arrive in **four shapes**: text
+  between tags, display attributes, parameter defaults, and intermediate
+  variables. A scan that lists syntax shapes misses a new one every time; the
+  string gate uses a closed allow-list instead.
+- 4 radii off our scale, all `rounded-full`, in `message` and `conversation`.
+- 0 raw palette colours — all six lived in `tool` and `web-preview`, both deleted.
+- 2 CSS properties added to `ConversationContent` so it drops off-screen layout
+  the way `MessageScroller` does. Without them the transcript at 500 turns is
+  **32× slower**; measured in a real browser, not a hand-copied page.
+
+Whichever files a later phase pulls back in bring their own divergences, and
+they belong in that same ledger.
 
 Those edits are a fork inside `packages/ui`, so:
 

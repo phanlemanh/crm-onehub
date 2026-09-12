@@ -1,0 +1,174 @@
+[
+	{
+		"id": "m1",
+		"mine": true,
+		"items": [
+			{
+				"kind": "said",
+				"id": "m1:0",
+				"mine": true,
+				"text": "Cho tôi biết về Acme."
+			}
+		]
+	},
+	{
+		"id": "m2",
+		"mine": false,
+		"items": [
+			{
+				"kind": "reasoned",
+				"id": "m2:0",
+				"streaming": true,
+				"text": "Cần xem lịch sử CRM."
+			},
+			{
+				"kind": "said",
+				"id": "m2:1",
+				"mine": false,
+				"text": "Đang tra cứu."
+			},
+			{
+				"kind": "did",
+				"id": "m2:call-neutral",
+				"label": "Read our emails and meetings with them",
+				"input": {
+					"contactId": "c1"
+				},
+				"output": {
+					"rows": 3
+				},
+				"errorText": null,
+				"failed": false,
+				"tone": "neutral",
+				"pending": false,
+				"sources": [],
+				"tool": "read_crm_history"
+			}
+		]
+	},
+	{
+		"id": "m3",
+		"mine": false,
+		"items": [
+			{
+				"kind": "did",
+				"id": "m3:call-success",
+				"label": "Recorded what it found",
+				"input": {
+					"fact": "Acme đổi trụ sở"
+				},
+				"output": {
+					"applied": true,
+					"sourceUrl": "https://www.linkedin.com/in/acme"
+				},
+				"errorText": null,
+				"failed": false,
+				"tone": "success",
+				"pending": false,
+				"sources": [
+					{
+						"url": "https://www.linkedin.com/in/acme",
+						"title": "linkedin.com",
+						"network": "linkedin"
+					}
+				],
+				"tool": "record_fact"
+			},
+			{
+				"kind": "did",
+				"id": "m3:call-warning",
+				"label": "Read a web page",
+				"input": {
+					"url": "https://acme.example"
+				},
+				"output": null,
+				"errorText": "hết lượt gọi trong ngày",
+				"failed": true,
+				"tone": "warning",
+				"pending": false,
+				"sources": [],
+				"tool": "web_fetch"
+			},
+			{
+				"kind": "did",
+				"id": "m3:call-warning-trong",
+				"label": "Read a web page",
+				"input": {
+					"url": "https://acme.example/khong-loi"
+				},
+				"output": null,
+				"errorText": null,
+				"failed": true,
+				"tone": "warning",
+				"pending": false,
+				"sources": [],
+				"tool": "web_fetch"
+			},
+			{
+				"kind": "did",
+				"id": "m3:call-khong-ghi",
+				"label": "Checked a profile against the account itself — tài khoản đứng tên người khác",
+				"input": {
+					"contactId": "c1"
+				},
+				"output": {
+					"stored": false,
+					"reason": "tài khoản đứng tên người khác"
+				},
+				"errorText": null,
+				"failed": false,
+				"tone": "warning",
+				"pending": false,
+				"sources": [],
+				"tool": "set_contact_socials"
+			},
+			{
+				"kind": "did",
+				"id": "m3:call-pending",
+				"label": "Searched the web",
+				"input": {
+					"query": "acme funding"
+				},
+				"output": null,
+				"errorText": null,
+				"failed": false,
+				"tone": "neutral",
+				"pending": true,
+				"sources": [],
+				"tool": "web_search"
+			},
+			{
+				"kind": "asked",
+				"id": "m3:call-asked",
+				"question": {
+					"kind": "question",
+					"requestId": "req-1",
+					"display": "select",
+					"prompt": "Ghi vào bản ghi nào?",
+					"options": [
+						{
+							"id": "acme",
+							"label": "Acme"
+						},
+						{
+							"id": "acme-vn",
+							"label": "Acme Việt Nam"
+						}
+					]
+				}
+			}
+		]
+	},
+	{
+		"id": "m4",
+		"mine": false,
+		"items": [
+			{
+				"kind": "reasoned",
+				"id": "m4:0",
+				"streaming": false,
+				"text": "Đã đủ dữ kiện để trả lời."
+			}
+		]
+	}
+]

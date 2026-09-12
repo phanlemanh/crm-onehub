@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Không chú thích trong code, không trailer đồng tác giả (AGENTS.md, CLAUDE.md).
+- Không chú thích trong code (AGENTS.md, CLAUDE.md).
 - Kho chuỗi: một hàm xuất duy nhất `xxxMessages(locale)`; bản `vi` có dấu; không giá trị `vi` y hệt `en`; mỗi hàm ghép biến có khẳng định ghim trong `apps/app/test/messages-guard.spec.ts` (bảng `GHIM`, khoá dạng `<kho>:<đường.khoá>`).
 - Danh từ theo `CONTEXT.md`: công ty · cá nhân · thoả thuận · hội thoại · chiến dịch · tác nhân. Thẻ số nói giọng đối tác: *chốt được · đang mở · tỷ lệ chốt · không thành* — không *thắng/thua/pipeline*.
 - Bảy nhãn giai đoạn thoả thuận GIỮ tiếng Anh, `lang="en"` (không đổi `lib/deal-stage.ts`).
