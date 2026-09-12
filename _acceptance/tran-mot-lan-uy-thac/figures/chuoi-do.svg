@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1400 620" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap');
+          svg text { dominant-baseline: auto; }
+          .pp    { fill: #fafafa; }
+          .pw    { fill: #ffffff; }
+          .ptint { fill: rgba(0,107,79,0.08); }
+          .pi3   { fill: rgba(23,23,23,0.03); }
+          .pi5   { fill: rgba(23,23,23,0.05); }
+          .pm10  { fill: rgba(87,87,87,0.10); }
+          .ti    { fill: #171717; }
+          .tm    { fill: #575757; }
+          .ts    { fill: #666666; }
+          .ta    { fill: #006B4F; }
+          .fm    { fill: #575757; }
+          .fa    { fill: #006B4F; }
+          .si    { stroke: #171717; }
+          .sm    { stroke: #575757; }
+          .ss    { stroke: #666666; }
+          .sa    { stroke: #006B4F; }
+          .si30  { stroke: rgba(23,23,23,0.30); }
+          .sa50  { stroke: rgba(0,107,79,0.50); }
+          .sr    { stroke: rgba(23,23,23,0.12); }
+          @media (prefers-color-scheme: dark) {
+            .pp    { fill: #171717; }
+            .pw    { fill: #212121; }
+            .ptint { fill: rgba(47,155,122,0.14); }
+            .pi3   { fill: rgba(250,250,250,0.04); }
+            .pi5   { fill: rgba(250,250,250,0.06); }
+            .pm10  { fill: rgba(180,180,180,0.12); }
+            .ti    { fill: #fafafa; }
+            .tm    { fill: #b4b4b4; }
+            .ts    { fill: #9a9a9a; }
+            .ta    { fill: #2f9b7a; }
+            .fm    { fill: #b4b4b4; }
+            .fa    { fill: #2f9b7a; }
+            .si    { stroke: #fafafa; }
+            .sm    { stroke: #b4b4b4; }
+            .ss    { stroke: #9a9a9a; }
+            .sa    { stroke: #2f9b7a; }
+            .si30  { stroke: rgba(250,250,250,0.34); }
+            .sa50  { stroke: rgba(47,155,122,0.55); }
+            .sr    { stroke: rgba(250,250,250,0.12); }
+          }
+        </style>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon class="fm" points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-ink" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon class="ti" points="0 0, 8 3, 0 6" fill="#171717"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" class="pp" fill="#fafafa"/>
+
+      <!-- ============ ARROWS (drawn first, behind boxes) ============ -->
+
+      <!-- Chuỗi đo, một chiều trái sang phải -->
+      <line x1="204"  y1="232" x2="234"  y2="232" class="sm" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="396"  y1="232" x2="426"  y2="232" class="sm" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="588"  y1="232" x2="618"  y2="232" class="sm" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="780"  y1="232" x2="810"  y2="232" class="sm" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="972"  y1="232" x2="1002" y2="232" class="sm" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="1164" y1="232" x2="1194" y2="232" class="sm" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <!-- Nhánh phụ: ContextContainer thật của eve vào nút hook -->
+      <line x1="892" y1="372" x2="892" y2="270" class="sm" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <!-- CHỖ CẤM: đi tắt từ ctx thẳng tới builderDelegationState, bỏ qua hook -->
+      <path d="M 700 196 L 700 120 Q 700 112 708 112 L 1076 112 Q 1084 112 1084 120 L 1084 194"
+            fill="none" class="si" stroke="#171717" stroke-width="1.2" stroke-dasharray="6,4" marker-end="url(#arrow-ink)"/>
+
+      <!-- Leader của nhãn CHỖ HỞ -->
+      <path d="M 560 400 Q 700 372 824 276" fill="none" class="sa50" stroke="rgba(0,107,79,0.50)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="824" cy="274" r="2.5" class="fa" fill="#006B4F"/>
+
+      <!-- ============ NÚT ============ -->
+
+      <!-- 1. buildPendingInputRequest — bên ghi thật -->
+      <rect x="44" y="196" width="160" height="72" rx="6" class="pp" fill="#fafafa"/>
+      <rect x="44" y="196" width="160" height="72" rx="6" class="pm10 ss" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="1"/>
+      <text x="124" y="222" class="ti" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">buildPending</text>
+      <text x="124" y="236" class="ti" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">InputRequest</text>
+      <text x="124" y="256" class="tm" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">bên ghi thật</text>
+
+      <!-- 2. commandTypeFromAuthorization -->
+      <rect x="236" y="196" width="160" height="72" rx="6" class="pp" fill="#fafafa"/>
+      <rect x="236" y="196" width="160" height="72" rx="6" class="pw si" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="316" y="228" class="ti" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">commandTypeFrom</text>
+      <text x="316" y="242" class="ti" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">Authorization</text>
+
+      <!-- 3. builderSessionAttributes -->
+      <rect x="428" y="196" width="160" height="72" rx="6" class="pp" fill="#fafafa"/>
+      <rect x="428" y="196" width="160" height="72" rx="6" class="pw si" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="508" y="228" class="ti" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">builderSession</text>
+      <text x="508" y="242" class="ti" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">Attributes</text>
+
+      <!-- 4. ctx của phiên -->
+      <rect x="620" y="196" width="160" height="72" rx="6" class="pp" fill="#fafafa"/>
+      <rect x="620" y="196" width="160" height="72" rx="6" class="pw si" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="700" y="230" class="ti" fill="#171717" font-size="13" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">ctx</text>
+      <text x="700" y="250" class="tm" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">của phiên</text>
+
+      <!-- 5. hook.events["actions.requested"] — NÚT FOCAL, chỗ hở -->
+      <rect x="812" y="196" width="160" height="72" rx="6" class="pp" fill="#fafafa"/>
+      <rect x="812" y="196" width="160" height="72" rx="6" class="ptint sa" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="892" y="228" class="ti" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">hook.events</text>
+      <text x="892" y="244" class="ti" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">["actions.requested"]</text>
+
+      <!-- 6. builderDelegationState -->
+      <rect x="1004" y="196" width="160" height="72" rx="6" class="pp" fill="#fafafa"/>
+      <rect x="1004" y="196" width="160" height="72" rx="6" class="pw si" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1084" y="228" class="ti" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">builder</text>
+      <text x="1084" y="242" class="ti" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">DelegationState</text>
+
+      <!-- 7. ném -->
+      <rect x="1196" y="208" width="160" height="48" rx="24" class="pp" fill="#fafafa"/>
+      <rect x="1196" y="208" width="160" height="48" rx="24" class="pi3 si30" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="1276" y="237" class="ti" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">ném</text>
+
+      <!-- Nhánh phụ: ContextContainer -->
+      <rect x="692" y="372" width="400" height="112" rx="6" class="pp" fill="#fafafa"/>
+      <rect x="692" y="372" width="400" height="112" rx="6" class="pi5 sm" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="712" y="398" class="ti" fill="#171717" font-size="12" font-weight="500" font-family="'Geist Mono', monospace">ContextContainer</text>
+      <text x="712" y="416" class="tm" fill="#575757" font-size="10" font-family="'Geist', sans-serif">thật của eve</text>
+      <text x="712" y="438" class="tm" fill="#575757" font-size="9" font-family="'Geist', sans-serif">nạp qua <tspan font-family="'Geist Mono', monospace">require.resolve("eve/package.json")</tspan></text>
+      <text x="712" y="454" class="tm" fill="#575757" font-size="9" font-family="'Geist', sans-serif">đặt vào <tspan font-family="'Geist Mono', monospace">AsyncLocalStorage</tspan> ở</text>
+      <text x="712" y="470" class="tm" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">Symbol.for("eve.context-storage")</text>
+
+      <!-- ============ NHÃN BẰNG CHỮ (vẽ sau cùng) ============ -->
+
+      <!-- Nhãn bằng chữ của CHỖ HỞ, nối bằng leader tới nút hook -->
+      <text x="44" y="392" class="ti" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">bản tại <tspan font-style="normal" font-family="'Geist Mono', monospace" font-size="12">41ba0a7</tspan> return sớm ở đây khi <tspan font-style="normal" font-family="'Geist Mono', monospace" font-size="12">commandType</tspan> khác <tspan font-style="normal" font-family="'Geist Mono', monospace" font-size="12">CREATE_AGENT</tspan>,</text>
+      <text x="44" y="416" class="ti" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">nên ba nút sau không chạy trên lượt không có quyền.</text>
+
+      <!-- Nhãn của mũi tên đứt nét: chỗ cấm -->
+      <rect x="828" y="86" width="128" height="18" rx="2" class="pp" fill="#fafafa"/>
+      <text x="892" y="100" class="ti" fill="#171717" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">CHỖ CẤM · MÃ 2</text>
+
+      <!-- Nhãn của nhánh phụ -->
+      <rect x="902" y="308" width="88" height="18" rx="2" class="pp" fill="#fafafa"/>
+      <text x="908" y="322" class="tm" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.12em">NHÁNH PHỤ</text>
+
+      <!-- Nhãn CHỖ HỞ ngay trên nút hook -->
+      <rect x="848" y="170" width="88" height="18" rx="2" class="pp" fill="#fafafa"/>
+      <text x="892" y="184" class="ta" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.16em">CHỖ HỞ</text>
+
+      <!-- ============ CHÚ GIẢI ============ -->
+      <line x1="44" y1="524" x2="1356" y2="524" class="sr" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="44" y="546" class="tm" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+
+      <rect x="44" y="568" width="24" height="12" rx="4" class="ptint sa" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="76" y="578" class="tm" fill="#575757" font-size="10" font-family="'Geist', sans-serif">nút focal — chỗ hở tại hook</text>
+
+      <line x1="520" y1="574" x2="544" y2="574" class="si" stroke="#171717" stroke-width="1.2" stroke-dasharray="6,4"/>
+      <text x="552" y="578" class="tm" fill="#575757" font-size="10" font-family="'Geist', sans-serif">đường cấm — gọi hàm thuần, bỏ qua hook (mã 2)</text>
+
+      <line x1="996" y1="574" x2="1020" y2="574" class="sm" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="1028" y="578" class="tm" fill="#575757" font-size="10" font-family="'Geist', sans-serif">chuỗi đo + nhánh phụ ngữ cảnh eve</text>
+    </svg>
