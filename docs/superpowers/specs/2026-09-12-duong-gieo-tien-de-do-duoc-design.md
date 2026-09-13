@@ -110,3 +110,50 @@ từng chạy chiều đỏ; assertion âm-tính-một-mình không sống).
 
 Ba eval thoát 0 trên cây sạch; làn ghim lại chạy được cho ba hồ sơ; cổng
 trước-merge của PR #35 từ 7 xuống còn 4 vi phạm.
+
+---
+
+## Cập nhật 13/09 — cái đo được khác cái spec đoán
+
+Spec trên viết trước khi chạy. Ba chỗ thực tế bác nó; giữ nguyên văn phần trên
+làm sử liệu, ghi sai lệch ở đây.
+
+### 1. Gốc chung là CỔNG ONBOARDING, không phải ba nhu cầu riêng
+
+Cả ba eval chết ở cùng một chỗ trước khi chạm thứ chúng đo. Middleware có HAI
+cổng: `readWorkspaceGate` (đòi `metadata.onboardedAt`) và `readResearchGate`
+(đòi `AppSetting.contextDevApiKey` khác null). Kho seed mới trắng cả hai → mọi
+route `/settings/**` trả 307 về `/onboarding/research`.
+
+Lượt đo hôm trước thấy lý do khác vì nó chạy trên một DB đã qua cả hai cổng bằng
+tay từ lâu — tức **nền đo không tương đương nền lúc ký**, và đó mới là lớp thật.
+
+### 2. `--skip-seed` không tồn tại
+
+`prisma migrate reset` chỉ có `-h · --config · --schema · -f/--force`. Đường dùng
+được là `prisma db push --force-reset`, và nó không chạy hook seed.
+
+### 3. E5 và E7 KHÔNG thiếu dữ liệu — chúng tự loại mình bằng lời khai
+
+- **E5**: mã 2 là kết quả **đã khai trước** (`expected` của chính eval nói vậy;
+  evidence-report lúc ký ghi `E5 | AC-5 | 2 | không đo được — đã khai trước`).
+  Nó chặn làn ghim chỉ vì `evals.yaml` chưa khai `expected_exit`. Đã khai.
+- **E7**: `route-cua-lat.json` khai hai route vào `can_vat`; hai dòng bảng còn
+  lại (`Slack`, `OneHub`) đều `ngoai_man_do_duoc: true` với lý do CẤU TRÚC, nên
+  `soSanh` luôn bằng 0. Gieo bản ghi thật không đổi một số nào.
+  PASS trong hồ sơ **không còn đúng từ 06/09**: `f69b9f3` rút `ngoai_lat` từ 8
+  chuỗi xuống 0 mà không chạm `evidence-report.md`, rồi một làn ghim suite-only
+  khiêng màu cũ qua mốc `f8aa7f4a`.
+
+  Nhưng **không có gì im lặng**: đợt hai mọc đúng ba răng cho việc bàn giao —
+  E12 (quan hệ, xanh), E15 (agent-builder còn chạy được, **đang đỏ**), E18 (canh
+  8 chuỗi, xanh — chứng bằng phép phá: lùi `dangGui` về `"Sending"` thì E18 và
+  CHỈ E18 lật đỏ).
+
+### Còn nợ, có tên
+
+| Việc | Vì sao chưa làm |
+|---|---|
+| `scripts/lan-do/trang-thai-rong.mjs` chưa nối dây | Răng E5 kết luận theo lời khai, không theo trạng thái; nối vào chỉ tốn một vòng xoá-seed mỗi lượt mà không đổi kết quả |
+| E7: thu phạm vi AC-6 hay khai `expected_exit` | Chạm hồ sơ đã ký — quyết định của owner, không phải của máy |
+| `tools/listing-crawl/.venv` | Deps là crawl4ai + transformers + sentence-transformers. Mã 127 là tín hiệu ĐÚNG (kit đọc thành `cannotRun`); dựng nửa vời sẽ biến nó thành lỗi giả |
