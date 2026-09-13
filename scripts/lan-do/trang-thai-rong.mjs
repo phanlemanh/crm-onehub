@@ -17,20 +17,11 @@
  * Trả NGUYÊN mã của lệnh răng. Dựng hỏng hoặc trả-lại hỏng → mã 2.
  */
 import { spawnSync } from "node:child_process";
-
-const HAU_TO = "_gieo";
+import { batBuocKhoNhap } from "./kho-nhap.mjs";
 
 function thoat(ma, cau) {
 	console.error(`trang-thai-rong: ${cau}`);
 	process.exit(ma);
-}
-
-function tenDb(url) {
-	try {
-		return new URL(url).pathname.replace(/^\//, "");
-	} catch {
-		return null;
-	}
 }
 
 const i = process.argv.indexOf("--chay");
@@ -38,17 +29,7 @@ if (i === -1 || !process.argv[i + 1])
 	thoat(2, 'thiếu --chay "<lệnh răng>" — không có gì để chạy');
 const lenh = process.argv[i + 1];
 
-const url = process.env.DATABASE_URL;
-if (!url) thoat(2, "DATABASE_URL chưa đặt — không biết sẽ xoá cái gì");
-const ten = tenDb(url);
-if (ten === null) thoat(2, "DATABASE_URL không đọc được thành URL");
-if (!ten.endsWith(HAU_TO))
-	thoat(
-		2,
-		`database "${ten}" không kết thúc bằng "${HAU_TO}" — làn này XOÁ SẠCH database ` +
-			`nên chỉ chạy trên kho nháp. Dựng một kho tên "<gì đó>${HAU_TO}", trỏ ` +
-			"DATABASE_URL vào đó rồi chạy lại.",
-	);
+const ten = batBuocKhoNhap("trang-thai-rong");
 
 function chay(cau, lenhCon, moiTruong) {
 	const ra = spawnSync("bash", ["-lc", lenhCon], {
@@ -73,10 +54,7 @@ chay("seed tối thiểu", "cd packages/db && bun run db:seed", {
 try {
 	const ra = spawnSync(
 		"bash",
-		[
-			"-lc",
-			`bun scripts/lan-do/tien-de.mjs --chay ${JSON.stringify(lenh)}`,
-		],
+		["-lc", `bun scripts/lan-do/tien-de.mjs --chay ${JSON.stringify(lenh)}`],
 		{ stdio: "inherit" },
 	);
 	process.exitCode = ra.status === null ? 2 : ra.status;
