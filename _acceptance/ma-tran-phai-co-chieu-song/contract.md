@@ -5,7 +5,7 @@ slug: ma-tran-phai-co-chieu-song
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent]
-status: verified
+status: signed-off
 approved_by: Mạnh
 approved_at: 2026-09-13
 design_doc: docs/superpowers/specs/2026-09-12-ma-tran-phai-co-chieu-song-design.md
@@ -178,3 +178,14 @@ tự bác bỏ mình.
   thuộc tính**. Một đường không đi qua khối ấy — ví dụ agent tự đọc hàng lần
   thứ hai ở chỗ khác — thì bài này không thấy; đó là chỗ hai sàn AST canh, và
   vòng này không mở rộng chúng.
+- Giới hạn đã khai — **Ngoài-2** (Cổng 2, 13/09): răng của hồ sơ này suy đường
+  dẫn của chính nó bằng cách đi ngược ra khỏi thư mục hồ sơ
+  `do-quyen-luot-bang-hanh-vi`. Dời hay đổi tên thư mục ấy làm răng báo «giàn đo
+  hỏng» ở một hồ sơ khác hẳn — triệu chứng xa nguyên nhân.
+- Giới hạn đã khai — **Ngoài-5** (Cổng 2, 13/09): lỗi phát ra lúc dọn bản sao
+  thay chỗ lỗi thật đang bay, nên khi hai phiên tranh khoá cùng lúc, thông điệp
+  nói ra đột biến nào sống sót có thể biến mất khỏi hồ sơ.
+- Giới hạn đã khai — **Ngoài-7** (Cổng 2, 13/09): neo dân số của AC-6 chỉ đối
+  chiếu **số** nhánh sinh biến thể, không đối chiếu **hình dạng** giá trị. Đổi
+  tên một trường ở nơi máy chủ sinh ra nó mà giữ nguyên số nhánh thì neo không
+  thấy.
