@@ -5,9 +5,9 @@ slug: ma-tran-phai-co-chieu-song
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent]
-status: verified
-approved_by: Mạnh
-approved_at: 2026-09-13
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-09-12-ma-tran-phai-co-chieu-song-design.md
 ---
 

@@ -183,10 +183,11 @@ function cham(goc) {
 	];
 	for (const { node: dv, quet, nhan } of donVi) {
 		for (const { ten, node } of ghimSoLuong(dv, quet)) {
-			if (thanDuyet(dv, ten, quet).length === 0) continue;
-			if (coSoCheoHaiLuot(dv, quet)) continue;
+			const than = thanDuyet(dv, ten, quet);
+			if (than.length === 0) continue;
+			if (than.every((t) => coSoCheoHaiLuot(t))) continue;
 			loi.push(
-				`${viTri(sf, node, goc)} — ghim so luong cua "${ten}" roi duyet chinh no trong ${nhan}, ma khong so cheo hai luot`,
+				`${viTri(sf, node, goc)} — ghim so luong cua "${ten}" roi duyet chinh no trong ${nhan}, ma THAN VONG khong so cheo hai luot`,
 			);
 		}
 	}
@@ -246,6 +247,21 @@ const VECTO = {
 				"\t\t});",
 				"\t});",
 				"",
+			].join("\n"),
+		),
+	"cay-vao-bai-co-san": (sao) =>
+		doiTrongSao(
+			sao,
+			"\t\texpect(luot[0].cham).toEqual(luot[1].cham);",
+			[
+				"\t\texpect(luot[0].cham).toEqual(luot[1].cham);",
+				"\t\texpect(BIEN_THE).toHaveLength(2);",
+				"\t\tfor (const ir of BIEN_THE) {",
+				'\t\t\texpect(chamCong("CHAT", ir).cham).toEqual({',
+				'\t\t\t\ttype: "denied",',
+				"\t\t\t\treason: BUILDER_DENIED_REASON,",
+				"\t\t\t});",
+				"\t\t}",
 			].join("\n"),
 		),
 	"cay-lai-it-each": (sao) =>

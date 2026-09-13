@@ -113,16 +113,21 @@ evals:
       bien thien phai song), nen san phai bat moi phep duyet tren mot mang
       da ghim so luong ma than khong chua so sanh cheo luot — for...of, .forEach,
       va it.each/describe.each.
-      Doi chung duong, BA vecto tren ban sao, tat ca deu ma 2:
+      Doi chung duong, BON vecto tren ban sao, tat ca deu ma 2:
       vecto "cay-lai-for-of": cay lai dung khoi cu — mot toHaveLength(2) dung
       truoc mot for...of tren cung mang, than vong chi assert tung luot.
       vecto "cay-lai-foreach": cung hinh dang do viet bang BIEN_THE.forEach.
       vecto "cay-lai-it-each": cung hinh dang do viet bang it.each(BIEN_THE).
-      Ba cach viet nay la ba duong ma chieu chet moc lai duoi ten khac; bat mot
-      duong roi tuyen da chan ca lop chinh la lop loi vong nay ton tai de va.
+      vecto "cay-vao-bai-co-san": cay hinh dang cu vao BEN TRONG mot bai DA CO
+      san phep so cheo hai luot. Ba vecto tren deu cay mot bai MOI hoac mot cau
+      o than describe — ba diem-case cung MOT vi tri; vecto nay la thu duy nhat
+      chung minh pham vi do la THAN VONG chu khong phai ca bai. Vong cham 2 da
+      do: truoc khi va, dung vecto nay chay qua san voi ma 0.
+      Bon cach viet nay la bon duong ma chieu chet moc lai duoi ten khac; bat
+      mot duong roi tuyen da chan ca lop chinh la lop loi vong nay ton tai de va.
       Khong do o vecto nao -> ma 2 (THUOC DO THUNG, khong phai gian do hong):
       mot dot bien song sot la vi pham cua chinh phep do, dung nghia ma 2.
-      LENH TRAN (khong co --vecto) chay CA san tinh LAN ba vecto roi moi thoat 0
+      LENH TRAN (khong co --vecto) chay CA san tinh LAN bon vecto roi moi thoat 0
       — chieu do duoc noi vao chinh lenh cong, khong nam ngoai no.
   - id: E5
     criterion: AC-5
