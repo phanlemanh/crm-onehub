@@ -14,7 +14,7 @@
  * research fail lúc gọi — đổi một lỗi nói thật («chưa cấu hình») lấy một lỗi nói
  * dối. Tiền đề này chỉ sống trong đúng lượt chấm rồi biến mất.
  *
- *   bun _acceptance/lan-do/tien-de.mjs --chay "<lệnh răng>"
+ *   bun scripts/lan-do/tien-de.mjs --chay "<lệnh răng>"
  *
  * Mã thoát: trả NGUYÊN mã của lệnh răng. Đặt/dọn hỏng → mã 2 gọi tên, KHÔNG
  * chạy răng — hỏng tiền đề mà vẫn chấm là màu không tin được.

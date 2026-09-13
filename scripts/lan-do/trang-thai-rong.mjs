@@ -12,7 +12,7 @@
  * Chốt đọc từ DATABASE_URL thật, không tin lời dặn. Sai tên → mã 2 gọi tên
  * (không đo được), KHÔNG phải mã 1 — hạ tầng chưa sẵn không phải sản phẩm sai.
  *
- *   bun _acceptance/lan-do/trang-thai-rong.mjs --chay "<lệnh răng>"
+ *   bun scripts/lan-do/trang-thai-rong.mjs --chay "<lệnh răng>"
  *
  * Trả NGUYÊN mã của lệnh răng. Dựng hỏng hoặc trả-lại hỏng → mã 2.
  */
@@ -75,7 +75,7 @@ try {
 		"bash",
 		[
 			"-lc",
-			`bun _acceptance/lan-do/tien-de.mjs --chay ${JSON.stringify(lenh)}`,
+			`bun scripts/lan-do/tien-de.mjs --chay ${JSON.stringify(lenh)}`,
 		],
 		{ stdio: "inherit" },
 	);

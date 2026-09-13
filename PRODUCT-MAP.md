@@ -14,7 +14,6 @@ flowchart TD
   GB --> DG["Đã giao<br/>29 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>1 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
-  HS["Hồ sơ hỏng<br/>1 việc"]
 ```
 
 > **Bốn cổng người** — mỗi cổng là một câu hỏi chỉ người trả lời được:
@@ -75,7 +74,3 @@ flowchart TD
 ## Đã nghiệm thu giá trị
 
 - Bộ gieo đọc danh bạ tới khi cạn thay vì tới một trần đoán, và lộ số điện thoại theo danh sách tầng khai trong cấu hình (`nang-tran-trang-danh-ba`) — giao rộng (release)
-
-## Hồ sơ hỏng
-
-- `lan-do` — không đọc được hồ sơ (`(workspace)`): không có contract.md lẫn opportunity.md

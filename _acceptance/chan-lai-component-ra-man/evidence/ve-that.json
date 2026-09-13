@@ -349,87 +349,28 @@
 	],
 	"packages/ui/src/components/ai-elements/artifact.tsx": [
 		{
-			"xuat": "Artifact",
+			"xuat": "*",
 			"dong": [],
 			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "ArtifactAction",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "ArtifactActions",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "ArtifactClose",
-			"dong": [
-				"Close"
-			],
-			"mo": [
-				"Close"
-			],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "ArtifactContent",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "ArtifactDescription",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "ArtifactHeader",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "ArtifactTitle",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
+			"loi_dong": "khong nap duoc module: Cannot find module '/Users/manhphan/dev/crm-onehub/.claude/worktrees/duong-gieo/packages/ui/src/components/ai-elements/artifact.tsx' from '/Users/manhphan/dev/c",
 			"loi_mo": null
 		}
 	],
-	"packages/ui/src/components/ai-elements/chain-of-thought.tsx": [],
+	"packages/ui/src/components/ai-elements/chain-of-thought.tsx": [
+		{
+			"xuat": "*",
+			"dong": [],
+			"mo": [],
+			"loi_dong": "khong nap duoc module: Cannot find module '/Users/manhphan/dev/crm-onehub/.claude/worktrees/duong-gieo/packages/ui/src/components/ai-elements/chain-of-thought.tsx' from '/Users/manhph",
+			"loi_mo": null
+		}
+	],
 	"packages/ui/src/components/ai-elements/checkpoint.tsx": [
 		{
-			"xuat": "Checkpoint",
+			"xuat": "*",
 			"dong": [],
 			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "CheckpointIcon",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "CheckpointTrigger",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
+			"loi_dong": "khong nap duoc module: Cannot find module '/Users/manhphan/dev/crm-onehub/.claude/worktrees/duong-gieo/packages/ui/src/components/ai-elements/checkpoint.tsx' from '/Users/manhphan/dev",
 			"loi_mo": null
 		}
 	],
@@ -528,401 +469,29 @@
 	],
 	"packages/ui/src/components/ai-elements/model-selector.tsx": [
 		{
-			"xuat": "ModelSelector",
+			"xuat": "*",
 			"dong": [],
 			"mo": [],
-			"loi_dong": null,
+			"loi_dong": "khong nap duoc module: Cannot find module '/Users/manhphan/dev/crm-onehub/.claude/worktrees/duong-gieo/packages/ui/src/components/ai-elements/model-selector.tsx' from '/Users/manhphan",
 			"loi_mo": null
-		},
-		{
-			"xuat": "ModelSelectorContent",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "`DialogPortal` must be used within `Dialog`",
-			"loi_mo": "`DialogPortal` must be used within `Dialog`"
-		},
-		{
-			"xuat": "ModelSelectorDialog",
-			"dong": [
-				"Command Palette",
-				"Search for a command to run..."
-			],
-			"mo": [
-				"Command Palette",
-				"Search for a command to run..."
-			],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "ModelSelectorEmpty",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "ModelSelectorGroup",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "ModelSelectorInput",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "ModelSelectorItem",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "ModelSelectorList",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "ModelSelectorLogo",
-			"dong": [
-				"undefined logo"
-			],
-			"mo": [
-				"undefined logo"
-			],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "ModelSelectorLogoGroup",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "ModelSelectorName",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "ModelSelectorSeparator",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "ModelSelectorShortcut",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "ModelSelectorTrigger",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "`DialogTrigger` must be used within `Dialog`",
-			"loi_mo": "`DialogTrigger` must be used within `Dialog`"
 		}
 	],
 	"packages/ui/src/components/ai-elements/prompt-input.tsx": [
 		{
-			"xuat": "PromptInput",
-			"dong": [
-				"Upload files"
-			],
-			"mo": [
-				"Upload files"
-			],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputActionAddAttachments",
+			"xuat": "*",
 			"dong": [],
 			"mo": [],
-			"loi_dong": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider",
-			"loi_mo": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider"
-		},
-		{
-			"xuat": "PromptInputActionMenu",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputActionMenuContent",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "`MenuPortal` must be used within `Menu`",
-			"loi_mo": "`MenuPortal` must be used within `Menu`"
-		},
-		{
-			"xuat": "PromptInputActionMenuItem",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "`MenuItem` must be used within `Menu`",
-			"loi_mo": "`MenuItem` must be used within `Menu`"
-		},
-		{
-			"xuat": "PromptInputActionMenuTrigger",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "`DropdownMenuTrigger` must be used within `DropdownMenu`",
-			"loi_mo": "`DropdownMenuTrigger` must be used within `DropdownMenu`"
-		},
-		{
-			"xuat": "PromptInputAttachment",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider",
-			"loi_mo": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider"
-		},
-		{
-			"xuat": "PromptInputAttachments",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider",
-			"loi_mo": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider"
-		},
-		{
-			"xuat": "PromptInputBody",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputButton",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputCommand",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputCommandEmpty",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "PromptInputCommandGroup",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "PromptInputCommandInput",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "PromptInputCommandItem",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "PromptInputCommandList",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "PromptInputCommandSeparator",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "undefined is not an object (evaluating 'o.subscribe')",
-			"loi_mo": "undefined is not an object (evaluating 'o.subscribe')"
-		},
-		{
-			"xuat": "PromptInputFooter",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputHeader",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputHoverCard",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputHoverCardContent",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "`HoverCardPortal` must be used within `HoverCard`",
-			"loi_mo": "`HoverCardPortal` must be used within `HoverCard`"
-		},
-		{
-			"xuat": "PromptInputHoverCardTrigger",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "`HoverCardTrigger` must be used within `HoverCard`",
-			"loi_mo": "`HoverCardTrigger` must be used within `HoverCard`"
-		},
-		{
-			"xuat": "PromptInputProvider",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputSelect",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputSelectContent",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "`SelectContent` must be used within `Select`",
-			"loi_mo": "`SelectContent` must be used within `Select`"
-		},
-		{
-			"xuat": "PromptInputSelectItem",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "`SelectItem` must be used within `Select`",
-			"loi_mo": "`SelectItem` must be used within `Select`"
-		},
-		{
-			"xuat": "PromptInputSelectTrigger",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "`SelectTrigger` must be used within `Select`",
-			"loi_mo": "`SelectTrigger` must be used within `Select`"
-		},
-		{
-			"xuat": "PromptInputSelectValue",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "`SelectValue` must be used within `Select`",
-			"loi_mo": "`SelectValue` must be used within `Select`"
-		},
-		{
-			"xuat": "PromptInputSpeechButton",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputSubmit",
-			"dong": [
-				"Submit"
-			],
-			"mo": [
-				"Submit"
-			],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputTab",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputTabBody",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputTabItem",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputTabLabel",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputTabsList",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "PromptInputTextarea",
-			"dong": [],
-			"mo": [],
-			"loi_dong": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider",
-			"loi_mo": "usePromptInputAttachments must be used within a PromptInput or PromptInputProvider"
-		},
-		{
-			"xuat": "PromptInputTools",
-			"dong": [],
-			"mo": [],
-			"loi_dong": null,
+			"loi_dong": "khong nap duoc module: Cannot find module '/Users/manhphan/dev/crm-onehub/.claude/worktrees/duong-gieo/packages/ui/src/components/ai-elements/prompt-input.tsx' from '/Users/manhphan/d",
 			"loi_mo": null
 		}
 	],
 	"packages/ui/src/components/ai-elements/shimmer.tsx": [],
 	"packages/ui/src/components/ai-elements/suggestion.tsx": [
 		{
-			"xuat": "Suggestion",
+			"xuat": "*",
 			"dong": [],
 			"mo": [],
-			"loi_dong": null,
-			"loi_mo": null
-		},
-		{
-			"xuat": "Suggestions",
-			"dong": [
-				"[data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}"
-			],
-			"mo": [
-				"[data-radix-scroll-area-viewport]{scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;}[data-radix-scroll-area-viewport]::-webkit-scrollbar{display:none}"
-			],
-			"loi_dong": null,
+			"loi_dong": "khong nap duoc module: Cannot find module '/Users/manhphan/dev/crm-onehub/.claude/worktrees/duong-gieo/packages/ui/src/components/ai-elements/suggestion.tsx' from '/Users/manhphan/dev",
 			"loi_mo": null
 		}
 	],
