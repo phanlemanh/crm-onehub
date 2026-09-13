@@ -1,0 +1,94 @@
+{
+ "feature_plain": "Bài đo quyền của lượt thôi tuyên «đã chạy hai biến thể» và chuyển sang chứng minh một điều đo được: hình dạng tin nhắn không dịch được thành quyền.",
+ "will_do": [
+  {
+   "id": "AC-2",
+   "p": "Sẽ giữ nguyên hành vi cổng: lượt khai trò chuyện thì đóng, lượt khai dựng tác nhân thì mở — trên cả hai kiểu câu trả lời của người dùng."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ chứng minh phép đo mới bắt được một đường leo quyền mà hai thước đọc mã hiện có đều mù — và chứng minh bằng cách chạy chính hai thước ấy trên bản đã phá."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ chạy lại chín phép đo của hai hồ sơ đã ký chạm cùng tệp này, đòi mọi phép đo vẫn xanh."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ neo tập hai kiểu câu trả lời vào đúng nơi máy chủ sinh ra chúng, để thêm kiểu thứ ba là buộc phải khai."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ KHÔNG để bài đo tự tuyên đã quét một lớp: đổi kiểu câu trả lời mà khối quyền của lượt không đổi một byte thì mới tính là đã chứng minh."
+  },
+  {
+   "id": "AC-4",
+   "p": "Chặn hình dạng cũ mọc lại dưới tên khác — ghim số lượng rồi lặp mà không so chéo hai lượt, viết bằng ba cách nào cũng bị bắt."
+  }
+ ],
+ "scope_plain": "Không sửa một dòng mã sản phẩm, không đụng máy chủ hay giao diện — vòng này chỉ sửa thứ đo.",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Trục thứ nhất kê bốn cách một quyền có thể mọc lên mà không lộ tên khoá cũ; thước là sự cố thật 08/09 và một lỗ vòng trước đã cấy thử."
+  },
+  {
+   "i": 1,
+   "p": "Trục thứ hai kê năm cách một phép đo tuyên nhiều hơn nó phủ; thước là chính sổ lỗi sáu vòng chấm của hồ sơ trước."
+  },
+  {
+   "i": 2,
+   "p": "Trục thứ ba kê bốn hình thức bằng chứng; thước là hai kỹ thuật có tên trong ngành, không phải cảm tính."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Phép đo mới định tự khen bằng một câu khẳng định suông «hai thước cũ vẫn im» — mà một câu như thế không phân biệt được «đã soi đúng chỗ» với «soi nhầm chỗ nên chẳng thấy gì». Đã thêm bước bắt nó phải chứng minh mình soi đúng cây."
+  },
+  {
+   "i": 1,
+   "p": "Bộ tiêu chí dựng ra để vá lỗi «tuyên nhiều hơn phủ» lại tái phạm đúng lỗi ấy ở chỗ khác: tập hai kiểu câu trả lời là do người viết tay, không neo vào nơi máy chủ sinh ra. Đã thêm một tiêu chí buộc hai con số phải khớp."
+  },
+  {
+   "i": 2,
+   "p": "Thước chặn hình dạng cũ chỉ nhận đúng một cách viết; viết lại cách khác là lọt. Đã bắt nó phải đỏ ở cả ba cách viết."
+  },
+  {
+   "i": 3,
+   "p": "Danh sách phép đo phải chạy lại bỏ sót đúng cái mà hợp đồng hai lần viện ra làm lý do. Đã liệt đủ chín."
+  },
+  {
+   "i": 4,
+   "p": "Một trong bốn cách quyền mọc lên không tiêu chí nào phủ và cũng không nằm trong danh sách đã cắt. Không bài nào của vòng này đỏ được cho nó, nên nó được khai thẳng là giới hạn thay vì vá vội."
+  }
+ ],
+ "decisions_plain": [
+  {
+   "id": "d-20260912T145813Z-1",
+   "p": "Giữ lời hứa về lớp và làm cho nó thật — đổi lại phải dựng một bất biến mới thay vì xoá bớt lời hứa."
+  },
+  {
+   "id": "d-20260912T145813Z-2",
+   "p": "Cắm phép thử đỏ vào chỗ chưa ai canh thay vì chỗ dễ — đổi lại phép thử phải phá hai tệp một lúc."
+  },
+  {
+   "id": "d-20260912T145813Z-3",
+   "p": "KHÔNG viết đặc tả giao diện — vòng này không có gì cho người nhìn."
+  },
+  {
+   "id": "d-20260912T145813Z-4",
+   "p": "KHÔNG phủ hai cách leo quyền còn lại — đổi lại chúng vẫn không có gì canh sau vòng này."
+  },
+  {
+   "id": "d-20260912T150533Z-5",
+   "p": "Sửa cả hai lỗ nặng người soi nêu, trước khi mời anh duyệt — đổi lại vòng lên sáu tiêu chí thay vì năm."
+  },
+  {
+   "id": "d-20260912T150533Z-6",
+   "p": "Sửa nốt ba lỗ vừa — đổi lại một trong ba kết thúc bằng lời khai giới hạn chứ không bằng bản vá."
+  }
+ ]
+}
