@@ -112,6 +112,7 @@ evals:
     criterion: AC-5
     executor: script
     cmd: config:executors.script.cai_dat_trang_thai_rong
+    expected_exit: 2
     expected: >-
       THOAT MA 2 la ket qua DA KHAI TRUOC cua eval nay, khong phai that bai: hop dong
       AC-5 khai san rang hai trong ba o KHONG dung duoc trong kho nay.
