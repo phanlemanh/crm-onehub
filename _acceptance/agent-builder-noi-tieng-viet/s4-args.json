@@ -1,0 +1,433 @@
+{
+  "generated_at": "2026-09-16T08:13:18Z",
+  "generated_sha": "445d36e5a62c2d8b7507822fcba0ebd28aabd3d8",
+  "mainBranchInfo": {
+    "branch": "onehub",
+    "source": "remote"
+  },
+  "slug": "agent-builder-noi-tieng-viet",
+  "round": 2,
+  "riskTier": "T2",
+  "evals": [
+    {
+      "id": "E1",
+      "criterion": "AC-1",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"node _acceptance/agent-builder-noi-tieng-viet/rang/man-that.mjs hai-tieng\"",
+      "expected": "exit 0. Danh sach route SINH TU THU MUC (agent-builder), khong go tay. Moi route\ndung hai luot vi/en tren may chu that, redirect: manual. Ba ve tren TUNG route:\nso chuoi bang nhau · moi cap khac nhau tru bang AC-6 · luot vi co dau tru dong\nmien_dau co ten. Tap rong tren mot route la thoat ma 2 goi ten route.\nBang dong route-cua-lat.json chia route thanh dung-duoc-ngay va can-mot-ban-ghi-that.\nBang do chiu CHIEU DO: chan mo tung route can_vat bang mot dinh danh KHONG CO THAT;\nroute nao van ve ra chu la DO goi ten — ban khai da cu. Route can ban ghi mang sang\ncong ky duoi nhan GIOI HAN DA KHAI, khong ha xuong doc ma roi ghi dat.\nChieu do: ghim mot kho chuoi ve \"vi\" trong mot trang thi luot en hien tieng Viet,\nve 2 gay, chan do goi ten trang va duong DOM.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "apps/app/components/agent-builder/**",
+        "apps/app/app/(app)/[slug]/(agent-builder)/**",
+        "apps/app/lib/messages/agent-builder-*.ts"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.ab_hai_tieng"
+    },
+    {
+      "id": "E2",
+      "criterion": "AC-1b",
+      "cmd": "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-cung-lat.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json",
+      "expected": "exit 0. Mui goi tro ve chu-cung-lat.mjs cua dot mot kem --lat tro toi ban khai lat\nnay. Dan so sinh tu dia; bo quet doc BANG so file lat sinh; 0 chuoi viet thang trong\nJSX ngoai mien tru co ten; mien tru chet la DO goi ten dong.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "apps/app/components/agent-builder/**",
+        "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.ab_chu_cung_jsx"
+    },
+    {
+      "id": "E3",
+      "criterion": "AC-2",
+      "cmd": "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json --chan toast",
+      "expected": "exit 0. Bang dong toast ghim (file, khoa kho chuoi); doi chieu TUNG MUC ca hai chieu;\nlech mot muc la thoat ma 2 in ca THIEU lan THUA. In so luot chuyen tiep error.message\nda bo qua. Chieu do: doi mot khoa trong bang thanh khoa khong ai doc thi tong van bang\nnhau nhung chan thoat ma 2.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "apps/app/components/agent-builder/**",
+        "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.ab_toast"
+    },
+    {
+      "id": "E4",
+      "criterion": "AC-3",
+      "cmd": "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json --chan tieu-de",
+      "expected": "exit 0. Dem O tieu de, khong dem chuoi: bon generateMetadata. So o nhan ra BANG bon,\nlech la thoat ma 2 liet tung o. Ca bon doc tu kho chuoi.\nChieu do: doi mot ve chuoi viet thang thi chan do goi ten o.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "apps/app/app/(app)/[slug]/(agent-builder)/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.ab_tieu_de"
+    },
+    {
+      "id": "E5",
+      "criterion": "AC-4",
+      "cmd": "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json --chan thuoc-tinh",
+      "expected": "exit 0. DANH SACH TEN THUOC TINH SINH TU CAY, khong ke tay: lay MOI ten thuoc tinh mang\nchuoi roi TRU theo danh sach ky thuat khai co ten. Mot ten thuoc tinh mang chu nguoi doc\nma khong nam trong danh sach ky thuat va cung khong doc tu kho chuoi la DO goi ten\nfile:dong:ten-thuoc-tinh. So thuoc tinh mang chu bat duoc phai BANG neo 57 — lech la\nthoat ma 2 kem diff. Moi dong mien tru ky thuat phai con doi tuong that.\nChieu do: doi mot aria-label ve chuoi viet thang thi chan do dung dong.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "apps/app/components/agent-builder/**",
+        "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.ab_thuoc_tinh"
+    },
+    {
+      "id": "E6",
+      "criterion": "AC-5",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"node _acceptance/agent-builder-noi-tieng-viet/rang/man-that.mjs trang-thai\"",
+      "expected": "exit 0. Bang dong chin o trang thai (tam o ST-* cua design cong o rong cua thanh ben).\nMoi o tro mot DUONG vao kho chuoi cua san pham — chu mong doi doc tu do, khong go tay.\nDuong chet la thoat ma 2 (thieu tien de). O khai dung duoc ma chu KHONG ve ra la DO;\no khai KHONG dung duoc ma chu VE RA la DO — ban khai da cu. It nhat MOT o phai dung\nduoc; khong o nao dung duoc la thoat ma 2. O khong dung duoc GOI TEN kem ly do duoi\nnhan GIOI HAN DA KHAI va mang sang cong ky — khong ha xuong doc ma roi ghi dat.\nChieu do da chung 06/09: (a) lat mot o dung-duoc thanh khong-dung-duoc -> ma 1 goi ten;\n(b) tro mot o vao duong kho chuoi khong ton tai -> ma 2 goi ten; (c) vet dot bien\ngo {t.doi.trong} khoi man -> CHI chan nay bat, chung rang no do MAN chu khong do KHO.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "apps/app/components/agent-builder/**",
+        "apps/app/lib/messages/agent-builder-*.ts"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.ab_trang_thai"
+    },
+    {
+      "id": "E8",
+      "criterion": "AC-6b",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"node _acceptance/agent-builder-noi-tieng-viet/rang/man-that.mjs du-lieu-nguoi-nhap\"",
+      "expected": "exit 0. Bang dong (file, bieu thuc). Chan doc CAY CU PHAP: phan tu JSX boc dung\nbieu thuc do phai mang translate=\"no\". Thieu thuoc tinh la DO goi ten file:dong va\nthe; bieu thuc khong con trong file la thoat ma 2 (ban khai da cu); bang rong la\nthoat ma 2. O co doi tuong ngoai thu muc lat khai o ngoai_lat va chiu cung phep do.\nGIOI HAN DA KHAI: nua do-tren-man-that nam sau cung quyet dinh gieo voi AC-1 —\nworkspace do co 0 tac nhan, 0 hoi thoai.\nChieu do da chung 06/09: (a) go translate=\"no\" khoi mot phan tu -> ma 1 goi dung\nfile:dong; (b) tro mot dong vao mot bieu thuc khong ton tai -> ma 2 goi ten.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "apps/app/components/agent-builder/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.ab_du_lieu_nguoi_nhap"
+    },
+    {
+      "id": "E9",
+      "criterion": "AC-7",
+      "cmd": "node _acceptance/agent-builder-noi-tieng-viet/rang/dot-bien.mjs",
+      "expected": "exit 0. Bang DONG ghim (hinh dang, chan chuyen trach) cho sau hinh dang cua truc A: van\nban JSX · thuoc tinh · tieu de · toast · khoa object · component dung chung. Moi vet phai\nbi dung CHAN CHUYEN TRACH cua hinh dang do bat voi MA 1 — khong nhan \"mot chan nao do bat\nduoc\", vi mot chan hong van co the duoc chan bat-het che lap. Vet cua hinh dang component\ndung chung phai cam o file NGOAI components/agent-builder, khai duong dan nguyen van.\nMa 2 in rieng va KHONG tinh la bat duoc — vet ma MOI chan tra ma 2 la KHONG DO DUOC (ma 2).\nVet nam trong ma may chu chay khai cho_ms de cho nap lai. Cay lanh thi moi chan xanh;\ngit status truoc/sau bang nhau.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.ab_dot_bien"
+    },
+    {
+      "id": "E10",
+      "criterion": "AC-8",
+      "cmd": "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json",
+      "expected": "exit 0. Hang FILE tu ba nguon doc lap bang nhau; hang VAT so theo TAP cho toast va so\no tieu de. So quet ra BANG bon con so neo trong ban khai — lech la thoat ma 2 kem diff\nten file. Lech la thoat ma 2 in ca hai hang.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.ab_khai_sinh"
+    },
+    {
+      "id": "E11",
+      "criterion": "AC-8",
+      "cmd": "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json --chan dan-so",
+      "expected": "exit 0. Truoc het chay NEN: hai chan xanh tren cay lanh, khong thi thoat ma 2 —\nchieu xanh gay thi chieu do khong noi len dieu gi. Roi hai thi nghiem: (a) tha mot\nfile .tsx mang chu tieng Anh vao thu muc lat → dan so tang 1 VA hai chan deu DO;\n(b) CAN GAT khong_quet do bang QUAN HE, khong bang \"con tieng Anh\" — sau file hoan CON\ntieng Anh la dung thiet ke: so dong khong_quet phai BANG sau (thua hay thieu mot dong la\nthoat ma 2 goi ten file), va mot file bi loai tru mang chuoi TRUNG voi mot gia tri cua ba\nkho chuoi moi la DO — nghia la chu cua dot nay da ro sang vung hoan. Chan tra ma 2 khi co vet la chua do duoc, KHONG tinh la bat.\nCa hai deu don sach, git status bang nhau.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "_acceptance/agent-builder-noi-tieng-viet/rang/**",
+        "apps/app/components/agent-builder/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.ab_dan_so_tu_dia"
+    },
+    {
+      "id": "E12",
+      "criterion": "AC-9",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"node _acceptance/agent-builder-noi-tieng-viet/rang/man-that.mjs be-rong\"",
+      "expected": "exit 0. Moi route dung duoc cua lat o 360px hai luot; chi tinh phan tu NHIN THAY DUOC\n(bo qua phan tu nam trong hop <=1px, vd chu chi danh cho trinh doc man hinh);\nscrollWidth > clientWidth la DO; en la doi chung duong; khong mien tru truncate;\ntap rong thoat ma 2. Gioi han ke thua noi ro trong output: mu voi vung chua xuong dong.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "apps/app/components/agent-builder/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.ab_be_rong"
+    },
+    {
+      "id": "E14",
+      "criterion": "AC-10",
+      "cmd": "node _acceptance/man-cai-dat-noi-tieng-viet/rang/moi-chuoi.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json",
+      "expected": "exit 0. Mui goi tro ve moi-chuoi.mjs cua dot mot kem --lat. Lay MOI chuoi, tru theo\nluat co ten voi hai danh sach TACH BIET (thuoc tinh JSX / khoa object). Con tieng Anh\nla DO in file:dong:boi canh:nguyen van. 0 chuoi quet ra la thoat ma 2. Giu-nguyen chet\nla DO.\nCA CHAN-KHONG-DUOC-NO (ranh gioi): mot dong giu-nguyen CON doi tuong that trong ma thi\nchan KHONG duoc do vi no — ghim so dong giu-nguyen song va doi chan van thoat 0. Thieu\nca nay thi \"0 chuoi tieng Anh\" khong phan biet duoc \"da dich het\" voi \"mien tru nuot het\".",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "apps/app/components/agent-builder/**",
+        "_acceptance/agent-builder-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.ab_moi_chuoi"
+    },
+    {
+      "id": "E15",
+      "criterion": "AC-11",
+      "cmd": "node _acceptance/agent-builder-noi-tieng-viet/rang/mot-bo-thuoc.mjs",
+      "expected": "exit 0. So than ham va than mo-dun giua rang/ cua lat nay va rang/ cua ba lat truoc:\nmot khoi trung tu 12 dong tro len la DO kem ten hai file va dai dong — bat ca file\n.mjs lan .sh. Chan tu chot tien de: moi script ma o cam ab_* tro toi phai co mat,\nthieu la thoat ma 2. Chieu do chung bang chep mot thuoc cua vong truoc sang rang/\nlat nay.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "_acceptance/agent-builder-noi-tieng-viet/rang/**",
+        "_acceptance/man-cai-dat-noi-tieng-viet/rang/**",
+        "_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/**"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.ab_mot_bo_thuoc"
+    },
+    {
+      "id": "E16",
+      "criterion": "AC-12",
+      "cmd": "cd apps/app && bun test test/messages-guard.spec.ts",
+      "expected": "exit 0. Bo canh kho chuoi: moi gia tri vi co dau tru mien tru co ten, khong gia tri\nnao y het en, moi ham ghep bien co khang dinh ghim va so ham bang so khang dinh,\nkhong khoa chet. Ba kho agent-builder-* tu dong nam trong MODULE vi bo canh sinh\ndanh sach tu readdirSync(lib/messages).",
+      "executor": "test",
+      "expectedExit": 0,
+      "paths": [
+        "apps/app/lib/messages/agent-builder-*.ts",
+        "apps/app/test/messages-guard.spec.ts"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.test.rang3_khoa_chet"
+    },
+    {
+      "id": "E17",
+      "criterion": "AC-12",
+      "cmd": "node _acceptance/agent-builder-noi-tieng-viet/rang/tu-dien.mjs",
+      "expected": "exit 0. CONTEXT.md co muc cho danh tu trung tam cua lat (Tac nhan), va moi tu khai\ntrong muc do that su xuat hien trong ban vi cua ba kho chuoi moi — muc tu dien chet\n(khai mot tu ma khong kho nao dung) la DO goi ten tu.\nChieu do: them mot tu khong ai dung vao muc thi chan do.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "CONTEXT.md",
+        "apps/app/lib/messages/agent-builder-*.ts"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.ab_tu_dien"
+    },
+    {
+      "id": "E18",
+      "criterion": "AC-13",
+      "expected": "Ban dich doc nhu tieng Viet cua nguoi lam nghe. Khong chuoi nao la chu go loi hay chu\nthu nghiem con sot. Danh tu trung tam dung nhat quan mot chu, khong lan giua hai cach\ngoi trong cung mot kho.",
+      "question": "Ba kho chuoi nay doc nhu tieng Viet cua nguoi quan tri khong: danh tu theo CONTEXT.md\n(tac nhan · hoi thoai · luot chay · cong ty · ca nhan), thuat ngu ky thuat giu ten\nthat (manifest, webhook, API), cau ghep so nhieu tieng Anh da thanh cau Viet tu nhien,\nva cho nao con la chu dich may thi neu dich danh khoa?",
+      "executor": "judgment",
+      "expectedExit": 0,
+      "inputs": [
+        "/Users/manh-macmini/dev/crm/apps/app/lib/messages/agent-builder-khung.ts",
+        "/Users/manh-macmini/dev/crm/apps/app/lib/messages/agent-builder-tac-nhan.ts",
+        "/Users/manh-macmini/dev/crm/apps/app/lib/messages/agent-builder-ket-qua.ts",
+        "/Users/manh-macmini/dev/crm/CONTEXT.md"
+      ],
+      "inputsHash": "c2e2eba16da2dae03c62f8bd7ba44dccbc349bbc9fa8a6bef3bb9748efbed934"
+    }
+  ],
+  "suiteCommands": [
+    "bun run test",
+    "bunx turbo run lint --force",
+    "bun run lint:slop",
+    "bunx turbo run build --force"
+  ],
+  "diffBase": "bd99ba3f1110bcac6db51cc3ddda996858ebc957",
+  "repoRoot": "/Users/manh-macmini/dev/crm",
+  "personasPath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0/skills/acceptance/references/judge-personas.md",
+  "templatePath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0/skills/acceptance/references/evidence-report-template.md",
+  "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
+  "contractPath": "/Users/manh-macmini/dev/crm/_acceptance/agent-builder-noi-tieng-viet/contract.md",
+  "invokedAt": "2026-09-16T08:13:18Z",
+  "invokedSha": "445d36e5a62c2d8b7507822fcba0ebd28aabd3d8",
+  "vungVat": [
+    "_acceptance/agent-builder-noi-tieng-viet/evals.yaml",
+    "_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/chu-la-cua-kho.json",
+    "_acceptance/config.yaml",
+    "_acceptance/man-cai-dat-noi-tieng-viet/evals.yaml",
+    "lib/nguong-o-co-hoi.cjs",
+    "scripts/khong-can-nguoi.mjs",
+    "scripts/lan-do/tien-de.mjs"
+  ],
+  "ngoaiVatGlobs": [
+    "docs/**",
+    "**/*.md",
+    "PRODUCT-MAP.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "scripts/pre-merge-check.sh",
+    "scripts/recheck-evidence.cjs",
+    "lib/evidence-core.cjs",
+    "lib/gap-probe.cjs",
+    "lib/workspace-record.cjs",
+    "lib/ac-line.cjs",
+    "lib/md-section.cjs",
+    "lib/eval-yaml.cjs",
+    "lib/lop-nhin-thay.cjs",
+    "_acceptance/*/**/*.md",
+    "_acceptance/*/**/*.jsonl"
+  ],
+  "ngoaiVatFiles": [
+    "_acceptance/agent-builder-noi-tieng-viet/contract.md",
+    "_acceptance/agent-builder-noi-tieng-viet/decisions.jsonl",
+    "_acceptance/auto-pr-thoi-do-o-ban-re/evidence-report.md",
+    "_acceptance/auto-pr-thoi-do-o-ban-re/run-log.jsonl",
+    "_acceptance/chu-mac-dinh-thu-vien-ngoai/evidence-report.md",
+    "_acceptance/chu-mac-dinh-thu-vien-ngoai/run-log.jsonl",
+    "_acceptance/khang-dinh-microsoft-co-rang/evidence-report.md",
+    "_acceptance/khang-dinh-microsoft-co-rang/run-log.jsonl",
+    "_acceptance/khoa-lo-giu-tran/evidence-report.md",
+    "_acceptance/khoa-lo-giu-tran/run-log.jsonl",
+    "_acceptance/man-cai-dat-noi-tieng-viet/evidence-report.md",
+    "_acceptance/man-cai-dat-noi-tieng-viet/run-log.jsonl",
+    "_acceptance/o-cam-khai-thac-trung-tinh/evidence-report.md",
+    "_acceptance/o-cam-khai-thac-trung-tinh/run-log.jsonl",
+    "_acceptance/sua-test-do-thu-tu-nap/evidence-report.md",
+    "_acceptance/sua-test-do-thu-tu-nap/run-log.jsonl",
+    "lib/ac-line.cjs",
+    "lib/eval-yaml.cjs",
+    "lib/evidence-core.cjs",
+    "lib/lop-nhin-thay.cjs",
+    "lib/md-section.cjs",
+    "scripts/pre-merge-check.sh",
+    "scripts/recheck-evidence.cjs"
+  ],
+  "diffFiles": [
+    "_acceptance/agent-builder-noi-tieng-viet/contract.md",
+    "_acceptance/agent-builder-noi-tieng-viet/decisions.jsonl",
+    "_acceptance/agent-builder-noi-tieng-viet/evals.yaml",
+    "_acceptance/auto-pr-thoi-do-o-ban-re/evidence-report.md",
+    "_acceptance/auto-pr-thoi-do-o-ban-re/run-log.jsonl",
+    "_acceptance/chu-mac-dinh-thu-vien-ngoai/evidence-report.md",
+    "_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/chu-la-cua-kho.json",
+    "_acceptance/chu-mac-dinh-thu-vien-ngoai/run-log.jsonl",
+    "_acceptance/config.yaml",
+    "_acceptance/khang-dinh-microsoft-co-rang/evidence-report.md",
+    "_acceptance/khang-dinh-microsoft-co-rang/run-log.jsonl",
+    "_acceptance/khoa-lo-giu-tran/evidence-report.md",
+    "_acceptance/khoa-lo-giu-tran/run-log.jsonl",
+    "_acceptance/man-cai-dat-noi-tieng-viet/evals.yaml",
+    "_acceptance/man-cai-dat-noi-tieng-viet/evidence-report.md",
+    "_acceptance/man-cai-dat-noi-tieng-viet/run-log.jsonl",
+    "_acceptance/o-cam-khai-thac-trung-tinh/evidence-report.md",
+    "_acceptance/o-cam-khai-thac-trung-tinh/run-log.jsonl",
+    "_acceptance/sua-test-do-thu-tu-nap/evidence-report.md",
+    "_acceptance/sua-test-do-thu-tu-nap/run-log.jsonl",
+    "lib/ac-line.cjs",
+    "lib/eval-yaml.cjs",
+    "lib/evidence-core.cjs",
+    "lib/lop-nhin-thay.cjs",
+    "lib/md-section.cjs",
+    "lib/nguong-o-co-hoi.cjs",
+    "scripts/khong-can-nguoi.mjs",
+    "scripts/lan-do/tien-de.mjs",
+    "scripts/pre-merge-check.sh",
+    "scripts/recheck-evidence.cjs"
+  ],
+  "fileDoTrongDiff": [
+    "_acceptance/agent-builder-noi-tieng-viet/evals.yaml",
+    "_acceptance/chu-mac-dinh-thu-vien-ngoai/rang/chu-la-cua-kho.json",
+    "_acceptance/config.yaml",
+    "_acceptance/man-cai-dat-noi-tieng-viet/evals.yaml"
+  ],
+  "coverageFiles": [],
+  "coEvalPaths": true,
+  "evalsHash": "1ec56d1c96b6202253a511a8f1a9b61d6a44848e8712ee34e5c738c9a6f2819a",
+  "runBaseline": true
+}
