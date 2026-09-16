@@ -28,7 +28,17 @@ export const DOC_O = (o) =>
 	});
 
 export const GOC = resolve(HERE, "../../..");
-export const EMAIL = process.env.EMAIL_DO ?? "man-xin-quyen@localhost";
+export const EMAIL =
+	process.env.EMAIL_DO ?? `${process.pid}-xin-quyen@localhost`;
+
+export function phienAnToan() {
+	try {
+		return phien(EMAIL);
+	} catch (loi) {
+		const chi = String(loi?.stderr ?? loi?.message ?? loi).trim().slice(-400);
+		tuChoi(`khong tao duoc phien cho ${EMAIL}: ${chi}`);
+	}
+}
 export const KHO_GOC = process.env.KHO_GOC ?? GOC;
 
 const DOC_KHO =
@@ -103,7 +113,7 @@ export async function moMan(browser, tieng, cookie, app = APP) {
 
 async function lenhTienDe() {
 	await chotCay();
-	const cookie = phien(EMAIL);
+	const cookie = phienAnToan();
 
 	const gieoDuoc = gieo("both");
 	if (gieoDuoc !== "google,microsoft") {
@@ -174,7 +184,7 @@ function ket(loi, dat) {
 
 async function lenhNamO() {
 	await chotCay();
-	const cookie = phien(EMAIL);
+	const cookie = phienAnToan();
 	gieo("both");
 	const browser = await moTrinhDuyet();
 	const loi = [];
@@ -205,7 +215,7 @@ async function lenhNamO() {
 
 async function lenhBaNhanh() {
 	const kho = await chotCay();
-	const cookie = phien(EMAIL);
+	const cookie = phienAnToan();
 	const browser = await moTrinhDuyet();
 	const loi = [];
 	try {
@@ -252,7 +262,7 @@ async function lenhBaNhanh() {
 
 async function lenhTieuDeTaiLieu() {
 	await chotCay();
-	const cookie = phien(EMAIL);
+	const cookie = phienAnToan();
 	gieo("both");
 	const browser = await moTrinhDuyet();
 	const loi = [];
@@ -268,7 +278,7 @@ async function lenhTieuDeTaiLieu() {
 
 async function lenhKhongDich() {
 	await chotCay();
-	const cookie = phien(EMAIL);
+	const cookie = phienAnToan();
 	gieo("both");
 	const browser = await moTrinhDuyet();
 	const loi = [];
@@ -321,7 +331,7 @@ const DO_BE_RONG = (o) =>
 
 async function lenhBeRong() {
 	await chotCay();
-	const cookie = phien(EMAIL);
+	const cookie = phienAnToan();
 	gieo("both");
 	const browser = await moTrinhDuyet();
 	const loi = [];
@@ -429,7 +439,7 @@ async function chuTrongThongBao(page) {
 
 async function doHaiTieng(ten, chay, sauCung) {
 	await chotCay();
-	const cookie = phien(EMAIL);
+	const cookie = phienAnToan();
 	gieo("both");
 	const browser = await moTrinhDuyet();
 	const loi = [];
@@ -500,7 +510,7 @@ const lenhLoiDangXuat = () =>
 
 async function lenhChupSan() {
 	const kho = await chotCay();
-	const cookie = phien(EMAIL);
+	const cookie = phienAnToan();
 	gieo("both");
 	const thuMuc = `${HERE}/../evidence`;
 	mkdirSync(thuMuc, { recursive: true });
