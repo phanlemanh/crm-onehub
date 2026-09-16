@@ -177,6 +177,7 @@ Cùng một lớp, ở mặt tài liệu — đều đã sửa trong vòng này:
 
 - eval: E5
   run_id: s4r3d-20260904T130156Z-16359-E5
+  exit_code: 2
   khong_do_duoc: tien-de-thieu (ma thoat 2) — KHONG phai mot phep do truot, ma la mot phep do TU CHOI chay vi tien de khong dung duoc. Gioi han da khai o AC-5 va o muc Known limits.
   verifier: config:executors.script.cai_dat_trang_thai_rong
   verified_at: 2026-09-04T13:02:22Z
