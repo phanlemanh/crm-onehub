@@ -358,7 +358,7 @@ evals:
   - id: E15
     criterion: AC-6
     executor: script
-    cmd: config:executors.design.gate
+    cmd: config:executors.test.cp_san_thiet_ke
     paths:
       - "apps/app/app/**"
       - "packages/ui/**"
