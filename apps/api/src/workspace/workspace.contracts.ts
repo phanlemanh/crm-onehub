@@ -76,6 +76,7 @@ export const workspaceOutput = z.object({
 	viewerRole: z.enum(WORKSPACE_ROLES).nullable(),
 	canRename: z.boolean(),
 	canChangeRoles: z.boolean(),
+	canManageMembers: z.boolean(),
 });
 
 export type Workspace = z.infer<typeof workspaceOutput>;

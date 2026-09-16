@@ -323,3 +323,101 @@ describe("chu-cuoi-cung", () => {
 		]);
 	});
 });
+
+describe("quyen-hai-ve", () => {
+	beforeEach(async () => {
+		await don();
+		await dungKho();
+	});
+
+	it("ve dich vu: vai member bi tu choi ca bon thu tuc, vai admin thi qua", async () => {
+		await dungNguoi("chu", "owner");
+		const thuong = await dungNguoi("thuong", "member");
+		const quan = await dungNguoi("quan", "admin");
+
+		const thuongMember = await db.member.findUnique({
+			where: {
+				organizationId_userId: {
+					organizationId: WORKSPACE_ID,
+					userId: thuong,
+				},
+			},
+			select: { id: true },
+		});
+
+		const goi = async (ai: string) => {
+			const ket: boolean[] = [];
+
+			for (const chay of [
+				() => workspace.allowances(ai),
+				() => workspace.allowEmail(ai, { email: `x-${ai}@gmail.com`, role: "member" }),
+				() => workspace.revokeAllowance(ai, { allowanceId: "khong-co" }),
+				() => workspace.removeMember(ai, { memberId: thuongMember?.id ?? "" }),
+			]) {
+				try {
+					await chay();
+					ket.push(true);
+				} catch (e) {
+					ket.push(!(e as Error).message.includes("Only an owner or an admin"));
+				}
+			}
+
+			return ket;
+		};
+
+		const cuaThuong = await goi(thuong);
+		const cuaQuan = await goi(quan);
+
+		expect([cuaThuong, "vai member: ca bon deu bi tu choi vi quyen"]).toEqual([
+			[false, false, false, false],
+			"vai member: ca bon deu bi tu choi vi quyen",
+		]);
+
+		expect([
+			cuaQuan.every((qua) => qua),
+			"doi chung duong: vai admin khong bi chan vi quyen o thu tuc nao",
+		]).toEqual([
+			true,
+			"doi chung duong: vai admin khong bi chan vi quyen o thu tuc nao",
+		]);
+	});
+
+	it("ve mat nguoi: co quyet dinh doc CUNG mot ham, va man Members khong nhap goi may chu", async () => {
+		const chu = await dungNguoi("chu", "owner");
+		const thuong = await dungNguoi("thuong", "member");
+
+		const cuaChu = await workspace.get(chu);
+		const cuaThuong = await workspace.get(thuong);
+
+		expect([
+			cuaChu.canManageMembers,
+			cuaThuong.canManageMembers,
+			"co bat cho chu, tat cho thanh vien thuong",
+		]).toEqual([true, false, "co bat cho chu, tat cho thanh vien thuong"]);
+
+		const transpiler = new Bun.Transpiler({ loader: "tsx" });
+		const goc = `${import.meta.dir}/../../app/app/(app)/[slug]/settings/members`;
+		const glob = new Bun.Glob("**/*.tsx");
+		const pham: string[] = [];
+		let daSoi = 0;
+
+		for await (const ten of glob.scan({ cwd: goc })) {
+			const ma = await Bun.file(`${goc}/${ten}`).text();
+			if (!ma.includes('"use client"')) continue;
+
+			daSoi += 1;
+			const nhap = transpiler.scanImports(ma).map((m) => m.path);
+
+			if (nhap.some((path) => path === "@crm/auth" || path.startsWith("@crm/auth/")))
+				pham.push(`${ten} nhap @crm/auth`);
+			if (nhap.some((path) => path === "@crm/db" || path.startsWith("@crm/db/")))
+				pham.push(`${ten} nhap @crm/db`);
+		}
+
+		expect([daSoi > 0, pham, "co tep client de soi, va khong tep nao nhap goi may chu"]).toEqual([
+			true,
+			[],
+			"co tep client de soi, va khong tep nao nhap goi may chu",
+		]);
+	});
+});

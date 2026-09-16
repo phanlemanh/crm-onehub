@@ -114,6 +114,7 @@ export class WorkspaceService {
 			viewerRole: role,
 			canRename: canRenameWorkspace(role),
 			canChangeRoles: canChangeRole(role),
+			canManageMembers: isWorkspaceAdmin(role),
 		};
 	}
 
