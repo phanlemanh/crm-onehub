@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
+verified_commit: 96ec6d9b0447bb8e3eafaf36c84dc9902372ebef
 human_signoff: Mạnh 2026-09-06 — ký trên giới hạn đã khai: 6 mục ngoài hợp đồng ghi vào giới hạn đã biết, cắt/hoãn đồng ý, Treo phê hết, và MỘT lỗ TRONG hợp đồng (AC-3: chân can chưa có chiều đỏ tự chạy) máy khai chứ không sửa vì đã hết ba vòng chấm.
 ---
 
@@ -180,3 +180,7 @@ sha: 2a72fed4c93b69bfeb479556ac616d5a789b4b98 · suites: 4 lệnh exit 0
 
 run_id: repin-20260907T005455Z-44758
 sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0
+
+### Re-pin lần 3 — 2026-09-16, do Chiến dịch ghim lại theo mốc kit 2.14.0 — sáu hồ sơ làn xanh; năm hồ sơ còn lại đỏ vì nguyên nhân thật, đi lượt riêng
+run_id: repin-20260916T014000Z-73664
+sha: 96ec6d9b0447bb8e3eafaf36c84dc9902372ebef · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
