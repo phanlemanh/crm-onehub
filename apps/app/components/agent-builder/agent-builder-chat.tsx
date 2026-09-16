@@ -431,6 +431,7 @@ export function AgentBuilderChat({
 									key={item.id}
 									messageId={item.id}
 									scrollAnchor={item.kind === "submission"}
+									userContent
 								>
 									{item.kind === "submission" ? (
 										<UserSubmission
@@ -453,6 +454,7 @@ export function AgentBuilderChat({
 									key={item.clientRequestId}
 									messageId={`sending:${item.clientRequestId}`}
 									scrollAnchor
+									userContent
 								>
 									<UserSubmission
 										submission={{
@@ -721,6 +723,7 @@ function SharedAgentChat({
 									key={item.id}
 									messageId={item.id}
 									scrollAnchor={item.kind === "submission"}
+									userContent
 								>
 									{item.kind === "submission" ? (
 										<UserSubmission
