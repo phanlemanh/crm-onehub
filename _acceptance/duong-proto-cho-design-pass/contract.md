@@ -6,7 +6,7 @@ owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
 design_doc: docs/superpowers/specs/2026-09-16-duong-proto-cho-design-pass-design.md
-status: implemented
+status: approved
 approved_by: Mạnh
 approved_at: 2026-09-16
 ---
@@ -120,6 +120,22 @@ Then mỗi ô cho một ảnh khác biệt thấy được, không ô nào trắ
 khác; ảnh nằm dưới `_acceptance/duong-proto-cho-design-pass/evidence/design-pass/`
 theo khuôn tên `<state>--<breakpoint>--<theme>.png`.
 
+**AC-15 (cross-layer)** — Lệnh trong tài liệu thật sự truyền được cờ
+Given `docs/environment.md` khai một biến có **ba** nhà: `.env.example`,
+`env.validation.ts` khi API đọc, và `globalPassThroughEnv` của `turbo.json`
+When chạy đúng lệnh khai ở `design_pass.dev_cmd` (đi qua turbo, chế độ `strict`)
+Then cờ tới được tiến trình con và `/proto` mở được. Phép đo phải đọc **nhà thứ
+ba**, không chỉ kiểm chuỗi `PROTO_ROUTE=1` có mặt trong lệnh — kiểm chuỗi là đo
+lời khai, không đo hành vi.
+
+**AC-16** — Slug hồ sơ giải được thành một bản mẫu
+Given `design_pass` điền `{slug}` bằng slug **hồ sơ nghiệm thu** (tên thư mục
+dưới `_acceptance/`), không phải slug do sổ proto tự đặt
+When mở `proto_route` đã điền slug của hồ sơ đang xét
+Then trang trả 200. Phép đo phải thử giải **một slug hồ sơ có thật**, không dừng
+ở mức "nhánh `/proto` tồn tại trên đĩa". Luật kèm theo: slug trong sổ proto phải
+bằng slug hồ sơ nó phục vụ, và `docs/proto.md` phải nói ra luật đó.
+
 **AC-14** — Phòng trưng bày không thối trong im lặng
 Given proto mẫu ghép từ component thật của `@crm/ui`, và proto ở lại vĩnh viễn
 When một export mà proto đang dùng bị gỡ, hoặc kiểu `ProtoState` đổi
@@ -140,6 +156,8 @@ giả, không role). Trục tự dựng theo B1:
 | C — bản khai khớp vật thật | `proto_route` · `dev_cmd` · `host_embed` · `.env.example` · `docs/proto.md` | bảng khoá mục 1 SKILL.md; luật một `.env` của AGENTS.md | AC-9, AC-10 |
 | D — môi trường × cờ | dev+bật · dev+tắt · prod+tắt · prod+bật | `apps/app/next.config.ts`; luật "không lộ ở bản chạy thật" | AC-1, AC-2, AC-3; prod+bật → Out of scope (đường preview, chưa có bản triển khai nào bật) |
 | E — lớp canh đường | proxy · cờ dev · sổ đăng ký | `apps/app/proxy.ts`; luật client-không-import-gói-server | AC-13, AC-2, AC-6 |
+| C' — nhà thứ ba của biến (nâng phạm vi S4-r2) | `.env.example` · `env.validation.ts` · `globalPassThroughEnv` | `docs/environment.md` | AC-15 |
+| B' — slug giải được (nâng phạm vi S4-r2) | slug hồ sơ ↔ slug sổ proto | hợp đồng của skill `design-pass` mục 1 | AC-16 |
 
 Chân ngành đối chiếu (bậc a, tên thật): Storybook, Chromatic, Ladle, Histoire.
 
@@ -162,6 +180,8 @@ Cross-cutting áp mọi ô Core: khổ 375/1280 × theme light/dark (AC-12) · c
 - **`design_pass.capture_cmd`.** `scripts/ui-capture.mjs` là bản tham chiếu
   một-URL→một-file, không khớp quy ước đặt tên ma trận của design-pass. Khai một
   lệnh không khớp tệ hơn để trống.
+- **Ánh xạ nhiều-proto-cho-một-hồ-sơ.** AC-16 chốt luật một-đối-một (slug sổ =
+  slug hồ sơ). Một hồ sơ cần nhiều bản mẫu là việc của vòng sau.
 - **Wire `executors.design.static`.** Bảng CT1 của feature-loop trỏ
   `config:executors.design.static`; kho chỉ có `.gate` và `.ui_check`, con trỏ đó
   đang chết. Làn static, không phải làn proto.

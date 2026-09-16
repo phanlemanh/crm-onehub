@@ -3,7 +3,11 @@ import { createServer } from "node:net";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const GOC_KHO = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
+const THU_MUC_RANG = dirname(fileURLToPath(import.meta.url));
+
+export const GOC_KHO = resolve(THU_MUC_RANG, "../../..");
+
+export const SLUG_HO_SO = resolve(THU_MUC_RANG, "..").split("/").pop();
 export const GOC_APP = resolve(GOC_KHO, "apps/app");
 
 export function thoat(ma, cau) {
@@ -22,9 +26,11 @@ async function congRoi() {
 	});
 }
 
-export async function moMayChu({ co, san = "dev" }) {
+export async function moMayChu({ co, san = "dev", kho }) {
 	const cong = await congRoi();
 	const env = { ...process.env, PORT: String(cong) };
+
+	if (kho !== undefined) env.PROTO_DIST_DIR = kho;
 
 	if (co === undefined) delete env.PROTO_ROUTE;
 	else env.PROTO_ROUTE = co;

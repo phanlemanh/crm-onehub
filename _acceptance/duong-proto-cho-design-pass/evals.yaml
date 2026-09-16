@@ -6,7 +6,7 @@ evals:
     criterion: AC-1
     executor: script
     layer: backend-effect
-    cmd: config:executors.script.dp_co_bat
+    cmd: config:executors.script.dp_duong_song
     paths:
       - "apps/app/app/proto/**"
       - "apps/app/proxy.ts"
@@ -27,7 +27,7 @@ evals:
     criterion: AC-2
     executor: script
     layer: backend-effect
-    cmd: config:executors.script.dp_co_tat
+    cmd: config:executors.script.dp_duong_song
     paths:
       - "apps/app/app/proto/**"
       - "apps/app/proxy.ts"
@@ -72,7 +72,7 @@ evals:
     criterion: AC-4
     executor: script
     layer: backend-effect
-    cmd: config:executors.script.dp_state_chon_duoc
+    cmd: config:executors.script.dp_duong_song
     paths:
       - "apps/app/app/proto/**"
       - "_acceptance/duong-proto-cho-design-pass/rang/**"
@@ -99,7 +99,7 @@ evals:
     criterion: AC-5
     executor: script
     layer: backend-effect
-    cmd: config:executors.script.dp_state_la
+    cmd: config:executors.script.dp_duong_song
     paths:
       - "apps/app/app/proto/**"
       - "_acceptance/duong-proto-cho-design-pass/rang/**"
@@ -114,7 +114,7 @@ evals:
     criterion: AC-6
     executor: script
     layer: backend-effect
-    cmd: config:executors.script.dp_slug_la
+    cmd: config:executors.script.dp_duong_song
     paths:
       - "apps/app/app/proto/**"
       - "_acceptance/duong-proto-cho-design-pass/rang/**"
@@ -128,7 +128,7 @@ evals:
     criterion: AC-7
     executor: script
     layer: backend-effect
-    cmd: config:executors.script.dp_muc_luc
+    cmd: config:executors.script.dp_duong_song
     paths:
       - "apps/app/app/proto/**"
       - "_acceptance/duong-proto-cho-design-pass/rang/**"
@@ -286,6 +286,45 @@ evals:
       Theme dark phai KHAC theme light thay duoc bang mat tren cung state va
       cung kho.
     evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
+
+  - id: E16
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.dp_nha_thu_ba
+    paths:
+      - "turbo.json"
+      - "_acceptance/config.yaml"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      Xanh: PROTO_ROUTE co trong globalPassThroughEnv cua turbo.json o goc kho —
+      NHA THU BA ma docs/environment.md goi la "cai hay can". Turbo 2 chay che do
+      strict, nen bien chua khai bi giau khoi moi task va lenh dev mot dong se im
+      lang khong mo duoc proto. Kho da tung mat nut dang nhap Microsoft vi dung
+      loi nay, co ten trong docs/environment.md.
+      Them mot ve: neu dev_cmd chay qua turbo thi bien PHAI duoc cho di qua.
+      Chieu do da chay: go PROTO_ROUTE khoi turbo.json -> ma khac 0, hai dieu
+      khong dat, thong diep noi thang lenh in ra cho nguoi se chet.
+      Day KHONG phai kiem chuoi trong dev_cmd — kiem chuoi la do loi khai, khong
+      do hanh vi; E9 da lam viec do roi.
+
+  - id: E17
+    criterion: AC-16
+    executor: script
+    cmd: config:executors.script.dp_slug_giai_duoc
+    paths:
+      - "apps/app/app/proto/catalog.ts"
+      - "docs/proto.md"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      Rang SUY slug ho so tu vi tri cua chinh no (thu muc cha cua rang/), khong
+      viet tay lai — viet tay thi rang va ho so troi nhau ma khong ai biet.
+      Xanh: slug do giai duoc thanh mot muc trong PROTO_CATALOG, va docs/proto.md
+      co noi ra luat slug-so-bang-slug-ho-so.
+      Chieu do da chay tren CUNG fixture: doi slug trong catalog ve "duong-proto"
+      (dung trang thai round 2) -> ma khac 0, thong diep in ca hai ten va giai
+      thich design-pass se 404 roi DUNG o preflight.
+      Day la eval dung cho cai viec ma ca vong nay ton tai de lam: neu no do thi
+      duong ong khong chay, du 15 eval kia xanh het.
 
   - id: E14
     criterion: AC-14

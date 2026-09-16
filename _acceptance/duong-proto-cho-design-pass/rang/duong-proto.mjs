@@ -1,13 +1,26 @@
 import { createHash } from "node:crypto";
 import { PROTO_CATALOG } from "../../../apps/app/app/proto/catalog.ts";
-import { ma, moMayChu, than, thoat } from "./may-chu.mjs";
+import { ma, moMayChu, SLUG_HO_SO, than, thoat } from "./may-chu.mjs";
 
 const chan = process.argv[2];
 if (chan === undefined) thoat(2, "thieu ten chan");
 
-const MAU = PROTO_CATALOG.find((m) => m.slug === "duong-proto");
+const CHAN_HET = [
+	"co-bat",
+	"co-tat",
+	"state-chon-duoc",
+	"state-la",
+	"slug-la",
+	"muc-luc",
+];
+
+const MAU = PROTO_CATALOG.find((m) => m.slug === SLUG_HO_SO);
 if (PROTO_CATALOG.length < 1) thoat(2, "san cung: catalog rong — khong do gi duoc");
-if (MAU === undefined) thoat(2, "san cung: khong thay muc duong-proto trong catalog");
+if (MAU === undefined)
+	thoat(
+		2,
+		`san cung: slug ho so "${SLUG_HO_SO}" khong giai duoc thanh mot muc trong catalog (co: ${PROTO_CATALOG.map((m) => m.slug).join(", ")}). design-pass dien {slug} bang slug HO SO, nen hai ten phai trung.`,
+	);
 if (MAU.states.length !== 5)
 	thoat(2, `san cung: duong-proto khai ${MAU.states.length} state, cho 5`);
 
@@ -39,13 +52,43 @@ function ket() {
 	thoat(1, `chan ${chan}: ${loi.length} dieu khong dat`);
 }
 
+if (chan === "tat-ca") {
+	const { spawnSync } = await import("node:child_process");
+	const toi = new URL(import.meta.url).pathname;
+	const hong = [];
+
+	for (const c of CHAN_HET) {
+		console.log(`\n--- chan ${c} ---`);
+		const ra = spawnSync("bun", [toi, c], { stdio: "inherit" });
+		if (ra.status !== 0) hong.push(`${c} (ma ${ra.status})`);
+	}
+
+	if (hong.length === 0) {
+		console.log(`\nOK tat-ca: ${CHAN_HET.length}/${CHAN_HET.length} chan dat`);
+		process.exit(0);
+	}
+
+	console.error(`\nchan hong: ${hong.join(", ")}`);
+	thoat(1, `tat-ca: ${hong.length}/${CHAN_HET.length} chan khong dat`);
+}
+
 if (chan === "co-bat") {
 	const s = await moMayChu({ co: "1" });
-	const t = await than(s.goc, "/proto/duong-proto");
-	doi((await ma(s.goc, "/proto/duong-proto")) === 200, "/proto/duong-proto khong tra 200");
+	const t = await than(s.goc, `/proto/${SLUG_HO_SO}`);
+	doi((await ma(s.goc, `/proto/${SLUG_HO_SO}`)) === 200, `/proto/${SLUG_HO_SO} khong tra 200`);
 	for (const st of MAU.states)
 		doi(t.includes(st.nhan), `than trang thieu ten state "${st.nhan}" tren thanh chuyen`);
-	doi(t.includes("data-slot"), "than trang khong co dau hieu component that cua @crm/ui (data-slot)");
+	const vung = vungProto(t);
+	if (vung === null) {
+		doi(false, "khong thay vung data-proto-body — khong do duoc than proto");
+	} else {
+		const slot = [...vung.matchAll(/data-slot="([a-z-]+)"/g)].map((m) => m[1]);
+		doi(slot.length > 0, "than PROTO khong co component nao cua @crm/ui (0 data-slot trong vung)");
+		doi(slot.includes("card"), `than proto thieu Card — data-slot thay duoc: ${[...new Set(slot)].join(", ") || "khong co"}`);
+	}
+
+	const thanh = t.slice(0, t.indexOf(NEO_PROTO) === -1 ? undefined : t.indexOf(NEO_PROTO));
+	doi(/data-slot="button"/.test(thanh), "thanh chuyen state khong dung Button cua @crm/ui");
 	s.dong();
 	ket();
 }
@@ -61,7 +104,7 @@ if (chan === "co-tat") {
 	];
 	for (const o of BANG) {
 		const s = await moMayChu({ co: o.co });
-		for (const d of ["/proto", "/proto/duong-proto"]) {
+		for (const d of ["/proto", `/proto/${SLUG_HO_SO}`]) {
 			const m = await ma(s.goc, d);
 			if (o.mo) doi(m === 200, `co ${o.ten}: ${d} tra ${m}, cho 200`);
 			else if (m === 307)
@@ -77,7 +120,7 @@ if (chan === "state-chon-duoc") {
 	const s = await moMayChu({ co: "1" });
 	const bams = new Map();
 	for (const st of MAU.states) {
-		const d = `/proto/duong-proto?state=${st.id}`;
+		const d = `/proto/${SLUG_HO_SO}?state=${st.id}`;
 		doi((await ma(s.goc, d)) === 200, `${d} khong tra 200`);
 		const v = vungProto(await than(s.goc, d));
 		if (v === null) {
@@ -90,7 +133,7 @@ if (chan === "state-chon-duoc") {
 			doi(false, `state "${st.id}" va "${trung[0]}" cho CUNG mot ban bam vung proto — tham so state khong toi noi render`);
 		bams.set(st.id, b);
 	}
-	const t = await than(s.goc, `/proto/duong-proto?state=${MAU.states[1].id}`);
+	const t = await than(s.goc, `/proto/${SLUG_HO_SO}?state=${MAU.states[1].id}`);
 	doi(t.includes('aria-current="page"'), "state dang bat khong mang aria-current");
 	s.dong();
 	ket();
@@ -98,7 +141,7 @@ if (chan === "state-chon-duoc") {
 
 if (chan === "state-la") {
 	const s = await moMayChu({ co: "1" });
-	const m = await ma(s.goc, "/proto/duong-proto?state=khong-ton-tai");
+	const m = await ma(s.goc, `/proto/${SLUG_HO_SO}?state=khong-ton-tai`);
 	doi(m === 404, `state la tra ${m}, cho 404 — state la da roi ve mac dinh`);
 	s.dong();
 	ket();

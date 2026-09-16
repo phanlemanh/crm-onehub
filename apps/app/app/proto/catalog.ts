@@ -11,7 +11,7 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
-		slug: "duong-proto",
+		slug: "duong-proto-cho-design-pass",
 		ten: "Bản mẫu đường proto",
 		states: [
 			{ id: "mac-dinh", nhan: "Mặc định" },

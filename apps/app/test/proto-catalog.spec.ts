@@ -6,8 +6,8 @@ describe("sổ đăng ký proto", () => {
 		expect(PROTO_CATALOG.length).toBeGreaterThan(0);
 	});
 
-	test("proto mẫu khai đúng năm state", () => {
-		const mau = PROTO_CATALOG.find((muc) => muc.slug === "duong-proto");
+	test("proto mẫu (slug bằng slug hồ sơ) khai đúng năm state", () => {
+		const mau = PROTO_CATALOG.find((muc) => muc.slug === "duong-proto-cho-design-pass");
 		expect(mau).toBeDefined();
 		expect(mau?.states.map((s) => s.id)).toEqual([
 			"mac-dinh",

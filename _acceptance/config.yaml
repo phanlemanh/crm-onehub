@@ -350,12 +350,9 @@ executors:
     nc_conversation_tuoi: node _acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs --tep conversation.tsx
     nc_pham_vi_diff: node _acceptance/nen-chat-ai-elements/rang/pham-vi-diff.mjs
     nc_rang_qua_cong: bun run test
-    dp_co_bat: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs co-bat"
-    dp_co_tat: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs co-tat"
-    dp_state_chon_duoc: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs state-chon-duoc"
-    dp_state_la: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs state-la"
-    dp_slug_la: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs slug-la"
-    dp_muc_luc: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs muc-luc"
+    dp_duong_song: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs tat-ca"
+    dp_nha_thu_ba: "bun _acceptance/duong-proto-cho-design-pass/rang/khai-bao.mjs nha-thu-ba"
+    dp_slug_giai_duoc: "bun _acceptance/duong-proto-cho-design-pass/rang/khai-bao.mjs slug"
     dp_ban_dung: "bun _acceptance/duong-proto-cho-design-pass/rang/ban-dung.mjs"
     dp_so_dang_ky: "bun _acceptance/duong-proto-cho-design-pass/rang/so-dang-ky.mjs"
     dp_config_tro_vat_that: "bun _acceptance/duong-proto-cho-design-pass/rang/khai-bao.mjs config"

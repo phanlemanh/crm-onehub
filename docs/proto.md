@@ -50,14 +50,31 @@ nghĩa nằm cạnh nhau trong cùng không gian đường dẫn. Next cho đo�
 đoạn động, nên `/proto/...` luôn về đây; cái giá là một workspace tên đúng chữ
 `proto` sẽ bị che.
 
+## Slug của bản mẫu PHẢI bằng slug hồ sơ
+
+`design-pass` điền `{slug}` bằng **slug hồ sơ nghiệm thu**, nên nếu sổ khai một
+tên khác thì URL nó mở ra sẽ 404 và nghi thức dừng ở preflight — đúng cái đường
+ống này dựng ra để xoá. Luật: `slug` trong `catalog.ts` bằng đúng tên thư mục
+dưới `_acceptance/` mà bản mẫu đó phục vụ.
+
+Răng `khai-bao.mjs slug` đo đúng điều này: nó suy slug hồ sơ từ vị trí của chính
+nó rồi đòi giải được thành một mục trong sổ.
+
+## Nhà thứ ba của biến
+
+`PROTO_ROUTE` phải nằm trong `globalPassThroughEnv` của `turbo.json` ở gốc kho.
+`docs/environment.md` gọi đây là nhà hay cắn nhất: turbo chạy chế độ `strict`
+nên biến chưa khai bị giấu khỏi mọi task, và lệnh dev một dòng sẽ im lặng không
+mở được proto. Kho đã từng mất nút đăng nhập Microsoft vì đúng lỗi này.
+
 ## Thêm một bản mẫu
 
 Bốn bước, theo đúng thứ tự:
 
 1. **Khai vào sổ** — thêm một mục vào `PROTO_CATALOG` trong
-   `apps/app/app/proto/catalog.ts`: `slug`, `ten`, và `states` (ít nhất một
-   state, mỗi state có `id` và `nhan`). File này cố ý **không nhập gì cả** để
-   phép đo `import` thẳng nó được.
+   `apps/app/app/proto/catalog.ts`: `slug` (**bằng đúng tên thư mục hồ sơ dưới
+   `_acceptance/`**), `ten`, và `states` (ít nhất một state, mỗi state có `id` và
+   `nhan`). File này cố ý **không nhập gì cả** để phép đo `import` thẳng nó được.
 2. **Viết module** — `apps/app/app/proto/_modules/<slug>/index.tsx`, xuất một
    hàm nhận `{ state }: { state: string }`. Mỗi state phải cho một cây DOM khác
    nhau thấy được; hai state cho cùng một cây là phép đo đỏ.
