@@ -390,14 +390,18 @@ export class WorkspaceService {
 
 			await tx.member.delete({ where: { id: target.id } });
 
-			await tx.invitation.updateMany({
-				where: {
-					organizationId: WORKSPACE_ID,
-					email: target.user.email,
-					status: { in: ["pending", "accepted"] },
-				},
-				data: { status: "cancelled" },
-			});
+			const email = normalizeEmail(target.user.email);
+
+			if (email) {
+				await tx.invitation.updateMany({
+					where: {
+						organizationId: WORKSPACE_ID,
+						email,
+						status: { in: ["pending", "accepted"] },
+					},
+					data: { status: "cancelled" },
+				});
+			}
 		});
 
 		this.logger.log({

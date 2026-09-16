@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from "bun:test";
+import { auth } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
@@ -284,6 +285,73 @@ describe("chu-cuoi-cung", () => {
 		]);
 	});
 
+	it("dia chi co CHU HOA o hang user van bi rut loi cho phep", async () => {
+		const quan = await dungNguoi("quan", "admin");
+		await dungNguoi("chu", "owner");
+
+		const thuong = id("hoa-thuong");
+		const now = new Date();
+		const diaHoa = `HoaThuong-${suffix}@OneMount.com`;
+
+		await db.user.upsert({
+			where: { id: thuong },
+			create: {
+				id: thuong,
+				name: "Hoa Thuong",
+				email: diaHoa,
+				emailVerified: true,
+				createdAt: now,
+				updatedAt: now,
+			},
+			update: { email: diaHoa },
+		});
+
+		await db.member.upsert({
+			where: {
+				organizationId_userId: { organizationId: WORKSPACE_ID, userId: thuong },
+			},
+			create: {
+				id: id("member-hoa-thuong"),
+				organizationId: WORKSPACE_ID,
+				userId: thuong,
+				role: "member",
+				createdAt: now,
+			},
+			update: { role: "member" },
+		});
+
+		const loi = await workspace.allowEmail(quan, {
+			email: diaHoa,
+			role: "member",
+		});
+		await db.invitation.update({
+			where: { id: loi.id },
+			data: { status: "accepted" },
+		});
+
+		const thuongMember = await db.member.findUnique({
+			where: {
+				organizationId_userId: { organizationId: WORKSPACE_ID, userId: thuong },
+			},
+			select: { id: true },
+		});
+
+		await workspace.removeMember(quan, { memberId: thuongMember?.id ?? "" });
+
+		const sau = await db.invitation.findUnique({
+			where: { id: loi.id },
+			select: { status: true },
+		});
+
+		expect([
+			sau?.status,
+			"hang user luu chu hoa, loi cho phep luu chu thuong — van phai rut duoc",
+		]).toEqual([
+			"cancelled",
+			"hang user luu chu hoa, loi cho phep luu chu thuong — van phai rut duoc",
+		]);
+	});
+
 	it("go mot thanh vien cung rut loi cho phep cua ho", async () => {
 		const quan = await dungNguoi("quan", "admin");
 		await dungNguoi("chu", "owner");
@@ -439,6 +507,169 @@ describe("quyen-hai-ve", () => {
 			true,
 			[],
 			"co tep client de soi, va khong tep nao nhap goi may chu",
+		]);
+	});
+});
+
+type TruocTao = (user: {
+	id: string;
+	name: string;
+	email: string;
+	emailVerified: boolean;
+	createdAt: Date;
+	updatedAt: Date;
+}) => Promise<{ data: unknown }>;
+
+function hookTruocTao(): TruocTao {
+	const o = auth.options as {
+		databaseHooks?: { user?: { create?: { before?: TruocTao } } };
+	};
+	const before = o.databaseHooks?.user?.create?.before;
+	if (before instanceof Function === false)
+		throw new Error(
+			"khong tim thay databaseHooks.user.create.before — phep kiem khong con nam TRUOC khi ghi",
+		);
+	return before;
+}
+
+function nguoiMoi(email: string) {
+	const now = new Date();
+	return {
+		id: `${suffix}-moi-${email.replace(/[^a-z0-9]/gi, "-")}`,
+		name: "Nguoi Moi",
+		email,
+		emailVerified: true,
+		createdAt: now,
+		updatedAt: now,
+	};
+}
+
+async function demBonBang() {
+	const [user, account, session, verification] = await Promise.all([
+		db.user.count(),
+		db.account.count(),
+		db.session.count(),
+		db.verification.count(),
+	]);
+	return { user, account, session, verification };
+}
+
+async function quaCong(email: string): Promise<boolean> {
+	try {
+		await hookTruocTao()(nguoiMoi(email));
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+describe("rut-chan-chua-vao", () => {
+	beforeEach(async () => {
+		await don();
+		await dungKho();
+	});
+
+	it("dia chi vua bi rut khong tao duoc hang nao, con dia chi con phep thi tao dung mot", async () => {
+		const quan = await dungNguoi("quan", "admin");
+
+		const biRut = `bi-rut-${suffix}@gmail.com`;
+		const conPhep = `con-phep-${suffix}@gmail.com`;
+
+		const loi = await workspace.allowEmail(quan, {
+			email: biRut,
+			role: "member",
+		});
+		await workspace.revokeAllowance(quan, { allowanceId: loi.id });
+		await workspace.allowEmail(quan, { email: conPhep, role: "member" });
+
+		const truoc = await demBonBang();
+		const quaKhiRut = await quaCong(biRut);
+		const sau = await demBonBang();
+
+		expect([
+			quaKhiRut,
+			sau.user,
+			sau.account,
+			sau.session,
+			sau.verification,
+			"bi chan, va bon bang khong tang hang nao",
+		]).toEqual([
+			false,
+			truoc.user,
+			truoc.account,
+			truoc.session,
+			truoc.verification,
+			"bi chan, va bon bang khong tang hang nao",
+		]);
+
+		const quaKhiConPhep = await quaCong(conPhep);
+		await db.user.create({ data: nguoiMoi(conPhep) });
+		const cuoi = await demBonBang();
+
+		expect([
+			quaKhiConPhep,
+			cuoi.user - sau.user,
+			"doi chung duong: dia chi con phep tao dung mot hang user",
+		]).toEqual([
+			true,
+			1,
+			"doi chung duong: dia chi con phep tao dung mot hang user",
+		]);
+	});
+});
+
+describe("go-tron-ven", () => {
+	beforeEach(async () => {
+		await don();
+		await dungKho();
+	});
+
+	it("go xong thi dang nhap lai KHONG tu thanh vien lan nua", async () => {
+		const quan = await dungNguoi("quan", "admin");
+		await dungNguoi("chu", "owner");
+		const bi = await dungNguoi("bi-go-lai", "member");
+
+		const loi = await workspace.allowEmail(quan, {
+			email: `${bi}@onemount.com`,
+			role: "member",
+		});
+		await db.invitation.update({
+			where: { id: loi.id },
+			data: { status: "accepted" },
+		});
+
+		const biMember = await db.member.findUnique({
+			where: {
+				organizationId_userId: { organizationId: WORKSPACE_ID, userId: bi },
+			},
+			select: { id: true },
+		});
+
+		await workspace.removeMember(quan, { memberId: biMember?.id ?? "" });
+
+		const { ensureWorkspaceMembership } = await import("@crm/auth");
+		await ensureWorkspaceMembership(bi, `${bi}@onemount.com`);
+
+		const lai = await db.member.findUnique({
+			where: {
+				organizationId_userId: { organizationId: WORKSPACE_ID, userId: bi },
+			},
+			select: { id: true },
+		});
+
+		const dongLoi = await db.invitation.findUnique({
+			where: { id: loi.id },
+			select: { status: true },
+		});
+
+		expect([
+			lai,
+			dongLoi?.status,
+			"dang nhap lai khong tu thanh vien, va loi cho phep van cancelled",
+		]).toEqual([
+			null,
+			"cancelled",
+			"dang nhap lai khong tu thanh vien, va loi cho phep van cancelled",
 		]);
 	});
 });
