@@ -8,7 +8,10 @@ const doi = (d, c) => {
 };
 
 if (PROTO_CATALOG.length < 1)
-	thoat(2, "san cung: catalog rong — moi cau 'moi muc deu hop le' duoi day dung vo nghia");
+	thoat(
+		2,
+		"san cung: catalog rong — moi cau 'moi muc deu hop le' duoi day dung vo nghia",
+	);
 
 const mau = PROTO_CATALOG.find((m) => m.slug === SLUG_HO_SO);
 if (mau === undefined)
@@ -25,7 +28,10 @@ for (const muc of PROTO_CATALOG) {
 	doi(muc.states.length > 0, `muc "${muc.slug}" KHONG khai state nao`);
 
 	const ids = muc.states.map((s) => s.id);
-	doi(new Set(ids).size === ids.length, `muc "${muc.slug}" co state id trung: ${ids.join(", ")}`);
+	doi(
+		new Set(ids).size === ids.length,
+		`muc "${muc.slug}" co state id trung: ${ids.join(", ")}`,
+	);
 
 	for (const s of muc.states) {
 		doi(s.id.trim() !== "", `muc "${muc.slug}" co state id rong`);
@@ -37,12 +43,20 @@ const trongSo = PROTO_CATALOG.map((m) => m.slug);
 const trongBang = [...PROTO_COMPONENTS.keys()];
 
 for (const s of trongSo)
-	doi(trongBang.includes(s), `slug "${s}" co trong so dang ky nhung THIEU Component trong registry`);
+	doi(
+		trongBang.includes(s),
+		`slug "${s}" co trong so dang ky nhung THIEU Component trong registry`,
+	);
 for (const s of trongBang)
-	doi(trongSo.includes(s), `slug "${s}" co Component trong registry nhung KHONG co trong so dang ky`);
+	doi(
+		trongSo.includes(s),
+		`slug "${s}" co Component trong registry nhung KHONG co trong so dang ky`,
+	);
 
 if (loi.length === 0) {
-	console.log(`OK so-dang-ky: ${PROTO_CATALOG.length} muc, ${trongBang.length} component`);
+	console.log(
+		`OK so-dang-ky: ${PROTO_CATALOG.length} muc, ${trongBang.length} component`,
+	);
 	process.exit(0);
 }
 for (const c of loi) console.error(`  - ${c}`);

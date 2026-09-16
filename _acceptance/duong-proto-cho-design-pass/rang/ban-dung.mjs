@@ -20,7 +20,10 @@ const dung = spawnSync("bunx", ["next", "build"], {
 const raDung = `${dung.stdout ?? ""}${dung.stderr ?? ""}`;
 
 if (/Another next build process is already running/i.test(raDung))
-	thoat(2, `da co mot lenh dung Next chay san tren kho ${KHO} — chan ha tang, khong phai san pham fail`);
+	thoat(
+		2,
+		`da co mot lenh dung Next chay san tren kho ${KHO} — chan ha tang, khong phai san pham fail`,
+	);
 
 if (dung.status !== 0)
 	thoat(1, `ban dung that bai (ma ${dung.status})\n${raDung.slice(-2000)}`);
@@ -49,8 +52,14 @@ for (const ro of RO) {
 tat.dong();
 
 const bat = await moMayChu({ co: "1", san: "start", kho: KHO });
-doi((await ma(bat.goc, `/proto/${SLUG_HO_SO}`)) === 200, "ban dung + co BAT: trang proto khong tra 200");
-doi((await ma(bat.goc, "/proto/khong-ton-tai")) === 404, "ban dung + co BAT: slug la khong tra 404");
+doi(
+	(await ma(bat.goc, `/proto/${SLUG_HO_SO}`)) === 200,
+	"ban dung + co BAT: trang proto khong tra 200",
+);
+doi(
+	(await ma(bat.goc, "/proto/khong-ton-tai")) === 404,
+	"ban dung + co BAT: slug la khong tra 404",
+);
 
 for (const ro of RO) {
 	const than_ = await than(bat.goc, ro.duong);

@@ -15,7 +15,7 @@ evals:
       Rang tu dung may chu cua rieng no tren mot cong roi, PROTO_ROUTE=1, KHONG
       cookie phien. Khong doc APP_URL mac dinh: mot ban dev dang chay o checkout
       chinh se bi do thay cho cay dang xet, va ket qua van in ra nhu thuong.
-      Xanh: GET /proto/duong-proto tra 200, than trang chua DU nam ten state da
+      Xanh: GET /proto/duong-proto-cho-design-pass tra 200, than trang chua DU nam ten state da
       khai trong so dang ky, va chua dau hieu component that cua @crm/ui (thuoc
       tinh data-slot cua shadcn) chu khong phai the tran.
       Chieu do da chay tren CUNG fixture: doi mot ten state trong so dang ky roi
@@ -40,7 +40,7 @@ evals:
       MA TRAN TOAN PHAN tren tap gia tri khai TRUOC — sau gia tri, sau assert,
       khong duoc it hon: khong-dat · "" · "0" · "false" · "true" · "1".
       Chi "1" duoc mo (200). NAM gia tri con lai PHAI 404 tren ca hai duong
-      /proto va /proto/duong-proto. Khong phai 307, khong phai 200.
+      /proto va /proto/duong-proto-cho-design-pass. Khong phai 307, khong phai 200.
       Ca chinh la "0" va "false": mot ban va viet if (!process.env.PROTO_ROUTE)
       se coi chung la BAT vi chuoi khac rong deu truthy — luc do proxy da thoi
       canh /proto nen khong con lop chan nao. Thong diep khi do phai ghim DUNG
@@ -83,9 +83,9 @@ evals:
       bang .map() hay trai mang, va mot vong lap tren 0 phan tu thi dung vo
       nghia: xanh ma chua tung doc so.
       SAN CUNG truoc moi so sanh, lech la do co so: catalog dai >= 1, va muc
-      duong-proto co DUNG 5 state.
+      muc cua slug ho so co DUNG 5 state.
       Xanh: voi tung id da nap, mo
-      /proto/duong-proto?state=<id>. Moi lan tra 200; bam than trang cua cac
+      /proto/duong-proto-cho-design-pass?state=<id>. Moi lan tra 200; bam than trang cua cac
       state phai KHAC NHAU doi mot; va the danh dau state dang bat mang
       aria-current.
       Chieu do: lam Component bo qua tham so state (tra cung mot cay cho moi
@@ -104,7 +104,7 @@ evals:
       - "apps/app/app/proto/**"
       - "_acceptance/duong-proto-cho-design-pass/rang/**"
     expected: |
-      Xanh: /proto/duong-proto?state=khong-ton-tai tra 404.
+      Xanh: /proto/duong-proto-cho-design-pass?state=khong-ton-tai tra 404.
       Chieu do: doi trang proto sang roi-ve-state-dau -> tra 200 -> ma khac 0,
       thong diep noi ro "state la da roi ve mac dinh".
       Day la eval chan dung lop loi ma muc 5 SKILL.md goi ten: mot loi go sai
@@ -160,7 +160,7 @@ evals:
     expected: |
       Nap bang IMPORT apps/app/app/proto/catalog.ts (duong ma that dung), khong
       boc van ban.
-      SAN CUNG truoc moi vong lap: catalog dai >= 1, va duong-proto co DUNG 5
+      SAN CUNG truoc moi vong lap: catalog dai >= 1, va muc cua slug ho so DUNG 5
       state. Thieu san nay thi "moi muc deu hop le" dung vo nghia tren mot tap
       rong va eval xanh ma chua doc gi — dung lop loi [do-quyen-luot-bang-hanh-vi#F1].
       Xanh: moi muc co slug khong rong, ten khong rong, va states co it nhat mot
@@ -239,7 +239,7 @@ evals:
       - "apps/app/test/**"
     expected: |
       Xanh: bai kiem goi thang ham quyet dinh an-danh cua proxy.
-      /proto va /proto/duong-proto -> an danh.
+      /proto va /proto/duong-proto-cho-design-pass -> an danh.
       /protoXYZ -> KHONG an danh (tien to giong nhung khac doan) — day la ca
       chinh, vi isUnder lam dung viec nay va mot ban vet cau tha bang startsWith
       se lam hong no.
@@ -256,9 +256,9 @@ evals:
     paths:
       - "apps/app/app/proto/**"
     steps:
-      - "Dung ban bam duoc: cd apps/app && PROTO_ROUTE=1 bunx next dev -p 3300 (lenh khai o design_pass.dev_cmd cung dung; cong nao cung duoc mien khong dung)"
+      - "Dung ban bam duoc TREN KHO RIENG de khong tranh khoa voi rang khac dang chay song song: cd apps/app && PROTO_ROUTE=1 PROTO_DIST_DIR=.next-proto-ui bunx next dev -p 3300. Next khoa theo THU MUC DUNG, nen kho rieng la cach DUY NHAT chay duoc hai may chu cung luc — da do that."
       - "Doc danh sach state TU apps/app/app/proto/catalog.ts — KHONG viet tay lai. Hien la 5 state: mac-dinh, rong, dang-tai, loi, tran-dai"
-      - "Chup DU 20 o = 5 state x 2 kho (375, 1280) x 2 theme (light, dark). Moi o mot lenh: bun run ui:capture \"http://localhost:3300/proto/duong-proto?state=<STATE>\" _acceptance/duong-proto-cho-design-pass/evidence/design-pass/<STATE>--<KHO>--<THEME>.png --w <KHO> --h <812 neu KHO=375, 900 neu KHO=1280> --theme <THEME> --wait 1200"
+      - "Chup DU 20 o = 5 state x 2 kho (375, 1280) x 2 theme (light, dark). Moi o mot lenh: bun run ui:capture \"http://localhost:3300/proto/duong-proto-cho-design-pass?state=<STATE>\" _acceptance/duong-proto-cho-design-pass/evidence/design-pass/<STATE>--<KHO>--<THEME>.png --w <KHO> --h <812 neu KHO=375, 900 neu KHO=1280> --theme <THEME> --wait 1200"
       - "Dem file: thu muc evidence/design-pass/ phai co DUNG 20 tep .png. Thieu du mot o -> UNCERTAIN kem TEN o thieu, khong phai PASS"
       - "Moi tep phai lon hon 5 KB — mot anh trang gan nhu luon nho hon nguong do"
       - "Nhin tung anh: khong o nao trang, va moi o phai la component that (the, phu hieu, duong ke) chu khong phai the tran"

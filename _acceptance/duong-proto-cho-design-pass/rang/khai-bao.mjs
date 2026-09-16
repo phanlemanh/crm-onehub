@@ -11,7 +11,8 @@ const doi = (d, c) => {
 
 const config = readFileSync(join(GOC_KHO, "_acceptance/config.yaml"), "utf8");
 const khoi = config.match(/^design_pass:\n((?:[ \t]+.*\n|\n)*)/m);
-if (khoi === null) thoat(2, "san cung: khong doc duoc khoi design_pass trong config.yaml");
+if (khoi === null)
+	thoat(2, "san cung: khong doc duoc khoi design_pass trong config.yaml");
 const dp = khoi[1];
 
 function gia(khoa, goc = dp) {
@@ -34,11 +35,13 @@ if (chan === "config" || chan === "tat-ca") {
 
 	const dev = gia("dev_cmd");
 	doi(dev !== null, "design_pass.dev_cmd VANG");
-	doi(dev !== null && dev.includes("PROTO_ROUTE=1"),
-		`dev_cmd khong mang PROTO_ROUTE=1 — in ra cho nguoi thi lenh do van chet: "${dev}"`);
+	doi(
+		dev !== null && dev.includes("PROTO_ROUTE=1"),
+		`dev_cmd khong mang PROTO_ROUTE=1 — in ra cho nguoi thi lenh do van chet: "${dev}"`,
+	);
 
 	const he = dp.match(/^\s*host_embed:\n((?:\s{4,}.*\n)+)/m);
-    doi(he !== null, "design_pass.host_embed VANG");
+	doi(he !== null, "design_pass.host_embed VANG");
 	if (he !== null) {
 		const guide = gia("guide", he[1]);
 		const route2 = gia("route", he[1]);
@@ -47,11 +50,23 @@ if (chan === "config" || chan === "tat-ca") {
 		const coGuide = guide !== null && existsSync(join(GOC_KHO, guide));
 		doi(coGuide, `host_embed.guide "${guide}" khong ton tai`);
 		if (coGuide)
-			doi(statSync(join(GOC_KHO, guide)).size > 0, `host_embed.guide "${guide}" rong`);
-		doi(route2 !== null && existsSync(join(GOC_KHO, route2)), `host_embed.route "${route2}" khong ton tai`);
+			doi(
+				statSync(join(GOC_KHO, guide)).size > 0,
+				`host_embed.guide "${guide}" rong`,
+			);
+		doi(
+			route2 !== null && existsSync(join(GOC_KHO, route2)),
+			`host_embed.route "${route2}" khong ton tai`,
+		);
 
-		const nguon = readFileSync(join(GOC_KHO, "apps/app/lib/proto-gate.ts"), "utf8");
-		const layout = readFileSync(join(GOC_KHO, "apps/app/app/proto/layout.tsx"), "utf8");
+		const nguon = readFileSync(
+			join(GOC_KHO, "apps/app/lib/proto-gate.ts"),
+			"utf8",
+		);
+		const layout = readFileSync(
+			join(GOC_KHO, "apps/app/app/proto/layout.tsx"),
+			"utf8",
+		);
 		doi(
 			!/process\.env\.[A-Z_]+/.test(layout),
 			"layout.tsx chep lai ten co thay vi goi protoMoDuoc() — hai cho giu cung mot hang, va phep do chi doc proto-gate.ts nen doi ten se xanh gia",
@@ -59,8 +74,10 @@ if (chan === "config" || chan === "tat-ca") {
 		const trongMa = nguon.match(/process\.env\.([A-Z_]+)/);
 		doi(trongMa !== null, "khong rut duoc ten bien tu proto-gate.ts");
 		if (trongMa !== null)
-			doi(co === trongMa[1],
-				`host_embed.dev_flag khai "${co}" nhung ma doc "${trongMa[1]}" — bang khai va ma nguon troi nhau`);
+			doi(
+				co === trongMa[1],
+				`host_embed.dev_flag khai "${co}" nhung ma doc "${trongMa[1]}" — bang khai va ma nguon troi nhau`,
+			);
 	}
 }
 
@@ -85,7 +102,7 @@ if (chan === "nha-thu-ba" || chan === "tat-ca") {
 	const cho = turbo.globalPassThroughEnv ?? [];
 	doi(
 		cho.includes("PROTO_ROUTE"),
-		"PROTO_ROUTE KHONG co trong globalPassThroughEnv cua turbo.json — nha thu BA ma docs/environment.md goi la \"cai hay can\". Thieu no thi turbo (che do strict) loc bien khoi moi task, nen dung lenh mot dong khai o design_pass.dev_cmd van cho ra 404, im lang.",
+		'PROTO_ROUTE KHONG co trong globalPassThroughEnv cua turbo.json — nha thu BA ma docs/environment.md goi la "cai hay can". Thieu no thi turbo (che do strict) loc bien khoi moi task, nen dung lenh mot dong khai o design_pass.dev_cmd van cho ra 404, im lang.',
 	);
 
 	const dp2 = dp.match(/^\s*dev_cmd:\s*(.+)$/m);
@@ -102,20 +119,32 @@ if (chan === "bien" || chan === "tat-ca") {
 	const i = env.findIndex((d) => d.includes("PROTO_ROUTE"));
 	doi(i !== -1, ".env.example KHONG co PROTO_ROUTE");
 	if (i > 0)
-		doi(env[i - 1].trim().startsWith("#") && env[i - 1].trim().length > 3,
-			"PROTO_ROUTE trong .env.example khong co dong chu giai ngay truoc no");
+		doi(
+			env[i - 1].trim().startsWith("#") && env[i - 1].trim().length > 3,
+			"PROTO_ROUTE trong .env.example khong co dong chu giai ngay truoc no",
+		);
 
 	const doc = join(GOC_KHO, "docs/proto.md");
-	doi(existsSync(doc) && statSync(doc).size > 0, "docs/proto.md vang hoac rong");
-	doi(readFileSync(join(GOC_KHO, "AGENTS.md"), "utf8").includes("docs/proto.md"),
-		"bang chi muc cua AGENTS.md khong co dong tro toi docs/proto.md");
+	doi(
+		existsSync(doc) && statSync(doc).size > 0,
+		"docs/proto.md vang hoac rong",
+	);
+	doi(
+		readFileSync(join(GOC_KHO, "AGENTS.md"), "utf8").includes("docs/proto.md"),
+		"bang chi muc cua AGENTS.md khong co dong tro toi docs/proto.md",
+	);
 
 	const val = join(GOC_KHO, "apps/api/src/config/env.validation.ts");
-	doi(!readFileSync(val, "utf8").includes("PROTO_ROUTE"),
-		"PROTO_ROUTE bi khai trong env.validation.ts cua API — API khong doc bien nay");
+	doi(
+		!readFileSync(val, "utf8").includes("PROTO_ROUTE"),
+		"PROTO_ROUTE bi khai trong env.validation.ts cua API — API khong doc bien nay",
+	);
 
 	for (const goi of ["apps/app", "apps/api", "apps/agent", "packages/ui"])
-		doi(!existsSync(join(GOC_KHO, goi, ".env")), `co .env theo goi o ${goi} — kho chi duoc mot .env o goc`);
+		doi(
+			!existsSync(join(GOC_KHO, goi, ".env")),
+			`co .env theo goi o ${goi} — kho chi duoc mot .env o goc`,
+		);
 }
 
 if (loi.length === 0) {

@@ -52,7 +52,8 @@ export async function moMayChu({ co, san = "dev", kho }) {
 	const goc = `http://127.0.0.1:${cong}`;
 	const han = Date.now() + 90_000;
 
-	const daCoMayChu = () => /Another next (dev server|build process) is already running/i.test(nhatKy);
+	const daCoMayChu = () =>
+		/Another next (dev server|build process) is already running/i.test(nhatKy);
 
 	while (Date.now() < han) {
 		if (daCoMayChu()) {
@@ -74,11 +75,26 @@ export async function moMayChu({ co, san = "dev", kho }) {
 
 	if (daCoMayChu()) {
 		con.kill("SIGKILL");
-		thoat(2, 'da co mot may chu Next chay san trong apps/app — dung no roi chay lai: pkill -f "next dev"');
+		thoat(
+			2,
+			'da co mot may chu Next chay san trong apps/app — dung no roi chay lai: pkill -f "next dev"',
+		);
 	}
 
 	con.kill("SIGKILL");
-	thoat(2, `may chu khong len trong 90s (co=${co ?? "khong-dat"})\n${nhatKy.slice(-1500)}`);
+	thoat(
+		2,
+		`may chu khong len trong 90s (co=${co ?? "khong-dat"})\n${nhatKy.slice(-1500)}`,
+	);
+}
+
+export async function dungMayChu(tuychon, viec) {
+	const s = await moMayChu(tuychon);
+	try {
+		return await viec(s);
+	} finally {
+		s.dong();
+	}
 }
 
 export async function ma(goc, duong) {

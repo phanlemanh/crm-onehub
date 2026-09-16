@@ -15,13 +15,17 @@ function moiTep(goc) {
 }
 
 const tep = moiTep(VUNG);
-if (tep.length < 1) thoat(2, "san cung: khong thay tep nao duoi apps/app/app/proto");
+if (tep.length < 1)
+	thoat(2, "san cung: khong thay tep nao duoi apps/app/app/proto");
 
 const loi = [];
 const CAM = [
 	{ re: /from\s+"@crm\/db(\/[^"]*)?"/, cau: "nhap @crm/db" },
 	{ re: /from\s+"@crm\/auth(\/[^"]*)?"/, cau: "nhap @crm/auth" },
-	{ re: /from\s+"@crm\/ui"/, cau: 'nhap BARREL "@crm/ui" — phai di theo subpath @crm/ui/components/<ten>' },
+	{
+		re: /from\s+"@crm\/ui"/,
+		cau: 'nhap BARREL "@crm/ui" — phai di theo subpath @crm/ui/components/<ten>',
+	},
 ];
 
 for (const t of tep) {
