@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đường đi của một phép đo — từ lúc gieo tới lúc thước phải đỏ</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --page:   #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:   #171717;
+      --ink:    #fafafa;
+      --muted:  #b4b4b4;
+      --soft:   #9a9a9a;
+      --rule:   rgba(250,250,250,0.16);
+      --accent: #2f9b7a;
+    }
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1240px; width: 100%; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .standfirst {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 68ch;
+    margin-bottom: 1.75rem;
+  }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 1100px; display: block; }
+  .notes {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 0.95fr;
+    gap: 2rem;
+  }
+  .notes h2 {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .notes p { font-size: 0.86rem; line-height: 1.6; color: var(--ink); }
+  .notes p + p { margin-top: 0.6rem; }
+  .notes .quiet { color: var(--muted); }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+    line-height: 1.7;
+  }
+  @media (max-width: 900px) { .notes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Cổng 1 · Hình · AC-1 · AC-2 · AC-9 · AC-10 · man-xin-quyen-co-rang</p>
+  <h1>Đường đi của một phép đo — từ lúc gieo tới lúc thước phải đỏ</h1>
+  <p class="standfirst">Bốn bước nối tiếp, hai chỗ rẽ, và một nhánh dừng giữa đường. Hai chỗ rẽ đầu không cho một lượt hỏng đi tiếp thành một lượt đạt: gieo không xong, hoặc máy chủ không phục vụ đúng cây này, thì phép đo từ chối đo. Nhánh chỉ-Microsoft dừng ở lớp kho chuỗi, và bước cuối cùng chạy trên bản sao riêng chứ không trên checkout chính.</p>
+
+  <div class="card">
+  <svg viewBox="0 0 1400 1140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ luồng một chiều từ trên xuống cho một lượt đo màn xin quyền: gieo trạng thái thiếu quyền hộp thư, hỏi trạng thái đã dựng được và màn không chuyển hướng về gốc, hỏi máy chủ có đang phục vụ đúng cây này qua chotMayChu, rồi rẽ theo ba nhánh nhà cung cấp; nhánh chỉ-Google và cả-hai đi tới màn dựng thật rồi khẳng định quan hệ ba vế rồi đổi chiều sang chiều đỏ trên bản sao ở cổng sao; nhánh chỉ-Microsoft dừng lại ở lớp kho chuỗi với một vạch chặn và không đi tới màn dựng thật; cả hai chỗ rẽ khi trả lời không đều dẫn sang nhánh hỏng từ chối đo thoát mã 2">
+    <defs>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');
+        svg {
+          --paper:#fafafa; --node:#ffffff; --ink:#171717; --muted:#575757;
+          --soft:#666666; --rule:rgba(23,23,23,0.12); --accent:#006B4F;
+          --tint:rgba(0,107,79,0.08); --leader:rgba(23,23,23,0.42);
+          --term:rgba(23,23,23,0.04); --termline:rgba(23,23,23,0.34);
+          --store:rgba(23,23,23,0.05);
+        }
+        @media (prefers-color-scheme: dark) {
+          svg {
+            --paper:#171717; --node:#212121; --ink:#fafafa; --muted:#b4b4b4;
+            --soft:#9a9a9a; --rule:rgba(250,250,250,0.16); --accent:#2f9b7a;
+            --tint:rgba(47,155,122,0.14); --leader:rgba(250,250,250,0.42);
+            --term:rgba(250,250,250,0.05); --termline:rgba(250,250,250,0.38);
+            --store:rgba(250,250,250,0.06);
+          }
+        }
+        .bg    { fill: var(--paper); }
+        .mask  { fill: var(--paper); }
+        .node  { fill: var(--node); stroke: var(--ink); stroke-width: 1; }
+        .store { fill: var(--store); stroke: var(--muted); stroke-width: 1; }
+        .term  { fill: var(--term); stroke: var(--termline); stroke-width: 1; }
+        .stop  { fill: var(--term); stroke: var(--ink); stroke-width: 1.4; }
+        .focal { fill: var(--tint); stroke: var(--accent); stroke-width: 1.4; }
+        .edge  { fill: none; stroke: var(--muted); stroke-width: 1.2; }
+        .edge-d{ fill: none; stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 5,4; }
+        .edge-a{ fill: none; stroke: var(--accent); stroke-width: 1.4; }
+        .bar   { stroke: var(--ink); stroke-width: 3; stroke-linecap: square; }
+        .tag   { fill: none; stroke: var(--muted); stroke-width: 0.8; }
+        .tag-a { fill: none; stroke: var(--accent); stroke-width: 0.8; }
+        .nm    { fill: var(--ink); font-family: 'Geist', sans-serif; font-size: 12px; font-weight: 600; }
+        .nm-s  { fill: var(--ink); font-family: 'Geist', sans-serif; font-size: 12px; font-weight: 500; }
+        .sub   { fill: var(--muted); font-family: 'Geist Mono', monospace; font-size: 9px; }
+        .tgt   { fill: var(--muted); font-family: 'Geist Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.08em; }
+        .tgt-a { fill: var(--accent); font-family: 'Geist Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.08em; }
+        .al    { fill: var(--muted); font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.10em; }
+        .al-a  { fill: var(--accent); font-family: 'Geist Mono', monospace; font-size: 9px; letter-spacing: 0.10em; }
+        .stl   { fill: var(--ink); font-family: 'Geist Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.10em; }
+        .note  { fill: var(--ink); font-family: 'Lora', Georgia, serif; font-size: 15px; font-style: italic; }
+        .lead  { fill: none; stroke: var(--leader); stroke-width: 1; stroke-dasharray: 4,3; }
+        .dot   { fill: var(--ink); }
+        .lgl   { fill: var(--muted); font-family: 'Geist Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.18em; }
+        .lgi   { fill: var(--muted); font-family: 'Geist', sans-serif; font-size: 11px; }
+      </style>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="var(--muted)"/>
+      </marker>
+      <marker id="arrow-a" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="var(--accent)"/>
+      </marker>
+    </defs>
+
+    <rect class="bg" width="100%" height="100%"/>
+
+    <!-- ============ ĐƯỜNG NỐI (vẽ trước, nằm dưới các nút) ============ -->
+
+    <!-- 1 · mở lượt → gieo -->
+    <path class="edge" d="M 700 104 V 144" marker-end="url(#arrow)"/>
+    <!-- 2 · gieo → chỗ rẽ 1 -->
+    <path class="edge" d="M 700 216 V 240" marker-end="url(#arrow)"/>
+    <!-- 3 · chỗ rẽ 1, trả lời KHÔNG → từ chối đo -->
+    <path class="edge-d" d="M 880 316 H 1252 A 8 8 0 0 1 1260 324 V 760" marker-end="url(#arrow)"/>
+    <!-- 4 · chỗ rẽ 1, trả lời CÓ → chỗ rẽ 2 -->
+    <path class="edge" d="M 700 392 V 424" marker-end="url(#arrow)"/>
+    <!-- 5 · chỗ rẽ 2, trả lời KHÔNG → từ chối đo -->
+    <path class="edge-d" d="M 880 500 H 1072 A 8 8 0 0 1 1080 508 V 760" marker-end="url(#arrow)"/>
+    <!-- 6 · chỗ rẽ 2, trả lời ĐÚNG CÂY → điểm rẽ ba nhánh -->
+    <path class="edge" d="M 700 576 V 624" marker-end="url(#arrow)"/>
+    <!-- 7 · nhánh chỉ-Microsoft → lớp kho chuỗi -->
+    <path class="edge" d="M 692 632 H 248 A 8 8 0 0 0 240 640 V 700" marker-end="url(#arrow)"/>
+    <!-- 8 · nhánh chỉ-Google và cả-hai → màn dựng thật -->
+    <path class="edge" d="M 700 640 V 700" marker-end="url(#arrow)"/>
+    <!-- 9 · màn dựng thật → khẳng định -->
+    <path class="edge" d="M 700 784 V 816" marker-end="url(#arrow)"/>
+    <!-- 10 · khẳng định → chiều đỏ -->
+    <path class="edge-a" d="M 700 900 V 932" marker-end="url(#arrow-a)"/>
+    <!-- vạch chặn của nhánh chỉ-Microsoft -->
+    <path class="edge-d" d="M 240 784 V 820"/>
+    <line class="bar" x1="176" y1="824" x2="304" y2="824"/>
+
+    <!-- ============ NHÃN TRÊN ĐƯỜNG NỐI ============ -->
+    <rect class="mask" x="1036" y="290" width="56" height="18" rx="2"/>
+    <text class="al" x="1064" y="303" text-anchor="middle">KHÔNG</text>
+
+    <rect class="mask" x="948" y="474" width="56" height="18" rx="2"/>
+    <text class="al" x="976" y="487" text-anchor="middle">KHÔNG</text>
+
+    <rect class="mask" x="708" y="396" width="40" height="18" rx="2"/>
+    <text class="al" x="728" y="409" text-anchor="middle">CÓ</text>
+
+    <rect class="mask" x="708" y="584" width="80" height="18" rx="2"/>
+    <text class="al" x="748" y="597" text-anchor="middle">ĐÚNG CÂY</text>
+
+    <rect class="mask" x="420" y="604" width="104" height="18" rx="2"/>
+    <text class="al" x="472" y="617" text-anchor="middle">CHỈ MICROSOFT</text>
+
+    <rect class="mask" x="708" y="652" width="144" height="18" rx="2"/>
+    <text class="al" x="780" y="665" text-anchor="middle">CHỈ GOOGLE · CẢ HAI</text>
+
+    <rect class="mask" x="708" y="904" width="76" height="18" rx="2"/>
+    <text class="al-a" x="746" y="917" text-anchor="middle">ĐỔI CHIỀU</text>
+
+    <!-- ============ CÁC NÚT ============ -->
+
+    <!-- mở lượt (hình bầu dục — đầu) -->
+    <rect x="540" y="48" width="320" height="56" rx="28" class="term"/>
+    <text class="nm-s" x="700" y="72" text-anchor="middle">Một lượt đo màn xin quyền</text>
+    <text class="sub" x="700" y="90" text-anchor="middle">/grant-access</text>
+
+    <!-- bước gieo -->
+    <rect class="mask" x="520" y="144" width="360" height="72" rx="6"/>
+    <rect class="node" x="520" y="144" width="360" height="72" rx="6"/>
+    <rect class="tag" x="532" y="152" width="80" height="18" rx="2"/>
+    <text class="tgt" x="572" y="165" text-anchor="middle">BƯỚC GIEO</text>
+    <text class="nm" x="700" y="192" text-anchor="middle">Gieo trạng thái thiếu quyền hộp thư</text>
+    <text class="sub" x="700" y="208" text-anchor="middle">mailboxGrantsNeeded() phải trả mảng khác rỗng</text>
+
+    <!-- chỗ rẽ 1 -->
+    <polygon class="mask" points="700,240 880,316 700,392 520,316"/>
+    <polygon class="node" points="700,240 880,316 700,392 520,316"/>
+    <text class="nm-s" x="700" y="310" text-anchor="middle">Trạng thái gieo dựng được, và màn</text>
+    <text class="nm-s" x="700" y="328" text-anchor="middle">KHÔNG chuyển hướng về «/» ?</text>
+
+    <!-- chỗ rẽ 2 -->
+    <polygon class="mask" points="700,424 880,500 700,576 520,500"/>
+    <polygon class="node" points="700,424 880,500 700,576 520,500"/>
+    <text class="sub" x="700" y="488" text-anchor="middle">chotMayChu()</text>
+    <text class="nm-s" x="700" y="508" text-anchor="middle">Máy chủ đang phục vụ</text>
+    <text class="nm-s" x="700" y="526" text-anchor="middle">ĐÚNG cây này ?</text>
+
+    <!-- điểm rẽ ba nhánh nhà cung cấp -->
+    <circle class="dot" cx="700" cy="632" r="4"/>
+
+    <!-- nhánh hỏng: từ chối đo (hình bầu dục — cuối) -->
+    <rect class="mask" x="1000" y="760" width="340" height="76" rx="38"/>
+    <rect class="stop" x="1000" y="760" width="340" height="76" rx="38"/>
+    <text class="nm" x="1170" y="790" text-anchor="middle">TỪ CHỐI ĐO — thoát mã 2</text>
+    <text class="sub" x="1170" y="810" text-anchor="middle">gọi tên trạng thái thiếu · không bao giờ là một lượt đạt</text>
+
+    <!-- lớp kho chuỗi (nơi nhánh chỉ-Microsoft dừng) -->
+    <rect class="mask" x="80" y="700" width="320" height="84" rx="6"/>
+    <rect class="store" x="80" y="700" width="320" height="84" rx="6"/>
+    <rect class="tag" x="92" y="710" width="124" height="18" rx="2"/>
+    <text class="tgt" x="154" y="723" text-anchor="middle">LỚP KHO CHUỖI</text>
+    <text class="nm" x="240" y="748" text-anchor="middle">So ba câu trong kho chuỗi</text>
+    <text class="sub" x="240" y="768" text-anchor="middle">auth.ts · ba khoá khác nhau từng đôi một</text>
+
+    <!-- nhãn của vạch chặn -->
+    <text class="stl" x="320" y="822">DỪNG Ở ĐÂY</text>
+    <text class="al" x="320" y="838">KHÔNG ĐI TỚI «MÀN DỰNG THẬT»</text>
+
+    <!-- màn dựng thật -->
+    <rect class="mask" x="520" y="700" width="360" height="84" rx="6"/>
+    <rect class="node" x="520" y="700" width="360" height="84" rx="6"/>
+    <rect class="tag" x="532" y="710" width="124" height="18" rx="2"/>
+    <text class="tgt" x="594" y="723" text-anchor="middle">MÀN DỰNG THẬT</text>
+    <text class="nm" x="700" y="748" text-anchor="middle">Dựng màn trên máy chủ thật</text>
+    <text class="sub" x="700" y="768" text-anchor="middle">hai nhánh dựng thật: chỉ-Google · cả-hai</text>
+
+    <!-- khẳng định quan hệ ba vế -->
+    <rect class="mask" x="520" y="816" width="360" height="84" rx="6"/>
+    <rect class="node" x="520" y="816" width="360" height="84" rx="6"/>
+    <rect class="tag" x="532" y="826" width="108" height="18" rx="2"/>
+    <text class="tgt" x="586" y="839" text-anchor="middle">KHẲNG ĐỊNH</text>
+    <text class="nm" x="700" y="864" text-anchor="middle">Quan hệ ba vế trên năm ô</text>
+    <text class="sub" x="700" y="884" text-anchor="middle">vi khác en · vi có dấu · en đúng bản đã ghim</text>
+
+    <!-- chiều đỏ trên bản sao (nút tiêu điểm) -->
+    <rect class="mask" x="500" y="932" width="400" height="92" rx="6"/>
+    <rect class="focal" x="500" y="932" width="400" height="92" rx="6"/>
+    <rect class="tag-a" x="512" y="942" width="88" height="18" rx="2"/>
+    <text class="tgt-a" x="556" y="955" text-anchor="middle">CHIỀU ĐỎ</text>
+    <text class="nm" x="700" y="980" text-anchor="middle">Đột biến vật thật trong BẢN SAO</text>
+    <text class="sub" x="700" y="1000" text-anchor="middle">CONG_SAO :3200 — không phải checkout chính :3000</text>
+    <text class="sub" x="700" y="1016" text-anchor="middle">thước phải ĐỎ và gọi tên ô hỏng</text>
+
+    <!-- ============ HAI LỜI CHÚ BÊN LỀ ============ -->
+    <path class="lead" d="M 150 878 Q 160 852 196 830"/>
+    <circle class="dot" cx="200" cy="828" r="2"/>
+    <text class="note" x="80" y="902">Chỉ-Microsoft dừng ở lớp kho chuỗi là giới hạn</text>
+    <text class="note" x="80" y="924">đã khai — kho này chạy Google làm nhà cung cấp chính.</text>
+
+    <path class="lead" d="M 1140 932 Q 1000 952 904 974"/>
+    <circle class="dot" cx="900" cy="976" r="2"/>
+    <text class="note" x="1360" y="896" text-anchor="end">Chiều đỏ chạy trên BẢN SAO riêng ở CONG_SAO,</text>
+    <text class="note" x="1360" y="918" text-anchor="end">không trên checkout chính — nên không đo nhầm cây.</text>
+
+    <!-- ============ CHÚ GIẢI ============ -->
+    <line x1="60" y1="1072" x2="1340" y2="1072" stroke="var(--rule)" stroke-width="0.8"/>
+    <text class="lgl" x="60" y="1094">CHÚ GIẢI</text>
+    <text class="lgi" x="180" y="1094">bầu dục = đầu và cuối</text>
+    <text class="lgi" x="352" y="1094">hình thoi = chỗ rẽ</text>
+    <text class="lgi" x="496" y="1094">chữ nhật = một bước</text>
+    <text class="lgi" x="660" y="1094">nét đứt = nhánh hỏng</text>
+    <text class="lgi" x="828" y="1094">vạch chặn = nhánh dừng tại chỗ</text>
+    <text class="lgi" x="1064" y="1094">nét màu = bước chống đo nhầm cây</text>
+  </svg>
+  </div>
+
+  <div class="notes">
+    <div>
+      <h2>Hai chỗ rẽ, một lối thoát</h2>
+      <p>Cả hai chỗ rẽ trả lời KHÔNG đều đổ về cùng một chỗ, và chỗ đó không phải là «đạt». Gieo không dựng được trạng thái thiếu quyền, hoặc màn chuyển hướng về «/», thì mọi khẳng định sau đó vô nghĩa (AC-10). Máy chủ không phục vụ đúng cây này thì con số đo được là của cây khác.</p>
+      <p class="quiet">Nét đứt vẽ nhánh hỏng để không đọc nhầm nó thành một đường đi bình thường.</p>
+    </div>
+    <div>
+      <h2>Nhánh dừng giữa đường</h2>
+      <p>Ba nhánh nhà cung cấp rẽ ở cùng một điểm. Chỉ-Google và cả-hai đi tới màn dựng thật. Chỉ-Microsoft dừng ở lớp kho chuỗi và có một vạch chặn: nó không tới nút «màn dựng thật» (AC-2).</p>
+      <p class="quiet">Đây là giới hạn đã khai, không phải chỗ sót. Phép đo phải in ra giới hạn ấy chứ không im.</p>
+    </div>
+    <div>
+      <h2>Vì sao bước cuối ở bản sao</h2>
+      <p>Chiều đỏ phá vật thật, nên nó chạy trên bản sao riêng dựng ở CONG_SAO. Một bản dev đang chạy ở checkout chính vẫn in kết quả ra như thường — đó đúng là kiểu đo nhầm cây mà chotMayChu() và bản sao cùng chặn.</p>
+    </div>
+  </div>
+
+  <footer>
+    Hình vẽ theo hợp đồng man-xin-quyen-co-rang và thiết kế ngày 16/09/2026 · bốn bước nối tiếp, ba nhánh nhà cung cấp, hai thứ tiếng<br>
+    Thước sống ở _acceptance/man-xin-quyen-co-rang/rang/man-xin-quyen.mjs · chotMayChu() dùng lại từ may-chu.mjs của hồ sơ cua-vao-noi-tieng-viet
+  </footer>
+</div>
+</body>
+</html>
