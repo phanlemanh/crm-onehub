@@ -1,0 +1,48 @@
+{
+  "feature_plain": "Mở một phòng trưng bày giao diện chạy được tại máy, để người duyệt bấm thử bản mẫu thay vì đọc mô tả bằng chữ.",
+  "will_do": [
+    {"id":"AC-1","p":"Sẽ mở được một bản bấm được tại máy, dựng từ chính bộ giao diện dùng chung của sản phẩm chứ không phải bản vẽ tay."},
+    {"id":"AC-2","p":"Sẽ biến mất hoàn toàn khi cờ chưa bật — kể cả với người chưa đăng nhập."},
+    {"id":"AC-4","p":"Sẽ cho đổi trạng thái hiển thị ngay trên thanh địa chỉ, mỗi trạng thái ra một màn khác nhau."},
+    {"id":"AC-6","p":"Sẽ báo không-tìm-thấy khi gõ sai tên bản mẫu, thay vì hiện trang trắng."},
+    {"id":"AC-7","p":"Sẽ có một trang mục lục liệt kê đúng các bản mẫu đang có, và mỗi dòng bấm vào mở đúng bản mẫu của nó."},
+    {"id":"AC-9","p":"Sẽ khai đường vào bản mẫu trong hồ sơ cấu hình, trỏ tới đường có thật chứ không phải một dòng khai suông."},
+    {"id":"AC-10","p":"Sẽ ghi biến bật-tắt và hướng dẫn thêm bản mẫu vào đúng chỗ mà người sau biết tìm."},
+    {"id":"AC-13","p":"Sẽ chỉ mở đúng nhánh phòng trưng bày cho người chưa đăng nhập — phần còn lại của sản phẩm vẫn đòi đăng nhập như cũ."},
+    {"id":"AC-12","p":"Sẽ chụp đủ hai mươi ảnh — năm trạng thái, hai khổ màn, hai nền sáng-tối — làm bằng chứng nhìn được."}
+  ],
+  "wont_do": [
+    {"id":"AC-3","p":"Chặn phòng trưng bày xuất hiện ở bản chạy thật: dựng bản thật mà không bật cờ thì đường này không phục vụ."},
+    {"id":"AC-5","p":"Chặn lỗi gõ sai tên trạng thái lặng lẽ rơi về trạng thái đầu — vì rơi lặng lẽ là cách một tập ảnh sai trông như đủ."},
+    {"id":"AC-8","p":"Chặn thêm bản mẫu mà quên khai trạng thái: phép đo đỏ và gọi đích danh bản mẫu thiếu."},
+    {"id":"AC-11","p":"Chặn bản mẫu kéo phần máy chủ xuống trình duyệt — thứ làm hỏng bản dựng."},
+    {"id":"AC-14","p":"Chặn bản mẫu cũ mục nát trong im lặng: đổi bộ giao diện dùng chung mà bản mẫu cũ không theo kịp thì cổng sẵn có đỏ ngay."}
+  ],
+  "coverage_plain": [
+    {"i":0,"p":"Bộ tiêu chí quét bằng lưới chống sót, và cố ý bác khuôn quét mặc định vì khuôn đó dành cho dữ liệu của khách, không dành cho công cụ nội bộ."},
+    {"i":4,"p":"Trục vòng đời bản mẫu — sinh ra, đem duyệt, sống cùng bản thật; riêng việc gỡ bỏ thì để lại lần sau vì chưa có gì để gỡ."},
+    {"i":5,"p":"Trục các đường người gõ vào — mục lục, trang bản mẫu, chọn trạng thái, tên sai, trạng thái sai; cả năm đều có tiêu chí."},
+    {"i":6,"p":"Trục các bản khai phải khớp vật thật — cấu hình, biến môi trường, tài liệu; phủ bởi AC-9 (cấu hình trỏ đúng) và AC-10 (biến và tài liệu đúng nếp)."},
+    {"i":7,"p":"Trục môi trường và cờ — chạy tại máy hay bản thật, cờ bật hay tắt; ô bật-ở-bản-thật để lại lần sau vì chưa bản triển khai nào bật."},
+    {"i":8,"p":"Trục lớp canh đường — sau việc này chỉ còn cờ canh phòng trưng bày, nên AC-2 (cờ tắt thì mất hẳn) đo ở đúng điều kiện chưa đăng nhập."},
+    {"i":9,"p":"Đối chiếu bốn công cụ cùng loại đang chạy thật ngoài thị trường, để biết mình không tự nghĩ ra một khuôn lạ."},
+    {"i":10,"p":"Bối cảnh sản phẩm dựng từ tài liệu có sẵn trong kho, không có dòng nào là phỏng đoán cần người gạch."}
+  ],
+  "gap_probe_plain": [
+    {"i":0,"p":"Bằng chứng nhìn được sẽ rỗng vì không ai chụp ảnh — hồ sơ trượt ở cổng sau dù mã đúng hoàn toàn. Đã vá: chính phép đo tự dựng bản mẫu rồi chụp, và ghim trước đủ hai mươi ô nên thiếu một ô là biết ngay."},
+    {"i":1,"p":"Ba phép đo đọc danh sách bản mẫu bằng cách dò chữ trong file, nên nếu ai đó viết danh sách theo kiểu khác thì chúng đọc ra rỗng và vẫn báo xanh. Đã vá: tách phần dữ liệu ra riêng để phép đo nạp đúng đường mã thật dùng, kèm sàn cứng phải đọc ra ít nhất một bản mẫu."},
+    {"i":2,"p":"Cờ đặt giá trị 0 hay false vẫn bị coi là bật, mà lúc đó không còn lớp nào canh phòng trưng bày. Đã vá: phép đo thử đủ sáu giá trị, chỉ đúng một giá trị được mở."},
+    {"i":3,"p":"Hai lệnh cổng chung bị gán cho hai tiêu chí cụ thể, làm bảng duyệt trông như có hai lớp đo trong khi chỉ có một. Đã vá: tách ra tiêu chí riêng cho việc chống mục nát, và chiều đỏ ghim vào chính bản mẫu."},
+    {"i":4,"p":"Mục lục có thể dựng liên kết sai mà phép đo vẫn xanh — người duyệt bấm vào dòng duy nhất và nhận không-tìm-thấy. Đã vá: phép đo lấy liên kết thật trên trang rồi mở thử từng cái."}
+  ],
+  "scope_plain": "Để lại lần sau: bộ chụp ảnh riêng của kho, đường bật bản mẫu trên bản triển khai thử, gỡ bỏ bản mẫu cũ, và một mục cấu hình đang trỏ vào chỗ trống.",
+  "decisions_plain": [
+    {"id":"d-20260916T031935Z-1","p":"Chọn một sổ đăng ký tập trung làm nguồn duy nhất của tên và trạng thái — đổi lại thêm bản mẫu phải sửa một file, và chính chỗ đó khiến không ai thêm lén được."},
+    {"id":"d-20260916T031935Z-2","p":"Chọn giữ bản mẫu lại vĩnh viễn thành phòng trưng bày — đổi lại chấp nhận rủi ro bản cũ lệch khỏi bản thật, và giao việc canh cho hai cổng sẵn có."},
+    {"id":"d-20260916T031935Z-3","p":"Chọn một biến bật-tắt riêng thay vì dựa vào chế độ chạy — đổi lại có thêm một biến phải nuôi, bù lại sau này mở được cho người duyệt xem từ xa."},
+    {"id":"d-20260916T031935Z-4","p":"Chọn mở nhánh phòng trưng bày cho người chưa đăng nhập — đổi lại cờ trở thành lớp canh duy nhất, nên hai tiêu chí đo đúng chỗ đó."},
+    {"id":"d-20260916T031935Z-5","p":"KHÔNG làm phiên duyệt giao diện trên bản bấm được ở chính vòng này, vì vòng này đang dựng ra thứ phiên đó cần — đổi lại cổng này duyệt giao diện bằng chữ đúng một lần cuối."},
+    {"id":"d-20260916T031935Z-6","p":"KHÔNG khai lệnh chụp ảnh riêng của kho lần này, vì lệnh sẵn có không khớp cách đặt tên ảnh — để trống thì phép đo tự chụp được."},
+    {"id":"d-20260916T031935Z-7","p":"KHÔNG vá một mục cấu hình đang trỏ vào chỗ trống, vì nó thuộc việc khác — đã ghi lại để lần sau không quên."}
+  ]
+}
