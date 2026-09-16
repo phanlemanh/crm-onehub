@@ -204,3 +204,42 @@ Nút mồi: vòng này tự nó chạm UI nên theo luật S1-D phải chạy de
 Cổng 1 — mà design-pass cần chính `proto_route` vòng này đang dựng. Bỏ S1-D ở
 vòng này là entry `descope` có tên trong sổ quyết định; từ vòng sau không còn cớ
 đó.
+
+### Known limits — chủ kho định đoạt ở Cổng 2, 2026-09-16
+
+Mười bảy mục dưới đây là lỗi thật, nằm NGOÀI phạm vi đã duyệt ở Cổng 1, và chủ
+kho chọn ghi nhận rồi ship bản này. Mười lăm trong số đó là nợ của **bộ đo**, một
+của **tài liệu**, một của **giao diện** — không mục nào đổi hành vi đường proto
+mà người dùng gặp.
+
+- `may-chu.mjs` bảo người chạy `pkill -f "next dev"` — đúng lệnh mà `evals.yaml`
+  của chính vòng này cấm tuyệt đối. Hai lời khai cùng vòng mâu thuẫn nhau.
+- `duong-proto.mjs` dựng `next dev` vào `.next` mặc định, không dùng
+  `PROTO_DIST_DIR` — đúng cái công tắc dựng ra để tránh tranh khoá.
+- `CardContent` bị `className` đè `flex-col` thành `flex-row` — `docs/design.md`
+  cấm đè style component tại chỗ gọi. Chỗ duy nhất trong cả kho.
+- `ban-dung.mjs` không bọc `try/finally` quanh hai máy chủ — máy chủ rò lại
+  chính là nguyên nhân BLOCKED đã ghi ở ba round đầu.
+- `mucMoCoi()` trong `registry.ts` là mã chết; phép đo mồ côi thật nằm ở
+  `so-dang-ky.mjs`, viết lại lần hai.
+- `tat-ca` nuốt mã thoát 2 của các chặng, biến "không đo được" thành "sản phẩm
+  fail".
+- `dong()` bắn SIGTERM rồi `process.exit` ngay — bỏ lại máy chủ Next mồ côi giữ
+  khoá thư mục.
+- Vòng chờ máy chủ `catch {}` nuốt mọi lỗi và không nghe sự kiện `exit` của tiến
+  trình con.
+- `PROTO_DIST_DIR=.next-proto-ui` mà E13 bắt dùng không nằm trong `.gitignore`.
+- Lệch sổ đăng ký ↔ registry không cổng nào bắt, và `docs/proto.md` hứa sai về
+  bài kiểm nào canh việc đó.
+- `delete env.PROTO_ROUTE` bị `loadRootEnv()` dựng lại từ `.env` gốc — chặng "cờ
+  tắt" không cô lập được biến một cách thật sự.
+- Bốn phép đo còn ở hình dạng yếu: `aria-current` không buộc vào state được yêu
+  cầu; vế `aria-current` chỉ có một điểm-case chứ chưa quét lớp; một assert
+  chuỗi-có-mặt thay cho lời hứa docs nói ra luật; một khẳng định âm-tính-một-mình
+  trên log dựng, không đối chứng dương.
+- Vế "dev_cmd chạy qua turbo" trong `khai-bao.mjs` lặp lại y nguyên assert đã có
+  ở trên, không đo thêm quan hệ nào.
+
+Hai mục nặng hơn KHÔNG nằm ở đây: chủ kho cho **mở hợp đồng mới** cho chúng —
+`bun run build` có thể xanh giả vì `loadRootEnv()` lách qua bộ lọc của turbo, và
+`?state=a&state=b` cho mã 200 trên một trang hỏng.
