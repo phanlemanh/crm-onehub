@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
+verified_commit: 413ef512cf88ca171c01a4eda5030a19d8f0bd2a
 run_id: s4r1-20260906T091355Z-66825
 human_signoff: Manh Phan 2026-09-06
 ---
@@ -262,3 +262,7 @@ sha: 538796cf4a0f334454dc9fc3f44f3f836a6b0ebf · suites: 4 lệnh exit 0
 
 run_id: repin-20260907T005455Z-44758
 sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0
+
+### Re-pin lần 3 — 2026-09-16, do Ghim lại sau ba bản vá của PR #46: nhãn tiêu đề, dấu vùng dữ liệu trên mục luồng, và tách tiêu đề bằng phần tử
+run_id: repin-20260916T025546Z-82246
+sha: 413ef512cf88ca171c01a4eda5030a19d8f0bd2a · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng
