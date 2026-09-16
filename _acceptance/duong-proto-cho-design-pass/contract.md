@@ -6,7 +6,7 @@ owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
 design_doc: docs/superpowers/specs/2026-09-16-duong-proto-cho-design-pass-design.md
-status: verified
+status: signed-off
 approved_by: Mạnh
 approved_at: 2026-09-16
 ---
