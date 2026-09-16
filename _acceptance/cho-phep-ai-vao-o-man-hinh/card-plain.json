@@ -1,0 +1,29 @@
+{
+  "feature_plain": "Người quản cho một đồng nghiệp vào CRM ngay trên màn Members, thay vì sửa cấu hình máy chủ rồi chờ dựng lại.",
+
+  "analyst_plain": "Ba vòng đo: vòng đầu bị chặn vì hạ tầng, vòng hai bị trả vì phép đo của chính tôi đo rỗng, vòng ba sạch — không thước nào đỏ và không còn lỗi nào nằm trong phạm vi đã duyệt.",
+
+  "decisions": [
+    {
+      "id": "E14",
+      "q": "Hai câu xác nhận có nói rõ gỡ khác rút không?",
+      "why": "Hộp thoại gỡ nói «Họ mất quyền ngay bây giờ. Đăng nhập lại cũng không vào được nữa.» Hộp thoại rút nói «Việc này chỉ chặn người chưa đăng nhập lần nào. Ai đã vào rồi thì vẫn ở trong.» Máy không chấm được chuyện người đọc có phân biệt được hay không."
+    }
+  ],
+
+  "decisions_plain": [
+    { "id": "d-20260916T021543Z-1", "p": "Chọn dùng lại bảng lời mời có sẵn thay vì dựng bảng mới — đổi lại phải đặt một mốc quy ước cho hạn dùng mà vòng này chưa có, bù lại vòng sau thêm link và hạn thật mà không phải dời dữ liệu." },
+    { "id": "d-20260916T021543Z-2", "p": "Chọn tách màn Members thành hai khối, gỡ và rút là hai việc khác nhau — đổi lại phải sửa chỗ cấp tư cách thành viên, nếu không thì nút gỡ nói dối." },
+    { "id": "d-20260916T021543Z-3", "p": "Chọn để màn đăng nhập Google giữ nguyên cách cũ — đổi lại sửa ô domain nhà sẽ không đổi gì ở màn chọn tài khoản. Vòng đo bắt được hệ quả xa hơn: xem mục ngoài hợp đồng về địa chỉ bên ngoài." },
+    { "id": "d-20260916T021543Z-4", "p": "KHÔNG làm thư mời, link bấm và hạn dùng ở vòng này — đổi lại người quản vẫn phải tự báo tin cho người được mời." },
+    { "id": "d-20260916T021543Z-5", "p": "KHÔNG xử lý chuyện địa chỉ Gmail có dấu chấm là cùng một hộp thư — đổi lại sẽ có ngày một người bị chặn oan vì gõ khác dạng." },
+    { "id": "d-20260916T021648Z-6", "p": "KHÔNG chạy được phiên thẩm mỹ trên bản bấm được vì kho chưa có đường dựng bản mẫu — đã mở một việc riêng để wire nó." },
+    { "id": "d-20260916T025314Z-8", "p": "Đổi thứ tự thi công so với kế hoạch: hai bài đo phải đi qua thủ tục thật nên dời xuống sau khi có thủ tục; và giữ nguyên cách chọn câu từ chối để không làm bập bênh bằng chứng đã ký của vòng trước." },
+    { "id": "d-20260916T025936Z-9", "p": "Dừng giữa chừng để trình hai việc: một thước chưa có răng, và sáu bài kiểm chuyển đỏ — sau đó hoá ra bốn trong sáu là do đo trên dữ liệu bẩn." },
+    { "id": "d-20260916T030559Z-10", "p": "Cho hàm cấp tư cách thành viên nhận đường đọc qua tham số, vì không mock được lớp dữ liệu nên thước cho lời hứa «hỏng thì không khoá cả nhà» đã xanh giả hai lần." },
+    { "id": "d-20260916T030559Z-11", "p": "Ghi nhận một ranh giới hẹp chưa được hợp đồng phủ: nhánh di dời vẫn gán người đầu tiên làm chủ bất kể vai đã định." },
+    { "id": "d-20260916T032733Z-12", "p": "Ban đầu không dựng được khung hình vì bản chạy thử bị cổng khai báo đẩy đi — về sau tìm ra nguyên nhân thật và đã chụp được cả ba khung hình." },
+    { "id": "d-20260916T035404Z-13", "p": "Bốn thước đỏ ở vòng đo đầu là do mười bảy lệnh chạy song song trên cùng một cơ sở dữ liệu — đã cho mỗi lượt một cơ sở dữ liệu riêng." },
+    { "id": "d-20260916T043650Z-14", "p": "Vòng đo thứ hai trả về năm lỗi: một lỗi sản phẩm thật (gỡ người mà phiên vẫn sống) và bốn phép đo rỗng của tôi. Đã sửa hết và cấy lỗi ngược lại để chắc từng thước có răng." }
+  ]
+}

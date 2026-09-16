@@ -47,10 +47,17 @@ Microsoft equivalent of `hd`**: `tenantId` is the whole of it.
 with none, the sign-in page says so by name rather than rendering nothing.
 
 **`ALLOWED_SIGN_IN`** — comma-separated whole domains or single addresses (bare
-addresses exist for a solo self-hoster, where `gmail.com` would be an open door). **One
-list, read by the sign-in guard *and* the sync's "which side is external" decision** —
-if they drifted a colleague would be refused at the door or filed as a lead. **An empty
-list fails closed.** Parsed on demand. `packages/auth/src/workspace.ts`.
+addresses exist for a solo self-hoster, where `gmail.com` would be an open door).
+**A seed for the first sign-in, not the authorisation model.** It has a say only
+while the allow list in the `invitation` table is empty **and** nobody has ever
+signed in; after that the list on Settings → Members decides and this variable goes
+quiet. **An empty list on a fresh install fails closed.** Parsed on demand.
+`packages/auth/src/workspace.ts` and `packages/auth/src/allow-list.ts`.
+
+It used to carry a second job — the sync's "which side is external" decision read
+its domains. That job moved to its own field, `appSetting.staffEmailDomains`, so
+changing who may sign in no longer silently changes how mailbox matching and
+visitor filtering behave. `apps/api/src/workspace/staff-domains.ts`.
 
 ## Where things are
 
