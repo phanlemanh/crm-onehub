@@ -70,7 +70,9 @@ async function don() {
 			],
 		},
 	});
-	await db.member.deleteMany({ where: { id: { startsWith: `${suffix}-` } } });
+	await db.member.deleteMany({
+		where: { userId: { startsWith: `${suffix}-` } },
+	});
 	await db.user.deleteMany({ where: { id: { startsWith: `${suffix}-` } } });
 }
 

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, spyOn } from "bun:test";
+import { beforeEach, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import { auth } from "../src/auth";
@@ -55,6 +55,9 @@ async function dem() {
 async function don() {
 	await db.invitation.deleteMany({
 		where: { id: { startsWith: `${suffix}-` } },
+	});
+	await db.member.deleteMany({
+		where: { userId: { startsWith: `${suffix}-` } },
 	});
 	await db.user.deleteMany({ where: { id: { startsWith: `${suffix}-` } } });
 }
@@ -217,7 +220,28 @@ async function daLaThanhVien(userId: string, vai = "member") {
 describe("vai-dinh-truoc", () => {
 	beforeEach(async () => {
 		await don();
-		await db.member.deleteMany({ where: { id: { startsWith: `${suffix}-m-` } } });
+		const chu = await db.user.upsert({
+			where: { id: `${suffix}-chu` },
+			create: { ...nguoi("chu@onemount.com"), id: `${suffix}-chu` },
+			update: {},
+			select: { id: true },
+		});
+		await db.member.upsert({
+			where: {
+				organizationId_userId: {
+					organizationId: WORKSPACE_ID,
+					userId: chu.id,
+				},
+			},
+			create: {
+				id: `${suffix}-m-chu`,
+				organizationId: WORKSPACE_ID,
+				userId: chu.id,
+				role: "owner",
+				createdAt: new Date(),
+			},
+			update: { role: "owner" },
+		});
 	});
 
 	it("vai khai truoc di vao tu cach thanh vien, va loi cho phep thanh accepted", async () => {
@@ -277,7 +301,6 @@ describe("vai-dinh-truoc", () => {
 describe("rut-khong-dung-da-vao", () => {
 	beforeEach(async () => {
 		await don();
-		await db.member.deleteMany({ where: { id: { startsWith: `${suffix}-m-` } } });
 	});
 
 	it("rut loi cho phep cua nguoi DA vao thi tu cach thanh vien con nguyen", async () => {
@@ -314,7 +337,6 @@ describe("rut-khong-dung-da-vao", () => {
 describe("doc-hong", () => {
 	beforeEach(async () => {
 		await don();
-		await db.member.deleteMany({ where: { id: { startsWith: `${suffix}-m-` } } });
 	});
 
 	it("lop doc hong thi hook khong nem, va thanh vien san co con nguyen", async () => {
@@ -326,18 +348,14 @@ describe("doc-hong", () => {
 		});
 		await daLaThanhVien(nguoiCu.id);
 
-		const hong = spyOn(db.invitation, "findMany").mockImplementation(() => {
-			throw new Error("lop doc loi cho phep hong");
-		});
-
 		let daNem = false;
 
 		try {
-			await ensureWorkspaceMembership(nguoiMoi.id, dia);
+			await ensureWorkspaceMembership(nguoiMoi.id, dia, () => {
+				throw new Error("lop doc loi cho phep hong");
+			});
 		} catch {
 			daNem = true;
-		} finally {
-			hong.mockRestore();
 		}
 
 		const hangCu = await db.member.findUnique({
