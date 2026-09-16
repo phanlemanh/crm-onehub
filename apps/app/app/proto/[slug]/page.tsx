@@ -27,7 +27,9 @@ export default async function ProtoPage({
 		<>
 			<h1 className="font-semibold text-2xl">{muc.ten}</h1>
 			<StateSwitcher dangBat={dangBat.id} slug={slug} states={muc.states} />
-			<Proto state={dangBat.id} />
+			<div data-proto-body>
+				<Proto state={dangBat.id} />
+			</div>
 		</>
 	);
 }

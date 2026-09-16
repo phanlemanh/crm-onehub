@@ -22,6 +22,7 @@ export default function ProtoIndexPage() {
 						<Link
 							className="flex items-center justify-between rounded-lg border p-4"
 							data-proto-slug={muc.slug}
+							data-proto-states={muc.states.length}
 							href={`/proto/${muc.slug}`}
 						>
 							<span className="font-medium">{muc.ten}</span>

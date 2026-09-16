@@ -11,6 +11,12 @@ feature_loop:
     - executors.script.build_khong_cache
 design_pass:
   ds_skill: web-design-guidelines
+  proto_route: http://localhost:3000/proto/{slug}
+  dev_cmd: PROTO_ROUTE=1 TURBO_UI=false bunx turbo run dev --ui=stream --filter=app --filter=api
+  host_embed:
+    guide: "docs/proto.md"
+    route: "apps/app/app/proto/[slug]/page.tsx"
+    dev_flag: "PROTO_ROUTE"
 executors:
   test:
     cua_vao_chon_tieng: "cd apps/app && bun test test/locale-resolve.spec.ts"
@@ -67,6 +73,7 @@ executors:
     mt_cong_hai_bien_the: "cd apps/agent && bun test test/quyen-luot.spec.ts -t suy-dien"
     mt_ho_so_cu_con_chay: bash _acceptance/ma-tran-phai-co-chieu-song/rang/ho-so-cu-con-chay.sh
     nc_lop_chuyen: cd packages/ui && bun test test/eve-to-ai-sdk.spec.ts
+    dp_proxy_an_danh: "cd apps/app && bun test test/proxy-an-danh.spec.ts"
   script:
     cua_vao_loi_mang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"'
     cua_vao_chon_tieng_may_chu: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chon-tieng-may-chu"'
@@ -343,6 +350,17 @@ executors:
     nc_conversation_tuoi: node _acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs --tep conversation.tsx
     nc_pham_vi_diff: node _acceptance/nen-chat-ai-elements/rang/pham-vi-diff.mjs
     nc_rang_qua_cong: bun run test
+    dp_co_bat: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs co-bat"
+    dp_co_tat: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs co-tat"
+    dp_state_chon_duoc: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs state-chon-duoc"
+    dp_state_la: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs state-la"
+    dp_slug_la: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs slug-la"
+    dp_muc_luc: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs muc-luc"
+    dp_ban_dung: "bun _acceptance/duong-proto-cho-design-pass/rang/ban-dung.mjs"
+    dp_so_dang_ky: "bun _acceptance/duong-proto-cho-design-pass/rang/so-dang-ky.mjs"
+    dp_config_tro_vat_that: "bun _acceptance/duong-proto-cho-design-pass/rang/khai-bao.mjs config"
+    dp_khai_bao: "bun _acceptance/duong-proto-cho-design-pass/rang/khai-bao.mjs bien"
+    dp_khong_goi_server: "bun _acceptance/duong-proto-cho-design-pass/rang/khong-goi-server.mjs"
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT}/scripts/design-gate.mjs"
     ui_check: "${CLAUDE_PLUGIN_ROOT}/scripts/design-scan.js"
