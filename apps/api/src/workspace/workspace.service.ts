@@ -357,7 +357,7 @@ export class WorkspaceService {
 	async removeMember(
 		userId: string,
 		input: RemoveMemberInput,
-	): Promise<void> {
+	): Promise<{ memberId: string }> {
 		const role = await workspaceRoleOf(userId);
 
 		if (!isWorkspaceAdmin(role)) {
@@ -407,6 +407,8 @@ export class WorkspaceService {
 			userId,
 			memberId: input.memberId,
 		});
+
+		return { memberId: input.memberId };
 	}
 
 	private toAllowance(row: AllowanceRow): Allowance {

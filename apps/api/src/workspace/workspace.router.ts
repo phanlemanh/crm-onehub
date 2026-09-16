@@ -19,6 +19,7 @@ import {
 	memberListOutput,
 	setMemberRoleInput,
 	removeMemberInput,
+	removeMemberOutput,
 	revokeAllowanceInput,
 	updateWorkspaceInput,
 	workspaceMemberOutput,
@@ -115,7 +116,7 @@ export class WorkspaceRouter {
 
 	@Mutation({
 		input: removeMemberInput,
-		output: z.void(),
+		output: removeMemberOutput,
 		meta: restMeta("DELETE", "/workspace/members/{memberId}", ["Workspace"]),
 	})
 	async removeMember(

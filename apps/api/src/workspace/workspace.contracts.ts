@@ -51,6 +51,10 @@ export const removeMemberInput = z.object({
 	memberId: z.string().min(1),
 });
 
+export const removeMemberOutput = z.object({
+	memberId: z.string(),
+});
+
 export type AllowEmailInput = z.infer<typeof allowEmailInput>;
 export type RevokeAllowanceInput = z.infer<typeof revokeAllowanceInput>;
 export type RemoveMemberInput = z.infer<typeof removeMemberInput>;
