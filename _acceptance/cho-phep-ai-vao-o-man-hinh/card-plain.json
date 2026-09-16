@@ -1,0 +1,49 @@
+{
+  "feature_plain": "Người quản cho một đồng nghiệp vào CRM ngay trên màn Members, thay vì phải sửa cấu hình máy chủ rồi chờ dựng lại.",
+
+  "will_do": [
+    { "id": "AC-1", "p": "Sẽ quyết ai vào được bằng danh sách trong CRM; cấu hình máy chủ chỉ còn tiếng nói ở bản cài mới chưa có ai." },
+    { "id": "AC-2", "p": "Sẽ cho người quản chọn sẵn vai của người được mời, và người ấy vào đúng vai đó ngay lần đầu." },
+    { "id": "AC-4", "p": "Sẽ để người đã vào yên: rút lời cho phép của họ không cắt quyền ai cả." },
+    { "id": "AC-5", "p": "Sẽ cắt quyền thật khi gỡ một người — và họ đăng nhập lại cũng không tự quay vào được nữa." },
+    { "id": "AC-9", "p": "Sẽ mở đường cho bản cài mới tự dựng được người chủ đầu tiên, không ai bị khoá ngoài cửa." },
+    { "id": "AC-14", "p": "Sẽ cho nhận lại một người từng bị gỡ, mà vẫn đọc được rằng họ từng bị gỡ." }
+  ],
+
+  "wont_do": [
+    { "id": "AC-3", "p": "Chặn người vừa bị rút lời cho phép tạo tài khoản, kể cả khi họ có đúng thư mời cũ." },
+    { "id": "AC-6", "p": "Sẽ KHÔNG bỏ mặc người vừa bị gỡ trong vòng chuyển hướng — họ thấy một câu nói thẳng là mình không còn trong nhà." },
+    { "id": "AC-7", "p": "Chặn việc gỡ người cuối cùng còn giữ quyền chủ, để không ai tự khoá cả nhà." },
+    { "id": "AC-8", "p": "Sẽ KHÔNG cho người vai thường thao tác gì — và cũng không bày ra nút để họ bấm rồi nhận lỗi." },
+    { "id": "AC-10", "p": "Sẽ KHÔNG để việc sửa danh sách người làm đổi cách nhận email nội bộ hay cách đếm khách truy cập." },
+    { "id": "AC-11", "p": "Sẽ KHÔNG đẻ dòng thứ hai khi thêm lại một địa chỉ đang còn hiệu lực, dù gõ hoa hay thừa khoảng trắng." },
+    { "id": "AC-12", "p": "Sẽ KHÔNG khoá cả nhà ngoài cửa khi một lượt đọc danh sách gặp trục trặc." }
+  ],
+
+  "scope_plain": "Vòng này chưa gửi thư mời, chưa có link bấm, chưa có hạn dùng — người quản vẫn phải tự báo tin cho người được mời qua kênh riêng.",
+
+  "coverage_plain": [
+    { "i": 0, "p": "Không gian tiêu chí được quét bằng lưới chống sót, không viết theo trí nhớ." },
+    { "i": 1, "p": "Bốn hướng đã soi: một lời cho phép đi qua những nấc nào; ai làm gì với ai; cái gì quyết cửa vào; và cửa được kiểm lúc nào." },
+    { "i": 2, "p": "Thước đo «đủ» là hai sản phẩm thật cùng loại — một cái vừa thao tác trực tiếp sáng nay, một cái đối chiếu." },
+    { "i": 3, "p": "Mỗi hướng đều có tiêu chí phủ, không hướng nào bỏ trống." },
+    { "i": 4, "p": "Nấc «nhận lại người từng bị gỡ» suýt lọt — bản đầu thiếu hẳn, lượt phản biện bắt được và AC-14 là chỗ vá." }
+  ],
+
+  "gap_probe_plain": [
+    { "i": 0, "p": "Hợp đồng bản đầu tự mâu thuẫn: gỡ một người xong thì không đường nào nhận họ lại, vì chính dấu vết gỡ bị lấy làm cớ từ chối. Đã vá bằng một tiêu chí mới cho việc nhận lại." },
+    { "i": 1, "p": "Bảng đo cửa vào bản đầu không phân biệt được «đọc đúng nội dung cấu hình» với «cấu hình khác rỗng thì cho tất cả» — một bản cài mới có thể mở cửa cho mọi người mà thước vẫn xanh. Đã vá bằng ba ca mới và một phép thử đột biến." },
+    { "i": 2, "p": "Thước kiểm quyền bản đầu chỉ soi phía máy chủ, nên nút bấm vẫn có thể hiện sai cho người vai thường mà thước không thấy. Đã vá bằng cách chỉ đích danh chỗ tính quyền hiển thị." },
+    { "i": 3, "p": "Mọi lời cho phép trong bài đo bản đầu là đồ dựng tay đúng khuôn, nên một lệch giữa nơi ghi và nơi đọc sẽ không lộ ra. Đã vá bằng cách bắt bài đo đi qua chính thủ tục thật." },
+    { "i": 4, "p": "Khung hình làm bằng chứng cho màn hình bản đầu không nói rõ chụp từ bản dựng nào, nên rất dễ chụp nhầm bản cũ đang chạy ở chỗ khác. Đã vá bằng cách khai rõ đường dựng và bắt nhận dạng bản dựng trước khi tin." }
+  ],
+
+  "decisions_plain": [
+    { "id": "d-20260916T021543Z-1", "p": "Chọn dùng lại bảng lời mời có sẵn thay vì dựng bảng mới — đổi lại phải đặt một mốc quy ước cho hạn dùng mà vòng này chưa có, bù lại vòng sau thêm link và hạn thật mà không phải dời dữ liệu." },
+    { "id": "d-20260916T021543Z-2", "p": "Chọn tách màn Members thành hai khối, gỡ và rút là hai việc khác nhau — đổi lại phải sửa chỗ cấp tư cách thành viên, nếu không thì nút gỡ nói dối." },
+    { "id": "d-20260916T021543Z-3", "p": "Chọn để màn đăng nhập Google giữ nguyên cách cũ — đổi lại sửa ô domain nhà sẽ không đổi gì ở màn chọn tài khoản, nhận downside này có ý thức." },
+    { "id": "d-20260916T021543Z-4", "p": "KHÔNG làm thư mời, link bấm và hạn dùng ở vòng này — đổi lại người quản vẫn phải tự báo tin, và sẽ xem lại khi có người thứ hai thật sự dùng danh sách." },
+    { "id": "d-20260916T021543Z-5", "p": "KHÔNG xử lý chuyện địa chỉ Gmail có dấu chấm là cùng một hộp thư — đổi lại sẽ có ngày một người bị chặn oan vì gõ khác dạng." },
+    { "id": "d-20260916T021648Z-6", "p": "KHÔNG chạy được phiên thẩm mỹ trên bản bấm được vì kho chưa có đường dựng bản mẫu — đổi lại cổng này duyệt giao diện bằng chữ và hai hình, không phải bằng thứ bấm được." }
+  ]
+}

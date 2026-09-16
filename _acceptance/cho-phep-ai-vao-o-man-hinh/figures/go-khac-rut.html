@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gỡ thành viên khác rút lời cho phép · Sơ đồ hai nhánh</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1140px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 46rem;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ hai nhánh · cho phép ai vào, quyết ở màn hình</p>
+    <h1>Gỡ thành viên khác rút lời cho phép</h1>
+    <p class="sub">Hai nút trên cùng một màn, hai hệ quả khác nhau. Rút chỉ nói về cổng vào; cắt quyền của người đã vào là việc của nút gỡ.</p>
+
+    <svg viewBox="0 0 1100 790" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- ===== Đường nối (vẽ trước) ===== -->
+      <line x1="620" y1="96" x2="620" y2="136" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 460 196 L 348 196 Q 340 196 340 204 L 340 292" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 780 196 L 892 196 Q 900 196 900 204 L 900 240" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M 200 352 L 168 352 Q 160 352 160 360 L 160 460" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 480 352 L 532 352 Q 540 352 540 360 L 540 460" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="900" y1="352" x2="900" y2="432" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="900" y1="528" x2="900" y2="588" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <!-- ===== Nhãn đường nối ===== -->
+      <rect x="352" y="170" width="104" height="18" rx="2" fill="#fafafa"/>
+      <text x="404" y="184" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">rút lời cho phép</text>
+
+      <rect x="788" y="170" width="96" height="18" rx="2" fill="#fafafa"/>
+      <text x="836" y="184" fill="#006B4F" font-size="10" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">gỡ thành viên</text>
+
+      <rect x="48" y="388" width="104" height="18" rx="2" fill="#fafafa"/>
+      <text x="152" y="402" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="end">chưa có tài khoản</text>
+
+      <rect x="548" y="388" width="104" height="18" rx="2" fill="#fafafa"/>
+      <text x="548" y="402" fill="#575757" font-size="10" font-family="'Geist', sans-serif">đã là thành viên</text>
+
+      <!-- ===== Điểm đầu ===== -->
+      <rect x="480" y="40" width="280" height="56" rx="28" fill="#fafafa"/>
+      <rect x="480" y="40" width="280" height="56" rx="28" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="620" y="73" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">người quản ở màn Members</text>
+
+      <!-- ===== Chỗ rẽ 1 ===== -->
+      <polygon points="620,136 780,196 620,256 460,196" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="620" y="200" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">bấm nút nào?</text>
+
+      <!-- ===== Chỗ rẽ 2 (nhánh rút) ===== -->
+      <polygon points="340,292 480,352 340,412 200,352" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="340" y="356" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đã là thành viên chưa?</text>
+
+      <!-- ===== Kết quả nhánh rút: người chưa có tài khoản ===== -->
+      <rect x="40" y="460" width="240" height="56" rx="28" fill="#fafafa"/>
+      <rect x="40" y="460" width="240" height="56" rx="28" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="160" y="493" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">bị chặn ở lượt tạo tài khoản</text>
+      <text x="160" y="536" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">AC-3</text>
+      <text x="160" y="552" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không hàng nào sinh thêm</text>
+      <text x="160" y="566" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">trong cơ sở dữ liệu</text>
+
+      <!-- ===== Kết quả nhánh rút: người đã là thành viên ===== -->
+      <rect x="420" y="460" width="240" height="56" rx="28" fill="#fafafa"/>
+      <rect x="420" y="460" width="240" height="56" rx="28" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="540" y="493" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">không suy suyển</text>
+      <text x="540" y="536" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">AC-4</text>
+      <text x="540" y="552" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">vẫn là thành viên,</text>
+      <text x="540" y="566" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">vẫn đăng nhập được</text>
+
+      <!-- ===== Nhánh gỡ, bước 1 (tiêu điểm) ===== -->
+      <rect x="740" y="240" width="320" height="112" rx="6" fill="#fafafa"/>
+      <rect x="740" y="240" width="320" height="112" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="752" y="252" width="44" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.40)" stroke-width="0.8"/>
+      <text x="774" y="264" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-5</text>
+      <text x="900" y="300" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">xoá dòng thành viên và chuyển</text>
+      <text x="900" y="318" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">lời cho phép sang <tspan font-family="'Geist Mono', monospace">cancelled</tspan></text>
+      <text x="900" y="338" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">một giao dịch — cùng xảy ra hoặc cùng không</text>
+
+      <!-- ===== Nhánh gỡ, bước 2 ===== -->
+      <rect x="740" y="432" width="320" height="96" rx="6" fill="#fafafa"/>
+      <rect x="740" y="432" width="320" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="752" y="444" width="44" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="774" y="456" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-5</text>
+      <text x="900" y="488" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">lần đăng nhập sau</text>
+      <text x="900" y="506" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">không tự thành viên lần nữa</text>
+
+      <!-- ===== Nhánh gỡ, bước 3 (kết quả cuối) ===== -->
+      <rect x="760" y="588" width="280" height="56" rx="28" fill="#fafafa"/>
+      <rect x="760" y="588" width="280" height="56" rx="28" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="900" y="621" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">màn hết quyền</text>
+      <text x="900" y="664" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">AC-6</text>
+      <text x="900" y="680" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">vẫn đăng nhập được, nhưng không còn</text>
+      <text x="900" y="694" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không gian làm việc</text>
+
+      <!-- ===== Chú giải ===== -->
+      <line x1="40" y1="726" x2="1060" y2="726" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="747" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="140" y="738" width="20" height="12" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="168" y="747" fill="#575757" font-size="9" font-family="'Geist', sans-serif">điểm đầu và kết quả cuối</text>
+
+      <polygon points="322,737 332,744 322,751 312,744" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="340" y="747" fill="#575757" font-size="9" font-family="'Geist', sans-serif">chỗ rẽ</text>
+
+      <rect x="408" y="738" width="20" height="12" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="436" y="747" fill="#575757" font-size="9" font-family="'Geist', sans-serif">một bước máy làm</text>
+
+      <rect x="554" y="738" width="20" height="12" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="582" y="747" fill="#575757" font-size="9" font-family="'Geist', sans-serif">bước cắt quyền thật</text>
+
+      <text x="710" y="747" fill="#575757" font-size="9" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" fill="#171717">cancelled</tspan> là giá trị thật trong cơ sở dữ liệu</text>
+    </svg>
+  </div>
+</body>
+</html>

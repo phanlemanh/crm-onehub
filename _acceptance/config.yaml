@@ -13,6 +13,18 @@ design_pass:
   ds_skill: web-design-guidelines
 executors:
   test:
+    cp_ham_thuan: "cd packages/auth && bun test test/ai-duoc-vao.spec.ts"
+    cp_vai_dinh_truoc: "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t vai-dinh-truoc"
+    cp_rut_chan_chua_vao: "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t rut-chan-chua-vao"
+    cp_rut_khong_dung_da_vao: "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t rut-khong-dung-da-vao"
+    cp_go_tron_ven: "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t go-tron-ven"
+    cp_duong_moi: "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t duong-moi"
+    cp_doc_hong_khong_khoa: "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t doc-hong"
+    cp_chu_cuoi_cung: "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t chu-cuoi-cung"
+    cp_quyen_hai_ve: "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t quyen-hai-ve"
+    cp_chuan_hoa_dia_chi: "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t chuan-hoa"
+    cp_domain_nha_tach: "cd apps/api && bun test test/domain-nha-tach.spec.ts"
+    cp_cho_phep_lai: "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t cho-phep-lai"
     cua_vao_chon_tieng: "cd apps/app && bun test test/locale-resolve.spec.ts"
     cua_vao_kho_chuoi: "cd apps/app && bun test test/auth-messages.spec.ts"
     api: "bun run test"
