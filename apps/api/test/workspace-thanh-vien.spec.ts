@@ -210,3 +210,116 @@ describe("cho-phep-lai", () => {
 		]);
 	});
 });
+
+describe("chu-cuoi-cung", () => {
+	beforeEach(async () => {
+		await don();
+		await dungKho();
+	});
+
+	it("chu cuoi cung khong go duoc, hai chu thi go duoc", async () => {
+		const chu = await dungNguoi("chu", "owner");
+		const chuMember = await db.member.findUnique({
+			where: {
+				organizationId_userId: { organizationId: WORKSPACE_ID, userId: chu },
+			},
+			select: { id: true },
+		});
+
+		const demTruoc = await db.member.count({
+			where: { organizationId: WORKSPACE_ID },
+		});
+
+		let cau = "";
+		try {
+			await workspace.removeMember(chu, { memberId: chuMember?.id ?? "" });
+		} catch (e) {
+			cau = (e as Error).message;
+		}
+
+		const demSau = await db.member.count({
+			where: { organizationId: WORKSPACE_ID },
+		});
+
+		expect([
+			cau.length > 0,
+			demSau,
+			demTruoc,
+			"tu choi, va khong dong nao doi",
+		]).toEqual([true, demTruoc, demTruoc, "tu choi, va khong dong nao doi"]);
+
+		const chuHai = await dungNguoi("chu-hai", "owner");
+		const chuHaiMember = await db.member.findUnique({
+			where: {
+				organizationId_userId: {
+					organizationId: WORKSPACE_ID,
+					userId: chuHai,
+				},
+			},
+			select: { id: true },
+		});
+
+		await workspace.removeMember(chu, { memberId: chuHaiMember?.id ?? "" });
+
+		const conLai = await db.member.findUnique({
+			where: {
+				organizationId_userId: {
+					organizationId: WORKSPACE_ID,
+					userId: chuHai,
+				},
+			},
+			select: { id: true },
+		});
+
+		expect([conLai, "doi chung duong: hai chu thi go duoc mot"]).toEqual([
+			null,
+			"doi chung duong: hai chu thi go duoc mot",
+		]);
+	});
+
+	it("go mot thanh vien cung rut loi cho phep cua ho", async () => {
+		const quan = await dungNguoi("quan", "admin");
+		await dungNguoi("chu", "owner");
+		const bi = await dungNguoi("bi-go", "member");
+
+		const loi = await workspace.allowEmail(quan, {
+			email: `${bi}@onemount.com`,
+			role: "member",
+		});
+		await db.invitation.update({
+			where: { id: loi.id },
+			data: { status: "accepted" },
+		});
+
+		const biMember = await db.member.findUnique({
+			where: {
+				organizationId_userId: { organizationId: WORKSPACE_ID, userId: bi },
+			},
+			select: { id: true },
+		});
+
+		await workspace.removeMember(quan, { memberId: biMember?.id ?? "" });
+
+		const hang = await db.member.findUnique({
+			where: {
+				organizationId_userId: { organizationId: WORKSPACE_ID, userId: bi },
+			},
+			select: { id: true },
+		});
+
+		const sau = await db.invitation.findUnique({
+			where: { id: loi.id },
+			select: { status: true },
+		});
+
+		expect([
+			hang,
+			sau?.status,
+			"hang thanh vien mat, loi cho phep thanh cancelled",
+		]).toEqual([
+			null,
+			"cancelled",
+			"hang thanh vien mat, loi cho phep thanh cancelled",
+		]);
+	});
+});

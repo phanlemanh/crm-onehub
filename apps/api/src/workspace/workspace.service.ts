@@ -354,6 +354,61 @@ export class WorkspaceService {
 		return this.toAllowance(updated);
 	}
 
+	async removeMember(
+		userId: string,
+		input: RemoveMemberInput,
+	): Promise<void> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!isWorkspaceAdmin(role)) {
+			throw new ForbiddenException(
+				"Only an owner or an admin can remove a member.",
+			);
+		}
+
+		await this.db.$transaction(async (tx) => {
+			const target = await tx.member.findFirst({
+				where: { id: input.memberId, organizationId: WORKSPACE_ID },
+				select: { id: true, role: true, user: { select: { email: true } } },
+			});
+
+			if (!target) {
+				throw new NotFoundException("That person is not in this workspace.");
+			}
+
+			if (target.role === "owner") {
+				const owners = await tx.$queryRaw<{ id: string }[]>`
+					SELECT id FROM "member"
+					WHERE "organizationId" = ${WORKSPACE_ID} AND role = 'owner'
+					FOR UPDATE
+				`;
+
+				if (owners.length <= 1) {
+					throw new ForbiddenException(
+						"The workspace needs an owner. Make someone else an owner first.",
+					);
+				}
+			}
+
+			await tx.member.delete({ where: { id: target.id } });
+
+			await tx.invitation.updateMany({
+				where: {
+					organizationId: WORKSPACE_ID,
+					email: target.user.email,
+					status: { in: ["pending", "accepted"] },
+				},
+				data: { status: "cancelled" },
+			});
+		});
+
+		this.logger.log({
+			message: "Member removed",
+			userId,
+			memberId: input.memberId,
+		});
+	}
+
 	private toAllowance(row: AllowanceRow): Allowance {
 		return {
 			id: row.id,
