@@ -63,6 +63,9 @@ executors:
     api_khong_cache_tron_bo: "bun run db:test && bunx turbo run test --concurrency=1 --force"
     dq_cong_quyen: "cd apps/agent && bun test test/quyen-luot.spec.ts"
     dq_ho_so_cu_con_chay: bash _acceptance/do-quyen-luot-bang-hanh-vi/rang/ho-so-cu-con-chay.sh
+    mt_bat_bien: "cd apps/agent && bun test test/quyen-luot.spec.ts -t bat-bien"
+    mt_cong_hai_bien_the: "cd apps/agent && bun test test/quyen-luot.spec.ts -t suy-dien"
+    mt_ho_so_cu_con_chay: bash _acceptance/ma-tran-phai-co-chieu-song/rang/ho-so-cu-con-chay.sh
     nc_lop_chuyen: cd packages/ui && bun test test/eve-to-ai-sdk.spec.ts
   script:
     cua_vao_loi_mang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"'
@@ -328,6 +331,9 @@ executors:
     dq_nguon_ghi: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/nguon-ghi.mjs
     dq_bo_do_grep: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/bo-do-grep.mjs
     dq_khai_sinh: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/khai-sinh.mjs
+    mt_dot_bien_hai_tep: node _acceptance/ma-tran-phai-co-chieu-song/rang/dot-bien-hai-tep.mjs
+    mt_khong_moc_lai: node _acceptance/ma-tran-phai-co-chieu-song/rang/khong-moc-lai.mjs
+    mt_neo_bien_the: node _acceptance/ma-tran-phai-co-chieu-song/rang/neo-bien-the.mjs
     dq_vet_ho_so_cu: node _acceptance/do-quyen-luot-bang-hanh-vi/rang/vet-ho-so-cu.mjs
     nc_mo_coi: node _acceptance/nen-chat-ai-elements/rang/mo-coi.mjs
     nc_chu_trong_component: node _acceptance/nen-chat-ai-elements/rang/chu-cung.mjs
