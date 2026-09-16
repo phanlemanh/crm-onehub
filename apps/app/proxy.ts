@@ -2,13 +2,14 @@ import { AUTH_COOKIE_PREFIX } from "@crm/auth/cookies";
 import { getSessionCookie } from "better-auth/cookies";
 import { type NextRequest, NextResponse } from "next/server";
 import { isMarketing } from "@/lib/env";
-import { isAnonymous, isUnder } from "@/lib/proxy-paths";
 import {
 	ONBOARDING_PATH,
 	RESEARCH_PATH,
 	readResearchGate,
 	readWorkspaceGate,
 } from "@/lib/onboarding";
+import { duongProtoHopLe, PROTO_PREFIX, protoMoDuoc } from "@/lib/proto-gate";
+import { isAnonymous, isUnder } from "@/lib/proxy-paths";
 import { workspaceUrl } from "@/lib/workspace-url";
 
 const LANDING_PATH = "/";
@@ -29,6 +30,14 @@ export async function proxy(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 
 	if (pathname === SIGN_IN_PATH) return NextResponse.next();
+
+	if (isUnder(pathname, PROTO_PREFIX)) {
+		if (!protoMoDuoc()) return new NextResponse(null, { status: 404 });
+
+		const state = request.nextUrl.searchParams.get("state");
+		if (!duongProtoHopLe(pathname, state))
+			return new NextResponse(null, { status: 404 });
+	}
 
 	if (isAnonymous(pathname)) return NextResponse.next();
 

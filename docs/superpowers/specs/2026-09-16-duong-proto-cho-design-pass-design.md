@@ -49,8 +49,17 @@ apps/app/app/proto/
   _modules/duong-proto/  proto mẫu
 ```
 
-Cờ dev đặt **một chỗ duy nhất** ở `layout.tsx` của nhánh. Đặt ở từng page là mời
-người sau quên một page — và cái quên đó chỉ lộ ra ở bản chạy thật.
+**Sửa sau khi đo (S3):** cờ dev đặt ở **proxy**, không ở `layout.tsx`.
+
+Bản đầu đặt cờ trong `layout.tsx` của nhánh. Đo trên bản dựng thật cho thấy nó
+không giao được thứ đã hứa: kho bật `cacheComponents` và layout gốc bọc cả ứng
+dụng trong `<Suspense>`, nên `/proto` là Partial Prerender — vỏ tĩnh rời máy chủ
+với mã 200 trước khi `notFound()` kịp nói gì. Hai hỏng cùng lúc: mọi đường trả
+200 kể cả slug lạ và state lạ, và nội dung mục lục rò ra HTML dù cờ tắt.
+
+Cổng chuyển lên `apps/app/lib/proto-gate.ts` + `apps/app/proxy.ts`, chạy trước
+khi có byte nào rời máy chủ. `layout.tsx` giữ lần kiểm thứ hai làm lớp phòng
+hai, không phải cổng.
 
 `/proto/x` thắng `(app)/[slug]` vì Next cho đoạn tĩnh thắng đoạn động. Cái giá:
 một workspace CRM tên đúng chữ `proto` sẽ bị che. Nhận, không phòng xa.

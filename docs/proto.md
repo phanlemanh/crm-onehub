@@ -14,12 +14,31 @@ PROTO_ROUTE=1 TURBO_UI=false bunx turbo run dev --ui=stream --filter=app --filte
 
 Rồi mở `http://localhost:3000/proto`.
 
-Mọi giá trị khác — không đặt, chuỗi rỗng, `0`, `false` — đều giữ cả nhánh ở
-404. Đây là chủ ý: `if (!process.env.PROTO_ROUTE)` sẽ coi `"0"` là bật vì chuỗi
-khác rỗng đều truthy, và lúc đó không còn lớp nào canh nhánh này.
+Mọi giá trị khác — không đặt, chuỗi rỗng, `0`, `false`, `true` — đều giữ cả
+nhánh ở 404. Đây là chủ ý: `if (!process.env.PROTO_ROUTE)` sẽ coi `"0"` là bật
+vì chuỗi khác rỗng đều truthy, và lúc đó không còn lớp nào canh nhánh này.
 
-Cờ đọc lúc **dựng**, không phải lúc chạy. Một bản triển khai muốn mở proto phải
-đặt biến trước khi build; đặt sau khi build xong thì không có tác dụng.
+## Cổng nằm ở proxy, không nằm ở trang
+
+`apps/app/lib/proto-gate.ts` giữ ba thứ: cờ, tiền tố `/proto`, và phép kiểm một
+đường proto có hợp lệ không (slug có trong sổ chưa, `?state=` có được khai
+chưa). `apps/app/proxy.ts` gọi chúng **trước** mọi việc khác và trả 404 thật khi
+không đạt.
+
+Đặt ở đó chứ không đặt trong `layout.tsx` là kết quả của một phép đo, không phải
+sở thích. Kho bật `cacheComponents`, và `apps/app/app/layout.tsx` bọc cả ứng
+dụng trong một `<Suspense>` ở gốc, nên trang `/proto` là **Partial Prerender**:
+vỏ tĩnh rời máy chủ với mã 200 trước khi bất kỳ `notFound()` nào ở tầng render
+kịp nói gì. Đo trên bản dựng thật, cách cũ cho hai kết quả sai cùng lúc — mọi
+đường đều 200, và nội dung mục lục vẫn rò ra HTML dù cờ tắt.
+
+Proxy chạy trước khi có byte nào rời máy chủ, nên nó là chỗ duy nhất quyết định
+được. Hệ quả tốt kèm theo: cờ đọc **lúc chạy**, nên bật hay tắt không cần dựng
+lại.
+
+`layout.tsx` vẫn giữ một lần kiểm cờ nữa. Đó là lớp phòng hai, phòng khi
+`config.matcher` của proxy đổi; nó không thay được mã trạng thái và không được
+coi là cổng.
 
 ## Hai chữ "slug" khác nhau
 
