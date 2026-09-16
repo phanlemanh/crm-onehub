@@ -1,96 +1,76 @@
 ## Trong hợp đồng
 
-- **Assert "chuỗi có mặt" thay vì quan hệ: cờ `data-slot` do StateSwitcher sinh ra, không do thân proto**
-  file: `_acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs:48`
-  severity: high
-  AC: AC-1
-  source: measurement
-  detail: Chân `co-bat` khẳng định "thân trang có dấu hiệu component thật của @crm/ui" bằng `doi(t.includes("data-slot"), ...)`, với `t` là TOÀN BỘ HTML của `/proto/duong-proto`. Nhưng lời hứa của AC-1 (và của docs/proto.md: "bắt bản mẫu ghép từ component thật thay vì vẽ tay") là một QUAN HỆ giữa THÂN PROTO và component thật — không phải sự có mặt của một chuỗi ở bất kỳ đâu trên trang.
+### so-dang-ky.mjs còn khoá slug cũ "duong-proto" — răng chết ở sàn cứng (thoát 2), phép đo mồ côi không còn chạy
+file: `_acceptance/duong-proto-cho-design-pass/rang/so-dang-ky.mjs:13`
+severity: high
+AC: AC-8
+Commit dd6c062 đổi slug trong `apps/app/app/proto/catalog.ts` từ `"duong-proto"` sang `"duong-proto-cho-design-pass"` (vá lỗi 404 của design-pass), nhưng `so-dang-ky.mjs` vẫn dò slug cũ viết cứng:
 
-  Trang luôn render `StateSwitcher` (apps/app/app/proto/state-switcher.tsx:17) bằng `<Button asChild>` của `@crm/ui/components/button`, và button.tsx:61 luôn phát `data-slot="button"` — nằm NGOÀI `<div data-proto-body>`. Hệ quả: nếu ai đó viết lại `apps/app/app/proto/_modules/duong-proto/index.tsx` hoàn toàn bằng `<div>`/`<span>` vẽ tay (đúng lớp lỗi eval này nói nó chặn), assert vẫn XANH vì `data-slot` của thanh chuyển state vẫn còn đó. Trang mục lục `/proto` cũng vậy (CardContent → `data-slot="card-content"`).
+    const mau = PROTO_CATALOG.find((m) => m.slug === "duong-proto");
+    if (mau === undefined) thoat(2, "san cung: khong thay muc duong-proto");
 
-  Chính file này đã có sẵn `vungProto(html)` (dòng 25-31) cắt đúng vùng từ `data-proto-body` tới `</main>`, và chân `state-chon-duoc` dùng nó — nhưng chân `co-bat` thì không. Chiều đỏ mà E1 mô tả ("đổi một tên state") chỉ đánh vào vòng lặp `st.nhan` ở dòng 47, không đánh vào assert này, nên không có đột biến nào chứng minh nó bắt được gì.
+Đã chạy trên HEAD: `bun _acceptance/duong-proto-cho-design-pass/rang/so-dang-ky.mjs` → in `rang: san cung: khong thay muc duong-proto`, EXIT=2. Nghĩa là toàn bộ phần thân răng (slug/tên/state không rỗng, state id duy nhất, và vế chính — không mục mồ côi giữa `catalog.ts` và `registry.ts` ở CẢ HAI CHIỀU) không còn được thực thi dòng nào. `_acceptance/config.yaml:357` (`dp_so_dang_ky`) vẫn trỏ vào nó, và `evidence-report.md` (dòng 106-109, round 2) còn ghi `OK so-dang-ky: 1 muc, 1 component` — bằng chứng đã ký giờ là bằng chứng cũ, mô tả một lượt chạy không lặp lại được.
+
+Mọi răng khác trong cùng thư mục đã suy slug từ vị trí hồ sơ (`SLUG_HO_SO` trong `may-chu.mjs`) đúng như `docs/proto.md` bắt ("Slug của bản mẫu PHẢI bằng slug hồ sơ"); riêng file này không import `SLUG_HO_SO` mà viết tay tên — đúng lớp lỗi "bảng khai và mã nguồn trôi nhau" mà `khai-bao.mjs` dựng ra để chặn ở chỗ khác.
+
+Rationale: Phép đo được khai cho AC-8 (dp_so_dang_ky) thoát ngay ở sàn cứng nên không một assert nào của AC-8 (khai sinh proto, đối chiếu catalog↔registry) còn chạy được. Fix đề xuất: thay literal bằng `SLUG_HO_SO` từ `./may-chu.mjs`, đúng như các răng anh em đã làm.
+
+### Một bit cho sáu lời hứa: sáu eval khai chung đúng một lệnh `dp_duong_song`
+file: `_acceptance/config.yaml:353`
+severity: high
+AC: AC-1, AC-2, AC-4, AC-5, AC-6, AC-7
+`dp_duong_song: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs tat-ca"` là lệnh DUY NHẤT được khai cho đường proto, và evals.yaml cho E1 (dòng 9), E2 (dòng 30), E4 (dòng 75), E5 (dòng 102), E6 (dòng 117), E7 (dòng 131) đều trỏ `cmd: config:executors.script.dp_duong_song`. Nhánh `tat-ca` (duong-proto.mjs:55-73) chạy cả sáu chặn rồi trả DUY NHẤT một mã thoát. Vì máy chấm dedupe theo cmd, sáu tiêu chí AC-1/2/4/5/6/7 nhận CÙNG một bit: một chặn đỏ bất kỳ nhuộm đỏ cả sáu mà báo cáo không nói được lời hứa nào gãy. Bằng chứng: run-log.jsonl round 2 ghi các lệnh per-chan (`duong-proto.mjs co-bat`, `... co-tat`, `... muc-luc`, `... slug-la`, `... state-chon-duoc`, `... state-la`) và evidence-report.md round 2 ghi các verifier `config:executors.script.dp_co_bat`, `dp_co_tat`, `dp_state_chon_duoc`, `dp_state_la`, `dp_slug_la`, `dp_muc_luc` — SÁU khoá này KHÔNG tồn tại trong config.yaml (grep đếm 0). Nghĩa là hồ sơ bằng chứng round trước trỏ tới những verifier không khai được, còn lệnh đã khai thì không tái lập được verdict từng eval.
+
+Rationale: Đây là cách AC-1/2/4/5/6/7 được nối dây chung trong config nghiệm thu — vượt quá một AC đơn lẻ nên không dịch danh được thành một AC duy nhất, nhưng ảnh hưởng trực tiếp tới độ phân giải của sáu tiêu chí trong hợp đồng nên xếp "Trong hợp đồng" thay vì "Ngoài hợp đồng".
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **proto_route điền slug hồ sơ nghiệm thu, nhưng PROTO_CATALOG khoá theo slug proto — URL đầu tiên mà design-pass mở sẽ 404**
-  Người dùng thấy gì: Khi bấm mở trang bản mẫu để duyệt thiết kế, hệ thống có thể báo không tìm thấy trang (404) thay vì hiện giao diện, khiến người duyệt không xem được gì.
-  file: `_acceptance/config.yaml`
-  severity: high
-  Đề xuất: known-limits
-
-- **PROTO_ROUTE không nằm trong allowlist env của turbo — dev_cmd được tài liệu hoá sẽ bị lọc mất cờ**
-  Người dùng thấy gì: Nếu làm đúng theo lệnh khởi động được ghi trong tài liệu, trang bản mẫu vẫn có thể không mở ra dù đã bật đúng cờ theo hướng dẫn.
-  file: `_acceptance/config.yaml`
-  severity: high
-  Đề xuất: known-limits
-
-- **.env.example nói cờ đọc lúc dựng, docs/proto.md và rang/ban-dung.mjs nói lúc chạy**
-  Người dùng thấy gì: Tài liệu hướng dẫn bật/tắt tính năng bản mẫu ghi sai thông tin, có thể khiến người vận hành tưởng phải dựng lại toàn bộ ứng dụng trong khi chỉ cần khởi động lại.
-  file: `.env.example`
+- **PROTO_DIST_DIR — biến môi trường mới đọc ở next.config.ts nhưng không khai ở .env.example, docs/environment.md hay turbo.json**
+  Người dùng thấy gì: Một biến cấu hình mới dùng để đổi nơi lưu bản dựng của ứng dụng chưa được ghi chú lại ở nơi liệt kê các biến cấu hình của dự án, nên người sau có thể không biết nó tồn tại hoặc dùng sai mà không được cảnh báo trước.
+  file: `apps/app/next.config.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **layout.tsx viết tay lại so sánh cờ thay vì gọi protoMoDuoc() — hai chỗ giữ cùng một hằng**
-  Người dùng thấy gì: Nếu sau này có người đổi tên cờ bật/tắt bản mẫu ở một chỗ, một phần khác của trang có thể vẫn dùng tên cũ và âm thầm ngừng hoạt động mà không ai nhận ra ngay.
-  file: `apps/app/app/proto/layout.tsx`
-  severity: medium
-  Đề xuất: known-limits
-
-- **proto/page.tsx đè style của CardContent tại chỗ gọi — chỗ duy nhất trong cả kho**
-  Người dùng thấy gì: Một khối nội dung trên trang bản mẫu bị ép hiển thị khác với quy chuẩn giao diện chung của sản phẩm, có thể gây lệch trải nghiệm nếu khuôn mẫu này về sau được dùng làm gốc cho màn hình khác.
+- **proto/page.tsx đè style của CardContent bằng className và dùng nó ngoài Card — chỗ duy nhất trong cả kho**
+  Người dùng thấy gì: Một dòng trên trang danh sách bản mẫu thử nghiệm đang chỉnh sửa giao diện riêng thay vì dùng đúng khối giao diện dùng chung của sản phẩm; nếu bản mẫu này về sau được dùng làm gốc cho màn hình thật, chỗ lệch này sẽ bị chép theo.
   file: `apps/app/app/proto/page.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **mucMoCoi() trong registry.ts là mã chết; phép đo mồ côi chép lại logic của nó**
-  Người dùng thấy gì: Có một đoạn mã kiểm tra không còn được dùng ở đâu; không ảnh hưởng gì tới người dùng, chỉ làm kho mã hơi khó đọc hơn theo thời gian.
-  file: `apps/app/app/proto/registry.ts`
+- **searchParams của trang proto khai kiểu hẹp hơn thật, không theo nếp ConnectionQuery của kho**
+  Người dùng thấy gì: Một tham số trên đường dẫn của trang thử nghiệm được xử lý lỏng hơn quy ước ở các trang khác của sản phẩm; nếu ai đó gõ tham số bất thường trên URL, trang sẽ báo không tìm thấy thay vì hoạt động đúng, dù hiện tại chưa thấy hỏng gì rõ rệt.
+  file: `apps/app/app/proto/[slug]/page.tsx`
   severity: low
-  Đề xuất: wont-fix
+  Đề xuất: known-limits
 
-- **.env.example mô tả PROTO_ROUTE là cờ đọc lúc build — trái với mã và trái với docs/proto.md**
-  Người dùng thấy gì: Tài liệu mô tả cờ bật bản mẫu ghi sai thời điểm cờ có hiệu lực, có thể khiến người vận hành dựng lại ứng dụng một cách không cần thiết.
-  file: `.env.example`
+- **docs/proto.md sends the developer to a test that does not check what it claims — an orphaned proto passes every documented gate**
+  Người dùng thấy gì: Tài liệu hướng dẫn thêm bản mẫu mới chỉ người đọc chạy một phép kiểm không thực sự phát hiện được lỗi quên khai báo; làm đúng từng bước hướng dẫn vẫn có thể tạo ra bản mẫu thiếu sót mà không có cảnh báo nào bật lên.
+  file: `docs/proto.md`
   severity: medium
   Đề xuất: known-limits
 
-- **Phép đo «dùng component thật» ở eval co-bat không thể đỏ — data-slot luôn có do StateSwitcher**
-  Người dùng thấy gì: Phép kiểm tự động để đảm bảo trang bản mẫu luôn dùng đúng thành phần giao diện thật có thể không phát hiện được nếu sau này ai đó âm thầm thay lại bằng HTML tự vẽ tay.
-  file: `_acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Nhánh «cờ không đặt» của răng không thật sự không đặt — next.config gọi loadRootEnv() nạp lại PROTO_ROUTE từ .env gốc**
-  Người dùng thấy gì: Phép đo dùng để chứng minh việc tắt cờ sẽ ẩn hết trang bản mẫu có thể cho kết quả khác nhau tuỳ máy đang chạy, nên kết quả "đạt" chưa chắc đáng tin trên mọi máy.
+- **The spawned Next server is only killed on the happy path — one thrown fetch orphans a `next dev` that locks apps/app for every later run**
+  Người dùng thấy gì: Khi quá trình đo tự động gặp sự cố giữa chừng, một tiến trình máy chủ thử nghiệm có thể bị bỏ quên chạy nền, khiến lần đo tiếp theo bị một máy chủ 'ma' chặn lại và cần can thiệp tay mới chạy tiếp được — không ảnh hưởng người dùng sản phẩm, chỉ ảnh hưởng người đo.
   file: `_acceptance/duong-proto-cho-design-pass/rang/may-chu.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **khai-bao.mjs: statSync không được chắn — chết bằng ENOENT thay vì in ra phát hiện vừa ghi ở dòng trên**
-  Người dùng thấy gì: Nếu cấu hình đo trỏ sai đường dẫn tệp hướng dẫn, công cụ kiểm tra sẽ dừng đột ngột bằng một lỗi hệ thống khó hiểu thay vì báo rõ nguyên nhân.
-  file: `_acceptance/duong-proto-cho-design-pass/rang/khai-bao.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-- **Assertion âm-tính-một-mình: ba chuỗi chống-rò ở ban-dung.mjs đúng rỗng, không có đối chứng dương**
-  Người dùng thấy gì: Phép kiểm dùng để đảm bảo tắt cờ sẽ ẩn hết nội dung bản mẫu thực ra không chứng minh được điều đó một cách chắc chắn, nên có thể báo "đạt" ngay cả khi có rò rỉ.
-  file: `_acceptance/duong-proto-cho-design-pass/rang/ban-dung.mjs`
-  severity: high
-  Đề xuất: known-limits
-
-- **Assertion âm-tính-một-mình: chân `state-la` và `slug-la` chỉ có 404, không đối chứng dương trong cùng lượt**
-  Người dùng thấy gì: Nếu cả nhánh /proto bị hỏng hoặc biến mất hoàn toàn, các bài kiểm tra hiện tại vẫn báo đạt, nên sự cố có thể không bị phát hiện cho tới khi có người tự tay vào kiểm tra.
-  file: `_acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs`
+- **Chỉ dẫn thay vì đầu ra: evals.yaml và các bước ui-check vẫn ghim URL /proto/duong-proto đã 404**
+  Người dùng thấy gì: Một số hướng dẫn đo và lệnh chụp màn hình mẫu trong hồ sơ nghiệm thu vẫn còn ghi địa chỉ trang cũ đã đổi tên; làm đúng theo hướng dẫn đó có thể chụp nhầm một trang báo lỗi thay vì trang bản mẫu thật.
+  file: `_acceptance/duong-proto-cho-design-pass/evals.yaml`
   severity: medium
   Đề xuất: known-limits
 
-- **Assertion âm-tính không ghim thông điệp: grep `/error/i` trên toàn bộ log dựng**
-  Người dùng thấy gì: Khi bước dựng gặp lỗi liên quan tới nhánh proto, thông báo hiện tại không cho biết lỗi gì hay ở đâu, khiến người xử lý mất thời gian dò nguyên nhân.
-  file: `_acceptance/duong-proto-cho-design-pass/rang/ban-dung.mjs`
-  severity: low
+- **Assertion âm-tính-một-mình: quét cấm nhập không có đối chứng dương cho chính bộ dò**
+  Người dùng thấy gì: Phép kiểm tự động đảm bảo bản mẫu không gọi thẳng vào phần lõi máy chủ chỉ báo động khi phát hiện vi phạm nhưng chưa tự kiểm xem chính nó còn hoạt động đúng hay không; nếu cách viết import đổi khác trong tương lai, phép kiểm có thể báo yên bình dù không còn dò được gì thật sự.
+  file: `_acceptance/duong-proto-cho-design-pass/rang/khong-goi-server.mjs`
+  severity: medium
   Đề xuất: known-limits
+
+## Chưa adversarial-verify (refuter chết)
+
+(không có mục nào)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

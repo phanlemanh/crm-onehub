@@ -1,6 +1,6 @@
 import { PROTO_CATALOG } from "../../../apps/app/app/proto/catalog.ts";
 import { PROTO_COMPONENTS } from "../../../apps/app/app/proto/registry.ts";
-import { thoat } from "./may-chu.mjs";
+import { SLUG_HO_SO, thoat } from "./may-chu.mjs";
 
 const loi = [];
 const doi = (d, c) => {
@@ -10,8 +10,12 @@ const doi = (d, c) => {
 if (PROTO_CATALOG.length < 1)
 	thoat(2, "san cung: catalog rong — moi cau 'moi muc deu hop le' duoi day dung vo nghia");
 
-const mau = PROTO_CATALOG.find((m) => m.slug === "duong-proto");
-if (mau === undefined) thoat(2, "san cung: khong thay muc duong-proto");
+const mau = PROTO_CATALOG.find((m) => m.slug === SLUG_HO_SO);
+if (mau === undefined)
+	thoat(
+		2,
+		`san cung: slug ho so "${SLUG_HO_SO}" khong giai duoc trong catalog (co: ${PROTO_CATALOG.map((m) => m.slug).join(", ")})`,
+	);
 if (mau.states.length !== 5)
 	thoat(2, `san cung: duong-proto khai ${mau.states.length} state, cho 5`);
 
