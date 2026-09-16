@@ -367,7 +367,12 @@ export class WorkspaceService {
 		await this.db.$transaction(async (tx) => {
 			const target = await tx.member.findFirst({
 				where: { id: input.memberId, organizationId: WORKSPACE_ID },
-				select: { id: true, role: true, user: { select: { email: true } } },
+				select: {
+					id: true,
+					role: true,
+					userId: true,
+					user: { select: { email: true } },
+				},
 			});
 
 			if (!target) {
@@ -389,6 +394,8 @@ export class WorkspaceService {
 			}
 
 			await tx.member.delete({ where: { id: target.id } });
+
+			await tx.session.deleteMany({ where: { userId: target.userId } });
 
 			const email = normalizeEmail(target.user.email);
 

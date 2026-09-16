@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-16T03:28:35Z",
-  "generated_sha": "03a0dcda733ab4a84cc9d97810378a6f2ed5d5ca",
+  "generated_at": "2026-09-16T04:03:01Z",
+  "generated_sha": "687c2a3ef7c6ee1981b02f3616d2b97d5e9e05a9",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "cho-phep-ai-vao-o-man-hinh",
-  "round": 1,
+  "round": 2,
   "riskTier": "T3",
   "evals": [
     {
@@ -25,7 +25,7 @@
     {
       "id": "E2",
       "criterion": "AC-2",
-      "cmd": "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t vai-dinh-truoc",
+      "cmd": "bun run test -- \"cd packages/auth && bun test test/cong-vao.integration.spec.ts -t vai-dinh-truoc\"",
       "expected": "Do HANG trong co so du lieu, khong do tham so ta gui di.\nKHEP VONG GHI-DOC, bat buoc: dong loi cho phep phai do CHINH THU TUC cho phep tao\nra (goi that thu tuc, voi dau vao nhu nguoi quan go tren man), KHONG duoc cam\nthang bang Prisma cho dung khuon ben doc. Truoc khi di duong callback, doc LAI\nhang vua ghi tu DB va dua DUNG hang ay vao ham thuan — khang dinh danh tinh nay\nphai in ra gia tri doc lai.\nVi sao: fixture cam tay luon dung khuon ben doc nen no che mat moi lech giua ben\nghi va ben doc — vai luu dang chu hoa, dia chi chua ha chu thuong. Cung lop loi\nda co o kho: [do-quyen-luot-bang-hanh-vi#F1].\nRoi di TRON duong callback that: sau luot do, hang `member` cua dia chi ay phai\nmang role \"admin\", VA dong loi cho phep phai chuyen sang \"accepted\". Chan in ca\nhai gia tri doc lai tu DB.\nChieu do: cay vai mac dinh vao duong tao thanh vien trong ban sao -> ma 1, in ra\nvai mong doi va vai nhan duoc.\nChieu do thu hai: doi chu hoa cua email hoac ten vai o BEN GHI trong ban sao ->\nchan nay phai DO (khong phai chi E10 do) — do la ca ma fixture cam tay bo sot.\nDoi chung duong bat buoc: mot loi cho phep `member` di cung duong phai cho role\n\"member\" — neu hai ca cho cung mot ket qua thi phep do khong phan biet duoc\n\"vai dinh truoc co hieu luc\" voi \"moi nguoi deu ra admin\", va chan tra ma 2.\nKhong goi duoc thu tuc cho phep, hoac khong dung duoc luot callback -> ma 2.",
       "executor": "test",
       "expectedExit": 0,
@@ -40,7 +40,7 @@
     {
       "id": "E3",
       "criterion": "AC-3",
-      "cmd": "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t rut-chan-chua-vao",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t rut-chan-chua-vao\"",
       "expected": "KHEP VONG GHI-DOC nhu E2: ca dong duoc cho phep lan luot rut deu di qua CHINH hai\nthu tuc that (cho phep, rut), khong cam thang bang Prisma.\nDo HE QUA trong co so du lieu: dem `user`, `account`, `session`, `verification`\nTRUOC va SAU khi mot dia chi VUA BI RUT di tron duong callback — bon cap phai\nbang nhau. Chan in du tam con so.\nDOI CHUNG DUONG BAT BUOC: mot dia chi CON duoc phep di cung duong PHAI tao dung\nmot hang `user`. Khong tao thi phep do khong phan biet duoc \"chan dung\" voi\n\"duong callback khong chay\", va chan tra ma 2 chu khong ma 0.\nMot bang tang hang o ca bi chan -> ma 1, neu ten bang va hai con so.",
       "executor": "test",
       "expectedExit": 0,
@@ -54,7 +54,7 @@
     {
       "id": "E4",
       "criterion": "AC-4",
-      "cmd": "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t rut-khong-dung-da-vao",
+      "cmd": "bun run test -- \"cd packages/auth && bun test test/cong-vao.integration.spec.ts -t rut-khong-dung-da-vao\"",
       "expected": "Mot nguoi DA la thanh vien, loi cho phep o \"accepted\". Rut loi cho phep ay, roi:\n1. hang `member` cua ho VAN con — doc lai tu DB, khong doc bien trong bo nho\n2. ho VAN tao duoc phien moi, va sau luot ay hang `member` van con\nDay la hanh vi CO Y. Chieu do: neu ban sua cho rut cung xoa thanh vien thi chan\nphai DO — do la AC-5 chu khong phai AC-4, va tron hai viec lai la dung cai loi\nma hai khoi tach bach sinh ra de tranh.\nKhong doc duoc hang member -> ma 2.",
       "executor": "test",
       "expectedExit": 0,
@@ -68,7 +68,7 @@
     {
       "id": "E5",
       "criterion": "AC-5",
-      "cmd": "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t go-tron-ven",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t go-tron-ven\"",
       "expected": "BA khang dinh, ca ba doc lai tu DB:\n1. sau khi go: hang `member` bien mat VA dong loi cho phep = \"cancelled\"\n2. nguoi ay dang nhap lai -> KHONG hang `member` nao sinh ra lan nua\n3. tinh NGUYEN TU: ep lenh ghi thu hai hong trong ban sao -> ca hai deu khong\nxay ra, tuc hang `member` van con va loi cho phep van \"accepted\"\nKhang dinh 3 la chieu do that su cua tieu chi nay: hai lenh ghi khong nam chung\nmot giao dich thi khang dinh 1 va 2 van xanh, con du lieu thi lech.\nThieu mot trong ba -> ma 1, neu khang dinh nao. Khong ep duoc loi -> ma 2.",
       "executor": "test",
       "expectedExit": 0,
@@ -82,7 +82,7 @@
     {
       "id": "E6",
       "criterion": "AC-9",
-      "cmd": "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t duong-moi",
+      "cmd": "bun run test -- \"cd packages/auth && bun test test/cong-vao.integration.spec.ts -t duong-moi\"",
       "expected": "Bang loi cho phep RONG, xet HAI trang thai tren cung mot dia chi thuoc bien moi:\nchua ai tung dang nhap -> tao duoc dung mot hang `user`\nDA co it nhat mot nguoi -> khong hang nao sinh them, bon bang dem truoc/sau bang nhau\nVa GHIM rang phep kiem nam o `databaseHooks.user.create.BEFORE`, tuc truoc khi ghi\n— doc vi tri that trong cau hinh, khong tim chuoi trong file.\nHai trang thai cho cung ket qua -> ma 1: duong moi dang mo vo dieu kien hoac dong\nvo dieu kien, ca hai deu sai.",
       "executor": "test",
       "expectedExit": 0,
@@ -96,7 +96,7 @@
     {
       "id": "E7",
       "criterion": "AC-12",
-      "cmd": "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t doc-hong",
+      "cmd": "bun run test -- \"cd packages/auth && bun test test/cong-vao.integration.spec.ts -t doc-hong\"",
       "expected": "Ep lop doc loi cho phep NEM LOI, roi mot nguoi DANG la thanh vien tao phien moi:\n1. hook khong nem loi ra ngoai — luot tao phien khong throw\n2. phien VAN tao duoc\n3. hang `member` san co con nguyen\nChieu do: bo `try` trong ban sao -> chan DO, in ra loi da thoat ra ngoai.\nDay la rang buoc docs/api.md dang co (\"degrades, never throws\"); vong nay khong\nduoc lam mat. Khong ep duoc lop doc nem loi -> ma 2.",
       "executor": "test",
       "expectedExit": 0,
@@ -110,7 +110,7 @@
     {
       "id": "E8",
       "criterion": "AC-7",
-      "cmd": "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t chu-cuoi-cung",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t chu-cuoi-cung\"",
       "expected": "Khong gian lam viec con DUNG MOT nguoi giu vai chu. Goi thu tuc go nguoi ay:\n1. luot goi bi tu choi, thong diep noi ro vi sao\n2. dem hang `member` va dem dong loi cho phep TRUOC va SAU — hai cap bang nhau\nDoi chung duong bat buoc: khi co HAI chu, go mot nguoi PHAI thanh cong — neu ca\nnay cung bi tu choi thi phep do khong phan biet \"bat bien dung\" voi \"thu tuc go\nhong hoan toan\", va chan tra ma 2.\nVa ghim rang lan dem di qua khoa `FOR UPDATE`, doc tu cau lenh that.",
       "executor": "test",
       "expectedExit": 0,
@@ -123,7 +123,7 @@
     {
       "id": "E9",
       "criterion": "AC-8",
-      "cmd": "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t quyen-hai-ve",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t quyen-hai-ve\"",
       "expected": "HAI VE trong cung mot luot, vi mot ve dung ma ve kia sai la dung loi can chan:\nve dich vu: nguoi vai `member` goi CA BON thu tuc moi -> ca bon tu choi\nve mat nguoi: co cho phep thao tac tinh o TRANG MAY CHU cua man Members tra\n`false` cho vai `member`\nVe mat nguoi phai neu DICH DANH tep may chu tinh co ay va tep do phai nam trong\n`paths` — khong khai thi quet AST khong bao gio gap ma giao dien, khong tim thay\ngi, thoat 0, va ve nay XANH KHONG trong khi nut Go van hien voi vai `member`.\nBA khang dinh AST, du ca ba:\n1. duong: tep may chu ay co DUNG MOT loi goi `isWorkspaceAdmin` nhap tu\n`@crm/auth` — khong phai mot ban sao logic thu hai\n2. am: khong noi nao trong man Members so chuoi vai tai cho\n3. am, va day la ca `bun run build` se bat neu lot: tep mang `\"use client\"` cua\nman Members KHONG nhap `@crm/auth` — goi server keo Prisma keo pg keo dns,\nbo dong goi di theo chuoi ay vao trinh duyet va ban dung do\nDoi chung duong: vai `admin` phai qua ca bon thu tuc va co cho phep thao tac tra\n`true`.\nDot bien chung minh: doi tep may chu sang so chuoi `role === \"admin\"` -> phai do\no khang dinh 1 va 2.\nMot thu tuc cho qua -> ma 1, neu ten thu tuc.",
       "executor": "test",
       "expectedExit": 0,
@@ -138,7 +138,7 @@
     {
       "id": "E10",
       "criterion": "AC-11",
-      "cmd": "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t chuan-hoa",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t chuan-hoa\"",
       "expected": "BANG VIET TRUOC, NAM dong. Dong 1 noi ro trang thai cua dong da co, vi luat tu\nchoi CHI ap cho loi cho phep con hieu luc (xem E16 cho ca da rut):\n1 \"  KHUE@Gmail.com  \" khi da co \"khue@gmail.com\" o `pending` -> tu choi, KHONG dong thu hai\n2 \"Khue@Gmail.com\"     khi bang rong                          -> tao dong, luu \"khue@gmail.com\"\n3 \"khue\"                                                      -> tu choi truoc khi cham DB\n4 \"a@b@c.com\"                                                 -> tu choi truoc khi cham DB\n5 \"\"                                                          -> tu choi truoc khi cham DB\nDong 3,4,5 phai bi chan TRUOC khi cham co so du lieu — dem so luot truy van trong\nca ay, phai bang khong.\nDong 1 kiem ca hai: khong tao dong thu hai VA nguoi thao tac nhan cau noi dia chi\nda co trong danh sach (do quan he: goi that duong tu choi, so thong diep nhan duoc\nvoi cau ghim truoc, khong tim chuoi trong file).\nSai mot dong -> ma 1, neu dong nao.",
       "executor": "test",
       "expectedExit": 0,
@@ -152,7 +152,7 @@
     {
       "id": "E11",
       "criterion": "AC-10",
-      "cmd": "cd apps/api && bun test test/domain-nha-tach.spec.ts",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/domain-nha-tach.spec.ts\"",
       "expected": "Do QUAN HE hai chieu, goi THAT hai duong doc chu khong tim chuoi:\nchieu 1: doi o domain nha -> ket qua cua `mailbox-match` va `tracking-filing`\nDOI theo; ket qua cua ham quyet dinh ai-vao-duoc KHONG doi\nchieu 2: them roi rut mot loi cho phep -> ket qua cua hai duong doc tren KHONG\ndoi mot chut nao\nBon khang dinh, chan in du bon. Chieu do: cay lai `workspaceDomains()` cu vao mot\ntrong hai duong doc trong ban sao -> ma 1, neu duong nao.\nVi sao do quan he chu khong do chuoi: hai duong doc van co the con nhac ten bien\ncu trong mot nhanh chet ma thuoc van xanh, trong khi hanh vi that da tach.",
       "executor": "test",
       "expectedExit": 0,
@@ -167,7 +167,7 @@
     {
       "id": "E16",
       "criterion": "AC-14",
-      "cmd": "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t cho-phep-lai",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t cho-phep-lai\"",
       "expected": "BA ca trong MOT luot, tren cung mot dia chi, khac nhau o trang thai dong da co:\n`cancelled` -> cho phep lai THANH CONG\n`pending`   -> tu choi\n`accepted`  -> tu choi\nBa ca cho cung mot ket qua -> ma 2: luc ay phep do khong phan biet duoc \"mo dung\nca da rut\" voi \"mo tat\" hay \"dong tat\".\nVa doc lai tu DB: sau khi cho phep lai, dong `cancelled` CU van con nguyen — loi\ncho phep moi la mot dong MOI. Dem so dong mang dia chi ay: truoc 1, sau 2.\nChieu do: sua ben ghi thanh quay dong cu ve `pending` thay vi tao dong moi -> chan\nphai DO o phep dem, neu hai con so.\nVi sao tieu chi nay ton tai: AC-5 go mot nguoi bang cach chuyen loi cho phep sang\n`cancelled`, roi AC-11 lay chinh dong ay lam co tu choi. Thieu ca nay thi hop dong\ntu mau thuan va khong duong nao nhan nguoi ta lai ngoai sua tay co so du lieu.",
       "executor": "test",
       "expectedExit": 0,
@@ -180,7 +180,7 @@
     {
       "id": "E12",
       "criterion": "AC-6",
-      "cmd": "${CLAUDE_PLUGIN_ROOT}/scripts/design-scan.js",
+      "cmd": "${CLAUDE_PLUGIN_ROOT:-/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0}/scripts/design-scan.js",
       "expected": "DUONG SINH KHUNG HINH, khai truoc vi bo cong khong tu biet: dung CAY DANG XET\n(khong phai checkout chinh), dat `APP_URL` va `API_URL` TAY theo cong cua chinh\ncay ay — de mac dinh thi thuoc do chup ban dev dang chay o checkout khac va ho so\nnhan khung hinh cua man CU. Tao phien bang `dev:session` cho tai khoan can dung.\nAnh ve `_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/` voi ten ghim truoc.\nKHANG DINH DANH TINH truoc khi tin mau: ban dung sinh ra khung hinh phai CO khoi\nduoc phep vao tren man Members — khong co khoi ay nghia la dang chup ban cu, va\nchan tra ma 2.\nNoi dung phai thay: mot tai khoan con dang nhap duoc nhung khong con la thanh vien,\ndi toi mot trang bat ky cua ung dung -> khung hinh cho thay MOT man noi thang rang\ntai khoan nay khong con trong khong gian lam viec, kem duong dang xuat.\nKhong vong chuyen huong, khong man trang, khong trang loi may chu.\nThieu tep khung hinh -> ma 2, neu ten tep thieu. KHONG im lang UNCERTAIN.",
       "executor": "ui-check",
       "expectedExit": 0,
@@ -204,7 +204,7 @@
     {
       "id": "E13",
       "criterion": "AC-8",
-      "cmd": "${CLAUDE_PLUGIN_ROOT}/scripts/design-scan.js",
+      "cmd": "${CLAUDE_PLUGIN_ROOT:-/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0}/scripts/design-scan.js",
       "expected": "DUONG SINH KHUNG HINH nhu E12: cay dang xet, `APP_URL` va `API_URL` dat tay theo\ncong cua chinh cay ay, phien tao bang `dev:session` — LAN LUOT cho hai vai, vi\ntieu chi nay song bang phep so hai khung hinh.\nMan Members nhin bang mat NGUOI VAI `member`: khung hinh phai cho thay hai bang\nday du ma KHONG nut nao thao tac duoc — khong nut cho phep mot dia chi, khong nut\ngo, khong nut rut.\nDoi chung bat buoc: khung hinh cua CUNG man ay nhin bang mat nguoi vai `admin`\nPHAI co du ba nut. Hai khung hinh giong nhau -> ma 1: hoac ca hai deu an nut (vai\n`admin` mat quyen), hoac ca hai deu hien (vai `member` thay nut khong duoc bam) —\nca hai deu sai, va neu ro dang nghi ca nao.\nThieu mot trong hai tep khung hinh -> ma 2, neu ten tep thieu.",
       "executor": "ui-check",
       "expectedExit": 0,
@@ -233,12 +233,13 @@
       "expectedExit": 0,
       "inputs": [
         "/Users/manhphan/dev/crm-onehub/apps/app/lib/messages/settings-thanh-vien.ts"
-      ]
+      ],
+      "inputsHash": "b8877955fe4ba1cfd42e75f46b20bbab813c079ab8adee3d560c559e39e46a0f"
     },
     {
       "id": "E15",
       "criterion": "AC-6",
-      "cmd": "node ${CLAUDE_PLUGIN_ROOT}/scripts/design-gate.mjs",
+      "cmd": "node ${CLAUDE_PLUGIN_ROOT:-/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0}/scripts/design-gate.mjs",
       "expected": "Chay tren CAY DANG XET voi `APP_URL` dat tay theo cong cua chinh cay ay, cung\nduong nhu E12 va E13 — san chat luong doc ban dang chay, nen chay no tren ban dev\no checkout khac la cham diem cho ma khong phai cua vong nay.\nSan chat luong giao dien cua bo cong: khong co P0 nao tren cac man vong nay cham.\nRang buoc rieng cua vong: hai viec khong dao duoc — go va rut — deu phai di qua\nhop thoai xac nhan, khong duoc lam ngay lap tuc.\nCo P0 -> ma 1, neu ten man va luat bi pham.",
       "executor": "script",
       "expectedExit": 0,
@@ -261,17 +262,21 @@
   "templatePath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
   "contractPath": "/Users/manhphan/dev/crm-onehub/_acceptance/cho-phep-ai-vao-o-man-hinh/contract.md",
-  "invokedAt": "2026-09-16T03:28:35Z",
-  "invokedSha": "03a0dcda733ab4a84cc9d97810378a6f2ed5d5ca",
+  "invokedAt": "2026-09-16T04:03:01Z",
+  "invokedSha": "687c2a3ef7c6ee1981b02f3616d2b97d5e9e05a9",
   "vungVat": [
     ".env.example",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/card-plain.json",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/card.html",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-member.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/go-khac-rut.html",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/go-khac-rut.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/vong-doi-loi-cho-phep.html",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/vong-doi-loi-cho-phep.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json",
     "_acceptance/config.yaml",
     "apps/api/src/generated/server.ts",
     "apps/api/src/mailbox/mailbox-match.service.ts",
@@ -330,8 +335,11 @@
     "_acceptance/cho-phep-ai-vao-o-man-hinh/contract.md",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/coverage-scan.md",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/decisions.jsonl",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence-report.md",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/index.md",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/gap-probe.md",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/review-findings.md",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/run-log.jsonl",
     "docs/api.md",
     "docs/environment.md",
     "docs/superpowers/plans/2026-09-16-cho-phep-ai-vao-o-man-hinh.md",
@@ -346,12 +354,19 @@
     "_acceptance/cho-phep-ai-vao-o-man-hinh/coverage-scan.md",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/decisions.jsonl",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence-report.md",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-member.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/go-khac-rut.html",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/go-khac-rut.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/index.md",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/vong-doi-loi-cho-phep.html",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/vong-doi-loi-cho-phep.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/gap-probe.md",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/review-findings.md",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/run-log.jsonl",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json",
     "_acceptance/config.yaml",
     "apps/api/src/generated/server.ts",
     "apps/api/src/mailbox/mailbox-match.service.ts",
@@ -396,10 +411,14 @@
     "_acceptance/cho-phep-ai-vao-o-man-hinh/card-plain.json",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/card.html",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-member.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/go-khac-rut.html",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/go-khac-rut.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/vong-doi-loi-cho-phep.html",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/vong-doi-loi-cho-phep.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json",
     "_acceptance/config.yaml",
     "apps/api/src/mailbox/mailbox-match.service.ts",
     "apps/api/src/tracking/tracking-filing.service.ts",
@@ -451,5 +470,132 @@
   ],
   "coEvalPaths": true,
   "evalsHash": "6824f9a5ea452507eed61bae6c964e65aaec38d18682adc56bc354f7691a56a1",
-  "runBaseline": true
+  "runBaseline": false,
+  "carriedAnalyst": {
+    "fromRound": 1,
+    "nonDiscriminating": []
+  },
+  "carriedFindings": [
+    {
+      "file": "apps/api/src/workspace/staff-domains.ts",
+      "title": "Cột staffEmailDomains không có đường ghi nào — lọc \"địa chỉ nhà\" ở tracking chết hẳn",
+      "severity": "high",
+      "plain": "Ô cài đặt domain nội bộ mới hiện chưa có nơi nào trên giao diện để nhập giá trị, nên tính năng loại nhân viên tự điền form khỏi số liệu tiếp thị coi như chưa bật được ở bất kỳ bản cài nào.",
+      "proposal": "new-contract",
+      "fromRound": 1
+    },
+    {
+      "file": "packages/auth/src/allow-list.ts",
+      "title": "Quyết định đăng nhập fail-open với mọi status lạ, và ép kiểu không qua parser ở biên DB",
+      "severity": "medium",
+      "plain": "Nếu một lời mời bị huỷ hoặc hết hạn theo cách ghi khác với quy ước hiện tại, hệ thống có thể vẫn coi đó là lời mời còn hiệu lực và để người đó đăng nhập được.",
+      "proposal": "new-contract",
+      "fromRound": 1
+    },
+    {
+      "file": "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx",
+      "title": "Bảng allowances dựng bằng thẻ <table> thô thay vì component của @crm/ui",
+      "severity": "medium",
+      "plain": "Bảng danh sách lời cho phép trên màn Members được dựng khác kiểu với các bảng khác trong sản phẩm, nên trải nghiệm và giao diện không hoàn toàn đồng nhất.",
+      "proposal": "known-limits",
+      "fromRound": 1
+    },
+    {
+      "file": "apps/api/src/workspace/staff-domains.ts",
+      "title": "APP_SETTING_ID trùng SETTINGS_ID của @crm/db, và chính hàm đọc không dùng nó",
+      "severity": "low",
+      "plain": "Không ảnh hưởng tới người dùng — đây thuần tuý là một chi tiết tổ chức mã nguồn phía sau.",
+      "proposal": "known-limits",
+      "fromRound": 1
+    },
+    {
+      "file": "packages/auth/src/allow-list.ts",
+      "title": "Quyết định cho vào mở-mặc-định với mọi status lạ, và ép kiểu không phân tích ở biên",
+      "severity": "high",
+      "plain": "Nếu quy trình mời có sẵn trong nền tảng ghi trạng thái theo cách khác với dự kiến, người bị từ chối hoặc lời mời đã hết hạn vẫn có thể đăng nhập được.",
+      "proposal": "new-contract",
+      "fromRound": 1
+    },
+    {
+      "file": "apps/api/src/workspace/staff-domains.ts",
+      "title": "staffEmailDomains không có đường ghi nào — mọi cài đặt đọc ra rỗng, chặn 'địa chỉ nhà' ở tracking chết hẳn",
+      "severity": "medium",
+      "plain": "Ô cài đặt domain nội bộ mới chưa có nơi nào để nhập giá trị, nên tính năng tách domain nội bộ ra khỏi số liệu tiếp thị vẫn chưa hoạt động được trên các bản cài hiện có.",
+      "proposal": "new-contract",
+      "fromRound": 1
+    },
+    {
+      "file": "packages/auth/src/organization.ts",
+      "title": "decide() chạy bằng client `db` toàn cục ở giữa `db.$transaction`, nên đọc ngoài giao dịch và giữ hai kết nối",
+      "severity": "low",
+      "plain": "Trong tình huống hệ thống chịu tải rất nặng, có một khả năng nhỏ khiến người vừa đăng nhập bị hiểu nhầm là chưa có quyền và bị đưa sang màn 'hết quyền' dù họ vẫn hợp lệ.",
+      "proposal": "wont-fix",
+      "fromRound": 1
+    },
+    {
+      "file": "apps/app/app/(landing)/het-quyen/sign-out-button.tsx",
+      "title": "Nút đăng xuất ở màn hết quyền truyền nhãn nút làm thông báo lỗi, và không bắt promise",
+      "severity": "low",
+      "plain": "Nếu việc đăng xuất ở màn 'hết quyền' gặp trục trặc, thông báo hiện ra sẽ chỉ lặp lại chữ trên nút bấm thay vì giải thích lỗi thật, gây khó hiểu cho người dùng.",
+      "proposal": "known-limits",
+      "fromRound": 1
+    },
+    {
+      "file": "packages/auth/test/cong-vao.integration.spec.ts",
+      "title": "Fixture VIẾT TAY đúng khuôn bên đọc — E2 cấm đích danh nhưng test vẫn cắm thẳng Prisma",
+      "severity": "high",
+      "plain": "Bài kiểm tự động cho việc gán vai trò định trước hiện dựng sẵn dữ liệu mẫu đúng khuôn nó mong đợi, nên nếu có lệch giữa lúc lưu và lúc đọc vai trò trong thực tế, bài kiểm sẽ không phát hiện ra.",
+      "proposal": "known-limits",
+      "fromRound": 1
+    },
+    {
+      "file": "packages/auth/test/cong-vao.integration.spec.ts",
+      "title": "Fixture VIẾT TAY thay đường ghi thật — E4 rút lời cho phép bằng updateMany, không gọi revokeAllowance",
+      "severity": "high",
+      "plain": "Bài kiểm tự động cho việc rút lời cho phép không đi qua đúng quy trình rút thật, nên nếu sau này việc rút phép vô tình xoá luôn một thành viên đang hoạt động, bài kiểm sẽ không phát hiện.",
+      "proposal": "known-limits",
+      "fromRound": 1
+    },
+    {
+      "file": "apps/api/test/domain-nha-tach.spec.ts",
+      "title": "Đo lớp trung gian thay vì ĐẦU RA — E11 hứa đo hai đường đọc mailbox-match/tracking-filing nhưng test chỉ gọi helper staffEmailDomains",
+      "severity": "high",
+      "plain": "Bài kiểm cho tính năng tách domain nội bộ hiện chỉ kiểm tra một lớp trung gian, không kiểm tra kết quả thực tế ở hai nơi sử dụng nó, nên một lỗi ở hai nơi đó có thể lọt qua mà không ai biết.",
+      "proposal": "known-limits",
+      "fromRound": 1
+    },
+    {
+      "file": "apps/api/test/domain-nha-tach.spec.ts",
+      "title": "Khẳng định rỗng: \"thêm rồi rút lời cho phép\" không hề ghi gì vào DB",
+      "severity": "high",
+      "plain": "Một trong các bài kiểm tuyên bố xác nhận dữ liệu không đổi sau khi thêm rồi rút quyền, nhưng thực chất phép thử đó không ghi dữ liệu thật vào hệ thống, nên gần như luôn báo đạt bất kể có lỗi hay không.",
+      "proposal": "known-limits",
+      "fromRound": 1
+    },
+    {
+      "file": "packages/auth/test/cong-vao.integration.spec.ts",
+      "title": "Khẳng định không thể đỏ + thoát im lặng: describe duong-moi tự vô hiệu khi DB còn hàng user",
+      "severity": "medium",
+      "plain": "Một số bài kiểm cho tình huống 'lần đầu chưa ai vào hệ thống' sẽ tự bỏ qua việc kiểm tra nếu môi trường thử còn sót dữ liệu cũ, nên có nguy cơ báo đạt mà thực ra chưa kiểm tra gì.",
+      "proposal": "known-limits",
+      "fromRound": 1
+    },
+    {
+      "file": "packages/auth/test/cong-vao.integration.spec.ts",
+      "title": "Thiếu khẳng định đã tuyên — E7 khai ba khẳng định, test bỏ khẳng định \"phiên VẪN tạo được\"",
+      "severity": "medium",
+      "plain": "Bài kiểm đảm bảo hệ thống không bị treo khi đọc danh sách cho phép bị lỗi hiện chưa kiểm tra rằng người dùng vẫn đăng nhập được bình thường trong tình huống đó, mới kiểm được một phần đã hứa.",
+      "proposal": "known-limits",
+      "fromRound": 1
+    }
+  ],
+  "deltaFiles": [
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-member.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json",
+    "_acceptance/config.yaml",
+    "apps/api/src/workspace/workspace.service.ts",
+    "apps/api/test/workspace-thanh-vien.spec.ts"
+  ]
 }

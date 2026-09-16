@@ -52,7 +52,21 @@ async function dem() {
 	return { user, account, session, verification };
 }
 
+async function dungKho() {
+	await db.organization.upsert({
+		where: { id: WORKSPACE_ID },
+		create: {
+			id: WORKSPACE_ID,
+			name: "CRM",
+			slug: "crm",
+			createdAt: new Date(),
+		},
+		update: {},
+	});
+}
+
 async function don() {
+	await dungKho();
 	await db.invitation.deleteMany({
 		where: { id: { startsWith: `${suffix}-` } },
 	});

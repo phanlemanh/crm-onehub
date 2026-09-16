@@ -237,6 +237,9 @@ describe("chu-cuoi-cung", () => {
 		const demTruoc = await db.member.count({
 			where: { organizationId: WORKSPACE_ID },
 		});
+		const loiTruoc = await db.invitation.count({
+			where: { organizationId: WORKSPACE_ID },
+		});
 
 		let cau = "";
 		try {
@@ -248,13 +251,21 @@ describe("chu-cuoi-cung", () => {
 		const demSau = await db.member.count({
 			where: { organizationId: WORKSPACE_ID },
 		});
+		const loiSau = await db.invitation.count({
+			where: { organizationId: WORKSPACE_ID },
+		});
 
 		expect([
-			cau.length > 0,
+			cau,
 			demSau,
+			loiSau,
+			"cau tu choi GHIM nguyen van, va ca hai bang khong doi",
+		]).toEqual([
+			"The workspace needs an owner. Make someone else an owner first.",
 			demTruoc,
-			"tu choi, va khong dong nao doi",
-		]).toEqual([true, demTruoc, demTruoc, "tu choi, va khong dong nao doi"]);
+			loiTruoc,
+			"cau tu choi GHIM nguyen van, va ca hai bang khong doi",
+		]);
 
 		const chuHai = await dungNguoi("chu-hai", "owner");
 		const chuHaiMember = await db.member.findUnique({
@@ -366,6 +377,17 @@ describe("chu-cuoi-cung", () => {
 			data: { status: "accepted" },
 		});
 
+		await db.session.create({
+			data: {
+				id: id("phien-bi-go"),
+				token: id("token-bi-go"),
+				userId: bi,
+				expiresAt: new Date(Date.now() + 7 * 24 * 3600 * 1000),
+				createdAt: new Date(),
+				updatedAt: new Date(),
+			},
+		});
+
 		const biMember = await db.member.findUnique({
 			where: {
 				organizationId_userId: { organizationId: WORKSPACE_ID, userId: bi },
@@ -387,14 +409,18 @@ describe("chu-cuoi-cung", () => {
 			select: { status: true },
 		});
 
+		const phienConLai = await db.session.count({ where: { userId: bi } });
+
 		expect([
 			hang,
 			sau?.status,
-			"hang thanh vien mat, loi cho phep thanh cancelled",
+			phienConLai,
+			"hang thanh vien mat, loi cho phep thanh cancelled, phien bi thu hoi",
 		]).toEqual([
 			null,
 			"cancelled",
-			"hang thanh vien mat, loi cho phep thanh cancelled",
+			0,
+			"hang thanh vien mat, loi cho phep thanh cancelled, phien bi thu hoi",
 		]);
 	});
 });
@@ -602,18 +628,47 @@ describe("rut-chan-chua-vao", () => {
 			"bi chan, va bon bang khong tang hang nao",
 		]);
 
+		const { ensureWorkspaceMembership } = await import("@crm/auth");
+
 		const quaKhiConPhep = await quaCong(conPhep);
-		await db.user.create({ data: nguoiMoi(conPhep) });
-		const cuoi = await demBonBang();
+		const hangConPhep = await db.user.create({
+			data: nguoiMoi(conPhep),
+		});
+		await ensureWorkspaceMembership(hangConPhep.id, conPhep);
+
+		const thanhVienConPhep = await db.member.findUnique({
+			where: {
+				organizationId_userId: {
+					organizationId: WORKSPACE_ID,
+					userId: hangConPhep.id,
+				},
+			},
+			select: { id: true },
+		});
+
+		const hangBiRut = await db.user.create({ data: nguoiMoi(biRut) });
+		await ensureWorkspaceMembership(hangBiRut.id, biRut);
+
+		const thanhVienBiRut = await db.member.findUnique({
+			where: {
+				organizationId_userId: {
+					organizationId: WORKSPACE_ID,
+					userId: hangBiRut.id,
+				},
+			},
+			select: { id: true },
+		});
 
 		expect([
 			quaKhiConPhep,
-			cuoi.user - sau.user,
-			"doi chung duong: dia chi con phep tao dung mot hang user",
+			thanhVienConPhep !== null,
+			thanhVienBiRut,
+			"doi chung duong: con phep thi duong dang nhap CAP tu cach thanh vien, bi rut thi khong",
 		]).toEqual([
 			true,
-			1,
-			"doi chung duong: dia chi con phep tao dung mot hang user",
+			true,
+			null,
+			"doi chung duong: con phep thi duong dang nhap CAP tu cach thanh vien, bi rut thi khong",
 		]);
 	});
 });
@@ -622,6 +677,88 @@ describe("go-tron-ven", () => {
 	beforeEach(async () => {
 		await don();
 		await dungKho();
+	});
+
+	it("NGUYEN TU: lenh ghi thu hai hong thi ca hai cung khong xay ra", async () => {
+		const quan = await dungNguoi("quan", "admin");
+		await dungNguoi("chu", "owner");
+		const bi = await dungNguoi("nguyen-tu", "member");
+
+		const loi = await workspace.allowEmail(quan, {
+			email: `${bi}@onemount.com`,
+			role: "member",
+		});
+		await db.invitation.update({
+			where: { id: loi.id },
+			data: { status: "accepted" },
+		});
+
+		const biMember = await db.member.findUnique({
+			where: {
+				organizationId_userId: { organizationId: WORKSPACE_ID, userId: bi },
+			},
+			select: { id: true },
+		});
+
+		const hong = new WorkspaceService(
+			new Proxy(db, {
+				get(muc, khoa, nhan) {
+					if (khoa === "$transaction") {
+						type Tx = Parameters<Parameters<typeof db.$transaction>[0]>[0];
+
+						return (viec: (tx: Tx) => Promise<unknown>) =>
+							db.$transaction(async (tx: Tx) => {
+								const chan = new Proxy(tx as object, {
+									get(t, k, n) {
+										if (k === "invitation") {
+											return {
+												updateMany: () => {
+													throw new Error("ep lenh ghi thu hai hong");
+												},
+											};
+										}
+										return Reflect.get(t, k, n);
+									},
+								});
+								return viec(chan as Tx);
+							});
+					}
+					return Reflect.get(muc, khoa, nhan);
+				},
+			}) as typeof db,
+			agent,
+		);
+
+		let daNem = false;
+		try {
+			await hong.removeMember(quan, { memberId: biMember?.id ?? "" });
+		} catch {
+			daNem = true;
+		}
+
+		const conThanhVien = await db.member.findUnique({
+			where: {
+				organizationId_userId: { organizationId: WORKSPACE_ID, userId: bi },
+			},
+			select: { id: true },
+		});
+
+		const dongLoi = await db.invitation.findUnique({
+			where: { id: loi.id },
+			select: { status: true },
+		});
+
+		expect([
+			daNem,
+			conThanhVien !== null,
+			dongLoi?.status,
+			"lenh ghi thu hai hong -> CA HAI deu khong xay ra",
+		]).toEqual([
+			true,
+			true,
+			"accepted",
+			"lenh ghi thu hai hong -> CA HAI deu khong xay ra",
+		]);
 	});
 
 	it("go xong thi dang nhap lai KHONG tu thanh vien lan nua", async () => {
