@@ -5,7 +5,7 @@ slug: cho-phep-ai-vao-o-man-hinh
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [auth, api, ui]
-status: verified
+status: signed-off
 approved_by: Mạnh
 approved_at: 2026-09-16
 design_doc: docs/superpowers/specs/2026-09-16-cho-phep-ai-vao-o-man-hinh-design.md
@@ -208,3 +208,13 @@ phản biện context sạch bắt được, và AC-14 là chỗ vá.
 - Người lạ tự xin vào rồi chờ duyệt — cổng vào là lời cho phép có trước
 
 ## Notes
+
+- Ngoài-3 — Khi dùng công cụ đăng nhập thử nội bộ mà không ghi rõ email, người dùng hợp lệ có thể bị hệ thống coi như chưa được phép và bị chặn ngoài cửa.
+- Ngoài-4 — Nếu bảng cài đặt từng có hơn một dòng, màn hình có thể âm thầm đọc nhầm danh sách domain nội bộ, khiến việc nhận diện email nhân viên hoặc lọc số liệu truy cập sai mà không ai biết.
+- Ngoài-5 — Một địa chỉ email viết sai định dạng vẫn có thể lọt vào danh sách cho phép, tạo ra một dòng chờ không bao giờ khớp được khi người đó thật sự đăng nhập.
+- Ngoài-6 — Luật ai được quản lý thành viên hiện nằm rải ở nhiều chỗ trong mã nguồn, nên lần sau đổi luật này có thể vô tình sót một chỗ, khiến nút bấm và thông báo lỗi nói hai điều khác nhau.
+- Ngoài-8 — Một trong các bài kiểm tự động có thể báo 'đạt' ngay cả khi có trục trặc khác xảy ra trong lúc chạy, nên một số lỗi liên quan có thể không được phát hiện dù bài kiểm vẫn xanh.
+- Ngoài-11 — Khi hệ thống bận, bước kiểm tra quyền vào có thể bị timeout, và người dùng hợp lệ có thể bị đưa nhầm sang màn 'hết quyền' mà không ai được báo, ngoài một dòng nhật ký kỹ thuật.
+- Ngoài-13 — Với một hệ thống đã có người dùng, khi có người mới bị từ chối vào, thông báo họ nhận được hướng dẫn sửa một file cấu hình không còn tác dụng nữa, khiến quản trị viên loay hoay sai hướng thay vì vào màn Members để cấp quyền.
+- Ngoài-17 — Một bài kiểm khác trong bộ nghiệm thu có thể báo 'đạt' dù chức năng bên dưới bị hỏng, vì cách viết phép so sánh không đủ chặt để bắt lỗi thật.
+- Ngoài-18 — Bài kiểm cho tiêu chí 'chỉ mở đường mồi khi cài đặt mới' có thể tự bỏ qua phần việc chính khi chạy trên cơ sở dữ liệu đã có người dùng, khiến báo cáo 'đạt' dù phần đó chưa hề được kiểm chứng thật.

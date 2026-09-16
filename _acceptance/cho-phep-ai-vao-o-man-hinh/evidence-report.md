@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: cho-phep-ai-vao-o-man-hinh
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: e3f91a298a42e117eb56ae52a1ee85aeb81bf196
-human_signoff:
+human_signoff: Mạnh 2026-09-16
 ---
 
 # Evidence Report: cho-phep-ai-vao-o-man-hinh
@@ -30,7 +30,7 @@ human_signoff:
 | E15 | AC-6 | script | PASS |
 | E12 | AC-6 | ui-check | PASS |
 | E13 | AC-8 | ui-check | PASS |
-| E14 | AC-13 | judgment | PASS (đề xuất panel — chờ human_override, bắt buộc vì hợp đồng T3) |
+| E14 | AC-13 | judgment | PASS (Mạnh chấm Đạt tại Cổng 2) |
 
 ## Evidence
 
@@ -251,7 +251,7 @@ human_signoff:
     - operational-feasibility: PASS — Hai câu thân đủ tách bạch: "go.than" nói "Họ mất quyền ngay bây giờ" — ngầm định người này đang có quyền (đã vào), còn "rut.than" nói rõ ràng bằng cấu trúc tương phản "chỉ chặn người chưa đăng nhập lần nào. Ai đã vào rồi thì vẫn ở trong" — tự nêu đích danh phạm vi (người chưa vào) và đối lập trực tiếp với trường hợp đã vào. Tiêu đề cũng khác nhau về đối tượng ("Gỡ người này?" nói về một người, "Rút lời cho phép này?" nói về một lời cho phép), nên người đọc lần đầu có đủ căn cứ để phân biệt hai hành động.
     - spec-alignment: PASS — Hai hộp thoại có tiêu đề khác nhau ("Gỡ người này?" vs "Rút lời cho phép này?"), nút khác nhau ("Gỡ" vs "Rút"), và quan trọng nhất là thân câu tự phân biệt rõ phạm vi: "go" nói "Họ mất quyền ngay bây giờ... không vào được nữa" (áp dụng cho người đã có quyền), còn "rut" nói thẳng "chỉ chặn người chưa đăng nhập lần nào. Ai đã vào rồi thì vẫn ở trong" — tức tự loại trừ trường hợp người đã vào. Một người đọc lần đầu đọc hết thân câu (không chỉ tiêu đề) sẽ phân biệt được GỠ = cắt quyền người đã vào, RÚT = chặn người chưa vào.
   rationale: Ba lens đồng thuận PASS trên cùng một câu hỏi (hai hộp thoại có tự phân biệt được hành vi không), không có bất đồng nào giữa các vote. Vì đây là hợp đồng T3, verdict tổng của báo cáo vẫn giữ PENDING-JUDGMENT cho tới khi một người tự đọc lại hai câu thân hộp thoại và điền human_override — máy không được tự nâng lên PASS cho mục judgment dù panel đồng thuận.
-  human_override:
+  human_override: Đạt — Mạnh 2026-09-16
 
 ## Known limits
 
