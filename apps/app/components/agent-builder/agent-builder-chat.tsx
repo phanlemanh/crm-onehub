@@ -786,11 +786,12 @@ function ChatHeader({
 	return (
 		<header className="flex h-12 shrink-0 items-center gap-2 border-b px-4 sm:gap-2.5 sm:pr-4 sm:pl-5">
 			<div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-				<h1
-					className="truncate font-medium text-sm"
-					translate={duLieu === null ? undefined : "no"}
-				>
-					{title}
+				<h1 className="truncate font-medium text-sm">
+					{duLieu === null ? (
+						t.man.hoiThoai
+					) : (
+						<span translate="no">{duLieu}</span>
+					)}
 				</h1>
 				<span className="hidden shrink-0 text-muted-foreground text-xs sm:inline">
 					{t.man.rieng}
