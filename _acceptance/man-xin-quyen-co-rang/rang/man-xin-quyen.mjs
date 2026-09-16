@@ -121,7 +121,8 @@ async function lenhTienDe() {
 	}
 
 	const browser = await moTrinhDuyet();
-	let loi = null;
+	const loi = [];
+	let dat = "";
 	try {
 		const vao = await moMan(browser, "vi", cookie);
 		if (vao.duong !== "/grant-access") {
@@ -132,12 +133,11 @@ async function lenhTienDe() {
 		gieo("clear");
 		const ra = await moMan(browser, "vi", cookie);
 		if (ra.duong === "/grant-access") {
-			loi =
-				"go gieo roi ma /grant-access VAN dung — phep gieo khong phan biet duoc hai trang thai";
-		} else {
-			console.log(
-				`DAT: gieo -> /grant-access dung; go gieo -> chuyen huong ve ${ra.duong}`,
+			loi.push(
+				"go gieo roi ma /grant-access VAN dung — phep gieo khong phan biet duoc hai trang thai",
 			);
+		} else {
+			dat = `gieo -> /grant-access dung; go gieo -> chuyen huong ve ${ra.duong}`;
 		}
 		await ra.page.close();
 	} finally {
@@ -145,10 +145,7 @@ async function lenhTienDe() {
 		gieo("clear");
 	}
 
-	if (loi) {
-		console.log(`DO: ${loi}`);
-		process.exit(1);
-	}
+	ket(loi, dat);
 }
 
 async function docHaiTieng(browser, cookie, doc) {
