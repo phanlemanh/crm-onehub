@@ -8,6 +8,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const THUOC = resolve(HERE, "man-xin-quyen.mjs");
 const KHO_CHUOI = "apps/app/lib/messages/auth.ts";
 const MAN = "apps/app/app/(landing)/grant-access/grant-access.tsx";
+const TRANG = "apps/app/app/(landing)/grant-access/page.tsx";
 
 const VET = [
 	{
@@ -141,6 +142,15 @@ const VET = [
 				/signOut: "Không đăng xuất được[^"]*"/,
 				'signOut: "Could not sign out. Reload the page and try again."',
 			),
+	},
+	{
+		ten: "E10 chup nham man",
+		file: TRANG,
+		lenh: "chup-san",
+		mong: 2,
+		ghim: "bi day ve",
+		sua: (s) =>
+			s.replace("if (providers.length === 0) {", "if (providers.length >= 0) {"),
 	},
 	{
 		ten: "E8 tieu de tai lieu",

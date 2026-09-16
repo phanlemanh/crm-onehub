@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
@@ -472,6 +472,45 @@ const lenhLoiDangXuat = () =>
 		},
 	);
 
+
+async function lenhChupSan() {
+	const kho = await chotCay();
+	const cookie = phien(EMAIL);
+	gieo("both");
+	const thuMuc = `${HERE}/../evidence`;
+	mkdirSync(thuMuc, { recursive: true });
+	const browser = await moTrinhDuyet();
+	try {
+		for (const t of ["vi", "en"]) {
+			const { page, duong } = await moMan(browser, t, cookie);
+			if (duong !== "/grant-access") {
+				tuChoi(
+					`luot ${t} bi day ve ${duong} — anh chup se la anh mot man KHAC, va san thiet ke chay tren no van bao sach`,
+				);
+			}
+			const tieu = await page.title();
+			const mongTieu = kho[t].docTitle.grantAccess;
+			if (!tieu.includes(mongTieu)) {
+				tuChoi(
+					`luot ${t}: tieu de tai lieu la ${JSON.stringify(tieu)}, khong chua ${JSON.stringify(mongTieu)} — dang dung o man khac`,
+				);
+			}
+			await page.setViewport({ width: 1280, height: 900 });
+			const duongAnh = `${thuMuc}/E10-xin-quyen-${t}.png`;
+			await page.screenshot({ path: duongAnh });
+			await page.close();
+			if (!existsSync(duongAnh) || statSync(duongAnh).size < 1000) {
+				tuChoi(`luot ${t}: khong ghi duoc anh ${duongAnh}`);
+			}
+			console.log(`da chup ${t}: duong=${duong} tieu-de=${JSON.stringify(tieu)}`);
+		}
+	} finally {
+		await browser.close();
+		gieo("clear");
+	}
+	console.log("DAT: hai anh chup dung man /grant-access, danh tinh da khang dinh");
+}
+
 const LENH = {
 	"tien-de": lenhTienDe,
 	"nam-o": lenhNamO,
@@ -482,6 +521,7 @@ const LENH = {
 	"dang-cap": lenhDangCap,
 	"loi-nha-cung-cap": lenhLoiNhaCungCap,
 	"loi-dang-xuat": lenhLoiDangXuat,
+	"chup-san": lenhChupSan,
 };
 
 const ten = process.argv[2];
