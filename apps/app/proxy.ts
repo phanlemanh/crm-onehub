@@ -2,6 +2,7 @@ import { AUTH_COOKIE_PREFIX } from "@crm/auth/cookies";
 import { getSessionCookie } from "better-auth/cookies";
 import { type NextRequest, NextResponse } from "next/server";
 import { isMarketing } from "@/lib/env";
+import { isAnonymous, isUnder } from "@/lib/proxy-paths";
 import {
 	ONBOARDING_PATH,
 	RESEARCH_PATH,
@@ -15,8 +16,6 @@ const LANDING_PATH = "/";
 const SIGN_IN_PATH = "/sign-in";
 
 const UNGATED = ["/grant-access", "/eve"];
-
-const ANONYMOUS = ["/t"];
 
 const SECTIONS = [
 	"/campaigns",
@@ -76,20 +75,12 @@ function appPath(pathname: string, slug: string): string {
 	return workspaceUrl(slug, rest.length ? `/${rest.join("/")}` : "/");
 }
 
-function isUnder(pathname: string, prefix: string): boolean {
-	return pathname === prefix || pathname.startsWith(`${prefix}/`);
-}
-
 function isPublic(pathname: string): boolean {
 	return pathname === LANDING_PATH && isMarketing();
 }
 
 function isUngated(pathname: string): boolean {
 	return UNGATED.some((prefix) => isUnder(pathname, prefix));
-}
-
-function isAnonymous(pathname: string): boolean {
-	return ANONYMOUS.some((prefix) => isUnder(pathname, prefix));
 }
 
 function isSetup(pathname: string): boolean {
