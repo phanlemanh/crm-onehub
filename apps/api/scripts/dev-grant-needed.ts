@@ -12,10 +12,10 @@ const CAU_HINH: readonly CauHinh[] = ["google", "both", "clear"];
 
 const SCOPE_KHONG_DONG_BO = IDENTITY_SCOPES.join(" ");
 
-const NHA_CUNG_CAP: Record<Exclude<CauHinh, "clear">, readonly string[]> = {
+const NHA_CUNG_CAP = {
 	google: [GOOGLE_PROVIDER_ID],
 	both: [GOOGLE_PROVIDER_ID, MICROSOFT_PROVIDER_ID],
-};
+} satisfies Record<Exclude<CauHinh, "clear">, readonly string[]>;
 
 export function laCauHinh(value: string): value is CauHinh {
 	return (CAU_HINH as readonly string[]).includes(value);

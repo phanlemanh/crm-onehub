@@ -1,5 +1,5 @@
 import { execFileSync, spawn } from "node:child_process";
-import { mkdtempSync, rmSync, symlinkSync } from "node:fs";
+import { mkdtempSync, openSync, readFileSync, rmSync, symlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,7 +9,20 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 export const GOC_THAT = resolve(HERE, "../../..");
 export const CONG_SAO = Number(process.env.CONG_SAO ?? 3200);
 
-const CHO_MAY_CHU_GIAY = 120;
+const CHO_MAY_CHU_GIAY = 180;
+
+const MUON_NODE_MODULES = [
+	"",
+	"apps/agent/",
+	"apps/api/",
+	"apps/app/",
+	"packages/auth/",
+	"packages/db/",
+	"packages/env/",
+	"packages/telemetry/",
+	"packages/ui/",
+	"packages/validation/",
+];
 
 async function song(url, giay) {
 	const han = Date.now() + giay * 1000;
@@ -50,20 +63,40 @@ export async function dungBanSao({ sua, khongDungMayChu = false }) {
 
 	try {
 		symlinkSync(`${GOC_THAT}/.env`, `${goc}/.env`);
-		symlinkSync(`${GOC_THAT}/node_modules`, `${goc}/node_modules`);
+		execFileSync(
+			"cp",
+			[
+				"-Rc",
+				`${GOC_THAT}/packages/db/src/generated`,
+				`${goc}/packages/db/src/generated`,
+			],
+			{ stdio: "pipe" },
+		);
+		for (const d of MUON_NODE_MODULES) {
+			execFileSync(
+				"cp",
+				["-Rc", `${GOC_THAT}/${d}node_modules`, `${goc}/${d}node_modules`],
+				{ stdio: "pipe" },
+			);
+		}
 		await sua(goc);
 
 		if (khongDungMayChu) return { goc, cong: CONG_SAO, app: null, don };
 
+		const log = openSync(join(hom, "may-chu.log"), "a");
 		may = spawn("bun", ["run", "dev", "--port", String(CONG_SAO)], {
 			cwd: join(goc, "apps/app"),
-			stdio: "ignore",
+			stdio: ["ignore", log, log],
 		});
 
 		const app = `http://localhost:${CONG_SAO}`;
 		if (!(await song(`${app}/sign-in`, CHO_MAY_CHU_GIAY))) {
+			let vi_sao = "";
+			try {
+				vi_sao = readFileSync(join(hom, "may-chu.log"), "utf8").trim().split("\n").slice(-12).join("\n");
+			} catch {}
 			throw new Error(
-				`ban sao khong tra loi o ${app} sau ${CHO_MAY_CHU_GIAY} giay`,
+				`ban sao khong tra loi o ${app} sau ${CHO_MAY_CHU_GIAY} giay.\n${vi_sao}`,
 			);
 		}
 
