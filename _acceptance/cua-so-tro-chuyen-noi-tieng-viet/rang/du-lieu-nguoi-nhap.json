@@ -5,7 +5,7 @@
 		{
 			"file": "apps/app/components/agent-builder/agent-builder-chat.tsx",
 			"truong": "tieu de hoi thoai o thanh dau",
-			"bieu_thuc": "title"
+			"bieu_thuc": "duLieu"
 		},
 		{
 			"file": "apps/app/components/agent-builder/chat-chips.tsx",
