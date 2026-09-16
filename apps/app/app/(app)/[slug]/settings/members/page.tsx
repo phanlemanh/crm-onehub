@@ -14,6 +14,7 @@ import { thanhVienMessages } from "@/lib/messages/settings-thanh-vien";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { AllowancesTable } from "./allowances-table";
 import { membersSearchParams } from "./members-search-params";
 import { MembersTable } from "./members-table";
 
@@ -63,7 +64,10 @@ async function Members({
 
 	return (
 		<HydrateClient>
-			<MembersTable />
+			<div className="flex min-h-0 flex-col gap-8">
+				<MembersTable />
+				<AllowancesTable />
+			</div>
 		</HydrateClient>
 	);
 }

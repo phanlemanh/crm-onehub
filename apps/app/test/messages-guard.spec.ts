@@ -42,6 +42,7 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 }
 
 const KHONG_DAU = new Set([
+	"hopThoaiChoPhep.choDoi",
 	"chiaSe.xong",
 	"tep.kiloByte",
 	"tep.megaByte",

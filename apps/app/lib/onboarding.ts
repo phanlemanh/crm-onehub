@@ -19,6 +19,7 @@ const workspaceAnswer = z
 		onboarded: z.boolean().nullable().catch(null),
 		canRename: z.boolean().nullable().catch(null),
 		slug: z.string().min(1).nullable().catch(null),
+		viewerRole: z.string().nullable().optional(),
 	})
 	.catch({ onboarded: null, canRename: null, slug: null });
 
@@ -46,7 +47,11 @@ async function read(request: NextRequest, procedure: string) {
 	}
 }
 
-export type WorkspaceGate = { gate: Gate; slug: string | null };
+export type WorkspaceGate = {
+	gate: Gate;
+	slug: string | null;
+	inWorkspace: boolean | null;
+};
 
 export async function readWorkspaceGate(
 	request: NextRequest,
@@ -56,7 +61,7 @@ export async function readWorkspaceGate(
 	const slug = workspace.slug;
 
 	if (workspace.onboarded === null) {
-		return { gate: "unknown", slug };
+		return { gate: "unknown", slug, inWorkspace: null };
 	}
 
 	return {
@@ -65,6 +70,8 @@ export async function readWorkspaceGate(
 				? "settled"
 				: "required",
 		slug,
+		inWorkspace:
+			workspace.viewerRole === undefined ? null : workspace.viewerRole !== null,
 	};
 }
 
