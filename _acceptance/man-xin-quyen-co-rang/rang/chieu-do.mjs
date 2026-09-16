@@ -16,7 +16,8 @@ const VET = [
 		lenh: "nam-o",
 		mong: 1,
 		ghim: "tieu de man",
-		sua: (s) => s.replace('title: "Còn một bước nữa"', 'title: "One more step"'),
+		sua: (s) =>
+			s.replace('title: "Còn một bước nữa"', 'title: "One more step"'),
 	},
 	{
 		ten: "E1 o cau rieng tu",
@@ -54,8 +55,8 @@ const VET = [
 		ghim: "chu tren nut cap quyen",
 		sua: (s) =>
 			s.replace(
-				"grant: (ten: string) => `Cấp quyền ${ten}`,\n\t\tgrantOne: \"Cấp quyền\",\n\t\tgranting: \"Đang mở…\",\n\t\tsignOut: \"Đăng xuất\",",
-				"grant: (ten: string) => `Grant ${ten} access`,\n\t\tgrantOne: \"Cấp quyền\",\n\t\tgranting: \"Đang mở…\",\n\t\tsignOut: \"Đăng xuất\",",
+				'grant: (ten: string) => `Cấp quyền ${ten}`,\n\t\tgrantOne: "Cấp quyền",\n\t\tgranting: "Đang mở…",\n\t\tsignOut: "Đăng xuất",',
+				'grant: (ten: string) => `Grant ${ten} access`,\n\t\tgrantOne: "Cấp quyền",\n\t\tgranting: "Đang mở…",\n\t\tsignOut: "Đăng xuất",',
 			),
 	},
 	{
@@ -111,7 +112,9 @@ const VET = [
 		sua: (s) => {
 			const i = s.lastIndexOf("\t\t\t<Button");
 			const j = s.indexOf("</Button>", i);
-			return i < 0 || j < 0 ? s : s.slice(0, i) + s.slice(j + "</Button>".length);
+			return i < 0 || j < 0
+				? s
+				: s.slice(0, i) + s.slice(j + "</Button>".length);
 		},
 	},
 	{
@@ -150,14 +153,18 @@ const VET = [
 		mong: 2,
 		ghim: "bi day ve",
 		sua: (s) =>
-			s.replace("if (providers.length === 0) {", "if (providers.length >= 0) {"),
+			s.replace(
+				"if (providers.length === 0) {",
+				"if (providers.length >= 0) {",
+			),
 	},
 	{
 		ten: "E8 tieu de tai lieu",
 		lenh: "tieu-de-tai-lieu",
 		mong: 1,
 		ghim: "tieu de tai lieu",
-		sua: (s) => s.replace('grantAccess: "Cấp quyền",', 'grantAccess: "Grant access",'),
+		sua: (s) =>
+			s.replace('grantAccess: "Cấp quyền",', 'grantAccess: "Grant access",'),
 	},
 ];
 
@@ -179,7 +186,11 @@ try {
 		const goc_chuoi = readFileSync(duong, "utf8");
 		const sau = vet.sua(goc_chuoi);
 		if (sau === goc_chuoi) {
-			ketQua.push({ ...vet, ma: null, do: "VET KHONG CAY DUOC — chuoi nguon khong khop" });
+			ketQua.push({
+				...vet,
+				ma: null,
+				do: "VET KHONG CAY DUOC — chuoi nguon khong khop",
+			});
 			continue;
 		}
 		writeFileSync(duong, sau);
@@ -214,6 +225,7 @@ for (const r of ketQua) {
 	if (!dat) console.log(`      ${r.do || "(khong co dong DO nao)"}`);
 }
 
-console.log(`\n${ketQua.length - hong}/${ketQua.length} vet lam thuoc DO dung cho`);
+console.log(
+	`\n${ketQua.length - hong}/${ketQua.length} vet lam thuoc DO dung cho`,
+);
 process.exit(hong ? 1 : 0);
-

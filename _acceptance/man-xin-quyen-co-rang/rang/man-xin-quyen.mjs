@@ -39,7 +39,10 @@ const DOC_KHO =
 	'console.log(JSON.stringify({ vi: phang(authMessages("vi")), en: phang(authMessages("en")), mau: MAU }))';
 
 export function khoChuoiTai(goc) {
-	const ra = execFileSync("bun", ["-e", DOC_KHO], { cwd: goc, encoding: "utf8" });
+	const ra = execFileSync("bun", ["-e", DOC_KHO], {
+		cwd: goc,
+		encoding: "utf8",
+	});
 	return JSON.parse(ra.trim().split("\n").pop());
 }
 
@@ -138,7 +141,6 @@ async function lenhTienDe() {
 	}
 }
 
-
 async function docHaiTieng(browser, cookie, doc) {
 	const ra = {};
 	for (const t of ["vi", "en"]) {
@@ -146,7 +148,9 @@ async function docHaiTieng(browser, cookie, doc) {
 		if (duong !== "/grant-access") {
 			await page.close();
 			await browser.close();
-			tuChoi(`luot ${t} bi day ve ${duong} — man khong dung ra thi moi so do deu vo nghia`);
+			tuChoi(
+				`luot ${t} bi day ve ${duong} — man khong dung ra thi moi so do deu vo nghia`,
+			);
 		}
 		ra[t] = await doc(page);
 		await page.close();
@@ -156,7 +160,8 @@ async function docHaiTieng(browser, cookie, doc) {
 
 function quanHeBaVe(ten, vi, en, loi) {
 	if (vi === en) loi.push(`o "${ten}": luot vi va en giong het nhau: "${vi}"`);
-	if (!CO_DAU.test(vi)) loi.push(`o "${ten}": luot vi khong mang dau tieng Viet: "${vi}"`);
+	if (!CO_DAU.test(vi))
+		loi.push(`o "${ten}": luot vi khong mang dau tieng Viet: "${vi}"`);
 }
 
 function ket(loi, dat) {
@@ -210,29 +215,39 @@ async function lenhBaNhanh() {
 		]) {
 			gieo(cauHinh);
 			const { page, duong } = await moMan(browser, "vi", cookie);
-			if (duong !== "/grant-access") tuChoi(`nhanh ${cauHinh} bi day ve ${duong}`);
+			if (duong !== "/grant-access")
+				tuChoi(`nhanh ${cauHinh} bi day ve ${duong}`);
 			const chu = await page.$eval("h2 + p", (e) => e.textContent.trim());
 			await page.close();
 			const mong = kho.vi.grantAccess[khoa];
 			if (chu !== mong) {
-				loi.push(`nhanh ${cauHinh}: man dung ra "${chu}" nhung khoa ${khoa} la "${mong}"`);
+				loi.push(
+					`nhanh ${cauHinh}: man dung ra "${chu}" nhung khoa ${khoa} la "${mong}"`,
+				);
 			}
 			if (cauHinh === "google" && chu === kho.vi.grantAccess.both) {
 				loi.push("nhanh google dung ra dung cau cua khoa both");
 			}
 		}
 		for (const t of ["vi", "en"]) {
-			const ba = ["google", "microsoft", "both"].map((k) => kho[t].grantAccess[k]);
+			const ba = ["google", "microsoft", "both"].map(
+				(k) => kho[t].grantAccess[k],
+			);
 			if (new Set(ba).size !== 3) {
 				loi.push(`kho chuoi ${t}: ba nhanh khong khac nhau tung doi mot`);
 			}
 		}
-		console.log("GIOI HAN DA KHAI: nhanh chi-Microsoft chi do o lop kho chuoi, chua render that");
+		console.log(
+			"GIOI HAN DA KHAI: nhanh chi-Microsoft chi do o lop kho chuoi, chua render that",
+		);
 	} finally {
 		await browser.close();
 		gieo("clear");
 	}
-	ket(loi, "hai nhanh dung that dung cau cua minh, ba nhanh khac nhau o kho chuoi");
+	ket(
+		loi,
+		"hai nhanh dung that dung cau cua minh, ba nhanh khac nhau o kho chuoi",
+	);
 }
 
 async function lenhTieuDeTaiLieu() {
@@ -260,7 +275,8 @@ async function lenhKhongDich() {
 	try {
 		const ten = await docHaiTieng(browser, cookie, (page) =>
 			page.evaluate(
-				(c) => [...document.querySelectorAll(c)].map((e) => e.textContent.trim()),
+				(c) =>
+					[...document.querySelectorAll(c)].map((e) => e.textContent.trim()),
 				TEN_NCC.chon,
 			),
 		);
@@ -271,16 +287,20 @@ async function lenhKhongDich() {
 		}
 		for (let i = 0; i < ten.vi.length; i++) {
 			if (ten.vi[i] !== ten.en[i]) {
-				loi.push(`ten nha cung cap thu ${i + 1} khac nhau hai luot: vi="${ten.vi[i]}" en="${ten.en[i]}"`);
+				loi.push(
+					`ten nha cung cap thu ${i + 1} khac nhau hai luot: vi="${ten.vi[i]}" en="${ten.en[i]}"`,
+				);
 			}
 		}
 	} finally {
 		await browser.close();
 		gieo("clear");
 	}
-	ket(loi, `${TEN_NCC.so_mong} ten nha cung cap nguyen van va mang translate="no"`);
+	ket(
+		loi,
+		`${TEN_NCC.so_mong} ten nha cung cap nguyen van va mang translate="no"`,
+	);
 }
-
 
 const KHO_MAN = [768, 1024, 1280];
 
@@ -334,7 +354,9 @@ async function lenhBeRong() {
 			for (const x of do_) {
 				dem++;
 				if (x.chu > x.o) {
-					loi.push(`kho ${w}, o "${x.ten}": chu rong ${x.chu}px vuot o ${x.o}px`);
+					loi.push(
+						`kho ${w}, o "${x.ten}": chu rong ${x.chu}px vuot o ${x.o}px`,
+					);
 				}
 			}
 		}
@@ -347,9 +369,11 @@ async function lenhBeRong() {
 	if (dem !== mong) {
 		tuChoi(`thuc hien ${dem} khang dinh, ban khai ghim ${mong}`);
 	}
-	ket(loi, `${dem} khang dinh be rong tren ${KHO_MAN.length} kho man, khong o nao bi cat tran`);
+	ket(
+		loi,
+		`${dem} khang dinh be rong tren ${KHO_MAN.length} kho man, khong o nao bi cat tran`,
+	);
 }
-
 
 const NUT_CAP_QUYEN = "button[data-slot=button]";
 const THONG_BAO = "[data-sonner-toast]";
@@ -447,11 +471,13 @@ const lenhDangCap = () =>
 	);
 
 const lenhLoiNhaCungCap = () =>
-	doHaiTieng("cau bao loi khi khong toi duoc nha cung cap", (browser, t, cookie) =>
-		bamRoiDoc(browser, t, cookie, {
-			chan: /accounts\.google|login\.microsoftonline|api\/auth/,
-			doc: chuTrongThongBao,
-		}),
+	doHaiTieng(
+		"cau bao loi khi khong toi duoc nha cung cap",
+		(browser, t, cookie) =>
+			bamRoiDoc(browser, t, cookie, {
+				chan: /accounts\.google|login\.microsoftonline|api\/auth/,
+				doc: chuTrongThongBao,
+			}),
 	);
 
 const lenhLoiDangXuat = () =>
@@ -471,7 +497,6 @@ const lenhLoiDangXuat = () =>
 			}
 		},
 	);
-
 
 async function lenhChupSan() {
 	const kho = await chotCay();
@@ -502,13 +527,17 @@ async function lenhChupSan() {
 			if (!existsSync(duongAnh) || statSync(duongAnh).size < 1000) {
 				tuChoi(`luot ${t}: khong ghi duoc anh ${duongAnh}`);
 			}
-			console.log(`da chup ${t}: duong=${duong} tieu-de=${JSON.stringify(tieu)}`);
+			console.log(
+				`da chup ${t}: duong=${duong} tieu-de=${JSON.stringify(tieu)}`,
+			);
 		}
 	} finally {
 		await browser.close();
 		gieo("clear");
 	}
-	console.log("DAT: hai anh chup dung man /grant-access, danh tinh da khang dinh");
+	console.log(
+		"DAT: hai anh chup dung man /grant-access, danh tinh da khang dinh",
+	);
 }
 
 const LENH = {

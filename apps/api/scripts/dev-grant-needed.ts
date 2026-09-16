@@ -76,6 +76,8 @@ if (import.meta.main) {
 	}
 
 	const providers = await gieoGrantNeeded(email, cauHinh);
-	console.log(`grant-needed=${providers.length ? providers.join(",") : "none"}`);
+	console.log(
+		`grant-needed=${providers.length ? providers.join(",") : "none"}`,
+	);
 	await db.$disconnect();
 }

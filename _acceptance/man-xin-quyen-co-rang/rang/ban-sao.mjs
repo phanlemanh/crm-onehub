@@ -1,5 +1,11 @@
 import { execFileSync, spawn } from "node:child_process";
-import { mkdtempSync, openSync, readFileSync, rmSync, symlinkSync } from "node:fs";
+import {
+	mkdtempSync,
+	openSync,
+	readFileSync,
+	rmSync,
+	symlinkSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -93,7 +99,11 @@ export async function dungBanSao({ sua, khongDungMayChu = false }) {
 		if (!(await song(`${app}/sign-in`, CHO_MAY_CHU_GIAY))) {
 			let vi_sao = "";
 			try {
-				vi_sao = readFileSync(join(hom, "may-chu.log"), "utf8").trim().split("\n").slice(-12).join("\n");
+				vi_sao = readFileSync(join(hom, "may-chu.log"), "utf8")
+					.trim()
+					.split("\n")
+					.slice(-12)
+					.join("\n");
 			} catch {}
 			throw new Error(
 				`ban sao khong tra loi o ${app} sau ${CHO_MAY_CHU_GIAY} giay.\n${vi_sao}`,

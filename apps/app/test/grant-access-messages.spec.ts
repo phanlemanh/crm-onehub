@@ -8,11 +8,14 @@ const TEN_HANG = ["Google", "Microsoft", "Outlook", "Gmail"] as const;
 const NHAN = ["title", "grantOne", "granting", "signOut"] as const;
 
 describe("kho chuoi man xin quyen", () => {
-	it("grant la mot ham nhan ten nha cung cap, o ca hai thu tieng", () => {
+	it("grant ghep dong ten nha cung cap, o ca hai thu tieng", () => {
 		for (const tieng of TIENG) {
 			const grant = authMessages(tieng).grantAccess.grant;
-			expect(typeof grant).toBe("function");
-			expect(grant("Đất Xanh")).toContain("Đất Xanh");
+			const mot = grant("Đất Xanh");
+			const hai = grant("Nhà Bè");
+			expect(mot).toContain("Đất Xanh");
+			expect(hai).toContain("Nhà Bè");
+			expect(mot).not.toBe(hai);
 		}
 	});
 
