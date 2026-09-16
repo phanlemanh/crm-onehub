@@ -265,6 +265,7 @@ evals:
       - "So bam: voi MOI cap (kho, theme), 5 anh cua 5 state phai KHAC NHAU doi mot. Hai state cho cung mot anh nghia la tham so state khong toi noi render — do chinh la cach mot ma tran chup gia trong nhu that"
       - "So theme: voi moi (state, kho), anh dark phai KHAC anh light thay duoc bang mat — nen toi, chu sang"
       - "Ghi vao bao cao: duong dan cua it nhat mot anh lam screenshot:, va mot dong observed: noi minh da NHIN thay gi"
+      - "DUNG MAY CHU truoc khi ket thuc: kill DUNG PID cua tien trinh next dev vua dung (lay tu luc khoi dong). TUYET DOI khong pkill -f \"next dev\": co rang khac cua chinh round nay dang chay song song, va con co worktree khac tren cung may. Bo lai mot may chu song la chan rang khac — do chinh la nguyen nhan BLOCKED cua round 3."
     expected: |
       AI SINH ANH: chinh eval nay. Nguoi cham ui-check tu khoi dong ban bam duoc
       bang lenh khai o design_pass.dev_cmd, roi tu chup bang Browser pane va ghi
