@@ -255,8 +255,16 @@ evals:
     cmd: config:executors.design.ui_check
     paths:
       - "apps/app/app/proto/**"
-    inputs:
-      - "_acceptance/duong-proto-cho-design-pass/evidence/design-pass/"
+    steps:
+      - "Dung ban bam duoc: cd apps/app && PROTO_ROUTE=1 bunx next dev -p 3300 (lenh khai o design_pass.dev_cmd cung dung; cong nao cung duoc mien khong dung)"
+      - "Doc danh sach state TU apps/app/app/proto/catalog.ts — KHONG viet tay lai. Hien la 5 state: mac-dinh, rong, dang-tai, loi, tran-dai"
+      - "Chup DU 20 o = 5 state x 2 kho (375, 1280) x 2 theme (light, dark). Moi o mot lenh: bun run ui:capture \"http://localhost:3300/proto/duong-proto?state=<STATE>\" _acceptance/duong-proto-cho-design-pass/evidence/design-pass/<STATE>--<KHO>--<THEME>.png --w <KHO> --h <812 neu KHO=375, 900 neu KHO=1280> --theme <THEME> --wait 1200"
+      - "Dem file: thu muc evidence/design-pass/ phai co DUNG 20 tep .png. Thieu du mot o -> UNCERTAIN kem TEN o thieu, khong phai PASS"
+      - "Moi tep phai lon hon 5 KB — mot anh trang gan nhu luon nho hon nguong do"
+      - "Nhin tung anh: khong o nao trang, va moi o phai la component that (the, phu hieu, duong ke) chu khong phai the tran"
+      - "So bam: voi MOI cap (kho, theme), 5 anh cua 5 state phai KHAC NHAU doi mot. Hai state cho cung mot anh nghia la tham so state khong toi noi render — do chinh la cach mot ma tran chup gia trong nhu that"
+      - "So theme: voi moi (state, kho), anh dark phai KHAC anh light thay duoc bang mat — nen toi, chu sang"
+      - "Ghi vao bao cao: duong dan cua it nhat mot anh lam screenshot:, va mot dong observed: noi minh da NHIN thay gi"
     expected: |
       AI SINH ANH: chinh eval nay. Nguoi cham ui-check tu khoi dong ban bam duoc
       bang lenh khai o design_pass.dev_cmd, roi tu chup bang Browser pane va ghi
@@ -277,6 +285,7 @@ evals:
       cach mot ma tran chup gia trong nhu that.
       Theme dark phai KHAC theme light thay duoc bang mat tren cung state va
       cung kho.
+    evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
 
   - id: E14
     criterion: AC-14
