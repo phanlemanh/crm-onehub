@@ -16,6 +16,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const KHAI = JSON.parse(readFileSync(`${HERE}/o-ghim.json`, "utf8"));
 export const O_GHIM = KHAI.o;
 export const TEN_NCC = KHAI.ten_nha_cung_cap;
+export const SO_NUT_MONG = KHAI.so_nut_mong;
 export const CO_DAU =
 	/[ăâđêôơưàáạảãèéẹẻẽìíịỉĩòóọỏõùúụủũỳýỵỷỹâấầậẩẫăắằặẳẵêếềệểễôốồộổỗơớờợởỡưứừựửữ]/i;
 
@@ -280,12 +281,82 @@ async function lenhKhongDich() {
 	ket(loi, `${TEN_NCC.so_mong} ten nha cung cap nguyen van va mang translate="no"`);
 }
 
+
+const KHO_MAN = [768, 1024, 1280];
+
+const DO_BE_RONG = (o) =>
+	o.map((x) => {
+		const n = document.querySelectorAll(x.chon);
+		const el = x.chi < 0 ? n[n.length + x.chi] : n[x.chi];
+		if (!el) return { ten: x.ten, thieu: true };
+		const r = document.createRange();
+		r.selectNodeContents(el);
+		return {
+			ten: x.ten,
+			thieu: false,
+			chu: Math.ceil(Math.max(r.getBoundingClientRect().width, el.scrollWidth)),
+			o: Math.floor(el.clientWidth || el.getBoundingClientRect().width),
+		};
+	});
+
+async function lenhBeRong() {
+	await chotCay();
+	const cookie = phien(EMAIL);
+	gieo("both");
+	const browser = await moTrinhDuyet();
+	const loi = [];
+	let dem = 0;
+	try {
+		for (const w of KHO_MAN) {
+			const { page, duong } = await moMan(browser, "vi", cookie);
+			if (duong !== "/grant-access") tuChoi(`kho ${w} bi day ve ${duong}`);
+			await page.setViewport({ width: w, height: 900 });
+			await page.evaluate(
+				() => new Promise((r) => requestAnimationFrame(() => r())),
+			);
+			const do_ = await page.evaluate(DO_BE_RONG, O_GHIM);
+			const soNut = await page.evaluate(
+				() => document.querySelectorAll("button[data-slot=button]").length,
+			);
+			await page.close();
+
+			const thieu = do_.filter((x) => x.thieu).map((x) => x.ten);
+			if (thieu.length) {
+				tuChoi(
+					`kho ${w}: bat duoc ${do_.length - thieu.length}/${O_GHIM.length} o — thieu: ${thieu.join(" · ")}`,
+				);
+			}
+			if (soNut !== SO_NUT_MONG) {
+				tuChoi(
+					`kho ${w}: dem duoc ${soNut} nut, ban khai ghim ${SO_NUT_MONG} — bo chon theo vi tri se tro nham o khi mot nut bien mat`,
+				);
+			}
+			for (const x of do_) {
+				dem++;
+				if (x.chu > x.o) {
+					loi.push(`kho ${w}, o "${x.ten}": chu rong ${x.chu}px vuot o ${x.o}px`);
+				}
+			}
+		}
+	} finally {
+		await browser.close();
+		gieo("clear");
+	}
+
+	const mong = KHO_MAN.length * O_GHIM.length;
+	if (dem !== mong) {
+		tuChoi(`thuc hien ${dem} khang dinh, ban khai ghim ${mong}`);
+	}
+	ket(loi, `${dem} khang dinh be rong tren ${KHO_MAN.length} kho man, khong o nao bi cat tran`);
+}
+
 const LENH = {
 	"tien-de": lenhTienDe,
 	"nam-o": lenhNamO,
 	"ba-nhanh": lenhBaNhanh,
 	"tieu-de-tai-lieu": lenhTieuDeTaiLieu,
 	"khong-dich": lenhKhongDich,
+	"be-rong": lenhBeRong,
 };
 
 const ten = process.argv[2];

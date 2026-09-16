@@ -80,6 +80,40 @@ const VET = [
 		sua: (s) => s.replace('<span translate="no">', "<span>"),
 	},
 	{
+		ten: "E9 tran o tieu de man",
+		lenh: "be-rong",
+		mong: 1,
+		ghim: 'o "tieu de man"',
+		sua: (s) =>
+			s.replace(
+				'title: "Còn một bước nữa"',
+				'title: "Cònmộtbướcnữatrướckhibạnvàođượcphầnchínhcủahệthốngquảntrịquanhệkháchhàngnày"',
+			),
+	},
+	{
+		ten: "E9 tran o nut dang xuat",
+		lenh: "be-rong",
+		mong: 1,
+		ghim: 'o "chu tren nut dang xuat"',
+		sua: (s) =>
+			s.replace(
+				'signOut: "Đăng xuất"',
+				'signOut: "Đăngxuấtkhỏitàikhoảnhiệntạivàquaylạimànhìnhđăngnhậpbanđầucủahệthống"',
+			),
+	},
+	{
+		ten: "E9 mat mot o",
+		file: MAN,
+		lenh: "be-rong",
+		mong: 2,
+		ghim: "ban khai ghim 3",
+		sua: (s) => {
+			const i = s.lastIndexOf("\t\t\t<Button");
+			const j = s.indexOf("</Button>", i);
+			return i < 0 || j < 0 ? s : s.slice(0, i) + s.slice(j + "</Button>".length);
+		},
+	},
+	{
 		ten: "E8 tieu de tai lieu",
 		lenh: "tieu-de-tai-lieu",
 		mong: 1,

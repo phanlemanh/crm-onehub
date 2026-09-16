@@ -77,6 +77,7 @@ Hai dòng chân ngành chờ người gạch tại Cổng 1:
 
 - **Nợ «browser check vẫn đếm ba» KHÔNG được vá ở vòng này.** `rang/cua-vao.mjs` của hồ sơ `cua-vao-noi-tieng-viet` vẫn liệt kê ba đường ở ba chỗ. Hồ sơ này dựng thước RIÊNG cho màn thứ tư, nên `/grant-access` từ nay có phép đo trình duyệt — nhưng hợp đồng gốc vẫn tự mâu thuẫn với chính nó cho tới khi ai đó hợp nhất hai thước. Đây là đánh đổi cố ý để không làm cũ bằng chứng đã ghim của hồ sơ gốc.
 - **Chỉ nhánh chỉ-Microsoft là chưa render thật** — xem Out of scope. Hai nhánh kia (chỉ-Google, cả-hai) đều dựng màn thật ở AC-2.
+- **AC-9 bắt CẮT TRẦN, không bắt TRÀN DÒNG.** Phép đo so bề rộng chữ dựng thật với bề rộng trong của ô. Một cụm từ dài ở ô biết xuống dòng thì chữ xuống dòng chứ không bị cắt, nên phép đo không đỏ — đúng, vì đó không phải lỗi. Ca cắt trần thật là một từ liền không khoảng trắng (URL, từ ghép dài), và chiều đỏ dùng đúng ca đó. Hệ quả cần biết: nếu một ngày ô nào đó đổi sang không-xuống-dòng, phép đo này mới bắt được cụm từ dài ở ô ấy.
 - **Vòng này không sinh hay đổi giao diện nào.** Không có nghi thức design-pass, không có section Đặc tả UX, không gọi kỹ năng chuẩn giao diện nội. Ba mục đó ghi trong `decisions.jsonl`.
 
 ## Notes
