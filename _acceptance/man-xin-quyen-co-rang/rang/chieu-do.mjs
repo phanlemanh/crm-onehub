@@ -114,6 +114,35 @@ const VET = [
 		},
 	},
 	{
+		ten: "E5 chu o trang thai dang cap",
+		lenh: "dang-cap",
+		mong: 1,
+		ghim: "chu tren nut o trang thai dang cap",
+		sua: (s) => s.replace('granting: "Đang mở…"', 'granting: "Opening…"'),
+	},
+	{
+		ten: "E6 cau loi nha cung cap",
+		lenh: "loi-nha-cung-cap",
+		mong: 1,
+		ghim: "cau bao loi khi khong toi duoc nha cung cap",
+		sua: (s) =>
+			s.replace(
+				/provider:\n\t\t\t\t"Không kết nối được[^"]*"/,
+				'provider:\n\t\t\t\t"Could not reach the provider. Check your connection and try again."',
+			),
+	},
+	{
+		ten: "E7 cau loi dang xuat",
+		lenh: "loi-dang-xuat",
+		mong: 1,
+		ghim: "cau bao loi khi dang xuat that bai",
+		sua: (s) =>
+			s.replace(
+				/signOut: "Không đăng xuất được[^"]*"/,
+				'signOut: "Could not sign out. Reload the page and try again."',
+			),
+	},
+	{
 		ten: "E8 tieu de tai lieu",
 		lenh: "tieu-de-tai-lieu",
 		mong: 1,

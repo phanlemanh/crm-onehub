@@ -350,6 +350,128 @@ async function lenhBeRong() {
 	ket(loi, `${dem} khang dinh be rong tren ${KHO_MAN.length} kho man, khong o nao bi cat tran`);
 }
 
+
+const NUT_CAP_QUYEN = "button[data-slot=button]";
+const THONG_BAO = "[data-sonner-toast]";
+
+async function chotSoNut(page, o) {
+	const so = await page.evaluate(
+		(c) => document.querySelectorAll(c).length,
+		NUT_CAP_QUYEN,
+	);
+	if (so !== SO_NUT_MONG) {
+		tuChoi(`${o}: dem duoc ${so} nut, ban khai ghim ${SO_NUT_MONG}`);
+	}
+}
+
+async function bamRoiDoc(browser, tieng, cookie, { chan, treo, nutCuoi, doc }) {
+	const { page, duong } = await moMan(browser, tieng, cookie);
+	if (duong !== "/grant-access") tuChoi(`luot ${tieng} bi day ve ${duong}`);
+	await chotSoNut(page, `luot ${tieng}`);
+
+	await page.setRequestInterception(true);
+	page.on("request", (q) => {
+		if (!chan.test(q.url())) return void q.continue();
+		if (!treo) q.abort();
+	});
+
+	const nut = await page.evaluate(
+		(c, cuoi) => {
+			const n = document.querySelectorAll(c);
+			const el = cuoi ? n[n.length - 1] : n[0];
+			if (!el) return null;
+			el.setAttribute("data-do", "1");
+			return true;
+		},
+		NUT_CAP_QUYEN,
+		Boolean(nutCuoi),
+	);
+	if (!nut) tuChoi(`luot ${tieng}: khong tim thay nut can bam`);
+
+	await page.click("[data-do]");
+	const ra = await doc(page);
+	await page.close();
+	return ra;
+}
+
+async function chuTrongThongBao(page) {
+	try {
+		await page.waitForSelector(THONG_BAO, { timeout: 10000 });
+	} catch {
+		return null;
+	}
+	return page.$eval(THONG_BAO, (e) => e.textContent.trim());
+}
+
+async function doHaiTieng(ten, chay, sauCung) {
+	await chotCay();
+	const cookie = phien(EMAIL);
+	gieo("both");
+	const browser = await moTrinhDuyet();
+	const loi = [];
+	try {
+		const thu = {};
+		for (const t of ["vi", "en"]) thu[t] = await chay(browser, t, cookie);
+		if (thu.vi === null || thu.en === null) {
+			tuChoi(
+				`${ten}: khong bat duoc trang thai can do (vi=${JSON.stringify(thu.vi)} en=${JSON.stringify(thu.en)})`,
+			);
+		}
+		quanHeBaVe(ten, thu.vi, thu.en, loi);
+		if (sauCung) sauCung(thu, loi);
+	} finally {
+		await browser.close();
+		gieo("clear");
+	}
+	ket(loi, ten);
+}
+
+const lenhDangCap = () =>
+	doHaiTieng("chu tren nut o trang thai dang cap", (browser, t, cookie) =>
+		bamRoiDoc(browser, t, cookie, {
+			chan: /accounts\.google|login\.microsoftonline|api\/auth/,
+			treo: true,
+			doc: async (page) => {
+				try {
+					await page.waitForFunction(
+						(c) => document.querySelector(c)?.disabled === true,
+						{ timeout: 10000 },
+						NUT_CAP_QUYEN,
+					);
+				} catch {
+					return null;
+				}
+				return page.$eval(NUT_CAP_QUYEN, (e) => e.textContent.trim());
+			},
+		}),
+	);
+
+const lenhLoiNhaCungCap = () =>
+	doHaiTieng("cau bao loi khi khong toi duoc nha cung cap", (browser, t, cookie) =>
+		bamRoiDoc(browser, t, cookie, {
+			chan: /accounts\.google|login\.microsoftonline|api\/auth/,
+			doc: chuTrongThongBao,
+		}),
+	);
+
+const lenhLoiDangXuat = () =>
+	doHaiTieng(
+		"cau bao loi khi dang xuat that bai",
+		(browser, t, cookie) =>
+			bamRoiDoc(browser, t, cookie, {
+				chan: /api\/auth\/sign-out/,
+				nutCuoi: true,
+				doc: chuTrongThongBao,
+			}),
+		(thu, loi) => {
+			if (/[A-Za-z]{4,}/.test(thu.vi) && !CO_DAU.test(thu.vi)) {
+				loi.push(
+					`cau bao loi luot vi la mot cau tieng Anh cung: "${thu.vi}" — day dung la muc no nang trong NO-CAN-TRA.md`,
+				);
+			}
+		},
+	);
+
 const LENH = {
 	"tien-de": lenhTienDe,
 	"nam-o": lenhNamO,
@@ -357,6 +479,9 @@ const LENH = {
 	"tieu-de-tai-lieu": lenhTieuDeTaiLieu,
 	"khong-dich": lenhKhongDich,
 	"be-rong": lenhBeRong,
+	"dang-cap": lenhDangCap,
+	"loi-nha-cung-cap": lenhLoiNhaCungCap,
+	"loi-dang-xuat": lenhLoiDangXuat,
 };
 
 const ten = process.argv[2];
