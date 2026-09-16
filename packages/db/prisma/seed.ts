@@ -11,6 +11,7 @@ import {
 	RateSource,
 } from "../src/generated/prisma/enums";
 import { readReportingCurrency, SETTINGS_ID } from "../src/settings";
+import { markOnboarded, WORKSPACE_ID } from "../src/workspace";
 
 function makeRandom(seed: number): () => number {
 	let a = seed;
@@ -1036,7 +1037,71 @@ async function seedActivities(
 	return rows.length;
 }
 
+/**
+ * Đánh dấu workspace ĐÃ QUA onboarding.
+ *
+ * Không có mốc này thì mọi route /settings/** trả 307 về /onboarding/research,
+ * nên không màn cài đặt nào chạm tới được — kể cả để đo. Mốc đi qua
+ * markOnboarded() của ../src/workspace, CÙNG một hàm mà API đọc bằng
+ * isOnboarded(), nên seed và sản phẩm không thể trôi khỏi nhau.
+ */
+async function seedOnboarded(): Promise<void> {
+	const row = await db.organization.findUnique({
+		where: { id: WORKSPACE_ID },
+		select: { metadata: true },
+	});
+
+	if (!row) return;
+
+	await db.organization.update({
+		where: { id: WORKSPACE_ID },
+		data: { metadata: markOnboarded(row.metadata, new Date()) },
+		select: { id: true },
+	});
+}
+
+/**
+ * Một tên miền theo dõi.
+ *
+ * Màn /settings/tracking không có gì để vẽ khi bảng rỗng, nên mọi phép đo
+ * trên dữ liệu người nhập ở màn đó không có tập quan sát.
+ */
+async function seedTrackedDomains(): Promise<number> {
+	const hosts = ["acme.com"];
+
+	for (const host of hosts) {
+		await db.trackedDomain.upsert({
+			where: { host },
+			create: { host },
+			update: {},
+			select: { host: true },
+		});
+	}
+
+	return hosts.length;
+}
+
+/**
+ * Chế độ TỐI THIỂU: chỉ dựng thứ bắt buộc để một màn cài đặt mở được —
+ * chủ sở hữu + mốc onboarding — và CỐ Ý bỏ tỷ giá, deal, công ty.
+ *
+ * Sinh ra cho phép đo trạng thái RỖNG: màn «chưa có tỷ giá nào» và «chưa deal
+ * nào có số tiền» không tồn tại trên kho seed đầy, vì seed luôn đổ đầy cả hai.
+ * Đây là trạng thái NGÀY MỘT thật của kho, không phải trạng thái bịa.
+ */
+const TOI_THIEU = process.env.SEED_TOI_THIEU === "1";
+
 async function main() {
+	if (TOI_THIEU) {
+		const ids = await seedOwners();
+		await seedOnboarded();
+		console.log(
+			`Seeded TỐI THIỂU: ${ids.length} owners, workspace đã qua onboarding. ` +
+				"Không tỷ giá, không deal, không công ty.",
+		);
+		return;
+	}
+
 	const rates = await seedRates();
 	const ownerIds = await seedOwners();
 	const companies = await seedCompanies(ownerIds);
@@ -1045,11 +1110,13 @@ async function main() {
 	const activities = await seedActivities(companies, contacts, deals, ownerIds);
 	const companyFields = await seedCompanyFields();
 	await seedCompanyFieldValues(companyFields, companies, ownerIds);
+	const domains = await seedTrackedDomains();
+	await seedOnboarded();
 
 	console.log(
 		`Seeded ${companies.length} companies, ${contacts.length} contacts, ` +
 			`${deals.length} deals, ${activities} activities, ${rates} exchange rates, ` +
-			"7 company fields.",
+			`7 company fields, ${domains} tracked domains, workspace đã qua onboarding.`,
 	);
 }
 
