@@ -1,8 +1,11 @@
 import {
+	ALLOWANCE_WITHOUT_EXPIRY,
 	canChangeRole,
 	canRenameWorkspace,
 	ensureWorkspaceMembership,
+	isWorkspaceAdmin,
 	isWorkspaceRole,
+	normalizeEmail,
 	WORKSPACE_ID,
 	type WorkspaceRole,
 	workspaceRoleOf,
@@ -28,7 +31,11 @@ import {
 	resolveOrderBy,
 } from "../trpc/list-input";
 import type {
+	Allowance,
+	AllowEmailInput,
 	MemberListInput,
+	RemoveMemberInput,
+	RevokeAllowanceInput,
 	SetMemberRoleInput,
 	UpdateWorkspaceInput,
 	Workspace,
@@ -44,6 +51,23 @@ const MEMBER_SELECT = {
 } as const;
 
 type MemberRow = Prisma.MemberGetPayload<{ select: typeof MEMBER_SELECT }>;
+
+const ALLOWANCE_SELECT = {
+	id: true,
+	email: true,
+	role: true,
+	status: true,
+	createdAt: true,
+	user: { select: { name: true } },
+} as const;
+
+type AllowanceRow = Prisma.InvitationGetPayload<{
+	select: typeof ALLOWANCE_SELECT;
+}>;
+
+function toStatus(value: string): Allowance["status"] {
+	return value === "accepted" || value === "cancelled" ? value : "pending";
+}
 
 const SORTABLE: OrderByColumns<Prisma.MemberOrderByWithRelationInput> = {
 	name: (dir) => ({ user: { name: dir } }),
@@ -223,6 +247,122 @@ export class WorkspaceService {
 		});
 
 		return this.toMember(updated, userId);
+	}
+
+	async allowances(userId: string): Promise<{ rows: Allowance[] }> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!isWorkspaceAdmin(role)) {
+			throw new ForbiddenException(
+				"Only an owner or an admin can see who is allowed in.",
+			);
+		}
+
+		const rows = await this.db.invitation.findMany({
+			where: { organizationId: WORKSPACE_ID },
+			select: ALLOWANCE_SELECT,
+			orderBy: [{ createdAt: "desc" }],
+		});
+
+		return { rows: rows.map((row) => this.toAllowance(row)) };
+	}
+
+	async allowEmail(
+		userId: string,
+		input: AllowEmailInput,
+	): Promise<Allowance> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!isWorkspaceAdmin(role)) {
+			throw new ForbiddenException(
+				"Only an owner or an admin can allow an address.",
+			);
+		}
+
+		const email = normalizeEmail(input.email);
+
+		if (!email) {
+			throw new BadRequestException(
+				"That is not an email address. Enter one like name@company.com.",
+			);
+		}
+
+		const live = await this.db.invitation.findFirst({
+			where: {
+				organizationId: WORKSPACE_ID,
+				email,
+				status: { in: ["pending", "accepted"] },
+			},
+			select: { id: true },
+		});
+
+		if (live) {
+			throw new BadRequestException("That address is already on the list.");
+		}
+
+		const created = await this.db.invitation.create({
+			data: {
+				id: crypto.randomUUID(),
+				organizationId: WORKSPACE_ID,
+				email,
+				role: input.role,
+				status: "pending",
+				expiresAt: ALLOWANCE_WITHOUT_EXPIRY,
+				inviterId: userId,
+			},
+			select: ALLOWANCE_SELECT,
+		});
+
+		this.logger.log({ message: "Address allowed", userId, email });
+
+		return this.toAllowance(created);
+	}
+
+	async revokeAllowance(
+		userId: string,
+		input: RevokeAllowanceInput,
+	): Promise<Allowance> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!isWorkspaceAdmin(role)) {
+			throw new ForbiddenException(
+				"Only an owner or an admin can withdraw an allowance.",
+			);
+		}
+
+		const target = await this.db.invitation.findFirst({
+			where: { id: input.allowanceId, organizationId: WORKSPACE_ID },
+			select: { id: true },
+		});
+
+		if (!target) {
+			throw new NotFoundException("That allowance is not on the list.");
+		}
+
+		const updated = await this.db.invitation.update({
+			where: { id: target.id },
+			data: { status: "cancelled" },
+			select: ALLOWANCE_SELECT,
+		});
+
+		this.logger.log({
+			message: "Allowance withdrawn",
+			userId,
+			allowanceId: target.id,
+		});
+
+		return this.toAllowance(updated);
+	}
+
+	private toAllowance(row: AllowanceRow): Allowance {
+		return {
+			id: row.id,
+			email: row.email,
+			role: toRole(row.role ?? "member"),
+			status: toStatus(row.status),
+			invitedByName: row.user?.name ?? null,
+			createdAt: row.createdAt.toISOString(),
+		};
 	}
 
 	private toMember(row: MemberRow, userId: string): WorkspaceMember {
