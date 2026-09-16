@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-16T04:03:01Z",
-  "generated_sha": "687c2a3ef7c6ee1981b02f3616d2b97d5e9e05a9",
+  "generated_at": "2026-09-16T04:37:09Z",
+  "generated_sha": "e3f91a298a42e117eb56ae52a1ee85aeb81bf196",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "cho-phep-ai-vao-o-man-hinh",
-  "round": 2,
+  "round": 3,
   "riskTier": "T3",
   "evals": [
     {
@@ -239,7 +239,7 @@
     {
       "id": "E15",
       "criterion": "AC-6",
-      "cmd": "node ${CLAUDE_PLUGIN_ROOT:-/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0}/scripts/design-gate.mjs",
+      "cmd": "for t in \"apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx\" \"apps/app/app/(app)/[slug]/settings/members/allow-dialog.tsx\" \"apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx\" \"apps/app/app/(landing)/het-quyen/page.tsx\"; do node ${CLAUDE_PLUGIN_ROOT:-/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0}/scripts/design-gate.mjs --target \"$t\" --mode static || exit 1; done",
       "expected": "Chay tren CAY DANG XET voi `APP_URL` dat tay theo cong cua chinh cay ay, cung\nduong nhu E12 va E13 — san chat luong doc ban dang chay, nen chay no tren ban dev\no checkout khac la cham diem cho ma khong phai cua vong nay.\nSan chat luong giao dien cua bo cong: khong co P0 nao tren cac man vong nay cham.\nRang buoc rieng cua vong: hai viec khong dao duoc — go va rut — deu phai di qua\nhop thoai xac nhan, khong duoc lam ngay lap tuc.\nCo P0 -> ma 1, neu ten man va luat bi pham.",
       "executor": "script",
       "expectedExit": 0,
@@ -247,7 +247,7 @@
         "apps/app/app/**",
         "packages/ui/**"
       ],
-      "ref": "config:executors.design.gate"
+      "ref": "config:executors.test.cp_san_thiet_ke"
     }
   ],
   "suiteCommands": [
@@ -262,8 +262,8 @@
   "templatePath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
   "contractPath": "/Users/manhphan/dev/crm-onehub/_acceptance/cho-phep-ai-vao-o-man-hinh/contract.md",
-  "invokedAt": "2026-09-16T04:03:01Z",
-  "invokedSha": "687c2a3ef7c6ee1981b02f3616d2b97d5e9e05a9",
+  "invokedAt": "2026-09-16T04:37:09Z",
+  "invokedSha": "e3f91a298a42e117eb56ae52a1ee85aeb81bf196",
   "vungVat": [
     ".env.example",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/card-plain.json",
@@ -469,133 +469,121 @@
     "packages/auth/test/cong-vao.integration.spec.ts"
   ],
   "coEvalPaths": true,
-  "evalsHash": "6824f9a5ea452507eed61bae6c964e65aaec38d18682adc56bc354f7691a56a1",
-  "runBaseline": false,
-  "carriedAnalyst": {
-    "fromRound": 1,
-    "nonDiscriminating": []
-  },
+  "evalsHash": "75b548bab3e471f38b86aadde0fa04d97750ffbd7f530a5306e09e08d755a2a3",
+  "runBaseline": true,
   "carriedFindings": [
     {
-      "file": "apps/api/src/workspace/staff-domains.ts",
-      "title": "Cột staffEmailDomains không có đường ghi nào — lọc \"địa chỉ nhà\" ở tracking chết hẳn",
-      "severity": "high",
-      "plain": "Ô cài đặt domain nội bộ mới hiện chưa có nơi nào trên giao diện để nhập giá trị, nên tính năng loại nhân viên tự điền form khỏi số liệu tiếp thị coi như chưa bật được ở bất kỳ bản cài nào.",
-      "proposal": "new-contract",
-      "fromRound": 1
-    },
-    {
       "file": "packages/auth/src/allow-list.ts",
-      "title": "Quyết định đăng nhập fail-open với mọi status lạ, và ép kiểu không qua parser ở biên DB",
-      "severity": "medium",
-      "plain": "Nếu một lời mời bị huỷ hoặc hết hạn theo cách ghi khác với quy ước hiện tại, hệ thống có thể vẫn coi đó là lời mời còn hiệu lực và để người đó đăng nhập được.",
-      "proposal": "new-contract",
-      "fromRound": 1
-    },
-    {
-      "file": "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx",
-      "title": "Bảng allowances dựng bằng thẻ <table> thô thay vì component của @crm/ui",
-      "severity": "medium",
-      "plain": "Bảng danh sách lời cho phép trên màn Members được dựng khác kiểu với các bảng khác trong sản phẩm, nên trải nghiệm và giao diện không hoàn toàn đồng nhất.",
-      "proposal": "known-limits",
-      "fromRound": 1
-    },
-    {
-      "file": "apps/api/src/workspace/staff-domains.ts",
-      "title": "APP_SETTING_ID trùng SETTINGS_ID của @crm/db, và chính hàm đọc không dùng nó",
-      "severity": "low",
-      "plain": "Không ảnh hưởng tới người dùng — đây thuần tuý là một chi tiết tổ chức mã nguồn phía sau.",
-      "proposal": "known-limits",
-      "fromRound": 1
-    },
-    {
-      "file": "packages/auth/src/allow-list.ts",
-      "title": "Quyết định cho vào mở-mặc-định với mọi status lạ, và ép kiểu không phân tích ở biên",
+      "title": "decideSignIn fails open on any status it doesn't recognise, and \"cancelled\" doesn't match better-auth's \"canceled\"",
       "severity": "high",
-      "plain": "Nếu quy trình mời có sẵn trong nền tảng ghi trạng thái theo cách khác với dự kiến, người bị từ chối hoặc lời mời đã hết hạn vẫn có thể đăng nhập được.",
+      "plain": "Nếu một lời mời bị huỷ hoặc bị từ chối qua tính năng có sẵn của hệ thống đăng nhập (không phải nút gỡ/rút trên màn Members), người bị huỷ mời đó vẫn có thể đăng nhập được, và bảng Allowances hiển thị nhầm họ như đang chờ duyệt.",
       "proposal": "new-contract",
-      "fromRound": 1
+      "fromRound": 2
     },
     {
       "file": "apps/api/src/workspace/staff-domains.ts",
-      "title": "staffEmailDomains không có đường ghi nào — mọi cài đặt đọc ra rỗng, chặn 'địa chỉ nhà' ở tracking chết hẳn",
-      "severity": "medium",
-      "plain": "Ô cài đặt domain nội bộ mới chưa có nơi nào để nhập giá trị, nên tính năng tách domain nội bộ ra khỏi số liệu tiếp thị vẫn chưa hoạt động được trên các bản cài hiện có.",
+      "title": "appSetting.staffEmailDomains has no writer and no backfill — the staff-domain check is dead everywhere",
+      "severity": "high",
+      "plain": "Không có nơi nào trên sản phẩm để nhập danh sách domain nội bộ, nên nhân viên tự điền form thử trên web công ty có thể bị ghi nhận nhầm thành khách hàng tiềm năng, và đồng nghiệp chưa có tài khoản CRM bị xếp nhầm là người ngoài.",
       "proposal": "new-contract",
-      "fromRound": 1
+      "fromRound": 2
     },
     {
       "file": "packages/auth/src/organization.ts",
-      "title": "decide() chạy bằng client `db` toàn cục ở giữa `db.$transaction`, nên đọc ngoài giao dịch và giữ hai kết nối",
-      "severity": "low",
-      "plain": "Trong tình huống hệ thống chịu tải rất nặng, có một khả năng nhỏ khiến người vừa đăng nhập bị hiểu nhầm là chưa có quyền và bị đưa sang màn 'hết quyền' dù họ vẫn hợp lệ.",
+      "title": "decideSignInFromDb opens a second connection from inside ensureWorkspaceMembership's interactive transaction",
+      "severity": "high",
+      "plain": "Trong một số tình huống hiếm khi nhiều người đăng nhập cùng lúc, hệ thống có thể treo lại rồi từ chối nhầm một người có quyền hợp lệ, đẩy họ ra màn hình 'hết quyền' mà không có lỗi rõ ràng.",
+      "proposal": "new-contract",
+      "fromRound": 2
+    },
+    {
+      "file": "packages/auth/src/auth.ts",
+      "title": "Google `hd` is still pinned to ALLOWED_SIGN_IN, so an allowance for an outside address cannot sign in",
+      "severity": "medium",
+      "plain": "Một quản trị viên có thể thêm một địa chỉ email bên ngoài (ví dụ của môi giới hay chuyên viên ngân hàng) vào danh sách cho phép và thấy nó hiện ra như đang chờ, nhưng người đó vẫn bị Google từ chối ngay ở màn hình đăng nhập, không vào được.",
+      "proposal": "new-contract",
+      "fromRound": 2
+    },
+    {
+      "file": "apps/api/src/workspace/staff-domains.ts",
+      "title": "staff-domains.ts re-declares SETTINGS_ID and reads the singleton with findFirst and no where clause",
+      "severity": "medium",
+      "plain": "Nếu sau này có nhiều hơn một hàng cấu hình trong bảng cài đặt, hệ thống có thể đọc nhầm cấu hình và lọc domain nội bộ sai mà không ai nhận ra.",
       "proposal": "wont-fix",
-      "fromRound": 1
+      "fromRound": 2
     },
     {
-      "file": "apps/app/app/(landing)/het-quyen/sign-out-button.tsx",
-      "title": "Nút đăng xuất ở màn hết quyền truyền nhãn nút làm thông báo lỗi, và không bắt promise",
+      "file": "packages/auth/src/allow-list.ts",
+      "title": "seedAllows re-implements the allow-list parser that workspace.ts already owns, orphaning isWorkspaceEmail",
+      "severity": "medium",
+      "plain": "Nếu một trong hai chỗ đọc danh sách được phép này đổi cách phân tích chuỗi mà quên đổi chỗ kia, người dùng có thể được cho vào hoặc bị chặn không nhất quán giữa hai đường, ẩn cho tới khi có sự cố.",
+      "proposal": "wont-fix",
+      "fromRound": 2
+    },
+    {
+      "file": "apps/api/src/workspace/workspace.contracts.ts",
+      "title": "allowEmailInput does not validate that the input is an email — the repo's own z.email() pattern is skipped",
+      "severity": "medium",
+      "plain": "Hệ thống chấp nhận một số chuỗi không phải là địa chỉ email hợp lệ (ví dụ thiếu tên miền hoặc có khoảng trắng ở giữa) khi quản trị viên thêm người được phép, tạo ra quyền truy cập gắn với địa chỉ sai.",
+      "proposal": "known-limits",
+      "fromRound": 2
+    },
+    {
+      "file": "apps/api/scripts/dev-session.ts",
+      "title": "dev:session no longer produces a workspace member — the documented local login is broken",
+      "severity": "medium",
+      "plain": "Người vận hành không thể tạo phiên đăng nhập thử cho một địa chỉ email mới trên máy phát triển bằng lệnh đã được tài liệu hoá; lệnh này âm thầm tạo phiên không có quyền.",
+      "proposal": "known-limits",
+      "fromRound": 2
+    },
+    {
+      "file": "apps/app/lib/onboarding.ts",
+      "title": "viewerRole is the only field in workspaceAnswer without .catch, so one bad value collapses the whole gate answer",
       "severity": "low",
-      "plain": "Nếu việc đăng xuất ở màn 'hết quyền' gặp trục trặc, thông báo hiện ra sẽ chỉ lặp lại chữ trên nút bấm thay vì giải thích lỗi thật, gây khó hiểu cho người dùng.",
+      "plain": "Nếu máy chủ trả về dữ liệu vai trò không đúng định dạng (trường hợp hiếm), người dùng có thể bị đưa vào trạng thái quyền không xác định và đường dẫn kèm tên không gian làm việc ngừng hoạt động đúng cho tới khi tải lại.",
       "proposal": "known-limits",
-      "fromRound": 1
+      "fromRound": 2
     },
     {
-      "file": "packages/auth/test/cong-vao.integration.spec.ts",
-      "title": "Fixture VIẾT TAY đúng khuôn bên đọc — E2 cấm đích danh nhưng test vẫn cắm thẳng Prisma",
+      "file": "apps/api/src/workspace/staff-domains.ts",
+      "title": "Cột staffEmailDomains không có đường ghi nào và migration không backfill — hai đường lọc \"địa chỉ nhà\" đọc ra rỗng trên mọi cài đặt",
       "severity": "high",
-      "plain": "Bài kiểm tự động cho việc gán vai trò định trước hiện dựng sẵn dữ liệu mẫu đúng khuôn nó mong đợi, nên nếu có lệch giữa lúc lưu và lúc đọc vai trò trong thực tế, bài kiểm sẽ không phát hiện ra.",
-      "proposal": "known-limits",
-      "fromRound": 1
+      "plain": "Không có nơi nào để nhập danh sách domain nội bộ, nên nhân viên tự điền form thử trên web công ty bị ghi nhận nhầm thành khách hàng tiềm năng, và đồng nghiệp chưa có tài khoản CRM bị xếp nhầm là người ngoài.",
+      "proposal": "new-contract",
+      "fromRound": 2
     },
     {
-      "file": "packages/auth/test/cong-vao.integration.spec.ts",
-      "title": "Fixture VIẾT TAY thay đường ghi thật — E4 rút lời cho phép bằng updateMany, không gọi revokeAllowance",
-      "severity": "high",
-      "plain": "Bài kiểm tự động cho việc rút lời cho phép không đi qua đúng quy trình rút thật, nên nếu sau này việc rút phép vô tình xoá luôn một thành viên đang hoạt động, bài kiểm sẽ không phát hiện.",
-      "proposal": "known-limits",
-      "fromRound": 1
-    },
-    {
-      "file": "apps/api/test/domain-nha-tach.spec.ts",
-      "title": "Đo lớp trung gian thay vì ĐẦU RA — E11 hứa đo hai đường đọc mailbox-match/tracking-filing nhưng test chỉ gọi helper staffEmailDomains",
-      "severity": "high",
-      "plain": "Bài kiểm cho tính năng tách domain nội bộ hiện chỉ kiểm tra một lớp trung gian, không kiểm tra kết quả thực tế ở hai nơi sử dụng nó, nên một lỗi ở hai nơi đó có thể lọt qua mà không ai biết.",
-      "proposal": "known-limits",
-      "fromRound": 1
-    },
-    {
-      "file": "apps/api/test/domain-nha-tach.spec.ts",
-      "title": "Khẳng định rỗng: \"thêm rồi rút lời cho phép\" không hề ghi gì vào DB",
-      "severity": "high",
-      "plain": "Một trong các bài kiểm tuyên bố xác nhận dữ liệu không đổi sau khi thêm rồi rút quyền, nhưng thực chất phép thử đó không ghi dữ liệu thật vào hệ thống, nên gần như luôn báo đạt bất kể có lỗi hay không.",
-      "proposal": "known-limits",
-      "fromRound": 1
-    },
-    {
-      "file": "packages/auth/test/cong-vao.integration.spec.ts",
-      "title": "Khẳng định không thể đỏ + thoát im lặng: describe duong-moi tự vô hiệu khi DB còn hàng user",
+      "file": "packages/auth/src/allow-list.ts",
+      "title": "decideSignIn fail-open với mọi status lạ, và chữ \"cancelled\" lệch với \"canceled\" mà better-auth thật sự ghi",
       "severity": "medium",
-      "plain": "Một số bài kiểm cho tình huống 'lần đầu chưa ai vào hệ thống' sẽ tự bỏ qua việc kiểm tra nếu môi trường thử còn sót dữ liệu cũ, nên có nguy cơ báo đạt mà thực ra chưa kiểm tra gì.",
-      "proposal": "known-limits",
-      "fromRound": 1
+      "plain": "Nếu một lời mời bị huỷ hoặc từ chối qua tính năng có sẵn của hệ thống đăng nhập, người bị huỷ đó vẫn đăng nhập được, và bảng Allowances hiện họ như đang chờ duyệt.",
+      "proposal": "new-contract",
+      "fromRound": 2
     },
     {
-      "file": "packages/auth/test/cong-vao.integration.spec.ts",
-      "title": "Thiếu khẳng định đã tuyên — E7 khai ba khẳng định, test bỏ khẳng định \"phiên VẪN tạo được\"",
+      "file": "packages/auth/src/organization.ts",
+      "title": "decide() chạy bằng client db toàn cục ở GIỮA db.$transaction — đọc ngoài giao dịch, mở cửa cho người vừa bị gỡ lọt vào vĩnh viễn",
       "severity": "medium",
-      "plain": "Bài kiểm đảm bảo hệ thống không bị treo khi đọc danh sách cho phép bị lỗi hiện chưa kiểm tra rằng người dùng vẫn đăng nhập được bình thường trong tình huống đó, mới kiểm được một phần đã hứa.",
-      "proposal": "known-limits",
-      "fromRound": 1
+      "plain": "Trong một số tình huống hiếm khi hai thao tác diễn ra gần như cùng lúc, một người vừa bị rút quyền vẫn có thể trở thành thành viên và ở lại vĩnh viễn, không bao giờ bị xét lại.",
+      "proposal": "new-contract",
+      "fromRound": 2
+    },
+    {
+      "file": "packages/auth/src/organization.ts",
+      "title": "ensureWorkspaceMembership nuốt lỗi và từ chối im lặng — người hợp lệ bị đóng đinh ở màn /het-quyen suốt vòng đời phiên, không có đường thử lại",
+      "severity": "medium",
+      "plain": "Một người mới được admin cho phép hợp lệ có thể, do một lỗi thoáng qua của hệ thống lúc đăng nhập lần đầu, bị kẹt vĩnh viễn ở màn 'hết quyền' dù chưa từng bị gỡ, không có gì báo lý do.",
+      "proposal": "new-contract",
+      "fromRound": 2
     }
   ],
   "deltaFiles": [
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-member.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json",
     "_acceptance/config.yaml",
     "apps/api/src/workspace/workspace.service.ts",
-    "apps/api/test/workspace-thanh-vien.spec.ts"
+    "apps/api/test/domain-nha-tach.spec.ts",
+    "apps/api/test/workspace-thanh-vien.spec.ts",
+    "packages/auth/test/cong-vao.integration.spec.ts"
   ]
 }
