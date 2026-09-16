@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
-import { auth } from "../src/auth";
 import { ALLOWANCE_WITHOUT_EXPIRY } from "../src/allow-list";
+import { auth } from "../src/auth";
 import { ensureWorkspaceMembership } from "../src/organization";
 
 const suffix = process.env.TEST_RUN_ID ?? "cong-vao-spec";
@@ -111,10 +111,10 @@ describe("duong-moi", () => {
 	it("bang rong va chua ai dang nhap thi moi co tieng noi", async () => {
 		const conAi = await db.user.count();
 		if (conAi > 0) {
-			expect([
+			expect(["bo qua — co so du lieu con nguoi that", conAi]).toEqual([
 				"bo qua — co so du lieu con nguoi that",
 				conAi,
-			]).toEqual(["bo qua — co so du lieu con nguoi that", conAi]);
+			]);
 			return;
 		}
 
@@ -327,10 +327,10 @@ describe("rut-khong-dung-da-vao", () => {
 			select: { id: true },
 		});
 
-		expect([hang !== null, "tu cach thanh vien con nguyen sau khi rut"]).toEqual([
-			true,
+		expect([
+			hang !== null,
 			"tu cach thanh vien con nguyen sau khi rut",
-		]);
+		]).toEqual([true, "tu cach thanh vien con nguyen sau khi rut"]);
 	});
 });
 

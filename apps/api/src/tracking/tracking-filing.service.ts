@@ -1,4 +1,3 @@
-import { staffEmailDomains } from "../workspace/staff-domains";
 import { ActivityType, type Db, Prisma, RecordSource } from "@crm/db";
 import type { Touch } from "@crm/db/attribution";
 import {
@@ -18,6 +17,7 @@ import {
 	isMachineAddress,
 	splitName,
 } from "../mailbox/participants";
+import { staffEmailDomains } from "../workspace/staff-domains";
 import { TrackingCounterService } from "./tracking-counter.service";
 
 type TouchColumns = Record<string, string | Date | null>;

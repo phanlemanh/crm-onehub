@@ -13,14 +13,14 @@ import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	allowanceListOutput,
-	allowEmailInput,
 	allowanceOutput,
+	allowEmailInput,
 	memberListInput,
 	memberListOutput,
-	setMemberRoleInput,
 	removeMemberInput,
 	removeMemberOutput,
 	revokeAllowanceInput,
+	setMemberRoleInput,
 	updateWorkspaceInput,
 	workspaceMemberOutput,
 	workspaceOutput,

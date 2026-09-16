@@ -5,19 +5,11 @@ import {
 	decideSignInFromDb,
 	normalizeEmail,
 } from "./allow-list";
-import { isWorkspaceAdmin, type WorkspaceRole, toWorkspaceRole } from "./roles";
+import { isWorkspaceAdmin, toWorkspaceRole, type WorkspaceRole } from "./roles";
 
 export { WORKSPACE_ID };
 
 export const DEFAULT_WORKSPACE_NAME = "CRM";
-
-export {
-	isWorkspaceAdmin,
-	isWorkspaceRole,
-	toWorkspaceRole,
-	WORKSPACE_ROLES,
-	type WorkspaceRole,
-} from "./roles";
 
 export function canRenameWorkspace(role: WorkspaceRole | null): boolean {
 	return isWorkspaceAdmin(role);

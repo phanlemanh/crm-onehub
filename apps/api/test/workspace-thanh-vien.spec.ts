@@ -98,10 +98,9 @@ describe("chuan-hoa", () => {
 			email: `  KHUE-${suffix}@Gmail.com  `,
 			role: "member",
 		});
-		expect([dong2.email, "dong 2 — ha chu thuong va cat khoang trang"]).toEqual([
-			dia,
-			"dong 2 — ha chu thuong va cat khoang trang",
-		]);
+		expect([dong2.email, "dong 2 — ha chu thuong va cat khoang trang"]).toEqual(
+			[dia, "dong 2 — ha chu thuong va cat khoang trang"],
+		);
 
 		let cau1 = "";
 		try {
@@ -132,9 +131,12 @@ describe("chuan-hoa", () => {
 			}
 			const sau = await db.invitation.count();
 
-			expect([n, daNem, sau - truoc, "chan truoc khi cham co so du lieu"]).toEqual(
-				[n, true, 0, "chan truoc khi cham co so du lieu"],
-			);
+			expect([
+				n,
+				daNem,
+				sau - truoc,
+				"chan truoc khi cham co so du lieu",
+			]).toEqual([n, true, 0, "chan truoc khi cham co so du lieu"]);
 		}
 	});
 });
@@ -151,7 +153,10 @@ describe("cho-phep-lai", () => {
 	it("ba ca, ba ket qua khac nhau", async () => {
 		const dia = `lai-${suffix}@gmail.com`;
 
-		const dau = await workspace.allowEmail(quan, { email: dia, role: "member" });
+		const dau = await workspace.allowEmail(quan, {
+			email: dia,
+			role: "member",
+		});
 
 		let khiPending = true;
 		try {
@@ -196,9 +201,11 @@ describe("cho-phep-lai", () => {
 			"cancelled mo, pending va accepted dong",
 		]).toEqual([true, false, false, "cancelled mo, pending va accepted dong"]);
 
-		expect([truoc, sau, "dong cu giu nguyen, loi cho phep moi la dong MOI"]).toEqual(
-			[1, 2, "dong cu giu nguyen, loi cho phep moi la dong MOI"],
-		);
+		expect([
+			truoc,
+			sau,
+			"dong cu giu nguyen, loi cho phep moi la dong MOI",
+		]).toEqual([1, 2, "dong cu giu nguyen, loi cho phep moi la dong MOI"]);
 
 		const cu = await db.invitation.findUnique({
 			where: { id: dau.id },
@@ -350,7 +357,11 @@ describe("quyen-hai-ve", () => {
 
 			for (const chay of [
 				() => workspace.allowances(ai),
-				() => workspace.allowEmail(ai, { email: `x-${ai}@gmail.com`, role: "member" }),
+				() =>
+					workspace.allowEmail(ai, {
+						email: `x-${ai}@gmail.com`,
+						role: "member",
+					}),
 				() => workspace.revokeAllowance(ai, { allowanceId: "khong-co" }),
 				() => workspace.removeMember(ai, { memberId: thuongMember?.id ?? "" }),
 			]) {
@@ -408,13 +419,23 @@ describe("quyen-hai-ve", () => {
 			daSoi += 1;
 			const nhap = transpiler.scanImports(ma).map((m) => m.path);
 
-			if (nhap.some((path) => path === "@crm/auth" || path.startsWith("@crm/auth/")))
+			if (
+				nhap.some(
+					(path) => path === "@crm/auth" || path.startsWith("@crm/auth/"),
+				)
+			)
 				pham.push(`${ten} nhap @crm/auth`);
-			if (nhap.some((path) => path === "@crm/db" || path.startsWith("@crm/db/")))
+			if (
+				nhap.some((path) => path === "@crm/db" || path.startsWith("@crm/db/"))
+			)
 				pham.push(`${ten} nhap @crm/db`);
 		}
 
-		expect([daSoi > 0, pham, "co tep client de soi, va khong tep nao nhap goi may chu"]).toEqual([
+		expect([
+			daSoi > 0,
+			pham,
+			"co tep client de soi, va khong tep nao nhap goi may chu",
+		]).toEqual([
 			true,
 			[],
 			"co tep client de soi, va khong tep nao nhap goi may chu",

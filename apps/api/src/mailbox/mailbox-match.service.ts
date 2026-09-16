@@ -1,4 +1,3 @@
-import { staffEmailDomains } from "../workspace/staff-domains";
 import { type Db, RecordSource } from "@crm/db";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
 import { Injectable, Logger } from "@nestjs/common";
@@ -6,6 +5,7 @@ import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { CompanyDirectoryService } from "../companies/company-directory.service";
 import { EnrichmentLogService } from "../crm/enrichment-log.service";
 import { InjectDatabase } from "../database/database.constants";
+import { staffEmailDomains } from "../workspace/staff-domains";
 import {
 	dominantDomain,
 	externalParticipants,

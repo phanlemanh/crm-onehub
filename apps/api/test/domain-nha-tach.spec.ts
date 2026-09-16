@@ -24,7 +24,9 @@ async function don() {
 	await db.user.deleteMany({ where: { id: { startsWith: `${suffix}-` } } });
 }
 
-function aiVaoDuoc(allowances: Parameters<typeof decideSignIn>[0]["allowances"]) {
+function aiVaoDuoc(
+	allowances: Parameters<typeof decideSignIn>[0]["allowances"],
+) {
 	return decideSignIn({
 		email: "khach@gmail.com",
 		allowances,
@@ -61,11 +63,7 @@ describe("domain nha tach khoi danh sach nguoi", () => {
 		const domainSau = [...(await staffEmailDomains(db))];
 		const vaoSau = aiVaoDuoc(loiChoPhep);
 
-		expect([
-			domainTruoc,
-			domainSau,
-			"o domain nha doi theo",
-		]).toEqual([
+		expect([domainTruoc, domainSau, "o domain nha doi theo"]).toEqual([
 			["onemount.com"],
 			["doitac.vn", "onemount.com"],
 			"o domain nha doi theo",
@@ -88,7 +86,11 @@ describe("domain nha tach khoi danh sach nguoi", () => {
 		const giuaChung = [...(await staffEmailDomains(db))];
 
 		const vaoKhiRut = aiVaoDuoc([
-			{ email: "khach@gmail.com", role: "member", status: "cancelled" as const },
+			{
+				email: "khach@gmail.com",
+				role: "member",
+				status: "cancelled" as const,
+			},
 		]);
 		const sau = [...(await staffEmailDomains(db))];
 
@@ -113,6 +115,9 @@ describe("domain nha tach khoi danh sach nguoi", () => {
 
 	it("o domain nha trong thi khong domain nao la nha", async () => {
 		await datDomainNha(null);
-		expect([[...(await staffEmailDomains(db))], "o trong"]).toEqual([[], "o trong"]);
+		expect([[...(await staffEmailDomains(db))], "o trong"]).toEqual([
+			[],
+			"o trong",
+		]);
 	});
 });

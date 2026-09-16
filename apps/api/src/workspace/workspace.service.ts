@@ -268,10 +268,7 @@ export class WorkspaceService {
 		return { rows: rows.map((row) => this.toAllowance(row)) };
 	}
 
-	async allowEmail(
-		userId: string,
-		input: AllowEmailInput,
-	): Promise<Allowance> {
+	async allowEmail(userId: string, input: AllowEmailInput): Promise<Allowance> {
 		const role = await workspaceRoleOf(userId);
 
 		if (!isWorkspaceAdmin(role)) {

@@ -1,5 +1,9 @@
 import { describe, expect, it } from "bun:test";
-import { type AllowanceRow, decideSignIn } from "../src/allow-list";
+import {
+	type AllowanceRow,
+	type AllowDecision,
+	decideSignIn,
+} from "../src/allow-list";
 
 const khue = (
 	status: AllowanceRow["status"],
@@ -12,7 +16,7 @@ type Dong = {
 	seedList: string;
 	anyUserExists: boolean;
 	email: string;
-	want: Record<string, unknown>;
+	want: AllowDecision;
 };
 
 const BANG: Dong[] = [
