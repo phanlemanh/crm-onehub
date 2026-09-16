@@ -46,13 +46,29 @@ export async function moMayChu({ co, san = "dev" }) {
 	const goc = `http://127.0.0.1:${cong}`;
 	const han = Date.now() + 90_000;
 
+	const daCoMayChu = () => /Another next (dev server|build process) is already running/i.test(nhatKy);
+
 	while (Date.now() < han) {
+		if (daCoMayChu()) {
+			con.kill("SIGKILL");
+			const pid = nhatKy.match(/PID:\s*(\d+)/);
+			thoat(
+				2,
+				`da co mot may chu Next chay san trong apps/app${pid ? ` (PID ${pid[1]})` : ""} — Next khoa theo THU MUC chu khong theo cong, nen chon cong roi khong go duoc. Dung no roi chay lai: pkill -f "next dev"`,
+			);
+		}
+
 		try {
 			await fetch(`${goc}/`, { redirect: "manual" });
 			return { goc, dong: () => con.kill("SIGTERM"), nhatKy: () => nhatKy };
 		} catch {
 			await new Promise((r) => setTimeout(r, 400));
 		}
+	}
+
+	if (daCoMayChu()) {
+		con.kill("SIGKILL");
+		thoat(2, 'da co mot may chu Next chay san trong apps/app — dung no roi chay lai: pkill -f "next dev"');
 	}
 
 	con.kill("SIGKILL");

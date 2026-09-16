@@ -1,3 +1,4 @@
+import { Button } from "@crm/ui/components/button";
 import Link from "next/link";
 import type { ProtoState } from "./catalog";
 
@@ -13,19 +14,19 @@ export function StateSwitcher({
 	return (
 		<nav aria-label="Trạng thái" className="flex flex-wrap gap-2">
 			{states.map((s) => (
-				<Link
-					aria-current={s.id === dangBat ? "page" : undefined}
-					className={
-						s.id === dangBat
-							? "rounded-md bg-primary px-3 py-1.5 text-primary-foreground text-sm"
-							: "rounded-md border px-3 py-1.5 text-sm"
-					}
-					data-proto-state={s.id}
-					href={`/proto/${slug}?state=${s.id}`}
+				<Button
+					asChild
 					key={s.id}
+					variant={s.id === dangBat ? "default" : "outline"}
 				>
-					{s.nhan}
-				</Link>
+					<Link
+						aria-current={s.id === dangBat ? "page" : undefined}
+						data-proto-state={s.id}
+						href={`/proto/${slug}?state=${s.id}`}
+					>
+						{s.nhan}
+					</Link>
+				</Button>
 			))}
 		</nav>
 	);

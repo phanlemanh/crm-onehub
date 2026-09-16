@@ -1,3 +1,4 @@
+import { CardContent } from "@crm/ui/components/card";
 import { Empty, EmptyHeader, EmptyTitle } from "@crm/ui/components/empty";
 import Link from "next/link";
 import { PROTO_CATALOG } from "./catalog";
@@ -20,15 +21,16 @@ export default function ProtoIndexPage() {
 				{PROTO_CATALOG.map((muc) => (
 					<li key={muc.slug}>
 						<Link
-							className="flex items-center justify-between rounded-lg border p-4"
 							data-proto-slug={muc.slug}
 							data-proto-states={muc.states.length}
 							href={`/proto/${muc.slug}`}
 						>
-							<span className="font-medium">{muc.ten}</span>
-							<span className="text-muted-foreground text-sm">
-								{muc.slug} · {muc.states.length} trạng thái
-							</span>
+							<CardContent className="flex-row items-center justify-between">
+								<span className="font-medium">{muc.ten}</span>
+								<span className="text-muted-foreground text-sm">
+									{muc.slug} · {muc.states.length} trạng thái
+								</span>
+							</CardContent>
 						</Link>
 					</li>
 				))}

@@ -12,10 +12,15 @@ const dung = spawnSync("bunx", ["turbo", "run", "build", "--filter=app", "--forc
 	encoding: "utf8",
 });
 
-if (dung.status !== 0)
-	thoat(1, `ban dung that bai (ma ${dung.status})\n${(dung.stdout ?? "").slice(-2000)}`);
+const raDung = `${dung.stdout ?? ""}${dung.stderr ?? ""}`;
 
-doi(!/error|Error:/i.test(dung.stdout ?? ""), "buoc dung phat sinh loi");
+if (/Another next build process is already running/i.test(raDung))
+	thoat(2, 'da co mot lenh dung Next chay san — Next khoa theo THU MUC. Dung no roi chay lai: pkill -f "next (dev|build)"');
+
+if (dung.status !== 0)
+	thoat(1, `ban dung that bai (ma ${dung.status})\n${raDung.slice(-2000)}`);
+
+doi(!/error|Error:/i.test(raDung), "buoc dung phat sinh loi");
 
 const tat = await moMayChu({ co: undefined, san: "start" });
 for (const d of ["/proto", "/proto/duong-proto"]) {

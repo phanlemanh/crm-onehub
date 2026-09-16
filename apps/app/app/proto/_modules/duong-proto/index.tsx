@@ -9,6 +9,7 @@ import {
 } from "@crm/ui/components/card";
 import { Empty, EmptyHeader, EmptyTitle } from "@crm/ui/components/empty";
 import { Separator } from "@crm/ui/components/separator";
+import { Skeleton } from "@crm/ui/components/skeleton";
 
 const DOI_TAC = [
 	{ ten: "Ngân hàng Đại Nam", loai: "RM ngân hàng", trangThai: "Đang theo" },
@@ -45,9 +46,9 @@ export function DuongProtoMau({ state }: { state: string }) {
 				</CardHeader>
 				<CardContent>
 					<div className="flex flex-col gap-3">
-						<div className="h-5 w-2/3 animate-pulse rounded-md bg-muted" />
-						<div className="h-5 w-1/2 animate-pulse rounded-md bg-muted" />
-						<div className="h-5 w-3/5 animate-pulse rounded-md bg-muted" />
+						<Skeleton className="h-5 w-2/3" />
+						<Skeleton className="h-5 w-1/2" />
+						<Skeleton className="h-5 w-3/5" />
 					</div>
 				</CardContent>
 			</Card>
