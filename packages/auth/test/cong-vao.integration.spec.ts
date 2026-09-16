@@ -1,8 +1,9 @@
-import { beforeEach, describe, expect, it } from "bun:test";
+import { beforeEach, describe, expect, it, spyOn } from "bun:test";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import { auth } from "../src/auth";
 import { ALLOWANCE_WITHOUT_EXPIRY } from "../src/allow-list";
+import { ensureWorkspaceMembership } from "../src/organization";
 
 const suffix = process.env.TEST_RUN_ID ?? "cong-vao-spec";
 
@@ -198,5 +199,177 @@ describe("duong-moi", () => {
 
 	it("phep kiem nam o hook TRUOC khi ghi", () => {
 		expect(hookTruocTao()).toBeInstanceOf(Function);
+	});
+});
+
+async function daLaThanhVien(userId: string, vai = "member") {
+	await db.member.create({
+		data: {
+			id: `${suffix}-m-${userId}`,
+			organizationId: WORKSPACE_ID,
+			userId,
+			role: vai,
+			createdAt: new Date(),
+		},
+	});
+}
+
+describe("vai-dinh-truoc", () => {
+	beforeEach(async () => {
+		await don();
+		await db.member.deleteMany({ where: { id: { startsWith: `${suffix}-m-` } } });
+	});
+
+	it("vai khai truoc di vao tu cach thanh vien, va loi cho phep thanh accepted", async () => {
+		const ket: Record<string, string | null> = {};
+
+		for (const [phan, vai] of [
+			["quan-vien", "admin"],
+			["thuong-dan", "member"],
+		] as const) {
+			const dia = `${phan}-${suffix}@gmail.com`;
+			await choPhep(dia, vai);
+
+			const nguoiMoi = await db.user.create({ data: nguoi(dia) });
+			await ensureWorkspaceMembership(nguoiMoi.id, dia);
+
+			const hang = await db.member.findUnique({
+				where: {
+					organizationId_userId: {
+						organizationId: WORKSPACE_ID,
+						userId: nguoiMoi.id,
+					},
+				},
+				select: { role: true },
+			});
+
+			const loi = await db.invitation.findFirst({
+				where: { organizationId: WORKSPACE_ID, email: dia },
+				select: { status: true },
+			});
+
+			ket[phan] = hang?.role ?? null;
+			ket[`${phan}-loi`] = loi?.status ?? null;
+		}
+
+		if (ket["quan-vien"] === ket["thuong-dan"]) {
+			throw new Error(
+				`hai vai cho cung mot ket qua (${ket["quan-vien"]}) — phep do khong phan biet duoc vai dinh truoc co hieu luc voi moi nguoi deu ra mot vai`,
+			);
+		}
+
+		expect([
+			ket["quan-vien"],
+			ket["thuong-dan"],
+			ket["quan-vien-loi"],
+			ket["thuong-dan-loi"],
+			"vai doc lai tu DB, va loi cho phep da thanh accepted",
+		]).toEqual([
+			"admin",
+			"member",
+			"accepted",
+			"accepted",
+			"vai doc lai tu DB, va loi cho phep da thanh accepted",
+		]);
+	});
+});
+
+describe("rut-khong-dung-da-vao", () => {
+	beforeEach(async () => {
+		await don();
+		await db.member.deleteMany({ where: { id: { startsWith: `${suffix}-m-` } } });
+	});
+
+	it("rut loi cho phep cua nguoi DA vao thi tu cach thanh vien con nguyen", async () => {
+		const dia = `da-vao-${suffix}@gmail.com`;
+		await choPhep(dia);
+
+		const nguoiCu = await db.user.create({ data: nguoi(dia) });
+		await daLaThanhVien(nguoiCu.id);
+
+		await db.invitation.updateMany({
+			where: { organizationId: WORKSPACE_ID, email: dia },
+			data: { status: "cancelled" },
+		});
+
+		await ensureWorkspaceMembership(nguoiCu.id, dia);
+
+		const hang = await db.member.findUnique({
+			where: {
+				organizationId_userId: {
+					organizationId: WORKSPACE_ID,
+					userId: nguoiCu.id,
+				},
+			},
+			select: { id: true },
+		});
+
+		expect([hang !== null, "tu cach thanh vien con nguyen sau khi rut"]).toEqual([
+			true,
+			"tu cach thanh vien con nguyen sau khi rut",
+		]);
+	});
+});
+
+describe("doc-hong", () => {
+	beforeEach(async () => {
+		await don();
+		await db.member.deleteMany({ where: { id: { startsWith: `${suffix}-m-` } } });
+	});
+
+	it("lop doc hong thi hook khong nem, va thanh vien san co con nguyen", async () => {
+		const dia = `hong-${suffix}@gmail.com`;
+		const nguoiMoi = await db.user.create({ data: nguoi(dia) });
+
+		const nguoiCu = await db.user.create({
+			data: nguoi(`cu-hong-${suffix}@gmail.com`),
+		});
+		await daLaThanhVien(nguoiCu.id);
+
+		const hong = spyOn(db.invitation, "findMany").mockImplementation(() => {
+			throw new Error("lop doc loi cho phep hong");
+		});
+
+		let daNem = false;
+
+		try {
+			await ensureWorkspaceMembership(nguoiMoi.id, dia);
+		} catch {
+			daNem = true;
+		} finally {
+			hong.mockRestore();
+		}
+
+		const hangCu = await db.member.findUnique({
+			where: {
+				organizationId_userId: {
+					organizationId: WORKSPACE_ID,
+					userId: nguoiCu.id,
+				},
+			},
+			select: { id: true },
+		});
+
+		const moi = await db.member.findUnique({
+			where: {
+				organizationId_userId: {
+					organizationId: WORKSPACE_ID,
+					userId: nguoiMoi.id,
+				},
+			},
+			select: { id: true },
+		});
+
+		expect([
+			daNem,
+			hangCu !== null,
+			moi === null,
+			"khong nem, thanh vien san co con nguyen, nguoi moi khong duoc them",
+		]).toEqual([
+			false,
+			true,
+			true,
+			"khong nem, thanh vien san co con nguyen, nguoi moi khong duoc them",
+		]);
 	});
 });

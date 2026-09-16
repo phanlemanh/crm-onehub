@@ -1,5 +1,6 @@
 import { type Db, db } from "@crm/db";
 import { WORKSPACE_ID, workspaceSlug } from "@crm/db/workspace";
+import { decideSignInFromDb, normalizeEmail } from "./allow-list";
 import { isWorkspaceAdmin, type WorkspaceRole, toWorkspaceRole } from "./roles";
 
 export { WORKSPACE_ID };
@@ -36,6 +37,7 @@ export function canManageTracking(role: WorkspaceRole | null): boolean {
 
 export async function ensureWorkspaceMembership(
 	userId: string,
+	email = "",
 ): Promise<string | undefined> {
 	try {
 		return await db.$transaction(async (tx) => {
@@ -82,19 +84,41 @@ export async function ensureWorkspaceMembership(
 				});
 			}
 
-			await tx.member.upsert({
+			const existing = await tx.member.findUnique({
 				where: {
 					organizationId_userId: { organizationId: workspace.id, userId },
 				},
-				create: {
+				select: { id: true },
+			});
+
+			if (existing) return workspace.id;
+
+			const decision = await decideSignInFromDb(email);
+
+			if (!decision.allowed) return workspace.id;
+
+			await tx.member.create({
+				data: {
 					id: crypto.randomUUID(),
 					organizationId: workspace.id,
 					userId,
-					role: "member",
+					role: decision.role,
 					createdAt: new Date(),
 				},
-				update: {},
 			});
+
+			const normalized = normalizeEmail(email);
+
+			if (normalized) {
+				await tx.invitation.updateMany({
+					where: {
+						organizationId: workspace.id,
+						email: normalized,
+						status: "pending",
+					},
+					data: { status: "accepted" },
+				});
+			}
 
 			return workspace.id;
 		});

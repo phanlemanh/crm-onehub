@@ -284,7 +284,15 @@ export const auth = betterAuth({
 		session: {
 			create: {
 				before: async (session) => {
-					const workspaceId = await ensureWorkspaceMembership(session.userId);
+					const signedIn = await db.user.findUnique({
+						where: { id: session.userId },
+						select: { email: true },
+					});
+
+					const workspaceId = await ensureWorkspaceMembership(
+						session.userId,
+						signedIn?.email ?? "",
+					);
 
 					return {
 						data: { ...session, activeOrganizationId: workspaceId ?? null },
