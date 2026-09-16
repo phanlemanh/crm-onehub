@@ -1,3 +1,5 @@
+import { db } from "@crm/db";
+import { WORKSPACE_ID } from "@crm/db/workspace";
 import { toWorkspaceRole, type WorkspaceRole } from "./roles";
 
 export type AllowanceStatus = "pending" | "accepted" | "cancelled";
@@ -79,4 +81,31 @@ export function decideSignIn(input: AllowInput): AllowDecision {
 	if (!seedAllows(email, input.seedList)) return DENY;
 
 	return { allowed: true, role: "member", source: "seed" };
+}
+
+export async function readAllowState(email: string): Promise<AllowInput> {
+	const normalized = normalizeEmail(email);
+
+	const [rows, anyUser] = await Promise.all([
+		normalized
+			? db.invitation.findMany({
+					where: { organizationId: WORKSPACE_ID, email: normalized },
+					select: { email: true, role: true, status: true },
+				})
+			: Promise.resolve([]),
+		db.user.count(),
+	]);
+
+	return {
+		email,
+		allowances: rows as AllowanceRow[],
+		seedList: process.env.ALLOWED_SIGN_IN ?? "",
+		anyUserExists: anyUser > 0,
+	};
+}
+
+export async function decideSignInFromDb(
+	email: string,
+): Promise<AllowDecision> {
+	return decideSignIn(await readAllowState(email));
 }

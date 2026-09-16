@@ -23,10 +23,10 @@ import { slackConnectGuard } from "./slack-connect";
 import { rememberSlackInstall, replaceSlackConnection } from "./slack-grant";
 import { SLACK_REQUESTED_SCOPES, SLACK_USER_SCOPES } from "./slack-scopes";
 import { queueSlackInventorySync } from "./slack-sync";
+import { decideSignInFromDb } from "./allow-list";
 import {
 	googleHostedDomain,
 	hasSignInAllowList,
-	isWorkspaceEmail,
 	primaryWorkspaceDomain,
 } from "./workspace";
 
@@ -260,6 +260,10 @@ export const auth = betterAuth({
 		user: {
 			create: {
 				before: async (user) => {
+					const decision = await decideSignInFromDb(user.email);
+
+					if (decision.allowed) return { data: user };
+
 					if (!hasSignInAllowList()) {
 						throw new APIError("FORBIDDEN", {
 							message:
@@ -267,16 +271,12 @@ export const auth = betterAuth({
 						});
 					}
 
-					if (!isWorkspaceEmail(user.email)) {
-						const domain = primaryWorkspaceDomain();
-						throw new APIError("FORBIDDEN", {
-							message: domain
-								? `This CRM is private. Sign in with your @${domain} account.`
-								: "This CRM is private. That address is not on the allow-list.",
-						});
-					}
-
-					return { data: user };
+					const domain = primaryWorkspaceDomain();
+					throw new APIError("FORBIDDEN", {
+						message: domain
+							? `This CRM is private. Sign in with your @${domain} account.`
+							: "This CRM is private. That address is not on the allow-list.",
+					});
 				},
 			},
 		},
