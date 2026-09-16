@@ -368,7 +368,11 @@ risk_tiers:
     - "lib/workspace-record.cjs"
     - "lib/ac-line.cjs"
     - "lib/md-section.cjs"
-    - "lib/eval-yaml.cjs"   # vendored 2.9.0 — bộ đọc evals.yaml của luật làn ghim-lại (ADR 0014)
+    - "lib/eval-yaml.cjs"   # bộ đọc evals.yaml của luật làn ghim-lại (ADR 0014), và là nguồn duy nhất đọc expected_exit
+    # lop-nhin-thay: mục thứ CHÍN của INIT-CI-COPY-LIST, kit thêm ở 2.10.0.
+    # Thiếu nó thì NOTE lớp nhìn-thấy in «không kiểm được» và luật W8 tắt im ở
+    # kho này — cùng lớp measuring-stick với tám mục trên.
+    - "lib/lop-nhin-thay.cjs"
   t3_paths:
     - "packages/auth/**"
     - "packages/db/prisma/**"
