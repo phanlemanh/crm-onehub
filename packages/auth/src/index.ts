@@ -1,4 +1,13 @@
 export {
+	ALLOWANCE_WITHOUT_EXPIRY,
+	type AllowanceRow,
+	type AllowanceStatus,
+	type AllowDecision,
+	type AllowInput,
+	decideSignIn,
+	normalizeEmail,
+} from "./allow-list";
+export {
 	API_KEY_EXPIRATION,
 	API_KEY_HEADER,
 	API_KEY_PREFIX,

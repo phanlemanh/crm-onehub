@@ -1,21 +1,18 @@
 import { type Db, db } from "@crm/db";
 import { WORKSPACE_ID, workspaceSlug } from "@crm/db/workspace";
+import { isWorkspaceAdmin, type WorkspaceRole, toWorkspaceRole } from "./roles";
 
 export { WORKSPACE_ID };
 
 export const DEFAULT_WORKSPACE_NAME = "CRM";
 
-export const WORKSPACE_ROLES = ["owner", "admin", "member"] as const;
-
-export type WorkspaceRole = (typeof WORKSPACE_ROLES)[number];
-
-export function isWorkspaceRole(value: string): value is WorkspaceRole {
-	return (WORKSPACE_ROLES as readonly string[]).includes(value);
-}
-
-export function isWorkspaceAdmin(role: WorkspaceRole | null): boolean {
-	return role === "owner" || role === "admin";
-}
+export {
+	isWorkspaceAdmin,
+	isWorkspaceRole,
+	toWorkspaceRole,
+	WORKSPACE_ROLES,
+	type WorkspaceRole,
+} from "./roles";
 
 export function canRenameWorkspace(role: WorkspaceRole | null): boolean {
 	return isWorkspaceAdmin(role);
@@ -108,10 +105,6 @@ export async function ensureWorkspaceMembership(
 		);
 		return undefined;
 	}
-}
-
-export function toWorkspaceRole(value: string): WorkspaceRole {
-	return isWorkspaceRole(value) ? value : "member";
 }
 
 export type WorkspaceMemberReader = Pick<Db, "member">;
