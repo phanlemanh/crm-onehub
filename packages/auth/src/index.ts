@@ -86,5 +86,4 @@ export {
 	hasSignInAllowList,
 	isWorkspaceEmail,
 	primaryWorkspaceDomain,
-	workspaceDomains,
 } from "./workspace";

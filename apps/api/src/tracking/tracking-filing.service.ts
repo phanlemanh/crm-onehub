@@ -1,4 +1,4 @@
-import { workspaceDomains } from "@crm/auth";
+import { staffEmailDomains } from "../workspace/staff-domains";
 import { ActivityType, type Db, Prisma, RecordSource } from "@crm/db";
 import type { Touch } from "@crm/db/attribution";
 import {
@@ -79,7 +79,7 @@ export class TrackingFilingService {
 			return this.skip(submission.id, "Not a domain a human reads");
 		}
 
-		if (workspaceDomains().includes(domain)) {
+		if ((await staffEmailDomains(this.db)).includes(domain)) {
 			return this.skip(submission.id, "One of our own addresses");
 		}
 

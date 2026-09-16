@@ -1,4 +1,4 @@
-import { workspaceDomains } from "@crm/auth/workspace";
+import { staffEmailDomains } from "../workspace/staff-domains";
 import { type Db, RecordSource } from "@crm/db";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
 import { Injectable, Logger } from "@nestjs/common";
@@ -57,7 +57,7 @@ export class MailboxMatchService {
 		const users = await this.db.user.findMany({ select: { email: true } });
 
 		const addresses = new Set<string>();
-		const domains = new Set<string>(workspaceDomains());
+		const domains = new Set<string>(await staffEmailDomains(this.db));
 
 		for (const user of users) {
 			const email = user.email.toLowerCase();
