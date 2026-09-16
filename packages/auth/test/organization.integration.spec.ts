@@ -34,6 +34,9 @@ const roleOf = async (userId: string): Promise<string | null> => {
 };
 
 const clear = async () => {
+	await db.invitation.deleteMany({
+		where: { id: { startsWith: `${suffix}-` } },
+	});
 	await db.member.deleteMany({
 		where: { userId: { startsWith: `${suffix}-` } },
 	});
@@ -94,14 +97,36 @@ describe("ensureWorkspaceMembership", () => {
 		expect(rows[0]?.role).toBe("admin");
 	});
 
-	it("joins someone who signs up later as a member", async () => {
+	it("does not enrol a later arrival who is not on the allow list", async () => {
 		await ensureWorkspaceMembership(secondId);
 
 		const laterId = await seedUser("later", new Date("2026-01-01T00:00:00Z"));
 
-		await ensureWorkspaceMembership(laterId);
+		await ensureWorkspaceMembership(laterId, emailOf("later"));
 
-		expect(await roleOf(laterId)).toBe("member");
+		expect(await roleOf(laterId)).toBeNull();
+	});
+
+	it("enrols a later arrival who is on the allow list, with the role it names", async () => {
+		await ensureWorkspaceMembership(secondId);
+
+		const laterId = await seedUser("later", new Date("2026-01-01T00:00:00Z"));
+
+		await db.invitation.create({
+			data: {
+				id: `${suffix}-inv-later`,
+				organizationId: WORKSPACE_ID,
+				email: emailOf("later"),
+				role: "admin",
+				status: "pending",
+				expiresAt: new Date("9999-12-31T00:00:00.000Z"),
+				inviterId: firstId,
+			},
+		});
+
+		await ensureWorkspaceMembership(laterId, emailOf("later"));
+
+		expect(await roleOf(laterId)).toBe("admin");
 	});
 
 	it("leaves the owner alone when a later arrival signs in", async () => {
@@ -109,7 +134,7 @@ describe("ensureWorkspaceMembership", () => {
 
 		const laterId = await seedUser("later", new Date("2026-01-01T00:00:00Z"));
 
-		await ensureWorkspaceMembership(laterId);
+		await ensureWorkspaceMembership(laterId, emailOf("later"));
 
 		expect(await roleOf(firstId)).toBe("owner");
 

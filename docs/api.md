@@ -43,10 +43,24 @@ here, what do we sell.
 
 - **The id is a constant, never a parameter.** A function taking an `organizationId`
   has turned the plugin into tenancy plumbing.
-- **Signing in is the join; no invite flow.** `ensureWorkspaceMembership` runs in
-  `databaseHooks.session.create.before` and **degrades, never throws** — a throw fails
-  the session create and locks everyone out. The plugin's `invitation` table is unused.
+- **An allow list decides who joins, and it lives in the `invitation` table.** A row
+  means *this address may sign in, with this role, allowed by this person*. Three
+  statuses: `pending` (allowed, no account yet) · `accepted` (signed in) · `cancelled`
+  (withdrawn — the row stays, so who allowed whom is still readable).
+  `expiresAt` is not nullable and there is no expiry yet, so it takes
+  `ALLOWANCE_WITHOUT_EXPIRY`.
+- **`ensureWorkspaceMembership` runs in `databaseHooks.session.create.before` and
+  degrades, never throws** — a throw fails the session create and locks everyone out.
+  It **keeps** an existing member untouched, and creates one only when the address is
+  still allowed, with the role the allowance names. That is what makes the remove
+  button tell the truth: without it, anyone removed walks straight back in at the next
+  sign-in. It takes the read path as a parameter so a test can inject a throwing one —
+  `db` is a proxy, so `spyOn` cannot reach it.
+- **Removing a member is one transaction**: the member row goes and the allowance
+  moves to `cancelled` together.
 - **First account is owner**, and the hook enrols pre-existing users, oldest first.
+  That migration branch still names the first user owner regardless of the role an
+  allowance gave them — a narrow case the contract does not cover yet.
 - **Permissions come from `@crm/auth`** — `canRenameWorkspace`, `canChangeRole`,
   `canConfigureSso`, `canManageCurrency` — enforced by the service *and* used to
   disable the UI control, so the button and the 403 cannot disagree.
@@ -121,8 +135,9 @@ self-hoster's admin cannot redeploy.
   walls only an account whose sign-in rows are *all* mailbox providers — Google,
   Microsoft, or both — and none of them granted. `mailboxGrantsNeeded` returns which,
   so `/grant-access` offers the button they can actually use.
-- `ALLOWED_SIGN_IN` still decides who gets an account, in
-  `databaseHooks.user.create.before`, for SSO sign-ups too.
+- `databaseHooks.user.create.before` decides who gets an account, for SSO sign-ups
+  too. It reads the allow list; `ALLOWED_SIGN_IN` is only the seed, and it has a say
+  only when the table is empty **and** nobody has ever signed in.
 - `organizationProvisioning: { disabled: true }` — `ensureWorkspaceMembership` already
   does the join.
 
