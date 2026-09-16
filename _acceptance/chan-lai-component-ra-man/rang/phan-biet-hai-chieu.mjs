@@ -1,6 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { duongLuot, xoaTaoPhamCu } from "./luot-chay.mjs";
 
 const GOC = join(import.meta.dirname, "..", "..", "..");
 const HERE = import.meta.dirname;
@@ -45,18 +46,14 @@ const CAY = [
 const DOI_CHUNG_AM = ["packages/ui/src/components/button.tsx", "variant"];
 
 function docPhanNhom() {
+	xoaTaoPhamCu("phan-nhom.json");
 	try {
 		execFileSync("node", [join(HERE, "lai-ra-man.mjs"), "phan-nhom"], {
 			cwd: GOC,
 			stdio: "pipe",
 		});
 	} catch {}
-	return JSON.parse(
-		readFileSync(
-			join(GOC, "_acceptance/chan-lai-component-ra-man/evidence/phan-nhom.json"),
-			"utf8",
-		),
-	);
+	return JSON.parse(readFileSync(duongLuot("phan-nhom.json"), "utf8"));
 }
 
 function co(nhom, file, thamSo) {

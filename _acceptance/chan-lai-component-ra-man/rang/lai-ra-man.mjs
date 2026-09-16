@@ -1,11 +1,10 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { duongLuot, xoaTaoPhamCu } from "./luot-chay.mjs";
 import { docFile, docMacDinh } from "./moi-mac-dinh.mjs";
 
 const GOC = join(import.meta.dirname, "..", "..", "..");
-const HO_SO = join(GOC, "_acceptance", "chan-lai-component-ra-man");
-const EV = join(HO_SO, "evidence");
 
 const NEO = { file: 398, mac_dinh: 107, dong_bang_cu: 9 };
 
@@ -16,9 +15,7 @@ function banVeRong(banVe) {
 }
 
 function ghi(ten, gt) {
-	const duong = join(EV, ten);
-	mkdirSync(dirname(duong), { recursive: true });
-	writeFileSync(duong, `${JSON.stringify(gt, null, "\t")}\n`);
+	writeFileSync(duongLuot(ten), `${JSON.stringify(gt, null, "\t")}\n`);
 }
 
 export function danSo() {
@@ -74,8 +71,9 @@ function chayBanVe() {
 
 export function phanNhom() {
 	ghi("mac-dinh.json", docMacDinh(GOC));
+	xoaTaoPhamCu("ve-that.json");
 	chayBanVe();
-	const duong = join(EV, "ve-that.json");
+	const duong = duongLuot("ve-that.json");
 	if (!existsSync(duong)) {
 		console.error(
 			"KHONG DO DUOC: khong co tao pham ve-that.json — bo ve chua chay duoc, khong ket luan gi ve phan nhom.",
