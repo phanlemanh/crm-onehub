@@ -286,6 +286,12 @@ evals:
       - "apps/app/app/**"
       - "apps/app/proxy.ts"
       - "packages/ui/**"
+    steps:
+      - "Dung ca hai may chu cua CAY DANG XET o cong rieng: api 3301, app 3300 (launch.json da khai api-cay-nay va app-cay-nay)"
+      - "Gieo mot tai khoan con dang nhap duoc nhung KHONG con hang member, tao phien bang `cd apps/api && bun run dev:session <email>`"
+      - "Dat cookie phien vao trinh duyet roi mo mot trang bat ky cua ung dung"
+      - "Chup evidence/E12-man-het-quyen.png"
+      - "TRUOC khi tin mau: khang dinh ban dung co khoi 'Duoc phep vao' tren man Members — khong co thi dang chup ban cu"
     inputs:
       - _acceptance/cho-phep-ai-vao-o-man-hinh/evidence/
     expected: |
@@ -311,6 +317,11 @@ evals:
     paths:
       - "apps/app/app/**"
       - "packages/ui/**"
+    steps:
+      - "Dung ca hai may chu cua CAY DANG XET o cong rieng nhu E12"
+      - "Tao phien cho mot nguoi vai `member`, mo /<slug>/settings/members, chup evidence/E13-members-member.png"
+      - "Tao phien cho mot nguoi vai `admin`, mo cung man ay, chup evidence/E13-members-admin.png"
+      - "So hai khung hinh: ban `member` khong co ba nut, ban `admin` co du ba"
     inputs:
       - _acceptance/cho-phep-ai-vao-o-man-hinh/evidence/
     expected: |
@@ -330,6 +341,12 @@ evals:
     criterion: AC-13
     executor: judgment
     cmd: judgment
+    question: |
+      Doc chu tren HAI hop thoai xac nhan trong kho chuoi — hop thoai go mot thanh vien
+      va hop thoai rut mot loi cho phep. Mot nguoi quan doc lan dau, khong ai giai
+      thich: ho co hieu dung rang GO cat quyen cua nguoi DA vao, con RUT chi chan nguoi
+      CHUA co tai khoan khong? Hai cau than co noi duoc hai viec khac nhau, hay chung
+      nghe giong nhau den muc nguoi bam nham?
     inputs:
       - apps/app/lib/messages/settings-thanh-vien.ts
     expected: |
