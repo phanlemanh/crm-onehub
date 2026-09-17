@@ -81,6 +81,14 @@ executors:
     mt_ho_so_cu_con_chay: bash _acceptance/ma-tran-phai-co-chieu-song/rang/ho-so-cu-con-chay.sh
     nc_lop_chuyen: cd packages/ui && bun test test/eve-to-ai-sdk.spec.ts
     xin_quyen_ghep_dong: cd apps/app && bun test test/grant-access-messages.spec.ts
+    lm_huy_qua_goi: bun run test -- "cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t huy-qua-goi"
+    lm_tu_choi_loi_moi: bun run test -- "cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t tu-choi-loi-moi"
+    lm_gia_tri_la: bun run test -- "cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t gia-tri-la"
+    lm_du_lieu_cu: bun run test -- "cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t du-lieu-cu"
+    lm_ranh_gioi_doc: bun run test -- "cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t ranh-gioi-doc"
+    lm_trang_thai_that: bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t trang-thai-that"
+    lm_ma_tran_trang_thai: bun run test -- "cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t ma-tran-trang-thai"
+    lm_khong_sinh_thanh_vien: bun run test -- "cd packages/auth && bun test test/loi-moi-ket-thuc.integration.spec.ts -t khong-sinh-thanh-vien"
   script:
     cua_vao_loi_mang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"'
     cua_vao_chon_tieng_may_chu: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chon-tieng-may-chu"'
@@ -368,6 +376,7 @@ executors:
     xin_quyen_be_rong: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/man-xin-quyen-co-rang/rang/man-xin-quyen.mjs be-rong"
     xin_quyen_tien_de: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/man-xin-quyen-co-rang/rang/man-xin-quyen.mjs tien-de"
     xin_quyen_chup_san: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/man-xin-quyen-co-rang/rang/man-xin-quyen.mjs chup-san"
+    lm_tu_vung_goi: node _acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
