@@ -28,6 +28,7 @@ import {
 
 const KHOA_LAN_DO = "lan-do-khong-phai-khoa-that";
 const NGUOI = process.env.NGUOI ?? "manh.phan@onemount.com";
+const MIEN_LAN_DO = "lan-do.onehub.vn";
 const ANH_LAN_DO =
 	"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
@@ -54,6 +55,7 @@ if (nguoi === null)
 		`chưa có người dùng ${NGUOI} trong kho — chạy một lượt \`cd apps/api && bun run dev:session ${NGUOI}\` rồi đo lại`,
 	);
 let daDatAnh = false;
+let daDatMien = false;
 
 try {
 	if (truoc === null) {
@@ -83,6 +85,17 @@ try {
 		console.log("-- tiền đề làn đo: ảnh đại diện đã có sẵn, không đụng");
 	}
 
+	if ((await db.trackedDomain.count()) === 0) {
+		await db.trackedDomain.create({ data: { host: MIEN_LAN_DO } });
+		daDatMien = true;
+		const lai = await db.trackedDomain.count({ where: { host: MIEN_LAN_DO } });
+		if (lai !== 1)
+			thoat(2, "đặt tên miền được phép xong nhưng đọc lại không thấy — không chấm");
+		console.log(`-- tiền đề làn đo: đã thêm tên miền được phép ${MIEN_LAN_DO} (sẽ dọn)`);
+	} else {
+		console.log("-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng");
+	}
+
 	const ra = spawnSync("bash", ["-lc", lenh], { stdio: "inherit" });
 	process.exitCode = ra.status === null ? 2 : ra.status;
 } finally {
@@ -107,6 +120,16 @@ try {
 			process.exitCode = 2;
 		} else {
 			console.log("-- tiền đề làn đo: đã dọn ảnh đại diện");
+		}
+	}
+	if (daDatMien) {
+		await db.trackedDomain.deleteMany({ where: { host: MIEN_LAN_DO } });
+		const con = await db.trackedDomain.count({ where: { host: MIEN_LAN_DO } });
+		if (con !== 0) {
+			console.error("tien-de: DỌN HỎNG — tên miền được phép của làn đo vẫn còn");
+			process.exitCode = 2;
+		} else {
+			console.log("-- tiền đề làn đo: đã dọn tên miền được phép");
 		}
 	}
 	await db.$disconnect();
