@@ -1,7 +1,6 @@
 export {
 	ALLOWANCE_WITHOUT_EXPIRY,
 	type AllowanceRow,
-	type AllowanceStatus,
 	type AllowDecision,
 	type AllowInput,
 	decideSignIn,
