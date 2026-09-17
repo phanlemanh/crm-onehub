@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f1a55ba0832031aa920fa708d3665e9b4dad6437
+verified_commit: 7c451de7b2567dde776a98770a8560a8efb77ff5
 run_id: s4r1-20260906T102507Z-35290
 human_signoff: Manh Phan 2026-09-06
 ---
@@ -195,3 +195,7 @@ sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0
 ### Re-pin lần 4 — 2026-09-16, do Ghim lại sau khi gieo tiền đề ảnh đại diện và bỏ dòng khai chỉ sống ở một máy
 run_id: repin-20260916T022636Z-63692
 sha: f1a55ba0832031aa920fa708d3665e9b4dad6437 · suites: 4 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng
+
+### Re-pin lần 5 — 2026-09-17, do chiến dịch ghim lại kit 2.14.0 (PR #47): làn eval thật trên cây đã chuyển đường ghi tạo phẩm; đo bằng manh.phan@onemount.com
+run_id: repin-20260917T034607Z-83188
+sha: 7c451de7b2567dde776a98770a8560a8efb77ff5 · suites: 4 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng
