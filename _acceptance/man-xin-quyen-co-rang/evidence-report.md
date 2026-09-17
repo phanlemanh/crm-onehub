@@ -184,6 +184,16 @@ lượt ba — xem `Known limits`, và mục `descope` trong sổ quyết địn
   output: |
     lệnh chạy trọn, kết thúc sạch
 
+## Known limits
+
+Năm giới hạn đã khai trong hợp đồng, chữ ký ở Cổng 2 phủ cả năm:
+
+1. **Nợ «browser check vẫn đếm ba» KHÔNG được vá ở vòng này.** Bộ thước của hồ sơ `cua-vao-noi-tieng-viet` vẫn liệt kê ba đường ở ba chỗ. Vòng này dựng thước RIÊNG cho màn thứ tư, nên `/grant-access` từ nay có phép đo trình duyệt — nhưng hợp đồng gốc vẫn tự mâu thuẫn với chính nó cho tới khi ai đó hợp nhất hai thước. Đánh đổi cố ý để không làm cũ bằng chứng đã ghim của hồ sơ gốc.
+2. **Sàn thiết kế KHÔNG chứng được mức P0 trên màn này.** Bốn đường đã thử ở vòng chấm này đều cho số 0 rỗng nghĩa: chế độ tĩnh tự khai không thấy được tương phản tính ra, còn chế độ DOM qua jsdom không tính nổi `color-mix()`, `oklch(from currentColor …)`, `@layer` và `@container` của tệp kiểu. Lỗ năng lực công cụ, không phải sản phẩm hỏng — đọc mắt trên hai khung hình không thấy khuyết tật hạng P0 nào. AC-9 đã được thu lại và thôi tuyên điều nó không chứng được.
+3. **Chỉ nhánh chỉ-Microsoft là chưa render thật.** Đo ở lớp kho chuỗi. Hai nhánh kia — chỉ-Google và cả-hai — đều dựng màn thật ở E2.
+4. **AC-9 bắt CẮT TRẦN, không bắt TRÀN DÒNG.** Một cụm từ dài ở ô biết xuống dòng thì chữ xuống dòng chứ không bị cắt, nên phép đo không đỏ — đúng, vì đó không phải lỗi. Ca cắt trần thật là một từ liền không khoảng trắng, và chiều đỏ dùng đúng ca đó.
+5. **Vòng này không sinh hay đổi một nét giao diện nào.** Không có buổi soi thiết kế trên bản bấm được, không có bản mô tả cấu trúc màn, không nạp bộ chuẩn giao diện nội bộ. Ba mục ghi trong sổ quyết định.
+
 ## Cặp hai chiều
 
 Mọi phép đo của hồ sơ này sinh ra kèm một vết đột biến chứng minh nó ĐỎ được.
