@@ -11,11 +11,11 @@ import {
 	workspaceRoleOf,
 } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
+import { isOnboarded, markOnboarded, workspaceSlug } from "@crm/db/workspace";
 import {
 	docTrangThai,
 	TRANG_THAI_LOI_MOI,
 } from "@crm/validation/invitation-status";
-import { isOnboarded, markOnboarded, workspaceSlug } from "@crm/db/workspace";
 import {
 	BadRequestException,
 	ForbiddenException,

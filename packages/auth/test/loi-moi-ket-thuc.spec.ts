@@ -1,11 +1,11 @@
 import { describe, expect, it } from "bun:test";
+import { type AllowanceRow, decideSignIn, docHang } from "../src/allow-list";
 import {
 	CANCELLED_CU,
 	conHieuLuc,
 	docTrangThai,
 	TRANG_THAI_LOI_MOI,
 } from "../src/invitation-status";
-import { type AllowanceRow, decideSignIn, docHang } from "../src/allow-list";
 
 const O = {
 	pending: TRANG_THAI_LOI_MOI[0],

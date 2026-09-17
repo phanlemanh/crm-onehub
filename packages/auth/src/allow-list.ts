@@ -72,8 +72,7 @@ export function decideSignIn(input: AllowInput): AllowDecision {
 
 	const row = input.allowances.find(
 		(candidate) =>
-			normalizeEmail(candidate.email) === email &&
-			conHieuLuc(candidate.status),
+			normalizeEmail(candidate.email) === email && conHieuLuc(candidate.status),
 	);
 
 	if (row) {

@@ -824,9 +824,10 @@ describe("trang-thai-that", () => {
 		expect(BANG.length).toBe(4);
 
 		for (const [vao, ra] of BANG) {
-			expect(toStatus(vao), `o "${vao}": vao "${vao}" thi phai ra "${ra}"`).toBe(
-				ra,
-			);
+			expect(
+				toStatus(vao),
+				`o "${vao}": vao "${vao}" thi phai ra "${ra}"`,
+			).toBe(ra);
 		}
 
 		expect(
