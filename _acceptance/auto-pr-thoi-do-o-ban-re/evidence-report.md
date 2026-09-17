@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 96ec6d9b0447bb8e3eafaf36c84dc9902372ebef
+verified_commit: ed70d70dd0ec9ee7412b45e63c90c925500d50c6
 human_signoff: Manh Phan 2026-09-07 — ký Cổng 2 trên verdict PASS của vòng chấm 5 (14/14 eval, 4 lệnh chứng xanh), với MƯỜI MỘT giới hạn đã khai. Ký trên hiểu biết rằng năm eval chiều đỏ E10-E14 là trang trí đã khai chứ không phải bằng chứng, rằng năng lực phân biệt chỉ được xác nhận bằng tay, rằng `bun run build` — lệnh chứng thứ năm của kho — không nằm trong AC-3, và rằng nhánh còn sau `origin/onehub` 16 commit với merge sạch.
 ---
 
@@ -318,3 +318,7 @@ khẳng định sai của hồ sơ mà CI của PR #17 bác trong vài phút.
 ### Re-pin lần 3 — 2026-09-16, do Chiến dịch ghim lại theo mốc kit 2.14.0 — sáu hồ sơ làn xanh; năm hồ sơ còn lại đỏ vì nguyên nhân thật, đi lượt riêng
 run_id: repin-20260916T014000Z-73664
 sha: 96ec6d9b0447bb8e3eafaf36c84dc9902372ebef · suites: 4 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng
+
+### Re-pin lần 4 — 2026-09-17, do chiến dịch ghim lại kit 2.14.0 (PR #47): làn eval thật trên cây đã chuyển đường ghi tạo phẩm; đo bằng phanlemanh@gmail.com
+run_id: repin-20260917T051527Z-61120
+sha: ed70d70dd0ec9ee7412b45e63c90c925500d50c6 · suites: 4 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng
