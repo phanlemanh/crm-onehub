@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: phiên verify độc lập, lệnh chạy tuần tự
 enforcement_mode: strict
 bypass_used: false
-verified_commit: fa2628905af26ed41056ed2df1cd18216e9c29ef
+verified_commit: 82758dd15c332c228b5db13468ebdeaa5f9a8acc
 human_signoff: Phan Le Manh 2026-09-17 — ký Cổng 2 trên verdict PASS (11 eval và 4 lệnh chứng đều xanh, 15 vết đột biến chứng minh từng thước đỏ được), với NĂM giới hạn đã khai. Ký trên hiểu biết rằng vòng 1 đi ba lượt, hai lượt tải bầy đầu bị chặn vì cùng một lớp lỗi và lượt ba đổi sang chạy tuần tự; rằng AC-9 đã được thu lại giữa chừng vì sàn thiết kế không chứng được mức P0 trên màn này; và rằng hai mươi lăm mục ngoài hợp đồng đã được định đoạt từng mục ở lượt ký này — hai mục ghi Known limits, hai mươi ba mục mở hợp đồng mới, phần lớn đến từ 26 commit của PR #48 và #50 chứ không phải sản phẩm của vòng này.
 ---
 
@@ -212,3 +212,7 @@ kia. Không lần chạy xanh nào bắt được cả ba.
 ### Re-pin lần 1 — 2026-09-17, do hoá cũ do onehub viết lại cổng tiền đề tien-de.mjs
 run_id: repin-20260917T170226Z-57366
 sha: fa2628905af26ed41056ed2df1cd18216e9c29ef · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-17, do hoa cu do onehub nhan PR #53 sau lan ghim truoc
+run_id: repin-20260917T171011Z-12715
+sha: 82758dd15c332c228b5db13468ebdeaa5f9a8acc · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
