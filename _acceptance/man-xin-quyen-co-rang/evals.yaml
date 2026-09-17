@@ -191,27 +191,26 @@ evals:
     criterion: AC-9
     executor: ui-check
     layer: ui-observed
-    cmd: config:executors.design.gate
+    cmd: config:executors.script.xin_quyen_chup_san
     steps:
-      - "Gieo tai khoan thieu quyen ca hai nha cung cap, dung /grant-access o tieng Viet, chup evidence/E10-xin-quyen-vi.png"
-      - "Dung cung man o tieng Anh, chup evidence/E10-xin-quyen-en.png"
-      - "TRUOC khi chup: khang dinh duong cuoi cung la /grant-access va tieu de tai lieu khop AC-8; sai thi thoat ma 2"
-      - "Chay san thiet ke tren hai anh do va doc muc P0"
-      - "In so luat san da chay; bang khong thi thoat ma 2"
+      - "Chay DUNG MOT LAN lenh chup-san cua thuoc"
+      - "Lenh tu gieo trang thai, tu khang dinh dang dung o /grant-access va tieu de tai lieu khop ban khai, roi chup hai khung hinh"
+      - "Doc hai anh sinh ra trong evidence/"
     expected: >-
-      exit 0. San thiet ke cua man /grant-access o hai thu tieng: khong vi pham muc P0
-      nao. Chan nay do SAN, khong thay E9 — E9 do be rong chu that, chan nay do cac luat
-      con lai cua bo chuan giao dien.
-      Khang dinh AM TINH "khong vi pham P0 nao" mot minh khong bao gio du, nen chan phai
-      mang HAI doi chung duong, kiem NGAY TRONG LUOT CHAY CUA CHINH NO, khong muon sang
-      chan khac: (1) duong cuoi cung sau khi dung la /grant-access VA tieu de tai lieu
-      khop AC-8 — phien het han lam man chuyen huong ve / thi hai anh van chup duoc va
-      san van sach, nen thieu khang dinh nay thi mot luot do NHAM MAN trong giong het
-      mot luot dat; (2) so luat san da chay phai KHAC KHONG — san nap hong cung cho ra
-      "khong vi pham P0 nao".
-      Thieu mot trong hai anh thi BLOCKED chu khong phai UNCERTAIN.
-      Chieu do: ha tuong phan chu tren nut cap quyen xuong duoi nguong tren mot ban sao
-      thi san phai bao DUNG mot vi pham P0 va GOI TEN luat bi pham.
+      exit 0, dong CUOI CUNG bat dau bang "DAT:". Chan nay giu lop NHIN THAY cho
+      hop dong: no de lai HAI khung hinh cua man that, mot tieng Viet mot tieng Anh,
+      va moi khung tu khang dinh danh tinh TRUOC khi chup.
+      Hai doi chung duong, kiem ngay trong luot chay cua chinh no: (1) duong cuoi
+      cung sau khi dung la /grant-access; (2) tieu de tai lieu chua dung chuoi cua
+      kho chuoi o thu tieng do. Sai mot trong hai thi thoat ma 2 va KHONG chup anh
+      nao — mot luot do NHAM MAN khong duoc phep trong giong mot luot dat.
+      Anh ghi ra phai ton tai va lon hon nguong 1000 byte, khong thi thoat ma 2.
+      SAN THIET KE KHONG con nam trong chan nay. S4 vong 1 da chung minh bon duong
+      chay san deu cho so 0 rong nghia tren man nay — xem Known limits cua hop dong.
+      Mot so 0 khong tinh duoc khong phai mot lan dat.
+      Chieu do: ep man chuyen huong di (sua dieu kien o page.tsx tren mot ban sao)
+      thi chan phai thoat ma 2 va goi ten duong no bi day ve, chu khong chup hai anh
+      cua mot man khac roi bao sach.
     paths:
       - "apps/app/app/(landing)/grant-access/**"
       - "apps/app/components/auth-shell.tsx"

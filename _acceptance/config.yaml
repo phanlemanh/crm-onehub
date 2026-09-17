@@ -367,6 +367,7 @@ executors:
     xin_quyen_tieu_de_tai_lieu: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/man-xin-quyen-co-rang/rang/man-xin-quyen.mjs tieu-de-tai-lieu"
     xin_quyen_be_rong: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/man-xin-quyen-co-rang/rang/man-xin-quyen.mjs be-rong"
     xin_quyen_tien_de: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/man-xin-quyen-co-rang/rang/man-xin-quyen.mjs tien-de"
+    xin_quyen_chup_san: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/man-xin-quyen-co-rang/rang/man-xin-quyen.mjs chup-san"
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0}/scripts/design-gate.mjs"
     ui_check: "${CLAUDE_PLUGIN_ROOT:-/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0}/scripts/design-scan.js"

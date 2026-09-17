@@ -9,6 +9,9 @@ status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-09-17
 design_doc: docs/superpowers/specs/2026-09-16-man-xin-quyen-co-rang-design.md
+amended_at: 2026-09-17
+amended_by: Phan Le Manh
+amended_reason: "S4 vong 1: thu AC-9 — go nua san thiet ke. Nguoi cham thu BON duong chay san tren man nay va chung minh ca bon cho so 0 rong nghia (che do tinh khong thay duoc tuong phan tinh ra; che do DOM qua jsdom khong tinh noi color-mix/oklch/@layer/@container cua tep kieu). Do la lo nang luc cong cu, khong phai san pham hong. Nua be rong muoi lam khang dinh GIU NGUYEN, khong thu hep."
 ---
 
 # Acceptance Contract: man-xin-quyen-co-rang
@@ -37,7 +40,7 @@ Hồ sơ này trả đúng lỗ đó, và trả luôn mục nợ nặng về câ
 - AC-6: Given người đọc tiếng Việt gặp lỗi khi bấm nút cấp quyền, When client tự dựng câu báo lỗi dự phòng, Then câu đó hiện tiếng Việt có dấu và khác câu tiếng Anh tương ứng.
 - AC-7: Given người đọc tiếng Việt bấm đăng xuất ở màn này và lượt đăng xuất THẤT BẠI, When client dựng câu báo lỗi, Then câu đó hiện tiếng Việt có dấu chứ không phải một câu tiếng Anh cứng. Đây là mục nợ nặng đã ghi ở `_acceptance/NO-CAN-TRA.md`.
 - AC-8: Given `/grant-access` là màn mà AC-8 của hồ sơ gốc khai loại trừ đích danh, When một người đọc tiếng Việt mở nó, Then tiêu đề tài liệu hiện tiếng Việt; và ở tiếng Anh hiện tiếng Anh. Tiêu đề tĩnh không đổi theo tiếng là tiêu chí đỏ.
-- AC-9: Given NĂM ô ghim của AC-1 — tiêu đề màn, mô tả màn, câu riêng tư, chữ trên nút cấp quyền, chữ trên nút đăng xuất — When màn dựng ở tiếng Việt trên ba khổ màn 768px, 1024px và 1280px, Then số khẳng định bề rộng phải BẰNG mười lăm (ba khổ nhân năm ô), mỗi ô một khẳng định trên mỗi khổ; và không ô nào có bề rộng chữ thật vượt bề rộng ô chứa nó. Số ô là hằng năm khai ở đây, KHÔNG suy từ số phần tử bộ chọn bắt được lúc chạy — bắt được bốn ô là TỪ CHỐI ĐO, thoát mã 2, gọi tên ô thiếu. Và sàn thiết kế chạy trên ảnh chụp của màn không báo vi phạm P0 nào.
+- AC-9: Given NĂM ô ghim của AC-1 — tiêu đề màn, mô tả màn, câu riêng tư, chữ trên nút cấp quyền, chữ trên nút đăng xuất — When màn dựng ở tiếng Việt trên ba khổ màn 768px, 1024px và 1280px, Then số khẳng định bề rộng phải BẰNG mười lăm (ba khổ nhân năm ô), mỗi ô một khẳng định trên mỗi khổ; và không ô nào có bề rộng chữ thật vượt bề rộng ô chứa nó. Số ô là hằng năm khai ở đây, KHÔNG suy từ số phần tử bộ chọn bắt được lúc chạy — bắt được bốn ô là TỪ CHỐI ĐO, thoát mã 2, gọi tên ô thiếu. Và phép đo giữ lại HAI khung hình của màn — một tiếng Việt, một tiếng Anh — mỗi khung tự khẳng định nó chụp đúng `/grant-access` với tiêu đề tài liệu khớp bản khai. Sàn thiết kế KHÔNG còn nằm trong tiêu chí này — xem Known limits.
 - AC-10: Given phép đo phải gieo được trạng thái thiếu quyền trước khi đo, When bước gieo không dựng được trạng thái đó, hoặc màn chuyển hướng về `/`, Then phép đo TỪ CHỐI ĐO — thoát mã 2 và gọi tên trạng thái thiếu. Một lượt không vào được màn không bao giờ là một lượt đạt.
 
 ## Coverage
@@ -77,6 +80,7 @@ Hai dòng chân ngành chờ người gạch tại Cổng 1:
 
 - **Nợ «browser check vẫn đếm ba» KHÔNG được vá ở vòng này.** `rang/cua-vao.mjs` của hồ sơ `cua-vao-noi-tieng-viet` vẫn liệt kê ba đường ở ba chỗ. Hồ sơ này dựng thước RIÊNG cho màn thứ tư, nên `/grant-access` từ nay có phép đo trình duyệt — nhưng hợp đồng gốc vẫn tự mâu thuẫn với chính nó cho tới khi ai đó hợp nhất hai thước. Đây là đánh đổi cố ý để không làm cũ bằng chứng đã ghim của hồ sơ gốc.
 - **Chỉ nhánh chỉ-Microsoft là chưa render thật** — xem Out of scope. Hai nhánh kia (chỉ-Google, cả-hai) đều dựng màn thật ở AC-2.
+- **Sàn thiết kế KHÔNG chứng được P0 trên màn này, và vòng này thôi tuyên là chứng được.** Ở S4 vòng 1, người chấm thử bốn đường và chứng minh cả bốn đều cho số 0 rỗng nghĩa: (A) nạp thẳng hai ảnh PNG — bộ tĩnh đọc tệp như HTML nên khớp con số không; (B) chế độ tĩnh trên tệp nguồn — chính công cụ khai nó không thấy được tương phản tính ra, mà cả năm luật P0 đều là luật tính-kiểu; (C) chế độ DOM qua jsdom — tệp kiểu không nạp được, và trang không có một thẻ `style` nội tuyến nào nên mọi luật chạy trên markup trần; (D) như C nhưng đã vá đường tệp kiểu — kết quả giống hệt C từng byte, và soi tệp kiểu thấy nó dùng `color-mix()` 200 lần, `oklch(from currentColor …)`, `@layer` và `@container`, những thứ jsdom không tính nổi. Đây là lỗ năng lực công cụ, không phải sản phẩm hỏng: đọc mắt trên hai ảnh không thấy khuyết tật hạng P0 nào. Cái còn lại và CÓ đo được là hai khung hình tự khẳng định danh tính, và đó là thứ AC-9 hứa từ vòng này.
 - **AC-9 bắt CẮT TRẦN, không bắt TRÀN DÒNG.** Phép đo so bề rộng chữ dựng thật với bề rộng trong của ô. Một cụm từ dài ở ô biết xuống dòng thì chữ xuống dòng chứ không bị cắt, nên phép đo không đỏ — đúng, vì đó không phải lỗi. Ca cắt trần thật là một từ liền không khoảng trắng (URL, từ ghép dài), và chiều đỏ dùng đúng ca đó. Hệ quả cần biết: nếu một ngày ô nào đó đổi sang không-xuống-dòng, phép đo này mới bắt được cụm từ dài ở ô ấy.
 - **Vòng này không sinh hay đổi giao diện nào.** Không có nghi thức design-pass, không có section Đặc tả UX, không gọi kỹ năng chuẩn giao diện nội. Ba mục đó ghi trong `decisions.jsonl`.
 
