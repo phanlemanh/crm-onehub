@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4159e3bad574786ba143bb9c0c331274a42490a5
+verified_commit: 8c6be6270473fc753bb15e19c063b3ef8c74219e
 human_signoff: Phan Le Manh 2026-09-17 — ký Cổng 2 trên verdict PASS sau SÁU vòng đo (15/15 eval máy và cả bốn lệnh chứng đều xanh ở vòng cuối, phép đo đột biến bảy chân chứng từng thước đỏ được), với BA giới hạn đã khai. Ký trên hiểu biết rằng: vòng 2 cho một màu ĐỎ GIẢ vì chạy song song khiến phép đo đột biến cắm vết vào cây mà thước tĩnh đang đọc, và từ vòng 3 mọi vòng đều chạy tuần tự; rằng người đã TRẢ LẠI ở vòng 4 vì câu chào gọi người dùng bằng họ, và bản sửa đã được giám khảo chấm kín xác nhận độc lập ở vòng 5; và rằng BẢY mục chữ vẫn để ngỏ — đều cùng một lớp «chữ chưa có mục từ điển», đều do hội đồng ba người khai UNCERTAIN chứ không lăng kính nào FAIL, và đều cần phán quyết của chủ từ điển chứ không cần thêm vòng đo.
 ---
 
@@ -438,3 +438,7 @@ ba UNCERTAIN, không lăng kính nào FAIL: bốn mục vòng 5 để ngỏ đư
 cụm "bộ dựng", và vùng khoá `ma.*`. PENDING-JUDGMENT: làn máy sạch, phần còn lại thuộc người
 quyết ở Cổng Bằng chứng. Vòng này VƯỢT trần ba vòng của skill — chạy theo chỉ đạo trực tiếp
 của người, không phải một vòng tự động.
+
+### Re-pin lần 1 — 2026-09-17, do dựng lại trên bản chung hiện tại: nhánh cũ gánh việc hồ sơ khác, và bản chung đã sửa dot-bien-lib
+run_id: repin-20260917T165105Z-85386
+sha: 8c6be6270473fc753bb15e19c063b3ef8c74219e · suites: 4 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng
