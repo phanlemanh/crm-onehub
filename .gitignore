@@ -52,6 +52,7 @@ yarn-error.log*
 .scratch/
 _acceptance/**/.anh-chup/
 _acceptance/**/.lan/
+.acceptance-runs/
 
 # Bộ cào listing: venv riêng ngoài turborepo, không commit thư viện
 tools/listing-crawl/.venv/
