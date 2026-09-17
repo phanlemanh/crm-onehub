@@ -25,7 +25,7 @@ reason: |
 verified_by: fresh-context verification subagents (hai làn)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f8f72ab99b4efebb09cfcf9374d612337a24879d
+verified_commit: ed70d70dd0ec9ee7412b45e63c90c925500d50c6
 human_signoff: Mạnh 2026-09-06 — ký lại trên bằng chứng vòng 4 sau khi bản sửa `go-khoa-goc-nhin` làm mốc cũ lệch cây. Mười mục ngoài hợp đồng ghi vào giới hạn đã biết; phạm vi đã cắt giữ nguyên; phê toàn bộ quyết định ghi sau Cổng 1. Chấm E19 và các định đoạt ngày 05/09 giữ nguyên hiệu lực, không làm lại.
 ---
 
@@ -620,3 +620,7 @@ chân kiểm chạy thật không hit đệm, cộng 28 bài của bộ cào. Ch
 Đây là lượt ghim lại thứ năm của hồ sơ này, và là lượt thứ tư không có tệp nào
 thuộc vùng nó phủ. Chi phí đó đã ghi thành số ở chip `cong-chan-theo-ho-so-khong-theo-diff`
 của kho kit.
+
+### Re-pin lần 4 — 2026-09-17, do chiến dịch ghim lại kit 2.14.0 (PR #47): làn eval thật trên cây đã chuyển đường ghi tạo phẩm; đo bằng phanlemanh@gmail.com
+run_id: repin-20260917T051527Z-61120
+sha: ed70d70dd0ec9ee7412b45e63c90c925500d50c6 · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng

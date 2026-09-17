@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e3f91a298a42e117eb56ae52a1ee85aeb81bf196
+verified_commit: ed70d70dd0ec9ee7412b45e63c90c925500d50c6
 human_signoff: Mạnh 2026-09-16
 ---
 
@@ -271,3 +271,7 @@ none — không có eval nào mang field runs > 1 trong vòng 3; không có phư
 Round 1: hồ sơ S4 đầu tiên, verdict BLOCKED (môi trường/verifier chưa sẵn sàng — xem 15b9fb).
 Round 2: E2, E7 hỏng vì cơ sở dữ liệu sạch chưa có hàng tổ chức (đã sửa beforeEach); E15 thoát mã 4 vì lệnh thiếu `--target`. Quay lại implementation.
 Round 3 (hiện tại): E3, E5, E8, E11 viết lại theo đối chứng đường thật (Prisma trực tiếp → thủ tục/service thật); tất cả eval máy (E1–E11, E16, E15, E12, E13) đạt; E14 (judgment, T3) panel đề xuất PASS trên cả ba lens, chờ human_override ở Gate 2.
+
+### Re-pin lần 1 — 2026-09-17, do chiến dịch ghim lại kit 2.14.0 (PR #47): làn eval thật trên cây đã chuyển đường ghi tạo phẩm; đo bằng phanlemanh@gmail.com
+run_id: repin-20260917T051527Z-61120
+sha: ed70d70dd0ec9ee7412b45e63c90c925500d50c6 · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng

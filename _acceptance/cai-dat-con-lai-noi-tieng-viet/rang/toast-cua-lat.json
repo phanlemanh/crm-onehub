@@ -93,6 +93,18 @@
 		{
 			"file": "apps/app/app/(app)/[slug]/settings/tracking/tracking-script.tsx",
 			"khoa": "doanMa.khongChep"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx",
+			"khoa": "hopThoaiChoPhep.xong"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx",
+			"khoa": "xacNhan.rut"
+		},
+		{
+			"file": "apps/app/app/(app)/[slug]/settings/members/members-table.tsx",
+			"khoa": "xacNhan.go"
 		}
 	]
 }

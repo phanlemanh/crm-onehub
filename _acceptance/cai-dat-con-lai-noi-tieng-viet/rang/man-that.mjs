@@ -266,14 +266,23 @@ function timBocJsx(file, chu) {
 	return ra;
 }
 
+function chuCaiDau(ten, email) {
+	const nhan = ten?.trim() || email?.trim() || "";
+	const phan = nhan.split(/\s+/).filter(Boolean);
+	if (phan.length === 0) return "?";
+	if (phan.length === 1) return phan[0].slice(0, 2).toUpperCase();
+	return (phan[0].slice(0, 1) + phan.at(-1).slice(0, 1)).toUpperCase();
+}
+
 async function trangThai(cookie) {
 	const noiLam = await goiApi(cookie, "workspace.get", null);
 	const thanhVien = await goiApi(cookie, "workspace.members", {});
+	const choPhep = await goiApiMem(cookie, "workspace.allowances", null);
 	const theoDoi = await goiApi(cookie, "tracking.settings", null);
 	const slack = await goiApi(cookie, "slack.status", null);
 	const ssoCauHinh = await goiApi(cookie, "sso.settings", null);
 	const ssoBang = await goiApi(cookie, "sso.list", {});
-	return { noiLam, thanhVien, theoDoi, slack, ssoCauHinh, ssoBang };
+	return { noiLam, thanhVien, choPhep, theoDoi, slack, ssoCauHinh, ssoBang };
 }
 
 function dungBoi(tt) {
@@ -283,11 +292,13 @@ function dungBoi(tt) {
 	for (const v of [tt.noiLam.name, tt.noiLam.website, tt.noiLam.slug])
 		if (v) nguoi.add(v);
 	for (const m of tt.thanhVien.rows ?? []) {
-		if (m.name) {
-			nguoi.add(m.name);
-			nguoi.add(m.name.slice(0, 2).toUpperCase());
-		}
+		if (m.name) nguoi.add(m.name);
 		if (m.email) nguoi.add(m.email);
+		nguoi.add(chuCaiDau(m.name, m.email));
+	}
+	for (const r of tt.choPhep.gia?.rows ?? []) {
+		if (r.email) nguoi.add(r.email);
+		if (r.invitedByName) nguoi.add(r.invitedByName);
 	}
 	for (const d of tt.theoDoi.domains ?? []) nguoi.add(d.host);
 	const vat = [
@@ -1198,6 +1209,59 @@ async function chanDoanMaChep(cookie, slug) {
 				ungVien.set(d.chu.replace(/\s+/g, " ").trim(), d);
 		}
 
+	if (tt.ssoCauHinh.canConfigure)
+		for (const tieng of ["vi", "en"]) {
+			const ten = "chan-do-sso";
+			const nhan = `URI chuyen huong o hop them nha cung cap SSO (lang=${tieng})`;
+			const mo = await moManMem(cookie, slug, "/settings/sso", tieng, RONG);
+			if (mo.loi !== null) {
+				await mo.trang.close();
+				khongDo2.push(`${nhan} — ${mo.loi[0]}`);
+				continue;
+			}
+			const nut = await mo.trang.$('[data-slot="sheet-trigger"]');
+			if (nut === null) {
+				await mo.trang.close();
+				khongDo2.push(`${nhan} — man khong ve ra nut them nha cung cap`);
+				continue;
+			}
+			await nut.click();
+			await new Promise((r) => setTimeout(r, 900));
+			const o = await mo.trang.$('[data-slot="sheet-content"] form input');
+			if (o === null) {
+				await mo.trang.close();
+				khongDo2.push(`${nhan} — hop them nha cung cap khong mo ra`);
+				continue;
+			}
+			await o.type(ten);
+			await new Promise((r) => setTimeout(r, 400));
+			const tren = await mo.trang.$$eval(
+				'[data-slot="sheet-content"] input[readonly][translate="no"]',
+				(els) => els.map((el) => el.value),
+			);
+			const doan = await docDoanTrenMan(mo.trang);
+			await mo.trang.close();
+			for (const d of doan) ungVien.set(d.chu.replace(/\s+/g, " ").trim(), d);
+			daDo.push(nhan);
+			const mong = `${tt.ssoCauHinh.callbackBase}/${ten}`;
+			nguonDaSo.add(gomTrangTri(mong));
+			if (tren.length !== 1) {
+				lech.push(
+					`${nhan} — hop co ${tren.length} o chi-doc mang translate="no", mong dung mot`,
+				);
+				continue;
+			}
+			const i = lechByte(tren[0], mong);
+			if (i === -1) {
+				console.log(
+					`   khop tung byte voi NGUON NGOAI MAN (sso.settings callbackBase + ten nha cung cap vua go) — ${nhan}`,
+				);
+				continue;
+			}
+			lech.push(
+				`${nhan} lech tu byte ${i}: man co ${JSON.stringify(tren[0])} · nguon co ${JSON.stringify(mong)}`,
+			);
+		}
 	if (!tt.ssoCauHinh.canConfigure)
 		khongDo2.push(
 			`URI chuyen huong o hop them nha cung cap SSO — sso.settings tra canConfigure=false cho vai tro "${tt.noiLam.viewerRole}", nut them bi khoa`,

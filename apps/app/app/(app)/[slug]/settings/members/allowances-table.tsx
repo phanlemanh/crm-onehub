@@ -108,9 +108,11 @@ export function AllowancesTable() {
 					<tbody>
 						{rows.map((row) => (
 							<tr key={row.id} className="border-b last:border-0">
-								<td className="py-2">{row.email}</td>
+								<td className="py-2" translate="no">
+									{row.email}
+								</td>
 								<td className="py-2">{t.vaiTro[row.role as Role]}</td>
-								<td className="py-2 text-muted-foreground">
+								<td className="py-2 text-muted-foreground" translate="no">
 									{row.invitedByName ?? "—"}
 								</td>
 								<td className="py-2 text-muted-foreground tabular-nums">

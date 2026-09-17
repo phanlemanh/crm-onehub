@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d67b2ac42b1fcdf3f8c9c5b4333ce1b99db57432
+verified_commit: ed70d70dd0ec9ee7412b45e63c90c925500d50c6
 run_id: s4r1-20260906T091355Z-66825
 human_signoff: Manh Phan 2026-09-06
 ---
@@ -270,3 +270,7 @@ sha: 413ef512cf88ca171c01a4eda5030a19d8f0bd2a · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-09-16, do Ghim lại ở cây sắp merge — sau khi hoà origin/onehub vào nhánh
 run_id: repin-20260916T030425Z-41233
 sha: d67b2ac42b1fcdf3f8c9c5b4333ce1b99db57432 · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng
+
+### Re-pin lần 5 — 2026-09-17, do chiến dịch ghim lại kit 2.14.0 (PR #47): làn eval thật trên cây đã chuyển đường ghi tạo phẩm; đo bằng phanlemanh@gmail.com
+run_id: repin-20260917T051527Z-61120
+sha: ed70d70dd0ec9ee7412b45e63c90c925500d50c6 · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng
