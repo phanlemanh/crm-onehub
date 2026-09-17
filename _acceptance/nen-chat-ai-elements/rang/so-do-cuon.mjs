@@ -26,7 +26,7 @@ const DUONG_CONVERSATION = join(
 	"src/components/ai-elements/conversation.tsx",
 );
 const DUONG_SCROLLER = join(DUONG_UI, "src/components/message-scroller.tsx");
-const DUONG_BANG_CHUNG = join(HO_SO, "evidence/so-do-cuon.json");
+const DUONG_BANG_CHUNG = join(GOC, ".acceptance-runs/nen-chat-ai-elements/so-do-cuon.json");
 
 const NGUONG_TI_SO = 1.2;
 const NGUONG_PHAN_UNG = 1.5;

@@ -59,7 +59,7 @@
 						"id": "so-do-cuon",
 						"script": "_acceptance/nen-chat-ai-elements/rang/so-do-cuon.mjs",
 						"vi_sao": "Cần trình duyệt thật (puppeteer-core) và dựng hội thoại 500 lượt ba lần; chậm hàng phút. Đây là phép đo, không phải răng chặn.",
-						"do_o": "E11 của _acceptance/nen-chat-ai-elements/evals.yaml, kết quả ghi ở evidence/so-do-cuon.json."
+						"do_o": "E11 của _acceptance/nen-chat-ai-elements/evals.yaml, kết quả ghi ở .acceptance-runs/nen-chat-ai-elements/so-do-cuon.json; vòng S4 của hồ sơ chép nó vào evidence/."
 					},
 					{
 						"id": "pham-vi-diff",
