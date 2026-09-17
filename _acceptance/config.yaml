@@ -398,6 +398,12 @@ risk_tiers:
     # Thiếu nó thì NOTE lớp nhìn-thấy in «không kiểm được» và luật W8 tắt im ở
     # kho này — cùng lớp measuring-stick với tám mục trên.
     - "lib/lop-nhin-thay.cjs"
+    # Cấu hình trình soạn: .claude/launch.json chỉ khai lệnh chạy dev server và
+    # số cổng cho phiên máy. Không file nào import nó, không bản dựng nào đọc
+    # nó, và không phép đo nào lấy giá trị từ nó — các thước tự đặt APP_URL và
+    # API_URL, nên đổi cổng ở đây không dịch chuyển được kết quả đo nào.
+    # Khai T1 ngày 17/09 sau khi cổng chặn một PR chỉ thêm hai mục cổng.
+    - ".claude/launch.json"
   t3_paths:
     - "packages/auth/**"
     - "packages/db/prisma/**"
