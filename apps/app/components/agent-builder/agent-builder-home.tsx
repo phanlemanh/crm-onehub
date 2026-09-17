@@ -11,9 +11,11 @@ import { khungMessages } from "@/lib/messages/agent-builder-khung";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { AgentComposer, type BuilderComposerPrompt } from "./agent-composer";
+import { tenGoi } from "./ten-goi";
 
 export function AgentBuilderHome({ name }: { name: string }) {
-	const t = khungMessages(useLocale());
+	const locale = useLocale();
+	const t = khungMessages(locale);
 	const router = useRouter();
 	const workspaceUrl = useWorkspaceUrl();
 	const trpc = useTRPC();
@@ -45,7 +47,7 @@ export function AgentBuilderHome({ name }: { name: string }) {
 		<main className="relative flex min-h-0 flex-1 flex-col items-center justify-center overflow-y-auto px-4 pt-14 pb-20 sm:px-6 sm:pt-12 sm:pb-28">
 			<div className="flex w-full max-w-3xl flex-col items-center gap-3 pb-6 text-center">
 				<h1 className="text-balance font-medium text-2xl tracking-tight sm:text-3xl">
-					{t.nha.chaoHoi(firstName(name, t.nha.tenThayThe))}
+					{t.nha.chaoHoi(tenGoi(name, locale, t.nha.tenThayThe))}
 				</h1>
 				<p className="max-w-xl text-balance text-muted-foreground text-sm">
 					{t.nha.moTa}
@@ -87,8 +89,4 @@ export function AgentBuilderHome({ name }: { name: string }) {
 			</div>
 		</main>
 	);
-}
-
-function firstName(name: string, thayThe: string): string {
-	return name.trim().split(/\s+/)[0] || thayThe;
 }
