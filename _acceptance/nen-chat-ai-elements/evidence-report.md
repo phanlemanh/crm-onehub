@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 040c52395de2d22cc907776952d69df231bae564
+verified_commit: 6a8c8e99070c818fa5d3ad863ba6548d98986d58
 human_signoff: Mạnh 10/09/2026 — ký lại trên bằng chứng vòng 7 sau khi hoà onehub và sửa lớp chuỗi thứ năm. Bảng đăng ký và kế hoạch chuyển đã sửa trước khi ký, theo quyết định của chủ kho. Các mục còn lại ghi ở Known limits của hợp đồng.
 ---
 
@@ -195,3 +195,7 @@ none — every multi-run eval is uniform
 
 Round 6: 12/12 eval PASS trên verified_commit 6d227b926f472d54b74cd61f7b8b348e933167bb, verdict PASS.
 Round 7 (vòng hiện tại): 12/12 eval PASS trên verified_commit 040c52395de2d22cc907776952d69df231bae564, verdict PASS. Nội dung round này thay trọn nội dung round 6; dữ liệu chi tiết round 1-5 không nằm trong ngữ cảnh truyền cho lượt tổng hợp này nên không được chép lại ở đây để tránh bịa.
+
+### Re-pin lần 1 — 2026-09-17, do sửa đường ghi E11 ra .acceptance-runs
+run_id: repin-20260917T074956Z-81715
+sha: 6a8c8e99070c818fa5d3ad863ba6548d98986d58 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
