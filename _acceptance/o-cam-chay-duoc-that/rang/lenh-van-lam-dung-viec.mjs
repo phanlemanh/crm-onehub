@@ -37,12 +37,6 @@ function yDinhTacGia(ten) {
 	return m ? m[1].trim() : undefined;
 }
 
-const veDuongChay = (lenh) =>
-	lenh.replaceAll(
-		"_acceptance/tiep-thi-tuyen-doi-tac/evidence/",
-		".acceptance-runs/tiep-thi-tuyen-doi-tac/",
-	);
-
 const chay = (lenh) =>
 	spawnSync("bash", ["-c", lenh], {
 		cwd: GOC,
@@ -65,7 +59,7 @@ for (const k of PHAI_SUA) {
 		console.error(`MA 2: khong giai duoc ${k} o HEAD`);
 		ketThuc(bamDau, 2);
 	}
-	const maCu = chay(veDuongChay(yDinh));
+	const maCu = chay(yDinh);
 	const maMoi = chay(nay);
 	console.log(
 		`  ${maCu === maMoi ? "ok " : "DO "} ${k.replace("executors.", "")} · y dinh ma ${maCu} · nay ma ${maMoi}`,
