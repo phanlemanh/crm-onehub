@@ -5,7 +5,7 @@ slug: man-xin-quyen-co-rang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-17
 design_doc: docs/superpowers/specs/2026-09-16-man-xin-quyen-co-rang-design.md
@@ -84,8 +84,12 @@ Hai dòng chân ngành chờ người gạch tại Cổng 1:
 - **AC-9 bắt CẮT TRẦN, không bắt TRÀN DÒNG.** Phép đo so bề rộng chữ dựng thật với bề rộng trong của ô. Một cụm từ dài ở ô biết xuống dòng thì chữ xuống dòng chứ không bị cắt, nên phép đo không đỏ — đúng, vì đó không phải lỗi. Ca cắt trần thật là một từ liền không khoảng trắng (URL, từ ghép dài), và chiều đỏ dùng đúng ca đó. Hệ quả cần biết: nếu một ngày ô nào đó đổi sang không-xuống-dòng, phép đo này mới bắt được cụm từ dài ở ô ấy.
 - **Vòng này không sinh hay đổi giao diện nào.** Không có nghi thức design-pass, không có section Đặc tả UX, không gọi kỹ năng chuẩn giao diện nội. Ba mục đó ghi trong `decisions.jsonl`.
 
+
 ## Notes
 
-Thước mới `import` lại `may-chu.mjs` của hồ sơ `cua-vao-noi-tieng-viet`. Đó là
+- Known limits (người quyết ở Cổng 2, 17/09): **Ngoài-7** — mã định danh phần tử viết cứng trong một hộp thoại vốn dùng hàm sinh mã tự động (`allow-dialog.tsx`). Chấp nhận và ghi vết, không sửa ở vòng này.
+- Known limits (người quyết ở Cổng 2, 17/09): **Ngoài-25** — `_acceptance/config.yaml.bak` được bộ kit sinh lại mỗi lần vá config, nên nó sẽ mọc lại sau mỗi lần thêm executor. Chấp nhận và ghi vết; chỗ đúng của nó là `.gitignore`, để một vòng khác làm.
+- Hai mươi ba mục ngoài hợp đồng còn lại được người định đoạt **mở hợp đồng mới** ở cùng lượt ký. Phần lớn đến từ 26 commit của PR #48 và #50 — điểm rẽ so sánh nằm trước lần trộn — nên chúng không phải sản phẩm của vòng này.
+- Thước mới `import` lại `may-chu.mjs` của hồ sơ `cua-vao-noi-tieng-viet`. Đó là
 phụ thuộc cố ý: `chotMayChu()` chứa phép khẳng định máy chủ đang phục vụ ĐÚNG
 cây này, và chép nó ra bản thứ hai là gieo đúng thứ bệnh mà hồ sơ này đang chữa.
