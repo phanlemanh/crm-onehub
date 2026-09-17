@@ -1,0 +1,23 @@
+{
+  "feature_plain": "Màn xin quyền hộp thư — màn nhân viên gặp ngay sau khi đăng nhập nếu CRM chưa được cấp quyền đọc thư — từ nay được máy mở ra và đọc thật ở cả hai thứ tiếng, thay vì chỉ được quét mã nguồn.",
+  "scope_plain": "Bốn việc gần kề cố ý để lại: đo màn dành riêng cho người chỉ dùng Microsoft; hợp nhất danh sách màn của bộ thước cũ; những phép đo bộ thước cũ đã làm rồi; và chấm mức tương phản bằng máy, thứ công cụ hiện tại không làm nổi trên màn này.",
+  "decisions_plain": [
+    { "id": "d-20260916T161519Z-1", "p": "Dựng bộ thước riêng cho màn này thay vì sửa bộ thước của việc cũ — đổi lại, việc cũ vẫn giữ nguyên chỗ tự mâu thuẫn của nó." },
+    { "id": "d-20260916T161519Z-2", "p": "Dựng đúng trạng thái người dùng thật rồi mở màn trên trình duyệt, thay vì kiểm từng mảnh giao diện rời — đắt hơn, nhưng đúng lớp mà lỗ hổng nằm ở." },
+    { "id": "d-20260916T161519Z-3", "p": "KHÔNG làm buổi soi giao diện trên bản bấm được — vòng này không đổi một nét nào trên màn." },
+    { "id": "d-20260916T161519Z-4", "p": "KHÔNG viết bản mô tả cấu trúc màn — màn đã tồn tại và không đổi." },
+    { "id": "d-20260916T161519Z-5", "p": "KHÔNG nạp bộ chuẩn giao diện nội bộ — không có bản vẽ nào để đặt lên bàn cân." },
+    { "id": "d-20260916T161519Z-6", "p": "KHÔNG gom danh sách màn của bộ thước cũ về một chỗ — đổi lại, danh sách đó vẫn nằm ba bản; hẹn làm khi việc cũ được mở lại để ký." },
+    { "id": "d-20260916T185055Z-8", "p": "Khi không dựng được cảnh cần đo, phép đo phải nói «không đo được» chứ không được nói «đo rồi và sai» — hai câu đó dẫn tới hai việc sửa khác hẳn nhau." },
+    { "id": "d-20260916T191821Z-9", "p": "Sửa lại chỗ máy nhìn vào trên màn cho khớp màn thật — bản cũ trỏ nhầm sang nhãn thương hiệu thay vì tên nhà cung cấp, nên nó sẽ báo xanh trong khi đo nhầm chỗ." },
+    { "id": "d-20260916T191821Z-10", "p": "Bắt cả hai nửa của phép đo cùng đọc một bản sản phẩm — trước đó một nửa đọc bản đang sửa, nửa kia đọc bản gốc, nên phép thử phá-cho-đỏ không bao giờ đỏ được." },
+    { "id": "d-20260916T191821Z-11", "p": "Dựng bản sao để thử phá bằng cách nhân bản đĩa thay vì tạo lối tắt — công cụ dựng giao diện từ chối lối tắt trỏ ra ngoài thư mục dự án." },
+    { "id": "d-20260916T191821Z-12", "p": "Phép thử phá lấy câu chữ từ chính kho chữ thay vì gõ lại — bản gõ tay trượt một chữ nên phép thử không phá được gì, và suýt làm tôi kết luận nhầm là thước hỏng." },
+    { "id": "d-20260916T192434Z-13", "p": "Đo chữ có bị CẮT CỤT hay không, thay vì đo chữ có rộng hơn ô hay không — cách cũ không bao giờ báo lỗi được ở ba trong năm chỗ, vì chữ ở đó tự xuống dòng. Thêm một chốt đếm nút để việc một nút biến mất không bị lặng lẽ bỏ qua." },
+    { "id": "d-20260916T192434Z-14", "p": "Phép thử phá dùng một từ liền không khoảng trắng — đó mới là ca chữ thật sự bị cắt cụt, còn một cụm từ dài thì chỉ xuống dòng." },
+    { "id": "d-20260916T194059Z-15", "p": "Mỗi lượt đo dùng một người dùng thử riêng — chín phép đo chạy song song trên cùng một người dùng thì lượt dọn của cái này phá cảnh của cái kia." },
+    { "id": "d-20260916T194059Z-16", "p": "Lỗi tạo phiên đăng nhập nay được gọi đúng tên là «không đo được», thay vì đội lốt một lỗi sản phẩm." },
+    { "id": "d-20260916T201627Z-17", "p": "Dấu hiệu «đã xong» luôn là dòng cuối cùng — đặt nó ở giữa khiến người chấm tưởng lệnh chưa chạy hết, và đó là lý do hai lượt chấm đầu bị chặn." },
+    { "id": "d-20260917T001201Z-18", "p": "KHÔNG chấm mức tương phản bằng máy nữa — công cụ hiện tại không đọc nổi cách tô màu của giao diện này, nên nó luôn báo «không có lỗi» dù có nhìn thấy gì hay không. Giữ lại phần đo được thật: hai khung hình của màn, mỗi khung tự chứng nó chụp đúng màn." }
+  ]
+}
