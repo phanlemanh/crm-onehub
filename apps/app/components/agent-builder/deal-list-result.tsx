@@ -16,7 +16,7 @@ import { OwnerCell } from "@/components/crm/owner-cell";
 import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { LocalDay } from "@/components/local-date-time";
-import type { DealListItem, DealListResult } from "@/lib/agent-transcript";
+import type { DealListResult } from "@/lib/agent-transcript";
 import { DEAL_STAGE_OPTIONS } from "@/lib/deal-stage";
 import {
 	type KetQuaMessages,
@@ -169,7 +169,7 @@ function tableMeta(
 ): string {
 	const details = [
 		t.thoaThuan.soThoaThuan(String(result.deals.length)),
-		pipelineTotal(result.deals, locale, t),
+		pipelineTotal(result, locale, t),
 		result.criteria.inactiveForDays === null
 			? null
 			: t.thoaThuan.ngayNamIm(String(result.criteria.inactiveForDays)),
@@ -188,10 +188,11 @@ function humaniseStage(stage: string): string {
 }
 
 function pipelineTotal(
-	deals: readonly DealListItem[],
+	result: DealListResult,
 	locale: Locale,
 	t: KetQuaMessages,
 ): string | null {
+	const deals = result.deals;
 	const currencies = new Set(deals.map((deal) => deal.currency));
 	if (currencies.size !== 1) return null;
 
@@ -199,7 +200,8 @@ function pipelineTotal(
 	if (!currency) return null;
 
 	const amount = deals.reduce((sum, deal) => sum + (deal.amount ?? 0), 0);
-	return t.thoaThuan.duongOng(
-		formatMoney(Math.round(amount * 100), currency, locale),
-	);
+	const tien = formatMoney(Math.round(amount * 100), currency, locale);
+	return result.criteria.status === "open"
+		? t.thoaThuan.duongOng(tien)
+		: t.thoaThuan.tongGiaTri(tien);
 }

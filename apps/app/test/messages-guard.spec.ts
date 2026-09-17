@@ -522,10 +522,8 @@ describe("kho chuoi cua vong ③a", () => {
 				"1 tệp đã đổi. Lưu là ghi thành một bản mới.",
 				"12 tệp đã đổi. Lưu là ghi thành một bản mới.",
 			],
-			"agent-builder-ket-qua:thoaThuan.duongOng": [
-				"đường ống 1",
-				"đường ống 12",
-			],
+			"agent-builder-ket-qua:thoaThuan.duongOng": ["1 đang mở", "12 đang mở"],
+			"agent-builder-ket-qua:thoaThuan.tongGiaTri": ["tổng 1", "tổng 12"],
 			"agent-builder-ket-qua:thoaThuan.ngayNamIm": [
 				"nằm im từ 1 ngày",
 				"nằm im từ 12 ngày",
