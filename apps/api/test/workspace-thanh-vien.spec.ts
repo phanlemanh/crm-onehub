@@ -2,8 +2,9 @@ import { beforeEach, describe, expect, it } from "bun:test";
 import { auth } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import { TRANG_THAI_LOI_MOI } from "@crm/validation/invitation-status";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
-import { WorkspaceService } from "../src/workspace/workspace.service";
+import { toStatus, WorkspaceService } from "../src/workspace/workspace.service";
 
 const suffix = process.env.TEST_RUN_ID ?? "thanh-vien";
 
@@ -199,8 +200,8 @@ describe("cho-phep-lai", () => {
 			khiCancelled,
 			khiPending,
 			khiAccepted,
-			"cancelled mo, pending va accepted dong",
-		]).toEqual([true, false, false, "cancelled mo, pending va accepted dong"]);
+			"canceled mo, pending va accepted dong",
+		]).toEqual([true, false, false, "canceled mo, pending va accepted dong"]);
 
 		expect([
 			truoc,
@@ -212,9 +213,9 @@ describe("cho-phep-lai", () => {
 			where: { id: dau.id },
 			select: { status: true },
 		});
-		expect([cu?.status, "dong cancelled cu con nguyen"]).toEqual([
-			"cancelled",
-			"dong cancelled cu con nguyen",
+		expect([cu?.status, "dong canceled cu con nguyen"]).toEqual([
+			TRANG_THAI_LOI_MOI[3],
+			"dong canceled cu con nguyen",
 		]);
 	});
 });
@@ -358,7 +359,7 @@ describe("chu-cuoi-cung", () => {
 			sau?.status,
 			"hang user luu chu hoa, loi cho phep luu chu thuong — van phai rut duoc",
 		]).toEqual([
-			"cancelled",
+			TRANG_THAI_LOI_MOI[3],
 			"hang user luu chu hoa, loi cho phep luu chu thuong — van phai rut duoc",
 		]);
 	});
@@ -415,12 +416,12 @@ describe("chu-cuoi-cung", () => {
 			hang,
 			sau?.status,
 			phienConLai,
-			"hang thanh vien mat, loi cho phep thanh cancelled, phien bi thu hoi",
+			"hang thanh vien mat, loi cho phep thanh canceled, phien bi thu hoi",
 		]).toEqual([
 			null,
-			"cancelled",
+			TRANG_THAI_LOI_MOI[3],
 			0,
-			"hang thanh vien mat, loi cho phep thanh cancelled, phien bi thu hoi",
+			"hang thanh vien mat, loi cho phep thanh canceled, phien bi thu hoi",
 		]);
 	});
 });
@@ -802,11 +803,35 @@ describe("go-tron-ven", () => {
 		expect([
 			lai,
 			dongLoi?.status,
-			"dang nhap lai khong tu thanh vien, va loi cho phep van cancelled",
+			"dang nhap lai khong tu thanh vien, va loi cho phep van canceled",
 		]).toEqual([
 			null,
-			"cancelled",
-			"dang nhap lai khong tu thanh vien, va loi cho phep van cancelled",
+			TRANG_THAI_LOI_MOI[3],
+			"dang nhap lai khong tu thanh vien, va loi cho phep van canceled",
 		]);
+	});
+});
+
+describe("trang-thai-that", () => {
+	it("bon o viet truoc, gia tri ra bang gia tri vao", () => {
+		const BANG = [
+			["pending", "pending"],
+			["accepted", "accepted"],
+			["canceled", "canceled"],
+			["rejected", "rejected"],
+		] as const;
+
+		expect(BANG.length).toBe(4);
+
+		for (const [vao, ra] of BANG) {
+			expect(toStatus(vao), `o "${vao}": vao "${vao}" thi phai ra "${ra}"`).toBe(
+				ra,
+			);
+		}
+
+		expect(
+			toStatus("mot-chuoi-la"),
+			'gia tri la phai ra "unknown", khong duoc hoa "pending"',
+		).toBe("unknown");
 	});
 });

@@ -11,6 +11,10 @@ import {
 	workspaceRoleOf,
 } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
+import {
+	docTrangThai,
+	TRANG_THAI_LOI_MOI,
+} from "@crm/validation/invitation-status";
 import { isOnboarded, markOnboarded, workspaceSlug } from "@crm/db/workspace";
 import {
 	BadRequestException,
@@ -65,8 +69,8 @@ type AllowanceRow = Prisma.InvitationGetPayload<{
 	select: typeof ALLOWANCE_SELECT;
 }>;
 
-function toStatus(value: string): Allowance["status"] {
-	return value === "accepted" || value === "cancelled" ? value : "pending";
+export function toStatus(value: string): Allowance["status"] {
+	return docTrangThai(value).trangThai;
 }
 
 const SORTABLE: OrderByColumns<Prisma.MemberOrderByWithRelationInput> = {
@@ -339,7 +343,7 @@ export class WorkspaceService {
 
 		const updated = await this.db.invitation.update({
 			where: { id: target.id },
-			data: { status: "cancelled" },
+			data: { status: TRANG_THAI_LOI_MOI[3] },
 			select: ALLOWANCE_SELECT,
 		});
 
@@ -406,7 +410,7 @@ export class WorkspaceService {
 						email,
 						status: { in: ["pending", "accepted"] },
 					},
-					data: { status: "cancelled" },
+					data: { status: TRANG_THAI_LOI_MOI[3] },
 				});
 			}
 		});
