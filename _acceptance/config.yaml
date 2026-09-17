@@ -207,7 +207,7 @@ executors:
     cd2_khong_du_quyen: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/lat-cai-dat-2.json --chan khong-du-quyen"
     cd2_khai_sinh: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/lat-cai-dat-2.json"
     cd2_dan_so_tu_dia: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/lat-cai-dat-2.json --chan dan-so"
-    cd2_dot_bien: "node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/dot-bien.mjs"
+    cd2_dot_bien: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/dot-bien.mjs"'
     cd2_mot_bo_thuoc: "node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/mot-bo-thuoc.mjs"
     ab_chu_cung_jsx: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-cung-lat.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json"
     ab_moi_chuoi: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/moi-chuoi.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json"
