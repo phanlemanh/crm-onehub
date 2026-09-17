@@ -58,6 +58,7 @@ function columns(
 			cell: (row) => (
 				<span className="flex min-w-0 items-center gap-2">
 					<PersonAvatar
+						translate="no"
 						size="sm"
 						src={row.image}
 						name={row.name}

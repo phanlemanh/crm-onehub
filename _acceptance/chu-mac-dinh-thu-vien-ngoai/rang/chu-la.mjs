@@ -2,6 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { docTep } from "../../man-cai-dat-noi-tieng-viet/rang/tep-thay.mjs";
 import puppeteer from "puppeteer-core";
 import {
 	APP,
@@ -14,7 +15,7 @@ import {
 import { GOC } from "../../man-cai-dat-noi-tieng-viet/rang/lat.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const BANG = JSON.parse(readFileSync(join(HERE, "chu-la-cua-kho.json"), "utf8"));
+const BANG = JSON.parse(docTep(join(HERE, "chu-la-cua-kho.json")));
 const LOAI_TRU = BANG.loai_tru;
 const THUOC = ["aria-label", "title", "placeholder", "alt"];
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";

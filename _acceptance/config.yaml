@@ -24,7 +24,7 @@ executors:
     cp_quyen_hai_ve: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t quyen-hai-ve"'
     cp_chuan_hoa_dia_chi: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t chuan-hoa"'
     cp_domain_nha_tach: 'bun run test -- "cd apps/api && bun test test/domain-nha-tach.spec.ts"'
-    cp_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx" "apps/app/app/(app)/[slug]/settings/members/allow-dialog.tsx" "apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx" "apps/app/app/(landing)/het-quyen/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    cp_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx" "apps/app/app/(app)/[slug]/settings/members/allow-dialog.tsx" "apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx" "apps/app/app/(landing)/het-quyen/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     cp_cho_phep_lai: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t cho-phep-lai"'
     cua_vao_chon_tieng: "cd apps/app && bun test test/locale-resolve.spec.ts"
     cua_vao_kho_chuoi: "cd apps/app && bun test test/auth-messages.spec.ts"
@@ -207,7 +207,7 @@ executors:
     cd2_khong_du_quyen: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --lat ${PWD}/_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/lat-cai-dat-2.json --chan khong-du-quyen"
     cd2_khai_sinh: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/lat-cai-dat-2.json"
     cd2_dan_so_tu_dia: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --lat ${PWD}/_acceptance/cai-dat-con-lai-noi-tieng-viet/rang/lat-cai-dat-2.json --chan dan-so"
-    cd2_dot_bien: "node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/dot-bien.mjs"
+    cd2_dot_bien: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/dot-bien.mjs"'
     cd2_mot_bo_thuoc: "node _acceptance/cai-dat-con-lai-noi-tieng-viet/rang/mot-bo-thuoc.mjs"
     ab_chu_cung_jsx: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-cung-lat.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json"
     ab_moi_chuoi: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/moi-chuoi.mjs --lat ${PWD}/_acceptance/agent-builder-noi-tieng-viet/rang/lat-agent-builder.json"
@@ -278,13 +278,13 @@ executors:
     rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
     rang_t1_im: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"
     tt_crawl_test: cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v
-    tt_crawl_live: cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --limit 50 --dry-run --redact --out ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json --log ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-run.log
+    tt_crawl_live: cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --limit 50 --dry-run --redact --out ../../.acceptance-runs/tiep-thi-tuyen-doi-tac/live-batch.json --log ../../.acceptance-runs/tiep-thi-tuyen-doi-tac/live-run.log
     tt_ui_luong: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs luong"'
     tt_ui_chu: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs chu"'
     tt_ui_trang_thai: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs trang-thai"'
     tt_ui_be_rong: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs be-rong"'
     tt_ui_thiet_ke: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs thiet-ke"'
-    tt_crawl_to_ingest: 'bun run test -- "cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --fixtures --dry-run --out ../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/fixture-batch.json && cd ../../apps/api && bun run test listing-fixture-batch"'
+    tt_crawl_to_ingest: 'bun run test -- "cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --fixtures --dry-run --out ../../.acceptance-runs/tiep-thi-tuyen-doi-tac/fixture-batch.json && cd ../../apps/api && LISTING_FIXTURE_BATCH=.acceptance-runs/tiep-thi-tuyen-doi-tac/fixture-batch.json bun run test listing-fixture-batch"'
     khoa_lo_tran_retire: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan tran-retire
     khoa_lo_tran_claim: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan tran-claim
     khoa_lo_can: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan can
@@ -358,8 +358,8 @@ executors:
     nc_pham_vi_diff: node _acceptance/nen-chat-ai-elements/rang/pham-vi-diff.mjs
     nc_rang_qua_cong: bun run test
   design:
-    gate: "node ${CLAUDE_PLUGIN_ROOT:-/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0}/scripts/design-gate.mjs"
-    ui_check: "${CLAUDE_PLUGIN_ROOT:-/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0}/scripts/design-scan.js"
+    gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
+    ui_check: "${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
 risk_tiers:
   t1_skip_globs:
     - "docs/**"
@@ -382,7 +382,11 @@ risk_tiers:
     - "lib/workspace-record.cjs"
     - "lib/ac-line.cjs"
     - "lib/md-section.cjs"
-    - "lib/eval-yaml.cjs"   # vendored 2.9.0 — bộ đọc evals.yaml của luật làn ghim-lại (ADR 0014)
+    - "lib/eval-yaml.cjs"   # bộ đọc evals.yaml của luật làn ghim-lại (ADR 0014), và là nguồn duy nhất đọc expected_exit
+    # lop-nhin-thay: mục thứ CHÍN của INIT-CI-COPY-LIST, kit thêm ở 2.10.0.
+    # Thiếu nó thì NOTE lớp nhìn-thấy in «không kiểm được» và luật W8 tắt im ở
+    # kho này — cùng lớp measuring-stick với tám mục trên.
+    - "lib/lop-nhin-thay.cjs"
   t3_paths:
     - "packages/auth/**"
     - "packages/db/prisma/**"

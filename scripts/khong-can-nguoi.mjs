@@ -24,6 +24,7 @@
 // ý của hồ sơ T2; sổ known-limits lan-v-khong-phai-cho-ky#7 ghi lớp «hai bản dựng
 // độc lập chỉ được giữ bằng ma trận fixture chọn tay» (S4-r3 từng bỏ sót hai điều kiện).
 import { createRequire } from 'node:module';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -92,4 +93,44 @@ export function khongCanNguoi(contractTxt, evidenceTxt) {
   if (vMo) return 'lan-v-mo';
   if (approvedBy || gate1Skipped) return 'xanh-sach';
   return null;
+}
+
+// ── CLI: đường GHI ô kết (duong-lui-phai-song AC-8) ─────────────────────────
+//   node khong-can-nguoi.mjs --write|--check --root <repo> --slug <slug>
+// verified + T2 + khongCanNguoi() ≠ null → ghi đúng dòng status thành machine-cleared,
+// tự kiểm bằng CHÍNH luật lưới ghi-lúc-viết (evaluateContractWrite) trước khi ghi đĩa.
+// Exit: 0 ghi/sẽ ghi · 2 chưa đủ (in lý do, không ghi) · 3 thiếu cờ hoặc không đọc được.
+// So bằng realpath: /var → /private/var trên macOS làm argv[1] và import.meta.url lệch nhau
+// khi script chạy từ một bản sao trong thư mục tạm (chân ket-ghi chiều đỏ M1/M2 im lặng exit 0).
+const _isMain = (() => { try { return !!process.argv[1] && fs.realpathSync(path.resolve(process.argv[1])) === fileURLToPath(import.meta.url); } catch { return false; } })();
+if (_isMain) {
+  const argv = process.argv.slice(2); const get = k => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : null; };
+  const mode = argv.includes('--write') ? 'write' : argv.includes('--check') ? 'check' : null;
+  const root = get('--root'), slug = get('--slug');
+  if (!mode || !root || !slug) { console.error('khong-can-nguoi: dùng --write|--check --root <repo> --slug <slug>'); process.exit(3); }
+  const { evaluateContractWrite, machineClearedSignoffConflict } = require(path.join(__dirname, '..', 'lib', 'evidence-core.cjs'));
+  const cp = path.join(root, '_acceptance', slug, 'contract.md'), ep = path.join(root, '_acceptance', slug, 'evidence-report.md');
+  let contract, evidence;
+  try { contract = fs.readFileSync(cp, 'utf8'); } catch { console.error(`khong-can-nguoi: không đọc được ${cp}`); process.exit(3); }
+  try { evidence = fs.readFileSync(ep, 'utf8'); } catch { evidence = null; }
+  const status = (frontmatterField(contract, 'status') || '').trim().toLowerCase();
+  const tier = (frontmatterField(contract, 'risk_tier') || '').trim().toUpperCase();
+  const why = status !== 'verified' ? `status ${status || '(rỗng)'} (chỉ verified)`
+    : tier !== 'T2' ? `hạng ${tier || '(rỗng)'} (chỉ T2)`
+    : (khongCanNguoi(contract, evidence) == null ? (xanhSach(contract, evidence).why || 'còn cần người') : '');
+  if (why) { console.error(`chưa đủ: ${why}`); process.exit(2); }
+  // Dòng status của khuôn hợp đồng mang comment đuôi (`status: verified   # draft | approved | …`) —
+  // giữ nguyên phần comment, chỉ thay giá trị (S4-r2 finding: regex đòi hết dòng làm cửa ghi
+  // duy nhất thất bại với lý do sai trên mọi hợp đồng sinh từ khuôn).
+  const next = contract.replace(/^(status:[ \t]*)verified([ \t]*(?:#.*)?)$/m, '$1machine-cleared$2');
+  if (next === contract) { console.error('chưa đủ: không tìm được dòng status: verified'); process.exit(2); }
+  const r = evaluateContractWrite(next, contract);
+  if (r.anyFailure) { console.error(`lưới ghi từ chối: ${r.failures.join(' | ')}`); process.exit(2); }
+  // Luật THỨ HAI của hook ghi-lúc-viết (hooks/acceptance-evidence-gate.js): chữ ký người trên hồ sơ
+  // máy-thông là hai sự thật cãi nhau — CLI ghi thẳng đĩa không qua hook nên phải hỏi cùng luật
+  // (S4-r1/r3 finding: ca ký bị ngắt giữa chừng rồi resume vào hàng verified).
+  const conflict = machineClearedSignoffConflict(next, evidence);
+  if (conflict) { console.error(`lưới ghi từ chối: ${conflict}`); process.exit(2); }
+  if (mode === 'write') fs.writeFileSync(cp, next);
+  console.log(`${mode === 'write' ? 'machine-cleared' : 'sẽ machine-cleared'}: ${slug}`);
 }

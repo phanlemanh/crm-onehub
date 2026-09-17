@@ -13,7 +13,9 @@ import { ListingIngestService } from "../src/listings/listing-ingest.service";
 
 const BATCH = resolve(
 	import.meta.dir,
-	"../../../_acceptance/tiep-thi-tuyen-doi-tac/evidence/fixture-batch.json",
+	"../../..",
+	process.env.LISTING_FIXTURE_BATCH ??
+		"_acceptance/tiep-thi-tuyen-doi-tac/evidence/fixture-batch.json",
 );
 
 const suffix = `fixture-batch-${process.env.TEST_RUN_ID ?? "local"}`;
