@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ai đã canh chỗ nào</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+
+    .frame { max-width: 1200px; width: 100%; }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Điểm quyết định · go-thanh-vien-phai-giu-duoc</p>
+    <h1>Phần lớn lượt gỡ đã có người canh. Còn ba chỗ thì chưa.</h1>
+
+    <svg viewBox="0 0 1000 720" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="204" y1="144" x2="204" y2="168" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="204" y1="224" x2="204" y2="248" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="204" y1="304" x2="204" y2="372" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <rect x="214" y="336" width="60" height="16" rx="2" fill="#fafafa"/>
+      <text x="218" y="348" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.10em">SAU ĐÓ</text>
+
+      <rect x="40" y="64" width="328" height="260" rx="8" fill="none" stroke="rgba(23,23,23,0.24)" stroke-width="1" stroke-dasharray="5,4"/>
+      <rect x="56" y="56" width="100" height="16" rx="2" fill="#fafafa"/>
+      <text x="60" y="68" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">MỘT GIAO DỊCH</text>
+
+      <text x="40" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">LƯỢT GỠ · removeMember</text>
+
+      <rect x="64" y="88" width="280" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="204" y="112" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Xoá dòng thành viên</text>
+      <text x="204" y="128" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">tx.member.delete</text>
+
+      <rect x="64" y="168" width="280" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="204" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Xoá dòng phiên</text>
+      <text x="204" y="208" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">tx.session.deleteMany</text>
+
+      <rect x="64" y="248" width="280" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="204" y="272" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Thu hồi lời mời</text>
+      <text x="204" y="288" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">tx.invitation.updateMany</text>
+
+      <rect x="64" y="372" width="280" height="56" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="204" y="396" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Người ấy đăng nhập lại</text>
+      <text x="204" y="412" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ensureWorkspaceMembership</text>
+
+      <text x="416" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐÃ CÓ NGƯỜI CANH</text>
+      <text x="416" y="62" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">hồ sơ cho-phep-ai-vao-o-man-hinh · đã ký 16/09</text>
+
+      <rect x="416" y="88" width="544" height="56" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="432" y="100" width="56" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.25)" stroke-width="0.8"/>
+      <text x="460" y="112" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐÃ ĐO</text>
+      <text x="500" y="112" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">cp_go_tron_ven</text>
+      <text x="432" y="132" fill="#666666" font-size="10" font-family="'Geist', sans-serif">nguyên tử — một lệnh ghi hỏng thì cả ba cùng không xảy ra</text>
+
+      <rect x="416" y="184" width="300" height="24" rx="4" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="428" y="200" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.10em">AC-2 · CHƯA AI CANH — XEM KHỐI DƯỚI</text>
+
+      <rect x="416" y="248" width="544" height="56" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="432" y="260" width="56" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.25)" stroke-width="0.8"/>
+      <text x="460" y="272" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐÃ ĐO</text>
+      <text x="500" y="272" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">cp_chu_cuoi_cung</text>
+      <text x="432" y="292" fill="#666666" font-size="10" font-family="'Geist', sans-serif">gỡ xong thì lời mời của người ấy cũng bị rút</text>
+
+      <rect x="416" y="372" width="544" height="56" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="432" y="384" width="56" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.25)" stroke-width="0.8"/>
+      <text x="460" y="396" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐÃ ĐO</text>
+      <text x="500" y="396" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">cp_go_tron_ven</text>
+      <text x="432" y="416" fill="#666666" font-size="10" font-family="'Geist', sans-serif">đăng nhập lại không tự thành thành viên lần nữa</text>
+
+      <rect x="40" y="468" width="920" height="140" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="56" y="460" width="156" height="16" rx="2" fill="#fafafa"/>
+      <text x="60" y="472" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHƯA AI CANH — BA CHỖ</text>
+
+      <rect x="60" y="500" width="280" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="72" y="512" width="40" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="92" y="524" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-1</text>
+      <text x="72" y="552" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Thủ tục quản trị từ chối</text>
+      <text x="72" y="568" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">người đã bị gỡ</text>
+      <text x="72" y="580" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">ma trận toàn phần, hai chiều</text>
+
+      <rect x="360" y="500" width="280" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="372" y="512" width="40" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="392" y="524" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-2</text>
+      <text x="372" y="552" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Phiên đang mở mất quyền,</text>
+      <text x="372" y="568" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">đúng 0 giây</text>
+      <text x="372" y="580" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">hỏi auth.api.getSession</text>
+
+      <rect x="660" y="500" width="280" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="672" y="512" width="40" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="692" y="524" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-3</text>
+      <text x="672" y="552" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Đường kết nạp mồi thôi</text>
+      <text x="672" y="568" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">cấp lại quyền</text>
+      <text x="672" y="580" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">lời mời ở trạng thái kết thúc</text>
+
+      <text x="40" y="636" fill="#575757" font-size="14" font-style="italic" font-family="'Lora', serif">Bản nháp đầu tưởng lời mời còn sống sau lượt gỡ — sai: khối thu hồi đã có từ trước khi hợp đồng được viết.</text>
+
+      <line x1="40" y1="656" x2="960" y2="656" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="672" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+
+      <rect x="40" y="686" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="72" y="696" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bước trong lượt gỡ</text>
+
+      <rect x="320" y="686" width="24" height="12" rx="2" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="352" y="696" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đã có người canh — hồ sơ đã ký</text>
+
+      <rect x="600" y="686" width="24" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="632" y="696" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chưa ai canh — hợp đồng này</text>
+    </svg>
+  </div>
+</body>
+</html>

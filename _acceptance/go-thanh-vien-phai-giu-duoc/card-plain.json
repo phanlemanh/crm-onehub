@@ -1,0 +1,27 @@
+{
+  "feature_plain": "Sau khi anh gỡ một người khỏi workspace, người đó mất quyền ngay và không có đường nào lén đưa họ quay lại.",
+  "analyst_plain": "",
+  "scope_plain": "Không đụng tới thứ màn quản trị hiển thị sau lượt gỡ, không chứng lại ba điều đã ký ở đợt trước, không sửa phép kiểm cho phép, và chưa làm nhật ký kiểm toán.",
+  "decisions_plain": [
+    {
+      "id": "d-20260918T044455Z-1",
+      "p": "KHÔNG làm lại ba lời hứa mà đợt trước đã giao và đã ký — đổi lại hồ sơ này nhỏ hơn, nhưng không có hai phép đo cùng canh một chỗ."
+    },
+    {
+      "id": "d-20260918T044455Z-2",
+      "p": "Chọn đo «mất quyền ngay lập tức» thay vì cho một khoảng chờ vài giây — đổi lại phép đo bám chặt vào việc xoá phiên, ai tách nó ra khỏi lượt gỡ là bài kêu."
+    },
+    {
+      "id": "d-20260918T044455Z-3",
+      "p": "Chọn chỉ chặn đúng người đang có lời mời đã kết thúc, chứ không bỏ hẳn đường kết nạp lần đầu — đổi lại một bản cài mới vẫn dựng được người chủ đầu tiên như cũ."
+    },
+    {
+      "id": "d-20260918T044456Z-4",
+      "p": "KHÔNG viết đặc tả màn hình vì việc này không đổi màn nào — đổi lại anh gặp hình dạng của nó lần đầu trong mã."
+    },
+    {
+      "id": "d-20260918T045115Z-5",
+      "p": "KHÔNG giữ lời hứa về thứ màn quản trị hiện sau lượt gỡ, dù nó dễ nhìn — đổi lại tránh dựng một phép đo trùng với phép đo đã ký."
+    }
+  ]
+}

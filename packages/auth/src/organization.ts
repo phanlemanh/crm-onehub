@@ -1,5 +1,6 @@
 import { type Db, db } from "@crm/db";
 import { WORKSPACE_ID, workspaceSlug } from "@crm/db/workspace";
+import { conHieuLuc, docTrangThai } from "@crm/validation/invitation-status";
 import {
 	type AllowDecision,
 	decideSignInFromDb,
@@ -65,12 +66,29 @@ export async function ensureWorkspaceMembership(
 
 			if (enrolled === 0) {
 				const existing = await tx.user.findMany({
-					select: { id: true },
+					select: { id: true, email: true },
 					orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 				});
 
+				const loiMoi = await tx.invitation.findMany({
+					where: { organizationId: workspace.id },
+					select: { email: true, status: true },
+				});
+
+				const ketThuc = new Set(
+					loiMoi
+						.filter((dong) => !conHieuLuc(docTrangThai(dong.status).trangThai))
+						.map((dong) => normalizeEmail(dong.email))
+						.filter((dia): dia is string => dia !== null),
+				);
+
+				const duocMoi = existing.filter((user) => {
+					const dia = normalizeEmail(user.email);
+					return dia === null || !ketThuc.has(dia);
+				});
+
 				await tx.member.createMany({
-					data: existing.map((user, index) => ({
+					data: duocMoi.map((user, index) => ({
 						id: crypto.randomUUID(),
 						organizationId: workspace.id,
 						userId: user.id,
