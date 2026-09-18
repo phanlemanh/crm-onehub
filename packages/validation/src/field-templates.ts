@@ -4,7 +4,7 @@ export type FieldTemplate = {
 	options?: readonly string[];
 };
 
-const PHAN_KHUC = [
+const LOAI_BAT_DONG_SAN = [
 	"Căn hộ",
 	"Nhà phố",
 	"Đất nền",
@@ -28,12 +28,16 @@ export const FIELD_TEMPLATES = {
 			type: "SELECT",
 			options: [
 				"Sàn giao dịch",
-				"Công ty môi giới",
+				"Đơn vị môi giới",
 				"Đại lý phân phối",
 				"Tổ chức tín dụng",
 			],
 		},
-		{ label: "Phân khúc chính", type: "SELECT", options: PHAN_KHUC },
+		{
+			label: "Loại bất động sản",
+			type: "SELECT",
+			options: LOAI_BAT_DONG_SAN,
+		},
 		{
 			label: "Quy mô môi giới",
 			type: "SELECT",
@@ -44,11 +48,15 @@ export const FIELD_TEMPLATES = {
 		{ label: "Người phụ trách", type: "USER" },
 	],
 	CONTACT: [
-		{ label: "Phân khúc chuyên", type: "SELECT", options: PHAN_KHUC },
+		{
+			label: "Loại bất động sản",
+			type: "SELECT",
+			options: LOAI_BAT_DONG_SAN,
+		},
 		{
 			label: "Vai trò trong sàn",
 			type: "SELECT",
-			options: ["Chủ sàn", "Trưởng nhóm", "Môi giới", "Trợ lý"],
+			options: ["Chủ sàn", "Trưởng nhóm", "Môi giới", "Hỗ trợ kinh doanh"],
 		},
 		{
 			label: "Kênh liên lạc quen",

@@ -1065,6 +1065,65 @@ async function trangThai(browser, cookie, slug) {
 	ketLuan("trang-thai");
 }
 
+async function napTruocDungThucThe(browser, cookie, slug) {
+	const KHUNG = [
+		{ tham: "contact", the: "Cá nhân", entity: "CONTACT" },
+		{ tham: "deal", the: "Thoả thuận", entity: "DEAL" },
+	];
+
+	for (const k of KHUNG) {
+		const goi = [];
+		const page = await browser.newPage();
+		await page.setViewport({ width: 1280, height: 900 });
+		await page.setCookie(
+			{ name: LANG, value: "vi", url: APP },
+			{ name: cookie.name, value: cookie.value, url: APP },
+		);
+		page.on("request", (r) => {
+			if (r.url().includes("fields.list")) goi.push(r.url());
+		});
+
+		await page.goto(`${APP}/${slug}/settings/fields?thucThe=${k.tham}`, {
+			waitUntil: "networkidle0",
+			timeout: 60000,
+		});
+		await new Promise((r) => setTimeout(r, 2500));
+
+		const dang = await page.evaluate(
+			() =>
+				[...document.querySelectorAll('[role="tab"]')]
+					.find((t) => t.getAttribute("aria-selected") === "true")
+					?.textContent.trim() ?? "",
+		);
+		doi(
+			dang === k.the,
+			`mo dia chi ?thucThe=${k.tham} nhung the dang mo la ${JSON.stringify(dang)}, cho ${JSON.stringify(k.the)}`,
+		);
+
+		const nhamThucThe = goi.filter((u) => u.includes(k.entity));
+		doi(
+			nhamThucThe.length === 0,
+			`may chu KHONG nap truoc danh sach cua ${k.entity}: trinh duyet phai tu goi ` +
+				`${nhamThucThe.length} lan cho dung thuc the do (${nhamThucThe[0] ?? ""}). ` +
+				"Nghia la mo lai hay chia se duong dan phai cho mot luot tai thu hai.",
+		);
+
+		const coVongCho = await page.evaluate(() =>
+			Boolean(document.querySelector("main [class*=animate-spin]")),
+		);
+		doi(
+			!coVongCho,
+			`mo dia chi ?thucThe=${k.tham} ma man con vong cho sau khi mang da yen — ` +
+				"dau hieu du lieu khong den tu lan nap truoc cua may chu",
+		);
+
+		await page.screenshot({ path: chupVao(`nap-truoc-${k.entity}`) });
+		await page.close();
+	}
+
+	ketLuan("nap-truoc-dung-thuc-the");
+}
+
 const CHE_DO = {
 	"duong-vao": duongVao,
 	"tieu-de-trang": tieuDeTrang,
@@ -1076,6 +1135,7 @@ const CHE_DO = {
 	"ba-viec": baViec,
 	"khay-cu": khayCu,
 	"trang-thai": trangThai,
+	"nap-truoc-dung-thuc-the": napTruocDungThucThe,
 };
 
 const che = process.argv[2];

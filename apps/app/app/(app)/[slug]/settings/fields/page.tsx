@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { entityOf } from "@/components/crm/fields/fields-entity";
 import {
 	PageShell,
 	PageShellContent,
@@ -14,13 +15,16 @@ import { settingsMessages } from "@/lib/messages/settings";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { kindFrom, loadFieldsPageParams } from "./fields-search-params";
 import { FieldsSettings } from "./fields-settings";
 
 export async function generateMetadata(): Promise<Metadata> {
 	return { title: settingsMessages(await getLocale()).tieuDeTab.truong };
 }
 
-export default async function FieldsSettingsPage() {
+export default async function FieldsSettingsPage({
+	searchParams,
+}: PageProps<"/[slug]/settings/fields">) {
 	const t = settingsMessages(await getLocale());
 
 	return (
@@ -34,26 +38,31 @@ export default async function FieldsSettingsPage() {
 
 			<PageShellContent>
 				<Suspense fallback={<PageShellLoading />}>
-					<Fields />
+					<Fields searchParams={searchParams} />
 				</Suspense>
 			</PageShellContent>
 		</PageShell>
 	);
 }
 
-async function Fields() {
+async function Fields({
+	searchParams,
+}: Pick<PageProps<"/[slug]/settings/fields">, "searchParams">) {
 	await requireSession();
+
+	const kind = kindFrom(await loadFieldsPageParams(searchParams));
+	const entity = entityOf(kind);
 
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
 
 	await queryClient.prefetchQuery(
-		trpc.fields.list.queryOptions({ entity: "COMPANY", includeArchived: true }),
+		trpc.fields.list.queryOptions({ entity, includeArchived: true }),
 	);
 
 	return (
 		<HydrateClient>
-			<FieldsSettings />
+			<FieldsSettings kindBanDau={kind} />
 		</HydrateClient>
 	);
 }

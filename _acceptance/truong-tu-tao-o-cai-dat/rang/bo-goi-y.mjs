@@ -29,14 +29,14 @@ const BANG = [
 		"SELECT",
 		[
 			"Sàn giao dịch",
-			"Công ty môi giới",
+			"Đơn vị môi giới",
 			"Đại lý phân phối",
 			"Tổ chức tín dụng",
 		],
 	],
 	[
 		"COMPANY",
-		"Phân khúc chính",
+		"Loại bất động sản",
 		"SELECT",
 		["Căn hộ", "Nhà phố", "Đất nền", "Cho thuê", "Dự án"],
 	],
@@ -61,7 +61,7 @@ const BANG = [
 	["COMPANY", "Người phụ trách", "USER", null],
 	[
 		"CONTACT",
-		"Phân khúc chuyên",
+		"Loại bất động sản",
 		"SELECT",
 		["Căn hộ", "Nhà phố", "Đất nền", "Cho thuê", "Dự án"],
 	],
@@ -69,7 +69,7 @@ const BANG = [
 		"CONTACT",
 		"Vai trò trong sàn",
 		"SELECT",
-		["Chủ sàn", "Trưởng nhóm", "Môi giới", "Trợ lý"],
+		["Chủ sàn", "Trưởng nhóm", "Môi giới", "Hỗ trợ kinh doanh"],
 	],
 	[
 		"CONTACT",
@@ -412,12 +412,108 @@ async function bangMuoiLam() {
 	ketLuan("bang-muoi-lam");
 }
 
+function docDanhSachTranh(chu) {
+	const tranh = [];
+	const re = /^\*\*(.+?)\*\*:/gm;
+	let m = re.exec(chu);
+	while (m) {
+		const dau = m.index;
+		const ke = re.exec(chu);
+		const muc = chu.slice(dau, ke ? ke.index : chu.length);
+		const dong = muc.match(/^_Avoid_:\s*(.+)$/m);
+		if (dong) {
+			for (const x of dong[1].split(",")) {
+				const t = x.trim();
+				if (t.length >= 4) tranh.push({ cum: t, muc: m[1] });
+			}
+		}
+		m = ke;
+	}
+	return tranh;
+}
+
+async function tranhTuDien() {
+	const duong = resolve(GOC, "CONTEXT.md");
+	const chu = readFileSync(duong, "utf8");
+	console.log(`doc tu dien: ${duong}`);
+
+	const tranh = docDanhSachTranh(chu);
+	console.log(`danh sach can tranh doc duoc tu tu dien: ${tranh.length} cum`);
+	doi(
+		tranh.length >= 10,
+		`chi doc duoc ${tranh.length} cum can tranh tu tu dien — bo doc dang hong, ` +
+			"mot danh sach gan rong se lam phep do nay luon xanh",
+	);
+
+	const { bo } = await napGoiY();
+	const det = [];
+	for (const [ten, list] of Object.entries(bo)) {
+		for (const t of list) {
+			det.push({ ten, cho: "nhan", chu: t.label });
+			for (const o of t.options ?? [])
+				det.push({ ten, cho: "lua chon", chu: o });
+		}
+	}
+	console.log(`so chuoi hien cho nguoi doc trong bo goi y: ${det.length}`);
+	doi(det.length >= 15, `chi doc duoc ${det.length} chuoi tu bo goi y`);
+
+	for (const d of det) {
+		for (const x of tranh) {
+			doi(
+				d.chu.toLowerCase() !== x.cum.toLowerCase(),
+				`${d.cho} ${JSON.stringify(d.chu)} cua nhom ${d.ten} dung DUNG cum ` +
+					`${JSON.stringify(x.cum)} ma tu dien liet vao danh sach can tranh o muc "${x.muc}"`,
+			);
+		}
+	}
+
+	ketLuan("tranh-tu-dien");
+}
+
+async function khongDungLaiPhanKhuc() {
+	const duong = resolve(GOC, "CONTEXT.md");
+	const chu = readFileSync(duong, "utf8");
+	console.log(`doc tu dien: ${duong}`);
+
+	doi(
+		/^\*\*Phân khúc\*\*:/m.test(chu),
+		'tu dien KHONG con muc "**Phân khúc**" — phep do nay mat tien de',
+	);
+
+	const { bo } = await napGoiY();
+	for (const [ten, list] of Object.entries(bo)) {
+		for (const t of list) {
+			doi(
+				!/phân khúc/i.test(t.label),
+				`nhan ${JSON.stringify(t.label)} cua nhom ${ten} dung lai chu "Phân khúc", ma tu dien da gan chu do cho nhom ca nhan do mot bo loc da luu chon ra`,
+			);
+			for (const o of t.options ?? []) {
+				doi(
+					!/phân khúc/i.test(o),
+					`lua chon ${JSON.stringify(o)} cua nhom ${ten} dung lai chu "Phân khúc"`,
+				);
+			}
+		}
+	}
+
+	doi(
+		Object.values(bo)
+			.flat()
+			.some((t) => /loại bất động sản/i.test(t.label)),
+		'khong con truong nao mang nhan noi dung thu no chua ("Loại bất động sản")',
+	);
+
+	ketLuan("khong-dung-lai-phan-khuc");
+}
+
 const CHE_DO = {
 	"nhom-cong-ty": nhomCongTy,
 	"ba-thuc-the": baThucThe,
 	"khong-trung-bo-cao": khongTrungBoCao,
 	"tu-dien": tuDien,
 	"bang-muoi-lam": bangMuoiLam,
+	"tranh-tu-dien": tranhTuDien,
+	"khong-dung-lai-phan-khuc": khongDungLaiPhanKhuc,
 };
 
 const che = process.argv[2];

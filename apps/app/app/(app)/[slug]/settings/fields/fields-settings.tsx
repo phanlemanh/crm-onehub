@@ -4,32 +4,23 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Tabs, TabsList, TabsTrigger } from "@crm/ui/components/tabs";
 import { useQuery } from "@tanstack/react-query";
-import { parseAsString, parseAsStringLiteral, useQueryStates } from "nuqs";
+import { useQueryStates } from "nuqs";
 import { useCallback, useMemo } from "react";
 import { FieldEditor } from "@/components/crm/fields/field-editor";
 import { entityTabs } from "@/components/crm/fields/fields-copy";
 import { entityOf } from "@/components/crm/fields/fields-entity";
 import { FieldsList } from "@/components/crm/fields/fields-list";
-import {
-	RECORD_KINDS,
-	type RecordKind,
-} from "@/components/crm/record-sheet/record-stack";
+import type { RecordKind } from "@/components/crm/record-sheet/record-stack";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
+import { fieldsPageParams } from "./fields-search-params";
 
-const MAC_DINH: RecordKind = "company";
-
-const params = {
-	[SEARCH_PARAM.fieldsPage.entity]: parseAsStringLiteral(RECORD_KINDS),
-	[SEARCH_PARAM.fieldsPage.field]: parseAsString,
-};
-
-export function FieldsSettings() {
+export function FieldsSettings({ kindBanDau }: { kindBanDau: RecordKind }) {
 	const trpc = useTRPC();
 	const locale = useLocale();
-	const [values, setParams] = useQueryStates(params);
+	const [values, setParams] = useQueryStates(fieldsPageParams);
 
-	const kind = values[SEARCH_PARAM.fieldsPage.entity] ?? MAC_DINH;
+	const kind = values[SEARCH_PARAM.fieldsPage.entity] ?? kindBanDau;
 	const editingRaw = values[SEARCH_PARAM.fieldsPage.field];
 	const entity = entityOf(kind);
 	const tabs = useMemo(() => entityTabs(locale), [locale]);

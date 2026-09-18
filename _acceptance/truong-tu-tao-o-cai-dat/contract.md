@@ -48,6 +48,9 @@ Source input: prompt (buổi khai thác 2026-09-18, Cổng Đáng ký `build` c�
 - AC-14: Given thực thể đang mở đã có trường, When trang hiện danh sách, Then nhóm trường chuẩn của hệ thống và nhóm trường đang dùng đều có mặt với tiêu đề đọc được, nhóm chuẩn có ít nhất một phần tử, và trên thẻ Cá nhân mọi trường mà tầng sau trả về đều hiện trên màn, kể cả trường do bộ cào gieo; và khi người quản trị lưu trữ một trường, nhóm trường đã lưu trữ xuất hiện mang đúng trường đó, còn nhóm đang dùng thôi mang nó. (cross-layer)
 - AC-15: Given bảng mười lăm gợi ý mà người ký đã chốt tại buổi thiết kế, When đối chiếu bộ gợi ý trong sản phẩm với bảng đó, Then khớp từng dòng: đúng mười lăm gợi ý, mỗi dòng đúng thực thể, đúng nhãn nguyên văn, đúng kiểu, và với kiểu một-trong-danh-sách thì đúng bộ lựa chọn cả về số lượng lẫn thứ tự; không dòng nào ngoài bảng.
 - AC-16: Given một nhãn trường bằng tiếng Việt có dấu, When hệ thống sinh khoá máy cho trường đó, Then khoá bỏ dấu mà giữ đủ chữ — «Loại hình» thành `loai_hinh`, «Đất nền» thành `dat_nen`, «Địa bàn» thành đúng `dia_ban` là khoá bộ cào khai tay — nên khoá đọc được và phép đối chiếu trùng khoá ở AC-8 mới có nghĩa.
+- AC-17: Given từ điển sản phẩm liệt một số cụm từ vào danh sách cần tránh, When đối chiếu mọi nhãn và mọi lựa chọn của bộ gợi ý với danh sách đó, Then không nhãn nào và không lựa chọn nào chứa một cụm bị tránh, và phép đo đọc danh sách trực tiếp từ từ điển chứ không chép tay.
+- AC-18: Given chữ «Phân khúc» đã có mục trong từ điển với nghĩa là nhóm cá nhân do một bộ lọc đã lưu chọn ra, When đọc bộ gợi ý, Then không gợi ý nào dùng lại chữ đó cho một nghĩa khác, và trường nói về loại bất động sản mang nhãn nói đúng thứ nó chứa.
+- AC-19: Given địa chỉ mang tham số thực thể, ví dụ thẻ Cá nhân, When trang được dựng ở phía máy chủ, Then máy chủ nạp trước danh sách trường của ĐÚNG thực thể đó, nên mở lại hoặc chia sẻ đường dẫn không phải chờ một lượt tải thứ hai; và cả trang máy chủ lẫn thành phần trình duyệt đọc cùng một khai báo tham số. (cross-layer)
 
 ## Coverage
 
@@ -82,6 +85,7 @@ này không làm — quyết định ghi trong sổ.
 - Chặn quyền sửa trường theo vai trò — ô riêng; chạm xác thực nên là T3.
 - Kiểu tiền tệ, kiểu nhiều lựa chọn, trường tính toán — ô riêng, chờ có người đòi.
 - Tìm kiếm trường, lọc theo người tạo, gom nhóm trường — HubSpot có, ta chưa cần: mỗi thực thể dưới hai mươi trường.
+- Soi danh sách cần tránh của từ điển cho MỌI chữ trên màn — AC-17 chỉ soi bộ gợi ý của vòng này; một bộ soi cho cả sản phẩm là việc riêng.
 - Xoá cứng trường từ giao diện — cố ý không có; giao diện chỉ cho lưu trữ mềm, giá trị được giữ.
 - Trường cho thực thể ngoài Công ty, Cá nhân, Thoả thuận — mô hình dữ liệu chỉ có ba.
 - Dịch nhãn của trường người đã tạo — dữ liệu người nhập không dịch, theo luật kho.
@@ -122,6 +126,14 @@ này không làm — quyết định ghi trong sổ.
 - Vòng này thay trọn bộ gợi ý, và **khay trượt cũng đọc bộ gợi ý đó**. Nên khay
   không bất động: nội dung nó hiện sẽ đổi. AC-11 vì thế đo sáu việc ở tầng sau
   chứ không chỉ đo khay còn mở được.
+- **AC-17, AC-18 và AC-19 là phạm vi NÂNG THÊM sau vòng nghiệm thu máy thứ
+  nhất.** Ba điều này ban đầu là lỗi ngoài hợp đồng do phiên soi độc lập tìm ra,
+  và người ký chọn lối «nâng phạm vi sửa ngay» ngày 2026-09-18 thay vì ghi vào
+  giới hạn đã biết. Lý do từng điều: một lựa chọn của bộ gợi ý dùng đúng cụm từ
+  mà từ điển sản phẩm liệt vào danh sách cần tránh, và nó sẽ thành dữ liệu trên
+  màn mà đổi tên sau không sửa được hồ sơ đã tạo; chữ «Phân khúc» bị dùng lại
+  cho một nghĩa khác nghĩa đã có mục; và trang máy chủ nạp trước cứng một thực
+  thể nên mọi đường dẫn tới thẻ khác phải tải lại từ đầu.
 - **AC-16 là phạm vi nới thêm ở bước viết mã, không có trong bản người ký đọc
   lúc chốt phạm vi.** Lý do: hàm sinh khoá máy bỏ mọi ký tự ngoài chữ La Mã
   không dấu, nên nhãn tiếng Việt sinh ra khoá rác (`lo_i_h_nh`), và nhãn «Địa
