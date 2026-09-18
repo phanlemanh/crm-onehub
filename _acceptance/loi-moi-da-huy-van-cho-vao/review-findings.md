@@ -1,95 +1,99 @@
-# Review Findings: loi-moi-da-huy-van-cho-vao — round 3
+# Review Findings: loi-moi-da-huy-van-cho-vao (round 4)
 
 ## Trong hợp đồng
 
-- **`toStatus` swallows the parse failure entirely, unlike the matching boundary in allow-list.ts**
-  AC: AC-4
-  file: `apps/api/src/workspace/workspace.service.ts:72`
-  severity: medium
-  `export function toStatus(value: string) { return docTrangThai(value).trangThai; }` discards `docTrangThai(...).loi`. AGENTS.md's parse-at-the-boundary rule is explicit: "Parse failure is a real error with a real message. Do not swallow it… because 'unreadable manifest' and 'no actions' are different problems." AC-4 of this feature's own contract restates it ("Giá trị không phân tích được là một lỗi có tên, không phải một mặc định im lặng"). The sibling boundary added in the same change, `packages/auth/src/allow-list.ts:93-121`, does surface `doc.loi`; this one does not, so the same unreadable row is named in one path and silent in the other. `WorkspaceService` already holds `private readonly logger = new Logger(WorkspaceService.name)` a few lines below, so the named-error path is available at zero cost. Separately, `toStatus` was changed from a module-private function to an `export` solely so `apps/api/test/workspace-thanh-vien.spec.ts` can import it — widening the service module's public surface for test access.
+### Đo CHỈ DẪN thay vì ĐẦU RA — E7 đo `toStatus`, hàm mà lộ trình sản phẩm không còn gọi
+- file: `apps/api/test/workspace-thanh-vien.spec.ts:827`
+- severity: high
+- AC: AC-6
+- source: measurement
 
-  source: conventions
+E7 (criterion AC-6, `_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml:52`) hứa đo «API báo đúng trạng thái thật» và khai chiều đỏ «trả lại mặc định im lặng ở toStatus thì hai ô kết thúc hoá pending và bài đỏ». Nhưng sau bản sửa, `toStatus` (apps/api/src/workspace/workspace.service.ts:72) KHÔNG còn người gọi trong mã sản phẩm: `toAllowance` tự gọi `docTrangThai(row.status)` rồi gán `status: doc.trangThai` ở workspace.service.ts:442. `grep -rn toStatus apps packages --exclude-dir=node_modules` chỉ ra đúng ba nơi: định nghĩa ở service:72, và hai lời gọi trong chính bài đo (spec:827 và spec:833). Hệ quả: bất kỳ đột biến nào vào ĐẦU RA thật — ví dụ đổi service:442 thành `status: doc.loi ? "pending" : doc.trangThai` — vẫn để E7 xanh, vì bài chỉ gọi một hàm mồ côi được export riêng cho nó. Chiều đỏ E7 khai chỉ giết được đột biến vào hàm không ai dùng.
+
+### Đo CHỈ DẪN thay vì ĐẦU RA — E3 đo hàm trợ giúp `conHieuLuc`/`docTrangThai`, không bao giờ gọi `decideSignIn`
+- file: `packages/auth/test/loi-moi-ket-thuc.spec.ts:54`
+- severity: high
+- AC: AC-3
+- source: measurement
+
+E3 (criterion AC-3, evals.yaml:20) khai chiều đỏ: «đổi luật từ ‹cho vào khi thuộc tập còn hiệu lực› sang ‹chặn khi thuộc tập kết thúc› thì bài đỏ». Luật đó sống ở `decideSignIn` (packages/auth/src/allow-list.ts:69-91, điều kiện `conHieuLuc(candidate.status)` ở dòng 75). Nhưng khối `gia-tri-la` (spec:54-63) chỉ gọi `docTrangThai("mot-chuoi-chua-tung-thay")` và `conHieuLuc(doc.trangThai)` — không có một lời gọi `decideSignIn` nào trong khối, dù `decideSignIn` đã được import ở dòng 2 và dùng ở nơi khác. Viết lại dòng 73-76 của allow-list.ts thành danh sách cấm (`!KET_THUC.includes(...)`) để giá trị rác được cho vào thì `conHieuLuc` không đổi một chữ, nên E3 vẫn xanh. Chính E8 (evals.yaml:60) nói ra nguyên tắc ngược lại — «Ma trận gọi THẲNG decideSignIn … chứ không gọi hàm trợ giúp conHieuLuc, vì đột biến vào hàm quyết định mới là thứ phép đo phải thấy» — E3 phạm đúng điều đó.
+
+### Fixture VIẾT TAY đúng khuôn bên đọc — E9 tự gõ chuỗi `"canceled"` vào bảng thay vì round-trip qua lộ trình huỷ của better-auth
+- file: `packages/auth/test/loi-moi-ket-thuc.integration.spec.ts:92`
+- severity: medium
+- AC: AC-1
+- source: measurement
+
+AC-1 nêu Given là «một lời mời đã bị huỷ qua chính lộ trình của better-auth (trạng thái `canceled`)», và trục A của Coverage khai nguồn ghi «lộ trình better-auth». Bài E9 lại tự dựng dòng bằng `db.invitation.create({ data: { … status } })` ở dòng 87-97, với `status` truyền vào là chuỗi gõ tay `"canceled"` / `"pending"` ở dòng 114 và 127 — không qua API huỷ của gói, và không lấy từ hằng `TRANG_THAI_HUY` (bài này không import gì từ invitation-status). Bên WRITER (gói) không bao giờ chạy; chỉ bên READER (`ensureWorkspaceMembership` → `decideSignIn`) chạy, trên một fixture được gõ đúng khuôn bên đọc mong đợi. Nếu gói đổi chuỗi huỷ, E5 bắt được ở mức khai báo kiểu nhưng E9 vẫn xanh trên một chuỗi không còn ai ghi — vòng round-trip writer→reader mà AC-1 mô tả không tồn tại trong phép đo nào của hồ sơ.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **The named-constant invariant (AC-7) was applied only to the `canceled` write; three sibling status literals remain raw**
-  Người dùng thấy gì: Vẫn còn vài nơi trong hệ thống dùng chuỗi trạng thái gõ tay thay vì một nguồn dùng chung; nếu ai gõ sai ở những chỗ đó sau này, lời mời có thể được xử lý sai mà không ai nhận ra ngay.
-  file: `apps/api/src/workspace/workspace.service.ts`
-  severity: high
-  Đề xuất: known-limits
-
-- **New `console.error` in the sign-in read path logs a user email address on every attempt**
-  Người dùng thấy gì: Mỗi lần một tài khoản có lời mời cũ đăng nhập, hệ thống có thể ghi lại địa chỉ email của người đó vào nhật ký lỗi nội bộ, lặp lại ở mỗi lần thử — vừa gây nhiễu vừa lộ thông tin cá nhân không cần thiết.
-  file: `packages/auth/src/allow-list.ts`
-  severity: medium
-  Đề xuất: new-contract
-
-- **Existing withdrawal integration test still writes the legacy `cancelled`, so it no longer covers the real cancel value**
-  Người dùng thấy gì: Một bài kiểm tra cũ vẫn còn dùng dữ liệu giả theo cách huỷ lời mời không còn xảy ra trong thực tế, nên nếu tính năng huỷ mới bị lỗi sau này, bài kiểm đó sẽ không phát hiện ra.
-  file: `packages/auth/test/cong-vao.integration.spec.ts`
+- **Vòng này dựng từ vựng trạng thái tập trung nhưng chỉ dùng cho một vế ghi — năm chỗ quyết định vẫn so chuỗi gõ tay**
+  Người dùng thấy gì: Nếu sau này bên cung cấp đổi cách đặt tên trạng thái, việc gỡ một thành viên có thể không thu hồi đúng lời mời của họ, khiến người đó đăng nhập lại được ngay sau khi vừa bị gỡ.
+  file: `apps/workspace/workspace.service.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **`ALLOWANCE_STATUSES` hand-copies the vocabulary instead of deriving it from the validation package**
-  Người dùng thấy gì: Không ảnh hưởng ngay tới người dùng; rủi ro là nếu danh sách trạng thái lời mời thay đổi sau này mà quên cập nhật đồng bộ, màn hiển thị trạng thái có thể sai mà không ai biết.
-  file: `apps/api/src/workspace/workspace.contracts.ts`
+- **AC-6 nói về màn quản trị nhưng không phép đo nào chạm màn — bộ lọc thật ở apps/app không bị ghim**
+  Người dùng thấy gì: Việc ẩn các lời mời đã huỷ hoặc bị từ chối trên màn quản trị thành viên chưa có phép kiểm tự động canh giữ, nên một sửa đổi sau này có thể vô tình để chúng hiện lại như đang chờ mà không ai phát hiện ngay.
+  file: `_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Thước nghiệm thu mới không qua biome và trượt lint rule noUndeclaredEnvVars**
+  Người dùng thấy gì: Một file công cụ đo nội bộ chưa theo đúng chuẩn định dạng của kho; việc này không ảnh hưởng tới người dùng sản phẩm.
+  file: `_acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Xoá _acceptance/config.yaml.bak khỏi kho nhưng không thêm luật .gitignore**
+  Người dùng thấy gì: Nếu chạy lại công cụ tạo hồ sơ nghiệm thu, một file cấu hình cũ có thể vô tình quay lại vào kho khi có người gộp toàn bộ thay đổi cùng lúc.
+  file: `.gitignore`
   severity: low
   Đề xuất: known-limits
 
-- **`@crm/auth` re-exports only part of the status vocabulary, so apps/api reaches past the barrel**
-  Người dùng thấy gì: Không ảnh hưởng người dùng ngay; rủi ro là người phát triển sau này có thể vô tình dùng nhầm nguồn dữ liệu trạng thái, dẫn tới xử lý lời mời không nhất quán giữa các nơi.
+- **@crm/auth tái xuất từ vựng trạng thái, tạo hai đường nhập cho cùng một hình dạng**
+  Người dùng thấy gì: Một đường nhập dùng chung có thể khiến người viết mã sau này vô tình kéo phần máy chủ vào một màn hình chạy trên trình duyệt, làm bản dựng bị lỗi.
   file: `packages/auth/src/index.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Cột status thành song ngữ: writer đổi sang "canceled" nhưng không có migration cho dòng "cancelled" cũ**
-  Người dùng thấy gì: Người từng bị huỷ quyền vào trước khi có bản cập nhật này vẫn bị từ chối đúng như mong đợi, nhưng mỗi lần họ thử đăng nhập, hệ thống sẽ ghi một dòng cảnh báo lỗi, có thể làm nhiễu việc theo dõi lỗi thật của đội vận hành.
-  file: `apps/api/src/workspace/workspace.service.ts`
+- **Decision card is one verify round stale: it asks the owner to re-decide five items that were already resolved and fixed, and undercounts the evals**
+  Người dùng thấy gì: Bản tóm tắt gửi cho người ký duyệt đợt này đã cũ: nó đếm thiếu một phép kiểm và yêu cầu ký lại những việc chủ kho đã quyết và đã sửa xong, có thể khiến người ký ghi nhầm là còn hạn chế.
+  file: `_acceptance/loi-moi-da-huy-van-cho-vao/card.html`
+  severity: high
+  Đề xuất: known-limits
+
+- **Decision d-…-6 in the card carries d-…-5's text verbatim, so Treo-1 and Treo-2 render identically and two later decisions are missing entirely**
+  Người dùng thấy gì: Trong bản tóm tắt cho người ký duyệt, hai quyết định trước đó bị hiển thị trùng nội dung và hai quyết định gần nhất bị thiếu hẳn, khiến người ký có thể duyệt nhầm hoặc bỏ sót nội dung thật đã thay đổi.
+  file: `_acceptance/loi-moi-da-huy-van-cho-vao/card-plain.json`
   severity: medium
   Đề xuất: known-limits
 
-- **Fixture cũ trong cong-vao.integration.spec.ts vẫn ghi "cancelled", không còn đo lộ trình thu hồi thật**
-  Người dùng thấy gì: Một bài kiểm tra khác cũng dùng dữ liệu giả cho tình huống huỷ không còn xảy ra trong thực tế nữa, nên nó không còn chứng minh được tính năng huỷ mới hoạt động đúng.
-  file: `packages/auth/test/cong-vao.integration.spec.ts`
+- **evidence-page.html — the link the card labels "Bằng chứng đầy đủ" — stops at E9 and round 2, contradicting evidence-report.md**
+  Người dùng thấy gì: Trang bằng chứng đầy đủ được dẫn tới từ bản tóm tắt vẫn dừng ở phép kiểm cũ, thiếu bằng chứng cho tiêu chí mới nhất mà chủ kho vừa yêu cầu thêm.
+  file: `_acceptance/loi-moi-da-huy-van-cho-vao/evidence-page.html`
+  severity: medium
+  Đề xuất: known-limits
+
+- **The Gate-1 decision figure describes branch B as keeping `revokeAllowance` writing `cancelled`, but branch B as shipped changes the writer to `canceled`**
+  Người dùng thấy gì: The note explaining why the team skipped a data migration for old cancelled invitations no longer matches what shipped, so the invitation status column will keep storing two different spellings of "cancelled" going forward, not just for old records — anything that later needs to recognize a cancelled invitation will have to check for both spellings indefinitely.
+  file: `_acceptance/loi-moi-da-huy-van-cho-vao/figures/tu-vung-va-du-lieu-cu.html`
   severity: low
   Đề xuất: known-limits
 
-- **E10 khai một chiều đỏ mà lệnh của nó không thể chạy**
-  Người dùng thấy gì: Một bài kiểm dùng để bắt lỗi hồi quy cho quy tắc đặt tên trạng thái không thực sự bắt được lỗi đó, nên một thay đổi sai có thể lọt qua mà không bị phát hiện.
+- **Đo CHỈ DẪN thay vì ĐẦU RA — E10 đo giá trị hằng, không đo chỗ GHI mà AC-7 hứa; chiều đỏ apps/api không nằm trong cmd**
+  Người dùng thấy gì: Phép kiểm tự động cho việc ghi trạng thái theo tên thay vì theo vị trí chỉ chạy trên một phần nhỏ của hệ thống, không chạm tới nơi thật sự ghi dữ liệu, nên một lỗi đảo thứ tự ở đó có thể lọt qua mà không bị phát hiện.
   file: `_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): E9 gõ tay chuỗi "canceled" vào DB thay vì rút từ hằng neo-vào-gói**
-  Người dùng thấy gì: Một bài kiểm đầu-cuối cho việc từ chối lời mời đã huỷ không phân biệt được giá trị huỷ thật với một chuỗi gõ sai bất kỳ, nên nếu ai gõ sai giá trị đó, bài kiểm vẫn báo qua như bình thường.
-  file: `packages/auth/test/loi-moi-ket-thuc.integration.spec.ts`
   severity: high
   Đề xuất: known-limits
 
-- **Hình dạng 1 (đo bước trung gian thay vì đầu ra): E3 khẳng định bằng hàm trợ giúp conHieuLuc, không bằng decideSignIn mà AC-3 hứa**
-  Người dùng thấy gì: Một bài kiểm cho quy tắc quyết định cho-vào-hay-không lại không gọi đúng hàm quyết định thật, nên nếu quy tắc đó bị đổi sai ở đúng chỗ quan trọng nhất, bài kiểm sẽ không phát hiện ra.
-  file: `packages/auth/test/loi-moi-ket-thuc.spec.ts`
-  severity: high
-  Đề xuất: known-limits
-
-- **Hình dạng 1 (đo bước trung gian thay vì đầu ra): E7 đo hàm thuần toStatus vừa được export riêng cho bài đo, không đo đầu ra API/màn quản trị**
-  Người dùng thấy gì: Một bài kiểm cho việc hiển thị đúng trạng thái ở màn quản trị lại không đo đúng dữ liệu cuối cùng hiển thị ra màn hình, nên nếu màn quản trị hiển thị sai trạng thái, bài kiểm vẫn báo qua.
-  file: `apps/api/test/workspace-thanh-vien.spec.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): E10 khẳng định «nằm trong từ vựng của GÓI» bằng mảng viết tay của chính kho, cùng một file với bốn hằng**
-  Người dùng thấy gì: Một bài kiểm dùng để đối chiếu danh sách trạng thái với gói bên ngoài thực chất chỉ so sánh danh sách đó với chính nó, nên không thực sự chứng minh được điều nó tuyên bố.
+- **Assertion âm-tính-một-mình — E2 chỉ có một assert từ-chối, không đối chứng dương, và thiếu luôn chốt canh mà evals.yaml khai**
+  Người dùng thấy gì: Một phép kiểm từ chối lời mời chỉ có chiều kiểm tra 'bị chặn', không có chiều đối chứng 'người hợp lệ vẫn vào được', nên một lỗi khiến hệ thống chặn nhầm tất cả mọi người vẫn có thể lọt qua mà không bị phát hiện.
   file: `packages/auth/test/loi-moi-ket-thuc.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (assertion âm-tính-một-mình): E2 chỉ có một assert từ-chối, thiếu luôn cả assert canh mà evals.yaml khai**
-  Người dùng thấy gì: Một bài kiểm cho việc từ chối lời mời bị từ chối chỉ kiểm tra một chiều, thiếu phép so sánh đảm bảo giá trị mới khác với giá trị cũ đã lỗi thời — nên một lỗi trộn lẫn hai giá trị đó có thể lọt qua.
-  file: `packages/auth/test/loi-moi-ket-thuc.spec.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-⚠ Cụm ngoài vùng phủ: 5/14 lỗi rơi vào file không bộ đo nào phủ (packages/auth/test/cong-vao.integration.spec.ts, apps/api/src/workspace/workspace.contracts.ts, packages/auth/src/index.ts, _acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+⚠ Cụm ngoài vùng phủ: 8/14 lỗi rơi vào file không bộ đo nào phủ (_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml, .gitignore, packages/auth/src/index.ts, _acceptance/loi-moi-da-huy-van-cho-vao/card.html, _acceptance/loi-moi-da-huy-van-cho-vao/card-plain.json, _acceptance/loi-moi-da-huy-van-cho-vao/evidence-page.html, _acceptance/loi-moi-da-huy-van-cho-vao/figures/tu-vung-va-du-lieu-cu.html) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.

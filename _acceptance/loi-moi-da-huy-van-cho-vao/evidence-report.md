@@ -1,17 +1,19 @@
 ---
 schema_version: 2
 feature_slug: loi-moi-da-huy-van-cho-vao
-verdict: PASS
+verdict: REJECT
 failed_evals: []
-reason:
+reason: 
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8c425a1071ede6bc76f1440fe726a4a8543f0434
-human_signoff:
+verified_commit: ffe50cd6ed620ee4b6f34c91d95820f4050ebc0a
+human_signoff: 
 ---
 
 # Evidence Report: loi-moi-da-huy-van-cho-vao
+
+Verdict REJECT: mười eval máy (E1–E10) và bốn lệnh suite đều thoát mã 0 tại `verified_commit` ở trên, nhưng review đối kháng vòng này (xem `review-findings.md`, mục "Trong hợp đồng") xác nhận ba eval trong hợp đồng — E7/AC-6, E3/AC-3, E9/AC-1 — đo chỉ dẫn hoặc fixture viết tay thay vì đầu ra thật, nên không thực sự phủ ba tiêu chí đó dù mã thoát bằng 0. Round này không đạt bằng chứng đầy đủ.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -29,134 +31,133 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: mu6a45c1e1xv
+  run_id: mu6ayxksodyy
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.lm_huy_qua_goi
-  verified_at: 2026-09-18T08:30:00+07:00
+  verified_at: 2026-09-18T02:00:00Z
   output: |
-     2 expect() calls
-    Ran 1 test across 1 file. [38.00ms]
-    test-run: dropped crm_mu6a45c1e1xv_test
+    2 expect() calls
+    Ran 1 test across 1 file. [51.00ms]
+    test-run: dropped crm_mu6ayxksodyy_test
 
 - eval: E2
-  run_id: mu6a44z34413
+  run_id: mu6ayzp4e8ph
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.lm_tu_choi_loi_moi
-  verified_at: 2026-09-18T08:30:00+07:00
+  verified_at: 2026-09-18T02:00:00Z
   output: |
+    1 expect() calls
     Ran 1 test across 1 file. [40.00ms]
-    test-run: dropped crm_mu6a44z34413_test
+    test-run: dropped crm_mu6ayzp4e8ph_test
 
 - eval: E3
-  run_id: mu6a45jqpgh3
+  run_id: mu6az07ydoek
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.lm_gia_tri_la
-  verified_at: 2026-09-18T08:30:00+07:00
+  verified_at: 2026-09-18T02:00:00Z
   output: |
-     3 expect() calls
-    Ran 1 test across 1 file. [48.00ms]
-    test-run: dropped crm_mu6a45jqpgh3_test
+    3 expect() calls
+    Ran 1 test across 1 file. [38.00ms]
+    test-run: dropped crm_mu6az07ydoek_test
 
 - eval: E4
-  run_id: mu6a44pjfag4
+  run_id: mu6ayzyqswp4
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.lm_du_lieu_cu
-  verified_at: 2026-09-18T08:30:00+07:00
+  verified_at: 2026-09-18T02:00:00Z
   output: |
-    Ran 1 test across 1 file. [54.00ms]
-    test-run: dropped crm_mu6a44pjfag4_test
+    2 expect() calls
+    Ran 1 test across 1 file. [42.00ms]
+    test-run: dropped crm_mu6ayzyqswp4_test
 
 - eval: E5
   run_id: minted-loi-moi-da-huy-van-cho-vao-E5-r3
   exit_code: 0
-  baseline: red
   verifier: config:executors.script.lm_tu_vung_goi
-  verified_at: 2026-09-18T08:30:00+07:00
-  output: |
-    tap goi: ["accepted","canceled","pending","rejected"]
-    tap kho: ["accepted","canceled","pending","rejected"]
-    DAT: hai tap bang nhau, 4 trang thai
+  verified_at: 2026-09-18T01:26:16Z
+  carried_from_round: 3
+  note: carry-forward tu round 3 — delta khong cham paths cua eval nay.
 
 - eval: E6
-  run_id: mu6a45tdn0ug
+  run_id: mu6ayz56yfzv
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.lm_ranh_gioi_doc
-  verified_at: 2026-09-18T08:30:00+07:00
+  verified_at: 2026-09-18T02:00:00Z
   output: |
-     5 expect() calls
-    Ran 1 test across 1 file. [50.00ms]
-    test-run: dropped crm_mu6a45tdn0ug_test
+    5 expect() calls
+    Ran 1 test across 1 file. [40.00ms]
+    test-run: dropped crm_mu6ayz56yfzv_test
 
 - eval: E7
-  run_id: mu6a44mezvej
+  run_id: mu6ayy0i8y2y
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.lm_trang_thai_that
-  verified_at: 2026-09-18T08:30:00+07:00
+  verified_at: 2026-09-18T02:00:00Z
   output: |
-     6 expect() calls
-    Ran 1 test across 1 file. [247.00ms]
-    test-run: dropped crm_mu6a44mezvej_test
+    6 expect() calls
+    Ran 1 test across 1 file. [194.00ms]
+    test-run: dropped crm_mu6ayy0i8y2y_test
 
 - eval: E8
-  run_id: mu6a4838opph
+  run_id: mu6ayyhki7nf
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.lm_ma_tran_trang_thai
-  verified_at: 2026-09-18T08:30:00+07:00
+  verified_at: 2026-09-18T02:00:00Z
   output: |
-     8 expect() calls
-    Ran 1 test across 1 file. [46.00ms]
-    test-run: dropped crm_mu6a4838opph_test
+    8 expect() calls
+    Ran 1 test across 1 file. [42.00ms]
+    test-run: dropped crm_mu6ayyhki7nf_test
 
 - eval: E9
-  run_id: mu6a453h20ri
+  run_id: minted-loi-moi-da-huy-van-cho-vao-E9-r4
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.lm_khong_sinh_thanh_vien
-  verified_at: 2026-09-18T08:30:00+07:00
+  verified_at: 2026-09-18T02:00:00Z
   output: |
-     2 expect() calls
-    Ran 1 test across 1 file. [138.00ms]
-    test-run: dropped crm_mu6a453h20ri_test
+    2 expect() calls
+    Ran 1 test across 1 file. [213.00ms]
+    test-run: dropped crm_mu6ayyr7vf6v_test
 
 - eval: E10
-  run_id: mu6a4559p0yw
+  run_id: mu6ayy3b7723
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.lm_hang_co_ten
-  verified_at: 2026-09-18T08:30:00+07:00
+  verified_at: 2026-09-18T02:00:00Z
   output: |
     9 expect() calls
-    Ran 1 test across 1 file. [41.00ms]
-    test-run: dropped crm_mu6a4559p0yw_test
+    Ran 1 test across 1 file. [43.00ms]
+    test-run: dropped crm_mu6ayy3b7723_test
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: minted-loi-moi-da-huy-van-cho-vao-SUITE-bun_run_test-r3
+  run_id: mu6ayyijfptx
   exit_code: 0
-  verified_at: 2026-09-18T08:30:00+07:00
+  verified_at: 2026-09-18T02:00:00Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-loi-moi-da-huy-van-cho-vao-SUITE-bunx_turbo_run_lint_force-r3
+  run_id: minted-loi-moi-da-huy-van-cho-vao-SUITE-bunx_turbo_run_lint_force-r4
   exit_code: 0
-  verified_at: 2026-09-18T08:30:00+07:00
+  verified_at: 2026-09-18T02:00:00Z
 
 - cmd: bun run lint:slop
-  run_id: minted-loi-moi-da-huy-van-cho-vao-SUITE-bun_run_lint_slop-r3
+  run_id: minted-loi-moi-da-huy-van-cho-vao-SUITE-bun_run_lint_slop-r4
   exit_code: 0
-  verified_at: 2026-09-18T08:30:00+07:00
+  verified_at: 2026-09-18T02:00:00Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-loi-moi-da-huy-van-cho-vao-SUITE-bunx_turbo_run_build_force-r3
+  run_id: minted-loi-moi-da-huy-van-cho-vao-SUITE-bunx_turbo_run_build_force-r4
   exit_code: 0
-  verified_at: 2026-09-18T08:30:00+07:00
+  verified_at: 2026-09-18T02:00:00Z
 
 ## Known limits
 
@@ -164,14 +165,14 @@ human_signoff:
 
 ## Analyst
 
-none — moi eval feature deu red tren baseline (co phan biet)
+carried tu round trước — baseline không đo lại round này (P2, evals.yaml không đổi từ lần baseline cuối). Danh sách eval không-phân-biệt round này: rỗng — mọi eval mang `baseline: n-a` vì không đo lại, không phải vì green-on-both.
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — không có eval nào mang `runs > 1` trong vòng này; mọi eval là deterministic (runs: 1) và đều 1/1.
 
 ## Iterations
 
-Round 1: 9/9 eval máy PASS (exit 0), 4/4 lệnh suite PASS, nhưng REJECT — adversarial review xác nhận E5 (thước dùng regex `[a-z]+` trên văn bản nguồn nên bỏ sót trạng thái có gạch/số/hoa, không round-trip qua giá trị thật của gói) và E8 (ma trận đo hàm trợ giúp `conHieuLuc` thay vì `decideSignIn` mà AC-3 hứa) là lỗi ở chính bộ đo, không phải ở mã sản phẩm; trả về S3 để sửa thước đo trước khi verify lại.
-
-Round 2: E5 (nay đọc tập của kho bằng `bun -e` + JSON qua `createRequire` neo vào `packages/auth/package.json`, không còn regex trên văn bản nguồn) và E8 (ma trận `ma-tran-trang-thai` gọi thẳng `decideSignIn`) đều PASS và đỏ trên diffBase (discriminates); E7, E9 carry-forward từ round 1 vì delta không chạm paths của hai eval đó; 4/4 lệnh suite PASS — verdict PASS. Tại Cổng Bằng chứng, chủ kho nâng phạm vi sửa ngay cho bốn mục ngoài hợp đồng hạng nặng cùng một gốc (ghi trạng thái huỷ bằng chỉ số mảng `TRANG_THAI_LOI_MOI[3]` thay vì hằng có tên), thêm AC-7 và eval E10, thay chỉ số mảng bằng hằng có tên ở cả nơi ghi lẫn nơi đọc — mở lại Cổng Phạm vi rồi quay lại S3 trước khi verify vòng 3 này.
+Round 1-2: sửa các lỗ đo bị Gate 1 nêu (d-20260917T235049Z-5: dời từ vựng trạng thái sang packages/validation/src/invitation-status.ts; d-20260918T002935Z-6: đổi E8 sang đo decideSignIn, đổi E5 sang rút tập bằng nạp module thay vì regex trên văn bản nguồn) rồi nâng phạm vi theo d-20260918T012525Z-7 (thêm AC-7/E10, đổi năm chỗ ghi trạng thái huỷ từ chỉ số mảng sang hằng có tên) — ký ở commit 8c425a10.
+Round 3: vá Ngoài-8 (thêm logger.warn khi phân tích trạng thái lỗi ở toAllowance, theo d-20260918T014850Z-9) tại commit f74eb7e0; E5 carried-forward không đo lại (paths không đổi), run_id/verified_at giữ nguyên từ round 3 (2026-09-18T01:26:16Z).
+Round 4 (vòng này): 10 eval + 4 lệnh suite đều exit 0 tại verified_commit ffe50cd6ed620ee4b6f34c91d95820f4050ebc0a, nhưng review đối kháng (t10/t11/t13 trong review-findings.md) xác nhận ba eval trong hợp đồng (E7/AC-6, E3/AC-3, E9/AC-1) đo chỉ dẫn/fixture thay vì đầu ra thật — không giết được đột biến ở nơi AC hứa; verdict REJECT phản ánh khoảng hở đo lường đó, không phải một exit code đỏ.
