@@ -77,7 +77,9 @@ describe("fieldKeyFromLabel", () => {
 		expect(fieldKeyFromLabel("Loại hình")).toBe("loai_hinh");
 		expect(fieldKeyFromLabel("Mức độ hợp tác")).toBe("muc_do_hop_tac");
 		expect(fieldKeyFromLabel("Người phụ trách")).toBe("nguoi_phu_trach");
-		expect(fieldKeyFromLabel("Tỷ lệ chia hoa hồng")).toBe("ty_le_chia_hoa_hong");
+		expect(fieldKeyFromLabel("Tỷ lệ chia hoa hồng")).toBe(
+			"ty_le_chia_hoa_hong",
+		);
 		expect(fieldKeyFromLabel("Kênh liên lạc quen")).toBe("kenh_lien_lac_quen");
 	});
 

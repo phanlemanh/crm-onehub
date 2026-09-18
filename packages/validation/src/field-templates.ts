@@ -4,7 +4,13 @@ export type FieldTemplate = {
 	options?: readonly string[];
 };
 
-const PHAN_KHUC = ["Căn hộ", "Nhà phố", "Đất nền", "Cho thuê", "Dự án"] as const;
+const PHAN_KHUC = [
+	"Căn hộ",
+	"Nhà phố",
+	"Đất nền",
+	"Cho thuê",
+	"Dự án",
+] as const;
 
 const MUC_DO_HOP_TAC = [
 	"Chưa tiếp xúc",

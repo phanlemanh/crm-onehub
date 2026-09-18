@@ -23,26 +23,116 @@ const BO_CU = [
 ];
 
 const BANG = [
-	["COMPANY", "Loại hình", "SELECT", ["Sàn giao dịch", "Công ty môi giới", "Đại lý phân phối", "Tổ chức tín dụng"]],
-	["COMPANY", "Phân khúc chính", "SELECT", ["Căn hộ", "Nhà phố", "Đất nền", "Cho thuê", "Dự án"]],
-	["COMPANY", "Quy mô môi giới", "SELECT", ["Dưới 10", "10–50", "50–200", "Trên 200"]],
-	["COMPANY", "Mức độ hợp tác", "SELECT", ["Chưa tiếp xúc", "Đang thăm dò", "Đang hợp tác", "Tạm dừng"]],
-	["COMPANY", "Nguồn quen", "SELECT", ["Giới thiệu", "Hội thảo", "Tự tìm", "Chiến dịch gọi"]],
+	[
+		"COMPANY",
+		"Loại hình",
+		"SELECT",
+		[
+			"Sàn giao dịch",
+			"Công ty môi giới",
+			"Đại lý phân phối",
+			"Tổ chức tín dụng",
+		],
+	],
+	[
+		"COMPANY",
+		"Phân khúc chính",
+		"SELECT",
+		["Căn hộ", "Nhà phố", "Đất nền", "Cho thuê", "Dự án"],
+	],
+	[
+		"COMPANY",
+		"Quy mô môi giới",
+		"SELECT",
+		["Dưới 10", "10–50", "50–200", "Trên 200"],
+	],
+	[
+		"COMPANY",
+		"Mức độ hợp tác",
+		"SELECT",
+		["Chưa tiếp xúc", "Đang thăm dò", "Đang hợp tác", "Tạm dừng"],
+	],
+	[
+		"COMPANY",
+		"Nguồn quen",
+		"SELECT",
+		["Giới thiệu", "Hội thảo", "Tự tìm", "Chiến dịch gọi"],
+	],
 	["COMPANY", "Người phụ trách", "USER", null],
-	["CONTACT", "Phân khúc chuyên", "SELECT", ["Căn hộ", "Nhà phố", "Đất nền", "Cho thuê", "Dự án"]],
-	["CONTACT", "Vai trò trong sàn", "SELECT", ["Chủ sàn", "Trưởng nhóm", "Môi giới", "Trợ lý"]],
-	["CONTACT", "Kênh liên lạc quen", "SELECT", ["Zalo", "Điện thoại", "Email", "Facebook"]],
-	["CONTACT", "Mức độ hợp tác", "SELECT", ["Chưa tiếp xúc", "Đang thăm dò", "Đang hợp tác", "Tạm dừng"]],
+	[
+		"CONTACT",
+		"Phân khúc chuyên",
+		"SELECT",
+		["Căn hộ", "Nhà phố", "Đất nền", "Cho thuê", "Dự án"],
+	],
+	[
+		"CONTACT",
+		"Vai trò trong sàn",
+		"SELECT",
+		["Chủ sàn", "Trưởng nhóm", "Môi giới", "Trợ lý"],
+	],
+	[
+		"CONTACT",
+		"Kênh liên lạc quen",
+		"SELECT",
+		["Zalo", "Điện thoại", "Email", "Facebook"],
+	],
+	[
+		"CONTACT",
+		"Mức độ hợp tác",
+		"SELECT",
+		["Chưa tiếp xúc", "Đang thăm dò", "Đang hợp tác", "Tạm dừng"],
+	],
 	["CONTACT", "Người phụ trách", "USER", null],
-	["DEAL", "Hình thức hợp tác", "SELECT", ["Giới thiệu khách", "Phân phối dự án", "Đồng môi giới", "Cung cấp dữ liệu"]],
-	["DEAL", "Nguồn thoả thuận", "SELECT", ["Giới thiệu", "Hội thảo", "Chiến dịch gọi", "Tự tìm"]],
+	[
+		"DEAL",
+		"Hình thức hợp tác",
+		"SELECT",
+		[
+			"Giới thiệu khách",
+			"Phân phối dự án",
+			"Đồng môi giới",
+			"Cung cấp dữ liệu",
+		],
+	],
+	[
+		"DEAL",
+		"Nguồn thoả thuận",
+		"SELECT",
+		["Giới thiệu", "Hội thảo", "Chiến dịch gọi", "Tự tìm"],
+	],
 	["DEAL", "Tỷ lệ chia hoa hồng", "NUMBER", null],
 	["DEAL", "Người phụ trách", "USER", null],
 ];
 
 const NHOM = ["COMPANY", "CONTACT", "DEAL"];
+
 const SO_CONG_TY = 6;
 const SO_KHOA_BO_CAO = 9;
+
+const DUONG_ZOD = resolve(GOC, "packages/validation/node_modules/zod/index.js");
+const { z } = await import(DUONG_ZOD);
+
+const goiY = z.object({
+	label: z.string(),
+	type: z.string(),
+	options: z.array(z.string()).optional(),
+});
+
+const boGoiY = z.object({
+	COMPANY: z.array(goiY),
+	CONTACT: z.array(goiY),
+	DEAL: z.array(goiY),
+});
+
+const bangBoCao = z.object({
+	fields: z.array(z.object({ key: z.string(), label: z.string() })),
+});
+
+const hamSinhKhoa = z.custom(
+	(v) => v instanceof Function,
+	"khong phai mot ham",
+);
 
 const loi = [];
 function doi(dieu, cau) {
@@ -68,25 +158,44 @@ async function napGoiY() {
 	const duong = resolve(GOC, "packages/validation/src/field-templates.ts");
 	const mod = await import(duong);
 	console.log(`nap bo goi y: ${duong}`);
-	if (!mod.FIELD_TEMPLATES) tuChoi(`module ${duong} khong xuat FIELD_TEMPLATES`);
-	return { duong, bo: mod.FIELD_TEMPLATES };
+
+	const doc = boGoiY.safeParse(mod.FIELD_TEMPLATES);
+	if (!doc.success)
+		tuChoi(
+			`module ${duong} khong cho ra bo goi y dung hinh dang: ${doc.error.issues
+				.map((x) => `${x.path.join(".")} ${x.message}`)
+				.join("; ")}`,
+		);
+
+	return { duong, bo: doc.data };
 }
 
 async function napBoCao() {
 	const duong = resolve(GOC, "apps/api/src/listings/listings-config.ts");
 	const mod = await import(duong);
 	console.log(`nap bang bo cao: ${duong}`);
-	if (!mod.LISTING) tuChoi(`module ${duong} khong xuat LISTING`);
-	return { duong, listing: mod.LISTING };
+
+	const doc = bangBoCao.safeParse(mod.LISTING);
+	if (!doc.success)
+		tuChoi(
+			`module ${duong} khong cho ra bang bo cao dung hinh dang: ${doc.error.issues
+				.map((x) => `${x.path.join(".")} ${x.message}`)
+				.join("; ")}`,
+		);
+
+	return { duong, listing: doc.data };
 }
 
 async function napSinhKhoa() {
 	const duong = resolve(GOC, "packages/db/src/fields-shape.ts");
 	const mod = await import(duong);
 	console.log(`nap ham sinh khoa: ${duong}`);
-	if (typeof mod.fieldKeyFromLabel !== "function")
-		tuChoi(`module ${duong} khong xuat fieldKeyFromLabel`);
-	return { duong, sinhKhoa: mod.fieldKeyFromLabel };
+
+	const doc = hamSinhKhoa.safeParse(mod.fieldKeyFromLabel);
+	if (!doc.success)
+		tuChoi(`module ${duong} khong xuat fieldKeyFromLabel nhu mot ham`);
+
+	return { duong, sinhKhoa: doc.data };
 }
 
 function cungGoc(a, b) {
@@ -144,13 +253,13 @@ async function baThucThe() {
 			continue;
 		}
 
-		doi(list.length >= 4, `nhom ${ten} chi co ${list.length} goi y, cho it nhat 4`);
+		doi(
+			list.length >= 4,
+			`nhom ${ten} chi co ${list.length} goi y, cho it nhat 4`,
+		);
 
 		for (const t of list) {
-			doi(
-				typeof t.label === "string" && t.label.trim().length > 0,
-				`nhom ${ten} co mot goi y khong co nhan`,
-			);
+			doi(t.label.trim().length > 0, `nhom ${ten} co mot goi y khong co nhan`);
 			doi(
 				CO_DAU.test(t.label ?? ""),
 				`nhan ${JSON.stringify(t.label)} cua nhom ${ten} khong mang dau tieng Viet`,
