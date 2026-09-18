@@ -1,6 +1,11 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import {
+	TRANG_THAI_CHO,
+	TRANG_THAI_HUY,
+	TRANG_THAI_NHAN,
+} from "@crm/validation/invitation-status";
 import { ALLOWANCE_WITHOUT_EXPIRY } from "../src/allow-list";
 import { auth } from "../src/auth";
 import { ensureWorkspaceMembership } from "../src/organization";
@@ -76,7 +81,11 @@ async function don() {
 	await db.user.deleteMany({ where: { id: { startsWith: `${suffix}-` } } });
 }
 
-async function choPhep(email: string, role = "member") {
+async function choPhep(
+	email: string,
+	role = "member",
+	trangThai: string = TRANG_THAI_CHO,
+) {
 	await db.organization.upsert({
 		where: { id: WORKSPACE_ID },
 		create: {
@@ -101,7 +110,7 @@ async function choPhep(email: string, role = "member") {
 			organizationId: WORKSPACE_ID,
 			email,
 			role,
-			status: "pending",
+			status: trangThai,
 			expiresAt: ALLOWANCE_WITHOUT_EXPIRY,
 			inviterId: chu.id,
 		},
@@ -319,17 +328,28 @@ describe("rut-khong-dung-da-vao", () => {
 
 	it("rut loi cho phep cua nguoi DA vao thi tu cach thanh vien con nguyen", async () => {
 		const dia = `da-vao-${suffix}@gmail.com`;
-		await choPhep(dia);
+		await choPhep(dia, "member", TRANG_THAI_NHAN);
 
 		const nguoiCu = await db.user.create({ data: nguoi(dia) });
 		await daLaThanhVien(nguoiCu.id);
 
-		await db.invitation.updateMany({
+		const daRut = await db.invitation.updateMany({
 			where: { organizationId: WORKSPACE_ID, email: dia },
-			data: { status: "cancelled" },
+			data: { status: TRANG_THAI_HUY },
 		});
 
-		await ensureWorkspaceMembership(nguoiCu.id, dia);
+		if (daRut.count !== 1) {
+			throw new Error(
+				`gieo cu lieu hong: rut duoc ${daRut.count} loi cho phep, phai dung 1 — phep do khong con do nhanh rut that`,
+			);
+		}
+
+		const truocKhiDo = await db.invitation.findFirst({
+			where: { organizationId: WORKSPACE_ID, email: dia },
+			select: { status: true },
+		});
+
+		const khoLamViec = await ensureWorkspaceMembership(nguoiCu.id, dia);
 
 		const hang = await db.member.findUnique({
 			where: {
@@ -342,9 +362,16 @@ describe("rut-khong-dung-da-vao", () => {
 		});
 
 		expect([
+			truocKhiDo?.status ?? null,
+			khoLamViec ?? null,
 			hang !== null,
 			"tu cach thanh vien con nguyen sau khi rut",
-		]).toEqual([true, "tu cach thanh vien con nguyen sau khi rut"]);
+		]).toEqual([
+			TRANG_THAI_HUY,
+			WORKSPACE_ID,
+			true,
+			"tu cach thanh vien con nguyen sau khi rut",
+		]);
 	});
 });
 
