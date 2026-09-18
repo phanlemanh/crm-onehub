@@ -10,7 +10,7 @@ slug: man-cai-dat-noi-tieng-viet
 verdict: PASS
 round: 3
 run_id: s4r3d-20260904T130156Z-16359
-verified_commit: ed70d70dd0ec9ee7412b45e63c90c925500d50c6
+verified_commit: 7ea0e79dd739f9fb5254c3a6f6ee54312a6a2d85
 verified_at: 2026-09-04T13:04:00Z
 human_signoff: Manh Phan 2026-09-04
 ---
@@ -364,3 +364,7 @@ sha: 96ec6d9b0447bb8e3eafaf36c84dc9902372ebef · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-09-17, do chiến dịch ghim lại kit 2.14.0 (PR #47): làn eval thật trên cây đã chuyển đường ghi tạo phẩm; đo bằng phanlemanh@gmail.com
 run_id: repin-20260917T051527Z-61120
 sha: ed70d70dd0ec9ee7412b45e63c90c925500d50c6 · suites: 4 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E5=2
+
+### Re-pin lần 5 — 2026-09-18, do ban khai o nhan len 10 sau khi PR #57 them muc Truong vao thanh ben
+run_id: repin-20260918T131812Z-37957
+sha: 7ea0e79dd739f9fb5254c3a6f6ee54312a6a2d85 · suites: 4 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E5=2
