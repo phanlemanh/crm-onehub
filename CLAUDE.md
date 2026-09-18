@@ -107,10 +107,17 @@ ngang không sang được lượt kế. Chỉ `bun test` trần trong một gó
 `cd apps/api && bun run dev:session <email>`.
 
 Ba cổng đó cũng là mặc định của các phép đo trong `_acceptance/config.yaml`
-(`APP_URL:-http://localhost:3000`, `API_URL:-http://localhost:3001`). Hệ quả: một
-bản dev đang chạy ở checkout chính bị đo thay cho cây đang xét, và kết quả vẫn in
-ra như thường. Đo một cây khác thì đặt `APP_URL` và `API_URL` tay. `dot-bien.mjs`
+(`APP_URL:-http://localhost:3000`, `API_URL:-http://localhost:3001`). Hệ quả cũ:
+một bản dev đang chạy ở checkout chính bị đo thay cho cây đang xét, và kết quả
+vẫn in ra như thường. Từ 10/09 các chặn đọc màn hình hết im lặng ở chỗ đó:
+`rang/canh-cay.mjs` đặt một dấu mốc vào `apps/app/public` rồi xin lại nó qua
+`APP_URL` trước khi mở màn đầu tiên; không nhận lại dấu mốc thì thoát mã 2 và gọi
+tên cây đang xét, chứ không đọc con số nào. Đo một cây khác vẫn phải đặt `APP_URL`
+và `API_URL` tay — cảnh cây chỉ nói cho biết đã đặt sai, không sửa hộ. `dot-bien.mjs`
 dựng bản sao riêng ở `CONG_SAO` (mặc định 3200) đúng vì lý do đó.
+
+Cảnh cây mới với tới `APP_URL`. Một máy chủ api của cây khác ở `API_URL` vẫn lọt,
+và `bun run dev:session` thì luôn chạy trong cây đang xét bất kể `API_URL` trỏ đâu.
 
 Đẩy lên `origin` cần `http.version HTTP/1.1` (đã đặt trong git config của kho);
 HTTP/2 trả 400. `pre-push` chạy `check-types`, `lint`, `lint:slop`, `test`. Đừng
