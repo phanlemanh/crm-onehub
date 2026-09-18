@@ -338,6 +338,24 @@ khác nhau.
 5. **Bốn tiêu chí là phạm vi nới thêm sau khi chốt phạm vi**: AC-16 ở bước viết
    mã, và AC-17 AC-18 AC-19 theo quyết định nâng phạm vi của người ký.
 
+> **Ghi chú thêm 2026-09-18, sau chữ ký — năm mục trên giữ nguyên văn.** Người
+> ký ký «với NĂM giới hạn đã khai», nên chữ trong từng mục không được đổi. Nhưng
+> hai trong năm mục kể trạng thái của vòng TRƯỚC phiên thiết kế, và chính vòng
+> này đã vượt qua chúng:
+>
+> - Mục 2 nói «hai mươi mốt thước» và «một khổ duy nhất, 1280 nhân 900». Hồ sơ
+>   hiện có hai mươi hai thước và hai mươi hai khối từng thước. Thước E22, theo
+>   tiêu chí AC-20, chạy ở CẢ khổ 375 lẫn 1280 và đo đúng ba hành vi mà mục 2
+>   nói là không ai đo: ba thẻ vừa khung hoặc cuộn được ở khổ hẹp, ba thẻ đi
+>   bằng mũi tên, ô sửa đóng bằng Esc.
+> - Mục 3 nói dòng bỏ phiên thiết kế «chưa ai đọc» và các hình thái «chưa ai
+>   duyệt». Chủ kho đã đọc đúng dòng đó và veto nó, sổ quyết định
+>   `d-20260918T062707Z-24`, rồi phê nó tường minh tại Cổng Bằng chứng, sổ
+>   `d-20260918T084446Z-37`. Phiên thiết kế đã chạy và để lại `design-pass.md`.
+>
+> Cả hai câu sai theo chiều thấp: chúng kể vòng này tệ hơn thực tế, nên không ai
+> tin quá điều đã chứng. Đính chính ở sổ quyết định, dòng `-39`.
+
 ## Ngoài hợp đồng
 
 Ba mục ngoài hợp đồng của vòng 1 đã được người ký quyết lối «nâng phạm vi sửa
