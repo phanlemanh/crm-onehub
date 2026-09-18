@@ -20,6 +20,12 @@ không sửa và không chấm thứ máy không được sửa.
   severity: medium
   Đề xuất: mở hợp đồng mới
 
+- **Nhãn kiểu trường bị cắt chữ ở mọi khung có danh sách**
+  Người dùng thấy gì: cột nhãn bên phải mỗi trường đọc ra «rong danh» thay vì «Trong danh sách», «. trong kho» và «- một dòng». Người đọc không biết trường đó thuộc kiểu gì, và một nhãn cắt dở làm cả bảng trông như lỗi.
+  file: `apps/app/components/crm/fields/fields-list.tsx`
+  severity: high
+  Đề xuất: mở hợp đồng mới
+
 - **Trang chỉ được soi ở một chủ đề màu**
   Người dùng thấy gì: bản sáng của trang Trường chưa ai nhìn. Nếu nó lệch, người dùng chủ đề sáng là người phát hiện.
   file: `apps/app/app/(app)/[slug]/settings/fields/fields-settings.tsx`

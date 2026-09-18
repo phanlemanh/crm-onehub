@@ -194,7 +194,22 @@ async function tieuDeTrang(browser, cookie, slug) {
 				CO_DAU.test(t.tieuDe) || t.tieuDe === "Trường",
 				`tieu de tieng Viet ${JSON.stringify(t.tieuDe)} khong mang dau tieng Viet`,
 			);
-			await page.screenshot({ path: chupVao("tieu-de-vi") });
+			const oTieuDe = await page.$("main h1");
+			if (oTieuDe) {
+				const h = await oTieuDe.boundingBox();
+				if (h)
+					await page.screenshot({
+						path: chupVao("tieu-de-vi"),
+						clip: {
+							x: Math.max(0, h.x - 16),
+							y: Math.max(0, h.y - 16),
+							width: Math.min(h.width + 520, 1200),
+							height: h.height + 44,
+						},
+					});
+			} else {
+				await page.screenshot({ path: chupVao("tieu-de-vi") });
+			}
 		}
 
 		await page.close();
@@ -240,7 +255,22 @@ async function baThe(browser, cookie, slug) {
 		doi(t.trongKhung, `the ${JSON.stringify(t.chu)} nam NGOAI khung nhin`);
 	}
 
-	await page.screenshot({ path: chupVao("ba-the") });
+	const oThe = await page.$('[role="tablist"]');
+	if (oThe) {
+		const h = await oThe.boundingBox();
+		if (h)
+			await page.screenshot({
+				path: chupVao("ba-the"),
+				clip: {
+					x: Math.max(0, h.x - 12),
+					y: Math.max(0, h.y - 12),
+					width: h.width + 24,
+					height: h.height + 24,
+				},
+			});
+	} else {
+		await page.screenshot({ path: chupVao("ba-the") });
+	}
 	await page.close();
 	ketLuan("ba-the");
 }
@@ -301,7 +331,7 @@ async function khongBatKhay(browser, cookie, slug) {
 		soMot === 0,
 		`mo trang Cai dat > Truong ma khay truot VAN BAT: dem duoc ${soMot} hop thoai`,
 	);
-	await mot.screenshot({ path: chupVao("khong-bat-khay") });
+	await mot.screenshot({ path: chupVao("khong-bat-khay-ve-mot-khong-khay") });
 	await mot.close();
 
 	const hai = await moTrang(
@@ -311,6 +341,7 @@ async function khongBatKhay(browser, cookie, slug) {
 		`/${slug}/settings/fields?manageFields=contact`,
 	);
 	const soHai = await hai.evaluate(demKhay);
+	await hai.screenshot({ path: chupVao("khong-bat-khay-ve-hai-co-khay") });
 	await hai.close();
 
 	if (soHai === 0) {
@@ -1243,7 +1274,6 @@ async function banPhimVaKhoHep(browser, cookie, slug) {
 			doi(ok.doiThe, `duong ban phim: ${ok.viDoiThe}`);
 			doi(ok.escDong, `duong ban phim: ${ok.viEsc}`);
 			doi(ok.thayVongFocus, `duong ban phim: ${ok.viFocus}`);
-			await page.screenshot({ path: chupTK("ban-phim--desktop-1280") });
 		}
 
 		await page.close();
@@ -1300,15 +1330,38 @@ async function duongBanPhim(page) {
 		? ""
 		: `bam mui ten phai tren hang the ma the dang mo la ${JSON.stringify(sau)}, cho "Cá nhân"`;
 
-	const nut = await page.$$("button");
 	let moO = false;
-	for (const n of nut) {
-		const t = await n.evaluate((el) => el.textContent.trim());
-		if (t === "Trường mới") {
-			await n.click();
-			await new Promise((r) => setTimeout(r, 1500));
-			moO = true;
-			break;
+	const hangTruong = await page.$$('[data-slot="dropdown-menu-trigger"]');
+	if (hangTruong.length > 0) {
+		const nhan = await hangTruong[0].evaluate((el) =>
+			el.textContent.trim().replace(/^Thêm hành động cho /, ""),
+		);
+		const nutTruong = await page.$$("main button");
+		for (const n of nutTruong) {
+			const t = await n.evaluate((el) => el.textContent.trim());
+			if (t.startsWith(nhan)) {
+				await n.click();
+				await new Promise((r) => setTimeout(r, 1800));
+				moO = await page.evaluate(() =>
+					Boolean(document.querySelector("main input")),
+				);
+				if (moO) break;
+			}
+		}
+	}
+
+	if (!moO) {
+		const nut = await page.$$("button");
+		for (const n of nut) {
+			const t = await n.evaluate((el) => el.textContent.trim());
+			if (t === "Trường mới") {
+				await n.click();
+				await new Promise((r) => setTimeout(r, 1500));
+				moO = true;
+				ra.viEsc =
+					"khong mo duoc o SUA cua truong co that nen thu Esc tren o TAO MOI";
+				break;
+			}
 		}
 	}
 	if (!moO) {
@@ -1324,11 +1377,14 @@ async function duongBanPhim(page) {
 	await oNhan.click();
 	await new Promise((r) => setTimeout(r, 400));
 
+	await page.screenshot({ path: chupTK("ban-phim-truoc-esc--o-sua-mo") });
+
 	await page.keyboard.press("Escape");
 	await new Promise((r) => setTimeout(r, 1200));
 	const conO = await page.evaluate(() =>
 		Boolean(document.querySelector("main input")),
 	);
+	await page.screenshot({ path: chupTK("ban-phim-sau-esc--o-sua-dong") });
 	ra.escDong = !conO;
 	if (!ra.escDong)
 		ra.viEsc =

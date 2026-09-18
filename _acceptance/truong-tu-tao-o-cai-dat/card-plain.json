@@ -111,6 +111,18 @@
   {
    "id": "d-20260918T065212Z-28",
    "p": "Đính chính một câu sai trong sổ về khoá veto: nó chặn merge, không buộc máy dừng."
+  },
+  {
+   "id": "d-20260918T075212Z-29",
+   "p": "Hồ sơ bằng chứng từng không dẫn được tới vật: không khối nào mang mã thoát và đường ảnh. Đã điền hai mươi hai khối từ dữ liệu thật, và mọi ảnh được một agent chấm mở ra kể lại."
+  },
+  {
+   "id": "d-20260918T075212Z-30",
+   "p": "Ba khung ảnh từng trùng byte, tức ba thước dẫn cùng một vật mà trông như ba bằng chứng. Đã sửa: mỗi thước chụp cảnh riêng, sáu khung có sáu mã băm khác nhau."
+  },
+  {
+   "id": "d-20260918T075212Z-31",
+   "p": "Agent chấm mở ảnh tìm ra một lỗi giao diện thật chưa ai thấy: nhãn kiểu trường bị cắt chữ. Ghi thành mục ngoài hợp đồng thứ tư, mức cao."
   }
  ]
 }
