@@ -45,4 +45,18 @@ sửa ngay» ngày 2026-09-18, mỗi mục thành một tiêu chí có thước:
 
 ## Known limits
 
-Chưa có mục nào. Người ký quyết mục nào vào đây tại Cổng Bằng chứng.
+Người ký quyết ba mục dưới đây vào đây tại Cổng Bằng chứng ngày 2026-09-18,
+sổ quyết định `d-20260918T084446Z-32`, `-33`, `-34`:
+
+- Hàng ba thẻ không cuộn ngang được. Hôm nay ba thẻ vừa khung ở khổ 375; ngày
+  nhãn dài hơn hoặc thêm một thực thể thứ tư, thẻ cuối rơi ra ngoài mà không có
+  đường cuộn để với tới.
+- Skill chuẩn giao diện mà kho khai là bộ soi lấy luật từ mạng, không phải một
+  từ vựng token. Mọi phiên thiết kế sau chạy trên token đọc từ mã, nên hai phiên
+  khác nhau có thể rút ra hai chuẩn khác nhau.
+- Trang chỉ được soi ở một chủ đề màu. Bản sáng chưa ai nhìn; nếu nó lệch thì
+  người dùng chủ đề sáng là người phát hiện.
+
+Mục ngoài hợp đồng thứ tư của danh sách trên — nhãn kiểu trường bị cắt chữ,
+mức cao — KHÔNG vào đây. Người ký quyết nó thành một hợp đồng mới, sổ quyết định
+`d-20260918T084446Z-35`.

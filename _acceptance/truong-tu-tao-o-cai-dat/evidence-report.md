@@ -343,7 +343,22 @@ khác nhau.
 Ba mục ngoài hợp đồng của vòng 1 đã được người ký quyết lối «nâng phạm vi sửa
 ngay» và đã sửa, mỗi mục thành một tiêu chí có thước: AC-17, AC-18, AC-19.
 
-Lượt chấm này không sinh mục ngoài hợp đồng mới.
+Lượt chấm này sinh BỐN mục ngoài hợp đồng mới, liệt đầy đủ ở
+`review-findings.md`: hàng ba thẻ không cuộn ngang được · skill chuẩn giao diện
+kho khai không phải từ vựng token · nhãn kiểu trường bị cắt chữ ở mọi khung có
+danh sách (mức cao) · trang chỉ được soi ở một chủ đề màu. Ba mục đầu đến từ
+phiên thiết kế chạy trước cổng này, mục nhãn cắt chữ đến từ agent chấm mở ảnh
+chụp ở vòng 3.
+
+Người ký định đoạt từng mục tại Cổng Bằng chứng ngày 2026-09-18: ba mục ghi
+Known limits (hàng ba thẻ · skill chuẩn giao diện · một chủ đề màu), và mục nhãn
+cắt chữ mở hợp đồng mới vì đó là thứ người dùng thấy, mức cao, và nó nằm ở thành
+phần mà khay trượt hồ sơ cũng dùng. Sổ quyết định `d-20260918T084446Z-32` đến
+`-35`.
+
+Câu trước ở chỗ này viết «lượt chấm này không sinh mục ngoài hợp đồng mới». Nó
+đúng lúc viết ở vòng chấm 2 và hoá sai ở vòng 3; sửa ngày 2026-09-18 sau khi một
+phiên rà soát đối chiếu nó với sổ quyết định.
 
 ## Iterations
 
