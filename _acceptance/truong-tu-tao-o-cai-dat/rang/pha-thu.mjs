@@ -16,7 +16,8 @@ function sua(duong, doi) {
 
 function thay(duong, a, b) {
 	sua(duong, (s) => {
-		if (!s.includes(a)) throw new Error(`khong tim thay trong ${duong}: ${a.slice(0, 60)}`);
+		if (!s.includes(a))
+			throw new Error(`khong tim thay trong ${duong}: ${a.slice(0, 60)}`);
 		return s.replace(a, b);
 	});
 }
@@ -80,7 +81,8 @@ const CA = [
 			sua(`${goc}/${GOI_Y}`, (s) => {
 				const a =
 					'\t\t{\n\t\t\tlabel: "Kênh liên lạc quen",\n\t\t\ttype: "SELECT",\n\t\t\toptions: ["Zalo", "Điện thoại", "Email", "Facebook"],\n\t\t},\n';
-				if (!s.includes(a)) throw new Error("khong tim thay dong Kenh lien lac quen");
+				if (!s.includes(a))
+					throw new Error("khong tim thay dong Kenh lien lac quen");
 				return s.replace(a, "");
 			}),
 	},
@@ -99,12 +101,7 @@ const CA = [
 		ten: "thieu mot lua chon",
 		che: "bang-muoi-lam",
 		thay: ["Đất nền"],
-		pha: (goc) =>
-			thay(
-				`${goc}/${GOI_Y}`,
-				'const PHAN_KHUC = ["Căn hộ", "Nhà phố", "Đất nền", "Cho thuê", "Dự án"] as const;',
-				'const PHAN_KHUC = ["Căn hộ", "Nhà phố", "Cho thuê", "Dự án"] as const;',
-			),
+		pha: (goc) => thay(`${goc}/${GOI_Y}`, '\t"Đất nền",\n', ""),
 	},
 	{
 		ten: "sai thu tu lua chon",
@@ -113,8 +110,8 @@ const CA = [
 		pha: (goc) =>
 			thay(
 				`${goc}/${GOI_Y}`,
-				'const PHAN_KHUC = ["Căn hộ", "Nhà phố", "Đất nền", "Cho thuê", "Dự án"] as const;',
-				'const PHAN_KHUC = ["Nhà phố", "Căn hộ", "Đất nền", "Cho thuê", "Dự án"] as const;',
+				'\t"Căn hộ",\n\t"Nhà phố",\n',
+				'\t"Nhà phố",\n\t"Căn hộ",\n',
 			),
 	},
 	{
@@ -151,7 +148,18 @@ const CA = [
 const ket = [];
 
 for (const ca of CA) {
-	const ban = await dungBanSao({ sua: ca.pha, khongDungMayChu: true });
+	let ban = null;
+	try {
+		ban = await dungBanSao({ sua: ca.pha, khongDungMayChu: true });
+	} catch (loi) {
+		ket.push({
+			ten: ca.ten,
+			dat: false,
+			vi: `khong dung duoc ban sao da dot bien: ${String(loi?.message ?? loi).slice(0, 200)}`,
+		});
+		continue;
+	}
+
 	try {
 		let ra = "";
 		let ma = 0;
@@ -171,7 +179,10 @@ for (const ca of CA) {
 			ket.push({
 				ten: ca.ten,
 				dat: ma === 0,
-				vi: ma === 0 ? "" : `cho XANH (ham cu thi hai tap khoa khong giao nhau) nhung thoat ${ma}`,
+				vi:
+					ma === 0
+						? ""
+						: `cho XANH (ham cu thi hai tap khoa khong giao nhau) nhung thoat ${ma}`,
 			});
 		} else if (ma === 0) {
 			ket.push({ ten: ca.ten, dat: false, vi: "thuoc VAN XANH sau khi pha" });
@@ -184,6 +195,12 @@ for (const ca of CA) {
 		} else {
 			ket.push({ ten: ca.ten, dat: true, vi: "" });
 		}
+	} catch (loi) {
+		ket.push({
+			ten: ca.ten,
+			dat: false,
+			vi: `than ca nem: ${String(loi?.message ?? loi).slice(0, 200)}`,
+		});
 	} finally {
 		await ban.don();
 	}
@@ -194,5 +211,14 @@ for (const k of ket) {
 	console.log(`${k.dat ? "dat " : "SAI "} ${k.ten}${k.vi ? ` — ${k.vi}` : ""}`);
 	if (!k.dat) do_++;
 }
+
+if (ket.length !== CA.length) {
+	console.log(
+		`\nSAI: chay ${ket.length} ca nhung khai ${CA.length}. Mot ca bien mat khong ` +
+			"duoc coi la mot ca dat.",
+	);
+	process.exit(1);
+}
+
 console.log(`\n${ket.length - do_}/${ket.length} ca pha thu dat`);
 process.exit(do_ === 0 ? 0 : 1);
