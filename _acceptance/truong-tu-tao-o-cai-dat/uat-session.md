@@ -25,15 +25,36 @@ decided_at:
   nhưng chưa merge vào `onehub`. Hệ quả có thật với ngưỡng: vế bốn tuần của
   ngưỡng SỐNG và vế bốn tuần của ngưỡng CHẾT đều chưa có đồng hồ để chạy.
 
+## Trình tự đã chốt ngày 2026-09-18
+
+Chủ kho chọn: **merge trước, hẹn phiên đủ sau bốn tuần**. Lý do trình tự này
+thắng lối chấm-vế-trong-phòng-ngay: vế bốn tuần là vế mang phần lớn sức nặng của
+ngưỡng, và họp hai lần cho một ngưỡng thì lần đầu chỉ sinh ra một verdict treo.
+
+Đánh đổi đã biết và đã nhận: vế CHẾT thứ nhất — người nghiệm thu không tìm ra
+đường vào từ Cài đặt trong hai phút — đo được ngay hôm nay và có thể cho câu trả
+lời dừng trước khi giao. Chọn lối này nghĩa là nếu điều đó xảy ra, ta biết nó
+SAU khi đã giao chứ không phải trước.
+
+Ngày hẹn phiên: bốn tuần kể từ ngày merge vào `onehub`.
+
 ## Người dự
 
 | Tên | Vai | Đại diện cho ai |
 |---|---|---|
+| Phan Le Manh | Chủ kho, người ký cả bốn cổng của vòng này | Chính mình — người TRONG ĐỘI, không phải người dùng đại diện thật |
+
+**Giới hạn của bảng này, người ký cần biết trước khi đọc điểm.** Không có người
+dùng đại diện thật nào dự. Người chấm duy nhất là người đã chốt phạm vi, duyệt
+bộ gợi ý và ký Cổng Bằng chứng của chính vòng này, nên điểm nói về kỳ vọng nhiều
+hơn nói về sản phẩm. Vế «người chưa từng thấy màn này» của câu hỏi phép đo không
+có ai đứng thay, và đó là chỗ yếu nhất của phiên.
 
 ## Chấm kín (thu TRƯỚC mọi thảo luận chung)
 
 | Người | Điểm/nhận xét kín | Sẽ gửi cho khách nào, khi nào |
 |---|---|---|
+| Phan Le Manh | chưa thu — phiên hẹn sau bốn tuần | chưa thu |
 
 ## Thảo luận sau khi đã chấm
 
