@@ -168,6 +168,14 @@ kho gốc; OneHub không bán gì cho đối tác.
 _Avoid_: pipeline, đường ống, cơ hội đang chạy
 Vì sao: đây là trạng thái của quan hệ, không phải một khối hàng đang chảy.
 
+**Trường**: một ô dữ liệu trên bản ghi, gồm trường chuẩn của hệ thống và trường
+người quản trị tự tạo thêm. Người quản trị xem và sửa chúng ở Cài đặt › Trường.
+Chốt 2026-09-18.
+_Avoid_: thuộc tính, property, custom field, trường tuỳ chỉnh
+Vì sao: màn Cài đặt hiện CẢ trường chuẩn lẫn trường tự tạo, nên thêm chữ "tự
+tạo" vào nhãn là nói hẹp hơn thứ người thấy; ba từ còn lại là tiếng của nhà khác,
+hoặc nửa Việt nửa Anh.
+
 **Số chứng chỉ**: **KHÔNG CÓ TRONG SẢN PHẨM.** Sàn chỉ gắn huy hiệu có hoặc
 không cho chứng chỉ hành nghề môi giới, không lộ mã số nào. CRM ghi trường
 `Chứng chỉ` với đúng hai giá trị `Có` · `Không`.

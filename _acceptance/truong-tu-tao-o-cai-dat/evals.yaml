@@ -382,3 +382,25 @@ evals:
     paths:
       - "packages/validation/src/field-templates.ts"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-16
+    executor: test
+    cmd: config:executors.test.trg_khoa_bo_dau
+    expected: >-
+      exit 0. Bai kiem cua ham sinh khoa, them ba ca: nhan tieng Viet co dau
+      sinh khoa BO DAU ma giu du chu ("Loai hinh" -> loai_hinh, "Muc do hop tac"
+      -> muc_do_hop_tac, "Nguoi phu trach" -> nguoi_phu_trach, "Ty le chia hoa
+      hong" -> ty_le_chia_hoa_hong, "Kenh lien lac quen" -> kenh_lien_lac_quen);
+      chu d gach ngang thanh d chu khong bi an mat ("Dat nen" -> dat_nen);
+      va nhan tieng Viet roi DUNG khoa ma bo cao khai tay ("Dia ban" -> dia_ban,
+      "San luong" -> san_luong, "Chung chi" -> chung_chi).
+      Ca thu ba la ca lam AC-8 co nghia: truoc khi sua ham, "Dia ban" sinh
+      "a_b_n" nen hai tap khoa khong bao gio giao nhau va phep doi chieu trung
+      khoa xanh ma khong chung duoc gi.
+      Cap hai chieu: tra ham ve ban cu (bo buoc bo dau) thi ca ba ca do, va
+      thong diep goi ten dung khoa mong doi.
+    paths:
+      - "packages/db/src/fields-shape.ts"
+      - "packages/db/test/fields.spec.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

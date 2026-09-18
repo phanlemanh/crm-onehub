@@ -28,6 +28,7 @@ executors:
     cp_cho_phep_lai: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t cho-phep-lai"'
     cua_vao_chon_tieng: "cd apps/app && bun test test/locale-resolve.spec.ts"
     cua_vao_kho_chuoi: "cd apps/app && bun test test/auth-messages.spec.ts"
+    trg_khoa_bo_dau: "cd packages/db && bun test test/fields.spec.ts"
     trg_khoa_tham_so: "cd apps/app && bun test lib/search-param-keys.test.ts"
     api: "bun run test"
     api_khong_cache_tru_agent: "bun run test -- --force --filter=!agent"
@@ -85,11 +86,11 @@ executors:
   script:
     trg_tieu_de_trang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs tieu-de-trang"'
     trg_ba_nhom: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs ba-nhom"'
-    trg_bang_muoi_lam: 'node _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs bang-muoi-lam'
-    trg_bo_goi_y: 'node _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs nhom-cong-ty'
-    trg_bo_goi_y_ba_thuc_the: 'node _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs ba-thuc-the'
-    trg_khong_trung_bo_cao: 'node _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs khong-trung-bo-cao'
-    trg_tu_dien: 'node _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs tu-dien'
+    trg_bang_muoi_lam: 'bun _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs bang-muoi-lam'
+    trg_bo_goi_y: 'bun _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs nhom-cong-ty'
+    trg_bo_goi_y_ba_thuc_the: 'bun _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs ba-thuc-the'
+    trg_khong_trung_bo_cao: 'bun _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs khong-trung-bo-cao'
+    trg_tu_dien: 'bun _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs tu-dien'
     trg_duong_vao: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs duong-vao"'
     trg_trang_ba_the: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs ba-the"'
     trg_the_tren_dia_chi: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs the-tren-dia-chi"'

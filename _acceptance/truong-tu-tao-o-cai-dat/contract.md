@@ -47,6 +47,7 @@ Source input: prompt (buổi khai thác 2026-09-18, Cổng Đáng ký `build` c�
 - AC-13: Given chữ «Trường» là từ mới trên màn hình, When đọc từ điển sản phẩm, Then nó có một mục nêu nghĩa và nêu các từ cần tránh.
 - AC-14: Given thực thể đang mở đã có trường, When trang hiện danh sách, Then ba nhóm có mặt với tiêu đề đọc được — trường chuẩn của hệ thống, trường đang dùng, trường đã lưu trữ; nhóm trường chuẩn có ít nhất một phần tử; trên thẻ Cá nhân nhóm đang dùng chứa đủ chín trường của bộ cào; và một trường vừa lưu trữ rời nhóm đang dùng sang nhóm đã lưu trữ. (cross-layer)
 - AC-15: Given bảng mười lăm gợi ý mà người ký đã chốt tại buổi thiết kế, When đối chiếu bộ gợi ý trong sản phẩm với bảng đó, Then khớp từng dòng: đúng mười lăm gợi ý, mỗi dòng đúng thực thể, đúng nhãn nguyên văn, đúng kiểu, và với kiểu một-trong-danh-sách thì đúng bộ lựa chọn cả về số lượng lẫn thứ tự; không dòng nào ngoài bảng.
+- AC-16: Given một nhãn trường bằng tiếng Việt có dấu, When hệ thống sinh khoá máy cho trường đó, Then khoá bỏ dấu mà giữ đủ chữ — «Loại hình» thành `loai_hinh`, «Đất nền» thành `dat_nen`, «Địa bàn» thành đúng `dia_ban` là khoá bộ cào khai tay — nên khoá đọc được và phép đối chiếu trùng khoá ở AC-8 mới có nghĩa.
 
 ## Coverage
 
@@ -111,3 +112,12 @@ này không làm — quyết định ghi trong sổ.
 - Vòng này thay trọn bộ gợi ý, và **khay trượt cũng đọc bộ gợi ý đó**. Nên khay
   không bất động: nội dung nó hiện sẽ đổi. AC-11 vì thế đo sáu việc ở tầng sau
   chứ không chỉ đo khay còn mở được.
+- **AC-16 là phạm vi nới thêm ở bước viết mã, không có trong bản người ký đọc
+  lúc chốt phạm vi.** Lý do: hàm sinh khoá máy bỏ mọi ký tự ngoài chữ La Mã
+  không dấu, nên nhãn tiếng Việt sinh ra khoá rác (`lo_i_h_nh`), và nhãn «Địa
+  bàn» sinh `a_b_n` chứ không phải `dia_ban`. Hệ quả: AC-8 sẽ xanh mà không
+  chứng được gì, vì hai tập khoá không bao giờ giao nhau. Sửa hàm là cách duy
+  nhất làm AC-8 có nghĩa. Hàm nằm ở `packages/db/src/fields-shape.ts`, không
+  phải lược đồ dữ liệu, nên vòng vẫn hạng T2. Trường đã tồn tại giữ khoá cũ:
+  hàm chỉ được gọi lúc tạo trường mới, hai chỗ, không nơi nào sinh lại khoá để
+  tra cứu.
