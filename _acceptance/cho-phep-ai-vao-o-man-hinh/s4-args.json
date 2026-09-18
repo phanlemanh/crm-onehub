@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-18T14:40:17Z",
-  "generated_sha": "1147c00e2884ea786a182fbeb40ed1a2e94b6885",
+  "generated_at": "2026-09-18T15:50:56Z",
+  "generated_sha": "5b19f4f6cfc26c29964c1015607929288f1121c3",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "cho-phep-ai-vao-o-man-hinh",
-  "round": 5,
+  "round": 6,
   "riskTier": "T3",
   "evals": [
     {
@@ -54,14 +54,14 @@
     {
       "id": "E4",
       "criterion": "AC-4",
-      "cmd": "bun run test -- \"cd packages/auth && bun test test/cong-vao.integration.spec.ts -t rut-khong-dung-da-vao\"",
-      "expected": "Mot nguoi DA la thanh vien, loi cho phep o \"accepted\". Rut loi cho phep ay, roi:\n1. hang `member` cua ho VAN con — doc lai tu DB, khong doc bien trong bo nho\n2. ho VAN tao duoc phien moi, va sau luot ay hang `member` van con\nDay la hanh vi CO Y. Chieu do: neu ban sua cho rut cung xoa thanh vien thi chan\nphai DO — do la AC-5 chu khong phai AC-4, va tron hai viec lai la dung cai loi\nma hai khoi tach bach sinh ra de tranh.\nKhong doc duoc hang member -> ma 2.",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t rut-khong-dung-da-vao\"",
+      "expected": "KHEP VONG GHI-DOC nhu E2 va E3, va day la dieu round 4-5 hong vi thieu: ca hai\nluot ghi deu di qua CHINH thu tuc that — `allowEmail` roi `revokeAllowance` cua\nWorkspaceService — KHONG duoc gieo bang Prisma cam tay. Vi the eval nay song o\n`apps/api`, noi goi duoc thu tuc that; o `packages/auth` no khong goi duoc, va\nchieu do duoi day khong bao gio ban duoc.\nTIEN DE doc lai tu DB, khong gieo tay: nguoi ay vao bang duong ket nap that\n(`ensureWorkspaceMembership`), nen dong loi cho phep phai TU chuyen sang\n\"accepted\" — doc lai thay khac thi chan tra ma 2, vi luc ay tien de cua AC-4\nchua dung va phep do dang do mot canh khac (do la canh cua AC-3).\nRoi rut, va do BON quan he — khong ve nao la mot hang co mat mot minh:\n1. dong loi cho phep chuyen sang TRANG_THAI_HUY — doc lai tu DB\n2. SO HANG `member` cua khong gian lam viec TRUOC va SAU khi rut BANG NHAU\n3. hang `member` cua chinh nguoi ay VAN con\n4. ho tao duoc phien moi qua `databaseHooks.session.create.before` that, va\nket qua cua ho BANG ket qua cua mot nguoi CON duoc phep di cung duong —\nday la ve quan he: rut khong doi gi o duong tao phien cua nguoi da vao\nDoi chung duong o ve 4 la bat buoc. Khong co no thi `activeOrganizationId ==\nWORKSPACE_ID` chi la mot hang co mat, khong phan biet duoc \"con vao duoc\" voi\n\"bi chan\" — `ensureWorkspaceMembership` tra cung mot gia tri tren MOI nhanh\nkhong no.\nDay la hanh vi CO Y. Chieu do, chay bang chinh dong lenh nay: sua\n`revokeAllowance` cho xoa luon hang `member` -> chan phai DO o ve 2 va 3; do la\nAC-5 chu khong phai AC-4, va tron hai viec lai la dung cai loi ma hai khoi tach\nbach sinh ra de tranh.\nKhong doc duoc hang member, hoac khong goi duoc thu tuc that -> ma 2.",
       "executor": "test",
       "expectedExit": 0,
       "paths": [
-        "packages/auth/src/allow-list.ts",
+        "apps/api/src/workspace/workspace.service.ts",
         "packages/auth/src/organization.ts",
-        "packages/auth/test/cong-vao.integration.spec.ts"
+        "apps/api/test/workspace-thanh-vien.spec.ts"
       ],
       "ref": "config:executors.test.cp_rut_khong_dung_da_vao"
     },
@@ -262,16 +262,19 @@
   "templatePath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.16.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
   "contractPath": "/Users/manh-macmini/dev/crm/.claude/worktrees/zen-brattain-ac74d0/_acceptance/cho-phep-ai-vao-o-man-hinh/contract.md",
-  "invokedAt": "2026-09-18T14:40:17Z",
-  "invokedSha": "1147c00e2884ea786a182fbeb40ed1a2e94b6885",
+  "invokedAt": "2026-09-18T15:50:56Z",
+  "invokedSha": "5b19f4f6cfc26c29964c1015607929288f1121c3",
   "vungVat": [
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-identity-check-members.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-network.txt",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-member.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json",
+    "_acceptance/config.yaml",
+    "apps/api/test/workspace-thanh-vien.spec.ts",
     "packages/auth/test/cong-vao.integration.spec.ts"
   ],
   "ngoaiVatGlobs": [
@@ -305,6 +308,7 @@
     "_acceptance/cho-phep-ai-vao-o-man-hinh/decisions.jsonl",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence-report.md",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-identity-check-members.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-network.txt",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png",
@@ -313,23 +317,29 @@
     "_acceptance/cho-phep-ai-vao-o-man-hinh/review-findings.md",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/run-log.jsonl",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json",
+    "_acceptance/config.yaml",
+    "apps/api/test/workspace-thanh-vien.spec.ts",
     "packages/auth/test/cong-vao.integration.spec.ts"
   ],
   "fileDoTrongDiff": [
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-identity-check-members.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-network.txt",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-member.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json",
+    "_acceptance/config.yaml",
+    "apps/api/test/workspace-thanh-vien.spec.ts",
     "packages/auth/test/cong-vao.integration.spec.ts"
   ],
   "coverageFiles": [
+    "apps/api/test/workspace-thanh-vien.spec.ts",
     "packages/auth/test/cong-vao.integration.spec.ts"
   ],
   "coEvalPaths": true,
-  "evalsHash": "2af14030837cfd5caee90aea96a34a9bbc059dbfebb6cd2075fa1dab7fdbf0d8",
+  "evalsHash": "1454d06140fe6410294c12c873b9d12d2de83b23d28a07771c7398829e5aad66",
   "runBaseline": true,
   "carriedFindings": [
     {
@@ -367,12 +377,15 @@
   ],
   "deltaFiles": [
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-identity-check-members.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-network.txt",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-member.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json",
+    "_acceptance/config.yaml",
+    "apps/api/test/workspace-thanh-vien.spec.ts",
     "packages/auth/test/cong-vao.integration.spec.ts"
   ],
   "carriedPanels": [
@@ -393,7 +406,7 @@
           "verdict": "PASS"
         }
       ],
-      "fromRound": 4,
+      "fromRound": 5,
       "inputsHash": "b8877955fe4ba1cfd42e75f46b20bbab813c079ab8adee3d560c559e39e46a0f"
     }
   ]

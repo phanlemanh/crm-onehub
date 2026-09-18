@@ -1,126 +1,137 @@
+# Review Findings: cho-phep-ai-vao-o-man-hinh (round 6)
+
 ## Trong hợp đồng
-
-- **Vế `phienSau` đếm đúng hàng mà chính bài kiểm vừa ghi — không thể đỏ một mình, nhưng đọc như số đo cho «vẫn tạo được phiên mới»**
-  - AC: AC-4
-  - file: `packages/auth/test/cong-vao.integration.spec.ts:406`
-  - severity: medium
-  - source: conventions
-  - detail: Dòng 398-399 tự chạy hook rồi tự `db.session.create`; dòng 406 đếm lại hàng session của cùng `userId` và dòng 423 khẳng định `phienSau === 1`. Vì hàng đó do chính bài kiểm ghi, vế này chỉ có thể đỏ khi Prisma nổ — nó không phân biệt được sản phẩm còn cho tạo phiên hay không, tức không chạm vế Then thứ hai của AC-4 theo cách một số đo phải chạm lời hứa. Ba vế thật sự gánh lực phân biệt là `truocKhiDo === TRANG_THAI_HUY` (dòng 420), `activeOrganizationId === WORKSPACE_ID` (dòng 423) và `hang !== null`. Đề nghị: hoặc bỏ `phienSau` để không dựng vẻ bằng chứng, hoặc đổi nó thành vế đọc được từ đường sản phẩm (ví dụ gọi đường đăng nhập thật rồi đếm), và nói rõ trong expected của E4 rằng `phienTruoc === 0` là chốt cách li cữ liệu chứ không phải phép đo AC-4. Chính hợp đồng đã cảnh báo lớp lỗi này ở Ngoài-8.
-
-- **E4 rút bằng `db.invitation.updateMany` trần, không qua `revokeAllowance` — chiều đỏ mà expected khai là bất khả đạt**
-  - AC: AC-4
-  - file: `packages/auth/test/cong-vao.integration.spec.ts:378`
-  - severity: high
-  - source: bugs
-  - detail: Dòng 378 gieo lượt rút bằng `db.invitation.updateMany({ ... data: { status: TRANG_THAI_HUY } })`, và câu chặn mới ở dòng 385 khẳng định ngược lại: "phep do khong con do nhanh rut that". Đường rút thật là `WorkspaceService.revokeAllowance` (apps/api/src/workspace/workspace.service.ts:319-350). Expected của E4 khai nguyên văn chiều đỏ: "neu ban sua cho rut cung xoa thanh vien thi chan phai DO". Kịch bản hỏng cụ thể: thêm `await tx.member.deleteMany({ where: { userId } })` vào `revokeAllowance` — phép đo này vẫn XANH vì nó không gọi hàm ấy; và không suite nào khác bù được, E3 (apps/api/test/workspace-thanh-vien.spec.ts:609) chỉ rút lời cho phép của một địa chỉ CHƯA từng thành thành viên, còn `cho-phep-lai` (dòng 182) và `ghi-hang-co-ten` (dòng 900) cũng vậy. Không có phép đo nào ở kho gọi `revokeAllowance` lên lời cho phép của người ĐÃ là thành viên rồi đọc lại hàng `member`.
-
-- **`phienSau === 1` là khẳng định vòng tròn — chính phép đo ghi hàng session, nên vế "vẫn tạo được phiên mới" của AC-4 vẫn chưa có số đo**
-  - AC: AC-4
-  - file: `packages/auth/test/cong-vao.integration.spec.ts:399`
-  - severity: high
-  - source: bugs
-  - detail: Dòng 398 gọi `hookTruocPhien()(phienCua(nguoiCu.id))` rồi dòng 399 tự `db.session.create({ data: ra.data })`. `phienTruoc` (dòng 394) đọc trước khi create, `phienSau` (dòng 406) đọc sau. Kịch bản hỏng: `phienSau` không thể khác 1 — nếu `db.session.create` nổ thì test đã đỏ ở dòng 399 trước khi tới assertion; nếu nó không nổ thì count luôn là 1. Hai vế 0/1 ở dòng 422-423 vì vậy không loại được hành vi sai nào. Đường tạo phiên thật của better-auth (adapter create + hook `after`/`notifySignedIn`) không chạy; chỉ `databaseHooks.session.create.before` được gọi tay. Lời hứa "ho VAN tao duoc phien moi" trong expected của E4 vẫn chưa có phép đo — chỉ có phép ghi của chính bài kiểm.
-
-- **Hình dạng 3 — assert giá trị WORKSPACE_ID có mặt, trong khi AC-4 hứa quan hệ "đã vào rồi thì rút lời cho phép không chặn được phiên mới"**
-  - AC: AC-4
-  - file: `packages/auth/test/cong-vao.integration.spec.ts:424`
-  - severity: high
-  - source: measurement
-  - detail: Vế mới `phienDaGhi?.activeOrganizationId ?? null` phải bằng `WORKSPACE_ID` (dòng 424, kỳ vọng ở dòng 431). Giá trị này do hook `session.create.before` (packages/auth/src/auth.ts:292-299) lấy từ `ensureWorkspaceMembership(...) ?? null`, và hàm đó trả ĐÚNG `workspace.id` trên MỌI nhánh không nổ: dòng 109 (đã là thành viên), dòng 113 (`if (!decision.allowed) return workspace.id` — tức nhánh BỊ CHẶN), dòng 138 (được nhận); chỉ khối catch dòng 145 trả `undefined`. Nên vế này chỉ phân biệt "giao dịch có nổ hay không", không phân biệt "còn vào được" với "bị chặn" — đúng lớp lỗi đã ghi ở round 4, round này chỉ DỜI khẳng định từ giá trị trả về của hàm sang cột `activeOrganizationId` của hàng session, không chữa. Nặng hơn: người trong phép đo ĐANG là thành viên (dòng 376 `daLaThanhVien`), nên dòng 109 trả về trước khi `decide(email)` được gọi — trạng thái lời cho phép (accepted / canceled / không có dòng nào) KHÔNG hề được đọc trong cả nhánh đo. `activeOrganizationId` sẽ là `WORKSPACE_ID` y như vậy dù bỏ hẳn lượt rút. Thứ duy nhất nối phép đo với trạng thái đã rút là `truocKhiDo` (dòng 389-392), mà đó là đọc lại chính lệnh ghi của bài kiểm.
-
-- **Hình dạng 2 — lượt rút gieo bằng Prisma cầm tay, không đi qua bên ghi thật, nên chiều đỏ mà E4 khai không bao giờ bắn được**
-  - AC: AC-4
-  - file: `packages/auth/test/cong-vao.integration.spec.ts:378`
-  - severity: high
-  - source: measurement
-  - detail: Dòng 378-381 gieo trạng thái đã rút bằng `db.invitation.updateMany({ ..., data: { status: TRANG_THAI_HUY } })`. Đường rút THẬT duy nhất trong kho là `apps/api/src/workspace/workspace.service.ts:340-344` (`revokeAllowance`, ghi `status: TRANG_THAI_HUY` sau khi kiểm quyền và tìm `target`); `packages/auth/src` không có đường rút nào (grep `revoke` chỉ ra `AllowanceRow`). Vì bài kiểm không gọi thủ tục rút, chiều đỏ mà E4 khai trong evals.yaml — "nếu bạn sửa chỗ rút cũng xoá thành viên thì chặn phải ĐỎ" — là chiều đỏ chết: sửa `revokeAllowance` thêm một lệnh xoá `member` thì bài này vẫn XANH, vì nó chỉ cần cột `status` đang là `canceled`. Guard mới ở dòng 383-387 không vá lỗ đó: `daRut.count !== 1` chỉ chứng minh chính lệnh `updateMany` của bài kiểm chạm đúng một hàng, còn thông điệp của nó ("phep do khong con do nhanh rut that") nói ngược điều nó làm — phép đo chưa bao giờ đo nhánh rút thật.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Cổng «hết quyền» chỉ có ở tầng trang — /api/trpc không kiểm tư cách thành viên, mà bằng chứng E12 vẫn chấm clean**
-    Người dùng thấy gì: Người vừa bị gỡ khỏi không gian làm việc nhưng phiên đăng nhập còn sống có thể vẫn lấy được dữ liệu qua các đường gọi ngầm của ứng dụng, dù màn hình chính đã chặn đúng như đã hứa.
-    file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-network.txt`
-    severity: high
-    Đề xuất: new-contract
+- **E4's mandatory "đối chứng" leg cannot fail — ensureWorkspaceMembership returns WORKSPACE_ID on every non-throwing branch**
+  Người dùng thấy gì: Bài kiểm dựng để bắt lỗi khi rút quyền vào không hoạt động đúng — nó có thể báo 'đạt' ngay cả khi tính năng rút quyền bị hỏng thật sự, nên một lỗi ở đây có thể lọt qua mà không ai biết.
+  file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml`
+  severity: high
+  Đề xuất: known-limits
 
-- **`ra.data as PhienGieo` — cast qua `unknown` ở đúng chỗ AGENTS.md cấm, và kiểu khẳng định thiếu chính trường đang được đo**
-    Người dùng thấy gì: Nếu tên trường nội bộ dùng để xác định không gian làm việc bị đổi, bài kiểm có thể không báo lỗi rõ ràng, khiến một lỗi thật liên quan tới việc giữ quyền truy cập lọt qua mà báo cáo vẫn ghi đạt.
-    file: `packages/auth/test/cong-vao.integration.spec.ts`
-    severity: medium
-    Đề xuất: wont-fix
+- **E13's seeding step is ordered after both screenshot steps, though the admin frame cannot exist without it**
+  Người dùng thấy gì: Nếu làm lại đúng theo các bước đã ghi, ảnh chụp màn hình quản trị dùng làm bằng chứng có thể chụp phải một bảng còn trống, khiến bằng chứng không còn phản ánh đúng giao diện thật.
+  file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml`
+  severity: medium
+  Đề xuất: known-limits
 
-- **E13: lượt gieo dòng chờ bằng UI (bước eval mới bắt) không có mặt trong bản dump mạng, và dòng khai xuất xứ của vòng 4 bị mất khi ghi đè**
-    Người dùng thấy gì: Bằng chứng cho thấy một dòng cho phép mới xuất hiện trên màn nhưng không ghi lại được thao tác tạo ra nó thực sự đi qua giao diện, nên khó xác nhận chắc chắn lượt kiểm này phản ánh đúng thao tác thật.
-    file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt`
-    severity: medium
-    Đề xuất: known-limits
+- **E13 evidence uses an owner session where the eval requires role `admin`; the report labels Owner as "đúng phiên vai admin"**
+  Người dùng thấy gì: Bằng chứng cho thấy vai quản trị hoạt động đúng thực ra được chụp từ tài khoản chủ sở hữu, không phải tài khoản quản trị viên thường — nên chưa có gì xác nhận người có vai quản trị viên (không phải chủ) thực sự thao tác được.
+  file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png`
+  severity: medium
+  Đề xuất: known-limits
 
-- **Khung hình E12 sinh bằng `scripts/_e12-capture.mjs` chưa theo dõi, đi ngoài đường `capture.ui` đã khai trong config**
-    Người dùng thấy gì: Khung hình minh hoạ cho màn 'hết quyền' được tạo bằng một công cụ nằm ngoài kho được theo dõi, nên nếu cần dựng lại bằng chứng này sau này có thể không tái tạo được y hệt.
-    file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png`
-    severity: medium
-    Đề xuất: known-limits
+- **E13-network.txt replaced a captured request log with a one-line self-assertion**
+  Người dùng thấy gì: Ghi chép về lỗi mạng khi chụp màn hình quản trị chỉ còn một câu khẳng định 'không thấy lỗi', không còn dữ liệu chi tiết để ai đó kiểm tra lại độc lập.
+  file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt`
+  severity: medium
+  Đề xuất: known-limits
 
-- **`PHIEN_MS` chép lại hạn phiên của sản phẩm thành số ngay trong tệp kiểm**
-    Người dùng thấy gì: Hạn phiên đăng nhập trong bài kiểm được chép tay thay vì lấy từ cấu hình sản phẩm, nên nếu chính sách thời hạn phiên đổi sau này, bài kiểm có thể không phản ánh đúng mà không ai nhận ra.
-    file: `packages/auth/test/cong-vao.integration.spec.ts`
-    severity: low
-    Đề xuất: wont-fix
+- **Dead `trangThai` parameter left in choPhep, typed as loose `string` instead of TrangThaiLoiMoi**
+  Người dùng thấy gì: Một tham số thừa, không còn nơi nào dùng tới, vẫn còn sót lại trong mã kiểm thử — không ảnh hưởng người dùng.
+  file: `packages/auth/test/cong-vao.integration.spec.ts`
+  severity: low
+  Đề xuất: wont-fix
 
-- **E13: bước gieo dòng cho vào bảng đứng SAU cả hai bước chụp khung hình — chạy đúng thứ tự thì khung `admin` không có nút rút, sinh ĐỎ giả**
-    Người dùng thấy gì: Nếu chạy lại đúng thứ tự bước hiện ghi trong tệp kiểm, có thể xuất hiện báo lỗi giả cho khả năng thao tác của người quản trên màn Thành viên, dù sản phẩm đang làm đúng.
-    file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml`
-    severity: medium
-    Đề xuất: known-limits
+- **E4 vế 4–5 (đối chứng đường tạo phiên) không có chiều đỏ — khẳng định luôn đúng bất kể sản phẩm hỏng hay không**
+  Người dùng thấy gì: Bài kiểm dựng để đối chứng đường tạo phiên đăng nhập không thể bắt được lỗi thật, nên một lỗi ở khâu này có thể không bị phát hiện dù bài kiểm báo đạt.
+  file: `apps/api/test/workspace-thanh-vien.spec.ts`
+  severity: high
+  Đề xuất: known-limits
 
-- **Bằng chứng E13 không có POST nào — dòng seed hiện trên khung admin không chứng được là vào qua UI như bước 324 đòi**
-    Người dùng thấy gì: Bằng chứng không ghi lại được thao tác tạo dòng cho phép mới trên màn quản trị, nên khó xác nhận chắc chắn nó được tạo đúng qua giao diện như bước kiểm đòi hỏi.
-    file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt`
-    severity: medium
-    Đề xuất: known-limits
+- **Cho phép lại một người ĐANG là thành viên để lại dòng `pending` treo vĩnh viễn — thành viên hiện tại bị liệt vào "chưa vào"**
+  Người dùng thấy gì: Nếu quản trị viên cho phép lại một người vốn ĐÃ đang là thành viên, hệ thống có thể tạo ra một dòng 'đang chờ' thừa, khiến người đó bị hiển thị nhầm là 'chưa vào' dù họ vẫn đang là thành viên, và các lần cho phép sau cho đúng địa chỉ đó có thể bị từ chối vì tưởng đã có sẵn.
+  file: `packages/auth/src/organization.ts`
+  severity: medium
+  Đề xuất: new-contract
 
-- **`ra.data as PhienGieo` là cast `unknown` trần, và `PhienGieo` không khai `activeOrganizationId` — đúng trường mà assertion đọc**
-    Người dùng thấy gì: Nếu tên trường lưu không gian làm việc đang hoạt động bị đổi, bài kiểm có thể báo lỗi không chỉ rõ nguyên nhân, khiến việc xác minh quyền truy cập khó theo dõi hơn.
-    file: `packages/auth/test/cong-vao.integration.spec.ts`
-    severity: low
-    Đề xuất: wont-fix
+- **Vế `doiChungConThanhVien` tự lành: `phienMoi` chạy trước nó và tái kết nạp hàng member của người đối chứng**
+  Người dùng thấy gì: Do thứ tự các bước kiểm tra, một lỗi khiến tư cách thành viên của người đối chứng bị mất có thể không bị bài kiểm phát hiện, vì một bước trước đó vô tình khôi phục lại đúng dữ liệu mà bài kiểm định đo.
+  file: `apps/api/test/workspace-thanh-vien.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
 
-- **E13-network.txt khai persona đối chứng là `admin` trong khi khung hình cho thấy vai Owner**
-    Người dùng thấy gì: Bằng chứng ghi nhãn vai 'quản trị' cho một người thật ra giữ vai 'chủ', nên nếu sau này có lỗi chỉ ảnh hưởng riêng vai quản trị, bộ bằng chứng hiện tại sẽ không phát hiện được.
-    file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt`
-    severity: low
-    Đề xuất: known-limits
+- **E4 `paths` bỏ mất `packages/auth/src/allow-list.ts` và `packages/auth/src/auth.ts` — đúng hai file mà hai vế trung tâm của test mới chạy qua**
+  Người dùng thấy gì: Bài kiểm cho một phần quan trọng của tính năng không tự động chạy lại khi có người sửa đúng những file trung tâm xử lý việc cho phép vào — một lỗi ở đó có thể đi qua mà không bị bắt lại.
+  file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml`
+  severity: medium
+  Đề xuất: known-limits
 
-- **Hình dạng 4 — đối chứng dương của E13 không cùng trạng thái dữ liệu với khung âm: bước gieo dòng xếp SAU cả hai lần chụp**
-    Người dùng thấy gì: Nếu chạy lại đúng thứ tự bước kiểm hiện ghi, khung hình đối chứng có thể chụp lúc bảng còn rỗng và sinh báo lỗi giả cho khả năng thao tác trên màn Thành viên.
-    file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml`
-    severity: medium
-    Đề xuất: known-limits
+- **Hai khung hình bằng chứng lệch nhau ~27 phút, trái với thứ tự `verified_at` và lời khai "cùng phiên chụp" trong evidence-report**
+  Người dùng thấy gì: Hai ảnh chụp dùng làm bằng chứng có thời điểm lệch nhau khoảng 27 phút so với những gì báo cáo mô tả, khiến thứ tự sự kiện trong báo cáo không khớp với chính ảnh chụp đính kèm.
+  file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png`
+  severity: medium
+  Đề xuất: known-limits
+
+- **`phienMoi` đọc lại bằng `findFirst` theo userId và cast bỏ chính trường đang đo**
+  Người dùng thấy gì: Cách đọc lại dữ liệu trong bài kiểm không đủ chặt chẽ — nếu có nhiều hơn một bản ghi liên quan, bài kiểm có thể đọc nhầm bản ghi và cho kết quả không đáng tin, dù đây chỉ ảnh hưởng nội bộ bài kiểm, không ảnh hưởng người dùng.
+  file: `apps/api/test/workspace-thanh-vien.spec.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Tham số `trangThai` mới của `choPhep` là code chết — người dùng duy nhất của nó bị xoá trong cùng diff**
+  Người dùng thấy gì: Một tham số thừa khác, không còn nơi nào dùng tới, vẫn còn sót lại trong mã kiểm thử — không ảnh hưởng người dùng.
+  file: `packages/auth/test/cong-vao.integration.spec.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **E13-network.txt thu về một dòng khẳng định, không khai origin/cổng — không chứng minh được nó đo cây đang xét**
+  Người dùng thấy gì: Ghi chép về mạng cho bằng chứng thiếu thông tin cổng/địa chỉ đang đo, nên không ai đọc lại có thể chắc chắn bằng chứng đó đo đúng bản đang xét chứ không phải một bản đang chạy sẵn ở máy khác.
+  file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 3 — assert "hằng có mặt" trong khi lời hứa là quan hệ: vế 4 của `rut-khong-dung-da-vao` là tautology, không bao giờ đỏ được**
+  Người dùng thấy gì: Cùng một bài kiểm đối chứng ở trên (vế 4) — nó không thể bắt được lỗi thật vì phép so sánh dùng một giá trị luôn cố định, không phải giá trị phản ánh đúng trạng thái sản phẩm.
+  file: `apps/api/test/workspace-thanh-vien.spec.ts`
+  severity: high
+  Đề xuất: known-limits
+
+- **Hình dạng 6 — đường dẫn hardcode ROOT: `inputs` của E14 ghim tuyệt đối vào worktree của tác giả**
+  Người dùng thấy gì: Một cấu hình đo dùng đường dẫn cố định trỏ vào đúng một bản sao trên máy của người viết; chạy lại trên một máy hoặc một bản sao khác, phần đo này có thể đọc nhầm file hoặc báo lỗi mà không ai để ý.
+  file: `_acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4 — đối chứng dương bắt buộc không với tới được: bước gieo dòng của E13 đặt SAU cả hai bước chụp**
+  Người dùng thấy gì: Trùng với phát hiện ở trên: nếu làm đúng theo thứ tự các bước đã ghi, ảnh chụp bằng chứng cho quản trị viên có thể chụp phải một bảng còn trống, không thể hiện đủ các thao tác mà bài kiểm yêu cầu phải thấy.
+  file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 1 — ghi lời khai thay vì đầu ra: `E13-network.txt` bị thay bằng một câu khẳng định, không còn log yêu cầu nào**
+  Người dùng thấy gì: Trùng với phát hiện ở trên: ghi chép mạng dùng làm bằng chứng chỉ còn một câu khẳng định, không còn dữ liệu chi tiết nào để kiểm tra lại độc lập.
+  file: `_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt`
+  severity: low
+  Đề xuất: known-limits
 
 - **Cột staffEmailDomains không có đường ghi và không có backfill — hai đường đọc "người nhà" mất sạch domain (r3)**
-    Người dùng thấy gì: Nếu chưa có nơi nào để nhập danh sách domain công ty, tính năng lọc 'đây là đồng nghiệp mình' sẽ luôn coi ai cũng là người ngoài — nhân viên mới có thể bị ghi nhầm thành khách hàng tiềm năng trong CRM.
-    file: `apps/api/src/workspace/staff-domains.ts`
-    severity: high
-    Đề xuất: new-contract
+  Người dùng thấy gì: Nếu chưa có nơi nào để nhập danh sách domain công ty, tính năng lọc 'đây là đồng nghiệp mình' sẽ luôn coi ai cũng là người ngoài — nhân viên mới có thể bị ghi nhầm thành khách hàng tiềm năng trong CRM.
+  file: `apps/api/src/workspace/staff-domains.ts`
+  severity: high
+  Đề xuất: new-contract
 
 - **`staff-domains.ts` tự đúc hằng `APP_SETTING_ID` và đọc `findFirst` không khoá theo id, lệch pattern của cả kho (r3)**
-    Người dùng thấy gì: Nếu bảng cài đặt từng có hơn một dòng, màn hình có thể âm thầm đọc nhầm danh sách domain nội bộ, khiến việc nhận diện email nhân viên hoặc lọc số liệu truy cập sai mà không ai biết.
-    file: `apps/api/src/workspace/staff-domains.ts`
-    severity: medium
-    Đề xuất: known-limits
+  Người dùng thấy gì: Nếu bảng cài đặt từng có hơn một dòng, màn hình có thể âm thầm đọc nhầm danh sách domain nội bộ, khiến việc nhận diện email nhân viên hoặc lọc số liệu truy cập sai mà không ai biết.
+  file: `apps/api/src/workspace/staff-domains.ts`
+  severity: medium
+  Đề xuất: known-limits
 
 - **Cột staffEmailDomains không có đường ghi và migration không backfill — lọc "địa chỉ nhà" ở tracking tắt hẳn, âm thầm (r3)**
-    Người dùng thấy gì: Nếu chưa có nơi nào để nhập danh sách domain công ty, các mẫu đăng ký do chính nhân viên điền bằng email công ty có thể bị tính nhầm thành khách hàng tiềm năng thật, làm sai lệch số liệu tiếp thị mà không ai nhận ra.
-    file: `apps/api/src/workspace/staff-domains.ts`
-    severity: high
-    Đề xuất: new-contract
+  Người dùng thấy gì: Nếu chưa có nơi nào để nhập danh sách domain công ty, các mẫu đăng ký do chính nhân viên điền bằng email công ty có thể bị tính nhầm thành khách hàng tiềm năng thật, làm sai lệch số liệu tiếp thị mà không ai nhận ra.
+  file: `apps/api/src/workspace/staff-domains.ts`
+  severity: high
+  Đề xuất: new-contract
 
 - **Câu từ chối ở cổng vào vẫn chỉ người dùng đi sửa .env, trong khi mô hình mới quyết bằng bảng cho phép (r3)**
-    Người dùng thấy gì: Với một hệ thống đã có người dùng, khi có người mới bị từ chối vào, thông báo họ nhận được hướng dẫn sửa một file cấu hình không còn tác dụng nữa, khiến quản trị viên loay hoay sai hướng thay vì vào màn Members để cấp quyền.
-    file: `packages/auth/src/auth.ts`
-    severity: low
-    Đề xuất: known-limits
+  Người dùng thấy gì: Với một hệ thống đã có người dùng, khi có người mới bị từ chối vào, thông báo họ nhận được hướng dẫn sửa một file cấu hình không còn tác dụng nữa, khiến quản trị viên loay hoay sai hướng thay vì vào màn Members để cấp quyền.
+  file: `packages/auth/src/auth.ts`
+  severity: low
+  Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 7/15 lỗi rơi vào file không bộ đo nào phủ (_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-network.txt, _acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt, _acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png, _acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+## Chưa adversarial-verify (refuter chết)
+
+⚠ Cụm ngoài vùng phủ: 10/17 lỗi rơi vào file không bộ đo nào phủ (_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml, _acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png, _acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt, _acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
