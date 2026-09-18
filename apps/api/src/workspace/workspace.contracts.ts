@@ -21,6 +21,50 @@ export const updateWorkspaceInput = z.object({
 		.optional(),
 });
 
+export const ALLOWANCE_STATUSES = [
+	"pending",
+	"accepted",
+	"rejected",
+	"canceled",
+	"unknown",
+] as const;
+
+export const allowanceOutput = z.object({
+	id: z.string(),
+	email: z.string(),
+	role: z.enum(WORKSPACE_ROLES),
+	status: z.enum(ALLOWANCE_STATUSES),
+	invitedByName: z.string().nullable(),
+	createdAt: z.string(),
+});
+
+export type Allowance = z.infer<typeof allowanceOutput>;
+
+export const allowanceListOutput = z.object({
+	rows: z.array(allowanceOutput),
+});
+
+export const allowEmailInput = z.object({
+	email: z.string().trim().min(1).max(255),
+	role: z.enum(WORKSPACE_ROLES),
+});
+
+export const revokeAllowanceInput = z.object({
+	allowanceId: z.string().min(1),
+});
+
+export const removeMemberInput = z.object({
+	memberId: z.string().min(1),
+});
+
+export const removeMemberOutput = z.object({
+	memberId: z.string(),
+});
+
+export type AllowEmailInput = z.infer<typeof allowEmailInput>;
+export type RevokeAllowanceInput = z.infer<typeof revokeAllowanceInput>;
+export type RemoveMemberInput = z.infer<typeof removeMemberInput>;
+
 export const setMemberRoleInput = z.object({
 	memberId: z.string().min(1),
 	role: z.enum(WORKSPACE_ROLES),
@@ -38,6 +82,7 @@ export const workspaceOutput = z.object({
 	viewerRole: z.enum(WORKSPACE_ROLES).nullable(),
 	canRename: z.boolean(),
 	canChangeRoles: z.boolean(),
+	canManageMembers: z.boolean(),
 });
 
 export type Workspace = z.infer<typeof workspaceOutput>;

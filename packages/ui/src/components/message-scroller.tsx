@@ -67,11 +67,15 @@ function MessageScrollerContent({
 function MessageScrollerItem({
   className,
   scrollAnchor = false,
+  userContent = false,
   ...props
-}: React.ComponentProps<typeof MessageScrollerPrimitive.Item>) {
+}: React.ComponentProps<typeof MessageScrollerPrimitive.Item> & {
+  userContent?: boolean
+}) {
   return (
     <MessageScrollerPrimitive.Item
       data-slot="message-scroller-item"
+      data-user-content={userContent ? "" : undefined}
       scrollAnchor={scrollAnchor}
       className={cn(
         "min-w-0 shrink-0 [contain-intrinsic-size:auto_10rem] [content-visibility:auto]",

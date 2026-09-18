@@ -45,6 +45,7 @@ const en = {
 		ngayNamIm: (so: string) => `${so}+ days inactive`,
 		conNua: "More results available",
 		duongOng: (ten: string) => `${ten} pipeline`,
+		tongGiaTri: (ten: string) => `${ten} total`,
 	},
 };
 
@@ -52,7 +53,7 @@ export type KetQuaMessages = typeof en;
 
 const vi = {
 	ma: {
-		danhSachTep: "Các tệp tác nhân sinh ra",
+		danhSachTep: "Các tệp đã dựng của tác nhân",
 		dangDoc: "Đang đọc mã tác nhân",
 		dangGhi: "Đang ghi mã tác nhân",
 		tieuDe: "Mã tác nhân",
@@ -81,7 +82,7 @@ const vi = {
 			company: "Công ty",
 			stage: "Giai đoạn",
 			amount: "Giá trị",
-			owner: "Người phụ trách",
+			owner: "Phụ trách",
 			closeDate: "Ngày chốt",
 			idle: "Nằm im",
 		},
@@ -93,7 +94,8 @@ const vi = {
 		soThoaThuan: (so: string) => `${so} thoả thuận`,
 		ngayNamIm: (so: string) => `nằm im từ ${so} ngày`,
 		conNua: "Còn kết quả nữa",
-		duongOng: (ten: string) => `đường ống ${ten}`,
+		duongOng: (ten: string) => `${ten} đang mở`,
+		tongGiaTri: (ten: string) => `tổng ${ten}`,
 	},
 } satisfies KetQuaMessages;
 

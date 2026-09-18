@@ -16,7 +16,9 @@ const LANDING_PATH = "/";
 
 const SIGN_IN_PATH = "/sign-in";
 
-const UNGATED = ["/grant-access", "/eve"];
+const NO_WORKSPACE_PATH = "/het-quyen";
+
+const UNGATED = ["/grant-access", "/eve", NO_WORKSPACE_PATH];
 
 const SECTIONS = [
 	"/campaigns",
@@ -57,6 +59,10 @@ export async function proxy(request: NextRequest) {
 		readWorkspaceGate(request),
 		readResearchGate(request),
 	]);
+
+	if (workspace.inWorkspace === false) {
+		return sendTo(NO_WORKSPACE_PATH, request);
+	}
 
 	if (workspace.gate === "required") return sendTo(ONBOARDING_PATH, request);
 	if (research === "required") return sendTo(RESEARCH_PATH, request);

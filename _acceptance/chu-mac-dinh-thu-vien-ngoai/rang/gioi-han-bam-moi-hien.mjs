@@ -1,11 +1,12 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { docTep } from "../../man-cai-dat-noi-tieng-viet/rang/tep-thay.mjs";
 import { GOC } from "../../man-cai-dat-noi-tieng-viet/rang/lat.mjs";
 import { docComponent } from "./khai-sinh.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const BANG = JSON.parse(readFileSync(join(HERE, "gioi-han-bam-moi-hien.json"), "utf8"));
+const BANG = JSON.parse(docTep(join(HERE, "gioi-han-bam-moi-hien.json")));
 const MO_DONG = /\b(Trigger|Content|Portal|Overlay|open|onOpenChange)\b/;
 
 const dia = docComponent();

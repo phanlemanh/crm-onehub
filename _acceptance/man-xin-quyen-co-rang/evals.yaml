@@ -1,0 +1,237 @@
+schema_version: 1
+feature_slug: man-xin-quyen-co-rang
+
+# Dieu khoan chung cho MOI chieu do duoi day. Chieu do KHONG duoc do bang cach doc
+# lai file da dot bien tu dia: lam vay thi chieu xanh do man dung con chieu do do
+# file, hai thuoc khac lop va cap hai chieu thanh gia. Moi chieu do phai:
+#   1. dung ban sao da dot bien o CONG_SAO (mac dinh 3200), APP_URL/API_URL tro vao
+#      dung cong do — khong tro ve checkout chinh;
+#   2. chay chotMayChu() cua may-chu.mjs TREN BAN SAO truoc khi khang dinh, de chac
+#      may chu dang phuc vu dung cay da dot bien; sai cay thi thoat ma 2;
+#   3. suy duong dan tu vi tri script, khong hardcode goc kho.
+# Thieu mot trong ba dieu do thi chieu do khong tinh la da chay.
+chieu_do_dung_ban_sao: true
+
+evals:
+
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.xin_quyen_chuoi
+    expected: >-
+      exit 0. Gieo tai khoan thieu quyen CA HAI nha cung cap, dung /grant-access
+      hai lan tren may chu that — lang=vi va lang=en — roi doc chu NGUOI DOC THAY
+      tren man, khong doc ma nguon.
+      Voi TUNG o trong NAM o ghim — tieu de man, mo ta man, cau rieng tu, chu tren
+      nut cap quyen, chu tren nut dang xuat — khang dinh QUAN HE ba ve: chuoi luot
+      vi KHAC chuoi luot en, VA chuoi luot vi mang dau tieng Viet, VA chuoi luot en
+      dung ban tieng Anh da ghim. So o do duoc phai BANG nam.
+      THEM mot khang dinh chong bo chon trung: nam chuoi vi thu duoc phai KHAC NHAU
+      tung doi mot. Hai o cung bat mot phan tu van dem du nam ma khong lo ra, nen
+      thieu khang dinh nay thi con so nam khong chung duoc gi.
+      Man chuyen huong ve / thi thoat ma 2 va goi ten — khong phai mot luot dat.
+      Chieu do chay NAM lan, moi lan dot bien MOT khoa khac nhau trong nam o, va moi
+      lan chan phai do VA goi ten DUNG khoa vua bi dot bien. Mot lan do ma goi sai ten
+      khoa cung la that bai cua chieu do. Cap hai chieu chay tren cung fixture.
+    paths:
+      - "apps/app/app/(landing)/grant-access/**"
+      - "apps/app/lib/messages/auth.ts"
+      - "apps/app/components/auth-shell.tsx"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.xin_quyen_ba_nhanh
+    expected: >-
+      exit 0. Gieo HAI trang thai khac nhau va dung man THAT cho tung trang thai:
+      (a) tai khoan chi thieu quyen Google -> khang dinh cau mo ta dung ra BANG cau
+      cua khoa google VA KHAC cau cua khoa both;
+      (b) tai khoan thieu quyen ca hai -> khang dinh cau dung ra BANG cau cua khoa both.
+      Hai khang dinh do doc tu MAN DA DUNG, khong doc kho chuoi.
+      Nhanh chi-Microsoft do o lop kho chuoi: ba cau khac nhau tung doi mot trong moi
+      thu tieng, so cap khac nhau BANG ba o vi va BANG ba o en. Chan PHAI IN RA dong
+      gioi han "nhanh chi-Microsoft chua render that" — im lang la that bai.
+      Chieu do hai lan: (1) dat khoa microsoft bang khoa both tren mot ban sao thi chan
+      do va goi ten dung hai nhanh trung nhau; (2) sua nhanh Google tren ban sao de no
+      tra ve cau cua khoa both thi chan do va goi ten dung nhanh google — day la ca ma
+      lop kho chuoi mot minh KHONG bat duoc.
+    paths:
+      - "apps/app/lib/messages/auth.ts"
+      - "apps/app/app/(landing)/grant-access/**"
+      - "packages/auth/src/scopes.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.xin_quyen_khong_dich
+    expected: >-
+      exit 0. Tren man THAT da dung o tieng Viet, tim phan tu chua ten nha cung cap
+      trong chu tren nut cap quyen.
+      Khang dinh HAI ve: ten do hien nguyen van GIONG HET luot tieng Anh, VA phan tu
+      chua no mang thuoc tinh translate="no".
+      Khong tim thay phan tu do thi thoat ma 2 va in nguyen van chu tren nut — tap
+      quan sat rong khong bao gio la dat.
+      Chieu do: go thuoc tinh translate="no" khoi span tren mot ban sao thi chan do
+      va in nguyen van phan tu thieu dau.
+    paths:
+      - "apps/app/app/(landing)/grant-access/grant-access.tsx"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.xin_quyen_ghep_dong
+    expected: >-
+      exit 0. Doc kho chuoi apps/app/lib/messages/auth.ts.
+      Khang dinh grantAccess.grant la MOT HAM nhan ten nha cung cap, o ca hai thu
+      tieng; va khong gia tri chuoi nao trong khoi grantAccess chua san ten mot nha
+      cung cap cu the (Google, Microsoft, Outlook, Gmail) duoi dang mot cau tron ven.
+      Chieu do: thay grant bang mot chuoi dung san "Grant Google access" tren mot ban
+      sao thi bai kiem do va goi ten khoa do.
+    paths:
+      - "apps/app/lib/messages/auth.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.xin_quyen_dang_cap
+    expected: >-
+      exit 0. MO trang thai dang cap that bang cach chan luot goi ra nha cung cap,
+      roi doc chu tren nut o trang thai do, o ca hai thu tieng.
+      Khang dinh quan he: chuoi luot vi KHAC chuoi luot en, VA chuoi luot vi mang dau
+      tieng Viet; VA nut bi khoa o trang thai do.
+      Khong mo duoc trang thai do thi thoat ma 2 va goi ten trang thai thieu — khong
+      duoc suy tu ma nguon.
+      Chieu do: go khoa granting ve tieng Anh tren mot ban sao thi chan do va goi ten
+      khoa do.
+    paths:
+      - "apps/app/app/(landing)/grant-access/grant-access.tsx"
+      - "apps/app/lib/messages/auth.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.xin_quyen_loi_nha_cung_cap
+    expected: >-
+      exit 0. EP DUT MANG THAT o luot bam nut cap quyen, roi doc CHU TRONG THONG BAO
+      NOI hien ra, o ca hai thu tieng.
+      Khang dinh quan he: chuoi luot vi KHAC chuoi luot en, VA chuoi luot vi mang dau
+      tieng Viet.
+      Khong bat duoc thong bao thi thoat ma 2 va goi ten trang thai thieu.
+      Chieu do: go khoa error.provider ve tieng Anh tren mot ban sao thi chan do va in
+      nguyen van cau do.
+    paths:
+      - "apps/app/app/(landing)/grant-access/grant-access.tsx"
+      - "apps/app/lib/messages/auth.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.xin_quyen_loi_dang_xuat
+    expected: >-
+      exit 0. EP LUOT DANG XUAT THAT BAI (chan luot goi dang xuat), bam nut dang xuat
+      tren /grant-access, roi doc CHU TRONG THONG BAO NOI hien ra, o ca hai thu tieng.
+      Khang dinh quan he: chuoi luot vi KHAC chuoi luot en, VA chuoi luot vi mang dau
+      tieng Viet. Mot cau tieng Anh cung hien o luot vi la chan DO va in nguyen van.
+      Day la muc no nang da ghi o _acceptance/NO-CAN-TRA.md — chan nay la thuoc tra no.
+      Khong ep duoc luot dang xuat that bai thi thoat ma 2, khong phai mot luot dat.
+      Chieu do: go khoa error.signOut ve tieng Anh tren mot ban sao thi chan do va goi
+      ten khoa do.
+    paths:
+      - "apps/app/app/(landing)/grant-access/grant-access.tsx"
+      - "apps/app/lib/sign-out.ts"
+      - "apps/app/lib/messages/auth.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.xin_quyen_tieu_de_tai_lieu
+    expected: >-
+      exit 0. Dung /grant-access hai lan, hai thu tieng, doc tieu de tai lieu that do
+      may chu tra ve.
+      Khang dinh quan he: tieu de luot vi KHAC tieu de luot en, VA tieu de luot vi mang
+      dau tieng Viet.
+      Chieu do: dat docTitle.grantAccess cua ban vi bang ban en tren mot ban sao thi
+      chan do va in ca hai tieu de.
+    paths:
+      - "apps/app/app/(landing)/grant-access/page.tsx"
+      - "apps/app/lib/messages/auth.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.xin_quyen_be_rong
+    expected: >-
+      exit 0. Dung /grant-access o tieng Viet tren BA kho man 768, 1024 va 1280, do BE
+      RONG CHU THAT dung ra — khong suy tu so ky tu.
+      Ma tran viet TRUOC, khong suy tu runtime: NAM o ghim cua AC-1 (tieu de man, mo ta
+      man, cau rieng tu, chu tren nut cap quyen, chu tren nut dang xuat) nhan BA kho man
+      = MUOI LAM khang dinh. So khang dinh thuc hien phai BANG muoi lam.
+      Bo chon bat duoc it hon nam o tren mot kho man nao do la TU CHOI DO: thoat ma 2 va
+      goi ten o thieu. TUYET DOI khong duoc dem duoc bao nhieu thi assert bay nhieu —
+      dung cai bay do lam mot o sot khong phan biet duoc voi mot o dat.
+      Chieu do chay HAI lan, o HAI o KHAC nhau, mot trong hai BAT BUOC la chu tren nut
+      dang xuat (o xa nhat khoi than man, de sot nhat): nhet mot chuoi tieng Viet dai gap
+      ba vao khoa do tren mot ban sao thi chan phai do va goi ten dung khoa do cung kho
+      man bi tran.
+    paths:
+      - "apps/app/app/(landing)/grant-access/**"
+      - "apps/app/lib/messages/auth.ts"
+      - "apps/app/components/auth-shell.tsx"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E10
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.xin_quyen_chup_san
+    steps:
+      - "Chay DUNG MOT LAN lenh chup-san cua thuoc"
+      - "Lenh tu gieo trang thai, tu khang dinh dang dung o /grant-access va tieu de tai lieu khop ban khai, roi chup hai khung hinh"
+      - "Doc hai anh sinh ra trong evidence/"
+    expected: >-
+      exit 0, dong CUOI CUNG bat dau bang "DAT:". Chan nay giu lop NHIN THAY cho
+      hop dong: no de lai HAI khung hinh cua man that, mot tieng Viet mot tieng Anh,
+      va moi khung tu khang dinh danh tinh TRUOC khi chup.
+      Hai doi chung duong, kiem ngay trong luot chay cua chinh no: (1) duong cuoi
+      cung sau khi dung la /grant-access; (2) tieu de tai lieu chua dung chuoi cua
+      kho chuoi o thu tieng do. Sai mot trong hai thi thoat ma 2 va KHONG chup anh
+      nao — mot luot do NHAM MAN khong duoc phep trong giong mot luot dat.
+      Anh ghi ra phai ton tai va lon hon nguong 1000 byte, khong thi thoat ma 2.
+      SAN THIET KE KHONG con nam trong chan nay. S4 vong 1 da chung minh bon duong
+      chay san deu cho so 0 rong nghia tren man nay — xem Known limits cua hop dong.
+      Mot so 0 khong tinh duoc khong phai mot lan dat.
+      Chieu do: ep man chuyen huong di (sua dieu kien o page.tsx tren mot ban sao)
+      thi chan phai thoat ma 2 va goi ten duong no bi day ve, chu khong chup hai anh
+      cua mot man khac roi bao sach.
+    paths:
+      - "apps/app/app/(landing)/grant-access/**"
+      - "apps/app/components/auth-shell.tsx"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E11
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.xin_quyen_tien_de
+    expected: >-
+      exit 0. Chan nay do CHINH TIEN DE, khong do noi dung man.
+      Ba khang dinh: (1) sau khi gieo, mailboxGrantsNeeded cua nguoi dung do tra mang
+      KHAC RONG; (2) mo /grant-access voi cookie phien do KHONG bi chuyen huong ve /;
+      (3) khi gieo bi go bo, mo cung duong AY thi BI chuyen huong ve / — tuc thuoc phan
+      biet duoc hai trang thai chu khong phai luc nao cung xanh.
+      Khang dinh (3) la doi chung duong cua chinh phep gieo: thieu no thi mot buoc gieo
+      hong trong giong het mot buoc gieo tot.
+      Chieu do: chay chan nay khi CHUA gieo gi thi no phai thoat ma 2 va goi ten trang
+      thai thieu, khong duoc thoat 0.
+    paths:
+      - "apps/api/scripts/**"
+      - "packages/auth/src/scopes.ts"
+      - "apps/app/app/(landing)/grant-access/page.tsx"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

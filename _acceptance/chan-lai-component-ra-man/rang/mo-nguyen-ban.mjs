@@ -1,16 +1,15 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { duongLuot, xoaTaoPhamCu } from "./luot-chay.mjs";
 
 const GOC = join(import.meta.dirname, "..", "..", "..");
-const TAO_PHAM = join(
-	GOC,
-	"_acceptance/chan-lai-component-ra-man/evidence/mo-nguyen-ban.json",
-);
+const TAO_PHAM = duongLuot("mo-nguyen-ban.json");
 
 export const NEO_DONG = 9;
 
 export function chayBoVe() {
+	xoaTaoPhamCu("mo-nguyen-ban.json");
 	try {
 		execFileSync(
 			"bun",

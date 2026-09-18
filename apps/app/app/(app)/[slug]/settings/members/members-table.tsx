@@ -17,6 +17,7 @@ import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { toast } from "sonner";
 import { ListSearch } from "@/components/data-table/list-search";
 import { useTableQuery } from "@/components/data-table/use-table-query";
@@ -28,6 +29,7 @@ import {
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { ConfirmDialog } from "./confirm-dialog";
 import { membersSearchParams } from "./members-search-params";
 
 type Role = keyof ThanhVienMessages["vaiTro"];
@@ -41,7 +43,9 @@ function roles(t: ThanhVienMessages): Role[] {
 function columns(
 	t: ThanhVienMessages,
 	canChangeRoles: boolean,
+	canManageMembers: boolean,
 	onChangeRole: (member: MemberRow, role: Role) => void,
+	onRemove: (member: MemberRow) => void,
 	pending: boolean,
 ): DataTableColumn<MemberRow>[] {
 	return [
@@ -54,6 +58,7 @@ function columns(
 			cell: (row) => (
 				<span className="flex min-w-0 items-center gap-2">
 					<PersonAvatar
+						translate="no"
 						size="sm"
 						src={row.image}
 						name={row.name}
@@ -111,7 +116,7 @@ function columns(
 			align: "right",
 			width: "w-[6%]",
 			cell: (row) =>
-				canChangeRoles ? (
+				canChangeRoles || canManageMembers ? (
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" size="icon" disabled={pending}>
@@ -121,18 +126,29 @@ function columns(
 						</DropdownMenuTrigger>
 
 						<DropdownMenuContent align="end">
-							{roles(t).map((role) => (
+							{canChangeRoles
+								? roles(t).map((role) => (
+										<DropdownMenuItem
+											key={role}
+											data-checked={row.role === role}
+											onSelect={() => {
+												if (row.role === role) return;
+												onChangeRole(row, role);
+											}}
+										>
+											{t.vaiTro[role]}
+										</DropdownMenuItem>
+									))
+								: null}
+
+							{canManageMembers && !row.isViewer ? (
 								<DropdownMenuItem
-									key={role}
-									data-checked={row.role === role}
-									onSelect={() => {
-										if (row.role === role) return;
-										onChangeRole(row, role);
-									}}
+									variant="destructive"
+									onSelect={() => onRemove(row)}
 								>
-									{t.vaiTro[role]}
+									{t.go}
 								</DropdownMenuItem>
-							))}
+							) : null}
 						</DropdownMenuContent>
 					</DropdownMenu>
 				) : null,
@@ -162,6 +178,23 @@ export function MembersTable() {
 		}),
 	);
 
+	const [dangGo, setDangGo] = useState<MemberRow | null>(null);
+
+	const remove = useMutation(
+		trpc.workspace.removeMember.mutationOptions({
+			onSuccess: async () => {
+				setDangGo(null);
+				await cache.workspace();
+				await members.refetch();
+				toast.success(t.xacNhan.go.xong);
+			},
+			onError: (error) => {
+				setDangGo(null);
+				toast.error(error.message);
+			},
+		}),
+	);
+
 	const facetCounts = members.data?.facetCounts;
 
 	const facets: DataTableFacet[] = [
@@ -177,22 +210,41 @@ export function MembersTable() {
 	];
 
 	return (
-		<DataTable
-			query={query}
-			search={<ListSearch placeholder={t.bang.tim} />}
-			columns={columns(
-				t,
-				workspace.data?.canChangeRoles ?? false,
-				(member, role) => setRole.mutate({ memberId: member.id, role }),
-				setRole.isPending,
-			)}
-			rows={members.data?.rows ?? []}
-			total={members.data?.total ?? 0}
-			facetCounts={facetCounts}
-			facets={facets}
-			getRowId={(row) => row.id}
-			loading={members.isFetching}
-			empty={t.bang.trong}
-		/>
+		<>
+			<DataTable
+				query={query}
+				search={<ListSearch placeholder={t.bang.tim} />}
+				columns={columns(
+					t,
+					workspace.data?.canChangeRoles ?? false,
+					workspace.data?.canManageMembers ?? false,
+					(member, role) => setRole.mutate({ memberId: member.id, role }),
+					(member) => setDangGo(member),
+					setRole.isPending || remove.isPending,
+				)}
+				rows={members.data?.rows ?? []}
+				total={members.data?.total ?? 0}
+				facetCounts={facetCounts}
+				facets={facets}
+				getRowId={(row) => row.id}
+				loading={members.isFetching}
+				empty={t.bang.trong}
+			/>
+
+			<ConfirmDialog
+				tieuDe={t.xacNhan.go.tieuDe}
+				than={t.xacNhan.go.than}
+				nut={t.xacNhan.go.nut}
+				thoi={t.xacNhan.thoi}
+				open={dangGo !== null}
+				onOpenChange={(next) => {
+					if (!next) setDangGo(null);
+				}}
+				onConfirm={() => {
+					if (dangGo) remove.mutate({ memberId: dangGo.id });
+				}}
+				pending={remove.isPending}
+			/>
+		</>
 	);
 }

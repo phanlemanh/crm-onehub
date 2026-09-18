@@ -1,0 +1,356 @@
+{
+  "generated_at": "2026-09-18T03:16:55Z",
+  "generated_sha": "954819db6cbec8d8f9027261731a3c7eebee5a59",
+  "mainBranchInfo": {
+    "branch": "onehub",
+    "source": "remote"
+  },
+  "slug": "loi-moi-da-huy-van-cho-vao",
+  "round": 6,
+  "riskTier": "T3",
+  "evals": [
+    {
+      "id": "E1",
+      "criterion": "AC-1",
+      "cmd": "bun run test -- \"cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t huy-qua-goi\"",
+      "expected": "\"exit 0; bài «huỷ qua lộ trình của gói thì thôi cho vào» pass với trạng thái canceled một chữ L — trước bản sửa đỏ vì phép kiểm chặn theo chuỗi cancelled hai chữ L nên giá trị của gói lọt qua; thông điệp đỏ ghim đúng chuỗi trạng thái đã lọt Cữ liệu trạng thái KHÔNG gõ tay: bài lấy chuỗi từ hằng đã được E5 khẳng định bằng InvitationStatus của gói đã nạp, in chuỗi thật ra output, và có một assert canh rằng chuỗi ô canceled KHÁC chuỗi ô dữ liệu cũ cancelled — hai ô bằng nhau thì bài TỪ CHỐI ĐO chứ không pass.\"",
+      "executor": "test",
+      "expectedExit": 0,
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "paths": [
+        "packages/auth/src/allow-list.ts",
+        "packages/auth/src/invitation-status.ts",
+        "packages/auth/test/loi-moi-ket-thuc.spec.ts"
+      ],
+      "ref": "config:executors.test.lm_huy_qua_goi"
+    },
+    {
+      "id": "E2",
+      "criterion": "AC-2",
+      "cmd": "bun run test -- \"cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t tu-choi-loi-moi\"",
+      "expected": "\"exit 0; bài «người từ chối lời mời thì thôi cho vào» pass với trạng thái rejected — trước bản sửa đỏ vì rejected không nằm trong bất kỳ luật chặn nào; thông điệp đỏ ghim chuỗi rejected Cữ liệu trạng thái KHÔNG gõ tay: bài lấy chuỗi từ hằng đã được E5 khẳng định bằng InvitationStatus của gói đã nạp, in chuỗi thật ra output, và có một assert canh rằng chuỗi ô canceled KHÁC chuỗi ô dữ liệu cũ cancelled — hai ô bằng nhau thì bài TỪ CHỐI ĐO chứ không pass.\"",
+      "executor": "test",
+      "expectedExit": 0,
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "paths": [
+        "packages/auth/src/allow-list.ts",
+        "packages/auth/src/invitation-status.ts",
+        "packages/auth/test/loi-moi-ket-thuc.spec.ts"
+      ],
+      "ref": "config:executors.test.lm_tu_choi_loi_moi"
+    },
+    {
+      "id": "E3",
+      "criterion": "AC-3",
+      "cmd": "bun run test -- \"cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t gia-tri-la\"",
+      "expected": "\"exit 0; bài nạp một chuỗi rác qua ĐÚNG CHUỖI THẬT mà sản phẩm chạy — docHang phân tích rồi decideSignIn quyết — và đòi TỪ CHỐI, cộng một lỗi có tên nêu trường status. Bài gọi decideSignIn, hàm mà AC-3 hứa, KHÔNG dừng ở hàm trợ giúp conHieuLuc. Chiều đỏ: đổi luật từ «cho vào khi thuộc tập còn hiệu lực» sang «chặn khi thuộc tập kết thúc» thì bài đỏ, thông điệp ghim rằng một giá trị lạ đã được cho vào\"",
+      "executor": "test",
+      "expectedExit": 0,
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "paths": [
+        "packages/auth/src/allow-list.ts",
+        "packages/auth/src/invitation-status.ts",
+        "packages/auth/test/loi-moi-ket-thuc.spec.ts"
+      ],
+      "ref": "config:executors.test.lm_gia_tri_la"
+    },
+    {
+      "id": "E4",
+      "criterion": "AC-3",
+      "cmd": "bun run test -- \"cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t du-lieu-cu\"",
+      "expected": "\"exit 0; bài «dòng cũ mang cancelled hai chữ L vẫn bị từ chối» pass — đây là chiều bảo vệ người đã bị thu hồi qua giao diện kho. Chiều đỏ: bỏ giá trị cũ khỏi phép đo mà vẫn giữ luật danh sách trắng thì bài đỏ với thông điệp ghim chuỗi cancelled Cữ liệu trạng thái KHÔNG gõ tay: bài lấy chuỗi từ hằng đã được E5 khẳng định bằng InvitationStatus của gói đã nạp, in chuỗi thật ra output, và có một assert canh rằng chuỗi ô canceled KHÁC chuỗi ô dữ liệu cũ cancelled — hai ô bằng nhau thì bài TỪ CHỐI ĐO chứ không pass.\"",
+      "executor": "test",
+      "expectedExit": 0,
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "paths": [
+        "packages/auth/src/allow-list.ts",
+        "packages/auth/src/invitation-status.ts",
+        "packages/auth/test/loi-moi-ket-thuc.spec.ts"
+      ],
+      "ref": "config:executors.test.lm_du_lieu_cu"
+    },
+    {
+      "id": "E5",
+      "criterion": "AC-5",
+      "cmd": "node _acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs",
+      "expected": "\"exit 0; thước giải gói better-auth bằng createRequire NEO VÀO packages/auth/package.json — không neo vào vị trí script, không neo vào gốc kho — rồi đọc kiểu InvitationStatus từ bản vừa giải và so BẰNG NHAU với tập trạng thái kho khai. Tập của kho lấy bằng cách NẠP module qua bun và in giá trị thật ra JSON — không rút bằng regex trên văn bản nguồn, vì regex nuốt im các giá trị có gạch nối, chữ số hay chữ hoa. Thước IN RA đường dẫn thật đã giải, số hiệu bản, và cả hai tập. Cây này có hai bản better-auth: 1.6.25 là bản packages/auth nạp, 1.4.22 chỉ là phụ thuộc bắc cầu của @better-auth/cli. Chiều đỏ ba lần: thêm một giá trị giả vào tập của kho thì mã 1 và in đúng giá trị thừa; trỏ thước sang bản 1.4.22 thì mã 2 TỪ CHỐI ĐO chứ không phải mã 0; gói không giải được cũng mã 2\"",
+      "executor": "script",
+      "expectedExit": 0,
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "paths": [
+        "packages/auth/src/invitation-status.ts",
+        "packages/auth/package.json",
+        "_acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs"
+      ],
+      "ref": "config:executors.script.lm_tu_vung_goi"
+    },
+    {
+      "id": "E6",
+      "criterion": "AC-4",
+      "cmd": "bun run test -- \"cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t ranh-gioi-doc\"",
+      "expected": "\"exit 0; bài «ranh giới đọc phân tích chứ không ép kiểu» pass: một dòng mang trạng thái không phân tích được trả về trạng thái unknown CÓ TÊN và một lỗi nêu tên trường, không phải một mặc định im lặng, và lượt đăng nhập không sập. Chiều đỏ: trả lại câu ép kiểu as thì dòng lạ đi thẳng vào quyết định và bài đỏ, thông điệp ghim tên trường không phân tích được\"",
+      "executor": "test",
+      "expectedExit": 0,
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "paths": [
+        "packages/auth/src/allow-list.ts",
+        "packages/auth/src/invitation-status.ts",
+        "packages/auth/test/loi-moi-ket-thuc.spec.ts"
+      ],
+      "ref": "config:executors.test.lm_ranh_gioi_doc"
+    },
+    {
+      "id": "E7",
+      "criterion": "AC-6",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t trang-thai-that\"",
+      "expected": "\"exit 0; bài gieo bốn dòng lời mời vào cơ sở dữ liệu rồi gọi THỦ TỤC DANH SÁCH THẬT của dịch vụ workspace, ghim giá trị RA BẰNG giá trị ĐÃ LƯU: pending ra pending, accepted ra accepted, canceled ra canceled, rejected ra rejected. Bốn ô viết trước, số assert là hằng bốn. Ô thứ hai gieo một chuỗi rác và đòi thủ tục trả unknown, KHÔNG được hoá pending. Bài KHÔNG gọi hàm trợ giúp nào — hàm toStatus cũ đã bị gỡ vì thành mã chết sau khi lộ trình thật thôi gọi nó. Chiều đỏ: cho lộ trình trả pending khi giá trị không đọc được thì bài đỏ, thông điệp in cặp lưu-ra của ô hỏng\"",
+      "executor": "test",
+      "expectedExit": 0,
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "paths": [
+        "apps/api/src/workspace/workspace.service.ts",
+        "apps/api/test/workspace-thanh-vien.spec.ts"
+      ],
+      "ref": "config:executors.test.lm_trang_thai_that"
+    },
+    {
+      "id": "E8",
+      "criterion": "AC-3",
+      "cmd": "bun run test -- \"cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t ma-tran-trang-thai\"",
+      "expected": "\"exit 0; MA TRẬN TOÀN PHẦN của trục B, SÁU Ô viết trước và SÁU assert, số assert là hằng sáu cấm suy từ runtime: pending CHO VÀO, accepted CHO VÀO, canceled từ chối, rejected từ chối, cancelled của dữ liệu cũ từ chối, chuỗi rác từ chối. Ma trận gọi THẲNG decideSignIn — hàm mà hợp đồng hứa — chứ không gọi hàm trợ giúp conHieuLuc, vì đột biến vào hàm quyết định mới là thứ phép đo phải thấy. Đây là ô mang chiều DƯƠNG của cả hồ sơ — không có nó thì một bản sửa từ chối tất cả mọi người vẫn làm mọi eval khác xanh. Chiều đỏ hai lần, cả hai đột biến vào decideSignIn: đổi điều kiện sang danh sách cấm thì đỏ ở ô rejected; cho điều kiện thành false để từ chối tất cả thì đỏ ở ô pending — vế thứ hai là thứ phân biệt «chặn đúng» với «hỏng hết»\"",
+      "executor": "test",
+      "expectedExit": 0,
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "paths": [
+        "packages/auth/src/allow-list.ts",
+        "packages/auth/src/invitation-status.ts",
+        "packages/auth/test/loi-moi-ket-thuc.spec.ts"
+      ],
+      "ref": "config:executors.test.lm_ma_tran_trang_thai"
+    },
+    {
+      "id": "E9",
+      "criterion": "AC-1",
+      "cmd": "bun run test -- \"cd packages/auth && bun test test/loi-moi-ket-thuc.integration.spec.ts -t khong-sinh-thanh-vien\"",
+      "expected": "\"exit 0; bài chạy ĐÚNG LỘ TRÌNH đăng nhập chứ không gọi cô lập phép kiểm, rồi ĐẾM dòng member của workspace trước và sau: với lời mời canceled hiệu phải bằng 0. Đối chứng dương trên cùng cữ liệu: với lời mời pending hiệu phải bằng 1 — vế hai này là thứ phân biệt «chặn đúng» với «hỏng hết». Cữ liệu lấy từ hằng CÓ TÊN TRANG_THAI_HUY và TRANG_THAI_CHO — hai hằng mà E5 đã đối chiếu bằng nhau với InvitationStatus của gói đã nạp — chứ không gõ tay chuỗi vào bài. Chiều đỏ: gỡ lời gọi phép kiểm khỏi lộ trình mà giữ nguyên decideSignIn thì bài đỏ, thông điệp ghim số dòng thành viên đã sinh\"",
+      "executor": "test",
+      "expectedExit": 0,
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "paths": [
+        "packages/auth/src/allow-list.ts",
+        "packages/auth/src/organization.ts",
+        "packages/auth/test/loi-moi-ket-thuc.integration.spec.ts"
+      ],
+      "ref": "config:executors.test.lm_khong_sinh_thanh_vien"
+    },
+    {
+      "id": "E10",
+      "criterion": "AC-7",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t ghi-hang-co-ten\"",
+      "expected": "\"exit 0; bài GỌI THẬT nút thu hồi của dịch vụ workspace rồi ĐỌC dòng trong cơ sở dữ liệu, và đòi cột status mang đúng chuỗi canceled — tức nó quan sát CHỖ GHI mà AC-7 nói tới, không dừng ở bản khai hằng số. Bài còn ghim rằng hằng TRANG_THAI_HUY mang đúng chuỗi ấy; đây là điểm neo tường minh duy nhất của hồ sơ. Chiều đỏ hai lần, cả hai chạy bằng CHÍNH lệnh của eval này: trả chỗ ghi về chỉ số mảng rồi đảo thứ tự mảng thì đỏ; đổi giá trị hằng TRANG_THAI_HUY thì đỏ. Cả hai thông điệp ghim chuỗi đã ghi nhầm.\"",
+      "executor": "test",
+      "expectedExit": 0,
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "paths": [
+        "packages/validation/src/invitation-status.ts",
+        "apps/api/src/workspace/workspace.service.ts",
+        "apps/api/test/workspace-thanh-vien.spec.ts"
+      ],
+      "ref": "config:executors.test.lm_hang_co_ten"
+    }
+  ],
+  "suiteCommands": [
+    "bun run test",
+    "bunx turbo run lint --force",
+    "bun run lint:slop",
+    "bunx turbo run build --force"
+  ],
+  "diffBase": "d61d0f592c58556c3e2d7c37272a7735666b2258",
+  "repoRoot": "/private/tmp/claude-501/-Users-manh-macmini-dev-crm/54d93dc9-c67f-48a4-80f0-d8db039b5f4d/scratchpad/wt-loimoi",
+  "personasPath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.15.0/skills/acceptance/references/judge-personas.md",
+  "templatePath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.15.0/skills/acceptance/references/evidence-report-template.md",
+  "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
+  "contractPath": "/private/tmp/claude-501/-Users-manh-macmini-dev-crm/54d93dc9-c67f-48a4-80f0-d8db039b5f4d/scratchpad/wt-loimoi/_acceptance/loi-moi-da-huy-van-cho-vao/contract.md",
+  "invokedAt": "2026-09-18T03:16:55Z",
+  "invokedSha": "954819db6cbec8d8f9027261731a3c7eebee5a59",
+  "vungVat": [
+    "_acceptance/config.yaml",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/card-plain.json",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/card.html",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/evidence-page.html",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/figures/tu-vung-va-du-lieu-cu.html",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/figures/tu-vung-va-du-lieu-cu.png",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/s4-args.json",
+    "apps/api/src/workspace/workspace.contracts.ts",
+    "apps/api/src/workspace/workspace.service.ts",
+    "apps/api/test/domain-nha-tach.spec.ts",
+    "apps/api/test/workspace-thanh-vien.spec.ts",
+    "packages/auth/src/allow-list.ts",
+    "packages/auth/src/index.ts",
+    "packages/auth/src/invitation-status.ts",
+    "packages/auth/test/ai-duoc-vao.spec.ts",
+    "packages/auth/test/loi-moi-ket-thuc.integration.spec.ts",
+    "packages/auth/test/loi-moi-ket-thuc.spec.ts",
+    "packages/validation/package.json",
+    "packages/validation/src/invitation-status.ts"
+  ],
+  "ngoaiVatGlobs": [
+    "docs/**",
+    "**/*.md",
+    "PRODUCT-MAP.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "scripts/pre-merge-check.sh",
+    "scripts/recheck-evidence.cjs",
+    "lib/evidence-core.cjs",
+    "lib/gap-probe.cjs",
+    "lib/workspace-record.cjs",
+    "lib/ac-line.cjs",
+    "lib/md-section.cjs",
+    "lib/eval-yaml.cjs",
+    "lib/lop-nhin-thay.cjs",
+    ".claude/launch.json",
+    "_acceptance/*/**/*.md",
+    "_acceptance/*/**/*.jsonl"
+  ],
+  "ngoaiVatFiles": [
+    "PRODUCT-MAP.md",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/contract.md",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/decisions.jsonl",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/evidence-report.md",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/figures/index.md",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/gap-probe.md",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/review-findings.md",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/run-log.jsonl",
+    "docs/superpowers/plans/2026-09-18-loi-moi-da-huy-van-cho-vao.md",
+    "docs/superpowers/specs/2026-09-18-loi-moi-da-huy-van-cho-vao-design.md"
+  ],
+  "diffFiles": [
+    "PRODUCT-MAP.md",
+    "_acceptance/config.yaml",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/card-plain.json",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/card.html",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/contract.md",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/decisions.jsonl",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/evidence-page.html",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/evidence-report.md",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/figures/index.md",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/figures/tu-vung-va-du-lieu-cu.html",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/figures/tu-vung-va-du-lieu-cu.png",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/gap-probe.md",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/review-findings.md",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/run-log.jsonl",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/s4-args.json",
+    "apps/api/src/workspace/workspace.contracts.ts",
+    "apps/api/src/workspace/workspace.service.ts",
+    "apps/api/test/domain-nha-tach.spec.ts",
+    "apps/api/test/workspace-thanh-vien.spec.ts",
+    "docs/superpowers/plans/2026-09-18-loi-moi-da-huy-van-cho-vao.md",
+    "docs/superpowers/specs/2026-09-18-loi-moi-da-huy-van-cho-vao-design.md",
+    "packages/auth/src/allow-list.ts",
+    "packages/auth/src/index.ts",
+    "packages/auth/src/invitation-status.ts",
+    "packages/auth/test/ai-duoc-vao.spec.ts",
+    "packages/auth/test/loi-moi-ket-thuc.integration.spec.ts",
+    "packages/auth/test/loi-moi-ket-thuc.spec.ts",
+    "packages/validation/package.json",
+    "packages/validation/src/invitation-status.ts"
+  ],
+  "fileDoTrongDiff": [
+    "_acceptance/config.yaml",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/card-plain.json",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/card.html",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/evidence-page.html",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/figures/tu-vung-va-du-lieu-cu.html",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/figures/tu-vung-va-du-lieu-cu.png",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/s4-args.json",
+    "apps/api/src/workspace/workspace.service.ts",
+    "apps/api/test/domain-nha-tach.spec.ts",
+    "apps/api/test/workspace-thanh-vien.spec.ts",
+    "packages/auth/src/allow-list.ts",
+    "packages/auth/src/invitation-status.ts",
+    "packages/auth/test/ai-duoc-vao.spec.ts",
+    "packages/auth/test/loi-moi-ket-thuc.integration.spec.ts",
+    "packages/auth/test/loi-moi-ket-thuc.spec.ts",
+    "packages/validation/src/invitation-status.ts"
+  ],
+  "coverageFiles": [
+    "_acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs",
+    "apps/api/src/workspace/workspace.service.ts",
+    "apps/api/test/workspace-thanh-vien.spec.ts",
+    "packages/auth/src/allow-list.ts",
+    "packages/auth/src/invitation-status.ts",
+    "packages/auth/test/loi-moi-ket-thuc.integration.spec.ts",
+    "packages/auth/test/loi-moi-ket-thuc.spec.ts",
+    "packages/validation/src/invitation-status.ts"
+  ],
+  "coEvalPaths": true,
+  "evalsHash": "d09eea0d272f07dbffea97b0ec363069638c030aa65fd8ef5a83c6c76e17aacc",
+  "runBaseline": true
+}

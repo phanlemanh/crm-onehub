@@ -21,6 +21,22 @@ describe("SEARCH_PARAM", () => {
 	it("keeps the fields sheet off the table's fields filter", () => {
 		expect(SEARCH_PARAM.fieldsSheet.entity).not.toBe(SEARCH_PARAM.list.fields);
 	});
+
+	it("keeps the fields page off every key the sheet owns", () => {
+		const sheet = Object.values(SEARCH_PARAM.fieldsSheet);
+		const page = Object.values(SEARCH_PARAM.fieldsPage);
+
+		for (const key of page) {
+			expect(sheet).not.toContain(key);
+		}
+		expect(page).toHaveLength(2);
+	});
+
+	it("reserves every key the fields page owns", () => {
+		for (const key of Object.values(SEARCH_PARAM.fieldsPage)) {
+			expect(RESERVED_SEARCH_PARAM_KEYS.has(key)).toBe(true);
+		}
+	});
 });
 
 describe("assertUnreservedSearchParamKeys", () => {
@@ -41,6 +57,15 @@ describe("assertUnreservedSearchParamKeys", () => {
 
 	it("rejects a facet that shadows a list key", () => {
 		expect(() => assertUnreservedSearchParamKeys(["q"], "test")).toThrow(/q/);
+	});
+
+	it("rejects the fields page reusing a key the sheet owns", () => {
+		expect(() =>
+			assertUnreservedSearchParamKeys(
+				[SEARCH_PARAM.fieldsSheet.entity],
+				"fields-page",
+			),
+		).toThrow(SEARCH_PARAM.fieldsSheet.entity);
 	});
 });
 

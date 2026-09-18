@@ -18,6 +18,10 @@ export const SEARCH_PARAM = {
 		entity: "manageFields",
 		field: "manageField",
 	},
+	fieldsPage: {
+		entity: "thucThe",
+		field: "truong",
+	},
 	dialog: {
 		create: "new",
 		switcher: "k",

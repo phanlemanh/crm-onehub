@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import { act, createElement, type ReactElement } from "react";
 import { createRoot } from "react-dom/client";
 import { LocaleProvider } from "../src/components/locale-provider";
@@ -17,6 +17,15 @@ const BANG_CU = join(
 	"rang",
 	"gioi-han-bam-moi-hien.json",
 );
+
+const LUOT_CHAY = (await import(join(HO_SO, "rang", "luot-chay.mjs"))) as {
+	duongLuot: (ten: string) => string;
+};
+const MOI_MAC_DINH = (await import(
+	join(HO_SO, "rang", "moi-mac-dinh.mjs")
+)) as {
+	docMacDinh: (goc: string) => { file: string }[];
+};
 
 const NEO_NGAY = "2026-09-08T12:00:00+07:00";
 
@@ -232,15 +241,14 @@ async function laiMotFile(
 }
 
 function ghi(ten: string, gt: Record<string, BanVe[]> | MoNguyenBan) {
-	const duong = join(HO_SO, "evidence", ten);
-	mkdirSync(dirname(duong), { recursive: true });
-	writeFileSync(duong, `${JSON.stringify(gt, null, "\t")}\n`);
+	writeFileSync(
+		LUOT_CHAY.duongLuot(ten),
+		`${JSON.stringify(gt, null, "\t")}\n`,
+	);
 }
 
 test("lai tung component ra man, doc chu ban ve that su ve", async () => {
-	const macDinh = JSON.parse(
-		readFileSync(join(HO_SO, "evidence", "mac-dinh.json"), "utf8"),
-	) as { file: string }[];
+	const macDinh = MOI_MAC_DINH.docMacDinh(GOC_KHO);
 	const file = [...new Set(macDinh.map((m) => m.file))].sort();
 	expect(file.length).toBeGreaterThan(0);
 

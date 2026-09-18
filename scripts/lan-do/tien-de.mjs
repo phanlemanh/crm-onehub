@@ -27,6 +27,10 @@ import {
 } from "../../packages/db/src/settings.ts";
 
 const KHOA_LAN_DO = "lan-do-khong-phai-khoa-that";
+const NGUOI = process.env.NGUOI ?? "manh.phan@onemount.com";
+const MIEN_LAN_DO = "lan-do.onehub.vn";
+const ANH_LAN_DO =
+	"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
 function thoat(ma, cau) {
 	console.error(`tien-de: ${cau}`);
@@ -40,6 +44,18 @@ const lenh = process.argv[i + 1];
 
 const truoc = await readContextDevKey(db);
 let daDat = false;
+
+const nguoi = await db.user.findUnique({
+	where: { email: NGUOI },
+	select: { image: true },
+});
+if (nguoi === null)
+	thoat(
+		2,
+		`chưa có người dùng ${NGUOI} trong kho — chạy một lượt \`cd apps/api && bun run dev:session ${NGUOI}\` rồi đo lại`,
+	);
+let daDatAnh = false;
+let daDatMien = false;
 
 try {
 	if (truoc === null) {
@@ -55,6 +71,31 @@ try {
 		console.log("-- tiền đề làn đo: contextDevApiKey đã có sẵn, không đụng");
 	}
 
+	if (nguoi.image === null) {
+		await db.user.update({ where: { email: NGUOI }, data: { image: ANH_LAN_DO } });
+		daDatAnh = true;
+		const lai = await db.user.findUnique({
+			where: { email: NGUOI },
+			select: { image: true },
+		});
+		if (lai?.image !== ANH_LAN_DO)
+			thoat(2, "đặt ảnh đại diện xong nhưng đọc lại không khớp — không chấm");
+		console.log("-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)");
+	} else {
+		console.log("-- tiền đề làn đo: ảnh đại diện đã có sẵn, không đụng");
+	}
+
+	if ((await db.trackedDomain.count()) === 0) {
+		await db.trackedDomain.create({ data: { host: MIEN_LAN_DO } });
+		daDatMien = true;
+		const lai = await db.trackedDomain.count({ where: { host: MIEN_LAN_DO } });
+		if (lai !== 1)
+			thoat(2, "đặt tên miền được phép xong nhưng đọc lại không thấy — không chấm");
+		console.log(`-- tiền đề làn đo: đã thêm tên miền được phép ${MIEN_LAN_DO} (sẽ dọn)`);
+	} else {
+		console.log("-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng");
+	}
+
 	const ra = spawnSync("bash", ["-lc", lenh], { stdio: "inherit" });
 	process.exitCode = ra.status === null ? 2 : ra.status;
 } finally {
@@ -66,6 +107,29 @@ try {
 			process.exitCode = 2;
 		} else {
 			console.log("-- tiền đề làn đo: đã dọn contextDevApiKey");
+		}
+	}
+	if (daDatAnh) {
+		await db.user.update({ where: { email: NGUOI }, data: { image: null } });
+		const con = await db.user.findUnique({
+			where: { email: NGUOI },
+			select: { image: true },
+		});
+		if (con?.image !== null) {
+			console.error("tien-de: DỌN HỎNG — ảnh đại diện vẫn còn giá trị");
+			process.exitCode = 2;
+		} else {
+			console.log("-- tiền đề làn đo: đã dọn ảnh đại diện");
+		}
+	}
+	if (daDatMien) {
+		await db.trackedDomain.deleteMany({ where: { host: MIEN_LAN_DO } });
+		const con = await db.trackedDomain.count({ where: { host: MIEN_LAN_DO } });
+		if (con !== 0) {
+			console.error("tien-de: DỌN HỎNG — tên miền được phép của làn đo vẫn còn");
+			process.exitCode = 2;
+		} else {
+			console.log("-- tiền đề làn đo: đã dọn tên miền được phép");
 		}
 	}
 	await db.$disconnect();

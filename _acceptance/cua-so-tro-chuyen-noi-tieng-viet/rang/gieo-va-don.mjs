@@ -2,12 +2,10 @@ import { randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { API, mu, phien, suySlug } from "../../man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs";
 import { GOC } from "../../man-cai-dat-noi-tieng-viet/rang/lat.mjs";
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-const VET = join(HERE, "..", "evidence", "hoi-thoai-gieo.json");
+const VET = join(GOC, ".acceptance-runs", "cua-so-tro-chuyen-noi-tieng-viet", "hoi-thoai-gieo.json");
 
 export function docHoiThoaiGieo() {
 	if (!existsSync(VET)) return null;

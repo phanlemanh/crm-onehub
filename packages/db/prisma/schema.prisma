@@ -1386,6 +1386,8 @@ model AppSetting {
 
   reportingCurrency String?
 
+  staffEmailDomains String?
+
   ratesRefreshedAt DateTime?
 
   archiveRetentionDays Int @default(180)

@@ -1,14 +1,21 @@
 import {
+	ALLOWANCE_WITHOUT_EXPIRY,
 	canChangeRole,
 	canRenameWorkspace,
 	ensureWorkspaceMembership,
+	isWorkspaceAdmin,
 	isWorkspaceRole,
+	normalizeEmail,
 	WORKSPACE_ID,
 	type WorkspaceRole,
 	workspaceRoleOf,
 } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { isOnboarded, markOnboarded, workspaceSlug } from "@crm/db/workspace";
+import {
+	docTrangThai,
+	TRANG_THAI_HUY,
+} from "@crm/validation/invitation-status";
 import {
 	BadRequestException,
 	ForbiddenException,
@@ -28,7 +35,11 @@ import {
 	resolveOrderBy,
 } from "../trpc/list-input";
 import type {
+	Allowance,
+	AllowEmailInput,
 	MemberListInput,
+	RemoveMemberInput,
+	RevokeAllowanceInput,
 	SetMemberRoleInput,
 	UpdateWorkspaceInput,
 	Workspace,
@@ -44,6 +55,19 @@ const MEMBER_SELECT = {
 } as const;
 
 type MemberRow = Prisma.MemberGetPayload<{ select: typeof MEMBER_SELECT }>;
+
+const ALLOWANCE_SELECT = {
+	id: true,
+	email: true,
+	role: true,
+	status: true,
+	createdAt: true,
+	user: { select: { name: true } },
+} as const;
+
+type AllowanceRow = Prisma.InvitationGetPayload<{
+	select: typeof ALLOWANCE_SELECT;
+}>;
 
 const SORTABLE: OrderByColumns<Prisma.MemberOrderByWithRelationInput> = {
 	name: (dir) => ({ user: { name: dir } }),
@@ -90,6 +114,7 @@ export class WorkspaceService {
 			viewerRole: role,
 			canRename: canRenameWorkspace(role),
 			canChangeRoles: canChangeRole(role),
+			canManageMembers: isWorkspaceAdmin(role),
 		};
 	}
 
@@ -223,6 +248,197 @@ export class WorkspaceService {
 		});
 
 		return this.toMember(updated, userId);
+	}
+
+	async allowances(userId: string): Promise<{ rows: Allowance[] }> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!isWorkspaceAdmin(role)) {
+			throw new ForbiddenException(
+				"Only an owner or an admin can see who is allowed in.",
+			);
+		}
+
+		const rows = await this.db.invitation.findMany({
+			where: { organizationId: WORKSPACE_ID },
+			select: ALLOWANCE_SELECT,
+			orderBy: [{ createdAt: "desc" }],
+		});
+
+		return { rows: rows.map((row) => this.toAllowance(row)) };
+	}
+
+	async allowEmail(userId: string, input: AllowEmailInput): Promise<Allowance> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!isWorkspaceAdmin(role)) {
+			throw new ForbiddenException(
+				"Only an owner or an admin can allow an address.",
+			);
+		}
+
+		const email = normalizeEmail(input.email);
+
+		if (!email) {
+			throw new BadRequestException(
+				"That is not an email address. Enter one like name@company.com.",
+			);
+		}
+
+		const live = await this.db.invitation.findFirst({
+			where: {
+				organizationId: WORKSPACE_ID,
+				email,
+				status: { in: ["pending", "accepted"] },
+			},
+			select: { id: true },
+		});
+
+		if (live) {
+			throw new BadRequestException("That address is already on the list.");
+		}
+
+		const created = await this.db.invitation.create({
+			data: {
+				id: crypto.randomUUID(),
+				organizationId: WORKSPACE_ID,
+				email,
+				role: input.role,
+				status: "pending",
+				expiresAt: ALLOWANCE_WITHOUT_EXPIRY,
+				inviterId: userId,
+			},
+			select: ALLOWANCE_SELECT,
+		});
+
+		this.logger.log({ message: "Address allowed", userId, email });
+
+		return this.toAllowance(created);
+	}
+
+	async revokeAllowance(
+		userId: string,
+		input: RevokeAllowanceInput,
+	): Promise<Allowance> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!isWorkspaceAdmin(role)) {
+			throw new ForbiddenException(
+				"Only an owner or an admin can withdraw an allowance.",
+			);
+		}
+
+		const target = await this.db.invitation.findFirst({
+			where: { id: input.allowanceId, organizationId: WORKSPACE_ID },
+			select: { id: true },
+		});
+
+		if (!target) {
+			throw new NotFoundException("That allowance is not on the list.");
+		}
+
+		const updated = await this.db.invitation.update({
+			where: { id: target.id },
+			data: { status: TRANG_THAI_HUY },
+			select: ALLOWANCE_SELECT,
+		});
+
+		this.logger.log({
+			message: "Allowance withdrawn",
+			userId,
+			allowanceId: target.id,
+		});
+
+		return this.toAllowance(updated);
+	}
+
+	async removeMember(
+		userId: string,
+		input: RemoveMemberInput,
+	): Promise<{ memberId: string }> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!isWorkspaceAdmin(role)) {
+			throw new ForbiddenException(
+				"Only an owner or an admin can remove a member.",
+			);
+		}
+
+		await this.db.$transaction(async (tx) => {
+			const target = await tx.member.findFirst({
+				where: { id: input.memberId, organizationId: WORKSPACE_ID },
+				select: {
+					id: true,
+					role: true,
+					userId: true,
+					user: { select: { email: true } },
+				},
+			});
+
+			if (!target) {
+				throw new NotFoundException("That person is not in this workspace.");
+			}
+
+			if (target.role === "owner") {
+				const owners = await tx.$queryRaw<{ id: string }[]>`
+					SELECT id FROM "member"
+					WHERE "organizationId" = ${WORKSPACE_ID} AND role = 'owner'
+					FOR UPDATE
+				`;
+
+				if (owners.length <= 1) {
+					throw new ForbiddenException(
+						"The workspace needs an owner. Make someone else an owner first.",
+					);
+				}
+			}
+
+			await tx.member.delete({ where: { id: target.id } });
+
+			await tx.session.deleteMany({ where: { userId: target.userId } });
+
+			const email = normalizeEmail(target.user.email);
+
+			if (email) {
+				await tx.invitation.updateMany({
+					where: {
+						organizationId: WORKSPACE_ID,
+						email,
+						status: { in: ["pending", "accepted"] },
+					},
+					data: { status: TRANG_THAI_HUY },
+				});
+			}
+		});
+
+		this.logger.log({
+			message: "Member removed",
+			userId,
+			memberId: input.memberId,
+		});
+
+		return { memberId: input.memberId };
+	}
+
+	private toAllowance(row: AllowanceRow): Allowance {
+		const doc = docTrangThai(row.status);
+
+		if (doc.loi) {
+			this.logger.warn({
+				message: "Invitation status unreadable",
+				allowanceId: row.id,
+				status: row.status,
+			});
+		}
+
+		return {
+			id: row.id,
+			email: row.email,
+			role: toRole(row.role ?? "member"),
+			status: doc.trangThai,
+			invitedByName: row.user?.name ?? null,
+			createdAt: row.createdAt.toISOString(),
+		};
 	}
 
 	private toMember(row: MemberRow, userId: string): WorkspaceMember {

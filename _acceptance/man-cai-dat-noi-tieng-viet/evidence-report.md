@@ -10,7 +10,7 @@ slug: man-cai-dat-noi-tieng-viet
 verdict: PASS
 round: 3
 run_id: s4r3d-20260904T130156Z-16359
-verified_commit: f8aa7f4a9e1ec9ce1be8585683103adf1a901431
+verified_commit: ed70d70dd0ec9ee7412b45e63c90c925500d50c6
 verified_at: 2026-09-04T13:04:00Z
 human_signoff: Manh Phan 2026-09-04
 ---
@@ -177,6 +177,7 @@ Cùng một lớp, ở mặt tài liệu — đều đã sửa trong vòng này:
 
 - eval: E5
   run_id: s4r3d-20260904T130156Z-16359-E5
+  exit_code: 2
   khong_do_duoc: tien-de-thieu (ma thoat 2) — KHONG phai mot phep do truot, ma la mot phep do TU CHOI chay vi tien de khong dung duoc. Gioi han da khai o AC-5 va o muc Known limits.
   verifier: config:executors.script.cai_dat_trang_thai_rong
   verified_at: 2026-09-04T13:02:22Z
@@ -355,3 +356,11 @@ sha: a99f80a2bf02c873af1500ddd1ca48bc1b6c153f · suites: 4 lệnh exit 0
 
 run_id: repin-20260907T005455Z-44758
 sha: f8aa7f4a9e1ec9ce1be8585683103adf1a901431 · suites: 4 lệnh exit 0
+
+### Re-pin lần 3 — 2026-09-16, do Chiến dịch ghim lại theo mốc kit 2.14.0 — sáu hồ sơ làn xanh; năm hồ sơ còn lại đỏ vì nguyên nhân thật, đi lượt riêng
+run_id: repin-20260916T014000Z-73664
+sha: 96ec6d9b0447bb8e3eafaf36c84dc9902372ebef · suites: 4 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E5=2
+
+### Re-pin lần 4 — 2026-09-17, do chiến dịch ghim lại kit 2.14.0 (PR #47): làn eval thật trên cây đã chuyển đường ghi tạo phẩm; đo bằng phanlemanh@gmail.com
+run_id: repin-20260917T051527Z-61120
+sha: ed70d70dd0ec9ee7412b45e63c90c925500d50c6 · suites: 4 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E5=2
