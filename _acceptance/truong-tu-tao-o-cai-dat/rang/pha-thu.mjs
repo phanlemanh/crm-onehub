@@ -49,7 +49,7 @@ const CA = [
 		ten: "nhan Ca nhan thanh tieng Anh",
 		che: "ba-thuc-the",
 		thay: ["Segment"],
-		pha: (goc) => thay(`${goc}/${GOI_Y}`, '"Phân khúc chuyên"', '"Segment"'),
+		pha: (goc) => thay(`${goc}/${GOI_Y}`, '"Vai trò trong sàn"', '"Segment"'),
 	},
 	{
 		ten: "goi y trung khoa bo cao",
@@ -113,6 +113,39 @@ const CA = [
 				'\t"Căn hộ",\n\t"Nhà phố",\n',
 				'\t"Nhà phố",\n\t"Căn hộ",\n',
 			),
+	},
+	{
+		ten: "cum bi tu dien tranh quay lai",
+		che: "tranh-tu-dien",
+		thay: ["Công ty môi giới", "Công ty"],
+		pha: (goc) =>
+			thay(
+				`${goc}/${GOI_Y}`,
+				'\t\t\t"Đơn vị môi giới",\n',
+				'\t\t\t"Công ty môi giới",\n',
+			),
+	},
+	{
+		ten: "chu Phan khuc dung lai",
+		che: "khong-dung-lai-phan-khuc",
+		thay: ["Phân khúc chuyên"],
+		pha: (goc) =>
+			thay(
+				`${goc}/${GOI_Y}`,
+				'\t\t\tlabel: "Loại bất động sản",\n\t\t\ttype: "SELECT",\n\t\t\toptions: LOAI_BAT_DONG_SAN,\n\t\t},\n\t\t{\n\t\t\tlabel: "Vai trò trong sàn"',
+				'\t\t\tlabel: "Phân khúc chuyên",\n\t\t\ttype: "SELECT",\n\t\t\toptions: LOAI_BAT_DONG_SAN,\n\t\t},\n\t\t{\n\t\t\tlabel: "Vai trò trong sàn"',
+			),
+	},
+	{
+		ten: "doi ten ma khong con truong noi dung thu no chua",
+		che: "khong-dung-lai-phan-khuc",
+		thay: ["Loại bất động sản"],
+		pha: (goc) =>
+			sua(`${goc}/${GOI_Y}`, (x) => {
+				if (!x.includes('label: "Loại bất động sản"'))
+					throw new Error("khong tim thay nhan Loai bat dong san");
+				return x.replaceAll('label: "Loại bất động sản"', 'label: "Dòng hàng"');
+			}),
 	},
 	{
 		ten: "tu dien thieu dong Avoid",

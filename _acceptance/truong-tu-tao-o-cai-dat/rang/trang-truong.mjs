@@ -19,6 +19,7 @@ const GOC = process.env.GOC_CAY
 const ANH = `${HERE}/../evidence`;
 const EMAIL = process.env.EMAIL_DO ?? "manh.phan@onemount.com";
 const TIEN_TO = "ZZ thu ";
+const HET_HAN_MS = Number(process.env.HET_HAN_MS ?? 32_000);
 
 const CO_DAU =
 	/[ăâđêôơưàáạảãèéẹẻẽìíịỉĩòóọỏõùúụủũỳýỵỷỹấầậẩẫắằặẳẵếềệểễốồộổỗớờợởỡứừựửữ]/i;
@@ -1036,6 +1037,11 @@ async function trangThai(browser, cookie, slug) {
 		`/${slug}/settings/fields`,
 	);
 
+	console.log(
+		`cho ${Math.round(HET_HAN_MS / 1000)}s cho du lieu nap truoc het han, roi moi chan duong goi`,
+	);
+	await new Promise((r) => setTimeout(r, HET_HAN_MS));
+
 	await loiTrang.setRequestInterception(true);
 	loiTrang.on("request", (r) => {
 		if (r.url().includes("fields.list")) r.abort();
@@ -1045,18 +1051,18 @@ async function trangThai(browser, cookie, slug) {
 	const daBamThe = await bamThe(loiTrang, "Cá nhân");
 	doi(
 		daBamThe,
-		"khong bam duoc the Ca nhan de bat duong goi danh sach chua nap truoc",
+		"khong bam duoc the Ca nhan de bat duong goi danh sach da het han",
 	);
-	await new Promise((r) => setTimeout(r, 6000));
+	await new Promise((r) => setTimeout(r, 8000));
 
 	const chuLoi = await loiTrang.evaluate(
 		() => document.querySelector("main")?.innerText ?? "",
 	);
 	doi(
 		chuLoi.includes("Chưa tải được các trường của bạn"),
-		"chan duong goi danh sach roi doi the ma man KHONG hien loi tai that bai. " +
-			"Trang may chu nap truoc danh sach cua the mo dau, nen phai doi sang the " +
-			"KHAC moi bat duoc duong goi that.",
+		"cho du lieu het han roi chan duong goi va doi the, ma man KHONG hien loi tai " +
+			"that bai. Trang may chu nap truoc CA BA the, nen chi sau khi du lieu het han " +
+			"moi co mot luot goi that de chan.",
 	);
 	doi(chuLoi.includes("Thử lại"), "man loi KHONG co nut Thu lai");
 	await loiTrang.screenshot({ path: chupVao("trang-thai-loi") });

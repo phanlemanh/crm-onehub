@@ -297,9 +297,12 @@ evals:
       (1) Rong: chon mot thuc the chua co truong tu tao nao — man hien dung loi
       "Chua co truong tu tao nao" VA khoi goi y cua thuc the do co mat voi it
       nhat mot goi y bam duoc.
-      (2) Loi: chan duong goi /fields o tang mang cua trinh duyet roi mo trang —
-      man hien loi "Chua tai duoc cac truong cua ban" VA mot nut "Thu lai" bam
-      duoc. Man trang tron hoac man treo vong cho mai la that bai.
+      (2) Loi: tu khi AC-19 buoc may chu nap truoc CA BA the, khong con luot goi
+      nao tu trinh duyet o lan tai dau de chan. Nen ve nay dung theo duong THAT:
+      mo trang, CHO du lieu het han (kho dat 30 giay), roi chan duong goi
+      fields.list o tang mang va doi sang the khac — luc do moi co mot luot goi
+      that. Khang dinh man hien loi "Chua tai duoc cac truong cua ban" VA mot nut
+      "Thu lai" bam duoc. Man trang tron hoac man treo vong cho mai la that bai.
       Chup anh ca hai trang thai.
       Cap hai chieu tren CUNG fixture: ban sao da bo nhanh loi (man chi hien vong
       cho) — phai do o ve hai VA thong diep goi ten trang thai loi.
@@ -436,13 +439,14 @@ evals:
       Thuoc dung MOT BAN SAO cay bang worktree cho TUNG ca, dot bien dung mot vat
       trong ban sao, roi chay lai chieu do TREN BAN SAO va khang dinh HAI dieu:
       chieu do DO, VA thong diep chua dung chuoi phai thay.
-      MUOI MOT ca, moi ca mot lop loi khac: goi y bo cu quay lai (thay "AMER" va
+      MUOI BON ca, moi ca mot lop loi khac: goi y bo cu quay lai (thay "AMER" va
       "Territory") · nhom Thoa thuan rong (thay "DEAL") · nhan Ca nhan thanh
       tieng Anh (thay "Segment") · goi y trung khoa bo cao (thay "dia_ban") ·
       bo cao doi so khoa · thieu mot dong cua bang (thay "Kenh lien lac quen") ·
       doi kieu mot dong · thieu mot lua chon (thay "Dat nen") · sai thu tu lua
       chon (thay "SAI THU TU") · tu dien thieu dong _Avoid_ · ham sinh khoa tra
-      ve ban cu.
+      ve ban cu · cum bi tu dien tranh quay lai · chu "Phan khuc" dung lai ·
+      doi ten ma khong con truong noi dung thu no chua.
       Ca cuoi la ca DOI CHUNG NGUOC: tra ham sinh khoa ve ban bo dau cu thi
       chieu do trung khoa phai XANH du da cam mot goi y trung — do la bang chung
       rang AC-8 tung la phep do rong truoc khi vong nay sua ham.
@@ -455,3 +459,68 @@ evals:
       - "_acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs"
       - "_acceptance/truong-tu-tao-o-cai-dat/rang/pha-thu.mjs"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E19
+    criterion: AC-17
+    executor: script
+    cmd: config:executors.script.trg_tranh_tu_dien
+    expected: >-
+      exit 0. Thuoc DOC danh sach can tranh TRUC TIEP tu CONTEXT.md — quet moi
+      muc **<tu>**: roi rut dong _Avoid_ cua tung muc — chu KHONG chep tay danh
+      sach vao thuoc. Khang dinh so cum doc duoc >= 10; mot danh sach gan rong
+      se lam phep do nay luon xanh nen phai do chinh no truoc.
+      Roi nap bo goi y bang import module that, det ra MOI chuoi hien cho nguoi
+      doc (moi nhan va moi lua chon), khang dinh so chuoi >= 15, va voi TUNG
+      chuoi doi chieu voi TUNG cum can tranh: khong chuoi nao duoc trung dung
+      mot cum.
+      Cap hai chieu tren CUNG fixture: chen lai lua chon "Cong ty moi gioi" vao
+      nhom Cong ty — chieu do phai do VA thong diep chua dong thoi cum do va ten
+      muc tu dien da liet no ("Cong ty").
+    paths:
+      - "packages/validation/src/field-templates.ts"
+      - "CONTEXT.md"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E20
+    criterion: AC-18
+    executor: script
+    cmd: config:executors.script.trg_khong_dung_lai_phan_khuc
+    expected: >-
+      exit 0. Khang dinh tien de truoc: tu dien CON muc "**Phân khúc**" — mat
+      muc do thi phep do nay mat nghia va phai do.
+      Roi nap bo goi y bang import module that, khang dinh khong nhan nao va
+      khong lua chon nao chua chu "Phan khuc" (khong phan biet chu hoa), vi tu
+      dien da gan chu do cho nhom ca nhan do mot bo loc da luu chon ra.
+      THEM mot khang dinh chieu duong, de viec doi ten khong thanh viec xoa
+      truong: phai CON mot truong mang nhan noi dung thu no chua, tuc "Loai bat
+      dong san".
+      Cap hai chieu tren CUNG fixture: doi mot nhan ve lai "Phan khuc chuyen" —
+      chieu do phai do VA thong diep chua dung nhan do.
+    paths:
+      - "packages/validation/src/field-templates.ts"
+      - "CONTEXT.md"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E21
+    criterion: AC-19
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.trg_nap_truoc
+    expected: >-
+      exit 0. Tren may chu that, hai luot: dia chi ?thucThe=contact va
+      ?thucThe=deal. Moi luot LANG NGHE moi loi goi mang cua trinh duyet, mo
+      trang, cho mang yen, roi khang dinh ba dieu:
+      the dang mo dung la the ma dia chi chi ra;
+      VA so loi goi fields.list mang dung thuc the do BANG KHONG — mot loi goi
+      nghia la may chu chua nap truoc, tuc mo lai hay chia se duong dan phai cho
+      mot luot tai thu hai;
+      VA man KHONG con vong cho nao sau khi mang da yen.
+      Doi chung da do 2026-09-18 tren cay dang chay: trang Tien te, trang Thanh
+      vien va trang Truong o the mac dinh deu goi KHONG lan, nen khong-goi-lai
+      la muc san pham nay dat duoc that, khong phai ky vong bat kha.
+      Cap hai chieu tren CUNG fixture: tra trang may chu ve nap truoc cung mot
+      thuc the — chieu do phai do VA goi ten thuc the bi thieu.
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/fields/**"
+      - "apps/app/components/crm/fields/fields-entity.ts"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
