@@ -71,4 +71,4 @@ evals:
     cmd: config:executors.test.lm_khong_sinh_thanh_vien
     expected: "exit 0; bài chạy ĐÚNG LỘ TRÌNH đăng nhập chứ không gọi cô lập phép kiểm, rồi ĐẾM dòng member của workspace trước và sau: với lời mời canceled hiệu phải bằng 0. Đối chứng dương trên cùng cữ liệu: với lời mời pending hiệu phải bằng 1 — vế hai này là thứ phân biệt «chặn đúng» với «hỏng hết». Chiều đỏ: gỡ lời gọi phép kiểm khỏi lộ trình mà giữ nguyên decideSignIn thì bài đỏ, thông điệp ghim số dòng thành viên đã sinh"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [packages/auth/src/allow-list.ts, packages/auth/src/organization.ts, packages/auth/test/loi-moi-ket-thuc.spec.ts]
+    paths: [packages/auth/src/allow-list.ts, packages/auth/src/organization.ts, packages/auth/test/loi-moi-ket-thuc.integration.spec.ts]
