@@ -424,3 +424,34 @@ evals:
       - "packages/db/src/fields-shape.ts"
       - "packages/db/test/fields.spec.ts"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E18
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.trg_pha_thu
+    expected: >-
+      exit 0. Day la chieu CHUNG MINH CAC CHIEU KHAC CO RANG — khong co no thi
+      moi cau "Cap hai chieu tren CUNG fixture" trong tep nay chi la loi khai,
+      khong ai chay.
+      Thuoc dung MOT BAN SAO cay bang worktree cho TUNG ca, dot bien dung mot vat
+      trong ban sao, roi chay lai chieu do TREN BAN SAO va khang dinh HAI dieu:
+      chieu do DO, VA thong diep chua dung chuoi phai thay.
+      MUOI MOT ca, moi ca mot lop loi khac: goi y bo cu quay lai (thay "AMER" va
+      "Territory") · nhom Thoa thuan rong (thay "DEAL") · nhan Ca nhan thanh
+      tieng Anh (thay "Segment") · goi y trung khoa bo cao (thay "dia_ban") ·
+      bo cao doi so khoa · thieu mot dong cua bang (thay "Kenh lien lac quen") ·
+      doi kieu mot dong · thieu mot lua chon (thay "Dat nen") · sai thu tu lua
+      chon (thay "SAI THU TU") · tu dien thieu dong _Avoid_ · ham sinh khoa tra
+      ve ban cu.
+      Ca cuoi la ca DOI CHUNG NGUOC: tra ham sinh khoa ve ban bo dau cu thi
+      chieu do trung khoa phai XANH du da cam mot goi y trung — do la bang chung
+      rang AC-8 tung la phep do rong truoc khi vong nay sua ham.
+      Thuoc dong-khi-hong: ca nao nem thi tinh la SAI, khong phai bo qua; va so
+      ca chay phai BANG so ca khai, ca bien mat khong duoc tinh la ca dat.
+    paths:
+      - "packages/validation/src/field-templates.ts"
+      - "packages/db/src/fields-shape.ts"
+      - "CONTEXT.md"
+      - "_acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs"
+      - "_acceptance/truong-tu-tao-o-cai-dat/rang/pha-thu.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

@@ -398,11 +398,36 @@ async function moKhoiGoiY(page) {
 	return false;
 }
 
+const docNhom = () =>
+	[...document.querySelectorAll("button")]
+		.map((e) => e.textContent.trim())
+		.filter((t) => /^(Trường chuẩn|Trường gợi ý|Đã lưu trữ)/.test(t))
+		.map((t) => {
+			const m = t.match(/^(.+?)(\d+) ·/);
+			return m
+				? { ten: m[1].trim(), so: Number(m[2]) }
+				: { ten: t.replace(/\d+ ·.*$/, "").trim(), so: null };
+		});
+
 const docTieuDeNhom = () =>
-	[...document.querySelectorAll("button, [data-slot]")]
+	[...document.querySelectorAll("button")]
 		.map((e) => e.textContent.trim())
 		.filter((t) => /^(Trường chuẩn|Trường gợi ý|Đã lưu trữ)/.test(t))
 		.map((t) => t.replace(/\d+ ·.*$/, "").trim());
+
+const demDongTuTao = () => {
+	const nhan = [...document.querySelectorAll("main [data-slot]")].filter((e) =>
+		/^Thêm hành động cho /.test(e.textContent.trim()),
+	);
+	return nhan.length;
+};
+
+async function donNhanKhuon(cookie, entity, nhan) {
+	const list = await lietKe(cookie, entity);
+	for (const f of list.filter((x) => x.label === nhan)) {
+		await ghiApi(cookie, "fields.delete", { id: f.id });
+	}
+}
 
 async function taoTuGoiY(browser, cookie, slug) {
 	const KHUNG = [
@@ -413,6 +438,8 @@ async function taoTuGoiY(browser, cookie, slug) {
 	const { FIELD_TEMPLATES } = await import(
 		resolve(GOC, "packages/validation/src/field-templates.ts")
 	);
+
+	const daTao = [];
 
 	for (const k of KHUNG) {
 		const page = await moTrang(
@@ -440,6 +467,8 @@ async function taoTuGoiY(browser, cookie, slug) {
 		}
 
 		const nhan = truoc[0].split(" · ")[0].trim();
+		daTao.push({ entity: k.entity, nhan });
+		await donNhanKhuon(cookie, k.entity, nhan);
 		const khuon = (FIELD_TEMPLATES[k.entity] ?? []).find(
 			(t) => t.label === nhan,
 		);
@@ -488,11 +517,12 @@ async function taoTuGoiY(browser, cookie, slug) {
 			);
 
 			await page.screenshot({ path: chupVao(`tao-tu-goi-y-${k.entity}`) });
-			await ghiApi(cookie, "fields.delete", { id: moi.id });
 		}
 
 		await page.close();
 	}
+
+	for (const x of daTao) await donNhanKhuon(cookie, x.entity, x.nhan);
 
 	ketLuan("tao-tu-goi-y");
 }
@@ -509,10 +539,15 @@ async function baNhom(browser, cookie, slug) {
 	const bam = await bamThe(page, "Cá nhân");
 	doi(bam, "khong tim thay the Ca nhan");
 
-	const nhom = await page.evaluate(docTieuDeNhom);
+	const nhom = await page.evaluate(docNhom);
+	const chuan = nhom.find((x) => x.ten.startsWith("Trường chuẩn"));
 	doi(
-		nhom.some((t) => t.startsWith("Trường chuẩn")),
-		`the Ca nhan: KHONG co nhom truong chuan. Cac nhom doc duoc: ${JSON.stringify(nhom)}`,
+		Boolean(chuan),
+		`the Ca nhan: KHONG co nhom truong chuan. Cac nhom doc duoc: ${JSON.stringify(nhom.map((x) => x.ten))}`,
+	);
+	doi(
+		(chuan?.so ?? 0) >= 1,
+		`nhom truong chuan dem ${chuan?.so} phan tu, cho it nhat mot`,
 	);
 
 	const dangDung = await lietKe(cookie, "CONTACT", false);
@@ -520,11 +555,15 @@ async function baNhom(browser, cookie, slug) {
 	console.log(
 		`khoa bo cao khai: ${khoaBoCao.length} · dang co tren co so du lieu nay: ${coBoCao.length}`,
 	);
-	doi(
-		coBoCao.length > 0,
-		"co so du lieu nay khong co truong nao cua bo cao tren Ca nhan, nen phep do khong " +
-			"chung duoc rang man hien duoc truong may gieo. Chay lo tiep nhan roi do lai.",
-	);
+	if (coBoCao.length === 0) {
+		await page.close();
+		console.log(
+			"KHONG DO DUOC: co so du lieu nay khong co truong nao cua bo cao tren Ca nhan, " +
+				"nen phep do khong chung duoc rang man hien duoc truong may gieo. Chay lo " +
+				"tiep nhan roi do lai.",
+		);
+		process.exit(2);
+	}
 
 	const chuTren = await page.evaluate(
 		() => document.querySelector("main")?.innerText ?? "",
@@ -535,6 +574,12 @@ async function baNhom(browser, cookie, slug) {
 			`truong ${JSON.stringify(f.label)} co trong API nhung KHONG hien tren man`,
 		);
 	}
+
+	const soTren = await page.evaluate(demDongTuTao);
+	doi(
+		soTren === dangDung.length,
+		`man liet ke ${soTren} truong tu tao nhung API tra ve ${dangDung.length} — hai so PHAI bang nhau`,
+	);
 
 	const nhan = `${TIEN_TO}chuyen nhom ${Date.now()}`;
 	const tao = await ghiApi(cookie, "fields.create", {
@@ -558,10 +603,28 @@ async function baNhom(browser, cookie, slug) {
 		await page.reload({ waitUntil: "networkidle0", timeout: 60000 });
 		await bamThe(page, "Cá nhân");
 
-		const nhomSau = await page.evaluate(docTieuDeNhom);
+		const nhomSau = await page.evaluate(docNhom);
+		const luuTru = nhomSau.find((x) => /Đã lưu trữ/.test(x.ten));
 		doi(
-			nhomSau.some((t) => /Đã lưu trữ/.test(t)),
-			`sau khi luu tru mot truong, nhom "Đã lưu trữ" KHONG xuat hien. Cac nhom: ${JSON.stringify(nhomSau)}`,
+			Boolean(luuTru),
+			`sau khi luu tru mot truong, nhom "Đã lưu trữ" KHONG xuat hien. Cac nhom: ${JSON.stringify(nhomSau.map((x) => x.ten))}`,
+		);
+		doi(
+			nhomSau.some((x) => x.ten.startsWith("Trường chuẩn")),
+			"sau khi luu tru, nhom truong chuan BIEN MAT khoi man",
+		);
+
+		const heTat = await lietKe(cookie, "CONTACT");
+		const heDang = await lietKe(cookie, "CONTACT", false);
+		doi(
+			(luuTru?.so ?? -1) === heTat.length - heDang.length,
+			`nhom da luu tru dem ${luuTru?.so} phan tu, hieu giua hai duong API la ${heTat.length - heDang.length} — hai so PHAI bang nhau`,
+		);
+
+		const soDangDungTren = await page.evaluate(demDongTuTao);
+		doi(
+			soDangDungTren === heDang.length,
+			`sau khi luu tru, man liet ke ${soDangDungTren} truong dang dung nhung API tra ve ${heDang.length}`,
 		);
 
 		const daLuu = await lietKe(cookie, "CONTACT");
@@ -586,8 +649,8 @@ async function baNhom(browser, cookie, slug) {
 	ketLuan("ba-nhom");
 }
 
-async function dienNhan(page, nhan) {
-	const o = await page.$("main input");
+async function dienNhan(page, nhan, goc = "main") {
+	const o = await page.$(`${goc} input`);
 	if (!o) return false;
 	await o.click();
 	const daiCu = (await o.evaluate((el) => el.value)).length;
@@ -613,8 +676,8 @@ async function dienNhan(page, nhan) {
 	return true;
 }
 
-async function bamChuCo(page, chu) {
-	const nut = await page.$$("button");
+async function bamChuCo(page, chu, goc = "") {
+	const nut = await page.$$(goc ? `${goc} button` : "button");
 	for (const n of nut) {
 		const t = await n.evaluate((el) => el.textContent.trim());
 		if (t === chu) {
@@ -639,6 +702,30 @@ async function bamMucMenu(page, chu) {
 		}
 	}
 	return false;
+}
+
+async function xepLaiTrongKhay(page, truoc) {
+	const tay = await page.$$(
+		'[data-slot] [aria-roledescription], main [role="button"]',
+	);
+	const keo = await page.$$("button");
+	for (const n of keo) {
+		const chu = await n.evaluate((el) => el.textContent.trim());
+		if (/^Đổi thứ tự /.test(chu)) {
+			await n.focus();
+			await page.keyboard.press("Space");
+			await new Promise((r) => setTimeout(r, 500));
+			await page.keyboard.press("ArrowDown");
+			await new Promise((r) => setTimeout(r, 500));
+			await page.keyboard.press("Space");
+			await new Promise((r) => setTimeout(r, 2500));
+			return { lam: true, vi: "" };
+		}
+	}
+	return {
+		lam: false,
+		vi: `khong tim thay tay cam "Đổi thứ tự" nao trong khay (${tay.length} phan tu co vai keo)`,
+	};
 }
 
 async function moMenuCua(page, nhan) {
@@ -738,6 +825,8 @@ async function baViec(browser, cookie, slug) {
 async function khayCu(browser, cookie, slug) {
 	await donRac(cookie, "CONTACT");
 	const nhan = `${TIEN_TO}khay ${Date.now()}`;
+	const nhanSua = `${nhan} sua`;
+	const nhanKhuon = [];
 
 	const page = await moTrang(
 		browser,
@@ -774,17 +863,121 @@ async function khayCu(browser, cookie, slug) {
 			"viec 2 tao tu goi y: khong bam duoc goi y nao trong khay",
 		);
 		if (daBam) {
+			nhanKhuon.push(daBam);
 			const sau = await lietKe(cookie, "CONTACT");
-			const moi = sau.find((f) => f.label === daBam);
 			doi(
-				Boolean(moi),
+				sau.some((f) => f.label === daBam),
 				`viec 2 tao tu goi y: API KHONG co truong ${JSON.stringify(daBam)}`,
 			);
-			if (moi) await ghiApi(cookie, "fields.delete", { id: moi.id });
+		}
+
+		const moO = await bamChuCo(page, "Trường mới", '[role="dialog"]');
+		doi(moO, "viec 3 tao tu dau: khong bam duoc nut Truong moi trong khay");
+		let tao = null;
+		if (moO) {
+			const dien = await dienNhan(page, nhan, '[role="dialog"]');
+			doi(dien, "viec 3 tao tu dau: khong dien duoc o Nhan trong khay");
+			if (dien) {
+				const daTao = await bamChuCo(page, "Tạo trường", '[role="dialog"]');
+				doi(
+					daTao,
+					"viec 3 tao tu dau: khong bam duoc nut Tao truong trong khay",
+				);
+				const sau = await lietKe(cookie, "CONTACT");
+				tao = sau.find((f) => f.label === nhan) ?? null;
+				doi(
+					Boolean(tao),
+					`viec 3 tao tu dau: API KHONG co truong ${JSON.stringify(nhan)}`,
+				);
+			}
+		}
+
+		if (tao) {
+			await page.goto(
+				`${APP}/${slug}/contacts?manageFields=contact&manageField=${tao.key}`,
+				{ waitUntil: "networkidle0", timeout: 60000 },
+			);
+			const dienSua = await dienNhan(page, nhanSua, '[role="dialog"]');
+			doi(dienSua, "viec 4 sua nhan: khong dien duoc o Nhan trong khay");
+			if (dienSua) {
+				const daLuu = await bamChuCo(page, "Lưu thay đổi", '[role="dialog"]');
+				doi(
+					daLuu,
+					"viec 4 sua nhan: khong bam duoc nut Luu thay doi trong khay",
+				);
+				const sau = await lietKe(cookie, "CONTACT");
+				doi(
+					sau.some((f) => f.id === tao.id && f.label === nhanSua),
+					`viec 4 sua nhan: API khong tra ve nhan moi ${JSON.stringify(nhanSua)}`,
+				);
+				doi(
+					!sau.some((f) => f.label === nhan),
+					`viec 4 sua nhan: API VAN con nhan cu ${JSON.stringify(nhan)}`,
+				);
+			}
+
+			await page.goto(`${APP}/${slug}/contacts?manageFields=contact`, {
+				waitUntil: "networkidle0",
+				timeout: 60000,
+			});
+
+			const truocXep = (await lietKe(cookie, "CONTACT", false)).map(
+				(f) => f.key,
+			);
+			doi(
+				truocXep.length >= 2,
+				`viec 5 xep lai: chi co ${truocXep.length} truong dang dung, can it nhat hai de doi cho`,
+			);
+
+			if (truocXep.length >= 2) {
+				const xep = await xepLaiTrongKhay(page, truocXep);
+				doi(
+					xep.lam,
+					`viec 5 xep lai: khong doi duoc thu tu trong khay — ${xep.vi}`,
+				);
+				if (xep.lam) {
+					const sauXep = (await lietKe(cookie, "CONTACT", false)).map(
+						(f) => f.key,
+					);
+					doi(
+						sauXep.join("|") !== truocXep.join("|"),
+						"viec 5 xep lai: API tra ve NGUYEN thu tu cu, ca day khong doi",
+					);
+					doi(
+						sauXep.length === truocXep.length &&
+							sauXep.every((k) => truocXep.includes(k)),
+						"viec 5 xep lai: tap khoa doi sau khi xep lai, khong chi thu tu",
+					);
+				}
+			}
+
+			const moMenu = await moMenuCua(page, nhanSua);
+			doi(
+				moMenu,
+				`viec 6 luu tru: khong mo duoc menu cua ${JSON.stringify(nhanSua)}`,
+			);
+			if (moMenu) {
+				const chon = await bamMucMenu(page, "Lưu trữ");
+				doi(chon, "viec 6 luu tru: menu khong co muc Luu tru");
+				await new Promise((r) => setTimeout(r, 2000));
+
+				const heTat = await lietKe(cookie, "CONTACT");
+				const no = heTat.find((f) => f.id === tao.id);
+				doi(
+					Boolean(no?.archived),
+					"viec 6 luu tru: API khong bao truong la da luu tru",
+				);
+				const heDang = await lietKe(cookie, "CONTACT", false);
+				doi(
+					!heDang.some((f) => f.id === tao.id),
+					"viec 6 luu tru: truong VAN nam trong danh sach dang dung",
+				);
+			}
 		}
 
 		await page.screenshot({ path: chupVao("khay-cu") });
 	} finally {
+		for (const x of nhanKhuon) await donNhanKhuon(cookie, "CONTACT", x);
 		await donRac(cookie, "CONTACT");
 		await page.close();
 	}
@@ -814,9 +1007,15 @@ async function trangThai(browser, cookie, slug) {
 		doi(goi.length > 0, "trang thai rong KHONG kem khoi goi y nao bam duoc");
 		await rong.screenshot({ path: chupVao("trang-thai-rong") });
 	} else {
+		await rong.close();
 		console.log(
-			`the Thoa thuan dang co ${dangDungDeal.length} truong nen khong do duoc ve rong o lan nay`,
+			`KHONG DO DUOC: the Thoa thuan dang co ${dangDungDeal.length} truong tu tao ` +
+				`(${dangDungDeal.map((f) => f.label).join(", ")}) nen ve trang thai RONG ` +
+				"khong dung duoc. Bao dat o day la bao mot ve chua he do, va anh cu trong " +
+				"evidence/trang-thai-rong.png se la anh cua luot truoc. Don thuc the Thoa " +
+				"thuan roi do lai.",
 		);
+		process.exit(2);
 	}
 	await rong.close();
 

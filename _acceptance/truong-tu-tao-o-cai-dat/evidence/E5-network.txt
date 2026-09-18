@@ -1,0 +1,39 @@
+E5 (AC-1) network truth
+========================
+
+Scope: dev_server.url = http://localhost:3000, dev_server.api_base = ["http://localhost:3001"]
+
+Primary source — isolated Puppeteer pages driving exactly the E5 steps
+(fresh page per locale, cookies set programmatically, request/response/
+console listeners attached before navigation, nothing else touched them):
+
+  locale=vi: GET /crm/settings -> no requestfailed, no response >=400, no console errors
+             click "Trường" -> navigated to /crm/settings/fields, no requestfailed, no response >=400
+  locale=en: GET /crm/settings -> no requestfailed, no response >=400, no console errors
+             click "Fields"  -> navigated to /crm/settings/fields, no requestfailed, no response >=400
+
+  => clean for the actual E5 steps.
+
+Secondary source — the shared Claude_Browser tab (tab-1), which was reused
+across this whole verification session. Its cumulative network log (dumped
+in full below the separator) additionally contains history predating my E5
+steps, from earlier exploratory activity on the same tab, out of scope for
+AC-1:
+
+  - POST /api/trpc/fields.archive?batch=1 -> 404 Not Found (app-scope,
+    localhost:3000, but occurred BEFORE the /crm/settings navigations timed
+    for this eval, from an unrelated fields-archive interaction — not caused
+    by, or part of, the sidebar-order/click-through steps this eval checks)
+  - 2x GET /crm/settings?_rsc=... -> 200 OK, net::ERR_ABORTED (client-side
+    RSC prefetch aborted by a subsequent navigation; normal Next.js
+    prefetch-cancellation, not a server/connection failure — response status
+    was 200 OK)
+  - Several React hydration-mismatch console errors tied to dnd-kit
+    aria-describedby ids on the Fields drag list, from earlier
+    reorder/drag interactions on that same tab — unrelated to sidebar
+    ordering or the fields-nav click-through this eval checks.
+
+None of the above secondary-source items were produced by, or affect, the
+AC-1 steps (open /settings, read sidebar order, click Trường/Fields,
+confirm URL). They are reported here for transparency per the network-truth
+rule, not counted against this eval's pass/fail.
