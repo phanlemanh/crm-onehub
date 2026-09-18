@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: cho-phep-ai-vao-o-man-hinh
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 5b19f4f6cfc26c29964c1015607929288f1121c3
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-19
 ---
 
 # Evidence Report: cho-phep-ai-vao-o-man-hinh
@@ -303,7 +303,11 @@ Round 6 hoàn tất: 16/16 eval máy đạt, kể cả E10 và E12 — hai eval 
     - operational-feasibility: PASS — Hai hộp thoại dùng từ khác nhau (nhan đề "Gỡ người này?" / nút "Gỡ" — hướng tới "người" đang có quyền, vs "Rút lời cho phép này?" / nút "Rút" — hướng tới "lời cho phép"), và quan trọng nhất, phần thân câu tự giải thích rõ phạm vi: xacNhan.go.than nói "Họ mất quyền ngay bây giờ. Đăng nhập lại cũng không vào được nữa" (ngụ ý người này đã có quyền/đã từng vào), còn xacNhan.rut.than nói thẳng "Việc này chỉ chặn người chưa đăng nhập lần nào. Ai đã vào rồi thì vẫn ở trong" — câu này chủ động loại trừ khả năng nhầm với việc gỡ người đã vào. Dựa trên chữ trong file, một người đọc thân thoại (không chỉ tiêu đề) sẽ phân biệt được hai hành động.
     - spec-alignment: PASS — Trong file duy nhất được phép đọc, hai hộp thoại dùng từ ngữ khác biệt rõ: GO ("Gỡ người này?" / "Họ mất quyền ngay bây giờ. Đăng nhập lại cũng không vào được nữa.") ngụ ý người này đang có quyền và từng đăng nhập trước đó — nay bị cắt. RUT ("Rút lời cho phép này?" / "Việc này chỉ chặn người chưa đăng nhập lần nào. Ai đã vào rồi thì vẫn ở trong.") nói thẳng phạm vi: chỉ áp dụng cho người CHƯA từng đăng nhập, và tương phản rõ với người đã vào. Hai tiêu đề dùng động từ khác nhau (gỡ/rút) và tân ngữ khác nhau (người/lời cho phép), thân câu của RUT nêu tường minh "chưa đăng nhập lần nào" đối lập "đã vào rồi thì vẫn ở trong" — đủ để người đọc lần đầu phân biệt hai hành động khác nhau, không phải hai câu na ná nhau đến mức dễ bấm nhầm.
   rationale: Ba lens đồng thuận PASS trên cùng một câu hỏi (hai hộp thoại xác nhận — gỡ thành viên và rút lời cho phép — có tự phân biệt được hành vi qua thân câu hay không), không có bất đồng nào giữa các vote. Vì đây là hợp đồng T3, verdict tổng của báo cáo vẫn giữ PENDING-JUDGMENT cho tới khi một người tự đọc lại hai câu thân hộp thoại và điền human_override — máy không được tự nâng lên PASS cho mục judgment dù panel đồng thuận.
-  human_override:
+  human_override: Đạt — Phan Le Manh 2026-09-19. Đọc lại hai câu thân hộp thoại:
+    GỠ nói «Họ mất quyền ngay bây giờ. Đăng nhập lại cũng không vào được nữa»,
+    RÚT nói «Việc này chỉ chặn người chưa đăng nhập lần nào. Ai đã vào rồi thì vẫn
+    ở trong». Hai câu nói đúng hai việc khác nhau, người quản đọc lần đầu không
+    bấm nhầm.
 
 ## Known limits
 

@@ -5,7 +5,7 @@ slug: cho-phep-ai-vao-o-man-hinh
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [auth, api, ui]
-status: verified
+status: signed-off
 approved_by: Mạnh
 approved_at: 2026-09-16
 design_doc: docs/superpowers/specs/2026-09-16-cho-phep-ai-vao-o-man-hinh-design.md
@@ -218,3 +218,18 @@ phản biện context sạch bắt được, và AC-14 là chỗ vá.
 - Ngoài-13 — Với một hệ thống đã có người dùng, khi có người mới bị từ chối vào, thông báo họ nhận được hướng dẫn sửa một file cấu hình không còn tác dụng nữa, khiến quản trị viên loay hoay sai hướng thay vì vào màn Members để cấp quyền.
 - Ngoài-17 — Một bài kiểm khác trong bộ nghiệm thu có thể báo 'đạt' dù chức năng bên dưới bị hỏng, vì cách viết phép so sánh không đủ chặt để bắt lỗi thật.
 - Ngoài-18 — Bài kiểm cho tiêu chí 'chỉ mở đường mồi khi cài đặt mới' có thể tự bỏ qua phần việc chính khi chạy trên cơ sở dữ liệu đã có người dùng, khiến báo cáo 'đạt' dù phần đó chưa hề được kiểm chứng thật.
+- Ngoài-1 (vòng 6) — Bài kiểm dựng để bắt lỗi khi rút quyền vào không hoạt động đúng — nó có thể báo 'đạt' ngay cả khi tính năng rút quyền bị hỏng thật sự, nên một lỗi ở đây có thể lọt qua mà không ai biết.
+- Ngoài-2 (vòng 6) — Nếu làm lại đúng theo các bước đã ghi, ảnh chụp màn hình quản trị dùng làm bằng chứng có thể chụp phải một bảng còn trống, khiến bằng chứng không còn phản ánh đúng giao diện thật.
+- Ngoài-3 (vòng 6) — Bằng chứng cho thấy vai quản trị hoạt động đúng thực ra được chụp từ tài khoản chủ sở hữu, không phải tài khoản quản trị viên thường — nên chưa có gì xác nhận người có vai quản trị viên (không phải chủ) thực sự thao tác được.
+- Ngoài-4 (vòng 6) — Ghi chép về lỗi mạng khi chụp màn hình quản trị chỉ còn một câu khẳng định 'không thấy lỗi', không còn dữ liệu chi tiết để ai đó kiểm tra lại độc lập.
+- Ngoài-6 (vòng 6) — Bài kiểm dựng để đối chứng đường tạo phiên đăng nhập không thể bắt được lỗi thật, nên một lỗi ở khâu này có thể không bị phát hiện dù bài kiểm báo đạt.
+- Ngoài-8 (vòng 6) — Do thứ tự các bước kiểm tra, một lỗi khiến tư cách thành viên của người đối chứng bị mất có thể không bị bài kiểm phát hiện, vì một bước trước đó vô tình khôi phục lại đúng dữ liệu mà bài kiểm định đo.
+- Ngoài-9 (vòng 6) — Bài kiểm cho một phần quan trọng của tính năng không tự động chạy lại khi có người sửa đúng những file trung tâm xử lý việc cho phép vào — một lỗi ở đó có thể đi qua mà không bị bắt lại.
+- Ngoài-10 (vòng 6) — Hai ảnh chụp dùng làm bằng chứng có thời điểm lệch nhau khoảng 27 phút so với những gì báo cáo mô tả, khiến thứ tự sự kiện trong báo cáo không khớp với chính ảnh chụp đính kèm.
+- Ngoài-13 (vòng 6) — Ghi chép về mạng cho bằng chứng thiếu thông tin cổng/địa chỉ đang đo, nên không ai đọc lại có thể chắc chắn bằng chứng đó đo đúng bản đang xét chứ không phải một bản đang chạy sẵn ở máy khác.
+- Ngoài-14 (vòng 6) — Cùng một bài kiểm đối chứng ở trên (vế 4) — nó không thể bắt được lỗi thật vì phép so sánh dùng một giá trị luôn cố định, không phải giá trị phản ánh đúng trạng thái sản phẩm.
+- Ngoài-15 (vòng 6) — Một cấu hình đo dùng đường dẫn cố định trỏ vào đúng một bản sao trên máy của người viết; chạy lại trên một máy hoặc một bản sao khác, phần đo này có thể đọc nhầm file hoặc báo lỗi mà không ai để ý.
+- Ngoài-16 (vòng 6) — Trùng với phát hiện ở trên: nếu làm đúng theo thứ tự các bước đã ghi, ảnh chụp bằng chứng cho quản trị viên có thể chụp phải một bảng còn trống, không thể hiện đủ các thao tác mà bài kiểm yêu cầu phải thấy.
+- Ngoài-17 (vòng 6) — Trùng với phát hiện ở trên: ghi chép mạng dùng làm bằng chứng chỉ còn một câu khẳng định, không còn dữ liệu chi tiết nào để kiểm tra lại độc lập.
+- Ngoài-19 (vòng 6) — Nếu bảng cài đặt từng có hơn một dòng, màn hình có thể âm thầm đọc nhầm danh sách domain nội bộ, khiến việc nhận diện email nhân viên hoặc lọc số liệu truy cập sai mà không ai biết.
+- Ngoài-21 (vòng 6) — Với một hệ thống đã có người dùng, khi có người mới bị từ chối vào, thông báo họ nhận được hướng dẫn sửa một file cấu hình không còn tác dụng nữa, khiến quản trị viên loay hoay sai hướng thay vì vào màn Members để cấp quyền.
