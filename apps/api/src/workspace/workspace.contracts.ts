@@ -21,7 +21,13 @@ export const updateWorkspaceInput = z.object({
 		.optional(),
 });
 
-export const ALLOWANCE_STATUSES = ["pending", "accepted", "cancelled"] as const;
+export const ALLOWANCE_STATUSES = [
+	"pending",
+	"accepted",
+	"rejected",
+	"canceled",
+	"unknown",
+] as const;
 
 export const allowanceOutput = z.object({
 	id: z.string(),

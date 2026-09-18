@@ -1,13 +1,21 @@
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import {
+	conHieuLuc,
+	docTrangThai,
+	type TrangThaiDaDoc,
+} from "@crm/validation/invitation-status";
 import { toWorkspaceRole, type WorkspaceRole } from "./roles";
-
-export type AllowanceStatus = "pending" | "accepted" | "cancelled";
 
 export type AllowanceRow = {
 	email: string;
 	role: string | null;
-	status: AllowanceStatus;
+	status: TrangThaiDaDoc;
+};
+
+export type HangDaDoc = {
+	rows: AllowanceRow[];
+	loi: string[];
 };
 
 export type AllowInput = {
@@ -64,8 +72,7 @@ export function decideSignIn(input: AllowInput): AllowDecision {
 
 	const row = input.allowances.find(
 		(candidate) =>
-			normalizeEmail(candidate.email) === email &&
-			candidate.status !== "cancelled",
+			normalizeEmail(candidate.email) === email && conHieuLuc(candidate.status),
 	);
 
 	if (row) {
@@ -83,6 +90,19 @@ export function decideSignIn(input: AllowInput): AllowDecision {
 	return { allowed: true, role: "member", source: "seed" };
 }
 
+export function docHang(
+	rows: readonly { email: string; role: string | null; status: unknown }[],
+): HangDaDoc {
+	const loi: string[] = [];
+	const ra = rows.map((row) => {
+		const doc = docTrangThai(row.status);
+		if (doc.loi) loi.push(doc.loi);
+		return { email: row.email, role: row.role, status: doc.trangThai };
+	});
+
+	return { rows: ra, loi };
+}
+
 export async function readAllowState(email: string): Promise<AllowInput> {
 	const normalized = normalizeEmail(email);
 
@@ -96,9 +116,13 @@ export async function readAllowState(email: string): Promise<AllowInput> {
 		db.user.count(),
 	]);
 
+	const { rows: allowances, loi } = docHang(rows);
+
+	for (const cau of loi) console.error(`allow-list: ${cau}`);
+
 	return {
 		email,
-		allowances: rows as AllowanceRow[],
+		allowances,
 		seedList: process.env.ALLOWED_SIGN_IN ?? "",
 		anyUserExists: anyUser > 0,
 	};

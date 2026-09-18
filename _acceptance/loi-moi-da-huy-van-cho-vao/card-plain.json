@@ -1,0 +1,44 @@
+{
+ "feature_plain": "Người bị thu hồi lời mời, hoặc tự từ chối lời mời, thôi đăng nhập vào được.",
+ "scope_plain": "Không đổi cấu trúc bảng lời mời, và không đụng người đã là thành viên từ trước.",
+ "analyst_plain": "",
+ "decisions": [],
+ "decisions_plain": [
+  {
+   "id": "d-20260917T174351Z-1",
+   "p": "Đã chọn để máy tự đối chiếu danh sách trạng thái với thư viện đăng nhập, thay vì chép tay rồi tin nó."
+  },
+  {
+   "id": "d-20260917T174351Z-2",
+   "p": "Đã chọn: một dòng dữ liệu hỏng thì không cho vào, nhưng cũng không làm sập lượt đăng nhập."
+  },
+  {
+   "id": "d-20260917T174351Z-3",
+   "p": "KHÔNG làm đặc tả giao diện cho vòng này, vì việc nằm ở tầng đọc dữ liệu."
+  },
+  {
+   "id": "d-20260917T235049Z-5",
+   "p": "Trong lúc làm, máy phải đổi chỗ đặt phần từ vựng trạng thái cho đúng luật của kho, và sửa lại nhiều phép đo sau khi hội đồng chấm chỉ ra chúng đo nhầm chỗ — sáu vòng chấm, bốn lượt sửa cùng một lớp lỗi."
+  },
+  {
+   "id": "d-20260918T002935Z-6",
+   "p": "Trong lúc làm, máy phải đổi chỗ đặt phần từ vựng trạng thái cho đúng luật của kho, và sửa lại nhiều phép đo sau khi hội đồng chấm chỉ ra chúng đo nhầm chỗ — sáu vòng chấm, bốn lượt sửa cùng một lớp lỗi."
+  },
+  {
+   "id": "d-20260918T012525Z-7",
+   "p": "Trong lúc làm, máy phải đổi chỗ đặt phần từ vựng trạng thái cho đúng luật của kho, và sửa lại nhiều phép đo sau khi hội đồng chấm chỉ ra chúng đo nhầm chỗ — sáu vòng chấm, bốn lượt sửa cùng một lớp lỗi."
+  },
+  {
+   "id": "d-20260918T014850Z-9",
+   "p": "Trong lúc làm, máy phải đổi chỗ đặt phần từ vựng trạng thái cho đúng luật của kho, và sửa lại nhiều phép đo sau khi hội đồng chấm chỉ ra chúng đo nhầm chỗ — sáu vòng chấm, bốn lượt sửa cùng một lớp lỗi."
+  },
+  {
+   "id": "d-20260918T022209Z-10",
+   "p": "Trong lúc làm, máy phải đổi chỗ đặt phần từ vựng trạng thái cho đúng luật của kho, và sửa lại nhiều phép đo sau khi hội đồng chấm chỉ ra chúng đo nhầm chỗ — sáu vòng chấm, bốn lượt sửa cùng một lớp lỗi."
+  },
+  {
+   "id": "d-20260918T031539Z-11",
+   "p": "Trong lúc làm, máy phải đổi chỗ đặt phần từ vựng trạng thái cho đúng luật của kho, và sửa lại nhiều phép đo sau khi hội đồng chấm chỉ ra chúng đo nhầm chỗ — sáu vòng chấm, bốn lượt sửa cùng một lớp lỗi."
+  }
+ ]
+}

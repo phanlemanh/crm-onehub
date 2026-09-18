@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Từ vựng và dữ liệu cũ — hai chuỗi, một chữ L khác nhau</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --page:  #fafafa;
+    --card:  #fafafa;
+    --ink:   #171717;
+    --muted: #575757;
+    --soft:  #666666;
+    --rule:  rgba(23,23,23,0.12);
+    --accent:#006B4F;
+    --sans:  'Geist', system-ui, sans-serif;
+    --serif: 'Lora', Georgia, serif;
+    --mono:  'Geist Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:  #171717;
+      --ink:   #fafafa;
+      --muted: #b4b4b4;
+      --soft:  #9a9a9a;
+      --rule:  rgba(250,250,250,0.16);
+      --accent:#2f9b7a;
+    }
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1180px; width: 100%; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .standfirst {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 70ch;
+    margin-bottom: 1.75rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+  svg { width: 100%; min-width: 1040px; display: block; }
+  .notes {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 0.9fr;
+    gap: 2rem;
+  }
+  .notes h2 {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .notes p { font-size: 0.86rem; line-height: 1.6; color: var(--ink); }
+  .notes p + p { margin-top: 0.6rem; }
+  .notes .quiet { color: var(--muted); }
+  code { font-family: var(--mono); font-size: 0.92em; }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+  }
+  @media (max-width: 860px) { .notes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Cổng 1 · Hình 1 · AC-1 · AC-2 · AC-3 · AC-5</p>
+  <h1>Từ vựng và dữ liệu cũ — hai chuỗi, một chữ <code>L</code> khác nhau</h1>
+  <p class="standfirst">Năm nguồn ghi vào cùng một cột <code>status</code>, và ba từ vựng chen nhau ở đó. Kho tự đúc <code>"cancelled"</code> hai chữ L; gói <code>better-auth 1.6.25</code> ghi <code>"canceled"</code> một chữ L và <code>"rejected"</code>. Vế đọc chỉ so với đúng một chuỗi của kho, nên hai trạng thái do gói ghi đi thẳng vào «cho vào». Điểm người phải quyết ở Cổng 1 nằm ở dưới: dữ liệu cũ mang chuỗi hai chữ L thì chuyển hay để nguyên.</p>
+
+  <div class="card">
+  <svg viewBox="0 0 1440 928" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ hai làn. Làn trái là năm nguồn ghi trạng thái lời mời: mời ghi pending, thu hồi bằng nút của kho ghi cancelled hai chữ L nằm ngoài từ vựng của gói, huỷ qua lộ trình của gói ghi canceled một chữ L, người được mời tự từ chối ghi rejected, kết nạp xong ghi accepted. Năm mũi tên đi sang làn phải vào khối decideSignIn, nơi luật hôm nay là danh sách cấm so với chuỗi cancelled, còn luật sau khi sửa là danh sách trắng gồm pending và accepted. Hai mũi tên tô đậm của canceled và rejected đi qua khối đó rồi thẳng vào ô cho vào. Bên dưới là một khối quyết định về dữ liệu cũ, rẽ hai nhánh: nhánh A chuyển dữ liệu cũ sang canceled trong vòng này, nhánh B để nguyên và chỉ chặn ở tầng đọc. Ghi chú nói rằng dưới danh sách trắng thì chuỗi cancelled bị chặn ở cả hai nhánh.">
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+      <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+    </defs>
+
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <line x1="768" y1="40" x2="768" y2="568" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+
+    <text x="48" y="56" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" font-weight="500" letter-spacing="0.18em">LÀN TRÁI · AI GHI TRẠNG THÁI</text>
+    <text x="48" y="76" fill="#666666" font-size="11" font-family="'Geist', sans-serif">Năm nguồn ghi vào cùng một cột status — String trần, không enum, không ràng buộc</text>
+    <line x1="48" y1="88" x2="744" y2="88" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+
+    <text x="792" y="56" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" font-weight="500" letter-spacing="0.18em">LÀN PHẢI · AI ĐỌC ĐỂ QUYẾT CHO VÀO</text>
+    <text x="792" y="76" fill="#666666" font-size="11" font-family="'Geist', sans-serif">Một chỗ quyết định, hai luật — cấm hôm nay, trắng sau khi sửa</text>
+    <line x1="792" y1="88" x2="1400" y2="88" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+
+    <path d="M 744 132 H 816 A 8 8 0 0 1 824 140 V 212 A 8 8 0 0 0 832 220 H 864" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <path d="M 744 208 H 800 A 8 8 0 0 1 808 216 V 244 A 8 8 0 0 0 816 252 H 864" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <path d="M 744 284 H 864" fill="none" stroke="#006B4F" stroke-width="2" marker-end="url(#arrow-accent)"/>
+    <path d="M 744 360 H 800 A 8 8 0 0 0 808 352 V 324 A 8 8 0 0 1 816 316 H 864" fill="none" stroke="#006B4F" stroke-width="2" marker-end="url(#arrow-accent)"/>
+    <path d="M 744 436 H 816 A 8 8 0 0 0 824 428 V 356 A 8 8 0 0 1 832 348 H 864" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <path d="M 920 384 V 456" fill="none" stroke="#006B4F" stroke-width="2" marker-end="url(#arrow-accent)"/>
+    <path d="M 1084 384 V 412 A 8 8 0 0 0 1092 420 H 1144 A 8 8 0 0 1 1152 428 V 456" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+    <path d="M 1216 384 V 456" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <rect x="48" y="104" width="696" height="56" rx="6" fill="#fafafa"/>
+    <rect x="48" y="104" width="696" height="56" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+    <text x="72" y="128" fill="#171717" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Mời người vào</text>
+    <text x="72" y="144" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">workspace.service.ts:307</text>
+    <rect x="400" y="116" width="152" height="32" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.28)" stroke-width="1"/>
+    <text x="476" y="136" fill="#171717" font-size="13" font-family="'Geist Mono', monospace" text-anchor="middle">"pending"</text>
+    <text x="572" y="128" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">kho ghi</text>
+    <text x="572" y="144" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">gói có chuỗi này</text>
+
+    <rect x="48" y="180" width="696" height="56" rx="6" fill="#fafafa"/>
+    <rect x="48" y="180" width="696" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <text x="72" y="204" fill="#171717" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Thu hồi bằng nút của kho</text>
+    <text x="72" y="220" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">revokeAllowance · workspace.service.ts:342, 409</text>
+    <rect x="392" y="188" width="168" height="40" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <text x="476" y="212" fill="#575757" font-size="15" font-family="'Geist Mono', monospace" text-anchor="middle">"cance<tspan fill="#171717" font-weight="600" text-decoration="underline">ll</tspan>ed"</text>
+    <text x="572" y="204" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" font-weight="600">HAI CHỮ L · kho tự đúc</text>
+    <text x="572" y="220" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">gói KHÔNG có chuỗi này</text>
+
+    <rect x="48" y="256" width="696" height="56" rx="6" fill="#fafafa"/>
+    <rect x="48" y="256" width="696" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <text x="72" y="280" fill="#171717" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Huỷ qua lộ trình của gói</text>
+    <text x="72" y="296" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">better-auth 1.6.25 · cancel-invitation</text>
+    <rect x="392" y="264" width="168" height="40" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <text x="476" y="288" fill="#575757" font-size="15" font-family="'Geist Mono', monospace" text-anchor="middle">"cance<tspan fill="#171717" font-weight="600" text-decoration="underline">l</tspan>ed"</text>
+    <text x="572" y="280" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" font-weight="600">MỘT CHỮ L · gói ghi</text>
+    <text x="572" y="296" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">gói có chuỗi này</text>
+
+    <rect x="48" y="332" width="696" height="56" rx="6" fill="#fafafa"/>
+    <rect x="48" y="332" width="696" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <text x="72" y="356" fill="#171717" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Người được mời tự từ chối</text>
+    <text x="72" y="372" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">better-auth 1.6.25 · reject-invitation</text>
+    <rect x="400" y="344" width="152" height="32" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <text x="476" y="364" fill="#171717" font-size="13" font-family="'Geist Mono', monospace" text-anchor="middle">"rejected"</text>
+    <text x="572" y="356" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">gói ghi</text>
+    <text x="572" y="372" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">gói có chuỗi này</text>
+
+    <rect x="48" y="408" width="696" height="56" rx="6" fill="#fafafa"/>
+    <rect x="48" y="408" width="696" height="56" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+    <text x="72" y="432" fill="#171717" font-size="13" font-family="'Geist', sans-serif" font-weight="600">Kết nạp xong</text>
+    <text x="72" y="448" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">organization.ts:116</text>
+    <rect x="400" y="420" width="152" height="32" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.28)" stroke-width="1"/>
+    <text x="476" y="440" fill="#171717" font-size="13" font-family="'Geist Mono', monospace" text-anchor="middle">"accepted"</text>
+    <text x="572" y="432" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">kho ghi</text>
+    <text x="572" y="448" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">gói có chuỗi này</text>
+
+    <rect x="864" y="184" width="440" height="200" rx="8" fill="#fafafa"/>
+    <rect x="864" y="184" width="440" height="200" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <rect x="880" y="200" width="64" height="20" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="912" y="212" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐỌC</text>
+    <text x="884" y="244" fill="#171717" font-size="14" font-family="'Geist Mono', monospace" font-weight="600">decideSignIn</text>
+    <text x="884" y="260" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">packages/auth/src/allow-list.ts:67</text>
+    <line x1="884" y1="276" x2="1284" y2="276" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="884" y="292" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" font-weight="500" letter-spacing="0.12em">HÔM NAY · DANH SÁCH CẤM</text>
+    <text x="884" y="312" fill="#171717" font-size="11" font-family="'Geist Mono', monospace">candidate.status !== "cancelled"</text>
+    <text x="884" y="340" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" font-weight="500" letter-spacing="0.12em">SAU KHI SỬA · DANH SÁCH TRẮNG</text>
+    <text x="884" y="360" fill="#171717" font-size="11" font-family="'Geist Mono', monospace">status thuộc {"pending", "accepted"}</text>
+
+    <rect x="928" y="408" width="76" height="16" rx="2" fill="#fafafa"/>
+    <text x="932" y="420" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" font-weight="600" letter-spacing="0.06em">HÔM NAY LỌT</text>
+    <rect x="996" y="392" width="80" height="16" rx="2" fill="#fafafa"/>
+    <text x="1072" y="404" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">SAU KHI SỬA</text>
+    <rect x="1224" y="408" width="84" height="16" rx="2" fill="#fafafa"/>
+    <text x="1228" y="420" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">HÔM NAY CHẶN</text>
+
+    <rect x="800" y="456" width="240" height="72" rx="6" fill="#fafafa"/>
+    <rect x="800" y="456" width="240" height="72" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="920" y="488" fill="#006B4F" font-size="14" font-family="'Geist', sans-serif" font-weight="600" text-anchor="middle">CHO VÀO</text>
+    <text x="920" y="508" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ensureWorkspaceMembership</text>
+
+    <rect x="1096" y="456" width="240" height="72" rx="6" fill="#fafafa"/>
+    <rect x="1096" y="456" width="240" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <text x="1216" y="488" fill="#171717" font-size="14" font-family="'Geist', sans-serif" font-weight="600" text-anchor="middle">TỪ CHỐI</text>
+    <text x="1216" y="508" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">không tạo dòng thành viên</text>
+
+    <text x="800" y="548" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace">hôm nay lọt: "canceled" · "rejected" · và mọi chuỗi lạ chưa từng thấy</text>
+
+    <line x1="40" y1="584" x2="1400" y2="584" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="48" y="612" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" font-weight="500" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH CỦA CỔNG 1 · DỮ LIỆU CŨ ĐANG NẰM TRONG BẢNG</text>
+
+    <path d="M 388 684 H 432 A 8 8 0 0 0 440 676 V 672 A 8 8 0 0 1 448 664 H 488" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <path d="M 388 732 H 440 A 8 8 0 0 1 448 740 V 768 A 8 8 0 0 0 456 776 H 488" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <path d="M 72 656 L 376 656 L 400 708 L 376 760 L 72 760 L 48 708 Z" fill="#fafafa"/>
+    <path d="M 72 656 L 376 656 L 400 708 L 376 760 L 72 760 L 48 708 Z" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <text x="224" y="692" fill="#171717" font-size="12" font-family="'Geist', sans-serif" font-weight="600" text-anchor="middle">Dòng "cancelled" đã nằm sẵn trong</text>
+    <text x="224" y="712" fill="#171717" font-size="12" font-family="'Geist', sans-serif" font-weight="600" text-anchor="middle">bảng invitation — vòng này</text>
+    <text x="224" y="732" fill="#171717" font-size="12" font-family="'Geist', sans-serif" font-weight="600" text-anchor="middle">làm gì với nó?</text>
+
+    <rect x="488" y="616" width="456" height="96" rx="6" fill="#fafafa"/>
+    <rect x="488" y="616" width="456" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="512" y="640" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" font-weight="500" letter-spacing="0.18em">NHÁNH A</text>
+    <text x="512" y="664" fill="#171717" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Chuyển dữ liệu cũ sang "canceled" trong vòng này</text>
+    <text x="512" y="684" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">thêm một lượt migration · revokeAllowance đổi sang ghi "canceled"</text>
+    <text x="512" y="698" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">kho và gói nói cùng một thứ tiếng</text>
+
+    <rect x="488" y="728" width="456" height="96" rx="6" fill="#fafafa"/>
+    <rect x="488" y="728" width="456" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="512" y="752" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" font-weight="500" letter-spacing="0.18em">NHÁNH B</text>
+    <text x="512" y="776" fill="#171717" font-size="12" font-family="'Geist', sans-serif" font-weight="600">Để dữ liệu cũ nguyên, chỉ chặn ở tầng đọc</text>
+    <text x="512" y="796" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">không migration · revokeAllowance vẫn ghi "cancelled"</text>
+    <text x="512" y="810" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">bảng còn hai thứ tiếng, tầng đọc phải nhớ mãi giá trị cũ</text>
+
+    <rect x="976" y="616" width="2" height="208" fill="rgba(23,23,23,0.20)"/>
+    <text x="1000" y="636" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" font-weight="500" letter-spacing="0.18em">GHI CHÚ</text>
+    <text x="1000" y="668" fill="#171717" font-size="13" font-family="'Lora', Georgia, serif" font-style="italic">Dưới danh sách trắng {pending, accepted}, chuỗi</text>
+    <text x="1000" y="692" fill="#171717" font-size="13" font-family="'Lora', Georgia, serif" font-style="italic">"cancelled" bị chặn ở CẢ hai nhánh. Khác nhau</text>
+    <text x="1000" y="716" fill="#171717" font-size="13" font-family="'Lora', Georgia, serif" font-style="italic">không nằm ở chỗ ai được vào, mà ở chỗ bảng có</text>
+    <text x="1000" y="740" fill="#171717" font-size="13" font-family="'Lora', Georgia, serif" font-style="italic">còn nói hai thứ tiếng hay không.</text>
+    <text x="1000" y="784" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">Phục vụ AC-1 · AC-2 · AC-3 · AC-5</text>
+
+    <line x1="40" y1="872" x2="1400" y2="872" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="40" y="896" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+    <line x1="160" y1="888" x2="196" y2="888" stroke="#006B4F" stroke-width="2" marker-end="url(#arrow-accent)"/>
+    <text x="208" y="896" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">đường lọt hôm nay — "canceled" và "rejected" đi thẳng vào CHO VÀO</text>
+
+    <line x1="580" y1="888" x2="616" y2="888" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+    <text x="628" y="896" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">sau khi sửa — danh sách trắng {pending, accepted}</text>
+
+    <rect x="936" y="880" width="20" height="16" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <text x="964" y="896" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">nguồn ghi — chữ trong ngoặc kép là giá trị thật trong cột status</text>
+  </svg>
+  </div>
+
+  <div class="notes">
+    <div>
+      <h2>Một chữ L, hai trạng thái lọt</h2>
+      <p>Kho so vế đọc với đúng một chuỗi: <code>"cancelled"</code>. Gói <code>better-auth 1.6.25</code> xuất ra <code>"pending" | "accepted" | "rejected" | "canceled"</code> — <code>canceled</code> một chữ L. Hai chuỗi không bao giờ khớp, nên người bị thu hồi qua lộ trình của gói, hoặc tự từ chối lời mời, vẫn vào được với đúng vai ghi trong dòng.</p>
+      <p class="quiet">Chiều ngược lại cũng thật: <code>"cancelled"</code> của kho không nằm trong từ vựng của gói, nên bất kỳ luật nào viết theo kiểu «chặn khi thuộc tập kết thúc» sẽ cho nó lọt.</p>
+    </div>
+    <div>
+      <h2>Vì sao phải là danh sách trắng</h2>
+      <p>Hỏi «có nằm trong tập còn hiệu lực không» thì <code>canceled</code>, <code>rejected</code>, <code>cancelled</code> của dữ liệu cũ và một chuỗi rác chưa từng thấy đều dẫn tới từ chối bằng chính cấu trúc của luật.</p>
+      <p class="quiet">Hỏi «có phải một trong các giá trị xấu đã biết không» thì luật chỉ đúng tới ngày gói thêm một giá trị. Cột <code>status</code> là <code>String</code> trần, không enum — không lớp nào khác chặn một giá trị lạ.</p>
+    </div>
+    <div>
+      <h2>Điều người quyết ở đây</h2>
+      <p>Cả hai nhánh đều chặn đúng. Nhánh A trả một lượt migration để bảng chỉ còn một thứ tiếng; nhánh B giữ nguyên dữ liệu và bắt tầng đọc mang <code>"cancelled"</code> như một giá trị cũ cần biết mãi mãi.</p>
+      <p class="quiet">Hợp đồng đang để dòng <code>[GIẢ ĐỊNH]</code> cho câu này — dữ liệu thật chưa được khảo sát.</p>
+    </div>
+  </div>
+
+  <footer>Hình 1 / 1 · điểm quyết định ở Cổng 1 · loi-moi-da-huy-van-cho-vao · AC-1, AC-2, AC-3, AC-5</footer>
+</div>
+</body>
+</html>
