@@ -1,7 +1,6 @@
 export {
 	ALLOWANCE_WITHOUT_EXPIRY,
 	type AllowanceRow,
-	type AllowanceStatus,
 	type AllowDecision,
 	type AllowInput,
 	decideSignIn,
@@ -22,6 +21,15 @@ export {
 	isMicrosoftConfigured,
 	isSlackConfigured,
 } from "./env";
+export {
+	CANCELLED_CU,
+	CON_HIEU_LUC,
+	conHieuLuc,
+	docTrangThai,
+	TRANG_THAI_LOI_MOI,
+	type TrangThaiDaDoc,
+	type TrangThaiLoiMoi,
+} from "./invitation-status";
 export {
 	canChangeRole,
 	canManageConnections,

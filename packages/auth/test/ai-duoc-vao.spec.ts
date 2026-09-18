@@ -86,7 +86,7 @@ const BANG: Dong[] = [
 	},
 	{
 		n: 9,
-		allowances: khue("cancelled"),
+		allowances: khue("canceled"),
 		seedList: "",
 		anyUserExists: true,
 		email: "khue@gmail.com",

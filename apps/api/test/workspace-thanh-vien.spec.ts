@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "bun:test";
 import { auth } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import { TRANG_THAI_HUY } from "@crm/validation/invitation-status";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { WorkspaceService } from "../src/workspace/workspace.service";
 
@@ -199,8 +200,8 @@ describe("cho-phep-lai", () => {
 			khiCancelled,
 			khiPending,
 			khiAccepted,
-			"cancelled mo, pending va accepted dong",
-		]).toEqual([true, false, false, "cancelled mo, pending va accepted dong"]);
+			"canceled mo, pending va accepted dong",
+		]).toEqual([true, false, false, "canceled mo, pending va accepted dong"]);
 
 		expect([
 			truoc,
@@ -212,9 +213,9 @@ describe("cho-phep-lai", () => {
 			where: { id: dau.id },
 			select: { status: true },
 		});
-		expect([cu?.status, "dong cancelled cu con nguyen"]).toEqual([
-			"cancelled",
-			"dong cancelled cu con nguyen",
+		expect([cu?.status, "dong canceled cu con nguyen"]).toEqual([
+			"canceled",
+			"dong canceled cu con nguyen",
 		]);
 	});
 });
@@ -358,7 +359,7 @@ describe("chu-cuoi-cung", () => {
 			sau?.status,
 			"hang user luu chu hoa, loi cho phep luu chu thuong — van phai rut duoc",
 		]).toEqual([
-			"cancelled",
+			"canceled",
 			"hang user luu chu hoa, loi cho phep luu chu thuong — van phai rut duoc",
 		]);
 	});
@@ -415,12 +416,12 @@ describe("chu-cuoi-cung", () => {
 			hang,
 			sau?.status,
 			phienConLai,
-			"hang thanh vien mat, loi cho phep thanh cancelled, phien bi thu hoi",
+			"hang thanh vien mat, loi cho phep thanh canceled, phien bi thu hoi",
 		]).toEqual([
 			null,
-			"cancelled",
+			"canceled",
 			0,
-			"hang thanh vien mat, loi cho phep thanh cancelled, phien bi thu hoi",
+			"hang thanh vien mat, loi cho phep thanh canceled, phien bi thu hoi",
 		]);
 	});
 });
@@ -802,11 +803,115 @@ describe("go-tron-ven", () => {
 		expect([
 			lai,
 			dongLoi?.status,
-			"dang nhap lai khong tu thanh vien, va loi cho phep van cancelled",
+			"dang nhap lai khong tu thanh vien, va loi cho phep van canceled",
 		]).toEqual([
 			null,
-			"cancelled",
-			"dang nhap lai khong tu thanh vien, va loi cho phep van cancelled",
+			"canceled",
+			"dang nhap lai khong tu thanh vien, va loi cho phep van canceled",
 		]);
+	});
+});
+
+describe("trang-thai-that", () => {
+	beforeEach(async () => {
+		await don();
+		await dungKho();
+	});
+
+	it("bon o viet truoc: thu tuc danh sach tra ve dung trang thai da luu", async () => {
+		const quan = await dungNguoi("quan-tt", "owner");
+
+		const BANG = [
+			["pending", "pending"],
+			["accepted", "accepted"],
+			["canceled", "canceled"],
+			["rejected", "rejected"],
+		] as const;
+
+		expect(BANG.length).toBe(4);
+
+		for (const [luu] of BANG) {
+			await db.invitation.create({
+				data: {
+					id: id(`inv-${luu}`),
+					organizationId: WORKSPACE_ID,
+					email: `${suffix}-${luu}@onemount.com`,
+					role: "member",
+					status: luu,
+					expiresAt: new Date("9999-12-31T00:00:00.000Z"),
+					inviterId: quan,
+				},
+			});
+		}
+
+		const { rows } = await workspace.allowances(quan);
+
+		for (const [luu, ra] of BANG) {
+			const dong = rows.find(
+				(r) => r.email === `${suffix}-${luu}@onemount.com`,
+			);
+			expect(
+				dong?.status,
+				`o "${luu}": luu "${luu}" thi thu tuc phai tra "${ra}", nhan "${dong?.status}"`,
+			).toBe(ra);
+		}
+	});
+
+	it("gia tri la ra unknown, khong hoa pending", async () => {
+		const quan = await dungNguoi("quan-la", "owner");
+
+		await db.invitation.create({
+			data: {
+				id: id("inv-la"),
+				organizationId: WORKSPACE_ID,
+				email: `${suffix}-la@onemount.com`,
+				role: "member",
+				status: "mot-chuoi-la",
+				expiresAt: new Date("9999-12-31T00:00:00.000Z"),
+				inviterId: quan,
+			},
+		});
+
+		const { rows } = await workspace.allowances(quan);
+		const dong = rows.find((r) => r.email === `${suffix}-la@onemount.com`);
+
+		expect(
+			dong?.status,
+			`gia tri la phai ra "unknown", khong duoc hoa "pending", nhan "${dong?.status}"`,
+		).toBe("unknown");
+	});
+});
+
+describe("ghi-hang-co-ten", () => {
+	beforeEach(async () => {
+		await don();
+		await dungKho();
+	});
+
+	it("nut thu hoi ghi dung chuoi canceled vao co so du lieu", async () => {
+		const quan = await dungNguoi("quan-ghi", "owner");
+		const dia = `${suffix}-ghi@onemount.com`;
+
+		const loi = await workspace.allowEmail(quan, {
+			email: dia,
+			role: "member",
+		});
+
+		await workspace.revokeAllowance(quan, { allowanceId: loi.id });
+
+		const dong = await db.invitation.findUnique({
+			where: { id: loi.id },
+			select: { status: true },
+		});
+
+		expect(
+			dong?.status,
+			`nut thu hoi phai ghi chuoi "canceled" vao cot status, nhan "${dong?.status}"`,
+		).toBe("canceled");
+
+		expect(
+			TRANG_THAI_HUY,
+			`hang TRANG_THAI_HUY phai mang chuoi "canceled", nhan "${TRANG_THAI_HUY}"`,
+		).toBe("canceled");
 	});
 });

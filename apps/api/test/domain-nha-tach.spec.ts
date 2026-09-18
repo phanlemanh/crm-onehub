@@ -96,7 +96,7 @@ async function nopForm(phan: string, email: string) {
 	}
 }
 
-function aiVaoDuoc(status: "pending" | "cancelled") {
+function aiVaoDuoc(status: "pending" | "canceled") {
 	return decideSignIn({
 		email: "khach@gmail.com",
 		allowances: [{ email: "khach@gmail.com", role: "member", status }],
@@ -152,7 +152,7 @@ describe("domain nha tach khoi danh sach nguoi", () => {
 
 		const nhaKhiRut = (await hopThu.internalIdentity()).domains.has(NHA);
 		const nopKhiRut = await nopForm("da-rut", `nguoi@${NHA}`);
-		const vaoKhiRut = aiVaoDuoc("cancelled");
+		const vaoKhiRut = aiVaoDuoc("canceled");
 
 		expect([
 			nhaKhiCoPhep,

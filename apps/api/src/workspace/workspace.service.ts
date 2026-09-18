@@ -13,6 +13,10 @@ import {
 import type { Db, Prisma } from "@crm/db";
 import { isOnboarded, markOnboarded, workspaceSlug } from "@crm/db/workspace";
 import {
+	docTrangThai,
+	TRANG_THAI_HUY,
+} from "@crm/validation/invitation-status";
+import {
 	BadRequestException,
 	ForbiddenException,
 	Injectable,
@@ -64,10 +68,6 @@ const ALLOWANCE_SELECT = {
 type AllowanceRow = Prisma.InvitationGetPayload<{
 	select: typeof ALLOWANCE_SELECT;
 }>;
-
-function toStatus(value: string): Allowance["status"] {
-	return value === "accepted" || value === "cancelled" ? value : "pending";
-}
 
 const SORTABLE: OrderByColumns<Prisma.MemberOrderByWithRelationInput> = {
 	name: (dir) => ({ user: { name: dir } }),
@@ -339,7 +339,7 @@ export class WorkspaceService {
 
 		const updated = await this.db.invitation.update({
 			where: { id: target.id },
-			data: { status: "cancelled" },
+			data: { status: TRANG_THAI_HUY },
 			select: ALLOWANCE_SELECT,
 		});
 
@@ -406,7 +406,7 @@ export class WorkspaceService {
 						email,
 						status: { in: ["pending", "accepted"] },
 					},
-					data: { status: "cancelled" },
+					data: { status: TRANG_THAI_HUY },
 				});
 			}
 		});
@@ -421,11 +421,21 @@ export class WorkspaceService {
 	}
 
 	private toAllowance(row: AllowanceRow): Allowance {
+		const doc = docTrangThai(row.status);
+
+		if (doc.loi) {
+			this.logger.warn({
+				message: "Invitation status unreadable",
+				allowanceId: row.id,
+				status: row.status,
+			});
+		}
+
 		return {
 			id: row.id,
 			email: row.email,
 			role: toRole(row.role ?? "member"),
-			status: toStatus(row.status),
+			status: doc.trangThai,
 			invitedByName: row.user?.name ?? null,
 			createdAt: row.createdAt.toISOString(),
 		};
