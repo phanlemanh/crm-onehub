@@ -5,7 +5,7 @@ slug: ho-so-khai-dung-tieng
 owner: manh@mstar.vn
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-09-19
 amended_at: 2026-09-19
