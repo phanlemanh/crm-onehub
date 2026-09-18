@@ -14,6 +14,12 @@ const TO_KIND = {
 	DEAL: "deal",
 } satisfies Record<FieldEntity, RecordKind>;
 
+export const FIELD_ENTITIES = [
+	"COMPANY",
+	"CONTACT",
+	"DEAL",
+] as const satisfies readonly FieldEntity[];
+
 export function entityOf(kind: RecordKind): FieldEntity {
 	return TO_ENTITY[kind];
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { entityOf } from "@/components/crm/fields/fields-entity";
+import { FIELD_ENTITIES } from "@/components/crm/fields/fields-entity";
 import {
 	PageShell,
 	PageShellContent,
@@ -51,13 +51,16 @@ async function Fields({
 	await requireSession();
 
 	const kind = kindFrom(await loadFieldsPageParams(searchParams));
-	const entity = entityOf(kind);
 
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
 
-	await queryClient.prefetchQuery(
-		trpc.fields.list.queryOptions({ entity, includeArchived: true }),
+	await Promise.all(
+		FIELD_ENTITIES.map((entity) =>
+			queryClient.prefetchQuery(
+				trpc.fields.list.queryOptions({ entity, includeArchived: true }),
+			),
+		),
 	);
 
 	return (
