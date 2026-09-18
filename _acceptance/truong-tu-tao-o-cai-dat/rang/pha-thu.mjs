@@ -215,18 +215,14 @@ for (const ca of CA) {
 			const tep = ca.mayChu
 				? `${ban.goc}/_acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs`
 				: `${ban.goc}/${THUOC}`;
+			const moi = { ...process.env, GOC_CAY: ban.goc };
+			if (ca.mayChu) {
+				moi.APP_URL = ban.app;
+				moi.API_URL = process.env.API_URL ?? "http://localhost:3001";
+			}
 			ra = execFileSync("bun", [tep, ca.che], {
 				encoding: "utf8",
-				env: {
-					...process.env,
-					GOC_CAY: ban.goc,
-					...(ca.mayChu
-						? {
-								APP_URL: ban.app,
-								API_URL: process.env.API_URL ?? "http://localhost:3001",
-							}
-						: {}),
-				},
+				env: moi,
 			});
 		} catch (loi) {
 			ma = loi.status ?? 1;
