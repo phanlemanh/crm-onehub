@@ -1,0 +1,116 @@
+{
+ "feature_plain": "Người quản trị vào Cài đặt thấy mục Trường, mở ra trang quản trị ba thực thể, và được gợi ý bộ trường của môi giới tài chính và bất động sản Việt.",
+ "scope_plain": "Không sửa khay trượt đang chạy; quyền sửa trường theo vai trò, kiểu tiền tệ và kiểu nhiều lựa chọn để thành ô riêng.",
+ "analyst_plain": "",
+ "decisions": [],
+ "decisions_plain": [
+  {
+   "id": "d-20260918T003000Z-1",
+   "p": "Vòng này KHÔNG xây lại tính năng, vì kho đã có nó từ 2026-08-06. Chỉ mở đường vào và thay bộ gợi ý. Đổi lại, tiết kiệm hai ngày công."
+  },
+  {
+   "id": "d-20260918T003000Z-2",
+   "p": "KHÔNG chặn quyền sửa trường theo vai trò ở vòng này. Đổi lại, mọi thành viên vẫn sửa được trường của cả đội; rủi ro hằng ngày thấp vì giao diện chỉ cho lưu trữ mềm."
+  },
+  {
+   "id": "d-20260918T003000Z-3",
+   "p": "KHÔNG thêm kiểu tiền tệ, kiểu nhiều lựa chọn, trường tính toán. Đổi lại, sản phẩm tài chính chưa gợi ý được trường tiền tệ."
+  },
+  {
+   "id": "d-20260918T003000Z-4",
+   "p": "Cổng Đáng ký làm, và không dựng bản mẫu nào nên không có mã mẫu để giữ."
+  },
+  {
+   "id": "d-20260918T012859Z-5",
+   "p": "KHÔNG chạm khay trượt đang chạy; trang mới lắp lại từ hai thành phần đã có. Đổi lại, khoảng bốn mươi dòng điều phối bị lặp."
+  },
+  {
+   "id": "d-20260918T012859Z-6",
+   "p": "Trang dùng nhóm khoá địa chỉ riêng, nên vào Cài đặt không bị khay trượt đè lên."
+  },
+  {
+   "id": "d-20260918T012859Z-7",
+   "p": "KHÔNG chạy phiên thiết kế, vì trang mới không sinh hình thái mới. Đổi lại, người duyệt đọc giao diện bằng chữ. Dòng này ĐÃ BỊ LẬT, xem dòng chờ phê."
+  },
+  {
+   "id": "d-20260918T012859Z-8",
+   "p": "Gợi ý chỉ dùng ba kiểu trường sẵn có, nên không chạm lược đồ dữ liệu. Đổi lại, chưa gợi ý được trường tiền tệ hay nhiều lựa chọn."
+  },
+  {
+   "id": "d-20260918T012859Z-9",
+   "p": "Phép đo đọc chín khoá bộ cào bằng cách nhập trực tiếp, nên bộ cào thêm khoá thứ mười thì phép đo tự thấy."
+  },
+  {
+   "id": "d-20260918T014419Z-10",
+   "p": "KHÔNG thêm cột ghi ai tạo trường, vì chạm lược đồ dữ liệu là đường T3. Đổi lại, phép đếm ngưỡng bốn tuần là xấp xỉ bằng loại trừ."
+  },
+  {
+   "id": "d-20260918T014419Z-11",
+   "p": "Ghim bảng mười lăm gợi ý thành hằng trong tệp thước, nên nội dung bộ gợi ý thôi là lời hứa suông."
+  },
+  {
+   "id": "d-20260918T014419Z-12",
+   "p": "Mọi phép đo phải tự khai gốc cây, nên lượt đột biến không đọc nhầm cây chưa bị phá."
+  },
+  {
+   "id": "d-20260918T014419Z-13",
+   "p": "Thêm tiêu chí cho ba nhóm trường, và đường vào cũ đo bằng sáu việc ở tầng sau."
+  },
+  {
+   "id": "d-20260918T014419Z-14",
+   "p": "Sổ sách thôi lệch: mỗi tiêu chí trỏ đúng thước đo nó."
+  },
+  {
+   "id": "d-20260918T014419Z-15",
+   "p": "KHÔNG thêm tiêu chí cho bàn phím và khổ hẹp. Dòng này ĐÃ BỊ LẬT bởi quyết định veto của anh."
+  },
+  {
+   "id": "d-20260918T015514Z-17",
+   "p": "Sửa hàm sinh khoá để bỏ dấu tiếng Việt, nên khoá đọc được và phép kiểm trùng khoá bộ cào mới có nghĩa. Đổi lại, một hàm dùng chung đổi hành vi."
+  },
+  {
+   "id": "d-20260918T023615Z-18",
+   "p": "Phép đo trạng thái lỗi phải đổi thẻ mới bắt được lượt gọi thật."
+  },
+  {
+   "id": "d-20260918T024020Z-19",
+   "p": "Nhúng tham số vào bản sao script chấm, vì môi trường chấm không đọc được tệp."
+  },
+  {
+   "id": "d-20260918T031644Z-20",
+   "p": "Sửa năm chỗ phép đo báo xanh khi chưa đo gì, tất cả là lỗi của bộ đo này."
+  },
+  {
+   "id": "d-20260918T035305Z-21",
+   "p": "Sửa hàm đọc mô tả trang: nó bắt cả tiêu đề nên khẳng định mô tả không rỗng luôn đúng dù mô tả trống."
+  },
+  {
+   "id": "d-20260918T035305Z-23",
+   "p": "KHÔNG tung lại bầy chấm song song lần thứ ba; chuyển sang làn tuần tự. Đổi lại, bằng chứng đến từ làn tuần tự."
+  },
+  {
+   "id": "d-20260918T043635Z-23",
+   "p": "Máy chủ nạp trước cả ba thẻ, nên mở lại hay chia sẻ đường dẫn không phải chờ lượt tải thứ hai. Đổi lại, ba truy vấn mỗi lần dựng trang."
+  },
+  {
+   "id": "d-20260918T062707Z-24",
+   "p": "NGƯỜI QUYẾT: anh veto dòng bỏ phiên thiết kế và yêu cầu chạy nó trước cổng này. Dòng này cần anh phê tường minh."
+  },
+  {
+   "id": "d-20260918T062707Z-26",
+   "p": "Chạy phiên thiết kế nấc một, không đồng bộ: máy dựng, tự đo, tự chụp, gửi gói rồi đi làm việc khác."
+  },
+  {
+   "id": "d-20260918T062707Z-28",
+   "p": "KHÔNG đặt khoá veto sang đã-veto, vì anh veto một dòng sổ chứ không bác phạm vi."
+  },
+  {
+   "id": "d-20260918T063404Z-27",
+   "p": "Phiên thiết kế tìm ra lỗi thật: Esc không đóng ô sửa. Đã vá, và thêm tiêu chí cùng thước cho bàn phím."
+  },
+  {
+   "id": "d-20260918T065212Z-28",
+   "p": "Đính chính một câu sai trong sổ về khoá veto: nó chặn merge, không buộc máy dừng."
+  }
+ ]
+}
