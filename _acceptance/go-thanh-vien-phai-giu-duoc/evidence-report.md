@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: e62300770c4b65aa022a2f9c30eee4f0cc89bcc7
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-18 — ký Cổng 2 trên verdict PASS của vòng chấm 1 (3/3 eval máy, 4/4 lệnh chứng, 0 lỗi trong hợp đồng, không vòng sửa nào). Mười hai mục ngoài hợp đồng định đoạt «ghi Known limits»; bốn mục — Ngoài-1 và Ngoài-8 (cùng một chỗ, hai làn soi độc lập tìm ra), Ngoài-6 và Ngoài-16 — định đoạt «mở hợp đồng mới»; phạm vi đã cắt giữ nguyên. Ký trên hiểu biết rằng chiều đỏ trên baseline của cả ba eval là đỏ-vì-bài-chưa-tồn-tại chứ không phải đỏ-vì-mã-sai, rằng chiều đỏ thật được ghim ở S3 bằng chính dòng lệnh eval khai, và rằng nhánh kết nạp mồi vừa viết mang một luật trái với `decideSignIn` — luật ấy nằm sau một cánh cửa mà Known limits của chính hợp đồng này khai là không mở được qua đường sản phẩm, và được giao cho một hồ sơ riêng thay vì sửa trong vòng này.
 ---
 
 # Evidence Report: go-thanh-vien-phai-giu-duoc

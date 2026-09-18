@@ -5,7 +5,7 @@ slug: go-thanh-vien-phai-giu-duoc
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-18
 ---
@@ -66,3 +66,31 @@ Ba trục trên đều có thước CE là vật có thật trong kho, không d�
 - **Đường kết nạp mồi không tới được qua giao diện sản phẩm.** `removeMember` từ chối gỡ owner cuối cùng, nên bảng thành viên không về 0 bằng đường sản phẩm. AC-3 canh một cánh cửa không khoá chứ không phải một lỗ đang chảy — nó tới được qua thao tác cơ sở dữ liệu tay, một lượt phục hồi từ bản lưu cũ, hoặc `db:test --reset` khi phát triển.
 
 - **Dụng cụ mint phiên đang gọi thiếu email.** `apps/api/scripts/dev-session.ts` gọi `ensureWorkspaceMembership(user.id)` không truyền `email`; hàm nhận `email = ""` và `decideSignIn` trả DENY ngay ở dòng đầu, nên thước không dựng lại được đường sản phẩm thật. Bản vá một dòng đã cherry-pick vào vòng này (commit gốc `880f0891`, thẻ máy `vaS-dev-session-cho-ho-so`) chứ không xin miễn trừ T1 — đổi dụng cụ mint phiên là đổi tiền đề của mọi phép đo đăng nhập.
+
+### Ghi thêm tại Cổng 2 — 12 mục ngoài hợp đồng người quyết nhận làm hạn chế đã biết
+
+- **Ngoài-2 · Nuốt lỗi đọc status của lời mời ở đường kết nạp mồi.** Nhánh mồi lấy `.trangThai` của `docTrangThai` và vứt `.loi`. Một dòng mang giá trị cũ `"cancelled"` đọc ra `"unknown"`, người đó bị loại, và không dòng nhật ký nào nói vì sao — «đọc không được» và «lời mời đã kết thúc» trộn thành một.
+
+- **Ngoài-3 · Ép kiểu thô `as TrangThaiLoiMoi` trong bài đo thay vì `docTrangThai`.** Khẳng định «lượt gỡ thật ghi ra một trạng thái kết thúc» vẫn xanh cả khi lượt gỡ không ghi gì, vì chuỗi rỗng cũng cho `conHieuLuc` trả `false`.
+
+- **Ngoài-4 · Bài đo E2 chép tay bộ ký cookie và tên cookie thay vì dùng hằng đã xuất.** Đổi tiền tố cookie hay thuật toán ký ở đường sản phẩm sẽ KHÔNG làm bài đỏ — nó ký bằng bản sao riêng của nó.
+
+- **Ngoài-5 · Hai executor mồ côi trong `_acceptance/config.yaml`.** `gt_phien_chet_tuc_thi` và `gt_thu_tuc_thoi_tra` trỏ vào tên bài không tồn tại. Chưa eval nào nối vào chúng; nối vào thì được màu xanh rỗng.
+
+- **Ngoài-7 · Bài đo xoá rồi dựng lại toàn bộ bảng thành viên của workspace dùng chung.** Cần thiết để dựng cảnh bảng rỗng, nhưng là bước tay nặng và bài khai rõ nó.
+
+- **Ngoài-9 · (làn `bugs`, trùng Ngoài-2)** cùng chỗ nuốt lỗi đọc trạng thái, nêu thêm rằng hai nơi gọi khác trong kho đều có ghi nhật ký.
+
+- **Ngoài-10 · `apps/api/scripts/dev-grant-needed.ts` vẫn gọi `ensureWorkspaceMembership` thiếu `email`** — đúng sinh đôi của lỗi `dev-session.ts` mà vòng này đã vá. Dụng cụ phát triển, không phải đường sản phẩm.
+
+- **Ngoài-11 · (làn `bugs`, trùng Ngoài-5)** cùng hai executor trỏ vào tên bài không tồn tại.
+
+- **Ngoài-12 · E3 tuyên quét lớp «mọi trạng thái kết thúc» nhưng số hàng suy từ lúc chạy**, không có ma trận viết trước ghim số. Thêm một trạng thái kết thúc mới thì bài tự nở ra và không ai thấy.
+
+- **Ngoài-13 · Bản vá một dòng của `dev-session.ts` trong diff không có phép đo nào chạm.** Nó là tiền đề của E2 nhưng E2 không đi qua nó.
+
+- **Ngoài-14 · Ma trận trạng thái của E3 là khẳng định âm-tính-một-mình** trong khi hàm bị đo nuốt mọi lỗi và trả `undefined` — «không kết nạp» và «hàm chết giữa chừng» cho cùng một màu xanh.
+
+- **Ngoài-15 · (làn `measurement`, trùng Ngoài-5)** cùng hai executor, nêu thêm hệ quả «xanh rỗng» nếu được nối vào eval.
+
+Bốn mục còn lại — Ngoài-1 và Ngoài-8 (nhánh mồi dùng luật «có dòng đã kết thúc» trái với luật «có dòng còn hiệu lực» của `decideSignIn`), Ngoài-6 (thẻ Cổng 1 cảnh báo «CE chưa kiểm chứng» ngược với hợp đồng) và Ngoài-16 (thẻ xếp AC-1 và AC-3 vào khối «sẽ KHÔNG làm») — người quyết **mở hợp đồng mới**, không ghi ở đây.
