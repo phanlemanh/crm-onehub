@@ -115,6 +115,12 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.trg_duong_vao
+    steps:
+      - "Dung may chu theo dev_server.start cua config"
+      - "Mo {APP_URL}/<slug>/settings voi cookie lang=vi → chup evidence/thanh-ben-vi.png"
+      - "Doc thanh ben, khang dinh muc Truong dung ngay sau muc Tien te theo CHI SO"
+      - "Bam muc Truong, khang dinh dia chi doi sang /settings/fields → chup evidence/trang-vi.png"
+      - "Lam lai tron bo voi cookie lang=en, khang dinh nhan hai luot KHAC nhau"
     expected: >-
       exit 0. Tren may chu that: dang nhap, mo /settings, doc thanh ben bang cai
       NGUOI DOC THAY, khong doc ma nguon. Khang dinh: co mot muc nhan "Truong";
@@ -136,6 +142,11 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.trg_trang_ba_the
+    steps:
+      - "Mo {APP_URL}/<slug>/settings/fields khong kem tham so nao"
+      - "Dem the mang role=tab, khang dinh BANG ba va nhan dung thu tu Cong ty, Ca nhan, Thoa thuan"
+      - "Khang dinh the Cong ty dang mo, va ba nhan khac nhau tung doi mot"
+      - "Do hop tung the: rong > 0 va cao > 0 VA nam trong khung nhin → chup evidence/ba-the.png"
     expected: >-
       exit 0. Tren may chu that: mo /settings/fields khong kem tham so nao, doc
       bang cai nguoi thay. Khang dinh: co dung BA the mang nhan cua ba thuc the,
@@ -276,6 +287,11 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.trg_trang_thai_rong_va_loi
+    steps:
+      - "Mo {APP_URL}/<slug>/settings/fields?thucThe=deal, khang dinh loi Chua co truong tu tao nao"
+      - "Mo khoi goi y, khang dinh co it nhat mot goi y bam duoc → chup evidence/trang-thai-rong.png"
+      - "Mo lai trang, chan duong goi fields.list o tang mang, roi DOI sang the Ca nhan"
+      - "Khang dinh man hien loi Chua tai duoc cac truong cua ban VA nut Thu lai → chup evidence/trang-thai-loi.png"
     expected: >-
       exit 0. Hai trang thai, ca hai tren may chu that, doc bang cai nguoi thay.
       (1) Rong: chon mot thuc the chua co truong tu tao nao — man hien dung loi
@@ -312,6 +328,10 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.trg_tieu_de_trang
+    steps:
+      - "Mo {APP_URL}/<slug>/settings/fields voi cookie lang=vi"
+      - "Doc tieu de va phan mo ta cua trang, khang dinh ca hai khong rong → chup evidence/tieu-de-vi.png"
+      - "Lam lai voi cookie lang=en, khang dinh CA tieu de LAN mo ta khac nhau giua hai luot"
     expected: >-
       exit 0. Tren may chu that: mo /settings/fields, doc bang cai nguoi thay.
       Khang dinh: trang co tieu de khong rong VA mo ta khong rong; ca hai bang
