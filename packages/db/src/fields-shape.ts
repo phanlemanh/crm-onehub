@@ -71,9 +71,15 @@ const RESERVED_KEYS = new Set([
 	"new",
 ]);
 
+function boDau(label: string): string {
+	return label
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.replace(/[đĐ]/g, "d");
+}
+
 export function fieldKeyFromLabel(label: string): string {
-	const key = label
-		.trim()
+	const key = boDau(label.trim())
 		.toLowerCase()
 		.replace(/['’]/g, "")
 		.replace(/[^a-z0-9]+/g, "_")

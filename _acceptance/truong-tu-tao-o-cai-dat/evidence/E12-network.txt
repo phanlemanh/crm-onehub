@@ -1,0 +1,29 @@
+E12 — network truth dump
+Driver dung de doc network: mcp__Claude_Browser (phien kham pha thu cong, KHONG phai phien sinh evidence chinh thuc)
+Bang chung chinh thuc (trang-thai-rong.png, trang-thai-loi.png) do bang lenh shell chay
+`bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs trang-thai` qua puppeteer-core
+rieng — cong cu do khong co duong doc network cho phien nay (driver = script, khong phai
+browser tool co read_network_requests).
+
+--- Console errors (Claude_Browser tab, chi de tham khao) ---
+[error] Encountered a script tag while rendering React component. Scripts inside React
+components are never executed when rendering on the client. Consider using template tag
+instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template).
+-> Canh bao dev cua React ve mot the <script> o noi khac trong ung dung (khong lien quan
+   toi man /settings/fields), khong chan render, ca hai anh evidence deu hien dung noi dung.
+
+--- Network requests (Claude_Browser tab, 50 gan nhat trong phien kham pha) ---
+Tat ca 200 OK ngoai MOT dong FAILED:
+[73168.225] GET http://localhost:3000/crm/settings?_rsc=-xhdy5r1YPrKabWj -> 200 OK [FAILED: net::ERR_ABORTED]
+
+Phan loai: origin la localhost:3000 (trong dev_server.url) nen ve nguyen tac FAIL-eligible,
+nhung net::ERR_ABORTED voi status 200 la dau hieu cua MOT request RSC prefetch bi HUY do
+dieu huong SPA tiep theo (chinh Claude dieu khien trinh duyet dieu huong nhanh giua cac trang
+trong luc kham pha thu cong o buoc 1/2) — khong phai loi ket noi, khong phai timeout, khong
+phai status >= 500, va khong xay ra trong phien sinh bang chung chinh thuc (script puppeteer).
+Khong co request nao toi /fields hoac /api/trpc/fields.* bi loi trong ca hai phien.
+
+networkObserved (cho phien Claude_Browser): "clean" — request app-scope da thay va OK, dong
+ERR_ABORTED la huy dieu huong tu client, khong phai loi may chu/ket noi.
+networkObserved chinh thuc cua eval (driver = puppeteer script qua Bash): "n-a (driver)" — vi
+day la driver khong co duong doc network cho phien nay.
