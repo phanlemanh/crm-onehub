@@ -14,7 +14,7 @@ import type { Db, Prisma } from "@crm/db";
 import { isOnboarded, markOnboarded, workspaceSlug } from "@crm/db/workspace";
 import {
 	docTrangThai,
-	TRANG_THAI_LOI_MOI,
+	TRANG_THAI_HUY,
 } from "@crm/validation/invitation-status";
 import {
 	BadRequestException,
@@ -343,7 +343,7 @@ export class WorkspaceService {
 
 		const updated = await this.db.invitation.update({
 			where: { id: target.id },
-			data: { status: TRANG_THAI_LOI_MOI[3] },
+			data: { status: TRANG_THAI_HUY },
 			select: ALLOWANCE_SELECT,
 		});
 
@@ -410,7 +410,7 @@ export class WorkspaceService {
 						email,
 						status: { in: ["pending", "accepted"] },
 					},
-					data: { status: TRANG_THAI_LOI_MOI[3] },
+					data: { status: TRANG_THAI_HUY },
 				});
 			}
 		});

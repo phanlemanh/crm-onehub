@@ -9,7 +9,15 @@ export const TRANG_THAI_LOI_MOI = [
 
 export type TrangThaiLoiMoi = (typeof TRANG_THAI_LOI_MOI)[number];
 
-export const CON_HIEU_LUC = ["pending", "accepted"] as const;
+export const TRANG_THAI_CHO = "pending";
+
+export const TRANG_THAI_NHAN = "accepted";
+
+export const TRANG_THAI_TU_CHOI = "rejected";
+
+export const TRANG_THAI_HUY = "canceled";
+
+export const CON_HIEU_LUC = [TRANG_THAI_CHO, TRANG_THAI_NHAN] as const;
 
 export const CANCELLED_CU = "cancelled";
 

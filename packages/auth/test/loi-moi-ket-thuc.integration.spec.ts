@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
-import { TRANG_THAI_LOI_MOI } from "@crm/validation/invitation-status";
 import { ALLOWANCE_WITHOUT_EXPIRY } from "../src/allow-list";
 import { ensureWorkspaceMembership } from "../src/organization";
 
@@ -112,26 +111,26 @@ describe("khong-sinh-thanh-vien", () => {
 
 	it("canceled khong sinh dong nao, pending sinh dung mot dong", async () => {
 		const hieuCanceled = await chayMotLuot(
-			TRANG_THAI_LOI_MOI[3],
+			"canceled",
 			`huy-${suffix}@onemount.com`,
 		);
 
 		expect(
 			hieuCanceled,
-			`loi moi "${TRANG_THAI_LOI_MOI[3]}" sinh ${hieuCanceled} dong thanh vien, mong 0`,
+			`loi moi "${"canceled"}" sinh ${hieuCanceled} dong thanh vien, mong 0`,
 		).toBe(0);
 
 		await don();
 		await coSanMotThanhVien();
 
 		const hieuPending = await chayMotLuot(
-			TRANG_THAI_LOI_MOI[0],
+			"pending",
 			`cho-${suffix}@onemount.com`,
 		);
 
 		expect(
 			hieuPending,
-			`loi moi "${TRANG_THAI_LOI_MOI[0]}" sinh ${hieuPending} dong thanh vien, mong 1`,
+			`loi moi "${"pending"}" sinh ${hieuPending} dong thanh vien, mong 1`,
 		).toBe(1);
 	});
 });

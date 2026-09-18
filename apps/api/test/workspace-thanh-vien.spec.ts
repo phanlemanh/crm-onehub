@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it } from "bun:test";
 import { auth } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
-import { TRANG_THAI_LOI_MOI } from "@crm/validation/invitation-status";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { toStatus, WorkspaceService } from "../src/workspace/workspace.service";
 
@@ -214,7 +213,7 @@ describe("cho-phep-lai", () => {
 			select: { status: true },
 		});
 		expect([cu?.status, "dong canceled cu con nguyen"]).toEqual([
-			TRANG_THAI_LOI_MOI[3],
+			"canceled",
 			"dong canceled cu con nguyen",
 		]);
 	});
@@ -359,7 +358,7 @@ describe("chu-cuoi-cung", () => {
 			sau?.status,
 			"hang user luu chu hoa, loi cho phep luu chu thuong — van phai rut duoc",
 		]).toEqual([
-			TRANG_THAI_LOI_MOI[3],
+			"canceled",
 			"hang user luu chu hoa, loi cho phep luu chu thuong — van phai rut duoc",
 		]);
 	});
@@ -419,7 +418,7 @@ describe("chu-cuoi-cung", () => {
 			"hang thanh vien mat, loi cho phep thanh canceled, phien bi thu hoi",
 		]).toEqual([
 			null,
-			TRANG_THAI_LOI_MOI[3],
+			"canceled",
 			0,
 			"hang thanh vien mat, loi cho phep thanh canceled, phien bi thu hoi",
 		]);
@@ -806,7 +805,7 @@ describe("go-tron-ven", () => {
 			"dang nhap lai khong tu thanh vien, va loi cho phep van canceled",
 		]).toEqual([
 			null,
-			TRANG_THAI_LOI_MOI[3],
+			"canceled",
 			"dang nhap lai khong tu thanh vien, va loi cho phep van canceled",
 		]);
 	});

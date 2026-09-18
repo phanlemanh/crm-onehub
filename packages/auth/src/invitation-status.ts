@@ -15,7 +15,11 @@ export {
 	conHieuLuc,
 	docTrangThai,
 	type KetQuaDocTrangThai,
+	TRANG_THAI_CHO,
+	TRANG_THAI_HUY,
 	TRANG_THAI_LOI_MOI,
+	TRANG_THAI_NHAN,
+	TRANG_THAI_TU_CHOI,
 	type TrangThaiDaDoc,
 	type TrangThaiLoiMoi,
 } from "@crm/validation/invitation-status";

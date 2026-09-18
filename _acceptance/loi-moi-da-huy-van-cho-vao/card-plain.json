@@ -1,82 +1,28 @@
 {
  "feature_plain": "Người bị thu hồi lời mời, hoặc tự từ chối lời mời, thôi đăng nhập vào được.",
- "will_do": [
-  {
-   "id": "AC-3",
-   "p": "Sẽ chỉ cho vào khi trạng thái lời mời nằm trong danh sách còn hiệu lực. Một trạng thái lạ chưa từng thấy dẫn tới từ chối."
-  },
-  {
-   "id": "AC-4",
-   "p": "Sẽ đọc trạng thái lời mời một cách có kiểm tra. Một giá trị không hiểu được thành lỗi có tên, không lặng lẽ hoá thành giá trị khác."
-  },
-  {
-   "id": "AC-5",
-   "p": "Sẽ tự đối chiếu danh sách trạng thái của sản phẩm với danh sách mà thư viện đăng nhập thật sự dùng. Thư viện đổi thì máy báo đỏ."
-  }
- ],
- "wont_do": [
-  {
-   "id": "AC-1",
-   "p": "Chặn người đã bị thu hồi lời mời: họ không vào được, và không có chỗ nào cấp lại tư cách thành viên cho họ."
-  },
-  {
-   "id": "AC-2",
-   "p": "Chặn người đã tự từ chối lời mời: họ không vào được."
-  },
-  {
-   "id": "AC-6",
-   "p": "Sẽ KHÔNG còn hiện lời mời đã huỷ như đang chờ trên màn quản trị thành viên."
-  }
- ],
  "scope_plain": "Không đổi cấu trúc bảng lời mời, và không đụng người đã là thành viên từ trước.",
- "coverage_plain": [
-  {
-   "i": 0,
-   "p": "Trục A — ai ghi trạng thái: lộ trình của thư viện, mã của sản phẩm, và dữ liệu đã nằm sẵn trong bảng. Đủ khi cả ba nguồn đều có phép đo."
-  },
-  {
-   "i": 1,
-   "p": "Trục B — năm trạng thái có thể gặp, kể cả một giá trị rác cố ý. Đủ khi mỗi trạng thái có một khẳng định viết trước, không suy ra lúc chạy."
-  },
-  {
-   "i": 2,
-   "p": "Trục C — hệ quả: cho vào, từ chối, vai được cấp, và màn quản trị hiện gì. Đủ khi cả vế cho-vào lẫn vế từ-chối đều được chứng."
-  }
- ],
- "gap_probe_plain": [
-  {
-   "i": 0,
-   "p": "Phiên phản biện thấy cả bộ phép đo chỉ chứng được chiều CHẶN. Một bản sửa chặn nhầm tất cả mọi người vẫn làm mọi ô xanh. Đã thêm một phép đo sáu ô, trong đó hai ô đòi lời mời còn hiệu lực PHẢI vào được."
-  },
-  {
-   "i": 1,
-   "p": "Tiêu chí thứ nhất hứa hai điều — không cho vào, và không cấp tư cách thành viên — nhưng chỉ điều thứ nhất được đo. Đã thêm một phép đo đếm số thành viên trước và sau lượt đăng nhập."
-  },
-  {
-   "i": 2,
-   "p": "Máy có hai bản thư viện đăng nhập cùng lúc. Phép đo đối chiếu có thể soi nhầm bản cũ và báo xanh sai. Đã bắt nó neo vào đúng bản mà sản phẩm nạp, và từ chối đo nếu lệch."
-  },
-  {
-   "i": 3,
-   "p": "Phép đo màn quản trị chỉ đòi «không phải đang chờ», nên một bản sửa biến MỌI trạng thái thành vô nghĩa vẫn lọt. Đã đổi thành bốn ô ghim đúng giá trị phải ra."
-  },
-  {
-   "i": 4,
-   "p": "Các chuỗi trạng thái trong bài đo được gõ tay, nên một lỗi chính tả trong chính bài đo sẽ không ai phát hiện. Đã bắt bài lấy chuỗi từ nguồn đã được đối chiếu với thư viện."
-  }
- ],
+ "analyst_plain": "",
+ "decisions": [],
  "decisions_plain": [
   {
    "id": "d-20260917T174351Z-1",
-   "p": "Đã chọn để máy tự đối chiếu danh sách trạng thái với thư viện, thay vì chép tay một danh sách rồi tin nó. Đổi lại: thư viện bỏ danh sách đó thì phải sửa phép đo."
+   "p": "Đã chọn để máy tự đối chiếu danh sách trạng thái với thư viện đăng nhập, thay vì chép tay rồi tin nó."
   },
   {
    "id": "d-20260917T174351Z-2",
-   "p": "Đã chọn: một dòng dữ liệu hỏng thì không cho vào nhưng cũng không làm sập lượt đăng nhập. Đổi lại: lỗi chỉ hiện trong nhật ký, không ai bị chặn oan."
+   "p": "Đã chọn: một dòng dữ liệu hỏng thì không cho vào, nhưng cũng không làm sập lượt đăng nhập."
   },
   {
    "id": "d-20260917T174351Z-3",
-   "p": "KHÔNG làm đặc tả giao diện cho vòng này, vì việc nằm ở tầng đọc dữ liệu. Đổi lại: chủ kho thấy cấu trúc lần đầu trong code."
+   "p": "KHÔNG làm đặc tả giao diện cho vòng này, vì việc nằm ở tầng đọc dữ liệu."
+  },
+  {
+   "id": "d-20260917T235049Z-5",
+   "p": "Trong lúc làm, máy đổi chỗ đặt phần từ vựng trạng thái cho đúng luật của kho, và sửa hai phép đo sau khi hội đồng chấm vòng một chỉ ra chúng đo nhầm chỗ."
+  },
+  {
+   "id": "d-20260918T002935Z-6",
+   "p": "Trong lúc làm, máy đổi chỗ đặt phần từ vựng trạng thái cho đúng luật của kho, và sửa hai phép đo sau khi hội đồng chấm vòng một chỉ ra chúng đo nhầm chỗ."
   }
  ]
 }
