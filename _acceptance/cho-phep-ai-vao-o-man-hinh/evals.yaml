@@ -97,17 +97,35 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.cp_rut_khong_dung_da_vao
     paths:
-      - "packages/auth/src/allow-list.ts"
+      - "apps/api/src/workspace/workspace.service.ts"
       - "packages/auth/src/organization.ts"
-      - "packages/auth/test/cong-vao.integration.spec.ts"
+      - "apps/api/test/workspace-thanh-vien.spec.ts"
     expected: |
-      Mot nguoi DA la thanh vien, loi cho phep o "accepted". Rut loi cho phep ay, roi:
-        1. hang `member` cua ho VAN con — doc lai tu DB, khong doc bien trong bo nho
-        2. ho VAN tao duoc phien moi, va sau luot ay hang `member` van con
-      Day la hanh vi CO Y. Chieu do: neu ban sua cho rut cung xoa thanh vien thi chan
-      phai DO — do la AC-5 chu khong phai AC-4, va tron hai viec lai la dung cai loi
-      ma hai khoi tach bach sinh ra de tranh.
-      Khong doc duoc hang member -> ma 2.
+      KHEP VONG GHI-DOC nhu E2 va E3, va day la dieu round 4-5 hong vi thieu: ca hai
+      luot ghi deu di qua CHINH thu tuc that — `allowEmail` roi `revokeAllowance` cua
+      WorkspaceService — KHONG duoc gieo bang Prisma cam tay. Vi the eval nay song o
+      `apps/api`, noi goi duoc thu tuc that; o `packages/auth` no khong goi duoc, va
+      chieu do duoi day khong bao gio ban duoc.
+      TIEN DE doc lai tu DB, khong gieo tay: nguoi ay vao bang duong ket nap that
+      (`ensureWorkspaceMembership`), nen dong loi cho phep phai TU chuyen sang
+      "accepted" — doc lai thay khac thi chan tra ma 2, vi luc ay tien de cua AC-4
+      chua dung va phep do dang do mot canh khac (do la canh cua AC-3).
+      Roi rut, va do BON quan he — khong ve nao la mot hang co mat mot minh:
+        1. dong loi cho phep chuyen sang TRANG_THAI_HUY — doc lai tu DB
+        2. SO HANG `member` cua khong gian lam viec TRUOC va SAU khi rut BANG NHAU
+        3. hang `member` cua chinh nguoi ay VAN con
+        4. ho tao duoc phien moi qua `databaseHooks.session.create.before` that, va
+           ket qua cua ho BANG ket qua cua mot nguoi CON duoc phep di cung duong —
+           day la ve quan he: rut khong doi gi o duong tao phien cua nguoi da vao
+      Doi chung duong o ve 4 la bat buoc. Khong co no thi `activeOrganizationId ==
+      WORKSPACE_ID` chi la mot hang co mat, khong phan biet duoc "con vao duoc" voi
+      "bi chan" — `ensureWorkspaceMembership` tra cung mot gia tri tren MOI nhanh
+      khong no.
+      Day la hanh vi CO Y. Chieu do, chay bang chinh dong lenh nay: sua
+      `revokeAllowance` cho xoa luon hang `member` -> chan phai DO o ve 2 va 3; do la
+      AC-5 chu khong phai AC-4, va tron hai viec lai la dung cai loi ma hai khoi tach
+      bach sinh ra de tranh.
+      Khong doc duoc hang member, hoac khong goi duoc thu tuc that -> ma 2.
 
   - id: E5
     criterion: AC-5

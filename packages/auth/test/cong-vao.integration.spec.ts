@@ -1,11 +1,7 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
-import {
-	TRANG_THAI_CHO,
-	TRANG_THAI_HUY,
-	TRANG_THAI_NHAN,
-} from "@crm/validation/invitation-status";
+import { TRANG_THAI_CHO } from "@crm/validation/invitation-status";
 import { ALLOWANCE_WITHOUT_EXPIRY } from "../src/allow-list";
 import { auth } from "../src/auth";
 import { ensureWorkspaceMembership } from "../src/organization";
@@ -33,45 +29,6 @@ function hookTruocTao(): TruocTao {
 			"khong tim thay databaseHooks.user.create.before — phep kiem khong con nam TRUOC khi ghi",
 		);
 	return before;
-}
-
-type PhienGieo = {
-	id: string;
-	token: string;
-	userId: string;
-	expiresAt: Date;
-	createdAt: Date;
-	updatedAt: Date;
-};
-
-type TruocPhien = (phien: PhienGieo) => Promise<{ data: unknown }>;
-
-const PHIEN_MS = 7 * 24 * 60 * 60 * 1000;
-
-function hookTruocPhien(): TruocPhien {
-	const o = auth.options as {
-		databaseHooks?: {
-			session?: { create?: { before?: TruocPhien } };
-		};
-	};
-	const before = o.databaseHooks?.session?.create?.before;
-	if (before instanceof Function === false)
-		throw new Error(
-			"khong tim thay databaseHooks.session.create.before — khong do duoc duong tao phien that",
-		);
-	return before;
-}
-
-function phienCua(userId: string): PhienGieo {
-	const now = new Date();
-	return {
-		id: `${suffix}-s-${userId}`,
-		token: `${suffix}-t-${userId}`,
-		userId,
-		expiresAt: new Date(now.getTime() + PHIEN_MS),
-		createdAt: now,
-		updatedAt: now,
-	};
 }
 
 function nguoi(email: string) {
@@ -116,9 +73,6 @@ async function don() {
 	});
 	await db.member.deleteMany({
 		where: { userId: { startsWith: `${suffix}-` } },
-	});
-	await db.session.deleteMany({
-		where: { id: { startsWith: `${suffix}-` } },
 	});
 	await db.user.deleteMany({ where: { id: { startsWith: `${suffix}-` } } });
 }
@@ -359,78 +313,6 @@ describe("vai-dinh-truoc", () => {
 			"accepted",
 			"accepted",
 			"vai doc lai tu DB, va loi cho phep da thanh accepted",
-		]);
-	});
-});
-
-describe("rut-khong-dung-da-vao", () => {
-	beforeEach(async () => {
-		await don();
-	});
-
-	it("rut loi cho phep cua nguoi DA vao thi tu cach thanh vien con nguyen", async () => {
-		const dia = `da-vao-${suffix}@gmail.com`;
-		await choPhep(dia, "member", TRANG_THAI_NHAN);
-
-		const nguoiCu = await db.user.create({ data: nguoi(dia) });
-		await daLaThanhVien(nguoiCu.id);
-
-		const daRut = await db.invitation.updateMany({
-			where: { organizationId: WORKSPACE_ID, email: dia },
-			data: { status: TRANG_THAI_HUY },
-		});
-
-		if (daRut.count !== 1) {
-			throw new Error(
-				`gieo cu lieu hong: rut duoc ${daRut.count} loi cho phep, phai dung 1 — phep do khong con do nhanh rut that`,
-			);
-		}
-
-		const truocKhiDo = await db.invitation.findFirst({
-			where: { organizationId: WORKSPACE_ID, email: dia },
-			select: { status: true },
-		});
-
-		const phienTruoc = await db.session.count({
-			where: { userId: nguoiCu.id },
-		});
-
-		const ra = await hookTruocPhien()(phienCua(nguoiCu.id));
-		await db.session.create({ data: ra.data as PhienGieo });
-
-		const phienDaGhi = await db.session.findFirst({
-			where: { userId: nguoiCu.id },
-			select: { activeOrganizationId: true },
-		});
-
-		const phienSau = await db.session.count({
-			where: { userId: nguoiCu.id },
-		});
-
-		const hang = await db.member.findUnique({
-			where: {
-				organizationId_userId: {
-					organizationId: WORKSPACE_ID,
-					userId: nguoiCu.id,
-				},
-			},
-			select: { id: true },
-		});
-
-		expect([
-			truocKhiDo?.status ?? null,
-			phienTruoc,
-			phienSau,
-			phienDaGhi?.activeOrganizationId ?? null,
-			hang !== null,
-			"rut roi: phien moi ghi duoc, tu cach thanh vien con nguyen",
-		]).toEqual([
-			TRANG_THAI_HUY,
-			0,
-			1,
-			WORKSPACE_ID,
-			true,
-			"rut roi: phien moi ghi duoc, tu cach thanh vien con nguyen",
 		]);
 	});
 });

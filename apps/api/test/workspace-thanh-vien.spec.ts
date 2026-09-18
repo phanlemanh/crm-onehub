@@ -2,7 +2,10 @@ import { beforeEach, describe, expect, it } from "bun:test";
 import { auth } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
-import { TRANG_THAI_HUY } from "@crm/validation/invitation-status";
+import {
+	TRANG_THAI_HUY,
+	TRANG_THAI_NHAN,
+} from "@crm/validation/invitation-status";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { WorkspaceService } from "../src/workspace/workspace.service";
 
@@ -671,6 +674,134 @@ describe("rut-chan-chua-vao", () => {
 			null,
 			"doi chung duong: con phep thi duong dang nhap CAP tu cach thanh vien, bi rut thi khong",
 		]);
+	});
+});
+
+type PhienGieo = {
+	id: string;
+	token: string;
+	userId: string;
+	expiresAt: Date;
+	createdAt: Date;
+	updatedAt: Date;
+};
+
+type TruocPhien = (phien: PhienGieo) => Promise<{ data: unknown }>;
+
+const PHIEN_MS = 7 * 24 * 60 * 60 * 1000;
+
+function hookTruocPhien(): TruocPhien {
+	const o = auth.options as {
+		databaseHooks?: { session?: { create?: { before?: TruocPhien } } };
+	};
+	const before = o.databaseHooks?.session?.create?.before;
+	if (before instanceof Function === false)
+		throw new Error(
+			"khong tim thay databaseHooks.session.create.before — khong do duoc duong tao phien that",
+		);
+	return before;
+}
+
+async function phienMoi(userId: string): Promise<string | null> {
+	const now = new Date();
+	const ra = await hookTruocPhien()({
+		id: id(`phien-${userId}`),
+		token: id(`token-${userId}`),
+		userId,
+		expiresAt: new Date(now.getTime() + PHIEN_MS),
+		createdAt: now,
+		updatedAt: now,
+	});
+
+	await db.session.create({ data: ra.data as PhienGieo });
+
+	const daGhi = await db.session.findFirst({
+		where: { userId },
+		select: { activeOrganizationId: true },
+	});
+
+	return daGhi?.activeOrganizationId ?? null;
+}
+
+async function thanhVienCua(userId: string) {
+	return db.member.findUnique({
+		where: {
+			organizationId_userId: { organizationId: WORKSPACE_ID, userId },
+		},
+		select: { id: true },
+	});
+}
+
+describe("rut-khong-dung-da-vao", () => {
+	beforeEach(async () => {
+		await don();
+		await dungKho();
+	});
+
+	it("rut loi cho phep cua nguoi DA vao khong doi tu cach thanh vien lan duong tao phien", async () => {
+		const quan = await dungNguoi("quan", "admin");
+
+		const daVao = `da-vao-${suffix}@gmail.com`;
+		const doiChung = `con-phep-${suffix}@gmail.com`;
+
+		const loiDaVao = await workspace.allowEmail(quan, {
+			email: daVao,
+			role: "member",
+		});
+		await workspace.allowEmail(quan, { email: doiChung, role: "member" });
+
+		const { ensureWorkspaceMembership } = await import("@crm/auth");
+
+		const hangDaVao = await db.user.create({ data: nguoiMoi(daVao) });
+		await ensureWorkspaceMembership(hangDaVao.id, daVao);
+
+		const hangDoiChung = await db.user.create({ data: nguoiMoi(doiChung) });
+		await ensureWorkspaceMembership(hangDoiChung.id, doiChung);
+
+		const truocRut = await db.invitation.findFirst({
+			where: { organizationId: WORKSPACE_ID, email: daVao },
+			select: { status: true },
+		});
+
+		if (truocRut?.status !== TRANG_THAI_NHAN) {
+			throw new Error(
+				`tien de AC-4 chua dung: loi cho phep cua nguoi da vao phai o "${TRANG_THAI_NHAN}", doc lai thay "${truocRut?.status}"`,
+			);
+		}
+
+		const demTruoc = await db.member.count({
+			where: { organizationId: WORKSPACE_ID },
+		});
+
+		await workspace.revokeAllowance(quan, { allowanceId: loiDaVao.id });
+
+		const sauRut = await db.invitation.findFirst({
+			where: { organizationId: WORKSPACE_ID, email: daVao },
+			select: { status: true },
+		});
+
+		const demSau = await db.member.count({
+			where: { organizationId: WORKSPACE_ID },
+		});
+
+		const khoDaVao = await phienMoi(hangDaVao.id);
+		const khoDoiChung = await phienMoi(hangDoiChung.id);
+
+		const conThanhVien = await thanhVienCua(hangDaVao.id);
+		const doiChungConThanhVien = await thanhVienCua(hangDoiChung.id);
+
+		const nhan =
+			"rut di qua thu tuc that: dong chuyen sang huy, so hang thanh vien khong doi, va nguoi bi rut tao phien y nhu nguoi con phep";
+
+		expect([
+			sauRut?.status ?? null,
+			demSau === demTruoc,
+			conThanhVien !== null,
+			doiChungConThanhVien !== null,
+			khoDaVao === khoDoiChung,
+			khoDaVao,
+			nhan,
+		]).toEqual([TRANG_THAI_HUY, true, true, true, true, WORKSPACE_ID, nhan]);
 	});
 });
 
