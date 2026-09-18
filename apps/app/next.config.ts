@@ -21,6 +21,8 @@ const allowedDevOrigins = (process.env.APP_URL ?? "")
 const nextConfig: NextConfig = {
 	allowedDevOrigins,
 
+	distDir: process.env.PROTO_DIST_DIR ?? ".next",
+
 	env: {
 		NEXT_PUBLIC_API_URL: apiUrl,
 	},

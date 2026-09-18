@@ -8,6 +8,8 @@ import {
 	readResearchGate,
 	readWorkspaceGate,
 } from "@/lib/onboarding";
+import { duongProtoHopLe, PROTO_PREFIX, protoMoDuoc } from "@/lib/proto-gate";
+import { isAnonymous, isUnder } from "@/lib/proxy-paths";
 import { workspaceUrl } from "@/lib/workspace-url";
 
 const LANDING_PATH = "/";
@@ -17,8 +19,6 @@ const SIGN_IN_PATH = "/sign-in";
 const NO_WORKSPACE_PATH = "/het-quyen";
 
 const UNGATED = ["/grant-access", "/eve", NO_WORKSPACE_PATH];
-
-const ANONYMOUS = ["/t"];
 
 const SECTIONS = [
 	"/campaigns",
@@ -32,6 +32,14 @@ export async function proxy(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 
 	if (pathname === SIGN_IN_PATH) return NextResponse.next();
+
+	if (isUnder(pathname, PROTO_PREFIX)) {
+		if (!protoMoDuoc()) return new NextResponse(null, { status: 404 });
+
+		const state = request.nextUrl.searchParams.get("state");
+		if (!duongProtoHopLe(pathname, state))
+			return new NextResponse(null, { status: 404 });
+	}
 
 	if (isAnonymous(pathname)) return NextResponse.next();
 
@@ -82,20 +90,12 @@ function appPath(pathname: string, slug: string): string {
 	return workspaceUrl(slug, rest.length ? `/${rest.join("/")}` : "/");
 }
 
-function isUnder(pathname: string, prefix: string): boolean {
-	return pathname === prefix || pathname.startsWith(`${prefix}/`);
-}
-
 function isPublic(pathname: string): boolean {
 	return pathname === LANDING_PATH && isMarketing();
 }
 
 function isUngated(pathname: string): boolean {
 	return UNGATED.some((prefix) => isUnder(pathname, prefix));
-}
-
-function isAnonymous(pathname: string): boolean {
-	return ANONYMOUS.some((prefix) => isUnder(pathname, prefix));
 }
 
 function isSetup(pathname: string): boolean {

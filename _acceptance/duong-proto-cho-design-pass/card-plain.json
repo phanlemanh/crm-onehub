@@ -1,0 +1,24 @@
+{
+  "feature_plain": "Phòng trưng bày giao diện chạy được tại máy đã mở: người duyệt bấm thử bản mẫu thay vì đọc mô tả bằng chữ.",
+  "decisions_plain": [
+    {"id":"d-20260916T031935Z-1","p":"Chọn một sổ đăng ký tập trung làm nguồn duy nhất của tên và trạng thái — đổi lại thêm bản mẫu phải sửa một file, và chính chỗ đó khiến không ai thêm lén được."},
+    {"id":"d-20260916T031935Z-2","p":"Chọn giữ bản mẫu lại vĩnh viễn — đổi lại chấp nhận rủi ro bản cũ lệch khỏi bản thật, giao việc canh cho hai cổng sẵn có."},
+    {"id":"d-20260916T031935Z-3","p":"Chọn một biến bật-tắt riêng thay vì dựa vào chế độ chạy — đổi lại thêm một biến phải nuôi, bù lại mở được cho người duyệt xem từ xa."},
+    {"id":"d-20260916T031935Z-4","p":"Chọn mở nhánh phòng trưng bày cho người chưa đăng nhập — đổi lại cờ trở thành lớp canh duy nhất, nên hai tiêu chí đo thẳng chỗ đó."},
+    {"id":"d-20260916T031935Z-5","p":"KHÔNG làm phiên duyệt giao diện trên bản bấm được ở chính vòng này, vì vòng này đang dựng ra thứ phiên đó cần — đổi lại cổng trước duyệt giao diện bằng chữ đúng một lần cuối."},
+    {"id":"d-20260916T031935Z-6","p":"KHÔNG khai lệnh chụp ảnh riêng của kho lần này, vì lệnh sẵn có không khớp cách đặt tên ảnh — để trống thì phép đo tự chụp được, và nó đã chụp đủ."},
+    {"id":"d-20260916T031935Z-7","p":"KHÔNG vá một mục cấu hình đang trỏ vào chỗ trống, vì nó thuộc việc khác — đã ghi lại để lần sau không quên."},
+    {"id":"d-20260916T035007Z-9","p":"Cho phép đo tự dựng máy chủ riêng thay vì đo một bản đang chạy sẵn — chậm hơn, đổi lại không bao giờ đo nhầm cây khác."},
+    {"id":"d-20260916T035007Z-10","p":"Ba việc độc lập làm tuần tự thay vì chia nhánh song song — chi phí dựng nhánh lớn hơn phần tiết kiệm được."},
+    {"id":"d-20260916T035948Z-11","p":"Dời cổng chặn từ trang lên lớp định tuyến, sau khi đo thấy cách cũ vừa để lọt mọi đường vừa rò nội dung ra bản chạy thật — đổi lại quyết định nằm thêm một chỗ nữa phải đọc khi sửa."},
+    {"id":"d-20260916T040455Z-12","p":"Sửa phép đo so sánh đúng vùng nội dung thay vì cả trang — bản cũ không bao giờ đỏ được vì thanh chọn trạng thái tự đổi theo."},
+    {"id":"d-20260916T041032Z-13","p":"Thêm tuỳ chọn nền sáng-tối cho bộ chụp ảnh của kho — cần cho trục thứ ba của bằng chứng, và không đổi hành vi cũ."},
+    {"id":"d-20260916T044147Z-14","p":"Thay ba chỗ tự vẽ giao diện bằng khối dùng chung thật — bản tự vẽ làm mất chế độ giảm chuyển động, một lỗi tiếp cận thật chứ không chỉ lệch hình."},
+    {"id":"d-20260916T044147Z-15","p":"Cho phép đo nhận ra ngay khi công cụ dựng đang bị khoá, thay vì chờ 90 giây rồi báo một câu mơ hồ."},
+    {"id":"d-20260916T050336Z-16","p":"Dừng lại sau hai vòng sửa cùng một kiểu lỗi và đưa anh quyết, thay vì tự vá tiếp — vá lần ba cùng kiểu là dấu hiệu chọn sai cách, không phải sai chi tiết."},
+    {"id":"d-20260916T050605Z-17","p":"Mở rộng phạm vi theo quyết định của anh: thêm hai tiêu chí cho hai lỗi làm hỏng đúng việc mà vòng này sinh ra để làm."},
+    {"id":"d-20260916T053024Z-18","p":"Sửa một phép đo còn ghim tên cũ sau lần đổi tên — nó chết sớm nên toàn bộ phần kiểm của nó không chạy dòng nào."},
+    {"id":"d-20260916T054031Z-19","p":"Gói bốn sửa cho vòng cuối: mỗi công cụ đo dùng thư mục dựng riêng, luôn dọn máy chủ khi xong, và tệp khai trên đĩa khớp lại với thứ đem đi chấm."}
+  ],
+  "scope_plain": "Để lại lần sau: gỡ bỏ bản mẫu cũ, lưới canh riêng, tìm-lọc trong danh sách, bộ chụp ảnh riêng của kho, một mục cấu hình đang trỏ chỗ trống, và đường bật bản mẫu trên bản triển khai thử."
+}
