@@ -10,7 +10,7 @@ import { useCallback, useMemo } from "react";
 import { timelineTabParser } from "@/components/crm/timeline/timeline-search-params";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 
-const RECORD_KINDS = ["company", "contact", "deal"] as const;
+export const RECORD_KINDS = ["company", "contact", "deal"] as const;
 
 export type RecordKind = (typeof RECORD_KINDS)[number];
 

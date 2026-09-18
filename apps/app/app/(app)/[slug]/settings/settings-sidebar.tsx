@@ -24,6 +24,7 @@ const ITEMS: SettingsNavItem[] = [
 	{ khoa: "theoDoi", href: `${ROOT}/tracking` },
 	{ khoa: "ketNoi", href: `${ROOT}/connections` },
 	{ khoa: "tienTe", href: `${ROOT}/currencies` },
+	{ khoa: "truong", href: `${ROOT}/fields` },
 	{ khoa: "thanhVien", href: `${ROOT}/members` },
 	{ khoa: "khoaApi", href: `${ROOT}/api-keys` },
 	{ khoa: "sso", href: `${ROOT}/sso` },
