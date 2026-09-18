@@ -5,7 +5,7 @@ slug: truong-tu-tao-o-cai-dat
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-18-truong-tu-tao-o-cai-dat-design.md
 approved_by:
 approved_at:
@@ -93,6 +93,20 @@ này không làm — quyết định ghi trong sổ.
 - Nhập trường từ HubSpot hay tệp bảng tính — đã bác ở hồ sơ cơ hội.
 
 ## Notes
+
+### Known limits — người ký chấp nhận tại Cổng Bằng chứng 2026-09-18
+
+- **Hàng ba thẻ không cuộn ngang được.** Hôm nay ở khổ điện thoại ba thẻ vẫn
+  thấy đủ vì hàng thẻ rộng 201 điểm. Ngày nhãn dài hơn hoặc thêm một thực thể
+  thứ tư, thẻ cuối rơi ra ngoài mà không có đường cuộn để với tới. Sửa đúng chỗ
+  là ở thành phần thẻ của `packages/ui`.
+- **Skill chuẩn giao diện kho khai là bộ soi lấy luật từ mạng, không phải từ
+  vựng token.** Hệ quả: mỗi phiên thiết kế chạy trên token đọc từ mã, nên hai
+  phiên khác nhau có thể rút ra hai chuẩn khác nhau.
+- **Trang chỉ được soi ở một chủ đề màu.** Bản sáng của trang Trường chưa ai
+  nhìn. Nếu nó lệch, người dùng chủ đề sáng là người phát hiện.
+
+### Ghi chú
 
 - Chín khoá bộ cào đã gieo trên Cá nhân, là danh sách loại trừ của AC-8:
   `san_luong` · `tin_dang` · `tin_moi_30_ngay` · `dia_ban` · `hinh_thai` ·

@@ -9,7 +9,7 @@ enforcement_mode: strict
 bypass_used: false
 verified_commit: cde88a9c54fd4aa89c092317e5b740c8b986965d
 run_id: r3-tuan-tu-20260918T070759Z
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-18 — ký Cổng Bằng chứng trên verdict PASS của vòng chấm 3 (22 thước và 4 lệnh cổng, 26/26 mã thoát 0, làn tuần tự một agent context sạch), với NĂM giới hạn đã khai. Ký trên hiểu biết rằng bằng chứng các thước trình duyệt đến từ làn tuần tự chứ không từ bầy chấm song song, vì bầy bị chặn hai lần bởi môi trường agent; rằng phép đếm ngưỡng bốn tuần là xấp xỉ bằng phép loại trừ vì bảng dữ liệu không có cột ghi ai tạo trường; và rằng bốn mục ngoài hợp đồng đã được định đoạt từng mục ở lượt ký này — ba mục ghi Known limits, một mục mở hợp đồng mới.
 ---
 
 # Hồ sơ bằng chứng: truong-tu-tao-o-cai-dat
