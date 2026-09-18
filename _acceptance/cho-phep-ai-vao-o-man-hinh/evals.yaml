@@ -321,20 +321,28 @@ evals:
       - "Dung ca hai may chu cua CAY DANG XET o cong rieng nhu E12"
       - "Tao phien cho mot nguoi vai `member`, mo /<slug>/settings/members, chup evidence/E13-members-member.png"
       - "Tao phien cho mot nguoi vai `admin`, mo cung man ay, chup evidence/E13-members-admin.png"
-      - "So hai khung hinh: ban `member` khong co ba nut, ban `admin` co du ba"
+      - "Gieo mot dong cho vao bang loi cho phep bang CHINH UI Allow an address truoc khi so — trang thai goc cua bang la rong nen khong co san nut rut de doi chieu"
+      - "So hai khung hinh: ban `member` khong cho thao tac nao, ban `admin` co du ba"
     inputs:
       - _acceptance/cho-phep-ai-vao-o-man-hinh/evidence/
     expected: |
       DUONG SINH KHUNG HINH nhu E12: cay dang xet, `APP_URL` va `API_URL` dat tay theo
       cong cua chinh cay ay, phien tao bang `dev:session` — LAN LUOT cho hai vai, vi
       tieu chi nay song bang phep so hai khung hinh.
-      Man Members nhin bang mat NGUOI VAI `member`: khung hinh phai cho thay hai bang
-      day du ma KHONG nut nao thao tac duoc — khong nut cho phep mot dia chi, khong nut
-      go, khong nut rut.
+      Man Members nhin bang mat NGUOI VAI `member`: khung hinh phai cho thay KHONG MOT
+      cho thao tac nao cho viec quan thanh vien hay quan loi cho phep — khong nut cho
+      phep mot dia chi, khong nut go, khong nut rut, khong menu `...` tren dong nao.
+      AC-8 hua dung mot dieu: "tren man khong nut nao thao tac duoc". Nen HAI hinh dang
+      deu DAT tieu chi: khoi loi cho phep hien o dang chi-doc, HOAC khoi ay khong hien
+      ra voi vai `member`. Chan phai NOI RO no thay hinh dang nao va o dong ma nao —
+      de lan sau doi hinh dang la mot quyet dinh nhin thay duoc, khong phai mot lan
+      chay khac mau. KHONG duoc tu doi hinh dang nao la dung: doi hinh dang la sua san
+      pham, va AC-8 khong hua dieu do.
       Doi chung bat buoc: khung hinh cua CUNG man ay nhin bang mat nguoi vai `admin`
-      PHAI co du ba nut. Hai khung hinh giong nhau -> ma 1: hoac ca hai deu an nut (vai
-      `admin` mat quyen), hoac ca hai deu hien (vai `member` thay nut khong duoc bam) —
-      ca hai deu sai, va neu ro dang nghi ca nao.
+      PHAI co du ba cho thao tac (cho phep mot dia chi, go, rut). Hai khung hinh giong
+      nhau -> ma 1: hoac ca hai deu mat cho thao tac (vai `admin` mat quyen), hoac ca
+      hai deu hien (vai `member` thay nut khong duoc bam) — ca hai deu sai, va neu ro
+      dang nghi ca nao.
       Thieu mot trong hai tep khung hinh -> ma 2, neu ten tep thieu.
 
   - id: E14

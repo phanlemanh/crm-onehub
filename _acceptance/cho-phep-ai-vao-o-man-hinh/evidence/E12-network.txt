@@ -1,0 +1,24 @@
+E12 network dump — verifier session, CAY DANG XET (app 3300 / api 3301)
+Captured via mcp__Claude_Browser__read_network_requests + read_console_messages
+after setting crm.session_token cookie for a logged-in-but-not-a-member user
+(e12-rut-quyen@example.test) and navigating to http://localhost:3300/ .
+
+=== console messages (onlyErrors=true) ===
+No console logs.
+
+=== network requests (urlPattern=localhost, last 100) ===
+[E82075169EBA39227CFDE7C535BCE03F] GET http://localhost:3300/crm -> 200 OK
+[354E4C9F2D87147CFD8B721013D3BDE8] GET http://localhost:3300/het-quyen -> 200 OK
+GET http://localhost:3300/api/trpc/enrichment.queue?batch=1&input=... -> 200 OK
+(remaining ~70 entries: /_next/static/* chunks and font files, all 200 OK or 304 Not Modified)
+
+=== scoping ===
+dev_server.url = http://localhost:3000 (config default; NOT what was used here)
+dev_server.api_base = ["http://localhost:3001"] (config default; NOT what was used here)
+Actual tree-under-test origin used: http://localhost:3300 (app-cay-nay), API http://localhost:3301 (api-cay-nay)
+All observed requests are same-origin to localhost:3300 (app-scope). No request to :3301 was
+observed in the browser network log — the /het-quyen page is server-rendered (proxy redirect +
+RSC), so the API call happens server-side, not as a browser XHR/fetch.
+No third-party requests. No 4xx/5xx. No failed/errored requests.
+
+Verdict: networkObserved = clean

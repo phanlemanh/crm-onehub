@@ -1,0 +1,9 @@
+E13 network truth dump (verifier session, admin persona ada@trycomp.ai, port 3300/3301)
+Scope: dev_server.url=http://localhost:3300, api_base=http://localhost:3301
+All requests observed were 200/OK or 304 Not Modified, all to localhost:3300 (app origin, in scope).
+Key app-scope calls:
+  GET  /api/trpc/workspace.allowances -> 200 OK (x2)
+  POST /api/trpc/workspace.allowEmail -> 200 OK (verifier seeded one pending allowance to make the 'rut' button observable)
+  GET  /crm/settings/members -> 200 OK
+No 4xx/5xx, no connection errors, no console errors observed.
+networkObserved = clean
