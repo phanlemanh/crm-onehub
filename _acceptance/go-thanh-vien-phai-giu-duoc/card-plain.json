@@ -1,0 +1,78 @@
+{
+ "feature_plain": "Người bị gỡ khỏi nhóm thì không còn dùng được gì, kể cả khi họ đang mở sẵn ứng dụng.",
+ "scope_plain": "Không làm lại những gì một đợt trước đã làm và đã đo; không thêm nhật ký kiểm toán.",
+ "will_do": [
+  {
+   "id": "AC-2",
+   "p": "Sẽ chặn ngay lập tức phiên đang mở của người vừa bị gỡ — họ đang dùng dở cũng mất quyền, không phải chờ hết hạn."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-1",
+   "p": "Chặn người đã bị gỡ gọi bất kỳ thao tác quản trị nào — kiểm đủ sáu thao tác, không chỉ một."
+  },
+  {
+   "id": "AC-3",
+   "p": "Chặn đường khởi tạo cấp lại quyền cho người từng bị gỡ, khi danh sách thành viên rỗng."
+  }
+ ],
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Trục A — các lớp chặn: thủ tục, dòng thành viên, dòng phiên, đường khởi tạo. Đủ khi mỗi lớp có một phép đo gọi đúng nó."
+  },
+  {
+   "i": 1,
+   "p": "Trục B — thời điểm: ngay trong lượt gỡ, lượt đăng nhập kế tiếp, và phiên đang mở sẵn. Đủ khi cả ba mốc đều có phép đo."
+  },
+  {
+   "i": 2,
+   "p": "Trục C — thứ còn lại sau lượt gỡ: ba bảng dữ liệu và thứ thủ tục trả về. Đủ khi phép đo đọc qua thủ tục, không đọc thẳng bảng."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Phiên phản biện thấy phép đo về phiên chỉ đếm số dòng trong bảng, chứ không kiểm người kia còn vào được hay không — hai chuyện khác nhau. Đã sửa: nay nó hỏi đúng cửa mà ứng dụng hỏi."
+  },
+  {
+   "i": 1,
+   "p": "Tiêu chí hứa chặn mọi thao tác quản trị nhưng phép đo chỉ thử một. Đã sửa thành bảng sáu thao tác, mỗi thao tác thử cả hai chiều."
+  },
+  {
+   "i": 2,
+   "p": "Một tiêu chí trùng với phép kiểm đã ký của đợt trước. Đã bỏ hẳn tiêu chí đó."
+  },
+  {
+   "i": 3,
+   "p": "Phép đo về đường khởi tạo tự dựng dữ liệu giả theo khuôn của chính nó. Đã sửa: nay nó cho người đó đi qua lượt gỡ thật rồi đọc lại giá trị đã ghi."
+  },
+  {
+   "i": 4,
+   "p": "Tiêu chí nói về màn quản trị nhưng không ai xác nhận màn ấy đọc đúng hai thủ tục được kiểm. Mục này tự hết khi tiêu chí kia bị bỏ."
+  }
+ ],
+ "decisions_plain": [
+  {
+   "id": "d-20260918T044455Z-1",
+   "p": "Đã chọn bỏ ba tiêu chí của bản nháp, vì sản phẩm đã làm và đã có phép kiểm tự động canh chúng từ một đợt trước. Đổi lại hồ sơ nhỏ hơn nhưng không tạo phép kiểm trùng."
+  },
+  {
+   "id": "d-20260918T044455Z-2",
+   "p": "Đã chọn khai thời gian mất quyền là tức thì, và đo bằng cách hỏi đúng cửa mà ứng dụng hỏi. Đổi lại phép đo gắn chặt vào việc xoá phiên nằm trong cùng một lượt ghi."
+  },
+  {
+   "id": "d-20260918T044455Z-3",
+   "p": "Đã chọn chỉ chặn người từng bị gỡ ở đường khởi tạo, không đụng người chưa từng được mời. Đổi lại lần cài mới vẫn chạy y như cũ."
+  },
+  {
+   "id": "d-20260918T044456Z-4",
+   "p": "KHÔNG làm đặc tả giao diện cho vòng này, vì cả ba tiêu chí đều nằm ở tầng thủ tục và tầng dữ liệu."
+  },
+  {
+   "id": "d-20260918T045115Z-5",
+   "p": "Đã chọn bỏ thêm một tiêu chí về màn quản trị, vì phiên phản biện chỉ ra nó trùng với hai phép kiểm đã ký."
+  }
+ ]
+}
