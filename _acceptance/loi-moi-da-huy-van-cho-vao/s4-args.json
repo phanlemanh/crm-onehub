@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-18T01:50:05Z",
-  "generated_sha": "ffe50cd6ed620ee4b6f34c91d95820f4050ebc0a",
+  "generated_at": "2026-09-18T02:24:05Z",
+  "generated_sha": "cc4158f27954832e48ff269f579e4c9ed78ad15a",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "loi-moi-da-huy-van-cho-vao",
-  "round": 4,
+  "round": 5,
   "riskTier": "T3",
   "evals": [
     {
@@ -55,7 +55,7 @@
       "id": "E3",
       "criterion": "AC-3",
       "cmd": "bun run test -- \"cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t gia-tri-la\"",
-      "expected": "\"exit 0; bài «giá trị rác chưa từng thấy thì từ chối» pass — bài nạp một chuỗi không nằm trong từ vựng nào và đòi TỪ CHỐI. Chiều đỏ: đổi luật từ «cho vào khi thuộc tập còn hiệu lực» sang «chặn khi thuộc tập kết thúc» thì bài đỏ, thông điệp ghim rằng một giá trị lạ đã được cho vào\"",
+      "expected": "\"exit 0; bài nạp một chuỗi rác qua ĐÚNG CHUỖI THẬT mà sản phẩm chạy — docHang phân tích rồi decideSignIn quyết — và đòi TỪ CHỐI, cộng một lỗi có tên nêu trường status. Bài gọi decideSignIn, hàm mà AC-3 hứa, KHÔNG dừng ở hàm trợ giúp conHieuLuc. Chiều đỏ: đổi luật từ «cho vào khi thuộc tập còn hiệu lực» sang «chặn khi thuộc tập kết thúc» thì bài đỏ, thông điệp ghim rằng một giá trị lạ đã được cho vào\"",
       "executor": "test",
       "expectedExit": 0,
       "evidence_required": [
@@ -139,7 +139,7 @@
       "id": "E7",
       "criterion": "AC-6",
       "cmd": "bun run test -- \"cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t trang-thai-that\"",
-      "expected": "\"exit 0; bài «API báo đúng trạng thái thật» chạy MA TRẬN BỐN Ô viết trước, bốn assert, ghim giá trị RA BẰNG giá trị VÀO chứ không chỉ khác pending: canceled ra canceled, rejected ra rejected, pending ra pending, accepted ra accepted. Số assert là hằng bốn, cấm suy từ số ô đếm được lúc chạy. Chiều đỏ hai lần: trả lại mặc định im lặng ở toStatus thì hai ô kết thúc hoá pending và bài đỏ; cho toStatus trả unknown cho MỌI giá trị thì hai ô còn hiệu lực đỏ. Thông điệp đỏ in cặp vào-ra của ô hỏng\"",
+      "expected": "\"exit 0; bài gieo bốn dòng lời mời vào cơ sở dữ liệu rồi gọi THỦ TỤC DANH SÁCH THẬT của dịch vụ workspace, ghim giá trị RA BẰNG giá trị ĐÃ LƯU: pending ra pending, accepted ra accepted, canceled ra canceled, rejected ra rejected. Bốn ô viết trước, số assert là hằng bốn. Ô thứ hai gieo một chuỗi rác và đòi thủ tục trả unknown, KHÔNG được hoá pending. Bài KHÔNG gọi hàm trợ giúp nào — hàm toStatus cũ đã bị gỡ vì thành mã chết sau khi lộ trình thật thôi gọi nó. Chiều đỏ: cho lộ trình trả pending khi giá trị không đọc được thì bài đỏ, thông điệp in cặp lưu-ra của ô hỏng\"",
       "executor": "test",
       "expectedExit": 0,
       "evidence_required": [
@@ -180,7 +180,7 @@
       "id": "E9",
       "criterion": "AC-1",
       "cmd": "bun run test -- \"cd packages/auth && bun test test/loi-moi-ket-thuc.integration.spec.ts -t khong-sinh-thanh-vien\"",
-      "expected": "\"exit 0; bài chạy ĐÚNG LỘ TRÌNH đăng nhập chứ không gọi cô lập phép kiểm, rồi ĐẾM dòng member của workspace trước và sau: với lời mời canceled hiệu phải bằng 0. Đối chứng dương trên cùng cữ liệu: với lời mời pending hiệu phải bằng 1 — vế hai này là thứ phân biệt «chặn đúng» với «hỏng hết». Chiều đỏ: gỡ lời gọi phép kiểm khỏi lộ trình mà giữ nguyên decideSignIn thì bài đỏ, thông điệp ghim số dòng thành viên đã sinh\"",
+      "expected": "\"exit 0; bài chạy ĐÚNG LỘ TRÌNH đăng nhập chứ không gọi cô lập phép kiểm, rồi ĐẾM dòng member của workspace trước và sau: với lời mời canceled hiệu phải bằng 0. Đối chứng dương trên cùng cữ liệu: với lời mời pending hiệu phải bằng 1 — vế hai này là thứ phân biệt «chặn đúng» với «hỏng hết». Cữ liệu lấy từ hằng CÓ TÊN TRANG_THAI_HUY và TRANG_THAI_CHO — hai hằng mà E5 đã đối chiếu bằng nhau với InvitationStatus của gói đã nạp — chứ không gõ tay chuỗi vào bài. Chiều đỏ: gỡ lời gọi phép kiểm khỏi lộ trình mà giữ nguyên decideSignIn thì bài đỏ, thông điệp ghim số dòng thành viên đã sinh\"",
       "executor": "test",
       "expectedExit": 0,
       "evidence_required": [
@@ -231,8 +231,8 @@
   "templatePath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.15.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
   "contractPath": "/private/tmp/claude-501/-Users-manh-macmini-dev-crm/54d93dc9-c67f-48a4-80f0-d8db039b5f4d/scratchpad/wt-loimoi/_acceptance/loi-moi-da-huy-van-cho-vao/contract.md",
-  "invokedAt": "2026-09-18T01:50:05Z",
-  "invokedSha": "ffe50cd6ed620ee4b6f34c91d95820f4050ebc0a",
+  "invokedAt": "2026-09-18T02:24:05Z",
+  "invokedSha": "cc4158f27954832e48ff269f579e4c9ed78ad15a",
   "vungVat": [
     "_acceptance/config.yaml",
     "_acceptance/loi-moi-da-huy-van-cho-vao/card-plain.json",
@@ -351,106 +351,6 @@
     "packages/validation/src/invitation-status.ts"
   ],
   "coEvalPaths": true,
-  "evalsHash": "3c5e59a5bc7fe09cc8c530daa33e3e110045c97ed1f0819582ef44070765fdc9",
-  "runBaseline": false,
-  "carriedAnalyst": {
-    "fromRound": 3,
-    "nonDiscriminating": []
-  },
-  "carriedEvals": [
-    {
-      "id": "E5",
-      "runId": "minted-loi-moi-da-huy-van-cho-vao-E5-r3",
-      "fromRound": 3,
-      "verifiedAt": "2026-09-18T01:26:16Z",
-      "cmd": "node _acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs"
-    }
-  ],
-  "carriedFindings": [
-    {
-      "file": "packages/auth/test/cong-vao.integration.spec.ts",
-      "title": "Existing withdrawal integration test still writes the legacy `cancelled`, so it no longer covers the real cancel value",
-      "severity": "medium",
-      "plain": "Một bài kiểm tra cũ vẫn còn dùng dữ liệu giả theo cách huỷ lời mời không còn xảy ra trong thực tế, nên nếu tính năng huỷ mới bị lỗi sau này, bài kiểm đó sẽ không phát hiện ra.",
-      "proposal": "known-limits",
-      "fromRound": 3
-    },
-    {
-      "file": "apps/api/src/workspace/workspace.contracts.ts",
-      "title": "`ALLOWANCE_STATUSES` hand-copies the vocabulary instead of deriving it from the validation package",
-      "severity": "low",
-      "plain": "Không ảnh hưởng ngay tới người dùng; rủi ro là nếu danh sách trạng thái lời mời thay đổi sau này mà quên cập nhật đồng bộ, màn hiển thị trạng thái có thể sai mà không ai biết.",
-      "proposal": "known-limits",
-      "fromRound": 3
-    },
-    {
-      "file": "packages/auth/src/index.ts",
-      "title": "`@crm/auth` re-exports only part of the status vocabulary, so apps/api reaches past the barrel",
-      "severity": "low",
-      "plain": "Không ảnh hưởng người dùng ngay; rủi ro là người phát triển sau này có thể vô tình dùng nhầm nguồn dữ liệu trạng thái, dẫn tới xử lý lời mời không nhất quán giữa các nơi.",
-      "proposal": "known-limits",
-      "fromRound": 3
-    },
-    {
-      "file": "packages/auth/test/cong-vao.integration.spec.ts",
-      "title": "Fixture cũ trong cong-vao.integration.spec.ts vẫn ghi \"cancelled\", không còn đo lộ trình thu hồi thật",
-      "severity": "low",
-      "plain": "Một bài kiểm tra khác cũng dùng dữ liệu giả cho tình huống huỷ không còn xảy ra trong thực tế nữa, nên nó không còn chứng minh được tính năng huỷ mới hoạt động đúng.",
-      "proposal": "known-limits",
-      "fromRound": 3
-    },
-    {
-      "file": "_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml",
-      "title": "E10 khai một chiều đỏ mà lệnh của nó không thể chạy",
-      "severity": "low",
-      "plain": "Một bài kiểm dùng để bắt lỗi hồi quy cho quy tắc đặt tên trạng thái không thực sự bắt được lỗi đó, nên một thay đổi sai có thể lọt qua mà không bị phát hiện.",
-      "proposal": "known-limits",
-      "fromRound": 3
-    },
-    {
-      "file": "packages/auth/test/loi-moi-ket-thuc.integration.spec.ts",
-      "title": "Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): E9 gõ tay chuỗi \"canceled\" vào DB thay vì rút từ hằng neo-vào-gói",
-      "severity": "high",
-      "plain": "Một bài kiểm đầu-cuối cho việc từ chối lời mời đã huỷ không phân biệt được giá trị huỷ thật với một chuỗi gõ sai bất kỳ, nên nếu ai gõ sai giá trị đó, bài kiểm vẫn báo qua như bình thường.",
-      "proposal": "known-limits",
-      "fromRound": 3
-    },
-    {
-      "file": "packages/auth/test/loi-moi-ket-thuc.spec.ts",
-      "title": "Hình dạng 1 (đo bước trung gian thay vì đầu ra): E3 khẳng định bằng hàm trợ giúp conHieuLuc, không bằng decideSignIn mà AC-3 hứa",
-      "severity": "high",
-      "plain": "Một bài kiểm cho quy tắc quyết định cho-vào-hay-không lại không gọi đúng hàm quyết định thật, nên nếu quy tắc đó bị đổi sai ở đúng chỗ quan trọng nhất, bài kiểm sẽ không phát hiện ra.",
-      "proposal": "known-limits",
-      "fromRound": 3
-    },
-    {
-      "file": "apps/api/test/workspace-thanh-vien.spec.ts",
-      "title": "Hình dạng 1 (đo bước trung gian thay vì đầu ra): E7 đo hàm thuần toStatus vừa được export riêng cho bài đo, không đo đầu ra API/màn quản trị",
-      "severity": "medium",
-      "plain": "Một bài kiểm cho việc hiển thị đúng trạng thái ở màn quản trị lại không đo đúng dữ liệu cuối cùng hiển thị ra màn hình, nên nếu màn quản trị hiển thị sai trạng thái, bài kiểm vẫn báo qua.",
-      "proposal": "known-limits",
-      "fromRound": 3
-    },
-    {
-      "file": "packages/auth/test/loi-moi-ket-thuc.spec.ts",
-      "title": "Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): E10 khẳng định «nằm trong từ vựng của GÓI» bằng mảng viết tay của chính kho, cùng một file với bốn hằng",
-      "severity": "medium",
-      "plain": "Một bài kiểm dùng để đối chiếu danh sách trạng thái với gói bên ngoài thực chất chỉ so sánh danh sách đó với chính nó, nên không thực sự chứng minh được điều nó tuyên bố.",
-      "proposal": "known-limits",
-      "fromRound": 3
-    },
-    {
-      "file": "packages/auth/test/loi-moi-ket-thuc.spec.ts",
-      "title": "Hình dạng 4 (assertion âm-tính-một-mình): E2 chỉ có một assert từ-chối, thiếu luôn cả assert canh mà evals.yaml khai",
-      "severity": "medium",
-      "plain": "Một bài kiểm cho việc từ chối lời mời bị từ chối chỉ kiểm tra một chiều, thiếu phép so sánh đảm bảo giá trị mới khác với giá trị cũ đã lỗi thời — nên một lỗi trộn lẫn hai giá trị đó có thể lọt qua.",
-      "proposal": "known-limits",
-      "fromRound": 3
-    }
-  ],
-  "deltaFiles": [
-    "_acceptance/loi-moi-da-huy-van-cho-vao/s4-args.json",
-    "apps/api/src/workspace/workspace.service.ts",
-    "packages/auth/src/allow-list.ts"
-  ]
+  "evalsHash": "297e8dd963987ea6b6cc2bf6272671aec8b47446f19dfd7fcbc973ac5f38df9e",
+  "runBaseline": true
 }
