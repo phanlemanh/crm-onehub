@@ -90,6 +90,11 @@ executors:
     lm_ma_tran_trang_thai: bun run test -- "cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t ma-tran-trang-thai"
     lm_khong_sinh_thanh_vien: bun run test -- "cd packages/auth && bun test test/loi-moi-ket-thuc.integration.spec.ts -t khong-sinh-thanh-vien"
     lm_hang_co_ten: bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t ghi-hang-co-ten"
+    gt_bi_go_thi_bi_tu_choi: bun run test -- "cd apps/api && bun test test/go-thanh-vien.spec.ts -t bi-go-thi-bi-tu-choi"
+    gt_phien_chet_tuc_thi: bun run test -- "cd apps/api && bun test test/go-thanh-vien.spec.ts -t phien-chet-tuc-thi"
+    gt_thu_tuc_thoi_tra: bun run test -- "cd apps/api && bun test test/go-thanh-vien.spec.ts -t thu-tuc-thoi-tra"
+    gt_duong_moi_khong_cap_lai: bun run test -- "cd apps/api && bun test test/go-thanh-vien.spec.ts -t duong-moi-khong-cap-lai"
+    gt_phien_mat_quyen: bun run test -- "cd apps/api && bun test test/go-thanh-vien.spec.ts -t phien-mat-quyen"
   script:
     cua_vao_loi_mang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"'
     cua_vao_chon_tieng_may_chu: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chon-tieng-may-chu"'
