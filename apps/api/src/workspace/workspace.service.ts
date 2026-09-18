@@ -69,10 +69,6 @@ type AllowanceRow = Prisma.InvitationGetPayload<{
 	select: typeof ALLOWANCE_SELECT;
 }>;
 
-export function toStatus(value: string): Allowance["status"] {
-	return docTrangThai(value).trangThai;
-}
-
 const SORTABLE: OrderByColumns<Prisma.MemberOrderByWithRelationInput> = {
 	name: (dir) => ({ user: { name: dir } }),
 	email: (dir) => ({ user: { email: dir } }),

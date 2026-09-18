@@ -21,7 +21,7 @@ evals:
     criterion: AC-3
     executor: test
     cmd: config:executors.test.lm_gia_tri_la
-    expected: "exit 0; bài «giá trị rác chưa từng thấy thì từ chối» pass — bài nạp một chuỗi không nằm trong từ vựng nào và đòi TỪ CHỐI. Chiều đỏ: đổi luật từ «cho vào khi thuộc tập còn hiệu lực» sang «chặn khi thuộc tập kết thúc» thì bài đỏ, thông điệp ghim rằng một giá trị lạ đã được cho vào"
+    expected: "exit 0; bài nạp một chuỗi rác qua ĐÚNG CHUỖI THẬT mà sản phẩm chạy — docHang phân tích rồi decideSignIn quyết — và đòi TỪ CHỐI, cộng một lỗi có tên nêu trường status. Bài gọi decideSignIn, hàm mà AC-3 hứa, KHÔNG dừng ở hàm trợ giúp conHieuLuc. Chiều đỏ: đổi luật từ «cho vào khi thuộc tập còn hiệu lực» sang «chặn khi thuộc tập kết thúc» thì bài đỏ, thông điệp ghim rằng một giá trị lạ đã được cho vào"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [packages/auth/src/allow-list.ts, packages/auth/src/invitation-status.ts, packages/auth/test/loi-moi-ket-thuc.spec.ts]
 
@@ -53,7 +53,7 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.lm_trang_thai_that
-    expected: "exit 0; bài «API báo đúng trạng thái thật» chạy MA TRẬN BỐN Ô viết trước, bốn assert, ghim giá trị RA BẰNG giá trị VÀO chứ không chỉ khác pending: canceled ra canceled, rejected ra rejected, pending ra pending, accepted ra accepted. Số assert là hằng bốn, cấm suy từ số ô đếm được lúc chạy. Chiều đỏ hai lần: trả lại mặc định im lặng ở toStatus thì hai ô kết thúc hoá pending và bài đỏ; cho toStatus trả unknown cho MỌI giá trị thì hai ô còn hiệu lực đỏ. Thông điệp đỏ in cặp vào-ra của ô hỏng"
+    expected: "exit 0; bài gieo bốn dòng lời mời vào cơ sở dữ liệu rồi gọi THỦ TỤC DANH SÁCH THẬT của dịch vụ workspace, ghim giá trị RA BẰNG giá trị ĐÃ LƯU: pending ra pending, accepted ra accepted, canceled ra canceled, rejected ra rejected. Bốn ô viết trước, số assert là hằng bốn. Ô thứ hai gieo một chuỗi rác và đòi thủ tục trả unknown, KHÔNG được hoá pending. Bài KHÔNG gọi hàm trợ giúp nào — hàm toStatus cũ đã bị gỡ vì thành mã chết sau khi lộ trình thật thôi gọi nó. Chiều đỏ: cho lộ trình trả pending khi giá trị không đọc được thì bài đỏ, thông điệp in cặp lưu-ra của ô hỏng"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/api/src/workspace/workspace.service.ts, apps/api/test/workspace-thanh-vien.spec.ts]
 
@@ -69,7 +69,7 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.lm_khong_sinh_thanh_vien
-    expected: "exit 0; bài chạy ĐÚNG LỘ TRÌNH đăng nhập chứ không gọi cô lập phép kiểm, rồi ĐẾM dòng member của workspace trước và sau: với lời mời canceled hiệu phải bằng 0. Đối chứng dương trên cùng cữ liệu: với lời mời pending hiệu phải bằng 1 — vế hai này là thứ phân biệt «chặn đúng» với «hỏng hết». Chiều đỏ: gỡ lời gọi phép kiểm khỏi lộ trình mà giữ nguyên decideSignIn thì bài đỏ, thông điệp ghim số dòng thành viên đã sinh"
+    expected: "exit 0; bài chạy ĐÚNG LỘ TRÌNH đăng nhập chứ không gọi cô lập phép kiểm, rồi ĐẾM dòng member của workspace trước và sau: với lời mời canceled hiệu phải bằng 0. Đối chứng dương trên cùng cữ liệu: với lời mời pending hiệu phải bằng 1 — vế hai này là thứ phân biệt «chặn đúng» với «hỏng hết». Cữ liệu lấy từ hằng CÓ TÊN TRANG_THAI_HUY và TRANG_THAI_CHO — hai hằng mà E5 đã đối chiếu bằng nhau với InvitationStatus của gói đã nạp — chứ không gõ tay chuỗi vào bài. Chiều đỏ: gỡ lời gọi phép kiểm khỏi lộ trình mà giữ nguyên decideSignIn thì bài đỏ, thông điệp ghim số dòng thành viên đã sinh"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [packages/auth/src/allow-list.ts, packages/auth/src/organization.ts, packages/auth/test/loi-moi-ket-thuc.integration.spec.ts]
 

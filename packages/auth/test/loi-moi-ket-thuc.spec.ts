@@ -2,7 +2,6 @@ import { describe, expect, it } from "bun:test";
 import { type AllowanceRow, decideSignIn, docHang } from "../src/allow-list";
 import {
 	CANCELLED_CU,
-	conHieuLuc,
 	docTrangThai,
 	TRANG_THAI_CHO,
 	TRANG_THAI_HUY,
@@ -52,13 +51,26 @@ describe("ma-tran-trang-thai", () => {
 });
 
 describe("gia-tri-la", () => {
-	it("chuoi rac ra unknown co ten, khong mac dinh im lang", () => {
-		const doc = docTrangThai("mot-chuoi-chua-tung-thay");
-		expect(doc.trangThai, "gia tri la phai ra unknown").toBe("unknown");
-		expect(doc.loi ?? "", "loi phai neu ten truong status").toContain("status");
-		expect(conHieuLuc(doc.trangThai), "unknown KHONG duoc con hieu luc").toBe(
-			false,
-		);
+	it("chuoi rac di het chuoi that thi bi TU CHOI, va de lai loi co ten", () => {
+		const rac = "mot-chuoi-chua-tung-thay";
+		const { rows, loi } = docHang([
+			{ email: "khue@gmail.com", role: "admin", status: rac },
+		]);
+
+		expect(rows[0]?.status, "gia tri la phai ra unknown").toBe("unknown");
+		expect(loi[0] ?? "", "loi phai neu ten truong status").toContain("status");
+
+		const quyet = decideSignIn({
+			email: "khue@gmail.com",
+			allowances: rows,
+			seedList: "",
+			anyUserExists: true,
+		});
+
+		expect(
+			quyet.allowed,
+			`chuoi rac "${rac}" di qua docHang roi decideSignIn phai bi TU CHOI`,
+		).toBe(false);
 	});
 });
 

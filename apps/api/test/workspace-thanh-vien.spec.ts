@@ -3,7 +3,7 @@ import { auth } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
-import { toStatus, WorkspaceService } from "../src/workspace/workspace.service";
+import { WorkspaceService } from "../src/workspace/workspace.service";
 
 const suffix = process.env.TEST_RUN_ID ?? "thanh-vien";
 
@@ -812,7 +812,14 @@ describe("go-tron-ven", () => {
 });
 
 describe("trang-thai-that", () => {
-	it("bon o viet truoc, gia tri ra bang gia tri vao", () => {
+	beforeEach(async () => {
+		await don();
+		await dungKho();
+	});
+
+	it("bon o viet truoc: thu tuc danh sach tra ve dung trang thai da luu", async () => {
+		const quan = await dungNguoi("quan-tt", "owner");
+
 		const BANG = [
 			["pending", "pending"],
 			["accepted", "accepted"],
@@ -822,16 +829,54 @@ describe("trang-thai-that", () => {
 
 		expect(BANG.length).toBe(4);
 
-		for (const [vao, ra] of BANG) {
-			expect(
-				toStatus(vao),
-				`o "${vao}": vao "${vao}" thi phai ra "${ra}"`,
-			).toBe(ra);
+		for (const [luu] of BANG) {
+			await db.invitation.create({
+				data: {
+					id: id(`inv-${luu}`),
+					organizationId: WORKSPACE_ID,
+					email: `${suffix}-${luu}@onemount.com`,
+					role: "member",
+					status: luu,
+					expiresAt: new Date("9999-12-31T00:00:00.000Z"),
+					inviterId: quan,
+				},
+			});
 		}
 
+		const { rows } = await workspace.allowances(quan);
+
+		for (const [luu, ra] of BANG) {
+			const dong = rows.find(
+				(r) => r.email === `${suffix}-${luu}@onemount.com`,
+			);
+			expect(
+				dong?.status,
+				`o "${luu}": luu "${luu}" thi thu tuc phai tra "${ra}", nhan "${dong?.status}"`,
+			).toBe(ra);
+		}
+	});
+
+	it("gia tri la ra unknown, khong hoa pending", async () => {
+		const quan = await dungNguoi("quan-la", "owner");
+
+		await db.invitation.create({
+			data: {
+				id: id("inv-la"),
+				organizationId: WORKSPACE_ID,
+				email: `${suffix}-la@onemount.com`,
+				role: "member",
+				status: "mot-chuoi-la",
+				expiresAt: new Date("9999-12-31T00:00:00.000Z"),
+				inviterId: quan,
+			},
+		});
+
+		const { rows } = await workspace.allowances(quan);
+		const dong = rows.find((r) => r.email === `${suffix}-la@onemount.com`);
+
 		expect(
-			toStatus("mot-chuoi-la"),
-			'gia tri la phai ra "unknown", khong duoc hoa "pending"',
+			dong?.status,
+			`gia tri la phai ra "unknown", khong duoc hoa "pending", nhan "${dong?.status}"`,
 		).toBe("unknown");
 	});
 });
