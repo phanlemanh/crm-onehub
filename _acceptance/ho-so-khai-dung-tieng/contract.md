@@ -58,7 +58,7 @@ Bốn chỗ **mới** trên tấm hồ sơ — hôm nay chưa khai:
 
 1. `apps/app/components/crm/record-sheet/company-sheet.tsx:349` — giới thiệu công ty
 2. `apps/app/components/crm/record-sheet/contact-sheet.tsx:487` — tóm tắt cá nhân
-3. `apps/app/components/crm/record-sheet/company-sheet.tsx:248` — ngành, qua `MetaLine`
+3. `apps/app/components/crm/record-sheet/record-parts.tsx` — ngành, nơi `MetaLine` vẽ phần tử ra (chỗ gọi khai `lang` là `company-sheet.tsx:248`)
 4. `apps/app/components/crm/timeline/timeline-entry.tsx:82` — hai nhãn giai đoạn
 
 Năm chỗ **cũ** đang khai đúng bằng `<span lang="en">` viết tay — chuyển cơ chế,
@@ -69,6 +69,18 @@ giữ nguyên lời hứa:
 7. `apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx:198` — giai đoạn
 8. `apps/app/components/crm/stage-stepper.tsx:65` — giai đoạn
 9. `apps/app/components/crm/deal-stage.tsx:14` — giai đoạn
+
+**Chín chỗ = chín TỆP mang phần tử khai tiếng, không phải chín phần tử.** Dòng
+thời gian mang HAI phần tử trong một tệp (hai nhãn giai đoạn), và ngành được khai
+ở `company-sheet` nhưng vẽ ra ở `record-parts`. Mục 3 sửa ngày 19/09 vì bản ký
+ghi `company-sheet` hai lần và bỏ sót `record-parts` — đếm theo tệp thì danh
+sách đúng là chín, đếm theo phần tử thì là mười.
+
+**Ba chỗ chân đo KHÔNG được tính là chỗ viết tay**, vì chúng không khai tiếng cho
+một phần nội dung: `<html lang>` ở `apps/app/app/layout.tsx` là tiếng của
+chính trang; chuỗi `document.documentElement.lang=` trong script cùng tệp đặt
+đúng cái đó; và `data-lang` ở `local-date-time.tsx` là thuộc tính dữ liệu, chỉ
+trùng chữ. Chân đo nào bắt ba chỗ này là chân đo đỏ vĩnh viễn.
 
 Số dòng là số dòng lúc ký, sẽ trôi khi mã đổi; **đường dẫn và mô tả là thứ ghim**,
 không phải con số dòng. Chỗ thứ mười xuất hiện thì AC-6 đỏ và gọi tên nó — đó là
