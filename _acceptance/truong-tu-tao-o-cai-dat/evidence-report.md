@@ -7,15 +7,15 @@ reason: ""
 verified_by: mot agent context sach, chay tuan tu tung lenh
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ec4ba0c0a3322860a0bfe63fbbaccad499d65fa0
-run_id: r2-tuan-tu-20260918T050907Z
+verified_commit: cde88a9c54fd4aa89c092317e5b740c8b986965d
+run_id: r3-tuan-tu-20260918T070759Z
 human_signoff:
 ---
 
 # Hồ sơ bằng chứng: truong-tu-tao-o-cai-dat
 
-Vòng chấm 2, làn **tuần tự**. Hai mươi mốt thước và bốn lệnh cổng, tổng hai
-mươi lăm lệnh, tất cả mã thoát 0. Không lệnh nào bị công cụ ngắt.
+Vòng chấm 3, làn **tuần tự**. Hai mươi hai thước và bốn lệnh cổng, tổng hai
+mươi sáu lệnh, tất cả mã thoát 0. Không lệnh nào bị công cụ ngắt.
 
 ## Vì sao làn tuần tự, không phải bầy song song
 
@@ -51,10 +51,11 @@ trường mà thước khác vừa tạo và chưa dọn.
 | E15 | AC-14 | script (tầng sau) | PASS |
 | E16 | AC-15 | script | PASS |
 | E17 | AC-16 | test | PASS |
-| E18 | AC-15 | script | PASS, 14/14 ca phá thử |
+| E18 | AC-15 | script | PASS, 15/15 ca phá thử |
 | E19 | AC-17 | script | PASS |
 | E20 | AC-18 | script | PASS |
 | E21 | AC-19 | script (tầng sau) | PASS |
+| E22 | AC-20 | ui-check | PASS |
 
 Bốn lệnh cổng của kho: `bun run test` (288 bài, 11 gói) · `turbo run lint --force`
 (9 gói) · `bun run lint:slop` (0 cảnh báo, 0 lỗi) · `turbo run build --force`
@@ -96,4 +97,7 @@ hơn điều đã khai; một thước để lại rác mang đúng nhãn gợi 
 phép đo rỗng thứ sáu (hàm đọc mô tả trang bắt cả tiêu đề) và ba mục ngoài hợp
 đồng. Tất cả đã sửa.
 
-Vòng 2, làn tuần tự: 25/25 mã thoát 0.
+Vòng 2, làn tuần tự: 25/25 mã thoát 0. Sau vòng đó owner veto dòng bỏ phiên
+thiết kế, phiên thiết kế tìm ra lỗi Esc, và vòng thêm AC-20 cùng thước E22.
+
+Vòng 3, làn tuần tự ở cây hiện tại: 26/26 mã thoát 0.
