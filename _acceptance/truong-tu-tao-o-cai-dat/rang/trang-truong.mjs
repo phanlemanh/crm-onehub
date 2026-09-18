@@ -96,17 +96,17 @@ const docThe = () =>
 		};
 	});
 
-const docTieuDe = () => ({
-	tieuDe: document.querySelector("main h1")?.textContent.trim() ?? "",
-	moTa:
-		document
-			.querySelector("main h1")
-			?.parentElement?.nextElementSibling?.textContent.trim() ??
-		document
-			.querySelector('main [data-slot="page-shell-header"] div div')
-			?.textContent.trim() ??
-		"",
-});
+const docTieuDe = () => {
+	const h1 = document.querySelector("main h1");
+	const mo = document.querySelector(
+		'main [data-slot="page-shell-description"]',
+	);
+	return {
+		tieuDe: h1?.textContent.trim() ?? "",
+		moTa: mo?.textContent.trim() ?? "",
+		coPhanTuMoTa: Boolean(mo),
+	};
+};
 
 const demKhay = () => document.querySelectorAll('[role="dialog"]').length;
 
@@ -176,7 +176,17 @@ async function tieuDeTrang(browser, cookie, slug) {
 		luot[tieng] = t;
 
 		doi(t.tieuDe.length > 0, `tieng ${tieng}: trang KHONG co tieu de`);
-		doi(t.moTa.length > 0, `tieng ${tieng}: trang KHONG co phan mo ta`);
+		doi(
+			t.coPhanTuMoTa,
+			`tieng ${tieng}: trang KHONG co phan tu mo ta nao mang data-slot page-shell-description`,
+		);
+		doi(t.moTa.length > 0, `tieng ${tieng}: phan mo ta RONG`);
+		doi(
+			t.moTa !== t.tieuDe && !t.moTa.startsWith(t.tieuDe),
+			`tieng ${tieng}: phan mo ta doc ra la ${JSON.stringify(t.moTa.slice(0, 50))}, ` +
+				"tuc dang bat mot the bao CA tieu de LAN mo ta — khang dinh mo-ta-khong-rong " +
+				"se luon dung du mo ta that co trong",
+		);
 
 		if (tieng === "vi") {
 			doi(

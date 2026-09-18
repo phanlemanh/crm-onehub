@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-18T02:37:42Z",
-  "generated_sha": "17a8c426d8f8b04c2fe567b4082a157dad2a1b88",
+  "generated_at": "2026-09-18T03:17:00Z",
+  "generated_sha": "905fc88d5b1472d4f2c435c7ca9cd5a23a365711",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
@@ -89,7 +89,7 @@
     {
       "id": "E5",
       "criterion": "AC-1",
-      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs duong-vao\"",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs duong-vao\"",
       "expected": "exit 0. Tren may chu that: dang nhap, mo /settings, doc thanh ben bang cai\nNGUOI DOC THAY, khong doc ma nguon. Khang dinh: co mot muc nhan \"Truong\";\nVA muc do dung NGAY SAU muc \"Tien te\", khang dinh bang chi so hai muc lien\nnhau chu khong bang \"co mat dau do\"; VA bam vao no thi dia chi doi sang\nduong /settings/fields.\nChay hai lan, lang=vi va lang=en, va khang dinh nhan hai luot KHAC nhau —\nmot nhan giong nhau o hai thu tieng nghia la chua noi tieng nguoi dung.\nChup anh thanh ben va anh trang sau khi bam.\nCap hai chieu tren CUNG fixture: ban sao da xoa dong muc Truong khoi thanh\nben — phai do VA thong diep chua chuoi \"Truong\".",
       "executor": "ui-check",
       "expectedExit": 0,
@@ -117,7 +117,7 @@
     {
       "id": "E6",
       "criterion": "AC-3",
-      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs ba-the\"",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs ba-the\"",
       "expected": "exit 0. Tren may chu that: mo /settings/fields khong kem tham so nao, doc\nbang cai nguoi thay. Khang dinh: co dung BA the mang nhan cua ba thuc the,\nthu tu Cong ty, Ca nhan, Thoa thuan; VA the dang mo la Cong ty; VA so the\ndo duoc BANG ba; VA ba nhan KHAC nhau tung doi mot.\nTHEM khang dinh hinh hoc, de mot trang dung ra ma the bi de khong di qua\nduoc: tung the phai co hop khac khong (rong > 0 va cao > 0) VA nam trong\nkhung nhin. Anh chup mot minh khong phai phep do — no la bang chung cho\nnguoi.\nChup anh trang.\nCap hai chieu tren CUNG fixture: ban sao da xoa the Thoa thuan — phai do VA\nthong diep chua nhan the bi thieu.",
       "executor": "ui-check",
       "expectedExit": 0,
@@ -144,7 +144,7 @@
     {
       "id": "E7",
       "criterion": "AC-4",
-      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs the-tren-dia-chi\"",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs the-tren-dia-chi\"",
       "expected": "exit 0. Tren may chu that: mo /settings/fields, bam the Ca nhan, doc dia\nchi va khang dinh no mang tham so chi the do; roi TAI LAI trang tu dia chi\nvua doc va khang dinh the dang mo van la Ca nhan — doc bang cai nguoi thay,\nkhong doc bien trong bo nho.\nCap hai chieu tren CUNG fixture: ban sao da bo viec ghi the vao dia chi\n(the giu trong bo nho React) — phai do sau buoc tai lai VA thong diep chua\nchuoi \"Ca nhan\".",
       "executor": "script",
       "expectedExit": 0,
@@ -164,7 +164,7 @@
     {
       "id": "E8",
       "criterion": "AC-5",
-      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs khong-bat-khay\"",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs khong-bat-khay\"",
       "expected": "exit 0. Hai ve, ca hai tren may chu that. Ve mot: mo /settings/fields va\nkhang dinh khay truot quan tri truong KHONG co tren man — tim dung phan tu\nkhay, khong doan bang anh. Ve hai la DOI CHUNG DUONG, de ve mot khong phai\nmot phep do luon xanh: mo /settings/fields kem tham so cua KHAY\n(manageFields) va khang dinh khay CO hien. Ve hai khong thay khay thi thuoc\nthoat ma 2 va noi ro phep do da mat suc phan biet.\nCap hai chieu tren CUNG fixture: ban sao da doi nhom khoa cua trang thanh\ndung khoa cua khay — phai do o ve mot VA thong diep chua chuoi\n\"manageFields\".",
       "executor": "script",
       "expectedExit": 0,
@@ -184,7 +184,7 @@
     {
       "id": "E9",
       "criterion": "AC-9",
-      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs tao-tu-goi-y\"",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs tao-tu-goi-y\"",
       "expected": "exit 0. Tren may chu that, hai luot: mot tren CA NHAN va mot tren THOA\nTHUAN. Ca nhan la thuc the nguong nghiem thu bam dong ho; Thoa thuan la\nnhom truoc vong nay khong co goi y nao. Hai luot vi hai ly do khac nhau,\nkhong phai de cho nhieu.\nMoi luot: mo /settings/fields, bam the tuong ung, bam MOT goi y trong khoi\ngoi y. Roi khang dinh bang API, khong bang man: GET /fields?entity=<thuc\nthe> tra ve mot truong co nhan DUNG NGUYEN VAN nhan goi y, kieu dung kieu\ngoi y, va voi goi y kieu SELECT thi bo lua chon dung bang bo khai trong goi\ny — dung so luong, dung nhan tung cai, dung thu tu. Sau do doc lai man va\nkhang dinh truong do hien trong nhom dang dung.\nDon phong: truong da ton tai truoc khi bam thi xoa qua API o buoc don dep\ndau, khong bo qua. Don dep cuoi: xoa truong vua tao qua API, du do hay xanh.\nCap hai chieu tren CUNG fixture: ban sao da lam buoc bam goi y chi cap nhat\nman ma khong goi API tao — phai do VA thong diep noi ro API khong co truong\nnao mang nhan do.",
       "executor": "script",
       "expectedExit": 0,
@@ -205,7 +205,7 @@
     {
       "id": "E10",
       "criterion": "AC-10",
-      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs ba-viec\"",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs ba-viec\"",
       "expected": "exit 0. Tren may chu that, lam ba viec LIEN TIEP tren trang\n/settings/fields the Cong ty, va khang dinh tung viec bang API:\n(1) tao mot truong tu dau, nhan bat dau dung tien to \"ZZ thu \" kem hau to\nsinh ngau nhien — GET /fields tra ve no;\n(2) sua nhan cua chinh truong do, giu tien to — GET /fields tra ve nhan\nmoi, va KHONG con nhan cu;\n(3) luu tru no — GET /fields?includeArchived=true tra ve no voi moc luu tru\nkhac rong, VA GET /fields thuong KHONG tra ve no.\nBa ve deu phai xanh; thieu ve nao thi do va goi ten dung ve do.\nDon dep: xoa truong vua tao qua API o cuoi, du thuoc do hay xanh.\nCap hai chieu tren CUNG fixture: ban sao da lam nut luu tru tren trang\nkhong goi API — phai do o ve ba VA thong diep chua chuoi \"luu tru\".",
       "executor": "script",
       "expectedExit": 0,
@@ -224,7 +224,7 @@
     {
       "id": "E11",
       "criterion": "AC-11",
-      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs khay-cu\"",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs khay-cu\"",
       "expected": "exit 0. Duong vao CU khong hoi quy, do bang SAU viec cua truc viec-nguoi-\nquan-tri, KHONG do bang \"khay con mo duoc\". Vong nay thay tron bo goi y ma\nkhay cung doc bo do, nen khay KHONG bat dong: noi dung no hien se doi.\nTren may chu that: mo mot the ho so Ca nhan, mo khay theo dung duong cu\n(tham so manageFields). Roi lam sau viec TRONG KHAY, khang dinh tung viec\no tang sau:\n(1) xem — khay hien va co ba the thuc the; so truong khay liet ke BANG so\nGET /fields tra ve cho thuc the do;\n(2) tao tu goi y — bam mot goi y trong khay, GET /fields tra ve truong dung\nnhan va dung bo lua chon;\n(3) tao tu dau — nhan mang tien to \"ZZ thu \", GET /fields tra ve no;\n(4) sua nhan — GET /fields tra ve nhan moi, khong con nhan cu;\n(5) xep lai thu tu — doi cho hai truong trong khay, GET /fields tra ve thu\ntu MOI, so nguyen ca day chu khong chi so hai phan tu;\n(6) luu tru — GET /fields?includeArchived=true tra ve moc luu tru khac\nrong, GET /fields thuong khong tra ve no.\nSau viec deu phai xanh; thieu viec nao thi do va goi ten dung viec do. Don\ndep moi truong tien to \"ZZ thu \" qua API o cuoi.\nChup anh khay.\nCap hai chieu tren CUNG fixture: ban sao da xoa FieldsSheetHost khoi bo cuc\nchung — phai do o viec (1) VA thong diep goi ten khay.",
       "executor": "script",
       "expectedExit": 0,
@@ -247,7 +247,7 @@
     {
       "id": "E12",
       "criterion": "AC-12",
-      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs trang-thai\"",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs trang-thai\"",
       "expected": "exit 0. Hai trang thai, ca hai tren may chu that, doc bang cai nguoi thay.\n(1) Rong: chon mot thuc the chua co truong tu tao nao — man hien dung loi\n\"Chua co truong tu tao nao\" VA khoi goi y cua thuc the do co mat voi it\nnhat mot goi y bam duoc.\n(2) Loi: chan duong goi /fields o tang mang cua trinh duyet roi mo trang —\nman hien loi \"Chua tai duoc cac truong cua ban\" VA mot nut \"Thu lai\" bam\nduoc. Man trang tron hoac man treo vong cho mai la that bai.\nChup anh ca hai trang thai.\nCap hai chieu tren CUNG fixture: ban sao da bo nhanh loi (man chi hien vong\ncho) — phai do o ve hai VA thong diep goi ten trang thai loi.",
       "executor": "ui-check",
       "expectedExit": 0,
@@ -294,7 +294,7 @@
     {
       "id": "E14",
       "criterion": "AC-2",
-      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs tieu-de-trang\"",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs tieu-de-trang\"",
       "expected": "exit 0. Tren may chu that: mo /settings/fields, doc bang cai nguoi thay.\nKhang dinh: trang co tieu de khong rong VA mo ta khong rong; ca hai bang\ntieng dang chon. Chay hai lan, lang=vi va lang=en, va khang dinh CA tieu de\nLAN mo ta khac nhau giua hai luot — giong nhau nghia la chuoi chua qua kho\nchuoi cua tung tieng.\nChup anh trang.\nCap hai chieu tren CUNG fixture: ban sao da xoa mo ta trang — phai do VA\nthong diep goi ten dung phan mo ta.",
       "executor": "ui-check",
       "expectedExit": 0,
@@ -320,7 +320,7 @@
     {
       "id": "E15",
       "criterion": "AC-14",
-      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"node _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs ba-nhom\"",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs ba-nhom\"",
       "expected": "exit 0. Tren may chu that, tren the CA NHAN — thuc the duy nhat chac chan\nco san du lieu, vi bo cao da gieo chin truong o day.\nKhang dinh tren man: co dung BA nhom voi tieu de doc duoc — truong chuan\ncua he thong, truong dang dung, truong da luu tru; nhom truong chuan co it\nnhat MOT phan tu; nhom dang dung chua DU CHIN khoa bo cao, doi chieu bang\ncach IMPORT LISTING chu khong chep tay.\nDoi chung so luong voi API: so phan tu nhom dang dung BANG so GET /fields\ntra ve; so phan tu nhom da luu tru BANG hieu giua\nGET /fields?includeArchived=true va GET /fields.\nRoi kiem viec chuyen nhom: tao mot truong nhan tien to \"ZZ thu \", luu tru\nno tren trang, khang dinh no ROI nhom dang dung VA sang nhom da luu tru\ntren man. Don dep qua API o cuoi.\nCap hai chieu tren CUNG fixture: ban sao da bo viec truyen truong chuan cho\ndanh sach — phai do VA thong diep goi ten nhom truong chuan bi thieu.",
       "executor": "script",
       "expectedExit": 0,
@@ -377,6 +377,29 @@
         "output"
       ],
       "ref": "config:executors.test.trg_khoa_bo_dau"
+    },
+    {
+      "id": "E18",
+      "criterion": "AC-15",
+      "cmd": "bun _acceptance/truong-tu-tao-o-cai-dat/rang/pha-thu.mjs",
+      "expected": "exit 0. Day la chieu CHUNG MINH CAC CHIEU KHAC CO RANG — khong co no thi\nmoi cau \"Cap hai chieu tren CUNG fixture\" trong tep nay chi la loi khai,\nkhong ai chay.\nThuoc dung MOT BAN SAO cay bang worktree cho TUNG ca, dot bien dung mot vat\ntrong ban sao, roi chay lai chieu do TREN BAN SAO va khang dinh HAI dieu:\nchieu do DO, VA thong diep chua dung chuoi phai thay.\nMUOI MOT ca, moi ca mot lop loi khac: goi y bo cu quay lai (thay \"AMER\" va\n\"Territory\") · nhom Thoa thuan rong (thay \"DEAL\") · nhan Ca nhan thanh\ntieng Anh (thay \"Segment\") · goi y trung khoa bo cao (thay \"dia_ban\") ·\nbo cao doi so khoa · thieu mot dong cua bang (thay \"Kenh lien lac quen\") ·\ndoi kieu mot dong · thieu mot lua chon (thay \"Dat nen\") · sai thu tu lua\nchon (thay \"SAI THU TU\") · tu dien thieu dong _Avoid_ · ham sinh khoa tra\nve ban cu.\nCa cuoi la ca DOI CHUNG NGUOC: tra ham sinh khoa ve ban bo dau cu thi\nchieu do trung khoa phai XANH du da cam mot goi y trung — do la bang chung\nrang AC-8 tung la phep do rong truoc khi vong nay sua ham.\nThuoc dong-khi-hong: ca nao nem thi tinh la SAI, khong phai bo qua; va so\nca chay phai BANG so ca khai, ca bien mat khong duoc tinh la ca dat.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "packages/validation/src/field-templates.ts",
+        "packages/db/src/fields-shape.ts",
+        "CONTEXT.md",
+        "_acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs",
+        "_acceptance/truong-tu-tao-o-cai-dat/rang/pha-thu.mjs"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.trg_pha_thu"
     }
   ],
   "suiteCommands": [
@@ -391,20 +414,29 @@
   "templatePath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.15.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
   "contractPath": "/Users/manh-macmini/dev/crm/_acceptance/truong-tu-tao-o-cai-dat/contract.md",
-  "invokedAt": "2026-09-18T02:37:42Z",
-  "invokedSha": "17a8c426d8f8b04c2fe567b4082a157dad2a1b88",
+  "invokedAt": "2026-09-18T03:17:00Z",
+  "invokedSha": "905fc88d5b1472d4f2c435c7ca9cd5a23a365711",
   "vungVat": [
     "CONTEXT.md",
     "_acceptance/config.yaml",
     "_acceptance/truong-tu-tao-o-cai-dat/evals.yaml",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E14-network.txt",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E14-step1.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E14-step2.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E5-network.txt",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E6-network.txt",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E6-ui-capture-unauth-limitation.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/ba-nhom.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/ba-the.html",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/ba-the.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/khay-cu.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/khong-bat-khay.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/tao-tu-goi-y-CONTACT.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/tao-tu-goi-y-DEAL.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/thanh-ben-en.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/thanh-ben-vi.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/tieu-de-vi.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/trang-en.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/trang-thai-loi.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/trang-thai-rong.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/trang-vi.png",
@@ -458,14 +490,23 @@
     "_acceptance/truong-tu-tao-o-cai-dat/contract.md",
     "_acceptance/truong-tu-tao-o-cai-dat/decisions.jsonl",
     "_acceptance/truong-tu-tao-o-cai-dat/evals.yaml",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E14-network.txt",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E14-step1.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E14-step2.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E5-network.txt",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E6-network.txt",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E6-ui-capture-unauth-limitation.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/ba-nhom.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/ba-the.html",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/ba-the.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/khay-cu.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/khong-bat-khay.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/tao-tu-goi-y-CONTACT.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/tao-tu-goi-y-DEAL.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/thanh-ben-en.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/thanh-ben-vi.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/tieu-de-vi.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/trang-en.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/trang-thai-loi.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/trang-thai-rong.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/trang-vi.png",
@@ -492,14 +533,23 @@
     "CONTEXT.md",
     "_acceptance/config.yaml",
     "_acceptance/truong-tu-tao-o-cai-dat/evals.yaml",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E14-network.txt",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E14-step1.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E14-step2.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E5-network.txt",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E6-network.txt",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/E6-ui-capture-unauth-limitation.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/ba-nhom.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/ba-the.html",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/ba-the.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/khay-cu.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/khong-bat-khay.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/tao-tu-goi-y-CONTACT.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/tao-tu-goi-y-DEAL.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/thanh-ben-en.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/thanh-ben-vi.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/tieu-de-vi.png",
+    "_acceptance/truong-tu-tao-o-cai-dat/evidence/trang-en.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/trang-thai-loi.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/trang-thai-rong.png",
     "_acceptance/truong-tu-tao-o-cai-dat/evidence/trang-vi.png",
@@ -520,6 +570,8 @@
   ],
   "coverageFiles": [
     "CONTEXT.md",
+    "_acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs",
+    "_acceptance/truong-tu-tao-o-cai-dat/rang/pha-thu.mjs",
     "apps/app/app/(app)/[slug]/settings/fields/fields-settings.tsx",
     "apps/app/app/(app)/[slug]/settings/fields/page.tsx",
     "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx",
@@ -532,6 +584,6 @@
     "packages/validation/src/field-templates.ts"
   ],
   "coEvalPaths": true,
-  "evalsHash": "6f9bac89cf444e9fa8b612ca6d39b54d5cf090baa09f430cd8fc3be8993cf9c5",
+  "evalsHash": "26895556ca93c889fc601ed13b614311124a25d96bada111543a4191ab97fe06",
   "runBaseline": true
 }
