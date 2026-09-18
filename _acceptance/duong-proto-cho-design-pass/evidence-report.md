@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 852dc7799675c39836b688897e44994fa2dd3454
+verified_commit: 83457a0979f2332fd2ed396d7cbccf5facac3989
 human_signoff: Mạnh 2026-09-16
 ---
 
@@ -257,3 +257,7 @@ Round 1: E3 (dp_ban_dung) và E7 (dp_muc_luc) thất bại (mã 1 và 2) vì m�
 Round 2: E2 (dp_co_tat, PID 61807), E6 (dp_slug_la, PID 61718) và E7 (dp_muc_luc, PID 61807) không chạy được vì một máy chủ Next khác đang khóa `apps/app` theo THƯ MỤC (không theo cổng), và dừng nó có thể phá hỏng verifier khác đang chạy song song nên không tự ý kill; E14 (build --force) thất bại thật (mã 1) vì một tiến trình `next build` khác đang chạy. Verdict BLOCKED — chưa quay về implementation, cần dừng các tiến trình Next cạnh tranh (xác nhận an toàn rồi kill PID 61807/61718) trước khi verify lại từ đầu vòng.
 Round 3: E8 (dp_so_dang_ky) thất bại thật (mã 2) vì so-dang-ky.mjs vẫn ghim cứng slug cũ "duong-proto" trong khi catalog.ts đã đổi sang "duong-proto-cho-design-pass" từ round trước, nên sàn cứng chặn ngay và toàn bộ đối chiếu catalog↔registry không chạy được; E1/E2/E4/E5/E6/E7 (dp_duong_song, chạy gộp `tat-ca`) không đo được vì một máy chủ Next khác (PID 73707) khóa `apps/app` theo thư mục, server test không lên nổi trong 90s. Verdict BLOCKED — không tự ý pkill nhiều lần theo hướng dẫn của vòng này; cần dừng PID 73707 và sửa so-dang-ky.mjs dùng SLUG_HO_SO thay vì hằng cứng trước khi verify lại từ đầu.
 Round 4: so-dang-ky.mjs đổi sang nạp slug hồ sơ qua SLUG_HO_SO thay vì viết tay (de62f1b), và bước dọn máy chủ của E13 đổi sang dừng theo PID đã in ra thay vì pkill rộng (852dc77) — cả 17 eval và ba lệnh suite hồi quy (`bun run test`, `bunx turbo run lint --force`, `bun run lint:slop`) chạy hết, không còn máy chủ Next nào tranh khóa thư mục. Verdict PASS.
+
+### Re-pin lần 1 — 2026-09-18, do hoa cu do tron origin/onehub vao nhanh truoc khi mo PR
+run_id: repin-20260918T123301Z-81551
+sha: 83457a0979f2332fd2ed396d7cbccf5facac3989 · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng
