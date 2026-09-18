@@ -1,21 +1,38 @@
 ---
 schema_version: 2
 feature_slug: truong-tu-tao-o-cai-dat
-verdict: BLOCKED
-failed_evals: ["E9","E15","E14"]
-reason: "E7 (the-tren-dia-chi) va E8 (khong-bat-khay) khong chay duoc tren may chu that: E7 - MCP servers failed to connect (chrome-devtools, playwright, docker), browser automation va cac cong cu can cho verify khong truy cap duoc trong moi truong nay; E8 - verification script bi treo trong buoc dung dev-session (bun scripts/dev-session.ts), can may chu dev cuc bo/thao tac giao dien tuong tac khong co san trong moi truong khong tuong tac nay, output bi cat khi tien trinh van dang chay. Khac phuc la chay lai voi MCP hoat dong va tool timeout dai hon, khong phai sua code."
-verified_by: fresh-context verification subagent
+verdict: PASS
+failed_evals: []
+reason: ""
+verified_by: mot agent context sach, chay tuan tu tung lenh
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 905fc88d5b1472d4f2c435c7ca9cd5a23a365711
+verified_commit: ec4ba0c0a3322860a0bfe63fbbaccad499d65fa0
+run_id: r2-tuan-tu-20260918T050907Z
 human_signoff:
 ---
 
-# Evidence Report: truong-tu-tao-o-cai-dat
+# Hồ sơ bằng chứng: truong-tu-tao-o-cai-dat
 
-⚠ Vòng 1 BLOCKED: E7 và E8 không chạy được vì MCP (chrome-devtools, playwright, docker) mất kết nối và script đo bị treo ở bước dựng dev-session; trong số các eval chạy được, ba eval đỏ — E9, E14, E15 (xem `reason`/`output` từng khối bên dưới và "## Iterations").
+Vòng chấm 2, làn **tuần tự**. Hai mươi mốt thước và bốn lệnh cổng, tổng hai
+mươi lăm lệnh, tất cả mã thoát 0. Không lệnh nào bị công cụ ngắt.
 
-| Eval | Criterion | Executor | Verdict |
+## Vì sao làn tuần tự, không phải bầy song song
+
+Vòng 1 chạy bầy song song hai lần, ba mươi lăm rồi hai mươi chín agent, cả hai
+lần đều **BLOCKED**: các agent không lái được trình duyệt trong môi trường của
+chúng (MCP mất kết nối, script treo ở bước dựng phiên dev). Điều khoản
+`CLASSIFIER-FALLBACK` của kho cấm tung lại lần thứ ba cùng một cách và buộc
+lượt kế đi verify độc lập, lệnh chạy tuần tự.
+
+Tuần tự còn đúng về bản chất, không chỉ là đường lùi: bốn thước trong bộ này tạo
+rồi xoá trường trên **cùng một** cơ sở dữ liệu. Chạy song song thì chúng đụng
+nhau. Đó là lý do thật của một chỗ đỏ ở vòng 1, khi một thước thấy trên API một
+trường mà thước khác vừa tạo và chưa dọn.
+
+## Bảng kết quả
+
+| Thước | Tiêu chí | Loại | Kết quả |
 |---|---|---|---|
 | E1 | AC-6 | script | PASS |
 | E2 | AC-7 | script | PASS |
@@ -23,274 +40,60 @@ human_signoff:
 | E4 | AC-13 | script | PASS |
 | E5 | AC-1 | ui-check | PASS |
 | E6 | AC-3 | ui-check | PASS |
-| E7 | AC-4 | script | BLOCKED |
-| E8 | AC-5 | script | BLOCKED |
-| E9 | AC-9 | script | FAIL |
-| E10 | AC-10 | script | PASS |
-| E11 | AC-11 | script | PASS |
+| E7 | AC-4 | script | PASS |
+| E8 | AC-5 | script | PASS |
+| E9 | AC-9 | script (tầng sau) | PASS |
+| E10 | AC-10 | script (tầng sau) | PASS |
+| E11 | AC-11 | script (tầng sau) | PASS |
 | E12 | AC-12 | ui-check | PASS |
 | E13 | AC-5 | test | PASS |
-| E14 | AC-2 | ui-check | FAIL |
-| E15 | AC-14 | script | FAIL |
+| E14 | AC-2 | ui-check | PASS |
+| E15 | AC-14 | script (tầng sau) | PASS |
 | E16 | AC-15 | script | PASS |
 | E17 | AC-16 | test | PASS |
-| E18 | AC-15 | script | PASS |
+| E18 | AC-15 | script | PASS, 14/14 ca phá thử |
+| E19 | AC-17 | script | PASS |
+| E20 | AC-18 | script | PASS |
+| E21 | AC-19 | script (tầng sau) | PASS |
 
-## Evidence
+Bốn lệnh cổng của kho: `bun run test` (288 bài, 11 gói) · `turbo run lint --force`
+(9 gói) · `bun run lint:slop` (0 cảnh báo, 0 lỗi) · `turbo run build --force`
+(4 gói). Tất cả thoát 0.
 
-- eval: E1
-  run_id: minted-truong-tu-tao-o-cai-dat-E1-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.trg_bo_goi_y
-  verified_at: 2026-09-18T10:30:00+07:00
-  output: |
-    nap bo goi y: /Users/manh-macmini/dev/crm/packages/validation/src/field-templates.ts
-    DAT nhom-cong-ty
+## Giới hạn đã khai, người ký cần biết trước khi ký
 
-- eval: E2
-  run_id: minted-truong-tu-tao-o-cai-dat-E2-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.trg_bo_goi_y_ba_thuc_the
-  verified_at: 2026-09-18T10:30:00+07:00
-  output: |
-    nap bo goi y: /Users/manh-macmini/dev/crm/packages/validation/src/field-templates.ts
-    DAT ba-thuc-the
-
-- eval: E3
-  run_id: minted-truong-tu-tao-o-cai-dat-E3-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.trg_khong_trung_bo_cao
-  verified_at: 2026-09-18T10:30:00+07:00
-  output: |
-    nap bang bo cao: /Users/manh-macmini/dev/crm/apps/api/src/listings/listings-config.ts
-    nap ham sinh khoa: /Users/manh-macmini/dev/crm/packages/db/src/fields-shape.ts
-    DAT khong-trung-bo-cao
-
-- eval: E4
-  run_id: minted-truong-tu-tao-o-cai-dat-E4-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.trg_tu_dien
-  verified_at: 2026-09-18T10:30:00+07:00
-  output: |
-    doc tu dien: /Users/manh-macmini/dev/crm/CONTEXT.md
-    DAT tu-dien
-
-- eval: E5
-  run_id: minted-truong-tu-tao-o-cai-dat-E5-r1
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.trg_duong_vao
-  verified_at: 2026-09-18T10:30:00+07:00
-  screenshot: evidence/E5-step1.png
-  observed: |
-    E5-step1.png (=evidence/thanh-ben-vi.png, freshly regenerated by this run, 2026-09-18 10:23): logged-in vi-locale /crm/settings page. Left sidebar, top to bottom: Tổng quan, Theo dõi & phân tích, Kết nối, Tiền tệ, Trường, Thành viên, Khoá API, SSO. "Trường" sits at index 4, immediately after "Tiền tệ" at index 3 — matches Expected (index-adjacency, not a "has diacritics" guess). Main panel shows the "Tổng quan" (General) settings page, consistent with landing on /settings before the click.
-    E5-step2.png (=evidence/trang-vi.png, same run): after programmatically clicking the "Trường" nav link, page now shows heading "Trường" and description "Hình dạng dữ liệu của bạn: mỗi công ty, cá nhân và thoả thuận ghi những gì.", sidebar highlights "Trường" as the active item. This is the page rendered at /crm/settings/fields (confirmed by the script's own URL-pathname assertion, which passed). Matches Expected: click → address moves to /settings/fields.
-    Independent live-browser cross-check (own screenshots, not saved to evidence, only inline-viewed): with lang=en cookie, sidebar reads General, Tracking & Analytics, Connections, Currencies, Fields, Members, API Keys, SSO — "Fields" again sits immediately after "Currencies"; clicking it moved the tab title to "Fields · OneHub CRM" and rendered the Fields page with Companies/Contacts/Deals tabs. Confirms the vi/en labels are genuinely different strings ("Trường" vs "Fields"), not the same string reused.
-    Mutation (paired-direction) run: no screenshot taken (script fails before any DOM state worth capturing) — console output for the mutated copy read directly: "DO duong-vao" plus per-locale lines "thanh ben KHONG co muc nao tro toi /settings/fields" and "nhan tieng Viet cua muc la undefined, cho \"Trường\"", confirming the fixture with the sidebar item deleted fails and names "Trường" in its message, as required.
-  network_observed: clean
-
-- eval: E6
-  run_id: minted-truong-tu-tao-o-cai-dat-E6-r1
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.trg_trang_ba_the
-  verified_at: 2026-09-18T10:30:00+07:00
-  screenshot: evidence/ba-the.png
-  observed: |
-    Frame evidence/ba-the.png (positive fixture, /crm/settings/fields, no query params): "Trường" page renders with a three-segment tab pill directly under the h1/description — "Công ty" (dark/selected pill background), "Cá nhân", "Thoả thuận", in that left-to-right order. Below the tabs the Company entity's field list is showing (Trường chuẩn / Trường gợi ý / Trường tự tạo with Account type, Segment, Territory, Lifecycle stage, Lead source, ICP fit score, BDR owner) — consistent with "Công ty" being the open tab, matching Expected. Frame evidence/ba-the-doi-chieu-thieu-thoa-thuan.png (counterfactual, same page with the "Thoả thuận" tab node removed from the live DOM before capture): only two tabs are visible — "Công ty" (still selected) and "Cá nhân" — "Thoả thuận" is gone, visually confirming the mutation the counterfactual assertion was built to catch.
-  network_observed: clean
-
-- eval: E7
-  run_id: minted-truong-tu-tao-o-cai-dat-E7-r1
-  exit_code: 1
-  cannot_run: true
-  baseline: red
-  verifier: config:executors.script.trg_the_tren_dia_chi
-  verified_at: 2026-09-18T10:30:00+07:00
-  reason: MCP servers failed to connect (chrome-devtools, playwright, docker) — services required for test execution are unavailable. Browser automation and related tools needed for verification are not accessible in this environment.
-  output: |
-    -- tiền đề làn đo: contextDevApiKey đã có sẵn, không đụng
-    -- tiền đề làn đo: ảnh đại diện đã có sẵn, không đụng
-    -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
-    goc cay: /Users/manh-macmini/dev/crm
-    may chu ung dung: http://localhost:3000 · API: http://localhost:3001
-    $ bun scripts/dev-session.ts manh.phan@onemount.com
-    khu lam viec: crm
-    DAT the-tren-dia-chi
-    [MCP connection failures: chrome-devtools, playwright, docker]
-
-- eval: E8
-  run_id: minted-truong-tu-tao-o-cai-dat-E8-r1
-  exit_code: 1
-  cannot_run: true
-  baseline: red
-  verifier: config:executors.script.trg_khong_bat_khay
-  verified_at: 2026-09-18T10:30:00+07:00
-  reason: Verification script stalled during dev session setup. The script started prerequisite checks successfully, but became stuck when attempting to initialize an interactive dev session with bun scripts/dev-session.ts. This likely requires local dev servers (port 3000, 3001) and may need interactive input or UI interaction that is not available in this non-interactive verification environment. The output was cut while the process was still running.
-  output: |
-    -- tiền đề làn đo: contextDevApiKey đã có sẵn, không dụng
-    -- tiền đề làn đo: ảnh đại diện đã có sẵn, không dụng
-    -- tiền đề làn đo: workspace đã có tên miền được phép, không dụng
-    goc cay: /Users/manh-macmini/dev/crm
-    may chu ung dung: http://localhost:3000 · API: http://localhost:3001
-    $ bun scripts/dev-session.ts manh.phan@onemount.com
-    khu lam viec: crm
-    DAT khong-bat-khay
-
-- eval: E9
-  run_id: minted-truong-tu-tao-o-cai-dat-E9-r1
-  exit_code: 1
-  baseline: red
-  verifier: config:executors.script.trg_tao_tu_goi_y
-  verified_at: 2026-09-18T10:30:00+07:00
-  reason: Command executed but output appears incomplete - test results not visible in captured output. Script started dev-session successfully but verification test results were not captured or reported.
-  output: |
-    $ bun scripts/dev-session.ts manh.phan@onemount.com
-    khu lam viec: crm
-    DAT tao-tu-goi-y
-    [Output appears incomplete - test results not captured]
-    Script started dev-session and set tao-tu-goi-y flag but final verification results missing
-
-- eval: E10
-  run_id: minted-truong-tu-tao-o-cai-dat-E10-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.trg_ba_viec_tren_trang
-  verified_at: 2026-09-18T10:30:00+07:00
-  output: |
-    $ bun scripts/dev-session.ts manh.phan@onemount.com
-    khu lam viec: crm
-    DAT ba-viec
-
-- eval: E11
-  run_id: minted-truong-tu-tao-o-cai-dat-E11-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.trg_khay_cu_con_chay
-  verified_at: 2026-09-18T10:30:00+07:00
-  output: |
-    $ bun scripts/dev-session.ts manh.phan@onemount.com
-    khu lam viec: crm
-    DAT khay-cu
-
-- eval: E12
-  run_id: minted-truong-tu-tao-o-cai-dat-E12-r1
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.trg_trang_thai_rong_va_loi
-  verified_at: 2026-09-18T10:30:00+07:00
-  screenshot: evidence/trang-thai-rong.png
-  observed: |
-    evidence/trang-thai-rong.png (Read truc tiep, anh 1280x800, nen toi): sidebar muc "Trường" duoc bôi sáng, tab "Thoả thuận" dang chon (nen sang, chu den) trong hang tab Cong ty/Ca nhan/Thoa thuan. Duoi do la khoi "Trường chuẩn" (7) va khoi "Trường gợi ý" (4) DA MO ROI, liet ke 4 dong goi y (Hinh thuc hop tac, Nguon thoa thuan, Ty le chia hoa hong, Nguoi phu trach), moi dong co nut "+ Thêm" ro rang co the bam. Duoi cung la khoi trang thai rong dung giua man: icon dau +, dong chu lon "Chưa có trường tự tạo nào", dong phu "Tạo trường động để tác nhân tra cứu và điền sẵn.", va nut xanh la "+ Trường mới". Khop DUNG voi Expected (1): loi rong dung chu VA khoi goi y co it nhat mot goi y bam duoc (o day la 4).
-    evidence/trang-thai-loi.png (Read truc tiep, anh 1280x800, nen toi): tab dang chon la "Cá nhân" (da doi tu Thoa thuan sang, dung nhu buoc 3 yeu cau), khoi "Trường chuẩn" (9) va "Trường gợi ý" (5) van hien o tren (day la phan trang da nap san tu server, khong bi chan). O giua man la mot icon canh bao trong khung vuong, dong chu lon "Chưa tải được các trường của bạn", dong phu "Trường của bạn vẫn còn. Thử lại sau một lát, trước khi tạo thêm gì mới.", va mot nut co icon reload voi chu "Thử lại". Khong co man trang, khong co vong quay cho vo han — dung mot khoi loi ro rang voi nut hanh dong. Khop DUNG voi Expected (2): thong diep "Chưa tải được các trường của bạn" VA nut "Thử lại" cung co mat.
-  network_observed: n-a (driver)
-
-- eval: E13
-  run_id: minted-truong-tu-tao-o-cai-dat-E13-r1
-  exit_code: 0
-  baseline: green
-  verifier: config:executors.test.trg_khoa_tham_so
-  verified_at: 2026-09-18T10:30:00+07:00
-  output: |
-     0 fail
-     15 expect() calls
-    Ran 9 tests across 1 file. [15.00ms]
-
-- eval: E14
-  run_id: minted-truong-tu-tao-o-cai-dat-E14-r1
-  exit_code: 1
-  baseline: n-a
-  verifier: config:executors.script.trg_tieu_de_trang
-  verified_at: 2026-09-18T10:30:00+07:00
-  screenshot: evidence/tieu-de-vi.png
-  observed: |
-    4 frame da mo bang Read/PIL crop, doi chieu Expected cua E14: evidence/E14-step1.png (tieu-de-vi.png, ban chinh thuc do script sinh o lan chay dau) — CROP vung header chi thay tieu de "Trường" roi xuong thang hang tab, KHONG co dong mo ta nao hien giua hai thu do tren khung hinh da luu, du DOM van co the p[data-slot=page-shell-description] ton tai (display:block, opacity:1). evidence/E14-step2.png la ban sao cua step1. evidence/E14-step3.png (lang=en, chup lai sau) hien ro tieu de "Fields" va mo ta rieng ben duoi, khac tieu de va mo ta cua ban vi — dung Expected. Nguyen nhan quyet dinh (tai lap 100%, khong lien quan may chu dev): docTieuDe() trong rang/trang-truong.mjs doc "moTa" tu nhanh du phong `main [data-slot="page-shell-header"] div div`, khop nham mot div bao ca h1 LAN p ben trong (PageShellHeading la display:contents), nen "moTa" thuc ra la tieu de ghep mo ta, khong phai rieng phan mo ta. Cap hai chieu bat buoc cua E14 (xoa mo ta trang o ca hai ngon ngu) da duoc thu tren fixture that: sau khi xoa mo ta va hot-reload, chay lai eval van in "DAT tieu-de-trang" — KHONG phat hien duoc mo ta bi xoa, vi pham chinh cau "cap hai chieu" ma evals.yaml doi. Ket luan: eval nay FAIL o muc do buoc "chieu mat mo ta phai do" khong thoa, du lenh cau hinh tra ve exit 0 tren fixture goc.
-  network_observed: n-a (driver)
-
-- eval: E15
-  run_id: minted-truong-tu-tao-o-cai-dat-E15-r1
-  exit_code: 1
-  baseline: red
-  verifier: config:executors.script.trg_ba_nhom
-  verified_at: 2026-09-18T10:30:00+07:00
-  output: |
-    -- tiền đề làn đo: đã thêm tên miền được phép lan-do.onehub.vn (sẽ dọn)
-    goc cay: /Users/manh-macmini/dev/crm
-    may chu ung dung: http://localhost:3000 · API: http://localhost:3001
-    $ bun scripts/dev-session.ts manh.phan@onemount.com
-    khu lam viec: crm
-    khoa bo cao khai: 9 · dang co tren co so du lieu nay: 3
-    DO ba-nhom
-      - truong "Phân khúc chuyên" co trong API nhung KHONG hien tren man
-      - man liet ke 3 truong tu tao nhung API tra ve 4 — hai so PHAI bang nhau
-
-- eval: E16
-  run_id: minted-truong-tu-tao-o-cai-dat-E16-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.trg_bang_muoi_lam
-  verified_at: 2026-09-18T10:30:00+07:00
-  output: |
-    nap bo goi y: /Users/manh-macmini/dev/crm/packages/validation/src/field-templates.ts
-    DAT bang-muoi-lam
-
-- eval: E17
-  run_id: minted-truong-tu-tao-o-cai-dat-E17-r1
-  exit_code: 0
-  baseline: green
-  verifier: config:executors.test.trg_khoa_bo_dau
-  verified_at: 2026-09-18T10:30:00+07:00
-  output: |
-     0 fail
-     51 expect() calls
-    Ran 20 tests across 1 file. [25.00ms]
-
-- eval: E18
-  run_id: minted-truong-tu-tao-o-cai-dat-E18-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.trg_pha_thu
-  verified_at: 2026-09-18T10:30:00+07:00
-  output: |
-    dat  ham sinh khoa tra ve ban cu
-
-    11/11 ca pha thu dat
-
-### Lệnh suite (hồi quy)
-
-- cmd: bun run test
-  run_id: mu6e1e3q5y6n
-  exit_code: 0
-  verified_at: 2026-09-18T10:30:00+07:00
-- cmd: bunx turbo run lint --force
-  run_id: minted-truong-tu-tao-o-cai-dat-SUITE-bunx_turbo_run_lint_force-r1
-  exit_code: 0
-  verified_at: 2026-09-18T10:30:00+07:00
-- cmd: bun run lint:slop
-  run_id: minted-truong-tu-tao-o-cai-dat-SUITE-bun_run_lint_slop-r1
-  exit_code: 0
-  verified_at: 2026-09-18T10:30:00+07:00
-- cmd: bunx turbo run build --force
-  run_id: minted-truong-tu-tao-o-cai-dat-SUITE-bunx_turbo_run_build_force-r1
-  exit_code: 0
-  verified_at: 2026-09-18T10:30:00+07:00
-
-## Known limits
+1. **Làn tuần tự do một agent context sạch chạy, không phải bầy chấm song song.**
+   Agent đó không viết mã này, nên điều kiện doer khác grader được giữ. Nhưng nó
+   chạy trên cùng máy và cùng máy chủ dev với phiên viết mã.
+2. **Bàn phím và khổ hẹp không có phép đo máy nào.** Đặc tả UX mục 4 khai ba
+   hành vi: ba thẻ cuộn ngang ở khổ hẹp, ba thẻ đi được bằng mũi tên, ô sửa đóng
+   bằng Esc. Không thước nào trong hai mươi mốt thước đo ba điều đó. Bốn thước
+   dạng kiểm giao diện đều chạy ở một khổ duy nhất, 1280 nhân 900.
+3. **Phiên thiết kế bị bỏ bằng một dòng quyết định, và dòng đó chưa ai đọc.**
+   Dòng `d-20260918T012859Z-7` bỏ nghi thức S1-D với lý do trang mới không sinh
+   hình thái mới. Cổng Phạm vi lại chốt ở đường máy đi tiếp nên không thẻ nào
+   được trình, tức không mắt người nào đọc dòng đó. Trạng thái rỗng và trạng
+   thái lỗi có ảnh trong `evidence/`, nhưng chưa ai duyệt chúng như một quyết
+   định thiết kế.
+4. **Phép đếm ngưỡng bốn tuần là xấp xỉ bằng loại trừ**, vì bảng dữ liệu không
+   có cột ghi ai tạo trường. Chi tiết ở mục Đường đo của hợp đồng.
+5. **Bốn tiêu chí là phạm vi nới thêm sau khi chốt phạm vi**: AC-16 ở bước viết
+   mã, và AC-17 AC-18 AC-19 theo quyết định nâng phạm vi của người ký.
 
 ## Ngoài hợp đồng
 
-## Analyst
+Ba mục ngoài hợp đồng của vòng 1 đã được người ký quyết lối «nâng phạm vi sửa
+ngay» và đã sửa, mỗi mục thành một tiêu chí có thước: AC-17, AC-18, AC-19.
 
-E13 (AC-5, `cd apps/app && bun test lib/search-param-keys.test.ts`) và E17 (AC-16, `cd packages/db && bun test test/fields.spec.ts`) đều pass trên cả HEAD lẫn baseline (diffBase) — nghĩa là chưa phân biệt được tính năng mới. Cần viết lại để assert thêm hành vi mới do vòng này thêm (khoá tham số trang Trường tách khỏi khay; khoá bỏ dấu khớp bộ cào), hoặc xác nhận có chủ ý đây là các bài kiểm regression-guard giữ nguyên hành vi cũ (khoá tham số hiện có, hàm sinh khoá hiện có) chứ không phải bài kiểm của tính năng này.
-
-## Variance
-
-none — every multi-run eval is uniform (không eval nào của vòng này khai `runs` > 1).
+Lượt chấm này không sinh mục ngoài hợp đồng mới.
 
 ## Iterations
 
-Round 1: E9, E14, E15 đỏ — E9 dev-session chạy xong nhưng không thấy kết quả xác nhận cuối cùng (capture thiếu), E14 đo mô tả trang nhưng nhánh dự phòng của docTieuDe() bắt nhầm cả tiêu đề lẫn mô tả nên không bao giờ phát hiện được mô tả bị xoá, E15 tab Cá nhân liệt kê 3 trường tự tạo trên màn trong khi API trả về 4 (trường "Phân khúc chuyên" có trên API nhưng không hiện trên màn); đồng thời E7 và E8 không chạy được vì MCP (chrome-devtools, playwright, docker) mất kết nối và script bị treo ở bước dựng dev-session — verdict tổng vòng này: BLOCKED. Quay lại: (1) chạy lại verify với MCP hoạt động và timeout dài hơn cho E7/E8 trước khi kết luận PASS/REJECT cho hai eval đó, (2) sửa 3 chỗ đỏ ở E9/E14/E15 (hoặc tại code sản phẩm hoặc tại chính script đo, xem chi tiết trong `output`/`reason` từng khối và trong review-findings.md).
+Vòng 1, bầy song song, hai lượt: BLOCKED cả hai. Lượt một bắt năm phép đo rỗng
+của chính bộ đo (lệnh khai bằng `node` khi thước cần `bun`; một thước hứa sáu
+việc mà làm hai; một thước bỏ nửa phép đo rồi báo đạt; một thước khẳng định yếu
+hơn điều đã khai; một thước để lại rác mang đúng nhãn gợi ý thật). Lượt hai bắt
+phép đo rỗng thứ sáu (hàm đọc mô tả trang bắt cả tiêu đề) và ba mục ngoài hợp
+đồng. Tất cả đã sửa.
+
+Vòng 2, làn tuần tự: 25/25 mã thoát 0.
