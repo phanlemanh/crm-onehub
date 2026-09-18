@@ -63,6 +63,6 @@ Ba trục trên đều có thước CE là vật có thật trong kho, không d�
 
 - **Ma trận AC-1 liệt thủ tục viết trước.** Một thủ tục quản trị THÊM sau này không tự vào ma trận; phép đo canh tập hiện có, không canh tập tương lai. Rút danh sách từ bản khai router lúc chạy là việc đáng làm nhưng nằm ngoài vòng này.
 
-- **Đường kết nạp mồi không tới được qua giao diện sản phẩm.** `removeMember` từ chối gỡ owner cuối cùng, nên bảng thành viên không về 0 bằng đường sản phẩm. AC-4 canh một cánh cửa không khoá chứ không phải một lỗ đang chảy — nó tới được qua thao tác cơ sở dữ liệu tay, một lượt phục hồi từ bản lưu cũ, hoặc `db:test --reset` khi phát triển.
+- **Đường kết nạp mồi không tới được qua giao diện sản phẩm.** `removeMember` từ chối gỡ owner cuối cùng, nên bảng thành viên không về 0 bằng đường sản phẩm. AC-3 canh một cánh cửa không khoá chứ không phải một lỗ đang chảy — nó tới được qua thao tác cơ sở dữ liệu tay, một lượt phục hồi từ bản lưu cũ, hoặc `db:test --reset` khi phát triển.
 
 - **Dụng cụ mint phiên đang gọi thiếu email.** `apps/api/scripts/dev-session.ts` gọi `ensureWorkspaceMembership(user.id)` không truyền `email`; hàm nhận `email = ""` và `decideSignIn` trả DENY ngay ở dòng đầu, nên thước không dựng lại được đường sản phẩm thật. Bản vá một dòng đã cherry-pick vào vòng này (commit gốc `880f0891`, thẻ máy `vaS-dev-session-cho-ho-so`) chứ không xin miễn trừ T1 — đổi dụng cụ mint phiên là đổi tiền đề của mọi phép đo đăng nhập.
