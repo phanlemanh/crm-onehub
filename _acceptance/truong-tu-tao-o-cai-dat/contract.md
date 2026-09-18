@@ -45,7 +45,7 @@ Source input: prompt (buổi khai thác 2026-09-18, Cổng Đáng ký `build` c�
 - AC-11: Given đường vào cũ từ thẻ hồ sơ, When nhân viên mở khay trượt quản trị trường như trước, Then khay vẫn làm được đúng sáu việc của trục việc-người-quản-trị, mỗi việc xác nhận ở tầng sau: xem danh sách, tạo từ gợi ý, tạo từ đầu, sửa nhãn, xếp lại thứ tự, lưu trữ. (cross-layer)
 - AC-12: Given thực thể đang mở chưa có trường tự tạo nào, When trang hiện danh sách, Then trạng thái rỗng hiện lời «Chưa có trường tự tạo nào» kèm khối gợi ý; và khi danh sách tải lỗi, trang hiện lời lỗi kèm nút thử lại.
 - AC-13: Given chữ «Trường» là từ mới trên màn hình, When đọc từ điển sản phẩm, Then nó có một mục nêu nghĩa và nêu các từ cần tránh.
-- AC-14: Given thực thể đang mở đã có trường, When trang hiện danh sách, Then nhóm trường chuẩn của hệ thống và nhóm trường đang dùng đều có mặt với tiêu đề đọc được, nhóm chuẩn có ít nhất một phần tử, và trên thẻ Cá nhân nhóm đang dùng chứa đủ chín trường của bộ cào; và khi người quản trị lưu trữ một trường, nhóm trường đã lưu trữ xuất hiện mang đúng trường đó, còn nhóm đang dùng thôi mang nó. (cross-layer)
+- AC-14: Given thực thể đang mở đã có trường, When trang hiện danh sách, Then nhóm trường chuẩn của hệ thống và nhóm trường đang dùng đều có mặt với tiêu đề đọc được, nhóm chuẩn có ít nhất một phần tử, và trên thẻ Cá nhân mọi trường mà tầng sau trả về đều hiện trên màn, kể cả trường do bộ cào gieo; và khi người quản trị lưu trữ một trường, nhóm trường đã lưu trữ xuất hiện mang đúng trường đó, còn nhóm đang dùng thôi mang nó. (cross-layer)
 - AC-15: Given bảng mười lăm gợi ý mà người ký đã chốt tại buổi thiết kế, When đối chiếu bộ gợi ý trong sản phẩm với bảng đó, Then khớp từng dòng: đúng mười lăm gợi ý, mỗi dòng đúng thực thể, đúng nhãn nguyên văn, đúng kiểu, và với kiểu một-trong-danh-sách thì đúng bộ lựa chọn cả về số lượng lẫn thứ tự; không dòng nào ngoài bảng.
 - AC-16: Given một nhãn trường bằng tiếng Việt có dấu, When hệ thống sinh khoá máy cho trường đó, Then khoá bỏ dấu mà giữ đủ chữ — «Loại hình» thành `loai_hinh`, «Đất nền» thành `dat_nen`, «Địa bàn» thành đúng `dia_ban` là khoá bộ cào khai tay — nên khoá đọc được và phép đối chiếu trùng khoá ở AC-8 mới có nghĩa.
 
@@ -101,6 +101,11 @@ này không làm — quyết định ghi trong sổ.
 - Skill chuẩn giao diện kho khai (`web-design-guidelines`) là bộ soi code giao
   diện, nó lấy luật từ nguồn trên mạng lúc chạy. Sẽ nạp ở bước viết code, không
   phải bây giờ.
+- **AC-14 đối chứng màn với tầng sau, không đòi đủ chín khoá bộ cào.** Chín khoá
+  chỉ tồn tại sau khi bộ cào chạy một lô tiếp nhận; cơ sở dữ liệu dev 2026-09-18
+  chỉ có ba. Đòi đủ chín là đòi một điều kiện của vòng khác, nên phép đo sẽ đỏ vì
+  lý do không phải lỗi của vòng này. Thước đo thứ vòng này chịu: mọi trường tầng
+  sau trả về đều hiện trên màn.
 - **Nhóm trường đã lưu trữ chỉ hiện khi có trường đã lưu trữ.** Đo trên bản
   đang chạy 2026-09-18: thẻ Cá nhân không có trường lưu trữ nào thì danh sách
   chỉ hiện hai nhóm. Nên AC-14 nói hai nhóm luôn có mặt, và nhóm thứ ba xuất
