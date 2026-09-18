@@ -77,6 +77,6 @@ evals:
     criterion: AC-7
     executor: test
     cmd: config:executors.test.lm_hang_co_ten
-    expected: "exit 0; bốn hằng có tên TRANG_THAI_CHO, TRANG_THAI_NHAN, TRANG_THAI_TU_CHOI, TRANG_THAI_HUY mang ĐÚNG chuỗi thật ghim trong bài, và cả bốn đều nằm trong từ vựng của gói. Bốn ô viết trước, số assert là hằng — không suy từ runtime. Chiều đỏ hai lần: đổi giá trị một hằng thì đỏ với thông điệp ghim tên hằng, chuỗi mong và chuỗi nhận; và trả chỗ ghi ở workspace.service.ts về chỉ số mảng RỒI đảo thứ tự mảng thì khối cho-phep-lai của apps/api đỏ — đó là kịch bản hội đồng vòng chấm 2 nêu, trước bản sửa không lớp canh nào thấy vì bài đo khẳng định bằng chính biểu thức mã dùng để ghi"
+    expected: "exit 0; bài GỌI THẬT nút thu hồi của dịch vụ workspace rồi ĐỌC dòng trong cơ sở dữ liệu, và đòi cột status mang đúng chuỗi canceled — tức nó quan sát CHỖ GHI mà AC-7 nói tới, không dừng ở bản khai hằng số. Bài còn ghim rằng hằng TRANG_THAI_HUY mang đúng chuỗi ấy; đây là điểm neo tường minh duy nhất của hồ sơ. Chiều đỏ hai lần, cả hai chạy bằng CHÍNH lệnh của eval này: trả chỗ ghi về chỉ số mảng rồi đảo thứ tự mảng thì đỏ; đổi giá trị hằng TRANG_THAI_HUY thì đỏ. Cả hai thông điệp ghim chuỗi đã ghi nhầm."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [packages/validation/src/invitation-status.ts, apps/api/src/workspace/workspace.service.ts, packages/auth/test/loi-moi-ket-thuc.spec.ts]
+    paths: [packages/validation/src/invitation-status.ts, apps/api/src/workspace/workspace.service.ts, apps/api/test/workspace-thanh-vien.spec.ts]

@@ -120,27 +120,3 @@ describe("du-lieu-cu", () => {
 		).toBe(false);
 	});
 });
-
-describe("hang-co-ten", () => {
-	it("bon hang mang dung chuoi that, va deu nam trong tu vung", () => {
-		const BANG: readonly [string, string, string][] = [
-			["TRANG_THAI_CHO", TRANG_THAI_CHO, "pending"],
-			["TRANG_THAI_NHAN", TRANG_THAI_NHAN, "accepted"],
-			["TRANG_THAI_TU_CHOI", TRANG_THAI_TU_CHOI, "rejected"],
-			["TRANG_THAI_HUY", TRANG_THAI_HUY, "canceled"],
-		];
-
-		expect(BANG.length).toBe(4);
-
-		for (const [ten, hang, chuoi] of BANG) {
-			expect(
-				hang,
-				`hang ${ten} phai mang chuoi "${chuoi}", nhan "${hang}"`,
-			).toBe(chuoi);
-			expect(
-				(TRANG_THAI_LOI_MOI as readonly string[]).includes(hang),
-				`hang ${ten} mang "${hang}" khong nam trong tu vung cua goi`,
-			).toBe(true);
-		}
-	});
-});

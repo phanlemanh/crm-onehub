@@ -89,7 +89,7 @@ executors:
     lm_trang_thai_that: bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t trang-thai-that"
     lm_ma_tran_trang_thai: bun run test -- "cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t ma-tran-trang-thai"
     lm_khong_sinh_thanh_vien: bun run test -- "cd packages/auth && bun test test/loi-moi-ket-thuc.integration.spec.ts -t khong-sinh-thanh-vien"
-    lm_hang_co_ten: bun run test -- "cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t hang-co-ten"
+    lm_hang_co_ten: bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t ghi-hang-co-ten"
   script:
     cua_vao_loi_mang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs loi-mang"'
     cua_vao_chon_tieng_may_chu: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/cua-vao-noi-tieng-viet/rang/cua-vao.mjs chon-tieng-may-chu"'

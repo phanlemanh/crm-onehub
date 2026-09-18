@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "bun:test";
 import { auth } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import { TRANG_THAI_HUY } from "@crm/validation/invitation-status";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { WorkspaceService } from "../src/workspace/workspace.service";
 
@@ -878,5 +879,39 @@ describe("trang-thai-that", () => {
 			dong?.status,
 			`gia tri la phai ra "unknown", khong duoc hoa "pending", nhan "${dong?.status}"`,
 		).toBe("unknown");
+	});
+});
+
+describe("ghi-hang-co-ten", () => {
+	beforeEach(async () => {
+		await don();
+		await dungKho();
+	});
+
+	it("nut thu hoi ghi dung chuoi canceled vao co so du lieu", async () => {
+		const quan = await dungNguoi("quan-ghi", "owner");
+		const dia = `${suffix}-ghi@onemount.com`;
+
+		const loi = await workspace.allowEmail(quan, {
+			email: dia,
+			role: "member",
+		});
+
+		await workspace.revokeAllowance(quan, { allowanceId: loi.id });
+
+		const dong = await db.invitation.findUnique({
+			where: { id: loi.id },
+			select: { status: true },
+		});
+
+		expect(
+			dong?.status,
+			`nut thu hoi phai ghi chuoi "canceled" vao cot status, nhan "${dong?.status}"`,
+		).toBe("canceled");
+
+		expect(
+			TRANG_THAI_HUY,
+			`hang TRANG_THAI_HUY phai mang chuoi "canceled", nhan "${TRANG_THAI_HUY}"`,
+		).toBe("canceled");
 	});
 });
