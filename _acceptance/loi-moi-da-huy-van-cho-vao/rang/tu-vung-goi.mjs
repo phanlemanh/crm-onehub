@@ -69,17 +69,35 @@ const dong = thoGoi.split("\n").find((d) => d.includes("|"));
 
 if (!dong) tuChoi(`khong tim thay dinh nghia InvitationStatus trong ${dist}`);
 
-const tapGoi = [...dong.matchAll(/"([a-z]+)"/g)].map((m) => m[1]).sort();
+const tapGoi = [...dong.matchAll(/"([^"]+)"/g)].map((m) => m[1]).sort();
 
-const nguon = readFileSync(
-	join(GOC, "packages", "validation", "src", "invitation-status.ts"),
-	"utf8",
+const modKho = join(
+	GOC,
+	"packages",
+	"validation",
+	"src",
+	"invitation-status.ts",
 );
-const khoi = nguon.match(/TRANG_THAI_LOI_MOI = \[([^\]]*)\]/);
 
-if (!khoi) tuChoi("khong doc duoc TRANG_THAI_LOI_MOI trong invitation-status.ts");
+let tapKho;
 
-const tapKho = [...khoi[1].matchAll(/"([a-z]+)"/g)].map((m) => m[1]).sort();
+try {
+	const tho = execFileSync(
+		"bun",
+		[
+			"-e",
+			`import { TRANG_THAI_LOI_MOI } from ${JSON.stringify(modKho)}; console.log(JSON.stringify(TRANG_THAI_LOI_MOI));`,
+		],
+		{ cwd: GOC, encoding: "utf8" },
+	);
+	tapKho = JSON.parse(tho.trim()).slice().sort();
+} catch (loi) {
+	tuChoi(`khong nap duoc TRANG_THAI_LOI_MOI tu ${modKho}: ${loi.message}`);
+}
+
+if (!Array.isArray(tapKho) || tapKho.length === 0) {
+	tuChoi(`TRANG_THAI_LOI_MOI nap ve khong phai mang co phan tu: ${JSON.stringify(tapKho)}`);
+}
 
 console.log(`tap goi: ${JSON.stringify(tapGoi)}`);
 console.log(`tap kho: ${JSON.stringify(tapKho)}`);

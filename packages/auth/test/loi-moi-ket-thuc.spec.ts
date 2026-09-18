@@ -14,6 +14,14 @@ const O = {
 	canceled: TRANG_THAI_LOI_MOI[3],
 } as const;
 
+const dungThu = (status: AllowanceRow["status"]) =>
+	decideSignIn({
+		email: "khue@gmail.com",
+		allowances: [{ email: "khue@gmail.com", role: "admin", status }],
+		seedList: "",
+		anyUserExists: true,
+	});
+
 describe("ma-tran-trang-thai", () => {
 	it("sau o viet truoc, sau khang dinh", () => {
 		expect(O.canceled).not.toBe(CANCELLED_CU);
@@ -32,8 +40,8 @@ describe("ma-tran-trang-thai", () => {
 		for (const [ten, chuoi, mong] of BANG) {
 			const doc = docTrangThai(chuoi);
 			expect(
-				conHieuLuc(doc.trangThai),
-				`o "${ten}" chuoi "${chuoi}": mong ${mong ? "CON HIEU LUC" : "HET HIEU LUC"}, nhan ${doc.trangThai}`,
+				dungThu(doc.trangThai).allowed,
+				`o "${ten}" chuoi "${chuoi}": mong ${mong ? "CHO VAO" : "TU CHOI"}, nhan trang thai ${doc.trangThai}`,
 			).toBe(mong);
 		}
 	});
@@ -64,14 +72,6 @@ describe("ranh-gioi-doc", () => {
 		expect(loi[0] ?? "", "loi phai neu ten truong status").toContain("status");
 	});
 });
-
-const dungThu = (status: AllowanceRow["status"]) =>
-	decideSignIn({
-		email: "khue@gmail.com",
-		allowances: [{ email: "khue@gmail.com", role: "admin", status }],
-		seedList: "",
-		anyUserExists: true,
-	});
 
 describe("huy-qua-goi", () => {
 	it("trang thai canceled mot chu L thi tu choi", () => {

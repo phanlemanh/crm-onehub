@@ -37,7 +37,7 @@ evals:
     criterion: AC-5
     executor: script
     cmd: config:executors.script.lm_tu_vung_goi
-    expected: "exit 0; thước giải gói better-auth bằng createRequire NEO VÀO packages/auth/package.json — không neo vào vị trí script, không neo vào gốc kho — rồi đọc kiểu InvitationStatus từ bản vừa giải và so BẰNG NHAU với tập trạng thái kho khai. Thước IN RA đường dẫn thật đã giải, số hiệu bản, và cả hai tập. Cây này có hai bản better-auth: 1.6.25 là bản packages/auth nạp, 1.4.22 chỉ là phụ thuộc bắc cầu của @better-auth/cli. Chiều đỏ ba lần: thêm một giá trị giả vào tập của kho thì mã 1 và in đúng giá trị thừa; trỏ thước sang bản 1.4.22 thì mã 2 TỪ CHỐI ĐO chứ không phải mã 0; gói không giải được cũng mã 2"
+    expected: "exit 0; thước giải gói better-auth bằng createRequire NEO VÀO packages/auth/package.json — không neo vào vị trí script, không neo vào gốc kho — rồi đọc kiểu InvitationStatus từ bản vừa giải và so BẰNG NHAU với tập trạng thái kho khai. Tập của kho lấy bằng cách NẠP module qua bun và in giá trị thật ra JSON — không rút bằng regex trên văn bản nguồn, vì regex nuốt im các giá trị có gạch nối, chữ số hay chữ hoa. Thước IN RA đường dẫn thật đã giải, số hiệu bản, và cả hai tập. Cây này có hai bản better-auth: 1.6.25 là bản packages/auth nạp, 1.4.22 chỉ là phụ thuộc bắc cầu của @better-auth/cli. Chiều đỏ ba lần: thêm một giá trị giả vào tập của kho thì mã 1 và in đúng giá trị thừa; trỏ thước sang bản 1.4.22 thì mã 2 TỪ CHỐI ĐO chứ không phải mã 0; gói không giải được cũng mã 2"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [packages/auth/src/invitation-status.ts, packages/auth/package.json, _acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs]
 
@@ -61,7 +61,7 @@ evals:
     criterion: AC-3
     executor: test
     cmd: config:executors.test.lm_ma_tran_trang_thai
-    expected: "exit 0; MA TRẬN TOÀN PHẦN của trục B, SÁU Ô viết trước và SÁU assert, số assert là hằng sáu cấm suy từ runtime: pending CHO VÀO, accepted CHO VÀO, canceled từ chối, rejected từ chối, cancelled của dữ liệu cũ từ chối, chuỗi rác từ chối. Đây là ô mang chiều DƯƠNG của cả hồ sơ — không có nó thì một bản sửa từ chối tất cả mọi người vẫn làm mọi eval khác xanh. Chiều đỏ hai lần: xoá pending khỏi tập còn hiệu lực thì đỏ ở ô cho-vào với thông điệp ghim tên ô; đổi luật từ danh sách trắng sang danh sách cấm thì đỏ ở ô rác với thông điệp ghim chuỗi đã lọt"
+    expected: "exit 0; MA TRẬN TOÀN PHẦN của trục B, SÁU Ô viết trước và SÁU assert, số assert là hằng sáu cấm suy từ runtime: pending CHO VÀO, accepted CHO VÀO, canceled từ chối, rejected từ chối, cancelled của dữ liệu cũ từ chối, chuỗi rác từ chối. Ma trận gọi THẲNG decideSignIn — hàm mà hợp đồng hứa — chứ không gọi hàm trợ giúp conHieuLuc, vì đột biến vào hàm quyết định mới là thứ phép đo phải thấy. Đây là ô mang chiều DƯƠNG của cả hồ sơ — không có nó thì một bản sửa từ chối tất cả mọi người vẫn làm mọi eval khác xanh. Chiều đỏ hai lần, cả hai đột biến vào decideSignIn: đổi điều kiện sang danh sách cấm thì đỏ ở ô rejected; cho điều kiện thành false để từ chối tất cả thì đỏ ở ô pending — vế thứ hai là thứ phân biệt «chặn đúng» với «hỏng hết»"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [packages/auth/src/allow-list.ts, packages/auth/src/invitation-status.ts, packages/auth/test/loi-moi-ket-thuc.spec.ts]
 
