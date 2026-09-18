@@ -45,11 +45,15 @@ function phien() {
 const HO_SO = '[data-slot="sheet-content"]';
 
 const DOC_VUNG = ({ canTim, goc }) => {
-	const khung = document.querySelector(goc);
-	if (!khung) return null;
+	const khung = [...document.querySelectorAll(goc)];
+	if (khung.length === 0) return null;
 	const ra = [];
-	const di = document.createTreeWalker(khung, NodeFilter.SHOW_TEXT);
-	for (let n = di.nextNode(); n; n = di.nextNode()) {
+	const nut = [];
+	for (const k of khung) {
+		const di = document.createTreeWalker(k, NodeFilter.SHOW_TEXT);
+		for (let n = di.nextNode(); n; n = di.nextNode()) nut.push(n);
+	}
+	for (const n of nut) {
 		const t = n.nodeValue.replace(/\s+/g, " ").trim();
 		if (t === "") continue;
 		const el = n.parentElement;
@@ -75,11 +79,11 @@ const DOC_VUNG = ({ canTim, goc }) => {
 };
 
 const DEM_RONG = (goc) => {
-	const khung = document.querySelector(goc);
-	if (!khung) return null;
-	return [...khung.querySelectorAll('[lang="en"]')].filter(
-		(el) => (el.textContent ?? "").trim() === "",
-	).length;
+	const khung = [...document.querySelectorAll(goc)];
+	if (khung.length === 0) return null;
+	return khung
+		.flatMap((k) => [...k.querySelectorAll('[lang="en"]')])
+		.filter((el) => (el.textContent ?? "").trim() === "").length;
 };
 
 function ghiVung(ten, muc) {
@@ -128,22 +132,23 @@ const browser = await puppeteer.launch({
 });
 
 async function bamTab(page, nhan) {
-	const bam = await page.evaluate((n) => {
+	const nut = await page.evaluateHandle((n) => {
 		const k = document.querySelector('[data-slot="sheet-content"]');
-		if (!k) return false;
-		const nut = [...k.querySelectorAll('[role="tab"], button')].find(
-			(b) => (b.textContent ?? "").trim().toLowerCase() === n.toLowerCase(),
+		if (!k) return null;
+		return (
+			[...k.querySelectorAll('[role="tab"]')].find(
+				(b) => (b.textContent ?? "").trim().toLowerCase() === n.toLowerCase(),
+			) ?? null
 		);
-		if (!nut) return false;
-		nut.click();
-		return true;
 	}, nhan);
-	if (!bam) return false;
-	await new Promise((r) => setTimeout(r, 2000));
+	const el = nut.asElement();
+	if (!el) return false;
+	await el.click();
+	await new Promise((r) => setTimeout(r, 2500));
 	return true;
 }
 
-async function xem(duong, canTim, tab) {
+async function xem(duong, canTim, tab, gocRieng) {
 	const page = await browser.newPage();
 	await page.setViewport({ width: 1440, height: 1000 });
 	await browser.setCookie(
@@ -181,24 +186,25 @@ async function xem(duong, canTim, tab) {
 		console.log(`-- DA BAM TAB: ${JSON.stringify(tab)}`);
 	}
 
-	const thay = await page.evaluate(DOC_VUNG, { canTim, goc: HO_SO });
-	const rong = await page.evaluate(DEM_RONG, HO_SO);
+	const goc = gocRieng ?? HO_SO;
+	const thay = await page.evaluate(DOC_VUNG, { canTim, goc });
+	const rong = await page.evaluate(DEM_RONG, goc);
 	if (thay === null || rong === null) {
 		await page.close();
 		await browser.close();
 		await vung.don();
 		thoat(
 			2,
-			`RANG CUN: khong thay TAM HO SO tren ${url} (bo chon ${HO_SO}).`,
+			`RANG CUN: khong thay vung can do tren ${url} (bo chon ${goc}).`,
 			"   Man danh sach van ve, nhung tam ho so thi khong — day la tien de thieu.",
 			"   KHONG doc con so nao: bang danh sach phia duoi da khai dung tu vong truoc,",
 			"   nen do ca trang se bao xanh nho dung cho no khong do.",
 		);
 	}
-	const chu = await page.evaluate((g) => {
-		const k = document.querySelector(g);
-		return k ? k.innerText : "";
-	}, HO_SO);
+	const chu = await page.evaluate(
+		(g) => [...document.querySelectorAll(g)].map((k) => k.innerText).join("\n"),
+		goc,
+	);
 	await page.close();
 	return { thay, rong, chu, url };
 }
@@ -266,10 +272,16 @@ if (chan === "gioi-thieu") {
 			`     ${vung.doiGiaiDoan.meta.from} -> ${JSON.stringify(canTim[0])}\n` +
 			`     ${vung.doiGiaiDoan.meta.to} -> ${JSON.stringify(canTim[1])}`,
 	);
+	console.log(
+		"-- KHOANH VUNG: chi doc trong [data-slot=timeline], KHONG doc ca tam ho so.\n" +
+			"   Thanh giai doan o dau ho so cung mang chinh hai nhan nay va DA khai dung tu\n" +
+			"   vong truoc — do ca tam ho so la bao xanh nho dung cho no khong do.",
+	);
 	const { thay } = await xem(
 		`deals/${vung.doiGiaiDoan.dealId}`,
 		canTim,
 		"Hoạt động",
+		'[data-slot="timeline"]',
 	);
 	hong = bao(chan, canTim, thay, true);
 } else if (chan === "khong-khai-thua") {
