@@ -5,7 +5,7 @@ slug: loi-moi-da-huy-van-cho-vao
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-09-18
 ---
