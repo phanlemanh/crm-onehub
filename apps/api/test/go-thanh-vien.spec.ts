@@ -1,7 +1,12 @@
 import { beforeEach, describe, expect, it } from "bun:test";
-import { AUTH_COOKIE_PREFIX, auth } from "@crm/auth";
+import { AUTH_COOKIE_PREFIX, auth, ensureWorkspaceMembership } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import {
+	conHieuLuc,
+	TRANG_THAI_LOI_MOI,
+	type TrangThaiLoiMoi,
+} from "@crm/validation/invitation-status";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { WorkspaceService } from "../src/workspace/workspace.service";
 
@@ -248,5 +253,100 @@ describe("phien-mat-quyen", () => {
 			nguoiKhac?.user?.id,
 			`phien cua nguoi KHAC khong duoc bi dung cham, mong ${chu}, nhan ${nguoiKhac?.user?.id}`,
 		).toBe(chu);
+	});
+});
+
+const KET_THUC = TRANG_THAI_LOI_MOI.filter(
+	(t): t is TrangThaiLoiMoi => !conHieuLuc(t),
+);
+
+async function vaiCua(userId: string) {
+	const dong = await db.member.findUnique({
+		where: {
+			organizationId_userId: { organizationId: WORKSPACE_ID, userId },
+		},
+		select: { role: true },
+	});
+
+	return dong?.role ?? null;
+}
+
+describe("duong-moi-khong-cap-lai", () => {
+	beforeEach(async () => {
+		await don();
+		await dungKho();
+	});
+
+	it("bang thanh vien rong: nguoi co loi moi ket thuc KHONG duoc ket nap", async () => {
+		expect(KET_THUC.length).toBeGreaterThan(0);
+
+		const chu = await dungNguoi("moi-chu", "owner");
+		const bi = await dungNguoi("moi-bi", "admin");
+		const chuaTungMoi = await dungNguoi("moi-la", "member");
+
+		await workspace.allowEmail(chu, {
+			email: `${bi}@onemount.com`,
+			role: "admin",
+		});
+		await workspace.removeMember(chu, { memberId: await dongMember(bi) });
+
+		const daGhi = await db.invitation.findFirst({
+			where: { organizationId: WORKSPACE_ID, email: `${bi}@onemount.com` },
+			select: { status: true },
+		});
+
+		expect(
+			conHieuLuc((daGhi?.status ?? "") as TrangThaiLoiMoi),
+			`trang thai luot go that ghi ra la "${daGhi?.status}" — no phai la trang thai KET THUC`,
+		).toBe(false);
+
+		await db.member.deleteMany({ where: { organizationId: WORKSPACE_ID } });
+
+		await ensureWorkspaceMembership(bi, `${bi}@onemount.com`);
+
+		expect(
+			await vaiCua(bi),
+			`nguoi mang loi moi "${daGhi?.status}" KHONG duoc duong moi ket nap`,
+		).toBe(null);
+
+		await db.member.deleteMany({ where: { organizationId: WORKSPACE_ID } });
+
+		await ensureWorkspaceMembership(chuaTungMoi, `${chuaTungMoi}@onemount.com`);
+
+		expect(
+			await vaiCua(chuaTungMoi),
+			"nguoi CHUA TUNG co loi moi van phai duoc duong moi ket nap nhu cu",
+		).not.toBe(null);
+	});
+
+	it("moi trang thai ket thuc deu bi loai, so khang dinh bang so trang thai", async () => {
+		for (const tt of KET_THUC) {
+			await don();
+			await dungKho();
+
+			const chu = await dungNguoi("mt-chu", "owner");
+			const nguoi = await dungNguoi(`mt-${tt}`, "member");
+
+			await db.invitation.create({
+				data: {
+					id: id(`inv-${tt}`),
+					organizationId: WORKSPACE_ID,
+					email: `${nguoi}@onemount.com`,
+					role: "admin",
+					status: tt,
+					expiresAt: new Date("9999-12-31T00:00:00.000Z"),
+					inviterId: chu,
+				},
+			});
+
+			await db.member.deleteMany({ where: { organizationId: WORKSPACE_ID } });
+
+			await ensureWorkspaceMembership(nguoi, `${nguoi}@onemount.com`);
+
+			expect(
+				await vaiCua(nguoi),
+				`trang thai ket thuc "${tt}": duong moi KHONG duoc ket nap`,
+			).toBe(null);
+		}
 	});
 });
