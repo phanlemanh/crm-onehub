@@ -1,0 +1,25 @@
+E5 network dump (independent verifier, Claude_Browser tool, supplementary cross-check
+alongside the official puppeteer-driven trang-truong.mjs run which produced the
+screenshots and PASS/FAIL verdict below).
+
+Scope: dev_server.url = http://localhost:3000, api_base = http://localhost:3001.
+
+Full request list (175 total) during vi + en manual walkthrough: all 200/304 OK,
+same-origin (localhost:3000) plus normal Next.js static/_next chunks and
+api/trpc calls, EXCEPT one entry:
+
+  GET http://localhost:3000/crm/settings?_rsc=-xhdy5r1YPrKabWj -> 200 OK [FAILED: net::ERR_ABORTED]
+
+This is a Next.js RSC prefetch fetch that the SERVER answered with 200, but the
+browser aborted client-side because the verifier issued a hard navigate() while a
+background prefetch for the previous page was still in flight (self-induced by the
+manual cross-check driving style, not a click-through). It is not a connection
+error, not a timeout, and not a 4xx/5xx from the server. The official eval script
+(trang-truong.mjs, headless puppeteer with page.goto/waitUntil networkidle0 and
+explicit page.click navigation) does not exhibit this pattern.
+
+Console: one pre-existing dev-mode warning ("Encountered a script tag while
+rendering React component...") unrelated to the fields/settings sidebar feature.
+
+No 4xx/5xx, no connection-error, no timeout observed against the app origin.
+networkObserved = clean.

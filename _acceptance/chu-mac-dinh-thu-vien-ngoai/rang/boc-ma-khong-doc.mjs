@@ -1,10 +1,10 @@
-import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { docTep } from "../../man-cai-dat-noi-tieng-viet/rang/tep-thay.mjs";
 import { docComponent } from "./khai-sinh.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const BANG = JSON.parse(readFileSync(join(HERE, "boc-ma-khong-doc.json"), "utf8"));
+const BANG = JSON.parse(docTep(join(HERE, "boc-ma-khong-doc.json")));
 
 const dia = docComponent();
 const theoTen = new Map(dia.map((c) => [c.ten, c]));

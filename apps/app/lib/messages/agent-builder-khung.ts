@@ -73,7 +73,7 @@ const vi = {
 	},
 	nha: {
 		chaoHoi: (ten: string) => `${ten} cần gì hôm nay?`,
-		tenThayThe: "bạn",
+		tenThayThe: "Bạn",
 		moTa: "Hỏi về CRM của bạn, gắn thẻ một bản ghi hay một kết nối, hoặc tả một tác nhân cần dựng để lo hộ một việc.",
 		riengTu:
 			"Hội thoại và bản nháp tác nhân chỉ mình bạn thấy. Đưa một tác nhân vào chạy thì cả đội dùng được.",
@@ -81,12 +81,12 @@ const vi = {
 		goiYMuc: [
 			"Tóm tắt cho người phụ trách trước mỗi cuộc gọi gia hạn",
 			"Nêu tên thoả thuận nằm im 14 ngày",
-			"Bàn giao khách mới từ Kinh doanh sang Khởi tạo",
+			"Bàn giao đối tác mới từ đội kinh doanh sang đội khởi tạo",
 		],
 	},
 	doi: {
 		tieuDe: "Tác nhân của đội",
-		moTa: "Việc tự động bền, dựng ra từ những hội thoại riêng của từng người.",
+		moTa: "Việc tự động dùng lại được, dựng ra từ những hội thoại riêng của từng người.",
 		khongMoTa: "Chưa có mô tả",
 		soLuotChay: (so: string) => `${so} lượt chạy`,
 		trong: "Đội chưa có tác nhân nào",

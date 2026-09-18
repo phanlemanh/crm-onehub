@@ -132,6 +132,10 @@
 		{
 			"chu": "true",
 			"vi_sao": "gia tri aria-disabled"
+		},
+		{
+			"chu": "member",
+			"vi_sao": "gia tri enum vai tro (Role) lam trang thai dau cua o chon trong allow-dialog.tsx — man hien vai tro qua t.vaiTro, khong bao gio ve chuoi nay nguyen van"
 		}
 	],
 	"khoa_kieu": {

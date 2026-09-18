@@ -1,0 +1,353 @@
+schema_version: 1
+slug: duong-proto-cho-design-pass
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dp_duong_song
+    paths:
+      - "apps/app/app/proto/**"
+      - "apps/app/proxy.ts"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      Rang tu dung may chu cua rieng no tren mot cong roi, PROTO_ROUTE=1, KHONG
+      cookie phien. Khong doc APP_URL mac dinh: mot ban dev dang chay o checkout
+      chinh se bi do thay cho cay dang xet, va ket qua van in ra nhu thuong.
+      Xanh: GET /proto/duong-proto-cho-design-pass tra 200, than trang chua DU nam ten state da
+      khai trong so dang ky, va chua dau hieu component that cua @crm/ui (thuoc
+      tinh data-slot cua shadcn) chu khong phai the tran.
+      Chieu do da chay tren CUNG fixture: doi mot ten state trong so dang ky roi
+      chay lai -> ma khac 0, thong diep ghim ten state bi thieu tren DOM. Neu
+      thieu doi chung nay thi mot trang tra 200 nhung rong cung se xanh.
+      May chu khong len trong han -> ma 2, KHONG xanh.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dp_duong_song
+    paths:
+      - "apps/app/app/proto/**"
+      - "apps/app/proxy.ts"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      CUNG mot rang, cung cach dung may chu, khac dung mot bien: PROTO_ROUTE
+      KHONG dat. Van khong cookie phien — day la dieu kien quan trong nhat cua
+      ca eval nay, vi sau khi proxy them /proto vao ANONYMOUS thi co la lop chan
+      duy nhat con lai.
+      MA TRAN TOAN PHAN tren tap gia tri khai TRUOC — sau gia tri, sau assert,
+      khong duoc it hon: khong-dat · "" · "0" · "false" · "true" · "1".
+      Chi "1" duoc mo (200). NAM gia tri con lai PHAI 404 tren ca hai duong
+      /proto va /proto/duong-proto-cho-design-pass. Khong phai 307, khong phai 200.
+      Ca chinh la "0" va "false": mot ban va viet if (!process.env.PROTO_ROUTE)
+      se coi chung la BAT vi chuoi khac rong deu truthy — luc do proxy da thoi
+      canh /proto nen khong con lop chan nao. Thong diep khi do phai ghim DUNG
+      gia tri lam lot.
+      Chieu do da chay tren CUNG fixture: doi phep kiem sang truthy -> "0" tra
+      200 -> ma khac 0.
+      Ghim them ca 307: neu tra 307 thi thong diep phai noi "proxy da chan, chua
+      chung duoc co chan" — 307 va 404 deu khong-vao-duoc nhung chi mot trong hai
+      chung dung dieu AC-2 hua.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.dp_ban_dung
+    paths:
+      - "apps/app/app/proto/**"
+      - "apps/app/next.config.ts"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      Xanh: dung ban production cua apps/app voi PROTO_ROUTE khong dat, khoi dong
+      ban da dung, GET /proto tra 404, va buoc dung khong phat sinh loi vi nhanh
+      proto.
+      Chieu do: dung lai voi PROTO_ROUTE=1 -> /proto tra 200, rang tra ma khac 0
+      khi chan nay doi 404. Cap hai chieu tren cung mot cay dung.
+      Day la eval dat nhat cua ho so; no ton tai vi bon lenh cong con lai khong
+      dung ung dung, nen mot hoi quy chi lo o ban dung se lot het.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dp_duong_song
+    paths:
+      - "apps/app/app/proto/**"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      Nap danh sach state bang cach IMPORT apps/app/app/proto/catalog.ts —
+      dung duong ma trang that dung — chu KHONG boc van ban registry.ts bang
+      bieu thuc chuoi. Rang boc bang regex se doc ra 0 muc neu ai do khai so
+      bang .map() hay trai mang, va mot vong lap tren 0 phan tu thi dung vo
+      nghia: xanh ma chua tung doc so.
+      SAN CUNG truoc moi so sanh, lech la do co so: catalog dai >= 1, va muc
+      muc cua slug ho so co DUNG 5 state.
+      Xanh: voi tung id da nap, mo
+      /proto/duong-proto-cho-design-pass?state=<id>. Moi lan tra 200; bam than trang cua cac
+      state phai KHAC NHAU doi mot; va the danh dau state dang bat mang
+      aria-current.
+      Chieu do: lam Component bo qua tham so state (tra cung mot cay cho moi
+      state) -> bam trung nhau -> ma khac 0, thong diep ghim hai state trung bam.
+      Khong co doi chung nay thi mot proto lo tham so van xanh vi moi URL deu 200.
+      Chieu do thu hai, doi voi duong NAP: doi khuon khai catalog sang dang
+      .map() hoac trai mang -> rang VAN phai nap dung 5 state (vi no import chu
+      khong boc chuoi). Rang doc ra 0 muc la do, khong phai xanh.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dp_duong_song
+    paths:
+      - "apps/app/app/proto/**"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      Xanh: /proto/duong-proto-cho-design-pass?state=khong-ton-tai tra 404.
+      Chieu do: doi trang proto sang roi-ve-state-dau -> tra 200 -> ma khac 0,
+      thong diep noi ro "state la da roi ve mac dinh".
+      Day la eval chan dung lop loi ma muc 5 SKILL.md goi ten: mot loi go sai
+      bien thanh mot o ma tran chup gia — xanh, du file, sai toan bo.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dp_duong_song
+    paths:
+      - "apps/app/app/proto/**"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      Xanh: /proto/khong-ton-tai tra 404 — khong phai 200 trang trang, khong phai
+      500.
+      Chieu do: bo buoc tra so dang ky truoc khi render -> 500 hoac 200 -> ma
+      khac 0. Thong diep in ma thuc te nhan duoc.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dp_duong_song
+    paths:
+      - "apps/app/app/proto/**"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      Nap tap slug doi chung bang IMPORT apps/app/app/proto/catalog.ts, khong
+      boc van ban. San cung: catalog dai >= 1 truoc khi so sanh — hai tap rong
+      so voi nhau la mot phep so luon dung va khong do gi ca.
+      Xanh: tap slug hien tren /proto BANG DUNG tap slug trong catalog — so
+      sanh hai chieu, khong chi kiem "moi slug trong so deu co mat". Sot va thua
+      la hai loi khac nhau va thong diep phai phan biet duoc.
+      Moi dong con phai mang so state dung bang do dai mang states cua slug do.
+      Chieu do: them mot muc cung vao trang muc luc (slug khong co trong so) ->
+      ma khac 0, thong diep xep no vao nhom "thua".
+      Ve THU HAI, khong duoc bo: voi TUNG dong, rut href THAT tren DOM roi GET
+      no; doi 200 va than trang mang dung ten proto cua dong do. Khong co ve nay
+      thi mot muc luc dung href bang TEN thay vi slug van xanh — tap slug hien
+      thi dung, so state dung — trong khi cua vao cua ca phong trung bay hong.
+      Chieu do cua ve hai: doi href sang ten -> ma khac 0, thong diep ghim href
+      sai va slug mong doi.
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.dp_so_dang_ky
+    paths:
+      - "apps/app/app/proto/registry.ts"
+      - "apps/app/app/proto/**"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      Nap bang IMPORT apps/app/app/proto/catalog.ts (duong ma that dung), khong
+      boc van ban.
+      SAN CUNG truoc moi vong lap: catalog dai >= 1, va muc cua slug ho so DUNG 5
+      state. Thieu san nay thi "moi muc deu hop le" dung vo nghia tren mot tap
+      rong va eval xanh ma chua doc gi — dung lop loi [do-quyen-luot-bang-hanh-vi#F1].
+      Xanh: moi muc co slug khong rong, ten khong rong, va states co it nhat mot
+      phan tu voi id duy nhat trong pham vi muc do.
+      Them mot ve: MOI slug trong catalog phai co Component tuong ung trong
+      registry.ts va nguoc lai — khong muc mo coi o ca hai chieu.
+      Chieu do: them mot muc states rong vao ban sao so dang ky -> ma khac 0,
+      thong diep goi DICH DANH slug thieu state (khong chi "co muc hong").
+      Chieu do thu hai: hai state trung id trong cung mot muc -> ma khac 0.
+      Day la rang chan lop loi "them proto ma quen khai state" — lop loi se xuat
+      hien o vong sau, khong phai vong nay.
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.dp_config_tro_vat_that
+    paths:
+      - "_acceptance/config.yaml"
+      - "apps/app/app/proto/**"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      Xanh: khoi design_pass co du proto_route, dev_cmd, host_embed.
+      proto_route chua chuoi {slug}; phan duong dan cua no (sau khi bo {slug})
+      khop mot nhanh route CO THAT trong apps/app — tuc thu muc tuong ung ton tai
+      tren dia, khong phai chi khop bang chuoi.
+      dev_cmd chua PROTO_ROUTE=1.
+      host_embed.guide va host_embed.route tro toi file ton tai.
+      host_embed.dev_flag bang DUNG ten bien ma layout.tsx doc — rut tu ma nguon,
+      khong viet tay hai lan.
+      Chieu do: doi dev_flag sang mot ten khac trong ban sao config -> ma khac 0,
+      thong diep ghim ca hai ten le nhau. Khong co doi chung nay thi bang khai va
+      ma nguon troi nhau ma khong ai biet.
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.dp_khai_bao
+    paths:
+      - ".env.example"
+      - "docs/proto.md"
+      - "AGENTS.md"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      Xanh: .env.example co dong PROTO_ROUTE kem it nhat mot dong chu giai ngay
+      truoc no (nep cua file: moi bien mot doan van xuoi); docs/proto.md ton tai
+      va khong rong; bang chi muc trong AGENTS.md co mot dong tro toi
+      docs/proto.md.
+      Them mot chan nguoc: KHONG duoc co .env theo goi moi sinh ra, va PROTO_ROUTE
+      KHONG duoc khai trong apps/api/src/config/env.validation.ts — API khong doc
+      bien nay, khai vao do la khai sai.
+      Chieu do: xoa dong chu giai truoc PROTO_ROUTE trong ban sao -> ma khac 0.
+
+  - id: E11
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.dp_khong_goi_server
+    paths:
+      - "apps/app/app/proto/**"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      Xanh: quet moi file duoi apps/app/app/proto/ (bat ca thu muc _modules).
+      Khong file nao nhap @crm/db, @crm/auth, hay barrel @crm/ui tran ("@crm/ui"
+      khong co duong con). Moi lan nhap @crm/ui phai theo subpath
+      @crm/ui/components/<ten>.
+      Chieu do: chen import { db } from "@crm/db" vao mot file proto trong ban sao
+      -> ma khac 0, thong diep ghim ten file va ten goi.
+      Chieu do thu hai: chen import tu barrel "@crm/ui" -> cung ma khac 0 — day
+      la ca de lot nhat vi no trong giong mot import hop le.
+
+  - id: E12
+    criterion: AC-13
+    executor: test
+    cmd: config:executors.test.dp_proxy_an_danh
+    paths:
+      - "apps/app/proxy.ts"
+      - "apps/app/test/**"
+    expected: |
+      Xanh: bai kiem goi thang ham quyet dinh an-danh cua proxy.
+      /proto va /proto/duong-proto-cho-design-pass -> an danh.
+      /protoXYZ -> KHONG an danh (tien to giong nhung khac doan) — day la ca
+      chinh, vi isUnder lam dung viec nay va mot ban vet cau tha bang startsWith
+      se lam hong no.
+      /settings, /contacts, / -> KHONG an danh, van di duong cu.
+      Danh sach ANONYMOUS dai dung hai muc: "/t" va "/proto".
+      Chieu do: doi phep so sanh sang startsWith tran -> /protoXYZ thanh an danh
+      -> bai kiem do voi thong diep ghim "/protoXYZ".
+
+  - id: E13
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "apps/app/app/proto/**"
+    steps:
+      - "Dung ban bam duoc TREN KHO RIENG de khong tranh khoa voi rang khac dang chay song song: cd apps/app && PROTO_ROUTE=1 PROTO_DIST_DIR=.next-proto-ui bunx next dev -p 3300. Next khoa theo THU MUC DUNG, nen kho rieng la cach DUY NHAT chay duoc hai may chu cung luc — da do that."
+      - "Doc danh sach state TU apps/app/app/proto/catalog.ts — KHONG viet tay lai. Hien la 5 state: mac-dinh, rong, dang-tai, loi, tran-dai"
+      - "Chup DU 20 o = 5 state x 2 kho (375, 1280) x 2 theme (light, dark). Moi o mot lenh: bun run ui:capture \"http://localhost:3300/proto/duong-proto-cho-design-pass?state=<STATE>\" _acceptance/duong-proto-cho-design-pass/evidence/design-pass/<STATE>--<KHO>--<THEME>.png --w <KHO> --h <812 neu KHO=375, 900 neu KHO=1280> --theme <THEME> --wait 1200"
+      - "Dem file: thu muc evidence/design-pass/ phai co DUNG 20 tep .png. Thieu du mot o -> UNCERTAIN kem TEN o thieu, khong phai PASS"
+      - "Moi tep phai lon hon 5 KB — mot anh trang gan nhu luon nho hon nguong do"
+      - "Nhin tung anh: khong o nao trang, va moi o phai la component that (the, phu hieu, duong ke) chu khong phai the tran"
+      - "So bam: voi MOI cap (kho, theme), 5 anh cua 5 state phai KHAC NHAU doi mot. Hai state cho cung mot anh nghia la tham so state khong toi noi render — do chinh la cach mot ma tran chup gia trong nhu that"
+      - "So theme: voi moi (state, kho), anh dark phai KHAC anh light thay duoc bang mat — nen toi, chu sang"
+      - "Ghi vao bao cao: duong dan cua it nhat mot anh lam screenshot:, va mot dong observed: noi minh da NHIN thay gi"
+      - "DUNG MAY CHU truoc khi ket thuc: kill DUNG PID cua tien trinh next dev vua dung (lay tu luc khoi dong). TUYET DOI khong pkill -f \"next dev\": co rang khac cua chinh round nay dang chay song song, va con co worktree khac tren cung may. Bo lai mot may chu song la chan rang khac — do chinh la nguyen nhan BLOCKED cua round 3."
+    expected: |
+      AI SINH ANH: chinh eval nay. Nguoi cham ui-check tu khoi dong ban bam duoc
+      bang lenh khai o design_pass.dev_cmd, roi tu chup bang Browser pane va ghi
+      file. Vong nay KHONG chay design-pass (da descope, nut moi) va KHONG khai
+      capture_cmd, nen neu eval khong tu chup thi khong vat nao sinh ra anh va
+      hop dong se UNCERTAIN du ma dung hoan toan.
+      MA TRAN TOAN PHAN, khai TRUOC khi chay — DUNG 20 o, so assert bang so o:
+      5 state (mac-dinh, rong, dang-tai, loi, tran-dai) x 2 kho (375, 1280) x
+      2 theme (light, dark). Ten file:
+      <state>--<375|1280>--<light|dark>.png duoi
+      _acceptance/duong-proto-cho-design-pass/evidence/design-pass/.
+      Danh sach state rut TU catalog.ts, khong viet tay lai o day; catalog khai
+      khac 5 state thi ma tran doi theo va so assert doi theo.
+      Thieu DU mot o -> UNCERTAIN kem TEN o thieu, khong phai PASS, khong phai
+      "da chup phan lon".
+      Khong o nao trang. Khong hai o nao trung khit — hai state khac nhau ma cho
+      cung mot anh nghia la tham so state khong toi noi render, va do chinh la
+      cach mot ma tran chup gia trong nhu that.
+      Theme dark phai KHAC theme light thay duoc bang mat tren cung state va
+      cung kho.
+    evidence_required: [run_id, exit_code, verifier, verified_at, screenshot]
+
+  - id: E16
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.dp_nha_thu_ba
+    paths:
+      - "turbo.json"
+      - "_acceptance/config.yaml"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      Xanh: PROTO_ROUTE co trong globalPassThroughEnv cua turbo.json o goc kho —
+      NHA THU BA ma docs/environment.md goi la "cai hay can". Turbo 2 chay che do
+      strict, nen bien chua khai bi giau khoi moi task va lenh dev mot dong se im
+      lang khong mo duoc proto. Kho da tung mat nut dang nhap Microsoft vi dung
+      loi nay, co ten trong docs/environment.md.
+      Them mot ve: neu dev_cmd chay qua turbo thi bien PHAI duoc cho di qua.
+      Chieu do da chay: go PROTO_ROUTE khoi turbo.json -> ma khac 0, hai dieu
+      khong dat, thong diep noi thang lenh in ra cho nguoi se chet.
+      Day KHONG phai kiem chuoi trong dev_cmd — kiem chuoi la do loi khai, khong
+      do hanh vi; E9 da lam viec do roi.
+
+  - id: E17
+    criterion: AC-16
+    executor: script
+    cmd: config:executors.script.dp_slug_giai_duoc
+    paths:
+      - "apps/app/app/proto/catalog.ts"
+      - "docs/proto.md"
+      - "_acceptance/duong-proto-cho-design-pass/rang/**"
+    expected: |
+      Rang SUY slug ho so tu vi tri cua chinh no (thu muc cha cua rang/), khong
+      viet tay lai — viet tay thi rang va ho so troi nhau ma khong ai biet.
+      Xanh: slug do giai duoc thanh mot muc trong PROTO_CATALOG, va docs/proto.md
+      co noi ra luat slug-so-bang-slug-ho-so.
+      Chieu do da chay tren CUNG fixture: doi slug trong catalog ve "duong-proto"
+      (dung trang thai round 2) -> ma khac 0, thong diep in ca hai ten va giai
+      thich design-pass se 404 roi DUNG o preflight.
+      Day la eval dung cho cai viec ma ca vong nay ton tai de lam: neu no do thi
+      duong ong khong chay, du 15 eval kia xanh het.
+
+  - id: E14
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.build_khong_cache
+    expected: |
+      Xanh: turbo chay build tuoi, ma 0. Day la lenh duy nhat dung ung dung that.
+      Vai cua no trong ho so nay la LUOI DRIFT cua phong trung bay, khong phai
+      bang chung cho AC-1 hay AC-11 — hai AC do co rang rieng (E1, E11). Gan mot
+      lenh cong chung cho mot AC cu the la lam bang Cong 1 trong nhu co hai lop
+      do trong khi chi co mot.
+      Chieu do PHAI ghim vao proto, khong phai mot loi bat ky trong kho: bo mot
+      export cua @crm/ui ma proto dang dung -> ma khac 0 va thong diep tro vao
+      file duoi apps/app/app/proto/.
+
+  - id: E15
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.check_types_khong_cache
+    expected: |
+      Xanh: tsc chay tuoi tren toan kho, ma 0. Cung voi E14, day la doi luoi giu
+      cho proto cu khong thoi dan trong im lang — ly do ky thuat de bat bac
+      real-components, va la thu thay cho mot may don rieng.
+      Chieu do ghim vao proto: doi kieu ProtoState roi de catalog.ts khong khop
+      -> ma khac 0, thong diep tro vao apps/app/app/proto/catalog.ts.

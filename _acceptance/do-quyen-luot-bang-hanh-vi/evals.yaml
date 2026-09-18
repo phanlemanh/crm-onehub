@@ -1,0 +1,327 @@
+schema_version: 1
+slug: do-quyen-luot-bang-hanh-vi
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dq_cong_quyen
+    paths:
+      - "apps/agent/agent/lib/custom-agent-dispatch.ts"
+      - "apps/agent/agent/lib/session-purpose.ts"
+      - "apps/agent/agent/subagents/agent_builder/lib/authorization.ts"
+      - "apps/agent/test/quyen-luot.spec.ts"
+    expected: |
+      Di TRON duong san pham, bat dau tu HANG chu khong tu khoi tham so:
+        builderSessionAuthFromRow(hang, conversationId)   <- ham SAN PHAM that
+          -> lay .attributes cua ket qua, KHONG sua truong nao
+          -> builderTurnApproval(ctx) / requireBuilderAttribute(ctx, ...)
+      Fixture la mot HANG submission dung khuon Prisma doc ra o
+      custom-agent-dispatch.ts: id, commandType, message, attachments,
+      conversation.userId, conversation.title. KHONG duoc dung khoi tham so cua
+      builderSessionAttributes lam fixture — cho ma RUT truong tu hang phai nam
+      trong duong do, vi do chinh la cho mot suy dien moi se moc.
+      Hang khai commandType "CHAT", message mang chu "Build me an agent that
+      flags stalled deals" VA mang inputResponse day du. HAI bien the
+      inputResponse, ca hai deu phai chay: { requestId, text } va
+      { requestId, optionId }.
+      Chieu am: builderTurnApproval tra { type: "denied" } voi reason BANG
+      NGUYEN VAN BUILDER_DENIED_REASON (so nguyen van, khong so "co chua"); va
+      requireBuilderAttribute(ctx, "conversationId") NEM loi.
+      Chieu duong tren CUNG hang: doi DUNG MOT truong commandType cua hang sang
+      "CREATE_AGENT", moi truong khac giu nguyen -> "not-applicable" VA
+      requireBuilderAttribute tra ve gia tri.
+      CAM: dung thuoc tinh phien bang tay; ghi de commandType sau khi ham that
+      da tra ve; goi mot ham phu thay cho cong that.
+      Chi mot chieu chay -> ma 1: mot cong luon-dong va mot cong luon-mo deu cho
+      mot mau xanh neu chi do mot chieu.
+      Bai nay song trong khoi describe("suy-dien") — xem AC-5.
+      CHIEU DO cua AC-1 KHONG do o day va KHONG co chan do rieng: no do o ban
+      khai sinh (E8), tren hai dong
+        vecto "mo-cong": doi builderTurnAuthorized cua session-purpose.ts thanh
+          `return true` -> bai "suy-dien: hang khai CHAT thi cong dong" phai DO.
+        vecto "ternary-xuong-dong": cay vao CHO GOI builderSessionAttributes mot
+          buoc suy commandType tu chu trong message, viet ternary XUONG DONG ->
+          cung bai ay phai DO.
+      Vi sao bo chan do rieng: eval do da BA LAN bao mot ket qua khong phai ket
+      qua that cua no (vong 2 dinh rang chi em, vong 3 va vong 5 dinh chinh no) —
+      moi lan chay tay deu thoat 0 voi output nhanh THANH CONG, con lan cham ghi
+      1. Gia thuyet "lan cham doc dong N fail trong nhat ky rang in ra" da duoc
+      thu o vong 4 va SAI: bo hen echo tho roi ma vong 5 van the. Nguyen nhan
+      that chua truy duoc. Chieu do van duoc chung minh — boi E8, tren dung hai
+      vecto ay — nen bo duong thu hai toi cung mot su that, giong dung cach da
+      lam voi AC-4 o vong 3.
+
+  - id: E3
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.dq_khong_cam_tin_nhan
+    paths:
+      - "apps/agent/agent/**"
+      - "_acceptance/do-quyen-luot-bang-hanh-vi/rang/**"
+    expected: |
+      Doc bang AST, KHONG tim chuoi. Dan so sinh TU DIA: quet de quy
+      apps/agent/agent lay moi tep .ts.
+      NAM dieu, ca nam deu phai dung:
+      1. builderSessionAttributes: tap khoa cua object type cua tham so `input`
+         KHONG chua "message".
+      2. KHONG mot thu nao trong dan so mang ten builderCommandType — khong ham,
+         khong bien, khong lop, khong method, khong thuoc tinh, VA khong
+         ExportSpecifier dang `export { x as builderCommandType }`. Chi bat
+         FunctionDeclaration voi VariableDeclaration la khong du: vong cham 3 da
+         dung cay thu chung minh export doi ten va method cung ten deu lot.
+      3. Tai MOI loi goi builderSessionAttributes(...), initializer cua thuoc tinh
+         commandType phai la `<mot dinh danh>.commandType` — truy cap MOT tang tren
+         mot dinh danh tran. "La mot PropertyAccessExpression" la khong du:
+         `row.message.commandType` cung la PropertyAccessExpression, ma do chinh la
+         doc quyen thang tu JSON do trinh duyet gui.
+      4. MA TRAN KHOA: gom moi cho VIET RA khoa commandType trong dan so (ke ca
+         khoa viet bang string literal hoac computed key), so CO BOI voi danh sach
+         ghim san trong chan do. Moi phan tu xep mot loai: `doc` (duoi select /
+         where / orderBy / include) · `kieu` (PropertySignature) · `khai`
+         (`<dinh danh>.commandType`) · `khac` (con lai). Lech -> ma 2, in ca hai
+         danh sach. Dieu nay dong duong "tinh truoc mot dong": mot object spread
+         mang commandType tinh tu tin nhan la mot phan tu MOI trong ma tran.
+      5. PHEP GAN cung vao ma tran: moi BinaryExpression toan tu `=` co ve trai
+      la `<x>.commandType` la mot phan tu rieng, loai `gan`. Mot phep gan ghi ra
+      quyen ma khong viet ra khoa nao, nen bon dieu tren deu mu voi no — vong
+      cham 8 da cay thu va ca hai san AST cung thoat 0.
+      Vi pham bat ky dieu nao -> ma 2, in file:dong.
+      San dan so: so loi goi builderSessionAttributes phai >= 1. Bang 0 -> ma 2.
+      Doi chung duong, BAY vecto tren ban sao, tat ca deu ma 2:
+        vecto "cay-lai-tham-so": cay tham so `message` vao chu ky
+          builderSessionAttributes.
+        vecto "cho-goi-tinh-toan": doi initializer commandType tai cho goi thanh
+          mot ternary doc tu message.
+        vecto "doc-tu-tin-nhan": doi thanh `row.message.commandType` — van la
+          PropertyAccessExpression, nhung doc tu payload trinh duyet gui.
+        vecto "khoa-hang-chuoi-agent": them mot loi goi thu hai voi ten khoa la
+          computed key tro toi mot HANG CHUOI (`const KHOA = "commandType"`),
+          gia tri suy tu chu trong message.
+        vecto "gan-thang-agent": cay mot cho leo quyen viet bang PHEP GAN
+      (`row.commandType = <suy tu tin nhan> ? "CREATE_AGENT" : row.commandType`)
+      ngay truoc khoi tra ve cua builderSessionAuthFromRow. Phep gan GHI RA
+      quyen ma khong VIET RA khoa, nen ba dieu dau va ma tran theo-khoa deu mu
+      voi no; dieu 5 la thu bat.
+      vecto "export-doi-ten": them `export { suyTuTinNhan as builderCommandType }`.
+        vecto "method-cung-ten": them mot lop co method ten builderCommandType.
+      Khong do o vecto nao -> ma 3 (gian do hong), in ten vecto.
+      Ranh gioi: builderCommandType cua apps/app/lib/agent-builder.ts la HAM KHAC,
+      trung ten, o app khac — KHONG thuoc dan so nay.
+
+  - id: E4
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.dq_nguon_ghi
+    paths:
+      - "apps/api/src/**"
+      - "_acceptance/do-quyen-luot-bang-hanh-vi/rang/**"
+    expected: |
+      San MA TRAN KHOA, doc bang AST. Di tu CHU `commandType` chu KHONG tu hinh
+      dang loi goi Prisma: mot duong ghi quyen buoc phai viet khoa ay ra o dau
+      do, nen khung nay phu ca `upsert` (khuon khong co khoa `data`),
+      `updateMany`, va `data` la mot bien — ba dang ma khung theo-hinh-dang-loi-goi
+      bo sot.
+      Dan so sinh TU DIA: quet de quy apps/api/src lay moi tep .ts, gom MOI cho
+      VIET RA khoa commandType (PropertyAssignment, ShorthandPropertyAssignment,
+      PropertySignature), ke ca khi ten khoa viet bang STRING LITERAL
+      (`"commandType": ...`) hoac COMPUTED KEY — ke ca computed key tro toi mot
+      HANG CHUOI trong cung tep (`const KHOA = "commandType"`). Chi nhan
+      Identifier la khong du: vong cham 3 da dung cay thu chung minh hai dang do
+      deu lot voi CREATE_AGENT ghim cung.
+      MA TRAN TOAN PHAN VIET TRUOC: tap tim duoc phai BANG DUNG danh sach ghim
+      san trong chinh chan do, SO SANH CO BOI — moi lan xuat hien la mot phan tu
+      rieng, khong khu trung. Thua hay thieu mot phan tu deu la ma 2, IN CA HAI
+      danh sach. Them mot cho viet khoa commandType la viec phai sua danh sach
+      ghim, khong phai viec de thuoc do oan.
+      Moi phan tu xep dung mot loai, bang luat may:
+        doc  — nam duoi `select` / `where` / `orderBy` / `include`, kiem bang TO
+               TIEN trong cay AST chu khong bang ten tep;
+        khai — initializer la `<mot dinh danh TRAN>.commandType`, truy cap MOT tang;
+       `input.message.commandType` va `doanQuyen(...).commandType` KHONG phai
+       loai nay — chung la `khac`;
+        suy  — initializer la loi goi `commandTypeFromAuthorization(...)`;
+        khac — con lai (khai bao kieu, khuon zod);
+      gan  — mot BinaryExpression toan tu `=` co ve trai la `<x>.commandType`.
+      Phep gan GHI RA quyen ma khong VIET RA khoa, nen khung di-tu-chu-commandType
+      van mu voi no neu chi bat ba dang thuoc tinh; no phai la mot phan tu rieng
+      trong ma tran, va MOI phan tu loai `gan` deu la vi pham du nam o tep nao.
+      Mot phan tu `khac` nam NGOAI conversations.contracts.ts la mot cho ghi
+      khong lay tu hai nguon da dat ten -> ma 2, IN file:dong.
+      Doi chung duong, MUOI MOT vecto tren ban sao, tat ca deu ma 2:
+        vecto "ghim-cung": doi mot cho ghi thanh chuoi "CREATE_AGENT" -> loai
+          doi tu khai sang khac -> ma 2, dung file:dong ay.
+        vecto "bien-trung-gian": doi mot cho ghi thanh mot bien gan tu mot ham
+          khac -> loai doi sang khac -> ma 2.
+        vecto "quan-he-long": cay mot cho ghi ghim cung nam trong object
+          `create` LONG cua quan he -> ma tran thanh 10 phan tu -> ma 2.
+        vecto "upsert-ghim-cung": cay mot `upsert` co commandType ghim cung o
+          nhanh `update` — khuon KHONG co khoa `data` -> ma 2. Vecto nay la thu
+          duy nhat chung minh khung khong bo sot upsert.
+        vecto "data-la-bien": cay mot `createMany({ data: <bien> })` voi bien la
+          mang object mang commandType ghim cung -> ma 2. Vecto nay chung minh
+          khung khong bo sot payload khong-phai-object-literal.
+        vecto "khoa-chuoi": cay mot cho ghi voi ten khoa la string literal
+          `"commandType": "CREATE_AGENT"` -> ma 2.
+        vecto "khoa-computed": cay mot cho ghi voi ten khoa la computed key
+          `["commandType"]: "CREATE_AGENT"` -> ma 2.
+        vecto "khoa-hang-chuoi": cay mot cho ghi voi ten khoa la computed key
+          tro toi mot HANG CHUOI (`const KHOA = "commandType" as const`) -> ma 2.
+          Chi giai duoc chuoi hang VIET TRUC TIEP trong dau ngoac la khong du.
+        vecto "goc-khong-tran": doi mot cho ghi thanh `input.message.commandType`
+          -> loai phai la `khac` chu khong phai `khai` -> ma 2. Loai `khai` doi
+          initializer la `<mot dinh danh TRAN>.commandType`, cung luat voi AC-2
+          diem 3; chi doi "la mot PropertyAccessExpression" la khong du.
+        vecto "gan-thang": cay vao than createBuilder mot phep GAN
+      (`input.commandType = <suy tu tin nhan> ? "CREATE_AGENT" : input.commandType`)
+      dat ngay truoc cho ghi hang -> ma tran thanh 10 phan tu, phan tu moi xep
+      loai `gan` -> ma 2. Vong cham 8 da do: truoc khi co dieu nay, dung mot
+      dot bien ay chay qua CA HAI san AST voi ma 0, con bo do grep cu (thu ma
+      vong nay xoa) thi bat duoc dang mot dong.
+      vecto "select-thanh-doc": cay mot commandType duoi mot `select` -> ma 2
+          (ma tran thanh 10), VA cho moi phai duoc xep loai `doc`. Xep sang loai
+          khac -> ma 2 voi thong diep rieng: bo do dang khong phan biet doc voi
+          ghi.
+      Ra sai o vecto nao -> ma 3 (gian do hong), in ten vecto.
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.ql_quyen_ke_thua
+    paths:
+      - "packages/validation/src/builder-question.ts"
+      - "apps/agent/test/quyen-luot.spec.ts"
+    expected: |
+      CHIEU XANH cua duong MANG THEO, chay bang lenh may da co san cua ho so
+      truoc: khoi describe("ke-thua") cua apps/agent/test/quyen-luot.spec.ts.
+      Cau hoi treo khai khong-duoc-phep -> "CHAT"; khai duoc-phep ->
+      "CREATE_AGENT"; moi ban ghi sai khuon (null, thieu khoa, khoa mang chuoi
+      thay vi boolean) -> "CHAT". Mot lenh khac 0 -> ma cua lenh ay.
+      CHIEU DO cua AC-4 KHONG do o day: no do o ban khai sinh (E8), dong
+        vecto "mang-theo-luon-mo": doi commandTypeFromAuthorization cua
+        packages/validation/src/builder-question.ts thanh ham tra thang
+        "CREATE_AGENT" cho moi dau vao -> bai "ke-thua: doc duoc ca hai chieu
+        tren cung khuon" phai DO.
+      Vi sao tach: hai vong cham dau co mot chan do rieng cho chieu do nay va ca
+      hai lan no bao ket qua khong phai ket qua that cua no (r1: chet bang ngoai
+      le, Node thoat 1 trung ma da khai; r2: thoat 0 tren may nhung lan cham ghi
+      1). Chieu do van duoc chung minh — boi E8, tren cung mot vecto — nhung
+      duong thu hai toi cung mot su that thi bo di.
+
+  - id: E6
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.dq_bo_do_grep
+    paths:
+      - "apps/agent/test/quyen-luot.spec.ts"
+      - "_acceptance/do-quyen-luot-bang-hanh-vi/rang/**"
+    expected: |
+      Doc apps/agent/test/quyen-luot.spec.ts bang AST.
+      BA dieu:
+      1. Khong con bai test nao mang ten chua "dem tren dia".
+      2. Khong con bo do theo dong nao moc lai duoi ten khac: khong mot loi goi
+         `.split(...)` nao voi doi so la literal "\n" ma trong cung mot ham lai
+         co mot RegularExpressionLiteral.
+      3. Khoi describe("suy-dien") CON TON TAI voi dung ten do, va co it nhat
+         mot bai ben trong. Mat khoi ay -> ma 2: lenh ql_khong_suy_dien cua ho
+         so cu loc theo dung ten nay.
+      Vi pham -> ma 2, in file:dong.
+      Doi chung duong, vecto "cay-lai-bo-do": cay lai dung khoi cu (split theo
+      dong + mot literal regex) vao ban sao -> ma 2 kem file:dong. Khong do ->
+      ma 2.
+
+  - id: E7
+    criterion: AC-6
+    executor: judgment
+    cmd: judgment
+    question: >-
+      Muc "Team-agent builder and runner" cua docs/agent.md co noi duoc ro ba dieu
+      khong: (1) commandType cua luot tao va luot submit la LOI KHAI cua client ma
+      may chu KHONG doi chung; (2) may chu suy quyen cua luot tra loi tu cau hoi
+      treo da luu; (3) agent khong bao gio suy lai, no doc gia tri cua hang roi
+      cham cong. Va no co noi bang chu nguoi doc hieu, khong bat nguoi doc phai mo
+      ma len moi biet quyen den tu dau?
+    inputs:
+      - docs/agent.md
+      - apps/api/src/conversations/conversations.service.ts
+      - apps/agent/agent/lib/custom-agent-dispatch.ts
+      - apps/agent/agent/subagents/agent_builder/lib/authorization.ts
+    expected: >-
+      Tai lieu khai dung thu ma ma thuc su lam. Doc bon tep cung luc phai thay ba
+      cau cua tai lieu khop voi ba cho trong ma: input.commandType o createBuilder
+      va submitBuilder; commandTypeFromAuthorization o answerBuilderQuestion;
+      builderTurnAuthorized doc thuoc tinh phien. Tai lieu noi "may chu doi chung
+      loi khai" hoac im lang ve chuyen ai khai, trong khi ma nhan thang gia tri
+      client -> FAIL. Tai lieu dung dung ba cau nhung viet bang jargon schema/tool
+      -> FAIL theo tieu chi (3).
+
+  - id: E8
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.dq_khai_sinh
+    paths:
+      - "_acceptance/do-quyen-luot-bang-hanh-vi/rang/**"
+      - "_acceptance/do-quyen-luot-bang-hanh-vi/evals.yaml"
+    expected: |
+      Ban khai sinh phai DAY DU THEO VECTO va phai CHAY DUOC.
+      1. Doc evals.yaml cua vong nay. Voi TUNG eval — moi executor, khong rieng
+         `script`, vi E5 la eval `test` nhung van khai mot vecto — dem so VECTO
+         khai trong `expected`: moi vecto la mot cum `vecto "<ten>"` nam ngoai
+         doan trong dau ngoac ma. So dong trong khai-sinh.json mang `id` cua eval
+         ay phai BANG DUNG so vecto do. Lech -> ma 2, in id eval va HAI con so.
+         "It nhat mot dong" la khong du: E2, E3, E4 moi cai nhieu vecto, va vecto
+         bi bo quen thuong la vecto nguy hiem nhat.
+      2. Moi dong khai co du nam truong: `id` (id eval), `vecto` (ten vecto,
+         TRUNG nguyen van ten trong expected), `chay` (mang argv), `ghim` (chuoi
+         thong diep), `ma` (so mong doi khac 0 — moi vecto cua vong nay la mot
+         chieu DO, khong co dong doi-chung-duong nao trong ban khai). Ten vecto
+         trong ban khai khong khop tap ten trong expected -> ma 2, in ca hai tap.
+      3. Chay tung dong tren mot ban sao MOI: ma thoat BANG `ma` da khai, va
+         thong diep (stdout + stderr) CHUA nguyen van chuoi `ghim`. Sai mot
+         trong hai -> ma 2, in ten dong.
+      Mot dong khai ra XANH la ca do nang nhat: thuoc do khong bat duoc dot bien
+      no tuyen bat. In ro chu "dong khai ra xanh" kem ten dong.
+      San dan so: khai-sinh.json co 0 dong -> ma 2.
+
+  - id: E9
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.dq_vet_ho_so_cu
+    paths:
+      - "_acceptance/quyen-luot-mang-theo/contract.md"
+      - "_acceptance/quyen-luot-mang-theo/evals.yaml"
+      - "_acceptance/do-quyen-luot-bang-hanh-vi/rang/**"
+    expected: |
+      HAI dieu, va dieu thu nhat nang hon:
+      1. Chu cua khoi AC-5 trong contract.md cu va cua khoi eval id E5 trong
+         evals.yaml cu GIU NGUYEN TUNG KY TU. Do bang sha256 cua tung khoi, so
+         voi hai sha256 GHIM SAN trong chinh chan do (lay tai luot dau, viet vao
+         ma). Khac -> ma 2, in ca hai sha.
+      2. `## Notes` cua contract.md cu co them dung mot dong: neu ten slug
+         `do-quyen-luot-bang-hanh-vi` VA noi ro rang `expected` da ghim cua E5
+         khong con mo ta thu ma lenh cua no chay. Vang mot trong hai y -> ma 2.
+      Vung dong bang la AC-5 va khoi E5; vung duoc dong la `## Notes`. Chan do
+      phai IN ra hai vung ay de nguoi doc thay chung khong de nhau.
+      Doi chung duong, vecto "sua-mot-ky-tu": sua mot ky tu trong khoi AC-5 cua
+      ban sao -> ma 2 voi sha khac nhau. Khong do -> ma 2.
+
+  - id: E10
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dq_ho_so_cu_con_chay
+    paths:
+      - "apps/agent/test/quyen-luot.spec.ts"
+      - "apps/agent/agent/**"
+      - "packages/validation/src/builder-question.ts"
+    expected: |
+      Chay lai BON lenh may cua ho so cu ma duong dung cua vong nay cham toi:
+        ql_quyen_ke_thua · ql_khong_suy_dien · ql_con_biet_cua_ra · ql_cong_dong_that
+      Moi lenh phai thoat 0. Mot lenh khac 0 -> ma cua lenh ay, IN ten lenh.
+      Vi sao AC nay ton tai: `recheck: strict`. Xoa builderCommandType (AC-2)
+      lam bai dau cua khoi describe("suy-dien") gay, va AC-8 cam chua `expected`
+      da ghim cua E5 cu. Khong co AC nay thi vong do o Cong 2 vi mot phep do cua
+      vong khac, va duong sua hien nhien nhat lai bi AC-8 chan.
+      KHONG duoc lam xanh bang cach xoa hay doi ten khoi describe: AC-5 diem 3
+      doi khoi ay con ton tai voi dung ten.

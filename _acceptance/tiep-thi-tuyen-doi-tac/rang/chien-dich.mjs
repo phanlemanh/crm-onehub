@@ -35,7 +35,7 @@ const EMAIL = process.env.PHIEN_EMAIL ?? "manh.phan@onemount.com";
 const CHROME =
 	process.env.CHROME ??
 	"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-const ANH = "_acceptance/tiep-thi-tuyen-doi-tac/evidence";
+const ANH = ".acceptance-runs/tiep-thi-tuyen-doi-tac";
 const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
 const CHO_VE = Number(process.env.CHO_VE ?? 60000);
 const PHA = process.env.PHA ?? "";

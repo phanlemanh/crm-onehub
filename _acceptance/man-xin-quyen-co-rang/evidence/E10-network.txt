@@ -1,0 +1,25 @@
+E10 network dump — verifier browser session (Claude_Browser tab-2)
+Scope: dev_server.url=http://localhost:3000, api_base=[http://localhost:3001]
+Failed requests (status>=400 or connection-error) in FAIL-eligible scope: NONE
+Console errors: NONE (only React DevTools info + [HMR] connected logs)
+
+All network requests observed:
+GET http://localhost:3000/sign-in -> 200
+GET http://localhost:3000/_next/static/** (fonts/js/css) -> 200 / 304 (cache revalidation, normal)
+GET http://localhost:3000/grant-access -> 200 (vi locale)
+GET http://localhost:3000/grant-access -> 200 (en locale, after cookie switch + reload)
+GET http://127.0.0.1:8899/design-scan.js -> 200 then 304
+  (out of scope: this is the verifier's own throwaway static file server used to
+  side-load the vendored Impeccable detector bundle into the page via a plain
+  <script src> tag, chosen because Next.js middleware 307-redirects unauthenticated/
+  ungated static asset requests served from apps/app/public. Not app traffic, not
+  third-party — a verifier tool artifact. Server stopped and no repo files were
+  left modified after the run.)
+
+Console messages (full):
+[info] Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+[log] [HMR] connected
+(repeated for each of the two page loads/reloads)
+
+Conclusion: all FAIL-eligible (app-origin) requests returned 200/304, no 4xx/5xx,
+no connection errors, no console errors. networkObserved = clean.

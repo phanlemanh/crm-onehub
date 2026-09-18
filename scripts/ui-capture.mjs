@@ -18,7 +18,7 @@
  *       ui: "npm run ui:capture"
  * The dependency lives in YOUR package.json, not in the plugin.
  *
- * Usage: node scripts/ui-capture.mjs <url> <out.png> [--wait <ms>] [--full] [--w <px>] [--h <px>]
+ * Usage: node scripts/ui-capture.mjs <url> <out.png> [--wait <ms>] [--full] [--w <px>] [--h <px>] [--theme light|dark]
  * Set CHROME_PATH if Chrome/Chromium isn't at a default location.
  */
 import puppeteer from 'puppeteer-core';
@@ -27,7 +27,7 @@ import { dirname } from 'node:path';
 
 const args = process.argv.slice(2);
 const flag = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : d; };
-const VAL_FLAGS = ['--wait', '--w', '--h'];
+const VAL_FLAGS = ['--wait', '--w', '--h', '--theme'];
 const pos = [];
 for (let i = 0; i < args.length; i++) {
   if (VAL_FLAGS.includes(args[i])) { i++; continue; }   // skip flag + its value
@@ -43,6 +43,11 @@ const waitMs = Number(flag('--wait', 600));
 const width = Number(flag('--w', 390));   // mobile-first default — adjust per persona
 const height = Number(flag('--h', 844));
 const fullPage = args.includes('--full');
+const theme = flag('--theme', null);
+if (theme !== null && theme !== 'light' && theme !== 'dark') {
+  console.error('ui-capture: --theme phai la light hoac dark, nhan duoc: ' + theme);
+  process.exit(2);
+}
 
 const CANDIDATES = [
   process.env.CHROME_PATH,
@@ -61,6 +66,9 @@ const browser = await puppeteer.launch({ executablePath: exe, headless: 'new', a
 try {
   const page = await browser.newPage();
   await page.setViewport({ width, height });
+  if (theme !== null) {
+    await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: theme }]);
+  }
   await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
   await new Promise(r => setTimeout(r, waitMs));
   await page.screenshot({ path: out, fullPage });

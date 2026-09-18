@@ -1,0 +1,40 @@
+import { CardContent } from "@crm/ui/components/card";
+import { Empty, EmptyHeader, EmptyTitle } from "@crm/ui/components/empty";
+import Link from "next/link";
+import { PROTO_CATALOG } from "./catalog";
+
+export default function ProtoIndexPage() {
+	if (PROTO_CATALOG.length === 0) {
+		return (
+			<Empty>
+				<EmptyHeader>
+					<EmptyTitle>Chưa có bản mẫu nào — xem docs/proto.md</EmptyTitle>
+				</EmptyHeader>
+			</Empty>
+		);
+	}
+
+	return (
+		<>
+			<h1 className="font-semibold text-2xl">Bản mẫu giao diện</h1>
+			<ul className="flex flex-col gap-2">
+				{PROTO_CATALOG.map((muc) => (
+					<li key={muc.slug}>
+						<Link
+							data-proto-slug={muc.slug}
+							data-proto-states={muc.states.length}
+							href={`/proto/${muc.slug}`}
+						>
+							<CardContent className="flex-row items-center justify-between">
+								<span className="font-medium">{muc.ten}</span>
+								<span className="text-muted-foreground text-sm">
+									{muc.slug} · {muc.states.length} trạng thái
+								</span>
+							</CardContent>
+						</Link>
+					</li>
+				))}
+			</ul>
+		</>
+	);
+}

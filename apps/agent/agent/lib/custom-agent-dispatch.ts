@@ -164,19 +164,7 @@ export async function dispatchBuilderSubmission(
 				submission.attachments,
 			),
 			{
-				auth: {
-					authenticator: "crm-builder",
-					principalType: "user",
-					principalId: submission.conversation.userId,
-					attributes: builderSessionAttributes({
-						commandType: submission.commandType,
-						message: submission.message,
-						conversationId,
-						userId: submission.conversation.userId,
-						submissionId: submission.id,
-						hasTitle: Boolean(submission.conversation.title),
-					}),
-				},
+				auth: builderSessionAuthFromRow(submission, conversationId),
 				continuationToken: builderToken(conversationId),
 				title: submission.conversation.title ?? "Agent builder",
 			},
@@ -883,7 +871,6 @@ export type BuilderSessionAttributes = {
 
 export function builderSessionAttributes(input: {
 	commandType: string;
-	message: Prisma.JsonValue;
 	conversationId: string;
 	userId: string;
 	submissionId: string;
@@ -891,7 +878,7 @@ export function builderSessionAttributes(input: {
 }): BuilderSessionAttributes {
 	return {
 		purpose: "builder",
-		commandType: builderCommandType(input.commandType, input.message),
+		commandType: input.commandType,
 		needsTitle: input.hasTitle ? "false" : "true",
 		conversationId: input.conversationId,
 		userId: input.userId,
@@ -899,11 +886,36 @@ export function builderSessionAttributes(input: {
 	};
 }
 
-export function builderCommandType(
-	commandType: string,
-	_value: Prisma.JsonValue,
-): string {
-	return commandType;
+export type BuilderAuthRow = {
+	id: string;
+	commandType: string;
+	message: Prisma.JsonValue;
+	conversation: { userId: string; title: string | null };
+};
+
+export type BuilderSessionAuth = {
+	authenticator: string;
+	principalType: "user";
+	principalId: string;
+	attributes: BuilderSessionAttributes;
+};
+
+export function builderSessionAuthFromRow(
+	row: BuilderAuthRow,
+	conversationId: string,
+): BuilderSessionAuth {
+	return {
+		authenticator: "crm-builder",
+		principalType: "user",
+		principalId: row.conversation.userId,
+		attributes: builderSessionAttributes({
+			commandType: row.commandType,
+			conversationId,
+			userId: row.conversation.userId,
+			submissionId: row.id,
+			hasTitle: Boolean(row.conversation.title),
+		}),
+	};
 }
 
 type BuilderDeliveryAttachment = {

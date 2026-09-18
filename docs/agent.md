@@ -373,6 +373,17 @@ delegation paths for custom agents.
   A path not yet tried: count at `action.result` instead — an abandoned attempt's
   request never produces one. That makes the ceiling after-the-fact rather than
   preventive, and is its own piece of work.
+- **Where a turn's authority comes from.** `commandType` on a create or a submit is a
+  **claim the browser makes**, and the API does not corroborate it. There is nothing
+  server-side to corroborate it against: the intent to build an agent exists only
+  where the person clicked. What the server owns is the **carry** — an answer to a
+  pending question inherits the authority of the turn that asked, derived by
+  `commandTypeFromAuthorization` inside `answerBuilderQuestion` and never taken from
+  the client. The agent re-derives nothing: it reads the value on the submission row
+  and the `approval` policy grades it. That is enough because this gate exists to stop
+  **the model** escalating mid-conversation — the 2026-09-08 incident — not to stop a
+  signed-in person, who can already press *Create agent*. Their approval boundary is
+  deployment, not saving a draft.
 - **Builder clarification is durable HITL.** The specialist calls eve's built-in
   `ask_question` directly; descendant input requests are proxied to the root channel,
   and the same child turn resumes when the user answers. The authored

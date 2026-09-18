@@ -1,0 +1,26 @@
+schema_version: 1
+feature_slug: go-thanh-vien-phai-giu-duoc
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.gt_bi_go_thi_bi_tu_choi
+    expected: "exit 0; MA TRẬN TOÀN PHẦN trên SÁU thủ tục quản trị của WorkspaceService — update, setMemberRole, allowances, allowEmail, revokeAllowance, removeMember — sáu hàng viết trước, số assert là hằng MƯỜI HAI vì mỗi hàng hai chiều trên cùng cữ liệu: người còn là quản trị gọi thì thủ tục KHÔNG ném, người ấy sau khi bị gỡ gọi lại thì NÉM ForbiddenException. Vế đầu là đối chứng dương — thiếu nó thì một bản sửa từ chối tất cả mọi người vẫn xanh. Bài gọi thủ tục THẬT của dịch vụ, không gọi hàm trợ giúp workspaceRoleOf. Chiều đỏ: bỏ lưới isWorkspaceAdmin khỏi MỘT thủ tục bất kỳ thì hàng của thủ tục đó đỏ, thông điệp ghim tên thủ tục và điều đã nhận thay vì lỗi"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/workspace/workspace.service.ts, packages/auth/src/organization.ts, apps/api/test/go-thanh-vien.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.gt_phien_mat_quyen
+    expected: "exit 0; bài mint một phiên THẬT theo đúng cách dev:session mint — cùng khuôn token và cùng tên cookie mà @crm/auth xuất — rồi hỏi ĐÚNG CỬA ứng dụng hỏi: auth.api.getSession với cookie của chính phiên ấy. Hai chiều trên cùng phiên: TRƯỚC lượt gỡ, getSession trả về một phiên có đúng userId ấy; NGAY SAU khi removeMember trả về, cùng lời gọi ấy KHÔNG còn trả phiên nào. Bài KHÔNG đếm số dòng bảng session — xoá một dòng và mất quyền là hai mệnh đề khác nhau, và mọi lớp đệm nằm giữa đều làm chúng tách ra; hiệu số dòng chỉ giữ làm khẳng định phụ. Đối chứng dương thứ hai: phiên của một người KHÁC vẫn hỏi được sau lượt gỡ. Chiều đỏ: gỡ session.deleteMany khỏi giao dịch của removeMember thì getSession vẫn trả phiên sau lượt gỡ và bài đỏ, thông điệp ghim userId mà cửa vẫn nhận"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/workspace/workspace.service.ts, packages/auth/src/auth.ts, apps/api/test/go-thanh-vien.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.gt_duong_moi_khong_cap_lai
+    expected: "exit 0; MA TRẬN trên MỌI trạng thái kết thúc mà hằng có tên của @crm/validation/invitation-status khai — số hàng bằng số trạng thái kết thúc, số assert là hằng bằng số hàng, không suy từ runtime. Cữ liệu KHÔNG gõ tay: bài đưa người đó qua lượt gỡ THẬT bằng removeMember rồi ĐỌC LẠI giá trị trạng thái đã ghi trong cơ sở dữ liệu và dùng chính giá trị ấy; các trạng thái kết thúc còn lại gieo bằng hằng có tên. Bước tay duy nhất không tránh được là xoá các dòng thành viên còn lại để dựng cảnh bảng rỗng — bài khai rõ bước đó. Rồi gọi ensureWorkspaceMembership và đòi đường mồi KHÔNG cấp tư cách thành viên cho người mang trạng thái kết thúc. Đối chứng dương trên cùng cữ liệu: một người CHƯA TỪNG có lời mời vẫn được đường mồi kết nạp — vế này giữ cho hành vi mồi của bản cài mới không đổi và phân biệt chặn-đúng-người với hỏng-cả-đường-mồi. Chiều đỏ: trả nhánh mồi về bản cũ thì người đã bị gỡ được kết nạp và bài đỏ, thông điệp ghim vai đã cấp cho họ"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/auth/src/organization.ts, packages/validation/src/invitation-status.ts, apps/api/test/go-thanh-vien.spec.ts]

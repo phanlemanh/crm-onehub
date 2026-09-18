@@ -1,21 +1,16 @@
 import { type Db, db } from "@crm/db";
 import { WORKSPACE_ID, workspaceSlug } from "@crm/db/workspace";
+import { conHieuLuc, docTrangThai } from "@crm/validation/invitation-status";
+import {
+	type AllowDecision,
+	decideSignInFromDb,
+	normalizeEmail,
+} from "./allow-list";
+import { isWorkspaceAdmin, toWorkspaceRole, type WorkspaceRole } from "./roles";
 
 export { WORKSPACE_ID };
 
 export const DEFAULT_WORKSPACE_NAME = "CRM";
-
-export const WORKSPACE_ROLES = ["owner", "admin", "member"] as const;
-
-export type WorkspaceRole = (typeof WORKSPACE_ROLES)[number];
-
-export function isWorkspaceRole(value: string): value is WorkspaceRole {
-	return (WORKSPACE_ROLES as readonly string[]).includes(value);
-}
-
-export function isWorkspaceAdmin(role: WorkspaceRole | null): boolean {
-	return role === "owner" || role === "admin";
-}
 
 export function canRenameWorkspace(role: WorkspaceRole | null): boolean {
 	return isWorkspaceAdmin(role);
@@ -39,6 +34,8 @@ export function canManageTracking(role: WorkspaceRole | null): boolean {
 
 export async function ensureWorkspaceMembership(
 	userId: string,
+	email = "",
+	decide: (address: string) => Promise<AllowDecision> = decideSignInFromDb,
 ): Promise<string | undefined> {
 	try {
 		return await db.$transaction(async (tx) => {
@@ -69,12 +66,29 @@ export async function ensureWorkspaceMembership(
 
 			if (enrolled === 0) {
 				const existing = await tx.user.findMany({
-					select: { id: true },
+					select: { id: true, email: true },
 					orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 				});
 
+				const loiMoi = await tx.invitation.findMany({
+					where: { organizationId: workspace.id },
+					select: { email: true, status: true },
+				});
+
+				const ketThuc = new Set(
+					loiMoi
+						.filter((dong) => !conHieuLuc(docTrangThai(dong.status).trangThai))
+						.map((dong) => normalizeEmail(dong.email))
+						.filter((dia): dia is string => dia !== null),
+				);
+
+				const duocMoi = existing.filter((user) => {
+					const dia = normalizeEmail(user.email);
+					return dia === null || !ketThuc.has(dia);
+				});
+
 				await tx.member.createMany({
-					data: existing.map((user, index) => ({
+					data: duocMoi.map((user, index) => ({
 						id: crypto.randomUUID(),
 						organizationId: workspace.id,
 						userId: user.id,
@@ -85,19 +99,41 @@ export async function ensureWorkspaceMembership(
 				});
 			}
 
-			await tx.member.upsert({
+			const existing = await tx.member.findUnique({
 				where: {
 					organizationId_userId: { organizationId: workspace.id, userId },
 				},
-				create: {
+				select: { id: true },
+			});
+
+			if (existing) return workspace.id;
+
+			const decision = await decide(email);
+
+			if (!decision.allowed) return workspace.id;
+
+			await tx.member.create({
+				data: {
 					id: crypto.randomUUID(),
 					organizationId: workspace.id,
 					userId,
-					role: "member",
+					role: decision.role,
 					createdAt: new Date(),
 				},
-				update: {},
 			});
+
+			const normalized = normalizeEmail(email);
+
+			if (normalized) {
+				await tx.invitation.updateMany({
+					where: {
+						organizationId: workspace.id,
+						email: normalized,
+						status: "pending",
+					},
+					data: { status: "accepted" },
+				});
+			}
 
 			return workspace.id;
 		});
@@ -108,10 +144,6 @@ export async function ensureWorkspaceMembership(
 		);
 		return undefined;
 	}
-}
-
-export function toWorkspaceRole(value: string): WorkspaceRole {
-	return isWorkspaceRole(value) ? value : "member";
 }
 
 export type WorkspaceMemberReader = Pick<Db, "member">;

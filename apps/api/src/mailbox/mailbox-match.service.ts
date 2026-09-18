@@ -1,4 +1,3 @@
-import { workspaceDomains } from "@crm/auth/workspace";
 import { type Db, RecordSource } from "@crm/db";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
 import { Injectable, Logger } from "@nestjs/common";
@@ -6,6 +5,7 @@ import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { CompanyDirectoryService } from "../companies/company-directory.service";
 import { EnrichmentLogService } from "../crm/enrichment-log.service";
 import { InjectDatabase } from "../database/database.constants";
+import { staffEmailDomains } from "../workspace/staff-domains";
 import {
 	dominantDomain,
 	externalParticipants,
@@ -57,7 +57,7 @@ export class MailboxMatchService {
 		const users = await this.db.user.findMany({ select: { email: true } });
 
 		const addresses = new Set<string>();
-		const domains = new Set<string>(workspaceDomains());
+		const domains = new Set<string>(await staffEmailDomains(this.db));
 
 		for (const user of users) {
 			const email = user.email.toLowerCase();

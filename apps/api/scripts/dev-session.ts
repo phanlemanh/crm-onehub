@@ -48,7 +48,7 @@ const user = await db.user.upsert({
 	update: {},
 });
 
-const workspaceId = await ensureWorkspaceMembership(user.id);
+const workspaceId = await ensureWorkspaceMembership(user.id, email);
 
 const token = `dev-session-${user.id}`;
 const expiresAt = new Date(Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000);

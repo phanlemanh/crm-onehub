@@ -1,0 +1,372 @@
+schema_version: 1
+slug: cho-phep-ai-vao-o-man-hinh
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.cp_ham_thuan
+    paths:
+      - "packages/auth/src/allow-list.ts"
+      - "packages/auth/test/ai-duoc-vao.spec.ts"
+    expected: |
+      BANG VIET TRUOC, MUOI MOT dong, chan phai chay va in du muoi mot. Moi dong khai
+      ba ket qua: vao duoc, vai, nguon.
+         1 bang rong   · moi "onemount.com"     · chua ai     · ai@onemount.com  -> co  · member · moi
+         2 bang rong   · moi "onemount.com"     · DA co nguoi · ai@onemount.com  -> khong
+         3 bang rong   · moi ""                 · chua ai     · ai@onemount.com  -> khong
+         4 bang rong   · moi "onemount.com"     · chua ai     · nguoi@gmail.com  -> khong
+         5 bang rong   · moi "khue@gmail.com"   · chua ai     · khue@gmail.com   -> co  · member · moi
+         6 bang rong   · moi "khue@gmail.com"   · chua ai     · khac@gmail.com   -> khong
+         7 khue pending member · moi "onemount.com" · da co   · khue@gmail.com   -> co  · member · bang
+         8 khue pending admin  · moi ""             · da co   · khue@gmail.com   -> co  · admin  · bang
+         9 khue cancelled      · moi ""             · da co   · khue@gmail.com   -> khong
+        10 khue accepted       · moi ""             · da co   · khue@gmail.com   -> co  · member · bang
+        11 khue pending member · moi "onemount.com" · da co   · ai@onemount.com  -> khong
+      LUAT 1: bien moi chi co tieng noi khi CA HAI ve dung — bang rong VA chua ai dang
+      nhap. Dong 2 va dong 11 la hai ca ma mot cach doc long se cho qua.
+      LUAT 2: khi bien moi CO tieng noi, van phai SO NOI DUNG cua no, khong duoc chi
+      xet no khac rong. Dong 4 va dong 6 la hai ca chan dung luat 2: dong 4 doi hinh
+      dang domain, dong 6 doi hinh dang dia chi dich danh — va dang dich danh chinh la
+      hinh dang ma ban chay that dang dung, con ban .env trong kho lai ghi dang domain.
+      Neu thieu hai dong nay thi mot than ham kieu "bang rong va chua ai va moi khac
+      rong -> cho qua" se xanh het bang, va ban cai moi dau tien mo cua cho MOI dia chi
+      cham vao duong callback — dung lop loi ma vong nay dung ra de va.
+      CAP HAI CHIEU tren cung mot ham: dong 1,5,7,8,10 chieu duong; dong 2,3,4,6,9,11
+      chieu am. Muoi mot ca chay trong MOT luot, khong nap lai module.
+      DOT BIEN CHUNG MINH, chan phai chay ca nay va no phai DO: thay than ham bang
+      "moi khac rong -> co/member/moi" -> phai do o dong 4 va dong 6, neu dung so dong.
+      Sai mot dong -> do, neu dau vao, gia tri mong doi, gia tri nhan duoc.
+      Ham khong ton tai, khong xuat ra duoc, hoac so dong chay khac 11 -> ma 2.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cp_vai_dinh_truoc
+    paths:
+      - "packages/auth/src/allow-list.ts"
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/src/organization.ts"
+      - "packages/auth/test/cong-vao.integration.spec.ts"
+    expected: |
+      Do HANG trong co so du lieu, khong do tham so ta gui di.
+      KHEP VONG GHI-DOC, bat buoc: dong loi cho phep phai do CHINH THU TUC cho phep tao
+      ra (goi that thu tuc, voi dau vao nhu nguoi quan go tren man), KHONG duoc cam
+      thang bang Prisma cho dung khuon ben doc. Truoc khi di duong callback, doc LAI
+      hang vua ghi tu DB va dua DUNG hang ay vao ham thuan — khang dinh danh tinh nay
+      phai in ra gia tri doc lai.
+      Vi sao: fixture cam tay luon dung khuon ben doc nen no che mat moi lech giua ben
+      ghi va ben doc — vai luu dang chu hoa, dia chi chua ha chu thuong. Cung lop loi
+      da co o kho: [do-quyen-luot-bang-hanh-vi#F1].
+      Roi di TRON duong callback that: sau luot do, hang `member` cua dia chi ay phai
+      mang role "admin", VA dong loi cho phep phai chuyen sang "accepted". Chan in ca
+      hai gia tri doc lai tu DB.
+      Chieu do: cay vai mac dinh vao duong tao thanh vien trong ban sao -> ma 1, in ra
+      vai mong doi va vai nhan duoc.
+      Chieu do thu hai: doi chu hoa cua email hoac ten vai o BEN GHI trong ban sao ->
+      chan nay phai DO (khong phai chi E10 do) — do la ca ma fixture cam tay bo sot.
+      Doi chung duong bat buoc: mot loi cho phep `member` di cung duong phai cho role
+      "member" — neu hai ca cho cung mot ket qua thi phep do khong phan biet duoc
+      "vai dinh truoc co hieu luc" voi "moi nguoi deu ra admin", va chan tra ma 2.
+      Khong goi duoc thu tuc cho phep, hoac khong dung duoc luot callback -> ma 2.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cp_rut_chan_chua_vao
+    paths:
+      - "packages/auth/src/allow-list.ts"
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/test/cong-vao.integration.spec.ts"
+    expected: |
+      KHEP VONG GHI-DOC nhu E2: ca dong duoc cho phep lan luot rut deu di qua CHINH hai
+      thu tuc that (cho phep, rut), khong cam thang bang Prisma.
+      Do HE QUA trong co so du lieu: dem `user`, `account`, `session`, `verification`
+      TRUOC va SAU khi mot dia chi VUA BI RUT di tron duong callback — bon cap phai
+      bang nhau. Chan in du tam con so.
+      DOI CHUNG DUONG BAT BUOC: mot dia chi CON duoc phep di cung duong PHAI tao dung
+      mot hang `user`. Khong tao thi phep do khong phan biet duoc "chan dung" voi
+      "duong callback khong chay", va chan tra ma 2 chu khong ma 0.
+      Mot bang tang hang o ca bi chan -> ma 1, neu ten bang va hai con so.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cp_rut_khong_dung_da_vao
+    paths:
+      - "packages/auth/src/allow-list.ts"
+      - "packages/auth/src/organization.ts"
+      - "packages/auth/test/cong-vao.integration.spec.ts"
+    expected: |
+      Mot nguoi DA la thanh vien, loi cho phep o "accepted". Rut loi cho phep ay, roi:
+        1. hang `member` cua ho VAN con — doc lai tu DB, khong doc bien trong bo nho
+        2. ho VAN tao duoc phien moi, va sau luot ay hang `member` van con
+      Day la hanh vi CO Y. Chieu do: neu ban sua cho rut cung xoa thanh vien thi chan
+      phai DO — do la AC-5 chu khong phai AC-4, va tron hai viec lai la dung cai loi
+      ma hai khoi tach bach sinh ra de tranh.
+      Khong doc duoc hang member -> ma 2.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cp_go_tron_ven
+    paths:
+      - "apps/api/src/workspace/workspace.service.ts"
+      - "packages/auth/src/organization.ts"
+      - "packages/auth/test/cong-vao.integration.spec.ts"
+    expected: |
+      BA khang dinh, ca ba doc lai tu DB:
+        1. sau khi go: hang `member` bien mat VA dong loi cho phep = "cancelled"
+        2. nguoi ay dang nhap lai -> KHONG hang `member` nao sinh ra lan nua
+        3. tinh NGUYEN TU: ep lenh ghi thu hai hong trong ban sao -> ca hai deu khong
+           xay ra, tuc hang `member` van con va loi cho phep van "accepted"
+      Khang dinh 3 la chieu do that su cua tieu chi nay: hai lenh ghi khong nam chung
+      mot giao dich thi khang dinh 1 va 2 van xanh, con du lieu thi lech.
+      Thieu mot trong ba -> ma 1, neu khang dinh nao. Khong ep duoc loi -> ma 2.
+
+  - id: E6
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cp_duong_moi
+    paths:
+      - "packages/auth/src/allow-list.ts"
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/test/cong-vao.integration.spec.ts"
+    expected: |
+      Bang loi cho phep RONG, xet HAI trang thai tren cung mot dia chi thuoc bien moi:
+        chua ai tung dang nhap -> tao duoc dung mot hang `user`
+        DA co it nhat mot nguoi -> khong hang nao sinh them, bon bang dem truoc/sau bang nhau
+      Va GHIM rang phep kiem nam o `databaseHooks.user.create.BEFORE`, tuc truoc khi ghi
+      — doc vi tri that trong cau hinh, khong tim chuoi trong file.
+      Hai trang thai cho cung ket qua -> ma 1: duong moi dang mo vo dieu kien hoac dong
+      vo dieu kien, ca hai deu sai.
+
+  - id: E7
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cp_doc_hong_khong_khoa
+    paths:
+      - "packages/auth/src/allow-list.ts"
+      - "packages/auth/src/organization.ts"
+      - "packages/auth/test/cong-vao.integration.spec.ts"
+    expected: |
+      Ep lop doc loi cho phep NEM LOI, roi mot nguoi DANG la thanh vien tao phien moi:
+        1. hook khong nem loi ra ngoai — luot tao phien khong throw
+        2. phien VAN tao duoc
+        3. hang `member` san co con nguyen
+      Chieu do: bo `try` trong ban sao -> chan DO, in ra loi da thoat ra ngoai.
+      Day la rang buoc docs/api.md dang co ("degrades, never throws"); vong nay khong
+      duoc lam mat. Khong ep duoc lop doc nem loi -> ma 2.
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cp_chu_cuoi_cung
+    paths:
+      - "apps/api/src/workspace/workspace.service.ts"
+      - "apps/api/test/workspace-thanh-vien.spec.ts"
+    expected: |
+      Khong gian lam viec con DUNG MOT nguoi giu vai chu. Goi thu tuc go nguoi ay:
+        1. luot goi bi tu choi, thong diep noi ro vi sao
+        2. dem hang `member` va dem dong loi cho phep TRUOC va SAU — hai cap bang nhau
+      Doi chung duong bat buoc: khi co HAI chu, go mot nguoi PHAI thanh cong — neu ca
+      nay cung bi tu choi thi phep do khong phan biet "bat bien dung" voi "thu tuc go
+      hong hoan toan", va chan tra ma 2.
+      Va ghim rang lan dem di qua khoa `FOR UPDATE`, doc tu cau lenh that.
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.cp_quyen_hai_ve
+    paths:
+      - "apps/api/src/workspace/workspace.service.ts"
+      - "apps/api/src/workspace/workspace.router.ts"
+      - "apps/api/test/workspace-thanh-vien.spec.ts"
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+    expected: |
+      HAI VE trong cung mot luot, vi mot ve dung ma ve kia sai la dung loi can chan:
+        ve dich vu: nguoi vai `member` goi CA BON thu tuc moi -> ca bon tu choi
+        ve mat nguoi: co cho phep thao tac tinh o TRANG MAY CHU cua man Members tra
+                      `false` cho vai `member`
+      Ve mat nguoi phai neu DICH DANH tep may chu tinh co ay va tep do phai nam trong
+      `paths` — khong khai thi quet AST khong bao gio gap ma giao dien, khong tim thay
+      gi, thoat 0, va ve nay XANH KHONG trong khi nut Go van hien voi vai `member`.
+      BA khang dinh AST, du ca ba:
+        1. duong: tep may chu ay co DUNG MOT loi goi `isWorkspaceAdmin` nhap tu
+           `@crm/auth` — khong phai mot ban sao logic thu hai
+        2. am: khong noi nao trong man Members so chuoi vai tai cho
+        3. am, va day la ca `bun run build` se bat neu lot: tep mang `"use client"` cua
+           man Members KHONG nhap `@crm/auth` — goi server keo Prisma keo pg keo dns,
+           bo dong goi di theo chuoi ay vao trinh duyet va ban dung do
+      Doi chung duong: vai `admin` phai qua ca bon thu tuc va co cho phep thao tac tra
+      `true`.
+      Dot bien chung minh: doi tep may chu sang so chuoi `role === "admin"` -> phai do
+      o khang dinh 1 va 2.
+      Mot thu tuc cho qua -> ma 1, neu ten thu tuc.
+
+  - id: E10
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.cp_chuan_hoa_dia_chi
+    paths:
+      - "apps/api/src/workspace/workspace.service.ts"
+      - "apps/api/src/workspace/workspace.contracts.ts"
+      - "apps/api/test/workspace-thanh-vien.spec.ts"
+    expected: |
+      BANG VIET TRUOC, NAM dong. Dong 1 noi ro trang thai cua dong da co, vi luat tu
+      choi CHI ap cho loi cho phep con hieu luc (xem E16 cho ca da rut):
+        1 "  KHUE@Gmail.com  " khi da co "khue@gmail.com" o `pending` -> tu choi, KHONG dong thu hai
+        2 "Khue@Gmail.com"     khi bang rong                          -> tao dong, luu "khue@gmail.com"
+        3 "khue"                                                      -> tu choi truoc khi cham DB
+        4 "a@b@c.com"                                                 -> tu choi truoc khi cham DB
+        5 ""                                                          -> tu choi truoc khi cham DB
+      Dong 3,4,5 phai bi chan TRUOC khi cham co so du lieu — dem so luot truy van trong
+      ca ay, phai bang khong.
+      Dong 1 kiem ca hai: khong tao dong thu hai VA nguoi thao tac nhan cau noi dia chi
+      da co trong danh sach (do quan he: goi that duong tu choi, so thong diep nhan duoc
+      voi cau ghim truoc, khong tim chuoi trong file).
+      Sai mot dong -> ma 1, neu dong nao.
+
+  - id: E11
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.cp_domain_nha_tach
+    paths:
+      - "apps/api/src/mailbox/mailbox-match.service.ts"
+      - "apps/api/src/tracking/tracking-filing.service.ts"
+      - "packages/auth/src/workspace.ts"
+      - "apps/api/test/domain-nha-tach.spec.ts"
+    expected: |
+      Do QUAN HE hai chieu, goi THAT hai duong doc chu khong tim chuoi:
+        chieu 1: doi o domain nha -> ket qua cua `mailbox-match` va `tracking-filing`
+                 DOI theo; ket qua cua ham quyet dinh ai-vao-duoc KHONG doi
+        chieu 2: them roi rut mot loi cho phep -> ket qua cua hai duong doc tren KHONG
+                 doi mot chut nao
+      Bon khang dinh, chan in du bon. Chieu do: cay lai `workspaceDomains()` cu vao mot
+      trong hai duong doc trong ban sao -> ma 1, neu duong nao.
+      Vi sao do quan he chu khong do chuoi: hai duong doc van co the con nhac ten bien
+      cu trong mot nhanh chet ma thuoc van xanh, trong khi hanh vi that da tach.
+
+  - id: E16
+    criterion: AC-14
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cp_cho_phep_lai
+    paths:
+      - "apps/api/src/workspace/workspace.service.ts"
+      - "apps/api/test/workspace-thanh-vien.spec.ts"
+    expected: |
+      BA ca trong MOT luot, tren cung mot dia chi, khac nhau o trang thai dong da co:
+        `cancelled` -> cho phep lai THANH CONG
+        `pending`   -> tu choi
+        `accepted`  -> tu choi
+      Ba ca cho cung mot ket qua -> ma 2: luc ay phep do khong phan biet duoc "mo dung
+      ca da rut" voi "mo tat" hay "dong tat".
+      Va doc lai tu DB: sau khi cho phep lai, dong `cancelled` CU van con nguyen — loi
+      cho phep moi la mot dong MOI. Dem so dong mang dia chi ay: truoc 1, sau 2.
+      Chieu do: sua ben ghi thanh quay dong cu ve `pending` thay vi tao dong moi -> chan
+      phai DO o phep dem, neu hai con so.
+      Vi sao tieu chi nay ton tai: AC-5 go mot nguoi bang cach chuyen loi cho phep sang
+      `cancelled`, roi AC-11 lay chinh dong ay lam co tu choi. Thieu ca nay thi hop dong
+      tu mau thuan va khong duong nao nhan nguoi ta lai ngoai sua tay co so du lieu.
+
+  - id: E12
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "apps/app/app/**"
+      - "apps/app/proxy.ts"
+      - "packages/ui/**"
+    steps:
+      - "Dung ca hai may chu cua CAY DANG XET o cong rieng: api 3301, app 3300 (launch.json da khai api-cay-nay va app-cay-nay)"
+      - "Gieo mot tai khoan con dang nhap duoc nhung KHONG con hang member, tao phien bang `cd apps/api && bun run dev:session <email>`"
+      - "Dat cookie phien vao trinh duyet roi mo mot trang bat ky cua ung dung"
+      - "Chup evidence/E12-man-het-quyen.png"
+      - "TRUOC khi tin mau: khang dinh ban dung co khoi 'Duoc phep vao' tren man Members — khong co thi dang chup ban cu"
+    inputs:
+      - _acceptance/cho-phep-ai-vao-o-man-hinh/evidence/
+    expected: |
+      DUONG SINH KHUNG HINH, khai truoc vi bo cong khong tu biet: dung CAY DANG XET
+      (khong phai checkout chinh), dat `APP_URL` va `API_URL` TAY theo cong cua chinh
+      cay ay — de mac dinh thi thuoc do chup ban dev dang chay o checkout khac va ho so
+      nhan khung hinh cua man CU. Tao phien bang `dev:session` cho tai khoan can dung.
+      Anh ve `_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/` voi ten ghim truoc.
+      KHANG DINH DANH TINH truoc khi tin mau: ban dung sinh ra khung hinh phai CO khoi
+      duoc phep vao tren man Members — khong co khoi ay nghia la dang chup ban cu, va
+      chan tra ma 2.
+      Noi dung phai thay: mot tai khoan con dang nhap duoc nhung khong con la thanh vien,
+      di toi mot trang bat ky cua ung dung -> khung hinh cho thay MOT man noi thang rang
+      tai khoan nay khong con trong khong gian lam viec, kem duong dang xuat.
+      Khong vong chuyen huong, khong man trang, khong trang loi may chu.
+      Thieu tep khung hinh -> ma 2, neu ten tep thieu. KHONG im lang UNCERTAIN.
+
+  - id: E13
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "apps/app/app/**"
+      - "packages/ui/**"
+    steps:
+      - "Dung ca hai may chu cua CAY DANG XET o cong rieng nhu E12"
+      - "Tao phien cho mot nguoi vai `member`, mo /<slug>/settings/members, chup evidence/E13-members-member.png"
+      - "Tao phien cho mot nguoi vai `admin`, mo cung man ay, chup evidence/E13-members-admin.png"
+      - "So hai khung hinh: ban `member` khong co ba nut, ban `admin` co du ba"
+    inputs:
+      - _acceptance/cho-phep-ai-vao-o-man-hinh/evidence/
+    expected: |
+      DUONG SINH KHUNG HINH nhu E12: cay dang xet, `APP_URL` va `API_URL` dat tay theo
+      cong cua chinh cay ay, phien tao bang `dev:session` — LAN LUOT cho hai vai, vi
+      tieu chi nay song bang phep so hai khung hinh.
+      Man Members nhin bang mat NGUOI VAI `member`: khung hinh phai cho thay hai bang
+      day du ma KHONG nut nao thao tac duoc — khong nut cho phep mot dia chi, khong nut
+      go, khong nut rut.
+      Doi chung bat buoc: khung hinh cua CUNG man ay nhin bang mat nguoi vai `admin`
+      PHAI co du ba nut. Hai khung hinh giong nhau -> ma 1: hoac ca hai deu an nut (vai
+      `admin` mat quyen), hoac ca hai deu hien (vai `member` thay nut khong duoc bam) —
+      ca hai deu sai, va neu ro dang nghi ca nao.
+      Thieu mot trong hai tep khung hinh -> ma 2, neu ten tep thieu.
+
+  - id: E14
+    criterion: AC-13
+    executor: judgment
+    cmd: judgment
+    question: |
+      Doc chu tren HAI hop thoai xac nhan trong kho chuoi — hop thoai go mot thanh vien
+      va hop thoai rut mot loi cho phep. Mot nguoi quan doc lan dau, khong ai giai
+      thich: ho co hieu dung rang GO cat quyen cua nguoi DA vao, con RUT chi chan nguoi
+      CHUA co tai khoan khong? Hai cau than co noi duoc hai viec khac nhau, hay chung
+      nghe giong nhau den muc nguoi bam nham?
+    inputs:
+      - apps/app/lib/messages/settings-thanh-vien.ts
+    expected: |
+      Doc chu tren hai hop thoai xac nhan — go mot thanh vien, va rut mot loi cho phep —
+      roi quyet: mot nguoi quan doc lan dau, khong ai giai thich, co hieu dung rang go
+      cat quyen cua nguoi DA vao con rut chi chan nguoi CHUA co tai khoan khong.
+      May KHONG cham muc nay.
+
+  - id: E15
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.test.cp_san_thiet_ke
+    paths:
+      - "apps/app/app/**"
+      - "packages/ui/**"
+    expected: |
+      Chay tren CAY DANG XET voi `APP_URL` dat tay theo cong cua chinh cay ay, cung
+      duong nhu E12 va E13 — san chat luong doc ban dang chay, nen chay no tren ban dev
+      o checkout khac la cham diem cho ma khong phai cua vong nay.
+      San chat luong giao dien cua bo cong: khong co P0 nao tren cac man vong nay cham.
+      Rang buoc rieng cua vong: hai viec khong dao duoc — go va rut — deu phai di qua
+      hop thoai xac nhan, khong duoc lam ngay lap tuc.
+      Co P0 -> ma 1, neu ten man va luat bi pham.

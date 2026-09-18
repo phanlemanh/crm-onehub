@@ -219,7 +219,6 @@ describe("builder persistence", () => {
 							current: {
 								attributes: builderSessionAttributes({
 									commandType,
-									message: { text: "dung mot tac nhan" },
 									conversationId: conversation.id,
 									userId,
 									submissionId: `sub-${commandType}`,
