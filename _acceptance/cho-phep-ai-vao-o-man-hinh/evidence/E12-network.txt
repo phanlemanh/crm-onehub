@@ -1,24 +1,54 @@
-E12 network dump — verifier session, CAY DANG XET (app 3300 / api 3301)
-Captured via mcp__Claude_Browser__read_network_requests + read_console_messages
-after setting crm.session_token cookie for a logged-in-but-not-a-member user
-(e12-rut-quyen@example.test) and navigating to http://localhost:3300/ .
+E12 — network truth dump (verifier session, fresh tab tab-4)
+Scope note: _acceptance/config.yaml dev_server.url=http://localhost:3000,
+api_base=["http://localhost:3001"] — these are the MAIN checkout's default
+dev ports. Per E12 steps, this eval was run against CAY DANG XET's dedicated
+ports (app 3300, api 3301, from .claude/launch.json "app-cay-nay"/"api-cay-nay"),
+so observed traffic below is on :3300, outside config.yaml's literal declared
+scope by design (the whole point of the eval's warning about default ports).
+Treated as unscoped-partial / note-only per grading rules, not app-fail.
 
-=== console messages (onlyErrors=true) ===
-No console logs.
+Navigation: fresh tab -> http://localhost:3300/ with cookie
+crm.session_token=<revoked test account e12-het-quyen@example.com>
+Result: single request GET http://localhost:3300/het-quyen -> 200 OK (no
+redirect chain visible / no bounce), all subsequent static asset requests
+(_next/static/*, fonts, css, js chunks) -> 200 OK. Zero console errors.
 
-=== network requests (urlPattern=localhost, last 100) ===
-[E82075169EBA39227CFDE7C535BCE03F] GET http://localhost:3300/crm -> 200 OK
-[354E4C9F2D87147CFD8B721013D3BDE8] GET http://localhost:3300/het-quyen -> 200 OK
-GET http://localhost:3300/api/trpc/enrichment.queue?batch=1&input=... -> 200 OK
-(remaining ~70 entries: /_next/static/* chunks and font files, all 200 OK or 304 Not Modified)
+Full request list (fresh tab, in order):
+[.] GET http://localhost:3300/het-quyen -> 200 OK
+[.] GET http://localhost:3300/_next/static/media/53b9e256198e5412-s.p.390ncx5urfkfu.woff2 -> 200 OK
+[.] GET http://localhost:3300/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2 -> 200 OK
+[.] GET http://localhost:3300/_next/static/media/7d817b4c03b0c5f1-s.p.1uyisp29ctx0d.woff2 -> 200 OK
+[.] GET http://localhost:3300/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2 -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/[root-of-the-server]__0l8ykhc._.css -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_0pu11fa._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/1m3o_next_dist_compiled_next-devtools_index_0huqbj8.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/1m3o_next_dist_compiled_react-dom_1bfiqar._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/1m3o_next_dist_compiled_react-server-dom-turbopack_163z8n9._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/1m3o_next_dist_compiled_0wcra3j._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/1m3o_next_dist_client_1cvbd6w._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/1m3o_next_dist_08d-hqc._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/1u71_@swc_helpers_cjs_0g5k6e_._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/apps_app_1anvha4._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/turbopack-apps_app_1kcbo1q._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/apps_app_0ydbglv._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/0d0e_@tanstack_query-devtools_build_0-6o2qw._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/11l8_tailwind-merge_dist_bundle-mjs_mjs_1gt0n5j._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/0d0e_@tanstack_query-devtools_build_046fnsj._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/17u__@trpc_client_dist_09ji32s._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/0trj_@trpc_server_dist_0__neun._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/13z9_zod_v4_0--tbhe._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/node_modules__bun_0nq_nv5._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/_1uh5i2t._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/node_modules__bun_0mzvidi._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/_1qtysdl._.js -> 200 OK
+[.] GET http://localhost:3300/_next/static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_1mojsay._.js -> 200 OK
 
-=== scoping ===
-dev_server.url = http://localhost:3000 (config default; NOT what was used here)
-dev_server.api_base = ["http://localhost:3001"] (config default; NOT what was used here)
-Actual tree-under-test origin used: http://localhost:3300 (app-cay-nay), API http://localhost:3301 (api-cay-nay)
-All observed requests are same-origin to localhost:3300 (app-scope). No request to :3301 was
-observed in the browser network log — the /het-quyen page is server-rendered (proxy redirect +
-RSC), so the API call happens server-side, not as a browser XHR/fetch.
-No third-party requests. No 4xx/5xx. No failed/errored requests.
+console (onlyErrors): No console logs. (clean)
 
-Verdict: networkObserved = clean
+Separate note (NOT counted, different tab/session tab-2 with long-lived
+pre-existing HMR history from before this eval run): a stray console entry
+"Failed to load resource: 502 (Bad Gateway)" appeared, but read_network_requests
+on that tab showed no matching 502 in the visible (last-50-of-494) window and
+that tab had ~147 pre-existing console lines / Fast-Refresh churn from before
+this session touched it. Re-ran the whole check in a brand-new tab (tab-4,
+zero prior history) to get an uncontaminated log: clean, as dumped above.
