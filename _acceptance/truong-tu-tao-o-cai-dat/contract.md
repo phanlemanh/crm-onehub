@@ -51,6 +51,7 @@ Source input: prompt (buổi khai thác 2026-09-18, Cổng Đáng ký `build` c�
 - AC-17: Given từ điển sản phẩm liệt một số cụm từ vào danh sách cần tránh, When đối chiếu mọi nhãn và mọi lựa chọn của bộ gợi ý với danh sách đó, Then không nhãn nào và không lựa chọn nào chứa một cụm bị tránh, và phép đo đọc danh sách trực tiếp từ từ điển chứ không chép tay.
 - AC-18: Given chữ «Phân khúc» đã có mục trong từ điển với nghĩa là nhóm cá nhân do một bộ lọc đã lưu chọn ra, When đọc bộ gợi ý, Then không gợi ý nào dùng lại chữ đó cho một nghĩa khác, và trường nói về loại bất động sản mang nhãn nói đúng thứ nó chứa.
 - AC-19: Given địa chỉ mang tham số thực thể, ví dụ thẻ Cá nhân, When trang được dựng ở phía máy chủ, Then máy chủ nạp trước danh sách trường của ĐÚNG thực thể đó, nên mở lại hoặc chia sẻ đường dẫn không phải chờ một lượt tải thứ hai; và cả trang máy chủ lẫn thành phần trình duyệt đọc cùng một khai báo tham số. (cross-layer)
+- AC-20: Given đặc tả giao diện khai ba hành vi bàn phím và khổ hẹp, When người quản trị dùng trang bằng bàn phím ở khổ rộng và mở trang ở khổ 375, Then trang không tràn ngang và ba thẻ bấm được ở cả hai khổ; mũi tên đổi được thẻ và thẻ đang focus có vòng focus thấy được; và Esc đóng ô sửa.
 
 ## Coverage
 

@@ -524,3 +524,28 @@ evals:
       - "apps/app/app/(app)/[slug]/settings/fields/**"
       - "apps/app/components/crm/fields/fields-entity.ts"
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E22
+    criterion: AC-20
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.trg_ban_phim_kho_hep
+    steps:
+      - "Mo {APP_URL}/<slug>/settings/fields o kho 375 roi o kho 1280"
+      - "Moi kho: khang dinh trang KHONG tran ngang, khong phan tu nao trong than tran khoi khung, ba the co hop bam duoc"
+      - "Kho hep: ba the phai VUA khung, hoac hang the phai cuon ngang duoc"
+      - "Kho rong: dat focus vao the dau, khang dinh co vong focus thay duoc; bam mui ten phai, khang dinh the doi sang Ca nhan"
+      - "Kho rong: mo o sua, dat con tro vao o nhap, bam Esc, khang dinh o sua DONG"
+      - "Chup ma tran {co du lieu · rong} x {375 · 1280} ve evidence/design-pass/"
+    expected: >-
+      exit 0. Day la chieu ma HAI MUOI MOT thuoc truoc do khong do: ban phim va
+      kho hep. Dac ta UX muc 4 khai ba hanh vi — ba the cuon ngang o kho hep, ba
+      the di bang mui ten, o sua dong bang Esc — va truoc phien thiet ke thi ca
+      ba khong co phep do nao.
+      Phien thiet ke 2026-09-18 tim ra mot loi that o day: Esc KHONG dong o sua.
+      Khay truot dong duoc nho hop thoai nen khong ai nghi trang thieu.
+      Cap hai chieu tren CUNG fixture: bo bo xu ly ban phim khoi vung chua o sua
+      — chieu do phai do VA thong diep goi ten dung chu "Esc".
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/fields/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]

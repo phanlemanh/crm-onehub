@@ -100,6 +100,7 @@ executors:
     trg_tranh_tu_dien: 'bun _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs tranh-tu-dien'
     trg_khong_dung_lai_phan_khuc: 'bun _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs khong-dung-lai-phan-khuc'
     trg_nap_truoc: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs nap-truoc-dung-thuc-the"'
+    trg_ban_phim_kho_hep: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs ban-phim-va-kho-hep"'
     trg_bo_goi_y: 'bun _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs nhom-cong-ty'
     trg_bo_goi_y_ba_thuc_the: 'bun _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs ba-thuc-the'
     trg_khong_trung_bo_cao: 'bun _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs khong-trung-bo-cao'

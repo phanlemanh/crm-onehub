@@ -159,6 +159,18 @@ const CA = [
 			),
 	},
 	{
+		ten: "bo xu ly Esc khoi vung chua o sua",
+		che: "ban-phim-va-kho-hep",
+		thay: ["Esc"],
+		mayChu: true,
+		pha: (goc) =>
+			thay(
+				`${goc}/apps/app/app/(app)/[slug]/settings/fields/fields-settings.tsx`,
+				'\t\t\t\t\t\tonKeyDown={(su) => {\n\t\t\t\t\t\t\tif (su.key !== "Escape") return;\n\t\t\t\t\t\t\tsu.stopPropagation();\n\t\t\t\t\t\t\tonEdit(null);\n\t\t\t\t\t\t}}\n',
+				"",
+			),
+	},
+	{
 		ten: "ham sinh khoa tra ve ban cu",
 		che: "khong-trung-bo-cao",
 		thay: ["dia_ban"],
@@ -183,7 +195,10 @@ const ket = [];
 for (const ca of CA) {
 	let ban = null;
 	try {
-		ban = await dungBanSao({ sua: ca.pha, khongDungMayChu: true });
+		ban = await dungBanSao({
+			sua: ca.pha,
+			khongDungMayChu: ca.mayChu !== true,
+		});
 	} catch (loi) {
 		ket.push({
 			ten: ca.ten,
@@ -197,9 +212,21 @@ for (const ca of CA) {
 		let ra = "";
 		let ma = 0;
 		try {
-			ra = execFileSync("bun", [`${ban.goc}/${THUOC}`, ca.che], {
+			const tep = ca.mayChu
+				? `${ban.goc}/_acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs`
+				: `${ban.goc}/${THUOC}`;
+			ra = execFileSync("bun", [tep, ca.che], {
 				encoding: "utf8",
-				env: { ...process.env, GOC_CAY: ban.goc },
+				env: {
+					...process.env,
+					GOC_CAY: ban.goc,
+					...(ca.mayChu
+						? {
+								APP_URL: ban.app,
+								API_URL: process.env.API_URL ?? "http://localhost:3001",
+							}
+						: {}),
+				},
 			});
 		} catch (loi) {
 			ma = loi.status ?? 1;

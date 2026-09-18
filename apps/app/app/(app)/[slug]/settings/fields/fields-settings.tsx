@@ -67,12 +67,21 @@ export function FieldsSettings({ kindBanDau }: { kindBanDau: RecordKind }) {
 						<Spinner />
 					</div>
 				) : (
-					<FieldEditor
-						key={editing?.id ?? "new"}
-						entity={entity}
-						field={editing}
-						onDone={() => onEdit(null)}
-					/>
+					// biome-ignore lint/a11y/noStaticElementInteractions: vùng chứa chỉ bắt Escape để đóng ô sửa, mọi điều khiển bên trong vẫn tự nhận bàn phím
+					<div
+						onKeyDown={(su) => {
+							if (su.key !== "Escape") return;
+							su.stopPropagation();
+							onEdit(null);
+						}}
+					>
+						<FieldEditor
+							key={editing?.id ?? "new"}
+							entity={entity}
+							field={editing}
+							onDone={() => onEdit(null)}
+						/>
+					</div>
 				)
 			) : (
 				<FieldsList

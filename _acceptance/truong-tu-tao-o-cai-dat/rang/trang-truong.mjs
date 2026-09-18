@@ -1130,6 +1130,213 @@ async function napTruocDungThucThe(browser, cookie, slug) {
 	ketLuan("nap-truoc-dung-thuc-the");
 }
 
+const ANH_TK = `${HERE}/../evidence/design-pass`;
+
+function chupTK(ten) {
+	if (!existsSync(ANH_TK)) mkdirSync(ANH_TK, { recursive: true });
+	return `${ANH_TK}/${ten}.png`;
+}
+
+const KHO = [
+	{ ten: "mobile-375", w: 375, h: 812 },
+	{ ten: "desktop-1280", w: 1280, h: 900 },
+];
+
+const docTran = () => {
+	const de = document.documentElement;
+	const tran = [...document.querySelectorAll("main *")]
+		.filter((e) => e.getBoundingClientRect().right > window.innerWidth + 1)
+		.slice(0, 5)
+		.map((e) => ({
+			tag: e.tagName,
+			cls: String(e.className ?? "").slice(0, 60),
+			phai: Math.round(e.getBoundingClientRect().right),
+		}));
+	const tl = document.querySelector('[role="tablist"]');
+	return {
+		khung: window.innerWidth,
+		trangTranNgang: de.scrollWidth > de.clientWidth + 1,
+		soPhanTuTran: tran.length,
+		mauTran: tran,
+		tablist: tl
+			? {
+					cuonDuoc: tl.scrollWidth > tl.clientWidth + 1,
+					scrollW: Math.round(tl.scrollWidth),
+					clientW: Math.round(tl.clientWidth),
+					overflowX: getComputedStyle(tl).overflowX,
+				}
+			: null,
+		the: [...document.querySelectorAll('[role="tab"]')].map((t) => {
+			const b = t.getBoundingClientRect();
+			return {
+				chu: t.textContent.trim(),
+				w: Math.round(b.width),
+				h: Math.round(b.height),
+				trongKhung: b.left >= -1 && b.right <= window.innerWidth + 1,
+			};
+		}),
+	};
+};
+
+async function banPhimVaKhoHep(browser, cookie, slug) {
+	for (const k of KHO) {
+		const page = await browser.newPage();
+		await page.setViewport({ width: k.w, height: k.h });
+		await page.setCookie(
+			{ name: LANG, value: "vi", url: APP },
+			{ name: cookie.name, value: cookie.value, url: APP },
+		);
+		await page.goto(`${APP}/${slug}/settings/fields`, {
+			waitUntil: "networkidle0",
+			timeout: 60000,
+		});
+		await new Promise((r) => setTimeout(r, 1500));
+
+		const d = await page.evaluate(docTran);
+		console.log(`kho ${k.ten}: ${JSON.stringify(d.tablist)}`);
+
+		doi(
+			!d.trangTranNgang,
+			`kho ${k.ten}: TRANG tran ngang — nguoi phai cuon ngang ca trang`,
+		);
+		doi(
+			d.soPhanTuTran === 0,
+			`kho ${k.ten}: ${d.soPhanTuTran} phan tu trong than trang tran khoi khung: ${JSON.stringify(d.mauTran)}`,
+		);
+		doi(d.the.length === 3, `kho ${k.ten}: co ${d.the.length} the, cho ba`);
+		for (const t of d.the) {
+			doi(
+				t.w > 0 && t.h >= 24,
+				`kho ${k.ten}: the ${JSON.stringify(t.chu)} co hop ${t.w}x${t.h} — qua nho de bam`,
+			);
+		}
+
+		if (k.w < 768) {
+			const bo = d.tablist;
+			const vuaKhung = d.the.every((t) => t.trongKhung);
+			doi(
+				bo?.cuonDuoc === true || vuaKhung,
+				`kho ${k.ten}: ba the KHONG vua khung ma hang the cung KHONG cuon ngang duoc ` +
+					`(scrollW ${bo?.scrollW} vs clientW ${bo?.clientW}, overflowX ${bo?.overflowX}) — ` +
+					"nguoi o kho hep khong voi duoc the cuoi",
+			);
+		}
+
+		await page.screenshot({ path: chupTK(`co-du-lieu--${k.ten}`) });
+
+		const rong = await browser.newPage();
+		await rong.setViewport({ width: k.w, height: k.h });
+		await rong.setCookie(
+			{ name: LANG, value: "vi", url: APP },
+			{ name: cookie.name, value: cookie.value, url: APP },
+		);
+		await rong.goto(`${APP}/${slug}/settings/fields?thucThe=deal`, {
+			waitUntil: "networkidle0",
+			timeout: 60000,
+		});
+		await new Promise((r) => setTimeout(r, 1500));
+		await rong.screenshot({ path: chupTK(`rong--${k.ten}`) });
+		await rong.close();
+
+		if (k.w >= 768) {
+			const ok = await duongBanPhim(page);
+			doi(ok.doiThe, `duong ban phim: ${ok.viDoiThe}`);
+			doi(ok.escDong, `duong ban phim: ${ok.viEsc}`);
+			doi(ok.thayVongFocus, `duong ban phim: ${ok.viFocus}`);
+			await page.screenshot({ path: chupTK("ban-phim--desktop-1280") });
+		}
+
+		await page.close();
+	}
+
+	ketLuan("ban-phim-va-kho-hep");
+}
+
+async function duongBanPhim(page) {
+	const ra = {
+		doiThe: false,
+		escDong: false,
+		thayVongFocus: false,
+		viDoiThe: "",
+		viEsc: "",
+		viFocus: "",
+	};
+
+	const the = await page.$$('[role="tab"]');
+	if (the.length < 2) {
+		ra.viDoiThe = "khong du the de thu mui ten";
+		return ra;
+	}
+
+	await the[0].focus();
+	const focusTruoc = await page.evaluate(() => {
+		const el = document.activeElement;
+		const s = el ? getComputedStyle(el) : null;
+		return {
+			chu: el?.textContent?.trim() ?? "",
+			vien: s ? `${s.outlineStyle} ${s.outlineWidth}` : "",
+			bong: s ? s.boxShadow : "",
+		};
+	});
+	ra.thayVongFocus =
+		(focusTruoc.vien !== "" && !/none 0px/.test(focusTruoc.vien)) ||
+		(focusTruoc.bong !== "none" && focusTruoc.bong !== "");
+	ra.viFocus = ra.thayVongFocus
+		? ""
+		: `the dang focus (${JSON.stringify(focusTruoc.chu)}) KHONG co vong focus thay duoc: ` +
+			`outline ${JSON.stringify(focusTruoc.vien)}, box-shadow ${JSON.stringify(focusTruoc.bong)}`;
+
+	await page.keyboard.press("ArrowRight");
+	await new Promise((r) => setTimeout(r, 1200));
+	const sau = await page.evaluate(
+		() =>
+			[...document.querySelectorAll('[role="tab"]')]
+				.find((t) => t.getAttribute("aria-selected") === "true")
+				?.textContent.trim() ?? "",
+	);
+	ra.doiThe = sau === "Cá nhân";
+	ra.viEsc = "";
+	ra.viDoiThe = ra.doiThe
+		? ""
+		: `bam mui ten phai tren hang the ma the dang mo la ${JSON.stringify(sau)}, cho "Cá nhân"`;
+
+	const nut = await page.$$("button");
+	let moO = false;
+	for (const n of nut) {
+		const t = await n.evaluate((el) => el.textContent.trim());
+		if (t === "Trường mới") {
+			await n.click();
+			await new Promise((r) => setTimeout(r, 1500));
+			moO = true;
+			break;
+		}
+	}
+	if (!moO) {
+		ra.viEsc = "khong mo duoc o sua de thu Esc";
+		return ra;
+	}
+
+	const oNhan = await page.$("main input");
+	if (!oNhan) {
+		ra.viEsc = "o sua mo ra ma khong co o nhap nao de dat con tro";
+		return ra;
+	}
+	await oNhan.click();
+	await new Promise((r) => setTimeout(r, 400));
+
+	await page.keyboard.press("Escape");
+	await new Promise((r) => setTimeout(r, 1200));
+	const conO = await page.evaluate(() =>
+		Boolean(document.querySelector("main input")),
+	);
+	ra.escDong = !conO;
+	if (!ra.escDong)
+		ra.viEsc =
+			"bam Esc tren o sua ma o van mo — dac ta UX muc 4 khai Esc dong o sua";
+
+	return ra;
+}
+
 const CHE_DO = {
 	"duong-vao": duongVao,
 	"tieu-de-trang": tieuDeTrang,
@@ -1142,6 +1349,7 @@ const CHE_DO = {
 	"khay-cu": khayCu,
 	"trang-thai": trangThai,
 	"nap-truoc-dung-thuc-the": napTruocDungThucThe,
+	"ban-phim-va-kho-hep": banPhimVaKhoHep,
 };
 
 const che = process.argv[2];
