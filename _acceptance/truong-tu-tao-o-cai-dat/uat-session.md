@@ -21,9 +21,12 @@ decided_at:
   hồ sơ. Điều kiện «sản phẩm thật đã chạy sau cờ để người dự bấm được» vào phiên
   này bằng LỜI KHAI chứ không bằng bằng chứng. Không chặn phiên, nhưng người ký
   cần biết trước khi đọc điểm.
-- **Tính năng chưa bật cho người dùng thật.** Pull request 57 đã xanh mọi cổng
-  nhưng chưa merge vào `onehub`. Hệ quả có thật với ngưỡng: vế bốn tuần của
-  ngưỡng SỐNG và vế bốn tuần của ngưỡng CHẾT đều chưa có đồng hồ để chạy.
+- **Máy bấm nút merge, không phải người.** Chủ kho ra lệnh trực tiếp bằng một
+  chữ sau khi đã nghe quan ngại rằng điều khoản provenance của kho đọc trách
+  nhiệm ở người bấm merge. Tài khoản forge ghi `phanlemanh` vì máy dùng chính
+  thẻ bài của chủ kho, nên dòng forge không sai về danh tính, nhưng THAO TÁC là
+  của máy. Bản ghi này và dòng sổ `d-20260918T093157Z-42` là chỗ sự thật đó
+  sống; đừng đọc dòng forge như một chữ ký người.
 
 ## Trình tự đã chốt ngày 2026-09-18
 
@@ -36,7 +39,12 @@ ngưỡng, và họp hai lần cho một ngưỡng thì lần đầu chỉ sinh 
 lời dừng trước khi giao. Chọn lối này nghĩa là nếu điều đó xảy ra, ta biết nó
 SAU khi đã giao chứ không phải trước.
 
-Ngày hẹn phiên: bốn tuần kể từ ngày merge vào `onehub`.
+Ngày hẹn phiên: **2026-10-16**, bốn tuần kể từ ngày merge.
+
+Đồng hồ bốn tuần bắt đầu chạy ngày **2026-09-18**, khi pull request 57 vào
+`onehub` ở commit `2862a375`. Từ ngày đó tính năng bật cho người dùng thật, nên
+mọi trường tự tạo xuất hiện sau mốc mà không nằm trong bảng mười trường dưới đây
+là trường do người quản trị tạo.
 
 ## Người dự
 
@@ -65,7 +73,7 @@ có ai đứng thay, và đó là chỗ yếu nhất của phiên.
 | Tìm ra đường vào từ Cài đặt | dưới hai phút, không chỉ dẫn | CHƯA ĐO | — |
 | Tạo xong một trường trên Cá nhân | dưới ba phút, không chỉ dẫn | CHƯA ĐO | — |
 | Chọn gợi ý tiếng Việt thay vì gõ từ đầu | ít nhất một lần | CHƯA ĐO | — |
-| Trường tự tạo do người quản trị tạo, mang giá trị trên hồ sơ thật | ít nhất ba, sau bốn tuần kể từ khi bật | CHƯA ĐO — đồng hồ chưa chạy, tính năng chưa merge | — |
+| Trường tự tạo do người quản trị tạo, mang giá trị trên hồ sơ thật | ít nhất ba, sau bốn tuần kể từ khi bật | CHƯA ĐO — đồng hồ chạy từ 2026-09-18, đọc số ngày 2026-10-16 | — |
 
 ### Mốc khởi điểm cho vế bốn tuần, đo ngày 2026-09-18
 
