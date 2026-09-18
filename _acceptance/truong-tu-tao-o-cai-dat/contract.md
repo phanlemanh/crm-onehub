@@ -5,7 +5,7 @@ slug: truong-tu-tao-o-cai-dat
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-18-truong-tu-tao-o-cai-dat-design.md
 approved_by:
 approved_at:
