@@ -1,0 +1,128 @@
+{
+  "gioi-thieu": {
+    "mong_boc": true,
+    "cho": [
+      {
+        "gia_tri": "One Mount is a Vietnamese technology and innovation group th",
+        "boc": true,
+        "the": "SPAN",
+        "so_phan_tu_khai": 1,
+        "duong_the": [
+          "SPAN"
+        ]
+      }
+    ]
+  },
+  "tom-tat-lien-he": {
+    "mong_boc": true,
+    "cho": [
+      {
+        "gia_tri": "Seasoned partnerships lead with a decade of experience build",
+        "boc": true,
+        "the": "SPAN",
+        "so_phan_tu_khai": 1,
+        "duong_the": [
+          "SPAN"
+        ]
+      }
+    ]
+  },
+  "nganh": {
+    "mong_boc": true,
+    "cho": [
+      {
+        "gia_tri": "Software",
+        "boc": true,
+        "the": "SPAN",
+        "so_phan_tu_khai": 1,
+        "duong_the": [
+          "SPAN"
+        ]
+      }
+    ]
+  },
+  "dong-thoi-gian": {
+    "mong_boc": true,
+    "cho": [
+      {
+        "gia_tri": "Demo booked",
+        "boc": true,
+        "the": "SPAN",
+        "so_phan_tu_khai": 1,
+        "duong_the": [
+          "SPAN"
+        ]
+      },
+      {
+        "gia_tri": "Qualified to buy",
+        "boc": true,
+        "the": "SPAN",
+        "so_phan_tu_khai": 1,
+        "duong_the": [
+          "SPAN"
+        ]
+      },
+      {
+        "gia_tri": "Qualified to buy",
+        "boc": true,
+        "the": "SPAN",
+        "so_phan_tu_khai": 1,
+        "duong_the": [
+          "SPAN"
+        ]
+      }
+    ]
+  },
+  "khong-khai-thua": {
+    "mong_boc": false,
+    "cho": [
+      {
+        "gia_tri": "Attio",
+        "boc": false,
+        "the": "H2",
+        "so_phan_tu_khai": 0,
+        "duong_the": []
+      },
+      {
+        "gia_tri": "Attio",
+        "boc": false,
+        "the": "SPAN",
+        "so_phan_tu_khai": 0,
+        "duong_the": []
+      },
+      {
+        "gia_tri": "London, United Kingdom",
+        "boc": false,
+        "the": "SPAN",
+        "so_phan_tu_khai": 0,
+        "duong_the": []
+      }
+    ]
+  },
+  "khong-khai-thua-chuc-danh": {
+    "mong_boc": false,
+    "cho": [
+      {
+        "gia_tri": "IT Director",
+        "boc": false,
+        "the": "SPAN",
+        "so_phan_tu_khai": 0,
+        "duong_the": []
+      },
+      {
+        "gia_tri": "IT Director",
+        "boc": false,
+        "the": "SPAN",
+        "so_phan_tu_khai": 0,
+        "duong_the": []
+      }
+    ]
+  },
+  "ho-so-trong": {
+    "so_phan_tu_rong": 0
+  },
+  "tieng-trang": {
+    "tieng_trang": "vi",
+    "tieng_viet_lot": []
+  }
+}

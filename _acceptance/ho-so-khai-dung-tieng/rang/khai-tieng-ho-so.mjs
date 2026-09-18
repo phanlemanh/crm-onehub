@@ -1,0 +1,329 @@
+import { execFileSync } from "node:child_process";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import puppeteer from "puppeteer-core";
+import { db } from "../../../packages/db/src/client.ts";
+import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
+import { dat } from "./du-lieu-thu.mjs";
+
+const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const APP = process.env.APP_URL ?? "http://localhost:3000";
+const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
+const NGUOI = process.env.NGUOI ?? "manh.phan@onemount.com";
+
+const chan = process.argv[2] ?? "gioi-thieu";
+
+function thoat(ma, ...dong) {
+	for (const d of dong) console.log(d);
+	process.exit(ma);
+}
+
+const cay = await canhCay();
+for (const d of cay.dong) console.log(d);
+if (cay.ket !== "dung-cay") {
+	thoat(
+		2,
+		`RANG CUN: dau moc khong ve qua ${APP} — dang do MOT CAY KHAC.`,
+		`   Cay dang xet: ${GOC}`,
+		"   Khong doc mot con so nao tren may chu do.",
+	);
+}
+console.log(`-- CANH CAY: dau moc ve tu cay dang xet (${APP})`);
+
+function phien() {
+	const raw = execFileSync("bun", ["run", "dev:session", NGUOI], {
+		cwd: join(GOC, "apps/api"),
+		encoding: "utf8",
+	});
+	const line = raw.trim().split("\n").pop().trim();
+	const eq = line.indexOf("=");
+	return { name: line.slice(0, eq), value: line.slice(eq + 1) };
+}
+
+const HO_SO = '[data-slot="sheet-content"]';
+
+const DOC_VUNG = ({ canTim, goc }) => {
+	const khung = document.querySelector(goc);
+	if (!khung) return null;
+	const ra = [];
+	const di = document.createTreeWalker(khung, NodeFilter.SHOW_TEXT);
+	for (let n = di.nextNode(); n; n = di.nextNode()) {
+		const t = n.nodeValue.replace(/\s+/g, " ").trim();
+		if (t === "") continue;
+		const el = n.parentElement;
+		if (!el || el.closest("script,style,noscript,template")) continue;
+		const r = el.getBoundingClientRect();
+		if (r.width === 0 || r.height === 0) continue;
+
+		for (const gt of canTim) {
+			const moc = gt.slice(0, 40);
+			if (!t.includes(moc)) continue;
+			const vung = el.closest('[lang="en"]');
+			const trong = vung ? [...vung.querySelectorAll("[lang]")] : [];
+			ra.push({
+				gia_tri: gt.slice(0, 60),
+				boc: vung !== null,
+				the: el.tagName,
+				so_phan_tu_khai: vung ? 1 + trong.length : 0,
+				duong_the: vung ? [vung.tagName, ...trong.map((x) => x.tagName)] : [],
+			});
+		}
+	}
+	return ra;
+};
+
+const DEM_RONG = (goc) => {
+	const khung = document.querySelector(goc);
+	if (!khung) return null;
+	return [...khung.querySelectorAll('[lang="en"]')].filter(
+		(el) => (el.textContent ?? "").trim() === "",
+	).length;
+};
+
+function ghiVung(ten, muc) {
+	const thu_muc = join(GOC, "_acceptance/ho-so-khai-dung-tieng/evidence");
+	if (!existsSync(thu_muc)) mkdirSync(thu_muc, { recursive: true });
+	const tep = join(thu_muc, "vung-khai.json");
+	const cu = existsSync(tep) ? JSON.parse(readFileSync(tep, "utf8")) : {};
+	cu[ten] = muc;
+	writeFileSync(tep, `${JSON.stringify(cu, null, 2)}\n`);
+	console.log(`-- BANG CHUNG: ghi muc "${ten}" vao evidence/vung-khai.json`);
+}
+
+function nhanGiaiDoan(ma) {
+	const kichBan = `
+import { dealStageLabel } from "./lib/deal-stage";
+const ma = ${JSON.stringify(ma)};
+console.log(JSON.stringify(Object.fromEntries(ma.map((m) => [m, dealStageLabel(m)]))));
+`;
+	let ra;
+	try {
+		ra = execFileSync("bun", ["-e", kichBan], {
+			cwd: join(GOC, "apps/app"),
+			encoding: "utf8",
+		});
+	} catch (loi) {
+		thoat(
+			2,
+			"KHONG DO DUOC: khong goi duoc dealStageLabel cua san pham — " +
+				String(loi.stderr ?? loi.message).slice(0, 300),
+		);
+	}
+	return JSON.parse(ra.trim().split("\n").pop());
+}
+
+const vung = await dat();
+const khongGian = await db.organization.findFirst({
+	orderBy: { createdAt: "asc" },
+});
+if (!khongGian) thoat(2, "KHONG DO DUOC: khong co khong gian lam viec nao");
+
+const cookie = phien();
+const browser = await puppeteer.launch({
+	executablePath: CHROME,
+	headless: "new",
+	args: ["--no-sandbox"],
+});
+
+async function bamTab(page, nhan) {
+	const bam = await page.evaluate((n) => {
+		const k = document.querySelector('[data-slot="sheet-content"]');
+		if (!k) return false;
+		const nut = [...k.querySelectorAll('[role="tab"], button')].find(
+			(b) => (b.textContent ?? "").trim().toLowerCase() === n.toLowerCase(),
+		);
+		if (!nut) return false;
+		nut.click();
+		return true;
+	}, nhan);
+	if (!bam) return false;
+	await new Promise((r) => setTimeout(r, 2000));
+	return true;
+}
+
+async function xem(duong, canTim, tab) {
+	const page = await browser.newPage();
+	await page.setViewport({ width: 1440, height: 1000 });
+	await browser.setCookie(
+		{ name: cookie.name, value: cookie.value, domain: "localhost", path: "/" },
+		{ name: "lang", value: "vi", domain: "localhost", path: "/" },
+	);
+	const url = `${APP}/${khongGian.slug}/${duong}`;
+	console.log(`-- MO MAN: ${url}`);
+	await page.goto(url, { waitUntil: "networkidle0", timeout: CHO_TAI });
+	await new Promise((r) => setTimeout(r, 1500));
+
+	const tiengTrang = await page.evaluate(() => document.documentElement.lang);
+	if (tiengTrang !== "vi") {
+		await browser.close();
+		await vung.don();
+		thoat(
+			2,
+			`RANG CUN: trang khong o lang=vi (doc duoc: ${JSON.stringify(tiengTrang)})`,
+			"   Day la tien de thieu, KHONG phai chan do do.",
+		);
+	}
+
+	if (tab) {
+		const bam = await bamTab(page, tab);
+		if (!bam) {
+			await page.close();
+			await browser.close();
+			await vung.don();
+			thoat(
+				2,
+				`RANG CUN: khong bam duoc tab ${JSON.stringify(tab)} tren ${url}.`,
+				"   Tien de thieu — khong doc con so nao.",
+			);
+		}
+		console.log(`-- DA BAM TAB: ${JSON.stringify(tab)}`);
+	}
+
+	const thay = await page.evaluate(DOC_VUNG, { canTim, goc: HO_SO });
+	const rong = await page.evaluate(DEM_RONG, HO_SO);
+	if (thay === null || rong === null) {
+		await page.close();
+		await browser.close();
+		await vung.don();
+		thoat(
+			2,
+			`RANG CUN: khong thay TAM HO SO tren ${url} (bo chon ${HO_SO}).`,
+			"   Man danh sach van ve, nhung tam ho so thi khong — day la tien de thieu.",
+			"   KHONG doc con so nao: bang danh sach phia duoi da khai dung tu vong truoc,",
+			"   nen do ca trang se bao xanh nho dung cho no khong do.",
+		);
+	}
+	const chu = await page.evaluate((g) => {
+		const k = document.querySelector(g);
+		return k ? k.innerText : "";
+	}, HO_SO);
+	await page.close();
+	return { thay, rong, chu, url };
+}
+
+function bao(ten, canTim, thay, mongBoc) {
+	let hong = 0;
+	const muc = [];
+	for (const gt of canTim) {
+		const cho = thay.filter((x) => x.gia_tri === gt.slice(0, 60));
+		if (cho.length === 0) {
+			console.log(`   KHONG THAY TREN MAN: ${JSON.stringify(gt.slice(0, 60))}`);
+			hong += 1;
+			continue;
+		}
+		const lech = cho.filter((x) => x.boc !== mongBoc);
+		hong += lech.length;
+		console.log(
+			`   ${lech.length === 0 ? "dat    " : "KHONG DAT"} ${JSON.stringify(gt.slice(0, 48))} — ${cho.length} cho, lech ${lech.length}`,
+		);
+		muc.push(...cho);
+	}
+	ghiVung(ten, { mong_boc: mongBoc, cho: muc });
+	return hong;
+}
+
+let hong = 0;
+
+if (chan === "gioi-thieu") {
+	const gt = vung.congTy.gioiThieu;
+	console.log(`-- DAN SO: gioi thieu cua cong ty ${JSON.stringify(vung.congTy.ten)}`);
+	const { thay } = await xem(`companies/${vung.congTy.id}`, [gt]);
+	hong = bao(chan, [gt], thay, true);
+} else if (chan === "tom-tat-lien-he") {
+	const gt = vung.caNhan.tomTat;
+	console.log("-- DAN SO: tom tat ca nhan do tac nhan sinh");
+	const { thay } = await xem(`contacts/${vung.caNhan.id}`, [gt]);
+	hong = bao(chan, [gt], thay, true);
+} else if (chan === "nganh") {
+	const ct = await db.company.findUnique({ where: { id: vung.congTy.id } });
+	if (!ct?.industry) {
+		await browser.close();
+		await vung.don();
+		thoat(2, "KHONG DO DUOC: cong ty thu khong co truong nganh");
+	}
+	console.log(`-- DAN SO: nganh ${JSON.stringify(ct.industry)} doc tu co so du lieu`);
+	const { thay } = await xem(`companies/${vung.congTy.id}`, [ct.industry]);
+	hong = bao(chan, [ct.industry], thay, true);
+} else if (chan === "dong-thoi-gian") {
+	if (!vung.doiGiaiDoan) {
+		await browser.close();
+		await vung.don();
+		thoat(
+			2,
+			"KHONG DO DUOC: khong hoat dong doi giai doan nao trong co so du lieu.",
+			"   Tap rong khong phai la dat: khong co gi de doi chieu.",
+		);
+	}
+	const nhan = nhanGiaiDoan([
+		vung.doiGiaiDoan.meta.from,
+		vung.doiGiaiDoan.meta.to,
+	]);
+	const canTim = [nhan[vung.doiGiaiDoan.meta.from], nhan[vung.doiGiaiDoan.meta.to]];
+	console.log(
+		"-- DAN SO: hai nhan giai doan lay tu dealStageLabel() CUA SAN PHAM:\n" +
+			`     ${vung.doiGiaiDoan.meta.from} -> ${JSON.stringify(canTim[0])}\n` +
+			`     ${vung.doiGiaiDoan.meta.to} -> ${JSON.stringify(canTim[1])}`,
+	);
+	const { thay } = await xem(
+		`deals/${vung.doiGiaiDoan.dealId}`,
+		canTim,
+		"Hoạt động",
+	);
+	hong = bao(chan, canTim, thay, true);
+} else if (chan === "khong-khai-thua") {
+	const ct = await db.company.findUnique({ where: { id: vung.congTy.id } });
+	const dia = [ct.city, ct.stateCode, ct.country].filter(Boolean).join(", ");
+	const canTim = [ct.name, dia].filter(Boolean);
+	console.log(`-- DAN SO (chieu nguoc): ${canTim.map((x) => JSON.stringify(x)).join(" · ")}`);
+	const { thay } = await xem(`companies/${vung.congTy.id}`, canTim);
+	hong = bao(chan, canTim, thay, false);
+
+	const cn = await db.contact.findUnique({ where: { id: vung.caNhan.id } });
+	if (cn?.title) {
+		console.log(`-- DAN SO (chieu nguoc, chuc danh): ${JSON.stringify(cn.title)}`);
+		const r = await xem(`contacts/${cn.id}`, [cn.title]);
+		hong += bao(`${chan}-chuc-danh`, [cn.title], r.thay, false);
+	}
+} else if (chan === "ho-so-trong") {
+	console.log(`-- DAN SO: cong ty chua enrichment ${JSON.stringify(vung.trong.ten)}`);
+	const { rong, chu } = await xem(`companies/${vung.trong.id}`, []);
+	console.log(`   so phan tu khai lang=en co noi dung RONG: ${rong}`);
+	if (rong > 0) hong += rong;
+	ghiVung(chan, { so_phan_tu_rong: rong });
+} else if (chan === "tieng-trang") {
+	const r = await xem(`companies/${vung.congTy.id}`, []);
+	console.log("   tieng cua trang: vi (da khang dinh trong xem())");
+	const viet = await (async () => {
+		const page = await browser.newPage();
+		await page.goto(r.url, { waitUntil: "networkidle0", timeout: CHO_TAI });
+		await new Promise((x) => setTimeout(x, 1200));
+		const ra = await page.evaluate(() => {
+			const di = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+			const dau = /[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/;
+			const lot = [];
+			for (let n = di.nextNode(); n; n = di.nextNode()) {
+				const t = n.nodeValue.replace(/\s+/g, " ").trim();
+				if (t === "" || !dau.test(t)) continue;
+				if (n.parentElement?.closest('[lang="en"]')) lot.push(t.slice(0, 60));
+			}
+			return lot;
+		});
+		await page.close();
+		return ra;
+	})();
+	console.log(`   chuoi tieng Viet lot vao trong pham vi lang=en: ${viet.length}`);
+	for (const v of viet) console.log(`     LOT: ${JSON.stringify(v)}`);
+	hong += viet.length;
+	ghiVung(chan, { tieng_trang: "vi", tieng_viet_lot: viet });
+} else {
+	await browser.close();
+	await vung.don();
+	thoat(2, `KHONG DO DUOC: khong biet chan ${JSON.stringify(chan)}`);
+}
+
+await browser.close();
+await vung.don();
+console.log(`ket qua: chan=${chan} · cho lech=${hong}`);
+process.exit(hong > 0 ? 1 : 0);
