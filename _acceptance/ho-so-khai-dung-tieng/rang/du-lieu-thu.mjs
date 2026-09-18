@@ -100,3 +100,39 @@ export async function dat() {
 		},
 	};
 }
+
+export async function datDuGiaiDoan() {
+	const { DealStage } = await import(
+		"../../../packages/db/src/generated/prisma/enums.ts"
+	);
+	const duEnum = Object.values(DealStage);
+	const dangCo = new Set(
+		(await db.deal.findMany({ select: { stage: true } })).map((d) => d.stage),
+	);
+	const thieu = duEnum.filter((m) => !dangCo.has(m));
+	const daDoi = [];
+
+	for (const ma of thieu) {
+		const muon = await db.deal.findFirst({
+			where: { stage: { notIn: thieu } },
+			orderBy: { createdAt: "desc" },
+			skip: daDoi.length,
+		});
+		if (!muon) break;
+		daDoi.push({ id: muon.id, giaiDoanCu: muon.stage });
+		await db.deal.update({ where: { id: muon.id }, data: { stage: ma } });
+	}
+
+	return {
+		thieu,
+		daDoi,
+		don: async () => {
+			for (const d of daDoi) {
+				await db.deal.update({
+					where: { id: d.id },
+					data: { stage: d.giaiDoanCu },
+				});
+			}
+		},
+	};
+}
