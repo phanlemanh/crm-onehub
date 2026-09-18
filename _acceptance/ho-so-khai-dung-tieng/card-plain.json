@@ -1,0 +1,48 @@
+{
+  "feature_plain": "Nhân viên dùng trình đọc màn hình tiếng Việt sẽ nghe ra chữ khi hồ sơ một công ty hay một cá nhân có đoạn tiếng Anh — thay vì nghe tiếng Anh đọc bằng giọng tiếng Việt, không ra chữ nào.",
+
+  "will_do": [
+    { "id": "AC-1", "p": "Sẽ để đoạn giới thiệu công ty được đọc bằng giọng tiếng Anh, thay vì giọng tiếng Việt như hôm nay." },
+    { "id": "AC-2", "p": "Sẽ làm điều tương tự cho đoạn tóm tắt về một người, thứ do tác nhân viết ra." },
+    { "id": "AC-3", "p": "Sẽ làm điều tương tự cho tên ngành hiện dưới tiêu đề hồ sơ công ty." },
+    { "id": "AC-4", "p": "Sẽ làm điều tương tự cho hai tên giai đoạn trong dòng thời gian, mỗi lần một thoả thuận đổi giai đoạn." },
+    { "id": "AC-5", "p": "Sẽ chứng minh việc này không làm quá tay: tên công ty, địa danh và chức danh do nhân viên tự gõ vẫn được đọc bằng giọng tiếng Việt." },
+    { "id": "AC-6", "p": "Sẽ gom cách khai tiếng về đúng một chỗ dùng chung, để lần sau thêm một màn mới thì không ai quên được nữa." },
+    { "id": "AC-7", "p": "Sẽ có phép kiểm tự động chạy mỗi lần đổi mã, bắt được cả việc quên khai lẫn việc khai thừa." },
+    { "id": "AC-11", "p": "Sẽ chạy lại nguyên cái thước của vòng dịch trước, để chắc rằng năm chỗ đang đúng không bị việc này làm hỏng." }
+  ],
+
+  "wont_do": [
+    { "id": "AC-8", "p": "Sẽ KHÔNG đổi gì trên hồ sơ một công ty chưa có dữ liệu — khối giới thiệu vẫn vắng như hôm nay, không sinh ra ô trống." },
+    { "id": "AC-9", "p": "Sẽ KHÔNG đổi ngôn ngữ của trang: trang vẫn là trang tiếng Việt, và chữ tiếng Việt trên đó vẫn được đọc bằng giọng tiếng Việt." }
+  ],
+
+  "scope_plain": "Để lại cho lần sau: những thứ chỉ hiện khi mở thêm một tab hay một menu trong hồ sơ; hồ sơ thoả thuận; và việc dịch giá trị từ cơ sở dữ liệu sang tiếng Việt — vòng này chỉ khai đúng tiếng của chúng, không dịch chúng.",
+
+  "coverage_plain": [
+    { "i": 0, "p": "Đã phân năm loại giá trị theo ai viết ra chúng, và chỉ khai tiếng cho loại máy viết. Bằng chứng là đủ: chuẩn trợ năng quốc tế (WCAG 2.2, mục ngôn ngữ của từng phần) liệt kê sẵn hai nhóm được miễn — tên riêng, và chữ không rõ tiếng gì — và hai nhóm đó khớp đúng hai loại bị loại ra." },
+    { "i": 1, "p": "Đã kê năm chỗ một giá trị có thể hiện ra trên hồ sơ. Bằng chứng là đủ: cái thước của vòng dịch trước chỉ mở hai màn danh sách và chưa bao giờ mở hồ sơ — nên đây đúng là chiều đã bị sót, và vòng này lấy chính lỗ đó làm trục." },
+    { "i": 2, "p": "Đã kê bốn cách một chữ được dựng ra trên màn. Bằng chứng là đủ: hai trong bốn cách là chỗ KHÔNG CÓ ô nào để gắn nhãn tiếng — một chuỗi ghép và một danh sách chữ trần — nên chúng vô hình với mọi cách tìm bằng đọc mã, và đó là lý do phải mở màn thật mới thấy." },
+    { "i": 3, "p": "Áp mọi tiêu chí: hai cơ chế dễ lẫn nhau. Một cái bảo máy dịch đừng đụng, một cái bảo trình đọc màn hình đọc bằng giọng nào — việc này canh cả chiều khai thiếu lẫn chiều khai thừa (AC-5, tiêu chí chống khai quá tay)." },
+    { "i": 4, "p": "Áp mọi tiêu chí: mỗi phép đo mới phải chứng minh được nó biết báo đỏ, bằng cách phá thật một chỗ rồi xem nó có bắt đúng chỗ đó không (AC-5 và AC-7). Một phép đo xanh mà chưa từng đỏ thì không phân biệt được sản phẩm lành với phép đo không chạy." },
+    { "i": 5, "p": "Áp mọi tiêu chí: hồ sơ chưa có dữ liệu thì không được sinh ra ô trống mang nhãn tiếng (AC-8, hồ sơ chưa enrichment)." },
+    { "i": 6, "p": "Áp mọi tiêu chí: việc gắn nhãn tiếng không được lan ra ngoài đúng giá trị nó phải bọc (AC-9, tiếng của trang không đổi)." }
+  ],
+
+  "gap_probe_plain": [
+    { "i": 0, "p": "Lời hứa lớn nhất của vòng này — 'lần sau không ai quên được nữa' — lại được đo bằng một phép đếm không biết trước phải đếm ra bao nhiêu. Một chỗ bị sót ở hình dạng khác chút là phép đo vẫn báo xanh. ĐÃ SỬA: hợp đồng nay ghim sẵn danh sách đủ chín chỗ theo tên tệp, phép đo phải đếm ra đúng chín và gọi tên từng chỗ, và nó bị thử bằng hai cách phá khác nhau." },
+    { "i": 1, "p": "Năm chỗ hôm nay đang khai đúng sẽ được chuyển sang cách mới, nhưng không phép đo nào canh chúng sau khi chuyển — chúng nằm ngoài hồ sơ, trên màn danh sách. Việc chuyển làm rơi mất một chỗ thì vòng này vẫn đóng xanh trong khi một vòng đã ký trước đó vỡ. ĐÃ SỬA: thêm một tiêu chí và một phép đo chạy lại nguyên cái thước của vòng trước." },
+    { "i": 2, "p": "Bảy phép đo mở màn thật nhưng không phép đo nào bắt buộc kiểm xem nó đang mở đúng bản đang xét hay một bản khác đang chạy sẵn trên cùng cổng. Kho này đã từng dính đúng lỗi đó. ĐÃ SỬA: mọi phép đo mở màn nay phải đặt một dấu mốc và xin lại nó trước khi đọc con số nào, và dừng hẳn kèm tên bản đang xét nếu dấu mốc không về." },
+    { "i": 3, "p": "Phép đo cuối cùng — chỗ hội đồng người xem — đòi một tệp bằng chứng mà không phép đo nào trước đó sinh ra, và lại cho hội đồng đọc chính bản thiết kế. Hội đồng sẽ chấm điểm lời hứa thay vì chấm kết quả. ĐÃ SỬA: các phép đo mở màn nay bắt buộc xuất ra tệp bằng chứng đó, và bản thiết kế bị bỏ khỏi thứ hội đồng được đọc." },
+    { "i": 4, "p": "Một danh sách chữ dùng chung đổi cách hoạt động, nhưng chỉ phần nhãn tiếng được canh — phần khử chữ trùng thì không. Làm sai chỗ đó thì dòng dưới tiêu đề in hai lần cùng một chữ, trong một vòng đã hứa không đổi một pixel nào. ĐÃ SỬA: thêm chiều đo thứ ba vào cùng phép kiểm đó." }
+  ],
+
+  "decisions_plain": [
+    { "id": "d-20260918T163656Z-1", "p": "Gom cách khai tiếng về một chỗ dùng chung thay vì gõ tay ở từng màn — đổi lại thêm một vật mới vào thư viện giao diện. Lối gõ tay hôm nay đã bỏ sót ba chỗ, đó là số đã xảy ra chứ không phải lo xa." },
+    { "id": "d-20260918T163656Z-2", "p": "Chuyển luôn cả năm chỗ đang đúng sang cách mới, không chỉ bốn chỗ đang hỏng — đổi lại việc này động vào năm tệp nằm ngoài hai màn đang xét. Nhận phần đắt đó vì 'một con đường duy nhất' chỉ ngăn được lần quên sau khi nó đúng là duy nhất." },
+    { "id": "d-20260918T163656Z-3", "p": "KHÔNG làm với chức danh nhân viên tự gõ, tên công ty và địa danh — đổi lại phạm vi hẹp hơn cách đọc rộng nhất. Không phải để tiết kiệm công: gắn nhãn tiếng Anh lên ô người gõ tiếng Việt là làm hỏng theo chiều ngược, và chuẩn trợ năng miễn trừ đúng hai nhóm này." },
+    { "id": "d-20260918T163656Z-4", "p": "KHÔNG mở phiên soi thẩm mỹ trước khi duyệt — đổi lại anh duyệt phần nhìn bằng chữ. Nhận vì vòng này không đổi một pixel nào; thứ nó đổi chỉ trình đọc màn hình nghe thấy." },
+    { "id": "d-20260918T163656Z-5", "p": "Đổi cách một danh sách chữ dùng chung nhận dữ liệu, thay vì gắn nhãn tiếng cho cả dòng — đổi lại dữ liệu vào nó phức tạp hơn. Bắt buộc, vì dòng dưới tiêu đề hồ sơ công ty đang trộn một địa danh với một tên ngành, hai thứ khác tiếng nhau." },
+    { "id": "d-20260918T164709Z-6", "p": "Canh năm chỗ cũ bằng cách chạy lại nguyên cái thước của vòng dịch trước, thay vì viết thước mới hay mở lại hồ sơ cũ — đổi lại vòng này phụ thuộc vào một tệp sống trong hồ sơ của vòng khác. Chạy lại một cái thước không phải mở lại một lời hứa." }
+  ]
+}

@@ -53,6 +53,7 @@ executors:
     api_khong_cache_tru_agent: "bun run test -- --force --filter=!agent"
     rang3_khoa_chet: "cd apps/app && bun test test/messages-guard.spec.ts"
     tv_canh_kho_ui: "cd packages/ui && bun test test/messages-guard.spec.ts"
+    hskt_component: "cd packages/ui && bun test --preload ./test/setup-dom.ts test/khai-tieng.spec.tsx"
     hd_bang_ba_dong: "cd packages/auth && bun test test/hosted-domain.spec.ts"
     hd_cau_hinh_onehub: "cd packages/auth && bun test test/hosted-domain.spec.ts -t onehub"
     hd_khong_de_lai_hang: "cd packages/auth && bun test test/tu-choi-khong-de-lai-hang.integration.spec.ts"
@@ -228,6 +229,16 @@ executors:
     oc_moi_o_cam_chay_duoc: bun _acceptance/o-cam-chay-duoc-that/rang/moi-o-cam-chay-duoc.mjs
     oc_yaml_doc_duoc: bun _acceptance/o-cam-chay-duoc-that/rang/yaml-doc-duoc.mjs
     oc_hai_trinh_doc_bang_nhau: bun _acceptance/o-cam-chay-duoc-that/rang/hai-trinh-doc-bang-nhau.mjs
+    hskt_gioi_thieu: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs gioi-thieu"'
+    hskt_tom_tat_lien_he: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs tom-tat-lien-he"'
+    hskt_nganh: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs nganh"'
+    hskt_dong_thoi_gian: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs dong-thoi-gian"'
+    hskt_khong_khai_thua: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs khong-khai-thua"'
+    hskt_ho_so_trong: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs ho-so-trong"'
+    hskt_tieng_trang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs tieng-trang"'
+    hskt_mot_duong: bun _acceptance/ho-so-khai-dung-tieng/rang/mot-duong.mjs
+    hskt_pha_thu: bun _acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs
+    hskt_hoi_quy_nam_cho: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ho-so-khai-dung-tieng/rang/hoi-quy-nam-cho.mjs"'
     oc_khoa_khong_doi: bun _acceptance/o-cam-chay-duoc-that/rang/khoa-khong-doi.mjs
     oc_verifier_con_giai_duoc: bun _acceptance/o-cam-chay-duoc-that/rang/verifier-con-giai-duoc.mjs
     oc_lenh_van_lam_dung_viec: bun _acceptance/o-cam-chay-duoc-that/rang/lenh-van-lam-dung-viec.mjs
