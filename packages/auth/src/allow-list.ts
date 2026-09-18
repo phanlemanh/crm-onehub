@@ -96,7 +96,7 @@ export function docHang(
 	const loi: string[] = [];
 	const ra = rows.map((row) => {
 		const doc = docTrangThai(row.status);
-		if (doc.loi) loi.push(`${row.email}: ${doc.loi}`);
+		if (doc.loi) loi.push(doc.loi);
 		return { email: row.email, role: row.role, status: doc.trangThai };
 	});
 

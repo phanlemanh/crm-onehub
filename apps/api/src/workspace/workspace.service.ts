@@ -425,11 +425,21 @@ export class WorkspaceService {
 	}
 
 	private toAllowance(row: AllowanceRow): Allowance {
+		const doc = docTrangThai(row.status);
+
+		if (doc.loi) {
+			this.logger.warn({
+				message: "Invitation status unreadable",
+				allowanceId: row.id,
+				status: row.status,
+			});
+		}
+
 		return {
 			id: row.id,
 			email: row.email,
 			role: toRole(row.role ?? "member"),
-			status: toStatus(row.status),
+			status: doc.trangThai,
 			invitedByName: row.user?.name ?? null,
 			createdAt: row.createdAt.toISOString(),
 		};

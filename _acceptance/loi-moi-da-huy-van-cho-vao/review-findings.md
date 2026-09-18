@@ -1,81 +1,95 @@
+# Review Findings: loi-moi-da-huy-van-cho-vao — round 3
+
 ## Trong hợp đồng
 
-(không có finding trong hợp đồng ở round này — ba phát hiện trong hợp đồng của round 1 (thước E5 dùng regex `[a-z]+` bỏ sót giá trị có gạch/số/hoa; E5 hình dạng 2 không round-trip; E8 hình dạng 1 đo `conHieuLuc` thay vì `decideSignIn`) đã được sửa: E5 nay đọc tập của kho bằng `bun -e` + JSON qua `createRequire` neo vào `packages/auth/package.json`, và ma trận `ma-tran-trang-thai` của E8 gọi thẳng `decideSignIn`.)
+- **`toStatus` swallows the parse failure entirely, unlike the matching boundary in allow-list.ts**
+  AC: AC-4
+  file: `apps/api/src/workspace/workspace.service.ts:72`
+  severity: medium
+  `export function toStatus(value: string) { return docTrangThai(value).trangThai; }` discards `docTrangThai(...).loi`. AGENTS.md's parse-at-the-boundary rule is explicit: "Parse failure is a real error with a real message. Do not swallow it… because 'unreadable manifest' and 'no actions' are different problems." AC-4 of this feature's own contract restates it ("Giá trị không phân tích được là một lỗi có tên, không phải một mặc định im lặng"). The sibling boundary added in the same change, `packages/auth/src/allow-list.ts:93-121`, does surface `doc.loi`; this one does not, so the same unreadable row is named in one path and silent in the other. `WorkspaceService` already holds `private readonly logger = new Logger(WorkspaceService.name)` a few lines below, so the named-error path is available at zero cost. Separately, `toStatus` was changed from a module-private function to an `export` solely so `apps/api/test/workspace-thanh-vien.spec.ts` can import it — widening the service module's public surface for test access.
+
+  source: conventions
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Revoke writes the "canceled" literal as a positional array index, and the AC-5 gate cannot catch a reorder**
-  Người dùng thấy gì: Neu thu tu noi bo cua cac trang thai loi moi bi doi trong mot lan sua sau nay, nguoi tung bi thu hoi quyen co the vo tinh duoc cho dang nhap tro lai ma khong ai nhan ra ngay.
+- **The named-constant invariant (AC-7) was applied only to the `canceled` write; three sibling status literals remain raw**
+  Người dùng thấy gì: Vẫn còn vài nơi trong hệ thống dùng chuỗi trạng thái gõ tay thay vì một nguồn dùng chung; nếu ai gõ sai ở những chỗ đó sau này, lời mời có thể được xử lý sai mà không ai nhận ra ngay.
   file: `apps/api/src/workspace/workspace.service.ts`
   severity: high
   Đề xuất: known-limits
 
-- **The API output enum re-declares the invitation vocabulary by hand instead of deriving it**
-  Người dùng thấy gì: Neu sau nay he thong loi moi co them mot trang thai moi, man quan tri co the tam thoi khong hien dung trang thai do cho toi khi duoc cap nhat thu cong.
+- **New `console.error` in the sign-in read path logs a user email address on every attempt**
+  Người dùng thấy gì: Mỗi lần một tài khoản có lời mời cũ đăng nhập, hệ thống có thể ghi lại địa chỉ email của người đó vào nhật ký lỗi nội bộ, lặp lại ở mỗi lần thử — vừa gây nhiễu vừa lộ thông tin cá nhân không cần thiết.
+  file: `packages/auth/src/allow-list.ts`
+  severity: medium
+  Đề xuất: new-contract
+
+- **Existing withdrawal integration test still writes the legacy `cancelled`, so it no longer covers the real cancel value**
+  Người dùng thấy gì: Một bài kiểm tra cũ vẫn còn dùng dữ liệu giả theo cách huỷ lời mời không còn xảy ra trong thực tế, nên nếu tính năng huỷ mới bị lỗi sau này, bài kiểm đó sẽ không phát hiện ra.
+  file: `packages/auth/test/cong-vao.integration.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **`ALLOWANCE_STATUSES` hand-copies the vocabulary instead of deriving it from the validation package**
+  Người dùng thấy gì: Không ảnh hưởng ngay tới người dùng; rủi ro là nếu danh sách trạng thái lời mời thay đổi sau này mà quên cập nhật đồng bộ, màn hiển thị trạng thái có thể sai mà không ai biết.
   file: `apps/api/src/workspace/workspace.contracts.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **AC-6 names the admin screen but no eval measures the admin screen**
-  Người dùng thấy gì: Khong co phep kiem tu dong nao theo doi truc tiep man quan tri thanh vien, nen neu ai do sau nay sua lai cach loc danh sach, loi moi da huy hoac bi tu choi co the lai hien nham nhu dang cho ma khong bi phat hien.
-  file: `_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml`
-  severity: medium
-  Đề xuất: known-limits
-
-- **E4's `expected` claims a refuse-to-measure guard that the `du-lieu-cu` block does not contain**
-  Người dùng thấy gì: Tai lieu mo ta phep kiem co ghi rang co mot buoc kiem tra chan du lieu cu, nhung buoc do thuc ra khong chay o dung cho duoc ghi — nen tai lieu dang hua nhieu hon thuc te do duoc.
-  file: `_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml`
-  severity: medium
-  Đề xuất: known-limits
-
-- **The same file mixes the vocabulary constant on writes with raw string literals on reads**
-  Người dùng thấy gì: Mot phan ma van dung chuoi trang thai viet tay o cho khac thay vi dung chung mot nguon, nen neu danh sach trang thai hop le thay doi sau nay, mot so cho co the khong duoc cap nhat theo va gay lech hanh vi giua cac phan cua he thong.
-  file: `apps/api/src/workspace/workspace.service.ts`
   severity: low
   Đề xuất: known-limits
 
-- **The AC-5 gate parses better-auth's type by grepping compiled output, the technique its own eval text rejects**
-  Người dùng thấy gì: Cach do de xac nhan danh sach trang thai khop voi goi ngoai dung ky thuat co the doc nham du lieu neu goi do thay doi cau truc ben trong, khien phep kiem co the bao an toan nham hoac bao loi nham trong tuong lai.
-  file: `_acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs`
+- **`@crm/auth` re-exports only part of the status vocabulary, so apps/api reaches past the barrel**
+  Người dùng thấy gì: Không ảnh hưởng người dùng ngay; rủi ro là người phát triển sau này có thể vô tình dùng nhầm nguồn dữ liệu trạng thái, dẫn tới xử lý lời mời không nhất quán giữa các nơi.
+  file: `packages/auth/src/index.ts`
   severity: low
   Đề xuất: known-limits
 
-- **revokeAllowance/removeMember write the "canceled" status via a positional array index that nothing pins**
-  Người dùng thấy gì: Cung nguy co nhu tren: neu thu tu noi bo cua cac trang thai bi doi, nut thu hoi loi moi cua quan tri vien co the ghi sai trang thai va nguoi bi thu hoi co the dang nhap lai duoc ma khong co canh bao nao.
+- **Cột status thành song ngữ: writer đổi sang "canceled" nhưng không có migration cho dòng "cancelled" cũ**
+  Người dùng thấy gì: Người từng bị huỷ quyền vào trước khi có bản cập nhật này vẫn bị từ chối đúng như mong đợi, nhưng mỗi lần họ thử đăng nhập, hệ thống sẽ ghi một dòng cảnh báo lỗi, có thể làm nhiễu việc theo dõi lỗi thật của đội vận hành.
   file: `apps/api/src/workspace/workspace.service.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Fixture cũ trong cong-vao.integration.spec.ts vẫn ghi "cancelled", không còn đo lộ trình thu hồi thật**
+  Người dùng thấy gì: Một bài kiểm tra khác cũng dùng dữ liệu giả cho tình huống huỷ không còn xảy ra trong thực tế nữa, nên nó không còn chứng minh được tính năng huỷ mới hoạt động đúng.
+  file: `packages/auth/test/cong-vao.integration.spec.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **E10 khai một chiều đỏ mà lệnh của nó không thể chạy**
+  Người dùng thấy gì: Một bài kiểm dùng để bắt lỗi hồi quy cho quy tắc đặt tên trạng thái không thực sự bắt được lỗi đó, nên một thay đổi sai có thể lọt qua mà không bị phát hiện.
+  file: `_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): E9 gõ tay chuỗi "canceled" vào DB thay vì rút từ hằng neo-vào-gói**
+  Người dùng thấy gì: Một bài kiểm đầu-cuối cho việc từ chối lời mời đã huỷ không phân biệt được giá trị huỷ thật với một chuỗi gõ sai bất kỳ, nên nếu ai gõ sai giá trị đó, bài kiểm vẫn báo qua như bình thường.
+  file: `packages/auth/test/loi-moi-ket-thuc.integration.spec.ts`
   severity: high
   Đề xuất: known-limits
 
-- **toStatus() discards the parse error, so an unreadable status reaches the API with nothing logged**
-  Người dùng thấy gì: Khi he thong gap mot trang thai loi moi la khong doc duoc, loi do khong duoc ghi lai o phia may chu, nen doi van hanh se khong co cach nao phan biet duoc do la loi du lieu hay chi don gian la loi moi khong con hieu luc.
-  file: `apps/api/src/workspace/workspace.service.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Legacy "cancelled" rows are never migrated although the write side switched to "canceled" — neither branch the Gate 1 figure offered**
-  Người dùng thấy gì: Cac loi moi da bi thu hoi tu truoc khi co ban sua nay van mang mot nhan trang thai cu khac voi nhan moi; he thong van tu choi cho ho vao dung nhu mong doi, nhung moi lan ho thu dang nhap se tao ra mot dong nhat ky loi gay nhieu, va chua ai quyet dinh co can don du lieu cu do hay khong.
-  file: `apps/api/src/workspace/workspace.service.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **E2, E4 and E7 expected-text claims assertions that the tests they run do not contain**
-  Người dùng thấy gì: Tai lieu mo ta mot so phep kiem hua co buoc kiem tra chan du lieu cu, nhung it nhat mot trong so cac phep kiem do khong co buoc kiem tra nhu da ghi — tai lieu dang mo ta nhieu hon thuc te do duoc.
-  file: `_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 2 (fixture đúng khuôn bên ghi, không round-trip): kỳ vọng dùng ĐÚNG biểu thức mà mã sản phẩm dùng để ghi — assert không thể đỏ**
-  Người dùng thấy gì: Mot trong cac phep kiem tu dong so sanh gia tri da luu voi chinh cong thuc ma ma ghi ra, nen neu cong thuc do ghi sai gia tri trong mot lan sua sau nay, phep kiem se khong phat hien ra va nguoi bi thu hoi co the lai dang nhap duoc ma khong co bao dong nao.
-  file: `apps/api/test/workspace-thanh-vien.spec.ts`
-  severity: high
-  Đề xuất: known-limits
-
-- **Hình dạng 2 (fixture lấy theo vị trí, không neo vào chuỗi): ô «canceled» và ô «rejected» của ma trận không được ghim vào trạng thái mà nhãn của chúng khai**
-  Người dùng thấy gì: Bang doi chieu trang thai dung trong phep kiem khong thuc su gan co dinh vao chuoi trang thai ma no noi den, nen neu thu tu trang thai bi doi trong mot lan sua sau nay, phep kiem co the dang do nham trang thai ma khong ai biet.
+- **Hình dạng 1 (đo bước trung gian thay vì đầu ra): E3 khẳng định bằng hàm trợ giúp conHieuLuc, không bằng decideSignIn mà AC-3 hứa**
+  Người dùng thấy gì: Một bài kiểm cho quy tắc quyết định cho-vào-hay-không lại không gọi đúng hàm quyết định thật, nên nếu quy tắc đó bị đổi sai ở đúng chỗ quan trọng nhất, bài kiểm sẽ không phát hiện ra.
   file: `packages/auth/test/loi-moi-ket-thuc.spec.ts`
   severity: high
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 4/12 lỗi rơi vào file không bộ đo nào phủ (apps/api/src/workspace/workspace.contracts.ts, _acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+- **Hình dạng 1 (đo bước trung gian thay vì đầu ra): E7 đo hàm thuần toStatus vừa được export riêng cho bài đo, không đo đầu ra API/màn quản trị**
+  Người dùng thấy gì: Một bài kiểm cho việc hiển thị đúng trạng thái ở màn quản trị lại không đo đúng dữ liệu cuối cùng hiển thị ra màn hình, nên nếu màn quản trị hiển thị sai trạng thái, bài kiểm vẫn báo qua.
+  file: `apps/api/test/workspace-thanh-vien.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): E10 khẳng định «nằm trong từ vựng của GÓI» bằng mảng viết tay của chính kho, cùng một file với bốn hằng**
+  Người dùng thấy gì: Một bài kiểm dùng để đối chiếu danh sách trạng thái với gói bên ngoài thực chất chỉ so sánh danh sách đó với chính nó, nên không thực sự chứng minh được điều nó tuyên bố.
+  file: `packages/auth/test/loi-moi-ket-thuc.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (assertion âm-tính-một-mình): E2 chỉ có một assert từ-chối, thiếu luôn cả assert canh mà evals.yaml khai**
+  Người dùng thấy gì: Một bài kiểm cho việc từ chối lời mời bị từ chối chỉ kiểm tra một chiều, thiếu phép so sánh đảm bảo giá trị mới khác với giá trị cũ đã lỗi thời — nên một lỗi trộn lẫn hai giá trị đó có thể lọt qua.
+  file: `packages/auth/test/loi-moi-ket-thuc.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+⚠ Cụm ngoài vùng phủ: 5/14 lỗi rơi vào file không bộ đo nào phủ (packages/auth/test/cong-vao.integration.spec.ts, apps/api/src/workspace/workspace.contracts.ts, packages/auth/src/index.ts, _acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.

@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-18T00:33:02Z",
-  "generated_sha": "70eb1b7d9e986156524f2b4ac9cd093d12d96df0",
+  "generated_at": "2026-09-18T01:26:16Z",
+  "generated_sha": "8c425a1071ede6bc76f1440fe726a4a8543f0434",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "loi-moi-da-huy-van-cho-vao",
-  "round": 2,
+  "round": 3,
   "riskTier": "T3",
   "evals": [
     {
@@ -196,6 +196,27 @@
         "packages/auth/test/loi-moi-ket-thuc.integration.spec.ts"
       ],
       "ref": "config:executors.test.lm_khong_sinh_thanh_vien"
+    },
+    {
+      "id": "E10",
+      "criterion": "AC-7",
+      "cmd": "bun run test -- \"cd packages/auth && bun test test/loi-moi-ket-thuc.spec.ts -t hang-co-ten\"",
+      "expected": "\"exit 0; bốn hằng có tên TRANG_THAI_CHO, TRANG_THAI_NHAN, TRANG_THAI_TU_CHOI, TRANG_THAI_HUY mang ĐÚNG chuỗi thật ghim trong bài, và cả bốn đều nằm trong từ vựng của gói. Bốn ô viết trước, số assert là hằng — không suy từ runtime. Chiều đỏ hai lần: đổi giá trị một hằng thì đỏ với thông điệp ghim tên hằng, chuỗi mong và chuỗi nhận; và trả chỗ ghi ở workspace.service.ts về chỉ số mảng RỒI đảo thứ tự mảng thì khối cho-phep-lai của apps/api đỏ — đó là kịch bản hội đồng vòng chấm 2 nêu, trước bản sửa không lớp canh nào thấy vì bài đo khẳng định bằng chính biểu thức mã dùng để ghi\"",
+      "executor": "test",
+      "expectedExit": 0,
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "paths": [
+        "packages/validation/src/invitation-status.ts",
+        "apps/api/src/workspace/workspace.service.ts",
+        "packages/auth/test/loi-moi-ket-thuc.spec.ts"
+      ],
+      "ref": "config:executors.test.lm_hang_co_ten"
     }
   ],
   "suiteCommands": [
@@ -210,13 +231,14 @@
   "templatePath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.15.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
   "contractPath": "/private/tmp/claude-501/-Users-manh-macmini-dev-crm/54d93dc9-c67f-48a4-80f0-d8db039b5f4d/scratchpad/wt-loimoi/_acceptance/loi-moi-da-huy-van-cho-vao/contract.md",
-  "invokedAt": "2026-09-18T00:33:02Z",
-  "invokedSha": "70eb1b7d9e986156524f2b4ac9cd093d12d96df0",
+  "invokedAt": "2026-09-18T01:26:16Z",
+  "invokedSha": "8c425a1071ede6bc76f1440fe726a4a8543f0434",
   "vungVat": [
     "_acceptance/config.yaml",
     "_acceptance/loi-moi-da-huy-van-cho-vao/card-plain.json",
     "_acceptance/loi-moi-da-huy-van-cho-vao/card.html",
     "_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/evidence-page.html",
     "_acceptance/loi-moi-da-huy-van-cho-vao/figures/tu-vung-va-du-lieu-cu.html",
     "_acceptance/loi-moi-da-huy-van-cho-vao/figures/tu-vung-va-du-lieu-cu.png",
     "_acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs",
@@ -273,6 +295,7 @@
     "_acceptance/loi-moi-da-huy-van-cho-vao/contract.md",
     "_acceptance/loi-moi-da-huy-van-cho-vao/decisions.jsonl",
     "_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/evidence-page.html",
     "_acceptance/loi-moi-da-huy-van-cho-vao/evidence-report.md",
     "_acceptance/loi-moi-da-huy-van-cho-vao/figures/index.md",
     "_acceptance/loi-moi-da-huy-van-cho-vao/figures/tu-vung-va-du-lieu-cu.html",
@@ -302,6 +325,7 @@
     "_acceptance/loi-moi-da-huy-van-cho-vao/card-plain.json",
     "_acceptance/loi-moi-da-huy-van-cho-vao/card.html",
     "_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/evidence-page.html",
     "_acceptance/loi-moi-da-huy-van-cho-vao/figures/tu-vung-va-du-lieu-cu.html",
     "_acceptance/loi-moi-da-huy-van-cho-vao/figures/tu-vung-va-du-lieu-cu.png",
     "_acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs",
@@ -313,7 +337,8 @@
     "packages/auth/src/invitation-status.ts",
     "packages/auth/test/ai-duoc-vao.spec.ts",
     "packages/auth/test/loi-moi-ket-thuc.integration.spec.ts",
-    "packages/auth/test/loi-moi-ket-thuc.spec.ts"
+    "packages/auth/test/loi-moi-ket-thuc.spec.ts",
+    "packages/validation/src/invitation-status.ts"
   ],
   "coverageFiles": [
     "_acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs",
@@ -322,105 +347,42 @@
     "packages/auth/src/allow-list.ts",
     "packages/auth/src/invitation-status.ts",
     "packages/auth/test/loi-moi-ket-thuc.integration.spec.ts",
-    "packages/auth/test/loi-moi-ket-thuc.spec.ts"
+    "packages/auth/test/loi-moi-ket-thuc.spec.ts",
+    "packages/validation/src/invitation-status.ts"
   ],
   "coEvalPaths": true,
-  "evalsHash": "ffe7af7d8a2de1f7b4e3c2838990f6466910f93d35cf69891727c60db77fb4f0",
+  "evalsHash": "3c5e59a5bc7fe09cc8c530daa33e3e110045c97ed1f0819582ef44070765fdc9",
   "runBaseline": true,
-  "carriedEvals": [
-    {
-      "id": "E7",
-      "runId": "minted-loi-moi-da-huy-van-cho-vao-E7-r1",
-      "fromRound": 1,
-      "verifiedAt": "2026-09-18T00:01:32Z",
-      "cmd": "bun run test -- \"cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t trang-thai-that\""
-    },
-    {
-      "id": "E9",
-      "runId": "mu675patibq9",
-      "fromRound": 1,
-      "verifiedAt": "2026-09-18T00:01:32Z",
-      "cmd": "bun run test -- \"cd packages/auth && bun test test/loi-moi-ket-thuc.integration.spec.ts -t khong-sinh-thanh-vien\""
-    }
-  ],
   "carriedFindings": [
     {
-      "file": "apps/api/src/workspace/workspace.service.ts",
-      "title": "Trạng thái huỷ được ghi bằng chỉ số mảng TRANG_THAI_LOI_MOI[3] — thứ tự không ai canh",
-      "severity": "high",
-      "plain": "Nếu sau này có người sắp xếp lại danh sách trạng thái nội bộ cho gọn, nút \"Thu hồi\" và luồng xoá thành viên có thể vô tình ghi sai trạng thái, khiến người vừa bị gỡ quyền lại được cấp quyền trở lại.",
-      "proposal": "known-limits",
-      "fromRound": 1
-    },
-    {
-      "file": "apps/api/src/workspace/workspace.service.ts",
-      "title": "toStatus nuốt lỗi phân tích: .loi bị bỏ, API im lặng trả \"unknown\"",
-      "severity": "medium",
-      "plain": "Khi một lời mời có trạng thái không đọc được, quản trị viên chỉ thấy chữ \"không rõ\" trên màn hình mà không có manh mối gì trong nhật ký hệ thống để tìm hiểu vì sao.",
-      "proposal": "known-limits",
-      "fromRound": 1
-    },
-    {
-      "file": "apps/api/src/workspace/workspace.service.ts",
-      "title": "CON_HIEU_LUC không được dùng ở chính hai truy vấn quyết định \"còn hiệu lực\"",
-      "severity": "medium",
-      "plain": "Nếu sau này danh sách trạng thái hợp lệ được mở rộng, một số màn hình khác (chặn trùng lời mời, gỡ thành viên) có thể không cập nhật theo, gây lời mời trùng hoặc quên thu hồi khi gỡ người.",
-      "proposal": "known-limits",
-      "fromRound": 1
-    },
-    {
-      "file": "packages/validation/src/invitation-status.ts",
-      "title": "Không có migration cho các hàng \"cancelled\" cũ — chúng thành unknown và spam console.error",
-      "severity": "low",
-      "plain": "Những lời mời từng bị huỷ theo cách ghi cũ sẽ luôn hiện là \"không rõ\" và tạo một dòng lỗi trong nhật ký hệ thống mỗi lần người đó thử đăng nhập, dù không có gì thực sự hỏng.",
-      "proposal": "known-limits",
-      "fromRound": 1
-    },
-    {
       "file": "apps/api/src/workspace/workspace.contracts.ts",
-      "title": "ALLOWANCE_STATUSES chép tay lại từ vựng vừa được tập trung",
-      "severity": "low",
-      "plain": "Danh sách trạng thái lời mời trả ra ngoài API được chép tay ở một chỗ riêng; nếu quên cập nhật đồng bộ, ứng dụng khách có thể thiếu một trạng thái mới mà không có cảnh báo.",
-      "proposal": "known-limits",
-      "fromRound": 1
-    },
-    {
-      "file": "packages/auth/src/allow-list.ts",
-      "title": "console.error in kèm địa chỉ email của người dùng",
-      "severity": "low",
-      "plain": "Địa chỉ email của người dùng đang bị ghi thẳng vào nhật ký hệ thống mỗi khi có lời mời với trạng thái lỗi, làm lộ thông tin cá nhân trong log không cần thiết.",
-      "proposal": "new-contract",
-      "fromRound": 1
-    },
-    {
-      "file": "apps/api/src/workspace/workspace.service.ts",
-      "title": "revokeAllowance ghi TRANG_THAI_LOI_MOI[3] theo vị trí, và mọi test kiểm giá trị ghi đều so với chính biểu thức đó (tautology)",
+      "title": "The API output enum re-declares the invitation vocabulary by hand instead of deriving it",
       "severity": "medium",
-      "plain": "Nếu sau này có người sắp xếp lại danh sách trạng thái nội bộ, nút \"Thu hồi truy cập\" có thể vô tình cấp lại quyền cho đúng người vừa bị gỡ thay vì thu hồi, và các bài kiểm hiện tại sẽ không phát hiện ra vì chúng tự so với chính giá trị đã ghi.",
+      "plain": "Neu sau nay he thong loi moi co them mot trang thai moi, man quan tri co the tam thoi khong hien dung trang thai do cho toi khi duoc cap nhat thu cong.",
       "proposal": "known-limits",
-      "fromRound": 1
+      "fromRound": 2
     },
     {
-      "file": "packages/auth/src/allow-list.ts",
-      "title": "Dòng cũ mang \"cancelled\" bị coi là không đọc được, nên mỗi lượt đăng nhập của người từng bị thu hồi in một dòng console.error",
-      "severity": "medium",
-      "plain": "Những lời mời từng bị huỷ theo cách ghi cũ sẽ khiến hệ thống ghi một dòng lỗi vào nhật ký mỗi lần người đó đăng nhập, mãi mãi, dù việc từ chối cho vào vẫn đúng.",
-      "proposal": "known-limits",
-      "fromRound": 1
-    },
-    {
-      "file": "packages/auth/test/loi-moi-ket-thuc.integration.spec.ts",
-      "title": "E9 có thể xanh rỗng vì ensureWorkspaceMembership nuốt mọi exception",
+      "file": "_acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs",
+      "title": "The AC-5 gate parses better-auth's type by grepping compiled output, the technique its own eval text rejects",
       "severity": "low",
-      "plain": "Một bài kiểm tra tự động có thể báo \"đạt\" ngay cả khi có lỗi hạ tầng khiến việc gỡ quyền không thực sự chạy, làm giảm độ tin cậy của bằng chứng đã ký duyệt.",
+      "plain": "Cach do de xac nhan danh sach trang thai khop voi goi ngoai dung ky thuat co the doc nham du lieu neu goi do thay doi cau truc ben trong, khien phep kiem co the bao an toan nham hoac bao loi nham trong tuong lai.",
       "proposal": "known-limits",
-      "fromRound": 1
+      "fromRound": 2
     }
   ],
   "deltaFiles": [
+    "_acceptance/config.yaml",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/card-plain.json",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/card.html",
     "_acceptance/loi-moi-da-huy-van-cho-vao/evals.yaml",
-    "_acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs",
+    "_acceptance/loi-moi-da-huy-van-cho-vao/evidence-page.html",
     "_acceptance/loi-moi-da-huy-van-cho-vao/s4-args.json",
-    "packages/auth/test/loi-moi-ket-thuc.spec.ts"
+    "apps/api/src/workspace/workspace.service.ts",
+    "apps/api/test/workspace-thanh-vien.spec.ts",
+    "packages/auth/src/invitation-status.ts",
+    "packages/auth/test/loi-moi-ket-thuc.integration.spec.ts",
+    "packages/auth/test/loi-moi-ket-thuc.spec.ts",
+    "packages/validation/src/invitation-status.ts"
   ]
 }
