@@ -1,6 +1,7 @@
 "use client";
 
 import { DealStage } from "@crm/db/enums";
+import { ForeignText } from "@crm/ui/components/foreign-text";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { cn } from "@crm/ui/lib/utils";
 import { useMutation } from "@tanstack/react-query";
@@ -62,7 +63,7 @@ export function StageStepper({
 								{current && option === DealStage.CLOSED_WON ? (
 									<DealStageIndicator stage={stage} className="text-xs" />
 								) : (
-									<span lang="en">{dealStageLabel(option)}</span>
+									<ForeignText lang="en">{dealStageLabel(option)}</ForeignText>
 								)}
 							</span>
 						</button>
