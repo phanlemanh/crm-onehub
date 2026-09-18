@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 954819db6cbec8d8f9027261731a3c7eebee5a59
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-18 — ký Cổng 2 trên verdict PASS của vòng chấm 6 (10/10 eval máy, 4/4 lệnh chứng, 0 lỗi trong hợp đồng). Mười bốn mục ngoài hợp đồng đều định đoạt «ghi Known limits»; phạm vi đã cắt giữ nguyên; phê toàn bộ quyết định ghi sau Cổng 1. Ký trên hiểu biết rằng hồ sơ đi qua sáu vòng chấm với ba lượt REJECT, cả ba đều vì phép đo trỏ sai chỗ chứ không vì mã sản phẩm, và rằng bốn mục hạng nặng còn lại — hai truy vấn gõ tay tập còn-hiệu-lực, một cữ liệu đã nghỉ hưu trong eval đã ký của hồ sơ trước, và hai eval còn khẳng định âm tính đơn độc — là nợ đã biết chứ không phải chỗ chưa ai thấy.
 ---
 
 # Evidence Report: loi-moi-da-huy-van-cho-vao

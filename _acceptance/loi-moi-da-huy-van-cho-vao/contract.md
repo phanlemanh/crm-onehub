@@ -5,7 +5,7 @@ slug: loi-moi-da-huy-van-cho-vao
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-18
 ---
@@ -70,4 +70,21 @@ này. Cần người xác nhận ở Cổng 1 xem có phải đi kèm một lư�
 ## Known limits
 
 - **Nâng phạm vi ở Cổng 2 ngày 18/09.** Bốn mục ngoài hợp đồng hạng nặng cùng một gốc — mã ghi trạng thái huỷ bằng chỉ số mảng — được chủ kho quyết «nâng phạm vi sửa ngay» thay vì ghi vào đây. AC-7 và phép đo E10 sinh ra từ quyết định đó.
+**Mười bốn mục ngoài hợp đồng, chủ kho quyết ghi giới hạn ở Cổng 2 ngày 18/09:**
+
+- **Ngoài-1 (high).** Khi một thành viên bị gỡ, lời mời cũ của họ có thể vẫn còn hiệu lực, nên người vừa bị gỡ có nguy cơ đăng nhập lại được.
+- **Ngoài-2 (high).** Một bài kiểm tra tự động vẫn dùng dữ liệu kiểu cũ, nên phép đo liên quan không còn phản ánh đúng cách hệ thống hoạt động hiện tại dù kết quả cuối vẫn hiện đạt.
+- **Ngoài-3 (medium).** Tài liệu mô tả phép đo ghi nhầm một số nội dung không khớp với bài kiểm tra thật, có thể khiến người đọc hiểu sai mức đã được kiểm chứng.
+- **Ngoài-4 (medium).** Danh sách trạng thái hiển thị cho màn thành viên được chép tay ở một nơi riêng, nên nếu sau này có thêm một trạng thái mới, cả màn danh sách thành viên có thể lỗi không tải được.
+- **Ngoài-5 (medium).** Một bước xử lý khi lời mời được chấp nhận vẫn viết trạng thái bằng chữ tay, nên nếu sau này từ vựng trạng thái đổi, lời mời có thể bị kẹt ở trạng thái chờ thay vì chuyển thành thành viên.
+- **Ngoài-6 (low).** Một đoạn kiểm tra kỹ thuật nội bộ dùng cách viết riêng biệt so với phần còn lại của mã nguồn; điều này không ảnh hưởng tới người dùng cuối.
+- **Ngoài-7 (high).** Trang bằng chứng liên kết từ thẻ quyết định vẫn hiển thị kết quả cũ là đạt toàn phần, trong khi báo cáo mới nhất thực ra là từ chối, nên người đọc có thể thấy thông tin đã lỗi thời.
+- **Ngoài-8 (high).** Thẻ tóm tắt gửi cho người ký ghi rằng mọi phép kiểm đều đạt và không có lỗi, trong khi hồ sơ thực tế đang bị từ chối, có thể khiến người ký nhầm mà duyệt một hồ sơ chưa đạt.
+- **Ngoài-9 (medium).** Danh sách trạng thái hiển thị cho màn thành viên được chép tay riêng, nên nếu sau này better-auth thêm một trạng thái mới, cả màn danh sách thành viên có thể lỗi không tải được thay vì chỉ hiện sai một dòng.
+- **Ngoài-10 (medium).** Dữ liệu trạng thái cũ còn sót lại sẽ khiến nhật ký hệ thống ghi lỗi lặp lại mỗi lần người liên quan đăng nhập hoặc admin mở màn thành viên, dù quyết định cho vào hay từ chối vẫn đúng.
+- **Ngoài-11 (low).** Một bài kiểm tra tự động vẫn dùng giá trị trạng thái cũ mà hệ thống không còn tạo ra, nên phép đo liên quan không còn phản ánh đúng cách ghi dữ liệu hiện tại dù kết quả vẫn hiện đạt.
+- **Ngoài-12 (low).** Khi gỡ một thành viên hoặc mời lại một địa chỉ đã có lời mời, hệ thống dùng một danh sách trạng thái viết tay riêng, nên người vừa bị gỡ có nguy cơ vẫn đăng nhập lại được.
+- **Ngoài-13 (high).** Bài kiểm tự động cho trường hợp lời mời bị từ chối không thực sự đối chiếu với chuỗi thật do gói bên ngoài ghi ra, nên một lỗi đúng chỗ này có thể trôi qua mà không ai phát hiện, dù hệ thống hiện vẫn hoạt động đúng.
+- **Ngoài-14 (high).** Bài kiểm tự động cho dữ liệu cũ đã huỷ không thực sự đối chiếu với chuỗi từng được ghi trước đây, nên một lỗi đúng chỗ này có thể trôi qua mà không ai phát hiện, dù hệ thống hiện vẫn hoạt động đúng.
+
 - Hợp đồng này chặn **đường vào**. Người đã có dòng thành viên từ trước không bị ảnh hưởng — đó là chủ ý, và là ranh giới với hồ sơ gỡ-thành-viên.
