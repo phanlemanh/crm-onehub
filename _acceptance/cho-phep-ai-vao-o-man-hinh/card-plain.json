@@ -1,29 +1,137 @@
 {
-  "feature_plain": "Người quản cho một đồng nghiệp vào CRM ngay trên màn Members, thay vì sửa cấu hình máy chủ rồi chờ dựng lại.",
-
-  "analyst_plain": "Ba vòng đo: vòng đầu bị chặn vì hạ tầng, vòng hai bị trả vì phép đo của chính tôi đo rỗng, vòng ba sạch — không thước nào đỏ và không còn lỗi nào nằm trong phạm vi đã duyệt.",
-
-  "decisions": [
-    {
-      "id": "E14",
-      "q": "Hai câu xác nhận có nói rõ gỡ khác rút không?",
-      "why": "Hộp thoại gỡ nói «Họ mất quyền ngay bây giờ. Đăng nhập lại cũng không vào được nữa.» Hộp thoại rút nói «Việc này chỉ chặn người chưa đăng nhập lần nào. Ai đã vào rồi thì vẫn ở trong.» Máy không chấm được chuyện người đọc có phân biệt được hay không."
-    }
-  ],
-
-  "decisions_plain": [
-    { "id": "d-20260916T021543Z-1", "p": "Chọn dùng lại bảng lời mời có sẵn thay vì dựng bảng mới — đổi lại phải đặt một mốc quy ước cho hạn dùng mà vòng này chưa có, bù lại vòng sau thêm link và hạn thật mà không phải dời dữ liệu." },
-    { "id": "d-20260916T021543Z-2", "p": "Chọn tách màn Members thành hai khối, gỡ và rút là hai việc khác nhau — đổi lại phải sửa chỗ cấp tư cách thành viên, nếu không thì nút gỡ nói dối." },
-    { "id": "d-20260916T021543Z-3", "p": "Chọn để màn đăng nhập Google giữ nguyên cách cũ — đổi lại sửa ô domain nhà sẽ không đổi gì ở màn chọn tài khoản. Vòng đo bắt được hệ quả xa hơn: xem mục ngoài hợp đồng về địa chỉ bên ngoài." },
-    { "id": "d-20260916T021543Z-4", "p": "KHÔNG làm thư mời, link bấm và hạn dùng ở vòng này — đổi lại người quản vẫn phải tự báo tin cho người được mời." },
-    { "id": "d-20260916T021543Z-5", "p": "KHÔNG xử lý chuyện địa chỉ Gmail có dấu chấm là cùng một hộp thư — đổi lại sẽ có ngày một người bị chặn oan vì gõ khác dạng." },
-    { "id": "d-20260916T021648Z-6", "p": "KHÔNG chạy được phiên thẩm mỹ trên bản bấm được vì kho chưa có đường dựng bản mẫu — đã mở một việc riêng để wire nó." },
-    { "id": "d-20260916T025314Z-8", "p": "Đổi thứ tự thi công so với kế hoạch: hai bài đo phải đi qua thủ tục thật nên dời xuống sau khi có thủ tục; và giữ nguyên cách chọn câu từ chối để không làm bập bênh bằng chứng đã ký của vòng trước." },
-    { "id": "d-20260916T025936Z-9", "p": "Dừng giữa chừng để trình hai việc: một thước chưa có răng, và sáu bài kiểm chuyển đỏ — sau đó hoá ra bốn trong sáu là do đo trên dữ liệu bẩn." },
-    { "id": "d-20260916T030559Z-10", "p": "Cho hàm cấp tư cách thành viên nhận đường đọc qua tham số, vì không mock được lớp dữ liệu nên thước cho lời hứa «hỏng thì không khoá cả nhà» đã xanh giả hai lần." },
-    { "id": "d-20260916T030559Z-11", "p": "Ghi nhận một ranh giới hẹp chưa được hợp đồng phủ: nhánh di dời vẫn gán người đầu tiên làm chủ bất kể vai đã định." },
-    { "id": "d-20260916T032733Z-12", "p": "Ban đầu không dựng được khung hình vì bản chạy thử bị cổng khai báo đẩy đi — về sau tìm ra nguyên nhân thật và đã chụp được cả ba khung hình." },
-    { "id": "d-20260916T035404Z-13", "p": "Bốn thước đỏ ở vòng đo đầu là do mười bảy lệnh chạy song song trên cùng một cơ sở dữ liệu — đã cho mỗi lượt một cơ sở dữ liệu riêng." },
-    { "id": "d-20260916T043650Z-14", "p": "Vòng đo thứ hai trả về năm lỗi: một lỗi sản phẩm thật (gỡ người mà phiên vẫn sống) và bốn phép đo rỗng của tôi. Đã sửa hết và cấy lỗi ngược lại để chắc từng thước có răng." }
-  ]
+ "feature_plain": "Người quản cấp và thu quyền vào CRM ngay trên màn Members, thay vì sửa một dòng cấu hình rồi chờ dựng lại.",
+ "scope_plain": "Chưa gửi email mời, chưa có link tự bấm, chưa có hạn dùng, và chưa xem được nhật ký ai cấp ai gỡ.",
+ "decisions": [
+  {
+   "id": "E14",
+   "q": "Hai câu xác nhận có nói rõ gỡ khác rút, không bấm nhầm?",
+   "why": "Ba người soi độc lập đều thấy hai câu nói đúng hai việc khác nhau; anh là người chốt."
+  }
+ ],
+ "decisions_plain": [
+  {
+   "id": "d-20260916T021543Z-1",
+   "p": "Danh sách ai được vào dùng chung chỗ với lời mời đã có, không dựng bảng mới — đổi lại phải sống chung với hình dạng dữ liệu cũ."
+  },
+  {
+   "id": "d-20260916T021543Z-2",
+   "p": "Màn Members chia hai khối rõ: gỡ người đã vào là cắt quyền thật, rút lời cho phép chỉ chặn người chưa có tài khoản — đổi lại người quản phải hiểu hai nút làm hai việc."
+  },
+  {
+   "id": "d-20260916T021543Z-3",
+   "p": "Ô domain nhà không nuôi phần đăng nhập Google; chỗ ấy vẫn đọc cấu hình ngoài sản phẩm — đổi lại còn một chỗ phải sửa ngoài màn hình."
+  },
+  {
+   "id": "d-20260916T021543Z-4",
+   "p": "KHÔNG làm email mời, link tự bấm và hạn dùng cho lời cho phép trong vòng này — đổi lại người quản phải tự nhắn cho người mình vừa cấp."
+  },
+  {
+   "id": "d-20260916T021543Z-5",
+   "p": "KHÔNG xử lý chuyện địa chỉ Gmail có dấu chấm là cùng một hộp thư — đổi lại nhập sai dạng thì lúc đăng nhập không khớp."
+  },
+  {
+   "id": "d-20260916T021648Z-6",
+   "p": "KHÔNG chạy phiên thiết kế trên bản bấm được, vì kho chưa có đường dựng bản mẫu — đổi lại Cổng Phạm vi duyệt giao diện bằng chữ."
+  },
+  {
+   "id": "d-20260916T025314Z-8",
+   "p": "Đảo thứ tự hai việc so với kế hoạch để làm phần chắc chắn trước — đổi lại kế hoạch và việc đã làm lệch nhau một chỗ."
+  },
+  {
+   "id": "d-20260916T025936Z-9",
+   "p": "Dừng giữa chừng để báo người hai việc thay vì tự quyết — đổi lại mất một lượt chờ."
+  },
+  {
+   "id": "d-20260916T030559Z-10",
+   "p": "Đường đọc danh sách cho phép nhận vào từ bên ngoài, để bài kiểm tiêm được một lỗi giả — đổi lại có thêm một tham số chỉ phép đo dùng tới."
+  },
+  {
+   "id": "d-20260916T030559Z-11",
+   "p": "Bản cài mới vẫn gán người đăng nhập đầu tiên làm chủ, bỏ qua vai đã định trong lời cho phép — để lại xem sau."
+  },
+  {
+   "id": "d-20260916T032733Z-12",
+   "p": "Chưa dựng được khung hình cho hai bài nhìn trong vòng ấy vì bản chạy thử khai thiếu cổng — đổi lại hai bài ấy phải chờ."
+  },
+  {
+   "id": "d-20260916T035404Z-13",
+   "p": "Bốn bài đỏ ở lượt chấm đầu là đỏ do chạy song song trên cùng một cơ sở dữ liệu, không phải hỏng thật — từ đó mọi lượt chạy tuần tự."
+  },
+  {
+   "id": "d-20260916T043650Z-14",
+   "p": "Lượt chấm hai sửa năm lỗi trong hợp đồng và bốn phép đo, không chạm ba mục ngoài hợp đồng — đổi lại ba mục ấy để người quyết."
+  },
+  {
+   "id": "d-20260916T050553Z-15",
+   "p": "Mục ngoài hợp đồng số 1: tách thành một việc riêng có tiêu chí của nó — đổi lại bản này phát hành mà chưa có nó."
+  },
+  {
+   "id": "d-20260916T050553Z-16",
+   "p": "Mục ngoài hợp đồng số 2: tách thành một việc riêng có tiêu chí của nó — đổi lại bản này phát hành mà chưa có nó."
+  },
+  {
+   "id": "d-20260916T050553Z-17",
+   "p": "Mục ngoài hợp đồng số 9: tách thành một việc riêng có tiêu chí của nó — đổi lại bản này phát hành mà chưa có nó."
+  },
+  {
+   "id": "d-20260916T050553Z-18",
+   "p": "Mục ngoài hợp đồng số 10: tách thành một việc riêng có tiêu chí của nó — đổi lại bản này phát hành mà chưa có nó."
+  },
+  {
+   "id": "d-20260916T050553Z-19",
+   "p": "Mục ngoài hợp đồng số 12: tách thành một việc riêng có tiêu chí của nó — đổi lại bản này phát hành mà chưa có nó."
+  },
+  {
+   "id": "d-20260916T050553Z-20",
+   "p": "Mục ngoài hợp đồng số 14: tách thành một việc riêng có tiêu chí của nó — đổi lại bản này phát hành mà chưa có nó."
+  },
+  {
+   "id": "d-20260916T050553Z-21",
+   "p": "Mục ngoài hợp đồng số 15: tách thành một việc riêng có tiêu chí của nó — đổi lại bản này phát hành mà chưa có nó."
+  },
+  {
+   "id": "d-20260916T050553Z-22",
+   "p": "Mục ngoài hợp đồng số 16: tách thành một việc riêng có tiêu chí của nó — đổi lại bản này phát hành mà chưa có nó."
+  },
+  {
+   "id": "d-20260916T050553Z-23",
+   "p": "Mục ngoài hợp đồng số 19: tách thành một việc riêng có tiêu chí của nó — đổi lại bản này phát hành mà chưa có nó."
+  },
+  {
+   "id": "d-20260916T050553Z-24",
+   "p": "Mục ngoài hợp đồng số 7: chấp nhận không sửa, vì đó là chuyện của bộ công cụ đo chứ không phải của sản phẩm."
+  },
+  {
+   "id": "d-20260916T050553Z-25",
+   "p": "Chín mục ngoài hợp đồng ghi vào giới hạn đã biết và phát hành bản này — đổi lại chúng vẫn còn đó khi người dùng nhận bản mới."
+  },
+  {
+   "id": "d-20260916T050553Z-26",
+   "p": "Giữ nguyên phạm vi đã cắt, và phê toàn bộ quyết định ghi sau Cổng Phạm vi — đổi lại không mở lại tranh luận cũ."
+  },
+  {
+   "id": "d-20260917T024711Z-6328",
+   "p": "Gỡ đường dẫn riêng của một máy khỏi ba lệnh đo, để chúng chạy được trên máy khác — đổi lại lệnh nay chọn bản bộ công cụ mới nhất đang cài."
+  },
+  {
+   "id": "d-20260918T132000Z-4702",
+   "p": "Bài đo «rút không đụng người đã vào» gieo một chuỗi trạng thái mà sản phẩm thôi ghi, nên nó thôi đo nhánh rút thật — mở lại hồ sơ đã ký để sửa."
+  },
+  {
+   "id": "d-20260918T140926Z-29",
+   "p": "Trần số lần được sửa phép đo đếm cả kho nên chặn oan; khai giới hạn có tên rồi dời mốc đếm — đổi lại trần của hồ sơ này về lại không."
+  },
+  {
+   "id": "d-20260918T143950Z-30",
+   "p": "Bài đo «rút không đụng người đã vào» thôi đọc giá trị trả về, chuyển sang đi đúng đường tạo phiên thật — đổi lại nó phụ thuộc hình dạng của thư viện đăng nhập."
+  },
+  {
+   "id": "d-20260918T143950Z-31",
+   "p": "Sửa bản khai của bài nhìn cho khớp điều hợp đồng hứa, không sửa sản phẩm: ẩn hẳn khối cũng là «không nút nào thao tác được» — đổi lại bài ấy thôi canh việc ẩn khối khỏi mắt người vai thường."
+  },
+  {
+   "id": "d-20260918T155043Z-32",
+   "p": "Đổi khuôn thay vì vá tiếp: dọn bài đo «rút không đụng người đã vào» sang chỗ gọi được thủ tục rút thật — đổi lại nó không còn nằm cùng tệp với các bài cổng vào khác."
+  }
+ ]
 }
