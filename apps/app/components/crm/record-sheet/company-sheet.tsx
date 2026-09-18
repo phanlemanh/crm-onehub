@@ -12,6 +12,7 @@ import {
 	EntityLogo,
 	type EntityLogoTone,
 } from "@crm/ui/components/entity-logo";
+import { ForeignText } from "@crm/ui/components/foreign-text";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
@@ -245,7 +246,7 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 						lead={
 							<DomainLink domain={company.domain} website={company.website} />
 						}
-						parts={[location, company.industry]}
+						parts={[{ text: location }, { text: company.industry, lang: "en" }]}
 					/>
 				) : undefined
 			}
@@ -346,7 +347,9 @@ function CompanyOverview({ company }: { company: Company }) {
 				<DetailSheetMain>
 					{company.description ? (
 						<DetailSheetSection title={m.section.about}>
-							<DetailSheetProse>{company.description}</DetailSheetProse>
+							<DetailSheetProse>
+								<ForeignText lang="en">{company.description}</ForeignText>
+							</DetailSheetProse>
 						</DetailSheetSection>
 					) : null}
 

@@ -3,12 +3,14 @@
 import Add from "@carbon/icons-react/es/Add";
 import { Button } from "@crm/ui/components/button";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
+import { ForeignText } from "@crm/ui/components/foreign-text";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { SimpleTableRow } from "@crm/ui/components/simple-table";
 import { Spinner } from "@crm/ui/components/spinner";
 import { TableCell } from "@crm/ui/components/table";
 import { formatMoney } from "@crm/ui/lib/format";
+import type { Locale } from "@crm/ui/lib/locale";
 import type { ReactNode } from "react";
 import {
 	DetailSheetHeader,
@@ -123,34 +125,40 @@ export function DealAmount({
 	);
 }
 
+export type MetaPart = { text: string | null | undefined; lang?: Locale };
+
 export function MetaLine({
 	lead,
 	parts,
 }: {
 	lead?: ReactNode;
-	parts: (string | null | undefined)[];
+	parts: (MetaPart | null | undefined)[];
 }) {
 	const seen = new Set<string>();
-	const rest: string[] = [];
+	const rest: { text: string; lang?: Locale }[] = [];
 
 	for (const part of parts) {
-		const value = part?.trim();
+		const value = part?.text?.trim();
 		if (!value) continue;
 
 		const key = value.toLowerCase();
 		if (seen.has(key)) continue;
 
 		seen.add(key);
-		rest.push(value);
+		rest.push({ text: value, lang: part?.lang });
 	}
 
 	return (
 		<>
 			{lead}
 			{rest.map((part, index) => (
-				<span key={part}>
+				<span key={part.text}>
 					{index === 0 && !lead ? null : " · "}
-					{part}
+					{part.lang ? (
+						<ForeignText lang={part.lang}>{part.text}</ForeignText>
+					) : (
+						part.text
+					)}
 				</span>
 			))}
 		</>
