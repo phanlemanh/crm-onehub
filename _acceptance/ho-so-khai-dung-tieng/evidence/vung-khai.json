@@ -11,7 +11,8 @@
           "SPAN"
         ]
       }
-    ]
+    ],
+    "tieng_viet_lot": []
   },
   "tom-tat-lien-he": {
     "mong_boc": true,
@@ -25,7 +26,8 @@
           "SPAN"
         ]
       }
-    ]
+    ],
+    "tieng_viet_lot": []
   },
   "nganh": {
     "mong_boc": true,
@@ -39,7 +41,8 @@
           "SPAN"
         ]
       }
-    ]
+    ],
+    "tieng_viet_lot": []
   },
   "dong-thoi-gian": {
     "mong_boc": true,
@@ -62,20 +65,21 @@
           "SPAN"
         ]
       }
-    ]
+    ],
+    "tieng_viet_lot": []
   },
   "khong-khai-thua": {
     "mong_boc": false,
     "cho": [
       {
-        "gia_tri": "Vat Thu 97763-mu7wppib",
+        "gia_tri": "Vat Thu 13052-mu7xlt6t",
         "boc": false,
         "the": "H2",
         "so_phan_tu_khai": 0,
         "duong_the": []
       },
       {
-        "gia_tri": "Vat Thu 97763-mu7wppib",
+        "gia_tri": "Vat Thu 13052-mu7xlt6t",
         "boc": false,
         "the": "SPAN",
         "so_phan_tu_khai": 0,
@@ -88,7 +92,8 @@
         "so_phan_tu_khai": 0,
         "duong_the": []
       }
-    ]
+    ],
+    "tieng_viet_lot": []
   },
   "khong-khai-thua-chuc-danh": {
     "mong_boc": false,
@@ -107,7 +112,8 @@
         "so_phan_tu_khai": 0,
         "duong_the": []
       }
-    ]
+    ],
+    "tieng_viet_lot": []
   },
   "ho-so-trong": {
     "tieu_de_khoi": "Giới thiệu",
@@ -117,7 +123,8 @@
     },
     "doi_chung_duong": {
       "co_khoi": true
-    }
+    },
+    "tieng_viet_lot": []
   },
   "tieng-trang": {
     "tieng_trang": "vi",

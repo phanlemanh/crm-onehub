@@ -53,7 +53,7 @@ executors:
     api_khong_cache_tru_agent: "bun run test -- --force --filter=!agent"
     rang3_khoa_chet: "cd apps/app && bun test test/messages-guard.spec.ts"
     tv_canh_kho_ui: "cd packages/ui && bun test test/messages-guard.spec.ts"
-    hskt_component: "cd packages/ui && bun test --preload ./test/setup-dom.ts test/khai-tieng.spec.tsx"
+    hskt_component: "cd packages/ui && bun test --preload ./test/setup-dom.ts test/khai-tieng.spec.tsx && cd ../../apps/app && bun test test/khai-tieng-metaline.spec.tsx"
     tk_bai_kiem_dung_nha: "bun run check-types"
     hd_bang_ba_dong: "cd packages/auth && bun test test/hosted-domain.spec.ts"
     hd_cau_hinh_onehub: "cd packages/auth && bun test test/hosted-domain.spec.ts -t onehub"

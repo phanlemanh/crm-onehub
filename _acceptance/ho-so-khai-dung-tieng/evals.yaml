@@ -88,7 +88,7 @@ evals:
       chan nay mo TAM HO SO, noi no chua khai.
       Ket xuat muc cho tung gia tri nganh vao evidence/vung-khai.json.
       Tap nganh rong → KHONG DO DUOC, ma 2.
-      Cap hai chieu: ban sao doi part nganh cua MetaLine ve chuoi tran → DO,
+      Cap hai chieu: ban sao doi part nganh cua MetaLine ve part khong khai lang → DO,
       thong diep ghim chua ten gia tri nganh chua boc.
     paths:
       - "apps/app/components/crm/record-sheet/company-sheet.tsx"
@@ -186,13 +186,14 @@ evals:
     cmd: config:executors.test.hskt_component
     expected: >-
       exit 0. Bai kiem VE RA DOM THAT (setup-dom.ts da co san trong packages/ui).
-      BA CHIEU trong cung mot bai kiem:
+      BA CHIEU, moi chieu duoi mot cong kieu that su soi no — (a) o
+      packages/ui/test, (b)(c) o apps/app/test (hop dong tu chinh lan hai):
       (a) ForeignText lang="en" sinh phan tu co lang="en"; ForeignText lang="vi"
           sinh lang="vi" — thuoc tinh theo tham so, khong dong cung mot gia tri;
-      (b) MetaLine nhan mot part kieu CHUOI TRAN sinh <span> KHONG mang thuoc
-          tinh lang, va part kieu {text, lang} sinh <span lang> dung gia tri;
-      (c) MetaLine nhan ["X", {text: "X", lang: "en"}] sinh ra DUNG MOT phan tu
-          mang chu X — khu trung lap chay tren text, khong tren phan tu tho.
+      (b) MetaLine nhan mot part KHONG khai lang sinh <span> KHONG mang thuoc
+          tinh lang, va part co khai {text, lang} sinh <span lang> dung gia tri;
+      (c) MetaLine nhan [{text:"X"}, {text:"X", lang:"en"}] sinh ra DUNG MOT
+          phan tu mang chu X — khu trung lap chay tren text, khong tren phan tu tho.
       Chieu (b) giu cho ho so lien he khong bi khai sai: cho goi o do truyen
       [contact.title, contact.company?.name] va KHONG phai sua mot chu nao.
       Chieu (c) giu loi hua "khong doi mot pixel nao" cua dac ta UX: khu trung lap
@@ -205,6 +206,7 @@ evals:
     paths:
       - "packages/ui/src/components/foreign-text.tsx"
       - "packages/ui/test/khai-tieng.spec.tsx"
+      - "apps/app/test/khai-tieng-metaline.spec.tsx"
       - "apps/app/components/crm/record-sheet/record-parts.tsx"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -267,7 +269,7 @@ evals:
       da khai trong `expected` cua chan do.
       Danh sach dot bien BAT BUOC, khong duoc bo chan nao:
       E1 go ForeignText o company-sheet · E2 go o contact-sheet ·
-      E3 doi part nganh ve chuoi tran · E4 tra headline ve template literal ·
+      E3 doi part nganh ve part khong khai lang · E4 tra headline ve template literal ·
       E5 boc ForeignText quanh part dia danh · E8 ve ForeignText khong dieu kien ·
       E9 boc quanh ca DetailSheetSection · E12 bo thuoc tinh lang khoi ForeignText.
       E6 chay HAI dot bien: (i) doi mot cho goi ve <p lang="en"> viet tay,

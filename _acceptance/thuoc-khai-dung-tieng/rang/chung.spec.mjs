@@ -14,7 +14,10 @@ try {
 } catch (loi) {
 	nem = loi.message;
 }
-assert.ok(nem?.includes("so tep"), "ghim phai nem kem TEN hang, khong chi con so");
+assert.ok(
+	nem?.includes("so tep"),
+	"ghim phai nem kem TEN hang, khong chi con so",
+);
 assert.ok(
 	nem?.includes("3") && nem?.includes("4"),
 	"ghim phai in ca hai con so",

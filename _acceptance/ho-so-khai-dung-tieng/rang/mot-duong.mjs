@@ -49,7 +49,15 @@ function dong(noi_dung, vi_tri) {
 
 const tep = execFileSync(
 	"git",
-	["-C", GOC, "ls-files", "--cached", "--others", "--exclude-standard", "apps/app"],
+	[
+		"-C",
+		GOC,
+		"ls-files",
+		"--cached",
+		"--others",
+		"--exclude-standard",
+		"apps/app",
+	],
 	{ encoding: "utf8" },
 )
 	.trim()

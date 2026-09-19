@@ -29,7 +29,11 @@ for (const [k, lenh] of lenhRieng) {
 			`   lenh: ${lenh.lenh} ${lenh.doi_so.join(" ")}${lenh.duoi ? ` (duoi ${lenh.duoi})` : ""}`,
 			"   Mot lenh do tren cay lanh khong phai ket qua do — no la tien de hong.",
 			"   Thuong la may chu dev chua chay cho cay nay (canh cay thoat 2).",
-			r.ra.split("\n").slice(-12).map((d) => `     ${d}`).join("\n"),
+			r.ra
+				.split("\n")
+				.slice(-12)
+				.map((d) => `     ${d}`)
+				.join("\n"),
 		);
 	}
 	raTheoLenh.set(k, r.ra);
@@ -51,7 +55,7 @@ bang(`-- ${DOT_BIEN.length} chuoi ghim:`, hang);
 
 if (hong > 0) {
 	console.log(
-		"   Cach sua: cho chan do in mot NHAN chi khi no do (vd \"lech-boc:<ten>\"),\n" +
+		'   Cach sua: cho chan do in mot NHAN chi khi no do (vd "lech-boc:<ten>"),\n' +
 			"   roi lay dung nhan do lam chuoi ghim. Ten chan thi in o moi luot chay.",
 	);
 }
