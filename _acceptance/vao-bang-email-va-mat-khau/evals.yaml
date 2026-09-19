@@ -230,9 +230,23 @@ evals:
       - "apps/app/proxy.ts"
       - "apps/app/test/proxy-duong-mo.spec.ts"
     expected: |
-      Do CHINH bang duong mo ma proxy dung, khong do mot ban sao chep tay trong bai kiem.
-      MA TRAN TOAN PHAN, viet truoc trong chinh tep thuoc: tap duong khong can dang nhap
-      co DUNG BON phan tu — /sign-in, /grant-access, /eve, va duong cua trang dat mat khau.
+      SUA SAU KHI SOI TASK 5 (19/09): ban dau muc nay chi ghim MOT danh sach, va do la
+      danh sach SAI. Proxy co HAI danh sach: `ANONYMOUS` (`apps/app/lib/proxy-paths.ts`)
+      xet TRUOC buoc doc phien va quyet dinh nguoi CHUA DANG NHAP co doc duoc duong khong;
+      con `UNGATED` (`apps/app/proxy.ts`) chi ap cho nguoi DA dang nhap. AC-10 hua ve nguoi
+      chua dang nhap, tuc no phu thuoc `ANONYMOUS`. Ghim mot minh `UNGATED` thi phep do
+      XANH trong khi nguoi mo lien ket bi da ve man dang nhap — da xay ra that trong vong
+      nay, nguoi thi cong bat duoc bang trinh duyet chu khong phai bang phep do.
+      Muc nay nay ghim CA HAI danh sach, moi danh sach mot ma tran toan phan.
+
+      DANH SACH MOT — `ANONYMOUS`, day la cua that cua AC-10: DUNG BA phan tu — /t, /proto,
+      va duong cua trang dat mat khau. Hang so BA va ba ten nam trong chinh tep thuoc.
+
+      DANH SACH HAI — `UNGATED`: DUNG BON phan tu — /grant-access, /eve, duong het-quyen, va
+      duong cua trang dat mat khau. Duong dat mat khau CO trong ca hai danh sach, va trong
+      `UNGATED` no nay la muc du thua vo hai: `isAnonymous` thoat truoc nen nhanh `isUngated`
+      khong con duoc chay toi cho tien to do. Giu no de ghim on dinh; muc nay khai ro dieu do
+      de nguoi doc sau khong tuong la mot lo.
       Hang so BON va bon ten nay nam trong tep thuoc, KHONG nap tu proxy.ts roi so voi
       chinh no (so mot thu voi chinh no thi luon bang).
       Khang dinh SET BANG NHAU, khong phai "co mat":

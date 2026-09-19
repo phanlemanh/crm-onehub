@@ -115,7 +115,7 @@ executors:
     mk_ghi_vet: bun run test -- "cd apps/api && bun test test/mat-khau-lien-ket.spec.ts -t ghi-vet"
     mk_san_thiet_ke: for t in "apps/app/app/(landing)/dat-mat-khau/[token]/page.tsx" "apps/app/app/(landing)/sign-in/password-sign-in.tsx" "apps/app/app/(app)/[slug]/settings/members/phat-chia-dialog.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done
     mk_cua_google_con_song: bun run test -- "cd packages/auth && bun test test/chia-mat-khau.integration.spec.ts -t cua-google-con-song"
-    mk_trang_ngoai_cong: cd apps/app && bun test test/proxy-duong-mo.spec.ts
+    mk_trang_ngoai_cong: cd apps/app && bun test test/proxy-duong-mo.spec.ts test/proxy-an-danh.spec.ts
     mk_phat_lai: bun run test -- "cd packages/auth && bun test test/chia-mat-khau.integration.spec.ts -t phat-lai"
   script:
     trg_tieu_de_trang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs tieu-de-trang"'
