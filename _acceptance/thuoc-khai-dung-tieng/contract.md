@@ -5,7 +5,7 @@ slug: thuoc-khai-dung-tieng
 owner: manh@mstar.vn
 risk_tier: T2
 surfaces: [tooling]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-09-19
 design_doc: docs/superpowers/specs/2026-09-19-thuoc-khai-dung-tieng-design.md
