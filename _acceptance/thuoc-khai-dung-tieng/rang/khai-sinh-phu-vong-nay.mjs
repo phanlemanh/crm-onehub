@@ -123,6 +123,7 @@ export const DOT_BIEN_VONG_NAY = [
 	},
 	{
 		chan: "E13",
+		commit: true,
 		tep: GS,
 		cu: '"runsIn": "@crm/ui#test"',
 		moi: '"runsIn": "@crm/ui#test "',
