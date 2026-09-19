@@ -196,7 +196,10 @@ export class WorkspaceService {
 			}),
 		]);
 
-		const vet = await this.vetMoiNhat(rows.map((row) => row.user.email));
+		const xemDuocVet = isWorkspaceAdmin(await workspaceRoleOf(userId));
+		const vet = xemDuocVet
+			? await this.vetMoiNhat(rows.map((row) => row.user.email))
+			: new Map<string, { issuedAt: Date; issuedByName: string }>();
 
 		return {
 			rows: rows.map((row) =>
@@ -371,20 +374,24 @@ export class WorkspaceService {
 
 		const nhan = nguoi ?? (await this.taoNguoiDaDuocVao(email));
 
-		const chia = await ducChia({ userId: nhan.id, appUrl });
-
 		const nguoiPhat = await this.db.user.findUniqueOrThrow({
 			where: { id: userId },
 			select: { name: true },
 		});
 
-		await this.db.passwordLinkIssue.create({
-			data: {
-				id: crypto.randomUUID(),
-				email,
-				issuedById: userId,
-				issuedByName: nguoiPhat.name,
-			},
+		const chia = await this.db.$transaction(async (tx) => {
+			const duc = await ducChia({ userId: nhan.id, appUrl, kho: tx });
+
+			await tx.passwordLinkIssue.create({
+				data: {
+					id: crypto.randomUUID(),
+					email,
+					issuedById: userId,
+					issuedByName: nguoiPhat.name,
+				},
+			});
+
+			return duc;
 		});
 
 		this.logger.log({ message: "Password link issued", userId, email });

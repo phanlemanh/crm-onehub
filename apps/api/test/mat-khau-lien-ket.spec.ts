@@ -1,10 +1,32 @@
 import { afterAll, describe, expect, test } from "bun:test";
+import { PASSWORD } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
+import { memberListInput } from "../src/workspace/workspace.contracts";
 import { WorkspaceService } from "../src/workspace/workspace.service";
 
 const suffix = process.env.TEST_RUN_ID ?? "mat-khau-lien-ket";
+
+const DANH_SACH_THANH_VIEN = memberListInput.parse({});
+
+function demChiaCua(userId: string) {
+	return db.verification.count({
+		where: {
+			value: userId,
+			identifier: { startsWith: PASSWORD.verificationPrefix },
+		},
+	});
+}
+
+function demChiaCuaLuot() {
+	return db.verification.count({
+		where: {
+			value: { startsWith: `${suffix}-` },
+			identifier: { startsWith: PASSWORD.verificationPrefix },
+		},
+	});
+}
 
 const agent = {
 	workspaceChanged: async () => undefined,
@@ -148,11 +170,11 @@ describe("quyen-hai-ve", () => {
 		const owner = await gieoNguoi("owner");
 		const nhan = await gieoNguoi("member");
 
-		const truoc = await db.verification.count();
+		const truoc = await demChiaCua(nhan.id);
 		await expect(
 			service.issuePasswordLink(member.id, { email: nhan.email }),
 		).rejects.toThrow();
-		expect(await db.verification.count()).toBe(truoc);
+		expect(await demChiaCua(nhan.id)).toBe(truoc);
 
 		expect(
 			(await service.issuePasswordLink(admin.id, { email: nhan.email })).url,
@@ -204,13 +226,13 @@ describe("tao-nguoi-truoc", () => {
 		const admin = await gieoNguoi("admin");
 		const email = `ngoai-${dinhDanh("dia")}@example.com`.toLowerCase();
 
-		const truocChia = await db.verification.count();
+		const truocChia = await demChiaCuaLuot();
 		await expect(
 			service.issuePasswordLink(admin.id, { email }),
 		).rejects.toThrow("Địa chỉ này không nằm trong danh sách được vào.");
 
 		expect(await db.user.count({ where: { email } })).toBe(0);
-		expect(await db.verification.count()).toBe(truocChia);
+		expect(await demChiaCuaLuot()).toBe(truocChia);
 	});
 });
 
@@ -248,5 +270,29 @@ describe("ghi-vet", () => {
 		expect(
 			new Date(cuaX?.passwordLinkIssuedAt ?? 0).getTime(),
 		).toBeGreaterThanOrEqual(batDau.getTime());
+	});
+});
+
+describe("vet-chi-quan-tri", () => {
+	test("man Thanh vien: quan tri doc duoc hai truong vet, thanh vien thuong thi khong", async () => {
+		const { service } = await dungService();
+		const admin = await gieoNguoi("admin");
+		const rep = await gieoNguoi("member");
+		const nhan = await gieoNguoi("member");
+
+		await service.issuePasswordLink(admin.id, { email: nhan.email });
+
+		const cuaQuanTri = (
+			await service.members(admin.id, DANH_SACH_THANH_VIEN)
+		).rows.find((row) => row.email === nhan.email);
+		expect(cuaQuanTri?.passwordLinkIssuedByName).toBe(admin.name);
+		expect(cuaQuanTri?.passwordLinkIssuedAt).not.toBeNull();
+
+		const cuaRep = (
+			await service.members(rep.id, DANH_SACH_THANH_VIEN)
+		).rows.find((row) => row.email === nhan.email);
+		expect(cuaRep).not.toBeUndefined();
+		expect(cuaRep?.passwordLinkIssuedByName).toBeNull();
+		expect(cuaRep?.passwordLinkIssuedAt).toBeNull();
 	});
 });
