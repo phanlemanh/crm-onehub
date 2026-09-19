@@ -189,6 +189,19 @@ let hong = 0;
 let sao = null;
 let mayChu = null;
 
+const { db } = await import("../../../packages/db/src/index.ts");
+const truocDB = new Map(
+	(await db.deal.findMany({ select: { id: true, stage: true } })).map((d) => [
+		d.id,
+		d.stage,
+	]),
+);
+console.log(
+	`-- CHUP CSDL TRUOC: ${truocDB.size} thoa thuan. Mot phep pha o day co CHU DICH\n` +
+		"   vo hieu hoa phep tra lai (E5), nen chinh bo khai sinh phai tra CSDL ve\n" +
+		"   nguyen trang — khong thi luot chay ke tiep do mot tien de da hong.",
+);
+
 try {
 	sao = dungCaySao();
 	console.log(`-- BAN SAO: ${sao}`);
@@ -211,6 +224,17 @@ try {
 			};
 			const lanh = chay(d.do, sao, mt);
 			const vang = !lanh.ra.includes(d.ghim);
+			if (!vang) {
+				hang.push(
+					`${d.chan.padEnd(4)} [chan-moi-khong-do-duoc:${d.chan}] chuoi ghim ${JSON.stringify(d.ghim)} CO MAT o luot LANH:\n` +
+						lanh.ra
+							.split("\n")
+							.filter((x) => x.includes(d.ghim))
+							.slice(0, 4)
+							.map((x) => `          lanh| ${x}`)
+							.join("\n"),
+				);
+			}
 
 			if (!goc.includes(d.cu)) {
 				hang.push(
@@ -279,6 +303,22 @@ try {
 		}
 	}
 } finally {
+	const sauDB = new Map(
+		(await db.deal.findMany({ select: { id: true, stage: true } })).map((d) => [
+			d.id,
+			d.stage,
+		]),
+	);
+	let daTra = 0;
+	for (const [id, cu] of truocDB) {
+		if (sauDB.get(id) !== cu) {
+			await db.deal.update({ where: { id }, data: { stage: cu } });
+			console.log(`-- TRA CSDL: ${id} ${sauDB.get(id)} -> ${cu}`);
+			daTra += 1;
+		}
+	}
+	console.log(`-- DA TRA ${daTra} thoa thuan ve nguyen trang.`);
+	await db.$disconnect();
 	if (mayChu) {
 		mayChu.api.kill();
 		mayChu.app.kill();
