@@ -25,7 +25,7 @@ CSDL: crm_rang_thuoc_test (nhan ban tu crm) · may chu worktree o 3000/3001
 ket qua: 0 chuoi ghim KHONG phan biet duoc tren 14
 -> ma thoat 0
 
-== E2 · bun _acceptance/thuoc-khai-dung-tieng/rang/khai-sinh-dung-ghim.mjs ==
+== E2 · tk_khai_sinh_dung_ghim · bun _acceptance/thuoc-khai-dung-tieng/rang/khai-sinh-dung-ghim.mjs ==
 -- KHOA: khai-sinh-dung-ghim giu /tmp/thuoc-khai-dung-tieng.khoa
 -- AC-1 hoi: chuoi ghim co vang o luot lanh khong.
 -- AC-2 hoi mot cau KHAC: bo khai sinh co DUNG cau tra loi do khong,
@@ -33,19 +33,11 @@ ket qua: 0 chuoi ghim KHONG phan biet duoc tren 14
    in ra "vang: khong" roi van cham DAT.
 -- Phep do: dat lai chuoi ghim cua E1 ve "gioi-thieu"
    (ten chan, in o moi luot), roi doi bo khai sinh phai bao KHONG DAT.
-KHONG DO DUOC: cua PHA_THU_DAT_LAI_GHIM khong con trong pha-thu.mjs,
-   nen luot chay nay chua he dat lai ghim nao — ket qua duoi day vo nghia.
-        khong bi ghi de bang so do cua ban da pha.
-     
-     KHONG DO DUOC: cay dang xet DANG BAN, ma ban sao duoc dung tai HEAD.
-        Nghia la moi con so duoi day noi ve HEAD, KHONG noi ve cay anh sap ky.
-        Cau "cay dang xet khong doi mot byte nao" van dung va van xanh khi cay ban tu dau,
-        nen no KHONG bat duoc chuyen nay — day la tien de, phai chan o day.
-        Commit roi chay lai, hoac dat CHO_PHEP_CAY_BAN=1 neu that su muon do HEAD.
-        Cay dang ban:
-           M _acceptance/thuoc-khai-dung-tieng/evidence/dau-ra-mot-luot.txt
-     
--> ma thoat 2
+   (1) bo khai sinh in nhan [dem-roi-vut]:            co
+   (2) no bao "ghim vang o luot lanh: KHONG":         co
+   (3) no cham E1 la KHONG DAT:                     co
+ket qua: dat
+-> ma thoat 0
 
 == E3 · bun _acceptance/thuoc-khai-dung-tieng/rang/cong-chan-duoc.mjs ==
 -- AC-3 do HIEU LUC, khong do BAN KHAI. Khang dinh "thuoc co ten trong
