@@ -39,7 +39,7 @@ lời cho phép, chuỗi biến mồi, và cờ đã-có-ai-đăng-nhập-chưa
 | 3 | rỗng | rỗng | không | `ai@onemount.com` | không | — | không |
 | 4 | `khue@gmail.com` `pending` `member` | `onemount.com` | có | `khue@gmail.com` | có | `member` | bảng |
 | 5 | `khue@gmail.com` `pending` `admin` | rỗng | có | `khue@gmail.com` | có | `admin` | bảng |
-| 6 | `khue@gmail.com` `cancelled` `member` | rỗng | có | `khue@gmail.com` | không | — | không |
+| 6 | `khue@gmail.com` `canceled` `member` | rỗng | có | `khue@gmail.com` | không | — | không |
 | 7 | `khue@gmail.com` `accepted` `member` | rỗng | có | `khue@gmail.com` | có | `member` | bảng |
 | 8 | `khue@gmail.com` `pending` `member` | `onemount.com` | có | `ai@onemount.com` | không | — | không |
 
@@ -82,7 +82,7 @@ gỡ.
 **Given** một thành viên đang ở trong, lời cho phép của họ ở `accepted`
 **When** gỡ người ấy
 **Then** trong **cùng một giao dịch**: dòng thành viên biến mất và lời cho phép
-chuyển sang `cancelled`. Và khi họ đăng nhập lại, không dòng thành viên nào sinh
+chuyển sang `canceled`. Và khi họ đăng nhập lại, không dòng thành viên nào sinh
 ra lần nữa. Chiều đỏ: chặn nửa chừng giữa hai lệnh ghi thì cả hai phải cùng không
 xảy ra.
 
@@ -135,25 +135,25 @@ trong danh sách. Bảng viết trước cho việc chuẩn hoá: cắt khoảng
 chữ thường toàn bộ, và địa chỉ không có đúng một dấu `@` thì bị từ chối trước khi
 chạm cơ sở dữ liệu.
 
-Từ chối chỉ áp cho lời cho phép **còn hiệu lực**. Một dòng đã `cancelled` không
+Từ chối chỉ áp cho lời cho phép **còn hiệu lực**. Một dòng đã `canceled` không
 chặn việc cho phép lại — xem AC-14.
 
 ### AC-14 — Cho phép lại một người đã bị rút (cross-layer)
 
-**Given** một địa chỉ có dòng lời cho phép ở `cancelled`, do vừa bị gỡ hoặc vừa bị
+**Given** một địa chỉ có dòng lời cho phép ở `canceled`, do vừa bị gỡ hoặc vừa bị
 rút
 **When** người quản cho phép lại chính địa chỉ ấy
-**Then** lượt gọi thành công và địa chỉ ấy vào được trở lại. Dòng `cancelled` cũ
+**Then** lượt gọi thành công và địa chỉ ấy vào được trở lại. Dòng `canceled` cũ
 **không** bị sửa — lời cho phép mới là một dòng mới, để nhật ký còn đọc được rằng
 người này từng bị rút rồi được nhận lại.
 
-Ba ca trong cùng một lượt, khác kết quả: `cancelled` cho phép lại được ·
+Ba ca trong cùng một lượt, khác kết quả: `canceled` cho phép lại được ·
 `pending` bị từ chối · `accepted` bị từ chối. Ba ca cho cùng một kết quả thì chân
 trả mã 2 — lúc ấy phép đo không phân biệt được "mở đúng ca đã rút" với "mở tất"
 hay "đóng tất".
 
 Không có tiêu chí này thì hợp đồng tự mâu thuẫn: AC-5 gỡ một người bằng cách
-chuyển lời cho phép sang `cancelled`, rồi AC-11 lấy chính dòng ấy làm cớ từ chối,
+chuyển lời cho phép sang `canceled`, rồi AC-11 lấy chính dòng ấy làm cớ từ chối,
 và không đường nào nhận họ lại ngoài sửa tay cơ sở dữ liệu.
 
 ### AC-12 — Một lượt đọc bảng hỏng không khoá cả nhà ngoài cửa (cross-layer)
