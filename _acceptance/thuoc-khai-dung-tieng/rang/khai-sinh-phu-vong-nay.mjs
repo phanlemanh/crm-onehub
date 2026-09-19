@@ -33,7 +33,7 @@ export const DOT_BIEN_VONG_NAY = [
 		cu: "const dat = ket.ma !== 0 && ket.ghim && ket.vang;",
 		moi: "const dat = ket.ma !== 0 && ket.ghim;",
 		do: chanMoi("khai-sinh-dung-ghim"),
-		ghim: "van cham DAT",
+		ghim: "[bo-khai-sinh-dem-roi-vut]",
 	},
 	{
 		chan: "E3",

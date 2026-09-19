@@ -44,7 +44,7 @@ console.log(
 const dat = nhan && vangKhong && khongDat;
 if (!dat) {
 	console.log(
-		`   [dem-roi-vut] Bo khai sinh da BIET chuoi ghim vo hieu ma van cham DAT —\n` +
+		"   [bo-khai-sinh-dem-roi-vut] No da BIET chuoi ghim vo hieu ma van cham dat —\n" +
 			"   dung nghia la dem roi vut: dieu kien thu ba khong noi vao ket luan.",
 	);
 }
