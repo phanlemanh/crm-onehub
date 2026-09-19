@@ -703,15 +703,22 @@ không có lời gọi `decideSignInFromDb` phía trên.
 				id: randomUUID(),
 				email,
 				name: email.split("@")[0],
-				emailVerified: false,
+				emailVerified: true,
 			},
 		});
 	}
 ```
 
-Cờ `emailVerified: false` là đúng và cố ý: kho không gửi được thư nên không ai
-xác minh được địa chỉ, và cấu hình KHÔNG bật `requireEmailVerification`, nên cờ
-này không chặn đăng nhập. Bật nó lên thành `true` là khai một điều chưa xảy ra.
+**Cờ `emailVerified: true`, và đây là bản SỬA sau khi soi Task 2.** Bản kế hoạch
+đầu viết `false` với lý luận «không ai xác minh thì đừng khai là đã xác minh».
+Lý luận đó sai ở chỗ nó bỏ qua nhánh nối tài khoản: người soi đọc mã nối tài
+khoản của thư viện và thấy nhánh nối đòi `emailVerified === true`. Tạo user với
+`false` thì chính người đó MẤT cửa Google, tức phá AC-9. Và danh sách được vào
+do quản trị soạn chính là bước xác minh của sản phẩm này; hai đường tạo user đã
+có trong kho đều dùng `true`.
+
+Bài kiểm của task này PHẢI khẳng định hàng vừa tạo có `emailVerified === true` —
+không có khẳng định đó thì một lần sửa về `false` sẽ đi qua im lặng.
 
 **Bất biến người thi công phải giữ:** lời gọi `decideSignInFromDb` ở Step 4 và
 lời gọi `db.user.create` ở đây phải nằm trong CÙNG một thủ tục, cái trước ném
