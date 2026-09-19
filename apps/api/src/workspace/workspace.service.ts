@@ -353,15 +353,21 @@ export class WorkspaceService {
 			);
 		}
 
-		const duocVao = await decideSignInFromDb(email);
+		const nguoi = await this.db.user.findUnique({ where: { email } });
 
-		if (!duocVao.allowed) {
-			throw new BadRequestException(
-				"Địa chỉ này không nằm trong danh sách được vào.",
-			);
+		const laThanhVien = nguoi
+			? (await workspaceRoleOf(nguoi.id)) !== null
+			: false;
+
+		if (!laThanhVien) {
+			const duocVao = await decideSignInFromDb(email);
+
+			if (!duocVao.allowed) {
+				throw new BadRequestException(
+					"Địa chỉ này không nằm trong danh sách được vào.",
+				);
+			}
 		}
-
-		const nguoi = await this.db.user.findFirst({ where: { email } });
 
 		const nhan = nguoi ?? (await this.taoNguoiDaDuocVao(email));
 

@@ -32,7 +32,7 @@ async function dungService() {
 	return { service: new WorkspaceService(db, agent), db };
 }
 
-async function gieoNguoi(vai: string) {
+async function gieoNguoi(vai: string, tuyChon?: { coLoiMoi?: boolean }) {
 	await dungKho();
 
 	const now = new Date();
@@ -61,17 +61,19 @@ async function gieoNguoi(vai: string) {
 		},
 	});
 
-	await db.invitation.create({
-		data: {
-			id: dinhDanh("inv"),
-			organizationId: WORKSPACE_ID,
-			email,
-			role: vai,
-			status: "accepted",
-			expiresAt: new Date("9999-12-31T00:00:00.000Z"),
-			inviterId: userId,
-		},
-	});
+	if (tuyChon?.coLoiMoi ?? true) {
+		await db.invitation.create({
+			data: {
+				id: dinhDanh("inv"),
+				organizationId: WORKSPACE_ID,
+				email,
+				role: vai,
+				status: "accepted",
+				expiresAt: new Date("9999-12-31T00:00:00.000Z"),
+				inviterId: userId,
+			},
+		});
+	}
 
 	return { id: userId, email, name };
 }
@@ -93,6 +95,15 @@ async function gieoHangDuocVao(email: string, vai: string) {
 }
 
 async function donSauKhiXong() {
+	const tuTaoTrongThuTuc = await db.user.findMany({
+		where: {
+			email: { contains: suffix },
+			id: { not: { startsWith: `${suffix}-` } },
+		},
+		select: { id: true },
+	});
+	const idTuTao = tuTaoTrongThuTuc.map((row) => row.id);
+
 	await db.passwordLinkIssue.deleteMany({
 		where: {
 			OR: [
@@ -102,7 +113,9 @@ async function donSauKhiXong() {
 		},
 	});
 	await db.verification.deleteMany({
-		where: { value: { startsWith: `${suffix}-` } },
+		where: {
+			OR: [{ value: { startsWith: `${suffix}-` } }, { value: { in: idTuTao } }],
+		},
 	});
 	await db.invitation.deleteMany({
 		where: {
@@ -115,7 +128,14 @@ async function donSauKhiXong() {
 	await db.member.deleteMany({
 		where: { userId: { startsWith: `${suffix}-` } },
 	});
-	await db.user.deleteMany({ where: { id: { startsWith: `${suffix}-` } } });
+	await db.user.deleteMany({
+		where: {
+			OR: [
+				{ id: { startsWith: `${suffix}-` } },
+				{ email: { contains: suffix } },
+			],
+		},
+	});
 }
 
 afterAll(donSauKhiXong);
@@ -187,10 +207,23 @@ describe("tao-nguoi-truoc", () => {
 		const truocChia = await db.verification.count();
 		await expect(
 			service.issuePasswordLink(admin.id, { email }),
-		).rejects.toThrow();
+		).rejects.toThrow("Địa chỉ này không nằm trong danh sách được vào.");
 
 		expect(await db.user.count({ where: { email } })).toBe(0);
 		expect(await db.verification.count()).toBe(truocChia);
+	});
+});
+
+describe("thanh-vien-khong-co-loi-moi", () => {
+	test("da la thanh vien nhung khong co hang loi moi van duoc phat chia", async () => {
+		const { service } = await dungService();
+		const admin = await gieoNguoi("admin");
+		const chuKho = await gieoNguoi("owner", { coLoiMoi: false });
+
+		const ket = await service.issuePasswordLink(admin.id, {
+			email: chuKho.email,
+		});
+		expect(ket.url).toContain("/dat-mat-khau/");
 	});
 });
 
