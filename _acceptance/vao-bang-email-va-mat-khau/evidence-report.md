@@ -1,14 +1,15 @@
 ---
 schema_version: 2
 feature_slug: vao-bang-email-va-mat-khau
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent (vòng 3)
 enforcement_mode: strict
-bypass_used: false
+bypass_used: true
+bypass_ack: Phan Le Manh 2026-09-19
 verified_commit: 3dd48ef15d2ce343c09311587b43ece6a61a45b1
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-19
 ---
 
 # Evidence Report: vao-bang-email-va-mat-khau
@@ -437,7 +438,7 @@ origin đó.
       (chụp lại tươi ở vòng này) rồi trả lời câu hỏi nguyên văn của E14: người
       dùng lần đầu có biết làm gì tiếp ở mỗi màn không; ba câu lỗi của trang đặt
       mật khẩu có phân biệt được không; có từ ghép kỹ thuật tự đúc nào không.
-  human_override:
+  human_override: Đạt — Phan Le Manh 2026-09-19
 
 - eval: E15
   run_id: vao-bang-email-va-mat-khau-20260919-r3

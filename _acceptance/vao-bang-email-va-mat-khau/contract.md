@@ -5,7 +5,7 @@ slug: vao-bang-email-va-mat-khau
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-19-vao-bang-email-va-mat-khau-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-19
@@ -83,3 +83,5 @@ Ba trục, tám ô Core thành AC-1 tới AC-8; bốn AC còn lại là lớp c�
 - Giới hạn đã biết, đánh đổi cố ý của vòng sửa sau soi cuối: phép sàng mật khẩu chạy ở `hooks.before`, tức TRƯỚC khi phiên hoặc token được kiểm. Đó là điều kiện cần — sàng phải đứng trước bước tiêu thụ token, nếu không mỗi lần từ chối là đốt liên kết. Hệ quả: người chưa đăng nhập có thể dùng máy chủ của ta làm cầu hỏi dịch vụ danh sách đã lộ. Nó không tiết lộ gì về bất kỳ tài khoản nào, và bộ giới hạn tần suất của thư viện đang bật.
 - Giới hạn đã biết, phát hiện ở vòng soi lại đợt sửa cuối: khoá huỷ-phiên-cũ xoá hàng phiên ngay khi đặt lại mật khẩu, nhưng kho bật cache bánh phiên 5 phút và đường đọc phiên trả kết quả từ bánh đã ký mà không chạm cơ sở dữ liệu. Nên một phiên mở TRƯỚC lúc đặt lại mật khẩu vẫn dùng được tới 5 phút sau. Hệ quả: đổi mật khẩu cắt kẻ trộm trong vòng không quá 5 phút, KHÔNG tức thì. Hạ mốc đó là chuyện cấu hình toàn kho, ngoài phạm vi vòng này.
 - Ba khoá cấu hình không thương lượng: bật cửa mật khẩu, CHẶN tự đăng ký, huỷ phiên cũ khi đặt lại mật khẩu. AC-7 canh khoá thứ hai.
+- Giới hạn đã biết, phát hiện ĐÚNG lúc ký và chủ kho ký qua bằng bypass (2026-09-19): ba tiêu chí lớp màn hình — AC-6 (E12), AC-9 (E13), AC-8 phần màn (E17) — KHÔNG có verifier máy nào thực sự chạy. Ba eval đó khai `cmd: config:executors.design.ui_check`, nhưng `design-scan.js` là payload tiêm vào trình duyệt (`window.__IMPECCABLE_CONFIG__`), chạy bằng node là `ReferenceError`, và `run-log.jsonl` không có dòng nào cho E12/E13/E17 ở cả ba vòng — trong khi các khối của chúng vẫn ghi `exit_code: 0`. Nền thật của ba khẳng định đó là ảnh chụp trong `evidence/` cộng lời tường thuật của phiên đo, không phải một lượt chạy máy. Verdict `PASS` do đó ghi được nhờ `ACCEPTANCE_GATE_BYPASS=1`, và `bypass_ack: Phan Le Manh 2026-09-19` là dấu khai việc đó. Hệ quả: một hồi quy ở ba mặt màn hình này sẽ KHÔNG có phép đo nào bắt được cho tới khi ba eval đổi sang một chân đo chạy được — kho đã có khuôn (`scripts/lan-do/tien-de.mjs --chay "node _acceptance/<hồ-sơ>/rang/<x>.mjs"`, mẫu `man-xin-quyen-co-rang`).
+- Giới hạn đã biết, chủ kho định đoạt tại Cổng 2 từ khối ngoài hợp đồng (mục Ngoài-3, 2026-09-19): người mở màn đăng nhập hoặc trang đặt mật khẩu từ một trình duyệt chưa từng chọn ngôn ngữ sẽ thấy toàn bộ nhãn bằng tiếng Anh, không phải tiếng Việt. Cơ chế `resolveLocale` có sẵn từ trước vòng này và vẫn tôn trọng cookie `lang=vi` hay header `Accept-Language` khi có, nên đây không phải hồi quy của vòng này; đổi mặc định là chuyện toàn kho, ngoài phạm vi vòng này. Mọi ảnh trong `evidence/` chụp với cookie `lang=vi` đặt tay đúng vì lý do đó.
