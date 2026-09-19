@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { bang, chay, GOC, ghim } from "./chung.mjs";
+import { bang, chay, GOC, ghim, thoat } from "./chung.mjs";
 
 const BAY = 7;
 const H = "_acceptance/ho-so-khai-dung-tieng/rang";
@@ -70,9 +70,23 @@ console.log(
 ghim("so benh", BENH.length, BAY);
 
 const hopDong = readFileSync(join(GOC, HOP_DONG), "utf8");
-const i = hopDong.indexOf("## Known limits");
-const khoaiLimits =
-	i < 0 ? "" : hopDong.slice(i, hopDong.indexOf("\n## ", i + 4));
+const tieuDe = /^## Known limits\s*$/m.exec(hopDong);
+if (!tieuDe) {
+	thoat(
+		2,
+		`KHONG DO DUOC: ${HOP_DONG} khong co TIEU DE "## Known limits" dung dau dong.`,
+		"   AC-13 lay muc do lam cua thoat duy nhat, nen thieu no thi khong the cham.",
+	);
+}
+const sauTieuDe = tieuDe.index + tieuDe[0].length;
+const conLai = hopDong.slice(sauTieuDe);
+const ketThuc = conLai.search(/^## /m);
+const khoaiLimits = ketThuc < 0 ? conLai : conLai.slice(0, ketThuc);
+console.log(
+	`-- Muc "## Known limits": doc tu TIEU DE dau dong, ${khoaiLimits.trim().split("\n").length} dong.\n` +
+		'   indexOf("## Known limits") tran bat nham chinh cau AC-13 dang nhac ten muc do,\n' +
+		"   nen cua thoat khong bao gio mo duoc. Hoi dong S4 vong 1 bat cho nay.",
+);
 
 let hong = 0;
 const hang = [];
@@ -86,7 +100,10 @@ for (const b of BENH) {
 		);
 		continue;
 	}
-	const coTenOLimits = khoaiLimits.includes(b.ma);
+	const coTenOLimits = new RegExp(
+		`^\\s*-\\s*\`?${b.ma.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\`?\\s*[—:-]`,
+		"m",
+	).test(khoaiLimits);
 	if (coTenOLimits) {
 		hang.push(
 			`khai o limits   ${b.ma.padEnd(12)} mat dau hieu, nhung CO ten trong Known limits`,
@@ -104,6 +121,11 @@ console.log(
 		"   chay lai chan nay tren ban sao trong bo — E14 cua ban khai lam viec do.",
 );
 
+console.log(
+	"-- Ten benh phai la MOT DONG DANH SACH co cau truc (`- <ma> — <ly do>`), khong\n" +
+		'   phai mot chuoi con bat ky. Ma benh la MOT CHU CAI, nen includes("G") khop\n' +
+		"   ca van xuoi binh thuong: do 19/09, 5/7 benh co cua thoat mo san vinh vien.",
+);
 bang(`-- ${BENH.length} benh:`, hang);
 console.log(`ket qua: ${hong} benh quay lai tren ${BENH.length}`);
 process.exit(hong > 0 ? 1 : 0);

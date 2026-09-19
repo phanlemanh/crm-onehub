@@ -192,6 +192,10 @@ let hong = 0;
 let sao = null;
 let mayChu = null;
 
+const { kiemCsdlThu } = await import(
+	"../../ho-so-khai-dung-tieng/rang/du-lieu-thu.mjs"
+);
+kiemCsdlThu();
 const { db } = await import("../../../packages/db/src/index.ts");
 const truocDB = new Map(
 	(await db.deal.findMany({ select: { id: true, stage: true } })).map((d) => [

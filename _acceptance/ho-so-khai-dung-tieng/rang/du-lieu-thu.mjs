@@ -1,5 +1,36 @@
 import { db } from "../../../packages/db/src/client.ts";
 
+const HAU_TO_THU = "_test";
+
+function tenCsdl(url) {
+	try {
+		return new URL(url).pathname.replace(/^\//, "").split("?")[0];
+	} catch {
+		return "";
+	}
+}
+
+export function kiemCsdlThu() {
+	const url = process.env.DATABASE_URL ?? "";
+	const ten = tenCsdl(url);
+	if (ten.endsWith(HAU_TO_THU)) return ten;
+	console.log(
+		`KHONG DO DUOC: DATABASE_URL tro toi ${JSON.stringify(ten || "(khong doc duoc)")},\n` +
+			`   khong mang hau to ${JSON.stringify(HAU_TO_THU)}.\n` +
+			"   Cac chan do nay TAO, SUA va XOA ban ghi that: chung dung fixture rieng va\n" +
+			"   MUON thoa thuan co san de phu du enum giai doan. Phep tra lai chay trong\n" +
+			"   finally va hai bay ngoai le, nhung mot SIGKILL hoac mot loi nem trong chinh\n" +
+			"   finally la de lai vet vinh vien tren CSDL dev cua nguoi dung.\n" +
+			"   packages/db/src/client.ts da co dung chot nay cho bo kiem; chan do khong\n" +
+			"   duoc di vong qua no.\n" +
+			"   Cach chay: dung mot CSDL nem di (bun run db:test), roi dat DATABASE_URL\n" +
+			"   tro vao do cho CA may chu dev LAN chan do.",
+	);
+	process.exit(2);
+}
+
+kiemCsdlThu();
+
 const GIOI_THIEU =
 	"One Mount is a Vietnamese technology and innovation group that builds comprehensive digital ecosystems for retail, banking and property services.";
 
