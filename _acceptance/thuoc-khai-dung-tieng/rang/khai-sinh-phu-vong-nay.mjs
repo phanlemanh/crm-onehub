@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import {
 	API_SAO,
@@ -88,8 +88,8 @@ export const DOT_BIEN_VONG_NAY = [
 		nhom: "nhanh",
 		eval: "E6",
 		tep: `${H}/cay-sao.mjs`,
-		cu: "\tkiemDuongSao(sao);\n",
-		moi: "",
+		cu: "\t\tif (!la.includes(duong)) {",
+		moi: "\t\tif (false) {",
 		do: chanMoi("xoa-co-kiem"),
 		ghim: "xoa-nham:",
 	},
@@ -97,9 +97,9 @@ export const DOT_BIEN_VONG_NAY = [
 		chan: "E7",
 		nhom: "vua",
 		eval: "E7",
-		tep: `${R}/ban-khai-khop.mjs`,
-		cu: 'const KHOA_MOI_MUC = ["tieng_viet_lot"];',
-		moi: 'const KHOA_MOI_MUC = ["tieng_viet_lot", "mau_sac_khong_ai_ghi"];',
+		tep: `${H}/khai-tieng-ho-so.mjs`,
+		cu: "\t\t\t\tduong_the: vung",
+		moi: "\t\t\t\tduong_the_DA_DOI_TEN: vung",
 		do: chanMoi("ban-khai-khop"),
 		ghim: "khoa-hoi-dong-khong-co-chan-do-ghi:",
 	},
@@ -420,6 +420,14 @@ try {
 
 	for (const d of DOT_BIEN_CHAY) {
 		const duong = join(sao, d.tep);
+		if (!existsSync(duong)) {
+			hang.push(
+				`${d.chan.padEnd(4)} [chan-moi-khong-do-duoc:${d.chan}] TEP KHONG CO trong ban sao: ${d.tep}\n` +
+					"        Mot ENOENT tran o day giet ca nhom va khong noi phep pha nao hong.",
+			);
+			hong += 1;
+			continue;
+		}
 		const goc = readFileSync(duong, "utf8");
 		try {
 			const mt = mtCua(d);
