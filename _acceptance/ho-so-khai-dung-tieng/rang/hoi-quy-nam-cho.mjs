@@ -53,18 +53,20 @@ for (const bien of ["uncaughtException", "unhandledRejection"]) {
 	});
 }
 
-if (process.env.RANG_EP_LOI === "1") {
-	throw new Error(
-		"ep loi de do phep tra lai (RANG_EP_LOI=1) — mo sau khi da muon, truoc khi tra",
-	);
-}
-
 let hong = 0;
 let tienDeThieu = 0;
 
 try {
 	for (const c of CHAN) {
 		console.log(`\n===== CHAN CU: ${c} =====`);
+		if (process.env.RANG_EP_LOI === "1") {
+			throw new Error(
+				"ep loi de do phep tra lai (RANG_EP_LOI=1) — nem TRONG than vong lap,\n" +
+					"   tuc sau khi da muon thoa thuan that va dang giua chung. Cho nem cu nam\n" +
+					"   NGOAI khoi try nen no chi do hai bay ngoai le, khong do finally —\n" +
+					"   go dung try/finally nhu eval khai ma chan van xanh. Hoi dong S4 vong 2 bat.",
+			);
+		}
 		try {
 			const ra = execFileSync("bun", [CU, c], {
 				cwd: GOC,

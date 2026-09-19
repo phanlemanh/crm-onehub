@@ -111,8 +111,15 @@ evals:
       ghi da kiem kem gia tri truoc/sau, khong tra mot con so.
       Ngoai le phai ep o giua — sau khi da muon, truoc khi tra — khong phai o dau
       hay o cuoi; ep sai cho thi chan nay xanh ma khong chung duoc gi.
-      Cap hai chieu: ban sao go try/finally khoi hoi-quy-nam-cho -> chan DO, thong
-      diep ghim ten thoa thuan bi bo lai sai giai doan.
+      Cap hai chieu: ban sao VO HIEU HOA phep tra lai (than ham `tra()` tra ve ngay)
+      -> chan DO, thong diep ghim "ban-ghi-that-con-lech:" kem id ban ghi.
+      Vi sao khai NHU VAY chu khong phai "go try/finally": duong don dep co HAI loi
+      vao — khoi `finally` VA hai bay uncaughtException/unhandledRejection — va ca
+      hai cung goi `tra()`. Go rieng try/finally thi bay van don, chan van xanh; da
+      do tay 19/09 (ma thoat 3 = bay chay, 0 ban ghi lech). Khai "go try/finally" la
+      mo ta mot co che KHAC voi co che that su giu loi hua, dung lop benh ma AC-7
+      cua chinh vong nay bat. Diem nem cung da doi: no nam TRONG than vong lap, tuc
+      sau khi da muon thoa thuan that, chu khong con nam ngoai khoi try.
     paths:
       - "_acceptance/ho-so-khai-dung-tieng/rang/du-lieu-thu.mjs"
       - "_acceptance/ho-so-khai-dung-tieng/rang/hoi-quy-nam-cho.mjs"

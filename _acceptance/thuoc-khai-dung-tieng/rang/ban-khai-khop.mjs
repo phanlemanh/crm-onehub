@@ -10,59 +10,196 @@ const HO_SO = "_acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs";
 const VUNG = "_acceptance/ho-so-khai-dung-tieng/evidence/vung-khai.json";
 const EVALS = "_acceptance/ho-so-khai-dung-tieng/evals.yaml";
 
-const KHOA_MOI_MUC = ["tieng_viet_lot"];
-const KHOA_MUC_E1_E5 = ["cho"];
-const MUC_E1_E5 = [
-	"gioi-thieu",
-	"tom-tat-lien-he",
-	"nganh",
-	"dong-thoi-gian",
-	"khong-khai-thua",
-	"khong-khai-thua-chuc-danh",
-];
-const API_DA_CHET = ["CHUOI TRAN", "chuoi tran"];
+const evals = readFileSync(join(GOC, EVALS), "utf8");
+
+function cacO(noi_dung) {
+	const ra = [];
+	const dong = noi_dung.split("\n");
+	let nay = null;
+	for (const d of dong) {
+		const mo = /^ {2}- id: (\S+)\s*$/.exec(d);
+		if (mo) {
+			if (nay) ra.push(nay);
+			nay = { id: mo[1], expected: [], paths: [], trong: null };
+			continue;
+		}
+		if (!nay) continue;
+		if (/^ {4}expected:/.test(d)) nay.trong = "expected";
+		else if (/^ {4}paths:/.test(d)) nay.trong = "paths";
+		else if (/^ {4}\w/.test(d)) nay.trong = null;
+		else if (nay.trong === "expected") nay.expected.push(d);
+		else if (nay.trong === "paths") {
+			const m = /^\s*-\s*"?([^"]+?)"?\s*$/.exec(d);
+			if (m) nay.paths.push(m[1]);
+		}
+	}
+	if (nay) ra.push(nay);
+	return ra;
+}
+
+function docDuong(d) {
+	if (!d.includes("*")) {
+		try {
+			return readFileSync(join(GOC, d), "utf8");
+		} catch {
+			return "";
+		}
+	}
+	const tienTo = d.replace(/\*+$/, "").replace(/\/+$/, "");
+	const r = chay("git", [
+		"-C",
+		GOC,
+		"ls-files",
+		"--cached",
+		"--others",
+		"--exclude-standard",
+		...(tienTo === "" ? [] : ["--", tienTo]),
+	]);
+	if (r.ma !== 0) return "";
+	return r.ra
+		.trim()
+		.split("\n")
+		.filter((t) => t !== "")
+		.map((t) => {
+			try {
+				return readFileSync(join(GOC, t), "utf8");
+			} catch {
+				return "";
+			}
+		})
+		.join("\n");
+}
+
+const O = cacO(evals);
+ghim("so o trong evals.yaml cua ho so kia", O.length, 12);
 
 console.log(
-	"-- HAI ve cua AC-7, doi chieu ban khai voi ban that:\n" +
-		`   (a) khong o eval nao con mo ta API da bo: ${API_DA_CHET.map((x) => JSON.stringify(x)).join(" · ")}\n` +
-		`   (b) moi khoa hoi dong duoc bao cham deu co chan do ghi ra.\n` +
-		`       E11 doi ${KHOA_MOI_MUC.join(" · ")} o MOI muc, va ${KHOA_MUC_E1_E5.join(" · ")} o vat do\n` +
-		`       CHINH cua E1..E5 (${MUC_E1_E5.length} muc, chep tay tu cau "vat do CHINH E1..E5").\n` +
-		"   Hang ghim chep tay tu muc E11 va E7 cua evals.yaml.",
+	"-- HAI VE cua AC-7, ca hai do QUAN HE giua BAN KHAI va BAN THAT.\n" +
+		"   (a) moi hinh dang ma mot o mo ta trong dau nhay nguoc phai CON TON TAI trong\n" +
+		"       chinh cac tep ma o do liet o `paths`. Ban cu chi grep evals.yaml tim hai\n" +
+		'       chuoi chep cung ("CHUOI TRAN"), tuc do CHI DAN chu khong do DAU RA:\n' +
+		"       mot API khac bi bo trong tuong lai se lot han. Hoi dong S4 vong 2 bat.\n" +
+		"   (b) moi KHOA ma o hoi dong bao cham phai co chan do ghi ra. Danh sach khoa\n" +
+		"       DOC TU `expected` cua o hoi dong, khong go lai lan hai.",
 );
 
 let hong = 0;
-const hang = [];
+const hangA = [];
+let soHinhDang = 0;
 
-const evals = readFileSync(join(GOC, EVALS), "utf8");
-for (const chet of API_DA_CHET) {
-	const dong = evals
-		.split("\n")
-		.map((d, i) => [i + 1, d])
-		.filter(([, d]) => d.includes(chet));
-	if (dong.length > 0) {
-		for (const [i, d] of dong) {
-			hang.push(
-				`API DA CHET [ban-khai-ta-api-da-bo:${chet}] ${EVALS}:${i} ${d.trim().slice(0, 70)}`,
+// Tu vung cua BAN KHAI, khong phai hinh dang cua BAN THAT: chung nam trong dau
+// nhay nguoc vi o dang noi VE cau truc eval, nen quet chung se bao dong gia.
+const BO_QUA = new Set([
+	"bun",
+	"git",
+	"node",
+	"exit",
+	"PASS",
+	"FAIL",
+	"UNCERTAIN",
+	"expected",
+	"paths",
+	"cmd",
+	"criterion",
+	"executor",
+	"inputs",
+	"status",
+	"not-run",
+	"evidence_required",
+]);
+
+for (const o of O) {
+	if (o.paths.length === 0) continue;
+	const noi_dung = o.paths.map((d) => docDuong(d)).join("\n");
+	if (noi_dung.trim() === "") {
+		hangA.push(
+			`KHONG DOC DUOC [o-khai-duong-khong-doc-duoc:${o.id}] ${o.paths.join(" · ")}`,
+		);
+		hong += 1;
+		continue;
+	}
+	const van = o.expected.join("\n");
+	const hinh = [
+		...new Set([
+			// ten component / kieu: PascalCase, it nhat mot chu hoa o giua
+			...[...van.matchAll(/\b([A-Z][a-z]+(?:[A-Z][a-z]+)+)\b/g)].map(
+				(m) => m[1],
+			),
+			// thuoc tinh DOM viet nguyen van: lang="en", data-slot="..."
+			...[...van.matchAll(/\b([a-z-]+="[^"]+")/g)].map((m) => m[1]),
+			// tuyen tRPC / khoa long nhau: companies.byId
+			...[...van.matchAll(/\b([a-z][a-zA-Z]*\.[a-z][a-zA-Z]+)\b/g)]
+				.map((m) => m[1])
+				.filter((t) => !/\.(tsx?|mjs|json|png|ya?ml|md|spec)$/.test(t)),
+		]),
+	].filter((t) => !BO_QUA.has(t));
+	for (const h of hinh) {
+		soHinhDang += 1;
+		const coi = h.replace(/^[.$]/, "").split(/[(\s]/)[0];
+		if (noi_dung.includes(coi)) {
+			hangA.push(`con ton tai  ${o.id.padEnd(4)} ${JSON.stringify(h)}`);
+		} else {
+			hangA.push(
+				`HINH DANG DA CHET [ban-khai-ta-hinh-dang-da-bo:${o.id}:${coi}] o ${o.id} mo ta ${JSON.stringify(h)} ma khong tep nao trong paths cua no con mang chuoi do`,
 			);
 			hong += 1;
 		}
-	} else {
-		hang.push(`khong con nhac ${JSON.stringify(chet)}`);
 	}
 }
+bang(
+	`-- VE (a): ${soHinhDang} hinh dang rut tu \`expected\` cua ${O.length} o:`,
+	hangA,
+);
+
+const oHoiDong = O.find(
+	(x) =>
+		evals
+			.slice(evals.indexOf(`  - id: ${x.id}`))
+			.startsWith(`  - id: ${x.id}`) &&
+		/executor: judgment/.test(
+			evals.slice(
+				evals.indexOf(`  - id: ${x.id}`),
+				evals.indexOf(`  - id: ${x.id}`) + 200,
+			),
+		),
+);
+if (!oHoiDong) {
+	thoat(
+		2,
+		"KHONG DO DUOC: khong tim thay o hoi dong (executor: judgment) trong evals.yaml.",
+	);
+}
+const khai = oHoiDong.expected.join("\n");
+const mKhoa =
+	/KHOA BAT BUOC[^:]*:\s*o moi muc ([^;]+);\s*o moi phan tu cua\s*mang `cho`:\s*([^.]+)\./s.exec(
+		khai.replace(/\n\s*/g, " "),
+	);
+if (!mKhoa) {
+	thoat(
+		2,
+		`KHONG DO DUOC: o hoi dong ${oHoiDong.id} khong khai "KHOA BAT BUOC" theo khuon may doc duoc.`,
+		"   Khong co ban khai thi chan nay chi con cach GO LAI danh sach — dung cai",
+		"   hinh dang ma hoi dong S4 vong 2 vua bat.",
+	);
+}
+const rut = (t) => [...t.matchAll(/`([^`]+)`/g)].map((m) => m[1]);
+const KHOA_MOI_MUC = rut(mKhoa[1]);
+const KHOA_PHAN_TU = rut(mKhoa[2]);
+console.log(
+	`\n-- VE (b): doc TU o ${oHoiDong.id}: moi muc can ${KHOA_MOI_MUC.map((x) => JSON.stringify(x)).join(", ")};\n` +
+		`   moi phan tu cua \`cho\` can ${KHOA_PHAN_TU.map((x) => JSON.stringify(x)).join(", ")}.`,
+);
+ghim("so khoa hoi dong bao cham", KHOA_MOI_MUC.length + KHOA_PHAN_TU.length, 6);
 
 console.log(
-	`\n-- Chay lai ${CHAN_UI.length} chan ui-check that de sinh lai ${VUNG}.\n` +
-		"   Doc tep cu la doc mot vat co the da cu hon chan do — phai sinh lai.",
+	`\n-- Chay lai ${CHAN_UI.length} chan ui-check that de sinh lai ${VUNG}.`,
 );
 for (const c of CHAN_UI) {
 	const r = chay("bun", [HO_SO, c]);
 	if (r.ma !== 0) {
 		thoat(
 			2,
-			`KHONG DO DUOC: chan ${c} thoat ${r.ma} tren cay sach — tien de hong,`,
-			"   khong phai ket qua do. Thuong la may chu dev chua chay cho cay nay.",
+			`KHONG DO DUOC: chan ${c} thoat ${r.ma} tren cay sach — tien de hong.`,
 			r.ra
 				.split("\n")
 				.slice(-10)
@@ -73,30 +210,33 @@ for (const c of CHAN_UI) {
 }
 
 const vung = JSON.parse(readFileSync(join(GOC, VUNG), "utf8"));
-const muc = Object.keys(vung);
-ghim("so muc trong vung-khai.json", muc.length, 8);
+ghim("so muc trong vung-khai.json", Object.keys(vung).length, 8);
 
-ghim(
-	"so muc vat do CHINH E1..E5",
-	MUC_E1_E5.filter((m) => muc.includes(m)).length,
-	MUC_E1_E5.length,
-);
-
-for (const m of muc) {
-	const can = [
-		...KHOA_MOI_MUC,
-		...(MUC_E1_E5.includes(m) ? KHOA_MUC_E1_E5 : []),
-	];
-	for (const k of can) {
-		if (vung[m][k] === undefined) {
-			hang.push(`THIEU KHOA [khoa-hoi-dong-khong-co-chan-do-ghi:${m}.${k}]`);
+const hangB = [];
+for (const [ten, m] of Object.entries(vung)) {
+	for (const k of KHOA_MOI_MUC) {
+		if (m[k] === undefined) {
+			hangB.push(`THIEU KHOA [khoa-hoi-dong-khong-co-chan-do-ghi:${ten}.${k}]`);
 			hong += 1;
 		} else {
-			hang.push(`co khoa    ${m}.${k}`);
+			hangB.push(`co khoa    ${ten}.${k}`);
+		}
+	}
+	if (!Array.isArray(m.cho)) continue;
+	for (const [i, pt] of m.cho.entries()) {
+		for (const k of KHOA_PHAN_TU) {
+			if (pt[k] === undefined) {
+				hangB.push(
+					`THIEU KHOA [khoa-hoi-dong-khong-co-chan-do-ghi:${ten}.cho[${i}].${k}]`,
+				);
+				hong += 1;
+			} else {
+				hangB.push(`co khoa    ${ten}.cho[${i}].${k}`);
+			}
 		}
 	}
 }
+bang("-- VE (b): tung khoa da doi chieu:", hangB);
 
-bang("-- Tung khoa da doi chieu, goi ten:", hang);
 console.log(`ket qua: ${hong} cho ban khai lech ban that`);
 process.exit(hong > 0 ? 1 : 0);

@@ -147,7 +147,6 @@ evals:
       chan nay phai DO, thong diep ghim chua chuoi gia tri dia danh.
     paths:
       - "apps/app/components/crm/record-sheet/company-sheet.tsx"
-      - "apps/app/components/crm/record-sheet/contact-sheet.tsx"
       - "apps/app/components/crm/record-sheet/record-parts.tsx"
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
 
@@ -208,6 +207,7 @@ evals:
       - "packages/ui/test/khai-tieng.spec.tsx"
       - "apps/app/test/khai-tieng-metaline.spec.tsx"
       - "apps/app/components/crm/record-sheet/record-parts.tsx"
+      - "apps/app/components/crm/record-sheet/contact-sheet.tsx"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8
@@ -305,6 +305,9 @@ evals:
     inputs:
       - "_acceptance/ho-so-khai-dung-tieng/evidence/vung-khai.json"
     expected: >-
+      KHOA BAT BUOC (danh sach nay la ban khai co hieu luc, chan tk_ban_khai_khop
+      DOC tu day chu khong go lai): o moi muc `tieng_viet_lot`; o moi phan tu cua
+      mang `cho`: `gia_tri`, `boc`, `the`, `so_phan_tu_khai`, `duong_the`.
       Hoi dong doc vung-khai.json — vat do CHINH E1..E5 ket xuat tu DOM that, mot
       muc cho moi gia tri, moi muc co: so phan tu khai lang ben trong gia tri,
       duong dan the cua tung phan tu, va danh sach chuoi tieng Viet lot trong

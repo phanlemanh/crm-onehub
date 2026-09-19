@@ -43,6 +43,9 @@ export function cho(ms) {
 export const TIEN_TO_SAO = ".pha-thu-khai-tieng-";
 
 export function kiemDuongSao(sao) {
+	// thu tu ba luat: nguy hiem nhat truoc. Dat luat tien to len dau thi luat goc kho
+	// thanh NHANH CHET — goc kho khong bao gio mang tien to, nen no bi chan o luat 1
+	// va luat 2 khong bao gio chay. Hoi dong S4 vong 2 bat dung cho nay.
 	const duong = resolve(sao);
 	const ten = basename(duong);
 	const tuChoi = (vi_sao) => {
@@ -54,11 +57,13 @@ export function kiemDuongSao(sao) {
 		);
 		process.exit(2);
 	};
-	if (!ten.startsWith(TIEN_TO_SAO)) {
-		tuChoi(`Ten thu muc khong mang tien to ${JSON.stringify(TIEN_TO_SAO)}.`);
-	}
 	if (duong === GOC || `${GOC}/`.startsWith(`${duong}/`)) {
-		tuChoi("Duong nay BANG hoac CHUA goc kho dang xet.");
+		tuChoi("[luat-1-goc-kho] Duong nay BANG hoac CHUA goc kho dang xet.");
+	}
+	if (!ten.startsWith(TIEN_TO_SAO)) {
+		tuChoi(
+			`[luat-2-tien-to] Ten thu muc khong mang tien to ${JSON.stringify(TIEN_TO_SAO)}.`,
+		);
 	}
 	if (existsSync(duong)) {
 		const ra = execFileSync(
@@ -74,7 +79,8 @@ export function kiemDuongSao(sao) {
 			.map((d) => resolve(d.slice("worktree ".length)));
 		if (!la.includes(duong)) {
 			tuChoi(
-				"Duong nay TON TAI nhung khong phai worktree do script nay dang ky.\n" +
+				"[luat-3-khong-phai-worktree] Duong nay TON TAI nhung khong phai worktree\n" +
+					"   do script nay dang ky.\n" +
 					"   No la mot thu muc that cua ai do, khong phai ban sao dung mot lan.",
 			);
 		}
@@ -86,11 +92,13 @@ export function dungCaySao() {
 	const sao =
 		process.env.CAY_SAO ?? join(GOC, "..", `${TIEN_TO_SAO}${process.pid}`);
 	kiemDuongSao(sao);
+	if (existsSync(sao)) rmSync(sao, { recursive: true, force: true });
 	if (process.env.CHI_KIEM_DUONG === "1") {
-		console.log(`[chi-kiem-duong] duong ${sao} di qua duoc phep kiem.`);
+		console.log(
+			`[chi-kiem-duong] duong ${sao} di qua phep kiem VA da qua lenh xoa.`,
+		);
 		process.exit(0);
 	}
-	if (existsSync(sao)) rmSync(sao, { recursive: true, force: true });
 	execFileSync(
 		"git",
 		["-C", GOC, "worktree", "add", "--detach", "--quiet", sao, "HEAD"],
