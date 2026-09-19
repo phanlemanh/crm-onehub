@@ -42,7 +42,7 @@ function docDuong(d) {
 		try {
 			return readFileSync(join(GOC, d), "utf8");
 		} catch {
-			return "";
+			return null;
 		}
 	}
 	const tienTo = d.replace(/\*+$/, "").replace(/\/+$/, "");
@@ -55,7 +55,7 @@ function docDuong(d) {
 		"--exclude-standard",
 		...(tienTo === "" ? [] : ["--", tienTo]),
 	]);
-	if (r.ma !== 0) return "";
+	if (r.ma !== 0) return null;
 	return r.ra
 		.trim()
 		.split("\n")
@@ -64,7 +64,7 @@ function docDuong(d) {
 			try {
 				return readFileSync(join(GOC, t), "utf8");
 			} catch {
-				return "";
+				return null;
 			}
 		})
 		.join("\n");
@@ -110,10 +110,23 @@ const BO_QUA = new Set([
 
 for (const o of O) {
 	if (o.paths.length === 0) continue;
-	const noi_dung = o.paths.map((d) => docDuong(d)).join("\n");
+	const doc = o.paths.map((d) => ({ d, noi: docDuong(d) }));
+	for (const x of doc.filter((y) => y.noi === null)) {
+		hangA.push(
+			`DUONG CHET [duong-trong-paths-khong-doc-duoc:${o.id}:${x.d}]\n` +
+				"        Nuot loi doc TUNG duong roi chi bao khi GOP LAI rong nghia la: doi ten\n" +
+				"        mot tep trong paths thi o van do tren cac tep con song, va ket luan\n" +
+				'        "moi hinh dang con ton tai" noi ve mot tap KHAC voi tap da khai.',
+		);
+		hong += 1;
+	}
+	const noi_dung = doc
+		.filter((x) => x.noi !== null)
+		.map((x) => x.noi)
+		.join("\n");
 	if (noi_dung.trim() === "") {
 		hangA.push(
-			`KHONG DOC DUOC [o-khai-duong-khong-doc-duoc:${o.id}] ${o.paths.join(" · ")}`,
+			`KHONG DOC DUOC GI [o-khai-duong-khong-doc-duoc:${o.id}] ${o.paths.join(" · ")}`,
 		);
 		hong += 1;
 		continue;
@@ -212,6 +225,16 @@ for (const c of CHAN_UI) {
 const vung = JSON.parse(readFileSync(join(GOC, VUNG), "utf8"));
 ghim("so muc trong vung-khai.json", Object.keys(vung).length, 8);
 
+const MUC_CO_CHO = [
+	"gioi-thieu",
+	"tom-tat-lien-he",
+	"nganh",
+	"dong-thoi-gian",
+	"khong-khai-thua",
+	"khong-khai-thua-chuc-danh",
+];
+ghim("so muc phai co mang `cho`", MUC_CO_CHO.length, 6);
+
 const hangB = [];
 for (const [ten, m] of Object.entries(vung)) {
 	for (const k of KHOA_MOI_MUC) {
@@ -222,7 +245,18 @@ for (const [ten, m] of Object.entries(vung)) {
 			hangB.push(`co khoa    ${ten}.${k}`);
 		}
 	}
-	if (!Array.isArray(m.cho)) continue;
+	if (!Array.isArray(m.cho)) {
+		if (MUC_CO_CHO.includes(ten)) {
+			hangB.push(
+				`THIEU MANG [khoa-hoi-dong-khong-co-chan-do-ghi:${ten}.cho]\n` +
+					"        Bo qua LANG khi `cho` vang nghia la: mot hoi quy lam ghiVung thoi\n" +
+					"        nhan `cho` se xoa sach NAM khang dinh tren tung phan tu, ma chan\n" +
+					"        van xanh — vi phep kiem nam SAU cai guard nay.",
+			);
+			hong += 1;
+		}
+		continue;
+	}
 	for (const [i, pt] of m.cho.entries()) {
 		for (const k of KHOA_PHAN_TU) {
 			if (pt[k] === undefined) {

@@ -134,6 +134,16 @@ export const DOT_BIEN_VONG_NAY = [
 		ghim: "khai-tieng-metaline.spec.tsx",
 	},
 	{
+		chan: "E10b",
+		eval: "E10",
+		nhom: "vua",
+		tep: "packages/ui/src/components/foreign-text.tsx",
+		cu: "			{children}",
+		moi: "			{children}{""}",
+		do: chanMoi("ho-so-cu-van-xanh"),
+		ghim: "cham-san-pham:packages/ui/src/components/foreign-text.tsx",
+	},
+	{
 		chan: "E12",
 		nhom: "nhanh",
 		eval: ["E12a", "E12b", "E12c", "E12d"],

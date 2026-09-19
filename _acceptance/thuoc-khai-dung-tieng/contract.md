@@ -48,6 +48,18 @@ phép kiểm tĩnh 19/09 về chuỗi ghim · `docs/superpowers/specs/2026-09-19
 ## Known limits
 
 
+
+- sáu-bệnh-chỉ-đo-bằng-dấu-hiệu — AC-13 hứa một QUAN HỆ: khôi phục bệnh rồi đòi
+  bộ đo đỏ. Sau vòng chấm 3, chỉ bệnh **E** được đo bằng quan hệ thật (khôi phục
+  bệnh trong bản sao rồi khẳng định `mot-duong.mjs` thôi bắt được). Sáu bệnh còn
+  lại — **A, C, D, F, G, chốt-ghim-cũ** — chỉ được đo bằng «dấu hiệu cấu trúc còn
+  trong tệp», tức một khẳng định đại diện. `bay-benh-cu.mjs` in ra lý do từng cái
+  ở mục `KHAI_GIOI_HAN`. Năm trong sáu là giới hạn **chi phí**: chỗ bắt cần một
+  lượt `pha-thu` hoặc một lượt trình duyệt, vài phút mỗi cái, vượt trần 600 giây
+  của công cụ chấm nếu nhét vào chân này. Riêng **C** là giới hạn **thật**: không
+  phép đo nào trong kho phân biệt được «so DOM với giá trị về từ máy chủ» và «so
+  DOM với một hằng gõ sẵn» — cả hai đều so DOM với một chuỗi, khác nhau ở chỗ
+  chuỗi ấy đến từ đâu.
 - trần thước — trần nhát sửa thước (thuoc-co-cua AC-12) được miễn cho vòng này
   theo quyết định của người ký 19/09. Tiền đề của trần là «vá thước nghĩa là đang
   trôi khỏi sản phẩm»; với một vòng mà sản phẩm CHÍNH LÀ thước, tiền đề đó không

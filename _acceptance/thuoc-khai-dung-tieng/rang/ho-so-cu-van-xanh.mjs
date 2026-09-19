@@ -85,16 +85,31 @@ hang.push(`bang chung: ${lech} cho lech tren ${Object.keys(vung).length} muc`);
 console.log(
 	`\n-- Ve (b): diff ${GOC_VONG}..HEAD co cham tep san pham nao khong.`,
 );
-const doi = execFileSync(
-	"git",
-	["-C", GOC, "diff", "--name-only", `${GOC_VONG}...HEAD`],
-	{
-		encoding: "utf8",
-	},
-)
-	.trim()
-	.split("\n")
-	.filter((d) => d !== "");
+const doi = [
+	...new Set([
+		...execFileSync("git", ["-C", GOC, "diff", "--name-only", GOC_VONG], {
+			encoding: "utf8",
+		})
+			.trim()
+			.split("\n"),
+		...execFileSync(
+			"git",
+			["-C", GOC, "ls-files", "--others", "--exclude-standard"],
+			{ encoding: "utf8" },
+		)
+			.trim()
+			.split("\n"),
+	]),
+].filter((d) => d !== "");
+
+ghim("diff phai KHAC RONG", doi.length > 0, true);
+console.log(
+	`   ${doi.length} tep doi so voi ${GOC_VONG}, KE CA thay doi chua commit va tep chua theo doi.\n` +
+		"   Ban cu dung `${GOC_VONG}...HEAD` — chi lich su DA COMMIT — nen phep pha ma ban\n" +
+		"   khai cho ve nay (sua mot dong trong foreign-text.tsx) khong the kich hoat: no\n" +
+		"   sua cay lam viec, ma phep do khong nhin cay lam viec. Va khong doi chung duong\n" +
+		'   nao: mot khoang diff RONG cung cho ra "RONG" va xanh. Hoi dong S4 vong 3 bat.',
+);
 const giao = doi.filter((d) => SAN_PHAM.includes(d));
 if (giao.length > 0) {
 	for (const g of giao) hang.push(`CHAM SAN PHAM [cham-san-pham:${g}]`);

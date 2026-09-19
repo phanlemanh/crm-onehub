@@ -1,6 +1,34 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { execFileSync } from "node:child_process";
+import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { basename, join } from "node:path";
 import { bang, chay, GOC, ghim, thoat } from "./chung.mjs";
+
+const TIEN_TO_BS = ".bay-benh-cu-";
+
+function dungBanSao() {
+	const sao = join(GOC, "..", `${TIEN_TO_BS}${process.pid}`);
+	if (existsSync(sao)) rmSync(sao, { recursive: true, force: true });
+	execFileSync(
+		"git",
+		["-C", GOC, "worktree", "add", "--detach", "--quiet", sao, "HEAD"],
+		{ encoding: "utf8" },
+	);
+	return sao;
+}
+
+function donBanSao(sao) {
+	if (!basename(sao).startsWith(TIEN_TO_BS)) {
+		thoat(2, `[xoa-tu-choi] ${sao} khong mang tien to ${TIEN_TO_BS}`);
+	}
+	try {
+		execFileSync("git", ["-C", GOC, "worktree", "remove", "--force", sao], {
+			encoding: "utf8",
+		});
+	} catch {
+		rmSync(sao, { recursive: true, force: true });
+	}
+	execFileSync("git", ["-C", GOC, "worktree", "prune"], { encoding: "utf8" });
+}
 
 const BAY = 7;
 const H = "_acceptance/ho-so-khai-dung-tieng/rang";
@@ -59,6 +87,58 @@ const BENH = [
 		dau_hieu: 'ghim: "lech-boc:gioi-thieu"',
 		vi_sao: "Chuoi ghim da doi sang nhan chi in khi do.",
 	},
+];
+
+const QUAN_HE = [
+	{
+		ma: "E",
+		vi_sao:
+			"Benh E la 'khop TEN THE trong khi loi hua la QUAN HE'. Khoi phuc no = bo\n" +
+			"      phep kiem nhap-tu-@crm/ui trong mot-duong.mjs. Cho bat: dinh nghia mot\n" +
+			"      ForeignText tu mot duong KHAC trong mot tep dang khai tieng — ban lanh\n" +
+			"      phai DO (vi quan he gay), ban da khoi phuc benh phai XANH (vi chi khop\n" +
+			"      ten the). Khong dinh nghia ForeignText tai cho: lam vay se them mot\n" +
+			"      <span lang=> viet tay va mot-duong do vi LY DO KHAC, nen phep do thanh\n" +
+			"      ra khong co lap duoc benh E.",
+		pha_thuoc: {
+			tep: "_acceptance/ho-so-khai-dung-tieng/rang/mot-duong.mjs",
+			cu: "\t\tif (NHAP_UI.test(noi_dung)) {",
+			moi: "\t\tif (true) {",
+		},
+		pha_vat: {
+			tep: "apps/app/components/crm/deal-stage.tsx",
+			cu: 'import { ForeignText } from "@crm/ui/components/foreign-text";',
+			moi: 'import { ForeignText } from "./foreign-text-cuc-bo";',
+		},
+		do: ["bun", "_acceptance/ho-so-khai-dung-tieng/rang/mot-duong.mjs"],
+	},
+];
+
+const KHAI_GIOI_HAN = [
+	[
+		"A",
+		"Khoi phuc = cho dungCaySao() tra ve chinh goc cay. Cho bat la phep kiem cay-khong-doi cua pha-thu, ma mot luot pha-thu mat vai phut va can hai may chu dev — vuot tran 600 giay cua cong cu cham neu de trong chan nay.",
+	],
+	[
+		"C",
+		"Khoi phuc = so gia tri DOM voi mot hang go san thay vi gia tri ve tu goiMayChu(). Khong phep do nao trong kho phan biet duoc hai ban cai dat do: ca hai deu so DOM voi mot chuoi, khac nhau o CHO chuoi ay den. Day la gioi han that, khong phai gioi han chi phi.",
+	],
+	[
+		"D",
+		"Khoi phuc = bo doi chung duong cua ho-so-trong. Cho bat phai la mot vat thu co enrichment RONG ma khoi Gioi thieu VAN ve — dung mot fixture thu hai chua co trong tap du lieu thu.",
+	],
+	[
+		"F",
+		"Khoi phuc = noi bo chon tu [data-slot=sheet-content] ra ca trang. Cho bat la phep pha E1 cua pha-thu tren ban da khoi phuc benh; can may chu dev va vai phut.",
+	],
+	[
+		"G",
+		"Khoi phuc = bo cua CHO_PHEP_CAY_BAN. Cho bat la chinh pha-thu chay tren mot cay co y lam ban; can mot luot pha-thu day du.",
+	],
+	[
+		"chot-ghim-cu",
+		"Khoi phuc = dat chuoi ghim ve ten chan. Cho bat la ghim-phan-biet, ma no mo trinh duyet cho bay chan ui-check — vai phut va can may chu dev.",
+	],
 ];
 
 console.log(
@@ -127,5 +207,76 @@ console.log(
 		"   ca van xuoi binh thuong: do 19/09, 5/7 benh co cua thoat mo san vinh vien.",
 );
 bang(`-- ${BENH.length} benh:`, hang);
-console.log(`ket qua: ${hong} benh quay lai tren ${BENH.length}`);
+console.log(
+	"\n-- VE QUAN HE: voi benh co cho bat re, khoi phuc benh THAT roi doi mot phep do\n" +
+		'   CU THE phai thoi bat duoc. Khang dinh "chuoi dau hieu con day" la dai dien:\n' +
+		"   mot ban cai dat van goi goiMayChu() roi so voi mot hang go san se di qua no\n" +
+		"   nguyen ven — chuoi con do, benh da quay lai. Hoi dong S4 vong 3 bat cho do.",
+);
+
+const hangQH = [];
+for (const q of QUAN_HE) {
+	const sao = dungBanSao();
+	try {
+		const apDung = (x) => {
+			const duong = join(sao, x.tep);
+			const goc = readFileSync(duong, "utf8");
+			if (!goc.includes(x.cu)) {
+				return `KHONG AP DUNG DUOC: ${x.tep}`;
+			}
+			writeFileSync(duong, goc.replace(x.cu, x.moi));
+			return null;
+		};
+		const loi = apDung(q.pha_vat);
+		if (loi) {
+			hangQH.push(`${q.ma} [benh-cu-quay-lai:${q.ma}] ${loi}`);
+			hong += 1;
+			continue;
+		}
+		const lanh = chay(q.do[0], q.do.slice(1), { cwd: sao });
+		const loi2 = apDung(q.pha_thuoc);
+		if (loi2) {
+			hangQH.push(`${q.ma} [benh-cu-quay-lai:${q.ma}] ${loi2}`);
+			hong += 1;
+			continue;
+		}
+		const benh = chay(q.do[0], q.do.slice(1), { cwd: sao });
+		const dat = lanh.ma !== 0 && benh.ma === 0;
+		if (!dat) {
+			hangQH.push(
+				`${q.ma} [benh-cu-quay-lai:${q.ma}] ban LANH thoat ${lanh.ma} (can khac 0), ban DA KHOI PHUC BENH thoat ${benh.ma} (can 0)`,
+			);
+			hong += 1;
+		} else {
+			hangQH.push(
+				`${q.ma} do bang QUAN HE: ban lanh DO (${lanh.ma}), ban khoi phuc benh XANH (${benh.ma}) — tuc phep kiem quan he that su dang gay`,
+			);
+		}
+	} finally {
+		donBanSao(sao);
+	}
+}
+bang(`-- ${QUAN_HE.length} benh do bang QUAN HE:`, hangQH);
+
+const daKhai = new Set(KHAI_GIOI_HAN.map(([m]) => m));
+const daQuanHe = new Set(QUAN_HE.map((q) => q.ma));
+const soHo = BENH.map((b) => b.ma).filter(
+	(m) => !daQuanHe.has(m) && !daKhai.has(m),
+);
+if (soHo.length > 0) {
+	for (const m of soHo) {
+		console.log(
+			`   [benh-thieu-ca-do-lan-known-limits:${m}] khong do bang quan he VA khong khai gioi han`,
+		);
+	}
+	hong += soHo.length;
+}
+bang(
+	`-- ${KHAI_GIOI_HAN.length} benh CHI do bang dau hieu, gioi han khai dich danh:`,
+	KHAI_GIOI_HAN.map(([m, v]) => `${m}: ${v}`),
+);
+
+console.log(
+	`ket qua: ${hong} cho hong (${BENH.length} benh · ${QUAN_HE.length} do quan he · ${KHAI_GIOI_HAN.length} khai gioi han)`,
+);
 process.exit(hong > 0 ? 1 : 0);
