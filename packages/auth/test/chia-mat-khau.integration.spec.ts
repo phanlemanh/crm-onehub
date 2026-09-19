@@ -3,13 +3,13 @@ import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import { handleOAuthUserInfo } from "better-auth/oauth2";
 import { auth } from "../src/auth";
-import { ducChia, PASSWORD } from "../src/chia-mat-khau";
+import { CHIA, ducChia, PASSWORD } from "../src/chia-mat-khau";
 import { isGoogleConfigured } from "../src/env";
 import { GOOGLE_PROVIDER_ID } from "../src/scopes";
 
 const suffix = process.env.TEST_RUN_ID ?? "chia-mat-khau-spec";
 
-const KHONG_TOI_MANG_HIBP = "Failed to check password. Please try again later.";
+const TIEN_TO_KHONG_TOI_MANG_HIBP = "Failed to check password.";
 
 async function dungKho() {
 	await db.organization.upsert({
@@ -106,6 +106,11 @@ describe("vong-tron", () => {
 		const ket = await gieoNguoiVaChia();
 		const matKhau = `Vong-tron-${Date.now()}`;
 
+		expect(ket.url).toBe(`http://localhost:3000/dat-mat-khau/${ket.token}`);
+		const conLai = ket.expiresAt.getTime() - Date.now();
+		expect(conLai).toBeGreaterThan(0);
+		expect(conLai).toBeLessThanOrEqual(CHIA.ttlMs);
+
 		const hang = await db.verification.findFirst({
 			where: { identifier: `${PASSWORD.verificationPrefix}${ket.token}` },
 		});
@@ -161,30 +166,38 @@ describe("het-han", () => {
 });
 
 describe("phat-lai", () => {
-	test("chia thu hai song thi chia thu nhat chet, khong con token treo", async () => {
-		const ket = await gieoNguoiVaChia();
+	test("chia thu hai song thi mat khau cu het dung duoc va chia giua chet", async () => {
+		const ket0 = await gieoNguoiVaChia();
+		const m0 = `Mat-khau-0-${Date.now()}`;
+		expect((await thuDatMatKhau(ket0.token, m0)).ok).toBe(true);
+
+		const chia1 = await ducChia({
+			userId: ket0.userId,
+			appUrl: "http://localhost:3000",
+		});
+		const token1 = chia1.url.split("/").at(-1) ?? "";
 
 		const chia2 = await ducChia({
-			userId: ket.userId,
+			userId: ket0.userId,
 			appUrl: "http://localhost:3000",
 		});
 		const token2 = chia2.url.split("/").at(-1) ?? "";
-		const m2 = `Mat-khau-hai-${Date.now()}`;
+		const m2 = `Mat-khau-2-${Date.now()}`;
 		expect((await thuDatMatKhau(token2, m2)).ok).toBe(true);
 
-		expect((await thuDangNhap(ket.email, m2)).ok).toBe(true);
+		expect((await thuDangNhap(ket0.email, m2)).ok).toBe(true);
+		expect((await thuDangNhap(ket0.email, m0)).ok).toBe(false);
+		expect((await thuDatMatKhau(token1, `Chia-giua-${Date.now()}`)).ok).toBe(
+			false,
+		);
 
 		const treo = await db.verification.count({
 			where: {
-				value: ket.userId,
+				value: ket0.userId,
 				identifier: { startsWith: PASSWORD.verificationPrefix },
 			},
 		});
 		expect(treo).toBe(0);
-
-		expect(
-			(await thuDatMatKhau(ket.token, `Chia-mot-lai-${Date.now()}`)).ok,
-		).toBe(false);
 	});
 });
 
@@ -211,7 +224,7 @@ describe("mat-khau-yeu", () => {
 			);
 		}
 
-		if (dat.message === KHONG_TOI_MANG_HIBP) {
+		if (dat.message.startsWith(TIEN_TO_KHONG_TOI_MANG_HIBP)) {
 			expect([
 				"bo-qua-co-ten: khong voi toi duoc mang cua haveIBeenPwned luc chay bai kiem",
 				dat.message,
