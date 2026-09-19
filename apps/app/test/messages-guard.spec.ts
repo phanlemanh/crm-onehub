@@ -2,6 +2,7 @@ import { describe, expect, it } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Locale } from "@crm/ui/lib/locale";
+import { authMessages } from "@/lib/messages/auth";
 import { docDuongGoi, taoSong } from "./duong-goi";
 
 const DAU_TIENG_VIET =
@@ -177,6 +178,10 @@ describe("kho chuoi cua vong ③a", () => {
 			"auth:datMatKhau.description": [
 				"Liên kết này dùng được một lần, còn hạn 1 phút.",
 				"Liên kết này dùng được một lần, còn hạn 12 phút.",
+			],
+			"auth:datMatKhau.loi.quaNgan": [
+				"Mật khẩu phải có ít nhất 1 ký tự.",
+				"Mật khẩu phải có ít nhất 12 ký tự.",
 			],
 			"auth:datMatKhau.toiThieu": [
 				"Ít nhất 1 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
@@ -612,6 +617,21 @@ describe("kho chuoi cua vong ③a", () => {
 			expect(f("1", "A", "B")).toBe(mot);
 			expect(f("12", "A", "B")).toBe(nhieu);
 		}
+	});
+});
+
+describe("man Xong cua trang dat mat khau", () => {
+	it("nut ve man dang nhap la chuoi rieng, khong dung lai chuoi nut gui", () => {
+		const LOCALE: readonly Locale[] = ["en", "vi"];
+
+		for (const locale of LOCALE) {
+			const m = authMessages(locale).datMatKhau;
+			expect(m.xong.dangNhap).not.toBe(m.gui);
+			expect(m.xong.dangNhap.length).toBeGreaterThan(0);
+		}
+
+		expect(authMessages("vi").datMatKhau.xong.dangNhap).toBe("Đăng nhập");
+		expect(authMessages("vi").datMatKhau.gui).toBe("Đặt mật khẩu");
 	});
 });
 

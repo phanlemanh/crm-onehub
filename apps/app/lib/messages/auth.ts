@@ -89,6 +89,7 @@ const en = {
 			title: "Done",
 			description:
 				"Your password is set. From now on you can sign in to the CRM with this email and password, even when your network can't reach Google.",
+			dangNhap: "Sign in",
 		},
 		loi: {
 			hetHan:
@@ -96,6 +97,7 @@ const en = {
 			khongDungDuoc:
 				"This link can no longer be used — it may already have been used, or replaced by a newer link. Ask your administrator to send you a new one.",
 			lechNhau: "The two passwords don't match.",
+			quaNgan: (soKyTu: number) => `Use at least ${soKyTu} characters.`,
 		},
 	},
 };
@@ -191,6 +193,7 @@ const vi = {
 			title: "Xong",
 			description:
 				"Mật khẩu đã đặt. Từ giờ bạn vào CRM được bằng địa chỉ email và mật khẩu này, kể cả khi mạng không vào được Google.",
+			dangNhap: "Đăng nhập",
 		},
 		loi: {
 			hetHan:
@@ -198,6 +201,7 @@ const vi = {
 			khongDungDuoc:
 				"Liên kết này không dùng được nữa — có thể đã dùng rồi hoặc đã bị thay bằng liên kết mới. Nhắn người quản trị phát cho bạn một liên kết mới.",
 			lechNhau: "Hai ô mật khẩu chưa giống nhau.",
+			quaNgan: (soKyTu: number) => `Mật khẩu phải có ít nhất ${soKyTu} ký tự.`,
 		},
 	},
 } satisfies AuthMessages;

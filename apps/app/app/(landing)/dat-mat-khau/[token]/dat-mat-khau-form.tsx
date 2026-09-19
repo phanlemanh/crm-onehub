@@ -18,11 +18,13 @@ import { LienKetKhongHopLe } from "./lien-ket-khong-hop-le";
 type XongChu = {
 	title: string;
 	description: string;
+	dangNhap: string;
 };
 
 type LoiChu = {
 	khongDungDuoc: string;
 	lechNhau: string;
+	quaNgan: string;
 };
 
 function Heading({
@@ -51,6 +53,7 @@ export function DatMatKhauForm({
 	matKhauMoi,
 	goLai,
 	toiThieu,
+	soKyTuToiThieu,
 	gui,
 	xong,
 	loi,
@@ -61,6 +64,7 @@ export function DatMatKhauForm({
 	matKhauMoi: string;
 	goLai: string;
 	toiThieu: string;
+	soKyTuToiThieu: number;
 	gui: string;
 	xong: XongChu;
 	loi: LoiChu;
@@ -77,6 +81,11 @@ export function DatMatKhauForm({
 		setPasswordError(null);
 		setMismatchError(null);
 		setTokenError(null);
+
+		if (newPassword.length < soKyTuToiThieu) {
+			setPasswordError(loi.quaNgan);
+			return;
+		}
 
 		if (newPassword !== confirmPassword) {
 			setMismatchError(loi.lechNhau);
@@ -113,7 +122,7 @@ export function DatMatKhauForm({
 			<div className="flex flex-col gap-8">
 				<Heading description={xong.description} title={xong.title} />
 				<Button asChild className="w-full">
-					<Link href="/sign-in">{gui}</Link>
+					<Link href="/sign-in">{xong.dangNhap}</Link>
 				</Button>
 			</div>
 		);

@@ -54,12 +54,18 @@ export default async function DatMatKhauPage({
 				loi={{
 					khongDungDuoc: m.loi.khongDungDuoc,
 					lechNhau: m.loi.lechNhau,
+					quaNgan: m.loi.quaNgan(PASSWORD.minLength),
 				}}
 				matKhauMoi={m.matKhauMoi}
+				soKyTuToiThieu={PASSWORD.minLength}
 				title={m.title}
 				toiThieu={m.toiThieu(PASSWORD.minLength)}
 				token={token}
-				xong={{ title: m.xong.title, description: m.xong.description }}
+				xong={{
+					title: m.xong.title,
+					description: m.xong.description,
+					dangNhap: m.xong.dangNhap,
+				}}
 			/>
 		</AuthShell>
 	);
