@@ -1,7 +1,10 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { CHAN_UI } from "../../ho-so-khai-dung-tieng/rang/bang-dot-bien.mjs";
-import { bang, chay, GOC, ghim, thoat } from "./chung.mjs";
+import { bang, chay, GOC, ghim, giuKhoa, thoat } from "./chung.mjs";
+
+const nhaKhoa = await giuKhoa("ban-khai-khop");
+process.on("exit", nhaKhoa);
 
 const HO_SO = "_acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs";
 const VUNG = "_acceptance/ho-so-khai-dung-tieng/evidence/vung-khai.json";

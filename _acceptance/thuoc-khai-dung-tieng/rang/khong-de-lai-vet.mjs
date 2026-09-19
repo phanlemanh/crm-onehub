@@ -1,5 +1,8 @@
 import { db } from "../../../packages/db/src/index.ts";
-import { bang, chay, GOC, thoat } from "./chung.mjs";
+import { bang, chay, GOC, giuKhoa, thoat } from "./chung.mjs";
+
+const nhaKhoa = await giuKhoa("khong-de-lai-vet");
+process.on("exit", nhaKhoa);
 
 const HOI_QUY = "_acceptance/ho-so-khai-dung-tieng/rang/hoi-quy-nam-cho.mjs";
 

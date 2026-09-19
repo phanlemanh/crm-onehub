@@ -9,7 +9,10 @@ import {
 	dungCaySao,
 	dungMayChu,
 } from "../../ho-so-khai-dung-tieng/rang/cay-sao.mjs";
-import { bang, GOC, ghim } from "./chung.mjs";
+import { bang, GOC, ghim, giuKhoa } from "./chung.mjs";
+
+const nhaKhoa = await giuKhoa("khai-sinh-phu-vong-nay");
+process.on("exit", nhaKhoa);
 
 const R = "_acceptance/thuoc-khai-dung-tieng/rang";
 const H = "_acceptance/ho-so-khai-dung-tieng/rang";

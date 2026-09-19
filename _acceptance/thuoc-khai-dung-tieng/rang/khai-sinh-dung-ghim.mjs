@@ -1,4 +1,7 @@
-import { chay, thoat } from "./chung.mjs";
+import { chay, giuKhoa, thoat } from "./chung.mjs";
+
+const nhaKhoa = await giuKhoa("khai-sinh-dung-ghim");
+process.on("exit", nhaKhoa);
 
 const PHA_THU = "_acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs";
 const CHAN = "E1";
