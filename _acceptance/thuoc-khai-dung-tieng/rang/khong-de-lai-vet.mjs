@@ -34,6 +34,21 @@ async function chup() {
 	);
 }
 
+const sot = await db.deal.findMany({
+	where: { name: { startsWith: `${TIEN_TO_VAT} Phu ` } },
+	select: { id: true, name: true },
+});
+if (sot.length > 0) {
+	await db.deal.deleteMany({ where: { id: { in: sot.map((d) => d.id) } } });
+	console.log(
+		`-- DON TRUOC: xoa ${sot.length} vat thu phu con sot tu luot truoc.\n` +
+			"   Mot luot chay HONG de lai vat, va vat do lam giai doan het thieu, nen luot\n" +
+			"   ke tiep khong tao gi va tien de sap. Chan do dang DO chinh chuyen de-lai-vet\n" +
+			"   thi phai tu dua minh ve trang thai biet truoc, khong duoc phu thuoc vao viec\n" +
+			"   luot truoc da sach.",
+	);
+}
+
 const truoc = await chup();
 if (truoc.size === 0) {
 	await db.$disconnect();
@@ -105,6 +120,16 @@ for (const id of sau.keys()) {
 		);
 		hong += 1;
 	}
+}
+
+const soVat = await db.deal.count({ where: { name: { contains: MOC } } });
+if (soVat > 0) {
+	hang.push(
+		`VAT THU CON LAI [ban-ghi-that-con-lech:vat-thu-${MOC}] ${soVat} thoa thuan mang moc ${MOC}`,
+	);
+	hong += soVat;
+} else {
+	hang.push(`vat thu mang moc ${MOC}: da don sach`);
 }
 
 bang(`-- ${hang.length} ban ghi da doi chieu, goi ten tung cai:`, hang);
