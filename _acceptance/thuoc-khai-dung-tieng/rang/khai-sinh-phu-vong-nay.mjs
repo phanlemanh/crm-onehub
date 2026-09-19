@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import {
@@ -11,12 +12,8 @@ import {
 import { bang, GOC, ghim } from "./chung.mjs";
 
 const R = "_acceptance/thuoc-khai-dung-tieng/rang";
-const BAY_GIO_KHONG_DUNG = 0;
-
 const H = "_acceptance/ho-so-khai-dung-tieng/rang";
 const GS = ".githooks/gate-shape.json";
-
-void BAY_GIO_KHONG_DUNG;
 
 const chanMoi = (t) => ({ lenh: "bun", doi_so: [`${R}/${t}.mjs`] });
 
@@ -39,6 +36,7 @@ export const DOT_BIEN_VONG_NAY = [
 	},
 	{
 		chan: "E3",
+		commit: true,
 		tep: GS,
 		cu: '"id": "mot-duong"',
 		moi: '"id": "mot-duong-KHONG-CO"',
@@ -79,10 +77,9 @@ export const DOT_BIEN_VONG_NAY = [
 	},
 	{
 		chan: "E7",
-		tep: "_acceptance/ho-so-khai-dung-tieng/evals.yaml",
-		cu: "      Hoi dong doc vung-khai.json",
-		moi: "      Hoi dong doc vung-khai.json (moi muc co khoa mau_sac_khong_ai_ghi)",
-		them_ghim: true,
+		tep: `${R}/ban-khai-khop.mjs`,
+		cu: 'const KHOA_MOI_MUC = ["tieng_viet_lot"];',
+		moi: 'const KHOA_MOI_MUC = ["tieng_viet_lot", "mau_sac_khong_ai_ghi"];',
 		do: chanMoi("ban-khai-khop"),
 		ghim: "khoa-hoi-dong-khong-co-chan-do-ghi:",
 	},
@@ -105,7 +102,17 @@ export const DOT_BIEN_VONG_NAY = [
 	{
 		chan: "E12",
 		tep: `${R}/khai-sinh-phu-vong-nay.mjs`,
-		cu: "const BAY_GIO_KHONG_DUNG = 0;\n",
+		cu: [
+			"\t{",
+			'\t\tchan: "E14",',
+			"\t\ttep: `${R}/bay-benh-cu.mjs`,",
+			'\t\tcu: "const BAY = 7;",',
+			'\t\tmoi: "const BAY = 6;",',
+			'\t\tdo: chanMoi("bay-benh-cu"),',
+			'\t\tghim: "HANG GHIM LECH",',
+			"\t},",
+			"",
+		].join("\n"),
 		moi: "",
 		do: {
 			lenh: "bun",
@@ -211,6 +218,25 @@ try {
 				continue;
 			}
 			writeFileSync(duong, goc.replace(d.cu, d.moi));
+			if (d.commit) {
+				execFileSync("git", ["-C", sao, "add", "-A"], { encoding: "utf8" });
+				execFileSync(
+					"git",
+					[
+						"-C",
+						sao,
+						"-c",
+						"user.email=r@r",
+						"-c",
+						"user.name=rang",
+						"commit",
+						"-q",
+						"-m",
+						"dot bien",
+					],
+					{ encoding: "utf8" },
+				);
+			}
 
 			const r = chay(d.do, sao, mt);
 			const coGhim = r.ra.includes(d.ghim);
@@ -224,6 +250,25 @@ try {
 			);
 		} finally {
 			writeFileSync(duong, goc);
+			if (d.commit) {
+				execFileSync("git", ["-C", sao, "add", "-A"], { encoding: "utf8" });
+				execFileSync(
+					"git",
+					[
+						"-C",
+						sao,
+						"-c",
+						"user.email=r@r",
+						"-c",
+						"user.name=rang",
+						"commit",
+						"-q",
+						"-m",
+						"tra ban goc",
+					],
+					{ encoding: "utf8" },
+				);
+			}
 		}
 	}
 } finally {
