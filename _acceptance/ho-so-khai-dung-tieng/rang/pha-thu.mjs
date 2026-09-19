@@ -8,13 +8,22 @@ import {
 	symlinkSync,
 	writeFileSync,
 } from "node:fs";
+import { createServer as netCreateServer } from "node:net";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
-const CONG_SAO = Number(process.env.CONG_SAO ?? 3200);
-const CONG_API_SAO = CONG_SAO + 1;
+function congTrong() {
+	const may = netCreateServer();
+	may.listen(0, "127.0.0.1");
+	const cong = may.address().port;
+	may.close();
+	return cong;
+}
+
+const CONG_SAO = Number(process.env.CONG_SAO ?? 0) || congTrong();
+const CONG_API_SAO = Number(process.env.CONG_API_SAO ?? 0) || congTrong();
 const APP_SAO = `http://localhost:${CONG_SAO}`;
 const API_SAO = `http://localhost:${CONG_API_SAO}`;
 const CHO_HMR = Number(process.env.CHO_HMR ?? 6000);
@@ -90,6 +99,19 @@ export function RangThuaNgoaiKiemKe() {
 
 export function RecordActions({`,
 		do: { lenh: "bun", doi_so: [MOT_DUONG] }, ghim: "THUA" },
+	{
+		chan: "E6c",
+		mo_ta: "dinh nghia ForeignText tai cho thay vi nhap tu @crm/ui",
+		tep: RP,
+		cu: `import { ForeignText } from "@crm/ui/components/foreign-text";`,
+		moi: [
+			"function ForeignText({ lang, className, children }) {",
+			"	return <span lang={lang} className={className}>{children}</span>;",
+			"}",
+		].join("\n"),
+		do: { lenh: "bun", doi_so: [MOT_DUONG] },
+		ghim: "KHONG NHAP TU @crm/ui",
+	},
 	{ chan: "E7a", mo_ta: "bo attribute lang khoi ForeignText", tep: FT,
 		cu: "<span lang={lang} className={className}>", moi: "<span className={className}>",
 		do: chanKiem(), ghim: "chieu a" },
@@ -108,10 +130,16 @@ export function RecordActions({`,
 					{company.description ? (`,
 		do: chanHoSo("ho-so-trong"), ghim: "noi dung RONG" },
 	{ chan: "E9", mo_ta: "boc ForeignText quanh ca khoi Gioi thieu", tep: CS,
-		cu: `						<DetailSheetSection title={m.section.about}>`,
-		moi: `						<ForeignText lang="en"><DetailSheetSection title={m.section.about}>`,
-		cu2: `						</DetailSheetSection>`,
-		moi2: `						</DetailSheetSection></ForeignText>`,
+		cu: `						<DetailSheetSection title={m.section.about}>
+							<DetailSheetProse>
+								<ForeignText lang="en">{company.description}</ForeignText>
+							</DetailSheetProse>
+						</DetailSheetSection>`,
+		moi: `						<ForeignText lang="en">
+							<DetailSheetSection title={m.section.about}>
+								<DetailSheetProse>{company.description}</DetailSheetProse>
+							</DetailSheetSection>
+						</ForeignText>`,
 		do: chanHoSo("tieng-trang"), ghim: "lot vao" },
 	{ chan: "E12", mo_ta: "bo attribute lang khoi ForeignText (nhin tu man danh sach)", tep: FT,
 		cu: "<span lang={lang} className={className}>", moi: "<span className={className}>",
@@ -254,6 +282,19 @@ console.log(
 );
 
 const banDauBan = cayBan();
+
+if (banDauBan !== "" && process.env.CHO_PHEP_CAY_BAN !== "1") {
+	console.log(
+		"KHONG DO DUOC: cay dang xet DANG BAN, ma ban sao duoc dung tai HEAD.\n" +
+			"   Nghia la moi con so duoi day noi ve HEAD, KHONG noi ve cay anh sap ky.\n" +
+			"   Cau \"cay dang xet khong doi mot byte nao\" van dung va van xanh khi cay ban tu dau,\n" +
+			"   nen no KHONG bat duoc chuyen nay — day la tien de, phai chan o day.\n" +
+			"   Commit roi chay lai, hoac dat CHO_PHEP_CAY_BAN=1 neu that su muon do HEAD.\n" +
+			"   Cay dang ban:\n" +
+			banDauBan.split("\n").map((d) => "     " + d).join("\n"),
+	);
+	process.exit(2);
+}
 const bang = [];
 let hong = 0;
 let sao = null;

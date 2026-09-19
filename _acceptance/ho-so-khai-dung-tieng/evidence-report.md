@@ -2,11 +2,11 @@
 schema_version: 2
 feature_slug: ho-so-khai-dung-tieng
 verdict: REJECT
-failed_evals: ["E6", "E12"]
+failed_evals: ["E10"]
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 2ae60f42f6ce5ec806a9dce50592f81ee0ae92be
+verified_commit: b81f3cefe9b02594a2aace575cc5a6a2fb77a429
 human_signoff:
 ---
 
@@ -19,203 +19,215 @@ human_signoff:
 | E3 | AC-3 | ui-check | PASS |
 | E4 | AC-4 | ui-check | PASS |
 | E5 | AC-5 | ui-check | PASS |
-| E6 | AC-6 | script | FAIL |
+| E6 | AC-6 | script | PASS |
 | E7 | AC-7 | test | PASS |
 | E8 | AC-8 | ui-check | PASS |
 | E9 | AC-9 | ui-check | PASS |
-| E10 | AC-1 | script | PASS |
-| E11 | AC-10 | judgment | FAIL |
-| E12 | AC-11 | ui-check | FAIL |
+| E10 | AC-1 | script | FAIL |
+| E11 | AC-10 | judgment | PASS (đề xuất hội đồng — chưa cần human_override, tổng vòng đã REJECT vì E10) |
+| E12 | AC-11 | ui-check | PASS |
+
+Lệnh gây REJECT vòng này: `bun _acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs` (exit 1, phủ eval E10 — không phải một lệnh nằm ngoài mọi eval, nó chính là script đo của E10).
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-ho-so-khai-dung-tieng-E1-r1
+  run_id: minted-ho-so-khai-dung-tieng-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hskt_gioi_thieu
-  verified_at: 2026-09-19T10:00:00+07:00
-  screenshot: evidence/ho-so-gioi-thieu.png
+  verified_at: 2026-09-19T00:00:00Z
+  screenshot: _acceptance/ho-so-khai-dung-tieng/evidence/E1-step4-independent.png
   observed: |
-    Opened /Users/manh-macmini/dev/crm/.claude/worktrees/busy-chatterjee-fc04e2/_acceptance/ho-so-khai-dung-tieng/evidence/ho-so-gioi-thieu.png with Read: it shows the REAL company record sheet (not the list view) for "Attio" at http://localhost:3000/crm/companies/cmtruz664000jfkty8peooied, cookie lang=vi applied — page chrome is Vietnamese ("Tổng quan", "Cá nhân", "Thoả thuận", "Hoạt động", "Tác nhân", "CHI TIẾT", "GIỚI THIỆU" section header) while the intro paragraph under "GIỚI THIỆU" reads the English test string "One Mount is a Vietnamese technology and innovation group that builds comprehensive digital ecosystems for retail, banking and property services." exactly matching the value injected server-side for this run. This matches Expected: Vietnamese screen, English value present, nothing hand-typed into the checker.
-  network_observed: clean
+    Opened evidence/E1-step4-independent.png (real screenshot, 1440x1000, saved to disk, read with Read tool — not the inline preview_screenshot path): a real record-SHEET detail view is open over a dimmed company-list background (confirms a real record sheet was opened, not the list screen). Header shows "E1-Verify-verify-e1-19951-mu7pg7i6 · Independent-Verification". Vietnamese chrome confirms lang=vi rendering: "Công ty", "Tổng quan", "Cá nhân", "Thoả thuận", "Hoạt động", "Tác nhân", "Giá trị đang mở", "Thoả thuận đang mở". Under the "GIỚI THIỆU" heading the exact seeded English description is shown verbatim, including a unique marker suffix "[verify-e1-19951-mu7pg7i6]" — matching byte-for-byte the value fetched moments earlier from the live tRPC HTTP API (companies.byId, HTTP 200) and the value the DOM-read script located inside a <span> whose closest('[lang="en"]') was non-null. This matches Expected: description text visible on a real profile screen, sourced from the server in this same run, and visually consistent with it being wrapped as foreign-language content.
   output: |
-    - _acceptance/ho-so-khai-dung-tieng/evidence/E1-network.txt (dump network tho)
-    KET LUAN: MOI assertion cua 7 buoc deu PASS, xac nhan hai lan doc lap (script chinh thuc + script tu viet rieng), cong voi phep pha bat duoc dung loi (cap hai chieu dat). exitCode=0.
+    - The shared dev DB carries leftover un-cleaned "Vat Thu ..." fixture companies from other/previous runs, and one real seed company ("Attio") whose `description` now equals the fixture's canned text (apparent contamination from an older version of the fixture script). I did not rely on or touch these; I used my own freshly seeded-and-cleaned company for every assertion, and re-verified everything through the real HTTP API rather than trusting local DB state alone.
+
+    All required E1 assertions PASS. exitCode=0.
+  network_observed: n-a (driver)
 
 - eval: E2
-  run_id: minted-ho-so-khai-dung-tieng-E2-r1
+  run_id: minted-ho-so-khai-dung-tieng-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hskt_tom_tat_lien_he
-  verified_at: 2026-09-19T10:00:00+07:00
-  screenshot: evidence/ho-so-tom-tat.png
+  verified_at: 2026-09-19T00:00:00Z
+  screenshot: _acceptance/ho-so-khai-dung-tieng/evidence/ho-so-tom-tat.png
   observed: |
-    evidence/ho-so-tom-tat.png (read via Read tool, image inspected directly): shows the REAL contact record sheet for "Quinn Ivanova" (IT Director · Công ty Cổ phần Đầu tư và Phát triển Địa ốc Phú Mỹ), tab "Tổng quan" active, cookie lang=vi in effect (all chrome labels in Vietnamese: CHI TIẾT, QUÁ TRÌNH, MỨC THÂN QUEN, etc). The "QUÁ TRÌNH" (brief) section shows the English narrative in full: "Seasoned partnerships lead with a decade of experience building distribution networks across Southeast Asia, currently focused on retail technology adoption." — the exact brief.narrative value read from the server this run, rendered as running English prose next to Vietnamese labels. This matches Expected: a real profile sheet (not a list screen) with the agent narrative visible on it.
-  network_observed: n-a (driver)
+    Read evidence/ho-so-tom-tat.png (also saved identically as evidence/E2-step1.png): a dark-theme contact sheet is open over the Cá nhân (contacts) list. Sheet header shows "Quinn Vatthu7p8lhf · IT Director · Vat Thu 55008-mu7p8lhf" with Vietnamese chrome throughout (tabs "Tổng quan / Thoả thuận / Hoạt động / Tác nhân", section labels "CHI TIẾT", "QUÁ TRÌNH", field labels "Tên, Họ, Chức danh, Công ty, Vị trí hiện tại, Thâm niên, Cấp bậc, Mảng phụ trách" all in Vietnamese). Under "QUÁ TRÌNH" the agent-generated summary is rendered verbatim in English, matching Expected: a Vietnamese-language screen (document.documentElement.lang="vi", confirmed by DOM read) containing one foreign-language (English) span for the agent narrative. The programmatic DOM check confirmed this exact text node's nearest lang-ancestor is a SPAN with lang="en" (boc=true), i.e. AC-2 holds.
   output: |
-    Network truth: driver for the browser steps is a standalone puppeteer-core script (both the official rang script and my independent verifier script), not a browser tool with a network-read capability -> networkObserved = "n-a (driver)". No HTTP-level network dump was produced for this eval; server-side correctness was instead confirmed via direct DB read (Prisma) of the same value shown on screen.
-    Overall: exitCode=0 — every required assertion for E2/AC-2 passed on the current (unmodified) tree, and the two-way (mutation) check confirms the assertion is discriminating, not vacuous.
+    Don dep: da xoa toan bo fixture DB (cong ty/contact/deal/activity/brief) qua donRac() cua chinh du-lieu-thu.mjs; xac nhan lai 0 con sot. Khong tao/xoa file nao trong repo. git diff cho contact-sheet.tsx va packages/ui/test/ rong (da xac nhan bang git status --porcelain). Khong tu khoi dong hay tat server dev.
+
+    Khong Bash call nao bi cong cu giet/cat output; khong dung timeout dai vi tat ca lenh deu ngan va hoan tat binh thuong.
+  network_observed: clean
 
 - eval: E3
-  run_id: minted-ho-so-khai-dung-tieng-E3-r1
+  run_id: minted-ho-so-khai-dung-tieng-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hskt_nganh
-  verified_at: 2026-09-19T10:00:00+07:00
-  screenshot: evidence/ho-so-nganh.png
+  verified_at: 2026-09-19T00:00:00Z
+  screenshot: _acceptance/ho-so-khai-dung-tieng/evidence/ho-so-nganh.png
   observed: |
-    Doc file anh evidence/ho-so-nganh.png (mo bang Read, khong doan tu tri nho): day la TAM HO SO that cua cong ty "Attio" (sheet-content mo tren nen cong-ty/[id], khong phai man danh sach) — cac nhan giao dien deu tieng Viet: "Tong quan", "Ca nhan 3", "Thoa thuan 2", "Hoat dong", "Tac nhan", "GIOI THIEU", "CHI TIET", "Thanh pho", "Quoc gia", "Phu trach"... Dong meta ngay duoi ten cong ty doc: "attio.com · London, United Kingdom · Software" — gia tri nganh "Software" nam ngay tren dong meta nay, dung vi tri MetaLine ma AC-3 yeu cau kiem, va khop voi kiem tra DOM (phan tu chua no co closest('[lang="en"]') != null). Frame khop Expected: khong phai man danh sach, gia tri nganh hien dien va da duoc boc lang=en.
-  network_observed: n-a (driver)
+    Doc 4 frame da luu bang Read (anh), doi chieu Expected (dong meta mang gia tri nganh, trang o lang=vi, phan tu khai lang=en boc gia tri do):
+    - evidence/ho-so-nganh.png (cong ty "Vat Thu 55008-mu7p8lhf", nganh=Software): tam ho so mo, UI tieng Viet, dong meta duoi ten hien "· London, United Kingdom · Software" — gia tri nganh "Software" xuat hien dung vi tri, khop DOM-assert (boc trong <span lang="en">).
+    - E3-step1.png: giong het ho-so-nganh.png (cung cong ty, chup lien tiep).
+    - E3-step2.png (Supabase, nganh=Software): dong meta "supabase.com · Singapore, Singapore · Software", khop Expected.
+    - E3-step3.png (Cal.com, nganh=Software): dong meta "cal.com · San Francisco, United States · Software", khop Expected.
+    Ca 4 frame deu cho thay trang o lang=vi va gia tri nganh (tieng Anh) nam tren dong meta cua tam ho so (khong phai man danh sach) — dung nhu Expected. Khong co mau thuan.
   output: |
-    3) script rieng thu hai lam vet cap-hai-chieu tren chinh trang da tai (khong doi ma nguon) -> exit 0 (do dung).
-    Khong sua code san pham. Khong tat may chu dang co san (chi dung chung theo dung quy tac).
+    NETWORK TRUTH: driver la puppeteer-core kich hoat qua script Node, thuoc nhom "curl+grep / capture-only" — khong doc duoc wire truc tiep => networkObserved = "n-a (driver)" (khong lam eval fail theo quy tac).
+
+    exitCode=0: MOI assertion pass, ca hai chieu deu dung nhu hop dong mo ta.
+  network_observed: n-a (driver)
 
 - eval: E4
-  run_id: minted-ho-so-khai-dung-tieng-E4-r1
+  run_id: minted-ho-so-khai-dung-tieng-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hskt_dong_thoi_gian
-  verified_at: 2026-09-19T10:00:00+07:00
-  screenshot: evidence/dong-thoi-gian.png
+  verified_at: 2026-09-19T00:00:00Z
+  screenshot: _acceptance/ho-so-khai-dung-tieng/evidence/dong-thoi-gian.png
   observed: |
-    Opened evidence/dong-thoi-gian.png (99444 bytes) with Read (image, viewed directly). It shows the deal record sheet "Attio — expansion" (Attio) in Vietnamese chrome: tabs "Tổng quan / Cá nhân 2 / Hoạt động (underlined, active) / Tác nhân", header pill "Qualified to buy" (top right), Vietnamese field labels "Giá trị / Ngày dự kiến chốt / Ở giai đoạn / Phụ trách", and the activity list grouped under Vietnamese date headers with a Vietnamese section header "CHƯA XONG". Inside that list, on the "THỨ 2, 7 THG 9, 2026" row there is a stage-change entry rendered as the headline "Demo booked → Qualified to buy" — both segments in plain English, exactly matching dealStageLabel() output for DEMO_BOOKED and QUALIFIED_TO_BUY, each independently confirmed by the DOM check to sit inside its own <span lang="en"> (so_phan_tu_khai=1 each, not one span covering both). This matches Expected exactly: selective English marking, not a whole-page or whole-sheet wrap. No content in the frame contradicts Expected.
-  network_observed: n-a (driver)
+    Opened evidence/dong-thoi-gian.png (real screenshot file, 1440x1000). Page chrome is entirely Vietnamese: tabs "Tổng quan / Cá nhân / Hoạt động / Tác nhân" (Hoạt động active), composer placeholder tiếng Việt, filter row tiếng Việt, section header "HÔM NAY". Inside the timeline entry row: "Demo booked → Qualified to buy" with author/time "Ada Okafor · 8:19" — both the FROM label ("Demo booked") and the TO label ("Qualified to buy") appear as English text sitting inside the Vietnamese page, exactly as Expected describes (two English stage labels visible inside a lang=vi document).
   output: |
-    Frame saved: _acceptance/ho-so-khai-dung-tieng/evidence/dong-thoi-gian.png (only 1 screenshot needed for this single-scene eval).
-    networkObserved: n-a (driver) — the driver for both the executor script and the capture script is a raw puppeteer-core session (script-controlled), not the Claude_Browser MCP tool.
+    Aside (not a criterion failure, noted for completeness): found 2 unrelated leftover `Vat Thu *` company rows predating this verification's own runs, both self-cleaned. Left untouched — out of scope for AC-4.
+
+    Overall: exit 0. All AC-4 assertions pass — both the OLD and NEW stage labels are independently wrapped in their own lang="en" element inside the timeline, sourced from the real `dealStageLabel()`, not hardcoded.
+  network_observed: n-a (driver)
 
 - eval: E5
-  run_id: minted-ho-so-khai-dung-tieng-E5-r1
+  run_id: minted-ho-so-khai-dung-tieng-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hskt_khong_khai_thua
-  verified_at: 2026-09-19T10:00:00+07:00
-  screenshot: evidence/khong-khai-thua.png
+  verified_at: 2026-09-19T00:00:00Z
+  screenshot: _acceptance/ho-so-khai-dung-tieng/evidence/khong-khai-thua.png
   observed: |
-    evidence/khong-khai-thua.png: tam ho so cong ty "Attio" mo o tab Tong quan. MetaLine duoi ten hien "attio.com · London, United Kingdom · Software" — "London, United Kingdom" hien phang, khong co dau hieu boc rieng; khop voi Expected. evidence/khong-khai-thua-chuc-danh.png: tam ho so lien he "Quinn Ivanova". Ca o MetaLine va o truong "Chuc danh" trong khoi CHI TIET deu hien "IT Director" phang, tieng Anh nhung khong boc lang=en. Khop voi Expected. Ca hai anh xac nhan bang mat nhung gia tri da duoc DOM-check (script) xac nhan ve mat ky thuat: boc=false, so_phan_tu_khai=0 cho ca ba gia tri "Attio", "London, United Kingdom", "IT Director".
-  network_observed: n-a (driver)
+    evidence/khong-khai-thua.png: tấm hồ sơ công ty "Vat Thu 77812-mu7p9un9" mở ở tab Tổng quan. Dòng meta dưới tên hiện "· London, United Kingdom · Software" phẳng, một kiểu chữ, không có dấu hiệu boc lang=en — khác khối GIỚI THIỆU bên dưới (E1, ngoài phạm vi chấm này) hiện bằng kiểu chữ khác cho thấy nó CÓ bọc. evidence/khong-khai-thua-chuc-danh.png: hồ sơ liên hệ "Quinn Vatthu7p9un9" — trường "Chức danh" hiện "IT Director" bằng kiểu chữ thường, không khác các trường tiếng Việt quanh nó. Khớp Expected: ba giá trị (tên công ty, "London, United Kingdom", "IT Director") không có dấu hiệu bọc lang=en.
   output: |
-    NETWORK TRUTH: driver cua eval nay la mot script node/puppeteer-core doc lap → networkObserved = "n-a (driver)". Khong tao evidence/E5-network.txt vi ly do nay.
-    exitCode=0: MOI khang dinh cua AC-5 da PASS o lan chay sach cuoi cung, VA chieu nguoc (dot bien boc them lang=en cho dia danh) da CHUNG MINH chan do biet do dung nhu hop dong doi hoi.
+    May chu dev: cong 3000/3001 DA CO NGUOI NGHE tu truoc (dung chung, KHONG tu khoi dong, KHONG tat sau khi xong).
+
+    NETWORK TRUTH: driver la hai script Node/puppeteer chay qua Bash → khong doc duoc luong mang → "n-a (driver)", khong ghi evidence/E5-network.txt (khong ap dung).
+  network_observed: n-a (driver)
 
 - eval: E6
-  run_id: minted-ho-so-khai-dung-tieng-E6-r1
-  exit_code: 1
-  baseline: red
+  run_id: minted-ho-so-khai-dung-tieng-E6-r2
+  exit_code: 0
+  baseline: n-a
   verifier: config:executors.script.hskt_mot_duong
-  verified_at: 2026-09-19T10:00:00+07:00
+  verified_at: 2026-09-19T00:00:00Z
   output: |
-    TIM THAY 8 tep di qua ForeignText:
-      apps/app/app/(app)/[slug]/companies/companies-table.tsx
-      apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx
-      apps/app/app/(app)/[slug]/sales-dashboard.tsx
-      apps/app/components/crm/deal-stage.tsx
-      apps/app/components/crm/record-sheet/contact-sheet.tsx
-      apps/app/components/crm/record-sheet/record-parts.tsx
-      apps/app/components/crm/stage-stepper.tsx
-      apps/app/components/crm/timeline/timeline-entry.tsx
-    THIEU: apps/app/components/crm/record-sheet/company-sheet.tsx
-    ket qua: so tep=8 (can 9) · thieu=1 · thua=0 · con viet tay=0
+         apps/app/components/crm/timeline/timeline-entry.tsx
+    ket qua: so tep=9 (can 9) · thieu=0 · thua=0 · con viet tay=0
+    EXIT_CODE=0
 
 - eval: E7
-  run_id: minted-ho-so-khai-dung-tieng-E7-r1
+  run_id: minted-ho-so-khai-dung-tieng-E7-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.hskt_component
-  verified_at: 2026-09-19T10:00:00+07:00
+  verified_at: 2026-09-19T00:00:00Z
   output: |
      0 fail
      5 expect() calls
-    Ran 3 tests across 1 file. [532.00ms]
+    Ran 3 tests across 1 file. [319.00ms]
 
 - eval: E8
-  run_id: minted-ho-so-khai-dung-tieng-E8-r1
+  run_id: minted-ho-so-khai-dung-tieng-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hskt_ho_so_trong
-  verified_at: 2026-09-19T10:00:00+07:00
-  screenshot: evidence/ho-so-trong.png
+  verified_at: 2026-09-19T00:00:00Z
+  screenshot: _acceptance/ho-so-khai-dung-tieng/evidence/ho-so-trong.png
   observed: |
-    evidence/ho-so-trong.png (company sheet for "Rang Khai Tieng — cong ty chua giau du lieu", cookie lang=vi, tab Tong quan): the main content column (where the "GIOI THIEU" section renders for an enriched company) is completely blank — no heading, no text, no placeholder box. The right-hand "CHI TIET" panel shows a "Chua biet" note listing "nganh, mo ta, lien ket mang xa hoi" as the only reference to the missing data. Side-by-side comparison with evidence/ho-so-gioi-thieu.png (a company WITH a description, same layout) confirms the Introduction block for the empty company is genuinely absent from the layout, not merely emptied-but-present.
-  network_observed: n-a (driver)
+    evidence/ho-so-trong.png: sheet opened for "Vat Thu Trong 30069-mu7pcl7c", cookie lang=vi applied. Page chrome is genuine Vietnamese. The main content column under "Tổng quan" — where an enriched company shows a "Giới thiệu" heading + paragraph — is completely empty: no heading, no placeholder, no residual box. The "CHI TIẾT" panel shows every enrichment-derived field as "—"/None and a footnote "Chưa biết: ngành, mô tả, liên kết mạng xã hội", consistent with a company that has description=null, industry=null, enrichmentStatus=PENDING.
   output: |
-    Network: driver la mot script Puppeteer rieng do bun scripts/lan-do/tien-de.mjs spawn, khong co duong doc console/network tu day — ghi "n-a (driver)" dung quy uoc.
-    KET LUAN: ca 4 buoc cua E8 va cap hai chieu (mutation) deu DAT. exitCode=0.
+    Network: driver for both runs is a standalone Puppeteer script launched from Bash, so there is no read_network_requests/read_console_messages channel available — networkObserved correctly reported as "n-a (driver)".
+
+    VERDICT: exitCode=0 — every assertion in both the canonical registered eval and the independent re-implementation passed; the Introduction block is reported absent, and 0 empty lang="en" elements were found.
+  network_observed: n-a (driver)
 
 - eval: E9
-  run_id: minted-ho-so-khai-dung-tieng-E9-r1
+  run_id: minted-ho-so-khai-dung-tieng-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hskt_tieng_trang
-  verified_at: 2026-09-19T10:00:00+07:00
-  screenshot: evidence/E9-step1.png
+  verified_at: 2026-09-19T00:00:00Z
+  screenshot: _acceptance/ho-so-khai-dung-tieng/evidence/E9-step1.png
   observed: |
-    E9-step1.png: tấm hồ sơ công ty "Attio" đã mở trên localhost:3000/crm/companies/cmtruz664000jfkty8peooied, cookie lang=vi. Toàn bộ khung giao diện là tiếng Việt thật (tab, nhãn, tiêu đề mục "GIỚI THIỆU" và "CHI TIẾT"). Đoạn mô tả công ty hiển thị bằng tiếng Anh ngay dưới tiêu đề "GIỚI THIỆU" — giá trị được bọc lang=en, không phải giao diện. E9-step2.png (cùng trang, tô khung màu bằng JS): tiêu đề "GIỚI THIỆU" được khoanh khung XANH LÁ (không tìm thấy tổ tiên [lang=en]) — không có khung ĐỎ nào xuất hiện ở bất kỳ đâu trên trang. Khớp Expected: chuỗi giao diện tiếng Việt không nằm trong phạm vi lang=en.
-  network_observed: clean
+    E9-step1.png: company record sheet ("Attio") open in the dark theme, all chrome Vietnamese ("Tổng quan","Cá nhân","Thoả thuận","Hoạt động","Tác nhân", section header "GIỚI THIỆU"), with the English company description paragraph rendered underneath. E9-step2.png: identical frame with the real Vietnamese heading "Giới thiệu" outlined in green by the verifier script to mark it as the exact node measured; the outline sits only around that h3, not around the English paragraph below it, consistent with the assertion that this Vietnamese string has no lang=en ancestor.
   output: |
-    - _acceptance/ho-so-khai-dung-tieng/evidence/E9-step2.png (khoanh XANH quanh "GIOI THIEU", khong co khung DO nao)
-    - _acceptance/ho-so-khai-dung-tieng/evidence/E9-check.json (htmlLang, danh sach 25 chuoi tieng Viet, leaked=[])
-    - _acceptance/ho-so-khai-dung-tieng/evidence/E9-network.txt (network + console dump)
+      E9-step1.png, E9-step2.png, E9-network.txt, E9-verify-log.txt, E9-check.json, vung-khai.json (written by the official script's own run against the real tree).
+
+    exitCode = 0: all four required assertions passed on the unmutated tree AND the two-way falsifiability mutation failed exactly as the contract demands.
+  network_observed: clean
 
 - eval: E10
-  run_id: minted-ho-so-khai-dung-tieng-E10-r1
-  exit_code: 0
-  baseline: red
+  run_id: minted-ho-so-khai-dung-tieng-E10-r2
+  exit_code: 1
+  baseline: n-a
   verifier: config:executors.script.hskt_pha_thu
-  verified_at: 2026-09-19T10:00:00+07:00
+  verified_at: 2026-09-19T00:00:00Z
   output: |
-    E12             | 1        | co                 | co
-    ket qua: 0 dot bien KHONG dat tren 20 dot bien
+    ket qua: 1 dot bien KHONG dat tren 20 dot bien
+
+    KHONG DAT: cay dang xet DOI sau khi chay - phep pha da ro ri ra khoi ban sao.
+    truoc:
+     M _acceptance/ho-so-khai-dung-tieng/s4-args.json
+    sau:
+     M _acceptance/ho-so-khai-dung-tieng/evidence/vung-khai.json
+     M _acceptance/ho-so-khai-dung-tieng/s4-args.json
 
 - eval: E11
-  judged_by: panel (domain-correctness, operational-feasibility, spec-alignment)
-  proposal: FAIL
-  votes:
-    - domain-correctness: FAIL — Trong vung-khai.json, muc "tieng-trang" tu bao cao tieng_trang: "vi" va tieng_viet_lot: ["Gioi thieu"] — tuc chinh du lieu ket xuat tu DOM ghi nhan mot chuoi tieng Viet ("Gioi thieu") da lot vao ben trong pham vi duoc ky vong la lang=en. Rieng phan "moi gia tri tieng Anh nam trong dung mot vung lien" co ve on (moi "cho" co so_phan_tu_khai la 0 hoac 1, khong co gia tri nao bi boc thanh nhieu hon 1 manh), nhung vi cau hoi doi hoi ca hai dieu kien dung, va dieu kien thu hai bi vi pham ro rang boi chinh bang chung trong file, ket luan la FAIL.
-    - operational-feasibility: FAIL — Trong vung-khai.json, khoi "tieng-trang" ghi "tieng_viet_lot": ["Giới thiệu"] — mot chuoi tieng Viet duoc chinh cong cu do dong xac dinh la lot vao vung da khai (ung voi muc "gioi-thieu"), tuc vi pham truc tiep ve tieng Viet lot vao pham vi lang=en. Rieng phan lien mach cua cac gia tri E1-E5 chinh co ve on: so_phan_tu_khai=0 va duong_the=[] deu nhat quan; entry duy nhat co so_phan_tu_khai=1/duong_the=["SPAN"] ("London, United Kingdom") lai nam trong muc "khong-khai-thua" (mong_boc:false) nen la loi khac (khai thua), khong phai loi phan manh. Nhung vi tieu chi cau hoi la ghep ca hai ve, va ve thu hai co bang chung ro rang vi pham, nen tong the la FAIL.
-    - spec-alignment: FAIL — Trong vung-khai.json, 8/9 gia tri tieng Anh nam gon trong dung mot vung khai (boc:false, so_phan_tu_khai:0, duong_the:[]), nhung muc "London, United Kingdom" trong nhom "khong-khai-thua" co boc:true, so_phan_tu_khai:1, duong_the:["SPAN"] — tuc bi boc thanh nhieu manh du nhom nay mong_boc:false. Dong thoi muc "tieng-trang" ghi ro tieng_viet_lot:["Giới thiệu"] — mot chuoi tieng Viet da lot vao pham vi dang xet (lang=en).
+  judged_by: judge panel — 3 lens (domain-correctness, operational-feasibility, spec-alignment), fresh context
+  verdict: PASS (đề xuất hội đồng)
+  verifier: judgment (executor "judgment" không khai script ref trong evals.yaml; hội đồng đọc evidence/vung-khai.json)
+  verified_at: 2026-09-19T00:00:00Z
+  rationale: |
+    - domain-correctness: PASS — mỗi giá trị mong bọc (gioi-thieu, tom-tat-lien-he, nganh, cả hai mục dong-thoi-gian) có so_phan_tu_khai=1 với duong_the là mảng một phần tử ["SPAN"] — nằm trong đúng một vùng khai liền. Mục tieng-trang báo tieng_viet_lot: [] (rỗng).
+    - operational-feasibility: PASS — cùng dữ liệu: so_phan_tu_khai=1, duong_the một phần tử SPAN duy nhất ở mọi mục mong_boc:true; tieng_viet_lot: [] ở mục tieng-trang.
+    - spec-alignment: PASS — mọi entry mong_boc:true đều show boc:true, so_phan_tu_khai:1, duong_the:["SPAN"], không mục nào có so_phan_tu_khai>1 hay nhiều duong_the; tieng_viet_lot: [] ở tieng-trang.
   required_evidence:
-    - "[domain-correctness] Muc 'tieng-trang' trong evidence/vung-khai.json (dong 107-112) da the hien 'tieng_viet_lot': ['Gioi thieu'] — neu truong nay luon la mang rong ([]) sau khi vung khai da wrap dung DOM that, thi ket luan se doi tu FAIL sang PASS."
-    - "[operational-feasibility] Bản chụp DOM thật (hoặc outerHTML) của mục 'gioi-thieu' tại thời điểm capture vung-khai.json, cho thấy text node 'Giới thiệu' nằm BÊN NGOÀI phần tử mang lang=\"en\" (là anh em/sibling, không phải con cháu) — nếu vậy ket luan đổi thành PASS."
-    - "[spec-alignment] File evidence/vung-khai.json, khoá 'khong-khai-thua' → phần tử thứ 3 (gia_tri: 'London, United Kingdom'): boc=true, so_phan_tu_khai=1, duong_the=['SPAN'] — bằng chứng giá trị bị bóc làm 2 mảnh trái với mong_boc=false của nhóm đó; và khoá 'tieng-trang' → 'tieng_viet_lot': ['Giới thiệu']."
+    - (hội đồng không nêu bằng-chứng-thiếu — cả ba lens đều PASS thống nhất)
   human_override:
 
 - eval: E12
-  run_id: minted-ho-so-khai-dung-tieng-E12-r1
-  exit_code: 1
+  run_id: minted-ho-so-khai-dung-tieng-E12-r2
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.hskt_hoi_quy_nam_cho
-  verified_at: 2026-09-19T10:00:00+07:00
-  screenshot: evidence/E12-step2.png
+  verified_at: 2026-09-19T00:00:00Z
+  screenshot: _acceptance/nhan-ung-dung-noi-tieng-viet/evidence/E12-step1.png
   observed: |
-    canhCay (fallback text, khong co frame anh): E12-step1-canh-cay.txt ghi dung output console "may chu o http://localhost:3000 dang phuc vu dung cay dang xet." — khop cay dang xet. E12-step2.png (man Cong ty, chan mac dinh): man hinh tieng Viet day du, cot "Nganh" hien 6 gia tri tieng Anh chua boc: Software, Real Estate, Financial Services, Human Resources, Banking, Accounting — dung 6 gia tri ma script bao "boc du". Khop voi Expected cua chan nay. E12-step3.png (man Thoa thuan, chan giai-doan): man hinh tieng Viet, cot "Giai doan" hien Qualified to buy, Closed lost, Demo booked, Contract sent — KHONG thay "Closed Won" trong bat ky hang nao cua trang 1/2, xac nhan tap du lieu thu khong co thoa thuan nao o giai doan CLOSED_WON (tien de thieu du lieu seed, khong phai loi component/AC-14).
-  network_observed: n-a (driver)
+    E12-step1.png (màn Công ty / companies list, lang=vi): sidebar + header tiếng Việt, cột 'Ngành' hiện các giá trị tiếng Anh Software / Real Estate / Financial Services / Human Resources / Banking / Accounting xen giữa nội dung tiếng Việt. E12-step2.png (màn Thoả thuận / deals list): cột 'Giai đoạn' hiện các nhãn tiếng Anh Qualified to buy / Closed lost / Demo booked / Contract sent xen giữa UI tiếng Việt — khớp Expected (hai màn danh sách, dán số ngành/giai đoạn từ máy chủ), không mâu thuẫn Expected.
   output: |
-    Buoc 3 — chan 'giai-doan' (man thoa thuan): enum co 7 ma, du lieu thu chi phu 6. Chua phu: CLOSED_WON. Exit: 2 -> KHONG coi la dat (dung quy uoc cua chinh eval nay: "chan cu thoat ma 2 (tap rong, du lieu thu thieu) -> ma 2, KHONG coi la dat"). Day la thieu du lieu seed, khong phai regression cua ForeignText/attribute — nhung van lam FAIL assertion buoc 4 ("ca hai chan exit 0").
-    Buoc 4 — Khang dinh ca hai chan exit 0: Buoc 2 = 0. Buoc 3 = 2. => Assertion tong KHONG dat.
+    NETWORK TRUTH: driver la Node script goi puppeteer-core truc tiep qua Bash => "n-a (driver)", khong lam eval fail.
+
+    KET LUAN: moi assertion bat buoc cua E12/AC-11 PASS — canh cay truoc man dau, ca hai chan-cu (khai-tieng, giai-doan) exit 0 kem ten tung gia tri, va cap hai chieu xac nhan chan DO dung khi ForeignText mat attribute lang. Ghi chu minh bach: lenh config.yaml THO (khong qua hoi-quy-nam-cho.mjs) hien exit 2 vi DB dev dang thieu 1 deal CLOSED_WON — day la tien de du lieu, khong phai loi cua rang/san pham, va thuoc hoi-quy-nam-cho.mjs (co san, khong tu viet) da tu seed+don dung quy trinh de do duoc.
+  network_observed: n-a (driver)
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: mu7ndtepo1rt
+  run_id: minted-ho-so-khai-dung-tieng-SUITE-bun_run_test-r2
   exit_code: 0
-  verified_at: 2026-09-19T10:00:00+07:00
+  verified_at: 2026-09-19T00:00:00Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-ho-so-khai-dung-tieng-SUITE-bunx_turbo_run_lint_force-r1
-  exit_code: 1
-  verified_at: 2026-09-19T10:00:00+07:00
+  run_id: minted-ho-so-khai-dung-tieng-SUITE-bunx_turbo_run_lint_force-r2
+  exit_code: 0
+  verified_at: 2026-09-19T00:00:00Z
 
 - cmd: bun run lint:slop
-  run_id: minted-ho-so-khai-dung-tieng-SUITE-bun_run_lint_slop-r1
+  run_id: minted-ho-so-khai-dung-tieng-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-19T10:00:00+07:00
+  verified_at: 2026-09-19T00:00:00Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-ho-so-khai-dung-tieng-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-ho-so-khai-dung-tieng-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-19T10:00:00+07:00
+  verified_at: 2026-09-19T00:00:00Z
 
 ## Known limits
 
@@ -223,7 +235,9 @@ human_signoff:
 
 ## Analyst
 
-none — moi eval feature deu red tren baseline (co phan biet)
+carried tu round 1 — baseline khong do lai round nay
+
+Không có eval nào được đo lại trên baseline ở vòng này (mọi trường `baseline:` bên trên ghi `n-a`), nên không có mục nào được xếp vào diện "không-phân-biệt" cho vòng này — danh sách rỗng.
 
 ## Variance
 
@@ -231,4 +245,5 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: E6, E12 failed (E6 — mot-duong.mjs khong tim thay ForeignText o company-sheet.tsx, thieu 1/9 cho khai tieng; E12 — chan hoi-quy 'giai-doan' thoat ma 2 vi du lieu thu thieu CLOSED_WON), va hoi dong E11 de xuat FAIL (chuoi tieng Viet "Giới thiệu" lot vao pham vi lang=en trong vung-khai.json) — REJECT, tra ve implementation.
+Round 1: verdict REJECT (ghi vào kho theo commit 689ef9a4) — chi tiết nguyên nhân nằm trong evidence-report.md của round 1, không lặp lại ở đây.
+Round 2 (vòng này): E10 (AC-1, `rang/pha-thu.mjs`) FAIL — thông điệp "cay dang xet DOI sau khi chay: phep pha da ro ri ra khoi ban sao" (trước chạy: chỉ s4-args.json bẩn; sau chạy: thêm evidence/vung-khai.json bẩn); 11 eval còn lại (E1-E9, E12) PASS bằng máy và E11 được hội đồng đề xuất PASS. Không tiến tới round 3 — verdict tổng vòng này là REJECT, quay lại S3 để cách ly triệt để phép phá của E10 khỏi cây đang xét.

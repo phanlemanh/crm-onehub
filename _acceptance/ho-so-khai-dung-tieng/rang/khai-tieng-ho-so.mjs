@@ -10,6 +10,7 @@ import { dat } from "./du-lieu-thu.mjs";
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const APP = process.env.APP_URL ?? "http://localhost:3000";
+const API = process.env.API_URL ?? "http://localhost:3001";
 const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
 const NGUOI = process.env.NGUOI ?? "manh.phan@onemount.com";
 
@@ -59,6 +60,20 @@ function phien() {
 }
 
 const HO_SO = '[data-slot="sheet-content"]';
+
+async function goiMayChu(duong, dauVao) {
+	const url = `${API}/api/trpc/${duong}?input=${encodeURIComponent(JSON.stringify(dauVao))}`;
+	const res = await fetch(url, {
+		headers: { Cookie: `${cookie.name}=${cookie.value}` },
+	});
+	if (!res.ok) {
+		return thoat(
+			2,
+			`RANG CUN: ${duong} tra ${res.status} — may chu API song nhung tu choi lenh nay.`,
+		);
+	}
+	return (await res.json()).result.data;
+}
 
 const DOC_VUNG = ({ canTim, goc }) => {
 	const khung = [...document.querySelectorAll(goc)];
@@ -255,18 +270,37 @@ function bao(ten, canTim, thay, mongBoc) {
 let hong = 0;
 
 if (chan === "gioi-thieu") {
-	const gt = vung.congTy.gioiThieu;
-	console.log(`-- DAN SO: gioi thieu cua cong ty ${JSON.stringify(vung.congTy.ten)}`);
+	const tuMayChu = await goiMayChu("companies.byId", { id: vung.congTy.id });
+	const gt = tuMayChu?.description;
+	if (!gt) {
+		await thoat(2, "KHONG DO DUOC: may chu khong tra ve truong gioi thieu");
+	}
+	console.log(
+		`-- DAN SO: gioi thieu DOC TU MAY CHU trong chinh luot chay nay (companies.byId)\n` +
+			`   cong ty ${JSON.stringify(tuMayChu.name)} · ${gt.length} ky tu`,
+	);
 	const { thay } = await xem(`companies/${vung.congTy.id}`, [gt]);
 	hong = bao(chan, [gt], thay, true);
 } else if (chan === "tom-tat-lien-he") {
-	const gt = vung.caNhan.tomTat;
-	console.log("-- DAN SO: tom tat ca nhan do tac nhan sinh");
+	const tuMayChu = await goiMayChu("contacts.byId", { id: vung.caNhan.id });
+	const gt = tuMayChu?.brief?.narrative;
+	if (!gt) {
+		await thoat(2, "KHONG DO DUOC: may chu khong tra ve tom tat cua ca nhan");
+	}
+	console.log(
+		`-- DAN SO: tom tat DOC TU MAY CHU trong chinh luot chay nay (contacts.byId) · ${gt.length} ky tu`,
+	);
 	const { thay } = await xem(`contacts/${vung.caNhan.id}`, [gt]);
 	hong = bao(chan, [gt], thay, true);
 } else if (chan === "nganh") {
-	const nganh = vung.congTy.nganh;
-	console.log(`-- DAN SO: nganh ${JSON.stringify(nganh)} cua vat thu`);
+	const tuMayChu = await goiMayChu("companies.byId", { id: vung.congTy.id });
+	const nganh = tuMayChu?.industry;
+	if (!nganh) {
+		await thoat(2, "KHONG DO DUOC: may chu khong tra ve truong nganh");
+	}
+	console.log(
+		`-- DAN SO: nganh ${JSON.stringify(nganh)} DOC TU MAY CHU (companies.byId)`,
+	);
 	const { thay } = await xem(`companies/${vung.congTy.id}`, [nganh]);
 	hong = bao(chan, [nganh], thay, true);
 } else if (chan === "dong-thoi-gian") {
@@ -293,21 +327,67 @@ if (chan === "gioi-thieu") {
 	);
 	hong = bao(chan, canTim, thay, true);
 } else if (chan === "khong-khai-thua") {
-	const canTim = [vung.congTy.ten, vung.congTy.diaDanh];
+	const ct = await goiMayChu("companies.byId", { id: vung.congTy.id });
+	const dia = [ct?.city, ct?.stateCode, ct?.country].filter(Boolean).join(", ");
+	const canTim = [ct?.name, dia].filter(Boolean);
+	if (canTim.length < 2) {
+		await thoat(2, "KHONG DO DUOC: may chu khong tra ve ten cong ty hoac dia danh");
+	}
+	console.log("-- Cac gia tri chieu nguoc DOC TU MAY CHU (companies.byId)");
 	console.log(`-- DAN SO (chieu nguoc): ${canTim.map((x) => JSON.stringify(x)).join(" · ")}`);
 	const { thay } = await xem(`companies/${vung.congTy.id}`, canTim);
 	hong = bao(chan, canTim, thay, false);
 
-	const chucDanh = vung.caNhan.chucDanh;
+	const cn = await goiMayChu("contacts.byId", { id: vung.caNhan.id });
+	const chucDanh = cn?.title;
+	if (!chucDanh) {
+		await thoat(2, "KHONG DO DUOC: may chu khong tra ve chuc danh");
+	}
 	console.log(`-- DAN SO (chieu nguoc, chuc danh): ${JSON.stringify(chucDanh)}`);
 	const r = await xem(`contacts/${vung.caNhan.id}`, [chucDanh]);
 	hong += bao(`${chan}-chuc-danh`, [chucDanh], r.thay, false);
 } else if (chan === "ho-so-trong") {
-	console.log(`-- DAN SO: cong ty chua enrichment ${JSON.stringify(vung.trong.ten)}`);
-	const { rong, chu } = await xem(`companies/${vung.trong.id}`, []);
-	console.log(`   so phan tu khai lang=en co noi dung RONG: ${rong}`);
-	if (rong > 0) hong += rong;
-	ghiVung(chan, { so_phan_tu_rong: rong });
+	const TIEU_DE = process.env.NHAN_GIOI_THIEU ?? "Giới thiệu";
+
+	console.log(
+		"-- So khop KHONG phan biet hoa-thuong: tieu de khoi ve ra chu hoa bang\n" +
+			"   text-transform, va innerText tra ve dung chu da bien doi.\n" +
+			"-- AC-8 co HAI ve, chan nay do CA HAI:\n" +
+			"   (a) khoi Gioi thieu VANG HAN khoi cay DOM — khong phai ve ra roi an bang CSS;\n" +
+			"   (b) 0 phan tu khai lang=en co noi dung chu RONG.\n" +
+			"-- Va mot DOI CHUNG DUONG: cung phep do tren mot cong ty CO gioi thieu phai\n" +
+			"   THAY khoi do — neu khong, phep do chi dang khang dinh mot cai no khong biet tim.",
+	);
+
+	const co = (chu) => chu.toLocaleLowerCase("vi").includes(TIEU_DE.toLocaleLowerCase("vi"));
+
+	const trong = await xem(`companies/${vung.trong.id}`, []);
+	const coKhoiTrong = co(trong.chu);
+	console.log(
+		`   (a) ho so CHUA enrichment: khoi ${JSON.stringify(TIEU_DE)} ${coKhoiTrong ? "VAN CO (sai)" : "vang han"}`,
+	);
+	if (coKhoiTrong) hong += 1;
+	console.log(`   (b) so phan tu khai lang=en co noi dung RONG: ${trong.rong}`);
+	if (trong.rong > 0) hong += trong.rong;
+
+	const day = await xem(`companies/${vung.congTy.id}`, []);
+	const coKhoiDay = co(day.chu);
+	console.log(
+		`   doi chung duong: ho so CO gioi thieu — khoi ${JSON.stringify(TIEU_DE)} ${coKhoiDay ? "co mat" : "KHONG THAY (phep do khong biet tim khoi nay)"}`,
+	);
+	if (!coKhoiDay) {
+		console.log(
+			"      Thieu doi chung duong thi ve (a) la khang dinh AM TINH MOT MINH:\n" +
+				"      no xanh ca khi bo chon sai, khi trang khong tai, khi nhan doi ten.",
+		);
+		hong += 1;
+	}
+
+	ghiVung(chan, {
+		tieu_de_khoi: TIEU_DE,
+		ho_so_trong: { co_khoi: coKhoiTrong, so_phan_tu_rong: trong.rong },
+		doi_chung_duong: { co_khoi: coKhoiDay },
+	});
 } else if (chan === "tieng-trang") {
 	const r = await xem(`companies/${vung.congTy.id}`, []);
 	console.log("   tieng cua trang: vi (da khang dinh trong xem())");

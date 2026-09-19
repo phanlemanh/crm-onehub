@@ -1,0 +1,9 @@
+-- STEP1 OK: canhCay() xac nhan may chu http://localhost:3000 phuc vu dung cay /Users/manh-macmini/dev/crm/.claude/worktrees/busy-chatterjee-fc04e2
+-- STEP2: MO MAN voi cookie lang=vi: http://localhost:3000/crm/companies/cmtruz664000jfkty8peooied
+-- BANG CHUNG: da luu evidence/E9-step1.png (man ho so vua mo, cookie lang=vi)
+-- STEP3: document.documentElement.lang = "vi"
+-- STEP3 OK: document.documentElement.lang === 'vi'
+-- STEP4: chuoi tieng Viet that tren ho so: {"found":true,"text":"Giới thiệu","tag":"H3","wrappedInEn":false,"rect":{"x":481.8125,"y":206,"width":67.078125,"height":16}}
+-- BANG CHUNG: da luu evidence/E9-step2.png (chuoi tieng Viet 'GIOI THIEU' duoc khoanh)
+-- STEP4 OK: chuoi tieng Viet 'GIOI THIEU' KHONG nam trong to tien lang=en
+-- BANG CHUNG: da luu evidence/E9-network.txt

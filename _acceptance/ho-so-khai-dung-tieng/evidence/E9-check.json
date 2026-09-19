@@ -1,23 +1,17 @@
 {
+  "verifier": "independent-ui-verifier",
   "url": "http://localhost:3000/crm/companies/cmtruz664000jfkty8peooied",
+  "canhCay": "dung-cay",
   "htmlLang": "vi",
-  "viCount": 25,
-  "sampleVi": [
-    "Đang chờ",
-    "Tra cứu lại",
-    "Tra cứu",
-    "Thêm hành động",
-    "Đóng",
-    "Giá trị đang mở",
-    "Thoả thuận đang mở",
-    "Lần chốt gần nhất",
-    "Phụ trách",
-    "Tổng quan",
-    "Cá nhân",
-    "Thoả thuận",
-    "Hoạt động",
-    "Tác nhân",
-    "Giới thiệu"
-  ],
-  "leaked": []
+  "viHeadingFound": "Giới thiệu",
+  "viHeadingWrappedInEn": false,
+  "hskt_tieng_trang_official_cmd_exit": 0,
+  "hskt_tieng_trang_official_viCount_leaked": 0,
+  "mutation_check": {
+    "description": "boc ForeignText quanh ca DetailSheetSection (thay vi quanh gia tri) trong ban sao rieng (git worktree, cong 3300/3301)",
+    "exit_code": 1,
+    "message_pinned": "lot vao",
+    "leaked_string": "Giới thiệu",
+    "result": "DO dung nhu ky vong (falsifiability confirmed)"
+  }
 }

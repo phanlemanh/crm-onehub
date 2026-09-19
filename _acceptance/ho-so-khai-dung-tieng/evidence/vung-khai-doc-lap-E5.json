@@ -1,0 +1,51 @@
+{
+  "ghi_chu": "chieu-nguoc (doc lap voi rang cua doer) — cac gia tri nay PHAI NAM NGOAI vung khai lang=en",
+  "cong_ty": {
+    "url": "http://localhost:3000/crm/companies/cmu7p9und00001gty8a59fxy5",
+    "gia_tri": [
+      "Vat Thu 77812-mu7p9un9",
+      "London, United Kingdom"
+    ],
+    "cho": [
+      {
+        "gia_tri": "Vat Thu 77812-mu7p9un9",
+        "the": "H2",
+        "boc": false,
+        "lang_cua_the": null
+      },
+      {
+        "gia_tri": "London, United Kingdom",
+        "the": "SPAN",
+        "boc": false,
+        "lang_cua_the": null
+      },
+      {
+        "gia_tri": "Vat Thu 77812-mu7p9un9",
+        "the": "SPAN",
+        "boc": false,
+        "lang_cua_the": null
+      }
+    ]
+  },
+  "lien_he": {
+    "url": "http://localhost:3000/crm/contacts/cmu7p9unm00021gtyv1u8ivuz",
+    "gia_tri": [
+      "IT Director"
+    ],
+    "cho": [
+      {
+        "gia_tri": "IT Director",
+        "the": "SPAN",
+        "boc": false,
+        "lang_cua_the": null
+      },
+      {
+        "gia_tri": "IT Director",
+        "the": "SPAN",
+        "boc": false,
+        "lang_cua_the": null
+      }
+    ]
+  },
+  "hong": 0
+}

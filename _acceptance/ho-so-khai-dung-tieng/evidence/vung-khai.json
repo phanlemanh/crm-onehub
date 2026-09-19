@@ -68,14 +68,14 @@
     "mong_boc": false,
     "cho": [
       {
-        "gia_tri": "Vat Thu 94333-mu7p0i6o",
+        "gia_tri": "Vat Thu 6791-mu7qlkgi",
         "boc": false,
         "the": "H2",
         "so_phan_tu_khai": 0,
         "duong_the": []
       },
       {
-        "gia_tri": "Vat Thu 94333-mu7p0i6o",
+        "gia_tri": "Vat Thu 6791-mu7qlkgi",
         "boc": false,
         "the": "SPAN",
         "so_phan_tu_khai": 0,
@@ -110,7 +110,14 @@
     ]
   },
   "ho-so-trong": {
-    "so_phan_tu_rong": 0
+    "tieu_de_khoi": "Giới thiệu",
+    "ho_so_trong": {
+      "co_khoi": false,
+      "so_phan_tu_rong": 0
+    },
+    "doi_chung_duong": {
+      "co_khoi": true
+    }
   },
   "tieng-trang": {
     "tieng_trang": "vi",
