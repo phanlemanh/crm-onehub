@@ -33,7 +33,7 @@ export const DOT_BIEN_VONG_NAY = [
 		cu: "const dat = ket.ma !== 0 && ket.ghim && ket.vang;",
 		moi: "const dat = ket.ma !== 0 && ket.ghim;",
 		do: chanMoi("khai-sinh-dung-ghim"),
-		ghim: "[dem-roi-vut]: KHONG",
+		ghim: "van cham DAT",
 	},
 	{
 		chan: "E3",
@@ -63,8 +63,8 @@ export const DOT_BIEN_VONG_NAY = [
 	{
 		chan: "E5",
 		tep: `${H}/hoi-quy-nam-cho.mjs`,
-		cu: "} finally {\n\tawait tra();\n}",
-		moi: '} finally {\n\tconsole.log("(khong tra gi)");\n}',
+		cu: "\tif (daDon) return;",
+		moi: '\tconsole.log("(tra() bi vo hieu hoa)");\n\treturn;',
 		do: chanMoi("khong-de-lai-vet"),
 		ghim: "ban-ghi-that-con-lech:",
 	},
