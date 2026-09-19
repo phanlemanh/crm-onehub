@@ -1,15 +1,17 @@
 import { afterAll, describe, expect, test } from "bun:test";
+import { createHash } from "node:crypto";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
-import { handleOAuthUserInfo } from "better-auth/oauth2";
 import { auth } from "../src/auth";
 import { CHIA, ducChia, PASSWORD } from "../src/chia-mat-khau";
 import { isGoogleConfigured } from "../src/env";
-import { GOOGLE_PROVIDER_ID } from "../src/scopes";
+import { CAU_MAT_KHAU, SANG_MAT_KHAU } from "../src/sang-mat-khau";
+import { GOOGLE_PROVIDER_ID, SYNC_SCOPES } from "../src/scopes";
+import { googleHostedDomain } from "../src/workspace";
 
 const suffix = process.env.TEST_RUN_ID ?? "chia-mat-khau-spec";
 
-const TIEN_TO_KHONG_TOI_MANG_HIBP = "Failed to check password.";
+const GOC_TOKEN_GOOGLE = "https://oauth2.googleapis.com/token";
 
 async function dungKho() {
 	await db.organization.upsert({
@@ -65,38 +67,190 @@ async function thuDangNhap(email: string, password: string) {
 	}
 }
 
-function thongDiepMatKhauDaLo(): string {
-	const plugins =
-		(
-			auth.options as {
-				plugins?: {
-					id: string;
-					options?: { customPasswordCompromisedMessage?: string };
-				}[];
-			}
-		).plugins ?? [];
-	const daLo = plugins.find((plugin) => plugin.id === "have-i-been-pwned");
+function duoiBamSha1(matKhau: string): string {
+	return createHash("sha1")
+		.update(matKhau)
+		.digest("hex")
+		.toUpperCase()
+		.slice(SANG_MAT_KHAU.doDaiTienTo);
+}
 
-	return daLo?.options?.customPasswordCompromisedMessage ?? "";
+async function voiDanhSachDaLoGia<T>(
+	traLoi: () => Response,
+	viec: () => Promise<T>,
+): Promise<T> {
+	const that = globalThis.fetch;
+
+	globalThis.fetch = (async (dau: RequestInfo | URL, them?: RequestInit) => {
+		const duong = String(dau instanceof Request ? dau.url : dau);
+		if (duong.startsWith(SANG_MAT_KHAU.goc)) return traLoi();
+		return that(dau as RequestInfo, them);
+	}) as typeof fetch;
+
+	try {
+		return await viec();
+	} finally {
+		globalThis.fetch = that;
+	}
+}
+
+function traLoiDaLo(matKhau: string): Response {
+	return new Response(`${duoiBamSha1(matKhau)}:42\n`, { status: 200 });
+}
+
+function traLoiSach(): Response {
+	return new Response(`${duoiBamSha1("khong-bao-gio-trung-mat-khau")}:1\n`, {
+		status: 200,
+	});
+}
+
+function matKhauSach(nhan: string): string {
+	return `${nhan}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+const BO_QUA_GOOGLE =
+	"bo-qua-co-ten: khong co GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET trong moi truong bai kiem";
+
+async function gieoHangDuocVao(): Promise<{ email: string }> {
+	await dungKho();
+
+	const chu = await db.user.upsert({
+		where: { id: `${suffix}-chu` },
+		create: {
+			id: `${suffix}-chu`,
+			name: "Chu Workspace",
+			email: "chu@onehub.center",
+			emailVerified: true,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		},
+		update: {},
+		select: { id: true },
+	});
+
+	const email = `${dinhDanh("duoc-vao")}@onehub.center`;
+
+	await db.invitation.create({
+		data: {
+			id: dinhDanh("inv"),
+			organizationId: WORKSPACE_ID,
+			email,
+			role: "member",
+			status: "pending",
+			expiresAt: new Date("9999-12-31T00:00:00.000Z"),
+			inviterId: chu.id,
+		},
+	});
+
+	return { email };
+}
+
+type ManhJwt = Record<string, string | number | boolean>;
+
+function phanJwt(noiDung: ManhJwt): string {
+	return Buffer.from(JSON.stringify(noiDung)).toString("base64url");
+}
+
+function idTokenGia(nguoi: {
+	email: string;
+	accountId: string;
+	ten: string;
+}): string {
+	const mienGiuNha = googleHostedDomain();
+	const nen: ManhJwt = {
+		iss: "https://accounts.google.com",
+		sub: nguoi.accountId,
+		email: nguoi.email,
+		email_verified: true,
+		name: nguoi.ten,
+	};
+
+	return [
+		phanJwt({ alg: "RS256", typ: "JWT", kid: "khoa-thu" }),
+		phanJwt(mienGiuNha ? { ...nen, hd: mienGiuNha } : nen),
+		Buffer.from("chua-ky").toString("base64url"),
+	].join(".");
+}
+
+async function dangNhapQuaGoogle(nguoi: {
+	email: string;
+	accountId: string;
+	ten: string;
+}): Promise<{ diaChiVe: string | null }> {
+	const batDau = await auth.api.signInSocial({
+		body: { provider: GOOGLE_PROVIDER_ID, callbackURL: "/" },
+		returnHeaders: true,
+	});
+
+	const duong = batDau.response?.url;
+	if (!duong) throw new Error("signInSocial khong tra ve duong cua google");
+
+	const state = new URL(duong).searchParams.get("state");
+	if (!state) throw new Error("duong cua google khong mang state");
+
+	const cookie = batDau.headers
+		.getSetCookie()
+		.map((mieng) => mieng.split(";")[0])
+		.join("; ");
+
+	const that = globalThis.fetch;
+
+	globalThis.fetch = (async (dau: RequestInfo | URL, them?: RequestInit) => {
+		const duongGoi = String(dau instanceof Request ? dau.url : dau);
+		if (duongGoi.startsWith(GOC_TOKEN_GOOGLE)) {
+			return Response.json({
+				access_token: `at-${nguoi.accountId}`,
+				refresh_token: `rt-${nguoi.accountId}`,
+				token_type: "Bearer",
+				expires_in: 3600,
+				scope: SYNC_SCOPES.join(" "),
+				id_token: idTokenGia(nguoi),
+			});
+		}
+		return that(dau as RequestInfo, them);
+	}) as typeof fetch;
+
+	try {
+		const ket = await auth.api.callbackOAuth({
+			method: "GET",
+			params: { id: GOOGLE_PROVIDER_ID },
+			query: { state, code: `ma-${nguoi.accountId}` },
+			headers: new Headers({ cookie }),
+			asResponse: true,
+		});
+
+		return { diaChiVe: ket.headers.get("location") };
+	} catch (loi) {
+		const dau = (loi as { headers?: Headers })?.headers;
+		return { diaChiVe: dau instanceof Headers ? dau.get("location") : null };
+	} finally {
+		globalThis.fetch = that;
+	}
 }
 
 async function donSauKhiXong() {
-	await db.session.deleteMany({
-		where: { userId: { startsWith: `${suffix}-` } },
+	const nguoiCuaLuot = await db.user.findMany({
+		where: {
+			OR: [
+				{ id: { startsWith: `${suffix}-` } },
+				{ email: { contains: suffix } },
+			],
+		},
+		select: { id: true },
 	});
-	await db.account.deleteMany({
-		where: { userId: { startsWith: `${suffix}-` } },
-	});
-	await db.verification.deleteMany({
-		where: { value: { startsWith: `${suffix}-` } },
-	});
-	await db.member.deleteMany({
-		where: { userId: { startsWith: `${suffix}-` } },
-	});
+	const id = nguoiCuaLuot.map((row) => row.id);
+
+	await db.session.deleteMany({ where: { userId: { in: id } } });
+	await db.account.deleteMany({ where: { userId: { in: id } } });
+	await db.verification.deleteMany({ where: { value: { in: id } } });
+	await db.member.deleteMany({ where: { userId: { in: id } } });
 	await db.invitation.deleteMany({
-		where: { organizationId: WORKSPACE_ID, inviterId: `${suffix}-chu` },
+		where: {
+			organizationId: WORKSPACE_ID,
+			OR: [{ inviterId: `${suffix}-chu` }, { email: { contains: suffix } }],
+		},
 	});
-	await db.user.deleteMany({ where: { id: { startsWith: `${suffix}-` } } });
+	await db.user.deleteMany({ where: { id: { in: id } } });
 }
 
 afterAll(donSauKhiXong);
@@ -129,6 +283,36 @@ describe("vong-tron", () => {
 		const vao = await thuDangNhap(ket.email, matKhau);
 		expect(vao.ok).toBe(true);
 		expect(vao.userId).toBe(ket.userId);
+	});
+
+	test("phien mo truoc khi dat lai mat khau khong con dung duoc sau do", async () => {
+		const ket = await gieoNguoiVaChia();
+		const mot = matKhauSach("Phien-cu");
+
+		expect((await thuDatMatKhau(ket.token, mot)).ok).toBe(true);
+		expect((await thuDangNhap(ket.email, mot)).ok).toBe(true);
+
+		const phienCu = await db.session.findMany({
+			where: { userId: ket.userId },
+			select: { id: true },
+		});
+		expect(phienCu.length).toBeGreaterThan(0);
+
+		const chiaHai = await ducChia({
+			userId: ket.userId,
+			appUrl: "http://localhost:3000",
+		});
+		const tokenHai = chiaHai.url.split("/").at(-1) ?? "";
+		expect((await thuDatMatKhau(tokenHai, matKhauSach("Phien-moi"))).ok).toBe(
+			true,
+		);
+
+		const conSong = await db.session.findMany({
+			where: { id: { in: phienCu.map((phien) => phien.id) } },
+			select: { id: true },
+		});
+		expect(conSong).toEqual([]);
+		expect(await db.session.count({ where: { userId: ket.userId } })).toBe(0);
 	});
 });
 
@@ -202,14 +386,14 @@ describe("phat-lai", () => {
 });
 
 describe("mat-khau-yeu", () => {
-	test("ngan hon do dai toi thieu thi tu choi voi thong diep do dai", async () => {
+	test("ngan hon do dai toi thieu thi tu choi voi thong diep do dai bang tieng Viet", async () => {
 		const ket = await gieoNguoiVaChia();
 		const matKhauNgan = "N".repeat(PASSWORD.minLength - 1);
 
 		const dat = await thuDatMatKhau(ket.token, matKhauNgan);
 
 		expect(dat.ok).toBe(false);
-		expect(dat.message).toBe("Password too short");
+		expect(dat.message).toBe(CAU_MAT_KHAU.quaNgan(PASSWORD.minLength));
 	});
 
 	test("du dai nhung da lo thi tu choi voi thong diep khac ca do dai", async () => {
@@ -219,33 +403,99 @@ describe("mat-khau-yeu", () => {
 		const dat = await thuDatMatKhau(ket.token, daLo);
 
 		if (dat.ok) {
-			throw new Error(
-				"mat khau da tung lo van duoc chap nhan — bo sang haveIBeenPwned khong con chan",
-			);
-		}
-
-		if (dat.message.startsWith(TIEN_TO_KHONG_TOI_MANG_HIBP)) {
 			expect([
-				"bo-qua-co-ten: khong voi toi duoc mang cua haveIBeenPwned luc chay bai kiem",
-				dat.message,
+				"bo-qua-co-ten: khong voi toi duoc danh sach mat khau da lo luc chay bai kiem, nen bo sang cho qua theo dung luat fail-open",
+				dat.ok,
 			]).toEqual([
-				"bo-qua-co-ten: khong voi toi duoc mang cua haveIBeenPwned luc chay bai kiem",
-				dat.message,
+				"bo-qua-co-ten: khong voi toi duoc danh sach mat khau da lo luc chay bai kiem, nen bo sang cho qua theo dung luat fail-open",
+				true,
 			]);
 			return;
 		}
 
-		expect(dat.message).not.toBe("Password too short");
-		expect(dat.message).toBe(thongDiepMatKhauDaLo());
+		expect(dat.message).not.toBe(CAU_MAT_KHAU.quaNgan(PASSWORD.minLength));
+		expect(dat.message).toBe(CAU_MAT_KHAU.daLo);
 	});
 
 	test("du dai va sach thi duoc chap nhan", async () => {
 		const ket = await gieoNguoiVaChia();
-		const sach = `Sach-Kh-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+		const sach = matKhauSach("Sach-Kh");
 
 		const dat = await thuDatMatKhau(ket.token, sach);
 
 		expect(dat.ok).toBe(true);
+	});
+
+	test("chia song sot sau khi mat khau da lo bi tu choi, dat lai tren CHINH chia do", async () => {
+		const ket = await gieoNguoiVaChia();
+		const daLo = matKhauSach("Da-lo");
+		const sach = matKhauSach("Sau-khi-bi-tu-choi");
+
+		const mot = await voiDanhSachDaLoGia(
+			() => traLoiDaLo(daLo),
+			() => thuDatMatKhau(ket.token, daLo),
+		);
+		expect(mot.ok).toBe(false);
+		expect(mot.message).toBe(CAU_MAT_KHAU.daLo);
+
+		const hangChia = await db.verification.findFirst({
+			where: { identifier: `${PASSWORD.verificationPrefix}${ket.token}` },
+		});
+		expect(hangChia).not.toBeNull();
+
+		const hai = await voiDanhSachDaLoGia(traLoiSach, () =>
+			thuDatMatKhau(ket.token, sach),
+		);
+		expect(hai.ok).toBe(true);
+		expect((await thuDangNhap(ket.email, sach)).ok).toBe(true);
+	});
+
+	test("chia song sot sau khi mat khau qua ngan bi tu choi, dat lai tren CHINH chia do", async () => {
+		const ket = await gieoNguoiVaChia();
+		const ngan = "N".repeat(PASSWORD.minLength - 1);
+		const sach = matKhauSach("Sau-khi-qua-ngan");
+
+		const mot = await thuDatMatKhau(ket.token, ngan);
+		expect(mot.ok).toBe(false);
+
+		const hangChia = await db.verification.findFirst({
+			where: { identifier: `${PASSWORD.verificationPrefix}${ket.token}` },
+		});
+		expect(hangChia).not.toBeNull();
+
+		const hai = await voiDanhSachDaLoGia(traLoiSach, () =>
+			thuDatMatKhau(ket.token, sach),
+		);
+		expect(hai.ok).toBe(true);
+		expect((await thuDangNhap(ket.email, sach)).ok).toBe(true);
+	});
+
+	test("khong voi toi duoc danh sach da lo thi van dat duoc mat khau", async () => {
+		const ket = await gieoNguoiVaChia();
+		const sach = matKhauSach("Mang-chan-host-ngoai");
+
+		const dat = await voiDanhSachDaLoGia(
+			() => {
+				throw new TypeError("fetch failed: mang doanh nghiep chan host ngoai");
+			},
+			() => thuDatMatKhau(ket.token, sach),
+		);
+
+		expect(dat.ok).toBe(true);
+		expect((await thuDangNhap(ket.email, sach)).ok).toBe(true);
+	});
+
+	test("danh sach da lo tra loi khong-2xx thi van dat duoc mat khau", async () => {
+		const ket = await gieoNguoiVaChia();
+		const sach = matKhauSach("Sang-tra-503");
+
+		const dat = await voiDanhSachDaLoGia(
+			() => new Response("khong san sang", { status: 503 }),
+			() => thuDatMatKhau(ket.token, sach),
+		);
+
+		expect(dat.ok).toBe(true);
+		expect((await thuDangNhap(ket.email, sach)).ok).toBe(true);
 	});
 });
 
@@ -271,34 +521,92 @@ describe("cua-google-con-song", () => {
 		expect(socialProviders?.google?.clientId).toBeTruthy();
 	});
 
-	test("dia chi da co hang nguoi dung thi lien ket qua google, khong sinh hang thu hai", async () => {
-		const ket = await gieoNguoiVaChia();
-		const context = await auth.$context;
-		const nguonGoogle: Parameters<typeof handleOAuthUserInfo>[0] = {
-			context,
-		} as unknown as Parameters<typeof handleOAuthUserInfo>[0];
+	test("cau hinh cap nhat thong tin nguoi khi noi tai khoan", () => {
+		const account = (
+			auth.options as {
+				account?: { accountLinking?: { updateUserInfoOnLink?: boolean } };
+			}
+		).account;
 
-		const ketQua = await handleOAuthUserInfo(nguonGoogle, {
-			userInfo: {
-				id: `google-ext-${ket.userId}`,
-				email: ket.email,
-				emailVerified: true,
-				name: "Nguoi thu qua Google",
-			},
-			account: {
-				providerId: GOOGLE_PROVIDER_ID,
-				accountId: `google-ext-${ket.userId}`,
-			},
-			callbackURL: "/",
-			disableSignUp: false,
+		expect(account?.accountLinking?.updateUserInfoOnLink).toBe(true);
+	});
+
+	test("nguoi trong danh sach duoc vao dang nhap that bang google thi tao duoc phien", async () => {
+		if (!isGoogleConfigured()) {
+			expect([BO_QUA_GOOGLE, isGoogleConfigured()]).toEqual([
+				BO_QUA_GOOGLE,
+				false,
+			]);
+			return;
+		}
+
+		const { email } = await gieoHangDuocVao();
+		expect(await db.user.count({ where: { email } })).toBe(0);
+
+		const vao = await dangNhapQuaGoogle({
+			email,
+			accountId: dinhDanh("google-id"),
+			ten: "Nguoi vao bang google",
+		});
+		expect(vao.diaChiVe).not.toBeNull();
+		expect(vao.diaChiVe ?? "").not.toContain("error=");
+
+		const nguoi = await db.user.findMany({ where: { email } });
+		expect(nguoi.length).toBe(1);
+
+		const phien = await db.session.count({
+			where: { userId: nguoi[0]?.id ?? "" },
+		});
+		expect(phien).toBeGreaterThan(0);
+
+		const thanhVien = await db.member.count({
+			where: { organizationId: WORKSPACE_ID, userId: nguoi[0]?.id ?? "" },
+		});
+		expect(thanhVien).toBe(1);
+	});
+
+	test("nguoi ngoai danh sach duoc vao khong dang nhap duoc bang google", async () => {
+		if (!isGoogleConfigured()) {
+			expect([BO_QUA_GOOGLE, isGoogleConfigured()]).toEqual([
+				BO_QUA_GOOGLE,
+				false,
+			]);
+			return;
+		}
+
+		await dungKho();
+		const email = `${dinhDanh("ngoai-ds")}@example.com`;
+
+		await dangNhapQuaGoogle({
+			email,
+			accountId: dinhDanh("google-id"),
+			ten: "Ke la",
 		});
 
-		expect(ketQua.error).toBeNull();
-		expect(ketQua.isRegister).toBe(false);
-		expect(ketQua.data?.user.id).toBe(ket.userId);
+		expect(await db.user.count({ where: { email } })).toBe(0);
+	});
 
-		const soHang = await db.user.count({ where: { email: ket.email } });
-		expect(soHang).toBe(1);
+	test("co ca hai cua thi van la mot hang nguoi dung, va phien vao duoc", async () => {
+		if (!isGoogleConfigured()) {
+			expect([BO_QUA_GOOGLE, isGoogleConfigured()]).toEqual([
+				BO_QUA_GOOGLE,
+				false,
+			]);
+			return;
+		}
+
+		const ket = await gieoNguoiVaChia();
+		expect((await thuDatMatKhau(ket.token, matKhauSach("Hai-cua"))).ok).toBe(
+			true,
+		);
+
+		await dangNhapQuaGoogle({
+			email: ket.email,
+			accountId: dinhDanh("google-id"),
+			ten: "Nguoi thu qua Google",
+		});
+
+		expect(await db.user.count({ where: { email: ket.email } })).toBe(1);
 
 		const taiKhoanGoogle = await db.account.findFirst({
 			where: { userId: ket.userId, providerId: GOOGLE_PROVIDER_ID },
@@ -306,7 +614,9 @@ describe("cua-google-con-song", () => {
 		});
 		expect(taiKhoanGoogle).not.toBeNull();
 
-		await db.session.deleteMany({ where: { userId: ket.userId } });
+		expect(
+			await db.session.count({ where: { userId: ket.userId } }),
+		).toBeGreaterThan(0);
 	});
 });
 
