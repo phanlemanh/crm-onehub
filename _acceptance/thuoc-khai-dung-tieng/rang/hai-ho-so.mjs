@@ -87,6 +87,17 @@ console.log(
 		"   Mo rong mot co che dang phuc vu ho so khac ma lam vo no la doi mot lo lay mot lo.",
 );
 const nenChat = cacKhoi.find((k) => k.ho_so === "nen-chat-ai-elements");
+if (!nenChat) {
+	bang(`-- ${cacKhoi.length} khoi trong ban khai cong:`, hang);
+	console.log(
+		"-- KHOI nen-chat-ai-elements VANG khoi ban khai, nen ve (a) khong chay duoc.\n" +
+			"   In bang da dem xong TRUOC khi dung: nem TypeError tran o day lam mat\n" +
+			"   toan bo bao cao, va nguoi doc nhan mot stack trace thay cho nhan\n" +
+			"   [ho-so-vang-khoi:nen-chat-ai-elements] ma chinh chan nay vua dat ra.",
+	);
+	console.log(`ket qua: ${hong} cho hong`);
+	process.exit(1);
+}
 const hangCu = [];
 for (const k of nenChat.checks) {
 	const r = chay("node", [join(GOC, k.script)]);

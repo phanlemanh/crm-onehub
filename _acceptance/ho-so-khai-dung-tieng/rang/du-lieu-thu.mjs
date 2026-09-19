@@ -218,7 +218,16 @@ export async function datDuGiaiDoan() {
 		daTao,
 		don: async () => {
 			await db.deal.deleteMany({ where: { id: { in: daTao } } });
-			await db.company.delete({ where: { id: congTy.id } }).catch(() => {});
+			try {
+				await db.company.delete({ where: { id: congTy.id } });
+			} catch (loi) {
+				throw new Error(
+					`KHONG DON DUOC VAT THU [vat-thu-con-lai:${congTy.id}] ${loi?.code ?? loi?.message}\n` +
+						"   Nuot loi o day nghia la: mot vat thu THAT o lai CSDL, ma tra() van in\n" +
+						'   "DA TRA du lieu thu ve nguyen trang" va luot chay van thoat 0. Do dung\n' +
+						"   la dieu AC-5 hua nguoc lai. Hoi dong S4 vong 6 bat.",
+				);
+			}
 		},
 	};
 }
