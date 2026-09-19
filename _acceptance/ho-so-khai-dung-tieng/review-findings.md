@@ -154,3 +154,28 @@ lặng thành vô hiệu — đúng lớp bệnh B mà vòng này sinh ra để 
 Ngoài hợp đồng: AC-1 chỉ hứa "vắng ở lượt lành", và ba ô này vắng thật.
 Siết thêm (ghim vào một chuỗi mà chính phép khẳng định in ra) là mở rộng
 phạm vi, nên để người ký quyết ở Cổng 2.
+
+## N16 — tám ô `ui-check` không có chốt máy nào ở lúc ghim lại
+
+Phát hiện 19/09, do phiên «Đăng nhập bằng tài khoản» nêu và tôi xác minh lại
+trên đĩa. **Đã kiểm, không phải suy đoán:**
+
+- `acceptance-gate/lib/evidence-core.cjs:358` — `const REPIN_MACHINE_EXECUTORS
+  = ['test', 'script'];`, dùng để lọc ở dòng 370 và 391.
+- `feature-loop/scripts/repin-lane.mjs` lọc qua đúng hằng đó, nên eval khai
+  `executor: ui-check` **không chạy một lần nào** trong làn ghim lại.
+- Hồ sơ này có **8** ô `ui-check` (E1–E5, E8, E9, E12).
+
+Hai làn bất đồng về chuyện gì được tính. Vòng chấm S4
+(`workflows/acceptance-verify.js`) CÓ chạy `ui-check` — nó gom thành một nhánh
+riêng và đếm riêng trong dòng log. Nhưng `repin-lane` — cái gác merge và cái
+quyết định bằng chứng còn tươi hay đã hoá cũ — thì không. Hệ quả cụ thể cho hồ
+sơ này: tám tiêu chí về tấm hồ sơ có người nhìn ở S4, mà **không chốt máy nào ở
+lúc ghim lại**. Một hồi quy rơi vào đúng tám ô đó sẽ đi qua nghi thức ghim lại
+mà không chuông nào kêu.
+
+Ngoài hợp đồng của vòng khai tiếng: không AC nào của hồ sơ này hứa về hành vi
+của làn ghim lại. Để người ký quyết ở Cổng 2. Hai lối nếu muốn bịt: đổi tám ô
+sang `executor: script` (chúng vốn đã trỏ tới `executors.script.hskt_*`, tức
+lệnh `bun` thật chạy được bằng máy — nên đổi nhãn là đủ, không phải viết lại
+phép đo), hoặc mở chip sang `~/dev/acceptance-gate-kit` xin nới hằng đó.
