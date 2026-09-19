@@ -31,6 +31,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { ConfirmDialog } from "./confirm-dialog";
 import { membersSearchParams } from "./members-search-params";
+import { PhatChiaButton } from "./phat-chia-button";
 
 type Role = keyof ThanhVienMessages["vaiTro"];
 
@@ -44,8 +45,10 @@ function columns(
 	t: ThanhVienMessages,
 	canChangeRoles: boolean,
 	canManageMembers: boolean,
+	canIssuePasswordLink: boolean,
 	onChangeRole: (member: MemberRow, role: Role) => void,
 	onRemove: (member: MemberRow) => void,
+	onDaPhat: () => void,
 	pending: boolean,
 ): DataTableColumn<MemberRow>[] {
 	return [
@@ -106,6 +109,23 @@ function columns(
 				<span className="text-muted-foreground">
 					<LocalRelativeTime date={row.joinedAt} />
 				</span>
+			),
+		},
+		{
+			id: "phatChia",
+			header: <span className="sr-only">{t.phatChia.nut}</span>,
+			label: t.phatChia.nut,
+			hideable: false,
+			align: "right",
+			width: "w-[14%]",
+			cell: (row) => (
+				<PhatChiaButton
+					t={t}
+					email={row.email}
+					ten={row.name}
+					coQuyen={canIssuePasswordLink}
+					onDaPhat={onDaPhat}
+				/>
 			),
 		},
 		{
@@ -218,8 +238,12 @@ export function MembersTable() {
 					t,
 					workspace.data?.canChangeRoles ?? false,
 					workspace.data?.canManageMembers ?? false,
+					workspace.data?.canIssuePasswordLink ?? false,
 					(member, role) => setRole.mutate({ memberId: member.id, role }),
 					(member) => setDangGo(member),
+					() => {
+						void members.refetch();
+					},
 					setRole.isPending || remove.isPending,
 				)}
 				rows={members.data?.rows ?? []}

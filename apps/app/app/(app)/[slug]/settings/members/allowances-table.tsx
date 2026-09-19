@@ -5,7 +5,10 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { LocalRelativeTime } from "@/components/local-date-time";
+import {
+	formatRelativeTime,
+	LocalRelativeTime,
+} from "@/components/local-date-time";
 import {
 	type ThanhVienMessages,
 	thanhVienMessages,
@@ -14,12 +17,14 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { AllowDialog } from "./allow-dialog";
 import { ConfirmDialog } from "./confirm-dialog";
+import { PhatChiaButton } from "./phat-chia-button";
 
 type Allowance = RouterOutputs["workspace"]["allowances"]["rows"][number];
 type Role = keyof ThanhVienMessages["vaiTro"];
 
 export function AllowancesTable() {
-	const t = thanhVienMessages(useLocale());
+	const locale = useLocale();
+	const t = thanhVienMessages(locale);
 	const trpc = useTRPC();
 
 	const [moChoPhep, setMoChoPhep] = useState(false);
@@ -100,6 +105,9 @@ export function AllowancesTable() {
 								{t.duocPhepVao.luc}
 							</th>
 							<th className="py-2 text-right font-normal">
+								<span className="sr-only">{t.phatChia.nut}</span>
+							</th>
+							<th className="py-2 text-right font-normal">
 								<span className="sr-only">{t.duocPhepVao.hanhDong}</span>
 							</th>
 						</tr>
@@ -109,7 +117,18 @@ export function AllowancesTable() {
 						{rows.map((row) => (
 							<tr key={row.id} className="border-b last:border-0">
 								<td className="py-2" translate="no">
-									{row.email}
+									<div className="flex flex-col gap-1">
+										<span>{row.email}</span>
+										{row.passwordLinkIssuedByName &&
+										row.passwordLinkIssuedAt ? (
+											<span className="text-muted-foreground text-xs">
+												{t.phatChia.vet(
+													row.passwordLinkIssuedByName,
+													formatRelativeTime(row.passwordLinkIssuedAt, locale),
+												)}
+											</span>
+										) : null}
+									</div>
 								</td>
 								<td className="py-2">{t.vaiTro[row.role as Role]}</td>
 								<td className="py-2 text-muted-foreground" translate="no">
@@ -117,6 +136,15 @@ export function AllowancesTable() {
 								</td>
 								<td className="py-2 text-muted-foreground tabular-nums">
 									<LocalRelativeTime date={row.createdAt} />
+								</td>
+								<td className="py-2 text-right">
+									<PhatChiaButton
+										t={t}
+										email={row.email}
+										ten={row.email}
+										coQuyen={workspace.data?.canIssuePasswordLink ?? false}
+										onDaPhat={lamMoi}
+									/>
 								</td>
 								<td className="py-2 text-right">
 									<Button

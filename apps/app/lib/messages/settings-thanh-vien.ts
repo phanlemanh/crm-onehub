@@ -68,6 +68,22 @@ const en = {
 		dangXuat: "Sign out",
 	},
 	go: "Remove from workspace",
+	phatChia: {
+		nut: "Issue link",
+		dangPhat: "Issuing",
+		canQuyen: "Only an owner or an admin can issue this",
+		tieuDe: "Password link",
+		moTa: (ten: string) =>
+			`Send to ${ten}. The link works once and expires in one hour.`,
+		nhanLienKet: "Link",
+		giaiThich:
+			"The recipient opens the link and sets their own password. You never see their password.",
+		chep: "Copy link",
+		daChep: (ten: string) => `Copied. Paste it into Zalo for ${ten}.`,
+		dong: "Close",
+		loi: "Could not issue the link. Try again in a few minutes.",
+		vet: (ten: string, luc: string) => `${ten} issued a link · ${luc}`,
+	},
 };
 
 export type ThanhVienMessages = typeof en;
@@ -140,6 +156,22 @@ const vi = {
 		dangXuat: "Đăng xuất",
 	},
 	go: "Gỡ khỏi không gian làm việc",
+	phatChia: {
+		nut: "Phát liên kết",
+		dangPhat: "Đang phát",
+		canQuyen: "Cần quyền quản trị mới phát được",
+		tieuDe: "Liên kết đặt mật khẩu",
+		moTa: (ten: string) =>
+			`Gửi cho ${ten}. Liên kết dùng được một lần, hết hạn sau một giờ.`,
+		nhanLienKet: "Liên kết",
+		giaiThich:
+			"Người nhận mở liên kết rồi tự đặt mật khẩu. Bạn không thấy mật khẩu của họ.",
+		chep: "Chép liên kết",
+		daChep: (ten: string) => `Đã chép. Dán vào Zalo gửi cho ${ten}.`,
+		dong: "Đóng",
+		loi: "Chưa phát được liên kết. Thử lại sau ít phút.",
+		vet: (ten: string, luc: string) => `${ten} đã phát liên kết · ${luc}`,
+	},
 } satisfies ThanhVienMessages;
 
 const BANG = { en, vi } satisfies Record<Locale, ThanhVienMessages>;

@@ -498,6 +498,18 @@ describe("kho chuoi cua vong ③a", () => {
 				"Đổi vai trò của 1",
 				"Đổi vai trò của 12",
 			],
+			"settings-thanh-vien:phatChia.moTa": [
+				"Gửi cho 1. Liên kết dùng được một lần, hết hạn sau một giờ.",
+				"Gửi cho 12. Liên kết dùng được một lần, hết hạn sau một giờ.",
+			],
+			"settings-thanh-vien:phatChia.daChep": [
+				"Đã chép. Dán vào Zalo gửi cho 1.",
+				"Đã chép. Dán vào Zalo gửi cho 12.",
+			],
+			"settings-thanh-vien:phatChia.vet": [
+				"1 đã phát liên kết · A",
+				"12 đã phát liên kết · A",
+			],
 			"agent-builder-khung:doi.soLuotChay": ["1 lượt chạy", "12 lượt chạy"],
 			"agent-builder-khung:nha.chaoHoi": [
 				"1 cần gì hôm nay?",

@@ -165,7 +165,7 @@ function formatRelativeDate(date: string, locale: Locale): string {
 	return getRelativeFormatter(locale).format(-days, "day");
 }
 
-function formatRelativeTime(date: string, locale: Locale): string {
+export function formatRelativeTime(date: string, locale: Locale): string {
 	const then = new Date(date).getTime();
 	if (!Number.isFinite(then)) return "—";
 	const difference = Date.now() - then;
