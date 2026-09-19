@@ -141,3 +141,16 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   Đề xuất: known-limits
 
 ⚠ Cụm ngoài vùng phủ: 4/20 lỗi rơi vào file không bộ đo nào phủ (_acceptance/ho-so-khai-dung-tieng/evals.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+
+## N15 — ba chuỗi ghim `chieu a/b/c` chốt bằng hành vi bộ in, không bằng lời hứa
+
+Phát hiện 19/09 khi chạy `tk_ghim_phan_biet` lần đầu. Ba ô `E7a/E7b/E7c`
+ghim vào `"chieu a"`, `"chieu b"`, `"chieu c"` — đúng tên ba test trong
+`khai-tieng.spec.tsx`. Chúng ĐẠT luật AC-1 (vắng ở lượt lành), nhưng vắng
+vì `bun test` chỉ in tên test khi đỏ, chứ không vì bài kiểm khẳng định gì.
+Thêm `--reporter=verbose`, hoặc bun đổi bộ in mặc định, là ba chốt ấy im
+lặng thành vô hiệu — đúng lớp bệnh B mà vòng này sinh ra để vá.
+
+Ngoài hợp đồng: AC-1 chỉ hứa "vắng ở lượt lành", và ba ô này vắng thật.
+Siết thêm (ghim vào một chuỗi mà chính phép khẳng định in ra) là mở rộng
+phạm vi, nên để người ký quyết ở Cổng 2.

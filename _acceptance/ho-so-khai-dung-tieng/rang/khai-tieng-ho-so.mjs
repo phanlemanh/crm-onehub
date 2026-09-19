@@ -252,14 +252,16 @@ function bao(ten, canTim, thay, mongBoc) {
 	for (const gt of canTim) {
 		const cho = thay.filter((x) => x.gia_tri === gt.slice(0, 60));
 		if (cho.length === 0) {
-			console.log(`   KHONG THAY TREN MAN: ${JSON.stringify(gt.slice(0, 60))}`);
+			console.log(
+				`   KHONG THAY TREN MAN [khong-thay:${ten}]: ${JSON.stringify(gt.slice(0, 60))}`,
+			);
 			hong += 1;
 			continue;
 		}
 		const lech = cho.filter((x) => x.boc !== mongBoc);
 		hong += lech.length;
 		console.log(
-			`   ${lech.length === 0 ? "dat    " : "KHONG DAT"} ${JSON.stringify(gt.slice(0, 48))} — ${cho.length} cho, lech ${lech.length}`,
+			`   ${lech.length === 0 ? "dat    " : `KHONG DAT [lech-boc:${ten}]`} ${JSON.stringify(gt.slice(0, 48))} — ${cho.length} cho, lech ${lech.length}`,
 		);
 		muc.push(...cho);
 	}
@@ -367,7 +369,10 @@ if (chan === "gioi-thieu") {
 		`   (a) ho so CHUA enrichment: khoi ${JSON.stringify(TIEU_DE)} ${coKhoiTrong ? "VAN CO (sai)" : "vang han"}`,
 	);
 	if (coKhoiTrong) hong += 1;
-	console.log(`   (b) so phan tu khai lang=en co noi dung RONG: ${trong.rong}`);
+	console.log(
+		`   (b) so phan tu khai lang=en co noi dung RONG: ${trong.rong}` +
+			(trong.rong > 0 ? ` [phan-tu-rong-dem-duoc:${trong.rong}]` : ""),
+	);
 	if (trong.rong > 0) hong += trong.rong;
 
 	const day = await xem(`companies/${vung.congTy.id}`, []);
@@ -410,7 +415,7 @@ if (chan === "gioi-thieu") {
 		return ra;
 	})();
 	console.log(`   chuoi tieng Viet lot vao trong pham vi lang=en: ${viet.length}`);
-	for (const v of viet) console.log(`     LOT: ${JSON.stringify(v)}`);
+	for (const v of viet) console.log(`     [tieng-viet-lot] ${JSON.stringify(v)}`);
 	hong += viet.length;
 	ghiVung(chan, { tieng_trang: "vi", tieng_viet_lot: viet });
 } else {
