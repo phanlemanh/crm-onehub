@@ -6,9 +6,11 @@ import { type BetterAuthOptions, betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { APIError } from "better-auth/api";
 import { genericOAuth } from "better-auth/plugins/generic-oauth";
+import { haveIBeenPwned } from "better-auth/plugins/haveibeenpwned";
 import { organization } from "better-auth/plugins/organization";
 import { decideSignInFromDb } from "./allow-list";
 import { API_KEY_EXPIRATION, API_KEY_HEADER, API_KEY_PREFIX } from "./api-keys";
+import { PASSWORD } from "./chia-mat-khau";
 import { AUTH_COOKIE_PREFIX } from "./cookies";
 import { env } from "./env";
 import { ensureWorkspaceMembership } from "./organization";
@@ -79,7 +81,11 @@ export const auth = betterAuth({
 	}),
 
 	emailAndPassword: {
-		enabled: false,
+		enabled: true,
+		disableSignUp: true,
+		revokeSessionsOnPasswordReset: true,
+		minPasswordLength: PASSWORD.minLength,
+		resetPasswordTokenExpiresIn: PASSWORD.tokenTtlSeconds,
 	},
 
 	socialProviders,
@@ -230,6 +236,11 @@ export const auth = betterAuth({
 
 		sso({
 			organizationProvisioning: { disabled: true },
+		}),
+
+		haveIBeenPwned({
+			customPasswordCompromisedMessage:
+				"Mật khẩu này đã từng bị lộ trong một vụ rò dữ liệu. Chọn mật khẩu khác.",
 		}),
 
 		apiKey({

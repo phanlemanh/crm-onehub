@@ -32,6 +32,7 @@ export {
 } from "./invitation-status";
 export {
 	canChangeRole,
+	canIssuePasswordLink,
 	canManageConnections,
 	canManageCurrency,
 	canManageTracking,
