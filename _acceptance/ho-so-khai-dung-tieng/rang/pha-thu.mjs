@@ -410,7 +410,7 @@ if (sauBan !== banDauBan) {
 	);
 	hong += 1;
 } else {
-	console.log("\n   dat     cay dang xet khong doi mot byte nao (ke ca thu muc evidence)");
+	console.log("\n   dat     cay dang xet khong doi mot byte MA NGUON nao");
 }
 
 console.log("\n===== BANG DOT BIEN =====");
