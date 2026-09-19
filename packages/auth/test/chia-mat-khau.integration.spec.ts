@@ -372,14 +372,24 @@ describe("het-han", () => {
 		);
 
 		const qua = await gieoNguoiVaChia();
+		const matKhauCu = `Mat-khau-cu-${Date.now()}`;
+		expect((await thuDatMatKhau(qua.token, matKhauCu)).ok).toBe(true);
+
+		const chiaHetHan = await ducChia({
+			userId: qua.userId,
+			appUrl: "http://localhost:3000",
+		});
+		const tokenHetHan = chiaHetHan.url.split("/").at(-1) ?? "";
 		await db.verification.updateMany({
-			where: { identifier: `${PASSWORD.verificationPrefix}${qua.token}` },
+			where: { identifier: `${PASSWORD.verificationPrefix}${tokenHetHan}` },
 			data: { expiresAt: new Date(Date.now() - 60_000) },
 		});
 
-		const matKhau = `Qua-han-${Date.now()}`;
-		expect((await thuDatMatKhau(qua.token, matKhau)).ok).toBe(false);
-		expect((await thuDangNhap(qua.email, matKhau)).ok).toBe(false);
+		const matKhauMoi = `Qua-han-${Date.now()}`;
+		expect((await thuDatMatKhau(tokenHetHan, matKhauMoi)).ok).toBe(false);
+
+		expect((await thuDangNhap(qua.email, matKhauCu)).ok).toBe(true);
+		expect((await thuDangNhap(qua.email, matKhauMoi)).ok).toBe(false);
 	});
 });
 
@@ -726,6 +736,24 @@ describe("chan-tu-dang-ky", () => {
 
 		const sau = await db.user.count({ where: { email } });
 		expect(sau).toBe(0);
+
+		const nguoiDuocPhat = await db.user.create({
+			data: {
+				id: dinhDanh("qua-chia"),
+				email,
+				name: "Duoc phat chia",
+				emailVerified: true,
+			},
+		});
+		const chia = await ducChia({
+			userId: nguoiDuocPhat.id,
+			appUrl: "http://localhost:3000",
+		});
+		const tokenChia = chia.url.split("/").at(-1) ?? "";
+		const matKhauQuaChia = matKhauSach("Qua-chia-dia-chi-bi-chan-tu-dang-ky");
+		const dat = await thuDatMatKhau(tokenChia, matKhauQuaChia);
+		expect(dat.ok).toBe(true);
+		expect((await thuDangNhap(email, matKhauQuaChia)).ok).toBe(true);
 	});
 
 	test("dia chi NGOAI danh sach cung khong tu dang ky duoc", async () => {

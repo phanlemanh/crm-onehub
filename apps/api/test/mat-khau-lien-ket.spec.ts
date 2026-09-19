@@ -199,6 +199,52 @@ describe("quyen-hai-ve", () => {
 	});
 });
 
+describe("phat-chia", () => {
+	test("nguoi da co tai khoan duoc phat mot chia hop le; id nguoi phat khong ton tai thi bi tu choi va khong ghi gi", async () => {
+		const { service, db } = await dungService();
+		const admin = await gieoNguoi("admin");
+		const nguoi = await gieoNguoi("member");
+
+		const truocChia = await demChiaCua(nguoi.id);
+		expect(truocChia).toBe(0);
+
+		const ket = await service.issuePasswordLink(admin.id, {
+			email: nguoi.email,
+		});
+		expect(ket.url).toContain("/dat-mat-khau/");
+		expect(ket.expiresAt).toBeTruthy();
+
+		const sauChia = await demChiaCua(nguoi.id);
+		expect(
+			sauChia,
+			`bang verification phai co dung ${truocChia + 1} hang tro id ${nguoi.id}, dang co ${sauChia}`,
+		).toBe(truocChia + 1);
+
+		const hang = await db.verification.findFirst({
+			where: {
+				value: nguoi.id,
+				identifier: { startsWith: PASSWORD.verificationPrefix },
+			},
+		});
+		expect(hang).not.toBeNull();
+		expect(hang?.value).toBe(nguoi.id);
+
+		const conLai = (hang?.expiresAt.getTime() ?? 0) - Date.now();
+		expect(conLai).toBeGreaterThan(0);
+		expect(conLai).toBeLessThanOrEqual(PASSWORD.tokenTtlSeconds * 1000);
+
+		const truocAm = await demChiaCuaLuot();
+		await expect(
+			service.issuePasswordLink(dinhDanh("khong-ton-tai"), {
+				email: nguoi.email,
+			}),
+		).rejects.toThrow();
+
+		expect(await demChiaCua(nguoi.id)).toBe(sauChia);
+		expect(await demChiaCuaLuot()).toBe(truocAm);
+	});
+});
+
 describe("tao-nguoi-truoc", () => {
 	test("dia chi trong danh sach chua co tai khoan thi tao truoc roi duc chia", async () => {
 		const { service, db } = await dungService();

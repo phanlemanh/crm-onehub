@@ -101,20 +101,7 @@ async function SignIn({
 				? configured
 				: [];
 
-	if (!showSso && social.length === 0) {
-		return (
-			<>
-				<AuthHeading title={m.noWay.title} description={m.noWay.description} />
-
-				<p
-					className="text-center text-muted-foreground text-sm/5"
-					translate="no"
-				>
-					{m.noWay.howTo}
-				</p>
-			</>
-		);
-	}
+	const coCuaKhac = showSso || social.length > 0;
 
 	return (
 		<>
@@ -140,11 +127,13 @@ async function SignIn({
 				/>
 			))}
 
-			<div className="flex items-center gap-3">
-				<Separator className="flex-1" />
-				<span className="text-muted-foreground text-xs">{m.hoac}</span>
-				<Separator className="flex-1" />
-			</div>
+			{coCuaKhac ? (
+				<div className="flex items-center gap-3">
+					<Separator className="flex-1" />
+					<span className="text-muted-foreground text-xs">{m.hoac}</span>
+					<Separator className="flex-1" />
+				</div>
+			) : null}
 
 			<PasswordSignIn
 				dangGui={m.signingIn}

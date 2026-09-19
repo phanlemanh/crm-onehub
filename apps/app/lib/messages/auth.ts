@@ -22,13 +22,6 @@ const en = {
 		matKhau: "Password",
 		dangNhap: "Sign in",
 		saiChung: "That email or password isn't right.",
-		noWay: {
-			title: "No way in yet",
-			description:
-				"This CRM has no sign-in method configured, so nobody can get in — including you.",
-			howTo:
-				"Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET — or MICROSOFT_CLIENT_ID and MICROSOFT_CLIENT_SECRET — in the root .env file and restart. Your own identity provider can be added from Settings once somebody is signed in.",
-		},
 		error: {
 			unreachable:
 				"Could not reach the sign-in service. Check your connection and try again.",
@@ -126,13 +119,6 @@ const vi = {
 		matKhau: "Mật khẩu",
 		dangNhap: "Đăng nhập",
 		saiChung: "Địa chỉ hoặc mật khẩu không đúng.",
-		noWay: {
-			title: "Chưa có cách nào để vào",
-			description:
-				"CRM này chưa cấu hình cách đăng nhập nào, nên chưa ai vào được — kể cả bạn.",
-			howTo:
-				"Đặt GOOGLE_CLIENT_ID và GOOGLE_CLIENT_SECRET — hoặc MICROSOFT_CLIENT_ID và MICROSOFT_CLIENT_SECRET — trong file .env ở gốc kho rồi khởi động lại. Nhà cung cấp định danh của riêng bạn thêm được từ Cài đặt, sau khi đã có người đăng nhập.",
-		},
 		error: {
 			unreachable:
 				"Không kết nối được tới dịch vụ đăng nhập. Kiểm tra mạng rồi thử lại.",
