@@ -1,0 +1,138 @@
+{
+ "feature_plain": "Nhân viên kinh doanh vào được CRM bằng email và mật khẩu, kể cả khi đứng trong mạng chặn Google.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ cho quản trị phát một liên kết đặt mật khẩu cho một người đang là thành viên, kèm hạn dùng."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ phát được liên kết cả cho người vừa được mời, chưa từng đăng nhập lần nào."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ cho người mở liên kết tự đặt mật khẩu, rồi vào được CRM bằng email và mật khẩu đó."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ hiện ô email và mật khẩu ngay cạnh nút Google, và giữ nguyên cửa Google cho ai vẫn dùng được."
+  },
+  {
+   "id": "AC-11",
+   "p": "Sẽ cho quản trị thấy ai đã phát liên kết cho ai, và phát lúc nào."
+  },
+  {
+   "id": "AC-13",
+   "p": "Sẽ cho người quên mật khẩu lấy lại được bằng một liên kết mới, và mật khẩu cũ hết dùng được."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-4",
+   "p": "Chặn dùng lại một liên kết đã dùng — lần thứ hai bị từ chối, mật khẩu hiện tại không đổi."
+  },
+  {
+   "id": "AC-5",
+   "p": "Chặn liên kết đã quá hạn — mật khẩu hiện tại không đổi."
+  },
+  {
+   "id": "AC-6",
+   "p": "Chặn thành viên thường phát liên kết, và nút trên màn cũng tắt sẵn cho họ."
+  },
+  {
+   "id": "AC-7",
+   "p": "Chặn tự đăng ký bằng mật khẩu, kể cả với địa chỉ đã nằm trong danh sách được vào."
+  },
+  {
+   "id": "AC-8",
+   "p": "Chặn mật khẩu quá ngắn hoặc đã từng bị lộ, và nói rõ hỏng ở chỗ nào."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ KHÔNG đá người cầm liên kết về màn đăng nhập — trang đặt mật khẩu mở được khi chưa đăng nhập."
+  }
+ ],
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Đã quét trục «một chìa khoá đi qua những chặng nào», đối chiếu chuẩn ngành về vòng đời thông tin đăng nhập. Đủ khi mỗi chặng có ít nhất một tiêu chí."
+  },
+  {
+   "i": 1,
+   "p": "Đã quét trục «ai đang đứng ở đó» theo đúng ba vai có thật của kho, cộng người ngoài và kẻ cầm liên kết không phải chủ. Đủ khi mỗi vai có câu trả lời rõ được hay không."
+  },
+  {
+   "i": 2,
+   "p": "Đã quét trục «cái chìa đang ở trạng thái nào» theo đúng cơ chế thư viện xác thực dùng. Đủ khi cả bốn trạng thái đều có tiêu chí."
+  },
+  {
+   "i": 3,
+   "p": "Bốn tiêu chí cuối phủ phần cắt ngang: cửa Google vẫn sống, trang đặt mật khẩu mở được khi chưa đăng nhập, có ghi vết, và nhãn tiếng Việt đọc tự nhiên."
+  },
+  {
+   "i": 4,
+   "p": "Cố ý KHÔNG lấy tầng mã làm trục quét — trục theo cấu trúc mã là chỗ hay sót nhất, lưới cảnh báo đích danh."
+  },
+  {
+   "i": 5,
+   "p": "Tiêu chí sàng mật khẩu đã lộ đến từ chuẩn ngành chứ không từ yêu cầu của anh; anh giữ lại ngày 19/09."
+  },
+  {
+   "i": 6,
+   "p": "Mọi ô bị cắt đều có tên trong mục «sẽ không làm» — không ô nào biến mất lặng lẽ."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Người quên mật khẩu không có tiêu chí nào, trong khi chính ngưỡng anh đã ký gọi tên đúng ca đó. Đã thêm tiêu chí và phép đo bắc cầu hai liên kết."
+  },
+  {
+   "i": 1,
+   "p": "Lời hứa «màn cho biết ai đã phát» chỉ được đo ở tầng truy vấn, không ai nhìn màn. Đã thêm một khung hình phải thấy tên người phát nằm trên hàng người nhận."
+  },
+  {
+   "i": 2,
+   "p": "Lời hứa «nói rõ mật khẩu hỏng ở chỗ nào» chỉ được đo ở máy chủ. Đã tách một phép đo riêng, nhìn bằng mắt hai ca lỗi trên màn thật."
+  },
+  {
+   "i": 3,
+   "p": "Phép đo các cửa mở không khoá số lượng, nên một cửa thứ năm lọt ra ngoài vẫn cho màu xanh. Đã ghim đúng bốn cửa và bắt so bằng nhau, gọi tên cửa thừa."
+  },
+  {
+   "i": 4,
+   "p": "Phép đo quyền định dùng cách tìm chữ trong mã để chứng minh một quan hệ. Đã bỏ hẳn, thay bằng phép tiêm hai chiều."
+  }
+ ],
+ "scope_plain": "Không gửi thư, không trang tự đổi mật khẩu, không báo cho người dùng khi mật khẩu đổi, không xác thực hai bước, không đăng nhập bằng Zalo — và cửa Google giữ nguyên, không ai bị buộc đặt mật khẩu.",
+ "decisions_plain": [
+  {
+   "id": "d-20260919T013843Z-1",
+   "p": "Chọn liên kết dùng một lần thay cho mật khẩu tạm — đổi lại phải dựng luồng liên kết, nhưng quản trị không bao giờ thấy mật khẩu của ai."
+  },
+  {
+   "id": "d-20260919T013843Z-2",
+   "p": "Chọn tự đúc chìa để trả liên kết ngay trong câu trả lời — đổi lại dựa vào một chi tiết bên trong thư viện, canh bằng chiều đỏ của phép đo vòng tròn."
+  },
+  {
+   "id": "d-20260919T013843Z-3",
+   "p": "KHÔNG bật bộ quản trị sẵn có của thư viện — đổi lại tránh một lần đổi cấu trúc dữ liệu và một khái niệm vai trò thứ hai."
+  },
+  {
+   "id": "d-20260919T013843Z-4",
+   "p": "KHÔNG làm trang tự đổi mật khẩu — đổi lại mỗi lần muốn đổi phải nhờ quản trị phát liên kết."
+  },
+  {
+   "id": "d-20260919T013843Z-5",
+   "p": "KHÔNG báo cho người dùng khi mật khẩu bị đổi — đổi lại chỉ có ghi vết cho quản trị, vì kho không gửi được thư."
+  },
+  {
+   "id": "d-20260919T013843Z-6",
+   "p": "Giữ tiêu chí sàng mật khẩu đã lộ — đổi lại phép đo phụ thuộc một dịch vụ ngoài, phải tách ca không với tới mạng."
+  },
+  {
+   "id": "d-20260919T014647Z-7",
+   "p": "KHÔNG đo chống dò mật khẩu hàng loạt — đổi lại dựa vào bộ giới hạn tần suất sẵn có của thư viện, chưa ai thử nó."
+  }
+ ]
+}
