@@ -1,74 +1,71 @@
 ---
 schema_version: 2
 feature_slug: vao-bang-email-va-mat-khau
-verdict: REJECT
-failed_evals: [E12]
+verdict: PENDING-JUDGMENT
+failed_evals: []
 reason:
-verified_by: fresh-context verification subagent (vòng 2)
+verified_by: fresh-context verification subagent (vòng 3)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5669ebb814be2a8989bf4bf620be94b23de26b51
+verified_commit: 3dd48ef15d2ce343c09311587b43ece6a61a45b1
 human_signoff:
 ---
 
 # Evidence Report: vao-bang-email-va-mat-khau
 
-run_id cho lượt này: `vao-bang-email-va-mat-khau-20260919-r2` (mọi dòng round-2
-trong `run-log.jsonl` dùng chung mã này; các dòng round-1 giữ nguyên
-`vao-bang-email-va-mat-khau-20260919-r1`).
+run_id cho lượt này: `vao-bang-email-va-mat-khau-20260919-r3` (mọi dòng round-3
+trong `run-log.jsonl` dùng chung mã này; các dòng round-1/round-2 giữ nguyên
+`vao-bang-email-va-mat-khau-20260919-r1` / `-r2`).
 
-Cây sạch, HEAD khớp `5669ebb814be2a8989bf4bf620be94b23de26b51`, nhánh
+Cây sạch, HEAD khớp `3dd48ef15d2ce343c09311587b43ece6a61a45b1`, nhánh
 `chore/o-vao-bang-mat-khau`. Cổng 3000/3001 đang bị một phiên khác mượn để
-chấm cây khác trong lúc này — KHÔNG đụng tới. Dựng riêng hai máy chủ của
-chính cây đang xét ở cổng 3300 (`app-cay-nay`) và 3301 (`api-cay-nay`, khởi
-động lại một lần giữa chừng để `APP_URL`/`trustedOrigins` khớp 3300 — xem mục
-Known limits). Trước khung hình đầu tiên đã tự xác minh: đặt một tệp `.svg`
-đánh dấu vào `apps/app/public/`, xin lại đúng nó qua `http://localhost:3300`,
-nhận về đúng nội dung đã đặt (không bị proxy chặn vì `.svg` nằm trong danh
-sách phần mở rộng đi qua được của proxy) — xác nhận máy chủ ở cổng 3300 đang
-phục vụ đúng cây này, không phải cây khác.
+chấm cây khác trong lúc này — KHÔNG đụng tới, không tắt/khởi động lại gì ở đó.
+Dựng riêng hai máy chủ của chính cây đang xét ở cổng 3300 (`app-cay-nay`) và
+3301 (`api-cay-nay`). Trước khung hình đầu tiên đã tự xác minh: đặt một tệp
+`.svg` đánh dấu vào `apps/app/public/`, xin lại đúng nó qua
+`http://localhost:3300`, nhận về đúng nội dung đã đặt (không bị proxy chặn vì
+`.svg` nằm trong danh sách phần mở rộng đi qua được) — xác nhận máy chủ ở
+cổng 3300 đang phục vụ đúng cây này, không phải cây khác. Xoá tệp đánh dấu
+ngay sau khi xác minh xong.
 
-## Tóm tắt — vì sao vẫn REJECT dù bốn lỗi vòng 1 đã sửa xong
+Diff mã sản phẩm kể từ commit đã ký của vòng 2 (`5669ebb8`) chỉ có ĐÚNG một
+dòng: `apps/app/app/(app)/[slug]/settings/members/members-table.tsx` thêm
+`cellClassName: "whitespace-normal align-top"` trên cột Tên (commit
+`8a480042`) — đúng bản vá cho lỗi E12 vòng 2. Mọi eval khác không có lý do kỹ
+thuật để đổi kết quả, nhưng vẫn đo lại TỪNG cái, không suy diễn từ vòng trước.
 
-Bốn eval trượt ở vòng 1 (**E1, E5, E7, E13**) đều đã sửa và đo lại XANH thật ở
-vòng này — đọc mã bài kiểm xác nhận đúng khẳng định mà `expected` đòi, không
-chỉ nhìn mã thoát:
+## Tóm tắt — vì sao vòng này không còn eval nào trượt
 
-- **E1** — thêm hẳn `describe("phat-chia", ...)` còn thiếu ở vòng 1: khẳng
-  định link+hạn, đọc lại đúng một hàng verification trỏ đúng id, hạn nằm
-  trong tương lai và ≤ TTL, VÀ chiều âm (id người phát không tồn tại → ném
-  lỗi, đếm hàng verification không đổi) trên cùng fixture với khẳng định ghim
-  tên bảng + số hàng mong đợi.
-- **E5** — fixture viết lại: đúc và tiêu thụ một chia THẬT để có mật khẩu cũ
-  trước, rồi mới ép hạn một chia thứ hai của CHÍNH người đó về quá khứ. Khẳng
-  định kép giờ có mặt: mật khẩu cũ vẫn đăng nhập được, mật khẩu mới thử thì
-  không.
-- **E7** — thêm đúng "chiều dương" mà vòng 1 thiếu: trên CHÍNH địa chỉ vừa bị
-  chặn tự đăng ký, đúc một chia thật, đặt mật khẩu qua chia đó, rồi đăng nhập
-  bằng mật khẩu mới — cả ba bước đều thành công, tách rõ "chặn tự đăng ký"
-  khỏi "chặn luôn cả cửa mật khẩu".
-- **E13** (nghiêm trọng nhất vòng 1) — `apps/app/app/(landing)/sign-in/page.tsx`
-  không còn nhánh chết "Chưa có cách nào để vào" khi không nhà cung cấp nào
-  được cấu hình. `<PasswordSignIn>` giờ LUÔN render; chỉ có dải phân cách
-  "hoặc" + các nút nhà cung cấp khác là ẩn có điều kiện. Đã đo lại đúng kịch
-  bản `.env` hiện có của kho (`GOOGLE_CLIENT_ID=""`) — đúng kịch bản mục tiêu
-  của cả tính năng — và ô email/mật khẩu hiện ra ngay, không còn màn chết.
+**E12** (mục duy nhất trượt ở vòng 2) đo lại XANH thật ở vòng này. Khung hình
+ghi vết (khung hình 3) được dựng lại đúng kịch bản làm vòng 2 trượt: admin có
+tên DÀI nhất trong kho dữ liệu hiện có (`e12-admin-1789807964659`, 23 ký tự —
+chính danh tính đã tái hiện lỗi ở vòng 2) phát một liên kết thật cho
+`zzm5c39f436`, tải lại màn Thành viên. Dòng ghi vết dưới hàng người nhận đọc
+được TRỌN VẸN: `"e12-admin-1789807964659 đã phát liên kết · 8 phút trước"` —
+cả "ai" lẫn "lúc nào". Xác nhận bằng hình học thật trên trang sống
+(`getBoundingClientRect`/`getComputedStyle`), không chỉ nhìn ảnh: ở bề rộng
+1280px, `span.bottom (788) ≤ cell.bottom (800)` và `span.right (540) ≤
+cell.right (552)`, `white-space: normal` (không còn `nowrap`) — không tràn
+theo cả hai chiều. Đo lại lần hai ở chiều cao 1400px (né lỗi xếp-chồng-bảng
+mô tả dưới đây) cho cùng kết quả không cắt. Hai khung hình còn lại của E12
+(nút tắt có lý do ở vai member, nút bấm được ở vai admin) không đổi so với
+vòng 2, vẫn xanh.
 
-Nhưng vòng soi kỹ hơn lần này phát hiện **một eval mới không đạt sạch**:
+Mười sáu eval máy còn lại (E1–E11, E13, E15–E17) đo lại XANH, đọc mã bài kiểm
+xác nhận đúng khẳng định mà `expected` đòi — không chỉ nhìn mã thoát. E9 vẫn
+đi qua nhánh BỎ QUA CÓ TÊN cho ba chặng đăng nhập Google thật (kho vẫn để
+trống `GOOGLE_CLIENT_ID`), in ra rõ ràng chứ không lặng lẽ tính đạt — xem mục
+Evidence của E9. **E14** (câu chữ màn hình, hạng T3) vẫn đúng luật: máy không
+tự chấm, chờ người quyết trực tiếp.
 
-- **E12** — hai trong ba khung hình (member: nút tắt có lý do đọc được; admin:
-  nút bấm được) đo XANH rõ ràng, có cả bằng chứng DOM (`disabled`, `title`)
-  lẫn hình ảnh. Nhưng khung hình thứ ba (ghi vết) chỉ chứng minh được nửa lời
-  hứa: phần "ai đã phát" đọc được, phần "phát lúc nào" bị CẮT MẤT trên màn
-  hình thật ở đúng bề rộng chụp chuẩn của kho (1280px) — xác nhận bằng
-  `getComputedStyle` trên trang thật (không chỉ đoán từ ảnh): dòng ghi vết có
-  `white-space: nowrap` bên trong một ô bảng `overflow: hidden`, nên đuôi
-  "· N phút trước" bị cắt. Lặp lại cả với tên quản trị NGẮN ("Ada Okafor") —
-  vẫn bị cắt giữa chữ ("vừa xo…" thay vì "vừa xong"). Theo đúng luật chính
-  `expected` của E12 ghi ("Khong thay -> UNCERTAIN, KHONG duoc suy ra tu
-  E11"), khung hình này không được tính là đã chứng minh. Xem
-  `review-findings.md` để biết chi tiết và một lỗi bố cục thứ hai (không nằm
-  trong phạm vi eval nào) phát hiện cùng lúc.
+Một sự cố hạ tầng lặp lại y hệt vòng 2 (không phải phát hiện mới, xem mục
+Known limits): máy chủ `api-cay-nay` khởi động lần đầu bằng `launch.json` chỉ
+khai `PORT`, không khai `APP_URL`, nên liên kết đặt mật khẩu đầu tiên hiện
+host `:3000` và `resetPassword` bị `trustedOrigins` từ chối ("Invalid
+origin") khi nộp từ `:3300`. Đã khởi động lại thủ công với
+`APP_URL=http://localhost:3300` trước khi chụp bất kỳ khung hình nào dùng để
+kết luận; không khung hình nào trong báo cáo này dựng trên lần chạy bị lỗi
+origin đó.
 
 ## Bảng eval
 
@@ -85,7 +82,7 @@ Nhưng vòng soi kỹ hơn lần này phát hiện **một eval mới không đ�
 | E9 | AC-9 | test | PASS (named-skip trong) |
 | E10 | AC-10 | test | PASS |
 | E11 | AC-11 | test | PASS |
-| E12 | AC-6/AC-11 | ui-check | UNCERTAIN |
+| E12 | AC-6/AC-11 | ui-check | PASS |
 | E13 | AC-9 | ui-check | PASS |
 | E14 | AC-12 | judgment | PENDING-HUMAN |
 | E15 | AC-3/AC-9/AC-6 | test (design-gate static) | PASS |
@@ -95,282 +92,331 @@ Nhưng vòng soi kỹ hơn lần này phát hiện **một eval mới không đ�
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verified_at: 2026-09-19T09:52:00Z
+  verified_at: 2026-09-19T10:33:20Z
   output: |
-    api:test:  459 pass / 0 fail (Ran 459 tests across 49 files)
+    api:test:  459 pass / 0 fail
     app:test:  298 pass / 0 fail (Ran 298 tests across 31 files)
-    agent:test:  427 pass / 0 fail (Ran 427 tests across 37 files)
-    @crm/auth:test:  102 pass / 0 fail (Ran 102 tests across 13 files)
+    agent:test:  427 pass / 0 fail
+    @crm/auth:test:  102 pass / 0 fail
     @crm/ui:test:  114 pass, @crm/db:test: 128 pass, @crm/telemetry:test: 61 pass,
     @crm/env:test: 17 pass, @crm/validation:test: 17 pass
     Tasks: 11 successful, 11 total
 
 - cmd: bunx turbo run lint --force
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verified_at: 2026-09-19T09:53:00Z
+  verified_at: 2026-09-19T10:38:40Z
   output: |
-    Chỉ warning (unused var trong bài kiểm phat-chia mới, noDocumentCookie,
-    noBarrelFile) — không có error.
+    Chỉ warning (noUnusedVariables trong mat-khau-lien-ket.spec.ts, noDocumentCookie,
+    noBarrelFile x2 ở app, vài warning có sẵn ở @crm/auth/@crm/ui/@crm/db) — không
+    có error nào.
     Tasks: 9 successful, 9 total
 
 - cmd: bun run lint:slop
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verified_at: 2026-09-19T09:53:30Z
+  verified_at: 2026-09-19T10:38:55Z
   output: |
     Found 0 warnings and 0 errors. 1062 files.
 
 - cmd: bunx turbo run build --force
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verified_at: 2026-09-19T09:54:00Z
+  verified_at: 2026-09-19T10:39:15Z
   output: |
     Tasks: 4 successful, 4 total. Build agent + app + auth + ui xong sạch.
 
 ## Evidence
 
 - eval: E1
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.mk_phat_chia
-  verified_at: 2026-09-19T09:44:10Z
+  verified_at: 2026-09-19T10:34:10Z
   output: |
     1 pass, 6 filtered out, 0 fail, 11 expect() calls
   observed: |
-    describe("phat-chia") mới: chiều dương khẳng định url+expiresAt trả về,
-    đọc LẠI từ DB đúng một hàng verification trỏ đúng id người nhận, hạn
-    trong tương lai và ≤ TTL. Chiều âm cùng fixture: id người phát không tồn
-    tại → reject, đếm hàng verification (theo người và theo lượt) không đổi
-    trước/sau, khẳng định ghim tên bảng + số hàng mong đợi trong thông điệp.
+    describe("phat-chia"): chiều dương khẳng định url+expiresAt trả về, đọc
+    LẠI từ DB đúng một hàng verification trỏ đúng id người nhận, hạn trong
+    tương lai và ≤ TTL. Chiều âm cùng fixture: id người phát không tồn tại →
+    reject, đếm hàng verification (theo người và theo lượt) không đổi
+    trước/sau, khẳng định ghim tên bảng + số hàng mong đợi trong thông điệp
+    (dòng "bang verification phai co dung...").
 
 - eval: E2
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.mk_tao_nguoi_truoc
-  verified_at: 2026-09-19T09:44:40Z
+  verified_at: 2026-09-19T10:35:00Z
   output: |
     2 pass, 4 filtered out, 0 fail, 8 expect() calls
   observed: |
-    Không đổi so với vòng 1 — cả hai chiều (tạo-trước-rồi-phát, và từ chối
-    địa chỉ ngoài danh sách với đếm không đổi) vẫn có mặt.
+    Cả hai chiều có mặt: tạo-trước-rồi-phát cho địa chỉ chưa từng có user
+    (đếm 0→1, hàng verification trỏ đúng id mới sinh, url trả về), và từ
+    chối địa chỉ ngoài danh sách với thông điệp cố định, đếm user và đếm
+    verification đều không đổi. Đọc mã service xác nhận cổng chặn là một
+    khối `if` gọi `decideSignInFromDb` riêng trên đường tạo-người, đúng ghi
+    chú "SUA SAU VONG SOI CUOI" của eval.
 
 - eval: E3
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.mk_vong_tron
-  verified_at: 2026-09-19T09:45:00Z
+  verified_at: 2026-09-19T10:37:00Z
   output: |
     2 pass, 18 filtered out, 0 fail, 15 expect() calls
   observed: |
-    Không đổi so với vòng 1 — đủ 4 chặng đúc/tiêu thụ/đọc lại DB/đăng nhập,
-    cộng khẳng định huỷ phiên cũ.
+    Đủ 4 chặng đúc/tiêu thụ/đọc lại DB/đăng nhập trong một lượt, không nạp
+    lại module. Bài kiểm thứ hai khẳng định hàng phiên cũ bị XOÁ thật (đếm
+    session=0), đúng khai báo "SUA SAU VONG SOI CUOI" phân biệt "hàng bị
+    xoá" với "phiên hết dùng được" (giới hạn cache 5 phút vẫn ở Known
+    limits, ngoài phạm vi eval này).
 
 - eval: E4
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.mk_dung_lan_hai
-  verified_at: 2026-09-19T09:45:20Z
+  verified_at: 2026-09-19T10:37:20Z
   output: |
     1 pass, 19 filtered out, 0 fail, 4 expect() calls
   observed: |
-    Không đổi so với vòng 1 — khẳng định kép hai chiều đăng nhập vẫn có mặt.
+    Lần dùng thứ hai của cùng một chia bị từ chối, VÀ khẳng định kép hai
+    chiều đăng nhập: mật khẩu lần một vẫn vào được, mật khẩu lần hai không.
 
 - eval: E5
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.mk_het_han
-  verified_at: 2026-09-19T09:45:40Z
+  verified_at: 2026-09-19T10:37:27Z
   output: |
     1 pass, 19 filtered out, 0 fail, 5 expect() calls
   observed: |
-    SỬA SO VỚI VÒNG 1 (khi đó 3 expect() calls, thiếu nửa khẳng định). Fixture
-    giờ: đúc+tiêu thụ một chia đầu để có mật khẩu cũ thật, đúc chia thứ hai
-    cho CHÍNH người đó rồi ép hạn về quá khứ qua DB. Khẳng định kép có mặt:
-    đăng nhập bằng mật khẩu cũ vẫn được, bằng mật khẩu mới vừa thử thì không.
-    Chiều dương (hạn còn tương lai → đặt được) vẫn giữ nguyên trên fixture
-    khác.
+    Fixture đúc+tiêu thụ một chia đầu để có mật khẩu cũ thật, đúc chia thứ
+    hai cho CHÍNH người đó rồi ép hạn về quá khứ qua DB. Khẳng định kép có
+    mặt: đăng nhập bằng mật khẩu cũ vẫn được, bằng mật khẩu mới vừa thử thì
+    không. Chiều dương (hạn còn tương lai → đặt được) trên fixture khác cùng
+    bài kiểm.
 
 - eval: E6
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.mk_quyen_hai_ve
-  verified_at: 2026-09-19T09:46:00Z
+  verified_at: 2026-09-19T10:35:54Z
   output: |
     1 pass, 5 filtered out, 0 fail, 6 expect() calls
   observed: |
-    Không đổi so với vòng 1 — vị từ tiêm hai chiều vẫn quyết định kết quả.
+    member bị từ chối và đếm không đổi; admin/owner được chấp nhận; vị từ
+    tiêm HAI chiều quyết định kết quả (tiêm luôn-false → owner cũng bị từ
+    chối, tiêm luôn-true → member được chấp nhận) — chứng minh service GỌI
+    THẬT vị từ từ `@crm/auth`, không tự viết lại điều kiện vai trò.
 
 - eval: E7
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.mk_chan_tu_dang_ky
-  verified_at: 2026-09-19T09:46:20Z
+  verified_at: 2026-09-19T10:37:41Z
   output: |
     2 pass, 18 filtered out, 0 fail, 7 expect() calls
   observed: |
-    SỬA SO VỚI VÒNG 1 (khi đó 5 expect() calls, thiếu chiều dương). Test
-    "chan-tu-dang-ky" giờ tiếp nối trên CHÍNH địa chỉ vừa bị chặn: một quản
-    trị đúc chia thật cho địa chỉ đó (`ducChia`), người nhận đặt mật khẩu qua
-    chia đó thành công, rồi đăng nhập bằng mật khẩu mới thành công — đúng
-    khẳng định "ta chặn tự đăng ký, không chặn cửa mật khẩu" mà vòng 1 thiếu.
+    Tự đăng ký bị chặn cho cả địa chỉ TRONG danh sách được vào lẫn NGOÀI
+    danh sách. Trên CHÍNH địa chỉ trong-danh-sách vừa bị chặn, một quản trị
+    đúc chia thật (`ducChia`), người nhận đặt mật khẩu qua chia đó thành
+    công, đăng nhập bằng mật khẩu mới thành công — đúng "chặn tự đăng ký,
+    không chặn cửa mật khẩu".
 
 - eval: E8
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.mk_mat_khau_yeu
-  verified_at: 2026-09-19T09:46:35Z
+  verified_at: 2026-09-19T10:37:41Z
   output: |
     8 pass, 12 filtered out, 0 fail, 26 expect() calls
     [auth] khong voi toi duoc danh sach mat khau da lo, cho mat khau di qua: fetch failed
+    [auth] khong voi toi duoc danh sach mat khau da lo, cho mat khau di qua: danh sach mat khau da lo tra ve 503
   observed: |
-    Không đổi so với vòng 1 — ba dòng thông điệp phân biệt được, nhánh mạng
-    không với tới được vẫn báo bo-qua-co-ten đúng dạng, không lặng lẽ tính
-    đạt.
+    Ba dòng thông điệp phân biệt được (quá ngắn / đã lộ / chấp nhận). Chia
+    sống sót sau khi bị từ chối (đã lộ hoặc quá ngắn) và đặt lại được trên
+    CHÍNH chia đó. Fail-open xác nhận thật cho cả hai ca (network không với
+    tới, và danh sách trả về không-2xx) — hai dòng log trên là do CHÍNH hai
+    bài kiểm đó cố ý giả lập lỗi mạng, không phải named-skip. Lượt này môi
+    trường VỚI TỚI ĐƯỢC danh sách mật khẩu đã lộ thật (bài kiểm "da lo" chạy
+    hết 8/8 pass mà không cần rơi vào nhánh bo-qua-co-ten của chính nó).
 
 - eval: E9
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.mk_cua_google_con_song
-  verified_at: 2026-09-19T09:46:50Z
+  verified_at: 2026-09-19T10:37:53Z
   output: |
     5 pass, 15 filtered out, 0 fail, 5 expect() calls
   observed: |
-    Không đổi so với vòng 1. GOOGLE_CLIENT_ID vẫn rỗng trong .env của kho.
-    Khẳng định hình dạng cấu hình (nhà cung cấp google khai khi có khoá, và
-    accountLinking.updateUserInfoOnLink=true) chạy VÔ ĐIỀU KIỆN và xanh thật.
-    Ba chặng đi đường Google thật (đăng nhập thật, chặn người ngoài danh
-    sách, gộp hai cửa cùng địa chỉ thành một hàng) đi qua nhánh BỎ QUA CÓ TÊN
-    (`BO_QUA_GOOGLE`), in ra rõ ràng, KHÔNG tính là đã đo phần thật của
-    "cửa Google vẫn sống song song". Vế người-nhìn-thấy của AC-9 nằm ở E13,
-    và E13 vòng này đã PASS.
+    GOOGLE_CLIENT_ID vẫn rỗng trong .env của kho (đã tự grep xác nhận, không
+    suy đoán). Khẳng định hình dạng cấu hình chạy VÔ ĐIỀU KIỆN và xanh thật:
+    (1) nhà cung cấp google khai clientId khi có khoá trong môi trường — ca
+    này TỰ nó cũng đi nhánh bo-qua-co-ten vì không có khoá, đúng vì "không
+    có khoá thì không có gì để khẳng định nhà cung cấp khai" (không phải lỗi
+    của eval); (2) accountLinking.updateUserInfoOnLink=true — chạy vô điều
+    kiện, không nhánh, PASS thật. Ba chặng đi đường Google thật (đăng nhập
+    thật, chặn người ngoài danh sách, gộp hai cửa cùng địa chỉ thành một
+    hàng) đi qua nhánh BỎ QUA CÓ TÊN (`BO_QUA_GOOGLE = "bo-qua-co-ten: khong
+    co GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET trong moi truong bai kiem"`),
+    KHÔNG được tính là đã đo phần thật của "cửa Google vẫn sống song song".
+    Vế người-nhìn-thấy của AC-9 nằm ở E13 (PASS vòng này).
 
 - eval: E10
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.mk_trang_ngoai_cong
-  verified_at: 2026-09-19T09:47:10Z
+  verified_at: 2026-09-19T10:39:40Z
   output: |
     6 pass, 0 fail, 13 expect() calls across 2 files
   observed: |
-    Không đổi so với vòng 1 — cả hai danh sách (UNGATED 4 phần tử, ANONYMOUS
-    3 phần tử) khẳng định bằng SET, in tên phần tử lệch khi có.
+    Cả hai danh sách khẳng định bằng SET (không phải có-mặt): `UNGATED`
+    (apps/app/proxy.ts, đọc trực tiếp qua import, không nạp lại) đúng 4 phần
+    tử /grant-access, /eve, NO_WORKSPACE_PATH, SET_PASSWORD_PATH — khớp
+    danh sách ghim trong bài kiểm, in tên phần tử lệch khi có. `ANONYMOUS`
+    (apps/app/lib/proxy-paths.ts) đúng 3 phần tử /t, /proto, /dat-mat-khau —
+    xác nhận bằng đọc mã nguồn. Đường dat-mat-khau có TOKEN thật đi qua được
+    (không chỉ thử đường gốc), một đường ứng dụng bất kỳ vẫn đòi đăng nhập.
 
 - eval: E11
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.mk_ghi_vet
-  verified_at: 2026-09-19T09:47:50Z
+  verified_at: 2026-09-19T10:36:01Z
   output: |
     1 pass, 5 filtered out, 0 fail, 3 expect() calls
   observed: |
-    Không đổi so với vòng 1 — đọc lại qua service.allowances() (đúng truy vấn
-    màn Thành viên gọi), ai/khi nào đều đúng và không đè lên nhau.
+    Hai quản trị phát cho hai người nhận khác nhau, đọc lại qua
+    service.allowances() (đúng truy vấn màn Thành viên gọi, không đọc thẳng
+    bảng Prisma cho vừa khuôn) — ai/khi nào đều đúng và không đè lên nhau,
+    mốc thời gian đọc lại được và ≥ mốc bắt đầu lượt chạy.
 
 - eval: E12
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
   verifier: manual ui-check (puppeteer-core headless + Google Chrome, cookie
     phiên thật qua `bun run dev:session`, tree xác minh bằng đối chứng .svg
-    qua APP_URL trước khi chụp)
-  verified_at: 2026-09-19T10:06:00Z
+    qua APP_URL trước khi chụp, viewport 1280×900)
+  verified_at: 2026-09-19T10:57:00Z
   screenshot: evidence/E12-thanhvien-member.png
   observed: |
-    Vai member: cả 4 nút "Phát liên kết" đang hiện trong khung nhìn đều ở
-    trạng thái tắt (DOM: disabled=true), title="Cần quyền quản trị mới phát
-    được" — có lý do đọc được, không biến mất câm. Khớp expected.
+    Vai member (marcus@trycomp.ai): tất cả 8 nút "Phát liên kết" trong bảng
+    Thành viên ở trạng thái tắt (DOM: disabled=true), title="Cần quyền quản
+    trị mới phát được" — có lý do đọc được, không biến mất câm. Không có
+    dòng ghi vết nào hiện dưới tên (đúng luật vet-chi-quan-tri: chỉ quản trị
+    đọc được ai/khi nào). Khớp expected.
   network_observed: n-a (driver)
 - eval: E12
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome)
-  verified_at: 2026-09-19T10:06:10Z
+  verifier: manual ui-check (puppeteer-core headless + Google Chrome,
+    viewport 1280×900)
+  verified_at: 2026-09-19T10:57:10Z
   screenshot: evidence/E12-thanhvien-admin.png
   observed: |
-    Vai admin (e12-admin-1789807964659): tất cả nút "Phát liên kết" bấm
-    được (disabled=false qua DOM), có thêm nút "..." đổi vai trò ở mỗi hàng.
+    Vai admin (e12-admin-1789807964659): mọi nút "Phát liên kết" bấm được
+    (disabled=false qua DOM), có thêm nút "..." đổi vai trò ở mỗi hàng. Chụp
+    lại ở viewport 1280×1400 để né lỗi bố cục mô tả dưới đây (bảng
+    "Thành viên" hiện đủ 3 hàng đầu Ada/Marcus/Priya, có thanh cuộn nội bộ
+    cho phần còn lại) — cùng một khẳng định DOM disabled=false vẫn đúng.
     Khớp expected.
   network_observed: n-a (driver)
 - eval: E12
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome)
-  verified_at: 2026-09-19T10:06:20Z
+  verifier: manual ui-check (puppeteer-core headless + Google Chrome, viewport
+    1280×1400 — 900 tái hiện đúng lỗi xếp-chồng-bảng đã biết ở mục Ngoài hợp
+    đồng, che mất hàng cần chụp; 1400 tránh lỗi đó mà không đổi khẳng định
+    đang đo)
+  verified_at: 2026-09-19T10:58:30Z
   screenshot: evidence/E12-ghivet.png
   observed: |
-    CHỈ CHỨNG MINH ĐƯỢC MỘT NỬA. Phát THẬT một liên kết cho Priya Raman qua
-    hộp thoại, đóng, tải lại màn Thành viên: hàng của Priya hiện
-    "e12-admin-1789807964659 đã phát" — phần AI ĐÃ PHÁT đọc được rõ. NHƯNG
-    phần "liên kết · N phút trước" (LÚC NÀO) bị cắt mất ở bề rộng cột thật —
-    xác nhận bằng getComputedStyle trên trang sống (không chỉ đoán từ ảnh):
-    span ghi vết có white-space:nowrap trong <td> có overflow:hidden, và
-    scrollWidth > clientWidth. Lặp lại thử với "Ada Okafor" (tên ngắn hơn
-    nhiều) làm người phát cho hàng Marcus Lindqvist: vẫn bị cắt, chỉ đỡ hơn
-    ("Ada Okafor đã phát liên kết · vừa xo" — thiếu "ng" cuối). Đây là lỗi
-    thật trên mã MỚI của chính vòng này (vet-line.tsx + cột Tên của
-    members-table.tsx), không phải lỗi chụp hình. Theo đúng câu
-    "Khong thay -> UNCERTAIN" mà chính expected của E12 ghi, khung hình này
-    không được tính là đã chứng minh phần "phát lúc nào".
+    FIXED SO VỚI VÒNG 2. Phát THẬT một liên kết cho zzm5c39f436 bằng chính
+    admin có tên DÀI nhất kho (e12-admin-1789807964659, 23 ký tự — cùng danh
+    tính đã tái hiện lỗi cắt chữ ở vòng 2), đóng hộp thoại, tải lại màn
+    Thành viên, cuộn hàng zzm5c39f436 vào khung nhìn: dòng ghi vết đọc được
+    TRỌN VẸN "e12-admin-1789807964659 đã phát liên kết · 8 phút trước" — cả
+    AI lẫn LÚC NÀO. Xác nhận bằng hình học thật (không chỉ đoán từ ảnh):
+    `span.getBoundingClientRect()` cho span.text-muted-foreground.text-xs
+    (đúng phần tử VetLine render, không phải span bọc ngoài) có
+    bottom=788/right=540 nằm gọn trong ô `<td>` có bottom=800/right=552 ở
+    viewport 900; `getComputedStyle(span).whiteSpace === "normal"` (không
+    còn nowrap). Đo lại lần hai ở viewport 1400 (bố cục sạch, không xếp
+    chồng): cùng hàng zzm5c39f436 vẫn "clipped: false". Vá của vòng 2
+    (`cellClassName: "whitespace-normal align-top"` trên cột Tên,
+    `members-table.tsx`) đã đủ.
   network_observed: n-a (driver)
 
 - eval: E13
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
   verifier: manual ui-check (puppeteer-core headless + Google Chrome, khung
     hình 1 chụp trong một browser context ẩn danh RIÊNG để tránh cookie phiên
-    admin/member rò từ các bước trước trong cùng lượt)
-  verified_at: 2026-09-19T10:01:00Z
+    admin/member rò từ các bước trước trong cùng lượt, viewport 1280×900)
+  verified_at: 2026-09-19T10:53:30Z
   screenshot: evidence/E13-dangnhap.png
   observed: |
-    SỬA SO VỚI VÒNG 1 (khi đó FAIL). Màn /sign-in chưa đăng nhập, đúng kịch
-    bản .env hiện có (GOOGLE_CLIENT_ID rỗng, không Microsoft, không SSO): ô
-    "Địa chỉ email" và ô "Mật khẩu" hiện ra ngay trên màn, có nút "Đăng
-    nhập" — không còn màn chết "Chưa có cách nào để vào" của vòng 1. Vì môi
-    trường này không có khoá Google, không có nút Google nào để so sánh
-    "cùng màn với" — nhưng đây đúng là giới hạn môi trường đã khai từ vòng 1,
-    không phải giới hạn của bản sửa; mã (`page.tsx`) giờ luôn render
-    PasswordSignIn bất kể `social.length`, dải phân cách + các nút nhà cung
-    cấp khác chỉ ẩn có điều kiện.
+    Không đổi so với vòng 2. Màn /sign-in chưa đăng nhập, đúng kịch bản .env
+    hiện có của kho (GOOGLE_CLIENT_ID="", không Microsoft, không SSO): ô
+    "Địa chỉ email" và ô "Mật khẩu" hiện ra ngay trên cùng màn, có nút "Đăng
+    nhập" — không màn chết, không nút "cách khác" phải bấm trước mới thấy.
   network_observed: n-a (driver)
 - eval: E13
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome)
-  verified_at: 2026-09-19T10:00:30Z
+  verifier: manual ui-check (puppeteer-core headless + Google Chrome, liên kết
+    còn hạn thật, viewport 1280×900)
+  verified_at: 2026-09-19T10:53:35Z
   screenshot: evidence/E13-datmatkhau.png
   observed: |
-    Không đổi so với vòng 1. Liên kết còn hạn: hai ô mật khẩu, mức tối thiểu
+    Không đổi so với vòng 2. Liên kết còn hạn: hai ô mật khẩu, mức tối thiểu
     nói TRƯỚC khi gõ ("Ít nhất 12 ký tự. Không cần chữ hoa hay ký tự đặc
     biệt."), nút "Đặt mật khẩu".
   network_observed: n-a (driver)
 - eval: E13
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome; liên
-    kết hết hạn dựng RIÊNG cho một người CHỈ nhận đúng một chia — tránh ca
-    "phát lại xoá hàng cũ" của AC-13 làm hàng verification biến mất trước
-    khi kịp ép hạn, thứ đã xảy ra ở lần thử đầu của chính lượt này)
-  verified_at: 2026-09-19T10:03:00Z
+  verifier: manual ui-check (puppeteer-core headless + Google Chrome; liên kết
+    hết hạn dựng RIÊNG cho priya@trycomp.ai — một người KHÁC với người nhận
+    liên kết còn hạn — rồi ép hạn về quá khứ thẳng trong DB qua cột
+    `verification.expiresAt`, tránh ca "phát lại xoá hàng cũ" của AC-13 làm
+    hàng verification biến mất trước khi kịp ép hạn)
+  verified_at: 2026-09-19T10:54:10Z
   screenshot: evidence/E13-datmatkhau-hethan.png
   observed: |
     "Liên kết này hết hạn rồi. Nhắn người quản trị phát cho bạn một liên kết
-    mới." — câu rõ ràng, nói đúng lý do (hết hạn) và việc cần làm tiếp. Khớp
+    mới." — câu rõ ràng, nói đúng lý do (hết hạn) và việc cần làm tiếp. Đây
+    là màn server-side kiểm hạn TRƯỚC khi render form (page.tsx đọc thẳng
+    bảng verification), không phải lỗi client sau khi gửi form. Khớp
     expected ("cau noi RO la het han").
   network_observed: n-a (driver)
 - eval: E13
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
   verifier: manual ui-check (puppeteer-core headless + Google Chrome, vai
-    admin)
-  verified_at: 2026-09-19T09:59:30Z
+    admin, viewport 1280×900)
+  verified_at: 2026-09-19T10:49:20Z
   screenshot: evidence/E13-hopthoai.png
   observed: |
-    Hộp thoại "Liên kết đặt mật khẩu": "Gửi cho Priya Raman. Liên kết dùng
+    Hộp thoại "Liên kết đặt mật khẩu": "Gửi cho zzm5c39f436. Liên kết dùng
     được một lần, hết hạn sau một giờ.", ô Liên kết hiện ĐẦY ĐỦ URL (chọn
-    sẵn, token thật), nút "Chép liên kết", hạn dùng nói bằng chữ. Không đổi
-    so với vòng 1.
+    sẵn, token thật), nút "Chép liên kết", nút "Đóng", hạn dùng nói bằng
+    chữ ("hết hạn sau một giờ"), không phải dấu thời gian máy. Không đổi so
+    với vòng 2.
   network_observed: n-a (driver)
 
 - eval: E14
@@ -378,76 +424,97 @@ Nhưng vòng soi kỹ hơn lần này phát hiện **một eval mới không đ�
     máy chấm)
   verdict: UNCERTAIN
   rationale: Hạng T3 đòi phán quyết trực tiếp của người theo đúng chỉ dẫn
-    nhiệm vụ ("KHÔNG tự chấm"). Không đổi so với vòng 1. Nội dung nguồn:
-    apps/app/lib/messages/auth.ts và apps/app/lib/messages/settings-thanh-vien.ts
-    — câu chữ tiếng Việt tự nhiên trong các câu đã render, không thấy từ
-    ghép kỹ thuật tự đúc ("Mật khẩu phải có ít nhất N ký tự.", "Mật khẩu này
-    đã từng bị lộ trong một vụ rò dữ liệu. Chọn mật khẩu khác.", "Liên kết
-    này hết hạn rồi...", "Liên kết đặt mật khẩu") — nhưng đây là quan sát hỗ
-    trợ, không phải phán quyết thay người.
+    nhiệm vụ ("KHÔNG tự chấm"). Không đổi so với vòng 1/2. Nội dung nguồn:
+    apps/app/lib/messages/auth.ts và
+    apps/app/lib/messages/settings-thanh-vien.ts — câu chữ tiếng Việt tự
+    nhiên trong các câu đã render, không thấy từ ghép kỹ thuật tự đúc ("Mật
+    khẩu phải có ít nhất N ký tự.", "Mật khẩu này đã từng bị lộ trong một vụ
+    rò dữ liệu. Chọn mật khẩu khác.", "Liên kết này hết hạn rồi...", "Liên
+    kết đặt mật khẩu") — đây là quan sát hỗ trợ, không phải phán quyết thay
+    người.
   required_evidence:
     - Người đọc trực tiếp evidence/E13-hopthoai.png và evidence/E13-datmatkhau*.png
-      (đã chụp lại tươi ở vòng này) rồi trả lời câu hỏi nguyên văn của E14.
+      (chụp lại tươi ở vòng này) rồi trả lời câu hỏi nguyên văn của E14: người
+      dùng lần đầu có biết làm gì tiếp ở mỗi màn không; ba câu lỗi của trang đặt
+      mật khẩu có phân biệt được không; có từ ghép kỹ thuật tự đúc nào không.
   human_override:
 
 - eval: E15
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.mk_san_thiet_ke
-  verified_at: 2026-09-19T09:48:10Z
+  verified_at: 2026-09-19T10:40:09Z
   output: |
     Ba tệp đều verdict PASS, p0_count 0, blocking [], findings [].
   observed: |
-    Không đổi so với vòng 1 — cả ba tệp đều sạch.
+    apps/app/app/(landing)/dat-mat-khau/[token]/page.tsx,
+    apps/app/app/(landing)/sign-in/password-sign-in.tsx, và
+    apps/app/app/(app)/[slug]/settings/members/phat-chia-dialog.tsx đều sạch
+    P0 (độ tương phản, mục tiêu chạm, ô nhập không nhãn, trạng thái focus
+    thiếu).
 
 - eval: E16
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.mk_phat_lai
-  verified_at: 2026-09-19T09:47:55Z
+  verified_at: 2026-09-19T10:39:32Z
   output: |
     1 pass, 19 filtered out, 0 fail, 6 expect() calls
   observed: |
-    Không đổi so với vòng 1 — đủ cả bốn khẳng định (M2 vào được, M1 không
-    vào được, chia1 vẫn bị từ chối, đếm hàng verification treo = 0).
+    Đủ cả bốn khẳng định trên MỘT người: phát chia 1, đặt mật khẩu M1 →
+    thành công; phát chia 2 cho CHÍNH người đó; đặt mật khẩu M2 bằng chia 2
+    → thành công. Rồi: đăng nhập bằng M2 vào được; bằng M1 không vào được;
+    dùng lại chia 1 vẫn bị từ chối; đếm hàng verification treo của người đó
+    sau khi xong = 0 (khẳng định ghim tên, chặn ca "quên dọn hàng cũ").
 
 - eval: E17
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
   verifier: manual ui-check (puppeteer-core headless + Google Chrome, set
-    value qua input value-setter thật + dispatch input event)
-  verified_at: 2026-09-19T10:02:00Z
+    value qua input value-setter thật + dispatch input event — không gõ ký
+    tự rời để tránh race của React controlled input, viewport 1280×900)
+  verified_at: 2026-09-19T10:53:55Z
   screenshot: evidence/E17-mk-ngan.png
   observed: |
-    Không đổi so với vòng 1. Mật khẩu ngắn hơn mức tối thiểu ở cả hai ô, gửi:
-    lỗi "Mật khẩu phải có ít nhất 12 ký tự." hiện cạnh ô "Mật khẩu mới"
-    (client-side). Ô "Gõ lại mật khẩu" vẫn còn nguyên giá trị đã gõ.
+    Không đổi so với vòng 2. Cùng MỘT mật khẩu ngắn hơn mức tối thiểu gõ vào
+    CẢ HAI ô, gửi: lỗi "Mật khẩu phải có ít nhất 12 ký tự." hiện CẠNH ô "Mật
+    khẩu mới" (kiểm client-side, đúng vì hai ô giống nhau nên chiều dài thua
+    trước chiều lệch-nhau). Ô "Gõ lại mật khẩu" vẫn còn nguyên giá trị đã
+    gõ, không bị xoá sạch.
   network_observed: n-a (driver)
 - eval: E17
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome)
-  verified_at: 2026-09-19T10:02:20Z
+  verifier: manual ui-check (puppeteer-core headless + Google Chrome, vẫn
+    trên CHÍNH liên kết của khung hình trước)
+  verified_at: 2026-09-19T10:54:05Z
   screenshot: evidence/E17-mk-dalo.png
   observed: |
-    KHÁC VÒNG 1 THEO HƯỚNG TỐT HƠN: lượt này môi trường VỚI TỚI ĐƯỢC mạng
-    ngoài, nên phép sàng mật khẩu đã lộ chạy THẬT (không phải named-skip
-    như lượt chạy đơn vị E8 trong cùng vòng này) — "123456789012" trả về lỗi
-    thật "Mật khẩu này đã từng bị lộ trong một vụ rò dữ liệu. Chọn mật khẩu
-    khác.", PHÂN BIỆT rõ với câu ở khung 1, cùng vị trí cạnh ô "Mật khẩu
-    mới". Ô xác nhận vẫn nguyên giá trị. Liên kết KHÔNG bị tiêu thụ.
+    Môi trường này VỚI TỚI ĐƯỢC mạng ngoài, phép sàng mật khẩu đã lộ chạy
+    THẬT (không named-skip): "123456789012" trả lỗi thật "Mật khẩu này đã
+    từng bị lộ trong một vụ rò dữ liệu. Chọn mật khẩu khác." — PHÂN BIỆT rõ
+    với câu ở khung 1, cùng vị trí cạnh ô "Mật khẩu mới". Ô xác nhận vẫn
+    nguyên giá trị. Liên kết KHÔNG bị tiêu thụ (bài kiểm E8 nguồn xác nhận
+    một chia sống sót qua nhiều lần bị từ chối; ở đây quan sát trực tiếp
+    trên UI thật bằng việc khung hình kế tiếp vẫn dùng được đúng liên kết
+    này).
   network_observed: clean
 - eval: E17
-  run_id: vao-bang-email-va-mat-khau-20260919-r2
+  run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome)
-  verified_at: 2026-09-19T10:02:40Z
+  verifier: manual ui-check (puppeteer-core headless + Google Chrome, vẫn
+    trên CHÍNH liên kết đã bị từ chối hai lần ở trên)
+  verified_at: 2026-09-19T10:54:15Z
   screenshot: evidence/E17-sua-duoc.png
   observed: |
-    Không đổi so với vòng 1. Vẫn trên CHÍNH liên kết vừa bị từ chối hai lần
-    ở trên, gõ mật khẩu sạch và gửi: "Xong — Mật khẩu đã đặt. Từ giờ bạn vào
-    CRM được bằng địa chỉ email và mật khẩu này, kể cả khi mạng không vào
-    được Google." Hai lần bị từ chối trước đó không đốt mất liên kết.
+    Ô MA TRẬN THÊM SAU VÒNG SOI CUỐI (19/09), lần đầu có bằng chứng UI cho
+    ô này. Vẫn trên CHÍNH liên kết vừa bị từ chối hai lần (ngắn, rồi đã lộ),
+    gõ mật khẩu sạch và gửi: "Xong — Mật khẩu đã đặt. Từ giờ bạn vào CRM
+    được bằng địa chỉ email và mật khẩu này, kể cả khi mạng không vào được
+    Google." — phục hồi thành công trên CHÍNH liên kết, không cần xin liên
+    kết mới. Hai lần bị từ chối trước đó không đốt mất liên kết.
   network_observed: clean
 
 ## Known limits
@@ -463,31 +530,42 @@ Nhưng vòng soi kỹ hơn lần này phát hiện **một eval mới không đ�
   BỎ QUA CÓ TÊN trong môi trường này (GOOGLE_CLIENT_ID rỗng) — vế người nhìn
   thấy nằm ở E13 (vòng này PASS), nhưng vế "đăng nhập Google thật" chưa từng
   được đo máy trong bất kỳ vòng nào của kho này.
-- Máy chủ `api-cay-nay` dùng cho vòng này khởi động lần đầu KHÔNG có `APP_URL`
-  riêng (launch.json chỉ khai `PORT`), nên các liên kết đặt mật khẩu đầu tiên
-  hiển thị với host `:3000` và bị `trustedOrigins` từ chối khi nộp form từ
-  `:3300` ("Invalid origin"). Đã khởi động lại thủ công với `APP_URL=http://localhost:3300`
-  khớp `app-cay-nay` trước khi chụp bất kỳ khung hình nào dùng để kết luận —
-  đây là lỗi cấu hình của chính phiên đo này (launch.json), không phải hành
-  vi sản phẩm; không sửa `launch.json` (nằm ngoài `diffFiles`/không phải mã
-  sản phẩm), chỉ ghi lại để vòng đo sau biết cần set `APP_URL` cho cả hai máy
-  chủ, không chỉ `app-cay-nay`.
+- Máy chủ `api-cay-nay` khởi động lần đầu bằng `launch.json` KHÔNG có
+  `APP_URL`/`API_URL` riêng (launch.json chỉ khai `PORT`), nên các liên kết
+  đặt mật khẩu đầu tiên hiển thị với host `:3000` và bị `trustedOrigins` từ
+  chối khi nộp form từ `:3300` ("Invalid origin"). Đã tái hiện Y HỆT ở vòng
+  2 và lại xảy ra ở vòng này — khởi động lại thủ công với
+  `APP_URL=http://localhost:3300` (và giữ `API_URL=http://localhost:3301`)
+  trước khi chụp bất kỳ khung hình nào dùng để kết luận. Đây là lỗi cấu hình
+  của chính phiên đo (launch.json), không phải hành vi sản phẩm; không sửa
+  `launch.json` (nằm ngoài `diffFiles`, không phải mã sản phẩm). Ghi lại lần
+  thứ hai để vòng đo sau cân nhắc sửa `launch.json` khai sẵn cả hai biến cho
+  `api-cay-nay`, tránh phải khởi động lại giữa chừng mỗi lần.
 
 ## Ngoài hợp đồng
 
-Xem `review-findings.md`:
-- Mục cũ (vòng 1, chưa sửa): va chạm id trong `apps/api/scripts/dev-session.ts`
+Xem `review-findings.md` — cả hai mục cũ vẫn giữ nguyên, không có mục mới ở
+vòng này:
+- Mục vòng 1 (chưa sửa): va chạm id trong `apps/api/scripts/dev-session.ts`
   khi hai email trùng 10 ký tự đầu.
-- Mục mới (vòng 2): trang `/[slug]/settings/members` xếp chồng hai bảng
-  ("Thành viên" và "Được phép vào") ở một số chiều cao khung nhìn phổ biến
-  (1280×700 đến 1280×1000 đã thử; ổn định trở lại từ ~1280×1400), và dòng ghi
-  vết bị cắt chữ ở cột Tên khi tên người phát đủ dài.
+- Mục vòng 2 (chưa sửa, RIÊNG với lỗi E12 đã vá): trang
+  `/[slug]/settings/members` xếp chồng hai bảng ("Thành viên" và "Được phép
+  vào") ở một số chiều cao khung nhìn phổ biến (1280×700 đến 1280×1000; ổn
+  định trở lại từ ~1280×1400). Vòng này TÁI XÁC NHẬN lỗi này vẫn còn: khi
+  chụp `E12-ghivet.png` lần đầu ở viewport mặc định 1280×900, tiêu đề "Được
+  phép vào" + thanh công cụ của nó đè lên đúng vị trí các hàng của bảng
+  "Thành viên", che mất hàng cần chụp — phải chuyển sang viewport 1280×1400
+  để có khung hình sạch (xem cách dựng của evidence E12 khung 3 ở trên). Đây
+  KHÔNG phải hồi quy mới của vòng 3, không nằm trong phạm vi eval nào của
+  hợp đồng này — chỉ xác nhận lại nó vẫn sống, không mô tả lại chi tiết
+  (xem review-findings.md để biết chi tiết đầy đủ từ vòng 2).
 
 ## Analyst
 
 Không chạy đối chứng `diffBase` trong lượt này (không được yêu cầu rõ trong
 nhiệm vụ giao cho phiên đo này). Không khẳng định gì về non-discriminating ở
-đây; để trống thận trọng thay vì đoán.
+đây; để trống thận trọng thay vì đoán. Trường `baseline: n-a` trên các khối
+Evidence phía trên phản ánh đúng điều này.
 
 ## Variance
 
@@ -500,12 +578,21 @@ tại; E5, E7 do bài kiểm thiếu khẳng định mà chính eval đòi dù l
 do lỗi sản phẩm thật (màn đăng nhập không hiện mật khẩu khi Google chưa cấu
 hình). Trả REJECT.
 
-Round 2 (lượt này): cả bốn lỗi của vòng 1 đo lại XANH, đọc mã bài kiểm xác
-nhận đủ khẳng định `expected` đòi, không chỉ nhìn mã thoát. Nhưng soi kỹ hơn
-ở E12 (khung hình ghi vết) phát hiện một lỗi hiển thị thật trên chính mã mới
-của vòng này (vet-line.tsx bị cắt chữ ở cột Tên) khiến phần "phát lúc nào"
-không đọc được trên màn hình thật ở bề rộng chụp chuẩn — theo đúng luật riêng
-của E12, khung hình này tính UNCERTAIN, không phải PASS. Trả REJECT, đích
-danh E12. Phiên NGHIỆM THU này không vá — trả về cho người điều phối quyết
-định vòng kế tiếp (rất có thể chỉ cần nới độ rộng cột Tên hoặc bỏ
-`white-space: nowrap` trên dòng ghi vết — một sửa nhỏ, không đụng logic).
+Round 2: cả bốn lỗi của vòng 1 đo lại XANH, đọc mã bài kiểm xác nhận đủ
+khẳng định `expected` đòi, không chỉ nhìn mã thoát. Nhưng soi kỹ hơn ở E12
+(khung hình ghi vết) phát hiện một lỗi hiển thị thật trên chính mã mới của
+vòng đó (`vet-line.tsx` bị cắt chữ ở cột Tên do `white-space: nowrap` trong
+một `<td>` `overflow: hidden`) khiến phần "phát lúc nào" không đọc được trên
+màn hình thật ở bề rộng chụp chuẩn 1280px. Trả REJECT, đích danh E12.
+
+Round 3 (lượt này): bản vá một dòng của E12
+(`cellClassName: "whitespace-normal align-top"` trên cột Tên,
+`members-table.tsx`, commit `8a480042`) đo lại XANH — dựng lại đúng kịch bản
+tái hiện lỗi vòng 2 (cùng admin tên dài nhất kho), xác nhận bằng hình học
+thật (`getBoundingClientRect`/`getComputedStyle`) chứ không chỉ nhìn ảnh, ở
+cả hai chiều cao khung nhìn. Mười sáu eval máy còn lại đo lại XANH không
+đổi. E14 (T3, câu chữ) vẫn đúng luật chờ người — không máy nào tự chấm được
+thay. Không có eval nào trượt ở vòng này. Verdict: **PENDING-JUDGMENT** — chờ
+người trực tiếp đọc `evidence/E13-hopthoai.png` +
+`evidence/E13-datmatkhau*.png` và điền `human_override` cho E14 tại Cổng
+Bằng chứng; sau đó mới nâng lên PASS.

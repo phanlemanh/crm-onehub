@@ -3,7 +3,30 @@
 Ghi từ lượt NGHIỆM THU TƯƠI, round 1 run_id `vao-bang-email-va-mat-khau-20260919-r1`
 (verified_commit `ff84234ee8ac73bc5c6c3bd10b501ab4e85f206e`), round 2 run_id
 `vao-bang-email-va-mat-khau-20260919-r2` (verified_commit
-`5669ebb814be2a8989bf4bf620be94b23de26b51`).
+`5669ebb814be2a8989bf4bf620be94b23de26b51`), round 3 run_id
+`vao-bang-email-va-mat-khau-20260919-r3` (verified_commit
+`3dd48ef15d2ce343c09311587b43ece6a61a45b1`).
+
+## Vòng 3 — không có mục ngoài hợp đồng mới
+
+Không có phát hiện ngoài-hợp-đồng nào mới ở vòng này. Hai mục dưới đây
+(một từ vòng 1, một từ vòng 2) GIỮ NGUYÊN không sửa gì thêm — không phải phạm
+vi của vòng đo này:
+
+- **va chạm id trong `apps/api/scripts/dev-session.ts`** (vòng 1): chưa đọc
+  lại mã lần này để xác nhận còn hay hết, vì công cụ này không nằm trong
+  đường chạy của bất kỳ eval nào ở vòng 3 (không tạo tài khoản demo mới nào
+  qua nó — vòng này dùng lại các tài khoản demo có sẵn từ các vòng trước
+  cộng với `bun run dev:session` trên hai địa chỉ email KHÔNG trùng 10 ký tự
+  đầu). Giữ nguyên mục ghi từ vòng 1.
+- **Trang Thành viên xếp chồng hai bảng ở một số chiều cao khung nhìn** (vòng
+  2): TÁI XÁC NHẬN vẫn còn ở vòng 3 — gặp lại y hệt khi dựng
+  `evidence/E12-ghivet.png`: ở viewport mặc định 1280×900, tiêu đề "Được
+  phép vào" đè lên đúng vị trí các hàng bảng "Thành viên", phải chuyển sang
+  1280×1400 mới chụp sạch được. Không mô tả lại chi tiết ở đây (xem mục vòng
+  2 bên dưới) — chỉ xác nhận nó KHÔNG PHẢI hồi quy của lần vá E12 (bản vá
+  `whitespace-normal align-top` trên cột Tên không đụng gì tới bố cục hai
+  bảng), và KHÔNG nằm trong phạm vi AC-6/AC-11 mà E12 đo.
 
 ## Vòng 2 — trong hợp đồng (lý do E12 = UNCERTAIN, chép lại từ evidence-report.md để dễ tra)
 
