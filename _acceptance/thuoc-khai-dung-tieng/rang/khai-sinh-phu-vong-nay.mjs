@@ -382,11 +382,11 @@ const { kiemCsdlThu } = await import(
 );
 kiemCsdlThu();
 const { db } = await import("../../../packages/db/src/index.ts");
+const TIEN_TO_VAT = "Vat Thu";
 const truocDB = new Map(
-	(await db.deal.findMany({ select: { id: true, stage: true } })).map((d) => [
-		d.id,
-		d.stage,
-	]),
+	(await db.deal.findMany({ select: { id: true, stage: true, name: true } }))
+		.filter((d) => !d.name.startsWith(TIEN_TO_VAT))
+		.map((d) => [d.id, d.stage]),
 );
 console.log(
 	`-- CHUP CSDL TRUOC: ${truocDB.size} thoa thuan. Mot phep pha o day co CHU DICH\n` +
@@ -523,18 +523,36 @@ try {
 	}
 } finally {
 	const sauDB = new Map(
-		(await db.deal.findMany({ select: { id: true, stage: true } })).map((d) => [
-			d.id,
-			d.stage,
-		]),
+		(await db.deal.findMany({ select: { id: true, stage: true, name: true } }))
+			.filter((d) => !d.name.startsWith(TIEN_TO_VAT))
+			.map((d) => [d.id, d.stage]),
 	);
 	let daTra = 0;
+	let daBienMat = 0;
 	for (const [id, cu] of truocDB) {
-		if (sauDB.get(id) !== cu) {
-			await db.deal.update({ where: { id }, data: { stage: cu } });
-			console.log(`-- TRA CSDL: ${id} ${sauDB.get(id)} -> ${cu}`);
-			daTra += 1;
+		if (!sauDB.has(id)) {
+			daBienMat += 1;
+			continue;
 		}
+		if (sauDB.get(id) !== cu) {
+			await db.deal
+				.update({ where: { id }, data: { stage: cu } })
+				.then(() => {
+					console.log(`-- TRA CSDL: ${id} ${sauDB.get(id)} -> ${cu}`);
+					daTra += 1;
+				})
+				.catch((loi) => {
+					console.log(`-- TRA CSDL HONG: ${id} — ${loi?.code ?? loi?.message}`);
+				});
+		}
+	}
+	if (daBienMat > 0) {
+		console.log(
+			`-- ${daBienMat} ban ghi trong anh chup da BIEN MAT truoc khi tra. Khong nem:\n` +
+				"   chung la vat thu bi mot chan do khac don hop le. Anh chup da BO tep mang\n" +
+				"   tien to vat-thu, va phep tra bo qua ban ghi khong con — chup TOAN BO roi\n" +
+				"   nem P2025 la bien mot cuoc don hop le thanh mot loi giet ca nhom.",
+		);
 	}
 	console.log(`-- DA TRA ${daTra} thoa thuan ve nguyen trang.`);
 	await db.$disconnect();
