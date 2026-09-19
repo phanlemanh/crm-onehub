@@ -4,6 +4,7 @@ import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
+import { canhCay } from "./canh-cay.mjs";
 import { GOC, lat } from "./lat.mjs";
 
 export const HERE = dirname(fileURLToPath(import.meta.url));
@@ -30,13 +31,18 @@ export const DAU_VIET =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
 export const CHE = /^[•●○*·\s]{3,}/;
 
+export const VET_MOC = process.env.VET_MOC ?? "";
+
 let trinhDuyet = null;
+let vetTrenMan = 0;
+let manDaMo = 0;
 
 export function datTrinhDuyet(t) {
 	trinhDuyet = t;
 }
 
 export async function ket(ma) {
+	if (VET_MOC !== "") console.log(`vet moc tren man=${vetTrenMan}/${manDaMo}`);
 	if (trinhDuyet !== null) await trinhDuyet.close().catch(() => {});
 	process.exit(ma);
 }
@@ -262,6 +268,8 @@ export const DO_RONG = (toanMan) => {
 };
 
 export async function moManMem(cookie, slug, man, tieng, rong, sau) {
+	const cay = await canhCay();
+	if (cay.ket !== "dung-cay") await khongDo(...cay.dong);
 	const trang = await trinhDuyet.newPage();
 	await trang.setViewport({ width: rong, height: CAO, deviceScaleFactor: 1 });
 	await trang.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
@@ -301,6 +309,14 @@ export async function moManMem(cookie, slug, man, tieng, rong, sau) {
 				`KHONG DO DUOC: tien de thieu — xin lang=${tieng} nhung trang ve lang=${langThat}.`,
 			],
 		};
+	}
+	if (VET_MOC !== "") {
+		manDaMo += 1;
+		const co = await trang.evaluate(
+			(v) => (document.body?.textContent ?? "").includes(v),
+			VET_MOC,
+		);
+		if (co) vetTrenMan += 1;
 	}
 	return { trang, loi: null };
 }
