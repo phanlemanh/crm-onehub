@@ -59,6 +59,7 @@ function columns(
 			sortable: true,
 			hideable: false,
 			width: "w-[26%]",
+			cellClassName: "whitespace-normal align-top",
 			cell: (row) => (
 				<span className="flex min-w-0 items-center gap-2">
 					<PersonAvatar
