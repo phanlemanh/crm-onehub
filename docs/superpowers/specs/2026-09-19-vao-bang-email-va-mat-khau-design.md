@@ -65,9 +65,22 @@ cũng đặt mật khẩu hộ — trái quyết định nền ở trên.
   có phải chủ địa chỉ không".
 - `emailAndPassword.revokeSessionsOnPasswordReset: true`
 
-Thêm: độ dài tối thiểu khai tường minh, và sàng mật khẩu qua danh sách đã lộ
-(`haveibeenpwned`, bộ nối có sẵn trong thư viện) — NIST Rev 4 đòi sàng danh sách
-chặn, và cấm bắt đổi định kỳ.
+Thêm: độ dài tối thiểu khai tường minh, và sàng mật khẩu qua danh sách đã lộ —
+NIST Rev 4 đòi sàng danh sách chặn, và cấm bắt đổi định kỳ.
+
+**Sửa sau vòng soi cuối (2026-09-19), giữ vết vì tài liệu đã ký ở Cổng Phạm vi:**
+bản đầu khai sàng bằng bộ nối `haveibeenpwned` của thư viện. Bộ nối đó bọc bước
+**băm** mật khẩu, mà bước băm chạy SAU khi token bị tiêu thụ — nên mỗi lần từ
+chối là đốt luôn liên kết dùng-một-lần, và người dùng đọc «chọn mật khẩu khác»
+mà không còn liên kết để chọn lại. Tệ hơn: bộ nối gọi ra `api.pwnedpasswords.com`
+và hỏng-là-chặn, nên trong đúng loại mạng chặn host ngoài mà tính năng này sinh
+ra để phục vụ thì không ai đặt được mật khẩu.
+
+Nay phép sàng chạy ở `hooks.before`, TRƯỚC khi token bị tiêu thụ, và
+**hỏng-là-cho-qua** kèm một dòng log — theo luật `AGENTS.md`: thứ self-hoster có
+thể không có là tuỳ chọn và không bao giờ được ném. NIST đòi sàng danh sách chặn;
+nó không đòi khoá cửa khi danh sách offline. Tiêu chí AC-8 giữ nguyên, chỉ đổi
+cách thi hành.
 
 ### Ca người chưa có tài khoản
 

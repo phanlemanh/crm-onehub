@@ -52,9 +52,16 @@ evals:
       nguoi dung mang dia chi ay van = 0, VA khong hang verification nao duoc them.
       Y nghia: duong tao nguoi moi nay KHONG duoc la cua sau di vong qua cong chan
       nguoi la dang co.
-      DOT BIEN CHUNG MINH: thay loi goi tao nguoi bang mot loi goi tao thang bang Prisma
-      (bo qua cong chan nguoi la) -> chieu am phai do o dong "dem van = 0". Dot bien nay
-      chinh la lop loi that: mot duong tao nguoi khong di qua cong.
+      SUA SAU VONG SOI CUOI (19/09): cau dot bien cu la "thay loi goi tao nguoi bang mot
+      loi goi tao thang bang Prisma" — cau do nay VO HIEU, vi hien thuc da ship CHINH LA
+      mot loi goi Prisma thang. Cong khong nam trong loi goi tao; no la mot khoi `if` rieng
+      goi `decideSignInFromDb` dung TREN loi goi tao. Ap cau dot bien cu vao ma hien tai thi
+      khong gi doi, chieu am van xanh — tuc thuoc nay se bao "con canh duoc" trong khi cong
+      da mat. Day la ban ro nhat cua lop loi "phep do bat khau trung gian", va no dau tren
+      mot bien bao mat.
+      DOT BIEN CHUNG MINH, ban sua: XOA khoi `if` goi `decideSignInFromDb` trong thu tuc
+      phat chia -> chieu am phai DO o dong "dem van = 0". Ten ham `taoNguoiDaDuocVao` doc
+      nhu the viec kiem da nam ben trong no, nen day dung la cho nguoi sau de go nham.
       Thieu chieu am -> ma 2, vi chieu duong mot minh khong phan biet duoc "co cong" voi
       "khong cong".
 
@@ -378,7 +385,7 @@ evals:
     steps:
       - "Dung hai may chu cua CAY DANG XET, dat APP_URL va API_URL TAY theo cong cua chinh cay ay"
       - "Mo mot lien ket dat mat khau CON HAN"
-      - "Go mot mat khau NGAN hon muc toi thieu vao o thu nhat, go mot chuoi KHAC vao o xac nhan, gui, chup evidence/E17-mk-ngan.png"
+      - "Go CUNG MOT mat khau ngan hon muc toi thieu vao CA HAI o, gui, chup evidence/E17-mk-ngan.png (sua 19/09: buoc cu go hai chuoi KHAC nhau, nhung form kiem lech-nhau o client va return truoc khi goi may chu, nen khung hinh se ra cau lech-nhau chu khong phai cau do dai)"
       - "Van tren chinh lien ket do: go mot mat khau du dai nhung nam trong danh sach da lo, gui, chup evidence/E17-mk-dalo.png"
     inputs:
       - _acceptance/vao-bang-email-va-mat-khau/evidence/
@@ -397,6 +404,13 @@ evals:
         c chu da go o o XAC NHAN van con nguyen sau khi gui — khong bi xoa sach
       Thieu mot trong hai khung hinh -> UNCERTAIN, khong suy ra tu khung con lai: hai ca
       loi nay chinh la thu phai phan biet duoc voi nhau.
+      O MA TRAN THEM SAU VONG SOI CUOI (19/09), day la o da de mot Critical di qua bay vong
+      soi: tren CHINH lien ket vua bi tu choi, go tiep mot mat khau SACH va gui -> phai
+      THANH CONG, va chup evidence/E17-sua-duoc.png. Vi sao o nay sinh tu: bo sang mat khau
+      da lo tung boc buoc BAM, ma buoc bam chay SAU khi token bi tieu thu, nen moi lan tu
+      choi la dot luon lien ket. Trang moi "chon mat khau khac" ma nguoi dung khong con lien
+      ket de chon lai. Khong co o nay thi bang van xanh trong khi trang thai da duyet
+      ST-datmk-mkyeu ("nguoi lam gi tiep: sua mat khau") la khong lam duoc.
       Neu bo noi sang danh sach da lo khong voi toi mang luc chup -> BAO QUA CO TEN o
       khung thu hai, khong duoc lang le tinh la dat.
 
