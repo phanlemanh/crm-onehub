@@ -1,9 +1,53 @@
 # Review findings — vao-bang-email-va-mat-khau
 
-Ghi từ lượt NGHIỆM THU TƯƠI, run_id `vao-bang-email-va-mat-khau-20260919-r1`,
-verified_commit `ff84234ee8ac73bc5c6c3bd10b501ab4e85f206e`.
+Ghi từ lượt NGHIỆM THU TƯƠI, round 1 run_id `vao-bang-email-va-mat-khau-20260919-r1`
+(verified_commit `ff84234ee8ac73bc5c6c3bd10b501ab4e85f206e`), round 2 run_id
+`vao-bang-email-va-mat-khau-20260919-r2` (verified_commit
+`5669ebb814be2a8989bf4bf620be94b23de26b51`).
 
-## Trong hợp đồng (đã liệt trong bảng eval của evidence-report.md, chép lại đây để dễ tra)
+## Vòng 2 — trong hợp đồng (lý do E12 = UNCERTAIN, chép lại từ evidence-report.md để dễ tra)
+
+- **E12 / AC-6+AC-11, khung hình ghi vết**: `apps/app/app/(app)/[slug]/settings/members/vet-line.tsx`
+  (tệp mới của chính vòng này) render dòng "X đã phát liên kết · N phút
+  trước" bên dưới tên trong cột "Tên" của `members-table.tsx`. Cột này rộng
+  `w-[26%]`, dùng chung với avatar + tên + badge "Bạn". `getComputedStyle`
+  trên trang sống xác nhận span ghi vết có `white-space: nowrap` bên trong
+  một `<td>` có `overflow: hidden` — không có `truncate`/ellipsis nào được
+  áp cho riêng nó, chỉ là tràn-rồi-cắt-cứng. Kết quả: đuôi "· N phút trước"
+  (phần "lúc nào" mà AC-11 hứa) bị cắt mất khỏi màn hình thật ở bề rộng chụp
+  chuẩn 1280px của kho. Thử lại với người phát có tên NGẮN ("Ada Okafor" thay
+  vì "e12-admin-1789807964659") vẫn bị cắt, chỉ đỡ hơn (mất chữ cuối "vừa
+  xong" → "vừa xo"). Vá gợi ý: bỏ `white-space: nowrap` khỏi `VetLine` (để nó
+  tự xuống dòng trong cột đã `flex-col`), hoặc nới `width` của cột "Tên", hoặc
+  rút ngắn phần "ai" khi cần (ví dụ chỉ hiện tên, bỏ id) để nhường chỗ cho
+  phần "lúc nào" — không sửa tại phiên đo này, chỉ ghi lại.
+
+- **Bố cục trang Thành viên xếp chồng hai bảng ở một số chiều cao khung nhìn**:
+  phát hiện trong lúc dựng bằng chứng E12 cho vai admin (người duy nhất thấy
+  cả hai bảng "Thành viên" và "Được phép vào" cùng lúc). Ở `1280×700`,
+  `1280×900` (mặc định puppeteer-core), và `1280×1000`, khung nhìn admin của
+  trang `/[slug]/settings/members` render tiêu đề "Được phép vào" cùng thanh
+  công cụ (Lọc/Sắp xếp/Cột/"Cho phép một địa chỉ") ĐÈ LÊN đúng vị trí đáng lẽ
+  là các hàng của bảng "Thành viên" — không có hàng thành viên nào hiện ra,
+  chỉ thấy tiêu đề trang rồi nhảy thẳng tới "Được phép vào" chồng chữ lên
+  thanh công cụ của chính nó. `getBoundingClientRect()` xác nhận đây không
+  phải ảo giác của ảnh chụp: bảng "Thành viên" đo được `top:205 bottom:704`
+  và bảng "Được phép vào" đo được `top:252 bottom:1038` — hai khoảng chồng
+  lấn nhau thật trong DOM đã layout, không chỉ trong ảnh PNG. Ở `1280×1400`
+  hiện tượng biến mất hoàn toàn, hai bảng xếp đúng thứ tự dọc không chồng.
+  Đáng chú ý: `evidence/E12-ghivet.png` của CHÍNH VÒNG 1 (đã commit ở
+  `0d446a34`, chụp ở 1280×900) mang chính xác cùng một kiểu chồng chữ này —
+  tức lỗi này đã có từ trước vòng 2, không phải hồi quy mới, và mục quan sát
+  của vòng 1 ("hàng của người vừa nhận hiện 'e12-admin-... đã phát liên kết
+  ...'") mô tả một thứ mà ảnh chụp kèm theo của chính họ không thực sự cho
+  thấy — một lệch data/ảnh giữa hai vòng, không phải điều tôi tự suy luận.
+  1280×900–1000 là những chiều cao cửa sổ trình duyệt thực tế phổ biến (ví dụ
+  laptop 13"), nên đây là lỗi thật người dùng thật có thể gặp, không chỉ là
+  giả tạo của công cụ chụp headless. Không sửa tại phiên đo này, chỉ ghi lại
+  kèm bước tái hiện: mở `/<slug>/settings/members` với vai admin/owner, cỡ
+  cửa sổ trình duyệt khoảng 1280×700 đến 1280×1000.
+
+## Vòng 1 — trong hợp đồng (đã liệt trong bảng eval của evidence-report.md, chép lại đây để dễ tra)
 
 - **E1 / AC-1**: eval tham chiếu một test tên `phat-chia` không tồn tại trong
   `apps/api/test/mat-khau-lien-ket.spec.ts`. `bun test -t phat-chia` khớp 0 test,
