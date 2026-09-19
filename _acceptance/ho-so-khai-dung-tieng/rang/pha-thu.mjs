@@ -1,8 +1,8 @@
 import { execFileSync, spawn, spawnSync } from "node:child_process";
 import {
 	existsSync,
-	readdirSync,
 	openSync,
+	readdirSync,
 	readFileSync,
 	rmSync,
 	symlinkSync,
@@ -37,11 +37,16 @@ function cho(ms) {
 
 function dungCaySao() {
 	const sao =
-		process.env.CAY_SAO ?? join(GOC, "..", `.pha-thu-khai-tieng-${process.pid}`);
+		process.env.CAY_SAO ??
+		join(GOC, "..", `.pha-thu-khai-tieng-${process.pid}`);
 	if (existsSync(sao)) rmSync(sao, { recursive: true, force: true });
-	execFileSync("git", ["-C", GOC, "worktree", "add", "--detach", "--quiet", sao, "HEAD"], {
-		encoding: "utf8",
-	});
+	execFileSync(
+		"git",
+		["-C", GOC, "worktree", "add", "--detach", "--quiet", sao, "HEAD"],
+		{
+			encoding: "utf8",
+		},
+	);
 	symlinkSync(join(GOC, ".env"), join(sao, ".env"));
 
 	const canNhan = ["node_modules"];
@@ -59,7 +64,9 @@ function dungCaySao() {
 		const dich = join(sao, ten);
 		if (existsSync(dich)) rmSync(dich, { recursive: true, force: true });
 		execFileSync("mkdir", ["-p", dirname(dich)], { encoding: "utf8" });
-		execFileSync("cp", ["-c", "-R", join(GOC, ten), dich], { encoding: "utf8" });
+		execFileSync("cp", ["-c", "-R", join(GOC, ten), dich], {
+			encoding: "utf8",
+		});
 	}
 	console.log(
 		`   nhan ban ${canNhan.length} thu muc bang clonefile — node_modules cua goc va tung goi,\n` +
@@ -100,13 +107,21 @@ async function dungMayChu(sao) {
 	const api = spawn("bun", ["run", "dev"], {
 		cwd: join(sao, "apps/api"),
 		env: { ...moi_truong, PORT: String(CONG_API_SAO) },
-		stdio: ["ignore", openSync(join(sao, "api-sao.log"), "w"), openSync(join(sao, "api-sao.log"), "a")],
+		stdio: [
+			"ignore",
+			openSync(join(sao, "api-sao.log"), "w"),
+			openSync(join(sao, "api-sao.log"), "a"),
+		],
 		detached: false,
 	});
 	const app = spawn("bun", ["run", "dev"], {
 		cwd: join(sao, "apps/app"),
 		env: { ...moi_truong, PORT: String(CONG_SAO) },
-		stdio: ["ignore", openSync(join(sao, "app-sao.log"), "w"), openSync(join(sao, "app-sao.log"), "a")],
+		stdio: [
+			"ignore",
+			openSync(join(sao, "app-sao.log"), "w"),
+			openSync(join(sao, "app-sao.log"), "a"),
+		],
 		detached: false,
 	});
 
@@ -121,7 +136,10 @@ async function dungMayChu(sao) {
 	app.kill();
 	const log = (t) => {
 		try {
-			return readFileSync(join(sao, t), "utf8").split("\n").slice(-12).join("\n");
+			return readFileSync(join(sao, t), "utf8")
+				.split("\n")
+				.slice(-12)
+				.join("\n");
 		} catch {
 			return "(khong doc duoc)";
 		}
@@ -170,11 +188,14 @@ if (banDauBan !== "" && process.env.CHO_PHEP_CAY_BAN !== "1") {
 	console.log(
 		"KHONG DO DUOC: cay dang xet DANG BAN, ma ban sao duoc dung tai HEAD.\n" +
 			"   Nghia la moi con so duoi day noi ve HEAD, KHONG noi ve cay anh sap ky.\n" +
-			"   Cau \"cay dang xet khong doi mot byte nao\" van dung va van xanh khi cay ban tu dau,\n" +
+			'   Cau "cay dang xet khong doi mot byte nao" van dung va van xanh khi cay ban tu dau,\n' +
 			"   nen no KHONG bat duoc chuyen nay — day la tien de, phai chan o day.\n" +
 			"   Commit roi chay lai, hoac dat CHO_PHEP_CAY_BAN=1 neu that su muon do HEAD.\n" +
 			"   Cay dang ban:\n" +
-			banDauBan.split("\n").map((d) => "     " + d).join("\n"),
+			banDauBan
+				.split("\n")
+				.map((d) => "     " + d)
+				.join("\n"),
 	);
 	process.exit(2);
 }
@@ -192,14 +213,50 @@ let mayChu = null;
 
 try {
 	sao = dungCaySao();
-	console.log(`-- BAN SAO: ${sao} (git worktree tai HEAD, symlink node_modules + .env)`);
+	console.log(
+		`-- BAN SAO: ${sao} (git worktree tai HEAD, symlink node_modules + .env)`,
+	);
 	mayChu = await dungMayChu(sao);
 	console.log(`-- MAY CHU CUA BAN SAO: ${APP_SAO} · ${API_SAO}`);
+
+	const khoaLenh = (d) =>
+		JSON.stringify([d.do.lenh, d.do.doi_so, d.do.duoi ?? ""]);
+	const vangOLuotLanh = new Map();
+	const lenhRieng = new Map();
+	for (const d of DOT_BIEN) {
+		if (!lenhRieng.has(khoaLenh(d))) lenhRieng.set(khoaLenh(d), d.do);
+	}
+	console.log(
+		`\n-- LUOT LANH: ${lenhRieng.size} lenh rieng biet, chay trong ban sao CHUA pha gi.\n` +
+			"   Dieu kien THU BA cua moi dot bien: chuoi ghim phai VANG o luot nay.\n" +
+			'   Thieu no thi "thong diep CO ghim" khong chung duoc gi — ten chan van in o moi luot.',
+	);
+	for (const [k, lenh] of lenhRieng) {
+		const r = chay(lenh, sao);
+		if (r.ma !== 0) {
+			console.log(
+				`   KHONG DO DUOC luot lanh: thoat ${r.ma} tren ban sao chua pha —\n` +
+					`      ${lenh.lenh} ${lenh.doi_so.join(" ")}\n` +
+					"      Day la tien de hong, khong phai ket qua do.",
+			);
+			hong += 1;
+		}
+		for (const d of DOT_BIEN) {
+			if (khoaLenh(d) === k) {
+				vangOLuotLanh.set(d.chan, r.ma === 0 && !r.ra.includes(d.ghim));
+			}
+		}
+	}
+	for (const d of DOT_BIEN) {
+		console.log(
+			`   ${vangOLuotLanh.get(d.chan) ? "vang    " : "CO MAT  "} ${d.chan.padEnd(5)} ${JSON.stringify(d.ghim)}`,
+		);
+	}
 
 	for (const d of DOT_BIEN) {
 		const duong = join(sao, d.tep);
 		const goc = readFileSync(duong, "utf8");
-		let ket = { ma: null, ghim: false, ap_dung: false };
+		const ket = { ma: null, ghim: false, vang: false, ap_dung: false };
 
 		try {
 			let sua = goc;
@@ -230,23 +287,40 @@ try {
 			ket.ma = r.ma;
 			ket.ghim = r.ra.includes(d.ghim);
 
-			const dat = ket.ma !== 0 && ket.ghim;
+			ket.vang = vangOLuotLanh.get(d.chan) === true;
+			const dat = ket.ma !== 0 && ket.ghim && ket.vang;
 			if (!dat) hong += 1;
 			console.log(
 				`   ${dat ? "dat     " : "KHONG DAT"} ${d.chan.padEnd(5)} ${d.mo_ta}\n` +
-					`             -> ma thoat ${ket.ma}, thong diep ${ket.ghim ? "CO" : "KHONG"} ghim ${JSON.stringify(d.ghim)}`,
+					`             -> ma thoat ${ket.ma}, thong diep ${ket.ghim ? "CO" : "KHONG"} ghim ${JSON.stringify(d.ghim)}, ghim vang o luot lanh: ${ket.vang ? "co" : "KHONG"}`,
 			);
+			if (!ket.vang) {
+				console.log(
+					`             -> [dem-roi-vut] chuoi ghim ${JSON.stringify(d.ghim)} CO mat o luot lanh\n` +
+						'                (hoac luot lanh hong), nen "co ghim" khong chung duoc dieu gi.',
+				);
+			}
 		} finally {
 			writeFileSync(duong, goc);
 		}
 
-		bang.push({ chan: d.chan, ma: ket.ma, ghim: ket.ghim ? "co" : "khong", ap_dung: ket.ap_dung });
+		bang.push({
+			chan: d.chan,
+			ma: ket.ma,
+			ghim: ket.ghim ? "co" : "khong",
+			vang_o_luot_lanh: ket.vang === true,
+			ap_dung: ket.ap_dung,
+		});
 	}
 
 	await cho(CHO_HMR);
 
-	console.log("\n-- DOT BIEN MOI TRUONG: tro APP_URL sang mot cong khong co may chu nao.");
-	console.log("   Moi chan ui-check phai DO ma 2 va GOI TEN CAY, khong chan nao in ra mot con so.");
+	console.log(
+		"\n-- DOT BIEN MOI TRUONG: tro APP_URL sang mot cong khong co may chu nao.",
+	);
+	console.log(
+		"   Moi chan ui-check phai DO ma 2 va GOI TEN CAY, khong chan nao in ra mot con so.",
+	);
 	for (const c of CHAN_UI) {
 		const r = chay(chanHoSo(c), sao, { APP_URL: "http://localhost:39997" });
 		const goiTen = r.ra.includes(sao) || r.ra.includes("CAY KHAC");
@@ -256,10 +330,17 @@ try {
 		console.log(
 			`   ${dat ? "dat     " : "KHONG DAT"} ${c.padEnd(18)} ma ${r.ma}, goi ten cay ${goiTen ? "co" : "khong"}, in con so ${inSo ? "CO (sai)" : "khong"}`,
 		);
-		bang.push({ chan: `moi-truong:${c}`, ma: r.ma, ghim: goiTen ? "co" : "khong", ap_dung: true });
+		bang.push({
+			chan: `moi-truong:${c}`,
+			ma: r.ma,
+			ghim: goiTen ? "co" : "khong",
+			ap_dung: true,
+		});
 	}
 
-	console.log("\n-- CHIEU DO CUA CHINH CHAN NAY: ban sao CHUA pha gi thi chan do phai xanh.");
+	console.log(
+		"\n-- CHIEU DO CUA CHINH CHAN NAY: ban sao CHUA pha gi thi chan do phai xanh.",
+	);
 	const sach = chay(chanHoSo("gioi-thieu"), sao);
 	if (sach.ma !== 0) {
 		console.log(
@@ -294,12 +375,16 @@ if (sauBan !== banDauBan) {
 }
 
 console.log("\n===== BANG DOT BIEN =====");
-console.log("chan            | ma thoat | thong diep co ghim | phep pha ap dung");
+console.log(
+	"chan            | ma thoat | thong diep co ghim | phep pha ap dung",
+);
 for (const b of bang) {
 	console.log(
 		`${String(b.chan).padEnd(15)} | ${String(b.ma).padEnd(8)} | ${String(b.ghim).padEnd(18)} | ${b.ap_dung ? "co" : "KHONG"}`,
 	);
 }
 
-console.log(`\nket qua: ${hong} dot bien KHONG dat tren ${bang.length} dot bien`);
+console.log(
+	`\nket qua: ${hong} dot bien KHONG dat tren ${bang.length} dot bien`,
+);
 process.exit(hong > 0 ? 1 : 0);
