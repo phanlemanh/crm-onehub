@@ -47,6 +47,13 @@ phép kiểm tĩnh 19/09 về chuỗi ghim · `docs/superpowers/specs/2026-09-19
 
 ## Known limits
 
+
+- trần thước — trần nhát sửa thước (thuoc-co-cua AC-12) được miễn cho vòng này
+  theo quyết định của người ký 19/09. Tiền đề của trần là «vá thước nghĩa là đang
+  trôi khỏi sản phẩm»; với một vòng mà sản phẩm CHÍNH LÀ thước, tiền đề đó không
+  đúng, nên mọi vá hợp lệ đều bị đếm là trôi. Sáu nhát bị đếm đều truy được về một
+  phát hiện trong hợp đồng của S4 vòng 1, có tên AC. Cái mất: vòng này không còn
+  chuông báo trôi thước, nên nếu máy thật sự trôi thì phải do người đọc diff bắt.
 Mục này có mặt để eval hội đồng (E11) có chỗ đối chiếu. Dòng nào ở đây là một
 cách nói dối KHÔNG có phép đo máy nào bắt được, và người ký nhận nó tường minh.
 
