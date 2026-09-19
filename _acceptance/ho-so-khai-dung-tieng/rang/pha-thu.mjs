@@ -1,7 +1,7 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-
+import { CHAN_UI, chanHoSo, DOT_BIEN } from "./bang-dot-bien.mjs";
 import {
 	API_SAO,
 	APP_SAO,
