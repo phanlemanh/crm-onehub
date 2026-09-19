@@ -17,13 +17,11 @@ const en = {
 		description: "Sign in with your account to continue.",
 		continueWith: (ten: string) => `Continue with ${ten}`,
 		signingIn: "Signing in…",
-		noWay: {
-			title: "No way in yet",
-			description:
-				"This CRM has no sign-in method configured, so nobody can get in — including you.",
-			howTo:
-				"Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET — or MICROSOFT_CLIENT_ID and MICROSOFT_CLIENT_SECRET — in the root .env file and restart. Your own identity provider can be added from Settings once somebody is signed in.",
-		},
+		hoac: "or",
+		diaChi: "Email address",
+		matKhau: "Password",
+		dangNhap: "Sign in",
+		saiChung: "That email or password isn't right.",
 		error: {
 			unreachable:
 				"Could not reach the sign-in service. Check your connection and try again.",
@@ -71,6 +69,30 @@ const en = {
 		submit: "Continue",
 		submitting: "Saving…",
 	},
+	datMatKhau: {
+		title: "Set a password",
+		description: (phut: number) =>
+			`This link can be used once and expires in ${phut} minutes.`,
+		matKhauMoi: "New password",
+		goLai: "Confirm password",
+		toiThieu: (n: number) =>
+			`At least ${n} characters. No uppercase or special characters required.`,
+		gui: "Set password",
+		xong: {
+			title: "Done",
+			description:
+				"Your password is set. From now on you can sign in to the CRM with this email and password, even when your network can't reach Google.",
+			dangNhap: "Sign in",
+		},
+		loi: {
+			hetHan:
+				"This link has expired. Ask your administrator to send you a new one.",
+			khongDungDuoc:
+				"This link can no longer be used — it may already have been used, or replaced by a newer link. Ask your administrator to send you a new one.",
+			lechNhau: "The two passwords don't match.",
+			quaNgan: (soKyTu: number) => `Use at least ${soKyTu} characters.`,
+		},
+	},
 };
 
 export type AuthMessages = typeof en;
@@ -92,13 +114,11 @@ const vi = {
 		description: "Đăng nhập bằng tài khoản của bạn để tiếp tục.",
 		continueWith: (ten: string) => `Tiếp tục với ${ten}`,
 		signingIn: "Đang đăng nhập…",
-		noWay: {
-			title: "Chưa có cách nào để vào",
-			description:
-				"CRM này chưa cấu hình cách đăng nhập nào, nên chưa ai vào được — kể cả bạn.",
-			howTo:
-				"Đặt GOOGLE_CLIENT_ID và GOOGLE_CLIENT_SECRET — hoặc MICROSOFT_CLIENT_ID và MICROSOFT_CLIENT_SECRET — trong file .env ở gốc kho rồi khởi động lại. Nhà cung cấp định danh của riêng bạn thêm được từ Cài đặt, sau khi đã có người đăng nhập.",
-		},
+		hoac: "hoặc",
+		diaChi: "Địa chỉ email",
+		matKhau: "Mật khẩu",
+		dangNhap: "Đăng nhập",
+		saiChung: "Địa chỉ hoặc mật khẩu không đúng.",
 		error: {
 			unreachable:
 				"Không kết nối được tới dịch vụ đăng nhập. Kiểm tra mạng rồi thử lại.",
@@ -145,6 +165,30 @@ const vi = {
 		signUp: "Đăng ký ở đây",
 		submit: "Tiếp tục",
 		submitting: "Đang lưu…",
+	},
+	datMatKhau: {
+		title: "Đặt mật khẩu",
+		description: (phut: number) =>
+			`Liên kết này dùng được một lần, còn hạn ${phut} phút.`,
+		matKhauMoi: "Mật khẩu mới",
+		goLai: "Gõ lại mật khẩu",
+		toiThieu: (n: number) =>
+			`Ít nhất ${n} ký tự. Không cần chữ hoa hay ký tự đặc biệt.`,
+		gui: "Đặt mật khẩu",
+		xong: {
+			title: "Xong",
+			description:
+				"Mật khẩu đã đặt. Từ giờ bạn vào CRM được bằng địa chỉ email và mật khẩu này, kể cả khi mạng không vào được Google.",
+			dangNhap: "Đăng nhập",
+		},
+		loi: {
+			hetHan:
+				"Liên kết này hết hạn rồi. Nhắn người quản trị phát cho bạn một liên kết mới.",
+			khongDungDuoc:
+				"Liên kết này không dùng được nữa — có thể đã dùng rồi hoặc đã bị thay bằng liên kết mới. Nhắn người quản trị phát cho bạn một liên kết mới.",
+			lechNhau: "Hai ô mật khẩu chưa giống nhau.",
+			quaNgan: (soKyTu: number) => `Mật khẩu phải có ít nhất ${soKyTu} ký tự.`,
+		},
 	},
 } satisfies AuthMessages;
 

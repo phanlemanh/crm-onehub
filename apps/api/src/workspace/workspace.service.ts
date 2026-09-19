@@ -1,7 +1,11 @@
 import {
 	ALLOWANCE_WITHOUT_EXPIRY,
+	appUrl,
 	canChangeRole,
+	canIssuePasswordLink,
 	canRenameWorkspace,
+	decideSignInFromDb,
+	ducChia,
 	ensureWorkspaceMembership,
 	isWorkspaceAdmin,
 	isWorkspaceRole,
@@ -37,6 +41,7 @@ import {
 import type {
 	Allowance,
 	AllowEmailInput,
+	IssuePasswordLinkInput,
 	MemberListInput,
 	RemoveMemberInput,
 	RevokeAllowanceInput,
@@ -115,6 +120,7 @@ export class WorkspaceService {
 			canRename: canRenameWorkspace(role),
 			canChangeRoles: canChangeRole(role),
 			canManageMembers: isWorkspaceAdmin(role),
+			canIssuePasswordLink: canIssuePasswordLink(role),
 		};
 	}
 
@@ -190,8 +196,15 @@ export class WorkspaceService {
 			}),
 		]);
 
+		const xemDuocVet = isWorkspaceAdmin(await workspaceRoleOf(userId));
+		const vet = xemDuocVet
+			? await this.vetMoiNhat(rows.map((row) => row.user.email))
+			: new Map<string, { issuedAt: Date; issuedByName: string }>();
+
 		return {
-			rows: rows.map((row) => this.toMember(row, userId)),
+			rows: rows.map((row) =>
+				this.toMember(row, userId, vet.get(row.user.email)),
+			),
 			total,
 			facetCounts: { role: countsByKey(roles, "role") },
 		};
@@ -247,7 +260,9 @@ export class WorkspaceService {
 			role: input.role,
 		});
 
-		return this.toMember(updated, userId);
+		const vet = await this.vetMoiNhat([updated.user.email]);
+
+		return this.toMember(updated, userId, vet.get(updated.user.email));
 	}
 
 	async allowances(userId: string): Promise<{ rows: Allowance[] }> {
@@ -265,7 +280,11 @@ export class WorkspaceService {
 			orderBy: [{ createdAt: "desc" }],
 		});
 
-		return { rows: rows.map((row) => this.toAllowance(row)) };
+		const vet = await this.vetMoiNhat(rows.map((row) => row.email));
+
+		return {
+			rows: rows.map((row) => this.toAllowance(row, vet.get(row.email))),
+		};
 	}
 
 	async allowEmail(userId: string, input: AllowEmailInput): Promise<Allowance> {
@@ -314,6 +333,81 @@ export class WorkspaceService {
 		this.logger.log({ message: "Address allowed", userId, email });
 
 		return this.toAllowance(created);
+	}
+
+	async issuePasswordLink(
+		userId: string,
+		input: IssuePasswordLinkInput,
+		quyen: (role: WorkspaceRole | null) => boolean = canIssuePasswordLink,
+	): Promise<{ url: string; expiresAt: string }> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!quyen(role)) {
+			throw new ForbiddenException(
+				"Chỉ chủ và quản trị phát được liên kết đặt mật khẩu.",
+			);
+		}
+
+		const email = normalizeEmail(input.email);
+
+		if (!email) {
+			throw new BadRequestException(
+				"Đó không phải địa chỉ email. Nhập dạng ten@congty.com.",
+			);
+		}
+
+		const nguoi = await this.db.user.findUnique({ where: { email } });
+
+		const laThanhVien = nguoi
+			? (await workspaceRoleOf(nguoi.id)) !== null
+			: false;
+
+		if (!laThanhVien) {
+			const duocVao = await decideSignInFromDb(email);
+
+			if (!duocVao.allowed) {
+				throw new BadRequestException(
+					"Địa chỉ này không nằm trong danh sách được vào.",
+				);
+			}
+		}
+
+		const nhan = nguoi ?? (await this.taoNguoiDaDuocVao(email));
+
+		const nguoiPhat = await this.db.user.findUniqueOrThrow({
+			where: { id: userId },
+			select: { name: true },
+		});
+
+		const chia = await this.db.$transaction(async (tx) => {
+			const duc = await ducChia({ userId: nhan.id, appUrl, kho: tx });
+
+			await tx.passwordLinkIssue.create({
+				data: {
+					id: crypto.randomUUID(),
+					email,
+					issuedById: userId,
+					issuedByName: nguoiPhat.name,
+				},
+			});
+
+			return duc;
+		});
+
+		this.logger.log({ message: "Password link issued", userId, email });
+
+		return { url: chia.url, expiresAt: chia.expiresAt.toISOString() };
+	}
+
+	private async taoNguoiDaDuocVao(email: string) {
+		return this.db.user.create({
+			data: {
+				id: crypto.randomUUID(),
+				email,
+				name: email.split("@")[0] ?? email,
+				emailVerified: true,
+			},
+		});
 	}
 
 	async revokeAllowance(
@@ -420,7 +514,10 @@ export class WorkspaceService {
 		return { memberId: input.memberId };
 	}
 
-	private toAllowance(row: AllowanceRow): Allowance {
+	private toAllowance(
+		row: AllowanceRow,
+		vet?: { issuedAt: Date; issuedByName: string },
+	): Allowance {
 		const doc = docTrangThai(row.status);
 
 		if (doc.loi) {
@@ -438,10 +535,16 @@ export class WorkspaceService {
 			status: doc.trangThai,
 			invitedByName: row.user?.name ?? null,
 			createdAt: row.createdAt.toISOString(),
+			passwordLinkIssuedAt: vet?.issuedAt.toISOString() ?? null,
+			passwordLinkIssuedByName: vet?.issuedByName ?? null,
 		};
 	}
 
-	private toMember(row: MemberRow, userId: string): WorkspaceMember {
+	private toMember(
+		row: MemberRow,
+		userId: string,
+		vet?: { issuedAt: Date; issuedByName: string },
+	): WorkspaceMember {
 		return {
 			id: row.id,
 			userId: row.userId,
@@ -451,7 +554,24 @@ export class WorkspaceService {
 			role: toRole(row.role),
 			joinedAt: row.createdAt.toISOString(),
 			isViewer: row.userId === userId,
+			passwordLinkIssuedAt: vet?.issuedAt.toISOString() ?? null,
+			passwordLinkIssuedByName: vet?.issuedByName ?? null,
 		};
+	}
+
+	private async vetMoiNhat(
+		emails: string[],
+	): Promise<Map<string, { issuedAt: Date; issuedByName: string }>> {
+		if (emails.length === 0) return new Map();
+
+		const vet = await this.db.passwordLinkIssue.findMany({
+			where: { email: { in: emails } },
+			orderBy: { issuedAt: "desc" },
+		});
+
+		const moiNhat = new Map<string, (typeof vet)[number]>();
+		for (const v of vet) if (!moiNhat.has(v.email)) moiNhat.set(v.email, v);
+		return moiNhat;
 	}
 
 	private searchWhere(q: string): Prisma.MemberWhereInput {

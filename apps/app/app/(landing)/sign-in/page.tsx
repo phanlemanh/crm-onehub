@@ -1,4 +1,5 @@
 import type { MailboxProviderId } from "@crm/auth/scopes";
+import { Separator } from "@crm/ui/components/separator";
 import type { Metadata } from "next";
 import { redirect, unstable_rethrow } from "next/navigation";
 import { Suspense } from "react";
@@ -7,6 +8,7 @@ import { getLocale } from "@/lib/locale/server";
 import { authMessages } from "@/lib/messages/auth";
 import { getSession } from "@/lib/session";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { PasswordSignIn } from "./password-sign-in";
 import { SocialSignIn } from "./social-sign-in";
 import { SsoSignIn } from "./sso-sign-in";
 
@@ -99,20 +101,7 @@ async function SignIn({
 				? configured
 				: [];
 
-	if (!showSso && social.length === 0) {
-		return (
-			<>
-				<AuthHeading title={m.noWay.title} description={m.noWay.description} />
-
-				<p
-					className="text-center text-muted-foreground text-sm/5"
-					translate="no"
-				>
-					{m.noWay.howTo}
-				</p>
-			</>
-		);
-	}
+	const coCuaKhac = showSso || social.length > 0;
 
 	return (
 		<>
@@ -137,6 +126,22 @@ async function SignIn({
 					loi={m.error.unreachable}
 				/>
 			))}
+
+			{coCuaKhac ? (
+				<div className="flex items-center gap-3">
+					<Separator className="flex-1" />
+					<span className="text-muted-foreground text-xs">{m.hoac}</span>
+					<Separator className="flex-1" />
+				</div>
+			) : null}
+
+			<PasswordSignIn
+				dangGui={m.signingIn}
+				dangNhap={m.dangNhap}
+				diaChi={m.diaChi}
+				matKhau={m.matKhau}
+				saiChung={m.saiChung}
+			/>
 		</>
 	);
 }

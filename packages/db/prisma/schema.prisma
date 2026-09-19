@@ -162,6 +162,17 @@ model Verification {
   @@map("verification")
 }
 
+model PasswordLinkIssue {
+  id           String   @id
+  email        String
+  issuedById   String
+  issuedByName String
+  issuedAt     DateTime @default(now())
+
+  @@index([email, issuedAt])
+  @@map("password_link_issue")
+}
+
 model RateLimit {
   id          String @id
   key         String

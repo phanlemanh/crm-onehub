@@ -14,6 +14,8 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { AllowDialog } from "./allow-dialog";
 import { ConfirmDialog } from "./confirm-dialog";
+import { PhatChiaButton } from "./phat-chia-button";
+import { VetLine } from "./vet-line";
 
 type Allowance = RouterOutputs["workspace"]["allowances"]["rows"][number];
 type Role = keyof ThanhVienMessages["vaiTro"];
@@ -100,6 +102,9 @@ export function AllowancesTable() {
 								{t.duocPhepVao.luc}
 							</th>
 							<th className="py-2 text-right font-normal">
+								<span className="sr-only">{t.phatChia.nut}</span>
+							</th>
+							<th className="py-2 text-right font-normal">
 								<span className="sr-only">{t.duocPhepVao.hanhDong}</span>
 							</th>
 						</tr>
@@ -109,7 +114,17 @@ export function AllowancesTable() {
 						{rows.map((row) => (
 							<tr key={row.id} className="border-b last:border-0">
 								<td className="py-2" translate="no">
-									{row.email}
+									<div className="flex flex-col gap-1">
+										<span>{row.email}</span>
+										{row.passwordLinkIssuedByName &&
+										row.passwordLinkIssuedAt ? (
+											<VetLine
+												t={t}
+												ten={row.passwordLinkIssuedByName}
+												luc={row.passwordLinkIssuedAt}
+											/>
+										) : null}
+									</div>
 								</td>
 								<td className="py-2">{t.vaiTro[row.role as Role]}</td>
 								<td className="py-2 text-muted-foreground" translate="no">
@@ -117,6 +132,15 @@ export function AllowancesTable() {
 								</td>
 								<td className="py-2 text-muted-foreground tabular-nums">
 									<LocalRelativeTime date={row.createdAt} />
+								</td>
+								<td className="py-2 text-right">
+									<PhatChiaButton
+										t={t}
+										email={row.email}
+										ten={row.email}
+										coQuyen={workspace.data?.canIssuePasswordLink ?? false}
+										onDaPhat={lamMoi}
+									/>
 								</td>
 								<td className="py-2 text-right">
 									<Button

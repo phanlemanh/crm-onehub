@@ -36,6 +36,8 @@ export const allowanceOutput = z.object({
 	status: z.enum(ALLOWANCE_STATUSES),
 	invitedByName: z.string().nullable(),
 	createdAt: z.string(),
+	passwordLinkIssuedAt: z.string().nullable(),
+	passwordLinkIssuedByName: z.string().nullable(),
 });
 
 export type Allowance = z.infer<typeof allowanceOutput>;
@@ -73,6 +75,17 @@ export const setMemberRoleInput = z.object({
 export type UpdateWorkspaceInput = z.infer<typeof updateWorkspaceInput>;
 export type SetMemberRoleInput = z.infer<typeof setMemberRoleInput>;
 
+export const issuePasswordLinkInput = z.object({
+	email: z.string().trim().min(1).max(255),
+});
+
+export const passwordLinkOutput = z.object({
+	url: z.string(),
+	expiresAt: z.string(),
+});
+
+export type IssuePasswordLinkInput = z.infer<typeof issuePasswordLinkInput>;
+
 export const workspaceOutput = z.object({
 	id: z.string(),
 	slug: z.string(),
@@ -83,6 +96,7 @@ export const workspaceOutput = z.object({
 	canRename: z.boolean(),
 	canChangeRoles: z.boolean(),
 	canManageMembers: z.boolean(),
+	canIssuePasswordLink: z.boolean(),
 });
 
 export type Workspace = z.infer<typeof workspaceOutput>;
@@ -96,6 +110,8 @@ export const workspaceMemberOutput = z.object({
 	role: z.enum(WORKSPACE_ROLES),
 	joinedAt: z.string(),
 	isViewer: z.boolean(),
+	passwordLinkIssuedAt: z.string().nullable(),
+	passwordLinkIssuedByName: z.string().nullable(),
 });
 
 export type WorkspaceMember = z.infer<typeof workspaceMemberOutput>;

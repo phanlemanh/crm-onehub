@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản trị lấy chìa về bằng cách nào · Sơ đồ hai nhánh</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 48rem;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ hai nhánh · quyết định đã ghi trong sổ</p>
+    <h1>Quản trị lấy chìa về bằng cách nào</h1>
+    <p class="sub">Hai lối đã cân nhắc để đưa chìa tới tay quản trị, kèm cái giá của từng lối. Vòng này đi lối bên trái; lối bên phải ghi lại để sau còn đọc được vì sao đã bỏ.</p>
+
+    <svg viewBox="0 0 1240 740" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- ===== Đường đi (vẽ trước) ===== -->
+      <path d="M 556 180 L 556 240 Q 556 248 548 248 L 336 248 Q 328 248 328 256 L 328 304" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M 684 180 L 684 240 Q 684 248 692 248 L 904 248 Q 912 248 912 256 L 912 304" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <!-- ===== Nhãn trên đường đi ===== -->
+      <rect x="444" y="206" width="104" height="18" rx="2" fill="#fafafa"/>
+      <text x="546" y="220" fill="#006B4F" font-size="10" font-weight="500" font-family="'Geist', sans-serif" text-anchor="end">vòng này đi lối này</text>
+
+      <rect x="692" y="206" width="80" height="18" rx="2" fill="#fafafa"/>
+      <text x="696" y="220" fill="#575757" font-size="10" font-family="'Geist', sans-serif">đã cân rồi bỏ</text>
+
+      <!-- ===== Câu hỏi ===== -->
+      <polygon points="620,76 820,140 620,204 420,140" fill="#fafafa"/>
+      <polygon points="620,76 820,140 620,204 420,140" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="620" y="145" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chìa tới tay quản trị bằng cách nào?</text>
+
+      <!-- ===== Nhánh A — đã chọn (tiêu điểm) ===== -->
+      <rect x="88" y="304" width="480" height="248" rx="8" fill="#fafafa"/>
+      <rect x="88" y="304" width="480" height="248" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="112" y="324" width="72" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+      <text x="148" y="336" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐÃ CHỌN</text>
+      <text x="112" y="372" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif">Kho tự đúc chìa rồi trả ngay cho quản trị</text>
+
+      <text x="112" y="410" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐƯỢC GÌ</text>
+      <text x="112" y="430" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Quản trị bấm một lần là có chìa ngay trên màn</text>
+
+      <text x="112" y="460" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">GIÁ PHẢI TRẢ</text>
+      <text x="112" y="480" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Kho dựa vào một chi tiết bên trong thư viện</text>
+
+      <text x="112" y="510" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CANH BẰNG GÌ</text>
+      <text x="112" y="530" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Phép đo E3 phải đỏ ngay khi chi tiết đó đổi</text>
+
+      <!-- ===== Nhánh B — đã bỏ ===== -->
+      <rect x="672" y="304" width="480" height="248" rx="8" fill="#fafafa"/>
+      <rect x="672" y="304" width="480" height="248" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="696" y="324" width="60" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="726" y="336" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐÃ BỎ</text>
+      <text x="696" y="372" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif">Nhờ thư viện phát chìa rồi đi nhặt lại</text>
+
+      <text x="696" y="410" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐƯỢC GÌ</text>
+      <text x="696" y="430" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Kho không dựa vào chi tiết bên trong nào</text>
+
+      <text x="696" y="460" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">GIÁ PHẢI TRẢ</text>
+      <text x="696" y="480" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Phải đẻ thêm một bảng để cất chìa chờ quản trị đọc</text>
+
+      <text x="696" y="510" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CANH BẰNG GÌ</text>
+      <text x="696" y="530" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Không phải canh gì thêm</text>
+
+      <!-- ===== Ghi chú biên tập ===== -->
+      <text x="88" y="608" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif">Chỗ dính chính là chỗ canh: bản thư viện mới đổi tên bên trong</text>
+      <text x="88" y="630" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif">thì phép đo E3 phải đỏ ngay, không được im.</text>
+      <path d="M 200 592 Q 190 576 186 560" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="185" cy="556" r="2.5" fill="#171717"/>
+
+      <!-- ===== Chú giải ===== -->
+      <line x1="40" y1="672" x2="1200" y2="672" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="693" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="148" y="684" width="16" height="12" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="172" y="693" fill="#575757" font-size="9" font-family="'Geist', sans-serif">lối vòng này đi</text>
+
+      <rect x="304" y="684" width="16" height="12" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="328" y="693" fill="#575757" font-size="9" font-family="'Geist', sans-serif">lối đã cân nhắc rồi bỏ</text>
+
+      <text x="500" y="693" fill="#575757" font-size="9" font-family="'Geist', sans-serif">E3 là phép đo vòng tròn đúc-rồi-tiêu-thụ của AC-3 (đặt xong là đăng nhập được).</text>
+      <text x="500" y="709" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chi tiết bên trong nói ở đây là tiền tố định danh <tspan font-family="'Geist Mono', monospace" fill="#171717">reset-password:</tspan> của thư viện xác thực.</text>
+    </svg>
+  </div>
+</body>
+</html>

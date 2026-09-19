@@ -4,14 +4,16 @@ import { db } from "@crm/db";
 import { schemas } from "@crm/validation";
 import { type BetterAuthOptions, betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { APIError } from "better-auth/api";
+import { APIError, createAuthMiddleware } from "better-auth/api";
 import { genericOAuth } from "better-auth/plugins/generic-oauth";
 import { organization } from "better-auth/plugins/organization";
 import { decideSignInFromDb } from "./allow-list";
 import { API_KEY_EXPIRATION, API_KEY_HEADER, API_KEY_PREFIX } from "./api-keys";
+import { PASSWORD } from "./chia-mat-khau";
 import { AUTH_COOKIE_PREFIX } from "./cookies";
 import { env } from "./env";
 import { ensureWorkspaceMembership } from "./organization";
+import { canhDatMatKhau } from "./sang-mat-khau";
 import {
 	GOOGLE_PROVIDER_ID,
 	MICROSOFT_PROVIDER_ID,
@@ -20,7 +22,7 @@ import {
 	SYNC_SCOPES,
 } from "./scopes";
 import { notifySignedIn } from "./signed-in";
-import { slackConnectGuard } from "./slack-connect";
+import { canhSlackConnect } from "./slack-connect";
 import { rememberSlackInstall, replaceSlackConnection } from "./slack-grant";
 import { SLACK_REQUESTED_SCOPES, SLACK_USER_SCOPES } from "./slack-scopes";
 import { queueSlackInventorySync } from "./slack-sync";
@@ -79,7 +81,11 @@ export const auth = betterAuth({
 	}),
 
 	emailAndPassword: {
-		enabled: false,
+		enabled: true,
+		disableSignUp: true,
+		revokeSessionsOnPasswordReset: true,
+		minPasswordLength: PASSWORD.minLength,
+		resetPasswordTokenExpiresIn: PASSWORD.tokenTtlSeconds,
 	},
 
 	socialProviders,
@@ -87,6 +93,7 @@ export const auth = betterAuth({
 	account: {
 		accountLinking: {
 			enabled: true,
+			updateUserInfoOnLink: true,
 			trustedProviders: [GOOGLE_PROVIDER_ID, MICROSOFT_PROVIDER_ID],
 		},
 	},
@@ -119,7 +126,10 @@ export const auth = betterAuth({
 
 	trustedOrigins: [...env.trustedOrigins],
 	hooks: {
-		before: slackConnectGuard,
+		before: createAuthMiddleware(async (ctx) => {
+			await canhDatMatKhau(ctx);
+			await canhSlackConnect(ctx);
+		}),
 	},
 
 	plugins: [
