@@ -136,6 +136,11 @@ export function dungCaySao() {
 }
 
 export function donCaySao(sao) {
+	// KHONG goi `git worktree prune` o day. Prune la thao tac TOAN CUC tren so
+	// worktree dung chung: ba chan do cung dung/xoa ban sao, va mot lan prune giua
+	// chung co the go ban sao cua chan khac dang song. Do 19/09: E3 chay rieng mat
+	// 73 giay va xanh, nhung do trong lan chay song song — khong phai het gio.
+	// Chi go DUNG ban sao cua minh; xac cua luot chet don o buoc dung sau.
 	kiemDuongSao(sao);
 	try {
 		execFileSync("git", ["-C", GOC, "worktree", "remove", "--force", sao], {
@@ -144,9 +149,6 @@ export function donCaySao(sao) {
 	} catch {
 		rmSync(sao, { recursive: true, force: true });
 	}
-	try {
-		execFileSync("git", ["-C", GOC, "worktree", "prune"], { encoding: "utf8" });
-	} catch {}
 }
 
 export async function song(url) {

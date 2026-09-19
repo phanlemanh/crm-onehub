@@ -84,7 +84,6 @@ try {
 } catch {
 	rmSync(hopLe, { recursive: true, force: true });
 }
-execFileSync("git", ["-C", GOC, "worktree", "prune"], { encoding: "utf8" });
 
 ghiNhan(
 	"(b) goc kho                    ",

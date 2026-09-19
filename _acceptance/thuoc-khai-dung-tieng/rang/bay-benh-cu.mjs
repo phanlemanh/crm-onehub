@@ -27,7 +27,6 @@ function donBanSao(sao) {
 	} catch {
 		rmSync(sao, { recursive: true, force: true });
 	}
-	execFileSync("git", ["-C", GOC, "worktree", "prune"], { encoding: "utf8" });
 }
 
 const BAY = 7;

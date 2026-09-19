@@ -32,9 +32,6 @@ function don() {
 	} catch {
 		if (existsSync(SAO)) rmSync(SAO, { recursive: true, force: true });
 	}
-	try {
-		execFileSync("git", ["-C", GOC, "worktree", "prune"], { encoding: "utf8" });
-	} catch {}
 }
 
 function cayBan() {
