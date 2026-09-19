@@ -98,6 +98,7 @@ const KHONG_DAU = new Set([
 	"ten.stripe",
 	"ten.docusign",
 	"header.otherLocale",
+	"datMatKhau.xong.title",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -173,6 +174,14 @@ describe("kho chuoi cua vong ③a", () => {
 			],
 			"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
 			"auth:grantAccess.grant": ["Cấp quyền 1", "Cấp quyền 12"],
+			"auth:datMatKhau.description": [
+				"Liên kết này dùng được một lần, còn hạn 1 phút.",
+				"Liên kết này dùng được một lần, còn hạn 12 phút.",
+			],
+			"auth:datMatKhau.toiThieu": [
+				"Ít nhất 1 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
+				"Ít nhất 12 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
+			],
 			"companies:bulk.reassigned": [
 				"Đã đổi người phụ trách cho 1.",
 				"Đã đổi người phụ trách cho 12.",

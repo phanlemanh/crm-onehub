@@ -17,6 +17,11 @@ const en = {
 		description: "Sign in with your account to continue.",
 		continueWith: (ten: string) => `Continue with ${ten}`,
 		signingIn: "Signing in…",
+		hoac: "or",
+		diaChi: "Email address",
+		matKhau: "Password",
+		dangNhap: "Sign in",
+		saiChung: "That email or password isn't right.",
 		noWay: {
 			title: "No way in yet",
 			description:
@@ -71,6 +76,30 @@ const en = {
 		submit: "Continue",
 		submitting: "Saving…",
 	},
+	datMatKhau: {
+		title: "Set a password",
+		description: (phut: number) =>
+			`This link can be used once and expires in ${phut} minutes.`,
+		matKhauMoi: "New password",
+		goLai: "Confirm password",
+		toiThieu: (n: number) =>
+			`At least ${n} characters. No uppercase or special characters required.`,
+		gui: "Set password",
+		xong: {
+			title: "Done",
+			description:
+				"Your password is set. From now on you can sign in to the CRM with this email and password, even when your network can't reach Google.",
+		},
+		loi: {
+			hetHan:
+				"This link has expired. Ask your administrator to send you a new one.",
+			daDung:
+				"This link has already been used. Ask your administrator to send you a new one.",
+			khongCo:
+				"This link isn't valid. Ask your administrator to send you a new one.",
+			lechNhau: "The two passwords don't match.",
+		},
+	},
 };
 
 export type AuthMessages = typeof en;
@@ -92,6 +121,11 @@ const vi = {
 		description: "Đăng nhập bằng tài khoản của bạn để tiếp tục.",
 		continueWith: (ten: string) => `Tiếp tục với ${ten}`,
 		signingIn: "Đang đăng nhập…",
+		hoac: "hoặc",
+		diaChi: "Địa chỉ email",
+		matKhau: "Mật khẩu",
+		dangNhap: "Đăng nhập",
+		saiChung: "Địa chỉ hoặc mật khẩu không đúng.",
 		noWay: {
 			title: "Chưa có cách nào để vào",
 			description:
@@ -145,6 +179,30 @@ const vi = {
 		signUp: "Đăng ký ở đây",
 		submit: "Tiếp tục",
 		submitting: "Đang lưu…",
+	},
+	datMatKhau: {
+		title: "Đặt mật khẩu",
+		description: (phut: number) =>
+			`Liên kết này dùng được một lần, còn hạn ${phut} phút.`,
+		matKhauMoi: "Mật khẩu mới",
+		goLai: "Gõ lại mật khẩu",
+		toiThieu: (n: number) =>
+			`Ít nhất ${n} ký tự. Không cần chữ hoa hay ký tự đặc biệt.`,
+		gui: "Đặt mật khẩu",
+		xong: {
+			title: "Xong",
+			description:
+				"Mật khẩu đã đặt. Từ giờ bạn vào CRM được bằng địa chỉ email và mật khẩu này, kể cả khi mạng không vào được Google.",
+		},
+		loi: {
+			hetHan:
+				"Liên kết này hết hạn rồi. Nhắn người quản trị phát cho bạn một liên kết mới.",
+			daDung:
+				"Liên kết này đã dùng rồi. Nhắn người quản trị phát cho bạn một liên kết mới.",
+			khongCo:
+				"Liên kết này không đúng. Nhắn người quản trị phát cho bạn một liên kết mới.",
+			lechNhau: "Hai ô mật khẩu chưa giống nhau.",
+		},
 	},
 } satisfies AuthMessages;
 

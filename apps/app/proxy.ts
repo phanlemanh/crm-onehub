@@ -18,7 +18,14 @@ const SIGN_IN_PATH = "/sign-in";
 
 const NO_WORKSPACE_PATH = "/het-quyen";
 
-const UNGATED = ["/grant-access", "/eve", NO_WORKSPACE_PATH];
+const SET_PASSWORD_PATH = "/dat-mat-khau";
+
+export const UNGATED = [
+	"/grant-access",
+	"/eve",
+	NO_WORKSPACE_PATH,
+	SET_PASSWORD_PATH,
+];
 
 const SECTIONS = [
 	"/campaigns",
