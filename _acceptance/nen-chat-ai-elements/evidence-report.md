@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c3e858ff70ac8ded853f49323dab4bcabda71b6c
+verified_commit: 9bd9e4556d9320bb334a26b30d187cf229228173
 human_signoff: Mạnh 10/09/2026 — ký lại trên bằng chứng vòng 7 sau khi hoà onehub và sửa lớp chuỗi thứ năm. Bảng đăng ký và kế hoạch chuyển đã sửa trước khi ký, theo quyết định của chủ kho. Các mục còn lại ghi ở Known limits của hợp đồng.
 ---
 
@@ -215,3 +215,7 @@ sha: 949b66a09ae67800453501527a035e04a660db46 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-09-19, do vong thuoc: go tranh chap song song, va bon phat hien trong hop dong cua S4 vong 3
 run_id: repin-20260919T153515Z-47416
 sha: c3e858ff70ac8ded853f49323dab4bcabda71b6c · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
+
+### Re-pin lần 6 — 2026-09-19, do vong thuoc: khoa doc-sua-ghi cua ghiVung va khoanh vung anh chup
+run_id: repin-20260919T170016Z-65962
+sha: 9bd9e4556d9320bb334a26b30d187cf229228173 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
