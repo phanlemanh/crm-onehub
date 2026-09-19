@@ -3,7 +3,7 @@ import { APIError } from "better-auth/api";
 import * as z from "zod";
 import { PASSWORD } from "./chia-mat-khau";
 
-const DUONG_DAT_LAI = "/reset-password";
+const DUONG_MAT_KHAU_MOI = new Set(["/reset-password", "/change-password"]);
 
 export const SANG_MAT_KHAU = {
 	goc: "https://api.pwnedpasswords.com/range",
@@ -16,15 +16,15 @@ export const CAU_MAT_KHAU = {
 	daLo: "Mật khẩu này đã từng bị lộ trong một vụ rò dữ liệu. Chọn mật khẩu khác.",
 } as const;
 
-const thanDatLai = z.object({ newPassword: z.string() });
+const thanMatKhauMoi = z.object({ newPassword: z.string() });
 
 export async function canhDatMatKhau(ctx: {
 	path: string;
 	body: unknown;
 }): Promise<void> {
-	if (ctx.path !== DUONG_DAT_LAI) return;
+	if (!DUONG_MAT_KHAU_MOI.has(ctx.path)) return;
 
-	const than = thanDatLai.safeParse(ctx.body);
+	const than = thanMatKhauMoi.safeParse(ctx.body);
 	if (!than.success) return;
 
 	const matKhau = than.data.newPassword;

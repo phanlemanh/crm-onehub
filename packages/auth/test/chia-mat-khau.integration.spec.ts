@@ -67,6 +67,40 @@ async function thuDangNhap(email: string, password: string) {
 	}
 }
 
+async function dangNhapLayBanh(
+	email: string,
+	password: string,
+): Promise<string> {
+	const ket = await auth.api.signInEmail({
+		body: { email, password },
+		returnHeaders: true,
+	});
+
+	return ket.headers
+		.getSetCookie()
+		.map((mieng) => mieng.split(";")[0])
+		.join("; ");
+}
+
+async function thuDoiMatKhau(
+	banh: string,
+	currentPassword: string,
+	newPassword: string,
+) {
+	try {
+		await auth.api.changePassword({
+			body: { currentPassword, newPassword },
+			headers: new Headers({ cookie: banh }),
+		});
+		return { ok: true as const, message: "" };
+	} catch (loi) {
+		return {
+			ok: false as const,
+			message: String((loi as Error)?.message ?? loi),
+		};
+	}
+}
+
 function duoiBamSha1(matKhau: string): string {
 	return createHash("sha1")
 		.update(matKhau)
@@ -467,6 +501,36 @@ describe("mat-khau-yeu", () => {
 			thuDatMatKhau(ket.token, sach),
 		);
 		expect(hai.ok).toBe(true);
+		expect((await thuDangNhap(ket.email, sach)).ok).toBe(true);
+	});
+
+	test("doi mat khau cung di qua sang: da lo bi tu choi, sach thi doi duoc", async () => {
+		const ket = await gieoNguoiVaChia();
+		const dau = matKhauSach("Mk-dau");
+
+		const datLanDau = await voiDanhSachDaLoGia(traLoiSach, () =>
+			thuDatMatKhau(ket.token, dau),
+		);
+		expect(datLanDau.ok).toBe(true);
+
+		const banh = await dangNhapLayBanh(ket.email, dau);
+		expect(banh).not.toBe("");
+
+		const daLo = matKhauSach("Doi-sang-da-lo");
+		const tuChoi = await voiDanhSachDaLoGia(
+			() => traLoiDaLo(daLo),
+			() => thuDoiMatKhau(banh, dau, daLo),
+		);
+		expect(tuChoi.ok).toBe(false);
+		expect(tuChoi.message).toBe(CAU_MAT_KHAU.daLo);
+		expect((await thuDangNhap(ket.email, dau)).ok).toBe(true);
+		expect((await thuDangNhap(ket.email, daLo)).ok).toBe(false);
+
+		const sach = matKhauSach("Doi-sang-sach");
+		const duoc = await voiDanhSachDaLoGia(traLoiSach, () =>
+			thuDoiMatKhau(banh, dau, sach),
+		);
+		expect(duoc.ok).toBe(true);
 		expect((await thuDangNhap(ket.email, sach)).ok).toBe(true);
 	});
 
