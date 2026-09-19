@@ -92,6 +92,15 @@ evals:
       ra de canh, va tieu chi nay coi nhu chua co thuoc.
       DOT BIEN THU HAI: bo buoc huy phien cu khi dat lai mat khau -> them mot khang dinh
       rieng, phien mo TRUOC khi dat lai mat khau phai khong con dung duoc sau do.
+
+      KHAI THANG SAU VONG SOI CUOI (19/09): khang dinh hien tai do HANG PHIEN BI XOA, khong
+      do PHIEN HET DUNG DUOC. Hai dieu do khac nhau THAT o kho nay, vi cau hinh bat cache
+      banh phien 5 phut va duong doc phien tra ket qua tu banh da ky ma khong cham co so du
+      lieu. Nen mot banh phien mo truoc luc dat lai mat khau van dung duoc toi 5 phut sau,
+      trong khi khang dinh nay van xanh. Y nghia san pham: doi mat khau cat ke trom trong
+      vong KHONG QUA 5 phut, khong tuc thi. Da ghi thanh gioi han da biet trong hop dong.
+      Khang dinh hang-bi-xoa GIU LAI vi no do dung cai co dot bien do duoc; phan duoi 5
+      phut la chuyen cau hinh toan kho, ngoai pham vi vong nay.
       Bat ky chang nao khong chay duoc -> ma 2, khong duoc bao cao xanh mot phan.
 
   - id: E4
@@ -227,6 +236,18 @@ evals:
       chi nghia la thoa thuan va danh ba cua ho bi chia doi.
       DOT BIEN CHUNG MINH: tat viec noi tai khoan trong cau hinh -> dong 3 phai do voi
       thong diep ghim so hang nguoi dung mong doi va so thuc te.
+
+      KHAI THANG SAU VONG SOI CUOI (19/09) — muc nay co mot nhanh BO QUA CO TEN, va thoi
+      im lang ve no: ba chang di duong that chi chay khi moi truong CO khoa Google. Kho de
+      GOOGLE_CLIENT_ID rong trong .env, nen o lượt chay thuong ba chang do TU BO QUA va in
+      mot dong bo-qua-co-ten. Ban truoc cua muc nay chay vo dieu kien nhung bang mot ngu
+      canh TU BIA qua ep kieu — tuc mot khang dinh luon xanh ma khong di qua duong that.
+      Doi chac: TRUNG THUC hon, PHU it hon. KHONG duoc lach bang cach tu export khoa Google
+      gia — CLAUDE.md ghi ro loi do nay sai.
+      Con lai chay VO DIEU KIEN va la bang chung may duy nhat cua ve may chu: khang dinh
+      hinh dang cau hinh (con khai nha cung cap google, va con bat noi tai khoan). Ve
+      NGUOI NHIN THAY cua AC-9 thi E13 do, va E13 chay duoc moi luot.
+      Goi bang chung Cong Bang chung PHAI in dong bo-qua nay ra, khong duoc nuot.
 
   - id: E10
     criterion: AC-10
