@@ -247,7 +247,9 @@ executors:
     tk_xoa_co_kiem: bun _acceptance/thuoc-khai-dung-tieng/rang/xoa-co-kiem.mjs
     tk_ban_khai_khop: bun _acceptance/thuoc-khai-dung-tieng/rang/ban-khai-khop.mjs
     tk_bai_kiem_dung_nha_quet: bun _acceptance/thuoc-khai-dung-tieng/rang/bai-kiem-dung-nha.mjs
-    tk_khai_sinh_phu_vong_nay: bun _acceptance/thuoc-khai-dung-tieng/rang/khai-sinh-phu-vong-nay.mjs
+    tk_khai_sinh_nhanh: KS_NHOM=nhanh bun _acceptance/thuoc-khai-dung-tieng/rang/khai-sinh-phu-vong-nay.mjs
+    tk_khai_sinh_vua: KS_NHOM=vua bun _acceptance/thuoc-khai-dung-tieng/rang/khai-sinh-phu-vong-nay.mjs
+    tk_khai_sinh_cham: KS_NHOM=cham bun _acceptance/thuoc-khai-dung-tieng/rang/khai-sinh-phu-vong-nay.mjs
     tk_ghim_lai_da_xong: bun _acceptance/thuoc-khai-dung-tieng/rang/ghim-lai-da-xong.mjs
     tk_bay_benh_cu_khong_quay_lai: bun _acceptance/thuoc-khai-dung-tieng/rang/bay-benh-cu.mjs
     tk_ho_so_cu_van_xanh: bun _acceptance/thuoc-khai-dung-tieng/rang/ho-so-cu-van-xanh.mjs

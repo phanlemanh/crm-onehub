@@ -50,6 +50,7 @@ export function chay(lenh, doi_so, tuy = {}) {
 
 const KHOA = "/tmp/thuoc-khai-dung-tieng.khoa";
 const KHOA_HET_HAN = 30 * 60 * 1000;
+const KHOA_CHO_TOI_DA = 9 * 60 * 1000;
 
 export async function giuKhoa(ten) {
 	const batDau = Date.now();
@@ -78,11 +79,14 @@ export async function giuKhoa(ten) {
 			} catch {
 				continue;
 			}
-			if (Date.now() - batDau > KHOA_HET_HAN) {
+			if (Date.now() - batDau > KHOA_CHO_TOI_DA) {
 				throw new Error(
-					`KHONG DO DUOC: doi khoa qua ${KHOA_HET_HAN / 60000} phut, dang giu boi ${JSON.stringify(cu)}.\n` +
+					`KHONG DO DUOC: doi khoa qua ${KHOA_CHO_TOI_DA / 60000} phut, dang giu boi ${JSON.stringify(cu)}.\n` +
 						"   Nam chan do cua vong nay dung CHUNG mot CSDL dev va chung tep vung-khai.json,\n" +
-						"   nen chay song song la do lan nhau. Khoa nay ep chung tuan tu.",
+						"   nen chay song song la do lan nhau. Khoa nay ep chung tuan tu.\n" +
+						"   Nguong 9 phut dat DUOI tran 600 giay cua cong cu cham, de mot va cham\n" +
+						"   thanh mot LOI KHAI TIEN DE doc duoc, khong phai mot lan bi cat cam.\n" +
+						"   Cach chay lai: chay rieng dung o nay, khong chay cung luc voi o khac.",
 				);
 			}
 			await new Promise((r) => setTimeout(r, 3000));

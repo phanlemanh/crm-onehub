@@ -231,23 +231,79 @@ evals:
       - "_acceptance/thuoc-khai-dung-tieng/rang/ho-so-cu-van-xanh.mjs"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
-  - id: E12
+  - id: E12a
     criterion: AC-11
     executor: script
-    cmd: config:executors.script.tk_khai_sinh_phu_vong_nay
+    cmd: config:executors.script.tk_khai_sinh_nhanh
     expected: >-
-      exit 0. Bo khai sinh cua CHINH vong nay. Doc
-      _acceptance/thuoc-khai-dung-tieng/evals.yaml, dem so menh de "Cap hai chieu"
-      trong do, va khang dinh so dot bien no chay BANG con so ay — danh sach doc
-      TU ban khai, khong go lai mot danh sach thu hai se troi.
-      Voi TUNG chan moi: chay tren vat LANH truoc, khang dinh chuoi ghim VANG
-      (dung luat AC-1), roi pha vat that, chay lai, khang dinh chan DO va thong
-      diep chua chuoi ghim.
-      Vi sao chan nay ton tai: muoi chan cua vong nay duoc viet de chua benh "chot
-      vo hieu", va khong co chan nay thi chinh chung mac dung benh ay — moi chan
-      ket bang mot cau "Cap hai chieu" ma khong ai chay.
-      Cap hai chieu: ban sao sua MOT chan moi thanh luon exit 0 -> chan nay phai
-      DO va GOI TEN dung chan do.
+      exit 0. 15 phep pha re: doc dia, khong dung may chu rieng.
+      Bo khai sinh cua CHINH vong nay, chay MOT NHOM chi phi. Ba nhom cong lai
+      phu du 21 phep pha; TUNG nhom deu chay lai phep kiem ANH XA day du truoc khi
+      pha gi: doc evals.yaml, liet moi eval may, va doi MOI eval co it nhat mot
+      phep pha chay qua. So tong khong du — 13=13 van dat khi mot eval co hai phep
+      pha con eval khac khong co cai nao (do 19/09, hoi dong S4 vong 1: eval E9
+      `bun run check-types` khong phep pha nao chay qua).
+      Voi TUNG phep pha trong nhom: chay tren vat LANH truoc, khang dinh chuoi ghim
+      VANG (dung luat AC-1), roi pha vat that, chay lai, khang dinh chan DO va
+      thong diep chua chuoi ghim.
+      Bo khai sinh tra CSDL ve nguyen trang sau nhom, vi mot phep pha trong do co
+      CHU DICH vo hieu hoa phep tra lai.
+      Vi sao tach ba: cong cu cham cat lenh o 600 giay, ma tron bo mat ~30 phut.
+      Tach roi thi moi nhom van la mot phep do tron ven, khong phai mot manh.
+      Cap hai chieu: ban sao bo MOT muc khoi bang phep pha -> phep kiem anh xa
+      DO voi chuoi ghim "HANG GHIM LECH" hoac ten eval mat phu.
+    paths:
+      - "_acceptance/thuoc-khai-dung-tieng/evals.yaml"
+      - "_acceptance/thuoc-khai-dung-tieng/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12b
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.tk_khai_sinh_vua
+    expected: >-
+      exit 0. 4 phep pha vua: co chay `bun run check-types` va chan doc man.
+      Bo khai sinh cua CHINH vong nay, chay MOT NHOM chi phi. Ba nhom cong lai
+      phu du 21 phep pha; TUNG nhom deu chay lai phep kiem ANH XA day du truoc khi
+      pha gi: doc evals.yaml, liet moi eval may, va doi MOI eval co it nhat mot
+      phep pha chay qua. So tong khong du — 13=13 van dat khi mot eval co hai phep
+      pha con eval khac khong co cai nao (do 19/09, hoi dong S4 vong 1: eval E9
+      `bun run check-types` khong phep pha nao chay qua).
+      Voi TUNG phep pha trong nhom: chay tren vat LANH truoc, khang dinh chuoi ghim
+      VANG (dung luat AC-1), roi pha vat that, chay lai, khang dinh chan DO va
+      thong diep chua chuoi ghim.
+      Bo khai sinh tra CSDL ve nguyen trang sau nhom, vi mot phep pha trong do co
+      CHU DICH vo hieu hoa phep tra lai.
+      Vi sao tach ba: cong cu cham cat lenh o 600 giay, ma tron bo mat ~30 phut.
+      Tach roi thi moi nhom van la mot phep do tron ven, khong phai mot manh.
+      Cap hai chieu: ban sao bo MOT muc khoi bang phep pha -> phep kiem anh xa
+      DO voi chuoi ghim "HANG GHIM LECH" hoac ten eval mat phu.
+    paths:
+      - "_acceptance/thuoc-khai-dung-tieng/evals.yaml"
+      - "_acceptance/thuoc-khai-dung-tieng/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12c
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.tk_khai_sinh_cham
+    expected: >-
+      exit 0. 2 phep pha dat nhat: moi cai dung mot ban sao cay rieng.
+      Bo khai sinh cua CHINH vong nay, chay MOT NHOM chi phi. Ba nhom cong lai
+      phu du 21 phep pha; TUNG nhom deu chay lai phep kiem ANH XA day du truoc khi
+      pha gi: doc evals.yaml, liet moi eval may, va doi MOI eval co it nhat mot
+      phep pha chay qua. So tong khong du — 13=13 van dat khi mot eval co hai phep
+      pha con eval khac khong co cai nao (do 19/09, hoi dong S4 vong 1: eval E9
+      `bun run check-types` khong phep pha nao chay qua).
+      Voi TUNG phep pha trong nhom: chay tren vat LANH truoc, khang dinh chuoi ghim
+      VANG (dung luat AC-1), roi pha vat that, chay lai, khang dinh chan DO va
+      thong diep chua chuoi ghim.
+      Bo khai sinh tra CSDL ve nguyen trang sau nhom, vi mot phep pha trong do co
+      CHU DICH vo hieu hoa phep tra lai.
+      Vi sao tach ba: cong cu cham cat lenh o 600 giay, ma tron bo mat ~30 phut.
+      Tach roi thi moi nhom van la mot phep do tron ven, khong phai mot manh.
+      Cap hai chieu: ban sao bo MOT muc khoi bang phep pha -> phep kiem anh xa
+      DO voi chuoi ghim "HANG GHIM LECH" hoac ten eval mat phu.
     paths:
       - "_acceptance/thuoc-khai-dung-tieng/evals.yaml"
       - "_acceptance/thuoc-khai-dung-tieng/rang/**"
