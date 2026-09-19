@@ -39,7 +39,7 @@ lời cho phép, chuỗi biến mồi, và cờ đã-có-ai-đăng-nhập-chưa
 | 3 | rỗng | rỗng | không | `ai@onemount.com` | không | — | không |
 | 4 | `khue@gmail.com` `pending` `member` | `onemount.com` | có | `khue@gmail.com` | có | `member` | bảng |
 | 5 | `khue@gmail.com` `pending` `admin` | rỗng | có | `khue@gmail.com` | có | `admin` | bảng |
-| 6 | `khue@gmail.com` `cancelled` `member` | rỗng | có | `khue@gmail.com` | không | — | không |
+| 6 | `khue@gmail.com` `canceled` `member` | rỗng | có | `khue@gmail.com` | không | — | không |
 | 7 | `khue@gmail.com` `accepted` `member` | rỗng | có | `khue@gmail.com` | có | `member` | bảng |
 | 8 | `khue@gmail.com` `pending` `member` | `onemount.com` | có | `ai@onemount.com` | không | — | không |
 
@@ -82,7 +82,7 @@ gỡ.
 **Given** một thành viên đang ở trong, lời cho phép của họ ở `accepted`
 **When** gỡ người ấy
 **Then** trong **cùng một giao dịch**: dòng thành viên biến mất và lời cho phép
-chuyển sang `cancelled`. Và khi họ đăng nhập lại, không dòng thành viên nào sinh
+chuyển sang `canceled`. Và khi họ đăng nhập lại, không dòng thành viên nào sinh
 ra lần nữa. Chiều đỏ: chặn nửa chừng giữa hai lệnh ghi thì cả hai phải cùng không
 xảy ra.
 
@@ -135,25 +135,25 @@ trong danh sách. Bảng viết trước cho việc chuẩn hoá: cắt khoảng
 chữ thường toàn bộ, và địa chỉ không có đúng một dấu `@` thì bị từ chối trước khi
 chạm cơ sở dữ liệu.
 
-Từ chối chỉ áp cho lời cho phép **còn hiệu lực**. Một dòng đã `cancelled` không
+Từ chối chỉ áp cho lời cho phép **còn hiệu lực**. Một dòng đã `canceled` không
 chặn việc cho phép lại — xem AC-14.
 
 ### AC-14 — Cho phép lại một người đã bị rút (cross-layer)
 
-**Given** một địa chỉ có dòng lời cho phép ở `cancelled`, do vừa bị gỡ hoặc vừa bị
+**Given** một địa chỉ có dòng lời cho phép ở `canceled`, do vừa bị gỡ hoặc vừa bị
 rút
 **When** người quản cho phép lại chính địa chỉ ấy
-**Then** lượt gọi thành công và địa chỉ ấy vào được trở lại. Dòng `cancelled` cũ
+**Then** lượt gọi thành công và địa chỉ ấy vào được trở lại. Dòng `canceled` cũ
 **không** bị sửa — lời cho phép mới là một dòng mới, để nhật ký còn đọc được rằng
 người này từng bị rút rồi được nhận lại.
 
-Ba ca trong cùng một lượt, khác kết quả: `cancelled` cho phép lại được ·
+Ba ca trong cùng một lượt, khác kết quả: `canceled` cho phép lại được ·
 `pending` bị từ chối · `accepted` bị từ chối. Ba ca cho cùng một kết quả thì chân
 trả mã 2 — lúc ấy phép đo không phân biệt được "mở đúng ca đã rút" với "mở tất"
 hay "đóng tất".
 
 Không có tiêu chí này thì hợp đồng tự mâu thuẫn: AC-5 gỡ một người bằng cách
-chuyển lời cho phép sang `cancelled`, rồi AC-11 lấy chính dòng ấy làm cớ từ chối,
+chuyển lời cho phép sang `canceled`, rồi AC-11 lấy chính dòng ấy làm cớ từ chối,
 và không đường nào nhận họ lại ngoài sửa tay cơ sở dữ liệu.
 
 ### AC-12 — Một lượt đọc bảng hỏng không khoá cả nhà ngoài cửa (cross-layer)
@@ -218,3 +218,18 @@ phản biện context sạch bắt được, và AC-14 là chỗ vá.
 - Ngoài-13 — Với một hệ thống đã có người dùng, khi có người mới bị từ chối vào, thông báo họ nhận được hướng dẫn sửa một file cấu hình không còn tác dụng nữa, khiến quản trị viên loay hoay sai hướng thay vì vào màn Members để cấp quyền.
 - Ngoài-17 — Một bài kiểm khác trong bộ nghiệm thu có thể báo 'đạt' dù chức năng bên dưới bị hỏng, vì cách viết phép so sánh không đủ chặt để bắt lỗi thật.
 - Ngoài-18 — Bài kiểm cho tiêu chí 'chỉ mở đường mồi khi cài đặt mới' có thể tự bỏ qua phần việc chính khi chạy trên cơ sở dữ liệu đã có người dùng, khiến báo cáo 'đạt' dù phần đó chưa hề được kiểm chứng thật.
+- Ngoài-1 (vòng 6) — Bài kiểm dựng để bắt lỗi khi rút quyền vào không hoạt động đúng — nó có thể báo 'đạt' ngay cả khi tính năng rút quyền bị hỏng thật sự, nên một lỗi ở đây có thể lọt qua mà không ai biết.
+- Ngoài-2 (vòng 6) — Nếu làm lại đúng theo các bước đã ghi, ảnh chụp màn hình quản trị dùng làm bằng chứng có thể chụp phải một bảng còn trống, khiến bằng chứng không còn phản ánh đúng giao diện thật.
+- Ngoài-3 (vòng 6) — Bằng chứng cho thấy vai quản trị hoạt động đúng thực ra được chụp từ tài khoản chủ sở hữu, không phải tài khoản quản trị viên thường — nên chưa có gì xác nhận người có vai quản trị viên (không phải chủ) thực sự thao tác được.
+- Ngoài-4 (vòng 6) — Ghi chép về lỗi mạng khi chụp màn hình quản trị chỉ còn một câu khẳng định 'không thấy lỗi', không còn dữ liệu chi tiết để ai đó kiểm tra lại độc lập.
+- Ngoài-6 (vòng 6) — Bài kiểm dựng để đối chứng đường tạo phiên đăng nhập không thể bắt được lỗi thật, nên một lỗi ở khâu này có thể không bị phát hiện dù bài kiểm báo đạt.
+- Ngoài-8 (vòng 6) — Do thứ tự các bước kiểm tra, một lỗi khiến tư cách thành viên của người đối chứng bị mất có thể không bị bài kiểm phát hiện, vì một bước trước đó vô tình khôi phục lại đúng dữ liệu mà bài kiểm định đo.
+- Ngoài-9 (vòng 6) — Bài kiểm cho một phần quan trọng của tính năng không tự động chạy lại khi có người sửa đúng những file trung tâm xử lý việc cho phép vào — một lỗi ở đó có thể đi qua mà không bị bắt lại.
+- Ngoài-10 (vòng 6) — Hai ảnh chụp dùng làm bằng chứng có thời điểm lệch nhau khoảng 27 phút so với những gì báo cáo mô tả, khiến thứ tự sự kiện trong báo cáo không khớp với chính ảnh chụp đính kèm.
+- Ngoài-13 (vòng 6) — Ghi chép về mạng cho bằng chứng thiếu thông tin cổng/địa chỉ đang đo, nên không ai đọc lại có thể chắc chắn bằng chứng đó đo đúng bản đang xét chứ không phải một bản đang chạy sẵn ở máy khác.
+- Ngoài-14 (vòng 6) — Cùng một bài kiểm đối chứng ở trên (vế 4) — nó không thể bắt được lỗi thật vì phép so sánh dùng một giá trị luôn cố định, không phải giá trị phản ánh đúng trạng thái sản phẩm.
+- Ngoài-15 (vòng 6) — Một cấu hình đo dùng đường dẫn cố định trỏ vào đúng một bản sao trên máy của người viết; chạy lại trên một máy hoặc một bản sao khác, phần đo này có thể đọc nhầm file hoặc báo lỗi mà không ai để ý.
+- Ngoài-16 (vòng 6) — Trùng với phát hiện ở trên: nếu làm đúng theo thứ tự các bước đã ghi, ảnh chụp bằng chứng cho quản trị viên có thể chụp phải một bảng còn trống, không thể hiện đủ các thao tác mà bài kiểm yêu cầu phải thấy.
+- Ngoài-17 (vòng 6) — Trùng với phát hiện ở trên: ghi chép mạng dùng làm bằng chứng chỉ còn một câu khẳng định, không còn dữ liệu chi tiết nào để kiểm tra lại độc lập.
+- Ngoài-19 (vòng 6) — Nếu bảng cài đặt từng có hơn một dòng, màn hình có thể âm thầm đọc nhầm danh sách domain nội bộ, khiến việc nhận diện email nhân viên hoặc lọc số liệu truy cập sai mà không ai biết.
+- Ngoài-21 (vòng 6) — Với một hệ thống đã có người dùng, khi có người mới bị từ chối vào, thông báo họ nhận được hướng dẫn sửa một file cấu hình không còn tác dụng nữa, khiến quản trị viên loay hoay sai hướng thay vì vào màn Members để cấp quyền.

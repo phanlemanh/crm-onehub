@@ -22,7 +22,7 @@ executors:
     cp_ham_thuan: "cd packages/auth && bun test test/ai-duoc-vao.spec.ts"
     cp_vai_dinh_truoc: 'bun run test -- "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t vai-dinh-truoc"'
     cp_rut_chan_chua_vao: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t rut-chan-chua-vao"'
-    cp_rut_khong_dung_da_vao: 'bun run test -- "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t rut-khong-dung-da-vao"'
+    cp_rut_khong_dung_da_vao: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t rut-khong-dung-da-vao"'
     cp_go_tron_ven: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t go-tron-ven"'
     cp_duong_moi: 'bun run test -- "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t duong-moi"'
     cp_doc_hong_khong_khoa: 'bun run test -- "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t doc-hong"'

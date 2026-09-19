@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import { TRANG_THAI_CHO } from "@crm/validation/invitation-status";
 import { ALLOWANCE_WITHOUT_EXPIRY } from "../src/allow-list";
 import { auth } from "../src/auth";
 import { ensureWorkspaceMembership } from "../src/organization";
@@ -76,7 +77,11 @@ async function don() {
 	await db.user.deleteMany({ where: { id: { startsWith: `${suffix}-` } } });
 }
 
-async function choPhep(email: string, role = "member") {
+async function choPhep(
+	email: string,
+	role = "member",
+	trangThai: string = TRANG_THAI_CHO,
+) {
 	await db.organization.upsert({
 		where: { id: WORKSPACE_ID },
 		create: {
@@ -101,7 +106,7 @@ async function choPhep(email: string, role = "member") {
 			organizationId: WORKSPACE_ID,
 			email,
 			role,
-			status: "pending",
+			status: trangThai,
 			expiresAt: ALLOWANCE_WITHOUT_EXPIRY,
 			inviterId: chu.id,
 		},
@@ -309,42 +314,6 @@ describe("vai-dinh-truoc", () => {
 			"accepted",
 			"vai doc lai tu DB, va loi cho phep da thanh accepted",
 		]);
-	});
-});
-
-describe("rut-khong-dung-da-vao", () => {
-	beforeEach(async () => {
-		await don();
-	});
-
-	it("rut loi cho phep cua nguoi DA vao thi tu cach thanh vien con nguyen", async () => {
-		const dia = `da-vao-${suffix}@gmail.com`;
-		await choPhep(dia);
-
-		const nguoiCu = await db.user.create({ data: nguoi(dia) });
-		await daLaThanhVien(nguoiCu.id);
-
-		await db.invitation.updateMany({
-			where: { organizationId: WORKSPACE_ID, email: dia },
-			data: { status: "cancelled" },
-		});
-
-		await ensureWorkspaceMembership(nguoiCu.id, dia);
-
-		const hang = await db.member.findUnique({
-			where: {
-				organizationId_userId: {
-					organizationId: WORKSPACE_ID,
-					userId: nguoiCu.id,
-				},
-			},
-			select: { id: true },
-		});
-
-		expect([
-			hang !== null,
-			"tu cach thanh vien con nguyen sau khi rut",
-		]).toEqual([true, "tu cach thanh vien con nguyen sau khi rut"]);
 	});
 });
 

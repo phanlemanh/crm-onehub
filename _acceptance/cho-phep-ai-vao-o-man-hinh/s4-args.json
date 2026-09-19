@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-16T04:37:09Z",
-  "generated_sha": "e3f91a298a42e117eb56ae52a1ee85aeb81bf196",
+  "generated_at": "2026-09-18T15:50:56Z",
+  "generated_sha": "5b19f4f6cfc26c29964c1015607929288f1121c3",
   "mainBranchInfo": {
     "branch": "onehub",
     "source": "remote"
   },
   "slug": "cho-phep-ai-vao-o-man-hinh",
-  "round": 3,
+  "round": 6,
   "riskTier": "T3",
   "evals": [
     {
@@ -54,14 +54,14 @@
     {
       "id": "E4",
       "criterion": "AC-4",
-      "cmd": "bun run test -- \"cd packages/auth && bun test test/cong-vao.integration.spec.ts -t rut-khong-dung-da-vao\"",
-      "expected": "Mot nguoi DA la thanh vien, loi cho phep o \"accepted\". Rut loi cho phep ay, roi:\n1. hang `member` cua ho VAN con — doc lai tu DB, khong doc bien trong bo nho\n2. ho VAN tao duoc phien moi, va sau luot ay hang `member` van con\nDay la hanh vi CO Y. Chieu do: neu ban sua cho rut cung xoa thanh vien thi chan\nphai DO — do la AC-5 chu khong phai AC-4, va tron hai viec lai la dung cai loi\nma hai khoi tach bach sinh ra de tranh.\nKhong doc duoc hang member -> ma 2.",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t rut-khong-dung-da-vao\"",
+      "expected": "KHEP VONG GHI-DOC nhu E2 va E3, va day la dieu round 4-5 hong vi thieu: ca hai\nluot ghi deu di qua CHINH thu tuc that — `allowEmail` roi `revokeAllowance` cua\nWorkspaceService — KHONG duoc gieo bang Prisma cam tay. Vi the eval nay song o\n`apps/api`, noi goi duoc thu tuc that; o `packages/auth` no khong goi duoc, va\nchieu do duoi day khong bao gio ban duoc.\nTIEN DE doc lai tu DB, khong gieo tay: nguoi ay vao bang duong ket nap that\n(`ensureWorkspaceMembership`), nen dong loi cho phep phai TU chuyen sang\n\"accepted\" — doc lai thay khac thi chan tra ma 2, vi luc ay tien de cua AC-4\nchua dung va phep do dang do mot canh khac (do la canh cua AC-3).\nRoi rut, va do BON quan he — khong ve nao la mot hang co mat mot minh:\n1. dong loi cho phep chuyen sang TRANG_THAI_HUY — doc lai tu DB\n2. SO HANG `member` cua khong gian lam viec TRUOC va SAU khi rut BANG NHAU\n3. hang `member` cua chinh nguoi ay VAN con\n4. ho tao duoc phien moi qua `databaseHooks.session.create.before` that, va\nket qua cua ho BANG ket qua cua mot nguoi CON duoc phep di cung duong —\nday la ve quan he: rut khong doi gi o duong tao phien cua nguoi da vao\nDoi chung duong o ve 4 la bat buoc. Khong co no thi `activeOrganizationId ==\nWORKSPACE_ID` chi la mot hang co mat, khong phan biet duoc \"con vao duoc\" voi\n\"bi chan\" — `ensureWorkspaceMembership` tra cung mot gia tri tren MOI nhanh\nkhong no.\nDay la hanh vi CO Y. Chieu do, chay bang chinh dong lenh nay: sua\n`revokeAllowance` cho xoa luon hang `member` -> chan phai DO o ve 2 va 3; do la\nAC-5 chu khong phai AC-4, va tron hai viec lai la dung cai loi ma hai khoi tach\nbach sinh ra de tranh.\nKhong doc duoc hang member, hoac khong goi duoc thu tuc that -> ma 2.",
       "executor": "test",
       "expectedExit": 0,
       "paths": [
-        "packages/auth/src/allow-list.ts",
+        "apps/api/src/workspace/workspace.service.ts",
         "packages/auth/src/organization.ts",
-        "packages/auth/test/cong-vao.integration.spec.ts"
+        "apps/api/test/workspace-thanh-vien.spec.ts"
       ],
       "ref": "config:executors.test.cp_rut_khong_dung_da_vao"
     },
@@ -180,7 +180,7 @@
     {
       "id": "E12",
       "criterion": "AC-6",
-      "cmd": "${CLAUDE_PLUGIN_ROOT:-/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0}/scripts/design-scan.js",
+      "cmd": "${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js",
       "expected": "DUONG SINH KHUNG HINH, khai truoc vi bo cong khong tu biet: dung CAY DANG XET\n(khong phai checkout chinh), dat `APP_URL` va `API_URL` TAY theo cong cua chinh\ncay ay — de mac dinh thi thuoc do chup ban dev dang chay o checkout khac va ho so\nnhan khung hinh cua man CU. Tao phien bang `dev:session` cho tai khoan can dung.\nAnh ve `_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/` voi ten ghim truoc.\nKHANG DINH DANH TINH truoc khi tin mau: ban dung sinh ra khung hinh phai CO khoi\nduoc phep vao tren man Members — khong co khoi ay nghia la dang chup ban cu, va\nchan tra ma 2.\nNoi dung phai thay: mot tai khoan con dang nhap duoc nhung khong con la thanh vien,\ndi toi mot trang bat ky cua ung dung -> khung hinh cho thay MOT man noi thang rang\ntai khoan nay khong con trong khong gian lam viec, kem duong dang xuat.\nKhong vong chuyen huong, khong man trang, khong trang loi may chu.\nThieu tep khung hinh -> ma 2, neu ten tep thieu. KHONG im lang UNCERTAIN.",
       "executor": "ui-check",
       "expectedExit": 0,
@@ -204,8 +204,8 @@
     {
       "id": "E13",
       "criterion": "AC-8",
-      "cmd": "${CLAUDE_PLUGIN_ROOT:-/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0}/scripts/design-scan.js",
-      "expected": "DUONG SINH KHUNG HINH nhu E12: cay dang xet, `APP_URL` va `API_URL` dat tay theo\ncong cua chinh cay ay, phien tao bang `dev:session` — LAN LUOT cho hai vai, vi\ntieu chi nay song bang phep so hai khung hinh.\nMan Members nhin bang mat NGUOI VAI `member`: khung hinh phai cho thay hai bang\nday du ma KHONG nut nao thao tac duoc — khong nut cho phep mot dia chi, khong nut\ngo, khong nut rut.\nDoi chung bat buoc: khung hinh cua CUNG man ay nhin bang mat nguoi vai `admin`\nPHAI co du ba nut. Hai khung hinh giong nhau -> ma 1: hoac ca hai deu an nut (vai\n`admin` mat quyen), hoac ca hai deu hien (vai `member` thay nut khong duoc bam) —\nca hai deu sai, va neu ro dang nghi ca nao.\nThieu mot trong hai tep khung hinh -> ma 2, neu ten tep thieu.",
+      "cmd": "${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js",
+      "expected": "DUONG SINH KHUNG HINH nhu E12: cay dang xet, `APP_URL` va `API_URL` dat tay theo\ncong cua chinh cay ay, phien tao bang `dev:session` — LAN LUOT cho hai vai, vi\ntieu chi nay song bang phep so hai khung hinh.\nMan Members nhin bang mat NGUOI VAI `member`: khung hinh phai cho thay KHONG MOT\ncho thao tac nao cho viec quan thanh vien hay quan loi cho phep — khong nut cho\nphep mot dia chi, khong nut go, khong nut rut, khong menu `...` tren dong nao.\nAC-8 hua dung mot dieu: \"tren man khong nut nao thao tac duoc\". Nen HAI hinh dang\ndeu DAT tieu chi: khoi loi cho phep hien o dang chi-doc, HOAC khoi ay khong hien\nra voi vai `member`. Chan phai NOI RO no thay hinh dang nao va o dong ma nao —\nde lan sau doi hinh dang la mot quyet dinh nhin thay duoc, khong phai mot lan\nchay khac mau. KHONG duoc tu doi hinh dang nao la dung: doi hinh dang la sua san\npham, va AC-8 khong hua dieu do.\nDoi chung bat buoc: khung hinh cua CUNG man ay nhin bang mat nguoi vai `admin`\nPHAI co du ba cho thao tac (cho phep mot dia chi, go, rut). Hai khung hinh giong\nnhau -> ma 1: hoac ca hai deu mat cho thao tac (vai `admin` mat quyen), hoac ca\nhai deu hien (vai `member` thay nut khong duoc bam) — ca hai deu sai, va neu ro\ndang nghi ca nao.\nThieu mot trong hai tep khung hinh -> ma 2, neu ten tep thieu.",
       "executor": "ui-check",
       "expectedExit": 0,
       "paths": [
@@ -216,7 +216,8 @@
         "Dung ca hai may chu cua CAY DANG XET o cong rieng nhu E12",
         "Tao phien cho mot nguoi vai `member`, mo /<slug>/settings/members, chup evidence/E13-members-member.png",
         "Tao phien cho mot nguoi vai `admin`, mo cung man ay, chup evidence/E13-members-admin.png",
-        "So hai khung hinh: ban `member` khong co ba nut, ban `admin` co du ba"
+        "Gieo mot dong cho vao bang loi cho phep bang CHINH UI Allow an address truoc khi so — trang thai goc cua bang la rong nen khong co san nut rut de doi chieu",
+        "So hai khung hinh: ban `member` khong cho thao tac nao, ban `admin` co du ba"
       ],
       "inputs": [
         "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/"
@@ -232,14 +233,13 @@
       "executor": "judgment",
       "expectedExit": 0,
       "inputs": [
-        "/Users/manhphan/dev/crm-onehub/apps/app/lib/messages/settings-thanh-vien.ts"
-      ],
-      "inputsHash": "b8877955fe4ba1cfd42e75f46b20bbab813c079ab8adee3d560c559e39e46a0f"
+        "/Users/manh-macmini/dev/crm/.claude/worktrees/zen-brattain-ac74d0/apps/app/lib/messages/settings-thanh-vien.ts"
+      ]
     },
     {
       "id": "E15",
       "criterion": "AC-6",
-      "cmd": "for t in \"apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx\" \"apps/app/app/(app)/[slug]/settings/members/allow-dialog.tsx\" \"apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx\" \"apps/app/app/(landing)/het-quyen/page.tsx\"; do node ${CLAUDE_PLUGIN_ROOT:-/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0}/scripts/design-gate.mjs --target \"$t\" --mode static || exit 1; done",
+      "cmd": "for t in \"apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx\" \"apps/app/app/(app)/[slug]/settings/members/allow-dialog.tsx\" \"apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx\" \"apps/app/app/(landing)/het-quyen/page.tsx\"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target \"$t\" --mode static || exit 1; done",
       "expected": "Chay tren CAY DANG XET voi `APP_URL` dat tay theo cong cua chinh cay ay, cung\nduong nhu E12 va E13 — san chat luong doc ban dang chay, nen chay no tren ban dev\no checkout khac la cham diem cho ma khong phai cua vong nay.\nSan chat luong giao dien cua bo cong: khong co P0 nao tren cac man vong nay cham.\nRang buoc rieng cua vong: hai viec khong dao duoc — go va rut — deu phai di qua\nhop thoai xac nhan, khong duoc lam ngay lap tuc.\nCo P0 -> ma 1, neu ten man va luat bi pham.",
       "executor": "script",
       "expectedExit": 0,
@@ -256,62 +256,26 @@
     "bun run lint:slop",
     "bunx turbo run build --force"
   ],
-  "diffBase": "55bd9cbf12912147c95f7e18de6c80ebd92d01c3",
-  "repoRoot": "/Users/manhphan/dev/crm-onehub",
-  "personasPath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0/skills/acceptance/references/judge-personas.md",
-  "templatePath": "/Users/manhphan/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.14.0/skills/acceptance/references/evidence-report-template.md",
+  "diffBase": "4dcb263d58b752daa2a460b52eaf1a02dfec0b5e",
+  "repoRoot": "/Users/manh-macmini/dev/crm/.claude/worktrees/zen-brattain-ac74d0",
+  "personasPath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.16.0/skills/acceptance/references/judge-personas.md",
+  "templatePath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.16.0/skills/acceptance/references/evidence-report-template.md",
   "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
-  "contractPath": "/Users/manhphan/dev/crm-onehub/_acceptance/cho-phep-ai-vao-o-man-hinh/contract.md",
-  "invokedAt": "2026-09-16T04:37:09Z",
-  "invokedSha": "e3f91a298a42e117eb56ae52a1ee85aeb81bf196",
+  "contractPath": "/Users/manh-macmini/dev/crm/.claude/worktrees/zen-brattain-ac74d0/_acceptance/cho-phep-ai-vao-o-man-hinh/contract.md",
+  "invokedAt": "2026-09-18T15:50:56Z",
+  "invokedSha": "5b19f4f6cfc26c29964c1015607929288f1121c3",
   "vungVat": [
-    ".env.example",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/card-plain.json",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/card.html",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-identity-check-members.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-network.txt",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-member.png",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/go-khac-rut.html",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/go-khac-rut.png",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/vong-doi-loi-cho-phep.html",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/vong-doi-loi-cho-phep.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json",
     "_acceptance/config.yaml",
-    "apps/api/src/generated/server.ts",
-    "apps/api/src/mailbox/mailbox-match.service.ts",
-    "apps/api/src/tracking/tracking-filing.service.ts",
-    "apps/api/src/workspace/staff-domains.ts",
-    "apps/api/src/workspace/workspace.contracts.ts",
-    "apps/api/src/workspace/workspace.router.ts",
-    "apps/api/src/workspace/workspace.service.ts",
-    "apps/api/test/domain-nha-tach.spec.ts",
     "apps/api/test/workspace-thanh-vien.spec.ts",
-    "apps/app/app/(app)/[slug]/settings/members/allow-dialog.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/members-table.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/page.tsx",
-    "apps/app/app/(landing)/het-quyen/page.tsx",
-    "apps/app/app/(landing)/het-quyen/sign-out-button.tsx",
-    "apps/app/lib/messages/settings-thanh-vien.ts",
-    "apps/app/lib/onboarding.ts",
-    "apps/app/proxy.ts",
-    "apps/app/test/messages-guard.spec.ts",
-    "apps/app/test/onboarding-gate.spec.ts",
-    "packages/auth/src/allow-list.ts",
-    "packages/auth/src/auth.ts",
-    "packages/auth/src/index.ts",
-    "packages/auth/src/organization.ts",
-    "packages/auth/src/roles.ts",
-    "packages/auth/src/slack-connect.ts",
-    "packages/auth/src/sso.ts",
-    "packages/auth/src/workspace.ts",
-    "packages/auth/test/ai-duoc-vao.spec.ts",
-    "packages/auth/test/cong-vao.integration.spec.ts",
-    "packages/auth/test/organization.integration.spec.ts",
-    "packages/db/prisma/migrations/20260916025034_staff_email_domains/migration.sql",
-    "packages/db/prisma/schema.prisma"
+    "packages/auth/test/cong-vao.integration.spec.ts"
   ],
   "ngoaiVatGlobs": [
     "docs/**",
@@ -327,263 +291,123 @@
     "lib/ac-line.cjs",
     "lib/md-section.cjs",
     "lib/eval-yaml.cjs",
+    "lib/lop-nhin-thay.cjs",
+    ".claude/launch.json",
     "_acceptance/*/**/*.md",
     "_acceptance/*/**/*.jsonl"
   ],
   "ngoaiVatFiles": [
-    "PRODUCT-MAP.md",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/contract.md",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/coverage-scan.md",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/decisions.jsonl",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence-report.md",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/index.md",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/gap-probe.md",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/review-findings.md",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/run-log.jsonl",
-    "docs/api.md",
-    "docs/environment.md",
-    "docs/superpowers/plans/2026-09-16-cho-phep-ai-vao-o-man-hinh.md",
-    "docs/superpowers/specs/2026-09-16-cho-phep-ai-vao-o-man-hinh-design.md"
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/run-log.jsonl"
   ],
   "diffFiles": [
-    ".env.example",
-    "PRODUCT-MAP.md",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/card-plain.json",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/card.html",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/contract.md",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/coverage-scan.md",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/decisions.jsonl",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence-report.md",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-identity-check-members.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-network.txt",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-member.png",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/go-khac-rut.html",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/go-khac-rut.png",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/index.md",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/vong-doi-loi-cho-phep.html",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/vong-doi-loi-cho-phep.png",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/gap-probe.md",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/review-findings.md",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/run-log.jsonl",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json",
     "_acceptance/config.yaml",
-    "apps/api/src/generated/server.ts",
-    "apps/api/src/mailbox/mailbox-match.service.ts",
-    "apps/api/src/tracking/tracking-filing.service.ts",
-    "apps/api/src/workspace/staff-domains.ts",
-    "apps/api/src/workspace/workspace.contracts.ts",
-    "apps/api/src/workspace/workspace.router.ts",
-    "apps/api/src/workspace/workspace.service.ts",
-    "apps/api/test/domain-nha-tach.spec.ts",
     "apps/api/test/workspace-thanh-vien.spec.ts",
-    "apps/app/app/(app)/[slug]/settings/members/allow-dialog.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/members-table.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/page.tsx",
-    "apps/app/app/(landing)/het-quyen/page.tsx",
-    "apps/app/app/(landing)/het-quyen/sign-out-button.tsx",
-    "apps/app/lib/messages/settings-thanh-vien.ts",
-    "apps/app/lib/onboarding.ts",
-    "apps/app/proxy.ts",
-    "apps/app/test/messages-guard.spec.ts",
-    "apps/app/test/onboarding-gate.spec.ts",
-    "docs/api.md",
-    "docs/environment.md",
-    "docs/superpowers/plans/2026-09-16-cho-phep-ai-vao-o-man-hinh.md",
-    "docs/superpowers/specs/2026-09-16-cho-phep-ai-vao-o-man-hinh-design.md",
-    "packages/auth/src/allow-list.ts",
-    "packages/auth/src/auth.ts",
-    "packages/auth/src/index.ts",
-    "packages/auth/src/organization.ts",
-    "packages/auth/src/roles.ts",
-    "packages/auth/src/slack-connect.ts",
-    "packages/auth/src/sso.ts",
-    "packages/auth/src/workspace.ts",
-    "packages/auth/test/ai-duoc-vao.spec.ts",
-    "packages/auth/test/cong-vao.integration.spec.ts",
-    "packages/auth/test/organization.integration.spec.ts",
-    "packages/db/prisma/migrations/20260916025034_staff_email_domains/migration.sql",
-    "packages/db/prisma/schema.prisma"
+    "packages/auth/test/cong-vao.integration.spec.ts"
   ],
   "fileDoTrongDiff": [
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/card-plain.json",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/card.html",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-identity-check-members.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-network.txt",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-member.png",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/go-khac-rut.html",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/go-khac-rut.png",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/vong-doi-loi-cho-phep.html",
-    "_acceptance/cho-phep-ai-vao-o-man-hinh/figures/vong-doi-loi-cho-phep.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json",
     "_acceptance/config.yaml",
-    "apps/api/src/mailbox/mailbox-match.service.ts",
-    "apps/api/src/tracking/tracking-filing.service.ts",
-    "apps/api/src/workspace/workspace.contracts.ts",
-    "apps/api/src/workspace/workspace.router.ts",
-    "apps/api/src/workspace/workspace.service.ts",
-    "apps/api/test/domain-nha-tach.spec.ts",
     "apps/api/test/workspace-thanh-vien.spec.ts",
-    "apps/app/app/(app)/[slug]/settings/members/allow-dialog.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/members-table.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/page.tsx",
-    "apps/app/app/(landing)/het-quyen/page.tsx",
-    "apps/app/app/(landing)/het-quyen/sign-out-button.tsx",
-    "apps/app/proxy.ts",
-    "apps/app/test/messages-guard.spec.ts",
-    "apps/app/test/onboarding-gate.spec.ts",
-    "packages/auth/src/allow-list.ts",
-    "packages/auth/src/auth.ts",
-    "packages/auth/src/organization.ts",
-    "packages/auth/src/workspace.ts",
-    "packages/auth/test/ai-duoc-vao.spec.ts",
-    "packages/auth/test/cong-vao.integration.spec.ts",
-    "packages/auth/test/organization.integration.spec.ts"
+    "packages/auth/test/cong-vao.integration.spec.ts"
   ],
   "coverageFiles": [
-    "apps/api/src/mailbox/mailbox-match.service.ts",
-    "apps/api/src/tracking/tracking-filing.service.ts",
-    "apps/api/src/workspace/workspace.contracts.ts",
-    "apps/api/src/workspace/workspace.router.ts",
-    "apps/api/src/workspace/workspace.service.ts",
-    "apps/api/test/domain-nha-tach.spec.ts",
     "apps/api/test/workspace-thanh-vien.spec.ts",
-    "apps/app/app/(app)/[slug]/settings/members/allow-dialog.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/members-table.tsx",
-    "apps/app/app/(app)/[slug]/settings/members/page.tsx",
-    "apps/app/app/(landing)/het-quyen/page.tsx",
-    "apps/app/app/(landing)/het-quyen/sign-out-button.tsx",
-    "apps/app/proxy.ts",
-    "packages/auth/src/allow-list.ts",
-    "packages/auth/src/auth.ts",
-    "packages/auth/src/organization.ts",
-    "packages/auth/src/workspace.ts",
-    "packages/auth/test/ai-duoc-vao.spec.ts",
     "packages/auth/test/cong-vao.integration.spec.ts"
   ],
   "coEvalPaths": true,
-  "evalsHash": "75b548bab3e471f38b86aadde0fa04d97750ffbd7f530a5306e09e08d755a2a3",
+  "evalsHash": "1454d06140fe6410294c12c873b9d12d2de83b23d28a07771c7398829e5aad66",
   "runBaseline": true,
   "carriedFindings": [
     {
-      "file": "packages/auth/src/allow-list.ts",
-      "title": "decideSignIn fails open on any status it doesn't recognise, and \"cancelled\" doesn't match better-auth's \"canceled\"",
+      "file": "apps/api/src/workspace/staff-domains.ts",
+      "title": "Cột staffEmailDomains không có đường ghi và không có backfill — hai đường đọc \"người nhà\" mất sạch domain",
       "severity": "high",
-      "plain": "Nếu một lời mời bị huỷ hoặc bị từ chối qua tính năng có sẵn của hệ thống đăng nhập (không phải nút gỡ/rút trên màn Members), người bị huỷ mời đó vẫn có thể đăng nhập được, và bảng Allowances hiển thị nhầm họ như đang chờ duyệt.",
+      "plain": "Nếu chưa có nơi nào để nhập danh sách domain công ty, tính năng lọc 'đây là đồng nghiệp mình' sẽ luôn coi ai cũng là người ngoài — nhân viên mới có thể bị ghi nhầm thành khách hàng tiềm năng trong CRM.",
       "proposal": "new-contract",
-      "fromRound": 2
+      "fromRound": 3
     },
     {
       "file": "apps/api/src/workspace/staff-domains.ts",
-      "title": "appSetting.staffEmailDomains has no writer and no backfill — the staff-domain check is dead everywhere",
-      "severity": "high",
-      "plain": "Không có nơi nào trên sản phẩm để nhập danh sách domain nội bộ, nên nhân viên tự điền form thử trên web công ty có thể bị ghi nhận nhầm thành khách hàng tiềm năng, và đồng nghiệp chưa có tài khoản CRM bị xếp nhầm là người ngoài.",
-      "proposal": "new-contract",
-      "fromRound": 2
+      "title": "`staff-domains.ts` tự đúc hằng `APP_SETTING_ID` và đọc `findFirst` không khoá theo id, lệch pattern của cả kho",
+      "severity": "medium",
+      "plain": "Nếu bảng cài đặt từng có hơn một dòng, màn hình có thể âm thầm đọc nhầm danh sách domain nội bộ, khiến việc nhận diện email nhân viên hoặc lọc số liệu truy cập sai mà không ai biết.",
+      "proposal": "known-limits",
+      "fromRound": 3
     },
     {
-      "file": "packages/auth/src/organization.ts",
-      "title": "decideSignInFromDb opens a second connection from inside ensureWorkspaceMembership's interactive transaction",
+      "file": "apps/api/src/workspace/staff-domains.ts",
+      "title": "Cột staffEmailDomains không có đường ghi và migration không backfill — lọc \"địa chỉ nhà\" ở tracking tắt hẳn, âm thầm",
       "severity": "high",
-      "plain": "Trong một số tình huống hiếm khi nhiều người đăng nhập cùng lúc, hệ thống có thể treo lại rồi từ chối nhầm một người có quyền hợp lệ, đẩy họ ra màn hình 'hết quyền' mà không có lỗi rõ ràng.",
+      "plain": "Nếu chưa có nơi nào để nhập danh sách domain công ty, các mẫu đăng ký do chính nhân viên điền bằng email công ty có thể bị tính nhầm thành khách hàng tiềm năng thật, làm sai lệch số liệu tiếp thị mà không ai nhận ra.",
       "proposal": "new-contract",
-      "fromRound": 2
+      "fromRound": 3
     },
     {
       "file": "packages/auth/src/auth.ts",
-      "title": "Google `hd` is still pinned to ALLOWED_SIGN_IN, so an allowance for an outside address cannot sign in",
-      "severity": "medium",
-      "plain": "Một quản trị viên có thể thêm một địa chỉ email bên ngoài (ví dụ của môi giới hay chuyên viên ngân hàng) vào danh sách cho phép và thấy nó hiện ra như đang chờ, nhưng người đó vẫn bị Google từ chối ngay ở màn hình đăng nhập, không vào được.",
-      "proposal": "new-contract",
-      "fromRound": 2
-    },
-    {
-      "file": "apps/api/src/workspace/staff-domains.ts",
-      "title": "staff-domains.ts re-declares SETTINGS_ID and reads the singleton with findFirst and no where clause",
-      "severity": "medium",
-      "plain": "Nếu sau này có nhiều hơn một hàng cấu hình trong bảng cài đặt, hệ thống có thể đọc nhầm cấu hình và lọc domain nội bộ sai mà không ai nhận ra.",
-      "proposal": "wont-fix",
-      "fromRound": 2
-    },
-    {
-      "file": "packages/auth/src/allow-list.ts",
-      "title": "seedAllows re-implements the allow-list parser that workspace.ts already owns, orphaning isWorkspaceEmail",
-      "severity": "medium",
-      "plain": "Nếu một trong hai chỗ đọc danh sách được phép này đổi cách phân tích chuỗi mà quên đổi chỗ kia, người dùng có thể được cho vào hoặc bị chặn không nhất quán giữa hai đường, ẩn cho tới khi có sự cố.",
-      "proposal": "wont-fix",
-      "fromRound": 2
-    },
-    {
-      "file": "apps/api/src/workspace/workspace.contracts.ts",
-      "title": "allowEmailInput does not validate that the input is an email — the repo's own z.email() pattern is skipped",
-      "severity": "medium",
-      "plain": "Hệ thống chấp nhận một số chuỗi không phải là địa chỉ email hợp lệ (ví dụ thiếu tên miền hoặc có khoảng trắng ở giữa) khi quản trị viên thêm người được phép, tạo ra quyền truy cập gắn với địa chỉ sai.",
-      "proposal": "known-limits",
-      "fromRound": 2
-    },
-    {
-      "file": "apps/api/scripts/dev-session.ts",
-      "title": "dev:session no longer produces a workspace member — the documented local login is broken",
-      "severity": "medium",
-      "plain": "Người vận hành không thể tạo phiên đăng nhập thử cho một địa chỉ email mới trên máy phát triển bằng lệnh đã được tài liệu hoá; lệnh này âm thầm tạo phiên không có quyền.",
-      "proposal": "known-limits",
-      "fromRound": 2
-    },
-    {
-      "file": "apps/app/lib/onboarding.ts",
-      "title": "viewerRole is the only field in workspaceAnswer without .catch, so one bad value collapses the whole gate answer",
+      "title": "Câu từ chối ở cổng vào vẫn chỉ người dùng đi sửa .env, trong khi mô hình mới quyết bằng bảng cho phép",
       "severity": "low",
-      "plain": "Nếu máy chủ trả về dữ liệu vai trò không đúng định dạng (trường hợp hiếm), người dùng có thể bị đưa vào trạng thái quyền không xác định và đường dẫn kèm tên không gian làm việc ngừng hoạt động đúng cho tới khi tải lại.",
+      "plain": "Với một hệ thống đã có người dùng, khi có người mới bị từ chối vào, thông báo họ nhận được hướng dẫn sửa một file cấu hình không còn tác dụng nữa, khiến quản trị viên loay hoay sai hướng thay vì vào màn Members để cấp quyền.",
       "proposal": "known-limits",
-      "fromRound": 2
-    },
-    {
-      "file": "apps/api/src/workspace/staff-domains.ts",
-      "title": "Cột staffEmailDomains không có đường ghi nào và migration không backfill — hai đường lọc \"địa chỉ nhà\" đọc ra rỗng trên mọi cài đặt",
-      "severity": "high",
-      "plain": "Không có nơi nào để nhập danh sách domain nội bộ, nên nhân viên tự điền form thử trên web công ty bị ghi nhận nhầm thành khách hàng tiềm năng, và đồng nghiệp chưa có tài khoản CRM bị xếp nhầm là người ngoài.",
-      "proposal": "new-contract",
-      "fromRound": 2
-    },
-    {
-      "file": "packages/auth/src/allow-list.ts",
-      "title": "decideSignIn fail-open với mọi status lạ, và chữ \"cancelled\" lệch với \"canceled\" mà better-auth thật sự ghi",
-      "severity": "medium",
-      "plain": "Nếu một lời mời bị huỷ hoặc từ chối qua tính năng có sẵn của hệ thống đăng nhập, người bị huỷ đó vẫn đăng nhập được, và bảng Allowances hiện họ như đang chờ duyệt.",
-      "proposal": "new-contract",
-      "fromRound": 2
-    },
-    {
-      "file": "packages/auth/src/organization.ts",
-      "title": "decide() chạy bằng client db toàn cục ở GIỮA db.$transaction — đọc ngoài giao dịch, mở cửa cho người vừa bị gỡ lọt vào vĩnh viễn",
-      "severity": "medium",
-      "plain": "Trong một số tình huống hiếm khi hai thao tác diễn ra gần như cùng lúc, một người vừa bị rút quyền vẫn có thể trở thành thành viên và ở lại vĩnh viễn, không bao giờ bị xét lại.",
-      "proposal": "new-contract",
-      "fromRound": 2
-    },
-    {
-      "file": "packages/auth/src/organization.ts",
-      "title": "ensureWorkspaceMembership nuốt lỗi và từ chối im lặng — người hợp lệ bị đóng đinh ở màn /het-quyen suốt vòng đời phiên, không có đường thử lại",
-      "severity": "medium",
-      "plain": "Một người mới được admin cho phép hợp lệ có thể, do một lỗi thoáng qua của hệ thống lúc đăng nhập lần đầu, bị kẹt vĩnh viễn ở màn 'hết quyền' dù chưa từng bị gỡ, không có gì báo lý do.",
-      "proposal": "new-contract",
-      "fromRound": 2
+      "fromRound": 3
     }
   ],
   "deltaFiles": [
     "_acceptance/cho-phep-ai-vao-o-man-hinh/evals.yaml",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-identity-check-members.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-network.txt",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-admin.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-members-member.png",
+    "_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E13-network.txt",
     "_acceptance/cho-phep-ai-vao-o-man-hinh/s4-args.json",
     "_acceptance/config.yaml",
-    "apps/api/src/workspace/workspace.service.ts",
-    "apps/api/test/domain-nha-tach.spec.ts",
     "apps/api/test/workspace-thanh-vien.spec.ts",
     "packages/auth/test/cong-vao.integration.spec.ts"
+  ],
+  "carriedPanels": [
+    {
+      "evalId": "E14",
+      "proposal": "PASS",
+      "votes": [
+        {
+          "lens": "domain-correctness",
+          "verdict": "PASS"
+        },
+        {
+          "lens": "operational-feasibility",
+          "verdict": "PASS"
+        },
+        {
+          "lens": "spec-alignment",
+          "verdict": "PASS"
+        }
+      ],
+      "fromRound": 5,
+      "inputsHash": "b8877955fe4ba1cfd42e75f46b20bbab813c079ab8adee3d560c559e39e46a0f"
+    }
   ]
 }

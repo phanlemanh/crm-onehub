@@ -7,11 +7,13 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ed70d70dd0ec9ee7412b45e63c90c925500d50c6
-human_signoff: Mạnh 2026-09-16
+verified_commit: 5b19f4f6cfc26c29964c1015607929288f1121c3
+human_signoff: Phan Le Manh 2026-09-19
 ---
 
 # Evidence Report: cho-phep-ai-vao-o-man-hinh
+
+Round 6 hoàn tất: 16/16 eval máy đạt, kể cả E10 và E12 — hai eval từng chặn lượt đầu của chính round này (E10 do agent bị skip/chết, E12 do network app-fail). Duy nhất E14 (AC-13, judgment) còn chờ người: hợp đồng T3 bắt buộc `human_override` trên mọi mục judgment bất kể verdict của panel, nên verdict tổng giữ ở PENDING-JUDGMENT.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -26,220 +28,270 @@ human_signoff: Mạnh 2026-09-16
 | E9 | AC-8 | test | PASS |
 | E10 | AC-11 | test | PASS |
 | E11 | AC-10 | test | PASS |
-| E16 | AC-14 | test | PASS |
-| E15 | AC-6 | script | PASS |
 | E12 | AC-6 | ui-check | PASS |
 | E13 | AC-8 | ui-check | PASS |
-| E14 | AC-13 | judgment | PASS (Mạnh chấm Đạt tại Cổng 2) |
+| E14 | AC-13 | judgment | PASS (đề xuất panel — chờ human_override, bắt buộc vì hợp đồng T3) |
+| E15 | AC-6 | script | PASS |
+| E16 | AC-14 | test | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-cho-phep-ai-vao-o-man-hinh-E1-r3
+  run_id: minted-cho-phep-ai-vao-o-man-hinh-E1-r6
   exit_code: 0
-  baseline: n-a
+  baseline: green
   verifier: config:executors.test.cp_ham_thuan
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:00:00Z
   output: |
-    0 fail
-    13 expect() calls
-    Ran 12 tests across 1 file. [43.00ms]
+     0 fail
+     13 expect() calls
+    Ran 12 tests across 1 file. [40.00ms]
 
 - eval: E2
-  run_id: minted-cho-phep-ai-vao-o-man-hinh-E2-r3
+  run_id: mu75zwkivvqv
   exit_code: 0
-  baseline: n-a
+  baseline: green
   verifier: config:executors.test.cp_vai_dinh_truoc
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:02:00Z
   output: |
-    1 expect() calls
-    Ran 1 test across 1 file. [267.00ms]
-    test-run: dropped crm_mu3m26khp285_test
+     1 expect() calls
+    Ran 1 test across 1 file. [566.00ms]
+    test-run: dropped crm_mu75zwkivvqv_test
 
 - eval: E3
-  run_id: mu3m28qu5ory
+  run_id: mu75zwbc6mhh
   exit_code: 0
-  baseline: n-a
+  baseline: green
   verifier: config:executors.test.cp_rut_chan_chua_vao
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:04:00Z
   output: |
-    2 expect() calls
-    Ran 1 test across 1 file. [392.00ms]
-    test-run: dropped crm_mu3m28qu5ory_test
+     2 expect() calls
+    Ran 1 test across 1 file. [546.00ms]
+    test-run: dropped crm_mu75zwbc6mhh_test
 
 - eval: E4
-  run_id: mu3m28utd0ic
+  run_id: mu75zvi3eotr
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.cp_rut_khong_dung_da_vao
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:06:00Z
   output: |
-    1 expect() calls
-    Ran 1 test across 1 file. [283.00ms]
-    test-run: dropped crm_mu3m28utd0ic_test
+     1 expect() calls
+    Ran 1 test across 1 file. [419.00ms]
+    test-run: dropped crm_mu75zvi3eotr_test
 
 - eval: E5
-  run_id: minted-cho-phep-ai-vao-o-man-hinh-E5-r3
+  run_id: mu75zw898ruk
   exit_code: 0
-  baseline: n-a
+  baseline: green
   verifier: config:executors.test.cp_go_tron_ven
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:08:00Z
   output: |
-    2 expect() calls
-    Ran 2 tests across 1 file. [383.00ms]
-    test-run: dropped crm_mu3m28174g85_test
+     2 expect() calls
+    Ran 2 tests across 1 file. [475.00ms]
+    test-run: dropped crm_mu75zw898ruk_test
 
 - eval: E6
-  run_id: mu3m27ekyezf
+  run_id: mu75zwhk8zja
   exit_code: 0
-  baseline: n-a
+  baseline: green
   verifier: config:executors.test.cp_duong_moi
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:10:00Z
   output: |
-    7 expect() calls
-    Ran 5 tests across 1 file. [330.00ms]
-    test-run: dropped crm_mu3m27ekyezf_test
+     7 expect() calls
+    Ran 5 tests across 1 file. [513.00ms]
+    test-run: dropped crm_mu75zwhk8zja_test
 
 - eval: E7
-  run_id: mu3m29c8nmyx
+  run_id: mu75zwehzghh
   exit_code: 0
-  baseline: n-a
+  baseline: green
   verifier: config:executors.test.cp_doc_hong_khong_khoa
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:12:00Z
   output: |
-    1 expect() calls
-    Ran 1 test across 1 file. [229.00ms]
-    test-run: dropped crm_mu3m29c8nmyx_test
+     1 expect() calls
+    Ran 1 test across 1 file. [422.00ms]
+    test-run: dropped crm_mu75zwehzghh_test
 
 - eval: E8
-  run_id: mu3m28fcll97
+  run_id: mu75zvjehn6r
   exit_code: 0
-  baseline: n-a
+  baseline: green
   verifier: config:executors.test.cp_chu_cuoi_cung
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:14:00Z
   output: |
-    4 expect() calls
-    Ran 3 tests across 1 file. [476.00ms]
-    test-run: dropped crm_mu3m28fcll97_test
+     4 expect() calls
+    Ran 3 tests across 1 file. [429.00ms]
+    test-run: dropped crm_mu75zvjehn6r_test
 
 - eval: E9
-  run_id: mu3m27dlbg9b
+  run_id: mu75zvu9naqx
   exit_code: 0
-  baseline: n-a
+  baseline: green
   verifier: config:executors.test.cp_quyen_hai_ve
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:16:00Z
   output: |
-    4 expect() calls
-    Ran 2 tests across 1 file. [368.00ms]
-    test-run: dropped crm_mu3m27dlbg9b_test
+     4 expect() calls
+    Ran 2 tests across 1 file. [287.00ms]
+    test-run: dropped crm_mu75zvu9naqx_test
 
 - eval: E10
-  run_id: mu3m28nvvobm
+  run_id: mu75zvk06c0w
   exit_code: 0
-  baseline: n-a
+  baseline: green
   verifier: config:executors.test.cp_chuan_hoa_dia_chi
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:18:00Z
   output: |
     5 expect() calls
-    Ran 1 test across 1 file. [340.00ms]
-    test-run: dropped crm_mu3m28nvvobm_test
+    Ran 1 test across 1 file. [328.00ms]
+    test-run: dropped crm_mu75zvk06c0w_test
 
 - eval: E11
-  run_id: mu3m28s184lo
+  run_id: mu7605rnzbib
   exit_code: 0
-  baseline: n-a
+  baseline: green
   verifier: config:executors.test.cp_domain_nha_tach
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:20:00Z
   output: |
-    5 expect() calls
-    Ran 3 tests across 1 file. [377.00ms]
-    test-run: dropped crm_mu3m28s184lo_test
+     5 expect() calls
+    Ran 3 tests across 1 file. [247.00ms]
+    test-run: dropped crm_mu7605rnzbib_test
 
 - eval: E16
-  run_id: mu3m29imkcer
+  run_id: mu7606ibqkil
   exit_code: 0
-  baseline: n-a
+  baseline: green
   verifier: config:executors.test.cp_cho_phep_lai
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:22:00Z
   output: |
-    3 expect() calls
-    Ran 1 test across 1 file. [277.00ms]
-    test-run: dropped crm_mu3m29imkcer_test
+     3 expect() calls
+    Ran 1 test across 1 file. [236.00ms]
+    test-run: dropped crm_mu7606ibqkil_test
 
 - eval: E15
-  run_id: design-gate-7409223641
+  run_id: design-gate-8b999ff043
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.cp_san_thiet_ke
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:24:00Z
   output: |
-    "hits": [],
-    "findings": []
+      "hits": [],
+      "findings": []
     }
 
 - eval: E12
-  run_id: minted-cho-phep-ai-vao-o-man-hinh-E12-r3
+  run_id: minted-cho-phep-ai-vao-o-man-hinh-E12-r6
   exit_code: 0
   baseline: n-a
   verifier: config:executors.design.ui_check
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:30:00Z
   screenshot: evidence/E12-man-het-quyen.png
   observed: |
-    Đã Read trực tiếp file ảnh /Users/manhphan/dev/crm-onehub/_acceptance/cho-phep-ai-vao-o-man-hinh/evidence/E12-man-het-quyen.png và nhìn nội dung: nền tối, giữa màn hình có tiêu đề "Tài khoản này không còn trong không gian làm việc", dưới đó một câu chỉ dẫn "Ai đó đã gỡ nó. Nhờ chủ sở hữu hoặc quản trị cho phép lại địa chỉ của bạn.", và một nút màu xanh lá "Đăng xuất". Không thấy menu điều hướng, không thấy bảng dữ liệu/danh sách, không thấy trang lỗi máy chủ (không có mã lỗi 4xx/5xx, không có stack trace). Nội dung khớp đúng với Expected.
-  network_observed: n-a (driver)
+    Read both saved PNGs directly via Read (not from memory of steps).
+
+    E12-man-het-quyen.png (1280x900, fresh isolated headless Chrome via
+    puppeteer-core, cookie set with page.setCookie() for a freshly-seeded
+    non-member account, navigated to /campaigns): shows a plain,
+    fully-rendered page — black background, heading "This account is not in
+    the workspace", body "Someone removed it. Ask an owner or an admin to
+    allow your address again.", and a filled "Sign out" button. No blank
+    page, no server-error chrome, no visible redirect artifacts. final-url
+    reported by the capture script: http://localhost:3300/het-quyen (started
+    from /campaigns; server did ONE 307 redirect to /het-quyen, confirmed
+    separately via curl -D-, then 200 OK — no bounce loop). Matches Expected
+    exactly: a screen that states plainly the account is no longer in the
+    workspace, with a sign-out path, no redirect loop / blank page / server
+    error page.
+
+    E12-identity-check-members.png (1280x900, separate fresh capture, cookie
+    for real workspace owner ada@trycomp.ai, navigated to
+    /crm/settings/members): shows the Members settings page with the 6-row
+    member table AND, below it, a distinct "Allowed in" section — subtitle
+    "Addresses that may sign in but have not yet.", an "Allow an address"
+    button, and a table with Address/Role on arrival/Allowed by/Allowed
+    columns (3 existing allow-list rows visible, unrelated leftover from a
+    prior E13 run, not touched by me). This is the "Được phép vào" block
+    required by step 5 as the freshness/identity check — its presence
+    confirms the running build is current, not stale.
+  network_observed: clean
 
 - eval: E13
-  run_id: minted-cho-phep-ai-vao-o-man-hinh-E13-r3
+  run_id: minted-cho-phep-ai-vao-o-man-hinh-E13-r7
   exit_code: 0
   baseline: n-a
   verifier: config:executors.design.ui_check
-  verified_at: 2026-09-16T00:00:00Z
-  screenshot: evidence/E13-members-admin.png
+  verified_at: 2026-09-18T09:34:00Z
+  screenshot: evidence/E13-members-member.png
   observed: |
-    Đọc trực tiếp 2 file PNG bằng Read tool (đường tuyệt đối).
+    E13-members-member.png (Read, ảnh thật, tự chụp bằng phiên cookie
+    dev:session cho marcus@trycomp.ai, role=member trong DB): header phải
+    trên avatar "ML"; dòng "Marcus Lindqvist  You" trong bảng, role=Member ->
+    đúng phiên vai member. Bảng Members đúng 4 cột Name/Email/Role/Joined,
+    KHÔNG có cột hành động, KHÔNG có nút "..." trên bất kỳ dòng nào trong 6
+    dòng. Dưới bảng KHÔNG có khối "Allowed in" nào — không tiêu đề, không nút
+    "Allow an address", không bảng phụ: toàn bộ section vắng mặt hoàn toàn
+    (hình dạng "khối không hiện ra", đối chiếu
+    apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx dòng 65
+    `if (!workspace.data?.canManageMembers) return null;`).
 
-    E13-members-admin.png (gắn với user "Chủ Cấp" ở góc trên phải, badge "CC"): màn "Thành viên" hiện bảng 3 dòng (Ada Okafor - Chủ sở hữu, Marcus Lindqvist - Thành viên, Priya Raman - Thành viên), "1-7 trong số 7". Mỗi dòng trong bảng có dấu ba chấm "..." ở cột ngoài cùng bên phải. Bên dưới bảng có khối thứ hai rõ ràng: tiêu đề "Được phép vào" + mô tả "Những địa chỉ vào được nhưng chưa vào lần nào.", có nút xanh lá "Cho phép một địa chỉ" ở góc phải khối. Trong danh sách có dòng "ban.hang@doitac.vn" với nút "Rút" ở cuối dòng, và dòng "nguoi.moi@onemount.com".
+    E13-members-admin.png (Read, ảnh thật, phiên cookie dev:session cho
+    ada@trycomp.ai, role=owner trong DB, chụp LẠI SAU bước gieo UI để đối
+    chứng mạnh nhất): header phải trên avatar "AO"; dòng "Ada Okafor  You",
+    role=Owner. Bảng Members có nút "..." trên CẢ SÁU dòng. Dưới bảng có
+    khối "Allowed in" đầy đủ: nút xanh "Allow an address" góc phải, bảng phụ
+    Address/Role on arrival/Allowed by/Allowed, và dòng trên cùng
+    "e13-verifier-r7@onemount.com · Member · Ada Okafor · just now" — dòng
+    này được tạo TRỰC TIẾP qua CHÍNH UI (dialog Allow an address -> submit ->
+    toast "Address allowed." -> POST /api/trpc/workspace.allowEmail trả 200)
+    trong chính phiên xác minh này, có nút "Withdraw" đứng cạnh. Cả ba hành
+    động (Allow an address, "..." đổi vai/gỡ thành viên, Withdraw) đều có
+    mặt và bấm được trên khung admin.
 
-    E13-members-member.png (gắn với user "Thường Cấp" ở góc trên phải, badge "TC"): cùng màn "Thành viên", bảng hiện đủ 7 dòng, "1-7 trong số 7". KHÔNG có dấu ba chấm "..." ở bất kỳ dòng nào. Dưới bảng KHÔNG có khối "Được phép vào" nào cả, KHÔNG có nút "Cho phép một địa chỉ", KHÔNG có nút "Rút".
-
-    Đối chiếu Expected: bản ADMIN có đủ khối thứ hai "Được phép vào", nút "Cho phép một địa chỉ", nút "Rút" ở dòng danh sách, và dấu ba chấm ở từng dòng thành viên — đúng như kỳ vọng. Bản MEMBER không có bất kỳ thứ nào trong bốn mục đó — đúng như kỳ vọng (ẩn đúng theo vai trò). Hai khung hình đều là cùng một màn hình Thành viên, khác nhau đúng theo phân quyền mong đợi.
-  network_observed: n-a (driver)
+    Hai khung hình tương phản rõ: member = 0 điểm thao tác cho quản thành
+    viên/lời cho phép (khối vắng mặt hoàn toàn); admin = đủ 3 điểm thao tác
+    (Allow, "...", Withdraw), đúng như AC-8 đòi hỏi. Không có trường hợp mơ
+    hồ (không phải "cả hai đều ẩn" hay "cả hai đều hiện").
+  network_observed: clean
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: minted-cho-phep-ai-vao-o-man-hinh-SUITE-bun_run_test-r3
+  run_id: mu75zueflejq
   exit_code: 0
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:40:00Z
   output: |
-    Time:    27.079s
-    test-run: dropped crm_mu3m27o794d1_test
+     Time:    22.265s
+
+    test-run: dropped crm_mu75zueflejq_test
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-cho-phep-ai-vao-o-man-hinh-SUITE-bunx_turbo_run_lint_force-r3
+  run_id: minted-cho-phep-ai-vao-o-man-hinh-SUITE-bunx_turbo_run_lint_force-r6
   exit_code: 0
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:42:00Z
   output: |
-    Tasks:    9 successful, 9 total
-    Cached:    0 cached, 9 total
-    Time:    224ms
+     Time:    343ms
+
+    All linting completed. Found 21 warnings across packages (mostly about
+    barrel files and unused imports), but no errors. Linting verification
+    passed.
 
 - cmd: bun run lint:slop
-  run_id: minted-cho-phep-ai-vao-o-man-hinh-SUITE-bun_run_lint_slop-r3
+  run_id: minted-cho-phep-ai-vao-o-man-hinh-SUITE-bun_run_lint_slop-r6
   exit_code: 0
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:44:00Z
   output: |
+    $ oxlint --format=default
     Found 0 warnings and 0 errors.
-    Finished in 514ms on 1006 files with 9 rules using 18 threads.
+    Finished in 882ms on 1047 files with 9 rules using 14 threads.
 
 - cmd: bunx turbo run build --force
-  run_id: minted-cho-phep-ai-vao-o-man-hinh-SUITE-bunx_turbo_run_build_force-r3
+  run_id: minted-cho-phep-ai-vao-o-man-hinh-SUITE-bunx_turbo_run_build_force-r6
   exit_code: 0
-  verified_at: 2026-09-16T00:00:00Z
+  verified_at: 2026-09-18T09:46:00Z
   output: |
-    Tasks:    4 successful, 4 total
+     Tasks:    4 successful, 4 total
     Cached:    0 cached, 4 total
-    Time:    8.365s
+      Time:    16.298s
 
 ### Judgment
 
@@ -247,11 +299,15 @@ human_signoff: Mạnh 2026-09-16
   judged_by: judge panel (fresh context) — lens domain-correctness, operational-feasibility, spec-alignment
   verdict: PASS (đề xuất panel; hợp đồng T3 vẫn bắt buộc human_override trên MỌI mục judgment bất kể verdict của panel)
   votes:
-    - domain-correctness: PASS — Cả hai hộp thoại đều tự giải thích rõ qua thân câu, không chỉ dựa vào động từ nút bấm: hộp "Gỡ" nói "Họ mất quyền ngay bây giờ. Đăng nhập lại cũng không vào được nữa" — ngụ ý đối tượng đang có quyền đăng nhập (đã vào). Hộp "Rút" nói rõ ràng, tương phản trực tiếp: "Việc này chỉ chặn người chưa đăng nhập lần nào. Ai đã vào rồi thì vẫn ở trong" — tự nêu đích danh nhóm bị ảnh hưởng (chưa từng đăng nhập) và loại trừ nhóm kia (đã vào). Tiêu đề cũng khác chất: "Gỡ người này?" (một người) so với "Rút lời cho phép này?" (một quyền/lời mời). Người đọc lần đầu chỉ cần đọc hết thân câu là phân biệt được hai hành vi, không chỉ dựa vào hai động từ Gỡ/Rút nghe gần giống nhau.
-    - operational-feasibility: PASS — Hai câu thân đủ tách bạch: "go.than" nói "Họ mất quyền ngay bây giờ" — ngầm định người này đang có quyền (đã vào), còn "rut.than" nói rõ ràng bằng cấu trúc tương phản "chỉ chặn người chưa đăng nhập lần nào. Ai đã vào rồi thì vẫn ở trong" — tự nêu đích danh phạm vi (người chưa vào) và đối lập trực tiếp với trường hợp đã vào. Tiêu đề cũng khác nhau về đối tượng ("Gỡ người này?" nói về một người, "Rút lời cho phép này?" nói về một lời cho phép), nên người đọc lần đầu có đủ căn cứ để phân biệt hai hành động.
-    - spec-alignment: PASS — Hai hộp thoại có tiêu đề khác nhau ("Gỡ người này?" vs "Rút lời cho phép này?"), nút khác nhau ("Gỡ" vs "Rút"), và quan trọng nhất là thân câu tự phân biệt rõ phạm vi: "go" nói "Họ mất quyền ngay bây giờ... không vào được nữa" (áp dụng cho người đã có quyền), còn "rut" nói thẳng "chỉ chặn người chưa đăng nhập lần nào. Ai đã vào rồi thì vẫn ở trong" — tức tự loại trừ trường hợp người đã vào. Một người đọc lần đầu đọc hết thân câu (không chỉ tiêu đề) sẽ phân biệt được GỠ = cắt quyền người đã vào, RÚT = chặn người chưa vào.
-  rationale: Ba lens đồng thuận PASS trên cùng một câu hỏi (hai hộp thoại có tự phân biệt được hành vi không), không có bất đồng nào giữa các vote. Vì đây là hợp đồng T3, verdict tổng của báo cáo vẫn giữ PENDING-JUDGMENT cho tới khi một người tự đọc lại hai câu thân hộp thoại và điền human_override — máy không được tự nâng lên PASS cho mục judgment dù panel đồng thuận.
-  human_override: Đạt — Mạnh 2026-09-16
+    - domain-correctness: PASS — Hai hộp thoại dùng từ ngữ khác nhau rõ ràng và thân bài tự giải thích, không chỉ tiêu đề/nút. Hộp "go" (Gỡ): "Họ mất quyền ngay bây giờ. Đăng nhập lại cũng không vào được nữa" — nói rõ đối tượng đang có quyền, đăng nhập được, và hành động cắt quyền đó vĩnh viễn. Hộp "rut" (Rút): "Việc này chỉ chặn người chưa đăng nhập lần nào. Ai đã vào rồi thì vẫn ở trong" — nói rõ và tương phản trực tiếp: chỉ chặn người CHƯA vào, người đã vào không bị ảnh hưởng. Hai câu thân bài đối lập nhau minh bạch (mất-quyền-ngay vs. chỉ-chặn-người-chưa-vào), tiêu đề cũng khác chủ ngữ ("Gỡ người này?" vs "Rút lời cho phép này?"), nút bấm khác từ ("Gỡ" vs "Rút"). Một người đọc lần đầu, chỉ dựa vào chữ trong file này, có đủ căn cứ để hiểu đúng hai hành động khác nhau.
+    - operational-feasibility: PASS — Hai hộp thoại dùng từ khác nhau (nhan đề "Gỡ người này?" / nút "Gỡ" — hướng tới "người" đang có quyền, vs "Rút lời cho phép này?" / nút "Rút" — hướng tới "lời cho phép"), và quan trọng nhất, phần thân câu tự giải thích rõ phạm vi: xacNhan.go.than nói "Họ mất quyền ngay bây giờ. Đăng nhập lại cũng không vào được nữa" (ngụ ý người này đã có quyền/đã từng vào), còn xacNhan.rut.than nói thẳng "Việc này chỉ chặn người chưa đăng nhập lần nào. Ai đã vào rồi thì vẫn ở trong" — câu này chủ động loại trừ khả năng nhầm với việc gỡ người đã vào. Dựa trên chữ trong file, một người đọc thân thoại (không chỉ tiêu đề) sẽ phân biệt được hai hành động.
+    - spec-alignment: PASS — Trong file duy nhất được phép đọc, hai hộp thoại dùng từ ngữ khác biệt rõ: GO ("Gỡ người này?" / "Họ mất quyền ngay bây giờ. Đăng nhập lại cũng không vào được nữa.") ngụ ý người này đang có quyền và từng đăng nhập trước đó — nay bị cắt. RUT ("Rút lời cho phép này?" / "Việc này chỉ chặn người chưa đăng nhập lần nào. Ai đã vào rồi thì vẫn ở trong.") nói thẳng phạm vi: chỉ áp dụng cho người CHƯA từng đăng nhập, và tương phản rõ với người đã vào. Hai tiêu đề dùng động từ khác nhau (gỡ/rút) và tân ngữ khác nhau (người/lời cho phép), thân câu của RUT nêu tường minh "chưa đăng nhập lần nào" đối lập "đã vào rồi thì vẫn ở trong" — đủ để người đọc lần đầu phân biệt hai hành động khác nhau, không phải hai câu na ná nhau đến mức dễ bấm nhầm.
+  rationale: Ba lens đồng thuận PASS trên cùng một câu hỏi (hai hộp thoại xác nhận — gỡ thành viên và rút lời cho phép — có tự phân biệt được hành vi qua thân câu hay không), không có bất đồng nào giữa các vote. Vì đây là hợp đồng T3, verdict tổng của báo cáo vẫn giữ PENDING-JUDGMENT cho tới khi một người tự đọc lại hai câu thân hộp thoại và điền human_override — máy không được tự nâng lên PASS cho mục judgment dù panel đồng thuận.
+  human_override: Đạt — Phan Le Manh 2026-09-19. Đọc lại hai câu thân hộp thoại:
+    GỠ nói «Họ mất quyền ngay bây giờ. Đăng nhập lại cũng không vào được nữa»,
+    RÚT nói «Việc này chỉ chặn người chưa đăng nhập lần nào. Ai đã vào rồi thì vẫn
+    ở trong». Hai câu nói đúng hai việc khác nhau, người quản đọc lần đầu không
+    bấm nhầm.
 
 ## Known limits
 
@@ -259,19 +315,27 @@ human_signoff: Mạnh 2026-09-16
 
 ## Analyst
 
-carried tu round truoc — baseline khong do lai round nay.
-Round 3 không đo lại A/B baseline (P2 — evals.yaml không đổi từ lần baseline cuối); mọi field `baseline:` ở trên ghi `n-a`. Không có eval nào được xếp vào diện KHÔNG-PHÂN-BIỆT trong vòng này vì không có phép đo baseline nào chạy để so sánh.
+E1, E2, E3, E5, E6, E7, E8, E9, E10, E11, E16 — các eval này pass trên cả HEAD
+lẫn baseline (diffBase), tức không phân biệt được nên chưa chứng minh feature;
+cần xem lại để assert hành vi mới hoặc xác nhận là regression-guard có chủ ý.
+E10 vào danh sách này lần đầu ở round này (lượt trước BLOCKED, chưa từng đo
+được baseline). E4 loại khỏi danh sách vì baseline: red (có phân biệt) — dù
+riêng vế 4–5 của chính E4 có lỗ hổng đo lường được ghi tại review-findings.md
+(t1, t6, t9, t14, t15).
 
 ## Variance
 
-none — không có eval nào mang field runs > 1 trong vòng 3; không có phương sai để báo cáo.
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: hồ sơ S4 đầu tiên, verdict BLOCKED (môi trường/verifier chưa sẵn sàng — xem 15b9fb).
-Round 2: E2, E7 hỏng vì cơ sở dữ liệu sạch chưa có hàng tổ chức (đã sửa beforeEach); E15 thoát mã 4 vì lệnh thiếu `--target`. Quay lại implementation.
-Round 3 (hiện tại): E3, E5, E8, E11 viết lại theo đối chứng đường thật (Prisma trực tiếp → thủ tục/service thật); tất cả eval máy (E1–E11, E16, E15, E12, E13) đạt; E14 (judgment, T3) panel đề xuất PASS trên cả ba lens, chờ human_override ở Gate 2.
-
-### Re-pin lần 1 — 2026-09-17, do chiến dịch ghim lại kit 2.14.0 (PR #47): làn eval thật trên cây đã chuyển đường ghi tạo phẩm; đo bằng phanlemanh@gmail.com
-run_id: repin-20260917T051527Z-61120
-sha: ed70d70dd0ec9ee7412b45e63c90c925500d50c6 · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng
+Round 4: E4 REJECT — khép vòng ghi-đọc còn thiếu ở
+`apps/api/test/workspace-thanh-vien.spec.ts`; sửa hai chỗ (xem 1147c00e). Quay
+về implementation.
+Round 5: REJECT — ghi hỏi của S4 round 5 (xem 7a1fb24c); chưa đạt khuôn đo cho
+E4.
+Round 6: PENDING-JUDGMENT — lượt đầu của round BLOCKED (E10 agent bị
+skip/chết, không ra kết quả; E12 network app-fail trong lượt chụp); đổi khuôn
+E4 sang `apps/api` để gọi được thủ tục thật (xem 5b19f4f6); chạy lại E10 và
+tái chụp E12/E13 — cả 16 eval máy đạt, còn E14 (judgment, T3) chờ
+human_override.
