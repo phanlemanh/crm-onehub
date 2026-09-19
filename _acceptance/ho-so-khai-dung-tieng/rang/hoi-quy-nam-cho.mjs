@@ -33,7 +33,7 @@ const giaiDoan = await datDuGiaiDoan();
 if (giaiDoan.thieu.length > 0) {
 	console.log(
 		`-- TIEN DE: du lieu thu thieu ${giaiDoan.thieu.length} giai doan (${giaiDoan.thieu.join(" · ")}),\n` +
-			`   da muon ${giaiDoan.daDoi.length} thoa thuan de phu du, se tra ve nguyen trang sau luot chay.`,
+			`   da TAO ${giaiDoan.daTao.length} thoa thuan de phu du, se xoa sau luot chay.`,
 	);
 }
 

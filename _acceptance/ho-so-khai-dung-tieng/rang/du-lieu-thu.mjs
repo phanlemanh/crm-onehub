@@ -175,39 +175,50 @@ export async function datDuGiaiDoan() {
 		(await db.deal.findMany({ select: { stage: true } })).map((d) => d.stage),
 	);
 	const thieu = duEnum.filter((m) => !dangCo.has(m));
-	const daDoi = [];
-
-	for (const ma of thieu) {
-		const muon = await db.deal.findFirst({
-			where: {
-				stage: { notIn: thieu },
-				id: { notIn: daDoi.map((d) => d.id) },
-			},
-			orderBy: { createdAt: "desc" },
-		});
-		if (!muon) {
-			throw new Error(
-				`KHONG DUNG DUOC TIEN DE: het thoa thuan de muon cho giai doan ${ma}.\n` +
-					`   Con thieu ${thieu.length - daDoi.length} giai doan, da muon ${daDoi.length}.\n` +
-					"   Tap du lieu thu khong du phu enum. Day la TIEN DE THIEU, khong phai dat —\n" +
-					"   bo cuoc im lang o day lam chan do chay tiep tren mot tap khong phu du,\n" +
-					"   roi bao xanh cho dung cai no chua bao gio nhin thay.",
-			);
-		}
-		daDoi.push({ id: muon.id, giaiDoanCu: muon.stage });
-		await db.deal.update({ where: { id: muon.id }, data: { stage: ma } });
+	if (thieu.length === 0) {
+		return { thieu, daTao: [], don: async () => {} };
 	}
+
+	const nguoi = await db.user.findFirst({ orderBy: { createdAt: "asc" } });
+	if (!nguoi) {
+		throw new Error(
+			"KHONG DUNG DUOC TIEN DE: khong nguoi dung nao trong co so du lieu",
+		);
+	}
+	const moc =
+		process.env.RANG_MOC ??
+		`${Date.now().toString(36)}${process.pid.toString(36)}`;
+	const congTy = await db.company.create({
+		data: { name: `${DAU}Phu giai doan ${moc}`, enrichmentStatus: "PENDING" },
+	});
+
+	const daTao = [];
+	for (const ma of thieu) {
+		const moiTao = await db.deal.create({
+			data: {
+				name: `${DAU}Phu ${ma} ${moc}`,
+				companyId: congTy.id,
+				ownerId: nguoi.id,
+				stage: ma,
+			},
+		});
+		daTao.push(moiTao.id);
+	}
+
+	console.log(
+		`-- PHU GIAI DOAN: TAO ${daTao.length} thoa thuan moi cho ${thieu.join(" · ")},\n` +
+			"   khong MUON thoa thuan co san. Muon la hai lop hong cung luc: hai luot chay\n" +
+			"   song song gianh cung mot ban ghi, va mot lan chet giua chung de lai vet tren\n" +
+			"   du lieu that. Tao thi moi luot co vat rieng, va don la xoa chu khong phai\n" +
+			"   khoi phuc.",
+	);
 
 	return {
 		thieu,
-		daDoi,
+		daTao,
 		don: async () => {
-			for (const d of daDoi) {
-				await db.deal.update({
-					where: { id: d.id },
-					data: { stage: d.giaiDoanCu },
-				});
-			}
+			await db.deal.deleteMany({ where: { id: { in: daTao } } });
+			await db.company.delete({ where: { id: congTy.id } }).catch(() => {});
 		},
 	};
 }

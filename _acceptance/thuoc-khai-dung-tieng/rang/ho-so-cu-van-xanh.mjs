@@ -2,10 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { CHAN_UI } from "../../ho-so-khai-dung-tieng/rang/bang-dot-bien.mjs";
-import { bang, chay, GOC, ghim, giuKhoa } from "./chung.mjs";
-
-const nhaKhoa = await giuKhoa("ho-so-cu-van-xanh");
-process.on("exit", nhaKhoa);
+import { bang, chay, GOC, ghim } from "./chung.mjs";
 
 const GOC_VONG = "32491c87";
 const VUNG = "_acceptance/ho-so-khai-dung-tieng/evidence/vung-khai.json";

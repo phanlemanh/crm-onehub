@@ -1,5 +1,11 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+	existsSync,
+	mkdirSync,
+	readFileSync,
+	renameSync,
+	writeFileSync,
+} from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
@@ -132,7 +138,9 @@ function ghiVung(ten, muc) {
 	const tep = join(thu_muc, "vung-khai.json");
 	const cu = existsSync(tep) ? JSON.parse(readFileSync(tep, "utf8")) : {};
 	cu[ten] = muc;
-	writeFileSync(tep, `${JSON.stringify(cu, null, 2)}\n`);
+	const tam = `${tep}.${process.pid}.tam`;
+	writeFileSync(tam, `${JSON.stringify(cu, null, 2)}\n`);
+	renameSync(tam, tep);
 	console.log(`-- BANG CHUNG: ghi muc "${ten}" vao evidence/vung-khai.json`);
 }
 

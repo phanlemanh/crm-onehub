@@ -120,6 +120,13 @@ evals:
       mo ta mot co che KHAC voi co che that su giu loi hua, dung lop benh ma AC-7
       cua chinh vong nay bat. Diem nem cung da doi: no nam TRONG than vong lap, tuc
       sau khi da muon thoa thuan that, chu khong con nam ngoai khoi try.
+      Tu 19/09 (S4 vong 3): phep phu giai doan TAO thoa thuan moi thay vi MUON
+      thoa thuan co san. Nen vet de lai khong con la ban ghi LECH ma la ban ghi
+      THUA, va chan do bat bang nhanh MOI SINH cong voi phep dem vat mang MOC
+      cua chinh luot nay. Doi cach vi MUON hong hai lop cung luc: hai luot chay
+      song song gianh cung mot ban ghi, va mot lan chet giua chung de lai vet
+      tren du lieu that. Anh chup cung BO tep mang tien to vat-thu, neu khong
+      mot chan do khac dang chay se hien ra thanh "MOI SINH" — mot bao do gia.
     paths:
       - "_acceptance/ho-so-khai-dung-tieng/rang/du-lieu-thu.mjs"
       - "_acceptance/ho-so-khai-dung-tieng/rang/hoi-quy-nam-cho.mjs"

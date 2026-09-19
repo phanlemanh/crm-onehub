@@ -1,0 +1,133 @@
+{
+  "gioi-thieu": {
+    "mong_boc": true,
+    "cho": [
+      {
+        "gia_tri": "One Mount is a Vietnamese technology and innovation group th",
+        "boc": true,
+        "the": "SPAN",
+        "so_phan_tu_khai": 1,
+        "duong_the": [
+          "SPAN"
+        ]
+      }
+    ],
+    "tieng_viet_lot": []
+  },
+  "tom-tat-lien-he": {
+    "mong_boc": true,
+    "cho": [
+      {
+        "gia_tri": "Seasoned partnerships lead with a decade of experience build",
+        "boc": true,
+        "the": "SPAN",
+        "so_phan_tu_khai": 1,
+        "duong_the": [
+          "SPAN"
+        ]
+      }
+    ],
+    "tieng_viet_lot": []
+  },
+  "nganh": {
+    "mong_boc": true,
+    "cho": [
+      {
+        "gia_tri": "Software",
+        "boc": true,
+        "the": "SPAN",
+        "so_phan_tu_khai": 1,
+        "duong_the": [
+          "SPAN"
+        ]
+      }
+    ],
+    "tieng_viet_lot": []
+  },
+  "dong-thoi-gian": {
+    "mong_boc": true,
+    "cho": [
+      {
+        "gia_tri": "Demo booked",
+        "boc": true,
+        "the": "SPAN",
+        "so_phan_tu_khai": 1,
+        "duong_the": [
+          "SPAN"
+        ]
+      },
+      {
+        "gia_tri": "Qualified to buy",
+        "boc": true,
+        "the": "SPAN",
+        "so_phan_tu_khai": 1,
+        "duong_the": [
+          "SPAN"
+        ]
+      }
+    ],
+    "tieng_viet_lot": []
+  },
+  "khong-khai-thua": {
+    "mong_boc": false,
+    "cho": [
+      {
+        "gia_tri": "Vat Thu 98242-mu8hkk8d",
+        "boc": false,
+        "the": "H2",
+        "so_phan_tu_khai": 0,
+        "duong_the": []
+      },
+      {
+        "gia_tri": "Vat Thu 98242-mu8hkk8d",
+        "boc": false,
+        "the": "SPAN",
+        "so_phan_tu_khai": 0,
+        "duong_the": []
+      },
+      {
+        "gia_tri": "London, United Kingdom",
+        "boc": false,
+        "the": "SPAN",
+        "so_phan_tu_khai": 0,
+        "duong_the": []
+      }
+    ],
+    "tieng_viet_lot": []
+  },
+  "khong-khai-thua-chuc-danh": {
+    "mong_boc": false,
+    "cho": [
+      {
+        "gia_tri": "IT Director",
+        "boc": false,
+        "the": "SPAN",
+        "so_phan_tu_khai": 0,
+        "duong_the": []
+      },
+      {
+        "gia_tri": "IT Director",
+        "boc": false,
+        "the": "SPAN",
+        "so_phan_tu_khai": 0,
+        "duong_the": []
+      }
+    ],
+    "tieng_viet_lot": []
+  },
+  "ho-so-trong": {
+    "tieu_de_khoi": "Giới thiệu",
+    "ho_so_trong": {
+      "co_khoi": false,
+      "so_phan_tu_rong": 0
+    },
+    "doi_chung_duong": {
+      "co_khoi": true
+    },
+    "tieng_viet_lot": []
+  },
+  "tieng-trang": {
+    "tieng_trang": "vi",
+    "tieng_viet_lot": []
+  }
+}
