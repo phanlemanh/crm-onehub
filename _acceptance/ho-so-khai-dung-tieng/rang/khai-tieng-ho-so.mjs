@@ -1,9 +1,13 @@
 import { execFileSync } from "node:child_process";
 import {
+	closeSync,
 	existsSync,
 	mkdirSync,
+	openSync,
 	readFileSync,
 	renameSync,
+	statSync,
+	unlinkSync,
 	writeFileSync,
 } from "node:fs";
 import { dirname, join } from "node:path";
@@ -136,11 +140,54 @@ function ghiVung(ten, muc) {
 	const thu_muc = join(GOC, "_acceptance/ho-so-khai-dung-tieng/evidence");
 	if (!existsSync(thu_muc)) mkdirSync(thu_muc, { recursive: true });
 	const tep = join(thu_muc, "vung-khai.json");
-	const cu = existsSync(tep) ? JSON.parse(readFileSync(tep, "utf8")) : {};
-	cu[ten] = muc;
-	const tam = `${tep}.${process.pid}.tam`;
-	writeFileSync(tam, `${JSON.stringify(cu, null, 2)}\n`);
-	renameSync(tam, tep);
+	const khoa = `${tep}.khoa`;
+
+	// Doc-sua-ghi tren mot tep DUNG CHUNG. temp+rename chi lam MOT lan ghi nguyen
+	// tu; no khong lam ca chuoi doc->sua->ghi nguyen tu. Bay executor hskt_* cung
+	// ghi vao tep nay, moi cai mot khoa khac nhau: hai lan doc cung trang thai roi
+	// lan rename sau thang la MAT mot muc, khong tien trinh nao bao loi. Khoa nay
+	// giu trong mili giay, khong phai khoa tuan tu ca chan do.
+	const den = Date.now() + 60_000;
+	for (;;) {
+		try {
+			closeSync(openSync(khoa, "wx"));
+			break;
+		} catch (loi) {
+			if (loi.code !== "EEXIST") throw loi;
+			let qua = false;
+			try {
+				qua = Date.now() - statSync(khoa).mtimeMs > 30_000;
+			} catch {
+				continue;
+			}
+			if (qua) {
+				unlinkSync(khoa);
+				continue;
+			}
+			if (Date.now() > den) {
+				throw new Error(
+					`KHONG GHI DUOC BANG CHUNG: doi khoa ${khoa} qua 60 giay.\n` +
+						"   Mot luot chay khac dang ghi vung-khai.json va chua nha khoa.",
+				);
+			}
+			execFileSync("sleep", ["0.05"]);
+		}
+	}
+	try {
+		const cu = existsSync(tep) ? JSON.parse(readFileSync(tep, "utf8")) : {};
+		cu[ten] = muc;
+		const tam = `${tep}.${process.pid}.tam`;
+		try {
+			writeFileSync(tam, `${JSON.stringify(cu, null, 2)}\n`);
+			renameSync(tam, tep);
+		} finally {
+			if (existsSync(tam)) unlinkSync(tam);
+		}
+	} finally {
+		try {
+			unlinkSync(khoa);
+		} catch {}
+	}
 	console.log(`-- BANG CHUNG: ghi muc "${ten}" vao evidence/vung-khai.json`);
 }
 
