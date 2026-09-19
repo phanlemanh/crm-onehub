@@ -4,7 +4,7 @@ import { bang, chay, GOC, ghim } from "./chung.mjs";
 
 const HANG_GHIM = {
 	"nen-chat-ai-elements": 6,
-	"ho-so-khai-dung-tieng": 6,
+	"ho-so-khai-dung-tieng": 7,
 };
 
 const hinh = JSON.parse(

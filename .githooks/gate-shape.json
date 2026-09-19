@@ -114,6 +114,12 @@
               "script": "_acceptance/ho-so-khai-dung-tieng/rang/du-lieu-thu.mjs",
               "vi_sao": "Module dựng vật thử, không phải răng — nó không tự khẳng định gì.",
               "do_o": "Mọi chân ui-check của hồ sơ nhập nó."
+            },
+            {
+              "id": "cay-sao",
+              "script": "_acceptance/ho-so-khai-dung-tieng/rang/cay-sao.mjs",
+              "vi_sao": "Module dung ban sao cay va hai may chu dev rieng — khong khang dinh gi nen khong phai rang. Tach 19/09 de pha-thu.mjs va bo khai sinh cua thuoc-khai-dung-tieng dung chung mot co che, khong go lai lan hai.",
+              "do_o": "E10 cua ho so nay va E12 cua thuoc-khai-dung-tieng deu chay qua no."
             }
           ]
         }

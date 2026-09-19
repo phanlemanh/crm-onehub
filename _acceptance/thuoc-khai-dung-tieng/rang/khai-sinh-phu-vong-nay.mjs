@@ -1,0 +1,208 @@
+import { readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import {
+	API_SAO,
+	APP_SAO,
+	chay,
+	donCaySao,
+	dungCaySao,
+	dungMayChu,
+} from "../../ho-so-khai-dung-tieng/rang/cay-sao.mjs";
+import { bang, GOC, ghim } from "./chung.mjs";
+
+const R = "_acceptance/thuoc-khai-dung-tieng/rang";
+const H = "_acceptance/ho-so-khai-dung-tieng/rang";
+const GS = ".githooks/gate-shape.json";
+
+const chanMoi = (t) => ({ lenh: "bun", doi_so: [`${R}/${t}.mjs`] });
+
+export const DOT_BIEN_VONG_NAY = [
+	{
+		chan: "E1",
+		tep: `${H}/bang-dot-bien.mjs`,
+		cu: 'ghim: "lech-boc:gioi-thieu"',
+		moi: 'ghim: "gioi-thieu"',
+		do: chanMoi("ghim-phan-biet"),
+		ghim: "KHONG PHAN BIET",
+	},
+	{
+		chan: "E2",
+		tep: `${H}/pha-thu.mjs`,
+		cu: "const dat = ket.ma !== 0 && ket.ghim && ket.vang;",
+		moi: "const dat = ket.ma !== 0 && ket.ghim;",
+		do: chanMoi("khai-sinh-dung-ghim"),
+		ghim: "[dem-roi-vut]: KHONG",
+	},
+	{
+		chan: "E3",
+		tep: GS,
+		cu: '"id": "mot-duong"',
+		moi: '"id": "mot-duong-KHONG-CO"',
+		do: chanMoi("cong-chan-duoc"),
+		ghim: "cong-khong-chan-duoc",
+	},
+	{
+		chan: "E4a",
+		tep: GS,
+		cu: '"id": "so-do-cuon"',
+		moi: '"id": "so-do-cuon-KHONG-CO"',
+		do: chanMoi("hai-ho-so"),
+		ghim: "chua-dinh-doat:",
+	},
+	{
+		chan: "E4b",
+		tep: `${R}/hai-ho-so.mjs`,
+		cu: '"nen-chat-ai-elements": 6,',
+		moi: '"nen-chat-ai-elements": 5,',
+		do: chanMoi("hai-ho-so"),
+		ghim: "HANG GHIM LECH",
+	},
+	{
+		chan: "E5",
+		tep: `${H}/hoi-quy-nam-cho.mjs`,
+		cu: "} finally {\n\tawait tra();\n}",
+		moi: "}",
+		do: chanMoi("khong-de-lai-vet"),
+		ghim: "ban-ghi-that-con-lech:",
+	},
+	{
+		chan: "E6",
+		tep: `${H}/cay-sao.mjs`,
+		cu: "\tif (!ten.startsWith(TIEN_TO_SAO)) {",
+		moi: "\tif (false) {",
+		do: chanMoi("xoa-co-kiem"),
+		ghim: "xoa-nham:",
+	},
+	{
+		chan: "E7",
+		tep: "_acceptance/ho-so-khai-dung-tieng/evals.yaml",
+		cu: "      Hoi dong doc vung-khai.json",
+		moi: "      Hoi dong doc vung-khai.json (moi muc co khoa mau_sac_khong_ai_ghi)",
+		them_ghim: true,
+		do: chanMoi("ban-khai-khop"),
+		ghim: "khoa-hoi-dong-khong-co-chan-do-ghi:",
+	},
+	{
+		chan: "E8",
+		tep: "packages/ui/src/components/foreign-text.tsx",
+		cu: 'import type { Locale } from "../lib/locale";',
+		moi: 'import type { Locale } from "../lib/locale";\nexport { MetaLine as X } from "../../../apps/app/components/crm/record-sheet/record-parts";',
+		do: chanMoi("bai-kiem-dung-nha"),
+		ghim: "nhap-nguoc-chieu",
+	},
+	{
+		chan: "E9",
+		tep: `${H}/mot-duong.mjs`,
+		cu: "const CHIN = 9;",
+		moi: "const CHIN = 8;",
+		do: chanMoi("ho-so-cu-van-xanh"),
+		ghim: "ho-so-cu-do:mot-duong",
+	},
+	{
+		chan: "E12",
+		tep: `${R}/ghim-phan-biet.mjs`,
+		cu: "process.exit(hong > 0 ? 1 : 0);",
+		moi: "process.exit(0);",
+		do: chanMoi("khai-sinh-phu-vong-nay"),
+		ghim: "chan-moi-khong-do-duoc:",
+		tu_quy: true,
+	},
+	{
+		chan: "E13",
+		tep: GS,
+		cu: '"runsIn": "@crm/ui#test"',
+		moi: '"runsIn": "@crm/ui#test "',
+		do: chanMoi("ghim-lai-da-xong"),
+		ghim: "bang-chung-hoa-cu:.githooks/gate-shape.json",
+	},
+	{
+		chan: "E14",
+		tep: `${R}/bay-benh-cu.mjs`,
+		cu: "const BAY = 7;",
+		moi: "const BAY = 6;",
+		do: chanMoi("bay-benh-cu"),
+		ghim: "HANG GHIM LECH",
+	},
+];
+
+const banKhai = readFileSync(
+	join(GOC, "_acceptance/thuoc-khai-dung-tieng/evals.yaml"),
+	"utf8",
+);
+const soMenhDe = (banKhai.match(/^\s*Cap hai chieu/gm) ?? []).length;
+
+console.log(
+	"-- Thuoc cua thuoc khong duoc mien luat cua thuoc (AC-11).\n" +
+		'-- Dem menh de "Cap hai chieu" NEO DAU DONG. Dem tho ra nhieu hon, vi chinh\n' +
+		"   phan mo ta cua E12 nhac cum do hai lan, giua dong, trong ngoac kep.",
+);
+ghim("so menh de Cap hai chieu", soMenhDe, 13);
+ghim("so dot bien", DOT_BIEN_VONG_NAY.length, soMenhDe);
+
+if (process.env.CHAN_TU_QUY === "1") {
+	console.log("[tu-quy] khong chay lai chinh minh trong ban sao.");
+	process.exit(0);
+}
+
+const hang = [];
+let hong = 0;
+let sao = null;
+let mayChu = null;
+
+try {
+	sao = dungCaySao();
+	console.log(`-- BAN SAO: ${sao}`);
+	mayChu = await dungMayChu(sao);
+	console.log(`-- MAY CHU CUA BAN SAO: ${APP_SAO} · ${API_SAO}`);
+
+	const moi_truong = {
+		APP_URL: APP_SAO,
+		API_URL: API_SAO,
+		CHAN_TU_QUY: "1",
+		CHO_PHEP_CAY_BAN: "1",
+	};
+
+	for (const d of DOT_BIEN_VONG_NAY) {
+		const duong = join(sao, d.tep);
+		const goc = readFileSync(duong, "utf8");
+		try {
+			const lanh = chay(d.do, sao, moi_truong);
+			const vang = !lanh.ra.includes(d.ghim);
+
+			if (!goc.includes(d.cu)) {
+				hang.push(
+					`${d.chan.padEnd(4)} [chan-moi-khong-do-duoc:${d.chan}] PHEP PHA KHONG AP DUNG DUOC trong ${d.tep}`,
+				);
+				hong += 1;
+				continue;
+			}
+			writeFileSync(duong, goc.replace(d.cu, d.moi));
+
+			const r = chay(d.do, sao, moi_truong);
+			const coGhim = r.ra.includes(d.ghim);
+			const dat = r.ma !== 0 && coGhim && vang;
+			if (!dat) hong += 1;
+			hang.push(
+				`${dat ? "dat " : "KHONG DAT"} ${d.chan.padEnd(4)} ma ${r.ma} · ghim ${coGhim ? "CO" : "KHONG"} · vang o luot lanh ${vang ? "co" : "KHONG"}` +
+					(dat
+						? ""
+						: `\n        [chan-moi-khong-do-duoc:${d.chan}] ghim ${JSON.stringify(d.ghim)}`),
+			);
+		} finally {
+			writeFileSync(duong, goc);
+		}
+	}
+} finally {
+	if (mayChu) {
+		mayChu.api.kill();
+		mayChu.app.kill();
+		console.log("-- DA TAT may chu cua ban sao");
+	}
+	if (sao) donCaySao(sao);
+}
+
+bang(`-- ${DOT_BIEN_VONG_NAY.length} chan moi, moi chan mot phep pha:`, hang);
+console.log(
+	`ket qua: ${hong} chan moi KHONG do duoc tren ${DOT_BIEN_VONG_NAY.length}`,
+);
+process.exit(hong > 0 ? 1 : 0);
