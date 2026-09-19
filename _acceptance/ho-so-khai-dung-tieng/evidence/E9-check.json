@@ -1,0 +1,23 @@
+{
+  "url": "http://localhost:3000/crm/companies/cmtruz664000jfkty8peooied",
+  "htmlLang": "vi",
+  "viCount": 25,
+  "sampleVi": [
+    "Đang chờ",
+    "Tra cứu lại",
+    "Tra cứu",
+    "Thêm hành động",
+    "Đóng",
+    "Giá trị đang mở",
+    "Thoả thuận đang mở",
+    "Lần chốt gần nhất",
+    "Phụ trách",
+    "Tổng quan",
+    "Cá nhân",
+    "Thoả thuận",
+    "Hoạt động",
+    "Tác nhân",
+    "Giới thiệu"
+  ],
+  "leaked": []
+}

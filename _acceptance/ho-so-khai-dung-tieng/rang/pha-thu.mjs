@@ -1,15 +1,28 @@
-import { execFileSync, spawnSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { execFileSync, spawn, spawnSync } from "node:child_process";
+import {
+	existsSync,
+	readdirSync,
+	openSync,
+	readFileSync,
+	rmSync,
+	symlinkSync,
+	writeFileSync,
+} from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+
+const CONG_SAO = Number(process.env.CONG_SAO ?? 3200);
+const CONG_API_SAO = CONG_SAO + 1;
+const APP_SAO = `http://localhost:${CONG_SAO}`;
+const API_SAO = `http://localhost:${CONG_API_SAO}`;
+const CHO_HMR = Number(process.env.CHO_HMR ?? 6000);
+const CHO_MAY_CHU = Number(process.env.CHO_MAY_CHU ?? 120000);
+
 const HO_SO = "_acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs";
 const MOT_DUONG = "_acceptance/ho-so-khai-dung-tieng/rang/mot-duong.mjs";
 const HOI_QUY = "_acceptance/ho-so-khai-dung-tieng/rang/hoi-quy-nam-cho.mjs";
-const KIEM_UI = "packages/ui";
-
-const CHO_HMR = Number(process.env.CHO_HMR ?? 6000);
 
 const CS = "apps/app/components/crm/record-sheet/company-sheet.tsx";
 const CN = "apps/app/components/crm/record-sheet/contact-sheet.tsx";
@@ -19,58 +32,31 @@ const CD = "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx";
 const FT = "packages/ui/src/components/foreign-text.tsx";
 const NGOAI = "apps/app/components/crm/record-sheet/record-actions.tsx";
 
-const chanHoSo = (ten) => ({
-	lenh: "bun",
-	doi_so: [HO_SO, ten],
-});
-
+const chanHoSo = (ten) => ({ lenh: "bun", doi_so: [HO_SO, ten] });
 const chanKiem = () => ({
 	lenh: "bun",
-	doi_so: [
-		"test",
-		"--preload",
-		"./test/setup-dom.ts",
-		"test/khai-tieng.spec.tsx",
-	],
-	cwd: join(GOC, KIEM_UI),
+	doi_so: ["test", "--preload", "./test/setup-dom.ts", "test/khai-tieng.spec.tsx"],
+	duoi: "packages/ui",
 });
 
 const DOT_BIEN = [
-	{
-		chan: "E1",
-		mo_ta: "go ForeignText quanh gioi thieu cong ty",
-		tep: CS,
+	{ chan: "E1", mo_ta: "go ForeignText quanh gioi thieu cong ty", tep: CS,
 		cu: `							<DetailSheetProse>
 								<ForeignText lang="en">{company.description}</ForeignText>
 							</DetailSheetProse>`,
 		moi: "							<DetailSheetProse>{company.description}</DetailSheetProse>",
-		do: chanHoSo("gioi-thieu"),
-		ghim: "gioi-thieu",
-	},
-	{
-		chan: "E2",
-		mo_ta: "go ForeignText quanh tom tat ca nhan",
-		tep: CN,
+		do: chanHoSo("gioi-thieu"), ghim: "gioi-thieu" },
+	{ chan: "E2", mo_ta: "go ForeignText quanh tom tat ca nhan", tep: CN,
 		cu: `			<DetailSheetProse>
 				<ForeignText lang="en">{brief.narrative}</ForeignText>
 			</DetailSheetProse>`,
 		moi: "			<DetailSheetProse>{brief.narrative}</DetailSheetProse>",
-		do: chanHoSo("tom-tat-lien-he"),
-		ghim: "tom-tat-lien-he",
-	},
-	{
-		chan: "E3",
-		mo_ta: "bo khai lang cho phan tu nganh cua MetaLine",
-		tep: CS,
+		do: chanHoSo("tom-tat-lien-he"), ghim: "tom-tat-lien-he" },
+	{ chan: "E3", mo_ta: "bo khai lang cho phan tu nganh cua MetaLine", tep: CS,
 		cu: `parts={[{ text: location }, { text: company.industry, lang: "en" }]}`,
 		moi: "parts={[{ text: location }, { text: company.industry }]}",
-		do: chanHoSo("nganh"),
-		ghim: "nganh",
-	},
-	{
-		chan: "E4",
-		mo_ta: "tra headline dong thoi gian ve template literal",
-		tep: TL,
+		do: chanHoSo("nganh"), ghim: "nganh" },
+	{ chan: "E4", mo_ta: "tra headline dong thoi gian ve template literal", tep: TL,
 		cu: `	const headline = change ? (
 		<>
 			<ForeignText lang="en">{dealStageLabel(change.from)}</ForeignText>
@@ -83,33 +69,18 @@ const DOT_BIEN = [
 		moi: `	const headline = change
 		? \`\${dealStageLabel(change.from)} → \${dealStageLabel(change.to)}\`
 		: entry.subject;`,
-		do: chanHoSo("dong-thoi-gian"),
-		ghim: "dong-thoi-gian",
-	},
-	{
-		chan: "E5",
-		mo_ta: "khai lang cho phan tu dia danh (khai thua)",
-		tep: CS,
+		do: chanHoSo("dong-thoi-gian"), ghim: "dong-thoi-gian" },
+	{ chan: "E5", mo_ta: "khai lang cho phan tu dia danh (khai thua)", tep: CS,
 		cu: `parts={[{ text: location }, { text: company.industry, lang: "en" }]}`,
 		moi: `parts={[{ text: location, lang: "en" }, { text: company.industry, lang: "en" }]}`,
-		do: chanHoSo("khong-khai-thua"),
-		ghim: "khong-khai-thua",
-	},
-	{
-		chan: "E6a",
-		mo_ta: "doi mot cho goi ve <p lang=en> viet tay",
-		tep: CD,
+		do: chanHoSo("khong-khai-thua"), ghim: "khong-khai-thua" },
+	{ chan: "E6a", mo_ta: "doi mot cho goi ve <p lang=en> viet tay", tep: CD,
 		cu: `<ForeignText lang="en">
 												{dealStageLabel(value)}
 											</ForeignText>`,
 		moi: `<p lang="en">{dealStageLabel(value)}</p>`,
-		do: { lenh: "bun", doi_so: [MOT_DUONG] },
-		ghim: "CON VIET TAY",
-	},
-	{
-		chan: "E6b",
-		mo_ta: "them ForeignText o tep NGOAI ban kiem ke",
-		tep: NGOAI,
+		do: { lenh: "bun", doi_so: [MOT_DUONG] }, ghim: "CON VIET TAY" },
+	{ chan: "E6b", mo_ta: "them ForeignText o tep NGOAI ban kiem ke", tep: NGOAI,
 		cu: "export function RecordActions({",
 		moi: `import { ForeignText } from "@crm/ui/components/foreign-text";
 
@@ -118,91 +89,148 @@ export function RangThuaNgoaiKiemKe() {
 }
 
 export function RecordActions({`,
-		do: { lenh: "bun", doi_so: [MOT_DUONG] },
-		ghim: "THUA",
-	},
-	{
-		chan: "E7a",
-		mo_ta: "bo attribute lang khoi ForeignText",
-		tep: FT,
-		cu: "<span lang={lang} className={className}>",
-		moi: "<span className={className}>",
-		do: chanKiem(),
-		ghim: "chieu a",
-	},
-	{
-		chan: "E7b",
-		mo_ta: "khai lang cho MOI phan tu cua MetaLine",
-		tep: RP,
+		do: { lenh: "bun", doi_so: [MOT_DUONG] }, ghim: "THUA" },
+	{ chan: "E7a", mo_ta: "bo attribute lang khoi ForeignText", tep: FT,
+		cu: "<span lang={lang} className={className}>", moi: "<span className={className}>",
+		do: chanKiem(), ghim: "chieu a" },
+	{ chan: "E7b", mo_ta: "khai lang cho MOI phan tu cua MetaLine", tep: RP,
 		cu: "		rest.push({ text: value, lang: part?.lang });",
 		moi: '		rest.push({ text: value, lang: part?.lang ?? "en" });',
-		do: chanKiem(),
-		ghim: "chieu b",
-	},
-	{
-		chan: "E7c",
-		mo_ta: "khu trung lap tren phan tu tho thay vi tren text",
-		tep: RP,
-		cu: "		const key = value.toLowerCase();",
-		moi: "		const key = JSON.stringify(part);",
-		do: chanKiem(),
-		ghim: "chieu c",
-	},
-	{
-		chan: "E8",
-		mo_ta: "ve ForeignText khong dieu kien, ke ca khi gia tri rong",
-		tep: CS,
+		do: chanKiem(), ghim: "chieu b" },
+	{ chan: "E7c", mo_ta: "khu trung lap tren phan tu tho thay vi tren text", tep: RP,
+		cu: "		const key = value.toLowerCase();", moi: "		const key = JSON.stringify(part);",
+		do: chanKiem(), ghim: "chieu c" },
+	{ chan: "E8", mo_ta: "ve ForeignText khong dieu kien, ke ca khi gia tri rong", tep: CS,
 		cu: `					{company.description ? (`,
 		moi: `					<DetailSheetProse>
 						<ForeignText lang="en">{company.description}</ForeignText>
 					</DetailSheetProse>
 					{company.description ? (`,
-		do: chanHoSo("ho-so-trong"),
-		ghim: "noi dung RONG",
-	},
-	{
-		chan: "E9",
-		mo_ta: "boc ForeignText quanh ca khoi Gioi thieu (nuot ca tieu de tieng Viet)",
-		tep: CS,
+		do: chanHoSo("ho-so-trong"), ghim: "noi dung RONG" },
+	{ chan: "E9", mo_ta: "boc ForeignText quanh ca khoi Gioi thieu", tep: CS,
 		cu: `						<DetailSheetSection title={m.section.about}>`,
 		moi: `						<ForeignText lang="en"><DetailSheetSection title={m.section.about}>`,
 		cu2: `						</DetailSheetSection>`,
 		moi2: `						</DetailSheetSection></ForeignText>`,
-		do: chanHoSo("tieng-trang"),
-		ghim: "lot vao",
-	},
-	{
-		chan: "E12",
-		mo_ta: "bo attribute lang khoi ForeignText (nhin tu man danh sach)",
-		tep: FT,
-		cu: "<span lang={lang} className={className}>",
-		moi: "<span className={className}>",
-		do: { lenh: "bun", doi_so: [HOI_QUY] },
-		ghim: "MAN DANH SACH",
-	},
+		do: chanHoSo("tieng-trang"), ghim: "lot vao" },
+	{ chan: "E12", mo_ta: "bo attribute lang khoi ForeignText (nhin tu man danh sach)", tep: FT,
+		cu: "<span lang={lang} className={className}>", moi: "<span className={className}>",
+		do: { lenh: "bun", doi_so: [HOI_QUY] }, ghim: "MAN DANH SACH" },
 ];
 
 const CHAN_UI = [
-	"gioi-thieu",
-	"tom-tat-lien-he",
-	"nganh",
-	"dong-thoi-gian",
-	"khong-khai-thua",
-	"ho-so-trong",
-	"tieng-trang",
+	"gioi-thieu", "tom-tat-lien-he", "nganh", "dong-thoi-gian",
+	"khong-khai-thua", "ho-so-trong", "tieng-trang",
 ];
 
-function chay({ lenh, doi_so, cwd }, moi_truong = {}) {
-	const r = spawnSync(lenh, doi_so, {
-		cwd: cwd ?? GOC,
-		encoding: "utf8",
-		env: { ...process.env, ...moi_truong },
-	});
-	return { ma: r.status, ra: `${r.stdout ?? ""}${r.stderr ?? ""}` };
+function cho(ms) {
+	return new Promise((r) => setTimeout(r, ms));
 }
 
-async function cho(ms) {
-	await new Promise((r) => setTimeout(r, ms));
+function dungCaySao() {
+	const sao =
+		process.env.CAY_SAO ?? join(GOC, "..", `.pha-thu-khai-tieng-${process.pid}`);
+	if (existsSync(sao)) rmSync(sao, { recursive: true, force: true });
+	execFileSync("git", ["-C", GOC, "worktree", "add", "--detach", "--quiet", sao, "HEAD"], {
+		encoding: "utf8",
+	});
+	symlinkSync(join(GOC, ".env"), join(sao, ".env"));
+
+	const canNhan = ["node_modules"];
+	for (const g of ["apps", "packages"]) {
+		for (const t of readdirSync(join(GOC, g), { withFileTypes: true })) {
+			if (t.isDirectory() && existsSync(join(GOC, g, t.name, "node_modules"))) {
+				canNhan.push(join(g, t.name, "node_modules"));
+			}
+		}
+	}
+	for (const them of ["packages/db/src/generated", "apps/app/.next/types"]) {
+		if (existsSync(join(GOC, them))) canNhan.push(them);
+	}
+	for (const ten of canNhan) {
+		const dich = join(sao, ten);
+		if (existsSync(dich)) rmSync(dich, { recursive: true, force: true });
+		execFileSync("mkdir", ["-p", dirname(dich)], { encoding: "utf8" });
+		execFileSync("cp", ["-c", "-R", join(GOC, ten), dich], { encoding: "utf8" });
+	}
+	console.log(
+		`   nhan ban ${canNhan.length} thu muc bang clonefile — node_modules cua goc va tung goi,\n` +
+			"   cong packages/db/src/generated (client Prisma bi gitignore nen worktree khong mang theo).\n" +
+			"   Khong dung symlink: Turbopack tu choi symlink tro ra ngoai goc du an.",
+	);
+	return sao;
+}
+
+function donCaySao(sao) {
+	try {
+		execFileSync("git", ["-C", GOC, "worktree", "remove", "--force", sao], {
+			encoding: "utf8",
+		});
+	} catch {
+		rmSync(sao, { recursive: true, force: true });
+	}
+	try {
+		execFileSync("git", ["-C", GOC, "worktree", "prune"], { encoding: "utf8" });
+	} catch {}
+}
+
+async function song(url) {
+	try {
+		await fetch(url, { method: "HEAD" });
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+async function dungMayChu(sao) {
+	const moi_truong = {
+		...process.env,
+		NEXT_PUBLIC_API_URL: API_SAO,
+		API_URL: API_SAO,
+	};
+	const api = spawn("bun", ["run", "dev"], {
+		cwd: join(sao, "apps/api"),
+		env: { ...moi_truong, PORT: String(CONG_API_SAO) },
+		stdio: ["ignore", openSync(join(sao, "api-sao.log"), "w"), openSync(join(sao, "api-sao.log"), "a")],
+		detached: false,
+	});
+	const app = spawn("bun", ["run", "dev"], {
+		cwd: join(sao, "apps/app"),
+		env: { ...moi_truong, PORT: String(CONG_SAO) },
+		stdio: ["ignore", openSync(join(sao, "app-sao.log"), "w"), openSync(join(sao, "app-sao.log"), "a")],
+		detached: false,
+	});
+
+	const han = Date.now() + CHO_MAY_CHU;
+	while (Date.now() < han) {
+		if ((await song(APP_SAO)) && (await song(API_SAO))) {
+			return { api, app };
+		}
+		await cho(2000);
+	}
+	api.kill();
+	app.kill();
+	const log = (t) => {
+		try {
+			return readFileSync(join(sao, t), "utf8").split("\n").slice(-12).join("\n");
+		} catch {
+			return "(khong doc duoc)";
+		}
+	};
+	throw new Error(
+		`KHONG DUNG DUOC MAY CHU cho ban sao sau ${CHO_MAY_CHU / 1000} giay (${APP_SAO} · ${API_SAO})\n` +
+			`--- api-sao.log ---\n${log("api-sao.log")}\n--- app-sao.log ---\n${log("app-sao.log")}`,
+	);
+}
+
+function chay({ lenh, doi_so, duoi }, sao, moi_truong = {}) {
+	const r = spawnSync(lenh, doi_so, {
+		cwd: duoi ? join(sao, duoi) : sao,
+		encoding: "utf8",
+		env: { ...process.env, APP_URL: APP_SAO, API_URL: API_SAO, ...moi_truong },
+	});
+	return { ma: r.status, ra: `${r.stdout ?? ""}${r.stderr ?? ""}` };
 }
 
 function cayBan() {
@@ -211,106 +239,127 @@ function cayBan() {
 	});
 	return (r.stdout ?? "")
 		.split("\n")
-		.filter((d) => d.trim() !== "" && !d.includes("_acceptance/"))
+		.filter((d) => d.trim() !== "")
 		.join("\n");
 }
-
-const bang = [];
-let hong = 0;
 
 console.log(
 	"-- CHAN KHAI SINH: voi TUNG chan do, pha dung vat that ma no khai minh do,\n" +
 		"   chay lai chan do do, va khang dinh no DO voi thong diep GHIM.\n" +
-		"   Mot chan xanh ma khong do duoc o day la mot thuoc CHUA TUNG DO.\n",
+		"   Mot chan xanh ma khong do duoc o day la mot thuoc CHUA TUNG DO.\n" +
+		"-- MOI PHEP PHA XAY RA TRONG MOT BAN SAO RIENG cua cay, voi may chu rieng.\n" +
+		"   Cay dang xet KHONG bi cham mot byte nao, nen cac thuoc tinh chay song song\n" +
+		"   voi chan nay khong doc phai ma da bi pha — va tep bang chung cua cay that\n" +
+		"   khong bi ghi de bang so do cua ban da pha.\n",
 );
 
-for (const d of DOT_BIEN) {
-	const duong = join(GOC, d.tep);
-	const goc = readFileSync(duong, "utf8");
-	let ket = { ma: null, ghim: false, ap_dung: false };
+const banDauBan = cayBan();
+const bang = [];
+let hong = 0;
+let sao = null;
+let mayChu = null;
 
-	try {
-		let sua = goc;
-		if (!sua.includes(d.cu)) {
-			console.log(
-				`   ${d.chan}: PHEP PHA KHONG AP DUNG DUOC — khong tim thay doan can pha trong ${d.tep}.\n` +
-					"      Dung tin mau nao ca: mot phep pha khong xay ra trong y het mot chan do khong bat duoc.",
-			);
-			bang.push({ chan: d.chan, pha: d.mo_ta, ma: "-", ghim: "-", ap_dung: false });
-			hong += 1;
-			continue;
-		}
-		sua = sua.replace(d.cu, d.moi);
-		if (d.cu2) {
-			if (!sua.includes(d.cu2)) {
-				console.log(`   ${d.chan}: PHEP PHA (ve thu hai) KHONG AP DUNG DUOC`);
-				bang.push({ chan: d.chan, pha: d.mo_ta, ma: "-", ghim: "-", ap_dung: false });
+try {
+	sao = dungCaySao();
+	console.log(`-- BAN SAO: ${sao} (git worktree tai HEAD, symlink node_modules + .env)`);
+	mayChu = await dungMayChu(sao);
+	console.log(`-- MAY CHU CUA BAN SAO: ${APP_SAO} · ${API_SAO}`);
+
+	for (const d of DOT_BIEN) {
+		const duong = join(sao, d.tep);
+		const goc = readFileSync(duong, "utf8");
+		let ket = { ma: null, ghim: false, ap_dung: false };
+
+		try {
+			let sua = goc;
+			if (!sua.includes(d.cu)) {
+				console.log(
+					`   ${d.chan}: PHEP PHA KHONG AP DUNG DUOC — khong tim thay doan can pha trong ${d.tep}.\n` +
+						"      Dung tin mau nao ca: mot phep pha khong xay ra trong y het mot chan do khong bat duoc.",
+				);
+				bang.push({ chan: d.chan, ma: "-", ghim: "-", ap_dung: false });
 				hong += 1;
 				continue;
 			}
-			sua = sua.replace(d.cu2, d.moi2);
+			sua = sua.replace(d.cu, d.moi);
+			if (d.cu2) {
+				if (!sua.includes(d.cu2)) {
+					console.log(`   ${d.chan}: PHEP PHA (ve thu hai) KHONG AP DUNG DUOC`);
+					bang.push({ chan: d.chan, ma: "-", ghim: "-", ap_dung: false });
+					hong += 1;
+					continue;
+				}
+				sua = sua.replace(d.cu2, d.moi2);
+			}
+			writeFileSync(duong, sua);
+			ket.ap_dung = true;
+
+			await cho(CHO_HMR);
+			const r = chay(d.do, sao);
+			ket.ma = r.ma;
+			ket.ghim = r.ra.includes(d.ghim);
+
+			const dat = ket.ma !== 0 && ket.ghim;
+			if (!dat) hong += 1;
+			console.log(
+				`   ${dat ? "dat     " : "KHONG DAT"} ${d.chan.padEnd(5)} ${d.mo_ta}\n` +
+					`             -> ma thoat ${ket.ma}, thong diep ${ket.ghim ? "CO" : "KHONG"} ghim ${JSON.stringify(d.ghim)}`,
+			);
+		} finally {
+			writeFileSync(duong, goc);
 		}
-		writeFileSync(duong, sua);
-		ket.ap_dung = true;
 
-		await cho(CHO_HMR);
-		const r = chay(d.do);
-		ket.ma = r.ma;
-		ket.ghim = r.ra.includes(d.ghim);
-
-		const dat = ket.ma !== 0 && ket.ghim;
-		if (!dat) hong += 1;
-		console.log(
-			`   ${dat ? "dat     " : "KHONG DAT"} ${d.chan.padEnd(5)} ${d.mo_ta}\n` +
-				`             -> ma thoat ${ket.ma}, thong diep ${ket.ghim ? "CO" : "KHONG"} ghim ${JSON.stringify(d.ghim)}`,
-		);
-	} finally {
-		writeFileSync(duong, goc);
+		bang.push({ chan: d.chan, ma: ket.ma, ghim: ket.ghim ? "co" : "khong", ap_dung: ket.ap_dung });
 	}
 
-	bang.push({
-		chan: d.chan,
-		pha: d.mo_ta,
-		ma: ket.ma,
-		ghim: ket.ghim ? "co" : "khong",
-		ap_dung: ket.ap_dung,
-	});
+	await cho(CHO_HMR);
+
+	console.log("\n-- DOT BIEN MOI TRUONG: tro APP_URL sang mot cong khong co may chu nao.");
+	console.log("   Moi chan ui-check phai DO ma 2 va GOI TEN CAY, khong chan nao in ra mot con so.");
+	for (const c of CHAN_UI) {
+		const r = chay(chanHoSo(c), sao, { APP_URL: "http://localhost:39997" });
+		const goiTen = r.ra.includes(sao) || r.ra.includes("CAY KHAC");
+		const inSo = /ket qua: chan=/.test(r.ra);
+		const dat = r.ma === 2 && goiTen && !inSo;
+		if (!dat) hong += 1;
+		console.log(
+			`   ${dat ? "dat     " : "KHONG DAT"} ${c.padEnd(18)} ma ${r.ma}, goi ten cay ${goiTen ? "co" : "khong"}, in con so ${inSo ? "CO (sai)" : "khong"}`,
+		);
+		bang.push({ chan: `moi-truong:${c}`, ma: r.ma, ghim: goiTen ? "co" : "khong", ap_dung: true });
+	}
+
+	console.log("\n-- CHIEU DO CUA CHINH CHAN NAY: ban sao CHUA pha gi thi chan do phai xanh.");
+	const sach = chay(chanHoSo("gioi-thieu"), sao);
+	if (sach.ma !== 0) {
+		console.log(
+			`   KHONG DAT: ban sao da tra ve nguyen trang ma chan do van do (ma ${sach.ma}).\n` +
+				"   Hoac phep tra ban goc hong, hoac co thu khac dang do.",
+		);
+		hong += 1;
+	} else {
+		console.log("   dat     ban sao sach thi chan do xanh");
+	}
+} finally {
+	if (mayChu) {
+		mayChu.api.kill();
+		mayChu.app.kill();
+		console.log("-- DA TAT may chu cua ban sao");
+	}
+	if (sao) {
+		donCaySao(sao);
+		console.log("-- DA XOA ban sao");
+	}
 }
 
-await cho(CHO_HMR);
-
-console.log("\n-- DOT BIEN MOI TRUONG: tro APP_URL sang mot cong khong co may chu nao.");
-console.log("   Moi chan ui-check phai DO ma 2 va GOI TEN CAY, khong chan nao in ra mot con so.");
-
-const CONG_CHET = "http://localhost:39997";
-for (const c of CHAN_UI) {
-	const r = chay(chanHoSo(c), { APP_URL: CONG_CHET });
-	const goiTen = r.ra.includes(GOC) || r.ra.includes("CAY KHAC");
-	const inSo = /ket qua: chan=/.test(r.ra);
-	const dat = r.ma === 2 && goiTen && !inSo;
-	if (!dat) hong += 1;
+const sauBan = cayBan();
+if (sauBan !== banDauBan) {
 	console.log(
-		`   ${dat ? "dat     " : "KHONG DAT"} ${c.padEnd(18)} ma ${r.ma}, goi ten cay ${goiTen ? "co" : "khong"}, in con so ${inSo ? "CO (sai)" : "khong"}`,
-	);
-	bang.push({ chan: `moi-truong:${c}`, pha: "APP_URL cong chet", ma: r.ma, ghim: goiTen ? "co" : "khong", ap_dung: true });
-}
-
-console.log("\n-- CHIEU DO CUA CHINH CHAN NAY: cay CHUA pha gi thi moi chan phai xanh.");
-const sach = chay(chanHoSo("gioi-thieu"));
-if (sach.ma !== 0) {
-	console.log(
-		`   KHONG DAT: cay da tra ve nguyen trang ma chan do van do (ma ${sach.ma}).\n` +
-			"   Hoac phep tra ban goc hong, hoac co thu khac dang do.",
+		`\n   KHONG DAT: cay dang xet DOI sau khi chay — phep pha da ro ri ra khoi ban sao.\n` +
+			`   truoc:\n${banDauBan || "   (sach)"}\n   sau:\n${sauBan || "   (sach)"}`,
 	);
 	hong += 1;
 } else {
-	console.log("   dat     cay sach thi chan do xanh");
-}
-
-const ban = cayBan();
-if (ban !== "") {
-	console.log(`\n   KHONG DAT: cay con ban sau khi chay xong:\n${ban}`);
-	hong += 1;
+	console.log("\n   dat     cay dang xet khong doi mot byte nao (ke ca thu muc evidence)");
 }
 
 console.log("\n===== BANG DOT BIEN =====");

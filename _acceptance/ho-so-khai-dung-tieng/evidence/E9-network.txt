@@ -1,0 +1,24 @@
+E9 network truth dump (2026-09-19)
+driver: Claude_Browser (Chrome-based preview pane), read_network_requests + read_console_messages
+scope: dev_server.url=http://localhost:3000, api_base=http://localhost:3001
+
+--- failed/aborted requests (raw) ---
+[10760.402] GET http://localhost:3000/crm/companies?record=company%3Acmtruz664000jfkty8peooied&_rsc=5I9ipxqktzTS8bep -> 200 OK [FAILED: net::ERR_ABORTED]
+  scope: app-origin (localhost:3000), FAIL-eligible (not a static asset)
+  classification: client-side cancel of a Next.js RSC prefetch (server responded 200; browser aborted reading it,
+  most likely superseded by the sheet's own subsequent navigation/re-render). Not a connection-error, not a
+  timeout, not a 4xx/5xx status -> does not meet the FAIL criteria in the eval instructions as written.
+  Noted, not counted as app-fail.
+
+--- console errors (raw) ---
+[error] Encountered a script tag while rendering React component. Scripts inside React components are never
+executed when rendering on the client. Consider using template tag instead (MDN link).
+  source: apps/app/components/inline-script.tsx (renders <script suppressHydrationWarning> to set
+  document.documentElement.lang client-side before hydration). Pre-existing pattern, unrelated to AC-9's
+  lang=vi / ForeignText-wrapping assertions. Not a network failure; noted for completeness only.
+
+--- all other requests in this run ---
+163 total requests observed; all others (Next.js static chunks/fonts, /api/trpc/* batch calls to
+localhost:3000) returned 200 or 304. No requests to localhost:3001 (api_base) were observed to fail.
+
+networkObserved: clean
