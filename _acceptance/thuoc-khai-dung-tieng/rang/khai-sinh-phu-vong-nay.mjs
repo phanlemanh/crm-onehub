@@ -183,6 +183,7 @@ export const DOT_BIEN_VONG_NAY = [
 	},
 	{
 		chan: "E14-A",
+		tat_ca: true,
 		nhom: "nhanh",
 		eval: "E14",
 		tep: "_acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs",
@@ -193,6 +194,7 @@ export const DOT_BIEN_VONG_NAY = [
 	},
 	{
 		chan: "E14-C",
+		tat_ca: true,
 		nhom: "nhanh",
 		eval: "E14",
 		tep: "_acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs",
@@ -203,6 +205,7 @@ export const DOT_BIEN_VONG_NAY = [
 	},
 	{
 		chan: "E14-D",
+		tat_ca: true,
 		nhom: "nhanh",
 		eval: "E14",
 		tep: "_acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs",
@@ -213,6 +216,7 @@ export const DOT_BIEN_VONG_NAY = [
 	},
 	{
 		chan: "E14-E",
+		tat_ca: true,
 		nhom: "nhanh",
 		eval: "E14",
 		tep: "_acceptance/ho-so-khai-dung-tieng/rang/mot-duong.mjs",
@@ -223,6 +227,7 @@ export const DOT_BIEN_VONG_NAY = [
 	},
 	{
 		chan: "E14-F",
+		tat_ca: true,
 		nhom: "nhanh",
 		eval: "E14",
 		tep: "_acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs",
@@ -233,6 +238,7 @@ export const DOT_BIEN_VONG_NAY = [
 	},
 	{
 		chan: "E14-G",
+		tat_ca: true,
 		nhom: "nhanh",
 		eval: "E14",
 		tep: "_acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs",
@@ -243,6 +249,7 @@ export const DOT_BIEN_VONG_NAY = [
 	},
 	{
 		chan: "E14-chot-ghim-cu",
+		tat_ca: true,
 		nhom: "nhanh",
 		eval: "E14",
 		tep: "_acceptance/ho-so-khai-dung-tieng/rang/bang-dot-bien.mjs",
@@ -390,6 +397,7 @@ try {
 		APP_URL: APP_SAO,
 		API_URL: API_SAO,
 		CHO_PHEP_CAY_BAN: "1",
+		KHOA_DA_GIU: "1",
 	};
 
 	for (const d of DOT_BIEN_CHAY) {
@@ -421,7 +429,10 @@ try {
 				hong += 1;
 				continue;
 			}
-			writeFileSync(duong, goc.replace(d.cu, d.moi));
+			writeFileSync(
+				duong,
+				d.tat_ca ? goc.replaceAll(d.cu, d.moi) : goc.replace(d.cu, d.moi),
+			);
 			if (d.commit) {
 				execFileSync("git", ["-C", sao, "add", "-A"], { encoding: "utf8" });
 				execFileSync(

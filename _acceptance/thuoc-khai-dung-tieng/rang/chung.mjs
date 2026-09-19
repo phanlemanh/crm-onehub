@@ -53,6 +53,10 @@ const KHOA_HET_HAN = 30 * 60 * 1000;
 const KHOA_CHO_TOI_DA = 9 * 60 * 1000;
 
 export async function giuKhoa(ten) {
+	if (process.env.KHOA_DA_GIU === "1") {
+		console.log(`-- KHOA: ${ten} di qua, khoa da do lan chay cha giu.`);
+		return () => {};
+	}
 	const batDau = Date.now();
 	for (;;) {
 		try {

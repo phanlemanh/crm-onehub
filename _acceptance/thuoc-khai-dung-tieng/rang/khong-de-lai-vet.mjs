@@ -1,5 +1,5 @@
-import { kiemCsdlThu } from "../../ho-so-khai-dung-tieng/rang/du-lieu-thu.mjs";
 import { db } from "../../../packages/db/src/index.ts";
+import { kiemCsdlThu } from "../../ho-so-khai-dung-tieng/rang/du-lieu-thu.mjs";
 import { bang, chay, GOC, giuKhoa, thoat } from "./chung.mjs";
 
 const nhaKhoa = await giuKhoa("khong-de-lai-vet");
