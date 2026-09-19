@@ -9,7 +9,7 @@ import {
 	writeFileSync,
 } from "node:fs";
 import { createServer as netCreateServer } from "node:net";
-import { dirname, join } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
@@ -35,10 +35,56 @@ function cho(ms) {
 	return new Promise((r) => setTimeout(r, ms));
 }
 
+const TIEN_TO_SAO = ".pha-thu-khai-tieng-";
+
+function kiemDuongSao(sao) {
+	const duong = resolve(sao);
+	const ten = basename(duong);
+	const tuChoi = (vi_sao) => {
+		console.log(
+			`[xoa-tu-choi] ${duong}\n` +
+				`   ${vi_sao}\n` +
+				"   rmSync de quy tren mot duong lay thang tu bien moi truong, khong kiem gi,\n" +
+				"   la mot lenh xoa sach thu muc dang cho mot cu go nham CAY_SAO.",
+		);
+		process.exit(2);
+	};
+	if (!ten.startsWith(TIEN_TO_SAO)) {
+		tuChoi(`Ten thu muc khong mang tien to ${JSON.stringify(TIEN_TO_SAO)}.`);
+	}
+	if (duong === GOC || `${GOC}/`.startsWith(`${duong}/`)) {
+		tuChoi("Duong nay BANG hoac CHUA goc kho dang xet.");
+	}
+	if (existsSync(duong)) {
+		const ra = execFileSync(
+			"git",
+			["-C", GOC, "worktree", "list", "--porcelain"],
+			{
+				encoding: "utf8",
+			},
+		);
+		const la = ra
+			.split("\n")
+			.filter((d) => d.startsWith("worktree "))
+			.map((d) => resolve(d.slice("worktree ".length)));
+		if (!la.includes(duong)) {
+			tuChoi(
+				"Duong nay TON TAI nhung khong phai worktree do script nay dang ky.\n" +
+					"   No la mot thu muc that cua ai do, khong phai ban sao dung mot lan.",
+			);
+		}
+	}
+	return duong;
+}
+
 function dungCaySao() {
 	const sao =
-		process.env.CAY_SAO ??
-		join(GOC, "..", `.pha-thu-khai-tieng-${process.pid}`);
+		process.env.CAY_SAO ?? join(GOC, "..", `${TIEN_TO_SAO}${process.pid}`);
+	kiemDuongSao(sao);
+	if (process.env.CHI_KIEM_DUONG === "1") {
+		console.log(`[chi-kiem-duong] duong ${sao} di qua duoc phep kiem.`);
+		process.exit(0);
+	}
 	if (existsSync(sao)) rmSync(sao, { recursive: true, force: true });
 	execFileSync(
 		"git",
@@ -77,6 +123,7 @@ function dungCaySao() {
 }
 
 function donCaySao(sao) {
+	kiemDuongSao(sao);
 	try {
 		execFileSync("git", ["-C", GOC, "worktree", "remove", "--force", sao], {
 			encoding: "utf8",
