@@ -1,0 +1,478 @@
+{
+  "generated_at": "2026-09-18T18:01:37Z",
+  "generated_sha": "2137475a3033759bc88ea5445a232914dd2042f0",
+  "mainBranchInfo": {
+    "branch": "onehub",
+    "source": "remote"
+  },
+  "slug": "ho-so-khai-dung-tieng",
+  "round": 1,
+  "riskTier": "T2",
+  "evals": [
+    {
+      "id": "E1",
+      "criterion": "AC-1",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs gioi-thieu\"",
+      "expected": "exit 0. CANH CAY truoc tien: dau moc khong ve → ma 2 goi ten cay dang xet,\nkhong doc con so nao.\nGia tri gioi thieu doc TU MAY CHU trong chinh luot chay nay, khong go san\ntrong chan do. Mo TAM HO SO that (khong phai man danh sach) roi tim gia tri\ndo tren man; phan tu chua no phai co to tien khai lang=en.\nKET XUAT BAT BUOC vao evidence/vung-khai.json, mot muc cho gia tri nay:\nso phan tu khai lang ben trong gia tri, duong dan the cua tung phan tu, va\ndanh sach chuoi tieng Viet (neu co) lot trong pham vi lang=en. Day la vat\nDUY NHAT cho E11 doc — thieu tep nay thi E11 khong co dau ra de cham.\nChan do IN RA ten man da mo va 60 ky tu dau cua gia tri da tim.\nTap rong (khong cong ty nao co description) la KHONG DO DUOC, ma 2.\nCap hai chieu tren CUNG fixture: ban sao go ForeignText khoi cho goi\ncompany-sheet → chan nay phai DO, thong diep ghim chua chuoi \"gioi-thieu\"\nva 60 ky tu dau cua gia tri chua boc.",
+      "executor": "ui-check",
+      "expectedExit": 0,
+      "steps": [
+        "Goi canhCay() — dat dau moc vao apps/app/public, xin lai qua APP_URL, in ten cay",
+        "Dung may chu theo dev_server.start cua config",
+        "Doc companies.list tu may chu, chon mot cong ty CO truong description",
+        "Mo {APP_URL}/<slug>/companies/<id> voi cookie lang=vi → chup evidence/ho-so-gioi-thieu.png",
+        "Doc DOM, tim doan gioi thieu bang chinh gia tri description lay tu may chu",
+        "Khang dinh phan tu chua doan do co closest('[lang=\"en\"]') khac null",
+        "Ket xuat vung khai cua gia tri nay vao evidence/vung-khai.json"
+      ],
+      "paths": [
+        "apps/app/components/crm/record-sheet/company-sheet.tsx",
+        "apps/app/components/detail-sheet.tsx",
+        "packages/ui/src/components/foreign-text.tsx"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output",
+        "screenshot"
+      ],
+      "ref": "config:executors.script.hskt_gioi_thieu"
+    },
+    {
+      "id": "E2",
+      "criterion": "AC-2",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs tom-tat-lien-he\"",
+      "expected": "exit 0. Canh cay truoc; dau moc khong ve → ma 2 goi ten cay.\nCung khuon E1, doi tuong la brief.narrative cua ho so lien he. Gia tri doc\ntu may chu trong chinh luot chay. In ra ten man da mo va 60 ky tu dau.\nKet xuat muc cua gia tri nay vao evidence/vung-khai.json theo cung khuon E1.\nKhong lien he nao co tom tat → KHONG DO DUOC, ma 2.\nCap hai chieu: ban sao go ForeignText khoi cho goi contact-sheet → DO,\nthong diep ghim chua \"tom-tat-lien-he\".",
+      "executor": "ui-check",
+      "expectedExit": 0,
+      "steps": [
+        "Goi canhCay() truoc man dau tien",
+        "Doc contacts.list tu may chu, chon mot lien he CO tom tat tac nhan",
+        "Mo ho so lien he do voi cookie lang=vi → chup evidence/ho-so-tom-tat.png",
+        "Khang dinh doan tom tat nam trong phan tu co to tien khai lang=en",
+        "Ket xuat vung khai cua gia tri nay vao evidence/vung-khai.json"
+      ],
+      "paths": [
+        "apps/app/components/crm/record-sheet/contact-sheet.tsx",
+        "apps/app/components/detail-sheet.tsx",
+        "packages/ui/src/components/foreign-text.tsx"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output",
+        "screenshot"
+      ],
+      "ref": "config:executors.script.hskt_tom_tat_lien_he"
+    },
+    {
+      "id": "E3",
+      "criterion": "AC-3",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs nganh\"",
+      "expected": "exit 0. Canh cay truoc; dau moc khong ve → ma 2 goi ten cay.\nGOI TEN tung gia tri nganh da kiem va so cho chua boc cua tung gia tri,\nkhong tra mot con so tong. Day la cho hop dong vong truoc (AC-7) tuong da\nxanh: chan do cu chi mo man DANH SACH cong ty, noi nganh von da khai dung;\nchan nay mo TAM HO SO, noi no chua khai.\nKet xuat muc cho tung gia tri nganh vao evidence/vung-khai.json.\nTap nganh rong → KHONG DO DUOC, ma 2.\nCap hai chieu: ban sao doi part nganh cua MetaLine ve chuoi tran → DO,\nthong diep ghim chua ten gia tri nganh chua boc.",
+      "executor": "ui-check",
+      "expectedExit": 0,
+      "steps": [
+        "Goi canhCay() truoc man dau tien",
+        "Doc companies.list tu may chu, lay tap gia tri industry khac rong",
+        "Mo ho so cua tung cong ty co industry voi cookie lang=vi",
+        "Khang dinh gia tri nganh tren dong meta nam trong phan tu khai lang=en",
+        "Chup evidence/ho-so-nganh.png va ket xuat vao evidence/vung-khai.json"
+      ],
+      "paths": [
+        "apps/app/components/crm/record-sheet/company-sheet.tsx",
+        "apps/app/components/crm/record-sheet/record-parts.tsx",
+        "packages/ui/src/components/foreign-text.tsx"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output",
+        "screenshot"
+      ],
+      "ref": "config:executors.script.hskt_nganh"
+    },
+    {
+      "id": "E4",
+      "criterion": "AC-4",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs dong-thoi-gian\"",
+      "expected": "exit 0. Canh cay truoc; dau moc khong ve → ma 2 goi ten cay.\nNhan giai doan lay tu dealStageLabel() CUA SAN PHAM (goi that, khong chep\nhang so vao chan do) — cung loi vong truoc da dung.\nGOI TEN ca hai nhan. Hai nhan trong mot muc \"A → B\" la HAI phan tu rieng,\nchan do khang dinh tung cai; mot chan chi kiem \"muc nay co lang=en o dau do\"\nse xanh gia khi chi mot nua duoc boc.\nKet xuat muc cho ca hai nhan vao evidence/vung-khai.json.\nKhong muc doi giai doan nao → KHONG DO DUOC, ma 2 (tap rong khong phai dat).\nCap hai chieu: ban sao tra headline ve template literal → DO, thong diep\nghim chua ca hai nhan.",
+      "executor": "ui-check",
+      "expectedExit": 0,
+      "steps": [
+        "Goi canhCay() truoc man dau tien",
+        "Gieo hoac tim mot thoa thuan da doi giai doan it nhat mot lan",
+        "Mo ho so chua dong thoi gian co muc doi giai doan, cookie lang=vi",
+        "Khang dinh CA HAI nhan giai doan (cu va moi) deu trong phan tu khai lang=en",
+        "Chup evidence/dong-thoi-gian.png va ket xuat vao evidence/vung-khai.json"
+      ],
+      "paths": [
+        "apps/app/components/crm/timeline/timeline-entry.tsx",
+        "packages/ui/src/components/foreign-text.tsx"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output",
+        "screenshot"
+      ],
+      "ref": "config:executors.script.hskt_dong_thoi_gian"
+    },
+    {
+      "id": "E5",
+      "criterion": "AC-5",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs khong-khai-thua\"",
+      "expected": "exit 0. Canh cay truoc; dau moc khong ve → ma 2 goi ten cay.\nChieu CHONG KHAI THUA. GOI TEN tung gia tri da kiem (ten cong ty, dia danh,\nchuc danh) va tra ve 0 cho khai thua.\nVi sao chan nay ton tai: mot ban cai dat boc lang=en quanh ca tam ho so se\nqua het E1..E4 va lam tinh hinh TE HON hien trang — chuc danh \"Giam doc kinh\ndoanh\" bi doc bang bo phat am tieng Anh. Chuan goi ten hai ca nay:\nproper names va words of indeterminate language (WCAG 2.2 SC 3.1.2).\nKet xuat muc cho tung gia tri PHAI NAM NGOAI vung khai vao\nevidence/vung-khai.json, danh dau ro la muc chieu-nguoc.\nCap hai chieu: ban sao boc ForeignText quanh part dia danh cua MetaLine →\nchan nay phai DO, thong diep ghim chua chuoi gia tri dia danh.",
+      "executor": "ui-check",
+      "expectedExit": 0,
+      "steps": [
+        "Goi canhCay() truoc man dau tien",
+        "Tren cung tam ho so cua E1 va E2, lay ten cong ty, dia danh, chuc danh lien he tu may chu",
+        "Khang dinh TUNG gia tri do KHONG nam trong phan tu khai lang=en",
+        "Chup evidence/khong-khai-thua.png va ket xuat vao evidence/vung-khai.json"
+      ],
+      "paths": [
+        "apps/app/components/crm/record-sheet/company-sheet.tsx",
+        "apps/app/components/crm/record-sheet/contact-sheet.tsx",
+        "apps/app/components/crm/record-sheet/record-parts.tsx"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output",
+        "screenshot"
+      ],
+      "ref": "config:executors.script.hskt_khong_khai_thua"
+    },
+    {
+      "id": "E6",
+      "criterion": "AC-6",
+      "cmd": "bun _acceptance/ho-so-khai-dung-tieng/rang/mot-duong.mjs",
+      "expected": "exit 0. MA TRAN TOAN PHAN, viet truoc: hang so CHIN nam trong chinh tep\nthuoc, chep tu muc \"Chin cho\" cua hop dong, KHONG nap tu module bi do.\nSo khang dinh = 9, khong phai \"dem duoc bao nhieu khang dinh bay nhieu\".\nChan do doc cay ma apps/app va khang dinh:\n(a) tim thay DUNG chin cho khai tieng, goi ten tung cho theo file:dong, va\ndoi chieu tung duong dan voi ban kiem ke ghim — thieu mot cho thi GOI\nTEN cho thieu, thua mot cho thi GOI TEN cho thua;\n(b) ca chin deu di qua ForeignText nhap tu @crm/ui;\n(c) 0 cho nao trong apps/app con mang thuoc tinh lang viet tay tren the JSX\no cho goi — xet MOI ten the (span, p, div, li, td, …) va MOI dang gia\ntri (chuoi hang lan bieu thuc lang={...}). Khong duoc chi quet <span\nlang=\"en\"> nguyen van: mot cho sot o hinh dang khac la dung ca ma chan\nnay ton tai de bat.\nDay la chan do CAU TRUC MA, kiem mot bat bien ve hinh dang ma. No KHONG\nthay chan do tren man: E1..E5 moi noi duoc dieu gi hien ra.\nCap hai chieu (E10 thi hanh, khong chi khai bang chu):\ndoi mot cho goi ve <p lang=\"en\"> viet tay → DO, goi ten file:dong; va them\nmot cho khai tieng o file NGOAI danh sach ghim → DO, goi ten file do.",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "apps/app/**",
+        "packages/ui/src/components/foreign-text.tsx",
+        "_acceptance/ho-so-khai-dung-tieng/contract.md"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.hskt_mot_duong"
+    },
+    {
+      "id": "E7",
+      "criterion": "AC-7",
+      "cmd": "cd packages/ui && bun test --preload ./test/setup-dom.ts test/khai-tieng.spec.tsx",
+      "expected": "exit 0. Bai kiem VE RA DOM THAT (setup-dom.ts da co san trong packages/ui).\nBA CHIEU trong cung mot bai kiem:\n(a) ForeignText lang=\"en\" sinh phan tu co lang=\"en\"; ForeignText lang=\"vi\"\nsinh lang=\"vi\" — thuoc tinh theo tham so, khong dong cung mot gia tri;\n(b) MetaLine nhan mot part kieu CHUOI TRAN sinh <span> KHONG mang thuoc\ntinh lang, va part kieu {text, lang} sinh <span lang> dung gia tri;\n(c) MetaLine nhan [\"X\", {text: \"X\", lang: \"en\"}] sinh ra DUNG MOT phan tu\nmang chu X — khu trung lap chay tren text, khong tren phan tu tho.\nChieu (b) giu cho ho so lien he khong bi khai sai: cho goi o do truyen\n[contact.title, contact.company?.name] va KHONG phai sua mot chu nao.\nChieu (c) giu loi hua \"khong doi mot pixel nao\" cua dac ta UX: khu trung lap\nchay sai thi dong meta ve hai lan cung mot chu khi dia danh trung chu voi\nnganh — mot loi thi giac that ma ca (a) lan (b) deu khong thay.\nCap hai chieu cho TUNG chieu, thong diep ghim ten chieu:\nbo thuoc tinh lang khoi ForeignText → (a) do;\nkhai lang cho moi part cua MetaLine → (b) do;\nkhu trung lap tren phan tu tho → (c) do, ghim so phan tu dem duoc.",
+      "executor": "test",
+      "expectedExit": 0,
+      "paths": [
+        "packages/ui/src/components/foreign-text.tsx",
+        "packages/ui/test/khai-tieng.spec.tsx",
+        "apps/app/components/crm/record-sheet/record-parts.tsx"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.test.hskt_component"
+    },
+    {
+      "id": "E8",
+      "criterion": "AC-8",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs ho-so-trong\"",
+      "expected": "exit 0. Canh cay truoc; dau moc khong ve → ma 2 goi ten cay.\nDem so phan tu khai lang=en co noi dung chu RONG tren tam ho so — phai bang\n0. Va khang dinh khoi Gioi thieu vang han khoi cay DOM, khong phai ve ra roi\nan bang CSS.\nKhong dung duoc mot cong ty chua enrichment → KHONG DO DUOC, ma 2.\nCap hai chieu: ban sao ve ForeignText khong dieu kien (ke ca khi gia tri\nnull) → chan nay phai DO, thong diep ghim so phan tu rong dem duoc.",
+      "executor": "ui-check",
+      "expectedExit": 0,
+      "steps": [
+        "Goi canhCay() truoc man dau tien",
+        "Gieo mot cong ty chua enrichment (khong description, khong industry)",
+        "Mo ho so cua no voi cookie lang=vi → chup evidence/ho-so-trong.png",
+        "Khang dinh khoi Gioi thieu KHONG ve, va 0 phan tu rong khai lang=en"
+      ],
+      "paths": [
+        "apps/app/components/crm/record-sheet/company-sheet.tsx",
+        "packages/ui/src/components/foreign-text.tsx"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output",
+        "screenshot"
+      ],
+      "ref": "config:executors.script.hskt_ho_so_trong"
+    },
+    {
+      "id": "E9",
+      "criterion": "AC-9",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs tieng-trang\"",
+      "expected": "exit 0. Canh cay truoc; dau moc khong ve → ma 2 goi ten cay.\nTIEN DE cua moi chan do khac: trang phai o lang=vi. Chan nay cung khang dinh\nchieu nguoc — mot chuoi giao dien TIENG VIET tren ho so khong duoc nam trong\npham vi lang=en, tuc viec boc khong tran ra ngoai gia tri no phai boc.\nlang cua trang khac \"vi\" → ma 2 va GOI TEN gia tri doc duoc; day la tien de\nthieu chu khong phai chan do do.\nCap hai chieu: ban sao boc ForeignText quanh ca DetailSheetSection (thay vi\nquanh gia tri) → chan nay phai DO, thong diep ghim chuoi tieng Viet bi nuot.",
+      "executor": "ui-check",
+      "expectedExit": 0,
+      "steps": [
+        "Goi canhCay() truoc man dau tien",
+        "Mo tam ho so voi cookie lang=vi",
+        "Khang dinh document.documentElement.lang === 'vi'",
+        "Lay mot chuoi giao dien tieng Viet that tren ho so, khang dinh no KHONG co to tien khai lang=en"
+      ],
+      "paths": [
+        "apps/app/app/layout.tsx",
+        "apps/app/components/crm/record-sheet/company-sheet.tsx",
+        "apps/app/components/detail-sheet.tsx"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output",
+        "screenshot"
+      ],
+      "ref": "config:executors.script.hskt_tieng_trang"
+    },
+    {
+      "id": "E10",
+      "criterion": "AC-1",
+      "cmd": "bun _acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs",
+      "expected": "exit 0. Chan KHAI SINH cua ca bo thuoc vong nay. Voi TUNG chan E1..E9 va\nE12: dung mot ban sao cay lam viec, pha dung vat that ma chan do khai minh\ndo, chay lai chan do do, va khang dinh no DO voi thong diep GHIM dung chuoi\nda khai trong `expected` cua chan do.\nDanh sach dot bien BAT BUOC, khong duoc bo chan nao:\nE1 go ForeignText o company-sheet · E2 go o contact-sheet ·\nE3 doi part nganh ve chuoi tran · E4 tra headline ve template literal ·\nE5 boc ForeignText quanh part dia danh · E8 ve ForeignText khong dieu kien ·\nE9 boc quanh ca DetailSheetSection · E12 bo thuoc tinh lang khoi ForeignText.\nE6 chay HAI dot bien: (i) doi mot cho goi ve <p lang=\"en\"> viet tay,\n(ii) them mot cho khai tieng o file NGOAI ban kiem ke ghim — ca hai deu\nphai DO va GOI TEN dung file.\nE7 chay BA dot bien, mot cho moi chieu (a)(b)(c) theo dung `expected` cua E7.\nCong mot dot bien MOI TRUONG, ap cho ca bay chan ui-check: tro APP_URL sang\nmot cong khong co may chu nao → moi chan phai DO ma 2 va GOI TEN CAY, khong\nchan nao duoc in ra mot con so. Day la canh cay, va no da tung hong that o\nkho nay.\nIn ra bang: ten chan | da pha gi | ma thoat | thong diep co ghim khong.\nMot chan xanh ma khong do duoc o day la mot thuoc CHUA TUNG DO — khong phan\nbiet duoc \"vat lanh\" voi \"chan do khong di toi cho can do\". Day dung la lop\nloi da giet AC-7 cua vong truoc.\nBat ky chan nao khong do, hoac do ma thong diep khong ghim → exit 1 va GOI\nTEN chan do.\nChieu do cua CHINH chan nay: chay no tren cay CHUA pha gi ca → moi chan xanh\n→ chan nay phai DO voi thong diep \"khong chan nao do khi da pha\".",
+      "executor": "script",
+      "expectedExit": 0,
+      "paths": [
+        "_acceptance/ho-so-khai-dung-tieng/rang/**",
+        "apps/app/components/crm/record-sheet/**",
+        "apps/app/components/crm/timeline/**",
+        "packages/ui/src/components/foreign-text.tsx"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "ref": "config:executors.script.hskt_pha_thu"
+    },
+    {
+      "id": "E11",
+      "criterion": "AC-10",
+      "expected": "Hoi dong doc vung-khai.json — vat do CHINH E1..E5 ket xuat tu DOM that, mot\nmuc cho moi gia tri, moi muc co: so phan tu khai lang ben trong gia tri,\nduong dan the cua tung phan tu, va danh sach chuoi tieng Viet lot trong\npham vi lang=en.\nCau hoi: co gia tri nao BI CHIA SAI khong — mot doan tieng Anh bi boc lam\nNHIEU manh thay vi mot vung lien, hoac mot cau tieng Viet bi cat lam doi vi\nmot manh tieng Anh giua cau?\nPASS khi: moi gia tri nam trong DUNG MOT vung khai lien, va danh sach chuoi\ntieng Viet lot vao trong la RONG o moi muc.\nVi sao cau hoi nay may khong tra loi duoc: \"co thuoc tinh lang\" va \"nghe ra\nchu\" la hai viec khac nhau. Mot ban cai dat boc TUNG TU deu qua het E1..E9,\nva anh chup giong het ban lanh vi thuoc tinh lang khong ve ra pixel nao.\nChi con so phan tu tren tung gia tri moi phan biet duoc.\nHoi dong KHONG duoc doc design doc hay hop dong de cham — cham DAU RA, khong\ncham LOI HUA. Tep vung-khai.json vang hoac rong → UNCERTAIN goi ten tep,\nKHONG suy doan.",
+      "question": "Doc vung-khai.json — vat do chinh E1..E5 ket xuat tu DOM that. Moi gia tri\ntieng Anh co nam trong DUNG MOT vung khai lien khong, hay bi boc lam nhieu\nmanh? Va co chuoi tieng Viet nao lot vao ben trong pham vi lang=en khong?",
+      "executor": "judgment",
+      "expectedExit": 0,
+      "inputs": [
+        "/Users/manh-macmini/dev/crm/.claude/worktrees/busy-chatterjee-fc04e2/_acceptance/ho-so-khai-dung-tieng/evidence/vung-khai.json"
+      ],
+      "evidence_required": [
+        "run_id",
+        "verifier",
+        "verified_at",
+        "output"
+      ]
+    },
+    {
+      "id": "E12",
+      "criterion": "AC-11",
+      "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/ho-so-khai-dung-tieng/rang/hoi-quy-nam-cho.mjs\"",
+      "expected": "exit 0. Canh cay truoc; dau moc khong ve → ma 2 goi ten cay.\nHOI QUY cho nam cho khai dung TU TRUOC vong nay, sau khi chung chuyen sang\nForeignText. Chay lai THUOC CU nguyen trang, khong sua mot dong nao cua no —\nchay lai mot cai thuoc KHONG phai mo lai hop dong cu: thuoc la vat, hop dong\nla loi hua, vong nay chi muon vat.\nVi sao can: E6 chi doc cau truc ma nen van xanh khi moi cho DA di qua\nForeignText ma component do lam roi thuoc tinh; E1..E5 chi mo tam ho so nen\nkhong thay man danh sach. Khong co chan nay thi vong nay dong xanh trong khi\nAC-7 va AC-14 cua vong DA KY truoc do vo tren man danh sach.\nIn ra ket qua tung chan kem ten tung gia tri chan do cu tim thay.\nChan cu thoat ma 2 (tap rong, du lieu thu thieu) → ma 2, KHONG coi la dat.\nCap hai chieu: ban sao bo thuoc tinh lang khoi ForeignText → chan nay phai\nDO, thong diep ghim ten man danh sach va ten gia tri chua boc.",
+      "executor": "ui-check",
+      "expectedExit": 0,
+      "steps": [
+        "Goi canhCay() truoc man dau tien",
+        "Chay NGUYEN TRANG _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs chan mac dinh (nganh, man danh sach cong ty)",
+        "Chay NGUYEN TRANG chan 'giai-doan' cua chinh tep do (man danh sach thoa thuan)",
+        "Khang dinh ca hai chan exit 0 va van goi ten tung gia tri"
+      ],
+      "paths": [
+        "apps/app/app/(app)/[slug]/companies/companies-table.tsx",
+        "apps/app/app/(app)/[slug]/sales-dashboard.tsx",
+        "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx",
+        "apps/app/components/crm/stage-stepper.tsx",
+        "apps/app/components/crm/deal-stage.tsx",
+        "packages/ui/src/components/foreign-text.tsx"
+      ],
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output",
+        "screenshot"
+      ],
+      "ref": "config:executors.script.hskt_hoi_quy_nam_cho"
+    }
+  ],
+  "suiteCommands": [
+    "bun run test",
+    "bunx turbo run lint --force",
+    "bun run lint:slop",
+    "bunx turbo run build --force"
+  ],
+  "diffBase": "ff3fb8bf10dc085d08eb9e2761941c6ff113a500",
+  "repoRoot": "/Users/manh-macmini/dev/crm/.claude/worktrees/busy-chatterjee-fc04e2",
+  "personasPath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.16.0/skills/acceptance/references/judge-personas.md",
+  "templatePath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.16.0/skills/acceptance/references/evidence-report-template.md",
+  "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
+  "contractPath": "/Users/manh-macmini/dev/crm/.claude/worktrees/busy-chatterjee-fc04e2/_acceptance/ho-so-khai-dung-tieng/contract.md",
+  "invokedAt": "2026-09-18T18:01:37Z",
+  "invokedSha": "2137475a3033759bc88ea5445a232914dd2042f0",
+  "vungVat": [
+    "_acceptance/config.yaml",
+    "_acceptance/ho-so-khai-dung-tieng/card-plain.json",
+    "_acceptance/ho-so-khai-dung-tieng/card.html",
+    "_acceptance/ho-so-khai-dung-tieng/contract.md",
+    "_acceptance/ho-so-khai-dung-tieng/evals.yaml",
+    "_acceptance/ho-so-khai-dung-tieng/evidence/vung-khai.json",
+    "_acceptance/ho-so-khai-dung-tieng/figures/duong-toi-giong-doc.html",
+    "_acceptance/ho-so-khai-dung-tieng/figures/duong-toi-giong-doc.png",
+    "_acceptance/ho-so-khai-dung-tieng/rang/du-lieu-thu.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/hoi-quy-nam-cho.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/mot-duong.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs",
+    "apps/app/app/(app)/[slug]/companies/companies-table.tsx",
+    "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx",
+    "apps/app/app/(app)/[slug]/sales-dashboard.tsx",
+    "apps/app/components/crm/deal-stage.tsx",
+    "apps/app/components/crm/record-sheet/company-sheet.tsx",
+    "apps/app/components/crm/record-sheet/contact-sheet.tsx",
+    "apps/app/components/crm/record-sheet/record-parts.tsx",
+    "apps/app/components/crm/stage-stepper.tsx",
+    "apps/app/components/crm/timeline/timeline-entry.tsx",
+    "apps/app/components/crm/timeline/timeline.tsx",
+    "packages/ui/src/components/foreign-text.tsx",
+    "packages/ui/test/khai-tieng.spec.tsx"
+  ],
+  "ngoaiVatGlobs": [
+    "docs/**",
+    "**/*.md",
+    "PRODUCT-MAP.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "scripts/pre-merge-check.sh",
+    "scripts/recheck-evidence.cjs",
+    "lib/evidence-core.cjs",
+    "lib/gap-probe.cjs",
+    "lib/workspace-record.cjs",
+    "lib/ac-line.cjs",
+    "lib/md-section.cjs",
+    "lib/eval-yaml.cjs",
+    "lib/lop-nhin-thay.cjs",
+    ".claude/launch.json",
+    "_acceptance/*/**/*.md",
+    "_acceptance/*/**/*.jsonl"
+  ],
+  "ngoaiVatFiles": [
+    "PRODUCT-MAP.md",
+    "_acceptance/ho-so-khai-dung-tieng/decisions.jsonl",
+    "_acceptance/ho-so-khai-dung-tieng/duong-nen.md",
+    "_acceptance/ho-so-khai-dung-tieng/figures/index.md",
+    "_acceptance/ho-so-khai-dung-tieng/gap-probe.md",
+    "docs/superpowers/plans/2026-09-19-ho-so-khai-dung-tieng.md",
+    "docs/superpowers/specs/2026-09-18-ho-so-khai-dung-tieng-design.md"
+  ],
+  "diffFiles": [
+    "PRODUCT-MAP.md",
+    "_acceptance/config.yaml",
+    "_acceptance/ho-so-khai-dung-tieng/card-plain.json",
+    "_acceptance/ho-so-khai-dung-tieng/card.html",
+    "_acceptance/ho-so-khai-dung-tieng/contract.md",
+    "_acceptance/ho-so-khai-dung-tieng/decisions.jsonl",
+    "_acceptance/ho-so-khai-dung-tieng/duong-nen.md",
+    "_acceptance/ho-so-khai-dung-tieng/evals.yaml",
+    "_acceptance/ho-so-khai-dung-tieng/evidence/vung-khai.json",
+    "_acceptance/ho-so-khai-dung-tieng/figures/duong-toi-giong-doc.html",
+    "_acceptance/ho-so-khai-dung-tieng/figures/duong-toi-giong-doc.png",
+    "_acceptance/ho-so-khai-dung-tieng/figures/index.md",
+    "_acceptance/ho-so-khai-dung-tieng/gap-probe.md",
+    "_acceptance/ho-so-khai-dung-tieng/rang/du-lieu-thu.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/hoi-quy-nam-cho.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/mot-duong.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs",
+    "apps/app/app/(app)/[slug]/companies/companies-table.tsx",
+    "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx",
+    "apps/app/app/(app)/[slug]/sales-dashboard.tsx",
+    "apps/app/components/crm/deal-stage.tsx",
+    "apps/app/components/crm/record-sheet/company-sheet.tsx",
+    "apps/app/components/crm/record-sheet/contact-sheet.tsx",
+    "apps/app/components/crm/record-sheet/record-parts.tsx",
+    "apps/app/components/crm/stage-stepper.tsx",
+    "apps/app/components/crm/timeline/timeline-entry.tsx",
+    "apps/app/components/crm/timeline/timeline.tsx",
+    "docs/superpowers/plans/2026-09-19-ho-so-khai-dung-tieng.md",
+    "docs/superpowers/specs/2026-09-18-ho-so-khai-dung-tieng-design.md",
+    "packages/ui/src/components/foreign-text.tsx",
+    "packages/ui/test/khai-tieng.spec.tsx"
+  ],
+  "fileDoTrongDiff": [
+    "_acceptance/config.yaml",
+    "_acceptance/ho-so-khai-dung-tieng/card-plain.json",
+    "_acceptance/ho-so-khai-dung-tieng/card.html",
+    "_acceptance/ho-so-khai-dung-tieng/contract.md",
+    "_acceptance/ho-so-khai-dung-tieng/evals.yaml",
+    "_acceptance/ho-so-khai-dung-tieng/evidence/vung-khai.json",
+    "_acceptance/ho-so-khai-dung-tieng/figures/duong-toi-giong-doc.html",
+    "_acceptance/ho-so-khai-dung-tieng/figures/duong-toi-giong-doc.png",
+    "_acceptance/ho-so-khai-dung-tieng/rang/du-lieu-thu.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/hoi-quy-nam-cho.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/mot-duong.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs",
+    "apps/app/app/(app)/[slug]/companies/companies-table.tsx",
+    "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx",
+    "apps/app/app/(app)/[slug]/sales-dashboard.tsx",
+    "apps/app/components/crm/deal-stage.tsx",
+    "apps/app/components/crm/record-sheet/company-sheet.tsx",
+    "apps/app/components/crm/record-sheet/contact-sheet.tsx",
+    "apps/app/components/crm/record-sheet/record-parts.tsx",
+    "apps/app/components/crm/stage-stepper.tsx",
+    "apps/app/components/crm/timeline/timeline-entry.tsx",
+    "apps/app/components/crm/timeline/timeline.tsx",
+    "packages/ui/src/components/foreign-text.tsx",
+    "packages/ui/test/khai-tieng.spec.tsx"
+  ],
+  "coverageFiles": [
+    "_acceptance/ho-so-khai-dung-tieng/contract.md",
+    "_acceptance/ho-so-khai-dung-tieng/rang/du-lieu-thu.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/hoi-quy-nam-cho.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/mot-duong.mjs",
+    "_acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs",
+    "apps/app/app/(app)/[slug]/companies/companies-table.tsx",
+    "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx",
+    "apps/app/app/(app)/[slug]/sales-dashboard.tsx",
+    "apps/app/components/crm/deal-stage.tsx",
+    "apps/app/components/crm/record-sheet/company-sheet.tsx",
+    "apps/app/components/crm/record-sheet/contact-sheet.tsx",
+    "apps/app/components/crm/record-sheet/record-parts.tsx",
+    "apps/app/components/crm/stage-stepper.tsx",
+    "apps/app/components/crm/timeline/timeline-entry.tsx",
+    "apps/app/components/crm/timeline/timeline.tsx",
+    "packages/ui/src/components/foreign-text.tsx",
+    "packages/ui/test/khai-tieng.spec.tsx"
+  ],
+  "coEvalPaths": true,
+  "evalsHash": "01cc09c409c48b10e4a6935d845b562df32fc085a4e458e90aa6016bca560a81",
+  "runBaseline": true
+}

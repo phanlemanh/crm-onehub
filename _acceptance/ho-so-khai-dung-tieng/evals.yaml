@@ -296,6 +296,10 @@ evals:
   - id: E11
     criterion: AC-10
     executor: judgment
+    question: >-
+      Doc vung-khai.json — vat do chinh E1..E5 ket xuat tu DOM that. Moi gia tri
+      tieng Anh co nam trong DUNG MOT vung khai lien khong, hay bi boc lam nhieu
+      manh? Va co chuoi tieng Viet nao lot vao ben trong pham vi lang=en khong?
     inputs:
       - "_acceptance/ho-so-khai-dung-tieng/evidence/vung-khai.json"
     expected: >-
