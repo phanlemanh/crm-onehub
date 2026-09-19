@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đường tới cổng, và cái giá của nó</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #fafafa;
+      --color-paper-2: #f2f2f2;
+      --color-ink:     #171717;
+      --color-muted:   #575757;
+      --color-accent:  #006B4F;
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Lora', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+
+    .frame { max-width: 1280px; width: 100%; }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ luồng · hồ sơ thuoc-khai-dung-tieng</p>
+    <h1>Đường tới cổng, và cái giá của nó</h1>
+
+    <svg viewBox="0 0 1280 672" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-label="Năm bước nối tiếp đưa thước mot-duong.mjs từ thư mục hồ sơ vào lệnh cổng chặn được, và một nhánh rẽ ở bước hai chỉ xuống cái giá phải trả: hồ sơ đã ký, bằng chứng hoá cũ, phải ghim lại.">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-ink" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#171717"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- ===== ARROWS FIRST ===== -->
+
+      <!-- main path: 5 steps, left to right, solid -->
+      <line x1="240" y1="200" x2="280" y2="200" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="480" y1="200" x2="520" y2="200" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="720" y1="200" x2="760" y2="200" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="960" y1="200" x2="1000" y2="200" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <!-- cost branch: drops out of step 2, dashed -->
+      <line x1="380" y1="264" x2="380" y2="456" stroke="#171717" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow-ink)"/>
+      <line x1="480" y1="512" x2="520" y2="512" stroke="#171717" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow-ink)"/>
+      <line x1="720" y1="512" x2="760" y2="512" stroke="#171717" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow-ink)"/>
+
+      <!-- note leader: dotted hairline, no arrowhead -->
+      <line x1="1100" y1="264" x2="1100" y2="304" stroke="rgba(23,23,23,0.35)" stroke-width="0.8" stroke-dasharray="2,3"/>
+      <circle cx="1100" cy="304" r="2" fill="#575757"/>
+
+      <!-- branch label, in words -->
+      <rect x="392" y="328" width="272" height="48" rx="2" fill="#fafafa"/>
+      <text x="400" y="348" fill="#171717" font-size="9" font-weight="500"
+            font-family="'Geist Mono', monospace" letter-spacing="0.18em">CÁI GIÁ</text>
+      <text x="400" y="364" fill="#575757" font-size="9"
+            font-family="'Geist Mono', monospace">hồ sơ đã ký · bằng chứng hoá cũ · phải ghim lại</text>
+
+      <!-- ===== MAIN PATH NODES ===== -->
+
+      <!-- 1 -->
+      <rect x="40" y="136" width="200" height="128" rx="6" fill="#fafafa"/>
+      <rect x="40" y="136" width="200" height="128" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="52" y="148" width="24" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="64" y="160" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">1</text>
+      <text x="140" y="196" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Thước sống trong</text>
+      <text x="140" y="212" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">thư mục hồ sơ</text>
+      <text x="140" y="240" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">mot-duong.mjs</text>
+
+      <!-- 2 -->
+      <rect x="280" y="136" width="200" height="128" rx="6" fill="#fafafa"/>
+      <rect x="280" y="136" width="200" height="128" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="292" y="148" width="24" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="304" y="160" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">2</text>
+      <text x="380" y="196" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Khai vào</text>
+      <text x="380" y="212" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">bản khai cổng</text>
+      <text x="380" y="240" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">.githooks/gate-shape.json</text>
+
+      <!-- 3 -->
+      <rect x="520" y="136" width="200" height="128" rx="6" fill="#fafafa"/>
+      <rect x="520" y="136" width="200" height="128" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="532" y="148" width="24" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="544" y="160" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">3</text>
+      <text x="620" y="200" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bộ chạy gọi nó</text>
+      <text x="620" y="236" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">rang-chat.spec.ts</text>
+      <text x="620" y="252" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">@crm/ui#test</text>
+
+      <!-- 4 -->
+      <rect x="760" y="136" width="200" height="128" rx="6" fill="#fafafa"/>
+      <rect x="760" y="136" width="200" height="128" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="772" y="148" width="24" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="784" y="160" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">4</text>
+      <text x="860" y="196" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lệnh cổng</text>
+      <text x="860" y="212" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chặn được</text>
+      <text x="860" y="240" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">bun run test · pre-push</text>
+
+      <!-- 5 — focal -->
+      <rect x="1000" y="136" width="200" height="128" rx="6" fill="#fafafa"/>
+      <rect x="1000" y="136" width="200" height="128" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="1012" y="148" width="24" height="16" rx="2" fill="none" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+      <text x="1024" y="160" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">5</text>
+      <text x="1100" y="188" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chỗ gọi thứ mười</text>
+      <text x="1100" y="204" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">không đẩy qua</text>
+      <text x="1100" y="220" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">được nữa</text>
+      <text x="1100" y="244" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">lời hứa AC-6 thành thật</text>
+
+      <!-- ===== COST BRANCH NODES (dashed border + GIÁ tag) ===== -->
+
+      <!-- giá 1 -->
+      <rect x="280" y="456" width="200" height="112" rx="6" fill="#fafafa"/>
+      <rect x="280" y="456" width="200" height="112" rx="6" fill="#f2f2f2" stroke="rgba(23,23,23,0.45)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="292" y="468" width="32" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="308" y="480" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">GIÁ</text>
+      <text x="380" y="516" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hồ sơ đã ký</text>
+      <text x="380" y="540" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">nen-chat-ai-elements</text>
+      <text x="380" y="554" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">verified_commit: 6a8c8e99</text>
+
+      <!-- giá 2 -->
+      <rect x="520" y="456" width="200" height="112" rx="6" fill="#fafafa"/>
+      <rect x="520" y="456" width="200" height="112" rx="6" fill="#f2f2f2" stroke="rgba(23,23,23,0.45)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="532" y="468" width="32" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="548" y="480" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">GIÁ</text>
+      <text x="620" y="516" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bằng chứng hoá cũ</text>
+      <text x="620" y="540" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">paths · gate-shape.json</text>
+
+      <!-- giá 3 — focal -->
+      <rect x="760" y="456" width="200" height="112" rx="6" fill="#fafafa"/>
+      <rect x="760" y="456" width="200" height="112" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4" stroke-dasharray="4,3"/>
+      <rect x="772" y="468" width="32" height="16" rx="2" fill="none" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+      <text x="788" y="480" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">GIÁ</text>
+      <text x="860" y="516" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Phải ghim lại</text>
+      <text x="860" y="540" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">repin-lane.mjs</text>
+
+      <!-- ===== NOTE BOX under step 5 ===== -->
+      <rect x="960" y="304" width="240" height="104" rx="6" fill="#fafafa" stroke="rgba(23,23,23,0.30)" stroke-width="0.8" stroke-dasharray="2,3"/>
+      <text x="976" y="328" fill="#575757" font-size="9" font-weight="500"
+            font-family="'Geist Mono', monospace" letter-spacing="0.18em">Ô CHÚ</text>
+      <text x="976" y="352" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif">trước vòng này, bước 2 đến 4</text>
+      <text x="976" y="372" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif">không tồn tại — thước chỉ chạy</text>
+      <text x="976" y="392" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif">khi có người gõ tay</text>
+
+      <!-- ===== LANE LABELS ===== -->
+      <text x="40" y="120" fill="#575757" font-size="9" font-weight="500"
+            font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐƯỜNG CHÍNH · AC-3</text>
+      <text x="40" y="444" fill="#575757" font-size="9" font-weight="500"
+            font-family="'Geist Mono', monospace" letter-spacing="0.14em">NHÁNH GIÁ · AC-4 · AC-12</text>
+
+      <!-- ===== LEGEND ===== -->
+      <line x1="40" y1="600" x2="1240" y2="600" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="620" fill="#575757" font-size="9" font-weight="500"
+            font-family="'Geist Mono', monospace" letter-spacing="0.14em">GIẢI NGHĨA</text>
+
+      <line x1="160" y1="616" x2="184" y2="616" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="192" y="620" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">NÉT LIỀN · ĐƯỜNG CHÍNH, NĂM BƯỚC</text>
+
+      <line x1="480" y1="616" x2="504" y2="616" stroke="#171717" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow-ink)"/>
+      <text x="512" y="620" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">NÉT ĐỨT + THẺ GIÁ · NHÁNH CÁI GIÁ</text>
+
+      <line x1="812" y1="616" x2="836" y2="616" stroke="rgba(23,23,23,0.35)" stroke-width="0.8" stroke-dasharray="2,3"/>
+      <text x="844" y="620" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">NÉT CHẤM · Ô CHÚ, KHÔNG PHẢI LUỒNG</text>
+    </svg>
+  </div>
+</body>
+</html>

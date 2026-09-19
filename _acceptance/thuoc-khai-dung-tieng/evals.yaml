@@ -1,0 +1,336 @@
+schema_version: 1
+feature_slug: thuoc-khai-dung-tieng
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tk_ghim_phan_biet
+    expected: >-
+      exit 0. Voi MOI chuoi ghim khai trong pha-thu.mjs: chay chan do tuong ung
+      tren vat LANH (khong pha gi), bat dau ra, va khang dinh chuoi ghim VANG.
+      In bang: ten dot bien | chuoi ghim | vang o luot lanh co/khong.
+      Chuoi nao CO mat o luot lanh la chuoi KHONG phan biet duoc — chan nay DO va
+      goi ten dung chuoi do.
+      So khang dinh = so chuoi ghim khai trong pha-thu.mjs, doc TU pha-thu.mjs,
+      khong go lai mot danh sach thu hai. Danh sach go lai la mot ban khai thu hai
+      se troi khoi ban that.
+      Vi sao chan nay ton tai: 7/11 chuoi ghim hien tai la TEN CHAN, ma ten chan
+      in ra o moi luot chay (dong "-- DAN SO:" va "ket qua: chan="), nen chot
+      "thong diep co ghim" luon tra CO ke ca luot xanh.
+      Cap hai chieu: ban sao doi mot chuoi ghim ve ten chan -> chan nay DO, thong
+      diep ghim chua dung chuoi do va chu "co mat o luot lanh".
+    paths:
+      - "_acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs"
+      - "_acceptance/thuoc-khai-dung-tieng/rang/ghim-phan-biet.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.tk_khai_sinh_dung_ghim
+    expected: >-
+      exit 0. Doc pha-thu.mjs va khang dinh no DUNG ket qua cua E1, khong chi
+      tinh roi vut: moi dot bien phai tinh dat theo BA dieu (ma thoat khac 0 ·
+      thong diep chua chuoi ghim · chuoi ghim da chung la vang o luot lanh), va
+      thieu dieu thu ba thi dot bien tinh KHONG DAT.
+      Khang dinh bang cach CHAY pha-thu tren mot ban sao co mot chuoi ghim co y
+      dat thanh ten chan: pha-thu phai bao dot bien do KHONG DAT, khong duoc bao
+      dat.
+      Day la chan chong "dem-roi-vut": mot ban cai dat tinh dung roi bo qua ket
+      qua van qua duoc E1.
+      Cap hai chieu: ban sao bo dieu kien thu ba khoi pha-thu -> chan nay DO,
+      thong diep ghim chua "dem roi vut".
+    paths:
+      - "_acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs"
+      - "_acceptance/thuoc-khai-dung-tieng/rang/khai-sinh-dung-ghim.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.tk_cong_chan_duoc
+    expected: >-
+      exit 0. Do HIEU LUC, khong do ban khai. Trong mot ban sao git worktree
+      rieng: them MOT cho khai tieng thu muoi vao apps/app, roi chay `bun run
+      test` trong ban sao va khang dinh no DO, va dau ra GOI TEN dung tep vua
+      them.
+      Roi tra ban sao ve nguyen trang va chay lai: phai XANH. Hai chieu tren cung
+      mot ban sao.
+      Khang dinh "mot-duong.mjs co khai trong gate-shape.json" la do BAN KHAI,
+      khong do hieu luc — chan nay khong duoc dung mot minh khang dinh do.
+      Cay dang xet KHONG duoc cham mot byte nao; chan nay chung dieu do bang cach
+      so `git status --porcelain` truoc va sau.
+      Cap hai chieu: ban sao go mot-duong.mjs khoi khoi khai -> `bun run test`
+      XANH du da them cho thu muoi -> chan nay DO, thong diep ghim "cong khong
+      chan duoc".
+    paths:
+      - ".githooks/gate-shape.json"
+      - "packages/ui/test/rang-chat.spec.ts"
+      - "_acceptance/ho-so-khai-dung-tieng/rang/mot-duong.mjs"
+      - "_acceptance/thuoc-khai-dung-tieng/rang/cong-chan-duoc.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tk_hai_ho_so
+    expected: >-
+      exit 0. Co che khai thuoc nay do HAI ho so. Khang dinh:
+      (a) ba thuoc cua nen-chat-ai-elements (mo-coi · chu-cung · mau-ban-kinh)
+          VAN duoc bo chay goi va VAN xanh — goi ten tung cai;
+      (b) moi tep .mjs trong rang/ cua CA HAI ho so deu co dinh doat (trong cong,
+          hoac ngoai cong kem ly do doc duoc). HANG GHIM trong tep thuoc, chep tay
+          tu cay: nen-chat-ai-elements co N1 tep .mjs, ho-so-khai-dung-tieng co N2.
+          Chan khang dinh so tep QUET DUOC bang dung N1 va N2 TRUOC khi so voi ban
+          khai — so hai con so cung suy tu mot luot quet la 0 bang 0 khi glob neo
+          sai goc. Chan in ra danh sach tung tep da quet;
+      (c) bo chay doc ban khai chu khong go cung danh sach: doi mot id trong ban
+          khai thi bo chay phai doi theo.
+      Ho so nen-chat-ai-elements da signed-off; lam vo ba thuoc cua no la lam vo
+      mot loi hua da ky.
+      Cap hai chieu, HAI vi tri de chung pham vi quet:
+      (i) ban sao bo khai mot tep .mjs khoi ban khai -> chan DO va GOI TEN tep do;
+      (ii) ban sao them mot tep .mjs MOI vao rang/ cua ho so thu hai -> chan DO va
+      GOI TEN tep do, chung rang chan that su quet CA HAI thu muc chu khong chi mot.
+    paths:
+      - ".githooks/gate-shape.json"
+      - "packages/ui/test/rang-chat.spec.ts"
+      - "_acceptance/nen-chat-ai-elements/rang/**"
+      - "_acceptance/ho-so-khai-dung-tieng/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.tk_khong_de_lai_vet
+    expected: >-
+      exit 0. Chup trang thai TRUOC cua moi ban ghi that ma bo do co the muon
+      (thoa thuan bi datDuGiaiDoan muon, cong ty/ca nhan bi dat muon neu con),
+      ep MOT NGOAI LE THAT o giua luot chay, roi chup lai va DOI CHIEU.
+      Khang dinh: 0 ban ghi that con lech sau luot chay. Chan GOI TEN tung ban
+      ghi da kiem kem gia tri truoc/sau, khong tra mot con so.
+      Ngoai le phai ep o giua — sau khi da muon, truoc khi tra — khong phai o dau
+      hay o cuoi; ep sai cho thi chan nay xanh ma khong chung duoc gi.
+      Cap hai chieu: ban sao go try/finally khoi hoi-quy-nam-cho -> chan DO, thong
+      diep ghim ten thoa thuan bi bo lai sai giai doan.
+    paths:
+      - "_acceptance/ho-so-khai-dung-tieng/rang/du-lieu-thu.mjs"
+      - "_acceptance/ho-so-khai-dung-tieng/rang/hoi-quy-nam-cho.mjs"
+      - "_acceptance/thuoc-khai-dung-tieng/rang/khong-de-lai-vet.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.tk_xoa_co_kiem
+    expected: >-
+      exit 0. Ba duong, ba khang dinh:
+      (a) CAY_SAO tro toi mot worktree do chinh script tao -> xoa duoc, exit 0;
+      (b) CAY_SAO tro toi GOC KHO -> tu choi, thoat co ten, va thu muc VAN CON;
+      (c) CAY_SAO tro toi mot thu muc thuong (khong phai worktree) -> tu choi,
+          thoat co ten, va thu muc VAN CON.
+      Hai duong (b)(c) phai khang dinh THU MUC VAN CON sau khi goi — chi khang
+      dinh ma thoat la chua du, vi mot ban cai dat xoa xong roi moi bao loi cung
+      cho cung ma thoat.
+      Chan tu dung thu muc thu cua chinh no, khong muon thu muc that nao.
+      Cap hai chieu: ban sao bo phep kiem khoi dungCaySao -> duong (b) hoac (c)
+      xoa that -> chan DO, thong diep ghim duong nao da xoa nham.
+    paths:
+      - "_acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs"
+      - "_acceptance/thuoc-khai-dung-tieng/rang/xoa-co-kiem.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.tk_ban_khai_khop
+    expected: >-
+      exit 0. Doi chieu ban khai voi ban that, hai chieu:
+      (a) moi doan `expected` cua evals.yaml ho-so-khai-dung-tieng mo ta mot API
+          hay mot hinh dang dau vao -> hinh dang do phai CON TON TAI trong ma;
+      (b) moi KHOA ma eval hoi dong bao cham -> phai co chan do GHI RA khoa do.
+          Chan doc danh sach khoa tu `expected` cua eval judgment va doi chieu voi
+          cac khoa chan do that su ghi vao vung-khai.json.
+      Chan GOI TEN tung khoa va tung hinh dang da doi chieu, khong tra con so.
+      So khang dinh = so khoa hoi dong bao cham + so hinh dang duoc mo ta.
+      Cap hai chieu: ban sao them mot khoa vao `expected` cua eval judgment ma
+      khong chan do nao ghi -> chan DO va GOI TEN khoa do.
+    paths:
+      - "_acceptance/ho-so-khai-dung-tieng/evals.yaml"
+      - "_acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs"
+      - "_acceptance/thuoc-khai-dung-tieng/rang/ban-khai-khop.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.tk_bai_kiem_dung_nha_quet
+    expected: >-
+      exit 0. Hai khang dinh:
+      (a) 0 tep trong packages/ nhap ma cua apps/ bang duong dan tuong doi. HANG
+          GHIM trong tep thuoc: so tep nguon phai quet duoi packages/ (chep tay tu
+          cay). Chan khang dinh so tep quet duoc BANG hang do truoc khi dem vi pham
+          — glob neo sai goc thi tap quet rong va 0 vi pham la 0 bang 0. Goi ten
+          tung vi pham theo file:dong;
+      (b) bai kiem cua MetaLine nam trong pham vi mot tsconfig THAT SU soi no:
+          chan doi chieu duong dan bai kiem voi `include` cua tsconfig gan nhat,
+          va khang dinh no nam trong.
+      Chieu do CUA SAN PHAM (khong phai cua chan nay) do o E9 cua bo kiem kieu:
+      doi kieu MetaPart -> `bun run check-types` phai DO.
+      Cap hai chieu, HAI vi tri: (i) them mot dong nhap nguoc chieu vao
+      packages/ui/src -> chan DO goi ten file:dong; (ii) them mot dong nhap nguoc
+      chieu vao packages/ui/test -> chan DO goi ten file:dong. Hai vi tri de chung
+      pham vi quet phu ca src lan test, khong chi mot nhanh.
+    paths:
+      - "packages/ui/test/**"
+      - "apps/app/test/**"
+      - "packages/ui/tsconfig.json"
+      - "apps/app/tsconfig.json"
+      - "_acceptance/thuoc-khai-dung-tieng/rang/bai-kiem-dung-nha.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.tk_bai_kiem_dung_nha
+    expected: >-
+      exit 0. `bun run check-types` xanh SAU khi bai kiem MetaLine chuyen sang
+      apps/app/test. Day la ve con lai cua AC-8: E8 do vi tri, chan nay do rang
+      cong kieu THAT SU soi duoc no.
+      Cap hai chieu: ban sao doi kieu MetaPart (vd doi `text` thanh `noi_dung`)
+      MA KHONG sua bai kiem -> `bun run check-types` phai DO, va thong diep ghim
+      ten tep bai kiem. Truoc vong nay, cung phep pha do cho ket qua XANH — do la
+      bang chung bai kiem dang lot khoi moi cong kieu.
+    paths:
+      - "apps/app/test/**"
+      - "apps/app/components/crm/record-sheet/record-parts.tsx"
+      - "packages/ui/src/components/foreign-text.tsx"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.tk_ho_so_cu_van_xanh
+    expected: >-
+      exit 0. Chay lai TRON VEN bo do cua ho-so-khai-dung-tieng sau moi thay doi
+      cua vong nay, va khang dinh hai dieu:
+      (a) moi chan xanh va bang chung vung-khai.json 0 lech — goi ten tung chan;
+      (b) diff cua vong nay KHONG chua mot tep san pham nao cua ho so do:
+          foreign-text.tsx · record-parts.tsx · company-sheet.tsx ·
+          contact-sheet.tsx · timeline-entry.tsx · timeline.tsx ·
+          companies-table.tsx · sales-dashboard.tsx · create-deal-sheet.tsx ·
+          stage-stepper.tsx · deal-stage.tsx.
+      Ve (b) la loi hua "thuoc doi ma san pham khong doi"; thieu no thi vong nay
+      co the sua san pham cho thuoc de xanh.
+      Cap hai chieu: ban sao sua mot dong trong foreign-text.tsx -> chan DO va
+      GOI TEN dung tep do.
+    paths:
+      - "_acceptance/ho-so-khai-dung-tieng/**"
+      - "apps/app/components/crm/**"
+      - "packages/ui/src/components/foreign-text.tsx"
+      - "_acceptance/thuoc-khai-dung-tieng/rang/ho-so-cu-van-xanh.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.tk_khai_sinh_phu_vong_nay
+    expected: >-
+      exit 0. Bo khai sinh cua CHINH vong nay. Doc
+      _acceptance/thuoc-khai-dung-tieng/evals.yaml, dem so menh de "Cap hai chieu"
+      trong do, va khang dinh so dot bien no chay BANG con so ay — danh sach doc
+      TU ban khai, khong go lai mot danh sach thu hai se troi.
+      Voi TUNG chan moi: chay tren vat LANH truoc, khang dinh chuoi ghim VANG
+      (dung luat AC-1), roi pha vat that, chay lai, khang dinh chan DO va thong
+      diep chua chuoi ghim.
+      Vi sao chan nay ton tai: muoi chan cua vong nay duoc viet de chua benh "chot
+      vo hieu", va khong co chan nay thi chinh chung mac dung benh ay — moi chan
+      ket bang mot cau "Cap hai chieu" ma khong ai chay.
+      Cap hai chieu: ban sao sua MOT chan moi thanh luon exit 0 -> chan nay phai
+      DO va GOI TEN dung chan do.
+    paths:
+      - "_acceptance/thuoc-khai-dung-tieng/evals.yaml"
+      - "_acceptance/thuoc-khai-dung-tieng/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.tk_ghim_lai_da_xong
+    expected: >-
+      exit 0. Doc evals.yaml cua nen-chat-ai-elements, gom MOI duong trong cac
+      truong paths, roi voi TUNG duong so bam noi dung tai verified_commit cua ho
+      so do voi bam noi dung tren cay dang xet.
+      Khang dinh: 0 duong lech. Chan GOI TEN tung duong kem hai bam, khong tra mot
+      con so.
+      Vi sao: vong nay sua .githooks/gate-shape.json, ma tep do nam trong paths
+      eval cua mot ho so DA SIGNED-OFF. Ba thuoc cua no van xanh KHONG chung minh
+      duoc bang chung cua no con tuoi — hai dieu khac nhau.
+      Ho so do khong co evals.yaml hoac khong doc duoc verified_commit -> ma 2 goi
+      ten, KHONG coi la dat.
+      Cap hai chieu: sua mot byte cua gate-shape.json SAU khi ghim lai -> chan DO
+      va GOI TEN dung tep do kem hai bam.
+    paths:
+      - ".githooks/gate-shape.json"
+      - "_acceptance/nen-chat-ai-elements/evals.yaml"
+      - "_acceptance/nen-chat-ai-elements/evidence-report.md"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.tk_bay_benh_cu_khong_quay_lai
+    expected: >-
+      exit 0. BAY dot bien, moi dot bien khoi phuc dung mot benh da va o hai vong
+      truoc, chay tren ban sao rieng:
+      A tra phep pha ve chay TAI CHO tren cay dang do;
+      C tra gia tri do ve hang go san thay vi goi may chu;
+      D bo doi chung duong khoi chan ho-so-trong;
+      E doi phep khop QUAN HE ve khop TEN THE;
+      F bo khoanh vung, doc ca trang thay vi doc tam ho so;
+      G bo chan cay-ban khoi pha-thu;
+      cong benh chot-ghim-cu: doi mot chuoi ghim ve ten chan.
+      Voi tung dot bien: bo do phai DO va thong diep GOI TEN benh.
+      HANG GHIM: bay, chep tu bang muoi ba cach noi doi trong design doc. So dot
+      bien chay phai BANG bay.
+      Benh nao khong dung duoc dot bien -> chan nay DOC muc "## Known limits" cua
+      hop dong va khang dinh ten benh do CO trong muc ay; khong co ten thi chan DO.
+      Im lang la duong duy nhat bi cam.
+      Cap hai chieu: bo mot benh khoi danh sach ma khong them ten no vao Known
+      limits -> chan DO va GOI TEN benh thieu.
+    paths:
+      - "_acceptance/ho-so-khai-dung-tieng/rang/**"
+      - "_acceptance/thuoc-khai-dung-tieng/contract.md"
+      - "docs/superpowers/specs/2026-09-19-thuoc-khai-dung-tieng-design.md"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-10
+    executor: judgment
+    question: >-
+      Doc bang muoi ba cach bo do da noi doi (trong design doc) cung bo do sau
+      vong nay. Voi TUNG cach: phep do nao bat duoc no, va bat bang cach nao?
+      Cach nao khong co phep do nao bat?
+    inputs:
+      - "docs/superpowers/specs/2026-09-19-thuoc-khai-dung-tieng-design.md"
+      - "_acceptance/thuoc-khai-dung-tieng/contract.md"
+      - "_acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs"
+      - "_acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs"
+      - "_acceptance/ho-so-khai-dung-tieng/rang/mot-duong.mjs"
+      - ".githooks/gate-shape.json"
+      - "packages/ui/test/rang-chat.spec.ts"
+      - "_acceptance/thuoc-khai-dung-tieng/evidence/dau-ra-mot-luot.txt"
+    expected: >-
+      Hoi dong lap bang 13 dong: cach noi doi | phep do bat duoc no | bat bang
+      cach nao. PASS khi moi dong hoac co ten mot phep do cu the, hoac co ten
+      trong Known limits cua hop dong — khong dong nao de trong.
+      Dong nao hoi dong khong tra loi duoc bang mot phep do CO TEN thi khong duoc
+      coi la da phu: "chac la E-gi-do bat" la chua phu.
+      Moi dong phai dan TEN TEP kem so dong cua phep do bat duoc no — mot ten AC
+      doc duoc trong hop dong la CHUA DU, vi hop dong la ban khai chu khong phai
+      dau ra. Hoi dong duoc dua ca nam tep chan do that va dau ra mot luot chay,
+      chinh de no cham DAU RA chu khong cham BAN KHAI.
+      Day la cau hoi may khong tra loi duoc bang mot phep dem: no doi doi chieu
+      MOT DANH SACH LOI CU voi MOT BO DO MOI, va phan xem cai sau co that su phu
+      cai truoc khong.
+    evidence_required: [run_id, verifier, verified_at, output]

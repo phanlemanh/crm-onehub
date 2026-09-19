@@ -1,0 +1,48 @@
+{
+  "feature_plain": "Bộ công cụ tự kiểm của tính năng trước đang báo xanh mà không chứng minh được gì; vòng này làm nó thôi nói dối, và cắm nó vào cổng để lần sau không ai quên được nữa.",
+
+  "will_do": [
+    { "id": "AC-1", "p": "Sẽ bắt mỗi dấu hiệu nhận-biết-lỗi phải VẮNG khi mọi thứ đang lành — hiện bảy trên mười một dấu hiệu xuất hiện ở cả lượt tốt lẫn lượt xấu, nên chúng không phân biệt được gì." },
+    { "id": "AC-4", "p": "Sẽ giữ ba phép kiểm của một tính năng đã phát hành trước đây tiếp tục chạy và tiếp tục xanh, dù cơ chế chung bị đổi hình." },
+    { "id": "AC-8", "p": "Sẽ đưa một bài kiểm đang lọt khỏi mọi lớp kiểm tra kiểu dữ liệu về đúng chỗ, để lỗi kiểu bị bắt lúc biên dịch thay vì lúc chạy." },
+    { "id": "AC-9", "p": "Sẽ chứng minh tính năng trước không bị sửa một dòng nào trong vòng này — thước đổi, lời hứa không đổi." },
+    { "id": "AC-11", "p": "Sẽ bắt chính các phép kiểm mới của vòng này chịu đúng luật mà chúng đặt ra cho phép kiểm cũ." },
+    { "id": "AC-12", "p": "Sẽ chứng minh bằng chứng của tính năng đã phát hành được ghim lại đúng sau khi vòng này sửa tệp mà nó phụ thuộc." },
+    { "id": "AC-13", "p": "Sẽ giữ bảy lỗi đã sửa ở hai vòng trước khỏi quay lại, bằng cách cố tình tái tạo từng lỗi rồi kiểm xem bộ đo có bắt được không." }
+  ],
+
+  "wont_do": [
+    { "id": "AC-2", "p": "Sẽ KHÔNG cho một phép kiểm tính ra kết quả rồi bỏ qua nó — nếu kết quả không được dùng thì coi như phép kiểm chưa làm gì." },
+    { "id": "AC-3", "p": "Sẽ KHÔNG chấp nhận việc chỉ khai phép kiểm vào danh sách là xong: phải thêm một vi phạm thật rồi thấy lệnh kiểm tra đỏ mới tính." },
+    { "id": "AC-5", "p": "Sẽ KHÔNG để bộ kiểm làm hỏng dữ liệu thật — kể cả khi nó gặp lỗi giữa chừng, mọi thứ nó mượn phải về nguyên trạng." },
+    { "id": "AC-6", "p": "Sẽ KHÔNG cho phép xoá thư mục theo một đường dẫn chưa được kiểm; trỏ nhầm vào chỗ khác thì công cụ từ chối thay vì xoá." },
+    { "id": "AC-7", "p": "Sẽ KHÔNG để bản mô tả của bộ kiểm nói một đằng còn bộ kiểm làm một nẻo." }
+  ],
+
+  "scope_plain": "Để lại cho lần sau: đo độ trung thực hình ảnh; mở rộng cơ chế cổng cho những tính năng chưa tồn tại; và đưa các phép kiểm cần trình duyệt vào lệnh đẩy — chúng cần máy chủ và trình duyệt nên không hợp một lần đẩy.",
+
+  "coverage_plain": [
+    { "i": 0, "p": "Đã kê bốn thành phần của bộ đo: bản mô tả, các phép kiểm, phần dựng dữ liệu thử, và chỗ nó được gọi chạy. Bằng chứng là đủ: cả bốn là tệp có thật, đọc được." },
+    { "i": 1, "p": "Đã kê bảy kiểu nói dối mà một kết quả xanh có thể mắc. Bằng chứng là đủ: đây là danh sách mười ba lỗi thật đã xảy ra ở chính bộ đo này trong ba ngày qua, cộng một thực hành có tên trong ngành mà tiền đề của nó đúng là mệnh đề vòng này — một phép kiểm chưa từng báo lỗi thì không chứng minh gì." },
+    { "i": 2, "p": "Đã kê năm mức khó phát hiện. Bằng chứng là đủ, và nó đáng lo: cả mười ba lỗi đều rơi vào ba mức khó nhất — không lỗi nào lộ ra bằng một lượt chạy xanh. Đó là lý do con số 'hai mươi mốt trên hai mươi mốt' của lượt tự kiểm không đủ làm bằng chứng." },
+    { "i": 3, "p": "Áp mọi tiêu chí: các phép kiểm mới của vòng này không được miễn luật mà chúng đặt cho phép kiểm cũ (AC-11)." },
+    { "i": 4, "p": "Áp mọi tiêu chí: bộ kiểm không được để lại dấu vết trên thứ nó kiểm, kể cả khi nó chết giữa chừng (AC-5 và AC-6)." },
+    { "i": 5, "p": "Áp mọi tiêu chí: bản mô tả phải khớp thứ có thật (AC-7)." }
+  ],
+
+  "gap_probe_plain": [
+    { "i": 0, "p": "Mười phép kiểm mới của chính vòng này không chịu luật mà chúng vừa đặt ra: mỗi cái kết bằng một câu 'sẽ thử phá để chứng minh nó biết báo lỗi', nhưng không cái nào thật sự chạy phép thử đó. Nói cách khác, bộ công cụ viết ra để chữa bệnh lại mắc đúng bệnh ấy. ĐÃ SỬA: thêm một tiêu chí bắt bộ thử phá phủ cả mười, và danh sách phép thử đọc từ chính bản mô tả chứ không gõ lại." },
+    { "i": 1, "p": "Không tiêu chí nào kiểm rằng bằng chứng của một tính năng ĐÃ PHÁT HÀNH được ghim lại sau khi vòng này sửa tệp nó phụ thuộc. Ba phép kiểm của nó vẫn xanh thì không có nghĩa bằng chứng của nó còn tươi — hai chuyện khác nhau. ĐÃ SỬA: thêm tiêu chí đối chiếu từng tệp kèm dấu vân tay nội dung trước và sau." },
+    { "i": 2, "p": "Hai phép kiểm tuyên bố quét 'mọi tệp' nhưng con số để đối chiếu lại tự sinh ra trong chính lượt quét — quét trượt thư mục thì không tìm thấy vi phạm nào và vẫn báo xanh. ĐÃ SỬA: ghim sẵn con số phải quét được, và phép thử phá chạy ở hai vị trí khác nhau để chứng minh phạm vi quét." },
+    { "i": 3, "p": "Bảy lỗi đã sửa ở hai vòng trước không có tiêu chí nào giữ chúng khỏi quay lại; và bản hợp đồng thiếu hẳn mục ghi giới hạn đã biết, trong khi điều kiện đạt của phần hội đồng chấm lại dựa vào mục đó. ĐÃ SỬA: thêm tiêu chí tái tạo từng lỗi cũ, và thêm mục giới hạn đã biết vào hợp đồng." },
+    { "i": 4, "p": "Phần hội đồng chấm chỉ được đưa hai tài liệu, không một tệp công cụ thật nào — nên nó sẽ chấm bản mô tả chứ không chấm kết quả. Và đường dẫn ghi cứng theo máy này, chạy ở nơi khác vẫn đọc được tài liệu cũ mà không ai hay. ĐÃ SỬA: đưa thêm năm tệp công cụ thật cùng đầu ra một lượt chạy, và đổi sang đường dẫn tương đối." }
+  ],
+
+  "decisions_plain": [
+    { "id": "d-20260919T041441Z-1", "p": "Cắm phép kiểm vào lệnh đẩy của kho, thay vì để nó ngồi trong hồ sơ và chỉ chạy khi có người gõ tay — đổi lại từ nay mọi lần đẩy của mọi người đều chạy nó. Nhận vì lời hứa của tính năng trước là một CƠ CHẾ, mà cơ chế chỉ đúng khi nó chặn được." },
+    { "id": "d-20260919T041441Z-2", "p": "Đổi bản khai cổng từ một khối thành một danh sách khối, mỗi tính năng một khối — đổi lại hình dạng bản khai đổi, mà một tính năng đã phát hành đang dùng nó. Loại hai lối tắt xấu hơn: thêm một khoá anh em, hoặc nhồi hai thư mục vào một khối." },
+    { "id": "d-20260919T041441Z-3", "p": "Nhận chi phí ghim lại bằng chứng cho tính năng đã phát hành trước đây — đổi lại vòng này tốn thêm một lượt chạy máy. Không có lối tránh: không đụng vào tệp đó thì không cắm được phép kiểm vào cổng, tức bỏ luôn điều trên." },
+    { "id": "d-20260919T041441Z-4", "p": "Tách đôi bài kiểm để phần thuộc ứng dụng về đúng nhà — đổi lại phải sửa câu chữ một tiêu chí của tính năng trước lần thứ hai. Nhận vì bài kiểm hiện lọt khỏi mọi lớp kiểm kiểu, nên lỗi chỉ vỡ lúc chạy." },
+    { "id": "d-20260919T041441Z-5", "p": "KHÔNG viết đặc tả giao diện — vòng này không có màn hình nào, sản phẩm là công cụ đo. Đổi lại người duyệt không có bảng trạng thái để soi, nhưng cũng không có gì để soi." }
+  ]
+}
