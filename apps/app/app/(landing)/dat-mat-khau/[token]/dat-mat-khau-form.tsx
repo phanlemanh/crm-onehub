@@ -1,7 +1,6 @@
 "use client";
 
 import { resetPassword } from "@crm/auth/client";
-import { Alert, AlertTitle } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import {
 	Field,
@@ -14,6 +13,7 @@ import { Input } from "@crm/ui/components/input";
 import { Spinner } from "@crm/ui/components/spinner";
 import Link from "next/link";
 import { type FormEvent, useState } from "react";
+import { LienKetKhongHopLe } from "./lien-ket-khong-hop-le";
 
 type XongChu = {
 	title: string;
@@ -21,9 +21,7 @@ type XongChu = {
 };
 
 type LoiChu = {
-	hetHan: string;
-	daDung: string;
-	khongCo: string;
+	khongDungDuoc: string;
 	lechNhau: string;
 };
 
@@ -95,18 +93,18 @@ export function DatMatKhauForm({
 		}
 
 		if (error.code === "INVALID_TOKEN") {
-			setTokenError(loi.khongCo);
+			setTokenError(loi.khongDungDuoc);
 			return;
 		}
 
-		setPasswordError(error.message ?? loi.khongCo);
+		setPasswordError(error.message ?? loi.khongDungDuoc);
 	}
 
 	function handleSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		submit().catch(() => {
 			setPending(false);
-			setTokenError(loi.khongCo);
+			setTokenError(loi.khongDungDuoc);
 		});
 	}
 
@@ -122,14 +120,7 @@ export function DatMatKhauForm({
 	}
 
 	if (tokenError) {
-		return (
-			<div className="flex flex-col gap-8">
-				<Heading description={description} title={title} />
-				<Alert variant="destructive">
-					<AlertTitle>{tokenError}</AlertTitle>
-				</Alert>
-			</div>
-		);
+		return <LienKetKhongHopLe message={tokenError} title={title} />;
 	}
 
 	return (

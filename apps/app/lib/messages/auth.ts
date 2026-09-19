@@ -93,10 +93,8 @@ const en = {
 		loi: {
 			hetHan:
 				"This link has expired. Ask your administrator to send you a new one.",
-			daDung:
-				"This link has already been used. Ask your administrator to send you a new one.",
-			khongCo:
-				"This link isn't valid. Ask your administrator to send you a new one.",
+			khongDungDuoc:
+				"This link can no longer be used — it may already have been used, or replaced by a newer link. Ask your administrator to send you a new one.",
 			lechNhau: "The two passwords don't match.",
 		},
 	},
@@ -197,10 +195,8 @@ const vi = {
 		loi: {
 			hetHan:
 				"Liên kết này hết hạn rồi. Nhắn người quản trị phát cho bạn một liên kết mới.",
-			daDung:
-				"Liên kết này đã dùng rồi. Nhắn người quản trị phát cho bạn một liên kết mới.",
-			khongCo:
-				"Liên kết này không đúng. Nhắn người quản trị phát cho bạn một liên kết mới.",
+			khongDungDuoc:
+				"Liên kết này không dùng được nữa — có thể đã dùng rồi hoặc đã bị thay bằng liên kết mới. Nhắn người quản trị phát cho bạn một liên kết mới.",
 			lechNhau: "Hai ô mật khẩu chưa giống nhau.",
 		},
 	},
