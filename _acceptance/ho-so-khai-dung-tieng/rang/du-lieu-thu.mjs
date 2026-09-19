@@ -148,11 +148,21 @@ export async function datDuGiaiDoan() {
 
 	for (const ma of thieu) {
 		const muon = await db.deal.findFirst({
-			where: { stage: { notIn: thieu } },
+			where: {
+				stage: { notIn: thieu },
+				id: { notIn: daDoi.map((d) => d.id) },
+			},
 			orderBy: { createdAt: "desc" },
-			skip: daDoi.length,
 		});
-		if (!muon) break;
+		if (!muon) {
+			throw new Error(
+				`KHONG DUNG DUOC TIEN DE: het thoa thuan de muon cho giai doan ${ma}.\n` +
+					`   Con thieu ${thieu.length - daDoi.length} giai doan, da muon ${daDoi.length}.\n` +
+					"   Tap du lieu thu khong du phu enum. Day la TIEN DE THIEU, khong phai dat —\n" +
+					"   bo cuoc im lang o day lam chan do chay tiep tren mot tap khong phu du,\n" +
+					"   roi bao xanh cho dung cai no chua bao gio nhin thay.",
+			);
+		}
 		daDoi.push({ id: muon.id, giaiDoanCu: muon.stage });
 		await db.deal.update({ where: { id: muon.id }, data: { stage: ma } });
 	}

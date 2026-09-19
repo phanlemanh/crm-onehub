@@ -37,43 +37,66 @@ if (giaiDoan.thieu.length > 0) {
 	);
 }
 
+let daDon = false;
+async function tra() {
+	if (daDon) return;
+	daDon = true;
+	await giaiDoan.don();
+	console.log("-- DA TRA du lieu thu ve nguyen trang");
+}
+
+for (const bien of ["uncaughtException", "unhandledRejection"]) {
+	process.on(bien, async (loi) => {
+		console.log(`-- ${bien}: ${loi?.message ?? loi}`);
+		await tra();
+		process.exit(3);
+	});
+}
+
+if (process.env.RANG_EP_LOI === "1") {
+	throw new Error(
+		"ep loi de do phep tra lai (RANG_EP_LOI=1) — mo sau khi da muon, truoc khi tra",
+	);
+}
+
 let hong = 0;
 let tienDeThieu = 0;
 
-for (const c of CHAN) {
-	console.log(`\n===== CHAN CU: ${c} =====`);
-	try {
-		const ra = execFileSync("bun", [CU, c], {
-			cwd: GOC,
-			encoding: "utf8",
-			env: process.env,
-		});
-		process.stdout.write(ra);
-		console.log(`   CHAN ${c}: exit 0`);
-	} catch (loi) {
-		const ma = loi.status ?? 1;
-		process.stdout.write(String(loi.stdout ?? ""));
-		if (ma === 2) {
-			console.log(
-				`   CHAN ${c} ma 2 = TIEN DE THIEU (du lieu thu rong hoac may chu khong toi duoc).\n` +
-					"   Day KHONG phai la dat, va cung khong phai la hoi quy.",
-			);
-			tienDeThieu += 1;
-		} else {
-			console.log(
-				`   CHAN ${c} DO (ma ${ma}) tren MAN DANH SACH — nam cho cu da vo sau khi chuyen co che.`,
-			);
-			hong += 1;
+try {
+	for (const c of CHAN) {
+		console.log(`\n===== CHAN CU: ${c} =====`);
+		try {
+			const ra = execFileSync("bun", [CU, c], {
+				cwd: GOC,
+				encoding: "utf8",
+				env: process.env,
+			});
+			process.stdout.write(ra);
+			console.log(`   CHAN ${c}: exit 0`);
+		} catch (loi) {
+			const ma = loi.status ?? 1;
+			process.stdout.write(String(loi.stdout ?? ""));
+			if (ma === 2) {
+				console.log(
+					`   CHAN ${c} ma 2 = TIEN DE THIEU (du lieu thu rong hoac may chu khong toi duoc).\n` +
+						"   Day KHONG phai la dat, va cung khong phai la hoi quy.",
+				);
+				tienDeThieu += 1;
+			} else {
+				console.log(
+					`   CHAN ${c} DO (ma ${ma}) tren MAN DANH SACH — nam cho cu da vo sau khi chuyen co che.`,
+				);
+				hong += 1;
+			}
 		}
 	}
+
+	console.log(
+		`\nket qua: chan do=${hong} · tien de thieu=${tienDeThieu} (tren ${CHAN.length} chan cu)`,
+	);
+} finally {
+	await tra();
 }
-
-console.log(
-	`\nket qua: chan do=${hong} · tien de thieu=${tienDeThieu} (tren ${CHAN.length} chan cu)`,
-);
-
-await giaiDoan.don();
-console.log("-- DA TRA du lieu thu ve nguyen trang");
 
 if (tienDeThieu > 0) process.exit(2);
 process.exit(hong > 0 ? 1 : 0);
