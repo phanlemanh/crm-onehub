@@ -32,7 +32,7 @@ if (!moCua) {
 }
 
 const nhan = r.ra.includes("[dem-roi-vut]");
-const khongDat = new RegExp(`KHONG DAT\\\\s+${CHAN}\\\\b`).test(r.ra);
+const khongDat = r.ra.includes(`KHONG DAT ${CHAN}`);
 const vangKhong = /ghim vang o luot lanh: KHONG/.test(r.ra);
 
 console.log(
