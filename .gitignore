@@ -60,3 +60,6 @@ __pycache__/
 *.pyc
 
 apps/agent/rang/.tmp/
+
+# tep tam cua ghiVung (temp + rename); xac cua luot chay bi cat ngang
+*.tam
