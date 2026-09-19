@@ -2,6 +2,26 @@ import { describe, expect, it, mock } from "bun:test";
 import { Separator } from "@crm/ui/components/separator";
 import { isValidElement, type ReactElement, type ReactNode } from "react";
 
+const OMatKhau = function OMatKhau() {
+	return null;
+};
+const CuaNgoai = function CuaNgoai() {
+	return null;
+};
+const CuaSso = function CuaSso() {
+	return null;
+};
+
+mock.module("@/app/(landing)/sign-in/password-sign-in", () => ({
+	PasswordSignIn: OMatKhau,
+}));
+mock.module("@/app/(landing)/sign-in/social-sign-in", () => ({
+	SocialSignIn: CuaNgoai,
+}));
+mock.module("@/app/(landing)/sign-in/sso-sign-in", () => ({
+	SsoSignIn: CuaSso,
+}));
+
 mock.module("@/lib/session", () => ({
 	getSession: async () => null,
 }));
@@ -33,10 +53,6 @@ mock.module("next/navigation", () => ({
 }));
 
 const { default: SignInPage } = await import("@/app/(landing)/sign-in/page");
-const { PasswordSignIn } = await import(
-	"@/app/(landing)/sign-in/password-sign-in"
-);
-const { SocialSignIn } = await import("@/app/(landing)/sign-in/social-sign-in");
 const { authMessages } = await import("@/lib/messages/auth");
 
 const m = authMessages("vi").signIn;
@@ -93,13 +109,13 @@ describe("cua-mat-khau-canh-cua-google", () => {
 	it("o email va o mat khau hien CUNG MAN voi nut Google", async () => {
 		const man = await dungManDangNhap();
 
-		const oMatKhau = gomTheoKieu(man, PasswordSignIn);
-		const cuaNgoai = gomTheoKieu(man, SocialSignIn);
-
-		expect(oMatKhau).toHaveLength(1);
-		expect(cuaNgoai).toHaveLength(1);
+		expect(gomTheoKieu(man, OMatKhau)).toHaveLength(1);
 		expect(
-			(motCai(cuaNgoai, "nut Google").props as { provider: string }).provider,
+			(
+				motCai(gomTheoKieu(man, CuaNgoai), "nut Google").props as {
+					provider: string;
+				}
+			).provider,
 		).toBe("google");
 	});
 
@@ -112,8 +128,7 @@ describe("cua-mat-khau-canh-cua-google", () => {
 	it("o mat khau nhan du ba nhan tieng Viet cua kho", async () => {
 		const man = await dungManDangNhap();
 
-		const oMatKhau = motCai(gomTheoKieu(man, PasswordSignIn), "o mat khau")
-			.props as {
+		const oMatKhau = motCai(gomTheoKieu(man, OMatKhau), "o mat khau").props as {
 			diaChi: string;
 			matKhau: string;
 			dangNhap: string;
