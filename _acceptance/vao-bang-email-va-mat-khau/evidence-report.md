@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent (vòng 3)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3dd48ef15d2ce343c09311587b43ece6a61a45b1
+verified_commit: 670c8859fdf38306fcd869913d4c5980dbbea855
 human_signoff: Phan Le Manh 2026-09-19
 ---
 
@@ -608,3 +608,7 @@ thay. Không có eval nào trượt ở vòng này. Verdict: **PENDING-JUDGMENT*
 người trực tiếp đọc `evidence/E13-hopthoai.png` +
 `evidence/E13-datmatkhau*.png` và điền `human_override` cho E14 tại Cổng
 Bằng chứng; sau đó mới nâng lên PASS.
+
+### Re-pin lần 1 — 2026-09-19, do hoa cu do commit 670c8859 them ba chan do that cho E12/E13/E17
+run_id: repin-20260919T130705Z-28331
+sha: 670c8859fdf38306fcd869913d4c5980dbbea855 · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng
