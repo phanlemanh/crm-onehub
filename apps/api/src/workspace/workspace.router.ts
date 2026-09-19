@@ -15,8 +15,10 @@ import {
 	allowanceListOutput,
 	allowanceOutput,
 	allowEmailInput,
+	issuePasswordLinkInput,
 	memberListInput,
 	memberListOutput,
+	passwordLinkOutput,
 	removeMemberInput,
 	removeMemberOutput,
 	revokeAllowanceInput,
@@ -98,6 +100,18 @@ export class WorkspaceRouter {
 		@Input() input: z.infer<typeof allowEmailInput>,
 	) {
 		return this.workspace.allowEmail(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: issuePasswordLinkInput,
+		output: passwordLinkOutput,
+		meta: restMeta("POST", "/workspace/password-link", ["Workspace"]),
+	})
+	async issuePasswordLink(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof issuePasswordLinkInput>,
+	) {
+		return this.workspace.issuePasswordLink(ctx.user.id, input);
 	}
 
 	@Mutation({

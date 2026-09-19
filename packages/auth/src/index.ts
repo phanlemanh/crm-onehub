@@ -4,6 +4,7 @@ export {
 	type AllowDecision,
 	type AllowInput,
 	decideSignIn,
+	decideSignInFromDb,
 	normalizeEmail,
 } from "./allow-list";
 export {
