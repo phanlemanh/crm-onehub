@@ -261,6 +261,8 @@ function chay({ lenh, doi_so, duoi }, sao, moi_truong = {}) {
 	return { ma: r.status, ra: `${r.stdout ?? ""}${r.stderr ?? ""}` };
 }
 
+const THU_MUC_BANG_CHUNG = "_acceptance/ho-so-khai-dung-tieng/evidence/";
+
 function cayBan() {
 	const r = spawnSync("git", ["-C", GOC, "status", "--porcelain"], {
 		encoding: "utf8",
@@ -268,6 +270,7 @@ function cayBan() {
 	return (r.stdout ?? "")
 		.split("\n")
 		.filter((d) => d.trim() !== "")
+		.filter((d) => !d.includes(THU_MUC_BANG_CHUNG))
 		.join("\n");
 }
 
@@ -295,6 +298,13 @@ if (banDauBan !== "" && process.env.CHO_PHEP_CAY_BAN !== "1") {
 	);
 	process.exit(2);
 }
+
+console.log(
+	"-- PHAM VI hai phep kiem cay: chi MA NGUON. Thu muc evidence/ bi loai ra vi cac\n" +
+		"   chan do khac ghi vao do trong CHINH luot chay song song — do chung la bao\n" +
+		"   ban gia. Bao dam rang chan nay khong cham bang chung la CAU TRUC (moi phep\n" +
+		"   pha nam trong ban sao rieng), khong phai phep so diff nay.",
+);
 const bang = [];
 let hong = 0;
 let sao = null;
