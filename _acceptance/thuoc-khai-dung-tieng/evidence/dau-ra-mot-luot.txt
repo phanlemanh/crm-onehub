@@ -1,5 +1,5 @@
 == DAU RA MOT LUOT CHAY — thuoc-khai-dung-tieng ==
-sinh 2026-09-19T13:17:04Z tai commit f2c4a092
+sinh 2026-09-19T15:12:27Z tai commit 4640b98c
 CSDL: crm_rang_thuoc_test (nhan ban tu crm) · may chu worktree o 3000/3001
 
 == E1 · bun _acceptance/thuoc-khai-dung-tieng/rang/ghim-phan-biet.mjs ==
@@ -25,25 +25,32 @@ CSDL: crm_rang_thuoc_test (nhan ban tu crm) · may chu worktree o 3000/3001
 ket qua: 0 chuoi ghim KHONG phan biet duoc tren 14
 -> ma thoat 0
 
-== E2 · tk_khai_sinh_dung_ghim · bun _acceptance/thuoc-khai-dung-tieng/rang/khai-sinh-dung-ghim.mjs ==
--- KHOA: khai-sinh-dung-ghim giu /tmp/thuoc-khai-dung-tieng.khoa
+== E2 · bun _acceptance/thuoc-khai-dung-tieng/rang/khai-sinh-dung-ghim.mjs ==
 -- AC-1 hoi: chuoi ghim co vang o luot lanh khong.
 -- AC-2 hoi mot cau KHAC: bo khai sinh co DUNG cau tra loi do khong,
    hay tinh ra roi vut di. Hai cau tach lam hai vi mot bo khai sinh co the
    in ra "vang: khong" roi van cham DAT.
 -- Phep do: dat lai chuoi ghim cua E1 ve "gioi-thieu"
    (ten chan, in o moi luot), roi doi bo khai sinh phai bao KHONG DAT.
-   (1) bo khai sinh in nhan [dem-roi-vut]:            co
-   (2) no bao "ghim vang o luot lanh: KHONG":         co
-   (3) no cham E1 la KHONG DAT:                     co
-ket qua: dat
--> ma thoat 0
+KHONG DO DUOC: cua PHA_THU_DAT_LAI_GHIM khong con trong pha-thu.mjs,
+   nen luot chay nay chua he dat lai ghim nao — ket qua duoi day vo nghia.
+        khong bi ghi de bang so do cua ban da pha.
+     
+     KHONG DO DUOC: cay dang xet DANG BAN, ma ban sao duoc dung tai HEAD.
+        Nghia la moi con so duoi day noi ve HEAD, KHONG noi ve cay anh sap ky.
+        Cau "cay dang xet khong doi mot byte nao" van dung va van xanh khi cay ban tu dau,
+        nen no KHONG bat duoc chuyen nay — day la tien de, phai chan o day.
+        Commit roi chay lai, hoac dat CHO_PHEP_CAY_BAN=1 neu that su muon do HEAD.
+        Cay dang ban:
+           M _acceptance/thuoc-khai-dung-tieng/evidence/dau-ra-mot-luot.txt
+     
+-> ma thoat 2
 
 == E3 · bun _acceptance/thuoc-khai-dung-tieng/rang/cong-chan-duoc.mjs ==
 -- AC-3 do HIEU LUC, khong do BAN KHAI. Khang dinh "thuoc co ten trong
    gate-shape.json" la doc lai to giay; cau hoi that la: them mot cho khai
    tieng THU MUOI vao apps/app thi `bun run test` co DO khong.
--- Moi viec xay ra trong ban sao /Users/manh-macmini/dev/crm/.claude/worktrees/.cong-chan-duoc-59303; cay dang xet khong doi mot byte.
+-- Moi viec xay ra trong ban sao /Users/manh-macmini/dev/crm/.claude/worktrees/.cong-chan-duoc-17499; cay dang xet khong doi mot byte.
    nhan ban 12 thu muc bang clonefile.
 -- Ket qua:
    them cho thu muoi -> `bun run test` DO (ma 1), va goi ten apps/app/components/crm/deal-stage.tsx
@@ -82,18 +89,31 @@ ket qua: 0 cho hong
 -> ma thoat 0
 
 == E5 · bun _acceptance/thuoc-khai-dung-tieng/rang/khong-de-lai-vet.mjs ==
--- KHOA: khong-de-lai-vet giu /tmp/thuoc-khai-dung-tieng.khoa
 -- Chan nay EP mot ngoai le that o GIUA luot chay cua hoi-quy-nam-cho.mjs:
+-- KHOANH VUNG: anh chup BO tep mang tien to vat-thu, va phep dem vat con lai
+   chi dem vat mang MOC cua chinh luot nay. Chup TOAN BO thoa thuan la khong
+   chay song song duoc: mot chan do khac dang tao/xoa vat thu cua no se hien
+   ra o day thanh "MOI SINH" — mot bao do gia. Do 19/09 khi chay hai chan cung luc.
+   Tu 19/09, phep phu giai doan TAO thoa thuan moi thay vi MUON thoa thuan co
+   san. Nen vet de lai khong con la mot ban ghi LECH ma la mot ban ghi THUA —
+   nhanh MOI SINH duoi day bat dung cai do. Doi cach nay xoa luon hai lop hong:
+   hai luot chay song song khong con gianh nhau mot ban ghi, va khong ban ghi
+   THAT nao bi cham du chuyen gi xay ra.
    sau khi no da muon thoa thuan that, truoc khi no tra. Roi doi chieu trang
    thai TRUOC/SAU cua tung ban ghi. Mot kich ban muon ban ghi THAT trong CSDL
    dev ma khong co try/finally se de lai vet moi lan no chet giua chung.
+-- DON TRUOC: xoa 1 vat thu phu con sot tu luot truoc.
+   Mot luot chay HONG de lai vat, va vat do lam giai doan het thieu, nen luot
+   ke tiep khong tao gi va tien de sap. Chan do dang DO chinh chuyen de-lai-vet
+   thi phai tu dua minh ve trang thai biet truoc, khong duoc phu thuoc vao viec
+   luot truoc da sach.
 -- Chup TRUOC: 27 thoa thuan.
 -- Luot bi ep loi thoat ma 3.
 -- BA TIEN DE cua phep do nay, kiem TRUOC khi doc bat ky con so nao:
      (1) luot chay phai THOAT KHAC 0: 3
-     (2) no phai da MUON that su: 1 thoa thuan
+     (2) no phai da TAO that su: 1 thoa thuan
      (3) no phai chet vi DUNG loi ta ep: dung
--- 27 ban ghi da doi chieu, goi ten tung cai:
+-- 28 ban ghi da doi chieu, goi ten tung cai:
    nguyen ven  seed-deal-stripe-0 DECISION_MAKER_BOUGHT_IN
    nguyen ven  seed-deal-stripe-1 CONTRACT_SENT
    nguyen ven  seed-deal-linear-0 CONTRACT_SENT
@@ -121,6 +141,7 @@ ket qua: 0 cho hong
    nguyen ven  seed-deal-nha-dat-thu-duc-1 QUALIFIED_TO_BUY
    nguyen ven  seed-deal-san-giao-dich-bat-dong-san-hoang-gia-0 QUALIFIED_TO_BUY
    nguyen ven  seed-deal-wise-1 QUALIFIED_TO_BUY
+   vat thu mang moc doclmu8j3630: da don sach
 ket qua: 0 ban ghi that con lech tren 27
 -> ma thoat 0
 
@@ -140,7 +161,6 @@ ket qua: 0 duong hong tren 4
 -> ma thoat 0
 
 == E7 · bun _acceptance/thuoc-khai-dung-tieng/rang/ban-khai-khop.mjs ==
--- KHOA: ban-khai-khop giu /tmp/thuoc-khai-dung-tieng.khoa
 -- HAI VE cua AC-7, ca hai do QUAN HE giua BAN KHAI va BAN THAT.
    (a) moi hinh dang ma mot o mo ta trong dau nhay nguoc phai CON TON TAI trong
        chinh cac tep ma o do liet o `paths`. Ban cu chi grep evals.yaml tim hai
@@ -276,21 +296,21 @@ app:typegen: ✓ Types generated successfully
 @crm/db:build: 
 @crm/db:build: Prisma schema loaded from prisma/schema.prisma.
 @crm/db:build: 
-@crm/db:build: ✔ Generated Prisma Client (7.9.1) to ./src/generated/prisma in 192ms
+@crm/db:build: ✔ Generated Prisma Client (7.9.1) to ./src/generated/prisma in 173ms
 @crm/db:build: 
-@crm/validation:check-types: cache hit, replaying logs 728e6a78cd64454b
-@crm/validation:check-types: $ tsc --noEmit
+@crm/auth:check-types: cache hit, replaying logs 7e0ac5ff3393efd4
 @crm/db:check-types: cache hit, replaying logs 92a3b937e3f7d27b
 @crm/db:check-types: $ tsc --noEmit
-@crm/ui:check-types: cache hit, replaying logs e942a490df1708c6
-@crm/ui:check-types: $ tsc --noEmit
 @crm/telemetry:check-types: cache hit, replaying logs 5482aa2a12891fe6
-@crm/auth:check-types: cache hit, replaying logs 7e0ac5ff3393efd4
-@crm/telemetry:check-types: $ tsc --noEmit
 @crm/auth:check-types: $ tsc --noEmit
+@crm/validation:check-types: cache hit, replaying logs 728e6a78cd64454b
+@crm/telemetry:check-types: $ tsc --noEmit
+@crm/ui:check-types: cache hit, replaying logs e942a490df1708c6
 agent:check-types: cache hit, replaying logs 9489ffb6c2876be7
 api:trpc:generate: cache hit, replaying logs 4cad31ca3c619841
+@crm/validation:check-types: $ tsc --noEmit
 agent:check-types: $ tsc --noEmit
+@crm/ui:check-types: $ tsc --noEmit
 api:trpc:generate: $ nestjs-trpc generate -e src/app.module.ts -r "**/*.router.ts" -o src/generated
 api:trpc:generate: ✓ Generated server.ts successfully!
 api:trpc:generate: 
@@ -302,7 +322,7 @@ api:check-types: cache hit, replaying logs 749c0b0f91c20db2
 api:check-types: $ tsc --noEmit
 api:build: cache hit, replaying logs 888e0705e17a1501
 api:build: $ bun build src/main.ts --target=bun --outdir dist --packages=external --sourcemap
-api:build: Bundled 193 modules in 20ms
+api:build: Bundled 193 modules in 12ms
 api:build: 
 api:build:   main.js      0.73 MB  (entry point)
 api:build:   main.js.map  1.29 MB  (source map)
@@ -312,17 +332,21 @@ app:check-types: $ tsc --noEmit
 
  Tasks:    13 successful, 13 total
 Cached:    13 cached, 13 total
-  Time:    41ms >>> FULL TURBO
+  Time:    44ms >>> FULL TURBO
 
 -> ma thoat 0
 
 == E10 · bun _acceptance/thuoc-khai-dung-tieng/rang/ho-so-cu-van-xanh.mjs ==
--- KHOA: ho-so-cu-van-xanh giu /tmp/thuoc-khai-dung-tieng.khoa
 -- Loi hua trung tam cua vong nay: THUOC doi, SAN PHAM khong doi.
 -- HANG GHIM chep tay tu hop dong: 11 tep san pham.
 -- Ve (a): chay lai 9 chan cua ho so cu, goi ten tung cai.
 
 -- Ve (b): diff 32491c87..HEAD co cham tep san pham nao khong.
+   69 tep doi so voi 32491c87, KE CA thay doi chua commit va tep chua theo doi.
+   Ban cu dung `${GOC_VONG}...HEAD` — chi lich su DA COMMIT — nen phep pha ma ban
+   khai cho ve nay (sua mot dong trong foreign-text.tsx) khong the kich hoat: no
+   sua cay lam viec, ma phep do khong nhin cay lam viec. Va khong doi chung duong
+   nao: mot khoang diff RONG cung cho ra "RONG" va xanh. Hoi dong S4 vong 3 bat.
 -- Ket qua:
    xanh gioi-thieu
    xanh tom-tat-lien-he
@@ -334,12 +358,11 @@ Cached:    13 cached, 13 total
    xanh mot-duong
    xanh hoi-quy-nam-cho
    bang chung: 0 cho lech tren 8 muc
-   diff 54 tep, giao voi 11 tep san pham: RONG
+   diff 69 tep, giao voi 11 tep san pham: RONG
 ket qua: 0 cho hong
 -> ma thoat 0
 
 == E12a · KS_NHOM=nhanh bun _acceptance/thuoc-khai-dung-tieng/rang/khai-sinh-phu-vong-nay.mjs ==
--- KHOA: khai-sinh-phu-vong-nay giu /tmp/thuoc-khai-dung-tieng.khoa
 -- Thuoc cua thuoc khong duoc mien luat cua thuoc (AC-11).
 -- Phu do bang ANH XA TUNG EVAL, khong bang so tong. So tong 13=13 van dat
    khi mot eval co HAI dot bien va mot eval khac KHONG co cai nao — do 19/09,
@@ -354,7 +377,7 @@ ket qua: 0 cho hong
      E7   <- E7
      E8   <- E8
      E9   <- E9a
-     E10  <- E10a
+     E10  <- E10a, E10b
      E12a <- E12
      E12b <- E12
      E12c <- E12
@@ -362,7 +385,7 @@ ket qua: 0 cho hong
      E13  <- E13
      E14  <- E14, E14-A, E14-C, E14-D, E14-E, E14-F, E14-G, E14-chot-ghim-cu
 -- 12 chan moi, moi chan co it nhat mot phep pha chay qua.
--- NHOM CHAY: nhanh — 15/21 dot bien.
+-- NHOM CHAY: nhanh — 15/22 dot bien.
    Tach nhom vi cong cu cham cat lenh o 600 giay, ma tron bo mat ~30 phut.
    Phep kiem ANH XA o tren van doc bang DAY DU, khong doc bang da loc —
    neu khong, moi nhom se tu bao la da phu du phan cua minh.
@@ -372,8 +395,8 @@ ket qua: 0 cho hong
    nhan ban 12 thu muc bang clonefile — node_modules cua goc va tung goi,
    cong packages/db/src/generated (client Prisma bi gitignore nen worktree khong mang theo).
    Khong dung symlink: Turbopack tu choi symlink tro ra ngoai goc du an.
--- BAN SAO: /Users/manh-macmini/dev/crm/.claude/worktrees/.pha-thu-khai-tieng-60276
--- MAY CHU CUA BAN SAO: http://localhost:53088 · http://localhost:53089
+-- BAN SAO: /Users/manh-macmini/dev/crm/.claude/worktrees/.pha-thu-khai-tieng-19253
+-- MAY CHU CUA BAN SAO: http://localhost:64574 · http://localhost:64575
 -- LUOT LANH: 7 lenh rieng biet, chay MOT LAN moi lenh, TRUOC khi
    pha bat cu gi. Chay lai luot lanh cho tung phep pha la tra cung mot gia
    nhieu lan cho cung mot cau tra loi — va dat den muc vuot tran 600 giay.
@@ -395,11 +418,10 @@ ket qua: 0 cho hong
    dat  E14-F ma 1 · ghim CO · vang o luot lanh co
    dat  E14-G ma 1 · ghim CO · vang o luot lanh co
    dat  E14-chot-ghim-cu ma 1 · ghim CO · vang o luot lanh co
-ket qua: 0 phep pha KHONG do duoc tren 15 (nhom nhanh; ca bang 21)
+ket qua: 0 phep pha KHONG do duoc tren 15 (nhom nhanh; ca bang 22)
 -> ma thoat 0
 
 == E12b · KS_NHOM=vua bun _acceptance/thuoc-khai-dung-tieng/rang/khai-sinh-phu-vong-nay.mjs ==
--- KHOA: khai-sinh-phu-vong-nay giu /tmp/thuoc-khai-dung-tieng.khoa
 -- Thuoc cua thuoc khong duoc mien luat cua thuoc (AC-11).
 -- Phu do bang ANH XA TUNG EVAL, khong bang so tong. So tong 13=13 van dat
    khi mot eval co HAI dot bien va mot eval khac KHONG co cai nao — do 19/09,
@@ -414,7 +436,7 @@ ket qua: 0 phep pha KHONG do duoc tren 15 (nhom nhanh; ca bang 21)
      E7   <- E7
      E8   <- E8
      E9   <- E9a
-     E10  <- E10a
+     E10  <- E10a, E10b
      E12a <- E12
      E12b <- E12
      E12c <- E12
@@ -422,7 +444,7 @@ ket qua: 0 phep pha KHONG do duoc tren 15 (nhom nhanh; ca bang 21)
      E13  <- E13
      E14  <- E14, E14-A, E14-C, E14-D, E14-E, E14-F, E14-G, E14-chot-ghim-cu
 -- 12 chan moi, moi chan co it nhat mot phep pha chay qua.
--- NHOM CHAY: vua — 4/21 dot bien.
+-- NHOM CHAY: vua — 5/22 dot bien.
    Tach nhom vi cong cu cham cat lenh o 600 giay, ma tron bo mat ~30 phut.
    Phep kiem ANH XA o tren van doc bang DAY DU, khong doc bang da loc —
    neu khong, moi nhom se tu bao la da phu du phan cua minh.
@@ -432,24 +454,23 @@ ket qua: 0 phep pha KHONG do duoc tren 15 (nhom nhanh; ca bang 21)
    nhan ban 12 thu muc bang clonefile — node_modules cua goc va tung goi,
    cong packages/db/src/generated (client Prisma bi gitignore nen worktree khong mang theo).
    Khong dung symlink: Turbopack tu choi symlink tro ra ngoai goc du an.
--- BAN SAO: /Users/manh-macmini/dev/crm/.claude/worktrees/.pha-thu-khai-tieng-61186
--- MAY CHU CUA BAN SAO: http://localhost:54044 · http://localhost:54045
+-- BAN SAO: /Users/manh-macmini/dev/crm/.claude/worktrees/.pha-thu-khai-tieng-20703
+-- MAY CHU CUA BAN SAO: http://localhost:49330 · http://localhost:49331
 -- LUOT LANH: 4 lenh rieng biet, chay MOT LAN moi lenh, TRUOC khi
    pha bat cu gi. Chay lai luot lanh cho tung phep pha la tra cung mot gia
    nhieu lan cho cung mot cau tra loi — va dat den muc vuot tran 600 giay.
--- TRA CSDL: seed-deal-wise-1 CLOSED_WON -> QUALIFIED_TO_BUY
--- DA TRA 1 thoa thuan ve nguyen trang.
+-- DA TRA 0 thoa thuan ve nguyen trang.
 -- DA TAT may chu cua ban sao
--- nhom vua: 4 phep pha:
+-- nhom vua: 5 phep pha:
    dat  E5   ma 1 · ghim CO · vang o luot lanh co
    dat  E7   ma 1 · ghim CO · vang o luot lanh co
    dat  E10a ma 1 · ghim CO · vang o luot lanh co
    dat  E9a  ma 2 · ghim CO · vang o luot lanh co
-ket qua: 0 phep pha KHONG do duoc tren 4 (nhom vua; ca bang 21)
+   dat  E10b ma 1 · ghim CO · vang o luot lanh co
+ket qua: 0 phep pha KHONG do duoc tren 5 (nhom vua; ca bang 22)
 -> ma thoat 0
 
 == E12c · KS_NHOM=cham bun _acceptance/thuoc-khai-dung-tieng/rang/khai-sinh-phu-vong-nay.mjs ==
--- KHOA: khai-sinh-phu-vong-nay giu /tmp/thuoc-khai-dung-tieng.khoa
 -- Thuoc cua thuoc khong duoc mien luat cua thuoc (AC-11).
 -- Phu do bang ANH XA TUNG EVAL, khong bang so tong. So tong 13=13 van dat
    khi mot eval co HAI dot bien va mot eval khac KHONG co cai nao — do 19/09,
@@ -464,7 +485,7 @@ ket qua: 0 phep pha KHONG do duoc tren 4 (nhom vua; ca bang 21)
      E7   <- E7
      E8   <- E8
      E9   <- E9a
-     E10  <- E10a
+     E10  <- E10a, E10b
      E12a <- E12
      E12b <- E12
      E12c <- E12
@@ -472,18 +493,18 @@ ket qua: 0 phep pha KHONG do duoc tren 4 (nhom vua; ca bang 21)
      E13  <- E13
      E14  <- E14, E14-A, E14-C, E14-D, E14-E, E14-F, E14-G, E14-chot-ghim-cu
 -- 12 chan moi, moi chan co it nhat mot phep pha chay qua.
--- NHOM CHAY: cham — 1/21 dot bien.
+-- NHOM CHAY: cham — 1/22 dot bien.
    Tach nhom vi cong cu cham cat lenh o 600 giay, ma tron bo mat ~30 phut.
    Phep kiem ANH XA o tren van doc bang DAY DU, khong doc bang da loc —
    neu khong, moi nhom se tu bao la da phu du phan cua minh.
--- CHUP CSDL TRUOC: 27 thoa thuan. Mot phep pha o day co CHU DICH
+-- CHUP CSDL TRUOC: 28 thoa thuan. Mot phep pha o day co CHU DICH
    vo hieu hoa phep tra lai (E5), nen chinh bo khai sinh phai tra CSDL ve
    nguyen trang — khong thi luot chay ke tiep do mot tien de da hong.
    nhan ban 12 thu muc bang clonefile — node_modules cua goc va tung goi,
    cong packages/db/src/generated (client Prisma bi gitignore nen worktree khong mang theo).
    Khong dung symlink: Turbopack tu choi symlink tro ra ngoai goc du an.
--- BAN SAO: /Users/manh-macmini/dev/crm/.claude/worktrees/.pha-thu-khai-tieng-62485
--- MAY CHU CUA BAN SAO: http://localhost:55696 · http://localhost:55697
+-- BAN SAO: /Users/manh-macmini/dev/crm/.claude/worktrees/.pha-thu-khai-tieng-22580
+-- MAY CHU CUA BAN SAO: http://localhost:51467 · http://localhost:51468
 -- LUOT LANH: 1 lenh rieng biet, chay MOT LAN moi lenh, TRUOC khi
    pha bat cu gi. Chay lai luot lanh cho tung phep pha la tra cung mot gia
    nhieu lan cho cung mot cau tra loi — va dat den muc vuot tran 600 giay.
@@ -491,11 +512,10 @@ ket qua: 0 phep pha KHONG do duoc tren 4 (nhom vua; ca bang 21)
 -- DA TAT may chu cua ban sao
 -- nhom cham: 1 phep pha:
    dat  E2   ma 1 · ghim CO · vang o luot lanh co
-ket qua: 0 phep pha KHONG do duoc tren 1 (nhom cham; ca bang 21)
+ket qua: 0 phep pha KHONG do duoc tren 1 (nhom cham; ca bang 22)
 -> ma thoat 0
 
 == E12d · KS_NHOM=dat bun _acceptance/thuoc-khai-dung-tieng/rang/khai-sinh-phu-vong-nay.mjs ==
--- KHOA: khai-sinh-phu-vong-nay giu /tmp/thuoc-khai-dung-tieng.khoa
 -- Thuoc cua thuoc khong duoc mien luat cua thuoc (AC-11).
 -- Phu do bang ANH XA TUNG EVAL, khong bang so tong. So tong 13=13 van dat
    khi mot eval co HAI dot bien va mot eval khac KHONG co cai nao — do 19/09,
@@ -510,7 +530,7 @@ ket qua: 0 phep pha KHONG do duoc tren 1 (nhom cham; ca bang 21)
      E7   <- E7
      E8   <- E8
      E9   <- E9a
-     E10  <- E10a
+     E10  <- E10a, E10b
      E12a <- E12
      E12b <- E12
      E12c <- E12
@@ -518,18 +538,18 @@ ket qua: 0 phep pha KHONG do duoc tren 1 (nhom cham; ca bang 21)
      E13  <- E13
      E14  <- E14, E14-A, E14-C, E14-D, E14-E, E14-F, E14-G, E14-chot-ghim-cu
 -- 12 chan moi, moi chan co it nhat mot phep pha chay qua.
--- NHOM CHAY: dat — 1/21 dot bien.
+-- NHOM CHAY: dat — 1/22 dot bien.
    Tach nhom vi cong cu cham cat lenh o 600 giay, ma tron bo mat ~30 phut.
    Phep kiem ANH XA o tren van doc bang DAY DU, khong doc bang da loc —
    neu khong, moi nhom se tu bao la da phu du phan cua minh.
--- CHUP CSDL TRUOC: 27 thoa thuan. Mot phep pha o day co CHU DICH
+-- CHUP CSDL TRUOC: 28 thoa thuan. Mot phep pha o day co CHU DICH
    vo hieu hoa phep tra lai (E5), nen chinh bo khai sinh phai tra CSDL ve
    nguyen trang — khong thi luot chay ke tiep do mot tien de da hong.
    nhan ban 12 thu muc bang clonefile — node_modules cua goc va tung goi,
    cong packages/db/src/generated (client Prisma bi gitignore nen worktree khong mang theo).
    Khong dung symlink: Turbopack tu choi symlink tro ra ngoai goc du an.
--- BAN SAO: /Users/manh-macmini/dev/crm/.claude/worktrees/.pha-thu-khai-tieng-63502
--- MAY CHU CUA BAN SAO: http://localhost:56207 · http://localhost:56208
+-- BAN SAO: /Users/manh-macmini/dev/crm/.claude/worktrees/.pha-thu-khai-tieng-23516
+-- MAY CHU CUA BAN SAO: http://localhost:51978 · http://localhost:51979
 -- LUOT LANH: 1 lenh rieng biet, chay MOT LAN moi lenh, TRUOC khi
    pha bat cu gi. Chay lai luot lanh cho tung phep pha la tra cung mot gia
    nhieu lan cho cung mot cau tra loi — va dat den muc vuot tran 600 giay.
@@ -537,11 +557,10 @@ ket qua: 0 phep pha KHONG do duoc tren 1 (nhom cham; ca bang 21)
 -- DA TAT may chu cua ban sao
 -- nhom dat: 1 phep pha:
    dat  E3   ma 1 · ghim CO · vang o luot lanh co
-ket qua: 0 phep pha KHONG do duoc tren 1 (nhom dat; ca bang 21)
+ket qua: 0 phep pha KHONG do duoc tren 1 (nhom dat; ca bang 22)
 -> ma thoat 0
 
 == E12d · KS_NHOM=dat bun _acceptance/thuoc-khai-dung-tieng/rang/khai-sinh-phu-vong-nay.mjs ==
--- KHOA: khai-sinh-phu-vong-nay giu /tmp/thuoc-khai-dung-tieng.khoa
 -- Thuoc cua thuoc khong duoc mien luat cua thuoc (AC-11).
 -- Phu do bang ANH XA TUNG EVAL, khong bang so tong. So tong 13=13 van dat
    khi mot eval co HAI dot bien va mot eval khac KHONG co cai nao — do 19/09,
@@ -556,7 +575,7 @@ ket qua: 0 phep pha KHONG do duoc tren 1 (nhom dat; ca bang 21)
      E7   <- E7
      E8   <- E8
      E9   <- E9a
-     E10  <- E10a
+     E10  <- E10a, E10b
      E12a <- E12
      E12b <- E12
      E12c <- E12
@@ -564,18 +583,18 @@ ket qua: 0 phep pha KHONG do duoc tren 1 (nhom dat; ca bang 21)
      E13  <- E13
      E14  <- E14, E14-A, E14-C, E14-D, E14-E, E14-F, E14-G, E14-chot-ghim-cu
 -- 12 chan moi, moi chan co it nhat mot phep pha chay qua.
--- NHOM CHAY: dat — 1/21 dot bien.
+-- NHOM CHAY: dat — 1/22 dot bien.
    Tach nhom vi cong cu cham cat lenh o 600 giay, ma tron bo mat ~30 phut.
    Phep kiem ANH XA o tren van doc bang DAY DU, khong doc bang da loc —
    neu khong, moi nhom se tu bao la da phu du phan cua minh.
--- CHUP CSDL TRUOC: 27 thoa thuan. Mot phep pha o day co CHU DICH
+-- CHUP CSDL TRUOC: 28 thoa thuan. Mot phep pha o day co CHU DICH
    vo hieu hoa phep tra lai (E5), nen chinh bo khai sinh phai tra CSDL ve
    nguyen trang — khong thi luot chay ke tiep do mot tien de da hong.
    nhan ban 12 thu muc bang clonefile — node_modules cua goc va tung goi,
    cong packages/db/src/generated (client Prisma bi gitignore nen worktree khong mang theo).
    Khong dung symlink: Turbopack tu choi symlink tro ra ngoai goc du an.
--- BAN SAO: /Users/manh-macmini/dev/crm/.claude/worktrees/.pha-thu-khai-tieng-64193
--- MAY CHU CUA BAN SAO: http://localhost:56508 · http://localhost:56509
+-- BAN SAO: /Users/manh-macmini/dev/crm/.claude/worktrees/.pha-thu-khai-tieng-24387
+-- MAY CHU CUA BAN SAO: http://localhost:52281 · http://localhost:52282
 -- LUOT LANH: 1 lenh rieng biet, chay MOT LAN moi lenh, TRUOC khi
    pha bat cu gi. Chay lai luot lanh cho tung phep pha la tra cung mot gia
    nhieu lan cho cung mot cau tra loi — va dat den muc vuot tran 600 giay.
@@ -583,7 +602,7 @@ ket qua: 0 phep pha KHONG do duoc tren 1 (nhom dat; ca bang 21)
 -- DA TAT may chu cua ban sao
 -- nhom dat: 1 phep pha:
    dat  E3   ma 1 · ghim CO · vang o luot lanh co
-ket qua: 0 phep pha KHONG do duoc tren 1 (nhom dat; ca bang 21)
+ket qua: 0 phep pha KHONG do duoc tren 1 (nhom dat; ca bang 22)
 -> ma thoat 0
 
 == E13 · bun _acceptance/thuoc-khai-dung-tieng/rang/ghim-lai-da-xong.mjs ==
@@ -600,7 +619,7 @@ ket qua: 0 phep pha KHONG do duoc tren 1 (nhom dat; ca bang 21)
    phep loc do vut tham muc "**" (paths cua E15 = TOAN KHO). Hoi dong S4 vong 1 bat.
 -- Ho so nen-chat-ai-elements da ky, va vong nay sua .githooks/gate-shape.json —
    mot tep nam trong paths eval cua no. Bang chung da ky cua no vi the HOA CU.
--- verified_commit hien tai: d7784561f57ea91b691cf626d6899ea929631cc3
+-- verified_commit hien tai: 949b66a09ae67800453501527a035e04a660db46
 -- 14 duong trong paths eval, doc TU _acceptance/nen-chat-ai-elements/evals.yaml.
 -- Tung duong, kem bam truoc/sau:
    con tuoi ** 1773 tep · 2d2
@@ -625,7 +644,7 @@ ket qua: 0 duong hoa cu tren 14
 -- Moi benh co MOT dau hieu cau truc; mat dau hieu la benh quay lai.
 -- Benh nao khong dung duoc dau hieu phai co TEN trong '## Known limits'
    cua hop dong — khong im lang, va khong tinh la da phu.
--- Muc "## Known limits": doc tu TIEU DE dau dong, 10 dong.
+-- Muc "## Known limits": doc tu TIEU DE dau dong, 21 dong.
    indexOf("## Known limits") tran bat nham chinh cau AC-13 dang nhac ten muc do,
    nen cua thoat khong bao gio mo duoc. Hoi dong S4 vong 1 bat cho nay.
 
@@ -649,6 +668,20 @@ ket qua: 0 duong hoa cu tren 14
         dau hieu "CHO_PHEP_CAY_BAN" con trong _acceptance/ho-so-khai-dung-tieng/rang/pha-thu.mjs
    khong quay lai  chot-ghim-cu chuoi ghim la ten chan nen luon co mat
         dau hieu "ghim: \"lech-boc:gioi-thieu\"" con trong _acceptance/ho-so-khai-dung-tieng/rang/bang-dot-bien.mjs
-ket qua: 0 benh quay lai tren 7
+
+-- VE QUAN HE: voi benh co cho bat re, khoi phuc benh THAT roi doi mot phep do
+   CU THE phai thoi bat duoc. Khang dinh "chuoi dau hieu con day" la dai dien:
+   mot ban cai dat van goi goiMayChu() roi so voi mot hang go san se di qua no
+   nguyen ven — chuoi con do, benh da quay lai. Hoi dong S4 vong 3 bat cho do.
+-- 1 benh do bang QUAN HE:
+   E do bang QUAN HE: ban lanh DO (1), ban khoi phuc benh XANH (0) — tuc phep kiem quan he that su dang gay
+-- 6 benh CHI do bang dau hieu, gioi han khai dich danh:
+   A: Khoi phuc = cho dungCaySao() tra ve chinh goc cay. Cho bat la phep kiem cay-khong-doi cua pha-thu, ma mot luot pha-thu mat vai phut va can hai may chu dev — vuot tran 600 giay cua cong cu cham neu de trong chan nay.
+   C: Khoi phuc = so gia tri DOM voi mot hang go san thay vi gia tri ve tu goiMayChu(). Khong phep do nao trong kho phan biet duoc hai ban cai dat do: ca hai deu so DOM voi mot chuoi, khac nhau o CHO chuoi ay den. Day la gioi han that, khong phai gioi han chi phi.
+   D: Khoi phuc = bo doi chung duong cua ho-so-trong. Cho bat phai la mot vat thu co enrichment RONG ma khoi Gioi thieu VAN ve — dung mot fixture thu hai chua co trong tap du lieu thu.
+   F: Khoi phuc = noi bo chon tu [data-slot=sheet-content] ra ca trang. Cho bat la phep pha E1 cua pha-thu tren ban da khoi phuc benh; can may chu dev va vai phut.
+   G: Khoi phuc = bo cua CHO_PHEP_CAY_BAN. Cho bat la chinh pha-thu chay tren mot cay co y lam ban; can mot luot pha-thu day du.
+   chot-ghim-cu: Khoi phuc = dat chuoi ghim ve ten chan. Cho bat la ghim-phan-biet, ma no mo trinh duyet cho bay chan ui-check — vai phut va can may chu dev.
+ket qua: 0 cho hong (7 benh · 1 do quan he · 6 khai gioi han)
 -> ma thoat 0
 
