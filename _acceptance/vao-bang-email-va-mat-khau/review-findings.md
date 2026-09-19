@@ -95,6 +95,31 @@ vi của vòng đo này:
   nhận bằng ảnh chụp thật (`E13-dangnhap.png`, cả bản tiếng Anh lẫn tiếng Việt)
   và bằng đọc mã nguồn (`configured`/`social`/`showSso` logic).
 
+## Vòng 4 — khuyết tật bắt được đúng lúc ký, đã vá
+
+Không phải phát hiện về sản phẩm: phát hiện về **bộ đo của chính vòng này**.
+
+- **Ba eval màn hình chưa từng chạy một lượt máy nào** (E12/AC-6, E13/AC-9,
+  E17/AC-8). Chúng khai `cmd: config:executors.design.ui_check`, mà
+  `design-scan.js` của bộ kit là payload tiêm vào trình duyệt
+  (`window.__IMPECCABLE_CONFIG__ = …`) — chạy bằng `node` là `ReferenceError:
+  window is not defined` ngay dòng đầu. `run-log.jsonl` không có dòng nào cho
+  ba eval đó ở cả ba vòng, trong khi các khối của chúng vẫn ghi `exit_code: 0`
+  và mượn `run_id` của vòng 3. Nền thật của ba khẳng định là ảnh chụp cộng lời
+  tường thuật.
+  Vì sao ba vòng không ai thấy: cổng `L2 SUBSTANCE` chỉ bắn khi verdict cố lên
+  `PASS`; `PENDING-JUDGMENT` không kích hoạt phép kiểm tính thật của verifier.
+  Đã vá: ba chân đo mới, chạy thật, thoát 0, có dòng run-log `…-r4`, mỗi chân
+  qua chiều đỏ — `apps/app/test/mk-nut-phat-chia.dom.tsx`,
+  `mk-dang-nhap-cung-man.spec.ts`, `mk-dat-mat-khau-loi.dom.tsx`.
+
+- **Làn nghiệm thu bỏ qua mọi eval khai `executor: ui-check`**. Làn gom eval
+  theo `executor: test|script`, nên lượt đo ngay sau khi vá vẫn chỉ chạy 13/13
+  và im lặng nhảy qua đúng ba eval vừa vá. Nếu không đổi nhãn thì bản vá chỉ
+  xanh một lần rồi chết. Đã đổi sang `executor: test`, khai lối thoát
+  `bỏ ui-observed — …` ở sổ quyết định dòng 20; làn nay chạy 16 eval, tất cả
+  exit 0.
+
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người

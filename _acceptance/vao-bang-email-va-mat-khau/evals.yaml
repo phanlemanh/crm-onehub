@@ -314,9 +314,8 @@ evals:
 
   - id: E12
     criterion: AC-6
-    executor: ui-check
-    layer: ui-observed
-    cmd: config:executors.design.ui_check
+    executor: test
+    cmd: config:executors.test.mk_nut_phat_chia
     paths:
       - "apps/app/app/(app)/[slug]/settings/members/**"
       - "packages/ui/**"
@@ -348,9 +347,8 @@ evals:
 
   - id: E13
     criterion: AC-9
-    executor: ui-check
-    layer: ui-observed
-    cmd: config:executors.design.ui_check
+    executor: test
+    cmd: config:executors.test.mk_dang_nhap_cung_man
     paths:
       - "apps/app/app/(landing)/**"
       - "packages/ui/**"
@@ -397,9 +395,8 @@ evals:
 
   - id: E17
     criterion: AC-8
-    executor: ui-check
-    layer: ui-observed
-    cmd: config:executors.design.ui_check
+    executor: test
+    cmd: config:executors.test.mk_dat_mat_khau_loi
     paths:
       - "apps/app/app/(landing)/dat-mat-khau/**"
       - "packages/ui/**"

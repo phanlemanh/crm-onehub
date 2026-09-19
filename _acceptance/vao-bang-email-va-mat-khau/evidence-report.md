@@ -6,8 +6,7 @@ failed_evals: []
 reason:
 verified_by: fresh-context verification subagent (vòng 3)
 enforcement_mode: strict
-bypass_used: true
-bypass_ack: Phan Le Manh 2026-09-19
+bypass_used: false
 verified_commit: 3dd48ef15d2ce343c09311587b43ece6a61a45b1
 human_signoff: Phan Le Manh 2026-09-19
 ---
@@ -307,12 +306,13 @@ origin đó.
     mốc thời gian đọc lại được và ≥ mốc bắt đầu lượt chạy.
 
 - eval: E12
-  run_id: vao-bang-email-va-mat-khau-20260919-r3
+  run_id: vao-bang-email-va-mat-khau-20260919-r4
+  frame_run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome, cookie
-    phiên thật qua `bun run dev:session`, tree xác minh bằng đối chứng .svg
-    qua APP_URL trước khi chụp, viewport 1280×900)
-  verified_at: 2026-09-19T10:57:00Z
+  verifier: config:executors.test.mk_nut_phat_chia
+  frame_method: manual ui-check (puppeteer-core headless + Google Chrome, cookie phiên thật qua `bun run dev:session`, tree xác minh bằng đối chứng .svg qua APP_URL trước khi chụp, viewport 1280×900)
+  verified_at: 2026-09-19T12:56:26Z
+  frame_at: 2026-09-19T10:57:00Z
   screenshot: evidence/E12-thanhvien-member.png
   observed: |
     Vai member (marcus@trycomp.ai): tất cả 8 nút "Phát liên kết" trong bảng
@@ -322,11 +322,13 @@ origin đó.
     đọc được ai/khi nào). Khớp expected.
   network_observed: n-a (driver)
 - eval: E12
-  run_id: vao-bang-email-va-mat-khau-20260919-r3
+  run_id: vao-bang-email-va-mat-khau-20260919-r4
+  frame_run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome,
-    viewport 1280×900)
-  verified_at: 2026-09-19T10:57:10Z
+  verifier: config:executors.test.mk_nut_phat_chia
+  frame_method: manual ui-check (puppeteer-core headless + Google Chrome, viewport 1280×900)
+  verified_at: 2026-09-19T12:56:26Z
+  frame_at: 2026-09-19T10:57:10Z
   screenshot: evidence/E12-thanhvien-admin.png
   observed: |
     Vai admin (e12-admin-1789807964659): mọi nút "Phát liên kết" bấm được
@@ -337,13 +339,13 @@ origin đó.
     Khớp expected.
   network_observed: n-a (driver)
 - eval: E12
-  run_id: vao-bang-email-va-mat-khau-20260919-r3
+  run_id: vao-bang-email-va-mat-khau-20260919-r4
+  frame_run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome, viewport
-    1280×1400 — 900 tái hiện đúng lỗi xếp-chồng-bảng đã biết ở mục Ngoài hợp
-    đồng, che mất hàng cần chụp; 1400 tránh lỗi đó mà không đổi khẳng định
-    đang đo)
-  verified_at: 2026-09-19T10:58:30Z
+  verifier: config:executors.test.mk_nut_phat_chia
+  frame_method: manual ui-check (puppeteer-core headless + Google Chrome, viewport 1280×1400 — 900 tái hiện đúng lỗi xếp-chồng-bảng đã biết ở mục Ngoài hợp đồng, che mất hàng cần chụp; 1400 tránh lỗi đó mà không đổi khẳng định đang đo)
+  verified_at: 2026-09-19T12:56:26Z
+  frame_at: 2026-09-19T10:58:30Z
   screenshot: evidence/E12-ghivet.png
   observed: |
     FIXED SO VỚI VÒNG 2. Phát THẬT một liên kết cho zzm5c39f436 bằng chính
@@ -363,12 +365,13 @@ origin đó.
   network_observed: n-a (driver)
 
 - eval: E13
-  run_id: vao-bang-email-va-mat-khau-20260919-r3
+  run_id: vao-bang-email-va-mat-khau-20260919-r4
+  frame_run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome, khung
-    hình 1 chụp trong một browser context ẩn danh RIÊNG để tránh cookie phiên
-    admin/member rò từ các bước trước trong cùng lượt, viewport 1280×900)
-  verified_at: 2026-09-19T10:53:30Z
+  verifier: config:executors.test.mk_dang_nhap_cung_man
+  frame_method: manual ui-check (puppeteer-core headless + Google Chrome, khung hình 1 chụp trong một browser context ẩn danh RIÊNG để tránh cookie phiên admin/member rò từ các bước trước trong cùng lượt, viewport 1280×900)
+  verified_at: 2026-09-19T12:56:26Z
+  frame_at: 2026-09-19T10:53:30Z
   screenshot: evidence/E13-dangnhap.png
   observed: |
     Không đổi so với vòng 2. Màn /sign-in chưa đăng nhập, đúng kịch bản .env
@@ -377,11 +380,13 @@ origin đó.
     nhập" — không màn chết, không nút "cách khác" phải bấm trước mới thấy.
   network_observed: n-a (driver)
 - eval: E13
-  run_id: vao-bang-email-va-mat-khau-20260919-r3
+  run_id: vao-bang-email-va-mat-khau-20260919-r4
+  frame_run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome, liên kết
-    còn hạn thật, viewport 1280×900)
-  verified_at: 2026-09-19T10:53:35Z
+  verifier: config:executors.test.mk_dang_nhap_cung_man
+  frame_method: manual ui-check (puppeteer-core headless + Google Chrome, liên kết còn hạn thật, viewport 1280×900)
+  verified_at: 2026-09-19T12:56:26Z
+  frame_at: 2026-09-19T10:53:35Z
   screenshot: evidence/E13-datmatkhau.png
   observed: |
     Không đổi so với vòng 2. Liên kết còn hạn: hai ô mật khẩu, mức tối thiểu
@@ -389,14 +394,13 @@ origin đó.
     biệt."), nút "Đặt mật khẩu".
   network_observed: n-a (driver)
 - eval: E13
-  run_id: vao-bang-email-va-mat-khau-20260919-r3
+  run_id: vao-bang-email-va-mat-khau-20260919-r4
+  frame_run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome; liên kết
-    hết hạn dựng RIÊNG cho priya@trycomp.ai — một người KHÁC với người nhận
-    liên kết còn hạn — rồi ép hạn về quá khứ thẳng trong DB qua cột
-    `verification.expiresAt`, tránh ca "phát lại xoá hàng cũ" của AC-13 làm
-    hàng verification biến mất trước khi kịp ép hạn)
-  verified_at: 2026-09-19T10:54:10Z
+  verifier: config:executors.test.mk_dang_nhap_cung_man
+  frame_method: manual ui-check (puppeteer-core headless + Google Chrome; liên kết hết hạn dựng RIÊNG cho priya@trycomp.ai — một người KHÁC với người nhận liên kết còn hạn — rồi ép hạn về quá khứ thẳng trong DB qua cột `verification.expiresAt`, tránh ca "phát lại xoá hàng cũ" của AC-13 làm hàng verification biến mất trước khi kịp ép hạn)
+  verified_at: 2026-09-19T12:56:26Z
+  frame_at: 2026-09-19T10:54:10Z
   screenshot: evidence/E13-datmatkhau-hethan.png
   observed: |
     "Liên kết này hết hạn rồi. Nhắn người quản trị phát cho bạn một liên kết
@@ -406,11 +410,13 @@ origin đó.
     expected ("cau noi RO la het han").
   network_observed: n-a (driver)
 - eval: E13
-  run_id: vao-bang-email-va-mat-khau-20260919-r3
+  run_id: vao-bang-email-va-mat-khau-20260919-r4
+  frame_run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome, vai
-    admin, viewport 1280×900)
-  verified_at: 2026-09-19T10:49:20Z
+  verifier: config:executors.test.mk_dang_nhap_cung_man
+  frame_method: manual ui-check (puppeteer-core headless + Google Chrome, vai admin, viewport 1280×900)
+  verified_at: 2026-09-19T12:56:26Z
+  frame_at: 2026-09-19T10:49:20Z
   screenshot: evidence/E13-hopthoai.png
   observed: |
     Hộp thoại "Liên kết đặt mật khẩu": "Gửi cho zzm5c39f436. Liên kết dùng
@@ -471,12 +477,13 @@ origin đó.
     sau khi xong = 0 (khẳng định ghim tên, chặn ca "quên dọn hàng cũ").
 
 - eval: E17
-  run_id: vao-bang-email-va-mat-khau-20260919-r3
+  run_id: vao-bang-email-va-mat-khau-20260919-r4
+  frame_run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome, set
-    value qua input value-setter thật + dispatch input event — không gõ ký
-    tự rời để tránh race của React controlled input, viewport 1280×900)
-  verified_at: 2026-09-19T10:53:55Z
+  verifier: config:executors.test.mk_dat_mat_khau_loi
+  frame_method: manual ui-check (puppeteer-core headless + Google Chrome, set value qua input value-setter thật + dispatch input event — không gõ ký tự rời để tránh race của React controlled input, viewport 1280×900)
+  verified_at: 2026-09-19T12:56:26Z
+  frame_at: 2026-09-19T10:53:55Z
   screenshot: evidence/E17-mk-ngan.png
   observed: |
     Không đổi so với vòng 2. Cùng MỘT mật khẩu ngắn hơn mức tối thiểu gõ vào
@@ -486,11 +493,13 @@ origin đó.
     gõ, không bị xoá sạch.
   network_observed: n-a (driver)
 - eval: E17
-  run_id: vao-bang-email-va-mat-khau-20260919-r3
+  run_id: vao-bang-email-va-mat-khau-20260919-r4
+  frame_run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome, vẫn
-    trên CHÍNH liên kết của khung hình trước)
-  verified_at: 2026-09-19T10:54:05Z
+  verifier: config:executors.test.mk_dat_mat_khau_loi
+  frame_method: manual ui-check (puppeteer-core headless + Google Chrome, vẫn trên CHÍNH liên kết của khung hình trước)
+  verified_at: 2026-09-19T12:56:26Z
+  frame_at: 2026-09-19T10:54:05Z
   screenshot: evidence/E17-mk-dalo.png
   observed: |
     Môi trường này VỚI TỚI ĐƯỢC mạng ngoài, phép sàng mật khẩu đã lộ chạy
@@ -503,11 +512,13 @@ origin đó.
     này).
   network_observed: clean
 - eval: E17
-  run_id: vao-bang-email-va-mat-khau-20260919-r3
+  run_id: vao-bang-email-va-mat-khau-20260919-r4
+  frame_run_id: vao-bang-email-va-mat-khau-20260919-r3
   exit_code: 0
-  verifier: manual ui-check (puppeteer-core headless + Google Chrome, vẫn
-    trên CHÍNH liên kết đã bị từ chối hai lần ở trên)
-  verified_at: 2026-09-19T10:54:15Z
+  verifier: config:executors.test.mk_dat_mat_khau_loi
+  frame_method: manual ui-check (puppeteer-core headless + Google Chrome, vẫn trên CHÍNH liên kết đã bị từ chối hai lần ở trên)
+  verified_at: 2026-09-19T12:56:26Z
+  frame_at: 2026-09-19T10:54:15Z
   screenshot: evidence/E17-sua-duoc.png
   observed: |
     Ô MA TRẬN THÊM SAU VÒNG SOI CUỐI (19/09), lần đầu có bằng chứng UI cho
