@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent (vòng 3)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 670c8859fdf38306fcd869913d4c5980dbbea855
+verified_commit: 2d2ca16ae5ec5935ef0231268c85ccdc2e5ebc8a
 human_signoff: Phan Le Manh 2026-09-19
 ---
 
@@ -612,3 +612,7 @@ Bằng chứng; sau đó mới nâng lên PASS.
 ### Re-pin lần 1 — 2026-09-19, do hoa cu do commit 670c8859 them ba chan do that cho E12/E13/E17
 run_id: repin-20260919T130705Z-28331
 sha: 670c8859fdf38306fcd869913d4c5980dbbea855 · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-19, do ghim lai sau khi go phu thuoc thu tu nap o hai bai kiem man dang nhap
+run_id: repin-20260919T140317Z-98890
+sha: 2d2ca16ae5ec5935ef0231268c85ccdc2e5ebc8a · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng
