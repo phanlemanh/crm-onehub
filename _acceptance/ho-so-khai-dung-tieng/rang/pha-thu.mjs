@@ -74,6 +74,24 @@ try {
 	mayChu = await dungMayChu(sao);
 	console.log(`-- MAY CHU CUA BAN SAO: ${APP_SAO} · ${API_SAO}`);
 
+	const datLai = process.env.PHA_THU_DAT_LAI_GHIM;
+	if (datLai) {
+		const [chan, ghimMoi] = datLai.split("=");
+		const d = DOT_BIEN.find((x) => x.chan === chan);
+		if (!d) {
+			console.log(
+				`KHONG DO DUOC: PHA_THU_DAT_LAI_GHIM tro toi chan ${JSON.stringify(chan)} khong co trong bang.`,
+			);
+			process.exit(2);
+		}
+		console.log(
+			`-- CUA DO: dat lai chuoi ghim cua ${chan} thanh ${JSON.stringify(ghimMoi)}.\n` +
+				"   Cua nay chi de chan tk_khai_sinh_dung_ghim do dieu kien THU BA; khong\n" +
+				"   luot chay binh thuong nao dat no.",
+		);
+		d.ghim = ghimMoi;
+	}
+
 	const khoaLenh = (d) =>
 		JSON.stringify([d.do.lenh, d.do.doi_so, d.do.duoi ?? ""]);
 	const vangOLuotLanh = new Map();

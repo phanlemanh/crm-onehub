@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import {
 	API_SAO,
@@ -11,8 +11,12 @@ import {
 import { bang, GOC, ghim } from "./chung.mjs";
 
 const R = "_acceptance/thuoc-khai-dung-tieng/rang";
+const BAY_GIO_KHONG_DUNG = 0;
+
 const H = "_acceptance/ho-so-khai-dung-tieng/rang";
 const GS = ".githooks/gate-shape.json";
+
+void BAY_GIO_KHONG_DUNG;
 
 const chanMoi = (t) => ({ lenh: "bun", doi_so: [`${R}/${t}.mjs`] });
 
@@ -100,12 +104,15 @@ export const DOT_BIEN_VONG_NAY = [
 	},
 	{
 		chan: "E12",
-		tep: `${R}/ghim-phan-biet.mjs`,
-		cu: "process.exit(hong > 0 ? 1 : 0);",
-		moi: "process.exit(0);",
-		do: chanMoi("khai-sinh-phu-vong-nay"),
+		tep: `${R}/khai-sinh-phu-vong-nay.mjs`,
+		cu: "const BAY_GIO_KHONG_DUNG = 0;\n",
+		moi: "",
+		do: {
+			lenh: "bun",
+			doi_so: [`${R}/khai-sinh-phu-vong-nay.mjs`],
+			tu_quy: true,
+		},
 		ghim: "chan-moi-khong-do-duoc:",
-		tu_quy: true,
 	},
 	{
 		chan: "E13",
@@ -139,8 +146,32 @@ console.log(
 ghim("so menh de Cap hai chieu", soMenhDe, 13);
 ghim("so dot bien", DOT_BIEN_VONG_NAY.length, soMenhDe);
 
+const CHAN_MOI = readdirSync(join(GOC, R))
+	.filter(
+		(t) => t.endsWith(".mjs") && t !== "chung.mjs" && !t.endsWith(".spec.mjs"),
+	)
+	.sort();
+const duocPhu = new Set(
+	DOT_BIEN_VONG_NAY.map((d) => d.do.doi_so[0].split("/").pop()),
+);
+const soHo = CHAN_MOI.filter((t) => !duocPhu.has(t));
+if (soHo.length > 0) {
+	console.log(
+		`-- ${soHo.length} chan moi KHONG co phep pha nao chay qua:\n` +
+			soHo.map((t) => `     [chan-moi-khong-do-duoc:${t}]`).join("\n"),
+	);
+	process.exit(1);
+}
+console.log(
+	`-- ${CHAN_MOI.length} chan moi, moi chan co it nhat mot phep pha chay qua.`,
+);
+
 if (process.env.CHAN_TU_QUY === "1") {
-	console.log("[tu-quy] khong chay lai chinh minh trong ban sao.");
+	console.log(
+		"[tu-quy] da qua moi hang ghim va phep kiem phu du; dung truoc khi dung ban\n" +
+			"   sao thu hai. Phep pha E12 chay den day la du — no do chinh hai hang ghim\n" +
+			"   va phep kiem phu du o tren.",
+	);
 	process.exit(0);
 }
 
@@ -158,7 +189,6 @@ try {
 	const moi_truong = {
 		APP_URL: APP_SAO,
 		API_URL: API_SAO,
-		CHAN_TU_QUY: "1",
 		CHO_PHEP_CAY_BAN: "1",
 	};
 
@@ -166,7 +196,11 @@ try {
 		const duong = join(sao, d.tep);
 		const goc = readFileSync(duong, "utf8");
 		try {
-			const lanh = chay(d.do, sao, moi_truong);
+			const mt = {
+				...moi_truong,
+				CHAN_TU_QUY: d.do.tu_quy ? "1" : "",
+			};
+			const lanh = chay(d.do, sao, mt);
 			const vang = !lanh.ra.includes(d.ghim);
 
 			if (!goc.includes(d.cu)) {
@@ -178,7 +212,7 @@ try {
 			}
 			writeFileSync(duong, goc.replace(d.cu, d.moi));
 
-			const r = chay(d.do, sao, moi_truong);
+			const r = chay(d.do, sao, mt);
 			const coGhim = r.ra.includes(d.ghim);
 			const dat = r.ma !== 0 && coGhim && vang;
 			if (!dat) hong += 1;
