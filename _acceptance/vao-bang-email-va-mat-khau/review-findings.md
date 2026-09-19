@@ -95,10 +95,17 @@ vi của vòng đo này:
   nhận bằng ảnh chụp thật (`E13-dangnhap.png`, cả bản tiếng Anh lẫn tiếng Việt)
   và bằng đọc mã nguồn (`configured`/`social`/`showSso` logic).
 
-## Ngoài hợp đồng
+## Ngoài hợp đồng — người quyết ở Gate 2
 
-- **`apps/api/scripts/dev-session.ts` — va chạm id khi hai email trùng 10 ký tự
-  đầu**: script sinh `id: dev-${Buffer.from(email).toString("hex").slice(0,20)}`,
+Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người
+quyết, máy không tự sửa.
+
+- **Công cụ dựng phiên dev đụng khoá khi hai email giống nhau 10 ký tự đầu**
+  Người dùng thấy gì: người dựng tài khoản thử bằng lệnh dev thấy lệnh văng lỗi trùng khoá ở lần thứ hai, và không dựng được tài khoản nào nữa cho tới khi đổi tên địa chỉ thử.
+  file: `apps/api/scripts/dev-session.ts`
+  severity: Important
+  Đề xuất: new-contract — công cụ dev, không phải mã sản phẩm, nhưng chắc chắn tái diễn
+  Chi tiết: script sinh `id: dev-${Buffer.from(email).toString("hex").slice(0,20)}`,
   tức chỉ lấy 10 byte đầu của địa chỉ email làm khoá. Hai email khác nhau nhưng
   cùng tiền tố 10 ký tự (ví dụ `e12-member-1789807881@onehub.center` và
   `e12-member-1789807964659@onehub.center`) sinh CÙNG một `id`, và lần `upsert`
@@ -108,8 +115,28 @@ vi của vòng đo này:
   nhưng đáng vá vì bất kỳ ai dùng công cụ này với hai địa chỉ thử đặt tên giống
   nhau (rất dễ xảy ra khi test tay) đều dính.
 
-- **Mặc định ngôn ngữ màn đăng nhập/đặt mật khẩu là tiếng Anh khi không có cookie
-  `lang` hay header `Accept-Language`**: không phải hồi quy của vòng này (cơ chế
+- **Màn Thành viên chồng hai bảng lên nhau ở cửa sổ cao khoảng 700–1000 điểm**
+  Người dùng thấy gì: quản trị mở màn Thành viên trên cửa sổ trình duyệt cỡ laptop 13 inch không thấy hàng thành viên nào — phần "Được phép vào" đè lên chỗ đáng lẽ là danh sách thành viên, nên cũng không đọc được vết ai đã phát liên kết cho ai.
+  file: `apps/app/app/(app)/[slug]/settings/members/page.tsx`
+  severity: Important
+  Đề xuất: new-contract — lỗi bố cục có từ trước vòng này, chắn đúng thứ AC-11 hứa cho người xem
+  Chi tiết: phát hiện trong lúc dựng bằng chứng E12 cho vai admin (người duy nhất
+  thấy cả hai bảng "Thành viên" và "Được phép vào" cùng lúc). Ở `1280×700`,
+  `1280×900` và `1280×1000`, tiêu đề "Được phép vào" cùng thanh công cụ đè lên
+  đúng vị trí các hàng của bảng "Thành viên". `getBoundingClientRect()` xác nhận
+  không phải ảo giác ảnh chụp: "Thành viên" đo `top:205 bottom:704`, "Được phép
+  vào" đo `top:252 bottom:1038` — hai khoảng chồng thật trong DOM đã layout. Ở
+  `1280×1400` hiện tượng biến mất. Đã có từ trước vòng 2: `evidence/E12-ghivet.png`
+  của vòng 1 (commit `0d446a34`, chụp 1280×900) mang chính xác kiểu chồng này.
+  Tái xác nhận còn nguyên ở vòng 3. Tái hiện: mở `/<slug>/settings/members` vai
+  admin hoặc chủ, cửa sổ khoảng 1280×700 đến 1280×1000.
+
+- **Hai màn mới hiện chữ tiếng Anh khi trình duyệt không khai ngôn ngữ**
+  Người dùng thấy gì: người mở màn đăng nhập hoặc trang đặt mật khẩu từ một trình duyệt chưa từng chọn ngôn ngữ sẽ thấy toàn bộ nhãn bằng tiếng Anh, chứ không phải tiếng Việt.
+  file: `apps/app/lib/locale/server.ts`
+  severity: Minor
+  Đề xuất: known-limits — có sẵn từ trước vòng này, không phải hồi quy
+  Chi tiết: không phải hồi quy của vòng này (cơ chế
   `resolveLocale` đã có sẵn từ trước và tôn trọng cookie `lang=vi`/header khi có),
   nhưng đáng ghi lại vì nó ảnh hưởng trực tiếp đến cách chụp bằng chứng: chụp lần
   đầu (trước khi tôi đặt cookie `lang=vi`) ra toàn bộ chữ tiếng Anh, không phản
