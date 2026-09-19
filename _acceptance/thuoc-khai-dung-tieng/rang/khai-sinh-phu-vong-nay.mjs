@@ -11,7 +11,6 @@ import {
 } from "../../ho-so-khai-dung-tieng/rang/cay-sao.mjs";
 import { bang, GOC, ghim } from "./chung.mjs";
 
-
 const R = "_acceptance/thuoc-khai-dung-tieng/rang";
 const H = "_acceptance/ho-so-khai-dung-tieng/rang";
 const GS = ".githooks/gate-shape.json";
@@ -137,7 +136,7 @@ export const DOT_BIEN_VONG_NAY = [
 		nhom: "vua",
 		tep: "packages/ui/src/components/foreign-text.tsx",
 		cu: "			{children}",
-		moi: "			{children}{""}",
+		moi: "			{children}{null}",
 		do: chanMoi("ho-so-cu-van-xanh"),
 		ghim: "cham-san-pham:packages/ui/src/components/foreign-text.tsx",
 	},
