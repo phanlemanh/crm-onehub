@@ -17,7 +17,10 @@ console.log(
 );
 
 const r = chay("bun", [PHA_THU], {
-	env: { PHA_THU_DAT_LAI_GHIM: `${CHAN}=${GHIM_VO_HIEU}` },
+	env: {
+		PHA_THU_DAT_LAI_GHIM: `${CHAN}=${GHIM_VO_HIEU}`,
+		PHA_THU_CHI_CHAN: CHAN,
+	},
 });
 
 const moCua = r.ra.includes("CUA DO: dat lai chuoi ghim");

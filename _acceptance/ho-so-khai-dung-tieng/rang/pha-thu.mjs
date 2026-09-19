@@ -74,6 +74,24 @@ try {
 	mayChu = await dungMayChu(sao);
 	console.log(`-- MAY CHU CUA BAN SAO: ${APP_SAO} · ${API_SAO}`);
 
+	const chiChan = process.env.PHA_THU_CHI_CHAN;
+	if (chiChan) {
+		const giu = DOT_BIEN.filter((d) => d.chan === chiChan);
+		if (giu.length === 0) {
+			console.log(
+				`KHONG DO DUOC: PHA_THU_CHI_CHAN tro toi ${JSON.stringify(chiChan)} khong co trong bang.`,
+			);
+			process.exit(2);
+		}
+		DOT_BIEN.length = 0;
+		DOT_BIEN.push(...giu);
+		console.log(
+			`-- CUA DO: chi chay ${giu.length} phep pha (${chiChan}) thay vi ca bang.\n` +
+				"   Chan tk_khai_sinh_dung_ghim chi can ket luan cua MOT phep pha; chay ca\n" +
+				"   bang o do la tra gia sau lan cho cung mot cau tra loi.",
+		);
+	}
+
 	const datLai = process.env.PHA_THU_DAT_LAI_GHIM;
 	if (datLai) {
 		const [chan, ghimMoi] = datLai.split("=");

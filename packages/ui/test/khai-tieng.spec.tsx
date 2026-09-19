@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { act, createElement, type ReactElement } from "react";
+import { act, type ReactElement } from "react";
 import { createRoot } from "react-dom/client";
 import { ForeignText } from "../src/components/foreign-text";
 
@@ -14,12 +14,8 @@ function ve(cay: ReactElement): HTMLElement {
 }
 
 test("chieu a — ForeignText sinh attribute lang dung tham so", () => {
-	const anh = ve(
-		createElement(ForeignText, { lang: "en", children: "Technology" }),
-	);
-	const viet = ve(
-		createElement(ForeignText, { lang: "vi", children: "Công nghệ" }),
-	);
+	const anh = ve(<ForeignText lang="en">Technology</ForeignText>);
+	const viet = ve(<ForeignText lang="vi">Công nghệ</ForeignText>);
 
 	expect(anh.querySelector("[lang]")?.getAttribute("lang")).toBe("en");
 	expect(viet.querySelector("[lang]")?.getAttribute("lang")).toBe("vi");

@@ -288,7 +288,33 @@ evals:
     executor: script
     cmd: config:executors.script.tk_khai_sinh_cham
     expected: >-
-      exit 0. 2 phep pha dat nhat: moi cai dung mot ban sao cay rieng.
+      exit 0. 1 phep pha dat: no chay pha-thu trong ban sao (chi mot phep pha, qua PHA_THU_CHI_CHAN).
+      Bo khai sinh cua CHINH vong nay, chay MOT NHOM chi phi. Ba nhom cong lai
+      phu du 21 phep pha; TUNG nhom deu chay lai phep kiem ANH XA day du truoc khi
+      pha gi: doc evals.yaml, liet moi eval may, va doi MOI eval co it nhat mot
+      phep pha chay qua. So tong khong du — 13=13 van dat khi mot eval co hai phep
+      pha con eval khac khong co cai nao (do 19/09, hoi dong S4 vong 1: eval E9
+      `bun run check-types` khong phep pha nao chay qua).
+      Voi TUNG phep pha trong nhom: chay tren vat LANH truoc, khang dinh chuoi ghim
+      VANG (dung luat AC-1), roi pha vat that, chay lai, khang dinh chan DO va
+      thong diep chua chuoi ghim.
+      Bo khai sinh tra CSDL ve nguyen trang sau nhom, vi mot phep pha trong do co
+      CHU DICH vo hieu hoa phep tra lai.
+      Vi sao tach ba: cong cu cham cat lenh o 600 giay, ma tron bo mat ~30 phut.
+      Tach roi thi moi nhom van la mot phep do tron ven, khong phai mot manh.
+      Cap hai chieu: ban sao bo MOT muc khoi bang phep pha -> phep kiem anh xa
+      DO voi chuoi ghim "HANG GHIM LECH" hoac ten eval mat phu.
+    paths:
+      - "_acceptance/thuoc-khai-dung-tieng/evals.yaml"
+      - "_acceptance/thuoc-khai-dung-tieng/rang/**"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12d
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.tk_khai_sinh_dat
+    expected: >-
+      exit 0. 1 phep pha dat nhat: no dung mot ban sao cay rieng VA chay `bun run test` hai lan trong do.
       Bo khai sinh cua CHINH vong nay, chay MOT NHOM chi phi. Ba nhom cong lai
       phu du 21 phep pha; TUNG nhom deu chay lai phep kiem ANH XA day du truoc khi
       pha gi: doc evals.yaml, liet moi eval may, va doi MOI eval co it nhat mot

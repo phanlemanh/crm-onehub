@@ -44,7 +44,7 @@ export const DOT_BIEN_VONG_NAY = [
 	},
 	{
 		chan: "E3",
-		nhom: "cham",
+		nhom: "dat",
 		eval: "E3",
 		commit: true,
 		tep: "packages/ui/test/rang-chat.spec.ts",
@@ -136,7 +136,7 @@ export const DOT_BIEN_VONG_NAY = [
 	{
 		chan: "E12",
 		nhom: "nhanh",
-		eval: ["E12a", "E12b", "E12c"],
+		eval: ["E12a", "E12b", "E12c", "E12d"],
 		tep: `${R}/khai-sinh-phu-vong-nay.mjs`,
 		cu: [
 			"\t{",
@@ -210,7 +210,7 @@ export const DOT_BIEN_VONG_NAY = [
 		eval: "E14",
 		tep: "_acceptance/ho-so-khai-dung-tieng/rang/khai-tieng-ho-so.mjs",
 		cu: "doi_chung_duong",
-		moi: "doi_chung_duongX",
+		moi: "doiXchungXduong",
 		do: chanMoi("bay-benh-cu"),
 		ghim: "benh-cu-quay-lai:D",
 	},
@@ -279,7 +279,7 @@ console.log(
 		"   khi mot eval co HAI dot bien va mot eval khac KHONG co cai nao — do 19/09,\n" +
 		"   hoi dong S4 vong 1: eval E9 (`bun run check-types`) khong dot bien nao chay qua.",
 );
-ghim("so eval may trong evals.yaml", EVAL_MAY.length, 15);
+ghim("so eval may trong evals.yaml", EVAL_MAY.length, 16);
 
 const phuTheoEval = new Map(EVAL_MAY.map((e) => [e, []]));
 const laMat = [];
@@ -400,15 +400,30 @@ try {
 		KHOA_DA_GIU: "1",
 	};
 
+	const mtCua = (d) => ({
+		...moi_truong,
+		CHAN_TU_QUY: d.do.tu_quy ? "1" : "",
+	});
+
+	const khoaLenh = (x) =>
+		JSON.stringify([x.do.lenh, x.do.doi_so, x.do.duoi ?? ""]);
+	const raLanh = new Map();
+	for (const d of DOT_BIEN_CHAY) {
+		if (raLanh.has(khoaLenh(d))) continue;
+		raLanh.set(khoaLenh(d), chay(d.do, sao, mtCua(d)).ra);
+	}
+	console.log(
+		`-- LUOT LANH: ${raLanh.size} lenh rieng biet, chay MOT LAN moi lenh, TRUOC khi\n` +
+			"   pha bat cu gi. Chay lai luot lanh cho tung phep pha la tra cung mot gia\n" +
+			"   nhieu lan cho cung mot cau tra loi — va dat den muc vuot tran 600 giay.",
+	);
+
 	for (const d of DOT_BIEN_CHAY) {
 		const duong = join(sao, d.tep);
 		const goc = readFileSync(duong, "utf8");
 		try {
-			const mt = {
-				...moi_truong,
-				CHAN_TU_QUY: d.do.tu_quy ? "1" : "",
-			};
-			const lanh = chay(d.do, sao, mt);
+			const mt = mtCua(d);
+			const lanh = { ra: raLanh.get(khoaLenh(d)) ?? "" };
 			const vang = !lanh.ra.includes(d.ghim);
 			if (!vang) {
 				hang.push(
@@ -518,6 +533,6 @@ try {
 
 bang(`-- nhom ${NHOM_CHAY}: ${DOT_BIEN_CHAY.length} phep pha:`, hang);
 console.log(
-	`ket qua: ${hong} chan moi KHONG do duoc tren ${DOT_BIEN_VONG_NAY.length}`,
+	`ket qua: ${hong} phep pha KHONG do duoc tren ${DOT_BIEN_CHAY.length} (nhom ${NHOM_CHAY}; ca bang ${DOT_BIEN_VONG_NAY.length})`,
 );
 process.exit(hong > 0 ? 1 : 0);
