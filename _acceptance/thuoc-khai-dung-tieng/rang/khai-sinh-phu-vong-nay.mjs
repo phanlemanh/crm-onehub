@@ -28,6 +28,7 @@ export const DOT_BIEN_VONG_NAY = [
 	},
 	{
 		chan: "E2",
+		commit: true,
 		tep: `${H}/pha-thu.mjs`,
 		cu: "const dat = ket.ma !== 0 && ket.ghim && ket.vang;",
 		moi: "const dat = ket.ma !== 0 && ket.ghim;",
@@ -38,8 +39,8 @@ export const DOT_BIEN_VONG_NAY = [
 		chan: "E3",
 		commit: true,
 		tep: GS,
-		cu: '"id": "mot-duong"',
-		moi: '"id": "mot-duong-KHONG-CO"',
+		cu: '"checks": [',
+		moi: '"checks": [], "khong_dung": [',
 		do: chanMoi("cong-chan-duoc"),
 		ghim: "cong-khong-chan-duoc",
 	},
@@ -70,8 +71,8 @@ export const DOT_BIEN_VONG_NAY = [
 	{
 		chan: "E6",
 		tep: `${H}/cay-sao.mjs`,
-		cu: "\tif (!ten.startsWith(TIEN_TO_SAO)) {",
-		moi: "\tif (false) {",
+		cu: "\tkiemDuongSao(sao);\n",
+		moi: "",
 		do: chanMoi("xoa-co-kiem"),
 		ghim: "xoa-nham:",
 	},
@@ -119,7 +120,7 @@ export const DOT_BIEN_VONG_NAY = [
 			doi_so: [`${R}/khai-sinh-phu-vong-nay.mjs`],
 			tu_quy: true,
 		},
-		ghim: "chan-moi-khong-do-duoc:",
+		ghim: "HANG GHIM LECH",
 	},
 	{
 		chan: "E13",
@@ -247,7 +248,12 @@ try {
 				`${dat ? "dat " : "KHONG DAT"} ${d.chan.padEnd(4)} ma ${r.ma} · ghim ${coGhim ? "CO" : "KHONG"} · vang o luot lanh ${vang ? "co" : "KHONG"}` +
 					(dat
 						? ""
-						: `\n        [chan-moi-khong-do-duoc:${d.chan}] ghim ${JSON.stringify(d.ghim)}`),
+						: `\n        [chan-moi-khong-do-duoc:${d.chan}] ghim ${JSON.stringify(d.ghim)}\n` +
+							r.ra
+								.split("\n")
+								.slice(-14)
+								.map((x) => `          | ${x}`)
+								.join("\n")),
 			);
 		} finally {
 			writeFileSync(duong, goc);
