@@ -9,7 +9,7 @@ status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-09-19
 amended_at: 2026-09-19
-amended_reason: "AC-7 (b)(c) — MetaLine.parts thoi nhan chuoi tran, moi phan tu la mot the khai lang hay khong. Loi hua khong doi; hinh dang doi vi lint:slop cua kho cam typeof de phan nhanh union"
+amended_reason: "AC-7 lan 1 (b)(c) — MetaLine.parts thoi nhan chuoi tran, moi phan tu la mot the khai lang hay khong. Loi hua khong doi; hinh dang doi vi lint:slop cua kho cam typeof de phan nhanh union. AC-7 lan 2 — bo chu CUNG MOT bai kiem: ba chieu van duoc do du, nhung (a) song o packages/ui/test va (b)(c) o apps/app/test, vi bai kiem gop nhap nguoc chieu goi va lot khoi moi tsconfig nen check-types khong soi no"
 design_doc: docs/superpowers/specs/2026-09-18-ho-so-khai-dung-tieng-design.md
 ---
 
@@ -42,7 +42,7 @@ Source input: quan sát bản chạy thật 18/09 · `docs/superpowers/specs/202
 - AC-4: Given một thoả thuận đã đổi giai đoạn ít nhất một lần, When dòng thời gian trong hồ sơ vẽ mục đổi giai đoạn đó, Then cả nhãn giai đoạn cũ lẫn nhãn giai đoạn mới đều nằm trong phần tử tự khai `lang="en"`; phép đo gọi tên cả hai nhãn.
 - AC-5: Given cùng tấm hồ sơ ở AC-1..AC-4, When màn vẽ, Then tên công ty, địa danh, và giá trị của ô người nhập được (chức danh cá nhân) **KHÔNG** nằm trong phần tử khai `lang="en"`; phép đo gọi tên từng giá trị nó đã kiểm và trả về 0 chỗ khai thừa. Đây là chiều chống-khai-thừa: thiếu nó thì "khai tất cả mọi thứ" cũng qua được AC-1..AC-4.
 - AC-6: Given bản kiểm kê **chín** chỗ khai tiếng ghim ở mục "Chín chỗ" dưới đây, When phép đo đọc cây mã `apps/app`, Then nó tìm thấy **đúng chín** chỗ, gọi tên từng chỗ theo `file:dòng`, và cả chín đều đi qua `ForeignText` nhập từ `@crm/ui`; số khẳng định BẰNG chín, là hằng ghim trong tệp thước chứ không đếm được bao nhiêu khẳng định bấy nhiêu. Và: 0 chỗ nào trong `apps/app` còn mang `attribute` `lang` viết tay trên thẻ JSX ở chỗ gọi, xét MỌI tên thẻ (`span`, `p`, `div`, …) và MỌI dạng giá trị (chuỗi hằng lẫn biểu thức).
-- AC-7: Given `ForeignText` và `MetaLine` sau vòng này, When bài kiểm vẽ chúng ra DOM thật, Then ba chiều cùng đạt trong CÙNG một bài kiểm: (a) `ForeignText` sinh `attribute` `lang` đúng giá trị được truyền, `"en"` ra `"en"` và `"vi"` ra `"vi"`; (b) một phần tử `parts` của `MetaLine` **không khai** `lang` thì sinh `<span>` **không mang** `attribute` `lang`, trong khi phần tử có khai thì sinh `<span lang>` đúng giá trị — không được khai hộ; (c) `MetaLine` nhận hai phần tử **mang cùng một chữ**, một có khai `lang` và một không, thì sinh ra **đúng một** phần tử mang chữ đó — khử trùng lặp chạy trên `text`, không trên phần tử thô.
+- AC-7: Given `ForeignText` và `MetaLine` sau vòng này, When bài kiểm vẽ chúng ra DOM thật, Then ba chiều cùng đạt, mỗi chiều dưới một cổng kiểu thật sự soi nó: (a) `ForeignText` sinh `attribute` `lang` đúng giá trị được truyền, `"en"` ra `"en"` và `"vi"` ra `"vi"`; (b) một phần tử `parts` của `MetaLine` **không khai** `lang` thì sinh `<span>` **không mang** `attribute` `lang`, trong khi phần tử có khai thì sinh `<span lang>` đúng giá trị — không được khai hộ; (c) `MetaLine` nhận hai phần tử **mang cùng một chữ**, một có khai `lang` và một không, thì sinh ra **đúng một** phần tử mang chữ đó — khử trùng lặp chạy trên `text`, không trên phần tử thô.
 - AC-8: Given một công ty chưa enrichment xong (không có giới thiệu, không có ngành), When hồ sơ vẽ, Then khối Giới thiệu không vẽ và không sinh phần tử rỗng nào khai `lang="en"`; bố cục phần còn lại giữ nguyên.
 - AC-9: Given tấm hồ sơ sau vòng này, When trang vẽ, Then phần tử gốc vẫn khai `lang="vi"` và không phần tử tổ tiên nào của nội dung tiếng Việt bị đổi tiếng; phép đo khẳng định `document.documentElement.lang === "vi"` trước khi tin bất kỳ con số nào khác.
 - AC-11: Given năm chỗ khai tiếng đã đúng từ trước vòng này — ngành ở bảng danh sách công ty, nhãn giai đoạn ở biểu đồ bảng điều khiển, và ba chỗ giai đoạn thoả thuận — When chúng đã chuyển sang `ForeignText`, Then chân đo NGUYÊN TRẠNG của vòng trước (`_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs`, cả hai chân `khai-tieng` và `giai-doan`) vẫn xanh và vẫn gọi tên từng giá trị nó tìm thấy. Chạy lại một cái thước cũ KHÔNG phải mở lại hợp đồng cũ: thước là vật, hợp đồng là lời hứa, và vòng này chỉ mượn vật.
@@ -148,6 +148,21 @@ từng phần. **Lời hứa không đổi một chữ nào**: phần tử khôn
 "phần này tiếng gì" thành một quyết định nhìn thấy được ở mọi chỗ gọi thay vì một
 mặc định vô hình. Đổi lại: hai chỗ gọi `MetaLine` phải sửa hình dạng, gồm cả chỗ
 ở hồ sơ cá nhân mà bản ký nói là "không phải sửa một chữ nào".
+
+**AC-7 sửa câu chữ lần hai — 2026-09-19.** Bản đã tu chính viết "trong CÙNG một
+bài kiểm". Chữ *cùng* đó không phải lời hứa về sản phẩm, nó là một chi tiết thi
+công — và chi tiết ấy hoá ra là chỗ hỏng: bài kiểm gộp sống ở
+`packages/ui/test/khai-tieng.spec.tsx`, nhập `MetaLine` từ `apps/app` bằng đường
+dẫn tương đối. Đó là nhập ngược chiều gói, và `packages/ui/tsconfig.json` chỉ
+`include: ["src"]`, nên tệp ấy lọt khỏi mọi `tsconfig`. Đã đo tay 19/09: đặt
+`const x: number = "chuỗi"` ngay trong bài kiểm đó mà `bun run check-types` vẫn
+thoát 0.
+
+Ba chiều vẫn được đo đủ, không bớt chiều nào: (a) ở
+`packages/ui/test/khai-tieng.spec.tsx`, (b) và (c) ở
+`apps/app/test/khai-tieng-metaline.spec.tsx`. Chiều nào cũng nằm trong một
+`tsconfig` thật — đã đo lại: lỗi kiểu đặt trong tệp mới làm `check-types` đỏ và
+gọi đúng tên tệp. Hồ sơ `thuoc-khai-dung-tieng` AC-8 đo chính điều này.
 
 **Vì sao AC-7 đo hai chiều trong một bài kiểm.** `MetaLine.parts` đổi kiểu để
 mang được ngôn ngữ theo từng phần. Một bản cài đặt lười có thể khai `lang` cho

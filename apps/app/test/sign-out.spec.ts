@@ -8,7 +8,11 @@ const assign = mock((_: string) => {});
 
 mock.module("@crm/auth/client", () => ({ signOut }));
 mock.module("sonner", () => ({ toast: { error: toastError } }));
-Object.assign(globalThis, { window: { location: { assign } } });
+Object.defineProperty(globalThis, "window", {
+	value: { location: { assign } },
+	configurable: true,
+	writable: true,
+});
 
 const { signOutAndRedirect } = await import("@/lib/sign-out");
 
