@@ -1,6 +1,9 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"extends": "@crm/typescript-config/react-library.json",
-	"include": ["src"],
-	"exclude": ["node_modules"]
+	"include": ["src", "test/khai-tieng.spec.tsx", "test/setup-dom.ts"],
+	"exclude": ["node_modules"],
+	"compilerOptions": {
+		"types": ["bun"]
+	}
 }

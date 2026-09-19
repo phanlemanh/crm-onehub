@@ -14,8 +14,12 @@ function ve(cay: ReactElement): HTMLElement {
 }
 
 test("chieu a — ForeignText sinh attribute lang dung tham so", () => {
-	const anh = ve(createElement(ForeignText, { lang: "en" }, "Technology"));
-	const viet = ve(createElement(ForeignText, { lang: "vi" }, "Công nghệ"));
+	const anh = ve(
+		createElement(ForeignText, { lang: "en", children: "Technology" }),
+	);
+	const viet = ve(
+		createElement(ForeignText, { lang: "vi", children: "Công nghệ" }),
+	);
 
 	expect(anh.querySelector("[lang]")?.getAttribute("lang")).toBe("en");
 	expect(viet.querySelector("[lang]")?.getAttribute("lang")).toBe("vi");
