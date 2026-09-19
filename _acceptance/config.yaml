@@ -104,6 +104,19 @@ executors:
     gt_thu_tuc_thoi_tra: bun run test -- "cd apps/api && bun test test/go-thanh-vien.spec.ts -t thu-tuc-thoi-tra"
     gt_duong_moi_khong_cap_lai: bun run test -- "cd apps/api && bun test test/go-thanh-vien.spec.ts -t duong-moi-khong-cap-lai"
     gt_phien_mat_quyen: bun run test -- "cd apps/api && bun test test/go-thanh-vien.spec.ts -t phien-mat-quyen"
+    mk_phat_chia: bun run test -- "cd apps/api && bun test test/mat-khau-lien-ket.spec.ts -t phat-chia"
+    mk_tao_nguoi_truoc: bun run test -- "cd apps/api && bun test test/mat-khau-lien-ket.spec.ts -t tao-nguoi-truoc"
+    mk_vong_tron: bun run test -- "cd packages/auth && bun test test/chia-mat-khau.integration.spec.ts -t vong-tron"
+    mk_dung_lan_hai: bun run test -- "cd packages/auth && bun test test/chia-mat-khau.integration.spec.ts -t dung-lan-hai"
+    mk_het_han: bun run test -- "cd packages/auth && bun test test/chia-mat-khau.integration.spec.ts -t het-han"
+    mk_quyen_hai_ve: bun run test -- "cd apps/api && bun test test/mat-khau-lien-ket.spec.ts -t quyen-hai-ve"
+    mk_chan_tu_dang_ky: bun run test -- "cd packages/auth && bun test test/chia-mat-khau.integration.spec.ts -t chan-tu-dang-ky"
+    mk_mat_khau_yeu: bun run test -- "cd packages/auth && bun test test/chia-mat-khau.integration.spec.ts -t mat-khau-yeu"
+    mk_ghi_vet: bun run test -- "cd apps/api && bun test test/mat-khau-lien-ket.spec.ts -t ghi-vet"
+    mk_san_thiet_ke: for t in "apps/app/app/(landing)/dat-mat-khau/[token]/page.tsx" "apps/app/app/(landing)/sign-in/password-sign-in.tsx" "apps/app/app/(app)/[slug]/settings/members/phat-chia-dialog.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done
+    mk_cua_google_con_song: bun run test -- "cd packages/auth && bun test test/chia-mat-khau.integration.spec.ts -t cua-google-con-song"
+    mk_trang_ngoai_cong: cd apps/app && bun test test/proxy-duong-mo.spec.ts
+    mk_phat_lai: bun run test -- "cd packages/auth && bun test test/chia-mat-khau.integration.spec.ts -t phat-lai"
   script:
     trg_tieu_de_trang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs tieu-de-trang"'
     trg_ba_nhom: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs ba-nhom"'
@@ -422,7 +435,7 @@ executors:
     lm_tu_vung_goi: node _acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
-    ui_check: "${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
+    ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
 risk_tiers:
   t1_skip_globs:
     - "docs/**"
