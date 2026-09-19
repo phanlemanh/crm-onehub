@@ -37,6 +37,12 @@ const SAU_TEP_CHAT = [
   "apps/app/components/agent-builder/agent-builder-route-fallback.tsx",
 ];
 
+function diemCuoi() {
+  const tu = process.env.DIEM_CUOI;
+  if (tu && tu.trim() !== "") return tu.trim();
+  return "HEAD";
+}
+
 function nhanhNen() {
   const tuThamSo = process.argv[2];
   if (tuThamSo && tuThamSo.trim() !== "") return tuThamSo.trim();
@@ -67,6 +73,7 @@ function trongDanhSachTrang(duong) {
 }
 
 const nen = nhanhNen();
+const cuoi = diemCuoi();
 
 if (nen === null) {
   console.error(
@@ -93,7 +100,7 @@ try {
 
 let thoRaw;
 try {
-  thoRaw = git(["diff", "--name-only", "-z", `${nen}...HEAD`]);
+  thoRaw = git(["diff", "--name-only", "-z", `${nen}...${cuoi}`]);
 } catch (loi) {
   console.error(`RĂNG PHẠM VI: chạy git diff hỏng — ${loi.message}`);
   process.exit(1);
@@ -101,7 +108,15 @@ try {
 
 const duongDoi = thoRaw.split("\0").filter((duong) => duong !== "");
 
-console.log(`RĂNG PHẠM VI — nhánh nền ${nen}`);
+console.log(`RĂNG PHẠM VI — nhánh nền ${nen} … điểm cuối ${cuoi}`);
+if (cuoi !== "HEAD") {
+  console.log(
+    "Vòng này đã hoà vào onehub, nên khoảng của nó là một đoạn lịch sử ĐÓNG.\n" +
+      "  Neo điểm cuối vào HEAD sẽ đo việc của các vòng SAU trên cùng nhánh —\n" +
+      "  đúng lỗi đã làm răng này đỏ ngày 19/09 với 13 tệp, không tệp nào là sáu\n" +
+      "  tệp chat nó thật sự canh.",
+  );
+}
 console.log(`Gốc kho: ${GOC_KHO}`);
 console.log(`Tổng số tệp đổi: ${duongDoi.length}`);
 

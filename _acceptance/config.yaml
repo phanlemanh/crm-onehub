@@ -498,7 +498,11 @@ executors:
     nc_so_do_cuon: node _acceptance/nen-chat-ai-elements/rang/so-do-cuon.mjs
     nc_so_lech_chuan: node _acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs
     nc_conversation_tuoi: node _acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs --tep conversation.tsx
-    nc_pham_vi_diff: node _acceptance/nen-chat-ai-elements/rang/pham-vi-diff.mjs
+    # Vòng nen-chat-ai-elements đã hoà vào onehub ở PR #33, nên khoảng của nó là
+    # một đoạn lịch sử ĐÓNG. Neo vào HEAD sẽ đo việc của các vòng SAU trên cùng
+    # nhánh — 19/09 nó báo 13 tệp vi phạm, không tệp nào là sáu tệp chat nó canh.
+    # Người ký chọn neo lại vào chính vòng đó (không nới danh sách trắng).
+    nc_pham_vi_diff: NHANH_NEN=cfc9e4a1^1 DIEM_CUOI=cfc9e4a1 node _acceptance/nen-chat-ai-elements/rang/pham-vi-diff.mjs
     nc_rang_qua_cong: bun run test
     dp_duong_song: "bun _acceptance/duong-proto-cho-design-pass/rang/duong-proto.mjs tat-ca"
     dp_nha_thu_ba: "bun _acceptance/duong-proto-cho-design-pass/rang/khai-bao.mjs nha-thu-ba"
