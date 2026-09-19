@@ -5,10 +5,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import {
-	formatRelativeTime,
-	LocalRelativeTime,
-} from "@/components/local-date-time";
+import { LocalRelativeTime } from "@/components/local-date-time";
 import {
 	type ThanhVienMessages,
 	thanhVienMessages,
@@ -18,13 +15,13 @@ import type { RouterOutputs } from "@/lib/trpc/types";
 import { AllowDialog } from "./allow-dialog";
 import { ConfirmDialog } from "./confirm-dialog";
 import { PhatChiaButton } from "./phat-chia-button";
+import { VetLine } from "./vet-line";
 
 type Allowance = RouterOutputs["workspace"]["allowances"]["rows"][number];
 type Role = keyof ThanhVienMessages["vaiTro"];
 
 export function AllowancesTable() {
-	const locale = useLocale();
-	const t = thanhVienMessages(locale);
+	const t = thanhVienMessages(useLocale());
 	const trpc = useTRPC();
 
 	const [moChoPhep, setMoChoPhep] = useState(false);
@@ -121,12 +118,11 @@ export function AllowancesTable() {
 										<span>{row.email}</span>
 										{row.passwordLinkIssuedByName &&
 										row.passwordLinkIssuedAt ? (
-											<span className="text-muted-foreground text-xs">
-												{t.phatChia.vet(
-													row.passwordLinkIssuedByName,
-													formatRelativeTime(row.passwordLinkIssuedAt, locale),
-												)}
-											</span>
+											<VetLine
+												t={t}
+												ten={row.passwordLinkIssuedByName}
+												luc={row.passwordLinkIssuedAt}
+											/>
 										) : null}
 									</div>
 								</td>

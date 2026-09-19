@@ -196,8 +196,12 @@ export class WorkspaceService {
 			}),
 		]);
 
+		const vet = await this.vetMoiNhat(rows.map((row) => row.user.email));
+
 		return {
-			rows: rows.map((row) => this.toMember(row, userId)),
+			rows: rows.map((row) =>
+				this.toMember(row, userId, vet.get(row.user.email)),
+			),
 			total,
 			facetCounts: { role: countsByKey(roles, "role") },
 		};
@@ -253,7 +257,9 @@ export class WorkspaceService {
 			role: input.role,
 		});
 
-		return this.toMember(updated, userId);
+		const vet = await this.vetMoiNhat([updated.user.email]);
+
+		return this.toMember(updated, userId, vet.get(updated.user.email));
 	}
 
 	async allowances(userId: string): Promise<{ rows: Allowance[] }> {
@@ -271,16 +277,10 @@ export class WorkspaceService {
 			orderBy: [{ createdAt: "desc" }],
 		});
 
-		const vet = await this.db.passwordLinkIssue.findMany({
-			where: { email: { in: rows.map((row) => row.email) } },
-			orderBy: { issuedAt: "desc" },
-		});
-
-		const moiNhat = new Map<string, (typeof vet)[number]>();
-		for (const v of vet) if (!moiNhat.has(v.email)) moiNhat.set(v.email, v);
+		const vet = await this.vetMoiNhat(rows.map((row) => row.email));
 
 		return {
-			rows: rows.map((row) => this.toAllowance(row, moiNhat.get(row.email))),
+			rows: rows.map((row) => this.toAllowance(row, vet.get(row.email))),
 		};
 	}
 
@@ -533,7 +533,11 @@ export class WorkspaceService {
 		};
 	}
 
-	private toMember(row: MemberRow, userId: string): WorkspaceMember {
+	private toMember(
+		row: MemberRow,
+		userId: string,
+		vet?: { issuedAt: Date; issuedByName: string },
+	): WorkspaceMember {
 		return {
 			id: row.id,
 			userId: row.userId,
@@ -543,7 +547,24 @@ export class WorkspaceService {
 			role: toRole(row.role),
 			joinedAt: row.createdAt.toISOString(),
 			isViewer: row.userId === userId,
+			passwordLinkIssuedAt: vet?.issuedAt.toISOString() ?? null,
+			passwordLinkIssuedByName: vet?.issuedByName ?? null,
 		};
+	}
+
+	private async vetMoiNhat(
+		emails: string[],
+	): Promise<Map<string, { issuedAt: Date; issuedByName: string }>> {
+		if (emails.length === 0) return new Map();
+
+		const vet = await this.db.passwordLinkIssue.findMany({
+			where: { email: { in: emails } },
+			orderBy: { issuedAt: "desc" },
+		});
+
+		const moiNhat = new Map<string, (typeof vet)[number]>();
+		for (const v of vet) if (!moiNhat.has(v.email)) moiNhat.set(v.email, v);
+		return moiNhat;
 	}
 
 	private searchWhere(q: string): Prisma.MemberWhereInput {

@@ -32,6 +32,7 @@ import type { RouterOutputs } from "@/lib/trpc/types";
 import { ConfirmDialog } from "./confirm-dialog";
 import { membersSearchParams } from "./members-search-params";
 import { PhatChiaButton } from "./phat-chia-button";
+import { VetLine } from "./vet-line";
 
 type Role = keyof ThanhVienMessages["vaiTro"];
 
@@ -57,7 +58,7 @@ function columns(
 			header: t.bang.ten,
 			sortable: true,
 			hideable: false,
-			width: "w-[30%]",
+			width: "w-[26%]",
 			cell: (row) => (
 				<span className="flex min-w-0 items-center gap-2">
 					<PersonAvatar
@@ -67,12 +68,25 @@ function columns(
 						name={row.name}
 						email={row.email}
 					/>
-					<span className="truncate font-medium" translate="no">
-						{row.name}
+					<span className="flex min-w-0 flex-col">
+						<span className="flex items-center gap-2">
+							<span className="truncate font-medium" translate="no">
+								{row.name}
+							</span>
+							{row.isViewer ? (
+								<span className="text-muted-foreground text-xs">
+									{t.bang.ban}
+								</span>
+							) : null}
+						</span>
+						{row.passwordLinkIssuedByName && row.passwordLinkIssuedAt ? (
+							<VetLine
+								t={t}
+								ten={row.passwordLinkIssuedByName}
+								luc={row.passwordLinkIssuedAt}
+							/>
+						) : null}
 					</span>
-					{row.isViewer ? (
-						<span className="text-muted-foreground text-xs">{t.bang.ban}</span>
-					) : null}
 				</span>
 			),
 		},
@@ -80,7 +94,7 @@ function columns(
 			id: "email",
 			header: t.bang.email,
 			sortable: true,
-			width: "w-[32%]",
+			width: "w-[27%]",
 			hideBelow: "md",
 			cell: (row) => (
 				<span className="truncate text-muted-foreground" translate="no">
@@ -92,7 +106,7 @@ function columns(
 			id: "role",
 			header: t.bang.vaiTro,
 			sortable: true,
-			width: "w-[18%]",
+			width: "w-[15%]",
 			cell: (row) => (
 				<span className="text-muted-foreground">{t.vaiTro[row.role]}</span>
 			),
@@ -103,7 +117,7 @@ function columns(
 			label: t.bang.thamGiaDayDu,
 			sortable: true,
 			align: "right",
-			width: "w-[14%]",
+			width: "w-[12%]",
 			hideBelow: "sm",
 			cell: (row) => (
 				<span className="text-muted-foreground">

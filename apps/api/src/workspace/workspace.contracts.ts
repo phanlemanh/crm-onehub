@@ -110,6 +110,8 @@ export const workspaceMemberOutput = z.object({
 	role: z.enum(WORKSPACE_ROLES),
 	joinedAt: z.string(),
 	isViewer: z.boolean(),
+	passwordLinkIssuedAt: z.string().nullable(),
+	passwordLinkIssuedByName: z.string().nullable(),
 });
 
 export type WorkspaceMember = z.infer<typeof workspaceMemberOutput>;
