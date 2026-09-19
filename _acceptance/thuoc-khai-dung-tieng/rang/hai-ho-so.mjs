@@ -42,6 +42,29 @@ for (const k of cacKhoi) {
 		hong += 1;
 		continue;
 	}
+	const daKhaiSom = new Set(
+		[...k.checks, ...k.notInGate].map((x) => `${x.id}.mjs`),
+	);
+	if (tep.length !== mong) {
+		for (const t of tep) {
+			if (!daKhaiSom.has(t)) {
+				console.log(
+					`   THIEU DINH DOAT [chua-dinh-doat:${k.ho_so}/${t}] — tep nay co tren cay ma khong co trong ban khai`,
+				);
+			}
+		}
+		for (const x of daKhaiSom) {
+			if (!tep.includes(x)) {
+				console.log(
+					`   KHAI MA KHONG CO [khai-thua:${k.ho_so}/${x}] — ban khai noi den tep nay ma cay khong co`,
+				);
+			}
+		}
+		console.log(
+			"   Goi ten tung tep TRUOC khi hang ghim nem: hang ghim noi ve mot CON SO,\n" +
+				"   ma nguoi doc can biet tep NAO. Hang van la chot cuoi va van nem ngay sau day.",
+		);
+	}
 	ghim(`so .mjs cua ${k.ho_so}`, tep.length, mong);
 
 	const daKhai = new Set(

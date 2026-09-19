@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import {
 	API_SAO,
@@ -69,6 +69,15 @@ export const DOT_BIEN_VONG_NAY = [
 		moi: '"nen-chat-ai-elements": 5,',
 		do: chanMoi("hai-ho-so"),
 		ghim: "HANG GHIM LECH",
+	},
+	{
+		chan: "E4c",
+		eval: "E4",
+		nhom: "nhanh",
+		tao: `${H}/mot-rang-moi-chua-khai.mjs`,
+		noi_dung: "process.exit(0);\n",
+		do: chanMoi("hai-ho-so"),
+		ghim: "chua-dinh-doat:ho-so-khai-dung-tieng/mot-rang-moi-chua-khai.mjs",
 	},
 	{
 		chan: "E5",
@@ -417,7 +426,7 @@ try {
 	const raLanh = new Map();
 	for (const d of DOT_BIEN_CHAY) {
 		if (raLanh.has(khoaLenh(d))) continue;
-		raLanh.set(khoaLenh(d), chay(d.do, sao, mtCua(d)).ra);
+		raLanh.set(khoaLenh(d), chay(d.do, sao, mtCua(d)));
 	}
 	console.log(
 		`-- LUOT LANH: ${raLanh.size} lenh rieng biet, chay MOT LAN moi lenh, TRUOC khi\n` +
@@ -426,6 +435,27 @@ try {
 	);
 
 	for (const d of DOT_BIEN_CHAY) {
+		if (d.tao) {
+			const duongMoi = join(sao, d.tao);
+			const lanh = raLanh.get(khoaLenh(d)) ?? { ma: null, ra: "" };
+			try {
+				writeFileSync(duongMoi, d.noi_dung);
+				const r = chay(d.do, sao, mtCua(d));
+				const coGhim = r.ra.includes(d.ghim);
+				const vang = lanh.ma === 0 && !lanh.ra.includes(d.ghim);
+				const dat = r.ma !== 0 && coGhim && vang;
+				if (!dat) hong += 1;
+				hang.push(
+					`${dat ? "dat " : "KHONG DAT"} ${d.chan.padEnd(4)} (TAO tep moi) ma ${r.ma} · ghim ${coGhim ? "CO" : "KHONG"} · vang o luot lanh ${vang ? "co" : "KHONG"}` +
+						(dat
+							? ""
+							: `\n        [chan-moi-khong-do-duoc:${d.chan}] ghim ${JSON.stringify(d.ghim)}`),
+				);
+			} finally {
+				if (existsSync(duongMoi)) rmSync(duongMoi);
+			}
+			continue;
+		}
 		const duong = join(sao, d.tep);
 		if (!existsSync(duong)) {
 			hang.push(
@@ -438,7 +468,18 @@ try {
 		const goc = readFileSync(duong, "utf8");
 		try {
 			const mt = mtCua(d);
-			const lanh = { ra: raLanh.get(khoaLenh(d)) ?? "" };
+			const lanh = raLanh.get(khoaLenh(d)) ?? { ma: null, ra: "" };
+			if (lanh.ma !== 0) {
+				hang.push(
+					`${d.chan.padEnd(4)} [chan-moi-khong-do-duoc:${d.chan}] LUOT LANH da DO san (ma ${lanh.ma}).\n` +
+						'        Vut ma thoat cua luot lanh roi ket luan "ghim vang" la dat TRONG:\n' +
+						"        mot lenh do san vi ly do KHAC, ma thong diep loi khong chua chuoi ghim,\n" +
+						"        van cho vang=true — roi luot pha cung do, va phep pha tinh DAT ma chua\n" +
+						"        he chung chan do bat duoc gi. pha-thu.mjs lam dung cho nay tu dau.",
+				);
+				hong += 1;
+				continue;
+			}
 			const vang = !lanh.ra.includes(d.ghim);
 			if (!vang) {
 				hang.push(
@@ -542,7 +583,12 @@ try {
 					daTra += 1;
 				})
 				.catch((loi) => {
-					console.log(`-- TRA CSDL HONG: ${id} — ${loi?.code ?? loi?.message}`);
+					console.log(
+						`-- TRA CSDL HONG [ban-ghi-that-con-lech:${id}] ${loi?.code ?? loi?.message}\n` +
+							"   Chi log roi di tiep nghia la: mot ban ghi THAT van mang stage sai ma\n" +
+							"   luong thoat 0. AC-5 hua dung dieu nguoc lai.",
+					);
+					hong += 1;
 				});
 		}
 	}
