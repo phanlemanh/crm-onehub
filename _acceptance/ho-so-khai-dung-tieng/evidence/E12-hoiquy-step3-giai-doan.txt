@@ -1,0 +1,23 @@
+===== CHAN CU: giai-doan =====
+$ bun scripts/dev-session.ts manh.phan@onemount.com
+-- DAN SO: 7 ma giai doan doc tu may chu trong chinh luot chay nay
+   nhan lay tu dealStageLabel() CUA SAN PHAM, khong tu mot hang trong file do:
+     CLOSED_WON                 -> "Closed won"
+     QUALIFIED_TO_BUY           -> "Qualified to buy"
+     CLOSED_LOST                -> "Closed lost"
+     DEMO_BOOKED                -> "Demo booked"
+     CONTRACT_SENT              -> "Contract sent"
+     UNQUALIFIED_TO_BUY         -> "Unqualified"
+     DECISION_MAKER_BOUGHT_IN   -> "Decision maker in"
+-- DO PHU: enum co 7 ma, du lieu thu phu 7
+-- KHANG DINH: moi nhan phai hien tren man, trong mot phan tu tu khai lang=en (AC-14 vong ③a)
+   boc du  Closed won           1 cho, chua boc 0
+   boc du  Qualified to buy     9 cho, chua boc 0
+   boc du  Closed lost          3 cho, chua boc 0
+   boc du  Demo booked          4 cho, chua boc 0
+   boc du  Contract sent        5 cho, chua boc 0
+   boc du  Unqualified          2 cho, chua boc 0
+   boc du  Decision maker in    1 cho, chua boc 0
+ket qua: cho chua khai lang=en=0
+   CHAN giai-doan: exit 0
+

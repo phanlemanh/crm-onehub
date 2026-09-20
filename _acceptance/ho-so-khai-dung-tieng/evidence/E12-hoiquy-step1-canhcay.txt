@@ -1,0 +1,14 @@
+-- CANH CAY: dau moc ve tu cay dang xet (http://localhost:3300)
+-- CANH CAY: dau moc ve tu cay dang xet (http://localhost:3300)
+-- HOI QUY nam cho khai dung TU TRUOC vong nay, sau khi chung chuyen sang
+   ForeignText. Chay lai THUOC CU nguyen trang, khong sua mot dong nao cua no.
+   Chay lai mot cai thuoc KHONG phai mo lai mot hop dong: thuoc la vat,
+   hop dong la loi hua, va vong nay chi muon vat.
+-- PHU GIAI DOAN: TAO 1 thoa thuan moi cho CLOSED_WON,
+   khong MUON thoa thuan co san. Muon la hai lop hong cung luc: hai luot chay
+   song song gianh cung mot ban ghi, va mot lan chet giua chung de lai vet tren
+   du lieu that. Tao thi moi luot co vat rieng, va don la xoa chu khong phai
+   khoi phuc.
+-- TIEN DE: du lieu thu thieu 1 giai doan (CLOSED_WON),
+   da TAO 1 thoa thuan de phu du, se xoa sau luot chay.
+

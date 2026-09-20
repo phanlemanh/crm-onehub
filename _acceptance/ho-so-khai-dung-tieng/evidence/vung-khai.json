@@ -18,14 +18,14 @@
     "mong_boc": false,
     "cho": [
       {
-        "gia_tri": "Vat Thu 57653-mu9ng9en",
+        "gia_tri": "Vat Thu 26967-mu9s7vpd",
         "boc": false,
         "the": "H2",
         "so_phan_tu_khai": 0,
         "duong_the": []
       },
       {
-        "gia_tri": "Vat Thu 57653-mu9ng9en",
+        "gia_tri": "Vat Thu 26967-mu9s7vpd",
         "boc": false,
         "the": "SPAN",
         "so_phan_tu_khai": 0,
@@ -129,5 +129,111 @@
       "co_khoi": true
     },
     "tieng_viet_lot": []
+  },
+  "nganh-verifier-doc-lap": {
+    "mong_boc": true,
+    "tap_gia_tri_da_kiem": [
+      "Software",
+      "Real Estate",
+      "Financial Services",
+      "Human Resources",
+      "Banking",
+      "Accounting"
+    ],
+    "theo_gia_tri": {
+      "Software": {
+        "cong_ty_id": "cmu9s98tq0000gfty6q636om0",
+        "cong_ty_ten": "Vat Thu 30399-mu9s98sh",
+        "so_cho_tim_thay": 1,
+        "so_cho_chua_boc": 0,
+        "chi_tiet": [
+          {
+            "the": "SPAN",
+            "lang_truc_tiep": "en",
+            "boc": true,
+            "la_span_lang_en_truc_tiep": true,
+            "html_quanh": "<span lang=\"en\">Software</span>"
+          }
+        ]
+      },
+      "Real Estate": {
+        "cong_ty_id": "cmu9rq8ge000ldktywtl03mia",
+        "cong_ty_ten": "Nhà Đất Thủ Đức",
+        "so_cho_tim_thay": 1,
+        "so_cho_chua_boc": 0,
+        "chi_tiet": [
+          {
+            "the": "SPAN",
+            "lang_truc_tiep": "en",
+            "boc": true,
+            "la_span_lang_en_truc_tiep": true,
+            "html_quanh": "<span lang=\"en\">Real Estate</span>"
+          }
+        ]
+      },
+      "Financial Services": {
+        "cong_ty_id": "cmu9rq8fy000bdkty33zx3112",
+        "cong_ty_ten": "Wise",
+        "so_cho_tim_thay": 1,
+        "so_cho_chua_boc": 0,
+        "chi_tiet": [
+          {
+            "the": "SPAN",
+            "lang_truc_tiep": "en",
+            "boc": true,
+            "la_span_lang_en_truc_tiep": true,
+            "html_quanh": "<span lang=\"en\">Financial Services</span>"
+          }
+        ]
+      },
+      "Human Resources": {
+        "cong_ty_id": "cmu9rq8fz000cdktyjp01vqaq",
+        "cong_ty_ten": "Personio",
+        "so_cho_tim_thay": 1,
+        "so_cho_chua_boc": 0,
+        "chi_tiet": [
+          {
+            "the": "SPAN",
+            "lang_truc_tiep": "en",
+            "boc": true,
+            "la_span_lang_en_truc_tiep": true,
+            "html_quanh": "<span lang=\"en\">Human Resources</span>"
+          }
+        ]
+      },
+      "Banking": {
+        "cong_ty_id": "cmu9rq8g7000idkty6bujyxxp",
+        "cong_ty_ten": "Mercury",
+        "so_cho_tim_thay": 1,
+        "so_cho_chua_boc": 0,
+        "chi_tiet": [
+          {
+            "the": "SPAN",
+            "lang_truc_tiep": "en",
+            "boc": true,
+            "la_span_lang_en_truc_tiep": true,
+            "html_quanh": "<span lang=\"en\">Banking</span>"
+          }
+        ]
+      },
+      "Accounting": {
+        "cong_ty_id": "cmu9rq8g0000ddktyp01hc1dy",
+        "cong_ty_ten": "Pennylane",
+        "so_cho_tim_thay": 1,
+        "so_cho_chua_boc": 0,
+        "chi_tiet": [
+          {
+            "the": "SPAN",
+            "lang_truc_tiep": "en",
+            "boc": true,
+            "la_span_lang_en_truc_tiep": true,
+            "html_quanh": "<span lang=\"en\">Accounting</span>"
+          }
+        ]
+      }
+    },
+    "tieng_viet_lot": [],
+    "tong_cho_chua_boc": 0,
+    "ghi_chu": "Viet boi verifier doc lap (khong phai doer). Kiem TAP gia tri industry khac rong (companies.list), khong chi 1 fixture. Moi gia tri: mo TAM HO SO that (khong phai man danh sach)."
   }
 }

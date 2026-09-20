@@ -1,0 +1,12 @@
+===== CHAN CU: khai-tieng =====
+$ bun scripts/dev-session.ts manh.phan@onemount.com
+-- DAN SO: 6 nganh doc tu may chu trong chinh luot chay nay
+   boc du  Software               9 cho, chua boc 0
+   boc du  Real Estate            3 cho, chua boc 0
+   boc du  Financial Services     3 cho, chua boc 0
+   boc du  Human Resources        2 cho, chua boc 0
+   boc du  Banking                2 cho, chua boc 0
+   boc du  Accounting             1 cho, chua boc 0
+ket qua: cho chua khai lang=en=0
+   CHAN khai-tieng: exit 0
+

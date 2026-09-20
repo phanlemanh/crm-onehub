@@ -1,0 +1,9 @@
+NETWORK TRUTH — E12 (hoi-quy-nam-cho.mjs / khai-tieng.mjs)
+
+Driver for this eval is Bash executing a Node/Bun script (hoi-quy-nam-cho.mjs)
+that internally drives its own headless puppeteer-core session and its own
+fetch() calls to the tRPC API. This verifier session has no read_network_requests
+/ read_console_messages access into that internal puppeteer session (it is not
+one of this session's mcp__Claude_Browser tabs).
+
+networkObserved = n-a (driver)

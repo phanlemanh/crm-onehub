@@ -1,0 +1,31 @@
+E9 (AC-9) — independent verifier network capture
+Driver: interactive Claude_Browser MCP (browser tab), app origin http://localhost:3300 (api http://localhost:3301)
+Note: this worktree's own dev server was NOT at the config-nominal ports 3000/3001 (those
+belong to a DIFFERENT worktree/tree — confirmed via the marker/"canh cay" check, see
+outputTail). Used this tree's own already-running server at 3300/3301 instead, per
+CLAUDE.md guidance ("Đo một tree khác vẫn phải đặt APP_URL và API_URL tay").
+
+CONSOLE (onlyErrors):
+[error] Encountered a script tag while rendering React component. Scripts inside React
+        components are never executed when rendering on the client... — pre-existing
+        React render warning, fired on first page load before any AC-9 navigation;
+        not a network failure, not related to lang scoping.
+[error] Failed to load resource: the server responded with a status of 404 (Not Found)
+        — see network entry below; corresponds to an EXPLORATORY navigation to a
+        company id (cmu9s98tq0000gfty6q636om0) that was the automated eval script's
+        OWN ephemeral test fixture, created and torn down by that script's run
+        (khai-tieng-ho-so.mjs tieng-trang, "-- DA DON vat thu" cleanup) moments
+        earlier. Not part of the 4 AC-9 steps — reusing that id was my own mistake,
+        and a 404 for a genuinely-deleted record is correct app behavior, not a defect.
+
+NETWORK (app-scope: localhost:3300 + localhost:3301), relevant to the 4 AC-9 steps
+(second navigation, company cmu9rq8ge000ldktywtl03mia — the flow actually asserted):
+  GET /api/trpc/savedViews.list,users.list,fields.filters,fields.list,companies.byId
+      ?...companies.byId id=cmu9rq8ge000ldktywtl03mia → 200 OK
+  GET /api/trpc/tracking.companyActivity?...companyId=cmu9rq8ge000ldktywtl03mia → 200 OK
+  GET /api/trpc/enrichment.queue?... → 200 OK (x3)
+  All static chunk/font requests → 200/304
+
+One FAIL-eligible 4xx observed overall: the single 404 above, from a stale id reused
+during my own exploration BEFORE switching to the persistent company used for the
+actual 4-step assertion. The assertion-relevant flow itself was clean (200/207 only).

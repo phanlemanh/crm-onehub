@@ -1,0 +1,15 @@
+EXITCODE:0
+-- tiền đề làn đo: contextDevApiKey đã có sẵn, không đụng
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+-- CANH CAY: dau moc ve tu cay dang xet (http://localhost:3300)
+$ bun scripts/dev-session.ts manh.phan@onemount.com
+-- MO MAN: http://localhost:3300/crm/companies/cmu9s98tq0000gfty6q636om0
+   tieng cua trang: vi (da khang dinh trong xem())
+   chuoi tieng Viet lot vao trong pham vi lang=en: 0
+-- BANG CHUNG: ghi muc "tieng-trang" vao evidence/vung-khai.json
+-- DA DON vat thu
+ket qua: chan=tieng-trang · cho lech=0
+-- tiền đề làn đo: đã dọn ảnh đại diện
+
+[exited with code 0]
