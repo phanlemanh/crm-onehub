@@ -11,3 +11,8 @@ export const ONBOARDING = {
 		maxItemsPerBatch: 500,
 	},
 } as const;
+
+export const MA_NEN_TANG = {
+	key: "ma_moi_gioi_nen_tang",
+	label: "Mã môi giới trên nền tảng",
+} as const;

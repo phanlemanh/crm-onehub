@@ -97,6 +97,19 @@ export class AgentTriggerService {
 		return brand || profile;
 	}
 
+	async onboardingMatchNeeded(
+		planId: string,
+		platformBrokerId: string,
+	): Promise<void> {
+		await this.enqueue({
+			kind: "onboarding-identify",
+			reason: `Lô từ nền tảng mang mã ${platformBrokerId} không khớp cá nhân nào trong kế hoạch ${planId}.`,
+			priority: PRIORITY.identify,
+			budget: 2,
+			payload: { planId, platformBrokerId },
+		});
+	}
+
 	async workspaceChanged(website: string, reason: string): Promise<void> {
 		await this.enqueue({
 			kind: "workspace-profile",

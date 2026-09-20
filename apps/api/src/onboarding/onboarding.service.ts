@@ -31,7 +31,7 @@ import type {
 	TemplateOutput,
 	TemplateUpdateInput,
 } from "./onboarding.contracts";
-import { ONBOARDING } from "./onboarding-config";
+import { MA_NEN_TANG, ONBOARDING } from "./onboarding-config";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -420,6 +420,35 @@ export class OnboardingService {
 				source: true,
 			},
 		});
+	}
+
+	async ensureMaNenTangField(): Promise<string> {
+		const co = await this.db.fieldDefinition.findUnique({
+			where: { entity_key: { entity: "CONTACT", key: MA_NEN_TANG.key } },
+			select: { id: true },
+		});
+
+		if (co !== null) return co.id;
+
+		const cuoi = await this.db.fieldDefinition.findFirst({
+			where: { entity: "CONTACT" },
+			orderBy: { position: "desc" },
+			select: { position: true },
+		});
+
+		const moi = await this.db.fieldDefinition.create({
+			data: {
+				entity: "CONTACT",
+				key: MA_NEN_TANG.key,
+				label: MA_NEN_TANG.label,
+				type: "TEXT",
+				agentFilled: false,
+				position: (cuoi?.position ?? -1) + 1,
+			},
+			select: { id: true },
+		});
+
+		return moi.id;
 	}
 
 	private async docKhuon(id: string): Promise<{

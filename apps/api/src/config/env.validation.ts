@@ -112,6 +112,8 @@ export class EnvironmentVariables {
 	})
 	LISTING_INGEST_SECRET?: string;
 
+	ONEHUB_PLATFORM_INGEST_SECRET?: string;
+
 	@IsOptional()
 	@IsString()
 	BLOB_READ_WRITE_TOKEN?: string;
