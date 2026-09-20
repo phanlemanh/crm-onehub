@@ -23,7 +23,9 @@ export async function gieoCaNhan() {
 }
 
 export async function gieoBoPhan(viTri = 0) {
-	return db.department.create({ data: { name: duy("Bo phan"), position: viTri } });
+	return db.department.create({
+		data: { name: duy("Bo phan"), position: viTri },
+	});
 }
 
 export async function gieoKeHoach(input?: { closedAt?: Date | null }) {
@@ -51,4 +53,16 @@ export async function batLoi(chay: () => Promise<unknown>): Promise<string> {
 		return loi instanceof Error ? `${loi.name}: ${loi.message}` : String(loi);
 	}
 	throw new Error("mong doi mot loi, nhung lenh chay tron ven");
+}
+
+export async function gieoBaBuoc(planId: string, departmentId: string) {
+	await db.onboardingStep.createMany({
+		data: [0, 1, 2].map((i) => ({
+			planId,
+			departmentId,
+			label: `Buoc ${i}`,
+			dueAt: new Date(Date.now() + i * 86_400_000),
+			position: i,
+		})),
+	});
 }
