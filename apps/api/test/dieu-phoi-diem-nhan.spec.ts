@@ -40,6 +40,19 @@ async function viecMang(ma: string) {
 	});
 }
 
+async function viecCuaKeHoach(planId: string, ma: string) {
+	return db.agentTask.findMany({
+		where: {
+			kind: VIEC,
+			AND: [
+				{ payload: { path: ["planId"], equals: planId } },
+				{ payload: { path: ["platformBrokerId"], equals: ma } },
+			],
+		},
+		select: { id: true },
+	});
+}
+
 async function tuChoi(chay: Promise<unknown>): Promise<HttpException> {
 	try {
 		await chay;
@@ -146,6 +159,35 @@ describe("diem nhan tu nen tang", () => {
 		expect(await viecMang(maLaHai)).toHaveLength(1);
 		expect(await demViec()).toBe(truocTask + 2);
 		expect(ketQua).toEqual({ khop: 1, chuyenTacNhan: 2 });
+	});
+
+	test("khong-khop-agenttask: cung mot ma la o HAI ke hoach thi moi ke hoach mot viec", async () => {
+		const [motBen, benKia] = await Promise.all([gieoKeHoach(), gieoKeHoach()]);
+		const maLa = maMoi("mg-hai-ke-hoach");
+
+		const truocTask = await demViec();
+
+		const lo = (planId: string) => ({
+			source: "onehub-platform" as const,
+			planId,
+			observedAt: "2026-09-20T00:00:00.000Z",
+			items: [muc(maLa)],
+		});
+
+		const mot = await dungController(KHOA).ingest(
+			`Bearer ${KHOA}`,
+			lo(motBen.id),
+		);
+		const hai = await dungController(KHOA).ingest(
+			`Bearer ${KHOA}`,
+			lo(benKia.id),
+		);
+
+		expect(await viecCuaKeHoach(motBen.id, maLa)).toHaveLength(1);
+		expect(await viecCuaKeHoach(benKia.id, maLa)).toHaveLength(1);
+		expect(await demViec()).toBe(truocTask + 2);
+		expect(mot).toEqual({ khop: 0, chuyenTacNhan: 1 });
+		expect(hai).toEqual({ khop: 0, chuyenTacNhan: 1 });
 	});
 
 	test("khong-khop-agenttask: ca hai muc deu khop thi KHONG viec nao duoc ghi", async () => {
