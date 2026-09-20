@@ -17,6 +17,8 @@
 		"./field-templates": "./src/field-templates.ts",
 		"./invitation-status": "./src/invitation-status.ts",
 		"./listing-ingest": "./src/listing-ingest.ts",
+		"./onboarding-ingest": "./src/onboarding-ingest.ts",
+		"./onboarding-template": "./src/onboarding-template.ts",
 		"./saved-view": "./src/saved-view.ts"
 	},
 	"scripts": {
