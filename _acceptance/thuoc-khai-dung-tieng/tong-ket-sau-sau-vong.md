@@ -1,68 +1,84 @@
-# Tổng kết sau sáu vòng chấm — thuoc-khai-dung-tieng
+# Tổng kết vòng `thuoc-khai-dung-tieng`
 
-Viết 20/09/2026, theo quyết định của người ký: dừng vòng lặp, trả hạ tầng,
-tổng kết. Hợp đồng ở `status: implemented` — **không** đặt `verified`, vì
-chưa vòng chấm nào cho verdict PASS.
+Vòng có **chủ ngữ là thước**: sản phẩm của nó là bộ đo của `ho-so-khai-dung-tieng`.
+Đóng ngày 2026-09-20 với `verdict: PASS`, chữ ký `Phan Le Manh 2026-09-20`,
+PR [#65](https://github.com/phanlemanh/crm-onehub/pull/65).
 
-## Sáu vòng
+## Đường đi của các lượt chấm
 
-| Vòng | Verdict | Ô máy hỏng | Phát hiện trong hợp đồng |
+| lượt | cách chạy | verdict | trong hợp đồng |
 |---|---|---|---|
-| 1 | BLOCKED | 3 hỏng + 2 chặn | 7 |
-| 2 | BLOCKED | 3 hỏng + 1 chặn | 4 |
-| 3 | BLOCKED | 5 hỏng + 1 chặn | 4 |
-| 4 | REJECT | 6 | 0 |
-| 5 | REJECT | 1 (E3) | 4 |
-| 6 | REJECT | 1 (E3) | 2 |
+| 1–6 | (trước phiên này) | BLOCKED ×3 · REJECT ×3 | 7 → 4 → 4 → 0 → 4 → 2 |
+| 7 | làn song song | **BLOCKED** | 1 |
+| 8 | **tuần tự**, 2h19m | PENDING-JUDGMENT | 0 |
+| 9 | sau khi vá `networkidle0` | **PASS** | 0 |
 
-Hội đồng chấm người (E11 / AC-10) đề xuất **PASS** ở vòng 3, 4, 5 và 6.
+Máy chưa bao giờ đánh số các vòng này: bộ đếm đọc `## Iterations` trong
+`evidence-report.md`, mà tệp đó chỉ sinh ra khi một vòng thành công. Sáu lượt đầu
+đều đi dưới nhãn `round: 1`, và carry-forward chưa lần nào chạy.
 
-## Trạng thái đo được, ngoài làn chấm
+## Ba điều vòng này học được, xếp theo giá trị
 
-- **17/17 ô đo thoát 0** trong một lượt chạy tuần tự có ghi
-  (`evidence/dau-ra-mot-luot.txt`).
-- **Năm cổng kho xanh**: `test` · `check-types` · `lint` · `lint:slop` · `build`.
-- **23 phép phá** trong bộ khai sinh, chia bốn nhóm chi phí (166s / 243s / 517s
-  / 180s), tất cả bắt được vật chúng khai là bắt.
-- **Diff không chạm một tệp sản phẩm nào** của `ho-so-khai-dung-tieng` — lời
-  hứa trung tâm của vòng, đo bằng chân đo riêng.
+**1. Đỏ của làn chấm không phải lúc nào cũng là đỏ của vật.** Lượt 7 BLOCKED vì
+hạ tầng: E3 đỏ do chân đo *khác* ghi vào cây giữa lúc nó so `git status` trước/sau;
+E10 và E12a đỏ do tranh tài nguyên; một lệnh bị công cụ giết ở 600 giây khi còn
+đang dựng 27 CSDL thử. Cả ba xanh khi chạy riêng cùng ngày. Kit **biết** lớp bệnh
+này — chú thích ở `acceptance-verify.js:459` tả đúng nó — nhưng hàng đợi tuần tự
+chỉ nhận **lệnh suite** (dòng 465), nên hồ sơ có *ô đo* nặng không khai được.
+Số đo cho chip kit: E12a mất **1625 giây**, E12b **3583 giây** — gấp 3 đến 6 lần
+trần 600 giây, tức không lọt làn dù chạy kiểu gì.
 
-## Hai điều còn mở
+**2. Đổi môi trường là một phép đo.** Dời bàn đo khỏi `localhost:3000` (máy chủ ấm
+của chủ kho) sang cổng riêng làm lộ **bốn** khuyết tật mà sáu lượt chấm đối kháng
+không thấy: cookie đóng cứng `domain: "localhost"` trong khi `APP_URL` cấu hình
+được · chờ bằng `networkidle0` trên máy chủ dev có HMR (đo được 0/2/0 ba lượt) ·
+ngủ 1500ms và 2500ms cố định thay vì chờ điều kiện · và một thông điệp hỏng
+**khẳng định điều nó không biết** («màn danh sách vẫn về»), che nguyên nhân thật
+(`/onboarding/research`) suốt sáu vòng. Thêm đúng một dòng in URL cuối là ra ngay.
 
-**E3 (`cong-chan-duoc`) hỏng chỉ trong làn.** Chạy riêng: 73 giây, xanh. Chạy
-cùng hai chân nặng khác: 87 giây, xanh. Chỉ hỏng dưới tải ~20 lệnh song song
-của làn chấm, và làn không giữ lại đầu ra của nó. **Không tái lập được**, nên
-không vá — vá theo một nguyên nhân phỏng đoán là đúng thứ vòng này cấm.
+**3. Một chữ đổi được hai ô đỏ.** E1 và E10 đỏ vì chạy lại thước của
+`nhan-ung-dung-noi-tieng-viet`, hồ sơ chủ kho cấm mở lại. Lối không-chạm (dựng bàn
+đo bằng bản sản phẩm) đã thử và **hỏng**: `next start` chụp ảnh `apps/app/public`
+lúc build, nên `canh-cay.mjs` — của một hồ sơ đã ký **thứ hai** — luôn thoát 2.
+Chủ kho gỡ chính ràng buộc của mình sau khi máy kiểm được hồ sơ kia mang
+`status: approved` + `verdict: BLOCKED` + `human_signoff` RỖNG, tức chưa bao giờ
+hoàn tất. Bản vá: `networkidle0` → `load`, đúng một chữ; chỗ chờ `waitForSelector`
+ngay sau đó vốn đã có. `hoi-quy-nam-cho` từ 60 giây (hoặc treo 120 giây) xuống
+**4–6 giây, 3/3 lượt**; E1 mã 0 sau 780 giây; E10 **9/9** chân con.
 
-**Dòng phát hiện chưa cạn.** Mỗi vòng vẫn tìm ra 2–4 khuyết tật thật trong hợp
-đồng; không cái nào tái phát, nhưng mỗi bản vá mở ra bề mặt mới. Ba vòng cuối
-đã vá: vứt mã thoát lượt lành · nuốt lỗi trả CSDL · nuốt lỗi xoá vật thử · ném
-`TypeError` trần · ma trận hai vị trí chỉ hiện thực một. Đây là tính chất của
-một vòng mà **sản phẩm chính là thước**: bộ đo đủ lớn thì mỗi lượt soi đối
-kháng đều còn gì đó để tìm.
+## Bốn chốt của kit đã bắn đúng trong phiên này
 
-## Những lớp bệnh đã bịt tận gốc trong vòng này
+- `ghim()` của chính bộ khai sinh bắt số ô đo máy lệch (16 khai / 17 thật).
+- `recheck-evidence` chặn `PASS` khi báo cáo còn ô đỏ (`L1 CONSISTENCY`) — chặn
+  đúng một nỗ lực ký PASS trên hai ô đỏ có Known limits.
+- `pre-merge` từ chối merge khi verdict khác `PASS`.
+- `repin-lane --skip-unchanged` bỏ qua đúng ca nó sinh ra để bỏ qua.
 
-1. **Chuỗi ghim vô hiệu** — 7/14 chuỗi là tên chân, in ở mọi lượt. Nay 0/23,
-   và có chân đo canh chính luật đó.
-2. **Đếm rồi vứt** — bộ khai sinh nay đòi BA điều, và giữ cả mã thoát của lượt
-   lành chứ không chỉ đầu ra.
-3. **Thước không nằm trong cổng nào** — `mot-duong.mjs` nay chạy trong
-   `@crm/ui#test`; thêm chỗ khai tiếng thứ mười làm `bun run test` đỏ và gọi
-   tên tệp.
-4. **Chạm dữ liệu thật** — phép phủ giai đoạn nay TẠO vật thử thay vì MƯỢN bản
-   ghi có sẵn; có chốt từ chối chạy nếu `DATABASE_URL` không mang đuôi `_test`.
-5. **Khẳng định đại diện thay cho quan hệ** — AC-8 nay đo bằng `tsc --listFiles`;
-   AC-7 rút hình dạng từ bản khai rồi đối chiếu với chính `paths` của nó; AC-11
-   ánh xạ từng eval thay vì so tổng.
-6. **Tranh chấp tài nguyên dùng chung** — CSDL (tạo thay vì mượn), tệp bằng
-   chứng (khoá cả chuỗi đọc–sửa–ghi), sổ worktree (bỏ `prune` toàn cục).
+Không chốt nào mở được bằng chữ: `bypass_ack` chỉ miễn luật `bypass_used`.
 
-## Việc còn lại cho người đọc
+## Phiên chấm tươi bắt ba câu sai của chính máy
 
-- Quyết có chạy vòng 7 không, hay nhận bằng chứng tuần tự và xét ở Cổng 2.
-- `review-findings.md` của `ho-so-khai-dung-tieng` có hai mục mới: N15 (ba
-  chuỗi ghim chốt bằng hành vi bộ in) và N16 (tám ô `ui-check` không có chốt
-  máy nào ở lúc ghim lại — đã xác minh tại `evidence-core.cjs:358`).
-- `## Known limits` của hợp đồng này khai ba giới hạn có tên: miễn trần nhát
-  sửa thước, sáu bệnh chỉ đo bằng dấu hiệu, và lý do từng cái.
+Người chấm là một phiên tươi (người viết mã không tự chấm). Nó đối chiếu mục
+Known limits *vừa viết* với bản ghi và bắt ba chỗ mô tả sai — đã sửa cả ba:
+«AC-1 và AC-9 không có lượt đo máy đáng tin» (nói quá với AC-9: vế (b) xanh trọn) ·
+«chập chờn» cho cả hai ô (E10 đỏ **2/2** lượt, cố định) · «năm trong sáu là giới hạn
+chi phí» (thật ra **bốn**; D là **thiếu vật thử**, chỗ rẻ nhất để thu hẹp).
+Nó cũng bắt 21 `run_id` không dòng sổ nào chống lưng, và bốn ô đọc hợp đồng phải
+chạy lại sau khi sửa Known limits.
+
+## Còn mở
+
+- **PR #65 chưa merge được**, hai vi phạm **có sẵn trên nhánh**:
+  `ho-so-khai-dung-tieng` verdict REJECT (chờ vòng chấm lại của chính nó) và
+  `nhan-ung-dung-noi-tieng-viet` `status: approved` + evidence BLOCKED (tàng hình
+  với cổng). Cả hai là quyết định của chủ kho, không phải việc của vòng này.
+- **Hai mục `UNCERTAIN`** không chặn merge: E4 (vế (c) không có dấu vết trong đầu
+  ra) và E15 (hai chốt `expected` đòi không được gọi tên).
+- **Chiều đỏ của bản vá nhánh glob chưa chạy** — đòi ba lượt × 10 phút, đã dừng
+  giữa chừng và gỡ đột biến. Khai tên trong Known limits.
+- **Mười một mục ngoài hợp đồng** đã định đoạt: một → Known limits, mười → hợp đồng
+  mới. Hai mục `high` đáng ưu tiên.
+- **Hai chip sang kho kit**: hàng đợi tuần tự cho ô đo nặng · pin phải nói ra ô nó
+  không đo.
+- **Bẫy `Invalid origin`** trong `.claude/launch.json` còn nguyên trên `onehub`
+  (mục `api-cay-nay` không khai `APP_URL`); bản vá chỉ sống trong worktree này.
