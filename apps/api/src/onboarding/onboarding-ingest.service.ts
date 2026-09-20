@@ -72,8 +72,10 @@ export class OnboardingIngestService {
 			}
 		});
 
+		let viecMoi = 0;
 		for (const ma of chuaKhop) {
-			await this.agent.onboardingMatchNeeded(batch.planId, ma);
+			const daGhi = await this.agent.onboardingMatchNeeded(batch.planId, ma);
+			if (daGhi) viecMoi += 1;
 		}
 
 		this.logger.log({
@@ -82,6 +84,7 @@ export class OnboardingIngestService {
 			items: batch.items.length,
 			khop,
 			chuyenTacNhan: chuaKhop.length,
+			viecMoi,
 		});
 
 		return { khop, chuyenTacNhan: chuaKhop.length };

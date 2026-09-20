@@ -287,6 +287,7 @@ evals:
     paths:
       - "apps/app/app/**"
       - "apps/app/test/dieu-phoi-trang-thai.spec.ts"
+      - "apps/app/test/dieu-phoi-xoa-ghi-danh.dom.tsx"
     expected: |
       Ca VIEC KHONG DAO DUOC.
       Dung man ho so ke hoach voi mot ghi danh. Bam nut xoa.

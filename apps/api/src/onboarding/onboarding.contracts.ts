@@ -162,6 +162,13 @@ export const enrollmentUpsertInput = z.object({
 	source: z.enum(["tay", "nen-tang"]).default("tay"),
 });
 
+export const enrollmentRemoveInput = z.object({
+	planId: z.string().trim().min(1),
+	contactId: z.string().trim().min(1),
+});
+
+export const enrollmentRemoveOutput = z.object({ id: z.string() });
+
 export const enrollmentStageInput = z.object({
 	id: z.string().trim().min(1),
 	stage: enrollmentStage,
@@ -188,6 +195,8 @@ export type PlanListOutput = z.infer<typeof planListOutput>;
 export type PlanIdInput = z.infer<typeof planIdInput>;
 export type EnrollmentStage = z.infer<typeof enrollmentStage>;
 export type EnrollmentUpsertInput = z.infer<typeof enrollmentUpsertInput>;
+export type EnrollmentRemoveInput = z.infer<typeof enrollmentRemoveInput>;
+export type EnrollmentRemoveOutput = z.infer<typeof enrollmentRemoveOutput>;
 export type EnrollmentStageInput = z.infer<typeof enrollmentStageInput>;
 export type EnrollmentOutput = z.infer<typeof enrollmentOutput>;
 

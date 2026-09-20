@@ -41,8 +41,8 @@ export function HoSoKeHoach({ planId }: { planId: string }) {
 	);
 	const boPhan = useQuery(trpc.onboarding.listDepartments.queryOptions());
 
-	const go = useMutation(
-		trpc.onboarding.upsertEnrollment.mutationOptions({
+	const xoa = useMutation(
+		trpc.onboarding.removeEnrollment.mutationOptions({
 			onSuccess: () => {
 				queryClient.invalidateQueries({
 					queryKey: trpc.onboarding.listEnrollments.queryKey({ id: planId }),
@@ -157,16 +157,14 @@ export function HoSoKeHoach({ planId }: { planId: string }) {
 				nut={m.hoSo.confirmAction}
 				onConfirm={() =>
 					setLuong((hien) =>
-						xacNhan(hien, (id) =>
-							go.mutate({ planId, contactId: id, source: "tay" }),
-						),
+						xacNhan(hien, (id) => xoa.mutate({ planId, contactId: id })),
 					)
 				}
 				onOpenChange={(mo) => {
 					if (!mo) setLuong(huy);
 				}}
 				open={luong.dangHoi !== null}
-				pending={go.isPending}
+				pending={xoa.isPending}
 				than={m.hoSo.confirmBody}
 				thoi={m.hoSo.confirmCancel}
 				tieuDe={m.hoSo.confirmTitle}

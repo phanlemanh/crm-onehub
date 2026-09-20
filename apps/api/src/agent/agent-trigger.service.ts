@@ -100,14 +100,18 @@ export class AgentTriggerService {
 	async onboardingMatchNeeded(
 		planId: string,
 		platformBrokerId: string,
-	): Promise<void> {
-		await this.enqueue({
-			kind: "onboarding-identify",
-			reason: `Lô từ nền tảng mang mã ${platformBrokerId} không khớp cá nhân nào trong kế hoạch ${planId}.`,
-			priority: PRIORITY.identify,
-			budget: 2,
-			payload: { planId, platformBrokerId },
-		});
+	): Promise<boolean> {
+		return this.enqueue(
+			{
+				kind: "onboarding-identify",
+				reason: `Lô từ nền tảng mang mã ${platformBrokerId} không khớp cá nhân nào trong kế hoạch ${planId}.`,
+				priority: PRIORITY.identify,
+				budget: 2,
+				payload: { planId, platformBrokerId },
+				subject: { path: ["platformBrokerId"], value: platformBrokerId },
+			},
+			true,
+		);
 	}
 
 	async workspaceChanged(website: string, reason: string): Promise<void> {

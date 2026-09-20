@@ -17,6 +17,8 @@ import type {
 	DepartmentReorderInput,
 	DepartmentUpdateInput,
 	EnrollmentOutput,
+	EnrollmentRemoveInput,
+	EnrollmentRemoveOutput,
 	EnrollmentStageInput,
 	EnrollmentUpsertInput,
 	PlanCreateFromTemplateInput,
@@ -406,6 +408,28 @@ export class OnboardingService {
 				dealAt: true,
 				source: true,
 			},
+		});
+	}
+
+	async removeEnrollment(
+		input: EnrollmentRemoveInput,
+	): Promise<EnrollmentRemoveOutput> {
+		const co = await this.db.onboardingEnrollment.findUnique({
+			where: {
+				planId_contactId: { planId: input.planId, contactId: input.contactId },
+			},
+			select: { id: true },
+		});
+
+		if (co === null) {
+			throw new NotFoundException(
+				`Không có ghi danh nào của cá nhân ${input.contactId} trong kế hoạch ${input.planId}.`,
+			);
+		}
+
+		return this.db.onboardingEnrollment.delete({
+			where: { id: co.id },
+			select: { id: true },
 		});
 	}
 

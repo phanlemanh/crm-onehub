@@ -31,7 +31,7 @@ executors:
     dp30_dong_ke_hoach_con_buoc_do: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t dong-ke-hoach"'
     dp30_ke_hoach_co_nguoi_cam_trich: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t nguoi-cam-trich"'
     dp30_bo_loc_nam_trong_duong_dan: 'cd apps/app && bun test test/dieu-phoi-trang-thai.spec.ts -t bo-loc-duong-dan'
-    dp30_xoa_co_xac_nhan: 'cd apps/app && bun test test/dieu-phoi-trang-thai.spec.ts -t xoa-co-xac-nhan'
+    dp30_xoa_co_xac_nhan: 'cd apps/app && bun test test/dieu-phoi-trang-thai.spec.ts -t xoa-co-xac-nhan && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-xoa-ghi-danh.dom.tsx'
     cp_ham_thuan: "cd packages/auth && bun test test/ai-duoc-vao.spec.ts"
     cp_vai_dinh_truoc: 'bun run test -- "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t vai-dinh-truoc"'
     cp_rut_chan_chua_vao: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t rut-chan-chua-vao"'

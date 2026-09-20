@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import type { HttpException } from "@nestjs/common";
-import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
+import { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { OnboardingController } from "../src/onboarding/onboarding.controller";
 import { OnboardingService } from "../src/onboarding/onboarding.service";
 import { ONBOARDING } from "../src/onboarding/onboarding-config";
@@ -9,29 +9,35 @@ import { OnboardingIngestService } from "../src/onboarding/onboarding-ingest.ser
 import { gieoCaNhan, gieoKeHoach } from "./dieu-phoi-gieo";
 
 const KHOA = "bi-mat-dieu-phoi";
+const VIEC = "onboarding-identify";
 
-let daGoiTacNhan: { planId: string; ma: string }[] = [];
+let dem = 0;
 
-const tacNhan = {
-	onboardingMatchNeeded: async (planId: string, ma: string) => {
-		daGoiTacNhan.push({ planId, ma });
-		await db.agentTask.create({
-			data: {
-				kind: "onboarding-identify",
-				reason: `Khong khop ma nen tang ${ma}`,
-				dueAt: new Date(),
-				payload: { planId, platformBrokerId: ma },
-			},
-		});
-	},
-} as unknown as AgentTriggerService;
+function maMoi(tien: string): string {
+	dem += 1;
+	return `${tien}-${Date.now()}-${dem}`;
+}
 
 function dungController(khoa: string | undefined) {
-	const ingest = new OnboardingIngestService(db, tacNhan);
+	const ingest = new OnboardingIngestService(db, new AgentTriggerService(db));
 	const config = {
 		get: () => khoa,
 	} as unknown as ConstructorParameters<typeof OnboardingController>[1];
 	return new OnboardingController(ingest, config);
+}
+
+async function demViec(): Promise<number> {
+	return db.agentTask.count({ where: { kind: VIEC } });
+}
+
+async function viecMang(ma: string) {
+	return db.agentTask.findMany({
+		where: {
+			kind: VIEC,
+			payload: { path: ["platformBrokerId"], equals: ma },
+		},
+		select: { id: true, reason: true },
+	});
 }
 
 async function tuChoi(chay: Promise<unknown>): Promise<HttpException> {
@@ -65,10 +71,10 @@ function muc(ma: string) {
 
 describe("diem nhan tu nen tang", () => {
 	test("lo-sai-tu-choi-tron: mot muc hong thi khong muc nao duoc ghi", async () => {
-		daGoiTacNhan = [];
 		const plan = await gieoKeHoach();
 		const ca = await gieoCaNhan();
-		await gieoMaNenTang(ca.id, "mg-tron-1");
+		const ma = maMoi("mg-tron");
+		await gieoMaNenTang(ca.id, ma);
 
 		const truoc = await db.onboardingEnrollment.count();
 		const truocTask = await db.agentTask.count();
@@ -78,10 +84,7 @@ describe("diem nhan tu nen tang", () => {
 				source: "onehub-platform",
 				planId: plan.id,
 				observedAt: "2026-09-20T00:00:00.000Z",
-				items: [
-					muc("mg-tron-1"),
-					{ ...muc("mg-tron-2"), platformBrokerId: "" },
-				],
+				items: [muc(ma), { ...muc("mg-tron-2"), platformBrokerId: "" }],
 			}),
 		);
 
@@ -92,18 +95,19 @@ describe("diem nhan tu nen tang", () => {
 	});
 
 	test("khong-khop-agenttask: muc khong khop khong sinh ghi danh, sinh mot AgentTask", async () => {
-		daGoiTacNhan = [];
 		const plan = await gieoKeHoach();
 		const ca = await gieoCaNhan();
-		await gieoMaNenTang(ca.id, "mg-khop-1");
+		const maKhop = maMoi("mg-khop");
+		const maLa = maMoi("mg-khong-co-that");
+		await gieoMaNenTang(ca.id, maKhop);
 
-		const truocTask = await db.agentTask.count();
+		const truocTask = await demViec();
 
 		const ketQua = await dungController(KHOA).ingest(`Bearer ${KHOA}`, {
 			source: "onehub-platform",
 			planId: plan.id,
 			observedAt: "2026-09-20T00:00:00.000Z",
-			items: [muc("mg-khop-1"), muc("mg-khong-co-that")],
+			items: [muc(maKhop), muc(maLa)],
 		});
 
 		const rows = await db.onboardingEnrollment.findMany({
@@ -113,9 +117,62 @@ describe("diem nhan tu nen tang", () => {
 		expect(rows[0]?.contactId).toBe(ca.id);
 		expect(rows[0]?.source).toBe("nen-tang");
 
-		expect(await db.agentTask.count()).toBe(truocTask + 1);
-		expect(daGoiTacNhan).toEqual([{ planId: plan.id, ma: "mg-khong-co-that" }]);
+		expect(await demViec()).toBe(truocTask + 1);
+		const viec = await viecMang(maLa);
+		expect(viec).toHaveLength(1);
+		expect(viec[0]?.reason).toContain(maLa);
+		expect(await viecMang(maKhop)).toHaveLength(0);
 		expect(ketQua).toEqual({ khop: 1, chuyenTacNhan: 1 });
+	});
+
+	test("khong-khop-agenttask: HAI ma khong khop trong CUNG mot lo deu toi duoc tac nhan", async () => {
+		const plan = await gieoKeHoach();
+		const ca = await gieoCaNhan();
+		const maKhop = maMoi("mg-khop");
+		const maLaMot = maMoi("mg-la-mot");
+		const maLaHai = maMoi("mg-la-hai");
+		await gieoMaNenTang(ca.id, maKhop);
+
+		const truocTask = await demViec();
+
+		const ketQua = await dungController(KHOA).ingest(`Bearer ${KHOA}`, {
+			source: "onehub-platform",
+			planId: plan.id,
+			observedAt: "2026-09-20T00:00:00.000Z",
+			items: [muc(maKhop), muc(maLaMot), muc(maLaHai)],
+		});
+
+		expect(await viecMang(maLaMot)).toHaveLength(1);
+		expect(await viecMang(maLaHai)).toHaveLength(1);
+		expect(await demViec()).toBe(truocTask + 2);
+		expect(ketQua).toEqual({ khop: 1, chuyenTacNhan: 2 });
+	});
+
+	test("khong-khop-agenttask: ca hai muc deu khop thi KHONG viec nao duoc ghi", async () => {
+		const plan = await gieoKeHoach();
+		const [motNguoi, nguoiKia] = await Promise.all([
+			gieoCaNhan(),
+			gieoCaNhan(),
+		]);
+		const maMot = maMoi("mg-doi-mot");
+		const maHai = maMoi("mg-doi-hai");
+		await gieoMaNenTang(motNguoi.id, maMot);
+		await gieoMaNenTang(nguoiKia.id, maHai);
+
+		const truocTask = await demViec();
+
+		const ketQua = await dungController(KHOA).ingest(`Bearer ${KHOA}`, {
+			source: "onehub-platform",
+			planId: plan.id,
+			observedAt: "2026-09-20T00:00:00.000Z",
+			items: [muc(maMot), muc(maHai)],
+		});
+
+		expect(
+			await db.onboardingEnrollment.count({ where: { planId: plan.id } }),
+		).toBe(2);
+		expect(await demViec()).toBe(truocTask);
+		expect(ketQua).toEqual({ khop: 2, chuyenTacNhan: 0 });
 	});
 
 	test("thieu-khoa-503: dung duoc controller, diem nhan tra 503", async () => {

@@ -13,6 +13,8 @@ import {
 	departmentUpdateInput,
 	enrollmentListOutput,
 	enrollmentOutput,
+	enrollmentRemoveInput,
+	enrollmentRemoveOutput,
 	enrollmentStageInput,
 	enrollmentUpsertInput,
 	planCreateFromTemplateInput,
@@ -175,6 +177,19 @@ export class OnboardingRouter {
 	})
 	upsertEnrollment(@Input() input: z.infer<typeof enrollmentUpsertInput>) {
 		return this.onboarding.upsertEnrollment(input);
+	}
+
+	@Mutation({
+		input: enrollmentRemoveInput,
+		output: enrollmentRemoveOutput,
+		meta: restMeta(
+			"DELETE",
+			"/onboarding/plans/{planId}/enrollments/{contactId}",
+			["Onboarding"],
+		),
+	})
+	removeEnrollment(@Input() input: z.infer<typeof enrollmentRemoveInput>) {
+		return this.onboarding.removeEnrollment(input);
 	}
 
 	@Mutation({

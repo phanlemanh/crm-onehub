@@ -403,6 +403,57 @@ describe("danh muc va vong doi", () => {
 		expect(sau.accountAt).toBeNull();
 	});
 
+	test("xoa-ghi-danh: hang di that, va bon moc bac di theo", async () => {
+		const service = await dungDichVu();
+		const plan = await gieoKeHoach();
+		const ca = await gieoCaNhan();
+
+		const e = await service.upsertEnrollment({
+			planId: plan.id,
+			contactId: ca.id,
+			source: "nen-tang",
+		});
+		await service.markEnrollmentStage({
+			id: e.id,
+			stage: "accountAt",
+			at: new Date(),
+		});
+
+		const kq = await service.removeEnrollment({
+			planId: plan.id,
+			contactId: ca.id,
+		});
+		expect(kq.id).toBe(e.id);
+
+		const con = await db.onboardingEnrollment.findUnique({
+			where: { id: e.id },
+		});
+		expect(con).toBeNull();
+		expect(
+			await db.onboardingEnrollment.count({ where: { planId: plan.id } }),
+		).toBe(0);
+	});
+
+	test("xoa-ghi-danh: khong co hang thi bao khong thay, khong xoa nham cua ke hoach khac", async () => {
+		const service = await dungDichVu();
+		const [motBen, benKia] = await Promise.all([gieoKeHoach(), gieoKeHoach()]);
+		const ca = await gieoCaNhan();
+
+		await service.upsertEnrollment({
+			planId: benKia.id,
+			contactId: ca.id,
+			source: "tay",
+		});
+
+		const loi = await batLoi(() =>
+			service.removeEnrollment({ planId: motBen.id, contactId: ca.id }),
+		);
+		expect(loi).toContain(ca.id);
+		expect(
+			await db.onboardingEnrollment.count({ where: { planId: benKia.id } }),
+		).toBe(1);
+	});
+
 	test("dong-ke-hoach: con buoc do van dong duoc va roi danh muc mac dinh", async () => {
 		const service = await dungDichVu();
 		const { plan, dep } = await gieoKeHoachCoBuoc({
