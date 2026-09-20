@@ -10,6 +10,7 @@ import {
 } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 import type {
+	DanhMucOutput,
 	DepartmentCreateInput,
 	DepartmentIdInput,
 	DepartmentOutput,
@@ -249,6 +250,22 @@ export class OnboardingService {
 		]);
 
 		return { rows, total };
+	}
+
+	async manDanhMuc(input: PlanListInput): Promise<DanhMucOutput> {
+		const [danhSach, soKhuon] = await Promise.all([
+			this.listPlans(input),
+			this.db.onboardingTemplate.count({ where: { archivedAt: null } }),
+		]);
+
+		const trangThai =
+			danhSach.rows.length > 0
+				? "ST-danhmuc-codulieu"
+				: soKhuon === 0
+					? "ST-danhmuc-chuacokhuon"
+					: "ST-danhmuc-empty";
+
+		return { ...danhSach, soKhuon, trangThai };
 	}
 
 	async listPlans(input: PlanListInput): Promise<PlanListOutput> {

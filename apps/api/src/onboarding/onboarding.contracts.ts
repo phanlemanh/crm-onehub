@@ -190,3 +190,17 @@ export type EnrollmentStage = z.infer<typeof enrollmentStage>;
 export type EnrollmentUpsertInput = z.infer<typeof enrollmentUpsertInput>;
 export type EnrollmentStageInput = z.infer<typeof enrollmentStageInput>;
 export type EnrollmentOutput = z.infer<typeof enrollmentOutput>;
+
+export const danhMucTrangThai = z.enum([
+	"ST-danhmuc-codulieu",
+	"ST-danhmuc-empty",
+	"ST-danhmuc-chuacokhuon",
+]);
+
+export const danhMucOutput = planListOutput.extend({
+	soKhuon: z.number(),
+	trangThai: danhMucTrangThai,
+});
+
+export type DanhMucTrangThai = z.infer<typeof danhMucTrangThai>;
+export type DanhMucOutput = z.infer<typeof danhMucOutput>;

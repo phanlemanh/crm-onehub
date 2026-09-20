@@ -31,6 +31,10 @@ export const SEARCH_PARAM = {
 	overview: {
 		scope: "scope",
 	},
+	onboarding: {
+		boPhan: "boPhan",
+		trangThai: "trangThai",
+	},
 } as const;
 
 export const RESERVED_SEARCH_PARAM_KEYS: ReadonlySet<string> = new Set(

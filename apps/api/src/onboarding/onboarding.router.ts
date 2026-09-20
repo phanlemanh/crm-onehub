@@ -4,6 +4,7 @@ import type { z } from "zod";
 import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
+	danhMucOutput,
 	departmentCreateInput,
 	departmentIdInput,
 	departmentListOutput,
@@ -185,5 +186,14 @@ export class OnboardingRouter {
 	})
 	markEnrollmentStage(@Input() input: z.infer<typeof enrollmentStageInput>) {
 		return this.onboarding.markEnrollmentStage(input);
+	}
+
+	@Query({
+		input: planListInput,
+		output: danhMucOutput,
+		meta: restMeta("GET", "/onboarding/danh-muc", ["Onboarding"]),
+	})
+	manDanhMuc(@Input() input: z.infer<typeof planListInput>) {
+		return this.onboarding.manDanhMuc(input);
 	}
 }
