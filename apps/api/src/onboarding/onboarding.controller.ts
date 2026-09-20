@@ -63,7 +63,7 @@ export class OnboardingController {
 	})
 	async ingest(
 		@Headers("authorization") authorization: string | undefined,
-		@Body() body: unknown,
+		@Body() body: OnboardingBatch,
 	): Promise<KetQuaNhan> {
 		if (this.secret === undefined || this.secret === "") {
 			throw new ServiceUnavailableException(

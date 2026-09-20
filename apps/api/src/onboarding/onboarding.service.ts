@@ -1,4 +1,4 @@
-import type { Db } from "@crm/db";
+import type { Db, Prisma } from "@crm/db";
 import {
 	type OnboardingTemplateStep,
 	parseOnboardingTemplateSteps,
@@ -224,12 +224,10 @@ export class OnboardingService {
 	}
 
 	async listSteps(input: StepListInput): Promise<StepListOutput> {
-		const where = {
-			planId: input.planId,
-			...(input.departmentId === undefined
-				? {}
-				: { departmentId: input.departmentId }),
-		};
+		const where: Prisma.OnboardingStepWhereInput = { planId: input.planId };
+		if (input.departmentId !== undefined) {
+			where.departmentId = input.departmentId;
+		}
 
 		const [rows, total] = await Promise.all([
 			this.db.onboardingStep.findMany({
@@ -269,12 +267,12 @@ export class OnboardingService {
 	}
 
 	async listPlans(input: PlanListInput): Promise<PlanListOutput> {
-		const where = {
+		const where: Prisma.OnboardingPlanWhereInput = {
 			closedAt: input.status === "da-dong" ? { not: null } : null,
-			...(input.departmentId === undefined
-				? {}
-				: { steps: { some: { departmentId: input.departmentId } } }),
 		};
+		if (input.departmentId !== undefined) {
+			where.steps = { some: { departmentId: input.departmentId } };
+		}
 
 		const [plans, total] = await Promise.all([
 			this.db.onboardingPlan.findMany({

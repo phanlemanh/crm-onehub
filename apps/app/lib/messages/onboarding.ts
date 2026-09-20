@@ -120,7 +120,7 @@ const vi = {
 	columns: {
 		partner: "Đối tác",
 		stuckOn: "Đang tắc ở",
-		silent: "Im",
+		silent: "Im lặng",
 		steps: "Bước",
 		days: "Ngày",
 		department: "Bộ phận",

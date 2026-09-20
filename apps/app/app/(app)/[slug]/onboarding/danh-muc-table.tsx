@@ -43,17 +43,16 @@ export function DanhMucTable() {
 		onboardingParsers[SEARCH_PARAM.onboarding.trangThai],
 	);
 
-	const danhMuc = useQuery(
-		trpc.onboarding.manDanhMuc.queryOptions({
-			q: "",
-			sort: "",
-			dir: "asc",
-			page: 1,
-			pageSize: 25,
-			status: trangThai,
-			...(boPhan === "" ? {} : { departmentId: boPhan }),
-		}),
-	);
+	const truyVan = {
+		q: "",
+		sort: "",
+		dir: "asc" as const,
+		page: 1,
+		pageSize: 25,
+		status: trangThai,
+		departmentId: boPhan === "" ? undefined : boPhan,
+	};
+	const danhMuc = useQuery(trpc.onboarding.manDanhMuc.queryOptions(truyVan));
 	const boPhanList = useQuery(trpc.onboarding.listDepartments.queryOptions());
 
 	if (danhMuc.isPending) {
