@@ -20,9 +20,10 @@
       "runtimeExecutable": "bash",
       "runtimeArgs": [
         "-lc",
-        "cd apps/api && PORT=3301 bun run dev"
+        "cd apps/api && PORT=3301 APP_URL=http://localhost:3300,http://127.0.0.1:3300 API_URL=http://localhost:3301 bun run dev"
       ],
-      "port": 3301
+      "port": 3301,
+      "url": "http://localhost:3301"
     },
     {
       "name": "app-cay-nay",
@@ -31,7 +32,8 @@
         "-lc",
         "cd apps/app && PORT=3300 NEXT_PUBLIC_API_URL=http://localhost:3301 API_URL=http://localhost:3301 APP_URL=http://localhost:3300 bun run dev"
       ],
-      "port": 3300
+      "port": 3300,
+      "url": "http://localhost:3300"
     },
     {
       "name": "cay-chinh-api",

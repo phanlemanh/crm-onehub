@@ -21,7 +21,9 @@ const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const APP = process.env.APP_URL ?? "http://localhost:3000";
 const API = process.env.API_URL ?? "http://localhost:3001";
+const MIEN_APP = new URL(APP).hostname;
 const CHO_TAI = Number(process.env.CHO_TAI ?? 120000);
+const CHO_HIEN = Number(process.env.CHO_HIEN ?? 20000);
 const NGUOI = process.env.NGUOI ?? "manh.phan@onemount.com";
 
 const chan = process.argv[2] ?? "gioi-thieu";
@@ -239,6 +241,21 @@ const browser = await puppeteer.launch({
 dongTrinhDuyet = () => browser.close();
 
 async function bamTab(page, nhan) {
+	const co = await page
+		.waitForFunction(
+			(n) => {
+				const k = document.querySelector('[data-slot="sheet-content"]');
+				if (!k) return false;
+				return [...k.querySelectorAll('[role="tab"]')].some(
+					(b) => (b.textContent ?? "").trim().toLowerCase() === n.toLowerCase(),
+				);
+			},
+			{ timeout: CHO_HIEN },
+			nhan,
+		)
+		.then(() => true)
+		.catch(() => false);
+	if (!co) return false;
 	const nut = await page.evaluateHandle((n) => {
 		const k = document.querySelector('[data-slot="sheet-content"]');
 		if (!k) return null;
@@ -251,7 +268,6 @@ async function bamTab(page, nhan) {
 	const el = nut.asElement();
 	if (!el) return false;
 	await el.click();
-	await new Promise((r) => setTimeout(r, 2500));
 	return true;
 }
 
@@ -259,13 +275,17 @@ async function xem(duong, canTim, tab, gocRieng) {
 	const page = await browser.newPage();
 	await page.setViewport({ width: 1440, height: 1000 });
 	await browser.setCookie(
-		{ name: cookie.name, value: cookie.value, domain: "localhost", path: "/" },
-		{ name: "lang", value: "vi", domain: "localhost", path: "/" },
+		{ name: cookie.name, value: cookie.value, domain: MIEN_APP, path: "/" },
+		{ name: "lang", value: "vi", domain: MIEN_APP, path: "/" },
 	);
 	const url = `${APP}/${khongGian.slug}/${duong}`;
 	console.log(`-- MO MAN: ${url}`);
-	await page.goto(url, { waitUntil: "networkidle0", timeout: CHO_TAI });
-	await new Promise((r) => setTimeout(r, 1500));
+	await page.goto(url, { waitUntil: "load", timeout: CHO_TAI });
+	await page
+		.waitForFunction(() => document.documentElement.lang !== "", {
+			timeout: CHO_TAI,
+		})
+		.catch(() => null);
 
 	const tiengTrang = await page.evaluate(() => document.documentElement.lang);
 	if (tiengTrang !== "vi") {
@@ -275,6 +295,32 @@ async function xem(duong, canTim, tab, gocRieng) {
 			"   Day la tien de thieu, KHONG phai chan do do.",
 		);
 	}
+
+	async function choHien(bo_chon, khi) {
+		const hien = await page
+			.waitForSelector(bo_chon, { timeout: CHO_HIEN })
+			.then(() => true)
+			.catch(() => false);
+		if (hien) return;
+		const cuoi = page.url();
+		await page.close();
+		await thoat(
+			2,
+			`RANG CUN: cho ${CHO_HIEN}ms ${khi} ma khong thay ${bo_chon} tren ${url}.`,
+			`   URL mo man: ${url}`,
+			`   URL cuoi  : ${cuoi}`,
+			"   Hai URL khac nhau thi doc ky: /crm/<loai>/<id> VON chuyen huong sang",
+			"   /crm/<loai>?record=<loai>:<id>, do la binh thuong; con bi day sang",
+			"   /onboarding/... la csdl chua co khoa nghien cuu.",
+			"   KHONG doc con so nao: bang danh sach phia duoi da khai dung tu vong truoc,",
+			"   nen do ca trang se bao xanh nho dung cho no khong do.",
+		);
+	}
+
+	await choHien(HO_SO, "tam ho so mo ra");
+	await page
+		.waitForNetworkIdle({ idleTime: 500, timeout: CHO_HIEN })
+		.catch(() => null);
 
 	if (tab) {
 		const bam = await bamTab(page, tab);
@@ -290,6 +336,9 @@ async function xem(duong, canTim, tab, gocRieng) {
 	}
 
 	const goc = gocRieng ?? HO_SO;
+	if (goc !== HO_SO) {
+		await choHien(goc, `sau khi bam tab ${JSON.stringify(tab ?? "")}`);
+	}
 	const thay = await page.evaluate(DOC_VUNG, { canTim, goc });
 	const rong = await page.evaluate(DEM_RONG, goc);
 	if (thay === null || rong === null) {
@@ -492,8 +541,11 @@ if (chan === "gioi-thieu") {
 	console.log("   tieng cua trang: vi (da khang dinh trong xem())");
 	const viet = await (async () => {
 		const page = await browser.newPage();
-		await page.goto(r.url, { waitUntil: "networkidle0", timeout: CHO_TAI });
-		await new Promise((x) => setTimeout(x, 1200));
+		await page.goto(r.url, {
+			waitUntil: "load",
+			timeout: CHO_TAI,
+		});
+		await page.waitForSelector(HO_SO, { timeout: CHO_HIEN }).catch(() => null);
 		const ra = await page.evaluate(() => {
 			const di = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
 			const dau =
