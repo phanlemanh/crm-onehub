@@ -400,6 +400,28 @@ evals:
       - "docs/superpowers/specs/2026-09-19-thuoc-khai-dung-tieng-design.md"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
+  - id: E15
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.tk_chung_spec
+    expected: >-
+      exit 0. Chay bai kiem cua chinh nen dung chung (chung.mjs) — thu vien ma 12
+      chan do kia deu goi. Khang dinh hai chot: ghim() NEM kem ten hang va ca hai
+      con so, va chay() NEM khi lenh khong cho ra ma thoat.
+      Vi sao co o do nay: truoc 20/09 chung.spec.mjs ton tai nhung KHONG lenh cong
+      nao chay no — `bun run test` di qua turbo nen chi quet cac GOI, ma
+      _acceptance/ khong phai mot goi. Mot bai kiem khong ai chay la mot to giay,
+      dung lop loi ma AC-6 cua ho so kia noi den.
+      chay() la cho dat chot vi spawnSync tra status=null cho CA HAI ca "bi giet
+      bang tin hieu" va "khong khoi dong duoc", ma null !== 0 doc y het mot lenh
+      DO that — nguoi goi bien mot luot chua he chay thanh mot phat hien co ten.
+      Cap hai chieu: bo lenh nem trong chay() cua chung.mjs -> chan nay DO va GOI
+      TEN chot da mat.
+    paths:
+      - "_acceptance/thuoc-khai-dung-tieng/rang/chung.mjs"
+      - "_acceptance/thuoc-khai-dung-tieng/rang/chung.spec.mjs"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
   - id: E11
     criterion: AC-10
     executor: judgment

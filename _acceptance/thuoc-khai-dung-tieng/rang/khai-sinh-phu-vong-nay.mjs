@@ -280,6 +280,16 @@ export const DOT_BIEN_VONG_NAY = [
 		do: chanMoi("bay-benh-cu"),
 		ghim: "benh-cu-quay-lai:chot-ghim-cu",
 	},
+	{
+		chan: "E15",
+		nhom: "nhanh",
+		eval: "E15",
+		tep: `${R}/chung.mjs`,
+		cu: "if (r.error || r.status === null) {",
+		moi: "if (false) {",
+		do: chanMoi("chung.spec"),
+		ghim: "phai NEM, khong duoc tra ma=null",
+	},
 ];
 
 const banKhai = readFileSync(
@@ -301,7 +311,7 @@ console.log(
 		"   khi mot eval co HAI dot bien va mot eval khac KHONG co cai nao — do 19/09,\n" +
 		"   hoi dong S4 vong 1: eval E9 (`bun run check-types`) khong dot bien nao chay qua.",
 );
-ghim("so eval may trong evals.yaml", EVAL_MAY.length, 16);
+ghim("so eval may trong evals.yaml", EVAL_MAY.length, 17);
 
 const phuTheoEval = new Map(EVAL_MAY.map((e) => [e, []]));
 const laMat = [];

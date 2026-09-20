@@ -30,12 +30,38 @@ export function bang(tieu_de, hang) {
 	for (const d of hang) console.log(`   ${d}`);
 }
 
+export class LoiKhongChay extends Error {
+	constructor(lenh, doi_so, cwd, r, ra) {
+		const vi = r.error
+			? `khong khoi dong duoc (${r.error.code ?? r.error.message})`
+			: `bi giet bang tin hieu ${r.signal}`;
+		super(
+			`LENH KHONG CHO RA MA THOAT: ${lenh} ${doi_so.join(" ")}\n` +
+				`   duoi ${cwd}\n` +
+				`   ${vi}\n` +
+				`   giu duoc ${ra.length} ky tu dau ra truoc khi dut.\n` +
+				"   Khong co ma thoat thi khong co phep do. spawnSync tra status=null\n" +
+				"   cho ca hai ca nay, va null !== 0 doc y het mot lenh DO that — do la\n" +
+				"   cach mot luot chua he chay hoa trang thanh mot phat hien co ten.",
+		);
+		this.name = "LoiKhongChay";
+		this.tin_hieu = r.signal ?? null;
+		this.ma_loi = r.error?.code ?? null;
+		this.ra = ra;
+	}
+}
+
 export function chay(lenh, doi_so, tuy = {}) {
+	const bat_dau = Date.now();
 	const r = spawnSync(lenh, doi_so, {
 		cwd: tuy.cwd ?? GOC,
 		encoding: "utf8",
 		maxBuffer: 64 * 1024 * 1024,
 		env: { ...process.env, ...(tuy.env ?? {}) },
 	});
-	return { ma: r.status, ra: `${r.stdout ?? ""}${r.stderr ?? ""}` };
+	const ra = `${r.stdout ?? ""}${r.stderr ?? ""}`;
+	if (r.error || r.status === null) {
+		throw new LoiKhongChay(lenh, doi_so, tuy.cwd ?? GOC, r, ra);
+	}
+	return { ma: r.status, ra, giay: (Date.now() - bat_dau) / 1000 };
 }

@@ -254,6 +254,7 @@ executors:
     tk_ghim_lai_da_xong: bun _acceptance/thuoc-khai-dung-tieng/rang/ghim-lai-da-xong.mjs
     tk_bay_benh_cu_khong_quay_lai: bun _acceptance/thuoc-khai-dung-tieng/rang/bay-benh-cu.mjs
     tk_ho_so_cu_van_xanh: bun _acceptance/thuoc-khai-dung-tieng/rang/ho-so-cu-van-xanh.mjs
+    tk_chung_spec: bun _acceptance/thuoc-khai-dung-tieng/rang/chung.spec.mjs
     hskt_hoi_quy_nam_cho: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/ho-so-khai-dung-tieng/rang/hoi-quy-nam-cho.mjs"'
     oc_khoa_khong_doi: bun _acceptance/o-cam-chay-duoc-that/rang/khoa-khong-doi.mjs
     oc_verifier_con_giai_duoc: bun _acceptance/o-cam-chay-duoc-that/rang/verifier-con-giai-duoc.mjs

@@ -212,11 +212,37 @@ export async function dungMayChu(sao) {
 	);
 }
 
+export class LoiKhongChay extends Error {
+	constructor(lenh, doi_so, cwd, r, ra) {
+		const vi = r.error
+			? `khong khoi dong duoc (${r.error.code ?? r.error.message})`
+			: `bi giet bang tin hieu ${r.signal}`;
+		super(
+			`LENH KHONG CHO RA MA THOAT: ${lenh} ${doi_so.join(" ")}\n` +
+				`   duoi ${cwd}\n` +
+				`   ${vi}\n` +
+				`   giu duoc ${ra.length} ky tu dau ra truoc khi dut.\n` +
+				"   Khong co ma thoat thi khong co phep do — bo khai sinh doc ket qua\n" +
+				"   nay se cham DAT hay KHONG DAT cho mot luot chua he chay xong.",
+		);
+		this.name = "LoiKhongChay";
+		this.tin_hieu = r.signal ?? null;
+		this.ma_loi = r.error?.code ?? null;
+		this.ra = ra;
+	}
+}
+
 export function chay({ lenh, doi_so, duoi }, sao, moi_truong = {}) {
+	const cwd = duoi ? join(sao, duoi) : sao;
 	const r = spawnSync(lenh, doi_so, {
-		cwd: duoi ? join(sao, duoi) : sao,
+		cwd,
 		encoding: "utf8",
+		maxBuffer: 64 * 1024 * 1024,
 		env: { ...process.env, APP_URL: APP_SAO, API_URL: API_SAO, ...moi_truong },
 	});
-	return { ma: r.status, ra: `${r.stdout ?? ""}${r.stderr ?? ""}` };
+	const ra = `${r.stdout ?? ""}${r.stderr ?? ""}`;
+	if (r.error || r.status === null) {
+		throw new LoiKhongChay(lenh, doi_so, cwd, r, ra);
+	}
+	return { ma: r.status, ra };
 }
