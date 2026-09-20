@@ -1,7 +1,7 @@
 ---
 schema_version: 2
 feature_slug: thuoc-khai-dung-tieng
-verdict: PASS
+verdict: PENDING-JUDGMENT
 failed_evals: [E1, E10]
 reason:
 verified_by: fresh-context verification subagent (vòng chấm 2 — lượt tuần tự)
