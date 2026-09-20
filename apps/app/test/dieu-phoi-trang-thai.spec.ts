@@ -1,5 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import {
+	huy,
+	luongXoaMoi,
+	moHoi,
+	xacNhan,
+} from "@/app/(app)/[slug]/onboarding/luong-xoa";
+import {
 	ONBOARDING_TRANG_THAI,
 	onboardingParsers,
 } from "@/app/(app)/[slug]/onboarding/onboarding-search-params";
@@ -67,5 +73,53 @@ describe("thong diep man danh muc", () => {
 		expect(vi.empty.noPlan.title).not.toBe(vi.empty.noTemplate.title);
 		expect(vi.empty.noPlan.body).not.toBe(vi.empty.noTemplate.body);
 		expect(vi.empty.noPlan.action).not.toBe(vi.empty.noTemplate.action);
+	});
+});
+
+describe("xoa-co-xac-nhan", () => {
+	test("xoa-co-xac-nhan: cu bam dau tien chi mo hop thoai, chua goi xoa", () => {
+		let daGoi = 0;
+		const xoa = () => {
+			daGoi += 1;
+		};
+
+		let luong = luongXoaMoi<string>();
+		luong = moHoi(luong, "ghi-danh-1");
+
+		expect(luong.dangHoi).toBe("ghi-danh-1");
+		expect(daGoi).toBe(0);
+
+		luong = xacNhan(luong, xoa);
+		expect(daGoi).toBe(1);
+		expect(luong.dangHoi).toBeNull();
+		expect(luong.soLanGoiXoa).toBe(1);
+	});
+
+	test("xoa-co-xac-nhan: bam huy thi ham xoa KHONG bao gio duoc goi", () => {
+		let daGoi = 0;
+		const xoa = () => {
+			daGoi += 1;
+		};
+
+		let luong = luongXoaMoi<string>();
+		luong = moHoi(luong, "ghi-danh-1");
+		luong = huy(luong);
+
+		expect(luong.dangHoi).toBeNull();
+		expect(daGoi).toBe(0);
+
+		luong = xacNhan(luong, xoa);
+		expect(daGoi).toBe(0);
+		expect(luong.soLanGoiXoa).toBe(0);
+	});
+
+	test("xoa-co-xac-nhan: xac nhan khi chua mo hoi thi khong xoa gi", () => {
+		let daGoi = 0;
+		const luong = xacNhan(luongXoaMoi<string>(), () => {
+			daGoi += 1;
+		});
+
+		expect(daGoi).toBe(0);
+		expect(luong.soLanGoiXoa).toBe(0);
 	});
 });

@@ -36,6 +36,34 @@ const en = {
 		action: "Try again",
 	},
 	loading: "Loading…",
+	hoSo: {
+		steps: "Plan steps",
+		stepsSummary: "{xong}/{tong} done · {chuaGiao} unassigned",
+		funnel: "Broker funnel",
+		funnelDenominator: "{n} brokers working on the marketplace",
+		unassigned: "Nobody yet",
+		overdue: "Overdue",
+		emptyFunnelTitle: "No broker enrolled yet",
+		emptyFunnelBody:
+			"Add them by hand, or wait for the platform feed once it is wired.",
+		emptyFunnelAction: "Add a broker",
+		remove: "Remove",
+		confirmTitle: "Remove this broker from the plan?",
+		confirmBody: "Their four stage dates go with them. This cannot be undone.",
+		confirmAction: "Remove",
+		confirmCancel: "Keep",
+	},
+	settings: {
+		title: "Onboarding",
+		templates: "Plan templates",
+		departments: "Departments",
+		newTemplate: "New template",
+		newDepartment: "New department",
+		noTemplate:
+			"No template yet. A template holds the steps for one kind of partner.",
+		noDepartment:
+			"No department yet. A step always belongs to one, even before anyone takes it.",
+	},
 } satisfies OnboardingMessages;
 
 type OnboardingMessages = {
@@ -59,6 +87,31 @@ type OnboardingMessages = {
 	>;
 	error: { title: string; body: string; action: string };
 	loading: string;
+	hoSo: {
+		steps: string;
+		stepsSummary: string;
+		funnel: string;
+		funnelDenominator: string;
+		unassigned: string;
+		overdue: string;
+		emptyFunnelTitle: string;
+		emptyFunnelBody: string;
+		emptyFunnelAction: string;
+		remove: string;
+		confirmTitle: string;
+		confirmBody: string;
+		confirmAction: string;
+		confirmCancel: string;
+	};
+	settings: {
+		title: string;
+		templates: string;
+		departments: string;
+		newTemplate: string;
+		newDepartment: string;
+		noTemplate: string;
+		noDepartment: string;
+	};
 };
 
 const vi = {
@@ -98,6 +151,35 @@ const vi = {
 		action: "Tải lại",
 	},
 	loading: "Đang tải…",
+	hoSo: {
+		steps: "Bước của kế hoạch",
+		stepsSummary: "{xong}/{tong} xong · {chuaGiao} bước chưa giao cho ai",
+		funnel: "Phễu môi giới",
+		funnelDenominator: "Mẫu số {n} người đang làm nghề trên sàn",
+		unassigned: "Chưa giao cho ai",
+		overdue: "Quá hạn",
+		emptyFunnelTitle: "Chưa ghi danh môi giới nào",
+		emptyFunnelBody:
+			"Thêm tay từng người, hoặc chờ số từ nền tảng khi đường nối đã bật.",
+		emptyFunnelAction: "Thêm môi giới",
+		remove: "Gỡ",
+		confirmTitle: "Gỡ môi giới này khỏi kế hoạch?",
+		confirmBody:
+			"Bốn mốc bậc của người đó đi theo luôn. Việc này không đảo lại được.",
+		confirmAction: "Gỡ",
+		confirmCancel: "Giữ lại",
+	},
+	settings: {
+		title: "Điều phối 30 ngày",
+		templates: "Khuôn kế hoạch",
+		departments: "Bộ phận",
+		newTemplate: "Soạn khuôn",
+		newDepartment: "Thêm bộ phận",
+		noTemplate:
+			"Chưa có khuôn nào. Một khuôn giữ bộ bước cho một loại đối tác.",
+		noDepartment:
+			"Chưa có bộ phận nào. Bước nào cũng thuộc một bộ phận, kể cả khi chưa ai nhận.",
+	},
 } satisfies OnboardingMessages;
 
 const BANG = { en, vi } satisfies Record<Locale, OnboardingMessages>;
