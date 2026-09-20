@@ -15,8 +15,15 @@ import type {
 	DepartmentOutput,
 	DepartmentReorderInput,
 	DepartmentUpdateInput,
+	EnrollmentOutput,
+	EnrollmentStageInput,
+	EnrollmentUpsertInput,
 	PlanCreateFromTemplateInput,
+	PlanIdInput,
+	PlanListInput,
+	PlanListOutput,
 	PlanOutput,
+	PlanRow,
 	StepListInput,
 	StepListOutput,
 	TemplateCreateInput,
@@ -27,6 +34,10 @@ import type {
 import { ONBOARDING } from "./onboarding-config";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+
+function soNgay(tu: Date, den: Date): number {
+	return Math.floor((den.getTime() - tu.getTime()) / DAY_MS);
+}
 
 @Injectable()
 export class OnboardingService {
@@ -238,6 +249,177 @@ export class OnboardingService {
 		]);
 
 		return { rows, total };
+	}
+
+	async listPlans(input: PlanListInput): Promise<PlanListOutput> {
+		const where = {
+			closedAt: input.status === "da-dong" ? { not: null } : null,
+			...(input.departmentId === undefined
+				? {}
+				: { steps: { some: { departmentId: input.departmentId } } }),
+		};
+
+		const [plans, total] = await Promise.all([
+			this.db.onboardingPlan.findMany({
+				where,
+				orderBy: { startedAt: "asc" },
+				skip: (input.page - 1) * input.pageSize,
+				take: input.pageSize,
+				include: {
+					company: { select: { name: true } },
+					steps: {
+						orderBy: { position: "asc" },
+						select: {
+							completedAt: true,
+							label: true,
+							updatedAt: true,
+							department: { select: { id: true, name: true } },
+						},
+					},
+				},
+			}),
+			this.db.onboardingPlan.count({ where }),
+		]);
+
+		const rows: PlanRow[] = plans.map((plan) => {
+			const xong = plan.steps.filter((s) => s.completedAt !== null).length;
+			const dang = plan.steps.find((s) => s.completedAt === null);
+			const moiNhat = plan.steps.reduce<Date>(
+				(moc, s) => (s.updatedAt > moc ? s.updatedAt : moc),
+				plan.steps[0]?.updatedAt ?? plan.startedAt,
+			);
+
+			return {
+				id: plan.id,
+				companyId: plan.companyId,
+				companyName: plan.company.name,
+				startedAt: plan.startedAt,
+				targetDays: plan.targetDays,
+				ngayThu: soNgay(plan.startedAt, new Date()),
+				buocXong: xong,
+				buocTong: plan.steps.length,
+				tacO: dang?.label ?? null,
+				boPhanTac: dang?.department.name ?? null,
+				imNgay: soNgay(moiNhat, new Date()),
+				ownerId: plan.ownerId,
+				closedAt: plan.closedAt,
+			};
+		});
+
+		const theoBoPhan = await this.db.onboardingStep.groupBy({
+			by: ["departmentId"],
+			where: { plan: { closedAt: where.closedAt } },
+			_count: { planId: true },
+		});
+
+		const boPhan: Record<string, number> = {};
+		for (const hang of theoBoPhan) {
+			const dem = await this.db.onboardingPlan.count({
+				where: {
+					closedAt: where.closedAt,
+					steps: { some: { departmentId: hang.departmentId } },
+				},
+			});
+			boPhan[hang.departmentId] = dem;
+		}
+
+		return { rows, total, facetCounts: { boPhan } };
+	}
+
+	async closePlan(input: PlanIdInput): Promise<PlanOutput> {
+		const plan = await this.db.onboardingPlan.findUnique({
+			where: { id: input.id },
+		});
+
+		if (plan === null) {
+			throw new NotFoundException(`Không có kế hoạch nào mang mã ${input.id}.`);
+		}
+
+		const sau = await this.db.onboardingPlan.update({
+			where: { id: input.id },
+			data: { closedAt: new Date() },
+		});
+
+		return {
+			id: sau.id,
+			companyId: sau.companyId,
+			templateId: sau.templateId,
+			startedAt: sau.startedAt,
+			targetDays: sau.targetDays,
+			closedAt: sau.closedAt,
+			ownerId: sau.ownerId,
+		};
+	}
+
+	async listEnrollments(input: PlanIdInput): Promise<EnrollmentOutput[]> {
+		return this.db.onboardingEnrollment.findMany({
+			where: { planId: input.id },
+			orderBy: { createdAt: "asc" },
+			select: {
+				id: true,
+				planId: true,
+				contactId: true,
+				accountAt: true,
+				courseAt: true,
+				activeAt: true,
+				dealAt: true,
+				source: true,
+			},
+		});
+	}
+
+	async upsertEnrollment(
+		input: EnrollmentUpsertInput,
+	): Promise<EnrollmentOutput> {
+		return this.db.onboardingEnrollment.upsert({
+			where: {
+				planId_contactId: { planId: input.planId, contactId: input.contactId },
+			},
+			create: {
+				planId: input.planId,
+				contactId: input.contactId,
+				source: input.source,
+			},
+			update: { source: input.source },
+			select: {
+				id: true,
+				planId: true,
+				contactId: true,
+				accountAt: true,
+				courseAt: true,
+				activeAt: true,
+				dealAt: true,
+				source: true,
+			},
+		});
+	}
+
+	async markEnrollmentStage(
+		input: EnrollmentStageInput,
+	): Promise<EnrollmentOutput> {
+		const co = await this.db.onboardingEnrollment.findUnique({
+			where: { id: input.id },
+			select: { id: true },
+		});
+
+		if (co === null) {
+			throw new NotFoundException(`Không có ghi danh nào mang mã ${input.id}.`);
+		}
+
+		return this.db.onboardingEnrollment.update({
+			where: { id: input.id },
+			data: { [input.stage]: input.at },
+			select: {
+				id: true,
+				planId: true,
+				contactId: true,
+				accountAt: true,
+				courseAt: true,
+				activeAt: true,
+				dealAt: true,
+				source: true,
+			},
+		});
 	}
 
 	private async docKhuon(id: string): Promise<{

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { listInput } from "../trpc/list-input";
 
 export const departmentCreateInput = z.object({
 	name: z.string().trim().min(1).max(120),
@@ -116,3 +117,76 @@ export type PlanOutput = z.infer<typeof planOutput>;
 export type StepOutput = z.infer<typeof stepOutput>;
 export type StepListInput = z.infer<typeof stepListInput>;
 export type StepListOutput = z.infer<typeof stepListOutput>;
+
+export const planStatus = z.enum(["dang-chay", "da-dong"]);
+
+export const planListInput = listInput.extend({
+	departmentId: z.string().trim().min(1).optional(),
+	status: planStatus.default("dang-chay"),
+});
+
+export const planRow = z.object({
+	id: z.string(),
+	companyId: z.string(),
+	companyName: z.string(),
+	startedAt: z.date(),
+	targetDays: z.number(),
+	ngayThu: z.number(),
+	buocXong: z.number(),
+	buocTong: z.number(),
+	tacO: z.string().nullable(),
+	boPhanTac: z.string().nullable(),
+	imNgay: z.number(),
+	ownerId: z.string(),
+	closedAt: z.date().nullable(),
+});
+
+export const planListOutput = z.object({
+	rows: z.array(planRow),
+	total: z.number(),
+	facetCounts: z.record(z.string(), z.record(z.string(), z.number())),
+});
+
+export const planIdInput = z.object({ id: z.string().trim().min(1) });
+
+export const enrollmentStage = z.enum([
+	"accountAt",
+	"courseAt",
+	"activeAt",
+	"dealAt",
+]);
+
+export const enrollmentUpsertInput = z.object({
+	planId: z.string().trim().min(1),
+	contactId: z.string().trim().min(1),
+	source: z.enum(["tay", "nen-tang"]).default("tay"),
+});
+
+export const enrollmentStageInput = z.object({
+	id: z.string().trim().min(1),
+	stage: enrollmentStage,
+	at: z.date().nullable(),
+});
+
+export const enrollmentOutput = z.object({
+	id: z.string(),
+	planId: z.string(),
+	contactId: z.string(),
+	accountAt: z.date().nullable(),
+	courseAt: z.date().nullable(),
+	activeAt: z.date().nullable(),
+	dealAt: z.date().nullable(),
+	source: z.string(),
+});
+
+export const enrollmentListOutput = z.array(enrollmentOutput);
+
+export type PlanStatus = z.infer<typeof planStatus>;
+export type PlanListInput = z.infer<typeof planListInput>;
+export type PlanRow = z.infer<typeof planRow>;
+export type PlanListOutput = z.infer<typeof planListOutput>;
+export type PlanIdInput = z.infer<typeof planIdInput>;
+export type EnrollmentStage = z.infer<typeof enrollmentStage>;
+export type EnrollmentUpsertInput = z.infer<typeof enrollmentUpsertInput>;
+export type EnrollmentStageInput = z.infer<typeof enrollmentStageInput>;
+export type EnrollmentOutput = z.infer<typeof enrollmentOutput>;

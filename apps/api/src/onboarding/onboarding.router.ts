@@ -10,6 +10,22 @@ import {
 	departmentOutput,
 	departmentReorderInput,
 	departmentUpdateInput,
+	enrollmentListOutput,
+	enrollmentOutput,
+	enrollmentStageInput,
+	enrollmentUpsertInput,
+	planCreateFromTemplateInput,
+	planIdInput,
+	planListInput,
+	planListOutput,
+	planOutput,
+	stepListInput,
+	stepListOutput,
+	templateCreateInput,
+	templateIdInput,
+	templateListOutput,
+	templateOutput,
+	templateUpdateInput,
 } from "./onboarding.contracts";
 import { OnboardingService } from "./onboarding.service";
 
@@ -65,5 +81,109 @@ export class OnboardingRouter {
 	})
 	reorderDepartments(@Input() input: z.infer<typeof departmentReorderInput>) {
 		return this.onboarding.reorderDepartments(input);
+	}
+
+	@Query({
+		output: templateListOutput,
+		meta: restMeta("GET", "/onboarding/templates", ["Onboarding"]),
+	})
+	listTemplates() {
+		return this.onboarding.listTemplates();
+	}
+
+	@Mutation({
+		input: templateCreateInput,
+		output: templateOutput,
+		meta: restMeta("POST", "/onboarding/templates", ["Onboarding"]),
+	})
+	createTemplate(@Input() input: z.infer<typeof templateCreateInput>) {
+		return this.onboarding.createTemplate(input);
+	}
+
+	@Mutation({
+		input: templateUpdateInput,
+		output: templateOutput,
+		meta: restMeta("PATCH", "/onboarding/templates/{id}", ["Onboarding"]),
+	})
+	updateTemplate(@Input() input: z.infer<typeof templateUpdateInput>) {
+		return this.onboarding.updateTemplate(input);
+	}
+
+	@Mutation({
+		input: templateIdInput,
+		output: templateOutput,
+		meta: restMeta("POST", "/onboarding/templates/{id}/archive", [
+			"Onboarding",
+		]),
+	})
+	archiveTemplate(@Input() input: z.infer<typeof templateIdInput>) {
+		return this.onboarding.archiveTemplate(input);
+	}
+
+	@Query({
+		input: planListInput,
+		output: planListOutput,
+		meta: restMeta("GET", "/onboarding/plans", ["Onboarding"]),
+	})
+	listPlans(@Input() input: z.infer<typeof planListInput>) {
+		return this.onboarding.listPlans(input);
+	}
+
+	@Mutation({
+		input: planCreateFromTemplateInput,
+		output: planOutput,
+		meta: restMeta("POST", "/onboarding/plans", ["Onboarding"]),
+	})
+	createFromTemplate(
+		@Input() input: z.infer<typeof planCreateFromTemplateInput>,
+	) {
+		return this.onboarding.createFromTemplate(input);
+	}
+
+	@Mutation({
+		input: planIdInput,
+		output: planOutput,
+		meta: restMeta("POST", "/onboarding/plans/{id}/close", ["Onboarding"]),
+	})
+	closePlan(@Input() input: z.infer<typeof planIdInput>) {
+		return this.onboarding.closePlan(input);
+	}
+
+	@Query({
+		input: stepListInput,
+		output: stepListOutput,
+		meta: restMeta("GET", "/onboarding/steps", ["Onboarding"]),
+	})
+	listSteps(@Input() input: z.infer<typeof stepListInput>) {
+		return this.onboarding.listSteps(input);
+	}
+
+	@Query({
+		input: planIdInput,
+		output: enrollmentListOutput,
+		meta: restMeta("GET", "/onboarding/plans/{id}/enrollments", ["Onboarding"]),
+	})
+	listEnrollments(@Input() input: z.infer<typeof planIdInput>) {
+		return this.onboarding.listEnrollments(input);
+	}
+
+	@Mutation({
+		input: enrollmentUpsertInput,
+		output: enrollmentOutput,
+		meta: restMeta("POST", "/onboarding/enrollments", ["Onboarding"]),
+	})
+	upsertEnrollment(@Input() input: z.infer<typeof enrollmentUpsertInput>) {
+		return this.onboarding.upsertEnrollment(input);
+	}
+
+	@Mutation({
+		input: enrollmentStageInput,
+		output: enrollmentOutput,
+		meta: restMeta("POST", "/onboarding/enrollments/{id}/stage", [
+			"Onboarding",
+		]),
+	})
+	markEnrollmentStage(@Input() input: z.infer<typeof enrollmentStageInput>) {
+		return this.onboarding.markEnrollmentStage(input);
 	}
 }

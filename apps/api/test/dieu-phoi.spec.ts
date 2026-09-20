@@ -4,6 +4,7 @@ import { OnboardingService } from "../src/onboarding/onboarding.service";
 import {
 	batLoi,
 	gieoBaBuoc,
+	gieoCaNhan,
 	gieoCongTy,
 	gieoKeHoach,
 	gieoKeHoachVaCaNhan,
@@ -283,5 +284,159 @@ describe("tao ke hoach tu khuon", () => {
 		expect(steps[0]?.dueAt.getTime()).toBe(batDau.getTime());
 		expect(steps[1]?.dueAt.getTime()).toBe(batDau.getTime() + 3 * ngay);
 		expect(steps[2]?.dueAt.getTime()).toBe(batDau.getTime() + 7 * ngay);
+	});
+});
+
+async function gieoKeHoachCoBuoc(input: {
+	service: Awaited<ReturnType<typeof dungDichVu>>;
+	tenBoPhan: string;
+	soBuocXong?: number;
+	imNgay?: number;
+}) {
+	const dep = await input.service.createDepartment({ name: input.tenBoPhan });
+	const tpl = await input.service.createTemplate({
+		name: `Khuon ${input.tenBoPhan}`,
+		partnerType: null,
+		steps: baBuocKhuon(dep.id),
+	});
+	const congTy = await gieoCongTy();
+	const nguoi = await gieoNguoi();
+	const plan = await input.service.createFromTemplate({
+		companyId: congTy.id,
+		templateId: tpl.id,
+		startedAt: new Date(Date.now() - 10 * 86_400_000),
+		ownerId: nguoi.id,
+	});
+
+	const steps = await db.onboardingStep.findMany({
+		where: { planId: plan.id },
+		orderBy: { position: "asc" },
+	});
+	for (let i = 0; i < (input.soBuocXong ?? 0); i += 1) {
+		const b = steps[i];
+		if (b === undefined) continue;
+		await db.onboardingStep.update({
+			where: { id: b.id },
+			data: { completedAt: new Date() },
+		});
+	}
+	if (input.imNgay !== undefined) {
+		await db.$executeRawUnsafe(
+			`UPDATE "onboardingStep" SET "updatedAt" = now() - interval '${input.imNgay} days' WHERE "planId" = $1`,
+			plan.id,
+		);
+	}
+	return { plan, dep, steps };
+}
+
+describe("danh muc va vong doi", () => {
+	test("danh-muc-loc: chi ke hoach khop, total nhat quan, so ngay im dung", async () => {
+		const service = await dungDichVu();
+		const a = await gieoKeHoachCoBuoc({
+			service,
+			tenBoPhan: "KT-A",
+			imNgay: 9,
+		});
+		await gieoKeHoachCoBuoc({ service, tenBoPhan: "DT-B", imNgay: 1 });
+
+		const kq = await service.listPlans({
+			q: "",
+			sort: "",
+			dir: "asc",
+			page: 1,
+			pageSize: 25,
+			status: "dang-chay",
+			departmentId: a.dep.id,
+		});
+
+		expect(kq.rows).toHaveLength(1);
+		expect(kq.total).toBe(1);
+		expect(kq.rows[0]?.id).toBe(a.plan.id);
+		expect(kq.rows[0]?.imNgay).toBe(9);
+		expect(kq.facetCounts.boPhan?.[a.dep.id]).toBe(1);
+
+		const depTrong = await service.createDepartment({ name: "Khong co gi" });
+		const rong = await service.listPlans({
+			q: "",
+			sort: "",
+			dir: "asc",
+			page: 1,
+			pageSize: 25,
+			status: "dang-chay",
+			departmentId: depTrong.id,
+		});
+		expect(rong.rows).toHaveLength(0);
+		expect(rong.total).toBe(0);
+	});
+
+	test("bac-la-moc-ngay: danh dau ghi mot moc, go tra ve rong", async () => {
+		const service = await dungDichVu();
+		const plan = await gieoKeHoach();
+		const ca = await gieoCaNhan();
+
+		const e = await service.upsertEnrollment({
+			planId: plan.id,
+			contactId: ca.id,
+			source: "tay",
+		});
+		expect(e.accountAt).toBeNull();
+
+		const luc = new Date();
+		await service.markEnrollmentStage({
+			id: e.id,
+			stage: "accountAt",
+			at: luc,
+		});
+		const doc = await db.onboardingEnrollment.findUniqueOrThrow({
+			where: { id: e.id },
+		});
+		expect(doc.accountAt).toBeInstanceOf(Date);
+		expect(typeof doc.accountAt).not.toBe("boolean");
+		expect(doc.accountAt?.getTime()).toBe(luc.getTime());
+
+		await service.markEnrollmentStage({
+			id: e.id,
+			stage: "accountAt",
+			at: null,
+		});
+		const sau = await db.onboardingEnrollment.findUniqueOrThrow({
+			where: { id: e.id },
+		});
+		expect(sau.accountAt).toBeNull();
+	});
+
+	test("dong-ke-hoach: con buoc do van dong duoc va roi danh muc mac dinh", async () => {
+		const service = await dungDichVu();
+		const { plan, dep } = await gieoKeHoachCoBuoc({
+			service,
+			tenBoPhan: "VH-C",
+			soBuocXong: 1,
+		});
+
+		await service.closePlan({ id: plan.id });
+
+		const doc = await db.onboardingPlan.findUniqueOrThrow({
+			where: { id: plan.id },
+		});
+		expect(doc.closedAt).toBeInstanceOf(Date);
+
+		const con = await db.onboardingStep.findMany({
+			where: { planId: plan.id, completedAt: null },
+		});
+		expect(con).toHaveLength(2);
+
+		const gocLoc = {
+			q: "",
+			sort: "",
+			dir: "asc" as const,
+			page: 1,
+			pageSize: 25,
+			departmentId: dep.id,
+		};
+		const macDinh = await service.listPlans({ ...gocLoc, status: "dang-chay" });
+		expect(macDinh.rows.map((r) => r.id)).not.toContain(plan.id);
+
+		const daDong = await service.listPlans({ ...gocLoc, status: "da-dong" });
+		expect(daDong.rows.map((r) => r.id)).toContain(plan.id);
 	});
 });
