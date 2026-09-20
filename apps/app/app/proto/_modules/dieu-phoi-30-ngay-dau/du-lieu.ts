@@ -7,6 +7,8 @@ export type HangDanhMuc = {
 	boPhan: string;
 	imNgay: number;
 	camTrich: string;
+	buocXong: number;
+	buocTong: number;
 };
 
 export const HANG_DANH_MUC: readonly HangDanhMuc[] = [
@@ -19,6 +21,8 @@ export const HANG_DANH_MUC: readonly HangDanhMuc[] = [
 		boPhan: "Kỹ thuật",
 		imNgay: 9,
 		camTrich: "Hà",
+		buocXong: 3,
+		buocTong: 5,
 	},
 	{
 		id: "kh-2",
@@ -29,6 +33,8 @@ export const HANG_DANH_MUC: readonly HangDanhMuc[] = [
 		boPhan: "Đào tạo",
 		imNgay: 3,
 		camTrich: "Dũng",
+		buocXong: 1,
+		buocTong: 6,
 	},
 	{
 		id: "kh-3",
@@ -39,6 +45,8 @@ export const HANG_DANH_MUC: readonly HangDanhMuc[] = [
 		boPhan: "Vận hành",
 		imNgay: 0,
 		camTrich: "Hà",
+		buocXong: 2,
+		buocTong: 5,
 	},
 ];
 

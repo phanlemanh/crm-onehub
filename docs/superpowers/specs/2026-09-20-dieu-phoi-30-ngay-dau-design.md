@@ -190,7 +190,7 @@ Kết quả tốt hơn ý định ban đầu: một con số truy được về 
 ### 6. Khuôn IA đã chọn + căn cứ
 
 Khuôn IA: danh-sách-chi-tiết (master-detail)
-Căn cứ: không tra mẫu thị trường — luồng hiển nhiên. Kho đã dùng đúng khuôn này cho Công ty, Cá nhân, Thoả thuận; một danh mục nhiều đối tác rồi soi từng cái là cùng một hình.
+Căn cứ: đã tra mẫu thị trường qua Mobbin 2026-09-20 (nấc (i) của thang). Xem sáu màn danh mục onboarding và bốn màn chi tiết — Remote, Workable, Employment Hero, Todoist, Oyster, Wrike. Rút ba thứ và đã đưa vào bản mẫu: (a) hàng phải mang PHÂN SỐ BƯỚC ĐÃ XONG chứ không chỉ ngày đã trôi — Remote hiện 1/3 · 2/3, Employment Hero hiện phần trăm kèm tên chặng; ngày-đã-trôi một mình không phân biệt được đối tác ổn với đối tác đang cháy. (b) rãnh trạng thái có SỐ ĐẾM làm đường điều hướng chính của danh sách (Workable: Pending 2 · In progress 2 · Complete 2) — `facetCounts` của hợp đồng tRPC đã trả sẵn. (c) đếm thẳng số việc CHƯA GIAO thay vì bắt người quét (Todoist: 0 assigned / 25 unassigned) — chạm đúng cơn đau việc-rơi. Khuôn danh-sách-chi-tiết giữ nguyên: cả sáu sản phẩm đều dùng nó, và kho đã dùng nó cho Công ty, Cá nhân, Thoả thuận.
 <!-- UX-SPEC-TEMPLATE>>> -->
 
 ## 5. Đo lường và đường đo

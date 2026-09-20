@@ -59,6 +59,7 @@ function BangDanhMuc() {
 						<TableHead>Đối tác</TableHead>
 						<TableHead>Đang tắc ở</TableHead>
 						<TableHead className="text-right tabular-nums">Im</TableHead>
+						<TableHead className="text-right tabular-nums">Bước</TableHead>
 						<TableHead className="text-right tabular-nums">Ngày</TableHead>
 						<TableHead>Bộ phận</TableHead>
 						<TableHead>Cầm trịch</TableHead>
@@ -77,6 +78,9 @@ function BangDanhMuc() {
 								{hang.imNgay === 0 ? "—" : `${hang.imNgay}n`}
 							</TableCell>
 							<TableCell className="whitespace-nowrap text-right tabular-nums">
+								{hang.buocXong}/{hang.buocTong}
+							</TableCell>
+							<TableCell className="whitespace-nowrap text-right tabular-nums">
 								{hang.ngay}/{hang.tran}
 							</TableCell>
 							<TableCell>
@@ -93,9 +97,13 @@ function BangDanhMuc() {
 
 function ThanhLoc() {
 	return (
-		<div className="flex flex-wrap items-center gap-2">
-			<Badge variant="secondary">Bộ phận: tất cả</Badge>
-			<Badge variant="secondary">Trạng thái: đang chạy</Badge>
+		<div className="flex flex-col gap-2">
+			<nav aria-label="Lọc theo trạng thái" className="flex flex-wrap gap-2">
+				<Badge>Đang chạy 3</Badge>
+				<Badge variant="outline">Đang tắc 2</Badge>
+				<Badge variant="outline">Chưa giao 1</Badge>
+				<Badge variant="outline">Đã đóng 7</Badge>
+			</nav>
 			<span className="text-muted-foreground text-xs">
 				Bộ lọc nằm trong đường dẫn — gửi liên kết là gửi đúng góc nhìn này
 			</span>
@@ -187,7 +195,9 @@ function BangBuoc() {
 		<Card>
 			<CardHeader>
 				<CardTitle>Bước của kế hoạch</CardTitle>
-				<CardDescription>Ba trên năm bước đã xong</CardDescription>
+				<CardDescription>
+					3/5 xong · 1 bước chưa giao cho ai · Kỹ thuật 1, Đào tạo 1 đang dở
+				</CardDescription>
 			</CardHeader>
 			<CardContent className="flex flex-col gap-3">
 				{BUOC_MAU.map((buoc) => (
