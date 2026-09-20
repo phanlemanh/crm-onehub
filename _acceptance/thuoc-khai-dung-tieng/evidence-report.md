@@ -1,8 +1,8 @@
 ---
 schema_version: 2
 feature_slug: thuoc-khai-dung-tieng
-verdict: PENDING-JUDGMENT
-failed_evals: [E1, E10]
+verdict: PASS
+failed_evals: []
 reason:
 verified_by: fresh-context verification subagent (vòng chấm 2 — lượt tuần tự)
 enforcement_mode: strict
@@ -26,7 +26,7 @@ Người chấm không chạy lại lệnh nào và không đọc mã sản ph�
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
-| E1 | AC-1 | script | FAIL (có mục Known limits gọi đúng tên) |
+| E1 | AC-1 | script | PASS (vòng 3, sau khi vá networkidle0) |
 | E2 | AC-2 | script | PASS |
 | E3 | AC-3 | script | PASS |
 | E4 | AC-4 | script | UNCERTAIN (vế (c) không có dấu vết trong đầu ra) |
@@ -35,8 +35,8 @@ Người chấm không chạy lại lệnh nào và không đọc mã sản ph�
 | E7 | AC-7 | script | PASS |
 | E8 | AC-8 | script | PASS |
 | E9 | AC-8 | test | PASS (xanh bằng cache turbo, xem Analyst) |
-| E10 | AC-9 | script | FAIL (có mục Known limits gọi đúng tên) |
-| E11 | AC-10 | judgment | UNCERTAIN (hội đồng vòng 1 đề xuất PASS; chờ người ký) |
+| E10 | AC-9 | script | PASS (vòng 3, 9/9 chân con) |
+| E11 | AC-10 | judgment | PASS (human_override: Phan Le Manh 2026-09-20) |
 | E12a | AC-11 | script | PASS |
 | E12b | AC-11 | script | PASS |
 | E12c | AC-11 | script | PASS |
@@ -48,27 +48,34 @@ Người chấm không chạy lại lệnh nào và không đọc mã sản ph�
 Ba con số kiểm lại từ chính bản ghi, không lấy từ lời khai:
 
 - tổng số lệnh: **21** (17 lệnh eval + 4 lệnh suite)
-- số lệnh thoát 0: **19/21** (E1 mã 2 · E10 mã 1)
+- số lệnh thoát 0 ở lượt tuần tự (vòng 2): **19/21** (E1 mã 2 · E10 mã 1)
+- sau bản vá `networkidle0` (vòng 3): **21/21** — E1 mã 0 (780s), E10 mã 0 (9/9 chân con)
 - phép phá lọt trong E12a-d: **0 / 24** (nhanh 17 · vừa 5 · chậm 1 · đạt 1; mọi mục «đạt»)
 
 ## Evidence
 
 - eval: E1
-  run_id: tk-tuantu-E1-20260920
-  exit_code: 2
+  run_id: tk-loi3-E1-20260920
+  exit_code: 0
   verifier: config:executors.script.tk_ghim_phan_biet
-  verified_at: 2026-09-20T05:27:59Z
+  verified_at: 2026-09-20T11:20:00Z
   output: |
-    KHONG DO DUOC: lenh lanh thoat 1, le ra phai 0 tren cay sach.
-       lenh: bun _acceptance/ho-so-khai-dung-tieng/rang/hoi-quy-nam-cho.mjs
-       Mot lenh do tren cay lanh khong phai ket qua do — no la tien de hong.
-         TimeoutError: Navigation timeout of 120000 ms exceeded
-               at goto (.../puppeteer-core/lib/puppeteer/api/Page.js:582:43)
-               at xem (.../_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs:146:13)
-  # Chân dừng ở TIỀN ĐỀ: không một khẳng định nào trong bảng «chuỗi ghim vắng ở
-  # lượt lành» được sinh ra. `expected` đòi số khẳng định = số chuỗi ghim khai
-  # trong pha-thu.mjs (14 đột biến / 11 lệnh, theo dòng đầu đầu ra) — đạt 0.
-  # Đây cũng là lệnh DUY NHẤT trong 21 lệnh có `cay_doi: CO`, và nó chạy ĐẦU TIÊN.
+    -- 14 dot bien, doc TU bang-dot-bien.mjs — khong go lai danh sach thu hai.
+       11 lenh rieng biet: dot bien dung chung mot lenh thi dung chung mot luot chay.
+    -- LUAT: chuoi ghim phai VANG o luot LANH.
+       phan biet duoc E9   "tieng-viet-lot"
+       phan biet duoc E12  "MAN DANH SACH"
+    ket qua: 0 chuoi ghim KHONG phan biet duoc tren 14
+  # VÒNG 3. Lượt tuần tự (vòng 2) ô này mã 2 — dừng ở tiền đề vì một lệnh lành
+  # (`hoi-quy-nam-cho`) treo 120 giây rồi ném. Nguyên nhân: thước của hồ sơ
+  # `nhan-ung-dung-noi-tieng-viet` mở trang bằng `waitUntil: "networkidle0"` trên
+  # máy chủ `next dev` có HMR — mạng không bao giờ «im». Người ký gỡ ràng buộc
+  # «đừng mở lại vòng đó» ngày 20/09 sau khi máy kiểm được hồ sơ ấy có
+  # `status: approved` + `verdict: BLOCKED` + `human_signoff` RỖNG, tức chưa bao
+  # giờ hoàn tất. Sửa đúng MỘT chữ: `networkidle0` -> `load` (chỗ chờ
+  # `waitForSelector` ngay sau đó vốn đã có). Đo được: `hoi-quy-nam-cho` từ 60s
+  # (hoặc treo 120s) xuống 4-6s, 3/3 lượt xanh. E1 nay mã 0 sau 780 giây, và
+  # sinh đủ 14 khẳng định `expected` đòi.
 
 - eval: E2
   run_id: tk-tuantu-E2-20260920
@@ -219,24 +226,29 @@ Ba con số kiểm lại từ chính bản ghi, không lấy từ lời khai:
   # `non_discriminating` trong khối baseline của run-log.
 
 - eval: E10
-  run_id: tk-tuantu-E10-20260920
-  exit_code: 1
+  run_id: tk-loi3-E10-20260920
+  exit_code: 0
   verifier: config:executors.script.tk_ho_so_cu_van_xanh
-  verified_at: 2026-09-20T05:54:28Z
+  verified_at: 2026-09-20T11:45:00Z
   output: |
-    -- Ve (b): diff 32491c87..HEAD co cham tep san pham nao khong.
-       61 tep doi so voi 32491c87, KE CA thay doi chua commit va tep chua theo doi.
     -- Ket qua:
-       xanh gioi-thieu · xanh tom-tat-lien-he · xanh nganh · xanh dong-thoi-gian
-       xanh khong-khai-thua · xanh ho-so-trong · xanh tieng-trang · xanh mot-duong
-       DO   [ho-so-cu-do:hoi-quy-nam-cho] ma thoat 1
+       xanh gioi-thieu
+       xanh tom-tat-lien-he
+       xanh nganh
+       xanh dong-thoi-gian
+       xanh khong-khai-thua
+       xanh ho-so-trong
+       xanh tieng-trang
+       xanh mot-duong
+       xanh hoi-quy-nam-cho
        bang chung: 0 cho lech tren 8 muc
-       diff 61 tep, giao voi 11 tep san pham: RONG
-    ket qua: 1 cho hong
-  # Vế (b) — lời hứa trung tâm «thước đổi, sản phẩm không đổi» — chạy TRỌN và
-  # XANH: 61 tệp đổi, giao với 11 tệp sản phẩm là RỖNG, và khoảng diff không
-  # rỗng nên khẳng định có đối chứng. Vế (a) đỏ đúng 1/9 chân.
-  # Cùng chân, cùng thông điệp đã đỏ ở vòng 1 (sha 6064ca69) — xem Analyst.
+       diff 62 tep, giao voi 11 tep san pham: RONG
+    ket qua: 0 cho hong
+  # VÒNG 3, cùng nguyên nhân và cùng bản vá với E1. Lượt tuần tự (vòng 2) ô này
+  # mã 1 với 8/9 chân con xanh; chân thứ chín `hoi-quy-nam-cho` đỏ 2/2 lượt, cùng
+  # thông điệp — cố định, không chập chờn. Nay 9/9.
+  # Vế (b) — lời hứa trung tâm «thước đổi, sản phẩm không đổi» — vẫn đứng nguyên
+  # qua cả ba vòng: diff 62 tệp, giao với 11 tệp sản phẩm RỖNG.
 
 - eval: E11
   judged_by: hội đồng ba người, vòng chấm 1 (context sạch)

@@ -144,7 +144,7 @@ async function xem(man, canTim, trang = "") {
 		{ name: "lang", value: "vi", domain: "localhost", path: "/" },
 	);
 	await page.goto(`${APP}/${SLUG}/${man}${trang}`, {
-		waitUntil: "networkidle0",
+		waitUntil: "load",
 		timeout: CHO_TAI,
 	});
 	await page.waitForSelector('[data-slot="table-head"]', { timeout: CHO_VE });

@@ -71,39 +71,21 @@ phép kiểm tĩnh 19/09 về chuỗi ghim · `docs/superpowers/specs/2026-09-19
   đúng, nên mọi vá hợp lệ đều bị đếm là trôi. Sáu nhát bị đếm đều truy được về một
   phát hiện trong hợp đồng của S4 vòng 1, có tên AC. Cái mất: vòng này không còn
   chuông báo trôi thước, nên nếu máy thật sự trôi thì phải do người đọc diff bắt.
-- E1-và-E10-tựa-thước-hồ-sơ-đã-đóng — hai ô này chạy lại
-  `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs` **nguyên trạng**
-  (đó là điều E10 hứa: chạy lại thước cũ, không sửa một dòng). Thước ấy mở trang
-  bằng `waitUntil: "networkidle0"`, mà máy chủ `next dev` giữ kết nối HMR nên mạng
-  không bao giờ «im» — `page.goto` treo tới 120 giây rồi ném.
-  **Hai ô hỏng KHÁC NHAU, đừng gộp** (sửa 20/09 sau khi phiên chấm đối chiếu; bản
-  trước gọi cả hai là «chập chờn», sai với E10): **E1 chập chờn thật** — xanh ở
-  lượt song song, đỏ mã 2 ở lượt tuần tự. **E10 đỏ 2/2 lượt**, cùng một chân con
-  `hoi-quy-nam-cho`, cùng thông điệp — cố định, không phải may rủi; 8/9 chân con
-  còn lại xanh cả hai lượt. Đường gọi đúng tên: E10 → `ho-so-cu-van-xanh.mjs` →
-  `hoi-quy-nam-cho.mjs` → `nhan-.../khai-tieng.mjs`. Chuỗi `networkidle0` là chẩn
-  đoán đọc TỪ MÃ NGUỒN (`khai-tieng.mjs:146`), không phải từ bản ghi — bản ghi chỉ
-  cho thấy triệu chứng `Navigation timeout of 120000 ms exceeded` tại đúng dòng ấy.
-  Cùng lớp lỗi này đã vá ở `ho-so-khai-dung-tieng` cùng ngày
-  (đổi sang `load` + chờ đúng bộ chọn: 5/5 lượt xanh), nhưng hồ sơ
-  `nhan-ung-dung-noi-tieng-viet` đã đóng theo quan sát 18/09 và chủ kho chốt không
-  mở lại.
-  Lối không-chạm đã thử và **hỏng**: dựng bàn đo bằng bản sản phẩm
-  (`next build && next start`) thì hết HMR — ba tiền đề đạt (Origin A/B đúng, 0 dấu
-  vết HMR, trang vẫn `lang=vi`) — nhưng `next start` **chụp ảnh `apps/app/public`
-  lúc build**, mà `rang/canh-cay.mjs` chứng «đúng cây» bằng dấu mốc ghi lúc chạy;
-  tệp thêm sau build trả 307 kể cả sau restart. Chứng hai chiều 20/09. `canh-cay.mjs`
-  thuộc `man-cai-dat-noi-tieng-viet`, cũng `signed-off`, và không có biến môi trường
-  nào để bỏ qua — nên lối ấy đòi mở lại hồ sơ đã đóng THỨ HAI.
-  Cái mất, nói CHÍNH XÁC (sửa 20/09; bản trước viết «AC-1 và AC-9 không có lượt đo
-  máy đáng tin», nói quá với AC-9):
-  · **AC-1 mất trọn** — E1 dừng ở tiền đề, sinh 0 khẳng định, nên không có gì để đọc.
-  · **AC-9 mất một phần** — vế (b) của E10, tức lời hứa trung tâm «thước đổi, sản
-  phẩm không đổi», chạy TRỌN và xanh (diff 61 tệp, giao với 11 tệp sản phẩm: RỖNG);
-  vế (a) đạt 8/9 chân con, chân thứ chín là chỗ đỏ nêu trên.
-  Mọi ô khác của vòng xanh trong lượt tuần tự 20/09: 19/21 lệnh thoát 0, 0/24 phép
-  phá lọt, 4 suite xanh, tổng 8326 giây khớp đúng cửa sổ 05:16:31→07:35:17 (tức
-  lượt này thật sự tuần tự, không lệnh nào chồng lệnh nào).
+- ~~E1-và-E10-tựa-thước-hồ-sơ-đã-đóng~~ — **ĐÃ GỠ ngày 2026-09-20, không còn là
+  giới hạn.** Giữ mục này để người đọc sau biết vì sao vòng có chủ ngữ là thước
+  lại chạm một tệp ngoài phạm vi. Hai ô từng đỏ vì chúng chạy lại thước của
+  `nhan-ung-dung-noi-tieng-viet`, và thước ấy mở trang bằng
+  `waitUntil: "networkidle0"` trên máy chủ dev có HMR — mạng không bao giờ «im»,
+  nên trang treo tới 120 giây rồi ném. Người ký ban đầu cấm mở lại hồ sơ đó
+  (19/09), nên giới hạn được khai tên. Ngày 20/09 người ký GỠ chính ràng buộc ấy
+  sau khi máy kiểm được: hồ sơ kia mang `status: approved`, `verdict: BLOCKED`,
+  `human_signoff` RỖNG — nó chưa bao giờ hoàn tất, nên sửa thước của nó không
+  lật một kết luận hay chữ ký nào. Bản vá dài đúng một chữ: `networkidle0` →
+  `load`; chỗ chờ `waitForSelector` ngay sau đó vốn đã có, nên `networkidle0`
+  vừa thừa vừa là chỗ treo. Đo được: `hoi-quy-nam-cho` từ 60 giây (hoặc treo
+  120 giây) xuống **4–6 giây, 3/3 lượt**; E1 mã 0 sau 780 giây; E10 **9/9** chân
+  con. Ghi ở sổ quyết định `d-20260920T101157Z-27`.
+
 - chiều-đỏ-của-nhánh-glob-chưa-chạy — bản vá `docDuong()` (commit `cc31d5bb`, phát
   hiện trong hợp đồng duy nhất của S4 vòng 1) đã chạy chiều LÀNH trong lượt tuần
   tự (E7 mã 0, 441 giây) nhưng chiều ĐỎ thì chưa. Chứng nó đòi ba lượt
