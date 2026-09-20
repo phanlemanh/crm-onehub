@@ -1,0 +1,374 @@
+schema_version: 1
+slug: dieu-phoi-30-ngay-dau
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dp30_chep_khong_tham_chieu
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/api/test/dieu-phoi.spec.ts"
+    expected: |
+      Do HANG trong co so du lieu, khong do gia tri tra ve.
+      Tao mot khuon khai BA buoc. Tao mot ke hoach tu khuon do. Roi SUA nhan cua
+      buoc thu hai TRONG KHUON. Doc LAI ba buoc cua ke hoach tu DB.
+      Khang dinh HAI dieu:
+        1 ke hoach co dung ba hang buoc
+        2 nhan cua buoc thu hai trong KE HOACH van la nhan CU — doc lai tu DB,
+          khong so voi bien trong bo nho
+      CAP HAI CHIEU tren cung fixture: chieu duong la hai dong tren. Chieu am:
+      sua nhan cua chinh buoc trong KE HOACH -> doc lai phai thay nhan moi. Neu
+      chieu am khong doi gi thi phep do dang doc nham cho.
+      DOT BIEN CHUNG MINH, chan phai chay va no phai DO: doi ham tao ke hoach
+      sang luu templateStepId thay vi chep nhan (tham chieu thay vi chep) -> dong
+      2 phai do voi thong diep ghim ten buoc va nhan mong doi.
+      Ham khong ton tai hoac khong goi duoc -> ma 2.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dp30_buoc_chua_giao_van_co_bo_phan
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/api/test/dieu-phoi.spec.ts"
+    expected: |
+      Ca BUOC CHUA GIAO CHO AI — ca ma cach lam suy-bo-phan-tu-nguoi khong bieu
+      dien duoc.
+      Tao mot bo phan. Tao khuon co mot buoc khai bo phan do va KHONG khai nguoi.
+      Tao ke hoach tu khuon. Doc lai buoc tu DB.
+      Khang dinh BA dieu:
+        1 buoc co departmentId bang dung id bo phan vua tao
+        2 buoc co assigneeId RONG
+        3 goi that thu tuc liet ke buoc loc theo bo phan do -> buoc nay CO trong
+          ket qua
+      Dong 3 la dong quan trong: mot buoc chua giao van phai tim thay duoc theo
+      bo phan, neu khong thi viec-roi la ca duy nhat he thong khong noi duoc.
+      CAP HAI CHIEU tren cung fixture: chieu am la loc theo MOT bo phan khac ->
+      buoc nay KHONG duoc co trong ket qua.
+      DOT BIEN CHUNG MINH: doi bo loc sang suy bo phan tu assignee (bo qua buoc
+      khong co nguoi) -> dong 3 phai do voi thong diep ghim id buoc bi mat.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dp30_danh_muc_loc_va_ngay_im
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/app/app/**"
+      - "apps/api/test/dieu-phoi.spec.ts"
+    expected: |
+      Gieo HAI ke hoach thuoc hai bo phan khac nhau, moi ke hoach mot buoc, va
+      dat updatedAt cua mot buoc lui ve qua khu mot so ngay BIET TRUOC.
+      Goi that thu tuc danh sach ke hoach voi bo loc bo phan.
+      Khang dinh BA dieu:
+        1 chi ke hoach khop bo phan hien trong rows; so luong dung bang 1
+        2 total va facetCounts nhat quan voi rows — dem roi vut la lop loi bi cam
+        3 hang tra ve mang so ngay ke tu lan doi gan nhat, va so do BANG dung so
+          ngay da gieo, khong phai mot con so gan dung
+      CAP HAI CHIEU tren cung fixture: chieu am la loc theo bo phan khong co ke
+      hoach nao -> rows rong VA total bang 0 (khong phai rows rong ma total cu).
+      DOT BIEN CHUNG MINH: bo menh de loc bo phan khoi truy van Prisma -> dong 1
+      phai do voi thong diep ghim so luong mong doi va so luong nhan duoc.
+      Loc phai lam trong Prisma; loc ca bang roi cat trong bo nho cung phai lam
+      dong 2 do vi total se sai.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dp30_bac_la_moc_ngay
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/api/test/dieu-phoi.spec.ts"
+    expected: |
+      Do KIEU DU LIEU that trong DB, khong chi do gia tri.
+      Tao mot ghi danh chua co moc bac nao. Danh dau bac "co tai khoan".
+      Khang dinh BA dieu:
+        1 truoc khi danh dau: truong moc bac do RONG
+        2 sau khi danh dau: doc lai tu DB, truong do la mot MOC THOI GIAN hop le
+          (parse duoc thanh ngay), khong phai true/false va khong phai chuoi
+        3 moc do nam trong qua khu gan — cach hien tai khong qua mot phut
+      Dong 2 la dong ghim quyet dinh thiet ke: neu ai do doi sang Boolean thi
+      phep do nay phai do, vi vong sau can biet CACH BAC TRUOC BAO LAU.
+      CAP HAI CHIEU tren cung fixture: chieu am la go danh dau -> truong tro lai
+      RONG, khong phai false.
+      DOT BIEN CHUNG MINH: doi cot trong luoc do sang Boolean va ham sang ghi
+      true -> dong 2 phai do voi thong diep ghim ten cot va kieu mong doi.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dp30_lo_sai_tu_choi_tron
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "packages/validation/src/onboarding-ingest.ts"
+      - "apps/api/test/dieu-phoi-diem-nhan.spec.ts"
+    expected: |
+      Ca LO SAI MOT MUC. Gui mot lo ba muc qua diem nhan, trong do muc thu hai
+      thieu mot truong bat buoc.
+      Khang dinh BON dieu:
+        1 ma tra ve la 400
+        2 thong diep loi CO CHUA ten truong hong — khang dinh chuoi ten truong,
+          khong chi khang dinh "co loi"
+        3 dem hang ghi danh TRUOC va SAU khi goi: hai so BANG NHAU — khong muc
+          nao trong lo duoc ghi, ke ca hai muc dung
+        4 dem hang AgentTask truoc va sau: bang nhau — lo hong khong duoc de lai
+          rac cho tac nhan
+      Dong 3 la lop loi that: nhan mot phan lo la trang thai khong ai truy nguoc
+      noi.
+      CAP HAI CHIEU tren cung fixture: chieu duong la gui dung ba muc hop le ->
+      ma 200 va dem hang tang dung 3.
+      DOT BIEN CHUNG MINH: doi ham nhan sang parse tung muc trong vong lap va bo
+      qua muc hong -> dong 3 phai do voi thong diep ghim so hang truoc va sau.
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dp30_khong_khop_viet_agenttask
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "packages/validation/src/onboarding-ingest.ts"
+      - "apps/api/test/dieu-phoi-diem-nhan.spec.ts"
+    expected: |
+      Ca KHONG KHOP MA NEN TANG — cho luat kho cam API doan danh tinh.
+      Gui mot lo hai muc dung khuon: muc mot mang ma khop mot Ca nhan da gieo,
+      muc hai mang ma KHONG khop ai.
+      Khang dinh BON dieu:
+        1 dung MOT hang ghi danh duoc tao, va no tro vao Ca nhan cua muc mot
+        2 KHONG hang ghi danh nao duoc tao cho muc hai — dem theo contactId
+        3 dung MOT hang AgentTask moi duoc ghi, va noi dung cua no chua ma cua
+          muc hai
+        4 phan hoi dem muc hai vao so chuyen cho tac nhan, khong dem vao so khop
+      Dong 2 la dong chan viec doan: neu ham thu khop gan dung theo ten hay so
+      dien thoai thi dong nay do.
+      CAP HAI CHIEU tren cung fixture: chieu duong la ca hai muc deu khop -> hai
+      hang ghi danh, KHONG hang AgentTask nao.
+      DOT BIEN CHUNG MINH: them mot buoc khop du phong theo ten gan dung -> dong
+      2 phai do voi thong diep ghim ma cua muc hai va so hang mong doi.
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dp30_thieu_khoa_tra_503
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/src/config/env.validation.ts"
+      - "apps/api/test/dieu-phoi-diem-nhan.spec.ts"
+    expected: |
+      Ca TU-HOST CHUA KHAI KHOA. Dung ung dung voi
+      ONEHUB_PLATFORM_INGEST_SECRET KHONG duoc dat.
+      Khang dinh BA dieu:
+        1 ung dung KHOI DONG duoc — khong nem luc dung module
+        2 goi diem nhan tra ve 503
+        3 moi thu tuc tRPC khac cua module van chay binh thuong — nang luc thieu
+          chi go mot cua, khong lam hong ca module
+      CAP HAI CHIEU tren cung fixture: chieu duong la dat khoa roi goi lai voi
+      Bearer dung -> khong con 503.
+      DOT BIEN CHUNG MINH: doi doc khoa sang nem khi thieu -> dong 1 phai do voi
+      thong diep ghim ten bien moi truong.
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dp30_doi_ten_bo_phan_khong_mat
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/api/test/dieu-phoi.spec.ts"
+    expected: |
+      Tao mot bo phan, ba buoc cung tro vao no. Doi TEN bo phan.
+      Khang dinh BA dieu:
+        1 ca ba buoc van co departmentId bang dung id cu — doc lai tu DB
+        2 doc buoc kem quan he bo phan -> ten tra ve la ten MOI
+        3 khong buoc nao co departmentId RONG sau khi doi ten
+      Phep do nay ghim quyet dinh dung khoa ngoai thay vi luu chuoi ten: neu ai
+      do luu ten bo phan thang vao buoc thi dong 2 do.
+      CAP HAI CHIEU tren cung fixture: chieu am la luu tru mem bo phan -> ba buoc
+      VAN tro vao no (luu tru khong phai xoa), va ten van doc duoc.
+      DOT BIEN CHUNG MINH: doi cot departmentId sang cot chuoi departmentName ->
+      dong 2 phai do voi thong diep ghim ten cu va ten moi.
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dp30_trang_thai_chua_co_khuon
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/app/app/**"
+      - "apps/api/test/dieu-phoi.spec.ts"
+    expected: |
+      Ca NGAY DAU BAT TINH NANG, do tren co so du lieu THAT rong — khong dung
+      fixture tu truyen vao component.
+      Voi DB rong hoan toan: goi DUNG bo thu tuc ma man danh muc goi de tai du
+      lieu, roi suy trang thai tu ket qua do.
+      Khang dinh BA dieu:
+        1 bo tai du lieu cua man CO hoi so khuon — neu no chi goi danh sach ke
+          hoach thi dong nay do; khang dinh bang ket qua tra ve co truong so khuon,
+          khong bang viec doc ma nguon
+        2 trang thai suy ra la ST-danhmuc-chuacokhuon, KHONG phai ST-danhmuc-empty
+        3 ket qua mang duong dan toi Cai dat > Khuon
+      Dong 1 la dong chan lop loi that: man chi goi Ke hoach.list thi DB rong van
+      ra ST-danhmuc-empty, nguoi bam tao roi gap bo chon khuon rong — dung phut dau
+      tien cua phien nghiem thu.
+      CAP HAI CHIEU tren CUNG duong day: gieo mot khuon QUA THU TUC TAO KHUON THAT
+      (khong chen thang vao DB), goi lai bo tai du lieu -> trang thai phai chuyen
+      sang ST-danhmuc-empty. Hai chieu di qua cung mot ben ghi.
+      DOT BIEN CHUNG MINH: bo loi goi dem khuon khoi bo tai du lieu cua man -> dong
+      1 va dong 2 phai do voi thong diep ghim ten trang thai mong doi va nhan duoc.
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.dp30_hang_so_o_config
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/app/app/**"
+      - "_acceptance/dieu-phoi-30-ngay-dau/rang/hang-so-o-config.mjs"
+    expected: |
+      exit 0. Quet bang AST, khong bang regex tren van ban.
+      Nap moi file nguon cua module dieu phoi TRU onboarding-config.ts. Voi moi
+      file, duyet cay cu phap tim so nguyen 30 va tim nguong nguoi dung lam hang
+      so tho.
+      Khang dinh HAI ve:
+        1 khong file nao ngoai onboarding-config.ts chua so 30 o vi tri mot
+          nguong nghiep vu
+        2 onboarding-config.ts CO khai ca hai hang so do, va co it nhat mot file
+          khac IMPORT tu no — neu khong ai import thi cau hinh la trang tri
+      Ve 2 chan lop loi hang-dung: mot bai kiem chi khang dinh ve 1 se xanh ngay
+      ca khi khong ai dung cau hinh.
+      CAP HAI CHIEU tren CUNG fixture: chay lai tren ban sao thu muc da chen
+      `const TARGET_DAYS = 30` vao onboarding.service.ts -> phai exit khac 0 voi
+      thong diep ghim duong dan file va so dong.
+      Script khong nap duoc module nao -> exit 2, khong exit 0.
+
+  - id: E11
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "apps/app/app/**"
+      - "packages/ui/**"
+    steps:
+      - "Dat truoc MOI buoc: APP_URL=http://127.0.0.1:3300 va API_URL=http://127.0.0.1:3301 — dung 127.0.0.1 chu khong dung localhost, tranh Invalid origin va cookie ro theo host"
+      - "Dung ca hai may chu cua CAY DANG XET: api 3301, app 3300 (launch.json da khai api-cay-nay va app-cay-nay)"
+      - "CHAN CAY, hai phia: dat mot dau moc vao apps/app/public roi xin lai qua APP_URL; VA doc mot ban ghi moc qua API_URL. Khong nhan lai duoc mot trong hai -> thoat ma 2 va goi ten cay dang xet, KHONG doc con so nao tren anh"
+      - "Gieo du lieu QUA CHINH API o 3301 — mot ke hoach co mot buoc qua han chua xong, updatedAt cua buoc lui ve qua khu mot so ngay biet truoc. Khong gieo bang mot ket noi co so du lieu rieng"
+      - "Doc LAI dung hang vua gieo qua API_URL truoc khi mo man; khong doc lai duoc -> thoat ma 2"
+      - "Tao phien bang `cd apps/api && bun run dev:session <email>`, dat cookie vao trinh duyet"
+      - "Mo man danh muc 30 ngay"
+      - "Chup evidence/E11-danh-muc.png o kho 1440 va evidence/E11-danh-muc-768.png o kho 768"
+    inputs:
+      - _acceptance/dieu-phoi-30-ngay-dau/evidence/
+    expected: |
+      Nhin thay duoc tren anh, khong suy tu ma:
+        1 hang cua ke hoach da gieo CO MAT tren man
+        2 hang do hien bac dang tac va so ngay im — chu doc duoc, khong bi cat cut
+          khong dau ba cham
+        3 o kho 768 khong co tran ngang: khong cot nao bi day ra ngoai khung
+      Anh khong co hang nao, hoac chu bi cat mat nghia -> khong dat.
+
+  - id: E12
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.dp30_xoa_co_xac_nhan
+    paths:
+      - "apps/app/app/**"
+      - "apps/app/test/dieu-phoi-trang-thai.spec.ts"
+    expected: |
+      Ca VIEC KHONG DAO DUOC.
+      Dung man ho so ke hoach voi mot ghi danh. Bam nut xoa.
+      Khang dinh BA dieu:
+        1 sau cu bam thu nhat, mot buoc xac nhan hien ra
+        2 sau cu bam thu nhat, ham xoa CHUA he duoc goi — dem so lan goi
+        3 chi sau khi xac nhan thi ham xoa moi duoc goi, dung mot lan
+      Dong 2 la dong that: mot hop thoai hien ra ma duoi nen da xoa roi thi van
+      la xoa ngay.
+      CAP HAI CHIEU tren cung fixture: chieu am la bam huy trong hop thoai -> ham
+      xoa KHONG bao gio duoc goi.
+      DOT BIEN CHUNG MINH: bo hop thoai, goi xoa thang -> dong 1 va dong 2 phai
+      do voi thong diep ghim so lan goi mong doi.
+
+  - id: E13
+    criterion: AC-13
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dp30_dong_ke_hoach_con_buoc_do
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/dieu-phoi.spec.ts"
+    expected: |
+      Ca NUA SAU VONG DOI — truc D cua Coverage.
+      Tao mot ke hoach co BA buoc, danh dau mot buoc xong, de hai buoc dang do.
+      Goi thu tuc dong ke hoach.
+      Khang dinh BON dieu:
+        1 thao tac THANH CONG — khong nem; ep lam xong moi duoc dong la cach nhanh
+          nhat khien nguoi ta bo cong cu
+        2 doc lai tu DB: ngay dong duoc ghi, la mot moc thoi gian hop le
+        3 hai buoc dang do GIU NGUYEN trang thai chua xong — dong khong duoc am
+          tham danh dau xong ho
+        4 goi thu tuc danh sach ke hoach voi bo loc MAC DINH -> ke hoach nay KHONG
+          con trong ket qua
+      Dong 4 la dong giu cho man danh muc con tra loi duoc cau "doi tac nao dang
+      tac": ke hoach da xong ma con nam do thi sau tuan nua man day rac.
+      CAP HAI CHIEU tren cung fixture: loc trang thai "da dong" -> ke hoach nay CO
+      trong ket qua, va hai buoc do van doc duoc.
+      DOT BIEN CHUNG MINH: cho thu tuc dong nem loi khi con buoc do -> dong 1 phai
+      do voi thong diep ghim ma ke hoach. Va: bo menh de loai ke hoach da dong khoi
+      bo loc mac dinh -> dong 4 phai do voi thong diep ghim ma ke hoach.
+
+  - id: E14
+    criterion: AC-14
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dp30_ke_hoach_co_nguoi_cam_trich
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/dieu-phoi.spec.ts"
+    expected: |
+      Do dung vat ma DUONG DO cua hop dong dem — neu khong co phep do nay thi
+      nguong (a) da ky o Cong Dang khong dem duoc gi.
+      Tao ke hoach tu khuon, co truyen nguoi cam trich.
+      Khang dinh HAI dieu:
+        1 doc lai tu DB: truong nguoi cam trich KHAC RONG va bang dung id nguoi da
+          chon
+        2 truy van dem dung cong thuc cua Duong do — dem ke hoach co buoc VA co
+          nguoi cam trich — tra ve 1
+      CHIEU AM tren cung fixture: goi thu tuc tao ma KHONG truyen nguoi cam trich
+      -> phai bi tu choi voi loi co ten, VA dem hang ke hoach truoc/sau phai bang
+      nhau — khong sinh hang nua voi roi bao loi.
+      DOT BIEN CHUNG MINH: bo nguoi cam trich khoi du lieu ghi (van tao thanh cong)
+      -> dong 1 phai do voi thong diep ghim ma ke hoach va ten truong.
+
+  - id: E15
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.dp30_bo_loc_nam_trong_duong_dan
+    paths:
+      - "apps/app/app/**"
+      - "apps/app/test/dieu-phoi-trang-thai.spec.ts"
+    expected: |
+      Do ve "bo loc NAM TRONG query param" cua AC-3 — ve nay E3 khong cham toi vi
+      E3 goi thang thu tuc dich vu.
+      Dung man danh muc, dat bo loc bo phan.
+      Khang dinh BA dieu:
+        1 duong dan sau khi dat loc CO CHUA tham so loc, va gia tri bang dung bo
+          phan da chon — khang dinh chuoi tham so, khong chi khang dinh "co doi"
+        2 tai lai man tu chinh duong dan do -> bo loc con nguyen, va so hang bang
+          dung so hang truoc khi tai lai
+        3 mo thang duong dan KHONG co tham so -> danh sach tro ve khong loc
+      Dong 2 va 3 la cap hai chieu tren cung fixture.
+      DOT BIEN CHUNG MINH: doi bo loc sang trang thai React cuc bo, khong ghi vao
+      duong dan -> dong 1 va dong 2 phai do voi thong diep ghim duong dan mong doi.
