@@ -37,20 +37,39 @@ mở đường xoá. Nhưng điểm cuối thì mở, và điểm cuối là th�
 
 - **Dễ hơn:** `Member.role` đã có sẵn trong lược đồ (`String @default("member")`,
   khoá theo `[organizationId, userId]`). Dữ liệu có rồi, chỉ là không ai đọc.
-- **Khó hơn:** kho **chưa có viên gạch phân quyền nào**. Ô này không phải gắn
-  một chốt vào một router — nó phải **dựng lớp phân quyền đầu tiên**, rồi mới
-  gắn. Và **21 router** đang cùng trạng thái chỉ-kiểm-đăng-nhập, nên thứ dựng ở
-  đây sẽ thành khuôn cho cả kho, đúng hay sai đều lan.
+- **Cũng dễ hơn — máy khai sai chỗ này lúc mở ô, sửa 2026-09-20:** bản đầu ghi
+  «kho chưa có viên gạch phân quyền nào». **SAI.** `packages/auth/src/organization.ts`
+  đã có SÁU vị từ vai trò đang chạy — `canRenameWorkspace` · `canChangeRole` ·
+  `canIssuePasswordLink` · `canManageCurrency` · `canManageConnections` ·
+  `canManageTracking` — cộng `canConfigureSso` ở `sso.ts`. Nếp gọi cũng đã chuẩn
+  hoá, xem `SlackConnectionService.disconnect`:
 
-**Hạng: ô cũ khai T3 vì chạm `packages/auth`. Cần xác nhận lại ở S1** — nếu vai
-trò đọc được từ bảng `Member` qua `@crm/db` mà không phải đụng `packages/auth`,
-ô này hạ xuống T2 và bớt một cổng.
+  ```ts
+  const role = await this.access.assertMember(userId);
+  if (!canManageConnections(role)) {
+    throw new ForbiddenException("Only an owner or an admin can disconnect Slack.");
+  }
+  ```
+
+  Nên ô này **KHÔNG dựng lớp mới**: nó thêm vị từ thứ bảy `canManageFields` vào
+  đúng file đó (ba dòng, `return isWorkspaceAdmin(role)`), rồi gọi ở sáu chỗ
+  trong `FieldsService`. Ô nhỏ hơn hẳn bản khai đầu.
+- **Vẫn khó ở một chỗ:** **21 router** đang chỉ có `AuthMiddleware`. Việc ô này
+  làm là áp nếp SẴN CÓ vào một chỗ đang hở, không phải phát minh nếp — nhưng nó
+  cũng cho thấy nếp đó chưa được áp rộng, và đó là bài riêng.
+- **Một ghi chú về lời khai tự tin:** `docs/connections.md` viết sẵn câu đáng
+  chép vào mọi ô quyền — «Being signed in is not authorisation: `AuthMiddleware`
+  only proves a session exists.» Luật đã có chữ; chỗ hở là chỗ chưa ai áp.
+
+**Hạng: T3, đã xác nhận 2026-09-20** — ô chạm `packages/auth/src/organization.ts`
+để thêm vị từ. Không hạ được xuống T2, và cũng không nên: đặt vị từ ở chỗ khác
+sáu anh em của nó là tự đẻ ra nếp thứ hai cho cùng một việc.
 
 ## Giả định chốt sinh tử
 
 | # | Giả định | Nếu sai thì | Phép thử rẻ nhất | Trạng thái |
 |---|---|---|---|---|
-| 1 | Vai trò đọc được ở tầng middleware mà không phải đụng `packages/auth` | Ô lên T3, thêm một cổng duyệt kế hoạch, và chạm gói mà nhiều thứ khác phụ thuộc | Đọc `AuthMiddleware` xem ngữ cảnh nó dựng có mang `Member.role` chưa; nếu chưa thì một truy vấn theo `[organizationId, userId]` có đủ không | Chưa thử — **đi trước mọi phép thử khác** |
+| 1 | Vai trò đọc được ở tầng middleware mà không phải đụng `packages/auth` | Ô lên T3, thêm một cổng duyệt kế hoạch, và chạm gói mà nhiều thứ khác phụ thuộc | Đọc `AuthMiddleware` xem ngữ cảnh nó dựng có mang `Member.role` chưa | **Đã thử 2026-09-20 — câu hỏi đặt sai.** Nếp của kho KHÔNG đọc vai trò ở middleware: nó gọi `access.assertMember(userId)` trong SERVICE rồi hỏi một vị từ ở `@crm/auth`. Nên ô CÓ chạm `packages/auth` — **T3 xác nhận** — nhưng chỉ để thêm ba dòng vào một file đã có sáu hàm cùng hình |
 | 2 | Hai mức `admin` / `member` là đủ, chưa cần hệ vai trò đầy đủ | Dựng thiếu, vài tháng sau phải làm lại; hoặc dựng thừa, tốn gấp ba cho thứ chưa ai cần | Hỏi người quản trị: có ai cần mức giữa (sửa được nhưng không xoá được) không | Chưa thử |
 | 3 | Giá trị `role` trong dữ liệu thật hiện đúng — tài khoản quản trị thật sự mang `admin` | Bật chốt lên là khoá luôn chính người quản trị ra ngoài | Một truy vấn đếm `role` theo tài khoản đang có | Chưa thử — **làm trước khi bật, nếu không là tự khoá cửa** |
 | 4 | Chặn ở máy chủ là đủ; giao diện chỉ cần ẩn đường vào cho gọn | Người dùng thấy nút rồi bấm rồi ăn lỗi — đúng nhưng tệ | Thử với một tài khoản `member` sau khi chặn: màn có còn mời bấm không | Chưa thử |
