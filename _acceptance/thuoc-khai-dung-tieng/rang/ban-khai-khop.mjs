@@ -53,18 +53,20 @@ function docDuong(d) {
 		...(tienTo === "" ? [] : ["--", tienTo]),
 	]);
 	if (r.ma !== 0) return null;
-	return r.ra
+	const tep = r.ra
 		.trim()
 		.split("\n")
-		.filter((t) => t !== "")
-		.map((t) => {
-			try {
-				return readFileSync(join(GOC, t), "utf8");
-			} catch {
-				return null;
-			}
-		})
-		.join("\n");
+		.filter((t) => t !== "");
+	if (tep.length === 0) return null;
+	const noi = [];
+	for (const t of tep) {
+		try {
+			noi.push(readFileSync(join(GOC, t), "utf8"));
+		} catch {
+			return null;
+		}
+	}
+	return noi.join("\n");
 }
 
 const O = cacO(evals);
