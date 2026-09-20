@@ -39,6 +39,21 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-thanhvien-covet", nhan: "Thành viên — có vết" },
 		],
 	},
+	{
+		slug: "dieu-phoi-30-ngay-dau",
+		ten: "Điều phối 30 ngày đầu",
+		states: [
+			{ id: "ST-danhmuc-codulieu", nhan: "Danh mục — có dữ liệu" },
+			{ id: "ST-danhmuc-loading", nhan: "Danh mục — đang tải" },
+			{ id: "ST-danhmuc-empty", nhan: "Danh mục — chưa kế hoạch nào" },
+			{ id: "ST-danhmuc-chuacokhuon", nhan: "Danh mục — chưa có khuôn nào" },
+			{ id: "ST-danhmuc-loi", nhan: "Danh mục — lỗi" },
+			{ id: "ST-hoso-codulieu", nhan: "Hồ sơ — có dữ liệu" },
+			{ id: "ST-hoso-phieurong", nhan: "Hồ sơ — phễu rỗng" },
+			{ id: "ST-hoso-khongkhuon", nhan: "Hồ sơ — không từ khuôn" },
+			{ id: "ST-khuon-empty", nhan: "Khuôn — chưa có khuôn nào" },
+		],
+	},
 ];
 
 export function timProto(slug: string): ProtoCatalogEntry | undefined {

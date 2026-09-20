@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { DieuPhoi30NgayDauMau } from "./_modules/dieu-phoi-30-ngay-dau";
 import { DuongProtoMau } from "./_modules/duong-proto";
 import { VaoBangMatKhauMau } from "./_modules/vao-bang-mat-khau";
 import { PROTO_CATALOG } from "./catalog";
@@ -6,6 +7,7 @@ import { PROTO_CATALOG } from "./catalog";
 export type ProtoComponent = (props: { state: string }) => ReactNode;
 
 const BANG_GHEP = {
+	"dieu-phoi-30-ngay-dau": DieuPhoi30NgayDauMau,
 	"duong-proto-cho-design-pass": DuongProtoMau,
 	"vao-bang-email-va-mat-khau": VaoBangMatKhauMau,
 } satisfies Record<string, ProtoComponent>;
