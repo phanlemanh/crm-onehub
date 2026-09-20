@@ -1,7 +1,7 @@
 ---
 schema_version: 2
 feature_slug: thuoc-khai-dung-tieng
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: [E1, E10]
 reason:
 verified_by: fresh-context verification subagent (vòng chấm 2 — lượt tuần tự)
@@ -248,7 +248,11 @@ Ba con số kiểm lại từ chính bản ghi, không lấy từ lời khai:
   required_evidence:
     - Bảng 13 dòng của hội đồng (cách nói dối | phép đo bắt được | TÊN TỆP + SỐ DÒNG),
       chấm trên `evidence/dau-ra-mot-luot.txt` chứ không trên hợp đồng.
-  human_override:        # người ký điền "<tên> <ngày>" ở Cổng Bằng chứng
+  human_override: Phan Le Manh 2026-09-20
+  human_override_decision: |
+    Đạt. Người ký phát ngôn «E11: Đạt» qua /acceptance-gate:signoff ngày
+    2026-09-20, sau khi đọc đề xuất PASS của hội đồng ba người ở vòng chấm 1 và
+    việc người chấm vòng 2 để UNCERTAIN vì không có bản ghi máy để đối chiếu.
 
 - eval: E12a
   run_id: tk-tuantu-E12a-20260920
