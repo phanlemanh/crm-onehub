@@ -76,8 +76,8 @@ describe("thong diep man danh muc", () => {
 	});
 });
 
-describe("luong-xoa", () => {
-	test("luong-xoa: state machine — cu bam dau tien chi mo hop thoai, chua goi xoa", () => {
+describe("xoa-co-xac-nhan", () => {
+	test("xoa-co-xac-nhan: state machine (luong-xoa reducer) — cu bam dau tien chi mo hop thoai, chua goi xoa", () => {
 		let daGoi = 0;
 		const xoa = () => {
 			daGoi += 1;
@@ -95,7 +95,7 @@ describe("luong-xoa", () => {
 		expect(luong.soLanGoiXoa).toBe(1);
 	});
 
-	test("luong-xoa: state machine — bam huy thi ham xoa KHONG bao gio duoc goi", () => {
+	test("xoa-co-xac-nhan: state machine (luong-xoa reducer) — bam huy thi ham xoa KHONG bao gio duoc goi", () => {
 		let daGoi = 0;
 		const xoa = () => {
 			daGoi += 1;
@@ -113,7 +113,7 @@ describe("luong-xoa", () => {
 		expect(luong.soLanGoiXoa).toBe(0);
 	});
 
-	test("luong-xoa: state machine — xac nhan khi chua mo hoi thi khong xoa gi", () => {
+	test("xoa-co-xac-nhan: state machine (luong-xoa reducer) — xac nhan khi chua mo hoi thi khong xoa gi", () => {
 		let daGoi = 0;
 		const luong = xacNhan(luongXoaMoi<string>(), () => {
 			daGoi += 1;
