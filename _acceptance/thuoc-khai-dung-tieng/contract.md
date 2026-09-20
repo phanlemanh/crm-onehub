@@ -5,7 +5,7 @@ slug: thuoc-khai-dung-tieng
 owner: manh@mstar.vn
 risk_tier: T2
 surfaces: [tooling]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-09-19
 design_doc: docs/superpowers/specs/2026-09-19-thuoc-khai-dung-tieng-design.md
@@ -54,9 +54,14 @@ phép kiểm tĩnh 19/09 về chuỗi ghim · `docs/superpowers/specs/2026-09-19
   bệnh trong bản sao rồi khẳng định `mot-duong.mjs` thôi bắt được). Sáu bệnh còn
   lại — **A, C, D, F, G, chốt-ghim-cũ** — chỉ được đo bằng «dấu hiệu cấu trúc còn
   trong tệp», tức một khẳng định đại diện. `bay-benh-cu.mjs` in ra lý do từng cái
-  ở mục `KHAI_GIOI_HAN`. Năm trong sáu là giới hạn **chi phí**: chỗ bắt cần một
-  lượt `pha-thu` hoặc một lượt trình duyệt, vài phút mỗi cái, vượt trần 600 giây
-  của công cụ chấm nếu nhét vào chân này. Riêng **C** là giới hạn **thật**: không
+  ở mục `KHAI_GIOI_HAN`. **Bốn** trong sáu — A, F, G, chốt-ghim-cũ — là giới hạn
+  **chi phí**: chỗ bắt cần một lượt `pha-thu` hoặc một lượt trình duyệt, vài phút
+  mỗi cái, vượt trần 600 giây của công cụ chấm nếu nhét vào chân này. **D** không
+  phải chi phí mà là **thiếu vật thử**: chỗ bắt cần một fixture có enrichment RỖNG
+  mà khối Giới thiệu VẪN vẽ, và tập dữ liệu thử chưa có cái thứ hai ấy — đây là
+  chỗ rẻ nhất để thu hẹp mục này, không cần thêm giây nào. (Sửa 20/09 sau khi
+  phiên chấm đối chiếu đầu ra `bay-benh-cu` với dòng này; bản trước ghi «năm
+  trong sáu là chi phí», sai.) Riêng **C** là giới hạn **thật**: không
   phép đo nào trong kho phân biệt được «so DOM với giá trị về từ máy chủ» và «so
   DOM với một hằng gõ sẵn» — cả hai đều so DOM với một chuỗi, khác nhau ở chỗ
   chuỗi ấy đến từ đâu.
@@ -66,6 +71,46 @@ phép kiểm tĩnh 19/09 về chuỗi ghim · `docs/superpowers/specs/2026-09-19
   đúng, nên mọi vá hợp lệ đều bị đếm là trôi. Sáu nhát bị đếm đều truy được về một
   phát hiện trong hợp đồng của S4 vòng 1, có tên AC. Cái mất: vòng này không còn
   chuông báo trôi thước, nên nếu máy thật sự trôi thì phải do người đọc diff bắt.
+- E1-và-E10-tựa-thước-hồ-sơ-đã-đóng — hai ô này chạy lại
+  `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs` **nguyên trạng**
+  (đó là điều E10 hứa: chạy lại thước cũ, không sửa một dòng). Thước ấy mở trang
+  bằng `waitUntil: "networkidle0"`, mà máy chủ `next dev` giữ kết nối HMR nên mạng
+  không bao giờ «im» — `page.goto` treo tới 120 giây rồi ném.
+  **Hai ô hỏng KHÁC NHAU, đừng gộp** (sửa 20/09 sau khi phiên chấm đối chiếu; bản
+  trước gọi cả hai là «chập chờn», sai với E10): **E1 chập chờn thật** — xanh ở
+  lượt song song, đỏ mã 2 ở lượt tuần tự. **E10 đỏ 2/2 lượt**, cùng một chân con
+  `hoi-quy-nam-cho`, cùng thông điệp — cố định, không phải may rủi; 8/9 chân con
+  còn lại xanh cả hai lượt. Đường gọi đúng tên: E10 → `ho-so-cu-van-xanh.mjs` →
+  `hoi-quy-nam-cho.mjs` → `nhan-.../khai-tieng.mjs`. Chuỗi `networkidle0` là chẩn
+  đoán đọc TỪ MÃ NGUỒN (`khai-tieng.mjs:146`), không phải từ bản ghi — bản ghi chỉ
+  cho thấy triệu chứng `Navigation timeout of 120000 ms exceeded` tại đúng dòng ấy.
+  Cùng lớp lỗi này đã vá ở `ho-so-khai-dung-tieng` cùng ngày
+  (đổi sang `load` + chờ đúng bộ chọn: 5/5 lượt xanh), nhưng hồ sơ
+  `nhan-ung-dung-noi-tieng-viet` đã đóng theo quan sát 18/09 và chủ kho chốt không
+  mở lại.
+  Lối không-chạm đã thử và **hỏng**: dựng bàn đo bằng bản sản phẩm
+  (`next build && next start`) thì hết HMR — ba tiền đề đạt (Origin A/B đúng, 0 dấu
+  vết HMR, trang vẫn `lang=vi`) — nhưng `next start` **chụp ảnh `apps/app/public`
+  lúc build**, mà `rang/canh-cay.mjs` chứng «đúng cây» bằng dấu mốc ghi lúc chạy;
+  tệp thêm sau build trả 307 kể cả sau restart. Chứng hai chiều 20/09. `canh-cay.mjs`
+  thuộc `man-cai-dat-noi-tieng-viet`, cũng `signed-off`, và không có biến môi trường
+  nào để bỏ qua — nên lối ấy đòi mở lại hồ sơ đã đóng THỨ HAI.
+  Cái mất, nói CHÍNH XÁC (sửa 20/09; bản trước viết «AC-1 và AC-9 không có lượt đo
+  máy đáng tin», nói quá với AC-9):
+  · **AC-1 mất trọn** — E1 dừng ở tiền đề, sinh 0 khẳng định, nên không có gì để đọc.
+  · **AC-9 mất một phần** — vế (b) của E10, tức lời hứa trung tâm «thước đổi, sản
+  phẩm không đổi», chạy TRỌN và xanh (diff 61 tệp, giao với 11 tệp sản phẩm: RỖNG);
+  vế (a) đạt 8/9 chân con, chân thứ chín là chỗ đỏ nêu trên.
+  Mọi ô khác của vòng xanh trong lượt tuần tự 20/09: 19/21 lệnh thoát 0, 0/24 phép
+  phá lọt, 4 suite xanh, tổng 8326 giây khớp đúng cửa sổ 05:16:31→07:35:17 (tức
+  lượt này thật sự tuần tự, không lệnh nào chồng lệnh nào).
+- chiều-đỏ-của-nhánh-glob-chưa-chạy — bản vá `docDuong()` (commit `cc31d5bb`, phát
+  hiện trong hợp đồng duy nhất của S4 vòng 1) đã chạy chiều LÀNH trong lượt tuần
+  tự (E7 mã 0, 441 giây) nhưng chiều ĐỎ thì chưa. Chứng nó đòi ba lượt
+  `ban-khai-khop`, mà chân ấy tự chạy lại sáu chân trình duyệt — ~10 phút mỗi lượt.
+  Đã bắt đầu rồi dừng giữa chừng và gỡ đột biến. Cái mất: hai ca mới (`git ls-files`
+  trả rỗng khi pathspec không khớp; `readFileSync` hỏng giữa danh sách glob) chỉ
+  được kiểm bằng đọc mã, không bằng một lượt đỏ có thật.
 Mục này có mặt để eval hội đồng (E11) có chỗ đối chiếu. Dòng nào ở đây là một
 cách nói dối KHÔNG có phép đo máy nào bắt được, và người ký nhận nó tường minh.
 
