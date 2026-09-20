@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent (vòng chấm 2 — lượt tu�
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 5b958a5ccdce44ca1269bd50adaef90249526821
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-20
 ---
 
 # Evidence Report: thuoc-khai-dung-tieng (vòng chấm 2 — lượt tuần tự)

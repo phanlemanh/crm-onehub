@@ -5,7 +5,7 @@ slug: thuoc-khai-dung-tieng
 owner: manh@mstar.vn
 risk_tier: T2
 surfaces: [tooling]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-19
 design_doc: docs/superpowers/specs/2026-09-19-thuoc-khai-dung-tieng-design.md
@@ -146,6 +146,14 @@ sơ tương lai (chỉ hai hồ sơ, YAGNI) · đưa các thước trình duyệ
 - **Không mở rộng cơ chế cổng thành khuôn tổng quát cho mọi hồ sơ tương lai.** Kho có hai hồ sơ cần nó; dựng khuôn cho cái thứ mười là dựng cho người chưa tồn tại.
 
 ## Notes
+
+- Known limits (Cổng Bằng chứng 2026-09-20, Phan Le Manh — định đoạt mục
+  Ngoài-7): `congTrong()` ở `_acceptance/ho-so-khai-dung-tieng/rang/cay-sao.mjs:24`
+  đọc `may.address()` ngay sau `listen()` — trả `null` dưới node, và cổng đã được
+  nhả trước lúc dùng, nên ở vài lối chạy ít dùng bộ đo có thể trùng cổng với một
+  lượt kiểm khác. Người ký nhận rủi ro này tường minh thay vì mở một hồ sơ riêng
+  cho một mục `low`. Mười mục ngoài hợp đồng còn lại đi lối «mở hợp đồng mới»,
+  ghi trong `decisions.jsonl` ngày 2026-09-20.
 
 Hợp đồng viết TRƯỚC khi có mã.
 
