@@ -180,11 +180,78 @@ liệu đáng giữ người LÂU NHẤT.** Vì đào tạo lúc này phần l�
 — giống hệt nhau ở mọi đối tác, nên lặp lại được, nên đóng gói được. Chuyển dữ
 liệu thì không có hai ca giống nhau.
 
+### Vật liệu đã có trong kho: hệ trường tự tạo — và chỗ nó dừng
+
+Đọc mã 2026-09-20 (`packages/db/prisma/schema.prisma`, `apps/api/src/fields/`,
+`apps/app/components/crm/fields/`). Kho đã có một hệ trường tự tạo **tốt hơn
+mức thường thấy**, và nó phủ được một nửa ô này:
+
+- **EAV có kiểu, không phải JSON blob.** `FieldDefinition` + `FieldOption` +
+  `FieldValue` với cột riêng cho từng kiểu (`text` · `number` · `date` · `bool`
+  · `optionId` · `userId`) và **chỉ mục** trên `(fieldId, text)`,
+  `(fieldId, number)`, `(fieldId, date)` — nên lọc theo trường tự tạo vẫn nhanh.
+- Mười kiểu; API đủ bộ tạo · sửa · xếp lại · lưu trữ · xoá · điền bù; ba công
+  tắc hiển thị (`showOnSheet` · `showOnTable` · `showOnFilter`); điểm cuối
+  `coverage` cho biết bao nhiêu bản ghi đã có giá trị.
+- **`agentFilled` + `agentBrief`**: tác nhân tự điền được trường tự tạo theo
+  lời dặn, và `backfill` điền ngược cho bản ghi cũ.
+
+Bốn bức tường, ba trong số đó chính ô `truong-tu-tao-o-cai-dat` đã ghi ở mục
+Out of scope của nó ngày 2026-09-18:
+
+1. **`FieldEntity` là enum ba giá trị** `COMPANY` · `CONTACT` · `DEAL`. Người
+   dùng thêm được *trường*, không thêm được *loại bản ghi*. Ô kia đã bác bằng
+   chữ: «mô hình dữ liệu chỉ có ba thực thể, mở rộng là việc khác hẳn».
+2. **`FieldValue` có ràng buộc `@@unique([fieldId, companyId])`** — mỗi trường
+   đúng MỘT giá trị trên mỗi bản ghi. Một trường tự tạo không bao giờ là một
+   *danh sách*.
+3. Không có kiểu nhiều lựa chọn, không có kiểu trỏ sang bản ghi khác.
+4. `DealStage` là enum cứng bảy bước phễu bán phần mềm — giai đoạn không tuỳ
+   biến được (cùng gốc với mục CHƯA CHỐT NGHĨA trong từ điển).
+
+**Kết luận: trường tự tạo giải nửa thuộc tính, không giải nửa hình.** Mọi thuộc
+tính phẳng của đối tác — ngày ký, gói dịch vụ, địa bàn, quy mô — là trường tự
+tạo, dùng được ngay, không đụng lược đồ. Nhưng «40 môi giới mỗi người bốn bậc»
+và «N việc, mỗi việc một người và một hạn» là **bảng con**, không phải thuộc
+tính, và không cấu hình nào tránh được.
+
+### Hình đề xuất, sau khi biết Sheet là một dòng một việc
+
+`Activity` (sổ hoạt động) đi được 60% đường: đã có `type: TASK`, `subject`,
+`dueAt`, `completedAt`, nối được vào Công ty, đã có chỉ mục theo `dueAt`. Thiếu
+đúng 40% chạm vào cơn đau số một: **không có người được giao** (`createdById`
+là người tạo), **không có bộ phận**, **không có nhóm kế hoạch**. Cột `meta Json?`
+có nhưng luật kho cấm chuyền JSON thô, và giá trị trong Json không lọc được
+bằng chỉ mục.
+
+Đề xuất, ba bảng mới cộng một cột:
+
+| Vật | Mới hay có sẵn | Vì sao |
+|---|---|---|
+| Khuôn kế hoạch theo **loại đối tác** | mới | **chỗ co giãn cho «nhiều loại business»** — xem ghi chú dưới |
+| Kế hoạch 30 ngày (một đối tác một bản) | mới | nhóm việc lại; là thứ màn danh mục và hồ sơ một đối tác đọc |
+| Bước của kế hoạch: bộ phận · người được giao · hạn · thứ tự | mới | chính là một dòng của Sheet |
+| `Activity.assigneeId` | thêm một cột | thiếu sót chung của CRM: hôm nay không giao được việc cho đồng nghiệp |
+
+**Ghi chú về «nhiều loại đối tác» — owner chốt 2026-09-20 là nghĩa này, không
+phải nhiều khách thuê CRM.** Máy đã kiểm: `Company`, `Contact`, `Deal`,
+`FieldDefinition`, `FieldValue` **không có cột phân vùng khách hàng nào**;
+`Organization` chỉ giữ thành viên và lời mời (phần đăng nhập của better-auth).
+Tức CRM một khách, một workspace — đúng như từ điển khai.
+
+Chỗ cần co giãn theo loại đối tác **không phải danh sách trường**, mà là **các
+bước 30 ngày**: một ngân hàng và một sàn môi giới cần *bước* khác nhau, không
+cần *cột* khác nhau trên Công ty. Hệ quả chi phí: thêm loại bản ghi vào
+`FieldDefinition` lúc mới có một loại đối tác mua được số không mà phải migrate
+ràng buộc `@@unique([entity, key])` cộng logic ẩn/hiện ở mọi màn; thêm cột
+«loại đối tác» vào bảng khuôn mới toanh tốn **một cột**. Nên: hoãn loại bản
+ghi, đặt chỗ co giãn vào khuôn.
+
 ## Giả định chốt sinh tử
 
 | # | Giả định | Nếu sai thì | Phép thử rẻ nhất | Trạng thái |
 |---|---|---|---|---|
-| 1 | Cái Google Sheet đang dùng chứa gần đủ những cột cần, tức đây là chuyển nhà chứ không phải thiết kế nghiệp vụ mới | Vòng này to gấp mấy lần ước lượng: phải định nghĩa nghiệp vụ trước rồi mới dựng | Xin bản Sheet đang dùng, đọc, đếm cột nào đã có nguồn trong CRM và cột nào chưa | Chưa thử — **đi trước mọi phép thử khác** |
+| 1 | Cái Google Sheet đang dùng chứa gần đủ những cột cần, tức đây là chuyển nhà chứ không phải thiết kế nghiệp vụ mới | Vòng này to gấp mấy lần ước lượng: phải định nghĩa nghiệp vụ trước rồi mới dựng | Xin bản Sheet đang dùng, đọc, đếm cột nào đã có nguồn trong CRM và cột nào chưa | **Đã thử 2026-09-20 — SAI.** Owner khai Sheet là *một dòng một việc*: một đối tác chiếm nhiều dòng |
 | 2 | Đội thật sự sẽ bỏ Sheet, không ghi song song hai chỗ | CRM thành nơi nhập liệu thứ hai; tổng công tăng lên chứ không giảm — công cụ nội bộ không thay được cái cũ là việc cộng thêm | Ngồi cạnh một người đang gõ vào Sheet một lượt; hỏi thẳng họ sẽ bỏ Sheet với điều kiện gì | Chưa thử |
 | 3 | Việc rơi giữa các bộ phận là vì thiếu một chỗ chung, không phải vì thiếu người cầm trịch | Phần mềm không chữa được; cần đổi cách phân công trước, và ô này hoãn | Lấy ba ca chậm gần nhất, hỏi từng ca: chậm vì không ai biết, hay vì không ai nhận | Chưa thử |
 | 4 | Các bộ phận ngoài đội quan hệ đối tác sẽ có tài khoản CRM và chịu vào đó ghi | Vẫn phải có một bản sao ngoài, và Sheet sống tiếp bất kể ô này làm gì | Một câu hỏi cho mỗi trưởng bộ phận đang tham gia 30 ngày | Chưa thử |
@@ -192,6 +259,16 @@ liệu thì không có hai ca giống nhau.
 
 Giả định 1 rẻ nhất và có thể đổi hẳn cỡ của ô. Giả định 2 nặng nhất và không
 phải câu hỏi kỹ thuật.
+
+**Kết quả giả định 1 (2026-09-20) và hệ quả.** Owner trả lời mà không cần dán
+Sheet: hình của nó là **một dòng một việc**. Nghĩa là lõi của Sheet không phải
+một bảng thuộc tính phẳng mà là **một danh sách việc** — thứ mô hình dữ liệu
+hiện tại không có chỗ chứa. Vòng một vì thế **không phải chuyển nhà**, mà là
+dựng một hình mới, đúng vế «nếu sai thì» đã khai. Ô giữ nguyên hạng **T3**.
+
+Giả định 2 (đội có thật sự bỏ Sheet không) **vẫn chưa thử** — và sau kết quả
+trên nó càng nặng hơn, vì công cụ mới không còn là bản sao quen thuộc của
+Sheet.
 
 ## Ngưỡng chết / ngưỡng UAT
 
@@ -275,6 +352,15 @@ Ghi để truy vết, KHÔNG phải thước của ô này: tỉ lệ môi giớ
 - **Dùng `Sản lượng` làm thước thành công** — bác, với lý do ở mục Vấn đề: nó
   cào từ nhatot, đo người có làm nghề hay không, không đo hoạt động trên
   OneHub. Giữ làm bộ lọc mẫu số và biến đối chứng.
+- **Loại bản ghi cho trường tự tạo** (`FieldDefinition.recordTypeId`) — hoãn có
+  chủ ý, lý do đầy đủ ở mục «Ghi chú về nhiều loại đối tác». Mở ô riêng khi
+  loại đối tác thứ hai thật sự tới.
+- **Vá lỗ quyền sửa trường** — mọi thành viên sửa được trường của cả đội vì
+  điểm cuối không kiểm vai trò (ô `truong-tu-tao-o-cai-dat` đã ghi 2026-09-18).
+  Tách sang ô riêng `chi-quan-tri-sua-duoc-truong`: chạm `packages/auth`, và
+  trộn vào đây làm cả hai chậm.
+- **Chốt nghĩa `DealStage`** — bước của kế hoạch 30 ngày KHÔNG phải giai đoạn
+  thoả thuận; đừng trộn hai thứ vào một enum.
 - **Bảng việc kiểu Trello làm vòng một** — không bác hẳn (việc có rơi thật, nên
   lớp việc có giá trị), nhưng bác việc làm nó TRƯỚC: xây một mình nó thì được
   một cái bảng đẹp và kết quả y như cũ, rồi rất khó xin tiền cho vòng hai.

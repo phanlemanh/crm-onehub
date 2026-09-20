@@ -222,8 +222,55 @@ Ghi ra để người đọc biết tin tới đâu:
    dùng, đi hết luồng, chụp màn. Bản này đọc **trang sản phẩm chính chủ** (không
    phải bài tổng hợp), nên biết họ *khai* có gì, chưa biết dùng ra sao. Năng lực
    nào định bắt chước hình thì phải teardown thật trước.
-2. **Chưa đọc Google Sheet đang dùng.** Trục C và nhóm A2 có thể còn sót thứ chỉ
-   lộ khi nhìn Sheet thật. Đây là việc kế đã ghi trong `opportunity.md`, và kết
-   quả của nó phải quay ngược vào bản quét này.
+2. ~~Chưa đọc Google Sheet đang dùng.~~ **Đã hỏi được hình mà không cần đọc
+   (2026-09-20): Sheet là *một dòng một việc*.** Hệ quả cho bản quét ở mục
+   «Cập nhật sau khi đọc mã» ngay dưới. Vẫn chưa thấy nội dung thật, nên nhãn
+   cột cụ thể của Sheet vẫn là điểm mù — nhưng hình thì đã biết, và hình mới là
+   thứ quyết định trục C.
 3. **Hai ô mang `[GIẢ ĐỊNH]`** (#7 người cầm trịch duy nhất, #13 chuyển giao khi nghỉ việc) gom về mục Coverage của hợp đồng để
    người gạch một lượt tại Cổng Phạm vi, trước khi ai tuyên bố «đã đủ».
+
+
+---
+
+## Cập nhật 2026-09-20 — sau khi đọc mã và hỏi được hình của Sheet
+
+Hai dữ kiện mới quay ngược vào bản quét, theo đúng luật đóng vòng của nghi thức.
+
+**Trục C có câu trả lời thật.** `C1` (người gõ tay) không còn là «gõ vào một ô
+trống»: kho đã có hệ **trường tự tạo** — EAV có kiểu, có chỉ mục, API đủ bộ, và
+`agentFilled` + `agentBrief` cho phép tác nhân tự điền. Nghĩa là phần **thuộc
+tính** của mọi ô Core dựng được **không đụng lược đồ**.
+
+**Nhưng trục C không phủ được nhóm A2.** `FieldValue` có ràng buộc
+`@@unique([fieldId, companyId])` — mỗi trường đúng một giá trị trên mỗi bản ghi,
+nên một trường tự tạo không bao giờ là danh sách. Sheet lại là *một dòng một
+việc*. Vậy **ô #8 và #9 (giao việc, bàn giao) không có đường nào đi qua trường
+tự tạo** — bắt buộc bảng con.
+
+Bảng dưới sửa lại cột «Nguồn số» cho bốn ô Core bị ảnh hưởng:
+
+| # | Ô Core | Nguồn số trước | Nguồn số sau khi đọc mã |
+|---|---|---|---|
+| 1 | Vạch đích đo được | C1 | C1 qua **trường tự tạo**, không đụng lược đồ |
+| 8 | Giao việc có hạn trong nội bộ | C1 | C1 qua **bảng mới** — trường tự tạo không giữ được danh sách |
+| 9 | Bàn giao giữa bộ phận có vết | C1 C5 | C1 qua **bảng mới** + `Activity.assigneeId` |
+| 15 | Hồ sơ một đối tác theo hình phễu | C1 C5 | thuộc tính từ trường tự tạo; phễu và bước từ **bảng mới** |
+
+**Một ô Later đổi lý do cắt, không đổi vị trí.** Ô #6 «bậc phục vụ theo cỡ đối
+tác» và mọi ý về loại bản ghi: chỗ co giãn cho «nhiều loại đối tác» nằm ở
+**khuôn kế hoạch**, không ở danh sách trường — lý do đầy đủ trong `opportunity.md`.
+Loại bản ghi vẫn Later, nhưng nay có lý do bằng số chứ không bằng cảm giác.
+
+**Một điểm mù đóng lại.** Câu hỏi tenancy đã có đáp án đọc từ lược đồ:
+`Company`, `Contact`, `Deal`, `FieldDefinition`, `FieldValue` không có cột phân
+vùng khách hàng; `Organization` chỉ giữ thành viên và lời mời. CRM **một khách,
+một workspace** — nên mọi ô trong bản quét này đọc theo nghĩa một tổ chức, và
+«nhiều doanh nghiệp» trong bản quét nghĩa là **nhiều loại đối tác**, không phải
+nhiều khách thuê.
+
+**Một ô mới sinh ra từ buổi đọc mã, đã tách sang hồ sơ riêng.** Lỗ quyền: mọi
+thành viên sửa được trường của cả đội vì điểm cuối không kiểm vai trò. Đây là
+năng lực nhóm `A2` × trục `B` mà bản quét gốc **sót** — vì bản quét hỏi «phần
+mềm làm gì» chứ không hỏi «ai được phép làm». Ghi lại như một lỗ của chính bản
+quét: trục Actor có trong khung nhưng chưa được dùng để soi quyền.
