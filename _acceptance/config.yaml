@@ -178,6 +178,8 @@ executors:
     bcl_nhan_khi_cho: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-cot-loi-va-nhan.dom.tsx -t nhan-khi-cho'
     bcl_nhan_khi_ve: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-cot-loi-va-nhan.dom.tsx -t nhan-khi-ve'
     bcl_tai_lai_bo_loc_moi: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-cot-loi-va-nhan.dom.tsx -t tai-lai-bo-loc-moi'
+    kl_foreign_text: "cd packages/ui && bun test --preload ./test/setup-dom.ts test/khai-tieng.spec.tsx"
+    kl_metaline: "cd apps/app && bun test test/khai-tieng-metaline.spec.tsx"
   script:
     dp30_hang_so_o_config: 'node _acceptance/dieu-phoi-30-ngay-dau/rang/hang-so-o-config.mjs'
     trg_tieu_de_trang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs tieu-de-trang"'

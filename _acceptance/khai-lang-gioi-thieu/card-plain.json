@@ -1,0 +1,26 @@
+{
+  "feature_plain": "Người dùng trình đọc màn hình nghe đoạn giới thiệu tiếng Anh của một công ty bằng giọng tiếng Anh, thay vì bị đọc bằng giọng tiếng Việt như trên prod hôm 18/09.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ gắn nhãn tiếng đúng cho mọi đoạn chữ đi qua khối «chữ nước ngoài» dùng chung — tiếng Anh ra nhãn tiếng Anh, tiếng Việt ra nhãn tiếng Việt."},
+    {"id": "AC-2", "p": "Sẽ chỉ gắn nhãn tiếng Anh cho phần tiếng Anh của dòng thông tin trên tấm hồ sơ (vd ngành «Technology»), để phần tiếng Việt cạnh nó (vd «Hà Nội, VN») vẫn được đọc bằng giọng Việt."},
+    {"id": "AC-3", "p": "Sẽ không để một chữ hiện hai lần trên dòng thông tin khi hai phần trùng chữ."}
+  ],
+  "scope_plain": "Bộ đo lớn của PR #65, dữ liệu người nhập bằng tiếng Việt, và việc chấm lại hồ sơ nhãn tiếng Việt gốc — đều để ngoài ô này.",
+  "coverage_plain": [
+    {"i": 0, "p": "Không quét không gian lựa chọn: đây là một ca đỏ đã thấy trên prod và bản sửa đã viết xong, nên không có nhiều hướng để chọn."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Chưa có phép đo máy nào cho đúng chỗ đã đỏ trên prod — đoạn giới thiệu trên tấm hồ sơ công ty. Ba phép đo hiện có chỉ đo khối dùng chung. Nếu ai đó vô tình gỡ lớp bọc ở chỗ này, máy vẫn xanh. Máy không tự quyết vì đo trực tiếp phải giả lập cả tầng dữ liệu, cách đó đã từng làm hỏng bài kiểm khác. Hai lối để anh chọn ở câu hỏi dưới thẻ."},
+    {"i": 1, "p": "Tiêu chí «không hiện hai lần» không nói bản nào được giữ: nếu phần không nhãn đứng trước, chữ hiện một lần mà không có nhãn tiếng. Đã khai thành giới hạn có tên trong hợp đồng; mọi chỗ hiện nay có hai phần khác chữ nên ca này chưa xảy ra trên màn."},
+    {"i": 2, "p": "Phép đo «phần tiếng Việt không bị gắn nhầm nhãn» thiếu bằng chứng rằng nó biết đỏ. Đã sửa: chạy thử trên mã thật, gắn nhầm nhãn tiếng Anh cho phần tiếng Việt thì phép đo đỏ; và nó vốn báo lỗi khi chữ biến mất."},
+    {"i": 3, "p": "Bài kiểm dựng dòng thông tin không nằm dưới một vùng tiếng Việt như trên màn thật. Hoãn: chỉ sửa nếu anh chọn lối (b) ở câu hỏi dưới thẻ."},
+    {"i": 4, "p": "Chưa có danh sách mười chỗ hiện chữ tiếng Anh để người duyệt đối chiếu. Đã thêm bảng mười chỗ vào hợp đồng."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260921T154216Z-1", "p": "Chỉ đưa bản sửa lên prod, tách khỏi bộ đo lớn còn kẹt ở PR #65 — đổi lại bản sửa lên mà không có phép đo máy cho từng chỗ hiện chữ."},
+    {"id": "d-20260921T154216Z-2", "p": "KHÔNG quét không gian lựa chọn — đổi lại không có bằng chứng độ phủ; người duyệt tự soi chỗ bị sót bằng bảng mười chỗ."},
+    {"id": "d-20260921T154216Z-3", "p": "KHÔNG dựng bản mẫu để nhìn trước — thay đổi không làm màn khác đi chút nào."},
+    {"id": "d-20260921T154216Z-4", "p": "KHÔNG viết đặc tả trải nghiệm — không có bố cục hay màn nào mới."},
+    {"id": "d-20260921T154216Z-5", "p": "KHÔNG chụp màn làm bằng chứng — nhãn tiếng không hiện trên ảnh; phép thử thật là anh nhìn lại trên prod sau khi gộp."}
+  ]
+}
