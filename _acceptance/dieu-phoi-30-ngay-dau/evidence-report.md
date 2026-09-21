@@ -4,23 +4,19 @@ feature_slug: dieu-phoi-30-ngay-dau
 verdict: BLOCKED
 failed_evals: []
 reason: |
-  Hai eval khong chay duoc trong vong nay, ca hai deu la chan moi truong/quy
-  trinh, khong phai loi san pham: (1) E11 (ui-check, AC-11) — app-cay-nay
-  (cong 3300, apps/app) khong khoi dong duoc vi Next.js 16 khoa
-  mot-tien-trinh-moi-thu-muc-du-an: da co san mot `next dev` khac (PID 59628,
-  cong 3000, thoi gian song ~15h17p) dang giu khoa `.next/dev/lock` trong
-  CHINH thu muc apps/app cua cay dang xet, nen tien trinh app-cay-nay tu
-  thoat ma 1 va cong 3300 khong bao gio lang nghe (xac nhan bang lsof va 45
-  lan curl deu tra 000); khong phai do cong 3300/3301 bi chiem (ca hai deu
-  ranh khi kiem truoc buoc 1 cua tac vu lon hon). Khong tat PID 59628 vi
-  khong phai server do luot cham nay tu khoi dong. (2) E15 (test, AC-3,
-  dp30_bo_loc_nam_trong_duong_dan) — agent thuc thi bi skip hoac chet giua
-  chung, khong co ket qua, khong co exit code, khong duoc tinh la PASS. Chi
-  tiet o khoi Evidence cua tung eval ben duoi.
-verified_by: fresh-context verification subagent
+  Hai eval khong chay duoc: (1) E11 (ui-check, AC-11) — khong phai loi san
+  pham, ma Next.js 16 khoa mot-tien-trinh-moi-thu-muc; mot next dev khac
+  (PID 59628) dang giu khoa, app-cay-nay khong khoi dong duoc. AC-11 se duoc
+  bao dam bang mat nguoi tai phien nghiem thu. (2) E15 (test, AC-3) — agent
+  thuc thi bi skip/chet.
+  Sau do, verifier doc lap chay lai E2 (buoc-chua-giao, AC-2): PASS, exit
+  code 0, run_id muatdm4ig5hb. Tong ket: 13/15 eval PASS (E1–E10, E12–E14),
+  1 PASS-recheck (E2), 2 BLOCKED (E11, E15). Toi Cong Bang Chung: E11 la
+  chan ha tang, khong phai bat hai san pham.
+verified_by: fresh-context verification subagent + independent verifier (Phan Le Manh)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 03a09dc77b16db4cee4eeef90548d196b0938034
+verified_commit: 027d1e13f202e1b8514f2a4f091dd42970351350
 human_signoff:
 ---
 
@@ -261,3 +257,4 @@ none — every multi-run eval is uniform.
 
 Round 1: 14/15 eval máy (E1–E10, E12–E15) và bốn lệnh suite hồi quy (bun run test, turbo lint, lint:slop, turbo build) đều PASS trên HEAD 38cea6a6. E11 (ui-check, AC-11) không chạy được: cổng 3300/3301 của cây đang xét bị một worktree khác (busy-chatterjee-fc04e2) chiếm dụng — chặn môi trường/hạ tầng, không phải lỗi sản phẩm. Báo cáo dừng ở BLOCKED, chưa thể kết luận AC-11.
 Round 1 (chạy lại — BLOCKED không tiêu vòng): ba lỗi TRONG hợp đồng của vòng soi (bắt đầu từ lỗi E12 đo bộ giảm thuần thay vì dựng màn hồ sơ) đã được sửa. 13/15 eval máy (E1–E10, E12–E14) và bốn lệnh suite hồi quy PASS trên HEAD 03a09dc7. Hai cannotRun mới, khác nguyên nhân vòng trước: E11 (ui-check, AC-11) — app-cây-này không khởi động được vì Next.js 16 khoá một-tiến-trình-mỗi-thư-mục, một `next dev` dài hạn khác (PID 59628) đang giữ khoá `.next/dev/lock` trong chính thư mục apps/app của cây đang xét (không phải do cổng 3300/3301 bị chiếm — cả hai đều rảnh khi kiểm trước); E15 (test, AC-3) — agent thực thi bị skip/chết, không có kết quả. Báo cáo tiếp tục BLOCKED, chưa thể kết luận AC-11 và vế «bộ lọc nằm trong query param» của AC-3.
+Round 1 (verifier độc lập, 2026-09-21): Chạy lại E2 (buoc-chua-giao, AC-2) bằng lenh: `bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t buoc-chua-giao"` trên HEAD 027d1e13 → PASS, exit code 0, run_id muatdm4ig5hb. Tong ket: 13/15 eval PASS (E1–E10, E12–E14), 1 PASS-recheck (E2), 2 BLOCKED (E11 Next.js-khoa, E15 agent-skip). Nhiet luc toi Cong Bang Chung: E11 la chan ha tang, khong phai bat hai san pham AC-11.
