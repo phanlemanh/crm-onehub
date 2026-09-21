@@ -22,8 +22,8 @@ describe("khung dieu huong", () => {
 		expect(laMucHoiThoai({ ...muc("chat"), key: "deals" })).toBe(false);
 	});
 
-	it("bay muc, nhan vi co dau va khac nhan en", () => {
-		expect(MUC_RAIL).toHaveLength(7);
+	it("tam muc, nhan vi co dau va khac nhan en", () => {
+		expect(MUC_RAIL).toHaveLength(8);
 		for (const m of MUC_RAIL) {
 			const vi = nhanRail(m, "vi");
 			expect(vi).not.toBe(nhanRail(m, "en"));
@@ -38,5 +38,17 @@ describe("khung dieu huong", () => {
 		expect(mucDangMo(muc("chat"), "/onehub/agents/x", wu)).toBe(true);
 		expect(mucDangMo(muc("companies"), "/onehub/companies/y", wu)).toBe(true);
 		expect(mucDangMo(muc("companies"), "/onehub/contacts", wu)).toBe(false);
+	});
+
+	it("dieu phoi 30 ngay co loi vao tren thanh dieu huong", () => {
+		const dieuPhoi = muc("onboarding");
+		expect(dieuPhoi.href).toBe("/onboarding");
+		expect(nhanRail(dieuPhoi, "vi")).toBe("30 ngày đầu");
+		expect(nhanRail(dieuPhoi, "en")).toBe("First 30 days");
+		expect(mucDangMo(dieuPhoi, "/onehub/onboarding/ke-hoach-1", wu)).toBe(true);
+		expect(mucDangMo(dieuPhoi, "/onehub/settings/onboarding", wu)).toBe(false);
+		expect(mucDangMo(muc("settings"), "/onehub/settings/onboarding", wu)).toBe(
+			true,
+		);
 	});
 });

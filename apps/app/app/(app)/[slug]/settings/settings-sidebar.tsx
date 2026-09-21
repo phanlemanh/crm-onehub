@@ -28,6 +28,7 @@ const ITEMS: SettingsNavItem[] = [
 	{ khoa: "thanhVien", href: `${ROOT}/members` },
 	{ khoa: "khoaApi", href: `${ROOT}/api-keys` },
 	{ khoa: "sso", href: `${ROOT}/sso` },
+	{ khoa: "dieuPhoi", href: `${ROOT}/onboarding` },
 ];
 
 function isActive(href: string, root: string, pathname: string): boolean {
