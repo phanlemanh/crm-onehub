@@ -7,6 +7,7 @@ import type {
 } from "../src/onboarding/onboarding.contracts";
 import { OnboardingService } from "../src/onboarding/onboarding.service";
 import { ONBOARDING } from "../src/onboarding/onboarding-config";
+import { COT_XONG } from "../src/onboarding/onboarding-danh-muc";
 import {
 	gieoBoPhan as taoBoPhan,
 	gieoNguoi as taoNguoi,
@@ -456,13 +457,36 @@ describe("bang-cot-buoc", () => {
 		expect(bang.cot.map((c) => `${c.khoa}=${c.tong}`)).toEqual([
 			"Ký hợp đồng=2",
 			"Đào tạo=1",
-			"xong=1",
+			`${COT_XONG}=1`,
 		]);
-		expect(bang.cot.find((c) => c.khoa === "xong")?.the[0]?.id).toBe(
+		expect(bang.cot.find((c) => c.khoa === COT_XONG)?.the[0]?.id).toBe(
 			plans[3]?.id,
 		);
 		const ids = moiIdMotLan(bang);
 		expect(ids.sort()).toEqual(plans.map((p) => p.id).sort());
+	});
+});
+
+describe("bang-cot-buoc", () => {
+	test("bang-cot-buoc: buoc ten trung chu xong khong gop vao cot xong moi buoc", async () => {
+		const service = dichVu();
+		const t = token();
+		const [dep, nguoi] = await Promise.all([gieoBoPhan(), gieoNguoi()]);
+		const tac = await gieoKeHoach({
+			tenCongTy: `${t} tac`,
+			ownerId: nguoi.id,
+			buoc: [{ label: "xong", departmentId: dep.id }],
+		});
+		const daXong = await gieoKeHoach({
+			tenCongTy: `${t} da-xong`,
+			ownerId: nguoi.id,
+			buoc: [{ label: "xong", departmentId: dep.id, xong: true }],
+		});
+
+		const bang = await bangCot(service, "buoc", { q: t });
+		expect(
+			bang.cot.map((c) => `${c.khoa}|${c.nhan}|${c.the.map((x) => x.id)}`),
+		).toEqual([`xong|xong|${tac.id}`, `${COT_XONG}|null|${daXong.id}`]);
 	});
 });
 
@@ -503,7 +527,7 @@ describe("bang-cot-bo-phan", () => {
 		];
 
 		const bang = await bangCot(service, "bo-phan", { q: t });
-		expect(cotTheoKhoa(bang)).toEqual({ [a.id]: 2, [b.id]: 1, xong: 1 });
+		expect(cotTheoKhoa(bang)).toEqual({ [a.id]: 2, [b.id]: 1, [COT_XONG]: 1 });
 		expect(moiIdMotLan(bang).sort()).toEqual(plans.map((p) => p.id).sort());
 
 		await service.updateDepartment({ id: a.id, name: `Ten moi ${t}` });

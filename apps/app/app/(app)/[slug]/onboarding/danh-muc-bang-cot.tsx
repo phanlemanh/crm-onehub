@@ -22,9 +22,17 @@ export type BangCotCot = {
 	the: BangCotThe[];
 };
 
-const COT_XONG = "xong";
+const COT_XONG = "";
 
 type NhanCot = { label: string; userLabel: boolean };
+
+const BAC_PHEU = [
+	"chua-tai-khoan",
+	"co-tai-khoan",
+	"khoa-hoc",
+	"hoat-dong",
+	"giao-dich",
+] as const;
 
 function nhanCot(
 	m: Messages,
@@ -35,8 +43,8 @@ function nhanCot(
 		return { label: m.board.xong, userLabel: false };
 	}
 	if (cachChia === "bac") {
-		const bac = Object.entries(m.board.bac).find(([k]) => k === cot.khoa);
-		return { label: bac?.[1] ?? cot.khoa, userLabel: false };
+		const bac = BAC_PHEU.find((k) => k === cot.khoa);
+		return { label: bac ? m.board.bac[bac] : cot.khoa, userLabel: false };
 	}
 	if (cachChia === "trang-thai") {
 		return {

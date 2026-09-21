@@ -15,7 +15,6 @@ const en = {
 	facets: {
 		running: "Running",
 		closed: "Closed",
-		allDepartments: "All departments",
 		status: "Plan status",
 		department: "Department holding it",
 		owner: "Owner",
@@ -46,7 +45,6 @@ const en = {
 		body: "Nothing fits these filters or this search.",
 		action: "Clear filters",
 	},
-	urlHint: "Filters live in the address — sending the link sends this view.",
 	empty: {
 		noPlan: {
 			title: "No plan yet",
@@ -109,7 +107,7 @@ type OnboardingMessages = {
 		string
 	>;
 	facets: Record<
-		"running" | "closed" | "allDepartments" | "status" | "department" | "owner",
+		"running" | "closed" | "status" | "department" | "owner",
 		string
 	>;
 	search: string;
@@ -129,7 +127,6 @@ type OnboardingMessages = {
 		>;
 	};
 	noMatch: { title: string; body: string; action: string };
-	urlHint: string;
 	empty: Record<
 		"noPlan" | "noTemplate",
 		{ title: string; body: string; action: string }
@@ -178,7 +175,6 @@ const vi = {
 	facets: {
 		running: "Đang chạy",
 		closed: "Đã đóng",
-		allDepartments: "Tất cả bộ phận",
 		status: "Trạng thái kế hoạch",
 		department: "Bộ phận đang cầm",
 		owner: "Người cầm trịch",
@@ -209,8 +205,6 @@ const vi = {
 		body: "Không kế hoạch nào khớp bộ lọc hay ô tìm này.",
 		action: "Bỏ lọc",
 	},
-	urlHint:
-		"Bộ lọc nằm trong đường dẫn — gửi liên kết là gửi đúng góc nhìn này.",
 	empty: {
 		noPlan: {
 			title: "Chưa có kế hoạch nào",

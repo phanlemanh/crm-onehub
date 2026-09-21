@@ -16,7 +16,7 @@ import { ONBOARDING } from "./onboarding-config";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-export const COT_XONG = "xong";
+export const COT_XONG = "";
 
 export const BAC_PHEU = [
 	"chua-tai-khoan",
