@@ -1,11 +1,17 @@
 import type {
 	BangCotCachChia,
 	BangCotCot,
+	BangCotInput,
+	BangCotOutput,
 	BangCotThe,
+	DanhMucOutput,
+	DanhMucTrangThai,
 	PlanListInput,
+	PlanListOutput,
 	PlanRow,
 } from "./onboarding.contracts";
 import { DANH_MUC_SAP } from "./onboarding.contracts";
+import { ONBOARDING } from "./onboarding-config";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -316,4 +322,75 @@ export function chiaCot(input: {
 		})),
 		tranThe,
 	);
+}
+
+function boViTri({ viTriTac, viTriBoPhan, ...hang }: HangDanhMuc): PlanRow {
+	return hang;
+}
+
+export function danhSachTuHang(
+	tap: HangDanhMuc[],
+	input: PlanListInput,
+): PlanListOutput {
+	const daLoc = sapHang(locHang(tap, input), input);
+
+	return {
+		rows: catTrang(daLoc, input).map(boViTri),
+		total: daLoc.length,
+		facetCounts: demBoLoc(tap, input),
+	};
+}
+
+export function dangLoc(input: PlanListInput): boolean {
+	return (
+		input.q.trim() !== "" ||
+		input.boPhan.length > 0 ||
+		input.nguoiCam.length > 0 ||
+		input.status === "da-dong"
+	);
+}
+
+export function suyTrangThai(
+	input: PlanListInput,
+	total: number,
+	soKhuon: number,
+): DanhMucTrangThai {
+	if (total > 0) return "ST-danhmuc-codulieu";
+	if (dangLoc(input)) return "ST-danhmuc-khongkhop";
+	return soKhuon === 0 ? "ST-danhmuc-chuacokhuon" : "ST-danhmuc-empty";
+}
+
+export function manDanhMucTuHang(
+	tap: HangDanhMuc[],
+	input: PlanListInput,
+	soKhuon: number,
+): DanhMucOutput {
+	const danhSach = danhSachTuHang(tap, input);
+
+	return {
+		...danhSach,
+		soKhuon,
+		trangThai: suyTrangThai(input, danhSach.total, soKhuon),
+	};
+}
+
+export function hangCuaBangCot(
+	tap: HangDanhMuc[],
+	input: PlanListInput,
+): HangDanhMuc[] {
+	return sapHang(locHang(tap, input), input);
+}
+
+export function bangCotTuHang(
+	hang: HangDanhMuc[],
+	input: BangCotInput,
+	ghiDanh: GhiDanhTho[],
+): BangCotOutput {
+	const tranThe = ONBOARDING.bangCot.tranThe;
+
+	return {
+		cachChia: input.cachChia,
+		tranThe,
+		cot: chiaCot({ cachChia: input.cachChia, hang, ghiDanh, tranThe }),
+	};
 }

@@ -28,7 +28,6 @@ import type {
 	PlanListInput,
 	PlanListOutput,
 	PlanOutput,
-	PlanRow,
 	StepListInput,
 	StepListOutput,
 	TemplateCreateInput,
@@ -38,18 +37,13 @@ import type {
 } from "./onboarding.contracts";
 import { MA_NEN_TANG, ONBOARDING } from "./onboarding-config";
 import {
-	catTrang,
-	chiaCot,
-	demBoLoc,
+	bangCotTuHang,
+	danhSachTuHang,
 	dungHang,
 	type HangDanhMuc,
-	locHang,
-	sapHang,
+	hangCuaBangCot,
+	manDanhMucTuHang,
 } from "./onboarding-danh-muc";
-
-function boViTri({ viTriTac, viTriBoPhan, ...hang }: HangDanhMuc): PlanRow {
-	return hang;
-}
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -264,42 +258,20 @@ export class OnboardingService {
 	}
 
 	async manDanhMuc(input: PlanListInput): Promise<DanhMucOutput> {
-		const [danhSach, soKhuon] = await Promise.all([
-			this.listPlans(input),
+		const [tap, soKhuon] = await Promise.all([
+			this.taiTap(input),
 			this.db.onboardingTemplate.count({ where: { archivedAt: null } }),
 		]);
 
-		const dangLoc =
-			input.q.trim() !== "" ||
-			input.boPhan.length > 0 ||
-			input.nguoiCam.length > 0 ||
-			input.status === "da-dong";
-
-		const trangThai =
-			danhSach.total > 0
-				? "ST-danhmuc-codulieu"
-				: dangLoc
-					? "ST-danhmuc-khongkhop"
-					: soKhuon === 0
-						? "ST-danhmuc-chuacokhuon"
-						: "ST-danhmuc-empty";
-
-		return { ...danhSach, soKhuon, trangThai };
+		return manDanhMucTuHang(tap, input, soKhuon);
 	}
 
 	async listPlans(input: PlanListInput): Promise<PlanListOutput> {
-		const tap = await this.taiTap(input);
-		const daLoc = sapHang(locHang(tap, input), input);
-
-		return {
-			rows: catTrang(daLoc, input).map(boViTri),
-			total: daLoc.length,
-			facetCounts: demBoLoc(tap, input),
-		};
+		return danhSachTuHang(await this.taiTap(input), input);
 	}
 
 	async bangCot(input: BangCotInput): Promise<BangCotOutput> {
-		const hang = sapHang(locHang(await this.taiTap(input), input), input);
+		const hang = hangCuaBangCot(await this.taiTap(input), input);
 		const ghiDanh =
 			input.cachChia === "bac"
 				? await this.db.onboardingEnrollment.findMany({
@@ -316,13 +288,8 @@ export class OnboardingService {
 						},
 					})
 				: [];
-		const tranThe = ONBOARDING.bangCot.tranThe;
 
-		return {
-			cachChia: input.cachChia,
-			tranThe,
-			cot: chiaCot({ cachChia: input.cachChia, hang, ghiDanh, tranThe }),
-		};
+		return bangCotTuHang(hang, input, ghiDanh);
 	}
 
 	private async taiTap(

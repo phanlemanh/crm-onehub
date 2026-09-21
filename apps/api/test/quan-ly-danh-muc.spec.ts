@@ -277,7 +277,12 @@ describe("loc-va-dem", () => {
 			[a.id, u1.id, true],
 			[b.id, u2.id, true],
 		];
-		const plans = [];
+		const plans: {
+			plan: { id: string };
+			dep: string;
+			owner: string;
+			dong: boolean;
+		}[] = [];
 		for (const [i, [dep, owner, dong]] of cap.entries()) {
 			plans.push({
 				plan: await gieoKeHoach({
