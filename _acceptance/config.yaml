@@ -140,6 +140,10 @@ executors:
     mk_nut_phat_chia: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/mk-nut-phat-chia.dom.tsx
     mk_dang_nhap_cung_man: cd apps/app && bun test ./test/mk-dang-nhap-cung-man.spec.ts
     mk_dat_mat_khau_loi: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/mk-dat-mat-khau-loi.dom.tsx
+    lv30_loi_vao_thanh_chinh: 'cd apps/app && bun test test/khung-dieu-huong.spec.ts -t loi-vao-30-ngay'
+    lv30_danh_dau_dang_mo: 'cd apps/app && bun test test/khung-dieu-huong.spec.ts -t danh-dau-dang-mo'
+    lv30_loi_vao_cai_dat: 'cd apps/app && bun test test/cai-dat-dieu-huong.spec.ts -t loi-vao-dieu-phoi'
+    lv30_nhan_hai_thu_tieng: 'cd apps/app && bun test test/khung-dieu-huong.spec.ts test/cai-dat-dieu-huong.spec.ts -t nhan-hai-thu-tieng'
   script:
     dp30_hang_so_o_config: 'node _acceptance/dieu-phoi-30-ngay-dau/rang/hang-so-o-config.mjs'
     trg_tieu_de_trang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs tieu-de-trang"'

@@ -11,6 +11,7 @@ const en = {
 		thanhVien: "Members",
 		khoaApi: "API Keys",
 		sso: "SSO",
+		dieuPhoi: "Onboarding",
 	},
 	tieuDeTab: {
 		chung: "General",
@@ -140,6 +141,7 @@ const vi = {
 		thanhVien: "Thành viên",
 		khoaApi: "Khoá API",
 		sso: "SSO",
+		dieuPhoi: "Điều phối 30 ngày",
 	},
 	tieuDeTab: {
 		chung: "Tổng quan",

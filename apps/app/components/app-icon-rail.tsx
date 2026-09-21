@@ -5,6 +5,7 @@ import Bullhorn from "@carbon/icons-react/es/Bullhorn";
 import Close from "@carbon/icons-react/es/Close";
 import Dashboard from "@carbon/icons-react/es/Dashboard";
 import Partnership from "@carbon/icons-react/es/Partnership";
+import Roadmap from "@carbon/icons-react/es/Roadmap";
 import Settings from "@carbon/icons-react/es/Settings";
 import UserMultiple from "@carbon/icons-react/es/UserMultiple";
 import { Button } from "@crm/ui/components/button";
@@ -47,6 +48,7 @@ const ICON = {
 	contacts: UserMultiple,
 	deals: Partnership,
 	campaigns: Bullhorn,
+	onboarding: Roadmap,
 	settings: Settings,
 } satisfies Record<MucRailKey, CarbonIcon>;
 
