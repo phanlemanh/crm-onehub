@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cc31d5bbe43ceb14fb939051061cd4757c999afa
+verified_commit: 866a35516212f7c4355a330ab1ff374fc73e441b
 human_signoff: Mạnh 10/09/2026 — ký lại trên bằng chứng vòng 7 sau khi hoà onehub và sửa lớp chuỗi thứ năm. Bảng đăng ký và kế hoạch chuyển đã sửa trước khi ký, theo quyết định của chủ kho. Các mục còn lại ghi ở Known limits của hợp đồng.
 ---
 
@@ -227,3 +227,7 @@ sha: a008db1b22266291c9dc7177892e93494926aabd · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 8 — 2026-09-20, do vong thuoc-khai-dung-tieng sua .githooks/gate-shape.json, mot duong trong paths eval cua ho so nay
 run_id: repin-20260920T051452Z-82512
 sha: cc31d5bbe43ceb14fb939051061cd4757c999afa · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
+
+### Re-pin lần 9 — 2026-09-21, do rebase #65 len onehub b108a2fb (kit 2.18.0) — neo lai moc bang chung o cay sap merge
+run_id: repin-20260921T152611Z-43894
+sha: 866a35516212f7c4355a330ab1ff374fc73e441b · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
