@@ -499,6 +499,10 @@ chứng quyết, không tự sửa.
 
 ### Xác minh mục Known limits `E1-và-E10-tựa-thước-hồ-sơ-đã-đóng`
 
+> **Mục được soi ở đây đã GẠCH BỎ ngày 21/09** — xem phần Known limits ở trên.
+> Phần soi dưới đây giữ nguyên: nó đúng tại thời điểm soi, và bốn điểm lệch nó
+> tìm ra vẫn là phát hiện thật về cách mục ấy được viết.
+
 Nhiệm vụ là kiểm mục này có MÔ TẢ ĐÚNG cái bản ghi cho thấy không. Bốn điểm
 khớp chính xác, bốn điểm lệch.
 
