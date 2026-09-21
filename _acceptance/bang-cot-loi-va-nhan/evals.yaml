@@ -1,0 +1,96 @@
+schema_version: 1
+slug: bang-cot-loi-va-nhan
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.bcl_loi_lan_dau
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/bang-cot-loi-va-nhan.dom.tsx"
+    expected: |
+      Dung THAT man danh muc trong jsdom o dang bang cot; ban gia tRPC cho thu tuc
+      bangCot nem loi. Khang dinh:
+        1 o tim va nut Loc van con
+        2 chu thong diep loi bang cot va nut «Tải lại» hien, doc tu bang thong diep,
+          khong viet tay
+        3 khong con phan tu khung cho (Skeleton) nao trong vung bang cot
+      DOI CHUNG DUONG cho dong 3, CUNG bo chon: thu tuc treo (promise chua giai) ->
+      dem duoc it nhat 1 khung cho trong vung bang cot; roi thu tuc nem loi -> dem 0.
+      DOI CHUNG: thu tuc tra du lieu -> co cot, khong co thong diep loi.
+      CHIEU DO: bo nhanh loi trong man -> dong 2 do voi thong diep ghim ten trang thai
+      va so khung cho con lai.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.bcl_tai_lai
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/bang-cot-loi-va-nhan.dom.tsx"
+    expected: |
+      Thu tuc lan 1 nem loi, lan 2 tra du lieu. Bam «Tải lại».
+      Khang dinh: so lan goi thu tuc tang dung 1; cot hien voi tieu de va so dem cua
+      du lieu lan 2 (rut tu phep tinh that cua thu tuc); thong diep loi bien mat; so
+      lan man GHI duong dan (dem qua bo chuyen nuqs kiem thu) quanh cu bam bang 0.
+      CHIEU DO: nut «Tải lại» khong goi lai truy van -> dong so lan goi do.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.bcl_loi_sau_du_lieu
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/bang-cot-loi-va-nhan.dom.tsx"
+    expected: |
+      Lan tai dau tra hai cot; doi bo loc (q) -> lan tai moi nem loi.
+      Khang dinh: thong diep loi va nut «Tải lại» hien; khong con phan tu
+      [data-board-column] nao cua lan truoc.
+      CHIEU DO: chi hien loi khi chua co du lieu (giu cot cu khi co du lieu cu) -> do
+      voi thong diep ghim so cot con lai.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.bcl_nhan_khi_cho
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/bang-cot-loi-va-nhan.dom.tsx"
+    expected: |
+      Ma tran viet truoc HAI chieu: buoc -> trang-thai va trang-thai -> buoc. Du lieu
+      moi chieu rut tu phep tinh that cua thu tuc. Moi chieu: cach chia cu da hien;
+      doi sang cach chia kia, thu tuc cho cach chia moi treo (promise chua giai).
+      Khang dinh tren TUNG cot dang hien: tieu de bang dung nhan cua cach chia CU tinh
+      tu du lieu (khong chuoi viet tay), khong cot nao mang nhan cua cach chia moi;
+      vung bang cot mang aria-busy="true". So chieu bang 2.
+      CHIEU DO: gan nhan theo cach chia trong duong dan -> do voi thong diep ghim tieu
+      de cot va nhan mong doi.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.bcl_nhan_khi_ve
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/bang-cot-loi-va-nhan.dom.tsx"
+    expected: |
+      Tiep E4, ca hai chieu: giai promise cua cach chia moi (du lieu rut tu phep tinh
+      that). Khang dinh: cac cot mang nhan cua cach chia moi tinh tu du lieu va bang
+      thong diep; vung bang cot thoi aria-busy.
+      CHIEU DO: aria-busy khong bao gio tat -> do voi thong diep ghim gia tri aria-busy.
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.bcl_tai_lai_bo_loc_moi
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/bang-cot-loi-va-nhan.dom.tsx"
+    expected: |
+      Lan goi 1 (khong q) tra hai cot; go q vao o tim -> lan goi 2 nem loi; bam
+      «Tải lại» -> lan goi 3 tra du lieu khac (rut tu phep tinh that tren tap khac).
+      Khang dinh: input cua lan goi 3 mang dung q moi; cac cot hien la cot cua lan 3
+      (so khoa va so dem voi du lieu lan 3), khong cot nao cua lan 1.
+      CHIEU DO: «Tải lại» goi lai voi input cu (khong q) -> do voi thong diep ghim q
+      cua lan goi.
