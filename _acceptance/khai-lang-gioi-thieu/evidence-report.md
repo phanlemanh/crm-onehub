@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 850cd9acc2cddead2946d9d443ad361a72762406
+verified_commit: b5b7b3fd0f556673219d8f1c639fe660d3439ead
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -108,3 +108,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E1, E2, E3, E4 đều pass ngay từ lần chạy đầu; không có vòng sửa lại.
+
+### Re-pin lần 1 — 2026-09-21, do tron origin/onehub (PR #71) vao nhanh truoc khi mo PR — neo lai moc o cay sap merge
+run_id: repin-20260921T224148Z-11691
+sha: b5b7b3fd0f556673219d8f1c639fe660d3439ead · suites: 4 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng
