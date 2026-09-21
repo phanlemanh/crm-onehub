@@ -1,0 +1,15 @@
+E11 network dump (E11-network.txt)
+Config dev_server.url = http://localhost:3000, api_base = [http://localhost:3001]
+Actual traffic observed at APP_URL=http://127.0.0.1:3300, API_URL=http://127.0.0.1:3301 (dedicated tree ports, per eval steps 1-2)
+=> scoping verdict: unscoped-partial (real app-origin traffic seen, but at an origin outside the config's literally declared dev_server.url/api_base strings) — note-only, does not fail the eval per rules.
+
+Console (last 100 of 415, dominated by dev-only noise):
+- Many "Failed to load resource: 403 Forbidden" on /_next/static/chunks/*.js — these are Next.js/Turbopack dev bundle chunk requests (static assets, not app data fetch/XHR); each 403'd chunk is immediately followed by a 200 OK retry for the same chunk in the log, consistent with a live dev-server recompiling while this verifier issued several concurrent navigate/resize calls. Classified as static-asset noise (note-only, never fail-eligible).
+- Repeated "WebSocket connection to 'ws://127.0.0.1:3300/_next/hmr?id=...' failed" — Next dev HMR websocket, not app API traffic. Note-only.
+- No 4xx/5xx observed on the page navigation itself (GET /crm/onboarding -> 200 OK).
+
+Network (data-fetch scope):
+- No client-side XHR/fetch to /rest/onboarding/* or any tRPC batch endpoint was observed in the browser's network log for the onboarding/danh-muc screen — the row data appears to be delivered via server-side render / RSC prefetch (getServerTrpc + HydrateClient in page.tsx), with the client query consuming the hydrated cache rather than issuing a new fetch during this capture window.
+- Direct REST calls made by this verifier via curl (outside the browser) to seed/read data during setup all returned 200 (recorded separately in outputTail): POST /rest/companies, POST /rest/onboarding/departments, POST /rest/onboarding/templates, POST /rest/onboarding/plans, GET /rest/onboarding/danh-muc, GET /health.
+
+networkObserved = unscoped-partial (n-a would also be defensible since driver is a browser tool that DOES expose read_network_requests/read_console_messages, but the literal declared scope in config.yaml does not match the 127.0.0.1:3300/3301 ports this eval's own steps mandate — this is a known config/eval-ports mismatch, not a product defect, and does not gate exitCode per the stated rules).
