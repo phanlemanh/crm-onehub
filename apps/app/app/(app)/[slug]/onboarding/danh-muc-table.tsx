@@ -165,10 +165,16 @@ export function DanhMucTable() {
 					<TableBody>
 						{data.rows.map((hang) => (
 							<TableRow key={hang.id}>
-								<TableCell className="min-w-0 max-w-[11rem] truncate font-medium">
+								<TableCell
+									className="whitespace-normal break-words font-medium"
+									translate="no"
+								>
 									{hang.companyName}
 								</TableCell>
-								<TableCell className="min-w-0 max-w-[11rem] truncate">
+								<TableCell
+									className="whitespace-normal break-words"
+									translate="no"
+								>
 									{hang.tacO}
 								</TableCell>
 								<TableCell className="whitespace-nowrap text-right tabular-nums">
@@ -180,10 +186,11 @@ export function DanhMucTable() {
 								<TableCell className="whitespace-nowrap text-right tabular-nums">
 									{hang.ngayThu}/{hang.targetDays}
 								</TableCell>
-								<TableCell>
-									{hang.boPhanTac === null ? null : (
-										<Badge variant="outline">{hang.boPhanTac}</Badge>
-									)}
+								<TableCell
+									className="whitespace-normal break-words text-muted-foreground"
+									translate="no"
+								>
+									{hang.boPhanTac}
 								</TableCell>
 							</TableRow>
 						))}
