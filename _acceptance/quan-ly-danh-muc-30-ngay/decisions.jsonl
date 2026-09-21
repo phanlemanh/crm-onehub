@@ -19,3 +19,4 @@
 {"id":"d-20260921T130454Z-19","type":"revisit","stage":"gate2","at":"2026-09-21T13:04:54Z","decision":"cắt/hoãn: đồng ý cắt","impact":"dinh doat cua nguoi ky tai Cong Bang chung","decided_by":"Phan Le Manh","decided_at":"2026-09-21T13:04:54Z"}
 {"id":"d-20260921T130454Z-20","type":"revisit","stage":"gate2","at":"2026-09-21T13:04:54Z","decision":"Treo: phê hết","impact":"dinh doat cua nguoi ky tai Cong Bang chung","decided_by":"Phan Le Manh","decided_at":"2026-09-21T13:04:54Z"}
 {"id":"d-20260921T130454Z-21","type":"revisit","stage":"gate2","at":"2026-09-21T13:04:54Z","decision":"veto hay để yên: ký","impact":"dinh doat cua nguoi ky tai Cong Bang chung","decided_by":"Phan Le Manh","decided_at":"2026-09-21T13:04:54Z"}
+{"id":"d-20260921T143032Z-22","type":"thuc-te","stage":"thuc-te","at":"2026-09-21","by":"Phan Le Manh","build_sha":"c5de5f03d0a48c04d9c3c6bddadbd90d194ce6aa","decision":"Đã lên prod qua #68; lọc, sắp, chia cột của danh mục 30 ngày chạy thật."}
