@@ -1,3 +1,4 @@
+import type { FacetCount } from "../trpc/list-input";
 import type {
 	BangCotCachChia,
 	BangCotCot,
@@ -65,6 +66,12 @@ export type HangDanhMuc = PlanRow & {
 
 type LocDanhMuc = Pick<PlanListInput, "status" | "boPhan" | "nguoiCam">;
 
+export type DemBoLoc = {
+	trangThai: FacetCount;
+	boPhan: FacetCount;
+	nguoiCam: FacetCount;
+};
+
 type SapDanhMuc = Pick<PlanListInput, "sort" | "dir">;
 
 function soNgay(tu: Date, den: Date): number {
@@ -128,8 +135,8 @@ export function locHang(hang: HangDanhMuc[], loc: LocDanhMuc): HangDanhMuc[] {
 function demTheo(
 	hang: HangDanhMuc[],
 	khoa: (h: HangDanhMuc) => string | null,
-): Record<string, number> {
-	const dem: Record<string, number> = {};
+): FacetCount {
+	const dem: FacetCount = {};
 	for (const h of hang) {
 		const k = khoa(h);
 		if (k === null) continue;
@@ -138,10 +145,7 @@ function demTheo(
 	return dem;
 }
 
-export function demBoLoc(
-	hang: HangDanhMuc[],
-	loc: LocDanhMuc,
-): Record<string, Record<string, number>> {
+export function demBoLoc(hang: HangDanhMuc[], loc: LocDanhMuc): DemBoLoc {
 	return {
 		trangThai: demTheo(
 			hang.filter((h) => khopBoPhan(h, loc) && khopNguoiCam(h, loc)),
@@ -162,12 +166,12 @@ const soChu = new Intl.Collator("vi", { sensitivity: "base", numeric: true });
 
 type KhoaSap = (typeof DANH_MUC_SAP)[number];
 
-const SO_SANH: Record<KhoaSap, (a: HangDanhMuc, b: HangDanhMuc) => number> = {
+const SO_SANH = {
 	companyName: (a, b) => soChu.compare(a.companyName, b.companyName),
 	startedAt: (a, b) => a.startedAt.getTime() - b.startedAt.getTime(),
 	imNgay: (a, b) => a.imNgay - b.imNgay,
 	buocXong: (a, b) => a.buocXong - b.buocXong,
-};
+} satisfies Record<KhoaSap, (a: HangDanhMuc, b: HangDanhMuc) => number>;
 
 function laKhoaSap(sort: string): sort is KhoaSap {
 	return (DANH_MUC_SAP as readonly string[]).includes(sort);

@@ -24,11 +24,13 @@ export type BangCotCot = {
 
 const COT_XONG = "xong";
 
+type NhanCot = { label: string; userLabel: boolean };
+
 function nhanCot(
 	m: Messages,
 	cachChia: DanhMucCachChia,
 	cot: BangCotCot,
-): { label: string; userLabel: boolean } {
+): NhanCot {
 	if (cot.khoa === COT_XONG && cot.nhan === null) {
 		return { label: m.board.xong, userLabel: false };
 	}

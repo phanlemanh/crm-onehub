@@ -8,6 +8,10 @@ import {
 	type ReactNode,
 } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import type {
+	DanhMucCachChia,
+	DanhMucInput,
+} from "@/app/(app)/[slug]/onboarding/onboarding-search-params";
 import {
 	bangCotInput,
 	planListInput,
@@ -31,7 +35,7 @@ const NGUOI = [{ id: "u-1", name: "Lan" }];
 
 let tap: HangDanhMuc[] = [];
 let daDieuHuong: string[] = [];
-let dauVaoCuoi: unknown = null;
+let dauVaoCuoi: DanhMucInput | null = null;
 
 function keHoach(i: number, buoc: string): KeHoachTho {
 	return {
@@ -61,22 +65,22 @@ function gieo(soKeHoach: number): void {
 	);
 }
 
-function thuTuc(chay: (dauVao: unknown) => unknown) {
+function thuTuc<TVao, TRa>(ten: string, chay: (dauVao: TVao) => TRa) {
 	return {
-		queryKey: (dauVao: unknown) => ["q", dauVao],
-		queryOptions: (dauVao?: unknown) => ({
-			queryKey: ["q", chay.name, dauVao],
+		queryKey: (dauVao: TVao) => [ten, dauVao],
+		queryOptions: (dauVao: TVao) => ({
+			queryKey: [ten, dauVao],
 			queryFn: async () => chay(dauVao),
 		}),
 	};
 }
 
-function manDanhMuc(dauVao: unknown) {
+function manDanhMuc(dauVao: DanhMucInput) {
 	dauVaoCuoi = dauVao;
 	return manDanhMucTuHang(tap, planListInput.parse(dauVao), 1);
 }
 
-function bangCot(dauVao: unknown) {
+function bangCot(dauVao: DanhMucInput & { cachChia: DanhMucCachChia }) {
 	const input = bangCotInput.parse(dauVao);
 	return bangCotTuHang(hangCuaBangCot(tap, input), input, []);
 }
@@ -84,16 +88,12 @@ function bangCot(dauVao: unknown) {
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		onboarding: {
-			manDanhMuc: thuTuc(manDanhMuc),
-			bangCot: thuTuc(bangCot),
-			listDepartments: thuTuc(function listDepartments() {
-				return BO_PHAN;
-			}),
+			manDanhMuc: thuTuc("manDanhMuc", manDanhMuc),
+			bangCot: thuTuc("bangCot", bangCot),
+			listDepartments: thuTuc("listDepartments", () => BO_PHAN),
 		},
 		users: {
-			list: thuTuc(function list() {
-				return NGUOI;
-			}),
+			list: thuTuc("users.list", () => NGUOI),
 		},
 	}),
 }));
@@ -302,7 +302,7 @@ describe("duong-dan", () => {
 		await cho(dau.o, () => dau.duongDan().get("cachChia") === "bo-phan");
 
 		const duong = dau.duongDan();
-		const mongDoi: Record<string, string> = {
+		const mongDoi = {
 			...DAT,
 			cachXem: "bang-cot",
 			cachChia: "bo-phan",
