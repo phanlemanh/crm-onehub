@@ -57,6 +57,10 @@ const en = {
 			action: "Go to Settings › Templates",
 		},
 	},
+	boardError: {
+		title: "Could not load the board",
+		body: "The server did not answer for this view. The filters are kept; try again.",
+	},
 	error: {
 		title: "Could not load the list",
 		body: "The server did not answer. Try again; if it keeps failing, tell the engineers what time you saw this.",
@@ -131,6 +135,7 @@ type OnboardingMessages = {
 		"noPlan" | "noTemplate",
 		{ title: string; body: string; action: string }
 	>;
+	boardError: { title: string; body: string };
 	error: { title: string; body: string; action: string };
 	loading: string;
 	hoSo: {
@@ -216,6 +221,10 @@ const vi = {
 			body: "Kế hoạch ba mươi ngày dựng từ một khuôn theo loại đối tác. Soạn khuôn đầu tiên rồi quay lại đây.",
 			action: "Đi tới Cài đặt › Khuôn",
 		},
+	},
+	boardError: {
+		title: "Không tải được bảng cột",
+		body: "Máy chủ không trả lời cho cách xem này. Bộ lọc vẫn giữ nguyên; thử tải lại.",
 	},
 	error: {
 		title: "Không tải được danh mục",
