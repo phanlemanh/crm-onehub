@@ -1,7 +1,6 @@
 "use client";
 
 import { Badge } from "@crm/ui/components/badge";
-import { Button } from "@crm/ui/components/button";
 import {
 	Card,
 	CardContent,
@@ -19,6 +18,8 @@ import { Skeleton } from "@crm/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { useTRPC } from "@/lib/trpc/client";
+import { SoanKhuon } from "./soan-khuon";
+import { ThemBoPhan } from "./them-bo-phan";
 
 export function CaiDatDieuPhoi() {
 	const m = onboardingMessages(useLocale());
@@ -74,7 +75,7 @@ export function CaiDatDieuPhoi() {
 						))
 					)}
 					<div>
-						<Button variant="outline">{m.settings.newTemplate}</Button>
+						<SoanKhuon boPhan={dsBoPhan} />
 					</div>
 				</CardContent>
 			</Card>
@@ -105,7 +106,7 @@ export function CaiDatDieuPhoi() {
 						))
 					)}
 					<div>
-						<Button variant="outline">{m.settings.newDepartment}</Button>
+						<ThemBoPhan />
 					</div>
 				</CardContent>
 			</Card>

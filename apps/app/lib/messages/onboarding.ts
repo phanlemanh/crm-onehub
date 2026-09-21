@@ -84,6 +84,39 @@ const en = {
 		confirmAction: "Remove",
 		confirmCancel: "Keep",
 	},
+	tao: {
+		save: "Save",
+		cancel: "Cancel",
+		boPhan: { title: "New department", name: "Department name" },
+		khuon: {
+			title: "New plan template",
+			name: "Template name",
+			partnerType: "Partner type (optional)",
+			steps: "Steps",
+			stepLabel: "Step",
+			stepDepartment: "Department",
+			stepDay: "Day",
+			addStep: "Add a step",
+			removeStep: "Remove step",
+			noDepartment:
+				"No department yet. Add a department first, then write the template.",
+		},
+		keHoach: {
+			title: "New plan from a template",
+			toolbar: "New plan",
+			company: "Partner company",
+			template: "Template",
+			startedAt: "Start date",
+			owner: "Owner",
+		},
+		moiGioi: {
+			title: "Add a broker",
+			contact: "Person",
+			choose: "Choose a person",
+			search: "Search people",
+			none: "Nobody matches",
+		},
+	},
 	settings: {
 		title: "Onboarding",
 		templates: "Plan templates",
@@ -153,6 +186,29 @@ type OnboardingMessages = {
 		confirmBody: string;
 		confirmAction: string;
 		confirmCancel: string;
+	};
+	tao: {
+		save: string;
+		cancel: string;
+		boPhan: { title: string; name: string };
+		khuon: Record<
+			| "title"
+			| "name"
+			| "partnerType"
+			| "steps"
+			| "stepLabel"
+			| "stepDepartment"
+			| "stepDay"
+			| "addStep"
+			| "removeStep"
+			| "noDepartment",
+			string
+		>;
+		keHoach: Record<
+			"title" | "toolbar" | "company" | "template" | "startedAt" | "owner",
+			string
+		>;
+		moiGioi: Record<"title" | "contact" | "choose" | "search" | "none", string>;
 	};
 	settings: {
 		title: string;
@@ -249,6 +305,39 @@ const vi = {
 			"Bốn mốc bậc của người đó đi theo luôn. Việc này không đảo lại được.",
 		confirmAction: "Gỡ",
 		confirmCancel: "Giữ lại",
+	},
+	tao: {
+		save: "Lưu",
+		cancel: "Huỷ",
+		boPhan: { title: "Thêm bộ phận", name: "Tên bộ phận" },
+		khuon: {
+			title: "Soạn khuôn kế hoạch",
+			name: "Tên khuôn",
+			partnerType: "Loại đối tác (tuỳ chọn)",
+			steps: "Các bước",
+			stepLabel: "Bước",
+			stepDepartment: "Bộ phận",
+			stepDay: "Ngày thứ",
+			addStep: "Thêm bước",
+			removeStep: "Bỏ bước",
+			noDepartment:
+				"Chưa có bộ phận nào. Thêm bộ phận trước rồi mới soạn khuôn.",
+		},
+		keHoach: {
+			title: "Tạo kế hoạch từ khuôn",
+			toolbar: "Kế hoạch mới",
+			company: "Công ty đối tác",
+			template: "Khuôn",
+			startedAt: "Ngày bắt đầu",
+			owner: "Người cầm trịch",
+		},
+		moiGioi: {
+			title: "Thêm môi giới",
+			contact: "Cá nhân",
+			choose: "Chọn một cá nhân",
+			search: "Tìm cá nhân",
+			none: "Không tìm thấy ai",
+		},
 	},
 	settings: {
 		title: "Điều phối 30 ngày",
