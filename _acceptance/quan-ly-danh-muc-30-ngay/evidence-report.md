@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-human_signoff: 
+human_signoff: Phan Le Manh 2026-09-21
 verified_commit: 4a5860be42cb8935c2727d1e05ceaea9a655ac38
 ---
 

@@ -5,7 +5,7 @@ slug: quan-ly-danh-muc-30-ngay
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -64,3 +64,13 @@ Source input: `_acceptance/quan-ly-danh-muc-30-ngay/opportunity.md` (Cổng Đá
 
 - Bảng cột chỉ để xem là giả định an toàn máy ghi ở Cổng Đáng vì câu kéo thẻ chưa được trả lời; chủ kho có thể phủ quyết.
 - Số ngày im và số bước đã xong là giá trị tính từ các bước, nên máy chủ tải trọn tập đã lọc rồi mới sắp và cắt trang. Ổn với cỡ vài trăm kế hoạch; nếu cỡ vượt xa, cần lưu sẵn hai giá trị đó.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-21 (Phan Le Manh), từ các mục ngoài hợp đồng của S4:
+
+- Ngoài-1: khoá cột «Đã xong mọi bước» và danh sách năm bậc phễu được chép hai nơi (máy chủ và màn); sửa một nơi mà quên nơi kia thì cột có thể hiện nhãn trống hoặc sai, dù các phép kiểm vẫn xanh.
+- Ngoài-2: bài kiểm chưa đưa kết quả thật của bảng cột vào màn để kiểm nhãn cột «Đã xong mọi bước» người dùng thấy; nhãn đó sai thì người dùng có thể thấy trước.
+- Ngoài-3: bằng chứng «không lỗi mạng» của ảnh chụp E13 chỉ là một câu viết sẵn, không kèm số request đã quan sát.
+- Ngoài-4: mỗi lần mở, lọc hay tìm, máy chủ nạp lại toàn bộ kế hoạch thay vì chỉ phần cần xem; chậm dần khi danh mục lớn.
+- Ngoài-5: bảng cột tải lỗi (mất mạng, máy chủ lỗi) thì khung chờ quay mãi, không có thông báo lỗi hay nút thử lại.
+- Ngoài-6: ngay sau khi đổi cách chia cột, nhãn và số đếm của cột cũ có thể bị gán nhầm vài giây trước khi dữ liệu mới về.
+- Ngoài-7: vế màn của E1 và E12 dựng màn từ kế hoạch mẫu viết tay trong bài kiểm (qua đúng phép tính của thủ tục), không từ kết quả truy vấn cơ sở dữ liệu thật.
