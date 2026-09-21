@@ -1,0 +1,10 @@
+{
+  "feature_plain": "Bốn nút đang không làm gì — Thêm bộ phận, Soạn khuôn, Tạo kế hoạch từ khuôn, Thêm môi giới — nay mở hộp thoại, lưu thật và hiện ngay bản ghi mới trên màn.",
+  "scope_plain": "Đổi tên / lưu trữ bộ phận, sửa khuôn, đánh dấu bậc phễu và tạo cá nhân mới ngay trong hộp thoại — để vòng sau.",
+  "decisions_plain": [
+    {"id": "d-20260921T141126Z-1", "p": "KHÔNG quét độ phủ tiêu chí — phạm vi là đúng bốn nút đã gọi tên; đổi lại có thể sót một nút chết thứ năm."},
+    {"id": "d-20260921T141126Z-2", "p": "KHÔNG làm bản mẫu trước khi duyệt — bốn hộp thoại dùng thành phần có sẵn; ảnh chụp màn thật ở hai khổ nằm trong gói bằng chứng này thay cho bản mẫu."},
+    {"id": "d-20260921T141126Z-3", "p": "Sửa lỗi ngày bắt đầu bằng cách cho máy chủ tự đổi chuỗi ngày thành ngày, chỉ ở một trường — không đổi cách truyền dữ liệu của mọi thủ tục khác."},
+    {"id": "d-20260921T141126Z-4", "p": "KHÔNG làm đổi tên, lưu trữ, sắp thứ tự bộ phận và sửa khuôn trong vòng này — gõ sai tên thì chưa sửa được trên màn."}
+  ]
+}
