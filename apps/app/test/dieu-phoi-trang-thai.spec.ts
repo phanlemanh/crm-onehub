@@ -6,6 +6,8 @@ import {
 	xacNhan,
 } from "@/app/(app)/[slug]/onboarding/luong-xoa";
 import {
+	danhMucSearchParams,
+	loadOnboardingSearchParams,
 	ONBOARDING_TRANG_THAI,
 	onboardingParsers,
 } from "@/app/(app)/[slug]/onboarding/onboarding-search-params";
@@ -17,30 +19,35 @@ import {
 
 describe("bo-loc-duong-dan", () => {
 	test("bo-loc-duong-dan: hai khoa loc co ten rieng trong so dang ky", () => {
-		expect(SEARCH_PARAM.onboarding.boPhan).toBe("boPhan");
 		expect(SEARCH_PARAM.onboarding.trangThai).toBe("trangThai");
 		expect(Object.keys(onboardingParsers).sort()).toEqual(
 			[
-				SEARCH_PARAM.onboarding.boPhan,
 				SEARCH_PARAM.onboarding.trangThai,
+				SEARCH_PARAM.onboarding.cachXem,
+				SEARCH_PARAM.onboarding.cachChia,
 			].sort(),
+		);
+		expect(Object.keys(danhMucSearchParams.parsers)).toContain("boPhan");
+	});
+
+	test("bo-loc-duong-dan: doc tu duong dan co tham so thi giu nguyen bo loc", async () => {
+		const duongDan = new URLSearchParams("boPhan=dep-1&trangThai=da-dong");
+
+		expect((await danhMucSearchParams.load(duongDan)).boPhan).toEqual([
+			"dep-1",
+		]);
+		expect((await loadOnboardingSearchParams(duongDan)).trangThai).toBe(
+			"da-dong",
 		);
 	});
 
-	test("bo-loc-duong-dan: doc tu duong dan co tham so thi giu nguyen bo loc", () => {
-		const boPhan = onboardingParsers[SEARCH_PARAM.onboarding.boPhan];
-		const trangThai = onboardingParsers[SEARCH_PARAM.onboarding.trangThai];
+	test("bo-loc-duong-dan: duong dan TRAN tra ve khong loc", async () => {
+		const tran = new URLSearchParams("");
 
-		expect(boPhan.parse("dep-1")).toBe("dep-1");
-		expect(trangThai.parse("da-dong")).toBe("da-dong");
-	});
-
-	test("bo-loc-duong-dan: duong dan TRAN tra ve khong loc", () => {
-		const boPhan = onboardingParsers[SEARCH_PARAM.onboarding.boPhan];
-		const trangThai = onboardingParsers[SEARCH_PARAM.onboarding.trangThai];
-
-		expect(boPhan.defaultValue).toBe("");
-		expect(trangThai.defaultValue).toBe("dang-chay");
+		expect((await danhMucSearchParams.load(tran)).boPhan).toEqual([]);
+		expect((await loadOnboardingSearchParams(tran)).trangThai).toBe(
+			"dang-chay",
+		);
 	});
 
 	test("bo-loc-duong-dan: gia tri la khong hop le thi ve mac dinh, khong nem", () => {

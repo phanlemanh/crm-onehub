@@ -32,8 +32,9 @@ export const SEARCH_PARAM = {
 		scope: "scope",
 	},
 	onboarding: {
-		boPhan: "boPhan",
 		trangThai: "trangThai",
+		cachXem: "cachXem",
+		cachChia: "cachChia",
 	},
 } as const;
 

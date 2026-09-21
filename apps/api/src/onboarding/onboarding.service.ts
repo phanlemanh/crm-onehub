@@ -10,6 +10,8 @@ import {
 } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 import type {
+	BangCotInput,
+	BangCotOutput,
 	DanhMucOutput,
 	DepartmentCreateInput,
 	DepartmentIdInput,
@@ -26,7 +28,6 @@ import type {
 	PlanListInput,
 	PlanListOutput,
 	PlanOutput,
-	PlanRow,
 	StepListInput,
 	StepListOutput,
 	TemplateCreateInput,
@@ -35,12 +36,16 @@ import type {
 	TemplateUpdateInput,
 } from "./onboarding.contracts";
 import { MA_NEN_TANG, ONBOARDING } from "./onboarding-config";
+import {
+	bangCotTuHang,
+	danhSachTuHang,
+	dungHang,
+	type HangDanhMuc,
+	hangCuaBangCot,
+	manDanhMucTuHang,
+} from "./onboarding-danh-muc";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-
-function soNgay(tu: Date, den: Date): number {
-	return Math.floor((den.getTime() - tu.getTime()) / DAY_MS);
-}
 
 @Injectable()
 export class OnboardingService {
@@ -253,94 +258,68 @@ export class OnboardingService {
 	}
 
 	async manDanhMuc(input: PlanListInput): Promise<DanhMucOutput> {
-		const [danhSach, soKhuon] = await Promise.all([
-			this.listPlans(input),
+		const [tap, soKhuon] = await Promise.all([
+			this.taiTap(input),
 			this.db.onboardingTemplate.count({ where: { archivedAt: null } }),
 		]);
 
-		const trangThai =
-			danhSach.rows.length > 0
-				? "ST-danhmuc-codulieu"
-				: soKhuon === 0
-					? "ST-danhmuc-chuacokhuon"
-					: "ST-danhmuc-empty";
-
-		return { ...danhSach, soKhuon, trangThai };
+		return manDanhMucTuHang(tap, input, soKhuon);
 	}
 
 	async listPlans(input: PlanListInput): Promise<PlanListOutput> {
-		const where: Prisma.OnboardingPlanWhereInput = {
-			closedAt: input.status === "da-dong" ? { not: null } : null,
-		};
-		if (input.departmentId !== undefined) {
-			where.steps = { some: { departmentId: input.departmentId } };
+		return danhSachTuHang(await this.taiTap(input), input);
+	}
+
+	async bangCot(input: BangCotInput): Promise<BangCotOutput> {
+		const hang = hangCuaBangCot(await this.taiTap(input), input);
+		const ghiDanh =
+			input.cachChia === "bac"
+				? await this.db.onboardingEnrollment.findMany({
+						where: { planId: { in: hang.map((h) => h.id) } },
+						orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+						select: {
+							id: true,
+							planId: true,
+							accountAt: true,
+							courseAt: true,
+							activeAt: true,
+							dealAt: true,
+							contact: { select: { firstName: true, lastName: true } },
+						},
+					})
+				: [];
+
+		return bangCotTuHang(hang, input, ghiDanh);
+	}
+
+	private async taiTap(
+		input: Pick<PlanListInput, "q">,
+	): Promise<HangDanhMuc[]> {
+		const where: Prisma.OnboardingPlanWhereInput = {};
+		const q = input.q.trim();
+		if (q !== "") {
+			where.company = { name: { contains: q, mode: "insensitive" } };
 		}
 
-		const [plans, total] = await Promise.all([
-			this.db.onboardingPlan.findMany({
-				where,
-				orderBy: { startedAt: "asc" },
-				skip: (input.page - 1) * input.pageSize,
-				take: input.pageSize,
-				include: {
-					company: { select: { name: true } },
-					steps: {
-						orderBy: { position: "asc" },
-						select: {
-							completedAt: true,
-							label: true,
-							updatedAt: true,
-							department: { select: { id: true, name: true } },
-						},
+		const plans = await this.db.onboardingPlan.findMany({
+			where,
+			include: {
+				company: { select: { name: true } },
+				steps: {
+					orderBy: { position: "asc" },
+					select: {
+						completedAt: true,
+						label: true,
+						position: true,
+						updatedAt: true,
+						department: { select: { id: true, name: true, position: true } },
 					},
 				},
-			}),
-			this.db.onboardingPlan.count({ where }),
-		]);
-
-		const rows: PlanRow[] = plans.map((plan) => {
-			const xong = plan.steps.filter((s) => s.completedAt !== null).length;
-			const dang = plan.steps.find((s) => s.completedAt === null);
-			const moiNhat = plan.steps.reduce<Date>(
-				(moc, s) => (s.updatedAt > moc ? s.updatedAt : moc),
-				plan.steps[0]?.updatedAt ?? plan.startedAt,
-			);
-
-			return {
-				id: plan.id,
-				companyId: plan.companyId,
-				companyName: plan.company.name,
-				startedAt: plan.startedAt,
-				targetDays: plan.targetDays,
-				ngayThu: soNgay(plan.startedAt, new Date()),
-				buocXong: xong,
-				buocTong: plan.steps.length,
-				tacO: dang?.label ?? null,
-				boPhanTac: dang?.department.name ?? null,
-				imNgay: soNgay(moiNhat, new Date()),
-				ownerId: plan.ownerId,
-				closedAt: plan.closedAt,
-			};
+			},
 		});
 
-		const theoBoPhan = await this.db.onboardingStep.groupBy({
-			by: ["departmentId"],
-			where: { plan: { closedAt: where.closedAt } },
-			_count: { planId: true },
-		});
-
-		const boPhan: Record<string, number> = {};
-		for (const hang of theoBoPhan) {
-			const dem = await this.db.onboardingPlan.count({
-				where: {
-					closedAt: where.closedAt,
-					steps: { some: { departmentId: hang.departmentId } },
-				},
-			});
-			boPhan[hang.departmentId] = dem;
-		}
-
-		return { rows, total, facetCounts: { boPhan } };
+		const bayGio = new Date();
+		return plans.map((plan) => dungHang(plan, bayGio));
 	}
 
 	async closePlan(input: PlanIdInput): Promise<PlanOutput> {

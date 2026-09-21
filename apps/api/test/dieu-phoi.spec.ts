@@ -345,7 +345,8 @@ describe("danh muc va vong doi", () => {
 			page: 1,
 			pageSize: 25,
 			status: "dang-chay",
-			departmentId: a.dep.id,
+			boPhan: [a.dep.id],
+			nguoiCam: [],
 		});
 
 		expect(kq.rows).toHaveLength(1);
@@ -362,7 +363,8 @@ describe("danh muc va vong doi", () => {
 			page: 1,
 			pageSize: 25,
 			status: "dang-chay",
-			departmentId: depTrong.id,
+			boPhan: [depTrong.id],
+			nguoiCam: [],
 		});
 		expect(rong.rows).toHaveLength(0);
 		expect(rong.total).toBe(0);
@@ -480,7 +482,8 @@ describe("danh muc va vong doi", () => {
 			dir: "asc" as const,
 			page: 1,
 			pageSize: 25,
-			departmentId: dep.id,
+			boPhan: [dep.id],
+			nguoiCam: [],
 		};
 		const macDinh = await service.listPlans({ ...gocLoc, status: "dang-chay" });
 		expect(macDinh.rows.map((r) => r.id)).not.toContain(plan.id);
@@ -498,6 +501,8 @@ describe("man danh muc", () => {
 		page: 1,
 		pageSize: 25,
 		status: "dang-chay" as const,
+		boPhan: [],
+		nguoiCam: [],
 	};
 
 	test("chua-co-khuon: DB khong con khuon nao thi man noi rieng, khong phai rong thuong", async () => {
@@ -508,12 +513,9 @@ describe("man danh muc", () => {
 			select: { id: true },
 		});
 		for (const k of conKhuon) await service.archiveTemplate({ id: k.id });
+		await db.onboardingPlan.deleteMany({});
 
-		const depTrong = await service.createDepartment({ name: "Trong tron" });
-		const rong = await service.manDanhMuc({
-			...gocLoc,
-			departmentId: depTrong.id,
-		});
+		const rong = await service.manDanhMuc(gocLoc);
 
 		expect(rong.soKhuon).toBe(0);
 		expect(rong.rows).toHaveLength(0);
@@ -526,10 +528,7 @@ describe("man danh muc", () => {
 			steps: baBuocKhuon(dep.id),
 		});
 
-		const coKhuon = await service.manDanhMuc({
-			...gocLoc,
-			departmentId: depTrong.id,
-		});
+		const coKhuon = await service.manDanhMuc(gocLoc);
 		expect(coKhuon.soKhuon).toBe(1);
 		expect(coKhuon.rows).toHaveLength(0);
 		expect(coKhuon.trangThai).toBe("ST-danhmuc-empty");
@@ -539,7 +538,7 @@ describe("man danh muc", () => {
 		const service = await dungDichVu();
 		const { dep } = await gieoKeHoachCoBuoc({ service, tenBoPhan: "MDM-A" });
 
-		const kq = await service.manDanhMuc({ ...gocLoc, departmentId: dep.id });
+		const kq = await service.manDanhMuc({ ...gocLoc, boPhan: [dep.id] });
 		expect(kq.rows.length).toBeGreaterThan(0);
 		expect(kq.trangThai).toBe("ST-danhmuc-codulieu");
 	});

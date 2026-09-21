@@ -265,6 +265,50 @@ function FacetSubmenu({
 	);
 }
 
+export function DataTableFacetMenu({
+	facets,
+	filters,
+	onFilterChange,
+}: {
+	facets: DataTableFacet[];
+	filters: Record<string, string[]>;
+	onFilterChange: (id: string, values: string[]) => void;
+}) {
+	const msg = useMessages();
+	if (facets.length === 0) return null;
+	const activeCount = facets.filter(
+		(facet) => (filters[facet.id]?.length ?? 0) > 0,
+	).length;
+
+	return (
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button
+					variant="outline"
+					size="sm"
+					className="justify-start sm:justify-center"
+				>
+					<Filter data-icon="inline-start" />
+					{msg.table.filters}
+					{activeCount > 0 && (
+						<span className="tabular-nums opacity-60">({activeCount})</span>
+					)}
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align="start" className="min-w-48">
+				{facets.map((facet) => (
+					<FacetSubmenu
+						key={facet.id}
+						facet={facet}
+						selected={filters[facet.id] ?? []}
+						onChange={(values) => onFilterChange(facet.id, values)}
+					/>
+				))}
+			</DropdownMenuContent>
+		</DropdownMenu>
+	);
+}
+
 export function DataTable<TRow, TSub = unknown>({
 	query,
 	columns,
@@ -456,35 +500,11 @@ export function DataTable<TRow, TSub = unknown>({
 					{leadingActions}
 
 					<div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap sm:items-center lg:ml-auto">
-						{availableFacets.length > 0 && (
-							<DropdownMenu>
-								<DropdownMenuTrigger asChild>
-									<Button
-										variant="outline"
-										size="sm"
-										className="justify-start sm:justify-center"
-									>
-										<Filter data-icon="inline-start" />
-										{msg.table.filters}
-										{activeFacetFilterCount > 0 && (
-											<span className="tabular-nums opacity-60">
-												({activeFacetFilterCount})
-											</span>
-										)}
-									</Button>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent align="start" className="min-w-48">
-									{availableFacets.map((facet) => (
-										<FacetSubmenu
-											key={facet.id}
-											facet={facet}
-											selected={query.filters[facet.id] ?? []}
-											onChange={(values) => query.setFilter(facet.id, values)}
-										/>
-									))}
-								</DropdownMenuContent>
-							</DropdownMenu>
-						)}
+						<DataTableFacetMenu
+							facets={availableFacets}
+							filters={query.filters}
+							onFilterChange={query.setFilter}
+						/>
 						{(sortableColumns.length > 0 || anyExpandable) && (
 							<DropdownMenu>
 								<DropdownMenuTrigger asChild>

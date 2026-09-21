@@ -27,7 +27,7 @@ import { enrichmentQueueInput } from "@crm/validation/enrichment-queue";
 import { fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
-import { departmentListOutput, departmentCreateInput, departmentOutput, departmentUpdateInput, departmentIdInput, departmentReorderInput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, planListInput, planListOutput, planCreateFromTemplateInput, planOutput, planIdInput, stepListInput, stepListOutput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput } from "../onboarding/onboarding.contracts";
+import { departmentListOutput, departmentCreateInput, departmentOutput, departmentUpdateInput, departmentIdInput, departmentReorderInput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, planListInput, planListOutput, planCreateFromTemplateInput, planOutput, planIdInput, stepListInput, stepListOutput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput, bangCotInput, bangCotOutput } from "../onboarding/onboarding.contracts";
 import { savedViewListInput, savedViewListOutput, savedViewCreateInput, savedViewOutput, savedViewUpdateArgs, savedViewIdInput, savedViewDeleteOutput } from "../saved-views/saved-views.contracts";
 import { agentModelOutput, modelCatalogOutput, setAgentModelInput, researchKeyOutput, setResearchKeyInput, archiveRetentionOutput, setArchiveRetentionDaysInput } from "../settings/settings.contracts";
 import { slackStatusOutput, slackMatchesOutput, slackChannelsInput, slackChannelsOutput, slackJoinChannelInput, slackJoinChannelOutput, slackRefreshPeopleOutput, slackCreateChannelInput, slackCreateChannelOutput, slackDisconnectOutput } from "../slack/slack.contracts";
@@ -681,6 +681,10 @@ const appRouter = t.router({
     manDanhMuc: publicProcedure
       .input(planListInput)
       .output(danhMucOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    bangCot: publicProcedure
+      .input(bangCotInput)
+      .output(bangCotOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   savedViews: t.router({

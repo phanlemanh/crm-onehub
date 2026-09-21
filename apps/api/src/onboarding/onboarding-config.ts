@@ -10,6 +10,12 @@ export const ONBOARDING = {
 	ingest: {
 		maxItemsPerBatch: 500,
 	},
+	danhMuc: {
+		pageSize: 25,
+	},
+	bangCot: {
+		tranThe: 30,
+	},
 } as const;
 
 export const MA_NEN_TANG = {

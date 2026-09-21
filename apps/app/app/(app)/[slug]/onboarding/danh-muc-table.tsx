@@ -1,7 +1,12 @@
 "use client";
 
-import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
+import {
+	DataTable,
+	type DataTableColumn,
+	type DataTableFacet,
+	DataTableFacetMenu,
+} from "@crm/ui/components/data-table";
 import {
 	Empty,
 	EmptyContent,
@@ -11,49 +16,136 @@ import {
 } from "@crm/ui/components/empty";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@crm/ui/components/table";
 import { useQuery } from "@tanstack/react-query";
-import { useQueryState } from "nuqs";
+import { useRouter } from "next/navigation";
+import { useQueryStates } from "nuqs";
+import { ListSearch } from "@/components/data-table/list-search";
+import { useTableQuery } from "@/components/data-table/use-table-query";
 import { onboardingMessages } from "@/lib/messages/onboarding";
-import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
+import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { DanhMucBangCot } from "./danh-muc-bang-cot";
 import {
-	ONBOARDING_TRANG_THAI,
+	CachChiaToggle,
+	CachXemToggle,
+	KhongKhop,
+	TrangThaiToggle,
+	useBoLoc,
+} from "./danh-muc-cong-cu";
+import {
+	chiaTheoTrangThai,
+	danhMucInput,
+	danhMucSearchParams,
 	onboardingParsers,
 } from "./onboarding-search-params";
+
+type Messages = ReturnType<typeof onboardingMessages>;
+
+export type DanhMucRow = {
+	id: string;
+	companyName: string;
+	tacO: string | null;
+	boPhanTac: string | null;
+	imNgay: number;
+	buocXong: number;
+	buocTong: number;
+	ngayThu: number;
+	targetDays: number;
+};
+
+type TuyChon = { value: string; label: string };
+
+function cotBang(m: Messages): DataTableColumn<DanhMucRow>[] {
+	return [
+		{
+			id: "companyName",
+			header: m.columns.partner,
+			sortable: true,
+			cellClassName: "whitespace-normal break-words font-medium",
+			cell: (hang) => <span translate="no">{hang.companyName}</span>,
+		},
+		{
+			id: "tacO",
+			header: m.columns.stuckOn,
+			cellClassName: "whitespace-normal break-words",
+			cell: (hang) => <span translate="no">{hang.tacO}</span>,
+		},
+		{
+			id: "imNgay",
+			header: m.columns.silent,
+			sortable: true,
+			align: "right",
+			width: "w-24",
+			cell: (hang) => (hang.imNgay === 0 ? "—" : `${hang.imNgay}n`),
+		},
+		{
+			id: "buocXong",
+			header: m.columns.steps,
+			sortable: true,
+			align: "right",
+			width: "w-20",
+			cell: (hang) => `${hang.buocXong}/${hang.buocTong}`,
+		},
+		{
+			id: "startedAt",
+			header: m.columns.days,
+			sortable: true,
+			align: "right",
+			width: "w-20",
+			hideBelow: "sm",
+			cell: (hang) => `${hang.ngayThu}/${hang.targetDays}`,
+		},
+		{
+			id: "boPhanTac",
+			header: m.columns.department,
+			hideBelow: "md",
+			cellClassName: "whitespace-normal break-words text-muted-foreground",
+			cell: (hang) => <span translate="no">{hang.boPhanTac}</span>,
+		},
+	];
+}
+
+function tuyChonCoDem(
+	nguon: { id: string; name: string }[],
+	dem: Record<string, number> | undefined,
+	daChon: string[],
+): TuyChon[] {
+	return nguon.flatMap((muc) => {
+		const so = dem?.[muc.id] ?? 0;
+		if (so === 0 && !daChon.includes(muc.id)) return [];
+		return [{ value: muc.id, label: `${muc.name} · ${so}` }];
+	});
+}
 
 export function DanhMucTable() {
 	const locale = useLocale();
 	const m = onboardingMessages(locale);
 	const trpc = useTRPC();
+	const router = useRouter();
+	const url = useWorkspaceUrl();
+	const boLoc = useBoLoc();
 
-	const [boPhan, setBoPhan] = useQueryState(
-		SEARCH_PARAM.onboarding.boPhan,
-		onboardingParsers[SEARCH_PARAM.onboarding.boPhan],
-	);
-	const [trangThai, setTrangThai] = useQueryState(
-		SEARCH_PARAM.onboarding.trangThai,
-		onboardingParsers[SEARCH_PARAM.onboarding.trangThai],
-	);
+	const { query, input: list } = useTableQuery(danhMucSearchParams);
+	const [ob, setOb] = useQueryStates(onboardingParsers);
+	const input = danhMucInput(list, ob);
+	const laBangCot = ob.cachXem === "bang-cot";
 
-	const truyVan = {
-		q: "",
-		sort: "",
-		dir: "asc" as const,
-		page: 1,
-		pageSize: 25,
-		status: trangThai,
-		departmentId: boPhan === "" ? undefined : boPhan,
-	};
-	const danhMuc = useQuery(trpc.onboarding.manDanhMuc.queryOptions(truyVan));
+	const danhMuc = useQuery({
+		...trpc.onboarding.manDanhMuc.queryOptions(input),
+		placeholderData: (truoc) => truoc,
+	});
+	const bangCot = useQuery({
+		...trpc.onboarding.bangCot.queryOptions({
+			...input,
+			cachChia: ob.cachChia,
+		}),
+		enabled: laBangCot,
+		placeholderData: (truoc) => truoc,
+	});
 	const boPhanList = useQuery(trpc.onboarding.listDepartments.queryOptions());
+	const users = useQuery(trpc.users.list.queryOptions());
+
+	const hrefCua = (planId: string) => url(`/onboarding/${planId}`);
 
 	if (danhMuc.isPending) {
 		return (
@@ -93,7 +185,9 @@ export function DanhMucTable() {
 				</EmptyHeader>
 				<EmptyContent>
 					<Button asChild>
-						<a href="settings/onboarding">{m.empty.noTemplate.action}</a>
+						<a href={url("/settings/onboarding")}>
+							{m.empty.noTemplate.action}
+						</a>
 					</Button>
 				</EmptyContent>
 			</Empty>
@@ -114,89 +208,100 @@ export function DanhMucTable() {
 		);
 	}
 
-	return (
-		<div className="flex flex-col gap-3">
-			<nav aria-label={m.facets.running} className="flex flex-wrap gap-2">
-				{ONBOARDING_TRANG_THAI.map((tt) => (
-					<Badge
-						key={tt}
-						onClick={() => setTrangThai(tt)}
-						variant={tt === trangThai ? "default" : "outline"}
-					>
-						{tt === "dang-chay" ? m.facets.running : m.facets.closed}
-					</Badge>
-				))}
-				<Badge
-					onClick={() => setBoPhan("")}
-					variant={boPhan === "" ? "default" : "outline"}
-				>
-					{m.facets.allDepartments}
-				</Badge>
-				{(boPhanList.data ?? []).map((bp) => (
-					<Badge
-						key={bp.id}
-						onClick={() => setBoPhan(bp.id)}
-						variant={bp.id === boPhan ? "default" : "outline"}
-					>
-						{bp.name} {data.facetCounts.boPhan?.[bp.id] ?? 0}
-					</Badge>
-				))}
-			</nav>
-			<p className="text-muted-foreground text-xs">{m.urlHint}</p>
+	const khongKhop = data.trangThai === "ST-danhmuc-khongkhop";
+	const facets: DataTableFacet[] = [
+		{
+			id: "boPhan",
+			label: m.facets.department,
+			options: tuyChonCoDem(
+				boPhanList.data ?? [],
+				data.facetCounts.boPhan,
+				list.boPhan,
+			),
+		},
+		{
+			id: "nguoiCam",
+			label: m.facets.owner,
+			options: tuyChonCoDem(
+				users.data ?? [],
+				data.facetCounts.nguoiCam,
+				list.nguoiCam,
+			),
+		},
+	];
 
-			<div className="rounded-lg border">
-				<Table>
-					<TableHeader>
-						<TableRow>
-							<TableHead>{m.columns.partner}</TableHead>
-							<TableHead>{m.columns.stuckOn}</TableHead>
-							<TableHead className="text-right tabular-nums">
-								{m.columns.silent}
-							</TableHead>
-							<TableHead className="text-right tabular-nums">
-								{m.columns.steps}
-							</TableHead>
-							<TableHead className="text-right tabular-nums">
-								{m.columns.days}
-							</TableHead>
-							<TableHead>{m.columns.department}</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{data.rows.map((hang) => (
-							<TableRow key={hang.id}>
-								<TableCell
-									className="whitespace-normal break-words font-medium"
-									translate="no"
-								>
-									{hang.companyName}
-								</TableCell>
-								<TableCell
-									className="whitespace-normal break-words"
-									translate="no"
-								>
-									{hang.tacO}
-								</TableCell>
-								<TableCell className="whitespace-nowrap text-right tabular-nums">
-									{hang.imNgay === 0 ? "—" : `${hang.imNgay}n`}
-								</TableCell>
-								<TableCell className="whitespace-nowrap text-right tabular-nums">
-									{hang.buocXong}/{hang.buocTong}
-								</TableCell>
-								<TableCell className="whitespace-nowrap text-right tabular-nums">
-									{hang.ngayThu}/{hang.targetDays}
-								</TableCell>
-								<TableCell
-									className="whitespace-normal break-words text-muted-foreground"
-									translate="no"
-								>
-									{hang.boPhanTac}
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
+	const trangThai = chiaTheoTrangThai(ob) ? null : (
+		<TrangThaiToggle
+			m={m}
+			value={ob.trangThai}
+			counts={data.facetCounts.trangThai}
+			onChange={(next) => {
+				setOb({ trangThai: next });
+				query.setPage(1);
+			}}
+		/>
+	);
+	const cachXem = (
+		<CachXemToggle
+			m={m}
+			value={ob.cachXem}
+			onChange={(next) => setOb({ cachXem: next })}
+		/>
+	);
+	const khongKhopView = <KhongKhop m={m} onClear={boLoc} />;
+
+	if (!laBangCot) {
+		return (
+			<DataTable
+				query={query}
+				search={<ListSearch placeholder={m.search} />}
+				leadingActions={trangThai}
+				actions={cachXem}
+				columns={cotBang(m)}
+				getRowId={(hang) => hang.id}
+				rows={data.rows}
+				total={data.total}
+				facetCounts={data.facetCounts}
+				facets={facets}
+				onRowClick={(hang) => router.push(hrefCua(hang.id))}
+				empty={khongKhop ? khongKhopView : undefined}
+			/>
+		);
+	}
+
+	return (
+		<div className="flex min-w-0 flex-col gap-3">
+			<div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+				<ListSearch placeholder={m.search} />
+				{trangThai}
+				<DataTableFacetMenu
+					facets={facets.filter(
+						(facet) =>
+							facet.options.length > 0 ||
+							(query.filters[facet.id]?.length ?? 0) > 0,
+					)}
+					filters={query.filters}
+					onFilterChange={query.setFilter}
+				/>
+				<CachChiaToggle
+					m={m}
+					value={ob.cachChia}
+					onChange={(next) => setOb({ cachChia: next })}
+				/>
+				<div className="sm:ml-auto">{cachXem}</div>
 			</div>
+			{khongKhop ? (
+				khongKhopView
+			) : bangCot.data ? (
+				<DanhMucBangCot
+					m={m}
+					cachChia={ob.cachChia}
+					cot={bangCot.data.cot}
+					hrefCua={hrefCua}
+				/>
+			) : (
+				<Skeleton className="h-64 w-full" />
+			)}
 		</div>
 	);
 }

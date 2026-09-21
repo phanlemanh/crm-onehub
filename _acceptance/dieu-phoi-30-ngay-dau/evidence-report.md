@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 25e86932760a6e3268b25adab683834e550268a0
+verified_commit: 9a9ec86a5356038b9c6b289f9bda8113651a107f
 human_signoff: Manh Phan 2026-09-21
 ---
 
@@ -238,3 +238,7 @@ none — khong eval nao trong round nay co runs > 1 (khong eval nao ngau nhien/d
 ## Iterations
 
 Round 1: luot D (chore 7e9decfc) dung o BLOCKED vi E6 va E11 chua dat. Fix c2211d93 (danh-muc: whitespace-normal/break-words thay truncate, bo badge cho span xuong dong) giai quyet E11 (chu doc duoc het, khong con tran ngang o 768px); rerun toan bo 15 eval + 4 lenh suite (test/lint/lint:slop/build) tren commit 25e86932 -> tat ca dat, chot PASS.
+
+### Re-pin lần 1 — 2026-09-21, do bai kiem cua ho so doi theo bo loc moi cua quan-ly-danh-muc-30-ngay
+run_id: repin-20260921T130831Z-74384
+sha: 9a9ec86a5356038b9c6b289f9bda8113651a107f · suites: 4 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng
