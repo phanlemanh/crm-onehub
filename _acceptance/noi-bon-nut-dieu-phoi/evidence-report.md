@@ -1,0 +1,234 @@
+---
+schema_version: 2
+feature_slug: noi-bon-nut-dieu-phoi
+verdict: PASS
+failed_evals: []
+verified_by: fresh-context verification subagent
+enforcement_mode: strict
+bypass_used: false
+verified_commit: 6afcd2610907e593c22dacd4cf88f18f10a66db4
+human_signoff: 
+---
+
+# Evidence Report: noi-bon-nut-dieu-phoi
+
+| Eval | Criterion | Executor | Verdict |
+|---|---|---|---|
+| E1 | AC-1 | test | PASS |
+| E2 | AC-1 | test | PASS |
+| E3 | AC-2 | test | PASS |
+| E4 | AC-2 | test | PASS |
+| E5 | AC-3 | test | PASS |
+| E6 | AC-4 | test | PASS |
+| E13 | AC-4 | test | PASS |
+| E7 | AC-5 | test | PASS |
+| E8 | AC-6 | test | PASS |
+| E9 | AC-7 | test | PASS |
+| E10 | AC-7 | test | PASS |
+| E11 | AC-8 | test | PASS |
+| E12 | AC-9 | ui-check | PASS |
+| E14 | AC-10 | test | PASS |
+
+## Evidence
+
+- eval: E1
+  run_id: minted-noi-bon-nut-dieu-phoi-E1-r1
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nbn_them_bo_phan
+  verified_at: 2026-09-21T09:00:00+07:00
+  output: |
+     0 fail
+     4 expect() calls
+    Ran 2 tests across 1 file. [613.00ms]
+
+- eval: E2
+  run_id: mubdn33oknx7
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nbn_ghi_bo_phan
+  verified_at: 2026-09-21T09:02:00+07:00
+  output: |
+     2 expect() calls
+    Ran 1 test across 1 file. [626.00ms]
+    test-run: dropped crm_mubdn33oknx7_test
+
+- eval: E3
+  run_id: minted-noi-bon-nut-dieu-phoi-E3-r1
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nbn_soan_khuon
+  verified_at: 2026-09-21T09:04:00+07:00
+  output: |
+     0 fail
+     5 expect() calls
+    Ran 1 test across 1 file. [787.00ms]
+
+- eval: E4
+  run_id: minted-noi-bon-nut-dieu-phoi-E4-r1
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nbn_ghi_khuon
+  verified_at: 2026-09-21T09:06:00+07:00
+  output: |
+    Ran 1 test across 1 file. [830.00ms]
+    test-run: dropped crm_mubdne7bkamd_test
+    EXIT_CODE=0
+
+- eval: E5
+  run_id: minted-noi-bon-nut-dieu-phoi-E5-r1
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nbn_chua_co_bo_phan
+  verified_at: 2026-09-21T09:08:00+07:00
+  output: |
+     0 fail
+     5 expect() calls
+    Ran 2 tests across 1 file. [618.00ms]
+
+- eval: E6
+  run_id: minted-noi-bon-nut-dieu-phoi-E6-r1
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nbn_tao_ke_hoach
+  verified_at: 2026-09-21T09:10:00+07:00
+  output: |
+     0 fail
+     2 expect() calls
+    Ran 1 test across 1 file. [798.00ms]
+
+- eval: E7
+  run_id: mubdn1jgd77g
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nbn_ghi_ke_hoach_json
+  verified_at: 2026-09-21T09:12:00+07:00
+  output: |
+     6 expect() calls
+    Ran 1 test across 1 file. [844.00ms]
+    test-run: dropped crm_mubdn1jgd77g_test
+
+- eval: E13
+  run_id: mubdn1jgd77g
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nbn_ghi_ke_hoach_json
+  verified_at: 2026-09-21T09:12:00+07:00
+  output: |
+     6 expect() calls
+    Ran 1 test across 1 file. [844.00ms]
+    test-run: dropped crm_mubdn1jgd77g_test
+
+- eval: E8
+  run_id: minted-noi-bon-nut-dieu-phoi-E8-r1
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nbn_nut_tren_thanh_cong_cu
+  verified_at: 2026-09-21T09:14:00+07:00
+  output: |
+     0 fail
+     3 expect() calls
+    Ran 1 test across 1 file. [579.00ms]
+
+- eval: E9
+  run_id: minted-noi-bon-nut-dieu-phoi-E9-r1
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nbn_them_moi_gioi
+  verified_at: 2026-09-21T09:16:00+07:00
+  output: |
+     0 fail
+     3 expect() calls
+    Ran 1 test across 1 file. [714.00ms]
+
+- eval: E10
+  run_id: mubdn2dzsp70
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nbn_ghi_danh
+  verified_at: 2026-09-21T09:18:00+07:00
+  output: |
+     2 expect() calls
+    Ran 1 test across 1 file. [591.00ms]
+    test-run: dropped crm_mubdn2dzsp70_test
+
+- eval: E11
+  run_id: minted-noi-bon-nut-dieu-phoi-E11-r1
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nbn_luu_hong
+  verified_at: 2026-09-21T09:20:00+07:00
+  output: |
+     0 fail
+     9 expect() calls
+    Ran 1 test across 1 file. [686.00ms]
+
+- eval: E14
+  run_id: minted-noi-bon-nut-dieu-phoi-E14-r1
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nbn_luu_mot_lan
+  verified_at: 2026-09-21T09:22:00+07:00
+  output: |
+     0 fail
+     5 expect() calls
+    Ran 1 test across 1 file. [929.00ms]
+
+- eval: E12
+  run_id: minted-noi-bon-nut-dieu-phoi-E12-r1
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.design.ui_check
+  verified_at: 2026-09-21T09:30:00+07:00
+  screenshot: evidence/E12-them-bo-phan-mo-1440.png
+  observed: |
+    Đọc từng trong 16 frame đã lưu bằng Read (ảnh, không phải trí nhớ lệnh):
+    E12-them-bo-phan-mo-1440.png: hộp thoại "Thêm bộ phận" mở, ô "Tên bộ phận" chứa "E12 BP 1440", nút Lưu/Huỷ đủ.
+    E12-them-bo-phan-sau-1440.png: hộp thoại đã đóng, cột "Bộ phận" ở Điều phối 30 ngày hiện "E12 BP 1440" (dòng mới) trong danh sách.
+    E12-soan-khuon-mo-1440.png: hộp thoại "Soạn khuôn kế hoạch" mở, đủ Tên khuôn ("E12 Khuon 1440"), Loại đối tác (để trống — tuỳ chọn), và ĐỦ HAI bước: bước 1 "Ho so"/"E12 BP 1440"/"01", bước 2 "Dao tao"/"E12 BP 1440"/"03".
+    E12-soan-khuon-sau-1440.png: đóng hộp thoại, "E12 Khuon 1440" hiện trong "Khuôn kế hoạch" với số bước = 2.
+    E12-tao-ke-hoach-mo-1440.png: hộp thoại "Tạo kế hoạch từ khuôn" mở, đủ ô: Công ty đối tác = Attio, Khuôn = E12 Khuon 1440, Ngày bắt đầu = 21 thg 9, 2026, Người cầm trịch = manh.phan.
+    E12-tao-ke-hoach-sau-1440.png: đóng hộp thoại, danh mục bảng hiện dòng mới "Attio / Ho so / ... / E12 BP 1440", và nút "Kế hoạch mới" vẫn có trên thanh công cụ dù đã có kế hoạch (khớp AC-6).
+    E12-them-moi-gioi-mo-1440.png: hộp thoại "Thêm môi giới" mở, ô "Cá nhân" đã chọn "Trâm Rangttmu3fhhhb".
+    E12-them-moi-gioi-sau-1440.png: đóng hộp thoại, "Phễu môi giới" đổi mẫu số từ 0 lên "1 người đang làm nghề trên sàn", 4 bậc đều hiện 0/1 (phễu đã cập nhật).
+    8 frame khổ 768 (them-bo-phan/soan-khuon/tao-ke-hoach/them-moi-gioi, mo+sau) lặp lại đúng nội dung tương ứng của khổ 1440 với tên hậu tố "768": mọi ô nhập đọc được trọn vẹn, hộp thoại (Sheet bên phải) nằm gọn trong 768px, không có phần bị cắt hay tràn ngang sang trái; nền tối bên trái chỉ là phần overlay, không phải nội dung bị đẩy ra ngoài khung.
+    Không thiếu hộp thoại nào trong bốn hộp thoại yêu cầu (Thêm bộ phận, Soạn khuôn, Tạo kế hoạch từ khuôn, Thêm môi giới) ở cả hai khổ — khớp Expected.
+  network_observed: n-a (driver)
+
+### Lệnh suite (hồi quy)
+
+- cmd: bun run test
+  run_id: mubdmzs7y2wc
+  exit_code: 0
+  verified_at: 2026-09-21T09:35:00+07:00
+
+- cmd: bunx turbo run lint --force
+  run_id: minted-noi-bon-nut-dieu-phoi-SUITE-bunx_turbo_run_lint_force-r1
+  exit_code: 0
+  verified_at: 2026-09-21T09:40:00+07:00
+
+- cmd: bun run lint:slop
+  run_id: minted-noi-bon-nut-dieu-phoi-SUITE-bun_run_lint_slop-r1
+  exit_code: 0
+  verified_at: 2026-09-21T09:42:00+07:00
+
+- cmd: bunx turbo run build --force
+  run_id: minted-noi-bon-nut-dieu-phoi-SUITE-bunx_turbo_run_build_force-r1
+  exit_code: 0
+  verified_at: 2026-09-21T09:45:00+07:00
+
+## Known limits
+
+## Ngoài hợp đồng
+
+## Analyst
+
+none — moi eval feature deu red tren baseline (co phan biet)
+
+## Variance
+
+none — không có eval nào chạy nhiều lần (runs > 1)
+
+## Iterations
+
+Round 1: 14 eval (E1–E14) và 4 lệnh suite (bun run test, bunx turbo run lint --force, bun run lint:slop, bunx turbo run build --force) đều PASS ngay vòng đầu tiên — không có vòng trước.
