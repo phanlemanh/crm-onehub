@@ -5,7 +5,7 @@ slug: khai-lang-gioi-thieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-21T22:25:02Z
 design_doc: docs/superpowers/specs/2026-09-21-khai-lang-gioi-thieu-design.md
@@ -48,6 +48,7 @@ phiên điều phối; mã rút từ PR #65 sang commit `946ef000`.
 
 - **Chỗ ca đỏ có phép đo máy (lối b, chủ kho chọn 2026-09-22).** Khối giới thiệu tách thành thành phần trình bày `CompanyAbout` cạnh `MetaLine`; AC-4 dựng nó dưới vùng `lang="vi"` và đòi vùng `en`.
 - **Giới hạn có tên: chín chỗ gọi còn lại, và việc tấm hồ sơ công ty dùng `CompanyAbout`, không có phép đo máy.** Các bài kiểm đo thành phần, không đo rằng từng chỗ gọi đi qua nó. Chúng được bảo đảm bằng mã và bằng quan sát prod của chủ kho sau khi gộp. Phép đo máy cho mọi chỗ gọi (răng `mot-duong`) sống ở PR #65.
+- **Known limits (Ngoài-1, chủ kho định đoạt tại Cổng Bằng chứng 2026-09-22):** bài kiểm `apps/app/test/khai-tieng-metaline.spec.tsx` tự nạp jsdom bằng một dòng import, nên nó thay các biến toàn cục cho mọi tệp kiểm nạp sau nó trong lượt `bun test` mặc định của `apps/app`. Nó giữ đuôi `.spec.tsx` để còn nằm trong lệnh cổng; `setup-dom.ts` đặt mọi thuộc tính `configurable` và `sign-out.spec.ts` dùng `defineProperty` để các tệp cùng sống được. Đổi sang khuôn `.dom.tsx` kèm `--preload` sẽ đưa bài kiểm ra khỏi lệnh cổng.
 - **Giới hạn có tên: khi trùng chữ, bản đứng trước thắng.** `MetaLine` khử trùng lặp theo chữ và giữ lần xuất hiện ĐẦU. Nếu phần không khai tiếng đứng trước phần khai tiếng cùng chữ, chữ hiện một lần mà không có `lang`. AC-3 chỉ hứa «đúng một lần». Ở mọi chỗ gọi hiện có, hai phần của một dòng khác chữ nhau, nên ca này chưa xảy ra trên màn.
 - **Mười chỗ gọi** — để người duyệt đối chiếu:
 

@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 850cd9acc2cddead2946d9d443ad361a72762406
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-22
 ---
 
 # Evidence Report: khai-lang-gioi-thieu
