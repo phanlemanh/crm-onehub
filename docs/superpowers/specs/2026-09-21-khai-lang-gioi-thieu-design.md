@@ -25,6 +25,13 @@ Mã rút nguyên từ PR #65 (nguồn: `9409080d`, `bab60026`, `1f9feb69`, `a4ea
   `configurable` để tệp kiểm sau ghi đè được `window` (hệ quả: `sign-out.spec.ts`
   dùng `defineProperty`).
 
+- **Khối giới thiệu thành thành phần trình bày** (lối b, chủ kho chọn tại Cổng 1):
+  `CompanyAbout({ title, description })` sống cạnh `MetaLine` trong
+  `record-parts.tsx`. Nó dựng tiêu đề khối, đoạn văn và `ForeignText lang="en"`,
+  và không dựng gì khi `description` rỗng. `CompanyOverview` gọi nó thay cho khối
+  dựng tại chỗ. Lý do tách: `CompanyOverview` gọi tRPC, React Query và mutation,
+  nên chỉ một thành phần thuần mới dựng được trong bài kiểm của kho.
+
 Loại phương án: nhận dạng tiếng theo nội dung chuỗi. Các ô này do máy ghi bằng
 tiếng Anh, nên khai cứng rẻ và đúng; dữ liệu người nhập nằm ngoài phạm vi.
 

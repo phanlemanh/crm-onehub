@@ -3,10 +3,10 @@ schema_version: 1
 slug: khai-lang-gioi-thieu
 feature: Đoạn tiếng Anh do máy ghi trên tấm hồ sơ tự khai lang="en", để trình đọc màn hình không đọc nó bằng giọng tiếng Việt
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-09-21T22:14:16Z
 prototype:
   base_commit:
   disposition:

@@ -32,6 +32,7 @@ phiên điều phối; mã rút từ PR #65 sang commit `946ef000`.
 - AC-1: Given một đoạn chữ được dựng qua `ForeignText` với tiếng `en` hoặc `vi`, When nó hiện lên, Then phần tử bao đoạn chữ mang đúng thuộc tính `lang` bằng tiếng đã truyền.
 - AC-2: Given một dòng thông tin trên tấm hồ sơ gồm một phần không khai tiếng (vd «Hà Nội, VN») và một phần khai tiếng Anh (vd ngành «Technology»), When dòng hiện lên, Then phần khai tiếng Anh nằm trong vùng `lang="en"`, còn phần không khai không bị khai hộ.
 - AC-3: Given một dòng thông tin có hai phần cùng chữ, một phần khai tiếng và một phần không, When dòng hiện lên, Then chữ đó hiện đúng một lần.
+- AC-4: Given tấm hồ sơ công ty có đoạn giới thiệu tiếng Anh, đặt dưới một vùng khai `lang="vi"` như trên màn thật, When khối giới thiệu hiện lên, Then vùng tiếng gần nhất của chữ đoạn giới thiệu là `en`; và khi công ty không có giới thiệu thì khối không hiện.
 
 ## Coverage
 
@@ -45,7 +46,8 @@ phiên điều phối; mã rút từ PR #65 sang commit `946ef000`.
 
 ## Notes
 
-- **Giới hạn có tên: chỗ gọi không có phép đo máy.** Hai bài kiểm đo cơ chế (`ForeignText`, `MetaLine`), không đo rằng mười chỗ gọi thật sự đi qua cơ chế đó. Riêng đoạn giới thiệu trên tấm hồ sơ công ty — đúng chỗ ca đỏ — được bảo đảm bằng mã (`company-sheet.tsx` bọc `description` trong `ForeignText lang="en"`) và bằng quan sát prod của chủ kho sau khi gộp. Phép đo máy cho chỗ gọi (răng `mot-duong`) sống ở PR #65.
+- **Chỗ ca đỏ có phép đo máy (lối b, chủ kho chọn 2026-09-22).** Khối giới thiệu tách thành thành phần trình bày `CompanyAbout` cạnh `MetaLine`; AC-4 dựng nó dưới vùng `lang="vi"` và đòi vùng `en`.
+- **Giới hạn có tên: chín chỗ gọi còn lại, và việc tấm hồ sơ công ty dùng `CompanyAbout`, không có phép đo máy.** Các bài kiểm đo thành phần, không đo rằng từng chỗ gọi đi qua nó. Chúng được bảo đảm bằng mã và bằng quan sát prod của chủ kho sau khi gộp. Phép đo máy cho mọi chỗ gọi (răng `mot-duong`) sống ở PR #65.
 - **Giới hạn có tên: khi trùng chữ, bản đứng trước thắng.** `MetaLine` khử trùng lặp theo chữ và giữ lần xuất hiện ĐẦU. Nếu phần không khai tiếng đứng trước phần khai tiếng cùng chữ, chữ hiện một lần mà không có `lang`. AC-3 chỉ hứa «đúng một lần». Ở mọi chỗ gọi hiện có, hai phần của một dòng khác chữ nhau, nên ca này chưa xảy ra trên màn.
 - **Mười chỗ gọi** — để người duyệt đối chiếu:
 
