@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { listInput } from "../trpc/list-input";
+import { ONBOARDING } from "./onboarding-config";
 
 export const departmentCreateInput = z.object({
 	name: z.string().trim().min(1).max(120),
@@ -118,11 +119,27 @@ export type StepOutput = z.infer<typeof stepOutput>;
 export type StepListInput = z.infer<typeof stepListInput>;
 export type StepListOutput = z.infer<typeof stepListOutput>;
 
-export const planStatus = z.enum(["dang-chay", "da-dong"]);
+export const planStatus = z.enum(["dang-chay", "da-dong", "tat-ca"]);
+
+export const DANH_MUC_SAP = [
+	"companyName",
+	"startedAt",
+	"imNgay",
+	"buocXong",
+] as const;
+
+const danhSachMa = z.array(z.string().trim().min(1).max(120)).max(200);
 
 export const planListInput = listInput.extend({
-	departmentId: z.string().trim().min(1).optional(),
+	pageSize: z
+		.number()
+		.int()
+		.min(1)
+		.max(100)
+		.default(ONBOARDING.danhMuc.pageSize),
 	status: planStatus.default("dang-chay"),
+	boPhan: danhSachMa.default([]),
+	nguoiCam: danhSachMa.default([]),
 });
 
 export const planRow = z.object({
@@ -136,6 +153,7 @@ export const planRow = z.object({
 	buocTong: z.number(),
 	tacO: z.string().nullable(),
 	boPhanTac: z.string().nullable(),
+	boPhanTacId: z.string().nullable(),
 	imNgay: z.number(),
 	ownerId: z.string(),
 	closedAt: z.date().nullable(),
@@ -202,6 +220,7 @@ export type EnrollmentOutput = z.infer<typeof enrollmentOutput>;
 
 export const danhMucTrangThai = z.enum([
 	"ST-danhmuc-codulieu",
+	"ST-danhmuc-khongkhop",
 	"ST-danhmuc-empty",
 	"ST-danhmuc-chuacokhuon",
 ]);
@@ -213,3 +232,36 @@ export const danhMucOutput = planListOutput.extend({
 
 export type DanhMucTrangThai = z.infer<typeof danhMucTrangThai>;
 export type DanhMucOutput = z.infer<typeof danhMucOutput>;
+
+export const bangCotCachChia = z.enum(["buoc", "bo-phan", "bac", "trang-thai"]);
+
+export const bangCotInput = planListInput.extend({
+	cachChia: bangCotCachChia,
+});
+
+export const bangCotThe = z.object({
+	id: z.string(),
+	planId: z.string(),
+	tieuDe: z.string(),
+	phu: z.string().nullable(),
+	imNgay: z.number().nullable(),
+});
+
+export const bangCotCot = z.object({
+	khoa: z.string(),
+	nhan: z.string().nullable(),
+	tong: z.number(),
+	the: z.array(bangCotThe),
+});
+
+export const bangCotOutput = z.object({
+	cachChia: bangCotCachChia,
+	tranThe: z.number(),
+	cot: z.array(bangCotCot),
+});
+
+export type BangCotCachChia = z.infer<typeof bangCotCachChia>;
+export type BangCotInput = z.infer<typeof bangCotInput>;
+export type BangCotThe = z.infer<typeof bangCotThe>;
+export type BangCotCot = z.infer<typeof bangCotCot>;
+export type BangCotOutput = z.infer<typeof bangCotOutput>;
