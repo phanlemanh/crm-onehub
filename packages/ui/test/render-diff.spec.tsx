@@ -6,6 +6,7 @@ import { createRoot } from "react-dom/client";
 import { renderToStaticMarkup } from "react-dom/server";
 import { AsyncButtonContent } from "../src/components/async-action";
 import { AttendeeList } from "../src/components/attendee-list";
+import { Board } from "../src/components/board";
 import {
 	Carousel,
 	CarouselContent,
@@ -162,6 +163,23 @@ const CA: Ca[] = [
 				pageSize={20}
 				total={15}
 				onPageChange={() => {}}
+			/>
+		),
+	},
+	{
+		ten: "Board",
+		ve: () => (
+			<Board
+				label={DU_LIEU.nhomLoc}
+				columns={[
+					{
+						id: "dai",
+						label: DU_LIEU.cot,
+						count: 3,
+						cards: [{ id: "a", href: "/a", title: DU_LIEU.tenCongTy }],
+					},
+					{ id: "trong", label: DU_LIEU.cotHai, count: 0, cards: [] },
+				]}
 			/>
 		),
 	},
