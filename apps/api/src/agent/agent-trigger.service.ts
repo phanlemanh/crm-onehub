@@ -97,6 +97,26 @@ export class AgentTriggerService {
 		return brand || profile;
 	}
 
+	async onboardingMatchNeeded(
+		planId: string,
+		platformBrokerId: string,
+	): Promise<boolean> {
+		return this.enqueue(
+			{
+				kind: "onboarding-identify",
+				reason: `Lô từ nền tảng mang mã ${platformBrokerId} không khớp cá nhân nào trong kế hoạch ${planId}.`,
+				priority: PRIORITY.identify,
+				budget: 2,
+				payload: { planId, platformBrokerId },
+				subject: [
+					{ path: ["planId"], value: planId },
+					{ path: ["platformBrokerId"], value: platformBrokerId },
+				],
+			},
+			true,
+		);
+	}
+
 	async workspaceChanged(website: string, reason: string): Promise<void> {
 		await this.enqueue({
 			kind: "workspace-profile",
@@ -179,7 +199,7 @@ export class AgentTriggerService {
 				reason: `Add Comp AI to #${channelName}`,
 				priority: PRIORITY.slackJoin,
 				budget: 1,
-				subject: { path: ["channelId"], value: channelId },
+				subject: [{ path: ["channelId"], value: channelId }],
 				payload: {
 					type: "slack.channel.join",
 					channelId,
@@ -452,7 +472,7 @@ export class AgentTriggerService {
 			priority: number;
 			budget: number;
 			payload?: Prisma.InputJsonValue;
-			subject?: { path: string[]; value: string };
+			subject?: readonly { path: string[]; value: string }[];
 		},
 		required = false,
 		client?: Prisma.TransactionClient,
@@ -461,7 +481,7 @@ export class AgentTriggerService {
 			const write = async (tx: Prisma.TransactionClient) => {
 				await lockIdempotencyKey(
 					tx,
-					`agent-task:${task.kind}:${task.contactId ?? ""}:${task.companyId ?? ""}:${task.subject?.value ?? ""}`,
+					`agent-task:${task.kind}:${task.contactId ?? ""}:${task.companyId ?? ""}:${task.subject?.map((phan) => phan.value).join(":") ?? ""}`,
 				);
 				const pending = await tx.agentTask.findFirst({
 					where: {
@@ -469,9 +489,9 @@ export class AgentTriggerService {
 						finishedAt: null,
 						contactId: task.contactId ?? undefined,
 						companyId: task.companyId ?? undefined,
-						payload: task.subject
-							? { path: task.subject.path, equals: task.subject.value }
-							: undefined,
+						AND: task.subject?.map((phan) => ({
+							payload: { path: phan.path, equals: phan.value },
+						})),
 					},
 					select: { id: true },
 				});

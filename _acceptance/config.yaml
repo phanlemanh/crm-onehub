@@ -19,6 +19,19 @@ design_pass:
     dev_flag: "PROTO_ROUTE"
 executors:
   test:
+    dp30_chep_khong_tham_chieu: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t chep-khong-tham-chieu"'
+    dp30_buoc_chua_giao_van_co_bo_phan: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t buoc-chua-giao"'
+    dp30_danh_muc_loc_va_ngay_im: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t danh-muc-loc"'
+    dp30_bac_la_moc_ngay: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t bac-la-moc-ngay"'
+    dp30_doi_ten_bo_phan_khong_mat: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t doi-ten-bo-phan"'
+    dp30_lo_sai_tu_choi_tron: 'bun run test -- "cd apps/api && bun test test/dieu-phoi-diem-nhan.spec.ts -t lo-sai-tu-choi-tron"'
+    dp30_khong_khop_viet_agenttask: 'bun run test -- "cd apps/api && bun test test/dieu-phoi-diem-nhan.spec.ts -t khong-khop-agenttask"'
+    dp30_thieu_khoa_tra_503: 'bun run test -- "cd apps/api && bun test test/dieu-phoi-diem-nhan.spec.ts -t thieu-khoa-503"'
+    dp30_trang_thai_chua_co_khuon: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t chua-co-khuon"'
+    dp30_dong_ke_hoach_con_buoc_do: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t dong-ke-hoach"'
+    dp30_ke_hoach_co_nguoi_cam_trich: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t nguoi-cam-trich"'
+    dp30_bo_loc_nam_trong_duong_dan: 'cd apps/app && bun test test/dieu-phoi-trang-thai.spec.ts -t bo-loc-duong-dan'
+    dp30_xoa_co_xac_nhan: 'cd apps/app && bun test test/dieu-phoi-trang-thai.spec.ts -t xoa-co-xac-nhan && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-xoa-ghi-danh.dom.tsx'
     cp_ham_thuan: "cd packages/auth && bun test test/ai-duoc-vao.spec.ts"
     cp_vai_dinh_truoc: 'bun run test -- "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t vai-dinh-truoc"'
     cp_rut_chan_chua_vao: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t rut-chan-chua-vao"'
@@ -128,6 +141,7 @@ executors:
     mk_dang_nhap_cung_man: cd apps/app && bun test ./test/mk-dang-nhap-cung-man.spec.ts
     mk_dat_mat_khau_loi: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/mk-dat-mat-khau-loi.dom.tsx
   script:
+    dp30_hang_so_o_config: 'node _acceptance/dieu-phoi-30-ngay-dau/rang/hang-so-o-config.mjs'
     trg_tieu_de_trang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs tieu-de-trang"'
     trg_ba_nhom: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs ba-nhom"'
     trg_bang_muoi_lam: 'bun _acceptance/truong-tu-tao-o-cai-dat/rang/bo-goi-y.mjs bang-muoi-lam'

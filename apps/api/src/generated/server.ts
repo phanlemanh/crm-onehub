@@ -27,6 +27,7 @@ import { enrichmentQueueInput } from "@crm/validation/enrichment-queue";
 import { fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
+import { departmentListOutput, departmentCreateInput, departmentOutput, departmentUpdateInput, departmentIdInput, departmentReorderInput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, planListInput, planListOutput, planCreateFromTemplateInput, planOutput, planIdInput, stepListInput, stepListOutput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput } from "../onboarding/onboarding.contracts";
 import { savedViewListInput, savedViewListOutput, savedViewCreateInput, savedViewOutput, savedViewUpdateArgs, savedViewIdInput, savedViewDeleteOutput } from "../saved-views/saved-views.contracts";
 import { agentModelOutput, modelCatalogOutput, setAgentModelInput, researchKeyOutput, setResearchKeyInput, archiveRetentionOutput, setArchiveRetentionDaysInput } from "../settings/settings.contracts";
 import { slackStatusOutput, slackMatchesOutput, slackChannelsInput, slackChannelsOutput, slackJoinChannelInput, slackJoinChannelOutput, slackRefreshPeopleOutput, slackCreateChannelInput, slackCreateChannelOutput, slackDisconnectOutput } from "../slack/slack.contracts";
@@ -609,6 +610,78 @@ const appRouter = t.router({
       .input(setOutlookAutoCreateInput)
       .output(microsoftConnectionStatusOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
+  onboarding: t.router({
+    listDepartments: publicProcedure
+      .output(departmentListOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    createDepartment: publicProcedure
+      .input(departmentCreateInput)
+      .output(departmentOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    updateDepartment: publicProcedure
+      .input(departmentUpdateInput)
+      .output(departmentOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    archiveDepartment: publicProcedure
+      .input(departmentIdInput)
+      .output(departmentOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    reorderDepartments: publicProcedure
+      .input(departmentReorderInput)
+      .output(departmentListOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    listTemplates: publicProcedure
+      .output(templateListOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    createTemplate: publicProcedure
+      .input(templateCreateInput)
+      .output(templateOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    updateTemplate: publicProcedure
+      .input(templateUpdateInput)
+      .output(templateOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    archiveTemplate: publicProcedure
+      .input(templateIdInput)
+      .output(templateOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    listPlans: publicProcedure
+      .input(planListInput)
+      .output(planListOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    createFromTemplate: publicProcedure
+      .input(planCreateFromTemplateInput)
+      .output(planOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    closePlan: publicProcedure
+      .input(planIdInput)
+      .output(planOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    listSteps: publicProcedure
+      .input(stepListInput)
+      .output(stepListOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    listEnrollments: publicProcedure
+      .input(planIdInput)
+      .output(enrollmentListOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    upsertEnrollment: publicProcedure
+      .input(enrollmentUpsertInput)
+      .output(enrollmentOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    removeEnrollment: publicProcedure
+      .input(enrollmentRemoveInput)
+      .output(enrollmentRemoveOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    markEnrollmentStage: publicProcedure
+      .input(enrollmentStageInput)
+      .output(enrollmentOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    manDanhMuc: publicProcedure
+      .input(planListInput)
+      .output(danhMucOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   savedViews: t.router({
     list: publicProcedure

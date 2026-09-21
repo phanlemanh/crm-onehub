@@ -156,6 +156,36 @@ self-hoster's admin cannot redeploy.
   Only `check-types` and `dev` run it. If the app cannot see a new procedure, it has
   not run.
 
+### Internal ingest endpoints are the one documented exception
+
+Two REST controllers accept data, and both are deliberate:
+
+| Endpoint | Sends | Secret |
+|---|---|---|
+| `POST /internal/listings/ingest` | the nhatot scraper | `LISTING_INGEST_SECRET` |
+| `POST /internal/onboarding/ingest` | the OneHub platform | `ONEHUB_PLATFORM_INGEST_SECRET` |
+
+They are REST rather than tRPC because the sender is a **machine outside this
+repo** that has no tRPC client and no session — the heading above is about the
+app's own data surface, not about machine-to-machine intake. Four rules keep
+them from becoming a second, undisciplined API:
+
+- `@AllowAnonymous()` plus a `Bearer <secret>` header. `AuthMiddleware` proves a
+  session exists and there is no session here.
+- **The secret is optional and its absence never throws.** Unset → `503` and
+  every other route keeps working. A self-hoster who has not wired the platform
+  loses one capability, not the module.
+- **Parse at the boundary, reject the whole batch.** The body goes through a Zod
+  schema in `packages/validation`; one bad item fails the batch. Half a batch
+  landing is a state nobody can reason about afterwards.
+- **No identity guessing.** The onboarding endpoint matches a `Cá nhân` only by
+  an exact platform id held in a designated custom field. No match writes an
+  `AgentTask` row and lets the agent decide — the same rule as
+  "Intelligence never lives in the API" above.
+
+Adding a third one is a decision, not a pattern to copy freely: it needs its own
+secret, its own schema, and a row in the table above.
+
 ## The OpenAPI document is built at runtime, not committed
 
 `GET /openapi.json` serves one document: Nest's own controllers plus a REST bridge

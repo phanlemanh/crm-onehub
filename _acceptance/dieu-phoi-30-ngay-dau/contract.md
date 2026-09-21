@@ -1,0 +1,143 @@
+---
+schema_version: 1
+feature: Cả đội điều phối 30 ngày đầu của đối tác mới ngay trong CRM, thôi dùng Google Sheet và giấy tờ tay
+slug: dieu-phoi-30-ngay-dau
+owner: phanlemanh@gmail.com
+risk_tier: T3
+surfaces: [api, ui, config, docs]
+status: signed-off
+approved_by: Manh Phan
+approved_at: 2026-09-20T11:03:08Z
+design_doc: docs/superpowers/specs/2026-09-20-dieu-phoi-30-ngay-dau-design.md
+---
+
+# Acceptance Contract: dieu-phoi-30-ngay-dau
+
+## Context
+
+Ký xong với một đối tác là hết phần dễ: ba mươi ngày đầu huy động nhiều bộ phận
+của OneHub — đào tạo, chính sách nền tảng, chuyển dữ liệu — và việc điều phối
+quãng đó hôm nay sống trong một Google Sheet **một dòng một việc**. Vòng này đưa
+nó vào CRM: khuôn kế hoạch theo loại đối tác, kế hoạch treo vào Công ty, bước
+mang bộ phận và người được giao, cộng một phễu bốn bậc cho từng môi giới đã sẵn
+đường nhận số từ nền tảng OneHub.
+
+Người dùng là **nhân viên OneHub** — nội bộ, nhưng là người dùng cuối thật.
+Thành công là cả đội nghiệm thu và dùng được thay Sheet; hiệu quả kinh doanh
+owner đo riêng, ngoài vòng này.
+
+Source input: `_acceptance/dieu-phoi-30-ngay-dau/opportunity.md` (ký Cổng Đáng 2026-09-19)
+
+## Criteria
+
+- AC-1: Given một khuôn khai ba bước và một kế hoạch đã tạo từ khuôn đó, When người sửa nhãn một bước TRONG KHUÔN, Then bước của kế hoạch đã tạo giữ nguyên nhãn cũ — bước được chép, không tham chiếu.
+- AC-2: Given một khuôn khai bước có bộ phận nhưng không khai người, When tạo kế hoạch từ khuôn, Then bước sinh ra mang bộ phận và KHÔNG có người được giao, và vẫn đọc được khi lọc theo bộ phận đó.
+- AC-3: Given hai kế hoạch thuộc hai bộ phận khác nhau, When mở màn danh mục với bộ lọc bộ phận nằm trong query param, Then chỉ kế hoạch khớp hiện ra, và mỗi hàng mang số ngày kể từ lần đổi gần nhất. (cross-layer)
+- AC-4: Given một ghi danh chưa có mốc bậc nào, When đánh dấu bậc «có tài khoản», Then bản ghi lưu một MỐC THỜI GIAN chứ không phải cờ đúng/sai, và đọc lại từ cơ sở dữ liệu thấy đúng mốc đó.
+- AC-5: Given điểm nhận đã khai khoá, When gửi một lô mà MỘT mục sai khuôn, Then trả 400, KHÔNG mục nào trong lô được ghi, và thông điệp nêu tên trường hỏng.
+- AC-6: Given một mục mang mã nền tảng không khớp cá nhân nào, When gửi lô, Then không ghi danh nào được tạo cho mục đó, một hàng `AgentTask` được ghi, và phản hồi đếm nó vào số chuyển cho tác nhân. (cross-layer)
+- AC-7: Given `ONEHUB_PLATFORM_INGEST_SECRET` chưa khai, When gọi điểm nhận, Then trả 503 và tiến trình không ném.
+- AC-8: Given một bộ phận đang được vài bước dùng, When đổi tên bộ phận, Then mọi bước đó vẫn trỏ đúng bộ phận và hiện tên mới — không bước nào mất bộ phận.
+- AC-9: Given chưa có khuôn nào trong hệ thống, When mở màn danh mục, Then màn nói rõ chưa có khuôn nào và cho đường dẫn sang Cài đặt › Khuôn, thay vì chỉ nói «chưa có kế hoạch». (cross-layer)
+- AC-10: Given mã nguồn của module điều phối, When quét, Then số 30 và ngưỡng nguội KHÔNG xuất hiện ghim trực tiếp ở bất kỳ file nào ngoài `onboarding-config.ts`.
+- AC-11: Given một kế hoạch có bước quá hạn chưa xong, When chụp màn danh mục, Then nhìn thấy được hàng của kế hoạch đó cùng bậc đang tắc và số ngày im.
+- AC-12: Given một ghi danh đang có, When người bấm xoá, Then phải qua một bước xác nhận trước khi hàng bị xoá thật.
+- AC-13: Given một kế hoạch còn hai bước chưa xong, When đóng kế hoạch, Then thao tác thành công, ngày đóng được ghi, hai bước dở giữ nguyên trạng thái chưa xong, và kế hoạch đó KHÔNG còn trong danh mục mặc định.
+- AC-14: Given người tạo kế hoạch từ khuôn, When lưu, Then kế hoạch mang người cầm trịch khác rỗng trỏ đúng người đã chọn; gọi thủ tục tạo mà không truyền người cầm trịch thì bị từ chối, không sinh hàng nửa vời.
+
+## Coverage
+
+Quét bằng skill `morphological-scan` ngày 2026-09-20; bản đầy đủ ở
+`_acceptance/dieu-phoi-30-ngay-dau/morphological-scan.md` — 4 trục, 47 ô, cắt còn
+8 ô Core (17%).
+
+- Trục A — việc phần mềm làm: định nghĩa & khuôn | điều phối & giao việc | nhìn & báo | phát hiện & cảnh báo | đào tạo & năng lực | trao đổi với đối tác | chi phí & nguồn lực [thước CE: đối chiếu năng lực đã xác minh của 5 sản phẩm chân ngành — GUIDEcx · Rocketlane · Dock · Gainsight CS · Salesforce PRM/PartnerStack, đọc trang sản phẩm 2026-09-19]
+- Trục B — ai đứng trong đó: nhân viên quan hệ đối tác | bộ phận chuyên môn | quản lý | người của công ty đối tác | môi giới cá nhân [thước CE: từ điển sản phẩm `CONTEXT.md` + lời owner về các bộ phận cùng vào 30 ngày]
+- Trục C — sự thật đi vào bằng đường nào: người gõ tay | biểu mẫu đối tác điền | nối máy tới hệ khác | bộ cào ngoài | suy từ chính CRM [thước CE: bốn bậc của cái thang trong `opportunity.md` + `docs/guides/goi-moi-gioi-trong-crm.md`]
+- Trục D — nhịp thời gian: một lần lúc bắt đầu | liên tục trong 30 ngày | tại mốc | sau 30 ngày [thước CE: preset entity-feature, trục Thời gian]
+- Giới hạn đã khai của bản quét: chưa teardown thật sản phẩm chân ngành (chỉ đọc trang sản phẩm chính chủ); và một lỗ của chính bản quét — trục Actor có trong khung nhưng lần quét đầu chưa dùng nó để soi QUYỀN, nên lỗ phân quyền sửa trường lọt lưới và nay là ô riêng `chi-quan-tri-sua-duoc-truong`.
+
+## Đường đo
+
+- Thước: đối tác ký mới được điều phối trọn vẹn trong CRM · số từ: đếm kế hoạch có bước và có người cầm trịch, truy vấn trên `OnboardingPlan` · bảo đảm bởi: AC-1, AC-2, AC-14
+- Thước: Sheet điều phối cũ không còn lần cập nhật nào trong hai tuần cuối kỳ · số từ: lịch sử sửa của chính Google Sheet, NGOÀI sản phẩm · bảo đảm bởi: đã có sẵn: lịch sử sửa của Google Sheet — không cần code, nhưng cần xin quyền xem trước phiên nghiệm thu
+- Thước: mỗi bộ phận chấm kín «dùng được thay Sheet» không dưới 4/5 · số từ: phiếu chấm kín tại phiên nghiệm thu, trước thảo luận · bảo đảm bởi: đã có sẵn: nghi thức phiên nghiệm thu — không cần code
+- Thước: thời gian trả lời câu «đối tác X đang tắc ở bậc nào» · số từ: bấm đồng hồ tại phiên nghiệm thu trên màn danh mục · bảo đảm bởi: AC-3, AC-11, AC-13
+
+## Out of scope
+
+- Cổng cho chính đối tác nhìn vào tiến độ — ứng viên số một vòng hai; mở CRM nội bộ cho người ngoài là đổi mô hình quyền, không phải thêm một màn.
+- Loại bản ghi cho trường tự tạo (`FieldDefinition.recordTypeId`) — chỗ co giãn theo loại đối tác đặt ở **khuôn kế hoạch**, không ở danh sách trường; thêm loại bản ghi lúc mới có một loại đối tác mua được số không mà phải migrate ràng buộc `@@unique([entity, key])`.
+- Vá lỗ quyền sửa trường tự tạo — ô riêng `chi-quan-tri-sua-duoc-truong`; chạm `packages/auth`, trộn vào đây làm cả hai chậm.
+- Chốt nghĩa `DealStage` — bước của kế hoạch KHÔNG phải giai đoạn thoả thuận; vòng này cố ý không đọc enum đó.
+- `Activity.assigneeId` — thiếu sót chung của CRM nhưng thiết kế này không cần: nếp `CampaignTouch` cho thấy bảng nghiệp vụ tự mang trường của nó rồi nối sang `Activity` khi cần.
+- Nối thật với nền tảng OneHub — vòng này viết schema và điểm nhận, chưa có bên gửi; nối thật phụ thuộc một đội ngoài vòng lặp.
+- Điểm sức khoẻ tổng hợp, dự báo ngày hoàn thành, bậc phục vụ theo cỡ đối tác — chờ có nhiều hơn một tín hiệu máy.
+- Đo hiệu quả kinh doanh (tỉ lệ môi giới hoạt động được) — owner chốt 2026-09-19 đo riêng, cố ý.
+
+## Notes
+
+- **Một chỗ vênh giữa tài liệu và mã, vòng này sửa:** `docs/api.md` để tiêu đề mục «tRPC is the data surface; REST is auth and health only», nhưng `ListingsController` đang là REST nhận dữ liệu và không được ghi là ngoại lệ. Vòng này đi theo tiền lệ đã có VÀ cập nhật `docs/api.md` để khai hạng mục «điểm nhận nội bộ» cho cả hai controller.
+- **Luật kho đẩy thiết kế sang phía đúng hơn:** ý ban đầu là một «điểm sức khoẻ»; `docs/api.md` cấm API `score`, nên thay bằng số ngày kể từ lần đổi gần nhất — truy được về sự thật thay vì một điểm không ai giải thích nổi.
+- **Khớp danh tính:** `docs/api.md` cấm API khớp danh tính. Điểm nhận khớp CHỈ bằng mã nền tảng đúng từng ký tự, giữ trong một trường tự tạo trên Cá nhân — cùng cơ chế `listing-ingest` đang dùng. Không khớp thì viết `AgentTask`, không đoán.
+- **Phụ thuộc phải gỡ sớm:** quyền xem lịch sử sửa của Google Sheet. Thiếu nó thì thước thứ hai của Đường đo không đo được, và biết muộn thì đã quá muộn để đổi phép đo.
+- Skill chuẩn giao diện repo khai (`feature_loop.ui_standards_skill: web-design-guidelines`) là một skill **rà soát mã UI đã có**, không phải chuẩn để thiết kế trước. Vòng này lấy thẳng nguồn nó trỏ tới (Web Interface Guidelines) làm chuẩn thiết kế, và để skill đó cho bước rà soát ở S3/S4.
+- **Một căng thẳng phải nói ra tại cổng, không giấu:** E11 là eval `ui-check` khai `layer: ui-observed` — nghĩa vụ hợp đồng cho mặt người nhìn. Nhưng làn máy gom eval theo `test`/`script`, nên `ui-check` **bị làn bỏ qua**: vòng `vao-bang-email-va-mat-khau` tuần trước đã phải đổi ba eval màn hình sang `executor: test` vì đúng lý do này (`d-20260919T130308Z-20`). Vòng này GIỮ `ui-check` và nêu căng thẳng lên thẻ để người ký quyết, thay vì tự đổi nhà rồi im.
+
+Known limits — **đề nghị, chờ người ký đọc và chấp nhận tại Cổng Bằng chứng**
+(máy khai theo lối (1) của trần nhát sửa thước, 2026-09-21; chưa ai ký):
+
+- **E11 (AC-11) không có phép đo máy nào thực sự đọc ảnh.** Nó khai
+  `executor: ui-check`, mà làn máy gom eval theo `test`/`script` nên bỏ qua
+  `ui-check` — căng thẳng này đã nêu tại Cổng Phạm vi và giữ nguyên. Hệ quả:
+  AC-11 là tiêu chí duy nhất «thấy được trên màn» mà không chốt máy nào chặn
+  được hồi quy; nó chỉ được bảo đảm bằng mắt người tại phiên nghiệm thu.
+- **E15 (AC-3, vế «bộ lọc nằm trong query param») đo bảng đăng ký khoá, không
+  chạm đường dẫn.** Bài kiểm khẳng định `SEARCH_PARAM`/`onboardingParsers` có
+  đúng khoá và giá trị mặc định; nó không dựng màn danh mục, không đặt lọc,
+  không đọc lại đường dẫn. Bộ lọc thôi ghi vào đường dẫn thì phép đo này vẫn
+  xanh. Cùng hình dạng với lỗ E12 vừa vá ở vòng này — E12 đã đổi nhà, E15 thì
+  chưa.
+- **E7 (AC-7) dựng một `ConfigService` giả, không đi qua `env.validation`.**
+  Vế «ứng dụng khởi động được khi thiếu khoá» được đo trên một vật thay thế;
+  đường đọc cấu hình thật đổi theo hướng ném khi thiếu thì phép đo vẫn xanh.
+- **E1 (AC-1) thiếu đối chứng dương cho đường đọc lại.** Nó khẳng định nhãn
+  bước trong kế hoạch KHÔNG đổi khi sửa khuôn, nhưng không có chiều ngược đo
+  rằng đường đọc đó CÓ đổi khi đáng phải đổi. Hàm đọc hỏng câm thì dòng âm
+  tính vẫn đúng.
+- **Răng `hang-so-o-config.mjs` chỉ quét `.ts` dưới `apps/api`.** AC-10 tuyên
+  quét lớp «không file nào ngoài `onboarding-config.ts`», nhưng phạm vi quét
+  bỏ toàn bộ mã giao diện; một số 30 ghim cứng ở `apps/app` lọt qua.
+- **Vế 2 của AC-10 khẳng định chuỗi có mặt, không khẳng định quan hệ.** Nó
+  kiểm hằng số được KHAI trong cấu hình, chứ không kiểm nó được DÙNG; ngưỡng
+  nguội bảy ngày hiện đúng là hằng số khai mà không ai đọc.
+
+Sáu mục trên là giới hạn của **bộ đo**, không phải của sản phẩm. Chúng đi Cổng
+Bằng chứng cùng các mục ngoài hợp đồng; người ký quyết nhận hay trả về.
+
+Người ký chấp nhận sáu mục trên tại Cổng Bằng chứng («Treo: phê hết»), Manh Phan 2026-09-21.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-21 (Manh Phan), từ các mục ngoài hợp đồng của S4 round 1:
+
+- Ngoài-2: bí mật của điểm nhận được so bằng phép so thường, không so thời gian hằng như điểm nhận listings — về lý thuyết dò được qua thời gian phản hồi.
+- Ngoài-3: biến bí mật của điểm nhận không có ràng buộc độ dài tối thiểu — một khoá quá ngắn vẫn được chấp nhận khi khởi động.
+- Ngoài-4: điểm nhận không kiểm mã kế hoạch có tồn tại — mã sai cho lỗi hệ thống chung chung, hoặc sinh việc treo cho kế hoạch không có thật.
+- Ngoài-5: xoá ghi danh làm mới dữ liệu tại chỗ gọi thay vì qua lối làm mới chung — màn danh mục có thể hiện số cũ trong chốc lát.
+- Ngoài-6: danh sách kế hoạch nhận tham số tìm kiếm và sắp xếp nhưng bỏ qua chúng, và đếm theo bộ phận bằng một truy vấn cho mỗi bộ phận.
+- Ngoài-7: khuôn dữ liệu của bước trong khuôn kế hoạch được chép tay ở phía API thay vì dùng chung — hai nơi có thể lệch nhau theo thời gian.
+- Ngoài-8: vài cấu hình tinh chỉnh không có tác dụng hoặc khai trùng — đổi chúng không đổi gì.
+- Ngoài-9: màn chi tiết kế hoạch tự tính tiến độ phía trình duyệt thay vì nhận dữ liệu đã tính — tên bậc có thể hiện bằng chữ kỹ thuật.
+- Ngoài-10: các nút lọc trên màn danh mục không dùng được bằng bàn phím.
+- Ngoài-11: mở một đường dẫn danh mục đã có sẵn bộ lọc có thể hiện tạm trạng thái đang tải trước khi lọc đúng.
+- Ngoài-12: một dòng nhật ký nội bộ dùng sai tên trường nội dung — khó tra khi có sự cố, người dùng không thấy gì.
+- Ngoài-14: nút xoá ghi danh có thể gửi yêu cầu xoá hai lần, và xoá thất bại thì không báo lỗi.
+- Ngoài-15: màn kế hoạch và cài đặt khuôn hiện lỗi tải dữ liệu y như chưa có dữ liệu.
+- Ngoài-16: điểm nhận chấp nhận âm thầm một lô cho mã kế hoạch không tồn tại khi không mục nào khớp.
+- Ngoài-17: một lô gửi thiếu mốc đã ghi trước đó có thể xoá mất mốc thời gian cũ của đối tác.
+- Ngoài-18: phép đo bộ lọc trên đường dẫn chỉ kiểm cấu hình khai báo, chưa thử thao tác lọc thật trên màn.
+- Ngoài-19: phép đo «thiếu khoá vẫn khởi động được» dùng cấu hình giả, chưa đi qua đường khởi động thật.
+- Ngoài-20: phép đo «sửa khuôn không đổi kế hoạch cũ» chưa kiểm việc sửa khuôn có thật sự được lưu.
+- Ngoài-21: rà số ngày ghim cứng chỉ quét phần máy chủ, bỏ phần giao diện.
+- Ngoài-22: rà ngưỡng chỉ kiểm ngưỡng được khai, chưa kiểm ngưỡng có được dùng.
+- Ngoài-23: phép đo lô sai chỉ kiểm số bản ghi không đổi, thiếu chiều dương trong cùng bài.
+- Ngoài-24: phép đo «dẫn sang Cài đặt khi chưa có khuôn» chưa kiểm đường dẫn thật trên nút.

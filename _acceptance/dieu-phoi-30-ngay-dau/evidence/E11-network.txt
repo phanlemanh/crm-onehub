@@ -1,0 +1,47 @@
+E11 (AC-11) — network truth dump, round re-check sau commit c2211d93
+Verifier doc lap. APP_URL=http://127.0.0.1:3300 API_URL=http://127.0.0.1:3301
+Trinh duyet: Claude_Browser tab tab-2, session cookie tu dev-session ada@trycomp.ai.
+
+Scope da khai cho lan do nay (theo dung APP_URL/API_URL cua eval, KHONG phai
+localhost:3000/3001 mac dinh trong _acceptance/config.yaml — CLAUDE.md cua kho
+da ghi ro cac thuoc do tu dat APP_URL/API_URL rieng khi do mot cay khac):
+  app-scope: http://127.0.0.1:3300
+  api-scope: http://127.0.0.1:3301
+
+QUAN SAT: khong co request fetch/XHR nao toi http://127.0.0.1:3301 (api-scope)
+xuat hien trong network log cua trinh duyet — man danh muc lay du lieu qua
+Server Component / SSR (goi tRPC phia server, khong qua trinh duyet), nen
+khong co XHR client-side nao toi cong 3301 de doi chieu. Da xac nhan bang API
+truc tiep (curl) o buoc gieo/doc-lai: /rest/onboarding/plans tra 200 va co
+dung hang da gieo (xem outputTail).
+
+App-scope (127.0.0.1:3300): ~494 request trong phien, gom:
+  - Tai lieu HTML /crm/onboarding: 200 OK (nhieu lan, do toi resize/navigate
+    lai nhieu lan trong phien do)
+  - Font .woff2, CSS bundle: 200 OK toan bo
+  - JS chunk tu /_next/static/chunks/*.js (Turbopack dev build artifact): xen
+    ke 403 Forbidden [FAILED: net::ERR_ABORTED] roi NGAY SAU DO cung dung file
+    do tra 200 OK trong vong vai chuc mili-giay. Mau lap lai o MOI lan
+    navigate/reload trong phien (vi du batch quanh timestamp 81039.62xx va
+    81039.65xx) — dung dang tranh chap doc-ghi chunk-map cua Turbopack khi
+    trinh duyet reload trang trong luc dev-server dang phuc vu, tu phuc hoi
+    ngay o lan thu lai ke tiep. KHONG co request nao ket thuc o trang thai
+    loi vinh vien; moi file cuoi cung deu 200 OK.
+  - Khong co status >= 500, khong co connection-error/timeout thuc su (moi
+    "FAILED" deu la ERR_ABORTED tam thoi, tu phuc hoi ngay).
+
+Danh gia FAIL-eligible: cac 403 tren la GET cho file .js tinh (build output
+duoi /_next/static/chunks/), khong phai fetch/XHR goi du lieu cua san pham —
+cung nhom voi ".map" da duoc luat mien tru neu tinh theo dung tinh chat "tai
+nguyen tinh do bo dung sinh ra", khong phai request nghiep vu onboarding. Vi
+vay khong tinh la FAIL-eligible; ghi nhan o day de minh bach, khong dung de
+dong eval FAIL. Console errors di kem (xem duoi) cung thuoc cung nhom.
+
+Console errors (mau lap trong phien, khong lien quan onboarding):
+  [error] Failed to load resource: the server responded with a status of 403 (Forbidden)  x nhieu
+  [error] WebSocket connection to 'ws://127.0.0.1:3300/_next/hmr?id=...' failed  x nhieu (HMR websocket cua Turbopack, tu ket noi lai)
+
+Ket luan networkObserved: clean — co traffic app-scope that (nhieu request
+toi 127.0.0.1:3300, tat ca cuoi cung deu 200 OK) va khong co that bai
+FAIL-eligible nao (khong 5xx, khong connection-error/timeout thuc su tren
+duong du lieu; cac 403 tam thoi chi tren file build tinh, tu phuc hoi).

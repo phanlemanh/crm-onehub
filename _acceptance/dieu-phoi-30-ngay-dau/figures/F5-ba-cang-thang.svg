@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1000 764" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <style>@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap');</style>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <rect x="32" y="32" width="248" height="20" rx="4" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+
+      <text x="44" y="46" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHƯA CHỐT · NGƯỜI Ở CỔNG QUYẾT</text>
+
+      <text x="968" y="46" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em" text-anchor="end">ĐIỂM QUYẾT ĐỊNH 7 · 8 · 9</text>
+
+      <path d="M 48 172 L 48 304 A 8 8 0 0 0 56 312 L 64 312" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <path d="M 48 312 L 48 552 A 8 8 0 0 0 56 560 L 64 560" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <text x="32" y="76" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CĂNG THẲNG A</text>
+
+      <rect x="32" y="88" width="288" height="84" rx="6" fill="#fafafa"/>
+      <rect x="32" y="88" width="288" height="84" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <rect x="44" y="100" width="60" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="74" y="111" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CÂU HỎI</text>
+      <text data-mx="308" x="44" y="140" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Phép đo cho mặt người nhìn</text>
+      <text data-mx="308" x="44" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">khai bằng loại nào?</text>
+
+      <rect x="64" y="204" width="256" height="216" rx="6" fill="#fafafa"/>
+      <rect x="64" y="204" width="256" height="216" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+      <rect x="76" y="216" width="80" height="16" rx="2" fill="#171717"/>
+      <text x="116" y="227" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÁY KHUYÊN</text>
+      <text data-mx="308" x="76" y="256" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Giữ loại nhìn-màn (<tspan font-family="'Geist Mono', monospace" font-size="11">ui-check</tspan>)</text>
+      <text data-mx="308" x="76" y="271" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">E11 · layer: ui-observed</text>
+      <line x1="76" y1="280" x2="308" y2="280" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="76" y="296" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">MÁY KHUYÊN VÌ</text>
+      <text data-mx="308" x="76" y="311" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Nghĩa vụ trong hợp đồng là mặt</text>
+      <text data-mx="308" x="76" y="325" fill="#575757" font-size="10" font-family="'Geist', sans-serif">người nhìn. Đổi loại cho làn chạy</text>
+      <text data-mx="308" x="76" y="339" fill="#575757" font-size="10" font-family="'Geist', sans-serif">được là đổi lời hứa cho vừa máy đo.</text>
+      <line x1="76" y1="346" x2="308" y2="346" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="76" y="362" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐỔI LẠI</text>
+      <text data-mx="308" x="76" y="377" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Làn máy chỉ gom loại <tspan font-family="'Geist Mono', monospace" font-size="9">test</tspan> và</text>
+      <text data-mx="308" x="76" y="391" fill="#575757" font-size="10" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" font-size="9">script</tspan>, nên phép đo này không có</text>
+      <text data-mx="308" x="76" y="405" fill="#575757" font-size="10" font-family="'Geist', sans-serif">chốt máy nào — chỉ có mắt người.</text>
+
+      <rect x="64" y="452" width="256" height="216" rx="6" fill="#fafafa"/>
+      <rect x="64" y="452" width="256" height="216" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="0.8"/>
+      <rect x="76" y="464" width="68" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="110" y="475" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NGẢ KHÁC</text>
+      <text data-mx="308" x="76" y="504" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Đổi sang loại chạy được (<tspan font-family="'Geist Mono', monospace" font-size="11">test</tspan>)</text>
+      <text data-mx="308" x="76" y="519" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">executor: test · nếp vòng trước</text>
+      <line x1="76" y1="528" x2="308" y2="528" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="76" y="544" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">NGẢ NÀY ĐƯỢC GÌ</text>
+      <text data-mx="308" x="76" y="559" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Làn máy chạy thật, có chốt đỏ hay</text>
+      <text data-mx="308" x="76" y="573" fill="#575757" font-size="10" font-family="'Geist', sans-serif">xanh. Vòng trước đã đổi ba phép đo</text>
+      <text data-mx="308" x="76" y="587" fill="#575757" font-size="10" font-family="'Geist', sans-serif">màn hình sang loại này vì lý do đó.</text>
+      <line x1="76" y1="594" x2="308" y2="594" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="76" y="610" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐỔI LẠI</text>
+      <text data-mx="308" x="76" y="625" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Mất lớp «người nhìn thấy được»:</text>
+      <text data-mx="308" x="76" y="639" fill="#575757" font-size="10" font-family="'Geist', sans-serif">phép đo thành kiểm mã, không còn</text>
+      <text data-mx="308" x="76" y="653" fill="#575757" font-size="10" font-family="'Geist', sans-serif">chứng được người nhìn ra cái gì.</text>
+
+      <path d="M 368 172 L 368 304 A 8 8 0 0 0 376 312 L 384 312" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <path d="M 368 312 L 368 552 A 8 8 0 0 0 376 560 L 384 560" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <text x="352" y="76" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CĂNG THẲNG B</text>
+
+      <rect x="352" y="88" width="288" height="84" rx="6" fill="#fafafa"/>
+      <rect x="352" y="88" width="288" height="84" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <rect x="364" y="100" width="60" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="394" y="111" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CÂU HỎI</text>
+      <text data-mx="628" x="364" y="140" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Điểm nhận dữ liệu bằng REST —</text>
+      <text data-mx="628" x="364" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">theo tiền lệ hay theo tài liệu?</text>
+
+      <rect x="384" y="204" width="256" height="216" rx="6" fill="#fafafa"/>
+      <rect x="384" y="204" width="256" height="216" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+      <rect x="396" y="216" width="80" height="16" rx="2" fill="#171717"/>
+      <text x="436" y="227" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÁY KHUYÊN</text>
+      <text data-mx="628" x="396" y="256" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Theo tiền lệ, rồi sửa tài liệu</text>
+      <text data-mx="628" x="396" y="271" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">nếp ListingsController đang chạy thật</text>
+      <line x1="396" y1="280" x2="628" y2="280" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="396" y="296" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">MÁY KHUYÊN VÌ</text>
+      <text data-mx="628" x="396" y="311" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Kho đã có một điểm nhận REST chạy</text>
+      <text data-mx="628" x="396" y="325" fill="#575757" font-size="10" font-family="'Geist', sans-serif">thật mà tài liệu chưa ghi là ngoại</text>
+      <text data-mx="628" x="396" y="339" fill="#575757" font-size="10" font-family="'Geist', sans-serif">lệ. Sửa thứ mình đang đụng là rẻ nhất.</text>
+      <line x1="396" y1="346" x2="628" y2="346" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="396" y="362" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐỔI LẠI</text>
+      <text data-mx="628" x="396" y="377" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Vòng này phải sửa <tspan font-family="'Geist Mono', monospace" font-size="9">docs/api.md</tspan>, và</text>
+      <text data-mx="628" x="396" y="391" fill="#575757" font-size="10" font-family="'Geist', sans-serif">mỗi ngoại lệ thêm vào làm câu «tRPC</text>
+      <text data-mx="628" x="396" y="405" fill="#575757" font-size="10" font-family="'Geist', sans-serif">là mặt dữ liệu» yếu đi một chút.</text>
+
+      <rect x="384" y="452" width="256" height="216" rx="6" fill="#fafafa"/>
+      <rect x="384" y="452" width="256" height="216" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="0.8"/>
+      <rect x="396" y="464" width="68" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="430" y="475" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NGẢ KHÁC</text>
+      <text data-mx="628" x="396" y="504" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Theo tiêu đề đã viết trong tài liệu</text>
+      <text data-mx="628" x="396" y="519" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">«REST is auth and health only»</text>
+      <line x1="396" y1="528" x2="628" y2="528" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="396" y="544" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">NGẢ NÀY ĐƯỢC GÌ</text>
+      <text data-mx="628" x="396" y="559" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Tài liệu giữ một câu dứt khoát;</text>
+      <text data-mx="628" x="396" y="573" fill="#575757" font-size="10" font-family="'Geist', sans-serif">không ai phải đọc kèm một danh</text>
+      <text data-mx="628" x="396" y="587" fill="#575757" font-size="10" font-family="'Geist', sans-serif">sách ngoại lệ dài dần ra.</text>
+      <line x1="396" y1="594" x2="628" y2="594" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="396" y="610" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐỔI LẠI</text>
+      <text data-mx="628" x="396" y="625" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Điểm nhận phải nhét vào tRPC dù bên</text>
+      <text data-mx="628" x="396" y="639" fill="#575757" font-size="10" font-family="'Geist', sans-serif">gửi là máy ngoài; và controller đang</text>
+      <text data-mx="628" x="396" y="653" fill="#575757" font-size="10" font-family="'Geist', sans-serif">chạy kia vẫn đứng đó, vẫn sai tài liệu.</text>
+
+      <path d="M 688 172 L 688 304 A 8 8 0 0 0 696 312 L 704 312" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <path d="M 688 312 L 688 552 A 8 8 0 0 0 696 560 L 704 560" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <text x="672" y="76" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CĂNG THẲNG C</text>
+
+      <rect x="672" y="88" width="288" height="84" rx="6" fill="#fafafa"/>
+      <rect x="672" y="88" width="288" height="84" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <rect x="684" y="100" width="60" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="714" y="111" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CÂU HỎI</text>
+      <text data-mx="948" x="684" y="140" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Một phép đo cần vỏ ứng dụng</text>
+      <text data-mx="948" x="684" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">chưa tồn tại — làm gì?</text>
+
+      <rect x="704" y="204" width="256" height="216" rx="6" fill="#fafafa"/>
+      <rect x="704" y="204" width="256" height="216" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+      <rect x="716" y="216" width="80" height="16" rx="2" fill="#171717"/>
+      <text x="756" y="227" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÁY KHUYÊN</text>
+      <text data-mx="948" x="716" y="256" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Khai bỏ cảnh đó, nói rõ ở cổng</text>
+      <text data-mx="948" x="716" y="271" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">khai «ngoài tầm đo» trong hồ sơ</text>
+      <line x1="716" y1="280" x2="948" y2="280" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="716" y="296" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">MÁY KHUYÊN VÌ</text>
+      <text data-mx="948" x="716" y="311" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Một lỗ được khai tên thì người ký</text>
+      <text data-mx="948" x="716" y="325" fill="#575757" font-size="10" font-family="'Geist', sans-serif">cân được. Dựng vỏ giả là đo một thứ</text>
+      <text data-mx="948" x="716" y="339" fill="#575757" font-size="10" font-family="'Geist', sans-serif">không ai dùng, mà vẫn ra màu xanh.</text>
+      <line x1="716" y1="346" x2="948" y2="346" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="716" y="362" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐỔI LẠI</text>
+      <text data-mx="948" x="716" y="377" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Bộ tiêu chí có một chỗ không chứng</text>
+      <text data-mx="948" x="716" y="391" fill="#575757" font-size="10" font-family="'Geist', sans-serif">được bằng máy, và chỗ đó sẽ quay lại</text>
+      <text data-mx="948" x="716" y="405" fill="#575757" font-size="10" font-family="'Geist', sans-serif">ở vòng sau chứ không tự mất.</text>
+
+      <rect x="704" y="452" width="256" height="216" rx="6" fill="#fafafa"/>
+      <rect x="704" y="452" width="256" height="216" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="0.8"/>
+      <rect x="716" y="464" width="68" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="750" y="475" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NGẢ KHÁC</text>
+      <text data-mx="948" x="716" y="504" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Dựng một vỏ ứng dụng giả để đo</text>
+      <text data-mx="948" x="716" y="519" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">vỏ chỉ sống trong phép đo</text>
+      <line x1="716" y1="528" x2="948" y2="528" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="716" y="544" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">NGẢ NÀY ĐƯỢC GÌ</text>
+      <text data-mx="948" x="716" y="559" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Mọi phép đo đều chạy được, hồ sơ</text>
+      <text data-mx="948" x="716" y="573" fill="#575757" font-size="10" font-family="'Geist', sans-serif">không còn ô trống nào để giải thích.</text>
+      <line x1="716" y1="580" x2="948" y2="580" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="716" y="596" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐỔI LẠI</text>
+      <text data-mx="948" x="716" y="611" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Màu xanh nói về cái vỏ, không nói về</text>
+      <text data-mx="948" x="716" y="625" fill="#575757" font-size="10" font-family="'Geist', sans-serif">sản phẩm; và cái vỏ đó thành thứ phải</text>
+      <text data-mx="948" x="716" y="639" fill="#575757" font-size="10" font-family="'Geist', sans-serif">nuôi ở mọi vòng sau.</text>
+
+      <line x1="32" y1="704" x2="968" y2="704" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="720" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect x="32" y="732" width="14" height="10" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+      <text x="52" y="741" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Ngả máy khuyên, kèm lý do</text>
+      <rect x="208" y="732" width="14" height="10" rx="2" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="0.8"/>
+      <text x="228" y="741" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Ngả khác, vẫn mở</text>
+      <rect x="372" y="732" width="14" height="10" rx="2" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="392" y="741" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Câu hỏi chờ người quyết</text>
+      <text x="536" y="741" fill="#575757" font-size="9" font-family="'Geist', sans-serif" font-style="italic">Không nhánh nào ở đây được chọn: cả sáu ngả còn mở cho tới khi người ở cổng gạch một ngả.</text>
+    </svg>
