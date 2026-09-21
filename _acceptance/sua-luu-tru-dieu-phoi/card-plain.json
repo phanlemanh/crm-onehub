@@ -1,44 +1,19 @@
 {
-  "feature_plain": "Người quản trị sửa, sắp xếp, lưu trữ, khôi phục và xoá vĩnh viễn bộ phận và khuôn; người điều phối đóng, mở lại kế hoạch và đánh dấu bậc phễu — còn thành viên thường chỉ xem được cấu hình.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ cho quản trị đổi tên bộ phận; kế hoạch đang chạy hiện tên mới ngay."},
-    {"id": "AC-2", "p": "Sẽ cho kéo để sắp thứ tự bộ phận; thứ tự còn nguyên sau khi tải lại và áp vào ô chọn khi soạn khuôn."},
-    {"id": "AC-3", "p": "Sẽ cho lưu trữ bộ phận, kèm nút «Hoàn tác» ngay sau đó; kế hoạch đang chạy vẫn hiện đúng tên bộ phận."},
-    {"id": "AC-5", "p": "Sẽ cho sửa khuôn trong hộp thoại điền sẵn; kế hoạch đã tạo từ khuôn đó không đổi theo."},
-    {"id": "AC-6", "p": "Sẽ cho lưu trữ khuôn; khuôn đã lưu trữ không còn trong ô chọn khi tạo kế hoạch."},
-    {"id": "AC-7", "p": "Sẽ có mục «Đã lưu trữ» với nút «Khôi phục» cho cả bộ phận và khuôn."},
-    {"id": "AC-8", "p": "Sẽ cho «Xoá vĩnh viễn» bộ phận hay khuôn đã lưu trữ mà chưa từng được dùng."},
-    {"id": "AC-9", "p": "Sẽ để chỉ chủ và quản trị đổi được cấu hình; thành viên vẫn làm mọi việc trên kế hoạch."},
-    {"id": "AC-10", "p": "Sẽ cho đóng kế hoạch (có xác nhận) và mở lại kế hoạch đã đóng."},
-    {"id": "AC-11", "p": "Sẽ cho đánh dấu bậc phễu bằng một cú bấm (ngày hôm nay), đổi ngày hoặc bỏ đánh dấu; không ép thứ tự bậc."},
-    {"id": "AC-13", "p": "Sẽ làm mờ người đã có trong phễu khi thêm môi giới, và máy chủ báo rõ thay vì âm thầm đổi nguồn."},
-    {"id": "AC-14", "p": "Sẽ giữ nguyên màn và giá trị đã nhập khi máy chủ từ chối, và mỗi cú bấm chỉ gửi một lần."}
-  ],
-  "wont_do": [
-    {"id": "AC-4", "p": "Chặn lưu trữ bộ phận khi còn khuôn đang dùng nó — báo tên khuôn để người sửa khuôn trước."},
-    {"id": "AC-12", "p": "Chặn ngày bắt đầu và ngày bậc sai dạng — báo lỗi thay vì tạo kế hoạch mang ngày 01/01/1970."},
-    {"id": "AC-15", "p": "Sẽ KHÔNG ký bằng chữ: ảnh màn thật ở hai khổ cho người nhìn tại Cổng Bằng chứng."}
-  ],
-  "scope_plain": "Để vòng sau: cấp phòng ban, sửa người cầm trịch và ngày bắt đầu, sửa bước kế hoạch đang chạy, nhật ký thay đổi, thao tác hàng loạt, loại đối tác từ trường của Công ty, và phân quyền màn Trường.",
-  "coverage_plain": [
-    {"i": 0, "p": "Phủ đủ bốn thứ của Điều phối — bộ phận, khuôn, kế hoạch, môi giới trong phễu — đối chiếu với bốn bảng dữ liệu thật."},
-    {"i": 1, "p": "Phủ trọn vòng đời theo chuẩn «lưu trữ trước, xoá vĩnh viễn sau» của kho, đối chiếu HubSpot, Attio, Linear (AC-1 đến AC-11)."},
-    {"i": 2, "p": "Phủ cả ba vai trò chủ, quản trị, thành viên (AC-9, đo từng vai trò)."},
-    {"i": 3, "p": "Phủ năm kết quả: thành công, bị chặn vì đang dùng, bị chặn vì quyền, máy chủ từ chối, ngày sai dạng (AC-4, AC-9, AC-12, AC-14)."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Máy chủ chưa có cách báo «mục này xoá được»; bài kiểm có thể tự bịa — đã thêm trường đó ở máy chủ và bắt dữ liệu giả đi qua đúng khuôn máy chủ."},
-    {"i": 1, "p": "Siết kiểu ngày có thể làm hỏng nút «Tạo kế hoạch từ khuôn» vừa giao hôm qua mà không phép đo nào thấy — đã thêm phép đo cho chính hộp thoại đó."},
-    {"i": 2, "p": "Vai trò chủ chưa được đo; viết sai là chủ kho bị khoá khỏi cấu hình — đã thêm phép đo đủ mọi vai trò và phiên của chủ."},
-    {"i": 3, "p": "Ma trận lỗi thiếu «sửa khuôn» và chưa tách bộ phận với khuôn — đã viết lại thành 28 ca."},
-    {"i": 4, "p": "Phép chụp màn thiếu bước gieo dữ liệu và có thể chụp nhầm máy chủ của cây khác — đã thêm bước gieo bằng thủ tục thật và kiểm cả cổng api."}
-  ],
+  "feature_plain": "Người quản trị sửa, sắp xếp, lưu trữ, khôi phục và xoá vĩnh viễn bộ phận và khuôn; người điều phối đóng, mở lại kế hoạch và đánh dấu bậc phễu; thành viên thường chỉ xem được cấu hình.",
+  "scope_plain": "Để vòng sau: cấp phòng ban, sửa người cầm trịch và ngày bắt đầu, sửa bước kế hoạch đang chạy, nhật ký thay đổi, thao tác hàng loạt, loại đối tác từ trường của Công ty, phân quyền màn Trường.",
   "decisions_plain": [
-    {"id": "d-20260921T224624Z-1", "p": "KHÔNG làm cấp phòng ban trong vòng này — tách thành ô riêng; đổi lại danh sách vẫn phẳng cho tới khi ô kia được duyệt."},
-    {"id": "d-20260921T224624Z-2", "p": "Lưu trữ theo đúng khuôn của kho (danh sách đang dùng và đã lưu trữ tách riêng); đổi lại thêm tên bộ phận vào dữ liệu bước kế hoạch."},
-    {"id": "d-20260921T224624Z-3", "p": "Quyền đi qua một hàm chung trong gói xác thực như màn Tiền tệ; đổi lại vòng lên hạng T3 và có thêm cổng duyệt kế hoạch."},
-    {"id": "d-20260921T224624Z-4", "p": "Chỉ xoá vĩnh viễn thứ chưa từng dùng; đổi lại thứ đã dùng nằm mãi trong mục Đã lưu trữ."},
-    {"id": "d-20260921T224624Z-5", "p": "KHÔNG làm bản mẫu bấm được trước duyệt — các thao tác dùng lại khuôn màn Trường; đổi lại anh duyệt giao diện bằng chữ và xem ảnh thật ở cổng sau."},
-    {"id": "d-20260921T224624Z-6", "p": "KHÔNG nối loại đối tác của khuôn với trường của Công ty; đổi lại vẫn gõ tự do."}
+    {"id": "d-20260921T224624Z-1", "p": "KHÔNG làm cấp phòng ban trong vòng này — đã tách thành ô riêng."},
+    {"id": "d-20260921T224624Z-2", "p": "Lưu trữ theo đúng khuôn của kho; tên bộ phận đi kèm dữ liệu bước kế hoạch."},
+    {"id": "d-20260921T224624Z-3", "p": "Quyền đi qua một hàm chung trong gói xác thực; vòng lên hạng T3."},
+    {"id": "d-20260921T224624Z-4", "p": "Chỉ xoá vĩnh viễn thứ chưa từng dùng."},
+    {"id": "d-20260921T224624Z-5", "p": "KHÔNG làm bản mẫu bấm được trước duyệt; ảnh màn thật nằm trong gói này."},
+    {"id": "d-20260921T224624Z-6", "p": "KHÔNG nối loại đối tác với trường của Công ty."},
+    {"id": "d-20260921T230125Z-8", "p": "Thêm truy vấn đọc một kế hoạch để hồ sơ biết kế hoạch đã đóng hay chưa."},
+    {"id": "d-20260921T230125Z-9", "p": "Gom bộ tạo phiên đăng nhập của bài kiểm máy chủ về một tệp dùng chung."},
+    {"id": "d-20260921T230125Z-10", "p": "Kế hoạch ban đầu: kiểm quyền bên trong từng thủ tục máy chủ (đã được thay bằng dòng dưới)."},
+    {"id": "d-20260921T230206Z-11", "p": "Máy hiểu việc anh dán dòng /goal là duyệt kế hoạch ở Cổng 1.5."},
+    {"id": "d-20260921T230941Z-12", "p": "Kiểm quyền đặt ở lớp nhận lời gọi thay vì bên trong thủ tục, để không phải sửa bốn tệp kiểm cũ; đổi lại một lời gọi nội bộ khác có thể bỏ sót kiểm quyền."},
+    {"id": "d-20260921T232817Z-13", "p": "Bài kiểm ngày đặt đồng hồ lúc 00:30 thay vì 23:30 như bộ đo ghi, vì 23:30 giờ Việt Nam không làm lệch ngày so với UTC."},
+    {"id": "d-20260921T232817Z-14", "p": "Dùng lại hàm ngày có sẵn; sửa hai lỗi thật mà bài kiểm bắt được (Hoàn tác sau khi lưu trữ mục cuối, Hoàn tác bấm đôi)."}
   ]
 }
