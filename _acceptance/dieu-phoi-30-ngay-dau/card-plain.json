@@ -1,142 +1,22 @@
 {
- "feature_plain": "Cả đội OneHub điều phối ba mươi ngày đầu của một đối tác mới ngay trong CRM — khuôn kế hoạch theo loại đối tác, bước có người và có hạn, và một phễu theo dõi từng môi giới — thay cho Google Sheet và giấy tờ tay.",
- "will_do": [
-  {
-   "id": "AC-1",
-   "p": "Sẽ dựng kế hoạch từ một khuôn bằng cách CHÉP bước sang, nên sửa khuôn tháng sau không động vào kế hoạch đang chạy."
-  },
-  {
-   "id": "AC-3",
-   "p": "Sẽ cho một màn duy nhất trả lời câu «đối tác nào đang tắc», lọc theo bộ phận, và bộ lọc nằm trong đường dẫn nên gửi liên kết là gửi đúng góc nhìn."
-  },
-  {
-   "id": "AC-5",
-   "p": "Sẽ từ chối TRỌN một lô số liệu từ nền tảng khi có một mục sai khuôn, và nói rõ trường nào hỏng — không nhận nửa lô."
-  },
-  {
-   "id": "AC-9",
-   "p": "Sẽ nói thẳng «chưa có khuôn nào» ở ngày đầu bật tính năng và dẫn người sang chỗ soạn khuôn, thay vì mời bấm tạo rồi gặp danh sách rỗng."
-  },
-  {
-   "id": "AC-11",
-   "p": "Sẽ cho người NHÌN THẤY hàng đang tắc trên màn danh mục, chứng bằng ảnh chụp thật chứ không bằng tên ca máy."
-  },
-  {
-   "id": "AC-12",
-   "p": "Sẽ hỏi lại một lần trước khi xoá một môi giới khỏi phễu."
-  },
-  {
-   "id": "AC-13",
-   "p": "Sẽ cho đóng một kế hoạch dù còn bước dở, giữ nguyên bước dở, và đưa kế hoạch đã đóng ra khỏi danh mục mặc định."
-  },
-  {
-   "id": "AC-14",
-   "p": "Sẽ buộc mỗi kế hoạch có một người cầm trịch — đây là con số mà ngưỡng anh đã ký ở Cổng Đáng dùng để đếm."
-  }
- ],
- "wont_do": [
-  {
-   "id": "AC-2",
-   "p": "Sẽ KHÔNG để một bước chưa giao cho ai rơi khỏi bộ lọc bộ phận — đó đúng là ca «việc rơi giữa các bộ phận»."
-  },
-  {
-   "id": "AC-4",
-   "p": "Sẽ KHÔNG lưu bốn bậc của môi giới bằng đúng/sai, mà bằng mốc ngày — để vòng sau trả lời được «cách bậc trước bao lâu»."
-  },
-  {
-   "id": "AC-6",
-   "p": "Chặn việc máy ĐOÁN môi giới nào ứng với dòng nào: không khớp mã thì chuyển cho tác nhân xử, không tự gán bừa."
-  },
-  {
-   "id": "AC-7",
-   "p": "Sẽ KHÔNG chết khi chưa khai khoá nối nền tảng — mất một năng lực, không sập cả module."
-  },
-  {
-   "id": "AC-8",
-   "p": "Sẽ KHÔNG làm bước nào mất bộ phận khi người quản trị đổi tên bộ phận đó."
-  },
-  {
-   "id": "AC-10",
-   "p": "Chặn việc ghim cứng con số ba mươi ngày và ngưỡng nguội vào code — chúng sống một chỗ, chỉnh được."
-  }
- ],
- "scope_plain": "Cổng cho chính đối tác nhìn vào, nối thật với nền tảng, đo hiệu quả kinh doanh, và vá lỗ quyền sửa trường đều để vòng sau — mỗi thứ có lý do riêng ghi trong hợp đồng.",
- "coverage_plain": [
-  {
-   "i": 0,
-   "p": "Bảy nhóm năng lực của phần mềm loại này đã quét đủ, đối chiếu với năng lực thật của năm sản phẩm cùng ngành đọc ngày 19/09."
-  },
-  {
-   "i": 1,
-   "p": "Năm phía người có mặt trong ba mươi ngày đều được kể: nhân viên quan hệ đối tác, các bộ phận chuyên môn, quản lý, người của công ty đối tác, và môi giới."
-  },
-  {
-   "i": 2,
-   "p": "Năm đường mà số liệu đi vào đều được kể — vòng này chọn hai đường rẻ nhất: người gõ tay và suy từ chính CRM."
-  },
-  {
-   "i": 3,
-   "p": "Bốn nhịp thời gian đều được kể; nhịp «sau ba mươi ngày» nay có tiêu chí phục vụ là AC-13 (đóng kế hoạch)."
-  },
-  {
-   "i": 4,
-   "p": "Hai giới hạn tự khai của bản quét: chưa dùng thử thật sản phẩm cùng ngành, và lần quét đầu chưa soi chiều QUYỀN nên lỗ phân quyền lọt lưới — nay đã tách thành hồ sơ riêng."
-  }
- ],
- "gap_probe_plain": [
-  {
-   "i": 0,
-   "p": "Phép đo cho màn «chưa có khuôn nào» trước đây tự dựng dữ liệu giả nên màn có thể không bao giờ hỏi số khuôn mà đèn vẫn xanh — đúng phút đầu tiên của phiên nghiệm thu. Đã viết lại để nó chạy trên dữ liệu thật và bắt màn phải hỏi."
-  },
-  {
-   "i": 1,
-   "p": "Không tiêu chí nào chạm việc ĐÓNG kế hoạch, nên sáu tuần sau màn «đối tác nào đang tắc» sẽ đầy kế hoạch đã xong. Đã thêm AC-13."
-  },
-  {
-   "i": 2,
-   "p": "Con số mà ngưỡng đã ký dùng để đếm — kế hoạch có người cầm trịch — không được tiêu chí nào bảo đảm, nên tới lúc nghiệm thu sẽ đếm ra không. Đã thêm AC-14."
-  },
-  {
-   "i": 3,
-   "p": "Phép đo nhìn-màn không ghim đúng cây đang xét ở phía máy chủ dữ liệu, nên có thể chụp nhầm bản khác đang chạy. Đã ghim cả hai phía và buộc đọc lại dữ liệu vừa gieo trước khi mở màn."
-  },
-  {
-   "i": 4,
-   "p": "Vế «bộ lọc nằm trong đường dẫn» đã viết thành chữ trong hợp đồng mà chưa ai đo. Đã thêm một phép đo riêng cho nó."
-  }
- ],
- "decisions_plain": [
-  {
-   "id": "d-20260920T020137Z-1",
-   "p": "Kế hoạch treo vào Công ty và một đối tác onboard lại được nhiều lượt — đổi lại không gì tự bấm đồng hồ hộ người, nhưng sản phẩm khỏi thừa kế một bộ giai đoạn chưa chốt nghĩa."
-  },
-  {
-   "id": "d-20260920T020137Z-2",
-   "p": "Bước được chép từ khuôn chứ không tham chiếu — đổi lại sửa một lỗi chính tả trong khuôn không tự vá các kế hoạch đã tạo."
-  },
-  {
-   "id": "d-20260920T020137Z-3",
-   "p": "Bốn bậc lưu bằng mốc ngày chứ không bằng đúng/sai — tốn một cột, đổi lại giữ được đường trả lời «cách bậc trước bao lâu» cho vòng sau."
-  },
-  {
-   "id": "d-20260920T020137Z-4",
-   "p": "Bộ phận là một danh sách quản trị tự thêm và nó gắn vào BƯỚC — vì bước chưa giao cho ai vẫn phải thuộc một bộ phận, đúng ca việc-rơi."
-  },
-  {
-   "id": "d-20260920T020137Z-5",
-   "p": "Đường nối nền tảng viết thật khuôn dữ liệu và cổng nhận, kiểm thật, nhưng chưa nối bên gửi — đổi lại khuôn có thể lệch với thứ nền tảng trả, gỡ bằng cách đưa khuôn cho đội nền tảng đọc trước."
-  },
-  {
-   "id": "d-20260920T020137Z-6",
-   "p": "KHÔNG làm chức năng giao việc cho đồng nghiệp ở sổ hoạt động chung — thiết kế này không cần, và nó là việc riêng nếu anh thấy đáng."
-  },
-  {
-   "id": "d-20260920T022204Z-7",
-   "p": "KHÔNG dựng một vỏ ứng dụng giả để chụp bản mẫu trong đó — đổi lại người duyệt đọc phần vào–ra bằng chữ, nhưng không ai bị tin vào một cái vỏ chưa tồn tại."
-  },
-  {
-   "id": "d-20260920T025802Z-8",
-   "p": "Danh mục hiện phân số bước đã xong cạnh số ngày đã trôi, và bộ lọc đổi thành rãnh trạng thái có số đếm — vì ngày-đã-trôi một mình không phân biệt được đối tác ổn với đối tác đang cháy."
-  }
- ]
+  "feature_plain": "Đội vận hành thấy trên một màn đối tác mới nào đang tắc ở bước nào trong 30 ngày đầu, và ai phải làm bước đó.",
+  "scope_plain": "Để sang vòng sau: cổng cho chính đối tác xem tiến độ, và loại bản ghi riêng cho trường tự tạo.",
+  "decisions_plain": [
+    {"id":"d-20260920T020137Z-1","p":"Kế hoạch 30 ngày gắn vào công ty và người tự đặt ngày bắt đầu — đổi lại, chốt một thoả thuận không tự bật đồng hồ."},
+    {"id":"d-20260920T020137Z-2","p":"Bước của kế hoạch được chép từ khuôn — sửa khuôn không làm đổi kế hoạch đang chạy, kể cả khi chỉ sửa lỗi chính tả."},
+    {"id":"d-20260920T020137Z-3","p":"Mỗi nấc của đối tác lưu bằng ngày giờ đạt nấc — tốn thêm một ô dữ liệu, nhưng trả lời được đạt nấc cách đây bao lâu."},
+    {"id":"d-20260920T020137Z-4","p":"Bộ phận là danh sách nhỏ quản trị tự thêm và gắn trên từng bước — bước chưa giao cho ai vẫn lọc được theo bộ phận."},
+    {"id":"d-20260920T020137Z-5","p":"Điểm nhận dữ liệu từ nền tảng được dựng và kiểm thật nhưng chưa có bên gửi — chưa nối thật trong vòng này."},
+    {"id":"d-20260920T020137Z-6","p":"KHÔNG làm việc giao hoạt động cho từng người trong vòng này — tránh đụng lối giao việc sẵn có của CRM."},
+    {"id":"d-20260920T022204Z-7","p":"KHÔNG vẽ cảnh ngữ cảnh ra vào màn trong bản mẫu — người duyệt đọc luồng đó bằng chữ trong đặc tả."},
+    {"id":"d-20260920T025802Z-8","p":"Danh mục hiện số bước đã xong cạnh số ngày đã trôi, và bộ lọc là các nút trạng thái có số đếm."},
+    {"id":"d-20260920T144128Z-10","p":"Phép đo nút xoá ghi danh nay dựng thật màn hồ sơ kế hoạch rồi bấm, thay vì chỉ gọi phần tính toán bên trong."},
+    {"id":"d-20260920T144128Z-11","p":"Nút «Gỡ» nay thật sự xoá ghi danh — trước đó nó ghi đè và lật nguồn về nhập tay."},
+    {"id":"d-20260920T144128Z-12","p":"Phép đo mã đối tác không khớp dùng dịch vụ thật và gửi hai mã không khớp trong một lô, để bắt lỗi gộp trùng."},
+    {"id":"d-20260921T000500Z-13","p":"Gỡ hai thay đổi mà một máy chấm tự ghi vào phép đo giữa lượt chấm — máy chấm không được sửa thứ nó đang chấm."},
+    {"id":"d-20260921T000500Z-14","p":"Chống trùng việc tra mã đối tác theo cặp kế hoạch và mã — lô của kế hoạch B không mất khi mã còn treo ở kế hoạch A."},
+    {"id":"d-20260921T001500Z-15","p":"Khai sáu giới hạn có tên của bộ đo vào ghi chú hợp đồng thay vì vá thêm phép đo — chờ anh chấp nhận tại cổng này."},
+    {"id":"d-20260921T061816Z-16","p":"Gỡ một thay đổi mà máy chấm tự ghi vào hồ sơ giữa lượt chấm (lần thứ ba ở việc này) — lượt đó bị chấm lại từ đầu."},
+    {"id":"d-20260921T062101Z-17","p":"Danh mục cho chữ xuống dòng thay vì cắt «…», tên bộ phận thành chữ thường — hàng cao hơn, mất huy hiệu so với bản mẫu."}
+  ]
 }
