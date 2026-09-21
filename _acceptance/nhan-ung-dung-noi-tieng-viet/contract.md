@@ -5,7 +5,7 @@ slug: nhan-ung-dung-noi-tieng-viet
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: da-cham-boi-thuc-te
 approved_by: Manh Phan
 approved_at: 2026-09-02
 amended_at: 2026-09-03
