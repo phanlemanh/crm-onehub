@@ -2,6 +2,7 @@
 
 import { DealStage } from "@crm/db/enums";
 import { Checkbox } from "@crm/ui/components/checkbox";
+import { ForeignText } from "@crm/ui/components/foreign-text";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { cn } from "@crm/ui/lib/utils";
@@ -78,9 +79,15 @@ export function TimelineEntry({
 			: m.timeline.viaCalendar
 		: entry.createdBy.name;
 
-	const headline = change
-		? `${dealStageLabel(change.from)} → ${dealStageLabel(change.to)}`
-		: entry.subject;
+	const headline = change ? (
+		<>
+			<ForeignText lang="en">{dealStageLabel(change.from)}</ForeignText>
+			{" → "}
+			<ForeignText lang="en">{dealStageLabel(change.to)}</ForeignText>
+		</>
+	) : (
+		entry.subject
+	);
 
 	const here = anchorId(anchor);
 	const deal = entry.deal && entry.deal.id !== here ? entry.deal : null;

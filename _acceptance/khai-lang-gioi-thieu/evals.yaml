@@ -1,0 +1,77 @@
+schema_version: 1
+slug: khai-lang-gioi-thieu
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.kl_foreign_text
+    paths:
+      - "packages/ui/src/components/foreign-text.tsx"
+      - "packages/ui/test/khai-tieng.spec.tsx"
+      - "packages/ui/test/setup-dom.ts"
+    expected: |
+      Dung THAT ForeignText trong jsdom (preload setup-dom), khong doc ma nguon.
+      Khang dinh HAI dieu tren cung mot bai:
+        1 ForeignText lang="en" -> phan tu [lang] mang "en"
+        2 ForeignText lang="vi" -> phan tu [lang] mang "vi"
+      CHIEU DO da chay tren vat that: bo lang={lang} khoi <span> cua ForeignText
+      -> do voi Expected: "en" / Received: undefined.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.kl_metaline
+    paths:
+      - "apps/app/components/crm/record-sheet/record-parts.tsx"
+      - "packages/ui/src/components/foreign-text.tsx"
+      - "apps/app/test/khai-tieng-metaline.spec.tsx"
+    expected: |
+      Dung THAT MetaLine cua tam ho so voi hai phan: "Ha Noi, VN" khong khai
+      tieng va "Technology" khai lang en, DUOI mot to tien lang="vi" nhu man
+      that. Di tu NUT CHU len phan tu [lang] gan nhat (chu khong tim phan tu co
+      lang roi doc chu), nen do QUAN HE chu-vung.
+      Khang dinh cap hai chieu tren cung fixture:
+        1 vung cua "Technology" la "en"
+        2 vung cua "Ha Noi" la "vi" (ke thua to tien, khong bi khai ho "en")
+      Doi chung duong: ham vungKhai nem "khong thay chu" khi nut chu vang mat,
+      nen phan bi roi mat khong qua tran khang dinh 2.
+      CHIEU DO da chay tren vat that, MOI khang dinh mot lan:
+        khang dinh 1 — bo lang khoi ForeignText -> Expected: "en" / Received: null
+        khang dinh 2 — boc ca phan khong khai trong ForeignText lang="en"
+                       -> Expected: "vi" / Received: "en"
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.kl_gioi_thieu
+    paths:
+      - "apps/app/components/crm/record-sheet/record-parts.tsx"
+      - "apps/app/components/crm/record-sheet/company-sheet.tsx"
+      - "packages/ui/src/components/foreign-text.tsx"
+      - "apps/app/test/khai-tieng-metaline.spec.tsx"
+    expected: |
+      Bai "chieu d" cung tep voi E2. Dung THAT CompanyAbout — thanh phan trinh
+      bay cua khoi gioi thieu ma tam ho so cong ty goi — DUOI to tien lang="vi".
+      Khang dinh ba dieu tren cung fixture:
+        1 di tu nut chu doan gioi thieu len [lang] gan nhat -> "en"
+        2 nut chu tieu de khoi (chu giao dien) -> vung "vi"
+        3 description rong -> khoi khong dung gi (khong co tieu de)
+      Doi chung duong: vungKhai nem "khong thay chu" khi chu vang mat.
+      CHIEU DO chay tren vat that sau khi viet: go ForeignText khoi CompanyAbout
+      -> Expected: "en" / Received: "vi".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.kl_metaline
+    paths:
+      - "apps/app/components/crm/record-sheet/record-parts.tsx"
+      - "apps/app/test/khai-tieng-metaline.spec.tsx"
+    expected: |
+      Cung tep voi E2, bai "chieu c". MetaLine nhan hai phan cung chu
+      "Technology", mot khai en mot khong. Dem span co chu dung bang "Technology"
+      (bo dau cham ngan cach) -> dung 1.
+      CHIEU DO da chay tren vat that: khoa khu trung lap tinh ca tieng
+      (`${value}|${lang}`) nen hai phan cung chu thanh hai -> do voi
+      Expected: 1 / Received: 3 (span long cua ForeignText cung duoc dem).

@@ -46,7 +46,6 @@ import {
 	DetailSheetMain,
 	DetailSheetPending,
 	DetailSheetProperties,
-	DetailSheetProse,
 	DetailSheetRail,
 	DetailSheetSection,
 	DetailSheetSplit,
@@ -71,6 +70,7 @@ import { QuickAddContact, QuickAddDeal } from "./quick-add";
 import { RecordActions } from "./record-actions";
 import {
 	AddRow,
+	CompanyAbout,
 	DealAmount,
 	DomainLink,
 	MetaLine,
@@ -245,7 +245,7 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 						lead={
 							<DomainLink domain={company.domain} website={company.website} />
 						}
-						parts={[location, company.industry]}
+						parts={[{ text: location }, { text: company.industry, lang: "en" }]}
 					/>
 				) : undefined
 			}
@@ -344,11 +344,10 @@ function CompanyOverview({ company }: { company: Company }) {
 		<DetailSheetBody>
 			<DetailSheetSplit>
 				<DetailSheetMain>
-					{company.description ? (
-						<DetailSheetSection title={m.section.about}>
-							<DetailSheetProse>{company.description}</DetailSheetProse>
-						</DetailSheetSection>
-					) : null}
+					<CompanyAbout
+						title={m.section.about}
+						description={company.description}
+					/>
 
 					<WebsiteActivity companyId={company.id} />
 				</DetailSheetMain>
