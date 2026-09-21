@@ -1,5 +1,36 @@
 {
   "feature_plain": "Người dùng trình đọc màn hình nghe đoạn giới thiệu tiếng Anh của một công ty bằng giọng tiếng Anh, thay vì bị đọc bằng giọng tiếng Việt như trên prod hôm 18/09.",
+  "scope_plain": "Bộ đo lớn của PR #65, dữ liệu người nhập bằng tiếng Việt, và việc chấm lại hồ sơ nhãn tiếng Việt gốc — đều để ngoài ô này.",
+  "decisions_plain": [
+    {
+      "id": "d-20260921T154216Z-1",
+      "p": "Chỉ đưa bản sửa lên prod, tách khỏi bộ đo lớn còn kẹt ở PR #65 — đổi lại bản sửa lên mà không có phép đo máy cho từng chỗ hiện chữ."
+    },
+    {
+      "id": "d-20260921T154216Z-2",
+      "p": "KHÔNG quét không gian lựa chọn — đổi lại không có bằng chứng độ phủ; người duyệt tự soi chỗ bị sót bằng bảng mười chỗ."
+    },
+    {
+      "id": "d-20260921T154216Z-3",
+      "p": "KHÔNG dựng bản mẫu để nhìn trước — thay đổi không làm màn khác đi chút nào."
+    },
+    {
+      "id": "d-20260921T154216Z-4",
+      "p": "KHÔNG viết đặc tả trải nghiệm — không có bố cục hay màn nào mới."
+    },
+    {
+      "id": "d-20260921T154216Z-5",
+      "p": "KHÔNG chụp màn làm bằng chứng — nhãn tiếng không hiện trên ảnh; phép thử thật là anh nhìn lại trên prod sau khi gộp."
+    },
+    {
+      "id": "d-20260921T221526Z-6",
+      "p": "Anh chọn đo đúng chỗ ca đỏ bằng một bài kiểm của kho — đổi lại thêm một phần việc viết mã và một lượt chấm; việc tấm hồ sơ có dùng khối mới hay không vẫn chỉ được thấy qua quan sát prod."
+    },
+    {
+      "id": "d-20260921T222514Z-7",
+      "p": "Anh đã duyệt phạm vi bốn tiêu chí tại Cổng Phạm vi."
+    }
+  ],
   "will_do": [
     {
       "id": "AC-1",
@@ -18,7 +49,6 @@
       "p": "Sẽ gắn nhãn tiếng Anh cho đoạn giới thiệu công ty ngay cả khi cả màn đang ở tiếng Việt — đúng chỗ đã đỏ trên prod — và không hiện khối giới thiệu khi công ty chưa có đoạn nào."
     }
   ],
-  "scope_plain": "Bộ đo lớn của PR #65, dữ liệu người nhập bằng tiếng Việt, và việc chấm lại hồ sơ nhãn tiếng Việt gốc — đều để ngoài ô này.",
   "coverage_plain": [
     {
       "i": 0,
@@ -45,32 +75,6 @@
     {
       "i": 4,
       "p": "Chưa có danh sách mười chỗ hiện chữ tiếng Anh để người duyệt đối chiếu. Đã thêm bảng mười chỗ vào hợp đồng."
-    }
-  ],
-  "decisions_plain": [
-    {
-      "id": "d-20260921T154216Z-1",
-      "p": "Chỉ đưa bản sửa lên prod, tách khỏi bộ đo lớn còn kẹt ở PR #65 — đổi lại bản sửa lên mà không có phép đo máy cho từng chỗ hiện chữ."
-    },
-    {
-      "id": "d-20260921T154216Z-2",
-      "p": "KHÔNG quét không gian lựa chọn — đổi lại không có bằng chứng độ phủ; người duyệt tự soi chỗ bị sót bằng bảng mười chỗ."
-    },
-    {
-      "id": "d-20260921T154216Z-3",
-      "p": "KHÔNG dựng bản mẫu để nhìn trước — thay đổi không làm màn khác đi chút nào."
-    },
-    {
-      "id": "d-20260921T154216Z-4",
-      "p": "KHÔNG viết đặc tả trải nghiệm — không có bố cục hay màn nào mới."
-    },
-    {
-      "id": "d-20260921T154216Z-5",
-      "p": "KHÔNG chụp màn làm bằng chứng — nhãn tiếng không hiện trên ảnh; phép thử thật là anh nhìn lại trên prod sau khi gộp."
-    },
-    {
-      "id": "d-20260921T221526Z-6",
-      "p": "Anh chọn đo đúng chỗ ca đỏ bằng một bài kiểm của kho — đổi lại thêm một phần việc viết mã và một lượt chấm; việc tấm hồ sơ có dùng khối mới hay không vẫn chỉ được thấy qua quan sát prod."
     }
   ]
 }
