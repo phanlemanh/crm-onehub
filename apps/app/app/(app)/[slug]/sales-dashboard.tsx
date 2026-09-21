@@ -8,6 +8,7 @@ import {
 } from "@crm/ui/components/card";
 import type { ChartConfig } from "@crm/ui/components/chart";
 import { DashboardRow, StatGroup } from "@crm/ui/components/dashboard";
+import { ForeignText } from "@crm/ui/components/foreign-text";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { StatCard, type StatDelta } from "@crm/ui/components/stat-card";
 import {
@@ -199,9 +200,12 @@ export function SalesDashboard({ summary }: { summary: Summary }) {
 												className="size-1.5 shrink-0"
 												style={{ backgroundColor: slice.color }}
 											/>
-											<span className="min-w-0 flex-1 truncate" lang="en">
+											<ForeignText
+												className="min-w-0 flex-1 truncate"
+												lang="en"
+											>
 												{slice.label}
-											</span>
+											</ForeignText>
 											<span className="shrink-0 text-muted-foreground tabular-nums">
 												{slice.count}
 											</span>

@@ -8,7 +8,8 @@
 		"./postcss.config": "./postcss.config.mjs",
 		"./components/*": "./src/components/*.tsx",
 		"./hooks/*": "./src/hooks/*.ts",
-		"./lib/*": "./src/lib/*.ts"
+		"./lib/*": "./src/lib/*.ts",
+		"./test/*": "./test/*.ts"
 	},
 	"scripts": {
 		"check-types": "tsc --noEmit",
@@ -56,6 +57,7 @@
 	"devDependencies": {
 		"@crm/typescript-config": "workspace:*",
 		"@tailwindcss/postcss": "^4",
+		"@types/bun": "^1.3.14",
 		"@types/node": "^24.10.1",
 		"@types/react": "^19.2.18",
 		"@types/react-dom": "^19",

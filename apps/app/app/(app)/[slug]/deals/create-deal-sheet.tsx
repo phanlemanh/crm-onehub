@@ -10,6 +10,7 @@ import {
 	FieldGroup,
 	FieldLabel,
 } from "@crm/ui/components/field";
+import { ForeignText } from "@crm/ui/components/foreign-text";
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
@@ -195,7 +196,9 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 								<SelectContent>
 									{OPEN_STAGES.map((value) => (
 										<SelectItem key={value} value={value}>
-											<span lang="en">{dealStageLabel(value)}</span>
+											<ForeignText lang="en">
+												{dealStageLabel(value)}
+											</ForeignText>
 										</SelectItem>
 									))}
 								</SelectContent>

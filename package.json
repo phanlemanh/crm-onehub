@@ -27,6 +27,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.10",
 		"@oxlint/plugins": "1.78.0",
+		"@types/jsdom": "^30.0.0",
 		"jsdom": "^30.0.1",
 		"knip": "6.32.2",
 		"oxlint": "1.78.0",
