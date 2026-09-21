@@ -16,6 +16,19 @@ export const ONBOARDING = {
 	bangCot: {
 		tranThe: 30,
 	},
+	thongDiep: {
+		canQuyenQuanTri: "Cần quyền quản trị để đổi cấu hình điều phối.",
+		daTrongPheu: "Người này đã có trong phễu.",
+		chuaLuuTru: "Chỉ xoá vĩnh viễn được thứ đã lưu trữ.",
+		daDung:
+			"Đã được dùng nên không xoá vĩnh viễn được — lịch sử kế hoạch còn trỏ tới.",
+		khuonDaLuuTru: (ten: string) =>
+			`Khuôn ${ten} đã lưu trữ — khôi phục trước khi tạo kế hoạch.`,
+		boPhanTrongKhuon: (khuon: string[]) =>
+			`Bộ phận này còn nằm trong khuôn ${khuon.join(", ")} — sửa khuôn trước.`,
+		boPhanDaLuuTru: (ten: string[]) =>
+			`Bộ phận ${ten.join(", ")} đã lưu trữ — khôi phục hoặc chọn bộ phận khác.`,
+	},
 } as const;
 
 export const MA_NEN_TANG = {

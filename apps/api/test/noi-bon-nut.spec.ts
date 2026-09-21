@@ -1,7 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { AUTH_COOKIE_PREFIX } from "@crm/auth";
 import { db } from "@crm/db";
-import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { INestApplication } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
 import request from "supertest";
@@ -12,10 +10,9 @@ import {
 } from "../src/onboarding/onboarding.contracts";
 import { OnboardingService } from "../src/onboarding/onboarding.service";
 import { batLoi } from "./dieu-phoi-gieo";
+import { mintPhien } from "./phien-thu";
 
 const TIEN_TO = "nbn";
-const DAY_MS = 24 * 60 * 60 * 1000;
-const COOKIE_NAME = `${AUTH_COOKIE_PREFIX}.session_token`;
 
 let dem = 0;
 
@@ -52,41 +49,10 @@ async function gieoBoPhan(): Promise<string> {
 	return bp.id;
 }
 
-async function kyCookie(value: string): Promise<string> {
-	const secret = process.env.BETTER_AUTH_SECRET;
-	if (!secret) throw new Error("BETTER_AUTH_SECRET chua dat");
-	const key = await crypto.subtle.importKey(
-		"raw",
-		new TextEncoder().encode(secret),
-		{ name: "HMAC", hash: "SHA-256" },
-		false,
-		["sign"],
-	);
-	const chuKy = await crypto.subtle.sign(
-		"HMAC",
-		key,
-		new TextEncoder().encode(value),
-	);
-	const base64 = btoa(String.fromCharCode(...new Uint8Array(chuKy)));
-	return encodeURIComponent(`${value}.${base64}`);
-}
-
-async function mintPhien(userId: string): Promise<string> {
-	const token = `dev-session-${userId}`;
-	await db.session.upsert({
-		where: { token },
-		create: {
-			id: token,
-			token,
-			userId,
-			expiresAt: new Date(Date.now() + 7 * DAY_MS),
-			updatedAt: new Date(),
-			activeOrganizationId: WORKSPACE_ID,
-		},
-		update: {},
-	});
-	daGieo.phien.push(token);
-	return `${COOKIE_NAME}=${await kyCookie(token)}`;
+async function phienCua(userId: string): Promise<string> {
+	const phien = await mintPhien(userId);
+	daGieo.phien.push(phien.token);
+	return phien.cookie;
 }
 
 function ngayLichUtc(d: Date): string {
@@ -183,7 +149,7 @@ describe("ghi-khuon", () => {
 describe("ghi-ke-hoach-json", () => {
 	test("ghi-ke-hoach-json: HTTP that toi thu tuc tao ke hoach, ngay lich dung, buoc chep tu khuon", async () => {
 		const nguoi = await gieoNguoi();
-		const cookie = await mintPhien(nguoi);
+		const cookie = await phienCua(nguoi);
 		const [a, b] = [await gieoBoPhan(), await gieoBoPhan()];
 		const buocKhuon = [
 			{ label: "Ky hop dong", departmentId: a, position: 0, offsetDays: 0 },

@@ -14,7 +14,9 @@ const MONG_DOI: ReadonlyArray<[WorkspaceRole | null, boolean]> = [
 
 describe("quyen-dieu-phoi", () => {
 	test("ma tran vai tro khop WORKSPACE_ROLES", () => {
-		const trongMaTran = MONG_DOI.flatMap(([vai]) => (vai === null ? [] : [vai]));
+		const trongMaTran = MONG_DOI.flatMap(([vai]) =>
+			vai === null ? [] : [vai],
+		);
 		expect([...trongMaTran].sort()).toEqual([...WORKSPACE_ROLES].sort());
 	});
 
