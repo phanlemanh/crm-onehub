@@ -333,14 +333,17 @@ evals:
     cmd: config:executors.script.hskt_hoi_quy_nam_cho
     steps:
       - "Goi canhCay() truoc man dau tien"
-      - "Chay NGUYEN TRANG _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs chan mac dinh (nganh, man danh sach cong ty)"
-      - "Chay NGUYEN TRANG chan 'giai-doan' cua chinh tep do (man danh sach thoa thuan)"
+      - "Chay THUOC CU _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs chan mac dinh (nganh, man danh sach cong ty) TREN CAY HIEN TAI"
+      - "Chay THUOC CU chan 'giai-doan' cua chinh tep do (man danh sach thoa thuan) TREN CAY HIEN TAI"
       - "Khang dinh ca hai chan exit 0 va van goi ten tung gia tri"
     expected: >-
       exit 0. Canh cay truoc; dau moc khong ve → ma 2 goi ten cay.
       HOI QUY cho nam cho khai dung TU TRUOC vong nay, sau khi chung chuyen sang
-      ForeignText. Chay lai THUOC CU nguyen trang, khong sua mot dong nao cua no —
-      chay lai mot cai thuoc KHONG phai mo lai hop dong cu: thuoc la vat, hop dong
+      ForeignText. Chay lai THUOC CU tren cay HIEN TAI: tieu chi la KET LUAN cua
+      phep do, KHONG phai byte cua tep thuoc. Mot ban va lam thuoc bot treo hay
+      chay nhanh hon ma KHONG doi ket luan thi khong vi pham; mot ban va lam no
+      doi ket luan thi vi pham, bat ke no dai bao nhieu chu.
+      Chay lai mot cai thuoc KHONG phai mo lai hop dong cu: thuoc la vat, hop dong
       la loi hua, vong nay chi muon vat.
       Vi sao can: E6 chi doc cau truc ma nen van xanh khi moi cho DA di qua
       ForeignText ma component do lam roi thuoc tinh; E1..E5 chi mo tam ho so nen

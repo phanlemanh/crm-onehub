@@ -434,14 +434,25 @@ này và chưa commit — xem Analyst.
   này theo quyết định của người ký 19/09, vì tiền đề của trần không đúng với
   một vòng mà sản phẩm CHÍNH LÀ thước. Cái mất: vòng này không còn chuông báo
   trôi thước, nên nếu máy thật sự trôi thì phải do người đọc diff bắt.
-- **E1-và-E10-tựa-thước-hồ-sơ-đã-đóng** — hai ô này chạy lại
-  `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs` nguyên trạng.
-  Thước ấy mở trang bằng `waitUntil: "networkidle0"`, mà `next dev` giữ kết nối
-  HMR nên mạng không bao giờ «im» — `page.goto` treo tới 120 giây rồi ném. Lối
-  không-chạm (`next build && next start`) đã thử và hỏng vì `canh-cay.mjs` của
-  một hồ sơ đã ký THỨ HAI luôn thoát 2. Cái mất: hai tiêu chí AC-1 và AC-9
-  không có một lượt đo máy đáng tin giữa hai chữ ký. Mọi ô khác của vòng xanh
-  trong lượt tuần tự 20/09 (19/21 lệnh, 0/24 phép phá lọt, 4 suite xanh).
+- ~~**E1-và-E10-tựa-thước-hồ-sơ-đã-đóng**~~ — **GẠCH BỎ 21/09, giữ nguyên văn.**
+  Mục này mô tả cây tại `verified_commit: 5b958a5c`, TRƯỚC bản vá `3f3f142f`
+  (`waitUntil: "networkidle0"` → `"load"`, đúng một chữ, trên
+  `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs:147`). Sau bản vá,
+  hai ô có lượt đo máy thật: E1 mã 0 (780s, 14/14 chuỗi ghim phân biệt được),
+  E10 mã 0 (9/9 chân con) — bảng eval ở đầu báo cáo này đã ghi PASS cho cả hai.
+  Chính commit `3f3f142f` khai «*muc E1-va-E10 GACH BO nhung GIU LAI van ban*»
+  nhưng không thực hiện, nên báo cáo này mang một mâu thuẫn nội bộ suốt một ngày:
+  bảng nói PASS, mục này nói «không có lượt đo máy đáng tin». Việc gạch bỏ hoàn
+  tất ở đây. Văn bản cũ giữ lại bên dưới để người đọc sau biết vì sao vòng này
+  chạm một tệp ngoài phạm vi:
+
+  > ~~hai ô này chạy lại `_acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs`
+  > nguyên trạng. Thước ấy mở trang bằng `waitUntil: "networkidle0"`, mà `next dev`
+  > giữ kết nối HMR nên mạng không bao giờ «im» — `page.goto` treo tới 120 giây rồi
+  > ném. Lối không-chạm (`next build && next start`) đã thử và hỏng vì `canh-cay.mjs`
+  > của một hồ sơ đã ký THỨ HAI luôn thoát 2. Cái mất: hai tiêu chí AC-1 và AC-9
+  > không có một lượt đo máy đáng tin giữa hai chữ ký.~~ Mọi ô khác của vòng xanh
+  > trong lượt tuần tự 20/09 (19/21 lệnh, 0/24 phép phá lọt, 4 suite xanh).
 - **chiều-đỏ-của-nhánh-glob-chưa-chạy** — bản vá `docDuong()` (commit `cc31d5bb`)
   đã chạy chiều LÀNH trong lượt tuần tự (E7 mã 0, 441 giây) nhưng chiều ĐỎ thì
   chưa; chứng nó đòi ba lượt `ban-khai-khop`, ~10 phút mỗi lượt. Cái mất: hai ca

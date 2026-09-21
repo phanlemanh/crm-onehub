@@ -295,13 +295,13 @@
       "id": "E12",
       "criterion": "AC-11",
       "cmd": "APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/ho-so-khai-dung-tieng/rang/hoi-quy-nam-cho.mjs\"",
-      "expected": "exit 0. Canh cay truoc; dau moc khong ve → ma 2 goi ten cay.\nHOI QUY cho nam cho khai dung TU TRUOC vong nay, sau khi chung chuyen sang\nForeignText. Chay lai THUOC CU nguyen trang, khong sua mot dong nao cua no —\nchay lai mot cai thuoc KHONG phai mo lai hop dong cu: thuoc la vat, hop dong\nla loi hua, vong nay chi muon vat.\nVi sao can: E6 chi doc cau truc ma nen van xanh khi moi cho DA di qua\nForeignText ma component do lam roi thuoc tinh; E1..E5 chi mo tam ho so nen\nkhong thay man danh sach. Khong co chan nay thi vong nay dong xanh trong khi\nAC-7 va AC-14 cua vong DA KY truoc do vo tren man danh sach.\nIn ra ket qua tung chan kem ten tung gia tri chan do cu tim thay.\nChan cu thoat ma 2 (tap rong, du lieu thu thieu) → ma 2, KHONG coi la dat.\nCap hai chieu: ban sao bo thuoc tinh lang khoi ForeignText → chan nay phai\nDO, thong diep ghim ten man danh sach va ten gia tri chua boc.",
+      "expected": "exit 0. Canh cay truoc; dau moc khong ve → ma 2 goi ten cay.\nHOI QUY cho nam cho khai dung TU TRUOC vong nay, sau khi chung chuyen sang\nForeignText. Chay lai THUOC CU tren cay HIEN TAI: tieu chi la KET LUAN cua\nphep do, KHONG phai byte cua tep thuoc. Mot ban va lam thuoc bot treo hay\nchay nhanh hon ma KHONG doi ket luan thi khong vi pham; mot ban va lam no\ndoi ket luan thi vi pham, bat ke no dai bao nhieu chu.\nChay lai mot cai thuoc KHONG phai mo lai hop dong cu: thuoc la vat, hop dong\nla loi hua, vong nay chi muon vat.\nVi sao can: E6 chi doc cau truc ma nen van xanh khi moi cho DA di qua\nForeignText ma component do lam roi thuoc tinh; E1..E5 chi mo tam ho so nen\nkhong thay man danh sach. Khong co chan nay thi vong nay dong xanh trong khi\nAC-7 va AC-14 cua vong DA KY truoc do vo tren man danh sach.\nIn ra ket qua tung chan kem ten tung gia tri chan do cu tim thay.\nChan cu thoat ma 2 (tap rong, du lieu thu thieu) → ma 2, KHONG coi la dat.\nCap hai chieu: ban sao bo thuoc tinh lang khoi ForeignText → chan nay phai\nDO, thong diep ghim ten man danh sach va ten gia tri chua boc.",
       "executor": "ui-check",
       "expectedExit": 0,
       "steps": [
         "Goi canhCay() truoc man dau tien",
-        "Chay NGUYEN TRANG _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs chan mac dinh (nganh, man danh sach cong ty)",
-        "Chay NGUYEN TRANG chan 'giai-doan' cua chinh tep do (man danh sach thoa thuan)",
+        "Chay THUOC CU _acceptance/nhan-ung-dung-noi-tieng-viet/rang/khai-tieng.mjs chan mac dinh (nganh, man danh sach cong ty) TREN CAY HIEN TAI",
+        "Chay THUOC CU chan 'giai-doan' cua chinh tep do (man danh sach thoa thuan) TREN CAY HIEN TAI",
         "Khang dinh ca hai chan exit 0 va van goi ten tung gia tri"
       ],
       "paths": [
