@@ -1,136 +1,106 @@
 # Bàn giao — dieu-phoi-30-ngay-dau
 
-Viết lúc 2026-09-20, trên Mac mini, tại `5649ead1`.
+Viết lúc 2026-09-21, trên Mac mini, tại `25f47ed4`.
 Đọc file này trước, rồi mở `contract.md` và `evidence-report.md`.
 
 ## Đang ở đâu
-
-Vòng tính năng đã đi qua Cổng Đáng và Cổng Phạm vi. Đang mắc ở giữa S4.
 
 | Mốc | Trạng thái |
 | --- | --- |
 | Cổng Đáng | ký 2026-09-19 (`opportunity.md`) |
 | Cổng Phạm vi | ký 2026-09-20 bởi Manh Phan, 14 tiêu chí, 15 phép đo, hạng T3 |
-| Thi công (S3) | xong, 10 task |
-| Năm lệnh chứng minh | xanh cả năm ở `38cea6a6` |
-| S4 vòng 1 | **BLOCKED** — xem dưới |
+| Thi công (S3) | xong |
+| Năm lệnh chứng minh | xanh cả năm ở `25f47ed4` |
+| S4 vòng 1, lượt chấm A | **BLOCKED** — E11 (khoá thư mục) + E15 (agent chết). Hồ sơ đã ghi |
+| S4 vòng 1, lượt B và C | **huỷ giữa chừng** — tác nhân từ chối chạy. KHÔNG ghi hồ sơ |
 | Cổng Bằng chứng | chưa tới được |
 
-`contract.md` đang ở `status: implemented`. **Đừng đưa nó sang `verified`**:
-vòng 1 không cho ra verdict thật.
+`contract.md` vẫn ở `status: implemented`. **Đừng đưa sang `verified`** —
+chưa lượt nào cho verdict thật sau khi sửa.
 
-## Vì sao BLOCKED
+## Việc đang chặn: tác nhân con từ chối chạy
 
-Một phép đo không chạy được, ba phép đo chạy xanh mà sai.
+Hai lượt chấm liên tiếp hỏng cùng một kiểu, không phải lỗi sản phẩm:
 
-### E11 không chạy được — chặn hạ tầng, không phải lỗi sản phẩm
+- Lượt B (`wf_66f43637-7c9`): 12/19 tác nhân khai `cannotRun`
+- Lượt C (`wf_b37274be-cc0`): 11/20 tác nhân khai `cannotRun`
 
-E11 là phép đo «nhìn thấy trên ảnh» của AC-11. Nó bắt buộc dùng cặp cổng
-3300/3301 khai trong `.claude/launch.json` (`api-cay-nay`, `app-cay-nay`).
+Lý do chúng tự khai: *«User cancelled with "Dừng nó"»*, *«Người dùng yêu cầu
+dừng workflow»*. Câu **«Dừng nó»** là lời chủ kho nói về **máy chủ dev PID
+59628**, không phải về vòng chấm; nó nằm trong ngữ cảnh phiên và các tác nhân
+con đọc thành lệnh huỷ. Đợi cho câu đó lùi xa KHÔNG chữa được — lượt C đã là
+sau khi đợi.
 
-Trên Mac mini, cặp cổng đó đang bị worktree `busy-chatterjee-fc04e2` giữ
-(pid api 94900, app 95303) — nhánh của **PR #65**, một luồng việc khác đang
-chạy. Bước «chặn cây» của E11 làm đúng việc: nó nhận ra mình đang nhìn cây
-khác, thoát mã 2, và không đọc con số nào trên ảnh.
+Hai lượt đó bị dừng tay và **không dòng nào vào `run-log.jsonl`,
+`evidence-report.md` hay `review-findings.md`** — ghi vào là vu cho người dùng
+đã huỷ vòng chấm, điều không đúng.
 
-Cổng là tài nguyên toàn máy, dù tên khai là «cây này». Chi tiết ở bộ nhớ dự
-án `cong-3300-la-tai-nguyen-chung`.
-
-**Trên máy mới, việc đầu tiên là kiểm lại cổng** — nhiều khả năng nó rảnh và
-chặn này tự biến mất:
-
-```
-for P in 3300 3301; do lsof -nP -iTCP:$P -sTCP:LISTEN -t; done
-```
-
-Rảnh thì đi thẳng, không cần quyết gì. Bị chiếm thì ba lối, và lối nào cũng
-cần người chọn:
+Ba lối, chủ kho chọn:
 
 | Lối | Làm gì | Đổi lại |
 | --- | --- | --- |
-| A | Dừng hai máy chủ của phiên kia | Phiên đó mất bản dev đang chạy — và nó có PR đang mở |
-| B | Đổi E11 sang cặp 3500/3501 (`cay-chinh-*`, đã khai sẵn) | Sửa phép đo đã ký: phải thêm dòng sổ quyết định, `evalsHash` đổi |
-| C | Khai E11 không chạy | Hạ thước. AC-11 là tiêu chí duy nhất «thấy được trên màn». Đừng |
+| Phiên mới | Mở phiên Claude Code mới rồi chạy S4 ở đó | Phiên mới không có câu «Dừng nó» → gỡ hẳn nguyên nhân. Mất một nhịp bàn giao |
+| Câu vô hiệu hoá | Người nhắn rõ trong phiên cũ rằng «Dừng nó» chỉ nói về máy chủ dev, vòng chấm cứ chạy | Rẻ nhất, nhưng câu mệnh lệnh cũ vẫn nằm cạnh câu mới |
+| VERIFY độc lập | Dùng Phase 3 của skill `acceptance` thay bầy tác nhân của workflow | Khác bộ máy nên không thừa ngữ cảnh. Đổi cách sinh bằng chứng giữa vòng, cần một dòng sổ quyết định |
 
-Chưa ai chọn. Đây là việc đang chờ người.
+## Đã sửa trong phiên 20–21/09
 
-### Ba lỗi TRONG hợp đồng — phải sửa trước khi chấm lại
+Ba lỗi TRONG hợp đồng của vòng soi lượt trước, mỗi nhát có chiều đỏ chạy bằng
+CHÍNH lệnh của eval:
 
-Cả ba mức nặng. Máy không được tự bỏ qua, và cũng không được sửa các mục
-*ngoài* hợp đồng cùng lúc.
+- **AC-12 / E12 đổi nhà** — E12 hứa «dựng màn hồ sơ, bấm nút xoá» mà chỉ gọi bộ
+  giảm thuần. Thêm `apps/app/test/dieu-phoi-xoa-ghi-danh.dom.tsx` dựng thật
+  `HoSoKeHoach` trong jsdom; bản giả tRPC ghi lại TÊN thủ tục màn hình gọi.
+- **AC-12 nút «Gỡ»** — nó gọi `upsertEnrollment` (một phép GHI) và lật `source`
+  về `tay`. Thêm `onboarding.removeEnrollment` thật; chiều đỏ in ra
+  «Expected onboarding.removeEnrollment / Received onboarding.upsertEnrollment».
+- **AC-6 chống trùng** — hai nhát. Nhát một khoá theo mã đơn; vòng soi bắt được
+  rằng như vậy lô của kế hoạch B mang mã còn treo ở kế hoạch A vẫn mất trắng.
+  Nhát hai khoá theo **cặp** `planId` + `platformBrokerId`; `subject` của
+  `enqueue` nay nhận nhiều cặp đường-dẫn ⇄ giá trị.
 
-1. **AC-6 — mã không khớp thứ hai trở đi bị bỏ âm thầm.**
-   `apps/api/src/onboarding/onboarding-ingest.service.ts:75`.
-   `onboardingMatchNeeded` xếp việc cho tác nhân mà không mang `contactId`
-   hay `subject`, nên câu chống trùng ở `agent-trigger.service.ts:479` khớp
-   *bất kỳ* việc `onboarding-identify` nào còn treo. Trong cùng một lô có hai
-   mã không khớp: mã đầu tạo việc, mã sau biến mất. Phản hồi vẫn đếm đủ N mã
-   đã chuyển. Mã mất không lưu ở đâu, không có đường thử lại.
-   E6 không bắt được vì bài kiểm thay hẳn `AgentTriggerService` bằng một bản
-   giả và chỉ dùng MỘT mã không khớp.
+Hai commit `a559192c` và `03a09dc7` do một tác nhân của lượt chấm A tự tạo giữa
+chừng (sửa chính phép đo đang bị chấm) **đã revert** — `dfd664d6`.
 
-2. **AC-12 — nút «Gỡ» không gỡ gì.**
-   `apps/app/app/(app)/[slug]/onboarding/[planId]/ho-so-ke-hoach.tsx:158`.
-   `onConfirm` gọi `upsertEnrollment` — một phép GHI. Router không có thủ tục
-   xoá ghi danh nào cả. Bấm Gỡ rồi xác nhận thì hàng vẫn còn, bốn mốc bậc còn
-   nguyên, và không có lỗi nào hiện ra. Tệ hơn: cú bấm đó lật `source` từ
-   `nen-tang` về `tay`.
-
-3. **AC-12 — phép đo không chạm lời hứa nó tự khai.**
-   `apps/app/test/dieu-phoi-trang-thai.spec.ts:79`.
-   E12 hứa «dựng màn hồ sơ, bấm nút xoá». Ba bài kiểm chỉ gọi bộ giảm thuần
-   `luong-xoa.ts` với một closure do chính bài kiểm dựng; `HoSoKeHoach` chưa
-   từng được render. Đột biến mà E12 tự khai xảy ra ở chỗ phép đo không với
-   tới — nên nó xanh, và lỗi số 2 đi qua.
-   Đây là gốc của lỗi 2, và nó vi phạm luật đã ghi ở bộ nhớ dự án
-   `luat-do-phai-cham-loi-hua`.
-
-Sửa xong ba mục này thì chứng chiều đỏ từng cái bằng chính lệnh của eval, rồi
-chấm lại **cùng vòng 1** (BLOCKED không tính là một vòng đã tiêu).
-
-### 32 mục ngoài hợp đồng
-
-17 mức nặng. Chúng nằm ở `review-findings.md`, và đi Cổng Bằng chứng cho
-người quyết — **không sửa ở vòng chấm**. Vài mục đáng đọc sớm vì chúng nặng:
-so khoá bí mật của điểm nhận chưa chống đo thời gian (bản anh em ở
-`listings.controller.ts` thì có), `ONEHUB_PLATFORM_INGEST_SECRET` không có
-decorator kiểm nào, `createFromTemplate` không kiểm người/công ty có thật,
-`listPlans` nhận `q`/`sort`/`dir` rồi bỏ lặng.
+Trần nhát sửa thước nổ ở lượt sinh args (mã 4). Chủ kho chọn lối (1): sáu giới
+hạn CÓ TÊN của bộ đo đã khai vào `## Notes` của `contract.md`, ghi là **đề
+nghị, chờ ký tại Cổng Bằng chứng** — chưa ai chấp nhận chúng.
 
 ## Chạy tiếp thế nào
 
-Bộ kit đang dùng: **acceptance-gate-kit 2.17.0**.
-
-Sinh lại args (BẮT BUỘC sau mỗi lần cây đổi — tệp args mang `generated_sha`,
-lệch HEAD là phải sinh lại, tuyệt đối không soạn tay):
+Bộ kit: **acceptance-gate-kit 2.17.0**. Sinh args (BẮT BUỘC sau mỗi lần cây đổi):
 
 ```
 node ~/.claude/plugins/cache/acceptance-gate-kit/feature-loop/2.17.0/scripts/s4-args.mjs \
-  --slug dieu-phoi-30-ngay-dau --root . --out /tmp/s4-args.json
+  --slug dieu-phoi-30-ngay-dau --root . --round 1 --out /tmp/s4-args.json
 ```
 
-Rồi dispatch `feature-loop/2.17.0/workflows/acceptance-verify.js` với nội
-dung tệp đó làm `args`. Vòng 1 vừa rồi tốn 30 agent, ~25 phút.
+`--round 1` vì BLOCKED không tiêu một vòng. So `generated_sha` với
+`git rev-parse HEAD` trước khi dispatch; lệch là sinh lại.
+
+Workflow `feature-loop/2.17.0/workflows/acceptance-verify.js` không nhận
+`scriptPath` ngoài thư mục làm việc — chép nguyên văn vào
+`node_modules/.cache/ag/` (vùng gitignore) và so sha trước khi dùng.
 
 Sau khi Workflow trả về, ở MỌI verdict: nối `runLog` vào `run-log.jsonl`
 TRƯỚC, rồi mới ghi `evidence-report.md` và `review-findings.md`; sau đó chạy
-`wf-usage.mjs` và `thuoc-vat.mjs --write`.
+`wf-usage.mjs` và `thuoc-vat.mjs --write`. Workflow trả `runLogWriteFailed:
+true` thì phần ghi đó là việc của phiên.
 
-## Máy mới cần gì
+## Môi trường
 
-- `bun`, Postgres, và một `.env` ở gốc kho. Mac mini đã có sẵn; máy mới thì
-  chưa — xem `docs/setup.md`.
+- Cổng 3000 / 3300 / 3301 rảnh, không `next dev` nào chạy, `.next/dev/lock` hết.
+- Next.js 16 khoá **một tiến trình mỗi thư mục dự án**: một `next dev` đang chạy
+  trong `apps/app` làm mọi `next dev` thứ hai trong cùng thư mục tự thoát mã 1,
+  bất kể cổng. Đây là cái đã chặn E11 ở lượt A — không phải cổng bị chiếm.
 - `bun run db:test --reset` trước khi tin một màu đỏ `P2021`.
-- Đẩy lên `origin` cần `http.version HTTP/1.1` (HTTP/2 trả 400).
-- Nhánh làm việc là `feat/dieu-phoi-30-ngay-dau`, mọc từ `8b9717d8`.
+- Đẩy lên `origin` cần `http.version HTTP/1.1`.
 
 ## Nợ đã biết, chưa trả
 
-- Ba script kit chép trong kho đã cũ so với 2.17.0:
-  `scripts/pre-merge-check.sh`, `scripts/recheck-evidence.cjs`,
-  `lib/workspace-record.cjs`. `pre-merge-check.sh` CHÍNH LÀ cổng merge của
-  CI, nên phải chép lại trước khi mở PR — không phải trước khi viết code.
+- Ba script kit chép trong kho đã cũ so với 2.17.0: `scripts/pre-merge-check.sh`,
+  `scripts/recheck-evidence.cjs`, `lib/workspace-record.cjs`.
+  `pre-merge-check.sh` CHÍNH LÀ cổng merge của CI — chép lại trước khi mở PR.
 - Ô `chi-quan-tri-sua-duoc-truong` đang chờ Cổng Đáng.
-- Giả định #2 (đội có thật sự bỏ Google Sheet hay nhập hai lần) chưa đo.
-- Giả định #3: cần quyền đọc lịch sử sửa của Google Sheet cho ngưỡng UAT
-  thứ hai.
+- Giả định #2 (đội có thật sự bỏ Google Sheet) chưa đo.
+- Giả định #3: cần quyền đọc lịch sử sửa của Google Sheet cho ngưỡng UAT thứ hai.
