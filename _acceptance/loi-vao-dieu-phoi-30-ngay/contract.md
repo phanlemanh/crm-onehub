@@ -31,7 +31,6 @@ của hồ sơ `dieu-phoi-30-ngay-dau`.
 - AC-2: Given người đứng ở màn danh mục hoặc hồ sơ một kế hoạch, When nhìn thanh điều hướng chính, Then mục 30 ngày đầu được đánh dấu đang mở; còn khi đứng ở Cài đặt › Điều phối thì mục Cài đặt được đánh dấu, không phải mục 30 ngày đầu.
 - AC-3: Given người đứng ở Cài đặt, When nhìn thanh bên Cài đặt, Then có một mục cuối dẫn tới Cài đặt › Điều phối 30 ngày, và mục đó được đánh dấu khi người đứng ở trang ấy.
 - AC-4: Given giao diện tiếng Việt hoặc tiếng Anh, When đọc nhãn hai mục mới, Then nhãn khớp đúng tiêu đề của màn đích — «30 ngày đầu» / «First 30 days» và «Điều phối 30 ngày» / «Onboarding».
-- AC-5: Given đã đăng nhập, When bấm mục 30 ngày đầu từ Tổng quan, mở Cài đặt › Điều phối, mở Cài đặt bằng tiếng Việt ở khổ 768, và mở lớp điều hướng di động ở khổ 375, Then nhìn thấy trên ảnh: màn danh mục mở ra với mục mới được đánh dấu, ở Cài đặt › Điều phối thì Cài đặt được đánh dấu chứ không phải mục 30 ngày đầu, nhãn «Điều phối 30 ngày» đọc trọn ở khổ 768, và mục mới có mặt trên điều hướng di động.
 
 ## Coverage
 
@@ -39,6 +38,7 @@ của hồ sơ `dieu-phoi-30-ngay-dau`.
 
 ## Out of scope
 
+- Khung chụp màn bằng máy (tiêu chí nhìn-thấy cũ AC-5) — chủ kho tự nhìn hai lối vào trên bản dev của nhánh vá ngày 2026-09-21 và xác nhận «ổn»; lý do ở dòng sổ quyết định bỏ ui-observed.
 - Đổi nội dung hay bố cục của hai màn đích — chúng đã qua Cổng Bằng chứng ở hồ sơ `dieu-phoi-30-ngay-dau`.
 - Hai hạt giống của hồ sơ đó (tác nhân tra mã đối tác không khớp; bộ lọc ra không kết quả) — mỗi cái sẽ là một hồ sơ riêng.
 - Sắp xếp lại thứ tự bảy mục sẵn có của thanh điều hướng chính.
