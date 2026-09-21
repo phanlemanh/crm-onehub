@@ -37,6 +37,7 @@ export {
 	canIssuePasswordLink,
 	canManageConnections,
 	canManageCurrency,
+	canManageOnboarding,
 	canManageTracking,
 	canRenameWorkspace,
 	DEFAULT_WORKSPACE_NAME,
