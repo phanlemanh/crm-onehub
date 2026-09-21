@@ -178,6 +178,17 @@ executors:
     bcl_nhan_khi_cho: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-cot-loi-va-nhan.dom.tsx -t nhan-khi-cho'
     bcl_nhan_khi_ve: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-cot-loi-va-nhan.dom.tsx -t nhan-khi-ve'
     bcl_tai_lai_bo_loc_moi: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-cot-loi-va-nhan.dom.tsx -t tai-lai-bo-loc-moi'
+    nbn_them_bo_phan: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/noi-bon-nut.dom.tsx -t them-bo-phan'
+    nbn_soan_khuon: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/noi-bon-nut.dom.tsx -t soan-khuon'
+    nbn_chua_co_bo_phan: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/noi-bon-nut.dom.tsx -t chua-co-bo-phan'
+    nbn_tao_ke_hoach: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/noi-bon-nut.dom.tsx -t tao-ke-hoach'
+    nbn_nut_tren_thanh_cong_cu: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/noi-bon-nut.dom.tsx -t nut-tren-thanh-cong-cu'
+    nbn_them_moi_gioi: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/noi-bon-nut.dom.tsx -t them-moi-gioi'
+    nbn_luu_hong: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/noi-bon-nut.dom.tsx -t luu-hong'
+    nbn_ghi_bo_phan: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/noi-bon-nut.spec.ts -t ghi-bo-phan"'
+    nbn_ghi_khuon: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/noi-bon-nut.spec.ts -t ghi-khuon"'
+    nbn_ghi_ke_hoach_json: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/noi-bon-nut.spec.ts -t ghi-ke-hoach-json"'
+    nbn_ghi_danh: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/noi-bon-nut.spec.ts -t ghi-danh"'
   script:
     dp30_hang_so_o_config: 'node _acceptance/dieu-phoi-30-ngay-dau/rang/hang-so-o-config.mjs'
     trg_tieu_de_trang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs tieu-de-trang"'
@@ -525,6 +536,7 @@ risk_tiers:
     # Thiếu nó thì NOTE lớp nhìn-thấy in «không kiểm được» và luật W8 tắt im ở
     # kho này — cùng lớp measuring-stick với tám mục trên.
     - "lib/lop-nhin-thay.cjs"
+    - "lib/nhan-canh-gay.cjs"
     # Cấu hình trình soạn: .claude/launch.json chỉ khai lệnh chạy dev server và
     # số cổng cho phiên máy. Không file nào import nó, không bản dựng nào đọc
     # nó, và không phép đo nào lấy giá trị từ nó — các thước tự đặt APP_URL và
