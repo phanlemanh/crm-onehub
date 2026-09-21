@@ -1,151 +1,151 @@
 ## Trong hợp đồng
 
-(không có finding nào ánh xạ được vào AC nào ở vòng này)
-
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Contract tRPC chép tay lại schema bước khuôn thay vì import từ @crm/validation/onboarding-template**
-  Người dùng thấy gì: Nếu sau này ai đó nới hay siết giới hạn số bước của khuôn kế hoạch, phần lưu dữ liệu và phần nhận dữ liệu có thể áp hai giới hạn khác nhau mà không ai nhận ra ngay.
-  file: `apps/api/src/onboarding/onboarding.contracts.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Việc tác nhân mới `onboarding-identify` không có schema payload ở packages/validation và không có nhánh xử lý trong apps/agent**
-  Người dùng thấy gì: Những trường hợp mã đối tác không khớp được ai sẽ báo là 'đã chuyển cho đội xử lý', nhưng hiện chưa có ai hay hệ thống nào tiếp nhận và hoàn tất chúng, nên các trường hợp này có thể nằm im vô thời hạn.
+- **New AgentTask kind 'onboarding-identify' is not registered in TASK_KINDS and the agent has no handler for it**
+  Người dùng thấy gì: Khi hệ thống không tự khớp được người dùng với mã đối tác gửi lên, việc xử lý tiếp theo bị treo lại vì chưa có bước nào tiếp tục tra và ghép hồ sơ đó, nên các trường hợp không khớp có thể bị bỏ quên.
   file: `apps/api/src/agent/agent-trigger.service.ts`
-  severity: medium
-  Đề xuất: known-limits
+  severity: high
+  Đề xuất: new-contract
 
-- **Điểm nhận không kiểm planId tồn tại/đang mở; planId lạ nổ lỗi khoá ngoại thành 500 thay vì 400/404**
-  Người dùng thấy gì: Nếu nền tảng gửi nhầm một mã kế hoạch không tồn tại hoặc đã đóng, người vận hành sẽ chỉ thấy một lỗi hệ thống chung chung thay vì thông báo rõ ràng, và một kế hoạch đã đóng vẫn có thể bị thêm ghi danh mới ngoài ý muốn.
-  file: `apps/api/src/onboarding/onboarding-ingest.service.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Dữ liệu người nhập trên ba màn mới không đánh dấu translate="no"**
-  Người dùng thấy gì: Nếu trình duyệt của người dùng bật dịch tự động, tên đối tác và tên bước trong kế hoạch có thể bị đổi thành chữ khác, gây hiểu nhầm.
-  file: `apps/app/app/(app)/[slug]/onboarding/danh-muc-table.tsx`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Trang danh mục prefetch bằng tham số cứng, bỏ qua loadOnboardingSearchParams đã khai**
-  Người dùng thấy gì: Khi mở một đường dẫn đã có sẵn bộ lọc, người dùng có thể thấy dữ liệu sai đúng chớp nhoáng rồi tự sửa lại ngay, gây cảm giác màn hình giật một nhịp.
-  file: `apps/app/app/(app)/[slug]/onboarding/page.tsx`
-  severity: low
-  Đề xuất: known-limits
-
-- **So khoá Bearer bằng !== thay vì timingSafeEquals như ListingsController**
-  Người dùng thấy gì: Về lý thuyết một kẻ tấn công kiên trì có thể dò khoá bí mật của điểm nhận nhanh hơn bình thường, dù rủi ro thực tế ở đây thấp.
+- **Ingest secret compared with plain !==, dropping the timingSafeEquals pattern of the sibling listings ingest**
+  Người dùng thấy gì: Bí mật dùng để xác thực nguồn gửi dữ liệu có thể bị dò ra qua thời gian phản hồi, làm tăng nguy cơ có bên ngoài giả danh gửi dữ liệu vào hệ thống.
   file: `apps/api/src/onboarding/onboarding.controller.ts`
-  severity: medium
+  severity: high
   Đề xuất: known-limits
 
-- **ONEHUB_PLATFORM_INGEST_SECRET khai trong EnvironmentVariables mà không có decorator nào**
-  Người dùng thấy gì: Nếu ai đó đặt một khoá bí mật quá ngắn hoặc dễ đoán cho điểm nhận, hệ thống vẫn chấp nhận mà không cảnh báo.
+- **ONEHUB_PLATFORM_INGEST_SECRET declared in env validation without any decorator (no IsOptional/IsString/MinLength(16))**
+  Người dùng thấy gì: Nếu bí mật kết nối được đặt quá ngắn hoặc quá đơn giản, hệ thống vẫn chấp nhận mà không cảnh báo, làm tăng nguy cơ bị đoán trúng.
   file: `apps/api/src/config/env.validation.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Facet lọc danh mục là Badge (<span>) gắn onClick: không focus được, không dùng được bằng bàn phím**
-  Người dùng thấy gì: Người chỉ dùng được bàn phím sẽ không bấm được các nút lọc theo trạng thái hay bộ phận trên màn danh mục.
-  file: `apps/app/app/(app)/[slug]/onboarding/danh-muc-table.tsx`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hằng số lặp/chết: DAY_MS khai hai lần, ONBOARDING.ingest.maxItemsPerBatch và stale.warnAfterMs không ai đọc**
-  Người dùng thấy gì: Không có tác động thấy được với người dùng; đây chỉ là phần mã dư thừa không ai đọc tới.
-  file: `apps/api/src/onboarding/onboarding.service.ts`
-  severity: low
-  Đề xuất: known-limits
-
-- **ensureField trong OnboardingIngestService là bản chép y hệt ensureMaNenTangField của OnboardingService**
-  Người dùng thấy gì: Nếu sau này ai đó sửa cách một trường hệ thống được tạo ra nhưng chỉ sửa một trong hai chỗ, dữ liệu kiểm thử và dữ liệu thật có thể lệch nhau mà không ai để ý.
+- **Ingest does not check that planId exists: unknown plan gives a 500 (FK P2003) or queues agent tasks for a plan that does not exist**
+  Người dùng thấy gì: Nếu bên gửi dữ liệu gõ nhầm mã kế hoạch, hệ thống có thể báo lỗi khó hiểu hoặc âm thầm tạo việc treo cho một kế hoạch không tồn tại, thay vì báo ngay là sai.
   file: `apps/api/src/onboarding/onboarding-ingest.service.ts`
-  severity: low
-  Đề xuất: known-limits
-
-- **ho-so-ke-hoach nhập ConfirmDialog từ thư mục settings/members**
-  Người dùng thấy gì: Không có tác động thấy được ngay với người dùng; đây là cách tổ chức mã, không phải hành vi màn hình.
-  file: `apps/app/app/(app)/[slug]/onboarding/[planId]/ho-so-ke-hoach.tsx`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hồ sơ kế hoạch nuốt lỗi truy vấn: listSteps/listEnrollments lỗi thì hiện như kế hoạch rỗng**
-  Người dùng thấy gì: Nếu việc tải dữ liệu bị lỗi (mất mạng, sự cố máy chủ), người dùng sẽ thấy kế hoạch trông như trống rỗng — không bước, không ai ghi danh — thay vì được báo có trục trặc và được mời thử lại.
-  file: `apps/app/app/(app)/[slug]/onboarding/[planId]/ho-so-ke-hoach.tsx`
-  severity: high
-  Đề xuất: known-limits
-
-- **Trang Cài đặt điều phối biến lỗi truy vấn thành 'chưa có khuôn / chưa có bộ phận'**
-  Người dùng thấy gì: Nếu việc tải danh sách khuôn bị lỗi, người quản trị sẽ thấy thông báo 'chưa có khuôn nào' và có thể vô tình tạo lại một khuôn đã có sẵn.
-  file: `apps/app/app/(app)/[slug]/settings/onboarding/cai-dat-dieu-phoi.tsx`
-  severity: high
-  Đề xuất: known-limits
-
-- **Chọn facet cho kết quả rỗng thì thanh facet biến mất, người dùng mắc kẹt**
-  Người dùng thấy gì: Sau khi chọn một bộ lọc mà không ra kết quả nào, người dùng có thể bị kẹt trên màn 'chưa có kế hoạch' mà không còn cách nào trên màn hình để quay lại xem tất cả kế hoạch.
-  file: `apps/app/app/(app)/[slug]/onboarding/danh-muc-table.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **Gọi mutate xoá bên trong hàm cập nhật setState (side effect trong updater)**
-  Người dùng thấy gì: Trong một số trường hợp, thao tác xoá có thể bị gọi lặp một lần âm thầm ở phía sau dù người dùng chỉ bấm xoá một lần.
+- **Mutation invalidates by listing query keys at the call site instead of through useCrmCache()**
+  Người dùng thấy gì: Sau khi xoá một ghi danh, màn danh mục có thể hiển thị số liệu chưa được cập nhật ngay, khiến người dùng thấy số cũ trong chốc lát.
   file: `apps/app/app/(app)/[slug]/onboarding/[planId]/ho-so-ke-hoach.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **Xoá ghi danh thất bại thì im lặng; nút xoá luôn nhắm ghi danh đầu tiên**
-  Người dùng thấy gì: Khi một kế hoạch có nhiều ghi danh, bấm nút xoá có thể xoá nhầm một ghi danh khác với ghi danh người dùng định xoá, và nếu việc xoá thất bại thì người dùng không được báo gì, tưởng đã xoá thành công.
-  file: `apps/app/app/(app)/[slug]/onboarding/[planId]/ho-so-ke-hoach.tsx`
-  severity: medium
-  Đề xuất: known-limits
-
-- **createTemplate/updateTemplate không kiểm departmentId; lỗi chỉ nổ muộn lúc tạo kế hoạch**
-  Người dùng thấy gì: Một khuôn kế hoạch trỏ tới bộ phận không còn tồn tại vẫn lưu được bình thường, nhưng khi ai đó dùng khuôn ấy để tạo kế hoạch thật thì thao tác sẽ thất bại với một lỗi khó hiểu.
+- **listPlans accepts listInput but ignores q/sort/dir, and computes facetCounts with an N+1 count loop**
+  Người dùng thấy gì: Ô tìm kiếm và sắp xếp trên màn danh mục kế hoạch có thể không có tác dụng thật, và màn có thể tải chậm hơn khi số bộ phận tăng lên.
   file: `apps/api/src/onboarding/onboarding.service.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Điểm nhận không kiểm planId; planId sai thì 500 cả lô thay vì 4xx**
-  Người dùng thấy gì: Một lô dữ liệu gửi nhầm mã kế hoạch có thể khiến hệ thống báo lỗi chung chung thay vì báo rõ mã kế hoạch sai, gây khó khăn khi bên gửi cần tự sửa lỗi.
+- **Template step schema is hand-duplicated in the API contracts beside the shared validation schema**
+  Người dùng thấy gì: Có nguy cơ hai nơi định nghĩa cùng một quy tắc của bước trong khuôn lệch nhau theo thời gian, dẫn tới hành vi khó lường khi tạo hay sửa khuôn.
+  file: `apps/api/src/onboarding/onboarding.contracts.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Tunable config is dead or duplicated: ONBOARDING.ingest.maxItemsPerBatch has no effect, DAY_MS is redefined, and ensureField is copy-pasted**
+  Người dùng thấy gì: Một số cấu hình dùng để tinh chỉnh hệ thống thực ra không có tác dụng gì khi thay đổi, dễ gây hiểu lầm cho người vận hành sau này.
+  file: `apps/api/src/onboarding/onboarding-config.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Client component derives data (progress, overdue, funnel counts) instead of receiving finished data**
+  Người dùng thấy gì: Màn chi tiết kế hoạch có thể hiện tên bậc bằng chữ kỹ thuật khó hiểu thay vì tên tiếng Việt dễ hiểu cho người dùng.
+  file: `apps/app/app/(app)/[slug]/onboarding/[planId]/ho-so-ke-hoach.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Filter facets are clickable Badges (span) with no keyboard or button semantics**
+  Người dùng thấy gì: Người dùng chỉ thao tác bằng bàn phím (không dùng chuột) có thể không bấm được các nhãn lọc theo trạng thái hay bộ phận trên màn danh mục.
+  file: `apps/app/app/(app)/[slug]/onboarding/danh-muc-table.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Server page ignores the URL state it defines, so the prefetch does not match the client query on deep links**
+  Người dùng thấy gì: Khi mở một đường dẫn danh mục đã có sẵn bộ lọc (ví dụ đường dẫn được chia sẻ), màn có thể hiện tạm một trạng thái đang tải trước khi lọc đúng dữ liệu.
+  file: `apps/app/app/(app)/[slug]/onboarding/page.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Log call uses `msg` key instead of the documented `message` key**
+  Người dùng thấy gì: Một dòng nhật ký nội bộ thiếu nội dung mô tả, gây khó khăn khi đội vận hành tra cứu sự cố sau này; người dùng cuối không thấy ảnh hưởng gì.
   file: `apps/api/src/onboarding/onboarding-ingest.service.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Danh mục cắt ở 25 hàng mà không có phân trang hay tổng số**
-  Người dùng thấy gì: Khi có hơn 25 kế hoạch đang chạy, những kế hoạch mới nhất có thể bị giấu khỏi màn hình mà người dùng không biết còn sót kế hoạch nào khác.
+- **Facet filter that returns zero rows replaces the whole list with the 'no plans / no template' empty state and hides the facet bar**
+  Người dùng thấy gì: Khi người dùng chọn một bộ lọc mà không có kế hoạch nào khớp, màn có thể hiện nhầm thông báo 'chưa có khuôn nào' dù khuôn và kế hoạch vẫn tồn tại, và không có cách nào trên màn để bỏ bộ lọc đó.
   file: `apps/app/app/(app)/[slug]/onboarding/danh-muc-table.tsx`
-  severity: low
+  severity: high
+  Đề xuất: new-contract
+
+- **Remove-enrollment mutation is fired inside a React state updater and has no error handling**
+  Người dùng thấy gì: Bấm xoá một ghi danh có thể âm thầm gửi yêu cầu xoá hai lần, và nếu việc xoá thất bại, người dùng không thấy thông báo lỗi nào — danh sách chỉ đứng yên như chưa có chuyện gì xảy ra.
+  file: `apps/app/app/(app)/[slug]/onboarding/[planId]/ho-so-ke-hoach.tsx`
+  severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 1 (đo CHỈ DẪN thay vì ĐẦU RA): E15 bo-loc-duong-dan chỉ đo bảng parser, không đo URL mà màn thật ghi ra**
-  Người dùng thấy gì: Nếu sau này tính năng lọc theo bộ phận trên đường dẫn bị hỏng, bộ kiểm tra tự động có thể vẫn báo bình thường, nên lỗi đó chỉ lộ ra khi người dùng thật gặp phải.
+- **Plan profile and settings screens show query errors as empty data**
+  Người dùng thấy gì: Khi dữ liệu không tải được do lỗi hệ thống, các màn kế hoạch và cài đặt khuôn có thể hiện y như chưa có dữ liệu nào, khiến người dùng tưởng nhầm là trống thật.
+  file: `apps/app/app/(app)/[slug]/onboarding/[planId]/ho-so-ke-hoach.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Ingest accepts a batch for a nonexistent planId with 200 when no item matches**
+  Người dùng thấy gì: Một mã kế hoạch không tồn tại có thể được điểm nhận chấp nhận âm thầm, tạo ra việc treo cho tác nhân xử lý một kế hoạch không có thật.
+  file: `apps/api/src/onboarding/onboarding-ingest.service.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Ingest upsert overwrites existing milestone timestamps with null**
+  Người dùng thấy gì: Nếu một đợt dữ liệu gửi lên thiếu một mốc đã ghi trước đó, mốc thời gian cũ có thể bị xoá mất, làm phễu tiến độ của đối tác lùi lại dù thực tế không đổi.
+  file: `apps/api/src/onboarding/onboarding-ingest.service.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): E15 đo bảng đăng ký khoá, không đo đường dẫn**
+  Người dùng thấy gì: Phép đo tự động cho việc lọc theo bộ phận trên đường dẫn hiện chỉ kiểm cấu hình khai báo, chưa thực sự thử thao tác lọc trên màn hình, nên nếu tính năng lọc hỏng sau này có thể không bị phát hiện kịp.
   file: `apps/app/test/dieu-phoi-trang-thai.spec.ts`
   severity: high
   Đề xuất: known-limits
 
-- **Hình dạng 2 (fixture VIẾT TAY đúng khuôn bên đọc): E7 thieu-khoa-503 dùng ConfigService giả `get: () => khoa`, bỏ qua env.validation và việc dựng module**
-  Người dùng thấy gì: Nếu cách đọc khoá bí mật thật sau này bị đổi sang gây lỗi khi thiếu khoá, bộ kiểm tra tự động có thể không phát hiện ra trước khi phát hành.
+- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): E7 dựng ConfigService giả, không đi qua env.validation hay module**
+  Người dùng thấy gì: Phép đo tự động cho việc hệ thống vẫn khởi động được khi thiếu bí mật kết nối chưa thử trên đường khởi động thật, nên một lỗi khiến hệ thống không khởi động được có thể lọt qua mà không bị phát hiện.
   file: `apps/api/test/dieu-phoi-diem-nhan.spec.ts`
   severity: high
   Đề xuất: known-limits
 
-- **Hình dạng 3 (assert «chuỗi có mặt» thay cho quan hệ): E10 kiểm «config khai đủ hai ngưỡng» bằng `includes(String(n))`**
-  Người dùng thấy gì: Ngưỡng thời gian dùng để cảnh báo kế hoạch im lặng có thể không thực sự được dùng ở đâu cả mà không ai biết, vì bài kiểm tra tự động chỉ tìm chuỗi số chứ không kiểm ai đang dùng nó.
+- **Hình dạng 4 (assertion âm tính một mình, không đối chứng dương): E1 không xác nhận khuôn thực sự đã đổi nhãn**
+  Người dùng thấy gì: Phép đo tự động cho việc sửa khuôn không ảnh hưởng kế hoạch cũ chỉ kiểm nhãn cũ không đổi, chưa kiểm việc sửa khuôn có thực sự được lưu lại hay không, nên một lỗi ở đó có thể không bị phát hiện.
+  file: `apps/api/test/dieu-phoi.spec.ts`
+  severity: high
+  Đề xuất: known-limits
+
+- **Hình dạng 5 (tuyên quét LỚP nhưng chỉ có điểm-case): răng AC-10 chỉ quét apps/api và chỉ bắt 4 kiểu nút cha**
+  Người dùng thấy gì: Việc rà soát tự động tìm số ngày ghim cứng chỉ quét phần máy chủ, bỏ qua phần giao diện người dùng, nên một con số ghim cứng ở màn hình vẫn có thể lọt qua mà không bị bắt.
+  file: `_acceptance/dieu-phoi-30-ngay-dau/rang/hang-so-o-config.mjs`
+  severity: high
+  Đề xuất: known-limits
+
+- **Hình dạng 3 (khẳng định chuỗi có mặt thay vì quan hệ): vế 2 AC-10 dùng includes trên văn bản thô**
+  Người dùng thấy gì: Việc rà soát tự động chỉ kiểm ngưỡng có được khai báo ở đúng chỗ, chưa kiểm ngưỡng đó có thực sự được dùng ở đâu hay không, nên một ngưỡng khai ra nhưng không ai dùng vẫn được coi là hợp lệ.
   file: `_acceptance/dieu-phoi-30-ngay-dau/rang/hang-so-o-config.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 5 (tuyên quét LỚP nhưng chỉ phủ một tập con): E10 khai quét cả module điều phối nhưng chỉ duyệt apps/api/src/onboarding và chỉ vài dạng nút cha**
-  Người dùng thấy gì: Một con số như 30 ngày có thể bị viết cứng ở phần giao diện người dùng mà không bị phát hiện, vì bài kiểm tra tự động hiện chỉ soi phần máy chủ.
-  file: `_acceptance/dieu-phoi-30-ngay-dau/rang/hang-so-o-config.mjs`
+- **Hình dạng 4 (assertion âm tính một mình): E5 lo-sai chỉ khẳng định đếm không đổi, thiếu chiều dương trong cùng lượt chạy**
+  Người dùng thấy gì: Phép đo tự động cho việc từ chối một lô dữ liệu sai chỉ kiểm số bản ghi không đổi, chưa kiểm việc gửi một lô đúng có thực sự tạo được bản ghi hay không, nên một lỗi khiến việc khớp mã đối tác luôn thất bại âm thầm có thể không bị phát hiện.
+  file: `apps/api/test/dieu-phoi-diem-nhan.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-## Chưa adversarial-verify (refuter chết)
-
-(không có finding nào bị đánh dấu unverified ở vòng này)
+- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): E9 dòng 3 «kết quả mang đường dẫn tới Cài đặt > Khuôn» không có assert đầu ra**
+  Người dùng thấy gì: Phép đo tự động cho việc dẫn người dùng sang Cài đặt khi chưa có khuôn nào chỉ kiểm nội dung thông báo, chưa kiểm đường dẫn thật trên nút bấm có hoạt động hay không, nên nếu đường dẫn đó bị gỡ mất, phép đo vẫn báo qua.
+  file: `apps/api/test/dieu-phoi.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
