@@ -204,12 +204,12 @@ export function bacCaoNhat(ghiDanh: GhiDanhTho): BacPheu {
 	return "chua-tai-khoan";
 }
 
-function theKeHoach(hang: HangDanhMuc): BangCotThe {
+function theKeHoach(hang: HangDanhMuc, phu: string | null): BangCotThe {
 	return {
 		id: hang.id,
 		planId: hang.id,
 		tieuDe: hang.companyName,
-		phu: hang.tacO,
+		phu,
 		imNgay: hang.imNgay,
 	};
 }
@@ -234,6 +234,7 @@ function catCot(cot: CotNhap[], tranThe: number): BangCotCot[] {
 
 function gomCot(
 	hang: HangDanhMuc[],
+	phuCua: (h: HangDanhMuc) => string | null,
 	khoaCua: (h: HangDanhMuc) => {
 		khoa: string;
 		nhan: string | null;
@@ -247,7 +248,7 @@ function gomCot(
 		theoKhoa.set(khoa, {
 			...cot,
 			thuTu: Math.min(cot.thuTu, thuTu),
-			the: [...cot.the, theKeHoach(h)],
+			the: [...cot.the, theKeHoach(h, phuCua(h))],
 		});
 	}
 	return [...theoKhoa.values()];
@@ -269,10 +270,13 @@ export function chiaCot(input: {
 
 	if (cachChia === "buoc") {
 		return catCot(
-			gomCot(hang, (h) =>
-				h.tacO === null
-					? cotXong()
-					: { khoa: h.tacO, nhan: h.tacO, thuTu: h.viTriTac ?? 0 },
+			gomCot(
+				hang,
+				(h) => h.boPhanTac,
+				(h) =>
+					h.tacO === null
+						? cotXong()
+						: { khoa: h.tacO, nhan: h.tacO, thuTu: h.viTriTac ?? 0 },
 			),
 			tranThe,
 		);
@@ -280,14 +284,17 @@ export function chiaCot(input: {
 
 	if (cachChia === "bo-phan") {
 		return catCot(
-			gomCot(hang, (h) =>
-				h.boPhanTacId === null
-					? cotXong()
-					: {
-							khoa: h.boPhanTacId,
-							nhan: h.boPhanTac,
-							thuTu: h.viTriBoPhan ?? 0,
-						},
+			gomCot(
+				hang,
+				(h) => h.tacO,
+				(h) =>
+					h.boPhanTacId === null
+						? cotXong()
+						: {
+								khoa: h.boPhanTacId,
+								nhan: h.boPhanTac,
+								thuTu: h.viTriBoPhan ?? 0,
+							},
 			),
 			tranThe,
 		);
@@ -299,7 +306,9 @@ export function chiaCot(input: {
 				khoa,
 				nhan: null,
 				thuTu,
-				the: hang.filter((h) => trangThaiCua(h) === khoa).map(theKeHoach),
+				the: hang
+					.filter((h) => trangThaiCua(h) === khoa)
+					.map((h) => theKeHoach(h, h.tacO)),
 			})),
 			tranThe,
 		);
