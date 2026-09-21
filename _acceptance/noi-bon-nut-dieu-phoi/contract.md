@@ -5,7 +5,7 @@ slug: noi-bon-nut-dieu-phoi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -49,3 +49,16 @@ phiên nghiệm thu của `dieu-phoi-30-ngay-dau` và `quan-ly-danh-muc-30-ngay`
 ## Notes
 
 - Ô chọn cá nhân chưa có trong kho; ghép từ Combobox theo khuôn của CompanyPicker, đặt cạnh màn điều phối.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-21 (Phan Le Manh), từ mục ngoài hợp đồng của S4:
+
+- Ngoài-1: ngày bắt đầu gửi lên sai hoặc thiếu vẫn tạo được kế hoạch với ngày 01/01/1970, thay vì báo lỗi — máy chủ đổi mọi giá trị thành ngày (`z.coerce.date()`), không chỉ nhận chuỗi `YYYY-MM-DD`.
+- Ngoài-2: bốn hộp thoại tạo mới giữ trạng thái mở trong bộ nhớ màn, không trên đường dẫn như các hộp thoại tạo mới khác — không gửi liên kết mở sẵn được, tải lại trang thì hộp thoại đóng.
+- Ngoài-3: khung quanh mỗi bước trong «Soạn khuôn» bo góc `rounded-md` thay vì `rounded-lg` của bề mặt chứa điều khiển.
+- Ngoài-4: nhập số ngày trên 365 thì nút Lưu vẫn bấm được, máy chủ mới từ chối với thông báo kỹ thuật; số giới hạn đặt ngay trong tệp màn, không trong tệp cấu hình của khu vực.
+- Ngoài-5: phạm vi tệp của các phép đo giao diện không gồm hộp thoại dùng chung và tệp thông điệp — sửa hai tệp đó sau này không làm bằng chứng hoá cũ.
+- Ngoài-6: thêm một người đã có trong phễu thì nguồn ghi danh của họ âm thầm đổi từ «nền tảng» sang «tay», hộp thoại vẫn báo thành công.
+- Ngoài-7: danh sách công ty, khuôn hay người phụ trách tải lỗi thì ô chọn trông như trống, không báo lỗi.
+- Ngoài-8: khi phá thử E8, E9, bài kiểm đỏ với câu báo chung, không ghim tên ca như `evals.yaml` hứa.
+- Ngoài-9: ngày đến hạn bằng ngày bắt đầu cộng độ trễ mới chỉ được kiểm ở bước có độ trễ 0.
+- Ngoài-10: sau khi lưu hỏng, mỗi hộp thoại mới kiểm một hai ô còn giữ giá trị, không phải mọi ô đã nhập.
