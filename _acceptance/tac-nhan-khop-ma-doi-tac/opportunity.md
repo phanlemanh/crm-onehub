@@ -3,10 +3,10 @@ schema_version: 1
 slug: tac-nhan-khop-ma-doi-tac
 feature: Môi giới mà nền tảng gửi lên với mã chưa khớp ai được tác nhân tra ra và ghép vào kế hoạch, thay vì nằm im
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-21T10:17:16Z
 prototype:
   base_commit:
   disposition:
@@ -49,12 +49,12 @@ Giả định 3 quyết thời điểm: không có bên gửi thì ô này nên 
 
 ## Ngưỡng chết / ngưỡng UAT
 
-Các dòng dưới là **đề xuất** — người ký Cổng Đáng gỡ tiền tố `[đề xuất]` là chốt.
+Bốn dòng dưới **đã chốt tại Cổng Đáng ngày 2026-09-21** — máy đề xuất, chủ kho ký «build».
 
-- Câu hỏi phép đo trả lời: [đề xuất] Một môi giới mà nền tảng báo có, mang mã chưa khớp ai, có tới được kế hoạch của mình mà không cần người đi tìm không?
-- Kết quả nào là SỐNG: [đề xuất] Đủ ba điều — (a) việc `onboarding-identify` có nhánh riêng ở tác nhân và có khuôn payload ở `packages/validation`; (b) trên một mẫu mã đã biết đáp án, tác nhân ghép đúng hoặc để trống — không ca nào ghép nhầm sang người khác; (c) ca tác nhân không chắc hiện ra cho người thấy trên hồ sơ kế hoạch, không nằm im.
-- Kết quả nào là CHẾT: [đề xuất] Có dù một ca ghép nhầm môi giới vào Cá nhân khác. Ghép nhầm tệ hơn để trống: nó làm sai phễu của một đối tác mà không ai biết để sửa.
-- Timebox: [đề xuất] Nửa ngày cho giả định 3 (hỏi đội nền tảng) TRƯỚC khi viết dòng nào. Có ngày gửi thì một ngày công cho khuôn payload, nhánh tác nhân và phép đo trên mẫu đã biết đáp án.
+- Câu hỏi phép đo trả lời: Một môi giới mà nền tảng báo có, mang mã chưa khớp ai, có tới được kế hoạch của mình mà không cần người đi tìm không?
+- Kết quả nào là SỐNG: Đủ ba điều — (a) việc `onboarding-identify` có nhánh riêng ở tác nhân và có khuôn payload ở `packages/validation`; (b) trên một mẫu mã đã biết đáp án, tác nhân ghép đúng hoặc để trống — không ca nào ghép nhầm sang người khác; (c) ca tác nhân không chắc hiện ra cho người thấy trên hồ sơ kế hoạch, không nằm im.
+- Kết quả nào là CHẾT: Có dù một ca ghép nhầm môi giới vào Cá nhân khác. Ghép nhầm tệ hơn để trống: nó làm sai phễu của một đối tác mà không ai biết để sửa.
+- Timebox: Nửa ngày cho giả định 3 (hỏi đội nền tảng) TRƯỚC khi viết dòng nào. Có ngày gửi thì một ngày công cho khuôn payload, nhánh tác nhân và phép đo trên mẫu đã biết đáp án.
 
 ## Kết quả prototype
 
@@ -70,9 +70,10 @@ Chưa dựng gì.
 
 ## Cổng 0
 
-Chưa quyết. Người ký điền `decision` (build/iterate/park/kill), `decided_by`,
-`decided_at`, đổi `stage` sang `decided`, và gỡ tiền tố `[đề xuất]` ở bốn dòng
-ngưỡng.
+- **decision = build** — chủ kho, 2026-09-21: «build cả hai». Ký dù giả định 3
+  (ngày nền tảng gửi lô đầu tiên) chưa thử: nhánh tác nhân dựng trước, để ngày
+  có bên gửi thì đường đã liền.
+- **Ngưỡng UAT chốt cùng lúc ký:** nguyên văn bốn dòng ở mục ngưỡng phía trên.
 
 ## Out of scope từ khám phá
 

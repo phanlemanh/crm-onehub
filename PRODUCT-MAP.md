@@ -5,8 +5,8 @@
 
 ```mermaid
 flowchart TD
-  A["Đang cân nhắc cơ hội<br/>7 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>chưa có"]
+  A["Đang cân nhắc cơ hội<br/>5 việc"] --> GD{"Cổng Đáng"}
+  GD --> B["Sắp mở vòng<br/>2 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
@@ -27,9 +27,12 @@ flowchart TD
 - Chỉ quản trị mới đổi được trường của cả đội — hôm nay bất kỳ thành viên nào đăng nhập cũng sửa và xoá được (`chi-quan-tri-sua-duoc-truong`)
 - Người quyết mở rộng biết nhắm địa bàn nào — giao dịch và độ tập trung theo quận (`mo-o-dau`)
 - Phân tích cấu hình bộ cào ở biên, thay vì chuyền dict thô từ TOML xuống chỗ dùng (`phan-tich-cau-hinh-bo-cao`)
+- Ô tìm trong trang thành viên chiến dịch phải tìm TRONG phân khúc, không thay thế phân khúc (`tim-trong-phan-khuc`)
+
+## Sắp mở vòng
+
 - Người điều phối lọc, sắp, tìm và xem theo bảng cột trên danh mục 30 ngày đầu — và bộ lọc ra không kết quả không còn đẩy họ vào ngõ cụt (`quan-ly-danh-muc-30-ngay`)
 - Môi giới mà nền tảng gửi lên với mã chưa khớp ai được tác nhân tra ra và ghép vào kế hoạch, thay vì nằm im (`tac-nhan-khop-ma-doi-tac`)
-- Ô tìm trong trang thành viên chiến dịch phải tìm TRONG phân khúc, không thay thế phân khúc (`tim-trong-phan-khuc`)
 
 ## Đang làm
 

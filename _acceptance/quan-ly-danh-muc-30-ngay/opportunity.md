@@ -3,10 +3,10 @@ schema_version: 1
 slug: quan-ly-danh-muc-30-ngay
 feature: Người điều phối lọc, sắp, tìm và xem theo bảng cột trên danh mục 30 ngày đầu — và bộ lọc ra không kết quả không còn đẩy họ vào ngõ cụt
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-21T10:17:16Z
 prototype:
   base_commit:
   disposition:
@@ -70,12 +70,12 @@ thử riêng.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-Các dòng dưới là **đề xuất** — người ký Cổng Đáng gỡ tiền tố `[đề xuất]` là chốt.
+Bốn dòng dưới **đã chốt tại Cổng Đáng ngày 2026-09-21** — máy đề xuất, chủ kho ký «build».
 
-- Câu hỏi phép đo trả lời: [đề xuất] Người điều phối có trả lời được «đối tác nào đang tắc, ở bước nào, bộ phận nào đang cầm» mà không mở từng hồ sơ không?
-- Kết quả nào là SỐNG: [đề xuất] Đủ bốn điều — (a) bộ lọc ra không kết quả hiện đúng trạng thái «không khớp» kèm lối bỏ lọc, không bao giờ hiện «chưa có khuôn»; (b) danh mục dùng khung bảng chung: tìm, sắp, phân trang, bộ lọc theo nhóm, và cả bộ lọc lẫn góc nhìn nằm trong đường dẫn; (c) bảng cột theo cách chia chủ kho chọn hiện đủ mọi kế hoạch đang chạy, không cột nào tràn khung ở khổ 768; (d) trong phiên nghiệm thu, câu hỏi ở trên trả lời được trong một phút bấm đồng hồ.
-- Kết quả nào là CHẾT: [đề xuất] Bảng cột có mà trong phiên nghiệm thu không bộ phận nào mở nó thay bảng dòng; hoặc kéo thẻ đổi dữ liệu mà không có bước xác nhận hay đường hoàn tác.
-- Timebox: [đề xuất] Vá Ngoài-13 và chuyển sang khung bảng chung trước — một ngày công. Bảng cột là nửa sau, chỉ mở khi giả định 1 qua.
+- Câu hỏi phép đo trả lời: Người điều phối có trả lời được «đối tác nào đang tắc, ở bước nào, bộ phận nào đang cầm» mà không mở từng hồ sơ không?
+- Kết quả nào là SỐNG: Đủ bốn điều — (a) bộ lọc ra không kết quả hiện đúng trạng thái «không khớp» kèm lối bỏ lọc, không bao giờ hiện «chưa có khuôn»; (b) danh mục dùng khung bảng chung: tìm, sắp, phân trang, bộ lọc theo nhóm, và cả bộ lọc lẫn góc nhìn nằm trong đường dẫn; (c) bảng cột ở cả bốn cách chia hiện đủ mọi kế hoạch đang chạy, không cột nào tràn khung ở khổ 768; (d) trong phiên nghiệm thu, câu hỏi ở trên trả lời được trong một phút bấm đồng hồ.
+- Kết quả nào là CHẾT: Bảng cột có mà trong phiên nghiệm thu không bộ phận nào mở nó thay bảng dòng; hoặc kéo thẻ đổi dữ liệu mà không có bước xác nhận hay đường hoàn tác.
+- Timebox: Vá Ngoài-13 và chuyển sang khung bảng chung trước — một ngày công. Bảng cột là nửa sau.
 
 ## Kết quả prototype
 
@@ -92,9 +92,14 @@ Chưa dựng gì.
 
 ## Cổng 0
 
-Chưa quyết. Người ký điền `decision` (build/iterate/park/kill), `decided_by`,
-`decided_at`, đổi `stage` sang `decided`, gỡ tiền tố `[đề xuất]` ở bốn dòng
-ngưỡng, và trả lời câu hỏi chia cột ở trên.
+- **decision = build** — chủ kho, 2026-09-21: «build cả hai, bảng cột theo đủ các
+  loại trên». Bảng cột có ĐỦ bốn cách chia (a) bước đang tắc · (b) bộ phận ·
+  (c) bậc phễu môi giới · (d) trạng thái kế hoạch, người chọn cách chia ngay
+  trên màn. Chủ kho cho làm bảng cột ngay, không đợi giả định 1 qua.
+- **Kéo thẻ — chưa được trả lời.** Máy ghi giả định an toàn: bảng cột CHỈ ĐỂ
+  XEM, không kéo đổi dữ liệu. Hợp đồng mang dòng này; chủ kho sửa tại Cổng Phạm
+  vi nếu muốn kéo để đổi trạng thái thật.
+- **Ngưỡng UAT chốt cùng lúc ký:** nguyên văn bốn dòng ở mục ngưỡng phía trên.
 
 ## Out of scope từ khám phá
 
