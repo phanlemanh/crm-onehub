@@ -14,6 +14,8 @@ import type { Locale } from "@crm/ui/lib/locale";
 import type { ReactNode } from "react";
 import {
 	DetailSheetHeader,
+	DetailSheetProse,
+	DetailSheetSection,
 	type DetailSheetTab,
 	DetailSheetTabs,
 } from "@/components/detail-sheet";
@@ -162,6 +164,24 @@ export function MetaLine({
 				</span>
 			))}
 		</>
+	);
+}
+
+export function CompanyAbout({
+	title,
+	description,
+}: {
+	title: ReactNode;
+	description: string | null | undefined;
+}) {
+	if (!description) return null;
+
+	return (
+		<DetailSheetSection title={title}>
+			<DetailSheetProse>
+				<ForeignText lang="en">{description}</ForeignText>
+			</DetailSheetProse>
+		</DetailSheetSection>
 	);
 }
 

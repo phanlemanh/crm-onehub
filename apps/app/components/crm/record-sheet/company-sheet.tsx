@@ -12,7 +12,6 @@ import {
 	EntityLogo,
 	type EntityLogoTone,
 } from "@crm/ui/components/entity-logo";
-import { ForeignText } from "@crm/ui/components/foreign-text";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
@@ -47,7 +46,6 @@ import {
 	DetailSheetMain,
 	DetailSheetPending,
 	DetailSheetProperties,
-	DetailSheetProse,
 	DetailSheetRail,
 	DetailSheetSection,
 	DetailSheetSplit,
@@ -72,6 +70,7 @@ import { QuickAddContact, QuickAddDeal } from "./quick-add";
 import { RecordActions } from "./record-actions";
 import {
 	AddRow,
+	CompanyAbout,
 	DealAmount,
 	DomainLink,
 	MetaLine,
@@ -345,13 +344,10 @@ function CompanyOverview({ company }: { company: Company }) {
 		<DetailSheetBody>
 			<DetailSheetSplit>
 				<DetailSheetMain>
-					{company.description ? (
-						<DetailSheetSection title={m.section.about}>
-							<DetailSheetProse>
-								<ForeignText lang="en">{company.description}</ForeignText>
-							</DetailSheetProse>
-						</DetailSheetSection>
-					) : null}
+					<CompanyAbout
+						title={m.section.about}
+						description={company.description}
+					/>
 
 					<WebsiteActivity companyId={company.id} />
 				</DetailSheetMain>

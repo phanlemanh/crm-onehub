@@ -2,10 +2,14 @@ import "@crm/ui/test/setup-dom";
 import { expect, test } from "bun:test";
 import { act, createElement, type ReactElement } from "react";
 import { createRoot } from "react-dom/client";
-import { MetaLine } from "@/components/crm/record-sheet/record-parts";
+import {
+	CompanyAbout,
+	MetaLine,
+} from "@/components/crm/record-sheet/record-parts";
 
-function ve(cay: ReactElement): HTMLElement {
+function ve(cay: ReactElement, tieng?: string): HTMLElement {
 	const o = document.createElement("div");
+	if (tieng) o.setAttribute("lang", tieng);
 	document.body.appendChild(o);
 	const goc = createRoot(o);
 	act(() => {
@@ -32,8 +36,9 @@ test("chieu b — phan tu khong khai lang thi khong duoc khai ho", () => {
 				{ text: "Technology", lang: "en" as const },
 			],
 		}),
+		"vi",
 	);
-	expect(vungKhai(o, "Hà Nội")).toBeNull();
+	expect(vungKhai(o, "Hà Nội")).toBe("vi");
 	expect(vungKhai(o, "Technology")).toBe("en");
 });
 
@@ -51,4 +56,22 @@ test("chieu c — khu trung lap chay tren text, khong tren phan tu tho", () => {
 	).length;
 
 	expect(dem).toBe(1);
+});
+
+test("chieu d — doan gioi thieu tieng Anh tu khai lang duoi vung tieng Viet", () => {
+	const o = ve(
+		createElement(CompanyAbout, {
+			title: "Giới thiệu",
+			description: "Acme builds logistics software for ports.",
+		}),
+		"vi",
+	);
+	expect(vungKhai(o, "Acme builds logistics")).toBe("en");
+	expect(vungKhai(o, "Giới thiệu")).toBe("vi");
+
+	const rong = ve(
+		createElement(CompanyAbout, { title: "Giới thiệu", description: null }),
+		"vi",
+	);
+	expect(rong.textContent).toBe("");
 });
