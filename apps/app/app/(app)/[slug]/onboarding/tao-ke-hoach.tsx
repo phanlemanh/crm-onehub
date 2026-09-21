@@ -10,19 +10,13 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@crm/ui/components/select";
+import { toDay } from "@crm/ui/lib/format";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { CompanyPicker } from "@/components/crm/company-picker";
 import { KhungTao } from "@/components/onboarding/khung-tao";
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { useTRPC } from "@/lib/trpc/client";
-
-export function ngayLichHomNay(bayGio: Date = new Date()): string {
-	const nam = bayGio.getFullYear();
-	const thang = String(bayGio.getMonth() + 1).padStart(2, "0");
-	const ngay = String(bayGio.getDate()).padStart(2, "0");
-	return `${nam}-${thang}-${ngay}`;
-}
 
 export function TaoKeHoach({
 	nhanNut,
@@ -40,7 +34,7 @@ export function TaoKeHoach({
 	const [dangMo, setDangMo] = useState(false);
 	const [congTy, setCongTy] = useState("");
 	const [khuon, setKhuon] = useState("");
-	const [ngay, setNgay] = useState(ngayLichHomNay);
+	const [ngay, setNgay] = useState(() => toDay(new Date()));
 	const [nguoi, setNguoi] = useState("");
 	const [loi, setLoi] = useState<string | null>(null);
 
@@ -90,7 +84,7 @@ export function TaoKeHoach({
 							]);
 							setCongTy("");
 							setKhuon("");
-							setNgay(ngayLichHomNay());
+							setNgay(toDay(new Date()));
 							setNguoi("");
 							setDangMo(false);
 						},

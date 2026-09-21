@@ -115,7 +115,47 @@ const en = {
 			choose: "Choose a person",
 			search: "Search people",
 			none: "Nobody matches",
+			daTrongPheu: "already in the funnel",
 		},
+	},
+	quanLy: {
+		menu: "More actions",
+		doiTen: "Rename",
+		sua: "Edit",
+		luuTru: "Archive",
+		khoiPhuc: "Restore",
+		xoaVinhVien: "Delete forever",
+		hoanTac: "Undo",
+		daLuuTru: "Archived",
+		daLuuTruTen: "Archived {ten}",
+		canQuyen: "You need admin rights to change the onboarding setup.",
+		keHoachKhongDoi: "Plans already created from this template do not change.",
+		suaBoPhan: "Rename department",
+		suaKhuon: "Edit plan template",
+		xacNhanLuuTruTieuDe: "Archive {ten}?",
+		xacNhanLuuTruThan:
+			"It leaves the list. You can restore it from Archived at any time.",
+		xacNhanXoaTieuDe: "Delete {ten} forever?",
+		xacNhanXoaThan: "It has never been used. This cannot be undone.",
+		giu: "Keep",
+	},
+	keHoach: {
+		dong: "Close plan",
+		moLai: "Reopen",
+		daDong: "Closed",
+		xacNhanDongTieuDe: "Close this plan?",
+		xacNhanDongThan:
+			"It leaves the default list. You can reopen it from the plan page.",
+		giu: "Keep open",
+	},
+	bac: {
+		accountAt: "Has an account",
+		courseAt: "Finished the course",
+		activeAt: "Active",
+		dealAt: "First deal",
+		boDanhDau: "Clear",
+		danhDau: "Mark {bac} for {ten}",
+		doiNgay: "Change {bac} for {ten}",
 	},
 	settings: {
 		title: "Onboarding",
@@ -208,8 +248,51 @@ type OnboardingMessages = {
 			"title" | "toolbar" | "company" | "template" | "startedAt" | "owner",
 			string
 		>;
-		moiGioi: Record<"title" | "contact" | "choose" | "search" | "none", string>;
+		moiGioi: Record<
+			"title" | "contact" | "choose" | "search" | "none" | "daTrongPheu",
+			string
+		>;
 	};
+	quanLy: Record<
+		| "menu"
+		| "doiTen"
+		| "sua"
+		| "luuTru"
+		| "khoiPhuc"
+		| "xoaVinhVien"
+		| "hoanTac"
+		| "daLuuTru"
+		| "daLuuTruTen"
+		| "canQuyen"
+		| "keHoachKhongDoi"
+		| "suaBoPhan"
+		| "suaKhuon"
+		| "xacNhanLuuTruTieuDe"
+		| "xacNhanLuuTruThan"
+		| "xacNhanXoaTieuDe"
+		| "xacNhanXoaThan"
+		| "giu",
+		string
+	>;
+	keHoach: Record<
+		| "dong"
+		| "moLai"
+		| "daDong"
+		| "xacNhanDongTieuDe"
+		| "xacNhanDongThan"
+		| "giu",
+		string
+	>;
+	bac: Record<
+		| "accountAt"
+		| "courseAt"
+		| "activeAt"
+		| "dealAt"
+		| "boDanhDau"
+		| "danhDau"
+		| "doiNgay",
+		string
+	>;
 	settings: {
 		title: string;
 		templates: string;
@@ -337,7 +420,47 @@ const vi = {
 			choose: "Chọn một cá nhân",
 			search: "Tìm cá nhân",
 			none: "Không tìm thấy ai",
+			daTrongPheu: "đã trong phễu",
 		},
+	},
+	quanLy: {
+		menu: "Thao tác khác",
+		doiTen: "Đổi tên",
+		sua: "Sửa",
+		luuTru: "Lưu trữ",
+		khoiPhuc: "Khôi phục",
+		xoaVinhVien: "Xoá vĩnh viễn",
+		hoanTac: "Hoàn tác",
+		daLuuTru: "Đã lưu trữ",
+		daLuuTruTen: "Đã lưu trữ {ten}",
+		canQuyen: "Cần quyền quản trị để đổi cấu hình điều phối.",
+		keHoachKhongDoi: "Kế hoạch đã tạo từ khuôn này không đổi theo.",
+		suaBoPhan: "Đổi tên bộ phận",
+		suaKhuon: "Sửa khuôn kế hoạch",
+		xacNhanLuuTruTieuDe: "Lưu trữ {ten}?",
+		xacNhanLuuTruThan:
+			"Nó rời danh sách. Khôi phục lúc nào cũng được ở mục Đã lưu trữ.",
+		xacNhanXoaTieuDe: "Xoá vĩnh viễn {ten}?",
+		xacNhanXoaThan: "Mục này chưa từng được dùng. Xoá rồi không lấy lại được.",
+		giu: "Giữ lại",
+	},
+	keHoach: {
+		dong: "Đóng kế hoạch",
+		moLai: "Mở lại",
+		daDong: "Đã đóng",
+		xacNhanDongTieuDe: "Đóng kế hoạch này?",
+		xacNhanDongThan:
+			"Kế hoạch rời danh mục mặc định. Mở lại được ở trang kế hoạch.",
+		giu: "Để mở",
+	},
+	bac: {
+		accountAt: "Có tài khoản",
+		courseAt: "Học xong khoá",
+		activeAt: "Đang hoạt động",
+		dealAt: "Giao dịch đầu",
+		boDanhDau: "Bỏ đánh dấu",
+		danhDau: "Đánh dấu {bac} cho {ten}",
+		doiNgay: "Đổi ngày {bac} của {ten}",
 	},
 	settings: {
 		title: "Điều phối 30 ngày",

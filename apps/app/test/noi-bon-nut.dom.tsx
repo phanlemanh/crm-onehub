@@ -25,7 +25,13 @@ import {
 	manDanhMucTuHang,
 } from "../../api/src/onboarding/onboarding-danh-muc";
 
-type BoPhan = { id: string; name: string; position: number; archivedAt: null };
+type BoPhan = {
+	id: string;
+	name: string;
+	position: number;
+	archivedAt: null;
+	purgeable: boolean;
+};
 type Khuon = {
 	id: string;
 	name: string;
@@ -37,11 +43,13 @@ type Khuon = {
 		offsetDays: number;
 	}[];
 	archivedAt: null;
+	purgeable: boolean;
 };
 type GhiDanh = {
 	id: string;
 	planId: string;
 	contactId: string;
+	contactName: string;
 	accountAt: null;
 	courseAt: null;
 	activeAt: null;
@@ -129,8 +137,36 @@ const khongDoc = () => {
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		onboarding: {
-			listDepartments: thuTuc("listDepartments", () => boPhan),
-			listTemplates: thuTuc("listTemplates", () => khuon),
+			access: thuTuc("access", () => ({ canManage: true })),
+			listDepartments: thuTuc(
+				"listDepartments",
+				(v?: { archived?: boolean }) => (v?.archived === true ? [] : boPhan),
+			),
+			listTemplates: thuTuc("listTemplates", (v?: { archived?: boolean }) =>
+				v?.archived === true ? [] : khuon,
+			),
+			updateDepartment: thuTuc("updateDepartment", khongDoc),
+			archiveDepartment: thuTuc("archiveDepartment", khongDoc),
+			restoreDepartment: thuTuc("restoreDepartment", khongDoc),
+			purgeDepartment: thuTuc("purgeDepartment", khongDoc),
+			reorderDepartments: thuTuc("reorderDepartments", khongDoc),
+			updateTemplate: thuTuc("updateTemplate", khongDoc),
+			archiveTemplate: thuTuc("archiveTemplate", khongDoc),
+			restoreTemplate: thuTuc("restoreTemplate", khongDoc),
+			purgeTemplate: thuTuc("purgeTemplate", khongDoc),
+			planById: thuTuc("planById", () => ({
+				id: KE_HOACH,
+				companyId: "ct-1",
+				companyName: "Alpha Sàn",
+				templateId: null,
+				startedAt: "2026-09-01T00:00:00.000Z",
+				targetDays: 30,
+				closedAt: null,
+				ownerId: TOI.id,
+			})),
+			closePlan: thuTuc("closePlan", khongDoc),
+			reopenPlan: thuTuc("reopenPlan", khongDoc),
+			markEnrollmentStage: thuTuc("markEnrollmentStage", khongDoc),
 			createDepartment: thuTuc(
 				"createDepartment",
 				khongDoc,
@@ -143,6 +179,7 @@ mock.module("@/lib/trpc/client", () => ({
 							name: d.name,
 							position: boPhan.length,
 							archivedAt: null,
+							purgeable: false,
 						},
 					];
 				}),
@@ -154,7 +191,12 @@ mock.module("@/lib/trpc/client", () => ({
 					const d = templateCreateInput.parse(quaJson(v));
 					khuon = [
 						...khuon,
-						{ id: `kh-${khuon.length}`, ...d, archivedAt: null },
+						{
+							id: `kh-${khuon.length}`,
+							...d,
+							archivedAt: null,
+							purgeable: false,
+						},
 					];
 				}),
 			),
@@ -187,6 +229,7 @@ mock.module("@/lib/trpc/client", () => ({
 							id: `gd-${ghiDanh.length}`,
 							planId: d.planId,
 							contactId: d.contactId,
+							contactName: d.contactId,
 							accountAt: null,
 							courseAt: null,
 							activeAt: null,
@@ -496,8 +539,20 @@ describe("soan-khuon", () => {
 		let soCa = 0;
 		for (const ca of CA) {
 			boPhan = [
-				{ id: "bp-a", name: "Kinh doanh", position: 0, archivedAt: null },
-				{ id: "bp-b", name: "Dao tao", position: 1, archivedAt: null },
+				{
+					id: "bp-a",
+					name: "Kinh doanh",
+					position: 0,
+					archivedAt: null,
+					purgeable: false,
+				},
+				{
+					id: "bp-b",
+					name: "Dao tao",
+					position: 1,
+					archivedAt: null,
+					purgeable: false,
+				},
 			];
 			khuon = [];
 			daGoi = [];
@@ -566,7 +621,13 @@ describe("chua-co-bo-phan", () => {
 
 	test("chua-co-bo-phan: doi chung — co mot bo phan thi co o ten khuon", async () => {
 		boPhan = [
-			{ id: "bp-a", name: "Kinh doanh", position: 0, archivedAt: null },
+			{
+				id: "bp-a",
+				name: "Kinh doanh",
+				position: 0,
+				archivedAt: null,
+				purgeable: false,
+			},
 		];
 		await mo(<CaiDatDieuPhoi />);
 		await bam(nut(m.settings.newTemplate));
@@ -623,6 +684,7 @@ describe("tao-ke-hoach", () => {
 				partnerType: null,
 				steps: [],
 				archivedAt: null,
+				purgeable: false,
 			},
 		];
 		await moTaoKeHoach(m.empty.noPlan.action);
@@ -660,6 +722,7 @@ describe("nut-tren-thanh-cong-cu", () => {
 				partnerType: null,
 				steps: [],
 				archivedAt: null,
+				purgeable: false,
 			},
 		];
 		let soCa = 0;
@@ -696,6 +759,7 @@ describe("them-moi-gioi", () => {
 						id: "gd-x",
 						planId: KE_HOACH,
 						contactId: "cn-2",
+						contactName: "Binh",
 						accountAt: null,
 						courseAt: null,
 						activeAt: null,
@@ -766,7 +830,13 @@ const BON_HOP_THOAI: HopThoaiCa[] = [
 		thuTuc: "createTemplate",
 		chuanBi: () => {
 			boPhan = [
-				{ id: "bp-a", name: "Kinh doanh", position: 0, archivedAt: null },
+				{
+					id: "bp-a",
+					name: "Kinh doanh",
+					position: 0,
+					archivedAt: null,
+					purgeable: false,
+				},
 			];
 		},
 		mo: async () => {
@@ -795,6 +865,7 @@ const BON_HOP_THOAI: HopThoaiCa[] = [
 					partnerType: null,
 					steps: [],
 					archivedAt: null,
+					purgeable: false,
 				},
 			];
 		},

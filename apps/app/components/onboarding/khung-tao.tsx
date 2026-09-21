@@ -16,7 +16,8 @@ import { Spinner } from "@crm/ui/components/spinner";
 import { type ReactNode, useEffect, useId, useRef } from "react";
 
 export type KhungTaoProps = {
-	nhanNut: string;
+	nhanNut?: string;
+	khoaNut?: boolean;
 	bienThe?: "default" | "outline";
 	tieuDe: string;
 	moTa?: string;
@@ -33,6 +34,7 @@ export type KhungTaoProps = {
 
 export function KhungTao({
 	nhanNut,
+	khoaNut = false,
 	bienThe = "outline",
 	tieuDe,
 	moTa,
@@ -61,9 +63,13 @@ export function KhungTao({
 
 	return (
 		<Sheet open={dangMo} onOpenChange={doiMo}>
-			<SheetTrigger asChild>
-				<Button variant={bienThe}>{nhanNut}</Button>
-			</SheetTrigger>
+			{nhanNut === undefined ? null : (
+				<SheetTrigger asChild>
+					<Button variant={bienThe} disabled={khoaNut}>
+						{nhanNut}
+					</Button>
+				</SheetTrigger>
+			)}
 			<SheetContent side="right">
 				<SheetHeader>
 					<SheetTitle>{tieuDe}</SheetTitle>

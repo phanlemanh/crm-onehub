@@ -25,9 +25,11 @@ import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialo
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { useTRPC } from "@/lib/trpc/client";
 import { huy, type LuongXoa, luongXoaMoi, moHoi, xacNhan } from "../luong-xoa";
+import { DongMoKeHoach } from "./dong-mo-ke-hoach";
+import { type Bac, OBac } from "./o-bac";
 import { ThemMoiGioi } from "./them-moi-gioi";
 
-const BAC = ["accountAt", "courseAt", "activeAt", "dealAt"] as const;
+const BAC: readonly Bac[] = ["accountAt", "courseAt", "activeAt", "dealAt"];
 
 export function HoSoKeHoach({ planId }: { planId: string }) {
 	const m = onboardingMessages(useLocale());
@@ -40,7 +42,9 @@ export function HoSoKeHoach({ planId }: { planId: string }) {
 	const ghiDanh = useQuery(
 		trpc.onboarding.listEnrollments.queryOptions({ id: planId }),
 	);
-	const boPhan = useQuery(trpc.onboarding.listDepartments.queryOptions());
+	const keHoach = useQuery(
+		trpc.onboarding.planById.queryOptions({ id: planId }),
+	);
 
 	const xoa = useMutation(
 		trpc.onboarding.removeEnrollment.mutationOptions({
@@ -65,13 +69,26 @@ export function HoSoKeHoach({ planId }: { planId: string }) {
 	const rows = buoc.data?.rows ?? [];
 	const xong = rows.filter((b) => b.completedAt !== null).length;
 	const chuaGiao = rows.filter((b) => b.assigneeId === null).length;
-	const tenBoPhan = new Map((boPhan.data ?? []).map((d) => [d.id, d.name]));
 	const nay = Date.now();
 	const dsGhiDanh = ghiDanh.data ?? [];
 	const mauSo = dsGhiDanh.length;
 
+	const daTrongPheu = dsGhiDanh.map((e) => e.contactId);
+
 	return (
 		<div className="grid gap-4 md:grid-cols-2">
+			<div className="flex items-center justify-end gap-2 md:col-span-2">
+				{keHoach.data ? (
+					<DongMoKeHoach
+						planId={planId}
+						closedAt={
+							keHoach.data.closedAt === null
+								? null
+								: String(keHoach.data.closedAt)
+						}
+					/>
+				) : null}
+			</div>
 			<Card>
 				<CardHeader>
 					<CardTitle>{m.hoSo.steps}</CardTitle>
@@ -101,8 +118,8 @@ export function HoSoKeHoach({ planId }: { planId: string }) {
 									</span>
 								</div>
 								<div className="flex flex-wrap items-center gap-2">
-									<Badge variant="outline">
-										{tenBoPhan.get(b.departmentId) ?? b.departmentId}
+									<Badge variant="outline" translate="no">
+										{b.departmentName}
 									</Badge>
 									{quaHan ? (
 										<Badge variant="outline">{m.hoSo.overdue}</Badge>
@@ -132,7 +149,7 @@ export function HoSoKeHoach({ planId }: { planId: string }) {
 								<EmptyDescription>{m.hoSo.emptyFunnelBody}</EmptyDescription>
 							</EmptyHeader>
 							<EmptyContent>
-								<ThemMoiGioi planId={planId} />
+								<ThemMoiGioi planId={planId} daTrongPheu={daTrongPheu} />
 							</EmptyContent>
 						</Empty>
 					) : (
@@ -142,7 +159,9 @@ export function HoSoKeHoach({ planId }: { planId: string }) {
 								return (
 									<div className="flex flex-col gap-1.5" key={bac}>
 										<div className="flex items-baseline justify-between gap-3">
-											<span className="min-w-0 truncate text-sm">{bac}</span>
+											<span className="min-w-0 truncate text-sm">
+												{m.bac[bac]}
+											</span>
 											<span className="shrink-0 text-sm tabular-nums">
 												{dat}/{mauSo}
 											</span>
@@ -151,8 +170,36 @@ export function HoSoKeHoach({ planId }: { planId: string }) {
 									</div>
 								);
 							})}
+							<ul className="flex flex-col gap-2">
+								{dsGhiDanh.map((e) => (
+									<li
+										className="flex flex-col gap-1"
+										data-ghi-danh={e.id}
+										key={e.id}
+									>
+										<span
+											className="truncate font-medium text-sm"
+											translate="no"
+										>
+											{e.contactName}
+										</span>
+										<div className="flex flex-wrap gap-1">
+											{BAC.map((bac) => (
+												<OBac
+													key={bac}
+													enrollmentId={e.id}
+													planId={planId}
+													bac={bac}
+													ngay={e[bac] === null ? null : String(e[bac])}
+													tenNguoi={e.contactName}
+												/>
+											))}
+										</div>
+									</li>
+								))}
+							</ul>
 							<div>
-								<ThemMoiGioi planId={planId} />
+								<ThemMoiGioi planId={planId} daTrongPheu={daTrongPheu} />
 							</div>
 						</>
 					)}
