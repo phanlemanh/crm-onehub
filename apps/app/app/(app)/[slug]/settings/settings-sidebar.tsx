@@ -7,33 +7,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import {
-	type SettingsMessages,
-	settingsMessages,
-} from "@/lib/messages/settings";
+	GOC_CAI_DAT,
+	MUC_CAI_DAT,
+	type MucCaiDat,
+	mucCaiDatDangMo,
+} from "@/lib/cai-dat-dieu-huong";
+import { settingsMessages } from "@/lib/messages/settings";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
-
-type SettingsNavItem = {
-	khoa: keyof SettingsMessages["thanhBen"];
-	href: string;
-};
-
-const ROOT = "/settings";
-
-const ITEMS: SettingsNavItem[] = [
-	{ khoa: "chung", href: ROOT },
-	{ khoa: "theoDoi", href: `${ROOT}/tracking` },
-	{ khoa: "ketNoi", href: `${ROOT}/connections` },
-	{ khoa: "tienTe", href: `${ROOT}/currencies` },
-	{ khoa: "truong", href: `${ROOT}/fields` },
-	{ khoa: "thanhVien", href: `${ROOT}/members` },
-	{ khoa: "khoaApi", href: `${ROOT}/api-keys` },
-	{ khoa: "sso", href: `${ROOT}/sso` },
-	{ khoa: "dieuPhoi", href: `${ROOT}/onboarding` },
-];
-
-function isActive(href: string, root: string, pathname: string): boolean {
-	return href === root ? pathname === href : pathname.startsWith(href);
-}
 
 function NavLink({
 	item,
@@ -41,7 +21,7 @@ function NavLink({
 	active,
 	className,
 }: {
-	item: SettingsNavItem;
+	item: MucCaiDat;
 	nhan: string;
 	active: boolean;
 	className: string;
@@ -80,7 +60,7 @@ export function SettingsSidebarFallback() {
 					aria-busy="true"
 					className="flex flex-col gap-0.5 p-3"
 				>
-					{ITEMS.map((item) => (
+					{MUC_CAI_DAT.map((item) => (
 						<Button
 							key={item.href}
 							variant="ghost"
@@ -98,7 +78,7 @@ export function SettingsSidebarFallback() {
 				aria-busy="true"
 				className="flex gap-1 overflow-x-auto border-b p-2 md:hidden [view-transition-name:settings-sidebar]"
 			>
-				{ITEMS.map((item) => (
+				{MUC_CAI_DAT.map((item) => (
 					<Button
 						key={item.href}
 						variant="ghost"
@@ -118,9 +98,10 @@ export function SettingsSidebar() {
 	const pathname = usePathname();
 	const workspaceUrl = useWorkspaceUrl();
 
-	const root = workspaceUrl(ROOT);
+	const root = workspaceUrl(GOC_CAI_DAT);
 	const items = useMemo(
-		() => ITEMS.map((item) => ({ ...item, href: workspaceUrl(item.href) })),
+		() =>
+			MUC_CAI_DAT.map((item) => ({ ...item, href: workspaceUrl(item.href) })),
 		[workspaceUrl],
 	);
 
@@ -133,7 +114,7 @@ export function SettingsSidebar() {
 							key={item.href}
 							item={item}
 							nhan={t.thanhBen[item.khoa]}
-							active={isActive(item.href, root, pathname)}
+							active={mucCaiDatDangMo(item.href, root, pathname)}
 							className="w-full px-3"
 						/>
 					))}
@@ -149,7 +130,7 @@ export function SettingsSidebar() {
 						key={item.href}
 						item={item}
 						nhan={t.thanhBen[item.khoa]}
-						active={isActive(item.href, root, pathname)}
+						active={mucCaiDatDangMo(item.href, root, pathname)}
 						className="shrink-0 px-3"
 					/>
 				))}
