@@ -5,7 +5,7 @@ slug: bang-cot-loi-va-nhan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -44,3 +44,7 @@ cách chia mới cho tới khi dữ liệu mới về.
 ## Notes
 
 - Không có ảnh chụp E-ui-check: cả ba trạng thái là trạng thái tải thoáng qua hoặc do lỗi gây ra, đo trong jsdom với thủ tục giả điều khiển được (entry `descope` «bỏ ui-observed»).
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-21 (Phan Le Manh), từ mục ngoài hợp đồng của S4:
+
+- Ngoài-1: khi phá thử E1, E3, E5, bài kiểm đỏ ở bước chờ với câu báo chung «màn không tới trạng thái mong đợi», không in con số ghim mà `evals.yaml` hứa (số khung chờ, số cột còn lại, giá trị aria-busy); bài kiểm vẫn bắt đúng lỗi, chỉ câu báo khi đỏ kém chi tiết.
