@@ -16,6 +16,35 @@ const en = {
 		running: "Running",
 		closed: "Closed",
 		allDepartments: "All departments",
+		status: "Plan status",
+		department: "Department holding it",
+		owner: "Owner",
+	},
+	search: "Search partners",
+	view: { label: "View", bang: "Table", "bang-cot": "Board" },
+	chia: {
+		label: "Columns by",
+		buoc: "Stuck step",
+		"bo-phan": "Department",
+		bac: "Broker stage",
+		"trang-thai": "Status",
+	},
+	board: {
+		label: "Plans by column",
+		xong: "All steps done",
+		silent: "silent {n}d",
+		bac: {
+			"chua-tai-khoan": "No account yet",
+			"co-tai-khoan": "Has an account",
+			"khoa-hoc": "Finished the course",
+			"hoat-dong": "Active",
+			"giao-dich": "Made a deal",
+		},
+	},
+	noMatch: {
+		title: "No plan matches",
+		body: "Nothing fits these filters or this search.",
+		action: "Clear filters",
 	},
 	urlHint: "Filters live in the address — sending the link sends this view.",
 	empty: {
@@ -79,7 +108,27 @@ type OnboardingMessages = {
 		| "owner",
 		string
 	>;
-	facets: Record<"running" | "closed" | "allDepartments", string>;
+	facets: Record<
+		"running" | "closed" | "allDepartments" | "status" | "department" | "owner",
+		string
+	>;
+	search: string;
+	view: Record<"label" | "bang" | "bang-cot", string>;
+	chia: Record<"label" | "buoc" | "bo-phan" | "bac" | "trang-thai", string>;
+	board: {
+		label: string;
+		xong: string;
+		silent: string;
+		bac: Record<
+			| "chua-tai-khoan"
+			| "co-tai-khoan"
+			| "khoa-hoc"
+			| "hoat-dong"
+			| "giao-dich",
+			string
+		>;
+	};
+	noMatch: { title: string; body: string; action: string };
 	urlHint: string;
 	empty: Record<
 		"noPlan" | "noTemplate",
@@ -130,6 +179,35 @@ const vi = {
 		running: "Đang chạy",
 		closed: "Đã đóng",
 		allDepartments: "Tất cả bộ phận",
+		status: "Trạng thái kế hoạch",
+		department: "Bộ phận đang cầm",
+		owner: "Người cầm trịch",
+	},
+	search: "Tìm đối tác",
+	view: { label: "Cách xem", bang: "Bảng", "bang-cot": "Bảng cột" },
+	chia: {
+		label: "Chia cột theo",
+		buoc: "Bước đang tắc",
+		"bo-phan": "Bộ phận",
+		bac: "Bậc phễu",
+		"trang-thai": "Trạng thái",
+	},
+	board: {
+		label: "Kế hoạch theo cột",
+		xong: "Đã xong mọi bước",
+		silent: "im {n} ngày",
+		bac: {
+			"chua-tai-khoan": "Chưa có tài khoản",
+			"co-tai-khoan": "Có tài khoản",
+			"khoa-hoc": "Hoàn thành khoá học",
+			"hoat-dong": "Hoạt động",
+			"giao-dich": "Phát sinh giao dịch",
+		},
+	},
+	noMatch: {
+		title: "Không kế hoạch nào khớp",
+		body: "Không kế hoạch nào khớp bộ lọc hay ô tìm này.",
+		action: "Bỏ lọc",
 	},
 	urlHint:
 		"Bộ lọc nằm trong đường dẫn — gửi liên kết là gửi đúng góc nhìn này.",
