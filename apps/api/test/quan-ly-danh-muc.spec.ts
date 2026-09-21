@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import type {
 	BangCotCachChia,
@@ -7,15 +7,52 @@ import type {
 } from "../src/onboarding/onboarding.contracts";
 import { OnboardingService } from "../src/onboarding/onboarding.service";
 import { ONBOARDING } from "../src/onboarding/onboarding-config";
-import { gieoBoPhan, gieoNguoi } from "./dieu-phoi-gieo";
+import {
+	gieoBoPhan as taoBoPhan,
+	gieoNguoi as taoNguoi,
+} from "./dieu-phoi-gieo";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+
+const TIEN_TO = "qldm";
+
+const daGieo = { nguoi: [] as string[], boPhan: [] as string[] };
+
+async function gieoNguoi() {
+	const nguoi = await taoNguoi();
+	daGieo.nguoi.push(nguoi.id);
+	return nguoi;
+}
+
+async function gieoBoPhan(viTri?: number) {
+	const boPhan = await taoBoPhan(viTri);
+	daGieo.boPhan.push(boPhan.id);
+	return boPhan;
+}
+
+afterAll(async () => {
+	await db.onboardingPlan.deleteMany({
+		where: {
+			OR: [
+				{ ownerId: { in: daGieo.nguoi } },
+				{ company: { name: { contains: TIEN_TO } } },
+			],
+		},
+	});
+	await db.contact.deleteMany({
+		where: { firstName: { startsWith: TIEN_TO } },
+	});
+	await db.company.deleteMany({ where: { name: { contains: TIEN_TO } } });
+	await db.member.deleteMany({ where: { userId: { in: daGieo.nguoi } } });
+	await db.user.deleteMany({ where: { id: { in: daGieo.nguoi } } });
+	await db.department.deleteMany({ where: { id: { in: daGieo.boPhan } } });
+});
 
 let demToken = 0;
 
 function token(): string {
 	demToken += 1;
-	return `qldm${Date.now().toString(36)}x${demToken}`;
+	return `${TIEN_TO}${Date.now().toString(36)}x${demToken}`;
 }
 
 function dichVu(): OnboardingService {
