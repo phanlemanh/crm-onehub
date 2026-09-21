@@ -1,0 +1,18 @@
+{
+  "feature_plain": "Người điều phối tìm, lọc, sắp và phân trang danh mục 30 ngày đầu, xem theo bảng cột bốn cách chia, và lọc ra không kết quả thì còn nút «Bỏ lọc» thay vì màn trống.",
+  "scope_plain": "Hoãn: kéo thẻ để đổi dữ liệu, góc nhìn lưu sẵn cho danh mục, bảng cột cho màn khác.",
+  "analyst_plain": "Lượt này không đo lại phép phân biệt vật lành với vật hỏng; số của lượt 1 được giữ nguyên.",
+  "decisions_plain": [
+    {"id": "d-20260921T105822Z-1", "p": "KHÔNG chạy quét độ phủ tiêu chí — phạm vi đã chốt ở Cổng Đáng; đổi lại có thể sót một công cụ anh ngầm muốn."},
+    {"id": "d-20260921T105822Z-2", "p": "KHÔNG dựng bản mẫu bấm được trước khi duyệt — anh xem ảnh chụp thật ở cổng này thay vào đó."},
+    {"id": "d-20260921T105822Z-3", "p": "Bảng cột chỉ để xem, không kéo thẻ — không có thao tác khó đảo nào dưới tay người dùng."},
+    {"id": "d-20260921T105822Z-4", "p": "Máy chủ sắp và chia cột trên cả tập đã lọc rồi mới cắt trang — đúng thứ tự, đổi lại mỗi lần tải đọc cả tập."},
+    {"id": "d-20260921T105822Z-5", "p": "KHÔNG làm góc nhìn lưu sẵn cho danh mục — cần đổi lược đồ; đường dẫn vẫn giữ nguyên góc nhìn khi gửi link."},
+    {"id": "d-20260921T111106Z-6", "p": "Lọc theo bộ phận đang cầm, người cầm trịch và trạng thái làm ở máy chủ sau khi nạp tập đã tìm — tổng số và số đếm luôn khớp nhau."},
+    {"id": "d-20260921T111106Z-7", "p": "Bảng cột chia theo trạng thái luôn hiện cả đang chạy lẫn đã đóng, và ẩn nút lọc trạng thái ở cách xem đó."},
+    {"id": "d-20260921T111106Z-8", "p": "Sửa bài kiểm của việc «30 ngày đầu» đã ký cho khớp bộ lọc mới — việc đó phải ghim lại bằng chứng khi ship."},
+    {"id": "d-20260921T120148Z-9", "p": "Cột «Đã xong mọi bước» không còn bị gộp với một bước tình cờ tên «xong» — có ca kiểm giữ điều này."},
+    {"id": "d-20260921T120148Z-10", "p": "Bỏ hai dòng chữ không còn hiện trên màn, nên bộ kiểm chữ thừa của kho xanh lại."},
+    {"id": "d-20260921T122333Z-11", "p": "Máy chấm tự sửa bộ chụp màn hình để chụp khi đã đăng nhập rồi để nguyên thay đổi; máy đã hoàn lại, ảnh vẫn là màn thật — anh quyết có nhận ảnh đó không."}
+  ]
+}
