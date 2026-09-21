@@ -5,7 +5,7 @@ slug: dieu-phoi-30-ngay-dau
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, config, docs]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-20T11:03:08Z
 design_doc: docs/superpowers/specs/2026-09-20-dieu-phoi-30-ngay-dau-design.md
@@ -114,3 +114,30 @@ Known limits — **đề nghị, chờ người ký đọc và chấp nhận t�
 
 Sáu mục trên là giới hạn của **bộ đo**, không phải của sản phẩm. Chúng đi Cổng
 Bằng chứng cùng các mục ngoài hợp đồng; người ký quyết nhận hay trả về.
+
+Người ký chấp nhận sáu mục trên tại Cổng Bằng chứng («Treo: phê hết»), Manh Phan 2026-09-21.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-21 (Manh Phan), từ các mục ngoài hợp đồng của S4 round 1:
+
+- Ngoài-2: bí mật của điểm nhận được so bằng phép so thường, không so thời gian hằng như điểm nhận listings — về lý thuyết dò được qua thời gian phản hồi.
+- Ngoài-3: biến bí mật của điểm nhận không có ràng buộc độ dài tối thiểu — một khoá quá ngắn vẫn được chấp nhận khi khởi động.
+- Ngoài-4: điểm nhận không kiểm mã kế hoạch có tồn tại — mã sai cho lỗi hệ thống chung chung, hoặc sinh việc treo cho kế hoạch không có thật.
+- Ngoài-5: xoá ghi danh làm mới dữ liệu tại chỗ gọi thay vì qua lối làm mới chung — màn danh mục có thể hiện số cũ trong chốc lát.
+- Ngoài-6: danh sách kế hoạch nhận tham số tìm kiếm và sắp xếp nhưng bỏ qua chúng, và đếm theo bộ phận bằng một truy vấn cho mỗi bộ phận.
+- Ngoài-7: khuôn dữ liệu của bước trong khuôn kế hoạch được chép tay ở phía API thay vì dùng chung — hai nơi có thể lệch nhau theo thời gian.
+- Ngoài-8: vài cấu hình tinh chỉnh không có tác dụng hoặc khai trùng — đổi chúng không đổi gì.
+- Ngoài-9: màn chi tiết kế hoạch tự tính tiến độ phía trình duyệt thay vì nhận dữ liệu đã tính — tên bậc có thể hiện bằng chữ kỹ thuật.
+- Ngoài-10: các nút lọc trên màn danh mục không dùng được bằng bàn phím.
+- Ngoài-11: mở một đường dẫn danh mục đã có sẵn bộ lọc có thể hiện tạm trạng thái đang tải trước khi lọc đúng.
+- Ngoài-12: một dòng nhật ký nội bộ dùng sai tên trường nội dung — khó tra khi có sự cố, người dùng không thấy gì.
+- Ngoài-14: nút xoá ghi danh có thể gửi yêu cầu xoá hai lần, và xoá thất bại thì không báo lỗi.
+- Ngoài-15: màn kế hoạch và cài đặt khuôn hiện lỗi tải dữ liệu y như chưa có dữ liệu.
+- Ngoài-16: điểm nhận chấp nhận âm thầm một lô cho mã kế hoạch không tồn tại khi không mục nào khớp.
+- Ngoài-17: một lô gửi thiếu mốc đã ghi trước đó có thể xoá mất mốc thời gian cũ của đối tác.
+- Ngoài-18: phép đo bộ lọc trên đường dẫn chỉ kiểm cấu hình khai báo, chưa thử thao tác lọc thật trên màn.
+- Ngoài-19: phép đo «thiếu khoá vẫn khởi động được» dùng cấu hình giả, chưa đi qua đường khởi động thật.
+- Ngoài-20: phép đo «sửa khuôn không đổi kế hoạch cũ» chưa kiểm việc sửa khuôn có thật sự được lưu.
+- Ngoài-21: rà số ngày ghim cứng chỉ quét phần máy chủ, bỏ phần giao diện.
+- Ngoài-22: rà ngưỡng chỉ kiểm ngưỡng được khai, chưa kiểm ngưỡng có được dùng.
+- Ngoài-23: phép đo lô sai chỉ kiểm số bản ghi không đổi, thiếu chiều dương trong cùng bài.
+- Ngoài-24: phép đo «dẫn sang Cài đặt khi chưa có khuôn» chưa kiểm đường dẫn thật trên nút.
