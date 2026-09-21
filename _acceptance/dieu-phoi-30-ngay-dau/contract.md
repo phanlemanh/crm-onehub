@@ -83,3 +83,34 @@ Quét bằng skill `morphological-scan` ngày 2026-09-20; bản đầy đủ ở
 - **Phụ thuộc phải gỡ sớm:** quyền xem lịch sử sửa của Google Sheet. Thiếu nó thì thước thứ hai của Đường đo không đo được, và biết muộn thì đã quá muộn để đổi phép đo.
 - Skill chuẩn giao diện repo khai (`feature_loop.ui_standards_skill: web-design-guidelines`) là một skill **rà soát mã UI đã có**, không phải chuẩn để thiết kế trước. Vòng này lấy thẳng nguồn nó trỏ tới (Web Interface Guidelines) làm chuẩn thiết kế, và để skill đó cho bước rà soát ở S3/S4.
 - **Một căng thẳng phải nói ra tại cổng, không giấu:** E11 là eval `ui-check` khai `layer: ui-observed` — nghĩa vụ hợp đồng cho mặt người nhìn. Nhưng làn máy gom eval theo `test`/`script`, nên `ui-check` **bị làn bỏ qua**: vòng `vao-bang-email-va-mat-khau` tuần trước đã phải đổi ba eval màn hình sang `executor: test` vì đúng lý do này (`d-20260919T130308Z-20`). Vòng này GIỮ `ui-check` và nêu căng thẳng lên thẻ để người ký quyết, thay vì tự đổi nhà rồi im.
+
+Known limits — **đề nghị, chờ người ký đọc và chấp nhận tại Cổng Bằng chứng**
+(máy khai theo lối (1) của trần nhát sửa thước, 2026-09-21; chưa ai ký):
+
+- **E11 (AC-11) không có phép đo máy nào thực sự đọc ảnh.** Nó khai
+  `executor: ui-check`, mà làn máy gom eval theo `test`/`script` nên bỏ qua
+  `ui-check` — căng thẳng này đã nêu tại Cổng Phạm vi và giữ nguyên. Hệ quả:
+  AC-11 là tiêu chí duy nhất «thấy được trên màn» mà không chốt máy nào chặn
+  được hồi quy; nó chỉ được bảo đảm bằng mắt người tại phiên nghiệm thu.
+- **E15 (AC-3, vế «bộ lọc nằm trong query param») đo bảng đăng ký khoá, không
+  chạm đường dẫn.** Bài kiểm khẳng định `SEARCH_PARAM`/`onboardingParsers` có
+  đúng khoá và giá trị mặc định; nó không dựng màn danh mục, không đặt lọc,
+  không đọc lại đường dẫn. Bộ lọc thôi ghi vào đường dẫn thì phép đo này vẫn
+  xanh. Cùng hình dạng với lỗ E12 vừa vá ở vòng này — E12 đã đổi nhà, E15 thì
+  chưa.
+- **E7 (AC-7) dựng một `ConfigService` giả, không đi qua `env.validation`.**
+  Vế «ứng dụng khởi động được khi thiếu khoá» được đo trên một vật thay thế;
+  đường đọc cấu hình thật đổi theo hướng ném khi thiếu thì phép đo vẫn xanh.
+- **E1 (AC-1) thiếu đối chứng dương cho đường đọc lại.** Nó khẳng định nhãn
+  bước trong kế hoạch KHÔNG đổi khi sửa khuôn, nhưng không có chiều ngược đo
+  rằng đường đọc đó CÓ đổi khi đáng phải đổi. Hàm đọc hỏng câm thì dòng âm
+  tính vẫn đúng.
+- **Răng `hang-so-o-config.mjs` chỉ quét `.ts` dưới `apps/api`.** AC-10 tuyên
+  quét lớp «không file nào ngoài `onboarding-config.ts`», nhưng phạm vi quét
+  bỏ toàn bộ mã giao diện; một số 30 ghim cứng ở `apps/app` lọt qua.
+- **Vế 2 của AC-10 khẳng định chuỗi có mặt, không khẳng định quan hệ.** Nó
+  kiểm hằng số được KHAI trong cấu hình, chứ không kiểm nó được DÙNG; ngưỡng
+  nguội bảy ngày hiện đúng là hằng số khai mà không ai đọc.
+
+Sáu mục trên là giới hạn của **bộ đo**, không phải của sản phẩm. Chúng đi Cổng
+Bằng chứng cùng các mục ngoài hợp đồng; người ký quyết nhận hay trả về.
