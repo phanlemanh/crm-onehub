@@ -38,6 +38,7 @@ import {
 	danhMucSearchParams,
 	onboardingParsers,
 } from "./onboarding-search-params";
+import { TaoKeHoach } from "./tao-ke-hoach";
 
 type Messages = ReturnType<typeof onboardingMessages>;
 
@@ -202,7 +203,7 @@ export function DanhMucTable() {
 					<EmptyDescription>{m.empty.noPlan.body}</EmptyDescription>
 				</EmptyHeader>
 				<EmptyContent>
-					<Button>{m.empty.noPlan.action}</Button>
+					<TaoKeHoach nhanNut={m.empty.noPlan.action} bienThe="default" />
 				</EmptyContent>
 			</Empty>
 		);
@@ -242,11 +243,14 @@ export function DanhMucTable() {
 		/>
 	);
 	const cachXem = (
-		<CachXemToggle
-			m={m}
-			value={ob.cachXem}
-			onChange={(next) => setOb({ cachXem: next })}
-		/>
+		<div className="flex flex-wrap items-center gap-2">
+			<CachXemToggle
+				m={m}
+				value={ob.cachXem}
+				onChange={(next) => setOb({ cachXem: next })}
+			/>
+			<TaoKeHoach nhanNut={m.tao.keHoach.toolbar} />
+		</div>
 	);
 	const khongKhopView = <KhongKhop m={m} onClear={boLoc} />;
 

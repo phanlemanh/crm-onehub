@@ -25,6 +25,7 @@ import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialo
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { useTRPC } from "@/lib/trpc/client";
 import { huy, type LuongXoa, luongXoaMoi, moHoi, xacNhan } from "../luong-xoa";
+import { ThemMoiGioi } from "./them-moi-gioi";
 
 const BAC = ["accountAt", "courseAt", "activeAt", "dealAt"] as const;
 
@@ -131,24 +132,29 @@ export function HoSoKeHoach({ planId }: { planId: string }) {
 								<EmptyDescription>{m.hoSo.emptyFunnelBody}</EmptyDescription>
 							</EmptyHeader>
 							<EmptyContent>
-								<Button variant="outline">{m.hoSo.emptyFunnelAction}</Button>
+								<ThemMoiGioi planId={planId} />
 							</EmptyContent>
 						</Empty>
 					) : (
-						BAC.map((bac) => {
-							const dat = dsGhiDanh.filter((e) => e[bac] !== null).length;
-							return (
-								<div className="flex flex-col gap-1.5" key={bac}>
-									<div className="flex items-baseline justify-between gap-3">
-										<span className="min-w-0 truncate text-sm">{bac}</span>
-										<span className="shrink-0 text-sm tabular-nums">
-											{dat}/{mauSo}
-										</span>
+						<>
+							{BAC.map((bac) => {
+								const dat = dsGhiDanh.filter((e) => e[bac] !== null).length;
+								return (
+									<div className="flex flex-col gap-1.5" key={bac}>
+										<div className="flex items-baseline justify-between gap-3">
+											<span className="min-w-0 truncate text-sm">{bac}</span>
+											<span className="shrink-0 text-sm tabular-nums">
+												{dat}/{mauSo}
+											</span>
+										</div>
+										<Progress value={(dat / mauSo) * 100} />
 									</div>
-									<Progress value={(dat / mauSo) * 100} />
-								</div>
-							);
-						})
+								);
+							})}
+							<div>
+								<ThemMoiGioi planId={planId} />
+							</div>
+						</>
 					)}
 				</CardContent>
 			</Card>
