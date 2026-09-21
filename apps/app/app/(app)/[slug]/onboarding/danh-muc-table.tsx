@@ -292,13 +292,35 @@ export function DanhMucTable() {
 			</div>
 			{khongKhop ? (
 				khongKhopView
+			) : bangCot.isError ? (
+				<Empty data-trang-thai="ST-bangcot-loi">
+					<EmptyHeader>
+						<EmptyTitle>{m.boardError.title}</EmptyTitle>
+						<EmptyDescription>{m.boardError.body}</EmptyDescription>
+					</EmptyHeader>
+					<EmptyContent>
+						<Button onClick={() => bangCot.refetch()} variant="outline">
+							{m.error.action}
+						</Button>
+					</EmptyContent>
+				</Empty>
 			) : bangCot.data ? (
-				<DanhMucBangCot
-					m={m}
-					cachChia={ob.cachChia}
-					cot={bangCot.data.cot}
-					hrefCua={hrefCua}
-				/>
+				<div
+					aria-busy={bangCot.isPlaceholderData}
+					data-trang-thai={
+						bangCot.isPlaceholderData
+							? "ST-bangcot-dangtai"
+							: "ST-bangcot-codulieu"
+					}
+					className={bangCot.isPlaceholderData ? "opacity-60" : undefined}
+				>
+					<DanhMucBangCot
+						m={m}
+						cachChia={bangCot.data.cachChia}
+						cot={bangCot.data.cot}
+						hrefCua={hrefCua}
+					/>
+				</div>
 			) : (
 				<Skeleton className="h-64 w-full" />
 			)}
