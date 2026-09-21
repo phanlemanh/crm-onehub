@@ -5,7 +5,7 @@ slug: khai-lang-gioi-thieu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: signed-off
+status: da-cham-boi-thuc-te
 approved_by: Phan Le Manh
 approved_at: 2026-09-21T22:25:02Z
 design_doc: docs/superpowers/specs/2026-09-21-khai-lang-gioi-thieu-design.md
