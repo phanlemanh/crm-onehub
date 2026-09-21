@@ -1,0 +1,12 @@
+{
+  "feature_plain": "Bảng cột của danh mục 30 ngày đầu báo lỗi kèm nút «Tải lại» thay vì khung chờ quay mãi, và giữ nhãn cột đúng với dữ liệu đang hiện khi đổi cách chia.",
+  "scope_plain": "Hoãn: trạng thái lỗi của dạng bảng (đã có), các hạn chế khác của hồ sơ trước, tự thử lại theo giờ.",
+  "analyst_plain": "Không eval nào chạy nhiều lần; không có ghi chú phân biệt.",
+  "decisions_plain": [
+    {"id": "d-20260921T133210Z-1", "p": "KHÔNG quét độ phủ tiêu chí — hai lỗi đã gọi tên sẵn, ba trạng thái tải liệt kê đủ ở sáu tiêu chí."},
+    {"id": "d-20260921T133210Z-2", "p": "KHÔNG dựng bản mẫu bấm được — chỉ sửa trạng thái của màn sẵn có, dùng lại thành phần có sẵn."},
+    {"id": "d-20260921T133210Z-3", "p": "KHÔNG chụp ảnh màn — ba trạng thái là lúc đang tải hoặc máy chủ lỗi, đo trong môi trường kiểm thử có thủ tục giả."},
+    {"id": "d-20260921T133210Z-4", "p": "Tải lại hỏng sau khi đổi bộ lọc thì thay cả vùng bảng bằng thông báo lỗi — người dùng không đọc nhầm số của bộ lọc cũ."},
+    {"id": "d-20260921T133723Z-5", "p": "Bài kiểm lỗi-sau-khi-đổi-bộ-lọc được đo bằng đúng lỗi «giữ cột cũ khi lỗi», vì cách phá thử ban đầu không làm màn sai."}
+  ]
+}
