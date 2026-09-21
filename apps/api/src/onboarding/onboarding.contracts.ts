@@ -71,7 +71,7 @@ export const templateListOutput = z.array(templateOutput);
 export const planCreateFromTemplateInput = z.object({
 	companyId: z.string().trim().min(1),
 	templateId: z.string().trim().min(1),
-	startedAt: z.date(),
+	startedAt: z.coerce.date(),
 	ownerId: z.string().trim().min(1),
 });
 
