@@ -1,0 +1,173 @@
+-- tiền đề làn đo: contextDevApiKey đã có sẵn, không đụng
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: đã thêm tên miền được phép lan-do.onehub.vn (sẽ dọn)
+$ bun scripts/dev-session.ts manh.phan@onemount.com
+HONG deals@320/vi cot=3 cuonBang=0
+     Tên:92/19 | Công ty:97/43! | Giai đoạn:97/51!
+dat  deals@375/vi cot=3 cuonBang=0
+     Tên:109/19 | Công ty:116/43 | Giai đoạn:116/51
+HONG deals@768/vi cot=5 cuonBang=0
+     Tên:113/19 | Công ty:119/43 | Giai đoạn:119/51 | Giá trị:79/33! | Phụ trách:93/53!
+HONG deals@1024/vi cot=7 cuonBang=0
+     Tên:136/19 | Công ty:144/43 | Giai đoạn:144/51 | Giá trị:96/33 | Phụ trách:112/53 | Ngày chốt:96/57! | Hoạt động gần nhất:152/110!
+dat  deals@1440/vi cot=7 cuonBang=0
+     Tên:191/19 | Công ty:203/43 | Giai đoạn:203/51 | Giá trị:135/33 | Phụ trách:158/53 | Ngày chốt:135/57 | Hoạt động gần nhất:214/110
+HONG deals@320/en cot=3 cuonBang=0
+     Deal:92/25 | Company:97/52! | Stage:97/32
+dat  deals@375/en cot=3 cuonBang=0
+     Deal:109/25 | Company:116/52 | Stage:116/32
+HONG deals@768/en cot=5 cuonBang=0
+     Deal:113/25 | Company:119/52 | Stage:119/32 | Amount:79/43! | Owner:93/36!
+HONG deals@1024/en cot=7 cuonBang=0
+     Deal:136/25 | Company:144/52 | Stage:144/32 | Amount:96/43! | Owner:112/36 | Close date:96/58! | Last activity:152/67
+dat  deals@1440/en cot=7 cuonBang=0
+     Deal:191/25 | Company:203/52 | Stage:203/32 | Amount:135/43 | Owner:158/36 | Close date:135/58 | Last activity:214/67
+HONG companies@320/vi cot=2 cuonBang=0
+     Tên:135/19 | Số thoả thuận đang mở:151/128!
+HONG companies@375/vi cot=2 cuonBang=0
+     Tên:162/19 | Số thoả thuận đang mở:179/128!
+HONG companies@768/vi cot=5 cuonBang=0
+     Tên:119/19 | Tên miền:79/49! | Phụ trách:86/53! | Số thoả thuận đang mở:132/128! | Hoạt động gần nhất:119/110!
+HONG companies@1024/vi cot=7 cuonBang=0
+     Tên:145/19 | Tên miền:97/49! | Ngành:97/36 | Phụ trách:105/53! | Số lượng cá nhân:129/95! | Số thoả thuận đang mở:161/128! | Hoạt động gần nhất:145/110!
+dat  companies@1440/vi cot=7 cuonBang=0
+     Tên:204/19 | Tên miền:136/49 | Ngành:136/36 | Phụ trách:148/53 | Số lượng cá nhân:182/95 | Số thoả thuận đang mở:227/128 | Hoạt động gần nhất:204/110
+dat  companies@320/en cot=2 cuonBang=0
+     Company:135/52 | Open deals:151/62
+dat  companies@375/en cot=2 cuonBang=0
+     Company:162/52 | Open deals:179/62
+HONG companies@768/en cot=5 cuonBang=0
+     Company:119/52 | Domain:79/42! | Owner:86/36! | Open deals:132/62 | Last activity:119/67!
+HONG companies@1024/en cot=7 cuonBang=0
+     Company:145/52 | Domain:97/42! | Industry:97/45! | Owner:105/36 | Contacts:129/50 | Open deals:161/62 | Last activity:145/67
+dat  companies@1440/en cot=7 cuonBang=0
+     Company:204/52 | Domain:136/42 | Industry:136/45 | Owner:148/36 | Contacts:182/50 | Open deals:227/62 | Last activity:204/67
+dat  contacts@320/vi cot=2 cuonBang=0
+     Tên:130/19 | Công ty:156/43
+dat  contacts@375/vi cot=2 cuonBang=0
+     Tên:155/19 | Công ty:186/43
+HONG contacts@768/vi cot=5 cuonBang=0
+     Tên:99/19 | Email:159/30 | Công ty:119/43 | Phụ trách:106/53! | Hoạt động gần nhất:126/110!
+HONG contacts@1024/vi cot=6 cuonBang=0
+     Tên:118/19 | Chức danh:157/59 | Email:188/30 | Công ty:141/43 | Phụ trách:125/53 | Hoạt động gần nhất:149/110!
+dat  contacts@1440/vi cot=6 cuonBang=0
+     Tên:166/19 | Chức danh:221/59 | Email:265/30 | Công ty:199/43 | Phụ trách:177/53 | Hoạt động gần nhất:210/110
+dat  contacts@320/en cot=2 cuonBang=0
+     Name:130/32 | Company:156/52
+dat  contacts@375/en cot=2 cuonBang=0
+     Name:155/32 | Company:186/52
+HONG contacts@768/en cot=5 cuonBang=0
+     Name:99/32 | Email:159/30 | Company:119/52 | Owner:106/36 | Last activity:126/67!
+dat  contacts@1024/en cot=6 cuonBang=0
+     Name:118/32 | Title:157/23 | Email:188/30 | Company:141/52 | Owner:125/36 | Last activity:149/67
+dat  contacts@1440/en cot=6 cuonBang=0
+     Name:166/32 | Title:221/23 | Email:265/30 | Company:199/52 | Owner:177/36 | Last activity:210/67
+HONG campaigns@320/vi cot=4 cuonBang=0
+     Tên:123/19 | Trạng thái:61/55! | Đã gọi:51/35! | Trả lời:51/33!
+HONG campaigns@375/vi cot=4 cuonBang=0
+     Tên:146/19 | Trạng thái:73/55! | Đã gọi:61/35! | Trả lời:61/33!
+HONG campaigns@768/vi cot=6 cuonBang=0
+     Tên:185/19 | Phân khúc:154/58 | Trạng thái:92/55! | Đã gọi:77/35! | Trả lời:77/33! | Ngày tạo:77/50!
+HONG campaigns@1024/vi cot=7 cuonBang=0
+     Tên:220/19 | Phân khúc:184/58 | Trạng thái:110/55! | Đã gọi:92/35! | Trả lời:92/33 | Phụ trách:129/53 | Ngày tạo:92/50!
+dat  campaigns@1440/vi cot=7 cuonBang=0
+     Tên:307/19 | Phân khúc:256/58 | Trạng thái:153/55 | Đã gọi:128/35 | Trả lời:128/33 | Phụ trách:179/53 | Ngày tạo:128/50
+HONG campaigns@320/en cot=4 cuonBang=0
+     Name:123/32 | Status:61/36! | Called:51/35! | Answered:51/55!
+HONG campaigns@375/en cot=4 cuonBang=0
+     Name:146/32 | Status:73/36! | Called:61/35! | Answered:61/55!
+HONG campaigns@768/en cot=6 cuonBang=0
+     Name:185/32 | Segment:154/50 | Status:92/36! | Called:77/35! | Answered:77/55! | Created:77/43!
+HONG campaigns@1024/en cot=7 cuonBang=0
+     Name:220/32 | Segment:184/50 | Status:110/36 | Called:92/35! | Answered:92/55! | Owner:129/36 | Created:92/43!
+dat  campaigns@1440/en cot=7 cuonBang=0
+     Name:307/32 | Segment:256/50 | Status:153/36 | Called:128/35 | Answered:128/55 | Owner:179/36 | Created:128/43
+HONG members@320/vi cot=2 cuonBang=0
+     Tên:122/19 | Vai trò:70/36!
+HONG members@375/vi cot=2 cuonBang=0
+     Tên:145/19 | Vai trò:84/36!
+HONG members@768/vi cot=4 cuonBang=0
+     Tên:114/19 | Địa chỉ email:118/70! | Vai trò:66/36! | Ngày vào:53/51!
+HONG members@1024/vi cot=4 cuonBang=0
+     Tên:180/19 | Địa chỉ email:187/70 | Vai trò:104/36 | Ngày vào:83/51!
+dat  members@1440/vi cot=4 cuonBang=0
+     Tên:289/19 | Địa chỉ email:300/70 | Vai trò:167/36 | Ngày vào:133/51
+HONG members@320/en cot=2 cuonBang=0
+     Name:122/32 | Role:70/25!
+dat  members@375/en cot=2 cuonBang=0
+     Name:145/32 | Role:84/25
+HONG members@768/en cot=4 cuonBang=0
+     Name:114/32 | Email:118/30 | Role:66/25! | Joined:53/37!
+HONG members@1024/en cot=4 cuonBang=0
+     Name:180/32 | Email:187/30 | Role:104/25 | Joined:83/37!
+dat  members@1440/en cot=4 cuonBang=0
+     Name:289/32 | Email:300/30 | Role:167/25 | Joined:133/37
+HONG: deals@320/vi tieu de bi cat: Công ty (nhan, o 97px, nhan 43px)
+HONG: deals@320/vi tieu de bi cat: Giai đoạn (nhan, o 97px, nhan 51px)
+HONG: deals@768/vi tieu de bi cat: Giá trị (nhan, o 79px, nhan 33px)
+HONG: deals@768/vi tieu de bi cat: Phụ trách (nhan, o 93px, nhan 53px)
+HONG: deals@1024/vi tieu de bi cat: Ngày chốt (nhan, o 96px, nhan 57px)
+HONG: deals@1024/vi tieu de bi cat: Hoạt động gần nhất (nhan, o 152px, nhan 110px)
+HONG: deals@320/en tieu de bi cat: Company (nhan, o 97px, nhan 52px)
+HONG: deals@768/en tieu de bi cat: Amount (nhan, o 79px, nhan 43px)
+HONG: deals@768/en tieu de bi cat: Owner (nhan, o 93px, nhan 36px)
+HONG: deals@1024/en tieu de bi cat: Amount (nhan, o 96px, nhan 43px)
+HONG: deals@1024/en tieu de bi cat: Close date (nhan, o 96px, nhan 58px)
+HONG: companies@320/vi tieu de bi cat: Số thoả thuận đang mở (nhan, o 151px, nhan 128px)
+HONG: companies@375/vi tieu de bi cat: Số thoả thuận đang mở (nhan, o 179px, nhan 128px)
+HONG: companies@768/vi tieu de bi cat: Tên miền (nhan, o 79px, nhan 49px)
+HONG: companies@768/vi tieu de bi cat: Phụ trách (nhan, o 86px, nhan 53px)
+HONG: companies@768/vi tieu de bi cat: Số thoả thuận đang mở (nhan, o 132px, nhan 128px)
+HONG: companies@768/vi tieu de bi cat: Hoạt động gần nhất (nhan, o 119px, nhan 110px)
+HONG: companies@1024/vi tieu de bi cat: Tên miền (nhan, o 97px, nhan 49px)
+HONG: companies@1024/vi tieu de bi cat: Phụ trách (nhan, o 105px, nhan 53px)
+HONG: companies@1024/vi tieu de bi cat: Số lượng cá nhân (nhan, o 129px, nhan 95px)
+HONG: companies@1024/vi tieu de bi cat: Số thoả thuận đang mở (nhan, o 161px, nhan 128px)
+HONG: companies@1024/vi tieu de bi cat: Hoạt động gần nhất (nhan, o 145px, nhan 110px)
+HONG: companies@768/en tieu de bi cat: Domain (nhan, o 79px, nhan 42px)
+HONG: companies@768/en tieu de bi cat: Owner (nhan, o 86px, nhan 36px)
+HONG: companies@768/en tieu de bi cat: Last activity (nhan, o 119px, nhan 67px)
+HONG: companies@1024/en tieu de bi cat: Domain (nhan, o 97px, nhan 42px)
+HONG: companies@1024/en tieu de bi cat: Industry (nhan, o 97px, nhan 45px)
+HONG: contacts@768/vi tieu de bi cat: Phụ trách (nhan, o 106px, nhan 53px)
+HONG: contacts@768/vi tieu de bi cat: Hoạt động gần nhất (nhan, o 126px, nhan 110px)
+HONG: contacts@1024/vi tieu de bi cat: Hoạt động gần nhất (nhan, o 149px, nhan 110px)
+HONG: contacts@768/en tieu de bi cat: Last activity (nhan, o 126px, nhan 67px)
+HONG: campaigns@320/vi tieu de bi cat: Trạng thái (nhan, o 61px, nhan 55px)
+HONG: campaigns@320/vi tieu de bi cat: Đã gọi (nhan, o 51px, nhan 35px)
+HONG: campaigns@320/vi tieu de bi cat: Trả lời (nhan, o 51px, nhan 33px)
+HONG: campaigns@375/vi tieu de bi cat: Trạng thái (nhan, o 73px, nhan 55px)
+HONG: campaigns@375/vi tieu de bi cat: Đã gọi (nhan, o 61px, nhan 35px)
+HONG: campaigns@375/vi tieu de bi cat: Trả lời (nhan, o 61px, nhan 33px)
+HONG: campaigns@768/vi tieu de bi cat: Trạng thái (nhan, o 92px, nhan 55px)
+HONG: campaigns@768/vi tieu de bi cat: Đã gọi (nhan, o 77px, nhan 35px)
+HONG: campaigns@768/vi tieu de bi cat: Trả lời (nhan, o 77px, nhan 33px)
+HONG: campaigns@768/vi tieu de bi cat: Ngày tạo (nhan, o 77px, nhan 50px)
+HONG: campaigns@1024/vi tieu de bi cat: Trạng thái (nhan, o 110px, nhan 55px)
+HONG: campaigns@1024/vi tieu de bi cat: Đã gọi (nhan, o 92px, nhan 35px)
+HONG: campaigns@1024/vi tieu de bi cat: Ngày tạo (nhan, o 92px, nhan 50px)
+HONG: campaigns@320/en tieu de bi cat: Status (nhan, o 61px, nhan 36px)
+HONG: campaigns@320/en tieu de bi cat: Called (nhan, o 51px, nhan 35px)
+HONG: campaigns@320/en tieu de bi cat: Answered (nhan, o 51px, nhan 55px)
+HONG: campaigns@375/en tieu de bi cat: Status (nhan, o 73px, nhan 36px)
+HONG: campaigns@375/en tieu de bi cat: Called (nhan, o 61px, nhan 35px)
+HONG: campaigns@375/en tieu de bi cat: Answered (nhan, o 61px, nhan 55px)
+HONG: campaigns@768/en tieu de bi cat: Status (nhan, o 92px, nhan 36px)
+HONG: campaigns@768/en tieu de bi cat: Called (nhan, o 77px, nhan 35px)
+HONG: campaigns@768/en tieu de bi cat: Answered (nhan, o 77px, nhan 55px)
+HONG: campaigns@768/en tieu de bi cat: Created (nhan, o 77px, nhan 43px)
+HONG: campaigns@1024/en tieu de bi cat: Called (nhan, o 92px, nhan 35px)
+HONG: campaigns@1024/en tieu de bi cat: Answered (nhan, o 92px, nhan 55px)
+HONG: campaigns@1024/en tieu de bi cat: Created (nhan, o 92px, nhan 43px)
+HONG: members@320/vi tieu de bi cat: Vai trò (nhan, o 70px, nhan 36px)
+HONG: members@375/vi tieu de bi cat: Vai trò (nhan, o 84px, nhan 36px)
+HONG: members@768/vi tieu de bi cat: Địa chỉ email (nhan, o 118px, nhan 70px)
+HONG: members@768/vi tieu de bi cat: Vai trò (nhan, o 66px, nhan 36px)
+HONG: members@768/vi tieu de bi cat: Ngày vào (nhan, o 53px, nhan 51px)
+HONG: members@1024/vi tieu de bi cat: Ngày vào (nhan, o 83px, nhan 51px)
+HONG: members@320/en tieu de bi cat: Role (nhan, o 70px, nhan 25px)
+HONG: members@768/en tieu de bi cat: Role (nhan, o 66px, nhan 25px)
+HONG: members@768/en tieu de bi cat: Joined (nhan, o 53px, nhan 37px)
+HONG: members@1024/en tieu de bi cat: Joined (nhan, o 83px, nhan 37px)
+-- tiền đề làn đo: đã dọn ảnh đại diện
+-- tiền đề làn đo: đã dọn tên miền được phép

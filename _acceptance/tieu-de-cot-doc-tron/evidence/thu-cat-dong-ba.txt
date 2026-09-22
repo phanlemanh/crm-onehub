@@ -1,0 +1,107 @@
+-- tiền đề làn đo: contextDevApiKey đã có sẵn, không đụng
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: đã thêm tên miền được phép lan-do.onehub.vn (sẽ dọn)
+$ bun scripts/dev-session.ts manh.phan@onemount.com
+dat  deals@320/vi cot=3 cuonBang=0 chuTen=65
+     Tên:89/19 | Công ty:99/43 | Giai đoạn:98/48x2
+dat  deals@375/vi cot=3 cuonBang=0 chuTen=82
+     Tên:106/19 | Công ty:118/43 | Giai đoạn:117/51
+dat  deals@768/vi cot=5 cuonBang=0 chuTen=89
+     Tên:113/19 | Công ty:119/43 | Giai đoạn:119/51 | Giá trị:79/29x2 | Phụ trách:93/43x2
+dat  deals@1024/vi cot=7 cuonBang=0 chuTen=125
+     Tên:149/19 | Công ty:158/43 | Giai đoạn:158/51 | Giá trị:107/33 | Phụ trách:124/53 | Ngày chốt:108/57 | Hoạt động gần nhất:83/29x2
+dat  deals@1440/vi cot=7 cuonBang=0 chuTen=179
+     Tên:211/19 | Công ty:224/43 | Giai đoạn:223/51 | Giá trị:150/33 | Phụ trách:175/53 | Ngày chốt:150/57 | Hoạt động gần nhất:114/60x2
+dat  deals@320/en cot=3 cuonBang=0 chuTen=60
+     Deal:84/25 | Company:111/52 | Stage:91/32
+dat  deals@375/en cot=3 cuonBang=0 chuTen=77
+     Deal:101/25 | Company:130/52 | Stage:110/32
+dat  deals@768/en cot=5 cuonBang=0 chuTen=89
+     Deal:113/25 | Company:119/52 | Stage:119/32 | Amount:93/43 | Owner:93/36
+dat  deals@1024/en cot=7 cuonBang=0 chuTen=121
+     Deal:145/25 | Company:157/52 | Stage:154/32 | Amount:108/43 | Owner:123/36 | Close date:106/56x2 | Last activity:94/40x2
+dat  deals@1440/en cot=7 cuonBang=0 chuTen=179
+     Deal:210/25 | Company:224/52 | Stage:223/32 | Amount:150/43 | Owner:174/36 | Close date:150/58 | Last activity:114/60x2
+dat  companies@320/vi cot=1 cuonBang=0 chuTen=88
+     Tên:286/19
+dat  companies@375/vi cot=1 cuonBang=0 chuTen=88
+     Tên:341/19
+dat  companies@768/vi cot=5 cuonBang=0 chuTen=65
+     Tên:119/19 | Tên miền:79/29x2 | Phụ trách:86/36x2 | Số thoả thuận đang mở:132/82x2 | Hoạt động gần nhất:119/65x2
+dat  companies@1024/vi cot=7 cuonBang=0 chuTen=88
+     Tên:157/19 | Tên miền:107/49 | Ngành:108/36 | Phụ trách:116/53 | Số lượng cá nhân:141/91x2 | Số thoả thuận đang mở:175/125x2 | Hoạt động gần nhất:83/29x2
+dat  companies@1440/vi cot=7 cuonBang=0 chuTen=88
+     Tên:223/19 | Tên miền:150/49 | Ngành:150/36 | Phụ trách:162/53 | Số lượng cá nhân:199/95 | Số thoả thuận đang mở:248/128 | Hoạt động gần nhất:114/60x2
+dat  companies@320/en cot=1 cuonBang=0 chuTen=88
+     Company:286/52
+dat  companies@375/en cot=1 cuonBang=0 chuTen=88
+     Company:341/52
+dat  companies@768/en cot=5 cuonBang=0 chuTen=65
+     Company:119/52 | Domain:92/42 | Owner:86/36 | Open deals:132/62 | Last activity:119/65x2
+dat  companies@1024/en cot=7 cuonBang=0 chuTen=88
+     Company:156/52 | Domain:107/42 | Industry:108/45 | Owner:114/36 | Contacts:140/50 | Open deals:168/62 | Last activity:94/40x2
+dat  companies@1440/en cot=7 cuonBang=0 chuTen=88
+     Company:224/52 | Domain:150/42 | Industry:150/45 | Owner:162/36 | Contacts:199/50 | Open deals:247/62 | Last activity:114/60x2
+dat  contacts@320/vi cot=2 cuonBang=0 chuTen=45
+     Tên:132/19 | Công ty:154/43
+dat  contacts@375/vi cot=2 cuonBang=0 chuTen=45
+     Tên:157/19 | Công ty:184/43
+dat  contacts@768/vi cot=5 cuonBang=0 chuTen=43
+     Tên:99/19 | Email:159/30 | Công ty:119/43 | Phụ trách:106/53 | Hoạt động gần nhất:126/72x2
+dat  contacts@1024/vi cot=6 cuonBang=0 chuTen=45
+     Tên:130/19 | Chức danh:172/59 | Email:205/30 | Công ty:156/43 | Phụ trách:140/53 | Hoạt động gần nhất:82/28x2
+HONG contacts@1440/vi cot=6 cuonBang=0 chuTen=45
+     Tên:187/19 | Chức danh:249/59 | Email:298/30 | Công ty:224/43 | Phụ trách:200/53 | Hoạt động gần nhất:89/42x2!
+dat  contacts@320/en cot=2 cuonBang=0 chuTen=45
+     Name:129/32 | Company:157/52
+dat  contacts@375/en cot=2 cuonBang=0 chuTen=45
+     Name:154/32 | Company:187/52
+dat  contacts@768/en cot=5 cuonBang=0 chuTen=43
+     Name:99/32 | Email:159/30 | Company:119/52 | Owner:106/36 | Last activity:126/67
+dat  contacts@1024/en cot=6 cuonBang=0 chuTen=45
+     Name:130/32 | Title:168/23 | Email:200/30 | Company:156/52 | Owner:138/36 | Last activity:94/40x2
+dat  contacts@1440/en cot=6 cuonBang=0 chuTen=45
+     Name:186/32 | Title:247/23 | Email:296/30 | Company:224/52 | Owner:199/36 | Last activity:94/40x2
+dat  campaigns@320/vi cot=3 cuonBang=0 chuTen=79
+     Tên:107/19 | Trạng thái:98/48x2 | Trả lời:81/31x2
+dat  campaigns@375/vi cot=3 cuonBang=0 chuTen=112
+     Tên:140/19 | Trạng thái:110/55 | Trả lời:91/33
+dat  campaigns@768/vi cot=6 cuonBang=0 chuTen=151
+     Tên:179/19 | Phân khúc:149/58 | Trạng thái:91/41x2 | Đã gọi:75/25x2 | Trả lời:76/26x2 | Ngày tạo:91/37x2
+dat  campaigns@1024/vi cot=7 cuonBang=0 chuTen=175
+     Tên:220/19 | Phân khúc:184/58 | Trạng thái:110/55 | Đã gọi:92/35 | Trả lời:92/33 | Phụ trách:129/53 | Ngày tạo:92/38x2
+dat  campaigns@1440/vi cot=7 cuonBang=0 chuTen=175
+     Tên:307/19 | Phân khúc:256/58 | Trạng thái:153/55 | Đã gọi:128/35 | Trả lời:128/33 | Phụ trách:179/53 | Ngày tạo:128/50
+dat  campaigns@320/en cot=3 cuonBang=0 chuTen=63
+     Name:91/32 | Status:88/36 | Answered:107/55
+dat  campaigns@375/en cot=3 cuonBang=0 chuTen=92
+     Name:120/32 | Status:102/36 | Answered:119/55
+dat  campaigns@768/en cot=6 cuonBang=0 chuTen=130
+     Name:158/32 | Segment:132/50 | Status:86/36 | Called:85/35 | Answered:105/55 | Created:97/43
+dat  campaigns@1024/en cot=7 cuonBang=0 chuTen=175
+     Name:212/32 | Segment:178/50 | Status:109/36 | Called:91/35 | Answered:105/55 | Owner:126/36 | Created:98/43
+dat  campaigns@1440/en cot=7 cuonBang=0 chuTen=175
+     Name:307/32 | Segment:256/50 | Status:153/36 | Called:128/35 | Answered:128/55 | Owner:179/36 | Created:128/43
+dat  members@320/vi cot=2 cuonBang=0 chuTen=47
+     Tên:107/19 | Vai trò:86/36
+dat  members@375/vi cot=2 cuonBang=0 chuTen=64
+     Tên:135/19 | Vai trò:94/36
+dat  members@768/vi cot=4 cuonBang=0 chuTen=44
+     Tên:104/19 | Địa chỉ email:109/59x2 | Vai trò:67/17x2 | Ngày vào:79/29x2
+dat  members@1024/vi cot=4 cuonBang=0 chuTen=64
+     Tên:180/19 | Địa chỉ email:187/70 | Vai trò:104/36 | Ngày vào:83/33x2
+dat  members@1440/vi cot=4 cuonBang=0 chuTen=64
+     Tên:289/19 | Địa chỉ email:300/70 | Vai trò:167/36 | Ngày vào:133/51
+dat  members@320/en cot=2 cuonBang=0 chuTen=51
+     Name:111/32 | Role:89/25
+dat  members@375/en cot=2 cuonBang=0 chuTen=64
+     Name:132/32 | Role:100/25
+dat  members@768/en cot=4 cuonBang=0 chuTen=42
+     Name:102/32 | Email:101/30 | Role:75/25 | Joined:87/37
+dat  members@1024/en cot=4 cuonBang=0 chuTen=64
+     Name:179/32 | Email:186/30 | Role:104/25 | Joined:87/37
+dat  members@1440/en cot=4 cuonBang=0 chuTen=64
+     Name:289/32 | Email:300/30 | Role:167/25 | Joined:133/37
+HONG: contacts@1440/vi tieu de bi cat: Hoạt động gần nhất (nhan, o 89px, nhan 42px)
+-- tiền đề làn đo: đã dọn ảnh đại diện
+-- tiền đề làn đo: đã dọn tên miền được phép

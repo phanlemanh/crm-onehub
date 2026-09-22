@@ -1,0 +1,85 @@
+-- tiền đề làn đo: contextDevApiKey đã có sẵn, không đụng
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: đã thêm tên miền được phép lan-do.onehub.vn (sẽ dọn)
+$ bun scripts/dev-session.ts manh.phan@onemount.com
+HONG onboarding-bang@320/vi
+HONG onboarding-bang@375/vi
+HONG onboarding-bang@768/vi
+HONG onboarding-bang@1024/vi
+HONG onboarding-bang@1440/vi
+HONG onboarding-bang@320/en
+HONG onboarding-bang@375/en
+HONG onboarding-bang@768/en
+HONG onboarding-bang@1024/en
+HONG onboarding-bang@1440/en
+dat  onboarding-bang-cot@320/vi
+dat  onboarding-bang-cot@375/vi
+dat  onboarding-bang-cot@768/vi
+dat  onboarding-bang-cot@1024/vi
+dat  onboarding-bang-cot@1440/vi
+dat  onboarding-bang-cot@320/en
+dat  onboarding-bang-cot@375/en
+dat  onboarding-bang-cot@768/en
+dat  onboarding-bang-cot@1024/en
+dat  onboarding-bang-cot@1440/en
+dat  deals@320/vi
+dat  deals@375/vi
+dat  deals@768/vi
+dat  deals@1024/vi
+dat  deals@1440/vi
+dat  deals@320/en
+dat  deals@375/en
+dat  deals@768/en
+dat  deals@1024/en
+dat  deals@1440/en
+o=30 khang-dinh=70/70
+HONG: onboarding-bang@320/vi khong doc duoc nhan: Đối tác
+HONG: onboarding-bang@320/vi khong doc duoc nhan: Tắc ở
+HONG: onboarding-bang@320/vi khong doc duoc nhan: Im lặng
+HONG: onboarding-bang@375/vi khong doc duoc nhan: Đối tác
+HONG: onboarding-bang@375/vi khong doc duoc nhan: Tắc ở
+HONG: onboarding-bang@375/vi khong doc duoc nhan: Im lặng
+HONG: onboarding-bang@768/vi khong doc duoc nhan: Đối tác
+HONG: onboarding-bang@768/vi khong doc duoc nhan: Tắc ở
+HONG: onboarding-bang@768/vi khong doc duoc nhan: Im lặng
+HONG: onboarding-bang@768/vi khong doc duoc nhan: Bước
+HONG: onboarding-bang@768/vi khong doc duoc nhan: Ngày
+HONG: onboarding-bang@768/vi khong doc duoc nhan: Bộ phận
+HONG: onboarding-bang@1024/vi khong doc duoc nhan: Đối tác
+HONG: onboarding-bang@1024/vi khong doc duoc nhan: Tắc ở
+HONG: onboarding-bang@1024/vi khong doc duoc nhan: Im lặng
+HONG: onboarding-bang@1024/vi khong doc duoc nhan: Bước
+HONG: onboarding-bang@1024/vi khong doc duoc nhan: Ngày
+HONG: onboarding-bang@1024/vi khong doc duoc nhan: Bộ phận
+HONG: onboarding-bang@1440/vi khong doc duoc nhan: Đối tác
+HONG: onboarding-bang@1440/vi khong doc duoc nhan: Tắc ở
+HONG: onboarding-bang@1440/vi khong doc duoc nhan: Im lặng
+HONG: onboarding-bang@1440/vi khong doc duoc nhan: Bước
+HONG: onboarding-bang@1440/vi khong doc duoc nhan: Ngày
+HONG: onboarding-bang@1440/vi khong doc duoc nhan: Bộ phận
+HONG: onboarding-bang@320/en khong doc duoc nhan: Partner
+HONG: onboarding-bang@320/en khong doc duoc nhan: Stuck on
+HONG: onboarding-bang@320/en khong doc duoc nhan: Silent
+HONG: onboarding-bang@375/en khong doc duoc nhan: Partner
+HONG: onboarding-bang@375/en khong doc duoc nhan: Stuck on
+HONG: onboarding-bang@375/en khong doc duoc nhan: Silent
+HONG: onboarding-bang@768/en khong doc duoc nhan: Partner
+HONG: onboarding-bang@768/en khong doc duoc nhan: Stuck on
+HONG: onboarding-bang@768/en khong doc duoc nhan: Silent
+HONG: onboarding-bang@768/en khong doc duoc nhan: Steps
+HONG: onboarding-bang@768/en khong doc duoc nhan: Day
+HONG: onboarding-bang@768/en khong doc duoc nhan: Department
+HONG: onboarding-bang@1024/en khong doc duoc nhan: Partner
+HONG: onboarding-bang@1024/en khong doc duoc nhan: Stuck on
+HONG: onboarding-bang@1024/en khong doc duoc nhan: Silent
+HONG: onboarding-bang@1024/en khong doc duoc nhan: Steps
+HONG: onboarding-bang@1024/en khong doc duoc nhan: Day
+HONG: onboarding-bang@1024/en khong doc duoc nhan: Department
+HONG: onboarding-bang@1440/en khong doc duoc nhan: Partner
+HONG: onboarding-bang@1440/en khong doc duoc nhan: Stuck on
+HONG: onboarding-bang@1440/en khong doc duoc nhan: Silent
+HONG: onboarding-bang@1440/en khong doc duoc nhan: Steps
+HONG: onboarding-bang@1440/en khong doc duoc nhan: Day
+HONG: onboarding-bang@1440/en khong doc duoc nhan: Department
+-- tiền đề làn đo: đã dọn ảnh đại diện
+-- tiền đề làn đo: đã dọn tên miền được phép

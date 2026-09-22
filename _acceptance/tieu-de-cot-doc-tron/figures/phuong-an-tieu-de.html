@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bốn phương án tiêu đề · tieu-de-cot-doc-tron</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 76ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.78rem; }
+    svg { width: 100%; min-width: 1040px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình phuong-an-tieu-de · Cổng 1 · tieu-de-cot-doc-tron</p>
+    <h1>Bốn cách sửa tiêu đề cột, đo trên cùng một bàn đo</h1>
+    <p class="sub">Bàn đo 3500/3501, 50 ô (5 trang × 5 khổ × 2 tiếng). Hai thước mỗi phương án: số ô có tiêu đề bị cắt, và chữ tên nhìn thấy nhỏ nhất ở các ô tệ nhất. B hết cắt tiêu đề nhưng dời chỗ bị ép sang cột Tên; D hết cắt mà cột Tên không nhỏ hơn cây chưa sửa ở ô tệ nhất. Chỗ không có số thì ghi chữ, không vẽ thanh.</p>
+
+    <svg viewBox="0 0 1120 548" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="52" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">PHƯƠNG ÁN</text>
+      <text x="320" y="52" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">Ô CÓ TIÊU ĐỀ BỊ CẮT · /50</text>
+      <text x="616" y="52" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHỮ TÊN NHÌN THẤY NHỎ NHẤT · px</text>
+      <text x="952" y="52" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CUỘN NGANG</text>
+
+      <line x1="368" y1="84" x2="368" y2="424" stroke="rgba(23,23,23,0.06)" stroke-width="0.8"/>
+      <line x1="416" y1="84" x2="416" y2="424" stroke="rgba(23,23,23,0.06)" stroke-width="0.8"/>
+      <line x1="464" y1="84" x2="464" y2="424" stroke="rgba(23,23,23,0.06)" stroke-width="0.8"/>
+      <line x1="512" y1="84" x2="512" y2="424" stroke="rgba(23,23,23,0.06)" stroke-width="0.8"/>
+      <line x1="560" y1="84" x2="560" y2="424" stroke="rgba(23,23,23,0.06)" stroke-width="0.8"/>
+      <line x1="696" y1="84" x2="696" y2="424" stroke="rgba(23,23,23,0.06)" stroke-width="0.8"/>
+      <line x1="856" y1="84" x2="856" y2="424" stroke="rgba(23,23,23,0.06)" stroke-width="0.8"/>
+
+      <line x1="40" y1="156" x2="1080" y2="156" stroke="rgba(23,23,23,0.08)" stroke-width="0.8"/>
+      <line x1="40" y1="244" x2="1080" y2="244" stroke="rgba(23,23,23,0.08)" stroke-width="0.8"/>
+      <line x1="40" y1="332" x2="1080" y2="332" stroke="rgba(23,23,23,0.08)" stroke-width="0.8"/>
+
+      <line x1="776" y1="80" x2="776" y2="424" stroke="#575757" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="728" y="64" width="96" height="12" rx="2" fill="#fafafa"/>
+      <text x="776" y="73" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">SÀN AC-7 · 40px</text>
+
+      <line x1="320" y1="84" x2="320" y2="424" stroke="rgba(23,23,23,0.25)" stroke-width="1"/>
+      <line x1="320" y1="424" x2="560" y2="424" stroke="rgba(23,23,23,0.25)" stroke-width="1"/>
+      <line x1="616" y1="84" x2="616" y2="424" stroke="rgba(23,23,23,0.25)" stroke-width="1"/>
+      <line x1="616" y1="424" x2="856" y2="424" stroke="rgba(23,23,23,0.25)" stroke-width="1"/>
+
+      <text x="320" y="440" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">0</text>
+      <text x="368" y="440" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">10</text>
+      <text x="416" y="440" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">20</text>
+      <text x="464" y="440" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">30</text>
+      <text x="512" y="440" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">40</text>
+      <text x="560" y="440" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">50</text>
+      <text x="440" y="456" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">số ô / 50</text>
+
+      <text x="616" y="440" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">0</text>
+      <text x="696" y="440" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">20</text>
+      <text x="776" y="440" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">40</text>
+      <text x="856" y="440" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">60</text>
+      <text x="736" y="456" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">px chữ tên</text>
+
+      <text x="40" y="118" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">A</text>
+      <text x="64" y="116" fill="#171717" font-size="11" font-family="'Geist', sans-serif">cây chưa sửa</text>
+
+      <rect x="320" y="104" width="144" height="16" fill="#fafafa"/>
+      <rect x="320" y="104" width="144" height="16" fill="rgba(87,87,87,0.15)" stroke="#575757" stroke-width="1"/>
+      <text x="472" y="116" fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace">30/50</text>
+
+      <rect x="616" y="104" width="172" height="16" fill="#fafafa"/>
+      <rect x="616" y="104" width="172" height="16" fill="rgba(87,87,87,0.15)" stroke="#575757" stroke-width="1"/>
+      <text x="796" y="116" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">43px · contacts@768</text>
+
+      <text x="952" y="116" fill="#666666" font-size="11" font-style="italic" font-family="'Lora', serif">không ghi số</text>
+
+      <text x="40" y="206" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">B</text>
+      <text x="64" y="204" fill="#171717" font-size="11" font-family="'Geist', sans-serif">bỏ table-fixed, nhãn một dòng</text>
+
+      <line x1="322" y1="192" x2="322" y2="208" stroke="#171717" stroke-width="2"/>
+      <text x="328" y="204" fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace">0/50</text>
+
+      <rect x="616" y="184" width="164" height="12" fill="#fafafa"/>
+      <rect x="616" y="184" width="164" height="12" fill="rgba(87,87,87,0.15)" stroke="#575757" stroke-width="1"/>
+      <text x="788" y="193" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">41px · companies@1024/vi</text>
+
+      <rect x="616" y="204" width="64" height="12" fill="#fafafa"/>
+      <rect x="616" y="204" width="64" height="12" fill="rgba(87,87,87,0.15)" stroke="#575757" stroke-width="1"/>
+      <rect x="684" y="204" width="108" height="12" rx="2" fill="#fafafa"/>
+      <text x="688" y="213" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">16px · members@768/vi</text>
+
+      <text x="952" y="204" fill="#171717" font-size="8" font-family="'Geist Mono', monospace">campaigns@320 · 60px</text>
+
+      <text x="40" y="294" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">C</text>
+      <text x="64" y="292" fill="#171717" font-size="11" font-family="'Geist', sans-serif">B + ẩn mũi tên nghỉ dưới 640</text>
+
+      <text x="324" y="292" fill="#666666" font-size="11" font-style="italic" font-family="'Lora', serif">không ghi số</text>
+
+      <rect x="616" y="272" width="156" height="32" rx="2" fill="#fafafa"/>
+      <text x="620" y="284" fill="#575757" font-size="10" font-family="'Geist', sans-serif">cột Tên không đổi so với B</text>
+      <text x="620" y="300" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">deals@320/vi · cột 76px</text>
+
+      <text x="952" y="292" fill="#666666" font-size="11" font-style="italic" font-family="'Lora', serif">không ghi số</text>
+
+      <text x="40" y="382" fill="#006B4F" font-size="16" font-weight="600" font-family="'Geist', sans-serif">D</text>
+      <text x="64" y="372" fill="#171717" font-size="11" font-family="'Geist', sans-serif">nhãn hai dòng + mũi tên cùng dòng</text>
+      <text x="64" y="388" fill="#171717" font-size="11" font-family="'Geist', sans-serif">+ ba chỉnh cột</text>
+      <rect x="152" y="380" width="56" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="0.8"/>
+      <text x="180" y="389" fill="#006B4F" font-size="7" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐỀ XUẤT</text>
+
+      <line x1="322" y1="368" x2="322" y2="384" stroke="#006B4F" stroke-width="2"/>
+      <text x="328" y="380" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace">0/50</text>
+
+      <rect x="616" y="368" width="172" height="16" fill="#fafafa"/>
+      <rect x="616" y="368" width="172" height="16" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1"/>
+      <text x="796" y="380" fill="#006B4F" font-size="8" font-weight="600" font-family="'Geist Mono', monospace">43px · contacts@768 · bằng A</text>
+
+      <text x="952" y="380" fill="#006B4F" font-size="8" font-weight="600" font-family="'Geist Mono', monospace">0 ô cuộn</text>
+
+      <line x1="40" y1="480" x2="1080" y2="480" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="500" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="40" y="512" width="16" height="10" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1"/>
+      <text x="64" y="521" fill="#575757" font-size="9" font-family="'Geist', sans-serif">phương án D · đề xuất</text>
+
+      <rect x="212" y="512" width="16" height="10" rx="2" fill="rgba(87,87,87,0.15)" stroke="#575757" stroke-width="1"/>
+      <text x="236" y="521" fill="#575757" font-size="9" font-family="'Geist', sans-serif">phương án đã loại · ô tệ nhất đã ghi</text>
+
+      <line x1="452" y1="508" x2="452" y2="524" stroke="#171717" stroke-width="2"/>
+      <text x="464" y="521" fill="#575757" font-size="9" font-family="'Geist', sans-serif">vạch ở 0 · không ô nào cắt</text>
+
+      <line x1="640" y1="516" x2="664" y2="516" stroke="#575757" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="672" y="521" fill="#575757" font-size="9" font-family="'Geist', sans-serif">sàn chữ tên của AC-7</text>
+
+      <text x="840" y="521" fill="#666666" font-size="10" font-style="italic" font-family="'Lora', serif">không ghi số — hồ sơ không có số đo</text>
+    </svg>
+
+    <footer>phuong-an-tieu-de · tieu-de-cot-doc-tron · AC-1 AC-7 AC-9 · nguồn evidence/nen-truoc-sua.txt, nen-chu-ten-truoc-sua.txt, thu-auto-layout.txt, thu-an-mui-ten-bi-loai.txt, thu-hai-dong.txt · A: số đo ở contacts@768, ô nhỏ nhất của D — hồ sơ không ghi ô nhỏ nhất của A · C: 76px là bề rộng cột, không phải chữ tên</footer>
+  </div>
+</body>
+</html>

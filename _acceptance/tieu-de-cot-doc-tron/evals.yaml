@@ -1,0 +1,212 @@
+schema_version: 1
+slug: tieu-de-cot-doc-tron
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tdc_tieu_de_cot
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/src/components/table.tsx"
+      - "packages/ui/src/components/button.tsx"
+      - "apps/app/app/(app)/[slug]/deals/deals-table.tsx"
+      - "apps/app/app/(app)/[slug]/companies/companies-table.tsx"
+      - "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx"
+      - "apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx"
+      - "apps/app/app/(app)/[slug]/settings/members/members-table.tsx"
+      - "apps/app/components/crm/fields/field-columns.tsx"
+      - "apps/app/lib/messages/**"
+      - "_acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs"
+    expected: |
+      Chrome that tren may chu dev cua CAY DANG XET (canhCay chan cay khac, ma 2), qua
+      tien-de.mjs. Ma tran viet truoc, hang trong tep thuoc: 5 man [deals, companies,
+      contacts, campaigns, members] x 5 kho [320,375,768,1024,1440] x 2 tieng [vi,en]
+      = O_MONG 50 o; dem o lech -> ma 2. Bang khong co hang -> ma 2 (khong cham).
+      Moi o hai khang dinh:
+        (a) TAP COT: tap chu cua th dang hien (bo th chi sr-only, bo o chon) BANG dung tap
+            mong doi cua (man, kho), khai trong tep thuoc bang KHOA cot (headers.name,
+            headers.company, ...) roi dich qua ham messages that cua tieng do — khong viet
+            tay chu. Tap mong doi = tap cua cay chua sua (evidence/nen-truoc-sua.txt), tru
+            dung ba cot cua AC-5 (campaigns called, companies openDeals o 320/375; members
+            joinedAt o 768).
+        (b) DOC TRON: moi th trong tap co nhan [data-slot=table-head-label]; nhan
+            scrollWidth <= clientWidth + 0.5 VA scrollHeight <= clientHeight + 0.5; so dong
+            (chieu cao / line-height) <= 2; svg DANG HIEN (hop > 0) nam trong hop cua th;
+            th cao 44 +/- 1.
+      Dem AC-1 = 100.
+      CHIEU DO (b) (da chay 2026-09-22 14:56Z tren cay chua sua 0013cf14,
+      evidence/nen-truoc-sua.txt): 30/50 o do, thong diep ghim
+      `deals@320/vi tieu de bi cat: Công ty (nhan, o 97px, nhan 43px)`.
+      CHIEU DO (a) (S3, ban sao pha): them hideBelow "md" cho cot lastActivity cua deals ->
+      do voi thong diep ghim `deals@768/vi thieu cot: Hoạt động gần nhất`.
+      CHIEU DO cat doc (da chay 2026-09-22 15:19Z tren ban thu line-clamp-2 chua co san
+      nua-do-dai): contacts@1440/vi do voi `tieu de bi cat: Hoạt động gần nhất (nhan, ...)`
+      — nhan can ba dong. S3 lap lai tren ban sao pha bo san minWidth de ghim.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.tdc_tieu_de_cot
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/src/components/table.tsx"
+      - "apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx"
+      - "apps/app/app/(app)/[slug]/deals/deals-table.tsx"
+      - "_acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs"
+    expected: |
+      Cung lan chay E1. Moi o: documentElement.scrollWidth - innerWidth <= 0 VA
+      [data-slot=table-container] scrollWidth - clientWidth <= 0. Dem 50.
+      Doi chung duong o deals@320 vi va en: co it nhat mot phan tu trong td cua tbody co
+      computed text-overflow = ellipsis, scrollWidth > clientWidth (dang cat chu), va mep
+      phai cua no <= td.right - paddingRight + 0.5 (nam gon trong o). Dem 2.
+      Tong AC-2 = 52.
+      CHIEU DO cuon (da chay 2026-09-22 15:00Z tren ban thu bo table-fixed, chua an cot o
+      campaigns, evidence/thu-auto-layout.txt: cuonBang=60 o campaigns@320/vi): thuoc
+      phai in `campaigns@320/vi bang cuon ngang 60px`; S3 chay lai tren ban sao pha bo
+      hideBelow cua cot called de lay thong diep ghim do.
+      CHIEU DO dau ba cham (S3, ban sao pha): bo lop truncate o o ten cua deals -> do voi
+      thong diep ghim `deals@320/vi o than khong cat bang dau ba cham`.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.tdc_tieu_de_cot
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/src/components/button.tsx"
+      - "_acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs"
+    expected: |
+      Cung lan chay E1. Moi o, moi th dang hien co nut sap: td cung chi so cot o hang than
+      dau tien; cot can trai (text-align cua th la left/start):
+      |nhan.left - (td.left + paddingLeft)| <= 1.5; cot can phai:
+      |nhan.right - (td.right - paddingRight)| <= 1.5; va khoang cach giua hop svg va hop
+      chu gan nhat cua nhan (Range tren nut chu) <= 6. Mot khang dinh / o (gop moi cot cua
+      o) = 50.
+      CHIEU DO (S3, ban sao pha): bo `-ml-2` khoi nut sap -> do voi thong diep ghim
+      `deals@1440/vi lech mep Tên 8px` (hoac cot dau khac, 8px +/- 1).
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tdc_tieu_de_cot
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "_acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs"
+    expected: |
+      Cung lan chay E1. Ma tran viet truoc: 3 trang [deals, companies, contacts] x 3 kho
+      [768,1024,1440] x 2 tieng = 18. Moi o: th chua checkbox rong 40 +/- 1.
+      Dem AC-4 = 18.
+      CHIEU DO: tren cay chua sua (lay bang git stash co ten o S3, hoac mot worktree cua
+      0013cf14) -> do voi thong diep ghim `deals@768/en o chon rong 139px, mong 40`
+      (139px da do tay 2026-09-22 bang puppeteer tren cay chua sua).
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.tdc_tieu_de_cot
+    paths:
+      - "apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx"
+      - "apps/app/app/(app)/[slug]/companies/companies-table.tsx"
+      - "apps/app/app/(app)/[slug]/settings/members/members-table.tsx"
+      - "apps/app/lib/messages/**"
+      - "_acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs"
+    expected: |
+      Cung lan chay E1. Ma tran viet truoc, nhan lay tu ham messages that cua tieng do:
+        campaigns x [320,375] x 2: khong th = columns.called; co th = columns.answered (4)
+        companies x [320,375] x 2: khong th = headers.openDeals (4)
+        members x [768] x 2: khong th = bang.thamGia; members x [1024] x 2: co th do (4)
+      Dem AC-5 = 12.
+      CHIEU DO (S3, ban sao pha go ca ba hideBelow): do voi ba thong diep ghim
+      `campaigns@320/vi cot Đã gọi van hien`, `companies@320/vi cot Số thoả thuận đang mở
+      van hien`, `members@768/vi cot Ngày vào van hien`.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.tdc_tieu_de_cot
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "_acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs"
+    expected: |
+      Cung lan chay E1 (buoc rieng sau ma tran). deals x kho [375,1024] x vi = 2 o. Moi o:
+      tim th co chu = dealMessages("vi").headers.company; ghi outerHTML svg (S0); bam nut,
+      cho URL co sort=company (waitForFunction, khong ngu co dinh); khang dinh
+      aria-sort="ascending", ghi svg (S1); bam lan hai, cho aria-sort="descending", ghi svg
+      (S2); khang dinh S0, S1, S2 doi mot khac nhau. Dem 2 o x 3 khang dinh = 6.
+      CHIEU DO (S3, ban sao pha): SortIndicator luon ve bieu tuong nghi -> do voi thong
+      diep ghim `deals@1024/vi Công ty sap nhung mui ten khong doi`.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.tdc_tieu_de_cot
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "apps/app/app/(app)/[slug]/deals/deals-table.tsx"
+      - "apps/app/app/(app)/[slug]/companies/companies-table.tsx"
+      - "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx"
+      - "apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx"
+      - "apps/app/app/(app)/[slug]/settings/members/members-table.tsx"
+      - "_acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs"
+    expected: |
+      Cung lan chay E1. Moi o trong 50: o dau (khong phai o chon) cua hang than dau tien; phan
+      tu co text-overflow ellipsis trong o; be rong NHIN THAY = min(chu.right, td.right -
+      paddingRight) - max(chu.left, td.left + paddingLeft) >= SAN_CHU_TEN = 40 (hang trong
+      tep thuoc). Khong tim thay phan tu ellipsis -> do (khong bo qua). Dem 50.
+      So do ban sua (evidence/thu-hai-dong.txt): nho nhat 43px contacts@768; cay chua sua
+      (evidence/nen-chu-ten-truoc-sua.txt): nho nhat 43px, cung o.
+      CHIEU DO (da chay 2026-09-22 15:25Z, evidence/thu-hai-dong-khong-chinh-trang.txt): bo
+      ba chinh uu tien cot -> campaigns@320/vi chu ten 37px; thuoc phai in
+      `campaigns@320/vi chu ten 37px, san 40`. S3 lap lai tren ban sao pha de ghim thong diep.
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.ogd_man_danh_muc
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/src/components/table.tsx"
+    expected: |
+      Thuoc cua ho so onboarding-giong-deals, nguyen van (khoa ogd_man_danh_muc, co trong
+      config tu 607fe361). Chay voi APP_URL/API_URL tro ban do cua cay nay. Ky vong ma 0,
+      dong `o=30 khang-dinh=70/70`. Chieu do cua thuoc thuoc ve ho so do.
+      Hien trang 2026-09-22 (evidence/ogd-sau-rebase-607fe361.txt): ma 1, 48 dong
+      `khong doc duoc nhan` — bo chon nhan cua thuoc do (`span.truncate, span.block`)
+      khong khop nhan moi; khong dong cat/tran/nut nao. Eval nay DO cho toi khi ho so do
+      ghim lai bo chon; khong duoc sua thuoc do tu ho so nay.
+
+  - id: E9
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "apps/app/app/(app)/[slug]/deals/deals-table.tsx"
+      - "apps/app/app/(app)/[slug]/companies/companies-table.tsx"
+      - "apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx"
+    steps:
+      - "Kiem cong 3500 va 3501 truoc: lsof -nP -iTCP:<cong> -sTCP:LISTEN -t roi lsof -a -p <pid> -d cwd -Fn; cwd phai nam trong CAY DANG XET. Khong phai -> thoat ma 2, KHONG chup. Khong tat may chu cua phien khac."
+      - "Chup bang lenh cua ho so: APP_URL=http://localhost:3500 RA=_acceptance/tieu-de-cot-doc-tron/evidence/E9 MAN=deals,companies,campaigns KHO=320,1024 TIENG=vi,en bun _acceptance/tieu-de-cot-doc-tron/rang/chup.mjs"
+      - "Mo 12 anh evidence/E9/<man>-<kho>-<tieng>.png"
+    inputs:
+      - _acceptance/tieu-de-cot-doc-tron/evidence/
+    expected: |
+      Nhin thay duoc tren anh, khong suy tu ma, tung anh:
+        1 moi ten cot o hang tieu de doc tron, khong co dau «…» o tieu de
+        2 cot dau tien hien du chu de nhan ra ban ghi (it nhat mot tu tron cua ten)
+        3 bang khong bi cat mep phai (khong cot nao bi khung the xen do)
+      Mot dong khong nhin thay o anh nao -> FAIL, ghi anh nao dong nao.
+
+  - id: E10
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tdc_san_thiet_ke
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx"
+    expected: |
+      design-gate --mode static tren hai tep bi sua: 0 blocking. Cay chua sua da chay
+      2026-09-22: 0 blocking, 0 hits — san thiet ke, khong phai thuoc cua loi nay; chieu
+      do thuoc ve design-gate cua kit.

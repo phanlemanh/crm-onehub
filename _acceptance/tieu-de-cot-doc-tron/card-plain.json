@@ -1,0 +1,47 @@
+{
+  "feature_plain": "Người dùng đọc trọn tên mọi cột ở các trang danh sách (thoả thuận, công ty, cá nhân, chiến dịch, thành viên) ở mọi khổ màn hình, cả tiếng Việt lẫn tiếng Anh, mà cột Tên không bị ép mất chữ.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ hiện đọc trọn mọi tên cột ở 50 tổ hợp trang × khổ × tiếng: không dấu «…», tối đa hai dòng, đúng những cột đang hiện hôm nay (trừ ba cột ở AC-5)."},
+    {"id": "AC-3", "p": "Sẽ giữ tên cột thẳng hàng với chữ trong cột như hiện nay, và mũi tên sắp nằm sát tên cột."},
+    {"id": "AC-4", "p": "Sẽ giữ cột ô chọn đúng 40px — hôm nay ở khổ 768 nó phình tới 139px."},
+    {"id": "AC-6", "p": "Sẽ vẫn sắp được bằng bấm tên cột, và mũi tên đổi theo chiều sắp."},
+    {"id": "AC-7", "p": "Sẽ luôn chừa cho tên bản ghi ít nhất 40px chữ nhìn thấy (nhỏ nhất đo được 43px, bằng hôm nay)."},
+    {"id": "AC-9", "p": "Sẽ có ảnh chụp ở khổ điện thoại và máy tính để người xem phán tên cột và tên bản ghi có đọc được không."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Sẽ KHÔNG để bảng cuộn ngang hay trang tràn ngang; chữ dài trong ô vẫn cắt «…» gọn trong ô."},
+    {"id": "AC-5", "p": "Sẽ KHÔNG hiện ba cột ở khổ hẹp: «Đã gọi» (chiến dịch) và «Số thoả thuận đang mở» (công ty) trên điện thoại, «Ngày vào» (thành viên) ở 768."},
+    {"id": "AC-8", "p": "Sẽ KHÔNG làm hỏng bảng kế hoạch hội nhập — phép đo của hồ sơ đó phải xanh trên bản sửa này."}
+  ],
+  "scope_plain": "Không sửa trang hội nhập, không đo khoá API/SSO/chi tiết chiến dịch, không rút gọn nhãn đã chốt, không sửa nút «Phát chia» bị xén sẵn.",
+  "coverage_plain": [
+    {"i": 0, "p": "Trang: đo năm trang có dữ liệu; khoá API, SSO không có dòng nào; chi tiết chiến dịch không có cột sắp được; hội nhập thuộc hồ sơ khác."},
+    {"i": 1, "p": "Khổ và tiếng: năm khổ 320 → 1440, cả tiếng Việt và tiếng Anh — 50 tổ hợp."},
+    {"i": 2, "p": "Kiểu tên cột: sắp được căn trái, căn phải, không sắp, chỉ có chữ cho trình đọc màn hình; căn giữa không trang nào dùng."},
+    {"i": 3, "p": "Tình huống kèm theo: đang sắp / không sắp, cột ô chọn, chữ dài trong ô, cột trường tự tạo (hiện từ 1024)."},
+    {"i": 4, "p": "Phần làm ngay: năm trang × đủ khổ và tiếng × hai kiểu căn × bốn tình huống → AC-1 đến AC-7."},
+    {"i": 5, "p": "Để sau: khoá API, SSO (chưa có dữ liệu để đo) và chi tiết chiến dịch — bản sửa vẫn áp nhưng không có số."},
+    {"i": 6, "p": "Không làm: căn giữa (không ai dùng) và sửa trang hội nhập; chỉ đối chứng nó ở AC-8."},
+    {"i": 7, "p": "Giả định cần anh gạch: trên điện thoại «Trả lời» quan trọng hơn «Đã gọi», trang công ty chỉ cần cột Tên; ở 768 trang thành viên bỏ «Ngày vào» được."},
+    {"i": 8, "p": "Giả định cần anh gạch: tên cột dài xuống hai dòng (27/50 tổ hợp) dễ đọc hơn một dòng bị cắt."},
+    {"i": 9, "p": "Giả định cần anh gạch: tên bản ghi hẹp hơn hôm nay ở 12/50 tổ hợp (sâu nhất chiến dịch ở 320: 95→72px) vẫn đủ nhận ra."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Thiếu danh sách cột phải hiện, nên lặng lẽ ẩn thêm cột vẫn qua — đã thêm: mỗi tổ hợp so với đúng bộ cột của hôm nay."},
+    {"i": 1, "p": "Anh sẽ phải chọn phương án khi chưa có số đo cột Tên — đã đo trước cổng: phương án ẩn mũi tên không giúp gì nên bỏ, đổi sang tên cột hai dòng; thêm sàn 40px cho chữ tên nhìn thấy."},
+    {"i": 2, "p": "Lời hứa đối chứng bảng hội nhập chỉ nằm ở chữ — đã thành tiêu chí AC-8 và đã chạy: nó đỏ vì phép đo bên đó tìm tên cột theo tên lớp cũ (xem quyết định cuối)."},
+    {"i": 3, "p": "Phép đo «chữ dài bị cắt» đo tràn chứ không đo dấu «…» — đã đổi sang đo đúng phần tử cắt «…» và nó nằm gọn trong ô."},
+    {"i": 4, "p": "Phép đo mũi tên sau khi bấm luôn đúng ở khổ rộng — đã đổi sang so mũi tên ở ba lúc trước bấm, bấm một, bấm hai."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260922T150736Z-1", "p": "Sửa một chỗ ở bảng dùng chung thay vì chỉnh từng trang — đổi lại mọi bảng danh sách đổi bố cục cùng lúc, kể cả bảng hội nhập."},
+    {"id": "d-20260922T150736Z-2", "p": "(Đã thay bằng quyết định sau) Ẩn mũi tên của cột không đang sắp trên điện thoại để nhường chỗ cho cột Tên."},
+    {"id": "d-20260922T150736Z-3", "p": "Chiến dịch trên điện thoại bỏ «Đã gọi», giữ «Trả lời» — đổi lại số cuộc đã gọi chỉ thấy từ 640px."},
+    {"id": "d-20260922T150736Z-4", "p": "KHÔNG đo khoá API, SSO, chi tiết chiến dịch và KHÔNG sửa trang hội nhập — bản sửa vẫn áp ở đó nhưng không có số đo riêng."},
+    {"id": "d-20260922T150736Z-5", "p": "KHÔNG chạy phiên dựng bản mẫu riêng — thay bằng ảnh chụp trang thật trước/sau trên bàn đo."},
+    {"id": "d-20260922T151135Z-6", "p": "Bỏ ý ẩn mũi tên: đo cho thấy cột Tên không rộng thêm chút nào — giữ nguyên dấu hiệu sắp trên điện thoại."},
+    {"id": "d-20260922T153010Z-7", "p": "Tên cột dài xuống tối đa hai dòng, mũi tên đi sát chữ — đổi lại 27/50 tổ hợp có tên cột hai dòng, bù lại cột Tên trở về gần như hôm nay."},
+    {"id": "d-20260922T153010Z-8", "p": "Công ty trên điện thoại bỏ «Số thoả thuận đang mở», thành viên ở 768 bỏ «Ngày vào» — đổi lại hai con số đó chỉ xem trong tấm bản ghi ở khổ hẹp."},
+    {"id": "d-20260922T153010Z-9", "p": "Đề xuất sửa luôn phép đo của hồ sơ hội nhập (đã ký) ngay trong lần giao này, phiên của hồ sơ đó đồng ý — đổi lại lần giao này mở lại một hồ sơ đã ký; anh không đồng ý thì AC-8 ra khỏi hợp đồng."}
+  ]
+}
