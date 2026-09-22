@@ -55,13 +55,18 @@ export class OnboardingNoi {
 	async plansOfCompany(input: PlansOfCompanyInput): Promise<CompanyPlanRow[]> {
 		const plans = await this.db.onboardingPlan.findMany({
 			where: { companyId: input.companyId },
-			include: { ...CHON_KE_HOACH_DANH_MUC, owner: { select: { name: true } } },
+			include: {
+				...CHON_KE_HOACH_DANH_MUC,
+				owner: { select: { name: true } },
+				template: { select: { name: true } },
+			},
 		});
 		const bayGio = new Date();
 		return plans
 			.map((plan) => ({
 				...boViTri(dungHang(plan, bayGio)),
 				ownerName: plan.owner.name,
+				templateName: plan.template?.name ?? null,
 			}))
 			.sort(
 				(a, b) =>

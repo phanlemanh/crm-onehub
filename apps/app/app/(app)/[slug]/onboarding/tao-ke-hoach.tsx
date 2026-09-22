@@ -2,6 +2,7 @@
 
 import { DatePicker } from "@crm/ui/components/date-picker";
 import { Field, FieldLabel } from "@crm/ui/components/field";
+import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Select,
@@ -18,12 +19,20 @@ import { KhungTao } from "@/components/onboarding/khung-tao";
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { useTRPC } from "@/lib/trpc/client";
 
+export type CongTyCoDinh = { id: string; name: string };
+
 export function TaoKeHoach({
 	nhanNut,
 	bienThe,
+	congTyCoDinh,
+	mo,
+	doiMo,
 }: {
-	nhanNut: string;
+	nhanNut?: string;
 	bienThe?: "default" | "outline";
+	congTyCoDinh?: CongTyCoDinh;
+	mo?: boolean;
+	doiMo?: (mo: boolean) => void;
 }) {
 	const m = onboardingMessages(useLocale());
 	const trpc = useTRPC();
@@ -31,8 +40,10 @@ export function TaoKeHoach({
 	const maCongTy = useId();
 	const maNgay = useId();
 
-	const [dangMo, setDangMo] = useState(false);
-	const [congTy, setCongTy] = useState("");
+	const [moTrong, setMoTrong] = useState(false);
+	const dangMo = mo ?? moTrong;
+	const setDangMo = doiMo ?? setMoTrong;
+	const [congTy, setCongTy] = useState(congTyCoDinh?.id ?? "");
 	const [khuon, setKhuon] = useState("");
 	const [ngay, setNgay] = useState(() => toDay(new Date()));
 	const [nguoi, setNguoi] = useState("");
@@ -81,8 +92,14 @@ export function TaoKeHoach({
 								queryClient.invalidateQueries({
 									queryKey: trpc.onboarding.bangCot.queryKey(),
 								}),
+								queryClient.invalidateQueries({
+									queryKey: trpc.onboarding.plansOfCompany.queryKey(),
+								}),
+								queryClient.invalidateQueries({
+									queryKey: trpc.companies.byId.queryKey(),
+								}),
 							]);
-							setCongTy("");
+							setCongTy(congTyCoDinh?.id ?? "");
 							setKhuon("");
 							setNgay(toDay(new Date()));
 							setNguoi("");
@@ -95,7 +112,21 @@ export function TaoKeHoach({
 		>
 			<Field>
 				<FieldLabel htmlFor={maCongTy}>{m.tao.keHoach.company}</FieldLabel>
-				<CompanyPicker id={maCongTy} value={congTy} onValueChange={setCongTy} />
+				{congTyCoDinh ? (
+					<Input
+						id={maCongTy}
+						value={congTyCoDinh.name}
+						readOnly
+						disabled
+						translate="no"
+					/>
+				) : (
+					<CompanyPicker
+						id={maCongTy}
+						value={congTy}
+						onValueChange={setCongTy}
+					/>
+				)}
 			</Field>
 			<Field>
 				<FieldLabel>{m.tao.keHoach.template}</FieldLabel>

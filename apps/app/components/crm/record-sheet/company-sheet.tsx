@@ -57,6 +57,7 @@ import { LocalDay } from "@/components/local-date-time";
 import { OPEN_STAGES } from "@/lib/deal-stage";
 import { ENRICHMENT_POLL_MS, isEnriching } from "@/lib/enrichment-status";
 import { crmMessages } from "@/lib/messages/crm";
+import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
 import {
 	type RecordSheetMessages,
 	recordSheetMessages,
@@ -66,6 +67,7 @@ import { hasCompanyLinks } from "@/lib/social-links";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { CompanyPlans } from "./company-plans";
 import { QuickAddContact, QuickAddDeal } from "./quick-add";
 import { RecordActions } from "./record-actions";
 import {
@@ -220,6 +222,21 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 						/>
 					),
 				},
+				...(company.soKeHoach > 0 || company.xuongCoKhuon
+					? [
+							{
+								value: "plans",
+								label: keHoachNoiMessages(locale).congTy.tab,
+								count: company.soKeHoach,
+								content: (
+									<CompanyPlans
+										companyId={company.id}
+										companyName={company.name}
+									/>
+								),
+							},
+						]
+					: []),
 				{
 					value: "activity",
 					label: m.tabs.activity,

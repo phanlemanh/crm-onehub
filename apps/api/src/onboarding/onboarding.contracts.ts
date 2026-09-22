@@ -269,7 +269,10 @@ export const planRow = z.object({
 
 export const plansOfCompanyInput = z.object({ companyId: maBuoc });
 
-export const companyPlanRow = planRow.extend({ ownerName: z.string() });
+export const companyPlanRow = planRow.extend({
+	ownerName: z.string(),
+	templateName: z.string().nullable(),
+});
 
 export const companyPlanListOutput = z.array(companyPlanRow);
 
