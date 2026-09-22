@@ -54,6 +54,22 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-khuon-empty", nhan: "Khuôn — chưa có khuôn nào" },
 		],
 	},
+	{
+		slug: "ke-hoach-la-mot-ban-ghi",
+		ten: "Kế hoạch là một bản ghi",
+		states: [
+			{ id: "ST-kehoach-codulieu", nhan: "Sheet — có dữ liệu" },
+			{ id: "ST-kehoach-quahan", nhan: "Sheet — có bước quá hạn" },
+			{ id: "ST-kehoach-dangghi", nhan: "Sheet — đang ghi một bước" },
+			{ id: "ST-kehoach-khongbuoc", nhan: "Sheet — chưa có bước" },
+			{ id: "ST-kehoach-dadong", nhan: "Sheet — kế hoạch đã đóng" },
+			{ id: "ST-kehoach-dangtai", nhan: "Sheet — đang tải" },
+			{ id: "ST-kehoach-loi", nhan: "Sheet — lỗi" },
+			{ id: "ST-kehoach-phieurong", nhan: "Môi giới — phễu rỗng" },
+			{ id: "ST-kehoach-phieu80", nhan: "Môi giới — 80 người" },
+			{ id: "ST-kehoach-hoatdong", nhan: "Hoạt động — có vết" },
+		],
+	},
 ];
 
 export function timProto(slug: string): ProtoCatalogEntry | undefined {

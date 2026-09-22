@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import type { HttpException } from "@nestjs/common";
 import { AgentTriggerService } from "../src/agent/agent-trigger.service";
@@ -81,6 +81,10 @@ function muc(ma: string) {
 		dealAt: null,
 	};
 }
+
+afterAll(async () => {
+	await db.agentTask.deleteMany({ where: { kind: VIEC } });
+});
 
 describe("diem nhan tu nen tang", () => {
 	test("lo-sai-tu-choi-tron: mot muc hong thi khong muc nao duoc ghi", async () => {

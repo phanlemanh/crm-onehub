@@ -1,6 +1,6 @@
 import type { FieldTypeName } from "@crm/db/fields-shape";
 import type { Locale } from "@crm/ui/lib/locale";
-import type { RecordKind } from "@/components/crm/record-sheet/record-stack";
+import type { EntityKind } from "@/components/crm/record-sheet/record-stack";
 import { crmMessages } from "@/lib/messages/crm";
 import type { FieldEntity } from "./fields-entity";
 
@@ -57,7 +57,7 @@ export function fieldsCopy(locale: Locale) {
 	};
 }
 
-export function subtitleFor(kind: RecordKind, locale: Locale): string {
+export function subtitleFor(kind: EntityKind, locale: Locale): string {
 	const m = crmMessages(locale).fields;
 	if (kind === "company") return m.shapesCompany;
 	if (kind === "contact") return m.shapesContact;
@@ -139,7 +139,7 @@ export function filledOn(
 
 export function entityTabs(
 	locale: Locale,
-): readonly { kind: RecordKind; label: string }[] {
+): readonly { kind: EntityKind; label: string }[] {
 	const m = crmMessages(locale).standard;
 	return [
 		{ kind: "company", label: m.companies },

@@ -20,6 +20,7 @@ const ALL_ACTIVITY_TYPES = [
 	ActivityType.TASK,
 	ActivityType.STAGE_CHANGE,
 	ActivityType.ENRICHMENT,
+	ActivityType.PLAN_CHANGE,
 ] as const;
 
 const activityTypeOutput = z.enum(ALL_ACTIVITY_TYPES);
@@ -40,6 +41,7 @@ export const timelineInput = z.object({
 	companyId: z.string().optional(),
 	contactId: z.string().optional(),
 	dealId: z.string().optional(),
+	planId: z.string().optional(),
 	filter: z.enum(TIMELINE_FILTERS).default("all"),
 	cursor: z.string().optional(),
 	limit: z.number().int().min(1).max(100).default(30),
@@ -51,6 +53,7 @@ export const timelineCountsInput = z.object({
 	companyId: z.string().optional(),
 	contactId: z.string().optional(),
 	dealId: z.string().optional(),
+	planId: z.string().optional(),
 });
 
 export const activityCreateInput = z
@@ -63,10 +66,16 @@ export const activityCreateInput = z
 		companyId: z.string().optional(),
 		contactId: z.string().optional(),
 		dealId: z.string().optional(),
+		planId: z.string().optional(),
 	})
-	.refine((input) => input.companyId || input.contactId || input.dealId, {
-		message: "An activity has to be about a company, a contact or a deal.",
-	})
+	.refine(
+		(input) =>
+			input.companyId || input.contactId || input.dealId || input.planId,
+		{
+			message:
+				"An activity has to be about a company, a contact, a deal or a 30-day plan.",
+		},
+	)
 	.refine(
 		(input) => input.type !== ActivityType.TASK || Boolean(input.subject),
 		{
@@ -152,6 +161,7 @@ export const activityEntryOutput = z.object({
 	company: activityCompanyRefOutput,
 	contact: activityContactRefOutput,
 	deal: activityDealRefOutput,
+	planId: z.string().nullable(),
 	emailThread: activityEmailThreadOutput,
 	calendarEvent: activityCalendarEventOutput,
 });

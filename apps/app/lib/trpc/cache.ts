@@ -25,6 +25,7 @@ export type CrmCache = {
 	company(id?: string, options?: Options): Promise<void>;
 	contact(id?: string, options?: Options): Promise<void>;
 	deal(id?: string, options?: Options): Promise<void>;
+	plan(id?: string, options?: Options): Promise<void>;
 	campaign(id?: string, options?: Options): Promise<void>;
 	campaignList(options?: Options): Promise<void>;
 	fields(entity?: RecordKind, options?: Options): Promise<void>;
@@ -210,6 +211,24 @@ export function useCrmCache(): CrmCache {
 					...activityKeys(),
 					trpc.dashboard.summary.queryKey(),
 					trpc.currency.settings.queryKey(),
+				],
+				options,
+			),
+
+		plan: (id, options) =>
+			run(
+				[
+					id
+						? trpc.onboarding.planById.queryKey({ id })
+						: trpc.onboarding.planById.queryKey(),
+				],
+				[
+					trpc.onboarding.listSteps.queryKey(),
+					trpc.onboarding.listEnrollments.queryKey(),
+					trpc.onboarding.manDanhMuc.queryKey(),
+					trpc.onboarding.bangCot.queryKey(),
+					...activityKeys(),
+					trpc.companies.byId.queryKey(),
 				],
 				options,
 			),

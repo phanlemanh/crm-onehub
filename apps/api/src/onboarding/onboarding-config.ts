@@ -17,6 +17,13 @@ export const ONBOARDING = {
 		tranThe: 30,
 	},
 	thongDiep: {
+		keHoachDaDong: "Kế hoạch đã đóng — mở lại trước khi sửa.",
+		khongPhaiThanhVien: (id: string) =>
+			`Người ${id} không phải thành viên đang hoạt động.`,
+		sapLaiSaiTap:
+			"Danh sách sắp lại phải gồm đúng mọi bước của kế hoạch, mỗi bước một lần.",
+		khongCoBuoc: (id: string) => `Không có bước nào mang mã ${id}.`,
+		khongCoKeHoach: (id: string) => `Không có kế hoạch nào mang mã ${id}.`,
 		canQuyenQuanTri: "Cần quyền quản trị để đổi cấu hình điều phối.",
 		daTrongPheu: "Người này đã có trong phễu.",
 		chuaLuuTru: "Chỉ xoá vĩnh viễn được thứ đã lưu trữ.",

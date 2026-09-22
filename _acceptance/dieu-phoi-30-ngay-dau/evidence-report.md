@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9a9ec86a5356038b9c6b289f9bda8113651a107f
+verified_commit: 18ddded26be1c1a204d4e2df661aa27669700a88
 human_signoff: Manh Phan 2026-09-21
 ---
 
@@ -242,3 +242,11 @@ Round 1: luot D (chore 7e9decfc) dung o BLOCKED vi E6 va E11 chua dat. Fix c2211
 ### Re-pin lần 1 — 2026-09-21, do bai kiem cua ho so doi theo bo loc moi cua quan-ly-danh-muc-30-ngay
 run_id: repin-20260921T130831Z-74384
 sha: 9a9ec86a5356038b9c6b289f9bda8113651a107f · suites: 4 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-22, do lượt ke-hoach-la-mot-ban-ghi sửa bài kiểm của hồ sơ (d-21, d-23) và dời màn hồ sơ kế hoạch sang PlanSheet
+run_id: repin-20260922T065429Z-21311
+sha: 2b389d3c924a29785f9250584bbae77718359592 · suites: 4 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E11 · diff chạm vật đo ngoài làn máy: E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-11
+
+### Re-pin lần 3 — 2026-09-22, do CI đỏ vì mock next/navigation của E12 sống sang tệp đăng nhập; sửa bài kiểm ở 18ddded2
+run_id: repin-20260922T070657Z-92620
+sha: 18ddded26be1c1a204d4e2df661aa27669700a88 · suites: 4 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E11 · AC không có chốt máy: AC-11
