@@ -123,6 +123,9 @@ const en = {
 		choose: "Choose a company",
 		none: "None",
 	},
+	fieldValue: {
+		none: "None",
+	},
 	owner: {
 		label: "Owner",
 		unassigned: "Unassigned",
@@ -439,6 +442,9 @@ const vi = {
 		searching: "Đang tìm…",
 		noMatch: "Không công ty nào khớp.",
 		choose: "Chọn công ty",
+		none: "Không chọn",
+	},
+	fieldValue: {
 		none: "Không chọn",
 	},
 	owner: {

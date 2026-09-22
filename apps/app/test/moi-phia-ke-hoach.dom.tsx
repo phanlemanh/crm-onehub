@@ -108,6 +108,8 @@ const { DashboardSummary } = await import(
 );
 const { tongQuanMessages } = await import("@/lib/messages/tong-quan");
 const { formatCount } = await import("@crm/ui/lib/format");
+const { recordSheetMessages } = await import("@/lib/messages/record-sheet");
+const { crmMessages } = await import("@/lib/messages/crm");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { keHoachNoiMessages } = await import("@/lib/messages/ke-hoach-noi");
@@ -859,5 +861,153 @@ describe("chuyen-giao-man", () => {
 		await moMenuCua("Huong Le");
 		await nghi(5);
 		expect(mucChuyen(), "khong co muc chuyen viec").toBeUndefined();
+	});
+});
+
+function truongChon(value: string | null) {
+	return {
+		id: "f-hang",
+		entity: "COMPANY",
+		key: "hang_doi_tac",
+		label: "Hang doi tac",
+		type: "SELECT",
+		agentFilled: false,
+		agentBrief: null,
+		required: false,
+		showOnSheet: true,
+		showOnTable: false,
+		showOnFilter: false,
+		position: 0,
+		archived: false,
+		options: [{ id: "o-vang", label: "Vang", color: null, position: 0 }],
+		value,
+	};
+}
+
+function thoaThuan(id: string, amountCents: number | null) {
+	return {
+		id,
+		name: `Thoa thuan ${id}`,
+		stage: "DEMO_BOOKED",
+		currency: "VND",
+		amountCents,
+		baseAmountCents: amountCents,
+		expectedCloseDate: null,
+		owner: null,
+	};
+}
+
+function oCuaNhan(nhan: string): HTMLElement {
+	const nhanO = [...document.body.querySelectorAll("label")].find(
+		(l) => l.textContent?.trim() === nhan,
+	);
+	const o = nhanO?.htmlFor ? document.getElementById(nhanO.htmlFor) : null;
+	if (!o) throw new Error(`khong thay o cua nhan ${nhan}`);
+	return o;
+}
+
+function coRongChuan(o: Element): boolean {
+	return [...o.querySelectorAll("span")].some(
+		(x) =>
+			x.textContent === "—" && x.className.includes("text-muted-foreground"),
+	);
+}
+
+async function moSheetLech(
+	chon: string | null,
+	chuSoHuu: typeof TOI | null,
+	gia: number | null,
+): Promise<void> {
+	duLieu["companies.byId"] = () => ({
+		...congTy(0, false),
+		owner: chuSoHuu,
+		fields: [truongChon(chon)],
+		deals: [thoaThuan("d1", gia), thoaThuan("d2", null)],
+	});
+	await mo(
+		trongSheet(<CompanySheet companyId={CONG_TY_K} />),
+		`?record=company:${CONG_TY_K}`,
+	);
+	await cho(
+		() =>
+			[...document.body.querySelectorAll("label")].some(
+				(l) => l.textContent?.trim() === "Hang doi tac",
+			),
+		"truong chon tren sheet",
+	);
+}
+
+describe("ba-lech", () => {
+	const rs = recordSheetMessages("vi");
+	const crm = crmMessages("vi");
+
+	test("ba-lech: truong chon, chu so huu va gia tri dang mo rong deu hien o rong chuan", async () => {
+		await moSheetLech(null, null, null);
+
+		const oChon = oCuaNhan("Hang doi tac");
+		expect(coRongChuan(oChon), "truong chon rong hien o rong chuan").toBe(true);
+		expect(document.body.textContent, "khong con chu None").not.toContain(
+			"None",
+		);
+
+		const oChu = oCuaNhan(rs.company.fields.owner);
+		expect(coRongChuan(oChu), "chu so huu rong hien o rong chuan").toBe(true);
+		expect(oChu.textContent, "o thu gon khong hien Chua giao").not.toContain(
+			rs.company.fields.unassigned,
+		);
+
+		const oGia = [...document.body.querySelectorAll("*")].find(
+			(x) =>
+				x.children.length > 0 &&
+				x.textContent?.startsWith(rs.company.openPipeline) === true &&
+				x.textContent.length < 60,
+		);
+		if (!oGia) throw new Error("khong thay o Gia tri dang mo");
+		expect(coRongChuan(oGia), "gia tri dang mo rong").toBe(true);
+
+		await bam(oChon);
+		await cho(
+			() => document.body.querySelectorAll('[role="option"]').length > 0,
+			"menu truong chon",
+		);
+		const luaChon = [...document.body.querySelectorAll('[role="option"]')].map(
+			(o) => o.textContent?.trim(),
+		);
+		expect(luaChon, "menu co Khong chon").toContain(crm.fieldValue.none);
+		expect(luaChon).not.toContain("None");
+	});
+
+	test("ba-lech: menu chu so huu van co Chua giao", async () => {
+		await moSheetLech(null, null, null);
+		await bam(oCuaNhan(rs.company.fields.owner));
+		await cho(
+			() => document.body.querySelectorAll('[role="option"]').length > 0,
+			"menu chu so huu",
+		);
+		expect(
+			[...document.body.querySelectorAll('[role="option"]')].map((o) =>
+				o.textContent?.trim(),
+			),
+		).toContain(rs.company.fields.unassigned);
+	});
+
+	test("ba-lech: doi chung duong — co gia tri thi hien gia tri", async () => {
+		await moSheetLech("o-vang", TOI, 5_000_000);
+		expect(oCuaNhan("Hang doi tac").textContent).toContain("Vang");
+		await cho(
+			() =>
+				oCuaNhan(rs.company.fields.owner).textContent?.includes(TOI.name) ===
+				true,
+			"ten chu so huu",
+		);
+		const oGia = [...document.body.querySelectorAll("*")].find(
+			(x) =>
+				x.children.length > 0 &&
+				x.textContent?.startsWith(rs.company.openPipeline) === true &&
+				x.textContent.length < 60,
+		);
+		if (!oGia) throw new Error("khong thay o Gia tri dang mo");
+		expect(coRongChuan(oGia), "co gia thi khong con o rong").toBe(false);
+		expect(oGia.textContent).toMatch(/\d/);
 	});
 });

@@ -304,9 +304,17 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 				company ? (
 					<DetailSheetStats>
 						<DetailSheetStat label={m.company.openPipeline}>
-							<span className="tabular-nums">
-								{formatMoney(openValueCents, company.reportingCurrency, locale)}
-							</span>
+							{openDeals.some((deal) => deal.amountCents !== null) ? (
+								<span className="tabular-nums">
+									{formatMoney(
+										openValueCents,
+										company.reportingCurrency,
+										locale,
+									)}
+								</span>
+							) : (
+								<EmptyCellValue />
+							)}
 							{openUncounted > 0 ? (
 								<span className="text-muted-foreground">
 									{" "}
@@ -433,6 +441,7 @@ function CompanyOverview({ company }: { company: Company }) {
 										label: user.name,
 									})),
 								]}
+								emptyValue={UNASSIGNED}
 								onSave={(ownerId) =>
 									save({ ownerId: ownerId === UNASSIGNED ? null : ownerId })
 								}
