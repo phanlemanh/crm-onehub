@@ -10,12 +10,12 @@ import { FieldEditor } from "@/components/crm/fields/field-editor";
 import { entityTabs } from "@/components/crm/fields/fields-copy";
 import { entityOf } from "@/components/crm/fields/fields-entity";
 import { FieldsList } from "@/components/crm/fields/fields-list";
-import type { RecordKind } from "@/components/crm/record-sheet/record-stack";
+import type { EntityKind } from "@/components/crm/record-sheet/record-stack";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { fieldsPageParams } from "./fields-search-params";
 
-export function FieldsSettings({ kindBanDau }: { kindBanDau: RecordKind }) {
+export function FieldsSettings({ kindBanDau }: { kindBanDau: EntityKind }) {
 	const trpc = useTRPC();
 	const locale = useLocale();
 	const [values, setParams] = useQueryStates(fieldsPageParams);
@@ -26,7 +26,7 @@ export function FieldsSettings({ kindBanDau }: { kindBanDau: RecordKind }) {
 	const tabs = useMemo(() => entityTabs(locale), [locale]);
 
 	const onEntity = useCallback(
-		(next: RecordKind) =>
+		(next: EntityKind) =>
 			void setParams({
 				[SEARCH_PARAM.fieldsPage.entity]: next,
 				[SEARCH_PARAM.fieldsPage.field]: null,
@@ -53,7 +53,7 @@ export function FieldsSettings({ kindBanDau }: { kindBanDau: RecordKind }) {
 
 	return (
 		<div className="flex min-h-0 flex-col gap-6">
-			<Tabs value={kind} onValueChange={(next) => onEntity(next as RecordKind)}>
+			<Tabs value={kind} onValueChange={(next) => onEntity(next as EntityKind)}>
 				<TabsList>
 					{tabs.map((tab) => (
 						<TabsTrigger key={tab.kind} value={tab.kind}>

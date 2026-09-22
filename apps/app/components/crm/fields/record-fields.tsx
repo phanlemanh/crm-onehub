@@ -19,7 +19,7 @@ import {
 	InlineTextArea,
 } from "@/components/crm/inline-field";
 import {
-	type RecordKind,
+	type EntityKind,
 	useFieldsSheet,
 } from "@/components/crm/record-sheet/record-stack";
 import { DetailSheetProperty } from "@/components/detail-sheet";
@@ -40,7 +40,7 @@ export type RecordFieldEntry = {
 
 const NONE = "__none__";
 
-export function FieldsCog({ kind }: { kind: RecordKind }) {
+export function FieldsCog({ kind }: { kind: EntityKind }) {
 	const locale = useLocale();
 	const m = crmMessages(locale);
 	const { open } = useFieldsSheet();

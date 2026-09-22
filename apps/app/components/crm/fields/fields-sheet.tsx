@@ -5,7 +5,7 @@ import { Spinner } from "@crm/ui/components/spinner";
 import { Tabs, TabsList, TabsTrigger } from "@crm/ui/components/tabs";
 import { useQuery } from "@tanstack/react-query";
 import {
-	type RecordKind,
+	type EntityKind,
 	useFieldsSheet,
 } from "@/components/crm/record-sheet/record-stack";
 import { DetailSheet, DetailSheetHeader } from "@/components/detail-sheet";
@@ -22,9 +22,9 @@ function FieldsSheetBody({
 	onEdit,
 	onClose,
 }: {
-	kind: RecordKind;
+	kind: EntityKind;
 	field: string | null;
-	onEntity: (kind: RecordKind) => void;
+	onEntity: (kind: EntityKind) => void;
 	onEdit: (key: string | null) => void;
 	onClose: () => void;
 }) {
@@ -96,7 +96,7 @@ function FieldsSheetBody({
 				note={
 					<Tabs
 						value={kind}
-						onValueChange={(next) => onEntity(next as RecordKind)}
+						onValueChange={(next) => onEntity(next as EntityKind)}
 					>
 						<TabsList>
 							{entityTabs(locale).map((tab) => (

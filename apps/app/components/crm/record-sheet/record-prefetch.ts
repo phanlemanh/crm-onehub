@@ -25,6 +25,11 @@ export function usePrefetchRecord() {
 				case "deal":
 					void queryClient.prefetchQuery(trpc.deals.byId.queryOptions({ id }));
 					return;
+				case "plan":
+					void queryClient.prefetchQuery(
+						trpc.onboarding.planById.queryOptions({ id }),
+					);
+					return;
 			}
 		},
 		[trpc, queryClient],

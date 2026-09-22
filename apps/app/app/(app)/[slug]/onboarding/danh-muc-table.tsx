@@ -17,11 +17,14 @@ import {
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useQueryStates } from "nuqs";
+import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch";
+import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { ListSearch } from "@/components/data-table/list-search";
 import { useTableQuery } from "@/components/data-table/use-table-query";
 import { onboardingMessages } from "@/lib/messages/onboarding";
+import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { DanhMucBangCot } from "./danh-muc-bang-cot";
@@ -122,7 +125,9 @@ export function DanhMucTable() {
 	const locale = useLocale();
 	const m = onboardingMessages(locale);
 	const trpc = useTRPC();
-	const router = useRouter();
+	const searchParams = useSearchParams();
+	const openRecord = useOpenRecord();
+	const prefetchRecord = usePrefetchRecord();
 	const url = useWorkspaceUrl();
 	const boLoc = useBoLoc();
 
@@ -146,7 +151,11 @@ export function DanhMucTable() {
 	const boPhanList = useQuery(trpc.onboarding.listDepartments.queryOptions());
 	const users = useQuery(trpc.users.list.queryOptions());
 
-	const hrefCua = (planId: string) => url(`/onboarding/${planId}`);
+	const hrefCua = (planId: string) => {
+		const q = new URLSearchParams(searchParams);
+		q.set(SEARCH_PARAM.record.stack, `plan:${planId}`);
+		return `?${q}`;
+	};
 
 	if (danhMuc.isPending) {
 		return (
@@ -267,7 +276,8 @@ export function DanhMucTable() {
 				total={data.total}
 				facetCounts={data.facetCounts}
 				facets={facets}
-				onRowClick={(hang) => router.push(hrefCua(hang.id))}
+				onRowClick={(hang) => openRecord({ kind: "plan", id: hang.id })}
+				onRowHover={(hang) => prefetchRecord({ kind: "plan", id: hang.id })}
 				empty={khongKhop ? khongKhopView : undefined}
 			/>
 		);
