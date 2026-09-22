@@ -3,10 +3,10 @@ schema_version: 1
 slug: ke-hoach-la-mot-ban-ghi
 feature: Kế hoạch 30 ngày là một bản ghi làm việc được — mở như thoả thuận, giao bước, đánh dấu xong, đổi cầm trịch, ghi chú, và mọi thay đổi để lại vết
 owner: phanlemanh@gmail.com
-stage: proposed
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-22T03:38:10Z
 prototype:
   base_commit:
   disposition: archive
@@ -92,7 +92,9 @@ Chưa dựng gì.
 
 ## Cổng 0
 
-Chờ chủ kho điền `decision` · `decided_by` · `decided_at`.
+- **decision = build** Căn cứ (chủ kho, 2026-09-22T03:38:10Z): lỗ đã xác nhận trên production — không thủ tục nào ghi vào bước sau khi tạo; mọi ô Core 1–6 của bản quét 2026-09-22 nằm trong lượt này.
+- **disposition = archive** Căn cứ: chưa dựng prototype, `base_commit` để trống.
+- **Ngưỡng UAT chốt cùng lúc ký:** nguyên văn ba vế SỐNG và một vế CHẾT ở mục «Ngưỡng chết / ngưỡng UAT».
 
 ## Thước đo thành công → ứng viên criterion
 
