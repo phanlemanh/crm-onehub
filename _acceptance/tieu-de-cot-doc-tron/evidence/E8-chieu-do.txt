@@ -1,0 +1,53 @@
+# Chieu do cua thuoc ogd_man_danh_muc tren cay tieu-de-cot-doc-tron (sau 97f276f4).
+# Luot 1 — pha maxLines 2 -> 1: ma 0, o=30 khang-dinh=70/70. KHONG kiem lop pha da toi trang truoc khi do — ket qua nay khong ket luan duoc gi.
+# Luot 2 — pha maxLines 1 VA bo san minWidth: ma 0, 70/70. Cung KHONG kiem lop da toi trang — khong ket luan duoc gi.
+# Luot 3 — pha nhan thanh line-clamp-1 max-w-4 (16px), da kiem lop co mat tren /crm/onboarding?cachXem=bang truoc khi do; hoan lai bang git checkout:
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: đã thêm tên miền được phép lan-do.onehub.vn (sẽ dọn)
+$ bun scripts/dev-session.ts manh.phan@onemount.com
+HONG onboarding-bang@320/vi
+HONG onboarding-bang@375/vi
+HONG onboarding-bang@768/vi
+HONG onboarding-bang@1024/vi
+HONG onboarding-bang@1440/vi
+HONG onboarding-bang@320/en
+HONG onboarding-bang@375/en
+HONG onboarding-bang@768/en
+HONG onboarding-bang@1024/en
+HONG onboarding-bang@1440/en
+dat  onboarding-bang-cot@320/vi
+dat  onboarding-bang-cot@375/vi
+dat  onboarding-bang-cot@768/vi
+dat  onboarding-bang-cot@1024/vi
+dat  onboarding-bang-cot@1440/vi
+dat  onboarding-bang-cot@320/en
+dat  onboarding-bang-cot@375/en
+dat  onboarding-bang-cot@768/en
+dat  onboarding-bang-cot@1024/en
+dat  onboarding-bang-cot@1440/en
+dat  deals@320/vi
+dat  deals@375/vi
+dat  deals@768/vi
+dat  deals@1024/vi
+dat  deals@1440/vi
+dat  deals@320/en
+dat  deals@375/en
+dat  deals@768/en
+dat  deals@1024/en
+dat  deals@1440/en
+o=30 khang-dinh=70/70
+HONG: onboarding-bang@320/vi tieu de bi cat: Đối tác, Im lặng
+HONG: onboarding-bang@375/vi tieu de bi cat: Đối tác, Im lặng
+HONG: onboarding-bang@768/vi tieu de bi cat: Đối tác, Im lặng, Bước, Ngày, Bộ phận
+HONG: onboarding-bang@1024/vi tieu de bi cat: Đối tác, Im lặng, Bước, Ngày, Bộ phận
+HONG: onboarding-bang@1440/vi tieu de bi cat: Đối tác, Im lặng, Bước, Ngày, Bộ phận
+HONG: onboarding-bang@320/en tieu de bi cat: Partner, Stuck on, Silent
+HONG: onboarding-bang@375/en tieu de bi cat: Partner, Stuck on, Silent
+HONG: onboarding-bang@768/en tieu de bi cat: Partner, Stuck on, Silent, Steps, Day, Department
+HONG: onboarding-bang@1024/en tieu de bi cat: Partner, Stuck on, Silent, Steps, Day, Department
+HONG: onboarding-bang@1440/en tieu de bi cat: Partner, Stuck on, Silent, Steps, Day, Department
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+-- tiền đề làn đo: đã dọn tên miền được phép
+EXIT=1
