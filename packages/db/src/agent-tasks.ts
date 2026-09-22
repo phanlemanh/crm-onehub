@@ -61,4 +61,5 @@ export const PRIORITY = {
 	slackPeople: 150,
 	slackJoin: 950,
 	event: 700,
+	nhac: 60,
 } as const;

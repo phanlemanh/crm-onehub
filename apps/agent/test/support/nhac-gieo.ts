@@ -1,5 +1,6 @@
 import { db } from "@crm/db";
 import { WORKSPACE_ID, workspaceSlug } from "@crm/db/workspace";
+import { z } from "zod";
 
 export const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -28,6 +29,12 @@ export async function moXuong(): Promise<void> {
 }
 
 export async function donDep(): Promise<void> {
+	await db.agentTask.deleteMany({
+		where: {
+			kind: "nhac-ke-hoach",
+			subject: { startsWith: `user:${TIEN_TO}` },
+		},
+	});
 	await db.onboardingPlan.deleteMany({
 		where: { company: { name: { startsWith: TIEN_TO } } },
 	});
@@ -122,4 +129,52 @@ export function phan<T>(ds: T[], i: number): T {
 		);
 	}
 	return gia;
+}
+
+export async function xongBuoc(stepId: string): Promise<void> {
+	await db.onboardingStep.update({
+		where: { id: stepId },
+		data: { completedAt: new Date() },
+	});
+}
+
+export async function noiSlack(userId: string): Promise<void> {
+	await db.account.create({
+		data: {
+			id: `${TIEN_TO}slack-${userId}`,
+			accountId: `${TIEN_TO}T`,
+			providerId: "slack",
+			userId,
+			accessToken: "xoxb-mn3",
+		},
+	});
+}
+
+export async function khopSlack(
+	crmUserId: string,
+	slackUserId: string,
+): Promise<void> {
+	await db.slackMemberMatch.create({ data: { crmUserId, slackUserId } });
+}
+
+const loiGoiSlack = z.object({
+	users: z.string().optional(),
+	channel: z.string().optional(),
+	text: z.string().optional(),
+});
+
+export type LoiGoiSlack = { url: string; body: z.infer<typeof loiGoiSlack> };
+
+export type SlackGia = { fetcher: typeof fetch; goi: LoiGoiSlack[] };
+
+export function slackGia(): SlackGia {
+	const goi: LoiGoiSlack[] = [];
+	const fetcher = (async (input: RequestInfo | URL, init?: RequestInit) => {
+		const url = String(input);
+		goi.push({ url, body: loiGoiSlack.parse(JSON.parse(String(init?.body))) });
+		return url.endsWith("conversations.open")
+			? Response.json({ ok: true, channel: { id: "D1" } })
+			: Response.json({ ok: true, channel: "D1", ts: "1" });
+	}) as typeof fetch;
+	return { fetcher, goi };
 }
