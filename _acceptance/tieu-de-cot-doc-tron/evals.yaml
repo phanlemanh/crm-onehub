@@ -131,9 +131,10 @@ evals:
     expected: |
       Cung lan chay E1 (buoc rieng sau ma tran). deals x kho [375,1024] x vi = 2 o. Moi o:
       tim th co chu = dealMessages("vi").headers.company; ghi outerHTML svg (S0); bam nut,
-      cho URL co sort=company (waitForFunction, khong ngu co dinh); khang dinh
-      aria-sort="ascending", ghi svg (S1); bam lan hai, cho aria-sort="descending", ghi svg
-      (S2); khang dinh S0, S1, S2 doi mot khac nhau. Dem 2 o x 3 khang dinh = 6.
+      cho URL co sort=company (waitForFunction, khong ngu co dinh); khang dinh aria-sort
+      bang chieu mac dinh cua trang (doc tu dealsSearchParams.config.defaultDir, deals =
+      desc -> descending), ghi svg (S1); bam lan hai, cho chieu nguoc lai, ghi svg (S2);
+      khang dinh S0, S1, S2 doi mot khac nhau. Dem 2 o x 3 khang dinh = 6.
       CHIEU DO (S3, ban sao pha): SortIndicator luon ve bieu tuong nghi -> do voi thong
       diep ghim `deals@1024/vi Công ty sap nhung mui ten khong doi`.
 

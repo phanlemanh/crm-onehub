@@ -116,7 +116,7 @@ git commit -m "fix(app): ba trang danh sach bot mot cot o kho hep"
 
 ```js
 const O_MONG = 50;
-const KY_MONG = 288;
+const KY_MONG = 276;
 const SAN_CHU_TEN = 40;
 const SAN_MEP = 1.5;
 const SAN_MUI_TEN = 6;
@@ -140,12 +140,12 @@ deals ở 375 và 1024, tiếng vi: ghi `outerHTML` của `svg` (S0) → bấm n
 
 - [ ] **Step 4: Đếm khẳng định và chặn lệch ma trận**
 
-Cộng: 100 (AC-1) + 52 (AC-2) + 50 (AC-3) + 18 (AC-4) + 12 (AC-5) + 6 (AC-6) + 50 (AC-7) = 288. Đặt `KY_MONG = 288`; đếm khác `O_MONG`/`KY_MONG` → in `KHONG DO DUOC: ma tran lech ban khai` và thoát 2.
+Cộng: 50 (tập cột) + 50 (đọc trọn) + 50 (tràn và cuộn) + 50 (mép và mũi tên) + 50 (chữ tên) + 18 (ô chọn) + 2 (dấu ba chấm) + 6 (bấm sắp) = 276 khẳng định. Đặt `KY_MONG = 276`; đếm khác `O_MONG`/`KY_MONG` → in `KHONG DO DUOC: ma tran lech ban khai` và thoát 2.
 
 - [ ] **Step 5: Chạy trên cây đã sửa**
 
 Chạy: `APP_URL=http://localhost:3500 API_URL=http://localhost:3501 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs"`
-Kỳ vọng: `o=50 khang-dinh=288/288`, exit 0. Lưu đầu ra vào `_acceptance/tieu-de-cot-doc-tron/evidence/E1-xanh.txt`.
+Kỳ vọng: `o=50 khang-dinh=276/276`, exit 0. Lưu đầu ra vào `_acceptance/tieu-de-cot-doc-tron/evidence/E1-xanh.txt`.
 
 - [ ] **Step 6: Commit**
 
