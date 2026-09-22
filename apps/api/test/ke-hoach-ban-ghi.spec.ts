@@ -727,7 +727,7 @@ describe("noi-man-buoc", () => {
 			phan(await buocCua(plan.id), 0),
 			phan(await buocCua(plan.id), 1),
 		];
-		const thay = (v: unknown) =>
+		const thay = (v: (typeof payload)[number]["dauVao"]) =>
 			JSON.parse(
 				JSON.stringify(v)
 					.replaceAll('"S2"', `"${s2.id}"`)

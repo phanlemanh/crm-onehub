@@ -1,5 +1,6 @@
 import { formatDay } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
+import type { ActivityMeta } from "@crm/validation/activity-meta";
 import {
 	type OnboardingActivityMeta,
 	onboardingActivityMeta,
@@ -37,7 +38,7 @@ export function cauVet(meta: OnboardingActivityMeta, locale: Locale): string {
 	}
 }
 
-export function dongVet(meta: unknown, locale: Locale): string {
+export function dongVet(meta: ActivityMeta, locale: Locale): string {
 	const ket = onboardingActivityMeta.safeParse(meta);
 	return ket.success
 		? cauVet(ket.data, locale)

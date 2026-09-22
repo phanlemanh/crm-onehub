@@ -1,12 +1,19 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
-import { vet } from "@crm/validation/onboarding-activity";
+import {
+	type OnboardingActivityMeta,
+	vet,
+} from "@crm/validation/onboarding-activity";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactElement, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import payload from "../../api/test/fixtures/ke-hoach-payload.json";
 
-type LoiGoi = { duong: string; dauVao: unknown };
+type GiaTri = string | number | boolean | null;
+
+type DauVao = Record<string, GiaTri> | undefined;
+
+type LoiGoi = { duong: string; dauVao: DauVao };
 
 const KE_HOACH = "kh-1";
 const CONG_TY = "ct-1";
@@ -116,21 +123,21 @@ const HANG_DANH_MUC = {
 let daGoi: LoiGoi[] = [];
 let daLamMoi: string[] = [];
 
-function thuTuc(duong: string, doc: (v: unknown) => unknown = () => null) {
+function thuTuc<T>(duong: string, doc: (v: DauVao) => T = () => null as T) {
 	return {
-		queryKey: (v?: unknown) => [duong, v],
+		queryKey: (v?: DauVao) => [duong, v],
 		pathKey: () => [duong],
-		queryOptions: (v?: unknown) => ({
+		queryOptions: (v?: DauVao) => ({
 			queryKey: [duong, v],
 			queryFn: async () => doc(v),
 		}),
 		mutationOptions: (chon?: {
-			onSuccess?: (kq: unknown, v: unknown) => void;
+			onSuccess?: (kq: { id: string }, v: DauVao) => void;
 			onError?: (e: Error) => void;
 		}) => ({
 			...chon,
 			mutationKey: [duong],
-			mutationFn: async (v: unknown) => {
+			mutationFn: async (v: DauVao) => {
 				daGoi.push({ duong, dauVao: v });
 				return { id: "ok" };
 			},
@@ -433,15 +440,9 @@ describe("go-dung-nguoi", () => {
 
 		const go = daGoi.filter((g) => g.duong === "onboarding.removeEnrollment");
 		expect(go.length).toBe(1);
-		expect(
-			(go[0]?.dauVao as { contactId: string }).contactId,
-			`Expected contactId cn-2 / Received ${(go[0]?.dauVao as { contactId: string }).contactId}`,
-		).toBe("cn-2");
-		expect(
-			daGoi.some(
-				(g) => (g.dauVao as { contactId?: string })?.contactId === "cn-1",
-			),
-		).toBe(false);
+		const nhan = go[0]?.dauVao?.contactId;
+		expect(nhan, `Expected contactId cn-2 / Received ${nhan}`).toBe("cn-2");
+		expect(daGoi.some((g) => g.dauVao?.contactId === "cn-1")).toBe(false);
 	});
 });
 
@@ -482,10 +483,10 @@ describe("noi-man-buoc", () => {
 		await bam(o);
 		await cho(() => daLamMoi.length >= 3, "lam moi sau doi han");
 
-		const thay = (v: unknown) =>
+		const thay = (v: (typeof payload)[number]["dauVao"]) =>
 			JSON.parse(
 				JSON.stringify(v).replaceAll('"A"', `"${NGUOI_A.id}"`),
-			) as unknown;
+			) as DauVao;
 		const mong = payload.map((p) => ({
 			duong: `onboarding.${p.thuTuc}`,
 			dauVao: thay(p.dauVao),
@@ -498,7 +499,7 @@ describe("noi-man-buoc", () => {
 			].includes(g.duong),
 		);
 		expect(
-			ghi.map((g) => (g.dauVao as { stepId: string }).stepId),
+			ghi.map((g) => g.dauVao?.stepId),
 			"Expected stepId S2",
 		).toEqual(["S2", "S2", "S2"]);
 		expect(ghi).toEqual(mong);
@@ -517,7 +518,11 @@ const NGUOI_TAO = {
 	image: null,
 };
 
-function dongThoiGian(id: string, type: string, meta: unknown) {
+function dongThoiGian(
+	id: string,
+	type: string,
+	meta: OnboardingActivityMeta | Record<string, string>,
+) {
 	return {
 		id,
 		type,
@@ -541,7 +546,7 @@ function dongThoiGian(id: string, type: string, meta: unknown) {
 describe("ve-vet-ke-hoach", () => {
 	test("ve-vet-ke-hoach: ma tran muoi dong, moi dong mot cau doc duoc", async () => {
 		const buoc = { stepId: "S2", nhan: "Dao tao" };
-		const MA_TRAN: [string, unknown][] = [
+		const MA_TRAN: [string, OnboardingActivityMeta][] = [
 			[
 				"buoc.giao",
 				vet.buocGiao({

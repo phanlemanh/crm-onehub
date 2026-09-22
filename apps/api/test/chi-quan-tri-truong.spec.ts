@@ -268,6 +268,9 @@ beforeAll(async () => {
 
 afterAll(async () => {
 	await app.close();
+	await db.agentTask.deleteMany({
+		where: { kind: "field-backfill", reason: { contains: `${TIEN_TO}-` } },
+	});
 	await db.fieldDefinition.deleteMany({
 		where: { key: { startsWith: TIEN_TO } },
 	});

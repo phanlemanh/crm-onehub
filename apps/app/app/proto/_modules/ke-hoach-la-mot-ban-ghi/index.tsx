@@ -76,7 +76,7 @@ const MAC_DINH: Hinh = {
 	dangGhi: null,
 };
 
-const HINH_THEO_STATE: Record<string, Hinh> = {
+const HINH_THEO_STATE = {
 	"ST-kehoach-codulieu": MAC_DINH,
 	"ST-kehoach-quahan": { ...MAC_DINH, buoc: BUOC_CO_DU_LIEU },
 	"ST-kehoach-dangtai": { ...MAC_DINH, dangTai: true },
@@ -87,7 +87,7 @@ const HINH_THEO_STATE: Record<string, Hinh> = {
 	"ST-kehoach-phieurong": { ...MAC_DINH, tab: "moi-gioi", ghiDanh: [] },
 	"ST-kehoach-phieu80": { ...MAC_DINH, tab: "moi-gioi", ghiDanh: GHI_DANH_80 },
 	"ST-kehoach-hoatdong": { ...MAC_DINH, tab: "hoat-dong" },
-};
+} satisfies Record<string, Hinh>;
 
 function BangNen() {
 	return (
@@ -492,7 +492,10 @@ function SheetKeHoach({ hinh }: { hinh: Hinh }) {
 }
 
 export function KeHoachLaMotBanGhiMau({ state }: { state: string }) {
-	const hinh = HINH_THEO_STATE[state] ?? MAC_DINH;
+	const hinh: Hinh =
+		state in HINH_THEO_STATE
+			? HINH_THEO_STATE[state as keyof typeof HINH_THEO_STATE]
+			: MAC_DINH;
 
 	return (
 		<>

@@ -1,14 +1,27 @@
-import { describe, expect, test } from "bun:test";
-import PlanRedirect from "@/app/(app)/[slug]/onboarding/[planId]/page";
-import { recordHref } from "@/lib/record-href";
+import { describe, expect, mock, test } from "bun:test";
+
+class ChuyenHuong extends Error {
+	constructor(readonly dich: string) {
+		super(`chuyen huong toi ${dich}`);
+	}
+}
+
+mock.module("next/navigation", () => ({
+	redirect: (dich: string) => {
+		throw new ChuyenHuong(dich);
+	},
+}));
+
+const { default: PlanRedirect } = await import(
+	"@/app/(app)/[slug]/onboarding/[planId]/page"
+);
+const { recordHref } = await import("@/lib/record-href");
 
 async function dichDen(slug: string, planId: string): Promise<string> {
 	try {
 		await PlanRedirect({ params: Promise.resolve({ slug, planId }) });
 	} catch (loi) {
-		const digest = (loi as { digest?: string }).digest ?? "";
-		const [loai, , dich] = digest.split(";");
-		if (loai === "NEXT_REDIRECT" && dich !== undefined) return dich;
+		if (loi instanceof ChuyenHuong) return loi.dich;
 		throw loi;
 	}
 	throw new Error("khong chuyen huong — trang cu van tra noi dung");
