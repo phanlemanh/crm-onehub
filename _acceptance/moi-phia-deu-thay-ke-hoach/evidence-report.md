@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0f8206b545597b563fc2f761df799a1cd052ecea
+verified_commit: ef99904ce50e884b7b8a4c26b92d0af993582f38
 human_signoff:
 ---
 
@@ -275,3 +275,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E1–E18 đều PASS ngay lần chạy đầu (baseline red trên diffBase, riêng E17 ui-check là n-a vì không có baseline mã để so); bốn lệnh suite hồi quy (bun run test, turbo lint, lint:slop, turbo build) đều xanh. Không có thất bại, không cần vòng lặp lại.
+
+### Re-pin lần 1 — 2026-09-22, do gộp onehub (kit 2.18.1) trước PR lượt 2
+run_id: repin-20260922T094919Z-71145
+sha: ef99904ce50e884b7b8a4c26b92d0af993582f38 · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E17
