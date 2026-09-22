@@ -139,6 +139,15 @@ export const planDetailOutput = planOutput.extend({
 	buocTong: z.number(),
 	imNgay: z.number(),
 	tacO: z.string().nullable(),
+	dangTheoDoi: z.boolean(),
+	nguoiTheoDoi: z.array(z.object({ id: z.string(), name: z.string() })),
+});
+
+export const watchInput = z.object({ planId: z.string().min(1) });
+
+export const watchOutput = z.object({
+	dangTheoDoi: z.boolean(),
+	soNguoiTheoDoi: z.number().int(),
 });
 
 export const stepListInput = z.object({
@@ -222,6 +231,9 @@ export type PlanCreateFromTemplateInput = z.infer<
 >;
 export type PlanOutput = z.infer<typeof planOutput>;
 export type PlanDetailOutput = z.infer<typeof planDetailOutput>;
+export type WatchInput = z.infer<typeof watchInput>;
+export type WatchOutput = z.infer<typeof watchOutput>;
+export type NguoiTheoDoi = PlanDetailOutput["nguoiTheoDoi"];
 export type StepOutput = z.infer<typeof stepOutput>;
 export type StepListInput = z.infer<typeof stepListInput>;
 export type StepListOutput = z.infer<typeof stepListOutput>;

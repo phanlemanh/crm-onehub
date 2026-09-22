@@ -36,6 +36,7 @@ import { dien } from "./plan-copy";
 import { PlanSteps } from "./plan-steps";
 import { RecordSheetFrame } from "./record-parts";
 import { useOpenRecord, useRecordSheetView } from "./record-stack";
+import { LoiTheoDoi, TheoDoiKeHoach } from "./theo-doi-ke-hoach";
 
 export type PlanDetail = RouterOutputs["onboarding"]["planById"];
 
@@ -129,6 +130,7 @@ export function PlanSheet({ planId }: { planId: string }) {
 	const trpc = useTRPC();
 	const openRecord = useOpenRecord();
 	const { tab, setTab } = useRecordSheetView("steps");
+	const [loiTheoDoi, setLoiTheoDoi] = useState(false);
 
 	const query = useQuery(trpc.onboarding.planById.queryOptions({ id: planId }));
 	const plan = query.data;
@@ -200,8 +202,22 @@ export function PlanSheet({ planId }: { planId: string }) {
 					/>
 				) : null
 			}
-			actions={plan ? <MenuKeHoach plan={plan} /> : null}
-			stats={plan ? <DaiSo plan={plan} /> : null}
+			actions={
+				plan ? (
+					<>
+						<TheoDoiKeHoach onLoi={setLoiTheoDoi} plan={plan} />
+						<MenuKeHoach plan={plan} />
+					</>
+				) : null
+			}
+			stats={
+				plan ? (
+					<>
+						{loiTheoDoi ? <LoiTheoDoi /> : null}
+						<DaiSo plan={plan} />
+					</>
+				) : null
+			}
 			tabs={tabs}
 			tab={tab}
 			onTabChange={setTab}

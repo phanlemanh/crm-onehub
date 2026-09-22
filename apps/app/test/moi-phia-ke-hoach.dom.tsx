@@ -553,6 +553,7 @@ function tongQuanGia() {
 				company: { id: CONG_TY_K, name: "One Mount" },
 			},
 		],
+		keHoachCanDeY: [],
 	};
 }
 

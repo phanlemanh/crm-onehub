@@ -1,0 +1,298 @@
+schema_version: 1
+slug: may-nhac-truoc-nguoi
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mn3_dung_nguoi
+    paths:
+      - "packages/db/src/onboarding-nhac.ts"
+      - "apps/agent/test/nhac-ke-hoach.integration.spec.ts"
+    expected: |
+      Gieo that tren DB (khong mock db), setSystemTime 2026-10-10T02:00:00Z (09:00 VN).
+      Ma tran viet truoc, moi dong mot assert tren ket qua viecCanNhac:
+        1 A: tap (loai, ma) bang dung {(buoc-qua-han,B1),(buoc-sap-han,B2)}
+        2 O: tap bang dung {(ke-hoach-im,P1),(moc-ngay,P1)}
+        3 W: tap bang dung {(ke-hoach-im,P1),(moc-ngay,P1)}
+        4 khong nguoi nao co muc mang B3, B4, B5 hay P2
+        5 R khong co trong ket qua
+      Doi chung duong tren cung fixture: dua R tro lai xuong -> R nhan
+      ke-hoach-im cua P3 (chung minh dong 5 do luat thanh vien, khong do fixture).
+      DOT BIEN CHUNG MINH: bo dieu kien closedAt null -> dong 4 do voi thong diep
+      ghim "khong ai nhan gi ve P2"; bo loc thanh vien -> dong 5 do voi
+      "R da roi xuong khong nhan".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mn3_bien_nguong
+    paths:
+      - "packages/db/src/onboarding-nhac.ts"
+      - "apps/agent/test/nhac-ke-hoach.integration.spec.ts"
+    expected: |
+      Gieo tung cap bien, gia tri doc tu NHAC (khong viet so rời trong test).
+      Ma tran viet truoc SAU cap, moi cap hai assert (trong / ngoai):
+        1 han = hom nay + NHAC.sapHanNgay -> sap-han; + NHAC.sapHanNgay + 1 -> khong
+        2 im NHAC.imSauNgay - 1 -> khong; im NHAC.imSauNgay -> ke-hoach-im
+        3 ngay thu 13 -> khong moc; 14 -> moc; 15 -> khong moc
+        4 goi y: con buoc chua giao -> bat dau "Giao bước"
+        5 khong con buoc chua giao, co buoc qua han -> chua "quá hạn"
+        6 con lai -> bat dau "Bước kế"
+      DOT BIEN CHUNG MINH: doi so sanh im tu >= sang > -> cap 2 do voi thong diep
+      ghim "im dung imSauNgay la ke-hoach-im"; dao thu tu luat goi y ->
+      dong 4 do voi "con buoc chua giao thi Giao bước".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mn3_nua_dem
+    paths:
+      - "packages/db/src/onboarding-nhac.ts"
+      - "apps/agent/test/nhac-ke-hoach.integration.spec.ts"
+    expected: |
+      Cung mot fixture, hai lan setSystemTime:
+        1 2026-10-10T17:30:00Z (00:30 VN ngay 11) -> buoc la buoc-qua-han, ke hoach ngay thu 15
+        2 2026-10-10T16:30:00Z (23:30 VN ngay 10) -> buoc khong qua han, ke hoach ngay thu 14 (co moc-ngay)
+      DOT BIEN CHUNG MINH: thay ngay VN bang ngay UTC -> dong 1 do voi thong diep
+      ghim "00:30 VN ngay 11 thi da qua han".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mn3_quet_mot_lan
+    paths:
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "apps/agent/agent/schedules/dispatch.ts"
+      - "packages/db/src/agent-tasks.ts"
+      - "apps/agent/test/nhac-ke-hoach.integration.spec.ts"
+    expected: |
+      Goi that ham quet lenLichNhac bon lan voi setSystemTime (gio VN 08:29, 08:31,
+      10:00, hom sau 08:31). Sau MOI lan doc LAI tu DB bang agentTask loai
+      nhac-ke-hoach:
+        1 sau 08:29 -> 0 hang
+        2 sau 08:31 -> dung 2 hang, subject {user:A:<ngay>, user:O:<ngay>}, khong hang cho N
+        3 sau 10:00 -> van 2 hang
+        4 sau hom sau 08:31 -> 4 hang, 2 hang moi mang ngay hom sau
+        5 moi payload parse qua schema payload cua loai nay; khoa chi gom loai, planId, stepId
+        6 ca chong nhau: Promise.all hai lan lenLichNhac luc 08:31 tren fixture sach -> dung 2 hang
+      Doi chung duong: dong 2 la chieu xanh cua dong 1 tren cung fixture.
+      DOT BIEN CHUNG MINH: bo kiem tra hang da co trong ngay -> dong 3 do voi thong
+      diep ghim "quet lai cung ngay khong them hang"; bo khoa duy nhat (kind, subject)
+      -> dong 6 do voi "hai luot chong nhau van mot hang moi nguoi".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mn3_gui_slack
+    paths:
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "apps/agent/agent/lib/dispatch.ts"
+      - "packages/db/src/onboarding-nhac.ts"
+      - "apps/agent/test/nhac-ke-hoach.integration.spec.ts"
+    expected: |
+      Slack gia ghi moi loi goi (khong mang that). Ma tran viet truoc:
+        1 dung 1 loi conversations.open, user = slackUserId cua A
+        2 dung 1 loi chat.postMessage
+        3 vi tri "Quá hạn" < "Sắp hạn" < "Kế hoạch im" trong van ban
+        4 moi dong mang ten cong ty cua dong do va ket thuc "?record=plan:<ma dung>"
+          (so tung dong voi ke hoach gieo, khong chi dem so lien ket)
+        5 doc LAI hang tu DB: finishedAt co gia tri, outcome da-gui, soDong 4,
+          payload.daGui bang dung tap bon dong da gui
+        6 fixture 12 viec -> dung 10 dong + dong "và 2 việc nữa", payload.daGui dung 10 muc do
+        7 xoa APP_URL khoi moi truong -> van 1 postMessage, van ban khong chua "record=" hay "undefined", outcome da-gui
+      DOT BIEN CHUNG MINH: dat planId cua dong dau cho ke hoach khac -> dong 4 do
+      voi thong diep ghim "dong mo dung ke hoach cua no"; bo tran -> dong 6 do;
+      noi APP_URL bang chuoi truc tiep -> dong 7 do voi "thieu APP_URL thi khong lien ket".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mn3_khong_kenh
+    paths:
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "apps/agent/test/nhac-ke-hoach.integration.spec.ts"
+    expected: |
+      Ba hang, Slack gia ghi loi goi. Moi ca: goi lan chay khong nem, so loi goi
+      Slack = 0, doc LAI tu DB outcome:
+        1 xuong chua noi -> khong-slack
+        2 da noi, khong SlackMemberMatch -> khong-khop
+        3 da het viec -> khong-viec
+      Doi chung duong: them SlackMemberMatch vao ca 2 -> 1 loi postMessage va da-gui.
+      DOT BIEN CHUNG MINH: bo nhanh kiem SlackMemberMatch -> ca 2 do voi thong diep
+      ghim "khong khop thi khong goi Slack".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mn3_theo_doi
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "packages/db/prisma/schema.prisma"
+      - "packages/validation/src/onboarding-activity.ts"
+      - "apps/api/test/may-nhac.spec.ts"
+    expected: |
+      Goi that thu tuc watch / unwatch / planById, doc LAI tu DB sau moi buoc:
+        1 bat lan dau -> 1 hang (P,W), 1 vet theoDoi.bat createdById W, dangTheoDoi true
+        2 bat lan hai -> van 1 hang, van 1 vet
+        3 tat -> 0 hang, them 1 vet theoDoi.tat, dangTheoDoi false, danh sach rong
+      Meta vet parse qua parseOnboardingActivityMeta.
+      DOT BIEN CHUNG MINH: bo kiem da ton tai -> dong 2 do voi thong diep ghim
+      "bat lan hai khong ghi vet thu hai".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mn3_tong_quan
+    paths:
+      - "apps/api/src/dashboard/**"
+      - "packages/db/src/onboarding-nhac.ts"
+      - "apps/api/test/may-nhac.spec.ts"
+    expected: |
+      Goi that dashboard.summary cho O, W, X:
+        1 O va W: keHoachCanDeY bang dung {(ke-hoach-im,P1),(moc-ngay,P1)}, moi muc
+          co planId, companyName, goiY; muc moc-ngay co soBuocXong va soBuocTong bang dem that
+        2 X: keHoachCanDeY rong
+        3 mySteps cua O bang dung ket qua truoc khi gieo P1 (khong doi)
+      DOT BIEN CHUNG MINH: bo loc theo nguoi -> dong 2 do voi thong diep ghim
+      "X khong lien quan thi khong co muc".
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: ui
+    cmd: config:executors.test.mn3_the_tasks
+    paths:
+      - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"
+      - "apps/app/lib/messages/**"
+      - "apps/app/test/may-nhac.dom.tsx"
+    expected: |
+      Dom test, du lieu tu fixture apps/api/test/fixtures/may-nhac-payload.json (rut
+      tu dau ra that cua dashboard.summary o E10). Ma tran:
+        1 co dong "Kế hoạch im" mang so ngay im, ten cong ty, goi y
+        2 co dong "Mốc ngày" mang ngay thu va "soBuocXong/soBuocTong" lay tu truong rieng cua fixture
+        3 hai dong do khong co o tich (role checkbox)
+        4 mo ta the chua dem ke hoach im
+        5 bam dong ke hoach im -> ngan sheet gom dung plan:<ma P1>
+      DOT BIEN CHUNG MINH: bo phan render keHoachCanDeY -> dong 1 do voi thong diep
+      ghim "the Tasks co dong Kế hoạch im".
+
+  - id: E10
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mn3_payload
+    paths:
+      - "apps/api/src/dashboard/**"
+      - "apps/api/test/may-nhac.spec.ts"
+      - "apps/api/test/fixtures/may-nhac-payload.json"
+    expected: |
+      Round-trip: goi that dashboard.summary tren fixture E8 roi so keHoachCanDeY
+      voi fixture may-nhac-payload.json ma E9 doc (sau khi bo truong thoi gian).
+      Lech -> do voi thong diep ghim "fixture the Tasks khop dau ra that".
+      DOT BIEN CHUNG MINH: doi ten mot truong trong fixture -> do.
+
+  - id: E15
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mn3_payload_theo_doi
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/may-nhac.spec.ts"
+      - "apps/api/test/fixtures/may-nhac-payload.json"
+    expected: |
+      Payload bat theo doi ma man gui o E11 (fixture.batTheoDoi, dom test ghi lai dau
+      vao that cua loi goi) di qua schema dau vao cua onboarding.watch roi goi that;
+      doc LAI tu DB co dung mot hang (P, W).
+      Doi chung am tren cung fixture: fixture thieu planId -> schema tu choi, 0 hang.
+      DOT BIEN CHUNG MINH: doi ten planId trong fixture -> do voi thong diep ghim
+      "payload man gui khop schema watch".
+
+  - id: E11
+    criterion: AC-10
+    executor: test
+    layer: ui
+    cmd: config:executors.test.mn3_nut_theo_doi
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/messages/**"
+      - "apps/app/test/may-nhac.dom.tsx"
+    expected: |
+      Dom test sheet ke hoach voi tRPC gia ghi loi goi:
+        1 bam "Theo dõi" -> dung 1 loi onboarding.watch, dau vao bang fixture.batTheoDoi {planId: P}
+        2 nut thanh "Đang theo dõi", aria-pressed="true", so nguoi theo doi tang 1
+        3 loi goi loi -> nut ve "Theo dõi", co chu "Không lưu được theo dõi"
+      DOT BIEN CHUNG MINH: bo xu ly onError -> dong 3 do voi thong diep ghim
+      "loi thi nut ve lai Theo dõi".
+
+  - id: E12
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mn3_duong_do
+    paths:
+      - "_acceptance/may-nhac-truoc-nguoi/rang/**"
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "apps/agent/test/nhac-ke-hoach.integration.spec.ts"
+    expected: |
+      Doc hai tep SQL trong rang/ (khong chep lai cau truy van trong test). Hang
+      nhac do CHINH lenLichNhac va lan gui (Slack gia) ghi, buoc xong do CHINH
+      setStepDone ghi; khong insert tay agentTask hay completedAt.
+        1 ngay-im-trung-vi.sql -> 6
+        2 xong-dung-han-sau-nhac.sql -> dung = 1, mau = 2 (buoc bi cat o tran va buoc xong
+          truoc gio gui KHONG vao mau — fixture co ca hai)
+      Doi chung duong: danh dau xong buoc con lai dung han -> dung = 2.
+      DOT BIEN CHUNG MINH: bo dieu kien closedAt null trong cau truy van -> dong 1 do
+      voi thong diep ghim "trung vi chi tinh ke hoach dang chay".
+
+  - id: E13
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"
+      - "apps/app/components/crm/record-sheet/**"
+      - "packages/ui/**"
+    steps:
+      - "Dat truoc MOI buoc: APP_URL=http://127.0.0.1:3300 va API_URL=http://127.0.0.1:3301 — dung 127.0.0.1, tranh Invalid origin va cookie ro theo host"
+      - "Dung ca hai may chu cua CAY DANG XET: api 3301, app 3300. Kiem cong 3300 va 3301 truoc khi dung — tai nguyen chung; dung ma PID de tat, khong pkill"
+      - "CHAN CAY, hai phia: dat mot dau moc vao apps/app/public roi xin lai qua APP_URL; VA doc mot ban ghi moc qua API_URL. Khong nhan lai duoc mot trong hai -> thoat ma 2 va goi ten cay dang xet, KHONG doc anh nao"
+      - "KHONG nang quyen bat ky thanh vien nao trong DB, KHONG tao phien cho tai khoan nguoi khac"
+      - "Gieo bang thu tuc cua kho (khong insert tay): mot ke hoach cam trich boi nguoi dang nhap, im 8 ngay, ngay thu 14; nguoi dang nhap theo doi mot ke hoach khac"
+      - "Mo /onehub o kho 1440, chup the Tasks, evidence/E13-tong-quan-1440.png"
+      - "Mo sheet ke hoach dang theo doi o kho 1440, chup evidence/E13-theo-doi-1440.png"
+      - "Lap lai hai man o kho 375: evidence/E13-tong-quan-375.png, evidence/E13-theo-doi-375.png"
+      - "Xoa dau moc trong apps/app/public khi xong"
+    inputs:
+      - _acceptance/may-nhac-truoc-nguoi/evidence/
+    expected: |
+      Nhin thay duoc tren anh, khong suy tu ma:
+        1 the Tasks co dong «Kế hoạch im» va «Mốc ngày» cung kieu dong buoc, cot han cua dong im cung chi bao do voi buoc qua han
+        2 sheet ke hoach co nut «Đang theo dõi» canh menu, kem so nguoi theo doi
+        3 hai anh 375 khong tran ngang
+      Mot dong khong nhin thay -> FAIL, ghi dong nao.
+
+  - id: E14
+    criterion: AC-12
+    executor: test
+    layer: unit
+    cmd: config:executors.test.mn3_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"
+      - "apps/app/components/crm/record-sheet/theo-doi-ke-hoach.tsx"
+    expected: |
+      Chay design-gate che do static tren tep giao dien moi va tep the Tasks.
+      Ma 0 = khong vi pham san P0 cua bo quet tinh.
+      DOT BIEN CHUNG MINH: them mot span chu xam tren nen mau (bg-blue-600
+      text-gray-400) vao ban sao theo-doi-ke-hoach.tsx -> lenh thoat khac 0 va in
+      ten luat tuong phan.

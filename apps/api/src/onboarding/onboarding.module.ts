@@ -6,6 +6,7 @@ import { OnboardingRouter } from "./onboarding.router";
 import { OnboardingService } from "./onboarding.service";
 import { OnboardingIngestService } from "./onboarding-ingest.service";
 import { OnboardingNoi } from "./onboarding-noi";
+import { OnboardingTheoDoi } from "./onboarding-theo-doi";
 
 @Module({
 	imports: [AgentModule, TrpcModule],
@@ -13,6 +14,7 @@ import { OnboardingNoi } from "./onboarding-noi";
 	providers: [
 		OnboardingService,
 		OnboardingNoi,
+		OnboardingTheoDoi,
 		OnboardingIngestService,
 		OnboardingRouter,
 	],

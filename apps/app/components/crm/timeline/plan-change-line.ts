@@ -35,6 +35,10 @@ export function cauVet(meta: OnboardingActivityMeta, locale: Locale): string {
 			return v.dong;
 		case "keHoach.moLai":
 			return v.moLai;
+		case "theoDoi.bat":
+			return v.theoDoiBat;
+		case "theoDoi.tat":
+			return v.theoDoiTat;
 	}
 }
 

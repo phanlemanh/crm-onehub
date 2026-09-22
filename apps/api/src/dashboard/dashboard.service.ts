@@ -1,5 +1,6 @@
 import { ActivityType, type Db, DealStage } from "@crm/db";
 import { OPEN_DEAL_STAGES } from "@crm/db/deal-stage";
+import { NHAC, type ViecNhac, viecCanNhac } from "@crm/db/onboarding-nhac";
 import { activityMeta } from "@crm/validation/activity-meta";
 import { Injectable } from "@nestjs/common";
 import { toCents } from "../crm/values";
@@ -20,6 +21,12 @@ const TREND_MONTHS = 6;
 const RATE_WINDOW_DAYS = 90;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+
+type NhacKeHoach = ViecNhac & { loai: "ke-hoach-im" | "moc-ngay" };
+
+function laNhacKeHoach(m: ViecNhac): m is NhacKeHoach {
+	return m.loai === "ke-hoach-im" || m.loai === "moc-ngay";
+}
 
 function monthIso(date: Date): string {
 	return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
@@ -280,6 +287,7 @@ export class DashboardService {
 				)
 				.sort((a, b) => (b.baseAmountCents ?? -1) - (a.baseAmountCents ?? -1)),
 			mySteps: await this.buocCuaToi(actingUserId, now),
+			keHoachCanDeY: await this.keHoachCanDeY(actingUserId, now),
 			overdueTasks: overdueTasks.map(({ dueAt, ...task }) => ({
 				...task,
 				dueAt: dueAt?.toISOString() ?? null,
@@ -324,5 +332,33 @@ export class DashboardService {
 			planId: b.planId,
 			company: b.plan.company,
 		}));
+	}
+
+	private async keHoachCanDeY(userId: string, now: Date) {
+		const ds = (await viecCanNhac(this.db, { now, userId })).get(userId) ?? [];
+		return ds
+			.filter(laNhacKeHoach)
+			.slice(0, NHAC.tran)
+			.map(
+				({
+					loai,
+					planId,
+					companyName,
+					goiY,
+					soNgay,
+					soBuocXong,
+					soBuocTong,
+					targetDays,
+				}) => ({
+					loai,
+					planId,
+					companyName,
+					goiY,
+					soNgay: soNgay ?? 0,
+					soBuocXong,
+					soBuocTong,
+					targetDays,
+				}),
+			);
 	}
 }

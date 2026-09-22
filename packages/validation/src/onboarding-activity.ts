@@ -34,6 +34,8 @@ export const onboardingActivityMeta = z.discriminatedUnion("kind", [
 	}),
 	z.object({ kind: z.literal("keHoach.dong") }),
 	z.object({ kind: z.literal("keHoach.moLai") }),
+	z.object({ kind: z.literal("theoDoi.bat") }),
+	z.object({ kind: z.literal("theoDoi.tat") }),
 ]);
 
 export type OnboardingActivityMeta = z.infer<typeof onboardingActivityMeta>;
@@ -50,6 +52,8 @@ export const ONBOARDING_ACTIVITY_KINDS = [
 	"keHoach.doiCamTrich",
 	"keHoach.dong",
 	"keHoach.moLai",
+	"theoDoi.bat",
+	"theoDoi.tat",
 ] as const satisfies readonly OnboardingActivityKind[];
 
 type Cua<K extends OnboardingActivityKind> = Omit<
@@ -72,6 +76,8 @@ export const vet = {
 		({ kind: "keHoach.doiCamTrich", ...v }) as const,
 	keHoachDong: () => ({ kind: "keHoach.dong" }) as const,
 	keHoachMoLai: () => ({ kind: "keHoach.moLai" }) as const,
+	theoDoiBat: () => ({ kind: "theoDoi.bat" }) as const,
+	theoDoiTat: () => ({ kind: "theoDoi.tat" }) as const,
 };
 
 export function parseOnboardingActivityMeta(

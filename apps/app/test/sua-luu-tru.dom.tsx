@@ -296,6 +296,8 @@ mock.module("@/lib/trpc/client", () => ({
 						buocTong: buocKeHoach.length,
 						imNgay: 0,
 						tacO: null,
+						dangTheoDoi: false,
+						nguoiTheoDoi: [],
 					}),
 				),
 			),
@@ -381,6 +383,7 @@ mock.module("@/lib/trpc/client", () => ({
 			),
 			manDanhMuc: thuTuc("manDanhMuc", khongDoc),
 			bangCot: thuTuc("bangCot", khongDoc),
+			plansOfCompany: thuTuc("plansOfCompany", khongDoc),
 		},
 		users: {
 			list: thuTuc("users.list", () => [TOI]),
