@@ -3,11 +3,10 @@ schema_version: 2
 feature_slug: onboarding-giong-deals
 verdict: PASS
 failed_evals: []
-reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 448e60f92faccf569618b4d2470d2202923c8931
+verified_commit: affd3b3ad58331da6e7bde4787fafb242f4d4111
 human_signoff:
 ---
 
@@ -36,20 +35,9 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-onboarding-giong-deals-E1-r1
+  run_id: minted-onboarding-giong-deals-E1-r2
   exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.ogd_man_danh_muc
-  verified_at: 2026-09-22T09:00:00+07:00
-  output: |
-    o=30 khang-dinh=70/70
-    -- tiền đề làn đo: đã dọn ảnh đại diện
-    -- tiền đề làn đo: đã dọn tên miền được phép
-
-- eval: E4
-  run_id: minted-onboarding-giong-deals-E4-r1
-  exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.script.ogd_man_danh_muc
   verified_at: 2026-09-22T09:00:00+07:00
   output: |
@@ -58,73 +46,83 @@ human_signoff:
     -- tiền đề làn đo: đã dọn tên miền được phép
 
 - eval: E2
-  run_id: minted-onboarding-giong-deals-E2-r1
+  run_id: minted-onboarding-giong-deals-E2-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.ogd_nut_dau_trang
   verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     0 fail
-     1 expect() calls
-    Ran 1 test across 1 file. [485.00ms]
+    0 fail
+    1 expect() calls
+    Ran 1 test across 1 file. [738.00ms]
 
 - eval: E3
-  run_id: minted-onboarding-giong-deals-E3-r1
+  run_id: minted-onboarding-giong-deals-E3-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.ogd_nut_mo_va_khoa
   verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     0 fail
-     2 expect() calls
-    Ran 1 test across 1 file. [649.00ms]
+    0 fail
+    2 expect() calls
+    Ran 1 test across 1 file. [636.00ms]
+
+- eval: E4
+  run_id: minted-onboarding-giong-deals-E4-r2
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.ogd_man_danh_muc
+  verified_at: 2026-09-22T09:00:00+07:00
+  output: |
+    o=30 khang-dinh=70/70
+    -- tiền đề làn đo: đã dọn ảnh đại diện
+    -- tiền đề làn đo: đã dọn tên miền được phép
 
 - eval: E5
-  run_id: minted-onboarding-giong-deals-E5-r1
+  run_id: minted-onboarding-giong-deals-E5-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.ogd_sap_mac_dinh
   verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     0 fail
-     3 expect() calls
-    Ran 1 test across 1 file. [664.00ms]
+    0 fail
+    3 expect() calls
+    Ran 1 test across 1 file. [867.00ms]
 
 - eval: E6
-  run_id: minted-onboarding-giong-deals-E6-r1
+  run_id: minted-onboarding-giong-deals-E6-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.ogd_dang_tai
   verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     0 fail
-     1 expect() calls
-    Ran 1 test across 1 file. [542.00ms]
+    0 fail
+    1 expect() calls
+    Ran 1 test across 1 file. [774.00ms]
 
 - eval: E7
-  run_id: minted-onboarding-giong-deals-E7-r1
+  run_id: minted-onboarding-giong-deals-E7-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.ogd_loi
   verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     0 fail
-     2 expect() calls
-    Ran 1 test across 1 file. [470.00ms]
+    3 expect() calls
+    Ran 2 tests across 1 file. [635.00ms]
 
 - eval: E8
-  run_id: minted-onboarding-giong-deals-E8-r1
+  run_id: minted-onboarding-giong-deals-E8-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.ogd_o_trong_va_so
   verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     0 fail
-     3 expect() calls
-    Ran 1 test across 1 file. [546.00ms]
+    0 fail
+    3 expect() calls
+    Ran 1 test across 1 file. [615.00ms]
 
 - eval: E9
-  run_id: minted-onboarding-giong-deals-E9-r1
+  run_id: minted-onboarding-giong-deals-E9-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.ogd_doi_tac_khong_an
@@ -132,21 +130,21 @@ human_signoff:
   output: |
     0 fail
     1 expect() calls
-    Ran 1 test across 1 file. [586.00ms]
+    Ran 1 test across 1 file. [602.00ms]
 
 - eval: E10
-  run_id: minted-onboarding-giong-deals-E10-r1
+  run_id: minted-onboarding-giong-deals-E10-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.ogd_o_chu_mot_dong
   verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     0 fail
-     1 expect() calls
-    Ran 1 test across 1 file. [491.00ms]
+    0 fail
+    1 expect() calls
+    Ran 1 test across 1 file. [800.00ms]
 
 - eval: E11
-  run_id: minted-onboarding-giong-deals-E11-r1
+  run_id: minted-onboarding-giong-deals-E11-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.ogd_nhan_bo_loc
@@ -154,109 +152,99 @@ human_signoff:
   output: |
     0 fail
     1 expect() calls
-    Ran 1 test across 1 file. [725.00ms]
+    Ran 1 test across 1 file. [890.00ms]
 
 - eval: E12
-  run_id: minted-onboarding-giong-deals-E12-r1
+  run_id: minted-onboarding-giong-deals-E12-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.ogd_tao_xong_mo
   verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     0 fail
-     2 expect() calls
-    Ran 1 test across 1 file. [876.00ms]
+    0 fail
+    2 expect() calls
+    Ran 1 test across 1 file. [834.00ms]
 
 - eval: E13
-  run_id: mucse2jjihc6
+  run_id: minted-onboarding-giong-deals-E13-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.ogd_tao_tra_id
   verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     2 expect() calls
-    Ran 1 test across 1 file. [314.00ms]
-    test-run: dropped crm_mucse2jjihc6_test
+    2 expect() calls
+    Ran 1 test across 1 file. [471.00ms]
+    test-run: dropped crm_mucsyq1hi4u8_test
+
+- eval: E14
+  run_id: E14-onboarding-giong-deals-verify-2026-09-22
+  exit_code: 0
+  verifier: config:executors.design.ui_check
+  verified_at: 2026-09-22T09:00:00+07:00
+  screenshot: _acceptance/onboarding-giong-deals/evidence/E14-onboarding-1440-sang.png
+  observed: |
+    Doc truc tiep tung file frame da luu bang Read:
+    - E14-onboarding-1440-sang.png: nut xanh "+ Kế hoạch mới" o goc phai dau trang (canh vung data-slot=page-shell-actions). Tieu de cot bang 30-ngay-dau: "Đối tác", "Tác ở", "Im lặng", "Bước", "Ngày", "Bộ phận" — khong cot nao co dau "…".
+    - E14-deals-1440-sang.png: nut xanh "+ Thoả thuận mới" o dung vi tri goc phai dau trang, cung mau xanh dam, cung icon dau cong voi nut ben onboarding.
+    - E14-onboarding-1440-toi.png va E14-deals-1440-toi.png (theme toi, prefers-color-scheme=dark): hai nut van cung vi tri/mau/icon nhu ban sang; tieu de cot 30-ngay-dau van khong dau ba cham.
+    - E14-onboarding-375-sang.png (mobile 375): nut "+ Kế hoạch mới" hien truc tiep canh o tim kiem/Loc, khong nam trong hop "Lọc" (hop Loc la mot dropdown rieng ben duoi).
+    - E14-deals-375-sang.png (mobile 375): nut "+ Thoả thuận mới" cung hien truc tiep tren cung, cung kieu voi ban onboarding.
+    Ca 3 dieu Expected deu khop: (1) nut giong nhau ca 1440/375, sang/toi — DAT; (2) khong tieu de cot nao cua bang 30-ngay-dau co dau ba cham — DAT; (3) o 375 nut tao hien truc tiep, khong nam trong o Loc — DAT.
+  network_observed: n-a (driver)
+
+- eval: E15
+  run_id: design-gate-1daab6dccd
+  exit_code: 0
+  baseline: green
+  verifier: config:executors.test.ogd_san_thiet_ke
+  verified_at: 2026-09-22T09:00:00+07:00
+  output: |
+    "hits": [],
+    "findings": []
 
 - eval: E16
-  run_id: minted-onboarding-giong-deals-E16-r1
+  run_id: mucsypqi6x62
   exit_code: 0
   baseline: red
   verifier: config:executors.test.ogd_sap_hai_chieu
   verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     2 expect() calls
-    Ran 1 test across 1 file. [348.00ms]
-    test-run: dropped crm_mucse2x2zpv4_test
+    2 expect() calls
+    Ran 1 test across 1 file. [485.00ms]
+    test-run: dropped crm_mucsypqi6x62_test
 
 - eval: E17
-  run_id: minted-onboarding-giong-deals-E17-r1
+  run_id: minted-onboarding-giong-deals-E17-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.ogd_trang_thai_trong
   verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     0 fail
-     1 expect() calls
-    Ran 1 test across 1 file. [714.00ms]
-
-- eval: E15
-  run_id: design-gate-bd7218edab
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.test.ogd_san_thiet_ke
-  verified_at: 2026-09-22T09:00:00+07:00
-  output: |
-    • khung-tao.tsx: PASS
-
-    All files passed static design verification with 0 P0 findings.
-
-- eval: E14
-  run_id: E14-onboarding-giong-deals
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.design.ui_check
-  verified_at: 2026-09-22T09:00:00+07:00
-  screenshot: evidence/E14-onboarding-1440-sang.png
-  observed: |
-    6/6 frame đã mở bằng Read và đối chiếu Expected:
-
-    E14-onboarding-1440-sang.png (light, 1440x900, /crm/onboarding): tiêu đề "30 ngày đầu", nút xanh lá đặc "+ Kế hoạch mới" ở góc phải đầu trang, cùng hàng với tiêu đề. Cách xem đang chọn là "Bảng" (nút "Bảng" viền xanh active). Tiêu đề cột: Đối tác, Tác ở, Im lặng, Bước, Ngày, Bộ phận — không cột nào có dấu ba chấm.
-
-    E14-deals-1440-sang.png (light, 1440x900, /crm/deals): tiêu đề "Thoả thuận", nút xanh lá đặc "+ Thoả thuận mới" ở đúng cùng vị trí góc phải đầu trang, cùng kích thước/padding, cùng icon "+" đặt trước chữ, cùng sắc xanh (#006B4F) như nút onboarding.
-
-    E14-onboarding-1440-toi.png (dark, 1440x900, /crm/onboarding): nền đen, nút "+ Kế hoạch mới" vẫn giữ nguyên nền xanh lá đặc (không đổi theo theme, đúng luật --primary bất biến 2 theme), vị trí và icon giống hệt bản sáng. Tiêu đề cột 30-ngày-đầu vẫn không có dấu ba chấm.
-
-    E14-deals-1440-toi.png (dark, 1440x900, /crm/deals): nút "+ Thoả thuận mới" cùng nền xanh lá đặc, cùng vị trí góc phải đầu trang như bản onboarding tối — khớp màu, khớp icon, khớp cỡ.
-
-    E14-onboarding-375-sang.png (light, 375x812, /crm/onboarding): nút "+ Kế hoạch mới" (nền xanh, chữ trắng) hiện rõ ngay trên màn hình ở góc phải đầu trang, tách biệt hoàn toàn với hàng "Lọc" nằm riêng bên dưới thanh tìm kiếm — nút không nằm lồng trong ô Lọc. Cách xem vẫn là bảng (đúng yêu cầu "onboarding ở cách xem bảng"). Cột "Đối tác/Tác ở/Im lặng" hiển thị, không có dấu ba chấm.
-
-    E14-deals-375-sang.png (light, 375x812, /crm/deals): nút "+ Thoả thuận mới" cũng hiện rõ ngay góc phải đầu trang, tách biệt khỏi hàng "Lọc" riêng bên dưới — cùng cách bố trí như onboarding 375. Vị trí, màu, icon khớp nút onboarding.
-
-    Đối chiếu code (không suy từ ký ức): apps/app/app/(app)/[slug]/onboarding/tao-ke-hoach.tsx (component DanhMucHanhDong/TaoKeHoach, dauTrang=true) và apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx (AddButton) đều dùng chung packages/ui Button mặc định (variant primary), cùng Icon Add carbon "inline-start", và cả hai trang page.tsx đặt component trong PageShellActions bên trong PageShellHeader — cùng một khuôn layout nguồn, không phải hai implementation lệch nhau.
-  network_observed: clean
+    0 fail
+    1 expect() calls
+    Ran 1 test across 1 file. [590.00ms]
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: mucsdp3eagms
+  run_id: minted-onboarding-giong-deals-SUITE-bun_run_test-r2
   exit_code: 0
-  verified_at: 2026-09-22T09:10:00+07:00
+  verified_at: 2026-09-22T09:00:00+07:00
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-onboarding-giong-deals-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-onboarding-giong-deals-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-22T09:15:00+07:00
+  verified_at: 2026-09-22T09:00:00+07:00
 
 - cmd: bun run lint:slop
-  run_id: minted-onboarding-giong-deals-SUITE-bun_run_lint_slop-r1
+  run_id: minted-onboarding-giong-deals-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-22T09:20:00+07:00
+  verified_at: 2026-09-22T09:00:00+07:00
 
 - cmd: bunx turbo run build --force
-  run_id: minted-onboarding-giong-deals-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-onboarding-giong-deals-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-22T09:25:00+07:00
+  verified_at: 2026-09-22T09:00:00+07:00
 
 ## Known limits
 
@@ -264,7 +252,7 @@ human_signoff:
 
 ## Analyst
 
-none — moi eval feature deu red tren baseline (co phan biet)
+E15 — pass tren CA HEAD lan baseline diffBase (design-gate --mode static tren 5 file onboarding). Day la regression-guard co chu y (quet mau hex/vi pham thiet ke tinh), khong phai eval phan biet hanh vi tinh nang moi, nen khong can viet lai — no dung de bat hoi quy thiet ke chu khong do AC hanh vi.
 
 ## Variance
 
@@ -272,4 +260,4 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: E1-E17 và bốn lệnh suite đều PASS trên lượt verify đầu tiên; không cần vòng thứ hai.
+Round 1: mọi eval feature (E1-E17) xanh ngay ở lần chấm đầu; một finding ngoài hợp đồng bị ghi lại (noi-bon-nut.dom.tsx dựng fixture tự đo trên chính nó — xem review-findings, carried). Round 2: xác minh lại toàn bộ 17 eval + E15 + 4 lệnh suite trên tệp đã đổi kể từ round 1; không có eval nào đỏ, không cần quay lại implementation.
