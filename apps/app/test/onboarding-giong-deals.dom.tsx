@@ -4,14 +4,16 @@ import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import {
 	act,
 	createElement as h,
-	type ReactElement,
 	type MouseEvent as ReactMouseEvent,
 	type ReactNode,
 } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { renderToStaticMarkup } from "react-dom/server";
+import type { z } from "zod";
+import type { DanhMucInput } from "@/app/(app)/[slug]/onboarding/onboarding-search-params";
 import {
 	danhMucOutput,
+	planCreateFromTemplateInput,
 	planListInput,
 	planOutput,
 } from "../../api/src/onboarding/onboarding.contracts";
@@ -70,7 +72,14 @@ let khuon: Khuon[] = [];
 let cheDoDanhMuc: CheDo = "thanh-cong";
 let cheDoTao: CheDo = "thanh-cong";
 let moTreo: (() => void) | null = null;
-let daGoi: { ten: string; dauVao: unknown }[] = [];
+type LuotGoi =
+	| { ten: "manDanhMuc"; dauVao: DanhMucInput }
+	| {
+			ten: "createFromTemplate";
+			dauVao: z.output<typeof planCreateFromTemplateInput>;
+	  };
+type KeHoachRa = z.infer<typeof planOutput>;
+let daGoi: LuotGoi[] = [];
 
 const taoTra = planOutput.parse({
 	id: "kh-vua-tao",
@@ -111,7 +120,7 @@ function hang(plan: KeHoachTho): HangDanhMuc {
 	return dungHang(plan, new Date());
 }
 
-function ketQuaDanhMuc(v: unknown) {
+function ketQuaDanhMuc(v: DanhMucInput) {
 	return danhMucOutput.parse(
 		manDanhMucTuHang(tap, planListInput.parse(v), khuon.length),
 	);
@@ -129,8 +138,8 @@ function thuTuc<TVao, TRa>(
 			queryFn: async () => doc(dauVao),
 		}),
 		mutationOptions: (tuyChon?: {
-			onSuccess?: (du: unknown) => unknown;
-			onError?: (loi: Error) => unknown;
+			onSuccess?: (du: KeHoachRa) => void | Promise<void>;
+			onError?: (loi: Error) => void;
 		}) => ({
 			mutationKey: [ten],
 			mutationFn: viet ?? (async () => undefined),
@@ -152,7 +161,7 @@ mock.module("@/lib/trpc/client", () => ({
 				soLanDocKhuon += 1;
 				return khuon;
 			}),
-			manDanhMuc: thuTuc("manDanhMuc", (v: unknown) => {
+			manDanhMuc: thuTuc("manDanhMuc", (v: DanhMucInput) => {
 				daGoi.push({ ten: "manDanhMuc", dauVao: v });
 				if (cheDoDanhMuc === "loi") throw new Error(LOI_MAY_CHU);
 				if (cheDoDanhMuc === "treo") {
@@ -167,11 +176,18 @@ mock.module("@/lib/trpc/client", () => ({
 				tranThe: 30,
 				cot: [],
 			})),
-			createFromTemplate: thuTuc("createFromTemplate", khongDoc, async (v) => {
-				daGoi.push({ ten: "createFromTemplate", dauVao: v });
-				if (cheDoTao === "loi") throw new Error(LOI_MAY_CHU);
-				return taoTra;
-			}),
+			createFromTemplate: thuTuc(
+				"createFromTemplate",
+				khongDoc,
+				async (v: z.input<typeof planCreateFromTemplateInput>) => {
+					daGoi.push({
+						ten: "createFromTemplate",
+						dauVao: planCreateFromTemplateInput.parse(v),
+					});
+					if (cheDoTao === "loi") throw new Error(LOI_MAY_CHU);
+					return taoTra;
+				},
+			),
 			plansOfCompany: thuTuc("plansOfCompany", () => []),
 			planById: thuTuc("planById", khongDoc),
 		},
@@ -359,9 +375,9 @@ function khungBang(san: San): HTMLElement | null {
 	return san.o.querySelector<HTMLElement>('[data-slot="table-container"]');
 }
 
-function goiDanhMucCuoi(): Record<string, unknown> {
-	const goi = daGoi.filter((g) => g.ten === "manDanhMuc").at(-1);
-	return (goi?.dauVao ?? {}) as Record<string, unknown>;
+function goiDanhMucCuoi(): Partial<DanhMucInput> {
+	const goi = daGoi.findLast((g) => g.ten === "manDanhMuc");
+	return goi?.ten === "manDanhMuc" ? goi.dauVao : {};
 }
 
 let soLanDocKhuon = 0;
@@ -414,8 +430,8 @@ async function chonSelect(nhan: string, chu: string): Promise<void> {
 		() => document.body.querySelectorAll('[role="option"]').length > 0,
 		`mo o chon ${nhan}`,
 	);
-	const lua = [...document.body.querySelectorAll('[role="option"]')].find(
-		(o) => o.textContent?.includes(chu),
+	const lua = [...document.body.querySelectorAll('[role="option"]')].find((o) =>
+		o.textContent?.includes(chu),
 	);
 	if (!lua) throw new Error(`o chon "${nhan}" khong co "${chu}"`);
 	await phim(lua, "Enter");
@@ -540,9 +556,9 @@ describe("sap-mac-dinh", () => {
 		const muc = [
 			...document.body.querySelectorAll('[role="menuitemradio"]'),
 		].find((o) => o.textContent?.trim() === m.columns.days);
-		expect(`menu Sap xep: Ngay aria-checked=${muc?.getAttribute("aria-checked")}`).toBe(
-			"menu Sap xep: Ngay aria-checked=true",
-		);
+		expect(
+			`menu Sap xep: Ngay aria-checked=${muc?.getAttribute("aria-checked")}`,
+		).toBe("menu Sap xep: Ngay aria-checked=true");
 		await dongMenu();
 		await act(async () => san.root.unmount());
 		san.o.remove();
@@ -574,7 +590,10 @@ describe("dang-tai", () => {
 		const mo1 = moTreo as (() => void) | null;
 		moTreo = null;
 		await act(async () => mo1?.());
-		await cho(() => san.o.querySelectorAll("tbody tr").length === 2, "hang hien");
+		await cho(
+			() => san.o.querySelectorAll("tbody tr").length === 2,
+			"hang hien",
+		);
 		await cho(() => !san.o.textContent?.includes(m.loading), "Dang tai mat");
 
 		const daDong = [...san.o.querySelectorAll("button")].find((b) =>
@@ -640,7 +659,9 @@ describe("o-trong-va-so", () => {
 			["tacO=null", m.columns.stuckOn],
 			["boPhanTac=null", m.columns.department],
 		] as const) {
-			ket.push(`${ten}: EmptyCellValue=${oCua(san, cot, r0).innerHTML.includes(O_TRONG)}`);
+			ket.push(
+				`${ten}: EmptyCellValue=${oCua(san, cot, r0).innerHTML.includes(O_TRONG)}`,
+			);
 		}
 		for (const cot of [m.columns.silent, m.columns.steps, m.columns.days]) {
 			ket.push(
@@ -688,13 +709,15 @@ describe("doi-tac-khong-an", () => {
 describe("o-chu-mot-dong", () => {
 	test("o-chu-mot-dong: ba cot chu cat mot dong, translate no", async () => {
 		const san = await mo();
-		const ket = [m.columns.partner, m.columns.stuckOn, m.columns.department].map(
-			(cot) => {
-				const td = oCua(san, cot, 0);
-				const nhan = td.querySelector(".truncate");
-				return `${cot}: mot dong=${nhan !== null && nhan.getAttribute("translate") === "no" && !td.className.includes("whitespace-normal")}`;
-			},
-		);
+		const ket = [
+			m.columns.partner,
+			m.columns.stuckOn,
+			m.columns.department,
+		].map((cot) => {
+			const td = oCua(san, cot, 0);
+			const nhan = td.querySelector(".truncate");
+			return `${cot}: mot dong=${nhan !== null && nhan.getAttribute("translate") === "no" && !td.className.includes("whitespace-normal")}`;
+		});
 		expect(ket).toEqual([
 			`${m.columns.partner}: mot dong=true`,
 			`${m.columns.stuckOn}: mot dong=true`,
@@ -726,7 +749,9 @@ describe("nhan-bo-loc", () => {
 		const ket: string[] = [];
 		for (const bl of MA_TRAN) {
 			for (const ca of ["khong-chon", "dang-chon"] as const) {
-				const san = await mo(ca === "dang-chon" ? `${bl.id}=${bl.khong.id}` : "");
+				const san = await mo(
+					ca === "dang-chon" ? `${bl.id}=${bl.khong.id}` : "",
+				);
 				await moMenu(ui.filters);
 				const muc = [
 					...document.body.querySelectorAll<HTMLElement>('[role="menuitem"]'),
@@ -735,7 +760,9 @@ describe("nhan-bo-loc", () => {
 				muc.focus();
 				await phim(muc, "ArrowRight");
 				await cho(
-					() => document.body.querySelectorAll('[role="menuitemcheckbox"]').length > 0,
+					() =>
+						document.body.querySelectorAll('[role="menuitemcheckbox"]').length >
+						0,
 					`mo bo loc ${bl.id}`,
 				);
 				const nhan = [

@@ -753,7 +753,9 @@ describe("nut-tren-thanh-cong-cu", () => {
 		for (const cachXem of ["bang", "bang-cot"] as const) {
 			tap = [dungHang(keHoachTho(1, "Beta Hub"), new Date())];
 			await moTaoKeHoach(m.tao.keHoach.toolbar, `cachXem=${cachXem}`, true);
-			const dau = document.body.querySelector('[data-slot="page-shell-actions"]');
+			const dau = document.body.querySelector(
+				'[data-slot="page-shell-actions"]',
+			);
 			expect(
 				`${cachXem}: dau trang=${dau?.textContent?.includes(m.tao.keHoach.toolbar)} hop thoai=${hopThoai()?.textContent?.includes(m.tao.keHoach.title)}`,
 			).toBe(`${cachXem}: dau trang=true hop thoai=true`);
