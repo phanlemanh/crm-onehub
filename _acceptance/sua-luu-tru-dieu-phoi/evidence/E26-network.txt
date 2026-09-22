@@ -1,0 +1,17 @@
+E26 network check (independent verifier pass)
+App: http://localhost:3300 (settings/onboarding, plan detail page)
+Total requests observed on tab during 768px overflow check pass: 456 (448 x 200 OK, 7 x 304 Not Modified, 0 x 4xx/5xx)
+All /api/trpc/* calls (enrichment.queue polling, onboarding.* etc.) returned 200 OK.
+No failed/aborted/timeout requests to app-origin (localhost:3300) or api-origin (localhost:3301) observed.
+
+Console errors observed (none are network failures; all dev-mode/dev-tool noise):
+1) Uncaught TypeError: Failed to execute 'getComputedStyle' on 'Window': parameter 1 is not of type 'Element'.
+   - thrown from an inline <anonymous> script, consistent with a dev-tool/overlay probe, not app code.
+2) React hydration-mismatch warning on DanhSachBoPhan/SortableItem (aria-describedby id mismatch:
+   "DndDescribedBy-0" vs "DndDescribedBy-11") — dnd-kit's auto-generated id counter differing between
+   server render and client render. Cosmetic dev warning, no broken behaviour observed on screen.
+3) Next.js dev-mode error: Route "/[slug]/onboarding/[planId]": Next.js encountered ... instant-shell-url-data
+   (E1439) — a Next.js internal dev-server diagnostic surfaced during turbopack HMR/dev navigation,
+   not a request that failed over the wire (no corresponding non-2xx network entry).
+
+Verdict: networkObserved = clean
