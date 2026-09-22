@@ -1,0 +1,35 @@
+{
+  "feature_plain": "Chỉ quản trị và chủ mới đổi được trường của cả đội; thành viên thường vẫn xem được danh sách trường, nhưng mọi nút đổi đều khoá, và gọi thẳng máy chủ cũng bị từ chối.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ thêm một luật quyền «quản lý trường» cạnh sáu luật quyền sẵn có: chủ và quản trị được, còn lại không."},
+    {"id": "AC-3", "p": "Sẽ để quản trị và chủ làm đủ bảy việc với trường như hôm nay, kể cả khi dùng khoá API."},
+    {"id": "AC-4", "p": "Sẽ để thành viên thường vẫn xem danh sách trường, từng trường, trường lọc được và độ phủ."},
+    {"id": "AC-5", "p": "Sẽ cho màn hỏi máy chủ người đang xem có quyền đổi trường không."},
+    {"id": "AC-6", "p": "Sẽ khoá mọi nút đổi ở Cài đặt › Trường cho thành viên thường, kèm dòng «Cần quyền quản trị để đổi trường của cả đội.»; quản trị thấy như cũ."},
+    {"id": "AC-7", "p": "Sẽ khoá y như vậy ở bảng Trường mở từ hồ sơ một bản ghi."},
+    {"id": "AC-8", "p": "Sẽ giữ nguyên mọi hành vi cũ của khu Trường."},
+    {"id": "AC-9", "p": "Sẽ chụp màn thật của cả hai vai ở khổ máy tính và khổ máy tính bảng."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Chặn thành viên thường và người không thuộc đội tạo, sửa, xếp lại, lưu trữ, khôi phục, xoá và điền bù trường — cả khi gọi thẳng máy chủ hay dùng khoá API — và không để lại dấu vết nào trong dữ liệu."}
+  ],
+  "scope_plain": "Để sau: áp quyền cho 20 khu khác đang chỉ kiểm đăng nhập, vai trò nhiều mức, nhật ký ai đổi trường, và sửa vai trò dữ liệu trên prod.",
+  "coverage_plain": [
+    {"i": 0, "p": "Đã xét đủ bốn loại người: chủ, quản trị, thành viên thường, và người đăng nhập được mà không thuộc đội — cả bốn đều được thử trước bảy việc đổi trường."},
+    {"i": 1, "p": "Đã xét đủ bảy việc đổi, bốn việc đọc và câu hỏi quyền mà khu Trường có trên máy chủ."},
+    {"i": 2, "p": "Đã xét mọi lối vào: gọi thẳng máy chủ bằng phiên hay khoá API, Cài đặt › Trường, và bảng Trường từ hồ sơ — tìm trong mã chỉ hai tệp màn gọi việc đổi trường."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Chưa thử lối khoá API — nay thử cho cả thành viên (bị chặn) lẫn quản trị (làm được). Lối REST dùng lại đúng đường của máy chủ nên không có ca riêng."},
+    {"i": 1, "p": "Chưa thử người không thuộc đội trước bảy việc đổi — nay có, để người vừa bị gỡ mà còn phiên không lọt."},
+    {"i": 2, "p": "Bảng Trường từ hồ sơ chỉ được kiểm bằng dữ liệu giả — nay chụp thêm màn thật của nó cho hai vai."},
+    {"i": 3, "p": "Chưa chắc không còn nút thứ ba nào đổi trường — đã tìm trong mã: chỉ hai tệp màn gọi."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260922T021911Z-1", "p": "Kiểm quyền ngay trong phần xử lý của máy chủ, cùng chỗ với các luật quyền khác — không lối gọi nào bỏ sót được; đổi lại phải sửa lời gọi trong bài kiểm cũ của khu Trường."},
+    {"id": "d-20260922T021911Z-2", "p": "Thành viên thấy nút mờ kèm một dòng lý do thay vì nút biến mất — người biết vì sao không bấm được; đổi lại màn có nhiều nút mờ."},
+    {"id": "d-20260922T021911Z-3", "p": "KHÔNG làm bản mẫu bấm được — màn đã có, chỉ thêm trạng thái khoá theo đúng khuôn của Cài đặt › Điều phối; ảnh thật chụp ở bước chấm."},
+    {"id": "d-20260922T021911Z-4", "p": "KHÔNG viết đặc tả giao diện — không thêm màn hay luồng nào."},
+    {"id": "d-20260922T021911Z-5", "p": "KHÔNG áp quyền cho các khu khác và KHÔNG sửa vai trò trên prod — anh tự kiểm vai trò của mình trên prod trước khi gộp."}
+  ]
+}

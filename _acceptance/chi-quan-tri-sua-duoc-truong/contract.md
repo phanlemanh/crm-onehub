@@ -49,6 +49,13 @@ Never: chỉ ẩn nút mà không chặn máy chủ — ẩn nút không phải 
 
 [GIẢ ĐỊNH] Tài khoản chủ kho dùng trên prod mang vai trò `owner` hoặc `admin` — ở dev nó là `member`. Chủ kho kiểm trên prod trước khi gộp; máy không đọc được prod.
 
+## Đường đo
+
+- Ngưỡng SỐNG (a) — member gọi thẳng bị từ chối ở cả bảy, mã «không đủ quyền» chứ không 500 · số từ ma trận 21 ca của E2 (phiên, khoá API, người không thuộc) · AC-2 bảo đảm.
+- Ngưỡng SỐNG (b) — admin làm được cả bảy như cũ · số từ ma trận 21 ca của E3 và hồi quy `fields.spec.ts` (E8) · AC-3, AC-8 bảo đảm.
+- Ngưỡng SỐNG (c) — member đọc được danh sách, không có đường mời bấm rồi ăn lỗi · E4 (đọc qua máy chủ), E6/E7 (khoá trên hai màn), E9 (ảnh thật) · AC-4, AC-6, AC-7, AC-9 bảo đảm.
+- Ngưỡng CHẾT — một thao tác còn hở, hoặc quản trị mất một thao tác · cùng hai ma trận E2/E3: một ca đỏ là chết.
+
 ## Out of scope
 
 - Áp phân quyền cho 20 router khác đang chỉ có `AuthMiddleware`.
