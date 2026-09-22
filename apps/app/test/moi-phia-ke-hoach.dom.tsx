@@ -100,6 +100,9 @@ const { DetailSheet } = await import("@/components/detail-sheet");
 const { DanhMucTable } = await import(
 	"@/app/(app)/[slug]/onboarding/danh-muc-table"
 );
+const { MembersTable } = await import(
+	"@/app/(app)/[slug]/settings/members/members-table"
+);
 const { DashboardSummary } = await import(
 	"@/app/(app)/[slug]/dashboard-summary"
 );
@@ -692,5 +695,169 @@ describe("loc-nguoi-giao-man", () => {
 			const v = goiDanhMucCuoi()?.nguoiGiao;
 			return Array.isArray(v) && v.length === 0;
 		}, "doi chung: bo chon thi nguoiGiao rong");
+	});
+});
+
+const THANH_VIEN = [
+	{ id: "m-h", userId: "u-h", name: "Huong Le" },
+	{ id: "m-t", userId: "u-t", name: "Tuan Do" },
+	{ id: "m-k", userId: "u-k", name: "Kim Anh" },
+];
+
+function datThanhVien(
+	canManage: boolean,
+	xemTruoc: { keHoach: number; buoc: number },
+) {
+	duLieu["workspace.get"] = () => ({
+		id: "ws",
+		name: "OneHub",
+		slug: "ws",
+		viewerRole: "admin",
+		canRename: true,
+		canChangeRoles: false,
+		canManageMembers: true,
+		canIssuePasswordLink: false,
+	});
+	duLieu["workspace.members"] = () => ({
+		rows: THANH_VIEN.map((n) => ({
+			...n,
+			email: `${n.userId}@thu.test`,
+			image: null,
+			role: "member",
+			joinedAt: "2026-09-01T00:00:00.000Z",
+			isViewer: false,
+			passwordLinkIssuedAt: null,
+			passwordLinkIssuedByName: null,
+		})),
+		total: THANH_VIEN.length,
+		facetCounts: { role: { member: 3 } },
+	});
+	duLieu["onboarding.access"] = () => ({ canManage });
+	duLieu["onboarding.transferPreview"] = () => xemTruoc;
+	duLieu["users.list"] = () =>
+		THANH_VIEN.map((n) => ({
+			id: n.userId,
+			name: n.name,
+			email: `${n.userId}@thu.test`,
+			image: null,
+		}));
+}
+
+async function moMenuCua(ten: string): Promise<void> {
+	await cho(
+		() => document.body.textContent?.includes(ten) === true,
+		`hang ${ten}`,
+	);
+	const hang = [...document.body.querySelectorAll("tr")].find((r) =>
+		r.textContent?.includes(ten),
+	);
+	const trigger = hang?.querySelector('[aria-haspopup="menu"]');
+	if (!trigger) throw new Error(`khong thay nut menu cua ${ten}`);
+	await bam(trigger);
+	await cho(
+		() => document.body.querySelector('[role="menu"]') !== null,
+		"menu mo",
+	);
+}
+
+function mucChuyen(): HTMLElement | undefined {
+	return [
+		...document.body.querySelectorAll<HTMLElement>('[role="menuitem"]'),
+	].find((o) => o.textContent?.trim() === k.chuyen.menu);
+}
+
+const thayMa = (gia: string) =>
+	gia === "NGUOI_DI" ? "u-h" : gia === "NGUOI_NHAN" ? "u-t" : gia;
+
+describe("chuyen-giao-man", () => {
+	test("chuyen-giao-man: xem truoc dung nguoi, chon T, gui dung payload chuyen giao", async () => {
+		datThanhVien(true, { keHoach: 2, buoc: 3 });
+		await mo(<MembersTable />);
+		await moMenuCua("Huong Le");
+		const muc = mucChuyen();
+		if (!muc) throw new Error("khong thay muc chuyen viec");
+		await bam(muc);
+		await cho(
+			() => document.body.textContent?.includes("2 kế hoạch") === true,
+			"hop thoai nêu so",
+		);
+
+		const xem = daGoi.filter((g) => g.duong === "onboarding.transferPreview");
+		expect(
+			xem.at(-1)?.dauVao,
+			"Expected fromUserId u-h / Received ma member",
+		).toEqual({
+			fromUserId: thayMa(payload.xemTruoc.fromUserId),
+		});
+		const hop = document.body.querySelector('[role="dialog"]');
+		if (!hop) throw new Error("khong thay hop thoai");
+		expect(hop.textContent).toContain("2 kế hoạch");
+		expect(hop.textContent).toContain("3 bước");
+
+		const o = hop.querySelector(`[aria-label="${k.chuyen.nguoiNhan}"]`);
+		if (!o) throw new Error("khong thay o nguoi nhan");
+		await bam(o);
+		await cho(
+			() => document.body.querySelectorAll("[cmdk-item]").length > 0,
+			"danh sach nguoi nhan",
+		);
+		const ten = [...document.body.querySelectorAll("[cmdk-item]")].map(
+			(i) => i.textContent?.trim() ?? "",
+		);
+		expect(ten.sort(), "nguoi nhan khong co H").toEqual(["Kim Anh", "Tuan Do"]);
+		const chonT = [...document.body.querySelectorAll("[cmdk-item]")].find((i) =>
+			i.textContent?.includes("Tuan Do"),
+		);
+		if (!chonT) throw new Error("khong thay Tuan Do");
+		await bam(chonT);
+
+		await cho(() => {
+			const x = [...hop.querySelectorAll("button")].find(
+				(b) => b.textContent?.trim() === k.chuyen.xacNhan,
+			);
+			return x !== undefined && !x.disabled;
+		}, "nut chuyen mo khoa");
+		const xacNhan = [...hop.querySelectorAll("button")].find(
+			(b) => b.textContent?.trim() === k.chuyen.xacNhan,
+		);
+		if (!xacNhan) throw new Error("khong thay nut chuyen");
+		await bam(xacNhan);
+		await cho(
+			() => daGoi.some((g) => g.duong === "onboarding.transferWork"),
+			"loi goi chuyen",
+		);
+		const chuyen = daGoi.filter((g) => g.duong === "onboarding.transferWork");
+		expect(chuyen.length, "dung mot loi goi transferWork").toBe(1);
+		expect(chuyen[0]?.dauVao, "payload bang muc chuyenGiao").toEqual({
+			fromUserId: thayMa(payload.chuyenGiao.fromUserId),
+			toUserId: thayMa(payload.chuyenGiao.toUserId),
+		});
+	});
+
+	test("chuyen-giao-man: xem truoc bang 0 thi nut chuyen khoa", async () => {
+		datThanhVien(true, { keHoach: 0, buoc: 0 });
+		await mo(<MembersTable />);
+		await moMenuCua("Huong Le");
+		const muc = mucChuyen();
+		if (!muc) throw new Error("khong thay muc chuyen viec");
+		await bam(muc);
+		await cho(
+			() => document.body.textContent?.includes("không cầm trịch") === true,
+			"cau khong co viec",
+		);
+		const xacNhan = [
+			...document.body.querySelectorAll<HTMLButtonElement>(
+				'[role="dialog"] button',
+			),
+		].find((b) => b.textContent?.trim() === k.chuyen.xacNhan);
+		expect(xacNhan?.disabled, "nut chuyen khoa khi 0 va 0").toBe(true);
+	});
+
+	test("chuyen-giao-man: doi chung am — khong co quyen thi khong co muc chuyen viec", async () => {
+		datThanhVien(false, { keHoach: 2, buoc: 3 });
+		await mo(<MembersTable />);
+		await moMenuCua("Huong Le");
+		await nghi(5);
+		expect(mucChuyen(), "khong co muc chuyen viec").toBeUndefined();
 	});
 });
