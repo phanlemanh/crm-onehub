@@ -271,6 +271,7 @@ mock.module("@/lib/trpc/client", () => ({
 mock.module("next/navigation", () => ({
 	useRouter: () => ({ push: () => {}, replace: () => {}, prefetch: () => {} }),
 	useParams: () => ({ slug: "ws" }),
+	useSearchParams: () => new URLSearchParams(),
 }));
 
 mock.module("next/link", () => ({

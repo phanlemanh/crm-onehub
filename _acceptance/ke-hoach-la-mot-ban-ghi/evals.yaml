@@ -415,10 +415,13 @@ evals:
       - "apps/app/components/crm/record-sheet/plan-brokers.tsx"
     expected: |
       Chay design-gate che do static tren ba tep giao dien moi cua sheet ke hoach.
-      Ma 0 = khong vi pham san P0 (tuong phan, focus, nhan cho nut chi co bieu
-      tuong, radius/mau ngoai thang cua kho).
-      DOT BIEN CHUNG MINH: them mot nut chi co bieu tuong khong aria-label vao
-      plan-steps.tsx trong ban sao -> lenh thoat khac 0 va in ten tep.
+      Ma 0 = khong vi pham san P0 cua bo quet tinh: tuong phan thap, chu xam tren
+      nen mau, tran chu, anh hong, chu sat mep man. Bo quet tinh KHONG kiem nhan
+      cho nut chi co bieu tuong — nhan do duoc do boi E13 va E19, hai bai tim nut
+      theo aria-label nen do khi nhan mat.
+      DOT BIEN CHUNG MINH: them mot span chu xam tren nen mau (bg-blue-600
+      text-gray-400) vao plan-steps.tsx trong ban sao -> lenh thoat 2 va in luat
+      gray-on-color.
 
   - id: E19
     criterion: AC-5

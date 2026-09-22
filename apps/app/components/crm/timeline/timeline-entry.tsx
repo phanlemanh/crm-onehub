@@ -38,6 +38,7 @@ const stageChange = z
 function anchorId(anchor: TimelineAnchor): string {
 	if ("companyId" in anchor) return anchor.companyId;
 	if ("contactId" in anchor) return anchor.contactId;
+	if ("planId" in anchor) return anchor.planId;
 	return anchor.dealId;
 }
 

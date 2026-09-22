@@ -33,7 +33,8 @@ import {
 export type TimelineAnchor =
 	| { companyId: string }
 	| { contactId: string }
-	| { dealId: string };
+	| { dealId: string }
+	| { planId: string };
 
 function tabLabels(m: CrmMessages) {
 	const t = m.timeline.tabs;

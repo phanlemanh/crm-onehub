@@ -168,6 +168,97 @@ const en = {
 		noDepartment:
 			"No department yet. A step always belongs to one, even before anyone takes it.",
 	},
+	sheet: {
+		subtitle: "30-day plan",
+		subtitleKhuon: "30-day plan · template {khuon}",
+		companyLink: "Company profile",
+		stats: {
+			day: "Day",
+			steps: "Steps",
+			silent: "Silent",
+			owner: "Owner",
+		},
+		days: "{n} days",
+		tabs: {
+			steps: "Steps",
+			brokers: "Brokers",
+			activity: "Activity",
+		},
+		details: "Details",
+		fields: {
+			template: "Template",
+			started: "Started",
+			target: "Target",
+			owner: "Owner",
+		},
+		noTemplate: "No template",
+		groupTitle: "{boPhan} · {xong}/{tong} done",
+		unassigned: "Unassigned",
+		assignTo: "Assign {nhan}",
+		dueFor: "Change the due date of {nhan}",
+		searchPeople: "Search people",
+		nobody: "Nobody matches",
+		unassign: "Unassign",
+		overdue: "Overdue",
+		markDone: "Mark {nhan} done",
+		markNotDone: "Mark {nhan} not done",
+		rowMenu: "More for {nhan}",
+		up: "Move up",
+		down: "Move down",
+		removeStep: "Remove step",
+		addStep: "Add a step",
+		newStepLabel: "What needs doing",
+		newStepDue: "Due",
+		save: "Add",
+		cancel: "Cancel",
+		noSteps: {
+			title: "This plan has no steps yet",
+			body: "Add the first step and pick the department that holds it.",
+		},
+		closedNote: "Closed {ngay}",
+		closedHint: "This plan is closed — reopen it to edit.",
+		menu: "Plan actions",
+		closePlan: "Close plan",
+		reopenPlan: "Reopen plan",
+		confirmClose: {
+			title: "Close this plan?",
+			body: "Steps that are not done stay as they are. You can reopen the plan at any time.",
+			action: "Close plan",
+			cancel: "Keep open",
+		},
+		confirmRemoveStep: {
+			title: "Remove «{nhan}» from the plan?",
+			body: "The step leaves the plan. The activity tab keeps a line saying it was removed.",
+			action: "Remove step",
+			cancel: "Keep",
+		},
+		funnel: "Funnel · {n} brokers",
+		brokerName: "Name",
+		removeBroker: "Remove {ten} from the funnel",
+		confirmRemoveBroker: {
+			title: "Remove {ten} from the funnel?",
+			body: "Their four stage dates go with them. This cannot be undone.",
+			action: "Remove",
+			cancel: "Keep",
+		},
+		noBrokers: {
+			title: "No broker enrolled yet",
+			body: "Add them by hand, or wait for the platform feed once it is wired.",
+		},
+	},
+	vet: {
+		giao: "assigned «{nhan}» to {ten}",
+		boGiao: "unassigned «{nhan}»",
+		xong: "marked «{nhan}» done",
+		boXong: "marked «{nhan}» not done",
+		doiHan: "moved «{nhan}» from {tu} to {den}",
+		them: "added the step «{nhan}»",
+		bo: "removed the step «{nhan}»",
+		doiCamTrich: "handed the plan from {tu} to {den}",
+		dong: "closed the plan",
+		moLai: "reopened the plan",
+		khongDoc: "A plan change that could not be read",
+	},
 } satisfies OnboardingMessages;
 
 type OnboardingMessages = {
@@ -301,6 +392,97 @@ type OnboardingMessages = {
 		newDepartment: string;
 		noTemplate: string;
 		noDepartment: string;
+	};
+	sheet: {
+		subtitle: string;
+		subtitleKhuon: string;
+		companyLink: string;
+		stats: {
+			day: string;
+			steps: string;
+			silent: string;
+			owner: string;
+		};
+		days: string;
+		tabs: {
+			steps: string;
+			brokers: string;
+			activity: string;
+		};
+		details: string;
+		fields: {
+			template: string;
+			started: string;
+			target: string;
+			owner: string;
+		};
+		noTemplate: string;
+		groupTitle: string;
+		unassigned: string;
+		assignTo: string;
+		dueFor: string;
+		searchPeople: string;
+		nobody: string;
+		unassign: string;
+		overdue: string;
+		markDone: string;
+		markNotDone: string;
+		rowMenu: string;
+		up: string;
+		down: string;
+		removeStep: string;
+		addStep: string;
+		newStepLabel: string;
+		newStepDue: string;
+		save: string;
+		cancel: string;
+		noSteps: {
+			title: string;
+			body: string;
+		};
+		closedNote: string;
+		closedHint: string;
+		menu: string;
+		closePlan: string;
+		reopenPlan: string;
+		confirmClose: {
+			title: string;
+			body: string;
+			action: string;
+			cancel: string;
+		};
+		confirmRemoveStep: {
+			title: string;
+			body: string;
+			action: string;
+			cancel: string;
+		};
+		funnel: string;
+		brokerName: string;
+		removeBroker: string;
+		confirmRemoveBroker: {
+			title: string;
+			body: string;
+			action: string;
+			cancel: string;
+		};
+		noBrokers: {
+			title: string;
+			body: string;
+		};
+	};
+	vet: {
+		giao: string;
+		boGiao: string;
+		xong: string;
+		boXong: string;
+		doiHan: string;
+		them: string;
+		bo: string;
+		doiCamTrich: string;
+		dong: string;
+		moLai: string;
+		khongDoc: string;
 	};
 };
 
@@ -472,6 +654,97 @@ const vi = {
 			"Chưa có khuôn nào. Một khuôn giữ bộ bước cho một loại đối tác.",
 		noDepartment:
 			"Chưa có bộ phận nào. Bước nào cũng thuộc một bộ phận, kể cả khi chưa ai nhận.",
+	},
+	sheet: {
+		subtitle: "Kế hoạch 30 ngày",
+		subtitleKhuon: "Kế hoạch 30 ngày · khuôn {khuon}",
+		companyLink: "Hồ sơ công ty",
+		stats: {
+			day: "Ngày",
+			steps: "Bước",
+			silent: "Im lặng",
+			owner: "Cầm trịch",
+		},
+		days: "{n} ngày",
+		tabs: {
+			steps: "Bước",
+			brokers: "Môi giới",
+			activity: "Hoạt động",
+		},
+		details: "Chi tiết",
+		fields: {
+			template: "Khuôn",
+			started: "Bắt đầu",
+			target: "Mục tiêu",
+			owner: "Cầm trịch",
+		},
+		noTemplate: "Không từ khuôn",
+		groupTitle: "{boPhan} · đã xong {xong}/{tong}",
+		unassigned: "Chưa giao",
+		assignTo: "Giao bước {nhan}",
+		dueFor: "Đổi hạn {nhan}",
+		searchPeople: "Tìm người",
+		nobody: "Không ai khớp",
+		unassign: "Bỏ giao",
+		overdue: "Quá hạn",
+		markDone: "Đánh dấu xong {nhan}",
+		markNotDone: "Bỏ đánh dấu xong {nhan}",
+		rowMenu: "Thao tác với {nhan}",
+		up: "Lên",
+		down: "Xuống",
+		removeStep: "Bỏ bước",
+		addStep: "Thêm bước",
+		newStepLabel: "Việc cần làm",
+		newStepDue: "Hạn",
+		save: "Thêm",
+		cancel: "Thôi",
+		noSteps: {
+			title: "Kế hoạch chưa có bước nào",
+			body: "Thêm bước đầu tiên và chọn bộ phận giữ nó.",
+		},
+		closedNote: "Đã đóng {ngay}",
+		closedHint: "Kế hoạch đã đóng — mở lại để sửa.",
+		menu: "Thao tác với kế hoạch",
+		closePlan: "Đóng kế hoạch",
+		reopenPlan: "Mở lại kế hoạch",
+		confirmClose: {
+			title: "Đóng kế hoạch này?",
+			body: "Các bước chưa xong giữ nguyên. Mở lại được bất cứ lúc nào.",
+			action: "Đóng kế hoạch",
+			cancel: "Giữ mở",
+		},
+		confirmRemoveStep: {
+			title: "Bỏ «{nhan}» khỏi kế hoạch?",
+			body: "Bước rời kế hoạch. Tab Hoạt động vẫn giữ một dòng ghi là đã bỏ.",
+			action: "Bỏ bước",
+			cancel: "Giữ",
+		},
+		funnel: "Phễu · {n} môi giới",
+		brokerName: "Tên",
+		removeBroker: "Gỡ {ten} khỏi phễu",
+		confirmRemoveBroker: {
+			title: "Gỡ {ten} khỏi phễu?",
+			body: "Bốn mốc bậc của người này mất theo. Không hoàn tác được.",
+			action: "Gỡ",
+			cancel: "Giữ",
+		},
+		noBrokers: {
+			title: "Chưa ghi danh môi giới nào",
+			body: "Thêm tay, hoặc chờ số từ nền tảng khi đường nối đã bật.",
+		},
+	},
+	vet: {
+		giao: "giao bước «{nhan}» cho {ten}",
+		boGiao: "bỏ giao bước «{nhan}»",
+		xong: "đánh dấu «{nhan}» xong",
+		boXong: "bỏ đánh dấu xong «{nhan}»",
+		doiHan: "đổi hạn «{nhan}» {tu} → {den}",
+		them: "thêm bước «{nhan}»",
+		bo: "bỏ bước «{nhan}»",
+		doiCamTrich: "chuyển cầm trịch từ {tu} sang {den}",
+		dong: "đóng kế hoạch",
+		moLai: "mở lại kế hoạch",
+		khongDoc: "Thay đổi kế hoạch không đọc được",
 	},
 } satisfies OnboardingMessages;
 

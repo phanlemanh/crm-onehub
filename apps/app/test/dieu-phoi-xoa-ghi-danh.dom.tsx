@@ -32,7 +32,13 @@ type BoPhan = {
 	archivedAt: Date | null;
 };
 
-type KetQuaTruyVan = { rows: Buoc[]; total: number } | GhiDanh[] | BoPhan[];
+type KeHoach = { id: string; companyName: string; closedAt: string | null };
+
+type KetQuaTruyVan =
+	| { rows: Buoc[]; total: number }
+	| GhiDanh[]
+	| BoPhan[]
+	| KeHoach;
 
 type DauVaoMan =
 	| { planId: string }
@@ -85,6 +91,8 @@ function ketQuaTruyVan(ten: string): KetQuaTruyVan {
 	if (ten === "listSteps") return { rows: BUOC, total: BUOC.length };
 	if (ten === "listEnrollments") return dsGhiDanh;
 	if (ten === "listDepartments") return BO_PHAN;
+	if (ten === "planById")
+		return { id: KE_HOACH, companyName: "Alpha", closedAt: null };
 	throw new Error(`man goi mot truy van khong co ban gia: ${ten}`);
 }
 
@@ -125,6 +133,8 @@ const BAN_GIA = {
 	removeEnrollment: thuTuc("removeEnrollment"),
 	markEnrollmentStage: thuTuc("markEnrollmentStage"),
 	manDanhMuc: thuTuc("manDanhMuc"),
+	planById: thuTuc("planById"),
+	reopenPlan: thuTuc("reopenPlan"),
 };
 
 mock.module("@/lib/trpc/client", () => ({
