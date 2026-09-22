@@ -1,0 +1,16 @@
+NETWORK TRUTH — E14 (onboarding-giong-deals)
+Driver: mcp__Claude_Browser (read_network_requests + read_console_messages) on live session at http://localhost:3000/crm/{onboarding,deals}
+FAIL-eligible scope: origin http://localhost:3000 (dev_server.url) and http://localhost:3001 (dev_server.api_base)
+
+read_network_requests(limit=50) — last 50 of 470 matching requests, all http://localhost:3000, all "200 OK".
+Sample (deduped, representative):
+  GET /_next/static/chunks/*.js -> 200 OK (multiple)
+  GET /_next/static/media/*.woff2 -> 200 OK
+  GET /__nextjs_font/geist-latin.woff2 -> 200 OK
+  GET /api/trpc/enrichment.queue?... -> 200 OK (repeated poll)
+  GET /api/trpc/users.list,users.me,currency.settings,fields.filters,fields.list?... -> 200 OK
+No 4xx/5xx, no connection-error/timeout observed among the FAIL-eligible (app-origin) requests read.
+
+read_console_messages(onlyErrors=true, limit=50) -> "No console logs." (no error-level console entries in buffer).
+
+Verdict: clean

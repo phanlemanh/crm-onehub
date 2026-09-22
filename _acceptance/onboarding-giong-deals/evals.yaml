@@ -242,7 +242,7 @@ evals:
     steps:
       - "May chu dev cua CAY DANG XET: api 3001, app 3000; APP_URL va API_URL tro dung hai cong do. Chan cay (dat dau moc vao apps/app/public, xin lai qua APP_URL); khong nhan lai -> thoat ma 2."
       - "Tao phien bang `cd apps/api && bun run dev:session <email>`, dat cookie vao trinh duyet."
-      - "Chup evidence/E14-onboarding-1440-sang.png, E14-deals-1440-sang.png, E14-onboarding-1440-toi.png, E14-deals-1440-toi.png, E14-onboarding-375-sang.png, E14-deals-375-sang.png (onboarding o cach xem bang)."
+      - "Chup vao _acceptance/onboarding-giong-deals/evidence/ (tinh tu goc kho, KHONG phai evidence/ o goc): E14-onboarding-1440-sang.png, E14-deals-1440-sang.png, E14-onboarding-1440-toi.png, E14-deals-1440-toi.png, E14-onboarding-375-sang.png, E14-deals-375-sang.png (onboarding o cach xem bang)."
     inputs:
       - _acceptance/onboarding-giong-deals/evidence/
     expected: |
