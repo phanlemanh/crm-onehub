@@ -3,10 +3,10 @@ schema_version: 1
 slug: chi-quan-tri-sua-duoc-truong
 feature: Chỉ quản trị mới đổi được trường của cả đội — hôm nay bất kỳ thành viên nào đăng nhập cũng sửa và xoá được
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-09-22T03:10:00Z
 prototype:
   base_commit:
   disposition:
@@ -82,10 +82,10 @@ Giả định 3 rẻ nhất và nguy hiểm nhất nếu bỏ qua: nó là ca t�
 đặt › Trường đổi), nên KHÔNG đi lối «Không đo được». Ngưỡng dưới đây là **máy
 đề xuất** — người ký Cổng Đáng gỡ tiền tố `[đề xuất]` là chốt.
 
-- Câu hỏi phép đo trả lời: [đề xuất] Một thành viên thường có còn đổi được hình dạng dữ liệu của cả đội không?
-- Kết quả nào là SỐNG: [đề xuất] Đủ ba điều — (a) một tài khoản vai trò `member` gọi THẲNG điểm cuối, không qua giao diện, bị từ chối ở **cả sáu** thao tác đổi lược đồ (tạo · sửa · xếp lại · lưu trữ · xoá · điền bù), bằng một mã lỗi nói đúng nghĩa «không đủ quyền» chứ không phải lỗi 500; (b) tài khoản `admin` làm được **cả sáu** như cũ, không sót thao tác nào; (c) tài khoản `member` mở màn Cài đặt › Trường vẫn đọc được danh sách, và không thấy đường nào mời bấm rồi ăn lỗi.
-- Kết quả nào là CHẾT: [đề xuất] Còn một thao tác nào trong sáu mà `member` vẫn làm được — một chỗ hở thì cả ô vô nghĩa, vì kẻ gọi thẳng điểm cuối chỉ cần một chỗ. Hoặc chặn quá tay: quản trị mất bất kỳ thao tác nào đang làm được hôm nay.
-- Timebox: [đề xuất] Nửa ngày cho giả định 1 và 3 (đọc ngữ cảnh middleware, đếm `role` trong dữ liệu thật) TRƯỚC khi viết dòng nào. Qua được thì một ngày công: một middleware, sáu chỗ gắn, và phép đo gọi thẳng điểm cuối cho cả sáu.
+- Câu hỏi phép đo trả lời: Một thành viên thường có còn đổi được hình dạng dữ liệu của cả đội không?
+- Kết quả nào là SỐNG: Đủ ba điều — (a) một tài khoản vai trò `member` gọi THẲNG điểm cuối, không qua giao diện, bị từ chối ở **cả bảy** thao tác đổi lược đồ (tạo · sửa · xếp lại · lưu trữ · khôi phục · xoá · điền bù), bằng một mã lỗi nói đúng nghĩa «không đủ quyền» chứ không phải lỗi 500; (b) tài khoản `admin` làm được **cả bảy** như cũ, không sót thao tác nào; (c) tài khoản `member` mở màn Cài đặt › Trường vẫn đọc được danh sách, và không thấy đường nào mời bấm rồi ăn lỗi.
+- Kết quả nào là CHẾT: Còn một thao tác nào trong bảy mà `member` vẫn làm được — một chỗ hở thì cả ô vô nghĩa, vì kẻ gọi thẳng điểm cuối chỉ cần một chỗ. Hoặc chặn quá tay: quản trị mất bất kỳ thao tác nào đang làm được hôm nay.
+- Timebox: Nửa ngày cho giả định 1 và 3 (đọc ngữ cảnh middleware, đếm `role` trong dữ liệu thật) TRƯỚC khi viết dòng nào. Qua được thì một ngày công: một middleware, sáu chỗ gắn, và phép đo gọi thẳng điểm cuối cho cả sáu.
 
 Căn cứ cho vế (a): đo bằng **gọi thẳng điểm cuối**, không đo bằng giao diện. Ẩn
 một cái nút không phải là phân quyền, và một phép đo chỉ bấm giao diện sẽ xanh
@@ -108,9 +108,11 @@ Chưa dựng gì.
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: …
-- **disposition = …** Căn cứ: …
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **decision = build** (2026-09-22). Căn cứ: chủ kho chọn làm ô này ngay sau khi xem tiến độ sản phẩm — lỗ quyền thật, và vòng `sua-luu-tru-dieu-phoi` vừa dựng khuôn kiểm quyền quản trị dùng lại được.
+- **disposition = không dựng prototype.** Căn cứ: sửa luật máy chủ và khoá nút trên một màn có sẵn.
+- **Ngưỡng UAT chốt cùng lúc ký:** bốn dòng ở mục Ngưỡng đã gỡ tiền tố. Máy sửa «sáu» thành «bảy» khi mở vòng: đọc `fields.router.ts` thấy bảy thao tác đổi lược đồ — ô cơ hội sót `restore` (khôi phục trường đã lưu trữ).
+
+**Giả định 3 đã thử một nửa (2026-09-22, cơ sở dữ liệu dev):** vai trò chỉ đọc từ bảng `member` (`workspaceRoleOf`, `packages/auth/src/organization.ts:159`). Ở dev, `manh.phan@onemount.com` và `manh@mstar.vn` đều mang `member`; chỉ `ada@trycomp.ai` là `owner` và một tài khoản thử là `admin`. Prod máy không đọc được — **chủ kho kiểm vai trò tài khoản mình dùng trên prod trước khi gộp**, nếu không là tự khoá cửa. Cùng luật đó đã áp cho cài đặt Điều phối ở `sua-luu-tru-dieu-phoi` (PR #74).
 
 **Thứ tự với ô khác:** độc lập với `dieu-phoi-30-ngay-dau` và chạy song song
 được — hai ô không chạm cùng file. Nhưng nếu ô này đi trước và dựng xong lớp
