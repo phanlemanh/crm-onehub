@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import { vet } from "@crm/validation/onboarding-activity";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactElement, type ReactNode } from "react";
@@ -190,6 +191,7 @@ mock.module("@/lib/trpc/client", () => ({
 			})),
 		},
 		activities: {
+			complete: thuTuc("activities.complete"),
 			timeline: thuTuc("activities.timeline", () => ({
 				entries: [],
 				nextCursor: null,
@@ -230,6 +232,9 @@ const { DetailSheet } = await import("@/components/detail-sheet");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { onboardingMessages } = await import("@/lib/messages/onboarding");
+const { TimelineEntry } = await import(
+	"@/components/crm/timeline/timeline-entry"
+);
 
 const m = onboardingMessages("vi");
 
@@ -502,5 +507,133 @@ describe("noi-man-buoc", () => {
 			KE_HOACH,
 			KE_HOACH,
 		]);
+	});
+});
+
+const NGUOI_TAO = {
+	id: "u-t",
+	name: "Trinh Cam Thuong",
+	email: "t@thu.test",
+	image: null,
+};
+
+function dongThoiGian(id: string, type: string, meta: unknown) {
+	return {
+		id,
+		type,
+		subject: null,
+		body: null,
+		occurredAt: "2026-09-22T02:00:00.000Z",
+		dueAt: null,
+		completedAt: null,
+		meta,
+		createdAt: "2026-09-22T02:00:00.000Z",
+		createdBy: NGUOI_TAO,
+		company: null,
+		contact: null,
+		deal: null,
+		planId: KE_HOACH,
+		emailThread: null,
+		calendarEvent: null,
+	};
+}
+
+describe("ve-vet-ke-hoach", () => {
+	test("ve-vet-ke-hoach: ma tran muoi dong, moi dong mot cau doc duoc", async () => {
+		const buoc = { stepId: "S2", nhan: "Dao tao" };
+		const MA_TRAN: [string, unknown][] = [
+			[
+				"buoc.giao",
+				vet.buocGiao({
+					...buoc,
+					tu: null,
+					tuTen: null,
+					den: "u-a",
+					denTen: "Nguyen A",
+				}),
+			],
+			[
+				"buoc.giao bo giao",
+				vet.buocGiao({
+					...buoc,
+					tu: "u-a",
+					tuTen: "Nguyen A",
+					den: null,
+					denTen: null,
+				}),
+			],
+			["buoc.xong", vet.buocXong(buoc)],
+			["buoc.boXong", vet.buocBoXong(buoc)],
+			[
+				"buoc.doiHan",
+				vet.buocDoiHan({ ...buoc, tu: "2026-09-22", den: "2026-09-25" }),
+			],
+			["buoc.them", vet.buocThem(buoc)],
+			["buoc.bo", vet.buocBo(buoc)],
+			[
+				"keHoach.doiCamTrich",
+				vet.keHoachDoiCamTrich({
+					tu: "u-l",
+					tuTen: "Lan",
+					den: "u-a",
+					denTen: "Nguyen A",
+				}),
+			],
+			["keHoach.dong", vet.keHoachDong()],
+			["keHoach.moLai", vet.keHoachMoLai()],
+		];
+		expect(MA_TRAN.length).toBe(10);
+
+		const san = await mo(
+			<ul>
+				{MA_TRAN.map(([ten, meta], i) => (
+					<TimelineEntry
+						anchor={{ planId: KE_HOACH }}
+						entry={dongThoiGian(`v-${i}`, "PLAN_CHANGE", meta) as never}
+						key={ten}
+					/>
+				))}
+			</ul>,
+		);
+		await cho(() => san.o.querySelectorAll("li").length === 10, "muoi dong");
+
+		const dong = [...san.o.querySelectorAll("li")];
+		for (const [i, [ten]] of MA_TRAN.entries()) {
+			const chu = dong[i]?.textContent ?? "";
+			expect(chu, `${ten}: ten nguoi tao`).toContain(NGUOI_TAO.name);
+			if (ten.startsWith("buoc.")) {
+				expect(chu, `${ten}: nhan buoc`).toContain("Dao tao");
+			}
+			expect(chu, `${ten}: lot chu may`).not.toMatch(
+				/undefined|null|\d{4}-\d{2}-\d{2}T/,
+			);
+			expect(chu, `${ten}: roi ve nhan du phong`).not.toContain(m.vet.khongDoc);
+		}
+		expect(dong[0]?.textContent).toContain("Nguyen A");
+		expect(dong[1]?.textContent).toContain("bỏ giao");
+	});
+
+	test("ve-vet-ke-hoach: dong thoa thuan van hien giai doan, meta hong hien nhan du phong", async () => {
+		const san = await mo(
+			<ul>
+				<TimelineEntry
+					anchor={{ dealId: "d-1" }}
+					entry={
+						dongThoiGian("s-1", "STAGE_CHANGE", {
+							from: "DEMO_BOOKED",
+							to: "QUALIFIED_TO_BUY",
+						}) as never
+					}
+				/>
+				<TimelineEntry
+					anchor={{ planId: KE_HOACH }}
+					entry={dongThoiGian("h-1", "PLAN_CHANGE", { stepId: "S2" }) as never}
+				/>
+			</ul>,
+		);
+		await cho(() => san.o.querySelectorAll("li").length === 2, "hai dong");
+		const [giaiDoan, hong] = [...san.o.querySelectorAll("li")];
+		expect(giaiDoan?.textContent).toContain("→");
+		expect(hong?.textContent).toContain(m.vet.khongDoc);
 	});
 });

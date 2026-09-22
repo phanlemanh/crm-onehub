@@ -20,6 +20,7 @@ import type { RouterOutputs } from "@/lib/trpc/types";
 import { ActivityIcon } from "./activity-icon";
 import { EmailThreadEntry } from "./email-thread-entry";
 import { MeetingEntry } from "./meeting-entry";
+import { dongVet } from "./plan-change-line";
 import type { TimelineAnchor } from "./timeline";
 
 export type TimelineEntryData =
@@ -86,6 +87,8 @@ export function TimelineEntry({
 			{" → "}
 			<ForeignText lang="en">{dealStageLabel(change.to)}</ForeignText>
 		</>
+	) : entry.type === "PLAN_CHANGE" ? (
+		dongVet(entry.meta, locale)
 	) : (
 		entry.subject
 	);

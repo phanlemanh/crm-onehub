@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { parse } from "./index";
 
 const ma = z.string().trim().min(1).max(120);
 const nhan = z.string().trim().min(1).max(200);
@@ -72,7 +71,19 @@ export const vet = {
 export function parseOnboardingActivityMeta(
 	value: unknown,
 ): OnboardingActivityMeta {
-	return parse(onboardingActivityMeta, value, "vết kế hoạch");
+	const ket = onboardingActivityMeta.safeParse(value);
+	if (!ket.success) {
+		throw new Error(
+			`vết kế hoạch: ${ket.error.issues
+				.map((loi) =>
+					loi.path.length > 0
+						? `${loi.path.join(".")} ${loi.message}`
+						: loi.message,
+				)
+				.join("; ")}`,
+		);
+	}
+	return ket.data;
 }
 
 export function vetCoCongTy(meta: OnboardingActivityMeta): boolean {
