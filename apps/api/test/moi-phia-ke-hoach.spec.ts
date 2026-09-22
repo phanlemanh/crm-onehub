@@ -3,7 +3,10 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { parseOnboardingActivityMeta } from "@crm/validation/onboarding-activity";
+import { ConversionService } from "../src/currency/conversion.service";
+import { DashboardService } from "../src/dashboard/dashboard.service";
 import {
+	stepDoneInput,
 	transferPreviewInput,
 	transferWorkInput,
 } from "../src/onboarding/onboarding.contracts";
@@ -19,6 +22,7 @@ import {
 	gieoNguoiNgoai,
 	gieoThanhVien,
 	moXuong,
+	ngayCach,
 	noi,
 	phan,
 	vetCua,
@@ -374,5 +378,129 @@ describe("chuyen-giao-payload", () => {
 			}).success,
 			"transferWork: schema tu choi khoa sai",
 		).toBe(false);
+	});
+});
+
+function tongQuan() {
+	return new DashboardService(db, new ConversionService(db));
+}
+
+describe("viec-cua-toi", () => {
+	test("viec-cua-toi: dung ba buoc qua han, hom nay va trong cua so, o ca hai che do", async () => {
+		const [O, A, B] = [
+			await gieoThanhVien(),
+			await gieoThanhVien(),
+			await gieoThanhVien(),
+		];
+		const bp = await gieoBoPhan();
+		const { plan } = await gieoKeHoach({
+			camTrich: O.id,
+			buoc: [
+				{ nhan: "D-1", boPhanId: bp.id, giao: A.id, han: ngayCach(-1) },
+				{ nhan: "D", boPhanId: bp.id, giao: A.id, han: ngayCach(0) },
+				{ nhan: "D+3", boPhanId: bp.id, giao: A.id, han: ngayCach(3) },
+				{ nhan: "D+4", boPhanId: bp.id, giao: A.id, han: ngayCach(4) },
+				{
+					nhan: "xong",
+					boPhanId: bp.id,
+					giao: A.id,
+					han: ngayCach(-2),
+					xong: true,
+				},
+				{ nhan: "cua B", boPhanId: bp.id, giao: B.id, han: ngayCach(-1) },
+			],
+		});
+		const { plan: dong } = await gieoKeHoach({
+			camTrich: O.id,
+			dong: true,
+			buoc: [{ nhan: "dong", boPhanId: bp.id, giao: A.id, han: ngayCach(-1) }],
+		});
+		const buoc = await buocCua(plan.id);
+		const ma = (nhan: string) => {
+			const hang = buoc.find((b) => b.label === nhan);
+			if (hang === undefined) throw new Error(`khong co buoc ${nhan}`);
+			return hang.id;
+		};
+
+		for (const scope of ["me", "everyone"] as const) {
+			const { mySteps } = await tongQuan().summary(A.id, { scope });
+			const cuaGieo = mySteps.filter(
+				(b) => b.planId === plan.id || b.planId === dong.id,
+			);
+			expect(
+				cuaGieo.map((b) => b.stepId),
+				`scope ${scope}: tap va thu tu; ke hoach da dong khong lot vao`,
+			).toEqual([ma("D-1"), ma("D"), ma("D+3")]);
+			expect(cuaGieo.map((b) => b.dueAt)).toEqual([
+				ngayCach(-1).toISOString().slice(0, 10),
+				ngayCach(0).toISOString().slice(0, 10),
+				ngayCach(3).toISOString().slice(0, 10),
+			]);
+			for (const b of cuaGieo) {
+				expect(b.company.id).toBe(plan.companyId);
+				expect(b.nhan.length).toBeGreaterThan(0);
+			}
+			const cuaB = (await tongQuan().summary(A.id, { scope })).mySteps.map(
+				(b) => b.stepId,
+			);
+			expect(cuaB, `scope ${scope}: buoc cua B khong vao`).not.toContain(
+				ma("cua B"),
+			);
+		}
+
+		await db.onboardingStep.update({
+			where: { id: ma("D+4") },
+			data: { dueAt: ngayCach(3) },
+		});
+		const sau = (await tongQuan().summary(A.id, { scope: "me" })).mySteps
+			.filter((b) => b.planId === plan.id)
+			.map((b) => b.stepId);
+		expect(sau, "doi chung duong: D+4 doi han sang D+3 thi vao").toContain(
+			ma("D+4"),
+		);
+	});
+});
+
+describe("the-tasks-payload", () => {
+	test("the-tasks-payload: payload tich xong cua the Tasks ghi dung buoc, vet mang nguoi giao", async () => {
+		const [O, A] = [await gieoThanhVien(), await gieoThanhVien()];
+		const bp = await gieoBoPhan();
+		const { plan } = await gieoKeHoach({
+			camTrich: O.id,
+			buoc: [
+				{ nhan: "S1", boPhanId: bp.id, giao: A.id },
+				{ nhan: "S2", boPhanId: bp.id, giao: A.id },
+			],
+		});
+		const [s1, s2] = [
+			phan(await buocCua(plan.id), 0),
+			phan(await buocCua(plan.id), 1),
+		];
+		const duLieu = phanTich(
+			stepDoneInput,
+			{
+				...payload.tichXong,
+				stepId:
+					payload.tichXong.stepId === "BUOC_S2"
+						? s2.id
+						: payload.tichXong.stepId,
+			},
+			"setStepDone",
+		);
+
+		await dichVu().setStepDone(duLieu, A.id);
+
+		const sau = await buocCua(plan.id);
+		expect(phan(sau, 1).completedAt, "S2 mong da xong").not.toBeNull();
+		expect(phan(sau, 0).completedAt, "S1 khong bi dong toi").toBeNull();
+		expect(phan(sau, 0).id).toBe(s1.id);
+		const meta = parseOnboardingActivityMeta(
+			phan(await vetCua(plan.id), 0).meta,
+		);
+		expect(meta).toMatchObject({
+			kind: "buoc.xong",
+			stepId: s2.id,
+			giaoLucXong: A.id,
+		});
 	});
 });

@@ -16,6 +16,10 @@ export const ONBOARDING = {
 	bangCot: {
 		tranThe: 30,
 	},
+	viecCuaToi: {
+		cuaSoNgay: 3,
+		tran: 10,
+	},
 	thongDiep: {
 		keHoachDaDong: "Kế hoạch đã đóng — mở lại trước khi sửa.",
 		khongPhaiThanhVien: (id: string) =>

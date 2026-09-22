@@ -5,6 +5,7 @@ import { Injectable } from "@nestjs/common";
 import { toCents } from "../crm/values";
 import { ConversionService } from "../currency/conversion.service";
 import { InjectDatabase } from "../database/database.constants";
+import { ONBOARDING } from "../onboarding/onboarding-config";
 import type { DashboardSummaryInput } from "./dashboard.contracts";
 
 const OWNER_SELECT = {
@@ -278,6 +279,7 @@ export class DashboardService {
 					}),
 				)
 				.sort((a, b) => (b.baseAmountCents ?? -1) - (a.baseAmountCents ?? -1)),
+			mySteps: await this.buocCuaToi(actingUserId, now),
 			overdueTasks: overdueTasks.map(({ dueAt, ...task }) => ({
 				...task,
 				dueAt: dueAt?.toISOString() ?? null,
@@ -288,5 +290,39 @@ export class DashboardService {
 				meta: activityMeta.parse(meta),
 			})),
 		};
+	}
+
+	private async buocCuaToi(actingUserId: string, now: Date) {
+		const han = new Date(
+			Date.UTC(
+				now.getUTCFullYear(),
+				now.getUTCMonth(),
+				now.getUTCDate() + ONBOARDING.viecCuaToi.cuaSoNgay + 1,
+			),
+		);
+		const buoc = await this.db.onboardingStep.findMany({
+			where: {
+				assigneeId: actingUserId,
+				completedAt: null,
+				plan: { closedAt: null },
+				dueAt: { lt: han },
+			},
+			orderBy: [{ dueAt: "asc" }, { id: "asc" }],
+			take: ONBOARDING.viecCuaToi.tran,
+			select: {
+				id: true,
+				label: true,
+				dueAt: true,
+				planId: true,
+				plan: { select: { company: { select: { id: true, name: true } } } },
+			},
+		});
+		return buoc.map((b) => ({
+			stepId: b.id,
+			nhan: b.label,
+			dueAt: b.dueAt.toISOString().slice(0, 10),
+			planId: b.planId,
+			company: b.plan.company,
+		}));
 	}
 }

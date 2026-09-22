@@ -115,7 +115,7 @@ evals:
     expected: |
       Gieo cho A: buoc han D-1, D, D+3, D+4 chua xong; mot buoc han D-2 da xong;
       mot buoc han D-1 cua ke hoach da dong. Cho B: mot buoc han D-1. D la hom nay.
-      Goi that dashboard.summary voi nguoi dang nhap A, scope "me" roi scope "all".
+      Goi that dashboard.summary voi nguoi dang nhap A, scope "me" roi scope "everyone".
       Ma tran viet truoc: voi MOI scope, tap stepId cua mySteps bang dung
       {D-1, D, D+3} (so assert bang so phan tu) va thu tu theo han tang dan;
       moi phan tu mang nhan, dueAt dang YYYY-MM-DD, planId, company.id va name.
