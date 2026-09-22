@@ -12,9 +12,9 @@ evals:
       - "apps/app/components/agent-builder/agent-composer.tsx"
       - "_acceptance/o-soan-va-ly-do-loi/rang/**"
     steps:
-      - "Dat truoc MOI buoc: APP_URL=http://127.0.0.1:3500 va API_URL=http://127.0.0.1:3501 — dung 127.0.0.1, tranh Invalid origin va cookie ro theo host"
-      - "Dung ca hai may chu cua CAY DANG XET: api 3501, app 3500 (APP_URL cua api cung la http://127.0.0.1:3500). Kiem cong 3500 va 3501 truoc khi dung — tai nguyen chung; tat bang PID da ghi, khong pkill"
-      - "Chay: bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs con-tro — rang tu chan cay (dau moc trong apps/app/public xin lai qua APP_URL), thoat ma 2 va goi ten cay neu khac cay, KHONG doc so nao"
+      - "Dat truoc MOI buoc: APP_URL=http://127.0.0.1:3600 va API_URL=http://127.0.0.1:3601 — dung 127.0.0.1, tranh Invalid origin va cookie ro theo host"
+      - "Dung ca hai may chu cua CAY DANG XET: api 3601, app 3600 (APP_URL cua api cung la http://127.0.0.1:3600; app dat NEXT_PUBLIC_API_URL va API_URL la http://127.0.0.1:3601). Kiem cong 3600 va 3601 truoc khi dung — tai nguyen chung; tat bang PID da ghi, khong pkill"
+      - "Chay: bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs con-tro" — rang tu chan cay (dau moc trong apps/app/public xin lai qua APP_URL), thoat ma 2 va goi ten cay neu khac cay, KHONG doc so nao"
       - "Rang ghi evidence/E1-con-tro.json: voi moi o (man-dau, trong-hoi-thoai) — khoang cach con tro toi mep trai vung chu (px), khoang cach mep trai chu goi y toi mep trai vung chu (px), chu goi y co hien khong; va chup evidence/E1-man-dau.png, evidence/E1-trong-hoi-thoai.png (o da bam vao, con tro nhap nhay da tat bang caret-color de khong mat khung)"
     inputs:
       - _acceptance/o-soan-va-ly-do-loi/evidence/
@@ -29,8 +29,10 @@ evals:
           d chu goi y nam tron trong o: scrollHeight cua o <= clientHeight va day chu goi y
             (do bang lay mau diem anh) nam tren mep tren thanh nut
       Doc so tu E1-con-tro.json, doi chieu tren anh: con tro dung truoc chu dau cua chu goi y.
-      CHIEU DO (rang tu chay tren ban sao): tra lai before: trong dong chu (bo xep chong luoi) ->
-      con tro man-dau > 100px, rang in "con tro dung sau chu goi y" va thoat 1.
+      Ma thoat cua rang: 0 dat, 1 khong dat (in "KHONG DAT: <o> <kho>: <ly do>"), 2 khong do duoc.
+      CHIEU DO (da chay o S3 tren ma cu, truoc khi sua token-field.tsx, cung rang cung may chu):
+      ca 4 to hop in "con tro dung sau chu goi y" (man-dau 1440 lech 284px) va thoat 1;
+      ngoai ra khong dong nao khac do.
 
   - id: E2
     criterion: AC-2
@@ -43,7 +45,7 @@ evals:
       - "_acceptance/o-soan-va-ly-do-loi/rang/**"
     steps:
       - "Cung may chu va bien moi truong nhu E1"
-      - "Chay: bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs go-chu — rang bam vao o man dau, go 'a', ghi evidence/E2-go-chu.json (chu goi y co hien khong, textContent cua o bo ky tu rong, vi tri con tro so voi mep phai chu 'a') va chup evidence/E2-go-chu.png"
+      - "Chay: bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs go-chu" — rang bam vao o man dau, go 'a', ghi evidence/E2-go-chu.json (chu goi y co hien khong, textContent cua o bo ky tu rong, vi tri con tro so voi mep phai chu 'a') va chup evidence/E2-go-chu.png"
     inputs:
       - _acceptance/o-soan-va-ly-do-loi/evidence/
     expected: |
@@ -183,7 +185,7 @@ evals:
       - "_acceptance/o-soan-va-ly-do-loi/rang/**"
     steps:
       - "Cung may chu va bien moi truong nhu E1; KHONG nang quyen thanh vien nao, KHONG tao phien cho tai khoan nguoi khac"
-      - "Chay: bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs chup — rang gieo hoi thoai BUILDER co AgentEvent turn.failed nhu AC-5 cho nguoi do (xoa khi xong), roi o kho 1440 va 375 chup: evidence/E8-o-trong-<kho>.png (o man dau da bam), evidence/E8-da-go-<kho>.png, evidence/E8-the-loi-<kho>.png; ghi scrollWidth va clientWidth moi kho vao evidence/E8-khuon.txt"
+      - "Chay: bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs chup" — rang gieo hoi thoai BUILDER co AgentEvent turn.failed nhu AC-5 cho nguoi do (xoa khi xong), roi o kho 1440 va 375 chup: evidence/E8-o-trong-<kho>.png (o man dau da bam), evidence/E8-da-go-<kho>.png, evidence/E8-the-loi-<kho>.png; ghi scrollWidth va clientWidth moi kho vao evidence/E8-khuon.txt"
       - "Xoa dau moc trong apps/app/public khi xong"
     inputs:
       - _acceptance/o-soan-va-ly-do-loi/evidence/
