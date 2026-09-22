@@ -17,10 +17,12 @@ function ChonCaNhan({
 	id,
 	value,
 	onValueChange,
+	daTrongPheu,
 }: {
 	id: string;
 	value: string;
 	onValueChange: (next: string) => void;
+	daTrongPheu: string[];
 }) {
 	const m = onboardingMessages(useLocale());
 	const trpc = useTRPC();
@@ -32,11 +34,15 @@ function ChonCaNhan({
 		...trpc.contacts.list.queryOptions({ q: tim, pageSize: SO_GOI_Y }),
 		placeholderData: (truoc) => truoc,
 	});
-	const luaChon: ComboboxOption[] = (caNhan.data?.rows ?? []).map((c) => ({
-		value: c.id,
-		label: contactName(c),
-		hint: c.email ?? undefined,
-	}));
+	const luaChon: ComboboxOption[] = (caNhan.data?.rows ?? []).map((c) => {
+		const daCo = daTrongPheu.includes(c.id);
+		return {
+			value: c.id,
+			label: contactName(c),
+			hint: daCo ? m.tao.moiGioi.daTrongPheu : (c.email ?? undefined),
+			disabled: daCo,
+		};
+	});
 
 	return (
 		<Combobox
@@ -58,7 +64,13 @@ function ChonCaNhan({
 	);
 }
 
-export function ThemMoiGioi({ planId }: { planId: string }) {
+export function ThemMoiGioi({
+	planId,
+	daTrongPheu,
+}: {
+	planId: string;
+	daTrongPheu: string[];
+}) {
 	const m = onboardingMessages(useLocale());
 	const trpc = useTRPC();
 	const queryClient = useQueryClient();
@@ -100,7 +112,12 @@ export function ThemMoiGioi({ planId }: { planId: string }) {
 		>
 			<Field>
 				<FieldLabel htmlFor={maCaNhan}>{m.tao.moiGioi.contact}</FieldLabel>
-				<ChonCaNhan id={maCaNhan} value={caNhan} onValueChange={setCaNhan} />
+				<ChonCaNhan
+					id={maCaNhan}
+					value={caNhan}
+					onValueChange={setCaNhan}
+					daTrongPheu={daTrongPheu}
+				/>
 			</Field>
 		</KhungTao>
 	);

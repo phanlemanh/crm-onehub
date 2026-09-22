@@ -36,6 +36,10 @@ export function canManageTracking(role: WorkspaceRole | null): boolean {
 	return isWorkspaceAdmin(role);
 }
 
+export function canManageOnboarding(role: WorkspaceRole | null): boolean {
+	return isWorkspaceAdmin(role);
+}
+
 export async function ensureWorkspaceMembership(
 	userId: string,
 	email = "",

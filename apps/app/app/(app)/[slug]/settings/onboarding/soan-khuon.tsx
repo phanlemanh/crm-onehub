@@ -24,6 +24,13 @@ import { useTRPC } from "@/lib/trpc/client";
 
 export type BoPhanChon = { id: string; name: string };
 
+export type KhuonSua = {
+	id: string;
+	name: string;
+	partnerType: string | null;
+	steps: { label: string; departmentId: string; offsetDays: number }[];
+};
+
 type BuocNhap = {
 	khoa: number;
 	label: string;
@@ -41,21 +48,47 @@ function buocHopLe(b: BuocNhap): boolean {
 	return b.label.trim() !== "" && b.departmentId !== "" && SO_NGAY.test(b.ngay);
 }
 
-export function SoanKhuon({ boPhan }: { boPhan: BoPhanChon[] }) {
+function buocTuKhuon(sua: KhuonSua): BuocNhap[] {
+	return sua.steps.map((b, khoa) => ({
+		khoa,
+		label: b.label,
+		departmentId: b.departmentId,
+		ngay: String(b.offsetDays),
+	}));
+}
+
+export function SoanKhuon({
+	boPhan,
+	khoa = false,
+	sua,
+	dangMo: moTuNgoai,
+	doiMo: doiMoTuNgoai,
+}: {
+	boPhan: BoPhanChon[];
+	khoa?: boolean;
+	sua?: KhuonSua;
+	dangMo?: boolean;
+	doiMo?: (mo: boolean) => void;
+}) {
 	const m = onboardingMessages(useLocale());
 	const trpc = useTRPC();
 	const queryClient = useQueryClient();
 	const maTen = useId();
 	const maLoai = useId();
 
-	const [dangMo, setDangMo] = useState(false);
-	const [ten, setTen] = useState("");
-	const [loai, setLoai] = useState("");
-	const [buoc, setBuoc] = useState<BuocNhap[]>([buocTrong(0)]);
-	const [khoaKe, setKhoaKe] = useState(1);
+	const [moTrong, setMoTrong] = useState(false);
+	const dangMo = moTuNgoai ?? moTrong;
+	const setDangMo = doiMoTuNgoai ?? setMoTrong;
+	const [ten, setTen] = useState(sua?.name ?? "");
+	const [loai, setLoai] = useState(sua?.partnerType ?? "");
+	const [buoc, setBuoc] = useState<BuocNhap[]>(() =>
+		sua ? buocTuKhuon(sua) : [buocTrong(0)],
+	);
+	const [khoaKe, setKhoaKe] = useState(sua ? sua.steps.length : 1);
 	const [loi, setLoi] = useState<string | null>(null);
 
 	const tao = useMutation(trpc.onboarding.createTemplate.mutationOptions());
+	const doi = useMutation(trpc.onboarding.updateTemplate.mutationOptions());
 	const coBoPhan = boPhan.length > 0;
 
 	const doiBuoc = (khoa: number, thay: Partial<BuocNhap>) =>
@@ -63,43 +96,53 @@ export function SoanKhuon({ boPhan }: { boPhan: BoPhanChon[] }) {
 
 	return (
 		<KhungTao
-			nhanNut={m.settings.newTemplate}
-			tieuDe={m.tao.khuon.title}
-			moTa={coBoPhan ? undefined : m.tao.khuon.noDepartment}
+			nhanNut={sua ? undefined : m.settings.newTemplate}
+			khoaNut={khoa}
+			tieuDe={sua ? m.quanLy.suaKhuon : m.tao.khuon.title}
+			moTa={
+				coBoPhan
+					? sua
+						? m.quanLy.keHoachKhongDoi
+						: undefined
+					: m.tao.khuon.noDepartment
+			}
 			dangMo={dangMo}
 			doiMo={setDangMo}
-			sanSang={coBoPhan && ten.trim() !== "" && buoc.every(buocHopLe)}
-			dangLuu={tao.isPending}
+			sanSang={!khoa && coBoPhan && ten.trim() !== "" && buoc.every(buocHopLe)}
+			dangLuu={tao.isPending || doi.isPending}
 			loi={loi}
 			nhanLuu={m.tao.save}
 			nhanHuy={m.tao.cancel}
 			onLuu={() => {
 				setLoi(null);
-				tao.mutate(
-					{
-						name: ten.trim(),
-						partnerType: loai.trim() === "" ? null : loai.trim(),
-						steps: buoc.map((b, viTri) => ({
-							label: b.label.trim(),
-							departmentId: b.departmentId,
-							position: viTri,
-							offsetDays: Number(b.ngay),
-						})),
+				const noiDung = {
+					name: ten.trim(),
+					partnerType: loai.trim() === "" ? null : loai.trim(),
+					steps: buoc.map((b, viTri) => ({
+						label: b.label.trim(),
+						departmentId: b.departmentId,
+						position: viTri,
+						offsetDays: Number(b.ngay),
+					})),
+				};
+				const xuLy = {
+					onSuccess: async () => {
+						await queryClient.invalidateQueries({
+							queryKey: trpc.onboarding.listTemplates.queryKey(),
+						});
+						setTen("");
+						setLoai("");
+						setBuoc([buocTrong(khoaKe)]);
+						setKhoaKe((k) => k + 1);
+						setDangMo(false);
 					},
-					{
-						onSuccess: async () => {
-							await queryClient.invalidateQueries({
-								queryKey: trpc.onboarding.listTemplates.queryKey(),
-							});
-							setTen("");
-							setLoai("");
-							setBuoc([buocTrong(khoaKe)]);
-							setKhoaKe((k) => k + 1);
-							setDangMo(false);
-						},
-						onError: (error) => setLoi(error.message),
-					},
-				);
+					onError: (error: { message: string }) => setLoi(error.message),
+				};
+				if (sua) {
+					doi.mutate({ id: sua.id, ...noiDung }, xuLy);
+					return;
+				}
+				tao.mutate(noiDung, xuLy);
 			}}
 		>
 			{coBoPhan ? (

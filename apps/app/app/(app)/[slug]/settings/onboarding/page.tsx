@@ -47,6 +47,7 @@ async function CaiDat() {
 	await Promise.all([
 		queryClient.prefetchQuery(trpc.onboarding.listTemplates.queryOptions()),
 		queryClient.prefetchQuery(trpc.onboarding.listDepartments.queryOptions()),
+		queryClient.prefetchQuery(trpc.onboarding.access.queryOptions()),
 	]);
 
 	return (

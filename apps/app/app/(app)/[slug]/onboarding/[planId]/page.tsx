@@ -56,7 +56,9 @@ async function HoSo({ planId }: { planId: string }) {
 		queryClient.prefetchQuery(
 			trpc.onboarding.listEnrollments.queryOptions({ id: planId }),
 		),
-		queryClient.prefetchQuery(trpc.onboarding.listDepartments.queryOptions()),
+		queryClient.prefetchQuery(
+			trpc.onboarding.planById.queryOptions({ id: planId }),
+		),
 	]);
 
 	return (

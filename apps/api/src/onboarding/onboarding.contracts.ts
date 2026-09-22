@@ -2,6 +2,18 @@ import { z } from "zod";
 import { listInput } from "../trpc/list-input";
 import { ONBOARDING } from "./onboarding-config";
 
+export const ngayLich = z.iso
+	.date()
+	.transform((ngay) => new Date(`${ngay}T00:00:00.000Z`));
+
+export const archivedInput = z
+	.object({ archived: z.boolean().default(false) })
+	.default({ archived: false });
+
+export const deletedOutput = z.object({ id: z.string() });
+
+export const accessOutput = z.object({ canManage: z.boolean() });
+
 export const departmentCreateInput = z.object({
 	name: z.string().trim().min(1).max(120),
 });
@@ -24,6 +36,7 @@ export const departmentOutput = z.object({
 	name: z.string(),
 	position: z.number(),
 	archivedAt: z.date().nullable(),
+	purgeable: z.boolean(),
 });
 
 export const departmentListOutput = z.array(departmentOutput);
@@ -33,6 +46,9 @@ export type DepartmentUpdateInput = z.infer<typeof departmentUpdateInput>;
 export type DepartmentIdInput = z.infer<typeof departmentIdInput>;
 export type DepartmentReorderInput = z.infer<typeof departmentReorderInput>;
 export type DepartmentOutput = z.infer<typeof departmentOutput>;
+export type ArchivedInput = z.infer<typeof archivedInput>;
+export type DeletedOutput = z.infer<typeof deletedOutput>;
+export type AccessOutput = z.infer<typeof accessOutput>;
 
 export const templateStepInput = z.object({
 	label: z.string().trim().min(1).max(200),
@@ -64,6 +80,7 @@ export const templateOutput = z.object({
 	partnerType: z.string().nullable(),
 	steps: z.array(templateStepInput),
 	archivedAt: z.date().nullable(),
+	purgeable: z.boolean(),
 });
 
 export const templateListOutput = z.array(templateOutput);
@@ -71,7 +88,7 @@ export const templateListOutput = z.array(templateOutput);
 export const planCreateFromTemplateInput = z.object({
 	companyId: z.string().trim().min(1),
 	templateId: z.string().trim().min(1),
-	startedAt: z.coerce.date(),
+	startedAt: ngayLich,
 	ownerId: z.string().trim().min(1),
 });
 
@@ -80,6 +97,7 @@ export const stepOutput = z.object({
 	planId: z.string(),
 	label: z.string(),
 	departmentId: z.string(),
+	departmentName: z.string(),
 	assigneeId: z.string().nullable(),
 	dueAt: z.date(),
 	completedAt: z.date().nullable(),
@@ -95,6 +113,8 @@ export const planOutput = z.object({
 	closedAt: z.date().nullable(),
 	ownerId: z.string(),
 });
+
+export const planDetailOutput = planOutput.extend({ companyName: z.string() });
 
 export const stepListInput = z.object({
 	planId: z.string().trim().min(1),
@@ -115,6 +135,7 @@ export type PlanCreateFromTemplateInput = z.infer<
 	typeof planCreateFromTemplateInput
 >;
 export type PlanOutput = z.infer<typeof planOutput>;
+export type PlanDetailOutput = z.infer<typeof planDetailOutput>;
 export type StepOutput = z.infer<typeof stepOutput>;
 export type StepListInput = z.infer<typeof stepListInput>;
 export type StepListOutput = z.infer<typeof stepListOutput>;
@@ -190,13 +211,14 @@ export const enrollmentRemoveOutput = z.object({ id: z.string() });
 export const enrollmentStageInput = z.object({
 	id: z.string().trim().min(1),
 	stage: enrollmentStage,
-	at: z.date().nullable(),
+	at: ngayLich.nullable(),
 });
 
 export const enrollmentOutput = z.object({
 	id: z.string(),
 	planId: z.string(),
 	contactId: z.string(),
+	contactName: z.string(),
 	accountAt: z.date().nullable(),
 	courseAt: z.date().nullable(),
 	activeAt: z.date().nullable(),

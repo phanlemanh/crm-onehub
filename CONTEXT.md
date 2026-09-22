@@ -176,6 +176,27 @@ Vì sao: màn Cài đặt hiện CẢ trường chuẩn lẫn trường tự t�
 tạo" vào nhãn là nói hẹp hơn thứ người thấy; ba từ còn lại là tiếng của nhà khác,
 hoặc nửa Việt nửa Anh.
 
+**Bộ phận**: một đơn vị trong OneHub nhận việc của kế hoạch 30 ngày đầu — mỗi
+bước của kế hoạch giao cho đúng một bộ phận. Người quản trị quản danh sách ở Cài
+đặt › Điều phối 30 ngày. Hôm nay danh sách phẳng; cấp phòng ban thuộc bộ phận đang
+chờ ở ô `cau-truc-to-chuc`. Chốt 2026-09-22.
+_Avoid_: phòng ban (chưa có cấp này), team, nhóm
+Vì sao: «phòng ban» sẽ là tên của cấp con khi ô `cau-truc-to-chuc` được làm; dùng
+nó bây giờ cho danh sách phẳng là đặt sẵn một nghĩa sai.
+
+**Khuôn kế hoạch**: bộ bước mẫu cho một loại đối tác — mỗi bước có nhãn, bộ phận
+nhận và ngày thứ mấy. Tạo kế hoạch từ khuôn là chép các bước đó vào kế hoạch; sửa
+khuôn sau đó không đổi kế hoạch đã tạo. Chốt 2026-09-22.
+_Avoid_: template, mẫu kế hoạch, quy trình
+Vì sao: «quy trình» gợi một thứ sống, đổi là mọi kế hoạch đổi theo — khuôn thì chỉ
+dùng lúc tạo.
+
+**Lưu trữ**: cất một bản ghi khỏi danh sách đang dùng mà không xoá; khôi phục được
+từ mục «Đã lưu trữ». Xoá vĩnh viễn là bước riêng, sau lưu trữ. Chốt 2026-09-22.
+_Avoid_: xoá (khi ý là lưu trữ), ẩn, archive
+Vì sao: nút ghi «Xoá» mà dữ liệu còn nguyên là nói dối người bấm; «ẩn» gợi thứ vẫn
+có trong danh sách chỉ không hiện.
+
 **Số chứng chỉ**: **KHÔNG CÓ TRONG SẢN PHẨM.** Sàn chỉ gắn huy hiệu có hoặc
 không cho chứng chỉ hành nghề môi giới, không lộ mã số nào. CRM ghi trường
 `Chứng chỉ` với đúng hai giá trị `Có` · `Không`.

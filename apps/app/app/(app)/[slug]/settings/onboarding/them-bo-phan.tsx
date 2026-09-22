@@ -9,44 +9,67 @@ import { KhungTao } from "@/components/onboarding/khung-tao";
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { useTRPC } from "@/lib/trpc/client";
 
-export function ThemBoPhan() {
+export type BoPhanSua = { id: string; name: string };
+
+export function ThemBoPhan({
+	khoa = false,
+	sua,
+	dangMo: moTuNgoai,
+	doiMo: doiMoTuNgoai,
+}: {
+	khoa?: boolean;
+	sua?: BoPhanSua;
+	dangMo?: boolean;
+	doiMo?: (mo: boolean) => void;
+}) {
 	const m = onboardingMessages(useLocale());
 	const trpc = useTRPC();
 	const queryClient = useQueryClient();
 	const maTen = useId();
 
-	const [dangMo, setDangMo] = useState(false);
-	const [ten, setTen] = useState("");
+	const [moTrong, setMoTrong] = useState(false);
+	const dangMo = moTuNgoai ?? moTrong;
+	const doiMo = doiMoTuNgoai ?? setMoTrong;
+	const [ten, setTen] = useState(sua?.name ?? "");
 	const [loi, setLoi] = useState<string | null>(null);
 
 	const tao = useMutation(trpc.onboarding.createDepartment.mutationOptions());
+	const doi = useMutation(trpc.onboarding.updateDepartment.mutationOptions());
+
+	const xong = async () => {
+		await queryClient.invalidateQueries({
+			queryKey: trpc.onboarding.listDepartments.queryKey(),
+		});
+		await queryClient.invalidateQueries({
+			queryKey: trpc.onboarding.listSteps.queryKey(),
+		});
+		setTen("");
+		doiMo(false);
+	};
 
 	return (
 		<KhungTao
-			nhanNut={m.settings.newDepartment}
-			tieuDe={m.tao.boPhan.title}
+			nhanNut={sua ? undefined : m.settings.newDepartment}
+			khoaNut={khoa}
+			tieuDe={sua ? m.quanLy.suaBoPhan : m.tao.boPhan.title}
 			dangMo={dangMo}
-			doiMo={setDangMo}
-			sanSang={ten.trim() !== ""}
-			dangLuu={tao.isPending}
+			doiMo={doiMo}
+			sanSang={ten.trim() !== "" && !khoa}
+			dangLuu={tao.isPending || doi.isPending}
 			loi={loi}
 			nhanLuu={m.tao.save}
 			nhanHuy={m.tao.cancel}
 			onLuu={() => {
 				setLoi(null);
-				tao.mutate(
-					{ name: ten.trim() },
-					{
-						onSuccess: async () => {
-							await queryClient.invalidateQueries({
-								queryKey: trpc.onboarding.listDepartments.queryKey(),
-							});
-							setTen("");
-							setDangMo(false);
-						},
-						onError: (error) => setLoi(error.message),
-					},
-				);
+				const onError = (error: { message: string }) => setLoi(error.message);
+				if (sua) {
+					doi.mutate(
+						{ id: sua.id, name: ten.trim() },
+						{ onSuccess: xong, onError },
+					);
+					return;
+				}
+				tao.mutate({ name: ten.trim() }, { onSuccess: xong, onError });
 			}}
 		>
 			<Field>
@@ -56,6 +79,7 @@ export function ThemBoPhan() {
 					value={ten}
 					onChange={(e) => setTen(e.target.value)}
 					autoComplete="off"
+					translate="no"
 				/>
 			</Field>
 		</KhungTao>

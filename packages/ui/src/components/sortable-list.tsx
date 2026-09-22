@@ -73,11 +73,13 @@ export function SortableItem({
 	id,
 	label,
 	className,
+	disabled = false,
 	children,
 }: {
 	id: string;
 	label: string;
 	className?: string;
+	disabled?: boolean;
 	children: ReactNode;
 }) {
 	const msg = useMessages();
@@ -89,7 +91,7 @@ export function SortableItem({
 		transform,
 		transition,
 		isDragging,
-	} = useSortable({ id });
+	} = useSortable({ id, disabled });
 
 	return (
 		<div
@@ -107,6 +109,7 @@ export function SortableItem({
 				variant="ghost"
 				size="icon-xs"
 				className="cursor-grab text-muted-foreground"
+				disabled={disabled}
 				{...attributes}
 				{...listeners}
 				aria-roledescription={undefined}
