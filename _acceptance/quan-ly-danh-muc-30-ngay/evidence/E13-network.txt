@@ -1,0 +1,1 @@
+no failed requests, no console errors, no page errors observed during capture

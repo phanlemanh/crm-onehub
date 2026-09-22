@@ -1,7 +1,8 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { GOC } from "../../man-cai-dat-noi-tieng-viet/rang/lat.mjs";
+import { docTep } from "../../man-cai-dat-noi-tieng-viet/rang/tep-thay.mjs";
 
 const XUONG = join(GOC, "_acceptance");
 const NEO_DOT_MOT = { file: 26, file_quet: 20, chuoi: 237, van_ban: 180, thuoc_tinh: 57 };
@@ -9,7 +10,7 @@ const SO_DONG_KHONG_QUET_DOT_MOT = 6;
 
 function docKhai(duong) {
 	try {
-		return JSON.parse(readFileSync(duong, "utf8"));
+		return JSON.parse(docTep(duong));
 	} catch {
 		return null;
 	}

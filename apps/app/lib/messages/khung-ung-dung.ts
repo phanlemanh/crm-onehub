@@ -8,6 +8,7 @@ const en = {
 		contacts: "Contacts",
 		deals: "Deals",
 		campaigns: "Campaigns",
+		onboarding: "First 30 days",
 		settings: "Settings",
 	},
 	nav: {
@@ -65,6 +66,7 @@ const vi = {
 		contacts: "Cá nhân",
 		deals: "Thoả thuận",
 		campaigns: "Chiến dịch",
+		onboarding: "30 ngày đầu",
 		settings: "Cài đặt",
 	},
 	nav: {

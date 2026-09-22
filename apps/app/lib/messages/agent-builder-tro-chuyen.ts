@@ -163,7 +163,7 @@ const vi = {
 		chiaSeBoi: (ten: string) => `${ten} chia sẻ`,
 		chiaSeMoTa:
 			"Bạn đọc được hội thoại dựng này, nhưng chỉ chủ của nó mới viết tiếp hay sửa được.",
-		hoiThoai: "Hội thoại với tác nhân",
+		hoiThoai: "Hội thoại",
 		rieng: "Riêng",
 		chayNen: "Đang chạy ngầm",
 		moMoi: "Mở hội thoại mới",

@@ -18,6 +18,10 @@ export const SEARCH_PARAM = {
 		entity: "manageFields",
 		field: "manageField",
 	},
+	fieldsPage: {
+		entity: "thucThe",
+		field: "truong",
+	},
 	dialog: {
 		create: "new",
 		switcher: "k",
@@ -26,6 +30,11 @@ export const SEARCH_PARAM = {
 	},
 	overview: {
 		scope: "scope",
+	},
+	onboarding: {
+		trangThai: "trangThai",
+		cachXem: "cachXem",
+		cachChia: "cachChia",
 	},
 } as const;
 

@@ -2,6 +2,7 @@
 
 import { DealStage } from "@crm/db/enums";
 import { Checkbox } from "@crm/ui/components/checkbox";
+import { ForeignText } from "@crm/ui/components/foreign-text";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { cn } from "@crm/ui/lib/utils";
@@ -13,12 +14,14 @@ import { LocalDateTime, LocalRelativeTime } from "@/components/local-date-time";
 import { activityLabel } from "@/lib/activity-presentation";
 import { dealStageLabel } from "@/lib/deal-stage";
 import { crmMessages } from "@/lib/messages/crm";
+import { quaHan } from "@/lib/qua-han";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { ActivityIcon } from "./activity-icon";
 import { EmailThreadEntry } from "./email-thread-entry";
 import { MeetingEntry } from "./meeting-entry";
+import { dongVet } from "./plan-change-line";
 import type { TimelineAnchor } from "./timeline";
 
 export type TimelineEntryData =
@@ -37,6 +40,7 @@ const stageChange = z
 function anchorId(anchor: TimelineAnchor): string {
 	if ("companyId" in anchor) return anchor.companyId;
 	if ("contactId" in anchor) return anchor.contactId;
+	if ("planId" in anchor) return anchor.planId;
 	return anchor.dealId;
 }
 
@@ -60,12 +64,13 @@ export function TimelineEntry({
 	);
 
 	const isTask = entry.type === "TASK";
-	const done = entry.completedAt !== null;
+	const completedAt =
+		entry.completedAt === null ? null : new Date(entry.completedAt);
+	const done = completedAt !== null;
 	const overdue =
 		isTask &&
-		!done &&
 		entry.dueAt !== null &&
-		new Date(entry.dueAt) < new Date();
+		quaHan(new Date(entry.dueAt), completedAt, new Date());
 
 	const change =
 		entry.type === "STAGE_CHANGE" ? stageChange.parse(entry.meta) : null;
@@ -78,9 +83,17 @@ export function TimelineEntry({
 			: m.timeline.viaCalendar
 		: entry.createdBy.name;
 
-	const headline = change
-		? `${dealStageLabel(change.from)} → ${dealStageLabel(change.to)}`
-		: entry.subject;
+	const headline = change ? (
+		<>
+			<ForeignText lang="en">{dealStageLabel(change.from)}</ForeignText>
+			{" → "}
+			<ForeignText lang="en">{dealStageLabel(change.to)}</ForeignText>
+		</>
+	) : entry.type === "PLAN_CHANGE" ? (
+		dongVet(entry.meta, locale)
+	) : (
+		entry.subject
+	);
 
 	const here = anchorId(anchor);
 	const deal = entry.deal && entry.deal.id !== here ? entry.deal : null;

@@ -1,0 +1,58 @@
+{
+ "feature_plain": "Nhân viên kinh doanh vào được CRM bằng email và mật khẩu, kể cả khi đứng trong mạng chặn Google.",
+ "decisions": [
+  {
+   "id": "E14",
+   "q": "Chữ trên hai màn mới có đọc được với một bạn sale người Việt không?",
+   "why": "Máy không chấm được câu chữ. Hai màn: hộp thoại quản trị chép liên kết, và trang người dùng tự đặt mật khẩu. Ảnh ở trang bằng chứng, khung E13-hopthoai và E13-datmatkhau."
+  }
+ ],
+ "analyst_plain": "",
+ "scope_plain": "Không gửi thư, không trang tự đổi mật khẩu, không báo cho người dùng khi mật khẩu đổi, không xác thực hai bước, không đăng nhập bằng Zalo — và cửa Google giữ nguyên.",
+ "decisions_plain": [
+  {
+   "id": "d-20260919T013843Z-1",
+   "p": "Chọn liên kết dùng một lần thay mật khẩu tạm — đổi lại phải dựng luồng liên kết, nhưng quản trị không bao giờ thấy mật khẩu của ai."
+  },
+  {
+   "id": "d-20260919T013843Z-2",
+   "p": "Chọn tự đúc chìa để trả liên kết ngay — đổi lại dựa vào một chi tiết bên trong thư viện, canh bằng chiều đỏ của phép đo vòng tròn."
+  },
+  {
+   "id": "d-20260919T013843Z-3",
+   "p": "KHÔNG bật bộ quản trị sẵn có của thư viện — tránh một lần đổi cấu trúc dữ liệu và một khái niệm vai trò thứ hai."
+  },
+  {
+   "id": "d-20260919T013843Z-4",
+   "p": "KHÔNG làm trang tự đổi mật khẩu — đổi lại mỗi lần muốn đổi phải nhờ quản trị."
+  },
+  {
+   "id": "d-20260919T013843Z-5",
+   "p": "KHÔNG báo cho người dùng khi mật khẩu bị đổi — chỉ có ghi vết cho quản trị, vì kho không gửi được thư."
+  },
+  {
+   "id": "d-20260919T013843Z-6",
+   "p": "Giữ tiêu chí sàng mật khẩu đã lộ — đổi lại phép đo phụ thuộc một dịch vụ ngoài."
+  },
+  {
+   "id": "d-20260919T014647Z-7",
+   "p": "KHÔNG đo chống dò mật khẩu hàng loạt — dựa vào bộ giới hạn tần suất sẵn có, chưa ai thử nó."
+  },
+  {
+   "id": "d-20260919T041818Z-9",
+   "p": "Ghi vết ai-phát-cho-ai vào một bảng riêng — đổi lại một lần đổi cấu trúc dữ liệu, nhưng giữ được lịch sử nhiều lần phát."
+  },
+  {
+   "id": "d-20260919T041818Z-10",
+   "p": "Tạo hàng người dùng bằng Prisma ngay sau lời kiểm danh sách, trong cùng thủ tục — buộc phải thế vì cửa tự đăng ký của thư viện đã khoá; bất biến là hai lời gọi phải nằm cùng chỗ."
+  },
+  {
+   "id": "d-20260919T042415Z-11",
+   "p": "Chủ kho duyệt kế hoạch bảy task ở Cổng Kế hoạch, gồm cả việc thêm một bảng mới."
+  },
+  {
+   "id": "d-20260919T092439Z-12",
+   "p": "Vòng đo máy thứ nhất trả về bốn lỗi; đưa cả bốn về sửa, không hoãn cái nào."
+  }
+ ]
+}

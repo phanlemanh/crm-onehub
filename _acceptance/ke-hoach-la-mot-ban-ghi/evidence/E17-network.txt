@@ -1,0 +1,29 @@
+E17 network dump — captured from interactive Claude_Browser tab (tab-5) after
+visiting /crm/onboarding?record=plan:<id> (1440 and 375) and /crm/deals?record=deal:<id> (1440).
+
+Scope note: config.yaml dev_server.url/api_base declare http://localhost:3000 and
+http://localhost:3001 (the shared default ports). This eval, per the E17 steps,
+intentionally ran the tree-under-test on the alternate ports 127.0.0.1:3300 (app)
+and 127.0.0.1:3301 (api) to avoid measuring a stray shared dev server on 3000/3001
+(see CLAUDE.md "Ba cổng đó cũng là mặc định..." and memory note "Bàn đo trên cổng
+khác 3000"). So strictly by the declared config origins, none of this traffic is
+"FAIL-eligible" (different origin than declared) — treating this as unscoped would
+misrepresent what was actually observed, so this file records the real traffic and
+the network-truth verdict below explains the substantive call.
+
+== Console messages (onlyErrors) ==
+No console logs / no errors.
+
+== Network requests (read_network_requests, last 100 of 279 total) ==
+All requests observed were to http://127.0.0.1:3300/* (app origin under test):
+  - /api/trpc/enrichment.queue?... -> 200 OK (repeated polling calls)
+  - /api/trpc/onboarding.listSteps,users.list,onboarding.planById?... -> 200 OK
+  - /crm/onboarding?record=plan:<id> -> 200 OK
+  - /_next/static/... (JS/CSS/font chunks) -> 200 OK (all Turbopack dev chunks, own origin)
+
+No 4xx/5xx responses. No connection errors or timeouts. No third-party or
+cross-origin requests were observed (no analytics/CDN/tracker calls seen).
+
+Verdict basis: all app-scope (127.0.0.1:3300) traffic succeeded with 200 OK, no
+console errors were logged. -> networkObserved = clean (substantively; note the
+origin-vs-config-port caveat above).

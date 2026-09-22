@@ -12,6 +12,7 @@ import {
 	EntityLogo,
 	type EntityLogoTone,
 } from "@crm/ui/components/entity-logo";
+import { ForeignText } from "@crm/ui/components/foreign-text";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useTableSelection } from "@crm/ui/hooks/use-table-selection";
 import { useQuery } from "@tanstack/react-query";
@@ -87,9 +88,9 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			hideBelow: "lg",
 			cell: (row) =>
 				row.industry ? (
-					<span className="truncate" lang="en">
+					<ForeignText className="truncate" lang="en">
 						{row.industry}
-					</span>
+					</ForeignText>
 				) : (
 					<EmptyCellValue />
 				),

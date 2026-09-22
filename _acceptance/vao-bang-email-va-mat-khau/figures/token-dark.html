@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vì sao màn đăng nhập không tối được · Sơ đồ cơ chế</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 48rem;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ cơ chế · chỗ người duyệt phải quyết</p>
+    <h1>Vì sao màn đăng nhập không tối được</h1>
+    <p class="sub">Ba bước nối tiếp giải thích vì sao lệnh «màn này luôn tối» không có tác dụng, và số đo trên màn thật. Đây là lỗi có sẵn của kho, không do vòng này sinh ra — cuối hình có hai lối, người duyệt chọn một.</p>
+
+    <svg viewBox="0 0 1240 800" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- ===== Đường đi (vẽ trước) ===== -->
+      <line x1="384" y1="188" x2="484" y2="188" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="756" y1="188" x2="856" y2="188" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="992" y1="240" x2="992" y2="312" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="992" y1="416" x2="992" y2="460" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="930" y1="492" x2="432" y2="492" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 930 548 L 620 548 Q 612 548 612 556 L 612 628 Q 612 636 604 636 L 432 636" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <!-- ===== Nhãn trên đường đi ===== -->
+      <rect x="392" y="162" width="88" height="18" rx="2" fill="#fafafa"/>
+      <text x="434" y="176" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">truyền xuống</text>
+
+      <rect x="764" y="162" width="88" height="18" rx="2" fill="#fafafa"/>
+      <text x="806" y="176" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">tới quá muộn</text>
+
+      <!-- ===== Ghi chú biên tập ===== -->
+      <text x="112" y="300" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif">Cả hai lối đều đi được.</text>
+      <text x="112" y="322" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif">Hình này không khuyên lối nào — người duyệt quyết.</text>
+
+      <!-- ===== Bước 1 ===== -->
+      <rect x="112" y="136" width="272" height="104" rx="8" fill="#fafafa"/>
+      <rect x="112" y="136" width="272" height="104" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="128" y="150" width="60" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="158" y="162" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BƯỚC 1</text>
+      <text x="248" y="192" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Gốc trang chốt màu nền</text>
+      <text x="248" y="212" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">chốt đúng một lần, trước mọi lớp khác</text>
+      <text x="248" y="230" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">:root · --background</text>
+
+      <!-- ===== Bước 2 ===== -->
+      <rect x="484" y="136" width="272" height="104" rx="8" fill="#fafafa"/>
+      <rect x="484" y="136" width="272" height="104" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="500" y="150" width="60" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="530" y="162" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BƯỚC 2</text>
+      <text x="620" y="192" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Màu đã chốt phủ cả cây</text>
+      <text x="620" y="212" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">mọi màn con nhận đúng màu đó</text>
+      <text x="620" y="230" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">và không còn tính lại theo lớp nào</text>
+
+      <!-- ===== Bước 3 ===== -->
+      <rect x="856" y="136" width="272" height="104" rx="8" fill="#fafafa"/>
+      <rect x="856" y="136" width="272" height="104" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="872" y="150" width="60" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="902" y="162" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BƯỚC 3</text>
+      <text x="992" y="192" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lệnh tối không với tới</text>
+      <text x="992" y="212" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">nó chỉ đổi bảng màu thô, không đổi màu nền</text>
+      <text x="992" y="230" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">.dark · --ds-*</text>
+
+      <!-- ===== Kết quả đo (tiêu điểm) ===== -->
+      <rect x="856" y="312" width="272" height="104" rx="8" fill="#fafafa"/>
+      <rect x="856" y="312" width="272" height="104" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="872" y="326" width="88" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+      <text x="916" y="338" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐO ĐƯỢC</text>
+      <text x="992" y="368" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Màn đăng nhập ra nền sáng</text>
+      <text x="992" y="388" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">dù đã dặn màn này luôn tối</text>
+      <text x="992" y="406" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">/sign-in → lab(98.1%)</text>
+
+      <!-- ===== Điểm người quyết ===== -->
+      <polygon points="992,460 1132,520 992,580 852,520" fill="#fafafa"/>
+      <polygon points="992,460 1132,520 992,580 852,520" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="992" y="525" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Người duyệt chọn một lối</text>
+
+      <!-- ===== Lối A ===== -->
+      <rect x="112" y="440" width="320" height="104" rx="8" fill="#fafafa"/>
+      <rect x="112" y="440" width="320" height="104" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="128" y="454" width="52" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="154" y="466" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LỐI A</text>
+      <text x="272" y="496" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Khai lại màu nền trong lệnh tối</text>
+      <text x="272" y="516" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">màn đăng nhập tối được đúng như ý ban đầu</text>
+      <text x="272" y="534" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">phải sửa ở tầng nền, mọi màn khác dùng chung</text>
+
+      <!-- ===== Lối B ===== -->
+      <rect x="112" y="584" width="320" height="104" rx="8" fill="#fafafa"/>
+      <rect x="112" y="584" width="320" height="104" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="128" y="598" width="52" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="154" y="610" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LỐI B</text>
+      <text x="272" y="640" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bỏ ý đồ màn đăng nhập luôn tối</text>
+      <text x="272" y="660" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">màn đăng nhập theo tông sáng như các màn khác</text>
+      <text x="272" y="678" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không đụng tầng nền, không tốn vòng nào</text>
+
+      <!-- ===== Chú giải ===== -->
+      <line x1="40" y1="732" x2="1200" y2="732" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="753" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="148" y="744" width="16" height="12" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="172" y="753" fill="#575757" font-size="9" font-family="'Geist', sans-serif">một bước của cơ chế, hoặc một lối để chọn</text>
+
+      <rect x="412" y="744" width="16" height="12" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="436" y="753" fill="#575757" font-size="9" font-family="'Geist', sans-serif">chỗ đo được trên màn thật, nơi ý đồ gãy</text>
+
+      <polygon points="692,745 704,753 692,761 680,753" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="714" y="753" fill="#575757" font-size="9" font-family="'Geist', sans-serif">chỗ người quyết — hai lối vẽ giống hệt nhau, cố ý</text>
+
+      <text x="980" y="753" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chữ mono là tên thật trong mã, không dịch.</text>
+    </svg>
+  </div>
+</body>
+</html>

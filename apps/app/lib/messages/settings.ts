@@ -7,17 +7,24 @@ const en = {
 		theoDoi: "Tracking & Analytics",
 		ketNoi: "Connections",
 		tienTe: "Currencies",
+		truong: "Fields",
 		thanhVien: "Members",
 		khoaApi: "API Keys",
 		sso: "SSO",
+		dieuPhoi: "Onboarding",
 	},
 	tieuDeTab: {
 		chung: "General",
 		tienTe: "Currencies",
+		truong: "Fields",
 	},
 	chung: {
 		tieuDe: "General",
 		moTa: "Who you are, and the model the research agent thinks with.",
+	},
+	truong: {
+		tieuDe: "Fields",
+		moTa: "The shape of your data: what every company, contact and deal records.",
 	},
 	congTy: {
 		tieuDe: "Workspace",
@@ -130,17 +137,24 @@ const vi = {
 		theoDoi: "Theo dõi & phân tích",
 		ketNoi: "Kết nối",
 		tienTe: "Tiền tệ",
+		truong: "Trường",
 		thanhVien: "Thành viên",
 		khoaApi: "Khoá API",
 		sso: "SSO",
+		dieuPhoi: "Điều phối 30 ngày",
 	},
 	tieuDeTab: {
 		chung: "Tổng quan",
 		tienTe: "Tiền tệ",
+		truong: "Trường",
 	},
 	chung: {
 		tieuDe: "Tổng quan",
 		moTa: "Công ty bạn là ai, và tác nhân nghiên cứu nghĩ bằng model nào.",
+	},
+	truong: {
+		tieuDe: "Trường",
+		moTa: "Hình dạng dữ liệu của bạn: mỗi công ty, cá nhân và thoả thuận ghi những gì.",
 	},
 	congTy: {
 		tieuDe: "Công ty",

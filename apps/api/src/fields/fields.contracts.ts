@@ -111,3 +111,5 @@ export const fieldCoverageOutput = z.object({
 export const fieldDeleteOutput = z.object({ id: z.string() });
 
 export const fieldBackfillOutput = z.object({ queued: z.boolean() });
+
+export const fieldAccessOutput = z.object({ canManage: z.boolean() });

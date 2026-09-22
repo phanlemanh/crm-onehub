@@ -5,14 +5,16 @@ import {
 } from "@crm/validation/builder-question";
 import { builderTaskMarkdown } from "../agent/instructions/task";
 import { AGENT_ACTION_EXECUTORS } from "../agent/lib/agent-actions";
-import { recordBuilderDelegation } from "../agent/lib/builder-delegation";
+import {
+	EMPTY_BUILDER_DELEGATION,
+	recordBuilderDelegation,
+} from "../agent/lib/builder-delegation";
 import {
 	actionIntegrationIssues,
 	type DraftAction,
 	slackDestinationIssues,
 } from "../agent/lib/builder-runtime";
 import {
-	builderCommandType,
 	builderDeliveryMessage,
 	builderIdFromToken,
 	builderToken,
@@ -83,14 +85,6 @@ describe("builder delivery messages", () => {
 			);
 		expect(commandTypeFromAuthorization(banGhi(true))).toBe("CREATE_AGENT");
 		expect(commandTypeFromAuthorization(banGhi(false))).toBe("CHAT");
-		expect(
-			builderCommandType("CHAT", {
-				inputResponse: { requestId: "question-1", optionId: "crm-task" },
-			}),
-		).toBe("CHAT");
-		expect(builderCommandType("CHAT", { text: "Also add a note" })).toBe(
-			"CHAT",
-		);
 	});
 
 	it("routes a selected answer back to the parked Eve input request", () => {
@@ -363,45 +357,41 @@ describe("builder command routing", () => {
 });
 
 describe("builder delegation guard", () => {
+	const goiBuilder = (callId: string) => ({
+		callId,
+		description: "dung ban nhap tac nhan",
+		input: {},
+		kind: "subagent-call" as const,
+		name: "agent_builder",
+		nodeId: "node-1",
+		subagentName: "agent_builder",
+	});
+
+	const duLieu = (turnId: string, stepIndex: number, callId: string) => ({
+		actions: [goiBuilder(callId)],
+		sequence: 0,
+		stepIndex,
+		turnId,
+	});
+
 	it("allows one idempotent builder delegation per turn", () => {
 		const first = recordBuilderDelegation(
-			{ turnId: null, callIds: [] },
-			"turn-1",
-			[
-				{
-					kind: "subagent-call",
-					callId: "call-1",
-					subagentName: "agent_builder",
-				},
-			],
+			EMPTY_BUILDER_DELEGATION,
+			duLieu("turn-1", 2, "call-1"),
 		);
+		expect(first).toEqual({ turnId: "turn-1", callIds: ["call-1"] });
 
 		expect(
-			recordBuilderDelegation(first, "turn-1", [
-				{
-					kind: "subagent-call",
-					callId: "call-1",
-					subagentName: "agent_builder",
-				},
-			]),
+			recordBuilderDelegation(first, duLieu("turn-1", 2, "call-1")),
 		).toEqual(first);
 		expect(() =>
-			recordBuilderDelegation(first, "turn-1", [
-				{
-					kind: "subagent-call",
-					callId: "call-2",
-					subagentName: "agent_builder",
-				},
-			]),
+			recordBuilderDelegation(first, duLieu("turn-1", 2, "call-2")),
+		).toThrow("only once");
+		expect(() =>
+			recordBuilderDelegation(first, duLieu("turn-1", 3, "call-2")),
 		).toThrow("only once");
 		expect(
-			recordBuilderDelegation(first, "turn-2", [
-				{
-					kind: "subagent-call",
-					callId: "call-2",
-					subagentName: "agent_builder",
-				},
-			]),
+			recordBuilderDelegation(first, duLieu("turn-2", 0, "call-2")),
 		).toEqual({ turnId: "turn-2", callIds: ["call-2"] });
 	});
 });

@@ -1,0 +1,18 @@
+{
+  "feature_plain": "Khi trợ lý bị từ chối quyền dựng tác nhân, hệ thống chặn cứng việc gọi lại chuyên gia dựng tác nhân trong cùng một lượt — thay vì chỉ dặn bằng lời trong chỉ dẫn.",
+  "scope_plain": "Giữ nguyên lời dặn trong chỉ dẫn, không chặn lời gọi đầu tiên, không nới trần, và không đụng ba hạn chế đã biết mà vòng trước ghi nhận.",
+  "decisions_plain": [
+    { "id": "d-20260909T001715Z-14489", "p": "Làm trên nền của vòng trước chứ không trên nhánh chính — vì đường bị-từ-chối chỉ tồn tại ở đó; đổi lại việc này phải chờ vòng trước về nhánh chính rồi mới về theo." },
+    { "id": "d-20260909T001715Z-20751", "p": "Một câu báo lỗi chung cho cả hai chiều — đổi lại thẻ lỗi vẫn mang từ nội bộ ở ca hiếm khi trợ lý cãi chỉ dẫn." },
+    { "id": "d-20260909T001715Z-17192", "p": "Đã bị thay bởi quyết định đổi khuôn đo ở cuối phiên — xem mục cuối cùng trong khối chưa duyệt." },
+    { "id": "d-20260909T001715Z-5768", "p": "Giữ nguyên lời dặn trong chỉ dẫn — đổi lại hai lớp cùng nói một luật, sửa một lớp mà quên lớp kia thì lệch." },
+    { "id": "d-20260909T001715Z-31133", "p": "KHÔNG làm bảng thước đo giá trị — việc này đi từ lỗi vòng trước tìm ra, không từ một hồ sơ cơ hội; đổi lại cổng giá trị sẽ không có số để đọc." },
+    { "id": "d-20260909T001715Z-21964", "p": "KHÔNG viết đặc tả giao diện — vòng này không chạm màn hình nào." },
+    { "id": "d-20260909T002448Z-8370", "p": "Bỏ một lời hứa không đo được thay vì thêm một phép kiểm quét chữ trong mã — đổi lại nếu ai đó thêm một câu báo lỗi thứ hai ở nhánh không phép kiểm nào đi qua thì không thước nào bắt." },
+    { "id": "d-20260909T002448Z-13640", "p": "Không đo tới màn hình cho câu báo lỗi, vì đã kiểm được không chỗ nào ở màn hình bắt theo câu này — đổi lại nếu sau này có người thêm một nhánh bắt theo nó thì không thước nào giữ." },
+    { "id": "d-20260909T002448Z-18815", "p": "Không ràng số câu dặn trong chỉ dẫn bằng phép kiểm — đổi lại có thể gỡ mà chín phép kiểm vẫn xanh; chỗ bắt là lúc soi thay đổi ở cổng bằng chứng." },
+    { "id": "d-20260909T020725Z-21375", "p": "Viết lại phép thử phá-hỏng cho vùng mới, để nó thật sự đổi thứ mà tên bài hứa sẽ đổi — vòng chấm 1 bắt đúng chỗ này." },
+    { "id": "d-20260909T022844Z-6477", "p": "Dừng, không tự chạy vòng thứ ba, vì lỗi lặp lại cùng một loại qua hai vòng — anh đã chọn đường ở điểm dừng đó." },
+    { "id": "d-20260909T025413Z-25883", "p": "Đổi cách kiểm tra: thôi dựa vào phần bên trong của thư viện agent nền, chỉ dùng phần thư viện có cam kết. Đổi lại — và đây là cái giá cần anh nhìn thẳng — bộ kiểm tra mới không còn phát hiện được khi phần chặn bị hỏng hoàn toàn." }
+  ]
+}

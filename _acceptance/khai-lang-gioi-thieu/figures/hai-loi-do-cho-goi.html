@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hai lối đo chỗ gọi · Sơ đồ hai nhánh</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1140px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 46rem;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ hai nhánh · khai lang cho đoạn giới thiệu</p>
+    <h1>Hai lối đo chỗ gọi</h1>
+    <p class="sub">E1–E3 đo cơ chế, nhưng đoạn giới thiệu không đi qua MetaLine nên không bài nào chạm tới nó. Chủ kho chọn một lối trước khi ký bộ tiêu chí.</p>
+    <svg viewBox="0 0 1100 712" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker></defs>
+<rect width="100%" height="100%" fill="#fafafa"/>
+<path d="M 500 120 L 500 140 Q 500 148 492 148 L 288 148 Q 280 148 280 156 L 280 184" stroke="#575757" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+<path d="M 600 120 L 600 140 Q 600 148 608 148 L 812 148 Q 820 148 820 156 L 820 184" stroke="#575757" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+<line x1="280" y1="256" x2="280" y2="292" stroke="#575757" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+<line x1="280" y1="364" x2="280" y2="400" stroke="#575757" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+<line x1="280" y1="512" x2="280" y2="548" stroke="#575757" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+<line x1="820" y1="256" x2="820" y2="292" stroke="#575757" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+<line x1="820" y1="364" x2="820" y2="400" stroke="#575757" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+<line x1="820" y1="512" x2="820" y2="548" stroke="#575757" stroke-width="1.2" fill="none" marker-end="url(#arrow)"/>
+<rect x="360" y="40" width="380" height="80" rx="6" fill="#fafafa"/>
+<rect x="360" y="40" width="380" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+<rect x="372" y="52" width="114" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+<text x="429.0" y="64" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">P0 · GAP-PROBE</text>
+<text x="550" y="84" fill="#171717" font-size="15" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đoạn giới thiệu trên tấm hồ sơ công ty</text>
+<text x="550" y="106" fill="#171717" font-size="13" font-family="'Geist', sans-serif" text-anchor="middle">ca đỏ prod <tspan font-family="'Geist Mono', monospace">ff3fb8bf</tspan> — đo bằng gì?</text>
+<rect x="60" y="184" width="440" height="72" rx="6" fill="#fafafa"/>
+<rect x="60" y="184" width="440" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+<rect x="72" y="196" width="51" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+<text x="97.5" y="208" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LỐI A</text>
+<text x="280" y="220" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Giữ giới hạn có tên</text>
+<text x="280" y="242" fill="#575757" font-size="12" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">không đổi mã</text>
+<rect x="60" y="292" width="440" height="72" rx="6" fill="#fafafa"/>
+<rect x="60" y="292" width="440" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+<rect x="72" y="304" width="58" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+<text x="101.0" y="316" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CƠ CHẾ</text>
+<text x="280" y="332" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">E1–E3 đo cơ chế</text>
+<text x="280" y="352" fill="#575757" font-size="9" font-weight="400" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-1 · AC-2</text>
+<rect x="60" y="400" width="440" height="112" rx="6" fill="#fafafa"/>
+<rect x="60" y="400" width="440" height="112" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+<rect x="72" y="412" width="121" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.40)" stroke-width="0.8"/>
+<text x="132.5" y="424" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CHỖ GỌI ĐO BẰNG</text>
+<text x="280" y="448" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">quan sát prod của chủ kho sau khi gộp</text>
+<text x="280" y="470" fill="#006B4F" font-size="11" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">/acceptance-gate:observed</text>
+<text x="280" y="494" fill="#575757" font-size="11" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">ca đỏ lộ ra ở prod, sau khi gộp</text>
+<rect x="60" y="548" width="440" height="72" rx="6" fill="#fafafa"/>
+<rect x="60" y="548" width="440" height="72" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+<rect x="72" y="560" width="58" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+<text x="101.0" y="572" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">RỦI RO</text>
+<text x="280" y="588" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chỗ gọi mất ForeignText mà máy không đỏ</text>
+<text x="280" y="608" fill="#575757" font-size="11" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">chỉ lộ khi chủ kho quan sát lại</text>
+<rect x="600" y="184" width="440" height="72" rx="6" fill="#fafafa"/>
+<rect x="600" y="184" width="440" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+<rect x="612" y="196" width="51" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+<text x="637.5" y="208" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LỐI B</text>
+<text x="820" y="220" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Tách thành phần + E4</text>
+<text x="820" y="242" fill="#575757" font-size="12" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">tách khối giới thiệu thành một thành phần trình bày nhỏ</text>
+<rect x="600" y="292" width="440" height="72" rx="6" fill="#fafafa"/>
+<rect x="600" y="292" width="440" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+<rect x="612" y="304" width="58" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+<text x="641.0" y="316" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CƠ CHẾ</text>
+<text x="820" y="332" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">E1–E3 đo cơ chế, thêm E4</text>
+<text x="820" y="352" fill="#575757" font-size="9" font-weight="400" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-1 · AC-2 · AC-4 mới</text>
+<rect x="600" y="400" width="440" height="112" rx="6" fill="#fafafa"/>
+<rect x="600" y="400" width="440" height="112" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+<rect x="612" y="412" width="121" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.40)" stroke-width="0.8"/>
+<text x="672.5" y="424" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CHỖ GỌI ĐO BẰNG</text>
+<text x="820" y="448" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">bài kiểm của kho dựng khối giới thiệu</text>
+<text x="820" y="470" fill="#006B4F" font-size="11" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">dưới tổ tiên lang="vi" · đòi vùng "en"</text>
+<text x="820" y="494" fill="#575757" font-size="11" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">chiều đỏ: gỡ ForeignText → Received "vi"</text>
+<rect x="600" y="548" width="440" height="72" rx="6" fill="#fafafa"/>
+<rect x="600" y="548" width="440" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+<rect x="612" y="560" width="37" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+<text x="630.5" y="572" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">GIÁ</text>
+<text x="820" y="588" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">S3 thành một task</text>
+<text x="820" y="608" fill="#575757" font-size="11" font-weight="400" font-family="'Geist', sans-serif" text-anchor="middle">thêm một lượt S4</text>
+<line x1="40" y1="652" x2="1060" y2="652" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="40" y="676" fill="#575757" font-size="9" font-weight="400" font-family="'Geist Mono', monospace" text-anchor="start" letter-spacing="0.14em">CHÚ GIẢI</text>
+<rect x="120" y="667" width="20" height="12" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+<text x="148" y="676" fill="#575757" font-size="10" font-weight="400" font-family="'Geist', sans-serif" text-anchor="start">chỗ hai lối khác nhau: ai bắt được ca đỏ</text>
+<rect x="420" y="667" width="20" height="12" rx="3" fill="#ffffff" stroke="#575757" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="448" y="676" fill="#575757" font-size="10" font-weight="400" font-family="'Geist', sans-serif" text-anchor="start">rủi ro còn hở</text>
+<rect x="560" y="667" width="20" height="12" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+<text x="588" y="676" fill="#575757" font-size="10" font-weight="400" font-family="'Geist', sans-serif" text-anchor="start">điều đã chắc, hoặc giá phải trả</text>
+</svg>
+  </div>
+</body>
+</html>

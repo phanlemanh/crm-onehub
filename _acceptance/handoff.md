@@ -1,10 +1,73 @@
 # Handoff — nhánh `onehub`
 
-Viết lại sáng **2026-09-04**. Phiên này gộp lại các dòng đã rẽ, và nhận một
-**hướng mới từ người** làm đổi trọng số của gần như mọi thứ còn treo.
+Viết lại chiều **2026-09-12**, sau một phiên dọn tồn đọng và ba phiên chạy song
+song. Bản trước (04/09) đã lạc: nó trỏ kho gốc ở `~/dev/crm` và liệt ba worktree
+nay không còn.
 
-Đọc ba mục trước khi làm bất cứ việc gì: "Hướng đã chốt", "Đứng ở cây nào",
-và "Bẫy".
+Đọc bốn mục trước khi làm bất cứ việc gì: "Cửa sổ đo đang chạy", "Đứng ở cây
+nào", "Hướng đã chốt", và "Bẫy".
+
+## Cửa sổ đo đang chạy — hạn cứng 2026-10-04
+
+`tiep-thi-tuyen-doi-tac` đã giao và đang trong cửa sổ đo bốn tuần. Ngày bật
+06/09, khép **04/10**. Đây là thứ duy nhất trong kho có hạn không dời được.
+
+**Đội tiếp thị dùng bản SẢN XUẤT trên Vercel**, không phải bản dev. Điều kiện
+06/09 (bản dev 3000/3001 từ checkout chính) đã lỗi thời kể từ 07/09 khi CRM lên
+Vercel — nhánh production là `onehub`, ba dự án `crm-onehub-{app,api,agent}`.
+Bản dev vẫn chạy ở 3000/3001 nhưng chỉ là chuyện vệ sinh kho, KHÔNG phải bản đo.
+
+**Đo 12/09 trên sản xuất — cửa sổ đang đếm mà chưa có gì để đếm:**
+
+| Đo gì | Thấy gì |
+| --- | --- |
+| Danh bạ | **1 bản ghi** (một nhân viên OneMount, không phải môi giới) |
+| Chiến dịch | **«No campaigns yet»** |
+| Số cột danh bạ | 6 — không cột nào của chín trường sàn |
+
+Ngưỡng SỐNG đòi ba chiến dịch chạy trọn và một phân khúc cho tỷ lệ trả lời gấp
+đôi trung bình. Không có lượt nạp dữ liệu thật vào sản xuất thì **04/10 đọc toàn
+CHƯA ĐO**. Việc phải làm, nêu từ 07/09 và chưa ai làm: chạy lượt cào với
+`[ingest] url` trỏ API sản xuất và khoá `LISTING_INGEST_SECRET` của sản xuất
+(khoá trên máy lập trình là khoá dev, không dùng được). Ba lối và hệ quả từng
+lối ghi ở `_acceptance/tiep-thi-tuyen-doi-tac/uat-session.md`, mục 12/09.
+
+Ba rủi ro đã khai trong `_acceptance/tiep-thi-tuyen-doi-tac/uat-session.md`,
+người đọc số ngày 04/10 phải tự lọc: 49 hồ sơ che cũ mang `phone =
+'09xxxxxxxx'`, 13 chiến dịch thử tạo ngày 2026-09-05, và ngưỡng 60/20/1 chỉ chia
+được hai nhóm trên dữ liệu thật.
+
+## Đứng ở cây nào
+
+Kho gốc nay là `~/dev/crm-onehub` (bản 04/09 ghi `~/dev/crm` — sai).
+
+| Cây | Nhánh | Trạng thái |
+| --- | --- | --- |
+| `~/dev/crm-onehub` | `onehub` | Kho gốc. **Máy chủ 3000/3001 chạy từ đây cho cửa sổ đo.** `.env` sống ở đây |
+| `.claude/worktrees/agitated-kilby-4b9585` | `claude/agitated-kilby-4b9585` | Vòng `do-quyen-luot-bang-hanh-vi`, đang chấm vòng 9 |
+| `.claude/worktrees/cool-elbakyan-61bdff` | detached | PR #38, đã ghim lại xong |
+| `/private/tmp/.../wt-ghim` | detached | Cây nền của bộ kit, đừng đụng |
+
+Luật vẫn nguyên giá trị, và 12/09 nó lại có giá thật: **`git worktree list`,
+`ListAgents`, rồi xem máy chủ dev chạy từ thư mục nào — trước khi tin handoff hay
+tin một con số.** Sáng 12/09 tôi suýt gộp đè lên một nhánh mà phiên khác đang
+làm; git từ chối vì cây bẩn, không phải vì tôi cẩn thận. Nhắn phiên kia trước.
+
+Thêm một luật mới, trả giá ba lần trong một ngày: **trước khi chẩn đoán hồ sơ
+của vòng khác, chạy `git rev-list --count HEAD..origin/onehub`.** Base cũ làm ta
+đọc bản cổ của hồ sơ rồi kết luận sai. Một phiên đã ba lần liền đề xuất sửa
+`chan-uy-thac-sai-luot` trong khi trên `onehub` nó đã `signed-off` từ 09/09.
+
+## Hai phiên đang chạy song song — 12/09
+
+Nhắn trước khi chạm cây của chúng. Cả hai đều nhận tin và trả lời trong ngày.
+
+- `agitated-kilby-4b9585-d4` — vòng `do-quyen-luot-bang-hanh-vi`. Hợp đồng vừa về
+  `draft` sau khi vá lỗ hai sàn AST mù với leo quyền viết bằng **phép gán**
+  (`input.commandType = <suy từ tin nhắn> ? "CREATE_AGENT" : ...` thoát 0 ở cả E3
+  lẫn E4). **Đang chờ chữ Cổng 1 của chủ kho** để vào vòng 9.
+- `cool-elbakyan-61bdff-ab` — PR #38, đã gộp `onehub`, ghim lại 14/14 eval, lưới
+  sạch. Không cần gì thêm.
 
 ## Hướng đã chốt — 2026-09-04
 
@@ -22,38 +85,6 @@ Bốn quyết định của người trong lượt này, và cái giá của m�
 
 Hệ quả cho phiên sau: **đừng mở thêm vòng nào có chủ ngữ là giàn đo.** Giàn đo
 đã đủ dùng. Mọi vòng mới phải đưa thêm chữ tiếng Việt ra trước mắt một nhân viên.
-
-## Đứng ở cây nào — đọc mục này trước
-
-Sáng 04/09 có **ba phiên máy chạy cùng lúc** trên cùng một kho, và ba dòng đã rẽ
-nhau trong đêm. Đã gộp một, còn một.
-
-| Cây | Nhánh | Trạng thái |
-| --- | --- | --- |
-| `/Users/manhphan/dev/crm` | `onehub` | Kho gốc. **Máy chủ dev 3000/3001/2000 chạy từ đây.** `.env` chỉ sống ở đây |
-| `.claude/worktrees/exciting-tharp-571c02` | `claude/elated-ptolemy-dc8eb1` | **Đã gộp** vào `onehub` ở `3b27b44`, gộp sạch |
-| `.claude/worktrees/sweet-leavitt-d88e70` | `claude/sweet-leavitt-d88e70` | **Đã gộp** vào `onehub` ở `e695eb3`, ba phút sau khi dòng này được viết là "chưa gộp" |
-| `/private/var/…/agk-baseline` | detached | Cây nền của bộ kit, đừng đụng |
-
-Khi gộp nốt `sweet-leavitt`: chỉ **một file** đụng nhau,
-`_acceptance/nhan-ung-dung-noi-tieng-viet/rang/ban-ve.mjs`, **4 cụm**. Ba cụm là
-cộng thêm hai bên (dòng `import`, và hai chỗ dùng `KHONG_DOI`) — ghép là xong.
-Cụm thứ tư ở đoạn đếm bề mặt (~dòng 727) khác luồng điều khiển: nhánh sweet thêm
-"không tìm thấy khung màn thì thoát mã 2" (AC-2), `onehub` thêm phần báo cáo độ
-lệch bản khai (AC-6). **Giữ cả hai.**
-
-Dây lùi đã đặt: `luu-onehub-2026-09-04` · `luu-elated-2026-09-04` ·
-`luu-sweet-2026-09-04`.
-
-**`onehub` ĐÃ đẩy lên `origin`** lúc 05:00 sáng 04/09 (`ecae119`). Bản handoff
-trước nói "hơn origin 82 commit, chưa ai đẩy" — sai. Lượt gộp `3b27b44` thì chưa
-đẩy.
-
-Luật, và lần này nó có giá thật: **`git worktree list`, `ListAgents`, rồi xem máy
-chủ dev chạy từ thư mục nào — trước khi tin handoff hay tin một con số.** Ngày
-03/09 mất một buổi vì hai phiên cùng dịch một bộ chuỗi. Ngày 04/09 suýt lặp lại
-với ba phiên. Nếu bạn thấy một phiên khác đang mở trên cây mình định gộp, **nhắn
-nó trước**, đừng gộp đè.
 
 ## Vòng `cua-vao-noi-tieng-viet` — dừng ở vòng 3, chưa ký được
 
@@ -101,35 +132,45 @@ Kèm theo: `git checkout --` làm mất việc chưa commit **hai lần** trong 
 này, dù bẫy đó đã ghi sẵn ở mục Bẫy. Commit trước mọi lượt checkout dùng để so
 sánh.
 
-## Đợt tới — bốn việc, người đã chọn cả bốn
+## Đợt tới — cập nhật 12/09
 
-1. ~~**Màn đăng nhập + màn khai báo.**~~ **XONG 04/09** — bốn màn đã dịch, vòng
-   `cua-vao-noi-tieng-viet` dừng ở vòng 3 với verdict BLOCKED và chưa ký được.
-   Việc kế của nó là **vòng giàn đo** cho ba món nợ ở mục trên.
-2. **Đổi nhãn "Comp AI" thành OneHub.** ~20 chỗ người đọc được: tiêu đề mọi tab,
+Bốn việc chốt 04/09 nay còn hai. Mục 1 (màn đăng nhập + khai báo) và mục 4 (lát
+③b màn Cài đặt) đã xong; `tong-quan-va-khung-noi-tieng-viet` và
+`nen-chat-ai-elements` cũng đã ký và merge trong tuần.
+
+Còn lại, chưa ai mở hồ sơ:
+
+1. **Đổi nhãn "Comp AI" thành OneHub.** ~20 chỗ người đọc được: tiêu đề mọi tab,
    chân trang, khung đăng nhập, 12 chỗ màn Slack, và `logo.tsx:10` mang
-   `aria-label="Comp AI Logo"`. Chạm cùng nhóm file với mục 1 — làm chung một đợt.
-3. **Thêm VND vào danh sách tiền tệ.** `CURRENCY_LIST` có 11 đồng tiền và
+   `aria-label="Comp AI Logo"`.
+2. **Thêm VND vào danh sách tiền tệ.** `CURRENCY_LIST` có 11 đồng tiền và
    **không có VND**. Phải sửa mã, không phải cấu hình; `minorUnits = 0`. Đọc
    `docs/currency.md` trước. Tỷ giá thật đã lấy về, chỉ thiếu VND trong danh sách.
-4. **Lát ③b — màn Cài đặt.** Phần còn lại theo kế hoạch đã khoanh.
+   Với một CRM nội bộ Việt Nam thì đây là lỗ khó giải thích nhất còn lại.
 
-Còn nợ **ba** chữ ký — và KHÔNG phải "một lượt gõ mỗi cái".
+## Ba hồ sơ "Đang làm" thật ra đã xếp lại
 
-Ba hồ sơ đều mang verdict mà bộ dựng thẻ từ chối mời ký (`one_shot: null` với
-REJECT/BLOCKED). Thứ biến chúng thành ký được là bốn quyết định ở mục "Hướng đã
-chốt", và chúng vào hồ sơ bằng `human_override` từng mục, không bằng một vòng
-chạy mới.
+Bản đồ 12/09 đếm **4 việc Đang làm**, nhưng ba trong số đó là hồ sơ **đã xếp lại
+có chủ ý** ngày 06/09 — dấu vết là `evidence-report.xep-lai-2026-09-06.md` trong
+thư mục của chúng: `cua-vao-noi-tieng-viet`, `thuoc-cua-lat-3a-co-rang`,
+`tieng-viet-cho-crm`. Kit không có ô xếp-lại cho hợp đồng nên bản đồ vẫn liệt
+chúng ở "Đang làm". Đừng đọc đó thành việc đang dở.
 
-Bằng chứng đã được **ghim lại vào cây hiện tại** sáng 04/09 — trước đó ba hồ sơ
-chứng cho cây cách đây 87 · 9 · 4 file mã. Một lượt làn máy, `run_id`
-`repin-20260904T030617Z-17073`, bốn suite exit 0, 1263 bài không đỏ, `Cached: 0`.
+Việc thứ tư là `nhan-ung-dung-noi-tieng-viet`, và nó mới là cái đang dở thật.
 
-```
-/acceptance-gate:signoff tieng-viet-cho-crm
-/acceptance-gate:signoff nhan-ung-dung-noi-tieng-viet
-/acceptance-gate:signoff thuoc-cua-lat-3a-co-rang
-```
+## Làn V: "máy đã thông" KHÔNG phải "đã ký"
+
+12/09 hai hồ sơ `go-khoa-goc-nhin` và `quyen-luot-mang-theo` chuyển từ
+`verified` sang **`machine-cleared`** (PR #39). Chúng đạt sáu điều kiện xanh-sạch
+và cổng nói thẳng «KHÔNG mời ký». Đó là trạng thái KẾT hợp lệ của làn V.
+
+Hai điều để phiên sau khỏi mất buổi như tôi:
+
+- **Kit không có thao tác "đóng cửa veto".** `veto_state` chỉ nhận `mo` hoặc
+  `da-veto`. Cửa mở là bình thường và vĩnh viễn, trừ khi owner veto hoặc ký.
+- **Dòng «17 hồ sơ máy đã đi trước mà owner chưa veto» đang đếm sai.** Đo 12/09:
+  **15 trong 17 đã `signed-off`**, chúng chỉ giữ `veto_state: mo` như di tích.
+  Chip đã mở sang kho kit. Đừng đọc con số ấy thành 17 việc tồn đọng.
 
 ## Môi trường: đã cắm gì, còn thiếu gì
 
@@ -289,6 +330,28 @@ nằm trong DOM**, nên người chấm đọc ảnh chỉ đoán. Đo bằng c�
 rồi so bề rộng ô.
 
 ## Bẫy
+
+**0. `failedCommands` có mà `failedEvals` rỗng — đừng tin màu đỏ ngay.** Hình dạng
+này xuất hiện **ba lần trong ngày 12/09**, ba nguyên nhân khác hẳn nhau:
+
+- Làn ghim lại báo `bun run test` exit 1 trong khi **9/9 eval xanh**. Nguyên nhân:
+  worktree chưa `bun install` sau khi gộp, `@crm/validation/agent-transcript` là
+  subpath `onehub` mới thêm nên `packages/ui` không resolve được. Cài xong: 114
+  pass / 0 fail. **Mọi worktree vừa gộp `onehub` đều phải `bun install` trước khi
+  tin màu**, và chép `.env` từ cây chính nếu `bun install` vấp `DATABASE_URL`.
+- Agent chấm trả `exitCode: 1` cho một script chỉ phát ra được 0/2/3 — đỏ giả của
+  bộ kit, chip `task_701548f2`.
+- `check-types` với `build --force` tranh cây build (ca cũ, đã ghi ở bộ nhớ kho).
+
+Luật rút ra: **đọc `failedEvals` trước `failedCommands`.** Eval xanh mà lệnh đỏ
+thì gần như luôn là môi trường hoặc thước, không phải sản phẩm.
+
+**0b. Bằng chứng của vòng ĐÃ KÝ tự đổi mỗi ngày.**
+`_acceptance/chan-lai-component-ra-man/evidence/ve-that.json` mang nhãn "Today"
+bám ngày hệ thống, nên mỗi lượt `bun run test` lại ghi lại nó. Tôi đã trả về
+nguyên trạng ở **bốn cây trong một phiên**; phiên khác cũng bốn lần. Nó làm
+`pre-merge-check` đọc thành «code đổi sau verify». Chip `task_9f71a9dc`. Trong
+lúc chờ vá: `git checkout -- <file>`, đừng commit.
 
 **1. Máy chủ ở `:3000` phục vụ mã của KHO GỐC.** Sửa trong worktree mà đo ở 3000
 là đo cây khác. Dựng máy chủ riêng cho cây làm việc:

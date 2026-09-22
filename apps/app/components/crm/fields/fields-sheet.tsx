@@ -5,7 +5,7 @@ import { Spinner } from "@crm/ui/components/spinner";
 import { Tabs, TabsList, TabsTrigger } from "@crm/ui/components/tabs";
 import { useQuery } from "@tanstack/react-query";
 import {
-	type RecordKind,
+	type EntityKind,
 	useFieldsSheet,
 } from "@/components/crm/record-sheet/record-stack";
 import { DetailSheet, DetailSheetHeader } from "@/components/detail-sheet";
@@ -22,9 +22,9 @@ function FieldsSheetBody({
 	onEdit,
 	onClose,
 }: {
-	kind: RecordKind;
+	kind: EntityKind;
 	field: string | null;
-	onEntity: (kind: RecordKind) => void;
+	onEntity: (kind: EntityKind) => void;
 	onEdit: (key: string | null) => void;
 	onClose: () => void;
 }) {
@@ -36,6 +36,8 @@ function FieldsSheetBody({
 	const query = useQuery(
 		trpc.fields.list.queryOptions({ entity, includeArchived: true }),
 	);
+	const quyen = useQuery(trpc.fields.access.queryOptions());
+	const khoa = quyen.data?.canManage !== true;
 
 	const editingKey = field && field !== "new" ? field : null;
 	const editing = editingKey
@@ -47,7 +49,7 @@ function FieldsSheetBody({
 		enabled: Boolean(editing?.agentFilled),
 	});
 
-	if (field) {
+	if (field && !khoa) {
 		const entityLabel = entityTabs(locale).find(
 			(tab) => tab.kind === kind,
 		)?.label;
@@ -94,7 +96,7 @@ function FieldsSheetBody({
 				note={
 					<Tabs
 						value={kind}
-						onValueChange={(next) => onEntity(next as RecordKind)}
+						onValueChange={(next) => onEntity(next as EntityKind)}
 					>
 						<TabsList>
 							{entityTabs(locale).map((tab) => (
@@ -108,6 +110,7 @@ function FieldsSheetBody({
 			/>
 			<FieldsList
 				entity={entity}
+				khoa={khoa}
 				onEdit={(key) => onEdit(key)}
 				onNew={() => onEdit("new")}
 			/>

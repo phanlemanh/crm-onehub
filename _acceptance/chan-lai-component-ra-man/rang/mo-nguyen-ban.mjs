@@ -1,13 +1,15 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { duongRa } from "./moi-mac-dinh.mjs";
+import { duongLuot, xoaTaoPhamCu } from "./luot-chay.mjs";
 
 const GOC = join(import.meta.dirname, "..", "..", "..");
+const TAO_PHAM = duongLuot("mo-nguyen-ban.json");
 
 export const NEO_DONG = 9;
 
 export function chayBoVe() {
+	xoaTaoPhamCu("mo-nguyen-ban.json");
 	try {
 		execFileSync(
 			"bun",
@@ -32,9 +34,8 @@ export function chayBoVe() {
 }
 
 export function docMoNguyenBan() {
-	const taoPham = duongRa(GOC, "mo-nguyen-ban.json");
-	if (!existsSync(taoPham)) return null;
-	return JSON.parse(readFileSync(taoPham, "utf8"));
+	if (!existsSync(TAO_PHAM)) return null;
+	return JSON.parse(readFileSync(TAO_PHAM, "utf8"));
 }
 
 function chan() {

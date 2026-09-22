@@ -1,0 +1,223 @@
+schema_version: 1
+slug: noi-bon-nut-dieu-phoi
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.nbn_them_bo_phan
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/test/noi-bon-nut.dom.tsx"
+    expected: |
+      Dung THAT man Cai dat › Dieu phoi trong jsdom; ban gia tRPC ghi lai dau vao cua
+      createDepartment. Bam «Thêm bộ phận», go ten, bam Luu.
+      Khang dinh:
+        1 dung MOT loi goi; dau vao di qua JSON.parse(JSON.stringify()) roi qua CHINH
+          departmentCreateInput cua API (khong khuon viet tay) va mang dung ten da go
+        2 hop thoai dong; danh sach bo phan hien ten moi (ban gia tra danh sach moi
+          sau khi truy van duoc lam moi)
+        3 DOI CHUNG: ten rong -> nut Luu tat, 0 loi goi
+      CHIEU DO: nut Luu khong goi thu tuc -> dong 1 do voi thong diep ghim so loi goi.
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nbn_ghi_bo_phan
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/noi-bon-nut.spec.ts"
+    expected: |
+      Dau vao di qua JSON roundtrip roi departmentCreateInput.parse roi THAT
+      service.createDepartment tren DB kiem thu. Doc lai DB: dung mot hang mang ten do.
+      CHIEU DO: dau vao ten rong -> parse tu choi voi thong diep ghim ten truong.
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.nbn_soan_khuon
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/test/noi-bon-nut.dom.tsx"
+    expected: |
+      Ma tran viet truoc HAI ca: co dien loai doi tac va bo trong loai doi tac.
+      Moi ca: co hai bo phan; bam «Soạn khuôn», go ten, them HAI buoc (nhan, bo phan,
+      ngay thu) — buoc hai chon bo phan khac buoc mot; them buoc thu ba roi bo no; Luu.
+      Khang dinh: dau vao qua JSON roundtrip + templateCreateInput cua API parse THANH
+      CONG; partnerType bang chuoi da go (ca 1) hoac null (ca 2); steps dung HAI phan
+      tu theo thu tu da nhap, position 0 va 1, departmentId va offsetDays dung; sau khi
+      luu ten khuon moi co tren man. So ca bang 2.
+      CHIEU DO: gui buoc theo thu tu nguoc -> do voi thong diep ghim nhan buoc va vi tri;
+      gui partnerType chuoi rong -> ca 2 do voi thong diep ghim truong partnerType.
+
+  - id: E4
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nbn_ghi_khuon
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/noi-bon-nut.spec.ts"
+    expected: |
+      Ma tran viet truoc HAI ca: co loai doi tac va loai doi tac null. Moi ca: dau vao
+      khuon hai buoc qua JSON roundtrip + templateCreateInput roi THAT
+      service.createTemplate. Doc lai DB: ten, loai doi tac (chuoi hoac null), hai buoc
+      dung thu tu, nhan, bo phan, ngay thu. So ca bang 2.
+      CHIEU DO: steps rong -> parse tu choi voi thong diep ghim ten truong.
+
+  - id: E5
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.nbn_chua_co_bo_phan
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/test/noi-bon-nut.dom.tsx"
+    expected: |
+      Khong co bo phan nao. Bam «Soạn khuôn». Khang dinh: cau «thêm bộ phận trước» doc
+      tu bang thong diep hien; khong nut Luu nao bam duoc; 0 loi goi createTemplate.
+      DOI CHUNG: co mot bo phan -> nut Luu co mat.
+      CHIEU DO: bo nhanh chua-co-bo-phan -> do voi thong diep ghim so loi goi hoac nut Luu.
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.nbn_tao_ke_hoach
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/noi-bon-nut.dom.tsx"
+    expected: |
+      Chay duoi TZ=Asia/Ho_Chi_Minh. Danh muc trong (co khuon). Bam «Tạo kế hoạch từ
+      khuôn», chon cong ty, khuon, chon mot ngay bat dau cu the, de nguoi cam trich mac
+      dinh. Luu.
+      Khang dinh: dau vao qua JSON roundtrip + planCreateFromTemplateInput cua API parse
+      THANH CONG; companyId, templateId dung lua chon; ownerId bang id nguoi dang dung
+      (ban gia users.me); startedAt sau parse co NGAY LICH (UTC) bang dung ngay da chon;
+      ban gia tra danh muc moi sau lam moi va ten cong ty cua ke hoach moi co tren man.
+      CHIEU DO: hop thoai gui toISOString cua nua dem gio dia phuong -> do voi thong diep
+      ghim hai ngay lech nhau; hop thoai khong gui ownerId -> do voi thong diep ghim truong.
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nbn_ghi_ke_hoach_json
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/noi-bon-nut.spec.ts"
+    expected: |
+      Dung THAT ung dung API (AppModule) va gui HTTP POST toi
+      /api/trpc/onboarding.createFromTemplate voi cookie phien dang nhap that (khuon tao
+      phien cua go-thanh-vien.spec.ts), than JSON co startedAt la chuoi ngay lich
+      «YYYY-MM-DD» — dung dang hop thoai gui (E6).
+      Khang dinh: HTTP 200; doc lai DB dung mot ke hoach cua cong ty do; NGAY LICH UTC cua
+      startedAt bang ngay da gui; ngay den han cua buoc 0 bang ngay do cong offsetDays.
+      CHIEU DO: dat .input() cua thu tuc ve z.date() -> HTTP 400, eval do voi thong diep
+      ghim ten truong startedAt va ma trang thai.
+
+  - id: E13
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nbn_ghi_ke_hoach_json
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/noi-bon-nut.spec.ts"
+    expected: |
+      Cung loi goi HTTP cua E7. Khang dinh them: companyId, templateId, ownerId trong DB
+      dung gia tri da gui; so buoc va nhan tung buoc cua ke hoach bang cac buoc cua khuon
+      theo dung thu tu.
+      CHIEU DO: bo chep buoc tu khuon -> do voi thong diep ghim so buoc mong doi va nhan
+      duoc.
+
+  - id: E8
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.nbn_nut_tren_thanh_cong_cu
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/noi-bon-nut.dom.tsx"
+    expected: |
+      Ma tran viet truoc: dang bang va dang bang cot, danh muc co ke hoach = HAI ca.
+      Moi ca: nut tao ke hoach co mat tren thanh cong cu; bam -> hop thoai tao ke
+      hoach mo. So ca bang 2.
+      CHIEU DO: chi dat nut o trang thai trong -> do voi thong diep ghim cach xem.
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.nbn_them_moi_gioi
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/noi-bon-nut.dom.tsx"
+    expected: |
+      Ma tran viet truoc: pheu trong va pheu da co mot nguoi = HAI ca. Moi ca: bam
+      «Thêm môi giới», go tim, chon mot ca nhan, Luu. Khang dinh: dau vao qua JSON
+      roundtrip + enrollmentUpsertInput cua API; planId dung ke hoach, contactId dung
+      ca nhan da chon, source «tay»; ban gia tra danh sach ghi danh moi sau lam moi va
+      so nguoi trong pheu tren man tang dung 1. So ca bang 2.
+      CHIEU DO: an nut khi pheu da co nguoi -> ca thu hai do voi thong diep ghim ten ca.
+
+  - id: E10
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nbn_ghi_danh
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/noi-bon-nut.spec.ts"
+    expected: |
+      Dau vao ghi danh qua JSON roundtrip + enrollmentUpsertInput roi THAT
+      service.upsertEnrollment. Doc lai DB: mot ghi danh dung ke hoach, ca nhan, nguon
+      «tay», bon moc trong.
+      CHIEU DO: contactId rong -> parse tu choi voi thong diep ghim truong.
+
+  - id: E11
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.nbn_luu_hong
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/noi-bon-nut.dom.tsx"
+    expected: |
+      Ma tran viet truoc: BON hop thoai. Moi hop thoai: ban gia thu tuc nem loi mang
+      mot thong diep xac dinh; dien day du, Luu. Khang dinh: hop thoai van mo; tung
+      o da nhap giu gia tri; thong diep loi hien trong hop thoai. So ca bang 4.
+      CHIEU DO: dong hop thoai trong onSettled -> ca tuong ung do voi thong diep ghim
+      ten hop thoai.
+
+  - id: E14
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.nbn_luu_mot_lan
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/noi-bon-nut.dom.tsx"
+    expected: |
+      Ma tran viet truoc: BON hop thoai. Moi hop thoai: ban gia de loi goi treo; dien
+      day du; bam Luu HAI lan. Khang dinh: dung 1 loi goi; nut Luu mang disabled trong
+      luc treo. So ca bang 4.
+      CHIEU DO: bo khoa nut theo trang thai dang luu -> ca tuong ung do voi thong diep
+      ghim ten hop thoai va so loi goi.
+
+  - id: E12
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    steps:
+      - "Dung api 3301 va app 3300 cua CAY DANG XET (api-cay-nay, app-cay-nay); khong sua tep nao trong cay, ke ca bo chup"
+      - "CHAN CAY: dat dau moc .svg vao apps/app/public roi xin lai qua http://localhost:3300; khong nhan lai -> thoat ma 2"
+      - "Dang nhap bang `cd apps/api && bun run dev:session <email>`, dat cookie vao trinh duyet chup"
+      - "Tren man that: them mot bo phan, soan mot khuon hai buoc, tao mot ke hoach, them mot moi gioi — bang CHINH bon hop thoai"
+      - "Chup moi hop thoai dang mo va man sau khi luu o 1440 va 768: evidence/E12-<hop-thoai>-<mo|sau>-<kho>.png"
+    inputs:
+      - _acceptance/noi-bon-nut-dieu-phoi/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+    expected: |
+      Nhin thay tren anh: moi hop thoai du o nhap; sau khi luu ban ghi moi co trong
+      danh sach; o kho 768 hop thoai khong tran ngang. Thieu hop thoai nao -> khong dat.

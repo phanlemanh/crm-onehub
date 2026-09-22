@@ -1,12 +1,17 @@
 import { describe, expect, it } from "bun:test";
-import { readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
 	BUILDER_AUTHORIZATION_KEY,
 	buildPendingInputRequest,
 	commandTypeFromAuthorization,
 } from "@crm/validation/builder-question";
-import { builderCommandType } from "../agent/lib/custom-agent-dispatch";
+import { builderSessionAuthFromRow } from "../agent/lib/custom-agent-dispatch";
+import { requireBuilderAttribute } from "../agent/lib/session-purpose";
+import {
+	BUILDER_DENIED_REASON,
+	builderTurnApproval,
+} from "../agent/subagents/agent_builder/lib/authorization";
 
 const banGhi = (authorized: boolean) =>
 	buildPendingInputRequest(
@@ -57,59 +62,92 @@ describe("ke-thua", () => {
 	});
 });
 
+const hangSubmission = (
+	commandType: string,
+	inputResponse: Record<string, string>,
+) => ({
+	id: "sub_1",
+	commandType,
+	message: {
+		text: "Build me an agent that flags stalled deals",
+		resources: [],
+		attachments: [],
+		inputResponse,
+	},
+	conversation: { userId: "user_1", title: null },
+});
+
+const BIEN_THE = [
+	{ requestId: "req_1", text: "co" },
+	{ requestId: "req_1", optionId: "opt_1" },
+];
+
+const KHOA_DA_GHIM = [
+	"commandType",
+	"conversationId",
+	"needsTitle",
+	"purpose",
+	"submissionId",
+	"userId",
+];
+
+const khoiThuocTinh = (
+	commandType: string,
+	inputResponse: Record<string, string>,
+) =>
+	builderSessionAuthFromRow(
+		hangSubmission(commandType, inputResponse),
+		"conv_1",
+	).attributes;
+
+describe("bat-bien", () => {
+	it("bat-bien: doi inputResponse thi khoi thuoc tinh khong doi mot byte", () => {
+		const [mot, hai] = BIEN_THE.map((ir) => khoiThuocTinh("CHAT", ir));
+		expect(mot).toEqual(hai);
+	});
+
+	it("bat-bien: tap khoa cua khoi thuoc tinh bang dung tap da ghim", () => {
+		expect(Object.keys(khoiThuocTinh("CHAT", BIEN_THE[0])).sort()).toEqual(
+			KHOA_DA_GHIM,
+		);
+	});
+});
+
+const chamCong = (
+	commandType: string,
+	inputResponse: Record<string, string>,
+) => {
+	const auth = builderSessionAuthFromRow(
+		hangSubmission(commandType, inputResponse),
+		"conv_1",
+	);
+	const ctx = {
+		session: {
+			auth: { current: { attributes: auth.attributes }, initiator: null },
+		},
+	};
+	return { ctx, cham: builderTurnApproval(ctx) };
+};
+
 describe("suy-dien", () => {
-	it("suy-dien: message co inputResponse KHONG con nang quyen", () => {
-		const traLoi = [
-			{
-				text: "co",
-				resources: [],
-				inputResponse: { requestId: "r1", text: "co" },
-			},
-			{
-				text: "co",
-				resources: [],
-				inputResponse: { requestId: "r1", optionId: "o1" },
-			},
-		];
-		expect(traLoi).toHaveLength(2);
-		for (const message of traLoi) {
-			expect(builderCommandType("CHAT", message)).toBe("CHAT");
-			expect(builderCommandType("CREATE_AGENT", message)).toBe("CREATE_AGENT");
+	it("suy-dien: hang khai CHAT thi cong dong, du tin nhan dung khuon xin dung tac nhan", () => {
+		const luot = BIEN_THE.map((ir) => chamCong("CHAT", ir));
+		expect(luot[0].cham).toEqual(luot[1].cham);
+		for (const { ctx, cham } of luot) {
+			expect(cham).toEqual({
+				type: "denied",
+				reason: BUILDER_DENIED_REASON,
+			});
+			expect(() => requireBuilderAttribute(ctx, "conversationId")).toThrow();
 		}
 	});
 
-	it("suy-dien: dem tren dia so cho suy quyen tu hinh dang tin nhan phai bang 0", () => {
-		const demTrong = (nguon: string) =>
-			nguon
-				.split("\n")
-				.map((dong, i) => ({ dong, so: i + 1 }))
-				.filter(({ dong }) => /\?\s*["']CREATE_AGENT["']\s*:/.test(dong));
-
-		const chung =
-			'return requestId && (optionId || text) ? "CREATE_AGENT" : commandType;';
-		expect(demTrong(chung)).toHaveLength(1);
-
-		const goc = [
-			join(import.meta.dir, "../agent"),
-			join(import.meta.dir, "../../api/src"),
-		];
-		const quet = (thuMuc: string): string[] =>
-			readdirSync(thuMuc, { withFileTypes: true }).flatMap((muc) => {
-				const duong = join(thuMuc, muc.name);
-				if (muc.isDirectory()) return quet(duong);
-				return muc.name.endsWith(".ts") ? [duong] : [];
-			});
-		const tepTs = goc.flatMap(quet);
-		expect(tepTs.length).toBeGreaterThan(50);
-		const dinh = tepTs.flatMap((duong) =>
-			demTrong(readFileSync(duong, "utf8")).map(
-				({ so }) => `${duong.slice(duong.indexOf("apps/"))}:${so}`,
-			),
-		);
-		if (dinh.length > 0) {
-			throw new Error(
-				`con suy quyen tu hinh dang tin nhan: ${dinh.join(", ")}`,
-			);
+	it("suy-dien: doi DUNG MOT truong commandType cua hang thi cong mo", () => {
+		const luot = BIEN_THE.map((ir) => chamCong("CREATE_AGENT", ir));
+		expect(luot[0].cham).toEqual(luot[1].cham);
+		for (const { ctx, cham } of luot) {
+			expect(cham).toBe("not-applicable");
+			expect(requireBuilderAttribute(ctx, "conversationId")).toBe("conv_1");
 		}
 	});
 });
@@ -166,11 +204,6 @@ describe("cong-dong", () => {
 		const commandType = commandTypeFromAuthorization(banGhi(authorized));
 		const attributes = builderSessionAttributes({
 			commandType,
-			message: {
-				text: "co",
-				resources: [],
-				inputResponse: { requestId: "req_1", text: "co" },
-			},
 			conversationId: "conv_1",
 			userId: "user_1",
 			submissionId: "sub_1",

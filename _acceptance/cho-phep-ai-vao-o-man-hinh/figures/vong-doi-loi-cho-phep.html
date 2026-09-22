@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vòng đời một lời cho phép · Máy trạng thái</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 46rem;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Máy trạng thái · cho phép ai vào, quyết ở màn hình</p>
+    <h1>Vòng đời một lời cho phép</h1>
+    <p class="sub">Một dòng trong bảng lời cho phép đi qua những trạng thái nào, và việc gì đẩy nó đi. Chữ mono là giá trị thật trong cơ sở dữ liệu — không dịch.</p>
+
+    <svg viewBox="0 0 1160 700" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- ===== Chuyển tiếp (vẽ trước, nằm dưới các ô) ===== -->
+      <line x1="64" y1="204" x2="112" y2="204" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="312" y1="204" x2="472" y2="204" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="672" y1="204" x2="880" y2="204" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="980" y1="248" x2="980" y2="400" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 572 248 L 572 436 Q 572 444 580 444 L 880 444" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 980 488 L 980 580 Q 980 588 972 588 L 220 588 Q 212 588 212 580 L 212 488" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <!-- ===== Nhãn chuyển tiếp ===== -->
+      <rect x="330" y="162" width="124" height="18" rx="2" fill="#fafafa"/>
+      <text x="392" y="177" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">cho phép một địa chỉ</text>
+      <rect x="330" y="180" width="124" height="16" rx="2" fill="#fafafa"/>
+      <text x="392" y="191" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-11</text>
+
+      <rect x="700" y="162" width="152" height="18" rx="2" fill="#fafafa"/>
+      <text x="776" y="177" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">người ấy đăng nhập lần đầu</text>
+      <rect x="700" y="180" width="152" height="16" rx="2" fill="#fafafa"/>
+      <text x="776" y="191" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-2</text>
+
+      <rect x="884" y="308" width="88" height="18" rx="2" fill="#fafafa"/>
+      <text x="964" y="323" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="end">gỡ thành viên</text>
+      <rect x="884" y="326" width="88" height="16" rx="2" fill="#fafafa"/>
+      <text x="964" y="337" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">AC-5</text>
+
+      <rect x="678" y="402" width="104" height="18" rx="2" fill="#fafafa"/>
+      <text x="730" y="417" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">rút lời cho phép</text>
+      <rect x="678" y="420" width="104" height="16" rx="2" fill="#fafafa"/>
+      <text x="730" y="431" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-3</text>
+
+      <rect x="544" y="546" width="104" height="18" rx="2" fill="#fafafa"/>
+      <text x="596" y="561" fill="#006B4F" font-size="10" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">cho phép lại</text>
+      <rect x="544" y="564" width="104" height="16" rx="2" fill="#fafafa"/>
+      <text x="596" y="575" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-14</text>
+
+      <!-- ===== Ghi chú biên tập ===== -->
+      <text x="136" y="306" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif">Cho phép lại không sửa dòng cũ.</text>
+      <text x="136" y="328" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif">Nó thêm một dòng mới, để còn đọc được ai từng bị rút.</text>
+      <path d="M 240 340 Q 220 366 212 394" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="212" cy="398" r="2" fill="#171717"/>
+
+      <!-- ===== Điểm bắt đầu ===== -->
+      <circle cx="56" cy="204" r="6" fill="#171717"/>
+
+      <!-- ===== Trạng thái: chưa có ===== -->
+      <rect x="112" y="160" width="200" height="88" rx="8" fill="#fafafa"/>
+      <rect x="112" y="160" width="200" height="88" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="212" y="200" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chưa có</text>
+      <text x="212" y="220" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">chưa có dòng nào trong bảng</text>
+
+      <!-- ===== Trạng thái: pending ===== -->
+      <rect x="472" y="160" width="200" height="88" rx="8" fill="#fafafa"/>
+      <rect x="472" y="160" width="200" height="88" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="572" y="200" fill="#171717" font-size="14" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">pending</text>
+      <text x="572" y="220" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">được phép, chưa có tài khoản</text>
+
+      <!-- ===== Trạng thái: accepted ===== -->
+      <rect x="880" y="160" width="200" height="88" rx="8" fill="#fafafa"/>
+      <rect x="880" y="160" width="200" height="88" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="980" y="200" fill="#171717" font-size="14" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">accepted</text>
+      <text x="980" y="220" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">đã vào, đang là thành viên</text>
+
+      <!-- ===== Trạng thái: cancelled ===== -->
+      <rect x="880" y="400" width="200" height="88" rx="8" fill="#fafafa"/>
+      <rect x="880" y="400" width="200" height="88" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="980" y="440" fill="#171717" font-size="14" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">cancelled</text>
+      <text x="980" y="460" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">đã rút, dòng vẫn còn để đọc</text>
+
+      <!-- ===== Trạng thái: dòng mới (tiêu điểm) ===== -->
+      <rect x="112" y="400" width="200" height="88" rx="8" fill="#fafafa"/>
+      <rect x="112" y="400" width="200" height="88" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="212" y="430" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">dòng mới</text>
+      <text x="212" y="450" fill="#006B4F" font-size="11" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">pending</text>
+      <text x="212" y="468" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">dòng <tspan font-family="'Geist Mono', monospace">cancelled</tspan> cũ giữ nguyên</text>
+
+      <!-- ===== Chú giải ===== -->
+      <line x1="40" y1="632" x2="1120" y2="632" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="653" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <circle cx="146" cy="649" r="4" fill="#171717"/>
+      <text x="160" y="653" fill="#575757" font-size="9" font-family="'Geist', sans-serif">điểm bắt đầu</text>
+
+      <rect x="248" y="643" width="16" height="12" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="272" y="653" fill="#575757" font-size="9" font-family="'Geist', sans-serif">một trạng thái của dòng lời cho phép</text>
+
+      <rect x="480" y="643" width="16" height="12" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="504" y="653" fill="#575757" font-size="9" font-family="'Geist', sans-serif">dòng mới sinh ra khi cho phép lại</text>
+
+      <text x="712" y="653" fill="#575757" font-size="9" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" fill="#171717">pending</tspan> là giá trị thật trong cơ sở dữ liệu, không dịch</text>
+    </svg>
+  </div>
+</body>
+</html>

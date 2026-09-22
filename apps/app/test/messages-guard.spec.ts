@@ -2,6 +2,7 @@ import { describe, expect, it } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Locale } from "@crm/ui/lib/locale";
+import { authMessages } from "@/lib/messages/auth";
 import { docDuongGoi, taoSong } from "./duong-goi";
 
 const DAU_TIENG_VIET =
@@ -42,6 +43,7 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 }
 
 const KHONG_DAU = new Set([
+	"hopThoaiChoPhep.choDoi",
 	"chiaSe.xong",
 	"tep.kiloByte",
 	"tep.megaByte",
@@ -97,6 +99,7 @@ const KHONG_DAU = new Set([
 	"ten.stripe",
 	"ten.docusign",
 	"header.otherLocale",
+	"datMatKhau.xong.title",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -172,6 +175,18 @@ describe("kho chuoi cua vong ③a", () => {
 			],
 			"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
 			"auth:grantAccess.grant": ["Cấp quyền 1", "Cấp quyền 12"],
+			"auth:datMatKhau.description": [
+				"Liên kết này dùng được một lần, còn hạn 1 phút.",
+				"Liên kết này dùng được một lần, còn hạn 12 phút.",
+			],
+			"auth:datMatKhau.loi.quaNgan": [
+				"Mật khẩu phải có ít nhất 1 ký tự.",
+				"Mật khẩu phải có ít nhất 12 ký tự.",
+			],
+			"auth:datMatKhau.toiThieu": [
+				"Ít nhất 1 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
+				"Ít nhất 12 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
+			],
 			"companies:bulk.reassigned": [
 				"Đã đổi người phụ trách cho 1.",
 				"Đã đổi người phụ trách cho 12.",
@@ -488,6 +503,18 @@ describe("kho chuoi cua vong ③a", () => {
 				"Đổi vai trò của 1",
 				"Đổi vai trò của 12",
 			],
+			"settings-thanh-vien:phatChia.moTa": [
+				"Gửi cho 1. Liên kết dùng được một lần, hết hạn sau một giờ.",
+				"Gửi cho 12. Liên kết dùng được một lần, hết hạn sau một giờ.",
+			],
+			"settings-thanh-vien:phatChia.daChep": [
+				"Đã chép. Dán vào Zalo gửi cho 1.",
+				"Đã chép. Dán vào Zalo gửi cho 12.",
+			],
+			"settings-thanh-vien:phatChia.vet": [
+				"1 đã phát liên kết · A",
+				"12 đã phát liên kết · A",
+			],
 			"agent-builder-khung:doi.soLuotChay": ["1 lượt chạy", "12 lượt chạy"],
 			"agent-builder-khung:nha.chaoHoi": [
 				"1 cần gì hôm nay?",
@@ -521,10 +548,8 @@ describe("kho chuoi cua vong ③a", () => {
 				"1 tệp đã đổi. Lưu là ghi thành một bản mới.",
 				"12 tệp đã đổi. Lưu là ghi thành một bản mới.",
 			],
-			"agent-builder-ket-qua:thoaThuan.duongOng": [
-				"đường ống 1",
-				"đường ống 12",
-			],
+			"agent-builder-ket-qua:thoaThuan.duongOng": ["1 đang mở", "12 đang mở"],
+			"agent-builder-ket-qua:thoaThuan.tongGiaTri": ["tổng 1", "tổng 12"],
 			"agent-builder-ket-qua:thoaThuan.ngayNamIm": [
 				"nằm im từ 1 ngày",
 				"nằm im từ 12 ngày",
@@ -592,6 +617,21 @@ describe("kho chuoi cua vong ③a", () => {
 			expect(f("1", "A", "B")).toBe(mot);
 			expect(f("12", "A", "B")).toBe(nhieu);
 		}
+	});
+});
+
+describe("man Xong cua trang dat mat khau", () => {
+	it("nut ve man dang nhap la chuoi rieng, khong dung lai chuoi nut gui", () => {
+		const LOCALE: readonly Locale[] = ["en", "vi"];
+
+		for (const locale of LOCALE) {
+			const m = authMessages(locale).datMatKhau;
+			expect(m.xong.dangNhap).not.toBe(m.gui);
+			expect(m.xong.dangNhap.length).toBeGreaterThan(0);
+		}
+
+		expect(authMessages("vi").datMatKhau.xong.dangNhap).toBe("Đăng nhập");
+		expect(authMessages("vi").datMatKhau.gui).toBe("Đặt mật khẩu");
 	});
 });
 

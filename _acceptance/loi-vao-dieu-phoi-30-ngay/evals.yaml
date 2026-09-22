@@ -1,0 +1,87 @@
+schema_version: 1
+slug: loi-vao-dieu-phoi-30-ngay
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.lv30_loi_vao_thanh_chinh
+    paths:
+      - "apps/app/lib/khung-dieu-huong.ts"
+      - "apps/app/test/khung-dieu-huong.spec.ts"
+    expected: |
+      Doc THANG danh sach muc ma thanh dieu huong chinh render (MUC_RAIL), khong
+      doc tai lieu hay chu thich.
+      Khang dinh BA dieu:
+        1 co mot muc khoa "onboarding" voi href "/onboarding"
+        2 muc do so khop theo tien to, de ho so mot ke hoach cung thuoc no
+        3 muc do dung ngay truoc muc Cai dat
+      CHIEU DO da chay tren vat that: xoa muc khoi MUC_RAIL -> do voi thong diep
+      ghim "khong co muc onboarding"; doi sang so khop "exact" -> do voi
+      Expected "prefix" / Received "exact".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.lv30_danh_dau_dang_mo
+    paths:
+      - "apps/app/lib/khung-dieu-huong.ts"
+      - "apps/app/components/app-icon-rail.tsx"
+      - "apps/app/test/khung-dieu-huong.spec.ts"
+    expected: |
+      Goi THAT ham mucDangMo ma thanh chinh dung de danh dau muc dang mo.
+      Khang dinh NAM dieu tren cung mot workspace gia lap duong dan /onehub:
+        1 /onehub/onboarding -> muc 30 ngay dau dang mo
+        2 /onehub/onboarding/ke-hoach-1 -> muc 30 ngay dau dang mo
+        3 /onehub/settings/onboarding -> muc 30 ngay dau KHONG mo
+        4 /onehub/deals -> muc 30 ngay dau KHONG mo
+        5 /onehub/settings/onboarding -> muc Cai dat dang mo
+      Dong 3 va 5 la cap hai chieu: cung mot duong dan, hai muc cho hai ket qua
+      nguoc nhau. CHIEU DO da chay: doi so khop sang "exact" -> dong 2 do voi
+      Expected true / Received false.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.lv30_loi_vao_cai_dat
+    paths:
+      - "apps/app/lib/cai-dat-dieu-huong.ts"
+      - "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx"
+      - "apps/app/test/cai-dat-dieu-huong.spec.ts"
+    expected: |
+      Doc THANG danh sach MUC_CAI_DAT ma thanh ben Cai dat render — thanh ben
+      import dung danh sach nay, khong giu ban rieng.
+      Khang dinh BON dieu:
+        1 co muc khoa "dieuPhoi" voi href "/settings/onboarding"
+        2 muc do la phan tu cuoi cua danh sach
+        3 mucCaiDatDangMo tra true khi dung o /onehub/settings/onboarding
+        4 va tra false o /onehub/settings/sso; muc goc Cai dat tra false o
+          /onehub/settings/onboarding
+      Dong 3 va 4 la cap hai chieu tren cung ham. CHIEU DO da chay: xoa muc khoi
+      MUC_CAI_DAT -> do voi thong diep ghim "khong co muc dieuPhoi trong thanh
+      ben cai dat".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.lv30_nhan_hai_thu_tieng
+    paths:
+      - "apps/app/lib/messages/khung-ung-dung.ts"
+      - "apps/app/lib/messages/settings.ts"
+      - "apps/app/lib/messages/onboarding.ts"
+      - "apps/app/test/khung-dieu-huong.spec.ts"
+      - "apps/app/test/cai-dat-dieu-huong.spec.ts"
+    expected: |
+      Do QUAN HE, khong so voi chuoi hang: nhan cua muc phai bang tieu de ma man
+      dich that su hien thi, doc tu CUNG nguon thong diep ma trang dich dung.
+      Khang dinh BON dieu, o ca vi va en:
+        1 nhanRail(muc 30 ngay dau) = onboardingMessages(locale).title — tieu
+          de cua trang danh muc
+        2 nhanCaiDat(muc dieu phoi) = onboardingMessages(locale).settings.title
+          — tieu de cua trang cai dat dieu phoi
+        3 va 4 ghim them chu hien tai «30 ngày đầu» / «First 30 days» de mot vong
+          doi ca hai phia cung luc van phai qua mat nguoi doc diff
+      CHIEU DO da chay tren vat that: doi tieu de trang cai dat thanh «Điều phối»
+      -> do voi thong diep ghim «nhan vi cua muc dieu phoi lech tieu de man cai
+      dat»; doi nhan vi cua thanh chinh thanh «Onboarding» -> do voi Expected
+      «30 ngày đầu».

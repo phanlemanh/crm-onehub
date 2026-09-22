@@ -17,10 +17,12 @@ import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { toast } from "sonner";
 import { ListSearch } from "@/components/data-table/list-search";
 import { useTableQuery } from "@/components/data-table/use-table-query";
 import { LocalRelativeTime } from "@/components/local-date-time";
+import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
 import {
 	type ThanhVienMessages,
 	thanhVienMessages,
@@ -28,7 +30,11 @@ import {
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { ChuyenViecDialog } from "./chuyen-viec-dialog";
+import { ConfirmDialog } from "./confirm-dialog";
 import { membersSearchParams } from "./members-search-params";
+import { PhatChiaButton } from "./phat-chia-button";
+import { VetLine } from "./vet-line";
 
 type Role = keyof ThanhVienMessages["vaiTro"];
 
@@ -41,8 +47,14 @@ function roles(t: ThanhVienMessages): Role[] {
 function columns(
 	t: ThanhVienMessages,
 	canChangeRoles: boolean,
+	canManageMembers: boolean,
+	canIssuePasswordLink: boolean,
 	onChangeRole: (member: MemberRow, role: Role) => void,
+	onRemove: (member: MemberRow) => void,
+	onDaPhat: () => void,
 	pending: boolean,
+	onChuyenViec: ((member: MemberRow) => void) | null,
+	nhanChuyenViec: string,
 ): DataTableColumn<MemberRow>[] {
 	return [
 		{
@@ -50,21 +62,36 @@ function columns(
 			header: t.bang.ten,
 			sortable: true,
 			hideable: false,
-			width: "w-[30%]",
+			width: "w-[26%]",
+			cellClassName: "whitespace-normal align-top",
 			cell: (row) => (
 				<span className="flex min-w-0 items-center gap-2">
 					<PersonAvatar
+						translate="no"
 						size="sm"
 						src={row.image}
 						name={row.name}
 						email={row.email}
 					/>
-					<span className="truncate font-medium" translate="no">
-						{row.name}
+					<span className="flex min-w-0 flex-col">
+						<span className="flex items-center gap-2">
+							<span className="truncate font-medium" translate="no">
+								{row.name}
+							</span>
+							{row.isViewer ? (
+								<span className="text-muted-foreground text-xs">
+									{t.bang.ban}
+								</span>
+							) : null}
+						</span>
+						{row.passwordLinkIssuedByName && row.passwordLinkIssuedAt ? (
+							<VetLine
+								t={t}
+								ten={row.passwordLinkIssuedByName}
+								luc={row.passwordLinkIssuedAt}
+							/>
+						) : null}
 					</span>
-					{row.isViewer ? (
-						<span className="text-muted-foreground text-xs">{t.bang.ban}</span>
-					) : null}
 				</span>
 			),
 		},
@@ -72,7 +99,7 @@ function columns(
 			id: "email",
 			header: t.bang.email,
 			sortable: true,
-			width: "w-[32%]",
+			width: "w-[27%]",
 			hideBelow: "md",
 			cell: (row) => (
 				<span className="truncate text-muted-foreground" translate="no">
@@ -84,7 +111,7 @@ function columns(
 			id: "role",
 			header: t.bang.vaiTro,
 			sortable: true,
-			width: "w-[18%]",
+			width: "w-[15%]",
 			cell: (row) => (
 				<span className="text-muted-foreground">{t.vaiTro[row.role]}</span>
 			),
@@ -95,12 +122,29 @@ function columns(
 			label: t.bang.thamGiaDayDu,
 			sortable: true,
 			align: "right",
-			width: "w-[14%]",
+			width: "w-[12%]",
 			hideBelow: "sm",
 			cell: (row) => (
 				<span className="text-muted-foreground">
 					<LocalRelativeTime date={row.joinedAt} />
 				</span>
+			),
+		},
+		{
+			id: "phatChia",
+			header: <span className="sr-only">{t.phatChia.nut}</span>,
+			label: t.phatChia.nut,
+			hideable: false,
+			align: "right",
+			width: "w-[14%]",
+			cell: (row) => (
+				<PhatChiaButton
+					t={t}
+					email={row.email}
+					ten={row.name}
+					coQuyen={canIssuePasswordLink}
+					onDaPhat={onDaPhat}
+				/>
 			),
 		},
 		{
@@ -111,7 +155,7 @@ function columns(
 			align: "right",
 			width: "w-[6%]",
 			cell: (row) =>
-				canChangeRoles ? (
+				canChangeRoles || canManageMembers || onChuyenViec ? (
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" size="icon" disabled={pending}>
@@ -121,18 +165,35 @@ function columns(
 						</DropdownMenuTrigger>
 
 						<DropdownMenuContent align="end">
-							{roles(t).map((role) => (
-								<DropdownMenuItem
-									key={role}
-									data-checked={row.role === role}
-									onSelect={() => {
-										if (row.role === role) return;
-										onChangeRole(row, role);
-									}}
-								>
-									{t.vaiTro[role]}
+							{canChangeRoles
+								? roles(t).map((role) => (
+										<DropdownMenuItem
+											key={role}
+											data-checked={row.role === role}
+											onSelect={() => {
+												if (row.role === role) return;
+												onChangeRole(row, role);
+											}}
+										>
+											{t.vaiTro[role]}
+										</DropdownMenuItem>
+									))
+								: null}
+
+							{onChuyenViec ? (
+								<DropdownMenuItem onSelect={() => onChuyenViec(row)}>
+									{nhanChuyenViec}
 								</DropdownMenuItem>
-							))}
+							) : null}
+
+							{canManageMembers && !row.isViewer ? (
+								<DropdownMenuItem
+									variant="destructive"
+									onSelect={() => onRemove(row)}
+								>
+									{t.go}
+								</DropdownMenuItem>
+							) : null}
 						</DropdownMenuContent>
 					</DropdownMenu>
 				) : null,
@@ -141,7 +202,8 @@ function columns(
 }
 
 export function MembersTable() {
-	const t = thanhVienMessages(useLocale());
+	const locale = useLocale();
+	const t = thanhVienMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const { query, input } = useTableQuery(membersSearchParams);
@@ -162,6 +224,26 @@ export function MembersTable() {
 		}),
 	);
 
+	const [dangGo, setDangGo] = useState<MemberRow | null>(null);
+	const [dangChuyen, setDangChuyen] = useState<MemberRow | null>(null);
+	const quyenKeHoach = useQuery(trpc.onboarding.access.queryOptions());
+	const k = keHoachNoiMessages(locale).chuyen;
+
+	const remove = useMutation(
+		trpc.workspace.removeMember.mutationOptions({
+			onSuccess: async () => {
+				setDangGo(null);
+				await cache.workspace();
+				await members.refetch();
+				toast.success(t.xacNhan.go.xong);
+			},
+			onError: (error) => {
+				setDangGo(null);
+				toast.error(error.message);
+			},
+		}),
+	);
+
 	const facetCounts = members.data?.facetCounts;
 
 	const facets: DataTableFacet[] = [
@@ -177,22 +259,58 @@ export function MembersTable() {
 	];
 
 	return (
-		<DataTable
-			query={query}
-			search={<ListSearch placeholder={t.bang.tim} />}
-			columns={columns(
-				t,
-				workspace.data?.canChangeRoles ?? false,
-				(member, role) => setRole.mutate({ memberId: member.id, role }),
-				setRole.isPending,
-			)}
-			rows={members.data?.rows ?? []}
-			total={members.data?.total ?? 0}
-			facetCounts={facetCounts}
-			facets={facets}
-			getRowId={(row) => row.id}
-			loading={members.isFetching}
-			empty={t.bang.trong}
-		/>
+		<>
+			<DataTable
+				query={query}
+				search={<ListSearch placeholder={t.bang.tim} />}
+				columns={columns(
+					t,
+					workspace.data?.canChangeRoles ?? false,
+					workspace.data?.canManageMembers ?? false,
+					workspace.data?.canIssuePasswordLink ?? false,
+					(member, role) => setRole.mutate({ memberId: member.id, role }),
+					(member) => setDangGo(member),
+					() => {
+						void members.refetch();
+					},
+					setRole.isPending || remove.isPending,
+					quyenKeHoach.data?.canManage
+						? (member) => setDangChuyen(member)
+						: null,
+					k.menu,
+				)}
+				rows={members.data?.rows ?? []}
+				total={members.data?.total ?? 0}
+				facetCounts={facetCounts}
+				facets={facets}
+				getRowId={(row) => row.id}
+				loading={members.isFetching}
+				empty={t.bang.trong}
+			/>
+
+			<ChuyenViecDialog
+				nguoi={
+					dangChuyen === null
+						? null
+						: { userId: dangChuyen.userId, name: dangChuyen.name }
+				}
+				onDong={() => setDangChuyen(null)}
+			/>
+
+			<ConfirmDialog
+				tieuDe={t.xacNhan.go.tieuDe}
+				than={t.xacNhan.go.than}
+				nut={t.xacNhan.go.nut}
+				thoi={t.xacNhan.thoi}
+				open={dangGo !== null}
+				onOpenChange={(next) => {
+					if (!next) setDangGo(null);
+				}}
+				onConfirm={() => {
+					if (dangGo) remove.mutate({ memberId: dangGo.id });
+				}}
+				pending={remove.isPending}
+			/>
+		</>
 	);
 }

@@ -1,0 +1,40 @@
+{
+	"ghi_chu": "Bo chon da kiem tren man that ngay 17/09, cau hinh gieo both. h1 la cau quang cao cua AuthShell, KHONG phai tieu de man. main p:last-of-type tra ba phan tu vi :last-of-type tinh theo tung cha, nen dung chi so tren querySelectorAll. so_nut_mong=3 o cau hinh both (hai nut nha cung cap + mot nut dang xuat): thieu no thi go nut dang xuat se lam bo chon chi:-1 lang le tro sang nut Microsoft, va thuoc van dem du nam o.",
+	"o": [
+		{
+			"ten": "tieu de man",
+			"khoa": "grantAccess.title",
+			"chon": "h2",
+			"chi": 0
+		},
+		{
+			"ten": "mo ta man",
+			"khoa": "grantAccess.both",
+			"chon": "h2 + p",
+			"chi": 0
+		},
+		{
+			"ten": "cau rieng tu",
+			"khoa": "grantAccess.privacy",
+			"chon": "main p",
+			"chi": -1
+		},
+		{
+			"ten": "chu tren nut cap quyen",
+			"khoa": "grantAccess.grant",
+			"chon": "button[data-slot=button]",
+			"chi": 0
+		},
+		{
+			"ten": "chu tren nut dang xuat",
+			"khoa": "grantAccess.signOut",
+			"chon": "button[data-slot=button]",
+			"chi": -1
+		}
+	],
+	"ten_nha_cung_cap": {
+		"chon": "span[translate=no]",
+		"so_mong": 2
+	},
+	"so_nut_mong": 3
+}

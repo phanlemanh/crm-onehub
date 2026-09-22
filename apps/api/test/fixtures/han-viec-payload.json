@@ -1,0 +1,51 @@
+{
+	"me": {
+		"scope": "me",
+		"overdueTasks": [
+			{
+				"id": "VIEC_T2",
+				"subject": "T2",
+				"createdBy": {
+					"id": "NGUOI_A",
+					"name": "An Nguyen"
+				},
+				"company": {
+					"id": "CONG_TY",
+					"name": "CONG_TY"
+				},
+				"deal": null
+			}
+		]
+	},
+	"team": {
+		"scope": "everyone",
+		"overdueTasks": [
+			{
+				"id": "VIEC_T2",
+				"subject": "T2",
+				"createdBy": {
+					"id": "NGUOI_A",
+					"name": "An Nguyen"
+				},
+				"company": {
+					"id": "CONG_TY",
+					"name": "CONG_TY"
+				},
+				"deal": null
+			},
+			{
+				"id": "VIEC_U",
+				"subject": "U",
+				"createdBy": {
+					"id": "NGUOI_B",
+					"name": "Binh Tran"
+				},
+				"company": {
+					"id": "CONG_TY",
+					"name": "CONG_TY"
+				},
+				"deal": null
+			}
+		]
+	}
+}

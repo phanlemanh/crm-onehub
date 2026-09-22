@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đường /proto đi qua proxy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1280px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.4rem;
+    }
+    .sub {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--color-muted);
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1040px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ luồng quyết định · AC-2 · AC-13</p>
+    <h1>/proto thoát sớm ở ANONYMOUS, rồi chỉ còn PROTO_ROUTE canh</h1>
+    <p class="sub">apps/app/proxy.ts — thứ tự kiểm đúng như trong mã</p>
+
+    <svg viewBox="0 0 1200 920" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-dim" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#8a8a8a"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- ZONE: phần proxy mà /proto không đi qua -->
+      <rect x="660" y="256" width="480" height="448" rx="8" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.10)" stroke-width="0.8"/>
+      <rect x="672" y="258" width="248" height="16" rx="2" fill="#fafafa"/>
+      <text x="680" y="270" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">PHẦN PROXY /PROTO KHÔNG ĐI QUA</text>
+
+      <!-- ARROWS (before boxes) -->
+      <!-- start → d1 -->
+      <line x1="380" y1="96" x2="380" y2="140" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- d1 CÓ → next() -->
+      <line x1="492" y1="184" x2="548" y2="184" stroke="#8a8a8a" stroke-width="1" marker-end="url(#arrow-dim)"/>
+      <!-- d1 KHÔNG → d2 -->
+      <line x1="380" y1="228" x2="380" y2="284" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- d2 CÓ → d5  (accent: đường /proto, thoát sớm) -->
+      <line x1="380" y1="396" x2="380" y2="540" stroke="#006B4F" stroke-width="1.6" marker-end="url(#arrow-accent)"/>
+      <!-- d2 KHÔNG → d3 -->
+      <line x1="512" y1="340" x2="770" y2="340" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- d3 KHÔNG (còn phiên) → d4 -->
+      <line x1="890" y1="388" x2="890" y2="440" stroke="#8a8a8a" stroke-width="1" marker-end="url(#arrow-dim)"/>
+      <!-- d3 null → redirect -->
+      <line x1="1010" y1="340" x2="1050" y2="340" stroke="#8a8a8a" stroke-width="1" marker-end="url(#arrow-dim)"/>
+      <!-- d4 KHÔNG → hai cổng onboarding -->
+      <line x1="890" y1="528" x2="890" y2="600" stroke="#8a8a8a" stroke-width="1" marker-end="url(#arrow-dim)"/>
+      <!-- d5 CÓ → trang proto -->
+      <path d="M 380,652 V 700 Q 380,708 372,708 H 180 Q 172,708 172,716 V 728" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- d5 KHÔNG → notFound() -->
+      <path d="M 516,596 H 540 Q 548,596 548,604 V 728" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <!-- ARROW LABELS -->
+      <rect x="334" y="248" width="36" height="16" rx="2" fill="#fafafa"/>
+      <text x="370" y="260" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.10em">KHÔNG</text>
+
+      <rect x="292" y="448" width="78" height="16" rx="2" fill="#fafafa"/>
+      <text x="370" y="460" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.10em">CÓ → next()</text>
+
+      <rect x="617" y="318" width="48" height="16" rx="2" fill="#fafafa"/>
+      <text x="641" y="330" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.10em">KHÔNG</text>
+
+      <rect x="902" y="406" width="44" height="16" rx="2" fill="#fafafa"/>
+      <text x="906" y="418" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.10em">KHÔNG</text>
+
+      <rect x="902" y="556" width="44" height="16" rx="2" fill="#fafafa"/>
+      <text x="906" y="568" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.10em">KHÔNG</text>
+
+      <rect x="256" y="686" width="40" height="16" rx="2" fill="#fafafa"/>
+      <text x="276" y="698" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.10em">CÓ</text>
+
+      <rect x="560" y="650" width="44" height="16" rx="2" fill="#fafafa"/>
+      <text x="564" y="662" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.10em">KHÔNG</text>
+
+      <!-- terminal texts (lối ra không vẽ thành nút) -->
+      <text x="556" y="188" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">CÓ → next()</text>
+      <text x="1058" y="344" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">CÓ → /sign-in</text>
+
+      <!-- NODES -->
+      <!-- 1. start -->
+      <rect x="220" y="40" width="320" height="56" rx="28" fill="#fafafa"/>
+      <rect x="220" y="40" width="320" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="380" y="64" fill="#171717" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">GET /proto/duong-proto</text>
+      <text x="380" y="80" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không có cookie phiên</text>
+
+      <!-- 2. d1 /sign-in? -->
+      <polygon points="380,140 492,184 380,228 268,184" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="380" y="180" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đường yêu cầu là</text>
+      <text x="380" y="196" fill="#171717" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">/sign-in ?</text>
+
+      <!-- 3. d2 ANONYMOUS — FOCAL -->
+      <polygon points="380,284 512,340 380,396 248,340" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.6"/>
+      <text x="380" y="332" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">nằm trong danh sách</text>
+      <text x="380" y="352" fill="#006B4F" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">ANONYMOUS ?</text>
+
+      <!-- 5. d3 cookie phiên (dimmed) -->
+      <polygon points="890,292 1010,340 890,388 770,340" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.28)" stroke-width="1"/>
+      <text x="890" y="336" fill="#575757" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">cookie phiên null?</text>
+      <text x="890" y="352" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">getSessionCookie()</text>
+
+      <!-- 6. d4 UNGATED (dimmed) -->
+      <polygon points="890,440 1004,484 890,528 776,484" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.28)" stroke-width="1"/>
+      <text x="890" y="480" fill="#575757" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">nằm trong</text>
+      <text x="890" y="496" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">UNGATED ?</text>
+
+      <!-- 7. hai cổng onboarding (dimmed) -->
+      <rect x="770" y="600" width="240" height="56" rx="6" fill="#fafafa"/>
+      <rect x="770" y="600" width="240" height="56" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.28)" stroke-width="1"/>
+      <text x="890" y="624" fill="#575757" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">hai cổng onboarding</text>
+      <text x="890" y="640" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">workspace · research</text>
+
+      <!-- zone footnote -->
+      <text x="890" y="678" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">lối ra khác của proxy giữ nguyên:</text>
+      <text x="890" y="692" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">next() · redirect /sign-in · rewrite /{workspace}</text>
+
+      <!-- 8. d5 PROTO_ROUTE — FOCAL -->
+      <polygon points="380,540 516,596 380,652 244,596" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.6"/>
+      <text x="380" y="590" fill="#006B4F" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">PROTO_ROUTE === "1"</text>
+      <text x="380" y="606" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">cờ đọc ở app/proto/layout.tsx</text>
+
+      <!-- 9. trang proto -->
+      <rect x="64" y="728" width="216" height="56" rx="28" fill="#fafafa"/>
+      <rect x="64" y="728" width="216" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="172" y="752" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">trang proto · 200</text>
+      <text x="172" y="768" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">?state=&lt;id&gt;</text>
+
+      <!-- 10. notFound() -->
+      <rect x="440" y="728" width="216" height="56" rx="28" fill="#fafafa"/>
+      <rect x="440" y="728" width="216" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="548" y="752" fill="#171717" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">notFound()</text>
+      <text x="548" y="768" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">404 · cả nhánh biến mất</text>
+
+      <!-- CALLOUT A — điểm (a): thoát sớm -->
+      <text x="236" y="278" fill="#006B4F" font-size="14" font-style="italic" font-family="'Lora', serif" text-anchor="end">/proto được thêm vào đúng đây</text>
+      <text x="236" y="298" fill="#006B4F" font-size="14" font-style="italic" font-family="'Lora', serif" text-anchor="end">— trước lần kiểm cookie phiên,</text>
+      <text x="236" y="318" fill="#006B4F" font-size="14" font-style="italic" font-family="'Lora', serif" text-anchor="end">nên nó thoát sớm.</text>
+      <path d="M 240,330 Q 268,340 292,342" fill="none" stroke="rgba(0,107,79,0.50)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="296" cy="342" r="2" fill="#006B4F"/>
+
+      <!-- CALLOUT B — điểm (b): lớp chặn duy nhất -->
+      <text x="236" y="548" fill="#006B4F" font-size="14" font-style="italic" font-family="'Lora', serif" text-anchor="end">sau bước trên proxy thôi canh —</text>
+      <text x="236" y="568" fill="#006B4F" font-size="14" font-style="italic" font-family="'Lora', serif" text-anchor="end">PROTO_ROUTE là lớp chặn</text>
+      <text x="236" y="588" fill="#006B4F" font-size="14" font-style="italic" font-family="'Lora', serif" text-anchor="end">duy nhất còn lại.</text>
+      <path d="M 240,596 Q 262,600 288,600" fill="none" stroke="rgba(0,107,79,0.50)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="292" cy="600" r="2" fill="#006B4F"/>
+
+      <!-- LEGEND -->
+      <line x1="40" y1="836" x2="1160" y2="836" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="852" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI · HÌNH DẠNG MANG LOẠI</text>
+
+      <rect x="40" y="870" width="28" height="14" rx="7" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="76" y="881" fill="#575757" font-size="9" font-family="'Geist', sans-serif">đầu / cuối</text>
+
+      <rect x="200" y="870" width="28" height="14" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="236" y="881" fill="#575757" font-size="9" font-family="'Geist', sans-serif">bước</text>
+
+      <polygon points="354,869 368,877 354,885 340,877" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="376" y="881" fill="#575757" font-size="9" font-family="'Geist', sans-serif">quyết định</text>
+
+      <line x1="520" y1="877" x2="552" y2="877" stroke="#006B4F" stroke-width="1.6" marker-end="url(#arrow-accent)"/>
+      <text x="564" y="881" fill="#575757" font-size="9" font-family="'Geist', sans-serif">đường /proto đi (thoát sớm)</text>
+
+      <rect x="800" y="870" width="28" height="14" rx="4" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.28)" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="836" y="881" fill="#575757" font-size="9" font-family="'Geist', sans-serif">phần proxy /proto không đi qua</text>
+    </svg>
+  </div>
+</body>
+</html>

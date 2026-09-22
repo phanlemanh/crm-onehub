@@ -33,13 +33,11 @@ import { crmMessages } from "@/lib/messages/crm";
 import { dealMessages } from "@/lib/messages/deals";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-import {
-	type RecordKind,
-	type RecordRef,
-	useRecordStack,
-} from "./record-stack";
+import { type EntityKind, useRecordStack } from "./record-stack";
 
-function recordNoun(kind: RecordKind, locale: Locale): string {
+type EntityRef = { kind: EntityKind; id: string };
+
+function recordNoun(kind: EntityKind, locale: Locale): string {
 	if (kind === "company") return companyMessages(locale).noun;
 	if (kind === "contact") return contactMessages(locale).noun;
 	return dealMessages(locale).noun;
@@ -49,9 +47,9 @@ const RECORD_PROCEDURES = {
 	company: "companies",
 	contact: "contacts",
 	deal: "deals",
-} satisfies Record<RecordKind, "companies" | "contacts" | "deals">;
+} satisfies Record<EntityKind, "companies" | "contacts" | "deals">;
 
-function useArchiveRecord(record: RecordRef) {
+function useArchiveRecord(record: EntityRef) {
 	const locale = useLocale();
 	const m = crmMessages(locale);
 	const trpc = useTRPC();
@@ -75,7 +73,7 @@ function useArchiveRecord(record: RecordRef) {
 	);
 }
 
-function useRestoreRecord(record: RecordRef) {
+function useRestoreRecord(record: EntityRef) {
 	const locale = useLocale();
 	const m = crmMessages(locale);
 	const trpc = useTRPC();
@@ -99,7 +97,7 @@ function useRestoreRecord(record: RecordRef) {
 	);
 }
 
-function usePurgeRecord(record: RecordRef) {
+function usePurgeRecord(record: EntityRef) {
 	const locale = useLocale();
 	const m = crmMessages(locale);
 	const trpc = useTRPC();
@@ -130,7 +128,7 @@ export function RecordActions({
 	consequence,
 	archivedAt,
 }: {
-	record: RecordRef;
+	record: EntityRef;
 	name: string;
 	consequence: string;
 	archivedAt: string | null;

@@ -110,6 +110,84 @@ _Avoid_: đã đặt lịch demo, đủ điều kiện để mua
 Vì sao: dịch một bước không xảy ra là in cái sai ra màn hình bằng thứ tiếng
 người đọc hiểu được.
 
+**Kế hoạch 30 ngày**: kế hoạch đưa một công ty mới ký vào guồng trong ba mươi
+ngày đầu, dựng từ một khuôn theo loại đối tác. Treo vào một công ty; mở như một
+bản ghi, cạnh công ty, cá nhân và thoả thuận. Trên màn hình đang hiện dưới
+`30 ngày đầu`. Chốt 2026-09-22.
+_Avoid_: onboarding, hồ sơ kế hoạch, dự án
+Vì sao: "onboarding" để nguyên thì màn lẫn tiếng; "hồ sơ" là tên trang riêng đã
+bỏ; "dự án" gợi một thứ có ngân sách và nghiệm thu, kế hoạch này thì không.
+
+**Bước**: một việc trong kế hoạch 30 ngày, luôn thuộc một bộ phận, có hạn, có thể
+chưa giao cho ai. Được chép từ khuôn lúc tạo kế hoạch, sửa trên kế hoạch không
+đổi khuôn. Chốt 2026-09-22.
+_Avoid_: task, việc cần làm, nhiệm vụ
+Vì sao: "việc cần làm" là một loại hoạt động khác đã có trên dòng thời gian —
+hai chữ cho hai thứ khác nhau thì người đọc nhầm ngay.
+
+**Người cầm trịch**: một người duy nhất chịu trách nhiệm cả kế hoạch 30 ngày của
+một đối tác, điều phối nhiều bộ phận. Chốt 2026-09-22.
+_Avoid_: phụ trách, owner, chủ kế hoạch
+Vì sao: thoả thuận dùng "phụ trách" cho người sở hữu một thương vụ; người cầm
+trịch không sở hữu việc của bộ phận nào, họ giữ nhịp cho mọi bộ phận — hai vai
+khác nhau nên hai chữ khác nhau (quyết tại Cổng Phạm vi 2026-09-22).
+
+**Người được giao**: người phải làm một bước của kế hoạch 30 ngày; một bước có
+thể chưa giao cho ai. Mỗi bước một người, còn kế hoạch có một người cầm trịch.
+Chốt 2026-09-22.
+_Avoid_: assignee, người phụ trách bước
+Vì sao: một kế hoạch có nhiều người được giao nhưng chỉ một người cầm trịch;
+dùng "phụ trách" cho bước là trùng chữ với người sở hữu thoả thuận.
+
+**Chuyển việc 30 ngày**: thao tác của quản trị ở màn Thành viên, chuyển mọi kế
+hoạch đang chạy mà một người cầm trịch và mọi bước chưa xong đang giao cho họ
+sang một người khác, mỗi dòng đổi để lại một vết. Chốt 2026-09-22.
+_Avoid_: transfer, bàn giao tài khoản
+Vì sao: thao tác không đụng công ty, cá nhân hay thoả thuận của người đó — gọi
+là "bàn giao tài khoản" thì người dùng tưởng nó chuyển hết.
+
+**Kế hoạch im**: kế hoạch 30 ngày đang chạy mà không bước nào đổi trong số ngày
+đã khai ở ngưỡng im (đếm như cột ngày im của danh mục). Chốt 2026-09-22.
+_Avoid_: kế hoạch treo, kế hoạch chết
+Vì sao: "treo" và "chết" nói kế hoạch hỏng; im chỉ nói chưa ai động tay — việc
+của người cầm trịch là làm nó động lại.
+
+**Mốc ngày**: ngày thứ 7, 14 và 30 của một kế hoạch 30 ngày, lúc người cầm trịch
+được nhắc kiểm tiến độ. Chốt 2026-09-22.
+_Avoid_: milestone, cột mốc
+Vì sao: "cột mốc" dễ lẫn với bậc của một cá nhân đã ghi danh.
+
+**Theo dõi (kế hoạch)**: một người tự chọn nhận nhắc về một kế hoạch 30 ngày mà
+họ không cầm trịch; bấm lần nữa để bỏ. Người theo dõi nhận nhắc kế hoạch im và
+mốc ngày, không nhận nhắc từng bước. Chốt 2026-09-22.
+_Avoid_: follow, đăng ký
+Vì sao: "đăng ký" nghe như ghi danh vào phễu; theo dõi không đổi ai làm gì.
+
+**Nhắc buổi sáng**: một tin Slack riêng mỗi sáng lúc giờ đã khai, gom mọi bước quá
+hạn, bước sắp hạn, kế hoạch im và mốc ngày của một người; ngày không có gì thì
+không gửi. Chốt 2026-09-22.
+_Avoid_: thông báo, notification
+Vì sao: kho không có bảng thông báo; gọi là thông báo thì người dùng đi tìm
+chuông trong app.
+
+**Gợi ý**: câu hướng xử lý đi kèm một nhắc kế hoạch im — «Giao bước X», «Bước X
+quá hạn N ngày», «Bước kế: X». Chốt 2026-09-22.
+_Avoid_: việc cần làm, hành động
+Vì sao: "việc cần làm" đã là một loại hoạt động trên dòng thời gian.
+
+**Ghi danh**: một cá nhân của công ty đối tác được đưa vào phễu của kế hoạch 30
+ngày để theo dõi bốn bậc. Chốt 2026-09-22.
+_Avoid_: enrollment, thành viên kế hoạch
+Vì sao: người được ghi danh không làm việc trong kế hoạch — họ là người được
+kéo vào guồng.
+
+**Bậc**: một trong bốn mốc của một cá nhân đã ghi danh — có tài khoản, xong khoá
+học, hoạt động, giao dịch đầu. Lưu bằng ngày đạt, không bằng đúng/sai. Chốt
+2026-09-22.
+_Avoid_: giai đoạn, trạng thái
+Vì sao: "giai đoạn" đã là chữ của thoả thuận; bậc đi theo người, không theo
+thoả thuận.
+
 **Tác nhân**: một việc tự động do người dùng dựng ra trong CRM, chạy theo mốc
 kích hoạt hoặc chạy tay. Trên màn hình đang hiện dưới `Agents`. Chốt 2026-09-06.
 _Avoid_: bot, trợ lý, agent
@@ -167,6 +245,35 @@ kho gốc; OneHub không bán gì cho đối tác.
 đứng một mình vì màn đã nói nó đếm thoả thuận.
 _Avoid_: pipeline, đường ống, cơ hội đang chạy
 Vì sao: đây là trạng thái của quan hệ, không phải một khối hàng đang chảy.
+
+**Trường**: một ô dữ liệu trên bản ghi, gồm trường chuẩn của hệ thống và trường
+người quản trị tự tạo thêm. Người quản trị xem và sửa chúng ở Cài đặt › Trường.
+Chốt 2026-09-18.
+_Avoid_: thuộc tính, property, custom field, trường tuỳ chỉnh
+Vì sao: màn Cài đặt hiện CẢ trường chuẩn lẫn trường tự tạo, nên thêm chữ "tự
+tạo" vào nhãn là nói hẹp hơn thứ người thấy; ba từ còn lại là tiếng của nhà khác,
+hoặc nửa Việt nửa Anh.
+
+**Bộ phận**: một đơn vị trong OneHub nhận việc của kế hoạch 30 ngày đầu — mỗi
+bước của kế hoạch giao cho đúng một bộ phận. Người quản trị quản danh sách ở Cài
+đặt › Điều phối 30 ngày. Hôm nay danh sách phẳng; cấp phòng ban thuộc bộ phận đang
+chờ ở ô `cau-truc-to-chuc`. Chốt 2026-09-22.
+_Avoid_: phòng ban (chưa có cấp này), team, nhóm
+Vì sao: «phòng ban» sẽ là tên của cấp con khi ô `cau-truc-to-chuc` được làm; dùng
+nó bây giờ cho danh sách phẳng là đặt sẵn một nghĩa sai.
+
+**Khuôn kế hoạch**: bộ bước mẫu cho một loại đối tác — mỗi bước có nhãn, bộ phận
+nhận và ngày thứ mấy. Tạo kế hoạch từ khuôn là chép các bước đó vào kế hoạch; sửa
+khuôn sau đó không đổi kế hoạch đã tạo. Chốt 2026-09-22.
+_Avoid_: template, mẫu kế hoạch, quy trình
+Vì sao: «quy trình» gợi một thứ sống, đổi là mọi kế hoạch đổi theo — khuôn thì chỉ
+dùng lúc tạo.
+
+**Lưu trữ**: cất một bản ghi khỏi danh sách đang dùng mà không xoá; khôi phục được
+từ mục «Đã lưu trữ». Xoá vĩnh viễn là bước riêng, sau lưu trữ. Chốt 2026-09-22.
+_Avoid_: xoá (khi ý là lưu trữ), ẩn, archive
+Vì sao: nút ghi «Xoá» mà dữ liệu còn nguyên là nói dối người bấm; «ẩn» gợi thứ vẫn
+có trong danh sách chỉ không hiện.
 
 **Số chứng chỉ**: **KHÔNG CÓ TRONG SẢN PHẨM.** Sàn chỉ gắn huy hiệu có hoặc
 không cho chứng chỉ hành nghề môi giới, không lộ mã số nào. CRM ghi trường

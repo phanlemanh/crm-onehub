@@ -43,10 +43,24 @@ here, what do we sell.
 
 - **The id is a constant, never a parameter.** A function taking an `organizationId`
   has turned the plugin into tenancy plumbing.
-- **Signing in is the join; no invite flow.** `ensureWorkspaceMembership` runs in
-  `databaseHooks.session.create.before` and **degrades, never throws** — a throw fails
-  the session create and locks everyone out. The plugin's `invitation` table is unused.
+- **An allow list decides who joins, and it lives in the `invitation` table.** A row
+  means *this address may sign in, with this role, allowed by this person*. Three
+  statuses: `pending` (allowed, no account yet) · `accepted` (signed in) · `cancelled`
+  (withdrawn — the row stays, so who allowed whom is still readable).
+  `expiresAt` is not nullable and there is no expiry yet, so it takes
+  `ALLOWANCE_WITHOUT_EXPIRY`.
+- **`ensureWorkspaceMembership` runs in `databaseHooks.session.create.before` and
+  degrades, never throws** — a throw fails the session create and locks everyone out.
+  It **keeps** an existing member untouched, and creates one only when the address is
+  still allowed, with the role the allowance names. That is what makes the remove
+  button tell the truth: without it, anyone removed walks straight back in at the next
+  sign-in. It takes the read path as a parameter so a test can inject a throwing one —
+  `db` is a proxy, so `spyOn` cannot reach it.
+- **Removing a member is one transaction**: the member row goes and the allowance
+  moves to `cancelled` together.
 - **First account is owner**, and the hook enrols pre-existing users, oldest first.
+  That migration branch still names the first user owner regardless of the role an
+  allowance gave them — a narrow case the contract does not cover yet.
 - **Permissions come from `@crm/auth`** — `canRenameWorkspace`, `canChangeRole`,
   `canConfigureSso`, `canManageCurrency` — enforced by the service *and* used to
   disable the UI control, so the button and the 403 cannot disagree.
@@ -121,8 +135,9 @@ self-hoster's admin cannot redeploy.
   walls only an account whose sign-in rows are *all* mailbox providers — Google,
   Microsoft, or both — and none of them granted. `mailboxGrantsNeeded` returns which,
   so `/grant-access` offers the button they can actually use.
-- `ALLOWED_SIGN_IN` still decides who gets an account, in
-  `databaseHooks.user.create.before`, for SSO sign-ups too.
+- `databaseHooks.user.create.before` decides who gets an account, for SSO sign-ups
+  too. It reads the allow list; `ALLOWED_SIGN_IN` is only the seed, and it has a say
+  only when the table is empty **and** nobody has ever signed in.
 - `organizationProvisioning: { disabled: true }` — `ensureWorkspaceMembership` already
   does the join.
 
@@ -140,6 +155,36 @@ self-hoster's admin cannot redeploy.
   regenerate it** — the generator needs GLIBC 2.39, newer than Vercel's build image.
   Only `check-types` and `dev` run it. If the app cannot see a new procedure, it has
   not run.
+
+### Internal ingest endpoints are the one documented exception
+
+Two REST controllers accept data, and both are deliberate:
+
+| Endpoint | Sends | Secret |
+|---|---|---|
+| `POST /internal/listings/ingest` | the nhatot scraper | `LISTING_INGEST_SECRET` |
+| `POST /internal/onboarding/ingest` | the OneHub platform | `ONEHUB_PLATFORM_INGEST_SECRET` |
+
+They are REST rather than tRPC because the sender is a **machine outside this
+repo** that has no tRPC client and no session — the heading above is about the
+app's own data surface, not about machine-to-machine intake. Four rules keep
+them from becoming a second, undisciplined API:
+
+- `@AllowAnonymous()` plus a `Bearer <secret>` header. `AuthMiddleware` proves a
+  session exists and there is no session here.
+- **The secret is optional and its absence never throws.** Unset → `503` and
+  every other route keeps working. A self-hoster who has not wired the platform
+  loses one capability, not the module.
+- **Parse at the boundary, reject the whole batch.** The body goes through a Zod
+  schema in `packages/validation`; one bad item fails the batch. Half a batch
+  landing is a state nobody can reason about afterwards.
+- **No identity guessing.** The onboarding endpoint matches a `Cá nhân` only by
+  an exact platform id held in a designated custom field. No match writes an
+  `AgentTask` row and lets the agent decide — the same rule as
+  "Intelligence never lives in the API" above.
+
+Adding a third one is a decision, not a pattern to copy freely: it needs its own
+secret, its own schema, and a row in the table above.
 
 ## The OpenAPI document is built at runtime, not committed
 

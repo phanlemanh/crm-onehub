@@ -1,14 +1,25 @@
 import {
+	ALLOWANCE_WITHOUT_EXPIRY,
+	appUrl,
 	canChangeRole,
+	canIssuePasswordLink,
 	canRenameWorkspace,
+	decideSignInFromDb,
+	ducChia,
 	ensureWorkspaceMembership,
+	isWorkspaceAdmin,
 	isWorkspaceRole,
+	normalizeEmail,
 	WORKSPACE_ID,
 	type WorkspaceRole,
 	workspaceRoleOf,
 } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { isOnboarded, markOnboarded, workspaceSlug } from "@crm/db/workspace";
+import {
+	docTrangThai,
+	TRANG_THAI_HUY,
+} from "@crm/validation/invitation-status";
 import {
 	BadRequestException,
 	ForbiddenException,
@@ -28,7 +39,12 @@ import {
 	resolveOrderBy,
 } from "../trpc/list-input";
 import type {
+	Allowance,
+	AllowEmailInput,
+	IssuePasswordLinkInput,
 	MemberListInput,
+	RemoveMemberInput,
+	RevokeAllowanceInput,
 	SetMemberRoleInput,
 	UpdateWorkspaceInput,
 	Workspace,
@@ -44,6 +60,19 @@ const MEMBER_SELECT = {
 } as const;
 
 type MemberRow = Prisma.MemberGetPayload<{ select: typeof MEMBER_SELECT }>;
+
+const ALLOWANCE_SELECT = {
+	id: true,
+	email: true,
+	role: true,
+	status: true,
+	createdAt: true,
+	user: { select: { name: true } },
+} as const;
+
+type AllowanceRow = Prisma.InvitationGetPayload<{
+	select: typeof ALLOWANCE_SELECT;
+}>;
 
 const SORTABLE: OrderByColumns<Prisma.MemberOrderByWithRelationInput> = {
 	name: (dir) => ({ user: { name: dir } }),
@@ -90,6 +119,8 @@ export class WorkspaceService {
 			viewerRole: role,
 			canRename: canRenameWorkspace(role),
 			canChangeRoles: canChangeRole(role),
+			canManageMembers: isWorkspaceAdmin(role),
+			canIssuePasswordLink: canIssuePasswordLink(role),
 		};
 	}
 
@@ -165,8 +196,15 @@ export class WorkspaceService {
 			}),
 		]);
 
+		const xemDuocVet = isWorkspaceAdmin(await workspaceRoleOf(userId));
+		const vet = xemDuocVet
+			? await this.vetMoiNhat(rows.map((row) => row.user.email))
+			: new Map<string, { issuedAt: Date; issuedByName: string }>();
+
 		return {
-			rows: rows.map((row) => this.toMember(row, userId)),
+			rows: rows.map((row) =>
+				this.toMember(row, userId, vet.get(row.user.email)),
+			),
 			total,
 			facetCounts: { role: countsByKey(roles, "role") },
 		};
@@ -222,10 +260,291 @@ export class WorkspaceService {
 			role: input.role,
 		});
 
-		return this.toMember(updated, userId);
+		const vet = await this.vetMoiNhat([updated.user.email]);
+
+		return this.toMember(updated, userId, vet.get(updated.user.email));
 	}
 
-	private toMember(row: MemberRow, userId: string): WorkspaceMember {
+	async allowances(userId: string): Promise<{ rows: Allowance[] }> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!isWorkspaceAdmin(role)) {
+			throw new ForbiddenException(
+				"Only an owner or an admin can see who is allowed in.",
+			);
+		}
+
+		const rows = await this.db.invitation.findMany({
+			where: { organizationId: WORKSPACE_ID },
+			select: ALLOWANCE_SELECT,
+			orderBy: [{ createdAt: "desc" }],
+		});
+
+		const vet = await this.vetMoiNhat(rows.map((row) => row.email));
+
+		return {
+			rows: rows.map((row) => this.toAllowance(row, vet.get(row.email))),
+		};
+	}
+
+	async allowEmail(userId: string, input: AllowEmailInput): Promise<Allowance> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!isWorkspaceAdmin(role)) {
+			throw new ForbiddenException(
+				"Only an owner or an admin can allow an address.",
+			);
+		}
+
+		const email = normalizeEmail(input.email);
+
+		if (!email) {
+			throw new BadRequestException(
+				"That is not an email address. Enter one like name@company.com.",
+			);
+		}
+
+		const live = await this.db.invitation.findFirst({
+			where: {
+				organizationId: WORKSPACE_ID,
+				email,
+				status: { in: ["pending", "accepted"] },
+			},
+			select: { id: true },
+		});
+
+		if (live) {
+			throw new BadRequestException("That address is already on the list.");
+		}
+
+		const created = await this.db.invitation.create({
+			data: {
+				id: crypto.randomUUID(),
+				organizationId: WORKSPACE_ID,
+				email,
+				role: input.role,
+				status: "pending",
+				expiresAt: ALLOWANCE_WITHOUT_EXPIRY,
+				inviterId: userId,
+			},
+			select: ALLOWANCE_SELECT,
+		});
+
+		this.logger.log({ message: "Address allowed", userId, email });
+
+		return this.toAllowance(created);
+	}
+
+	async issuePasswordLink(
+		userId: string,
+		input: IssuePasswordLinkInput,
+		quyen: (role: WorkspaceRole | null) => boolean = canIssuePasswordLink,
+	): Promise<{ url: string; expiresAt: string }> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!quyen(role)) {
+			throw new ForbiddenException(
+				"Chỉ chủ và quản trị phát được liên kết đặt mật khẩu.",
+			);
+		}
+
+		const email = normalizeEmail(input.email);
+
+		if (!email) {
+			throw new BadRequestException(
+				"Đó không phải địa chỉ email. Nhập dạng ten@congty.com.",
+			);
+		}
+
+		const nguoi = await this.db.user.findUnique({ where: { email } });
+
+		const laThanhVien = nguoi
+			? (await workspaceRoleOf(nguoi.id)) !== null
+			: false;
+
+		if (!laThanhVien) {
+			const duocVao = await decideSignInFromDb(email);
+
+			if (!duocVao.allowed) {
+				throw new BadRequestException(
+					"Địa chỉ này không nằm trong danh sách được vào.",
+				);
+			}
+		}
+
+		const nhan = nguoi ?? (await this.taoNguoiDaDuocVao(email));
+
+		const nguoiPhat = await this.db.user.findUniqueOrThrow({
+			where: { id: userId },
+			select: { name: true },
+		});
+
+		const chia = await this.db.$transaction(async (tx) => {
+			const duc = await ducChia({ userId: nhan.id, appUrl, kho: tx });
+
+			await tx.passwordLinkIssue.create({
+				data: {
+					id: crypto.randomUUID(),
+					email,
+					issuedById: userId,
+					issuedByName: nguoiPhat.name,
+				},
+			});
+
+			return duc;
+		});
+
+		this.logger.log({ message: "Password link issued", userId, email });
+
+		return { url: chia.url, expiresAt: chia.expiresAt.toISOString() };
+	}
+
+	private async taoNguoiDaDuocVao(email: string) {
+		return this.db.user.create({
+			data: {
+				id: crypto.randomUUID(),
+				email,
+				name: email.split("@")[0] ?? email,
+				emailVerified: true,
+			},
+		});
+	}
+
+	async revokeAllowance(
+		userId: string,
+		input: RevokeAllowanceInput,
+	): Promise<Allowance> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!isWorkspaceAdmin(role)) {
+			throw new ForbiddenException(
+				"Only an owner or an admin can withdraw an allowance.",
+			);
+		}
+
+		const target = await this.db.invitation.findFirst({
+			where: { id: input.allowanceId, organizationId: WORKSPACE_ID },
+			select: { id: true },
+		});
+
+		if (!target) {
+			throw new NotFoundException("That allowance is not on the list.");
+		}
+
+		const updated = await this.db.invitation.update({
+			where: { id: target.id },
+			data: { status: TRANG_THAI_HUY },
+			select: ALLOWANCE_SELECT,
+		});
+
+		this.logger.log({
+			message: "Allowance withdrawn",
+			userId,
+			allowanceId: target.id,
+		});
+
+		return this.toAllowance(updated);
+	}
+
+	async removeMember(
+		userId: string,
+		input: RemoveMemberInput,
+	): Promise<{ memberId: string }> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!isWorkspaceAdmin(role)) {
+			throw new ForbiddenException(
+				"Only an owner or an admin can remove a member.",
+			);
+		}
+
+		await this.db.$transaction(async (tx) => {
+			const target = await tx.member.findFirst({
+				where: { id: input.memberId, organizationId: WORKSPACE_ID },
+				select: {
+					id: true,
+					role: true,
+					userId: true,
+					user: { select: { email: true } },
+				},
+			});
+
+			if (!target) {
+				throw new NotFoundException("That person is not in this workspace.");
+			}
+
+			if (target.role === "owner") {
+				const owners = await tx.$queryRaw<{ id: string }[]>`
+					SELECT id FROM "member"
+					WHERE "organizationId" = ${WORKSPACE_ID} AND role = 'owner'
+					FOR UPDATE
+				`;
+
+				if (owners.length <= 1) {
+					throw new ForbiddenException(
+						"The workspace needs an owner. Make someone else an owner first.",
+					);
+				}
+			}
+
+			await tx.member.delete({ where: { id: target.id } });
+
+			await tx.session.deleteMany({ where: { userId: target.userId } });
+
+			const email = normalizeEmail(target.user.email);
+
+			if (email) {
+				await tx.invitation.updateMany({
+					where: {
+						organizationId: WORKSPACE_ID,
+						email,
+						status: { in: ["pending", "accepted"] },
+					},
+					data: { status: TRANG_THAI_HUY },
+				});
+			}
+		});
+
+		this.logger.log({
+			message: "Member removed",
+			userId,
+			memberId: input.memberId,
+		});
+
+		return { memberId: input.memberId };
+	}
+
+	private toAllowance(
+		row: AllowanceRow,
+		vet?: { issuedAt: Date; issuedByName: string },
+	): Allowance {
+		const doc = docTrangThai(row.status);
+
+		if (doc.loi) {
+			this.logger.warn({
+				message: "Invitation status unreadable",
+				allowanceId: row.id,
+				status: row.status,
+			});
+		}
+
+		return {
+			id: row.id,
+			email: row.email,
+			role: toRole(row.role ?? "member"),
+			status: doc.trangThai,
+			invitedByName: row.user?.name ?? null,
+			createdAt: row.createdAt.toISOString(),
+			passwordLinkIssuedAt: vet?.issuedAt.toISOString() ?? null,
+			passwordLinkIssuedByName: vet?.issuedByName ?? null,
+		};
+	}
+
+	private toMember(
+		row: MemberRow,
+		userId: string,
+		vet?: { issuedAt: Date; issuedByName: string },
+	): WorkspaceMember {
 		return {
 			id: row.id,
 			userId: row.userId,
@@ -235,7 +554,24 @@ export class WorkspaceService {
 			role: toRole(row.role),
 			joinedAt: row.createdAt.toISOString(),
 			isViewer: row.userId === userId,
+			passwordLinkIssuedAt: vet?.issuedAt.toISOString() ?? null,
+			passwordLinkIssuedByName: vet?.issuedByName ?? null,
 		};
+	}
+
+	private async vetMoiNhat(
+		emails: string[],
+	): Promise<Map<string, { issuedAt: Date; issuedByName: string }>> {
+		if (emails.length === 0) return new Map();
+
+		const vet = await this.db.passwordLinkIssue.findMany({
+			where: { email: { in: emails } },
+			orderBy: { issuedAt: "desc" },
+		});
+
+		const moiNhat = new Map<string, (typeof vet)[number]>();
+		for (const v of vet) if (!moiNhat.has(v.email)) moiNhat.set(v.email, v);
+		return moiNhat;
 	}
 
 	private searchWhere(q: string): Prisma.MemberWhereInput {

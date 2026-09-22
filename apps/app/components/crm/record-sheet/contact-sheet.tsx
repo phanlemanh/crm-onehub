@@ -16,6 +16,7 @@ import {
 	EntityLogo,
 	type EntityLogoTone,
 } from "@crm/ui/components/entity-logo";
+import { ForeignText } from "@crm/ui/components/foreign-text";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
@@ -64,6 +65,7 @@ import { hasContactLinks } from "@/lib/social-links";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { ContactPlans } from "./contact-plans";
 import { RecordActions } from "./record-actions";
 import { DealAmount, MetaLine, RecordSheetFrame } from "./record-parts";
 import { useOpenRecord, useRecordSheetView } from "./record-stack";
@@ -155,7 +157,9 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 			title={contact ? contactName(contact) : m.contact.fallbackTitle}
 			description={
 				contact ? (
-					<MetaLine parts={[contact.title, contact.company?.name]} />
+					<MetaLine
+						parts={[{ text: contact.title }, { text: contact.company?.name }]}
+					/>
 				) : undefined
 			}
 			note={
@@ -433,6 +437,8 @@ function ContactOverview({ contact }: { contact: Contact }) {
 				</DetailSheetProperties>
 			</DetailSheetSection>
 
+			<ContactPlans contactId={contact.id} />
+
 			{contact.brief ? <Background brief={contact.brief} /> : null}
 
 			<WeKnowThem
@@ -484,7 +490,9 @@ function Background({ brief }: { brief: NonNullable<Contact["brief"]> }) {
 				</span>
 			}
 		>
-			<DetailSheetProse>{brief.narrative}</DetailSheetProse>
+			<DetailSheetProse>
+				<ForeignText lang="en">{brief.narrative}</ForeignText>
+			</DetailSheetProse>
 
 			<DetailSheetProperties>
 				{lines.map((line) => (

@@ -1,8 +1,10 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
-import { isAbsolute, join } from "node:path";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { basename, isAbsolute, join } from "node:path";
 import { giuViet } from "./khoa-cay.mjs";
 import { GOC } from "./lat.mjs";
+import { BIEN_TEP_THAY } from "./tep-thay.mjs";
 
 export function chanChung(dotMot, khai) {
 	const o = (t) => `${dotMot}/${t}`;
@@ -27,7 +29,7 @@ export function sach() {
 	});
 }
 
-export function chay(HERE, chan) {
+export function chay(HERE, chan, env = process.env) {
 	const dau = isAbsolute(chan.lenh[0])
 		? chan.lenh[0]
 		: join(HERE, chan.lenh[0]);
@@ -36,6 +38,7 @@ export function chay(HERE, chan) {
 			cwd: GOC,
 			encoding: "utf8",
 			stdio: ["ignore", "pipe", "pipe"],
+			env,
 		});
 		return 0;
 	} catch (e) {
@@ -43,8 +46,8 @@ export function chay(HERE, chan) {
 	}
 }
 
-export function chayHet(HERE, bo) {
-	return bo.map((c) => ({ chan: c.ten, ma: chay(HERE, c) }));
+export function chayHet(HERE, bo, env = process.env) {
+	return bo.map((c) => ({ chan: c.ten, ma: chay(HERE, c, env) }));
 }
 
 export async function chayDotBien({ HERE, CHAN, VET }) {
@@ -95,17 +98,31 @@ export async function chayDotBien({ HERE, CHAN, VET }) {
 			v.chan === undefined ? CHAN : CHAN.filter((c) => v.chan.includes(c.ten));
 
 		let ket;
-		try {
-			writeFileSync(duong, sau);
-			if (v.cho_ms !== undefined) {
-				console.log(
-					`   (cho ${v.cho_ms}ms cho may chu nap lai truoc khi do — vet nay nam trong ma may chu chay)`,
-				);
-				execFileSync("sleep", [String(v.cho_ms / 1000)]);
+		if (v.file.split("/")[0] === "_acceptance") {
+			const tam = mkdtempSync(join(tmpdir(), "dot-bien-ho-so-"));
+			try {
+				const banSao = join(tam, basename(v.file));
+				writeFileSync(banSao, sau);
+				ket = chayHet(HERE, bo, {
+					...process.env,
+					[BIEN_TEP_THAY]: JSON.stringify({ [v.file]: banSao }),
+				});
+			} finally {
+				rmSync(tam, { recursive: true, force: true });
 			}
-			ket = chayHet(HERE, bo);
-		} finally {
-			writeFileSync(duong, truoc);
+		} else {
+			try {
+				writeFileSync(duong, sau);
+				if (v.cho_ms !== undefined) {
+					console.log(
+						`   (cho ${v.cho_ms}ms cho may chu nap lai truoc khi do — vet nay nam trong ma may chu chay)`,
+					);
+					execFileSync("sleep", [String(v.cho_ms / 1000)]);
+				}
+				ket = chayHet(HERE, bo);
+			} finally {
+				writeFileSync(duong, truoc);
+			}
 		}
 
 		const doDuoc = ket

@@ -9,6 +9,7 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
+import { luotCua } from "../../chan-lai-component-ra-man/rang/luot-chay.mjs";
 
 const GOC = join(import.meta.dirname, "..", "..", "..");
 const SPEC = "packages/ui/test/lai-ra-man.spec.tsx";
@@ -28,6 +29,11 @@ function nodeModules(goc) {
 	};
 	di("", 0);
 	return ra;
+}
+
+function donBanSao(d) {
+	rmSync(luotCua(d), { recursive: true, force: true });
+	rmSync(d, { recursive: true, force: true });
 }
 
 function banSao() {
@@ -51,16 +57,20 @@ function chay(cwd, lenh, them = {}) {
 	return { ma: r.status ?? 1, ra: `${r.stdout ?? ""}${r.stderr ?? ""}` };
 }
 
+function taoPham(d, ten) {
+	return join(luotCua(d), ten);
+}
+
 function ve(d) {
+	rmSync(taoPham(d, "ve-that.json"), { force: true });
 	return chay(
 		join(d, "packages/ui"),
 		'bun test --preload ./test/setup-dom.ts test/lai-ra-man.spec.tsx -t "lai tung component ra man"',
-		{ TLR_CHO_TAM: join(d, ".tam") },
 	);
 }
 
 function docVe(d) {
-	const p = join(d, ".tam", "ve-that.json");
+	const p = taoPham(d, "ve-that.json");
 	return existsSync(p) ? JSON.parse(readFileSync(p, "utf8")) : null;
 }
 
@@ -155,7 +165,7 @@ function caMotNguon() {
 			suaTep(
 				d,
 				SPEC,
-				"const macDinh = docMacDinh(GOC_KHO) as { file: string }[];",
+				"const macDinh = MOI_MAC_DINH.docMacDinh(GOC_KHO);",
 				'const macDinh = JSON.parse(readFileSync(join(HO_SO, "evidence", "mac-dinh.json"), "utf8")) as { file: string }[];',
 			);
 			xoaMotComponent(d);
@@ -164,16 +174,17 @@ function caMotNguon() {
 		const do_ = kiemMotNguon(d);
 		return { ma: ketCa("MOT-NGUON", duong, do_), ra: "" };
 	} finally {
-		rmSync(d, { recursive: true, force: true });
+		donBanSao(d);
 	}
 }
 
 function phanNhomTrong(d) {
-	return chay(d, `node ${CHAM} phan-nhom`, { TLR_CHO_TAM: join(d, ".tam") });
+	rmSync(taoPham(d, "phan-nhom.json"), { force: true });
+	return chay(d, `node ${CHAM} phan-nhom`);
 }
 
 function docPhanNhom(d) {
-	const p = join(d, ".tam", "phan-nhom.json");
+	const p = taoPham(d, "phan-nhom.json");
 	return existsSync(p) ? JSON.parse(readFileSync(p, "utf8")) : null;
 }
 
@@ -225,7 +236,7 @@ function caHongMotChieu() {
 		const do_ = kiemHongMotChieu(d);
 		return { ma: ketCa("HONG-MOT-CHIEU", duong, do_), ra: "" };
 	} finally {
-		rmSync(d, { recursive: true, force: true });
+		donBanSao(d);
 	}
 }
 
@@ -240,7 +251,7 @@ function caBoVeChet() {
 		const do_ = phanNhomTrong(d);
 		return { ma: ketCa("BO-VE-CHET", duong, do_), ra: "" };
 	} finally {
-		rmSync(d, { recursive: true, force: true });
+		donBanSao(d);
 	}
 }
 
@@ -265,7 +276,7 @@ function caDemDu() {
 		const do_ = ve(d);
 		return { ma: ketCa("DEM-DU", duong, do_), ra: "" };
 	} finally {
-		rmSync(d, { recursive: true, force: true });
+		donBanSao(d);
 	}
 }
 
@@ -292,9 +303,9 @@ function caKhongBanCay() {
 		if (VO_HIEU !== "khong-ban-cay")
 			suaTep(
 				d,
-				SPEC,
-				": process.env.TLR_CHO_TAM ||",
-				': join(HO_SO, "evidence") ||',
+				"_acceptance/chan-lai-component-ra-man/rang/luot-chay.mjs",
+				"export const LUOT = luotCua(GOC);",
+				'export const LUOT = join(GOC, "_acceptance", "chan-lai-component-ra-man", "evidence");',
 			);
 		ve(d);
 		const ban = banChung(d);
@@ -304,7 +315,7 @@ function caKhongBanCay() {
 		};
 		return { ma: ketCa("KHONG-BAN-CAY", duong, do_), ra: "" };
 	} finally {
-		rmSync(d, { recursive: true, force: true });
+		donBanSao(d);
 	}
 }
 
@@ -323,7 +334,7 @@ function docLenhCong(d) {
 }
 
 function lenhCong(d) {
-	const r = chay(d, docLenhCong(d), { TLR_CHO_TAM: join(d, ".tam") });
+	const r = chay(d, docLenhCong(d));
 	return {
 		ma: r.ma,
 		ra: r.ma === 0 ? r.ra : `QUA-CONG: lenh cong thoat ${r.ma}\n${r.ra.slice(-600)}`,
@@ -340,7 +351,7 @@ function caQuaLenhCong() {
 		const do_ = lenhCong(d);
 		return { ma: ketCa("QUA-CONG", duong, do_), ra: "" };
 	} finally {
-		rmSync(d, { recursive: true, force: true });
+		donBanSao(d);
 	}
 }
 

@@ -9,9 +9,9 @@ import * as z from "zod";
 import {
 	canManageConnections,
 	WORKSPACE_ID,
-	WORKSPACE_ROLES,
 	workspaceRoleOf,
 } from "./organization";
+import { WORKSPACE_ROLES } from "./roles";
 import { SLACK_PROVIDER_ID } from "./scopes";
 
 const CONNECT_MANAGER_ROLES = WORKSPACE_ROLES.filter((role) =>
@@ -24,10 +24,16 @@ const OAUTH_CALLBACK_PATH = "/oauth2/callback";
 const connectStartBody = z.object({ providerId: z.string() });
 const callbackParams = z.object({ providerId: z.string() });
 
+export type CtxTruoc = Parameters<typeof getSessionFromCtx>[0];
+
 export const slackConnectGuard = createAuthMiddleware(async (ctx) => {
+	await canhSlackConnect(ctx);
+});
+
+export async function canhSlackConnect(ctx: CtxTruoc): Promise<void> {
 	const guarded =
 		startsSlackConnect(ctx.path, ctx.body) ||
-		completesSlackConnect(ctx.path, ctx.params);
+		completesSlackConnect(ctx.path, ctx.params ?? null);
 	if (!guarded) return;
 
 	const session = await getSessionFromCtx(ctx, { disableCookieCache: true });
@@ -60,7 +66,7 @@ export const slackConnectGuard = createAuthMiddleware(async (ctx) => {
 				"Only an owner or an admin can connect Slack. One Slack workspace is shared by everyone here, so ask one of them to connect or reconnect it.",
 		});
 	}
-});
+}
 
 function startsSlackConnect(path: string, body: JsonValue): boolean {
 	if (!SLACK_CONNECT_START_PATHS.includes(path)) return false;

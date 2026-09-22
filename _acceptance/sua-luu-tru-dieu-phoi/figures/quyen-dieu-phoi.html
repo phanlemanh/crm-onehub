@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quyền điều phối · Cây hai nhánh</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1080px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 46rem;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Cây rẽ theo vai trò · sửa, lưu trữ và phân quyền trên Điều phối 30 ngày</p>
+    <h1>Ai được đổi cấu hình điều phối</h1>
+    <p class="sub">Máy chủ và màn đọc cùng một cờ, nên nút khoá và lời từ chối 403 không nói ngược nhau. Việc trên kế hoạch không đòi quyền quản trị.</p>
+
+    <svg viewBox="0 0 1040 632" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="320" y1="280" x2="1000" y2="280" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+
+      <path d="M 240 268 L 272 268 Q 280 268 280 260 L 280 164 Q 280 156 288 156 L 316 156" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 240 292 L 272 292 Q 280 292 280 300 L 280 400 Q 280 408 288 408 L 316 408" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <path d="M 520 144 L 552 144 Q 560 144 560 136 L 560 112 Q 560 104 568 104 L 596 104" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 520 168 L 552 168 Q 560 168 560 176 L 560 200 Q 560 208 568 208 L 596 208" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 520 396 L 552 396 Q 560 396 560 388 L 560 360 Q 560 352 568 352 L 596 352" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M 520 420 L 552 420 Q 560 420 560 428 L 560 456 Q 560 464 568 464 L 596 464" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <rect x="176" y="192" width="96" height="14" rx="2" fill="#fafafa"/>
+      <text x="272" y="203" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">canManage: true</text>
+      <rect x="172" y="352" width="100" height="14" rx="2" fill="#fafafa"/>
+      <text x="272" y="363" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">canManage: false</text>
+
+      <rect x="40" y="236" width="200" height="88" rx="8" fill="#fafafa"/>
+      <rect x="40" y="236" width="200" height="88" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="140" y="268" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Người đã đăng nhập</text>
+      <text x="140" y="288" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">canManageOnboarding(role)</text>
+      <text x="140" y="304" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">máy chủ và màn đọc cùng một cờ</text>
+
+      <rect x="320" y="116" width="200" height="80" rx="8" fill="#fafafa"/>
+      <rect x="320" y="116" width="200" height="80" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="420" y="152" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chủ / Quản trị</text>
+      <text x="420" y="172" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">owner · admin</text>
+
+      <rect x="320" y="368" width="200" height="80" rx="8" fill="#fafafa"/>
+      <rect x="320" y="368" width="200" height="80" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="420" y="404" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Thành viên</text>
+      <text x="420" y="424" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">member</text>
+
+      <rect x="600" y="64" width="400" height="80" rx="6" fill="#fafafa"/>
+      <rect x="600" y="64" width="400" height="80" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="620" y="92" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Đổi cấu hình điều phối</text>
+      <text x="980" y="92" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">AC-9</text>
+      <text x="620" y="112" fill="#575757" font-size="10" font-family="'Geist', sans-serif">bộ phận và khuôn: thêm · sửa · sắp xếp · lưu trữ ·</text>
+      <text x="620" y="128" fill="#575757" font-size="10" font-family="'Geist', sans-serif">khôi phục · xoá vĩnh viễn</text>
+
+      <rect x="600" y="168" width="400" height="80" rx="6" fill="#fafafa"/>
+      <rect x="600" y="168" width="400" height="80" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="620" y="196" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Việc trên kế hoạch</text>
+      <text x="620" y="216" fill="#575757" font-size="10" font-family="'Geist', sans-serif">tạo · đóng · mở lại · thêm môi giới · đánh dấu bậc</text>
+      <text x="620" y="232" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">không đòi quyền quản trị</text>
+
+      <rect x="600" y="304" width="400" height="96" rx="6" fill="#fafafa"/>
+      <rect x="600" y="304" width="400" height="96" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="620" y="332" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Cấu hình: chỉ xem</text>
+      <text x="980" y="332" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">AC-9</text>
+      <text x="620" y="352" fill="#575757" font-size="10" font-family="'Geist', sans-serif">mọi nút đổi cấu hình khoá, kèm dòng</text>
+      <text x="620" y="368" fill="#171717" font-size="10" font-family="'Geist', sans-serif">«Cần quyền quản trị để đổi cấu hình điều phối»</text>
+      <text x="620" y="388" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist Mono', monospace">gọi thẳng máy chủ → 403</text>
+
+      <rect x="600" y="424" width="400" height="80" rx="6" fill="#fafafa"/>
+      <rect x="600" y="424" width="400" height="80" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="620" y="452" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Việc trên kế hoạch</text>
+      <text x="620" y="472" fill="#575757" font-size="10" font-family="'Geist', sans-serif">tạo · đóng · mở lại · thêm môi giới · đánh dấu bậc</text>
+      <text x="620" y="488" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">không đòi quyền quản trị</text>
+
+      <text x="600" y="536" fill="#171717" font-size="12" font-style="italic" font-family="'Lora', serif">[GIẢ ĐỊNH] Thành viên đóng, mở lại được cả kế hoạch của người khác —</text>
+      <text x="600" y="554" fill="#171717" font-size="12" font-style="italic" font-family="'Lora', serif">chưa có luật sở hữu kế hoạch; gạch tại Cổng Phạm vi nếu sai.</text>
+
+      <line x1="40" y1="580" x2="1000" y2="580" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="605" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="140" y="595" width="16" height="12" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="164" y="605" fill="#575757" font-size="9" font-family="'Geist', sans-serif">người và vai trò</text>
+
+      <rect x="272" y="595" width="16" height="12" rx="2" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="296" y="605" fill="#575757" font-size="9" font-family="'Geist', sans-serif">được làm</text>
+
+      <rect x="372" y="595" width="16" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="396" y="605" fill="#575757" font-size="9" font-family="'Geist', sans-serif">bị khoá trên màn và bị máy chủ từ chối</text>
+
+      <text x="600" y="605" fill="#575757" font-size="9" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" fill="#171717">owner · admin · member</tspan> là giá trị vai trò thật, không dịch</text>
+    </svg>
+  </div>
+</body>
+</html>

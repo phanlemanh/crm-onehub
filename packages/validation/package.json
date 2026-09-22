@@ -15,7 +15,12 @@
 		"./eve-tool": "./src/eve-tool.ts",
 		"./field-backfill": "./src/field-backfill.ts",
 		"./field-templates": "./src/field-templates.ts",
+		"./invitation-status": "./src/invitation-status.ts",
 		"./listing-ingest": "./src/listing-ingest.ts",
+		"./nhac-ke-hoach": "./src/nhac-ke-hoach.ts",
+		"./onboarding-activity": "./src/onboarding-activity.ts",
+		"./onboarding-ingest": "./src/onboarding-ingest.ts",
+		"./onboarding-template": "./src/onboarding-template.ts",
 		"./saved-view": "./src/saved-view.ts"
 	},
 	"scripts": {

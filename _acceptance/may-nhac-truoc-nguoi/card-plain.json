@@ -1,0 +1,45 @@
+{
+  "feature_plain": "Mỗi sáng 08:30, ai có việc 30 ngày nhận một tin Slack riêng gom bước quá hạn, bước sắp hạn, kế hoạch im và mốc ngày; thẻ Tasks hiện cùng danh sách cho người không có Slack; ai cũng tự theo dõi được một kế hoạch.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ nhắc đúng người: bước cho người được giao, kế hoạch im và mốc ngày cho người cầm trịch và người theo dõi; bước đã xong, kế hoạch đã đóng, người đã rời xưởng thì không."},
+    {"id": "AC-2", "p": "Sẽ đúng ở biên: sắp hạn trong 3 ngày, im từ 7 ngày, mốc đúng ngày 7 · 14 · 30; gợi ý đi kèm nhắc im theo luật cố định."},
+    {"id": "AC-3", "p": "Sẽ tính mọi «ngày» theo giờ Việt Nam, kể cả lúc nửa đêm."},
+    {"id": "AC-5", "p": "Sẽ gửi một tin Slack riêng: quá hạn trước, sắp hạn sau, mỗi dòng mở đúng kế hoạch, tối đa 10 dòng; thiếu địa chỉ app thì vẫn gửi, chỉ không có liên kết."},
+    {"id": "AC-7", "p": "Sẽ cho bật và tắt theo dõi, mỗi lần đổi ghi một vết; bấm bật hai lần không đẻ bản ghi thứ hai."},
+    {"id": "AC-8", "p": "Sẽ đưa kế hoạch im và mốc ngày vào tổng quan của người cầm trịch và người theo dõi, không của người khác."},
+    {"id": "AC-9", "p": "Sẽ hiện hai loại dòng mới trong thẻ Tasks, không ô tích, bấm mở đúng kế hoạch. (xuyên lớp)"},
+    {"id": "AC-10", "p": "Sẽ có nút «Theo dõi» trên sheet kế hoạch; lỗi thì nút về lại và báo «Không lưu được theo dõi». (xuyên lớp)"},
+    {"id": "AC-11", "p": "Sẽ có câu truy vấn đo số ngày im trung vị và tỷ lệ bước xong đúng hạn sau khi được nhắc — đúng số Cổng Giá trị sẽ đọc."},
+    {"id": "AC-12", "p": "Sẽ có ảnh 1440 và 375 của thẻ Tasks và nút theo dõi, không tràn ngang."}
+  ],
+  "wont_do": [
+    {"id": "AC-4", "p": "Sẽ KHÔNG nhắc trước 08:30 và KHÔNG gửi quá một tin mỗi người mỗi ngày, kể cả khi hai lượt quét chạy chồng nhau."},
+    {"id": "AC-6", "p": "Chặn mọi lời gọi Slack khi xưởng chưa nối, người chưa khớp Slack hay đã hết việc — ghi lý do, không báo lỗi."}
+  ],
+  "scope_plain": "không thư, không leo thang lên quản lý, không nhắc đối tác, không chuông trong app, không tự chọn giờ nhắc, không gắn người theo dõi hộ",
+  "coverage_plain": [
+    {"i": 0, "p": "Bốn loại nhắc — quá hạn, sắp hạn, kế hoạch im, mốc ngày — mỗi loại có tiêu chí riêng (AC-1, AC-2)."},
+    {"i": 1, "p": "Bốn kiểu người nhận, gồm cả người đã rời xưởng không được nhận (AC-1)."},
+    {"i": 2, "p": "Sáu đường tới người: gửi được, xưởng chưa nối, chưa khớp, Slack lỗi (luật thử lại sẵn có), thiếu địa chỉ app, thẻ Tasks (AC-5, AC-6, AC-9)."},
+    {"i": 3, "p": "Năm thời điểm quét: trước giờ, lần đầu, quét lại, ngày mới, quanh nửa đêm (AC-3, AC-4)."},
+    {"i": 4, "p": "Mỗi ô Core của bản quét trỏ tới ít nhất một tiêu chí."},
+    {"i": 5, "p": "Hai giả định chờ anh gạch: OneHub đã nối Slack và phần lớn người được giao khớp Slack; tin Slack riêng là chỗ người bộ phận đọc trong ngày."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Thiếu phép đo cho ca không có địa chỉ app — đã thêm: tin vẫn gửi, không liên kết, không chữ «undefined»."},
+    {"i": 1, "p": "Thước «xong đúng hạn sau nhắc» có thể đếm cả bước không thật sự nằm trong tin — đã sửa: máy ghi đúng các dòng đã gửi và thước đọc tập đó."},
+    {"i": 2, "p": "Hai lượt quét chạy chồng nhau có thể gửi hai tin một sáng — đã thêm khoá duy nhất và ca kiểm chạy song song."},
+    {"i": 3, "p": "«Màu cảnh báo» chưa có trong bảng màu — đã ghim vào chỉ báo đỏ sẵn có của bước quá hạn, không màu mới."},
+    {"i": 4, "p": "Nhắc mốc hứa «3/8 bước xong» mà khuôn dữ liệu không có trường số bước — đã thêm hai trường và phép đo."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260922T102217Z-1", "p": "Chọn một tin tổng hợp lúc 08:30 — đổi lại bước quá hạn giữa ngày chỉ được biết sáng hôm sau."},
+    {"id": "d-20260922T102217Z-2", "p": "Chọn thẻ Tasks hiện cùng danh sách — đổi lại thẻ thêm hai loại dòng."},
+    {"id": "d-20260922T102217Z-3", "p": "Chọn người tự bấm theo dõi — đổi lại không ai được gắn hộ."},
+    {"id": "d-20260922T102217Z-4", "p": "Chọn lưu theo dõi ở bảng riêng — đổi lại lượt này là T3, thêm cổng duyệt kế hoạch thi công."},
+    {"id": "d-20260922T102217Z-5", "p": "Chọn một hàm tính dùng chung cho tin Slack và thẻ Tasks — đổi lại API gọi một truy vấn có ngưỡng."},
+    {"id": "d-20260922T102217Z-6", "p": "KHÔNG làm thư, leo thang, nhắc đối tác, chuông trong app, tự chọn giờ — đổi lại người không muốn nhận chỉ có cách tắt tiếng bot."},
+    {"id": "d-20260922T103311Z-7", "p": "Chọn khoá duy nhất để chống hai tin một sáng — đổi lại migration chạm bảng hàng việc của tác tử."},
+    {"id": "d-20260922T104608Z-8", "p": "Chọn duyệt trên bản mẫu ghép từ component thật — đổi lại tin Slack chỉ có bản xem trước."}
+  ]
+}

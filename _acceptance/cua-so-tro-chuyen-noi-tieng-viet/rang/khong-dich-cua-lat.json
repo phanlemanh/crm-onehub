@@ -27,7 +27,7 @@
 	"vung_du_lieu": {
 		"ghi_chu": "Vung DOM ma chu ben trong la du lieu nguoi nhap hoac noi dung tac nhan sinh — phai Y HET nhau o ca hai luot tieng. Khai bang bo chon; vung khong con doi tuong la thoat ma 2. Chi ap cho NOT VAN BAN, khong ap cho @aria-label: nhan tro nang luon la chu do minh viet, khong bao gio la du lieu nguoi nhap.",
 		"bo_chon": [
-			"[data-slot=\"message-scroller-item\"]",
+			"[data-user-content]",
 			"[data-composer-text]",
 			"[translate=\"no\"]"
 		]

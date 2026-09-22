@@ -1,4 +1,3 @@
-import { workspaceDomains } from "@crm/auth";
 import { ActivityType, type Db, Prisma, RecordSource } from "@crm/db";
 import type { Touch } from "@crm/db/attribution";
 import {
@@ -18,6 +17,7 @@ import {
 	isMachineAddress,
 	splitName,
 } from "../mailbox/participants";
+import { staffEmailDomains } from "../workspace/staff-domains";
 import { TrackingCounterService } from "./tracking-counter.service";
 
 type TouchColumns = Record<string, string | Date | null>;
@@ -79,7 +79,7 @@ export class TrackingFilingService {
 			return this.skip(submission.id, "Not a domain a human reads");
 		}
 
-		if (workspaceDomains().includes(domain)) {
+		if ((await staffEmailDomains(this.db)).includes(domain)) {
 			return this.skip(submission.id, "One of our own addresses");
 		}
 

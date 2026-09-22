@@ -27,17 +27,20 @@ import { Spinner } from "@crm/ui/components/spinner";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { TableCell } from "@crm/ui/components/table";
 import { formatCount, formatMoneyCompact } from "@crm/ui/lib/format";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useQueryState } from "nuqs";
 import type { CSSProperties, ReactNode } from "react";
 import { toast } from "sonner";
 import { DealStageIndicator } from "@/components/crm/deal-stage";
+import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { RecordLink } from "@/components/crm/record-sheet/record-link";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { LocalRelativeTime } from "@/components/local-date-time";
 import { activityLabel } from "@/lib/activity-presentation";
 import { dealStageColor } from "@/lib/deal-stage";
+import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
+import { nhacMessages } from "@/lib/messages/nhac";
 import {
 	type TongQuanMessages,
 	tongQuanMessages,
@@ -46,6 +49,8 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { buocQuaHan, DongBuoc, ngayCuaBuoc } from "./dong-buoc";
+import { DongKeHoach } from "./dong-ke-hoach";
 import { overviewParsers } from "./overview-search-params";
 import { SalesDashboard } from "./sales-dashboard";
 
@@ -129,6 +134,13 @@ export function DashboardSummary() {
 		}),
 	);
 
+	const queryClient = useQueryClient();
+	const xongBuoc = useMutation(
+		trpc.onboarding.setStepDone.mutationOptions({
+			onError: (error) => toast.error(error.message),
+		}),
+	);
+
 	const summary = summaryQuery.data;
 
 	if (!summary) {
@@ -139,7 +151,48 @@ export function DashboardSummary() {
 		);
 	}
 
-	const { biggestOpen, overdueTasks, recentActivity } = summary;
+	const { biggestOpen, overdueTasks, recentActivity, mySteps, keHoachCanDeY } =
+		summary;
+	const now = new Date();
+	const theoHan = [
+		...overdueTasks.map((viec) => ({
+			loai: "viec" as const,
+			id: viec.id,
+			han:
+				viec.dueAt === null ? Number.POSITIVE_INFINITY : Date.parse(viec.dueAt),
+			viec,
+		})),
+		...mySteps.map((buoc) => ({
+			loai: "buoc" as const,
+			id: buoc.stepId,
+			han: ngayCuaBuoc(buoc.dueAt).getTime(),
+			buoc,
+		})),
+	].sort((a, b) => a.han - b.han || a.id.localeCompare(b.id));
+	const keHoach = [
+		...keHoachCanDeY.filter((k) => k.loai === "ke-hoach-im"),
+		...keHoachCanDeY.filter((k) => k.loai === "moc-ngay"),
+	].map((keHoach) => ({
+		loai: "keHoach" as const,
+		id: `${keHoach.loai}:${keHoach.planId}`,
+		keHoach,
+	}));
+	const dong = [...theoHan, ...keHoach];
+	const soQuaHan =
+		overdueTasks.length + mySteps.filter((b) => buocQuaHan(b, now)).length;
+	const soIm = keHoachCanDeY.filter((k) => k.loai === "ke-hoach-im").length;
+	const moTaViec =
+		soQuaHan > 0
+			? m.tasks.pastDue(formatCount(soQuaHan, m.tasks.taskNoun, locale))
+			: mySteps.length > 0
+				? dien(keHoachNoiMessages(locale).tasks.sapHan, {
+						n: String(mySteps.length),
+					})
+				: null;
+	const moTaIm =
+		soIm > 0 ? dien(nhacMessages(locale).moTaIm, { n: soIm }) : null;
+	const moTaTasks =
+		[moTaViec, moTaIm].filter((v) => v !== null).join(" · ") || m.tasks.allDone;
 
 	const mine = scope === "me";
 	const largestOpenCents = biggestOpen[0]?.baseAmountCents ?? 0;
@@ -212,61 +265,91 @@ export function DashboardSummary() {
 				<Card className="min-w-0">
 					<CardHeader>
 						<CardTitle>{m.tasks.title}</CardTitle>
-						<CardDescription>
-							{overdueTasks.length === 0
-								? m.tasks.allDone
-								: m.tasks.pastDue(
-										formatCount(overdueTasks.length, m.tasks.taskNoun, locale),
-									)}
-						</CardDescription>
+						<CardDescription>{moTaTasks}</CardDescription>
 					</CardHeader>
 					<CardPanel>
-						{overdueTasks.length === 0 ? (
+						{dong.length === 0 ? (
 							<CardPanelEmpty>{m.tasks.empty}</CardPanelEmpty>
 						) : (
 							<SimpleTable variant="panel" surface="page" columns={COT.tasks}>
-								{overdueTasks.map((task) => (
-									<SimpleTableRow key={task.id}>
-										<TableCell className={CELL}>
-											<Checkbox
-												checked={false}
-												disabled={complete.isPending}
-												aria-label={m.tasks.markDone}
-												onCheckedChange={() =>
-													complete.mutate({ id: task.id, completed: true })
-												}
-											/>
-										</TableCell>
-										<TableCell className={CELL}>
-											<span className="flex min-w-0 flex-col" translate="no">
-												<span className="truncate">{task.subject}</span>
-												<span className="flex min-w-0 text-muted-foreground">
-													{task.deal ? (
-														<RecordLink kind="deal" id={task.deal.id}>
-															{task.deal.name}
-														</RecordLink>
-													) : task.company ? (
-														<RecordLink kind="company" id={task.company.id}>
-															{task.company.name}
-														</RecordLink>
-													) : null}
+								{dong.map((d) =>
+									d.loai === "keHoach" ? (
+										<DongKeHoach key={d.id} dong={d.keHoach} />
+									) : d.loai === "buoc" ? (
+										<DongBuoc
+											key={d.id}
+											buoc={d.buoc}
+											now={now}
+											dangGhi={xongBuoc.isPending}
+											onXong={() =>
+												xongBuoc.mutate(
+													{ stepId: d.buoc.stepId, done: true },
+													{
+														onSuccess: async () => {
+															await Promise.all([
+																queryClient.invalidateQueries({
+																	queryKey: trpc.dashboard.summary.queryKey(),
+																}),
+																cache.plan(d.buoc.planId),
+															]);
+														},
+													},
+												)
+											}
+										/>
+									) : (
+										<SimpleTableRow key={d.id} data-viec={d.viec.id}>
+											<TableCell className={CELL}>
+												<Checkbox
+													checked={false}
+													disabled={complete.isPending}
+													aria-label={m.tasks.markDone}
+													onCheckedChange={() =>
+														complete.mutate({ id: d.viec.id, completed: true })
+													}
+												/>
+											</TableCell>
+											<TableCell className={CELL}>
+												<span className="flex min-w-0 flex-col" translate="no">
+													<span className="truncate">{d.viec.subject}</span>
+													<span className="flex min-w-0 gap-1 text-muted-foreground">
+														{mine ? null : (
+															<>
+																<span className="shrink-0">
+																	{d.viec.createdBy.name}
+																</span>
+																{d.viec.deal || d.viec.company ? (
+																	<span aria-hidden>·</span>
+																) : null}
+															</>
+														)}
+														{d.viec.deal ? (
+															<RecordLink kind="deal" id={d.viec.deal.id}>
+																{d.viec.deal.name}
+															</RecordLink>
+														) : d.viec.company ? (
+															<RecordLink kind="company" id={d.viec.company.id}>
+																{d.viec.company.name}
+															</RecordLink>
+														) : null}
+													</span>
 												</span>
-											</span>
-										</TableCell>
-										<TableCell className={`${CELL} text-right`}>
-											<StatusIndicator
-												tone="error"
-												label={
-													task.dueAt ? (
-														<LocalRelativeTime date={task.dueAt} />
-													) : (
-														m.tasks.noDueDate
-													)
-												}
-											/>
-										</TableCell>
-									</SimpleTableRow>
-								))}
+											</TableCell>
+											<TableCell className={`${CELL} text-right`}>
+												<StatusIndicator
+													tone="error"
+													label={
+														d.viec.dueAt ? (
+															<LocalRelativeTime date={d.viec.dueAt} />
+														) : (
+															m.tasks.noDueDate
+														)
+													}
+												/>
+											</TableCell>
+										</SimpleTableRow>
+									),
+								)}
 							</SimpleTable>
 						)}
 					</CardPanel>

@@ -1,10 +1,18 @@
 import { ActivityType, type Db, DealStage } from "@crm/db";
 import { OPEN_DEAL_STAGES } from "@crm/db/deal-stage";
+import {
+	dauNgayVN,
+	NHAC,
+	ngayVN,
+	type ViecNhac,
+	viecCanNhac,
+} from "@crm/db/onboarding-nhac";
 import { activityMeta } from "@crm/validation/activity-meta";
 import { Injectable } from "@nestjs/common";
 import { toCents } from "../crm/values";
 import { ConversionService } from "../currency/conversion.service";
 import { InjectDatabase } from "../database/database.constants";
+import { ONBOARDING } from "../onboarding/onboarding-config";
 import type { DashboardSummaryInput } from "./dashboard.contracts";
 
 const OWNER_SELECT = {
@@ -19,6 +27,12 @@ const TREND_MONTHS = 6;
 const RATE_WINDOW_DAYS = 90;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+
+type NhacKeHoach = ViecNhac & { loai: "ke-hoach-im" | "moc-ngay" };
+
+function laNhacKeHoach(m: ViecNhac): m is NhacKeHoach {
+	return m.loai === "ke-hoach-im" || m.loai === "moc-ngay";
+}
 
 function monthIso(date: Date): string {
 	return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
@@ -138,8 +152,8 @@ export class DashboardService {
 				where: {
 					type: ActivityType.TASK,
 					completedAt: null,
-					dueAt: { lt: now },
-					createdById: actingUserId,
+					dueAt: { lt: dauNgayVN(now) },
+					createdById: mine ? actingUserId : undefined,
 				},
 				orderBy: [{ dueAt: "asc" }],
 				take: 10,
@@ -147,6 +161,7 @@ export class DashboardService {
 					id: true,
 					subject: true,
 					dueAt: true,
+					createdBy: { select: { id: true, name: true } },
 					company: { select: { id: true, name: true } },
 					deal: { select: { id: true, name: true } },
 				},
@@ -278,6 +293,8 @@ export class DashboardService {
 					}),
 				)
 				.sort((a, b) => (b.baseAmountCents ?? -1) - (a.baseAmountCents ?? -1)),
+			mySteps: await this.buocCuaToi(actingUserId, now),
+			keHoachCanDeY: await this.keHoachCanDeY(actingUserId, now),
 			overdueTasks: overdueTasks.map(({ dueAt, ...task }) => ({
 				...task,
 				dueAt: dueAt?.toISOString() ?? null,
@@ -288,5 +305,63 @@ export class DashboardService {
 				meta: activityMeta.parse(meta),
 			})),
 		};
+	}
+
+	private async buocCuaToi(actingUserId: string, now: Date) {
+		const han = new Date(
+			dauNgayVN(now).getTime() + (ONBOARDING.viecCuaToi.cuaSoNgay + 1) * DAY_MS,
+		);
+		const buoc = await this.db.onboardingStep.findMany({
+			where: {
+				assigneeId: actingUserId,
+				completedAt: null,
+				plan: { closedAt: null },
+				dueAt: { lt: han },
+			},
+			orderBy: [{ dueAt: "asc" }, { id: "asc" }],
+			take: ONBOARDING.viecCuaToi.tran,
+			select: {
+				id: true,
+				label: true,
+				dueAt: true,
+				planId: true,
+				plan: { select: { company: { select: { id: true, name: true } } } },
+			},
+		});
+		return buoc.map((b) => ({
+			stepId: b.id,
+			nhan: b.label,
+			dueAt: ngayVN(b.dueAt),
+			planId: b.planId,
+			company: b.plan.company,
+		}));
+	}
+
+	private async keHoachCanDeY(userId: string, now: Date) {
+		const ds = (await viecCanNhac(this.db, { now, userId })).get(userId) ?? [];
+		return ds
+			.filter(laNhacKeHoach)
+			.slice(0, NHAC.tran)
+			.map(
+				({
+					loai,
+					planId,
+					companyName,
+					goiY,
+					soNgay,
+					soBuocXong,
+					soBuocTong,
+					targetDays,
+				}) => ({
+					loai,
+					planId,
+					companyName,
+					goiY,
+					soNgay: soNgay ?? 0,
+					soBuocXong,
+					soBuocTong,
+					targetDays,
+				}),
+			);
 	}
 }

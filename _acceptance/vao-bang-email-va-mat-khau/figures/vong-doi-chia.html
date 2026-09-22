@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vòng đời một chìa khoá · Sơ đồ luồng</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1320px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 48rem;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ luồng · vào bằng email và mật khẩu</p>
+    <h1>Vòng đời một chìa khoá</h1>
+    <p class="sub">Từ lúc quản trị phát chìa tới lúc người dùng vào được CRM, cộng ba chỗ đi trệch và một đường quay lại khi quên mật khẩu. Quản trị không bao giờ nhìn thấy mật khẩu của ai.</p>
+
+    <svg viewBox="0 0 1320 820" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- ===== Đường đi (vẽ trước, nằm dưới các ô) ===== -->
+      <line x1="336" y1="168" x2="456" y2="168" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="696" y1="168" x2="832" y2="168" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="524" y1="204" x2="524" y2="344" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="628" y1="204" x2="628" y2="344" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="956" y1="216" x2="956" y2="304" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="956" y1="432" x2="956" y2="520" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 1076 368 L 1152 368 Q 1160 368 1160 360 L 1160 200 Q 1160 192 1152 192 L 1080 192" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 456 392 L 212 392 Q 204 392 204 384 L 204 228" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 956 600 L 956 688 Q 956 696 948 696 L 48 696 Q 40 696 40 688 L 40 176 Q 40 168 48 168 L 68 168" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <!-- ===== Nhãn trên đường đi ===== -->
+      <rect x="340" y="142" width="112" height="18" rx="2" fill="#fafafa"/>
+      <text x="396" y="156" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">người dùng mở chìa</text>
+
+      <rect x="712" y="142" width="104" height="18" rx="2" fill="#fafafa"/>
+      <text x="764" y="156" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">còn dùng được</text>
+
+      <rect x="414" y="254" width="100" height="18" rx="2" fill="#fafafa"/>
+      <text x="514" y="268" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="end">chìa đã quá hạn</text>
+      <rect x="470" y="272" width="44" height="16" rx="2" fill="#fafafa"/>
+      <text x="514" y="284" fill="#666666" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="end" letter-spacing="0.06em">AC-5</text>
+
+      <rect x="638" y="254" width="120" height="18" rx="2" fill="#fafafa"/>
+      <text x="638" y="268" fill="#575757" font-size="10" font-family="'Geist', sans-serif">chìa này đã dùng rồi</text>
+      <rect x="638" y="272" width="44" height="16" rx="2" fill="#fafafa"/>
+      <text x="638" y="284" fill="#666666" font-size="9" font-weight="500" font-family="'Geist', sans-serif" letter-spacing="0.06em">AC-4</text>
+
+      <rect x="966" y="462" width="92" height="18" rx="2" fill="#fafafa"/>
+      <text x="966" y="476" fill="#575757" font-size="10" font-family="'Geist', sans-serif">mật khẩu đạt</text>
+
+      <rect x="1172" y="254" width="132" height="18" rx="2" fill="#fafafa"/>
+      <text x="1172" y="268" fill="#575757" font-size="10" font-family="'Geist', sans-serif">mật khẩu ngắn hoặc đã lộ</text>
+      <rect x="1172" y="272" width="44" height="16" rx="2" fill="#fafafa"/>
+      <text x="1172" y="284" fill="#666666" font-size="9" font-weight="500" font-family="'Geist', sans-serif" letter-spacing="0.06em">AC-8</text>
+
+      <rect x="424" y="656" width="152" height="18" rx="2" fill="#fafafa"/>
+      <text x="500" y="670" fill="#006B4F" font-size="10" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">người dùng quên mật khẩu</text>
+      <rect x="408" y="674" width="184" height="16" rx="2" fill="#fafafa"/>
+      <text x="500" y="686" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle" letter-spacing="0.06em">AC-13 (quên thì lấy lại được)</text>
+
+      <!-- ===== Ghi chú biên tập ===== -->
+      <text x="80" y="532" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif">Chìa thứ hai sống thì chìa thứ nhất chết —</text>
+      <text x="80" y="554" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', serif">mật khẩu cũ cũng hết dùng được.</text>
+      <path d="M 232 568 Q 254 628 276 684" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="278" cy="688" r="2.5" fill="#171717"/>
+
+      <!-- ===== Quản trị phát chìa ===== -->
+      <rect x="72" y="112" width="264" height="112" rx="8" fill="#fafafa"/>
+      <rect x="72" y="112" width="264" height="112" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="204" y="156" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Quản trị phát chìa</text>
+      <text x="204" y="180" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">AC-1 (người đã có thì phát được chìa)</text>
+      <text x="204" y="198" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">AC-2 (chưa có tài khoản cũng phát được)</text>
+
+      <!-- ===== Cổng: chìa còn dùng được không ===== -->
+      <polygon points="576,104 696,168 576,232 456,168" fill="#fafafa"/>
+      <polygon points="576,104 696,168 576,232 456,168" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="576" y="173" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Chìa còn dùng được không?</text>
+
+      <!-- ===== Người dùng đặt mật khẩu ===== -->
+      <rect x="832" y="120" width="248" height="96" rx="8" fill="#fafafa"/>
+      <rect x="832" y="120" width="248" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="956" y="160" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Người dùng đặt mật khẩu mới</text>
+      <text x="956" y="184" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">AC-3 (đặt xong là đăng nhập được)</text>
+
+      <!-- ===== Cổng: mật khẩu đủ mạnh không ===== -->
+      <polygon points="956,304 1076,368 956,432 836,368" fill="#fafafa"/>
+      <polygon points="956,304 1076,368 956,432 836,368" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="956" y="373" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mật khẩu đủ mạnh không?</text>
+
+      <!-- ===== Xin chìa mới ===== -->
+      <rect x="456" y="344" width="240" height="96" rx="8" fill="#fafafa"/>
+      <rect x="456" y="344" width="240" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="576" y="384" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Người dùng xin chìa mới</text>
+      <text x="576" y="406" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">quản trị phát lại từ đầu</text>
+
+      <!-- ===== Điểm ra (tiêu điểm) ===== -->
+      <rect x="832" y="520" width="248" height="80" rx="20" fill="#fafafa"/>
+      <rect x="832" y="520" width="248" height="80" rx="20" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="956" y="552" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Người dùng vào được CRM</text>
+      <text x="956" y="574" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">AC-9 (màn đăng nhập có cả hai lối)</text>
+
+      <!-- ===== Chú giải ===== -->
+      <line x1="40" y1="748" x2="1280" y2="748" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="769" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="148" y="760" width="16" height="12" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="172" y="769" fill="#575757" font-size="9" font-family="'Geist', sans-serif">một việc của người</text>
+
+      <polygon points="300,758 312,766 300,774 288,766" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="322" y="769" fill="#575757" font-size="9" font-family="'Geist', sans-serif">một chỗ hệ thống quyết</text>
+
+      <rect x="470" y="760" width="16" height="12" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="494" y="769" fill="#575757" font-size="9" font-family="'Geist', sans-serif">điểm ra: người dùng vào được CRM</text>
+
+      <text x="700" y="769" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Chìa sống ở bảng <tspan font-family="'Geist Mono', monospace" fill="#171717">verification</tspan>, định danh mang tiền tố <tspan font-family="'Geist Mono', monospace" fill="#171717">reset-password:</tspan> — chữ mono không dịch.</text>
+    </svg>
+  </div>
+</body>
+</html>

@@ -1,0 +1,454 @@
+=== ALL RESPONSES ===
+[vi] 200 GET http://localhost:3000/crm/settings/fields
+[vi] 200 GET http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2
+[vi] 200 GET http://localhost:3000/_next/static/media/7d817b4c03b0c5f1-s.p.1uyisp29ctx0d.woff2
+[vi] 200 GET http://localhost:3000/_next/static/media/53b9e256198e5412-s.p.390ncx5urfkfu.woff2
+[vi] 200 GET http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2
+[vi] 200 GET http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0pu11fa._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0l8ykhc._.css
+[vi] 200 GET http://localhost:3000/_next/static/chunks/1m3o_next_dist_compiled_react-server-dom-turbopack_163z8n9._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/1m3o_next_dist_compiled_0wcra3j._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/1u71_%40swc_helpers_cjs_0g5k6e_._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/1m3o_next_dist_08d-hqc._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/apps_app_1anvha4._.js
+[vi] 200 GET http://localhost:3000/_next/static/media/7178b3e590c64307-s.21jp631_3pja2.woff2
+[vi] 200 GET http://localhost:3000/_next/static/chunks/apps_app_1n8ojhq._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/turbopack-apps_app_1kcbo1q._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/1m3o_next_dist_compiled_next-devtools_index_0huqbj8.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/1m3o_next_dist_compiled_react-dom_1bfiqar._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_0-6o2qw._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/11l8_tailwind-merge_dist_bundle-mjs_mjs_1gt0n5j._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_046fnsj._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/17u__%40trpc_client_dist_09ji32s._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/0trj_%40trpc_server_dist_0__neun._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/072g_streamdown_dist_02kxc_u._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/_1uh5i2t._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/1m3o_next_dist_client_1cvbd6w._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/apps_app_components_0s9vjv_._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/apps_app_0gz9oyv._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/packages_1cr7g1m._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/1rp1_%40carbon_icons-react_es_1p6f9oc._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/13z9_zod_v4_0--tbhe._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/1m3o_next_1fqcc15._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/node_modules__bun_0nq_nv5._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/apps_app_components_crm_0waldvs._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/05cx_framer-motion_dist_es_1hp694k._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/18oq_%40dnd-kit_core_dist_core_esm_0q7k3ym.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/107c_micromark_dev_lib_190-11a._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/0da4_micromark-core-commonmark_dev_lib_1_ah9fh._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/021h_parse5_dist_1mtcf8o._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/0t6z_%40shadcn_react_dist_1807_q6._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/072g_streamdown_dist_0ov_yc8._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/0nox_date-fns_1x_qo5w._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/0ch2_motion-dom_dist_es_05ag043._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/apps_app_130bof0._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/apps_app_0qw72e8._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/08t5_react-day-picker_dist_esm_1cbf8bs._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_1mojsay._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/0w0o_eve_dist_src_1dg6d7z._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_1emqd7n._.js
+[vi] 200 GET http://localhost:3000/_next/static/chunks/node_modules__bun_1st1gm8._.js
+[vi] 200 GET http://localhost:3000/favicon.svg
+[vi] 200 GET http://localhost:3000/_next/static/media/bbc41e54d2fcbd21-s.1rgnod-3esatf.woff2
+[vi] 200 POST http://localhost:3000/__nextjs_original-stack-frames
+[vi] 200 GET http://localhost:3000/__nextjs_font/geist-latin.woff2
+[vi] 200 GET http://localhost:3000/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D
+[en] 200 GET http://localhost:3000/crm/settings/fields
+[en] 200 GET http://localhost:3000/_next/static/media/7d817b4c03b0c5f1-s.p.1uyisp29ctx0d.woff2
+[en] 200 GET http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2
+[en] 200 GET http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2
+[en] 200 GET http://localhost:3000/_next/static/media/53b9e256198e5412-s.p.390ncx5urfkfu.woff2
+[en] 304 GET http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0l8ykhc._.css
+[en] 304 GET http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0pu11fa._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/1m3o_next_dist_compiled_react-server-dom-turbopack_163z8n9._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/1m3o_next_dist_compiled_0wcra3j._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/1m3o_next_dist_compiled_react-dom_1bfiqar._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/1m3o_next_dist_compiled_next-devtools_index_0huqbj8.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/1m3o_next_dist_08d-hqc._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/1m3o_next_dist_client_1cvbd6w._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/1u71_%40swc_helpers_cjs_0g5k6e_._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/apps_app_1anvha4._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/turbopack-apps_app_1kcbo1q._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/apps_app_1n8ojhq._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_0-6o2qw._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/11l8_tailwind-merge_dist_bundle-mjs_mjs_1gt0n5j._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/17u__%40trpc_client_dist_09ji32s._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_046fnsj._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/_1uh5i2t._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/0trj_%40trpc_server_dist_0__neun._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/072g_streamdown_dist_02kxc_u._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/packages_1cr7g1m._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/node_modules__bun_0nq_nv5._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/13z9_zod_v4_0--tbhe._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/1rp1_%40carbon_icons-react_es_1p6f9oc._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/apps_app_components_0s9vjv_._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/apps_app_0gz9oyv._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/1m3o_next_1fqcc15._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/apps_app_components_crm_0waldvs._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/05cx_framer-motion_dist_es_1hp694k._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/0da4_micromark-core-commonmark_dev_lib_1_ah9fh._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/107c_micromark_dev_lib_190-11a._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/0ch2_motion-dom_dist_es_05ag043._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/021h_parse5_dist_1mtcf8o._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/18oq_%40dnd-kit_core_dist_core_esm_0q7k3ym.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/0t6z_%40shadcn_react_dist_1807_q6._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/072g_streamdown_dist_0ov_yc8._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/apps_app_130bof0._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/0nox_date-fns_1x_qo5w._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/08t5_react-day-picker_dist_esm_1cbf8bs._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/0w0o_eve_dist_src_1dg6d7z._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_1mojsay._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/node_modules__bun_1st1gm8._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/apps_app_0qw72e8._.js
+[en] 304 GET http://localhost:3000/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_1emqd7n._.js
+[en] 200 GET http://localhost:3000/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D
+[en] 200 GET http://localhost:3000/__nextjs_font/geist-latin.woff2
+[en] 200 POST http://localhost:3000/__nextjs_original-stack-frames
+
+=== FAILED REQUESTS (status>=500 hoac loi ket noi) ===
+(khong co)
+
+=== CONSOLE ERRORS ===
+[vi] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <FieldsList entity="COMPANY" onEdit={function onEdit} onNew={function onNew}>
+      <div className="flex min-h...">
+        <DisclosureRow>
+        <DisclosureRow>
+        <div>
+        <SortableList ids={[...]} onReorder={function onReorder}>
+          <DndContext sensors={[...]} collisionDetection={function closestCenter} modifiers={[...]} ...>
+            <SortableContext items={[...]} strategy={function verticalListSortingStrategy}>
+              <SortableItem id="cmtruzu1g0..." label="Account type" className="flex items...">
+                <div ref={function useCombinedRefs.useMemo} style={{...}} className="flex items...">
+                  <Button ref={function useNodeRef.useCallback[setNodeRef]} type="button" variant="ghost" size="icon-xs" ...>
+                    <button
+                      data-slot="button"
+                      data-variant="ghost"
+                      data-size="icon-xs"
+                      className={"group/button inline-flex shrink-0 items-center justify-center border border-transpa..."}
+                      ref={function useNodeRef.useCallback[setNodeRef]}
+                      type="button"
+                      role="button"
+                      tabIndex={0}
+                      aria-disabled={false}
+                      aria-pressed={undefined}
+                      aria-roledescription={undefined}
++                     aria-describedby="DndDescribedBy-0"
+-                     aria-describedby="DndDescribedBy-61"
+                      onPointerDown={function useSyntheticListeners.useMemo}
+                      onKeyDown={function useSyntheticListeners.useMemo}
+                    >
+                  ...
+              <SortableItem id="cmtruzu1k0..." label="Segment" className="flex items...">
+                <div ref={function useCombinedRefs.useMemo} style={{...}} className="flex items...">
+                  <Button ref={function useNodeRef.useCallback[setNodeRef]} type="button" variant="ghost" size="icon-xs" ...>
+                    <button
+                      data-slot="button"
+                      data-variant="ghost"
+                      data-size="icon-xs"
+                      className={"group/button inline-flex shrink-0 items-center justify-center border border-transpa..."}
+                      ref={function useNodeRef.useCallback[setNodeRef]}
+                      type="button"
+                      role="button"
+                      tabIndex={0}
+                      aria-disabled={false}
+                      aria-pressed={undefined}
+                      aria-roledescription={undefined}
++                     aria-describedby="DndDescribedBy-0"
+-                     aria-describedby="DndDescribedBy-61"
+                      onPointerDown={function useSyntheticListeners.useMemo}
+                      onKeyDown={function useSyntheticListeners.useMemo}
+                    >
+                  ...
+              <SortableItem id="cmtruzu1l0..." label="Territory" className="flex items...">
+                <div ref={function useCombinedRefs.useMemo} style={{...}} className="flex items...">
+                  <Button ref={function useNodeRef.useCallback[setNodeRef]} type="button" variant="ghost" size="icon-xs" ...>
+                    <button
+                      data-slot="button"
+                      data-variant="ghost"
+                      data-size="icon-xs"
+                      className={"group/button inline-flex shrink-0 items-center justify-center border border-transpa..."}
+                      ref={function useNodeRef.useCallback[setNodeRef]}
+                      type="button"
+                      role="button"
+                      tabIndex={0}
+                      aria-disabled={false}
+                      aria-pressed={undefined}
+                      aria-roledescription={undefined}
++                     aria-describedby="DndDescribedBy-0"
+-                     aria-describedby="DndDescribedBy-61"
+                      onPointerDown={function useSyntheticListeners.useMemo}
+                      onKeyDown={function useSyntheticListeners.useMemo}
+                    >
+                  ...
+              <SortableItem id="cmtruzu1l0..." label="Lifecycle ..." className="flex items...">
+                <div ref={function useCombinedRefs.useMemo} style={{...}} className="flex items...">
+                  <Button ref={function useNodeRef.useCallback[setNodeRef]} type="button" variant="ghost" size="icon-xs" ...>
+                    <button
+                      data-slot="button"
+                      data-variant="ghost"
+                      data-size="icon-xs"
+                      className={"group/button inline-flex shrink-0 items-center justify-center border border-transpa..."}
+                      ref={function useNodeRef.useCallback[setNodeRef]}
+                      type="button"
+                      role="button"
+                      tabIndex={0}
+                      aria-disabled={false}
+                      aria-pressed={undefined}
+                      aria-roledescription={undefined}
++                     aria-describedby="DndDescribedBy-0"
+-                     aria-describedby="DndDescribedBy-61"
+                      onPointerDown={function useSyntheticListeners.useMemo}
+                      onKeyDown={function useSyntheticListeners.useMemo}
+                    >
+                  ...
+              <SortableItem id="cmtruzu1l0..." label="Lead source" className="flex items...">
+                <div ref={function useCombinedRefs.useMemo} style={{...}} className="flex items...">
+                  <Button ref={function useNodeRef.useCallback[setNodeRef]} type="button" variant="ghost" size="icon-xs" ...>
+                    <button
+                      data-slot="button"
+                      data-variant="ghost"
+                      data-size="icon-xs"
+                      className={"group/button inline-flex shrink-0 items-center justify-center border border-transpa..."}
+                      ref={function useNodeRef.useCallback[setNodeRef]}
+                      type="button"
+                      role="button"
+                      tabIndex={0}
+                      aria-disabled={false}
+                      aria-pressed={undefined}
+                      aria-roledescription={undefined}
++                     aria-describedby="DndDescribedBy-0"
+-                     aria-describedby="DndDescribedBy-61"
+                      onPointerDown={function useSyntheticListeners.useMemo}
+                      onKeyDown={function useSyntheticListeners.useMemo}
+                    >
+                  ...
+              <SortableItem id="cmtruzu1l0..." label="ICP fit score" className="flex items...">
+                <div ref={function useCombinedRefs.useMemo} style={{...}} className="flex items...">
+                  <Button ref={function useNodeRef.useCallback[setNodeRef]} type="button" variant="ghost" size="icon-xs" ...>
+                    <button
+                      data-slot="button"
+                      data-variant="ghost"
+                      data-size="icon-xs"
+                      className={"group/button inline-flex shrink-0 items-center justify-center border border-transpa..."}
+                      ref={function useNodeRef.useCallback[setNodeRef]}
+                      type="button"
+                      role="button"
+                      tabIndex={0}
+                      aria-disabled={false}
+                      aria-pressed={undefined}
+                      aria-roledescription={undefined}
++                     aria-describedby="DndDescribedBy-0"
+-                     aria-describedby="DndDescribedBy-61"
+                      onPointerDown={function useSyntheticListeners.useMemo}
+                      onKeyDown={function useSyntheticListeners.useMemo}
+                    >
+                  ...
+              <SortableItem id="cmtruzu1l0..." label="BDR owner" className="flex items...">
+                <div ref={function useCombinedRefs.useMemo} style={{...}} className="flex items...">
+                  <Button ref={function useNodeRef.useCallback[setNodeRef]} type="button" variant="ghost" size="icon-xs" ...>
+                    <button
+                      data-slot="button"
+                      data-variant="ghost"
+                      data-size="icon-xs"
+                      className={"group/button inline-flex shrink-0 items-center justify-center border border-transpa..."}
+                      ref={function useNodeRef.useCallback[setNodeRef]}
+                      type="button"
+                      role="button"
+                      tabIndex={0}
+                      aria-disabled={false}
+                      aria-pressed={undefined}
+                      aria-roledescription={undefined}
++                     aria-describedby="DndDescribedBy-0"
+-                     aria-describedby="DndDescribedBy-61"
+                      onPointerDown={function useSyntheticListeners.useMemo}
+                      onKeyDown={function useSyntheticListeners.useMemo}
+                    >
+                  ...
+            ...
+            ...
+      ...
+
+[en] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <FieldsList entity="COMPANY" onEdit={function onEdit} onNew={function onNew}>
+      <div className="flex min-h...">
+        <DisclosureRow>
+        <DisclosureRow>
+        <div>
+        <SortableList ids={[...]} onReorder={function onReorder}>
+          <DndContext sensors={[...]} collisionDetection={function closestCenter} modifiers={[...]} ...>
+            <SortableContext items={[...]} strategy={function verticalListSortingStrategy}>
+              <SortableItem id="cmtruzu1g0..." label="Account type" className="flex items...">
+                <div ref={function useCombinedRefs.useMemo} style={{...}} className="flex items...">
+                  <Button ref={function useNodeRef.useCallback[setNodeRef]} type="button" variant="ghost" size="icon-xs" ...>
+                    <button
+                      data-slot="button"
+                      data-variant="ghost"
+                      data-size="icon-xs"
+                      className={"group/button inline-flex shrink-0 items-center justify-center border border-transpa..."}
+                      ref={function useNodeRef.useCallback[setNodeRef]}
+                      type="button"
+                      role="button"
+                      tabIndex={0}
+                      aria-disabled={false}
+                      aria-pressed={undefined}
+                      aria-roledescription={undefined}
++                     aria-describedby="DndDescribedBy-0"
+-                     aria-describedby="DndDescribedBy-62"
+                      onPointerDown={function useSyntheticListeners.useMemo}
+                      onKeyDown={function useSyntheticListeners.useMemo}
+                    >
+                  ...
+              <SortableItem id="cmtruzu1k0..." label="Segment" className="flex items...">
+                <div ref={function useCombinedRefs.useMemo} style={{...}} className="flex items...">
+                  <Button ref={function useNodeRef.useCallback[setNodeRef]} type="button" variant="ghost" size="icon-xs" ...>
+                    <button
+                      data-slot="button"
+                      data-variant="ghost"
+                      data-size="icon-xs"
+                      className={"group/button inline-flex shrink-0 items-center justify-center border border-transpa..."}
+                      ref={function useNodeRef.useCallback[setNodeRef]}
+                      type="button"
+                      role="button"
+                      tabIndex={0}
+                      aria-disabled={false}
+                      aria-pressed={undefined}
+                      aria-roledescription={undefined}
++                     aria-describedby="DndDescribedBy-0"
+-                     aria-describedby="DndDescribedBy-62"
+                      onPointerDown={function useSyntheticListeners.useMemo}
+                      onKeyDown={function useSyntheticListeners.useMemo}
+                    >
+                  ...
+              <SortableItem id="cmtruzu1l0..." label="Territory" className="flex items...">
+                <div ref={function useCombinedRefs.useMemo} style={{...}} className="flex items...">
+                  <Button ref={function useNodeRef.useCallback[setNodeRef]} type="button" variant="ghost" size="icon-xs" ...>
+                    <button
+                      data-slot="button"
+                      data-variant="ghost"
+                      data-size="icon-xs"
+                      className={"group/button inline-flex shrink-0 items-center justify-center border border-transpa..."}
+                      ref={function useNodeRef.useCallback[setNodeRef]}
+                      type="button"
+                      role="button"
+                      tabIndex={0}
+                      aria-disabled={false}
+                      aria-pressed={undefined}
+                      aria-roledescription={undefined}
++                     aria-describedby="DndDescribedBy-0"
+-                     aria-describedby="DndDescribedBy-62"
+                      onPointerDown={function useSyntheticListeners.useMemo}
+                      onKeyDown={function useSyntheticListeners.useMemo}
+                    >
+                  ...
+              <SortableItem id="cmtruzu1l0..." label="Lifecycle ..." className="flex items...">
+                <div ref={function useCombinedRefs.useMemo} style={{...}} className="flex items...">
+                  <Button ref={function useNodeRef.useCallback[setNodeRef]} type="button" variant="ghost" size="icon-xs" ...>
+                    <button
+                      data-slot="button"
+                      data-variant="ghost"
+                      data-size="icon-xs"
+                      className={"group/button inline-flex shrink-0 items-center justify-center border border-transpa..."}
+                      ref={function useNodeRef.useCallback[setNodeRef]}
+                      type="button"
+                      role="button"
+                      tabIndex={0}
+                      aria-disabled={false}
+                      aria-pressed={undefined}
+                      aria-roledescription={undefined}
++                     aria-describedby="DndDescribedBy-0"
+-                     aria-describedby="DndDescribedBy-62"
+                      onPointerDown={function useSyntheticListeners.useMemo}
+                      onKeyDown={function useSyntheticListeners.useMemo}
+                    >
+                  ...
+              <SortableItem id="cmtruzu1l0..." label="Lead source" className="flex items...">
+                <div ref={function useCombinedRefs.useMemo} style={{...}} className="flex items...">
+                  <Button ref={function useNodeRef.useCallback[setNodeRef]} type="button" variant="ghost" size="icon-xs" ...>
+                    <button
+                      data-slot="button"
+                      data-variant="ghost"
+                      data-size="icon-xs"
+                      className={"group/button inline-flex shrink-0 items-center justify-center border border-transpa..."}
+                      ref={function useNodeRef.useCallback[setNodeRef]}
+                      type="button"
+                      role="button"
+                      tabIndex={0}
+                      aria-disabled={false}
+                      aria-pressed={undefined}
+                      aria-roledescription={undefined}
++                     aria-describedby="DndDescribedBy-0"
+-                     aria-describedby="DndDescribedBy-62"
+                      onPointerDown={function useSyntheticListeners.useMemo}
+                      onKeyDown={function useSyntheticListeners.useMemo}
+                    >
+                  ...
+              <SortableItem id="cmtruzu1l0..." label="ICP fit score" className="flex items...">
+                <div ref={function useCombinedRefs.useMemo} style={{...}} className="flex items...">
+                  <Button ref={function useNodeRef.useCallback[setNodeRef]} type="button" variant="ghost" size="icon-xs" ...>
+                    <button
+                      data-slot="button"
+                      data-variant="ghost"
+                      data-size="icon-xs"
+                      className={"group/button inline-flex shrink-0 items-center justify-center border border-transpa..."}
+                      ref={function useNodeRef.useCallback[setNodeRef]}
+                      type="button"
+                      role="button"
+                      tabIndex={0}
+                      aria-disabled={false}
+                      aria-pressed={undefined}
+                      aria-roledescription={undefined}
++                     aria-describedby="DndDescribedBy-0"
+-                     aria-describedby="DndDescribedBy-62"
+                      onPointerDown={function useSyntheticListeners.useMemo}
+                      onKeyDown={function useSyntheticListeners.useMemo}
+                    >
+                  ...
+              <SortableItem id="cmtruzu1l0..." label="BDR owner" className="flex items...">
+                <div ref={function useCombinedRefs.useMemo} style={{...}} className="flex items...">
+                  <Button ref={function useNodeRef.useCallback[setNodeRef]} type="button" variant="ghost" size="icon-xs" ...>
+                    <button
+                      data-slot="button"
+                      data-variant="ghost"
+                      data-size="icon-xs"
+                      className={"group/button inline-flex shrink-0 items-center justify-center border border-transpa..."}
+                      ref={function useNodeRef.useCallback[setNodeRef]}
+                      type="button"
+                      role="button"
+                      tabIndex={0}
+                      aria-disabled={false}
+                      aria-pressed={undefined}
+                      aria-roledescription={undefined}
++                     aria-describedby="DndDescribedBy-0"
+-                     aria-describedby="DndDescribedBy-62"
+                      onPointerDown={function useSyntheticListeners.useMemo}
+                      onKeyDown={function useSyntheticListeners.useMemo}
+                    >
+                  ...
+            ...
+            ...
+      ...

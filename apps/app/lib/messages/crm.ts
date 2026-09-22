@@ -44,6 +44,7 @@ const en = {
 			email: "Email",
 			stageChange: "Stage change",
 			enrichment: "Enrichment",
+			planChange: "Plan change",
 		},
 		empty: {
 			allTitle: "Nothing has happened yet",
@@ -122,6 +123,9 @@ const en = {
 		choose: "Choose a company",
 		none: "None",
 	},
+	fieldValue: {
+		none: "None",
+	},
 	owner: {
 		label: "Owner",
 		unassigned: "Unassigned",
@@ -174,6 +178,7 @@ const en = {
 		optionsLabel: "Options",
 		addOption: "Add option",
 		moreFor: (label: string) => `More for ${label}`,
+		canQuyen: "You need admin rights to change the team's fields.",
 		edit: "Edit",
 		restore: "Restore",
 		archiveTitle: (label: string) => `Archive ${label}?`,
@@ -360,6 +365,7 @@ const vi = {
 			email: "Email",
 			stageChange: "Đổi giai đoạn",
 			enrichment: "Bổ sung dữ liệu",
+			planChange: "Thay đổi kế hoạch",
 		},
 		empty: {
 			allTitle: "Chưa có gì xảy ra",
@@ -438,6 +444,9 @@ const vi = {
 		choose: "Chọn công ty",
 		none: "Không chọn",
 	},
+	fieldValue: {
+		none: "Không chọn",
+	},
 	owner: {
 		label: "Phụ trách",
 		unassigned: "Chưa giao",
@@ -490,6 +499,7 @@ const vi = {
 		optionsLabel: "Lựa chọn",
 		addOption: "Thêm lựa chọn",
 		moreFor: (label: string) => `Thêm hành động cho ${label}`,
+		canQuyen: "Cần quyền quản trị để đổi trường của cả đội.",
 		edit: "Sửa",
 		restore: "Khôi phục",
 		archiveTitle: (label: string) => `Lưu trữ ${label}?`,

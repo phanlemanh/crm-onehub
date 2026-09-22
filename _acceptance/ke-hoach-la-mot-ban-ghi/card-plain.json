@@ -1,0 +1,49 @@
+{
+  "feature_plain": "Mở một kế hoạch 30 ngày như mở một thoả thuận, rồi làm việc ngay trên đó: giao bước, đánh dấu xong, đổi hạn, thêm bớt bước, đổi người cầm trịch, ghi chú, và thấy ai làm gì lúc nào.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ giao được một bước cho một người; bước ghi đúng người đó và để lại một dòng vết ghi tên chính người bấm."},
+    {"id": "AC-2", "p": "Sẽ đánh dấu được một bước xong; ở danh mục, cột Bước tăng lên và cột Im lặng về 0 ngày, vết ghi đúng người bấm."},
+    {"id": "AC-3", "p": "Sẽ đổi được hạn của một bước; vết ghi hạn cũ và hạn mới dạng ngày."},
+    {"id": "AC-4", "p": "Sẽ thêm, bỏ và sắp lại thứ tự bước; sắp lại với danh sách sai thì bị từ chối và thứ tự cũ còn nguyên."},
+    {"id": "AC-5", "p": "Sẽ gửi đúng việc cho đúng dòng: bấm trên dòng thứ hai thì chỉ dòng thứ hai đổi, rồi danh mục và sheet tự làm mới."},
+    {"id": "AC-6", "p": "Sẽ đổi được người cầm trịch; việc đổi này hiện ở dòng thời gian công ty, còn vết từng bước thì không."},
+    {"id": "AC-7", "p": "Sẽ bỏ qua thao tác không đổi gì: giao lại đúng người hay tích lại bước đã xong thì không sinh vết, không làm «Im lặng» về 0."},
+    {"id": "AC-8", "p": "Sẽ khoá kế hoạch đã đóng: mọi thao tác sửa bị từ chối với câu «Kế hoạch đã đóng — mở lại trước khi sửa.»"},
+    {"id": "AC-9", "p": "Sẽ cho ghi chú trên kế hoạch; ghi chú hiện ở cả kế hoạch lẫn dòng thời gian của công ty."},
+    {"id": "AC-10", "p": "Sẽ xoá sạch vết của kế hoạch khi công ty bị xoá, mà các cá nhân của công ty vẫn còn."},
+    {"id": "AC-11", "p": "Sẽ mở kế hoạch trong sheet trượt ra, bảng danh mục vẫn nằm phía sau; link cũ vẫn mở đúng; từ sheet mở được sheet công ty chồng lên."},
+    {"id": "AC-12", "p": "Sẽ gỡ đúng môi giới ở hàng mình bấm, hộp xác nhận nêu đúng tên người đó — hết lỗi gỡ nhầm người đầu danh sách."},
+    {"id": "AC-13", "p": "Sẽ chỉ gắn «Quá hạn» cho bước có hạn trước hôm nay; bước hạn hôm nay không còn bị gắn nhầm."},
+    {"id": "AC-14", "p": "Sẽ viết mỗi loại vết thành một câu tiếng Việt đọc được, không lọt chữ máy; dòng giai đoạn của thoả thuận vẫn hiện như cũ."},
+    {"id": "AC-15", "p": "Sẽ trông cùng khung với sheet thoả thuận khi đặt cạnh nhau: cùng đầu sheet, cùng dải bốn ô số, cùng thanh tab."}
+  ],
+  "scope_plain": "Để sang lượt sau: tab 30 ngày ở sheet công ty và «việc của tôi» (lượt 2), nhắc việc (lượt 3), việc con (lượt 4); không làm sửa nhãn bước, sửa số ngày mục tiêu, tab tác nhân.",
+  "coverage_plain": [
+    {"i": 0, "p": "Vòng đời một mục việc, so với thẻ Trello: người trên mục, hạn, thêm/bỏ/sắp, bình luận và nhật ký đều có tiêu chí; mục con và đính kèm để lượt 4."},
+    {"i": 1, "p": "Ai đứng trong đó: quan hệ đối tác và bộ phận chuyên môn cùng làm được trên một sheet; chuyển giao khi nghỉ và báo theo người để lượt 2."},
+    {"i": 2, "p": "Vào và ra: gõ tay và mở từ danh mục có tiêu chí (AC-5, AC-11); nhắc qua kênh để lượt 3, xuất để lượt 5."},
+    {"i": 3, "p": "Theo thời gian: nhịp «liên tục» sống lại nhờ mỗi thao tác chạm ngày cập nhật (AC-2, AC-7); nhắc tại mốc để lượt 3."},
+    {"i": 4, "p": "Sáu ô cốt lõi của bản quét đều có tiêu chí đo: giao, xong, hạn, thêm bớt, vết, ghi chú, cầm trịch, và sheet cùng khung."},
+    {"i": 5, "p": "Không có giả định mới; câu «bộ phận có tài khoản CRM không» vẫn chưa thử và nằm ở hồ sơ cơ hội — không phải việc của phần mềm."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Chưa có phép đo nào cho đoạn màn gửi việc xuống máy chủ — ô tích ở dòng 2 có thể gửi nhầm dòng 1 mà mọi phép đo vẫn xanh. Đã thêm tiêu chí AC-5 cùng hai phép đo: một bấm trên màn và ghi lại đúng lời gọi, một đưa đúng lời gọi đó vào máy chủ rồi đọc lại."},
+    {"i": 1, "p": "Ngưỡng CHẾT dựa vào «vết ghi đúng người bấm», nhưng chưa ai đo điều đó. Đã thêm vào AC-1 và AC-2, đo bằng một người thứ ba không phải cầm trịch cũng không phải người được giao."},
+    {"i": 2, "p": "Phép đo cách vết hiện chữ chỉ thử một trong chín loại vết, và dữ liệu thử viết tay. Đã đổi sang bảng viết trước đủ chín loại, dữ liệu dựng bằng chính hàm máy chủ dùng khi ghi."},
+    {"i": 3, "p": "Hợp đồng khai trả năm khoản hạn chế cũ mà không đo khoản nào. Đã viết lại: chỉ một khoản có phép đo mới tính là đã trả, bốn khoản kia ghi rõ là chưa đo."},
+    {"i": 4, "p": "Một phép đo về ngày hoạt động gần nhất chạy trên tập rỗng nên không bao giờ đỏ được. Đã thu tiêu chí AC-10 về vế xoá dây chuyền, và ghi lý do vì sao vế kia rỗng theo thiết kế."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260922T040054Z-1", "p": "Ai đăng nhập cũng đánh dấu được bước xong, vết ghi tên người bấm — đổi lại không chặn được việc đánh dấu hộ, chỉ thấy được qua vết."},
+    {"id": "d-20260922T040054Z-2", "p": "Chỉ ghi chú và mốc lớn của kế hoạch hiện ở dòng thời gian công ty — đổi lại muốn xem vết từng bước phải mở kế hoạch."},
+    {"id": "d-20260922T040054Z-3", "p": "Kế hoạch mở như thoả thuận, menu ⋯ riêng chỉ có Đóng / Mở lại — đổi lại menu ⋯ khác nội dung ba loại bản ghi kia."},
+    {"id": "d-20260922T040054Z-4", "p": "Vết kế hoạch là một loại dòng riêng, không mượn loại «việc cần làm» hay «đổi giai đoạn» — đổi lại thêm một loại dòng mới phải rà mọi chỗ đang đọc loại dòng."},
+    {"id": "d-20260922T040054Z-5", "p": "Mỗi thao tác một lệnh riêng và một dòng vết riêng — đổi lại có bảy lệnh thay vì một."},
+    {"id": "d-20260922T040054Z-6", "p": "KHÔNG làm sửa nhãn bước — vết cũ luôn đọc đúng; đổi lại sửa chính tả một nhãn phải bỏ bước rồi thêm lại."},
+    {"id": "d-20260922T040054Z-7", "p": "KHÔNG làm sửa số ngày mục tiêu — không có đường làm lệch hạn hàng loạt; đổi lại đối tác cần 45 ngày phải tạo từ khuôn khác."},
+    {"id": "d-20260922T040054Z-8", "p": "KHÔNG có tab tác nhân trên sheet kế hoạch ở lượt này — đổi lại sheet kế hoạch ít hơn ba sheet kia một tab."},
+    {"id": "d-20260922T040054Z-9", "p": "Sắp bước bằng Lên / Xuống trong menu, không kéo thả — dùng được bằng bàn phím; đổi lại dời một bước xa phải bấm nhiều lần."},
+    {"id": "d-20260922T041817Z-10", "p": "KHÔNG đo ngày hoạt động gần nhất khi xoá công ty — vết kế hoạch không bao giờ gắn vào cá nhân hay thoả thuận nên không có gì để sai; mở lại nếu điều đó đổi."},
+    {"id": "d-20260922T041817Z-11", "p": "Gộp thêm/bỏ/sắp bước thành một tiêu chí để có chỗ cho tiêu chí «màn gửi đúng dòng» — giữ hợp đồng trong 15 tiêu chí."}
+  ]
+}

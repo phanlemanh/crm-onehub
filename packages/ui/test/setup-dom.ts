@@ -1,4 +1,4 @@
-import { JSDOM } from "jsdom";
+import { type DOMWindow, JSDOM } from "jsdom";
 
 const dom = new JSDOM("<!doctype html><html><body></body></html>", {
 	pretendToBeVisual: true,
@@ -24,6 +24,7 @@ const DE_LEN = new Set([
 ]);
 
 type GiaTriToanCuc =
+	| DOMWindow
 	| Window
 	| Document
 	| Navigator
@@ -37,14 +38,14 @@ function dat(ten: string, gia_tri: GiaTriToanCuc): void {
 	Object.defineProperty(globalThis, ten, {
 		value: gia_tri,
 		writable: true,
-		configurable: cu?.configurable ?? true,
+		configurable: true,
 	});
 }
 
 for (const ten of Object.getOwnPropertyNames(dom.window)) {
 	if (ten in globalThis && !DE_LEN.has(ten)) continue;
 	const mo = Object.getOwnPropertyDescriptor(dom.window, ten);
-	if (mo) Object.defineProperty(globalThis, ten, mo);
+	if (mo) Object.defineProperty(globalThis, ten, { ...mo, configurable: true });
 }
 
 dat("window", dom.window);

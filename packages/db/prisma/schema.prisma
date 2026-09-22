@@ -54,6 +54,10 @@ model User {
 
   apiKeys Apikey[]
 
+  onboardingPlansOwned    OnboardingPlan[]  @relation("OnboardingPlanOwner")
+  onboardingStepsAssigned OnboardingStep[]  @relation("OnboardingStepAssignee")
+  onboardingWatches       OnboardingWatch[]
+
   @@unique([email])
   @@map("user")
 }
@@ -162,6 +166,17 @@ model Verification {
   @@map("verification")
 }
 
+model PasswordLinkIssue {
+  id           String   @id
+  email        String
+  issuedById   String
+  issuedByName String
+  issuedAt     DateTime @default(now())
+
+  @@index([email, issuedAt])
+  @@map("password_link_issue")
+}
+
 model RateLimit {
   id          String @id
   key         String
@@ -190,6 +205,7 @@ enum ActivityType {
   TASK
   STAGE_CHANGE
   ENRICHMENT
+  PLAN_CHANGE
 }
 
 enum EnrichmentStatus {
@@ -354,6 +370,8 @@ model Company {
   createdAt      DateTime            @default(now())
   updatedAt      DateTime            @updatedAt
 
+  onboardingPlans OnboardingPlan[]
+
   @@unique([domain], map: "company_domain_active_key", where: { archivedAt: null })
   @@index([ownerId])
   @@index([name])
@@ -418,6 +436,8 @@ model Contact {
   submissions     FormSubmission[]   @relation("SubmissionContact")
   createdAt       DateTime           @default(now())
   updatedAt       DateTime           @updatedAt
+
+  onboardingEnrollments OnboardingEnrollment[]
 
   @@unique([email], map: "contact_email_active_key", where: { archivedAt: null })
   @@index([companyId])
@@ -513,6 +533,7 @@ model AgentTask {
 
   createdAt DateTime @default(now())
 
+  @@unique([kind, subject], map: "agentTask_nhac_mot_ngay", where: { kind: "nhac-ke-hoach" })
   @@index([dueAt, leasedUntil])
   @@index([contactId])
   @@index([dealId])
@@ -1200,6 +1221,8 @@ model Activity {
   contact   Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
   dealId    String?
   deal      Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  planId    String?
+  plan      OnboardingPlan? @relation(fields: [planId], references: [id], onDelete: Cascade)
 
   createdById String
   createdBy   User   @relation("ActivityAuthor", fields: [createdById], references: [id])
@@ -1216,6 +1239,7 @@ model Activity {
 
   @@index([companyId, createdAt])
   @@index([dealId, createdAt])
+  @@index([planId, createdAt])
   @@index([contactId, createdAt])
   @@index([dueAt])
   @@index([createdById])
@@ -1385,6 +1409,8 @@ model AppSetting {
   contextDevApiKey String?
 
   reportingCurrency String?
+
+  staffEmailDomains String?
 
   ratesRefreshedAt DateTime?
 
@@ -1661,4 +1687,126 @@ model Apikey {
   @@index([configId])
   @@index([key])
   @@map("apikey")
+}
+
+model Department {
+  id       String @id @default(cuid())
+  name     String
+  position Int
+
+  archivedAt DateTime?
+  steps      OnboardingStep[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([position])
+  @@map("department")
+}
+
+model OnboardingTemplate {
+  id          String  @id @default(cuid())
+  name        String
+  partnerType String?
+  steps       Json
+
+  archivedAt DateTime?
+  plans      OnboardingPlan[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("onboardingTemplate")
+}
+
+model OnboardingPlan {
+  id        String  @id @default(cuid())
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  templateId String?
+  template   OnboardingTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+
+  startedAt  DateTime
+  targetDays Int
+  closedAt   DateTime?
+
+  ownerId String
+  owner   User   @relation("OnboardingPlanOwner", fields: [ownerId], references: [id])
+
+  steps       OnboardingStep[]
+  enrollments OnboardingEnrollment[]
+  activities  Activity[]
+  watches     OnboardingWatch[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([companyId, startedAt])
+  @@index([closedAt])
+  @@index([ownerId])
+  @@map("onboardingPlan")
+}
+
+model OnboardingWatch {
+  id        String         @id @default(cuid())
+  planId    String
+  plan      OnboardingPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime       @default(now())
+
+  @@unique([planId, userId])
+  @@index([userId])
+  @@map("onboardingWatch")
+}
+
+model OnboardingStep {
+  id     String         @id @default(cuid())
+  planId String
+  plan   OnboardingPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  label        String
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+
+  assigneeId String?
+  assignee   User?   @relation("OnboardingStepAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+
+  dueAt       DateTime
+  completedAt DateTime?
+  position    Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([planId, position])
+  @@index([departmentId])
+  @@index([assigneeId])
+  @@index([completedAt])
+  @@map("onboardingStep")
+}
+
+model OnboardingEnrollment {
+  id     String         @id @default(cuid())
+  planId String
+  plan   OnboardingPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  contactId String
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  accountAt DateTime?
+  courseAt  DateTime?
+  activeAt  DateTime?
+  dealAt    DateTime?
+
+  source String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([planId, contactId])
+  @@index([planId])
+  @@index([contactId])
+  @@map("onboardingEnrollment")
 }

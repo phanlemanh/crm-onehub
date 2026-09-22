@@ -1,0 +1,149 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bằng chứng · duong-proto-cho-design-pass</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+</style></head><body><div class="wrap">
+<h1>Đường proto cho nghi thức design-pass — route /proto sau cờ dev, sổ đăng ký có khai state, proto mẫu ghép từ @crm/ui, và ba khoá design_pass trong config</h1><div class="sub">Trang bằng chứng · <span class="mono">duong-proto-cho-design-pass</span> · tier T2</div>
+<div class="card" style="margin-top:12px"><span class="badge pass">PASS</span>
+<div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E1-r4</td><td class="mono">2026-09-16T12:10:00Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-2</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E2-r4</td><td class="mono">2026-09-16T12:10:00Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-3</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E3-r4</td><td class="mono">2026-09-16T12:15:00Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-4</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E4-r4</td><td class="mono">2026-09-16T12:10:00Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-5</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E5-r4</td><td class="mono">2026-09-16T12:10:00Z</td></tr>
+<tr><td><a href="#E6">E6</a></td><td>AC-6</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E6-r4</td><td class="mono">2026-09-16T12:10:00Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-7</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E7-r4</td><td class="mono">2026-09-16T12:10:00Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E8-r4</td><td class="mono">2026-09-16T12:17:00Z</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-9</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E9-r4</td><td class="mono">2026-09-16T12:18:00Z</td></tr>
+<tr><td><a href="#E10">E10</a></td><td>AC-10</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E10-r4</td><td class="mono">2026-09-16T12:18:30Z</td></tr>
+<tr><td><a href="#E11">E11</a></td><td>AC-11</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E11-r4</td><td class="mono">2026-09-16T12:19:00Z</td></tr>
+<tr><td><a href="#E12">E12</a></td><td>AC-13</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E12-r4</td><td class="mono">2026-09-16T12:20:00Z</td></tr>
+<tr><td><a href="#E13">E13</a></td><td>AC-12</td><td>ui-check</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E13-r4</td><td class="mono">2026-09-16T12:12:00Z</td></tr>
+<tr><td><a href="#E14">E14</a></td><td>AC-14</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E14-r4</td><td class="mono">2026-09-16T12:23:00Z</td></tr>
+<tr><td><a href="#E15">E15</a></td><td>AC-14</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E15-r4</td><td class="mono">2026-09-16T12:29:00Z</td></tr>
+<tr><td><a href="#E16">E16</a></td><td>AC-15</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E16-r4</td><td class="mono">2026-09-16T12:21:00Z</td></tr>
+<tr><td><a href="#E17">E17</a></td><td>AC-16</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-duong-proto-cho-design-pass-E17-r4</td><td class="mono">2026-09-16T12:21:30Z</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · script</h3><p class="crit">AC-1: (cross-layer) — Bản bấm được mở được ở dev khi cờ bật</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E1-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dp_duong_song</b></span><span>verified_at <b>2026-09-16T12:10:00Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">OK muc-luc
+
+OK tat-ca: 6/6 chan dat</pre>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · script</h3><p class="crit">AC-2: (cross-layer) — Cờ tắt thì cả nhánh biến mất</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E2-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dp_duong_song</b></span><span>verified_at <b>2026-09-16T12:10:00Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">OK muc-luc
+
+OK tat-ca: 6/6 chan dat</pre>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · script</h3><p class="crit">AC-3: — Bản dựng cho chạy thật không mang đường proto</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E3-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dp_ban_dung</b></span><span>verified_at <b>2026-09-16T12:15:00Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">OK ban-dung: cap hai chieu tren CUNG mot cay dung (.next-proto-do)</pre>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · script</h3><p class="crit">AC-4: — State chọn được qua URL</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E4-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dp_duong_song</b></span><span>verified_at <b>2026-09-16T12:10:00Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">OK muc-luc
+
+OK tat-ca: 6/6 chan dat</pre>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · script</h3><p class="crit">AC-5: — State lạ không rơi về mặc định</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E5-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dp_duong_song</b></span><span>verified_at <b>2026-09-16T12:10:00Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">OK muc-luc
+
+OK tat-ca: 6/6 chan dat</pre>
+</div>
+<div class="card eval" id="E6"><h3><span class="badge pass">PASS</span> &nbsp;E6 · script</h3><p class="crit">AC-6: — Slug lạ trả 404</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E6-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dp_duong_song</b></span><span>verified_at <b>2026-09-16T12:10:00Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">OK muc-luc
+
+OK tat-ca: 6/6 chan dat</pre>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge pass">PASS</span> &nbsp;E7 · script</h3><p class="crit">AC-7: — Mục lục khớp sổ đăng ký</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E7-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dp_duong_song</b></span><span>verified_at <b>2026-09-16T12:10:00Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">OK muc-luc
+
+OK tat-ca: 6/6 chan dat</pre>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · script</h3><p class="crit">AC-8: — Thêm proto mà quên khai state thì bị chặn</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E8-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dp_so_dang_ky</b></span><span>verified_at <b>2026-09-16T12:17:00Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">OK so-dang-ky: 1 muc, 1 component</pre>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pass">PASS</span> &nbsp;E9 · script</h3><p class="crit">AC-9: — Ba khoá config trỏ vào vật có thật</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E9-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dp_config_tro_vat_that</b></span><span>verified_at <b>2026-09-16T12:18:00Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">OK khai-bao (config)</pre>
+</div>
+<div class="card eval" id="E10"><h3><span class="badge pass">PASS</span> &nbsp;E10 · script</h3><p class="crit">AC-10: — Biến và tài liệu khai đúng nếp kho</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E10-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dp_khai_bao</b></span><span>verified_at <b>2026-09-16T12:18:30Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">OK khai-bao (bien)</pre>
+</div>
+<div class="card eval" id="E11"><h3><span class="badge pass">PASS</span> &nbsp;E11 · script</h3><p class="crit">AC-11: — Proto không kéo gói server vào trình duyệt</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E11-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dp_khong_goi_server</b></span><span>verified_at <b>2026-09-16T12:19:00Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">OK khong-goi-server: quet 7 tep</pre>
+</div>
+<div class="card eval" id="E12"><h3><span class="badge pass">PASS</span> &nbsp;E12 · test</h3><p class="crit">AC-13: — Proxy chỉ mở đúng nhánh proto</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E12-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dp_proxy_an_danh</b></span><span>verified_at <b>2026-09-16T12:20:00Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out"> 0 fail
+ 9 expect() calls
+Ran 4 tests across 1 file. [10.00ms]</pre>
+</div>
+<div class="card eval" id="E13"><h3><span class="badge pass">PASS</span> &nbsp;E13 · ui-check</h3><p class="crit">AC-12: — Ma trận chụp được thật</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E13-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.design.ui_check</b></span><span>verified_at <b>2026-09-16T12:12:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="flag fred">Không có screenshot — ui-check có thể đã downgrade sang judgment (không có browser).</div>
+<pre class="out">NETWORK TRUTH: driver cua toan bo eval nay la Bash (curl de doi 200 + script ui:capture cua repo, khong phai browser-tool co read_network_requests) → khong co duong doc network → networkObserved = &quot;n-a (driver)&quot; (gia tri nay khong lam eval fail theo luat).
+
+Tong ket: 20/20 o co anh, dung 20 file, khong o nao trang, khong trung hash trong tung nhom (kho,theme), dark khac light ro rang o moi cap da kiem. Server tat dung PID, khong dung pkill rong, khong cham server khac. exitCode=0.</pre>
+</div>
+<div class="card eval" id="E14"><h3><span class="badge pass">PASS</span> &nbsp;E14 · script</h3><p class="crit">AC-14: — Phòng trưng bày không thối trong im lặng</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E14-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.build_khong_cache</b></span><span>verified_at <b>2026-09-16T12:23:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">agent:build: [BUILD] built output at /Users/manhphan/dev/crm-onehub/.claude/worktrees/agitated-kilby-4b9585/apps/agent/.output
+agent:build: [nitro] ✔ You can preview this build using npx nitro preview</pre>
+</div>
+<div class="card eval" id="E15"><h3><span class="badge pass">PASS</span> &nbsp;E15 · script</h3><p class="crit">AC-14: — Phòng trưng bày không thối trong im lặng</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E15-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.check_types_khong_cache</b></span><span>verified_at <b>2026-09-16T12:29:00Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out"> Tasks:    13 successful, 13 total
+Cached:    0 cached, 13 total
+  Time:    7.773s</pre>
+</div>
+<div class="card eval" id="E16"><h3><span class="badge pass">PASS</span> &nbsp;E16 · script</h3><p class="crit">AC-15: (cross-layer) — Lệnh trong tài liệu thật sự truyền được cờ</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E16-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dp_nha_thu_ba</b></span><span>verified_at <b>2026-09-16T12:21:00Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">OK khai-bao (nha-thu-ba)</pre>
+</div>
+<div class="card eval" id="E17"><h3><span class="badge pass">PASS</span> &nbsp;E17 · script</h3><p class="crit">AC-16: — Slug hồ sơ giải được thành một bản mẫu</p>
+<div class="kv"><span>run_id <b>minted-duong-proto-cho-design-pass-E17-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dp_slug_giai_duoc</b></span><span>verified_at <b>2026-09-16T12:21:30Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">OK khai-bao (slug)</pre>
+</div>
+<h2>Eval không phân biệt (Analyst)</h2><div class="flag fred">E15 (check-types, config:executors.script.check_types_khong_cache) — pass trên cả HEAD và baseline (green/green); là regression-guard cho toàn kho, không phải bằng chứng phân biệt riêng cho tính năng proto/AC-14. Cân nhắc viết lại để assert hành vi kiểu mới do proto thêm vào (vd. ProtoState, catalog.ts), hoặc xác nhận đây là regression-guard có chủ ý và giữ nguyên.</div>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1: E3 (dp_ban_dung) và E7 (dp_muc_luc) thất bại (mã 1 và 2) vì một tiến trình `next build`/`next dev` khác đang chiếm `apps/app/.next` và cổng 51063; E4 (dp_state_chon_duoc) không chạy được vì máy chủ riêng của răng không lên trong 90s do cổng đó đã bị PID 51725 giữ. Verdict BLOCKED.</li><li>Round 2: E2 (dp_co_tat, PID 61807), E6 (dp_slug_la, PID 61718) và E7 (dp_muc_luc, PID 61807) không chạy được vì một máy chủ Next khác đang khóa `apps/app` theo THƯ MỤC (không theo cổng), và dừng nó có thể phá hỏng verifier khác đang chạy song song nên không tự ý kill; E14 (build --force) thất bại thật (mã 1) vì một tiến trình `next build` khác đang chạy. Verdict BLOCKED — chưa quay về implementation, cần dừng các tiến trình Next cạnh tranh (xác nhận an toàn rồi kill PID 61807/61718) trước khi verify lại từ đầu vòng.</li><li>Round 3: E8 (dp_so_dang_ky) thất bại thật (mã 2) vì so-dang-ky.mjs vẫn ghim cứng slug cũ &quot;duong-proto&quot; trong khi catalog.ts đã đổi sang &quot;duong-proto-cho-design-pass&quot; từ round trước, nên sàn cứng chặn ngay và toàn bộ đối chiếu catalog↔registry không chạy được; E1/E2/E4/E5/E6/E7 (dp_duong_song, chạy gộp `tat-ca`) không đo được vì một máy chủ Next khác (PID 73707) khóa `apps/app` theo thư mục, server test không lên nổi trong 90s. Verdict BLOCKED — không tự ý pkill nhiều lần theo hướng dẫn của vòng này; cần dừng PID 73707 và sửa so-dang-ky.mjs dùng SLUG_HO_SO thay vì hằng cứng trước khi verify lại từ đầu.</li><li>Round 4: so-dang-ky.mjs đổi sang nạp slug hồ sơ qua SLUG_HO_SO thay vì viết tay (de62f1b), và bước dọn máy chủ của E13 đổi sang dừng theo PID đã in ra thay vì pkill rộng (852dc77) — cả 17 eval và ba lệnh suite hồi quy (`bun run test`, `bunx turbo run lint --force`, `bun run lint:slop`) chạy hết, không còn máy chủ Next nào tranh khóa thư mục. Verdict PASS.</li></ul>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>

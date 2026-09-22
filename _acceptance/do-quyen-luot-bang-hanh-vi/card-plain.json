@@ -1,0 +1,42 @@
+{
+ "feature_plain": "Quyền của một lượt trò chuyện nay đọc từ hàng đã lưu chứ không suy từ chữ trong tin nhắn, và có thước đo chứng minh được điều đó bằng cách tự phá.",
+ "scope_plain": "Không đụng ô soạn tin của người dùng, không đổi hình dạng dữ liệu gửi lên, và không cấm người gõ «build me an agent» giữa chừng một hội thoại.",
+ "decisions_plain": [
+  {
+   "id": "d-20260909T144100Z-31001",
+   "p": "Tách một hàm riêng dựng quyền của lượt từ hàng đã lưu — đổi lại đường đo đi qua đúng chỗ một suy diễn mới sẽ mọc."
+  },
+  {
+   "id": "d-20260910T090000Z-50001",
+   "p": "Mỗi thước đo nay trả ba màu tách bạch: xanh · vật bị vi phạm · thước hỏng — đổi lại đọc nhật ký mất thêm một bước."
+  },
+  {
+   "id": "d-20260910T110000Z-52001",
+   "p": "KHÔNG quét cả lớp «mọi chỗ suy quyền» nữa; thu về đúng thứ máy chủ và agent giữ được — đổi lại lời hứa hẹp hơn nhưng giữ được."
+  },
+  {
+   "id": "d-20260910T190000Z-59001",
+   "p": "KHÔNG giữ chân đo riêng cho chiều đỏ của tiêu chí một — giao hẳn cho bản khai sinh; đổi lại còn một đường tới sự thật ấy thay vì hai."
+  },
+  {
+   "id": "d-20260910T213000Z-61001",
+   "p": "Bản sao để tự phá thôi dùng lệnh git ghi vào chỉ mục dùng chung — đổi lại nhiều thước chạy song song không giết nhau nữa."
+  },
+  {
+   "id": "d-20260910T230000Z-62001",
+   "p": "Đổi hẳn cách dựng bản sao: chép tệp thay vì nhờ git cất tạm — đổi lại xoá cả một lớp lỗi thay vì phòng thủ nó."
+  },
+  {
+   "id": "d-20260910T230000Z-62002",
+   "p": "Phép tự kiểm thôi cắm dấu vào mã sản phẩm, chuyển sang một tệp trợ giúp — đổi lại một lần dừng giữa chừng không để rác trong mã thật."
+  },
+  {
+   "id": "d-20260912T010000Z-64001",
+   "p": "Thước nay bắt cả kiểu leo quyền viết bằng phép gán — đổi lại một lượt duyệt phạm vi nữa, vì đó là lỗ chính vòng này gây ra."
+  },
+  {
+   "id": "d-20260912T010000Z-64002",
+   "p": "Sửa một chỗ khiến một lượt chấm hợp lệ bị ghi nhầm thành hỏng hạ tầng — không đổi lại gì."
+  }
+ ]
+}

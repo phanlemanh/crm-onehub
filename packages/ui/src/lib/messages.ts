@@ -108,6 +108,10 @@ const en = {
 	threadMessage: {
 		empty: "No message body.",
 	},
+	board: {
+		empty: "Empty",
+		more: (count: string) => `${count} more`,
+	},
 };
 
 export type Messages = typeof en;
@@ -219,6 +223,10 @@ const vi = {
 	},
 	threadMessage: {
 		empty: "Thư không có nội dung.",
+	},
+	board: {
+		empty: "Trống",
+		more: (count: string) => `còn ${count} thẻ`,
 	},
 } satisfies Messages;
 

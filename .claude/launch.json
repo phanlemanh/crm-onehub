@@ -32,6 +32,42 @@
         "cd apps/app && PORT=3300 NEXT_PUBLIC_API_URL=http://localhost:3301 API_URL=http://localhost:3301 APP_URL=http://localhost:3300 bun run dev"
       ],
       "port": 3300
+    },
+    {
+      "name": "cay-chinh-api",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/api && PORT=3501 bun run dev"
+      ],
+      "port": 3501
+    },
+    {
+      "name": "cay-chinh-app",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/app && PORT=3500 NEXT_PUBLIC_API_URL=http://localhost:3501 API_URL=http://localhost:3501 APP_URL=http://localhost:3500 bun run dev"
+      ],
+      "port": 3500
+    },
+    {
+      "name": "proto-cay-nay",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/app && PROTO_ROUTE=1 PORT=3300 NEXT_PUBLIC_API_URL=http://localhost:3301 API_URL=http://localhost:3301 APP_URL=http://localhost:3300 bun run dev"
+      ],
+      "port": 3300
+    },
+    {
+      "name": "app-proto",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/app && PROTO_ROUTE=1 PORT=3400 NEXT_PUBLIC_API_URL=http://localhost:3001 API_URL=http://localhost:3001 APP_URL=http://localhost:3400 bun run start"
+      ],
+      "port": 3400
     }
   ]
 }

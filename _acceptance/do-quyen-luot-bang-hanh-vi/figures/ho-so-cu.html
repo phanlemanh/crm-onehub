@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hồ sơ cũ đóng băng, mã thì không — và cái giá phải nói ra</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --page:  #fafafa;
+    --card:  #fafafa;
+    --ink:   #171717;
+    --muted: #575757;
+    --soft:  #666666;
+    --rule:  rgba(23,23,23,0.12);
+    --accent:#006B4F;
+    --sans:  'Geist', system-ui, sans-serif;
+    --serif: 'Lora', Georgia, serif;
+    --mono:  'Geist Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:  #171717;
+      --ink:   #fafafa;
+      --muted: #b4b4b4;
+      --soft:  #9a9a9a;
+      --rule:  rgba(250,250,250,0.16);
+      --accent:#2f9b7a;
+    }
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1180px; width: 100%; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .standfirst {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 70ch;
+    margin-bottom: 1.75rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+  svg { width: 100%; min-width: 980px; display: block; }
+  .notes {
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 0.9fr;
+    gap: 2rem;
+  }
+  .notes h2 {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .notes p { font-size: 0.86rem; line-height: 1.6; color: var(--ink); }
+  .notes p + p { margin-top: 0.6rem; }
+  .notes .quiet { color: var(--muted); }
+  code { font-family: var(--mono); font-size: 0.92em; }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+  }
+  @media (max-width: 860px) { .notes { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Cổng 1 · Hình 3 · AC-5, AC-8, AC-9</p>
+  <h1>Hồ sơ cũ đóng băng, mã thì không — và cái giá phải nói ra</h1>
+  <p class="standfirst">Chữ của hồ sơ <code>quyen-luot-mang-theo</code> không được viết lại. Nhưng <code>recheck: strict</code> vẫn chạy lại lệnh máy của nó, và bài đầu của khối <code>describe("suy-dien")</code> gọi đúng hàm vòng này xoá. Ba đường thoát, chỉ một đường không đá vào AC-8.</p>
+
+  <div class="card">
+  <svg viewBox="0 0 1440 940" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hai khối cạnh nhau: hồ sơ cũ chia vùng đóng băng và vùng được động; mã trong quyen-luot.spec.ts với bài đo cũ đã xoá và phép đo hành vi mới; nối bằng chuỗi bốn bước recheck strict, lệnh ql_khong_suy_dien, bài đầu gọi builderCommandType, hàm bị AC-2 xoá; ba đường đã cân và đường đã chọn">
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+      <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+    </defs>
+
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <!-- ===== ĐƯỜNG NỐI (vẽ trước) ===== -->
+    <line x1="198" y1="424" x2="198" y2="492" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <line x1="356" y1="544" x2="386" y2="544" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <line x1="704" y1="544" x2="734" y2="544" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <line x1="1052" y1="544" x2="1082" y2="544" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+    <line x1="1242" y1="492" x2="1242" y2="428" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+    <!-- ===== KHỐI TRÁI: HỒ SƠ CŨ ===== -->
+    <text x="40" y="72" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">HỒ SƠ CŨ · _acceptance/quyen-luot-mang-theo</text>
+
+    <rect x="40" y="96" width="600" height="192" rx="8" fill="rgba(23,23,23,0.06)" stroke="#171717" stroke-width="1.2"/>
+    <text x="64" y="122" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐÓNG BĂNG — GIỮ TỪNG KÝ TỰ, KIỂM BẰNG sha256</text>
+    <text x="64" y="156" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">contract.md · chữ của AC-5</text>
+    <text x="64" y="174" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">mệnh đề cũ không được viết lại — hồ sơ là vết của một thời điểm</text>
+    <text x="64" y="208" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">evals.yaml · khối eval id E5</text>
+    <text x="64" y="226" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">expected đã ghim giữ nguyên từng ký tự</text>
+    <text x="64" y="260" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">bằng chứng đã ghim verified_commit của nó nói về lời hứa nó đã chấm</text>
+
+    <rect x="40" y="304" width="600" height="120" rx="8" fill="#ffffff" stroke="#575757" stroke-width="1.2" stroke-dasharray="7,5"/>
+    <text x="64" y="330" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐƯỢC ĐỘNG</text>
+    <text x="64" y="360" fill="#171717" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">## Notes</text>
+    <text x="64" y="380" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">thêm đúng MỘT dòng giới hạn đã biết, nêu slug do-quyen-luot-bang-hanh-vi</text>
+    <text x="64" y="398" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">và nói rõ expected đã ghim của E5 không còn mô tả thứ lệnh của nó chạy</text>
+
+    <!-- ===== KHỐI PHẢI: MÃ ===== -->
+    <text x="800" y="72" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">MÃ · apps/agent/test/quyen-luot.spec.ts</text>
+
+    <rect x="800" y="96" width="600" height="328" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1.2"/>
+    <text x="824" y="122" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">KHỐI describe("suy-dien") — TÊN GIỮ NGUYÊN, RUỘT THAY</text>
+
+    <rect x="824" y="144" width="552" height="88" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.22)" stroke-width="1" stroke-dasharray="5,4"/>
+    <rect x="836" y="154" width="64" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.28)" stroke-width="0.8"/>
+    <text x="868" y="167" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐÃ XOÁ</text>
+    <text x="1100" y="194" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">dem tren dia so cho suy quyen tu hinh dang tin nhan phai bang 0</text>
+    <line x1="912" y1="190" x2="1288" y2="190" stroke="#575757" stroke-width="1.2"/>
+    <text x="1100" y="216" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">regex theo dòng trên nguon.split("\n") — và gọi builderCommandType</text>
+    <line x1="828" y1="228" x2="1372" y2="148" stroke="rgba(23,23,23,0.16)" stroke-width="1"/>
+
+    <rect x="824" y="256" width="552" height="144" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="836" y="266" width="56" height="18" rx="4" fill="none" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
+    <text x="864" y="279" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-1</text>
+    <text x="1100" y="306" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">ruột mới — phép đo hành vi</text>
+    <text x="1100" y="330" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">hàng khai CHAT + tin nhắn xin tạo agent + inputResponse đầy đủ</text>
+    <text x="1100" y="348" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">builderSessionAuthFromRow(hàng, conversationId)</text>
+    <text x="1100" y="366" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">→ builderTurnApproval(ctx) = denied, đúng BUILDER_DENIED_REASON</text>
+    <text x="1100" y="388" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">đối chứng dương trên cùng hàng: đổi một trường → not-applicable</text>
+
+    <!-- ===== CHUỖI BỐN BƯỚC ===== -->
+    <rect x="40" y="496" width="316" height="96" rx="6" fill="#fafafa"/>
+    <rect x="40" y="496" width="316" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="52" y="506" width="28" height="20" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="66" y="521" fill="#575757" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">1</text>
+    <text x="198" y="548" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">recheck: strict</text>
+    <text x="198" y="568" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">_acceptance/config.yaml</text>
+    <text x="198" y="584" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">lệnh máy của hồ sơ cũ vẫn được chạy lại</text>
+
+    <rect x="388" y="496" width="316" height="96" rx="6" fill="#fafafa"/>
+    <rect x="388" y="496" width="316" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="400" y="506" width="28" height="20" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="414" y="521" fill="#575757" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">2</text>
+    <text x="546" y="548" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">ql_khong_suy_dien</text>
+    <text x="546" y="568" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">lọc -t suy-dien</text>
+    <text x="546" y="584" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">lệnh máy của eval E5 cũ</text>
+
+    <rect x="736" y="496" width="316" height="96" rx="6" fill="#fafafa"/>
+    <rect x="736" y="496" width="316" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="748" y="506" width="28" height="20" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="762" y="521" fill="#575757" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">3</text>
+    <text x="894" y="548" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">bài đầu của khối</text>
+    <text x="894" y="568" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">gọi builderCommandType</text>
+    <text x="894" y="584" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">đúng hàm vòng này xoá</text>
+
+    <rect x="1084" y="496" width="316" height="96" rx="6" fill="#fafafa"/>
+    <rect x="1084" y="496" width="316" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="1096" y="506" width="28" height="20" rx="4" fill="none" stroke="rgba(23,23,23,0.35)" stroke-width="0.8"/>
+    <text x="1110" y="521" fill="#575757" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">4</text>
+    <text x="1242" y="548" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">hàm ấy bị AC-2 xoá</text>
+    <text x="1242" y="568" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">khối gãy nếu không thay ruột</text>
+    <text x="1242" y="584" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">AC-9 — chạy lại vẫn phải thoát 0</text>
+
+    <!-- ===== BA ĐƯỜNG ĐÃ CÂN ===== -->
+    <text x="40" y="644" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">BA ĐƯỜNG ĐÃ CÂN, VÀ ĐƯỜNG ĐÃ CHỌN</text>
+
+    <rect x="40" y="664" width="432" height="136" rx="6" fill="#fafafa"/>
+    <rect x="40" y="664" width="432" height="136" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1" stroke-dasharray="5,4"/>
+    <rect x="52" y="674" width="72" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.28)" stroke-width="0.8"/>
+    <text x="88" y="687" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐÃ LOẠI</text>
+    <text x="256" y="720" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chữa expected đã ghim</text>
+    <text x="256" y="744" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">AC-8 cấm — sửa chữ là làm lệch vết</text>
+    <text x="256" y="762" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">bằng chứng đã ghim sẽ nói về một</text>
+    <text x="256" y="780" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">lời hứa khác lời hứa nó đã chấm</text>
+
+    <rect x="504" y="664" width="432" height="136" rx="6" fill="#fafafa"/>
+    <rect x="504" y="664" width="432" height="136" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1" stroke-dasharray="5,4"/>
+    <rect x="516" y="674" width="72" height="18" rx="4" fill="none" stroke="rgba(23,23,23,0.28)" stroke-width="0.8"/>
+    <text x="552" y="687" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐÃ LOẠI</text>
+    <text x="720" y="720" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">xoá khối describe</text>
+    <text x="720" y="744" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">lệnh ql_khong_suy_dien cũ thất bại</text>
+    <text x="720" y="762" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">recheck: strict vẫn chạy lại lệnh ấy</text>
+    <text x="720" y="780" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">→ AC-9 đỏ vì phép đo của vòng khác</text>
+
+    <rect x="968" y="664" width="432" height="136" rx="6" fill="#fafafa"/>
+    <rect x="968" y="664" width="432" height="136" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="980" y="674" width="76" height="18" rx="4" fill="none" stroke="rgba(0,107,79,0.55)" stroke-width="0.8"/>
+    <text x="1018" y="687" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐÃ CHỌN</text>
+    <text x="1184" y="720" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">giữ tên khối, thay ruột</text>
+    <text x="1184" y="744" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">describe("suy-dien") giữ nguyên tên</text>
+    <text x="1184" y="762" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">lệnh cũ vẫn thoát 0 — AC-9 xanh</text>
+    <text x="1184" y="780" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chữ hồ sơ cũ không đổi — AC-8 xanh</text>
+
+    <!-- ===== CÁI GIÁ ===== -->
+    <text x="40" y="832" fill="#171717" font-size="9" font-family="'Geist Mono', monospace">cái giá phải nói ra: expected đã ghim của E5 cũ từ nay KHÔNG CÒN mô tả thứ mà lệnh của nó chạy — dòng phụ vào ## Notes phải nói đúng câu ấy</text>
+
+    <!-- ===== CHÚ GIẢI ===== -->
+    <line x1="40" y1="864" x2="1400" y2="864" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="40" y="884" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+    <rect x="40" y="902" width="20" height="16" rx="3" fill="rgba(23,23,23,0.06)" stroke="#171717" stroke-width="1.2"/>
+    <text x="68" y="914" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">vùng đóng băng — giữ từng ký tự, kiểm bằng sha256</text>
+
+    <rect x="388" y="902" width="20" height="16" rx="3" fill="#ffffff" stroke="#575757" stroke-width="1.2" stroke-dasharray="6,4"/>
+    <text x="416" y="914" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">vùng được động — chỉ ## Notes, thêm đúng một dòng</text>
+
+    <rect x="736" y="902" width="20" height="16" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="764" y="914" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">đã chọn — giữ tên khối, thay ruột</text>
+
+    <rect x="1084" y="902" width="20" height="16" rx="3" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.22)" stroke-width="1" stroke-dasharray="4,3"/>
+    <line x1="1084" y1="918" x2="1104" y2="902" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+    <text x="1112" y="914" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">đã xoá — bài đo cũ là mã, không phải hồ sơ</text>
+  </svg>
+  </div>
+
+  <div class="notes">
+    <div>
+      <h2>Vì sao không viết lại hồ sơ cũ</h2>
+      <p>Hồ sơ là vết của một thời điểm. Sửa chữ là làm lệch vết, và bằng chứng đã ghim <code>verified_commit</code> của nó sẽ nói về một lời hứa khác với lời hứa nó đã chấm.</p>
+      <p class="quiet">Điểm quyết định <code>d-…-20735</code>. Bài đo grep trong mã thì vẫn xoá — nó là mã, không phải hồ sơ.</p>
+    </div>
+    <div>
+      <h2>Vì sao đóng băng chữ lại đẻ ra AC-9</h2>
+      <p><code>recheck: strict</code> chạy lại lệnh máy của hồ sơ cũ. Xoá <code>builderCommandType</code> làm bài đầu của khối <code>suy-dien</code> gãy, mà đường sửa hiển nhiên nhất — chữa <code>expected</code> — lại bị AC-8 chặn.</p>
+      <p class="quiet">Điểm quyết định <code>d-…-31138</code>: không có AC-9 thì vòng đỏ ở Cổng 2 vì một phép đo của vòng khác.</p>
+    </div>
+    <div>
+      <h2>Hai vùng khai tường minh</h2>
+      <p>AC-8 nói rõ vùng nào đóng băng (AC-5 và khối E5) và vùng nào được động (<code>## Notes</code>), để hai tiêu chí không đá nhau. Không khai thì một tiêu chí đòi giữ, một tiêu chí đòi sửa, trên cùng một tệp.</p>
+    </div>
+  </div>
+
+  <footer>Hình 3 / 3 · điểm quyết định ở Cổng 1 · do-quyen-luot-bang-hanh-vi · AC-5, AC-8, AC-9</footer>
+</div>
+</body>
+</html>

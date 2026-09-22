@@ -48,7 +48,7 @@ function laySau(goc, duong) {
 const CHO_LANG = Number(process.env.CHO_LANG_MS ?? 6000);
 const DAU = /[àáâãèéêìíòóôõùúýăđĩũơưạ-ỹ]/i;
 const VUNG_DU_LIEU = [
-	'[data-slot="message-scroller-item"]',
+	"[data-user-content]",
 	"[data-composer-text]",
 	'[translate="no"]',
 ];

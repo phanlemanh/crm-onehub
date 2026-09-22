@@ -1,0 +1,486 @@
+schema_version: 1
+slug: sua-luu-tru-dieu-phoi
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.slt_doi_ten_bo_phan
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/app/(app)/[slug]/onboarding/[planId]/**"
+      - "apps/app/components/onboarding/**"
+      - "apps/app/test/sua-luu-tru.dom.tsx"
+    expected: |
+      Dung THAT man Cai dat › Dieu phoi trong jsdom, ban gia tRPC ghi lai dau vao.
+      Mo menu cua dong bo phan -> Doi ten; hop thoai dien san ten cu; go ten moi; Luu.
+      Khang dinh: dung MOT loi goi updateDepartment; dau vao qua JSON roundtrip roi
+      qua CHINH departmentUpdateInput cua API, mang dung id va ten moi; hop thoai dong;
+      danh sach hien ten moi. DOI CHUNG: ten rong -> Luu tat, 0 loi goi.
+      Cung tep: ho so ke hoach doc departmentName tu listSteps (ban gia tra ten moi)
+      va hien ten do, khong hien ma.
+      CHIEU DO: hop thoai goi createDepartment thay vi updateDepartment -> do voi thong
+      diep ghim ten thu tuc va so loi goi.
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_bo_phan
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      HTTP POST that toi AppModule voi cookie phien cua mot quan tri: doi ten mot bo phan
+      co buoc ke hoach dang chay giao cho no. Doc lai: DB mang ten moi; listSteps cua ke
+      hoach tra departmentName = ten moi. Tiep: sap lai thu tu (AC-2) -> listDepartments
+      tra dung thu tu moi; luu tru (AC-3) -> listDepartments({archived:false}) khong con,
+      ({archived:true}) co; listSteps van tra departmentName dung ten; restore -> ve lai.
+      CHIEU DO: listSteps bo departmentName (lay ten qua listDepartments) -> do voi thong
+      diep ghim ten bo phan mong doi va nhan duoc sau khi luu tru.
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.slt_sap_bo_phan
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/components/onboarding/**"
+      - "apps/app/test/sua-luu-tru.dom.tsx"
+    expected: |
+      Ma tran viet truoc HAI ca: may chu chap nhan / may chu tu choi. Ba bo phan A,B,C;
+      dung ban phim cua SortableList dua C len dau.
+      Ca chap nhan: dung MOT loi goi reorderDepartments voi ids [C,A,B] qua
+      departmentReorderInput; danh sach hien C,A,B; mo Soan khuon -> o chon bo phan theo
+      thu tu C,A,B. Ca tu choi: danh sach ve A,B,C va toast hien thong diep may chu.
+      So ca bang 2.
+      CHIEU DO: khong hoan thu tu khi loi -> ca tu choi do voi thong diep ghim thu tu
+      mong doi va hien.
+
+  - id: E4
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_bo_phan
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      Cung loi goi HTTP cua E2: reorderDepartments ghi position theo dung thu tu gui;
+      doc lai DB va listDepartments trung thu tu do.
+      CHIEU DO: ghi position theo thu tu nguoc -> do voi thong diep ghim hai thu tu.
+
+  - id: E5
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.slt_luu_tru_bo_phan
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/components/onboarding/**"
+      - "apps/app/test/sua-luu-tru.dom.tsx"
+    expected: |
+      Menu -> Luu tru -> hop xac nhan -> Xac nhan. Khang dinh: dung MOT loi goi
+      archiveDepartment voi id do; bo phan roi danh sach dang dung; muc «Đã lưu trữ» hien
+      no; toast co nut «Hoàn tác»; bam Hoan tac -> dung MOT loi goi restoreDepartment
+      cung id va bo phan tro lai danh sach. DOI CHUNG: bam Huy o hop xac nhan -> 0 loi goi.
+      CHIEU DO: toast khong co nut Hoan tac -> do voi thong diep ghim nhan nut.
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.slt_bi_chan_luu_tru
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/test/sua-luu-tru.dom.tsx"
+    expected: |
+      Ban gia archiveDepartment nem loi mang thong diep may chu (nguyen van tu E7).
+      Khang dinh: bo phan van o danh sach dang dung; toast hien dung thong diep do;
+      muc Da luu tru khong co bo phan do.
+      CHIEU DO: cap nhat lac quan khong hoan -> do voi thong diep ghim ten bo phan.
+
+  - id: E7
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_chan_luu_tru
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      Ma tran viet truoc BA ca: bo phan trong mot khuon chua luu tru -> HTTP 400,
+      thong diep chua ten khuon, DB archivedAt van null; bo phan chi trong khuon da luu
+      tru -> 200, archivedAt co; bo phan khong khuon nao -> 200. So ca bang 3.
+      CHIEU DO: bo kiem khuon dang dung -> ca 1 do voi thong diep ghim ten ca va ma HTTP.
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.slt_sua_khuon
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/components/onboarding/**"
+      - "apps/app/test/sua-luu-tru.dom.tsx"
+    expected: |
+      Menu cua the khuon -> Sua. Khang dinh hop thoai dien san ten, loai doi tac va cac
+      buoc cua khuon (nhan, bo phan, ngay thu, theo dung thu tu) va co dong «Kế hoạch đã
+      tạo không đổi theo». Doi ten, xoa loai doi tac, doi nhan buoc 2, Luu. Khang dinh:
+      dung MOT loi goi updateTemplate qua templateUpdateInput voi id khuon, ten moi,
+      partnerType null, steps dung thu tu moi; KHONG loi goi createTemplate.
+      CHIEU DO: hop thoai khong dien san buoc -> do voi thong diep ghim so buoc mong doi
+      va hien.
+
+  - id: E9
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_khuon
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      HTTP that: tao khuon hai buoc, tao ke hoach tu no, roi updateTemplate doi ten,
+      loai doi tac va buoc. Doc lai: khuon mang gia tri moi; buoc cua ke hoach da tao
+      giu nguyen nhan va so luong cu.
+      CHIEU DO: updateTemplate ghi de buoc cua ke hoach da tao -> do voi thong diep ghim
+      nhan buoc cu va moi.
+
+  - id: E10
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.slt_luu_tru_khuon
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/components/onboarding/**"
+      - "apps/app/test/sua-luu-tru.dom.tsx"
+    expected: |
+      Menu the khuon -> Luu tru -> xac nhan. Khang dinh: dung MOT loi goi archiveTemplate;
+      khuon roi danh sach, hien trong Da luu tru; toast co Hoan tac -> restoreTemplate.
+      Rieng: hop thoai «Tạo kế hoạch từ khuôn» doc listTemplates({archived:false}) — dau vao
+      truy van ghi lai co archived false (hoac vang), va o chon khuon khong co khuon da
+      luu tru (ban gia tra danh sach chi co khuon dang dung).
+      CHIEU DO: hop thoai tao ke hoach goi listTemplates voi archived true -> do voi thong
+      diep ghim dau vao truy van.
+
+  - id: E11
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_khuon
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      Cung tep E9: archiveTemplate -> listTemplates({archived:false}) khong con,
+      ({archived:true}) co; createFromTemplate voi khuon da luu tru -> 4xx; restoreTemplate
+      -> ve danh sach dang dung.
+      CHIEU DO: listTemplates bo loc archived -> do voi thong diep ghim ten khuon.
+
+  - id: E12
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.slt_khoi_phuc
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/test/sua-luu-tru.dom.tsx"
+    expected: |
+      Ma tran viet truoc HAI ca: khoi phuc bo phan / khoi phuc khuon. Mo muc «Đã lưu trữ»,
+      bam Khoi phuc. Moi ca: dung MOT loi goi restore dung thu tuc va id; muc roi Da luu
+      tru, ve danh sach dang dung. So ca bang 2. Them: ban gia restoreTemplate nem loi
+      mang ten bo phan -> khuon o nguyen Da luu tru, toast hien thong diep.
+      CHIEU DO: nut Khoi phuc cua khuon goi restoreDepartment -> ca 2 do voi thong diep
+      ghim ten thu tuc.
+
+  - id: E13
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_khuon
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      Ma tran viet truoc BA ca, deu tra 400 voi thong diep chua TEN bo phan da luu tru:
+      restoreTemplate khuon co buoc giao bo phan dang luu tru; createTemplate voi buoc
+      nhu vay; updateTemplate them buoc nhu vay. DB khong doi o ca ba. DOI CHUNG: bo phan
+      dang dung -> ca ba thanh cong. So ca bang 3.
+      CHIEU DO: bo kiem bo phan da luu tru o createTemplate -> ca 2 do voi thong diep ghim
+      ten ca.
+
+  - id: E14
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.slt_xoa_vinh_vien
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/api/src/onboarding/onboarding.contracts.ts"
+      - "apps/app/test/sua-luu-tru.dom.tsx"
+    expected: |
+      Ma tran viet truoc BON ca: bo phan chua dung / bo phan da dung / khuon chua dung /
+      khuon da dung. Du lieu gia cua listDepartments({archived:true}) va
+      listTemplates({archived:true}) DI QUA CHINH departmentListOutput/templateListOutput
+      cua API (truong purgeable), khong viet tay ngoai schema.
+      Ca chua dung (purgeable true): co nut «Xoá vĩnh viễn»; bam -> hop xac nhan -> dung
+      MOT loi goi purge dung thu tuc va id; muc bien mat. Ca da dung (purgeable false):
+      KHONG co nut. So ca bang 4.
+      CHIEU DO: hien nut cho muc da dung -> ca 2 va 4 do voi thong diep ghim ten ca;
+      bo truong purgeable khoi schema dau ra -> du lieu gia khong qua schema, do voi thong
+      diep ghim ten truong.
+
+  - id: E15
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_xoa_vinh_vien
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      Ma tran viet truoc BON doi tuong qua HTTP: bo phan da luu tru chua dung, bo phan da
+      luu tru da co buoc ke hoach, khuon da luu tru chua ke hoach nao, khuon da luu tru da
+      co ke hoach. Voi moi doi tuong: listDepartments/listTemplates({archived:true}) tra
+      purgeable dung (true, false, true, false); purge -> 200 va hang mat khoi DB khi
+      purgeable true, 400 va hang con khi false. Them ca thu nam: purge bo phan CHUA luu
+      tru -> 400. So ca bang 5.
+      CHIEU DO: purge bo kiem «da dung» -> ca 2 do voi thong diep ghim ten ca va so hang;
+      purgeable luon true -> do voi thong diep ghim ten ca.
+
+  - id: E16
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.slt_khoa_theo_quyen
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/components/onboarding/**"
+      - "apps/app/test/sua-luu-tru.dom.tsx"
+    expected: |
+      Ma tran viet truoc HAI vai: access tra canManage false / true. Voi false: dong
+      «Cần quyền quản trị để đổi cấu hình điều phối» doc tu bang thong diep hien; MOI nut
+      trong danh sach dong (Thêm bộ phận, Soạn khuôn, menu cua dong bo phan, menu cua the
+      khuon, keo sap xep, Khoi phuc, Xoa vinh vien) bi khoa — ma tran liet ke tung nut,
+      so assert bang so nut. Voi true: cac nut do bam duoc, dong kia vang.
+      Ho so ke hoach voi canManage false: nut Dong ke hoach, o bac, Them moi gioi van
+      bam duoc.
+      CHIEU DO: bo khoa nut Soan khuon -> do voi thong diep ghim ten nut.
+
+  - id: E17
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_quyen
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "packages/auth/src/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      Ba cookie phien that: mot chu, mot quan tri, mot thanh vien. Ma tran viet truoc tung thu
+      tuc cau hinh: createDepartment, updateDepartment, reorderDepartments,
+      archiveDepartment, restoreDepartment, purgeDepartment, createTemplate,
+      updateTemplate, archiveTemplate, restoreTemplate, purgeTemplate — thanh vien -> HTTP
+      403 va DB khong doi; so assert bang so thu tuc (11). access: thanh vien
+      canManage false, quan tri true. Thanh vien goi createFromTemplate, closePlan,
+      reopenPlan, upsertEnrollment, markEnrollmentStage -> 200. Them cookie phien cua mot
+      CHU: access canManage true va createDepartment -> 200.
+      CHIEU DO: bo kiem quyen o purgeTemplate -> do voi thong diep ghim ten thu tuc va ma
+      HTTP.
+
+  - id: E18
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.slt_dong_mo_ke_hoach
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/[planId]/**"
+      - "apps/app/test/sua-luu-tru.dom.tsx"
+    expected: |
+      Ho so ke hoach dang chay: bam Dong ke hoach -> hop xac nhan -> xac nhan -> dung MOT
+      loi goi closePlan dung id; ho so hien nhan «Đã đóng» va nut «Mở lại»; bam Mo lai ->
+      dung MOT loi goi reopenPlan; nhan bien mat. DOI CHUNG: Huy o hop xac nhan -> 0 loi goi.
+      CHIEU DO: nut Mo lai goi closePlan -> do voi thong diep ghim ten thu tuc.
+
+  - id: E19
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_dong_mo
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      HTTP that: closePlan -> closedAt co; manDanhMuc mac dinh (dang-chay) khong chua ke
+      hoach, status da-dong co; reopenPlan -> closedAt null, manDanhMuc mac dinh co lai.
+      CHIEU DO: reopenPlan khong xoa closedAt -> do voi thong diep ghim trang thai mong doi.
+
+  - id: E20
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.slt_danh_dau_bac
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/[planId]/**"
+      - "apps/app/test/sua-luu-tru.dom.tsx"
+    expected: |
+      Chay duoi TZ=Asia/Ho_Chi_Minh voi dong ho gia dat luc 23:30 gio dia phuong (ngay
+      lich dia phuong khac ngay UTC cua cung thoi diem). Ma tran viet truoc BA ca:
+      (1) bam o courseAt con trong trong khi accountAt cung trong -> dung MOT loi goi
+      markEnrollmentStage qua enrollmentStageInput voi stage courseAt va at = NGAY LICH DIA
+      PHUONG dang chuoi YYYY-MM-DD; phieu dem bac do tang 1.
+      (2) bam o da co ngay -> chon ngay khac tren lich -> at = ngay da chon.
+      (3) bam o da co ngay -> «Bỏ đánh dấu» -> at = null; o ve trong.
+      So ca bang 3.
+      CHIEU DO: gui toISOString().slice(0,10) cua gio hien tai -> ca 1 do voi thong diep
+      ghim hai ngay lech nhau.
+
+  - id: E21
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_bac
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      HTTP that: markEnrollmentStage voi at "2026-09-20" cho dealAt khi ba bac truoc trong
+      -> 200, DB dealAt ngay lich UTC 2026-09-20, ba bac kia van null; at null -> dealAt null.
+      CHIEU DO: dat .input() ve z.date() -> 400, do voi thong diep ghim ten truong at.
+
+  - id: E22
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_ngay
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      Ma tran viet truoc qua HTTP, hai truong startedAt (createFromTemplate) va at
+      (markEnrollmentStage) x bon dau vao sai: vang truong, null (chi startedAt), so
+      1726963200000, chuoi "21/09/2026" — moi o tra 400 voi thong diep chua ten truong va
+      DB khong co hang moi / khong doi; so o sai = 7. Dau vao "2026-09-21" -> 200, ngay lich
+      UTC dung. Them: sau ca, DB khong co ke hoach nao startedAt nam 1970.
+      CHIEU DO: dat startedAt ve z.coerce.date() -> o null do voi thong diep ghim ten
+      truong va ngay 1970.
+
+  - id: E23
+    criterion: AC-13
+    executor: test
+    cmd: config:executors.test.slt_da_trong_pheu
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/[planId]/**"
+      - "apps/app/test/sua-luu-tru.dom.tsx"
+    expected: |
+      Pheu co ca nhan X. Mo Them moi gioi, go tim ra X va Y. Khang dinh: dong X mang
+      «đã trong phễu» va aria-disabled; bam X khong chon; chon Y, Luu -> dung MOT loi goi
+      upsertEnrollment voi contactId Y. DOI CHUNG: pheu trong -> X chon duoc.
+      CHIEU DO: bo danh dau nguoi trong pheu -> do voi thong diep ghim ten ca nhan.
+
+  - id: E24
+    criterion: AC-13
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_trung_pheu
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      Ghi danh X nguon «nen-tang» (ghi thang DB nhu luong nen tang). HTTP upsertEnrollment
+      X nguon tay -> 409, thong diep «Người này đã có trong phễu», DB source van nen-tang
+      va chi mot hang. DOI CHUNG: ca nhan moi -> 200, source tay.
+      CHIEU DO: tra ve update source nhu cu -> do voi thong diep ghim nguon mong doi.
+
+  - id: E25
+    criterion: AC-14
+    executor: test
+    cmd: config:executors.test.slt_loi_va_mot_lan
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/app/(app)/[slug]/onboarding/[planId]/**"
+      - "apps/app/components/onboarding/**"
+      - "apps/app/test/sua-luu-tru.dom.tsx"
+    expected: |
+      Ma tran viet truoc MUOI BON o (thao tac x doi tuong): doi ten bo phan, sap xep bo
+      phan, sua khuon, luu tru bo phan, luu tru khuon, hoan tac bo phan, hoan tac khuon,
+      khoi phuc bo phan, khoi phuc khuon, xoa vinh vien bo phan, xoa vinh vien khuon,
+      dong ke hoach, mo lai ke hoach, danh dau bac. Moi o hai lan chay:
+      (a) ban gia nem loi mang thong diep xac dinh -> man giu trang thai truoc thao tac
+      (so sanh gia tri cu) va toast hien dung thong diep; rieng doi ten bo phan va sua
+      khuon: hop thoai con mo va giu nguyen moi gia tri da go (ten, loai doi tac, tung
+      buoc);
+      (b) ban gia treo -> bam hai lan -> dung 1 loi goi, nut/o mang disabled khi treo.
+      So ca bang 28.
+      CHIEU DO: bo khoa khi dang luu o o bac -> ca «danh dau bac (b)» do voi thong diep
+      ghim ten thao tac va so loi goi; dong hop thoai sua khuon trong onSettled -> ca
+      «sua khuon (a)» do voi thong diep ghim ten o.
+
+  - id: E26
+    criterion: AC-15
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    steps:
+      - "Dung api va app cua CAY DANG XET; cong lay tu APP_URL va API_URL (mac dinh http://localhost:3300 va http://localhost:3301); khong sua tep nao trong cay, ke ca bo chup"
+      - "CHAN CAY: dat dau moc .svg vao apps/app/public roi xin lai qua APP_URL; xin onboarding.access qua API_URL — thieu dau moc hoac thu tuc access khong co -> thoat ma 2"
+      - "Dang nhap bang `cd apps/api && bun run dev:session <email>` cho mot quan tri va mot thanh vien, dat cookie vao trinh duyet chup"
+      - "GIEO bang chinh thu tuc that qua HTTP voi cookie quan tri (khong ghi thang DB): tao va luu tru mot bo phan chua dung; tao va luu tru mot khuon chua dung; tao mot bo phan va mot khuon hai buoc dang dung; tao mot ke hoach tu khuon do va them mot moi gioi"
+      - "Quan tri: mo menu «…» mot bo phan va mot khuon; mo Soan khuon che do sua; mo muc Da luu tru co ca bo phan va khuon; tren ho so ke hoach: dong ke hoach, mo lich cua mot o bac"
+      - "Thanh vien: mo Cai dat › Dieu phoi"
+      - "Chup tung trang thai o 1440 va 768: evidence/E26-<trang-thai>-<kho>.png"
+    inputs:
+      - _acceptance/sua-luu-tru-dieu-phoi/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/components/onboarding/**"
+    expected: |
+      Nhin thay tren anh: menu «…» voi Doi ten/Sua va Luu tru; hop Soan khuon dien san;
+      muc Da luu tru co Khoi phuc va Xoa vinh vien; man thanh vien co nut khoa va dong can
+      quyen quan tri; ho so ke hoach nhan Da dong va nut Mo lai; o bac mo lich co Bo danh
+      dau. O kho 768 khong co gi tran ngang. Thieu trang thai nao -> khong dat.
+
+  - id: E27
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.slt_ngay_tao_ke_hoach
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/api/src/onboarding/onboarding.contracts.ts"
+      - "apps/app/test/sua-luu-tru.dom.tsx"
+    expected: |
+      Chay duoi TZ=Asia/Ho_Chi_Minh voi dong ho gia luc 23:30 gio dia phuong. Mo hop thoai
+      «Tạo kế hoạch từ khuôn» san co tu vong truoc, de ngay mac dinh, chon cong ty va khuon,
+      Luu. Khang dinh: dung MOT loi goi createFromTemplate; dau vao qua JSON roundtrip roi
+      qua CHINH planCreateFromTemplateInput da siet cua API parse THANH CONG; startedAt
+      goc la chuoi YYYY-MM-DD bang NGAY LICH DIA PHUONG.
+      CHIEU DO: hop thoai gui toISOString() -> schema tu choi, do voi thong diep ghim ten
+      truong startedAt.
+
+  - id: E28
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.slt_quyen_don_vi
+    paths:
+      - "packages/auth/src/**"
+      - "packages/auth/test/quyen-dieu-phoi.spec.ts"
+    expected: |
+      Ma tran viet truoc: moi phan tu cua WORKSPACE_ROLES cong null, voi hang mong doi
+      ghi trong tep thuoc (owner true, admin true, member false, null false). Khang dinh
+      canManageOnboarding tra dung tung dong; so assert bang so phan tu (4) va tep so
+      khop tap vai tro voi WORKSPACE_ROLES de vai tro moi them vao lam do.
+      CHIEU DO: canManageOnboarding viet thanh role === "admin" -> dong owner do voi
+      thong diep ghim ten vai tro.
+
+  - id: E29
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_bo_phan
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      Cung loi goi HTTP that cua E2, phan luu tru: quan tri luu tru mot bo phan ma khong
+      khuon chua luu tru nao dung -> 200; listDepartments({archived:false}) khong con no,
+      listDepartments({archived:true}) co no; listSteps cua ke hoach dang chay van tra
+      departmentName dung ten bo phan da luu tru; restoreDepartment (duong cua Hoan tac)
+      -> 200 va no tro lai listDepartments({archived:false}).
+      CHIEU DO: archiveDepartment khong ghi archivedAt -> do voi thong diep ghim ten bo
+      phan va danh sach dang dung.

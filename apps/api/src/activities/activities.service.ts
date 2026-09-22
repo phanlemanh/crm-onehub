@@ -1,4 +1,5 @@
 import { ActivityType, type Db, type Prisma } from "@crm/db";
+import { dauNgayVN } from "@crm/db/onboarding-nhac";
 import { activityMeta } from "@crm/validation/activity-meta";
 import {
 	BadRequestException,
@@ -40,6 +41,7 @@ const ENTRY_SELECT = {
 	company: { select: { id: true, name: true } },
 	contact: { select: { id: true, firstName: true, lastName: true } },
 	deal: { select: { id: true, name: true } },
+	planId: true,
 
 	emailThread: {
 		select: {
@@ -103,7 +105,7 @@ export class ActivitiesService {
 	}
 
 	async timelineCounts(
-		input: Pick<TimelineInput, "companyId" | "contactId" | "dealId">,
+		input: Pick<TimelineInput, "companyId" | "contactId" | "dealId" | "planId">,
 	): Promise<TimelineCounts> {
 		const anchor = this.anchor(input);
 
@@ -145,6 +147,7 @@ export class ActivitiesService {
 				companyId,
 				contactId: input.contactId ?? null,
 				dealId: input.dealId ?? null,
+				planId: input.planId ?? null,
 				createdById: actingUserId,
 			},
 			select: ENTRY_SELECT,
@@ -191,15 +194,15 @@ export class ActivitiesService {
 		input: MyTasksInput,
 		actingUserId: string,
 	): Promise<ActivityEntry[]> {
-		const now = new Date();
+		const homNay = dauNgayVN(new Date());
 		const where: Prisma.ActivityWhereInput = {
 			type: ActivityType.TASK,
 			completedAt: null,
 			createdById: actingUserId,
 		};
 
-		if (input.window === "overdue") where.dueAt = { lt: now };
-		if (input.window === "upcoming") where.dueAt = { gte: now };
+		if (input.window === "overdue") where.dueAt = { lt: homNay };
+		if (input.window === "upcoming") where.dueAt = { gte: homNay };
 
 		const tasks = await this.db.activity.findMany({
 			where,
@@ -215,13 +218,14 @@ export class ActivitiesService {
 	}
 
 	private anchor(
-		input: Pick<TimelineInput, "companyId" | "contactId" | "dealId">,
+		input: Pick<TimelineInput, "companyId" | "contactId" | "dealId" | "planId">,
 	): Prisma.ActivityWhereInput {
+		if (input.planId) return { planId: input.planId };
 		if (input.dealId) return { dealId: input.dealId };
 		if (input.contactId) return { contactId: input.contactId };
 		if (input.companyId) return { companyId: input.companyId };
 		throw new BadRequestException(
-			"A timeline needs a company, a contact or a deal.",
+			"A timeline needs a company, a contact, a deal or a 30-day plan.",
 		);
 	}
 
@@ -250,6 +254,17 @@ export class ActivitiesService {
 				throw new NotFoundException(`No contact with id ${input.contactId}.`);
 			}
 			return contact.companyId;
+		}
+
+		if (input.planId) {
+			const plan = await this.db.onboardingPlan.findUnique({
+				where: { id: input.planId },
+				select: { companyId: true },
+			});
+			if (!plan) {
+				throw new NotFoundException(`No 30-day plan with id ${input.planId}.`);
+			}
+			return plan.companyId;
 		}
 
 		return null;

@@ -26,6 +26,7 @@ type ComboboxOption = {
 	label: string;
 	hint?: string;
 	keywords?: string[];
+	disabled?: boolean;
 };
 
 function Combobox({
@@ -109,7 +110,8 @@ function Combobox({
 									key={option.value}
 									value={option.label}
 									keywords={option.keywords}
-									disabled={stale}
+									disabled={stale || option.disabled === true}
+									aria-disabled={stale || option.disabled === true}
 									data-checked={option.value === value}
 									onSelect={() => {
 										close();

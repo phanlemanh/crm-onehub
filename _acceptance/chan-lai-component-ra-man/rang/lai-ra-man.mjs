@@ -1,13 +1,12 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { docFile, docMacDinh, duongRa as duongChung } from "./moi-mac-dinh.mjs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { duongLuot, xoaTaoPhamCu } from "./luot-chay.mjs";
+import { docFile, docMacDinh } from "./moi-mac-dinh.mjs";
 
 const GOC = join(import.meta.dirname, "..", "..", "..");
-const HO_SO = join(GOC, "_acceptance", "chan-lai-component-ra-man");
-const EV = join(HO_SO, "evidence");
 
-const NEO = { file: 383, mac_dinh: 92, dong_bang_cu: 9 };
+const NEO = { file: 459, mac_dinh: 93, dong_bang_cu: 9 };
 
 function banVeRong(banVe) {
 	return Object.values(banVe)
@@ -15,14 +14,8 @@ function banVeRong(banVe) {
 		.every((b) => b.loi_dong !== null || b.loi_mo !== null);
 }
 
-function duongRa(ten) {
-	return duongChung(GOC, ten);
-}
-
 function ghi(ten, gt) {
-	const duong = duongRa(ten);
-	mkdirSync(dirname(duong), { recursive: true });
-	writeFileSync(duong, `${JSON.stringify(gt, null, "\t")}\n`);
+	writeFileSync(duongLuot(ten), `${JSON.stringify(gt, null, "\t")}\n`);
 }
 
 export function danSo() {
@@ -82,9 +75,10 @@ function chayBanVe() {
 
 export function phanNhom() {
 	ghi("mac-dinh.json", docMacDinh(GOC));
+	xoaTaoPhamCu("ve-that.json");
 	const maVe = chayBanVe();
 	if (maVe !== 0) return maVe;
-	const duong = duongRa("ve-that.json");
+	const duong = duongLuot("ve-that.json");
 	if (!existsSync(duong)) {
 		console.error(
 			"KHONG DO DUOC: khong co tao pham ve-that.json — bo ve chua chay duoc, khong ket luan gi ve phan nhom.",

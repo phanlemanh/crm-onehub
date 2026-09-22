@@ -1,0 +1,164 @@
+{
+  "generated_at": "2026-09-18T11:31:09Z",
+  "generated_sha": "e62300770c4b65aa022a2f9c30eee4f0cc89bcc7",
+  "mainBranchInfo": {
+    "branch": "onehub",
+    "source": "remote"
+  },
+  "slug": "go-thanh-vien-phai-giu-duoc",
+  "round": 1,
+  "riskTier": "T3",
+  "evals": [
+    {
+      "id": "E1",
+      "criterion": "AC-1",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/go-thanh-vien.spec.ts -t bi-go-thi-bi-tu-choi\"",
+      "expected": "\"exit 0; MA TRẬN TOÀN PHẦN trên SÁU thủ tục quản trị của WorkspaceService — update, setMemberRole, allowances, allowEmail, revokeAllowance, removeMember — sáu hàng viết trước, số assert là hằng MƯỜI HAI vì mỗi hàng hai chiều trên cùng cữ liệu: người còn là quản trị gọi thì thủ tục KHÔNG ném, người ấy sau khi bị gỡ gọi lại thì NÉM ForbiddenException. Vế đầu là đối chứng dương — thiếu nó thì một bản sửa từ chối tất cả mọi người vẫn xanh. Bài gọi thủ tục THẬT của dịch vụ, không gọi hàm trợ giúp workspaceRoleOf. Chiều đỏ: bỏ lưới isWorkspaceAdmin khỏi MỘT thủ tục bất kỳ thì hàng của thủ tục đó đỏ, thông điệp ghim tên thủ tục và điều đã nhận thay vì lỗi\"",
+      "executor": "test",
+      "expectedExit": 0,
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "paths": [
+        "apps/api/src/workspace/workspace.service.ts",
+        "packages/auth/src/organization.ts",
+        "apps/api/test/go-thanh-vien.spec.ts"
+      ],
+      "ref": "config:executors.test.gt_bi_go_thi_bi_tu_choi"
+    },
+    {
+      "id": "E2",
+      "criterion": "AC-2",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/go-thanh-vien.spec.ts -t phien-mat-quyen\"",
+      "expected": "\"exit 0; bài mint một phiên THẬT theo đúng cách dev:session mint — cùng khuôn token và cùng tên cookie mà @crm/auth xuất — rồi hỏi ĐÚNG CỬA ứng dụng hỏi: auth.api.getSession với cookie của chính phiên ấy. Hai chiều trên cùng phiên: TRƯỚC lượt gỡ, getSession trả về một phiên có đúng userId ấy; NGAY SAU khi removeMember trả về, cùng lời gọi ấy KHÔNG còn trả phiên nào. Bài KHÔNG đếm số dòng bảng session — xoá một dòng và mất quyền là hai mệnh đề khác nhau, và mọi lớp đệm nằm giữa đều làm chúng tách ra; hiệu số dòng chỉ giữ làm khẳng định phụ. Đối chứng dương thứ hai: phiên của một người KHÁC vẫn hỏi được sau lượt gỡ. Chiều đỏ: gỡ session.deleteMany khỏi giao dịch của removeMember thì getSession vẫn trả phiên sau lượt gỡ và bài đỏ, thông điệp ghim userId mà cửa vẫn nhận\"",
+      "executor": "test",
+      "expectedExit": 0,
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "paths": [
+        "apps/api/src/workspace/workspace.service.ts",
+        "packages/auth/src/auth.ts",
+        "apps/api/test/go-thanh-vien.spec.ts"
+      ],
+      "ref": "config:executors.test.gt_phien_mat_quyen"
+    },
+    {
+      "id": "E3",
+      "criterion": "AC-3",
+      "cmd": "bun run test -- \"cd apps/api && bun test test/go-thanh-vien.spec.ts -t duong-moi-khong-cap-lai\"",
+      "expected": "\"exit 0; MA TRẬN trên MỌI trạng thái kết thúc mà hằng có tên của @crm/validation/invitation-status khai — số hàng bằng số trạng thái kết thúc, số assert là hằng bằng số hàng, không suy từ runtime. Cữ liệu KHÔNG gõ tay: bài đưa người đó qua lượt gỡ THẬT bằng removeMember rồi ĐỌC LẠI giá trị trạng thái đã ghi trong cơ sở dữ liệu và dùng chính giá trị ấy; các trạng thái kết thúc còn lại gieo bằng hằng có tên. Bước tay duy nhất không tránh được là xoá các dòng thành viên còn lại để dựng cảnh bảng rỗng — bài khai rõ bước đó. Rồi gọi ensureWorkspaceMembership và đòi đường mồi KHÔNG cấp tư cách thành viên cho người mang trạng thái kết thúc. Đối chứng dương trên cùng cữ liệu: một người CHƯA TỪNG có lời mời vẫn được đường mồi kết nạp — vế này giữ cho hành vi mồi của bản cài mới không đổi và phân biệt chặn-đúng-người với hỏng-cả-đường-mồi. Chiều đỏ: trả nhánh mồi về bản cũ thì người đã bị gỡ được kết nạp và bài đỏ, thông điệp ghim vai đã cấp cho họ\"",
+      "executor": "test",
+      "expectedExit": 0,
+      "evidence_required": [
+        "run_id",
+        "exit_code",
+        "verifier",
+        "verified_at",
+        "output"
+      ],
+      "paths": [
+        "packages/auth/src/organization.ts",
+        "packages/validation/src/invitation-status.ts",
+        "apps/api/test/go-thanh-vien.spec.ts"
+      ],
+      "ref": "config:executors.test.gt_duong_moi_khong_cap_lai"
+    }
+  ],
+  "suiteCommands": [
+    "bun run test",
+    "bunx turbo run lint --force",
+    "bun run lint:slop",
+    "bunx turbo run build --force"
+  ],
+  "diffBase": "fb38472baf738d7ee728f5b92e517e005cf31ab4",
+  "repoRoot": "/private/tmp/claude-501/-Users-manh-macmini-dev-crm/54d93dc9-c67f-48a4-80f0-d8db039b5f4d/scratchpad/wt-gothanhvien",
+  "personasPath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.16.0/skills/acceptance/references/judge-personas.md",
+  "templatePath": "/Users/manh-macmini/.claude/plugins/cache/acceptance-gate-kit/acceptance-gate/2.16.0/skills/acceptance/references/evidence-report-template.md",
+  "toolKillRule": "# TOOL-KILL-RULE — lệnh bị công cụ ngắt KHÔNG phải lệnh fail\n\n**Nguồn duy nhất** của luật «hết giờ không phải trượt» cho MỌI đường chạy lệnh\nkiểm của kit. Hai đường tiêu thụ, cùng đọc khối marker dưới đây, không chép tay:\n\n- **Vòng lặp tính năng** (plugin feature-loop): skill `feature-loop` đọc file này\n  (resolve qua `resolve-plugin.mjs --require skills/acceptance/references/tool-kill-rule.md`)\n  và truyền NGUYÊN VĂN vào `args.toolKillRule` của workflow\n  `acceptance-verify.js`; workflow rút khối marker và nội suy vào prompt của mọi\n  agent chạy lệnh (machine · ui-check · baseline). Thiếu args hoặc không rút\n  được marker → workflow trả BLOCKED có tên, không chạy không luật.\n- **Đường VERIFY độc lập** (skill `acceptance` Phase 3): phiên điều phối chép khối\n  marker VERBATIM vào prompt của phiên tươi VERIFY, cùng nếp «Network truth».\n\nVì sao có luật: verifier chạy lệnh qua Bash tool có trần thời gian mặc định\n(~120 s) NGẮN hơn nhiều suite; lệnh bị công cụ giết trả exit code CỦA CÔNG CỤ,\nkhông phải của lệnh (vấp thật release-2-2-0 S4 r5: suite 108 s đơn lẻ, dưới tải\nbị giết ở 118 s → REJECT giả 4 eval). Nhận diện là việc AGENT (nó thấy tool\nresult thật); phần máy chỉ phòng thủ trên field cấu trúc `killedByTool` —\nKHÔNG grep nội dung output trong engine (chuỗi tổng kết là của suite từng repo).\n\n<!-- <<<TOOL-KILL-RULE -->\nTRAN THOI GIAN CONG CU: khi goi Bash chay lenh, LUON dat tham so timeout >= 600000 (ms) — tran mac dinh cua cong cu (~120s) NGAN hon nhieu suite; lenh vuot tran se bi CONG CU giet va exit code luc do la cua cong cu, KHONG phai cua lenh. Neu lenh van bi cong cu dung (tool result bao timeout/killed, hoac output bi CAT giua chung truoc dong tong ket cuoi cua lenh) → DO KHONG PHAI ket qua that: khai cannotRun=true + killedByTool=true + reason \"bi cong cu giet o <so giay> giay\" kem dau hieu (timeout tool / output cat). TUYET DOI khong bao exitCode nhu the lenh tu fail va khong doan PASS/FAIL tu output cut.\n<!-- TOOL-KILL-RULE>>> -->\n\n## Hồ sơ cho lượt bị ngắt (đường độc lập)\n\nPhiên tươi VERIFY gặp lệnh bị công cụ ngắt thì:\n\n- dòng run-log của eval đó: `\"exit_code\": null, \"killed_by_tool\": true` (không\n  ghi mã thoát của công cụ như mã thoát của lệnh);\n- verdict báo cáo `BLOCKED`, `reason: bi cong cu giet o <so giay> giay — <eval ids>`\n  (kèm dấu hiệu: timeout tool / output cắt trước dòng tổng kết); `failed_evals`\n  rỗng — người đọc hồ sơ thấy đây là sự cố hạ tầng, chữa bằng chạy lại với trần\n  công cụ đủ dài, không phải sửa sản phẩm.\n",
+  "contractPath": "/private/tmp/claude-501/-Users-manh-macmini-dev-crm/54d93dc9-c67f-48a4-80f0-d8db039b5f4d/scratchpad/wt-gothanhvien/_acceptance/go-thanh-vien-phai-giu-duoc/contract.md",
+  "invokedAt": "2026-09-18T11:31:09Z",
+  "invokedSha": "e62300770c4b65aa022a2f9c30eee4f0cc89bcc7",
+  "vungVat": [
+    "_acceptance/config.yaml",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/card-plain.json",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/card.html",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/evals.yaml",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/figures/ai-da-canh-cho-nao.html",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/figures/ai-da-canh-cho-nao.png",
+    "apps/api/scripts/dev-session.ts",
+    "apps/api/test/go-thanh-vien.spec.ts",
+    "packages/auth/src/organization.ts"
+  ],
+  "ngoaiVatGlobs": [
+    "docs/**",
+    "**/*.md",
+    "PRODUCT-MAP.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "scripts/pre-merge-check.sh",
+    "scripts/recheck-evidence.cjs",
+    "lib/evidence-core.cjs",
+    "lib/gap-probe.cjs",
+    "lib/workspace-record.cjs",
+    "lib/ac-line.cjs",
+    "lib/md-section.cjs",
+    "lib/eval-yaml.cjs",
+    "lib/lop-nhin-thay.cjs",
+    ".claude/launch.json",
+    "_acceptance/*/**/*.md",
+    "_acceptance/*/**/*.jsonl"
+  ],
+  "ngoaiVatFiles": [
+    "PRODUCT-MAP.md",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/contract.md",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/decisions.jsonl",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/figures/index.md",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/gap-probe.md",
+    "docs/superpowers/plans/2026-09-18-go-thanh-vien-phai-giu-duoc.md",
+    "docs/superpowers/specs/2026-09-18-go-thanh-vien-phai-giu-duoc-design.md"
+  ],
+  "diffFiles": [
+    "PRODUCT-MAP.md",
+    "_acceptance/config.yaml",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/card-plain.json",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/card.html",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/contract.md",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/decisions.jsonl",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/evals.yaml",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/figures/ai-da-canh-cho-nao.html",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/figures/ai-da-canh-cho-nao.png",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/figures/index.md",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/gap-probe.md",
+    "apps/api/scripts/dev-session.ts",
+    "apps/api/test/go-thanh-vien.spec.ts",
+    "docs/superpowers/plans/2026-09-18-go-thanh-vien-phai-giu-duoc.md",
+    "docs/superpowers/specs/2026-09-18-go-thanh-vien-phai-giu-duoc-design.md",
+    "packages/auth/src/organization.ts"
+  ],
+  "fileDoTrongDiff": [
+    "_acceptance/config.yaml",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/card-plain.json",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/card.html",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/evals.yaml",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/figures/ai-da-canh-cho-nao.html",
+    "_acceptance/go-thanh-vien-phai-giu-duoc/figures/ai-da-canh-cho-nao.png",
+    "apps/api/test/go-thanh-vien.spec.ts",
+    "packages/auth/src/organization.ts"
+  ],
+  "coverageFiles": [
+    "apps/api/test/go-thanh-vien.spec.ts",
+    "packages/auth/src/organization.ts"
+  ],
+  "coEvalPaths": true,
+  "evalsHash": "76948fa02f475be8bde863cd3aaf496cb48263b0139ea5ff0c872a27d6177e31",
+  "runBaseline": true
+}

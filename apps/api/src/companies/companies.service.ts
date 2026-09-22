@@ -225,6 +225,7 @@ export class CompaniesService {
 						owner: { select: OWNER_SELECT },
 					},
 				},
+				_count: { select: { onboardingPlans: true } },
 			},
 		});
 
@@ -238,6 +239,7 @@ export class CompaniesService {
 			enrichedAt,
 			createdAt,
 			archivedAt,
+			_count,
 			...rest
 		} = company;
 
@@ -251,6 +253,11 @@ export class CompaniesService {
 			primaryContactId: primaryContact?.id ?? null,
 			primaryContact,
 			reportingCurrency: await this.conversion.reportingCurrency(),
+			soKeHoach: _count.onboardingPlans,
+			xuongCoKhuon:
+				(await this.db.onboardingTemplate.count({
+					where: { archivedAt: null },
+				})) > 0,
 			deals: deals.map((deal) => ({
 				...deal,
 				amount: undefined,

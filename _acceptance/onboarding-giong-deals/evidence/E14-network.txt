@@ -1,0 +1,16 @@
+E14 network truth — verifier duoc lap, chay lai 2026-09-22
+Driver: Claude_Browser (mcp) — co read_network_requests / read_console_messages.
+Scope: dev_server.url=http://localhost:3000, dev_server.api_base=[http://localhost:3001]
+Trang da tham: /crm/onboarding?cachXem=bang va /crm/deals (dang nhap qua cookie dev-session).
+
+read_console_messages(onlyErrors=true) -> "No console logs." (khong co loi console)
+
+read_network_requests(urlPattern="trpc") -> toan bo 200 OK, gom:
+  GET /api/trpc/enrichment.queue?... x nhieu -> 200 OK
+  GET /api/trpc/users.list,users.me,currency.settings,fields.filters,fields.list?... -> 200 OK
+
+read_network_requests(limit=80, khong loc) -> toan bo tai nguyen tinh (_next/static/chunks/*.js,
+*.woff2, *.css) va trang HTML (/crm/deals) deu 200 OK. Khong thay request nao status >= 400,
+khong thay connection-error/timeout trong tap FAIL-eligible (app-origin :3000 va api-base :3001).
+
+Ket luan: networkObserved = clean (co traffic app-scope, tat ca OK).

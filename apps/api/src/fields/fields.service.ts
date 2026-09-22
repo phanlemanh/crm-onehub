@@ -1,3 +1,4 @@
+import { canManageFields, workspaceRoleOf } from "@crm/auth";
 import {
 	type Db,
 	type FieldEntity,
@@ -21,6 +22,7 @@ import {
 import {
 	BadRequestException,
 	ConflictException,
+	ForbiddenException,
 	Injectable,
 	NotFoundException,
 } from "@nestjs/common";
@@ -74,7 +76,22 @@ export class FieldsService {
 		return serializeField(definition);
 	}
 
-	async create(input: FieldCreateInput): Promise<SerializedField> {
+	async access(actingUserId: string): Promise<{ canManage: boolean }> {
+		return { canManage: canManageFields(await workspaceRoleOf(actingUserId)) };
+	}
+
+	private async requireManager(actingUserId: string): Promise<void> {
+		if (!canManageFields(await workspaceRoleOf(actingUserId))) {
+			throw new ForbiddenException(FIELDS_CONFIG.messages.forbidden);
+		}
+	}
+
+	async create(
+		actingUserId: string,
+		input: FieldCreateInput,
+	): Promise<SerializedField> {
+		await this.requireManager(actingUserId);
+
 		const key = fieldKeyFromLabel(input.label);
 
 		if (!key) {
@@ -142,7 +159,13 @@ export class FieldsService {
 		return serializeField(definition);
 	}
 
-	async update(id: string, data: FieldUpdateData): Promise<SerializedField> {
+	async update(
+		actingUserId: string,
+		id: string,
+		data: FieldUpdateData,
+	): Promise<SerializedField> {
+		await this.requireManager(actingUserId);
+
 		const existing = await this.db.fieldDefinition.findUnique({
 			where: { id },
 			include: WITH_OPTIONS,
@@ -239,7 +262,12 @@ export class FieldsService {
 		return serializeField(definition);
 	}
 
-	async reorder(input: FieldReorderInput): Promise<SerializedField[]> {
+	async reorder(
+		actingUserId: string,
+		input: FieldReorderInput,
+	): Promise<SerializedField[]> {
+		await this.requireManager(actingUserId);
+
 		const owned = await this.db.fieldDefinition.findMany({
 			where: { id: { in: input.ids }, entity: input.entity },
 			select: { id: true },
@@ -263,7 +291,9 @@ export class FieldsService {
 		return this.list(input.entity, false);
 	}
 
-	async archive(id: string): Promise<SerializedField> {
+	async archive(actingUserId: string, id: string): Promise<SerializedField> {
+		await this.requireManager(actingUserId);
+
 		try {
 			const definition = await this.db.fieldDefinition.update({
 				where: { id },
@@ -277,7 +307,9 @@ export class FieldsService {
 		}
 	}
 
-	async restore(id: string): Promise<SerializedField> {
+	async restore(actingUserId: string, id: string): Promise<SerializedField> {
+		await this.requireManager(actingUserId);
+
 		try {
 			const definition = await this.db.fieldDefinition.update({
 				where: { id },
@@ -291,7 +323,9 @@ export class FieldsService {
 		}
 	}
 
-	async delete(id: string): Promise<{ id: string }> {
+	async delete(actingUserId: string, id: string): Promise<{ id: string }> {
+		await this.requireManager(actingUserId);
+
 		try {
 			await this.db.fieldDefinition.delete({ where: { id } });
 		} catch (error) {
@@ -301,7 +335,12 @@ export class FieldsService {
 		return { id };
 	}
 
-	async backfill(id: string): Promise<{ queued: boolean }> {
+	async backfill(
+		actingUserId: string,
+		id: string,
+	): Promise<{ queued: boolean }> {
+		await this.requireManager(actingUserId);
+
 		const definition = await this.db.fieldDefinition.findUnique({
 			where: { id },
 			select: {

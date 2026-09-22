@@ -33,7 +33,8 @@ import {
 export type TimelineAnchor =
 	| { companyId: string }
 	| { contactId: string }
-	| { dealId: string };
+	| { dealId: string }
+	| { planId: string };
 
 function tabLabels(m: CrmMessages) {
 	const t = m.timeline.tabs;
@@ -137,7 +138,7 @@ function TimelineDay({
 			<h3 className={cn("sticky top-0 z-10 bg-popover py-2", SECTION_TITLE)}>
 				{label}
 			</h3>
-			<ul className="divide-y">
+			<ul className="divide-y" data-slot="timeline">
 				{entries.map((entry) => (
 					<TimelineEntry key={entry.id} entry={entry} anchor={anchor} />
 				))}

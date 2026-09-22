@@ -72,6 +72,27 @@ describe("fieldKeyFromLabel", () => {
 	it("steps around the sentinel the fields sheet opens the create form with", () => {
 		expect(fieldKeyFromLabel("New")).toBe("new_field");
 	});
+
+	it("folds Vietnamese tone marks instead of eating the letters", () => {
+		expect(fieldKeyFromLabel("Loại hình")).toBe("loai_hinh");
+		expect(fieldKeyFromLabel("Mức độ hợp tác")).toBe("muc_do_hop_tac");
+		expect(fieldKeyFromLabel("Người phụ trách")).toBe("nguoi_phu_trach");
+		expect(fieldKeyFromLabel("Tỷ lệ chia hoa hồng")).toBe(
+			"ty_le_chia_hoa_hong",
+		);
+		expect(fieldKeyFromLabel("Kênh liên lạc quen")).toBe("kenh_lien_lac_quen");
+	});
+
+	it("keeps đ and Đ as d, not as a dropped letter", () => {
+		expect(fieldKeyFromLabel("Đất nền")).toBe("dat_nen");
+		expect(fieldKeyFromLabel("độ đo")).toBe("do_do");
+	});
+
+	it("lands a Vietnamese label on the same key the crawler declares by hand", () => {
+		expect(fieldKeyFromLabel("Địa bàn")).toBe("dia_ban");
+		expect(fieldKeyFromLabel("Sản lượng")).toBe("san_luong");
+		expect(fieldKeyFromLabel("Chứng chỉ")).toBe("chung_chi");
+	});
 });
 
 describe("columnFor", () => {

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luồng nhắc mỗi sáng · may-nhac-truoc-nguoi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1320px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 72ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.78rem; }
+    svg { width: 100%; min-width: 1040px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình luong-nhac · Luồng nhắc · may-nhac-truoc-nguoi</p>
+    <h1>Một tin mỗi sáng, và cùng danh sách đó trên thẻ Tasks</h1>
+    <p class="sub">Nhịp dispatch sẵn có gọi lượt quét mỗi phút; từ 08:30 giờ VN, <code>viecCanNhac</code> trong <code>packages/db</code> trả danh sách cho từng người. Tác tử ghi một hàng mỗi người mỗi ngày rồi gửi một tin; API gọi cùng hàm đó cho thẻ Tasks. Hai lượt quét chồng nhau vẫn chỉ để lại một hàng.</p>
+
+    <svg viewBox="0 0 1304 528" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH d-1 · d-2 · d-5 · d-7</text>
+
+      <text x="552" y="164" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐƯỜNG TÁC TỬ · apps/agent</text>
+      <text x="552" y="356" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">ĐƯỜNG API · apps/api</text>
+
+      <path d="M 112 208 L 112 128 A 8 8 0 0 1 120 120 L 256 120" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <rect x="152" y="100" width="72" height="12" rx="2" fill="#fafafa"/>
+      <text x="188" y="109" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">TRƯỚC 08:30</text>
+
+      <path d="M 184 236 L 256 236" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <rect x="192" y="216" width="56" height="12" rx="2" fill="#fafafa"/>
+      <text x="220" y="225" fill="#006B4F" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">TỪ 08:30</text>
+
+      <path d="M 456 220 L 552 220" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <rect x="468" y="200" width="72" height="12" rx="2" fill="#fafafa"/>
+      <text x="504" y="209" fill="#006B4F" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LƯỢT QUÉT A</text>
+
+      <path d="M 456 252 L 536 252" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+      <line x1="540" y1="244" x2="540" y2="260" stroke="#171717" stroke-width="1.6"/>
+      <rect x="460" y="260" width="76" height="12" rx="2" fill="#fafafa"/>
+      <text x="498" y="269" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LƯỢT B · CHẶN</text>
+
+      <path d="M 792 236 L 856 236" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <path d="M 1024 212 L 1032 212 A 8 8 0 0 0 1040 204 L 1040 156 A 8 8 0 0 1 1048 148 L 1080 148" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 1024 228 L 1048 228 A 8 8 0 0 0 1056 220 L 1056 204 A 8 8 0 0 1 1064 196 L 1080 196" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 1024 244 L 1080 244" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 1024 260 L 1040 260 A 8 8 0 0 1 1048 268 L 1048 296 A 8 8 0 0 0 1056 304 L 1080 304" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <path d="M 216 408 L 296 408 A 8 8 0 0 0 304 400 L 304 284" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="312" y="332" width="60" height="12" rx="2" fill="#fafafa"/>
+      <text x="316" y="341" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.06em">NGƯỜI NHẬN</text>
+
+      <path d="M 408 284 L 408 400 A 8 8 0 0 0 416 408 L 552 408" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="452" y="388" width="64" height="12" rx="2" fill="#fafafa"/>
+      <text x="484" y="397" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CÙNG HÀM</text>
+
+      <path d="M 792 408 L 872 408" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <rect x="40" y="208" width="144" height="56" rx="28" fill="#fafafa"/>
+      <rect x="40" y="208" width="144" height="56" rx="28" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="112" y="232" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Nhịp dispatch</text>
+      <text x="112" y="248" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">mỗi phút</text>
+
+      <rect x="256" y="96" width="200" height="48" rx="6" fill="#fafafa"/>
+      <rect x="256" y="96" width="200" height="48" rx="6" fill="transparent" stroke="rgba(23,23,23,0.30)" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="268" y="116" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Trước 08:30 giờ VN?</text>
+      <text x="268" y="132" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif">không làm gì</text>
+
+      <rect x="256" y="188" width="200" height="96" rx="6" fill="#fafafa"/>
+      <rect x="256" y="188" width="200" height="96" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="268" y="200" width="72" height="16" rx="2" fill="#006B4F"/>
+      <text x="304" y="211" fill="#fafafa" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">DÙNG CHUNG</text>
+      <text x="444" y="211" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC-1</text>
+      <text x="268" y="236" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Từ 08:30:</text>
+      <text x="268" y="254" fill="#006B4F" font-size="12" font-weight="600" font-family="'Geist Mono', monospace">viecCanNhac</text>
+      <text x="268" y="272" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">packages/db</text>
+
+      <rect x="552" y="180" width="240" height="112" rx="6" fill="#fafafa"/>
+      <rect x="552" y="180" width="240" height="112" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="780" y="196" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC-4</text>
+      <text x="564" y="204" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Mỗi người có việc: một hàng</text>
+      <text x="564" y="224" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">nhac-ke-hoach</text>
+      <text x="564" y="240" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">user:&lt;id&gt;:&lt;ngày&gt;</text>
+      <text x="564" y="264" fill="#575757" font-size="10" font-family="'Geist', sans-serif">chỉ mục duy nhất chặn hàng thứ hai</text>
+      <text x="564" y="280" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">(kind, subject) · skipDuplicates</text>
+
+      <rect x="856" y="196" width="168" height="80" rx="6" fill="#fafafa"/>
+      <rect x="856" y="196" width="168" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="868" y="220" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Làn trực tiếp</text>
+      <text x="868" y="238" fill="#575757" font-size="10" font-family="'Geist', sans-serif">tính lại danh sách</text>
+      <text x="868" y="256" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">DIRECT_KINDS</text>
+
+      <rect x="1080" y="130" width="184" height="36" rx="18" fill="#fafafa"/>
+      <rect x="1080" y="130" width="184" height="36" rx="18" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <text x="1096" y="145" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">khong-viec</text>
+      <text x="1248" y="145" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC-6</text>
+      <text x="1096" y="158" fill="#575757" font-size="9" font-family="'Geist', sans-serif">hết việc từ lúc ghi hàng</text>
+
+      <rect x="1080" y="178" width="184" height="36" rx="18" fill="#fafafa"/>
+      <rect x="1080" y="178" width="184" height="36" rx="18" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <text x="1096" y="193" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">khong-slack</text>
+      <text x="1248" y="193" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC-6</text>
+      <text x="1096" y="206" fill="#575757" font-size="9" font-family="'Geist', sans-serif">xưởng chưa nối Slack</text>
+
+      <rect x="1080" y="226" width="184" height="36" rx="18" fill="#fafafa"/>
+      <rect x="1080" y="226" width="184" height="36" rx="18" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <text x="1096" y="241" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">khong-khop</text>
+      <text x="1248" y="241" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC-6</text>
+      <text x="1096" y="254" fill="#575757" font-size="9" font-family="'Geist', sans-serif">không có <tspan font-family="'Geist Mono', monospace">SlackMemberMatch</tspan></text>
+
+      <rect x="1080" y="274" width="184" height="60" rx="20" fill="#fafafa"/>
+      <rect x="1080" y="274" width="184" height="60" rx="20" fill="#ffffff" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="1096" y="293" fill="#006B4F" font-size="10" font-weight="600" font-family="'Geist Mono', monospace">da-gui</text>
+      <text x="1248" y="293" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC-5</text>
+      <text x="1096" y="309" fill="#171717" font-size="10" font-family="'Geist', sans-serif">một tin Slack riêng, ≤10 dòng</text>
+      <text x="1096" y="324" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">payload.daGui</text>
+
+      <rect x="40" y="376" width="176" height="64" rx="6" fill="#fafafa"/>
+      <rect x="40" y="376" width="176" height="64" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <text x="52" y="398" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Người theo dõi</text>
+      <text x="52" y="414" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">OnboardingWatch</text>
+      <text x="52" y="428" fill="#575757" font-size="9" font-family="'Geist', sans-serif">tự bấm, vào cùng người cầm trịch</text>
+
+      <rect x="552" y="368" width="240" height="80" rx="6" fill="#fafafa"/>
+      <rect x="552" y="368" width="240" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="780" y="384" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC-8</text>
+      <text x="564" y="392" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">API <tspan font-family="'Geist Mono', monospace" font-weight="500">dashboard.summary</tspan></text>
+      <text x="564" y="410" fill="#575757" font-size="10" font-family="'Geist', sans-serif">gọi cùng <tspan font-family="'Geist Mono', monospace">viecCanNhac</tspan></text>
+      <text x="564" y="428" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">keHoachCanDeY · NHAC.tran</text>
+
+      <rect x="872" y="368" width="152" height="80" rx="6" fill="#fafafa"/>
+      <rect x="872" y="368" width="152" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="884" y="392" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Thẻ Tasks</text>
+      <text x="884" y="410" fill="#575757" font-size="10" font-family="'Geist', sans-serif">kế hoạch im · mốc ngày</text>
+      <text x="884" y="428" fill="#575757" font-size="9" font-family="'Geist', sans-serif">cùng danh sách, trong app</text>
+
+      <line x1="32" y1="472" x2="1272" y2="472" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="488" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <line x1="32" y1="505" x2="56" y2="505" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="64" y="508" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đường chính: từ 08:30 tới tin Slack</text>
+      <line x1="252" y1="505" x2="276" y2="505" stroke="#575757" stroke-width="1"/>
+      <text x="284" y="508" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nhánh khác</text>
+      <line x1="376" y1="505" x2="400" y2="505" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+      <text x="408" y="508" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Không làm gì · bị chỉ mục chặn</text>
+      <rect x="588" y="500" width="14" height="10" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="608" y="508" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Hàm dùng chung của tác tử và API</text>
+      <rect x="796" y="500" width="20" height="10" rx="5" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <text x="824" y="508" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Kết cục ghi vào <tspan font-family="'Geist Mono', monospace">outcome</tspan> của hàng</text>
+    </svg>
+
+    <footer>luong-nhac · may-nhac-truoc-nguoi · d-1 d-2 d-5 d-7 · AC-1 AC-4 AC-5 AC-6 AC-8 · thiết kế 2026-09-22</footer>
+  </div>
+</body>
+</html>

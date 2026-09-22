@@ -46,7 +46,10 @@ const workspace = (data: {
 	onboarded: boolean;
 	canRename: boolean;
 	slug?: string;
-}) => ({ result: { data: { slug: SLUG, ...data } } });
+	viewerRole?: string | null;
+}) => ({
+	result: { data: { slug: SLUG, viewerRole: "owner", ...data } },
+});
 
 const researchKey = (configured: boolean) => ({
 	result: { data: { configured, hint: configured ? "••••9876" : null } },
@@ -114,7 +117,33 @@ describe("readWorkspaceGate", () => {
 		expect(await readWorkspaceGate(request("/", [SESSION_COOKIE]))).toEqual({
 			gate: "settled",
 			slug: SLUG,
+			inWorkspace: true,
 		});
+	});
+
+	it("says the viewer is out when the API names no role for them", async () => {
+		answerWith(
+			workspace({ onboarded: true, canRename: true, viewerRole: null }),
+		);
+
+		expect(await readWorkspaceGate(request("/", [SESSION_COOKIE]))).toEqual({
+			gate: "settled",
+			slug: SLUG,
+			inWorkspace: false,
+		});
+	});
+
+	it("does not throw anyone out when the API says nothing about the role", async () => {
+		answerWith({
+			result: { data: { slug: SLUG, onboarded: true, canRename: true } },
+		});
+
+		const gate = await readWorkspaceGate(request("/", [SESSION_COOKIE]));
+
+		expect([gate.inWorkspace, "vang truong khac han voi bi go"]).toEqual([
+			null,
+			"vang truong khac han voi bi go",
+		]);
 	});
 
 	it("is unknown rather than required when the API cannot be read", async () => {

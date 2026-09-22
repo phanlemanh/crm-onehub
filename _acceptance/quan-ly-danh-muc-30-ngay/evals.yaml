@@ -1,0 +1,268 @@
+schema_version: 1
+slug: quan-ly-danh-muc-30-ngay
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.qldm_khong_khop
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/quan-ly-danh-muc.spec.ts"
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/danh-muc-quan-ly.dom.tsx"
+    expected: |
+      Hai ve tren CUNG du lieu gieo: mot khuon, hai ke hoach thuoc bo phan A.
+      Ve may chu — goi THAT thu tuc tai danh muc:
+        1 loc bo phan B (khong ke hoach nao) -> trangThai = ST-danhmuc-khongkhop,
+          KHONG phai ST-danhmuc-empty hay ST-danhmuc-chuacokhuon
+        2 tim chuoi khong khop -> ST-danhmuc-khongkhop
+        3 DOI CHUNG: bo loc -> ST-danhmuc-codulieu, hai hang
+        4 DOI CHUNG: xoa het ke hoach va khuon, KHONG loc -> ST-danhmuc-chuacokhuon
+      Ve man — dung THAT man danh muc trong jsdom; du lieu cho man lay tu CHINH
+      ket qua thu tuc that o ve may chu (goi thu tuc, dua ket qua vao ban gia tRPC
+      nguyen trang), KHONG viet tay khuon tra ve:
+        5 dang bang: thanh loc van con, «Không kế hoạch nào khớp» hien, nut
+          «Bỏ lọc» co mat
+        6 dang bang cot voi cung bo loc: cung ba dieu o dong 5, khong hien bon
+          cot rong
+        7 bam «Bỏ lọc» -> tham so loc va tim bi xoa khoi duong dan, tham so cach
+          xem giu nguyen, va hai hang da gieo hien ra
+      CHIEU DO: dat lai cach suy trang thai cu (bo qua bo loc) -> dong 1 do voi
+      thong diep ghim ten trang thai mong doi va nhan duoc.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.qldm_tim_ten_cong_ty
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/quan-ly-danh-muc.spec.ts"
+    expected: |
+      Gieo ba ke hoach cua 'Công ty Alpha', 'Beta Holdings', 'Gamma'.
+      Goi THAT thu tuc tai danh muc voi q = 'ALPHA', roi 'hold'.
+      Khang dinh:
+        1 q ALPHA -> dung mot hang, companyName 'Công ty Alpha', total 1
+        2 q hold -> dung mot hang Beta Holdings, total 1
+        3 DOI CHUNG: q rong -> ba hang, total 3
+      CHIEU DO: bo menh de tim -> dong 1 do voi thong diep ghim total 1/3.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.qldm_sap_toan_tap
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/quan-ly-danh-muc.spec.ts"
+    expected: |
+      Ma tran viet truoc: BON khoa sap x HAI chieu = TAM ca, tren 30 ke hoach voi
+      pageSize 10 de thu tu phai dung tren TOAN tap, khong chi trang dau.
+      Gieo CO CHU Y it nhat nam hang cung gia tri o moi khoa. Moi ca: goi ba trang,
+      noi lai, so voi thu tu mong doi tinh doc lap tu du lieu gieo (khoa roi thu
+      tu phu theo id), VA khang dinh hop ba trang bang dung tap id da gieo, khong
+      id nao trung. So ca bang 8. Khoa sap la id truyen vao, khong doc tai lieu.
+      CHIEU DO: sap trong trang sau khi cat -> ca «so ngay im giam» do voi thong diep
+      ghim khoa va chieu.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.qldm_phan_trang
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/quan-ly-danh-muc.spec.ts"
+    expected: |
+      Gieo 27 ke hoach, pageSize 25.
+      Khang dinh:
+        1 trang 1 -> 25 hang, total 27
+        2 trang 2 -> 2 hang, total 27, khong trung id voi trang 1
+        3 hop hai trang = dung 27 id da gieo
+      CHIEU DO: tra lai take co dinh 25 bo qua page -> dong 2 do voi thong diep
+      ghim so hang trang hai.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.qldm_loc_va_dem
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/quan-ly-danh-muc.spec.ts"
+    expected: |
+      Gieo ke hoach tren hai bo phan va hai nguoi cam trich, xen nhau, cong hai ke
+      hoach da dong. Ma tran viet truoc: hai tab trang thai + hai bo phan + hai
+      nguoi = SAU ca. Tab da dong chi tra ke hoach co ngay dong.
+      Moi ca khang dinh: rows chi gom ke hoach khop, total bang so khop, va so dem
+      facetCounts cho lua chon do (khi CHUA chon no, voi cac bo loc khac giu nguyen)
+      BANG so hang nhan duoc khi chon no. So assert bang 4 cap.
+      CHIEU DO: dem theo bo phan bo qua bo loc nguoi cam trich -> mot ca do voi
+      thong diep ghim lua chon va hai so.
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.qldm_duong_dan
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/danh-muc-quan-ly.dom.tsx"
+      - "apps/app/app/(app)/[slug]/onboarding/onboarding-search-params.ts"
+    expected: |
+      Dung THAT man danh muc trong jsdom, bo dinh tuyen gia ghi lai duong dan.
+      Dat: q, tab da dong, mot bo loc bo phan, sap 'imNgay' giam, trang 2, cach xem bang cot,
+      cach chia 'bo-phan'. Khang dinh:
+        1 duong dan chua dung tung tham so va gia tri — so tham so, khong so chuoi
+          nguyen duong dan
+        2 dung lai man tu CHINH duong dan do -> tung lua chon doc ra bang gia tri da
+          dat (o tim co chu, bo loc duoc chon, cach xem la bang cot, cach chia
+          bo-phan)
+        3 DOI CHUNG: duong dan trong -> mac dinh: bang, khong loc
+      CHIEU DO: doi cach xem sang trang thai React cuc bo -> dong 1 do voi thong
+      diep ghim ten tham so cach xem.
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.qldm_bang_cot_buoc
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/quan-ly-danh-muc.spec.ts"
+    expected: |
+      Gieo bon ke hoach: hai tac o buoc 'Ký hợp đồng', mot o 'Đào tạo', mot xong
+      moi buoc. Goi THAT onboarding.bangCot chia theo buoc.
+      Khang dinh:
+        1 ba cot: 'Ký hợp đồng' (2), 'Đào tạo' (1), 'Đã xong mọi bước' (1)
+        2 moi id ke hoach xuat hien dung MOT lan tren toan bang
+        3 tong so the = so ke hoach da loc
+      CHIEU DO: dat ke hoach xong moi buoc vao cot buoc cuoi -> dong 1 do voi thong
+      diep ghim ten cot mong doi.
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.qldm_bang_cot_bo_phan
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/quan-ly-danh-muc.spec.ts"
+    expected: |
+      Gieo ba ke hoach tac o buoc cua bo phan A, B, A, va mot ke hoach xong moi buoc.
+      Chia theo bo phan. Khang dinh:
+        1 cot A (2), cot B (1), cot 'Đã xong mọi bước' (1)
+        2 moi ke hoach dung mot cot
+        3 doi ten bo phan A -> tieu de cot la ten MOI (cot theo id, khong theo chuoi)
+      CHIEU DO: chia theo bo phan cua buoc DAU TIEN thay vi buoc dang tac -> dong 1
+      do voi thong diep ghim ten cot va so dem.
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.qldm_bang_cot_bac
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/quan-ly-danh-muc.spec.ts"
+    expected: |
+      Ma tran viet truoc: NAM bac (chua co tai khoan, co tai khoan, hoan thanh khoa,
+      hoat dong, phat sinh giao dich), moi bac mot ghi danh co bac cao nhat dung bac
+      do, cong mot ghi danh co moc bac cao ma thieu moc bac thap (bac cao nhat van
+      la bac cao). Chia theo bac.
+      Khang dinh:
+        1 nam cot dung thu tu bac
+        2 moi ghi danh dung mot cot, dung bac cao nhat — so assert bang 6
+        3 loc ke hoach theo bo phan -> ghi danh cua ke hoach khac bien khoi bang
+      CHIEU DO: lay bac THAP nhat thay vi cao nhat -> dong 2 do voi thong diep ghim
+      id ghi danh va cot.
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.qldm_bang_cot_trang_thai
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/quan-ly-danh-muc.spec.ts"
+    expected: |
+      Gieo hai ke hoach dang chay, mot da dong. Chia theo trang thai.
+      Khang dinh:
+        1 hai cot 'Đang chạy' (2), 'Đã đóng' (1)
+        2 moi ke hoach dung mot cot
+      CHIEU DO: bo menh de closedAt -> dong 1 do voi thong diep ghim so dem.
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.qldm_the_chi_de_xem
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/danh-muc-quan-ly.dom.tsx"
+      - "packages/ui/src/components/board.tsx"
+    expected: |
+      Dung THAT thanh phan Board va man danh muc dang bang cot trong jsdom.
+      Khang dinh:
+        1 khong phan tu nao mang thuoc tinh keo tha (draggable, aria-roledescription
+          'draggable', role cua dnd-kit)
+        2 moi the la mot lien ket toi ho so ke hoach cua the do — doc href, so id
+        3 nhan Enter khi the dang focus -> dieu huong toi dung duong dan
+      CHIEU DO: boc the bang useSortable -> dong 1 do voi thong diep ghim thuoc tinh
+      tim thay.
+
+  - id: E12
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.qldm_tran_cot
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/quan-ly-danh-muc.spec.ts"
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/danh-muc-quan-ly.dom.tsx"
+      - "packages/ui/src/components/board.tsx"
+    expected: |
+      Tran the moi cot doc tu cau hinh cua khu vuc (khong ghim so trong bai kiem).
+      Gieo mot cot co tran + 3 ke hoach.
+      Khang dinh:
+        1 thu tuc tra dung so the bang tran, va tong that bang tran + 3
+        2 man hien «còn 3 thẻ» — so voi so tinh tu du lieu, khong chuoi viet tay
+        3 so dem o tieu de cot bang tran + 3
+      CHIEU DO: dem tieu de bang so the da cat -> dong 3 do voi thong diep ghim hai
+      so.
+
+  - id: E13
+    criterion: AC-13
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    steps:
+      - "Dung api 3301 va app 3300 cua CAY DANG XET (api-cay-nay, app-cay-nay)"
+      - "CHAN CAY: dat dau moc .svg vao apps/app/public roi xin lai qua http://localhost:3300; khong nhan lai -> thoat ma 2, khong doc anh nao"
+      - "Gieo qua CHINH API o 3301: hai bo phan, mot khuon, nam ke hoach tac o cac buoc khac nhau, vai ghi danh o cac bac khac nhau"
+      - "Tao phien bang `cd apps/api && bun run dev:session <email>`, dat cookie"
+      - "CHAN CAY phia api: goi qua 3301 thu tuc onboarding.bangCot (chi co o cay dang xet); khong tra loi dung khuon -> thoat ma 2, khong gieo gi"
+      - "Chup dang bang o 1440 va 768: evidence/E13-bang-1440.png, evidence/E13-bang-768.png; roi bang cot tung cach chia o 1440 va 768: evidence/E13-cot-<cach-chia>-<kho>.png"
+    inputs:
+      - _acceptance/quan-ly-danh-muc-30-ngay/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "packages/ui/src/components/board.tsx"
+    expected: |
+      Nhin thay tren anh, khong suy tu ma:
+        1 dang bang: co o tim, thanh loc, tieu de cot sap duoc
+        2 moi bang cot (bon cach chia): tieu de cot kem so dem, the trong cot
+        3 o kho 768, ca dang bang lan bang cot: trang khong tran ngang (bang cot cuon trong khung rieng), chu
+          tren the khong bi cat mat nghia
+      Anh thieu cach chia nao, hoac trang tran ngang -> khong dat.
+
+  - id: E14
+    criterion: AC-14
+    executor: test
+    cmd: config:executors.test.qldm_bang_cot_khong_phan_trang
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/quan-ly-danh-muc.spec.ts"
+    expected: |
+      Gieo pageSize + 2 ke hoach (pageSize doc tu cau hinh khu vuc, khong ghim so).
+      Ma tran viet truoc: BON cach chia x hai dau vao (khong co trang, co page=2
+      va pageSize) = TAM ca. Moi ca goi THAT onboarding.bangCot va khang dinh:
+        1 tong so dem cac cot bang dung so ke hoach da loc (voi cach chia bac:
+          tong ghi danh cua cac ke hoach do)
+        2 moi id da gieo xuat hien
+      So ca bang 8. CHIEU DO: truyen page va take vao truy van cua bang cot ->
+      ca «co page=2» do voi thong diep ghim hai so.
+

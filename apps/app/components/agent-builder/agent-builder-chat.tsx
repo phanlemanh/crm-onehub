@@ -431,6 +431,7 @@ export function AgentBuilderChat({
 									key={item.id}
 									messageId={item.id}
 									scrollAnchor={item.kind === "submission"}
+									userContent
 								>
 									{item.kind === "submission" ? (
 										<UserSubmission
@@ -453,6 +454,7 @@ export function AgentBuilderChat({
 									key={item.clientRequestId}
 									messageId={`sending:${item.clientRequestId}`}
 									scrollAnchor
+									userContent
 								>
 									<UserSubmission
 										submission={{
@@ -721,6 +723,7 @@ function SharedAgentChat({
 									key={item.id}
 									messageId={item.id}
 									scrollAnchor={item.kind === "submission"}
+									userContent
 								>
 									{item.kind === "submission" ? (
 										<UserSubmission
@@ -769,16 +772,26 @@ function ChatHeader({
 }) {
 	const t = troChuyenMessages(useLocale());
 	const workspaceUrl = useWorkspaceUrl();
-	const title =
+	// Tiêu đề đến từ HAI nguồn khác hẳn nhau: tên tác nhân / tiêu đề hội thoại là
+	// DỮ LIỆU người nhập hoặc máy sinh (không được dịch), còn nhãn dự phòng là CHỮ
+	// GIAO DIỆN (phải dịch). Trước đây cả hai dùng chung một `translate="no"`, nên
+	// khi rơi về nhãn dự phòng thì một phần tử tự xưng «đừng dịch» lại vẽ ra hai
+	// chuỗi khác nhau ở hai thứ tiếng.
+	const duLieu =
 		(creatingAgent ? conversation.agent?.name : null) ??
 		conversation.title ??
-		t.man.hoiThoai;
+		null;
+	const title = duLieu ?? t.man.hoiThoai;
 
 	return (
 		<header className="flex h-12 shrink-0 items-center gap-2 border-b px-4 sm:gap-2.5 sm:pr-4 sm:pl-5">
 			<div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-				<h1 className="truncate font-medium text-sm" translate="no">
-					{title}
+				<h1 className="truncate font-medium text-sm">
+					{duLieu === null ? (
+						t.man.hoiThoai
+					) : (
+						<span translate="no">{duLieu}</span>
+					)}
 				</h1>
 				<span className="hidden shrink-0 text-muted-foreground text-xs sm:inline">
 					{t.man.rieng}

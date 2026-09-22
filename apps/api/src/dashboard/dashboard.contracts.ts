@@ -72,6 +72,26 @@ const overdueTaskOutput = z.object({
 	company: linkedRecordOutput.nullable(),
 	deal: linkedRecordOutput.nullable(),
 	dueAt: z.string().nullable(),
+	createdBy: linkedRecordOutput,
+});
+
+const myStepOutput = z.object({
+	stepId: z.string(),
+	nhan: z.string(),
+	dueAt: z.string(),
+	planId: z.string(),
+	company: linkedRecordOutput,
+});
+
+export const keHoachCanDeYOutput = z.object({
+	loai: z.enum(["ke-hoach-im", "moc-ngay"]),
+	planId: z.string(),
+	companyName: z.string(),
+	goiY: z.string(),
+	soNgay: z.number().int(),
+	soBuocXong: z.number().int().optional(),
+	soBuocTong: z.number().int().optional(),
+	targetDays: z.number().int().optional(),
 });
 
 const recentActivityOutput = z.object({
@@ -108,6 +128,8 @@ export const dashboardSummaryOutput = z.object({
 	trend: z.array(trendPointOutput),
 	closingThisMonthTotal: monthlyTotalOutput,
 	biggestOpen: z.array(biggestOpenDealOutput),
+	mySteps: z.array(myStepOutput),
+	keHoachCanDeY: z.array(keHoachCanDeYOutput),
 	overdueTasks: z.array(overdueTaskOutput),
 	recentActivity: z.array(recentActivityOutput),
 });

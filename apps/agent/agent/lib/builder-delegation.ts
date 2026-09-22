@@ -1,45 +1,41 @@
-import { defineState } from "eve/context";
+import type { HookEvent } from "eve/hooks";
 
-type BuilderDelegationAction = {
-	callId: string;
-	kind: string;
-	subagentName?: string;
-};
+export const BUILDER_DELEGATION_SUBAGENT = "agent_builder";
 
-type BuilderDelegationState = {
+export const BUILDER_DELEGATION_LIMIT_MESSAGE =
+	"The agent builder can be delegated only once per turn.";
+
+export type ActionsRequestedData = HookEvent<"actions.requested">["data"];
+
+export type BuilderDelegationState = {
 	turnId: string | null;
-	callIds: string[];
+	callIds: readonly string[];
 };
 
-export const builderDelegationState = defineState<BuilderDelegationState>(
-	"crm.builder-delegation",
-	() => ({ turnId: null, callIds: [] }),
-);
+export const EMPTY_BUILDER_DELEGATION: BuilderDelegationState = {
+	turnId: null,
+	callIds: [],
+};
 
 export function recordBuilderDelegation(
 	state: BuilderDelegationState,
-	turnId: string,
-	actions: readonly BuilderDelegationAction[],
+	event: ActionsRequestedData,
 ): BuilderDelegationState {
-	const current =
-		state.turnId === turnId ? state : { turnId, callIds: [] as string[] };
-	const callIds = new Set(current.callIds);
+	const { actions, turnId } = event;
+	const current = state.turnId === turnId ? state : EMPTY_BUILDER_DELEGATION;
+	const moi = actions
+		.filter(
+			(action) =>
+				action.kind === "subagent-call" &&
+				action.subagentName === BUILDER_DELEGATION_SUBAGENT,
+		)
+		.map((action) => action.callId)
+		.filter((callId) => !current.callIds.includes(callId));
 
-	for (const action of actions) {
-		if (
-			action.kind !== "subagent-call" ||
-			action.subagentName !== "agent_builder" ||
-			callIds.has(action.callId)
-		) {
-			continue;
-		}
-		if (callIds.size > 0) {
-			throw new Error(
-				"The agent builder can be delegated only once per creation turn.",
-			);
-		}
-		callIds.add(action.callId);
+	if (moi.length === 0) return { ...current, turnId };
+	if (current.callIds.length + moi.length > 1) {
+		throw new Error(BUILDER_DELEGATION_LIMIT_MESSAGE);
 	}
 
-	return { turnId, callIds: [...callIds] };
+	return { turnId, callIds: [...current.callIds, ...moi] };
 }

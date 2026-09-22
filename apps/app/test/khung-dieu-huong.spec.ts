@@ -5,6 +5,7 @@ import {
 	mucDangMo,
 	nhanRail,
 } from "@/lib/khung-dieu-huong";
+import { onboardingMessages } from "@/lib/messages/onboarding";
 
 const DAU =
 	/[ăâđêôơưàảãáạằẳẵắặầẩẫấậèẻẽéẹềểễếệìỉĩíịòỏõóọồổỗốộờởỡớợùủũúụừửữứựỳỷỹýỵ]/i;
@@ -22,8 +23,8 @@ describe("khung dieu huong", () => {
 		expect(laMucHoiThoai({ ...muc("chat"), key: "deals" })).toBe(false);
 	});
 
-	it("bay muc, nhan vi co dau va khac nhan en", () => {
-		expect(MUC_RAIL).toHaveLength(7);
+	it("tam muc, nhan vi co dau va khac nhan en", () => {
+		expect(MUC_RAIL).toHaveLength(8);
 		for (const m of MUC_RAIL) {
 			const vi = nhanRail(m, "vi");
 			expect(vi).not.toBe(nhanRail(m, "en"));
@@ -38,5 +39,37 @@ describe("khung dieu huong", () => {
 		expect(mucDangMo(muc("chat"), "/onehub/agents/x", wu)).toBe(true);
 		expect(mucDangMo(muc("companies"), "/onehub/companies/y", wu)).toBe(true);
 		expect(mucDangMo(muc("companies"), "/onehub/contacts", wu)).toBe(false);
+	});
+
+	it("loi-vao-30-ngay: muc 30 ngay dau dan toi man danh muc", () => {
+		const dieuPhoi = muc("onboarding");
+		expect(dieuPhoi.href).toBe("/onboarding");
+		expect(dieuPhoi.match).toBe("prefix");
+		expect(MUC_RAIL.indexOf(dieuPhoi)).toBe(
+			MUC_RAIL.indexOf(muc("settings")) - 1,
+		);
+	});
+
+	it("danh-dau-dang-mo: 30 ngay dau sang o danh muc va ho so, khong o cai dat", () => {
+		const dieuPhoi = muc("onboarding");
+		expect(mucDangMo(dieuPhoi, "/onehub/onboarding", wu)).toBe(true);
+		expect(mucDangMo(dieuPhoi, "/onehub/onboarding/ke-hoach-1", wu)).toBe(true);
+		expect(mucDangMo(dieuPhoi, "/onehub/settings/onboarding", wu)).toBe(false);
+		expect(mucDangMo(dieuPhoi, "/onehub/deals", wu)).toBe(false);
+		expect(mucDangMo(muc("settings"), "/onehub/settings/onboarding", wu)).toBe(
+			true,
+		);
+	});
+
+	it("nhan-hai-thu-tieng: nhan 30 ngay dau bang dung tieu de man danh muc", () => {
+		const dieuPhoi = muc("onboarding");
+		for (const locale of ["vi", "en"] as const) {
+			expect(
+				nhanRail(dieuPhoi, locale),
+				`nhan ${locale} cua muc 30 ngay dau lech tieu de man danh muc`,
+			).toBe(onboardingMessages(locale).title);
+		}
+		expect(nhanRail(dieuPhoi, "vi")).toBe("30 ngày đầu");
+		expect(nhanRail(dieuPhoi, "en")).toBe("First 30 days");
 	});
 });
