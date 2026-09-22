@@ -40,6 +40,7 @@ import { LocalRelativeTime } from "@/components/local-date-time";
 import { activityLabel } from "@/lib/activity-presentation";
 import { dealStageColor } from "@/lib/deal-stage";
 import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
+import { nhacMessages } from "@/lib/messages/nhac";
 import {
 	type TongQuanMessages,
 	tongQuanMessages,
@@ -49,6 +50,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { buocQuaHan, DongBuoc, ngayCuaBuoc } from "./dong-buoc";
+import { DongKeHoach } from "./dong-ke-hoach";
 import { overviewParsers } from "./overview-search-params";
 import { SalesDashboard } from "./sales-dashboard";
 
@@ -149,9 +151,10 @@ export function DashboardSummary() {
 		);
 	}
 
-	const { biggestOpen, overdueTasks, recentActivity, mySteps } = summary;
+	const { biggestOpen, overdueTasks, recentActivity, mySteps, keHoachCanDeY } =
+		summary;
 	const now = new Date();
-	const dong = [
+	const theoHan = [
 		...overdueTasks.map((viec) => ({
 			loai: "viec" as const,
 			id: viec.id,
@@ -166,16 +169,30 @@ export function DashboardSummary() {
 			buoc,
 		})),
 	].sort((a, b) => a.han - b.han || a.id.localeCompare(b.id));
+	const keHoach = [
+		...keHoachCanDeY.filter((k) => k.loai === "ke-hoach-im"),
+		...keHoachCanDeY.filter((k) => k.loai === "moc-ngay"),
+	].map((keHoach) => ({
+		loai: "keHoach" as const,
+		id: `${keHoach.loai}:${keHoach.planId}`,
+		keHoach,
+	}));
+	const dong = [...theoHan, ...keHoach];
 	const soQuaHan =
 		overdueTasks.length + mySteps.filter((b) => buocQuaHan(b, now)).length;
-	const moTaTasks =
+	const soIm = keHoachCanDeY.filter((k) => k.loai === "ke-hoach-im").length;
+	const moTaViec =
 		soQuaHan > 0
 			? m.tasks.pastDue(formatCount(soQuaHan, m.tasks.taskNoun, locale))
 			: mySteps.length > 0
 				? dien(keHoachNoiMessages(locale).tasks.sapHan, {
 						n: String(mySteps.length),
 					})
-				: m.tasks.allDone;
+				: null;
+	const moTaIm =
+		soIm > 0 ? dien(nhacMessages(locale).moTaIm, { n: soIm }) : null;
+	const moTaTasks =
+		[moTaViec, moTaIm].filter((v) => v !== null).join(" · ") || m.tasks.allDone;
 
 	const mine = scope === "me";
 	const largestOpenCents = biggestOpen[0]?.baseAmountCents ?? 0;
@@ -256,7 +273,9 @@ export function DashboardSummary() {
 						) : (
 							<SimpleTable variant="panel" surface="page" columns={COT.tasks}>
 								{dong.map((d) =>
-									d.loai === "buoc" ? (
+									d.loai === "keHoach" ? (
+										<DongKeHoach key={d.id} dong={d.keHoach} />
+									) : d.loai === "buoc" ? (
 										<DongBuoc
 											key={d.id}
 											buoc={d.buoc}
