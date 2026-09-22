@@ -85,12 +85,18 @@ mock.module("next/navigation", () => ({
 const { CompanySheet } = await import(
 	"@/components/crm/record-sheet/company-sheet"
 );
+const { ContactSheet } = await import(
+	"@/components/crm/record-sheet/contact-sheet"
+);
 const { DetailSheet } = await import("@/components/detail-sheet");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { keHoachNoiMessages } = await import("@/lib/messages/ke-hoach-noi");
 
+const { onboardingMessages } = await import("@/lib/messages/onboarding");
+
 const k = keHoachNoiMessages("vi");
+const ob = onboardingMessages("vi");
 
 const CONG_TY_K = "ct-k";
 const TOI = { id: "u-toi", name: "Lan", email: "lan@thu.test", image: null };
@@ -369,5 +375,97 @@ describe("tab-cong-ty-man", () => {
 				),
 			"o cong ty dien san va khoa",
 		);
+	});
+});
+
+const CA_NHAN_C = "cn-c";
+
+function caNhan() {
+	return {
+		id: CA_NHAN_C,
+		firstName: "Trinh",
+		lastName: "Cam Thuong",
+		email: null,
+		phone: null,
+		title: null,
+		linkedinUrl: null,
+		twitterUrl: null,
+		githubUrl: null,
+		imageUrl: null,
+		enrichmentStatus: "COMPLETE",
+		enrichmentError: null,
+		owner: null,
+		company: null,
+		fields: [],
+		queued: false,
+		createdAt: "2026-09-01T00:00:00.000Z",
+		archivedAt: null,
+		brief: null,
+		facts: [],
+		relationship: {
+			emails: 0,
+			threads: 0,
+			lastReplyAt: null,
+			meetings: 0,
+			nextMeeting: null,
+			colleagues: [],
+		},
+		isPrimaryContact: false,
+		deals: [],
+	};
+}
+
+function tieuDeMuc(): boolean {
+	return [...document.body.querySelectorAll("h3")].some(
+		(h) => h.textContent?.trim() === k.caNhan.tieuDe,
+	);
+}
+
+describe("muc-ca-nhan-man", () => {
+	test("muc-ca-nhan-man: mot dong cho ke hoach dang chay, bam mo ke hoach chong len", async () => {
+		duLieu["contacts.byId"] = () => caNhan();
+		duLieu["onboarding.plansOfContact"] = () => [
+			{ planId: "P1", companyName: "One Mount", bac: "accountAt" },
+		];
+		const san = await mo(
+			trongSheet(<ContactSheet contactId={CA_NHAN_C} />),
+			`?record=contact:${CA_NHAN_C}`,
+		);
+		await cho(() => tieuDeMuc(), "muc 30 ngay dau");
+
+		const goi = daGoi.filter((g) => g.duong === "onboarding.plansOfContact");
+		expect(goi.length, "dung mot loi goi plansOfContact").toBe(1);
+		expect(goi[0]?.dauVao, "input bang muc keHoachCaNhan").toEqual({
+			...payload.keHoachCaNhan,
+			contactId: CA_NHAN_C,
+		});
+
+		const dong = document.body.querySelectorAll("[data-ke-hoach]");
+		expect(dong.length, "dung mot dong").toBe(1);
+		expect(dong[0]?.textContent).toContain("One Mount");
+		expect(dong[0]?.textContent).toContain(ob.bac.accountAt);
+
+		const nutDong = dong[0];
+		if (!nutDong) throw new Error("khong thay dong ke hoach");
+		await bam(nutDong);
+		await nghi(1);
+		expect(san.url().get("record"), "Expected plan:P1").toBe(
+			`contact:${CA_NHAN_C},plan:P1`,
+		);
+	});
+
+	test("muc-ca-nhan-man: doi chung am — khong ghi danh thi khong co muc", async () => {
+		duLieu["contacts.byId"] = () => caNhan();
+		duLieu["onboarding.plansOfContact"] = () => [];
+		await mo(
+			trongSheet(<ContactSheet contactId={CA_NHAN_C} />),
+			`?record=contact:${CA_NHAN_C}`,
+		);
+		await cho(
+			() => daGoi.some((g) => g.duong === "onboarding.plansOfContact"),
+			"da hoi plansOfContact",
+		);
+		await nghi(5);
+		expect(tieuDeMuc(), "khong co tieu de muc 30 ngay dau").toBe(false);
 	});
 });

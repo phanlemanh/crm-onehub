@@ -65,6 +65,7 @@ import { hasContactLinks } from "@/lib/social-links";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { ContactPlans } from "./contact-plans";
 import { RecordActions } from "./record-actions";
 import { DealAmount, MetaLine, RecordSheetFrame } from "./record-parts";
 import { useOpenRecord, useRecordSheetView } from "./record-stack";
@@ -435,6 +436,8 @@ function ContactOverview({ contact }: { contact: Contact }) {
 					/>
 				</DetailSheetProperties>
 			</DetailSheetSection>
+
+			<ContactPlans contactId={contact.id} />
 
 			{contact.brief ? <Background brief={contact.brief} /> : null}
 

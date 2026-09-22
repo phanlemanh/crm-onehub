@@ -285,9 +285,9 @@ evals:
       bang muc keHoachCaNhan cua moi-phia-payload.json voi contactId C; muc «30 ngày đầu» co dung mot dong,
       textContent chua «One Mount» va nhan bac «Có tài khoản»; bam dong -> ngan xep
       record bang [contact:C, plan:P1].
-      Doi chung am tren CUNG lan dung: ban gia tra rong -> khong co tieu de muc
-      «30 ngày đầu» (tim theo ten, mong 0) — va doi chung duong ngay sau khi tra lai
-      mot dong -> muc hien.
+      Doi chung am, bai rieng tren cung bo dung va cung ban gia: ban gia tra rong
+      -> da hoi plansOfContact ma khong co tieu de muc «30 ngày đầu» (tim theo ten,
+      mong 0); bai duong ngay truoc do la doi chung duong.
       DOT BIEN CHUNG MINH: hien muc ca khi rong -> doi chung am do voi thong diep
       ghim ten muc.
 
