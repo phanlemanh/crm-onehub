@@ -28,6 +28,8 @@ export const DANH_MUC_BO_LOC = ["boPhan", "nguoiCam", "nguoiGiao"] as const;
 export type DanhMucBoLoc = (typeof DANH_MUC_BO_LOC)[number];
 
 export const danhMucSearchParams = createListSearchParams<never, DanhMucBoLoc>({
+	defaultSort: "startedAt",
+	defaultDir: "asc",
 	facetIds: DANH_MUC_BO_LOC,
 });
 

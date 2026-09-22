@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 18ddded26be1c1a204d4e2df661aa27669700a88
+verified_commit: e1c3ff8a020a3667823dbb8f87058686559ed67d
 human_signoff: Phan Le Manh 2026-09-21
 ---
 
@@ -244,3 +244,11 @@ sha: 2b389d3c924a29785f9250584bbae77718359592 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-09-22, do CI đỏ vì mock next/navigation của E12 sống sang tệp đăng nhập; sửa bài kiểm ở 18ddded2
 run_id: repin-20260922T070657Z-92620
 sha: 18ddded26be1c1a204d4e2df661aa27669700a88 · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E12 · AC không có chốt máy: AC-9
+
+### Re-pin lần 4 — 2026-09-22, do bai kiem nut-tren-thanh-cong-cu viet lai do nut o dau trang (onboarding-giong-deals)
+run_id: repin-20260922T151614Z-70182
+sha: 8a8f86a7e454db4fd02d0fee4fea6a4770944bdc · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9
+
+### Re-pin lần 5 — 2026-09-22, do hoa cu do merge origin/onehub (#84)
+run_id: repin-20260922T152039Z-31450
+sha: e1c3ff8a020a3667823dbb8f87058686559ed67d · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E12 · AC không có chốt máy: AC-9

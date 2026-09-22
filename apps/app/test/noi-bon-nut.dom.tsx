@@ -300,6 +300,9 @@ const { CaiDatDieuPhoi } = await import(
 const { DanhMucTable } = await import(
 	"@/app/(app)/[slug]/onboarding/danh-muc-table"
 );
+const { DanhMucHanhDong } = await import(
+	"@/app/(app)/[slug]/onboarding/tao-ke-hoach"
+);
 const { HoSoKeHoach } = await import(
 	"@/app/(app)/[slug]/onboarding/[planId]/ho-so-ke-hoach"
 );
@@ -642,8 +645,24 @@ describe("chua-co-bo-phan", () => {
 	});
 });
 
-async function moTaoKeHoach(nhanNut: string, duong = ""): Promise<void> {
-	await mo(<DanhMucTable />, duong);
+async function moTaoKeHoach(
+	nhanNut: string,
+	duong = "",
+	dauTrang = false,
+): Promise<void> {
+	await mo(
+		dauTrang ? (
+			<>
+				<div data-slot="page-shell-actions">
+					<DanhMucHanhDong />
+				</div>
+				<DanhMucTable />
+			</>
+		) : (
+			<DanhMucTable />
+		),
+		duong,
+	);
 	await cho(
 		() => document.body.textContent?.includes(nhanNut) === true,
 		"nut tao ke hoach",
@@ -719,7 +738,7 @@ describe("tao-ke-hoach", () => {
 });
 
 describe("nut-tren-thanh-cong-cu", () => {
-	test("nut-tren-thanh-cong-cu: hai cach xem deu co nut ke hoach moi mo hop thoai", async () => {
+	test("nut-tren-thanh-cong-cu: hai cach xem deu co nut ke hoach moi o dau trang mo hop thoai", async () => {
 		khuon = [
 			{
 				id: "kh-a",
@@ -733,10 +752,13 @@ describe("nut-tren-thanh-cong-cu", () => {
 		let soCa = 0;
 		for (const cachXem of ["bang", "bang-cot"] as const) {
 			tap = [dungHang(keHoachTho(1, "Beta Hub"), new Date())];
-			await moTaoKeHoach(m.tao.keHoach.toolbar, `cachXem=${cachXem}`);
+			await moTaoKeHoach(m.tao.keHoach.toolbar, `cachXem=${cachXem}`, true);
+			const dau = document.body.querySelector(
+				'[data-slot="page-shell-actions"]',
+			);
 			expect(
-				`${cachXem}: ${hopThoai()?.textContent?.includes(m.tao.keHoach.title)}`,
-			).toBe(`${cachXem}: true`);
+				`${cachXem}: dau trang=${dau?.textContent?.includes(m.tao.keHoach.toolbar)} hop thoai=${hopThoai()?.textContent?.includes(m.tao.keHoach.title)}`,
+			).toBe(`${cachXem}: dau trang=true hop thoai=true`);
 			for (const san of dangMo) {
 				await act(async () => san.root.unmount());
 				san.o.remove();
