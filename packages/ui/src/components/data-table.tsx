@@ -137,6 +137,27 @@ const ALIGN_CLASS = {
 	center: "text-center",
 } as const;
 
+const HEAD_LABEL = {
+	maxLines: 2,
+	minWidthDivisor: 2,
+	minWidthPadCh: 1,
+} as const;
+
+const HEAD_LABEL_CLAMP_CLASS = {
+	1: "line-clamp-1",
+	2: "line-clamp-2",
+} as const;
+
+const HEAD_LABEL_CLAMP = HEAD_LABEL_CLAMP_CLASS[HEAD_LABEL.maxLines];
+
+function headLabelStyle<TRow>(column: DataTableColumn<TRow>) {
+	if (typeof column.header !== "string") return undefined;
+	const ch =
+		Math.ceil(column.header.length / HEAD_LABEL.minWidthDivisor) +
+		HEAD_LABEL.minWidthPadCh;
+	return { minWidth: `${ch}ch` };
+}
+
 function columnLabel<TRow>(column: DataTableColumn<TRow>): string {
 	if (column.label) return column.label;
 	return typeof column.header === "string" ? column.header : column.id;
@@ -145,12 +166,19 @@ function columnLabel<TRow>(column: DataTableColumn<TRow>): string {
 function SortIndicator({
 	active,
 	dir,
+	className,
 }: {
 	active: boolean;
 	dir: "asc" | "desc";
+	className?: string;
 }) {
 	return (
-		<span className="text-muted-foreground">
+		<span
+			className={cn(
+				"inline-flex align-[-2px] text-muted-foreground",
+				className,
+			)}
+		>
 			{active ? (
 				dir === "asc" ? (
 					<ArrowUp size={12} />
@@ -594,7 +622,7 @@ export function DataTable<TRow, TSub = unknown>({
 
 			<Table
 				className={cn(
-					"table-fixed [&_td:first-child]:pl-4 [&_th:first-child]:pl-4 [&_td:last-child]:pr-4 [&_th:last-child]:pr-4",
+					"[&_td]:max-w-0 [&_td:first-child]:pl-4 [&_th:first-child]:pl-4 [&_td:last-child]:pr-4 [&_th:last-child]:pr-4",
 					tableClassName,
 				)}
 				containerClassName="min-h-0 flex-1 overflow-auto rounded-lg border bg-card"
@@ -658,16 +686,41 @@ export function DataTable<TRow, TSub = unknown>({
 											size="xs"
 											onClick={() => query.toggleSort(column.id)}
 											className={cn(
-												"-ml-2 min-w-0 max-w-full font-normal text-muted-foreground hover:text-foreground",
-												column.align === "right" && "-mr-2 ml-0 flex-row-reverse",
+												"-ml-2 inline-block h-auto min-h-6 min-w-0 max-w-[calc(100%+0.5rem)] py-1 text-left font-normal whitespace-normal text-muted-foreground hover:text-foreground",
+												column.align === "right" && "-mr-2 ml-0 text-right",
 												column.align === "center" && "mx-auto",
 											)}
 										>
-											<span className="truncate">{column.header}</span>
-											<SortIndicator active={isActive} dir={query.dir} />
+											<span
+												data-slot="table-head-label"
+												style={headLabelStyle(column)}
+												className={HEAD_LABEL_CLAMP}
+											>
+												{column.align === "right" && (
+													<SortIndicator
+														active={isActive}
+														dir={query.dir}
+														className="mr-1"
+													/>
+												)}
+												{column.header}
+												{column.align !== "right" && (
+													<SortIndicator
+														active={isActive}
+														dir={query.dir}
+														className="ml-1"
+													/>
+												)}
+											</span>
 										</Button>
 									) : (
-										<span className="block truncate">{column.header}</span>
+										<span
+											data-slot="table-head-label"
+											style={headLabelStyle(column)}
+											className={cn(HEAD_LABEL_CLAMP, "whitespace-normal")}
+										>
+											{column.header}
+										</span>
 									)}
 								</TableHead>
 							);
