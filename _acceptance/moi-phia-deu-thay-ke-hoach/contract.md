@@ -5,7 +5,7 @@ slug: moi-phia-deu-thay-ke-hoach
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui, docs]
-status: verified
+status: machine-cleared
 design_doc: docs/superpowers/specs/2026-09-22-moi-phia-deu-thay-ke-hoach-design.md
 approved_by:
 approved_at:
@@ -79,3 +79,12 @@ trục, 36 ô có nghĩa, cắt còn 7 ô Core (19%).
 - Vết `buoc.xong` của lượt 1 không có trường người được giao lúc bấm; câu truy vấn đường đo bỏ chúng ra ngoài mẫu thay vì đoán.
 - `onboarding.service.ts` đã 810 dòng, quá trần 800 của kho; thủ tục đọc mới nằm ở tệp mới `onboarding-noi.ts`, không thêm vào tệp cũ.
 - Chuẩn giao diện: `feature_loop.ui_standards_skill` khai `web-design-guidelines`, nhưng đó là skill rà mã đã viết trong `.agents/skills`, không phải chuẩn thiết kế; lượt này thiết kế theo `docs/design.md` và `/packages/ui`, và chạy skill đó trên tệp giao diện mới ở S3 — cùng cách lượt 1 đã làm.
+- Known limit (Ngoài-1, Cổng Bằng chứng 2026-09-22): dữ liệu mới của kế hoạch và chuyển việc được làm mới bằng danh sách khoá tại chỗ gọi, không qua `useCrmCache`; tab 30 ngày đầu, mục 30 ngày đầu của sheet Cá nhân và thẻ Tasks có thể hiện dữ liệu cũ tới khi tải lại.
+- Known limit (Ngoài-2, Cổng Bằng chứng 2026-09-22): kiểm quyền quản trị của chuyển việc có một bản chép trong `onboarding-ghi.ts` bên cạnh `yeuCauQuanTri` của `OnboardingService`; đổi luật quyền phải sửa cả hai.
+- Known limit (Ngoài-3, Cổng Bằng chứng 2026-09-22): `OnboardingNoi` chạy truy vấn Prisma trong `onboarding-noi.ts`, không theo quy ước `*.service.ts`.
+- Known limit (Ngoài-4, Cổng Bằng chứng 2026-09-22): sau chuyển việc 30 ngày, chi tiết kế hoạch, tab 30 ngày đầu và thẻ Tasks có thể còn hiện người cầm trịch và người được giao cũ tới khi tải lại.
+- Known limit (Ngoài-5, Cổng Bằng chứng 2026-09-22): phép đo dòng bước ở tab 30 ngày đầu tìm link theo chữ, không kiểm đích mở.
+- Known limit (Ngoài-6, Cổng Bằng chứng 2026-09-22): phép đo giá trị đang mở chỉ khớp một chữ số, không buộc vào `amountCents`.
+- Known limit (Ngoài-7, Cổng Bằng chứng 2026-09-22): phép đo nhãn tab chỉ kiểm có chữ số 2; fixture không tách được `soKeHoach` khỏi số dòng.
+- Known limit (Ngoài-8, Cổng Bằng chứng 2026-09-22): payload chuyển việc và xem trước được dựng lại khoá bằng tay ở hai phía thay vì trải fixture.
+- Known limit (Ngoài-9, Cổng Bằng chứng 2026-09-22): ca 403 của chuyển việc chỉ ghim mã, không ghim thông điệp `canQuyenQuanTri`.
