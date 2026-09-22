@@ -107,7 +107,10 @@ evals:
       - "apps/app/test/onboarding-giong-deals.dom.tsx"
     expected: |
       manDanhMuc gia nem loi: o tim co mat, m.error.title va nut m.error.action nam TRONG phan
-      tu table; bam nut -> so lan goi manDanhMuc tang 1. Dem ca = 2.
+      tu table; bam nut -> so lan goi manDanhMuc tang 1. Ca thu ba (S4-r1): bang da co hang,
+      manDanhMuc doi sang nem loi, invalidateQueries -> loi va dung mot nut Thu lai trong khung
+      bang, o tim con. Dem ca = 3.
+      CHIEU DO ca thu ba (da chay tren 448e60f): ghim "tai lai hong: loi trong bang=false nut=0".
       CHIEU DO (da chay): dua loi ra khoi o empty cua bang -> do voi thong diep ghim "loi hien"
       (loi khong bao gio xuat hien trong khung bang).
 

@@ -242,7 +242,12 @@ const m = onboardingMessages("vi");
 const ui = uiMessages("vi").table;
 const O_TRONG = renderToStaticMarkup(<EmptyCellValue />);
 
-type San = { o: HTMLElement; root: Root; url: () => URLSearchParams };
+type San = {
+	o: HTMLElement;
+	root: Root;
+	url: () => URLSearchParams;
+	client: QueryClient;
+};
 let dangMo: San[] = [];
 
 function Trang() {
@@ -289,7 +294,7 @@ async function mo(
 			</NuqsTestingAdapter>,
 		);
 	});
-	const san = { o, root, url: () => hienTai };
+	const san = { o, root, url: () => hienTai, client };
 	dangMo.push(san);
 	if (tuyChon.choTai !== false) {
 		const nhan = onboardingMessages(tuyChon.locale ?? "vi").loading;
@@ -641,6 +646,35 @@ describe("loi-giu-thanh-cong-cu", () => {
 			"thu lai goi lai",
 		);
 		expect(daGoi.filter((g) => g.ten === "manDanhMuc").length).toBe(truoc + 1);
+	});
+});
+
+describe("loi-giu-thanh-cong-cu", () => {
+	test("loi-giu-thanh-cong-cu: da co hang ma tai lai hong thi loi va Thu lai van hien trong bang", async () => {
+		const san = await mo();
+		await cho(
+			() => san.o.querySelectorAll("tbody tr").length === 2,
+			"hang hien",
+		);
+		cheDoDanhMuc = "loi";
+		await act(async () => {
+			await san.client.invalidateQueries();
+		});
+		await cho(
+			() =>
+				(khungBang(san)?.textContent ?? "").includes(m.error.title) ||
+				daGoi.filter((g) => g.ten === "manDanhMuc").length > 1,
+			"tai lai",
+		);
+		for (let i = 0; i < 20; i += 1) {
+			await act(async () => {
+				await new Promise((r) => setTimeout(r, 0));
+			});
+		}
+		const khung = khungBang(san);
+		expect(
+			`tai lai hong: loi trong bang=${(khung?.textContent ?? "").includes(m.error.title)} nut=${khung ? cacNut(khung, m.error.action).length : 0} o tim=${oTim(san) !== null}`,
+		).toBe("tai lai hong: loi trong bang=true nut=1 o tim=true");
 	});
 });
 

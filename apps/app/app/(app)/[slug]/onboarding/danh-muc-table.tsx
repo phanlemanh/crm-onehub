@@ -192,7 +192,8 @@ export function DanhMucTable() {
 		return `?${q}`;
 	};
 
-	const data = danhMuc.data;
+	const coLoi = danhMuc.isError;
+	const data = coLoi ? undefined : danhMuc.data;
 
 	if (data?.trangThai === "ST-danhmuc-chuacokhuon") {
 		return (
@@ -226,7 +227,7 @@ export function DanhMucTable() {
 		);
 	}
 
-	const loiView = danhMuc.isError ? (
+	const loiView = coLoi ? (
 		<Empty data-trang-thai="ST-danhmuc-loi">
 			<EmptyHeader>
 				<EmptyTitle>{m.error.title}</EmptyTitle>
