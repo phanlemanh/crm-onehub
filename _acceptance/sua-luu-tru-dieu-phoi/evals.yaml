@@ -467,3 +467,20 @@ evals:
       khop tap vai tro voi WORKSPACE_ROLES de vai tro moi them vao lam do.
       CHIEU DO: canManageOnboarding viet thanh role === "admin" -> dong owner do voi
       thong diep ghim ten vai tro.
+
+  - id: E29
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_bo_phan
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      Cung loi goi HTTP that cua E2, phan luu tru: quan tri luu tru mot bo phan ma khong
+      khuon chua luu tru nao dung -> 200; listDepartments({archived:false}) khong con no,
+      listDepartments({archived:true}) co no; listSteps cua ke hoach dang chay van tra
+      departmentName dung ten bo phan da luu tru; restoreDepartment (duong cua Hoan tac)
+      -> 200 va no tro lai listDepartments({archived:false}).
+      CHIEU DO: archiveDepartment khong ghi archivedAt -> do voi thong diep ghim ten bo
+      phan va danh sach dang dung.

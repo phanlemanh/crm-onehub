@@ -235,10 +235,15 @@ describe("api-bo-phan", () => {
 
 		ok(await goi("archiveTemplate", { id: khuon.id }), "luu tru khuon");
 		ok(await goi("archiveDepartment", { id: a.id }), "luu tru bo phan");
-		expect((await danhSachBoPhan(false)).some((d) => d.id === a.id)).toBe(
-			false,
+		const dangDungSauLuuTru = (await danhSachBoPhan(false)).some(
+			(d) => d.id === a.id,
 		);
-		expect((await danhSachBoPhan(true)).some((d) => d.id === a.id)).toBe(true);
+		const luuTruSauLuuTru = (await danhSachBoPhan(true)).some(
+			(d) => d.id === a.id,
+		);
+		expect(
+			`${tenMoi} sau luu tru: dang dung ${dangDungSauLuuTru} da luu tru ${luuTruSauLuuTru}`,
+		).toBe(`${tenMoi} sau luu tru: dang dung false da luu tru true`);
 		const sauLuuTru = ok<{ rows: BuocRa[] }>(
 			await doc("listSteps", { planId: kh.id }),
 			"buoc sau luu tru",
@@ -248,7 +253,12 @@ describe("api-bo-phan", () => {
 		);
 
 		ok(await goi("restoreDepartment", { id: a.id }), "khoi phuc");
-		expect((await danhSachBoPhan(false)).some((d) => d.id === a.id)).toBe(true);
+		const dangDungSauKhoiPhuc = (await danhSachBoPhan(false)).some(
+			(d) => d.id === a.id,
+		);
+		expect(`${tenMoi} sau khoi phuc: dang dung ${dangDungSauKhoiPhuc}`).toBe(
+			`${tenMoi} sau khoi phuc: dang dung true`,
+		);
 	});
 });
 
