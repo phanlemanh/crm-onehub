@@ -3,3 +3,4 @@
 {"id":"d-20260922T013108Z-3","type":"descope","stage":"S1","at":"2026-09-22T01:31:08Z","decision":"bỏ đặc-tả-UX — vòng chỉ sửa luật máy chủ, không thêm hay đổi màn nào","impact":"cấu trúc không khai trước — owner thấy nó lần đầu trong code"}
 {"id":"d-20260922T013108Z-4","type":"descope","stage":"S1","at":"2026-09-22T01:31:08Z","decision":"bỏ đường-đo — ô cơ hội khai ngưỡng là không đo được; phép thử là chủ kho thử lại đường dọn sau khi gộp","impact":"Cổng Giá trị sẽ đọc bảng ngưỡng với ô CHƯA ĐO — quyết release/iterate/kill mất căn cứ số"}
 {"id":"d-20260922T013108Z-5","type":"descope","stage":"S1","at":"2026-09-22T01:31:08Z","decision":"KHÔNG dò và vá khuôn đã mồ côi từ trước khi sửa","impact":"tiết kiệm một migration dữ liệu · khuôn mồ côi nếu đã có trên prod vẫn không khôi phục được"}
+{"id":"d-20260922T014525Z-6","type":"seal","gate":1,"at":"2026-09-22T01:45:25Z"}
