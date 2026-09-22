@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 2b389d3c924a29785f9250584bbae77718359592
+verified_commit: 18ddded26be1c1a204d4e2df661aa27669700a88
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -181,3 +181,7 @@ exit 0; không có sửa lại giữa các vòng.
 ### Re-pin lần 1 — 2026-09-22, do lượt ke-hoach-la-mot-ban-ghi sửa bài kiểm của hồ sơ (d-21, d-23) và dời màn hồ sơ kế hoạch sang PlanSheet
 run_id: repin-20260922T065429Z-21311
 sha: 2b389d3c924a29785f9250584bbae77718359592 · suites: 4 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9
+
+### Re-pin lần 2 — 2026-09-22, do CI đỏ vì mock next/navigation của E12 sống sang tệp đăng nhập; sửa bài kiểm ở 18ddded2
+run_id: repin-20260922T070657Z-92620
+sha: 18ddded26be1c1a204d4e2df661aa27669700a88 · suites: 4 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E9 · AC không có chốt máy: AC-9

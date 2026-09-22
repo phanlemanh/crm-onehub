@@ -34,3 +34,4 @@
 {"ts":"2026-09-22T06:06:59Z","sha":"e9fe5f82eb97f47d0e4f56c75378a4ed01cc4d18","round":1,"kind":"baseline","evals_hash":"2e6b66588b5a25f699e027d4695888e65a3dc411dbf187892e7b9ede62c6322b","non_discriminating":[]}
 {"ts":"2026-09-22T06:06:59Z","sha":"e9fe5f82eb97f47d0e4f56c75378a4ed01cc4d18","round":1,"kind":"round-tally","verdict":"PASS","expected":24,"returned":24,"blocked":0}
 {"kind":"thuoc-vat","ts":"2026-09-22T06:44:46Z","round":1,"san":"e9fe5f82eb97f47d0e4f56c75378a4ed01cc4d18","vat":[0,0],"thuoc":[0,0],"ho_so":[0,0],"nhat":0,"lan":0,"tep_thuoc":[]}
+{"ts":"2026-09-22T07:06:57Z","kind":"repin","run_id":"repin-20260922T070657Z-92620","sha":"18ddded26be1c1a204d4e2df661aa27669700a88","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0,"E5":0,"E6":0,"E7":0,"E8":0,"E9":0,"E10":0,"E11":0,"E12":0,"E13":0,"E14":0,"E15":0,"E16":0,"E18":0,"E19":0,"E20":0},"evals_not_machine":["E17"]}

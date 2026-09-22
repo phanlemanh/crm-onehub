@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e9fe5f82eb97f47d0e4f56c75378a4ed01cc4d18
+verified_commit: 18ddded26be1c1a204d4e2df661aa27669700a88
 human_signoff: Phan Le Manh 2026-09-22 — ký Cổng Bằng chứng trên verdict PASS của vòng chấm 1 (20/20 phép đo và 4 lệnh suite mã thoát 0), với TÁM giới hạn đã khai và một mục mở hợp đồng mới (Ngoài-5, kế hoạch trống không thêm được bước đầu). Chín mục ngoài hợp đồng đã được định đoạt từng mục ở lượt ký này; phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -311,3 +311,7 @@ none — không eval nào có runs > 1; không phát sinh phương sai.
 ## Iterations
 
 Round 1: tất cả 20 eval (E1–E20) và cả bốn lệnh suite (bun run test, bunx turbo run lint --force, bun run lint:slop, bunx turbo run build --force) xanh ngay từ vòng đầu tiên — không có vòng sửa nào trước đó.
+
+### Re-pin lần 1 — 2026-09-22, do CI đỏ vì mock next/navigation của E12 sống sang tệp đăng nhập; sửa bài kiểm ở 18ddded2
+run_id: repin-20260922T070657Z-92620
+sha: 18ddded26be1c1a204d4e2df661aa27669700a88 · suites: 4 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E17
