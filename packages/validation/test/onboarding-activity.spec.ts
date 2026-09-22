@@ -33,12 +33,14 @@ const MA_TRAN = [
 	}),
 	vet.keHoachDong(),
 	vet.keHoachMoLai(),
+	vet.theoDoiBat(),
+	vet.theoDoiTat(),
 ];
 
 describe("onboarding-activity", () => {
 	test("moi kind co mot ham dung va doc lai qua schema", () => {
-		expect(new Set(MA_TRAN.map((m) => m.kind)).size).toBe(9);
-		expect(ONBOARDING_ACTIVITY_KINDS.length).toBe(9);
+		expect(new Set(MA_TRAN.map((m) => m.kind)).size).toBe(11);
+		expect(ONBOARDING_ACTIVITY_KINDS.length).toBe(11);
 		for (const meta of MA_TRAN) {
 			expect(parseOnboardingActivityMeta(meta)).toEqual(meta);
 		}

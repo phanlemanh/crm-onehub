@@ -54,8 +54,9 @@ model User {
 
   apiKeys Apikey[]
 
-  onboardingPlansOwned    OnboardingPlan[] @relation("OnboardingPlanOwner")
-  onboardingStepsAssigned OnboardingStep[] @relation("OnboardingStepAssignee")
+  onboardingPlansOwned    OnboardingPlan[]  @relation("OnboardingPlanOwner")
+  onboardingStepsAssigned OnboardingStep[]  @relation("OnboardingStepAssignee")
+  onboardingWatches       OnboardingWatch[]
 
   @@unique([email])
   @@map("user")
@@ -532,6 +533,7 @@ model AgentTask {
 
   createdAt DateTime @default(now())
 
+  @@unique([kind, subject], map: "agentTask_nhac_mot_ngay", where: { kind: "nhac-ke-hoach" })
   @@index([dueAt, leasedUntil])
   @@index([contactId])
   @@index([dealId])
@@ -1735,6 +1737,7 @@ model OnboardingPlan {
   steps       OnboardingStep[]
   enrollments OnboardingEnrollment[]
   activities  Activity[]
+  watches     OnboardingWatch[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1743,6 +1746,19 @@ model OnboardingPlan {
   @@index([closedAt])
   @@index([ownerId])
   @@map("onboardingPlan")
+}
+
+model OnboardingWatch {
+  id        String         @id @default(cuid())
+  planId    String
+  plan      OnboardingPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime       @default(now())
+
+  @@unique([planId, userId])
+  @@index([userId])
+  @@map("onboardingWatch")
 }
 
 model OnboardingStep {

@@ -258,6 +258,8 @@ const en = {
 		doiCamTrich: "handed the plan from {tu} to {den}",
 		dong: "closed the plan",
 		moLai: "reopened the plan",
+		theoDoiBat: "started watching the plan",
+		theoDoiTat: "stopped watching the plan",
 		khongDoc: "A plan change that could not be read",
 	},
 } satisfies OnboardingMessages;
@@ -486,6 +488,8 @@ type OnboardingMessages = {
 		doiCamTrich: string;
 		dong: string;
 		moLai: string;
+		theoDoiBat: string;
+		theoDoiTat: string;
 		khongDoc: string;
 	};
 };
@@ -749,6 +753,8 @@ const vi = {
 		doiCamTrich: "chuyển cầm trịch từ {tu} sang {den}",
 		dong: "đóng kế hoạch",
 		moLai: "mở lại kế hoạch",
+		theoDoiBat: "theo dõi kế hoạch",
+		theoDoiTat: "bỏ theo dõi kế hoạch",
 		khongDoc: "Thay đổi kế hoạch không đọc được",
 	},
 } satisfies OnboardingMessages;
