@@ -134,7 +134,7 @@ không đổi cách tính.
 
 ### 4. Hành vi
 
-- Tin Slack theo ngôn ngữ của xưởng; tên công ty, tên bước, tên người giữ nguyên văn.
+- Tin Slack bằng tiếng Việt — xưởng không lưu ngôn ngữ (kho không có trường locale của workspace); tên công ty, tên bước, tên người giữ nguyên văn.
 - Mô tả thẻ Tasks đếm cả hai loại mới: «2 quá hạn · 3 sắp hạn · 1 kế hoạch im».
 - Nút theo dõi đi được bằng bàn phím, có `aria-pressed`; danh sách người theo dõi trong tooltip mang `translate="no"`.
 - Khổ 375: dòng mới của thẻ Tasks xuống hai dòng như dòng bước, không tràn ngang.
