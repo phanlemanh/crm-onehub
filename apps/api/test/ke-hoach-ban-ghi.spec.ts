@@ -4,9 +4,18 @@ import { db } from "@crm/db";
 import { workspaceSlug } from "@crm/db/workspace";
 import { parseOnboardingActivityMeta } from "@crm/validation/onboarding-activity";
 import type { HttpException } from "@nestjs/common";
+import { ActivitiesService } from "../src/activities/activities.service";
+import type { AgentQueueService } from "../src/agent/agent-queue.service";
+import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
+import { CompaniesService } from "../src/companies/companies.service";
+import type { FaviconService } from "../src/companies/favicon.service";
+import { ActivityStampService } from "../src/crm/activity-stamp.service";
+import type { ConversionService } from "../src/currency/conversion.service";
+import type { FieldsService } from "../src/fields/fields.service";
 import type { PlanListInput } from "../src/onboarding/onboarding.contracts";
 import { OnboardingService } from "../src/onboarding/onboarding.service";
 import { ONBOARDING } from "../src/onboarding/onboarding-config";
+import { withDiscardedCrmEvents } from "./agent-trigger.stub";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -36,7 +45,12 @@ beforeAll(async () => {
 
 afterAll(async () => {
 	await db.activity.deleteMany({
-		where: { plan: { company: { name: { startsWith: TIEN_TO } } } },
+		where: {
+			OR: [
+				{ plan: { company: { name: { startsWith: TIEN_TO } } } },
+				{ createdById: { in: daGieo.nguoi } },
+			],
+		},
 	});
 	await db.onboardingPlan.deleteMany({
 		where: { company: { name: { startsWith: TIEN_TO } } },
@@ -592,5 +606,105 @@ describe("go-dung-nguoi", () => {
 			(await db.onboardingEnrollment.findMany({ where: { planId: plan.id } }))
 				.length,
 		).toBe(1);
+	});
+});
+
+const stamp = new ActivityStampService(db);
+
+function hoatDong(): ActivitiesService {
+	return new ActivitiesService(db, stamp);
+}
+
+function congTyDichVu(): CompaniesService {
+	return new CompaniesService(
+		db,
+		{ withCrmEvents: withDiscardedCrmEvents } as unknown as AgentTriggerService,
+		{} as unknown as AgentQueueService,
+		{ backfill: async () => undefined } as unknown as FaviconService,
+		stamp,
+		{} as unknown as ConversionService,
+		{} as unknown as FieldsService,
+	);
+}
+
+describe("ghi-chu-hai-dong-thoi-gian", () => {
+	test("ghi-chu-hai-dong-thoi-gian: ghi chu chi mang planId hien o ke hoach va cong ty, vet buoc thi khong", async () => {
+		const [O, A] = [await gieoThanhVien(), await gieoThanhVien()];
+		const bp = await gieoBoPhan();
+		const { plan, congTy } = await gieoKeHoach({
+			ownerId: O.id,
+			buoc: [{ label: "Kickoff", departmentId: bp.id }],
+		});
+		const buoc = phan(await buocCua(plan.id), 0);
+		await dichVu().assignStep({ stepId: buoc.id, assigneeId: A.id }, O.id);
+		const vetBuoc = phan(await vetCua(plan.id), 0);
+
+		const ghiChu = await hoatDong().create(
+			{ type: "NOTE", body: "Hen goi lai thu Sau", planId: plan.id },
+			O.id,
+		);
+
+		const doc = await db.activity.findUniqueOrThrow({
+			where: { id: ghiChu.id },
+		});
+		expect(doc.planId).toBe(plan.id);
+		expect(doc.companyId, `ghi chu ${ghiChu.id} vang mat o cong ty`).toBe(
+			congTy.id,
+		);
+
+		const theoKeHoach = await hoatDong().timeline({
+			planId: plan.id,
+			filter: "all",
+			limit: 30,
+		});
+		const theoCongTy = await hoatDong().timeline({
+			companyId: congTy.id,
+			filter: "all",
+			limit: 30,
+		});
+		const idKeHoach = theoKeHoach.entries.map((e) => e.id);
+		const idCongTy = theoCongTy.entries.map((e) => e.id);
+		expect(idKeHoach).toContain(ghiChu.id);
+		expect(idCongTy, `ghi chu ${ghiChu.id} vang mat o cong ty`).toContain(
+			ghiChu.id,
+		);
+		expect(idKeHoach).toContain(vetBuoc.id);
+		expect(idCongTy).not.toContain(vetBuoc.id);
+	});
+});
+
+describe("xoa-day-chuyen", () => {
+	test("xoa-day-chuyen: xoa cong ty keo theo vet ke hoach, ca nhan con lai", async () => {
+		const [O, A] = [await gieoThanhVien(), await gieoThanhVien()];
+		const bp = await gieoBoPhan();
+		const { plan, congTy } = await gieoKeHoach({
+			ownerId: O.id,
+			buoc: [{ label: "Kickoff", departmentId: bp.id }],
+		});
+		const buoc = phan(await buocCua(plan.id), 0);
+		await dichVu().assignStep({ stepId: buoc.id, assigneeId: A.id }, O.id);
+		await hoatDong().create(
+			{ type: "NOTE", body: "Ghi chu", planId: plan.id },
+			O.id,
+		);
+		const caNhan = await db.contact.create({
+			data: { firstName: `${TIEN_TO}-cn`, companyId: congTy.id },
+		});
+		await db.onboardingEnrollment.create({
+			data: { planId: plan.id, contactId: caNhan.id, source: "tay" },
+		});
+		const idVet = (await vetCua(plan.id)).map((v) => v.id);
+		expect(idVet.length).toBeGreaterThan(0);
+
+		await congTyDichVu().purge(congTy.id);
+
+		const con = await db.activity.count({ where: { id: { in: idVet } } });
+		expect(con, `so vet cua ke hoach ${plan.id} mong 0`).toBe(0);
+		expect(
+			await db.onboardingPlan.findUnique({ where: { id: plan.id } }),
+		).toBeNull();
+		expect(
+			await db.contact.findUnique({ where: { id: caNhan.id } }),
+		).not.toBeNull();
 	});
 });
