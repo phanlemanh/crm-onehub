@@ -3,10 +3,10 @@ schema_version: 1
 slug: khuon-mat-bo-phan
 feature: Khuôn đã lưu trữ khôi phục được kể cả khi một bộ phận nó dùng đã bị xoá vĩnh viễn
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-09-22T01:05:00Z
 prototype:
   base_commit:
   disposition:
@@ -38,7 +38,14 @@ trước, xoá vĩnh viễn bộ phận sau, rồi muốn dùng lại khuôn.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-Chưa khai — đợi Cổng Đáng.
+Không đo được — ô này sửa một lỗi dữ liệu đã quan sát ở Cổng Bằng chứng của
+`sua-luu-tru-dieu-phoi`, không đưa giá trị mới cho người dùng. Phép thử thực tế
+là chủ kho thử lại đường dọn (lưu trữ khuôn, xoá vĩnh viễn bộ phận, khôi phục
+khuôn) trên màn cài đặt sau khi gộp.
+
+Chủ kho quyết `build` ngày 2026-09-22, theo khuyến nghị làm ô này trước
+`cau-truc-to-chuc`. Chọn giữa hai hướng sửa (chặn xoá hay bỏ bước mồ côi) để
+cho phần thiết kế, trình lại ở Cổng Phạm vi.
 
 ## Out of scope từ khám phá
 

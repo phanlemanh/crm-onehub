@@ -1,0 +1,32 @@
+{
+  "feature_plain": "Bộ phận còn nằm trong một khuôn nào đó — kể cả khuôn đã lưu trữ — thì không xoá vĩnh viễn được nữa, nên khuôn cất đi rồi vẫn lấy lại được.",
+  "will_do": [
+    {"id": "AC-2", "p": "Sẽ cho khôi phục bộ phận rồi khôi phục khuôn, và khuôn trở về với đủ các bước như lúc cất."},
+    {"id": "AC-3", "p": "Sẽ cho xoá vĩnh viễn bộ phận ngay khi nó hết nằm trong khuôn — dù người xoá khuôn trước, hay sửa khuôn bỏ bộ phận ra."},
+    {"id": "AC-4", "p": "Sẽ chỉ hiện nút «Xoá vĩnh viễn» cho đúng những bộ phận bấm vào là xoá được — nút hiện thì xoá được, nút ẩn thì máy chủ cũng từ chối."},
+    {"id": "AC-5", "p": "Sẽ giữ nguyên các luật lưu trữ và xoá vĩnh viễn đã giao ở vòng trước."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Chặn xoá vĩnh viễn bộ phận còn nằm trong khuôn đã lưu trữ, và báo tên mọi khuôn đang giữ nó."}
+  ],
+  "scope_plain": "Để sau: cứu các khuôn đã kẹt từ trước khi sửa (nếu có trên prod), và nói trên màn vì sao nút «Xoá vĩnh viễn» không hiện.",
+  "coverage_plain": [
+    {"i": 0, "p": "Đã xét cả bộ phận đang dùng lẫn đã lưu trữ; bộ phận đang dùng thì vốn không xoá được (AC-5)."},
+    {"i": 1, "p": "Đã xét mọi chỗ có thể giữ một bộ phận: không đâu, khuôn đang dùng, khuôn đã lưu trữ, bước kế hoạch, và cả khuôn lẫn kế hoạch — hai đường duy nhất cơ sở dữ liệu có (AC-1, AC-4)."},
+    {"i": 2, "p": "Đã xét bốn việc người làm: xem nút xoá, bấm xoá, khôi phục khuôn sau đó, và những gì máy trả về ngay lúc lưu trữ (AC-2, AC-3, AC-4)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Luật «bộ phận còn trong khuôn đang dùng thì không lưu trữ được» sẽ được viết lại mà chưa có gì giữ nó — đã thêm vào AC-5 và chạy lại bài kiểm cũ của luật đó."},
+    {"i": 1, "p": "Câu tóm tắt cũ hứa «khuôn luôn khôi phục được», trong khi khuôn đã kẹt từ trước vẫn không cứu được — đã viết lại câu tóm tắt cho đúng."},
+    {"i": 2, "p": "Thông điệp chỉ hai cách gỡ nhưng chỉ một cách được kiểm — nay kiểm cả hai."},
+    {"i": 3, "p": "Chưa có ca một bộ phận nằm trong hai khuôn — nay có: xoá một khuôn thì bộ phận vẫn bị chặn và thông điệp nêu khuôn còn lại."},
+    {"i": 4, "p": "Chưa có phép đo máy cho việc màn làm mới danh sách sau khi xoá khuôn — để lại, vì vòng này không đổi mã màn; anh thử lại trên màn sau khi gộp."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260922T013108Z-1", "p": "Chọn chặn xoá thay vì cho khôi phục khuôn mà bỏ bước — không mất gì người đã soạn; đổi lại bộ phận nằm trong khuôn đã có kế hoạch sẽ không bao giờ xoá được."},
+    {"id": "d-20260922T013108Z-2", "p": "KHÔNG làm bản mẫu bấm được — vòng này không đổi màn nào."},
+    {"id": "d-20260922T013108Z-3", "p": "KHÔNG viết đặc tả giao diện — vòng chỉ đổi luật ở máy chủ."},
+    {"id": "d-20260922T013108Z-4", "p": "KHÔNG dựng đường đo số — ô cơ hội khai là không đo được; anh thử lại đường dọn sau khi gộp."},
+    {"id": "d-20260922T013108Z-5", "p": "KHÔNG cứu khuôn đã kẹt từ trước — đỡ một lần sửa dữ liệu; đổi lại khuôn kẹt nếu đã có trên prod vẫn kẹt."}
+  ]
+}
