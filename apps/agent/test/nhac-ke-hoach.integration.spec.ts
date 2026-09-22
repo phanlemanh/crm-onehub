@@ -702,6 +702,59 @@ describe("khong-kenh", () => {
 	});
 });
 
+const NGOAI = "ngoai-duong-do";
+
+async function gieoNgoai(gui: Date): Promise<void> {
+	const chu = await db.user.findFirstOrThrow({
+		where: { id: { startsWith: TIEN_TO } },
+	});
+	const boPhan = await db.department.create({
+		data: { name: NGOAI, position: 0 },
+	});
+	const congTy = await db.company.create({ data: { name: NGOAI } });
+	const plan = await db.onboardingPlan.create({
+		data: {
+			companyId: congTy.id,
+			ownerId: chu.id,
+			startedAt: ngayCach(gui, -HAN_XA),
+			targetDays: HAN_XA,
+		},
+	});
+	const buoc = await db.onboardingStep.create({
+		data: {
+			planId: plan.id,
+			label: NGOAI,
+			departmentId: boPhan.id,
+			dueAt: ngayCach(gui, MOT_NGAY),
+			position: 0,
+			updatedAt: ngayCach(gui, -HAN_XA),
+		},
+	});
+	await db.agentTask.create({
+		data: {
+			kind: LOAI_VIEC_NHAC,
+			reason: NGOAI,
+			subject: `user:${NGOAI}:${NGAY_NHAC}`,
+			dueAt: gui,
+			createdAt: gui,
+			outcome: "da-gui:1",
+			payload: {
+				muc: [],
+				daGui: [{ loai: "buoc-sap-han", planId: plan.id, stepId: buoc.id }],
+			},
+		},
+	});
+}
+
+async function donNgoai(): Promise<void> {
+	await db.agentTask.deleteMany({
+		where: { subject: { startsWith: `user:${NGOAI}:` } },
+	});
+	await db.onboardingPlan.deleteMany({ where: { company: { name: NGOAI } } });
+	await db.company.deleteMany({ where: { name: NGOAI } });
+	await db.department.deleteMany({ where: { name: NGOAI } });
+}
+
 describe("duong-do", () => {
 	let g: Awaited<ReturnType<typeof gieoDuongDo>>;
 	let ky: KyDo;
@@ -720,9 +773,13 @@ describe("duong-do", () => {
 		setSystemTime(new Date(g.gui.getTime() + MUOI_GIO_SANG * PHUT_MS));
 		await xongBuoc(g.sapXong.id);
 		ky = { tu: ngayCach(g.gui, HOM_QUA), den: ngayCach(g.gui, MOT_NGAY) };
+		await gieoNgoai(g.gui);
 	});
 
-	afterAll(donDep);
+	afterAll(async () => {
+		await donNgoai();
+		await donDep();
+	});
 
 	test("duong-do: trung vi ngay im chi tinh ke hoach dang chay", async () => {
 		expect(await trungViIm(g.do_), "trung vi chi tinh ke hoach dang chay").toBe(

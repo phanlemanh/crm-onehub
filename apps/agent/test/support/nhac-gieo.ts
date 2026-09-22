@@ -30,10 +30,7 @@ export async function moXuong(): Promise<void> {
 
 export async function donDep(): Promise<void> {
 	await db.agentTask.deleteMany({
-		where: {
-			kind: "nhac-ke-hoach",
-			subject: { startsWith: `user:${TIEN_TO}` },
-		},
+		where: { kind: "nhac-ke-hoach" },
 	});
 	await db.onboardingPlan.deleteMany({
 		where: { company: { name: { startsWith: TIEN_TO } } },

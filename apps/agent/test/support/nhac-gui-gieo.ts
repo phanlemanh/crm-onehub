@@ -200,19 +200,55 @@ function docRang(tep: string): string {
 	return readFileSync(join(RANG, tep), "utf8");
 }
 
+class HoanLai extends Error {}
+
+type Tx = Parameters<Parameters<typeof db.$transaction>[0]>[0];
+
+async function coLap<T>(chay: (tx: Tx) => Promise<T>): Promise<T> {
+	let ket: { gia: T } | null = null;
+	await db
+		.$transaction(async (tx) => {
+			await tx.onboardingPlan.updateMany({
+				where: {
+					closedAt: null,
+					company: { name: { not: { startsWith: TIEN_TO } } },
+				},
+				data: { closedAt: new Date() },
+			});
+			await tx.agentTask.updateMany({
+				where: {
+					kind: LOAI_VIEC_NHAC,
+					NOT: { subject: { startsWith: `user:${TIEN_TO}` } },
+				},
+				data: { outcome: "ngoai-phep-do" },
+			});
+			ket = { gia: await chay(tx) };
+			throw new HoanLai();
+		})
+		.catch((e: Error) => {
+			if (!(e instanceof HoanLai)) throw e;
+		});
+	if (!ket) throw new Error("phep do co lap khong tra ket qua");
+	return (ket as { gia: T }).gia;
+}
+
 export async function trungViIm(luc: Date): Promise<number | null> {
-	const [hang] = await db.$queryRawUnsafe<{ trung_vi: number | null }[]>(
-		docRang("ngay-im-trung-vi.sql"),
-		luc,
+	const [hang] = await coLap((tx) =>
+		tx.$queryRawUnsafe<{ trung_vi: number | null }[]>(
+			docRang("ngay-im-trung-vi.sql"),
+			luc,
+		),
 	);
 	return hang?.trung_vi ?? null;
 }
 
 export async function xongDungHan(tu: Date, den: Date) {
-	const [hang] = await db.$queryRawUnsafe<{ dung: number; mau: number }[]>(
-		docRang("xong-dung-han-sau-nhac.sql"),
-		tu,
-		den,
+	const [hang] = await coLap((tx) =>
+		tx.$queryRawUnsafe<{ dung: number; mau: number }[]>(
+			docRang("xong-dung-han-sau-nhac.sql"),
+			tu,
+			den,
+		),
 	);
 	return { dung: hang?.dung, mau: hang?.mau };
 }
