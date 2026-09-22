@@ -52,7 +52,8 @@ evals:
       A tao T2, B tao U, ca hai han hom qua. Goi that dashboard.summary cua A hai che do:
         1 team: tap overdueTasks = {T2, U}; U.createdBy.name = ten B; T2.createdBy.id = A
         2 me: tap = {T2}
-        3 mySteps va keHoachCanDeY cua hai lan goi bang nhau (deep equal)
+        3 gieo them buoc qua han giao A va mot ke hoach im A cam trich; mySteps va
+          keHoachCanDeY cua moi lan goi KHAC RONG, roi hai lan goi bang nhau (deep equal)
       DOT BIEN CHUNG MINH: giu loc createdById o team -> dong 1 do voi thong diep ghim
       "ca doi thay viec qua han cua B".
 
@@ -81,14 +82,14 @@ evals:
       - "packages/db/src/onboarding-nhac.ts"
       - "apps/api/test/han-viec.spec.ts"
     expected: |
-      Gieo ke hoach dang chay voi S3 han 25/09, S4 han 26/09 giao A (bang thu tuc gieo
-      cua ke-hoach-gieo.ts). setSystemTime 2026-09-22T17:30:00Z (00:30 VN 23/09).
-        1 mySteps chua S3
-        2 mySteps khong chua S4
-        3 dueAt cua S3 = "2026-09-25"
+      Gieo ke hoach dang chay voi S3 han 25/09, S4 han 26/09, S5 han 27/09 giao A (bang
+      thu tuc gieo cua ke-hoach-gieo.ts, han luu nhu thu tuc that luu). Hai lan setSystemTime:
+        1 2026-09-22T13:54:00Z (20:54 VN 22/09): chua S3, khong chua S4
+        2 2026-09-22T17:30:00Z (00:30 VN 23/09): chua S3 va S4, khong chua S5
+        3 lan 2: dueAt cua S4 = "2026-09-26"
       Gia tri cua so doc tu ONBOARDING.viecCuaToi.cuaSoNgay (khong viet so roi).
-      DOT BIEN CHUNG MINH: tra lai moc UTC -> dong 1 hoac 2 do voi thong diep ghim
-      "cua so buoc cua toi tinh theo ngay VN".
+      DOT BIEN CHUNG MINH: tra lai moc UTC -> dong 2 do (S4 vang) voi thong diep ghim
+      "cua so buoc cua toi tinh theo ngay VN"; tra lai toISOString().slice -> dong 3 do.
 
   - id: E6
     criterion: AC-6
@@ -151,14 +152,14 @@ evals:
       - "Dung ca hai may chu cua CAY DANG XET: api 3301, app 3300. Kiem cong 3300 va 3301 truoc khi dung — tai nguyen chung; dung ma PID de tat, khong pkill"
       - "CHAN CAY, hai phia: dat mot dau moc vao apps/app/public roi xin lai qua APP_URL; VA doc mot ban ghi moc qua API_URL. Khong nhan lai duoc mot trong hai -> thoat ma 2 va goi ten cay dang xet, KHONG doc anh nao"
       - "KHONG nang quyen bat ky thanh vien nao trong DB, KHONG tao phien cho tai khoan nguoi khac"
-      - "Gieo bang thu tuc cua kho (activities.create): hai viec qua han cua hai nguoi, mot viec han hom nay"
-      - "Mo tong quan che do Cả đội o kho 1440, chup the, evidence/E9-ca-doi-1440.png; lap lai kho 375, evidence/E9-ca-doi-375.png"
+      - "Gieo bang thu tuc cua kho (activities.create): hai viec qua han cua hai nguoi (mot nguoi ten dai tren 30 ky tu), mot viec han hom nay"
+      - "Mo tong quan che do Cả đội o kho 1440, chup the, evidence/E9-ca-doi-1440.png; lap lai kho 375, evidence/E9-ca-doi-375.png; o moi kho ghi document.documentElement.scrollWidth va clientWidth vao evidence/E9-khuon.txt"
       - "Xoa dau moc trong apps/app/public khi xong"
     inputs:
       - _acceptance/han-viec-theo-ngay/evidence/
     expected: |
       Nhin thay duoc tren anh, khong suy tu ma:
-        1 moi viec qua han mang ten nguoi tao o dong phu
+        1 moi viec qua han mang ten nguoi tao o dau dong phu; o 375 ten dai hien du
         2 viec han hom nay khong nam trong the
-        3 anh 375 khong tran ngang
+        3 E9-khuon.txt ghi scrollWidth <= clientWidth o ca hai kho
       Mot dong khong nhin thay -> FAIL, ghi dong nao.

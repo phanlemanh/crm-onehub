@@ -43,7 +43,7 @@ Việt Nam**. Hạn là cả ngày. Dữ liệu cũ đúng luật mà không c�
 - `buocCuaToi`: khung = `dueAt < dauNgayVN(now) + (cuaSoNgay + 1) ngày`; trường `dueAt`
   trả `ngayVN(dueAt)` thay cho `toISOString().slice(0, 10)`.
 - `timeline-entry.tsx`: `overdue` = `quaHan(...)`.
-- Thẻ Tasks: ở chế độ «Cả đội», dòng phụ của việc thêm tên người tạo (`translate="no"`).
+- Thẻ Tasks: ở chế độ «Cả đội», dòng phụ của việc bắt đầu bằng tên người tạo (`translate="no"`).
 
 Không đổi: schema, ô soạn, tiêu đề thẻ.
 
@@ -78,7 +78,7 @@ Không đổi: schema, ô soạn, tiêu đề thẻ.
 ### 4. Hành vi
 
 - Tên người tạo là dữ liệu người nhập: `translate="no"`.
-- Khổ 375: dòng phụ cắt chữ như dòng bước, không tràn ngang.
+- Dòng phụ ở chế độ «Cả đội» bắt đầu bằng tên người tạo, rồi mới tới tên bản ghi; ở khổ 375 tên người hiện đủ, phần tên bản ghi phía sau mới bị cắt. Không tràn ngang.
 
 ### 5. Xuất xứ component
 
