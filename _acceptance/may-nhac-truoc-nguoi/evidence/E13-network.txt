@@ -1,0 +1,8 @@
+=== tong-quan-1440 (http://127.0.0.1:3300/onehub) ===
+api-traffic-count: 1
+=== theo-doi-1440 (http://127.0.0.1:3300/onehub?record=plan:cmucmpaam00077etywkzn224r) ===
+api-traffic-count: 2
+=== tong-quan-375 (http://127.0.0.1:3300/onehub) ===
+api-traffic-count: 1
+=== theo-doi-375 (http://127.0.0.1:3300/onehub?record=plan:cmucmpaam00077etywkzn224r) ===
+api-traffic-count: 2
