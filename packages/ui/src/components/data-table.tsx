@@ -137,6 +137,8 @@ const ALIGN_CLASS = {
 	center: "text-center",
 } as const;
 
+const FIXED_COLUMN = "w-[0.1%] min-w-10 max-w-10";
+
 const HEAD_LABEL = {
 	maxLines: 2,
 	minWidthDivisor: 2,
@@ -637,7 +639,9 @@ export function DataTable<TRow, TSub = unknown>({
 				<TableHeader className="sticky top-0 z-10 bg-muted [&_th]:bg-muted [&_tr]:border-0 [&_tr]:shadow-[inset_0_-1px_0_var(--border)]">
 					<TableRow>
 						{selection && (
-							<TableHead className={cn("h-11 w-10 px-3", HIDE_BELOW_CLASS.sm)}>
+							<TableHead
+								className={cn("h-11 px-3", FIXED_COLUMN, HIDE_BELOW_CLASS.sm)}
+							>
 								<Checkbox
 									checked={
 										selection.state.allSelected
@@ -655,7 +659,7 @@ export function DataTable<TRow, TSub = unknown>({
 							</TableHead>
 						)}
 						{anyExpandable && (
-							<TableHead className="h-11 w-10 px-3">
+							<TableHead className={cn("h-11 px-3", FIXED_COLUMN)}>
 								<span className="sr-only">{msg.table.detailColumn}</span>
 							</TableHead>
 						)}
