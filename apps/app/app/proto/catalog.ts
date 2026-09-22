@@ -93,6 +93,19 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-chuyen-khongviec", nhan: "Chuyển việc — không có việc" },
 		],
 	},
+	{
+		slug: "may-nhac-truoc-nguoi",
+		ten: "Máy nhắc trước người",
+		states: [
+			{ id: "tasks-co-im", nhan: "Thẻ Tasks — có kế hoạch im và mốc ngày" },
+			{ id: "tasks-rong", nhan: "Thẻ Tasks — rỗng" },
+			{ id: "theo-doi-chua", nhan: "Nút theo dõi — chưa theo dõi" },
+			{ id: "theo-doi-dang", nhan: "Nút theo dõi — đang theo dõi" },
+			{ id: "theo-doi-loi", nhan: "Nút theo dõi — không lưu được" },
+			{ id: "slack-du", nhan: "Tin Slack — đủ bốn nhóm" },
+			{ id: "slack-tran", nhan: "Tin Slack — tràn quá 10 dòng" },
+		],
+	},
 ];
 
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
