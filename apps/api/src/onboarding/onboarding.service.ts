@@ -70,13 +70,16 @@ type HangBoPhan = {
 	_count: { steps: number };
 };
 
-function boPhanRa(row: HangBoPhan): DepartmentOutput {
+type KhuonNhac = { name: string; archived: boolean };
+
+function boPhanRa(row: HangBoPhan, khuon: KhuonNhac[]): DepartmentOutput {
 	return {
 		id: row.id,
 		name: row.name,
 		position: row.position,
 		archivedAt: row.archivedAt,
-		purgeable: row.archivedAt !== null && row._count.steps === 0,
+		purgeable:
+			row.archivedAt !== null && row._count.steps === 0 && khuon.length === 0,
 	};
 }
 
@@ -178,7 +181,8 @@ export class OnboardingService {
 			orderBy: { position: "asc" },
 			select: CHON_BO_PHAN,
 		});
-		return rows.map(boPhanRa);
+		const banDo = await this.banDoKhuon();
+		return rows.map((row) => boPhanRa(row, banDo.get(row.id) ?? []));
 	}
 
 	async createDepartment(
@@ -189,7 +193,7 @@ export class OnboardingService {
 			select: { position: true },
 		});
 
-		return boPhanRa(
+		return this.motBoPhanRa(
 			await this.db.department.create({
 				data: { name: input.name, position: (cuoi?.position ?? -1) + 1 },
 				select: CHON_BO_PHAN,
@@ -202,7 +206,7 @@ export class OnboardingService {
 	): Promise<DepartmentOutput> {
 		await this.doiChieuBoPhan(input.id);
 
-		return boPhanRa(
+		return this.motBoPhanRa(
 			await this.db.department.update({
 				where: { id: input.id },
 				data: { name: input.name },
@@ -221,7 +225,7 @@ export class OnboardingService {
 			);
 		}
 
-		return boPhanRa(
+		return this.motBoPhanRa(
 			await this.db.department.update({
 				where: { id: input.id },
 				data: { archivedAt: new Date() },
@@ -233,7 +237,7 @@ export class OnboardingService {
 	async restoreDepartment(input: DepartmentIdInput): Promise<DepartmentOutput> {
 		await this.doiChieuBoPhan(input.id);
 
-		return boPhanRa(
+		return this.motBoPhanRa(
 			await this.db.department.update({
 				where: { id: input.id },
 				data: { archivedAt: null },
@@ -255,6 +259,12 @@ export class OnboardingService {
 		}
 		if (row._count.steps > 0) {
 			throw new BadRequestException(ONBOARDING.thongDiep.daDung);
+		}
+		const khuon = (await this.banDoKhuon()).get(row.id) ?? [];
+		if (khuon.length > 0) {
+			throw new BadRequestException(
+				ONBOARDING.thongDiep.boPhanConTrongKhuon(khuon.map((k) => k.name)),
+			);
 		}
 
 		return this.db.department.delete({
@@ -688,18 +698,38 @@ export class OnboardingService {
 	}
 
 	private async khuonDungBoPhan(id: string): Promise<string[]> {
+		const khuon = (await this.banDoKhuon()).get(id) ?? [];
+		return khuon.filter((k) => !k.archived).map((k) => k.name);
+	}
+
+	private async banDoKhuon(): Promise<Map<string, KhuonNhac[]>> {
 		const khuon = await this.db.onboardingTemplate.findMany({
-			where: { archivedAt: null },
-			select: { name: true, steps: true },
+			orderBy: { createdAt: "asc" },
+			select: { name: true, steps: true, archivedAt: true },
 		});
 
 		return khuon
-			.filter((k) =>
-				parseOnboardingTemplateSteps(k.steps).some(
-					(buoc) => buoc.departmentId === id,
-				),
+			.flatMap((k) =>
+				[
+					...new Set(
+						parseOnboardingTemplateSteps(k.steps).map(
+							(buoc) => buoc.departmentId,
+						),
+					),
+				].map((id) => ({
+					id,
+					nhac: { name: k.name, archived: k.archivedAt !== null },
+				})),
 			)
-			.map((k) => k.name);
+			.reduce(
+				(banDo, { id, nhac }) =>
+					new Map(banDo).set(id, [...(banDo.get(id) ?? []), nhac]),
+				new Map<string, KhuonNhac[]>(),
+			);
+	}
+
+	private async motBoPhanRa(row: HangBoPhan): Promise<DepartmentOutput> {
+		return boPhanRa(row, (await this.banDoKhuon()).get(row.id) ?? []);
 	}
 
 	private async kiemBoPhanDangDung(

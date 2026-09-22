@@ -1,0 +1,106 @@
+schema_version: 1
+slug: khuon-mat-bo-phan
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kmbp_chan_xoa
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/khuon-mat-bo-phan.spec.ts"
+    expected: |
+      Qua HTTP that voi phien quan tri: tao bo phan B, tao khuon K co mot buoc giao cho B,
+      luu tru K, luu tru B. listDepartments({archived:true}) tra B voi purgeable === false.
+      purgeDepartment({id:B}) -> 400, thong diep chua dung ten K; doc thang DB thay hang B
+      con. Ca hai khuon: bo phan B2 nam trong K1 va K2 cung da luu tru -> purgeDepartment(B2)
+      -> 400, thong diep chua CA ten K1 va K2; purgeTemplate(K1) -> 200; B2 van purgeable
+      false, purgeDepartment(B2) -> 400 voi thong diep chua ten K2 va khong chua ten K1.
+      DOI CHUNG DUONG cung fixture: bo phan C da luu tru khong o dau ca -> purgeable
+      true, purgeDepartment -> 200.
+      CHIEU DO: bo nhanh kiem khuon trong purgeDepartment -> do voi thong diep ghim
+      "purgeDepartment B phai bi tu choi vi con trong khuon K"; ban do ghi de mot khuon
+      moi bo phan -> do voi thong diep ghim "B2 con trong K2 sau khi xoa K1".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kmbp_khoi_phuc
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/khuon-mat-bo-phan.spec.ts"
+    expected: |
+      Fixture cua E1, sau luot purgeDepartment bi tu choi: restoreDepartment(B) -> 200,
+      restoreTemplate(K) -> 200; listTemplates({archived:false}) co K voi steps giu nguyen
+      so buoc, nhan va departmentId === B; listDepartments({archived:false}) co B.
+      CHIEU DO: cung nhanh pha cua E1 (xoa duoc B) -> restoreTemplate(K) khong 200, do voi
+      thong diep ghim "khoi phuc khuon K sau khi thu xoa B".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kmbp_thu_tu_don
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/khuon-mat-bo-phan.spec.ts"
+    expected: |
+      Hai loi, hai fixture rieng cung dang E1 (K chua co ke hoach).
+      Loi a: purgeTemplate(K) -> 200; listDepartments({archived:true}) tra B voi purgeable
+      === true; purgeDepartment(B) -> 200 va hang B khong con trong DB.
+      Loi b: restoreDepartment(B), restoreTemplate(K), updateTemplate(K) bo buoc cua B
+      (giu mot buoc giao cho bo phan khac), archiveTemplate(K), archiveDepartment(B) ->
+      purgeable === true, purgeDepartment(B) -> 200 va hang B khong con.
+      CHIEU DO: purgeable tinh tu moi khuon ke ca khuon da xoa (vd doc tu mot ban sao cu)
+      hoac khong lam moi -> purgeable van false, do voi thong diep ghim "sau khi xoa K,
+      B phai xoa duoc" (loi a) va "sau khi bo B khoi K, B phai xoa duoc" (loi b).
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kmbp_khop
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/khuon-mat-bo-phan.spec.ts"
+    expected: |
+      Ma tran viet truoc, bon ca, moi ca mot bo phan da luu tru:
+      khong-dau-ca, chi-khuon-luu-tru, chi-buoc-ke-hoach, ca-hai. Voi moi ca ghi lai
+      (a) purgeable ma archiveDepartment tra ngay luc luu tru, (b) purgeable trong
+      listDepartments({archived:true}), (c) ma HTTP cua purgeDepartment. Khang dinh tung ca:
+      (a) === (b), va (b) === (c === 200); ky vong cu the: true/200, false/400, false/400,
+      false/400. Dem assert = 4 ca x 2 quan he; thieu mot ca -> do.
+      CHIEU DO: boPhanRa bo dieu kien khuon (hoac archiveDepartment tinh purgeable khac
+      danh sach) -> do voi thong diep ghim ten ca.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_xoa_vinh_vien
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      Chay lai nguyen van ma tran "nam ca xoa vinh vien" cua sua-luu-tru-dieu-phoi (E8 cu):
+      bo phan chua dung -> 200 va het hang; bo phan da dung -> 400; bo phan chua luu tru ->
+      400; khuon da dung -> 400; khuon chua dung -> 200. Khong sua tep kiem nay.
+      CHIEU DO: da chung o vong truoc (dot-bien cua E8); vong nay chi ghi exit 0 cua lenh.
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.slt_api_chan_luu_tru
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/sua-luu-tru.spec.ts"
+    expected: |
+      Chay lai nguyen van ma tran ba ca chan luu tru cua sua-luu-tru-dieu-phoi (E7 cu): bo
+      phan trong mot khuon chua luu tru -> archiveDepartment 400, thong diep chua ten khuon,
+      archivedAt van null; bo phan chi trong khuon da luu tru -> 200; bo phan khong khuon
+      nao -> 200. Khong sua tep kiem nay.
+      CHIEU DO: da chung o vong truoc; vong nay chi ghi exit 0 cua lenh, cung ham quet
+      khuon ma vong nay viet lai.

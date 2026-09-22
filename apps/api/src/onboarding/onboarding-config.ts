@@ -26,6 +26,8 @@ export const ONBOARDING = {
 			`Khuôn ${ten} đã lưu trữ — khôi phục trước khi tạo kế hoạch.`,
 		boPhanTrongKhuon: (khuon: string[]) =>
 			`Bộ phận này còn nằm trong khuôn ${khuon.join(", ")} — sửa khuôn trước.`,
+		boPhanConTrongKhuon: (khuon: string[]) =>
+			`Bộ phận này còn nằm trong khuôn ${khuon.join(", ")} — xoá vĩnh viễn khuôn đó hoặc bỏ bộ phận khỏi khuôn trước.`,
 		boPhanDaLuuTru: (ten: string[]) =>
 			`Bộ phận ${ten.join(", ")} đã lưu trữ — khôi phục hoặc chọn bộ phận khác.`,
 	},
