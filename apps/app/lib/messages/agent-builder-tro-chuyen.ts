@@ -45,6 +45,7 @@ const en = {
 		hetTien:
 			"Vercel AI Gateway has no available credits. Add credits in Vercel, then try again.",
 		chung: "The builder could not finish this request. Try again.",
+		maLoi: "Error code",
 	},
 	traLoi: {
 		chepMarkdown: "Copy response as Markdown",
@@ -198,6 +199,7 @@ const vi = {
 			"Model này cần tín dụng AI Gateway trả phí. Nạp tín dụng ở Vercel rồi thử lại.",
 		hetTien: "Vercel AI Gateway hết tín dụng. Nạp thêm ở Vercel rồi thử lại.",
 		chung: "Bộ dựng không làm xong yêu cầu này. Thử lại.",
+		maLoi: "Mã lỗi",
 	},
 	traLoi: {
 		chepMarkdown: "Chép câu trả lời dạng Markdown",
