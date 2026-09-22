@@ -189,7 +189,9 @@ export class OnboardingGhi {
 			await ghiVet(
 				tx,
 				plan,
-				input.done ? vet.buocXong(chung) : vet.buocBoXong(chung),
+				input.done
+					? vet.buocXong({ ...chung, giaoLucXong: buoc.assigneeId })
+					: vet.buocBoXong(chung),
 				actingUserId,
 			);
 			return buocRa(sau);
