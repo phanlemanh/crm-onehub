@@ -82,6 +82,14 @@ executors:
     mn3_the_tasks: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/may-nhac.dom.tsx -t the-tasks"
     mn3_nut_theo_doi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/may-nhac.dom.tsx -t nut-theo-doi"
     mn3_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/dashboard-summary.tsx" "apps/app/components/crm/record-sheet/theo-doi-ke-hoach.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    hv_qua_han_ngay: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t qua-han-ngay"'
+    hv_bien_nua_dem: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t bien-nua-dem"'
+    hv_ca_doi: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t ca-doi"'
+    hv_viec_cua_toi: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t viec-cua-toi"'
+    hv_buoc_cua_toi: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t buoc-cua-toi"'
+    hv_payload: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t payload"'
+    hv_dong_thoi_gian: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/han-viec.dom.tsx -t dong-thoi-gian"
+    hv_the_ca_doi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/han-viec.dom.tsx -t the-ca-doi"
     cp_ham_thuan: "cd packages/auth && bun test test/ai-duoc-vao.spec.ts"
     cp_vai_dinh_truoc: 'bun run test -- "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t vai-dinh-truoc"'
     cp_rut_chan_chua_vao: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t rut-chan-chua-vao"'

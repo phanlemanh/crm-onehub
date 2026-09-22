@@ -1,0 +1,164 @@
+schema_version: 1
+slug: han-viec-theo-ngay
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hv_qua_han_ngay
+    paths:
+      - "apps/api/src/dashboard/**"
+      - "packages/db/src/onboarding-nhac.ts"
+      - "apps/api/test/han-viec.spec.ts"
+    expected: |
+      Gieo that tren DB bang activities.create that (khong insert tay dueAt), setSystemTime
+      2026-09-22T13:54:00Z (20:54 VN). Goi that dashboard.summary scope me cua A.
+      Ma tran viet truoc NAM viec, moi viec mot assert:
+        T1 (han 22/09 00:00 VN) khong trong overdueTasks
+        T2 (han 21/09) trong overdueTasks
+        T3 (han 22/09 14:00 VN) khong trong
+        T4 (han 20/09 da xong) khong trong
+        T5 (khong han) khong trong
+      Tap overdueTasks bang dung {T2}.
+      DOT BIEN CHUNG MINH: tra lai phep so dueAt < now -> T1 do voi thong diep ghim
+      "viec han hom nay chua qua han".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hv_bien_nua_dem
+    paths:
+      - "apps/api/src/dashboard/**"
+      - "packages/db/src/onboarding-nhac.ts"
+      - "apps/api/test/han-viec.spec.ts"
+    expected: |
+      Cung fixture E1, hai lan setSystemTime:
+        1 2026-09-22T16:59:00Z (23:59 VN 22/09) -> tap bang dung {T2}
+        2 2026-09-22T17:30:00Z (00:30 VN 23/09) -> tap bang dung {T1,T2,T3}
+      DOT BIEN CHUNG MINH: tinh dau ngay theo UTC thay vi VN -> lan 2 do voi thong
+      diep ghim "00:30 VN 23/09 thi viec han 22/09 da qua han".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hv_ca_doi
+    paths:
+      - "apps/api/src/dashboard/**"
+      - "apps/api/test/han-viec.spec.ts"
+    expected: |
+      A tao T2, B tao U, ca hai han hom qua. Goi that dashboard.summary cua A hai che do:
+        1 team: tap overdueTasks = {T2, U}; U.createdBy.name = ten B; T2.createdBy.id = A
+        2 me: tap = {T2}
+        3 mySteps va keHoachCanDeY cua hai lan goi bang nhau (deep equal)
+      DOT BIEN CHUNG MINH: giu loc createdById o team -> dong 1 do voi thong diep ghim
+      "ca doi thay viec qua han cua B".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hv_viec_cua_toi
+    paths:
+      - "apps/api/src/activities/**"
+      - "apps/api/test/han-viec.spec.ts"
+    expected: |
+      Cung fixture E1, 20:54 VN 22/09. Goi that activities.myTasks:
+        1 window overdue -> tap bang dung {T2}
+        2 window upcoming -> chua T1 va T3, khong chua T2
+      DOT BIEN CHUNG MINH: tra lai dueAt { lt: now } cho overdue -> dong 1 do voi thong
+      diep ghim "khung qua han khong gom viec han hom nay".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hv_buoc_cua_toi
+    paths:
+      - "apps/api/src/dashboard/**"
+      - "packages/db/src/onboarding-nhac.ts"
+      - "apps/api/test/han-viec.spec.ts"
+    expected: |
+      Gieo ke hoach dang chay voi S3 han 25/09, S4 han 26/09 giao A (bang thu tuc gieo
+      cua ke-hoach-gieo.ts). setSystemTime 2026-09-22T17:30:00Z (00:30 VN 23/09).
+        1 mySteps chua S3
+        2 mySteps khong chua S4
+        3 dueAt cua S3 = "2026-09-25"
+      Gia tri cua so doc tu ONBOARDING.viecCuaToi.cuaSoNgay (khong viet so roi).
+      DOT BIEN CHUNG MINH: tra lai moc UTC -> dong 1 hoac 2 do voi thong diep ghim
+      "cua so buoc cua toi tinh theo ngay VN".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: ui
+    cmd: config:executors.test.hv_dong_thoi_gian
+    paths:
+      - "apps/app/components/crm/timeline/**"
+      - "apps/app/lib/qua-han.ts"
+      - "apps/app/test/han-viec.dom.tsx"
+    expected: |
+      Dom test render TimelineEntry voi setSystemTime 20:54 VN 22/09 (TZ=Asia/Ho_Chi_Minh):
+        1 viec han hom nay: khong co chu "Quá hạn", StatusIndicator tone khac error
+        2 viec han hom qua: co chu "Quá hạn", tone error
+      Doi chung duong: dong 2 la chieu do cua dong 1 tren cung ham render.
+      DOT BIEN CHUNG MINH: tra lai new Date(dueAt) < new Date() -> dong 1 do voi thong
+      diep ghim "dong thoi gian khong to do viec han hom nay".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: ui
+    cmd: config:executors.test.hv_the_ca_doi
+    paths:
+      - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"
+      - "apps/app/test/han-viec.dom.tsx"
+    expected: |
+      Dom test DashboardSummary, du lieu tu fixture apps/api/test/fixtures/han-viec-payload.json
+      (rut tu dau ra that cua dashboard.summary o E8):
+        1 che do Cả đội: dong U chua ten B (translate="no")
+        2 che do Tôi: khong co dong U
+      DOT BIEN CHUNG MINH: bo render createdBy -> dong 1 do voi thong diep ghim
+      "the ca doi hien ten nguoi tao".
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.hv_payload
+    paths:
+      - "apps/api/src/dashboard/**"
+      - "apps/api/test/han-viec.spec.ts"
+      - "apps/api/test/fixtures/han-viec-payload.json"
+    expected: |
+      Round-trip: goi that dashboard.summary cua A o ca hai che do tren fixture E3, bo
+      truong thoi gian, so voi han-viec-payload.json ma E7 doc. Lech -> do voi thong
+      diep ghim "fixture the Tasks khop dau ra that".
+      DOT BIEN CHUNG MINH: doi ten createdBy trong fixture -> do.
+
+  - id: E9
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"
+      - "packages/ui/**"
+    steps:
+      - "Dat truoc MOI buoc: APP_URL=http://127.0.0.1:3300 va API_URL=http://127.0.0.1:3301 — dung 127.0.0.1, tranh Invalid origin va cookie ro theo host"
+      - "Dung ca hai may chu cua CAY DANG XET: api 3301, app 3300. Kiem cong 3300 va 3301 truoc khi dung — tai nguyen chung; dung ma PID de tat, khong pkill"
+      - "CHAN CAY, hai phia: dat mot dau moc vao apps/app/public roi xin lai qua APP_URL; VA doc mot ban ghi moc qua API_URL. Khong nhan lai duoc mot trong hai -> thoat ma 2 va goi ten cay dang xet, KHONG doc anh nao"
+      - "KHONG nang quyen bat ky thanh vien nao trong DB, KHONG tao phien cho tai khoan nguoi khac"
+      - "Gieo bang thu tuc cua kho (activities.create): hai viec qua han cua hai nguoi, mot viec han hom nay"
+      - "Mo tong quan che do Cả đội o kho 1440, chup the, evidence/E9-ca-doi-1440.png; lap lai kho 375, evidence/E9-ca-doi-375.png"
+      - "Xoa dau moc trong apps/app/public khi xong"
+    inputs:
+      - _acceptance/han-viec-theo-ngay/evidence/
+    expected: |
+      Nhin thay duoc tren anh, khong suy tu ma:
+        1 moi viec qua han mang ten nguoi tao o dong phu
+        2 viec han hom nay khong nam trong the
+        3 anh 375 khong tran ngang
+      Mot dong khong nhin thay -> FAIL, ghi dong nao.
