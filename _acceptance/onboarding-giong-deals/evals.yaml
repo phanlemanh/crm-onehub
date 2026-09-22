@@ -16,8 +16,9 @@ evals:
       truoc: 3 man [onboarding-bang, onboarding-bang-cot, deals] x 5 kho [320,375,768,1024,1440]
       x 2 tieng [vi,en] = 30 o. Moi o: khong tran ngang + nut tao (nhan lay tu tep thong diep)
       nam trong [data-slot=page-shell-actions], hien trong khung nhin, data-variant=default,
-      co svg. Hai man bang (onboarding-bang) them khang dinh tieu de (AC-3). Dem khang dinh
-      = 80 (script tu so voi ma tran, lech -> ma 2). Deals la DOI CHUNG DUONG tren cung lan chay:
+      co svg. Man onboarding-bang them khang dinh tieu de (AC-3); deals chi do tran + nut.
+      Dem khang dinh = 10x3 + 10x2 + 10x2 = 70 (hang O_MONG=30, KY_MONG=70 trong tep thuoc;
+      lech -> ma 2). Deals la DOI CHUNG DUONG tren cung lan chay:
       nut cua no phai dat thi bo do nut moi dang doc dung.
       CHIEU DO (da chay 2026-09-22 tren cay chua sua d1bc95fa): onboarding-bang@1440/vi do voi
       thong diep ghim `nut tao "Kế hoạch mới" khong o dau trang: vung=false co=false`; deals dat.
@@ -62,7 +63,7 @@ evals:
     expected: |
       Cung lan chay voi E1. Voi onboarding-bang o moi kho x tieng: moi th dang hien co nhan
       (span.truncate/span.block) scrollWidth <= clientWidth; documentElement khong tran; o
-      320 va 375 so th dang hien co chu = 3 (Doi tac, Dang tac o, Im lang).
+      duoi 640 so th dang hien co chu = 3 (Doi tac, Tac o, Im lang).
       CHIEU DO (da chay tren cay chua sua): onboarding-bang@1440/vi do voi thong diep ghim
       "tieu de bi cat: Im lặng, Bước, Ngày".
 

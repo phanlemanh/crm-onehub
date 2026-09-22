@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
 	PageShell,
+	PageShellActions,
 	PageShellContent,
 	PageShellDescription,
 	PageShellHeader,
@@ -15,6 +16,7 @@ import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { DanhMucTable } from "./danh-muc-table";
+import { DanhMucHanhDong } from "./tao-ke-hoach";
 import {
 	danhMucInput,
 	danhMucSearchParams,
@@ -41,6 +43,9 @@ export default async function OnboardingPage({
 					<PageShellTitle>{m.title}</PageShellTitle>
 					<PageShellDescription>{m.description}</PageShellDescription>
 				</PageShellHeading>
+				<PageShellActions>
+					<DanhMucHanhDong />
+				</PageShellActions>
 			</PageShellHeader>
 
 			<PageShellContent className="min-h-0">

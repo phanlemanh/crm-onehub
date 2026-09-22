@@ -43,7 +43,7 @@ xếp + độ rộng phần trăm), không riêng onboarding — tách thành h�
   dùng `KhungTao` khác không đổi. Thanh công cụ chỉ còn nút chuyển Bảng/Bảng cột.
   Chưa có khuôn nào thì nút khoá (`khoaNut`), vì hộp thoại không có khuôn để chọn.
 - **Độ rộng cột.** Mọi cột mang độ rộng phần trăm, tổng 100%. Dưới `sm` chỉ còn
-  Đối tác, Đang tắc ở, Im lặng (ẩn Bước như deals ẩn cột tiền); Ngày dưới `sm`,
+  Đối tác, Tắc ở, Im lặng (ẩn Bước như deals ẩn cột tiền); Ngày dưới `sm`,
   Bộ phận dưới `md` như cũ. Tỉ lệ chốt bằng thước đo ở 5 khổ: tiêu đề có nút sắp
   xếp cần ≈ độ rộng chữ + 48px («Im lặng» ≈ 89px).
 - **Sắp xếp mặc định** `startedAt` tăng dần khai trong
@@ -107,7 +107,7 @@ lại để đo nút ở đầu trang, và hồ sơ đó được ghim lại ở
 
 ### 4. Hành vi
 
-- Khổ < 640px: bảng còn ba cột Đối tác · Đang tắc ở · Im lặng; nút tạo vẫn ở đầu
+- Khổ < 640px: bảng còn ba cột Đối tác · Tắc ở · Im lặng (nhãn vi rút từ «Đang tắc ở»: ở 320px một tỉ lệ chung cho vi và en thiếu 3px); nút tạo vẫn ở đầu
   trang, không nằm trong ô «Lọc».
 - Không tiêu đề cột nào bị cắt ở 320 · 375 · 768 · 1024 · 1440, cả vi lẫn en.
 - «Đang tải…» đọc qua `aria-live="polite"`.

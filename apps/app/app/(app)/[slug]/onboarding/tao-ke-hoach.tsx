@@ -1,7 +1,9 @@
 "use client";
 
+import Add from "@carbon/icons-react/es/Add";
 import { DatePicker } from "@crm/ui/components/date-picker";
 import { Field, FieldLabel } from "@crm/ui/components/field";
+import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
@@ -14,6 +16,8 @@ import {
 import { toDay } from "@crm/ui/lib/format";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useId, useState } from "react";
+import { toast } from "sonner";
+import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { CompanyPicker } from "@/components/crm/company-picker";
 import { KhungTao } from "@/components/onboarding/khung-tao";
 import { onboardingMessages } from "@/lib/messages/onboarding";
@@ -21,15 +25,22 @@ import { useTRPC } from "@/lib/trpc/client";
 
 export type CongTyCoDinh = { id: string; name: string };
 
+export function DanhMucHanhDong() {
+	const m = onboardingMessages(useLocale());
+	return <TaoKeHoach nhanNut={m.tao.keHoach.toolbar} dauTrang />;
+}
+
 export function TaoKeHoach({
 	nhanNut,
 	bienThe,
+	dauTrang = false,
 	congTyCoDinh,
 	mo,
 	doiMo,
 }: {
 	nhanNut?: string;
 	bienThe?: "default" | "outline";
+	dauTrang?: boolean;
 	congTyCoDinh?: CongTyCoDinh;
 	mo?: boolean;
 	doiMo?: (mo: boolean) => void;
@@ -49,9 +60,10 @@ export function TaoKeHoach({
 	const [nguoi, setNguoi] = useState("");
 	const [loi, setLoi] = useState<string | null>(null);
 
+	const openRecord = useOpenRecord();
 	const dsKhuon = useQuery({
 		...trpc.onboarding.listTemplates.queryOptions(),
-		enabled: dangMo,
+		enabled: dangMo || dauTrang,
 	});
 	const dsNguoi = useQuery({
 		...trpc.users.list.queryOptions(),
@@ -65,7 +77,11 @@ export function TaoKeHoach({
 	return (
 		<KhungTao
 			nhanNut={nhanNut}
-			bienThe={bienThe}
+			bienThe={dauTrang ? "default" : bienThe}
+			bieuTuong={
+				dauTrang ? <Icon icon={Add} data-icon="inline-start" /> : undefined
+			}
+			khoaNut={dauTrang && dsKhuon.data?.length === 0}
 			tieuDe={m.tao.keHoach.title}
 			dangMo={dangMo}
 			doiMo={setDangMo}
@@ -84,7 +100,7 @@ export function TaoKeHoach({
 						ownerId: nguoiCam,
 					},
 					{
-						onSuccess: async () => {
+						onSuccess: async (keHoach) => {
 							await Promise.all([
 								queryClient.invalidateQueries({
 									queryKey: trpc.onboarding.manDanhMuc.queryKey(),
@@ -104,6 +120,8 @@ export function TaoKeHoach({
 							setNgay(toDay(new Date()));
 							setNguoi("");
 							setDangMo(false);
+							toast.success(m.tao.keHoach.created);
+							openRecord({ kind: "plan", id: keHoach.id });
 						},
 						onError: (error) => setLoi(error.message),
 					},

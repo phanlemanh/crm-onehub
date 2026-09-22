@@ -14,6 +14,7 @@ import {
 	EmptyHeader,
 	EmptyTitle,
 } from "@crm/ui/components/empty";
+import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
@@ -60,52 +61,85 @@ export type DanhMucRow = {
 
 type TuyChon = { value: string; label: string };
 
+function soImLang(m: Messages, imNgay: number): string {
+	return m.cells.silentDays.replace("{n}", String(imNgay));
+}
+
 function cotBang(m: Messages): DataTableColumn<DanhMucRow>[] {
 	return [
 		{
 			id: "companyName",
 			header: m.columns.partner,
 			sortable: true,
-			cellClassName: "whitespace-normal break-words font-medium",
-			cell: (hang) => <span translate="no">{hang.companyName}</span>,
+			hideable: false,
+			width: "w-[19%]",
+			cell: (hang) => (
+				<span className="truncate font-medium" translate="no">
+					{hang.companyName}
+				</span>
+			),
 		},
 		{
 			id: "tacO",
 			header: m.columns.stuckOn,
-			cellClassName: "whitespace-normal break-words",
-			cell: (hang) => <span translate="no">{hang.tacO}</span>,
+			width: "w-[13.5%]",
+			cell: (hang) =>
+				hang.tacO ? (
+					<span className="truncate" translate="no">
+						{hang.tacO}
+					</span>
+				) : (
+					<EmptyCellValue />
+				),
 		},
 		{
 			id: "imNgay",
 			header: m.columns.silent,
 			sortable: true,
 			align: "right",
-			width: "w-24",
-			cell: (hang) => (hang.imNgay === 0 ? "—" : `${hang.imNgay}n`),
+			width: "w-[17.5%]",
+			cell: (hang) =>
+				hang.imNgay === 0 ? (
+					<EmptyCellValue />
+				) : (
+					<span className="tabular-nums">{soImLang(m, hang.imNgay)}</span>
+				),
 		},
 		{
 			id: "buocXong",
 			header: m.columns.steps,
 			sortable: true,
 			align: "right",
-			width: "w-20",
-			cell: (hang) => `${hang.buocXong}/${hang.buocTong}`,
+			width: "w-[15%]",
+			hideBelow: "sm",
+			cell: (hang) => (
+				<span className="tabular-nums">{`${hang.buocXong}/${hang.buocTong}`}</span>
+			),
 		},
 		{
 			id: "startedAt",
 			header: m.columns.days,
 			sortable: true,
 			align: "right",
-			width: "w-20",
+			width: "w-[15%]",
 			hideBelow: "sm",
-			cell: (hang) => `${hang.ngayThu}/${hang.targetDays}`,
+			cell: (hang) => (
+				<span className="tabular-nums">{`${hang.ngayThu}/${hang.targetDays}`}</span>
+			),
 		},
 		{
 			id: "boPhanTac",
 			header: m.columns.department,
+			width: "w-[20%]",
 			hideBelow: "md",
-			cellClassName: "whitespace-normal break-words text-muted-foreground",
-			cell: (hang) => <span translate="no">{hang.boPhanTac}</span>,
+			cell: (hang) =>
+				hang.boPhanTac ? (
+					<span className="truncate text-muted-foreground" translate="no">
+						{hang.boPhanTac}
+					</span>
+				) : (
+					<EmptyCellValue />
+				),
 		},
 	];
 }
@@ -118,7 +152,7 @@ function tuyChonCoDem(
 	return nguon.flatMap((muc) => {
 		const so = dem?.[muc.id] ?? 0;
 		if (so === 0 && !daChon.includes(muc.id)) return [];
-		return [{ value: muc.id, label: `${muc.name} · ${so}` }];
+		return [{ value: muc.id, label: muc.name }];
 	});
 }
 
@@ -158,36 +192,9 @@ export function DanhMucTable() {
 		return `?${q}`;
 	};
 
-	if (danhMuc.isPending) {
-		return (
-			<div aria-live="polite" className="flex flex-col gap-2">
-				<span className="text-muted-foreground text-sm">{m.loading}</span>
-				<Skeleton className="h-9 w-full" />
-				<Skeleton className="h-12 w-full" />
-				<Skeleton className="h-12 w-full" />
-			</div>
-		);
-	}
-
-	if (danhMuc.isError) {
-		return (
-			<Empty>
-				<EmptyHeader>
-					<EmptyTitle>{m.error.title}</EmptyTitle>
-					<EmptyDescription>{m.error.body}</EmptyDescription>
-				</EmptyHeader>
-				<EmptyContent>
-					<Button onClick={() => danhMuc.refetch()} variant="outline">
-						{m.error.action}
-					</Button>
-				</EmptyContent>
-			</Empty>
-		);
-	}
-
 	const data = danhMuc.data;
 
-	if (data.trangThai === "ST-danhmuc-chuacokhuon") {
+	if (data?.trangThai === "ST-danhmuc-chuacokhuon") {
 		return (
 			<Empty>
 				<EmptyHeader>
@@ -205,7 +212,7 @@ export function DanhMucTable() {
 		);
 	}
 
-	if (data.trangThai === "ST-danhmuc-empty") {
+	if (data?.trangThai === "ST-danhmuc-empty") {
 		return (
 			<Empty>
 				<EmptyHeader>
@@ -219,14 +226,32 @@ export function DanhMucTable() {
 		);
 	}
 
-	const khongKhop = data.trangThai === "ST-danhmuc-khongkhop";
+	const loiView = danhMuc.isError ? (
+		<Empty data-trang-thai="ST-danhmuc-loi">
+			<EmptyHeader>
+				<EmptyTitle>{m.error.title}</EmptyTitle>
+				<EmptyDescription>{m.error.body}</EmptyDescription>
+			</EmptyHeader>
+			<EmptyContent>
+				<Button onClick={() => danhMuc.refetch()} variant="outline">
+					{m.error.action}
+				</Button>
+			</EmptyContent>
+		</Empty>
+	) : null;
+	const dangTaiDau = danhMuc.isPending ? (
+		<span aria-live="polite">{m.loading}</span>
+	) : undefined;
+	const facetCounts = data?.facetCounts;
+
+	const khongKhop = data?.trangThai === "ST-danhmuc-khongkhop";
 	const facets: DataTableFacet[] = [
 		{
 			id: "boPhan",
 			label: m.facets.department,
 			options: tuyChonCoDem(
 				boPhanList.data ?? [],
-				data.facetCounts.boPhan,
+				facetCounts?.boPhan,
 				list.boPhan,
 			),
 		},
@@ -235,7 +260,7 @@ export function DanhMucTable() {
 			label: m.facets.owner,
 			options: tuyChonCoDem(
 				users.data ?? [],
-				data.facetCounts.nguoiCam,
+				facetCounts?.nguoiCam,
 				list.nguoiCam,
 			),
 		},
@@ -244,7 +269,7 @@ export function DanhMucTable() {
 			label: keHoachNoiMessages(locale).danhMuc.nguoiGiao,
 			options: tuyChonCoDem(
 				users.data ?? [],
-				data.facetCounts.nguoiGiao,
+				facetCounts?.nguoiGiao,
 				list.nguoiGiao,
 			),
 		},
@@ -254,7 +279,7 @@ export function DanhMucTable() {
 		<TrangThaiToggle
 			m={m}
 			value={ob.trangThai}
-			counts={data.facetCounts.trangThai}
+			counts={facetCounts?.trangThai}
 			onChange={(next) => {
 				setOb({ trangThai: next });
 				query.setPage(1);
@@ -262,14 +287,11 @@ export function DanhMucTable() {
 		/>
 	);
 	const cachXem = (
-		<div className="flex flex-wrap items-center gap-2">
-			<CachXemToggle
-				m={m}
-				value={ob.cachXem}
-				onChange={(next) => setOb({ cachXem: next })}
-			/>
-			<TaoKeHoach nhanNut={m.tao.keHoach.toolbar} />
-		</div>
+		<CachXemToggle
+			m={m}
+			value={ob.cachXem}
+			onChange={(next) => setOb({ cachXem: next })}
+		/>
 	);
 	const khongKhopView = <KhongKhop m={m} onClear={boLoc} />;
 
@@ -282,13 +304,15 @@ export function DanhMucTable() {
 				actions={cachXem}
 				columns={cotBang(m)}
 				getRowId={(hang) => hang.id}
-				rows={data.rows}
-				total={data.total}
-				facetCounts={data.facetCounts}
+				rows={data?.rows ?? []}
+				total={data?.total ?? 0}
+				facetCounts={facetCounts}
 				facets={facets}
+				loading={danhMuc.isFetching}
+				meta={dangTaiDau}
 				onRowClick={(hang) => openRecord({ kind: "plan", id: hang.id })}
 				onRowHover={(hang) => prefetchRecord({ kind: "plan", id: hang.id })}
-				empty={khongKhop ? khongKhopView : undefined}
+				empty={loiView ?? (khongKhop ? khongKhopView : undefined)}
 			/>
 		);
 	}
@@ -314,7 +338,9 @@ export function DanhMucTable() {
 				/>
 				<div className="sm:ml-auto">{cachXem}</div>
 			</div>
-			{khongKhop ? (
+			{loiView ? (
+				loiView
+			) : khongKhop ? (
 				khongKhopView
 			) : bangCot.isError ? (
 				<Empty data-trang-thai="ST-bangcot-loi">

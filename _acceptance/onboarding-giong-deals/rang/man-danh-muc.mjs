@@ -19,7 +19,7 @@ const CAO = 900;
 const CHO_HANG_MS = 20000;
 const KHO_SM = 640;
 const O_MONG = 30;
-const KY_MONG = 80;
+const KY_MONG = 70;
 const SO_COT_HEP = 3;
 
 const MAN = [
