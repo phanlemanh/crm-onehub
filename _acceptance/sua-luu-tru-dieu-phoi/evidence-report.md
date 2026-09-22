@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c8d30eb2f5eafd74f331486a21dd289ce9d313c2
+verified_commit: 2b389d3c924a29785f9250584bbae77718359592
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -413,3 +413,7 @@ none — every multi-run eval is uniform
 
 Round 1: PASS — 28 eval ban dau (chua co E29) va cac lenh suite deu xanh; da ky Cong 2 (Gate 2 signoff, doc-Cong-Bang-chung).
 Round 2 (hien tai): them E29 (AC-3, phan luu tru bo phan qua HTTP) sau khi ha hop dong ve implemented de cham lai; toan bo 29 eval + 4 lenh suite deu PASS, khong hoi quy.
+
+### Re-pin lần 1 — 2026-09-22, do lượt ke-hoach-la-mot-ban-ghi sửa bài kiểm của hồ sơ (d-21, d-23) và dời màn hồ sơ kế hoạch sang PlanSheet
+run_id: repin-20260922T065429Z-21311
+sha: 2b389d3c924a29785f9250584bbae77718359592 · suites: 4 lệnh exit 0 · evals: 28/28 eval máy đạt kỳ vọng · ngoài làn máy: E26 · diff chạm vật đo ngoài làn máy: E26 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15

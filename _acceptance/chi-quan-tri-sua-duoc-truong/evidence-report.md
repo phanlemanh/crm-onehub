@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9db00f3ae7359d19facd99b1669ff5f41b0c2d20
+verified_commit: 2b389d3c924a29785f9250584bbae77718359592
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -177,3 +177,7 @@ none — không có eval nào khai `runs` > 1; toàn bộ deterministic và đ�
 
 Round 1: E1–E9 đều PASS ngay vòng đầu, cùng bốn lệnh suite (test/lint/lint:slop/build) đều
 exit 0; không có sửa lại giữa các vòng.
+
+### Re-pin lần 1 — 2026-09-22, do lượt ke-hoach-la-mot-ban-ghi sửa bài kiểm của hồ sơ (d-21, d-23) và dời màn hồ sơ kế hoạch sang PlanSheet
+run_id: repin-20260922T065429Z-21311
+sha: 2b389d3c924a29785f9250584bbae77718359592 · suites: 4 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9

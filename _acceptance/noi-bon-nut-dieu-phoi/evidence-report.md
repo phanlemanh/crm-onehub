@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f30b237fbad09ace55e3cb89f573d5b9756c7110
+verified_commit: 2b389d3c924a29785f9250584bbae77718359592
 human_signoff: Phan Le Manh 2026-09-21
 ---
 
@@ -236,3 +236,7 @@ Round 1: 14 eval (E1–E14) và 4 lệnh suite (bun run test, bunx turbo run lin
 ### Re-pin lần 1 — 2026-09-21, do hoá cũ do trộn onehub (PR #70 kit 2.18.0)
 run_id: repin-20260921T154017Z-20554
 sha: f30b237fbad09ace55e3cb89f573d5b9756c7110 · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E12 · AC không có chốt máy: AC-9
+
+### Re-pin lần 2 — 2026-09-22, do lượt ke-hoach-la-mot-ban-ghi sửa bài kiểm của hồ sơ (d-21, d-23) và dời màn hồ sơ kế hoạch sang PlanSheet
+run_id: repin-20260922T065429Z-21311
+sha: 2b389d3c924a29785f9250584bbae77718359592 · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9
