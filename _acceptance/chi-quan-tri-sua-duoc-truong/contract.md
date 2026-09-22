@@ -5,7 +5,7 @@ slug: chi-quan-tri-sua-duoc-truong
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-22
 design_doc: docs/superpowers/specs/2026-09-22-chi-quan-tri-sua-duoc-truong-design.md
@@ -67,3 +67,10 @@ Never: chỉ ẩn nút mà không chặn máy chủ — ẩn nút không phải 
 ## Notes
 
 - `canManageFields` là hàm mới trong `@crm/auth` (đường T3), cùng hình với `canManageCurrency` và năm vị từ anh em.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-22 (Phan Le Manh), từ mục ngoài hợp đồng của S4:
+
+- Ngoài-2: `khoa = quyen.data?.canManage !== true` gộp ba trạng thái — đang tải, lỗi, và không có quyền. Khi `fields.access` lỗi (5xx, rớt mạng), quản trị thấy nhầm dòng «Cần quyền quản trị…», mọi nút khoá, không có trạng thái lỗi hay nút thử lại (`fields-settings.tsx`, `fields-sheet.tsx`).
+- Ngoài-3: phép đếm ca của E2/E3 tự tham chiếu (`LOI.length * BAY_THAO_TAC.length`) và tập bảy thao tác không đối chiếu với các mutation thật của `FieldsRouter`; một mutation mới thêm vào mà quên `requireManager` sẽ không bị bắt.
+
+Mở hợp đồng mới (Ngoài-1): trợ lý AI vẫn tạo và sửa trường qua công cụ `manage_fields` của `apps/agent` (`apps/agent/agent/lib/fields.ts` ghi thẳng `fieldDefinition`) mà không kiểm vai trò người yêu cầu; ô cơ hội `agent-doi-truong-theo-quyen`.
