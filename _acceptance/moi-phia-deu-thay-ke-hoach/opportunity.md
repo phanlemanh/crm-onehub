@@ -3,10 +3,10 @@ schema_version: 1
 slug: moi-phia-deu-thay-ke-hoach
 feature: Kế hoạch hiện ra ở mọi chỗ người đã đứng — tab 30 ngày đầu ở sheet Công ty, dòng phễu ở sheet Cá nhân, việc của tôi trên tổng quan, lọc theo người được giao, chuyển giao khi một người nghỉ
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-22T07:25:28Z
 prototype:
   base_commit:
   disposition: archive
@@ -73,10 +73,10 @@ trong module onboarding, không móc vào `removeMember`.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] Sau khi bật, người được giao bước có tự thấy và tự đánh dấu việc của mình không — hay vẫn phải chờ người cầm trịch nhắn rồi đánh dấu hộ?
-- Kết quả nào là SỐNG: [đề xuất] hai tuần sau khi bật, đủ hai điều — (a) trong các bước được đánh dấu xong trong kỳ, ít nhất một nửa do chính người được giao bấm, đếm bằng vết `buoc.xong` có `createdById` trùng `assigneeId` của bước; (b) tại phiên nghiệm thu, một người của bộ phận chuyên môn trả lời «hôm nay tôi có việc gì» từ màn tổng quan, không mở danh mục, trong 30 giây — bấm giờ.
-- Kết quả nào là CHẾT: [đề xuất] hết hai tuần mà quá nửa số bước xong vẫn do người cầm trịch đánh dấu hộ; hoặc bộ phận khai vẫn cần được nhắn mới biết mình có việc.
-- Timebox: [đề xuất] hai ngày công cho bản bấm được (tab 30 ngày đầu ở sheet Công ty và khối việc của tôi) trước Cổng Phạm vi; quá hai ngày là đang xây, không phải hội tụ.
+- Câu hỏi phép đo trả lời: Sau khi bật, người được giao bước có tự thấy và tự đánh dấu việc của mình không — hay vẫn phải chờ người cầm trịch nhắn rồi đánh dấu hộ?
+- Kết quả nào là SỐNG: hai tuần sau khi bật, đủ hai điều — (a) trong các bước được đánh dấu xong trong kỳ, ít nhất một nửa do chính người được giao bấm, đếm bằng vết `buoc.xong` có `createdById` trùng `assigneeId` của bước; (b) tại phiên nghiệm thu, một người của bộ phận chuyên môn trả lời «hôm nay tôi có việc gì» từ màn tổng quan, không mở danh mục, trong 30 giây — bấm giờ.
+- Kết quả nào là CHẾT: hết hai tuần mà quá nửa số bước xong vẫn do người cầm trịch đánh dấu hộ; hoặc bộ phận khai vẫn cần được nhắn mới biết mình có việc.
+- Timebox: hai ngày công cho bản bấm được (tab 30 ngày đầu ở sheet Công ty và khối việc của tôi) trước Cổng Phạm vi; quá hai ngày là đang xây, không phải hội tụ.
 
 ## Kết quả prototype
 
@@ -92,9 +92,9 @@ Chưa dựng gì.
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: …
+- **decision = build** Căn cứ (chủ kho, 2026-09-22T07:25:28Z): lượt 1 đã cho người được giao cách làm việc nhưng chưa cho họ chỗ thấy việc; lỗ xác nhận trên code 2026-09-22 (mục «Vấn đề & ai gặp»).
 - **disposition = archive** Căn cứ: chưa dựng prototype, `base_commit` để trống.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** nguyên văn bốn dòng ở mục «Ngưỡng chết / ngưỡng UAT», chốt như đề xuất.
 
 ## Thước đo thành công → ứng viên criterion
 
