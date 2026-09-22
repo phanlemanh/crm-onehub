@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 2e4fd46d950e8f5c1ed4de739ca62a9d7fa25b91
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-22 — ký với giới hạn: Ngoài-1..5 ghi Known limits, Ngoài-6 mở hợp đồng mới; đồng ý phần cắt/hoãn; phê hết Treo
 ---
 
 # Evidence Report: quyen-luot-mang-theo
