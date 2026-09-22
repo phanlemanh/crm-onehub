@@ -12,10 +12,16 @@ import type { FaviconService } from "../src/companies/favicon.service";
 import { ActivityStampService } from "../src/crm/activity-stamp.service";
 import type { ConversionService } from "../src/currency/conversion.service";
 import type { FieldsService } from "../src/fields/fields.service";
-import type { PlanListInput } from "../src/onboarding/onboarding.contracts";
+import {
+	type PlanListInput,
+	stepAssignInput,
+	stepDoneInput,
+	stepRescheduleInput,
+} from "../src/onboarding/onboarding.contracts";
 import { OnboardingService } from "../src/onboarding/onboarding.service";
 import { ONBOARDING } from "../src/onboarding/onboarding-config";
 import { withDiscardedCrmEvents } from "./agent-trigger.stub";
+import payload from "./fixtures/ke-hoach-payload.json";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -706,5 +712,59 @@ describe("xoa-day-chuyen", () => {
 		expect(
 			await db.contact.findUnique({ where: { id: caNhan.id } }),
 		).not.toBeNull();
+	});
+});
+
+describe("noi-man-buoc", () => {
+	test("noi-man-buoc: ba payload man gui qua duoc schema va ghi dung dong hai", async () => {
+		const [O, A] = [await gieoThanhVien(), await gieoThanhVien()];
+		const bp = await gieoBoPhan();
+		const { plan } = await gieoKeHoach({
+			ownerId: O.id,
+			buoc: ["S1", "S2"].map((label) => ({ label, departmentId: bp.id })),
+		});
+		const [s1, s2] = [
+			phan(await buocCua(plan.id), 0),
+			phan(await buocCua(plan.id), 1),
+		];
+		const thay = (v: unknown) =>
+			JSON.parse(
+				JSON.stringify(v)
+					.replaceAll('"S2"', `"${s2.id}"`)
+					.replaceAll('"A"', `"${A.id}"`),
+			);
+		expect(payload.map((p) => p.thuTuc)).toEqual([
+			"setStepDone",
+			"assignStep",
+			"rescheduleStep",
+		]);
+
+		for (const muc of payload) {
+			const dauVao = thay(muc.dauVao);
+			if (muc.thuTuc === "setStepDone") {
+				const hop = stepDoneInput.safeParse(dauVao);
+				expect(hop.success, `setStepDone: ${hop.error?.message}`).toBe(true);
+				if (hop.success) await dichVu().setStepDone(hop.data, O.id);
+			}
+			if (muc.thuTuc === "assignStep") {
+				const hop = stepAssignInput.safeParse(dauVao);
+				expect(hop.success, `assignStep: ${hop.error?.message}`).toBe(true);
+				if (hop.success) await dichVu().assignStep(hop.data, O.id);
+			}
+			if (muc.thuTuc === "rescheduleStep") {
+				const hop = stepRescheduleInput.safeParse(dauVao);
+				expect(hop.success, `rescheduleStep: ${hop.error?.message}`).toBe(true);
+				if (hop.success) await dichVu().rescheduleStep(hop.data, O.id);
+			}
+		}
+
+		const [d1, d2] = [
+			phan(await buocCua(plan.id), 0),
+			phan(await buocCua(plan.id), 1),
+		];
+		expect(d2.completedAt).not.toBeNull();
+		expect(d2.assigneeId).toBe(A.id);
+		expect(d2.dueAt.toISOString().slice(0, 10)).toBe("2026-09-25");
+		expect(d1).toEqual(s1);
 	});
 });

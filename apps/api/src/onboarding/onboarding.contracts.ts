@@ -117,7 +117,29 @@ export const planOutput = z.object({
 	ownerId: z.string(),
 });
 
-export const planDetailOutput = planOutput.extend({ companyName: z.string() });
+export const planDetailOutput = planOutput.extend({
+	companyName: z.string(),
+	company: z.object({
+		id: z.string(),
+		name: z.string(),
+		iconUrl: z.string().nullable(),
+		iconDarkUrl: z.string().nullable(),
+		iconTone: z.string().nullable(),
+		logoUrl: z.string().nullable(),
+	}),
+	owner: z.object({
+		id: z.string(),
+		name: z.string(),
+		email: z.string(),
+		image: z.string().nullable(),
+	}),
+	templateName: z.string().nullable(),
+	ngayThu: z.number(),
+	buocXong: z.number(),
+	buocTong: z.number(),
+	imNgay: z.number(),
+	tacO: z.string().nullable(),
+});
 
 export const stepListInput = z.object({
 	planId: z.string().trim().min(1),

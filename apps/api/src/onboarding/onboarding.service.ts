@@ -545,14 +545,52 @@ export class OnboardingService {
 	async planById(input: PlanIdInput): Promise<PlanDetailOutput> {
 		const plan = await this.db.onboardingPlan.findUnique({
 			where: { id: input.id },
-			include: { company: { select: { name: true } } },
+			include: {
+				company: {
+					select: {
+						id: true,
+						name: true,
+						iconUrl: true,
+						iconDarkUrl: true,
+						iconTone: true,
+						logoUrl: true,
+					},
+				},
+				owner: { select: { id: true, name: true, email: true, image: true } },
+				template: { select: { name: true } },
+				steps: {
+					orderBy: { position: "asc" },
+					select: {
+						completedAt: true,
+						label: true,
+						position: true,
+						updatedAt: true,
+						department: { select: { id: true, name: true, position: true } },
+					},
+				},
+			},
 		});
 
 		if (plan === null) {
-			throw new NotFoundException(`Không có kế hoạch nào mang mã ${input.id}.`);
+			throw new NotFoundException(
+				ONBOARDING.thongDiep.khongCoKeHoach(input.id),
+			);
 		}
 
-		return { ...keHoachRa(plan), companyName: plan.company.name };
+		const hang = dungHang(plan, new Date());
+
+		return {
+			...keHoachRa(plan),
+			companyName: plan.company.name,
+			company: plan.company,
+			owner: plan.owner,
+			templateName: plan.template?.name ?? null,
+			ngayThu: hang.ngayThu,
+			buocXong: hang.buocXong,
+			buocTong: hang.buocTong,
+			imNgay: hang.imNgay,
+			tacO: hang.tacO,
+		};
 	}
 
 	closePlan(input: PlanIdInput, actingUserId: string): Promise<PlanOutput> {

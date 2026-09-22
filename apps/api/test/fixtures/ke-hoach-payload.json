@@ -1,0 +1,8 @@
+[
+	{ "thuTuc": "setStepDone", "dauVao": { "stepId": "S2", "done": true } },
+	{ "thuTuc": "assignStep", "dauVao": { "stepId": "S2", "assigneeId": "A" } },
+	{
+		"thuTuc": "rescheduleStep",
+		"dauVao": { "stepId": "S2", "dueAt": "2026-09-25" }
+	}
+]
