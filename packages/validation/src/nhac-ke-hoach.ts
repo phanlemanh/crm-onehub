@@ -1,13 +1,7 @@
+import { LOAI_NHAC } from "@crm/db/onboarding-nhac";
 import { z } from "zod";
 
-export const LOAI_NHAC = [
-	"buoc-qua-han",
-	"buoc-sap-han",
-	"ke-hoach-im",
-	"moc-ngay",
-] as const;
-
-export type LoaiNhac = (typeof LOAI_NHAC)[number];
+export { LOAI_NHAC, type LoaiNhac } from "@crm/db/onboarding-nhac";
 
 export const mucNhac = z
 	.object({
