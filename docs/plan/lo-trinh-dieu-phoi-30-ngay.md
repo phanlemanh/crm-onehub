@@ -264,7 +264,7 @@ ngày đổi trạng thái gần nhất. Không sửa dòng cũ, chỉ nối th�
 | # | Slug | Trạng thái | Ngày | PR | Ghi chú |
 | --- | --- | --- | --- | --- | --- |
 | 0 | `dieu-phoi-30-ngay-dau` (vòng một) | đã lên `onehub` | 2026-09-21 | #68 · #71 · #74 · #75 | Cổng Giá trị dời tới sau lượt 1 |
-| 1 | `ke-hoach-la-mot-ban-ghi` | Cổng Phạm vi | 2026-09-22 | — | Cổng Đáng ký build (Manh Phan); đang S1 |
+| 1 | `ke-hoach-la-mot-ban-ghi` | đang dựng | 2026-09-22 | — | Cổng Đáng ký build; Cổng Phạm vi duyệt (Phan Le Manh, 15 tiêu chí, 20 phép đo); đang S2, chờ Cổng 1.5 |
 | 2 | `moi-phia-deu-thay-ke-hoach` | chưa mở | — | — | |
 | 3 | `may-nhac-truoc-nguoi` | chưa mở | — | — | |
 | 4 | `buoc-co-viec-con` | chưa mở | — | — | chỉ mở khi có bằng chứng bước còn quá to |

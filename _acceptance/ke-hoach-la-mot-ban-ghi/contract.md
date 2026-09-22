@@ -5,10 +5,10 @@ slug: ke-hoach-la-mot-ban-ghi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: draft
+status: approved
 design_doc: docs/superpowers/specs/2026-09-22-ke-hoach-la-mot-ban-ghi-design.md
-approved_by:
-approved_at:
+approved_by: Phan Le Manh
+approved_at: 2026-09-22T05:19:11Z
 ---
 
 # Acceptance Contract: ke-hoach-la-mot-ban-ghi
