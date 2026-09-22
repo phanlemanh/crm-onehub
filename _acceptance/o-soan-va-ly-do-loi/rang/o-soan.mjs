@@ -32,6 +32,8 @@ const TI_LE_COT_TRAN = 0.5;
 const CHO_MS = 90_000;
 const CHO_BAM_MS = 3_000;
 const SO_LAN_BAM = 10;
+const SO_LAN_CHUP_CON_TRO = 12;
+const CHO_NHAP_NHAY_MS = 150;
 const MA_LOI = "TOOL_EXECUTION_FAILED";
 const O = '[data-slot="token-field"]';
 
@@ -105,7 +107,7 @@ async function gieo() {
 	return { slug: xuong.slug, hoiThoai: hoiThoai.id };
 }
 
-async function moTrang(trinh, cookie, duong, kho) {
+async function moTrang(trinh, cookie, duong, kho, anConTro = true) {
 	const trang = await trinh.newPage();
 	await trang.setViewport({
 		width: kho.width,
@@ -127,7 +129,9 @@ async function moTrang(trinh, cookie, duong, kho) {
 		khongDo(`khong thay o soan o ${trang.url()}`);
 	}
 	await trang.addStyleTag({
-		content: `${O}{caret-color:transparent!important}nextjs-portal{display:none!important}`,
+		content: anConTro
+			? `${O}{caret-color:transparent!important}nextjs-portal{display:none!important}`
+			: "nextjs-portal{display:none!important}",
 	});
 	return trang;
 }
@@ -390,15 +394,67 @@ async function goChu(trinh, cookie, dich) {
 	return loi;
 }
 
+async function chupCoConTro(trang, duong) {
+	const so = await doO(trang);
+	if (!so.conTro) return false;
+	const mauChu = await trang.$eval(O, (o) => getComputedStyle(o).color);
+	for (let lan = 0; lan < SO_LAN_CHUP_CON_TRO; lan++) {
+		const anh = await trang.screenshot({ encoding: "base64" });
+		const thay = await trang.evaluate(
+			async (b64, conTro, mau, nguong) => {
+				const hinh = new Image();
+				hinh.src = `data:image/png;base64,${b64}`;
+				await hinh.decode();
+				const c = document.createElement("canvas");
+				c.width = hinh.width;
+				c.height = hinh.height;
+				const ve = c.getContext("2d");
+				ve.drawImage(hinh, 0, 0);
+				const [r, g, b] = mau.match(/\d+/g).map(Number);
+				const x0 = Math.floor(conTro.left);
+				let khop = 0;
+				for (
+					let y = Math.ceil(conTro.top);
+					y < conTro.top + conTro.height;
+					y++
+				) {
+					for (const x of [x0, x0 + 1]) {
+						const d = ve.getImageData(x, y, 1, 1).data;
+						if (
+							Math.abs(d[0] - r) + Math.abs(d[1] - g) + Math.abs(d[2] - b) <
+							nguong
+						)
+							khop++;
+					}
+				}
+				return khop >= conTro.height * 0.6;
+			},
+			anh,
+			so.conTro,
+			mauChu,
+			NGUONG_LECH_MAU,
+		);
+		if (thay) {
+			writeFileSync(duong, Buffer.from(anh, "base64"));
+			return true;
+		}
+		await new Promise((xong) => setTimeout(xong, CHO_NHAP_NHAY_MS));
+	}
+	return false;
+}
+
 async function chup(trinh, cookie, dich) {
 	const khuon = [];
 	const loi = [];
 	for (const kho of KHO) {
-		const dau = await moTrang(trinh, cookie, `/${dich.slug}/chat`, kho);
+		const dau = await moTrang(trinh, cookie, `/${dich.slug}/chat`, kho, false);
 		await bamVaoO(dau);
-		await dau.screenshot({
-			path: resolve(BANG_CHUNG, `E8-o-trong-${kho.ten}.png`),
-		});
+		const coConTro = await chupCoConTro(
+			dau,
+			resolve(BANG_CHUNG, `E8-o-trong-${kho.ten}.png`),
+		);
+		if (!coConTro)
+			loi.push(`${kho.ten}: khong chup duoc con tro tren anh o trong`);
 		await dau.keyboard.type("a");
 		await dau.screenshot({
 			path: resolve(BANG_CHUNG, `E8-da-go-${kho.ten}.png`),
