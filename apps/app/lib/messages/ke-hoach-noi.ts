@@ -27,7 +27,7 @@ const en = {
 	tasks: {
 		keHoach: "30-day plan",
 		sapHan: "Nothing overdue · {n} steps due soon",
-		xongBuoc: "Mark step done",
+		xongBuoc: "Mark {nhan} done",
 	},
 	chuyen: {
 		menu: "Hand over 30-day work…",
@@ -39,6 +39,9 @@ const en = {
 		chon: "Pick a recipient",
 		timNguoi: "Search people",
 		khongAi: "No one matches",
+		loiXemTruoc: "Couldn't count this person's work",
+		thuLai: "Try again",
+		dangTai: "Loading people…",
 		xacNhan: "Hand over",
 		huy: "Cancel",
 		xong: "Handed {keHoach} plans and {buoc} steps to {ten}.",
@@ -78,7 +81,7 @@ const vi: KeHoachNoiMessages = {
 	tasks: {
 		keHoach: "Kế hoạch 30 ngày",
 		sapHan: "Không có gì quá hạn · {n} bước sắp hạn",
-		xongBuoc: "Đánh dấu bước xong",
+		xongBuoc: "Đánh dấu xong {nhan}",
 	},
 	chuyen: {
 		menu: "Chuyển việc 30 ngày…",
@@ -91,6 +94,9 @@ const vi: KeHoachNoiMessages = {
 		chon: "Chọn người nhận",
 		timNguoi: "Tìm người",
 		khongAi: "Không có ai khớp",
+		loiXemTruoc: "Không đếm được việc của người này",
+		thuLai: "Thử lại",
+		dangTai: "Đang tải danh sách người…",
 		xacNhan: "Chuyển",
 		huy: "Huỷ",
 		xong: "Đã chuyển {keHoach} kế hoạch và {buoc} bước cho {ten}.",

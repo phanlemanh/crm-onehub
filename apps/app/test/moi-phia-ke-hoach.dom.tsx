@@ -11,41 +11,58 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { z } from "zod";
 import payload from "../../api/test/fixtures/moi-phia-payload.json";
 
-type LoiGoi = { duong: string; dauVao: unknown };
+type Json =
+	| string
+	| number
+	| boolean
+	| null
+	| Json[]
+	| { [khoa: string]: Json };
+
+type DauVao = Json | undefined;
+
+type LoiGoi = { duong: string; dauVao: DauVao };
+
+type Lay = (dauVao: DauVao) => Json;
 
 let daGoi: LoiGoi[] = [];
 let daLamMoi: string[] = [];
-let duLieu: Record<string, (dauVao: unknown) => unknown> = {};
+const duLieu = new Map<string, Lay>();
+
+function dat(duong: string, lay: Lay): void {
+	duLieu.set(duong, lay);
+}
 
 function thuTuc(duong: string) {
-	const doc = (v: unknown) => {
+	const doc = (v: DauVao): Json => {
 		daGoi.push({ duong, dauVao: v });
-		const lay = duLieu[duong];
+		const lay = duLieu.get(duong);
 		return lay ? lay(v) : null;
 	};
 	return {
-		queryKey: (v?: unknown) => (v === undefined ? [duong] : [duong, v]),
+		queryKey: (v?: DauVao) => (v === undefined ? [duong] : [duong, v]),
 		pathKey: () => [duong],
-		queryOptions: (v?: unknown, chon?: object) => ({
+		queryOptions: (v?: DauVao, chon?: { enabled?: boolean }) => ({
 			...chon,
 			queryKey: [duong, v],
 			queryFn: async () => doc(v),
 		}),
-		infiniteQueryOptions: (v?: unknown) => ({
+		infiniteQueryOptions: (v?: DauVao) => ({
 			queryKey: [duong, v],
 			queryFn: async () => doc(v),
 			initialPageParam: null,
 			getNextPageParam: () => null,
 		}),
 		mutationOptions: (chon?: {
-			onSuccess?: (kq: unknown, v: unknown) => void;
+			onSuccess?: (kq: Json, v: DauVao) => void;
 			onError?: (e: Error) => void;
 		}) => ({
 			...chon,
 			mutationKey: [duong],
-			mutationFn: async (v: unknown) => doc(v) ?? { id: "ok" },
+			mutationFn: async (v: DauVao) => doc(v) ?? { id: "ok" },
 		}),
 	};
 }
@@ -292,11 +309,10 @@ function trongSheet(con: ReactElement): ReactElement {
 beforeEach(() => {
 	daGoi = [];
 	daLamMoi = [];
-	duLieu = {
-		"users.list": () => [TOI],
-		"users.me": () => TOI,
-		"onboarding.listTemplates": () => [],
-	};
+	duLieu.clear();
+	dat("users.list", () => [TOI]);
+	dat("users.me", () => TOI);
+	dat("onboarding.listTemplates", () => []);
 });
 
 afterEach(async () => {
@@ -312,11 +328,11 @@ afterEach(async () => {
 
 describe("tab-cong-ty-man", () => {
 	test("tab-cong-ty-man: so tren nhan bang so dong, bam dong hai chong ke hoach P2", async () => {
-		duLieu["companies.byId"] = () => congTy(2, true);
-		duLieu["onboarding.plansOfCompany"] = () => [
+		dat("companies.byId", () => congTy(2, true));
+		dat("onboarding.plansOfCompany", () => [
 			hangKeHoach("P1", false),
 			hangKeHoach("P2", true),
-		];
+		]);
 		const san = await mo(
 			trongSheet(<CompanySheet companyId={CONG_TY_K} />),
 			`?record=company:${CONG_TY_K}`,
@@ -348,7 +364,7 @@ describe("tab-cong-ty-man", () => {
 	});
 
 	test("tab-cong-ty-man: xuong khong khuon va cong ty khong ke hoach thi khong co tab", async () => {
-		duLieu["companies.byId"] = () => congTy(0, false);
+		dat("companies.byId", () => congTy(0, false));
 		await mo(
 			trongSheet(<CompanySheet companyId={CONG_TY_K} />),
 			`?record=company:${CONG_TY_K}`,
@@ -364,8 +380,8 @@ describe("tab-cong-ty-man", () => {
 	});
 
 	test("tab-cong-ty-man: doi chung duong — co mot ke hoach thi co tab", async () => {
-		duLieu["companies.byId"] = () => congTy(1, false);
-		duLieu["onboarding.plansOfCompany"] = () => [hangKeHoach("P1", false)];
+		dat("companies.byId", () => congTy(1, false));
+		dat("onboarding.plansOfCompany", () => [hangKeHoach("P1", false)]);
 		await mo(
 			trongSheet(<CompanySheet companyId={CONG_TY_K} />),
 			`?record=company:${CONG_TY_K}`,
@@ -374,8 +390,8 @@ describe("tab-cong-ty-man", () => {
 	});
 
 	test("tab-cong-ty-man: co khuon ma chua co ke hoach thi man rong mo tao ke hoach khoa cong ty", async () => {
-		duLieu["companies.byId"] = () => congTy(0, true);
-		duLieu["onboarding.plansOfCompany"] = () => [];
+		dat("companies.byId", () => congTy(0, true));
+		dat("onboarding.plansOfCompany", () => []);
 		await mo(
 			trongSheet(<CompanySheet companyId={CONG_TY_K} />),
 			`?record=company:${CONG_TY_K}&tab=plans`,
@@ -444,10 +460,10 @@ function tieuDeMuc(): boolean {
 
 describe("muc-ca-nhan-man", () => {
 	test("muc-ca-nhan-man: mot dong cho ke hoach dang chay, bam mo ke hoach chong len", async () => {
-		duLieu["contacts.byId"] = () => caNhan();
-		duLieu["onboarding.plansOfContact"] = () => [
+		dat("contacts.byId", () => caNhan());
+		dat("onboarding.plansOfContact", () => [
 			{ planId: "P1", companyName: "One Mount", bac: "accountAt" },
-		];
+		]);
 		const san = await mo(
 			trongSheet(<ContactSheet contactId={CA_NHAN_C} />),
 			`?record=contact:${CA_NHAN_C}`,
@@ -476,8 +492,8 @@ describe("muc-ca-nhan-man", () => {
 	});
 
 	test("muc-ca-nhan-man: doi chung am — khong ghi danh thi khong co muc", async () => {
-		duLieu["contacts.byId"] = () => caNhan();
-		duLieu["onboarding.plansOfContact"] = () => [];
+		dat("contacts.byId", () => caNhan());
+		dat("onboarding.plansOfContact", () => []);
 		await mo(
 			trongSheet(<ContactSheet contactId={CA_NHAN_C} />),
 			`?record=contact:${CA_NHAN_C}`,
@@ -547,7 +563,7 @@ describe("the-tasks-man", () => {
 
 	test("the-tasks-man: tich buoc thu hai goi setStepDone dung buoc, lam moi tong quan va ke hoach", async () => {
 		setSystemTime(new Date(2026, 8, 22, 23, 30));
-		duLieu["dashboard.summary"] = () => tongQuanGia();
+		dat("dashboard.summary", () => tongQuanGia());
 		const tq = tongQuanMessages("vi");
 		await mo(<DashboardSummary />);
 		await cho(
@@ -627,15 +643,26 @@ async function phim(o: Element, key: string): Promise<void> {
 	});
 }
 
-function goiDanhMucCuoi(): Record<string, unknown> | undefined {
+const dauVaoDanhMuc = z
+	.object({
+		nguoiGiao: z.array(z.string()),
+		nguoiCam: z.array(z.string()),
+		boPhan: z.array(z.string()),
+	})
+	.partial();
+
+function goiDanhMucCuoi(
+	khoa: "nguoiGiao" | "nguoiCam" | "boPhan",
+): string[] | undefined {
 	const goi = daGoi.filter((g) => g.duong === "onboarding.manDanhMuc");
-	return goi.at(-1)?.dauVao as Record<string, unknown> | undefined;
+	const ket = dauVaoDanhMuc.safeParse(goi.at(-1)?.dauVao);
+	return ket.success ? ket.data[khoa] : undefined;
 }
 
 describe("loc-nguoi-giao-man", () => {
 	test("loc-nguoi-giao-man: chon A o o loc Nguoi duoc giao gui nguoiGiao [A], bo chon thi rong", async () => {
-		duLieu["users.list"] = () => [TOI, NGUOI_A];
-		duLieu["onboarding.manDanhMuc"] = () => danhMucGia();
+		dat("users.list", () => [TOI, NGUOI_A]);
+		dat("onboarding.manDanhMuc", () => danhMucGia());
 		const san = await mo(<DanhMucTable />);
 		await cho(
 			() => san.o.textContent?.includes("One Mount") === true,
@@ -675,13 +702,14 @@ describe("loc-nguoi-giao-man", () => {
 		if (!chonA) throw new Error("khong thay lua chon An");
 		await bam(chonA);
 		await cho(() => {
-			const v = goiDanhMucCuoi()?.nguoiGiao;
+			const v = goiDanhMucCuoi("nguoiGiao");
 			return Array.isArray(v) && v.length === 1;
 		}, "loi goi danh muc mang nguoiGiao");
-		const dauVao = goiDanhMucCuoi();
-		expect(dauVao?.nguoiGiao, "Expected nguoiGiao [A]").toEqual([NGUOI_A.id]);
-		expect(dauVao?.nguoiCam, "nguoiCam giu nguyen").toEqual([]);
-		expect(dauVao?.boPhan, "boPhan giu nguyen").toEqual([]);
+		expect(goiDanhMucCuoi("nguoiGiao"), "Expected nguoiGiao [A]").toEqual([
+			NGUOI_A.id,
+		]);
+		expect(goiDanhMucCuoi("nguoiCam"), "nguoiCam giu nguyen").toEqual([]);
+		expect(goiDanhMucCuoi("boPhan"), "boPhan giu nguyen").toEqual([]);
 		expect(san.url().get("nguoiGiao"), "tham so duong dan").toContain(
 			NGUOI_A.id,
 		);
@@ -694,7 +722,7 @@ describe("loc-nguoi-giao-man", () => {
 		if (!lai) throw new Error("menu da dong, khong bo chon duoc");
 		await bam(lai);
 		await cho(() => {
-			const v = goiDanhMucCuoi()?.nguoiGiao;
+			const v = goiDanhMucCuoi("nguoiGiao");
 			return Array.isArray(v) && v.length === 0;
 		}, "doi chung: bo chon thi nguoiGiao rong");
 	});
@@ -710,7 +738,7 @@ function datThanhVien(
 	canManage: boolean,
 	xemTruoc: { keHoach: number; buoc: number },
 ) {
-	duLieu["workspace.get"] = () => ({
+	dat("workspace.get", () => ({
 		id: "ws",
 		name: "OneHub",
 		slug: "ws",
@@ -719,8 +747,8 @@ function datThanhVien(
 		canChangeRoles: false,
 		canManageMembers: true,
 		canIssuePasswordLink: false,
-	});
-	duLieu["workspace.members"] = () => ({
+	}));
+	dat("workspace.members", () => ({
 		rows: THANH_VIEN.map((n) => ({
 			...n,
 			email: `${n.userId}@thu.test`,
@@ -733,16 +761,17 @@ function datThanhVien(
 		})),
 		total: THANH_VIEN.length,
 		facetCounts: { role: { member: 3 } },
-	});
-	duLieu["onboarding.access"] = () => ({ canManage });
-	duLieu["onboarding.transferPreview"] = () => xemTruoc;
-	duLieu["users.list"] = () =>
+	}));
+	dat("onboarding.access", () => ({ canManage }));
+	dat("onboarding.transferPreview", () => xemTruoc);
+	dat("users.list", () =>
 		THANH_VIEN.map((n) => ({
 			id: n.userId,
 			name: n.name,
 			email: `${n.userId}@thu.test`,
 			image: null,
-		}));
+		})),
+	);
 }
 
 async function moMenuCua(ten: string): Promise<void> {
@@ -918,12 +947,12 @@ async function moSheetLech(
 	chuSoHuu: typeof TOI | null,
 	gia: number | null,
 ): Promise<void> {
-	duLieu["companies.byId"] = () => ({
+	dat("companies.byId", () => ({
 		...congTy(0, false),
 		owner: chuSoHuu,
 		fields: [truongChon(chon)],
 		deals: [thoaThuan("d1", gia), thoaThuan("d2", null)],
-	});
+	}));
 	await mo(
 		trongSheet(<CompanySheet companyId={CONG_TY_K} />),
 		`?record=company:${CONG_TY_K}`,

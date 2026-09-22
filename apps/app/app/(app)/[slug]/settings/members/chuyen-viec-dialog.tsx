@@ -13,13 +13,24 @@ import {
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { Fragment, type ReactNode, useState } from "react";
 import { toast } from "sonner";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
 import { useTRPC } from "@/lib/trpc/client";
 
 export type NguoiDi = { userId: string; name: string };
+
+function dienNode(mau: string, gia: Record<string, ReactNode>): ReactNode[] {
+	return mau.split(/(\{\w+\})/).map((phan, i) => {
+		const khoa = /^\{(\w+)\}$/.exec(phan)?.[1];
+		return (
+			<Fragment key={`${i}-${phan}`}>
+				{khoa === undefined ? phan : (gia[khoa] ?? "")}
+			</Fragment>
+		);
+	});
+}
 
 export function ChuyenViecDialog({
 	nguoi,
@@ -75,7 +86,7 @@ export function ChuyenViecDialog({
 
 	const so = xemTruoc.data;
 	const coViec = so !== undefined && (so.keHoach > 0 || so.buoc > 0);
-	const ten = nguoi?.name ?? "";
+	const ten = <span translate="no">{nguoi?.name ?? ""}</span>;
 	const luaChon = (dsNguoi.data ?? [])
 		.filter((u) => u.id !== nguoi?.userId)
 		.map((u) => ({ value: u.id, label: u.name }));
@@ -89,28 +100,40 @@ export function ChuyenViecDialog({
 		>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>{dien(k.tieuDe, { ten })}</DialogTitle>
+					<DialogTitle>{dienNode(k.tieuDe, { ten })}</DialogTitle>
 					<DialogDescription>
-						{so === undefined ? (
+						{xemTruoc.isError ? (
+							k.loiXemTruoc
+						) : so === undefined ? (
 							<Spinner />
 						) : coViec ? (
-							dien(k.coViec, {
+							dienNode(k.coViec, {
 								ten,
 								keHoach: String(so.keHoach),
 								buoc: String(so.buoc),
 							})
 						) : (
-							dien(k.khongViec, { ten })
+							dienNode(k.khongViec, { ten })
 						)}
 					</DialogDescription>
+					{xemTruoc.isError ? (
+						<Button
+							size="sm"
+							variant="outline"
+							onClick={() => xemTruoc.refetch()}
+						>
+							{k.thuLai}
+						</Button>
+					) : null}
 				</DialogHeader>
 				{coViec ? (
 					<Combobox
 						aria-label={k.nguoiNhan}
+						disabled={dsNguoi.isPending}
 						empty={k.khongAi}
 						onValueChange={setNhan}
 						options={luaChon}
-						placeholder={k.chon}
+						placeholder={dsNguoi.isPending ? k.dangTai : k.chon}
 						searchPlaceholder={k.timNguoi}
 						value={nhan}
 					/>

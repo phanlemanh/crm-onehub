@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { parseOnboardingActivityMeta } from "@crm/validation/onboarding-activity";
+import { z } from "zod";
 import type { AgentQueueService } from "../src/agent/agent-queue.service";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { CompaniesService } from "../src/companies/companies.service";
@@ -150,17 +151,15 @@ describe("vet-giao-luc-xong", () => {
 	});
 });
 
-function phanTich<T>(
-	schema: {
-		safeParse: (x: unknown) => { success: boolean; data?: T; error?: unknown };
-	},
-	duLieu: unknown,
+function phanTich<S extends z.ZodType>(
+	schema: S,
+	duLieu: z.input<S>,
 	thuTuc: string,
-): T {
+): z.output<S> {
 	const ket = schema.safeParse(duLieu);
-	if (!ket.success || ket.data === undefined) {
+	if (!ket.success) {
 		throw new Error(
-			`${thuTuc}: payload man gui khong qua schema — ${String(ket.error)}`,
+			`${thuTuc}: payload man gui khong qua schema — ${ket.error.message}`,
 		);
 	}
 	return ket.data;

@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@crm/ui/components/button";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useQuery } from "@tanstack/react-query";
 import { DetailSheetSection } from "@/components/detail-sheet";
@@ -19,6 +20,19 @@ export function ContactPlans({ contactId }: { contactId: string }) {
 		trpc.onboarding.plansOfContact.queryOptions({ contactId }),
 	);
 
+	if (query.isError) {
+		return (
+			<DetailSheetSection title={m.tieuDe}>
+				<div className="flex items-center justify-between gap-3 text-sm">
+					<span>{keHoachNoiMessages(locale).congTy.loi}</span>
+					<Button variant="outline" size="sm" onClick={() => query.refetch()}>
+						{keHoachNoiMessages(locale).congTy.thuLai}
+					</Button>
+				</div>
+			</DetailSheetSection>
+		);
+	}
+
 	if (!query.data || query.data.length === 0) return null;
 
 	return (
@@ -26,11 +40,11 @@ export function ContactPlans({ contactId }: { contactId: string }) {
 			<ul className="flex flex-col">
 				{query.data.map((dong) => (
 					<li key={dong.planId}>
-						<button
-							type="button"
+						<Button
+							variant="ghost"
 							data-ke-hoach={dong.planId}
 							onClick={() => openRecord({ kind: "plan", id: dong.planId })}
-							className="flex w-full items-center justify-between gap-3 rounded-md px-2 py-1.5 text-left text-sm hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
+							className="w-full justify-between"
 						>
 							<span className="truncate font-medium" translate="no">
 								{dong.companyName}
@@ -40,7 +54,7 @@ export function ContactPlans({ contactId }: { contactId: string }) {
 									? m.chuaDat
 									: dien(m.daDat, { bac: bac[dong.bac] })}
 							</span>
-						</button>
+						</Button>
 					</li>
 				))}
 			</ul>
