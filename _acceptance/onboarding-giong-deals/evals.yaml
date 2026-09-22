@@ -36,7 +36,7 @@ evals:
       (component hanh dong dau trang) canh DanhMucTable. Moi cach xem: nut ten
       m.tao.keHoach.toolbar co data-variant=default va co svg; trong DanhMucTable KHONG co nut
       nao mang ten do. Dem ca = 2.
-      CHIEU DO: tra nut ve thanh cong cu -> do voi thong diep ghim "<cach xem>: nut trong thanh cong cu".
+      CHIEU DO (da chay): bienThe ve outline -> do voi thong diep ghim "bang: dau-trang=true bienThe=outline".
 
   - id: E3
     criterion: AC-2
@@ -93,8 +93,10 @@ evals:
       [data-slot=spinner] (dau tai cua DataTable), (4) trong table KHONG co m.noMatch.title va
       KHONG co chu msg.table.noResults, (5) phan tu aria-live=polite chua m.loading. Giai
       promise: hang hien, m.loading mat. Tai lai (doi bo loc sang promise treo moi):
-      (6) o tim van co, (7) trong table co [data-slot=spinner]. Dem khang dinh = 7.
-      CHIEU DO: tra lai khoi skeleton tra som -> do voi thong diep ghim "dang tai: o tim".
+      (6) o tim van co, (7) trong vung bang (chan bang, TablePagination) co [data-slot=spinner].
+      Dem khang dinh = 7.
+      CHIEU DO (da chay): bo meta aria-live -> do voi thong diep ghim
+      "dang tai: aria-live chua Dang tai=false".
 
   - id: E7
     criterion: AC-6
@@ -106,7 +108,8 @@ evals:
     expected: |
       manDanhMuc gia nem loi: o tim co mat, m.error.title va nut m.error.action nam TRONG phan
       tu table; bam nut -> so lan goi manDanhMuc tang 1. Dem ca = 2.
-      CHIEU DO: loi tra som ngoai bang -> do voi thong diep ghim "loi: o tim".
+      CHIEU DO (da chay): dua loi ra khoi o empty cua bang -> do voi thong diep ghim "loi hien"
+      (loi khong bao gio xuat hien trong khung bang).
 
   - id: E8
     criterion: AC-7
@@ -161,7 +164,7 @@ evals:
       loc: facetCounts gia {<id1>:2,<id2>:0}. Ca 1 (khong chon): lua chon id1 co nhan dung ten,
       khong chua " · "; id2 vang. Ca 2 (id2 dang chon qua duong dan): id2 co mat, nhan dung ten.
       Dem khang dinh = 6.
-      CHIEU DO: nhan kem " · so" -> do voi thong diep ghim "nhan bo loc: bp1".
+      CHIEU DO (da chay): nhan kem " · so" -> do voi thong diep ghim "khong-cham=false".
 
   - id: E12
     criterion: AC-11
@@ -177,7 +180,7 @@ evals:
       m.tao.keHoach.created) va duong dan mang record stack "plan:<id cua chinh gia tri da parse>"
       — so voi bien, khong so voi chuoi hang.
       createFromTemplate gia nem loi: khong toast thanh cong, hop thoai con mo. Dem ca = 2.
-      CHIEU DO: bo openRecord -> do voi thong diep ghim "tao xong: plan:kh-moi".
+      CHIEU DO (da chay): bo openRecord -> do voi thong diep ghim "tao xong: plan:kh-vua-tao".
 
   - id: E13
     criterion: AC-11
@@ -189,9 +192,9 @@ evals:
       - "apps/api/test/onboarding-giong-deals.spec.ts"
     expected: |
       Dich vu that tren CSDL thu: createFromTemplate cho mot khuon gieo san tra ban ghi qua
-      duoc planOutput.parse; planById(id tra ve) doc lai dung congTy va so buoc cua khuon.
-      Dem ca = 1 (hai khang dinh).
-      CHIEU DO: dung mot id khong ton tai -> planById nem loi khong tim thay, ghim thong diep.
+      duoc planOutput.parse; planById(id tra ve) doc lai dung id, ten cong ty va templateId cua
+      khuon. Doi chung am tren cung fixture: id khong ton tai -> planById tra 404, ghim
+      "id khong ton tai: 404". Dem khang dinh = 2.
 
   - id: E16
     criterion: AC-4
@@ -206,7 +209,7 @@ evals:
       Goi manDanhMuc voi (a) sort rong, (b) {sort:startedAt, dir:asc}, (c) {sort:startedAt,
       dir:desc}, loc theo 3 id do. Khang dinh: day id (a) == (b) == thu tu startedAt tang dan;
       (c) == dao nguoc cua (b). Dem khang dinh = 3.
-      CHIEU DO: sapHang bo qua dir -> (c) do voi thong diep ghim "desc la dao nguoc cua asc".
+      CHIEU DO (da chay): sapHang bo qua dir -> (c) do voi thong diep ghim "desc la dao nguoc cua asc".
 
   - id: E17
     criterion: AC-14
