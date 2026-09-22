@@ -1,4 +1,12 @@
-import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	mock,
+	setSystemTime,
+	test,
+} from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
@@ -18,7 +26,7 @@ function thuTuc(duong: string) {
 		return lay ? lay(v) : null;
 	};
 	return {
-		queryKey: (v?: unknown) => [duong, v],
+		queryKey: (v?: unknown) => (v === undefined ? [duong] : [duong, v]),
 		pathKey: () => [duong],
 		queryOptions: (v?: unknown, chon?: object) => ({
 			...chon,
@@ -89,6 +97,11 @@ const { ContactSheet } = await import(
 	"@/components/crm/record-sheet/contact-sheet"
 );
 const { DetailSheet } = await import("@/components/detail-sheet");
+const { DashboardSummary } = await import(
+	"@/app/(app)/[slug]/dashboard-summary"
+);
+const { tongQuanMessages } = await import("@/lib/messages/tong-quan");
+const { formatCount } = await import("@crm/ui/lib/format");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { keHoachNoiMessages } = await import("@/lib/messages/ke-hoach-noi");
@@ -467,5 +480,110 @@ describe("muc-ca-nhan-man", () => {
 		);
 		await nghi(5);
 		expect(tieuDeMuc(), "khong co tieu de muc 30 ngay dau").toBe(false);
+	});
+});
+
+function tongQuanGia() {
+	const thang = { count: 0, valueCents: 0 };
+	return {
+		scope: "me",
+		reportingCurrency: "VND",
+		unconverted: { count: 0, currencies: [] },
+		pipeline: { stages: [], totalCents: 0, totalDeals: 0 },
+		wonThisMonth: thang,
+		wonPrevMonth: thang,
+		performance: {
+			windowDays: 90,
+			wins: 0,
+			losses: 0,
+			winRate: null,
+			avgDealCents: null,
+			avgCycleDays: null,
+		},
+		trend: [],
+		closingThisMonthTotal: thang,
+		biggestOpen: [],
+		overdueTasks: [
+			{
+				id: "viec-1",
+				subject: "Goi lai chi Thuong",
+				company: { id: "ct-x", name: "Song Hong Land" },
+				deal: null,
+				dueAt: "2026-09-20T09:00:00.000Z",
+			},
+		],
+		recentActivity: [],
+		mySteps: [
+			{
+				stepId: "S1",
+				nhan: "Ky hop dong khung",
+				dueAt: "2026-09-21",
+				planId: "P-S1",
+				company: { id: "ct-nx", name: "Nha Xanh" },
+			},
+			{
+				stepId: "S2",
+				nhan: "Dao tao nen tang",
+				dueAt: "2026-09-22",
+				planId: "P-S2",
+				company: { id: CONG_TY_K, name: "One Mount" },
+			},
+		],
+	};
+}
+
+describe("the-tasks-man", () => {
+	afterEach(() => {
+		setSystemTime();
+	});
+
+	test("the-tasks-man: tich buoc thu hai goi setStepDone dung buoc, lam moi tong quan va ke hoach", async () => {
+		setSystemTime(new Date(2026, 8, 22, 23, 30));
+		duLieu["dashboard.summary"] = () => tongQuanGia();
+		const tq = tongQuanMessages("vi");
+		await mo(<DashboardSummary />);
+		await cho(
+			() => document.body.querySelector('[data-buoc="S2"]') !== null,
+			"dong buoc S2",
+		);
+
+		const s1 = document.body.querySelector('[data-buoc="S1"]');
+		const s2 = document.body.querySelector('[data-buoc="S2"]');
+		if (!s1 || !s2) throw new Error("thieu dong buoc");
+		expect(
+			s1.querySelector('[data-tone="error"]'),
+			"S1 qua han phai to do",
+		).not.toBeNull();
+		expect(
+			s2.querySelector('[data-tone="error"]'),
+			"S2 han hom nay khong qua han",
+		).toBeNull();
+		expect(s2.textContent).toContain("One Mount");
+		expect(nut(k.tasks.keHoach, s2).textContent).toBe(k.tasks.keHoach);
+		expect(
+			document.body.textContent,
+			"mo ta dem ca viec va buoc qua han",
+		).toContain(tq.tasks.pastDue(formatCount(2, tq.tasks.taskNoun, "vi")));
+
+		const truoc = daGoi.filter((g) => g.duong === "dashboard.summary").length;
+		const o = s2.querySelector('[role="checkbox"]');
+		if (!o) throw new Error("khong thay o tich cua S2");
+		await bam(o);
+		await cho(() => daLamMoi.includes("plan:P-S2"), "lam moi ke hoach P-S2");
+
+		const xong = daGoi.filter((g) => g.duong === "onboarding.setStepDone");
+		expect(xong.length, "dung mot loi goi setStepDone").toBe(1);
+		expect(xong[0]?.dauVao, "Expected stepId S2").toEqual({
+			...payload.tichXong,
+			stepId: "S2",
+		});
+		expect(
+			daGoi.some((g) => g.duong === "activities.complete"),
+			"khong goi activities.complete",
+		).toBe(false);
+		await cho(
+			() => daGoi.filter((g) => g.duong === "dashboard.summary").length > truoc,
+			"tong quan duoc lam moi",
+		);
 	});
 });
