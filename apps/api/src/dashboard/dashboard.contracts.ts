@@ -72,6 +72,7 @@ const overdueTaskOutput = z.object({
 	company: linkedRecordOutput.nullable(),
 	deal: linkedRecordOutput.nullable(),
 	dueAt: z.string().nullable(),
+	createdBy: linkedRecordOutput,
 });
 
 const myStepOutput = z.object({
