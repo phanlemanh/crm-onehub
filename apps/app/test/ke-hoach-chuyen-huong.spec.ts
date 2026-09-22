@@ -6,7 +6,10 @@ class ChuyenHuong extends Error {
 	}
 }
 
+const dieuHuongThat = await import("next/navigation");
+
 mock.module("next/navigation", () => ({
+	...dieuHuongThat,
 	redirect: (dich: string) => {
 		throw new ChuyenHuong(dich);
 	},
