@@ -12,6 +12,7 @@ import type {
 	DanhMucCachChia,
 	DanhMucInput,
 } from "@/app/(app)/[slug]/onboarding/onboarding-search-params";
+import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import {
 	bangCotInput,
 	planListInput,
@@ -35,6 +36,7 @@ const NGUOI = [{ id: "u-1", name: "Lan" }];
 
 let tap: HangDanhMuc[] = [];
 let daDieuHuong: string[] = [];
+let duongHienTai = new URLSearchParams();
 let dauVaoCuoi: DanhMucInput | null = null;
 
 function keHoach(i: number, buoc: string): KeHoachTho {
@@ -52,6 +54,8 @@ function keHoach(i: number, buoc: string): KeHoachTho {
 				label: buoc,
 				position: 0,
 				updatedAt: new Date("2026-09-10T00:00:00.000Z"),
+				assigneeId: null,
+				assignee: null,
 				department: { id: "bp-a", name: "Kinh doanh", position: 0 },
 			},
 		],
@@ -75,6 +79,16 @@ function thuTuc<TVao, TRa>(ten: string, chay: (dauVao: TVao) => TRa) {
 	};
 }
 
+function khongGoi(ten: string) {
+	return {
+		mutationOptions: () => ({
+			mutationFn: async () => {
+				throw new Error(`${ten} khong duoc goi trong tep nay`);
+			},
+		}),
+	};
+}
+
 function manDanhMuc(dauVao: DanhMucInput) {
 	dauVaoCuoi = dauVao;
 	return manDanhMucTuHang(tap, planListInput.parse(dauVao), 1);
@@ -91,9 +105,12 @@ mock.module("@/lib/trpc/client", () => ({
 			manDanhMuc: thuTuc("manDanhMuc", manDanhMuc),
 			bangCot: thuTuc("bangCot", bangCot),
 			listDepartments: thuTuc("listDepartments", () => BO_PHAN),
+			listTemplates: thuTuc("listTemplates", () => []),
+			createFromTemplate: khongGoi("createFromTemplate"),
 		},
 		users: {
 			list: thuTuc("users.list", () => NGUOI),
+			me: thuTuc("users.me", () => NGUOI[0]),
 		},
 	}),
 }));
@@ -105,6 +122,8 @@ mock.module("next/navigation", () => ({
 		prefetch: () => {},
 	}),
 	useParams: () => ({ slug: SLUG }),
+	useSearchParams: () => duongHienTai,
+	usePathname: () => `/${SLUG}/onboarding`,
 }));
 
 mock.module("next/link", () => ({
@@ -152,6 +171,7 @@ async function dungMan(duong: string): Promise<San> {
 		defaultOptions: { queries: { retry: false } },
 	});
 	let hienTai = new URLSearchParams(duong);
+	duongHienTai = hienTai;
 	await act(async () => {
 		root.render(
 			<NuqsTestingAdapter
@@ -159,6 +179,7 @@ async function dungMan(duong: string): Promise<San> {
 				hasMemory
 				onUrlUpdate={(e) => {
 					hienTai = new URLSearchParams(e.searchParams);
+					duongHienTai = hienTai;
 				}}
 			>
 				<QueryClientProvider client={client}>
@@ -368,8 +389,10 @@ describe("the-chi-de-xem", () => {
 		expect(the).toHaveLength(tap.length);
 		for (const a of the) {
 			expect(a.tagName).toBe("A");
-			expect(a.getAttribute("href")).toBe(
-				`/${SLUG}/onboarding/${a.getAttribute("data-board-card")}`,
+			const href = a.getAttribute("href") ?? "";
+			expect(href.startsWith("?")).toBe(true);
+			expect(new URLSearchParams(href).get(SEARCH_PARAM.record.stack)).toBe(
+				`plan:${a.getAttribute("data-board-card")}`,
 			);
 		}
 		expect(the.map((a) => a.getAttribute("data-board-card")).sort()).toEqual(
