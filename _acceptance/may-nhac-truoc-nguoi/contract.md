@@ -5,7 +5,7 @@ slug: may-nhac-truoc-nguoi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, agent, db, ui, docs]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-22-may-nhac-truoc-nguoi-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-22T10:53:30Z
@@ -79,3 +79,10 @@ trục dựng lại); bản đầy đủ ở `_acceptance/may-nhac-truoc-nguoi/m
 - «Gợi ý» là chữ của lượt này cho câu hướng xử lý đi kèm nhắc im («Giao bước X» …); `CONTEXT.md` cấm «việc cần làm» cho nghĩa đó.
 - Lượt 2 tính «bước của tôi» theo ngày UTC; lượt này tính theo ngày giờ VN. Lượt này không đổi lượt 2; hai cách đếm lệch nhau quanh nửa đêm là giới hạn đã biết.
 - `ONBOARDING.stale` gỡ khỏi `onboarding-config.ts`; ngưỡng im sống ở `NHAC` của `packages/db/src/onboarding-nhac.ts`.
+- Known limit (Ngoài-1, Cổng Bằng chứng 2026-09-22): bài kiểm của tác tử import thẳng mã nguồn apps/api bằng đường dẫn tương đối.
+- Known limit (Ngoài-2, Cổng Bằng chứng 2026-09-22): người dùng gieo 'ngoai-duong-do' có id cố định không mang tiền tố.
+- Known limit (Ngoài-3, Cổng Bằng chứng 2026-09-22): chốt lọc người ngoài trong E12 thiếu đối chứng dương.
+- Known limit (Ngoài-4, Cổng Bằng chứng 2026-09-22): dòng gợi ý trên thẻ Tasks luôn tiếng Việt, mang translate=no.
+- Known limit (Ngoài-6, Cổng Bằng chứng 2026-09-22): lời chào tin Slack viết cứng «30 ngày đầu».
+- Known limit (Ngoài-7, Cổng Bằng chứng 2026-09-22): thử lại sau khi Slack đã gửi mà ghi DB lỗi có thể gửi lại tin tới 3 lần.
+- Known limit (Ngoài-8, Cổng Bằng chứng 2026-09-22): số ngày trên thẻ Tasks và tin Slack lệch một ngày với sheet kế hoạch.
