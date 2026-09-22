@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4a0cbe58b6f909be067931132b205a6f5e0cf7f3
+verified_commit: a22b9eb1cfcb3dfdd762dac4cb2d2d0e3a86b471
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -240,3 +240,7 @@ none — không có eval nào mang field runs > 1 ở round này; không eval n�
 
 Round 1: PASS — hợp đồng verified, evidence xanh sạch (S4 vòng 1).
 Round 2: Cổng Bằng chứng trả lại đầu vòng 2 — E5 (so tập daGui với dòng thật) và E12 (đánh dấu xong bằng setStepDone thật) sửa lại để đo đúng hành vi thật thay vì giả lập; toàn bộ eval xanh trở lại, suite/lint/build xanh, verdict PASS.
+
+### Re-pin lần 1 — 2026-09-22, do gộp onehub (#80) và sửa bản giả E27 trước PR lượt 3
+run_id: repin-20260922T132144Z-13202
+sha: a22b9eb1cfcb3dfdd762dac4cb2d2d0e3a86b471 · suites: 4 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E13
