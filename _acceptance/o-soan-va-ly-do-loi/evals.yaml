@@ -106,8 +106,10 @@ evals:
         1 su kien turn.failed co data.code va data.message nguyen van
         2 dau ra (bo meta.id, meta.at) bang dung apps/api/test/fixtures/loi-hoi-thoai-events.json
       Nguoi B goi cung id -> NotFound (khong ro su kien cua nguoi khac).
-      CHIEU DO: doi code trong fixture -> dong 2 do voi thong diep ghim
-      "fixture su kien loi khop dau ra that".
+      CHIEU DO: conversations.events tra data rong (ban sua tai cho, hoan nguyen bang git) ->
+      dong 1 va dong 2 do, dong 2 voi thong diep ghim "fixture su kien loi khop dau ra that".
+      (Doi code trong fixture chi lam dong 1 do: fixture vua gieo vua so, nen dong 2 khong
+      chung duoc fixture — moc cua fixture la E9.)
 
   - id: E6
     criterion: AC-5
