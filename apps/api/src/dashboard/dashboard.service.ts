@@ -348,6 +348,7 @@ export class DashboardService {
 					soNgay,
 					soBuocXong,
 					soBuocTong,
+					targetDays,
 				}) => ({
 					loai,
 					planId,
@@ -356,6 +357,7 @@ export class DashboardService {
 					soNgay: soNgay ?? 0,
 					soBuocXong,
 					soBuocTong,
+					targetDays,
 				}),
 			);
 	}

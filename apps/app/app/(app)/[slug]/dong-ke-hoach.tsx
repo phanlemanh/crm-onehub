@@ -61,7 +61,9 @@ export function DongKeHoach({ dong }: { dong: KeHoachCanDeY }) {
 					label={
 						im
 							? dien(m.imNgay, { n: dong.soNgay })
-							: dien(m.ngayThu, { n: dong.soNgay })
+							: dong.targetDays === undefined
+								? dien(m.ngay, { n: dong.soNgay })
+								: dien(m.ngayThu, { n: dong.soNgay, tong: dong.targetDays })
 					}
 				/>
 			</TableCell>

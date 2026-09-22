@@ -73,6 +73,7 @@ export type ViecNhac = {
 	soNgay?: number;
 	soBuocXong?: number;
 	soBuocTong?: number;
+	targetDays?: number;
 };
 
 function docKeHoach(db: Db, userId: string | undefined) {
@@ -91,6 +92,7 @@ function docKeHoach(db: Db, userId: string | undefined) {
 			id: true,
 			ownerId: true,
 			startedAt: true,
+			targetDays: true,
 			company: { select: { name: true } },
 			watches: { select: { userId: true } },
 			steps: {
@@ -179,6 +181,7 @@ function viecKeHoach(k: KeHoach, buoc: Buoc[], now: Date): ViecNhac[] {
 						soNgay: ngayThu,
 						soBuocXong,
 						soBuocTong: buoc.length,
+						targetDays: k.targetDays,
 					},
 				]
 			: []),

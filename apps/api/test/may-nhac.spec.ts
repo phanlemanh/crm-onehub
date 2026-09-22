@@ -28,6 +28,8 @@ const LUC_NHAC = new Date("2026-10-10T02:00:00Z");
 
 const IM_NGAY = 8;
 
+const SO_NGAY_P1 = 45;
+
 const MA_P1 = "KE_HOACH_P1";
 
 const TEN_P1 = "CONG_TY_P1";
@@ -69,6 +71,7 @@ async function gieoAc8() {
 	const { plan } = await gieoKeHoach({
 		camTrich: O.id,
 		batDau: new Date("2026-09-27T00:00:00+07:00"),
+		soNgay: SO_NGAY_P1,
 		buoc: [
 			{
 				nhan: "Ky hop dong",
@@ -109,10 +112,14 @@ async function keHoachCanDeY(userId: string) {
 
 type MucCanDeY = Awaited<ReturnType<typeof keHoachCanDeY>>[number];
 
-type MucSoSanh = Omit<MucCanDeY, "loai" | "soBuocXong" | "soBuocTong"> & {
+type MucSoSanh = Omit<
+	MucCanDeY,
+	"loai" | "soBuocXong" | "soBuocTong" | "targetDays"
+> & {
 	loai: string;
 	soBuocXong?: number;
 	soBuocTong?: number;
+	targetDays?: number;
 };
 
 type ChieuMuc = Pick<MucSoSanh, "loai" | "planId" | "companyName"> & {

@@ -315,11 +315,22 @@ describe("the-tasks", () => {
 		expect(
 			{
 				nhan: chu.includes(n.mocNgay),
-				ngayThu: chu.includes(dien(n.ngayThu, { n: MOC.soNgay })),
+				ngayThu: chu.includes(
+					dien(n.ngayThu, { n: MOC.soNgay, tong: MOC.targetDays ?? "" }),
+				),
 				buoc: chu.includes(`${MOC.soBuocXong}/${MOC.soBuocTong}`),
 			},
 			"the Tasks co dong Mốc ngày",
 		).toEqual({ nhan: true, ngayThu: true, buoc: true });
+	});
+
+	test("the-tasks: dong Mốc ngày lay so ngay muc tieu cua ke hoach", async () => {
+		if (!MOC?.targetDays) throw new Error("fixture thieu targetDays cua moc");
+		await moTheTasks();
+		expect(
+			dongCua("moc-ngay")?.textContent ?? "",
+			"moc ngay mang targetDays cua ke hoach",
+		).toContain(`ngày ${MOC.soNgay}/${MOC.targetDays}`);
 	});
 
 	test("the-tasks: hai dong moi khong co o tich", async () => {

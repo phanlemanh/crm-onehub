@@ -90,6 +90,7 @@ export const keHoachCanDeYOutput = z.object({
 	soNgay: z.number().int(),
 	soBuocXong: z.number().int().optional(),
 	soBuocTong: z.number().int().optional(),
+	targetDays: z.number().int().optional(),
 });
 
 const recentActivityOutput = z.object({
