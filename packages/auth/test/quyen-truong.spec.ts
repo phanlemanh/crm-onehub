@@ -1,9 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import {
-	canManageFields,
-	WORKSPACE_ROLES,
-	type WorkspaceRole,
-} from "../src";
+import { canManageFields, WORKSPACE_ROLES, type WorkspaceRole } from "../src";
 
 const MONG_DOI: ReadonlyArray<[WorkspaceRole | null, boolean]> = [
 	["owner", true],
