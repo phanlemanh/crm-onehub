@@ -5,7 +5,7 @@ slug: sua-luu-tru-dieu-phoi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-22
 design_doc: docs/superpowers/specs/2026-09-22-sua-luu-tru-dieu-phoi-design.md
@@ -69,3 +69,14 @@ Never: xoá vĩnh viễn thứ đã từng dùng — lịch sử kế hoạch tr
 
 - `canManageOnboarding` là hàm mới trong `@crm/auth` (đường T3), theo khuôn `canManageCurrency`.
 - Luồng đồng bộ từ nền tảng (`onboarding-ingest.service.ts`) ghi ghi danh bằng đường riêng — AC-13 không chạm nó.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-22 (Phan Le Manh), từ mục ngoài hợp đồng của S4:
+
+- Ngoài-1: kiểm quyền quản trị đặt ở router (`yeuCauQuanTri(ctx.user.id)` trước lời gọi service), không ở trong service như khuôn `canManageCurrency`; một lối gọi service khác sau này có thể bỏ sót bước kiểm quyền.
+- Ngoài-2: làm mới truy vấn sau thao tác dùng một hàm cục bộ (`lam-moi.ts`) và các danh sách khoá rải ở chỗ gọi, không đi qua `useCrmCache`; đánh dấu bậc chưa làm mới bảng cột và danh mục.
+- Ngoài-4: kiểu hàng `HangBoPhan`, `HangKhuon`, `HangGhiDanh` viết tay cạnh các `select` của Prisma thay vì suy ra bằng `GetPayload`; thêm trường vào `select` mà quên kiểu thì trường bị bỏ âm thầm.
+- Ngoài-6: phép đo E6 dùng một câu lỗi tự đặt cho bản giả, không phải câu thật của máy chủ; màn hiện sai câu máy chủ trả thì E6 không bắt được.
+- Ngoài-7: ô «hoàn tác bộ phận/khuôn (b)» của E25 khẳng định chỉ một lời gọi mà không có đối chứng rằng cú bấm thứ hai thực sự đã xảy ra.
+- Ngoài-8: ô sai dạng của trường `at` trong E22 kiểm «thông điệp chứa tên trường» bằng `includes("at")`, điều mà mọi lỗi ngày đều thoả.
+
+Mở hợp đồng mới (Ngoài-3, Ngoài-5 — cùng một lỗi): xoá vĩnh viễn một bộ phận chỉ còn trong khuôn đã lưu trữ làm khuôn đó không bao giờ khôi phục được; ô cơ hội `khuon-mat-bo-phan`.
