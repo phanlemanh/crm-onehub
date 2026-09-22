@@ -42,7 +42,7 @@ Sống ở `packages/db/src/onboarding-nhac.ts`, vì cả tác tử (lượt qu�
 suy luận — cùng loại với `imNgay` mà API đã tính cho danh mục.
 
 `viecCanNhac(db, { now, userId? })` → `Map<userId, ViecNhac[]>`, mỗi phần tử:
-`{ loai, planId, companyName, nhan, viec, han?, soNgay? }` với `loai` thuộc
+`{ loai, planId, stepId?, companyName, nhan, goiY, han?, soNgay? }` với `loai` thuộc
 
 | Loại | Điều kiện | Người nhận |
 |---|---|---|
@@ -54,9 +54,9 @@ suy luận — cùng loại với `imNgay` mà API đã tính cho danh mục.
 Số ngày im tính như `imNgay` của danh mục: `updatedAt` mới nhất của bước, không
 có thì `startedAt`. Chỉ thành viên còn trong xưởng mới là người nhận.
 
-`viec` (việc cần làm) theo luật, việc đầu tiên khớp thắng: (1) có bước chưa giao
+`goiY` (gợi ý — `CONTEXT.md` cấm «việc cần làm» cho nghĩa này) theo luật, việc đầu tiên khớp thắng: (1) có bước chưa giao
 → «Giao bước X»; (2) có bước quá hạn → «Bước X quá hạn N ngày — hỏi Z»; (3) còn
-lại → «Bước kế: X, hạn <ngày>». Loại `buoc-*` thì `viec` là chính bước đó.
+lại → «Bước kế: X, hạn <ngày>». Loại `buoc-*` thì `goiY` là chính bước đó.
 
 Hằng `NHAC` trong cùng module, một chỗ duy nhất:
 `{ gio: { gio: 8, phut: 30 }, muiGio: "Asia/Ho_Chi_Minh", sapHanNgay: 3, imSauNgay: 7, moc: [7, 14, 30], tran: 10 }`.
@@ -115,7 +115,7 @@ không đổi cách tính.
 <!-- <<<UX-STATE-TABLE -->
 | Trạng thái | Màn | Hiển thị gì | Người làm gì tiếp |
 |---|---|---|---|
-| ST-slack-du | Tin Slack | lời chào + các nhóm Quá hạn · Sắp hạn · Kế hoạch im · Mốc ngày, mỗi dòng «công ty · việc — mở kế hoạch» | bấm một dòng |
+| ST-slack-du | Tin Slack | lời chào + các nhóm Quá hạn · Sắp hạn · Kế hoạch im · Mốc ngày, mỗi dòng «công ty · gợi ý — mở kế hoạch» | bấm một dòng |
 | ST-slack-tran | Tin Slack | 10 dòng + «và N việc nữa — mở tổng quan» | mở tổng quan |
 | ST-slack-khong-duong | Tin Slack | như ST-slack-du nhưng không có liên kết (thiếu `APP_URL`) | mở CRM tay |
 | ST-tasks-co-im | Thẻ Tasks | dòng «Kế hoạch im 9 ngày · Sunrise — Giao bước Mở tài khoản», màu cảnh báo, không ô tích | bấm mở kế hoạch |
