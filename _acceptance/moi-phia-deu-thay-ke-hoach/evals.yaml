@@ -24,10 +24,12 @@ evals:
           createdById = quan tri Q, meta parse qua onboardingActivityMeta
       CAP HAI CHIEU tren cung fixture: goi transferPreview TRUOC -> {2,3}; ket qua
       transferWork bang dung {2,3}. Goi transferPreview SAU -> {0,0}.
-      DOT BIEN CHUNG MINH: bo dieu kien closedAt null khoi where cua ke hoach ->
-      dong 3 do voi thong diep ghim "P3 da dong phai giu H". Dot bien hai: bo
-      dieu kien completedAt null khoi where cua buoc -> dong 5 do voi thong diep
-      ghim "S4 da xong phai giu H".
+      DOT BIEN CHUNG MINH: bo dieu kien closedAt null khoi dieu kien chuyen chung
+      -> do ngay o khang dinh xem truoc voi thong diep ghim "xem truoc mong {2,3}"
+      (xem truoc va chuyen dung chung mot ham dieu kien, nen dot bien cham ca hai);
+      neu khang dinh do bi bo, dong 3 do voi "P3 da dong phai giu H". Dot bien hai:
+      bo completedAt null -> cung do o "xem truoc mong {2,3}", hoac dong 5 voi
+      "S4 da xong phai giu H".
 
   - id: E2
     criterion: AC-2

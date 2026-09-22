@@ -1,0 +1,7 @@
+{
+	"xemTruoc": { "fromUserId": "NGUOI_DI" },
+	"chuyenGiao": { "fromUserId": "NGUOI_DI", "toUserId": "NGUOI_NHAN" },
+	"tichXong": { "stepId": "BUOC_S2", "done": true },
+	"keHoachCongTy": { "companyId": "CONG_TY_K" },
+	"keHoachCaNhan": { "contactId": "CA_NHAN_C" }
+}

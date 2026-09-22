@@ -4,13 +4,22 @@ import { join } from "node:path";
 import { db } from "@crm/db";
 import { parseOnboardingActivityMeta } from "@crm/validation/onboarding-activity";
 import {
+	transferPreviewInput,
+	transferWorkInput,
+} from "../src/onboarding/onboarding.contracts";
+import { ONBOARDING } from "../src/onboarding/onboarding-config";
+import payload from "./fixtures/moi-phia-payload.json";
+import {
+	batHttp,
 	buocCua,
 	dichVu,
 	donDep,
 	gieoBoPhan,
 	gieoKeHoach,
+	gieoNguoiNgoai,
 	gieoThanhVien,
 	moXuong,
+	noi,
 	phan,
 	vetCua,
 } from "./support/ke-hoach-gieo";
@@ -120,5 +129,250 @@ describe("vet-giao-luc-xong", () => {
 			await doDuongDo(tu, den()),
 			"them mot vet danh dau ho: mau mong 6",
 		).toEqual({ tu_danh_dau: 3, mau: 6, khong_giao: 1 });
+	});
+});
+
+function phanTich<T>(
+	schema: {
+		safeParse: (x: unknown) => { success: boolean; data?: T; error?: unknown };
+	},
+	duLieu: unknown,
+	thuTuc: string,
+): T {
+	const ket = schema.safeParse(duLieu);
+	if (!ket.success || ket.data === undefined) {
+		throw new Error(
+			`${thuTuc}: payload man gui khong qua schema — ${String(ket.error)}`,
+		);
+	}
+	return ket.data;
+}
+
+async function gieoChuyenGiao() {
+	const Q = await gieoThanhVien("Quan Tri", "admin");
+	const [H, T, X] = [
+		await gieoThanhVien("Huong Le"),
+		await gieoThanhVien("Tuan Do"),
+		await gieoThanhVien("Xuan Mai"),
+	];
+	const bp = await gieoBoPhan();
+	const { plan: P1 } = await gieoKeHoach({
+		camTrich: H.id,
+		buoc: [
+			{ nhan: "S1", boPhanId: bp.id, giao: H.id },
+			{ nhan: "S4", boPhanId: bp.id, giao: H.id, xong: true },
+		],
+	});
+	const { plan: P2 } = await gieoKeHoach({
+		camTrich: H.id,
+		buoc: [
+			{ nhan: "S2", boPhanId: bp.id, giao: H.id },
+			{ nhan: "S3", boPhanId: bp.id, giao: H.id },
+			{ nhan: "S6", boPhanId: bp.id, giao: X.id },
+		],
+	});
+	const { plan: P3 } = await gieoKeHoach({
+		camTrich: H.id,
+		dong: true,
+		buoc: [{ nhan: "S5", boPhanId: bp.id, giao: H.id }],
+	});
+	const buoc = async (planId: string, nhan: string) => {
+		const hang = await db.onboardingStep.findFirst({
+			where: { planId, label: nhan },
+		});
+		if (hang === null) throw new Error(`khong co buoc ${nhan}`);
+		return hang;
+	};
+	return {
+		Q,
+		H,
+		T,
+		X,
+		P1,
+		P2,
+		P3,
+		S: {
+			S1: await buoc(P1.id, "S1"),
+			S2: await buoc(P2.id, "S2"),
+			S3: await buoc(P2.id, "S3"),
+			S4: await buoc(P1.id, "S4"),
+			S5: await buoc(P3.id, "S5"),
+			S6: await buoc(P2.id, "S6"),
+		},
+	};
+}
+
+async function chup(planIds: string[]) {
+	const keHoach = await db.onboardingPlan.findMany({
+		where: { id: { in: planIds } },
+		select: { id: true, ownerId: true },
+		orderBy: { id: "asc" },
+	});
+	const buoc = await db.onboardingStep.findMany({
+		where: { planId: { in: planIds } },
+		select: { id: true, assigneeId: true },
+		orderBy: { id: "asc" },
+	});
+	const soVet = await db.activity.count({
+		where: { planId: { in: planIds } },
+	});
+	return { keHoach, buoc, soVet };
+}
+
+describe("chuyen-giao-dung-viec", () => {
+	test("chuyen-giao-dung-viec: doi dung ke hoach dang chay va buoc chua xong, vet moi dong", async () => {
+		const g = await gieoChuyenGiao();
+		const ids = [g.P1.id, g.P2.id, g.P3.id];
+
+		const truoc = await noi().transferPreview({ fromUserId: g.H.id }, g.Q.id);
+		expect(truoc, "xem truoc mong {2,3}").toEqual({ keHoach: 2, buoc: 3 });
+
+		const ketQua = await noi().transferWork(
+			{ fromUserId: g.H.id, toUserId: g.T.id },
+			g.Q.id,
+		);
+		expect(ketQua, "ket qua bang so xem truoc").toEqual(truoc);
+
+		const owner = async (id: string) =>
+			(await db.onboardingPlan.findUniqueOrThrow({ where: { id } })).ownerId;
+		const giao = async (id: string) =>
+			(await db.onboardingStep.findUniqueOrThrow({ where: { id } })).assigneeId;
+
+		expect(await owner(g.P1.id), "P1 mong T").toBe(g.T.id);
+		expect(await owner(g.P2.id), "P2 mong T").toBe(g.T.id);
+		expect(await owner(g.P3.id), "P3 da dong phai giu H").toBe(g.H.id);
+		const tapT = (
+			await db.onboardingStep.findMany({
+				where: { planId: { in: ids }, assigneeId: g.T.id },
+				select: { id: true },
+			})
+		)
+			.map((b) => b.id)
+			.sort();
+		expect(tapT, "tap buoc sang T").toEqual(
+			[g.S.S1.id, g.S.S2.id, g.S.S3.id].sort(),
+		);
+		expect(await giao(g.S.S4.id), "S4 da xong phai giu H").toBe(g.H.id);
+		expect(await giao(g.S.S5.id), "S5 cua ke hoach da dong phai giu H").toBe(
+			g.H.id,
+		);
+		expect(await giao(g.S.S6.id), "S6 cua X giu nguyen").toBe(g.X.id);
+
+		const vet = await db.activity.findMany({ where: { planId: { in: ids } } });
+		const meta = vet.map((v) => ({
+			nguoiTao: v.createdById,
+			meta: parseOnboardingActivityMeta(v.meta),
+		}));
+		expect(
+			meta.filter((v) => v.meta.kind === "keHoach.doiCamTrich").length,
+			"so vet doi cam trich",
+		).toBe(2);
+		expect(
+			meta.filter((v) => v.meta.kind === "buoc.giao").length,
+			"so vet buoc.giao",
+		).toBe(3);
+		expect(
+			meta.every((v) => v.nguoiTao === g.Q.id),
+			"moi vet do quan tri tao",
+		).toBe(true);
+
+		expect(
+			await noi().transferPreview({ fromUserId: g.H.id }, g.Q.id),
+			"xem truoc sau khi chuyen",
+		).toEqual({ keHoach: 0, buoc: 0 });
+	});
+});
+
+describe("chuyen-giao-chan", () => {
+	test("chuyen-giao-chan: bon ca bi chan khong doi gi, ca quan tri dung thi doi", async () => {
+		const g = await gieoChuyenGiao();
+		const ids = [g.P1.id, g.P2.id, g.P3.id];
+		const M = await gieoThanhVien("Thanh Vien Thuong");
+		const N = await gieoThanhVien("Khong Co Viec");
+		const ngoai = await gieoNguoiNgoai();
+
+		const truoc = await chup(ids);
+
+		const loi403 = await batHttp(
+			() => noi().transferWork({ fromUserId: g.H.id, toUserId: g.T.id }, M.id),
+			"403 cho thanh vien M",
+		);
+		expect(loi403.getStatus(), "403 cho thanh vien M").toBe(403);
+		expect(await chup(ids)).toEqual(truoc);
+
+		const loiTrung = await batHttp(
+			() =>
+				noi().transferWork({ fromUserId: g.H.id, toUserId: g.H.id }, g.Q.id),
+			"chuyen cho chinh minh",
+		);
+		expect(loiTrung.getStatus()).toBe(400);
+		expect(loiTrung.message).toBe(ONBOARDING.thongDiep.chuyenChoChinhMinh);
+		expect(await chup(ids)).toEqual(truoc);
+
+		const loiNgoai = await batHttp(
+			() =>
+				noi().transferWork({ fromUserId: g.H.id, toUserId: ngoai.id }, g.Q.id),
+			"nguoi nhan khong la thanh vien",
+		);
+		expect(loiNgoai.getStatus()).toBe(400);
+		expect(loiNgoai.message).toBe(
+			ONBOARDING.thongDiep.khongPhaiThanhVien(ngoai.id),
+		);
+		expect(await chup(ids)).toEqual(truoc);
+
+		expect(
+			await noi().transferWork({ fromUserId: N.id, toUserId: g.T.id }, g.Q.id),
+			"N khong co viec",
+		).toEqual({ keHoach: 0, buoc: 0 });
+		expect(await chup(ids)).toEqual(truoc);
+
+		expect(
+			await noi().transferWork(
+				{ fromUserId: g.H.id, toUserId: g.T.id },
+				g.Q.id,
+			),
+			"doi chung duong",
+		).toEqual({ keHoach: 2, buoc: 3 });
+		expect(await chup(ids)).not.toEqual(truoc);
+	});
+});
+
+describe("chuyen-giao-payload", () => {
+	test("chuyen-giao-payload: payload man gui chay that tren may chu", async () => {
+		const g = await gieoChuyenGiao();
+		const thay = (gia: string) =>
+			gia === "NGUOI_DI" ? g.H.id : gia === "NGUOI_NHAN" ? g.T.id : gia;
+
+		const xemTruoc = phanTich(
+			transferPreviewInput,
+			{ fromUserId: thay(payload.xemTruoc.fromUserId) },
+			"transferPreview",
+		);
+		expect(
+			await noi().transferPreview(xemTruoc, g.Q.id),
+			"transferPreview: id man gui la id that",
+		).toEqual({ keHoach: 2, buoc: 3 });
+
+		const chuyen = phanTich(
+			transferWorkInput,
+			{
+				fromUserId: thay(payload.chuyenGiao.fromUserId),
+				toUserId: thay(payload.chuyenGiao.toUserId),
+			},
+			"transferWork",
+		);
+		await noi().transferWork(chuyen, g.Q.id);
+		expect(
+			(await db.onboardingPlan.findUniqueOrThrow({ where: { id: g.P1.id } }))
+				.ownerId,
+		).toBe(g.T.id);
+
+		expect(
+			transferWorkInput.safeParse({
+				memberId: "m-x",
+				toUserId: g.T.id,
+			}).success,
+			"transferWork: schema tu choi khoa sai",
+		).toBe(false);
 	});
 });

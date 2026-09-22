@@ -3,6 +3,7 @@ import { db } from "@crm/db";
 import { workspaceSlug } from "@crm/db/workspace";
 import type { HttpException } from "@nestjs/common";
 import { OnboardingService } from "../../src/onboarding/onboarding.service";
+import { OnboardingNoi } from "../../src/onboarding/onboarding-noi";
 
 export const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -53,6 +54,10 @@ export async function donDep(): Promise<void> {
 
 export function dichVu(): OnboardingService {
 	return new OnboardingService(db);
+}
+
+export function noi(): OnboardingNoi {
+	return new OnboardingNoi(db);
 }
 
 export async function gieoNguoiNgoai(ten?: string) {

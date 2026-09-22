@@ -25,6 +25,7 @@ export const ONBOARDING = {
 		khongCoBuoc: (id: string) => `Không có bước nào mang mã ${id}.`,
 		khongCoKeHoach: (id: string) => `Không có kế hoạch nào mang mã ${id}.`,
 		canQuyenQuanTri: "Cần quyền quản trị để đổi cấu hình điều phối.",
+		chuyenChoChinhMinh: "Người nhận phải khác người đang có việc.",
 		daTrongPheu: "Người này đã có trong phễu.",
 		chuaLuuTru: "Chỉ xoá vĩnh viễn được thứ đã lưu trữ.",
 		daDung:
