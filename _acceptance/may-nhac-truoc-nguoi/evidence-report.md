@@ -3,11 +3,12 @@ schema_version: 2
 feature_slug: may-nhac-truoc-nguoi
 verdict: PASS
 failed_evals: []
+reason: 
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9eda32f754e003b14f75e32e0d841520329d8bcb
-human_signoff:
+verified_commit: 4a0cbe58b6f909be067931132b205a6f5e0cf7f3
+human_signoff: 
 ---
 
 # Evidence Report: may-nhac-truoc-nguoi
@@ -33,193 +34,193 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: mucmevaqer11
+  run_id: muco1v4r0hqw
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.mn3_dung_nguoi
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   output: |
      6 expect() calls
-    Ran 6 tests across 1 file. [146.00ms]
-    test-run: dropped crm_mucmevaqer11_test
+    Ran 6 tests across 1 file. [340.00ms]
+    test-run: dropped crm_muco1v4r0hqw_test
 
 - eval: E2
-  run_id: mucmeu6kwr6e
+  run_id: minted-may-nhac-truoc-nguoi-E2-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.mn3_bien_nguong
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   output: |
      13 expect() calls
-    Ran 6 tests across 1 file. [209.00ms]
-    test-run: dropped crm_mucmeu6kwr6e_test
+    Ran 6 tests across 1 file. [318.00ms]
+    test-run: dropped crm_muco1vqfd28u_test
 
 - eval: E3
-  run_id: mucmeuq7thj1
+  run_id: muco1ul656tu
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.mn3_nua_dem
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     4 expect() calls
-    Ran 2 tests across 1 file. [123.00ms]
-    test-run: dropped crm_mucmeuq7thj1_test
+    Ran 2 tests across 1 file. [319.00ms]
+    test-run: dropped crm_muco1ul656tu_test
 
 - eval: E4
-  run_id: mucmete9k273
+  run_id: muco1v9k404k
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.mn3_quet_mot_lan
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   output: |
      6 expect() calls
-    Ran 2 tests across 1 file. [198.00ms]
-    test-run: dropped crm_mucmete9k273_test
+    Ran 2 tests across 1 file. [531.00ms]
+    test-run: dropped crm_muco1v9k404k_test
 
 - eval: E5
-  run_id: mucmetzrliz3
+  run_id: muco1uovlf8z
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.mn3_gui_slack
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     7 expect() calls
-    Ran 7 tests across 1 file. [293.00ms]
-    test-run: dropped crm_mucmetzrliz3_test
+       7 expect() calls
+      Ran 7 tests across 1 file. [713.00ms]
+      test-run: dropped crm_muco1uovlf8z_test
 
 - eval: E6
-  run_id: minted-may-nhac-truoc-nguoi-E6-r1
+  run_id: muco1w39t1fs
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.mn3_khong_kenh
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   output: |
      4 expect() calls
-    Ran 4 tests across 1 file. [261.00ms]
-    test-run: dropped crm_mucmeu149zth_test
+    Ran 4 tests across 1 file. [411.00ms]
+    test-run: dropped crm_muco1w39t1fs_test
 
 - eval: E7
-  run_id: mucmetdn6qxp
+  run_id: muco1vb3llgk
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.mn3_theo_doi
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   output: |
      5 expect() calls
-    Ran 2 tests across 1 file. [357.00ms]
-    test-run: dropped crm_mucmetdn6qxp_test
+    Ran 2 tests across 1 file. [539.00ms]
+    test-run: dropped crm_muco1vb3llgk_test
 
 - eval: E8
-  run_id: mucmeszzm66h
+  run_id: muco1ujx1fkx
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.mn3_tong_quan
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     0 fail
      3 expect() calls
-    Ran 3 tests across 1 file. [392.00ms]
+    Ran 3 tests across 1 file. [405.00ms]
+    test-run: dropped crm_muco1ujx1fkx_test
 
 - eval: E9
-  run_id: minted-may-nhac-truoc-nguoi-E9-r1
+  run_id: minted-may-nhac-truoc-nguoi-E9-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.mn3_the_tasks
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   output: |
      0 fail
      6 expect() calls
-    Ran 6 tests across 1 file. [569.00ms]
+    Ran 6 tests across 1 file. [592.00ms]
 
 - eval: E10
-  run_id: mucmesl90jk1
+  run_id: muco1xa22nqv
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.mn3_payload
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   output: |
      3 expect() calls
-    Ran 2 tests across 1 file. [346.00ms]
-    test-run: dropped crm_mucmesl90jk1_test
+    Ran 2 tests across 1 file. [304.00ms]
+    test-run: dropped crm_muco1xa22nqv_test
 
 - eval: E11
-  run_id: minted-may-nhac-truoc-nguoi-E11-r1
+  run_id: minted-may-nhac-truoc-nguoi-E11-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.mn3_nut_theo_doi
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   output: |
-    0 fail
-    4 expect() calls
-    Ran 4 tests across 1 file. [582.00ms]
+     0 fail
+     4 expect() calls
+    Ran 4 tests across 1 file. [684.00ms]
 
 - eval: E12
-  run_id: mucmf6ewhqgw
+  run_id: muco28gaa1wa
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.mn3_duong_do
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   output: |
      3 expect() calls
-    Ran 3 tests across 1 file. [223.00ms]
-    test-run: dropped crm_mucmf6ewhqgw_test
+    Ran 3 tests across 1 file. [396.00ms]
+    test-run: dropped crm_muco28gaa1wa_test
 
 - eval: E13
-  run_id: minted-may-nhac-truoc-nguoi-E13-r1
+  run_id: minted-may-nhac-truoc-nguoi-E13-r2
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.design.ui_check
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   screenshot: evidence/E13-tong-quan-1440.png
   observed: |
-    E13-tong-quan-1440.png (đọc trực tiếp bằng Read, ảnh 1440x900): thẻ "Overdue tasks" (locale en của "Thẻ Tasks") có 4 dòng cùng kiểu bảng: (1) "E13 Buoc qua han cua toi" — cột hạn "Sep 19, 2026" với ô vuông ĐỎ; (2) "Dao tao nen tang" việc khác, ô xám; (3) "Quiet plan · E13 Cong Ty Cam Trich" (= "Kế hoạch im" locale vi, message keHoachIm) — cột hạn "quiet 8 days" với ô vuông ĐỎ giống hệt màu ô đỏ của dòng (1); (4) "Day checkpoint · E13 Cong Ty Cam Trich" (= "Mốc ngày", message mocNgay) — "1/3 steps done · Plan", cột hạn "day 14/30" ô XÁM (neutral). Zoom pixel xác nhận ô đỏ dòng (1) và dòng (3) cùng sắc đỏ. => khớp Expected #1 (dòng "Kế hoạch im"/"Mốc ngày" cùng kiểu dòng bước, cột hạn dòng im cùng chỉ báo đỏ với bước quá hạn).
-    E13-theo-doi-1440.png: sheet kế hoạch "E13 Cong Ty Theo Doi" (chủ = E13 Nguoi Cam Trich B) hiện nút "👁 Watching · 1" (locale en của "Đang theo dõi") nằm NGAY CẠNH nút "…" (menu) và nút đóng "✕" ở góc phải header — đúng vị trí "cạnh menu", kèm số người theo dõi = 1. => khớp Expected #2.
-    E13-tong-quan-375.png và E13-theo-doi-375.png (375x1400 / 375x1000): cả hai ảnh không có nội dung bị cắt/tràn theo chiều ngang bằng mắt; đo bổ sung bằng puppeteer (document.documentElement.scrollWidth vs clientWidth) cho cả hai URL ở viewport 375 đều ra scrollWidth=clientWidth=375 — không tràn ngang. => khớp Expected #3.
-    Không có dòng Expected nào vắng mặt trên ảnh.
-  network_observed: clean
+    E13-tong-quan-1440.png (1440x1450): the tasks card ("Overdue tasks") shows two "Quiet plan · <company>" rows, due-column carries a red square indicator + "quiet 8 days", same row/column shape as the overdue step row "E13 Buoc qua han cua toi" (also red square + date) — same red tone confirmed side by side. A "Day checkpoint · <company>" row shows "1/3 steps done" / "day 14/30" with a neutral (non-red) indicator, as intended for milestone (not quiet). No horizontal cut visible.
+    E13-theo-doi-1440.png (1440x1000): plan sheet "Viet Phat Group" header shows "Watching · 1" button immediately left of the "..." menu button and the close (X) button, top-right of the header row. No horizontal cut.
+    E13-tong-quan-375.png (375x2250, width matches viewport exactly): same two "Quiet plan" rows and one "Day checkpoint" row visible, company names ellipsis-truncated ("E13 Cong Ty Cam Tri…", "E13 Cong Ty Ca…") — genuine CSS truncation, not raw edge clipping; page content stays within the 375px frame throughout, no horizontal scrollbar/cut.
+    E13-theo-doi-375.png (375x1400, width matches viewport exactly): sheet header collapses the follow button to an eye icon + "1" (matches the documented design decision for <sm breakpoints), sitting next to the "..." menu and close button, fully inside the 375px frame — no horizontal cut.
+  network_observed: n-a (driver)
 
 - eval: E14
-  run_id: design-gate-21c58c4483
+  run_id: design-gate-6691dd6cd6
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.mn3_san_thiet_ke
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   output: |
       "hits": [],
       "findings": []
     }
 
 - eval: E15
-  run_id: mucmf5qm3m4v
+  run_id: muco1v0j39oi
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.mn3_payload_theo_doi
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
   output: |
-     2 expect() calls
-    Ran 1 test across 1 file. [244.00ms]
-    test-run: dropped crm_mucmf5qm3m4v_test
+    2 expect() calls
+    Ran 1 test across 1 file. [339.00ms]
+    test-run: dropped crm_muco1v0j39oi_test
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: mucmes6928r3
+  run_id: muco1tspseu4
   exit_code: 0
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-may-nhac-truoc-nguoi-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-may-nhac-truoc-nguoi-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
 
 - cmd: bun run lint:slop
-  run_id: minted-may-nhac-truoc-nguoi-SUITE-bun_run_lint_slop-r1
+  run_id: minted-may-nhac-truoc-nguoi-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
 
 - cmd: bunx turbo run build --force
-  run_id: minted-may-nhac-truoc-nguoi-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-may-nhac-truoc-nguoi-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-22T09:30:00Z
+  verified_at: 2026-09-22T09:00:00+07:00
 
 ## Known limits
 
@@ -227,12 +228,15 @@ human_signoff:
 
 ## Analyst
 
-none — mọi eval feature đều red trên baseline (có phân biệt).
+carried tu round 1 — baseline khong do lai round nay
+
+Không có eval non-discriminating (danh sách rỗng, kế thừa nguyên trạng từ round 1; baseline không đo lại ở round này nên không có phép so sánh mới).
 
 ## Variance
 
-none — every multi-run eval is uniform.
+none — không có eval nào mang field runs > 1 ở round này; không eval nào variance hay flaky.
 
 ## Iterations
 
-Round 1: toàn bộ 15 eval (E1–E15) và 4 lệnh suite hồi quy (test, lint, lint:slop, build) PASS ngay từ lượt đầu — không có vòng thất bại nào, không có eval nào quay lại implementation.
+Round 1: PASS — hợp đồng verified, evidence xanh sạch (S4 vòng 1).
+Round 2: Cổng Bằng chứng trả lại đầu vòng 2 — E5 (so tập daGui với dòng thật) và E12 (đánh dấu xong bằng setStepDone thật) sửa lại để đo đúng hành vi thật thay vì giả lập; toàn bộ eval xanh trở lại, suite/lint/build xanh, verdict PASS.
