@@ -40,6 +40,10 @@ export function canManageOnboarding(role: WorkspaceRole | null): boolean {
 	return isWorkspaceAdmin(role);
 }
 
+export function canManageFields(role: WorkspaceRole | null): boolean {
+	return isWorkspaceAdmin(role);
+}
+
 export async function ensureWorkspaceMembership(
 	userId: string,
 	email = "",
