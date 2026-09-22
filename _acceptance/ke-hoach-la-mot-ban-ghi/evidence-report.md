@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: e9fe5f82eb97f47d0e4f56c75378a4ed01cc4d18
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-22 — ký Cổng Bằng chứng trên verdict PASS của vòng chấm 1 (20/20 phép đo và 4 lệnh suite mã thoát 0), với TÁM giới hạn đã khai và một mục mở hợp đồng mới (Ngoài-5, kế hoạch trống không thêm được bước đầu). Chín mục ngoài hợp đồng đã được định đoạt từng mục ở lượt ký này; phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
 # Evidence Report: ke-hoach-la-mot-ban-ghi
@@ -287,6 +287,16 @@ human_signoff:
   verified_at: 2026-09-22T08:00:00Z
 
 ## Known limits
+
+- Ngoài-1: thêm bước với bộ phận không có thật hoặc đã lưu trữ trả lỗi 500 thô.
+- Ngoài-2: trang kế hoạch cũ không còn đường vào vẫn nằm trong mã, ba bài dom vòng một còn đo nó.
+- Ngoài-3: meta PLAN_CHANGE không parse ở biên đọc của API; vết hỏng chỉ hiện câu dự phòng.
+- Ngoài-4: kế hoạch quá 100 bước không sắp lại được.
+- Ngoài-6: Lên / Xuống ở ranh hai bộ phận có thể không thấy đổi gì trên màn.
+- Ngoài-7: E16 không đo quan hệ loại vết → câu.
+- Ngoài-8: nhánh âm của E4 là khẳng định luôn đúng.
+- Ngoài-9: đối chứng âm của E11 không bấm ra ngoài sheet.
+- Ngoài-5 không ghi ở đây: mở hợp đồng mới (kế hoạch trống không thêm được bước đầu).
 
 ## Ngoài hợp đồng
 

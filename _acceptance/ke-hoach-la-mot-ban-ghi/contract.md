@@ -5,7 +5,7 @@ slug: ke-hoach-la-mot-ban-ghi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-22-ke-hoach-la-mot-ban-ghi-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-22T05:19:11Z
@@ -81,3 +81,12 @@ bản đầy đủ ở `_acceptance/ke-hoach-la-mot-ban-ghi/morphological-scan.m
 - Tiêu chí AC-15 là `ui-check`. Như Known limit đã ký ở vòng một, làn máy gom eval theo `test`/`script` nên bỏ qua `ui-check`; vòng này GIỮ nó và nêu căng thẳng lên thẻ cho người ký quyết, không tự đổi nhà.
 - Known limits của vòng một chạm tới trong lượt này, tính là ĐÃ TRẢ chỉ khi có phép đo: Ngoài-5 (làm mới tại chỗ gọi thay vì qua lối chung) — đo bởi E19 (spy `useCrmCache().plan`). Các khoản khác thiết kế có đổi nhưng KHÔNG có phép đo nên KHÔNG tính là đã trả: Ngoài-9 (dải số giờ đọc từ `planById`), Ngoài-10 (nút mới dùng được bằng bàn phím), Ngoài-14 (nút gỡ khoá khi đang gửi), Ngoài-15 (`RecordSheetFrame` tách lỗi khỏi rỗng).
 - `ActivityStampService.targetsOf` không cần phủ `planId`: vết kế hoạch chỉ mang `planId` hoặc thêm `companyId`, không bao giờ mang `contactId` hay `dealId`, nên khi xoá công ty không bản ghi còn sống nào bị một vết kế hoạch đóng dấu `lastActivityAt` (gap-probe P2, 2026-09-22).
+- Known limit (Ngoài-1, Cổng Bằng chứng 2026-09-22): `addStep` không kiểm `departmentId`; bộ phận không có thật hoặc đã lưu trữ trả lỗi 500 thô thay vì thông báo đọc được.
+- Known limit (Ngoài-2): trang kế hoạch cũ `ho-so-ke-hoach.tsx` / `dong-mo-ke-hoach.tsx` không còn đường vào, nhưng ba bài dom của vòng một vẫn đo nó thay vì `PlanSheet` / `PlanBrokers`.
+- Known limit (Ngoài-3): meta `PLAN_CHANGE` không được parse ở biên đọc của API; vết hỏng hình dạng chỉ hiện câu dự phòng «không đọc được», không có lỗi hay nhật ký.
+- Known limit (Ngoài-4): sắp lại bước chặn ở 100 bước trong khi thêm bước không có trần; kế hoạch quá 100 bước không sắp lại được.
+- Known limit (Ngoài-6): Lên / Xuống đổi chỗ với bước kề trong toàn kế hoạch, nên ở ranh hai bộ phận có thể không thấy đổi gì trên màn.
+- Known limit (Ngoài-7): E16 chỉ đo chuỗi có mặt, không đo quan hệ loại vết → câu; tráo câu giữa hai loại vết lọt được.
+- Known limit (Ngoài-8): nhánh âm của E4 (gỡ bước của kế hoạch khác → 404) là một khẳng định âm luôn đúng.
+- Known limit (Ngoài-9): đối chứng âm của E11 kiểm trạng thái khởi tạo, không bấm ra ngoài sheet.
+- Mở hợp đồng mới (Ngoài-5): kế hoạch không còn bước nào không thêm được bước đầu tiên từ màn, và không thêm được bước dưới bộ phận chưa có bước.
