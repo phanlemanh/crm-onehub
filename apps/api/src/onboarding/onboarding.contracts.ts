@@ -102,6 +102,9 @@ export const stepOutput = z.object({
 	dueAt: z.date(),
 	completedAt: z.date().nullable(),
 	position: z.number(),
+	assignee: z
+		.object({ id: z.string(), name: z.string(), image: z.string().nullable() })
+		.nullable(),
 });
 
 export const planOutput = z.object({
@@ -125,6 +128,48 @@ export const stepListOutput = z.object({
 	rows: z.array(stepOutput),
 	total: z.number(),
 });
+
+const maBuoc = z.string().trim().min(1).max(120);
+
+export const stepAssignInput = z.object({
+	stepId: maBuoc,
+	assigneeId: maBuoc.nullable(),
+});
+
+export const stepDoneInput = z.object({ stepId: maBuoc, done: z.boolean() });
+
+export const stepRescheduleInput = z.object({
+	stepId: maBuoc,
+	dueAt: ngayLich,
+});
+
+export const stepAddInput = z.object({
+	planId: maBuoc,
+	label: z.string().trim().min(1).max(200),
+	departmentId: maBuoc,
+	dueAt: ngayLich,
+	assigneeId: maBuoc.nullable().optional(),
+});
+
+export const stepIdInput = z.object({ stepId: maBuoc });
+
+export const stepReorderInput = z.object({
+	planId: maBuoc,
+	stepIds: z.array(maBuoc).min(1).max(100),
+});
+
+export const planOwnerInput = z.object({ planId: maBuoc, ownerId: maBuoc });
+
+export const stepRemovedOutput = z.object({ id: z.string() });
+
+export type StepAssignInput = z.infer<typeof stepAssignInput>;
+export type StepDoneInput = z.infer<typeof stepDoneInput>;
+export type StepRescheduleInput = z.infer<typeof stepRescheduleInput>;
+export type StepAddInput = z.infer<typeof stepAddInput>;
+export type StepIdInput = z.infer<typeof stepIdInput>;
+export type StepReorderInput = z.infer<typeof stepReorderInput>;
+export type PlanOwnerInput = z.infer<typeof planOwnerInput>;
+export type StepRemovedOutput = z.infer<typeof stepRemovedOutput>;
 
 export type TemplateStepInput = z.infer<typeof templateStepInput>;
 export type TemplateCreateInput = z.infer<typeof templateCreateInput>;

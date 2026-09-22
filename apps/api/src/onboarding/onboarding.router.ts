@@ -36,8 +36,17 @@ import {
 	planListInput,
 	planListOutput,
 	planOutput,
+	planOwnerInput,
+	stepAddInput,
+	stepAssignInput,
+	stepDoneInput,
+	stepIdInput,
 	stepListInput,
 	stepListOutput,
+	stepOutput,
+	stepRemovedOutput,
+	stepReorderInput,
+	stepRescheduleInput,
 	templateCreateInput,
 	templateIdInput,
 	templateListOutput,
@@ -259,8 +268,11 @@ export class OnboardingRouter {
 		output: planOutput,
 		meta: restMeta("POST", "/onboarding/plans/{id}/close", TAG),
 	})
-	closePlan(@Input() input: z.infer<typeof planIdInput>) {
-		return this.onboarding.closePlan(input);
+	closePlan(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof planIdInput>,
+	) {
+		return this.onboarding.closePlan(input, ctx.user.id);
 	}
 
 	@Mutation({
@@ -268,8 +280,92 @@ export class OnboardingRouter {
 		output: planOutput,
 		meta: restMeta("POST", "/onboarding/plans/{id}/reopen", TAG),
 	})
-	reopenPlan(@Input() input: z.infer<typeof planIdInput>) {
-		return this.onboarding.reopenPlan(input);
+	reopenPlan(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof planIdInput>,
+	) {
+		return this.onboarding.reopenPlan(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: stepAssignInput,
+		output: stepOutput,
+		meta: restMeta("PATCH", "/onboarding/steps/{stepId}/assignee", TAG),
+	})
+	assignStep(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof stepAssignInput>,
+	) {
+		return this.onboarding.assignStep(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: stepDoneInput,
+		output: stepOutput,
+		meta: restMeta("PATCH", "/onboarding/steps/{stepId}/done", TAG),
+	})
+	setStepDone(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof stepDoneInput>,
+	) {
+		return this.onboarding.setStepDone(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: stepRescheduleInput,
+		output: stepOutput,
+		meta: restMeta("PATCH", "/onboarding/steps/{stepId}/due", TAG),
+	})
+	rescheduleStep(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof stepRescheduleInput>,
+	) {
+		return this.onboarding.rescheduleStep(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: stepAddInput,
+		output: stepOutput,
+		meta: restMeta("POST", "/onboarding/plans/{planId}/steps", TAG),
+	})
+	addStep(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof stepAddInput>,
+	) {
+		return this.onboarding.addStep(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: stepIdInput,
+		output: stepRemovedOutput,
+		meta: restMeta("DELETE", "/onboarding/steps/{stepId}", TAG),
+	})
+	removeStep(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof stepIdInput>,
+	) {
+		return this.onboarding.removeStep(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: stepReorderInput,
+		output: stepListOutput,
+		meta: restMeta("PUT", "/onboarding/plans/{planId}/steps/order", TAG),
+	})
+	reorderSteps(@Input() input: z.infer<typeof stepReorderInput>) {
+		return this.onboarding.reorderSteps(input);
+	}
+
+	@Mutation({
+		input: planOwnerInput,
+		output: planOutput,
+		meta: restMeta("PATCH", "/onboarding/plans/{planId}/owner", TAG),
+	})
+	setPlanOwner(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof planOwnerInput>,
+	) {
+		return this.onboarding.setPlanOwner(input, ctx.user.id);
 	}
 
 	@Query({

@@ -464,7 +464,7 @@ describe("danh muc va vong doi", () => {
 			soBuocXong: 1,
 		});
 
-		await service.closePlan({ id: plan.id });
+		await service.closePlan({ id: plan.id }, plan.ownerId);
 
 		const doc = await db.onboardingPlan.findUniqueOrThrow({
 			where: { id: plan.id },

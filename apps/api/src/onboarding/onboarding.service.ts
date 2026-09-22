@@ -35,8 +35,17 @@ import type {
 	PlanListInput,
 	PlanListOutput,
 	PlanOutput,
+	PlanOwnerInput,
+	StepAddInput,
+	StepAssignInput,
+	StepDoneInput,
+	StepIdInput,
 	StepListInput,
 	StepListOutput,
+	StepOutput,
+	StepRemovedOutput,
+	StepReorderInput,
+	StepRescheduleInput,
 	TemplateCreateInput,
 	TemplateIdInput,
 	TemplateOutput,
@@ -51,6 +60,7 @@ import {
 	hangCuaBangCot,
 	manDanhMucTuHang,
 } from "./onboarding-danh-muc";
+import { buocRa, CHON_BUOC, keHoachRa, OnboardingGhi } from "./onboarding-ghi";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -145,29 +155,53 @@ function ghiDanhRa(row: HangGhiDanh): EnrollmentOutput {
 	};
 }
 
-function keHoachRa(plan: {
-	id: string;
-	companyId: string;
-	templateId: string | null;
-	startedAt: Date;
-	targetDays: number;
-	closedAt: Date | null;
-	ownerId: string;
-}): PlanOutput {
-	return {
-		id: plan.id,
-		companyId: plan.companyId,
-		templateId: plan.templateId,
-		startedAt: plan.startedAt,
-		targetDays: plan.targetDays,
-		closedAt: plan.closedAt,
-		ownerId: plan.ownerId,
-	};
-}
-
 @Injectable()
 export class OnboardingService {
-	constructor(@InjectDatabase() private readonly db: Db) {}
+	private readonly ghi: OnboardingGhi;
+
+	constructor(@InjectDatabase() private readonly db: Db) {
+		this.ghi = new OnboardingGhi(db);
+	}
+
+	assignStep(
+		input: StepAssignInput,
+		actingUserId: string,
+	): Promise<StepOutput> {
+		return this.ghi.assignStep(input, actingUserId);
+	}
+
+	setStepDone(input: StepDoneInput, actingUserId: string): Promise<StepOutput> {
+		return this.ghi.setStepDone(input, actingUserId);
+	}
+
+	rescheduleStep(
+		input: StepRescheduleInput,
+		actingUserId: string,
+	): Promise<StepOutput> {
+		return this.ghi.rescheduleStep(input, actingUserId);
+	}
+
+	addStep(input: StepAddInput, actingUserId: string): Promise<StepOutput> {
+		return this.ghi.addStep(input, actingUserId);
+	}
+
+	removeStep(
+		input: StepIdInput,
+		actingUserId: string,
+	): Promise<StepRemovedOutput> {
+		return this.ghi.removeStep(input, actingUserId);
+	}
+
+	reorderSteps(input: StepReorderInput): Promise<StepListOutput> {
+		return this.ghi.reorderSteps(input);
+	}
+
+	setPlanOwner(
+		input: PlanOwnerInput,
+		actingUserId: string,
+	): Promise<PlanOutput> {
+		return this.ghi.setPlanOwner(input, actingUserId);
+	}
 
 	async access(userId: string): Promise<AccessOutput> {
 		return { canManage: canManageOnboarding(await workspaceRoleOf(userId)) };
@@ -435,27 +469,12 @@ export class OnboardingService {
 			this.db.onboardingStep.findMany({
 				where,
 				orderBy: { position: "asc" },
-				select: {
-					id: true,
-					planId: true,
-					label: true,
-					departmentId: true,
-					department: { select: { name: true } },
-					assigneeId: true,
-					dueAt: true,
-					completedAt: true,
-					position: true,
-				},
+				select: CHON_BUOC,
 			}),
 			this.db.onboardingStep.count({ where }),
 		]);
 
-		const rows = hang.map(({ department, ...buoc }) => ({
-			...buoc,
-			departmentName: department.name,
-		}));
-
-		return { rows, total };
+		return { rows: hang.map(buocRa), total };
 	}
 
 	async manDanhMuc(input: PlanListInput): Promise<DanhMucOutput> {
@@ -536,12 +555,12 @@ export class OnboardingService {
 		return { ...keHoachRa(plan), companyName: plan.company.name };
 	}
 
-	async closePlan(input: PlanIdInput): Promise<PlanOutput> {
-		return this.datDong(input.id, new Date());
+	closePlan(input: PlanIdInput, actingUserId: string): Promise<PlanOutput> {
+		return this.ghi.datDong(input.id, true, actingUserId);
 	}
 
-	async reopenPlan(input: PlanIdInput): Promise<PlanOutput> {
-		return this.datDong(input.id, null);
+	reopenPlan(input: PlanIdInput, actingUserId: string): Promise<PlanOutput> {
+		return this.ghi.datDong(input.id, false, actingUserId);
 	}
 
 	async listEnrollments(input: PlanIdInput): Promise<EnrollmentOutput[]> {
@@ -677,24 +696,6 @@ export class OnboardingService {
 		if (!canManageOnboarding(await workspaceRoleOf(userId))) {
 			throw new ForbiddenException(ONBOARDING.thongDiep.canQuyenQuanTri);
 		}
-	}
-
-	private async datDong(
-		id: string,
-		closedAt: Date | null,
-	): Promise<PlanOutput> {
-		const plan = await this.db.onboardingPlan.findUnique({ where: { id } });
-
-		if (plan === null) {
-			throw new NotFoundException(`Không có kế hoạch nào mang mã ${id}.`);
-		}
-
-		return keHoachRa(
-			await this.db.onboardingPlan.update({
-				where: { id },
-				data: { closedAt },
-			}),
-		);
 	}
 
 	private async khuonDungBoPhan(id: string): Promise<string[]> {

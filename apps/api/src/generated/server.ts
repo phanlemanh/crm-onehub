@@ -27,7 +27,7 @@ import { enrichmentQueueInput } from "@crm/validation/enrichment-queue";
 import { fieldAccessOutput, fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
-import { accessOutput, archivedInput, departmentListOutput, departmentCreateInput, departmentOutput, departmentUpdateInput, departmentIdInput, deletedOutput, departmentReorderInput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, planListInput, planListOutput, planIdInput, planDetailOutput, planCreateFromTemplateInput, planOutput, stepListInput, stepListOutput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput, bangCotInput, bangCotOutput } from "../onboarding/onboarding.contracts";
+import { accessOutput, archivedInput, departmentListOutput, departmentCreateInput, departmentOutput, departmentUpdateInput, departmentIdInput, deletedOutput, departmentReorderInput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, planListInput, planListOutput, planIdInput, planDetailOutput, planCreateFromTemplateInput, planOutput, stepAssignInput, stepOutput, stepDoneInput, stepRescheduleInput, stepAddInput, stepIdInput, stepRemovedOutput, stepReorderInput, stepListOutput, planOwnerInput, stepListInput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput, bangCotInput, bangCotOutput } from "../onboarding/onboarding.contracts";
 import { savedViewListInput, savedViewListOutput, savedViewCreateInput, savedViewOutput, savedViewUpdateArgs, savedViewIdInput, savedViewDeleteOutput } from "../saved-views/saved-views.contracts";
 import { agentModelOutput, modelCatalogOutput, setAgentModelInput, researchKeyOutput, setResearchKeyInput, archiveRetentionOutput, setArchiveRetentionDaysInput } from "../settings/settings.contracts";
 import { slackStatusOutput, slackMatchesOutput, slackChannelsInput, slackChannelsOutput, slackJoinChannelInput, slackJoinChannelOutput, slackRefreshPeopleOutput, slackCreateChannelInput, slackCreateChannelOutput, slackDisconnectOutput } from "../slack/slack.contracts";
@@ -688,6 +688,34 @@ const appRouter = t.router({
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     reopenPlan: publicProcedure
       .input(planIdInput)
+      .output(planOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    assignStep: publicProcedure
+      .input(stepAssignInput)
+      .output(stepOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    setStepDone: publicProcedure
+      .input(stepDoneInput)
+      .output(stepOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    rescheduleStep: publicProcedure
+      .input(stepRescheduleInput)
+      .output(stepOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    addStep: publicProcedure
+      .input(stepAddInput)
+      .output(stepOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    removeStep: publicProcedure
+      .input(stepIdInput)
+      .output(stepRemovedOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    reorderSteps: publicProcedure
+      .input(stepReorderInput)
+      .output(stepListOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    setPlanOwner: publicProcedure
+      .input(planOwnerInput)
       .output(planOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     listSteps: publicProcedure
