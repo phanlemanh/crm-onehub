@@ -52,6 +52,8 @@ function keHoach(
 				label: buoc,
 				position: 0,
 				updatedAt: new Date("2026-09-10T00:00:00.000Z"),
+				assigneeId: null,
+				assignee: null,
 				department: { id: "bp-a", name: "Kinh doanh", position: 0 },
 			},
 		],
@@ -80,6 +82,17 @@ let kichBan: KichBan[] = [];
 let daGoiBangCot: BangCotVao[] = [];
 let moTreo: (() => void)[] = [];
 let daDieuHuong: string[] = [];
+let duongHienTai = new URLSearchParams();
+
+function khongGoi(ten: string) {
+	return {
+		mutationOptions: () => ({
+			mutationFn: async () => {
+				throw new Error(`${ten} khong duoc goi trong tep nay`);
+			},
+		}),
+	};
+}
 
 function bangCot(dauVao: BangCotVao): Promise<BangCotOutput> {
 	daGoiBangCot.push(dauVao);
@@ -114,8 +127,13 @@ mock.module("@/lib/trpc/client", () => ({
 			listDepartments: thuTuc("listDepartments", () => [
 				{ id: "bp-a", name: "Kinh doanh", position: 0, archivedAt: null },
 			]),
+			listTemplates: thuTuc("listTemplates", () => []),
+			createFromTemplate: khongGoi("createFromTemplate"),
 		},
-		users: { list: thuTuc("users.list", () => [{ id: "u-1", name: "Lan" }]) },
+		users: {
+			list: thuTuc("users.list", () => [{ id: "u-1", name: "Lan" }]),
+			me: thuTuc("users.me", () => ({ id: "u-1", name: "Lan" })),
+		},
 	}),
 }));
 
@@ -126,6 +144,8 @@ mock.module("next/navigation", () => ({
 		prefetch: () => {},
 	}),
 	useParams: () => ({ slug: "ws" }),
+	useSearchParams: () => duongHienTai,
+	usePathname: () => "/ws/onboarding",
 }));
 
 mock.module("next/link", () => ({
@@ -177,6 +197,7 @@ async function mo(duong: string): Promise<San> {
 	});
 	let soLanGhi = 0;
 	let hienTai = duong;
+	duongHienTai = new URLSearchParams(duong);
 	await act(async () => {
 		root.render(
 			<NuqsTestingAdapter
@@ -185,6 +206,7 @@ async function mo(duong: string): Promise<San> {
 				onUrlUpdate={(e) => {
 					soLanGhi += 1;
 					hienTai = e.queryString;
+					duongHienTai = new URLSearchParams(e.searchParams);
 				}}
 			>
 				<QueryClientProvider client={client}>

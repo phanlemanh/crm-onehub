@@ -96,6 +96,8 @@ function keHoachTho(i: number, ten: string): KeHoachTho {
 				label: "Ky hop dong",
 				position: 0,
 				updatedAt: new Date("2026-09-10T00:00:00.000Z"),
+				assigneeId: null,
+				assignee: null,
 				department: { id: "bp-a", name: "Kinh doanh", position: 0 },
 			},
 		],
@@ -247,6 +249,7 @@ mock.module("@/lib/trpc/client", () => ({
 				tranThe: 30,
 				cot: [],
 			})),
+			plansOfCompany: thuTuc("plansOfCompany", () => []),
 			listSteps: thuTuc("listSteps", () => ({ rows: [], total: 0 })),
 			listEnrollments: thuTuc("listEnrollments", () => ghiDanh),
 			removeEnrollment: thuTuc("removeEnrollment", khongDoc),
@@ -257,6 +260,7 @@ mock.module("@/lib/trpc/client", () => ({
 		},
 		companies: {
 			options: thuTuc("companies.options", () => CONG_TY),
+			byId: thuTuc("companies.byId", khongDoc),
 		},
 		contacts: {
 			list: thuTuc("contacts.list", () => ({
