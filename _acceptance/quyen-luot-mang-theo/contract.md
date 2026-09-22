@@ -5,7 +5,7 @@ slug: quyen-luot-mang-theo
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent, api]
-status: machine-cleared
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -204,6 +204,23 @@ fixture.
   Đổi tên ở một nơi thì chốt chặn lặng lẽ mất tác dụng.
 - Hai bài đo còn quét chữ trong mã nguồn, một bài đọc sang phần chạy riêng khác.
   Loại luật đó thuộc về bộ soi mã, không thuộc bộ đo đơn vị.
+
+### Hạn chế đã biết — người ký định đoạt ở Cổng Bằng chứng 22/09, tệp phát hiện vòng chấm 6
+
+Bốn gạch trên thuộc tệp phát hiện của vòng chấm 4. Vòng chấm 6 sinh lại tệp với sáu mục
+mới; năm mục dưới đây ghi Known limits, mục 6 mở hợp đồng mới (sổ quyết định).
+
+- `builderCommandType` phía agent đã thành hàm đồng nhất, kéo theo một tham số chết
+  xuyên suốt. Gõ sai tên trạng thái quyền thì lượt bị coi là không được phép mà không
+  báo lỗi (`apps/agent/agent/lib/custom-agent-dispatch.ts`).
+- Khuôn thật của cột `pendingInputRequest` không có schema nào mô tả trọn; nơi hỏi và
+  nơi xác nhận quyền có thể trôi khỏi nhau (`packages/validation/src/builder-question.ts`).
+- Một biến chết trong test mới, lint của kho đã bắt (`apps/agent/test/chan-uy-thac.spec.ts`).
+- Hai tệp test trùng nội dung cho một hàm sống ở `packages/validation`
+  (`apps/api/test/quyen-luot.spec.ts`).
+- Câu hỏi builder đang chờ từ trước deploy không có cờ quyền, nên câu trả lời thành chat
+  thường và người dùng phải bấm Tạo tác nhân lại. Đúng lựa chọn «đóng-không-dọn» đã duyệt
+  ở S1 (Out of scope); cửa sổ hại đã qua từ deploy.
 
 
 - **Vòng `do-quyen-luot-bang-hanh-vi` thay bộ đo của AC-5.** Mệnh đề của AC-5 tuyên
