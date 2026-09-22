@@ -55,13 +55,14 @@ async function Fields({
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
 
-	await Promise.all(
-		FIELD_ENTITIES.map((entity) =>
+	await Promise.all([
+		queryClient.prefetchQuery(trpc.fields.access.queryOptions()),
+		...FIELD_ENTITIES.map((entity) =>
 			queryClient.prefetchQuery(
 				trpc.fields.list.queryOptions({ entity, includeArchived: true }),
 			),
 		),
-	);
+	]);
 
 	return (
 		<HydrateClient>

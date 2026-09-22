@@ -122,10 +122,12 @@ function DisclosureRow({
 
 export function FieldsList({
 	entity,
+	khoa,
 	onEdit,
 	onNew,
 }: {
 	entity: FieldEntity;
+	khoa: boolean;
 	onEdit: (key: string) => void;
 	onNew: () => void;
 }) {
@@ -195,6 +197,14 @@ export function FieldsList({
 	return (
 		<>
 			<div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+				{khoa ? (
+					<p
+						className="border-b px-5 py-2.5 text-muted-foreground text-xs"
+						data-trang-thai="ST-truong-khong-quyen"
+					>
+						{copy.canQuyen}
+					</p>
+				) : null}
 				<DisclosureRow
 					title={copy.standardRow}
 					note={`${standard.length} · ${copy.standardNote}`}
@@ -231,7 +241,7 @@ export function FieldsList({
 									<Button
 										variant="outline"
 										size="xs"
-										disabled={addSuggested.isPending}
+										disabled={khoa || addSuggested.isPending}
 										onClick={() =>
 											addSuggested.mutate({
 												entity,
@@ -295,7 +305,7 @@ export function FieldsList({
 									<EmptyDescription>{copy.emptyBody}</EmptyDescription>
 								</EmptyHeader>
 								<EmptyContent>
-									<Button onClick={onNew}>
+									<Button disabled={khoa} onClick={onNew}>
 										<Icon icon={Add} data-icon="inline-start" />
 										{copy.newField}
 									</Button>
@@ -322,9 +332,11 @@ export function FieldsList({
 											id={field.id}
 											label={field.label}
 											className={ROW}
+											disabled={khoa}
 										>
 											<button
 												type="button"
+												disabled={khoa}
 												onClick={() => onEdit(field.key)}
 												className="flex min-w-0 flex-1 flex-col gap-px text-left"
 											>
@@ -345,7 +357,11 @@ export function FieldsList({
 
 											<DropdownMenu>
 												<DropdownMenuTrigger asChild>
-													<Button variant="ghost" size="icon-xs">
+													<Button
+														variant="ghost"
+														size="icon-xs"
+														disabled={khoa}
+													>
 														<Icon icon={OverflowMenuVertical} />
 														<span className="sr-only">
 															{copy.moreFor(field.label)}
@@ -387,6 +403,7 @@ export function FieldsList({
 											<Button
 												variant="outline"
 												size="xs"
+												disabled={khoa}
 												onClick={() => restore.mutate({ id: field.id })}
 											>
 												{copy.restore}
@@ -402,7 +419,7 @@ export function FieldsList({
 
 			{live.length > 0 ? (
 				<div className="flex shrink-0 items-center justify-between gap-3 border-t px-5 py-3">
-					<Button onClick={onNew}>
+					<Button disabled={khoa} onClick={onNew}>
 						<Icon icon={Add} data-icon="inline-start" />
 						{copy.newField}
 					</Button>

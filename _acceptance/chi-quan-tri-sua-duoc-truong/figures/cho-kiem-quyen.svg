@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1000 512" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <style>@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH d-1 · HAI NHÁNH</text>
+
+      <path d="M 224 192 L 244 192 A 8 8 0 0 1 252 200 L 252 218 A 8 8 0 0 0 260 226 L 288 226" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 224 244 L 288 244" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M 224 296 L 244 296 A 8 8 0 0 0 252 288 L 252 270 A 8 8 0 0 1 260 262 L 288 262" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <path d="M 448 232 L 464 232 A 8 8 0 0 0 472 224 L 472 184 A 8 8 0 0 1 480 176 L 512 176" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M 448 256 L 480 256 A 8 8 0 0 1 488 264 L 488 380 A 8 8 0 0 0 496 388 L 512 388" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <path d="M 728 160 L 744 160 A 8 8 0 0 0 752 152 L 752 132 A 8 8 0 0 1 760 124 L 772 124" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M 728 192 L 744 192 A 8 8 0 0 1 752 200 L 752 204 A 8 8 0 0 0 760 212 L 772 212" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <path d="M 728 388 L 772 388" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <line x1="620" y1="224" x2="620" y2="248" stroke="#da2f35" stroke-width="1.2" stroke-dasharray="3,3"/>
+
+      <rect x="40" y="132" width="200" height="200" rx="8" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="0.8"/>
+      <text data-mx="228" x="56" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Lời gọi đổi trường</text>
+
+      <rect x="56" y="172" width="168" height="40" rx="6" fill="#fafafa"/>
+      <rect x="56" y="172" width="168" height="40" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <text data-mx="216" x="68" y="189" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Màn</text>
+      <text data-mx="216" x="68" y="203" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">FieldsList + FieldEditor</text>
+
+      <rect x="56" y="224" width="168" height="40" rx="6" fill="#fafafa"/>
+      <rect x="56" y="224" width="168" height="40" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <text data-mx="216" x="68" y="241" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">tRPC trực tiếp</text>
+      <text data-mx="216" x="68" y="255" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">fields.create … backfill</text>
+
+      <rect x="56" y="276" width="168" height="40" rx="6" fill="#fafafa"/>
+      <rect x="56" y="276" width="168" height="40" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <text data-mx="216" x="68" y="293" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">khoá API</text>
+      <text data-mx="216" x="68" y="307" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">REST · restMeta</text>
+
+      <rect x="288" y="208" width="160" height="72" rx="6" fill="#fafafa"/>
+      <rect x="288" y="208" width="160" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text data-mx="436" x="300" y="236" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">FieldsRouter</text>
+      <text data-mx="436" x="300" y="252" fill="#575757" font-size="10" font-family="'Geist', sans-serif">chỉ kiểm đã đăng nhập</text>
+      <text data-mx="436" x="300" y="267" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">AuthMiddleware</text>
+
+      <rect x="512" y="128" width="216" height="96" rx="6" fill="#fafafa"/>
+      <rect x="512" y="128" width="216" height="96" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="524" y="140" width="60" height="16" rx="2" fill="#006B4F"/>
+      <text x="554" y="151" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐÃ CHỌN</text>
+      <text data-mx="716" x="524" y="180" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">FieldsService</text>
+      <text data-mx="716" x="524" y="198" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace">workspaceRoleOf → canManageFields</text>
+      <text data-mx="716" x="524" y="212" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">requireManager(actingUserId)</text>
+
+      <rect x="512" y="248" width="216" height="84" rx="6" fill="#fafafa"/>
+      <rect x="512" y="248" width="216" height="84" rx="6" fill="rgba(218,47,53,0.06)" stroke="#da2f35" stroke-width="1.4"/>
+      <rect x="524" y="260" width="64" height="16" rx="2" fill="transparent" stroke="#b4232a" stroke-width="0.8"/>
+      <text x="556" y="271" fill="#b4232a" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">GIẢ ĐỊNH</text>
+      <text data-mx="716" x="524" y="296" fill="#b4232a" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Chỉ đọc bảng member</text>
+      <text data-mx="716" x="524" y="311" fill="#171717" font-size="10" font-family="'Geist', sans-serif">dev: chủ kho là member.</text>
+      <text data-mx="716" x="524" y="325" fill="#171717" font-size="10" font-family="'Geist', sans-serif">Kiểm prod trước khi gộp.</text>
+
+      <rect x="512" y="356" width="216" height="64" rx="6" fill="#fafafa"/>
+      <rect x="512" y="356" width="216" height="64" rx="6" fill="rgba(23,23,23,0.03)" stroke="#575757" stroke-width="0.8" stroke-dasharray="5,4"/>
+      <rect x="524" y="368" width="80" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="564" y="379" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">KHÔNG CHỌN</text>
+      <text data-mx="716" x="524" y="406" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">kiểm ở router</text>
+
+      <rect x="772" y="96" width="196" height="56" rx="6" fill="#fafafa"/>
+      <rect x="772" y="96" width="196" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text data-mx="956" x="784" y="120" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">403 cho member / không thuộc</text>
+      <text data-mx="956" x="784" y="138" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">ForbiddenException</text>
+
+      <rect x="772" y="184" width="196" height="56" rx="6" fill="#fafafa"/>
+      <rect x="772" y="184" width="196" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text data-mx="956" x="784" y="208" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">chạy tiếp cho owner/admin</text>
+      <text data-mx="956" x="784" y="226" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">isWorkspaceAdmin(role)</text>
+
+      <rect x="772" y="356" width="196" height="64" rx="6" fill="#fafafa"/>
+      <rect x="772" y="356" width="196" height="64" rx="6" fill="transparent" stroke="rgba(23,23,23,0.30)" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text data-mx="956" x="784" y="384" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif">lối gọi service khác bỏ sót</text>
+      <text data-mx="956" x="784" y="402" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">(Ngoài-1 của sua-luu-tru)</text>
+
+      <line x1="32" y1="452" x2="968" y2="452" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="468" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <line x1="32" y1="485" x2="56" y2="485" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="64" y="488" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nhánh đã chọn</text>
+      <line x1="196" y1="485" x2="220" y2="485" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+      <text x="228" y="488" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nhánh không chọn</text>
+      <line x1="368" y1="485" x2="392" y2="485" stroke="#575757" stroke-width="1"/>
+      <text x="400" y="488" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đường chung của mọi lời gọi</text>
+      <rect x="568" y="480" width="14" height="10" rx="2" fill="rgba(218,47,53,0.06)" stroke="#da2f35" stroke-width="1.4"/>
+      <text x="588" y="488" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Cảnh báo — tiền đề chỉ người gỡ được</text>
+    </svg>

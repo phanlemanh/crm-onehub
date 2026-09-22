@@ -36,6 +36,8 @@ function FieldsSheetBody({
 	const query = useQuery(
 		trpc.fields.list.queryOptions({ entity, includeArchived: true }),
 	);
+	const quyen = useQuery(trpc.fields.access.queryOptions());
+	const khoa = quyen.data?.canManage !== true;
 
 	const editingKey = field && field !== "new" ? field : null;
 	const editing = editingKey
@@ -47,7 +49,7 @@ function FieldsSheetBody({
 		enabled: Boolean(editing?.agentFilled),
 	});
 
-	if (field) {
+	if (field && !khoa) {
 		const entityLabel = entityTabs(locale).find(
 			(tab) => tab.kind === kind,
 		)?.label;
@@ -108,6 +110,7 @@ function FieldsSheetBody({
 			/>
 			<FieldsList
 				entity={entity}
+				khoa={khoa}
 				onEdit={(key) => onEdit(key)}
 				onNew={() => onEdit("new")}
 			/>

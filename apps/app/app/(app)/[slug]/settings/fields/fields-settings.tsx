@@ -43,6 +43,8 @@ export function FieldsSettings({ kindBanDau }: { kindBanDau: RecordKind }) {
 	const query = useQuery(
 		trpc.fields.list.queryOptions({ entity, includeArchived: true }),
 	);
+	const quyen = useQuery(trpc.fields.access.queryOptions());
+	const khoa = quyen.data?.canManage !== true;
 
 	const editingKey = editingRaw && editingRaw !== "new" ? editingRaw : null;
 	const editing = editingKey
@@ -61,7 +63,7 @@ export function FieldsSettings({ kindBanDau }: { kindBanDau: RecordKind }) {
 				</TabsList>
 			</Tabs>
 
-			{editingRaw ? (
+			{editingRaw && !khoa ? (
 				editingKey && query.isPending ? (
 					<div className="flex min-h-0 flex-1 items-center justify-center">
 						<Spinner />
@@ -86,6 +88,7 @@ export function FieldsSettings({ kindBanDau }: { kindBanDau: RecordKind }) {
 			) : (
 				<FieldsList
 					entity={entity}
+					khoa={khoa}
 					onEdit={(key) => onEdit(key)}
 					onNew={() => onEdit("new")}
 				/>

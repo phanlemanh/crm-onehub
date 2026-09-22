@@ -24,7 +24,7 @@ import { currencySettingsOutput, setReportingCurrencyInput, setManualRateInput, 
 import { dashboardSummaryInput, dashboardSummaryOutput } from "../dashboard/dashboard.contracts";
 import { dealListInput, dealListOutput, dealIdInput, dealDetailOutput, dealCreateInput, dealCreateOutput, dealUpdateArgs, dealMutateOutput, setStageInput, dealSetStageOutput, dealContactsInput, dealContactOptionsOutput, dealAttachContactInput, dealContactLinkOutput, dealDetachContactInput, dealContactRoleInput, dealContactRoleOutput, dealBulkOwnerInput, dealBulkResultOutput, dealBulkStageInput, dealBulkInput } from "../deals/deals.contracts";
 import { enrichmentQueueInput } from "@crm/validation/enrichment-queue";
-import { fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
+import { fieldAccessOutput, fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
 import { accessOutput, archivedInput, departmentListOutput, departmentCreateInput, departmentOutput, departmentUpdateInput, departmentIdInput, deletedOutput, departmentReorderInput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, planListInput, planListOutput, planIdInput, planDetailOutput, planCreateFromTemplateInput, planOutput, stepListInput, stepListOutput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput, bangCotInput, bangCotOutput } from "../onboarding/onboarding.contracts";
@@ -518,6 +518,9 @@ const appRouter = t.router({
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   fields: t.router({
+    access: publicProcedure
+      .output(fieldAccessOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     list: publicProcedure
       .input(fieldListInput)
       .output(fieldListOutput)
