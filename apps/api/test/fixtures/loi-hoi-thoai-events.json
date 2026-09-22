@@ -1,0 +1,9 @@
+[
+	{
+		"type": "turn.failed",
+		"data": {
+			"code": "TOOL_EXECUTION_FAILED",
+			"message": "search_crm: query too short"
+		}
+	}
+]
