@@ -313,6 +313,7 @@ mock.module("@/lib/trpc/client", () => ({
 					dongLuc = null;
 				}),
 			),
+			plansOfCompany: thuTuc("plansOfCompany", () => []),
 			listSteps: thuTuc("listSteps", () =>
 				quaJson(
 					stepListOutput.parse({
@@ -387,6 +388,7 @@ mock.module("@/lib/trpc/client", () => ({
 		},
 		companies: {
 			options: thuTuc("companies.options", () => CONG_TY),
+			byId: thuTuc("companies.byId", khongDoc),
 		},
 		contacts: {
 			list: thuTuc("contacts.list", () => ({
