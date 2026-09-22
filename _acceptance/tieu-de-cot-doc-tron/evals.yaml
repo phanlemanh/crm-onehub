@@ -38,11 +38,12 @@ evals:
       CHIEU DO (b) (da chay 2026-09-22 14:56Z tren cay chua sua 0013cf14,
       evidence/nen-truoc-sua.txt): 30/50 o do, thong diep ghim
       `deals@320/vi tieu de bi cat: Công ty (nhan, o 97px, nhan 43px)`.
-      CHIEU DO (a) (S3, ban sao pha): them hideBelow "md" cho cot lastActivity cua deals ->
-      do voi thong diep ghim `deals@768/vi thieu cot: Hoạt động gần nhất`.
+      CHIEU DO (a) (da chay S3, evidence/chieu-do.txt): them hideBelow "md" cho cot company
+      cua deals -> ma 1, `deals@320/vi thieu cot: Công ty`.
       CHIEU DO cat doc (da chay 2026-09-22 15:19Z tren ban thu line-clamp-2 chua co san
       nua-do-dai): contacts@1440/vi do voi `tieu de bi cat: Hoạt động gần nhất (nhan, ...)`
-      — nhan can ba dong. S3 lap lai tren ban sao pha bo san minWidth de ghim.
+      — nhan can ba dong. Lap lai o S3 (evidence/chieu-do.txt): bo san minWidth -> ma 1,
+      `deals@1024/vi tieu de bi cat: Hoạt động gần nhất (ngang+doc, ...)`.
 
   - id: E2
     criterion: AC-2
@@ -63,10 +64,9 @@ evals:
       Tong AC-2 = 52.
       CHIEU DO cuon (da chay 2026-09-22 15:00Z tren ban thu bo table-fixed, chua an cot o
       campaigns, evidence/thu-auto-layout.txt: cuonBang=60 o campaigns@320/vi): thuoc
-      phai in `campaigns@320/vi bang cuon ngang 60px`; S3 chay lai tren ban sao pha bo
-      hideBelow cua cot called de lay thong diep ghim do.
-      CHIEU DO dau ba cham (S3, ban sao pha): bo lop truncate o o ten cua deals -> do voi
-      thong diep ghim `deals@320/vi o than khong cat bang dau ba cham`.
+      phai in `... bang cuon ngang <n>px`. Da chay S3 (evidence/chieu-do.txt): bo
+      [&_td]:max-w-0 -> ma 1, `deals@320/vi bang cuon ngang 566px` va
+      `deals@320/vi o than khong cat bang dau ba cham` (doi chung duong cung do).
 
   - id: E3
     criterion: AC-3
@@ -83,8 +83,8 @@ evals:
       |nhan.right - (td.right - paddingRight)| <= 1.5; va khoang cach giua hop svg va hop
       chu gan nhat cua nhan (Range tren nut chu) <= 6. Mot khang dinh / o (gop moi cot cua
       o) = 50.
-      CHIEU DO (S3, ban sao pha): bo `-ml-2` khoi nut sap -> do voi thong diep ghim
-      `deals@1440/vi lech mep Tên 8px` (hoac cot dau khac, 8px +/- 1).
+      CHIEU DO (da chay S3, evidence/chieu-do.txt): bo `-ml-2` khoi nut sap -> ma 1,
+      `deals@320/vi lech mep Tên 9.0px, san 1.5` (8px le trai + 1px vien trong suot).
 
   - id: E4
     criterion: AC-4
@@ -97,9 +97,8 @@ evals:
       Cung lan chay E1. Ma tran viet truoc: 3 trang [deals, companies, contacts] x 3 kho
       [768,1024,1440] x 2 tieng = 18. Moi o: th chua checkbox rong 40 +/- 1.
       Dem AC-4 = 18.
-      CHIEU DO: tren cay chua sua (lay bang git stash co ten o S3, hoac mot worktree cua
-      0013cf14) -> do voi thong diep ghim `deals@768/en o chon rong 139px, mong 40`
-      (139px da do tay 2026-09-22 bang puppeteer tren cay chua sua).
+      CHIEU DO (da chay S3, evidence/chieu-do.txt): tra cot o chon ve w-10 -> ma 1,
+      `deals@768/vi o chon rong 139px, mong 40` va `deals@1024/vi o chon rong 32px`.
 
   - id: E5
     criterion: AC-5
@@ -117,9 +116,9 @@ evals:
         companies x [320,375] x 2: khong th = headers.openDeals (4)
         members x [768] x 2: khong th = bang.thamGia; members x [1024] x 2: co th do (4)
       Dem AC-5 = 12.
-      CHIEU DO (S3, ban sao pha go ca ba hideBelow): do voi ba thong diep ghim
-      `campaigns@320/vi cot Đã gọi van hien`, `companies@320/vi cot Số thoả thuận đang mở
-      van hien`, `members@768/vi cot Ngày vào van hien`.
+      CHIEU DO (da chay S3, evidence/chieu-do.txt): go ca ba hideBelow -> ma 1,
+      `companies@320/vi thua cot: Số thoả thuận đang mở`, `campaigns@320/vi thua cot: Đã
+      gọi` (khoi thua cot cua E1 la noi do AC-5).
 
   - id: E6
     criterion: AC-6
@@ -135,8 +134,8 @@ evals:
       bang chieu mac dinh cua trang (doc tu dealsSearchParams.config.defaultDir, deals =
       desc -> descending), ghi svg (S1); bam lan hai, cho chieu nguoc lai, ghi svg (S2);
       khang dinh S0, S1, S2 doi mot khac nhau. Dem 2 o x 3 khang dinh = 6.
-      CHIEU DO (S3, ban sao pha): SortIndicator luon ve bieu tuong nghi -> do voi thong
-      diep ghim `deals@1024/vi Công ty sap nhung mui ten khong doi`.
+      CHIEU DO (da chay S3, evidence/chieu-do.txt): SortIndicator luon ve bieu tuong nghi
+      -> ma 1, `deals@375/vi Công ty sap nhung mui ten khong doi giua ba luc`.
 
   - id: E7
     criterion: AC-7
@@ -159,7 +158,8 @@ evals:
       (evidence/nen-chu-ten-truoc-sua.txt): nho nhat 43px, cung o.
       CHIEU DO (da chay 2026-09-22 15:25Z, evidence/thu-hai-dong-khong-chinh-trang.txt): bo
       ba chinh uu tien cot -> campaigns@320/vi chu ten 37px; thuoc phai in
-      `campaigns@320/vi chu ten 37px, san 40`. S3 lap lai tren ban sao pha de ghim thong diep.
+      `campaigns@320/vi chu ten 37px, san 40`. Lap lai o S3 (evidence/chieu-do.txt): cot
+      stage cua deals w-[60%] -> ma 1, `deals@320/vi chu ten 34px, san 40`.
 
   - id: E8
     criterion: AC-8

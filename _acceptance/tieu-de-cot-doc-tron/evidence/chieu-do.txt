@@ -1,0 +1,77 @@
+# Chieu do cua rang tieu-de-cot — moi luot pha mot thu tren cay da commit, hoan lai bang git checkout
+# lenh: APP_URL=http://localhost:3500 API_URL=http://localhost:3501 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs"
+
+## AC-1 tap cot — pha: them hideBelow md cho cot company cua deals
+ma thoat: 1 · so dong HONG: 6
+o=50 khang-dinh=276/276
+HONG: deals@320/vi thieu cot: Công ty
+HONG: deals@320/vi o than khong cat bang dau ba cham
+HONG: deals@375/vi thieu cot: Công ty
+HONG: deals@320/en thieu cot: Company
+HONG: deals@320/en o than khong cat bang dau ba cham
+HONG: deals@375/en thieu cot: Company
+
+## AC-1 cat doc — pha: bo san minWidth cua nhan tieu de
+ma thoat: 1 · so dong HONG: 7
+o=50 khang-dinh=276/276
+HONG: deals@1024/vi tieu de bi cat: Hoạt động gần nhất (ngang+doc, o 81px, nhan 49px)
+HONG: companies@1024/vi tieu de bi cat: Hoạt động gần nhất (ngang+doc, o 80px, nhan 49px)
+HONG: companies@1440/vi tieu de bi cat: Hoạt động gần nhất (ngang+doc, o 112px, nhan 80px)
+HONG: contacts@1024/vi tieu de bi cat: Hoạt động gần nhất (doc, o 66px, nhan 28px)
+HONG: contacts@1440/vi tieu de bi cat: Hoạt động gần nhất (ngang+doc, o 87px, nhan 56px)
+HONG: contacts@1024/en tieu de bi cat: Last activity (ngang+doc, o 78px, nhan 47px)
+
+## AC-2 cuon — pha: bo max-w-0 cua o than
+ma thoat: 1 · so dong HONG: 36
+o=50 khang-dinh=276/276
+HONG: deals@320/vi bang cuon ngang 566px
+HONG: deals@320/vi o than khong cat bang dau ba cham
+HONG: deals@375/vi bang cuon ngang 511px
+HONG: deals@768/vi bang cuon ngang 492px
+HONG: deals@1024/vi bang cuon ngang 465px
+HONG: deals@1440/vi bang cuon ngang 105px
+
+## AC-3 mep — pha: bo -ml-2 cua nut sap
+ma thoat: 1 · so dong HONG: 158
+o=50 khang-dinh=276/276
+HONG: deals@320/vi lech mep Tên 9.0px, san 1.5
+HONG: deals@320/vi lech mep Công ty 9.0px, san 1.5
+HONG: deals@320/vi lech mep Giai đoạn 9.0px, san 1.5
+HONG: deals@375/vi lech mep Tên 9.0px, san 1.5
+HONG: deals@375/vi lech mep Công ty 9.0px, san 1.5
+HONG: deals@375/vi lech mep Giai đoạn 9.0px, san 1.5
+
+## AC-4 o chon — pha: tra cot o chon ve w-10
+ma thoat: 1 · so dong HONG: 18
+o=50 khang-dinh=276/276
+HONG: deals@768/vi o chon rong 139px, mong 40
+HONG: deals@1024/vi o chon rong 32px, mong 40
+HONG: deals@1440/vi o chon rong 32px, mong 40
+HONG: deals@768/en o chon rong 139px, mong 40
+HONG: deals@1024/en o chon rong 32px, mong 40
+HONG: deals@1440/en o chon rong 32px, mong 40
+
+## AC-5 cot an — pha: go ca ba hideBelow cua AC-5
+ma thoat: 1 · so dong HONG: 14
+o=50 khang-dinh=276/276
+HONG: companies@320/vi thua cot: Số thoả thuận đang mở
+HONG: companies@375/vi thua cot: Số thoả thuận đang mở
+HONG: companies@320/en thua cot: Open deals
+HONG: companies@375/en thua cot: Open deals
+HONG: campaigns@320/vi thua cot: Đã gọi
+HONG: campaigns@320/vi chu ten 37px, san 40
+
+## AC-6 mui ten — pha: SortIndicator luon ve bieu tuong nghi
+ma thoat: 1 · so dong HONG: 2
+o=50 khang-dinh=276/276
+HONG: deals@375/vi Công ty sap nhung mui ten khong doi giua ba luc
+HONG: deals@1024/vi Công ty sap nhung mui ten khong doi giua ba luc
+
+## AC-7 chu ten — pha: cot stage cua deals rong w-[60%]
+ma thoat: 1 · so dong HONG: 4
+o=50 khang-dinh=276/276
+HONG: deals@320/vi chu ten 34px, san 40
+HONG: deals@375/vi chu ten 35px, san 40
+HONG: deals@320/en chu ten 35px, san 40
+HONG: deals@375/en chu ten 35px, san 40
+
