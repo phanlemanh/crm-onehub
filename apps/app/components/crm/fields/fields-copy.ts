@@ -39,6 +39,7 @@ export function fieldsCopy(locale: Locale) {
 		optionsLabel: m.fields.optionsLabel,
 		addOption: m.fields.addOption,
 		moreFor: m.fields.moreFor,
+		canQuyen: m.fields.canQuyen,
 		edit: m.fields.edit,
 		restore: m.fields.restore,
 		archiveTitle: m.fields.archiveTitle,
