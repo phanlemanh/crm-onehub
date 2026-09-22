@@ -3,3 +3,4 @@
 {"id":"d-20260922T021911Z-3","type":"descope","stage":"S1","at":"2026-09-22T02:19:11Z","decision":"bỏ design-pass — màn đã có, chỉ khoá nút theo đúng khuôn khoá đã giao ở Cài đặt › Điều phối; ảnh thật của cả hai vai chụp ở S4 (E9)","impact":"Gate 1 duyệt UI bằng chữ — mất khoảnh khắc visual trước duyệt"}
 {"id":"d-20260922T021911Z-4","type":"descope","stage":"S1","at":"2026-09-22T02:19:11Z","decision":"bỏ đặc-tả-UX — không thêm màn hay luồng mới, chỉ thêm trạng thái khoá cho điều khiển có sẵn","impact":"cấu trúc không khai trước — owner thấy nó lần đầu trong code"}
 {"id":"d-20260922T021911Z-5","type":"descope","stage":"S1","at":"2026-09-22T02:19:11Z","decision":"KHÔNG áp quyền cho 20 router khác và KHÔNG sửa vai trò dữ liệu trên prod","impact":"vòng nhỏ, chứng nếp ở một chỗ · đổi lại lỗ cùng loại còn ở router khác, và chủ kho phải tự kiểm vai trò của mình trên prod trước khi gộp"}
+{"id":"d-20260922T023433Z-6","type":"seal","gate":1,"at":"2026-09-22T02:34:33Z"}
