@@ -32,6 +32,23 @@ executors:
     dp30_ke_hoach_co_nguoi_cam_trich: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t nguoi-cam-trich"'
     dp30_bo_loc_nam_trong_duong_dan: 'cd apps/app && bun test test/dieu-phoi-trang-thai.spec.ts -t bo-loc-duong-dan'
     dp30_xoa_co_xac_nhan: 'cd apps/app && bun test test/dieu-phoi-trang-thai.spec.ts -t xoa-co-xac-nhan && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-xoa-ghi-danh.dom.tsx'
+    kh1_giao_buoc: 'bun run test -- "cd apps/api && bun test test/ke-hoach-ban-ghi.spec.ts -t giao-buoc"'
+    kh1_xong_lam_song_danh_muc: 'bun run test -- "cd apps/api && bun test test/ke-hoach-ban-ghi.spec.ts -t xong-lam-song-danh-muc"'
+    kh1_doi_han: 'bun run test -- "cd apps/api && bun test test/ke-hoach-ban-ghi.spec.ts -t doi-han"'
+    kh1_them_bo_buoc: 'bun run test -- "cd apps/api && bun test test/ke-hoach-ban-ghi.spec.ts -t them-bo-buoc"'
+    kh1_sap_lai: 'bun run test -- "cd apps/api && bun test test/ke-hoach-ban-ghi.spec.ts -t sap-lai"'
+    kh1_doi_cam_trich: 'bun run test -- "cd apps/api && bun test test/ke-hoach-ban-ghi.spec.ts -t doi-cam-trich"'
+    kh1_thao_tac_rong: 'bun run test -- "cd apps/api && bun test test/ke-hoach-ban-ghi.spec.ts -t thao-tac-rong"'
+    kh1_dong_la_chi_doc: 'bun run test -- "cd apps/api && bun test test/ke-hoach-ban-ghi.spec.ts -t dong-la-chi-doc"'
+    kh1_ghi_chu_hai_dong_thoi_gian: 'bun run test -- "cd apps/api && bun test test/ke-hoach-ban-ghi.spec.ts -t ghi-chu-hai-dong-thoi-gian"'
+    kh1_xoa_day_chuyen: 'bun run test -- "cd apps/api && bun test test/ke-hoach-ban-ghi.spec.ts -t xoa-day-chuyen"'
+    kh1_go_dung_nguoi_db: 'bun run test -- "cd apps/api && bun test test/ke-hoach-ban-ghi.spec.ts -t go-dung-nguoi"'
+    kh1_mo_nhu_thoa_thuan: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ke-hoach-sheet.dom.tsx -t mo-nhu-thoa-thuan"
+    kh1_go_dung_nguoi_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ke-hoach-sheet.dom.tsx -t go-dung-nguoi"
+    kh1_ve_vet_ke_hoach: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ke-hoach-sheet.dom.tsx -t ve-vet-ke-hoach"
+    kh1_duong_cu_chuyen_huong: "cd apps/app && bun test test/ke-hoach-chuyen-huong.spec.ts"
+    kh1_qua_han_theo_ngay: "cd apps/app && bun test test/qua-han-theo-ngay.spec.ts"
+    kh1_san_thiet_ke: 'for t in "apps/app/components/crm/record-sheet/plan-sheet.tsx" "apps/app/components/crm/record-sheet/plan-steps.tsx" "apps/app/components/crm/record-sheet/plan-brokers.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     cp_ham_thuan: "cd packages/auth && bun test test/ai-duoc-vao.spec.ts"
     cp_vai_dinh_truoc: 'bun run test -- "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t vai-dinh-truoc"'
     cp_rut_chan_chua_vao: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t rut-chan-chua-vao"'

@@ -1,0 +1,411 @@
+schema_version: 1
+slug: ke-hoach-la-mot-ban-ghi
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh1_giao_buoc
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "packages/validation/src/onboarding-activity.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/api/test/ke-hoach-ban-ghi.spec.ts"
+    expected: |
+      Do HANG trong co so du lieu, khong do gia tri tra ve.
+      Gieo mot ke hoach dang chay co mot buoc chua giao, ghi lai updatedAt cua
+      buoc. Goi that service.assignStep({ stepId, assigneeId: A }).
+      Doc LAI tu DB va khang dinh BON dieu:
+        1 buoc co assigneeId bang A
+        2 updatedAt moi LON HON updatedAt da ghi
+        3 co DUNG MOT Activity type PLAN_CHANGE mang planId cua ke hoach
+        4 meta cua Activity do parse qua schema onboarding-activity ra kind
+          buoc.giao, tu = null, den = A, stepId dung
+      CAP HAI CHIEU tren cung fixture: chieu duong la bon dong tren. Chieu doi
+      chung: giao tiep cho B -> Activity thu hai mang tu = A, den = B.
+      DOT BIEN CHUNG MINH, chan phai chay va no phai DO: bo lenh ghi Activity
+      khoi transaction cua assignStep -> dong 3 do voi thong diep ghim
+      "buoc.giao" va so vet mong doi 1, nhan duoc 0.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh1_xong_lam_song_danh_muc
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/ke-hoach-ban-ghi.spec.ts"
+    expected: |
+      Day la phep do cua ba cot dang chet tren production.
+      Gieo mot ke hoach BON buoc, khong buoc nao xong, va lui updatedAt cua moi
+      buoc ve dung NAM ngay truoc (nep gieoKeHoach imNgay cua vong mot).
+      Goi that service.manDanhMuc truoc -> ghi lai hang: buocXong 0, imNgay 5.
+      Goi that service.setStepDone({ stepId, done: true }).
+      Goi LAI service.manDanhMuc va khang dinh BA dieu tren CHINH hang do:
+        1 buocXong bang 1 va buocTong bang 4
+        2 imNgay bang 0
+        3 doc tu DB: completedAt cua buoc khac null
+      CAP HAI CHIEU tren cung fixture: chieu duong la ba dong tren. Chieu am:
+      setStepDone done false tren cung buoc -> completedAt null, buocXong ve 0,
+      va mot vet buoc.boXong duoc ghi.
+      DOT BIEN CHUNG MINH: doi setStepDone sang dung updateMany khong cham
+      updatedAt (ghi completedAt bang raw SQL) -> dong 2 do voi thong diep ghim
+      imNgay mong doi 0, nhan duoc 5.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh1_doi_han
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "packages/validation/src/onboarding-activity.ts"
+      - "apps/api/test/ke-hoach-ban-ghi.spec.ts"
+    expected: |
+      Gieo mot buoc han 2026-09-22. Goi that service.rescheduleStep voi dueAt
+      "2026-09-25". Doc LAI tu DB.
+      Khang dinh BA dieu:
+        1 dueAt cua buoc, doc ra dang ngay, bang 2026-09-25
+        2 mot vet buoc.doiHan co tu "2026-09-22" va den "2026-09-25" — chuoi
+          ngay, khong phai ISO co gio
+        3 vet parse qua schema onboarding-activity khong nem
+      CAP HAI CHIEU tren cung fixture: chieu am la doi han sang CHINH ngay dang
+      co -> khong vet nao duoc ghi (thao tac rong, xem E7).
+      DOT BIEN CHUNG MINH: ghi tu/den bang toISOString() -> dong 2 do voi thong
+      diep ghim chuoi ngay mong doi va chuoi nhan duoc.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh1_them_bo_buoc
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/ke-hoach-ban-ghi.spec.ts"
+    expected: |
+      Gieo mot ke hoach BA buoc X Y Z. Goi that service.addStep them buoc W
+      (bo phan, han). Goi that service.removeStep bo buoc Y.
+      Doc LAI tu DB va khang dinh BON dieu:
+        1 tap nhan buoc cua ke hoach bang dung {X, Z, W} — ma tran viet truoc,
+          so assert bang so phan tu
+        2 W co position lon hon moi buoc con lai
+        3 co dung mot vet buoc.them mang nhan W
+        4 co dung mot vet buoc.bo mang nhan Y, va vet do VAN DOC DUOC sau khi
+          buoc Y da mat — vet khong khoa ngoai sang buoc
+      CAP HAI CHIEU tren cung fixture: chieu am la removeStep voi stepId cua mot
+      ke hoach KHAC -> 404, tap buoc ke hoach nay khong doi.
+      DOT BIEN CHUNG MINH: cho Activity khoa ngoai sang OnboardingStep voi
+      onDelete Cascade -> dong 4 do voi thong diep ghim "buoc.bo" mat vet.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh1_sap_lai
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/ke-hoach-ban-ghi.spec.ts"
+    expected: |
+      Gieo ke hoach P ba buoc A B C, va ke hoach Q mot buoc D. Ghi lai thu tu
+      position cua P.
+      Ma tran viet truoc, BA ca sai + mot ca dung, moi ca mot assert:
+        1 [C, A] (thieu B) -> 400
+        2 [C, A, D] (lan buoc cua Q) -> 400
+        3 [C, A, A] (trung) -> 400
+        4 [C, A, B] -> thanh cong, doc lai thu tu theo position bang C A B
+      Sau moi ca sai, doc LAI tu DB: thu tu cua P bang dung thu tu da ghi —
+      khong ghi nua chung.
+      DOT BIEN CHUNG MINH: bo buoc kiem tap id, ghi tung id theo vong lap ->
+      ca 1 phai do voi thong diep ghim thu tu mong doi va thu tu nhan duoc.
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh1_doi_cam_trich
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/ke-hoach-ban-ghi.spec.ts"
+    expected: |
+      Gieo ke hoach cua cong ty K, cam trich A. Goi assignStep mot buoc, roi
+      service.setPlanOwner({ planId, ownerId: B }).
+      Doc LAI tu DB va khang dinh BA dieu:
+        1 ownerId cua ke hoach bang B
+        2 vet keHoach.doiCamTrich mang tu A, den B, VA companyId bang K
+        3 moi vet co kind bat dau "buoc." cua ke hoach nay co companyId null
+      Dong 3 la quan he, khong phai co mat: dem vet buoc.* co companyId khac
+      null, phai bang 0, va dem vet buoc.* phai lon hon 0 (doi chung duong —
+      khong co vet buoc nao thi dong 3 dung suong).
+      DOT BIEN CHUNG MINH: gan companyId cho moi vet -> dong 3 do voi thong
+      diep ghim so vet buoc.* mang companyId.
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh1_thao_tac_rong
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/ke-hoach-ban-ghi.spec.ts"
+    expected: |
+      Gieo mot buoc da giao cho A va da xong, updatedAt lui ve BA ngay truoc.
+      Dem Activity cua ke hoach, ghi lai updatedAt.
+      Goi assignStep voi A, roi setStepDone voi done true.
+      Khang dinh BA dieu:
+        1 ca hai loi goi tra ve thanh cong, khong nem
+        2 so Activity cua ke hoach khong doi
+        3 updatedAt cua buoc bang dung gia tri da ghi
+      CAP HAI CHIEU tren cung fixture: chieu duong doi chung la assignStep voi B
+      -> so Activity tang 1 va updatedAt doi.
+      DOT BIEN CHUNG MINH: bo nhanh so sanh gia tri cu truoc khi ghi -> dong 2
+      va 3 do voi thong diep ghim "thao tac rong".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh1_dong_la_chi_doc
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/src/onboarding/onboarding-config.ts"
+      - "apps/api/test/ke-hoach-ban-ghi.spec.ts"
+    expected: |
+      Gieo mot ke hoach ba buoc roi closePlan. Chup trang thai: moi buoc, so
+      Activity, ownerId.
+      Ma tran viet truoc, SAU thu tuc — moi thu tuc mot assert:
+        assignStep · setStepDone · rescheduleStep · addStep · removeStep ·
+        reorderSteps · setPlanOwner
+      Moi loi goi phai nem loi HTTP 409 voi thong diep dung nguyen van
+      "Kế hoạch đã đóng — mở lại trước khi sửa." — so thong diep, khong chi
+      so ma loi.
+      Sau ca bay, doc LAI tu DB: trang thai bang dung trang thai da chup.
+      CAP HAI CHIEU tren cung fixture: reopenPlan roi goi assignStep -> thanh
+      cong. Chieu nay chung minh 409 den tu trang thai dong, khong den tu fixture
+      hong.
+      DOT BIEN CHUNG MINH: bo kiem closedAt khoi removeStep -> assert cua
+      removeStep do voi thong diep ghim ten thu tuc.
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh1_ghi_chu_hai_dong_thoi_gian
+    paths:
+      - "apps/api/src/activities/**"
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/ke-hoach-ban-ghi.spec.ts"
+    expected: |
+      Gieo cong ty K va ke hoach P cua K. Goi that ActivitiesService.create voi
+      type NOTE, body "Hen goi lai thu Sau", CHI truyen planId.
+      Khang dinh BA dieu:
+        1 doc tu DB: ghi chu co planId P va companyId K
+        2 goi that timeline voi anchor { planId: P } -> co ghi chu do
+        3 goi that timeline voi anchor { companyId: K } -> co ghi chu do
+      Va doi chung am tren cung fixture: mot vet buoc.giao cua P KHONG co trong
+      timeline { companyId: K } nhung CO trong timeline { planId: P }.
+      Dong doi chung am chung minh luat hien thi o cong ty (lua chon a), khong
+      chi chung minh ghi chu duoc luu.
+      DOT BIEN CHUNG MINH: bo buoc gan companyId tu ke hoach -> dong 3 do voi
+      thong diep ghim id ghi chu vang mat trong dong thoi gian cong ty.
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh1_xoa_day_chuyen
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/src/companies/**"
+      - "apps/api/src/activities/**"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/api/test/ke-hoach-ban-ghi.spec.ts"
+    expected: |
+      Gieo cong ty K voi ke hoach P, mot vet buoc.giao, mot ghi chu NOTE mang
+      planId va companyId, va mot contact C cua K dang ghi danh trong phieu.
+      Xoa K bang DUNG duong xoa that cua san pham (thu tuc delete cua companies,
+      khong xoa bang Prisma tran).
+      Khang dinh HAI dieu:
+        1 dem Activity co planId P bang 0
+        2 moi ban ghi con song ma lenh xoa cham toi co lastActivityAt null hoac
+          bang createdAt/occurredAt cua mot Activity CON TON TAI — khong tro vao
+          hang da mat
+      Doi chung duong tren cung fixture: TRUOC khi xoa, dem Activity planId P
+      lon hon 0.
+      DOT BIEN CHUNG MINH: cho ActivityStampService.targetsOf bo qua planId ->
+      dong 2 do voi thong diep ghim ban ghi co lastActivityAt tro vao hang mat.
+      Neu duong xoa that khong cham ban ghi nao con song thi ghi ro dieu do
+      trong test va dong 2 van phai chay tren tap rong co doi chung.
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    layer: ui
+    cmd: config:executors.test.kh1_mo_nhu_thoa_thuan
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/ke-hoach-sheet.dom.tsx"
+    expected: |
+      Dung that DanhMucTable trong jsdom voi ban gia tRPC tra mot hang ke hoach
+      P cua cong ty K. Bam hang.
+      Khang dinh BA dieu:
+        1 tham so duong dan record bang "plan:P" (doc tu bo nho nuqs cua test)
+        2 bang danh muc van con trong DOM sau khi bam
+        3 dung that PlanSheet cho P; bam ten cong ty tren dong phu -> ngan xep
+          record thanh [plan:P, company:K]
+      CAP HAI CHIEU: chieu am la bam ra ngoai sheet -> ngan xep rong.
+      DOT BIEN CHUNG MINH: khoi phuc onRowClick cu goi router.push -> dong 1 do
+      voi thong diep ghim "record=plan:P".
+
+  - id: E12
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh1_duong_cu_chuyen_huong
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/[planId]/page.tsx"
+      - "apps/app/lib/record-href.ts"
+      - "apps/app/test/ke-hoach-chuyen-huong.spec.ts"
+    expected: |
+      Goi that ham trang cua duong cu /[slug]/onboarding/[planId] voi slug
+      "onehub" va planId P. Bat loi redirect cua Next.
+      Khang dinh: dich chuyen huong bang dung recordHref("onehub", "/onboarding",
+      "plan", P) va chuoi do chua "record=plan%3AP" hoac "record=plan:P".
+      CAP HAI CHIEU: doi chung la cung ham voi planId khac -> dich khac, mang
+      id moi.
+      DOT BIEN CHUNG MINH: tra ve trang cu thay vi redirect -> test do voi thong
+      diep ghim "khong chuyen huong".
+
+  - id: E13
+    criterion: AC-12
+    executor: test
+    layer: ui
+    cmd: config:executors.test.kh1_go_dung_nguoi_man
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/ke-hoach-sheet.dom.tsx"
+    expected: |
+      Dung that tab Moi gioi cua PlanSheet trong jsdom, ban gia tRPC tra HAI
+      ghi danh: Trinh Cam Thuong (nguoi 1), Tuan Do (nguoi 2). Ban gia ghi lai
+      TEN thu tuc va INPUT moi lan man goi.
+      Bam go o hang THU HAI, doc hop xac nhan, xac nhan.
+      Khang dinh BA dieu:
+        1 hop xac nhan chua "Tuan Do"
+        2 ban gia ghi dung mot loi goi onboarding.removeEnrollment voi contactId
+          cua nguoi 2
+        3 khong loi goi nao mang contactId cua nguoi 1
+      DOT BIEN CHUNG MINH: khoi phuc loi dsGhiDanh[0] -> dong 2 do voi thong
+      diep "Expected contactId <nguoi 2> / Received <nguoi 1>".
+
+  - id: E14
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh1_go_dung_nguoi_db
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/ke-hoach-ban-ghi.spec.ts"
+    expected: |
+      Gieo ke hoach voi hai ghi danh nguoi 1 va nguoi 2. Goi that
+      service.removeEnrollment voi contactId nguoi 2.
+      Doc LAI tu DB: ghi danh nguoi 1 con, ghi danh nguoi 2 mat.
+      CAP HAI CHIEU: goi lan hai voi nguoi 2 -> 404, ghi danh nguoi 1 van con.
+      DOT BIEN CHUNG MINH: xoa theo planId thay vi theo cap planId + contactId
+      -> dong "nguoi 1 con" do voi thong diep ghim id nguoi 1.
+
+  - id: E15
+    criterion: AC-13
+    executor: test
+    layer: unit
+    cmd: config:executors.test.kh1_qua_han_theo_ngay
+    paths:
+      - "apps/app/lib/**"
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/test/qua-han-theo-ngay.spec.ts"
+    expected: |
+      Ma tran viet truoc BA dong, moi dong mot assert, tren ham thuan quaHan
+      nhan (dueAt, completedAt, now):
+        han D-1 chua xong -> true
+        han D chua xong   -> false
+        han D+1 chua xong -> false
+      Voi now dat 23:30 va dueAt luu 00:00 UTC cua ngay D — chinh ca dang sai tren
+      production.
+      Doi chung: han D-1 DA xong -> false.
+      DOT BIEN CHUNG MINH: doi ham ve so getTime() nhu cu -> dong "han D" do voi
+      thong diep ghim ngay va ket qua mong doi false.
+
+  - id: E16
+    criterion: AC-14
+    executor: test
+    layer: ui
+    cmd: config:executors.test.kh1_ve_vet_ke_hoach
+    paths:
+      - "apps/app/components/crm/timeline/**"
+      - "packages/validation/src/onboarding-activity.ts"
+      - "apps/app/lib/messages/**"
+      - "apps/app/test/ke-hoach-sheet.dom.tsx"
+    expected: |
+      Dung that TimelineEntry trong jsdom, hai lan:
+        a mot Activity PLAN_CHANGE, meta kind buoc.xong, nhan "Dao tao", nguoi
+          tao "Trinh Cam Thuong", locale vi
+        b mot Activity STAGE_CHANGE cua thoa thuan, meta from DEMO_BOOKED to
+          QUALIFIED_TO_BUY
+      Khang dinh HAI dieu:
+        1 a hien chuoi co ca ten nguoi, chu "xong" va nhan buoc — doc textContent,
+          khong doc props
+        2 b hien hai nhan giai doan va mui ten "→" nhu truoc; khong nem
+      Doi chung am: meta PLAN_CHANGE hong (thieu kind) -> dong khong vo man,
+      hien nhan du phong co ten, va khong nem.
+      DOT BIEN CHUNG MINH: cho PLAN_CHANGE di qua stageChange.parse -> dong 1 do
+      voi thong diep ghim kind buoc.xong.
+
+  - id: E17
+    criterion: AC-15
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/components/detail-sheet.tsx"
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "packages/ui/**"
+    steps:
+      - "Dat truoc MOI buoc: APP_URL=http://127.0.0.1:3300 va API_URL=http://127.0.0.1:3301 — dung 127.0.0.1, tranh Invalid origin va cookie ro theo host"
+      - "Dung ca hai may chu cua CAY DANG XET: api 3301, app 3300 (launch.json khai api-cay-nay va app-cay-nay). Kiem cong 3300 truoc khi dung — tai nguyen chung"
+      - "CHAN CAY, hai phia: dat mot dau moc vao apps/app/public roi xin lai qua APP_URL; VA doc mot ban ghi moc qua API_URL. Khong nhan lai duoc mot trong hai -> thoat ma 2 va goi ten cay dang xet, KHONG doc anh nao"
+      - "Gieo QUA CHINH API o 3301: cong ty One Mount, mot ke hoach bon buoc hai bo phan (mot buoc qua han, mot buoc da giao), hai ghi danh; va mot thoa thuan cua cung cong ty"
+      - "Doc LAI hai ban ghi vua gieo qua API_URL truoc khi mo man; khong doc lai duoc -> thoat ma 2"
+      - "Tao phien bang `cd apps/api && bun run dev:session <email>`, dat cookie vao trinh duyet"
+      - "Mo /onehub/onboarding?record=plan:<id> o kho 1440, chup evidence/E17-ke-hoach-1440.png"
+      - "Mo /onehub/deals?record=deal:<id> o kho 1440, chup evidence/E17-thoa-thuan-1440.png"
+      - "Mo lai sheet ke hoach o kho 375, chup evidence/E17-ke-hoach-375.png"
+    inputs:
+      - _acceptance/ke-hoach-la-mot-ban-ghi/evidence/
+    expected: |
+      Nhin thay duoc tren anh, khong suy tu ma, so hai anh 1440 canh nhau:
+        1 dau sheet cung bo cuc: logo, tieu de, dong phu, nut hanh dong o goc phai
+        2 cung mot dai bon o so ngay duoi dau sheet; o ke hoach doc duoc Ngay,
+          Buoc, Im lang, Cam trich
+        3 cung mot thanh tab; ke hoach co Buoc, Moi gioi, Hoat dong
+        4 tab Buoc hien tren tung dong o tich, nguoi duoc giao hoac «Chưa giao»,
+          va han; buoc qua han mang huy hieu «Quá hạn»
+        5 anh 375 khong tran ngang
+      Mot trong nam dong khong nhin thay -> FAIL, ghi dong nao.
+
+  - id: E18
+    criterion: AC-15
+    executor: test
+    layer: ui
+    cmd: config:executors.test.kh1_san_thiet_ke
+    paths:
+      - "apps/app/components/crm/record-sheet/plan-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/plan-steps.tsx"
+      - "apps/app/components/crm/record-sheet/plan-brokers.tsx"
+    expected: |
+      Chay design-gate che do static tren ba tep giao dien moi cua sheet ke hoach.
+      Ma 0 = khong vi pham san P0 (tuong phan, focus, nhan cho nut chi co bieu
+      tuong, radius/mau ngoai thang cua kho).
+      DOT BIEN CHUNG MINH: them mot nut chi co bieu tuong khong aria-label vao
+      plan-steps.tsx trong ban sao -> lenh thoat khac 0 va in ten tep.
