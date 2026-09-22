@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: affd3b3ad58331da6e7bde4787fafb242f4d4111
+verified_commit: e1c3ff8a020a3667823dbb8f87058686559ed67d
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -261,3 +261,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: mọi eval feature (E1-E17) xanh ngay ở lần chấm đầu; một finding ngoài hợp đồng bị ghi lại (noi-bon-nut.dom.tsx dựng fixture tự đo trên chính nó — xem review-findings, carried). Round 2: xác minh lại toàn bộ 17 eval + E15 + 4 lệnh suite trên tệp đã đổi kể từ round 1; không có eval nào đỏ, không cần quay lại implementation.
+
+### Re-pin lần 1 — 2026-09-22, do hoa cu do merge origin/onehub (#84)
+run_id: repin-20260922T152039Z-31450
+sha: e1c3ff8a020a3667823dbb8f87058686559ed67d · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-12
