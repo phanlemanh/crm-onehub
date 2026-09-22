@@ -19,9 +19,11 @@ export const NHAC = {
 	tran: 10,
 } as const;
 
-const DAY_MS = 24 * 60 * 60 * 1000;
-
 const PHUT_MOI_GIO = 60;
+
+const PHUT_MS = 60 * 1000;
+
+const DAY_MS = 24 * PHUT_MOI_GIO * PHUT_MS;
 
 const dinhNgay = new Intl.DateTimeFormat("en-CA", {
 	timeZone: NHAC.muiGio,
@@ -43,8 +45,34 @@ const dinhGio = new Intl.DateTimeFormat("en-GB", {
 	hourCycle: "h23",
 });
 
+const dinhLech = new Intl.DateTimeFormat("en-US", {
+	timeZone: NHAC.muiGio,
+	timeZoneName: "longOffset",
+});
+
+const LECH_GMT = /^GMT(?:([+-])(\d{2}):(\d{2}))?$/;
+
 export function ngayVN(d: Date): string {
 	return dinhNgay.format(d);
+}
+
+function lechPhut(d: Date): number {
+	const ten =
+		dinhLech.formatToParts(d).find((p) => p.type === "timeZoneName")?.value ??
+		"";
+	const khop = LECH_GMT.exec(ten);
+	if (!khop) {
+		throw new Error(`Không đọc được độ lệch múi giờ ${NHAC.muiGio}: «${ten}»`);
+	}
+	const [, dau, gio, phut] = khop;
+	if (!dau) return 0;
+	const lech = Number(gio) * PHUT_MOI_GIO + Number(phut);
+	return dau === "-" ? -lech : lech;
+}
+
+export function dauNgayVN(now: Date): Date {
+	const nuaDemUtc = Date.parse(`${ngayVN(now)}T00:00:00Z`);
+	return new Date(nuaDemUtc - lechPhut(new Date(nuaDemUtc)) * PHUT_MS);
 }
 
 export function soNgayVN(tu: Date, den: Date): number {

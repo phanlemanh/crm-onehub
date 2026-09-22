@@ -1,0 +1,79 @@
+== In-scope (127.0.0.1:3300 app, 127.0.0.1:3301 api) — 185 requests ==
+FAIL-eligible failures in scope: 0
+
+[97D47889EC59E5AE2C508C19490E3D7E] GET http://127.0.0.1:3300/crm → 200 OK
+[35657.2] GET http://127.0.0.1:3300/_next/static/media/53b9e256198e5412-s.p.390ncx5urfkfu.woff2 → 200 OK
+[35657.3] GET http://127.0.0.1:3300/_next/static/media/797e433ab948586e-s.p.0r6juujl39pe6.woff2 → 200 OK
+[35657.4] GET http://127.0.0.1:3300/_next/static/media/7d817b4c03b0c5f1-s.p.1uyisp29ctx0d.woff2 → 200 OK
+[35657.5] GET http://127.0.0.1:3300/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2 → 200 OK
+[35657.6] GET http://127.0.0.1:3300/_next/static/chunks/%5Broot-of-the-server%5D__0l8ykhc._.css → 200 OK
+[35657.7] GET http://127.0.0.1:3300/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0pu11fa._.js → 200 OK
+[35657.8] GET http://127.0.0.1:3300/_next/static/chunks/1m3o_next_dist_compiled_next-devtools_index_0huqbj8.js → 200 OK
+[35657.9] GET http://127.0.0.1:3300/_next/static/chunks/1m3o_next_dist_compiled_react-dom_1bfiqar._.js → 200 OK
+[35657.10] GET http://127.0.0.1:3300/_next/static/chunks/1m3o_next_dist_compiled_react-server-dom-turbopack_163z8n9._.js → 200 OK
+[35657.11] GET http://127.0.0.1:3300/_next/static/chunks/1m3o_next_dist_compiled_0wcra3j._.js → 200 OK
+[35657.12] GET http://127.0.0.1:3300/_next/static/chunks/1m3o_next_dist_client_1cvbd6w._.js → 200 OK
+[35657.13] GET http://127.0.0.1:3300/_next/static/chunks/1m3o_next_dist_08d-hqc._.js → 200 OK
+[35657.14] GET http://127.0.0.1:3300/_next/static/chunks/1u71_%40swc_helpers_cjs_0g5k6e_._.js → 200 OK
+[35657.15] GET http://127.0.0.1:3300/_next/static/chunks/apps_app_1anvha4._.js → 200 OK
+[35657.16] GET http://127.0.0.1:3300/_next/static/chunks/turbopack-apps_app_1kcbo1q._.js → 200 OK
+[35657.17] GET http://127.0.0.1:3300/_next/static/chunks/apps_app_19c2f99._.js → 200 OK
+[35657.18] GET http://127.0.0.1:3300/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_0-6o2qw._.js → 200 OK
+[35657.19] GET http://127.0.0.1:3300/_next/static/chunks/11l8_tailwind-merge_dist_bundle-mjs_mjs_1gt0n5j._.js → 200 OK
+[35657.20] GET http://127.0.0.1:3300/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_046fnsj._.js → 200 OK
+[35657.21] GET http://127.0.0.1:3300/_next/static/chunks/17u__%40trpc_client_dist_09ji32s._.js → 200 OK
+[35657.22] GET http://127.0.0.1:3300/_next/static/chunks/0trj_%40trpc_server_dist_0__neun._.js → 200 OK
+[35657.23] GET http://127.0.0.1:3300/_next/static/chunks/13z9_zod_v4_0--tbhe._.js → 200 OK
+[35657.24] GET http://127.0.0.1:3300/_next/static/chunks/node_modules__bun_0nq_nv5._.js → 200 OK
+[35657.25] GET http://127.0.0.1:3300/_next/static/chunks/_1uh5i2t._.js → 200 OK
+[35657.26] GET http://127.0.0.1:3300/_next/static/chunks/072g_streamdown_dist_0-ijpy6._.js → 200 OK
+[35657.27] GET http://127.0.0.1:3300/_next/static/chunks/packages_07lakfh._.js → 200 OK
+[35657.28] GET http://127.0.0.1:3300/_next/static/chunks/apps_app_components_crm_timeline_1-ot9mv._.js → 200 OK
+[35657.29] GET http://127.0.0.1:3300/_next/static/chunks/apps_app_components_crm_record-sheet_1fcuwwo._.js → 200 OK
+[35657.30] GET http://127.0.0.1:3300/_next/static/chunks/apps_app_components_crm_fields_184omea._.js → 200 OK
+[35657.31] GET http://127.0.0.1:3300/_next/static/chunks/apps_app_components_crm_0xuvzno._.js → 200 OK
+[35657.32] GET http://127.0.0.1:3300/_next/static/chunks/apps_app_components_1fw4-h1._.js → 200 OK
+[35657.33] GET http://127.0.0.1:3300/_next/static/chunks/apps_app_lib_1g8ayt8._.js → 200 OK
+[35657.34] GET http://127.0.0.1:3300/_next/static/chunks/apps_app_app_(app)_%5Bslug%5D_0m3wx8g._.js → 200 OK
+[35657.35] GET http://127.0.0.1:3300/_next/static/chunks/1m3o_next_1fqcc15._.js → 200 OK
+[35657.36] GET http://127.0.0.1:3300/_next/static/chunks/1rp1_%40carbon_icons-react_es_1e3joml._.js → 200 OK
+[35657.37] GET http://127.0.0.1:3300/_next/static/chunks/0ch2_motion-dom_dist_es_05ag043._.js → 200 OK
+[35657.38] GET http://127.0.0.1:3300/_next/static/chunks/05cx_framer-motion_dist_es_1hp694k._.js → 200 OK
+[35657.39] GET http://127.0.0.1:3300/_next/static/chunks/18oq_%40dnd-kit_core_dist_core_esm_0q7k3ym.js → 200 OK
+[35657.40] GET http://127.0.0.1:3300/_next/static/chunks/021h_parse5_dist_1mtcf8o._.js → 200 OK
+...(145 more, all 200/304, zero failures)
+
+== Out-of-scope stray traffic: localhost:3000 — 275 requests (note-only) ==
+Nothing was started on port 3000 in this run; these are pre-existing/stale entries in the shared browser network log, not traffic from this E9 run. All show ERR_CONNECTION_REFUSED once, confirming nothing is currently listening there.
+
+[76284.12] GET http://localhost:3000/_next/static/chunks/1m3o_next_dist_client_1cvbd6w._.js → 200 OK
+[76284.13] GET http://localhost:3000/_next/static/chunks/1m3o_next_dist_08d-hqc._.js → 200 OK
+[76284.14] GET http://localhost:3000/_next/static/chunks/1u71_%40swc_helpers_cjs_0g5k6e_._.js → 200 OK
+[76284.15] GET http://localhost:3000/_next/static/chunks/apps_app_1anvha4._.js → 200 OK
+[76284.16] GET http://localhost:3000/_next/static/chunks/turbopack-apps_app_1kcbo1q._.js → 200 OK
+[76284.17] GET http://localhost:3000/_next/static/chunks/apps_app_19c2f99._.js → 200 OK
+[76284.18] GET http://localhost:3000/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_0-6o2qw._.js → 200 OK
+[76284.19] GET http://localhost:3000/_next/static/chunks/11l8_tailwind-merge_dist_bundle-mjs_mjs_1gt0n5j._.js → 200 OK
+[76284.20] GET http://localhost:3000/_next/static/chunks/0d0e_%40tanstack_query-devtools_build_046fnsj._.js → 200 OK
+[76284.21] GET http://localhost:3000/_next/static/chunks/17u__%40trpc_client_dist_09ji32s._.js → 200 OK
+[76284.22] GET http://localhost:3000/_next/static/chunks/0trj_%40trpc_server_dist_0__neun._.js → 200 OK
+[76284.23] GET http://localhost:3000/_next/static/chunks/13z9_zod_v4_0--tbhe._.js → 200 OK
+[76284.24] GET http://localhost:3000/_next/static/chunks/node_modules__bun_0nq_nv5._.js → 200 OK
+[76284.25] GET http://localhost:3000/_next/static/chunks/_1uh5i2t._.js → 200 OK
+[76284.26] GET http://localhost:3000/_next/static/chunks/072g_streamdown_dist_062har3._.js → 200 OK
+...
+[76284.597] GET http://localhost:3000/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D [FAILED: net::ERR_CONNECTION_REFUSED]
+[76284.598] GET http://localhost:3000/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D [FAILED: net::ERR_CONNECTION_REFUSED]
+[76284.600] GET http://localhost:3000/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D [FAILED: net::ERR_CONNECTION_REFUSED]
+[76284.601] GET http://localhost:3000/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D [FAILED: net::ERR_CONNECTION_REFUSED]
+[76284.602] GET http://localhost:3000/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D [FAILED: net::ERR_CONNECTION_REFUSED]
+[76284.604] GET http://localhost:3000/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D [FAILED: net::ERR_CONNECTION_REFUSED]
+[76284.605] GET http://localhost:3000/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D [FAILED: net::ERR_CONNECTION_REFUSED]
+[76284.607] GET http://localhost:3000/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D [FAILED: net::ERR_CONNECTION_REFUSED]
+[76284.608] GET http://localhost:3000/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D [FAILED: net::ERR_CONNECTION_REFUSED]
+[EEA8610F4BE2D185A403288C6F9C47C8] GET http://localhost:3000/crm [FAILED: net::ERR_CONNECTION_REFUSED]
+[56CFE3EF8B4312049774AA06636743AD] GET http://localhost:3000/crm [FAILED: net::ERR_CONNECTION_REFUSED]
+[23B23038FD2A6CEC23181C9A0B23F6A3] GET http://localhost:3000/crm [FAILED: net::ERR_CONNECTION_REFUSED]
+[488DF40569A7483075F427D1974041CB] GET http://localhost:3000/crm [FAILED: net::ERR_CONNECTION_REFUSED]
+[CABE6EF2E5D2C6496CBEC877FE6EC14C] GET http://localhost:3000/crm [FAILED: net::ERR_CONNECTION_REFUSED]
+[786B654FDAEFF4337F35BA463050DDAD] GET http://localhost:3000/crm [FAILED: net::ERR_CONNECTION_REFUSED]

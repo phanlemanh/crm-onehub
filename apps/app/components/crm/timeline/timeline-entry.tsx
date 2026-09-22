@@ -14,6 +14,7 @@ import { LocalDateTime, LocalRelativeTime } from "@/components/local-date-time";
 import { activityLabel } from "@/lib/activity-presentation";
 import { dealStageLabel } from "@/lib/deal-stage";
 import { crmMessages } from "@/lib/messages/crm";
+import { quaHan } from "@/lib/qua-han";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -63,12 +64,13 @@ export function TimelineEntry({
 	);
 
 	const isTask = entry.type === "TASK";
-	const done = entry.completedAt !== null;
+	const completedAt =
+		entry.completedAt === null ? null : new Date(entry.completedAt);
+	const done = completedAt !== null;
 	const overdue =
 		isTask &&
-		!done &&
 		entry.dueAt !== null &&
-		new Date(entry.dueAt) < new Date();
+		quaHan(new Date(entry.dueAt), completedAt, new Date());
 
 	const change =
 		entry.type === "STAGE_CHANGE" ? stageChange.parse(entry.meta) : null;

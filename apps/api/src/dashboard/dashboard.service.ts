@@ -1,6 +1,12 @@
 import { ActivityType, type Db, DealStage } from "@crm/db";
 import { OPEN_DEAL_STAGES } from "@crm/db/deal-stage";
-import { NHAC, type ViecNhac, viecCanNhac } from "@crm/db/onboarding-nhac";
+import {
+	dauNgayVN,
+	NHAC,
+	ngayVN,
+	type ViecNhac,
+	viecCanNhac,
+} from "@crm/db/onboarding-nhac";
 import { activityMeta } from "@crm/validation/activity-meta";
 import { Injectable } from "@nestjs/common";
 import { toCents } from "../crm/values";
@@ -146,8 +152,8 @@ export class DashboardService {
 				where: {
 					type: ActivityType.TASK,
 					completedAt: null,
-					dueAt: { lt: now },
-					createdById: actingUserId,
+					dueAt: { lt: dauNgayVN(now) },
+					createdById: mine ? actingUserId : undefined,
 				},
 				orderBy: [{ dueAt: "asc" }],
 				take: 10,
@@ -155,6 +161,7 @@ export class DashboardService {
 					id: true,
 					subject: true,
 					dueAt: true,
+					createdBy: { select: { id: true, name: true } },
 					company: { select: { id: true, name: true } },
 					deal: { select: { id: true, name: true } },
 				},
@@ -302,11 +309,7 @@ export class DashboardService {
 
 	private async buocCuaToi(actingUserId: string, now: Date) {
 		const han = new Date(
-			Date.UTC(
-				now.getUTCFullYear(),
-				now.getUTCMonth(),
-				now.getUTCDate() + ONBOARDING.viecCuaToi.cuaSoNgay + 1,
-			),
+			dauNgayVN(now).getTime() + (ONBOARDING.viecCuaToi.cuaSoNgay + 1) * DAY_MS,
 		);
 		const buoc = await this.db.onboardingStep.findMany({
 			where: {
@@ -328,7 +331,7 @@ export class DashboardService {
 		return buoc.map((b) => ({
 			stepId: b.id,
 			nhan: b.label,
-			dueAt: b.dueAt.toISOString().slice(0, 10),
+			dueAt: ngayVN(b.dueAt),
 			planId: b.planId,
 			company: b.plan.company,
 		}));
