@@ -2,7 +2,10 @@ import { timingSafeEqual } from "node:crypto";
 import { EnrichmentStatus, Prisma } from "@crm/db";
 import { MAX_ATTEMPTS } from "@crm/db/agent-tasks";
 import { schemas } from "@crm/validation";
-import { eveTurnFailure } from "@crm/validation/eve-stream";
+import {
+	type EveTurnFailure,
+	eveTurnFailure,
+} from "@crm/validation/eve-stream";
 import { type ChannelEvents, defineChannel, GET, POST } from "eve/channels";
 import { z } from "zod";
 import { recordBuilderInputRequest } from "../lib/builder-input";
@@ -102,11 +105,10 @@ export async function closeTask(
 function logBuilderFailure(
 	conversationId: string,
 	event: "turn.failed" | "session.failed",
-	data: unknown,
+	failure: EveTurnFailure,
 ) {
-	const { code, message } = eveTurnFailure.parse(data);
 	console.error(
-		`[agent] builder conversation ${conversationId} ${event}: ${code ?? "AGENT_FAILED"} ${message ?? ""}`,
+		`[agent] builder conversation ${conversationId} ${event}: ${failure.code ?? "AGENT_FAILED"} ${failure.message ?? ""}`,
 	);
 }
 
@@ -158,7 +160,11 @@ export const crmEvents: ChannelEvents = {
 
 		const conversationId = builderIdFromToken(channel.continuationToken);
 		if (conversationId) {
-			logBuilderFailure(conversationId, "turn.failed", data);
+			logBuilderFailure(
+				conversationId,
+				"turn.failed",
+				eveTurnFailure.parse(data),
+			);
 			const { db } = await import("@crm/db");
 			await db.agentConversation.updateMany({
 				where: { id: conversationId, kind: "BUILDER" },
@@ -248,7 +254,11 @@ export const crmEvents: ChannelEvents = {
 	async "session.failed"(data, channel) {
 		const conversationId = builderIdFromToken(channel.continuationToken);
 		if (conversationId) {
-			logBuilderFailure(conversationId, "session.failed", data);
+			logBuilderFailure(
+				conversationId,
+				"session.failed",
+				eveTurnFailure.parse(data),
+			);
 			const { db } = await import("@crm/db");
 			await db.agentConversation.updateMany({
 				where: { id: conversationId, kind: "BUILDER" },

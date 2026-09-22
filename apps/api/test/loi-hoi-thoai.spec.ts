@@ -92,13 +92,8 @@ describe("su-kien-loi", () => {
 	});
 
 	test("nguoi khac khong doc duoc su kien", async () => {
-		const loi = await dichVu
-			.events({ id: hoiThoai, limit: 50 }, nguoiB)
-			.then(() => null)
-			.catch((error: unknown) =>
-				error instanceof Error ? error.message : String(error),
-			);
-
-		expect(loi).toBe(`No conversation with id ${hoiThoai}.`);
+		await expect(
+			dichVu.events({ id: hoiThoai, limit: 50 }, nguoiB),
+		).rejects.toThrow(`No conversation with id ${hoiThoai}.`);
 	});
 });
