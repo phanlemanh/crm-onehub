@@ -315,7 +315,6 @@ mock.module("@/lib/trpc/client", () => ({
 					dongLuc = null;
 				}),
 			),
-			plansOfCompany: thuTuc("plansOfCompany", () => []),
 			listSteps: thuTuc("listSteps", () =>
 				quaJson(
 					stepListOutput.parse({
