@@ -135,7 +135,8 @@ ngày, không theo hành động.
 | ST-kehoach-dadong | Sheet kế hoạch | ghi chú «Đã đóng <ngày>» ở đầu sheet; mọi nút ghi khoá kèm «Mở lại để sửa» | mở lại, hoặc chỉ đọc và ghi chú |
 | ST-kehoach-quahan | Sheet kế hoạch | huy hiệu «Quá hạn» và ngày in đậm trên bước có ngày hạn trước hôm nay | giao, đổi hạn, tích |
 | ST-kehoach-phieurong | Tab Môi giới | màn trống của vòng một kèm Thêm môi giới | thêm môi giới |
-| ST-kehoach-phieu80 | Tab Môi giới | bảng 80 hàng cuộn trong thân sheet, tiêu đề cột bậc đứng yên | đánh dấu bậc, gỡ |
+| ST-kehoach-phieu80 | Tab Môi giới | bảng 80 hàng cuộn cùng phễu trong thân sheet | đánh dấu bậc, gỡ |
+| ST-kehoach-hoatdong | Tab Hoạt động | vết theo thời gian mới nhất trước, ghi chú đậm hơn vết máy, composer ghi chú ở đầu | đọc, ghi chú |
 | ST-kehoach-dangghi | Mọi nút ghi | nút khoá, trạng thái chờ; lỗi → toast đúng thông điệp máy chủ | chờ |
 <!-- UX-STATE-TABLE>>> -->
 
@@ -174,12 +175,12 @@ Căn cứ: luồng hiển nhiên, không tra thêm — kho đã dùng đúng khu
 `/onboarding?record=plan:<id>`, như `deals/[dealId]/page.tsx`.
 
 **Đầu sheet:** `EntityLogo` công ty · tiêu đề tên đối tác · dòng phụ «Kế hoạch 30
-ngày · khuôn <tên>» với tên công ty bấm mở sheet công ty chồng lên · ô `note`
+ngày · khuôn <tên> · Hồ sơ công ty» với «Hồ sơ công ty» bấm mở sheet công ty chồng lên · ô `note`
 «Đã đóng <ngày>» · menu `⋯` riêng.
 
 **Dải số:** Ngày x/y · Bước x/y · Im lặng n ngày · Cầm trịch.
 
-**Tab Bước** (mặc định): mục «Kế hoạch» (Khuôn · Bắt đầu · Mục tiêu · Cầm trịch
+**Tab Bước** (mặc định): mục «Chi tiết» (Khuôn · Bắt đầu · Mục tiêu · Cầm trịch
 sửa tại chỗ) rồi các nhóm theo bộ phận «<bộ phận> · x/y xong», mỗi dòng ô tích ·
 nhãn · người được giao · hạn · menu Lên/Xuống/Bỏ; `AddRow` «Thêm bước» cuối mỗi
 nhóm, điền sẵn bộ phận.
