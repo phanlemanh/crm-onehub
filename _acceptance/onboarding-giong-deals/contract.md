@@ -5,7 +5,7 @@ slug: onboarding-giong-deals
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 veto_state: mo
 veto_opened_at: 2026-09-22T14:30:00Z
 design_doc: docs/superpowers/specs/2026-09-22-onboarding-giong-deals-design.md
