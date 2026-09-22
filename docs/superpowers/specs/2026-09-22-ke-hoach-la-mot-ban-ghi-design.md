@@ -56,9 +56,15 @@ Ghi chú của người là `NOTE` mang `planId` và `companyId` của kế ho�
 1. Mỗi thủ tục ghi bước và ghi đúng một `Activity` trong **cùng một transaction**,
    và chạm `OnboardingStep.updatedAt`.
 2. Thao tác không đổi giá trị nào thì không ghi vết và không chạm `updatedAt`.
-3. Xoá theo dây chuyền (xoá công ty → kế hoạch → vết) tính lại `lastActivityAt`
-   qua `ActivityStampService.targetsOf` — `targetsOf` phải phủ `planId`
-   (`docs/api.md`, mục purge).
+3. Xoá theo dây chuyền (xoá công ty → kế hoạch → vết). Vết kế hoạch chỉ mang
+   `planId` hoặc thêm `companyId`, không bao giờ `contactId` hay `dealId`, nên
+   không bản ghi còn sống nào bị vết kế hoạch đóng dấu `lastActivityAt`;
+   `targetsOf` không cần phủ `planId` (`docs/api.md`, mục purge).
+4. Mỗi vết mang `createdById` của người bấm — thủ tục nhận người đang đăng nhập
+   từ ngữ cảnh router, không lấy `ownerId` của kế hoạch.
+5. Hàm dựng `meta` của từng `kind` xuất từ `packages/validation/src/onboarding-activity.ts`
+   là đường DUY NHẤT tạo `meta`; service gọi nó khi ghi, bài kiểm vẽ gọi nó khi
+   dựng fixture — một khuôn cho bên viết và bên đọc.
 
 ## 3. API
 

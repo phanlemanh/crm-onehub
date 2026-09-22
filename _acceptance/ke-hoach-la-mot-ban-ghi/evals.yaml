@@ -14,19 +14,23 @@ evals:
       - "apps/api/test/ke-hoach-ban-ghi.spec.ts"
     expected: |
       Do HANG trong co so du lieu, khong do gia tri tra ve.
-      Gieo mot ke hoach dang chay co mot buoc chua giao, ghi lai updatedAt cua
-      buoc. Goi that service.assignStep({ stepId, assigneeId: A }).
-      Doc LAI tu DB va khang dinh BON dieu:
+      Gieo mot ke hoach dang chay, cam trich O, co mot buoc chua giao, ghi lai
+      updatedAt cua buoc. Goi that service.assignStep({ stepId, assigneeId: A })
+      voi nguoi dang nhap la B (B khac O, khac A).
+      Doc LAI tu DB va khang dinh NAM dieu:
         1 buoc co assigneeId bang A
         2 updatedAt moi LON HON updatedAt da ghi
         3 co DUNG MOT Activity type PLAN_CHANGE mang planId cua ke hoach
         4 meta cua Activity do parse qua schema onboarding-activity ra kind
           buoc.giao, tu = null, den = A, stepId dung
-      CAP HAI CHIEU tren cung fixture: chieu duong la bon dong tren. Chieu doi
+        5 createdById cua Activity bang B — khong phai O, khong phai A
+      CAP HAI CHIEU tren cung fixture: chieu duong la nam dong tren. Chieu doi
       chung: giao tiep cho B -> Activity thu hai mang tu = A, den = B.
       DOT BIEN CHUNG MINH, chan phai chay va no phai DO: bo lenh ghi Activity
       khoi transaction cua assignStep -> dong 3 do voi thong diep ghim
-      "buoc.giao" va so vet mong doi 1, nhan duoc 0.
+      "buoc.giao" va so vet mong doi 1, nhan duoc 0. Dot bien thu hai: ghi
+      createdById bang ownerId cua ke hoach -> dong 5 do voi thong diep ghim
+      "mong B / nhan O".
 
   - id: E2
     criterion: AC-2
@@ -41,11 +45,13 @@ evals:
       Gieo mot ke hoach BON buoc, khong buoc nao xong, va lui updatedAt cua moi
       buoc ve dung NAM ngay truoc (nep gieoKeHoach imNgay cua vong mot).
       Goi that service.manDanhMuc truoc -> ghi lai hang: buocXong 0, imNgay 5.
-      Goi that service.setStepDone({ stepId, done: true }).
-      Goi LAI service.manDanhMuc va khang dinh BA dieu tren CHINH hang do:
+      Goi that service.setStepDone({ stepId, done: true }) voi nguoi dang nhap
+      la B — B khong phai cam trich, khong phai nguoi duoc giao buoc.
+      Goi LAI service.manDanhMuc va khang dinh BON dieu tren CHINH hang do:
         1 buocXong bang 1 va buocTong bang 4
         2 imNgay bang 0
         3 doc tu DB: completedAt cua buoc khac null
+        4 doc tu DB: vet buoc.xong co createdById bang B
       CAP HAI CHIEU tren cung fixture: chieu duong la ba dong tren. Chieu am:
       setStepDone done false tren cung buoc -> completedAt null, buocXong ve 0,
       va mot vet buoc.boXong duoc ghi.
@@ -99,7 +105,7 @@ evals:
       onDelete Cascade -> dong 4 do voi thong diep ghim "buoc.bo" mat vet.
 
   - id: E5
-    criterion: AC-5
+    criterion: AC-4
     executor: test
     layer: backend-effect
     cmd: config:executors.test.kh1_sap_lai
@@ -223,19 +229,17 @@ evals:
     expected: |
       Gieo cong ty K voi ke hoach P, mot vet buoc.giao, mot ghi chu NOTE mang
       planId va companyId, va mot contact C cua K dang ghi danh trong phieu.
+      Doi chung duong TRUOC khi xoa: dem Activity planId P lon hon 0, va C ton tai.
       Xoa K bang DUNG duong xoa that cua san pham (thu tuc delete cua companies,
       khong xoa bang Prisma tran).
       Khang dinh HAI dieu:
-        1 dem Activity co planId P bang 0
-        2 moi ban ghi con song ma lenh xoa cham toi co lastActivityAt null hoac
-          bang createdAt/occurredAt cua mot Activity CON TON TAI — khong tro vao
-          hang da mat
-      Doi chung duong tren cung fixture: TRUOC khi xoa, dem Activity planId P
-      lon hon 0.
-      DOT BIEN CHUNG MINH: cho ActivityStampService.targetsOf bo qua planId ->
-      dong 2 do voi thong diep ghim ban ghi co lastActivityAt tro vao hang mat.
-      Neu duong xoa that khong cham ban ghi nao con song thi ghi ro dieu do
-      trong test va dong 2 van phai chay tren tap rong co doi chung.
+        1 dem Activity co planId P bang 0, va ke hoach P khong con
+        2 contact C van con — duong xoa cong ty giu ca nhan
+      DOT BIEN CHUNG MINH: doi quan he Activity.plan sang onDelete SetNull ->
+      dong 1 do voi thong diep ghim so vet planId P mong 0 nhan duoc lon hon 0.
+      Luu y co ten: targetsOf KHONG can phu planId vi vet ke hoach khong bao gio
+      mang contactId hay dealId (gap-probe P2, 2026-09-22) — eval nay khong do
+      lastActivityAt.
 
   - id: E11
     criterion: AC-11
@@ -347,19 +351,25 @@ evals:
       - "apps/app/lib/messages/**"
       - "apps/app/test/ke-hoach-sheet.dom.tsx"
     expected: |
-      Dung that TimelineEntry trong jsdom, hai lan:
-        a mot Activity PLAN_CHANGE, meta kind buoc.xong, nhan "Dao tao", nguoi
-          tao "Trinh Cam Thuong", locale vi
-        b mot Activity STAGE_CHANGE cua thoa thuan, meta from DEMO_BOOKED to
-          QUALIFIED_TO_BUY
-      Khang dinh HAI dieu:
-        1 a hien chuoi co ca ten nguoi, chu "xong" va nhan buoc — doc textContent,
-          khong doc props
-        2 b hien hai nhan giai doan va mui ten "→" nhu truoc; khong nem
-      Doi chung am: meta PLAN_CHANGE hong (thieu kind) -> dong khong vo man,
-      hien nhan du phong co ten, va khong nem.
-      DOT BIEN CHUNG MINH: cho PLAN_CHANGE di qua stageChange.parse -> dong 1 do
-      voi thong diep ghim kind buoc.xong.
+      Fixture KHONG dung meta tay: moi meta dung bang CHINH ham dung vet xuat tu
+      packages/validation/src/onboarding-activity.ts — ham service goi khi ghi.
+      Mot khuon cho ben viet va ben doc.
+      Ma tran viet truoc CHIN kind, moi dong mot assert tren textContent cua
+      TimelineEntry dung that trong jsdom, locale vi, nguoi tao "Trinh Cam
+      Thuong", nhan buoc "Dao tao":
+        buoc.giao tu null den A · buoc.giao tu A den null (bo giao) ·
+        buoc.xong · buoc.boXong · buoc.doiHan 2026-09-22 -> 2026-09-25 ·
+        buoc.them · buoc.bo · keHoach.doiCamTrich · keHoach.dong · keHoach.moLai
+      (buoc.giao hai dong vi hai chieu; tong 10 assert cho 9 kind.)
+      Moi dong phai: co ten nguoi tao; co nhan buoc voi kind buoc.*; KHONG chua
+      "undefined", "null", hay mau ISO co chu T.
+      Them mot dong STAGE_CHANGE cua thoa thuan (DEMO_BOOKED -> QUALIFIED_TO_BUY):
+      hien hai nhan giai doan va mui ten "→" nhu truoc; khong nem.
+      Doi chung am: meta PLAN_CHANGE hong (thieu kind) -> dong khong vo man, hien
+      nhan du phong co ten, khong nem.
+      DOT BIEN CHUNG MINH: xoa nhanh ve buoc.giao -> dong buoc.giao do voi thong
+      diep ghim ten kind; cho PLAN_CHANGE di qua stageChange.parse -> moi dong
+      PLAN_CHANGE do.
 
   - id: E17
     criterion: AC-15
@@ -409,3 +419,55 @@ evals:
       tuong, radius/mau ngoai thang cua kho).
       DOT BIEN CHUNG MINH: them mot nut chi co bieu tuong khong aria-label vao
       plan-steps.tsx trong ban sao -> lenh thoat khac 0 va in ten tep.
+
+  - id: E19
+    criterion: AC-5
+    executor: test
+    layer: ui
+    cmd: config:executors.test.kh1_noi_man_buoc
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/trpc/cache.ts"
+      - "apps/app/test/ke-hoach-sheet.dom.tsx"
+      - "apps/api/test/fixtures/ke-hoach-payload.json"
+    expected: |
+      Day la phep do cua doan noi man -> thu tuc (gap-probe P0, 2026-09-22).
+      Dung that tab Buoc cua PlanSheet trong jsdom, ban gia tRPC tra HAI dong buoc
+      cung mot bo phan: S1 (dong 1), S2 (dong 2). Ban gia ghi TEN thu tuc va INPUT;
+      spy tren useCrmCache().plan ghi moi lan duoc goi.
+      Tren DONG 2: tich xong; chon nguoi A trong danh sach giao; chon ngay
+      2026-09-25 trong lich.
+      Khang dinh BON dieu:
+        1 dung ba loi goi, theo thu tu: onboarding.setStepDone { stepId: S2, done:
+          true } · onboarding.assignStep { stepId: S2, assigneeId: A } ·
+          onboarding.rescheduleStep { stepId: S2, dueAt: "2026-09-25" }
+        2 khong loi goi nao mang stepId S1
+        3 ba payload bang DUNG ba payload ghi trong
+          apps/api/test/fixtures/ke-hoach-payload.json — tep E20 doc de ghi that
+        4 sau moi loi goi thanh cong, useCrmCache().plan duoc goi voi planId dung
+          (3 lan)
+      DOT BIEN CHUNG MINH: lay stepId cua dong dau nhom -> dong 2 do voi thong
+      diep "Expected stepId S2 / Received S1"; bo lenh lam moi trong onSuccess ->
+      dong 4 do voi thong diep ghim so lan lam moi mong 3.
+
+  - id: E20
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh1_noi_man_buoc_db
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/ke-hoach-ban-ghi.spec.ts"
+      - "apps/api/test/fixtures/ke-hoach-payload.json"
+    expected: |
+      Doc ba payload tu apps/api/test/fixtures/ke-hoach-payload.json — chinh tep
+      E19 khang dinh man gui dung. Thay stepId S2 va assigneeId A bang id that cua
+      mot ke hoach gieo hai buoc.
+      Cho moi payload: parse qua DUNG input schema zod ma router dung (xuat tu
+      onboarding.contracts), roi goi service tuong ung.
+      Khang dinh BA dieu, doc LAI tu DB:
+        1 ca ba payload qua duoc schema — khong 400
+        2 dong 2 co completedAt khac null, assigneeId A, dueAt 2026-09-25
+        3 dong 1 khong doi gi (so voi anh chup truoc)
+      DOT BIEN CHUNG MINH: doi dueAt cua schema sang z.date() -> dong 1 do voi
+      thong diep ghim ten thu tuc rescheduleStep va loi parse.
