@@ -23,6 +23,7 @@ import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { ListSearch } from "@/components/data-table/list-search";
 import { useTableQuery } from "@/components/data-table/use-table-query";
+import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
@@ -236,6 +237,15 @@ export function DanhMucTable() {
 				users.data ?? [],
 				data.facetCounts.nguoiCam,
 				list.nguoiCam,
+			),
+		},
+		{
+			id: "nguoiGiao",
+			label: keHoachNoiMessages(locale).danhMuc.nguoiGiao,
+			options: tuyChonCoDem(
+				users.data ?? [],
+				data.facetCounts.nguoiGiao,
+				list.nguoiGiao,
 			),
 		},
 	];

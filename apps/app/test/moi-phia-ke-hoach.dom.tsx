@@ -97,6 +97,9 @@ const { ContactSheet } = await import(
 	"@/components/crm/record-sheet/contact-sheet"
 );
 const { DetailSheet } = await import("@/components/detail-sheet");
+const { DanhMucTable } = await import(
+	"@/app/(app)/[slug]/onboarding/danh-muc-table"
+);
 const { DashboardSummary } = await import(
 	"@/app/(app)/[slug]/dashboard-summary"
 );
@@ -585,5 +588,109 @@ describe("the-tasks-man", () => {
 			() => daGoi.filter((g) => g.duong === "dashboard.summary").length > truoc,
 			"tong quan duoc lam moi",
 		);
+	});
+});
+
+const NGUOI_A = { id: "u-a", name: "An", email: "an@thu.test", image: null };
+
+function danhMucGia() {
+	return {
+		rows: [
+			{
+				...hangKeHoach("P1", false),
+				boPhanTac: "Kinh doanh",
+				boPhanTacId: "bp-1",
+			},
+		],
+		total: 1,
+		facetCounts: {
+			trangThai: { "dang-chay": 1 },
+			boPhan: { "bp-1": 1 },
+			nguoiCam: { [TOI.id]: 1 },
+			nguoiGiao: { [NGUOI_A.id]: 1 },
+		},
+		soKhuon: 1,
+		trangThai: "ST-danhmuc-codulieu",
+	};
+}
+
+async function phim(o: Element, key: string): Promise<void> {
+	await act(async () => {
+		o.dispatchEvent(
+			new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true }),
+		);
+	});
+}
+
+function goiDanhMucCuoi(): Record<string, unknown> | undefined {
+	const goi = daGoi.filter((g) => g.duong === "onboarding.manDanhMuc");
+	return goi.at(-1)?.dauVao as Record<string, unknown> | undefined;
+}
+
+describe("loc-nguoi-giao-man", () => {
+	test("loc-nguoi-giao-man: chon A o o loc Nguoi duoc giao gui nguoiGiao [A], bo chon thi rong", async () => {
+		duLieu["users.list"] = () => [TOI, NGUOI_A];
+		duLieu["onboarding.manDanhMuc"] = () => danhMucGia();
+		const san = await mo(<DanhMucTable />);
+		await cho(
+			() => san.o.textContent?.includes("One Mount") === true,
+			"hang One Mount",
+		);
+
+		const moLoc = [
+			...document.body.querySelectorAll<HTMLElement>('[aria-haspopup="menu"]'),
+		].find((o) => o.textContent?.trim().startsWith("Lọc"));
+		if (!moLoc) throw new Error("khong thay nut mo menu Loc");
+		await bam(moLoc);
+		await cho(
+			() =>
+				[...document.body.querySelectorAll('[role="menuitem"]')].some((o) =>
+					o.textContent?.includes(k.danhMuc.nguoiGiao),
+				),
+			"muc Nguoi duoc giao",
+		);
+		const muc = [
+			...document.body.querySelectorAll<HTMLElement>('[role="menuitem"]'),
+		].find((o) => o.textContent?.includes(k.danhMuc.nguoiGiao));
+		if (!muc) throw new Error("khong thay muc Nguoi duoc giao");
+		muc.focus();
+		await phim(muc, "ArrowRight");
+		await cho(
+			() =>
+				[...document.body.querySelectorAll('[role="menuitemcheckbox"]')].some(
+					(o) => o.textContent?.includes(NGUOI_A.name),
+				),
+			"lua chon An",
+		);
+		const chonA = [
+			...document.body.querySelectorAll<HTMLElement>(
+				'[role="menuitemcheckbox"]',
+			),
+		].find((o) => o.textContent?.includes(NGUOI_A.name));
+		if (!chonA) throw new Error("khong thay lua chon An");
+		await bam(chonA);
+		await cho(() => {
+			const v = goiDanhMucCuoi()?.nguoiGiao;
+			return Array.isArray(v) && v.length === 1;
+		}, "loi goi danh muc mang nguoiGiao");
+		const dauVao = goiDanhMucCuoi();
+		expect(dauVao?.nguoiGiao, "Expected nguoiGiao [A]").toEqual([NGUOI_A.id]);
+		expect(dauVao?.nguoiCam, "nguoiCam giu nguyen").toEqual([]);
+		expect(dauVao?.boPhan, "boPhan giu nguyen").toEqual([]);
+		expect(san.url().get("nguoiGiao"), "tham so duong dan").toContain(
+			NGUOI_A.id,
+		);
+
+		const lai = [
+			...document.body.querySelectorAll<HTMLElement>(
+				'[role="menuitemcheckbox"]',
+			),
+		].find((o) => o.textContent?.includes(NGUOI_A.name));
+		if (!lai) throw new Error("menu da dong, khong bo chon duoc");
+		await bam(lai);
+		await cho(() => {
+			const v = goiDanhMucCuoi()?.nguoiGiao;
+			return Array.isArray(v) && v.length === 0;
+		}, "doi chung: bo chon thi nguoiGiao rong");
 	});
 });
