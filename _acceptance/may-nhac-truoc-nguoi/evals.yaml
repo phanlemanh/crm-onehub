@@ -79,9 +79,11 @@ evals:
         3 sau 10:00 -> van 2 hang
         4 sau hom sau 08:31 -> 4 hang, 2 hang moi mang ngay hom sau
         5 moi payload parse qua schema payload cua loai nay; khoa chi gom loai, planId, stepId
+        6 ca chong nhau: Promise.all hai lan lenLichNhac luc 08:31 tren fixture sach -> dung 2 hang
       Doi chung duong: dong 2 la chieu xanh cua dong 1 tren cung fixture.
       DOT BIEN CHUNG MINH: bo kiem tra hang da co trong ngay -> dong 3 do voi thong
-      diep ghim "quet lai cung ngay khong them hang".
+      diep ghim "quet lai cung ngay khong them hang"; bo khoa duy nhat (kind, subject)
+      -> dong 6 do voi "hai luot chong nhau van mot hang moi nguoi".
 
   - id: E5
     criterion: AC-5
@@ -100,10 +102,13 @@ evals:
         3 vi tri "Quá hạn" < "Sắp hạn" < "Kế hoạch im" trong van ban
         4 moi dong mang ten cong ty cua dong do va ket thuc "?record=plan:<ma dung>"
           (so tung dong voi ke hoach gieo, khong chi dem so lien ket)
-        5 doc LAI hang tu DB: finishedAt co gia tri, outcome da-gui, soDong 4
-        6 fixture 12 viec -> dung 10 dong + dong "và 2 việc nữa"
+        5 doc LAI hang tu DB: finishedAt co gia tri, outcome da-gui, soDong 4,
+          payload.daGui bang dung tap bon dong da gui
+        6 fixture 12 viec -> dung 10 dong + dong "và 2 việc nữa", payload.daGui dung 10 muc do
+        7 xoa APP_URL khoi moi truong -> van 1 postMessage, van ban khong chua "record=" hay "undefined", outcome da-gui
       DOT BIEN CHUNG MINH: dat planId cua dong dau cho ke hoach khac -> dong 4 do
-      voi thong diep ghim "dong mo dung ke hoach cua no"; bo tran -> dong 6 do.
+      voi thong diep ghim "dong mo dung ke hoach cua no"; bo tran -> dong 6 do;
+      noi APP_URL bang chuoi truc tiep -> dong 7 do voi "thieu APP_URL thi khong lien ket".
 
   - id: E6
     criterion: AC-6
@@ -154,7 +159,7 @@ evals:
     expected: |
       Goi that dashboard.summary cho O, W, X:
         1 O va W: keHoachCanDeY bang dung {(ke-hoach-im,P1),(moc-ngay,P1)}, moi muc
-          co planId, companyName, goiY
+          co planId, companyName, goiY; muc moc-ngay co soBuocXong va soBuocTong bang dem that
         2 X: keHoachCanDeY rong
         3 mySteps cua O bang dung ket qua truoc khi gieo P1 (khong doi)
       DOT BIEN CHUNG MINH: bo loc theo nguoi -> dong 2 do voi thong diep ghim
@@ -173,7 +178,7 @@ evals:
       Dom test, du lieu tu fixture apps/api/test/fixtures/may-nhac-payload.json (rut
       tu dau ra that cua dashboard.summary o E10). Ma tran:
         1 co dong "Kế hoạch im" mang so ngay im, ten cong ty, goi y
-        2 co dong "Mốc ngày" mang ngay thu va so buoc xong
+        2 co dong "Mốc ngày" mang ngay thu va "soBuocXong/soBuocTong" lay tu truong rieng cua fixture
         3 hai dong do khong co o tich (role checkbox)
         4 mo ta the chua dem ke hoach im
         5 bam dong ke hoach im -> ngan sheet gom dung plan:<ma P1>
@@ -243,7 +248,8 @@ evals:
       nhac do CHINH lenLichNhac va lan gui (Slack gia) ghi, buoc xong do CHINH
       setStepDone ghi; khong insert tay agentTask hay completedAt.
         1 ngay-im-trung-vi.sql -> 6
-        2 xong-dung-han-sau-nhac.sql -> dung = 1, mau = 2
+        2 xong-dung-han-sau-nhac.sql -> dung = 1, mau = 2 (buoc bi cat o tran va buoc xong
+          truoc gio gui KHONG vao mau — fixture co ca hai)
       Doi chung duong: danh dau xong buoc con lai dung han -> dung = 2.
       DOT BIEN CHUNG MINH: bo dieu kien closedAt null trong cau truy van -> dong 1 do
       voi thong diep ghim "trung vi chi tinh ke hoach dang chay".
@@ -271,7 +277,7 @@ evals:
       - _acceptance/may-nhac-truoc-nguoi/evidence/
     expected: |
       Nhin thay duoc tren anh, khong suy tu ma:
-        1 the Tasks co dong «Kế hoạch im» va «Mốc ngày» cung kieu dong buoc, dong im to mau canh bao
+        1 the Tasks co dong «Kế hoạch im» va «Mốc ngày» cung kieu dong buoc, cot han cua dong im cung chi bao do voi buoc qua han
         2 sheet ke hoach co nut «Đang theo dõi» canh menu, kem so nguoi theo doi
         3 hai anh 375 khong tran ngang
       Mot dong khong nhin thay -> FAIL, ghi dong nao.

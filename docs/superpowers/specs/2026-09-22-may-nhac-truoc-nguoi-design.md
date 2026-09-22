@@ -42,7 +42,7 @@ Sống ở `packages/db/src/onboarding-nhac.ts`, vì cả tác tử (lượt qu�
 suy luận — cùng loại với `imNgay` mà API đã tính cho danh mục.
 
 `viecCanNhac(db, { now, userId? })` → `Map<userId, ViecNhac[]>`, mỗi phần tử:
-`{ loai, planId, stepId?, companyName, nhan, goiY, han?, soNgay? }` với `loai` thuộc
+`{ loai, planId, stepId?, companyName, nhan, goiY, han?, soNgay?, soBuocXong?, soBuocTong? }` (hai trường cuối cho `moc-ngay`) với `loai` thuộc
 
 | Loại | Điều kiện | Người nhận |
 |---|---|---|
@@ -69,13 +69,16 @@ không đổi cách tính.
   trong `schedules/dispatch.ts` cạnh `sweepBlankFacts` — không lịch mới. Trước
   08:30 giờ VN: không làm gì. Từ 08:30 tới hết ngày: gọi `viecCanNhac`, với mỗi
   người có việc mà chưa có hàng `nhac-ke-hoach` cho ngày đó, ghi một hàng
-  (`dueAt` = bây giờ). Idempotent: quét lại trong ngày không ghi thêm.
+  (`dueAt` = bây giờ). Idempotent: quét lại trong ngày không ghi thêm; hai lượt
+  chồng nhau cũng không, nhờ chỉ mục duy nhất một phần trên (`kind`, `subject`)
+  cho loại `nhac-ke-hoach` (cùng `migration`) và `createMany … skipDuplicates`.
 - **Làn trực tiếp**: `nhac-ke-hoach` vào `TASK_KINDS` và `DIRECT_KINDS`
   (`packages/db/src/agent-tasks.ts`). Chạy: tính lại `viecCanNhac` cho đúng
   người đó (danh sách có thể đổi từ lúc ghi hàng) → rỗng thì `khong-viec` →
   `slackConnected()` sai thì `khong-slack` → không có `SlackMemberMatch` thì
   `khong-khop` → còn lại gửi một tin qua `conversations.open` + `chat.postMessage`
-  với token của xưởng, rồi `da-gui`. Lỗi Slack đi luật thử lại và
+  với token của xưởng, rồi `da-gui`, và ghi `payload.daGui` = đúng các dòng đã
+  có trong tin (sau trần) — thước SỐNG b đọc tập này, không đọc tập lúc quét. Lỗi Slack đi luật thử lại và
   `retireExhausted` sẵn có. Gửi tuần tự, không song song.
 - **Đường mở**: `APP_URL` (khai trong `.env.example`, tác tử đọc tuỳ chọn) +
   `/<slug xưởng>?record=plan:<id>`. Vắng `APP_URL` → tin vẫn gửi, không có
@@ -118,8 +121,8 @@ không đổi cách tính.
 | ST-slack-du | Tin Slack | lời chào + các nhóm Quá hạn · Sắp hạn · Kế hoạch im · Mốc ngày, mỗi dòng «công ty · gợi ý — mở kế hoạch» | bấm một dòng |
 | ST-slack-tran | Tin Slack | 10 dòng + «và N việc nữa — mở tổng quan» | mở tổng quan |
 | ST-slack-khong-duong | Tin Slack | như ST-slack-du nhưng không có liên kết (thiếu `APP_URL`) | mở CRM tay |
-| ST-tasks-co-im | Thẻ Tasks | dòng «Kế hoạch im 9 ngày · Sunrise — Giao bước Mở tài khoản», màu cảnh báo, không ô tích | bấm mở kế hoạch |
-| ST-tasks-co-moc | Thẻ Tasks | dòng «Ngày 14/30 · One Mount — 3/8 bước xong», không ô tích | bấm mở kế hoạch |
+| ST-tasks-co-im | Thẻ Tasks | dòng «Kế hoạch im · Sunrise — Giao bước Mở tài khoản», cột hạn là `StatusIndicator tone="error"` nhãn «im 9 ngày» như bước quá hạn, không ô tích | bấm mở kế hoạch |
+| ST-tasks-co-moc | Thẻ Tasks | dòng «Mốc ngày · One Mount — 3/8 bước xong», cột hạn là `StatusIndicator tone="neutral"` nhãn «ngày 14/30», không ô tích | bấm mở kế hoạch |
 | ST-tasks-rong | Thẻ Tasks | trạng thái rỗng sẵn có của thẻ | không cần làm gì |
 | ST-tasks-dang-tai | Thẻ Tasks | trạng thái đang tải sẵn có của thẻ | chờ |
 | ST-tasks-loi | Thẻ Tasks | trạng thái lỗi sẵn có của thẻ | thử lại |
@@ -141,6 +144,7 @@ không đổi cách tính.
 | Component | Nấc (dùng / ghép / mở rộng / tạo) | Vì sao (1 dòng) |
 |---|---|---|
 | `Card` + dòng bước của thẻ Tasks (lượt 2) | ghép | hai loại dòng mới cùng khuôn dòng bước, bỏ ô tích |
+| `StatusIndicator` (`tone` `error` / `neutral`) | dùng | «màu cảnh báo» của dòng im là đúng tone bước quá hạn đang dùng; không màu mới, không `className` |
 | `Button` `outline` + `Tooltip` của `/packages/ui` | dùng | nút theo dõi không cần biến thể mới |
 | `RecordSheetFrame` `actions` | ghép | nút đứng cạnh menu ⋯ đã có của kế hoạch |
 | Tin Slack (mrkdwn) | tạo | kênh mới, không có component UI; khuôn chữ ở một module tin nhắn |
