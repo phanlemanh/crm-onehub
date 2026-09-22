@@ -1,4 +1,5 @@
 import { ActivityType, type Db, type Prisma } from "@crm/db";
+import { dauNgayVN } from "@crm/db/onboarding-nhac";
 import { activityMeta } from "@crm/validation/activity-meta";
 import {
 	BadRequestException,
@@ -193,15 +194,15 @@ export class ActivitiesService {
 		input: MyTasksInput,
 		actingUserId: string,
 	): Promise<ActivityEntry[]> {
-		const now = new Date();
+		const homNay = dauNgayVN(new Date());
 		const where: Prisma.ActivityWhereInput = {
 			type: ActivityType.TASK,
 			completedAt: null,
 			createdById: actingUserId,
 		};
 
-		if (input.window === "overdue") where.dueAt = { lt: now };
-		if (input.window === "upcoming") where.dueAt = { gte: now };
+		if (input.window === "overdue") where.dueAt = { lt: homNay };
+		if (input.window === "upcoming") where.dueAt = { gte: homNay };
 
 		const tasks = await this.db.activity.findMany({
 			where,

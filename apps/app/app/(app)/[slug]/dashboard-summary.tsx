@@ -298,7 +298,7 @@ export function DashboardSummary() {
 											}
 										/>
 									) : (
-										<SimpleTableRow key={d.id}>
+										<SimpleTableRow key={d.id} data-viec={d.viec.id}>
 											<TableCell className={CELL}>
 												<Checkbox
 													checked={false}
@@ -312,7 +312,17 @@ export function DashboardSummary() {
 											<TableCell className={CELL}>
 												<span className="flex min-w-0 flex-col" translate="no">
 													<span className="truncate">{d.viec.subject}</span>
-													<span className="flex min-w-0 text-muted-foreground">
+													<span className="flex min-w-0 gap-1 text-muted-foreground">
+														{mine ? null : (
+															<>
+																<span className="shrink-0">
+																	{d.viec.createdBy.name}
+																</span>
+																{d.viec.deal || d.viec.company ? (
+																	<span aria-hidden>·</span>
+																) : null}
+															</>
+														)}
 														{d.viec.deal ? (
 															<RecordLink kind="deal" id={d.viec.deal.id}>
 																{d.viec.deal.name}
