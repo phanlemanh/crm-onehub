@@ -68,6 +68,20 @@ executors:
     kh2_cot_nguoi_giao: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t cot-nguoi-giao"'
     kh2_ba_lech: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/moi-phia-ke-hoach.dom.tsx -t ba-lech"
     kh2_san_thiet_ke: 'for t in "apps/app/components/crm/record-sheet/company-plans.tsx" "apps/app/components/crm/record-sheet/contact-plans.tsx" "apps/app/app/(app)/[slug]/settings/members/chuyen-viec-dialog.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    mn3_dung_nguoi: 'bun run test -- "cd apps/agent && bun test test/nhac-ke-hoach.integration.spec.ts -t dung-nguoi"'
+    mn3_bien_nguong: 'bun run test -- "cd apps/agent && bun test test/nhac-ke-hoach.integration.spec.ts -t bien-nguong"'
+    mn3_nua_dem: 'bun run test -- "cd apps/agent && bun test test/nhac-ke-hoach.integration.spec.ts -t nua-dem"'
+    mn3_quet_mot_lan: 'bun run test -- "cd apps/agent && bun test test/nhac-ke-hoach.integration.spec.ts -t quet-mot-lan"'
+    mn3_gui_slack: 'bun run test -- "cd apps/agent && bun test test/nhac-ke-hoach.integration.spec.ts -t gui-slack"'
+    mn3_khong_kenh: 'bun run test -- "cd apps/agent && bun test test/nhac-ke-hoach.integration.spec.ts -t khong-kenh"'
+    mn3_duong_do: 'bun run test -- "cd apps/agent && bun test test/nhac-ke-hoach.integration.spec.ts -t duong-do"'
+    mn3_theo_doi: 'bun run test -- "cd apps/api && bun test test/may-nhac.spec.ts -t theo-doi"'
+    mn3_tong_quan: 'bun run test -- "cd apps/api && bun test test/may-nhac.spec.ts -t tong-quan"'
+    mn3_payload: 'bun run test -- "cd apps/api && bun test test/may-nhac.spec.ts -t payload"'
+    mn3_payload_theo_doi: 'bun run test -- "cd apps/api && bun test test/may-nhac.spec.ts -t payload-theo-doi"'
+    mn3_the_tasks: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/may-nhac.dom.tsx -t the-tasks"
+    mn3_nut_theo_doi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/may-nhac.dom.tsx -t nut-theo-doi"
+    mn3_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/dashboard-summary.tsx" "apps/app/components/crm/record-sheet/theo-doi-ke-hoach.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     cp_ham_thuan: "cd packages/auth && bun test test/ai-duoc-vao.spec.ts"
     cp_vai_dinh_truoc: 'bun run test -- "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t vai-dinh-truoc"'
     cp_rut_chan_chua_vao: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t rut-chan-chua-vao"'

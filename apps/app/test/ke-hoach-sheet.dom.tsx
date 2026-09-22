@@ -101,6 +101,8 @@ const KE_HOACH_CHI_TIET = {
 	buocTong: 2,
 	imNgay: 3,
 	tacO: "Kickoff",
+	dangTheoDoi: false,
+	nguoiTheoDoi: [],
 };
 
 const HANG_DANH_MUC = {
@@ -179,6 +181,8 @@ mock.module("@/lib/trpc/client", () => ({
 			setPlanOwner: thuTuc("onboarding.setPlanOwner"),
 			closePlan: thuTuc("onboarding.closePlan"),
 			reopenPlan: thuTuc("onboarding.reopenPlan"),
+			watch: thuTuc("onboarding.watch"),
+			unwatch: thuTuc("onboarding.unwatch"),
 			removeEnrollment: thuTuc("onboarding.removeEnrollment"),
 			markEnrollmentStage: thuTuc("onboarding.markEnrollmentStage"),
 			upsertEnrollment: thuTuc("onboarding.upsertEnrollment"),

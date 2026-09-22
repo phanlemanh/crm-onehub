@@ -112,6 +112,7 @@ export async function gieoKeHoach(input: {
 	congTyId?: string;
 	dong?: boolean;
 	batDau?: Date;
+	soNgay?: number;
 }) {
 	const congTyId = input.congTyId ?? (await gieoCongTy()).id;
 	const plan = await db.onboardingPlan.create({
@@ -119,7 +120,7 @@ export async function gieoKeHoach(input: {
 			companyId: congTyId,
 			ownerId: input.camTrich,
 			startedAt: input.batDau ?? new Date(Date.now() - 3 * DAY_MS),
-			targetDays: 30,
+			targetDays: input.soNgay ?? 30,
 			closedAt: input.dong ? new Date() : null,
 		},
 	});

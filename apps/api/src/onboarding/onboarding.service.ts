@@ -62,6 +62,7 @@ import {
 	manDanhMucTuHang,
 } from "./onboarding-danh-muc";
 import { buocRa, CHON_BUOC, keHoachRa, OnboardingGhi } from "./onboarding-ghi";
+import { OnboardingTheoDoi } from "./onboarding-theo-doi";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -159,9 +160,11 @@ function ghiDanhRa(row: HangGhiDanh): EnrollmentOutput {
 @Injectable()
 export class OnboardingService {
 	private readonly ghi: OnboardingGhi;
+	private readonly theoDoi: OnboardingTheoDoi;
 
 	constructor(@InjectDatabase() private readonly db: Db) {
 		this.ghi = new OnboardingGhi(db);
+		this.theoDoi = new OnboardingTheoDoi(db);
 	}
 
 	assignStep(
@@ -531,7 +534,10 @@ export class OnboardingService {
 		return plans.map((plan) => dungHang(plan, bayGio));
 	}
 
-	async planById(input: PlanIdInput): Promise<PlanDetailOutput> {
+	async planById(
+		input: PlanIdInput,
+		actingUserId: string,
+	): Promise<PlanDetailOutput> {
 		const plan = await this.db.onboardingPlan.findUnique({
 			where: { id: input.id },
 			include: {
@@ -570,6 +576,7 @@ export class OnboardingService {
 			buocTong: hang.buocTong,
 			imNgay: hang.imNgay,
 			tacO: hang.tacO,
+			...(await this.theoDoi.cua(plan.id, actingUserId)),
 		};
 	}
 

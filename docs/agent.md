@@ -57,7 +57,7 @@ behind sixty LLM runs for 25 minutes (`test/lanes.integration.spec.ts`). **The r
 what the work is; the lane only says whether it needs a conversation.**
 
 **Priority**: `brand` 900 · `portrait` 800 · `workspace` 500 · `requested` 300 ·
-`meeting` 200 · `identify` 100 · `sweep` 50 · `companyProfile` 40 · `recheck` 0. The
+`meeting` 200 · `identify` 100 · `nhac` 60 · `sweep` 50 · `companyProfile` 40 · `recheck` 0. The
 top two are what a rep reads *before* deciding what to open.
 
 **`claimDue` sorts what it claims** — Postgres does not order `UPDATE … RETURNING` by
@@ -159,6 +159,31 @@ work that is actually happening.
 **It is a safety net, not the fix.** The settle path still fails to close some rows;
 this pass keeps that from reaching a rep, and the count it reports is how you see the
 underlying bug getting worse.
+
+### Nhắc buổi sáng
+
+`lenLichNhac` (`lib/nhac-ke-hoach.ts`) chạy trên nhịp dispatch, cạnh `sweepBlankFacts`
+— không có lịch riêng. Trước 08:30 giờ VN (`NHAC.gio` trong `@crm/db/onboarding-nhac`)
+nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi hàng `AgentTask` loại
+`nhac-ke-hoach` cho mỗi người có việc.
+
+- **Một hàng mỗi người mỗi ngày.** `subject` là `user:<userId>:<ngày VN>`, và chỉ
+  mục duy nhất một phần `agentTask_nhac_mot_ngay` cùng `createMany … skipDuplicates`
+  giữ điều đó — quét lại trong ngày, hay hai lượt chạy chồng nhau, không thêm hàng.
+  Tác tử tắt qua nửa đêm thì nhắc của ngày đó không gửi bù.
+- **Làn trực tiếp, không mô hình.** `chayNhac` tính lại `viecCanNhac` cho đúng người
+  đó, dựng tin bằng `lib/tin-nhac.ts` (cắt ở `NHAC.tran`), rồi gửi một tin riêng qua
+  `sendSlackMessage` bằng token của xưởng. Độ ưu tiên là `PRIORITY.nhac`.
+- **Bốn `outcome`**: `da-gui:<số dòng>` · `khong-slack` (xưởng chưa nối) ·
+  `khong-khop` (người không có `SlackMemberMatch`) · `khong-viec` (hết việc từ lúc
+  ghi hàng). Ba cái sau không gọi Slack và không ném. Lỗi Slack thì ném, và luật
+  thử lại cùng `retireExhausted` sẵn có lo phần còn lại.
+- **`APP_URL` là tuỳ chọn.** Có thì mỗi dòng mang đường mở
+  `<APP_URL>/<slug>?record=plan:<id>`; vắng thì tin vẫn gửi, không liên kết.
+- **`payload.daGui` là thứ thước đọc**, không phải `payload.muc`. `muc` là danh sách
+  lúc quét; `daGui` là đúng các dòng đã có trong tin sau khi cắt. Hai câu truy vấn
+  đường đo ở `_acceptance/may-nhac-truoc-nguoi/rang/` đọc tập này. `payload` chỉ giữ
+  mã và loại (`@crm/validation/nhac-ke-hoach`) — không tên, không nội dung.
 
 ### Backfills
 

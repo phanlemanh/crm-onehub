@@ -146,6 +146,35 @@ _Avoid_: transfer, bàn giao tài khoản
 Vì sao: thao tác không đụng công ty, cá nhân hay thoả thuận của người đó — gọi
 là "bàn giao tài khoản" thì người dùng tưởng nó chuyển hết.
 
+**Kế hoạch im**: kế hoạch 30 ngày đang chạy mà không bước nào đổi trong số ngày
+đã khai ở ngưỡng im (đếm như cột ngày im của danh mục). Chốt 2026-09-22.
+_Avoid_: kế hoạch treo, kế hoạch chết
+Vì sao: "treo" và "chết" nói kế hoạch hỏng; im chỉ nói chưa ai động tay — việc
+của người cầm trịch là làm nó động lại.
+
+**Mốc ngày**: ngày thứ 7, 14 và 30 của một kế hoạch 30 ngày, lúc người cầm trịch
+được nhắc kiểm tiến độ. Chốt 2026-09-22.
+_Avoid_: milestone, cột mốc
+Vì sao: "cột mốc" dễ lẫn với bậc của một cá nhân đã ghi danh.
+
+**Theo dõi (kế hoạch)**: một người tự chọn nhận nhắc về một kế hoạch 30 ngày mà
+họ không cầm trịch; bấm lần nữa để bỏ. Người theo dõi nhận nhắc kế hoạch im và
+mốc ngày, không nhận nhắc từng bước. Chốt 2026-09-22.
+_Avoid_: follow, đăng ký
+Vì sao: "đăng ký" nghe như ghi danh vào phễu; theo dõi không đổi ai làm gì.
+
+**Nhắc buổi sáng**: một tin Slack riêng mỗi sáng lúc giờ đã khai, gom mọi bước quá
+hạn, bước sắp hạn, kế hoạch im và mốc ngày của một người; ngày không có gì thì
+không gửi. Chốt 2026-09-22.
+_Avoid_: thông báo, notification
+Vì sao: kho không có bảng thông báo; gọi là thông báo thì người dùng đi tìm
+chuông trong app.
+
+**Gợi ý**: câu hướng xử lý đi kèm một nhắc kế hoạch im — «Giao bước X», «Bước X
+quá hạn N ngày», «Bước kế: X». Chốt 2026-09-22.
+_Avoid_: việc cần làm, hành động
+Vì sao: "việc cần làm" đã là một loại hoạt động trên dòng thời gian.
+
 **Ghi danh**: một cá nhân của công ty đối tác được đưa vào phễu của kế hoạch 30
 ngày để theo dõi bốn bậc. Chốt 2026-09-22.
 _Avoid_: enrollment, thành viên kế hoạch
