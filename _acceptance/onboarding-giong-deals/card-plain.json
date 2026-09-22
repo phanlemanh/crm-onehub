@@ -1,0 +1,14 @@
+{
+  "feature_plain": "Trang «30 ngày đầu» nay trông và dùng giống trang Thoả thuận: nút «Kế hoạch mới» xanh ở góc phải đầu trang, tiêu đề cột đọc trọn ở mọi khổ màn hình, và lúc tải hay lỗi thanh công cụ không biến mất.",
+  "scope_plain": "Để lại cho việc sau: bộ lọc trạng thái kiểu dropdown, chọn nhiều hàng, lỗi cắt tiêu đề ở các trang danh sách khác (đang có một việc riêng sửa).",
+  "decisions_plain": [
+    {"id": "d-20260922T142119Z-1", "p": "Nút «Kế hoạch mới» dời lên đầu trang, xanh, có dấu cộng như «Thoả thuận mới» (anh chốt trong phiên) — đổi lại phải sửa một bài kiểm của hồ sơ nối-bốn-nút đã ký."},
+    {"id": "d-20260922T142119Z-2", "p": "KHÔNG đổi nút «Đang chạy / Đã đóng» sang dạng dropdown như deals — giữ số đếm và mặc định «Đang chạy», đổi lại còn một chỗ khác deals."},
+    {"id": "d-20260922T142119Z-3", "p": "KHÔNG sửa lỗi cắt tiêu đề của trang Thoả thuận ở vòng này — đó là lỗi khuôn chung, đã tách thành việc riêng."},
+    {"id": "d-20260922T142119Z-4", "p": "KHÔNG làm bản mẫu thiết kế trước — đích là trang Thoả thuận đang chạy; ảnh so sánh chụp ở bước kiểm thay cho bản mẫu."},
+    {"id": "d-20260922T142119Z-5", "p": "Lúc tải lần đầu vẫn giữ chữ «Đang tải…» ở chân bảng cho trình đọc màn hình — đổi lại không phải sửa năm bài kiểm của các hồ sơ đã ký."},
+    {"id": "d-20260922T142119Z-6", "p": "KHÔNG làm chọn nhiều hàng, lọc «chưa giao», dòng tổng hợp chân bảng và vài điểm lệch nhỏ khác — giữ vòng gọn."},
+    {"id": "d-20260922T144038Z-7", "p": "Nhãn cột «Đang tắc ở» rút thành «Tắc ở» để điện thoại 320px đọc trọn cả ba cột — đổi lại cột số rộng hơn trước trên màn lớn."},
+    {"id": "d-20260922T145905Z-8", "p": "Khi bảng đã có hàng mà tải lại hỏng, nay bảng hiện lỗi và nút «Thử lại» thay vì giữ hàng cũ im lặng — đổi lại lúc lỗi không còn thấy hàng cũ."}
+  ]
+}

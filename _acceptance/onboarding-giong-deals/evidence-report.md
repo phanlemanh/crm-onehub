@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: affd3b3ad58331da6e7bde4787fafb242f4d4111
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-22
 ---
 
 # Evidence Report: onboarding-giong-deals

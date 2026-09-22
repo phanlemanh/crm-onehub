@@ -5,7 +5,7 @@ slug: onboarding-giong-deals
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 veto_state: mo
 veto_opened_at: 2026-09-22T14:30:00Z
 design_doc: docs/superpowers/specs/2026-09-22-onboarding-giong-deals-design.md
@@ -65,3 +65,7 @@ Source input: prompt (ảnh chụp onehub.center/onehub/onboarding, 2026-09-22) 
 
 - Thay chỗ đặt nút của AC-6 hồ sơ `noi-bon-nut-dieu-phoi` (đã ký): ý «có nút tạo ở cả hai cách xem» giữ nguyên, chỗ đặt dời lên đầu trang theo quyết định của chủ kho trong phiên 2026-09-22. Phép đo `nut-tren-thanh-cong-cu` của hồ sơ đó được viết lại để đo nút ở đầu trang; hồ sơ đó ghim lại cuối vòng.
 - Chữ «Đang tải…» được giữ trên màn khi tải lần đầu vì năm tệp test của các hồ sơ đã ký chờ nó biến mất làm mốc «tải xong».
+- Known limits (Ngoài-1, Gate 2): ca test «tải lại hỏng khi đã có hàng» chờ 20 nhịp cố định thay vì chờ đúng trạng thái cuối, và trùng tên khối describe với ca lỗi cũ.
+- Known limits (Ngoài-2, Gate 2): bằng chứng mạng của E14 (`evidence/E14-network.txt`) chỉ đọc 50/470 yêu cầu và không có yêu cầu nào tới cổng API 3001 mà vẫn ghi «sạch».
+- Known limits (Ngoài-3, Gate 2): cùng tệp đó, mẫu 50 yêu cầu không chứa yêu cầu nào của chính trang 30 ngày đầu — lỗi mạng trên trang này chưa từng được kiểm.
+- Known limits (Ngoài-4, Gate 2): bài kiểm `nut-tren-thanh-cong-cu` của `noi-bon-nut-dieu-phoi` khẳng định «nút ở đầu trang» trên khối do chính bài kiểm dựng; vị trí thật chỉ được đo bằng Chrome ở E1/E4 và ảnh E14.
