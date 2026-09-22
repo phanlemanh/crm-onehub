@@ -70,6 +70,29 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-kehoach-hoatdong", nhan: "Hoạt động — có vết" },
 		],
 	},
+	{
+		slug: "moi-phia-deu-thay-ke-hoach",
+		ten: "Mọi phía đều thấy kế hoạch",
+		states: [
+			{
+				id: "ST-congty-codulieu",
+				nhan: "Sheet Công ty — tab 30 ngày đầu có dữ liệu",
+			},
+			{ id: "ST-congty-rong", nhan: "Sheet Công ty — tab rỗng" },
+			{ id: "ST-congty-dangtai", nhan: "Sheet Công ty — tab đang tải" },
+			{ id: "ST-congty-loi", nhan: "Sheet Công ty — tab lỗi" },
+			{ id: "ST-congty-lechsua", nhan: "Sheet Công ty — ba lệch đã sửa" },
+			{ id: "ST-canhan-coghidanh", nhan: "Sheet Cá nhân — mục 30 ngày đầu" },
+			{ id: "ST-tongquan-cobuoc", nhan: "Tổng quan — thẻ Tasks có bước" },
+			{ id: "ST-tongquan-saphan", nhan: "Tổng quan — chỉ có bước sắp hạn" },
+			{
+				id: "ST-danhmuc-cotnguoigiao",
+				nhan: "Danh mục — cột theo người được giao",
+			},
+			{ id: "ST-chuyen-hoi", nhan: "Chuyển việc — có việc" },
+			{ id: "ST-chuyen-khongviec", nhan: "Chuyển việc — không có việc" },
+		],
+	},
 ];
 
 export function timProto(slug: string): ProtoCatalogEntry | undefined {

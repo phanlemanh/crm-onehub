@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { DieuPhoi30NgayDauMau } from "./_modules/dieu-phoi-30-ngay-dau";
 import { DuongProtoMau } from "./_modules/duong-proto";
 import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
+import { MoiPhiaDeuThayKeHoachMau } from "./_modules/moi-phia-deu-thay-ke-hoach";
 import { VaoBangMatKhauMau } from "./_modules/vao-bang-mat-khau";
 import { PROTO_CATALOG } from "./catalog";
 
@@ -11,6 +12,7 @@ const BANG_GHEP = {
 	"dieu-phoi-30-ngay-dau": DieuPhoi30NgayDauMau,
 	"duong-proto-cho-design-pass": DuongProtoMau,
 	"ke-hoach-la-mot-ban-ghi": KeHoachLaMotBanGhiMau,
+	"moi-phia-deu-thay-ke-hoach": MoiPhiaDeuThayKeHoachMau,
 	"vao-bang-email-va-mat-khau": VaoBangMatKhauMau,
 } satisfies Record<string, ProtoComponent>;
 

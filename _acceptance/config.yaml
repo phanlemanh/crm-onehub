@@ -51,6 +51,23 @@ executors:
     kh1_duong_cu_chuyen_huong: "cd apps/app && bun test test/ke-hoach-chuyen-huong.spec.ts"
     kh1_qua_han_theo_ngay: "cd apps/app && bun test test/qua-han-theo-ngay.spec.ts"
     kh1_san_thiet_ke: 'for t in "apps/app/components/crm/record-sheet/plan-sheet.tsx" "apps/app/components/crm/record-sheet/plan-steps.tsx" "apps/app/components/crm/record-sheet/plan-brokers.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    kh2_chuyen_giao: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t chuyen-giao-dung-viec"'
+    kh2_chuyen_giao_chan: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t chuyen-giao-chan"'
+    kh2_chuyen_giao_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/moi-phia-ke-hoach.dom.tsx -t chuyen-giao-man"
+    kh2_chuyen_giao_payload: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t chuyen-giao-payload"'
+    kh2_viec_cua_toi: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t viec-cua-toi"'
+    kh2_the_tasks_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/moi-phia-ke-hoach.dom.tsx -t the-tasks-man"
+    kh2_the_tasks_payload: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t the-tasks-payload"'
+    kh2_vet_giao_luc_xong: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t vet-giao-luc-xong"'
+    kh2_ke_hoach_cong_ty: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t ke-hoach-cong-ty"'
+    kh2_tab_cong_ty_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/moi-phia-ke-hoach.dom.tsx -t tab-cong-ty-man"
+    kh2_ke_hoach_ca_nhan: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t ke-hoach-ca-nhan"'
+    kh2_muc_ca_nhan_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/moi-phia-ke-hoach.dom.tsx -t muc-ca-nhan-man"
+    kh2_loc_nguoi_giao: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t loc-nguoi-giao-db"'
+    kh2_loc_nguoi_giao_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/moi-phia-ke-hoach.dom.tsx -t loc-nguoi-giao-man"
+    kh2_cot_nguoi_giao: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t cot-nguoi-giao"'
+    kh2_ba_lech: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/moi-phia-ke-hoach.dom.tsx -t ba-lech"
+    kh2_san_thiet_ke: 'for t in "apps/app/components/crm/record-sheet/company-plans.tsx" "apps/app/components/crm/record-sheet/contact-plans.tsx" "apps/app/app/(app)/[slug]/settings/members/chuyen-viec-dialog.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     cp_ham_thuan: "cd packages/auth && bun test test/ai-duoc-vao.spec.ts"
     cp_vai_dinh_truoc: 'bun run test -- "cd packages/auth && bun test test/cong-vao.integration.spec.ts -t vai-dinh-truoc"'
     cp_rut_chan_chua_vao: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t rut-chan-chua-vao"'
