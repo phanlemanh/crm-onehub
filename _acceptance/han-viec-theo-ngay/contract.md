@@ -5,7 +5,7 @@ slug: han-viec-theo-ngay
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-22-han-viec-theo-ngay-design.md
 approved_by:
 approved_at:
@@ -56,3 +56,5 @@ xem sổ quyết định dòng «bỏ coverage-scan». Trục vẫn khai để n
 
 - Hệ thống một xưởng (`WORKSPACE_ID` cố định trong `@crm/db/workspace`): chế độ «Cả đội» là mọi việc trong cơ sở dữ liệu, không có xưởng khác để rò.
 - Client tính «quá hạn» của dòng thời gian theo ngày của trình duyệt (`quaHan`); người dùng ngoài giờ VN có thể thấy lệch một ngày với thẻ tổng quan.
+- Known limit (Ngoài-3, Cổng Bằng chứng 2026-09-22): E5 dòng 3 không phân biệt cách cũ và mới vì hạn bước lưu 00:00 UTC.
+- Known limit (Ngoài-4, Cổng Bằng chứng 2026-09-22): bài kiểm dom chế độ Tôi chỉ đúng nhờ dữ liệu giả, không chứng màn gửi đúng chế độ.
