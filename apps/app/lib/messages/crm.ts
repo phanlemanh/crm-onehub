@@ -44,6 +44,7 @@ const en = {
 			email: "Email",
 			stageChange: "Stage change",
 			enrichment: "Enrichment",
+			planChange: "Plan change",
 		},
 		empty: {
 			allTitle: "Nothing has happened yet",
@@ -361,6 +362,7 @@ const vi = {
 			email: "Email",
 			stageChange: "Đổi giai đoạn",
 			enrichment: "Bổ sung dữ liệu",
+			planChange: "Thay đổi kế hoạch",
 		},
 		empty: {
 			allTitle: "Chưa có gì xảy ra",

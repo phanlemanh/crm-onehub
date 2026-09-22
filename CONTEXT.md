@@ -110,6 +110,41 @@ _Avoid_: đã đặt lịch demo, đủ điều kiện để mua
 Vì sao: dịch một bước không xảy ra là in cái sai ra màn hình bằng thứ tiếng
 người đọc hiểu được.
 
+**Kế hoạch 30 ngày**: kế hoạch đưa một công ty mới ký vào guồng trong ba mươi
+ngày đầu, dựng từ một khuôn theo loại đối tác. Treo vào một công ty; mở như một
+bản ghi, cạnh công ty, cá nhân và thoả thuận. Trên màn hình đang hiện dưới
+`30 ngày đầu`. Chốt 2026-09-22.
+_Avoid_: onboarding, hồ sơ kế hoạch, dự án
+Vì sao: "onboarding" để nguyên thì màn lẫn tiếng; "hồ sơ" là tên trang riêng đã
+bỏ; "dự án" gợi một thứ có ngân sách và nghiệm thu, kế hoạch này thì không.
+
+**Bước**: một việc trong kế hoạch 30 ngày, luôn thuộc một bộ phận, có hạn, có thể
+chưa giao cho ai. Được chép từ khuôn lúc tạo kế hoạch, sửa trên kế hoạch không
+đổi khuôn. Chốt 2026-09-22.
+_Avoid_: task, việc cần làm, nhiệm vụ
+Vì sao: "việc cần làm" là một loại hoạt động khác đã có trên dòng thời gian —
+hai chữ cho hai thứ khác nhau thì người đọc nhầm ngay.
+
+**Người cầm trịch**: một người duy nhất chịu trách nhiệm cả kế hoạch 30 ngày của
+một đối tác, điều phối nhiều bộ phận. Chốt 2026-09-22.
+_Avoid_: phụ trách, owner, chủ kế hoạch
+Vì sao: thoả thuận dùng "phụ trách" cho người sở hữu một thương vụ; người cầm
+trịch không sở hữu việc của bộ phận nào, họ giữ nhịp cho mọi bộ phận — hai vai
+khác nhau nên hai chữ khác nhau (quyết tại Cổng Phạm vi 2026-09-22).
+
+**Ghi danh**: một cá nhân của công ty đối tác được đưa vào phễu của kế hoạch 30
+ngày để theo dõi bốn bậc. Chốt 2026-09-22.
+_Avoid_: enrollment, thành viên kế hoạch
+Vì sao: người được ghi danh không làm việc trong kế hoạch — họ là người được
+kéo vào guồng.
+
+**Bậc**: một trong bốn mốc của một cá nhân đã ghi danh — có tài khoản, xong khoá
+học, hoạt động, giao dịch đầu. Lưu bằng ngày đạt, không bằng đúng/sai. Chốt
+2026-09-22.
+_Avoid_: giai đoạn, trạng thái
+Vì sao: "giai đoạn" đã là chữ của thoả thuận; bậc đi theo người, không theo
+thoả thuận.
+
 **Tác nhân**: một việc tự động do người dùng dựng ra trong CRM, chạy theo mốc
 kích hoạt hoặc chạy tay. Trên màn hình đang hiện dưới `Agents`. Chốt 2026-09-06.
 _Avoid_: bot, trợ lý, agent

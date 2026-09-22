@@ -204,6 +204,7 @@ enum ActivityType {
   TASK
   STAGE_CHANGE
   ENRICHMENT
+  PLAN_CHANGE
 }
 
 enum EnrichmentStatus {
@@ -1218,6 +1219,8 @@ model Activity {
   contact   Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
   dealId    String?
   deal      Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  planId    String?
+  plan      OnboardingPlan? @relation(fields: [planId], references: [id], onDelete: Cascade)
 
   createdById String
   createdBy   User   @relation("ActivityAuthor", fields: [createdById], references: [id])
@@ -1234,6 +1237,7 @@ model Activity {
 
   @@index([companyId, createdAt])
   @@index([dealId, createdAt])
+  @@index([planId, createdAt])
   @@index([contactId, createdAt])
   @@index([dueAt])
   @@index([createdById])
@@ -1730,6 +1734,7 @@ model OnboardingPlan {
 
   steps       OnboardingStep[]
   enrollments OnboardingEnrollment[]
+  activities  Activity[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
