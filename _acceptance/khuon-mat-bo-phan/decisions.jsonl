@@ -4,3 +4,6 @@
 {"id":"d-20260922T013108Z-4","type":"descope","stage":"S1","at":"2026-09-22T01:31:08Z","decision":"bỏ đường-đo — ô cơ hội khai ngưỡng là không đo được; phép thử là chủ kho thử lại đường dọn sau khi gộp","impact":"Cổng Giá trị sẽ đọc bảng ngưỡng với ô CHƯA ĐO — quyết release/iterate/kill mất căn cứ số"}
 {"id":"d-20260922T013108Z-5","type":"descope","stage":"S1","at":"2026-09-22T01:31:08Z","decision":"KHÔNG dò và vá khuôn đã mồ côi từ trước khi sửa","impact":"tiết kiệm một migration dữ liệu · khuôn mồ côi nếu đã có trên prod vẫn không khôi phục được"}
 {"id":"d-20260922T014525Z-6","type":"seal","gate":1,"at":"2026-09-22T01:45:25Z"}
+{"id":"d-20260922T020428Z-7","type":"revisit","stage":"gate2","at":"2026-09-22T02:04:28Z","decision":"Ngoài-1: ghi Known limits","impact":"dinh doat cua nguoi ky tai Cong Bang chung","decided_by":"Phan Le Manh","decided_at":"2026-09-22T02:04:28Z"}
+{"id":"d-20260922T020428Z-8","type":"revisit","stage":"gate2","at":"2026-09-22T02:04:28Z","decision":"Ngoài-2: ghi Known limits","impact":"dinh doat cua nguoi ky tai Cong Bang chung","decided_by":"Phan Le Manh","decided_at":"2026-09-22T02:04:28Z"}
+{"id":"d-20260922T020428Z-9","type":"revisit","stage":"gate2","at":"2026-09-22T02:04:28Z","decision":"cắt/hoãn: đồng ý cắt","impact":"dinh doat cua nguoi ky tai Cong Bang chung","decided_by":"Phan Le Manh","decided_at":"2026-09-22T02:04:28Z"}

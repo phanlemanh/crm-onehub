@@ -5,7 +5,7 @@ slug: khuon-mat-bo-phan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: verified
+status: machine-cleared
 approved_by: Phan Le Manh
 approved_at: 2026-09-22
 design_doc: docs/superpowers/specs/2026-09-22-khuon-mat-bo-phan-design.md
@@ -54,3 +54,8 @@ Never: cho khôi phục khuôn mà bỏ bước mồ côi — mất dữ liệu 
 ## Notes
 
 - Màn hình không đổi mã (không có phép đo máy nào cho việc làm mới danh sách trên màn — phép thử là chủ kho thử lại đường dọn sau khi gộp): `da-luu-tru.tsx` chỉ hiện «Xoá vĩnh viễn» khi `purgeable`, và làm mới cả hai danh sách sau mọi lần xoá.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-22 (Phan Le Manh), từ mục ngoài hợp đồng của S4:
+
+- Ngoài-1: thông điệp chặn xoá bộ phận gợi ý «xoá vĩnh viễn khuôn đó», nhưng khuôn đã có kế hoạch thì cũng không xoá được; lúc đó chỉ lối «bỏ bộ phận khỏi khuôn» (khôi phục khuôn, sửa, lưu trữ lại) đi được.
+- Ngoài-2: E4 ép mã HTTP của ba ca bị từ chối thành «khác 200», không ghim mã 400 hay thông điệp; E1 ghim đủ cho ca khuôn đã lưu trữ, nên chỗ hở chỉ còn ở ca có bước kế hoạch.
