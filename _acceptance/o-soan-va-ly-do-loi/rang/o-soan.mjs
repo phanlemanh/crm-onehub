@@ -33,6 +33,11 @@ const CHO_MS = 90_000;
 const CHO_BAM_MS = 3_000;
 const SO_LAN_BAM = 10;
 const SO_LAN_CHUP_CON_TRO = 12;
+const MAU_CON_TRO = "rgb(255, 0, 0)";
+const MAU_CON_TRO_RGB = [255, 0, 0];
+const NGUONG_MAU_CON_TRO = 40;
+const TI_LE_HANG_CON_TRO = 0.6;
+const RONG_COT_CON_TRO = 2;
 const CHO_NHAP_NHAY_MS = 150;
 const MA_LOI = "TOOL_EXECUTION_FAILED";
 const O = '[data-slot="token-field"]';
@@ -131,7 +136,7 @@ async function moTrang(trinh, cookie, duong, kho, anConTro = true) {
 	await trang.addStyleTag({
 		content: anConTro
 			? `${O}{caret-color:transparent!important}nextjs-portal{display:none!important}`
-			: "nextjs-portal{display:none!important}",
+			: `${O}{caret-color:${MAU_CON_TRO}!important}nextjs-portal{display:none!important}`,
 	});
 	return trang;
 }
@@ -397,11 +402,10 @@ async function goChu(trinh, cookie, dich) {
 async function chupCoConTro(trang, duong) {
 	const so = await doO(trang);
 	if (!so.conTro) return false;
-	const mauChu = await trang.$eval(O, (o) => getComputedStyle(o).color);
 	for (let lan = 0; lan < SO_LAN_CHUP_CON_TRO; lan++) {
 		const anh = await trang.screenshot({ encoding: "base64" });
 		const thay = await trang.evaluate(
-			async (b64, conTro, mau, nguong) => {
+			async (b64, conTro, mau, nguong, tiLe, rongCot) => {
 				const hinh = new Image();
 				hinh.src = `data:image/png;base64,${b64}`;
 				await hinh.decode();
@@ -410,29 +414,32 @@ async function chupCoConTro(trang, duong) {
 				c.height = hinh.height;
 				const ve = c.getContext("2d");
 				ve.drawImage(hinh, 0, 0);
-				const [r, g, b] = mau.match(/\d+/g).map(Number);
 				const x0 = Math.floor(conTro.left);
+				const day = Math.ceil(conTro.top + conTro.height);
 				let khop = 0;
-				for (
-					let y = Math.ceil(conTro.top);
-					y < conTro.top + conTro.height;
-					y++
-				) {
-					for (const x of [x0, x0 + 1]) {
+				let hang = 0;
+				for (let y = Math.ceil(conTro.top); y < day; y++) {
+					hang += 1;
+					for (let x = x0; x < x0 + rongCot; x++) {
 						const d = ve.getImageData(x, y, 1, 1).data;
-						if (
-							Math.abs(d[0] - r) + Math.abs(d[1] - g) + Math.abs(d[2] - b) <
-							nguong
-						)
-							khop++;
+						const lech =
+							Math.abs(d[0] - mau[0]) +
+							Math.abs(d[1] - mau[1]) +
+							Math.abs(d[2] - mau[2]);
+						if (lech < nguong) {
+							khop += 1;
+							break;
+						}
 					}
 				}
-				return khop >= conTro.height * 0.6;
+				return hang > 0 && khop >= hang * tiLe;
 			},
 			anh,
 			so.conTro,
-			mauChu,
-			NGUONG_LECH_MAU,
+			MAU_CON_TRO_RGB,
+			NGUONG_MAU_CON_TRO,
+			TI_LE_HANG_CON_TRO,
+			RONG_COT_CON_TRO,
 		);
 		if (thay) {
 			writeFileSync(duong, Buffer.from(anh, "base64"));
