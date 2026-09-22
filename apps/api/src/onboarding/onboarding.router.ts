@@ -16,6 +16,8 @@ import {
 	archivedInput,
 	bangCotInput,
 	bangCotOutput,
+	companyPlanListOutput,
+	contactPlanListOutput,
 	danhMucOutput,
 	deletedOutput,
 	departmentCreateInput,
@@ -37,6 +39,8 @@ import {
 	planListOutput,
 	planOutput,
 	planOwnerInput,
+	plansOfCompanyInput,
+	plansOfContactInput,
 	stepAddInput,
 	stepAssignInput,
 	stepDoneInput,
@@ -372,6 +376,24 @@ export class OnboardingRouter {
 		@Input() input: z.infer<typeof planOwnerInput>,
 	) {
 		return this.onboarding.setPlanOwner(input, ctx.user.id);
+	}
+
+	@Query({
+		input: plansOfCompanyInput,
+		output: companyPlanListOutput,
+		meta: restMeta("GET", "/onboarding/companies/{companyId}/plans", TAG),
+	})
+	plansOfCompany(@Input() input: z.infer<typeof plansOfCompanyInput>) {
+		return this.noi.plansOfCompany(input);
+	}
+
+	@Query({
+		input: plansOfContactInput,
+		output: contactPlanListOutput,
+		meta: restMeta("GET", "/onboarding/contacts/{contactId}/plans", TAG),
+	})
+	plansOfContact(@Input() input: z.infer<typeof plansOfContactInput>) {
+		return this.noi.plansOfContact(input);
 	}
 
 	@Query({

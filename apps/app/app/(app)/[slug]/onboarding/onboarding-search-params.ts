@@ -18,6 +18,7 @@ export const DANH_MUC_CACH_CHIA = [
 	"bo-phan",
 	"bac",
 	"trang-thai",
+	"nguoi-giao",
 ] as const;
 
 export type DanhMucCachChia = (typeof DANH_MUC_CACH_CHIA)[number];

@@ -218,8 +218,8 @@ evals:
         1 byId.soKeHoach = 3
         2 danh sach bang DUNG thu tu [P1, P0, P2] — dang chay truoc theo startedAt
           moi nhat, da dong sau, du P2 bat dau muon nhat
-        3 voi P1: ngayThu, buocXong, buocTong, tacO, ownerId, ownerName bang DUNG hang
-          cua P1 trong manDanhMuc goi tren cung DB (so tung truong)
+        3 voi P1: ngayThu, buocXong, buocTong, tacO, ownerId bang DUNG hang cua P1 trong
+          danh muc goi tren cung DB (so tung truong); ownerName bang ten nguoi cam trich
       CAP HAI CHIEU cho co xuong co khuon: luu tru moi khuon -> xuongCoKhuon false;
       khoi phuc mot khuon -> true.
       DOT BIEN CHUNG MINH: bo where companyId -> dong 2 do voi thong diep ghim P3

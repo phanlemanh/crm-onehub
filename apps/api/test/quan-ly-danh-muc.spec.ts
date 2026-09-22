@@ -68,6 +68,7 @@ function loc(input: Partial<PlanListInput> & { q: string }): PlanListInput {
 		pageSize: ONBOARDING.danhMuc.pageSize,
 		status: "dang-chay",
 		boPhan: [],
+		nguoiGiao: [],
 		nguoiCam: [],
 		...input,
 	};

@@ -27,6 +27,7 @@ const en = {
 		"bo-phan": "Department",
 		bac: "Broker stage",
 		"trang-thai": "Status",
+		"nguoi-giao": "Assignee",
 	},
 	board: {
 		label: "Plans by column",
@@ -280,7 +281,10 @@ type OnboardingMessages = {
 	>;
 	search: string;
 	view: Record<"label" | "bang" | "bang-cot", string>;
-	chia: Record<"label" | "buoc" | "bo-phan" | "bac" | "trang-thai", string>;
+	chia: Record<
+		"label" | "buoc" | "bo-phan" | "bac" | "trang-thai" | "nguoi-giao",
+		string
+	>;
 	board: {
 		label: string;
 		xong: string;
@@ -513,6 +517,7 @@ const vi = {
 		"bo-phan": "Bộ phận",
 		bac: "Bậc phễu",
 		"trang-thai": "Trạng thái",
+		"nguoi-giao": "Người được giao",
 	},
 	board: {
 		label: "Kế hoạch theo cột",

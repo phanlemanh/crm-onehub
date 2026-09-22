@@ -203,6 +203,10 @@ export type StepAddInput = z.infer<typeof stepAddInput>;
 export type StepIdInput = z.infer<typeof stepIdInput>;
 export type StepReorderInput = z.infer<typeof stepReorderInput>;
 export type PlanOwnerInput = z.infer<typeof planOwnerInput>;
+export type PlansOfCompanyInput = z.infer<typeof plansOfCompanyInput>;
+export type CompanyPlanRow = z.infer<typeof companyPlanRow>;
+export type PlansOfContactInput = z.infer<typeof plansOfContactInput>;
+export type ContactPlanRow = z.infer<typeof contactPlanRow>;
 export type TransferPreviewInput = z.infer<typeof transferPreviewInput>;
 export type TransferWorkInput = z.infer<typeof transferWorkInput>;
 export type TransferOutput = z.infer<typeof transferOutput>;
@@ -243,6 +247,7 @@ export const planListInput = listInput.extend({
 	status: planStatus.default("dang-chay"),
 	boPhan: danhSachMa.default([]),
 	nguoiCam: danhSachMa.default([]),
+	nguoiGiao: danhSachMa.default([]),
 });
 
 export const planRow = z.object({
@@ -262,6 +267,12 @@ export const planRow = z.object({
 	closedAt: z.date().nullable(),
 });
 
+export const plansOfCompanyInput = z.object({ companyId: maBuoc });
+
+export const companyPlanRow = planRow.extend({ ownerName: z.string() });
+
+export const companyPlanListOutput = z.array(companyPlanRow);
+
 export const planListOutput = z.object({
 	rows: z.array(planRow),
 	total: z.number(),
@@ -276,6 +287,16 @@ export const enrollmentStage = z.enum([
 	"activeAt",
 	"dealAt",
 ]);
+
+export const plansOfContactInput = z.object({ contactId: maBuoc });
+
+export const contactPlanRow = z.object({
+	planId: z.string(),
+	companyName: z.string(),
+	bac: enrollmentStage.nullable(),
+});
+
+export const contactPlanListOutput = z.array(contactPlanRow);
 
 export const enrollmentUpsertInput = z.object({
 	planId: z.string().trim().min(1),
@@ -337,7 +358,13 @@ export const danhMucOutput = planListOutput.extend({
 export type DanhMucTrangThai = z.infer<typeof danhMucTrangThai>;
 export type DanhMucOutput = z.infer<typeof danhMucOutput>;
 
-export const bangCotCachChia = z.enum(["buoc", "bo-phan", "bac", "trang-thai"]);
+export const bangCotCachChia = z.enum([
+	"buoc",
+	"bo-phan",
+	"bac",
+	"trang-thai",
+	"nguoi-giao",
+]);
 
 export const bangCotInput = planListInput.extend({
 	cachChia: bangCotCachChia,

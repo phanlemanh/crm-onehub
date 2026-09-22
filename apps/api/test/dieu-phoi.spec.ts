@@ -347,6 +347,7 @@ describe("danh muc va vong doi", () => {
 			status: "dang-chay",
 			boPhan: [a.dep.id],
 			nguoiCam: [],
+			nguoiGiao: [],
 		});
 
 		expect(kq.rows).toHaveLength(1);
@@ -365,6 +366,7 @@ describe("danh muc va vong doi", () => {
 			status: "dang-chay",
 			boPhan: [depTrong.id],
 			nguoiCam: [],
+			nguoiGiao: [],
 		});
 		expect(rong.rows).toHaveLength(0);
 		expect(rong.total).toBe(0);
@@ -484,6 +486,7 @@ describe("danh muc va vong doi", () => {
 			pageSize: 25,
 			boPhan: [dep.id],
 			nguoiCam: [],
+			nguoiGiao: [],
 		};
 		const macDinh = await service.listPlans({ ...gocLoc, status: "dang-chay" });
 		expect(macDinh.rows.map((r) => r.id)).not.toContain(plan.id);
@@ -503,6 +506,7 @@ describe("man danh muc", () => {
 		status: "dang-chay" as const,
 		boPhan: [],
 		nguoiCam: [],
+		nguoiGiao: [],
 	};
 
 	test("chua-co-khuon: DB khong con khuon nao thi man noi rieng, khong phai rong thuong", async () => {

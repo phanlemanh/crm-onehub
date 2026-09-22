@@ -210,6 +210,8 @@ export const companyDetailOutput = z.object({
 	primaryContactId: z.string().nullable(),
 	primaryContact: companyDetailPrimaryContactOutput.nullable(),
 	reportingCurrency: z.string(),
+	soKeHoach: z.number().int().nonnegative(),
+	xuongCoKhuon: z.boolean(),
 	deals: z.array(companyDetailDealOutput),
 });
 

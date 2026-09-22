@@ -3,9 +3,19 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { parseOnboardingActivityMeta } from "@crm/validation/onboarding-activity";
+import type { AgentQueueService } from "../src/agent/agent-queue.service";
+import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
+import { CompaniesService } from "../src/companies/companies.service";
+import type { FaviconService } from "../src/companies/favicon.service";
+import { ActivityStampService } from "../src/crm/activity-stamp.service";
 import { ConversionService } from "../src/currency/conversion.service";
 import { DashboardService } from "../src/dashboard/dashboard.service";
+import type { FieldsService } from "../src/fields/fields.service";
 import {
+	type PlanListInput,
+	type PlanRow as PlanListRow,
+	plansOfCompanyInput,
+	plansOfContactInput,
 	stepDoneInput,
 	transferPreviewInput,
 	transferWorkInput,
@@ -15,9 +25,12 @@ import payload from "./fixtures/moi-phia-payload.json";
 import {
 	batHttp,
 	buocCua,
+	DAY_MS,
 	dichVu,
 	donDep,
 	gieoBoPhan,
+	gieoCaNhan,
+	gieoCongTy,
 	gieoKeHoach,
 	gieoNguoiNgoai,
 	gieoThanhVien,
@@ -25,6 +38,7 @@ import {
 	ngayCach,
 	noi,
 	phan,
+	token,
 	vetCua,
 } from "./support/ke-hoach-gieo";
 
@@ -502,5 +516,293 @@ describe("the-tasks-payload", () => {
 			stepId: s2.id,
 			giaoLucXong: A.id,
 		});
+	});
+});
+
+function congTyDichVu(): CompaniesService {
+	return new CompaniesService(
+		db,
+		{} as unknown as AgentTriggerService,
+		{ isQueued: async () => false } as unknown as AgentQueueService,
+		{} as unknown as FaviconService,
+		new ActivityStampService(db),
+		{ reportingCurrency: async () => "VND" } as unknown as ConversionService,
+		{ valuesFor: async () => [] } as unknown as FieldsService,
+	);
+}
+
+function locTatCa(q = ""): PlanListInput {
+	return {
+		q,
+		sort: "",
+		dir: "asc",
+		page: 1,
+		pageSize: 100,
+		status: "tat-ca",
+		boPhan: [],
+		nguoiCam: [],
+		nguoiGiao: [],
+	};
+}
+
+describe("ke-hoach-cong-ty", () => {
+	test("ke-hoach-cong-ty: dung ke hoach cua K, dang chay truoc, dong dung hang cua danh muc", async () => {
+		const O = await gieoThanhVien("Cam Trich K");
+		const bp = await gieoBoPhan();
+		const K = await gieoCongTy();
+		const L = await gieoCongTy();
+		const { plan: P1 } = await gieoKeHoach({
+			camTrich: O.id,
+			congTyId: K.id,
+			batDau: new Date(Date.now() - DAY_MS),
+			buoc: [
+				{ nhan: "Ky hop dong", boPhanId: bp.id, xong: true },
+				{ nhan: "Dao tao", boPhanId: bp.id },
+			],
+		});
+		const { plan: P0 } = await gieoKeHoach({
+			camTrich: O.id,
+			congTyId: K.id,
+			batDau: new Date(Date.now() - 10 * DAY_MS),
+			buoc: [{ nhan: "Kickoff", boPhanId: bp.id }],
+		});
+		const { plan: P2 } = await gieoKeHoach({
+			camTrich: O.id,
+			congTyId: K.id,
+			dong: true,
+			batDau: new Date(),
+			buoc: [{ nhan: "Cu", boPhanId: bp.id, xong: true }],
+		});
+		const { plan: P3 } = await gieoKeHoach({
+			camTrich: O.id,
+			congTyId: L.id,
+			buoc: [{ nhan: "L", boPhanId: bp.id }],
+		});
+
+		expect((await congTyDichVu().byId(K.id)).soKeHoach, "soKeHoach cua K").toBe(
+			3,
+		);
+
+		const input = phanTich(
+			plansOfCompanyInput,
+			{
+				companyId:
+					payload.keHoachCongTy.companyId === "CONG_TY_K"
+						? K.id
+						: payload.keHoachCongTy.companyId,
+			},
+			"plansOfCompany",
+		);
+		const hang = await noi().plansOfCompany(input);
+		expect(
+			hang.map((h) => h.id),
+			`thu tu mong [P1, P0, P2]; P3 la ke hoach cua cong ty L; P2 da dong phai dung sau`,
+		).toEqual([P1.id, P0.id, P2.id]);
+		expect(hang.map((h) => h.id)).not.toContain(P3.id);
+
+		const danhMuc = await dichVu().listPlans(locTatCa(K.name));
+		const hangDanhMuc = danhMuc.rows.find((h) => h.id === P1.id);
+		const hangTab = phan(hang, 0);
+		expect(hangDanhMuc, "P1 co trong danh muc").toBeDefined();
+		const chon = (h: PlanListRow | undefined) => ({
+			ngayThu: h?.ngayThu,
+			buocXong: h?.buocXong,
+			buocTong: h?.buocTong,
+			tacO: h?.tacO,
+			ownerId: h?.ownerId,
+		});
+		expect(chon(hangTab), "tung truong khop hang danh muc").toEqual(
+			chon(hangDanhMuc),
+		);
+		expect(hangTab.ownerName).toBe("Cam Trich K");
+	});
+
+	test("ke-hoach-cong-ty: co xuong co khuon theo so khuon chua luu tru", async () => {
+		const K = await gieoCongTy();
+		const khuon = await db.onboardingTemplate.findMany({
+			select: { id: true, archivedAt: true },
+		});
+		const moi = await db.onboardingTemplate.create({
+			data: { name: `mpkh-khuon-${Date.now()}`, steps: [] },
+		});
+		try {
+			await db.onboardingTemplate.updateMany({
+				where: { archivedAt: null },
+				data: { archivedAt: new Date() },
+			});
+			expect(
+				(await congTyDichVu().byId(K.id)).xuongCoKhuon,
+				"luu tru moi khuon thi xuongCoKhuon false",
+			).toBe(false);
+			await db.onboardingTemplate.update({
+				where: { id: moi.id },
+				data: { archivedAt: null },
+			});
+			expect(
+				(await congTyDichVu().byId(K.id)).xuongCoKhuon,
+				"khoi phuc mot khuon thi true",
+			).toBe(true);
+		} finally {
+			for (const k of khuon) {
+				await db.onboardingTemplate.update({
+					where: { id: k.id },
+					data: { archivedAt: k.archivedAt },
+				});
+			}
+			await db.onboardingTemplate.delete({ where: { id: moi.id } });
+		}
+	});
+});
+
+describe("ke-hoach-ca-nhan", () => {
+	test("ke-hoach-ca-nhan: chi ke hoach dang chay, mang bac da dat", async () => {
+		const O = await gieoThanhVien();
+		const bp = await gieoBoPhan();
+		const { plan: P1, congTyId } = await gieoKeHoach({
+			camTrich: O.id,
+			buoc: [{ nhan: "B", boPhanId: bp.id }],
+		});
+		const { plan: P2 } = await gieoKeHoach({
+			camTrich: O.id,
+			dong: true,
+			buoc: [{ nhan: "B", boPhanId: bp.id }],
+		});
+		const C = await gieoCaNhan(congTyId);
+		const D = await gieoCaNhan(congTyId);
+		await db.onboardingEnrollment.create({
+			data: {
+				planId: P1.id,
+				contactId: C.id,
+				source: "tay",
+				accountAt: new Date(),
+			},
+		});
+		await db.onboardingEnrollment.create({
+			data: { planId: P2.id, contactId: C.id, source: "tay" },
+		});
+		const thay = (id: string) =>
+			phanTich(
+				plansOfContactInput,
+				{
+					contactId:
+						payload.keHoachCaNhan.contactId === "CA_NHAN_C"
+							? id
+							: payload.keHoachCaNhan.contactId,
+				},
+				"plansOfContact",
+			);
+		const congTy = await db.company.findUniqueOrThrow({
+			where: { id: congTyId },
+		});
+
+		expect(
+			await noi().plansOfContact(thay(C.id)),
+			"C mong dung mot dong; P2 da dong",
+		).toEqual([{ planId: P1.id, companyName: congTy.name, bac: "accountAt" }]);
+		expect(await noi().plansOfContact(thay(D.id)), "D khong ghi danh").toEqual(
+			[],
+		);
+
+		await db.onboardingEnrollment.update({
+			where: { planId_contactId: { planId: P1.id, contactId: C.id } },
+			data: { courseAt: new Date() },
+		});
+		expect(phan(await noi().plansOfContact(thay(C.id)), 0).bac).toBe(
+			"courseAt",
+		);
+	});
+});
+
+async function gieoBonKeHoach() {
+	const moc = token();
+	const O = await gieoThanhVien("Cam Trich");
+	const A = await gieoThanhVien("An Nguoi Giao");
+	const B = await gieoThanhVien("Binh Nguoi Giao");
+	const bp = await gieoBoPhan();
+	const congTy = async (ten: string) =>
+		(await db.company.create({ data: { name: `${moc}-${ten}` } })).id;
+	const { plan: P1 } = await gieoKeHoach({
+		camTrich: O.id,
+		congTyId: await congTy("P1"),
+		buoc: [{ nhan: "a", boPhanId: bp.id, giao: A.id }],
+	});
+	const { plan: P2 } = await gieoKeHoach({
+		camTrich: O.id,
+		congTyId: await congTy("P2"),
+		buoc: [
+			{ nhan: "a", boPhanId: bp.id, giao: A.id },
+			{ nhan: "b", boPhanId: bp.id, giao: B.id },
+		],
+	});
+	const { plan: P3 } = await gieoKeHoach({
+		camTrich: O.id,
+		congTyId: await congTy("P3"),
+		buoc: [
+			{ nhan: "a xong", boPhanId: bp.id, giao: A.id, xong: true },
+			{ nhan: "chua giao", boPhanId: bp.id },
+		],
+	});
+	const { plan: P4 } = await gieoKeHoach({
+		camTrich: O.id,
+		congTyId: await congTy("P4"),
+		buoc: [{ nhan: "xong", boPhanId: bp.id, giao: A.id, xong: true }],
+	});
+	return { moc, A, B, P1, P2, P3, P4 };
+}
+
+describe("loc-nguoi-giao-db", () => {
+	test("loc-nguoi-giao-db: loc theo nguoi co buoc chua xong, dem bo loc dung", async () => {
+		const g = await gieoBonKeHoach();
+		const tap = async (nguoiGiao: string[]) =>
+			(await dichVu().listPlans({ ...locTatCa(g.moc), nguoiGiao })).rows
+				.map((h) => h.id)
+				.sort();
+
+		expect(await tap([g.A.id]), "loc A: P3 chi co buoc da xong cua A").toEqual(
+			[g.P1.id, g.P2.id].sort(),
+		);
+		expect(await tap([g.B.id]), "loc B").toEqual([g.P2.id]);
+		expect(await tap([]), "khong loc").toEqual(
+			[g.P1.id, g.P2.id, g.P3.id, g.P4.id].sort(),
+		);
+		const dem = (await dichVu().listPlans(locTatCa(g.moc))).facetCounts
+			.nguoiGiao;
+		expect(dem?.[g.A.id], "dem A").toBe(2);
+		expect(dem?.[g.B.id], "dem B").toBe(1);
+	});
+});
+
+describe("cot-nguoi-giao", () => {
+	test("cot-nguoi-giao: moi nguoi mot cot, chua giao va xong o cuoi", async () => {
+		const g = await gieoBonKeHoach();
+		const chia = async () => {
+			const kq = await dichVu().bangCot({
+				...locTatCa(g.moc),
+				cachChia: "nguoi-giao",
+			});
+			return new Map(
+				kq.cot.map((c) => [c.khoa, c.the.map((t) => t.planId).sort()]),
+			);
+		};
+		const cot = await chia();
+		expect(cot.get(g.A.id), "cot A").toEqual([g.P1.id, g.P2.id].sort());
+		expect(cot.get(g.B.id), "cot B: P2 phai co o cot B").toEqual([g.P2.id]);
+		expect(cot.get("chua-giao"), "cot chua giao").toEqual([g.P3.id]);
+		expect(cot.get(""), "cot xong").toEqual([g.P4.id]);
+		expect(
+			[...cot.values()].reduce((tong, the) => tong + the.length, 0),
+			"tong the 5 tren 4 ke hoach",
+		).toBe(5);
+
+		const buocP3 = await db.onboardingStep.findFirstOrThrow({
+			where: { planId: g.P3.id, label: "chua giao" },
+		});
+		await db.onboardingStep.update({
+			where: { id: buocP3.id },
+			data: { assigneeId: g.B.id },
+		});
+		const sau = await chia();
+		expect(sau.get("chua-giao"), "P3 roi cot chua giao").toBeUndefined();
+		expect(sau.get(g.B.id)).toEqual([g.P2.id, g.P3.id].sort());
 	});
 });

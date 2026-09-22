@@ -179,6 +179,7 @@ function loc(q: string): PlanListInput {
 		status: "tat-ca",
 		boPhan: [],
 		nguoiCam: [],
+		nguoiGiao: [],
 	};
 }
 
