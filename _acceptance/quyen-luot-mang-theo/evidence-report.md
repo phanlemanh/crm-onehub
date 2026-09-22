@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 2e4fd46d950e8f5c1ed4de739ca62a9d7fa25b91
+verified_commit: 162d3decd656892c611fd5272fd376cc6214d2c0
 human_signoff: Phan Le Manh 2026-09-22 — ký với giới hạn: Ngoài-1..5 ghi Known limits, Ngoài-6 mở hợp đồng mới; đồng ý phần cắt/hoãn; phê hết Treo
 ---
 
@@ -160,3 +160,7 @@ Round 3: tất cả 7 eval máy (E1, E2, E3, E4, E5, E7, E9) đều xanh (exit 0
 Round 4: tất cả 7 eval máy (E1, E2, E3, E4, E5, E7, E9) đều xanh (exit 0) — E1/E3 vẫn baseline green (không phân biệt, xem Analyst), năm eval còn lại (E2, E4, E5, E7, E9) baseline red (có phân biệt, đã sửa đúng lỗ hổng round 3 nêu: cặp hai chiều thật trên cùng fixture, ma trận ba hình dạng thật sự khác nhau, sàn đếm-trên-đĩa quét cây nguồn thật). E8 judgment ba lăng kính đồng thuận PASS, cả năm lệnh cổng (bun run test, check-types, lint, lint:slop, build) đều xanh. Review đối kháng vòng này chỉ còn 1 phát hiện trong hợp đồng (AC-3, severity low — fixture viết tay đúng khuôn bên đọc ở apps/agent/test/custom-agent-runtime.spec.ts:75, không lật kết quả AC-3) và 5 phát hiện ngoài hợp đồng để người quyết ở Cổng 2 (xem review-findings.md) — PASS. Cổng 2 ký round này (human_signoff: Manh Phan 2026-09-09), chấp nhận 4 hạn chế đã biết dưới dạng known-limits và tách một hành vi (trần một-lần-uỷ-thác trên lượt không quyền) thành hợp đồng riêng.
 Round 5: sau chữ ký Cổng 2 của round 4, lịch sử git của cây cho thấy có thêm sửa chữa (vá ba lỗ trong hợp đồng và dọn một phép thử ra khỏi cây mã; chặn nhánh union quay lại bằng sàn hình dạng schema và khai lại hai hợp đồng; cài sàn cho hai phép đo mù và bọc lại outputSchema của agent_builder) — không có evidence-report round 5 nào trên đĩa được bàn giao cho vòng chấm này để chép lại chi tiết từng eval của round đó; verified_commit của round 4 (055cb558932a8069bd038ea0f48ea73c809811c5) đã lệch khỏi cây hiện tại nên bằng chứng cũ bị coi là cũ, cần chấm lại.
 Round 6: cả tám eval (E1-E5, E7-E9; E6 đã rút khỏi hợp đồng từ round 2) đều xanh (exit 0) trên verified_commit 2e4fd46d950e8f5c1ed4de739ca62a9d7fa25b91 — E1/E3 vẫn baseline green (không phân biệt, xem Analyst; hợp đồng vừa khai lại sàn dân số của E3 theo cách đo mới ở chính commit này), năm eval còn lại (E2, E4, E5, E7, E9) baseline red (có phân biệt). E8 judgment ba lăng kính (domain-correctness, operational-feasibility, spec-alignment) đồng thuận PASS, không đổi so với các round trước. Cả năm lệnh cổng (bun run test, check-types, lint, lint:slop, build) đều xanh. Review đối kháng vòng này không tìm thấy phát hiện nào ánh xạ được vào AC (mục Trong hợp đồng rỗng); 6 phát hiện thật khác nằm ngoài hợp đồng — trong đó 2/6 rơi vào file apps/agent/test/chan-uy-thac.spec.ts mà không bộ đo nào phủ — để người quyết ở Cổng 2 (xem review-findings.md) — PASS.
+
+### Re-pin lần 1 — 2026-09-22, do hoá cũ do chính commit chữ ký (onehub đi tiếp từ 2e4fd46d)
+run_id: repin-20260922T085623Z-88016
+sha: 162d3decd656892c611fd5272fd376cc6214d2c0 · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E8 (E8 không khai paths) · AC không có chốt máy: AC-8
