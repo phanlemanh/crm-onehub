@@ -1,0 +1,4 @@
+E9 — document.documentElement.scrollWidth vs clientWidth, tại /crm?scope=everyone
+
+Khổ 1440: scrollWidth=1440, clientWidth=1440 -> scrollWidth <= clientWidth: DUNG
+Khổ 375:  scrollWidth=375,  clientWidth=375  -> scrollWidth <= clientWidth: DUNG

@@ -5,7 +5,7 @@ slug: han-viec-theo-ngay
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-09-22-han-viec-theo-ngay-design.md
 approved_by:
 approved_at:
