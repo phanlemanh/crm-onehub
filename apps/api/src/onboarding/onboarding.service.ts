@@ -54,6 +54,7 @@ import type {
 import { MA_NEN_TANG, ONBOARDING } from "./onboarding-config";
 import {
 	bangCotTuHang,
+	CHON_KE_HOACH_DANH_MUC,
 	danhSachTuHang,
 	dungHang,
 	type HangDanhMuc,
@@ -523,19 +524,7 @@ export class OnboardingService {
 
 		const plans = await this.db.onboardingPlan.findMany({
 			where,
-			include: {
-				company: { select: { name: true } },
-				steps: {
-					orderBy: { position: "asc" },
-					select: {
-						completedAt: true,
-						label: true,
-						position: true,
-						updatedAt: true,
-						department: { select: { id: true, name: true, position: true } },
-					},
-				},
-			},
+			include: CHON_KE_HOACH_DANH_MUC,
 		});
 
 		const bayGio = new Date();
@@ -558,16 +547,7 @@ export class OnboardingService {
 				},
 				owner: { select: { id: true, name: true, email: true, image: true } },
 				template: { select: { name: true } },
-				steps: {
-					orderBy: { position: "asc" },
-					select: {
-						completedAt: true,
-						label: true,
-						position: true,
-						updatedAt: true,
-						department: { select: { id: true, name: true, position: true } },
-					},
-				},
+				steps: CHON_KE_HOACH_DANH_MUC.steps,
 			},
 		});
 

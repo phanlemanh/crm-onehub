@@ -567,7 +567,7 @@ describe("ve-vet-ke-hoach", () => {
 					denTen: null,
 				}),
 			],
-			["buoc.xong", vet.buocXong(buoc)],
+			["buoc.xong", vet.buocXong({ ...buoc, giaoLucXong: null })],
 			["buoc.boXong", vet.buocBoXong(buoc)],
 			[
 				"buoc.doiHan",

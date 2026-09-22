@@ -16,7 +16,11 @@ export const onboardingActivityMeta = z.discriminatedUnion("kind", [
 		den: ma.nullable(),
 		denTen: ten.nullable(),
 	}),
-	z.object({ kind: z.literal("buoc.xong"), ...buoc }),
+	z.object({
+		kind: z.literal("buoc.xong"),
+		...buoc,
+		giaoLucXong: ma.nullable().optional(),
+	}),
 	z.object({ kind: z.literal("buoc.boXong"), ...buoc }),
 	z.object({ kind: z.literal("buoc.doiHan"), ...buoc, tu: ngay, den: ngay }),
 	z.object({ kind: z.literal("buoc.them"), ...buoc }),
@@ -55,7 +59,9 @@ type Cua<K extends OnboardingActivityKind> = Omit<
 
 export const vet = {
 	buocGiao: (v: Cua<"buoc.giao">) => ({ kind: "buoc.giao", ...v }) as const,
-	buocXong: (v: Cua<"buoc.xong">) => ({ kind: "buoc.xong", ...v }) as const,
+	buocXong: (
+		v: Omit<Cua<"buoc.xong">, "giaoLucXong"> & { giaoLucXong: string | null },
+	) => ({ kind: "buoc.xong", ...v }) as const,
 	buocBoXong: (v: Cua<"buoc.boXong">) =>
 		({ kind: "buoc.boXong", ...v }) as const,
 	buocDoiHan: (v: Cua<"buoc.doiHan">) =>

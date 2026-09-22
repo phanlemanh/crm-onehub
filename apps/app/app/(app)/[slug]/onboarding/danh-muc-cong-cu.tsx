@@ -29,7 +29,13 @@ export function useBoLoc(): () => void {
 	const [, setOnboarding] = useQueryStates(onboardingParsers);
 
 	return () => {
-		setList({ q: null, page: null, boPhan: null, nguoiCam: null });
+		setList({
+			q: null,
+			page: null,
+			boPhan: null,
+			nguoiCam: null,
+			nguoiGiao: null,
+		});
 		setOnboarding({ trangThai: null });
 	};
 }

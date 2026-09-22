@@ -18,11 +18,12 @@ export const DANH_MUC_CACH_CHIA = [
 	"bo-phan",
 	"bac",
 	"trang-thai",
+	"nguoi-giao",
 ] as const;
 
 export type DanhMucCachChia = (typeof DANH_MUC_CACH_CHIA)[number];
 
-export const DANH_MUC_BO_LOC = ["boPhan", "nguoiCam"] as const;
+export const DANH_MUC_BO_LOC = ["boPhan", "nguoiCam", "nguoiGiao"] as const;
 
 export type DanhMucBoLoc = (typeof DANH_MUC_BO_LOC)[number];
 
@@ -57,6 +58,7 @@ export type DanhMucInput = {
 	status: OnboardingTrangThai | "tat-ca";
 	boPhan: string[];
 	nguoiCam: string[];
+	nguoiGiao: string[];
 };
 
 export function chiaTheoTrangThai(values: OnboardingSearchValues): boolean {
@@ -76,5 +78,6 @@ export function danhMucInput(
 		status: chiaTheoTrangThai(values) ? "tat-ca" : values.trangThai,
 		boPhan: list.boPhan,
 		nguoiCam: list.nguoiCam,
+		nguoiGiao: list.nguoiGiao,
 	};
 }

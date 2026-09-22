@@ -74,6 +74,14 @@ const overdueTaskOutput = z.object({
 	dueAt: z.string().nullable(),
 });
 
+const myStepOutput = z.object({
+	stepId: z.string(),
+	nhan: z.string(),
+	dueAt: z.string(),
+	planId: z.string(),
+	company: linkedRecordOutput,
+});
+
 const recentActivityOutput = z.object({
 	id: z.string(),
 	type: z.nativeEnum(ActivityType),
@@ -108,6 +116,7 @@ export const dashboardSummaryOutput = z.object({
 	trend: z.array(trendPointOutput),
 	closingThisMonthTotal: monthlyTotalOutput,
 	biggestOpen: z.array(biggestOpenDealOutput),
+	mySteps: z.array(myStepOutput),
 	overdueTasks: z.array(overdueTaskOutput),
 	recentActivity: z.array(recentActivityOutput),
 });

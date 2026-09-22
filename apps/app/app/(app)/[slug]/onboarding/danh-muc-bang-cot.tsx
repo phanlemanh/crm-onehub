@@ -1,7 +1,9 @@
 "use client";
 
 import { Board, type BoardColumn } from "@crm/ui/components/board";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import Link from "next/link";
+import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
 import type { onboardingMessages } from "@/lib/messages/onboarding";
 import type { DanhMucCachChia } from "./onboarding-search-params";
 
@@ -24,6 +26,8 @@ export type BangCotCot = {
 
 const COT_XONG = "";
 
+const COT_CHUA_GIAO = "chua-giao";
+
 type NhanCot = { label: string; userLabel: boolean };
 
 const BAC_PHEU = [
@@ -38,6 +42,7 @@ function nhanCot(
 	m: Messages,
 	cachChia: DanhMucCachChia,
 	cot: BangCotCot,
+	chuaGiao: string,
 ): NhanCot {
 	if (cot.khoa === COT_XONG && cot.nhan === null) {
 		return { label: m.board.xong, userLabel: false };
@@ -45,6 +50,9 @@ function nhanCot(
 	if (cachChia === "bac") {
 		const bac = BAC_PHEU.find((k) => k === cot.khoa);
 		return { label: bac ? m.board.bac[bac] : cot.khoa, userLabel: false };
+	}
+	if (cachChia === "nguoi-giao" && cot.khoa === COT_CHUA_GIAO) {
+		return { label: chuaGiao, userLabel: false };
 	}
 	if (cachChia === "trang-thai") {
 		return {
@@ -66,9 +74,10 @@ export function DanhMucBangCot({
 	cot: BangCotCot[];
 	hrefCua: (planId: string) => string;
 }) {
+	const chuaGiao = keHoachNoiMessages(useLocale()).danhMuc.chuaGiao;
 	const columns: BoardColumn[] = cot.map((c) => ({
 		id: c.khoa,
-		...nhanCot(m, cachChia, c),
+		...nhanCot(m, cachChia, c, chuaGiao),
 		count: c.tong,
 		cards: c.the.map((the) => ({
 			id: the.id,

@@ -16,6 +16,8 @@ import {
 	archivedInput,
 	bangCotInput,
 	bangCotOutput,
+	companyPlanListOutput,
+	contactPlanListOutput,
 	danhMucOutput,
 	deletedOutput,
 	departmentCreateInput,
@@ -37,6 +39,8 @@ import {
 	planListOutput,
 	planOutput,
 	planOwnerInput,
+	plansOfCompanyInput,
+	plansOfContactInput,
 	stepAddInput,
 	stepAssignInput,
 	stepDoneInput,
@@ -52,8 +56,12 @@ import {
 	templateListOutput,
 	templateOutput,
 	templateUpdateInput,
+	transferOutput,
+	transferPreviewInput,
+	transferWorkInput,
 } from "./onboarding.contracts";
 import { OnboardingService } from "./onboarding.service";
+import { OnboardingNoi } from "./onboarding-noi";
 
 const TAG = ["Onboarding"];
 
@@ -63,6 +71,8 @@ export class OnboardingRouter {
 	constructor(
 		@Inject(OnboardingService)
 		private readonly onboarding: OnboardingService,
+		@Inject(OnboardingNoi)
+		private readonly noi: OnboardingNoi,
 	) {}
 
 	@Query({
@@ -366,6 +376,48 @@ export class OnboardingRouter {
 		@Input() input: z.infer<typeof planOwnerInput>,
 	) {
 		return this.onboarding.setPlanOwner(input, ctx.user.id);
+	}
+
+	@Query({
+		input: plansOfCompanyInput,
+		output: companyPlanListOutput,
+		meta: restMeta("GET", "/onboarding/companies/{companyId}/plans", TAG),
+	})
+	plansOfCompany(@Input() input: z.infer<typeof plansOfCompanyInput>) {
+		return this.noi.plansOfCompany(input);
+	}
+
+	@Query({
+		input: plansOfContactInput,
+		output: contactPlanListOutput,
+		meta: restMeta("GET", "/onboarding/contacts/{contactId}/plans", TAG),
+	})
+	plansOfContact(@Input() input: z.infer<typeof plansOfContactInput>) {
+		return this.noi.plansOfContact(input);
+	}
+
+	@Query({
+		input: transferPreviewInput,
+		output: transferOutput,
+		meta: restMeta("GET", "/onboarding/transfer/{fromUserId}", TAG),
+	})
+	transferPreview(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof transferPreviewInput>,
+	) {
+		return this.noi.transferPreview(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: transferWorkInput,
+		output: transferOutput,
+		meta: restMeta("POST", "/onboarding/transfer", TAG),
+	})
+	transferWork(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof transferWorkInput>,
+	) {
+		return this.noi.transferWork(input, ctx.user.id);
 	}
 
 	@Query({

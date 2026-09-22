@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 18ddded26be1c1a204d4e2df661aa27669700a88
+verified_commit: ef99904ce50e884b7b8a4c26b92d0af993582f38
 human_signoff: Phan Le Manh 2026-09-22 — ký Cổng Bằng chứng trên verdict PASS của vòng chấm 1 (20/20 phép đo và 4 lệnh suite mã thoát 0), với TÁM giới hạn đã khai và một mục mở hợp đồng mới (Ngoài-5, kế hoạch trống không thêm được bước đầu). Chín mục ngoài hợp đồng đã được định đoạt từng mục ở lượt ký này; phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -315,3 +315,7 @@ Round 1: tất cả 20 eval (E1–E20) và cả bốn lệnh suite (bun run test
 ### Re-pin lần 1 — 2026-09-22, do CI đỏ vì mock next/navigation của E12 sống sang tệp đăng nhập; sửa bài kiểm ở 18ddded2
 run_id: repin-20260922T070657Z-92620
 sha: 18ddded26be1c1a204d4e2df661aa27669700a88 · suites: 4 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E17
+
+### Re-pin lần 2 — 2026-09-22, do gộp onehub (kit 2.18.1) trước PR lượt 2
+run_id: repin-20260922T094919Z-71145
+sha: ef99904ce50e884b7b8a4c26b92d0af993582f38 · suites: 4 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E17 · diff chạm vật đo ngoài làn máy: E17 — chưa chứng lại, đi vòng S4 delta

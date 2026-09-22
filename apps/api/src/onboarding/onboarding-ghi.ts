@@ -1,3 +1,4 @@
+import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import {
 	type OnboardingActivityMeta,
@@ -7,6 +8,7 @@ import {
 import {
 	BadRequestException,
 	ConflictException,
+	ForbiddenException,
 	NotFoundException,
 } from "@nestjs/common";
 import type {
@@ -21,6 +23,9 @@ import type {
 	StepRemovedOutput,
 	StepReorderInput,
 	StepRescheduleInput,
+	TransferOutput,
+	TransferPreviewInput,
+	TransferWorkInput,
 } from "./onboarding.contracts";
 import { ONBOARDING } from "./onboarding-config";
 
@@ -138,6 +143,22 @@ export async function ghiVet(
 	});
 }
 
+function dieuKienChuyen(from: string) {
+	return {
+		keHoach: { ownerId: from, closedAt: null },
+		buoc: { assigneeId: from, completedAt: null, plan: { closedAt: null } },
+	} satisfies {
+		keHoach: Prisma.OnboardingPlanWhereInput;
+		buoc: Prisma.OnboardingStepWhereInput;
+	};
+}
+
+async function yeuCauQuanTri(userId: string): Promise<void> {
+	if (!canManageOnboarding(await workspaceRoleOf(userId))) {
+		throw new ForbiddenException(ONBOARDING.thongDiep.canQuyenQuanTri);
+	}
+}
+
 export class OnboardingGhi {
 	constructor(private readonly db: Db) {}
 
@@ -189,7 +210,9 @@ export class OnboardingGhi {
 			await ghiVet(
 				tx,
 				plan,
-				input.done ? vet.buocXong(chung) : vet.buocBoXong(chung),
+				input.done
+					? vet.buocXong({ ...chung, giaoLucXong: buoc.assigneeId })
+					: vet.buocBoXong(chung),
 				actingUserId,
 			);
 			return buocRa(sau);
@@ -353,6 +376,84 @@ export class OnboardingGhi {
 				actingUserId,
 			);
 			return keHoachRa(sau);
+		});
+	}
+
+	async transferPreview(
+		input: TransferPreviewInput,
+		actingUserId: string,
+	): Promise<TransferOutput> {
+		await yeuCauQuanTri(actingUserId);
+		const dk = dieuKienChuyen(input.fromUserId);
+		const [keHoach, buoc] = await Promise.all([
+			this.db.onboardingPlan.count({ where: dk.keHoach }),
+			this.db.onboardingStep.count({ where: dk.buoc }),
+		]);
+		return { keHoach, buoc };
+	}
+
+	async transferWork(
+		input: TransferWorkInput,
+		actingUserId: string,
+	): Promise<TransferOutput> {
+		await yeuCauQuanTri(actingUserId);
+		if (input.fromUserId === input.toUserId) {
+			throw new BadRequestException(ONBOARDING.thongDiep.chuyenChoChinhMinh);
+		}
+		return this.db.$transaction(async (tx) => {
+			const den = await thanhVien(tx, input.toUserId);
+			const dk = dieuKienChuyen(input.fromUserId);
+			const keHoach = await tx.onboardingPlan.findMany({
+				where: dk.keHoach,
+				orderBy: { id: "asc" },
+			});
+			const buoc = await tx.onboardingStep.findMany({
+				where: dk.buoc,
+				select: { ...CHON_BUOC, plan: { select: { companyId: true } } },
+				orderBy: { id: "asc" },
+			});
+			if (keHoach.length === 0 && buoc.length === 0) {
+				return { keHoach: 0, buoc: 0 };
+			}
+
+			const tuTen = await tenNguoi(tx, input.fromUserId);
+			for (const plan of keHoach) {
+				await tx.onboardingPlan.update({
+					where: { id: plan.id },
+					data: { ownerId: den.id },
+				});
+				await ghiVet(
+					tx,
+					plan,
+					vet.keHoachDoiCamTrich({
+						tu: plan.ownerId,
+						tuTen,
+						den: den.id,
+						denTen: den.name,
+					}),
+					actingUserId,
+				);
+			}
+			for (const b of buoc) {
+				await tx.onboardingStep.update({
+					where: { id: b.id },
+					data: { assigneeId: den.id },
+				});
+				await ghiVet(
+					tx,
+					{ id: b.planId, companyId: b.plan.companyId },
+					vet.buocGiao({
+						stepId: b.id,
+						nhan: b.label,
+						tu: input.fromUserId,
+						tuTen,
+						den: den.id,
+						denTen: den.name,
+					}),
+					actingUserId,
+				);
+			}
+			return { keHoach: keHoach.length, buoc: buoc.length };
 		});
 	}
 }

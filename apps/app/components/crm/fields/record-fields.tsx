@@ -140,13 +140,14 @@ export function RecordFields({
 								label={field.label}
 								value={field.value === null ? NONE : String(field.value)}
 								options={[
-									{ value: NONE, label: "None" },
+									{ value: NONE, label: crmMessages(locale).fieldValue.none },
 									...field.options.map((option) => ({
 										value: option.id,
 										label: option.label,
 									})),
 								]}
 								saving={busy}
+								emptyValue={NONE}
 								onSave={(next) => save(next === NONE ? null : next)}
 							/>
 						);
@@ -162,6 +163,7 @@ export function RecordFields({
 								value={current}
 								options={userOptionsFor(current)}
 								placeholder={crmMessages(locale).owner.unassigned}
+								emptyValue={NONE}
 								saving={busy}
 								onSave={(next) => save(next === NONE ? null : next)}
 							/>

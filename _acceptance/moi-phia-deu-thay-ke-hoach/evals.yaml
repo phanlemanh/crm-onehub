@@ -1,0 +1,419 @@
+schema_version: 1
+slug: moi-phia-deu-thay-ke-hoach
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh2_chuyen_giao
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "packages/validation/src/onboarding-activity.ts"
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+    expected: |
+      Do HANG trong co so du lieu sau khi goi that.
+      Gieo: H cam trich P1, P2 dang chay va P3 da dong; buoc chua xong S1 (P1),
+      S2 S3 (P2) giao cho H; buoc S4 (P1) giao H da xong; buoc S5 (P3) giao H chua
+      xong; buoc S6 (P2) giao cho X. Ma tran viet truoc SAU dong, moi dong mot
+      assert, doc LAI tu DB:
+        1 P1.ownerId = T   2 P2.ownerId = T   3 P3.ownerId = H
+        4 S1 S2 S3 assigneeId = T (tap bang dung {S1,S2,S3})
+        5 S4 S5 van la H, S6 van la X
+        6 dung 2 vet keHoach.doiCamTrich va 3 vet buoc.giao moi, moi vet
+          createdById = quan tri Q, meta parse qua onboardingActivityMeta
+      CAP HAI CHIEU tren cung fixture: goi transferPreview TRUOC -> {2,3}; ket qua
+      transferWork bang dung {2,3}. Goi transferPreview SAU -> {0,0}.
+      DOT BIEN CHUNG MINH: bo dieu kien closedAt null khoi dieu kien chuyen chung
+      -> do ngay o khang dinh xem truoc voi thong diep ghim "xem truoc mong {2,3}"
+      (xem truoc va chuyen dung chung mot ham dieu kien, nen dot bien cham ca hai);
+      neu khang dinh do bi bo, dong 3 do voi "P3 da dong phai giu H". Dot bien hai:
+      bo completedAt null -> cung do o "xem truoc mong {2,3}", hoac dong 5 voi
+      "S4 da xong phai giu H".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh2_chuyen_giao_chan
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+    expected: |
+      Cung fixture E1. Chup trang thai (owner moi ke hoach, assignee moi buoc, so
+      Activity) truoc moi ca. Ma tran viet truoc BON ca, moi ca mot assert:
+        1 thanh vien M (vai member) goi -> 403, thong diep canQuyenQuanTri
+        2 quan tri chuyen H cho H -> 400, thong diep chuyenChoChinhMinh
+        3 quan tri chuyen H cho mot user khong la thanh vien -> 400,
+          thong diep khongPhaiThanhVien
+        4 quan tri chuyen viec cua N (khong co viec gi) -> tra {0,0}
+      Sau MOI ca, doc LAI tu DB: trang thai bang dung trang thai da chup.
+      Doi chung duong tren cung fixture: ca 5 quan tri chuyen H cho T -> tra
+      {2,3} va trang thai DOI — chung minh bon ca tren bi chan boi luat, khong
+      phai boi fixture hong.
+      DOT BIEN CHUNG MINH: bo yeuCauQuanTri khoi transferWork -> ca 1 do voi thong
+      diep ghim "403 cho thanh vien M".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: ui
+    cmd: config:executors.test.kh2_chuyen_giao_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "apps/app/test/moi-phia-ke-hoach.dom.tsx"
+      - "apps/api/test/fixtures/moi-phia-payload.json"
+    expected: |
+      Dung that MembersTable trong jsdom, ban gia tRPC tra ba thanh vien H, T, K
+      va onboarding.access canManage true; ban gia ghi TEN thu tuc va INPUT.
+      Mo menu ⋯ cua hang H, chon «Chuyển việc 30 ngày…».
+      Khang dinh NAM dieu:
+        0 loi goi onboarding.transferPreview mang fromUserId = userId cua H (khong
+          phai ma member), payload bang muc xemTruoc cua moi-phia-payload.json
+        1 hop thoai hien «2 kế hoạch» va «3 bước» tu transferPreview gia {2,3}
+        2 danh sach nguoi nhan co T va K, KHONG co H (so phan tu dung 2)
+        3 chon T, xac nhan -> dung mot loi goi onboarding.transferWork
+        4 payload bang DUNG payload ghi trong apps/api/test/fixtures/moi-phia-payload.json
+          muc chuyenGiao (tep E4 doc de chay that)
+        5 transferPreview gia {0,0} -> nut xac nhan disabled
+      CAP HAI CHIEU: doi chung am — onboarding.access canManage false -> menu
+      KHONG co muc «Chuyển việc 30 ngày…» (tim theo ten, mong 0).
+      DOT BIEN CHUNG MINH: dung row.id (ma member) thay row.userId -> dong 0 va 4
+      do voi thong diep "Expected fromUserId <userId H> / Received <memberId H>".
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh2_chuyen_giao_payload
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+      - "apps/api/test/fixtures/moi-phia-payload.json"
+    expected: |
+      Doc muc chuyenGiao tu apps/api/test/fixtures/moi-phia-payload.json — chinh tep
+      E3 khang dinh man gui dung. Thay ma gia bang id that cua H va T da gieo.
+      Parse qua DUNG input schema zod ma router dung (xuat tu onboarding.contracts),
+      roi goi service.transferWork voi nguoi dang nhap la quan tri.
+      Lam dung nhu vay voi muc xemTruoc qua input schema cua transferPreview TRUOC
+      khi chuyen: ket qua {2,3}, khac {0,0} — chung minh id man gui la id that.
+      Khang dinh: parse khong nem; doc LAI tu DB, ke hoach dang chay cua H nay do T
+      cam trich. Doi chung: parse payload khi doi khoa fromUserId thanh memberId ->
+      schema tu choi (khoa thieu).
+      DOT BIEN CHUNG MINH: doi ten khoa schema sang fromMemberId -> parse nem voi
+      thong diep ghim ten thu tuc transferWork.
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh2_viec_cua_toi
+    paths:
+      - "apps/api/src/dashboard/**"
+      - "apps/api/src/onboarding/onboarding-config.ts"
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+    expected: |
+      Gieo cho A: buoc han D-1, D, D+3, D+4 chua xong; mot buoc han D-2 da xong;
+      mot buoc han D-1 cua ke hoach da dong. Cho B: mot buoc han D-1. D la hom nay.
+      Goi that dashboard.summary voi nguoi dang nhap A, scope "me" roi scope "everyone".
+      Ma tran viet truoc: voi MOI scope, tap stepId cua mySteps bang dung
+      {D-1, D, D+3} (so assert bang so phan tu) va thu tu theo han tang dan;
+      moi phan tu mang nhan, dueAt dang YYYY-MM-DD, planId, company.id va name.
+      CAP HAI CHIEU: doi chung duong — buoc D+4 doi han sang D+3 -> vao danh sach.
+      Doi chung am — buoc cua B khong co trong mySteps cua A o ca hai scope.
+      DOT BIEN CHUNG MINH: bo dieu kien closedAt null -> buoc cua ke hoach da dong
+      lot vao, assert tap do voi thong diep ghim "ke hoach da dong".
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: ui
+    cmd: config:executors.test.kh2_the_tasks_man
+    paths:
+      - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"
+      - "apps/app/lib/messages/tong-quan.ts"
+      - "apps/app/test/moi-phia-ke-hoach.dom.tsx"
+      - "apps/api/test/fixtures/moi-phia-payload.json"
+    expected: |
+      Dung that DashboardSummary trong jsdom, ban gia tRPC tra summary co mot viec
+      qua han va hai buoc (S1 qua han, S2 han hom nay). Ban gia ghi ten thu tuc va
+      input; spy tren useCrmCache().plan.
+      Tich o cua dong buoc S2. Khang dinh NAM dieu:
+        1 dung mot loi goi onboarding.setStepDone { stepId: S2, done: true }
+        2 KHONG co loi goi activities.complete
+        3 payload bang dung muc tichXong cua apps/api/test/fixtures/moi-phia-payload.json
+        4 sau thanh cong: summary duoc lam moi va useCrmCache().plan goi voi planId cua S2
+        5 dong S2 co link ten cong ty va link sang ke hoach (kind plan)
+      Mo ta the doc duoc «2 quá hạn» — dem ca viec va buoc S1, khong dem S2.
+      CAP HAI CHIEU tren CUNG lan dung, now dat 23:30 va dueAt luu 00:00 UTC: dong S1
+      mang StatusIndicator tone error, dong S2 (han hom nay) KHONG mang tone error.
+      Dot bien hai: so han bang <= thay vi quaHan theo ngay -> dong S2 do voi thong
+      diep ghim "S2 han hom nay khong qua han".
+      DOT BIEN CHUNG MINH: dong buoc goi complete.mutate nhu dong viec -> dong 1
+      va 2 do voi thong diep ghim ten thu tuc.
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh2_the_tasks_payload
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+      - "apps/api/test/fixtures/moi-phia-payload.json"
+    expected: |
+      Doc muc tichXong tu apps/api/test/fixtures/moi-phia-payload.json — chinh tep E6
+      khang dinh man gui. Thay stepId gia bang id that cua mot buoc giao cho A.
+      Parse qua input schema cua setStepDone, goi service voi nguoi dang nhap A.
+      Doc LAI tu DB: completedAt khac null; vet buoc.xong co createdById A va
+      giaoLucXong A. Doi chung: buoc thu hai khong bi dong toi.
+      DOT BIEN CHUNG MINH: doi done thanh chuoi "true" trong fixture -> parse nem
+      voi thong diep ghim setStepDone.
+
+  - id: E8
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh2_vet_giao_luc_xong
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "packages/validation/src/onboarding-activity.ts"
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+      - "_acceptance/moi-phia-deu-thay-ke-hoach/rang/ty-le-tu-danh-dau.sql"
+    expected: |
+      Phan 1 — vet: buoc S1 giao cho A, buoc S2 chua giao. B goi that setStepDone
+      tren ca hai. Doc LAI hai vet buoc.xong va parse qua onboardingActivityMeta:
+        1 vet S1: createdById B, giaoLucXong A
+        2 vet S2: createdById B, giaoLucXong null
+      Phan 2 — duong do: chay CHINH cau truy van trong
+      _acceptance/moi-phia-deu-thay-ke-hoach/rang/ty-le-tu-danh-dau.sql (doc tep, khong
+      chep lai). Truoc het tren DUNG hai vet cua phan 1 (ben ghi that): tu_danh_dau 0,
+      mau 1, khong_giao 1. Roi gieo them BANG setStepDone THAT: A tu danh dau hai buoc
+      giao cho A, C tu danh dau mot buoc giao cho C, B danh dau ho mot buoc giao cho A;
+      va MOT vet cu viet tay dung khuon vet luot 1 (khong co khoa giaoLucXong), meta
+      lay tu mot vet luot 1 doc lai tu DB roi xoa khoa. Khang dinh tren toan tap:
+      tu_danh_dau 3, mau 5, khong_giao 1 (vet cu bi bo ra khoi ca ba).
+      CAP HAI CHIEU: them mot vet danh dau ho bang setStepDone that -> mau 6, tu_danh_dau 3.
+      DOT BIEN CHUNG MINH: bo giaoLucXong khoi setStepDone -> dong 1 do voi thong
+      diep ghim "giaoLucXong mong A"; bo dieu kien loai vet chua giao khoi mau -> mau
+      do voi thong diep ghim "mau mong 5"; builder doi ten khoa kind -> mau do 0.
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh2_ke_hoach_cong_ty
+    paths:
+      - "apps/api/test/fixtures/moi-phia-payload.json"
+      - "apps/api/src/onboarding/**"
+      - "apps/api/src/companies/**"
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+    expected: |
+      Gieo cong ty K: P1 dang chay bat dau hom qua, P0 dang chay bat dau 10 ngay
+      truoc, P2 DA DONG bat dau HOM NAY (moi nhat); cong ty L: P3.
+      Goi that companies.byId(K); goi onboarding.plansOfCompany voi input doc tu muc
+      keHoachCongTy cua apps/api/test/fixtures/moi-phia-payload.json, parse qua input
+      schema cua router, thay companyId gia bang K.
+      Khang dinh:
+        1 byId.soKeHoach = 3
+        2 danh sach bang DUNG thu tu [P1, P0, P2] — dang chay truoc theo startedAt
+          moi nhat, da dong sau, du P2 bat dau muon nhat
+        3 voi P1: ngayThu, buocXong, buocTong, tacO, ownerId bang DUNG hang cua P1 trong
+          danh muc goi tren cung DB (so tung truong); ownerName bang ten nguoi cam trich
+      CAP HAI CHIEU cho co xuong co khuon: luu tru moi khuon -> xuongCoKhuon false;
+      khoi phuc mot khuon -> true.
+      DOT BIEN CHUNG MINH: bo where companyId -> dong 2 do voi thong diep ghim P3
+      la ke hoach cua cong ty L. Dot bien hai: chi sap theo startedAt -> dong 2 do
+      voi thong diep ghim "P2 da dong phai dung sau".
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    layer: ui
+    cmd: config:executors.test.kh2_tab_cong_ty_man
+    paths:
+      - "apps/api/test/fixtures/moi-phia-payload.json"
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/app/(app)/[slug]/onboarding/tao-ke-hoach.tsx"
+      - "apps/app/test/moi-phia-ke-hoach.dom.tsx"
+    expected: |
+      Dung that CompanySheet trong jsdom. Ma tran viet truoc BA ca tren ban gia:
+        1 soKeHoach 2, xuongCoKhuon true: nhan tab doc duoc so 2; mo tab -> dung mot
+          loi goi onboarding.plansOfCompany, input bang muc keHoachCongTy cua
+          moi-phia-payload.json voi companyId K; bang co dung 2 dong; bam dong thu
+          hai -> ngan xep record bang [company:K, plan:P2]
+        2 soKeHoach 0, xuongCoKhuon false: KHONG co tab «30 ngày đầu» (tim theo ten, mong 0)
+        3 soKeHoach 0, xuongCoKhuon true: tab hien trang thai rong; bam «Tạo kế hoạch»
+          -> hop thoai tao ke hoach mo, o cong ty hien ten K va KHONG chon duoc
+      Doi chung duong cho ca 2: cung sheet voi soKeHoach 1 -> tab co mat. Ca 2 va
+      ca doi chung chay tren CUNG mot lan dung component, chi doi du lieu gia.
+      DOT BIEN CHUNG MINH: bam dong goi openRecord voi id dong dau -> dong 1 do voi
+      thong diep "Expected plan:P2 / Received plan:P1".
+
+  - id: E11
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh2_ke_hoach_ca_nhan
+    paths:
+      - "apps/api/test/fixtures/moi-phia-payload.json"
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+    expected: |
+      Gieo ca nhan C ghi danh trong P1 dang chay (accountAt co, cac bac sau rong) va
+      P2 da dong; ca nhan D khong ghi danh. Goi that onboarding.plansOfContact voi
+      input doc tu muc keHoachCaNhan cua apps/api/test/fixtures/moi-phia-payload.json,
+      parse qua input schema cua router, thay contactId gia bang C (roi bang D).
+      Khang dinh: voi C tra DUNG mot dong, planId P1, companyName cua P1, bac
+      accountAt; voi D tra rong.
+      CAP HAI CHIEU: danh dau courseAt cho C trong P1 -> bac doi thanh courseAt.
+      DOT BIEN CHUNG MINH: bo dieu kien closedAt null -> C tra hai dong, assert do
+      voi thong diep ghim P2 da dong.
+
+  - id: E12
+    criterion: AC-9
+    executor: test
+    layer: ui
+    cmd: config:executors.test.kh2_muc_ca_nhan_man
+    paths:
+      - "apps/api/test/fixtures/moi-phia-payload.json"
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/test/moi-phia-ke-hoach.dom.tsx"
+    expected: |
+      Dung that ContactSheet trong jsdom. Ban gia plansOfContact tra mot dong
+      (P1, One Mount, accountAt). Khang dinh: dung mot loi goi plansOfContact, input
+      bang muc keHoachCaNhan cua moi-phia-payload.json voi contactId C; muc «30 ngày đầu» co dung mot dong,
+      textContent chua «One Mount» va nhan bac «Có tài khoản»; bam dong -> ngan xep
+      record bang [contact:C, plan:P1].
+      Doi chung am, bai rieng tren cung bo dung va cung ban gia: ban gia tra rong
+      -> da hoi plansOfContact ma khong co tieu de muc «30 ngày đầu» (tim theo ten,
+      mong 0); bai duong ngay truoc do la doi chung duong.
+      DOT BIEN CHUNG MINH: hien muc ca khi rong -> doi chung am do voi thong diep
+      ghim ten muc.
+
+  - id: E13
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh2_loc_nguoi_giao
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+    expected: |
+      Gieo bon ke hoach dung nhu AC-10. Goi that onboarding.manDanhMuc.
+      Ma tran viet truoc:
+        1 nguoiGiao [A] -> tap id bang dung {P1, P2}
+        2 nguoiGiao [B] -> tap id bang dung {P2}
+        3 nguoiGiao [] -> ca bon
+        4 dem bo loc nguoiGiao: A 2, B 1
+      Doi chung: P3 co buoc DA XONG cua A ma KHONG vao ket qua cua [A] — day la
+      quan he «chua xong», khong phai «co mat».
+      DOT BIEN CHUNG MINH: tinh nguoiGiao tu moi buoc thay vi buoc chua xong ->
+      dong 1 do voi thong diep ghim P3.
+
+  - id: E14
+    criterion: AC-10
+    executor: test
+    layer: ui
+    cmd: config:executors.test.kh2_loc_nguoi_giao_man
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/moi-phia-ke-hoach.dom.tsx"
+    expected: |
+      Dung that thanh cong cu danh muc trong jsdom voi ban gia tRPC ghi input.
+      Mo o loc «Người được giao», chon A. Khang dinh: loi goi danh muc ke tiep mang
+      nguoiGiao [A] va boPhan, nguoiCam giu nguyen []; tham so duong dan mang A.
+      Doi chung: bo chon A -> loi goi ke tiep mang nguoiGiao [].
+      DOT BIEN CHUNG MINH: noi o loc vao khoa nguoiCam -> assert do voi thong diep
+      "Expected nguoiGiao [A]".
+
+  - id: E15
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kh2_cot_nguoi_giao
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+    expected: |
+      Cung fixture E13. Goi that onboarding.bangCot voi cachChia nguoi-giao.
+      Ma tran viet truoc, moi cot mot assert tren TAP id:
+        cot A {P1, P2} · cot B {P2} · cot Chua giao {P3} · cot Xong {P4}
+      va tong so the 5 tren 4 ke hoach.
+      Doi chung: giao buoc chua xong cua P3 cho B -> P3 roi cot Chua giao, vao cot B.
+      DOT BIEN CHUNG MINH: moi ke hoach chi vao mot cot (nguoi dau tien) -> cot B
+      do voi thong diep ghim P2.
+
+  - id: E16
+    criterion: AC-12
+    executor: test
+    layer: ui
+    cmd: config:executors.test.kh2_ba_lech
+    paths:
+      - "apps/app/components/crm/**"
+      - "apps/app/lib/messages/**"
+      - "apps/app/test/moi-phia-ke-hoach.dom.tsx"
+    expected: |
+      Dung that CompanySheet trong jsdom, locale vi, ban gia co mot truong chon rong,
+      chu so huu null, hai thoa thuan dang mo amountCents null.
+      Ma tran viet truoc BA lech, moi lech mot cap hai chieu:
+        1 truong chon: o thu gon hien o rong chuan (EmptyCellValue), mo menu co
+          «Không chọn», textContent toan sheet KHONG chua «None»; chon mot gia tri ->
+          o hien nhan gia tri do
+        2 chu so huu: o thu gon hien o rong chuan, KHONG hien «Chưa giao»; mo menu co
+          «Chưa giao»; gan mot nguoi -> o hien ten nguoi
+        3 o «Giá trị đang mở» (Open pipeline): hien o rong chuan; them amountCents cho mot thoa thuan dang
+          mo -> hien so tien dinh dang, khong phai o rong
+      DOT BIEN CHUNG MINH: khoi phuc nhan «None» cung -> dong 1 do voi thong diep
+      ghim chuoi «None».
+
+  - id: E17
+    criterion: AC-13
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "packages/ui/**"
+    steps:
+      - "Dat truoc MOI buoc: APP_URL=http://127.0.0.1:3300 va API_URL=http://127.0.0.1:3301 — dung 127.0.0.1, tranh Invalid origin va cookie ro theo host"
+      - "Dung ca hai may chu cua CAY DANG XET: api 3301, app 3300. Kiem cong 3300 va 3301 truoc khi dung — tai nguyen chung; dung ma PID de tat, khong pkill"
+      - "CHAN CAY, hai phia: dat mot dau moc vao apps/app/public roi xin lai qua APP_URL; VA doc mot ban ghi moc qua API_URL. Khong nhan lai duoc mot trong hai -> thoat ma 2 va goi ten cay dang xet, KHONG doc anh nao"
+      - "KHONG nang quyen bat ky thanh vien nao trong DB, KHONG tao phien cho tai khoan nguoi khac. Viec can quyen quan tri: dung mot tai khoan da la quan tri san trong DB dev; khong co -> thoat ma 2 va noi ro"
+      - "Gieo QUA CHINH API o 3301: cong ty One Mount voi mot ke hoach dang chay, mot buoc qua han giao cho nguoi dang nhap va mot buoc han hom nay; mot thanh vien khac cam trich mot ke hoach"
+      - "Doc LAI ban ghi vua gieo qua API_URL truoc khi mo man; khong doc lai duoc -> thoat ma 2"
+      - "Mo /onehub/companies?record=company:<id> o kho 1440, mo tab «30 ngày đầu», chup evidence/E17-cong-ty-1440.png"
+      - "Mo /onehub o kho 1440, chup the Tasks, evidence/E17-tong-quan-1440.png"
+      - "Mo /onehub/settings/members bang tai khoan quan tri, mo «Chuyển việc 30 ngày…» cua thanh vien cam trich, chup evidence/E17-chuyen-viec-1440.png"
+      - "Lap lai sheet cong ty va tong quan o kho 375, chup evidence/E17-cong-ty-375.png va evidence/E17-tong-quan-375.png"
+      - "Xoa dau moc trong apps/app/public khi xong"
+    inputs:
+      - _acceptance/moi-phia-deu-thay-ke-hoach/evidence/
+    expected: |
+      Nhin thay duoc tren anh, khong suy tu ma:
+        1 sheet cong ty co tab «30 ngày đầu» dung sau tab Thoa thuan, cung kieu nhan
+          va so dem nhu tab Thoa thuan; bang co Ke hoach, Ngay, Buoc, Dang tac o, Cam trich
+        2 the Tasks co dong buoc mang ten cong ty; buoc qua han co han to do, buoc
+          han hom nay khong to do
+        3 hop thoai chuyen viec doc duoc so ke hoach va so buoc
+        4 hai anh 375 khong tran ngang
+      Mot trong bon dong khong nhin thay -> FAIL, ghi dong nao.
+
+  - id: E18
+    criterion: AC-13
+    executor: test
+    layer: unit
+    cmd: config:executors.test.kh2_san_thiet_ke
+    paths:
+      - "apps/app/components/crm/record-sheet/company-plans.tsx"
+      - "apps/app/components/crm/record-sheet/contact-plans.tsx"
+      - "apps/app/app/(app)/[slug]/settings/members/chuyen-viec-dialog.tsx"
+    expected: |
+      Chay design-gate che do static tren ba tep giao dien moi.
+      Ma 0 = khong vi pham san P0 cua bo quet tinh: tuong phan thap, chu xam tren
+      nen mau, tran chu, anh hong, chu sat mep man.
+      DOT BIEN CHUNG MINH: them mot span chu xam tren nen mau (bg-blue-600
+      text-gray-400) vao ban sao company-plans.tsx -> lenh thoat khac 0 va in
+      luat gray-on-color.

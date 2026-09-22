@@ -132,6 +132,20 @@ Vì sao: thoả thuận dùng "phụ trách" cho người sở hữu một thư�
 trịch không sở hữu việc của bộ phận nào, họ giữ nhịp cho mọi bộ phận — hai vai
 khác nhau nên hai chữ khác nhau (quyết tại Cổng Phạm vi 2026-09-22).
 
+**Người được giao**: người phải làm một bước của kế hoạch 30 ngày; một bước có
+thể chưa giao cho ai. Mỗi bước một người, còn kế hoạch có một người cầm trịch.
+Chốt 2026-09-22.
+_Avoid_: assignee, người phụ trách bước
+Vì sao: một kế hoạch có nhiều người được giao nhưng chỉ một người cầm trịch;
+dùng "phụ trách" cho bước là trùng chữ với người sở hữu thoả thuận.
+
+**Chuyển việc 30 ngày**: thao tác của quản trị ở màn Thành viên, chuyển mọi kế
+hoạch đang chạy mà một người cầm trịch và mọi bước chưa xong đang giao cho họ
+sang một người khác, mỗi dòng đổi để lại một vết. Chốt 2026-09-22.
+_Avoid_: transfer, bàn giao tài khoản
+Vì sao: thao tác không đụng công ty, cá nhân hay thoả thuận của người đó — gọi
+là "bàn giao tài khoản" thì người dùng tưởng nó chuyển hết.
+
 **Ghi danh**: một cá nhân của công ty đối tác được đưa vào phễu của kế hoạch 30
 ngày để theo dõi bốn bậc. Chốt 2026-09-22.
 _Avoid_: enrollment, thành viên kế hoạch

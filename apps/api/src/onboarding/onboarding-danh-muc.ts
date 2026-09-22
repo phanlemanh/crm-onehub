@@ -28,6 +28,22 @@ export const BAC_PHEU = [
 
 export type BacPheu = (typeof BAC_PHEU)[number];
 
+export const CHON_KE_HOACH_DANH_MUC = {
+	company: { select: { name: true } },
+	steps: {
+		orderBy: { position: "asc" },
+		select: {
+			completedAt: true,
+			label: true,
+			position: true,
+			updatedAt: true,
+			assigneeId: true,
+			assignee: { select: { name: true } },
+			department: { select: { id: true, name: true, position: true } },
+		},
+	},
+} as const;
+
 export const COT_TRANG_THAI = ["dang-chay", "da-dong"] as const;
 
 export type BuocTho = {
@@ -35,6 +51,8 @@ export type BuocTho = {
 	label: string;
 	position: number;
 	updatedAt: Date;
+	assigneeId?: string | null;
+	assignee?: { name: string } | null;
 	department: { id: string; name: string; position: number };
 };
 
@@ -59,17 +77,24 @@ export type GhiDanhTho = {
 	contact: { firstName: string; lastName: string | null };
 };
 
+export type NguoiGiao = { id: string; ten: string };
+
 export type HangDanhMuc = PlanRow & {
 	viTriTac: number | null;
 	viTriBoPhan: number | null;
+	nguoiGiao: NguoiGiao[];
 };
 
-type LocDanhMuc = Pick<PlanListInput, "status" | "boPhan" | "nguoiCam">;
+type LocDanhMuc = Pick<
+	PlanListInput,
+	"status" | "boPhan" | "nguoiCam" | "nguoiGiao"
+>;
 
 export type DemBoLoc = {
 	trangThai: FacetCount;
 	boPhan: FacetCount;
 	nguoiCam: FacetCount;
+	nguoiGiao: FacetCount;
 };
 
 type SapDanhMuc = Pick<PlanListInput, "sort" | "dir">;
@@ -104,7 +129,22 @@ export function dungHang(plan: KeHoachTho, bayGio: Date): HangDanhMuc {
 		closedAt: plan.closedAt,
 		viTriTac: dang?.position ?? null,
 		viTriBoPhan: dang?.department.position ?? null,
+		nguoiGiao: nguoiGiaoCua(buoc),
 	};
+}
+
+function nguoiGiaoCua(buoc: BuocTho[]): NguoiGiao[] {
+	const theoId = new Map<string, NguoiGiao>();
+	for (const b of buoc) {
+		if (b.completedAt !== null || !b.assigneeId) continue;
+		if (!theoId.has(b.assigneeId)) {
+			theoId.set(b.assigneeId, {
+				id: b.assigneeId,
+				ten: b.assignee?.name ?? b.assigneeId,
+			});
+		}
+	}
+	return [...theoId.values()];
 }
 
 function trangThaiCua(hang: HangDanhMuc): (typeof COT_TRANG_THAI)[number] {
@@ -126,9 +166,20 @@ function khopNguoiCam(hang: HangDanhMuc, loc: LocDanhMuc): boolean {
 	return loc.nguoiCam.length === 0 || loc.nguoiCam.includes(hang.ownerId);
 }
 
+function khopNguoiGiao(hang: HangDanhMuc, loc: LocDanhMuc): boolean {
+	return (
+		loc.nguoiGiao.length === 0 ||
+		hang.nguoiGiao.some((n) => loc.nguoiGiao.includes(n.id))
+	);
+}
+
 export function locHang(hang: HangDanhMuc[], loc: LocDanhMuc): HangDanhMuc[] {
 	return hang.filter(
-		(h) => khopTrangThai(h, loc) && khopBoPhan(h, loc) && khopNguoiCam(h, loc),
+		(h) =>
+			khopTrangThai(h, loc) &&
+			khopBoPhan(h, loc) &&
+			khopNguoiCam(h, loc) &&
+			khopNguoiGiao(h, loc),
 	);
 }
 
@@ -145,19 +196,30 @@ function demTheo(
 	return dem;
 }
 
+function demNhieu(
+	hang: HangDanhMuc[],
+	khoa: (h: HangDanhMuc) => string[],
+): FacetCount {
+	const dem: FacetCount = {};
+	for (const h of hang) {
+		for (const k of khoa(h)) dem[k] = (dem[k] ?? 0) + 1;
+	}
+	return dem;
+}
+
 export function demBoLoc(hang: HangDanhMuc[], loc: LocDanhMuc): DemBoLoc {
+	const tru = (bo: (h: HangDanhMuc, l: LocDanhMuc) => boolean) =>
+		hang.filter((h) =>
+			[khopTrangThai, khopBoPhan, khopNguoiCam, khopNguoiGiao]
+				.filter((f) => f !== bo)
+				.every((f) => f(h, loc)),
+		);
 	return {
-		trangThai: demTheo(
-			hang.filter((h) => khopBoPhan(h, loc) && khopNguoiCam(h, loc)),
-			trangThaiCua,
-		),
-		boPhan: demTheo(
-			hang.filter((h) => khopTrangThai(h, loc) && khopNguoiCam(h, loc)),
-			(h) => h.boPhanTacId,
-		),
-		nguoiCam: demTheo(
-			hang.filter((h) => khopTrangThai(h, loc) && khopBoPhan(h, loc)),
-			(h) => h.ownerId,
+		trangThai: demTheo(tru(khopTrangThai), trangThaiCua),
+		boPhan: demTheo(tru(khopBoPhan), (h) => h.boPhanTacId),
+		nguoiCam: demTheo(tru(khopNguoiCam), (h) => h.ownerId),
+		nguoiGiao: demNhieu(tru(khopNguoiGiao), (h) =>
+			h.nguoiGiao.map((n) => n.id),
 		),
 	};
 }
@@ -196,7 +258,9 @@ export function catTrang<T>(
 	return hang.slice(tu, tu + trang.pageSize);
 }
 
-export function bacCaoNhat(ghiDanh: GhiDanhTho): BacPheu {
+export function bacCaoNhat(
+	ghiDanh: Pick<GhiDanhTho, "accountAt" | "courseAt" | "activeAt" | "dealAt">,
+): BacPheu {
 	if (ghiDanh.dealAt !== null) return "giao-dich";
 	if (ghiDanh.activeAt !== null) return "hoat-dong";
 	if (ghiDanh.courseAt !== null) return "khoa-hoc";
@@ -256,6 +320,8 @@ function gomCot(
 
 const SAU_CUNG = Number.MAX_SAFE_INTEGER;
 
+export const COT_CHUA_GIAO = "chua-giao";
+
 function cotXong() {
 	return { khoa: COT_XONG, nhan: null, thuTu: SAU_CUNG };
 }
@@ -300,6 +366,10 @@ export function chiaCot(input: {
 		);
 	}
 
+	if (cachChia === "nguoi-giao") {
+		return catCot(cotNguoiGiao(hang), tranThe);
+	}
+
 	if (cachChia === "trang-thai") {
 		return catCot(
 			COT_TRANG_THAI.map((khoa, thuTu) => ({
@@ -337,7 +407,43 @@ export function chiaCot(input: {
 	);
 }
 
-function boViTri({ viTriTac, viTriBoPhan, ...hang }: HangDanhMuc): PlanRow {
+function cotNguoiGiao(hang: HangDanhMuc[]): CotNhap[] {
+	const nguoi = [
+		...new Map(hang.flatMap((h) => h.nguoiGiao).map((n) => [n.id, n])).values(),
+	].sort((a, b) => soChu.compare(a.ten, b.ten));
+	const cot = new Map<string, CotNhap>(
+		nguoi.map((n, thuTu) => [
+			n.id,
+			{ khoa: n.id, nhan: n.ten, thuTu, the: [] },
+		]),
+	);
+	const chuaGiao: CotNhap = {
+		khoa: COT_CHUA_GIAO,
+		nhan: null,
+		thuTu: SAU_CUNG - 1,
+		the: [],
+	};
+	const xong: CotNhap = { ...cotXong(), the: [] };
+	for (const h of hang) {
+		if (h.tacO === null) {
+			xong.the.push(theKeHoach(h, null));
+			continue;
+		}
+		if (h.nguoiGiao.length === 0) {
+			chuaGiao.the.push(theKeHoach(h, h.tacO));
+			continue;
+		}
+		for (const n of h.nguoiGiao) cot.get(n.id)?.the.push(theKeHoach(h, h.tacO));
+	}
+	return [...cot.values(), chuaGiao, xong].filter((c) => c.the.length > 0);
+}
+
+export function boViTri({
+	viTriTac,
+	viTriBoPhan,
+	nguoiGiao,
+	...hang
+}: HangDanhMuc): PlanRow {
 	return hang;
 }
 
@@ -359,6 +465,7 @@ export function dangLoc(input: PlanListInput): boolean {
 		input.q.trim() !== "" ||
 		input.boPhan.length > 0 ||
 		input.nguoiCam.length > 0 ||
+		input.nguoiGiao.length > 0 ||
 		input.status === "da-dong"
 	);
 }
