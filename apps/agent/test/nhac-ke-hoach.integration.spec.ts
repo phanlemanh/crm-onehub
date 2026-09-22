@@ -33,6 +33,7 @@ import {
 } from "./support/nhac-gieo";
 import {
 	dongCo,
+	donNgoai,
 	gieoDuongDo,
 	gieoGui,
 	gieoKhongKenh,
@@ -57,6 +58,7 @@ import {
 	TRUNG_VI,
 	tenCongTy,
 	trungViIm,
+	XONG_TRONG_NGAY_HAN,
 	xongDungHan,
 } from "./support/nhac-gui-gieo";
 
@@ -593,15 +595,33 @@ describe("gui-slack tran", () => {
 		const t =
 			slack.goi.find((c) => c.url.endsWith("chat.postMessage"))?.body.text ??
 			"";
-		const hang = await hangCua(g.A.id);
+		const khoa = (m: { planId: string; stepId?: string }) =>
+			`${m.planId}:${m.stepId ?? ""}`;
+		const hien = g.viec.filter((v) =>
+			dongCo(t, `${v.congTy} ·`).some((d) =>
+				lienKetCua(d)?.endsWith(`?record=plan:${v.planId}`),
+			),
+		);
+		const daGui = (
+			parseNhacPayload((await hangCua(g.A.id)).payload).daGui ?? []
+		).map(khoa);
 		expect(
 			{
-				dong: dongCo(t, "record=plan:").length,
+				soHien: hien.length,
 				conLai: t.includes("và 2 việc nữa"),
-				daGui: parseNhacPayload(hang.payload).daGui?.length,
+				daGui: [...daGui].sort(),
+				catMaVanGui: g.viec
+					.filter((v) => !hien.includes(v))
+					.map(khoa)
+					.filter((k) => daGui.includes(k)),
 			},
-			"vuot tran thi cat o tran va daGui chi gom dong da gui",
-		).toEqual({ dong: NHAC.tran, conLai: true, daGui: NHAC.tran });
+			"daGui dung tap 10 viec da hien trong tin",
+		).toEqual({
+			soHien: NHAC.tran,
+			conLai: true,
+			daGui: hien.map(khoa).sort(),
+			catMaVanGui: [],
+		});
 	});
 
 	test("gui-slack: thieu APP_URL thi van gui, khong lien ket", async () => {
@@ -682,7 +702,7 @@ describe("khong-kenh", () => {
 	test("khong-kenh: het viec tu luc ghi hang thi khong-viec", async () => {
 		await noiSlack(g.A.id);
 		await khopSlack(g.A.id, "U-MN3-A");
-		await xongBuoc(g.buoc.id);
+		await xongBuoc(g.buoc.id, g.A.id);
 		expect(await chay(), "het viec thi khong goi Slack").toEqual({
 			ket: "khong-viec",
 			goi: 0,
@@ -702,59 +722,6 @@ describe("khong-kenh", () => {
 	});
 });
 
-const NGOAI = "ngoai-duong-do";
-
-async function gieoNgoai(gui: Date): Promise<void> {
-	const chu = await db.user.findFirstOrThrow({
-		where: { id: { startsWith: TIEN_TO } },
-	});
-	const boPhan = await db.department.create({
-		data: { name: NGOAI, position: 0 },
-	});
-	const congTy = await db.company.create({ data: { name: NGOAI } });
-	const plan = await db.onboardingPlan.create({
-		data: {
-			companyId: congTy.id,
-			ownerId: chu.id,
-			startedAt: ngayCach(gui, -HAN_XA),
-			targetDays: HAN_XA,
-		},
-	});
-	const buoc = await db.onboardingStep.create({
-		data: {
-			planId: plan.id,
-			label: NGOAI,
-			departmentId: boPhan.id,
-			dueAt: ngayCach(gui, MOT_NGAY),
-			position: 0,
-			updatedAt: ngayCach(gui, -HAN_XA),
-		},
-	});
-	await db.agentTask.create({
-		data: {
-			kind: LOAI_VIEC_NHAC,
-			reason: NGOAI,
-			subject: `user:${NGOAI}:${NGAY_NHAC}`,
-			dueAt: gui,
-			createdAt: gui,
-			outcome: "da-gui:1",
-			payload: {
-				muc: [],
-				daGui: [{ loai: "buoc-sap-han", planId: plan.id, stepId: buoc.id }],
-			},
-		},
-	});
-}
-
-async function donNgoai(): Promise<void> {
-	await db.agentTask.deleteMany({
-		where: { subject: { startsWith: `user:${NGOAI}:` } },
-	});
-	await db.onboardingPlan.deleteMany({ where: { company: { name: NGOAI } } });
-	await db.company.deleteMany({ where: { name: NGOAI } });
-	await db.department.deleteMany({ where: { name: NGOAI } });
-}
-
 describe("duong-do", () => {
 	let g: Awaited<ReturnType<typeof gieoDuongDo>>;
 	let ky: KyDo;
@@ -763,17 +730,20 @@ describe("duong-do", () => {
 		await donDep();
 		g = await gieoDuongDo();
 		setSystemTime(ngayCach(g.gui, HOM_QUA));
-		await xongBuoc(g.xongTruoc.id);
+		await xongBuoc(g.xongTruoc.id, g.A.id);
 		setSystemTime(g.gui);
 		await lenLichNhac(g.gui);
-		await chayNhac(await hangCua(g.A.id), {
-			fetcher: slackGia().fetcher,
-			appUrl: "https://crm.test",
-		});
+		for (const nguoi of [g.A.id, g.ngoai.nguoi]) {
+			await chayNhac(await hangCua(nguoi), {
+				fetcher: slackGia().fetcher,
+				appUrl: "https://crm.test",
+			});
+		}
 		setSystemTime(new Date(g.gui.getTime() + MUOI_GIO_SANG * PHUT_MS));
-		await xongBuoc(g.sapXong.id);
+		await xongBuoc(g.ngoai.buoc, g.ngoai.nguoi);
+		setSystemTime(XONG_TRONG_NGAY_HAN);
+		await xongBuoc(g.sapXong.id, g.A.id);
 		ky = { tu: ngayCach(g.gui, HOM_QUA), den: ngayCach(g.gui, MOT_NGAY) };
-		await gieoNgoai(g.gui);
 	});
 
 	afterAll(async () => {
@@ -790,13 +760,13 @@ describe("duong-do", () => {
 	test("duong-do: mau chi gom buoc sap han trong daGui", async () => {
 		expect(
 			await xongDungHan(ky.tu, ky.den),
-			"xong dung han 1 tren 2, khong tinh buoc bi cat hay xong truoc gui",
+			"xong dung han theo ngay VN 1 tren 2, khong tinh buoc bi cat hay xong truoc gui",
 		).toEqual({ dung: 1, mau: 2 });
 	});
 
 	test("duong-do: doi chung, xong buoc con lai dung han thi dung = 2", async () => {
-		setSystemTime(ngayCach(g.gui, MOT_NGAY));
-		await xongBuoc(g.sapChua.id);
+		setSystemTime(XONG_TRONG_NGAY_HAN);
+		await xongBuoc(g.sapChua.id, g.A.id);
 		expect(
 			await xongDungHan(ky.tu, ky.den),
 			"doi chung duong: xong ca hai dung han",

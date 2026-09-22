@@ -1,6 +1,8 @@
 import { db } from "@crm/db";
 import { WORKSPACE_ID, workspaceSlug } from "@crm/db/workspace";
 import { z } from "zod";
+import { stepDoneInput } from "../../../api/src/onboarding/onboarding.contracts";
+import { OnboardingGhi } from "../../../api/src/onboarding/onboarding-ghi";
 
 export const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -128,11 +130,13 @@ export function phan<T>(ds: T[], i: number): T {
 	return gia;
 }
 
-export async function xongBuoc(stepId: string): Promise<void> {
-	await db.onboardingStep.update({
-		where: { id: stepId },
-		data: { completedAt: new Date() },
-	});
+const ghi = new OnboardingGhi(db);
+
+export async function xongBuoc(
+	stepId: string,
+	nguoiLam: string,
+): Promise<void> {
+	await ghi.setStepDone(stepDoneInput.parse({ stepId, done: true }), nguoiLam);
 }
 
 export async function noiSlack(userId: string): Promise<void> {

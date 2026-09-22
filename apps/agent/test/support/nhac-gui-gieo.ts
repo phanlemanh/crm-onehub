@@ -13,6 +13,7 @@ import {
 	noiSlack,
 	phan,
 	TIEN_TO,
+	vaoXuong,
 } from "./nhac-gieo";
 
 export const HOM_QUA = -1;
@@ -151,18 +152,22 @@ export async function gieoMuoiHai() {
 	await noiSlack(A.id);
 	await khopSlack(A.id, "U-MN3-A");
 	const goc = lucVN(NGAY_NHAC, PHUT_SAU);
-	const soViec = NHAC.tran + 2;
-	await gieoKeHoach({
-		camTrich: O.id,
-		batDau: ngayCach(goc, -HAN_XA),
-		imTu: ngayCach(goc, HOM_QUA),
-		buoc: Array.from({ length: soViec }, (_, i) => ({
-			nhan: `Tre ${i}`,
-			giao: A.id,
-			han: ngayCach(goc, HOM_QUA - i),
-		})),
-	});
-	return { A, goc };
+	const viec = [];
+	for (const i of Array.from({ length: NHAC.tran + 2 }, (_, k) => k)) {
+		const k = await gieoKeHoach({
+			camTrich: O.id,
+			batDau: ngayCach(goc, -HAN_XA),
+			imTu: ngayCach(goc, HOM_QUA),
+			buoc: [{ nhan: `Tre ${i}`, giao: A.id, han: ngayCach(goc, HOM_QUA - i) }],
+		});
+		const buoc = phan(k.buoc, 0);
+		viec.push({
+			planId: k.plan.id,
+			stepId: buoc.id,
+			congTy: await tenCongTy(k.plan.id),
+		});
+	}
+	return { A, goc, viec };
 }
 
 export async function gieoKhongKenh() {
@@ -253,6 +258,50 @@ export async function xongDungHan(tu: Date, den: Date) {
 	return { dung: hang?.dung, mau: hang?.mau };
 }
 
+const NGOAI = "ngoai-duong-do";
+
+const HAN_DEM = new Date("2026-10-12T00:30:00+07:00");
+
+export const XONG_TRONG_NGAY_HAN = new Date("2026-10-12T17:00:00+07:00");
+
+async function gieoNgoai(gui: Date) {
+	const nguoi = await db.user.create({
+		data: { id: NGOAI, name: NGOAI, email: `${NGOAI}@thu.test` },
+	});
+	await vaoXuong(nguoi.id);
+	await khopSlack(nguoi.id, "U-NGOAI");
+	const boPhan = await db.department.create({
+		data: { name: NGOAI, position: 0 },
+	});
+	const congTy = await db.company.create({ data: { name: NGOAI } });
+	const plan = await db.onboardingPlan.create({
+		data: {
+			companyId: congTy.id,
+			ownerId: nguoi.id,
+			startedAt: ngayCach(gui, -HAN_XA),
+			targetDays: HAN_XA,
+		},
+	});
+	const buoc = await db.onboardingStep.create({
+		data: {
+			planId: plan.id,
+			label: NGOAI,
+			departmentId: boPhan.id,
+			assigneeId: nguoi.id,
+			dueAt: ngayCach(gui, MOT_NGAY),
+			position: 0,
+		},
+	});
+	return { nguoi: nguoi.id, buoc: buoc.id };
+}
+
+export async function donNgoai(): Promise<void> {
+	await db.onboardingPlan.deleteMany({ where: { company: { name: NGOAI } } });
+	await db.company.deleteMany({ where: { name: NGOAI } });
+	await db.department.deleteMany({ where: { name: NGOAI } });
+	await db.user.deleteMany({ where: { id: NGOAI } });
+}
+
 export async function gieoDuongDo() {
 	await moXuong();
 	const A = await gieoNguoi("An");
@@ -260,14 +309,14 @@ export async function gieoDuongDo() {
 	await noiSlack(A.id);
 	await khopSlack(A.id, "U-MN3-A");
 	const gui = lucVN(NGAY_NHAC, PHUT_SAU);
-	const do_ = ngayCach(gui, IM_NGAN);
+	const do_ = ngayCach(XONG_TRONG_NGAY_HAN, IM_NGAN);
 	const soTre = NHAC.tran - 2;
 	const x = await gieoKeHoach({
 		camTrich: O.id,
 		batDau: ngayCach(gui, -HAN_XA),
 		imTu: ngayCach(gui, HAI_NGAY * HOM_QUA),
 		buoc: [
-			{ nhan: "Sap xong", giao: A.id, han: ngayCach(gui, MOT_NGAY) },
+			{ nhan: "Sap xong dem", giao: A.id, han: HAN_DEM },
 			{ nhan: "Sap chua", giao: A.id, han: ngayCach(gui, HAI_NGAY) },
 			{ nhan: "Sap bi cat", giao: A.id, han: ngayCach(gui, NHAC.sapHanNgay) },
 			{ nhan: "Xong truoc gui", giao: A.id, han: ngayCach(gui, HAI_NGAY) },
@@ -294,6 +343,7 @@ export async function gieoDuongDo() {
 		A,
 		gui,
 		do_,
+		ngoai: await gieoNgoai(gui),
 		sapXong: phan(x.buoc, 0),
 		sapChua: phan(x.buoc, 1),
 		biCat: phan(x.buoc, 2),
