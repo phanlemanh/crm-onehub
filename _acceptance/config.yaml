@@ -178,6 +178,9 @@ executors:
     bcl_nhan_khi_cho: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-cot-loi-va-nhan.dom.tsx -t nhan-khi-cho'
     bcl_nhan_khi_ve: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-cot-loi-va-nhan.dom.tsx -t nhan-khi-ve'
     bcl_tai_lai_bo_loc_moi: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-cot-loi-va-nhan.dom.tsx -t tai-lai-bo-loc-moi'
+    kl_foreign_text: "cd packages/ui && bun test --preload ./test/setup-dom.ts test/khai-tieng.spec.tsx"
+    kl_metaline: "cd apps/app && bun test test/khai-tieng-metaline.spec.tsx"
+    kl_gioi_thieu: "cd apps/app && bun test test/khai-tieng-metaline.spec.tsx -t \"chieu d\""
     nbn_them_bo_phan: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/noi-bon-nut.dom.tsx -t them-bo-phan'
     nbn_soan_khuon: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/noi-bon-nut.dom.tsx -t soan-khuon'
     nbn_chua_co_bo_phan: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/noi-bon-nut.dom.tsx -t chua-co-bo-phan'

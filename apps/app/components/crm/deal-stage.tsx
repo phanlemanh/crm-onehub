@@ -1,4 +1,5 @@
 import type { DealStage } from "@crm/db/enums";
+import { ForeignText } from "@crm/ui/components/foreign-text";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { dealStagePresentation } from "@/lib/deal-stage";
 
@@ -11,8 +12,8 @@ export function DealStageIndicator({
 }) {
 	const { label, tone } = dealStagePresentation(stage);
 	return (
-		<span lang="en">
+		<ForeignText lang="en">
 			<StatusIndicator tone={tone} label={label} className={className} />
-		</span>
+		</ForeignText>
 	);
 }
