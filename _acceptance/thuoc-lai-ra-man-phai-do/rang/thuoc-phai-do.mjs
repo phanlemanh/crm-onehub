@@ -229,9 +229,7 @@ function caHongMotChieu() {
 				"const tron = ban.filter((b) => b.loi_dong === null && b.loi_mo === null);\n\t\tif (tron.length === 0) {",
 				"const tron = ban.filter((b) => b.loi_dong !== null && b.loi_mo !== null);\n\t\tif (tron.length === ban.length && ban.length > 0) {",
 			);
-			phaMotComponent(d);
 		}
-		ve(d);
 		phanNhomTrong(d);
 		const do_ = kiemHongMotChieu(d);
 		return { ma: ketCa("HONG-MOT-CHIEU", duong, do_), ra: "" };
