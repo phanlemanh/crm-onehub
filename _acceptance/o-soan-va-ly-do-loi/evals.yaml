@@ -1,0 +1,195 @@
+schema_version: 1
+slug: o-soan-va-ly-do-loi
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "packages/ui/src/components/token-field.tsx"
+      - "apps/app/components/agent-builder/agent-composer.tsx"
+      - "_acceptance/o-soan-va-ly-do-loi/rang/**"
+    steps:
+      - "Dat truoc MOI buoc: APP_URL=http://127.0.0.1:3500 va API_URL=http://127.0.0.1:3501 — dung 127.0.0.1, tranh Invalid origin va cookie ro theo host"
+      - "Dung ca hai may chu cua CAY DANG XET: api 3501, app 3500 (APP_URL cua api cung la http://127.0.0.1:3500). Kiem cong 3500 va 3501 truoc khi dung — tai nguyen chung; tat bang PID da ghi, khong pkill"
+      - "Chay: bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs con-tro — rang tu chan cay (dau moc trong apps/app/public xin lai qua APP_URL), thoat ma 2 va goi ten cay neu khac cay, KHONG doc so nao"
+      - "Rang ghi evidence/E1-con-tro.json: voi moi o (man-dau, trong-hoi-thoai) — khoang cach con tro toi mep trai vung chu (px), khoang cach mep trai chu goi y toi mep trai vung chu (px), chu goi y co hien khong; va chup evidence/E1-man-dau.png, evidence/E1-trong-hoi-thoai.png (o da bam vao, con tro nhap nhay da tat bang caret-color de khong mat khung)"
+    inputs:
+      - _acceptance/o-soan-va-ly-do-loi/evidence/
+    expected: |
+      Ma tran viet truoc HAI o x HAI kho x BON so, moi to hop mot dong:
+        1 man-dau 1440 / 2 man-dau 375 / 3 trong-hoi-thoai 1440 / 4 trong-hoi-thoai 375:
+          a |con tro - mep trai vung chu| <= 2px, voi hinh chu nhat con tro co height > 0
+            (hinh chu nhat rong hoac height 0 -> FAIL, KHONG doc so)
+          b chu goi y hien
+          c |mep trai chu goi y ve that - mep trai vung chu| <= 2px; mep ve that do bang lay
+            mau diem anh tren anh chup o (cot dau tien co mau chu goi y), KHONG doc CSS left
+          d chu goi y nam tron trong o: scrollHeight cua o <= clientHeight va day chu goi y
+            (do bang lay mau diem anh) nam tren mep tren thanh nut
+      Doc so tu E1-con-tro.json, doi chieu tren anh: con tro dung truoc chu dau cua chu goi y.
+      CHIEU DO (rang tu chay tren ban sao): tra lai before: trong dong chu (bo xep chong luoi) ->
+      con tro man-dau > 100px, rang in "con tro dung sau chu goi y" va thoat 1.
+
+  - id: E2
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "packages/ui/src/components/token-field.tsx"
+      - "apps/app/components/agent-builder/agent-composer.tsx"
+      - "_acceptance/o-soan-va-ly-do-loi/rang/**"
+    steps:
+      - "Cung may chu va bien moi truong nhu E1"
+      - "Chay: bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs go-chu — rang bam vao o man dau, go 'a', ghi evidence/E2-go-chu.json (chu goi y co hien khong, textContent cua o bo ky tu rong, vi tri con tro so voi mep phai chu 'a') va chup evidence/E2-go-chu.png"
+    inputs:
+      - _acceptance/o-soan-va-ly-do-loi/evidence/
+    expected: |
+      1 chu goi y khong hien (content cua ::before la none hoac data-empty khac true)
+      2 noi dung o dung "a" (bo U+200B)
+      3 con tro dung sau chu "a" (le trai con tro >= le phai chu "a" - 1px)
+      Doi chung duong: E1 cung rang, cung o, truoc khi go thi chu goi y hien.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: unit
+    cmd: config:executors.test.os_ma_loi_transcript
+    paths:
+      - "apps/app/lib/agent-transcript.ts"
+      - "apps/app/test/agent-transcript.spec.ts"
+    expected: |
+      Ma tran viet truoc NAM chuoi su kien, moi chuoi mot assert tren ca code va kind:
+        1 turn.failed "GatewayRateLimitError ..." code RL_1 -> {code RL_1, kind rate-limit}
+        2 turn.failed "RestrictedModelsError ..." code RS_1 -> {code RS_1, kind restricted}
+        3 turn.failed "insufficient credits" code CR_1 -> {code CR_1, kind credits}
+        4 turn.failed "search_crm: query too short" code TOOL_EXECUTION_FAILED -> {code TOOL_EXECUTION_FAILED, kind unknown}
+        5 session.failed khong code -> {code AGENT_FAILED, kind unknown}
+      CHIEU DO (ban sao): ep code ve hang "AGENT_FAILED" -> dong 1-4 do voi thong diep ghim
+      "latestTurnFailure giu code cua su kien".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: ui
+    cmd: config:executors.test.os_the_loi
+    paths:
+      - "apps/app/components/agent-builder/builder-failure-card.tsx"
+      - "apps/app/lib/messages/agent-builder-tro-chuyen.ts"
+      - "apps/app/test/the-loi-hoi-thoai.dom.tsx"
+    expected: |
+      Dom test render BuilderFailureCard voi code TOOL_EXECUTION_FAILED, ma tran 2 tieng x 4 kind
+      = 8 lan render, moi lan bon assert:
+        1 co dong "Mã lỗi: TOOL_EXECUTION_FAILED" (en "Error code: TOOL_EXECUTION_FAILED")
+        2 phan tu chua dung chuoi ma mang translate="no"
+        3 cau loi dung theo kind (lay tu goi thong diep, khong viet chu roi) va nut "Thử lại" con
+        4 khong chua chuoi message tho "search_crm: query too short"
+      CHIEU DO (ban sao): bo dong ma loi -> assert 1 do voi thong diep ghim
+      "the loi hien ma loi"; bo translate="no" -> assert 2 do.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.os_su_kien_api
+    paths:
+      - "apps/api/src/conversations/**"
+      - "apps/api/test/loi-hoi-thoai.spec.ts"
+      - "apps/api/test/fixtures/loi-hoi-thoai-events.json"
+    expected: |
+      Gieo that tren DB: nguoi A, hoi thoai BUILDER cua A, mot AgentEvent turn.failed voi
+      data DOC TU phan data cua apps/api/test/fixtures/loi-hoi-thoai-events.json (chinh phan
+      E9 chung la hook audit that ghi ra tu su kien kieu eve), khong viet tay. Goi that
+      conversations.events cua A:
+        1 su kien turn.failed co data.code va data.message nguyen van
+        2 dau ra (bo meta.id, meta.at) bang dung apps/api/test/fixtures/loi-hoi-thoai-events.json
+      Nguoi B goi cung id -> NotFound (khong ro su kien cua nguoi khac).
+      CHIEU DO: doi code trong fixture -> dong 2 do voi thong diep ghim
+      "fixture su kien loi khop dau ra that".
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: ui
+    cmd: config:executors.test.os_the_loi_tu_su_kien
+    paths:
+      - "apps/app/components/agent-builder/builder-failure-card.tsx"
+      - "apps/app/lib/agent-transcript.ts"
+      - "apps/app/test/the-loi-hoi-thoai.dom.tsx"
+      - "apps/api/test/fixtures/loi-hoi-thoai-events.json"
+    expected: |
+      Round-trip: dom test doc CHINH apps/api/test/fixtures/loi-hoi-thoai-events.json (dau ra
+      that cua E5), dua qua latestTurnFailure roi render BuilderFailureCard:
+        1 the hien "Mã lỗi: TOOL_EXECUTION_FAILED"
+      Khong tu dung su kien trong test nay.
+      CHIEU DO: bo code khoi fixture ban sao -> the hien AGENT_FAILED, assert do voi thong
+      diep ghim "ma loi di tu su kien toi the".
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.os_log_agent
+    paths:
+      - "apps/agent/agent/channels/crm.ts"
+      - "apps/agent/test/log-loi-hoi-thoai.integration.spec.ts"
+    expected: |
+      Goi that bo xu ly events cua kenh crm (import default tu agent/channels/crm) tren DB
+      that, bat console.error bang spyOn. Du lieu su kien dung theo kieu su kien eve xuat ra
+      (satisfies), khong khuon tu dat. Ma tran viet truoc BA su kien:
+        1 turn.failed, token builderToken(id), {code C1, message M1}: dung mot dong chua id,
+          "turn.failed", C1, M1; sau do hang agentConversation co continuationToken =
+          builderToken(id) va pendingInputRequest null (gieo truoc khac null)
+        2 gieo lai pendingInputRequest khac null; session.failed, cung token, {code C2,
+          message M2}: dung mot dong chua id, "session.failed", C2, M2; token va
+          pendingInputRequest nhu sau 1
+        3 turn.failed, token taskToken(t) cua mot AgentTask nghien cuu CO THAT (gieo bang thu
+          tuc cua kho): khong dong nao chua "builder conversation", VA doi chung duong: ban ghi
+          cua task duoc danh dau hong nhu truoc (enrichment FAILED voi ly do M3)
+      CHIEU DO (ban sao): bo console.error o nhanh builder -> dong 1 do voi thong diep ghim
+      "agent ghi log loi hoi thoai".
+
+  - id: E9
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.os_ghi_su_kien
+    paths:
+      - "apps/agent/agent/hooks/audit.ts"
+      - "apps/agent/test/log-loi-hoi-thoai.integration.spec.ts"
+      - "apps/api/test/fixtures/loi-hoi-thoai-events.json"
+    expected: |
+      Mo neo cua chuoi: dung su kien turn.failed theo kieu su kien eve xuat ra (satisfies),
+      {code TOOL_EXECUTION_FAILED, message "search_crm: query too short"}, cho hook audit
+      THAT (import default tu agent/hooks/audit) xu ly voi hoi thoai BUILDER tren DB that:
+        1 co dung mot hang AgentEvent type turn.failed gan conversationId
+        2 data cua hang do bang dung phan data cua su kien turn.failed trong
+          apps/api/test/fixtures/loi-hoi-thoai-events.json (fixture E5 va E6 doc)
+      CHIEU DO: doi code trong fixture ban sao -> dong 2 do voi thong diep ghim
+      "fixture su kien loi la dau ra cua hook audit".
+
+  - id: E8
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "packages/ui/src/components/token-field.tsx"
+      - "apps/app/components/agent-builder/**"
+      - "_acceptance/o-soan-va-ly-do-loi/rang/**"
+    steps:
+      - "Cung may chu va bien moi truong nhu E1; KHONG nang quyen thanh vien nao, KHONG tao phien cho tai khoan nguoi khac"
+      - "Chay: bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs chup — rang gieo hoi thoai BUILDER co AgentEvent turn.failed nhu AC-5 cho nguoi do (xoa khi xong), roi o kho 1440 va 375 chup: evidence/E8-o-trong-<kho>.png (o man dau da bam), evidence/E8-da-go-<kho>.png, evidence/E8-the-loi-<kho>.png; ghi scrollWidth va clientWidth moi kho vao evidence/E8-khuon.txt"
+      - "Xoa dau moc trong apps/app/public khi xong"
+    inputs:
+      - _acceptance/o-soan-va-ly-do-loi/evidence/
+    expected: |
+      Nhin thay duoc tren anh, khong suy tu ma:
+        1 o trong da bam: con tro dung truoc chu dau cua chu goi y, chu goi y nam tron trong
+          o va khong de thanh nut, o ca hai kho
+        2 da go: khong con chu goi y
+        3 the loi: dong "Mã lỗi: TOOL_EXECUTION_FAILED" duoi cau loi, nut "Thử lại" con
+        4 E8-khuon.txt: scrollWidth <= clientWidth o ca hai kho
+      Mot dong khong nhin thay -> FAIL, ghi dong nao.
