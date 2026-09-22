@@ -185,7 +185,7 @@ evals:
       - "_acceptance/o-soan-va-ly-do-loi/rang/**"
     steps:
       - "Cung may chu va bien moi truong nhu E1; KHONG nang quyen thanh vien nao, KHONG tao phien cho tai khoan nguoi khac"
-      - "Chay: bun scripts/lan-do/tien-de.mjs --chay 'bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs chup' — rang gieo hoi thoai BUILDER co AgentEvent turn.failed nhu AC-5 cho nguoi do (xoa khi xong), roi o kho 1440 va 375 chup: evidence/E8-o-trong-<kho>.png (o man dau da bam), evidence/E8-da-go-<kho>.png, evidence/E8-the-loi-<kho>.png; ghi scrollWidth va clientWidth moi kho vao evidence/E8-khuon.txt"
+      - "Chay: bun scripts/lan-do/tien-de.mjs --chay 'bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs chup' — rang gieo hoi thoai BUILDER co AgentEvent turn.failed nhu AC-5 cho nguoi do (xoa khi xong), roi o kho 1440 va 375 chup: evidence/E8-o-trong-<kho>.png (o man dau da bam, con tro to do), evidence/E8-da-go-<kho>.png, evidence/E8-the-loi-<kho>.png; ghi scrollWidth va clientWidth moi kho vao evidence/E8-khuon.txt"
       - "Xoa dau moc trong apps/app/public khi xong"
     inputs:
       - _acceptance/o-soan-va-ly-do-loi/evidence/
@@ -198,3 +198,5 @@ evals:
           tin gui nen khong co nut "Thử lại" — nut do E4 phu)
         4 E8-khuon.txt: scrollWidth <= clientWidth o ca hai kho
       Mot dong khong nhin thay -> FAIL, ghi dong nao.
+      Ghi chu: rang to con tro bang mau do thuan rgb(255,0,0) tren trang do de con tro nhin
+      thay duoc tren anh o moi chu de sang toi; vach do truoc chu goi y CHINH LA con tro.
