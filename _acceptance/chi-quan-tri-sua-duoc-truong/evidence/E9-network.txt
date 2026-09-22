@@ -1,0 +1,15 @@
+E9 network truth dump — driver: Claude_Browser (read_network_requests / read_console_messages)
+Session: admin cookie (e12-admin-...@onehub.center) on http://localhost:3300 (app) / http://localhost:3301 (api, via /api proxy)
+Scope: dev_server.url = http://localhost:3300, dev_server.api_base = ["http://localhost:3301"]
+
+All captured requests: 200 OK, all to localhost:3300 (app origin, includes proxied /api/trpc/* calls).
+No requests to any origin outside app-scope observed. No 4xx/5xx among FAIL-eligible requests.
+
+One console error observed, unrelated to any network request:
+  [error] Uncaught {message: Failed to execute 'getComputedStyle' on 'Window': parameter 1 is not of type 'Element'.}
+  at <anonymous>:1:398 / at <anonymous>:1:1538
+  — this stack trace points at an inline eval (":1:...") consistent with the browser-automation
+    tooling's own injected inspection script, not application code; no corresponding failed
+    request accompanies it. Treated as non-blocking / not app-scope evidence.
+
+Verdict: networkObserved = clean

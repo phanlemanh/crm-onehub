@@ -5,7 +5,7 @@ slug: chi-quan-tri-sua-duoc-truong
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-09-22
 design_doc: docs/superpowers/specs/2026-09-22-chi-quan-tri-sua-duoc-truong-design.md
