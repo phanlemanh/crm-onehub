@@ -59,9 +59,12 @@ import {
 	transferOutput,
 	transferPreviewInput,
 	transferWorkInput,
+	watchInput,
+	watchOutput,
 } from "./onboarding.contracts";
 import { OnboardingService } from "./onboarding.service";
 import { OnboardingNoi } from "./onboarding-noi";
+import { OnboardingTheoDoi } from "./onboarding-theo-doi";
 
 const TAG = ["Onboarding"];
 
@@ -73,6 +76,8 @@ export class OnboardingRouter {
 		private readonly onboarding: OnboardingService,
 		@Inject(OnboardingNoi)
 		private readonly noi: OnboardingNoi,
+		@Inject(OnboardingTheoDoi)
+		private readonly theoDoi: OnboardingTheoDoi,
 	) {}
 
 	@Query({
@@ -258,8 +263,11 @@ export class OnboardingRouter {
 		output: planDetailOutput,
 		meta: restMeta("GET", "/onboarding/plans/{id}", TAG),
 	})
-	planById(@Input() input: z.infer<typeof planIdInput>) {
-		return this.onboarding.planById(input);
+	planById(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof planIdInput>,
+	) {
+		return this.onboarding.planById(input, ctx.user.id);
 	}
 
 	@Mutation({
@@ -283,6 +291,30 @@ export class OnboardingRouter {
 		@Input() input: z.infer<typeof planIdInput>,
 	) {
 		return this.onboarding.closePlan(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: watchInput,
+		output: watchOutput,
+		meta: restMeta("POST", "/onboarding/plans/{planId}/watch", TAG),
+	})
+	watch(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof watchInput>,
+	) {
+		return this.theoDoi.bat(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: watchInput,
+		output: watchOutput,
+		meta: restMeta("DELETE", "/onboarding/plans/{planId}/watch", TAG),
+	})
+	unwatch(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof watchInput>,
+	) {
+		return this.theoDoi.tat(input, ctx.user.id);
 	}
 
 	@Mutation({

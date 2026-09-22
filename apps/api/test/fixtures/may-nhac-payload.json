@@ -1,0 +1,21 @@
+{
+	"keHoachCanDeY": [
+		{
+			"loai": "ke-hoach-im",
+			"planId": "KE_HOACH_P1",
+			"companyName": "CONG_TY_P1",
+			"goiY": "Giao bước «Dao tao»",
+			"soNgay": 8
+		},
+		{
+			"loai": "moc-ngay",
+			"planId": "KE_HOACH_P1",
+			"companyName": "CONG_TY_P1",
+			"goiY": "1/3 bước xong",
+			"soNgay": 14,
+			"soBuocXong": 1,
+			"soBuocTong": 3
+		}
+	],
+	"batTheoDoi": { "planId": "KE_HOACH_P" }
+}

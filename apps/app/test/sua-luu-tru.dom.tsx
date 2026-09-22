@@ -296,6 +296,8 @@ mock.module("@/lib/trpc/client", () => ({
 						buocTong: buocKeHoach.length,
 						imNgay: 0,
 						tacO: null,
+						dangTheoDoi: false,
+						nguoiTheoDoi: [],
 					}),
 				),
 			),

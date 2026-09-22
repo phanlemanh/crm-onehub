@@ -82,6 +82,16 @@ const myStepOutput = z.object({
 	company: linkedRecordOutput,
 });
 
+export const keHoachCanDeYOutput = z.object({
+	loai: z.enum(["ke-hoach-im", "moc-ngay"]),
+	planId: z.string(),
+	companyName: z.string(),
+	goiY: z.string(),
+	soNgay: z.number().int(),
+	soBuocXong: z.number().int().optional(),
+	soBuocTong: z.number().int().optional(),
+});
+
 const recentActivityOutput = z.object({
 	id: z.string(),
 	type: z.nativeEnum(ActivityType),
@@ -117,6 +127,7 @@ export const dashboardSummaryOutput = z.object({
 	closingThisMonthTotal: monthlyTotalOutput,
 	biggestOpen: z.array(biggestOpenDealOutput),
 	mySteps: z.array(myStepOutput),
+	keHoachCanDeY: z.array(keHoachCanDeYOutput),
 	overdueTasks: z.array(overdueTaskOutput),
 	recentActivity: z.array(recentActivityOutput),
 });
