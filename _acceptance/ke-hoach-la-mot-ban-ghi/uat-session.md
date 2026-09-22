@@ -13,6 +13,8 @@ decided_at:
 
 Bật trên production ngày 2026-09-22: PR #77 merge vào `onehub` ở `cca1cf4b`, ba bản production (app · api · agent) dựng thành công, migration `20260922052616_ke_hoach_la_mot_ban_ghi` chạy trong bước dựng crm-api (`docs/setup.md`, mục «Migrations run on the production deploy»).
 
+**Hoãn** — chủ kho quyết 2026-09-22: hoãn phiên nghiệm thu, làm tiếp lượt 2 `moi-phia-deu-thay-ke-hoach`. Phiên giữ `stage: scheduled`, ngưỡng không đổi; đồng hồ hai tuần vẫn chạy từ ngày bật.
+
 Cờ vàng — **chưa lái-thử**: hồ sơ không có `stranger-drive.md`, nên điều kiện «sản phẩm thật chạy được cho người dự bấm» ở đây là lời khai (bản production dựng xanh), không phải bằng chứng từ nhật-ký-vấp.
 
 ## Ngưỡng đã khai tại Cổng Đáng (CHÉP NGUYÊN VĂN — cấm sửa sau khi thấy số)
