@@ -3,10 +3,10 @@ schema_version: 1
 slug: may-nhac-truoc-nguoi
 feature: Máy nhắc thay người canh — bước sắp tới hạn nhắc người được giao, kế hoạch im quá ngưỡng nhắc người cầm trịch kèm việc cần làm, tới mốc ngày 7 · 14 · 30 nhắc kiểm, người theo dõi nhận cùng nhắc
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-09-22T10:12:05Z
 prototype:
   base_commit:
   disposition: archive
@@ -65,7 +65,7 @@ Một câu: *«Tôi không phải mở danh mục mỗi sáng: sắp tới hạn
   kế hoạch im và mốc ngày.
 - Mọi ngưỡng (số ngày trước hạn, ngưỡng im, các mốc) vào `onboarding-config.ts`.
 
-**Hạng dự kiến: T3 — cần chủ kho quyết ở Cổng Đáng hoặc Cổng Phạm vi.** Chỗ
+**Hạng: T3** (chốt ở Cổng Đáng, lối (a)). Chỗ
 theo dõi phải được lưu ở đâu đó:
 - (a) bảng mới `OnboardingWatch` — rõ ràng, truy vấn rẻ, nhưng chạm
   `packages/db/prisma/**` nên là T3 (thêm Cổng 1.5 duyệt kế hoạch thi công);
@@ -89,10 +89,10 @@ từng người dùng đã nối Gmail.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] Khi máy nhắc thay người canh, kế hoạch có bớt nằm im không — hay người vẫn chỉ động tay khi người cầm trịch đi hỏi?
-- Kết quả nào là SỐNG: [đề xuất] hai tuần sau khi bật, đủ hai điều — (a) số ngày im trung vị của các kế hoạch đang chạy (tính như `imNgay`, từ `OnboardingStep.updatedAt` mới nhất) thấp hơn số đo cùng cách ở ngày bật; (b) trong các bước tới hạn trong kỳ mà người được giao đã nhận nhắc, ít nhất một nửa được đánh dấu xong trước hoặc đúng hạn.
-- Kết quả nào là CHẾT: [đề xuất] hết hai tuần mà số ngày im trung vị không giảm, hoặc quá nửa số người nhận nhắc tắt tiếng bot hoặc xin ngừng nhắc.
-- Timebox: [đề xuất] một ngày công cho một nhắc thật chạy từ đầu đến cuối (một bước sắp hạn → một tin Slack riêng có đường mở kế hoạch) trước Cổng Phạm vi; quá một ngày là đang xây, không phải hội tụ.
+- Câu hỏi phép đo trả lời: Khi máy nhắc thay người canh, kế hoạch có bớt nằm im không — hay người vẫn chỉ động tay khi người cầm trịch đi hỏi?
+- Kết quả nào là SỐNG: hai tuần sau khi bật, đủ hai điều — (a) số ngày im trung vị của các kế hoạch đang chạy (tính như `imNgay`, từ `OnboardingStep.updatedAt` mới nhất) thấp hơn số đo cùng cách ở ngày bật; (b) trong các bước tới hạn trong kỳ mà người được giao đã nhận nhắc, ít nhất một nửa được đánh dấu xong trước hoặc đúng hạn.
+- Kết quả nào là CHẾT: hết hai tuần mà số ngày im trung vị không giảm, hoặc quá nửa số người nhận nhắc tắt tiếng bot hoặc xin ngừng nhắc.
+- Timebox: một ngày công cho một nhắc thật chạy từ đầu đến cuối (một bước sắp hạn → một tin Slack riêng có đường mở kế hoạch) trước Cổng Phạm vi; quá một ngày là đang xây, không phải hội tụ.
 
 Ghi chú về số nền: lượt 1 mới lên `onehub` hôm nay, nên chưa có «hai tuần trước
 lượt» để so như lộ trình gợi ý. Đề xuất đo số nền ngay ngày bật, rồi so sau hai
@@ -113,9 +113,9 @@ Chưa dựng gì.
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: …
+- **decision = build** Căn cứ (chủ kho, 2026-09-22T10:12:05Z): lượt 2 cho người chỗ thấy việc nhưng mọi thứ vẫn là kéo; ngưỡng im đã khai mà không ai đọc (mục «Vấn đề & ai gặp»). Theo dõi đi lối (a) — bảng `OnboardingWatch`, hạng T3 — theo khuyến nghị của máy, người đáp «làm».
 - **disposition = archive** Căn cứ: chưa dựng prototype, `base_commit` để trống.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** nguyên văn bốn dòng ở mục «Ngưỡng chết / ngưỡng UAT», chốt như đề xuất; số nền đo ngay ngày bật.
 
 ## Thước đo thành công → ứng viên criterion
 
