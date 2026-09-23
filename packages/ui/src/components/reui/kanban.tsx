@@ -9,9 +9,11 @@ import {
 	useMemo,
 	useRef,
 	useState,
+	useId,
 	useSyncExternalStore,
 } from "react";
 import type {
+	CollisionDetection,
 	DragCancelEvent,
 	DragEndEvent,
 	DragOverEvent,
@@ -27,6 +29,8 @@ import {
 	KeyboardSensor,
 	MeasuringStrategy,
 	MouseSensor,
+	pointerWithin,
+	rectIntersection,
 	TouchSensor,
 	useSensor,
 	useSensors,
@@ -60,6 +64,7 @@ interface KanbanContextProps<T> {
 	setActiveId: (id: UniqueIdentifier | null) => void;
 	findContainer: (id: UniqueIdentifier) => string | undefined;
 	isColumn: (id: UniqueIdentifier) => boolean;
+	overColumn: string | null;
 	modifiers?: Modifiers;
 }
 const KanbanContext = createContext<KanbanContextProps<any>>({
@@ -71,6 +76,7 @@ const KanbanContext = createContext<KanbanContextProps<any>>({
 	setActiveId: () => {},
 	findContainer: () => undefined,
 	isColumn: () => false,
+	overColumn: null,
 	modifiers: undefined,
 });
 const ColumnContext = createContext<{
@@ -85,10 +91,12 @@ const ColumnContext = createContext<{
 	disabled: false,
 });
 const ItemContext = createContext<{
+	attributes: DraggableAttributes;
 	listeners: DraggableSyntheticListeners | undefined;
 	isDragging?: boolean;
 	disabled?: boolean;
 }>({
+	attributes: {} as DraggableAttributes,
 	listeners: undefined,
 	isDragging: false,
 	disabled: false,
@@ -108,6 +116,10 @@ const dropAnimationConfig: DropAnimation = {
 const subscribeToNothing = () => () => {};
 const getIsMounted = () => true;
 const getIsMountedOnServer = () => false;
+const pointerFirst: CollisionDetection = (args) => {
+	const underPointer = pointerWithin(args);
+	return underPointer.length > 0 ? underPointer : rectIntersection(args);
+};
 const MOUSE_SENSOR_OPTIONS = { activationConstraint: { distance: 10 } };
 const TOUCH_SENSOR_OPTIONS = {
 	activationConstraint: { delay: 250, tolerance: 5 },
@@ -152,6 +164,7 @@ export interface KanbanRootProps<T>
 	accessibility?: React.ComponentProps<typeof DndContext>["accessibility"];
 	asChild?: boolean;
 	modifiers?: Modifiers;
+	collisionDetection?: CollisionDetection;
 }
 function Kanban<T>({
 	value,
@@ -168,8 +181,11 @@ function Kanban<T>({
 	onDragCancel,
 	accessibility,
 	modifiers,
+	collisionDetection = pointerFirst,
 	...props
 }: KanbanRootProps<T>) {
+	const dndId = useId();
+	const [overColumn, setOverColumn] = useState<string | null>(null);
 	const columns = value;
 	const setColumns = onValueChange;
 	const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
@@ -250,7 +266,9 @@ function Kanban<T>({
 			let overContainer: string | undefined;
 			let overIndex = -1;
 			for (const key of Object.keys(finalValue)) {
-				const found = itemsOf(finalValue, key).findIndex((item) => getId(item) === id);
+				const found = itemsOf(finalValue, key).findIndex(
+					(item) => getId(item) === id,
+				);
 				if (found !== -1) {
 					overContainer = key;
 					overIndex = found;
@@ -292,7 +310,9 @@ function Kanban<T>({
 					let container: string | undefined;
 					let index = -1;
 					for (const key of keys) {
-						const found = itemsOf(snapshot, key).findIndex((item) => getId(item) === id);
+						const found = itemsOf(snapshot, key).findIndex(
+							(item) => getId(item) === id,
+						);
 						if (found !== -1) {
 							container = key;
 							index = found;
@@ -307,6 +327,7 @@ function Kanban<T>({
 	);
 	const handleDragOver = useCallback(
 		(event: DragOverEvent) => {
+			setOverColumn(event.over ? (findContainer(event.over.id) ?? null) : null);
 			if (onMove) {
 				return;
 			}
@@ -351,7 +372,11 @@ function Kanban<T>({
 				if (activeIndex !== overIndex) {
 					setColumns({
 						...columns,
-						[container]: arrayMove(itemsOf(columns, container), activeIndex, overIndex),
+						[container]: arrayMove(
+							itemsOf(columns, container),
+							activeIndex,
+							overIndex,
+						),
 					});
 				}
 			}
@@ -368,6 +393,7 @@ function Kanban<T>({
 			}
 			dragOriginRef.current = null;
 			setActiveId(null);
+			setOverColumn(null);
 			onDragCancel?.(event);
 		},
 		[
@@ -383,6 +409,7 @@ function Kanban<T>({
 		(event: DragEndEvent) => {
 			const { active, over } = event;
 			setActiveId(null);
+			setOverColumn(null);
 			onDragEnd?.(event);
 			if (!over) {
 				commitChange(valueRef.current, event, "item");
@@ -452,7 +479,11 @@ function Kanban<T>({
 				if (activeIndex !== overIndex) {
 					const newColumns = {
 						...columns,
-						[container]: arrayMove(itemsOf(columns, container), activeIndex, overIndex),
+						[container]: arrayMove(
+							itemsOf(columns, container),
+							activeIndex,
+							overIndex,
+						),
 					};
 					setColumns(newColumns);
 					commitChange(newColumns, event, "item");
@@ -486,6 +517,7 @@ function Kanban<T>({
 			setActiveId,
 			findContainer,
 			isColumn,
+			overColumn,
 			modifiers,
 		}),
 		[
@@ -496,6 +528,7 @@ function Kanban<T>({
 			activeId,
 			findContainer,
 			isColumn,
+			overColumn,
 			modifiers,
 		],
 	);
@@ -503,6 +536,8 @@ function Kanban<T>({
 	return (
 		<KanbanContext.Provider value={contextValue}>
 			<DndContext
+				id={dndId}
+				collisionDetection={collisionDetection}
 				sensors={sensors}
 				modifiers={modifiers}
 				accessibility={accessibility}
@@ -573,7 +608,7 @@ function KanbanColumn({
 		disabled: disabled || isOverlay,
 		animateLayoutChanges,
 	});
-	const { activeId, isColumn } = useContext(KanbanContext);
+	const { activeId, isColumn, overColumn } = useContext(KanbanContext);
 	const isColumnDragging = activeId ? isColumn(activeId) : false;
 	const style = {
 		transition,
@@ -611,6 +646,7 @@ function KanbanColumn({
 				data-value={value}
 				data-dragging={isSortableDragging}
 				data-disabled={disabled}
+				data-over={overColumn === value}
 				ref={setNodeRef}
 				style={style}
 				className={cn(
@@ -695,7 +731,12 @@ function KanbanItem({
 	if (isOverlay) {
 		return (
 			<ItemContext.Provider
-				value={{ listeners: undefined, isDragging: true, disabled: false }}
+				value={{
+					attributes: {} as DraggableAttributes,
+					listeners: undefined,
+					isDragging: true,
+					disabled: false,
+				}}
 			>
 				<Comp
 					data-slot="kanban-item"
@@ -711,7 +752,7 @@ function KanbanItem({
 	}
 	return (
 		<ItemContext.Provider
-			value={{ listeners, isDragging: isItemDragging, disabled }}
+			value={{ attributes, listeners, isDragging: isItemDragging, disabled }}
 		>
 			<Comp
 				data-slot="kanban-item"
@@ -720,7 +761,6 @@ function KanbanItem({
 				data-disabled={disabled}
 				ref={setNodeRef}
 				style={style}
-				{...attributes}
 				className={cn(
 					isSortableDragging && "z-50 opacity-50",
 					disabled && "opacity-50",
@@ -744,13 +784,15 @@ function KanbanItemHandle({
 	children,
 	...props
 }: KanbanItemHandleProps) {
-	const { listeners, isDragging, disabled } = useContext(ItemContext);
+	const { attributes, listeners, isDragging, disabled } =
+		useContext(ItemContext);
 	const Comp = asChild ? Slot.Root : "div";
 	return (
 		<Comp
 			data-slot="kanban-item-handle"
 			data-dragging={isDragging}
 			data-disabled={disabled}
+			{...attributes}
 			{...listeners}
 			className={cn(
 				cursor && (isDragging ? "cursor-grabbing!" : "cursor-grab!"),
