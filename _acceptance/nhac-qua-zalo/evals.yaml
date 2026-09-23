@@ -1,0 +1,476 @@
+schema_version: 1
+slug: nhac-qua-zalo
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: unit
+    cmd: config:executors.test.nqz_chon_kenh
+    paths:
+      - "packages/db/src/kenh-thong-bao.ts"
+      - "apps/agent/test/nhac-qua-zalo.integration.spec.ts"
+    expected: |
+      Ma tran toan phan viet truoc: 12 dong = 3 uu tien x 2 zalo x 2 slack,
+      moi dong mot assert tren {kenh, lech}, gia tri ky vong ghi tay trong bang
+      (khong tinh lai bang chinh ham). So assert = 12, test dem so dong bang va
+      ghim 12 de mot dong bi xoa thi do.
+      DOT BIEN CHUNG MINH (ban sao): cho AUTO tra lech=true khi Zalo khong duoc ->
+      dong (AUTO,khong,co) do voi thong diep ghim "AUTO khong bao gio lech";
+      dao nhanh SLACK roi sang zalo khi ca hai duoc -> dong (SLACK,co,co) do voi
+      "SLACK chon Slack khi Slack duoc".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_gui_zalo
+    paths:
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "apps/agent/agent/lib/tin-nhac.ts"
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "packages/db/src/kenh-thong-bao.ts"
+      - "apps/agent/test/nhac-qua-zalo.integration.spec.ts"
+    expected: |
+      Gieo that tren DB bang thu tuc cua kho; Zalo gia va Slack gia cung ghi moi
+      loi goi (fetcher tiem vao, khong mang that). Ma tran viet truoc:
+        1 dung 1 loi sendMessage, chat_id = zaloUserId cua A
+        2 0 loi goi Slack (ca conversations.open lan chat.postMessage)
+        3 van ban chua nguyen chuoi "Minh & Co <HN>" (doi chung duong) va khong
+          chua "*", "<http", "|mở kế hoạch>", "&amp;"
+        4 vi tri "Quá hạn" < "Sắp hạn" < "Kế hoạch im"
+        5 moi dong: ten cong ty cua dong do va ket thuc "?record=plan:<ma dung>"
+          (so tung dong voi ke hoach gieo)
+        6 doc LAI tu DB: outcome da-gui:4, payload.kenh zalo, payload.lechKenh false,
+          payload.daGui bang dung tap 4 dong
+      Doi chung duong tren cung fixture: xoa ZaloLink cua A -> 1 postMessage Slack,
+      payload.kenh slack (chung minh dong 2 do do chon kenh, khong do Slack gia hong).
+      DOT BIEN CHUNG MINH: dung khuon slack cho Zalo -> dong 3 do voi thong diep
+      ghim "tin Zalo la chu tron"; giu khuon tron nhung bat thoat HTML -> dong 3
+      do voi "tin Zalo khong thoat HTML"; gui toi slackUserId thay zaloUserId -> dong 1 do.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_tran_zalo
+    paths:
+      - "apps/agent/agent/lib/tin-nhac.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/test/nhac-qua-zalo.integration.spec.ts"
+    expected: |
+      Fixture 12 viec, ten cong ty dai de ban day du vuot ZALO.tranKyTu (gia tri doc
+      tu ZALO, khong viet so roi). Assert:
+        1 do dai van ban gui <= ZALO.tranKyTu
+        2 co dong "và N việc nữa", N = 12 - so dong co trong van ban (dem bang
+          cach tim tung planId trong van ban, khong tin payload)
+        3 payload.daGui bang dung tap dong co trong van ban
+      Doi chung duong: ten cong ty ngan -> khong co dong "và N việc nữa", N dong = min(12, NHAC.tran).
+      DOT BIEN CHUNG MINH: bo cat theo tranKyTu -> dong 1 do voi thong diep ghim
+      "tin Zalo khong vuot tran ky tu"; cat van ban nhung khong cat daGui -> dong 3 do.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_lech_kenh
+    paths:
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "packages/db/src/kenh-thong-bao.ts"
+      - "apps/agent/test/nhac-qua-zalo.integration.spec.ts"
+    expected: |
+      Bon hang P, Q, R, S; Zalo gia va Slack gia ghi loi goi; R chay voi
+      ZALO_BOT_TOKEN bi go khoi moi truong. Moi ca doc LAI tu DB:
+        P: 1 tin Slack, 0 Zalo, kenh slack, lechKenh true
+        Q: 1 tin Zalo, 0 Slack, kenh zalo, lechKenh true
+        R: 1 tin Slack, 0 loi goi Zalo nao, kenh slack, lechKenh true
+        S: 0 loi goi, outcome khong-khop
+      Quan he trang <-> may gui, cung trang thai gieo: voi moi nguoi, goi
+      kenhSeDungCua(db, userId) TRUOC khi chay, roi so voi payload sau khi chay:
+        kenh cua ham = payload.kenh (S: null va khong co payload.kenh), lech = lechKenh
+      DOT BIEN CHUNG MINH: bo nhanh roi kenh (uu tien khong dung duoc thi dung) ->
+      P do voi thong diep ghim "uu tien khong dung duoc thi di kenh con lai";
+      coi Zalo dung duoc chi can ZaloLink (bo kiem token) -> R do voi "thieu token
+      thi khong goi Zalo".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_zalo_loi
+    paths:
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "apps/agent/test/nhac-qua-zalo.integration.spec.ts"
+    expected: |
+      Hai ca cung fixture: Zalo gia tra HTTP 500; Zalo gia tra 200 {"ok":false}.
+      Moi ca: chayNhac nem (bat bang bo bat loi ghim thong diep, khong dung
+      expect().rejects voi PrismaPromise), 0 loi goi Slack, doc LAI hang:
+      finishedAt null, payload khong co kenh va daGui.
+      Doi chung duong: Zalo gia tra {"ok":true} -> khong nem, finishedAt co gia tri.
+      DOT BIEN CHUNG MINH: bat loi Zalo roi di Slack -> so loi goi Slack = 1, do voi
+      thong diep ghim "Zalo loi khong roi sang Slack"; chi kiem HTTP status bo qua
+      ok:false -> ca hai do voi "ok false la loi".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_khong_token
+    paths:
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "apps/agent/agent/lib/capabilities.ts"
+      - "apps/agent/agent/schedules/dispatch.ts"
+      - "apps/agent/test/nhac-qua-zalo.integration.spec.ts"
+    expected: |
+      Ca 1 (khong token): fetcher gia dem loi goi = 0, pollZalo khong nem,
+      appSetting.zaloBotName doc lai la null, capabilities() co dong ZALO_BOT_TOKEN
+      enabled false.
+      Ca 2 (co token, getMe tra "Bot OneHub", getUpdates rong): zaloBotName "Bot OneHub",
+      zaloPolledAt bang gio setSystemTime.
+      Ca 2 la doi chung duong cua ca 1 tren cung DB.
+      Ca 3 (co token, zaloBotName dang "Bot OneHub", getMe tra 401): pollZalo khong
+      nem, zaloBotName doc lai null; sau do chayNhac cho nguoi uu tien ZALO da noi,
+      khop Slack -> 1 tin Slack, 0 sendMessage, lechKenh true.
+      DOT BIEN CHUNG MINH: bo kiem token dau pollZalo -> ca 1 do voi thong diep ghim
+      "khong token thi khong goi Zalo"; bo nhanh getMe loi -> ca 3 do voi "token
+      hong thi Zalo tat".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_noi_ma
+    paths:
+      - "packages/db/src/zalo-lien-ket.ts"
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "apps/agent/test/nhac-qua-zalo.integration.spec.ts"
+    expected: |
+      Tao ma hai lan bang ham dung chung cua packages/db (cung ham API goi).
+      Ma tran viet truoc:
+        1 moi lan tra chuoi khop /^\d{6}$/ (so chu so doc tu ZALO_LIEN_KET.ma.soChuSo)
+        2 expiresAt = gio tao + ZALO_LIEN_KET.ma.songMs
+        3 doc toan bo bang zaloLinkCode: khong cot nao chua chuoi ma ro; dung 1 hang cua U
+        4 getUpdates gia tra tin ma lan 2 tu Z -> sau nhip dung 1 ZaloLink (U,Z),
+          zaloDisplayName = display_name cua Z, ma co usedAt
+        5 Zalo gia ghi dung 1 sendMessage toi Z, van ban chua ten CRM cua U
+        6 tin ma lan 1 o nhip sau -> van dung 1 ZaloLink, khong doi
+      DOT BIEN CHUNG MINH: luu ma ro thay bam -> dong 3 do voi thong diep ghim
+      "khong luu ma ro"; tao ma khong xoa ma cu -> dong 6 do voi "ma cu het song".
+
+  - id: E19
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_tao_ma_api
+    paths:
+      - "apps/api/src/zalo/**"
+      - "packages/db/src/zalo-lien-ket.ts"
+      - "apps/api/test/nhac-qua-zalo.spec.ts"
+    expected: |
+      Qua tRPC voi phien that cua U (khong goi thang ham packages/db). Ma tran:
+        1 goi tao ma hai lan: moi lan output khop /^\d{6}$/ va co expiresAt
+        2 doc lai DB: dung 1 hang zaloLinkCode cua U, codeHash = bam cua ma lan 2
+          (tinh bang ham bam dung chung), khong cot nao bang chuoi ma ro
+        3 phien cua nguoi khong thuoc xuong goi tao ma -> loi, 0 hang ma cho nguoi do
+      Doi chung duong cua dong 3: cung nguoi do sau khi them vao xuong -> tao duoc.
+      DOT BIEN CHUNG MINH: router tu sinh ma bang Math.random va khong xoa ma cu ->
+      dong 2 do voi thong diep ghim "mot nguoi mot ma song"; bo kiem thanh vien ->
+      dong 3 do voi "nguoi ngoai xuong khong tao duoc ma".
+
+  - id: E20
+    criterion: AC-7
+    executor: test
+    layer: ui
+    cmd: config:executors.test.nqz_nut_noi_go
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/notifications/**"
+      - "apps/app/test/nhac-qua-zalo.dom.tsx"
+    expected: |
+      Render khoi Zalo voi payload dung kieu z.infer output tRPC that, spy tren moi
+      mutation. Ma tran:
+        1 bam "Nối Zalo" -> dung 1 loi goi tao ma, 0 loi goi khac
+        2 bam "Tạo mã mới" o trang thai ma het han -> dung 1 loi goi tao ma
+      Doi chung duong: khong bam gi -> 0 loi goi tao ma.
+      DOT BIEN CHUNG MINH: noi nut "Nối Zalo" vao mutation go -> dong 1 do voi
+      thong diep ghim "Nối Zalo goi tao ma"
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_ma_hong
+    paths:
+      - "packages/db/src/zalo-lien-ket.ts"
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "apps/agent/test/nhac-qua-zalo.integration.spec.ts"
+    expected: |
+      Bon tin tu Z: ma sai, ma het han (setSystemTime qua songMs), ma da dung, chu
+      "xin chao". Ma tran:
+        1 sau bon tin: 0 ZaloLink
+        2 dung 4 sendMessage toi Z, khong van ban nao chua ten CRM cua bat ky thanh vien gieo nao
+        3 zaloLinkAttempt.failures cua Z = 3
+        4 van ban cua tin chu la mot chuoi linh canh rieng. Sau nhip, lay danh sach
+          MOI bang va MOI cot text/json cua DB thu tu information_schema (khong ke
+          ten tay), quet: khong gia tri nao chua linh canh
+          Doi chung duong cua dong 4: chen tay linh canh vao mot hang AgentTask ->
+          phep quet do
+      Doi chung duong: tin ma dung o cung fixture -> 1 ZaloLink.
+      DOT BIEN CHUNG MINH: tin chu cung tang dem -> dong 3 do voi thong diep ghim
+      "tin khong phai 6 so khong tinh lan sai"; tra loi ma sai kem ten chu ma ->
+      dong 2 do voi "khong lo ten".
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_chong_do
+    paths:
+      - "packages/db/src/zalo-lien-ket.ts"
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "apps/agent/test/nhac-qua-zalo.integration.spec.ts"
+    expected: |
+      Gieo Z da sai ZALO_LIEN_KET.doMa.toiDa lan trong cua so. Z nhan ma song cua U:
+        1 0 ZaloLink, 0 sendMessage, ma cua U usedAt null
+      setSystemTime qua doMa.cuaSoMs, Z nhan lai:
+        2 dung 1 ZaloLink (U,Z)
+      Bien: gieo toiDa - 1 lan sai -> ma dung tao lien ket (doi chung duong o biên).
+      DOT BIEN CHUNG MINH: so sanh > thay >= -> bien do voi thong diep ghim
+      "sai du toiDa lan thi bi bo qua"; khong reset cua so -> dong 2 do.
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_noi_lai
+    paths:
+      - "packages/db/src/zalo-lien-ket.ts"
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "apps/agent/test/nhac-qua-zalo.integration.spec.ts"
+    expected: |
+      Nua thay lien ket (qua nhip poll): sau khi Z nhan ma cua U2, doc lai:
+        1 dung 1 ZaloLink co zaloUserId Z, crmUserId U2
+        2 khong ZaloLink nao (U2, Z2)
+        3 U1 khong ZaloLink, NotificationPreference U1 = AUTO
+      DOT BIEN CHUNG MINH: bo buoc tra uu tien U1 ve AUTO -> dong 3 do voi thong
+      diep ghim "mat lien ket thi uu tien ZALO ve AUTO".
+
+  - id: E22
+    criterion: AC-10
+    executor: test
+    layer: ui
+    cmd: config:executors.test.nqz_go_xac_nhan
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/notifications/**"
+      - "apps/app/test/nhac-qua-zalo.dom.tsx"
+    expected: |
+      Render khoi Zalo o trang thai da-noi, spy mutation go. Ma tran:
+        1 bam "Gỡ" roi dong hop khong xac nhan -> 0 loi goi go
+        2 bam "Gỡ" roi xac nhan -> dung 1 loi goi go
+        3 uu tien ZALO: hop xac nhan chua cau tin se ve Slack
+        4 uu tien SLACK: hop xac nhan khong chua cau do (doi chung cho dong 3)
+      DOT BIEN CHUNG MINH: noi nut Go thang vao mutation khong qua hop -> dong 1 do
+      voi thong diep ghim "go phai qua xac nhan".
+
+  - id: E11
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_go_zalo
+    paths:
+      - "apps/api/src/zalo/**"
+      - "packages/db/src/zalo-lien-ket.ts"
+      - "apps/api/test/nhac-qua-zalo.spec.ts"
+    expected: |
+      Nua go (qua thu tuc tRPC cua API, phien that cua U3/U4): sau khi moi nguoi go:
+        1 U3 va U4 khong ZaloLink
+        2 NotificationPreference U3 = AUTO, U4 = SLACK
+        3 go khi chua noi khong nem, khong doi uu tien
+      DOT BIEN CHUNG MINH: dat moi uu tien ve AUTO khi go -> dong 2 (U4) do voi
+      thong diep ghim "go Zalo khong dung toi uu tien SLACK".
+
+  - id: E12
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_trung_tin
+    paths:
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "packages/validation/src/zalo-update.ts"
+      - "apps/agent/test/nhac-qua-zalo.integration.spec.ts"
+    expected: |
+      getUpdates gia tra lai cung message_id trong mot nhip, va lai o nhip ke:
+        1 dung 1 ZaloLink, dung 1 sendMessage xac nhan
+      getUpdates gia khong bao gio het tin:
+        2 so loi getUpdates trong mot nhip = ZALO.poll.toiDaMoiNhip
+      Mot tin sai schema (thieu from.id) chen giua hai tin tot:
+        3 nhip khong nem, hai tin tot duoc xu ly, loi ghi ra co message_id cua tin hong
+        4 message_id tin hong KHONG co trong zaloUpdateSeen
+      DOT BIEN CHUNG MINH: bo kiem zaloUpdateSeen -> dong 1 do voi thong diep ghim
+      "mot message_id xu ly mot lan"; bo tran vong lap -> dong 2 do (vong lap co
+      tran bao ve cua test de khong treo); nuot loi schema thanh tin trong va danh
+      dau da xem -> dong 4 do.
+
+  - id: E13
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_luu_uu_tien
+    paths:
+      - "apps/api/src/zalo/**"
+      - "packages/db/src/kenh-thong-bao.ts"
+      - "apps/api/test/nhac-qua-zalo.spec.ts"
+    expected: |
+      Qua tRPC voi phien that cua U (chua noi Zalo, khong khop Slack, appSetting
+      zaloBotName co gia tri). Chuoi goi va doc LAI sau moi lan:
+        1 luu ZALO -> loi, thong diep chua ten kenh Zalo; uu tien van AUTO
+        2 luu SLACK -> loi, thong diep chua ten kenh Slack; uu tien van AUTO
+        3 luu AUTO -> thanh cong
+        4 gieo ZaloLink cho U, luu ZALO -> thanh cong, uu tien ZALO
+      DOT BIEN CHUNG MINH: bo kiem dung duoc phia may chu -> dong 1 do voi thong
+      diep ghim "may chu tu choi kenh chua dung duoc".
+
+  - id: E14
+    criterion: AC-12
+    executor: test
+    layer: ui
+    cmd: config:executors.test.nqz_chon_kenh_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/notifications/**"
+      - "apps/app/test/nhac-qua-zalo.dom.tsx"
+    expected: |
+      Render component client cua khoi chon kenh voi du lieu may chu dung khuon
+      rut tu contract tRPC that (kieu z.infer cua output, khong viet tay):
+        1 truoc khi noi: nut Zalo va Slack co aria-disabled, moi nut co dong ly do
+        2 bam Tu dong: dung 1 loi goi mutation mang channel AUTO
+        3 mutation loi: lua chon ve gia tri cu, hien "Không lưu được lựa chọn"
+      Doi chung duong: mutation thanh cong -> lua chon moi giu nguyen, khong co dong loi.
+      DOT BIEN CHUNG MINH: bo hoan tac khi loi -> dong 3 do voi thong diep ghim
+      "loi thi ve gia tri cu".
+
+  - id: E15
+    criterion: AC-13
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_trang_thai
+    paths:
+      - "apps/api/src/zalo/**"
+      - "packages/db/src/kenh-thong-bao.ts"
+      - "apps/api/test/nhac-qua-zalo.spec.ts"
+    expected: |
+      Gieo xuong 7 thanh vien + 1 nguoi da roi xuong con ZaloLink; 3 thanh vien da noi.
+      Ma tran viet truoc tren output trang thai ket noi:
+        1 bat true, tenBot, pollCuoi dung gia tri gieo
+        2 daNoi 3, tong 7, danh sach 7 ten, dung 3 dong daNoi true, khong co nguoi da roi
+        3 zaloPolledAt cu hon ZALO_LIEN_KET.imSauMs -> co im true; moi hon -> im false
+        4 zaloBotName null -> bat false
+      Tren output trang thai ca nhan cua U (uu tien SLACK, da noi, khong khop Slack):
+        5 lech true, kenhSeDung zalo
+        6 bot tat -> kenhSeDung null
+      DOT BIEN CHUNG MINH: dem ZaloLink khong loc thanh vien -> dong 2 do voi thong
+      diep ghim "nguoi da roi khong duoc dem"; so sanh im nguoc chieu -> dong 3 do.
+
+  - id: E16
+    criterion: AC-13
+    executor: test
+    layer: ui
+    cmd: config:executors.test.nqz_trang_thai_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/notifications/**"
+      - "apps/app/app/(app)/[slug]/settings/connections/zalo/**"
+      - "apps/app/test/nhac-qua-zalo.dom.tsx"
+    expected: |
+      Render hai component client voi payload dung kieu z.infer output tRPC that:
+        1 trang ket noi: hien "3/7", ten bot, co canh bao im khi im true, khong khi false
+        2 trang ca nhan: hien dong canh bao lech khi lech true, khong khi false
+        3 ten hien thi Zalo nam trong phan tu translate="no"
+      DOT BIEN CHUNG MINH: bo nhanh canh bao im -> dong 1 do voi thong diep ghim
+      "bot im phai hien canh bao".
+
+  - id: E21
+    criterion: AC-15
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nqz_trang_thai_lien_ket
+    paths:
+      - "apps/api/src/zalo/**"
+      - "packages/db/src/zalo-lien-ket.ts"
+      - "apps/api/test/nhac-qua-zalo.spec.ts"
+    expected: |
+      Qua tRPC voi phien that cua U. Ma tran bon dong viet truoc, moi dong gieo bang
+      ham packages/db that (tao ma that, dung ma that), roi doc output:
+        1 khong ma -> chua-noi
+        2 ma song -> ma-cho, co expiresAt, output KHONG co truong nao bang chuoi ma
+        3 setSystemTime qua ZALO_LIEN_KET.ma.songMs -> ma-het-han
+        4 ma da dung + ZaloLink -> da-noi, tenZalo = display_name gieo
+      DOT BIEN CHUNG MINH: coi moi hang ma la ma-cho (bo kiem expiresAt/usedAt) ->
+      dong 3 do voi thong diep ghim "ma qua han la ma-het-han", dong 4 do voi
+      "da noi thang ma cho".
+
+  - id: E23
+    criterion: AC-15
+    executor: test
+    layer: ui
+    cmd: config:executors.test.nqz_lam_moi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/notifications/**"
+      - "apps/app/test/nhac-qua-zalo.dom.tsx"
+    expected: |
+      Render khoi Zalo o trang thai ma-cho voi query trang thai gia (dem so lan goi,
+      dong ho gia). Lan goi 1-2 tra ma-cho, lan 3 tra da-noi:
+        1 sau hai chu ky lam moi van hien ma
+        2 sau lan tra da-noi hien "Đã nối" kem ten Zalo
+        3 sau do tien dong ho them ba chu ky: so lan goi khong tang
+      Doi chung duong: o trang thai da-noi tu dau -> 0 lan lam moi.
+      DOT BIEN CHUNG MINH: bo dieu kien dung lam moi -> dong 3 do voi thong diep
+      ghim "da noi thi thoi lam moi".
+
+  - id: E17
+    criterion: AC-14
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/notifications/**"
+      - "apps/app/app/(app)/[slug]/settings/connections/zalo/**"
+      - "apps/app/app/(app)/[slug]/settings/connections/page.tsx"
+      - "apps/app/lib/cai-dat-dieu-huong.ts"
+      - "packages/ui/**"
+    steps:
+      - "Dat truoc MOI buoc: APP_URL=http://127.0.0.1:3300 va API_URL=http://127.0.0.1:3301 — dung 127.0.0.1, tranh Invalid origin va cookie ro theo host"
+      - "Dung ca hai may chu cua CAY DANG XET: api 3301, app 3300. Kiem cong 3300 va 3301 truoc khi dung — tai nguyen chung; dung ma PID de tat, khong pkill"
+      - "CHAN CAY, hai phia: dat mot dau moc vao apps/app/public roi xin lai qua APP_URL; VA doc mot ban ghi moc qua API_URL. Khong nhan lai duoc mot trong hai -> thoat ma 2 va goi ten cay dang xet, KHONG doc anh nao"
+      - "KHONG nang quyen bat ky thanh vien nao trong DB, KHONG tao phien cho tai khoan nguoi khac"
+      - "Gieo bang thu tuc cua kho (ham packages/db, khong insert tay): appSetting zaloBotName 'Bot OneHub', zaloPolledAt 1 phut truoc; 3 thanh vien da noi; nguoi dang nhap co ma dang cho"
+      - "Mo /onehub/settings/notifications o kho 1440, chup evidence/E17-ma-cho-1440.png"
+      - "Gieo ZaloLink cho nguoi dang nhap, uu tien SLACK, khong khop Slack; tai lai, chup evidence/E17-lech-1440.png"
+      - "Dat zaloBotName null; tai lai, chup evidence/E17-zalo-tat-1440.png"
+      - "Tra zaloBotName, mo /onehub/settings/connections/zalo, chup evidence/E17-ket-noi-song-1440.png; dat zaloPolledAt 10 phut truoc, chup evidence/E17-ket-noi-im-1440.png"
+      - "Lap lai ma-cho, lech, ket-noi-song o kho 375: evidence/E17-ma-cho-375.png, evidence/E17-lech-375.png, evidence/E17-ket-noi-song-375.png"
+      - "Xoa dau moc trong apps/app/public va don du lieu gieo khi xong"
+    inputs:
+      - _acceptance/nhac-qua-zalo/evidence/
+    expected: |
+      Nhin thay duoc tren anh, khong suy tu ma:
+        1 ma 6 so chia hai nhom kem gio het han va ten bot
+        2 nhom nut Tu dong · Zalo · Slack; lua chon khoa co dong ly do
+        3 dong canh bao lech kenh
+        4 trang ket noi: "3/7" nguoi da noi; anh im co canh bao bot khong tra loi
+        5 thanh ben Cai dat co muc "Thông báo của bạn"
+        6 ba anh 375 khong tran ngang
+      Mot dong khong nhin thay -> FAIL, ghi dong nao.
+
+  - id: E18
+    criterion: AC-14
+    executor: test
+    layer: unit
+    cmd: config:executors.test.nqz_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/notifications/**"
+      - "apps/app/app/(app)/[slug]/settings/connections/zalo/**"
+    expected: |
+      Chay design-gate che do static tren cac tep giao dien moi.
+      Ma 0 = khong vi pham san P0 cua bo quet tinh.
+      DOT BIEN CHUNG MINH: them mot span chu xam tren nen mau (bg-blue-600
+      text-gray-400) vao ban sao mot tep giao dien moi -> lenh thoat khac 0 va in
+      ten luat tuong phan.
