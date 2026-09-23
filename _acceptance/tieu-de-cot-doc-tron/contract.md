@@ -5,7 +5,7 @@ slug: tieu-de-cot-doc-tron
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-22-tieu-de-cot-doc-tron-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-23
@@ -78,4 +78,8 @@ chiều — hồ sơ này vẫn đặt mức chặt hơn: không cuộn), và m�
 - Known limits (Ngoài-5): khoá `tdc_tieu_de_cot` không đặt `DUOI_CONG=1`, nên `CHI_MAN` sót trong môi trường làm răng chỉ đo một phần ma trận mà vẫn thoát 0.
 - Known limits (Ngoài-6): nhánh cắt dọc (`scrollHeight`) mới thêm vào thước của hồ sơ Kế hoạch 30 ngày chưa có chiều đỏ riêng ghim đúng nhánh đó; chiều đỏ đã chạy (`evidence/E8-chieu-do.txt`) chỉ chứng thước bắt được nhãn bị cắt nói chung.
 - Known limits (Ngoài-7): E10 (rà thiết kế tĩnh) chỉ quét hai tệp giao diện trong khi lượt giao sửa bốn tệp giao diện; `companies-table.tsx` và `members-table.tsx` không qua rà tĩnh ở vòng này.
+- Known limits (vòng 2, Ngoài-4, ký Cổng 2 ngày 2026-09-23): mũi tên sắp có thể xuống dòng riêng ngay dưới nhãn — thấy ở campaigns@320 «Trạng thái» (`evidence/E9/campaigns-320-vi.png`); khoảng cách mũi tên–chữ của AC-3 chỉ đo trục ngang nên không bắt ca này.
+- Known limits (vòng 2, Ngoài-7): `CHI_MAN` gõ sai tên màn mà không có `DUOI_CONG` thì lượt đo không kiểm ô nào và vẫn thoát 0.
+- Known limits (vòng 2, Ngoài-8): E5 khai đếm AC-5 = 12 nhưng thước không đếm riêng khẳng định AC-5; ba chỉnh cột được đo qua phép so tập cột của AC-1.
+- Vòng 2, Ngoài-1/2/3/9 trùng gốc với Known limits Ngoài-1, 2, 3, 5 ghi ở trên (lượt chụp E9 và `DUOI_CONG`); Ngoài-5/6 thuộc hồ sơ `bo-dung-chung-nhan-chuoi`.
 - AC-8 đỏ tại 607fe361 (`evidence/ogd-sau-rebase-607fe361.txt`): 48 dòng `khong doc duoc nhan`, không dòng cắt/tràn/nút nào — thước onboarding tìm nhãn bằng `span.truncate, span.block`, bản sửa đổi nhãn thành `[data-slot="table-head-label"]`. Đã báo phiên của hồ sơ đó (trước 15:29Z) đề xuất thêm bộ chọn và điều kiện cắt dọc; ghim lại là việc của hồ sơ đó. Không bọc thêm `span.block` để khớp bộ chọn.
