@@ -592,13 +592,17 @@ if (import.meta.main) {
 	const i = process.argv.indexOf("--ca");
 	const cacCa = (i >= 0 ? process.argv[i + 1] ?? "" : "").split(",").filter(Boolean);
 	let ma = 0;
+	let dung = 0;
+	let sai = 0;
 	try {
 		if (cacCa.length === 0) tienDe(`thieu --ca <${Object.keys(CAC_CA).join("|")}>`);
 		for (const ten of cacCa) {
 			if (!CAC_CA[ten]) tienDe(`ca la: ${ten}`);
 			const hang = await CAC_CA[ten]();
 			for (const h of hang) console.log(h);
-			if (hang.some((h) => h.startsWith("SAI"))) ma = 1;
+			dung += hang.filter((h) => h.startsWith("DUNG")).length;
+			sai += hang.filter((h) => h.startsWith("SAI")).length;
+			if (sai > 0) ma = 1;
 		}
 	} catch (loi) {
 		console.log(
@@ -609,5 +613,6 @@ if (import.meta.main) {
 		ma = 2;
 	}
 	await db.$disconnect();
+	console.log(`PHA-THU KET LUAN: ${dung} DUNG, ${sai} SAI — ma thoat ${ma}`);
 	process.exit(ma);
 }
