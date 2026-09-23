@@ -3,11 +3,10 @@ schema_version: 2
 feature_slug: khoa-cu-khong-mo-khoa-moi
 verdict: PASS
 failed_evals: []
-reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b161dc169076c0ee26ce33e1f04692097d632224
+verified_commit: 60eff8b85f4170162c5b2c01342022348620534d
 human_signoff:
 ---
 
@@ -28,125 +27,125 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-khoa-cu-khong-mo-khoa-moi-E1-r1
+  run_id: mue9y137s98t
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.kcm_header_tao
-  verified_at: 2026-09-23T10:00:00+07:00
+  verified_at: 2026-09-23T18:45:00Z
   output: |
      2 expect() calls
-    Ran 1 test across 1 file. [1486.00ms]
-    test-run: dropped crm_mue9agarfqgj_test
+    Ran 1 test across 1 file. [1385.00ms]
+    test-run: dropped crm_mue9y137s98t_test
 
 - eval: E2
-  run_id: mue9ai8smv0b
+  run_id: mue9y25p69km
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.kcm_header_bat_lai
-  verified_at: 2026-09-23T10:00:00+07:00
+  verified_at: 2026-09-23T18:45:00Z
   output: |
      1 expect() calls
-    Ran 1 test across 1 file. [882.00ms]
-    test-run: dropped crm_mue9ai8smv0b_test
+    Ran 1 test across 1 file. [966.00ms]
+    test-run: dropped crm_mue9y25p69km_test
 
 - eval: E3
-  run_id: mue9ahpgkkfv
+  run_id: minted-khoa-cu-khong-mo-khoa-moi-E3-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.kcm_header_lan_cookie
-  verified_at: 2026-09-23T10:00:00+07:00
+  verified_at: 2026-09-23T18:45:00Z
   output: |
-     1 expect() calls
-    Ran 1 test across 1 file. [1231.00ms]
-    test-run: dropped crm_mue9ahpgkkfv_test
+    Ran 1 test across 1 file. [891.00ms]
+    test-run: dropped crm_mue9yg1jjmto_test
+    EXIT_CODE_IS:0
 
 - eval: E4
-  run_id: minted-khoa-cu-khong-mo-khoa-moi-E4-r1
+  run_id: mue9y2j8ykbc
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.kcm_header_doi_chung
-  verified_at: 2026-09-23T10:00:00+07:00
+  verified_at: 2026-09-23T18:45:00Z
   output: |
      3 expect() calls
-    Ran 1 test across 1 file. [1183.00ms]
-    test-run: dropped crm_mue9ahm6psn1_test
+    Ran 1 test across 1 file. [930.00ms]
+    test-run: dropped crm_mue9y2j8ykbc_test
 
 - eval: E5
-  run_id: mue9ahlm1wlq
+  run_id: mue9y2dnu4o8
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.kcm_don_mot_lan
-  verified_at: 2026-09-23T10:00:00+07:00
+  verified_at: 2026-09-23T18:45:00Z
   output: |
      3 expect() calls
-    Ran 1 test across 1 file. [1152.00ms]
-    test-run: dropped crm_mue9ahlm1wlq_test
+    Ran 1 test across 1 file. [924.00ms]
+    test-run: dropped crm_mue9y2dnu4o8_test
 
 - eval: E6
-  run_id: mue9ahkreeao
+  run_id: mue9yf4yvipk
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.kcm_don_bang_rong
-  verified_at: 2026-09-23T10:00:00+07:00
+  verified_at: 2026-09-23T18:45:00Z
   output: |
-     1 expect() calls
-    Ran 1 test across 1 file. [1083.00ms]
-    test-run: dropped crm_mue9ahkreeao_test
+    Ran 1 test across 1 file. [1186.00ms]
+    test-run: dropped crm_mue9yf4yvipk_test
+    EXIT_CODE=0
 
 - eval: E7
-  run_id: mue9ahk4sjb5
+  run_id: mue9y1t8avrk
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.test.gl_go_tat_khoa
-  verified_at: 2026-09-23T10:00:00+07:00
+  verified_at: 2026-09-23T18:45:00Z
   output: |
-    6 expect() calls
-    Ran 1 test across 1 file. [1231.00ms]
-    test-run: dropped crm_mue9ahk4sjb5_test
+     6 expect() calls
+    Ran 1 test across 1 file. [971.00ms]
+    test-run: dropped crm_mue9y1t8avrk_test
 
 - eval: E8
-  run_id: mue9ai3rzsk0
+  run_id: mue9y230as8x
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.test.gl_khoa_moi
-  verified_at: 2026-09-23T10:00:00+07:00
+  verified_at: 2026-09-23T18:45:00Z
   output: |
      5 expect() calls
-    Ran 1 test across 1 file. [1146.00ms]
-    test-run: dropped crm_mue9ai3rzsk0_test
+    Ran 1 test across 1 file. [1168.00ms]
+    test-run: dropped crm_mue9y230as8x_test
 
 - eval: E9
-  run_id: mue9ahrrjsit
+  run_id: mue9y1ofyhea
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.kcm_xem_truoc
-  verified_at: 2026-09-23T10:00:00+07:00
+  verified_at: 2026-09-23T18:45:00Z
   output: |
-     3 expect() calls
-    Ran 1 test across 1 file. [1076.00ms]
-    test-run: dropped crm_mue9ahrrjsit_test
+     9 expect() calls
+    Ran 2 tests across 1 file. [1058.00ms]
+    test-run: dropped crm_mue9y1ofyhea_test
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: mue9buuhnylj
+  run_id: mue9z9yj322j
   exit_code: 0
-  verified_at: 2026-09-23T10:00:00+07:00
+  verified_at: 2026-09-23T18:45:00Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-khoa-cu-khong-mo-khoa-moi-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-khoa-cu-khong-mo-khoa-moi-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-23T10:00:00+07:00
+  verified_at: 2026-09-23T18:45:00Z
 
 - cmd: bun run lint:slop
-  run_id: minted-khoa-cu-khong-mo-khoa-moi-SUITE-bun_run_lint_slop-r1
+  run_id: minted-khoa-cu-khong-mo-khoa-moi-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-23T10:00:00+07:00
+  verified_at: 2026-09-23T18:45:00Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-khoa-cu-khong-mo-khoa-moi-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-khoa-cu-khong-mo-khoa-moi-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-23T10:00:00+07:00
+  verified_at: 2026-09-23T18:45:00Z
 
 ## Known limits
 
@@ -154,17 +153,16 @@ human_signoff:
 
 ## Analyst
 
-E7 (AC-7, `go-tat-khoa`) và E8 (AC-8, `khoa-moi`) pass trên cả HEAD lẫn baseline (diffBase) — không phân biệt được feature với code cũ trên riêng hai bài này:
+carried tu round 1 — baseline khong do lai round nay
 
-- E7 — cmd: `bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t go-tat-khoa"`
-- E8 — cmd: `bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t khoa-moi"`
-
-Cả hai bài đã có vế siết thật (ví dụ E7 kiểm `verifyApiKey` trả 401/KEY_DISABLED) nên nhiều khả năng đây là regression-guard có chủ ý giữ đối chứng dương song song với vế mới, không phải bài rỗng — cần người xác nhận đúng ý đồ đó khi ký.
+- E7 (AC-7): bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t go-tat-khoa" — PASS trên cả HEAD lẫn baseline (non-discriminating, đã ghi từ round 1)
+- E8 (AC-8): bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t khoa-moi" — PASS trên cả HEAD lẫn baseline (non-discriminating, đã ghi từ round 1)
 
 ## Variance
 
-none — every multi-run eval is uniform (không eval nào của round này có `runs` > 1)
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: cả 9 eval (E1–E9) và 4 lệnh suite hồi quy đều pass ngay lượt đầu — không có round trước, không quay lại implementation.
+Round 1: E1–E9 và bốn lệnh suite đều PASS (round-tally 13/13, verdict PASS) — bun run test khi đó chạy hết trong hạn thời gian.
+Round 2: chín eval mục tiêu (E1–E9) PASS ngay từ đầu; lệnh suite `bun run test` lần chạy trước vượt quá 600 giây và bị tool cắt giữa chừng ở @crm/telemetry:test (verdict tạm BLOCKED, cần chạy lại với timeout dài hơn) — chạy lại, `bun run test` hoàn tất sạch trong 49.563s, cùng `bunx turbo run lint --force`, `bun run lint:slop`, `bunx turbo run build --force` đều PASS — verdict PASS.
