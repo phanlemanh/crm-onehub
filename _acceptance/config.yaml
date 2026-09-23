@@ -140,6 +140,16 @@ executors:
     trg_khoa_bo_dau: "cd packages/db && bun test test/fields.spec.ts"
     trg_khoa_tham_so: "cd apps/app && bun test lib/search-param-keys.test.ts"
     api: "bun run test"
+    gl_ma_tran_dang_nhap_lai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ma-tran-dang-nhap-lai"'
+    gl_ngoai_le_dung_tap_khai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ngoai-le-dung-tap-khai"'
+    gl_doi_chung_thanh_vien: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t doi-chung-thanh-vien"'
+    gl_tab_dang_mo: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t tab-dang-mo"'
+    gl_khoa_con_bat: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t khoa-con-bat"'
+    gl_proxy_het_quyen: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t proxy-het-quyen"'
+    gl_go_tat_khoa: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t go-tat-khoa"'
+    gl_khoa_moi: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t khoa-moi"'
+    gl_eve_cau_noi: 'bun run test -- "cd apps/app && bun test test/eve-cau-noi-thanh-vien.spec.ts"'
+    gl_cho_phep_lai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t cho-phep-lai"'
     api_khong_cache_tru_agent: "bun run test -- --force --filter=!agent"
     rang3_khoa_chet: "cd apps/app && bun test test/messages-guard.spec.ts"
     tv_canh_kho_ui: "cd packages/ui && bun test test/messages-guard.spec.ts"

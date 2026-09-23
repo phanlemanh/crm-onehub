@@ -1,3 +1,4 @@
+import { NOT_A_MEMBER, workspaceRoleOf } from "@crm/auth";
 import { db } from "@crm/db";
 import { connection } from "next/server";
 import {
@@ -20,6 +21,10 @@ async function handler(request: Request): Promise<Response> {
 	const session = await getSession();
 	if (!session) {
 		return Response.json({ error: "Not signed in." }, { status: 401 });
+	}
+
+	if (!(await workspaceRoleOf(session.user.id))) {
+		return Response.json({ error: NOT_A_MEMBER }, { status: 403 });
 	}
 
 	const url = new URL(request.url);

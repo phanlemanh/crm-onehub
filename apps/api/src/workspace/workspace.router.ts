@@ -10,6 +10,7 @@ import {
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
 import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { SignedInMiddleware } from "../trpc/middlewares/signed-in.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	allowanceListOutput,
@@ -30,7 +31,6 @@ import {
 import { WorkspaceService } from "./workspace.service";
 
 @Router({ alias: "workspace" })
-@UseMiddlewares(AuthMiddleware)
 export class WorkspaceRouter {
 	constructor(
 		@Inject(WorkspaceService) private readonly workspace: WorkspaceService,
@@ -40,6 +40,7 @@ export class WorkspaceRouter {
 		output: workspaceOutput,
 		meta: restMeta("GET", "/workspace", ["Workspace"]),
 	})
+	@UseMiddlewares(SignedInMiddleware)
 	async get(@Ctx() ctx: AuthedTrpcContext) {
 		return this.workspace.get(ctx.user.id);
 	}
@@ -49,6 +50,7 @@ export class WorkspaceRouter {
 		output: memberListOutput,
 		meta: restMeta("POST", "/workspace/members/search", ["Workspace"]),
 	})
+	@UseMiddlewares(AuthMiddleware)
 	async members(
 		@Ctx() ctx: AuthedTrpcContext,
 		@Input() input: z.infer<typeof memberListInput>,
@@ -61,6 +63,7 @@ export class WorkspaceRouter {
 		output: workspaceOutput,
 		meta: restMeta("PATCH", "/workspace", ["Workspace"]),
 	})
+	@UseMiddlewares(AuthMiddleware)
 	async update(
 		@Ctx() ctx: AuthedTrpcContext,
 		@Input() input: z.infer<typeof updateWorkspaceInput>,
@@ -75,6 +78,7 @@ export class WorkspaceRouter {
 			"Workspace",
 		]),
 	})
+	@UseMiddlewares(AuthMiddleware)
 	async setMemberRole(
 		@Ctx() ctx: AuthedTrpcContext,
 		@Input() input: z.infer<typeof setMemberRoleInput>,
@@ -86,6 +90,7 @@ export class WorkspaceRouter {
 		output: allowanceListOutput,
 		meta: restMeta("GET", "/workspace/allowances", ["Workspace"]),
 	})
+	@UseMiddlewares(AuthMiddleware)
 	async allowances(@Ctx() ctx: AuthedTrpcContext) {
 		return this.workspace.allowances(ctx.user.id);
 	}
@@ -95,6 +100,7 @@ export class WorkspaceRouter {
 		output: allowanceOutput,
 		meta: restMeta("POST", "/workspace/allowances", ["Workspace"]),
 	})
+	@UseMiddlewares(AuthMiddleware)
 	async allowEmail(
 		@Ctx() ctx: AuthedTrpcContext,
 		@Input() input: z.infer<typeof allowEmailInput>,
@@ -107,6 +113,7 @@ export class WorkspaceRouter {
 		output: passwordLinkOutput,
 		meta: restMeta("POST", "/workspace/password-link", ["Workspace"]),
 	})
+	@UseMiddlewares(AuthMiddleware)
 	async issuePasswordLink(
 		@Ctx() ctx: AuthedTrpcContext,
 		@Input() input: z.infer<typeof issuePasswordLinkInput>,
@@ -121,6 +128,7 @@ export class WorkspaceRouter {
 			"Workspace",
 		]),
 	})
+	@UseMiddlewares(AuthMiddleware)
 	async revokeAllowance(
 		@Ctx() ctx: AuthedTrpcContext,
 		@Input() input: z.infer<typeof revokeAllowanceInput>,
@@ -133,6 +141,7 @@ export class WorkspaceRouter {
 		output: removeMemberOutput,
 		meta: restMeta("DELETE", "/workspace/members/{memberId}", ["Workspace"]),
 	})
+	@UseMiddlewares(AuthMiddleware)
 	async removeMember(
 		@Ctx() ctx: AuthedTrpcContext,
 		@Input() input: z.infer<typeof removeMemberInput>,

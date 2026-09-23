@@ -1,0 +1,19 @@
+{
+  "feature_plain": "Người đã bị gỡ khỏi CRM mất quyền đọc và ghi dữ liệu ngay lập tức, dù họ đăng nhập lại, còn giữ tab cũ, còn giữ khoá API hay hỏi qua trợ lý nghiên cứu.",
+  "scope_plain": "Để hồ sơ riêng: các cổng xác thực khác mà mọi người có phiên gọi thẳng được (đăng ký SSO, quản trị tổ chức), và tải tệp đính kèm hội thoại.",
+  "analyst_plain": "",
+  "decisions_plain": [
+    {"id": "d-20260923T132304Z-1", "p": "Chọn kiểm tư cách ở một chỗ chung, chặn mặc định — thủ tục mới tự được canh; đổi lại mỗi lời gọi đọc thêm bảng thành viên một lần."},
+    {"id": "d-20260923T132304Z-2", "p": "Chọn chừa câu hỏi tư cách bằng một lớp kiểm có tên gắn riêng cho nó — ngoại lệ hiện ngay tại chỗ; đổi lại chín thủ tục của mục workspace gắn lớp kiểm từng cái."},
+    {"id": "d-20260923T132304Z-3", "p": "Chọn TẮT khoá khi gỡ chứ không xoá — còn đọc được ai từng có khoá gì; đổi lại người được cho phép lại phải tạo khoá mới."},
+    {"id": "d-20260923T132304Z-4", "p": "KHÔNG tắt hay rút ngắn bộ đệm phiên — trang vẫn nhanh; đổi lại mọi chỗ đọc dữ liệu phải hỏi tư cách, không được tin riêng phiên."},
+    {"id": "d-20260923T132304Z-5", "p": "KHÔNG soát trong hồ sơ này các cổng xác thực khác mà mọi người có phiên gọi được — giữ đúng lời hứa «gỡ là cắt quyền»; đổi lại cần một việc riêng soát chúng."},
+    {"id": "d-20260923T132304Z-6", "p": "KHÔNG viết đặc tả giao diện — không màn nào đổi."},
+    {"id": "d-20260923T132304Z-7", "p": "KHÔNG làm bản mẫu bấm được — không màn nào đổi."},
+    {"id": "d-20260923T132304Z-8", "p": "KHÔNG có ảnh chụp màn làm bằng chứng — mọi lời hứa đo ở tầng API và trả lời của route."},
+    {"id": "d-20260923T134309Z-10", "p": "Đổi cách lấy danh sách đường REST trong phép đo khoá API sau Cổng 1: lấy từ khai báo của từng thủ tục thay vì tài liệu API, vì tài liệu ghi đường thiếu tiền tố nên lọc ra 0 đường; đổi lại chữ của phép đo này khác bản đã duyệt."},
+    {"id": "d-20260923T134540Z-11", "p": "Thay một lời hứa của hồ sơ đã ký «chỉ quản trị sửa được trường»: người ngoài kho hỏi «tôi có quyền sửa trường không» nay nhận lời từ chối thay vì câu trả lời «không» — giữ đúng hai ngoại lệ đã duyệt; người ngoài vốn không tới được màn đó."},
+    {"id": "d-20260923T134540Z-12", "p": "Sửa một bài kiểm cũ về tạo kế hoạch cho người dùng thử là thành viên — bài cũ chỉ xanh nhờ đúng lỗ vừa vá; không nới luật nào."},
+    {"id": "d-20260923T140445Z-13", "p": "Sau vòng chấm 1: phép đo REST so ngoại lệ theo cả thao tác lẫn đường, vì bản cũ miễn nhầm thao tác đổi thông tin kho; chỉ sửa thước, không đổi sản phẩm."}
+  ]
+}
