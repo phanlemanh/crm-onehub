@@ -71,7 +71,7 @@ evals:
       - "packages/ui/test/chay-tung-tep-dom.ts"
       - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
     expected: |
-      Voi moi goi: tao tep tam co mot bai do, chay lenh kiem, khang dinh ma thoat khac 0 VA dau ra
+      Voi moi goi: tao tep tam co mot bai do trong ban guong (xem E3), chay lenh kiem, khang dinh ma thoat khac 0 VA dau ra
       goi ten tep tam. 4 khang dinh. Doi chung duong: E3 cung tep tam nhung bai xanh -> ma 0.
       CHIEU DO (da chay 2026-09-23 tren script cu): "app: tep do ma lenh van xanh". Tren ban moi:
       ban sao bo chay khong dung o tep do (bo tra ma loi) -> "app: tep do ma lenh van xanh".
@@ -99,7 +99,7 @@ evals:
       - "packages/ui/test/chay-tung-tep-dom.ts"
       - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
     expected: |
-      Tao tep tam trong apps/app/test khang dinh do lech gio la +07 (getTimezoneOffset cua 01/01/2026 = -420, vi 1970 la +08; ICU
+      Tao tep tam trong apps/app/test cua ban guong (xem E3) khang dinh do lech gio la +07 (getTimezoneOffset cua 01/01/2026 = -420, vi 1970 la +08; ICU
       chuan hoa ten Asia/Ho_Chi_Minh thanh Asia/Saigon nen khong so ten), chay `bun run test:dom`,
       khang dinh tep da chay va ma 0. 2 khang dinh.
       Thuoc ep tien trinh cha chay o TZ=UTC, nen chi phan tu dat TZ cua chinh script moi lam no
@@ -120,7 +120,7 @@ evals:
       - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
     expected: |
       Chay tu goc kho dung duong cua pre-push: `bun run test -- --filter=app --filter=@crm/ui`.
-      Voi moi goi [app, ui]: tep tam xanh -> ma 0 va co dong «chay-dom» cua no; tep tam do -> ma
+      Chay tren ban guong (xem E3). Voi moi goi [app, ui]: tep tam xanh -> ma 0 va co dong «chay-dom» cua no; tep tam do -> ma
       khac 0 va dau ra goi ten tep. 2 goi x 3 = 6 khang dinh, cong kiem khong sot tep tam.
       CHIEU DO (da chay 2026-09-23 tren script cu): "app: tep xanh khong chay qua bun run test goc",
       "app: tep do khong lam bun run test goc do" va cung the cho ui.
