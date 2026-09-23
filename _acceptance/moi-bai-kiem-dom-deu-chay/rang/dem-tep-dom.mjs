@@ -80,7 +80,7 @@ test("tep do do thu", () => { expect(1).toBe(2); });
 `;
 const TEP_MUI_GIO = `import { expect, test } from "bun:test";
 test("mui gio do thu", () => {
-	expect(Intl.DateTimeFormat().resolvedOptions().timeZone).toBe("Asia/Ho_Chi_Minh");
+	expect(new Date(Date.UTC(2026, 0, 1)).getTimezoneOffset()).toBe(-420);
 });
 `;
 

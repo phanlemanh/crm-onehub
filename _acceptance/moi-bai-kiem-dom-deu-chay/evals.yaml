@@ -93,7 +93,8 @@ evals:
       - "packages/ui/test/chay-tung-tep-dom.ts"
       - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
     expected: |
-      Tao tep tam trong apps/app/test khang dinh mui gio la Asia/Ho_Chi_Minh, chay `bun run test:dom`,
+      Tao tep tam trong apps/app/test khang dinh do lech gio la +07 (getTimezoneOffset cua 01/01/2026 = -420, vi 1970 la +08; ICU
+      chuan hoa ten Asia/Ho_Chi_Minh thanh Asia/Saigon nen khong so ten), chay `bun run test:dom`,
       khang dinh tep da chay va ma 0. 2 khang dinh.
       Thuoc ep tien trinh cha chay o TZ=UTC, nen chi phan tu dat TZ cua chinh script moi lam no
       xanh (may do o +07 se che mat loi neu khong ep).
