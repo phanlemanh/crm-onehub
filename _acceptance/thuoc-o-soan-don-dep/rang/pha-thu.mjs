@@ -540,6 +540,7 @@ async function caThat() {
 	const dong = readFileSync(join(GOC, PHA_THU.evalsCu), "utf8").split("\n");
 	const bangChung = join(GOC, PHA_THU.bangChungThat);
 	const cu = join(GOC, PHA_THU.bangChungCu);
+	rmSync(bangChung, { recursive: true, force: true });
 	mkdirSync(bangChung, { recursive: true });
 	const ghi = [];
 	const hang = [];
