@@ -5,7 +5,7 @@ slug: tieu-de-cot-doc-tron
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-22-tieu-de-cot-doc-tron-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-23
@@ -72,4 +72,10 @@ chiều — hồ sơ này vẫn đặt mức chặt hơn: không cuộn), và m�
 
 - Bàn đo: api 3501 + app 3500 của cây này (`.claude/launch.json`: `ban-do-cot-api`, `ban-do-cot-app`), dùng CSDL dev `crm`. Cổng 3000/3001 là của phiên onboarding — không đo trên đó.
 - Mọi lượt đo chạy `scripts/lan-do/tien-de.mjs`, thứ ghi rồi dọn trên CSDL dev — chạy tuần tự với phiên onboarding, không chồng.
+- Known limits (Ngoài-1, ký Cổng 2 ngày 2026-09-23): `rang/chup.mjs` không gọi chốt đúng-cây `canhCay()` trước khi chụp, nên ảnh minh chứng của E9 có thể lấy từ máy chủ của cây khác nếu cổng 3500/3501 bị cây khác giữ; bước kiểm cổng của E9 chỉ là chữ.
+- Known limits (Ngoài-2): `rang/chup.mjs` nuốt lỗi hết giờ chờ bảng và vẫn lưu ảnh, nên trang trống hoặc bị chuyển hướng vẫn ra ảnh như lượt chụp thành công.
+- Known limits (Ngoài-3): cùng gốc với Ngoài-2 — `rang/chup.mjs` không kiểm đường dẫn cuối sau khi mở trang, nên ảnh của màn bị chuyển hướng vẫn được coi là bằng chứng.
+- Known limits (Ngoài-5): khoá `tdc_tieu_de_cot` không đặt `DUOI_CONG=1`, nên `CHI_MAN` sót trong môi trường làm răng chỉ đo một phần ma trận mà vẫn thoát 0.
+- Known limits (Ngoài-6): nhánh cắt dọc (`scrollHeight`) mới thêm vào thước của hồ sơ Kế hoạch 30 ngày chưa có chiều đỏ riêng ghim đúng nhánh đó; chiều đỏ đã chạy (`evidence/E8-chieu-do.txt`) chỉ chứng thước bắt được nhãn bị cắt nói chung.
+- Known limits (Ngoài-7): E10 (rà thiết kế tĩnh) chỉ quét hai tệp giao diện trong khi lượt giao sửa bốn tệp giao diện; `companies-table.tsx` và `members-table.tsx` không qua rà tĩnh ở vòng này.
 - AC-8 đỏ tại 607fe361 (`evidence/ogd-sau-rebase-607fe361.txt`): 48 dòng `khong doc duoc nhan`, không dòng cắt/tràn/nút nào — thước onboarding tìm nhãn bằng `span.truncate, span.block`, bản sửa đổi nhãn thành `[data-slot="table-head-label"]`. Đã báo phiên của hồ sơ đó (trước 15:29Z) đề xuất thêm bộ chọn và điều kiện cắt dọc; ghim lại là việc của hồ sơ đó. Không bọc thêm `span.block` để khớp bộ chọn.

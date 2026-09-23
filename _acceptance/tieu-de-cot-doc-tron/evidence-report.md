@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: e14252d466ea31b3e803fa1b2099c06d025bdbd5
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-23
 ---
 
 # Evidence Report: tieu-de-cot-doc-tron
