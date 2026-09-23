@@ -173,17 +173,69 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   Tác tử tắt qua nửa đêm thì nhắc của ngày đó không gửi bù.
 - **Làn trực tiếp, không mô hình.** `chayNhac` tính lại `viecCanNhac` cho đúng người
   đó, dựng tin bằng `lib/tin-nhac.ts` (cắt ở `NHAC.tran`), rồi gửi một tin riêng qua
-  `sendSlackMessage` bằng token của xưởng. Độ ưu tiên là `PRIORITY.nhac`.
+  Zalo hoặc Slack. Độ ưu tiên là `PRIORITY.nhac`.
+- **Kênh do `kenhSeDungCua` chọn** (`@crm/db/kenh-thong-bao`), không do `chayNhac`.
+  Hàm đọc ưu tiên của người (`NotificationPreference`, thiếu hàng là `AUTO`),
+  `ZaloLink`, `appSetting.zaloBotName` và khớp Slack, rồi gọi hàm thuần `chonKenh`.
+  Trang «Thông báo của bạn» (trang cá nhân ở Cài đặt) đọc đúng hàm này để báo lệch,
+  nên trang và máy gửi không trả lời khác nhau. Riêng agent truyền thêm
+  `{ coToken }`: không có `ZALO_BOT_TOKEN` thì Zalo không được, kể cả khi
+  `zaloBotName` chưa kịp về null ở nhịp poll kế.
+  - `kenh = zalo`: dựng tin bằng `dungTin(..., "tron", ZALO.tranKyTu)` (không `*đậm*`,
+    không thoát HTML, đường dẫn in trần sau « — », cắt theo trần ký tự của Zalo) rồi
+    gọi `guiZalo`.
+  - `kenh = slack`: đường Slack như cũ, `sendSlackMessage` bằng token của xưởng.
+  - `kenh = null`: đóng `khong-slack` hoặc `khong-khop` như trước khi có Zalo.
+- **Zalo lỗi thì ném, không đổi sang Slack.** HTTP khác 2xx hay `ok: false` từ
+  `sendMessage` làm `chayNhac` ném; hàng không đóng, và luật thử lại cùng
+  `retireExhausted` lo phần còn lại. Rơi sang Slack sẽ gửi một tin người đã chọn
+  không nhận, và giấu mất chuyện Zalo hỏng.
 - **Bốn `outcome`**: `da-gui:<số dòng>` · `khong-slack` (xưởng chưa nối) ·
   `khong-khop` (người không có `SlackMemberMatch`) · `khong-viec` (hết việc từ lúc
-  ghi hàng). Ba cái sau không gọi Slack và không ném. Lỗi Slack thì ném, và luật
-  thử lại cùng `retireExhausted` sẵn có lo phần còn lại.
+  ghi hàng). Ba cái sau không gọi Zalo hay Slack và không ném. Lỗi Slack thì ném,
+  như lỗi Zalo.
+- **`payload.kenh` và `payload.lechKenh`** được ghi khi gửi xong: `kenh` là
+  `"zalo"` hoặc `"slack"`, `lechKenh` là `true` khi kênh đã dùng khác lựa chọn của
+  người (chọn Zalo mà Zalo chưa dùng được, hay ngược lại). `AUTO` không bao giờ lệch.
+  `outcome` vẫn là `da-gui:<n>`.
 - **`APP_URL` là tuỳ chọn.** Có thì mỗi dòng mang đường mở
   `<APP_URL>/<slug>?record=plan:<id>`; vắng thì tin vẫn gửi, không liên kết.
 - **`payload.daGui` là thứ thước đọc**, không phải `payload.muc`. `muc` là danh sách
   lúc quét; `daGui` là đúng các dòng đã có trong tin sau khi cắt. Hai câu truy vấn
   đường đo ở `_acceptance/may-nhac-truoc-nguoi/rang/` đọc tập này. `payload` chỉ giữ
-  mã và loại (`@crm/validation/nhac-ke-hoach`) — không tên, không nội dung.
+  mã và loại (`@crm/validation/nhac-ke-hoach`) — không tên, không nội dung. Mục bị
+  cắt vì trần ký tự của Zalo không vào `daGui`.
+
+#### Poll Zalo
+
+`pollZalo` (`lib/zalo-poll.ts`) chạy trên cùng nhịp dispatch, cạnh `lenLichNhac`.
+Chỉ agent gọi Zalo Bot API; API chỉ đọc và ghi hàng.
+
+- **Không token thì tắt, không ném.** Thiếu `ZALO_BOT_TOKEN` thì ghi
+  `appSetting.zaloBotName = null` rồi về. Có token thì gọi `getMe` một lần: thành
+  công thì ghi tên bot và `zaloPolledAt`; lỗi (ví dụ token bị thu hồi) thì ghi
+  `zaloBotName = null`, ghi log, và không ném cả nhịp. Phía API, «Zalo bật» nghĩa
+  là `zaloBotName` khác null, và `zaloPolledAt` cũ hơn `ZALO_LIEN_KET.imSauMs` là
+  «bot không trả lời».
+- **Mỗi nhịp tối đa `ZALO.poll.toiDaMoiNhip` lần `getUpdates`**, `timeout`
+  `ZALO.poll.timeoutGiay`, dừng ở lần đầu không có tin. `getUpdates` không có
+  `offset` và mỗi lần trả một tin. Tin được phân tích ở biên bằng
+  `@crm/validation/zalo-update`; tin hỏng tính là một lỗi, ghi log kèm
+  `message_id`, và vòng đi tiếp.
+- **Chống trùng bằng `ZaloUpdateSeen`.** Chưa rõ `getUpdates` có trả lại tin cũ
+  không, nên mỗi `message_id` được ghi trước khi xử lý và tin đã thấy thì bỏ qua.
+  Hàng cũ hơn `ZALO.poll.giuDauMs` bị tỉa đầu mỗi nhịp. Tin từ bot khác cũng bỏ qua.
+- **Chống dò mã.** Mã chỉ có 6 số, nên mỗi `zaloUserId` sai quá
+  `ZALO_LIEN_KET.doMa.toiDa` lần trong `doMa.cuaSoMs` thì bị bỏ qua (`dangBiChan`):
+  không tra mã, không trả lời, tới hết cửa sổ. Mã sai, hết hạn hay đã dùng thì
+  tăng đếm (`ghiSai`) và bot trả lời một câu hướng dẫn chung không nêu tên ai. Tin
+  không phải 6 số thì bot trả lời câu hướng dẫn, không tính là một lần sai.
+- **Mã khớp thì nối** (`noiBangMa`): mã lưu dạng băm SHA-256, sống
+  `ZALO_LIEN_KET.ma.songMs`, dùng một lần. Zalo đó đang nối người khác thì liên kết
+  cũ bị thay, và người kia đang ưu tiên `ZALO` thì về `AUTO`. Bot trả lời «Đã nối
+  với <tên CRM>».
+- **Nội dung tin người nhắn bot không được lưu, cũng không vào log.** Chỉ
+  `message_id` và bộ đếm lần sai.
 
 ### Backfills
 

@@ -140,6 +140,30 @@ An unmatched person must be allowed. The automation stops and says so rather tha
 guessing at a similar name — and the connection page surfaces the count so the
 gap is visible before it bites.
 
+## Zalo cần một bước nối của từng người
+
+Zalo is the one connection where each person links themselves. Three things
+follow, and none of them is a gap to fill later.
+
+- **It cannot be matched on email or phone.** A message to a Zalo bot carries
+  `from.id`, `from.display_name` and `from.is_bot` — no email, no phone number,
+  and no way to ask for one. So a person proves which Zalo is theirs by sending
+  the bot a 6-digit link code (`packages/db/src/zalo-lien-ket.ts`). The bot can
+  also only message someone who has messaged it first, which the code step
+  guarantees.
+- **The API never calls Zalo.** Only `apps/agent` holds `ZALO_BOT_TOKEN` and talks
+  to the Zalo Bot API, on the dispatch tick (`pollZalo`, see `docs/agent.md`). The
+  API mints codes, stores the channel preference, deletes links and reads status —
+  row work only. It knows Zalo is on because the agent writes
+  `appSetting.zaloBotName`, not because it reads the token.
+- **The connection page only shows; linking and unlinking are personal.**
+  `/settings/connections/zalo` shows whether the bot is on, its name, when it last
+  answered, and who has linked — the same "capability, not controls" rule as every
+  other connection page. «Nối Zalo», «Tạo mã mới», «Gỡ» and the choice of Zalo or
+  Slack for the morning reminder live on «Thông báo của bạn»
+  (`/settings/notifications`), the personal page in Settings. An admin cannot
+  unlink someone else's Zalo.
+
 ## The Questionnaire
 
 The strongest pattern in this work. When the builder cannot derive something, it

@@ -1,3 +1,4 @@
+import Chat from "@carbon/icons-react/es/Chat";
 import GoogleLogo from "@crm/ui/components/brand-logos/google";
 import MicrosoftLogo from "@crm/ui/components/brand-logos/microsoft";
 import SlackLogo from "@crm/ui/components/brand-logos/slack";
@@ -35,10 +36,11 @@ async function ConnectionsSettingsPageContent({
 	const [{ slug }, query] = await Promise.all([params, searchParams]);
 	const queryClient = getServerQueryClient();
 	const trpc = getServerTrpc();
-	const [google, microsoft, slack] = await Promise.all([
+	const [google, microsoft, slack, zalo] = await Promise.all([
 		queryClient.fetchQuery(trpc.google.status.queryOptions()),
 		queryClient.fetchQuery(trpc.microsoft.status.queryOptions()),
 		queryClient.fetchQuery(trpc.slack.status.queryOptions()),
+		queryClient.fetchQuery(trpc.zalo.xuong.queryOptions()),
 	]);
 	const rows = [
 		...(google.linked
@@ -64,6 +66,18 @@ async function ConnectionsSettingsPageContent({
 						sends: t.danhSach.slackGui,
 						href: `/${slug}/settings/connections/slack`,
 						logo: SlackLogo,
+					},
+				]
+			: []),
+		...(zalo.bat
+			? [
+					{
+						name: t.ten.zalo,
+						status: t.chung.daCam,
+						bringsIn: t.danhSach.zaloMangVe,
+						sends: t.danhSach.zaloGui,
+						href: `/${slug}/settings/connections/zalo`,
+						logo: Chat,
 					},
 				]
 			: []),
@@ -135,6 +149,13 @@ async function ConnectionsSettingsPageContent({
 							name={t.ten.slack}
 							description={t.danhSach.slackKhoiDau}
 							href={`/${slug}/settings/connections/slack`}
+							connectLabel={t.danhSach.cam}
+						/>
+						<StarterRow
+							logo={Chat}
+							name={t.ten.zalo}
+							description={t.danhSach.zaloKhoiDau}
+							href={`/${slug}/settings/connections/zalo`}
 							connectLabel={t.danhSach.cam}
 						/>
 						<StarterRow

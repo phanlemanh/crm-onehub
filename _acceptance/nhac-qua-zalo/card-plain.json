@@ -1,0 +1,23 @@
+{
+  "feature_plain": "Mỗi người trong đội nối Zalo bằng mã 6 số và nhận nhắc việc buổi sáng qua Zalo hoặc Slack theo lựa chọn của mình; trang Kết nối cho thấy bot còn chạy và ai đã nối.",
+  "scope_plain": "Không nhắn khách, không nhóm Zalo, không gửi cả hai kênh, không tắt nhắc, không ghép bằng số điện thoại.",
+  "decisions_plain": [
+    {"id": "d-20260923T075612Z-1", "p": "Nối người bằng mã 6 số nhắn cho bot, không bằng số điện thoại hay tin mẫu trả phí — đổi lại mỗi người làm một bước nối tay."},
+    {"id": "d-20260923T075612Z-2", "p": "Mỗi lượt nhắc đi đúng một kênh; kênh chọn hỏng thì gửi kênh kia và báo — đổi lại có lúc tin đến kênh người không chọn."},
+    {"id": "d-20260923T075612Z-3", "p": "KHÔNG làm gửi cả hai kênh, tắt nhắc, hay chọn kênh theo từng loại — đổi lại không có giai đoạn nhận song song."},
+    {"id": "d-20260923T075612Z-4", "p": "Token bot để trong tệp cấu hình máy chủ, không có ô nhập trong Cài đặt — đổi lại bật hay đổi bot phải sửa máy chủ."},
+    {"id": "d-20260923T075612Z-5", "p": "Máy đọc tin gửi bot mỗi phút, không dùng webhook — đổi lại nối Zalo có thể chờ tới một phút."},
+    {"id": "d-20260923T075612Z-6", "p": "KHÔNG nhắn khách hay đối tác qua Zalo trong vòng này."},
+    {"id": "d-20260923T075612Z-7", "p": "Dùng nhóm nút chọn sẵn có thay vì tạo thành phần giao diện mới."},
+    {"id": "d-20260923T080022Z-8", "p": "Trang và máy gửi hỏi chung một hàm để biết kênh sẽ dùng — trang không thể báo khác thứ máy gửi."},
+    {"id": "d-20260923T080803Z-9", "p": "Duyệt giao diện trên bản bấm được với 11 trạng thái ở hai khổ."},
+    {"id": "d-20260923T083907Z-11", "p": "Máy chủ web không đọc token Zalo; nó biết Zalo bật hay tắt qua tên bot mà tác tử ghi — đổi lại có dưới một phút trang báo sai sau khi gỡ token."},
+    {"id": "d-20260923T083907Z-12", "p": "Zalo lỗi thì dùng luật thử lại sẵn có của hàng việc, không thêm vòng thử lại riêng — đổi lại lỗi tạm chờ tới nhịp kế."},
+    {"id": "d-20260923T083907Z-13", "p": "Đã đề xuất đổi nhãn «Thông báo của bạn» thành «Nhắc buổi sáng của bạn» cho khớp từ điển — chờ anh quyết."},
+    {"id": "d-20260923T085621Z-14", "p": "Anh duyệt kế hoạch và không trả lời việc đổi nhãn, nên nhãn giữ «Thông báo của bạn» như hợp đồng."},
+    {"id": "d-20260923T091343Z-15", "p": "Sửa bài kiểm để mỗi phần tự dựng dữ liệu khi chạy riêng; một phép thử phá bị chốt an toàn trong code chặn trước — vẫn đỏ đúng."},
+    {"id": "d-20260923T092112Z-16", "p": "Phép quét giao diện tĩnh (E18) chỉ quét hai trang gốc, bỏ sót các khối con — không sửa thước giữa chừng, đưa anh quyết."},
+    {"id": "d-20260923T095906Z-17", "p": "Vòng chấm 1 trượt chỉ vì phép đo E17 ghi cứng «3/7» trong khi máy dev có 10 người — lỗi ở thước, không ở sản phẩm."},
+    {"id": "d-20260923T100310Z-18", "p": "Anh chọn sửa phép đo E17 cho đo đúng số máy chủ trả về; vòng chấm 2 qua toàn bộ."}
+  ]
+}
