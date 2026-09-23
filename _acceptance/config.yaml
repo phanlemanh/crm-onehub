@@ -150,6 +150,13 @@ executors:
     gl_khoa_moi: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t khoa-moi"'
     gl_eve_cau_noi: 'bun run test -- "cd apps/app && bun test test/eve-cau-noi-thanh-vien.spec.ts"'
     gl_cho_phep_lai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t cho-phep-lai"'
+    kcm_header_tao: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t header-tao-khoa"'
+    kcm_header_bat_lai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t header-bat-lai-khoa"'
+    kcm_header_lan_cookie: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t header-lan-cookie"'
+    kcm_header_doi_chung: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t header-doi-chung"'
+    kcm_don_mot_lan: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t don-mot-lan"'
+    kcm_don_bang_rong: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t don-bang-rong"'
+    kcm_xem_truoc: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t xem-truoc"'
     api_khong_cache_tru_agent: "bun run test -- --force --filter=!agent"
     rang3_khoa_chet: "cd apps/app && bun test test/messages-guard.spec.ts"
     tv_canh_kho_ui: "cd packages/ui && bun test test/messages-guard.spec.ts"

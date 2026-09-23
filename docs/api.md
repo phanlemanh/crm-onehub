@@ -61,8 +61,13 @@ here, what do we sell.
   the allowance moves to `cancelled`, together. Allowing them again restores the
   membership, not the keys.
 - **A non-member cannot create, update or re-enable a key** through Better Auth's
-  own `/api-key/*` endpoints either: `canhKhoaApi` in `hooks.before` refuses any
-  session without a `member` row. A server-side call with no session is untouched.
+  own `/api-key/*` endpoints either. `canhKhoaApiPlugin` sits right after `apiKey()`
+  in `plugins`, so its check runs once the key plugin has turned an `x-api-key`
+  header into a session: it asks about the identity the endpoint will act as — the
+  key's owner when a key is sent, the cookie's otherwise. Moving it before `apiKey()`,
+  or back into `hooks.before`, lets a key alone through. A server-side call with no
+  session is untouched. Keys a non-member still held when this shipped were disabled
+  once by the `tat_khoa_nguoi_ngoai_kho` migration.
 - **First account is owner**, and the hook enrols pre-existing users, oldest first.
   That migration branch still names the first user owner regardless of the role an
   allowance gave them — a narrow case the contract does not cover yet.

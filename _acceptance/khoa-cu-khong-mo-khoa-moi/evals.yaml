@@ -1,0 +1,74 @@
+schema_version: 1
+feature_slug: khoa-cu-khong-mo-khoa-moi
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.kcm_header_tao
+    expected: "exit 0; khoá tạo bằng auth.api.createApiKey cho một thành viên, rồi dòng member xoá TRỰC TIẾP (người bị gỡ trước ngày có bản vá nguồn) và bài khẳng định khoá vẫn enabled === true — để 403 phía sau không thể đến từ tầng khoá. POST /api/auth/api-key/create chỉ mang header x-api-key, không cookie. Bài so BẰNG một đối tượng {status, message, them} với {403, NOT_A_MEMBER nhập từ @crm/auth, 0}; them đếm dòng apikey của người đó trước và sau. Chiều đỏ trên cùng cữ liệu: bản trước vá trả {200, \"\", 1} — đã chạy đỏ 23/09; đặt plugin canh-khoa-api TRƯỚC apiKey(...) trong mảng plugins thì bài đỏ lại, thông điệp ghim endpoint — lượt phá thử này CHẠY THẬT ở S3 và mã thoát cùng dòng thông điệp lưu ở _acceptance/khoa-cu-khong-mo-khoa-moi/evidence/pha-thu.md."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/auth/src/canh-khoa-api.ts, packages/auth/src/auth.ts, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.kcm_header_bat_lai
+    expected: "exit 0; cùng dựng cảnh E1, thêm một khoá của cùng người bị tắt bằng cột enabled. Hai lời gọi POST /api/auth/api-key/update chỉ bằng header khoá còn bật: bật lại khoá đã tắt, và đổi tên chính khoá đang dùng. Bài so BẰNG {batLai:{status,message}, doiTen:{status,message}, daTatVanTat, tenKhongDoi} với {{403,NOT_A_MEMBER},{403,NOT_A_MEMBER},false,'khoa-con-bat'} — trạng thái khoá và tên đọc từ cơ sở dữ liệu, không suy từ mã HTTP. Chiều đỏ: bản trước vá trả 200/200, khoá đã tắt bật lại, tên đổi — đã chạy đỏ 23/09; lượt phá thử đặt plugin trước apiKey(...) chạy thật ở S3, kết quả ở evidence/pha-thu.md."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/auth/src/canh-khoa-api.ts, packages/auth/src/auth.ts, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.kcm_header_lan_cookie
+    expected: "exit 0; thành viên đăng nhập bằng mật khẩu thật lấy cookie; người ngoài kho giữ khoá còn bật. Một lời gọi POST /api/auth/api-key/create mang cookie của thành viên VÀ header khoá của người ngoài kho. Bài so BẰNG {status, message, them} với {403, NOT_A_MEMBER, 0}, them đếm dòng apikey của CẢ HAI người. Chiều đỏ: bản trước vá trả {200, \"\", 1} — đã chạy đỏ 23/09; một bản vá kiểm cookie trước rồi cho qua khi cookie là thành viên cũng đỏ ở đây, thông điệp ghim «cookie thanh vien che mat header khoa»; lượt phá thử đặt plugin trước apiKey(...) chạy thật ở S3, kết quả ở evidence/pha-thu.md."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/auth/src/canh-khoa-api.ts, packages/auth/src/auth.ts, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.kcm_header_doi_chung
+    expected: "exit 0; đối chứng dương trên cùng lối gọi của E1–E2, người là thành viên còn trong kho. Ba hàng, mỗi hàng so BẰNG: tạo chỉ bằng header khoá → {status 200, them 1}; bật lại khoá đã tắt của chính mình chỉ bằng header khoá → {status 200, bat true đọc từ cột enabled}; auth.api.createApiKey phía máy chủ không header → them 1. Chiều đỏ: một móc từ chối mọi lời gọi /api-key/* mang header khoá thì hàng đầu đỏ, thông điệp ghim «thanh vien khong tao duoc khoa chi bang header khoa»; một móc coi «không có phiên» là người ngoài thì hàng thứ ba đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/auth/src/canh-khoa-api.ts, packages/auth/src/auth.ts, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.kcm_don_mot_lan
+    expected: "exit 0; SQL đọc qua sqlLuotDon() của packages/db/scripts/luot-don-sql.ts — cùng bộ đọc lệnh xem trước dùng — từ thư mục DUY NHẤT có đuôi _tat_khoa_nguoi_ngoai_kho (đường dẫn suy từ vị trí script bằng import.meta.dirname; số thư mục khớp khác 1 thì ném lỗi có tên). Bài khẳng định bảng _prisma_migrations của cơ sở dữ liệu lượt kiểm — dựng mới bằng migrate deploy mỗi lượt — có đúng 1 dòng migration đó finished và không rolled back. Dựng cảnh bằng writer THẬT auth.api.createApiKey: người ngoài kho b1 true, b2 đổi cột enabled sang null, b3 đã tắt với updatedAt 2020-01-01; thành viên c1 true, c2 null; dòng member của người ngoài xoá trực tiếp. Trước lượt dọn, bài so BẰNG danh sách [referenceId, enabled] sắp theo tên với [[bi,true],[bi,null],[bi,false],[chu,true],[chu,null]] — round-trip khuôn cột chủ khoá mà writer thật ghi. Chạy SQL trong giao dịch REPEATABLE READ rồi HOÀN TÁC (để không đụng khoá của bài khác), so BẰNG {b1 false, b2 false, b3 {enabled false, updatedAt 2020-01-01}, c1 true, c2 null, soKhoaBi 3}. Chiều đỏ: thư mục migration vắng — đã chạy đỏ 23/09 với «can dung mot migration *_tat_khoa_nguoi_ngoai_kho, thay 0»; bỏ vế NOT EXISTS thì c1 false; đổi sang DELETE thì soKhoaBi 0; dùng = true thay IS DISTINCT FROM false thì b2 còn null; bỏ hẳn lọc enabled thì updatedAt của b3 bị đè."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/prisma/migrations/**, packages/db/scripts/luot-don-sql.ts, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.kcm_don_bang_rong
+    expected: "exit 0; cùng SQL và cùng bộ đọc của E5. Khoá b1 true, b2 null của người sẽ thành ngoài kho, c1 true của thành viên, tạo bằng auth.api.createApiKey. Trong một giao dịch hoàn tác: xoá mọi dòng member của WORKSPACE_ID, chạy SQL, so BẰNG {b1 true, b2 null, c1 true}. Chiều đỏ: bỏ vế EXISTS (chốt bảng rỗng) thì {false, false, false}, thông điệp ghim «lan ghi danh dau se mat het khoa»; thư mục migration vắng thì đỏ — đã chạy đỏ 23/09."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/prisma/migrations/**, packages/db/scripts/luot-don-sql.ts, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.gl_go_tat_khoa
+    expected: "exit 0; hai người mỗi người hai khoá, gỡ người thứ nhất bằng WorkspaceService.removeMember THẬT. Vế siết: gọi contacts.list bằng khoá của người bị gỡ và auth.api.verifyApiKey trên cùng khoá, so BẰNG {status, loiKhoa} với {401, 'KEY_DISABLED'} — 401 chứ không phải 403 NOT_A_MEMBER, nên lời từ chối đến từ tầng khoá. Các vế cũ giữ: số dòng khoá của người bị gỡ vẫn 2, cả hai enabled false đọc từ cơ sở dữ liệu; hai khoá người kia vẫn true và đọc được contacts.list (200) — đối chứng dương. Chiều đỏ: bỏ lệnh tắt khoá khỏi removeMember thì nhận {403, null} và bài đỏ ở vế siết, thông điệp ghim «tu choi o tang khoa, khong phai o phep kiem tu cach»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/workspace/workspace.service.ts, apps/api/src/trpc/trpc.context.ts, apps/api/src/trpc/middlewares/**, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.gl_khoa_moi
+    expected: "exit 0; người bị gỡ bằng removeMember THẬT rồi đăng nhập lại bằng auth.api.signInEmail, cookie từ set-cookie thật. Ba lời gọi so BẰNG từng hàng {status, message} với {403, NOT_A_MEMBER}: POST /api/trpc/apiKeys.create với đầu vào HỢP LỆ (message đọc từ body.error.message), POST /api/auth/api-key/create, POST /api/auth/api-key/update bật lại khoá cũ (message đọc từ body.message); cộng soKhoa bằng 1 và khoá cũ enabled false. Đối chứng dương giữ từ hồ sơ nguồn (thành viên tạo qua tRPC, qua Better Auth, và phía máy chủ — mỗi hàng 200 và thêm 1 dòng) và thêm một hàng: thành viên bật lại khoá đã tắt của chính mình qua /api/auth/api-key/update bằng cookie → {200, bat true}. Chiều đỏ: bỏ plugin canh-khoa-api khỏi mảng plugins thì hai hàng Better Auth nhận {200, \"\"} và bài đỏ; một bản vá chặn mọi lời bật lại thì hàng đối chứng mới đỏ, thông điệp ghim «thanh vien khong bat lai duoc khoa cua chinh minh»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/auth/src/canh-khoa-api.ts, packages/auth/src/auth.ts, apps/api/src/api-keys/**, apps/api/src/trpc/middlewares/**, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.kcm_xem_truoc
+    expected: "exit 0; câu đếm dựng bằng cauXemTruoc(sqlLuotDon()) của packages/db/scripts/luot-don-sql.ts — mệnh đề WHERE rút bằng máy từ chính migration.sql, không chép tay. Dựng cảnh: người ngoài kho có khoá true và null, thành viên có một khoá. Trong một giao dịch REPEATABLE READ hoàn tác: chạy câu đếm, chạy SQL của migration lấy số dòng đổi, chạy câu đếm lần nữa. Bài so BẰNG {khopSoDong, conLai, cuaBi} với {true, 0, 2} — quan hệ «xem trước = số dòng migration đổi», không phải một con số viết tay — và khẳng định số khoá đếm ≥ 2, số chủ ≥ 1 (chống câu đếm rỗng xanh câm). Chiều đỏ: bộ rút mệnh đề cắt mất vế NOT EXISTS thì xem trước đếm cả khoá thành viên và khopSoDong false, thông điệp in hai con số; thư mục migration vắng — đã chạy đỏ 23/09. Hai tính chất an toàn đọc từ mã lệnh packages/db/scripts/xem-truoc-luot-don.ts (không đo bằng bài chạy): chỉ đọc XEM_TRUOC_DATABASE_URL, thoát mã 2 khi thiếu; chạy trong BEGIN READ ONLY."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/scripts/luot-don-sql.ts, packages/db/scripts/xem-truoc-luot-don.ts, packages/db/prisma/migrations/**, apps/api/test/go-la-cat-quyen.spec.ts]

@@ -1,0 +1,16 @@
+{
+  "feature_plain": "Người đã rời workspace mà còn giữ khoá API cũ không dùng nó để tạo khoá mới hay bật lại khoá cũ được nữa; khi phát hành, các khoá cũ còn bật của họ được tắt một lần.",
+  "scope_plain": "Các lối khác của hệ thống đăng nhập nhận khoá làm danh tính, việc đọc hay xoá khoá của chính mình, và danh sách từng khoá bị lượt dọn tắt — để ngoài như đã duyệt.",
+  "analyst_plain": "Hai bài kiểm siết lại từ việc trước (khoá đã tắt bị từ chối đúng lý do; ba lối tạo và bật lại báo đúng «không còn là thành viên») cũng xanh trên mã cũ. Đó là điều dự kiến: chúng siết cách đo một hành vi đã có, không đo hành vi mới; lượt phá thử đã chứng chúng đỏ khi hành vi hỏng.",
+  "decisions_plain": [
+    {"id": "d-20260923T144150Z-1", "p": "Đã chọn đặt phép kiểm ngay sau bước hệ thống nhận ra chủ khoá, để nó xét đúng người thao tác nhân danh — đổi lại lời hứa sống nhờ thứ tự, nên bài kiểm ghim thứ tự bằng hành vi."},
+    {"id": "d-20260923T144150Z-2", "p": "Đã chọn tắt khoá cũ một lần bằng bước cập nhật dữ liệu đi kèm bản phát hành, có chốt khi workspace chưa ai — đổi lại là một lần ghi dữ liệu thật khó đảo."},
+    {"id": "d-20260923T144150Z-3", "p": "Đã chọn siết hai bài kiểm của việc trước ngay tại chỗ, không viết lại hồ sơ đã ký — đổi lại hồ sơ đó phải ghim lại bằng chứng sau khi đổi."},
+    {"id": "d-20260923T144150Z-4", "p": "KHÔNG làm đặc tả giao diện — việc này không chạm màn nào."},
+    {"id": "d-20260923T144150Z-5", "p": "KHÔNG làm đường đo giá trị — việc này đi từ một quyết định ở cổng bằng chứng, không có ngưỡng giá trị nào để đo."},
+    {"id": "d-20260923T144150Z-6", "p": "KHÔNG đo riêng việc đọc và xoá khoá của chính mình — đã bị chặn chung, và không trao thêm quyền nào."},
+    {"id": "d-20260923T144841Z-7", "p": "Đã chọn thêm lệnh xem trước chỉ đọc cho người ký chạy trên dữ liệu thật — đổi lại có thêm một việc tay ở cổng bằng chứng."},
+    {"id": "d-20260923T144841Z-8", "p": "KHÔNG ghi lại danh sách từng khoá bị tắt — người ký có con số tổng trước khi phát hành."},
+    {"id": "d-20260923T153727Z-10", "p": "Đã sửa luôn một lỗ đo trong phạm vi dù vòng chấm đầu đã đạt: bài kiểm nay chạy chính lệnh xem trước như người ký sẽ chạy — đổi lại thêm một vòng chấm."}
+  ]
+}
