@@ -17,6 +17,7 @@ import { type ReactNode, useEffect, useId, useRef } from "react";
 
 export type KhungTaoProps = {
 	nhanNut?: string;
+	bieuTuong?: ReactNode;
 	khoaNut?: boolean;
 	bienThe?: "default" | "outline";
 	tieuDe: string;
@@ -34,6 +35,7 @@ export type KhungTaoProps = {
 
 export function KhungTao({
 	nhanNut,
+	bieuTuong,
 	khoaNut = false,
 	bienThe = "outline",
 	tieuDe,
@@ -66,6 +68,7 @@ export function KhungTao({
 			{nhanNut === undefined ? null : (
 				<SheetTrigger asChild>
 					<Button variant={bienThe} disabled={khoaNut}>
+						{bieuTuong}
 						{nhanNut}
 					</Button>
 				</SheetTrigger>

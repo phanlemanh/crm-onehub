@@ -9,7 +9,7 @@
 		"typegen": "next typegen",
 		"check-types": "tsc --noEmit",
 		"test": "bun test && bun run test:dom",
-		"test:dom": "TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/danh-muc-quan-ly.dom.tsx ./test/bang-cot-loi-va-nhan.dom.tsx ./test/noi-bon-nut.dom.tsx ./test/sua-luu-tru.dom.tsx ./test/chi-quan-tri-truong.dom.tsx ./test/dieu-phoi-xoa-ghi-danh.dom.tsx ./test/ke-hoach-sheet.dom.tsx ./test/mk-dat-mat-khau-loi.dom.tsx ./test/mk-nut-phat-chia.dom.tsx ./test/moi-phia-ke-hoach.dom.tsx ./test/han-viec.dom.tsx ./test/the-loi-hoi-thoai.dom.tsx",
+		"test:dom": "TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/danh-muc-quan-ly.dom.tsx ./test/bang-cot-loi-va-nhan.dom.tsx ./test/noi-bon-nut.dom.tsx ./test/sua-luu-tru.dom.tsx ./test/chi-quan-tri-truong.dom.tsx ./test/dieu-phoi-xoa-ghi-danh.dom.tsx ./test/ke-hoach-sheet.dom.tsx ./test/mk-dat-mat-khau-loi.dom.tsx ./test/mk-nut-phat-chia.dom.tsx ./test/moi-phia-ke-hoach.dom.tsx ./test/han-viec.dom.tsx ./test/onboarding-giong-deals.dom.tsx ./test/the-loi-hoi-thoai.dom.tsx",
 		"lint": "biome check ."
 	},
 	"dependencies": {

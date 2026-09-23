@@ -1,0 +1,60 @@
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: đã thêm tên miền được phép lan-do.onehub.vn (sẽ dọn)
+$ bun scripts/dev-session.ts manh.phan@onemount.com
+dat  deals@320/vi cot=3 cuonBang=0 chuTen=57
+dat  deals@375/vi cot=3 cuonBang=0 chuTen=75
+dat  deals@768/vi cot=5 cuonBang=0 chuTen=110
+dat  deals@1024/vi cot=7 cuonBang=0 chuTen=113
+dat  deals@1440/vi cot=7 cuonBang=0 chuTen=179
+dat  deals@320/en cot=3 cuonBang=0 chuTen=59
+dat  deals@375/en cot=3 cuonBang=0 chuTen=77
+dat  deals@768/en cot=5 cuonBang=0 chuTen=110
+dat  deals@1024/en cot=7 cuonBang=0 chuTen=118
+dat  deals@1440/en cot=7 cuonBang=0 chuTen=179
+dat  companies@320/vi cot=1 cuonBang=0 chuTen=88
+dat  companies@375/vi cot=1 cuonBang=0 chuTen=88
+dat  companies@768/vi cot=5 cuonBang=0 chuTen=84
+dat  companies@1024/vi cot=7 cuonBang=0 chuTen=86
+dat  companies@1440/vi cot=7 cuonBang=0 chuTen=88
+dat  companies@320/en cot=1 cuonBang=0 chuTen=88
+dat  companies@375/en cot=1 cuonBang=0 chuTen=88
+dat  companies@768/en cot=5 cuonBang=0 chuTen=84
+dat  companies@1024/en cot=7 cuonBang=0 chuTen=88
+dat  companies@1440/en cot=7 cuonBang=0 chuTen=88
+dat  contacts@320/vi cot=2 cuonBang=0 chuTen=45
+dat  contacts@375/vi cot=2 cuonBang=0 chuTen=45
+dat  contacts@768/vi cot=5 cuonBang=0 chuTen=45
+dat  contacts@1024/vi cot=6 cuonBang=0 chuTen=45
+dat  contacts@1440/vi cot=6 cuonBang=0 chuTen=45
+dat  contacts@320/en cot=2 cuonBang=0 chuTen=45
+dat  contacts@375/en cot=2 cuonBang=0 chuTen=45
+dat  contacts@768/en cot=5 cuonBang=0 chuTen=45
+dat  contacts@1024/en cot=6 cuonBang=0 chuTen=45
+dat  contacts@1440/en cot=6 cuonBang=0 chuTen=45
+dat  campaigns@320/vi cot=3 cuonBang=0 chuTen=73
+dat  campaigns@375/vi cot=3 cuonBang=0 chuTen=108
+dat  campaigns@768/vi cot=6 cuonBang=0 chuTen=151
+dat  campaigns@1024/vi cot=7 cuonBang=0 chuTen=175
+dat  campaigns@1440/vi cot=7 cuonBang=0 chuTen=175
+dat  campaigns@320/en cot=3 cuonBang=0 chuTen=72
+dat  campaigns@375/en cot=3 cuonBang=0 chuTen=107
+dat  campaigns@768/en cot=6 cuonBang=0 chuTen=146
+dat  campaigns@1024/en cot=7 cuonBang=0 chuTen=175
+dat  campaigns@1440/en cot=7 cuonBang=0 chuTen=175
+dat  members@320/vi cot=2 cuonBang=0 chuTen=44
+dat  members@375/vi cot=2 cuonBang=0 chuTen=64
+dat  members@768/vi cot=3 cuonBang=0 chuTen=64
+dat  members@1024/vi cot=4 cuonBang=0 chuTen=64
+dat  members@1440/vi cot=4 cuonBang=0 chuTen=64
+dat  members@320/en cot=2 cuonBang=0 chuTen=51
+dat  members@375/en cot=2 cuonBang=0 chuTen=64
+dat  members@768/en cot=3 cuonBang=0 chuTen=64
+dat  members@1024/en cot=4 cuonBang=0 chuTen=64
+dat  members@1440/en cot=4 cuonBang=0 chuTen=64
+dat  sap deals@375/vi
+dat  sap deals@1024/vi
+o=50 khang-dinh=276/276
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+-- tiền đề làn đo: đã dọn tên miền được phép

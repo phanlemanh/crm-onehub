@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
 	PageShell,
+	PageShellActions,
 	PageShellContent,
 	PageShellDescription,
 	PageShellHeader,
@@ -20,6 +21,7 @@ import {
 	danhMucSearchParams,
 	loadOnboardingSearchParams,
 } from "./onboarding-search-params";
+import { DanhMucHanhDong } from "./tao-ke-hoach";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
@@ -41,6 +43,9 @@ export default async function OnboardingPage({
 					<PageShellTitle>{m.title}</PageShellTitle>
 					<PageShellDescription>{m.description}</PageShellDescription>
 				</PageShellHeading>
+				<PageShellActions>
+					<DanhMucHanhDong />
+				</PageShellActions>
 			</PageShellHeader>
 
 			<PageShellContent className="min-h-0">

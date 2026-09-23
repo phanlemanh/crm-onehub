@@ -1,0 +1,127 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bằng chứng · bo-dung-chung-nhan-chuoi</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+</style></head><body><div class="wrap">
+<h1>Bộ dựng chung nhận chuỗi từ ngoài — một component hiện đúng tiếng người đọc mà chỗ gọi không phải truyền gì</h1><div class="sub">Trang bằng chứng · <span class="mono">bo-dung-chung-nhan-chuoi</span> · tier T2</div>
+<div class="card" style="margin-top:12px"><span class="badge pass">PASS</span>
+<div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">mudi9wpghn7y</td><td class="mono">2026-09-23T03:00:23Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-2</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">mudi9wpghn7y</td><td class="mono">2026-09-23T03:00:23Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-3</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">mudi9wpghn7y</td><td class="mono">2026-09-23T03:00:23Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-4</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-bo-dung-chung-nhan-chuoi-E4-r6</td><td class="mono">2026-09-23T03:00:23Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-5</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-bo-dung-chung-nhan-chuoi-E5-r6</td><td class="mono">2026-09-23T03:00:23Z</td></tr>
+<tr><td><a href="#E6">E6</a></td><td>AC-6</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-bo-dung-chung-nhan-chuoi-E6-r6</td><td class="mono">2026-09-23T03:00:23Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-7</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">mudi9wpghn7y</td><td class="mono">2026-09-23T03:00:23Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">mudi9wpghn7y</td><td class="mono">2026-09-23T03:00:23Z</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-9</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">mudi9wpghn7y</td><td class="mono">2026-09-23T03:00:23Z</td></tr>
+<tr><td><a href="#E10">E10</a></td><td>AC-10</td><td>judgment</td><td><span class="badge pass">PASS</span></td><td class="mono">—</td><td class="mono">—</td></tr>
+<tr><td><a href="#E11">E11</a></td><td>AC-7</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-bo-dung-chung-nhan-chuoi-E11-r6</td><td class="mono">2026-09-23T03:00:23Z</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · script</h3><p class="crit">AC-1: Given nhân viên đang đọc tiếng Việt, When họ mở một màn có bảng dùng chung, Then mọi chuỗi bảng đang khoá cứng hiện tiếng Việt. Danh sách do phép đo bản vẽ liệt kê, không do hợp đồng liệt kê.</p>
+<div class="kv"><span>run_id <b>mudi9wpghn7y</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.bdc_bo_dung_ui</b></span><span>verified_at <b>2026-09-23T03:00:23Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Time:    2.947s
+
+test-run: dropped crm_mudi9wpghn7y_test</pre>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · script</h3><p class="crit">AC-2: Given nhân viên đang đọc tiếng Việt, When họ mở một màn có BẤT KỲ component dùng chung nào khác, Then chữ khoá cứng của nó là tiếng Việt. Hợp đồng không kể tên component nào ở đây — máy quét kể, và AC-5 là chỗ đếm.</p>
+<div class="kv"><span>run_id <b>mudi9wpghn7y</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.bdc_bo_dung_ui</b></span><span>verified_at <b>2026-09-23T03:00:23Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Time:    2.947s
+
+test-run: dropped crm_mudi9wpghn7y_test</pre>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · script</h3><p class="crit">AC-3: Given một component dùng chung dựng ở nơi KHÔNG có nhà cung cấp ngôn ngữ, When nó vẽ, Then nó hiện tiếng Anh và không lỗi nào nổ.</p>
+<div class="kv"><span>run_id <b>mudi9wpghn7y</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.bdc_bo_dung_ui</b></span><span>verified_at <b>2026-09-23T03:00:23Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Time:    2.947s
+
+test-run: dropped crm_mudi9wpghn7y_test</pre>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · script</h3><p class="crit">AC-4: Given `packages/ui` sau vòng này, When tìm chỗ nó nhập từ `apps/app`, Then không có chỗ nào, và kiểu `Locale` chỉ còn MỘT định nghĩa trong cả kho.</p>
+<div class="kv"><span>run_id <b>minted-bo-dung-chung-nhan-chuoi-E4-r6</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.bdc_goc_ngon_ngu</b></span><span>verified_at <b>2026-09-23T03:00:23Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">-- chiều đỏ: gieo một dòng nhập ngược thì phép đo phải bắt
+    gieo thì bắt, gỡ thì im
+rang-goc-ngon-ngu khong-nhap-nguoc: hai chiều đúng</pre>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · script</h3><p class="crit">AC-5: Given mỗi component dùng chung được DỰNG THẬT hai lần, một lần tiếng Anh một lần tiếng Việt, When so chữ người đọc thấy trong hai bản vẽ, Then không chữ nào giống nhau ở cả hai — trừ danh sách trung tính khai trong hồ sơ (tên riêng, dữ liệu thử).</p>
+<div class="kv"><span>run_id <b>minted-bo-dung-chung-nhan-chuoi-E5-r6</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.bdc_goi_ui</b></span><span>verified_at <b>2026-09-23T03:00:23Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">0 fail
+231 expect() calls
+Ran 117 tests across 9 files. [3.71s]</pre>
+</div>
+<div class="card eval" id="E6"><h3><span class="badge pass">PASS</span> &nbsp;E6 · script</h3><p class="crit">AC-6: Given phép đo của AC-5, When trả TỪNG khoá của bảng dịch tiếng Việt về đúng chuỗi tiếng Anh của nó, một khoá một lượt, Then phép đo đỏ, và MỌI khoá nó không bắt được phải có tên cùng lý do trong hồ sơ.</p>
+<div class="kv"><span>run_id <b>minted-bo-dung-chung-nhan-chuoi-E6-r6</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.bdc_goi_ui</b></span><span>verified_at <b>2026-09-23T03:00:23Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">0 fail
+231 expect() calls
+Ran 117 tests across 9 files. [3.71s]</pre>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge pass">PASS</span> &nbsp;E7 · script</h3><p class="crit">AC-7: Given một tiêu đề cột dài hơn bề rộng cột, When màn hiện ở 768px, Then chữ bị cắt mang dấu ba chấm, và tiêu đề đầy đủ nằm trong một thuộc tính trình đọc màn hình đọc được.</p>
+<div class="kv"><span>run_id <b>mudi9wpghn7y</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.bdc_bo_dung_ui</b></span><span>verified_at <b>2026-09-23T03:00:23Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Time:    2.947s
+
+test-run: dropped crm_mudi9wpghn7y_test</pre>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · script</h3><p class="crit">AC-8: Given phân trang hiện tổng số dòng, When trang vẽ từ máy chủ rồi trình duyệt nhận, Then số hiện giống nhau ở hai bên và theo quy ước tiếng Việt.</p>
+<div class="kv"><span>run_id <b>mudi9wpghn7y</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.bdc_bo_dung_ui</b></span><span>verified_at <b>2026-09-23T03:00:23Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Time:    2.947s
+
+test-run: dropped crm_mudi9wpghn7y_test</pre>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pass">PASS</span> &nbsp;E9 · script</h3><p class="crit">AC-9: Given nhân viên đổi tiếng, When màn vẽ lại, Then chữ trong bảng dùng chung đổi theo mà không cần tải lại trang, KỂ CẢ khi component không được máy chủ vẽ lại.</p>
+<div class="kv"><span>run_id <b>mudi9wpghn7y</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.bdc_bo_dung_ui</b></span><span>verified_at <b>2026-09-23T03:00:23Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Time:    2.947s
+
+test-run: dropped crm_mudi9wpghn7y_test</pre>
+</div>
+<div class="card eval" id="E10"><h3><span class="badge pass">PASS</span> &nbsp;E10 · judgment</h3><p class="crit">AC-10: Given bảng dịch của vòng này đã chốt trong hồ sơ TRƯỚC khi chấm, When một nhân viên quan hệ đối tác đọc nó, Then chữ đọc như tiếng Việt của người trong nghề. Hội đồng chấm đúng bảng đã chốt, không chấm chữ chưa ai khai.</p>
+<div class="kv"><span>judged_by <b>judge panel (3 lens, fresh context)</b></span></div>
+<div class="ov">human_override: CHƯA điền (việc của bạn ở Gate 2)</div>
+</div>
+<div class="card eval" id="E11"><h3><span class="badge pass">PASS</span> &nbsp;E11 · script</h3><p class="crit">AC-7: Given một tiêu đề cột dài hơn bề rộng cột, When màn hiện ở 768px, Then chữ bị cắt mang dấu ba chấm, và tiêu đề đầy đủ nằm trong một thuộc tính trình đọc màn hình đọc được.</p>
+<div class="kv"><span>run_id <b>minted-bo-dung-chung-nhan-chuoi-E11-r6</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.bdc_cat_ba_cham</b></span><span>verified_at <b>2026-09-23T03:00:23Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">dat  deals@768/vi cat=true line-clamp=2 title=«Phụ trách»
+dat  deals@768/en cat=true line-clamp=2 title=«Owner»
+khang-dinh=4/4
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+-- tiền đề làn đo: đã dọn tên miền được phép</pre>
+</div>
+<h2>Eval không phân biệt (Analyst)</h2><div class="flag fred">Chín eval máy gốc của tính năng này (E1-E9) tiếp tục xanh trên CẢ HEAD lẫn baseline (diffBase) round này — không có eval nào trong nhóm đó đỏ trên code cũ, nên xét riêng lẻ chúng không phân biệt được tính năng khỏi trạng thái trước khi làm:
+- `bun run test --filter=@crm/ui` (E1, E2, E3, E7, E8, E9): baseline green.
+- `bash _acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh --chan mot-goc &amp;&amp; --chan khong-nhap-nguoc` (E4): baseline green.
+- `cd packages/ui &amp;&amp; bun run test` (E5, E6): baseline green.
+E11 không nằm trong danh sách này — baseline của nó là `n-a` (kịch bản `cat-ba-cham.mjs` mới thêm ở round này, không có bản trên diffBase để so), nên nó vẫn là eval phân biệt được cho AC-7 dù chỉ trên chiều &quot;đã sửa vs. chưa sửa&quot; đã chạy tại quyết định d-20260923T024743Z-3, không phải trên chiều A/B của round này.
+Xem thêm review-findings.md § &quot;Ngoài hợp đồng&quot; (7 phát hiện mới của round này, phần lớn nằm trong file bằng chứng chưa bộ đo nào phủ) — người ký Cổng 2 nên coi nhóm eval không phân biệt ở trên là tín hiệu cân nhắc riêng, không phải một khối với các phát hiện ngoài hợp đồng.</div>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1–4 (2026-09-01): bốn vòng chấm ngữ cảnh sạch, báo cáo dạng kể chuyện; ký Cổng 2 — Manh Phan 2026-09-01. Sau chữ ký có một vòng người lạ lái thử, ghi vào cùng báo cáo. Bản kể chuyện đó còn nguyên trong lịch sử git (lần sửa cuối 75e5daf8), được thay bằng báo cáo khuôn máy này theo d-20260923T024743Z-4.</li><li>Round 5 (2026-09-23, mở lại theo hồ sơ tieu-de-cot-doc-tron, d-20260923T010721Z-25 của hồ sơ đó): chuyển E1–E9 sang khuôn máy với lệnh ở config; chấm trên a1e9d9e5 — PASS; phát hiện ngoài hợp đồng ghi ở review-findings.md vòng đó, chưa ký. Returned to implementation: vòng chấm này lộ phép đo mũi tên rỗng và nút tiêu đề tự đè kiểu Button ở hồ sơ tieu-de-cot-doc-tron.</li><li>Round 6 (round này): thêm E11 (`rang/cat-ba-cham.mjs`) đo cắt ba chấm và `title` trên trang thật cho AC-7, hai chiều đỏ đã chạy (evidence/cat-ba-cham-chieu-do.txt); E7 giữ làm hồi quy component. Chấm lại trọn E1–E9, E11 và bốn lệnh suite trên 088078c7 — PASS; E10 mang panel PASS từ round 5 vì đầu vào không đổi. Chờ người ký Cổng 2.</li></ul>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>

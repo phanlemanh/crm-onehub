@@ -68,6 +68,7 @@ const en = {
 		action: "Try again",
 	},
 	loading: "Loading…",
+	cells: { silentDays: "{n}d" },
 	hoSo: {
 		steps: "Plan steps",
 		stepsSummary: "{xong}/{tong} done · {chuaGiao} unassigned",
@@ -105,6 +106,7 @@ const en = {
 		keHoach: {
 			title: "New plan from a template",
 			toolbar: "New plan",
+			created: "Plan created.",
 			company: "Partner company",
 			template: "Template",
 			startedAt: "Start date",
@@ -308,6 +310,7 @@ type OnboardingMessages = {
 	boardError: { title: string; body: string };
 	error: { title: string; body: string; action: string };
 	loading: string;
+	cells: { silentDays: string };
 	hoSo: {
 		steps: string;
 		stepsSummary: string;
@@ -342,7 +345,13 @@ type OnboardingMessages = {
 			string
 		>;
 		keHoach: Record<
-			"title" | "toolbar" | "company" | "template" | "startedAt" | "owner",
+			| "title"
+			| "toolbar"
+			| "company"
+			| "template"
+			| "startedAt"
+			| "owner"
+			| "created",
 			string
 		>;
 		moiGioi: Record<
@@ -499,7 +508,7 @@ const vi = {
 	description: "Đối tác nào đang tắc, và tắc ở đâu.",
 	columns: {
 		partner: "Đối tác",
-		stuckOn: "Đang tắc ở",
+		stuckOn: "Tắc ở",
 		silent: "Im lặng",
 		steps: "Bước",
 		days: "Ngày",
@@ -562,6 +571,7 @@ const vi = {
 		action: "Tải lại",
 	},
 	loading: "Đang tải…",
+	cells: { silentDays: "{n} ngày" },
 	hoSo: {
 		steps: "Bước của kế hoạch",
 		stepsSummary: "{xong}/{tong} xong · {chuaGiao} bước chưa giao cho ai",
@@ -600,6 +610,7 @@ const vi = {
 		keHoach: {
 			title: "Tạo kế hoạch từ khuôn",
 			toolbar: "Kế hoạch mới",
+			created: "Đã tạo kế hoạch.",
 			company: "Công ty đối tác",
 			template: "Khuôn",
 			startedAt: "Ngày bắt đầu",

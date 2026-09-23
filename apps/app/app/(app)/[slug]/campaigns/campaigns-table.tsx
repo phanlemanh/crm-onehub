@@ -125,6 +125,7 @@ function columnsFor(
 			sortable: true,
 			align: "right",
 			width: "w-[10%]",
+			hideBelow: "sm",
 			cell: (row) => <span className="tabular-nums">{row.called}</span>,
 		},
 		{

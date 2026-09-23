@@ -196,6 +196,14 @@ ngược lên hãng được: một component nhận chuỗi qua nhà cung cấp
 `apps/app/lib/messages/companies.ts:31` — `showing` là một **hàm**
 `(from,to,total) => string`. Vòng này dùng lại dạng đó.
 
+**Known limits (ký Cổng 2 vòng 6, 2026-09-23).**
+
+- Ngoài-1: mũi tên sắp của cột căn trái nằm trong nhãn cắt hai dòng (`data-table.tsx`), nên tiêu đề dài tới mức bị cắt thì mất mũi tên; hướng sắp vẫn đọc được qua `aria-sort`. Năm trang danh sách đo ở hồ sơ `tieu-de-cot-doc-tron` không có nhãn nào bị cắt.
+- Ngoài-2, Ngoài-5: phép đo mũi tên của hồ sơ `tieu-de-cot-doc-tron` bỏ qua lặng khi svg ẩn hoặc không lấy được hộp chữ, vẫn đếm là đạt.
+- Ngoài-3, Ngoài-6: lượt chụp E9 của hồ sơ `tieu-de-cot-doc-tron` (`chup.mjs`) nuốt lỗi chờ bảng, không kiểm chuyển hướng, không gọi `canhCay`.
+- Ngoài-4: gỡ khoá mồ côi trong `mot-luot.sh` có khe cho hai lượt đo chạy chồng khi tiến trình giữ khoá bị giết.
+- Ngoài-7: E7 chỉ soi tên lớp `line-clamp-2` trong markup; đầu ra thật trên trang do E11 đo.
+
 **Đã đọc trước khi viết:** `AGENTS.md`, `docs/design.md`, `CONTEXT.md`,
 `.oxlintrc.json`, `packages/ui/package.json`,
 `_acceptance/tieng-viet-cho-crm/{opportunity,contract,decisions}.md`, và ba bản

@@ -1,0 +1,23 @@
+{
+  "feature_plain": "Bảng và các thành phần giao diện dùng chung tự hiện đúng tiếng Việt hay tiếng Anh theo người đọc, mà mỗi trang gọi chúng không phải truyền chữ vào.",
+  "scope_plain": "Không dịch 20 chữ mặc định mà trang gọi tự đè được, không đụng khung trò chuyện tác nhân, lịch chọn ngày, logo, và không thêm thư viện đa ngôn ngữ.",
+  "decisions_plain": [
+    {
+      "id": "d-20260922T231810Z-1",
+      "p": "Sửa bài kiểm cắt chữ tiêu đề cho khớp nhãn tiêu đề mới của bảng dùng chung — đổi lại bài kiểm vẫn chỉ soi tên lớp, nên thêm phép đo trang thật ở dưới."
+    },
+    {
+      "id": "d-20260923T011109Z-2",
+      "p": "Mở lại hồ sơ đã ký trong cùng nhánh, chuyển bộ đo sang khuôn máy rồi chấm lại — đổi lại cần một chữ ký mới."
+    },
+    {
+      "id": "d-20260923T024743Z-3",
+      "p": "Thêm phép đo trên trang thật: tiêu đề dài bị cắt kèm dấu ba chấm và ô tiêu đề mang chữ đầy đủ cho trình đọc màn hình — đổi lại hồ sơ cần bàn đo chạy máy chủ thật."
+    },
+    {
+      "id": "d-20260923T024743Z-4",
+      "p": "Báo cáo bằng chứng chuyển sang khuôn máy đọc được; bản kể chuyện đã ký ngày 01/09 chỉ còn tra qua lịch sử git."
+    }
+  ],
+  "analyst_plain": "Chín phép đo cũ xanh cả trước lẫn sau các sửa đổi của nhánh này, nên chúng giữ vai chống hồi quy chứ không chứng minh gì mới; phép đo trang thật mới thêm là phép đo phân biệt được cho tiêu chí cắt chữ."
+}

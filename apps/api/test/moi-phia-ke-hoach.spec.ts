@@ -1,4 +1,12 @@
-import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import {
+	afterAll,
+	afterEach,
+	beforeAll,
+	describe,
+	expect,
+	setSystemTime,
+	test,
+} from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
@@ -13,6 +21,7 @@ import { ConversionService } from "../src/currency/conversion.service";
 import { DashboardService } from "../src/dashboard/dashboard.service";
 import type { FieldsService } from "../src/fields/fields.service";
 import {
+	ngayLich,
 	type PlanListInput,
 	type PlanRow as PlanListRow,
 	plansOfCompanyInput,
@@ -398,81 +407,125 @@ function tongQuan() {
 	return new DashboardService(db, new ConversionService(db));
 }
 
-describe("viec-cua-toi", () => {
-	test("viec-cua-toi: dung ba buoc qua han, hom nay va trong cua so, o ca hai che do", async () => {
-		const [O, A, B] = [
-			await gieoThanhVien(),
-			await gieoThanhVien(),
-			await gieoThanhVien(),
-		];
-		const bp = await gieoBoPhan();
-		const { plan } = await gieoKeHoach({
-			camTrich: O.id,
-			buoc: [
-				{ nhan: "D-1", boPhanId: bp.id, giao: A.id, han: ngayCach(-1) },
-				{ nhan: "D", boPhanId: bp.id, giao: A.id, han: ngayCach(0) },
-				{ nhan: "D+3", boPhanId: bp.id, giao: A.id, han: ngayCach(3) },
-				{ nhan: "D+4", boPhanId: bp.id, giao: A.id, han: ngayCach(4) },
-				{
-					nhan: "xong",
-					boPhanId: bp.id,
-					giao: A.id,
-					han: ngayCach(-2),
-					xong: true,
-				},
-				{ nhan: "cua B", boPhanId: bp.id, giao: B.id, han: ngayCach(-1) },
-			],
-		});
-		const { plan: dong } = await gieoKeHoach({
-			camTrich: O.id,
-			dong: true,
-			buoc: [{ nhan: "dong", boPhanId: bp.id, giao: A.id, han: ngayCach(-1) }],
-		});
-		const buoc = await buocCua(plan.id);
-		const ma = (nhan: string) => {
-			const hang = buoc.find((b) => b.label === nhan);
-			if (hang === undefined) throw new Error(`khong co buoc ${nhan}`);
-			return hang.id;
-		};
+const SO_NGAY_GIEO = [-1, 0, 3, 4] as const;
 
-		for (const scope of ["me", "everyone"] as const) {
-			const { mySteps } = await tongQuan().summary(A.id, { scope });
-			const cuaGieo = mySteps.filter(
-				(b) => b.planId === plan.id || b.planId === dong.id,
-			);
-			expect(
-				cuaGieo.map((b) => b.stepId),
-				`scope ${scope}: tap va thu tu; ke hoach da dong khong lot vao`,
-			).toEqual([ma("D-1"), ma("D"), ma("D+3")]);
-			expect(cuaGieo.map((b) => b.dueAt)).toEqual([
-				ngayCach(-1).toISOString().slice(0, 10),
-				ngayCach(0).toISOString().slice(0, 10),
-				ngayCach(3).toISOString().slice(0, 10),
-			]);
-			for (const b of cuaGieo) {
-				expect(b.company.id).toBe(plan.companyId);
-				expect(b.nhan.length).toBeGreaterThan(0);
-			}
-			const cuaB = (await tongQuan().summary(A.id, { scope })).mySteps.map(
-				(b) => b.stepId,
-			);
-			expect(cuaB, `scope ${scope}: buoc cua B khong vao`).not.toContain(
-				ma("cua B"),
-			);
-		}
+const LUC_GHIM = [
+	{
+		khung: "khung-dem",
+		nhan: "06:30 VN 23/09, ngay UTC con 22/09",
+		luc: new Date("2026-09-22T23:30:00Z"),
+		ngay: ["2026-09-22", "2026-09-23", "2026-09-26", "2026-09-27"],
+	},
+	{
+		khung: "khung-ngay",
+		nhan: "20:54 VN 22/09, cung ngay UTC",
+		luc: new Date("2026-09-22T13:54:00Z"),
+		ngay: ["2026-09-21", "2026-09-22", "2026-09-25", "2026-09-26"],
+	},
+] as const;
 
-		await db.onboardingStep.update({
-			where: { id: ma("D+4") },
-			data: { dueAt: ngayCach(3) },
-		});
-		const sau = (await tongQuan().summary(A.id, { scope: "me" })).mySteps
-			.filter((b) => b.planId === plan.id)
-			.map((b) => b.stepId);
-		expect(sau, "doi chung duong: D+4 doi han sang D+3 thi vao").toContain(
-			ma("D+4"),
-		);
+describe("ngay-gieo-theo-vn", () => {
+	afterEach(() => {
+		setSystemTime();
 	});
+
+	for (const ca of LUC_GHIM) {
+		test(`ngay-gieo-theo-vn: ${ca.khung} ${ca.nhan} — ngayCach la ngay lich VN nhu ngayLich luu`, () => {
+			setSystemTime(ca.luc);
+			expect(
+				SO_NGAY_GIEO.map((k) => ngayCach(k).toISOString()),
+				`${ca.khung}: ngayCach(${SO_NGAY_GIEO.join(", ")}) theo ngay lich VN`,
+			).toEqual(ca.ngay.map((ngay) => ngayLich.parse(ngay).toISOString()));
+		});
+	}
 });
+
+describe("viec-cua-toi", () => {
+	afterEach(() => {
+		setSystemTime();
+	});
+
+	for (const ca of LUC_GHIM) {
+		test(`viec-cua-toi: ${ca.khung} ${ca.nhan} — dung ba buoc qua han, hom nay va trong cua so, o ca hai che do`, async () => {
+			setSystemTime(ca.luc);
+			await veBaBuoc(ca.khung, ca.ngay.slice(0, 3));
+		});
+	}
+});
+
+async function veBaBuoc(khung: string, ngayBaBuoc: readonly string[]) {
+	const [O, A, B] = [
+		await gieoThanhVien(),
+		await gieoThanhVien(),
+		await gieoThanhVien(),
+	];
+	const bp = await gieoBoPhan();
+	const { plan } = await gieoKeHoach({
+		camTrich: O.id,
+		buoc: [
+			{ nhan: "D-1", boPhanId: bp.id, giao: A.id, han: ngayCach(-1) },
+			{ nhan: "D", boPhanId: bp.id, giao: A.id, han: ngayCach(0) },
+			{ nhan: "D+3", boPhanId: bp.id, giao: A.id, han: ngayCach(3) },
+			{ nhan: "D+4", boPhanId: bp.id, giao: A.id, han: ngayCach(4) },
+			{
+				nhan: "xong",
+				boPhanId: bp.id,
+				giao: A.id,
+				han: ngayCach(-2),
+				xong: true,
+			},
+			{ nhan: "cua B", boPhanId: bp.id, giao: B.id, han: ngayCach(-1) },
+		],
+	});
+	const { plan: dong } = await gieoKeHoach({
+		camTrich: O.id,
+		dong: true,
+		buoc: [{ nhan: "dong", boPhanId: bp.id, giao: A.id, han: ngayCach(-1) }],
+	});
+	const buoc = await buocCua(plan.id);
+	const ma = (nhan: string) => {
+		const hang = buoc.find((b) => b.label === nhan);
+		if (hang === undefined) throw new Error(`khong co buoc ${nhan}`);
+		return hang.id;
+	};
+
+	for (const scope of ["me", "everyone"] as const) {
+		const { mySteps } = await tongQuan().summary(A.id, { scope });
+		const cuaGieo = mySteps.filter(
+			(b) => b.planId === plan.id || b.planId === dong.id,
+		);
+		expect(
+			cuaGieo.map((b) => b.stepId),
+			`${khung} scope ${scope}: tap va thu tu; ke hoach da dong khong lot vao`,
+		).toEqual([ma("D-1"), ma("D"), ma("D+3")]);
+		expect(
+			cuaGieo.map((b) => b.dueAt),
+			`${khung} scope ${scope}: ngay VN cua ba buoc`,
+		).toEqual([...ngayBaBuoc]);
+		for (const b of cuaGieo) {
+			expect(b.company.id).toBe(plan.companyId);
+			expect(b.nhan.length).toBeGreaterThan(0);
+		}
+		const cuaB = (await tongQuan().summary(A.id, { scope })).mySteps.map(
+			(b) => b.stepId,
+		);
+		expect(cuaB, `${khung} scope ${scope}: buoc cua B khong vao`).not.toContain(
+			ma("cua B"),
+		);
+	}
+
+	await db.onboardingStep.update({
+		where: { id: ma("D+4") },
+		data: { dueAt: ngayCach(3) },
+	});
+	const sau = (await tongQuan().summary(A.id, { scope: "me" })).mySteps
+		.filter((b) => b.planId === plan.id)
+		.map((b) => b.stepId);
+	expect(
+		sau,
+		`${khung} doi chung duong: D+4 doi han sang D+3 thi vao`,
+	).toContain(ma("D+4"));
+}
 
 describe("the-tasks-payload", () => {
 	test("the-tasks-payload: payload tich xong cua the Tasks ghi dung buoc, vet mang nguoi giao", async () => {
