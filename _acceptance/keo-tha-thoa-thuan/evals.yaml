@@ -223,6 +223,10 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.ktt_man_chrome
+    steps:
+      - "Cung lan chay voi E14 (config:executors.script.ktt_man_chrome)"
+      - "Mo {APP_URL}/<slug>/deals?view=board o 5 kho x 2 tieng, doc bay cot theo chi so"
+      - "Chup evidence/E14-bang-cot-<kho>-<tieng>.png"
     paths:
       - "apps/app/app/(app)/[slug]/deals/**"
       - "_acceptance/keo-tha-thoa-thuan/rang/man-bang-cot.mjs"
@@ -235,6 +239,10 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.ktt_man_chrome
+    steps:
+      - "Cung lan chay voi E14; o 1440/vi keo chuot mot the sang cot khac"
+      - "Tai lai trang, doc cot cua the va goi deals.byId de so giai doan may chu da ghi"
+      - "Chup evidence/E14-sau-khi-keo.png va evidence/E14-tha-cot-rong.png"
     paths:
       - "apps/app/app/(app)/[slug]/deals/**"
       - "apps/api/src/deals/**"
