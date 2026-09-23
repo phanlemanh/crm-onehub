@@ -1,31 +1,7 @@
 {
-  "feature_plain": "Người đã rời workspace mà còn giữ khoá API cũ sẽ không dùng nó để tạo khoá mới hay bật lại khoá cũ được nữa, và các khoá cũ đó được tắt một lần khi phát hành.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ từ chối người ngoài workspace tạo khoá mới chỉ bằng khoá cũ còn bật — báo «không còn là thành viên», không ghi khoá nào."},
-    {"id": "AC-2", "p": "Sẽ từ chối người ngoài workspace bật lại khoá đã tắt hay đổi tên khoá chỉ bằng khoá cũ — khoá đã tắt vẫn tắt, tên giữ nguyên."},
-    {"id": "AC-4", "p": "Sẽ vẫn cho thành viên dùng khoá của mình để tạo khoá mới và bật lại khoá của chính mình; hệ thống vẫn tạo khoá hộ phía máy chủ được."},
-    {"id": "AC-5", "p": "Sẽ tắt một lần mọi khoá còn bật của người không còn là thành viên khi phát hành — khoá của thành viên giữ nguyên, khoá đã tắt không bị đụng, không dòng nào bị xoá."},
-    {"id": "AC-8", "p": "Sẽ báo đúng lý do «không còn là thành viên» cho cả ba lối tạo và bật lại khoá của người đã bị gỡ; thành viên vẫn bật lại được khoá của chính mình."},
-    {"id": "AC-9", "p": "Sẽ cho người ký xem trước con số khoá sắp bị tắt trên dữ liệu thật, bằng một lệnh chỉ đọc, trước khi phát hành."}
-  ],
-  "wont_do": [
-    {"id": "AC-3", "p": "Chặn cả khi lời gọi mang đăng nhập của một thành viên đi kèm khoá của người ngoài — hệ thống xét người mà thao tác thật sự nhân danh, tức chủ khoá."},
-    {"id": "AC-6", "p": "Sẽ KHÔNG tắt khoá nào khi workspace chưa ai ghi danh — để bản cài cũ nâng cấp không mất sạch khoá của mọi người."},
-    {"id": "AC-7", "p": "Chặn khoá đã tắt ngay ở tầng khoá, tách được khỏi lời từ chối vì không còn là thành viên — hai lý do không còn lẫn vào nhau."}
-  ],
-  "scope_plain": "Các lối khác của hệ thống đăng nhập nhận khoá làm danh tính, việc đọc hay xoá khoá của chính mình, và danh sách từng khoá bị lượt dọn tắt — để ngoài.",
-  "coverage_plain": [
-    {"i": 0, "p": "Đã phủ cả bốn cách một lời gọi mang danh tính: chỉ đăng nhập, chỉ khoá, cả hai, và không gì (máy chủ tự gọi) — AC-1 đến AC-4 (chặn người ngoài, giữ thành viên)."},
-    {"i": 1, "p": "Đã phủ hai loại người: người ngoài còn giữ khoá bật và thành viên — mỗi lối bị chặn đều có đối chứng thành viên đi qua (AC-4, AC-8)."},
-    {"i": 2, "p": "Đã phủ tạo và sửa khoá; đọc hay xoá khoá của chính mình để ngoài vì không trao thêm quyền nào."},
-    {"i": 3, "p": "Đã phủ lượt dọn theo mọi tổ hợp: workspace có người hay chưa ai, khoá bật, trống hay đã tắt, chủ khoá là thành viên hay không — AC-5, AC-6 (tắt đúng khoá, giữ đúng khoá)."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Lượt dọn ghi thẳng vào dữ liệu thật mà người ký chưa thấy con số nào. Đã sửa: thêm lệnh xem trước chỉ đọc, dùng đúng điều kiện của lượt dọn, có bài kiểm ghim con số xem trước bằng số khoá lượt dọn thật sự tắt; người ký chạy nó trên dữ liệu thật ở cổng bằng chứng."},
-    {"i": 1, "p": "Bài kiểm lượt dọn chưa chứng dữ liệu khoá được tạo đúng như lối tạo khoá thật ghi ra. Đã sửa: mọi khoá trong bài được tạo bằng lối tạo khoá thật, và bài kiểm chủ của từng khoá trước khi dọn."},
-    {"i": 2, "p": "Lời hứa «đặt sai thứ tự thì bài đỏ» mới nằm trên giấy. Đã sửa: lượt thử phá thứ tự sẽ chạy thật lúc làm và lưu kết quả làm bằng chứng."},
-    {"i": 3, "p": "Ma trận lượt dọn thiếu vài ô: khoá đã tắt, khoá trống của thành viên, khoá trống khi workspace chưa ai. Đã sửa: bài kiểm thêm đủ các ô đó, kể cả kiểm thời điểm sửa của khoá đã tắt không bị đè."}
-  ],
+  "feature_plain": "Người đã rời workspace mà còn giữ khoá API cũ không dùng nó để tạo khoá mới hay bật lại khoá cũ được nữa; khi phát hành, các khoá cũ còn bật của họ được tắt một lần.",
+  "scope_plain": "Các lối khác của hệ thống đăng nhập nhận khoá làm danh tính, việc đọc hay xoá khoá của chính mình, và danh sách từng khoá bị lượt dọn tắt — để ngoài như đã duyệt.",
+  "analyst_plain": "Hai bài kiểm siết lại từ việc trước (khoá đã tắt bị từ chối đúng lý do; ba lối tạo và bật lại báo đúng «không còn là thành viên») cũng xanh trên mã cũ. Đó là điều dự kiến: chúng siết cách đo một hành vi đã có, không đo hành vi mới; lượt phá thử đã chứng chúng đỏ khi hành vi hỏng.",
   "decisions_plain": [
     {"id": "d-20260923T144150Z-1", "p": "Đã chọn đặt phép kiểm ngay sau bước hệ thống nhận ra chủ khoá, để nó xét đúng người thao tác nhân danh — đổi lại lời hứa sống nhờ thứ tự, nên bài kiểm ghim thứ tự bằng hành vi."},
     {"id": "d-20260923T144150Z-2", "p": "Đã chọn tắt khoá cũ một lần bằng bước cập nhật dữ liệu đi kèm bản phát hành, có chốt khi workspace chưa ai — đổi lại là một lần ghi dữ liệu thật khó đảo."},
@@ -34,6 +10,7 @@
     {"id": "d-20260923T144150Z-5", "p": "KHÔNG làm đường đo giá trị — việc này đi từ một quyết định ở cổng bằng chứng, không có ngưỡng giá trị nào để đo."},
     {"id": "d-20260923T144150Z-6", "p": "KHÔNG đo riêng việc đọc và xoá khoá của chính mình — đã bị chặn chung, và không trao thêm quyền nào."},
     {"id": "d-20260923T144841Z-7", "p": "Đã chọn thêm lệnh xem trước chỉ đọc cho người ký chạy trên dữ liệu thật — đổi lại có thêm một việc tay ở cổng bằng chứng."},
-    {"id": "d-20260923T144841Z-8", "p": "KHÔNG ghi lại danh sách từng khoá bị tắt — người ký có con số tổng trước khi phát hành."}
+    {"id": "d-20260923T144841Z-8", "p": "KHÔNG ghi lại danh sách từng khoá bị tắt — người ký có con số tổng trước khi phát hành."},
+    {"id": "d-20260923T153727Z-10", "p": "Đã sửa luôn một lỗ đo trong phạm vi dù vòng chấm đầu đã đạt: bài kiểm nay chạy chính lệnh xem trước như người ký sẽ chạy — đổi lại thêm một vòng chấm."}
   ]
 }
