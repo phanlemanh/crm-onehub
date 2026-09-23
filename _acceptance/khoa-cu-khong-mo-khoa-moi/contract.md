@@ -5,7 +5,7 @@ slug: khoa-cu-khong-mo-khoa-moi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [auth, api, db]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-23
 design_doc: docs/superpowers/specs/2026-09-23-khoa-cu-khong-mo-khoa-moi-design.md
@@ -71,3 +71,8 @@ như thành viên và ghi khoá cho thành viên — không phải lối leo quy
 - Luật đã đọc: `docs/api.md` (tRPC, workspace, khoá API), `docs/setup.md` (migration chạy ở lượt dựng production), `AGENTS.md` (không chú thích, một `.env`), `CLAUDE.md` của kho. Skill kho đã đọc: `.agents/skills/better-auth-best-practices` (móc `hooks.before`, `ctx.context.session`, plugin — không nói thứ tự móc người dùng với móc plugin) và `.agents/skills/prisma-database-setup` (không có mục migration dữ liệu); thứ tự móc đọc thẳng từ mã `better-auth` 1.6.25 và `@better-auth/api-key` 1.6.25.
 - Hạng T3: chạm `packages/auth` và `packages/db/prisma`. Kế hoạch viết xong trước Cổng 1 nên cổng duyệt kế hoạch ngồi cùng lượt.
 - Lượt dọn ghi dữ liệu thật ở lượt dựng production — việc khó đảo, nên Cổng 2 dừng chờ người dù bằng chứng xanh. Máy không với tới cơ sở dữ liệu production; con số thật do người ký chạy lệnh xem trước ở Cổng 2: `XEM_TRUOC_DATABASE_URL=<địa chỉ chỉ-đọc> bun packages/db/scripts/xem-truoc-luot-don.ts`.
+- **Ngoài-1 (Cổng 2, Manh Phan 2026-09-24): hằng «một ngày» trong bài kiểm viết lại tại chỗ thay vì dùng `DAY_MS` có sẵn trong `apps/api/test/support`.** Chỉ là cách viết mã kiểm, hành vi khoá API không đổi.
+- **Ngoài-2 (Cổng 2, Manh Phan 2026-09-24): bài «workspace chưa ai ghi danh» (E6) chỉ khẳng định không gì đổi, không mang đối chứng dương trong cùng lượt đo.** Một câu dọn hợp lệ mà không khớp hàng nào vẫn xanh ở E6; đối chứng dương nằm ở E5 cùng tệp.
+- **Ngoài-3 (Cổng 2, Manh Phan 2026-09-24): con số «khoá dùng gần đây» trong bài kiểm lệnh xem trước được đặt thẳng vào cột thời điểm dùng, không đi qua lối dùng khoá thật.** Hôm nay Better Auth 1.6.25 ghi đúng cột đó; nếu cách ghi đổi, bài không báo.
+- **Ngoài-4 (Cổng 2, Manh Phan 2026-09-24): biến `XEM_TRUOC_DATABASE_URL` của lệnh xem trước chưa có trong `.env.example` hay `docs/setup.md`.** Lệnh chỉ ghi ở hồ sơ này và trong design doc.
+- **Ngoài-5 (Cổng 2, Manh Phan 2026-09-24): bài kiểm của api nhập `packages/db/scripts/luot-don-sql.ts` bằng đường dẫn tương đối, không qua lối gói `@crm/db` công bố.** Dời hay đổi tên tệp đó trong gói db sẽ làm đỏ bài kiểm của api.
