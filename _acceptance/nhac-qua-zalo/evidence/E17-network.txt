@@ -1,31 +1,14 @@
-E17 network truth dump
-Config dev_server.url = http://localhost:3000, api_base = [http://localhost:3001]
-Task instructed APP_URL/API_URL override to 127.0.0.1:3300 / 127.0.0.1:3301, so no
-observed request literally matches the config's declared origins (host AND port
-both differ from config). networkObserved = "unscoped-partial" accordingly.
-
-All app-scope traffic to http://127.0.0.1:3300/** (page loads, static chunks,
-/api/trpc/* proxy calls including zalo.taoMa, zalo.cuaToi) returned 200/304 OK.
-No console errors were observed in the browser session (read_console_messages
-onlyErrors=true -> "No console logs.").
-
-Two families of FAILED requests were observed, both to a DIFFERENT origin
-(http://localhost:3300, note: "localhost" not "127.0.0.1") than the one this
-eval actually drove the app on:
-  - GET http://localhost:3300/sign-in -> net::ERR_CONNECTION_REFUSED (x6)
-  - GET http://localhost:3300/sign-in?_rsc=... -> net::ERR_ABORTED (x1)
-  - GET http://localhost:3300/proto/nhac-qua-zalo?state=... -> 404 (x2, browser-pane
-    housekeeping probe, not part of this eval's steps)
-These happened because the API/APP dev servers were bound explicitly to the
-IPv4 loopback 127.0.0.1 (per task step 1), while "localhost" on this machine
-resolves to ::1 first; the browser pane's own reconnect/prefetch behaviour
-(after a viewport resize) retried the "localhost" variant of the tab's origin
-and got refused. This is not app-scope-eligible under the declared config
-(different host than either 127.0.0.1:3300 or localhost:3000), and none of
-these requests occurred while performing an assertion step (all evidence
-screenshots were taken via the separate puppeteer capture, not this browser
-tab) — recorded here as note-only, not a FAIL trigger.
-
-Raw request list: see tool call read_network_requests output captured in this
-session's transcript (last 400 entries); not re-pasted here to avoid duplicating
-several hundred near-identical static-asset lines.
+=== console errors (0) ===
+=== network (12) ===
+[response] 200 GET http://127.0.0.1:3300/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D
+[response] 200 POST http://127.0.0.1:3300/api/trpc/zalo.taoMa?batch=1
+[response] 200 GET http://127.0.0.1:3300/api/trpc/zalo.cuaToi?batch=1&input=%7B%7D
+[response] 200 GET http://127.0.0.1:3300/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D
+[response] 200 GET http://127.0.0.1:3300/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D
+[response] 200 GET http://127.0.0.1:3300/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D
+[response] 200 GET http://127.0.0.1:3300/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D
+[response] 200 GET http://127.0.0.1:3300/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D
+[response] 200 POST http://127.0.0.1:3300/api/trpc/zalo.taoMa?batch=1
+[response] 200 GET http://127.0.0.1:3300/api/trpc/zalo.cuaToi?batch=1&input=%7B%7D
+[response] 200 GET http://127.0.0.1:3300/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D
+[response] 200 GET http://127.0.0.1:3300/api/trpc/enrichment.queue?batch=1&input=%7B%220%22%3A%7B%22limit%22%3A20%7D%7D
