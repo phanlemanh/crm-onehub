@@ -637,7 +637,7 @@ executors:
     ccc_pham_vi: bun _acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs --chan pham-vi
     tosd_khac_cay: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca khac-cay"
     tosd_giua_chung: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca giua-gieo,sau-gieo,sau-chrome"
-    tosd_tin_hieu: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca sigterm,sigint"
+    tosd_tin_hieu: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca sigterm,sigint,sigkill"
     tosd_thieu_nguoi: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca thieu-nguoi"
     tosd_token: bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca token
     tosd_mau: bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca mau
