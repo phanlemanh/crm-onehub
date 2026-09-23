@@ -709,6 +709,13 @@ executors:
     ktt_man_chrome: "bun _acceptance/keo-tha-thoa-thuan/rang/man-bang-cot.mjs"
     ktt_reui_da_chinh: "bun _acceptance/keo-tha-thoa-thuan/rang/reui-da-chinh.mjs"
     ktt_san_thiet_ke: "bun _acceptance/keo-tha-thoa-thuan/rang/san-thiet-ke.mjs"
+    bkd_du_tep_app: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs du-tep app"
+    bkd_du_tep_ui: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs du-tep ui"
+    bkd_tep_moi: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs tep-moi"
+    bkd_tep_do: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs tep-do"
+    bkd_cach_ly: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs cach-ly"
+    bkd_mui_gio: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs mui-gio"
+    bkd_goc: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs goc"
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

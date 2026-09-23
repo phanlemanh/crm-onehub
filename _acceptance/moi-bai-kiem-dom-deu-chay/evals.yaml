@@ -1,0 +1,133 @@
+schema_version: 1
+slug: moi-bai-kiem-dom-deu-chay
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.bkd_du_tep_app
+    paths:
+      - "apps/app/package.json"
+      - "apps/app/test/*.dom.tsx"
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
+    expected: |
+      Chay that `bun run test:dom` trong apps/app. Ma tran = danh sach tep *.dom.tsx duoi test/ dem
+      bang `find` (de quy, doc lap voi cach bo chay liet ke; 16 tep ngay 23/09), cong 2 khang dinh
+      ghim hai tep AC-1 goi ten (keo-tha-thoa-thuan, may-nhac) con tren dia; moi tep 1 khang dinh:
+      tep co dong «chay-dom: test/<tep>» va
+      doan cua no co «Ran N tests across 1 file» voi N > 0, dung mot lan; cong 1 khang dinh ma
+      thoat 0. Thu muc khong co tep nao -> ma 2.
+      CHIEU DO (da chay 2026-09-23 tren script danh sach tay cu): 16 dong «HONG app: tep <ten>
+      chay 0 lan (thieu tep)». Chieu do tren ban moi: ban sao bo chay loc bo keo-tha-thoa-thuan
+      -> do voi thong diep ghim "app: tep keo-tha-thoa-thuan.dom.tsx chay 0 lan".
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.bkd_du_tep_ui
+    paths:
+      - "packages/ui/package.json"
+      - "packages/ui/test/*.dom.tsx"
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
+    expected: |
+      Chay that `bun run test` trong packages/ui. Ma tran = tep *.dom.tsx duoi test/ dem bang find
+      (1 tep: board-giu-nguyen.dom.tsx, duoc ghim), moi tep 1 khang dinh nhu E1, cong ma thoat 0; cong 1 khang dinh
+      cac tep *.spec/*.test van chay: dem K tep bang find (bo node_modules), dau ra phai co mot
+      luot «Ran N tests across K files» voi N > 0.
+      CHIEU DO (da chay 2026-09-23 tren script cu): "ui: tep board-giu-nguyen.dom.tsx chay 0 lan
+      (thieu tep)". Chieu do ve spec: script ui chi con bo chay dom (bo `bun test` dau) ->
+      "ui: K tep spec khong con chay".
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.bkd_tep_moi
+    paths:
+      - "apps/app/package.json"
+      - "packages/ui/package.json"
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
+    expected: |
+      Moi che do co tep tam (E3, E4, E6, E7) dung mot BAN GUONG cua kho trong thu muc tam he thong:
+      moi muc noi bang symlink ve cay that, chi test/ cua hai goi, package.json/turbo.json cua cac
+      goi va packages/db/scripts/test-run.ts la ban that (turbo tu choi goi co package.json tro ra
+      ngoai goc; test-run tim goc theo vi tri that cua chinh no). Tep tam nam trong ban guong nen cay
+      that khong bao gio co tep do — cac phep do va bo kiem lon chay song song khong giam chan nhau.
+      Voi moi goi [app, ui]: tao tep tam test/zz-do-thu-<che-do>-<pid>.dom.tsx (mot bai xanh) trong
+      ban guong, chay lenh kiem cua goi o ban guong, khang dinh tep tam da chay, khong dong
+      «chay-dom: test/<tep> đỏ» nao xuat hien, va ma thoat 0. Ban
+      guong luon bi xoa (finally + SIGINT + SIGTERM). 2 goi x 3 = 6 khang dinh. Moi che do con khang
+      dinh them: khong co tep zz-do-thu-* trong test/ that cua hai goi, va moi ban guong da dung da bi
+      xoa.
+      CHIEU DO (da chay 2026-09-23 tren script cu): "app: tep moi zz-do-thu-... khong duoc chay"
+      va cung the cho ui.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.bkd_tep_do
+    paths:
+      - "apps/app/package.json"
+      - "packages/ui/package.json"
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
+    expected: |
+      Voi moi goi: tao tep tam co mot bai do trong ban guong (xem E3), chay lenh kiem, khang dinh ma
+      thoat khac 0 VA dong loi rieng cua bo chay «chay-dom: test/<tep> đỏ (mã N)» goi dung tep tam va
+      chi tep do (khong chi ten tep co mat, vi bo chay in ten moi tep truoc khi chay). 4 khang dinh. Doi chung duong: E3 cung tep tam nhung bai xanh -> ma 0.
+      CHIEU DO (da chay 2026-09-23 tren script cu): "app: tep do ma lenh van xanh". Tren ban moi:
+      ban sao bo chay khong dung o tep do (bo tra ma loi) -> "app: tep do ma lenh van xanh".
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.bkd_cach_ly
+    paths:
+      - "apps/app/package.json"
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
+    expected: |
+      Chay that `bun run test:dom` trong apps/app: so luot «Ran ... across K file» bang so tep
+      tren dia, moi luot K = 1, ma thoat 0 (ca 16 tep xanh khi chay rieng). Ma tran: 1 + so luot + 1.
+      CHIEU DO (da chay 2026-09-23 tren script cu): "app: 1 luot bun test cho 16 tep (khong moi tep
+      mot tien trinh)" va "app: luot 1 chay 14 tep chung mot tien trinh".
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.bkd_mui_gio
+    paths:
+      - "apps/app/package.json"
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
+    expected: |
+      Tao tep tam trong apps/app/test cua ban guong (xem E3) khang dinh do lech gio la +07 (getTimezoneOffset cua 01/01/2026 = -420, vi 1970 la +08; ICU
+      chuan hoa ten Asia/Ho_Chi_Minh thanh Asia/Saigon nen khong so ten), chay `bun run test:dom`,
+      khang dinh tep da chay va ma 0. 2 khang dinh.
+      Thuoc ep tien trinh cha chay o TZ=UTC, nen chi phan tu dat TZ cua chinh script moi lam no
+      xanh (may do o +07 se che mat loi neu khong ep).
+      CHIEU DO: ban sao script bo TZ -> "app: bai kiem DOM khong chay voi TZ=Asia/Ho_Chi_Minh".
+
+  - id: E7
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.bkd_goc
+    paths:
+      - "package.json"
+      - "turbo.json"
+      - "packages/db/scripts/test-run.ts"
+      - "apps/app/package.json"
+      - "packages/ui/package.json"
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
+    expected: |
+      Chay tu goc kho dung duong cua pre-push: `bun run test -- --filter=app --filter=@crm/ui --only`
+      (--only bo cac buoc ^build: nhieu luot prisma generate chong nhau lam tep DOM nap ma Prisma dang
+      bi ghi lai — do chap chon da bat duoc ngay 23/09; phan E7 can chung minh la nhat tep va truyen ma
+      loi, khong phai buoc dung). Chay tren ban guong (xem E3). Voi moi goi [app, ui]: tep tam xanh ->
+      ma 0, co dong «chay-dom» cua no, khong dong đỏ nao; tep tam do -> ma khac 0 va dong loi rieng
+      goi dung tep tam va chi tep do. 2 goi x 4 = 8 khang dinh, cong kiem khong sot.
+      CHIEU DO (da chay 2026-09-23 tren script cu): "app: tep xanh khong chay qua bun run test goc",
+      "app: tep do khong lam bun run test goc do" va cung the cho ui.
