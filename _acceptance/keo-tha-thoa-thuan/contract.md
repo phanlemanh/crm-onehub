@@ -5,7 +5,7 @@ slug: keo-tha-thoa-thuan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: machine-cleared
 design_doc: docs/superpowers/specs/2026-09-23-keo-tha-thoa-thuan-design.md
 approved_by: Manh Phan
 approved_at: 2026-09-23
@@ -68,3 +68,9 @@ Chân sản phẩm: Product Context dựng từ repo — `CONTEXT.md` (thoả th
 ## Notes
 
 - Không đụng quyền: bảng cột dùng đúng thủ tục `deals.setStage` mà menu giai đoạn đang dùng, nên ai đổi được giai đoạn ở dạng bảng thì đổi được ở bảng cột, không hơn không kém.
+- Known limits (Ngoài-1, Gate 2): hai tệp kiểm của bảng cột (`apps/app/test/keo-tha-thoa-thuan.dom.tsx`, `packages/ui/test/board-giu-nguyen.dom.tsx`) chưa nằm trong `bun run test`, nên lần kiểm trước khi đẩy code không chạy chúng; chỉ các lệnh nghiệm thu của hồ sơ này chạy.
+- Known limits (Ngoài-2, Gate 2): trong lúc lưu một lần kéo, số đếm đầu hai cột đứng yên và cột cũ hiện dòng «còn 1 thẻ» không có thật, tới khi bảng tải lại xong.
+- Known limits (Ngoài-3, Gate 2): bài kiểm «thả không gửi gì» (E9) hứa ba ca nhưng chỉ chạy hai; ca huỷ kéo giữa chừng chưa được thử.
+- Known limits (Ngoài-4, Gate 2): lời báo cho trình đọc màn hình (E23) chỉ được đo trên kho chuỗi, chưa đo trên thứ bảng cột thật sự đọc ra; phép đếm «6 khẳng định» là hằng đúng.
+- Known limits (Ngoài-5, Gate 2): phép đo số đầu cột (E22) so bằng `includes()` trên cả tiêu đề, nên chữ số của tổng tiền có thể làm nó đúng khi ô đếm sai.
+- Known limits (Ngoài-6, Gate 2): phát hiện về `the-loi-hoi-thoai.dom.tsx` thuộc một việc khác trên `onehub`, lọt vào vì mốc so sánh cũ; ghi lại, không sửa ở hồ sơ này.
