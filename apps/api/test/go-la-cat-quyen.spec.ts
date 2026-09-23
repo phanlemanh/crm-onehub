@@ -9,7 +9,7 @@ import {
 import type { AddressInfo } from "node:net";
 import { join } from "node:path";
 import { API_KEY_HEADER, auth, NOT_A_MEMBER } from "@crm/auth";
-import { db } from "@crm/db";
+import { db, type Prisma } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import type { AnyProcedure } from "@trpc/server";
@@ -17,6 +17,11 @@ import { hashPassword } from "better-auth/crypto";
 import { AppRouterHost } from "nestjs-trpc";
 import request from "supertest";
 import { z } from "zod";
+import {
+	cauXemTruoc,
+	DUOI_LUOT_DON,
+	sqlLuotDon,
+} from "../../../packages/db/scripts/luot-don-sql";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { createApp } from "../src/create-app";
 import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
@@ -29,6 +34,7 @@ const NGOAI_LE = ["sso.signInOptions", "workspace.get"] as const;
 const SAN_THU_TUC = 50;
 const SAN_DUONG_REST = 30;
 const THU_MUC_APP = join(import.meta.dir, "..", "..", "app");
+const MOC_THOI_CU = new Date("2020-01-01T00:00:00.000Z");
 
 const THU_TUC_MAU = [
 	{ ten: "contacts.list", input: {} },
@@ -232,6 +238,41 @@ async function khoaBat(keyId: string): Promise<boolean | null> {
 	return row.enabled;
 }
 
+async function taoKhoaTat(userId: string, name: string) {
+	const khoa = await taoKhoa(userId, name);
+	await db.apikey.update({ where: { id: khoa.id }, data: { enabled: false } });
+	return khoa;
+}
+
+function quaHeader(duong: string, key: string, body: object) {
+	return request(app.getHttpServer())
+		.post(duong)
+		.set(API_KEY_HEADER, key)
+		.set("content-type", "application/json")
+		.send(JSON.stringify(body));
+}
+
+class HoanTac extends Error {}
+
+async function chayRoiHoanTac<T>(
+	fn: (tx: Prisma.TransactionClient) => Promise<T>,
+): Promise<T> {
+	let ketQua: { gia: T } | null = null;
+	await db
+		.$transaction(
+			async (tx) => {
+				ketQua = { gia: await fn(tx) };
+				throw new HoanTac();
+			},
+			{ isolationLevel: "RepeatableRead" },
+		)
+		.catch((e: unknown) => {
+			if (!(e instanceof HoanTac)) throw e;
+		});
+	if (!ketQua) throw new Error("giao dich hoan tac khong tra ket qua");
+	return (ketQua as { gia: T }).gia;
+}
+
 async function don() {
 	const users = { startsWith: `${suffix}-` };
 	await db.apikey.deleteMany({ where: { referenceId: users } });
@@ -410,17 +451,20 @@ describe("go-la-cat-quyen", () => {
 		for (const k of [b1, b2])
 			if ((await khoaBat(k.id)) !== false) conBat.push(k.id);
 		expect(conBat, "khoa cua nguoi bi go van bat").toEqual([]);
+		const quaKhoaTat = await goiTrpc(
+			"contacts.list",
+			"query",
+			{},
+			{ [API_KEY_HEADER]: b1.key },
+		);
+		const xacMinh = await auth.api.verifyApiKey({ body: { key: b1.key } });
 		expect(
-			(
-				await goiTrpc(
-					"contacts.list",
-					"query",
-					{},
-					{ [API_KEY_HEADER]: b1.key },
-				)
-			).status,
-			"khoa da tat van doc duoc",
-		).not.toBe(200);
+			{
+				status: quaKhoaTat.status,
+				loiKhoa: xacMinh.error?.code ?? null,
+			},
+			"khoa da tat phai bi tu choi o tang khoa, khong phai o phep kiem tu cach",
+		).toEqual({ status: 401, loiKhoa: "KEY_DISABLED" });
 		expect([await khoaBat(c1.id), await khoaBat(c2.id)]).toEqual([true, true]);
 		expect(
 			(
@@ -455,19 +499,29 @@ describe("go-la-cat-quyen", () => {
 			.set("cookie", cookie)
 			.set("content-type", "application/json")
 			.send(JSON.stringify({ keyId: cu.id, enabled: true }));
+		const tuChoi = { status: 403, message: NOT_A_MEMBER };
 		expect(
 			{
-				quaTrpc: quaTrpc.status < 300,
-				quaAuth: quaAuth.status < 300,
-				batLai: batLai.status < 300,
+				quaTrpc: {
+					status: quaTrpc.status,
+					message: String(quaTrpc.body?.error?.message ?? ""),
+				},
+				quaAuth: {
+					status: quaAuth.status,
+					message: String(quaAuth.body?.message ?? ""),
+				},
+				batLai: {
+					status: batLai.status,
+					message: String(batLai.body?.message ?? ""),
+				},
 				soKhoa: await db.apikey.count({ where: { referenceId: bi } }),
 				cuBat: await khoaBat(cu.id),
 			},
-			`nguoi da bi go van tao hay bat lai duoc khoa (${quaTrpc.status}/${quaAuth.status}/${batLai.status})`,
+			"nguoi da bi go van tao hay bat lai duoc khoa, hoac bi tu choi vi ly do khac tu cach",
 		).toEqual({
-			quaTrpc: false,
-			quaAuth: false,
-			batLai: false,
+			quaTrpc: tuChoi,
+			quaAuth: tuChoi,
+			batLai: tuChoi,
 			soKhoa: 1,
 			cuBat: false,
 		});
@@ -501,6 +555,256 @@ describe("go-la-cat-quyen", () => {
 			(await dem()) - truoc3,
 			"he thong khong tao duoc khoa phia may chu khong kem phien",
 		).toBe(1);
+		const tatCuaChu = await taoKhoaTat(chu, "tv-tat");
+		const tvBatLai = await request(server)
+			.post("/api/auth/api-key/update")
+			.set("cookie", cookieChu)
+			.set("content-type", "application/json")
+			.send(JSON.stringify({ keyId: tatCuaChu.id, enabled: true }));
+		expect(
+			{ status: tvBatLai.status, bat: await khoaBat(tatCuaChu.id) },
+			"thanh vien khong bat lai duoc khoa cua chinh minh qua cong xac thuc",
+		).toEqual({ status: 200, bat: true });
+	});
+
+	test("header-tao-khoa: khoa con bat cua nguoi ngoai kho khong tao duoc khoa moi chi bang header", async () => {
+		const khoa = await taoKhoa(bi, "khoa-con-bat");
+		await db.member.delete({ where: { id: await memberId(bi) } });
+		expect(
+			await khoaBat(khoa.id),
+			"khoa phai con bat de tu choi khong den tu tang khoa",
+		).toBe(true);
+		const truoc = await db.apikey.count({ where: { referenceId: bi } });
+		const res = await quaHeader("/api/auth/api-key/create", khoa.key, {
+			name: "qua-header",
+		});
+		expect(
+			{
+				status: res.status,
+				message: String(res.body?.message ?? ""),
+				them: (await db.apikey.count({ where: { referenceId: bi } })) - truoc,
+			},
+			"POST /api/auth/api-key/create chi bang header khoa cua nguoi ngoai kho van qua",
+		).toEqual({ status: 403, message: NOT_A_MEMBER, them: 0 });
+	});
+
+	test("header-bat-lai-khoa: khoa con bat cua nguoi ngoai kho khong bat lai hay sua duoc khoa nao", async () => {
+		const conBat = await taoKhoa(bi, "khoa-con-bat");
+		const daTat = await taoKhoaTat(bi, "khoa-da-tat");
+		await db.member.delete({ where: { id: await memberId(bi) } });
+		const batLai = await quaHeader("/api/auth/api-key/update", conBat.key, {
+			keyId: daTat.id,
+			enabled: true,
+		});
+		const doiTen = await quaHeader("/api/auth/api-key/update", conBat.key, {
+			keyId: conBat.id,
+			name: "doi-ten-qua-header",
+		});
+		const ten = await db.apikey.findUniqueOrThrow({
+			where: { id: conBat.id },
+			select: { name: true },
+		});
+		expect(
+			{
+				batLai: {
+					status: batLai.status,
+					message: String(batLai.body?.message ?? ""),
+				},
+				doiTen: {
+					status: doiTen.status,
+					message: String(doiTen.body?.message ?? ""),
+				},
+				daTatVanTat: await khoaBat(daTat.id),
+				tenKhongDoi: ten.name,
+			},
+			"POST /api/auth/api-key/update chi bang header khoa cua nguoi ngoai kho van qua",
+		).toEqual({
+			batLai: { status: 403, message: NOT_A_MEMBER },
+			doiTen: { status: 403, message: NOT_A_MEMBER },
+			daTatVanTat: false,
+			tenKhongDoi: "khoa-con-bat",
+		});
+	});
+
+	test("header-lan-cookie: phep kiem hoi dung danh tinh ma endpoint se dung, khong phai cookie", async () => {
+		const khoaBi = await taoKhoa(bi, "khoa-con-bat");
+		await db.member.delete({ where: { id: await memberId(bi) } });
+		const cookieChu = await dangNhap(await datMatKhau(chu));
+		const dem = () =>
+			db.apikey.count({ where: { referenceId: { in: [bi, chu] } } });
+		const truoc = await dem();
+		const res = await request(app.getHttpServer())
+			.post("/api/auth/api-key/create")
+			.set("cookie", cookieChu)
+			.set(API_KEY_HEADER, khoaBi.key)
+			.set("content-type", "application/json")
+			.send(JSON.stringify({ name: "lan-cookie" }));
+		expect(
+			{
+				status: res.status,
+				message: String(res.body?.message ?? ""),
+				them: (await dem()) - truoc,
+			},
+			"cookie thanh vien che mat header khoa cua nguoi ngoai kho",
+		).toEqual({ status: 403, message: NOT_A_MEMBER, them: 0 });
+	});
+
+	test("header-doi-chung: thanh vien dung header khoa van tao va bat lai duoc khoa", async () => {
+		const khoa = await taoKhoa(chu, "khoa-chu");
+		const daTat = await taoKhoaTat(chu, "khoa-chu-tat");
+		const dem = () => db.apikey.count({ where: { referenceId: chu } });
+		const truoc = await dem();
+		const tao = await quaHeader("/api/auth/api-key/create", khoa.key, {
+			name: "tao-qua-header",
+		});
+		expect(
+			{ status: tao.status, them: (await dem()) - truoc },
+			"thanh vien khong tao duoc khoa chi bang header khoa",
+		).toEqual({ status: 200, them: 1 });
+		const batLai = await quaHeader("/api/auth/api-key/update", khoa.key, {
+			keyId: daTat.id,
+			enabled: true,
+		});
+		expect(
+			{ status: batLai.status, bat: await khoaBat(daTat.id) },
+			"thanh vien khong bat lai duoc khoa chi bang header khoa",
+		).toEqual({ status: 200, bat: true });
+		const truocHeThong = await dem();
+		await taoKhoa(chu, "he-thong");
+		expect(
+			(await dem()) - truocHeThong,
+			"he thong khong tao duoc khoa phia may chu khong kem phien",
+		).toBe(1);
+	});
+
+	test("don-mot-lan: luot don tat khoa con bat cua nguoi ngoai kho, khong cham khoa thanh vien", async () => {
+		const sql = sqlLuotDon();
+		const daChay = await db.$queryRawUnsafe<Array<{ n: bigint }>>(
+			`SELECT count(*) AS n FROM "_prisma_migrations" WHERE "migration_name" LIKE '%${DUOI_LUOT_DON}' AND "finished_at" IS NOT NULL AND "rolled_back_at" IS NULL`,
+		);
+		expect(
+			Number(daChay[0]?.n ?? 0),
+			"migrate deploy chua ap luot don len co so du lieu cua luot kiem",
+		).toBe(1);
+		const b1 = await taoKhoa(bi, "b1");
+		const b2 = await taoKhoa(bi, "b2");
+		await db.apikey.update({ where: { id: b2.id }, data: { enabled: null } });
+		const b3 = await taoKhoaTat(bi, "b3");
+		await db.apikey.update({
+			where: { id: b3.id },
+			data: { updatedAt: MOC_THOI_CU },
+		});
+		const c1 = await taoKhoa(chu, "c1");
+		const c2 = await taoKhoa(chu, "c2");
+		await db.apikey.update({ where: { id: c2.id }, data: { enabled: null } });
+		await db.member.delete({ where: { id: await memberId(bi) } });
+		const ids = [b1.id, b2.id, b3.id, c1.id, c2.id];
+		const truoc = await db.apikey.findMany({
+			where: { id: { in: ids } },
+			select: { id: true, referenceId: true, enabled: true },
+			orderBy: { name: "asc" },
+		});
+		expect(
+			truoc.map((h) => [h.referenceId, h.enabled]),
+			"khuon khoa do writer that ghi lech gia dinh cua luot don",
+		).toEqual([
+			[bi, true],
+			[bi, null],
+			[bi, false],
+			[chu, true],
+			[chu, null],
+		]);
+		const sau = await chayRoiHoanTac(async (tx) => {
+			await tx.$executeRawUnsafe(sql);
+			const hang = await tx.apikey.findMany({
+				where: { id: { in: ids } },
+				select: { id: true, enabled: true, updatedAt: true },
+			});
+			const theo = new Map(hang.map((h) => [h.id, h]));
+			return {
+				b1: theo.get(b1.id)?.enabled,
+				b2: theo.get(b2.id)?.enabled,
+				b3: {
+					enabled: theo.get(b3.id)?.enabled,
+					updatedAt: theo.get(b3.id)?.updatedAt.toISOString(),
+				},
+				c1: theo.get(c1.id)?.enabled,
+				c2: theo.get(c2.id)?.enabled,
+				soKhoaBi: await tx.apikey.count({ where: { referenceId: bi } }),
+			};
+		});
+		expect(
+			sau,
+			"luot don lech: khoa nguoi ngoai kho con bat, khoa da tat bi de, khoa thanh vien bi cham, hoac dong khoa bi xoa",
+		).toEqual({
+			b1: false,
+			b2: false,
+			b3: { enabled: false, updatedAt: MOC_THOI_CU.toISOString() },
+			c1: true,
+			c2: null,
+			soKhoaBi: 3,
+		});
+	});
+
+	test("don-bang-rong: kho chua ai ghi danh thi luot don khong tat khoa nao", async () => {
+		const sql = sqlLuotDon();
+		const b1 = await taoKhoa(bi, "b1");
+		const b2 = await taoKhoa(bi, "b2");
+		await db.apikey.update({ where: { id: b2.id }, data: { enabled: null } });
+		const c1 = await taoKhoa(chu, "c1");
+		const sau = await chayRoiHoanTac(async (tx) => {
+			await tx.member.deleteMany({ where: { organizationId: WORKSPACE_ID } });
+			await tx.$executeRawUnsafe(sql);
+			const hang = await tx.apikey.findMany({
+				where: { id: { in: [b1.id, b2.id, c1.id] } },
+				select: { id: true, enabled: true },
+			});
+			const theo = new Map(hang.map((h) => [h.id, h.enabled]));
+			return {
+				b1: theo.get(b1.id),
+				b2: theo.get(b2.id),
+				c1: theo.get(c1.id),
+			};
+		});
+		expect(
+			sau,
+			"luot don tat khoa khi bang thanh vien rong — lan ghi danh dau se mat het khoa",
+		).toEqual({ b1: true, b2: null, c1: true });
+	});
+
+	test("xem-truoc-dung-so: lenh xem truoc dem dung so khoa ma luot don se tat", async () => {
+		const sql = sqlLuotDon();
+		const b1 = await taoKhoa(bi, "b1");
+		const b2 = await taoKhoa(bi, "b2");
+		await db.apikey.update({ where: { id: b2.id }, data: { enabled: null } });
+		await taoKhoa(chu, "c1");
+		await db.member.delete({ where: { id: await memberId(bi) } });
+		const ketQua = await chayRoiHoanTac(async (tx) => {
+			const [xemTruoc] = await tx.$queryRawUnsafe<
+				Array<{ khoa: number; chu: number; dungGanDay: number }>
+			>(cauXemTruoc(sql));
+			const daDoi = await tx.$executeRawUnsafe(sql);
+			const conLai = await tx.$queryRawUnsafe<Array<{ khoa: number }>>(
+				cauXemTruoc(sql),
+			);
+			const cuaBi = await tx.apikey.count({
+				where: { id: { in: [b1.id, b2.id] }, enabled: false },
+			});
+			return { xemTruoc, daDoi, conLai: conLai[0]?.khoa, cuaBi };
+		});
+		expect(
+			{
+				khopSoDong: ketQua.xemTruoc?.khoa === ketQua.daDoi,
+				conLai: ketQua.conLai,
+				cuaBi: ketQua.cuaBi,
+			},
+			`xem truoc dem ${ketQua.xemTruoc?.khoa} khoa, luot don doi ${ketQua.daDoi} dong`,
+		).toEqual({ khopSoDong: true, conLai: 0, cuaBi: 2 });
+		expect(
+			ketQua.xemTruoc?.khoa ?? 0,
+			"xem truoc khong thay khoa nao cua co lieu",
+		).toBeGreaterThanOrEqual(2);
+		expect(ketQua.xemTruoc?.chu ?? 0).toBeGreaterThanOrEqual(1);
 	});
 
 	test("cho-phep-lai: duoc cho phep lai thi doc lai duoc, khoa cu van tat", async () => {
