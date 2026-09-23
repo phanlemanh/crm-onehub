@@ -20,12 +20,14 @@
 		"./images": "./src/images.ts",
 		"./idempotency": "./src/idempotency.ts",
 		"./json": "./src/json.ts",
+		"./kenh-thong-bao": "./src/kenh-thong-bao.ts",
 		"./onboarding-nhac": "./src/onboarding-nhac.ts",
 		"./safe-fetch": "./src/safe-fetch.ts",
 		"./settings": "./src/settings.ts",
 		"./slack-inventory": "./src/slack-inventory.ts",
 		"./tracking": "./src/tracking.ts",
-		"./workspace": "./src/workspace.ts"
+		"./workspace": "./src/workspace.ts",
+		"./zalo-lien-ket": "./src/zalo-lien-ket.ts"
 	},
 	"scripts": {
 		"build": "prisma generate",

@@ -32,7 +32,7 @@
   - Lỗi có dạng `{ ok: false, error_code, description }`.
 - **`[GIẢ ĐỊNH]` khi không có tin mới:** `getUpdates` trả `ok:false` với `error_code` 408, hoặc `ok:true` không có `result`. Cả hai đọc là «hết tin». Mọi hình dạng khác là lỗi thật, ghi log và không nuốt.
 - **Nhãn dữ liệu không dịch:** tên bot (`account_name`), tên hiển thị Zalo và tên người mang `translate="no"`.
-- **Nhãn trang cá nhân:** đề xuất đổi thành «Nhắc buổi sáng của bạn», chờ duyệt ở Cổng 1.5. Lý do: `CONTEXT.md` đã cấm chữ «thông báo», vì trong kho không có chuông thông báo nào. Chữ nằm ở một khoá message (`thanhBen.nhacCuaBan`), nên nếu bị bác thì chỉ đổi một dòng.
+- **Nhãn trang cá nhân: «Thông báo của bạn»** (en «Your notifications»), đúng hợp đồng đã duyệt. Cổng 1.5 không duyệt đề xuất đổi nhãn. Chữ nằm ở khoá `thanhBen.thongBaoCuaBan`, nên nếu người quyết đổi sau thì chỉ sửa một dòng.
 - **Mục mới trên thanh bên Cài đặt** đứng **trước** «Điều phối». `test/cai-dat-dieu-huong.spec.ts:22` đòi «Điều phối» đứng cuối.
 - **Mọi test DOM mới** phải được thêm vào chuỗi `test:dom` của `apps/app/package.json`. `bun test` trơn không nhặt đuôi `.dom.tsx`.
 - **Test API chạy qua HTTP có phiên thật** thì không được `setSystemTime` xa hơn hạn phiên. `mintPhien` đặt hạn bằng `Date.now()` cộng 7 ngày. Hãy mint lại phiên sau khi đổi giờ, hoặc chỉ đổi giờ ở tầng gọi thẳng service.
@@ -562,7 +562,7 @@ export const ZALO = {
 	tranKyTu: 2_000,
 	loi: {
 		huongDan:
-			"Chào bạn. Để nhận nhắc việc, mở CRM › Cài đặt › Nhắc buổi sáng của bạn, bấm «Nối Zalo» rồi nhắn mã 6 số ở đây.",
+			"Chào bạn. Để nhận nhắc việc, mở CRM › Cài đặt › Thông báo của bạn, bấm «Nối Zalo» rồi nhắn mã 6 số ở đây.",
 		daNoi: (ten: string) =>
 			`Đã nối với ${ten}. Mỗi sáng tôi gửi việc cần để ý ở đây.`,
 	},
@@ -1270,8 +1270,8 @@ Các khối `go-zalo`, `luu-uu-tien`, `trang-thai` và `trang-thai-lien-ket` vi�
   - `.../connections/zalo/danh-sach-noi.tsx`
   - `apps/app/test/nhac-qua-zalo.dom.tsx`
 - Modify:
-  - `apps/app/lib/cai-dat-dieu-huong.ts`: thêm `{ khoa: "nhacCuaBan", href: \`${GOC_CAI_DAT}/notifications\` }` **trước** `dieuPhoi`
-  - `apps/app/lib/messages/settings.ts`: `thanhBen.nhacCuaBan` en `"Your reminders"`, vi `"Nhắc buổi sáng của bạn"`
+  - `apps/app/lib/cai-dat-dieu-huong.ts`: thêm `{ khoa: "thongBaoCuaBan", href: \`${GOC_CAI_DAT}/notifications\` }` **trước** `dieuPhoi`
+  - `apps/app/lib/messages/settings.ts`: `thanhBen.thongBaoCuaBan` en `"Your notifications"`, vi `"Thông báo của bạn"`
   - `apps/app/lib/messages/settings-ket-noi.ts`:
     - `ten.zalo`
     - `danhSach.zaloMangVe`, `danhSach.zaloGui`, `danhSach.zaloKhoiDau`
@@ -1324,7 +1324,7 @@ test("chon-kenh-man: truoc khi noi, Zalo va Slack khoa co ly do", async () => {
   - `bun run check-types`
   - `bun run build`
   - Các đột biến ghim ở E14, E16, E20, E22, E23
-- [ ] **Step 5: Commit.** `feat(nhac-qua-zalo): trang nhac buoi sang cua ban va trang ket noi Zalo`.
+- [ ] **Step 5: Commit.** `feat(nhac-qua-zalo): trang thong bao cua ban va trang ket noi Zalo`.
 
 ---
 

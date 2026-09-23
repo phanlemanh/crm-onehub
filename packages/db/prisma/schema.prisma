@@ -54,9 +54,12 @@ model User {
 
   apiKeys Apikey[]
 
-  onboardingPlansOwned    OnboardingPlan[]  @relation("OnboardingPlanOwner")
-  onboardingStepsAssigned OnboardingStep[]  @relation("OnboardingStepAssignee")
+  onboardingPlansOwned    OnboardingPlan[]        @relation("OnboardingPlanOwner")
+  onboardingStepsAssigned OnboardingStep[]        @relation("OnboardingStepAssignee")
   onboardingWatches       OnboardingWatch[]
+  zaloLink                ZaloLink?
+  zaloLinkCode            ZaloLinkCode?
+  notificationPreference  NotificationPreference?
 
   @@unique([email])
   @@map("user")
@@ -1216,11 +1219,11 @@ model Activity {
   completedAt DateTime?
 
   companyId String?
-  company   Company? @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  company   Company?        @relation(fields: [companyId], references: [id], onDelete: Cascade)
   contactId String?
-  contact   Contact? @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  contact   Contact?        @relation(fields: [contactId], references: [id], onDelete: Cascade)
   dealId    String?
-  deal      Deal?    @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  deal      Deal?           @relation(fields: [dealId], references: [id], onDelete: Cascade)
   planId    String?
   plan      OnboardingPlan? @relation(fields: [planId], references: [id], onDelete: Cascade)
 
@@ -1425,6 +1428,9 @@ model AppSetting {
   trackingCookieDays       Int     @default(395)
   trackingConfigHash       String?
   trackingPaused           Boolean @default(false)
+
+  zaloBotName  String?
+  zaloPolledAt DateTime?
 
   updatedAt DateTime @updatedAt
 
@@ -1759,6 +1765,61 @@ model OnboardingWatch {
   @@unique([planId, userId])
   @@index([userId])
   @@map("onboardingWatch")
+}
+
+enum NotificationChannel {
+  AUTO
+  ZALO
+  SLACK
+}
+
+model ZaloLink {
+  id              String   @id @default(cuid())
+  crmUserId       String   @unique
+  crmUser         User     @relation(fields: [crmUserId], references: [id], onDelete: Cascade)
+  zaloUserId      String   @unique
+  zaloDisplayName String
+  linkedAt        DateTime @default(now())
+
+  @@map("zaloLink")
+}
+
+model ZaloLinkCode {
+  id        String    @id @default(cuid())
+  crmUserId String    @unique
+  crmUser   User      @relation(fields: [crmUserId], references: [id], onDelete: Cascade)
+  codeHash  String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@map("zaloLinkCode")
+}
+
+model ZaloLinkAttempt {
+  zaloUserId      String   @id
+  failures        Int      @default(0)
+  windowStartedAt DateTime
+
+  @@map("zaloLinkAttempt")
+}
+
+model ZaloUpdateSeen {
+  messageId String   @id
+  seenAt    DateTime @default(now())
+
+  @@index([seenAt])
+  @@map("zaloUpdateSeen")
+}
+
+model NotificationPreference {
+  id        String              @id @default(cuid())
+  userId    String              @unique
+  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channel   NotificationChannel @default(AUTO)
+  updatedAt DateTime            @updatedAt
+
+  @@map("notificationPreference")
 }
 
 model OnboardingStep {
