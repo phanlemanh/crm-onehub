@@ -217,6 +217,40 @@ evals:
       Chuyen khuon 2026-09-23 (ho so tieu-de-cot-doc-tron, nguoi chon mo lai): lenh cu chay
       nguyen van o dinh ed30103e — ma 0.
 
+  - id: E11
+    criterion: AC-7
+    cau_hoi: Trên trang thật ở 768px, tiêu đề cột dài hơn cột có bị cắt kèm dấu ba chấm, và ô tiêu đề có mang chữ đầy đủ cho trình đọc màn hình?
+    cach_do: >-
+      Chrome thật trên máy chủ dev của cây đang xét (canhCay chặn cây khác, mã 2),
+      qua tiền đề làn đo. Mở /deals ở 768px, vi và en; lấy tiêu đề «Phụ trách» /
+      «Owner» từ hàm dealMessages thật, thay nút chữ của nhãn bằng chính nó lặp 8
+      lần để chắc chắn dài hơn cột; khẳng định nhãn bị cắt (scrollHeight >
+      clientHeight), -webkit-line-clamp là 2 và overflow hidden — và thuộc tính
+      title của ô tiêu đề bằng đúng nhãn gốc. Hai tiếng × hai khẳng định = 4.
+    chieu_do: >-
+      Gỡ lớp cắt-kèm-ba-chấm khỏi nhãn: phép đo phải đỏ với «tieu de dai khong cat
+      bang dau ba cham». Gỡ title khỏi ô tiêu đề: phép đo phải đỏ với «title cua o
+      tieu de la «null»».
+    lenh: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-dung-chung-nhan-chuoi/rang/cat-ba-cham.mjs"
+    executor: script
+    cmd: config:executors.script.bdc_cat_ba_cham
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/src/components/table.tsx"
+      - "apps/app/app/(app)/[slug]/deals/deals-table.tsx"
+      - "apps/app/lib/messages/deals.ts"
+      - "_acceptance/bo-dung-chung-nhan-chuoi/rang/cat-ba-cham.mjs"
+    expected: |
+      Ma 0, dong `khang-dinh=4/4`, hai dong `dat  deals@768/<tieng> cat=true line-clamp=2
+      title=«<nhan goc>»` (evidence/cat-ba-cham-xanh.txt, 2026-09-23). Them 2026-09-23 vi
+      vong cham 2 cua tieu-de-cot-doc-tron (Ngoai-5, nguoi chon mo hop dong moi): E7 chi
+      soi ten lop line-clamp-2 trong markup SSR, khong do dau ra tren trang that.
+      CHIEU DO (da chay 2026-09-23 bang lenh cua eval nguyen van,
+      evidence/cat-ba-cham-chieu-do.txt): (1) HEAD_LABEL_CLAMP = "" -> ma 1,
+      `deals@768/vi tieu de dai khong cat bang dau ba cham: cat=false line-clamp=none`;
+      (2) bo title={columnLabel(column)} khoi TableHead -> ma 1,
+      `deals@768/vi title cua o tieu de la «null», mong «Phụ trách»`.
+
   - id: E10
     criterion: AC-10
     cau_hoi: Chữ đọc như tiếng Việt của người trong nghề?
