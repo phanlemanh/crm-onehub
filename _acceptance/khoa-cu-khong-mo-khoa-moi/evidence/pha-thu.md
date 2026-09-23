@@ -24,3 +24,16 @@ Lệnh: `bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -
 Mã thoát: 1 · 0 pass 1 fail
 
 - `khoa-moi` đỏ — «nguoi da bi go van tao hay bat lai duoc khoa, hoac bi tu choi vi ly do khac tu cach»: quaAuth và batLai nhận {200, ""}, soKhoa 2, cuBat true.
+
+## P3–P8 — lượt dọn và lệnh xem trước (E5, E6, E9)
+
+Lệnh chung: `bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t 'don-|xem-truoc'"` — mỗi lượt dựng cơ sở dữ liệu riêng bằng `migrate deploy`, nên SQL đột biến chính là SQL được áp. Trước mọi lượt: 3 pass 0 fail. Hoàn nguyên bằng bản chép, `diff` rỗng.
+
+| Lượt | Thay đổi tạm | Mã thoát | Kết quả | Dòng thông điệp ghim |
+|---|---|---|---|---|
+| P3 | bỏ vế `NOT EXISTS` | 1 |  2 pass  1 fail  | «luot don lech: … khoa thanh vien bi cham …» — c1 false, c2 false |
+| P4 | bỏ vế `EXISTS` (chốt bảng rỗng) | 1 |  2 pass  1 fail  | «luot don tat khoa khi bang thanh vien rong — lan ghi danh dau se mat het khoa» — b1, b2, c1 false |
+| P5 | `IS DISTINCT FROM false` → `= true` | 1 |  1 pass  2 fail  | «luot don lech …» — b2 còn null; «xem truoc dem 1 khoa, luot don doi 1 dong» — cuaBi 1 |
+| P6 | bộ rút mệnh đề chỉ lấy dòng đầu của WHERE | 1 |  2 pass  1 fail  | «xem truoc dem 3 khoa, luot don doi 2 dong» — khopSoDong false, conLai 1 |
+| P7 | `UPDATE … SET` → `DELETE FROM "apikey"` | 1 |  1 pass  2 fail  | «luot don lech … dong khoa bi xoa» — soKhoaBi 1; «migration luot don khong co dang UPDATE "apikey" ... WHERE ...» |
+| P8 | bỏ hẳn lọc `enabled` | 1 |  1 pass  2 fail  | «luot don lech: … khoa da tat bi de …» — updatedAt của b3 bị đè; «xem truoc dem 2 khoa, luot don doi 2 dong» — conLai 2 |
