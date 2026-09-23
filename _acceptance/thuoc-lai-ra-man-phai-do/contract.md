@@ -5,9 +5,9 @@ slug: thuoc-lai-ra-man-phai-do
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: implemented
-approved_by: Manh Phan
-approved_at: 2026-09-12T20:41:08Z
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-09-12-thuoc-lai-ra-man-phai-do-design.md
 veto_state: mo
 veto_opened_at: 2026-09-12T05:47:24Z
@@ -59,13 +59,6 @@ ra cây bẩn ở hồ sơ khác)
   Then không file nào dưới `_acceptance/chan-lai-component-ra-man/evidence/`
   bị sửa — bản vẽ của lượt chạy đi vào chỗ tạm; chỉ lệnh thước gọi có chủ đích
   mới ghi đè bằng chứng. (cross-layer)
-- AC-6: Given mỗi phép đo mới của vòng này, When chạy trên bản sao có vật bị
-  phá (một component bị xoá, một trạng thái bị hỏng, bộ vẽ bị làm nổ), Then
-  phép đo ĐỎ với thông điệp ghim tên ca; và trên bản nguyên vẹn thì XANH
-  trước — đối chứng dương chạy trước chiều đỏ trong cùng một ca. Bằng chứng
-  của cặp là MÃ THOÁT quan sát được ở từng chiều cộng nguyên văn thông điệp
-  bắt được, không phải dòng chữ ca tự khai đã chạy.
-
 - AC-7: Given thước đã sửa và bản vẽ đã dời sang chỗ tạm, When chạy đúng LỆNH
   CỔNG của kho (không gọi thẳng script) trên bản sao có một component bị phá,
   Then lệnh cổng thoát khác 0 với thông điệp ghim tên ca — dây nối giữa cổng
@@ -74,13 +67,15 @@ ra cây bẩn ở hồ sơ khác)
 ## Coverage
 
 - Trục chỗ hỏng: danh sách lệch nguồn (AC-1) | phân loại lỗi (AC-2) | bộ vẽ chết (AC-3) | câu khẳng định luôn đúng (AC-4) [thước CE: bốn lỗ đo được của vấp 12/09, mỗi lỗ đúng một AC]
-- Trục hướng lọt: im lặng không ai đỏ (AC-1, AC-2, AC-3, AC-4) | ồn sai đỏ nhầm (AC-6 bằng đối chứng dương) [thước CE: lưới chỉ có chiều đỏ sẽ đỏ cả khi vật lành]
+- Trục hướng lọt: im lặng không ai đỏ (AC-1, AC-2, AC-3, AC-4) | ồn sai đỏ nhầm — bỏ khỏi hợp đồng cùng AC-6, xem `d-20260923T105729Z-12` [thước CE: lưới chỉ có chiều đỏ sẽ đỏ cả khi vật lành]
 - Trục tác dụng phụ: bẩn cây (AC-5) | nuốt bằng chứng hồ sơ khác (AC-5) [thước CE: ba lượt ghi đè đo được trong một phiên]
-- Trục sức sống của thước: có chiều đỏ (AC-6) | cặp đo bằng mã thoát chứ không bằng lời tự khai (AC-6) [thước CE: ca in hai dòng mốc vô điều kiện phải trượt]
+- Trục sức sống của thước: bỏ khỏi hợp đồng — AC-6 cũ (cặp hai chiều của chính bộ đo) đã descope, xem `d-20260923T105729Z-12` [thước CE: ca in hai dòng mốc vô điều kiện phải trượt]
 - Trục dây nối: thước còn được lệnh cổng gọi sau khi đường bản vẽ đổi chỗ (AC-7) [thước CE: thước đỏ-được mà không ai gọi = y hệt trước vòng này]
 
 ## Out of scope
 
+- Không đo thước của thước: AC-6 cũ (cặp hai chiều của chính bộ đo) bỏ khỏi
+  hợp đồng theo luật chiều rộng (a) của kit — xem `d-20260923T105729Z-12`.
 - Không sửa hợp đồng, bằng chứng hay chữ ký của `chan-lai-component-ra-man`
   (ký 06/09) — hồ sơ đã ký không kéo vào diff; vòng này chỉ đụng `rang/*.mjs`
   và bộ ca.

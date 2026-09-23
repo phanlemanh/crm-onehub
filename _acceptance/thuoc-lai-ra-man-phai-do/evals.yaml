@@ -103,23 +103,6 @@ evals:
       `_acceptance/chan-lai-component-ra-man/evidence/` -> ma 0.
       Ca ba manh cung mot fixture: cung ban sao, cung lan dung.
 
-  - id: E6
-    criterion: AC-6
-    executor: script
-    cmd: config:executors.script.tlr_cap_hai_chieu
-    paths:
-      - "_acceptance/thuoc-lai-ra-man-phai-do/rang/**"
-    expected: |
-      Do QUAN HE, khong do chuoi co mat trong loi tu xung cua ca. Moi ca E1..E5 va
-      E7 phai phat ra BA so lieu may doc duoc: ma thoat quan sat o chieu duong ·
-      ma thoat quan sat o chieu do · nguyen van thong diep bat duoc o chieu do.
-      Assert tung ca: ma chieu duong = 0 · ma chieu do KHAC 0 · thong diep chieu do
-      CHUA dung nhan ca da khai (MOT-NGUON, SAN-KHUON, HONG-MOT-CHIEU, BO-VE-CHET,
-      DEM-DU, KHONG-BAN-CAY, QUA-CONG). Lech mot o -> ma 1 goi ten ca va o lech.
-      Chieu do cua chinh E6: VO HIEU phep tiem cua MOT ca trong ban sao sao cho
-      ban-tiem TRUNG ban-goc -> ca do bao ma chieu-do = 0 -> E6 PHAI ma 1 va goi
-      dung ten ca do. Mot ca in hai dong moc vo dieu kien khong the qua E6 nua.
-
   - id: E7
     criterion: AC-7
     executor: script
