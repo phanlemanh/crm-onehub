@@ -5,7 +5,7 @@ slug: go-la-cat-quyen-that
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [auth, api, app]
-status: implemented
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-09-23
 design_doc: docs/superpowers/specs/2026-09-23-go-la-cat-quyen-that-design.md

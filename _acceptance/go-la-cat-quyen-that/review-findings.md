@@ -1,25 +1,23 @@
 ## Trong hợp đồng
 
-- **Hình dạng 5, quét lớp có lỗ: ma trận REST miễn luôn PATCH /rest/workspace (workspace.update) vì so ngoại lệ chỉ theo đường, không theo phương thức**
-  file: `apps/api/test/go-la-cat-quyen.spec.ts:180`
-  severity: high
-  AC: AC-5
-  source: measurement
-  detail: laNgoaiLeRest (dòng 180-183) lấy `h.ten.split(" ")[1]`, tức chỉ phần đường, rồi so với ngoaiLeRest(). Nhưng workspace.get khai restMeta("GET", "/workspace") và workspace.update khai restMeta("PATCH", "/workspace") (workspace.router.ts dòng 41 và 63), nên hai hàng dùng chung đường /rest/workspace. Vì vậy hàng `PATCH /rest/workspace` bị coi là ngoại lệ và hangLot(rest, laNgoaiLeRest) ở dòng 384 không bao giờ xét nó. E5 hứa mọi đường ngoài tập ngoại lệ đều trả 403 kèm NOT_A_MEMBER. Thực tế, một khoá API còn bật của người ngoài kho có gọi được PATCH /rest/workspace (đổi thông tin kho) hay không thì bài vẫn xanh. Ma trận nói là quét toàn phần nhưng lặng lẽ để sót một thủ tục ghi. Ngoại lệ phải so theo cặp (phương thức, đường), ví dụ lấy từ soThuTuc() cả method lẫn restPath.
-  rationale: Kịch bản đúng Given của AC-5 (khoá API còn bật của người không còn là thành viên) và đúng vế Then về cầu REST, nhưng lỗ khớp ngoại lệ khiến bài kiểm không thực sự đo được đường ghi PATCH /rest/workspace mà AC-5 hứa phải từ chối.
-
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **The API key endpoint check can be bypassed by sending an API key instead of a cookie**
-  Người dùng thấy gì: Người đã bị gỡ khỏi không gian làm việc nhưng còn giữ một khoá truy cập (API key) cũ vẫn có thể dùng khoá đó để tự tạo khoá truy cập mới, hoặc bật lại một khoá cũ đã bị khoá — dù họ không còn là thành viên.
+- **The API key endpoint check does not see an API-key session, so a non-member holding an enabled key can still create or re-enable keys through Better Auth**
+  Người dùng thấy gì: Một người đã bị gỡ khỏi không gian làm việc nhưng còn giữ khoá API cũ chưa bị tắt vẫn có thể tự tạo khoá mới hoặc tự bật lại khoá cũ mà không cần đăng nhập lại, tức là vẫn mở được đường truy cập mới sau khi đã bị gỡ.
   file: `packages/auth/src/canh-khoa-api.ts`
   severity: medium
   Đề xuất: new-contract
 
-- **Hình dạng 5, phép đếm hàng là hằng đúng: hang.length so với chính nguồn sinh ra nó**
-  Người dùng thấy gì: Nếu sau này ai đó vô tình bỏ sót một chức năng khỏi vòng kiểm tra quyền truy cập, hệ thống kiểm tra tự động hiện tại có thể không phát hiện ra, vì phép đếm chỉ đối chiếu với chính nó chứ không đối chiếu độc lập với danh sách chức năng thật.
+- **Hinh dang 4 (kiem am mot minh): ma khac 200 cua khoa da tat thuc ra do phep kiem tu cach sinh ra, khong phai do khoa bi tat**
+  Người dùng thấy gì: Neu sau nay tinh nang tat khoa bi hong rieng le, bo bai kiem hien tai co the khong bat duoc loi do, khien nguoi da bi go van con dung duoc khoa cu ma khong ai phat hien kip thoi.
+  file: `apps/api/test/go-la-cat-quyen.spec.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hinh dang 4 (kiem am mot minh): loi goi bat lai khoa (batLai) chi kiem 'khong 2xx', khong co doi chung duong va khong ghim thong diep**
+  Người dùng thấy gì: Neu duong bat lai khoa cu sau nay bi hong vi mot ly do khac, bo bai kiem hien tai co the van bao xanh nham, khien loi that khong duoc phat hien som.
   file: `apps/api/test/go-la-cat-quyen.spec.ts`
   severity: low
   Đề xuất: known-limits
