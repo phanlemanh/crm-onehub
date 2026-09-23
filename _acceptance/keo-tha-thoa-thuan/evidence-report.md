@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6febb34a493260b406b52d044531151bd90b674b
+verified_commit: bfccc1371797251068e59a4f7fc3c1cef638c8d4
 human_signoff: 
 ---
 
@@ -366,3 +366,7 @@ deals.meta.notCounted và luật "disclosed not zeroed" cho cột tổng tiền 
 Quay lại triển khai để khớp ma trận mở rộng.
 Round 2 (hiện tại): toàn bộ 23 eval + 4 lệnh suite hồi quy đều xanh trên ma trận đã mở
 rộng — không phát sinh vòng tiếp theo.
+
+### Re-pin lần 1 — 2026-09-23, do kéo onehub ae50f942 vào qua #93 — không chạm vùng đo nhìn-thấy
+run_id: repin-20260923T123409Z-31199
+sha: bfccc1371797251068e59a4f7fc3c1cef638c8d4 · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng
