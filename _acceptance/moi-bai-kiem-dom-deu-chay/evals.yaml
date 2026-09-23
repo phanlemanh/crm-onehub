@@ -12,8 +12,10 @@ evals:
       - "packages/ui/test/chay-tung-tep-dom.ts"
       - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
     expected: |
-      Chay that `bun run test:dom` trong apps/app. Ma tran = danh sach tep test/*.dom.tsx doc
-      tu dia (16 tep ngay 23/09), moi tep 1 khang dinh: tep co dong «chay-dom: test/<tep>» va
+      Chay that `bun run test:dom` trong apps/app. Ma tran = danh sach tep *.dom.tsx duoi test/ dem
+      bang `find` (de quy, doc lap voi cach bo chay liet ke; 16 tep ngay 23/09), cong 2 khang dinh
+      ghim hai tep AC-1 goi ten (keo-tha-thoa-thuan, may-nhac) con tren dia; moi tep 1 khang dinh:
+      tep co dong «chay-dom: test/<tep>» va
       doan cua no co «Ran N tests across 1 file» voi N > 0, dung mot lan; cong 1 khang dinh ma
       thoat 0. Thu muc khong co tep nao -> ma 2.
       CHIEU DO (da chay 2026-09-23 tren script danh sach tay cu): 16 dong «HONG app: tep <ten>
@@ -30,8 +32,8 @@ evals:
       - "packages/ui/test/chay-tung-tep-dom.ts"
       - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
     expected: |
-      Chay that `bun run test` trong packages/ui. Ma tran = tep test/*.dom.tsx tren dia (1 tep:
-      board-giu-nguyen.dom.tsx), moi tep 1 khang dinh nhu E1, cong ma thoat 0; cong 1 khang dinh
+      Chay that `bun run test` trong packages/ui. Ma tran = tep *.dom.tsx duoi test/ dem bang find
+      (1 tep: board-giu-nguyen.dom.tsx, duoc ghim), moi tep 1 khang dinh nhu E1, cong ma thoat 0; cong 1 khang dinh
       cac tep *.spec/*.test van chay: dem K tep bang find (bo node_modules), dau ra phai co mot
       luot «Ran N tests across K files» voi N > 0.
       CHIEU DO (da chay 2026-09-23 tren script cu): "ui: tep board-giu-nguyen.dom.tsx chay 0 lan
@@ -54,8 +56,9 @@ evals:
       ngoai goc; test-run tim goc theo vi tri that cua chinh no). Tep tam nam trong ban guong nen cay
       that khong bao gio co tep do — cac phep do va bo kiem lon chay song song khong giam chan nhau.
       Voi moi goi [app, ui]: tao tep tam test/zz-do-thu-<che-do>-<pid>.dom.tsx (mot bai xanh) trong
-      ban guong, chay lenh kiem cua goi o ban guong, khang dinh tep tam da chay va ma thoat 0. Ban
-      guong luon bi xoa (finally + SIGINT + SIGTERM). 2 goi x 2 = 4 khang dinh. Moi che do con khang
+      ban guong, chay lenh kiem cua goi o ban guong, khang dinh tep tam da chay, khong dong
+      «chay-dom: test/<tep> đỏ» nao xuat hien, va ma thoat 0. Ban
+      guong luon bi xoa (finally + SIGINT + SIGTERM). 2 goi x 3 = 6 khang dinh. Moi che do con khang
       dinh them: khong co tep zz-do-thu-* trong test/ that cua hai goi, va moi ban guong da dung da bi
       xoa.
       CHIEU DO (da chay 2026-09-23 tren script cu): "app: tep moi zz-do-thu-... khong duoc chay"
@@ -71,8 +74,9 @@ evals:
       - "packages/ui/test/chay-tung-tep-dom.ts"
       - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
     expected: |
-      Voi moi goi: tao tep tam co mot bai do trong ban guong (xem E3), chay lenh kiem, khang dinh ma thoat khac 0 VA dau ra
-      goi ten tep tam. 4 khang dinh. Doi chung duong: E3 cung tep tam nhung bai xanh -> ma 0.
+      Voi moi goi: tao tep tam co mot bai do trong ban guong (xem E3), chay lenh kiem, khang dinh ma
+      thoat khac 0 VA dong loi rieng cua bo chay «chay-dom: test/<tep> đỏ (mã N)» goi dung tep tam va
+      chi tep do (khong chi ten tep co mat, vi bo chay in ten moi tep truoc khi chay). 4 khang dinh. Doi chung duong: E3 cung tep tam nhung bai xanh -> ma 0.
       CHIEU DO (da chay 2026-09-23 tren script cu): "app: tep do ma lenh van xanh". Tren ban moi:
       ban sao bo chay khong dung o tep do (bo tra ma loi) -> "app: tep do ma lenh van xanh".
 
@@ -119,8 +123,11 @@ evals:
       - "packages/ui/test/chay-tung-tep-dom.ts"
       - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
     expected: |
-      Chay tu goc kho dung duong cua pre-push: `bun run test -- --filter=app --filter=@crm/ui`.
-      Chay tren ban guong (xem E3). Voi moi goi [app, ui]: tep tam xanh -> ma 0 va co dong «chay-dom» cua no; tep tam do -> ma
-      khac 0 va dau ra goi ten tep. 2 goi x 3 = 6 khang dinh, cong kiem khong sot tep tam.
+      Chay tu goc kho dung duong cua pre-push: `bun run test -- --filter=app --filter=@crm/ui --only`
+      (--only bo cac buoc ^build: nhieu luot prisma generate chong nhau lam tep DOM nap ma Prisma dang
+      bi ghi lai — do chap chon da bat duoc ngay 23/09; phan E7 can chung minh la nhat tep va truyen ma
+      loi, khong phai buoc dung). Chay tren ban guong (xem E3). Voi moi goi [app, ui]: tep tam xanh ->
+      ma 0, co dong «chay-dom» cua no, khong dong đỏ nao; tep tam do -> ma khac 0 va dong loi rieng
+      goi dung tep tam va chi tep do. 2 goi x 4 = 8 khang dinh, cong kiem khong sot.
       CHIEU DO (da chay 2026-09-23 tren script cu): "app: tep xanh khong chay qua bun run test goc",
       "app: tep do khong lam bun run test goc do" va cung the cho ui.

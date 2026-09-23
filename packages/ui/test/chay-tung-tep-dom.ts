@@ -4,7 +4,8 @@ import { readdirSync } from "node:fs";
 const THU_MUC = "test";
 const DUOI = ".dom.tsx";
 
-const tep = readdirSync(THU_MUC)
+const tep = readdirSync(THU_MUC, { recursive: true })
+	.map(String)
 	.filter((ten) => ten.endsWith(DUOI))
 	.sort();
 

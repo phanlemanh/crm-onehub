@@ -21,17 +21,21 @@ const GOI = {
 		rel: "apps/app",
 		thuMuc: join(GOC, "apps", "app"),
 		lenh: "bun run test:dom",
+		batBuoc: ["keo-tha-thoa-thuan.dom.tsx", "may-nhac.dom.tsx"],
 	},
 	ui: {
 		rel: "packages/ui",
 		thuMuc: join(GOC, "packages", "ui"),
 		lenh: "bun run test",
+		batBuoc: ["board-giu-nguyen.dom.tsx"],
 	},
 };
-const LENH_GOC = "bun run test -- --filter=app --filter=@crm/ui";
+const LENH_GOC = "bun run test -- --filter=app --filter=@crm/ui --only";
 const TIEN_TO_TAM = "zz-do-thu-";
 const [cheDo, tenGoi] = process.argv.slice(2);
 const TEP_TAM = `${TIEN_TO_TAM}${cheDo ?? "x"}-${process.pid}.dom.tsx`;
+
+const duoiRa = [];
 
 function chay(lenh, thuMuc, envThem = {}) {
 	const r = spawnSync("sh", ["-c", `${lenh} 2>&1`], {
@@ -43,20 +47,33 @@ function chay(lenh, thuMuc, envThem = {}) {
 	const ra = r.stdout ?? "";
 	const doan = ra.split(/^.*chay-dom: /m).slice(1);
 	const tepChay = doan.flatMap((d) => {
-		const ten = /^test\/([\w.-]+\.dom\.tsx)/.exec(d)?.[1];
+		const ten = /^test\/([\w./-]+\.dom\.tsx)/.exec(d)?.[1];
 		const soBai = Number(/Ran (\d+) tests? across 1 file/.exec(d)?.[1] ?? 0);
 		return ten && soBai > 0 ? [ten] : [];
 	});
 	const luot = [...ra.matchAll(/Ran (\d+) tests? across (\d+) files?/g)].map(
 		(m) => ({ bai: Number(m[1]), tep: Number(m[2]) }),
 	);
+	duoiRa.push({ lenh, thuMuc, ma: r.status, duoi: ra.split("\n").slice(-60) });
 	return { ma: r.status, ra, tepChay, luot };
 }
 
 function tepDom(goi) {
-	return readdirSync(join(goi.thuMuc, "test"))
-		.filter((t) => t.endsWith(".dom.tsx"))
+	const r = spawnSync("find", ["test", "-type", "f", "-name", "*.dom.tsx"], {
+		cwd: goi.thuMuc,
+		encoding: "utf8",
+	});
+	return (r.stdout ?? "")
+		.split("\n")
+		.filter(Boolean)
+		.map((t) => t.replace(/^test\//, ""))
 		.sort();
+}
+
+function tepBaoDo(ra) {
+	return [...ra.matchAll(/chay-dom: test\/([\w./-]+\.dom\.tsx) đỏ/g)].map(
+		(m) => m[1],
+	);
 }
 
 function tepSpec(thuMuc) {
@@ -176,6 +193,11 @@ function duTep(ten) {
 	console.log(
 		`${ten}: ${mong.length} tep tren dia, ${kq.tepChay.length} tep da chay, ma ${kq.ma}`,
 	);
+	for (const t of goi.batBuoc) {
+		khang += 1;
+		if (!mong.includes(t))
+			hong.push(`${ten}: tep bat buoc ${t} khong con tren dia`);
+	}
 	for (const t of mong) {
 		khang += 1;
 		const lan = kq.tepChay.filter((x) => x === t).length;
@@ -212,10 +234,13 @@ if (cheDo === "du-tep") {
 		if (!kq.tepChay.includes(TEP_TAM))
 			hong.push(`${ten}: tep moi ${TEP_TAM} khong duoc chay`);
 		khang += 1;
+		if (tepBaoDo(kq.ra).length > 0)
+			hong.push(`${ten}: tep xanh bi bao do: ${tepBaoDo(kq.ra).join(", ")}`);
+		khang += 1;
 		if (kq.ma !== 0)
 			hong.push(`${ten}: tep moi xanh ma lenh thoat ma ${kq.ma}`);
 	}
-	console.log(`khang-dinh: ${khang} (= 2 goi x 2)`);
+	console.log(`khang-dinh: ${khang} (= 2 goi x 3)`);
 } else if (cheDo === "tep-do") {
 	for (const ten of ["app", "ui"]) {
 		const goi = GOI[ten];
@@ -223,8 +248,11 @@ if (cheDo === "du-tep") {
 		khang += 1;
 		if (kq.ma === 0) hong.push(`${ten}: tep do ma lenh van xanh`);
 		khang += 1;
-		if (!kq.ra.includes(TEP_TAM))
-			hong.push(`${ten}: dau ra khong goi ten tep do`);
+		const baoDo = tepBaoDo(kq.ra);
+		if (baoDo.length !== 1 || baoDo[0] !== TEP_TAM)
+			hong.push(
+				`${ten}: dau ra khong goi ten tep do (bao do: ${baoDo.join(", ") || "khong tep nao"})`,
+			);
 	}
 	console.log(`khang-dinh: ${khang} (= 2 goi x 2)`);
 } else if (cheDo === "cach-ly") {
@@ -267,14 +295,22 @@ if (cheDo === "du-tep") {
 			hong.push(
 				`${ten}: tep xanh khong chay qua bun run test goc (ma ${xanh.ma})`,
 			);
+		khang += 1;
+		if (tepBaoDo(xanh.ra).length > 0)
+			hong.push(
+				`${ten}: bun run test goc bao do tep xanh: ${tepBaoDo(xanh.ra).join(", ")}`,
+			);
 		const kq = voiTepTam(goi, TEP_DO, (T) => chay(LENH_GOC, T));
 		khang += 1;
 		if (kq.ma === 0) hong.push(`${ten}: tep do khong lam bun run test goc do`);
 		khang += 1;
-		if (!kq.ra.includes(TEP_TAM))
-			hong.push(`${ten}: bun run test goc khong goi ten tep do`);
+		const baoDo = tepBaoDo(kq.ra);
+		if (baoDo.length !== 1 || baoDo[0] !== TEP_TAM)
+			hong.push(
+				`${ten}: bun run test goc khong goi ten tep do (bao do: ${baoDo.join(", ") || "khong tep nao"})`,
+			);
 	}
-	console.log(`khang-dinh: ${khang} (= 2 goi x 3)`);
+	console.log(`khang-dinh: ${khang} (= 2 goi x 4)`);
 } else {
 	console.log(
 		"KHONG DO DUOC: che do phai la du-tep|tep-moi|tep-do|cach-ly|mui-gio|goc",
@@ -293,5 +329,10 @@ khang += 1;
 const guongSot = guongDaDung.filter((T) => existsSync(T));
 if (guongSot.length > 0) hong.push(`guong con sot: ${guongSot.join(", ")}`);
 
+if (hong.length > 0)
+	for (const d of duoiRa) {
+		console.log(`--- ${d.lenh} @ ${d.thuMuc} (ma ${d.ma}), 60 dong cuoi:`);
+		console.log(d.duoi.join("\n"));
+	}
 for (const h of hong) console.log(`HONG ${h}`);
 process.exit(hong.length === 0 ? 0 : 1);
