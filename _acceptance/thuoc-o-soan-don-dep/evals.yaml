@@ -5,7 +5,7 @@ evals:
     criterion: AC-1
     executor: script
     cmd: config:executors.script.tosd_khac_cay
-    expected: "exit 0 khi CA HAI chieu dung tren cung ca khac-cay (may chu gia phuc vu thu muc khac co mot .svg doi chung, NGUOI=dev@localhost): ban sua thoat 2, dau ra co 'KHONG DO DUOC: may chu o <APP_URL> khong phuc vu cay dang xet.', 0 vat sot (a tep moi trong apps/app/public, b hoi thoai 'o-soan do' cua NGUOI tao sau luc bat dau, c tien trinh Chrome moi); ban goc 7cf69d6a thi bo do in 'khac-cay: sot dau moc'. Chieu nao sai -> exit 1 ghim '<ban> khac-cay: <ly do>'. Moc/tien de vang -> exit 2 'TIEN DE'"
+    expected: "exit 0 khi CA HAI chieu dung tren cung ca khac-cay (may chu gia phuc vu thu muc khac co mot .svg doi chung, NGUOI=dev@localhost): ban sua thoat 2, dau ra co 'KHONG DO DUOC: may chu o <APP_URL> khong phuc vu cay dang xet.', 0 vat sot (a tep moi trong apps/app/public, b hoi thoai 'o-soan do' cua moi nguoi dung tao sau luc bat dau, c tien trinh Chrome co TMPDIR rieng cua luot); ban goc 7cf69d6a thi bo do in 'khac-cay: sot dau moc'. Chieu nao sai -> exit 1 ghim '<ban> khac-cay: <ly do>'. Moc/tien de vang -> exit 2 'TIEN DE'"
     paths: ["_acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs", "_acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs", "_acceptance/thuoc-o-soan-don-dep/rang/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
