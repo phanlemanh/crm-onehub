@@ -5,7 +5,7 @@ slug: moi-bai-kiem-dom-deu-chay
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-23-moi-bai-kiem-dom-deu-chay-design.md
 approved_by:
 approved_at:
@@ -47,3 +47,5 @@ Source input: Known limits Ngoài-1 của `_acceptance/keo-tha-thoa-thuan/contra
 ## Notes
 
 - Đo trước khi làm (23/09): chạy chung 16 tệp của app trong một tiến trình → 8 bài đỏ do `mock.module` rò; chạy riêng → 16/16 xanh, 164 bài, 17 giây.
+- Known limits (Ngoài-1, Gate 2): phép đo chỉ ghim hai tệp AC-1 gọi tên (và `board-giu-nguyen.dom.tsx` của ui); các tệp DOM khác mà bị xoá hay đổi tên thì E1/E5 vẫn xanh vì danh sách đọc từ đĩa lúc chạy.
+- Known limits (Ngoài-2, Gate 2): bộ chạy dừng ở tệp đỏ đầu tiên, nên khi nhiều tệp cùng đỏ thì một lượt chỉ báo tệp đầu; bản cũ (một tiến trình) báo hết trong một lượt.
