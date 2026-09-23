@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b1101467ace5fb9057dd43fd7bf7254e06a5b132
+verified_commit: 110662f789087b1a6c844f127d8a1f106f470c74
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -277,3 +277,7 @@ sha: 496726d395354129d7b6495b47a940eeec4550a2 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-09-23, do hoa cu do hop nhat onehub (PR 86: apps/api/test)
 run_id: repin-20260923T031737Z-62007
 sha: b1101467ace5fb9057dd43fd7bf7254e06a5b132 · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-12
+
+### Re-pin lần 5 — 2026-09-23, do hoa cu do hop nhat onehub (PR 88: packages/auth/test)
+run_id: repin-20260923T071938Z-72479
+sha: 110662f789087b1a6c844f127d8a1f106f470c74 · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-12
