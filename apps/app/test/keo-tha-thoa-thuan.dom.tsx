@@ -9,6 +9,7 @@ import { act, createElement as h, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import type { DealBoardQueryInput } from "@/app/(app)/[slug]/deals/deals-search-params";
 import type { DealBoard } from "@/app/(app)/[slug]/deals/use-deal-board-move";
+import { dealBoardOutput } from "../../api/src/deals/deals.contracts";
 
 type BoardData = DealBoard;
 type Column = BoardData["columns"][number];
@@ -19,7 +20,7 @@ type MutationHooks = { onSuccess?: unknown; onError?: unknown };
 
 const FIXTURES = join(import.meta.dir, "fixtures");
 const docFixture = (ten: string): BoardData =>
-	JSON.parse(readFileSync(join(FIXTURES, ten), "utf8"));
+	dealBoardOutput.parse(JSON.parse(readFileSync(join(FIXTURES, ten), "utf8")));
 
 const LOI_MAY_CHU = "Khong duoc doi.";
 
@@ -589,6 +590,36 @@ describe("dau-cot", () => {
 			dem += 1;
 		}
 		expect(dem).toBe(14);
+	});
+
+	test("thoa thuan chua quy doi duoc noi ra, khong bien tong thanh 0", async () => {
+		const m = dealMessages("vi");
+		const tien0 = new Intl.NumberFormat("vi-VN", {
+			style: "currency",
+			currency: boardState.reportingCurrency,
+		}).format(0);
+		const cotChf = column("CONTRACT_SENT");
+		cotChf.valueCents = null;
+		cotChf.unconverted = { count: 2, currencies: ["CHF"] };
+		const k = await dung("?view=board");
+		const demo = column("DEMO_BOOKED");
+		const chuDemo =
+			cotCua(k, "DEMO_BOOKED").querySelector("h3")?.textContent ?? "";
+		const bao = m.meta.notCounted(
+			String(demo.unconverted.count),
+			demo.unconverted.currencies.join(", "),
+		);
+		if (!chuDemo.includes(bao)) {
+			throw new Error(
+				`cot DEMO_BOOKED: thieu loi bao chua quy doi (${chuDemo})`,
+			);
+		}
+		const chuChf =
+			cotCua(k, "CONTRACT_SENT").querySelector("h3")?.textContent ?? "";
+		if (chuChf.includes(tien0)) {
+			throw new Error(`cot CONTRACT_SENT: tong rong bi in thanh ${tien0}`);
+		}
+		expect(chuChf).toContain(m.meta.notCounted("2", "CHF"));
 	});
 
 	test("cot 53 co +3, cot 50 thi khong", async () => {

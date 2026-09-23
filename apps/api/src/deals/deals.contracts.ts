@@ -242,6 +242,10 @@ export const dealBoardOutput = z.object({
 			stage: stageEnum,
 			count: z.number(),
 			valueCents: z.number().nullable(),
+			unconverted: z.object({
+				count: z.number(),
+				currencies: z.array(z.string()),
+			}),
 			cards: z.array(dealBoardCardOutput),
 		}),
 	),

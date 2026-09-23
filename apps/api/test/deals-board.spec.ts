@@ -111,9 +111,11 @@ function column(board: DealBoardResult, stage: DealStage) {
 }
 
 function writeFixture(name: string, board: DealBoardResult) {
+	if (process.env.GHI_FIXTURE_BANG_COT !== "1") return;
 	const file = join(FIXTURE_DIR, name);
 	mkdirSync(dirname(file), { recursive: true });
 	writeFileSync(file, `${JSON.stringify(board, null, "\t")}\n`);
+	Bun.spawnSync(["bunx", "biome", "format", "--write", file]);
 }
 
 async function clean() {
@@ -266,9 +268,17 @@ describe("deals.board", () => {
 			expect(new Set(got.cards.map((c) => c.id))).toEqual(
 				new Set(want.map((d) => d.id)),
 			);
-			checks += 3;
+			const wantUnconverted = want.filter(
+				(d) => !d.counted && d.cents !== null,
+			);
+			if (got.unconverted.count !== wantUnconverted.length) {
+				throw new Error(
+					`cot ${stage}: chua quy doi ${got.unconverted.count} != ${wantUnconverted.length}`,
+				);
+			}
+			checks += 4;
 		}
-		expect(checks).toBe(STAGES.length * 3);
+		expect(checks).toBe(STAGES.length * 4);
 		expect(board.reportingCurrency).toBe(base);
 		writeFixture("deals-board-dem-tong.json", board);
 	});

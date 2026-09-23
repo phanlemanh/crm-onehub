@@ -18,6 +18,9 @@ evals:
       chep so cung. Thu tu cot khang dinh bang mang giai doan cua deal-stage.
       CHIEU DO: ban sao bo dieu kien archivedAt null trong thu tuc -> do voi thong diep ghim
       "cot DEMO_BOOKED: dem 4 != 3" (thoa thuan luu tru bi tinh; da chay 2026-09-23).
+      Vong 2 (S4-r1): them khang dinh thu tu moi cot — so thoa thuan chua quy doi (unconverted.count)
+      bang so thoa thuan trong fixture co gia tri ma tien te khong quy doi duoc. Ma tran 7 x 4 = 28.
+      CHIEU DO (da chay 2026-09-23): thu tuc luon tra count 0 -> "cot DEMO_BOOKED: chua quy doi 0 != 1".
 
   - id: E2
     criterion: AC-3
@@ -349,6 +352,12 @@ evals:
       lai (2 khang dinh). Tong 18.
       CHIEU DO: dem bang so the thay count -> do voi thong diep ghim
       "cot QUALIFIED_TO_BUY: hien 50 != 53".
+      Tep du lieu chi duoc ghi lai khi GHI_FIXTURE_BANG_COT=1 (khong lam ban cay moi lan test) va
+      bai kiem man parse no qua dealBoardOutput cua API truoc khi dung.
+      Vong 2 (S4-r1): cot co thoa thuan chua quy doi noi ra bang chuoi deals.meta.notCounted, cot co
+      tong rong va 2 thoa thuan CHF khong in tong 0 (docs/currency.md: "disclosed not zeroed").
+      CHIEU DO (da chay 2026-09-23): dau cot tro ve formatMoney(valueCents ?? 0) -> "cot DEMO_BOOKED:
+      thieu loi bao chua quy doi".
 
   - id: E23
     criterion: AC-9

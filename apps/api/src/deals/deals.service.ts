@@ -214,12 +214,13 @@ export class DealsService {
 		const columns = await Promise.all(
 			DEAL_BOARD_STAGES.map(async (stage) => {
 				const stageWhere: Prisma.DealWhereInput = { AND: [where, { stage }] };
-				const [count, value, cards] = await Promise.all([
+				const [count, value, unconverted, cards] = await Promise.all([
 					this.db.deal.count({ where: stageWhere }),
 					this.db.deal.aggregate({
 						where: { AND: [stageWhere, this.conversion.countedWhere(base)] },
 						_sum: { baseAmount: true },
 					}),
+					this.conversion.unconverted(stageWhere),
 					this.db.deal.findMany({
 						where: stageWhere,
 						take: DEAL_BOARD.cardsPerColumn,
@@ -245,6 +246,7 @@ export class DealsService {
 					stage,
 					count,
 					valueCents: toCents(value._sum.baseAmount),
+					unconverted,
 					cards: cards.map(
 						({
 							amount,

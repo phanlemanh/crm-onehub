@@ -12,6 +12,7 @@ import {
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { formatMoney } from "@crm/ui/lib/format";
+import type { Locale } from "@crm/ui/lib/locale";
 import { useQuery } from "@tanstack/react-query";
 import { OwnerCell } from "@/components/crm/owner-cell";
 import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch";
@@ -19,7 +20,7 @@ import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { DealStageMenu } from "@/components/crm/stage-change";
 import { LocalDay } from "@/components/local-date-time";
 import { dealStageLabel } from "@/lib/deal-stage";
-import { dealMessages } from "@/lib/messages/deals";
+import { type DealMessages, dealMessages } from "@/lib/messages/deals";
 import { useTRPC } from "@/lib/trpc/client";
 import type { DealBoardQueryInput } from "./deals-search-params";
 import {
@@ -29,6 +30,22 @@ import {
 } from "./use-deal-board-move";
 
 type DealCard = DealBoardColumn["cards"][number];
+
+function columnSummary(
+	column: DealBoardColumn,
+	currency: string,
+	locale: Locale,
+	m: DealMessages,
+): string {
+	const { count, currencies } = column.unconverted;
+	const parts = [
+		column.valueCents === null && count > 0
+			? null
+			: formatMoney(column.valueCents ?? 0, currency, locale),
+		count > 0 ? m.meta.notCounted(String(count), currencies.join(", ")) : null,
+	];
+	return parts.filter((part) => part !== null).join(" · ");
+}
 
 export function DealsBoard({ input }: { input: DealBoardQueryInput }) {
 	const locale = useLocale();
@@ -82,10 +99,7 @@ export function DealsBoard({ input }: { input: DealBoardQueryInput }) {
 		id: column.stage,
 		label: dealStageLabel(column.stage),
 		count: column.count,
-		summary:
-			column.valueCents === null
-				? formatMoney(0, currency, locale)
-				: formatMoney(column.valueCents, currency, locale),
+		summary: columnSummary(column, currency, locale, m),
 		cards: column.cards.map((card) => ({
 			id: card.id,
 			href: "",

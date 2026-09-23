@@ -230,6 +230,9 @@ describe("kho chuoi cua vong ③a", () => {
 				"12 chưa tính (thiếu tỉ giá A)",
 			],
 			"deals:created": ["Đã thêm 1.", "Đã thêm 12."],
+			"deals:board.pickedUp": ["Đã nhấc 1.", "Đã nhấc 12."],
+			"deals:board.over": ["Đang ở trên 1.", "Đang ở trên 12."],
+			"deals:board.dropped": ["Đã thả vào 1.", "Đã thả vào 12."],
 			"deals:bulk.reassigned": [
 				"Đã đổi người phụ trách cho 1.",
 				"Đã đổi người phụ trách cho 12.",
