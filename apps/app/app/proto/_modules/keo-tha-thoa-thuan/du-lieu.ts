@@ -57,7 +57,7 @@ export type CotThoaThuan = {
 	tongXu: number;
 };
 
-const SO_THE: Record<GiaiDoanId, number> = {
+const SO_THE = {
 	DEMO_BOOKED: 4,
 	QUALIFIED_TO_BUY: 3,
 	DECISION_MAKER_BOUGHT_IN: 2,
@@ -65,28 +65,31 @@ const SO_THE: Record<GiaiDoanId, number> = {
 	CLOSED_WON: 2,
 	CLOSED_LOST: 1,
 	UNQUALIFIED_TO_BUY: 0,
-};
+} satisfies Record<GiaiDoanId, number>;
 
-export function bangCotMau(tuyChon: {
-	cotRong?: GiaiDoanId;
-	cotTran?: GiaiDoanId;
-}): Record<GiaiDoanId, CotThoaThuan> {
-	const ket = {} as Record<GiaiDoanId, CotThoaThuan>;
-	for (const gd of GIAI_DOAN) {
-		const soThat =
-			gd.id === tuyChon.cotRong
-				? 0
-				: gd.id === tuyChon.cotTran
-					? 53
-					: SO_THE[gd.id];
-		const the50 = Array.from({ length: Math.min(soThat, 50) }, (_, i) =>
-			the(i, gd.id),
-		);
-		ket[gd.id] = {
-			the: the50,
-			tong: soThat,
-			tongXu: the50.reduce((s, t) => s + (t.giaTriXu ?? 0), 0),
-		};
-	}
-	return ket;
+type TuyChon = { cotRong?: GiaiDoanId; cotTran?: GiaiDoanId };
+
+function cot(id: GiaiDoanId, tuyChon: TuyChon): CotThoaThuan {
+	const soThat =
+		id === tuyChon.cotRong ? 0 : id === tuyChon.cotTran ? 53 : SO_THE[id];
+	const the50 = Array.from({ length: Math.min(soThat, 50) }, (_, i) =>
+		the(i, id),
+	);
+	return {
+		the: the50,
+		tong: soThat,
+		tongXu: the50.reduce((s, t) => s + (t.giaTriXu ?? 0), 0),
+	};
+}
+
+export function bangCotMau(tuyChon: TuyChon) {
+	return {
+		DEMO_BOOKED: cot("DEMO_BOOKED", tuyChon),
+		QUALIFIED_TO_BUY: cot("QUALIFIED_TO_BUY", tuyChon),
+		DECISION_MAKER_BOUGHT_IN: cot("DECISION_MAKER_BOUGHT_IN", tuyChon),
+		CONTRACT_SENT: cot("CONTRACT_SENT", tuyChon),
+		CLOSED_WON: cot("CLOSED_WON", tuyChon),
+		CLOSED_LOST: cot("CLOSED_LOST", tuyChon),
+		UNQUALIFIED_TO_BUY: cot("UNQUALIFIED_TO_BUY", tuyChon),
+	} satisfies Record<GiaiDoanId, CotThoaThuan>;
 }

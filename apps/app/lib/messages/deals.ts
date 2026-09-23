@@ -80,6 +80,23 @@ const en = {
 		reasonPlaceholder: "Budget pulled for the quarter",
 		nobody: "Nobody",
 	},
+	view: {
+		label: "View",
+		table: "Table",
+		board: "Board",
+	},
+	board: {
+		label: "Deals by stage",
+		errorTitle: "The board did not load",
+		errorBody: "Nothing changed. Try again in a moment.",
+		retry: "Try again",
+		loading: "Loading…",
+		pickedUp: (name: string) => `Picked up ${name}.`,
+		over: (stage: string) => `Over ${stage}.`,
+		dropped: (stage: string) => `Dropped on ${stage}.`,
+		droppedOutside: "Dropped outside the board. Nothing changed.",
+		cancelled: "Move cancelled. Nothing changed.",
+	},
 };
 
 export type DealMessages = typeof en;
@@ -164,6 +181,23 @@ const vi = {
 		markUnqualified: (n: string) => `Đánh dấu ${n} là chưa phù hợp`,
 		reasonPlaceholder: "Đối tác hoãn sang quý sau",
 		nobody: "Không ai",
+	},
+	view: {
+		label: "Cách xem",
+		table: "Bảng",
+		board: "Bảng cột",
+	},
+	board: {
+		label: "Thoả thuận theo giai đoạn",
+		errorTitle: "Không tải được bảng cột",
+		errorBody: "Chưa có gì thay đổi. Thử lại sau giây lát.",
+		retry: "Thử lại",
+		loading: "Đang tải…",
+		pickedUp: (name: string) => `Đã nhấc ${name}.`,
+		over: (stage: string) => `Đang ở trên ${stage}.`,
+		dropped: (stage: string) => `Đã thả vào ${stage}.`,
+		droppedOutside: "Đã thả ra ngoài bảng. Không đổi gì.",
+		cancelled: "Đã huỷ kéo. Không đổi gì.",
 	},
 } satisfies DealMessages;
 

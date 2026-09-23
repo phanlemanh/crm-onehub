@@ -1,7 +1,11 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { act, createElement as h } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { Board, type BoardColumn } from "../src/components/board";
+import {
+	Board,
+	type BoardColumn,
+	type BoardMove,
+} from "../src/components/board";
 import { LocaleProvider } from "../src/components/locale-provider";
 
 const COT: BoardColumn[] = [
@@ -28,7 +32,7 @@ const SO_THE = COT.reduce((n, c) => n + c.cards.length, 0);
 let root: Root | null = null;
 let khung: HTMLElement | null = null;
 
-function dung(onMove?: (m: unknown) => void): HTMLElement {
+function dung(onMove?: (m: BoardMove) => void): HTMLElement {
 	khung = document.createElement("div");
 	document.body.appendChild(khung);
 	root = createRoot(khung);

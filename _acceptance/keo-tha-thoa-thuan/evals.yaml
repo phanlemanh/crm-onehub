@@ -89,8 +89,8 @@ evals:
       jsdom, tRPC gia. Bam «Bang cot» -> tham so view=board, bay phan tu data-board-column theo
       dung thu tu mang giai doan (so theo chi so), o tim van co mat; bam «Bang» -> bang
       DataTable tro lai. Dung lai voi view=board tren duong dan -> bang cot.
-      CHIEU DO: dao thu tu hai cot trong ban sao -> do voi thong diep ghim "cot 2: CONTRACT_SENT
-      != QUALIFIED_TO_BUY".
+      CHIEU DO: dao nguoc thu tu cot trong ban sao -> do voi thong diep ghim "cot 1:
+      UNQUALIFIED_TO_BUY != DEMO_BOOKED" (da chay 2026-09-23).
 
   - id: E7
     criterion: AC-11
@@ -265,7 +265,8 @@ evals:
     expected: |
       Ba ca: dang tai -> o tim, bo loc, nut chuyen co mat va co dau dang tai; loi -> loi va nut
       «Thu lai» trong vung bang, bam thi deals.board goi lai 1 lan; co du lieu -> khong loi.
-      CHIEU DO: an thanh cong cu khi loi trong ban sao -> do voi thong diep ghim "loi: mat o tim".
+      CHIEU DO: bo o tim khoi thanh cong cu cua bang cot trong ban sao -> do voi thong diep ghim
+      "dang tai: mat o tim" (da chay 2026-09-23).
 
   - id: E19
     criterion: AC-15

@@ -426,7 +426,9 @@ function TheMau({
 					</span>
 					<span className="flex items-center gap-1">
 						{the.hanChot ? (
-							<span className="whitespace-nowrap tabular-nums">{the.hanChot}</span>
+							<span className="whitespace-nowrap tabular-nums">
+								{the.hanChot}
+							</span>
 						) : null}
 						<PersonAvatar name={the.phuTrach} size="sm" />
 					</span>
