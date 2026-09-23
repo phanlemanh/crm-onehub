@@ -35,6 +35,17 @@ const SAN_THU_TUC = 50;
 const SAN_DUONG_REST = 30;
 const THU_MUC_APP = join(import.meta.dir, "..", "..", "app");
 const MOC_THOI_CU = new Date("2020-01-01T00:00:00.000Z");
+const NGAY_MS = 24 * 60 * 60 * 1000;
+const LENH_XEM_TRUOC = join(
+	import.meta.dir,
+	"..",
+	"..",
+	"..",
+	"packages",
+	"db",
+	"scripts",
+	"xem-truoc-luot-don.ts",
+);
 
 const THU_TUC_MAU = [
 	{ ten: "contacts.list", input: {} },
@@ -273,6 +284,30 @@ async function chayRoiHoanTac<T>(
 	}
 	if (!ketQua) throw new Error("giao dich hoan tac khong tra ket qua");
 	return (ketQua as { gia: T }).gia;
+}
+
+const soXemTruoc = z.object({
+	may: z.string(),
+	khoa: z.number(),
+	chu: z.number(),
+	dungGanDay: z.number(),
+});
+
+async function chayLenhXemTruoc(url: string | undefined) {
+	const env = { ...process.env };
+	delete env.XEM_TRUOC_DATABASE_URL;
+	if (url !== undefined) env.XEM_TRUOC_DATABASE_URL = url;
+	const con = Bun.spawn(["bun", LENH_XEM_TRUOC], {
+		env,
+		stdout: "pipe",
+		stderr: "pipe",
+	});
+	const [ra, loi, ma] = await Promise.all([
+		new Response(con.stdout).text(),
+		new Response(con.stderr).text(),
+		con.exited,
+	]);
+	return { ra, loi, ma };
 }
 
 async function don() {
@@ -807,6 +842,71 @@ describe("go-la-cat-quyen", () => {
 			"xem truoc khong thay khoa nao cua co lieu",
 		).toBeGreaterThanOrEqual(2);
 		expect(ketQua.xemTruoc?.chu ?? 0).toBeGreaterThanOrEqual(1);
+	});
+
+	test("xem-truoc-chay-lenh: lenh xem truoc chay that, dem dung khoa dung gan day, khong ghi dong nao", async () => {
+		const url = process.env.TEST_DATABASE_URL;
+		expect(url, "luot kiem khong co TEST_DATABASE_URL").toBeDefined();
+		const thieuBien = await chayLenhXemTruoc(undefined);
+		expect(
+			{
+				ma: thieuBien.ma,
+				goiTen: thieuBien.loi.includes("XEM_TRUOC_DATABASE_URL"),
+			},
+			`thieu bien rieng ma lenh van chay: ${thieuBien.loi}`,
+		).toEqual({ ma: 2, goiTen: true });
+		const docSo = async () => {
+			const kq = await chayLenhXemTruoc(url);
+			expect(kq.ma, `lenh xem truoc loi: ${kq.loi}`).toBe(0);
+			return soXemTruoc.parse(JSON.parse(kq.ra));
+		};
+		const truoc = await docSo();
+		const ganDay = await taoKhoa(bi, "gan-day");
+		const ganDay2 = await taoKhoa(bi, "gan-day-2");
+		const lauRoi = await taoKhoa(bi, "lau-roi");
+		const cuaChu = await taoKhoa(chu, "cua-chu");
+		const bayGio = Date.now();
+		await db.apikey.update({
+			where: { id: ganDay.id },
+			data: { lastRequest: new Date(bayGio - NGAY_MS) },
+		});
+		await db.apikey.update({
+			where: { id: ganDay2.id },
+			data: { lastRequest: new Date(bayGio - 2 * NGAY_MS) },
+		});
+		await db.apikey.update({
+			where: { id: lauRoi.id },
+			data: { lastRequest: new Date(bayGio - 60 * NGAY_MS) },
+		});
+		await db.apikey.update({
+			where: { id: cuaChu.id },
+			data: { lastRequest: new Date(bayGio - NGAY_MS) },
+		});
+		await db.member.delete({ where: { id: await memberId(bi) } });
+		const sau = await docSo();
+		expect(
+			{
+				may: sau.may,
+				themKhoa: sau.khoa - truoc.khoa,
+				themChu: sau.chu - truoc.chu,
+				themDungGanDay: sau.dungGanDay - truoc.dungGanDay,
+			},
+			"lenh xem truoc dem lech: khoa, chu khoa, hoac khoa dung trong 30 ngay",
+		).toEqual({
+			may: new URL(String(url)).host,
+			themKhoa: 3,
+			themChu: 1,
+			themDungGanDay: 2,
+		});
+		expect(
+			[
+				await khoaBat(ganDay.id),
+				await khoaBat(ganDay2.id),
+				await khoaBat(lauRoi.id),
+				await khoaBat(cuaChu.id),
+			],
+			"lenh xem truoc da ghi vao co so du lieu",
+		).toEqual([true, true, true, true]);
 	});
 
 	test("cho-phep-lai: duoc cho phep lai thi doc lai duoc, khoa cu van tat", async () => {

@@ -47,3 +47,16 @@ Lệnh chung: `bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spe
 | P10 | `canhKhoaApi` từ chối mọi `/api-key/update` | `khoa-moi` | 1 | 0 pass 1 fail | «thanh vien khong bat lai duoc khoa cua chinh minh qua cong xac thuc» — nhận {status 403, bat false} |
 
 Sau mỗi lượt hoàn nguyên từ bản chép; `git status` của `apps` và `packages` sạch ngoài thay đổi đã commit.
+
+## P12–P14 — lệnh xem trước chạy thật (E9, sửa finding trong hợp đồng của S4 round 1)
+
+Lệnh: `bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t xem-truoc-chay-lenh"` · trước mọi lượt: 1 pass 0 fail.
+
+| Lượt | Thay đổi tạm | Mã thoát | Kết quả | Dòng thông điệp ghim |
+|---|---|---|---|---|
+| P12 | đảo điều kiện 30 ngày (`>` → `<`), dữ liệu dựng bản đầu (1 khoá mới dùng, 1 khoá lâu) | 0 | 1 pass 0 fail | XANH — dữ liệu dựng đối xứng nên đảo chiều ra cùng số. Thước chưa phân biệt được; sửa dữ liệu dựng thành 2 khoá mới dùng + 1 khoá lâu |
+| P12b | như P12, dữ liệu dựng đã sửa | 1 | 0 pass 1 fail | «lenh xem truoc dem lech: khoa, chu khoa, hoac khoa dung trong 30 ngay» — themDungGanDay 1, đòi 2 |
+| P13 | lệnh rơi về `DATABASE_URL` khi thiếu biến riêng | 1 | 0 pass 1 fail | «thieu bien rieng ma lenh van chay» — nhận {ma 0, goiTen false}, đòi {2, true} |
+| P14 | lệnh chạy chính SQL của `migration` và bỏ `BEGIN READ ONLY` | 1 | 0 pass 1 fail | ZodError khi đọc đầu ra của lệnh — câu ghi không trả hàng đếm; lượt kiểm dừng trước vế «lenh xem truoc da ghi vao co so du lieu» |
+
+Giới hạn còn lại: bỏ riêng `BEGIN READ ONLY` mà câu vẫn là câu đếm thì không có gì để quan sát — bài đo «lệnh không ghi dòng nào», không đo cờ giao dịch.
