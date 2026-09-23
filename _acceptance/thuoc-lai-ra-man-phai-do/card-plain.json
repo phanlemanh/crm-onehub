@@ -1,0 +1,34 @@
+{
+  "feature_plain": "Thước kiểm «mọi component giao diện lái được ra màn» đỏ đúng lúc: khi một component bị xoá, hỏng một nửa, hay bộ vẽ chết — thay vì xanh im lặng như sau vụ xoá 19 component ngày 12/09.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ lấy danh sách component cho bên vẽ và bên chấm từ cùng một lượt quét kho, nên xoá một component thì cả hai cùng biết."},
+    {"id": "AC-2", "p": "Sẽ coi một component hỏng ở chỉ một trạng thái (đóng hoặc mở) là hỏng, không cho lọt lưới."},
+    {"id": "AC-4", "p": "Sẽ đòi số component vẽ được bằng đúng số cần vẽ, và gọi tên từng cái thiếu."},
+    {"id": "AC-5", "p": "Sẽ để lượt chạy test thường và móc trước-khi-đẩy không sửa bằng chứng đã ký của hồ sơ khác."},
+    {"id": "AC-7", "p": "Sẽ chứng lệnh cổng của kho vẫn gọi tới thước: phá một component thì lệnh cổng đỏ."}
+  ],
+  "wont_do": [
+    {"id": "AC-3", "p": "Chặn kết luận khi bộ vẽ chạy không trọn — thước dừng đỏ thay vì chấm tiếp trên bản vẽ cũ."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Bốn chỗ hỏng đo được trong vụ 12/09, mỗi chỗ một tiêu chí: lệch nguồn danh sách (AC-1), phân loại lỗi (AC-2), bộ vẽ chết (AC-3), câu «có ít nhất một» luôn đúng (AC-4)."},
+    {"i": 1, "p": "Hướng im-lặng-không-ai-đỏ do AC-1..AC-4 phủ; hướng đỏ-nhầm-khi-vật-lành đã bỏ cùng AC-6 cũ."},
+    {"i": 2, "p": "Tác dụng phụ: không làm bẩn cây và không nuốt bằng chứng hồ sơ khác (AC-5)."},
+    {"i": 3, "p": "Kiểm tra chính các chiều đỏ của bộ đo (AC-6 cũ) đã bỏ khỏi hợp đồng — không đo thước của thước."},
+    {"i": 4, "p": "Dây nối: lệnh cổng của kho vẫn gọi tới thước sau khi đường bản vẽ đổi chỗ (AC-7)."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260912T055043Z-15023", "p": "KHÔNG viết đặc tả trải nghiệm — vòng này sửa thước kiểm, không có màn hình mới."},
+    {"id": "d-20260912T055043Z-14859", "p": "KHÔNG làm phiên thiết kế — không chạm mặt người dùng."},
+    {"id": "d-20260912T055043Z-17847", "p": "Bản vẽ đã ký ở lại trong kho; lượt chạy thường ghi vào chỗ tạm, chỉ lệnh gọi có chủ đích mới ghi đè."},
+    {"id": "d-20260912T055043Z-12367", "p": "Sửa thước tại chỗ trong hồ sơ đã ký thay vì dựng bộ thước mới song song."},
+    {"id": "d-20260912T055043Z-10676", "p": "KHÔNG quét các thước khác của kho dù có thể mắc cùng lỗi — việc riêng."},
+    {"id": "d-20260912T205034Z-10483", "p": "Canh neo số tệp về số thật sau vụ xoá 19 component."},
+    {"id": "d-20260912T205348Z-26668", "p": "Chỗ tạm của lượt đo đổi được bằng biến môi trường, để bản sao đo đạc không ghi vào kho thật."},
+    {"id": "d-20260912T224918Z-28429", "p": "Phân biệt «bộ vẽ chết» với «neo số tệp lệch» để lượt đo đỏ đúng lý do."},
+    {"id": "d-20260923T101758Z-10", "p": "Canh neo số tệp lên 460 sau khi gộp onehub — thêm đúng một tệp là thẻ lỗi hội thoại của PR #90."},
+    {"id": "d-20260923T104150Z-11", "p": "Dừng trước lượt chấm 3 vì lượt 2 lặp đúng lỗi của lượt 1 ở chiều đỏ của bộ đo."},
+    {"id": "d-20260923T105729Z-12", "p": "KHÔNG đo thước của thước: bỏ AC-6 (tự kiểm chiều đỏ của bộ đo), giữ sáu tiêu chí còn lại — đổi lại không còn máy kiểm rằng chiều đỏ do vật bị phá sinh ra."},
+    {"id": "d-20260923T105729Z-13", "p": "Gỡ báo cáo bằng chứng của hợp đồng cũ khỏi cây khi hạ về nháp; sổ chạy giữ nguyên làm sử liệu."}
+  ]
+}
