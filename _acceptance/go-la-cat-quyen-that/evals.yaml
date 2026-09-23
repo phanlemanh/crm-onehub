@@ -1,0 +1,83 @@
+schema_version: 1
+feature_slug: go-la-cat-quyen-that
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.gl_ma_tran_dang_nhap_lai
+    expected: "exit 0; MA TRẬN TOÀN PHẦN rút lúc chạy từ app.get(AppRouterHost).appRouter — mọi thủ tục đang mount, query gọi GET và mutation gọi POST, đầu vào rỗng. Người bị gỡ bằng removeMember THẬT rồi đăng nhập lại bằng auth.api.signInEmail (đi qua móc session.create.before), cookie lấy từ set-cookie thật. Mỗi thủ tục ngoài tập ngoại lệ phải trả HTTP 403 VÀ body mang đúng hằng thông điệp tư cách xuất từ auth.middleware.ts — không chỉ 403, vì 403 theo vai cũng là 403. Số hàng in ra và phải bằng số thủ tục của sổ router trừ số ngoại lệ; bài đỏ nếu sổ router rỗng hoặc dưới 50 thủ tục (chống ma trận rỗng xanh câm). Chiều đỏ trên cùng cữ liệu: bản trước vá trả 200 cho contacts.list — đã chạy đỏ 23/09; bỏ phép kiểm tư cách khỏi AuthMiddleware thì hàng của từng thủ tục đỏ, thông điệp ghim tên thủ tục và mã đã nhận."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/trpc/middlewares/**, apps/api/src/**/*.router.ts, packages/auth/src/auth.ts, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.gl_ngoai_le_dung_tap_khai
+    expected: "exit 0; cùng phiên và cùng ma trận của E1. Bài gom tập thủ tục KHÔNG trả thông điệp tư cách cho người bị gỡ rồi so BẰNG (toEqual trên mảng đã sắp) với hằng NGOAI_LE = [sso.signInOptions, workspace.get] — quan hệ tập, không phải chuỗi-có-mặt. Thêm: workspace.get trả 200 và result.data.viewerRole === null. Chiều đỏ: (a) gắn AuthMiddleware lại cho workspace.get thì tập thiếu workspace.get và bài đỏ, thông điệp in hai tập; (b) gắn SignedInMiddleware cho một thủ tục dữ liệu bất kỳ thì tập thừa tên thủ tục đó và bài đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/trpc/middlewares/**, apps/api/src/workspace/workspace.router.ts, apps/api/src/sso/sso.router.ts, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.gl_doi_chung_thanh_vien
+    expected: "exit 0; đối chứng dương trên CÙNG ma trận của E1: thành viên còn trong kho, đăng nhập bằng cùng đường mật khẩu, gọi từng thủ tục; không hàng nào được mang thông điệp tư cách. Mã khác (400/404/403 theo vai/409/500 của thủ tục cần hạ tầng ngoài) được phép — bài chỉ ghim ĐÚNG thông điệp tư cách. Thêm sáu thủ tục dữ liệu mẫu (contacts.list, companies.list, deals.list, activities.myTasks, search.quick, campaigns.list) trả 200. Chiều đỏ: một AuthMiddleware từ chối mọi người thì mọi hàng mang thông điệp tư cách và bài đỏ, thông điệp ghim tên thủ tục đầu tiên bị chặn oan."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/trpc/middlewares/**, packages/auth/src/organization.ts, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.gl_tab_dang_mo
+    expected: "exit 0; cookie lấy từ lượt đăng nhập THẬT trước lượt gỡ, và bài khẳng định nó chứa cả session_token lẫn session_data (bộ đệm phiên) — thiếu session_data thì bài đỏ với thông điệp nói phép đo đang hỏi thiếu cookie, vì đó chính là lỗi của phép đo cũ ở go-thanh-vien-phai-giu-duoc. Hai chiều trên cùng cookie: trước lượt gỡ contacts.list trả 200; ngay sau removeMember (không sleep, không chờ) toàn bộ ma trận E1 trả 403 với thông điệp tư cách. Chiều đỏ: bản trước vá trả 200 cho contacts.list sau lượt gỡ — đã chạy đỏ 23/09."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/trpc/middlewares/**, packages/auth/src/auth.ts, apps/api/src/workspace/workspace.service.ts, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.gl_khoa_con_bat
+    expected: "exit 0; khoá tạo bằng auth.api.createApiKey cho một thành viên. Hai chiều trên CÙNG khoá: khi còn là thành viên, contacts.list qua x-api-key trả 200 và POST /rest/contacts/search trả 200; rồi xoá dòng member TRỰC TIẾP (mô phỏng người bị gỡ trước ngày vá — lượt gỡ đời cũ không tắt khoá) và bài khẳng định khoá vẫn enabled === true, để 403 phía sau không thể đến từ tầng khoá của Better Auth. Sau đó: toàn bộ ma trận tRPC của E1 qua x-api-key trả 403 với đúng hằng thông điệp tư cách; và MA TRẬN REST rút lúc chạy từ GET /openapi.json — mọi đường dưới /rest với đúng phương thức khai, đầu vào rỗng, trừ đường của tập ngoại lệ — trả 403 với cùng thông điệp. Bài đỏ nếu ma trận REST dưới 30 đường (chống rỗng xanh câm). Chiều đỏ: bản trước vá trả 200 — đã chạy đỏ 23/09; bỏ phép kiểm tư cách khỏi AuthMiddleware thì hàng đỏ, thông điệp ghim đường và mã nhận được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/trpc/middlewares/**, apps/api/src/create-app.ts, apps/api/src/trpc/openapi.ts, packages/auth/src/auth.ts, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.gl_go_tat_khoa
+    expected: "exit 0; hai người mỗi người hai khoá. Trước lượt gỡ: bốn khoá bật và khoá của người thứ nhất đọc được contacts.list (200). Sau removeMember người thứ nhất: số dòng apikey của người đó KHÔNG đổi (2), cả hai có enabled === false, và gọi contacts.list bằng khoá đó không trả 200; hai khoá của người thứ hai vẫn enabled === true và một trong hai đọc được contacts.list (200). Vế tắt khoá đo độc lập với middleware: bài đọc cột enabled trong cơ sở dữ liệu, không suy từ mã HTTP. Chiều đỏ: bỏ lệnh tắt khoá khỏi removeMember thì enabled vẫn true và bài đỏ, thông điệp ghim id khoá còn bật; đổi sang xoá khoá thì số dòng về 0 và bài đỏ ở vế số dòng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/workspace/workspace.service.ts, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.gl_khoa_moi
+    expected: "exit 0; người bị gỡ rồi đăng nhập lại bằng mật khẩu. Ba lời gọi bằng cookie đó: POST /api/trpc/apiKeys.create với đầu vào HỢP LỆ (name, expiresInDays null) — đầu vào hợp lệ để 403 không thể là lỗi đầu vào; POST /api/auth/api-key/create; POST /api/auth/api-key/update bật lại khoá cũ đã bị tắt. Cả ba không được 2xx; sau đó số dòng apikey của người đó bằng đúng số trước (khoá cũ) và khoá cũ vẫn enabled === false. Ba đối chứng dương trên cùng dựng cảnh, mỗi hàng đòi 2xx VÀ đúng một dòng apikey mới: thành viên còn trong kho gọi POST /api/trpc/apiKeys.create với cùng đầu vào hợp lệ (lối màn cài đặt dùng); thành viên gọi POST /api/auth/api-key/create; auth.api.createApiKey phía máy chủ không header, body userId của thành viên. Chiều đỏ thêm: móc coi «không có phiên» là người ngoài thì hàng thứ ba đỏ, thông điệp ghim lối gọi. Chiều đỏ: bản trước vá trả 200/200 và ghi 2 dòng — đã chạy đỏ 23/09; bỏ móc hooks.before thì lời gọi Better Auth đỏ, thông điệp ghim endpoint."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/auth/src/auth.ts, apps/api/src/api-keys/**, apps/api/src/trpc/middlewares/**, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.gl_eve_cau_noi
+    expected: "exit 0; gọi handler THẬT của apps/app/app/eve/v1/[...path]/route.ts; chỉ giả lập getSession, connection() của next/server và fetch ra ngoài (để đếm lời gọi sang trợ lý). Tư cách đọc từ cơ sở dữ liệu thật của lượt kiểm, không giả lập workspaceRoleOf. Hai chiều trên cùng dựng cảnh: thành viên → 200 và đúng 1 lời gọi sang trợ lý; người có phiên mà không có dòng member → 403 và 0 lời gọi sang trợ lý. Chiều đỏ: bản trước vá trả 200 và 1 lời gọi — đã chạy đỏ 23/09; bỏ phép kiểm tư cách khỏi route thì bài đỏ, thông điệp in {status, soLanToiAgent}."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/eve/v1/**", apps/app/test/eve-cau-noi-thanh-vien.spec.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.gl_cho_phep_lai
+    expected: "exit 0; người có một khoá bị gỡ bằng removeMember, rồi chủ kho cho phép lại địa chỉ bằng WorkspaceService.allowEmail THẬT, rồi người đó đăng nhập lại bằng mật khẩu (móc tạo phiên tạo lại dòng member). Hai vế: contacts.list bằng cookie mới trả 200; khoá cũ vẫn enabled === false trong cơ sở dữ liệu và gọi contacts.list bằng khoá đó không trả 200. Đối chứng cho vế đầu nằm ở E1 (cùng người trước khi được cho phép lại thì 403). Chiều đỏ: một bản vá chặn theo danh sách người từng bị gỡ thay vì theo dòng member thì vế đầu đỏ, thông điệp ghim mã nhận được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/workspace/workspace.service.ts, packages/auth/src/organization.ts, apps/api/src/trpc/middlewares/**, apps/api/test/go-la-cat-quyen.spec.ts]
+
+  - id: E10
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.gl_proxy_het_quyen
+    expected: "exit 0; lớp backend-effect cho vế proxy của AC-2. Bài dựng API THẬT (AppModule) nghe trên một cổng tạm, rồi chạy hàm proxy THẬT của apps/app/proxy.ts trong một tiến trình bun con đứng ở apps/app với API_URL trỏ vào cổng đó — không giả lập fetch, không giả lập tRPC. Yêu cầu GET /contacts mang cookie đăng nhập thật. Hai chiều trên cùng dựng cảnh: người đã bị gỡ rồi đăng nhập lại → phản hồi chuyển hướng với location kết thúc bằng /het-quyen; thành viên còn trong kho → location KHÔNG phải /het-quyen. Chiều đỏ: gắn AuthMiddleware lại cho workspace.get thì proxy nhận lỗi, coi là không biết và cho qua, location không phải /het-quyen và bài đỏ, thông điệp in location nhận được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    layer: backend-effect
+    paths: [apps/app/proxy.ts, apps/app/lib/onboarding.ts, apps/api/src/workspace/workspace.router.ts, apps/api/src/trpc/middlewares/**, apps/api/test/go-la-cat-quyen.spec.ts]

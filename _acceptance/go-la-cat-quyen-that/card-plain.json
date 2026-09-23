@@ -1,0 +1,40 @@
+{
+  "feature_plain": "Người đã bị gỡ khỏi CRM thì mất quyền đọc và ghi dữ liệu ngay lập tức, dù họ đăng nhập lại, còn giữ tab cũ, còn giữ khoá API hay hỏi qua trợ lý nghiên cứu.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ từ chối người đã bị gỡ ở MỌI thủ tục của API khi họ đăng nhập lại (danh sách thủ tục máy tự rút lúc chạy, thủ tục thêm sau tự được canh)."},
+    {"id": "AC-2", "p": "Sẽ chừa đúng hai chỗ người ngoài còn hỏi được — câu hỏi «tôi còn trong kho không» và danh sách cách đăng nhập — để ứng dụng vẫn đưa họ sang màn «hết quyền»."},
+    {"id": "AC-5", "p": "Sẽ từ chối khoá API của người không còn trong kho kể cả khi khoá vẫn bật (người bị gỡ trước ngày vá), qua cả API lẫn cầu REST."},
+    {"id": "AC-6", "p": "Sẽ tắt mọi khoá API của người bị gỡ ngay trong lượt gỡ — giữ lại dòng để đọc lịch sử; khoá của người khác không bị chạm."},
+    {"id": "AC-9", "p": "Sẽ trả lại quyền đọc dữ liệu khi quản trị cho phép lại người đó, nhưng khoá cũ vẫn tắt."}
+  ],
+  "wont_do": [
+    {"id": "AC-3", "p": "Sẽ KHÔNG chặn nhầm thành viên còn trong kho ở bất kỳ thủ tục nào."},
+    {"id": "AC-4", "p": "Chặn tab đang mở của người bị gỡ ngay lời gọi kế tiếp, không chờ 5 phút bộ đệm phiên hết hạn."},
+    {"id": "AC-7", "p": "Chặn người đã bị gỡ tạo khoá mới hoặc bật lại khoá cũ, qua cả màn cài đặt lẫn cổng xác thực trực tiếp; thành viên và hệ thống vẫn tạo khoá được."},
+    {"id": "AC-8", "p": "Chặn người không còn trong kho hỏi trợ lý nghiên cứu — lời gọi không được chuyển sang trợ lý."}
+  ],
+  "scope_plain": "Để hồ sơ riêng: các cổng xác thực khác mà mọi người có phiên gọi thẳng được (đăng ký SSO, quản trị tổ chức), và tải tệp đính kèm hội thoại.",
+  "coverage_plain": [
+    {"i": 0, "p": "Cửa vào: đủ năm cách người bị gỡ còn cầm danh tính — đăng nhập lại (AC-1), tab cũ (AC-4), khoá còn bật (AC-5), khoá mới (AC-7), trợ lý (AC-8); căn cứ «đủ»: ba cách cổng xác thực dựng ra người dùng cộng route duy nhất đúc danh tính, đối chiếu chuẩn OWASP ASVS."},
+    {"i": 1, "p": "Lối gọi: API và cầu REST đo bằng ma trận toàn phần (AC-1, AC-5), cổng tạo khoá (AC-7), route trợ lý (AC-8); các lối REST riêng khác đã soát tay, không được đo ở đây."},
+    {"i": 2, "p": "Người: đã bị gỡ, thành viên còn trong kho (đối chứng AC-3), được cho phép lại (AC-9)."},
+    {"i": 3, "p": "Tập thủ tục: toàn bộ thủ tục đang chạy, trừ đúng hai ngoại lệ đã khai (AC-2) — thêm ngoại lệ mới mà không khai thì phép đo đỏ."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép đo khoá cũ dùng khoá đã tắt nên không chứng được lớp kiểm tư cách chặn khoá còn bật — đúng ca người bị gỡ trước ngày vá. Đã sửa: tiêu chí AC-5 viết lại cho khoá còn bật, đo cả API lẫn toàn bộ cầu REST."},
+    {"i": 1, "p": "Thiếu đối chứng rằng thành viên vẫn tạo khoá được ở màn cài đặt và hệ thống vẫn tự tạo khoá được. Đã sửa: thêm ba đối chứng vào AC-7."},
+    {"i": 2, "p": "Lời hứa «ứng dụng vẫn đưa người bị gỡ sang màn hết quyền» chỉ được đo gián tiếp. Đã sửa: thêm phép đo chạy proxy thật với API thật (E10)."},
+    {"i": 3, "p": "Lời hứa «bất kỳ cửa nào» rộng hơn thứ được đo. Đã sửa: viết lại lời hứa đúng bốn lối được đo, kê các lối đã soát tay."},
+    {"i": 4, "p": "Kế hoạch chưa đính kèm dù hạng này cần duyệt kế hoạch. Đã sửa: kế hoạch viết xong, duyệt cùng lượt này."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260923T132304Z-1", "p": "Chọn kiểm tư cách ở một chỗ chung, chặn mặc định — thủ tục mới tự được canh; đổi lại mỗi lời gọi đọc thêm bảng thành viên một lần."},
+    {"id": "d-20260923T132304Z-2", "p": "Chọn chừa câu hỏi tư cách bằng một lớp kiểm có tên gắn riêng cho nó — ngoại lệ hiện ngay tại chỗ; đổi lại chín thủ tục của mục workspace phải gắn lớp kiểm từng cái."},
+    {"id": "d-20260923T132304Z-3", "p": "Chọn TẮT khoá khi gỡ chứ không xoá — còn đọc được ai từng có khoá gì; đổi lại người được cho phép lại phải tạo khoá mới."},
+    {"id": "d-20260923T132304Z-4", "p": "KHÔNG tắt hay rút ngắn bộ đệm phiên — trang vẫn nhanh; đổi lại mọi chỗ đọc dữ liệu phải hỏi tư cách, không được tin riêng phiên."},
+    {"id": "d-20260923T132304Z-5", "p": "KHÔNG soát trong hồ sơ này các cổng xác thực khác mà mọi người có phiên gọi được — giữ đúng lời hứa «gỡ là cắt quyền»; đổi lại cần một việc riêng soát chúng."},
+    {"id": "d-20260923T132304Z-6", "p": "KHÔNG viết đặc tả giao diện — không màn nào đổi."},
+    {"id": "d-20260923T132304Z-7", "p": "KHÔNG làm bản mẫu bấm được — không màn nào đổi."},
+    {"id": "d-20260923T132304Z-8", "p": "KHÔNG có ảnh chụp màn làm bằng chứng — mọi lời hứa đo ở tầng API và trả lời của route."}
+  ]
+}
