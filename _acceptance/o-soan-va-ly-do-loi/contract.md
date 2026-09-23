@@ -5,7 +5,7 @@ slug: o-soan-va-ly-do-loi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, agent, api]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-09-22-o-soan-va-ly-do-loi-design.md
 approved_by:
 approved_at:
