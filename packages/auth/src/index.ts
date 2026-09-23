@@ -43,6 +43,7 @@ export {
 	canRenameWorkspace,
 	DEFAULT_WORKSPACE_NAME,
 	ensureWorkspaceMembership,
+	NOT_A_MEMBER,
 	WORKSPACE_ID,
 	workspaceRoleOf,
 } from "./organization";

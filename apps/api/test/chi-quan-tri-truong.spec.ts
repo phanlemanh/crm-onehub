@@ -1,5 +1,10 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { API_KEY_HEADER, auth, type WorkspaceRole } from "@crm/auth";
+import {
+	API_KEY_HEADER,
+	auth,
+	NOT_A_MEMBER,
+	type WorkspaceRole,
+} from "@crm/auth";
 import { db } from "@crm/db";
 import type { INestApplication } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
@@ -207,7 +212,8 @@ async function chayMaTran(
 		for (const ca of BAY_THAO_TAC) {
 			const { dauVao, daXayRa } = await ca.chuanBi();
 			const tra = await goi(loi, ca.thaoTac, dauVao);
-			const camDung = maMong === 403 ? tra.loi === THONG_DIEP_CAM : true;
+			const thongDiep = loi === "nonMember" ? NOT_A_MEMBER : THONG_DIEP_CAM;
+			const camDung = maMong === 403 ? tra.loi === thongDiep : true;
 			expect(
 				`${nhan} ${ca.thaoTac}: HTTP ${tra.status} thong diep ${camDung} xay ra ${await daXayRa(tra)}`,
 			).toBe(
@@ -323,7 +329,6 @@ describe("cqt-access", () => {
 			["owner", true],
 			["admin", true],
 			["member", false],
-			["nonMember", false],
 		];
 		let soCa = 0;
 		for (const [loi, mong] of CA) {
@@ -336,6 +341,11 @@ describe("cqt-access", () => {
 			);
 			soCa += 1;
 		}
+		const ngoai = await doc("nonMember", "access", undefined);
+		expect(`nonMember access: HTTP ${ngoai.status} ${ngoai.loi}`).toBe(
+			`nonMember access: HTTP 403 ${NOT_A_MEMBER}`,
+		);
+		soCa += 1;
 		expect(`so ca ${soCa}`).toBe("so ca 4");
 	});
 });

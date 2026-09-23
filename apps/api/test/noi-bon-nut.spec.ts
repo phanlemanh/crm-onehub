@@ -10,7 +10,7 @@ import {
 } from "../src/onboarding/onboarding.contracts";
 import { OnboardingService } from "../src/onboarding/onboarding.service";
 import { batLoi } from "./dieu-phoi-gieo";
-import { mintPhien } from "./phien-thu";
+import { gieoThanhVien, mintPhien } from "./phien-thu";
 
 const TIEN_TO = "nbn";
 
@@ -50,6 +50,7 @@ async function gieoBoPhan(): Promise<string> {
 }
 
 async function phienCua(userId: string): Promise<string> {
+	await gieoThanhVien(userId, "member");
 	const phien = await mintPhien(userId);
 	daGieo.phien.push(phien.token);
 	return phien.cookie;
