@@ -80,7 +80,7 @@ evals:
     criterion: AC-8
     executor: script
     cmd: config:executors.script.kat_hd_noi
-    expected: "exit 0; tep test moi o packages/auth/test xanh voi auth.ts that; tren ban sao sao-* trong .acceptance-runs (co doi chung ban sao khong dot bien phai xanh), dot bien M1 (auth.ts dat hd la mot mien ngoai danh sach) va M2 (auth.ts bo han hd) moi dot bien lam ca do cua tep do do, rang ghim ten ca; dot bien nao van xanh thi exit 1 in 'RANG CUN' va ten dot bien"
+    expected: "exit 0; tep test moi o packages/auth/test xanh voi auth.ts that; tren ban sao sao-* trong .acceptance-runs (co doi chung ban sao khong dot bien phai xanh), dot bien M1 (auth.ts dat hd la mot mien ngoai danh sach) va M2 (auth.ts bo han hd) moi dot bien lam ca do cua tep do do VA lam ca 'cua google tu choi token co hd lech' trong chia-mat-khau do, rang ghim ten ca; dot bien nao van xanh o mot trong hai ca thi exit 1 in 'RANG CUN' va ten dot bien"
     paths: ["packages/auth/test/**", "packages/auth/src/auth.ts", "packages/auth/src/workspace.ts", "_acceptance/kiem-auth-khong-phu-thuoc-thu-tu/rang/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 

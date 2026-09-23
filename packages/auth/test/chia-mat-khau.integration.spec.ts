@@ -7,6 +7,7 @@ import { CHIA, ducChia, PASSWORD } from "../src/chia-mat-khau";
 import { isGoogleConfigured } from "../src/env";
 import { CAU_MAT_KHAU, SANG_MAT_KHAU } from "../src/sang-mat-khau";
 import { GOOGLE_PROVIDER_ID, SYNC_SCOPES } from "../src/scopes";
+import { googleHostedDomain } from "../src/workspace";
 
 const suffix = process.env.TEST_RUN_ID ?? "chia-mat-khau-spec";
 
@@ -145,7 +146,7 @@ const BO_QUA_GOOGLE =
 	"bo-qua-co-ten: khong co GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET trong moi truong bai kiem";
 
 const BO_QUA_HD_LECH =
-	"bo-qua-co-ten: auth khong khoa hd — thieu khoa Google hoac danh sach cho phep khong phai dung mot mien";
+	"bo-qua-co-ten: danh sach cho phep khong phai dung mot mien, hoac thieu khoa Google";
 
 async function gieoHangDuocVao(): Promise<{ email: string }> {
 	await dungKho();
@@ -643,26 +644,37 @@ describe("cua-google-con-song", () => {
 	});
 
 	test("cua google tu choi token co hd lech voi hd da khoa, du nguoi trong danh sach", async () => {
-		const hdDaKhoa = auth.options.socialProviders?.google?.hd;
-		if (!isGoogleConfigured() || !hdDaKhoa) {
+		const mienTheoDanhSach = googleHostedDomain();
+		if (!isGoogleConfigured() || !mienTheoDanhSach) {
 			expect([
 				BO_QUA_HD_LECH,
-				isGoogleConfigured() && Boolean(hdDaKhoa),
+				isGoogleConfigured() && Boolean(mienTheoDanhSach),
 			]).toEqual([BO_QUA_HD_LECH, false]);
 			return;
 		}
 
+		expect(auth.options.socialProviders?.google?.hd).toBe(mienTheoDanhSach);
+
 		const { email } = await gieoHangDuocVao();
+		const accountId = dinhDanh("google-id");
 
-		const vao = await dangNhapQuaGoogle({
+		const lech = await dangNhapQuaGoogle({
 			email,
-			accountId: dinhDanh("google-id"),
+			accountId,
 			ten: "Token lech mien",
-			hd: `lech-${hdDaKhoa}`,
+			hd: `lech-${mienTheoDanhSach}`,
 		});
-
-		expect(vao.diaChiVe ?? "").toContain("error=unable_to_get_user_info");
+		expect(lech.diaChiVe ?? "").toContain("error=unable_to_get_user_info");
 		expect(await db.user.count({ where: { email } })).toBe(0);
+
+		const dung = await dangNhapQuaGoogle({
+			email,
+			accountId,
+			ten: "Token lech mien",
+			hd: mienTheoDanhSach,
+		});
+		expect(dung.diaChiVe ?? "").not.toContain("error=");
+		expect(await db.user.count({ where: { email } })).toBe(1);
 	});
 
 	test("nguoi ngoai danh sach duoc vao khong dang nhap duoc bang google", async () => {

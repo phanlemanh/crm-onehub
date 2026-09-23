@@ -49,6 +49,9 @@ export const KAT = {
 	mocHd: "if (hostedDomain) google.hd = hostedDomain;",
 	caOnemount: '(fail) hd cua google theo danh sach "onemount.com"',
 	loiNap: "khong nap duoc auth voi danh sach",
+	locHdLech: "hd lech",
+	caHdLech:
+		"(fail) cua-google-con-song > cua google tu choi token co hd lech voi hd da khoa, du nguoi trong danh sach",
 };
 
 export class Dung extends Error {

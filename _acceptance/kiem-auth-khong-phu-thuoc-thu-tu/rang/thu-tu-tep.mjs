@@ -289,6 +289,34 @@ const DOT_BIEN = [
 	["M2 bo hd", "", null],
 ];
 
+function chayHdLech(noi) {
+	return chayBun(noi, ["test", `./test/${KAT.tepChia}`, "-t", KAT.locHdLech]);
+}
+
+function xetDoiChung(ten, a, b) {
+	if (a.ma === 0 && b.ma === 0 && !b.ra.includes("(fail)"))
+		return {
+			ok: `${ten}: xanh — ban sao nap auth, ca hd-cua-google va ca hd lech deu xanh`,
+		};
+	return {
+		loi: `RANG CUN: ${ten} do — ban sao khong dung lam doi chung\n${a.ra}\n${b.ra}`,
+	};
+}
+
+function xetDotBien(ten, dauVet, a, b) {
+	const loi = [];
+	if (!a.ra.includes(KAT.caOnemount))
+		loi.push(`RANG CUN: ${ten} van xanh o ${KAT.tepMoi}`);
+	else if (dauVet && !a.ra.includes(dauVet))
+		loi.push(`RANG CUN: ${ten} do nhung khong thay gia tri nhan '${dauVet}'`);
+	if (!b.ra.includes(KAT.caHdLech))
+		loi.push(`RANG CUN: ${ten} — ca hd lech van xanh khi auth.ts hong`);
+	if (loi.length) return { loi: loi.join("\n") };
+	return {
+		ok: `${ten}: bi bat — ${KAT.caOnemount}${dauVet ? ` (nhan '${dauVet}')` : ""} · ${KAT.caHdLech}`,
+	};
+}
+
 function hdNoi() {
 	const that = chayBun(AUTH, ["test", `./${KAT.tepMoi}`]);
 	if (that.ma !== 0)
@@ -305,38 +333,25 @@ function hdNoi() {
 					`TIEN DE: auth.ts khong con moc '${KAT.mocHd}' — ${ten} khong dat duoc`,
 				);
 			if (thay !== null) writeFileSync(duong, noiDung.replace(KAT.mocHd, thay));
-			const { ma, ra } = chayBun(sao, ["test", `./${KAT.tepMoi}`]);
-			if (ra.includes(KAT.loiNap)) {
+			const a = chayBun(sao, ["test", `./${KAT.tepMoi}`]);
+			if (a.ra.includes(KAT.loiNap)) {
 				loi.push(
 					`RANG CUN: ${ten} — ban sao khong nap duoc auth, do vi loi nap chu khong vi dot bien`,
 				);
 				continue;
 			}
-			if (thay === null) {
-				if (ma === 0)
-					console.log(`${ten}: xanh — ban sao nap auth va phan biet duoc`);
-				else
-					loi.push(
-						`RANG CUN: ${ten} do — ban sao khong dung lam doi chung\n${ra}`,
-					);
-				continue;
-			}
-			if (!ra.includes(KAT.caOnemount)) loi.push(`RANG CUN: ${ten} van xanh`);
-			else if (dauVet && !ra.includes(dauVet))
-				loi.push(
-					`RANG CUN: ${ten} do nhung khong thay gia tri nhan '${dauVet}'`,
-				);
-			else
-				console.log(
-					`${ten}: bi bat — ${KAT.caOnemount}${dauVet ? ` (nhan '${dauVet}')` : ""}`,
-				);
+			const b = chayHdLech(sao);
+			const ket =
+				thay === null ? xetDoiChung(ten, a, b) : xetDotBien(ten, dauVet, a, b);
+			if (ket.loi) loi.push(ket.loi);
+			else console.log(ket.ok);
 		} finally {
 			donSao(sao);
 		}
 	}
 	if (loi.length) dung(1, loi.join("\n"));
 	console.log(
-		"kat hd-noi: auth.ts that xanh, ban sao doi chung xanh, hai dot bien deu bi bat vi dung ly do",
+		"kat hd-noi: auth.ts that xanh, ban sao doi chung xanh, hai dot bien deu bi bat o ca hd-cua-google lan ca hd lech",
 	);
 }
 
