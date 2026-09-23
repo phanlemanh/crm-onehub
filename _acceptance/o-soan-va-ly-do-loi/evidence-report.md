@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 08cade5101990a29fe046bc1c75393c1ab819c30
+verified_commit: fb78f6bbaef9f167ee0553a4b8f42e0fd0b49850
 human_signoff: Phan Le Manh 2026-09-23
 ---
 
@@ -209,3 +209,7 @@ Round 4: chờ việc "viec-cua-toi" (phiên nền task_08c81e16) sửa xong r�
 ### Re-pin lần 1 — 2026-09-23, do hop nhat onehub PR 89 sau chu ky
 run_id: repin-20260923T080559Z-37923
 sha: 08cade5101990a29fe046bc1c75393c1ab819c30 · suites: 4 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · ngoài làn máy: E1, E2, E8 · AC không có chốt máy: AC-1, AC-2, AC-7
+
+### Re-pin lần 2 — 2026-09-23, do sua thuoc o-soan.mjs va steps E1/E2/E8 (ho so thuoc-o-soan-don-dep)
+run_id: repin-20260923T093819Z-15281
+sha: fb78f6bbaef9f167ee0553a4b8f42e0fd0b49850 · suites: 4 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · ngoài làn máy: E1, E2, E8 · diff chạm vật đo ngoài làn máy: E1, E2, E8 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-2, AC-7

@@ -14,7 +14,7 @@ evals:
     steps:
       - "Dat truoc MOI buoc: APP_URL=http://127.0.0.1:3600 va API_URL=http://127.0.0.1:3601 — dung 127.0.0.1, tranh Invalid origin va cookie ro theo host"
       - "Dung ca hai may chu cua CAY DANG XET: api 3601, app 3600 (APP_URL cua api cung la http://127.0.0.1:3600; app dat NEXT_PUBLIC_API_URL va API_URL la http://127.0.0.1:3601). Kiem cong 3600 va 3601 truoc khi dung — tai nguyen chung; tat bang PID da ghi, khong pkill"
-      - "Chay: bun scripts/lan-do/tien-de.mjs --chay 'bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs con-tro' — rang tu chan cay (dau moc trong apps/app/public xin lai qua APP_URL), thoat ma 2 va goi ten cay neu khac cay, KHONG doc so nao"
+      - "Chay: NGUOI=${NGUOI:-dev@localhost} bun scripts/lan-do/tien-de.mjs --chay 'bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs con-tro' — rang tu chan cay (dau moc trong apps/app/public xin lai qua APP_URL), thoat ma 2 va goi ten cay neu khac cay, KHONG doc so nao"
       - "Rang ghi evidence/E1-con-tro.json: voi moi o (man-dau, trong-hoi-thoai) — khoang cach con tro toi mep trai vung chu (px), khoang cach mep trai chu goi y toi mep trai vung chu (px), chu goi y co hien khong; o hai kho 1440 va 375, va chup evidence/E1-<o>-<kho>.png (4 anh) (o da bam vao, con tro nhap nhay da tat bang caret-color de khong mat khung)"
     inputs:
       - _acceptance/o-soan-va-ly-do-loi/evidence/
@@ -45,7 +45,7 @@ evals:
       - "_acceptance/o-soan-va-ly-do-loi/rang/**"
     steps:
       - "Cung may chu va bien moi truong nhu E1"
-      - "Chay: bun scripts/lan-do/tien-de.mjs --chay 'bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs go-chu' — rang bam vao o man dau, go chu a, ghi evidence/E2-go-chu.json (chu goi y co hien khong, textContent cua o bo ky tu rong, vi tri con tro so voi mep phai chu 'a') va chup evidence/E2-go-chu.png"
+      - "Chay: NGUOI=${NGUOI:-dev@localhost} bun scripts/lan-do/tien-de.mjs --chay 'bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs go-chu' — rang bam vao o man dau, go chu a, ghi evidence/E2-go-chu.json (chu goi y co hien khong, textContent cua o bo ky tu rong, vi tri con tro so voi mep phai chu 'a') va chup evidence/E2-go-chu.png"
     inputs:
       - _acceptance/o-soan-va-ly-do-loi/evidence/
     expected: |
@@ -185,7 +185,7 @@ evals:
       - "_acceptance/o-soan-va-ly-do-loi/rang/**"
     steps:
       - "Cung may chu va bien moi truong nhu E1; KHONG nang quyen thanh vien nao, KHONG tao phien cho tai khoan nguoi khac"
-      - "Chay: bun scripts/lan-do/tien-de.mjs --chay 'bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs chup' — rang gieo hoi thoai BUILDER co AgentEvent turn.failed nhu AC-5 cho nguoi do (xoa khi xong), roi o kho 1440 va 375 chup: evidence/E8-o-trong-<kho>.png (o man dau da bam, con tro to do), evidence/E8-da-go-<kho>.png, evidence/E8-the-loi-<kho>.png; ghi scrollWidth va clientWidth moi kho vao evidence/E8-khuon.txt"
+      - "Chay: NGUOI=${NGUOI:-dev@localhost} bun scripts/lan-do/tien-de.mjs --chay 'bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs chup' — rang gieo hoi thoai BUILDER co AgentEvent turn.failed nhu AC-5 cho nguoi do (xoa khi xong), roi o kho 1440 va 375 chup: evidence/E8-o-trong-<kho>.png (o man dau da bam, con tro to do), evidence/E8-da-go-<kho>.png, evidence/E8-the-loi-<kho>.png; ghi scrollWidth va clientWidth moi kho vao evidence/E8-khuon.txt"
       - "Xoa dau moc trong apps/app/public khi xong"
     inputs:
       - _acceptance/o-soan-va-ly-do-loi/evidence/
