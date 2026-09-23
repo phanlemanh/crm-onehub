@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e1c3ff8a020a3667823dbb8f87058686559ed67d
+verified_commit: e83bf65af354acd1a4f986baef7183405d2c0310
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -265,3 +265,7 @@ Round 1: mọi eval feature (E1-E17) xanh ngay ở lần chấm đầu; một fi
 ### Re-pin lần 1 — 2026-09-22, do hoa cu do merge origin/onehub (#84)
 run_id: repin-20260922T152039Z-31450
 sha: e1c3ff8a020a3667823dbb8f87058686559ed67d · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-12
+
+### Re-pin lần 2 — 2026-09-23, do DataTable doi nhan tieu de sang data-slot table-head-label, bo cuc auto (ho so tieu-de-cot-doc-tron)
+run_id: repin-20260923T001940Z-55145
+sha: e83bf65af354acd1a4f986baef7183405d2c0310 · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-12
