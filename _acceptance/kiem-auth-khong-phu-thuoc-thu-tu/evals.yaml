@@ -72,7 +72,7 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.kat_pham_vi
-    expected: "exit 0; git diff b812b65a..HEAD ngoai _acceptance/** va docs/** chi gom tep duoi packages/auth/test/; danh sach mau co packages/auth/src/auth.ts thi ham kiem goi ten dung tep do — chieu do vang thi exit 1"
+    expected: "exit 0; git diff b812b65a..HEAD ngoai _acceptance/** va tep T1 (risk_tiers.t1_skip_globs) chi gom tep duoi packages/auth/test/; danh sach mau co packages/auth/src/auth.ts thi ham kiem goi ten dung tep do — chieu do vang thi exit 1"
     paths: ["packages/**", "apps/**", "_acceptance/kiem-auth-khong-phu-thuoc-thu-tu/rang/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
