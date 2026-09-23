@@ -17,7 +17,7 @@ evals:
       doc lap trong bai kiem (loc archivedAt null, nhom theo stage, cong baseAmount), khong
       chep so cung. Thu tu cot khang dinh bang mang giai doan cua deal-stage.
       CHIEU DO: ban sao bo dieu kien archivedAt null trong thu tuc -> do voi thong diep ghim
-      "cot DEMO_BOOKED: dem 3 != 4" (thoa thuan luu tru bi tinh).
+      "cot DEMO_BOOKED: dem 4 != 3" (thoa thuan luu tru bi tinh; da chay 2026-09-23).
 
   - id: E2
     criterion: AC-3
@@ -31,7 +31,7 @@ evals:
       Fixture 53 thoa thuan o QUALIFIED_TO_BUY. Khang dinh: dem = 53, so the = 50, the la 50
       phan tu dau theo cung sort/dir ma deals.list tra cho stage do (so tung id theo chi so).
       Cap hai chieu tren cung fixture: 50 thoa thuan -> dem 50, the 50.
-      CHIEU DO: nang tran len 60 trong ban sao -> do voi thong diep ghim "tran cot: 53 the != 50".
+      CHIEU DO: nang tran len 60 trong ban sao -> do voi thong diep ghim "tran cot: 53 the != 50" (da chay 2026-09-23).
 
   - id: E3
     criterion: AC-4
@@ -46,8 +46,8 @@ evals:
       tap id the] = 84 khang dinh. Gia tri ky vong lay tu deals.list THAT cung bo loc
       (status=all, archived=false, pageSize 100, fixture < 100 dong) roi gom theo stage — khong
       viet tay. So theo tung cot, khong so tap gop.
-      CHIEU DO: ban sao chi rieng phan dem/tong (groupBy) mat bo loc owner, phan the van loc ->
-      do voi thong diep ghim "bo loc owner, cot DEMO_BOOKED: dem 3 != 1".
+      CHIEU DO: ban sao chi rieng phan dem mat moi bo loc, phan the van loc -> do voi thong
+      diep ghim "bo loc q, cot DEMO_BOOKED: dem 4 != 1" (da chay 2026-09-23).
 
   - id: E4
     criterion: AC-5
