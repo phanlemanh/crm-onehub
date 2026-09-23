@@ -431,4 +431,5 @@ if (!CA[dong_tu]) {
 }
 const kq = CA[dong_tu]();
 if (kq.ra) console.error(kq.ra);
+console.log(`THUOC KET LUAN: ${dong_tu} — ma thoat cua lenh ${kq.ma}`);
 process.exit(kq.ma);
