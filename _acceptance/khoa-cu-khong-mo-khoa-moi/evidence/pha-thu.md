@@ -37,3 +37,13 @@ Lệnh chung: `bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spe
 | P6 | bộ rút mệnh đề chỉ lấy dòng đầu của WHERE | 1 |  2 pass  1 fail  | «xem truoc dem 3 khoa, luot don doi 2 dong» — khopSoDong false, conLai 1 |
 | P7 | `UPDATE … SET` → `DELETE FROM "apikey"` | 1 |  1 pass  2 fail  | «luot don lech … dong khoa bi xoa» — soKhoaBi 1; «migration luot don khong co dang UPDATE "apikey" ... WHERE ...» |
 | P8 | bỏ hẳn lọc `enabled` | 1 |  1 pass  2 fail  | «luot don lech: … khoa da tat bi de …» — updatedAt của b3 bị đè; «xem truoc dem 2 khoa, luot don doi 2 dong» — conLai 2 |
+
+## P9–P11 — hai bài siết của hồ sơ nguồn (E7, E8)
+
+| Lượt | Thay đổi tạm | Lệnh `-t` | Mã thoát | Kết quả | Dòng thông điệp ghim |
+|---|---|---|---|---|---|
+| P9 | `removeMember` ghi `enabled: true` thay vì tắt | `go-tat-khoa` | 1 | 0 pass 1 fail | «khoa cua nguoi bi go van bat» — vế đọc cột trạng thái khoá bắt trước |
+| P11 | như P9, cộng tạm bỏ vế đọc cột trạng thái trong bài (để chạm tới vế siết) | `go-tat-khoa` | 1 | 0 pass 1 fail | «khoa da tat phai bi tu choi o tang khoa, khong phai o phep kiem tu cach» — nhận {status 403, loiKhoa null}, đòi {401, KEY_DISABLED} |
+| P10 | `canhKhoaApi` từ chối mọi `/api-key/update` | `khoa-moi` | 1 | 0 pass 1 fail | «thanh vien khong bat lai duoc khoa cua chinh minh qua cong xac thuc» — nhận {status 403, bat false} |
+
+Sau mỗi lượt hoàn nguyên từ bản chép; `git status` của `apps` và `packages` sạch ngoài thay đổi đã commit.
