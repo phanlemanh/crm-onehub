@@ -30,9 +30,19 @@ function phanDau(v: ViecNhac): string {
 	return "";
 }
 
-function dong(v: ViecNhac, lienKet: (planId: string) => string | null): string {
+export type KhuonTin = "slack" | "tron";
+
+function dong(
+	v: ViecNhac,
+	lienKet: (planId: string) => string | null,
+	khuon: KhuonTin,
+): string {
 	const han = v.han ? `, hạn ${ngayThang(v.han)}` : "";
 	const url = lienKet(v.planId);
+	if (khuon === "tron") {
+		const mo = url ? ` — ${url}` : "";
+		return `• ${v.companyName} · ${phanDau(v)}${v.goiY}${han}${mo}`;
+	}
 	const mo = url ? ` — <${url}|mở kế hoạch>` : "";
 	return `• ${thoat(v.companyName)} · ${phanDau(v)}${thoat(v.goiY)}${han}${mo}`;
 }
@@ -43,18 +53,29 @@ export function dungTin(
 	ten: string,
 	viec: ViecNhac[],
 	lienKet: (planId: string) => string | null,
+	khuon: KhuonTin = "slack",
+	tranKyTu: number = Number.POSITIVE_INFINITY,
 ): TinNhac {
 	const theoThuTu = LOAI_NHAC.flatMap((loai) =>
 		viec.filter((v) => v.loai === loai),
 	);
-	const daGui = theoThuTu.slice(0, NHAC.tran);
-	const nhom = LOAI_NHAC.flatMap((loai) => {
-		const ds = daGui.filter((v) => v.loai === loai);
-		if (ds.length === 0) return [];
-		return ["", `*${TIEU_DE[loai]}*`, ...ds.map((v) => dong(v, lienKet))];
-	});
-	const conLai = theoThuTu.length - daGui.length;
-	const cuoi = conLai > 0 ? ["", `và ${conLai} việc nữa — mở tổng quan`] : [];
-	const chao = `Chào ${thoat(ten)}, sáng nay có ${theoThuTu.length} việc 30 ngày đầu cần bạn để ý.`;
-	return { text: [chao, ...nhom, ...cuoi].join("\n"), daGui };
+	const tieuDe = (loai: LoaiNhac) =>
+		khuon === "tron" ? TIEU_DE[loai] : `*${TIEU_DE[loai]}*`;
+	const tenHien = khuon === "tron" ? ten : thoat(ten);
+	const chao = `Chào ${tenHien}, sáng nay có ${theoThuTu.length} việc 30 ngày đầu cần bạn để ý.`;
+	const ve = (daGui: ViecNhac[]) => {
+		const nhom = LOAI_NHAC.flatMap((loai) => {
+			const ds = daGui.filter((v) => v.loai === loai);
+			if (ds.length === 0) return [];
+			return ["", tieuDe(loai), ...ds.map((v) => dong(v, lienKet, khuon))];
+		});
+		const conLai = theoThuTu.length - daGui.length;
+		const cuoi = conLai > 0 ? ["", `và ${conLai} việc nữa — mở tổng quan`] : [];
+		return [chao, ...nhom, ...cuoi].join("\n");
+	};
+	let daGui = theoThuTu.slice(0, NHAC.tran);
+	while (daGui.length > 0 && ve(daGui).length > tranKyTu) {
+		daGui = daGui.slice(0, -1);
+	}
+	return { text: ve(daGui), daGui };
 }

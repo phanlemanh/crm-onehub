@@ -12,7 +12,12 @@ export const mucNhac = z
 	.strict();
 
 export const nhacPayload = z
-	.object({ muc: z.array(mucNhac), daGui: z.array(mucNhac).optional() })
+	.object({
+		muc: z.array(mucNhac),
+		daGui: z.array(mucNhac).optional(),
+		kenh: z.enum(["zalo", "slack"]).optional(),
+		lechKenh: z.boolean().optional(),
+	})
 	.strict();
 
 export type NhacPayload = z.infer<typeof nhacPayload>;

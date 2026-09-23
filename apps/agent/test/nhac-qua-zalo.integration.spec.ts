@@ -9,7 +9,8 @@ import {
 	test,
 } from "bun:test";
 import { db } from "@crm/db";
-import { chonKenh, type UuTien } from "@crm/db/kenh-thong-bao";
+import { chonKenh, kenhSeDungCua, type UuTien } from "@crm/db/kenh-thong-bao";
+import { NHAC } from "@crm/db/onboarding-nhac";
 import { SETTINGS_ID } from "@crm/db/settings";
 import {
 	bamMa,
@@ -17,10 +18,34 @@ import {
 	taoMaLienKet,
 	ZALO_LIEN_KET,
 } from "@crm/db/zalo-lien-ket";
+import { parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
 import { capabilitiesFrom } from "../agent/lib/capabilities";
+import { chayNhac, lenLichNhac } from "../agent/lib/nhac-ke-hoach";
 import { ZALO } from "../agent/lib/zalo-config";
 import { pollZalo } from "../agent/lib/zalo-poll";
-import { donDep, gieoNguoi, moXuong, TIEN_TO } from "./support/nhac-gieo";
+import {
+	donDep,
+	gieoKeHoach,
+	gieoNguoi,
+	khopSlack,
+	moXuong,
+	noiSlack,
+	slackGia,
+	TIEN_TO,
+} from "./support/nhac-gieo";
+import {
+	dongCo,
+	gieoGui,
+	gieoMuoiHai,
+	HAN_XA,
+	HOM_QUA,
+	hangCua,
+	lucVN,
+	NGAY_NHAC,
+	ngayCach,
+	PHUT_SAU,
+	tenCongTy,
+} from "./support/nhac-gui-gieo";
 import { type TinGia, zaloGia } from "./support/zalo-gia";
 
 type DongBang = [UuTien, boolean, boolean, "zalo" | "slack" | null, boolean];
@@ -473,5 +498,413 @@ describe("zalo", () => {
 				"tin hong khong danh dau da xem",
 			).toBeNull();
 		});
+	});
+});
+
+const APP_URL = "https://crm.test";
+const TEN_DAC_BIET = `${TIEN_TO}Minh & Co <HN>`;
+const DAI = 200;
+
+function lienKetTron(dong: string): string | null {
+	return / — (\S+)$/.exec(dong)?.[1] ?? null;
+}
+
+async function batBot(): Promise<void> {
+	await db.appSetting.upsert({
+		where: { id: SETTINGS_ID },
+		create: { id: SETTINGS_ID, zaloBotName: "Bot OneHub" },
+		update: { zaloBotName: "Bot OneHub" },
+	});
+}
+
+async function noiZalo(userId: string, zaloUserId: string): Promise<void> {
+	await db.zaloLink.create({
+		data: {
+			crmUserId: userId,
+			zaloUserId,
+			zaloDisplayName: `Zalo ${zaloUserId}`,
+		},
+	});
+}
+
+async function uuTien(userId: string, channel: UuTien): Promise<void> {
+	await db.notificationPreference.upsert({
+		where: { userId },
+		create: { userId, channel },
+		update: { channel },
+	});
+}
+
+async function gieoMotViec(ten: string) {
+	const nguoi = await gieoNguoi(ten);
+	const O = await gieoNguoi(`${ten} cam trich`);
+	const goc = lucVN(NGAY_NHAC, PHUT_SAU);
+	await gieoKeHoach({
+		camTrich: O.id,
+		batDau: ngayCach(goc, -HAN_XA),
+		imTu: ngayCach(goc, HOM_QUA),
+		buoc: [{ nhan: "Tre", giao: nguoi.id, han: ngayCach(goc, HOM_QUA) }],
+	});
+	return nguoi;
+}
+
+async function batLoi(chay: () => Promise<unknown>): Promise<string> {
+	try {
+		await chay();
+	} catch (loi) {
+		return loi instanceof Error ? `nem: ${loi.message}` : "nem";
+	}
+	return "khong nem";
+}
+
+describe("gui-kenh", () => {
+	beforeEach(async () => {
+		await donDep();
+		await donZalo();
+		await db.account.deleteMany({ where: { providerId: "slack" } });
+	});
+	afterEach(() => {
+		setSystemTime();
+	});
+	afterAll(async () => {
+		await donZalo();
+		await donDep();
+	});
+
+	test("gui-zalo: mot sendMessage toi ZA, khong Slack, chu tron, doc lai hang", async () => {
+		const g = await gieoGui();
+		await db.company.updateMany({
+			where: { onboardingPlans: { some: { id: g.keHoach[0]?.id } } },
+			data: { name: TEN_DAC_BIET },
+		});
+		await noiZalo(g.A.id, "ZA");
+		await batBot();
+		setSystemTime(g.goc);
+		await lenLichNhac(g.goc);
+		const z = zaloGia();
+		const s = slackGia();
+		const ket = await voiToken(TOKEN, async () =>
+			chayNhac(await hangCua(g.A.id), {
+				fetcher: s.fetcher,
+				zaloFetcher: z.fetcher,
+				appUrl: APP_URL,
+			}),
+		);
+		const gui = z.guiToi("ZA");
+		expect(gui.length, "dung mot sendMessage toi ZA").toBe(1);
+		expect(s.goi.length, "khong goi Slack").toBe(0);
+		const text = gui[0]?.body.text ?? "";
+		expect(text, "doi chung: ky tu dac biet giu nguyen").toContain(
+			"Minh & Co <HN>",
+		);
+		for (const cam of ["*", "<http", "|mở kế hoạch>", "&amp;"]) {
+			expect(text.includes(cam), `tin Zalo la chu tron: ${cam}`).toBe(false);
+		}
+		expect(text.indexOf("Quá hạn"), "Quá hạn truoc Sắp hạn").toBeLessThan(
+			text.indexOf("Sắp hạn"),
+		);
+		expect(text.indexOf("Sắp hạn"), "Sắp hạn truoc Kế hoạch im").toBeLessThan(
+			text.indexOf("Kế hoạch im"),
+		);
+		const moiDong = await Promise.all(
+			g.keHoach.map(async (k) =>
+				dongCo(text, `${await tenCongTy(k.id)} ·`).map((d) =>
+					lienKetTron(d)?.endsWith(`?record=plan:${k.id}`),
+				),
+			),
+		);
+		expect(moiDong, "dong mo dung ke hoach cua no").toEqual(
+			g.keHoach.map(() => [true]),
+		);
+		const hang = await hangCua(g.A.id);
+		const p = parseNhacPayload(hang.payload);
+		expect({
+			ket,
+			outcome: hang.outcome,
+			kenh: p.kenh,
+			lech: p.lechKenh,
+			daGui: (p.daGui ?? []).map((m) => m.planId).sort(),
+		}).toEqual({
+			ket: "da-gui",
+			outcome: "da-gui:4",
+			kenh: "zalo",
+			lech: false,
+			daGui: g.keHoach.map((k) => k.id).sort(),
+		});
+	});
+
+	test("gui-zalo: doi chung, go ZaloLink thi di Slack", async () => {
+		const g = await gieoGui();
+		await batBot();
+		setSystemTime(g.goc);
+		await lenLichNhac(g.goc);
+		const z = zaloGia();
+		const s = slackGia();
+		await voiToken(TOKEN, async () =>
+			chayNhac(await hangCua(g.A.id), {
+				fetcher: s.fetcher,
+				zaloFetcher: z.fetcher,
+				appUrl: APP_URL,
+			}),
+		);
+		const p = parseNhacPayload((await hangCua(g.A.id)).payload);
+		expect({
+			zalo: z.goi.length,
+			slack: s.goi.filter((c) => c.url.endsWith("chat.postMessage")).length,
+			kenh: p.kenh,
+		}).toEqual({ zalo: 0, slack: 1, kenh: "slack" });
+	});
+
+	async function guiMuoiHai(tenDai: boolean) {
+		const g = await gieoMuoiHai();
+		if (tenDai) {
+			for (const [i, v] of g.viec.entries()) {
+				const ten = `${TIEN_TO}${"X".repeat(DAI)}${i}`;
+				await db.company.updateMany({
+					where: { onboardingPlans: { some: { id: v.planId } } },
+					data: { name: ten },
+				});
+				v.congTy = ten;
+			}
+		}
+		await noiZalo(g.A.id, "ZA");
+		await batBot();
+		setSystemTime(g.goc);
+		await lenLichNhac(g.goc);
+		const z = zaloGia();
+		await voiToken(TOKEN, async () =>
+			chayNhac(await hangCua(g.A.id), {
+				zaloFetcher: z.fetcher,
+				appUrl: APP_URL,
+			}),
+		);
+		const text = z.guiToi("ZA")[0]?.body.text ?? "";
+		const hien = g.viec.filter((v) =>
+			text.includes(`?record=plan:${v.planId}`),
+		);
+		const daGui = (
+			parseNhacPayload((await hangCua(g.A.id)).payload).daGui ?? []
+		)
+			.map((m) => m.planId)
+			.sort();
+		return { g, text, hien, daGui };
+	}
+
+	test("tran-zalo: ten dai, tin khong vuot tran, dem con lai dung, daGui dung", async () => {
+		const { g, text, hien, daGui } = await guiMuoiHai(true);
+		const conLai = g.viec.length - hien.length;
+		expect(text.length, "tin Zalo khong vuot tran ky tu").toBeLessThanOrEqual(
+			ZALO.tranKyTu,
+		);
+		expect(
+			hien.length,
+			"ten dai thi cat bot dong theo tran ky tu",
+		).toBeLessThan(NHAC.tran);
+		expect(text, "dong con lai dem dung so viec khong co trong tin").toContain(
+			`và ${conLai} việc nữa`,
+		);
+		expect(daGui, "daGui dung tap dong co trong tin").toEqual(
+			hien.map((v) => v.planId).sort(),
+		);
+	});
+
+	test("tran-zalo: doi chung, ten ngan thi du NHAC.tran dong", async () => {
+		const { g, text, hien, daGui } = await guiMuoiHai(false);
+		expect({
+			soHien: hien.length,
+			conLai: text.includes(`và ${g.viec.length - NHAC.tran} việc nữa`),
+			daGui: daGui.length,
+		}).toEqual({ soHien: NHAC.tran, conLai: true, daGui: NHAC.tran });
+	});
+
+	test("lech-kenh: P Q R S di dung kenh, trang thai trung payload", async () => {
+		const [P, Q, R, S] = await Promise.all([
+			gieoMotViec("Phuong"),
+			gieoMotViec("Quang"),
+			gieoMotViec("Rin"),
+			gieoMotViec("Son"),
+		]);
+		if (!P || !Q || !R || !S) throw new Error("gieo thieu nguoi");
+		await noiSlack(P.id);
+		await batBot();
+		await uuTien(P.id, "ZALO");
+		await khopSlack(P.id, "U-P");
+		await uuTien(Q.id, "SLACK");
+		await noiZalo(Q.id, "ZQ");
+		await uuTien(R.id, "ZALO");
+		await noiZalo(R.id, "ZR");
+		await khopSlack(R.id, "U-R");
+		await uuTien(S.id, "ZALO");
+		const goc = lucVN(NGAY_NHAC, PHUT_SAU);
+		setSystemTime(goc);
+		await lenLichNhac(goc);
+		const chay = async (id: string, token: string | undefined) => {
+			const z = zaloGia();
+			const s = slackGia();
+			return voiToken(token, async () => {
+				const truoc = await kenhSeDungCua(db, id, {
+					coToken: token !== undefined,
+				});
+				const ket = await chayNhac(await hangCua(id), {
+					fetcher: s.fetcher,
+					zaloFetcher: z.fetcher,
+					appUrl: APP_URL,
+				});
+				const hang = await hangCua(id);
+				const p = parseNhacPayload(hang.payload);
+				return {
+					ket,
+					outcome: hang.outcome,
+					zalo: z.goi.length,
+					slack: s.goi.filter((c) => c.url.endsWith("chat.postMessage")).length,
+					kenh: p.kenh ?? null,
+					lech: p.lechKenh ?? null,
+					trangKhop:
+						truoc.kenh === (p.kenh ?? null) &&
+						(truoc.kenh === null || truoc.lech === p.lechKenh),
+				};
+			});
+		};
+		expect(
+			await chay(P.id, TOKEN),
+			"uu tien khong dung duoc thi di kenh con lai",
+		).toEqual({
+			ket: "da-gui",
+			outcome: "da-gui:1",
+			zalo: 0,
+			slack: 1,
+			kenh: "slack",
+			lech: true,
+			trangKhop: true,
+		});
+		expect(
+			await chay(Q.id, TOKEN),
+			"SLACK khong dung duoc thi di Zalo",
+		).toEqual({
+			ket: "da-gui",
+			outcome: "da-gui:1",
+			zalo: 1,
+			slack: 0,
+			kenh: "zalo",
+			lech: true,
+			trangKhop: true,
+		});
+		expect(
+			await chay(R.id, undefined),
+			"thieu token thi khong goi Zalo",
+		).toEqual({
+			ket: "da-gui",
+			outcome: "da-gui:1",
+			zalo: 0,
+			slack: 1,
+			kenh: "slack",
+			lech: true,
+			trangKhop: true,
+		});
+		expect(await chay(S.id, TOKEN), "khong kenh nao thi khong-khop").toEqual({
+			ket: "khong-khop",
+			outcome: "khong-khop",
+			zalo: 0,
+			slack: 0,
+			kenh: null,
+			lech: null,
+			trangKhop: true,
+		});
+	});
+
+	async function chayLoi(send: 500 | "ok-false" | "ok") {
+		const A = await gieoMotViec("Loi");
+		await noiSlack(A.id);
+		await khopSlack(A.id, "U-L");
+		await noiZalo(A.id, "ZL");
+		await uuTien(A.id, "ZALO");
+		await batBot();
+		const goc = lucVN(NGAY_NHAC, PHUT_SAU);
+		setSystemTime(goc);
+		await lenLichNhac(goc);
+		const z = zaloGia({ send });
+		const s = slackGia();
+		const ket = await voiToken(TOKEN, async () =>
+			batLoi(async () =>
+				chayNhac(await hangCua(A.id), {
+					fetcher: s.fetcher,
+					zaloFetcher: z.fetcher,
+					appUrl: APP_URL,
+				}),
+			),
+		);
+		const hang = await hangCua(A.id);
+		const p = parseNhacPayload(hang.payload);
+		return {
+			nem: ket.startsWith("nem"),
+			slack: s.goi.length,
+			dong: hang.finishedAt !== null,
+			coKenh: p.kenh !== undefined,
+			coDaGui: p.daGui !== undefined,
+		};
+	}
+
+	test("zalo-loi: HTTP 500 thi nem, khong Slack, hang chua dong", async () => {
+		expect(await chayLoi(500), "Zalo loi khong roi sang Slack").toEqual({
+			nem: true,
+			slack: 0,
+			dong: false,
+			coKenh: false,
+			coDaGui: false,
+		});
+	});
+
+	test("zalo-loi: ok false thi nem, khong Slack, hang chua dong", async () => {
+		expect(await chayLoi("ok-false"), "ok false la loi").toEqual({
+			nem: true,
+			slack: 0,
+			dong: false,
+			coKenh: false,
+			coDaGui: false,
+		});
+	});
+
+	test("zalo-loi: doi chung, ok true thi khong nem va hang dong", async () => {
+		expect(await chayLoi("ok")).toEqual({
+			nem: false,
+			slack: 0,
+			dong: true,
+			coKenh: true,
+			coDaGui: true,
+		});
+	});
+
+	test("khong-token: token hong, getMe 401 roi nhac di Slack kem lech", async () => {
+		const A = await gieoMotViec("Hong");
+		await noiSlack(A.id);
+		await khopSlack(A.id, "U-H");
+		await noiZalo(A.id, "ZH");
+		await uuTien(A.id, "ZALO");
+		await batBot();
+		const goc = lucVN(NGAY_NHAC, PHUT_SAU);
+		setSystemTime(goc);
+		const z = zaloGia({ getMe: 401 });
+		const s = slackGia();
+		await voiToken(TOKEN, () =>
+			pollZalo({ fetcher: z.fetcher, now: () => goc }),
+		);
+		await lenLichNhac(goc);
+		await voiToken(TOKEN, async () =>
+			chayNhac(await hangCua(A.id), {
+				fetcher: s.fetcher,
+				zaloFetcher: z.fetcher,
+				appUrl: APP_URL,
+			}),
+		);
+		const p = parseNhacPayload((await hangCua(A.id)).payload);
+		expect(
+			{
+				send: z.goi.filter((g) => g.method === "sendMessage").length,
+				slack: s.goi.filter((c) => c.url.endsWith("chat.postMessage")).length,
+				kenh: p.kenh,
+				lech: p.lechKenh,
+			},
+			"token hong thi Zalo tat, nhac di Slack kem lech",
+		).toEqual({ send: 0, slack: 1, kenh: "slack", lech: true });
 	});
 });
