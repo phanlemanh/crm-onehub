@@ -1,0 +1,16 @@
+{
+  "feature_plain": "Mọi bài kiểm giao diện của app và thư viện giao diện nay tự chạy trong lệnh kiểm chung, trước khi đẩy code và trên CI — không còn tệp nào bị bỏ sót vì quên thêm vào danh sách.",
+  "scope_plain": "Không đổi tên tệp kiểm, không chạy song song cho nhanh, không sửa số đếm đầu cột khi đang lưu, không đụng gói nào khác.",
+  "analyst_plain": "",
+  "decisions_plain": [
+    {"id": "d-20260923T141850Z-1", "p": "Mỗi tệp kiểm giao diện chạy riêng một lượt — chạy chung thì 8 bài đỏ vì các tệp giẫm lên nhau; đổi lại chậm hơn một chút (khoảng 17 giây cho 16 tệp)."},
+    {"id": "d-20260923T141850Z-2", "p": "KHÔNG làm bước quét chống sót tiêu chí — hai gói nhân năm tình huống đã đếm hết thành sáu tiêu chí."},
+    {"id": "d-20260923T141850Z-3", "p": "KHÔNG viết đặc tả trải nghiệm — việc này không có màn hình nào."},
+    {"id": "d-20260923T141850Z-4", "p": "KHÔNG làm phiên thẩm mỹ trên bản bấm được — việc này không chạm giao diện."},
+    {"id": "d-20260923T143416Z-5", "p": "Phép đo giờ Việt Nam so độ lệch giờ thay vì tên múi giờ — tên bị máy đổi tự động nên so tên cho kết quả sai."},
+    {"id": "d-20260923T144429Z-6", "p": "Phép đo đặt tệp thử vào một bản sao tạm của kho, không vào kho thật — để các phép đo chạy cùng lúc không làm nhau đỏ giả; đổi lại phép đo phức tạp hơn."},
+    {"id": "d-20260923T150632Z-7", "p": "Phép đo tệp đỏ nay đòi lời báo lỗi gọi đúng tệp đỏ, không chỉ thấy tên tệp đâu đó — máy tự siết dù phân loại xếp nó ngoài hợp đồng; anh veto thì máy quay về cách đo cũ."},
+    {"id": "d-20260923T150632Z-8", "p": "Phép đo đếm tệp bằng một cách độc lập với bộ chạy và ghim hai tệp tiêu chí gọi tên; bộ chạy cũng nhặt cả tệp trong thư mục con."},
+    {"id": "d-20260923T150632Z-9", "p": "Phép đo đường chạy từ gốc kho bỏ bước dựng gói phụ thuộc — bước đó chồng nhau gây đỏ chập chờn; lệnh kiểm chung thật vẫn chạy đủ bước."}
+  ]
+}
