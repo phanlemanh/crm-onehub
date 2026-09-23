@@ -5,7 +5,7 @@ slug: khoa-cu-khong-mo-khoa-moi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [auth, api, db]
-status: implemented
+status: verified
 approved_by: Manh Phan
 approved_at: 2026-09-23
 design_doc: docs/superpowers/specs/2026-09-23-khoa-cu-khong-mo-khoa-moi-design.md
