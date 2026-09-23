@@ -68,3 +68,15 @@ ca `cua-google-con-song` thôi tình cờ bắt được một `auth.ts` khoá s
 `packages/auth/test/hd-cua-google.spec.ts`.
 
 Không có bề mặt người nhìn; không eval thiết kế, không `ui-check`.
+
+### Known limits (người chọn lối (c) sau S4 round 4, 2026-09-23)
+
+Hồ sơ dừng ở S4 round 4 với verdict REJECT, KHÔNG ký Cổng 2. Chủ kho chọn mở PR và
+tự quyết merge vượt cổng. Mọi eval mức sản phẩm (E1–E4, E10, suite `bun run test`)
+xanh ở round 2–4; phần còn đỏ nằm ở độ chặt của bộ đo:
+
+- AC-4: chốt «tổng số ca bằng bản gốc cộng ca mới» tự suy từ chính lượt đo (tập ca mới lấy từ hiệu hai lượt), nên luôn đúng khi không mất ca gốc; không có danh sách ca mới viết trước để chặn ca bị nhân đôi hay chép nhầm tên.
+- AC-8/E11: đột biến M1 chập chờn dưới tải song song — bản sao đôi khi không nạp được auth (`RANG CUN: ... khong nap duoc auth`); chạy tay và chạy song song tám lệnh đều xanh; chưa tìm ra nguyên nhân.
+- Việc trả lại `ALLOWED_SIGN_IN` gắn tay vào từng tệp (`traLaiDanhSachSauTep`); tệp test mới đổi biến này mà quên gọi thì rò lại, và cổng test của kho không chạy răng `tra-env` để bắt.
+- Token Google giả của hai ca `cua-google-con-song` lấy `hd` từ chính cấu hình auth; phần bù là AC-8 (tệp `hd-cua-google.spec.ts`) và ca «hd lệch» có đối chứng dương.
+- Răng `pham-vi` dùng diff hai chấm `GOC..HEAD`; gộp `onehub` vào nhánh này trước khi đo lại sẽ gọi tên nhầm tệp của nhánh chính.
