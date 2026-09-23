@@ -5,7 +5,7 @@ slug: chu-cuoi-cung-tien-de
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-23-chu-cuoi-cung-tien-de-design.md
 approved_by:
 approved_at:
@@ -53,3 +53,5 @@ Không dùng skill morphological-scan: phạm vi là một ca kiểm và một t
 ## Notes
 
 Không có bề mặt người nhìn; không eval thiết kế, không `ui-check`.
+
+- known-limits (Gate 2, 2026-09-23, Phan Le Manh): ca `chu-cuoi-cung` tạm hạ vai `owner` của member lạ trong lúc chạy rồi trả lại trong `finally` — khác nếp từ chối có tên của `packages/auth/test/organization.integration.spec.ts`. Nếu tiến trình test bị giết giữa ca, vai bị hạ không được trả; rủi ro nhỏ vì `bun run test` chạy các gói tuần tự và cơ sở dữ liệu của lượt bị xoá sau lượt.
