@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 60eff8b85f4170162c5b2c01342022348620534d
+verified_commit: 46a30eb3bbf08aaabae1c487a6e9a70a529dbd91
 human_signoff: Manh Phan 2026-09-24
 ---
 
@@ -166,3 +166,7 @@ none — every multi-run eval is uniform
 
 Round 1: E1–E9 và bốn lệnh suite đều PASS (round-tally 13/13, verdict PASS) — bun run test khi đó chạy hết trong hạn thời gian.
 Round 2: chín eval mục tiêu (E1–E9) PASS ngay từ đầu; lệnh suite `bun run test` lần chạy trước vượt quá 600 giây và bị tool cắt giữa chừng ở @crm/telemetry:test (verdict tạm BLOCKED, cần chạy lại với timeout dài hơn) — chạy lại, `bun run test` hoàn tất sạch trong 49.563s, cùng `bunx turbo run lint --force`, `bun run lint:slop`, `bunx turbo run build --force` đều PASS — verdict PASS.
+
+### Re-pin lần 1 — 2026-09-23, do ghim lai sau khi keo onehub 2221fcf5
+run_id: repin-20260923T233105Z-50957
+sha: 46a30eb3bbf08aaabae1c487a6e9a70a529dbd91 · suites: 4 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng
