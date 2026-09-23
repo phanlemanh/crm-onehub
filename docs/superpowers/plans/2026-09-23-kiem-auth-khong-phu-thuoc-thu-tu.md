@@ -1,5 +1,7 @@
 # Bài kiểm packages/auth không phụ thuộc thứ tự tệp — Implementation Plan
 
+> Hồ sơ `_acceptance/kiem-auth-khong-phu-thuoc-thu-tu/` đã tách khỏi PR #88 và không vào kho — xem `docs/findings/2026-09-23-kiem-auth-khong-phu-thuoc-thu-tu.md` (hồ sơ đầy đủ ở commit `16c47aaa`).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Đo được — hai chiều, trên bản gốc trong git — rằng bài kiểm `packages/auth` xanh bất kể thứ tự tệp, và canh riêng chỗ `auth.ts` nối `hd` của Google.

@@ -1,5 +1,7 @@
 # Bài kiểm `packages/auth` không phụ thuộc thứ tự tệp — design
 
+> Hồ sơ `_acceptance/kiem-auth-khong-phu-thuoc-thu-tu/` đã tách khỏi PR #88 và không vào kho — xem `docs/findings/2026-09-23-kiem-auth-khong-phu-thuoc-thu-tu.md` (hồ sơ đầy đủ ở commit `16c47aaa`).
+
 Ngày: 2026-09-23 · Hồ sơ: `_acceptance/kiem-auth-khong-phu-thuoc-thu-tu/` · Hạng T3 (`packages/auth/**`)
 
 ## Vấn đề
