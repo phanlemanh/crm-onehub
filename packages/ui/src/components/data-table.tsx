@@ -177,7 +177,7 @@ function SortIndicator({
 	return (
 		<span
 			className={cn(
-				"inline-flex align-[-2px] text-muted-foreground",
+				"inline-flex align-middle text-muted-foreground",
 				className,
 			)}
 		>
@@ -687,10 +687,10 @@ export function DataTable<TRow, TSub = unknown>({
 									{column.sortable ? (
 										<Button
 											variant="ghost"
-											size="xs"
+											size="xs-wrap"
 											onClick={() => query.toggleSort(column.id)}
 											className={cn(
-												"-ml-2 inline-block h-auto min-h-6 min-w-0 max-w-[calc(100%+0.5rem)] py-1 text-left font-normal whitespace-normal text-muted-foreground hover:text-foreground",
+												"-ml-2 min-w-0 max-w-[calc(100%+0.5rem)] font-normal text-muted-foreground hover:text-foreground",
 												column.align === "right" && "-mr-2 ml-0 text-right",
 												column.align === "center" && "mx-auto",
 											)}
