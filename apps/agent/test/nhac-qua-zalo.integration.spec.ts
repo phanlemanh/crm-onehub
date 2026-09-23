@@ -562,6 +562,7 @@ describe("gui-kenh", () => {
 		await donDep();
 		await donZalo();
 		await db.account.deleteMany({ where: { providerId: "slack" } });
+		await moXuong();
 	});
 	afterEach(() => {
 		setSystemTime();
@@ -594,12 +595,13 @@ describe("gui-kenh", () => {
 		expect(gui.length, "dung mot sendMessage toi ZA").toBe(1);
 		expect(s.goi.length, "khong goi Slack").toBe(0);
 		const text = gui[0]?.body.text ?? "";
-		expect(text, "doi chung: ky tu dac biet giu nguyen").toContain(
-			"Minh & Co <HN>",
-		);
-		for (const cam of ["*", "<http", "|mở kế hoạch>", "&amp;"]) {
+		for (const cam of ["*", "<http", "|mở kế hoạch>"]) {
 			expect(text.includes(cam), `tin Zalo la chu tron: ${cam}`).toBe(false);
 		}
+		expect(
+			text.includes("Minh & Co <HN>") && !text.includes("&amp;"),
+			"tin Zalo khong thoat HTML",
+		).toBe(true);
 		expect(text.indexOf("Quá hạn"), "Quá hạn truoc Sắp hạn").toBeLessThan(
 			text.indexOf("Sắp hạn"),
 		);
