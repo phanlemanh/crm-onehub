@@ -5,7 +5,7 @@ slug: o-soan-va-ly-do-loi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, agent, api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-22-o-soan-va-ly-do-loi-design.md
 approved_by:
 approved_at:
@@ -60,3 +60,6 @@ có không gian để liệt kê; xem sổ quyết định dòng «bỏ coverage
 
 - AC-1 và AC-2 chỉ đo được trong trình duyệt thật (jsdom không có toạ độ con trỏ), nên chỉ có eval `ui-check` — không có chốt ở làn máy khi ghim lại.
 - Mã lỗi hiện nguyên chuỗi eve trả về; eve không cam kết một danh sách mã đóng.
+- Known limit (Ngoài-1, Cổng Bằng chứng 2026-09-23): màu con trỏ đỏ trong kịch bản đo `rang/o-soan.mjs` khai hai lần (chuỗi CSS và mảng RGB) không ràng nhau; đổi một chỗ quên chỗ kia thì E8 báo không đạt giả.
+- Known limit (Ngoài-2, Cổng Bằng chứng 2026-09-23): tệp mẫu `apps/api/test/fixtures/loi-hoi-thoai-events.json` được `apps/agent` và `apps/app` đọc theo đường tương đối; dời thư mục test của API thì hai bài kiểm kia đỏ theo.
+- Known limit (Ngoài-3, Cổng Bằng chứng 2026-09-23): E7 hàng 3 chỉ kiểm tác vụ nghiên cứu bị đánh dấu hỏng, không kiểm lý do hỏng được lưu.
