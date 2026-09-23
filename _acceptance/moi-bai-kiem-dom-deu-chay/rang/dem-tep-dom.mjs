@@ -214,7 +214,7 @@ if (cheDo === "du-tep") {
 		process.exit(2);
 	}
 	const { mong, kq } = duTep(tenGoi);
-	let ghiChu = `${mong.length} tep + 1 ma thoat`;
+	let ghiChu = `${GOI[tenGoi].batBuoc.length} tep ghim + ${mong.length} tep + 1 ma thoat`;
 	if (tenGoi === "ui") {
 		const spec = tepSpec(GOI.ui.thuMuc);
 		khang += 1;
