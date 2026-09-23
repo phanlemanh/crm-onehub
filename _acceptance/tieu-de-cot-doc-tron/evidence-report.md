@@ -32,7 +32,7 @@ human_signoff:
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_tieu_de_cot
-  verified_at: 2026-09-23T09:00:00Z
+  verified_at: 2026-09-23T00:05:57Z
   output: |
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
@@ -43,7 +43,7 @@ human_signoff:
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_tieu_de_cot
-  verified_at: 2026-09-23T09:00:00Z
+  verified_at: 2026-09-23T00:05:57Z
   output: |
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
@@ -54,7 +54,7 @@ human_signoff:
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_tieu_de_cot
-  verified_at: 2026-09-23T09:00:00Z
+  verified_at: 2026-09-23T00:05:57Z
   output: |
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
@@ -65,7 +65,7 @@ human_signoff:
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_tieu_de_cot
-  verified_at: 2026-09-23T09:00:00Z
+  verified_at: 2026-09-23T00:05:57Z
   output: |
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
@@ -76,7 +76,7 @@ human_signoff:
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_tieu_de_cot
-  verified_at: 2026-09-23T09:00:00Z
+  verified_at: 2026-09-23T00:05:57Z
   output: |
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
@@ -87,7 +87,7 @@ human_signoff:
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_tieu_de_cot
-  verified_at: 2026-09-23T09:00:00Z
+  verified_at: 2026-09-23T00:05:57Z
   output: |
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
@@ -98,7 +98,7 @@ human_signoff:
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_tieu_de_cot
-  verified_at: 2026-09-23T09:00:00Z
+  verified_at: 2026-09-23T00:05:57Z
   output: |
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
@@ -109,7 +109,7 @@ human_signoff:
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_doi_chung_ke_hoach
-  verified_at: 2026-09-23T09:02:00Z
+  verified_at: 2026-09-23T00:05:57Z
   output: |
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
@@ -120,7 +120,7 @@ human_signoff:
   exit_code: 0
   baseline: n-a
   verifier: config:executors.design.ui_check
-  verified_at: 2026-09-23T09:05:00Z
+  verified_at: 2026-09-23T00:05:57Z
   screenshot: _acceptance/tieu-de-cot-doc-tron/evidence/E9/deals-320-vi.png
   observed: |
     Đã mở cả 12 file trong evidence/E9 bằng Read (đọc ảnh trực tiếp), đối chiếu 3 dòng Expected cho từng ảnh:
@@ -146,7 +146,7 @@ human_signoff:
   exit_code: 0
   baseline: green
   verifier: config:executors.script.tdc_san_thiet_ke
-  verified_at: 2026-09-23T09:08:00Z
+  verified_at: 2026-09-23T00:05:57Z
   output: |
       - p0_count: 0
 
@@ -157,22 +157,22 @@ human_signoff:
 - cmd: bun run test
   run_id: mudcg1aw0ofz
   exit_code: 0
-  verified_at: 2026-09-23T09:10:00Z
+  verified_at: 2026-09-23T00:05:57Z
 
 - cmd: bunx turbo run lint --force
   run_id: minted-tieu-de-cot-doc-tron-SUITE-bunx_turbo_run_lint_force-r1
   exit_code: 0
-  verified_at: 2026-09-23T09:12:00Z
+  verified_at: 2026-09-23T00:05:57Z
 
 - cmd: bun run lint:slop
   run_id: minted-tieu-de-cot-doc-tron-SUITE-bun_run_lint_slop-r1
   exit_code: 0
-  verified_at: 2026-09-23T09:13:00Z
+  verified_at: 2026-09-23T00:05:57Z
 
 - cmd: bunx turbo run build --force
   run_id: minted-tieu-de-cot-doc-tron-SUITE-bunx_turbo_run_build_force-r1
   exit_code: 0
-  verified_at: 2026-09-23T09:15:00Z
+  verified_at: 2026-09-23T00:05:57Z
 
 ## Known limits
 
