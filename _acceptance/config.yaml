@@ -56,6 +56,10 @@ executors:
     kh2_chuyen_giao_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/moi-phia-ke-hoach.dom.tsx -t chuyen-giao-man"
     kh2_chuyen_giao_payload: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t chuyen-giao-payload"'
     kh2_viec_cua_toi: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t viec-cua-toi"'
+    ngv_khung_dem: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t khung-dem"'
+    ngv_khung_ngay: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t khung-ngay"'
+    ngv_ngay_gieo: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t ngay-gieo-theo-vn"'
+    ngv_ca_tep: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts"'
     kh2_the_tasks_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/moi-phia-ke-hoach.dom.tsx -t the-tasks-man"
     kh2_the_tasks_payload: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t the-tasks-payload"'
     kh2_vet_giao_luc_xong: 'bun run test -- "cd apps/api && bun test test/moi-phia-ke-hoach.spec.ts -t vet-giao-luc-xong"'
@@ -346,6 +350,7 @@ executors:
     lint: "bun run lint"
     lint_khong_cache: "bunx turbo run lint --force"
     lint_slop: "bun run lint:slop"
+    ngv_dot_bien_utc: node _acceptance/ngay-gieo-theo-gio-vn/rang/dot-bien-utc.mjs
     check_types: "bun run check-types"
     check_types_khong_cache: "bunx turbo run check-types --force"
     build_khong_cache: 'bunx turbo run build --force'
