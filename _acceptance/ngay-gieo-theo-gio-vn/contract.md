@@ -5,7 +5,7 @@ slug: ngay-gieo-theo-gio-vn
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-09-23-ngay-gieo-theo-gio-vn-design.md
 approved_by:
 approved_at:
