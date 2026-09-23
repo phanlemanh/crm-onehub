@@ -1,0 +1,21 @@
+E15 — network dump (2026-09-23, driver: Claude Browser MCP, real Chrome tab)
+Scope: dev_server.url = http://localhost:3000, dev_server.api_base = [http://localhost:3001]
+Flow captured: GET /onehub -> GET /onehub/deals (table) -> click "Bảng cột" (real button) ->
+  GET .../deals?view=board (client nav, no full reload) -> deals.board tRPC call -> click "Bảng" ->
+  back to .../deals (client nav).
+
+read_network_requests (last 150, deduped by URL where identical repeats occurred):
+- All requests are same-origin to http://localhost:3000 (Next app origin, which proxies
+  /api/trpc/* server-side to API_URL=http://localhost:3001 — no direct browser->3001 XHR seen).
+- Static assets (_next/static/chunks/*, *.woff2): 200 OK or 304 Not Modified. Note-only (static).
+- App XHR (FAIL-eligible, in-scope):
+  GET /api/trpc/enrichment.queue?...            -> 200 OK (x5)
+  GET /api/trpc/users.list,users.me,currency.settings,fields.filters,fields.list?... -> 200 OK
+  GET /api/trpc/deals.board?...                 -> 200 OK
+- Page navigations: GET /onehub -> 200 OK; GET /onehub/deals -> 200 OK.
+- No 4xx/5xx, no connection-error/timeout in the FAIL-eligible set.
+
+read_console_messages(onlyErrors=true): "No console logs." — zero console errors observed
+during the toggle-to-board / toggle-back-to-table flow.
+
+networkObserved = clean

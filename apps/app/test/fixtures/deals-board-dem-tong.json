@@ -1,0 +1,276 @@
+{
+	"columns": [
+		{
+			"stage": "DEMO_BOOKED",
+			"count": 3,
+			"valueCents": 35000,
+			"unconverted": {
+				"count": 1,
+				"currencies": ["EUR"]
+			},
+			"cards": [
+				{
+					"id": "cmue1s9fs0002hjcfajaenhmf",
+					"name": "A1 kbtokmue1s8m3emsj",
+					"stage": "DEMO_BOOKED",
+					"currency": "USD",
+					"company": {
+						"id": "cmue1s9fn0000hjcfn2fdzxrj",
+						"name": "Board Co mue1s8m3emsj",
+						"domain": "deals-board-mue1s8m3emsj.test",
+						"iconUrl": null,
+						"iconDarkUrl": null,
+						"iconTone": null,
+						"logoUrl": null
+					},
+					"owner": {
+						"id": "user-board-a-mue1s8m3emsj",
+						"name": "user-board-a-mue1s8m3emsj",
+						"email": "user-board-a-mue1s8m3emsj@example.test",
+						"image": null
+					},
+					"amountCents": 10000,
+					"baseAmountCents": 10000,
+					"expectedCloseDate": null,
+					"closedAt": null,
+					"lastActivityAt": null,
+					"createdAt": "2026-01-01T00:00:00.000Z",
+					"archivedAt": null
+				},
+				{
+					"id": "cmue1s9fz0004hjcf7q53tfmq",
+					"name": "A2",
+					"stage": "DEMO_BOOKED",
+					"currency": "USD",
+					"company": {
+						"id": "cmue1s9fn0000hjcfn2fdzxrj",
+						"name": "Board Co mue1s8m3emsj",
+						"domain": "deals-board-mue1s8m3emsj.test",
+						"iconUrl": null,
+						"iconDarkUrl": null,
+						"iconTone": null,
+						"logoUrl": null
+					},
+					"owner": {
+						"id": "user-board-a-mue1s8m3emsj",
+						"name": "user-board-a-mue1s8m3emsj",
+						"email": "user-board-a-mue1s8m3emsj@example.test",
+						"image": null
+					},
+					"amountCents": 25000,
+					"baseAmountCents": 25000,
+					"expectedCloseDate": null,
+					"closedAt": null,
+					"lastActivityAt": null,
+					"createdAt": "2026-01-01T00:00:01.000Z",
+					"archivedAt": null
+				},
+				{
+					"id": "cmue1s9g10005hjcfrbzvz7uj",
+					"name": "A3",
+					"stage": "DEMO_BOOKED",
+					"currency": "EUR",
+					"company": {
+						"id": "cmue1s9fn0000hjcfn2fdzxrj",
+						"name": "Board Co mue1s8m3emsj",
+						"domain": "deals-board-mue1s8m3emsj.test",
+						"iconUrl": null,
+						"iconDarkUrl": null,
+						"iconTone": null,
+						"logoUrl": null
+					},
+					"owner": {
+						"id": "user-board-a-mue1s8m3emsj",
+						"name": "user-board-a-mue1s8m3emsj",
+						"email": "user-board-a-mue1s8m3emsj@example.test",
+						"image": null
+					},
+					"amountCents": 90000,
+					"baseAmountCents": 90000,
+					"expectedCloseDate": null,
+					"closedAt": null,
+					"lastActivityAt": null,
+					"createdAt": "2026-01-01T00:00:02.000Z",
+					"archivedAt": null
+				}
+			]
+		},
+		{
+			"stage": "QUALIFIED_TO_BUY",
+			"count": 1,
+			"valueCents": null,
+			"unconverted": {
+				"count": 0,
+				"currencies": []
+			},
+			"cards": [
+				{
+					"id": "cmue1s9g50007hjcf5zy0kjsx",
+					"name": "A5 kbtokmue1s8m3emsj",
+					"stage": "QUALIFIED_TO_BUY",
+					"currency": "USD",
+					"company": {
+						"id": "cmue1s9fn0000hjcfn2fdzxrj",
+						"name": "Board Co mue1s8m3emsj",
+						"domain": "deals-board-mue1s8m3emsj.test",
+						"iconUrl": null,
+						"iconDarkUrl": null,
+						"iconTone": null,
+						"logoUrl": null
+					},
+					"owner": {
+						"id": "user-board-a-mue1s8m3emsj",
+						"name": "user-board-a-mue1s8m3emsj",
+						"email": "user-board-a-mue1s8m3emsj@example.test",
+						"image": null
+					},
+					"amountCents": null,
+					"baseAmountCents": null,
+					"expectedCloseDate": null,
+					"closedAt": null,
+					"lastActivityAt": null,
+					"createdAt": "2026-01-01T00:00:04.000Z",
+					"archivedAt": null
+				}
+			]
+		},
+		{
+			"stage": "DECISION_MAKER_BOUGHT_IN",
+			"count": 0,
+			"valueCents": null,
+			"unconverted": {
+				"count": 0,
+				"currencies": []
+			},
+			"cards": []
+		},
+		{
+			"stage": "CONTRACT_SENT",
+			"count": 1,
+			"valueCents": 100000,
+			"unconverted": {
+				"count": 0,
+				"currencies": []
+			},
+			"cards": [
+				{
+					"id": "cmue1s9g70008hjcfe97b2e0t",
+					"name": "A6",
+					"stage": "CONTRACT_SENT",
+					"currency": "USD",
+					"company": {
+						"id": "cmue1s9fn0000hjcfn2fdzxrj",
+						"name": "Board Co mue1s8m3emsj",
+						"domain": "deals-board-mue1s8m3emsj.test",
+						"iconUrl": null,
+						"iconDarkUrl": null,
+						"iconTone": null,
+						"logoUrl": null
+					},
+					"owner": {
+						"id": "user-board-a-mue1s8m3emsj",
+						"name": "user-board-a-mue1s8m3emsj",
+						"email": "user-board-a-mue1s8m3emsj@example.test",
+						"image": null
+					},
+					"amountCents": 100000,
+					"baseAmountCents": 100000,
+					"expectedCloseDate": "2030-06-01T00:00:00.000Z",
+					"closedAt": null,
+					"lastActivityAt": null,
+					"createdAt": "2026-01-01T00:00:05.000Z",
+					"archivedAt": null
+				}
+			]
+		},
+		{
+			"stage": "CLOSED_WON",
+			"count": 1,
+			"valueCents": 300000,
+			"unconverted": {
+				"count": 0,
+				"currencies": []
+			},
+			"cards": [
+				{
+					"id": "cmue1s9gb000ahjcf8edhlcg9",
+					"name": "A8",
+					"stage": "CLOSED_WON",
+					"currency": "USD",
+					"company": {
+						"id": "cmue1s9fn0000hjcfn2fdzxrj",
+						"name": "Board Co mue1s8m3emsj",
+						"domain": "deals-board-mue1s8m3emsj.test",
+						"iconUrl": null,
+						"iconDarkUrl": null,
+						"iconTone": null,
+						"logoUrl": null
+					},
+					"owner": {
+						"id": "user-board-a-mue1s8m3emsj",
+						"name": "user-board-a-mue1s8m3emsj",
+						"email": "user-board-a-mue1s8m3emsj@example.test",
+						"image": null
+					},
+					"amountCents": 300000,
+					"baseAmountCents": 300000,
+					"expectedCloseDate": null,
+					"closedAt": null,
+					"lastActivityAt": null,
+					"createdAt": "2026-01-01T00:00:07.000Z",
+					"archivedAt": null
+				}
+			]
+		},
+		{
+			"stage": "CLOSED_LOST",
+			"count": 1,
+			"valueCents": 4000,
+			"unconverted": {
+				"count": 0,
+				"currencies": []
+			},
+			"cards": [
+				{
+					"id": "cmue1s9gd000chjcfaa1embo8",
+					"name": "A9",
+					"stage": "CLOSED_LOST",
+					"currency": "USD",
+					"company": {
+						"id": "cmue1s9fn0000hjcfn2fdzxrj",
+						"name": "Board Co mue1s8m3emsj",
+						"domain": "deals-board-mue1s8m3emsj.test",
+						"iconUrl": null,
+						"iconDarkUrl": null,
+						"iconTone": null,
+						"logoUrl": null
+					},
+					"owner": {
+						"id": "user-board-a-mue1s8m3emsj",
+						"name": "user-board-a-mue1s8m3emsj",
+						"email": "user-board-a-mue1s8m3emsj@example.test",
+						"image": null
+					},
+					"amountCents": 4000,
+					"baseAmountCents": 4000,
+					"expectedCloseDate": null,
+					"closedAt": null,
+					"lastActivityAt": null,
+					"createdAt": "2026-01-01T00:00:08.000Z",
+					"archivedAt": null
+				}
+			]
+		},
+		{
+			"stage": "UNQUALIFIED_TO_BUY",
+			"count": 0,
+			"valueCents": null,
+			"unconverted": {
+				"count": 0,
+				"currencies": []
+			},
+			"cards": []
+		}
+	],
+	"reportingCurrency": "USD"
+}

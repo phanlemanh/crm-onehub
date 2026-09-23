@@ -1,0 +1,18 @@
+{
+  "feature_plain": "Người bán chuyển màn Thoả thuận sang dạng bảng cột, nhìn cả phễu bảy giai đoạn một lượt và kéo một thoả thuận sang cột khác để đổi giai đoạn của nó.",
+  "scope_plain": "Để lại cho vòng sau: sắp thứ tự trong cột, chọn nhiều thẻ, tổng có trọng số, dịch tên giai đoạn, tải thêm quá 50 thẻ, vùng thả nổi kiểu Pipedrive, bảng cột cho mục lưu trữ.",
+  "decisions": [],
+  "analyst_plain": "",
+  "decisions_plain": [
+    {"id": "d-20260923T101345Z-1", "p": "Bảng cột kéo thả là một chế độ của bảng cột sẵn có, chạy bằng thành phần miễn phí của ReUI — đổi lại bảng cột chung phình thêm một chế độ."},
+    {"id": "d-20260923T101345Z-2", "p": "Thêm một câu truy vấn riêng cho bảng cột thay vì dùng lại danh sách 100 dòng — đổi lại phải giữ hai câu truy vấn cùng bộ lọc."},
+    {"id": "d-20260923T101345Z-3", "p": "KHÔNG làm sắp thứ tự trong một cột — không cần đổi cơ sở dữ liệu, nhưng kéo trong cột sẽ không có tác dụng."},
+    {"id": "d-20260923T101345Z-4", "p": "Thả vào cột thua thì hỏi lý do trước, không ghi trước — không có thoả thuận thua thiếu lý do, đổi lại thêm một bước."},
+    {"id": "d-20260923T101345Z-5", "p": "Dựng bản bấm được để duyệt giao diện trước Cổng 1 — tốn thêm một vòng dựng."},
+    {"id": "d-20260923T102708Z-6", "p": "Năm chỗ thiếu của thành phần ReUI sửa thẳng trong bản đã cài — một chỗ để đọc khi lỗi, đổi lại cài lại từ ReUI sẽ ghi đè các chỗ sửa."},
+    {"id": "d-20260923T103644Z-8", "p": "Làm tuần tự hai phần độc lập thay vì tách song song — chậm hơn vài phút, không phải gộp nhánh."},
+    {"id": "d-20260923T110407Z-9", "p": "Lỗi thả vào cột rỗng hoá ra do bảng cột bị bẻ thành lưới 3 cột, không phải do cách chọn đích như design-pass đoán — đã sửa bố cục và thêm phép đo bảy cột cùng một hàng."},
+    {"id": "d-20260923T110657Z-10", "p": "Bổ sung các bước cho hai phép đo nhìn-thấy để máy chạy được — không đổi thứ được đo."},
+    {"id": "d-20260923T115525Z-11", "p": "Đầu cột nói rõ thoả thuận chưa có tỷ giá thay vì in tổng 0, và ghim ba câu lời báo kéo thả — hai lỗi vòng 1 đã sửa, sáu mục ngoài hợp đồng để anh quyết."}
+  ]
+}
