@@ -12,7 +12,7 @@ Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt 
   severity: medium
   Đề xuất: known-limits
 
-- **Bộ chạy dừng ở tệp đỏ đầu tiên, nên tệp đỏ thứ hai không được chạy và không được báo trong cùng lượt** (nêu ở vòng 1, vẫn đúng với mã vòng 2)
+- **Bộ chạy dừng ở tệp đỏ đầu tiên, nên tệp đỏ thứ hai không được chạy và không được báo trong cùng lượt (nêu ở vòng 1, vẫn đúng với mã vòng 2)**
   Người dùng thấy gì: Khi nhiều tệp kiểm cùng lỗi trong một lần chạy, bạn chỉ thấy tên tệp lỗi đầu tiên; phải sửa xong tệp đó rồi chạy lại mới thấy lỗi tiếp theo.
   file: `packages/ui/test/chay-tung-tep-dom.ts:29`
   severity: low
