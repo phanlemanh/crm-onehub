@@ -152,8 +152,8 @@ export function Board({
 					onMove={handleMove}
 					accessibility={announcements ? { announcements } : undefined}
 				>
-					<KanbanBoard asChild>
-						<ol className="flex w-max gap-3 p-3 select-none">
+					<KanbanBoard asChild className="flex w-max gap-3 p-3 select-none">
+						<ol>
 							{columns.map((column) => {
 								const hidden = column.count - column.cards.length;
 								return (

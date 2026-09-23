@@ -205,15 +205,18 @@ evals:
       - "O 1440/vi: keo mot the vao cot Contract sent dang rong -> the o cot do, deals.byId tra CONTRACT_SENT -> chup evidence/tha-cot-rong.png"
     expected: |
       exit 0. Chrome that tren may chu dev cua cay dang xet. Ma tran viet truoc 5 kho x 2 tieng
-      = 10 o x [khong tran, 7 dau cot du ba phan] = 20 khang dinh, cong 2 khang dinh keo
+      = 10 o x [khong tran, 7 dau cot du ba phan, 7 cot cung mot hang] = 30 khang dinh, cong 2 khang dinh keo
       (sau khi tha, sau khi tai lai), cong 2 khang dinh keo vao cot mo DANG RONG (gieo de
-      CONTRACT_SENT rong; sau khi tha the o cot do, deals.byId tra CONTRACT_SENT) = 24 (hang
-      KY_MONG trong tep thuoc; lech -> ma 2). Chieu do thu hai: ban sao bo vung tha cua khung
-      cot -> do voi thong diep ghim "cot rong khong nhan tha".
-      Them: console cua moi o khong co loi hydrate (chuoi "hydrated but some attributes") —
-      doi chung duong: ban sao bo id cua DndContext -> do voi thong diep ghim "loi hydrate".
-      Cap hai chieu tren cung may chu: ban sao bo overflow-x-auto cua Board -> do o 320 voi
-      thong diep ghim "tran ngang 320/vi".
+      CONTRACT_SENT rong; sau khi tha the o cot do, deals.byId tra CONTRACT_SENT) = 34 (hang
+      KY_MONG trong tep thuoc; lech -> ma 2).
+      Them: console va loi trang cua moi o khong co loi hydrate (/hydrat/i), doc sau khi mang
+      yen va React hydrate xong.
+      Chieu do (da chay 2026-09-23, moi lan mot ban sao, cung may chu cua cay):
+      (1) khung bang overflow-hidden -> "bang khong cuon duoc hoac tran trang 320/vi";
+      (2) class bang cot dat len con cua KanbanBoard asChild -> "bay cot khong cung mot hang 320/vi";
+      (3) bo qua tha khi dich la chinh khung cot -> "cot rong khong nhan tha";
+      (4) chen gia tri ngau nhien vao dau cot (lech hydrate) -> "loi hydrate 320/vi".
+      Doi chung duong: ban sach -> o=10/10 khang-dinh=34/34, 0 dong HONG.
 
   - id: E15
     criterion: AC-1
@@ -297,7 +300,11 @@ evals:
       Danh sach tep lay tu git diff --name-only <merge-base voi onehub>...HEAD giao voi cac glob
       .tsx cua paths (khong ghi dich danh), in so tep; danh sach rong -> ma 2. Chay cong thiet ke
       tinh tren tung tep, moi tep exit 0.
-      CHIEU DO: ban sao chen mau hex vao board.tsx -> do voi thong diep ghim "board.tsx: mau hex".
+      CHIEU DO (da chay 2026-09-23): ban sao dat chu xam tren nen mau (bg-blue-600 text-gray-400)
+      vao cot cua board.tsx -> do voi thong diep ghim "HONG packages/ui/src/components/board.tsx".
+      GIOI HAN DA DO: cong tinh cua bo kit chi chan 5 luat P0 (tuong phan, xam tren nen mau, tran chu,
+      anh hong, chu sat mep); mot mau hex chen vao TSX KHONG bi bat (da thu) — luat "chi primary va
+      destructive duoc to nen" cua docs/design.md khong co thuoc may o vong nay, nguoi soi bang anh.
 
   - id: E21
     criterion: AC-4
