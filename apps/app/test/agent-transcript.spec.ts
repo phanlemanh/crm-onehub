@@ -933,3 +933,38 @@ describe("vật thử của lớp chuyển sinh từ chính toTranscript", () =>
 		).toEqual([false, true]);
 	});
 });
+
+describe("ma-loi", () => {
+	const hong = (type: string, data: Record<string, string>) => [
+		{ type: "turn.started", data: {} },
+		{ type, data },
+	];
+
+	it.each([
+		[
+			"GatewayRateLimitError: Free tier requests on this model are rate-limited.",
+			"RL_1",
+			"rate-limit",
+		],
+		[
+			"RestrictedModelsError: free tier users do not have access",
+			"RS_1",
+			"restricted",
+		],
+		["insufficient credits", "CR_1", "credits"],
+		["search_crm: query too short", "TOOL_EXECUTION_FAILED", "unknown"],
+	] as const)(
+		"latestTurnFailure giu code cua su kien: %s",
+		(message, code, kind) => {
+			expect(latestTurnFailure(hong("turn.failed", { code, message }))).toEqual(
+				{ code, kind },
+			);
+		},
+	);
+
+	it("session.failed khong code thi code la AGENT_FAILED", () => {
+		expect(
+			latestTurnFailure(hong("session.failed", { message: "boom" })),
+		).toEqual({ code: "AGENT_FAILED", kind: "unknown" });
+	});
+});

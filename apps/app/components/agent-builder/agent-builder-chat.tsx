@@ -68,7 +68,6 @@ import {
 } from "@/lib/agent-builder-state";
 import { toolLabel } from "@/lib/agent-tool-display";
 import {
-	type AgentTurnFailure,
 	conversationTimeline,
 	eventStreamSettled,
 	latestTurnFailure,
@@ -93,6 +92,7 @@ import {
 	hasAgentResult,
 } from "./agent-result";
 import { AgentScopeBadges } from "./agent-scope-badges";
+import { BuilderFailureCard } from "./builder-failure-card";
 import {
 	ChatAttachmentChip,
 	ChatCommandChip,
@@ -1211,63 +1211,6 @@ function BuildingAgentCard({
 					</Button>
 				</footer>
 			</div>
-		</div>
-	);
-}
-
-function BuilderFailureCard({
-	failure,
-	creatingAgent,
-	retrying,
-	onRetry,
-}: {
-	failure: AgentTurnFailure;
-	creatingAgent: boolean;
-	retrying: boolean;
-	onRetry: (() => void) | null;
-}) {
-	const t = troChuyenMessages(useLocale());
-	const message =
-		failure.kind === "rate-limit"
-			? t.loi.choPhut
-			: failure.kind === "restricted"
-				? t.loi.canTra
-				: failure.kind === "credits"
-					? t.loi.hetTien
-					: t.loi.chung;
-
-	return (
-		<div
-			role="alert"
-			className="flex flex-col items-stretch gap-3 rounded-lg border border-destructive/30 bg-card px-4 py-3 sm:flex-row sm:items-start"
-		>
-			<div className="flex min-w-0 flex-1 items-start gap-3">
-				<Icon icon={WarningAlt} className="mt-0.5 size-4 text-destructive" />
-				<div className="min-w-0 flex-1">
-					<p className="font-medium text-sm">
-						{creatingAgent ? t.dung.daDungTao : t.dung.daDungTraLoi}
-					</p>
-					<p className="mt-0.5 text-pretty text-muted-foreground text-xs leading-5">
-						{message}
-					</p>
-				</div>
-			</div>
-			{onRetry ? (
-				<Button
-					variant="outline"
-					size="sm"
-					disabled={retrying}
-					aria-busy={retrying}
-					onClick={onRetry}
-				>
-					<AsyncButtonContent
-						status={retrying ? "pending" : "idle"}
-						pendingLabel={t.dung.dangThuLai}
-					>
-						{t.dung.thuLai}
-					</AsyncButtonContent>
-				</Button>
-			) : null}
 		</div>
 	);
 }
