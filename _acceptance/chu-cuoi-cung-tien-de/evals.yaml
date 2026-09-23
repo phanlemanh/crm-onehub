@@ -1,0 +1,70 @@
+schema_version: 1
+feature_slug: chu-cuoi-cung-tien-de
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.ccc_chu_la
+    expected: "exit 0; tren ban sao apps/api, tep do cai mot member owner la (khong thuoc tep kiem) roi import workspace-thanh-vien.spec.ts: ban sua ca chu-cuoi-cung xanh; ban tep kiem o 058bb75f cung chu la thi ca do va dau ra co 'The workspace needs an owner. Make someone else an owner first.'; ban goc khong do thi exit 2 'TIEN DE'"
+    paths: ["apps/api/test/workspace-thanh-vien.spec.ts", "apps/api/src/workspace/**", "_acceptance/chu-cuoi-cung-tien-de/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.ccc_tra_vai
+    expected: "exit 0; sau khi ca chu-cuoi-cung chay xong, afterAll cua tep do doc lai vai cua chu la: ban sua in 'VAI-GIU owner'; ban sao bo khoi tra vai trong finally thi in 'VAI-MAT member' va rang exit 1 neu khong thay dung cap nay"
+    paths: ["apps/api/test/workspace-thanh-vien.spec.ts", "_acceptance/chu-cuoi-cung-tien-de/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.ccc_khong_chu_la
+    expected: "exit 0; bun test workspace-thanh-vien.spec.ts ban sua thoat 0, 0 fail; tap ca (theo nhom+ten, doc tu junit) bang dung tap ca o 058bb75f"
+    paths: ["apps/api/test/workspace-thanh-vien.spec.ts", "_acceptance/chu-cuoi-cung-tien-de/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.ccc_dot_bien
+    expected: "exit 0; ban sao khong dot bien thi ca chu-cuoi-cung xanh (doi chung); ban sao doi 'owners.length <= 1' thanh 'owners.length < 1' trong workspace.service.ts thi ca do va dau ra co 'The workspace needs an owner. Make someone else an owner first.'; moc dot bien vang thi exit 2 'TIEN DE'"
+    paths: ["apps/api/test/workspace-thanh-vien.spec.ts", "apps/api/src/workspace/**", "_acceptance/chu-cuoi-cung-tien-de/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.ccc_pham_vi
+    expected: "exit 0; git diff 058bb75f...HEAD ngoai _acceptance/** va tep T1 chi gom apps/api/test/workspace-thanh-vien.spec.ts; danh sach mau co apps/api/src/workspace/workspace.service.ts thi ham kiem goi ten dung tep do"
+    paths: ["apps/**", "packages/**", "_acceptance/chu-cuoi-cung-tien-de/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.check_types_khong_cache
+    expected: "exit 0; moi task kiem kieu thanh cong, 0 cached"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.lint_khong_cache
+    expected: "exit 0; moi task lint thanh cong, 0 cached"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.lint_slop
+    expected: "exit 0; 0 warnings va 0 errors"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.api_khong_cache_tru_agent
+    expected: "exit 0; moi task test con lai thanh cong, 0 cached"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
