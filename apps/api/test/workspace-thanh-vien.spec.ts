@@ -81,6 +81,30 @@ async function don() {
 	await db.user.deleteMany({ where: { id: { startsWith: `${suffix}-` } } });
 }
 
+async function haChuLa(chu: string): Promise<string[]> {
+	const chuLa = await db.member.findMany({
+		where: {
+			organizationId: WORKSPACE_ID,
+			role: "owner",
+			userId: { not: chu },
+		},
+		select: { id: true },
+	});
+	const ids = chuLa.map((m) => m.id);
+	await db.member.updateMany({
+		where: { id: { in: ids } },
+		data: { role: "member" },
+	});
+	return ids;
+}
+
+async function traVai(ids: string[]): Promise<void> {
+	await db.member.updateMany({
+		where: { id: { in: ids } },
+		data: { role: "owner" },
+	});
+}
+
 async function demDong(email: string) {
 	return db.invitation.count({
 		where: { organizationId: WORKSPACE_ID, email },
@@ -231,73 +255,78 @@ describe("chu-cuoi-cung", () => {
 
 	it("chu cuoi cung khong go duoc, hai chu thi go duoc", async () => {
 		const chu = await dungNguoi("chu", "owner");
-		const chuMember = await db.member.findUnique({
-			where: {
-				organizationId_userId: { organizationId: WORKSPACE_ID, userId: chu },
-			},
-			select: { id: true },
-		});
-
-		const demTruoc = await db.member.count({
-			where: { organizationId: WORKSPACE_ID },
-		});
-		const loiTruoc = await db.invitation.count({
-			where: { organizationId: WORKSPACE_ID },
-		});
-
-		let cau = "";
+		const daHa = await haChuLa(chu);
 		try {
-			await workspace.removeMember(chu, { memberId: chuMember?.id ?? "" });
-		} catch (e) {
-			cau = (e as Error).message;
+			const chuMember = await db.member.findUnique({
+				where: {
+					organizationId_userId: { organizationId: WORKSPACE_ID, userId: chu },
+				},
+				select: { id: true },
+			});
+
+			const demTruoc = await db.member.count({
+				where: { organizationId: WORKSPACE_ID },
+			});
+			const loiTruoc = await db.invitation.count({
+				where: { organizationId: WORKSPACE_ID },
+			});
+
+			let cau = "";
+			try {
+				await workspace.removeMember(chu, { memberId: chuMember?.id ?? "" });
+			} catch (e) {
+				cau = (e as Error).message;
+			}
+
+			const demSau = await db.member.count({
+				where: { organizationId: WORKSPACE_ID },
+			});
+			const loiSau = await db.invitation.count({
+				where: { organizationId: WORKSPACE_ID },
+			});
+
+			expect([
+				cau,
+				demSau,
+				loiSau,
+				"cau tu choi GHIM nguyen van, va ca hai bang khong doi",
+			]).toEqual([
+				"The workspace needs an owner. Make someone else an owner first.",
+				demTruoc,
+				loiTruoc,
+				"cau tu choi GHIM nguyen van, va ca hai bang khong doi",
+			]);
+
+			const chuHai = await dungNguoi("chu-hai", "owner");
+			const chuHaiMember = await db.member.findUnique({
+				where: {
+					organizationId_userId: {
+						organizationId: WORKSPACE_ID,
+						userId: chuHai,
+					},
+				},
+				select: { id: true },
+			});
+
+			await workspace.removeMember(chu, { memberId: chuHaiMember?.id ?? "" });
+
+			const conLai = await db.member.findUnique({
+				where: {
+					organizationId_userId: {
+						organizationId: WORKSPACE_ID,
+						userId: chuHai,
+					},
+				},
+				select: { id: true },
+			});
+
+			expect([conLai, "doi chung duong: hai chu thi go duoc mot"]).toEqual([
+				null,
+				"doi chung duong: hai chu thi go duoc mot",
+			]);
+		} finally {
+			await traVai(daHa);
 		}
-
-		const demSau = await db.member.count({
-			where: { organizationId: WORKSPACE_ID },
-		});
-		const loiSau = await db.invitation.count({
-			where: { organizationId: WORKSPACE_ID },
-		});
-
-		expect([
-			cau,
-			demSau,
-			loiSau,
-			"cau tu choi GHIM nguyen van, va ca hai bang khong doi",
-		]).toEqual([
-			"The workspace needs an owner. Make someone else an owner first.",
-			demTruoc,
-			loiTruoc,
-			"cau tu choi GHIM nguyen van, va ca hai bang khong doi",
-		]);
-
-		const chuHai = await dungNguoi("chu-hai", "owner");
-		const chuHaiMember = await db.member.findUnique({
-			where: {
-				organizationId_userId: {
-					organizationId: WORKSPACE_ID,
-					userId: chuHai,
-				},
-			},
-			select: { id: true },
-		});
-
-		await workspace.removeMember(chu, { memberId: chuHaiMember?.id ?? "" });
-
-		const conLai = await db.member.findUnique({
-			where: {
-				organizationId_userId: {
-					organizationId: WORKSPACE_ID,
-					userId: chuHai,
-				},
-			},
-			select: { id: true },
-		});
-
-		expect([conLai, "doi chung duong: hai chu thi go duoc mot"]).toEqual([
-			null,
-			"doi chung duong: hai chu thi go duoc mot",
-		]);
 	});
 
 	it("dia chi co CHU HOA o hang user van bi rut loi cho phep", async () => {

@@ -1,0 +1,11 @@
+== XANH: hai luot qua mot-luot.sh cung luc
+A bat dau 07:03:26
+A xong 07:03:32
+mot-luot: da cho 6s de toi luot
+B bat dau 07:03:33
+B xong 07:03:35
+== DO: hai luot tien-de truc tiep cung luc
+D bat dau 07:03:38
+D xong 07:03:40
+C bat dau 07:03:37
+C xong 07:03:43

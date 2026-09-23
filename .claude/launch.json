@@ -68,6 +68,43 @@
         "cd apps/app && PROTO_ROUTE=1 PORT=3400 NEXT_PUBLIC_API_URL=http://localhost:3001 API_URL=http://localhost:3001 APP_URL=http://localhost:3400 bun run start"
       ],
       "port": 3400
+    },
+    {
+      "name": "ban-do-cot-api",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/api && PORT=3501 APP_URL=http://localhost:3500,http://127.0.0.1:3500 API_URL=http://localhost:3501 bun run dev"
+      ],
+      "port": 3501
+    },
+    {
+      "name": "ban-do-cot-app",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/app && PORT=3500 NEXT_PUBLIC_API_URL=http://localhost:3501 API_URL=http://localhost:3501 APP_URL=http://localhost:3500 bun run dev"
+      ],
+      "port": 3500
+    },
+    {
+      "name": "o-soan-api",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/api && PORT=3601 APP_URL=http://127.0.0.1:3600 API_URL=http://127.0.0.1:3601 bun run dev"
+      ],
+      "port": 3601
+    },
+    {
+      "name": "o-soan-app",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/app && PORT=3600 NEXT_PUBLIC_API_URL=http://127.0.0.1:3601 API_URL=http://127.0.0.1:3601 APP_URL=http://127.0.0.1:3600 bun run dev"
+      ],
+      "port": 3600,
+      "url": "http://127.0.0.1:3600"
     }
   ]
 }

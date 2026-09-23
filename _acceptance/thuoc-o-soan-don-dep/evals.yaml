@@ -1,0 +1,88 @@
+schema_version: 1
+feature_slug: thuoc-o-soan-don-dep
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tosd_khac_cay
+    expected: "exit 0 khi CA HAI chieu dung tren cung ca khac-cay (may chu gia phuc vu thu muc khac co mot .svg doi chung, NGUOI=dev@localhost): ban sua thoat 2, dau ra co 'KHONG DO DUOC: may chu o <APP_URL> khong phuc vu cay dang xet.', 0 vat sot (a tep moi trong apps/app/public, b hoi thoai 'o-soan do' cua moi nguoi dung tao sau luc bat dau, c tien trinh Chrome co TMPDIR rieng cua luot); ban goc 7cf69d6a thi bo do in 'khac-cay: sot dau moc'. Chieu nao sai -> exit 1 ghim '<ban> khac-cay: <ly do>'. Moc/tien de vang -> exit 2 'TIEN DE'"
+    paths: ["_acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs", "_acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs", "_acceptance/thuoc-o-soan-don-dep/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.tosd_giua_chung
+    expected: "exit 0 khi ma tran BON ca x hai ban dung het (8 dong, moi dong mot ket luan): giua-gieo (chen khongDo sau khi hoi thoai da tao, truoc khi ghi su kien), sau-gieo, sau-chrome (Chrome da mo, truoc trang dau) va loi-la (chen throw new Error('pha-thu loi la') o moc sau-chrome), moi ca may chu gia phuc vu dung public cua cay; ban sua: thoat 2, dong KHONG DO DUOC co 'pha-thu <moc>' (loi-la: 'pha-thu loi la'), 0 vat sot a/b/c; ban goc: bo do in '<ca>: sot hoi thoai'. Moc chen khong tim thay trong ban nao -> exit 2 goi ten moc"
+    paths: ["_acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs", "_acceptance/thuoc-o-soan-don-dep/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.tosd_tin_hieu
+    expected: "exit 0 khi ma tran hai ca x hai ban dung het va doi chung duong dung: ban sao chen o moc sau-chrome dong 'PHA-THU SAN SANG' roi treo; bo do gui SIGTERM (ca sigterm) / SIGINT (ca sigint) khi thay dong do; ban sua: thoat 143 / 130, 0 vat sot a/b/c; ban goc: bo do in '<ca>: sot hoi thoai'. Doi chung duong (ca sigkill, ban sua, SIGKILL cung moc): bo do PHAI in 'sigkill: sot chrome' va 'sigkill: sot hoi thoai' roi tu don — khong in thi exit 1 'thuoc vat sot mu'. Chrome nhan dien bang TMPDIR rieng cua luot trong dong lenh. Khong thay dong SAN SANG trong han -> exit 2 goi ten ca"
+    paths: ["_acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs", "_acceptance/thuoc-o-soan-don-dep/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tosd_thieu_nguoi
+    expected: "exit 0 khi: ban sua chay voi NGUOI vang (may chu gia phuc vu dung public) thoat 2, dong 'KHONG DO DUOC:' co chu NGUOI, 0 vat sot a/b/c (b tinh moi nguoi dung); tep ban sua khong chua '@onemount.com'; ban goc cung ca: co hoi thoai moi (da qua buoc gieo) va khong dong KHONG DO DUOC nao co chu NGUOI -> bo do in 'thieu-nguoi: khong chan' va don vat sot no de lai. Han luot la hang trong tep cau hinh cua bo do"
+    paths: ["_acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs", "_acceptance/thuoc-o-soan-don-dep/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.tosd_token
+    expected: "exit 0 khi ban sua co dong import builderToken tu duong giai ra apps/agent/agent/lib/custom-agent-dispatch.ts (duong tuong doi giai tu vi tri tep, khong so chuoi tho) va khong con chuoi 'builder:' nao; ban goc bi goi ten 'token: builder viet tay'"
+    paths: ["_acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs", "_acceptance/thuoc-o-soan-don-dep/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.tosd_mau
+    expected: "exit 0 khi: lay hai khai bao MAU_CON_TRO_RGB va MAU_CON_TRO cua ban sua, tinh gia tri trong mot ham rieng: chuoi bang dung 'rgb(' + mang.join(', ') + ')', va ve phai cua MAU_CON_TRO tham chieu MAU_CON_TRO_RGB; ban goc bi goi ten 'mau: khai hai lan' (ve phai la literal)"
+    paths: ["_acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs", "_acceptance/thuoc-o-soan-don-dep/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tosd_that
+    paths: ["_acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs", "_acceptance/o-soan-va-ly-do-loi/evals.yaml", "_acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs", "_acceptance/thuoc-o-soan-don-dep/rang/**"]
+    steps:
+      - "Kiem cong 3600 va 3601 (tai nguyen chung): lsof -nP -iTCP:<cong> -sTCP:LISTEN -t; dang co chu thi doc cwd bang lsof -a -p <pid> -d cwd -Fn — cwd nam trong cay dang xet (repoRoot) thi DUNG LAI may chu do, bo buoc dung; cwd o cay khac thi khong giet, bao BLOCKED"
+      - "Neu cong trong: dung may chu cua CAY DANG XET: api PORT=3601 APP_URL=http://127.0.0.1:3600 API_URL=http://127.0.0.1:3601; app PORT=3600 NEXT_PUBLIC_API_URL=http://127.0.0.1:3601 API_URL=http://127.0.0.1:3601; ghi PID, tat bang PID khi xong, khong pkill"
+      - "Chay O TIEN CANH (khong chay nen), Bash timeout 600000: APP_URL=http://127.0.0.1:3600 API_URL=http://127.0.0.1:3601 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh \"bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca that\" — khoa mot-luot xep hang voi E1-E4 de tien de contextDevApiKey khong bi lan khac don giua chung; may chu da nong thi luot xong trong vai phut. Bo do xoa evidence/ truoc khi ghi, doc doc dong 'Chay:' cua E1, E2, E8 trong _acceptance/o-soan-va-ly-do-loi/evals.yaml, chay dung dong do voi BANG_CHUNG=_acceptance/thuoc-o-soan-don-dep/evidence, ghi evidence/that.json (moi dong: che do, ma thoat, co dong DAT khong, cac dong KHONG DAT/KHONG DO DUOC, vat sot a/b/c, bam thu muc evidence cua ho so cu truoc/sau)"
+    inputs:
+      - _acceptance/thuoc-o-soan-don-dep/evidence/
+    expected: |
+      Doc evidence/that.json va anh trong evidence/:
+        1 ba dong con-tro, go-chu, chup: ma thoat 0, coDat true (dau ra co dong 'DAT: <che do>'),
+          dongHong rong (khong dong 'KHONG DAT:' hay 'KHONG DO DUOC:' nao)
+        2 moi dong: vat sot a, b, c deu rong
+        3 bam thu muc _acceptance/o-soan-va-ly-do-loi/evidence truoc = sau
+        4 anh E1-*.png (4), E2-go-chu.png, E8-*.png (6) co trong evidence/ cua ho so nay,
+          va E8-o-trong-<kho>.png nhin thay vach do truoc chu goi y
+      Mot dong khong dat -> FAIL, ghi dong nao.
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.tosd_pham_vi
+    expected: "exit 0 khi git diff $(git merge-base origin/onehub HEAD)...HEAD (tru _acceptance/** va tep khop risk_tiers.t1_skip_globs) rong, VA danh sach mau co apps/agent/agent/lib/custom-agent-dispatch.ts thi ham kiem goi ten dung tep do (doi chung duong)"
+    paths: ["apps/**", "packages/**", "scripts/**", "_acceptance/thuoc-o-soan-don-dep/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.tosd_steps_cu
+    expected: "exit 0 khi diff cua _acceptance/o-soan-va-ly-do-loi/evals.yaml tu merge-base origin/onehub toi HEAD: dung ba dong doi, la ba dong Chay: cua E1, E2, E8 (xac dinh bang khoi eval chua dong), moi dong moi = dong cu voi 'NGUOI=${NGUOI:-dev@localhost} ' chen ngay truoc 'bun scripts/lan-do/tien-de.mjs'; doi chung duong: mot cap cu/moi mau bot che do 'chup' va mot cap mau them co '--bo-qua' deu bi ham so goi ten 'steps-cu: doi ngoai tien to NGUOI'"
+    paths: ["_acceptance/o-soan-va-ly-do-loi/evals.yaml", "_acceptance/thuoc-o-soan-don-dep/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

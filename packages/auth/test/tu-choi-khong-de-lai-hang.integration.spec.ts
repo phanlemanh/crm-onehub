@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
 import { auth } from "../src/auth";
+import { traLaiDanhSachSauTep } from "./danh-sach-goc";
+
+traLaiDanhSachSauTep();
 
 const DANH_SACH = "onemount.com,phanlemanh@gmail.com";
 const suffix = process.env.TEST_RUN_ID ?? "tu-choi-spec";

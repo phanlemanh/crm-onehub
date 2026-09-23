@@ -1,0 +1,23 @@
+{
+  "feature_plain": "Bấm vào ô soạn hội thoại thì con trỏ đứng ở đầu ô, chữ gợi ý không còn trông như chữ đã gõ; khi một câu trả lời hỏng, thẻ báo lỗi hiện mã lỗi để chép gửi người vận hành, và máy chủ ghi lại lý do đầy đủ.",
+  "scope_plain": "Chưa tìm gốc lỗi chat trên bản chạy thật, chưa sửa chữ «Bộ dựng», chưa có công cụ đếm liên hệ, chưa sửa các chỗ khác của ô soạn — mỗi việc để vòng riêng.",
+  "decisions_plain": [
+    {"id": "d-20260922T153405Z-1", "p": "KHÔNG chạy bước quét độ phủ bằng công cụ — việc chỉ có hai chỗ sửa đã rõ; đổi lại độ phủ chỉ khai tay."},
+    {"id": "d-20260922T153405Z-2", "p": "KHÔNG làm bản mẫu bấm được trước khi duyệt — thay bằng ảnh chụp ô soạn và thẻ lỗi ở hai khổ màn hình; đổi lại lúc duyệt phạm vi chỉ đọc chữ."},
+    {"id": "d-20260922T153405Z-3", "p": "Thẻ lỗi chỉ hiện mã lỗi, lý do chi tiết chỉ nằm trong nhật ký máy chủ — người dùng không đọc được chữ kỹ thuật tiếng Anh của nhà cung cấp."},
+    {"id": "d-20260922T153405Z-4", "p": "Đo vị trí con trỏ trong trình duyệt thật chứ không soi mã giao diện — đổi lại phần này không tự kiểm lại được khi ghim lại bằng máy."},
+    {"id": "d-20260922T153406Z-5", "p": "Tách thẻ lỗi thành một phần riêng để kiểm riêng được — thêm một tệp mã."},
+    {"id": "d-20260922T153711Z-6", "p": "Chữ gợi ý được xếp chồng dưới vùng gõ để ô tự cao lên khi chữ gợi ý xuống hai dòng trên điện thoại."},
+    {"id": "d-20260922T153735Z-7", "p": "Anh đã duyệt thiết kế ngắn trong trò chuyện trước khi máy viết hồ sơ."},
+    {"id": "d-20260922T154417Z-9", "p": "Đổi cách chứng một phép đo máy chủ cho đúng: kiểm máy chủ giữ nguyên lý do lỗi, còn việc tệp mẫu khớp thực tế giao cho phép đo khác."},
+    {"id": "d-20260922T155457Z-10", "p": "Chuyển phép đo trình duyệt sang cặp cổng khác vì cặp cũ đang bị một việc khác giữ; lượt đỏ được thử trên mã cũ trước khi sửa."},
+    {"id": "d-20260922T155457Z-11", "p": "Phép đo «chữ gợi ý nằm trọn trong ô» bỏ qua góc phải dưới ô để khỏi nhầm các nút nổi của công cụ phát triển — chữ tràn luôn bắt đầu từ bên trái nên vẫn bắt được."},
+    {"id": "d-20260922T155906Z-12", "p": "Sửa lời mô tả các bước chụp ảnh cho đúng và bỏ yêu cầu thấy nút «Thử lại» ở ảnh thẻ lỗi vì tiêu chí không hứa điều đó (nút đã được phép đo khác kiểm)."},
+    {"id": "d-20260922T161704Z-13", "p": "Lượt 1 trượt vì chính kịch bản chụp ảnh giấu con trỏ; sửa để ảnh ô trống giữ lại con trỏ."},
+    {"id": "d-20260922T164211Z-14", "p": "Lượt 2 trượt lần nữa cùng kiểu (kịch bản tự chặn phép đo) — máy dừng vá và hỏi anh chọn hướng."},
+    {"id": "d-20260922T231806Z-15", "p": "Anh chọn đổi cách đo: trên trang đo con trỏ được tô đỏ và kịch bản tìm vạch đỏ trên ảnh, không phụ thuộc màu nền sáng hay tối."},
+    {"id": "d-20260922T232920Z-16", "p": "Ghi chú «vạch đỏ là con trỏ» được đưa vào bộ phép đo thay vì chèn tay lúc chạy; một lượt bị ngắt đã để lại tệp thừa trong thư mục công khai, máy đã dọn."},
+    {"id": "d-20260922T234243Z-17", "p": "Lượt 3 đạt đủ 9 phép đo nhưng bộ kiểm chung đỏ vì một bài kiểm cũ chỉ hỏng lúc sáng sớm giờ Việt Nam — lỗi có sẵn, không do việc này; máy dừng hỏi anh."},
+    {"id": "d-20260923T074349Z-18", "p": "Anh chọn chờ bản sửa bài kiểm đó rồi chấm lượt 4; nhánh đã gộp bản mới nhất của nhánh chính trước khi chấm."}
+  ]
+}

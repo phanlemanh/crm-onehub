@@ -1,0 +1,17 @@
+{
+  "feature_plain": "Kịch bản đo ô soạn hội thoại dọn sạch sau mình ở mọi cách thoát — không còn để lại hội thoại thử trong danh sách hội thoại của người đo, trình duyệt chạy ngầm, hay tệp lạ trong thư mục ảnh của ứng dụng.",
+  "scope_plain": "Chưa xử lý: tiến trình bị giết cứng giữa lượt, dọn rác hội thoại thử cũ theo tuổi, email thật ghi sẵn trong bước chuẩn bị đo dùng chung, và hội thoại thử đang sót trong dữ liệu dev.",
+  "decisions_plain": [
+    {"id": "d-20260923T083800Z-1", "p": "Người đo phải khai tên mỗi lần chạy, mặc định là tài khoản thử dev@localhost; KHÔNG dùng email sinh ngẫu nhiên vì bước chuẩn bị đo chạy ở tiến trình khác — đổi lại phải sửa dòng lệnh ba phép đo của hồ sơ đã ký."},
+    {"id": "d-20260923T083800Z-2", "p": "Mọi lỗi dồn về một chỗ dọn dẹp duy nhất, và kịch bản tự bắt tín hiệu dừng — đổi lại tắt cách xử lý tín hiệu mặc định của trình duyệt tự động."},
+    {"id": "d-20260923T083800Z-3", "p": "Cho phép đổi thư mục ghi ảnh bằng chứng để lượt chạy thử không ghi đè ảnh của hồ sơ đã ký."},
+    {"id": "d-20260923T083800Z-4", "p": "KHÔNG chạy công cụ quét độ phủ tự động — hai trục cách-thoát × thứ-bị-sót đã liệt tay trong hợp đồng."},
+    {"id": "d-20260923T083800Z-5", "p": "KHÔNG làm phiên thiết kế giao diện — việc này chỉ sửa kịch bản đo, không có màn hình mới."},
+    {"id": "d-20260923T083800Z-6", "p": "KHÔNG viết đặc tả trải nghiệm — không có màn hình mới."},
+    {"id": "d-20260923T083800Z-7", "p": "KHÔNG khai đường đo giá trị — việc sửa công cụ, không có hồ sơ cơ hội."},
+    {"id": "d-20260923T083801Z-8", "p": "KHÔNG xử lý tiến trình bị giết cứng, rác hội thoại cũ, email trong bước chuẩn bị đo dùng chung và cách chọn không gian làm việc — để việc khác."},
+    {"id": "d-20260923T085229Z-9", "p": "Lượt chạy thật nhận 'đạt' khi có dòng ĐẠT và không dòng lỗi nào, thay vì đòi ĐẠT là dòng cuối — bước chuẩn bị đo in thêm dòng dọn dẹp sau đó."},
+    {"id": "d-20260923T091141Z-10", "p": "Bộ phá-thử in dòng kết luận có mã thoát rõ ràng — vòng chấm 1 bị trả lại oan vì người chấm tự suy mã thoát."},
+    {"id": "d-20260923T092144Z-11", "p": "Lượt chạy thật xếp hàng chung khoá với các lượt phá-thử và xoá ảnh cũ trước khi chụp — vòng 2 lộ ra lượt khác dọn mất khoá nghiên cứu giả giữa chừng."}
+  ]
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "eval": "E1",
+    "cheDo": "con-tro",
+    "lenh": "NGUOI=${NGUOI:-dev@localhost} bun scripts/lan-do/tien-de.mjs --chay 'bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs con-tro'",
+    "ma": 0,
+    "coDat": true,
+    "dongHong": [],
+    "sot": {
+      "dau moc": [],
+      "hoi thoai": [],
+      "chrome": []
+    },
+    "bamTruoc": "df73b8fcb8fd83ab0584c88674bf8d2f8e5feb4ade326b31b5fa8dc6a3370267",
+    "bamSau": "df73b8fcb8fd83ab0584c88674bf8d2f8e5feb4ade326b31b5fa8dc6a3370267"
+  },
+  {
+    "eval": "E2",
+    "cheDo": "go-chu",
+    "lenh": "NGUOI=${NGUOI:-dev@localhost} bun scripts/lan-do/tien-de.mjs --chay 'bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs go-chu'",
+    "ma": 0,
+    "coDat": true,
+    "dongHong": [],
+    "sot": {
+      "dau moc": [],
+      "hoi thoai": [],
+      "chrome": []
+    },
+    "bamTruoc": "df73b8fcb8fd83ab0584c88674bf8d2f8e5feb4ade326b31b5fa8dc6a3370267",
+    "bamSau": "df73b8fcb8fd83ab0584c88674bf8d2f8e5feb4ade326b31b5fa8dc6a3370267"
+  },
+  {
+    "eval": "E8",
+    "cheDo": "chup",
+    "lenh": "NGUOI=${NGUOI:-dev@localhost} bun scripts/lan-do/tien-de.mjs --chay 'bun _acceptance/o-soan-va-ly-do-loi/rang/o-soan.mjs chup'",
+    "ma": 0,
+    "coDat": true,
+    "dongHong": [],
+    "sot": {
+      "dau moc": [],
+      "hoi thoai": [],
+      "chrome": []
+    },
+    "bamTruoc": "df73b8fcb8fd83ab0584c88674bf8d2f8e5feb4ade326b31b5fa8dc6a3370267",
+    "bamSau": "df73b8fcb8fd83ab0584c88674bf8d2f8e5feb4ade326b31b5fa8dc6a3370267"
+  }
+]

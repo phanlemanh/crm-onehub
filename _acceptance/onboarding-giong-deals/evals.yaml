@@ -62,7 +62,7 @@ evals:
       - "_acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs"
     expected: |
       Cung lan chay voi E1. Voi onboarding-bang o moi kho x tieng: moi th dang hien co nhan
-      (span.truncate/span.block) scrollWidth <= clientWidth; documentElement khong tran; o
+      ([data-slot=table-head-label], hoac span.truncate/span.block) scrollWidth <= clientWidth VA scrollHeight <= clientHeight (nhan hai dong cat theo chieu doc); documentElement khong tran; o
       duoi 640 so th dang hien co chu = 3 (Doi tac, Tac o, Im lang).
       CHIEU DO (da chay tren cay chua sua): onboarding-bang@1440/vi do voi thong diep ghim
       "tieu de bi cat: Im lặng, Bước, Ngày".
