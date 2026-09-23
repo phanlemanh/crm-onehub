@@ -5,7 +5,7 @@ slug: nhac-qua-zalo
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, config, docs]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-23-nhac-qua-zalo-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-23T08:28:44Z
@@ -95,3 +95,33 @@ khoảng 60 ô có nghĩa, cắt còn 13 ô Core (khoảng 21%).
   câu truy vấn đường đo của `may-nhac-truoc-nguoi` không lệch.
 - Người đã rời xưởng còn `ZaloLink`: không có việc nhắc nên không nhận gì, và
   không được đếm trên trang kết nối. Liên kết tự mất khi `User` bị xoá.
+
+### Known limits (Cổng Bằng chứng, 2026-09-23)
+
+- Ngoài-1: chốt cây phía API của E17 đọc một hàng cơ sở dữ liệu, nên một cây
+  khác dùng chung cơ sở dữ liệu cũng trả lại được hàng đó.
+- Ngoài-2: câu «không lỗi console, mọi yêu cầu 200» trong `E17-network.txt` lấy
+  từ một phiên trình duyệt khác phiên chụp ảnh bằng chứng.
+- Ngoài-3: `ZALO_BOT_TOKEN` chưa khai trong `turbo.json`; chạy `bun run dev` ở
+  gốc thì agent có thể không thấy token và trang báo Zalo chưa bật.
+- Ngoài-4: vài chữ trên trang Zalo («xưởng», «tác tử») chưa có mục trong
+  `CONTEXT.md` và lệch cách gọi ở các trang khác.
+- Ngoài-5: mã 408 «không có tin» của Zalo viết ở hai chỗ; sửa một chỗ quên
+  chỗ kia thì vòng đọc tin báo lỗi sai hoặc bỏ sót lỗi thật.
+- Ngoài-6: cỡ chữ của `StatusIndicator` trong khối Zalo đè bằng `className`
+  thay vì prop `size`.
+- Ngoài-7: `getUpdates` lỗi thì vòng đọc tin dừng, nhưng trang kết nối vẫn báo
+  bot sống.
+- Ngoài-9: E5 «Zalo lỗi» chỉ kiểm có ném, không ghim thông điệp lỗi.
+- Ngoài-10: ca 1 của khối test `khong-token` kiểm `zaloBotName` null trong khi
+  `beforeEach` đã đặt sẵn null.
+- Ngoài-11: E4 «trang ↔ máy gửi» gọi `kenhSeDungCua` bằng tham số của máy gửi,
+  không bằng tham số của trang.
+- Ngoài-12: E18 chỉ quét hai `page.tsx`; `khoi-zalo.tsx`, `khoi-kenh.tsx`,
+  `ket-noi-zalo-than.tsx` không được quét sàn thiết kế.
+- Ngoài-13: assert thứ tự tiêu đề trong tin Zalo xanh cả khi thiếu «Quá hạn»
+  (`indexOf` trả -1).
+- Ngoài-14: E23 dòng 1 «sau hai chu kỳ làm mới vẫn hiện mã» không có assert.
+- Ngoài-15: E15 đếm đúng 3 dòng đã nối, không kiểm đó là 3 người nào.
+- Ngoài-16: E16 dựng trang kết nối bằng props viết tay, không rút từ kết quả
+  tRPC qua page.
