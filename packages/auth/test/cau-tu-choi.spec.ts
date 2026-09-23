@@ -1,5 +1,8 @@
 import { expect, test } from "bun:test";
 import { auth } from "../src/auth";
+import { traLaiDanhSachSauTep } from "./danh-sach-goc";
+
+traLaiDanhSachSauTep();
 
 type NguoiMoi = { email: string; name: string };
 

@@ -7,7 +7,6 @@ import { CHIA, ducChia, PASSWORD } from "../src/chia-mat-khau";
 import { isGoogleConfigured } from "../src/env";
 import { CAU_MAT_KHAU, SANG_MAT_KHAU } from "../src/sang-mat-khau";
 import { GOOGLE_PROVIDER_ID, SYNC_SCOPES } from "../src/scopes";
-import { googleHostedDomain } from "../src/workspace";
 
 const suffix = process.env.TEST_RUN_ID ?? "chia-mat-khau-spec";
 
@@ -190,7 +189,7 @@ function idTokenGia(nguoi: {
 	accountId: string;
 	ten: string;
 }): string {
-	const mienGiuNha = googleHostedDomain();
+	const mienGiuNha = auth.options.socialProviders?.google?.hd;
 	const nen: ManhJwt = {
 		iss: "https://accounts.google.com",
 		sub: nguoi.accountId,
