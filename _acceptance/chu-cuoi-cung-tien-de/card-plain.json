@@ -1,0 +1,12 @@
+{
+  "feature_plain": "Bộ kiểm «không gỡ được chủ cuối cùng của workspace» thôi đỏ ngẫu nhiên trên CI khi trong cơ sở dữ liệu còn sót một chủ từ bài kiểm khác.",
+  "scope_plain": "Để lại: tìm bài kiểm nào để sót chủ; tách cơ sở dữ liệu theo gói; ca đổi vai (không có ca kiểm nào)",
+  "decisions_plain": [
+    {"id": "d-20260923T072055Z-1", "p": "KHÔNG dùng bộ quét độ phủ tự động — phạm vi chỉ một ca kiểm"},
+    {"id": "d-20260923T072055Z-2", "p": "KHÔNG viết đặc tả giao diện — không có màn hình"},
+    {"id": "d-20260923T072055Z-3", "p": "Ca tự hạ chủ lạ xuống thành viên rồi trả lại vai sau ca — không xoá dữ liệu của bài kiểm khác; đổi lại chưa biết chủ lạ đến từ đâu"},
+    {"id": "d-20260923T072055Z-4", "p": "Đổi hướng so với chip ban đầu (tách cơ sở dữ liệu theo gói) vì đã tái hiện được gốc lỗi nằm ở tiền đề ngầm của ca, việc nhỏ hơn và ít rủi ro hơn"},
+    {"id": "d-20260923T072055Z-5", "p": "Lượt kiểm hạ tầng đầu tiên đỏ do máy ghi tệp trong lúc đo — đã chạy lại trên cây sạch, xanh"},
+    {"id": "d-20260923T072321Z-6", "p": "KHÔNG chạy bộ kiểm của gói agent trong lượt chấm — gói đó có ca phập phù không liên quan; CI vẫn chạy nó"}
+  ]
+}
