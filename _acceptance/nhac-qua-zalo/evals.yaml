@@ -442,11 +442,12 @@ evals:
       - "CHAN CAY, hai phia: dat mot dau moc vao apps/app/public roi xin lai qua APP_URL; VA doc mot ban ghi moc qua API_URL. Khong nhan lai duoc mot trong hai -> thoat ma 2 va goi ten cay dang xet, KHONG doc anh nao"
       - "KHONG nang quyen bat ky thanh vien nao trong DB, KHONG tao phien cho tai khoan nguoi khac"
       - "Gieo bang thu tuc cua kho (ham packages/db, khong insert tay): appSetting zaloBotName 'Bot OneHub', zaloPolledAt 1 phut truoc; 3 thanh vien da noi; nguoi dang nhap co ma dang cho"
-      - "Mo /onehub/settings/notifications o kho 1440, chup evidence/E17-ma-cho-1440.png"
-      - "Gieo ZaloLink cho nguoi dang nhap, uu tien SLACK, khong khop Slack; tai lai, chup evidence/E17-lech-1440.png"
-      - "Dat zaloBotName null; tai lai, chup evidence/E17-zalo-tat-1440.png"
-      - "Tra zaloBotName, mo /onehub/settings/connections/zalo, chup evidence/E17-ket-noi-song-1440.png; dat zaloPolledAt 10 phut truoc, chup evidence/E17-ket-noi-im-1440.png"
-      - "Lap lai ma-cho, lech, ket-noi-song o kho 375: evidence/E17-ma-cho-375.png, evidence/E17-lech-375.png, evidence/E17-ket-noi-song-375.png"
+      - "Doc slug workspace that tu DB (bang organization, id WORKSPACE_ID) — goi la <slug>; moi duong duoi day la /<slug>/..., KHONG dung chu onehub"
+      - "Mo /<slug>/settings/notifications o kho 1440, chup _acceptance/nhac-qua-zalo/evidence/E17-ma-cho-1440.png (duong tinh tu goc kho, KHONG ghi vao evidence/ o goc)"
+      - "Gieo ZaloLink cho nguoi dang nhap, uu tien SLACK, khong khop Slack; tai lai, chup _acceptance/nhac-qua-zalo/evidence/E17-lech-1440.png"
+      - "Dat zaloBotName null; tai lai, chup _acceptance/nhac-qua-zalo/evidence/E17-zalo-tat-1440.png"
+      - "Tra zaloBotName, mo /<slug>/settings/connections/zalo, goi GET zalo.xuong ghi lai daNoi va tong vao output, chup _acceptance/nhac-qua-zalo/evidence/E17-ket-noi-song-1440.png; dat zaloPolledAt 10 phut truoc, chup _acceptance/nhac-qua-zalo/evidence/E17-ket-noi-im-1440.png"
+      - "Lap lai ma-cho, lech, ket-noi-song o kho 375: _acceptance/nhac-qua-zalo/evidence/E17-ma-cho-375.png, _acceptance/nhac-qua-zalo/evidence/E17-lech-375.png, _acceptance/nhac-qua-zalo/evidence/E17-ket-noi-song-375.png"
       - "Xoa dau moc trong apps/app/public va don du lieu gieo khi xong"
     inputs:
       - _acceptance/nhac-qua-zalo/evidence/
@@ -455,7 +456,8 @@ evals:
         1 ma 6 so chia hai nhom kem gio het han va ten bot
         2 nhom nut Tu dong · Zalo · Slack; lua chon khoa co dong ly do
         3 dong canh bao lech kenh
-        4 trang ket noi: "3/7" nguoi da noi; anh im co canh bao bot khong tra loi
+        4 trang ket noi: dong "x/y người đã nối Zalo" voi x, y bang dung daNoi, tong ma zalo.xuong
+          tra luc chup (so trong DB dev dung chung, khong phai so co dinh); anh im co canh bao bot khong tra loi
         5 thanh ben Cai dat co muc "Thông báo của bạn"
         6 ba anh 375 khong tran ngang
       Mot dong khong nhin thay -> FAIL, ghi dong nao.
