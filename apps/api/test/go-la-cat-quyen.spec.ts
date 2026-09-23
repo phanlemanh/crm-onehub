@@ -12,9 +12,11 @@ import { API_KEY_HEADER, auth, NOT_A_MEMBER } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { NestExpressApplication } from "@nestjs/platform-express";
+import type { AnyProcedure } from "@trpc/server";
 import { hashPassword } from "better-auth/crypto";
 import { AppRouterHost } from "nestjs-trpc";
 import request from "supertest";
+import { z } from "zod";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { createApp } from "../src/create-app";
 import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
@@ -41,14 +43,24 @@ type Loai = "query" | "mutation";
 type ThuTuc = { ten: string; loai: Loai; restPath: string | null };
 type HangMaTran = { ten: string; status: number; message: string };
 type Dau = Record<string, string>;
+type DauVao = Record<string, string> | undefined;
 
-const procedureDef = (value: unknown) =>
-	value as {
-		_def: {
-			type: string;
-			meta?: { openapi?: { method: string; path: string } };
+const khaiRest = z
+	.object({ openapi: z.object({ method: z.string(), path: z.string() }) })
+	.transform((m) => m.openapi);
+
+function thuTucDangChay() {
+	const { appRouter } = app.get(AppRouterHost);
+	const procs = appRouter._def.procedures as Record<string, AnyProcedure>;
+	return Object.entries(procs).map(([ten, p]) => {
+		const rest = khaiRest.safeParse(p._def.meta);
+		return {
+			ten,
+			type: p._def.type,
+			rest: rest.success ? rest.data : null,
 		};
-	};
+	});
+}
 
 let app: NestExpressApplication;
 let workspace: WorkspaceService;
@@ -56,18 +68,18 @@ let workspace: WorkspaceService;
 const id = (phan: string) => `${suffix}-${phan}`;
 
 function soThuTuc(): ThuTuc[] {
-	const { appRouter } = app.get(AppRouterHost);
-	const procs = appRouter._def.procedures as Record<string, unknown>;
-	return Object.entries(procs)
-		.map(([ten, raw]) => ({ ten, def: procedureDef(raw)._def }))
-		.filter(({ def }) => def.type === "query" || def.type === "mutation")
-		.map(({ ten, def }) => ({
-			ten,
-			loai: def.type as Loai,
-			restPath: def.meta?.openapi
-				? `${REST_BRIDGE_PATH}${def.meta.openapi.path}`
-				: null,
-		}))
+	return thuTucDangChay()
+		.flatMap(({ ten, type, rest }) =>
+			type === "query" || type === "mutation"
+				? [
+						{
+							ten,
+							loai: type,
+							restPath: rest ? `${REST_BRIDGE_PATH}${rest.path}` : null,
+						},
+					]
+				: [],
+		)
 		.sort((a, b) => a.ten.localeCompare(b.ten));
 }
 
@@ -80,7 +92,7 @@ function gan(req: request.Test, dau: Dau): request.Test {
 async function goiTrpc(
 	ten: string,
 	loai: Loai,
-	input: unknown,
+	input: DauVao,
 	dau: Dau,
 ): Promise<request.Response> {
 	const server = app.getHttpServer();
@@ -114,11 +126,8 @@ async function maTranTrpc(dau: Dau): Promise<HangMaTran[]> {
 }
 
 function duongRest(): Array<{ path: string; method: string }> {
-	const { appRouter } = app.get(AppRouterHost);
-	const procs = appRouter._def.procedures as Record<string, unknown>;
-	return Object.values(procs)
-		.map((raw) => procedureDef(raw)._def.meta?.openapi)
-		.filter((o): o is { method: string; path: string } => Boolean(o))
+	return thuTucDangChay()
+		.flatMap(({ rest }) => (rest ? [rest] : []))
 		.map((o) => ({
 			path: `${REST_BRIDGE_PATH}${o.path}`,
 			method: o.method.toLowerCase(),
@@ -368,10 +377,9 @@ describe("go-la-cat-quyen", () => {
 			"tRPC: khoa con bat cua nguoi ngoai van qua duoc",
 		).toEqual([]);
 		const rest = await maTranRest(dau);
-		expect(
-			rest.length,
-			"ma tran REST rong hoac qua it",
-		).toBeGreaterThanOrEqual(SAN_DUONG_REST);
+		expect(rest.length, "ma tran REST rong hoac qua it").toBeGreaterThanOrEqual(
+			SAN_DUONG_REST,
+		);
 		expect(
 			hangLot(rest, laNgoaiLeRest),
 			"REST: khoa con bat cua nguoi ngoai van qua duoc",
@@ -382,8 +390,14 @@ describe("go-la-cat-quyen", () => {
 		const [b1, b2] = [await taoKhoa(bi, "b1"), await taoKhoa(bi, "b2")];
 		const [c1, c2] = [await taoKhoa(chu, "c1"), await taoKhoa(chu, "c2")];
 		expect(
-			(await goiTrpc("contacts.list", "query", {}, { [API_KEY_HEADER]: b1.key }))
-				.status,
+			(
+				await goiTrpc(
+					"contacts.list",
+					"query",
+					{},
+					{ [API_KEY_HEADER]: b1.key },
+				)
+			).status,
 			"doi chung: khoa nguoi thu nhat doc duoc truoc luot go",
 		).toBe(200);
 		await go();
@@ -392,17 +406,30 @@ describe("go-la-cat-quyen", () => {
 			"luot go khong duoc xoa dong khoa",
 		).toBe(2);
 		const conBat = [];
-		for (const k of [b1, b2]) if ((await khoaBat(k.id)) !== false) conBat.push(k.id);
+		for (const k of [b1, b2])
+			if ((await khoaBat(k.id)) !== false) conBat.push(k.id);
 		expect(conBat, "khoa cua nguoi bi go van bat").toEqual([]);
 		expect(
-			(await goiTrpc("contacts.list", "query", {}, { [API_KEY_HEADER]: b1.key }))
-				.status,
+			(
+				await goiTrpc(
+					"contacts.list",
+					"query",
+					{},
+					{ [API_KEY_HEADER]: b1.key },
+				)
+			).status,
 			"khoa da tat van doc duoc",
 		).not.toBe(200);
 		expect([await khoaBat(c1.id), await khoaBat(c2.id)]).toEqual([true, true]);
 		expect(
-			(await goiTrpc("contacts.list", "query", {}, { [API_KEY_HEADER]: c1.key }))
-				.status,
+			(
+				await goiTrpc(
+					"contacts.list",
+					"query",
+					{},
+					{ [API_KEY_HEADER]: c1.key },
+				)
+			).status,
 			"khoa cua thanh vien khac bi cham",
 		).toBe(200);
 	});
@@ -486,8 +513,14 @@ describe("go-la-cat-quyen", () => {
 		).toBe(200);
 		expect(await khoaBat(cu.id), "khoa cu duoc bat lai theo").toBe(false);
 		expect(
-			(await goiTrpc("contacts.list", "query", {}, { [API_KEY_HEADER]: cu.key }))
-				.status,
+			(
+				await goiTrpc(
+					"contacts.list",
+					"query",
+					{},
+					{ [API_KEY_HEADER]: cu.key },
+				)
+			).status,
 			"khoa cu doc duoc sau khi cho phep lai",
 		).not.toBe(200);
 	});
