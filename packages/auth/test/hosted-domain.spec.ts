@@ -1,5 +1,8 @@
 import { expect, test } from "bun:test";
 import { googleHostedDomain, isWorkspaceEmail } from "../src/workspace";
+import { traLaiDanhSachSauTep } from "./danh-sach-goc";
+
+traLaiDanhSachSauTep();
 
 const BANG = [
 	["onemount.com", "onemount.com", true],
