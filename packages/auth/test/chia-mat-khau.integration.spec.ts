@@ -666,15 +666,6 @@ describe("cua-google-con-song", () => {
 		});
 		expect(lech.diaChiVe ?? "").toContain("error=unable_to_get_user_info");
 		expect(await db.user.count({ where: { email } })).toBe(0);
-
-		const dung = await dangNhapQuaGoogle({
-			email,
-			accountId,
-			ten: "Token lech mien",
-			hd: mienTheoDanhSach,
-		});
-		expect(dung.diaChiVe ?? "").not.toContain("error=");
-		expect(await db.user.count({ where: { email } })).toBe(1);
 	});
 
 	test("nguoi ngoai danh sach duoc vao khong dang nhap duoc bang google", async () => {

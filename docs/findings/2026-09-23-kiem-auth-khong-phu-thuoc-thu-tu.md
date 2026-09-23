@@ -25,8 +25,8 @@ CI của #87 (run 35813904599) đỏ hai ca `cua-google-con-song` trong
 - `test/danh-sach-goc.ts`: bốn tệp trả lại `ALLOWED_SIGN_IN` ở `afterAll`.
 - `test/hd-cua-google.spec.ts`: nạp auth trong tiến trình con, canh chỗ
   `auth.ts` nối `hd` theo danh sách cho phép.
-- Ca «cua google tu choi token co hd lech»: cùng người, cùng tài khoản; `hd`
-  lệch thì bị từ chối, đúng thì vào được.
+- Ca «cua google tu choi token co hd lech»: token mang `hd` lệch miền của danh
+  sách cho phép thì bị từ chối và không tạo hàng người dùng.
 
 ## Hồ sơ nghiệm thu — vì sao không vào kho
 
@@ -64,3 +64,10 @@ git show 16c47aaa:_acceptance/kiem-auth-khong-phu-thuoc-thu-tu/contract.md
 - Các ca đỏ chỉ lộ ra dưới `--randomize` (`ensureWorkspaceMembership`,
   `duong-moi`, `vai-dinh-truoc`, `doi chung duong`, `khong-sinh-thanh-vien`)
   phụ thuộc trạng thái DB hoặc thứ tự ca trong tệp. Chúng đỏ y hệt trên bản gốc.
+- Ca «hd lệch» không có đối chứng dương đăng nhập thành công. Bản trong hồ sơ
+  (`16c47aaa`) có lượt đó, nhưng trên CI nó làm `api#test` đỏ 2/2 ở ca «chủ cuối
+  cùng không gỡ được». `auth#test` và `api#test` chạy song song trên cùng một cơ sở
+  dữ liệu, và một lượt đăng nhập thành công lúc workspace 0 thành viên sẽ ghi danh
+  mọi người dùng và đặt người đầu làm chủ (`packages/auth/src/organization.ts`). Ca
+  `api` đó vốn đã chập chờn (đỏ ngày 19/09 và 22/09 ở PR khác); gốc là hai gói test
+  dùng chung một cơ sở dữ liệu.
