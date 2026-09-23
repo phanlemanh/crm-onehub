@@ -9,7 +9,7 @@ import { genericOAuth } from "better-auth/plugins/generic-oauth";
 import { organization } from "better-auth/plugins/organization";
 import { decideSignInFromDb } from "./allow-list";
 import { API_KEY_EXPIRATION, API_KEY_HEADER, API_KEY_PREFIX } from "./api-keys";
-import { canhKhoaApi } from "./canh-khoa-api";
+import { canhKhoaApiPlugin } from "./canh-khoa-api";
 import { PASSWORD } from "./chia-mat-khau";
 import { AUTH_COOKIE_PREFIX } from "./cookies";
 import { env } from "./env";
@@ -130,7 +130,6 @@ export const auth = betterAuth({
 		before: createAuthMiddleware(async (ctx) => {
 			await canhDatMatKhau(ctx);
 			await canhSlackConnect(ctx);
-			await canhKhoaApi(ctx);
 		}),
 	},
 
@@ -257,6 +256,7 @@ export const auth = betterAuth({
 				minExpiresIn: API_KEY_EXPIRATION.minDays,
 			},
 		}),
+		canhKhoaApiPlugin(),
 	],
 
 	databaseHooks: {
