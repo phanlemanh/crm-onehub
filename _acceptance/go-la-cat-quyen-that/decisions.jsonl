@@ -6,3 +6,4 @@
 {"id":"d-20260923T132304Z-6","type":"descope","stage":"S1","at":"2026-09-23T06:40:05Z","decision":"bỏ đặc-tả-UX — hồ sơ không chạm màn nào, màn hết quyền đã có và không đổi","impact":"cấu trúc không khai trước — owner thấy nó lần đầu trong code"}
 {"id":"d-20260923T132304Z-7","type":"descope","stage":"S1","at":"2026-09-23T06:40:06Z","decision":"bỏ design-pass — không có surface giao diện nào đổi","impact":"Gate 1 duyệt UI bằng chữ — mất khoảnh khắc visual trước duyệt"}
 {"id":"d-20260923T132304Z-8","type":"descope","stage":"S1","at":"2026-09-23T06:40:07Z","decision":"bỏ ui-observed — surfaces khong co mat nguoi nhin; route eve la route may chu","impact":"Cổng Bằng chứng không có frame — người ký đọc tên ca máy thay vì nhìn"}
+{"id":"d-20260923T134024Z-9","type":"seal","gate":1,"at":"2026-09-23T13:40:24Z"}

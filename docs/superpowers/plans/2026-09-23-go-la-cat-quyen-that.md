@@ -8,6 +8,8 @@
 
 **Tech Stack:** NestJS + nestjs-trpc 2.13 (tRPC 11.18), Better Auth 1.6.25 + `@better-auth/api-key`, Prisma, Next.js route handler, bun test + supertest.
 
+**Duyệt kế hoạch (cổng T3):** Manh Phan, 2026-09-23 — cùng lượt Cổng 1.
+
 **Spec:** `docs/superpowers/specs/2026-09-23-go-la-cat-quyen-that-design.md` · hợp đồng `_acceptance/go-la-cat-quyen-that/contract.md` · evals `_acceptance/go-la-cat-quyen-that/evals.yaml`
 
 ## Global Constraints
