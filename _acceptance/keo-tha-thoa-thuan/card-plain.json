@@ -1,47 +1,18 @@
 {
   "feature_plain": "Người bán chuyển màn Thoả thuận sang dạng bảng cột, nhìn cả phễu bảy giai đoạn một lượt và kéo một thoả thuận sang cột khác để đổi giai đoạn của nó.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ có nút chuyển «Bảng / Bảng cột»; cách xem nằm trên đường dẫn nên tải lại hay gửi link vẫn giữ nguyên."},
-    {"id": "AC-3", "p": "Sẽ hiện tối đa 50 thẻ mỗi cột và dòng «+N nữa» cho phần còn lại, số N khớp số đếm thật."},
-    {"id": "AC-4", "p": "Sẽ áp đúng bộ lọc và thứ tự sắp đang đặt ở dạng bảng cho mọi cột — số đếm, tổng và thẻ đều khớp dạng bảng."},
-    {"id": "AC-5", "p": "Sẽ dời thẻ ngay khi thả (kể cả vào cột đang rỗng), đầu hai cột đổi số khi lưu xong, và thoả thuận có ghi một hoạt động đổi giai đoạn."},
-    {"id": "AC-7", "p": "Sẽ đưa thẻ về chỗ cũ và hiện đúng câu lỗi khi máy chủ không cho đổi."},
-    {"id": "AC-9", "p": "Sẽ cho đổi giai đoạn bằng bàn phím qua menu trên thẻ; tên thoả thuận và công ty không bị trình duyệt tự dịch; trình đọc màn hình báo nhấc, dời, thả bằng tiếng của màn."},
-    {"id": "AC-10", "p": "Sẽ mở tấm thoả thuận khi bấm vào thẻ mà không kéo, như bấm một dòng bảng."},
-    {"id": "AC-11", "p": "Sẽ khoá nút chuyển và giữ dạng bảng khi đang xem mục lưu trữ."},
-    {"id": "AC-14", "p": "Sẽ giữ ô tìm, bộ lọc và nút chuyển khi bảng cột đang tải hoặc hỏng; hỏng thì có nút «Thử lại»."}
-  ],
-  "wont_do": [
-    {"id": "AC-2", "p": "Chặn thoả thuận đã lưu trữ lọt vào số đếm, tổng giá trị và thẻ của bất kỳ cột nào; tổng quy về tiền báo cáo."},
-    {"id": "AC-6", "p": "Sẽ KHÔNG ghi gì khi thả vào «Closed lost» hay «Unqualified» cho tới khi người điền lý do và bấm Lưu; huỷ thì thẻ về chỗ cũ."},
-    {"id": "AC-8", "p": "Sẽ KHÔNG gửi lệnh đổi nào khi thả vào chính cột cũ, thả ra ngoài bảng, hoặc nhấn Esc."},
-    {"id": "AC-12", "p": "Sẽ KHÔNG đổi bảng cột của màn 30 ngày đầu — ở đó vẫn không kéo được, thẻ vẫn là đường dẫn."},
-    {"id": "AC-13", "p": "Chặn tràn ngang cả trang ở năm khổ màn và hai thứ tiếng; bảng chỉ cuộn trong khung của nó."},
-    {"id": "AC-15", "p": "Chặn phần ReUI mang vào kho một gói gộp class thứ hai, chú thích trong mã hay icon lạ, và chặn vi phạm luật giao diện của kho."}
-  ],
   "scope_plain": "Để lại cho vòng sau: sắp thứ tự trong cột, chọn nhiều thẻ, tổng có trọng số, dịch tên giai đoạn, tải thêm quá 50 thẻ, vùng thả nổi kiểu Pipedrive, bảng cột cho mục lưu trữ.",
-  "coverage_plain": [
-    {"i": 0, "p": "Mọi đích thả đều có tiêu chí: cột mở khác, Closed won, hai cột thua, chính cột cũ, ra ngoài hoặc Esc (AC-5, AC-6, AC-8)."},
-    {"i": 1, "p": "Ba kết cục sau khi thả đều có tiêu chí: máy chủ nhận, máy chủ từ chối, huỷ ở hộp thoại lý do (AC-5, AC-7, AC-6)."},
-    {"i": 2, "p": "Bốn cách thao tác: chuột kéo đo trên Chrome thật, bàn phím qua menu (AC-9), bấm mở tấm (AC-10); chạm kéo chỉ đo gián tiếp."},
-    {"i": 3, "p": "Mọi trạng thái của bảng có tiêu chí: cột rỗng, quá 50, đang lọc, đang tải, lỗi, lưu trữ."},
-    {"i": 4, "p": "Áp chung: năm khổ màn, hai thứ tiếng, tên người nhập không bị tự dịch, màn 30 ngày đầu giữ nguyên."},
-    {"i": 5, "p": "Cả 15 tiêu chí là phần làm ngay. Giả định cần anh gạch: kéo bằng tay trên điện thoại đủ dùng — chưa thử trên máy thật."},
-    {"i": 6, "p": "Phần để sau nằm ở mục ngoài phạm vi và sổ quyết định."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Chưa có phép đo nào kiểm màn có thật sự gửi bộ lọc đang đặt sang bảng cột, và số từng cột chưa được so với dạng bảng — đã thêm phép đo đầu vào và so từng cột."},
-    {"i": 1, "p": "Số ở đầu cột và dòng «+N nữa» chưa được đo trên màn, và chưa đòi đầu cột đổi ngay sau khi lưu — đã thêm vào tiêu chí và phép đo dựng từ kết quả thật của máy chủ."},
-    {"i": 2, "p": "Chưa ai thử thả vào cột đang rỗng — đã thêm vào tiêu chí và bước kéo thật trên Chrome; design-pass sau đó đo ra đúng lỗi này (thẻ rơi sang cột bên cạnh)."},
-    {"i": 3, "p": "Tên người nhập không bị tự dịch và lời báo cho trình đọc màn hình chưa có tiêu chí — đã gộp vào tiêu chí bàn phím và thêm phép đo."},
-    {"i": 4, "p": "Thiết kế chưa dẫn luật giao diện của kho cho trạng thái kéo, và phép soi thiết kế dùng danh sách file viết tay — đã ghi luật vào thiết kế và cho phép soi lấy file từ thay đổi thật."}
-  ],
+  "decisions": [],
+  "analyst_plain": "",
   "decisions_plain": [
     {"id": "d-20260923T101345Z-1", "p": "Bảng cột kéo thả là một chế độ của bảng cột sẵn có, chạy bằng thành phần miễn phí của ReUI — đổi lại bảng cột chung phình thêm một chế độ."},
     {"id": "d-20260923T101345Z-2", "p": "Thêm một câu truy vấn riêng cho bảng cột thay vì dùng lại danh sách 100 dòng — đổi lại phải giữ hai câu truy vấn cùng bộ lọc."},
     {"id": "d-20260923T101345Z-3", "p": "KHÔNG làm sắp thứ tự trong một cột — không cần đổi cơ sở dữ liệu, nhưng kéo trong cột sẽ không có tác dụng."},
     {"id": "d-20260923T101345Z-4", "p": "Thả vào cột thua thì hỏi lý do trước, không ghi trước — không có thoả thuận thua thiếu lý do, đổi lại thêm một bước."},
-    {"id": "d-20260923T101345Z-5", "p": "Dựng bản bấm được để duyệt giao diện trước cổng này — tốn thêm một vòng dựng."},
-    {"id": "d-20260923T102708Z-6", "p": "Năm chỗ thiếu của thành phần ReUI sửa thẳng trong bản đã cài — một chỗ để đọc khi lỗi, đổi lại cài lại từ ReUI sẽ ghi đè các chỗ sửa."}
+    {"id": "d-20260923T101345Z-5", "p": "Dựng bản bấm được để duyệt giao diện trước Cổng 1 — tốn thêm một vòng dựng."},
+    {"id": "d-20260923T102708Z-6", "p": "Năm chỗ thiếu của thành phần ReUI sửa thẳng trong bản đã cài — một chỗ để đọc khi lỗi, đổi lại cài lại từ ReUI sẽ ghi đè các chỗ sửa."},
+    {"id": "d-20260923T103644Z-8", "p": "Làm tuần tự hai phần độc lập thay vì tách song song — chậm hơn vài phút, không phải gộp nhánh."},
+    {"id": "d-20260923T110407Z-9", "p": "Lỗi thả vào cột rỗng hoá ra do bảng cột bị bẻ thành lưới 3 cột, không phải do cách chọn đích như design-pass đoán — đã sửa bố cục và thêm phép đo bảy cột cùng một hàng."},
+    {"id": "d-20260923T110657Z-10", "p": "Bổ sung các bước cho hai phép đo nhìn-thấy để máy chạy được — không đổi thứ được đo."},
+    {"id": "d-20260923T115525Z-11", "p": "Đầu cột nói rõ thoả thuận chưa có tỷ giá thay vì in tổng 0, và ghim ba câu lời báo kéo thả — hai lỗi vòng 1 đã sửa, sáu mục ngoài hợp đồng để anh quyết."}
   ]
 }
