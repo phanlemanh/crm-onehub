@@ -50,7 +50,7 @@ const GOC: ThongBaoMau = {
 	luuLoi: false,
 };
 
-export const THONG_BAO: Record<string, ThongBaoMau> = {
+export const THONG_BAO = {
 	"ST-thong-bao-chua-noi": GOC,
 	"ST-thong-bao-ma-cho": {
 		...GOC,
@@ -77,9 +77,9 @@ export const THONG_BAO: Record<string, ThongBaoMau> = {
 		kenhSeDung: "zalo",
 		luuLoi: true,
 	},
-};
+} satisfies Record<string, ThongBaoMau>;
 
-export const KET_NOI: Record<string, KetNoiMau> = {
+export const KET_NOI = {
 	"ST-ket-noi-zalo-song": {
 		bat: true,
 		tenBot: TEN_BOT,
@@ -101,7 +101,7 @@ export const KET_NOI: Record<string, KetNoiMau> = {
 		im: false,
 		nguoi: NGUOI,
 	},
-};
+} satisfies Record<string, KetNoiMau>;
 
 export const MUC_CAI_DAT = [
 	"Chung",
@@ -112,6 +112,18 @@ export const MUC_CAI_DAT = [
 	"Thành viên",
 	"Khoá API",
 	"SSO",
-	"Điều phối",
 	"Thông báo của bạn",
+	"Điều phối",
 ] as const;
+
+export function thongBaoCua(state: string): ThongBaoMau | undefined {
+	return Object.hasOwn(THONG_BAO, state)
+		? THONG_BAO[state as keyof typeof THONG_BAO]
+		: undefined;
+}
+
+export function ketNoiCua(state: string): KetNoiMau | undefined {
+	return Object.hasOwn(KET_NOI, state)
+		? KET_NOI[state as keyof typeof KET_NOI]
+		: undefined;
+}

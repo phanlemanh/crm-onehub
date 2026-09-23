@@ -63,7 +63,9 @@ const getMe = z.object({
 	result: z.object({ id: z.string(), account_name: z.string().min(1) }),
 });
 
-export function parseZaloGetMe(value: unknown): { id: string; tenBot: string } {
+export type ZaloBot = { id: string; tenBot: string };
+
+export function parseZaloGetMe(value: unknown): ZaloBot {
 	const ket = getMe.safeParse(value);
 	if (!ket.success) {
 		throw new Error(`getMe tra hinh dang la: ${ket.error.message}`);
@@ -76,7 +78,9 @@ const guiDuoc = z.object({
 	result: z.object({ message_id: z.string() }),
 });
 
-export function parseZaloSend(value: unknown): { messageId: string } {
+export type ZaloDaGui = { messageId: string };
+
+export function parseZaloSend(value: unknown): ZaloDaGui {
 	const ket = guiDuoc.safeParse(value);
 	if (ket.success) return { messageId: ket.data.result.message_id };
 	const loi = loiZalo.safeParse(value);

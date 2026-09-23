@@ -22,12 +22,12 @@ import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { useState } from "react";
 import type { KenhUuTien, LienKetMau, ThongBaoMau } from "./du-lieu";
 
-const MO_TA_KENH: Record<KenhUuTien, string> = {
+const MO_TA_KENH = {
 	AUTO: "Zalo khi bạn đã nối Zalo, không thì Slack.",
 	ZALO: "Chỉ Zalo. Zalo không dùng được thì tin đi qua Slack và trang này báo cho bạn.",
 	SLACK:
 		"Chỉ Slack. Slack không dùng được thì tin đi qua Zalo và trang này báo cho bạn.",
-};
+} satisfies Record<KenhUuTien, string>;
 
 const TEN_KENH = { zalo: "Zalo", slack: "Slack" } as const;
 
