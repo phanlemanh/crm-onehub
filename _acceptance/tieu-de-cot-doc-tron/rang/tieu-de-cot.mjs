@@ -155,11 +155,16 @@ const CHI_TIET = process.env.CHI_TIET === "1";
 
 function doTrenTrang(le) {
 	const hopChu = (el) => {
-		const r = document.createRange();
-		r.selectNodeContents(el);
-		const hop = [...r.getClientRects()].filter(
-			(x) => x.width > 0 && x.height > 0,
-		);
+		const di = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+		const hop = [];
+		for (let nut = di.nextNode(); nut !== null; nut = di.nextNode()) {
+			if (!nut.textContent.trim()) continue;
+			const r = document.createRange();
+			r.selectNodeContents(nut);
+			hop.push(
+				...[...r.getClientRects()].filter((x) => x.width > 0 && x.height > 0),
+			);
+		}
 		return hop.length > 0 ? hop : null;
 	};
 	const hien = (el) => {
