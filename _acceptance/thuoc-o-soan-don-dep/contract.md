@@ -5,7 +5,7 @@ slug: thuoc-o-soan-don-dep
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [script]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-23-thuoc-o-soan-don-dep-design.md
 approved_by:
 approved_at:
@@ -72,3 +72,10 @@ Không có bề mặt người nhìn của sản phẩm; AC-7 là eval `ui-check
 là lần chứng lại E1/E2/E8 của `o-soan-va-ly-do-loi` (làn ghim lại không chạy `ui-check`).
 Hồ sơ này sửa `steps` của E1/E2/E8 trong `evals.yaml` của hồ sơ đã ký để truyền `NGUOI`
 — xem `decisions.jsonl`.
+
+- Known limit (Ngoài-1, Cổng Bằng chứng 2026-09-23): lệnh `tosd_that` đi qua `mot-luot.sh`, mà `mot-luot.sh` tự điền `APP_URL`/`API_URL` mặc định 3500/3501, nên chặn «thiếu APP_URL/API_URL» của `pha-thu.mjs --ca that` không còn bắn; chạy trần lệnh cấu hình mà không tự đặt hai biến thì đo máy chủ 3500/3501 thay vì báo lỗi.
+- Known limit (Ngoài-2, Cổng Bằng chứng 2026-09-23): hạn trong của lượt thật (`thatMs` 600 s mỗi chế độ, ba chế độ, cộng thời gian chờ khoá) dài hơn trần 600 s của lời gọi Bash mà step E7 khai; bị công cụ ngắt giữa chừng thì `finally` của `tien-de.mjs` và phần dọn của bộ đo không chạy, có thể để lại khoá nghiên cứu giả, hội thoại thử hoặc Chrome.
+- Known limit (Ngoài-3, Cổng Bằng chứng 2026-09-23): bọc `tosd_that` trong `mot-luot.sh` khiến E7 cần người dùng mặc định của `tien-de.mjs` có sẵn trong kho, như E1–E4 đã cần từ trước.
+- Known limit (Ngoài-4, Cổng Bằng chứng 2026-09-23): cùng gốc với Ngoài-2 — trần 600 s của lời gọi Bash ở step E7 thấp hơn ca xấu nhất của chính lệnh; ngắt ở đó bỏ qua mọi bước dọn.
+- Known limit (Ngoài-5, Cổng Bằng chứng 2026-09-23): cùng gốc với Ngoài-1 — chạy trần lệnh `tosd_that` đo máy chủ 3500/3501 thay vì thoát 2.
+- Known limit (Ngoài-6, Cổng Bằng chứng 2026-09-23): tín hiệu SIGINT/SIGTERM đến đúng lúc `gieo()` đang tạo hội thoại (trước khi id được ghi lại) thì `donDep()` đã chạy xong một lần mà chưa biết id, nên hội thoại thử có thể sót; AC-3 chỉ đo tín hiệu sau khi Chrome đã mở.

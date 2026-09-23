@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 807d1357efe8e5957d837d2a4800704a535406cc
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-23
 ---
 
 # Evidence Report: thuoc-o-soan-don-dep
