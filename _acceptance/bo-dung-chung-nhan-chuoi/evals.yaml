@@ -19,6 +19,17 @@ evals:
       Trả một khoá của bảng dịch về chuỗi tiếng Anh. Bài kiểm phải đỏ và gọi tên
       đúng khoá đó.
     lenh: bun run test --filter=@crm/ui
+    executor: script
+    cmd: config:executors.script.bdc_bo_dung_ui
+    paths:
+      - "packages/ui/**"
+      - "_acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh"
+    expected: |
+      Ma 0. Khuon may cua phep do da ky 2026-09-01 (cau_hoi / cach_do / chieu_do o tren
+      giu nguyen van; lenh cu = lenh cua khoa bdc_bo_dung_ui). Chieu do theo chieu_do cua
+      chinh eval nay, da chay o vong cham 1-4 ngay 2026-09-01 (evidence-report.md).
+      Chuyen khuon 2026-09-23 (ho so tieu-de-cot-doc-tron, nguoi chon mo lai): lenh cu chay
+      nguyen van o dinh ed30103e — ma 0.
 
   - id: E2
     criterion: AC-2
@@ -31,6 +42,17 @@ evals:
       của các component khác phải vẫn xanh — nếu tất cả cùng đỏ thì phép đo đang
       đo nhà cung cấp chứ không đo component.
     lenh: bun run test --filter=@crm/ui
+    executor: script
+    cmd: config:executors.script.bdc_bo_dung_ui
+    paths:
+      - "packages/ui/**"
+      - "_acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh"
+    expected: |
+      Ma 0. Khuon may cua phep do da ky 2026-09-01 (cau_hoi / cach_do / chieu_do o tren
+      giu nguyen van; lenh cu = lenh cua khoa bdc_bo_dung_ui). Chieu do theo chieu_do cua
+      chinh eval nay, da chay o vong cham 1-4 ngay 2026-09-01 (evidence-report.md).
+      Chuyen khuon 2026-09-23 (ho so tieu-de-cot-doc-tron, nguoi chon mo lai): lenh cu chay
+      nguyen van o dinh ed30103e — ma 0.
 
   - id: E3
     criterion: AC-3
@@ -43,6 +65,17 @@ evals:
       đỏ. Đây là phép đo của phí bản rẽ: kho của hãng không dựng nhà cung cấp
       nào.
     lenh: bun run test --filter=@crm/ui
+    executor: script
+    cmd: config:executors.script.bdc_bo_dung_ui
+    paths:
+      - "packages/ui/**"
+      - "_acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh"
+    expected: |
+      Ma 0. Khuon may cua phep do da ky 2026-09-01 (cau_hoi / cach_do / chieu_do o tren
+      giu nguyen van; lenh cu = lenh cua khoa bdc_bo_dung_ui). Chieu do theo chieu_do cua
+      chinh eval nay, da chay o vong cham 1-4 ngay 2026-09-01 (evidence-report.md).
+      Chuyen khuon 2026-09-23 (ho so tieu-de-cot-doc-tron, nguoi chon mo lai): lenh cu chay
+      nguyen van o dinh ed30103e — ma 0.
 
   - id: E4
     criterion: AC-4
@@ -56,6 +89,17 @@ evals:
     lenh: |
       bash _acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh --chan mot-goc
       bash _acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh --chan khong-nhap-nguoc
+    executor: script
+    cmd: config:executors.script.bdc_goc_ngon_ngu
+    paths:
+      - "packages/ui/**"
+      - "_acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh"
+    expected: |
+      Ma 0. Khuon may cua phep do da ky 2026-09-01 (cau_hoi / cach_do / chieu_do o tren
+      giu nguyen van; lenh cu = lenh cua khoa bdc_goc_ngon_ngu). Chieu do theo chieu_do cua
+      chinh eval nay, da chay o vong cham 1-4 ngay 2026-09-01 (evidence-report.md).
+      Chuyen khuon 2026-09-23 (ho so tieu-de-cot-doc-tron, nguoi chon mo lai): lenh cu chay
+      nguyen van o dinh ed30103e — ma 0.
 
   - id: E5
     criterion: AC-5
@@ -68,6 +112,17 @@ evals:
     chieu_do: >-
       Là chính E6. Phép đo không đọc mã, nên không có lối lách cú pháp nào.
     lenh: cd packages/ui && bun run test
+    executor: script
+    cmd: config:executors.script.bdc_goi_ui
+    paths:
+      - "packages/ui/**"
+      - "_acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh"
+    expected: |
+      Ma 0. Khuon may cua phep do da ky 2026-09-01 (cau_hoi / cach_do / chieu_do o tren
+      giu nguyen van; lenh cu = lenh cua khoa bdc_goi_ui). Chieu do theo chieu_do cua
+      chinh eval nay, da chay o vong cham 1-4 ngay 2026-09-01 (evidence-report.md).
+      Chuyen khuon 2026-09-23 (ho so tieu-de-cot-doc-tron, nguoi chon mo lai): lenh cu chay
+      nguyen van o dinh ed30103e — ma 0.
 
   - id: E6
     criterion: AC-6
@@ -81,6 +136,17 @@ evals:
       chấm 2 là 44/45. Thêm hai đòn nữa phải đỏ: dịch một khoá thành một chuỗi
       tiếng Anh KHÁC, và thêm một chuỗi giao diện vào danh sách trung tính.
     lenh: cd packages/ui && bun run test
+    executor: script
+    cmd: config:executors.script.bdc_goi_ui
+    paths:
+      - "packages/ui/**"
+      - "_acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh"
+    expected: |
+      Ma 0. Khuon may cua phep do da ky 2026-09-01 (cau_hoi / cach_do / chieu_do o tren
+      giu nguyen van; lenh cu = lenh cua khoa bdc_goi_ui). Chieu do theo chieu_do cua
+      chinh eval nay, da chay o vong cham 1-4 ngay 2026-09-01 (evidence-report.md).
+      Chuyen khuon 2026-09-23 (ho so tieu-de-cot-doc-tron, nguoi chon mo lai): lenh cu chay
+      nguyen van o dinh ed30103e — ma 0.
 
   - id: E7
     criterion: AC-7
@@ -93,6 +159,17 @@ evals:
       Phép đo phải chạy trên tiêu đề DÀI HƠN bề rộng cột — chạy trên tiêu đề
       ngắn thì nó xanh mà không đo gì.
     lenh: bun run test --filter=@crm/ui
+    executor: script
+    cmd: config:executors.script.bdc_bo_dung_ui
+    paths:
+      - "packages/ui/**"
+      - "_acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh"
+    expected: |
+      Ma 0. Khuon may cua phep do da ky 2026-09-01 (cau_hoi / cach_do / chieu_do o tren
+      giu nguyen van; lenh cu = lenh cua khoa bdc_bo_dung_ui). Chieu do theo chieu_do cua
+      chinh eval nay, da chay o vong cham 1-4 ngay 2026-09-01 (evidence-report.md).
+      Chuyen khuon 2026-09-23 (ho so tieu-de-cot-doc-tron, nguoi chon mo lai): lenh cu chay
+      nguyen van o dinh ed30103e — ma 0.
 
   - id: E8
     criterion: AC-8
@@ -105,6 +182,17 @@ evals:
       Đưa lại `new Intl.NumberFormat()` ngoặc rỗng vào tầng module trên bản sao.
       Máy quét phải đỏ và gọi tên đúng dòng đó.
     lenh: bun run test --filter=@crm/ui
+    executor: script
+    cmd: config:executors.script.bdc_bo_dung_ui
+    paths:
+      - "packages/ui/**"
+      - "_acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh"
+    expected: |
+      Ma 0. Khuon may cua phep do da ky 2026-09-01 (cau_hoi / cach_do / chieu_do o tren
+      giu nguyen van; lenh cu = lenh cua khoa bdc_bo_dung_ui). Chieu do theo chieu_do cua
+      chinh eval nay, da chay o vong cham 1-4 ngay 2026-09-01 (evidence-report.md).
+      Chuyen khuon 2026-09-23 (ho so tieu-de-cot-doc-tron, nguoi chon mo lai): lenh cu chay
+      nguyen van o dinh ed30103e — ma 0.
 
   - id: E9
     criterion: AC-9
@@ -117,6 +205,17 @@ evals:
       Nếu nó vẫn xanh thì phép đo đang ăn theo `router.refresh()` của thanh đầu
       trang chứ không đo tính phản ứng.
     lenh: bun run test --filter=@crm/ui
+    executor: script
+    cmd: config:executors.script.bdc_bo_dung_ui
+    paths:
+      - "packages/ui/**"
+      - "_acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh"
+    expected: |
+      Ma 0. Khuon may cua phep do da ky 2026-09-01 (cau_hoi / cach_do / chieu_do o tren
+      giu nguyen van; lenh cu = lenh cua khoa bdc_bo_dung_ui). Chieu do theo chieu_do cua
+      chinh eval nay, da chay o vong cham 1-4 ngay 2026-09-01 (evidence-report.md).
+      Chuyen khuon 2026-09-23 (ho so tieu-de-cot-doc-tron, nguoi chon mo lai): lenh cu chay
+      nguyen van o dinh ed30103e — ma 0.
 
   - id: E10
     criterion: AC-10
@@ -128,3 +227,16 @@ evals:
       Không có chiều máy. Đây là tiêu chí phán xét, và bảng dịch phải nằm trong
       hồ sơ trước lúc chấm để hội đồng không bắn vào bia đang chạy.
     lenh: null
+    executor: judgment
+    inputs:
+      - _acceptance/bo-dung-chung-nhan-chuoi/ban-dich.md
+      - packages/ui/src/lib/messages.ts
+    paths:
+      - "packages/ui/src/lib/messages.ts"
+      - "_acceptance/bo-dung-chung-nhan-chuoi/ban-dich.md"
+    expected: |
+      Hoi dong phan cham DUNG bang dich da chot trong ban-dich.md (sinh tu
+      packages/ui/src/lib/messages.ts): chu doc nhu tieng Viet cua nhan vien quan he doi
+      tac, khong chu nao phai di hoi moi hieu. Chu chua co trong bang thi khong cham.
+      Da nhan o vong cham 4 ngay 2026-09-01 sau khi sua ba dong hoi dong neu.
+
