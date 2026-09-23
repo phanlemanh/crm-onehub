@@ -5,7 +5,7 @@ slug: nhac-qua-zalo
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, config, docs]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-23-nhac-qua-zalo-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-23T08:28:44Z
