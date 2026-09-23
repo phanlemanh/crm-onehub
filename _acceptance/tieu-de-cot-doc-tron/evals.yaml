@@ -81,10 +81,16 @@ evals:
       dau tien; cot can trai (text-align cua th la left/start):
       |nhan.left - (td.left + paddingLeft)| <= 1.5; cot can phai:
       |nhan.right - (td.right - paddingRight)| <= 1.5; va khoang cach giua hop svg va hop
-      chu gan nhat cua nhan (Range tren nut chu) <= 6. Mot khang dinh / o (gop moi cot cua
-      o) = 50.
+      chu gan nhat cua nhan <= 6, voi hop chu lay tu CAC NUT CHU (TreeWalker SHOW_TEXT,
+      moi nut mot Range) — khong lay Range tren ca nhan, vi no tra ca hop cua span mui ten
+      va khoang cach luon ra 0 (phat hien cua vong cham bo-dung-chung-nhan-chuoi vong 5,
+      2026-09-23; vong cham 1 cua ho so nay da ky tren phep do rong do). Mot khang dinh / o
+      (gop moi cot cua o) = 50.
       CHIEU DO (da chay S3, evidence/chieu-do.txt): bo `-ml-2` khoi nut sap -> ma 1,
       `deals@320/vi lech mep Tên 9.0px, san 1.5` (8px le trai + 1px vien trong suot).
+      CHIEU DO mui ten (da chay 2026-09-23 bang lenh cua eval nguyen van,
+      evidence/chieu-do.txt muc «AC-3 mui ten (vong 2)»): SortIndicator cot can trai
+      ml-1 -> ml-8 -> ma 1, 116 dong, `deals@375/vi mui ten cach chu 32.0px o cot Tên, san 6`.
 
   - id: E4
     criterion: AC-4

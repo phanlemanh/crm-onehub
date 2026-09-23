@@ -75,3 +75,9 @@ HONG: deals@375/vi chu ten 35px, san 40
 HONG: deals@320/en chu ten 35px, san 40
 HONG: deals@375/en chu ten 35px, san 40
 
+## AC-3 mui ten (vong 2) — pha: SortIndicator cot can trai ml-1 -> ml-8 (32px), lenh cua eval tdc_tieu_de_cot nguyen van
+ma thoat: 1 · so dong HONG mui ten: 116
+o=50 khang-dinh=276/276
+HONG: deals@320/vi mui ten cach chu 12.8px o cot Tên, san 6
+HONG: deals@375/vi mui ten cach chu 32.0px o cot Tên, san 6
+HONG: deals@768/vi mui ten cach chu 32.0px o cot Tên, san 6
