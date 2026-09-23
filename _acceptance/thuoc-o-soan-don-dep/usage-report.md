@@ -78,3 +78,45 @@ wall: 451s
 - **claude-opus-5-5**: 3 agent · 22 calls · out 11,981 · in 44 · cache_read 2,184,701 · cache_create 313,376
 - **claude-haiku-4-5-20251001**: 12 agent · 27 calls · out 10,856 · in 240 · cache_read 1,202,432 · cache_create 466,110
 
+### S4 round 3 — wf_a9ddff81-5c5 (20 agent, 97,572 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5 | 6 | 22,410 | 12 | 582,645 | 251 |
+| ui:E7 | claude-sonnet-5 | 25 | 14,152 | 50 | 2,714,154 | 274 |
+| baseline:diffBase | claude-sonnet-5 | 27 | 13,573 | 54 | 2,718,286 | 244 |
+| review:conventions | claude-opus-5-5 | 7 | 9,838 | 14 | 619,370 | 105 |
+| review:bugs | claude-opus-5-5 | 12 | 9,414 | 24 | 1,171,336 | 109 |
+| review:measurement | claude-opus-5-5 | 10 | 7,171 | 20 | 1,074,315 | 97 |
+| triage | claude-sonnet-5 | 3 | 7,115 | 6 | 188,285 | 91 |
+| machine:bun _acceptance/thuoc-o-soan-don-dep/ran | claude-haiku-4-5-20251001 | 2 | 1,576 | 18 | 86,553 | 19 |
+| machine:bash _acceptance/tieu-de-cot-doc-tron/ra | claude-haiku-4-5-20251001 | 2 | 1,496 | 18 | 86,582 | 112 |
+| machine:bash _acceptance/tieu-de-cot-doc-tron/ra | claude-haiku-4-5-20251001 | 2 | 1,432 | 18 | 86,596 | 126 |
+| machine:bash _acceptance/tieu-de-cot-doc-tron/ra | claude-haiku-4-5-20251001 | 2 | 1,431 | 18 | 86,586 | 73 |
+| machine:bun run test | claude-haiku-4-5-20251001 | 3 | 1,046 | 26 | 122,144 | 60 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 1,035 | 18 | 86,520 | 15 |
+| machine:bash _acceptance/tieu-de-cot-doc-tron/ra | claude-haiku-4-5-20251001 | 2 | 1,022 | 18 | 86,582 | 74 |
+| machine:bun _acceptance/thuoc-o-soan-don-dep/ran | claude-haiku-4-5-20251001 | 2 | 980 | 18 | 86,554 | 14 |
+| machine:bun _acceptance/thuoc-o-soan-don-dep/ran | claude-haiku-4-5-20251001 | 2 | 911 | 18 | 86,552 | 13 |
+| machine:bun _acceptance/thuoc-o-soan-don-dep/ran | claude-haiku-4-5-20251001 | 2 | 841 | 18 | 86,551 | 12 |
+| capture:provenance | claude-sonnet-5 | 2 | 755 | 4 | 85,268 | 19 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 708 | 18 | 86,520 | 23 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 666 | 18 | 86,518 | 11 |
+
+
+wall: 635s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 13,573 | 2,718,286 | 244 | 09:23:31 | 09:27:35 |
+| machine | 12 | 13,144 | 1,074,258 | 127 | 09:23:31 | 09:25:38 |
+| ui | 1 | 14,152 | 2,714,154 | 274 | 09:23:31 | 09:28:05 |
+| review | 3 | 26,423 | 2,865,021 | 123 | 09:23:31 | 09:25:34 |
+| triage | 1 | 7,115 | 188,285 | 91 | 09:28:05 | 09:29:36 |
+| capture | 1 | 755 | 85,268 | 19 | 09:29:36 | 09:29:55 |
+| synthesize | 1 | 22,410 | 582,645 | 251 | 09:29:55 | 09:34:06 |
+
+- **claude-sonnet-5**: 5 agent · 63 calls · out 58,005 · in 126 · cache_read 6,288,638 · cache_create 590,542
+- **claude-opus-5-5**: 3 agent · 29 calls · out 26,423 · in 58 · cache_read 2,865,021 · cache_create 319,921
+- **claude-haiku-4-5-20251001**: 12 agent · 25 calls · out 13,144 · in 224 · cache_read 1,074,258 · cache_create 466,098
+
