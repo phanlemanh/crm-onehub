@@ -624,6 +624,13 @@ executors:
     xin_quyen_tien_de: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/man-xin-quyen-co-rang/rang/man-xin-quyen.mjs tien-de"
     xin_quyen_chup_san: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/man-xin-quyen-co-rang/rang/man-xin-quyen.mjs chup-san"
     lm_tu_vung_goi: node _acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs
+    tdc_tieu_de_cot: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs"
+    tdc_doi_chung_ke_hoach: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "DUOI_CONG=1 bun _acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs"
+    bdc_bo_dung_ui: bun run test --filter=@crm/ui
+    bdc_goi_ui: cd packages/ui && bun run test
+    bdc_cat_ba_cham: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-dung-chung-nhan-chuoi/rang/cat-ba-cham.mjs"
+    bdc_goc_ngon_ngu: bash _acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh --chan mot-goc && bash _acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh --chan khong-nhap-nguoc
+    tdc_san_thiet_ke: 'for t in "packages/ui/src/components/data-table.tsx" "apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

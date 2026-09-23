@@ -118,6 +118,7 @@ function columnsFor(m: CompanyMessages): DataTableColumn<CompanyRow>[] {
 			sortable: true,
 			align: "right",
 			width: "w-[20%]",
+			hideBelow: "sm",
 			cell: (row) => <span className="tabular-nums">{row.openDealCount}</span>,
 		},
 		{

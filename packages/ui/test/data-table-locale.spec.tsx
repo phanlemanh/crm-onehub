@@ -95,7 +95,11 @@ describe("AC-1 — bảng dùng chung nói tiếng của người đọc", () =>
 
 describe("AC-7 — tiêu đề cột dài không bị chém trần", () => {
 	test("chữ trong tiêu đề nằm trong lớp cắt kèm dấu ba chấm", () => {
-		expect(ve("vi")).toContain(`<span class="truncate">${COT_DAI}</span>`);
+		expect(ve("vi")).toMatch(
+			new RegExp(
+				`data-slot="table-head-label"[^>]*class="line-clamp-2">${COT_DAI}`,
+			),
+		);
 	});
 
 	test("ô tiêu đề mang chữ đầy đủ cho trình đọc màn hình", () => {
