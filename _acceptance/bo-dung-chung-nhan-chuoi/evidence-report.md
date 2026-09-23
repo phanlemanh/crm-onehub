@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 088078c7bb8c3851bb8a4268ed00b96765a3d867
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-23
 ---
 
 # Evidence Report: bo-dung-chung-nhan-chuoi
