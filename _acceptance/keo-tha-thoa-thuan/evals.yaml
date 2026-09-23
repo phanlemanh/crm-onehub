@@ -145,8 +145,10 @@ evals:
       cot thua -> hop thoai ly do mo (tham so closeDeal/closeStage), setStage goi 0 lan. Luu voi
       ly do -> setStage goi 1 lan kem closedReason, the o cot thua. Huy -> setStage 0 lan, the
       o cot cu.
-      CHIEU DO: goi setStage ngay khi tha vao cot thua trong ban sao -> do voi thong diep ghim
-      "cot thua: ghi truoc khi co ly do".
+      Hop thoai ly do that (CloseReasonDialog) gan trong cay kiem; nhanh luu go ly do roi bam Luu,
+      nhanh huy bam Huy va khang dinh hop thoai dong.
+      CHIEU DO (da chay 2026-09-23): goi setStage ngay khi tha vao cot thua trong ban sao -> do voi
+      thong diep ghim "cot thua: ghi truoc khi co ly do".
 
   - id: E11
     criterion: AC-7
@@ -169,10 +171,12 @@ evals:
       - "apps/app/app/(app)/[slug]/deals/**"
       - "apps/app/test/keo-tha-thoa-thuan.dom.tsx"
     expected: |
-      Chi ban phim (userEvent.keyboard, khong click): Tab toi nut menu giai doan tren the, Enter,
-      mui ten, Enter chon QUALIFIED_TO_BUY -> setStage goi 1 lan, the o cot moi; chon
-      CLOSED_LOST -> hop thoai ly do mo, setStage 0 lan.
-      CHIEU DO: the khong co menu giai doan -> do voi thong diep ghim "the khong co menu giai doan".
+      Chi ban phim, khong click: focus nut menu giai doan tren the (nam ngoai tay keo), keydown
+      Enter mo menu, focus muc «Qualified to buy», keydown Enter -> setStage goi 1 lan, the o cot
+      moi; lam lai voi «Closed lost» -> tham so hop thoai ly do (closeDeal/closeStage) duoc dat,
+      setStage 0 lan.
+      CHIEU DO (da chay 2026-09-23): the khong co menu giai doan -> do voi thong diep ghim
+      "the khong co menu giai doan".
 
   - id: E13
     criterion: AC-10
@@ -184,7 +188,8 @@ evals:
     expected: |
       Bam than the -> openRecord goi voi {kind: "deal", id}. Bam nut menu giai doan tren the ->
       openRecord KHONG goi. Dem ca = 2.
-      CHIEU DO: bo stopPropagation cua menu -> do voi thong diep ghim "bam menu mo tam".
+      CHIEU DO (da chay 2026-09-23): boc the trong mot lop bat click de mo tam -> do voi thong diep
+      ghim "bam menu mo tam".
 
   - id: E14
     criterion: AC-13

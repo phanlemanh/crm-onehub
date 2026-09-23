@@ -157,6 +157,8 @@ mock.module("@crm/ui/components/board", () => ({
 
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { DealsTable } = await import("@/app/(app)/[slug]/deals/deals-table");
+const { CloseReasonDialog } = await import("@/components/crm/stage-change");
+const { crmMessages } = await import("@/lib/messages/crm");
 const { dealMessages } = await import("@/lib/messages/deals");
 
 let root: Root | null = null;
@@ -188,6 +190,7 @@ async function dung(search: string, locale: "vi" | "en" = "vi") {
 			<QueryClientProvider client={queryClient}>
 				<LocaleProvider locale={locale}>
 					<DealsTable />
+					<CloseReasonDialog />
 				</LocaleProvider>
 			</QueryClientProvider>
 		</NuqsTestingAdapter>
@@ -346,8 +349,24 @@ describe("tha-goi-setstage", () => {
 });
 
 describe("tha-vao-cot-thua", () => {
-	for (const cot of ["CLOSED_LOST", "UNQUALIFIED_TO_BUY"]) {
-		test(`${cot}: mo hop thoai, chua ghi gi, the o cot cu`, async () => {
+	function hopThoai() {
+		return document.querySelector('[role="dialog"]');
+	}
+
+	async function go(o: HTMLTextAreaElement, gia: string) {
+		const setter = Object.getOwnPropertyDescriptor(
+			HTMLTextAreaElement.prototype,
+			"value",
+		)?.set;
+		await act(async () => {
+			setter?.call(o, gia);
+			o.dispatchEvent(new Event("input", { bubbles: true }));
+		});
+	}
+
+	for (const cot of ["CLOSED_LOST", "UNQUALIFIED_TO_BUY"] as const) {
+		test(`${cot} luu: chua ghi truoc khi co ly do, luu thi ghi kem ly do`, async () => {
+			const m = crmMessages("vi");
 			const k = await dung("?view=board");
 			const the = motThe("DEMO_BOOKED");
 			await tha(the.id, "DEMO_BOOKED", cot);
@@ -355,9 +374,38 @@ describe("tha-vao-cot-thua", () => {
 			if (setStageCalls.length !== 0) {
 				throw new Error("cot thua: ghi truoc khi co ly do");
 			}
-			const cuoi = urlUpdates.at(-1);
-			expect(cuoi?.get("closeDeal")).toBe(the.id);
-			expect(cuoi?.get("closeStage")).toBe(cot);
+			const hop = hopThoai();
+			if (!hop) throw new Error("cot thua: hop thoai ly do khong mo");
+			expect(theTrongCot(k, "DEMO_BOOKED")).toContain(the.id);
+			const o = hop.querySelector("textarea");
+			if (!(o instanceof HTMLTextAreaElement)) throw new Error("thieu o ly do");
+			await go(o, "Het ngan sach");
+			const luu = [...hop.querySelectorAll("button")].find(
+				(b) => b.textContent?.trim() === m.close.save,
+			);
+			await act(async () => luu?.click());
+			await cho();
+			expect(setStageCalls).toEqual([
+				{ id: the.id, stage: cot, closedReason: "Het ngan sach" },
+			]);
+			expect(theTrongCot(k, cot)).toContain(the.id);
+		});
+
+		test(`${cot} huy: khong ghi gi, the o cot cu`, async () => {
+			const m = crmMessages("vi");
+			const k = await dung("?view=board");
+			const the = motThe("DEMO_BOOKED");
+			await tha(the.id, "DEMO_BOOKED", cot);
+			await cho();
+			const hop = hopThoai();
+			if (!hop) throw new Error("cot thua: hop thoai ly do khong mo");
+			const huy = [...hop.querySelectorAll("button")].find(
+				(b) => b.textContent?.trim() === m.sheet.cancel,
+			);
+			await act(async () => huy?.click());
+			await cho();
+			expect(setStageCalls).toEqual([]);
+			expect(hopThoai()).toBeNull();
 			expect(theTrongCot(k, "DEMO_BOOKED")).toContain(the.id);
 		});
 	}
@@ -388,14 +436,55 @@ describe("tu-choi-ve-cho-cu", () => {
 });
 
 describe("menu-giai-doan", () => {
-	test("moi the co menu giai doan dat ngoai tay keo", async () => {
+	function phim(el: Element, key: string) {
+		el.dispatchEvent(
+			new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true }),
+		);
+	}
+
+	async function chonBangPhim(k: HTMLElement, cardId: string, nhan: string) {
+		const el = k.querySelector(`[data-board-card="${cardId}"]`);
+		const menu = el?.querySelector('[aria-haspopup="menu"]');
+		if (!(menu instanceof HTMLElement)) {
+			throw new Error("the khong co menu giai doan");
+		}
+		if (menu.closest('[role="button"]')) {
+			throw new Error("menu giai doan nam trong tay keo");
+		}
+		await act(async () => {
+			menu.focus();
+			phim(menu, "Enter");
+		});
+		await cho(2);
+		const muc = [...document.querySelectorAll('[role="menuitemradio"]')].find(
+			(m) => m.textContent?.trim() === nhan,
+		);
+		if (!(muc instanceof HTMLElement)) {
+			throw new Error(`menu khong mo bang ban phim (thieu muc ${nhan})`);
+		}
+		await act(async () => {
+			muc.focus();
+			phim(muc, "Enter");
+		});
+		await cho();
+	}
+
+	test("chon giai doan mo bang ban phim: ghi mot lan, the sang cot moi", async () => {
 		const k = await dung("?view=board");
 		const the = motThe("DEMO_BOOKED");
-		const el = k.querySelector(`[data-board-card="${the.id}"]`);
-		const menu = el?.querySelector('[aria-haspopup="menu"]');
-		if (!menu) throw new Error("the khong co menu giai doan");
-		expect(menu.closest('[role="button"]')).toBeNull();
-		expect(menu.tagName).toBe("BUTTON");
+		await chonBangPhim(k, the.id, "Qualified to buy");
+		expect(setStageCalls).toEqual([{ id: the.id, stage: "QUALIFIED_TO_BUY" }]);
+		expect(theTrongCot(k, "QUALIFIED_TO_BUY")).toContain(the.id);
+	});
+
+	test("chon Closed lost bang ban phim: mo hop thoai ly do, chua ghi", async () => {
+		const k = await dung("?view=board");
+		const the = motThe("DEMO_BOOKED");
+		await chonBangPhim(k, the.id, "Closed lost");
+		expect(setStageCalls).toEqual([]);
+		const cuoi = urlUpdates.at(-1);
+		expect(cuoi?.get("closeDeal")).toBe(the.id);
+		expect(cuoi?.get("closeStage")).toBe("CLOSED_LOST");
 	});
 });
 
