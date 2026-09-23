@@ -48,10 +48,16 @@ evals:
       - "packages/ui/test/chay-tung-tep-dom.ts"
       - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
     expected: |
-      Voi moi goi [app, ui]: tao tep tam test/zz-do-thu-<che-do>-<pid>.dom.tsx (mot bai xanh),
-      chay lenh kiem cua goi, khang dinh tep tam da chay va ma thoat 0; tep tam luon bi xoa
-      (finally + SIGINT + SIGTERM). 2 goi x 2 = 4 khang dinh. Moi che do con khang dinh them
-      khong con tep zz-do-thu-* nao trong test/ cua ca hai goi.
+      Moi che do co tep tam (E3, E4, E6, E7) dung mot BAN GUONG cua kho trong thu muc tam he thong:
+      moi muc noi bang symlink ve cay that, chi test/ cua hai goi, package.json/turbo.json cua cac
+      goi va packages/db/scripts/test-run.ts la ban that (turbo tu choi goi co package.json tro ra
+      ngoai goc; test-run tim goc theo vi tri that cua chinh no). Tep tam nam trong ban guong nen cay
+      that khong bao gio co tep do — cac phep do va bo kiem lon chay song song khong giam chan nhau.
+      Voi moi goi [app, ui]: tao tep tam test/zz-do-thu-<che-do>-<pid>.dom.tsx (mot bai xanh) trong
+      ban guong, chay lenh kiem cua goi o ban guong, khang dinh tep tam da chay va ma thoat 0. Ban
+      guong luon bi xoa (finally + SIGINT + SIGTERM). 2 goi x 2 = 4 khang dinh. Moi che do con khang
+      dinh them: khong co tep zz-do-thu-* trong test/ that cua hai goi, va moi ban guong da dung da bi
+      xoa.
       CHIEU DO (da chay 2026-09-23 tren script cu): "app: tep moi zz-do-thu-... khong duoc chay"
       va cung the cho ui.
 

@@ -1,12 +1,32 @@
 import { spawnSync } from "node:child_process";
-import { readdirSync, rmSync, writeFileSync } from "node:fs";
+import {
+	copyFileSync,
+	existsSync,
+	lstatSync,
+	mkdirSync,
+	mkdtempSync,
+	readdirSync,
+	rmSync,
+	symlinkSync,
+	unlinkSync,
+	writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const GOI = {
-	app: { thuMuc: join(GOC, "apps", "app"), lenh: "bun run test:dom" },
-	ui: { thuMuc: join(GOC, "packages", "ui"), lenh: "bun run test" },
+	app: {
+		rel: "apps/app",
+		thuMuc: join(GOC, "apps", "app"),
+		lenh: "bun run test:dom",
+	},
+	ui: {
+		rel: "packages/ui",
+		thuMuc: join(GOC, "packages", "ui"),
+		lenh: "bun run test",
+	},
 };
 const LENH_GOC = "bun run test -- --filter=app --filter=@crm/ui";
 const TIEN_TO_TAM = "zz-do-thu-";
@@ -51,24 +71,82 @@ function tepSpec(thuMuc) {
 	return (r.stdout ?? "").split("\n").filter(Boolean);
 }
 
-function voiTepTam(goi, noiDung, lam) {
-	const duong = join(goi.thuMuc, "test", TEP_TAM);
-	const don = () => rmSync(duong, { force: true });
-	const khiNgat = (ma) => () => {
-		don();
-		process.exit(ma);
-	};
-	const ngat = khiNgat(130);
-	const dung = khiNgat(143);
-	process.once("SIGINT", ngat);
-	process.once("SIGTERM", dung);
-	writeFileSync(duong, noiDung);
+let guongDangMo = null;
+const guongDaDung = [];
+
+function coTep(duong) {
 	try {
-		return lam();
+		lstatSync(duong);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+function dungGuong() {
+	const T = mkdtempSync(join(tmpdir(), TIEN_TO_TAM));
+	const noi = (rel) => {
+		for (const e of readdirSync(join(GOC, rel)))
+			symlinkSync(join(GOC, rel, e), join(T, rel, e));
+	};
+	const moRa = (rel) => {
+		let cur = "";
+		for (const p of rel.split("/")) {
+			cur = cur ? `${cur}/${p}` : p;
+			if (lstatSync(join(T, cur)).isSymbolicLink()) {
+				unlinkSync(join(T, cur));
+				mkdirSync(join(T, cur));
+				noi(cur);
+			}
+		}
+	};
+	const chep = (rel) => {
+		unlinkSync(join(T, rel));
+		copyFileSync(join(GOC, rel), join(T, rel));
+	};
+	noi("");
+	chep("package.json");
+	chep("turbo.json");
+	for (const nhom of ["apps", "packages"]) {
+		moRa(nhom);
+		for (const g of readdirSync(join(GOC, nhom))) {
+			if (!coTep(join(GOC, nhom, g, "package.json"))) continue;
+			moRa(`${nhom}/${g}`);
+			chep(`${nhom}/${g}/package.json`);
+			if (coTep(join(GOC, nhom, g, "turbo.json")))
+				chep(`${nhom}/${g}/turbo.json`);
+		}
+	}
+	moRa("packages/db/scripts");
+	chep("packages/db/scripts/test-run.ts");
+	for (const g of Object.values(GOI)) moRa(`${g.rel}/test`);
+	return T;
+}
+
+function donGuong() {
+	if (guongDangMo) rmSync(guongDangMo, { recursive: true, force: true });
+	guongDangMo = null;
+}
+
+for (const [tinHieu, ma] of [
+	["SIGINT", 130],
+	["SIGTERM", 143],
+]) {
+	process.on(tinHieu, () => {
+		donGuong();
+		process.exit(ma);
+	});
+}
+
+function voiTepTam(goi, noiDung, lam) {
+	const T = dungGuong();
+	guongDangMo = T;
+	guongDaDung.push(T);
+	try {
+		writeFileSync(join(T, goi.rel, "test", TEP_TAM), noiDung);
+		return lam(T);
 	} finally {
-		don();
-		process.off("SIGINT", ngat);
-		process.off("SIGTERM", dung);
+		donGuong();
 	}
 }
 
@@ -127,7 +205,9 @@ if (cheDo === "du-tep") {
 } else if (cheDo === "tep-moi") {
 	for (const ten of ["app", "ui"]) {
 		const goi = GOI[ten];
-		const kq = voiTepTam(goi, TEP_XANH, () => chay(goi.lenh, goi.thuMuc));
+		const kq = voiTepTam(goi, TEP_XANH, (T) =>
+			chay(goi.lenh, join(T, goi.rel)),
+		);
 		khang += 1;
 		if (!kq.tepChay.includes(TEP_TAM))
 			hong.push(`${ten}: tep moi ${TEP_TAM} khong duoc chay`);
@@ -139,7 +219,7 @@ if (cheDo === "du-tep") {
 } else if (cheDo === "tep-do") {
 	for (const ten of ["app", "ui"]) {
 		const goi = GOI[ten];
-		const kq = voiTepTam(goi, TEP_DO, () => chay(goi.lenh, goi.thuMuc));
+		const kq = voiTepTam(goi, TEP_DO, (T) => chay(goi.lenh, join(T, goi.rel)));
 		khang += 1;
 		if (kq.ma === 0) hong.push(`${ten}: tep do ma lenh van xanh`);
 		khang += 1;
@@ -168,8 +248,8 @@ if (cheDo === "du-tep") {
 	console.log(`khang-dinh: ${khang} (= 1 + ${kq.luot.length} luot + 1)`);
 } else if (cheDo === "mui-gio") {
 	const goi = GOI.app;
-	const kq = voiTepTam(goi, TEP_MUI_GIO, () =>
-		chay(goi.lenh, goi.thuMuc, { TZ: "UTC" }),
+	const kq = voiTepTam(goi, TEP_MUI_GIO, (T) =>
+		chay(goi.lenh, join(T, goi.rel), { TZ: "UTC" }),
 	);
 	khang += 1;
 	if (!kq.tepChay.includes(TEP_TAM))
@@ -181,13 +261,13 @@ if (cheDo === "du-tep") {
 } else if (cheDo === "goc") {
 	for (const ten of ["app", "ui"]) {
 		const goi = GOI[ten];
-		const xanh = voiTepTam(goi, TEP_XANH, () => chay(LENH_GOC, GOC));
+		const xanh = voiTepTam(goi, TEP_XANH, (T) => chay(LENH_GOC, T));
 		khang += 1;
 		if (xanh.ma !== 0 || !xanh.tepChay.includes(TEP_TAM))
 			hong.push(
 				`${ten}: tep xanh khong chay qua bun run test goc (ma ${xanh.ma})`,
 			);
-		const kq = voiTepTam(goi, TEP_DO, () => chay(LENH_GOC, GOC));
+		const kq = voiTepTam(goi, TEP_DO, (T) => chay(LENH_GOC, T));
 		khang += 1;
 		if (kq.ma === 0) hong.push(`${ten}: tep do khong lam bun run test goc do`);
 		khang += 1;
@@ -209,6 +289,9 @@ for (const [ten, goi] of Object.entries(GOI)) {
 	);
 	if (sot.length > 0) hong.push(`${ten}: tep tam con sot: ${sot.join(", ")}`);
 }
+khang += 1;
+const guongSot = guongDaDung.filter((T) => existsSync(T));
+if (guongSot.length > 0) hong.push(`guong con sot: ${guongSot.join(", ")}`);
 
 for (const h of hong) console.log(`HONG ${h}`);
 process.exit(hong.length === 0 ? 0 : 1);
