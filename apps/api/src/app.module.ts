@@ -40,6 +40,7 @@ import { TrackingModule } from "./tracking/tracking.module";
 import { TrpcModule } from "./trpc/trpc.module";
 import { UsersModule } from "./users/users.module";
 import { WorkspaceModule } from "./workspace/workspace.module";
+import { ZaloModule } from "./zalo/zalo.module";
 
 @Module({
 	imports: [
@@ -77,6 +78,7 @@ import { WorkspaceModule } from "./workspace/workspace.module";
 		WorkspaceModule,
 		SsoModule,
 		SlackModule,
+		ZaloModule,
 		BackfillModule,
 		TelemetryModule,
 		TrackingModule,

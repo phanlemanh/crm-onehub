@@ -93,6 +93,9 @@ const KHONG_DAU = new Set([
 	"ten.googleWorkspace",
 	"ten.gmail",
 	"ten.slack",
+	"ten.zalo",
+	"kenh.zalo",
+	"kenh.slack",
 	"ten.microsoft",
 	"ten.microsoft365",
 	"ten.outlook",
@@ -413,6 +416,26 @@ describe("kho chuoi cua vong ③a", () => {
 				"Đã xoá 12 mục đã kéo về.",
 			],
 			"settings-ket-noi:danhSach.daCamVoi": ["Đã cắm vào 1", "Đã cắm vào 12"],
+			"nhac-qua-zalo:khoiZalo.nhanMaCho": [
+				"Nhắn mã này cho 1 trên Zalo.",
+				"Nhắn mã này cho 12 trên Zalo.",
+			],
+			"nhac-qua-zalo:khoiZalo.dangCho": [
+				"Đang chờ bạn nhắn · hết hạn lúc 1",
+				"Đang chờ bạn nhắn · hết hạn lúc 12",
+			],
+			"nhac-qua-zalo:ketNoi.traLoiLanCuoi": [
+				"trả lời lần cuối lúc 1",
+				"trả lời lần cuối lúc 12",
+			],
+			"nhac-qua-zalo:ketNoi.imTieuDe": [
+				"Bot không trả lời từ 1",
+				"Bot không trả lời từ 12",
+			],
+			"nhac-qua-zalo:ketNoi.daNoiSo": [
+				"1/A người đã nối Zalo",
+				"12/A người đã nối Zalo",
+			],
 			"settings-ket-noi:them.daCamRoi": ["1 đã cắm rồi.", "12 đã cắm rồi."],
 			"settings-ket-noi:google.dongBoHong": [
 				"Đồng bộ hỏng: 1",
