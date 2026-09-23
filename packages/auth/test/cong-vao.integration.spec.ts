@@ -5,6 +5,9 @@ import { TRANG_THAI_CHO } from "@crm/validation/invitation-status";
 import { ALLOWANCE_WITHOUT_EXPIRY } from "../src/allow-list";
 import { auth } from "../src/auth";
 import { ensureWorkspaceMembership } from "../src/organization";
+import { traLaiDanhSachSauTep } from "./danh-sach-goc";
+
+traLaiDanhSachSauTep();
 
 const suffix = process.env.TEST_RUN_ID ?? "cong-vao-spec";
 

@@ -123,7 +123,7 @@ function columns(
 			sortable: true,
 			align: "right",
 			width: "w-[12%]",
-			hideBelow: "sm",
+			hideBelow: "lg",
 			cell: (row) => (
 				<span className="text-muted-foreground">
 					<LocalRelativeTime date={row.joinedAt} />

@@ -1,0 +1,11 @@
+--- api errors (tail) ---
+▲ Next.js 16.3.0 (Turbopack)
+- Local:         http://localhost:3600
+- Network:       http://192.168.1.2:3600
+✓ Ready in 182ms
+✓ Running next.config.ts took 18ms
+- Cache Components enabled
+- Partial Prefetching enabled
+
+○ Compiling /sign-in ...
+ GET /sign-in 200 in 3.9s (next.js: 3.4s, proxy.ts: 151ms, application-code: 385ms)

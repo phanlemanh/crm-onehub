@@ -1,0 +1,115 @@
+{
+  "feature_plain": "Người dùng đọc trọn tên mọi cột ở năm trang danh sách, ở mọi khổ màn hình, cả tiếng Việt lẫn tiếng Anh, mà tên bản ghi vẫn còn đủ chỗ.",
+  "scope_plain": "Không sửa trang Kế hoạch 30 ngày, không đo khoá API/SSO/chi tiết chiến dịch, không rút gọn nhãn đã chốt, không sửa nút «Phát chia» bị xén sẵn.",
+  "decisions_plain": [
+    {
+      "id": "d-20260922T150736Z-1",
+      "p": "Sửa một chỗ ở bảng dùng chung thay vì chỉnh từng trang — đổi lại mọi bảng danh sách đổi bố cục cùng lúc, kể cả bảng Kế hoạch 30 ngày."
+    },
+    {
+      "id": "d-20260922T150736Z-2",
+      "p": "(Đã thay bằng quyết định sau) Ẩn mũi tên của cột không đang sắp trên điện thoại."
+    },
+    {
+      "id": "d-20260922T150736Z-3",
+      "p": "Chiến dịch trên điện thoại bỏ «Đã gọi», giữ «Trả lời» — đổi lại số cuộc đã gọi chỉ thấy từ 640px."
+    },
+    {
+      "id": "d-20260922T150736Z-4",
+      "p": "KHÔNG đo khoá API, SSO, chi tiết chiến dịch và KHÔNG sửa trang Kế hoạch 30 ngày — bản sửa vẫn áp ở đó nhưng không có số đo riêng."
+    },
+    {
+      "id": "d-20260922T150736Z-5",
+      "p": "KHÔNG chạy phiên dựng bản mẫu riêng — thay bằng ảnh chụp trang thật trước/sau."
+    },
+    {
+      "id": "d-20260922T151135Z-6",
+      "p": "Bỏ ý ẩn mũi tên: đo cho thấy cột Tên không rộng thêm — giữ dấu hiệu sắp trên điện thoại."
+    },
+    {
+      "id": "d-20260922T153010Z-7",
+      "p": "Tên cột dài xuống tối đa hai dòng, mũi tên đi sát chữ — đổi lại 27/50 tổ hợp có tên cột hai dòng, bù lại cột Tên về gần như trước."
+    },
+    {
+      "id": "d-20260922T153010Z-8",
+      "p": "Công ty trên điện thoại bỏ «Số thoả thuận đang mở», thành viên ở 768 bỏ «Ngày vào» — đổi lại hai số đó chỉ xem trong tấm bản ghi ở khổ hẹp."
+    },
+    {
+      "id": "d-20260922T153010Z-9",
+      "p": "Sửa luôn phép đo của hồ sơ Kế hoạch 30 ngày (đã ký) trong lần giao này — đã làm và ghim lại xanh."
+    },
+    {
+      "id": "d-20260922T233705Z-11",
+      "p": "Đính chính một câu của hợp đồng đã duyệt: bấm cột mới thì sắp theo chiều mặc định của trang (thoả thuận: giảm dần), không phải tăng dần — hành vi này có sẵn, lần giao này không đổi nó."
+    },
+    {
+      "id": "d-20260922T233705Z-12",
+      "p": "Cột ô chọn giữ đúng 40px ở mọi khổ — phép đo bắt được nó phình 139px ở 768 và bị bóp 32px ở 1024, đã sửa."
+    },
+    {
+      "id": "d-20260922T233705Z-13",
+      "p": "Sửa thêm bài kiểm của một hồ sơ đã ký thứ hai («bộ dùng chung nhãn chuỗi») mà Cổng 1 không gọi tên — lời hứa của nó không đổi, nhưng hồ sơ đó không ghim lại được bằng máy (xem tin trình cổng)."
+    },
+    {
+      "id": "d-20260923T000437Z-14",
+      "p": "Mọi lượt đo cần dữ liệu thử đi qua một hàng chờ có khoá để vòng chấm không chạy chồng lên nhau trên cơ sở dữ liệu dùng chung — đã chứng hai chiều."
+    },
+    {
+      "id": "d-20260923T002519Z-15",
+      "p": "Sửa giờ kiểm chứng bị máy ghi sai (giờ tương lai) thành giờ thật của lượt chấm — không đổi kết quả nào."
+    },
+    {
+      "id": "d-20260923T010721Z-16",
+      "p": "Lần ký trước: ảnh E9 có thể chụp nhầm máy chủ — ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260923T010721Z-17",
+      "p": "Lần ký trước: lượt chụp E9 bỏ qua lỗi chờ bảng — ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260923T010721Z-18",
+      "p": "Lần ký trước: lượt chụp E9 không kiểm trang bị chuyển hướng — ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260923T010721Z-19",
+      "p": "Lần ký trước: lệnh đo không khoá biến CHI_MAN — ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260923T010721Z-20",
+      "p": "Lần ký trước: nhánh cắt dọc của thước Kế hoạch 30 ngày chưa có lượt phá riêng — ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260923T010721Z-21",
+      "p": "Lần ký trước: rà thiết kế tĩnh chỉ quét hai trong bốn tệp giao diện — ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260923T010721Z-22",
+      "p": "Lần ký trước: khe đua khi gỡ khoá mồ côi của hàng đợi đo — chấp nhận, không sửa."
+    },
+    {
+      "id": "d-20260923T010721Z-23",
+      "p": "Lần ký trước: đồng ý phạm vi đã cắt."
+    },
+    {
+      "id": "d-20260923T010721Z-24",
+      "p": "Lần ký trước: phê các quyết định ghi sau Cổng 1."
+    },
+    {
+      "id": "d-20260923T010721Z-25",
+      "p": "Mở lại hồ sơ đã ký «bộ dùng chung nhãn chuỗi» trong cùng nhánh, chuyển bộ đo sang khuôn máy rồi chấm lại — đổi lại nhánh dài thêm một hồ sơ."
+    },
+    {
+      "id": "d-20260923T021757Z-26",
+      "p": "Mở lại hồ sơ này sau chữ ký: phép đo khoảng cách mũi tên hoá ra luôn ra 0, và nút tiêu đề tự đè kiểu nút chung — chữ ký cũ không còn đứng trọn, phải ký lại."
+    },
+    {
+      "id": "d-20260923T022147Z-27",
+      "p": "Nút tiêu đề dùng một cỡ nút mới khai trong bộ giao diện chung thay vì tự đè kiểu — đổi lại bộ nút chung có thêm một cỡ."
+    },
+    {
+      "id": "d-20260923T022147Z-28",
+      "p": "Phép đo khoảng cách mũi tên đo từ chữ thật, đã chứng nó bắt được mũi tên đẩy xa 32px — đổi lại lần ký trước dựa trên phép đo rỗng."
+    }
+  ],
+  "analyst_plain": "Bước rà thiết kế tĩnh (E10) xanh cả trước lẫn sau khi sửa, nên nó không phân biệt được bản sửa — giữ làm sàn chống hồi quy chung, không phải thước của lỗi này."
+}

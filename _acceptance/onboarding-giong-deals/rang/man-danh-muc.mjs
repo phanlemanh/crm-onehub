@@ -77,13 +77,17 @@ function doTrenTrang(nhanNut, coBang) {
 		? [...document.querySelectorAll("thead th")]
 				.filter((th) => th.offsetWidth > 0 && th.textContent?.trim())
 				.map((th) => {
-					const nhan = th.querySelector("span.truncate, span.block");
+					const nhan = th.querySelector(
+						'[data-slot="table-head-label"], span.truncate, span.block',
+					);
 					return {
 						chu: th.textContent.trim(),
 						docDuoc: nhan !== null,
 						cat:
 							th.scrollWidth > th.clientWidth + 0.5 ||
-							(nhan !== null && nhan.scrollWidth > nhan.clientWidth + 0.5),
+							(nhan !== null &&
+								(nhan.scrollWidth > nhan.clientWidth + 0.5 ||
+									nhan.scrollHeight > nhan.clientHeight + 0.5)),
 					};
 				})
 		: [];

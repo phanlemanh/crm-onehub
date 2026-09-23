@@ -1,0 +1,136 @@
+schema_version: 1
+slug: ngay-gieo-theo-gio-vn
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ngv_khung_dem
+    paths:
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+      - "apps/api/test/support/ke-hoach-gieo.ts"
+      - "apps/api/src/dashboard/**"
+      - "packages/db/src/onboarding-nhac.ts"
+    expected: |
+      setSystemTime 2026-09-22T23:30:00Z (06:30 VN 23/09). Gieo that tren DB bang gieoKeHoach:
+      buoc D-1, D, D+3, D+4 giao A; mot buoc xong; mot buoc cua B; mot buoc trong ke hoach dong.
+      Goi that DashboardService.summary cua A, scope me roi everyone. Ma tran viet truoc:
+        voi MOI che do (me, everyone), moi dong mot assert mang "khung-dem scope <che do>: ...":
+        1 stepId phan gieo bang dung [D-1, D, D+3] theo thu tu
+        2 dueAt bang dung ["2026-09-22","2026-09-23","2026-09-26"] (hang so, khong suy tu ngayCach)
+        3 buoc cua B khong vao
+        sau vong che do, mot lan: 4 doi chung duong: doi han D+4 sang ngayCach(3) thi D+4 vao
+      CHIEU DO: tra ngayCach ve ngay UTC -> dong 1 do voi thong diep ghim
+      "khung-dem scope me: tap va thu tu; ke hoach da dong khong lot vao" (do bang E4).
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ngv_khung_ngay
+    paths:
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+      - "apps/api/test/support/ke-hoach-gieo.ts"
+      - "apps/api/src/dashboard/**"
+      - "packages/db/src/onboarding-nhac.ts"
+    expected: |
+      Cung ca va fixture E1, setSystemTime 2026-09-22T13:54:00Z (20:54 VN 22/09).
+        1 stepId bang dung [D-1, D, D+3]
+        2 dueAt bang dung ["2026-09-21","2026-09-22","2026-09-25"]
+        3 buoc cua B khong vao   4 doi chung D+4 -> D+3 thi vao
+      Moc nay KHONG phan biet hai cach tinh (ngay UTC = ngay VN) — E4 khang dinh no van xanh
+      khi ngayCach bi tra ve UTC; do do E2 la doi chung, khong phai thuoc phat hien loi.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ngv_ngay_gieo
+    paths:
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+      - "apps/api/test/support/ke-hoach-gieo.ts"
+      - "apps/api/src/onboarding/onboarding.contracts.ts"
+      - "packages/db/src/onboarding-nhac.ts"
+    expected: |
+      Hai moc E1 va E2. Ma tran viet truoc TAM o: k in [-1,0,3,4] x hai moc,
+      ngayCach(k).toISOString() bang ngayLich.parse(<ngay VN viet san>).toISOString():
+        khung-dem  -> 2026-09-22, 2026-09-23, 2026-09-26, 2026-09-27
+        khung-ngay -> 2026-09-21, 2026-09-22, 2026-09-25, 2026-09-26
+      ngayLich la bo phan tich that cua san pham (onboarding.contracts) — round-trip qua writer that.
+      CHIEU DO: tra ngayCach ve ngay UTC -> ca khung-dem do voi thong diep ghim
+      "khung-dem: ngayCach(-1, 0, 3, 4) theo ngay lich VN" (do bang E4).
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ngv_dot_bien_utc
+    paths:
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+      - "apps/api/test/support/**"
+      - "apps/api/test/fixtures/**"
+      - "apps/api/src/dashboard/**"
+      - "packages/db/src/onboarding-nhac.ts"
+      - "_acceptance/ngay-gieo-theo-gio-vn/rang/dot-bien-utc.mjs"
+    expected: |
+      Tim ban sao sot apps/api/.sao-ngay-<pid>: pid chet thi don, pid song thi thoat 2 goi ten thu muc.
+      Chep spec + support + fixtures sang apps/api/.sao-ngay-<pid>/ (thu muc an, bun test toan goi
+      khong nhat), xoa sau. Doc ket qua tung ca tu tep junit.
+      Moi luot chay qua bun run test --, doc ten co so du lieu tu dong "test-run: <ten> is this run's
+      database"; khong thay, hoac ten la crm_test, thi do.
+        Luot lanh: lenh thoat 0; bon ca viec-cua-toi khung-dem/khung-ngay va ngay-gieo-theo-vn
+          khung-dem/khung-ngay deu xanh.
+        Luot pha: thay ngayCach bang ban getUTCDate() + soNgay; lenh thoat khac 0;
+          viec-cua-toi khung-dem DO mang "khung-dem scope me: tap va thu tu; ke hoach da dong khong lot vao";
+          ngay-gieo-theo-vn khung-dem DO mang "khung-dem: ngayCach(-1, 0, 3, 4) theo ngay lich VN";
+          hai ca khung-ngay XANH.
+        Khong tim thay ban ngayCach theo VN de pha -> do voi thong diep "thuoc da lech voi vat".
+      Thoat 0 va in "dot-bien-utc: XANH" khi moi dieu tren dung.
+      CHIEU DO CUA CHINH RANG: doi moc khung-dem sang 2026-09-23T02:00:00Z (09:00 VN, ngay UTC da sang)
+      -> rang thoat 1 voi "ca «viec-cua-toi: khung-dem» xanh, mong do" (da thu tay luc viet).
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ngv_ca_tep
+    paths:
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+      - "apps/api/test/support/**"
+      - "apps/api/test/fixtures/**"
+      - "apps/api/src/onboarding/**"
+      - "apps/api/src/dashboard/**"
+    expected: |
+      Chay ca tep o gio that: moi ca xanh (14 ca luc viet, gom 2 ngay-gieo-theo-vn va 2 viec-cua-toi).
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.api
+    expected: |
+      bun run test o goc kho thoat 0 — ca suite, moi goi. Duong nen cua vong nay do dung mot ca
+      viec-cua-toi (goc loi dang sua); sau ban sua phai xanh ca khi chay trong khung 00:00-07:00 VN.
+
+  - id: E7
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.check_types
+    expected: bun run check-types thoat 0.
+
+  - id: E8
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.lint_khong_cache
+    expected: turbo lint --force thoat 0.
+
+  - id: E9
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.lint_slop
+    expected: bun run lint:slop thoat 0.
+
+  - id: E10
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.build_khong_cache
+    expected: turbo build --force thoat 0.
