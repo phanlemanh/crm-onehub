@@ -5,7 +5,7 @@ slug: ngay-gieo-theo-gio-vn
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-23-ngay-gieo-theo-gio-vn-design.md
 approved_by:
 approved_at:
@@ -58,3 +58,5 @@ là hằng viết trước, không suy từ hàm đang đo; AC-4 đo chiều đ�
 chính răng của AC-4 đã được thử đỏ bằng cách dời mốc `khung-dem` ra 09:00 VN.
 
 Không có bề mặt người nhìn. Không sinh eval thiết kế hay `ui-check`.
+
+- Known limit (Ngoài-1, Cổng Bằng chứng 2026-09-23): E3 khai «round-trip qua writer thật» nhưng chỉ so `ngayCach` với bộ phân tích đầu vào `ngayLich`; không ca nào đi qua đường ghi hạn bước của sản phẩm, nên nếu đường ghi đổi cách tính ngày thì E1–E3 vẫn xanh.
