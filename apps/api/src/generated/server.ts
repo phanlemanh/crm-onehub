@@ -34,6 +34,7 @@ import { slackStatusOutput, slackMatchesOutput, slackChannelsInput, slackChannel
 import { ssoSignInOptionsOutput, ssoSettingsOutput, ssoProviderListInput, ssoProviderListOutput, registerSsoProviderInput, ssoProviderOutput, deleteSsoProviderInput, deleteSsoProviderOutput } from "../sso/sso.contracts";
 import { trackingSettingsOutput, trackingFlagInput, cookieLifetimeInput, addDomainInput, trackedDomainOutput, removeDomainInput, rotateSiteIdOutput, verifyInput, verifyOutput, sourcesOutput, companyActivityInput, websiteActivityOutput, contactActivityInput } from "../tracking/tracking.contracts";
 import { workspaceOutput, memberListInput, memberListOutput, updateWorkspaceInput, setMemberRoleInput, workspaceMemberOutput, allowanceListOutput, allowEmailInput, allowanceOutput, issuePasswordLinkInput, passwordLinkOutput, revokeAllowanceInput, removeMemberInput, removeMemberOutput } from "../workspace/workspace.contracts";
+import { zaloTaoMaOutput, zaloGoOutput, zaloLuuUuTienInput, zaloLuuUuTienOutput, zaloCuaToiOutput, zaloXuongOutput } from "../zalo/zalo.contracts";
 import type { UsersRouter } from "../users/users.router";
 
 const appRouter = t.router({
@@ -968,6 +969,24 @@ const appRouter = t.router({
       .input(removeMemberInput)
       .output(removeMemberOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
+  zalo: t.router({
+    taoMa: publicProcedure
+      .output(zaloTaoMaOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    go: publicProcedure
+      .output(zaloGoOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    luuUuTien: publicProcedure
+      .input(zaloLuuUuTienInput)
+      .output(zaloLuuUuTienOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    cuaToi: publicProcedure
+      .output(zaloCuaToiOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    xuong: publicProcedure
+      .output(zaloXuongOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     })
 });
 

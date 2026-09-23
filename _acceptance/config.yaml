@@ -86,6 +86,28 @@ executors:
     mn3_the_tasks: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/may-nhac.dom.tsx -t the-tasks"
     mn3_nut_theo_doi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/may-nhac.dom.tsx -t nut-theo-doi"
     mn3_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/dashboard-summary.tsx" "apps/app/components/crm/record-sheet/theo-doi-ke-hoach.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    nqz_chon_kenh: 'bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts -t chon-kenh"'
+    nqz_gui_zalo: 'bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts -t gui-zalo"'
+    nqz_tran_zalo: 'bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts -t tran-zalo"'
+    nqz_lech_kenh: 'bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts -t lech-kenh"'
+    nqz_zalo_loi: 'bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts -t zalo-loi"'
+    nqz_khong_token: 'bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts -t khong-token"'
+    nqz_noi_ma: 'bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts -t noi-ma"'
+    nqz_ma_hong: 'bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts -t ma-hong"'
+    nqz_chong_do: 'bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts -t chong-do"'
+    nqz_noi_lai: 'bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts -t noi-lai"'
+    nqz_trung_tin: 'bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts -t trung-tin"'
+    nqz_go_zalo: 'bun run test -- "cd apps/api && bun test test/nhac-qua-zalo.spec.ts -t go-zalo"'
+    nqz_luu_uu_tien: 'bun run test -- "cd apps/api && bun test test/nhac-qua-zalo.spec.ts -t luu-uu-tien"'
+    nqz_trang_thai: 'bun run test -- "cd apps/api && bun test test/nhac-qua-zalo.spec.ts -t trang-thai"'
+    nqz_chon_kenh_man: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/nhac-qua-zalo.dom.tsx -t chon-kenh-man"
+    nqz_trang_thai_man: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/nhac-qua-zalo.dom.tsx -t trang-thai-man"
+    nqz_tao_ma_api: 'bun run test -- "cd apps/api && bun test test/nhac-qua-zalo.spec.ts -t tao-ma-api"'
+    nqz_trang_thai_lien_ket: 'bun run test -- "cd apps/api && bun test test/nhac-qua-zalo.spec.ts -t trang-thai-lien-ket"'
+    nqz_nut_noi_go: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/nhac-qua-zalo.dom.tsx -t nut-noi"
+    nqz_go_xac_nhan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/nhac-qua-zalo.dom.tsx -t go-xac-nhan"
+    nqz_lam_moi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/nhac-qua-zalo.dom.tsx -t lam-moi"
+    nqz_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/settings/notifications/page.tsx" "apps/app/app/(app)/[slug]/settings/connections/zalo/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     hv_qua_han_ngay: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t qua-han-ngay"'
     hv_bien_nua_dem: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t bien-nua-dem"'
     hv_ca_doi: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t ca-doi"'

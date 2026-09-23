@@ -72,6 +72,12 @@ export function capabilitiesFrom(
 			gives:
 				"somewhere to keep a logo or a profile photo. Without it a record has no picture at all, because the URLs these sources hand back expire and are never stored as they are",
 		},
+		{
+			...fromEnv("ZALO_BOT_TOKEN"),
+			label: "Zalo reminders",
+			gives:
+				"the morning reminder on Zalo for anyone who linked their Zalo, and the bot that answers link codes",
+		},
 	];
 }
 

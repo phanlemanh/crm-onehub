@@ -41,6 +41,7 @@ export type CrmCache = {
 	currency(options?: Options): Promise<void>;
 	workspace(options?: Options): Promise<void>;
 	slack(options?: Options): Promise<void>;
+	zalo(options?: Options): Promise<void>;
 	sso(options?: Options): Promise<void>;
 	apiKeys(options?: Options): Promise<void>;
 	tracking(options?: Options): Promise<void>;
@@ -344,6 +345,13 @@ export function useCrmCache(): CrmCache {
 		slack: (options) =>
 			run(
 				[trpc.slack.status.queryKey(), trpc.slack.matches.queryKey()],
+				[],
+				options,
+			),
+
+		zalo: (options) =>
+			run(
+				[trpc.zalo.cuaToi.queryKey(), trpc.zalo.xuong.queryKey()],
 				[],
 				options,
 			),

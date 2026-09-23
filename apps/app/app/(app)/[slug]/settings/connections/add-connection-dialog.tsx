@@ -1,5 +1,6 @@
 "use client";
 
+import Chat from "@carbon/icons-react/es/Chat";
 import Plug from "@carbon/icons-react/es/Plug";
 import DocusignLogo from "@crm/ui/components/brand-logos/docusign";
 import GoogleLogo from "@crm/ui/components/brand-logos/google";
@@ -58,6 +59,14 @@ export function AddConnectionDialog({
 							brand
 							description={t.them.slackMoTa}
 							href={`/${slug}/settings/connections/slack`}
+						/>
+					) : null}
+					{!connected.includes(t.ten.zalo) ? (
+						<CatalogRow
+							logo={Chat}
+							name={t.ten.zalo}
+							description={t.them.zaloMoTa}
+							href={`/${slug}/settings/connections/zalo`}
 						/>
 					) : null}
 					{!connected.includes(t.ten.microsoft365) ? (

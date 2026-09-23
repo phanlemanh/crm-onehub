@@ -21,7 +21,8 @@
 		"./onboarding-activity": "./src/onboarding-activity.ts",
 		"./onboarding-ingest": "./src/onboarding-ingest.ts",
 		"./onboarding-template": "./src/onboarding-template.ts",
-		"./saved-view": "./src/saved-view.ts"
+		"./saved-view": "./src/saved-view.ts",
+		"./zalo-update": "./src/zalo-update.ts"
 	},
 	"scripts": {
 		"check-types": "tsc --noEmit",
