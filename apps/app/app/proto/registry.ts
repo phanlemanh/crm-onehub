@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { DieuPhoi30NgayDauMau } from "./_modules/dieu-phoi-30-ngay-dau";
 import { DuongProtoMau } from "./_modules/duong-proto";
 import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
+import { KeoThaThoaThuanMau } from "./_modules/keo-tha-thoa-thuan";
 import { MayNhacTruocNguoiMau } from "./_modules/may-nhac-truoc-nguoi";
 import { MoiPhiaDeuThayKeHoachMau } from "./_modules/moi-phia-deu-thay-ke-hoach";
 import { NhacQuaZaloMau } from "./_modules/nhac-qua-zalo";
@@ -14,6 +15,7 @@ const BANG_GHEP = {
 	"dieu-phoi-30-ngay-dau": DieuPhoi30NgayDauMau,
 	"duong-proto-cho-design-pass": DuongProtoMau,
 	"ke-hoach-la-mot-ban-ghi": KeHoachLaMotBanGhiMau,
+	"keo-tha-thoa-thuan": KeoThaThoaThuanMau,
 	"may-nhac-truoc-nguoi": MayNhacTruocNguoiMau,
 	"moi-phia-deu-thay-ke-hoach": MoiPhiaDeuThayKeHoachMau,
 	"nhac-qua-zalo": NhacQuaZaloMau,

@@ -16,7 +16,12 @@ import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { CreateDealSheet } from "./create-deal-sheet";
-import { dealsSearchParams } from "./deals-search-params";
+import {
+	dealBoardInputFrom,
+	dealsSearchParams,
+	loadDealsView,
+	showsBoard,
+} from "./deals-search-params";
 import { DealsTable } from "./deals-table";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -52,17 +57,22 @@ export default async function DealsPage({
 async function Deals({
 	searchParams,
 }: Pick<PageProps<"/[slug]/deals">, "searchParams">) {
-	const [, values] = await Promise.all([
+	const [, values, { view }] = await Promise.all([
 		requireSession(),
 		dealsSearchParams.load(searchParams),
+		loadDealsView(searchParams),
 	]);
+	const input = dealsSearchParams.toInput(values);
 
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
 	await Promise.all([
-		queryClient.prefetchQuery(
-			trpc.deals.list.queryOptions(dealsSearchParams.toInput(values)),
-		),
+		queryClient.prefetchQuery(trpc.deals.list.queryOptions(input)),
+		showsBoard(view, input.archived)
+			? queryClient.prefetchQuery(
+					trpc.deals.board.queryOptions(dealBoardInputFrom(input)),
+				)
+			: Promise.resolve(),
 		queryClient.prefetchQuery(trpc.users.list.queryOptions()),
 		queryClient.prefetchQuery(trpc.companies.options.queryOptions({ q: "" })),
 	]);

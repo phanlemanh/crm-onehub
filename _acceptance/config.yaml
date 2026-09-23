@@ -343,6 +343,22 @@ executors:
     ogd_sap_hai_chieu: 'bun run test -- "cd apps/api && bun test test/onboarding-giong-deals.spec.ts -t sap-hai-chieu"'
     ogd_tao_tra_id: 'bun run test -- "cd apps/api && bun test test/onboarding-giong-deals.spec.ts -t tao-tra-id"'
     ogd_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/onboarding/danh-muc-table.tsx" "apps/app/app/(app)/[slug]/onboarding/danh-muc-cong-cu.tsx" "apps/app/app/(app)/[slug]/onboarding/tao-ke-hoach.tsx" "apps/app/app/(app)/[slug]/onboarding/page.tsx" "apps/app/components/onboarding/khung-tao.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    ktt_board_dem_tong: 'bun run test -- "cd apps/api && bun test test/deals-board.spec.ts -t dem-tong"'
+    ktt_board_tran_50: 'bun run test -- "cd apps/api && bun test test/deals-board.spec.ts -t tran-50"'
+    ktt_board_loc: 'bun run test -- "cd apps/api && bun test test/deals-board.spec.ts -t cung-tap-voi-list"'
+    ktt_board_ghi: 'bun run test -- "cd apps/api && bun test test/deals-board.spec.ts -t tha-ghi-giai-doan"'
+    ktt_board_ly_do: 'bun run test -- "cd apps/api && bun test test/deals-board.spec.ts -t thua-can-ly-do"'
+    ktt_man_chuyen: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t chuyen-cach-xem"
+    ktt_man_tha: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t tha-goi-setstage"
+    ktt_man_thua: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t tha-vao-cot-thua"
+    ktt_man_tu_choi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t tu-choi-ve-cho-cu"
+    ktt_man_ban_phim: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t menu-giai-doan"
+    ktt_man_bam_the: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t bam-mo-tam"
+    ktt_man_tai_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t tai-va-loi"
+    ktt_man_loc_vao_board: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t loc-vao-board"
+    ktt_man_dau_cot: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t dau-cot"
+    ktt_man_tro_nang: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t tro-nang"
+    ktt_board_giu_nguyen: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/board-giu-nguyen.dom.tsx"
   script:
     ogd_man_danh_muc: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "DUOI_CONG=1 bun _acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs"'
     dp30_hang_so_o_config: 'node _acceptance/dieu-phoi-30-ngay-dau/rang/hang-so-o-config.mjs'
@@ -683,6 +699,9 @@ executors:
     bdc_cat_ba_cham: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-dung-chung-nhan-chuoi/rang/cat-ba-cham.mjs"
     bdc_goc_ngon_ngu: bash _acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh --chan mot-goc && bash _acceptance/bo-dung-chung-nhan-chuoi/rang-goc-ngon-ngu.sh --chan khong-nhap-nguoc
     tdc_san_thiet_ke: 'for t in "packages/ui/src/components/data-table.tsx" "apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    ktt_man_chrome: "bun _acceptance/keo-tha-thoa-thuan/rang/man-bang-cot.mjs"
+    ktt_reui_da_chinh: "bun _acceptance/keo-tha-thoa-thuan/rang/reui-da-chinh.mjs"
+    ktt_san_thiet_ke: "bun _acceptance/keo-tha-thoa-thuan/rang/san-thiet-ke.mjs"
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

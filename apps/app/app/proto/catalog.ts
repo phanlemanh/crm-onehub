@@ -107,6 +107,19 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "keo-tha-thoa-thuan",
+		ten: "Kéo thả thoả thuận giữa các giai đoạn",
+		states: [
+			{ id: "ST-bangcot-coduLieu", nhan: "Bảng cột — có dữ liệu" },
+			{ id: "ST-bangcot-cotrong", nhan: "Bảng cột — cột Contract sent rỗng" },
+			{ id: "ST-bangcot-qua50", nhan: "Bảng cột — cột quá 50 thoả thuận" },
+			{ id: "ST-bangcot-dangtai", nhan: "Bảng cột — đang tải" },
+			{ id: "ST-bangcot-loitai", nhan: "Bảng cột — lỗi tải" },
+			{ id: "ST-bangcot-tuchoi", nhan: "Bảng cột — máy chủ từ chối khi thả" },
+			{ id: "ST-lydo-mo", nhan: "Hộp thoại lý do khi thả vào cột thua" },
+		],
+	},
+	{
 		slug: "nhac-qua-zalo",
 		ten: "Nhắc qua Zalo",
 		states: [

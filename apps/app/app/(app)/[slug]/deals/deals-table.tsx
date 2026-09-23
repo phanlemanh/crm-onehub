@@ -6,13 +6,16 @@ import {
 	DataTable,
 	type DataTableColumn,
 	type DataTableFacet,
+	DataTableFacetMenu,
 } from "@crm/ui/components/data-table";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { useTableSelection } from "@crm/ui/hooks/use-table-selection";
 import { formatMoney } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
 import { useQuery } from "@tanstack/react-query";
+import { useQueryStates } from "nuqs";
 import { useEffect, useMemo } from "react";
 import { closingOptions } from "@/components/crm/closing-window";
 import { CompanyCell } from "@/components/crm/company-cell";
@@ -29,8 +32,15 @@ import { DEAL_STAGE_OPTIONS } from "@/lib/deal-stage";
 import { type DealMessages, dealMessages } from "@/lib/messages/deals";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { DealsBoard } from "./deals-board";
 import { DealsBulkActions } from "./deals-bulk-actions";
-import { dealsSearchParams } from "./deals-search-params";
+import {
+	DEALS_VIEWS,
+	dealBoardInputFrom,
+	dealsSearchParams,
+	dealsViewParsers,
+	showsBoard,
+} from "./deals-search-params";
 
 type DealRow = RouterOutputs["deals"]["list"]["rows"][number];
 
@@ -161,6 +171,8 @@ export function DealsTable() {
 	const trpc = useTRPC();
 	const prefetchRecord = usePrefetchRecord();
 	const { query, input, setArchived } = useTableQuery(dealsSearchParams);
+	const [{ view }, setView] = useQueryStates(dealsViewParsers);
+	const board = showsBoard(view, input.archived);
 
 	const deals = useQuery({
 		...trpc.deals.list.queryOptions(input),
@@ -239,10 +251,50 @@ export function DealsTable() {
 		[fieldColumns, input.archived, m, locale],
 	);
 
+	const viewToggle = (
+		<ToggleGroup
+			type="single"
+			variant="outline"
+			size="sm"
+			spacing={0}
+			value={board ? "board" : "table"}
+			aria-label={m.view.label}
+			disabled={input.archived}
+			onValueChange={(next) => {
+				const chosen = DEALS_VIEWS.find((v) => v === next);
+				if (chosen) void setView({ view: chosen });
+			}}
+		>
+			{DEALS_VIEWS.map((v) => (
+				<ToggleGroupItem key={v} value={v}>
+					{m.view[v]}
+				</ToggleGroupItem>
+			))}
+		</ToggleGroup>
+	);
+
+	if (board) {
+		return (
+			<div className="flex min-w-0 flex-col gap-3">
+				<div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+					<ListSearch placeholder={m.search} />
+					<DataTableFacetMenu
+						facets={facets.filter((facet) => facet.id !== "stage")}
+						filters={query.filters}
+						onFilterChange={query.setFilter}
+					/>
+					<div className="sm:ml-auto">{viewToggle}</div>
+				</div>
+				<DealsBoard input={dealBoardInputFrom(input)} />
+			</div>
+		);
+	}
+
 	return (
 		<DataTable
 			query={query}
 			search={<ListSearch placeholder={m.search} />}
+			leadingActions={viewToggle}
 			actions={
 				<Button
 					variant={input.archived ? "contrast" : "outline"}
