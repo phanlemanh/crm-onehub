@@ -78,7 +78,22 @@ Không dùng:
 - `code-block` trong màn chat — hội thoại thuộc AI Elements, xem
   `docs/chat-ui.md`.
 - Skill ReUI cài toàn cục — nó dạy «bảng luôn là data-grid» và «không chỉnh
-  style của mục đã cài», cả hai ngược với kho; công cụ MCP đủ dùng.
+  style của mục đã cài», cả hai ngược với kho. Bản trong kho ở mục dưới là để
+  tra cứu, và mang sẵn dòng nói rõ hai điều đó không áp dụng.
+
+## Skill ReUI
+
+Skill nằm ở `.agents/skills/reui/`, cạnh các skill khác của kho, để tra cách tìm,
+cài và đọc API của thành phần và block. Nó không nằm trong `.claude/skills/` nên
+không tự bật; người hay tác nhân mở khi cần. Dòng đầu `SKILL.md` là phần của kho:
+file này đứng trên skill, hai lời khuyên ở mục «Không dùng» bị gạt.
+
+Cập nhật khi công cụ `get_agent_skill` của MCP báo phiên bản mới hơn dòng
+«ReUI skill version» trong `SKILL.md`: tải gói ở
+`https://mcp.reui.io/api/skills/download` (JSON, mỗi mục một `path` và
+`content`), ghi đè từng file vào `.agents/skills/reui/`, rồi gắn lại dòng đầu của
+kho. Không chạy bộ cài một dòng `curl … | node -`: nó ghi thêm cấu hình Cursor,
+OpenCode, `.mcp.json` trong kho và `~/.codex/config.toml` ngoài kho.
 
 ## Code trả phí không đi về hãng
 
