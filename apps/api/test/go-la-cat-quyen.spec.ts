@@ -40,7 +40,7 @@ const THU_TUC_MAU = [
 ] as const;
 
 type Loai = "query" | "mutation";
-type ThuTuc = { ten: string; loai: Loai; restPath: string | null };
+type ThuTuc = { ten: string; loai: Loai; restKey: string | null };
 type HangMaTran = { ten: string; status: number; message: string };
 type Dau = Record<string, string>;
 type DauVao = Record<string, string> | undefined;
@@ -75,7 +75,9 @@ function soThuTuc(): ThuTuc[] {
 						{
 							ten,
 							loai: type,
-							restPath: rest ? `${REST_BRIDGE_PATH}${rest.path}` : null,
+							restKey: rest
+								? `${rest.method.toUpperCase()} ${REST_BRIDGE_PATH}${rest.path}`
+								: null,
 						},
 					]
 				: [],
@@ -163,9 +165,9 @@ function biChanVeTuCach(h: HangMaTran): boolean {
 
 function ngoaiLeRest(): string[] {
 	const ten = new Set<string>(NGOAI_LE);
-	return soThuTuc()
-		.filter((t) => ten.has(t.ten) && t.restPath)
-		.map((t) => t.restPath as string);
+	return soThuTuc().flatMap((t) =>
+		ten.has(t.ten) && t.restKey ? [t.restKey] : [],
+	);
 }
 
 function hangLot(hang: HangMaTran[], ngoaiLe: (h: HangMaTran) => boolean) {
@@ -178,8 +180,7 @@ const laNgoaiLeTrpc = (h: HangMaTran) =>
 	(NGOAI_LE as readonly string[]).includes(h.ten);
 
 function laNgoaiLeRest(h: HangMaTran): boolean {
-	const duong = h.ten.split(" ")[1];
-	return ngoaiLeRest().includes(duong ?? "");
+	return ngoaiLeRest().includes(h.ten);
 }
 
 async function datMatKhau(userId: string): Promise<string> {
