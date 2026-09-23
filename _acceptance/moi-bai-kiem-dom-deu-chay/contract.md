@@ -5,12 +5,12 @@ slug: moi-bai-kiem-dom-deu-chay
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: draft
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-23-moi-bai-kiem-dom-deu-chay-design.md
 approved_by:
 approved_at:
 veto_state: mo
-veto_opened_at: 2026-09-23T09:45:00Z
+veto_opened_at: 2026-09-23T14:26:50Z
 ---
 
 # Acceptance Contract: moi-bai-kiem-dom-deu-chay
