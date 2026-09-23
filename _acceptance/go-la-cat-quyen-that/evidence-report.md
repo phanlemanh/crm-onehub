@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 652799b91d411dd9b8cbd86c038ea40bf9d8944d
-human_signoff:
+human_signoff: Manh Phan 2026-09-23
 ---
 
 # Evidence Report: go-la-cat-quyen-that

@@ -5,7 +5,7 @@ slug: go-la-cat-quyen-that
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [auth, api, app]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-23
 design_doc: docs/superpowers/specs/2026-09-23-go-la-cat-quyen-that-design.md
@@ -71,3 +71,5 @@ Chưa từng là thành viên và đã bị gỡ là cùng một vị từ (khô
 ## Known limits
 
 - **Token cầu nối đã đúc trước lượt gỡ còn sống tối đa 120 giây ở phía trợ lý.** AC-8 chặn việc đúc token mới; trợ lý không tự hỏi tư cách khi nhận token.
+- **Ngoài-2 (Cổng 2, Manh Phan 2026-09-23): lời gọi bằng khoá đã tắt trong E6 bị từ chối bởi phép kiểm tư cách trước, nên vế HTTP đó không tách được «khoá đã tắt» với «không còn là thành viên».** Việc tắt khoá vẫn được đo chắc bằng cách đọc cột `enabled` trong cơ sở dữ liệu; vế HTTP chỉ là khẳng định phụ.
+- **Ngoài-3 (Cổng 2, Manh Phan 2026-09-23): lời gọi bật lại khoá trong E7 chỉ đòi «không thành công», không có đối chứng dương và không ghim thông điệp.** Khoá cũ vẫn tắt được đo bằng cột `enabled`; nếu lối sửa khoá hỏng vì lý do khác, bài vẫn có thể xanh.
