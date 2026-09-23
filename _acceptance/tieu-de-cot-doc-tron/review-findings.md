@@ -1,53 +1,63 @@
-# Review Findings: tieu-de-cot-doc-tron
-
 ## Trong hợp đồng
 
-(không có phát hiện nào ánh xạ được vào AC)
+Findings: (không có)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **chup.mjs opens app screens without the canhCay tree guard**
-  Người dùng thấy gì: Ảnh chụp minh chứng có thể vô tình được lấy từ một máy chủ thử nghiệm khác đang chạy song song, khiến người xem đánh giá nhầm giao diện không phải của bản này.
+- **chup.mjs takes the E9 evidence screenshots even when the table never loads, and never checks which tree it is measuring**
+  Người dùng thấy gì: Ảnh minh chứng của mục E9 có thể thực ra chụp một trang trống, một trang bị chuyển hướng, hoặc máy chủ của một bản build khác — nhưng vẫn được lưu và trình như thể là bằng chứng đúng.
   file: `_acceptance/tieu-de-cot-doc-tron/rang/chup.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **chup.mjs ignores an empty-table timeout and still takes the screenshot**
-  Người dùng thấy gì: Nếu bảng dữ liệu chưa tải xong hoặc trang bị chuyển hướng, hệ thống vẫn lưu lại ảnh chụp như thể đo thành công, khiến người xem tưởng màn hình đã đúng trong khi thực ra chưa đo được gì.
-  file: `_acceptance/tieu-de-cot-doc-tron/rang/chup.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **chup.mjs swallows the table-load timeout and still writes the E9 evidence screenshot**
-  Người dùng thấy gì: Khi trang không tải được bảng đúng cách (đang tải, trống dữ liệu, hoặc bị chuyển hướng), bộ ảnh minh chứng vẫn được tạo ra như bình thường, nên người xem có thể đang chấm điểm một màn hình không phản ánh đúng tính năng.
-  file: `_acceptance/tieu-de-cot-doc-tron/rang/chup.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Stale-lock recovery in mot-luot.sh has a race: two waiters can both break the lock and run at the same time**
-  Người dùng thấy gì: Trong trường hợp hiếm hai lượt đo tự động chạy chồng lên nhau, dữ liệu thử nghiệm dùng chung có thể bị xáo trộn, khiến một kết quả đo ngẫu nhiên báo sai mà không ai biết vì sao.
-  file: `_acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh`
-  severity: low
-  Đề xuất: wont-fix
-
-- **Hình dạng 5 (tuyên quét lớp nhưng số assert không bị ghim): khoá tdc_tieu_de_cot thiếu DUOI_CONG=1, nên chốt đếm 50 ô / 276 khẳng định bị bỏ qua được**
-  Người dùng thấy gì: Nếu môi trường máy chạy có sót lại một cờ cũ, phép đo có thể chỉ thực sự kiểm tra một phần bảng tiêu đề rồi vẫn báo đạt toàn bộ, khiến người xem tưởng cả 50 ô đã được kiểm kỹ trong khi chưa chắc vậy.
+- **The gate command never sets DUOI_CONG, so the CHI_MAN guard in tieu-de-cot.mjs never fires and a stray CHI_MAN makes a partial matrix pass with exit 0**
+  Người dùng thấy gì: Nếu biến môi trường CHI_MAN vô tình còn sót lại từ một lượt đo trước, phép đo có thể chỉ kiểm một phần nhỏ của bảng mà vẫn báo hoàn thành, khiến người ký tưởng đã kiểm đủ cả 50 ô.
   file: `_acceptance/config.yaml`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (khẳng định âm tính đứng một mình, không ghim thông điệp): nhánh cắt dọc (scrollHeight) mới thêm vào man-danh-muc.mjs chưa từng làm E8 đỏ**
-  Người dùng thấy gì: Chưa có bằng chứng nào cho thấy phép đo thực sự bắt được lỗi tiêu đề bị cắt xuống dòng ở màn Kế hoạch 30 ngày, nên nếu lỗi đó xảy ra sau này, phép đo có thể vẫn báo đạt như không có chuyện gì.
-  file: `_acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs`
+- **chup.mjs swallows the table-load timeout and never checks for a redirect, so E9 screenshots can silently show the wrong screen**
+  Người dùng thấy gì: Ảnh minh chứng của mục E9 có thể thực ra chụp một trang trống, một trang còn đang tải, hoặc trang bị chuyển hướng — nhưng vẫn được lưu và trình như thể là bằng chứng đúng.
+  file: `_acceptance/tieu-de-cot-doc-tron/rang/chup.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 5 (tuyên quét lớp nhưng chỉ có điểm-case): E10 bảo quét «hai tệp bị sửa» trong khi diff sửa bốn tệp UI**
-  Người dùng thấy gì: Việc rà soát thiết kế bỏ sót hai tệp giao diện thực sự đã bị sửa, nên nếu hai tệp đó có vấn đề về thiết kế thì sẽ không được phát hiện ở lượt kiểm này.
-  file: `_acceptance/config.yaml`
+- **Hình dạng 3 (lời hứa là quan hệ, assert chỉ đo một trục): khoảng cách mũi tên–chữ của AC-3 chỉ tính theo trục ngang**
+  Người dùng thấy gì: Nếu mũi tên sắp xếp bị đẩy xuống dòng dưới trong khi chữ tiêu đề đã đầy dòng trên, phép đo tự động vẫn có thể báo đạt dù người dùng thật nhìn thấy mũi tên nằm tách rời, xa nhãn cột.
+  file: `_acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): bài kiểm AC-7 của bo-dung-chung-nhan-chuoi chỉ grep tên lớp line-clamp-2 trong markup SSR**
+  Người dùng thấy gì: Bài kiểm của một tính năng khác chỉ soi xem đúng tên lớp CSS có xuất hiện hay không, nên nếu sau này ai đó vô tình làm hỏng việc cắt chữ dài kèm dấu ba chấm ở tính năng đó, bài kiểm vẫn có thể báo đạt như thường.
+  file: `packages/ui/test/data-table-locale.spec.tsx`
+  severity: medium
+  Đề xuất: new-contract
+
+- **Hình dạng 4 (không ghim thông điệp): sáu eval E1/E2/E3/E7/E8/E9 của bo-dung-chung-nhan-chuoi cùng đo mã thoát của cả bộ test @crm/ui**
+  Người dùng thấy gì: Sáu tiêu chí khác nhau của một tính năng khác đều dùng chung kết quả toàn bộ bộ kiểm thử, nên nếu bài kiểm riêng của một tiêu chí bị xoá hay viết lỏng đi, các tiêu chí còn lại vẫn báo đạt bình thường.
+  file: `_acceptance/bo-dung-chung-nhan-chuoi/evals.yaml`
+  severity: medium
+  Đề xuất: new-contract
+
+- **Hình dạng 5 (tuyên ma trận toàn phần nhưng để lọt ma trận một phần hoặc rỗng): CHI_MAN không có DUOI_CONG thì thoát 0**
+  Người dùng thấy gì: Nếu ai đó gõ sai tên màn cho biến CHI_MAN, lượt đo có thể không kiểm ô nào cả mà vẫn báo hoàn thành thành công.
+  file: `_acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs`
   severity: low
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 7/7 lỗi rơi vào file không bộ đo nào phủ (_acceptance/tieu-de-cot-doc-tron/rang/chup.mjs, _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh, _acceptance/config.yaml, _acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+- **Hình dạng 5 (số assert khác số phần tử khai): E5 khai «Dem AC-5 = 12» nhưng thước không có khẳng định nào của AC-5**
+  Người dùng thấy gì: Nếu sau này một trong ba chỉnh ưu tiên cột của AC-5 bị bỏ sót khỏi danh sách cột mong đợi, phép đo có thể không phát hiện ra vì không có phép đếm riêng khớp với con số 12 đã khai.
+  file: `_acceptance/tieu-de-cot-doc-tron/evals.yaml`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 6 (đo checkout khác thay vì cây đang kiểm): chup.mjs của E9 không gọi canhCay, không kiểm đường dẫn cuối, nuốt lỗi chờ bảng**
+  Người dùng thấy gì: Ảnh minh chứng của mục E9 có thể thực ra lấy từ máy chủ của một bản build khác, hoặc từ một trang bị lỗi/chuyển hướng, mà vẫn được trình như bằng chứng hợp lệ.
+  file: `_acceptance/tieu-de-cot-doc-tron/rang/chup.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+⚠ Cụm ngoài vùng phủ: 7/9 lỗi rơi vào file không bộ đo nào phủ (_acceptance/tieu-de-cot-doc-tron/rang/chup.mjs, _acceptance/config.yaml, packages/ui/test/data-table-locale.spec.tsx, _acceptance/bo-dung-chung-nhan-chuoi/evals.yaml, _acceptance/tieu-de-cot-doc-tron/evals.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.

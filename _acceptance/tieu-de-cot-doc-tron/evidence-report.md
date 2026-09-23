@@ -3,11 +3,12 @@ schema_version: 2
 feature_slug: tieu-de-cot-doc-tron
 verdict: PASS
 failed_evals: []
+reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e14252d466ea31b3e803fa1b2099c06d025bdbd5
-human_signoff: Phan Le Manh 2026-09-23
+verified_commit: 25664adb4fb06fe7694b37acaae374bc8cc0fa27
+human_signoff:
 ---
 
 # Evidence Report: tieu-de-cot-doc-tron
@@ -28,151 +29,175 @@ human_signoff: Phan Le Manh 2026-09-23
 ## Evidence
 
 - eval: E1
-  run_id: minted-tieu-de-cot-doc-tron-E1-r1
+  run_id: minted-tieu-de-cot-doc-tron-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_tieu_de_cot
-  verified_at: 2026-09-23T00:05:57Z
+  verified_at: 2026-09-23T02:34:01Z
   output: |
+    dat  sap deals@375/vi
+    dat  sap deals@1024/vi
+    o=50 khang-dinh=276/276
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
     -- tiền đề làn đo: đã dọn tên miền được phép
 
 - eval: E2
-  run_id: minted-tieu-de-cot-doc-tron-E2-r1
+  run_id: minted-tieu-de-cot-doc-tron-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_tieu_de_cot
-  verified_at: 2026-09-23T00:05:57Z
+  verified_at: 2026-09-23T02:34:01Z
   output: |
+    dat  sap deals@375/vi
+    dat  sap deals@1024/vi
+    o=50 khang-dinh=276/276
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
     -- tiền đề làn đo: đã dọn tên miền được phép
 
 - eval: E3
-  run_id: minted-tieu-de-cot-doc-tron-E3-r1
+  run_id: minted-tieu-de-cot-doc-tron-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_tieu_de_cot
-  verified_at: 2026-09-23T00:05:57Z
+  verified_at: 2026-09-23T02:34:01Z
   output: |
+    dat  sap deals@375/vi
+    dat  sap deals@1024/vi
+    o=50 khang-dinh=276/276
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
     -- tiền đề làn đo: đã dọn tên miền được phép
 
 - eval: E4
-  run_id: minted-tieu-de-cot-doc-tron-E4-r1
+  run_id: minted-tieu-de-cot-doc-tron-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_tieu_de_cot
-  verified_at: 2026-09-23T00:05:57Z
+  verified_at: 2026-09-23T02:34:01Z
   output: |
+    dat  sap deals@375/vi
+    dat  sap deals@1024/vi
+    o=50 khang-dinh=276/276
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
     -- tiền đề làn đo: đã dọn tên miền được phép
 
 - eval: E5
-  run_id: minted-tieu-de-cot-doc-tron-E5-r1
+  run_id: minted-tieu-de-cot-doc-tron-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_tieu_de_cot
-  verified_at: 2026-09-23T00:05:57Z
+  verified_at: 2026-09-23T02:34:01Z
   output: |
+    dat  sap deals@375/vi
+    dat  sap deals@1024/vi
+    o=50 khang-dinh=276/276
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
     -- tiền đề làn đo: đã dọn tên miền được phép
 
 - eval: E6
-  run_id: minted-tieu-de-cot-doc-tron-E6-r1
+  run_id: minted-tieu-de-cot-doc-tron-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_tieu_de_cot
-  verified_at: 2026-09-23T00:05:57Z
+  verified_at: 2026-09-23T02:34:01Z
   output: |
+    dat  sap deals@375/vi
+    dat  sap deals@1024/vi
+    o=50 khang-dinh=276/276
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
     -- tiền đề làn đo: đã dọn tên miền được phép
 
 - eval: E7
-  run_id: minted-tieu-de-cot-doc-tron-E7-r1
+  run_id: minted-tieu-de-cot-doc-tron-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_tieu_de_cot
-  verified_at: 2026-09-23T00:05:57Z
+  verified_at: 2026-09-23T02:34:01Z
   output: |
+    dat  sap deals@375/vi
+    dat  sap deals@1024/vi
+    o=50 khang-dinh=276/276
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
     -- tiền đề làn đo: đã dọn tên miền được phép
 
 - eval: E8
-  run_id: minted-tieu-de-cot-doc-tron-E8-r1
+  run_id: minted-tieu-de-cot-doc-tron-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tdc_doi_chung_ke_hoach
-  verified_at: 2026-09-23T00:05:57Z
+  verified_at: 2026-09-23T02:34:01Z
   output: |
+    dat  deals@1440/vi
+    dat  deals@1440/en
+    o=30 khang-dinh=70/70
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
     -- tiền đề làn đo: đã dọn tên miền được phép
 
 - eval: E9
-  run_id: minted-tieu-de-cot-doc-tron-E9-r1
+  run_id: minted-tieu-de-cot-doc-tron-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.design.ui_check
-  verified_at: 2026-09-23T00:05:57Z
+  verified_at: 2026-09-23T02:34:01Z
   screenshot: _acceptance/tieu-de-cot-doc-tron/evidence/E9/deals-320-vi.png
   observed: |
-    Đã mở cả 12 file trong evidence/E9 bằng Read (đọc ảnh trực tiếp), đối chiếu 3 dòng Expected cho từng ảnh:
+    Đã mở cả 12 file bằng Read (đọc ảnh trực tiếp), đối chiếu từng dòng Expected:
 
-    deals-320-vi.png: header "Tên ↑↓ | Công ty ↑↓ | Giai đoạn ↑↓" đủ chữ, không «…». Cột đầu "One Mount -", "Wise — expa", "Nhà Đất Thù", "Notion — Co" — mỗi ô có ít nhất một từ tròn. Bảng chỉ hiện 3 cột vừa khung 320px, không cột nào bị khung thẻ xén.
-    deals-320-en.png: header "Deal ↑↓ | Company ↑↓ | Stage ↑↓" đủ chữ. Cột đầu có từ tròn (One Mount, Wise, Nhà Đất, Notion). Không cắt mép phải.
-    deals-1024-vi.png: 7 cột header đầy đủ "Tên/Công ty/Giai đoạn/Giá trị/Phụ trách/Ngày chốt/Hoạt động gần nhất" — cột cuối tự xuống dòng "Hoạt động"/"gần nhất", không «…». Cột đầu "One Mount - Triển khai", "Wise — expansion" v.v. đủ từ tròn. Bảng kết thúc gọn trong khung, không cột nào bị xén.
-    deals-1024-en.png: 7 header đầy đủ, "Last activity" xuống dòng. Cột đầu đủ từ tròn. Không cắt mép.
-    companies-320-vi.png: header "Tên ↑↓" đủ chữ. Cột đầu "Viet Phat Group", "Song Hong Land" v.v. đủ chữ (chỉ 1 cột, không tràn).
-    companies-320-en.png: header "Company ↑↓" đủ chữ, cột đầu đủ chữ.
-    companies-1024-vi.png: 7 header "Tên/Tên miền/Ngành/Phụ trách/Số lượng cá nhân/Số thoả thuận đang mở/Hoạt động gần nhất" đều xuống dòng đầy đủ, không «…». Cột đầu "Viet Phat Gro…" bị cắt nhưng "Viet Phat" là hai từ tròn hiện đủ (thoả yêu cầu ít nhất một từ tròn). Bảng không bị xén mép phải.
-    companies-1024-en.png: 7 header đầy đủ ("Last activity" xuống dòng). Cột đầu có từ tròn. Không cắt mép.
-    campaigns-320-vi.png: header "Tên ↑↓ | Trạng thái ↑↓ | Trả lời ↑↓" đủ chữ, "Trạng thái" xuống dòng. Cột đầu "Chiến dịch bé r" — "Chiến dịch" là từ tròn đủ hiện. Không cắt mép (chỉ 3 cột vừa khung).
-    campaigns-320-en.png: header "Name/Status/Answered" đủ chữ, "Answered" xuống dòng. Cột đầu có từ tròn.
-    campaigns-1024-vi.png: 7 header "Tên/Phân khúc/Trạng thái/Đã gọi/Trả lời/Phụ trách/Ngày tạo" đầy đủ, "Ngày tạo" xuống dòng. Cột đầu "Chiến dịch bé rộng ttmu3fhhhb" đủ chữ hoàn toàn. Không cắt mép.
-    campaigns-1024-en.png: 7 header đầy đủ, "Created" xuống dòng. Cột đầu đủ chữ. Không cắt mép.
+    deals-320-vi.png: header "Tên ↑↓ / Công ty ↑↓ / Giai đoạn ↑↓" đứng nguyên một dòng, không có "…"; cột đầu hiện "One Mount -", "Wise — expa", "Nhà Đất Thủ", "Notion — Co" — mỗi ô có ít nhất một từ trọn của tên; bảng nằm gọn trong khung, không cột nào bị khung xén.
+    deals-320-en.png: header "Deal ↑↓ / Company ↑↓ / Stage ↑↓" nguyên vẹn không "…"; cột đầu "One Mount -", "Wise — expa", "Nhà Đất Thủ", "Notion — Co" có từ trọn; không bị xén mép phải.
+    deals-1024-vi.png: 7 cột tiêu đề đầy đủ (Tên, Công ty, Giai đoạn, Giá trị, Phụ trách, Ngày chốt, Hoạt động gần nhất) — "Hoạt động gần nhất" tự xuống dòng "Hoạt động\ngần nhất" thay vì "…"; cột "Tên" hiện đủ tên; bảng khớp mép phải viewport, không cột nào bị cắt.
+    deals-1024-en.png: tương tự bản en, header "Last activity" xuống dòng "Last\nactivity", không "…"; không xén mép phải.
+    companies-320-vi.png: chỉ một cột "Tên ↑↓" (layout thẻ đơn cột ở khổ hẹp) không "…"; tên công ty hiện đầy đủ ("Viet Phat Group", "Song Hong Land"...); không xén.
+    companies-320-en.png: cột "Company ↑↓" đầy đủ, tên công ty hiện trọn; không xén.
+    companies-1024-vi.png: header "Số lượng cá\nnhân", "Số thoả thuận đang\nmở", "Hoạt động\ngần nhất" đều xuống dòng, không "…"; cột Tên hiện đủ chữ đầu ("Viet Phat Gro…" — cell bị cắt bằng dấu "…" nhưng đó là GIÁ TRỊ Ô, không phải TIÊU ĐỀ CỘT, và vẫn còn từ trọn "Viet"); bảng khớp mép phải, không cột nào bị khung xén.
+    companies-1024-en.png: tương tự, header "Contacts", "Open deals", "Last\nactivity" đủ chữ không "…"; không xén mép phải.
+    campaigns-320-vi.png: header "Tên ↑↓", "Trạng thái\n↑↓", "Trả lời" xuống dòng, không "…"; cột đầu "Chiến dịch bé r", "Chiến dịch thiế"... đều có từ trọn ("Chiến", "dịch"); không xén.
+    campaigns-320-en.png: header "Name ↑↓", "Status\n↑↓", "Answered" tương tự, không "…"; cột đầu có từ trọn; không xén.
+    campaigns-1024-vi.png: 6 cột tiêu đề đầy đủ, "Ngày tạo" xuống dòng "↓ Ngày\ntạo" không "…"; cột Tên đủ chữ; bảng khớp mép phải, không cột bị xén.
+    campaigns-1024-en.png: tương tự bản en, "Created" xuống dòng, không "…"; không xén mép phải.
 
-    Không có ảnh nào vi phạm 1 trong 3 dòng Expected → không có dòng nào không đạt.
+    Không có dòng Expected nào bị vi phạm ở bất kỳ ảnh nào trong 12 ảnh.
   network_observed: n-a (driver)
 
 - eval: E10
-  run_id: design-gate-271d76a1d6, design-gate-03f9e452ed
+  run_id: design-gate-ce8163cb76
   exit_code: 0
   baseline: green
   verifier: config:executors.script.tdc_san_thiet_ke
-  verified_at: 2026-09-23T00:05:57Z
+  verified_at: 2026-09-23T02:34:01Z
   output: |
-      - p0_count: 0
-
-    Both files passed design gate verification with no P0 violations.
+      "hits": [],
+      "findings": []
+    }
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: mudcg1aw0ofz
+  run_id: minted-tieu-de-cot-doc-tron-SUITE-bun_run_test-r2
   exit_code: 0
-  verified_at: 2026-09-23T00:05:57Z
+  verified_at: 2026-09-23T02:34:01Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-tieu-de-cot-doc-tron-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-tieu-de-cot-doc-tron-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-23T00:05:57Z
+  verified_at: 2026-09-23T02:34:01Z
 
 - cmd: bun run lint:slop
-  run_id: minted-tieu-de-cot-doc-tron-SUITE-bun_run_lint_slop-r1
+  run_id: minted-tieu-de-cot-doc-tron-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-23T00:05:57Z
+  verified_at: 2026-09-23T02:34:01Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-tieu-de-cot-doc-tron-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-tieu-de-cot-doc-tron-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-23T00:05:57Z
+  verified_at: 2026-09-23T02:34:01Z
 
 ## Known limits
 
@@ -180,12 +205,13 @@ human_signoff: Phan Le Manh 2026-09-23
 
 ## Analyst
 
-E10 (AC-1, design-gate --mode static trên packages/ui/src/components/data-table.tsx và apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx) — xanh trên cả nhánh hiện tại lẫn cây diffBase (baseline: green), tức phép đo tĩnh này không phân biệt được feature với code cũ. Cân nhắc: hoặc viết thêm assertion cho hành vi mới của tiêu đề cột, hoặc xác nhận đây là một regression-guard có chủ ý (không phải bug) cho hai tệp UI vừa sửa.
+E10 (design-gate --mode static trên packages/ui/src/components/data-table.tsx và apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx) xanh trên cả HEAD lẫn diffBase — cây chưa sửa đã 0 blocking/0 hits từ trước, nên eval này không phân biệt được bản sửa với bản cũ cho đúng hai file đó. Đây là sàn thiết kế chung của kit, không phải thước riêng của tính năng tiêu-de-cot-doc-tron, nên giữ nguyên như regression-guard có chủ ý (không viết lại) là hợp lý.
 
 ## Variance
 
-none — không có eval nào khai runs > 1 trong vòng này (không có eval ngẫu nhiên).
+none — không có eval nào khai `runs` > 1 trong vòng này (không có eval ngẫu nhiên), và không eval deterministic nào lệch giữa các lần chạy.
 
 ## Iterations
 
-Round 1: toàn bộ 10 eval (E1–E10) cùng bốn lệnh suite (test, lint, lint:slop, build) đều xanh ngay ở lượt xác minh đầu tiên — không có eval nào fail, không cần quay lại implementation.
+Round 1: PASS trên e14252d4, ký Cổng 2 ngày 2026-09-23 (Phan Le Manh). Sau đó vòng chấm 5 của hồ sơ bo-dung-chung-nhan-chuoi (chấm trên cùng nhánh) lộ hai lỗ: (a) E3 đo khoảng cách mũi tên–chữ bằng Range trên cả nhãn, gồm cả hộp span mũi tên, nên khoảng cách luôn ra 0 — phép đo rỗng; (b) nút tiêu đề sắp đè kiểu Button bằng className, trái docs/design.md. Mở lại hồ sơ: thêm cỡ `xs-wrap` vào Button trong packages/ui (29cde6d3); thước đo hộp chữ theo từng nút chữ (TreeWalker SHOW_TEXT) (57fbb4a8); chiều đỏ chạy bằng lệnh của eval nguyên văn — SortIndicator cột căn trái ml-1 → ml-8 → mã 1, 116 dòng, `deals@375/vi mui ten cach chu 32.0px o cot Tên, san 6` (25664adb). Returned to verification.
+Round 2 (round này): chấm lại trọn (--no-carry) trên 25664adb4fb06fe7694b37acaae374bc8cc0fa27. E1–E10 và bốn lệnh suite xanh; thước chính `o=50 khang-dinh=276/276`, thước onboarding `o=30 khang-dinh=70/70`, 12 ảnh E9 đạt. Verdict: PASS.
