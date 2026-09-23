@@ -106,8 +106,24 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "slack-tran", nhan: "Tin Slack — tràn quá 10 dòng" },
 		],
 	},
+	{
+		slug: "nhac-qua-zalo",
+		ten: "Nhắc qua Zalo",
+		states: [
+			{ id: "ST-thong-bao-chua-noi", nhan: "Thông báo — chưa nối" },
+			{ id: "ST-thong-bao-ma-cho", nhan: "Thông báo — mã đang chờ" },
+			{ id: "ST-thong-bao-ma-het-han", nhan: "Thông báo — mã hết hạn" },
+			{ id: "ST-thong-bao-da-noi", nhan: "Thông báo — đã nối" },
+			{ id: "ST-thong-bao-lech", nhan: "Thông báo — lệch kênh" },
+			{ id: "ST-thong-bao-zalo-tat", nhan: "Thông báo — Zalo chưa bật" },
+			{ id: "ST-thong-bao-luu-loi", nhan: "Thông báo — lưu lỗi" },
+			{ id: "ST-thong-bao-dang-tai", nhan: "Thông báo — đang tải" },
+			{ id: "ST-ket-noi-zalo-song", nhan: "Kết nối — bot sống" },
+			{ id: "ST-ket-noi-zalo-im", nhan: "Kết nối — bot im" },
+			{ id: "ST-ket-noi-zalo-tat", nhan: "Kết nối — chưa bật" },
+		],
+	},
 ];
-
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);
 }

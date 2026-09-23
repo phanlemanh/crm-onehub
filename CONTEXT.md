@@ -163,12 +163,28 @@ mốc ngày, không nhận nhắc từng bước. Chốt 2026-09-22.
 _Avoid_: follow, đăng ký
 Vì sao: "đăng ký" nghe như ghi danh vào phễu; theo dõi không đổi ai làm gì.
 
-**Nhắc buổi sáng**: một tin Slack riêng mỗi sáng lúc giờ đã khai, gom mọi bước quá
-hạn, bước sắp hạn, kế hoạch im và mốc ngày của một người; ngày không có gì thì
-không gửi. Chốt 2026-09-22.
+**Nhắc buổi sáng**: một tin riêng qua Zalo hoặc Slack, theo lựa chọn của người
+đó, mỗi sáng lúc giờ đã khai, gom mọi bước quá hạn, bước sắp hạn, kế hoạch im và
+mốc ngày của một người; ngày không có gì thì không gửi. Chốt 2026-09-22, thêm
+kênh Zalo 2026-09-23.
 _Avoid_: thông báo, notification
 Vì sao: kho không có bảng thông báo; gọi là thông báo thì người dùng đi tìm
 chuông trong app.
+
+**Bot Zalo**: tài khoản bot của xưởng trên Zalo Bot Platform, chỉ gửi nhắc buổi
+sáng và trả lời mã nối. Khác **Tác nhân**: bot Zalo không tự làm việc gì. Chốt
+2026-09-23.
+_Avoid_: tác nhân, trợ lý
+Vì sao: "tác nhân" đã là việc tự động người dùng dựng ra; gọi bot Zalo là tác
+nhân thì người ta chờ nó tự làm việc, còn "trợ lý" hứa một cuộc trò chuyện mà bot
+không có.
+
+**Nối Zalo**: một người trong đội nhắn mã 6 số cho bot Zalo để CRM biết Zalo đó
+là của họ. Làm ở trang cá nhân «Thông báo của bạn» trong Cài đặt. Chốt
+2026-09-23.
+_Avoid_: đăng nhập Zalo, liên kết tài khoản
+Vì sao: người không đăng nhập CRM bằng Zalo, và Zalo không cho CRM đọc gì từ tài
+khoản của họ; việc duy nhất xảy ra là CRM biết nhắn nhắc buổi sáng cho ai.
 
 **Gợi ý**: câu hướng xử lý đi kèm một nhắc kế hoạch im — «Giao bước X», «Bước X
 quá hạn N ngày», «Bước kế: X». Chốt 2026-09-22.

@@ -1,5 +1,6 @@
 import { db } from "@crm/db";
 import { PRIORITY } from "@crm/db/agent-tasks";
+import { kenhSeDungCua } from "@crm/db/kenh-thong-bao";
 import {
 	daToiGioNhac,
 	ngayVN,
@@ -16,6 +17,8 @@ import { sendSlackMessage } from "./run-runtime";
 import { slackAccessToken } from "./slack-connection";
 import { completeTask } from "./tasks";
 import { dungTin } from "./tin-nhac";
+import { guiZalo, zaloToken } from "./zalo-api";
+import { ZALO } from "./zalo-config";
 
 export const LOAI_VIEC_NHAC = "nhac-ke-hoach";
 
@@ -25,7 +28,11 @@ const CHU_DE = /^user:(.+):\d{4}-\d{2}-\d{2}$/;
 
 export type KetQuaNhac = "da-gui" | "khong-slack" | "khong-khop" | "khong-viec";
 
-export type PhuThuocGui = { fetcher?: typeof fetch; appUrl?: string | null };
+export type PhuThuocGui = {
+	fetcher?: typeof fetch;
+	zaloFetcher?: typeof fetch;
+	appUrl?: string | null;
+};
 
 export function chuDeNhac(userId: string, now: Date): string {
 	return `user:${userId}:${ngayVN(now)}`;
@@ -100,31 +107,74 @@ export async function chayNhac(
 		(await viecCanNhac(db, { now: new Date(), userId })).get(userId) ?? [];
 	if (viec.length === 0) return dong(task.id, "khong-viec");
 
-	const token = await slackAccessToken();
-	if (!token) return dong(task.id, "khong-slack");
+	const token = zaloToken();
+	const kenh = await kenhSeDungCua(db, userId, { coToken: token !== null });
+	if (kenh.kenh === null) {
+		const slack = await slackAccessToken();
+		return dong(task.id, slack ? "khong-khop" : "khong-slack");
+	}
 
-	const khop = await db.slackMemberMatch.findUnique({
-		where: { crmUserId: userId },
-		select: { slackUserId: true, crmUser: { select: { name: true } } },
+	const { name: ten } = await db.user.findUniqueOrThrow({
+		where: { id: userId },
+		select: { name: true },
 	});
-	if (!khop?.slackUserId) return dong(task.id, "khong-khop");
-
-	const ten = khop.crmUser.name;
 	const lienKet = await duongMo(
 		deps.appUrl === undefined ? appUrlMacDinh() : deps.appUrl,
 	);
-	const { text, daGui } = dungTin(ten, viec, lienKet);
-	await sendSlackMessage(
-		token,
-		{ kind: "user", id: khop.slackUserId, label: ten },
-		text,
-		task.id,
-		{ fetcher: deps.fetcher },
-	);
+	const daGui =
+		kenh.kenh === "zalo"
+			? await guiQuaZalo(token, kenh.zaloUserId, ten, viec, lienKet, deps)
+			: await guiQuaSlack(kenh.slackUserId, ten, viec, lienKet, task.id, deps);
 	await db.agentTask.update({
 		where: { id: task.id },
-		data: { payload: { ...payload, daGui: maCua(daGui) } },
+		data: {
+			payload: {
+				...payload,
+				daGui: maCua(daGui),
+				kenh: kenh.kenh,
+				lechKenh: kenh.lech,
+			},
+		},
 	});
 	await completeTask(task.id, `da-gui:${daGui.length}`);
 	return "da-gui";
+}
+
+async function guiQuaZalo(
+	token: string | null,
+	zaloUserId: string | null,
+	ten: string,
+	viec: ViecNhac[],
+	lienKet: (planId: string) => string | null,
+	deps: PhuThuocGui,
+): Promise<ViecNhac[]> {
+	if (!token || !zaloUserId) {
+		throw new Error("kenh Zalo duoc chon ma thieu token hoac lien ket");
+	}
+	const { text, daGui } = dungTin(ten, viec, lienKet, "tron", ZALO.tranKyTu);
+	await guiZalo(token, zaloUserId, text, { fetcher: deps.zaloFetcher });
+	return daGui;
+}
+
+async function guiQuaSlack(
+	slackUserId: string | null,
+	ten: string,
+	viec: ViecNhac[],
+	lienKet: (planId: string) => string | null,
+	taskId: string,
+	deps: PhuThuocGui,
+): Promise<ViecNhac[]> {
+	const token = await slackAccessToken();
+	if (!token || !slackUserId) {
+		throw new Error("kenh Slack duoc chon ma thieu token hoac nguoi khop");
+	}
+	const { text, daGui } = dungTin(ten, viec, lienKet);
+	await sendSlackMessage(
+		token,
+		{ kind: "user", id: slackUserId, label: ten },
+		text,
+		taskId,
+		{ fetcher: deps.fetcher },
+	);
+	return daGui;
 }
