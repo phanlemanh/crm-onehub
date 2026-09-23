@@ -555,11 +555,16 @@ async function caThat() {
 			HAN.thatMs,
 		);
 		const bamSau = bamThuMuc(cu);
-		const dongCuoi = ket.ra.trim().split("\n").pop() ?? "";
-		ghi.push({ eval: id, cheDo, lenh, ma: ket.ma, dongCuoi, sot: ket.sot, bamTruoc, bamSau });
+		const dongRa = ket.ra.split("\n").map((d) => d.trim());
+		const coDat = dongRa.includes(`DAT: ${cheDo}`);
+		const dongHong = dongRa.filter(
+			(d) => d.startsWith("KHONG DAT:") || d.startsWith("KHONG DO DUOC:"),
+		);
+		ghi.push({ eval: id, cheDo, lenh, ma: ket.ma, coDat, dongHong, sot: ket.sot, bamTruoc, bamSau });
 		const loi = [];
 		if (ket.ma !== 0) loi.push(`thoat ${ket.ma ?? ket.tin}`);
-		if (dongCuoi !== `DAT: ${cheDo}`) loi.push(`dong cuoi ${JSON.stringify(dongCuoi)}`);
+		if (!coDat) loi.push(`khong co dong "DAT: ${cheDo}"`);
+		if (dongHong.length > 0) loi.push(dongHong.join(" | "));
 		for (const [vat, ds] of Object.entries(ket.sot))
 			if (ds.length > 0) loi.push(`sot ${vat}`);
 		if (bamTruoc !== bamSau) loi.push(`bang chung ho so cu bi doi`);

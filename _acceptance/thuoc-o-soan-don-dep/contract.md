@@ -5,7 +5,7 @@ slug: thuoc-o-soan-don-dep
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [script]
-status: draft
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-23-thuoc-o-soan-don-dep-design.md
 approved_by:
 approved_at:
