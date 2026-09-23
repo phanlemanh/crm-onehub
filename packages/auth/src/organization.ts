@@ -160,6 +160,8 @@ export async function ensureWorkspaceMembership(
 
 export type WorkspaceMemberReader = Pick<Db, "member">;
 
+export const NOT_A_MEMBER = "You are not a member of this workspace.";
+
 export async function workspaceRoleOf(
 	userId: string,
 	client: WorkspaceMemberReader = db,

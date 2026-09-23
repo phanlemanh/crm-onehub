@@ -1,3 +1,4 @@
+import { NOT_A_MEMBER, workspaceRoleOf } from "@crm/auth";
 import { Injectable } from "@nestjs/common";
 import { TRPCError } from "@trpc/server";
 import type {
@@ -19,6 +20,10 @@ export class AuthMiddleware implements TRPCMiddleware {
 		}
 
 		setRequestUserId(user.id);
+
+		if (!(await workspaceRoleOf(user.id))) {
+			throw new TRPCError({ code: "FORBIDDEN", message: NOT_A_MEMBER });
+		}
 
 		const nextCtx: AuthedTrpcContext = { ...ctx, user };
 		return opts.next({ ctx: nextCtx });

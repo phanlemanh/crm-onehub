@@ -458,7 +458,7 @@ export class WorkspaceService {
 			);
 		}
 
-		await this.db.$transaction(async (tx) => {
+		const disabledKeys = await this.db.$transaction(async (tx) => {
 			const target = await tx.member.findFirst({
 				where: { id: input.memberId, organizationId: WORKSPACE_ID },
 				select: {
@@ -491,6 +491,11 @@ export class WorkspaceService {
 
 			await tx.session.deleteMany({ where: { userId: target.userId } });
 
+			const keys = await tx.apikey.updateMany({
+				where: { referenceId: target.userId },
+				data: { enabled: false },
+			});
+
 			const email = normalizeEmail(target.user.email);
 
 			if (email) {
@@ -503,12 +508,15 @@ export class WorkspaceService {
 					data: { status: TRANG_THAI_HUY },
 				});
 			}
+
+			return keys.count;
 		});
 
 		this.logger.log({
 			message: "Member removed",
 			userId,
 			memberId: input.memberId,
+			disabledKeys,
 		});
 
 		return { memberId: input.memberId };
