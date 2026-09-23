@@ -144,6 +144,9 @@ function matKhauSach(nhan: string): string {
 const BO_QUA_GOOGLE =
 	"bo-qua-co-ten: khong co GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET trong moi truong bai kiem";
 
+const BO_QUA_HD_LECH =
+	"bo-qua-co-ten: auth khong khoa hd — thieu khoa Google hoac danh sach cho phep khong phai dung mot mien";
+
 async function gieoHangDuocVao(): Promise<{ email: string }> {
 	await dungKho();
 
@@ -184,12 +187,15 @@ function phanJwt(noiDung: ManhJwt): string {
 	return Buffer.from(JSON.stringify(noiDung)).toString("base64url");
 }
 
-function idTokenGia(nguoi: {
+type NguoiGoogle = {
 	email: string;
 	accountId: string;
 	ten: string;
-}): string {
-	const mienGiuNha = auth.options.socialProviders?.google?.hd;
+	hd?: string;
+};
+
+function idTokenGia(nguoi: NguoiGoogle): string {
+	const mienGiuNha = nguoi.hd ?? auth.options.socialProviders?.google?.hd;
 	const nen: ManhJwt = {
 		iss: "https://accounts.google.com",
 		sub: nguoi.accountId,
@@ -205,11 +211,9 @@ function idTokenGia(nguoi: {
 	].join(".");
 }
 
-async function dangNhapQuaGoogle(nguoi: {
-	email: string;
-	accountId: string;
-	ten: string;
-}): Promise<{ diaChiVe: string | null }> {
+async function dangNhapQuaGoogle(
+	nguoi: NguoiGoogle,
+): Promise<{ diaChiVe: string | null }> {
 	const batDau = await auth.api.signInSocial({
 		body: { provider: GOOGLE_PROVIDER_ID, callbackURL: "/" },
 		returnHeaders: true,
@@ -636,6 +640,29 @@ describe("cua-google-con-song", () => {
 			where: { organizationId: WORKSPACE_ID, userId: nguoi[0]?.id ?? "" },
 		});
 		expect(thanhVien).toBe(1);
+	});
+
+	test("cua google tu choi token co hd lech voi hd da khoa, du nguoi trong danh sach", async () => {
+		const hdDaKhoa = auth.options.socialProviders?.google?.hd;
+		if (!isGoogleConfigured() || !hdDaKhoa) {
+			expect([
+				BO_QUA_HD_LECH,
+				isGoogleConfigured() && Boolean(hdDaKhoa),
+			]).toEqual([BO_QUA_HD_LECH, false]);
+			return;
+		}
+
+		const { email } = await gieoHangDuocVao();
+
+		const vao = await dangNhapQuaGoogle({
+			email,
+			accountId: dinhDanh("google-id"),
+			ten: "Token lech mien",
+			hd: `lech-${hdDaKhoa}`,
+		});
+
+		expect(vao.diaChiVe ?? "").toContain("error=unable_to_get_user_info");
+		expect(await db.user.count({ where: { email } })).toBe(0);
 	});
 
 	test("nguoi ngoai danh sach duoc vao khong dang nhap duoc bang google", async () => {

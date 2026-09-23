@@ -29,7 +29,7 @@ evals:
     criterion: AC-4
     executor: script
     cmd: config:executors.script.kat_tu_nhien
-    expected: "exit 0; toan goi packages/auth voi env CI, co so du lieu moi, thu tu thuong: ban sua 0 fail; tong so ca ban sua bang tong so ca ban goc b812b65a cong so ca cua tep test moi cua AC-8; so skip ban sua khong vuot ban goc"
+    expected: "exit 0; toan goi packages/auth voi env CI, co so du lieu moi, thu tu thuong: bun test ban sua thoat 0 va 0 fail; khong ca nao cua ban goc b812b65a bi mat (so theo tep+nhom+ten); tong so ca ban sua bang tong ban goc cong so ca moi, trong do co ca cua tep test AC-8; so skip ban sua khong vuot ban goc"
     paths: ["packages/auth/**", "_acceptance/kiem-auth-khong-phu-thuoc-thu-tu/rang/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 

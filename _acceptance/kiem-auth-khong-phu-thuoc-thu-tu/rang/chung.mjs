@@ -5,6 +5,7 @@ import {
 	mkdirSync,
 	readFileSync,
 	rmSync,
+	symlinkSync,
 	writeFileSync,
 } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -47,6 +48,7 @@ export const KAT = {
 	logHd: 'does not satisfy the configured "hd" option "example.com"',
 	mocHd: "if (hostedDomain) google.hd = hostedDomain;",
 	caOnemount: '(fail) hd cua google theo danh sach "onemount.com"',
+	loiNap: "khong nap duoc auth voi danh sach",
 };
 
 export class Dung extends Error {
@@ -81,8 +83,9 @@ export function envCi() {
 }
 
 export function saoChep(ban) {
-	const sao = join(AUTH, `.sao-kat-${ban}-${randomBytes(4).toString("hex")}`);
-	mkdirSync(sao);
+	const sao = join(RA, `sao-${ban}-${randomBytes(4).toString("hex")}`);
+	mkdirSync(sao, { recursive: true });
+	symlinkSync(join(AUTH, "node_modules"), join(sao, "node_modules"));
 	for (const muc of ["bunfig.toml", "package.json", "tsconfig.json", "src"])
 		cpSync(join(AUTH, muc), join(sao, muc), { recursive: true });
 	if (ban === "sua") {
