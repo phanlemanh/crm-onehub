@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 50dd8c3e38dc5609113ac2a322d38ead2e487241
+verified_commit: 53b2335c112102a292903ace5221b556b42ab328
 human_signoff: Manh Phan 2026-09-23
 ---
 
@@ -194,3 +194,7 @@ Round 2: E1-E10 và bốn lệnh suite đều exit 0. E5 nay so ngoại lệ RES
 ### Re-pin lần 1 — 2026-09-23, do keo onehub 674dcd11 (bang deal keo tha) vao nhanh
 run_id: repin-20260923T142303Z-26868
 sha: 50dd8c3e38dc5609113ac2a322d38ead2e487241 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-23, do auth.ts doi thu tu moc khoa API va go-la-cat-quyen.spec.ts siet E6 E7 (khoa-cu-khong-mo-khoa-moi)
+run_id: repin-20260923T232757Z-95212
+sha: 53b2335c112102a292903ace5221b556b42ab328 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
