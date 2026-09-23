@@ -164,13 +164,15 @@ evals:
   - id: E8
     criterion: AC-8
     executor: script
-    cmd: config:executors.script.ogd_man_danh_muc
+    cmd: config:executors.script.tdc_doi_chung_ke_hoach
     paths:
       - "packages/ui/src/components/data-table.tsx"
       - "packages/ui/src/components/table.tsx"
     expected: |
-      Thuoc cua ho so onboarding-giong-deals, nguyen van (khoa ogd_man_danh_muc, co trong
-      config tu 607fe361). Chay voi APP_URL/API_URL tro ban do cua cay nay. Ky vong ma 0,
+      Thuoc cua ho so onboarding-giong-deals, nguyen van (cung tep man-danh-muc.mjs va cung
+      DUOI_CONG=1 nhu khoa ogd_man_danh_muc), nhung qua rang/mot-luot.sh: xep hang voi moi
+      luot tien-de khac va mac dinh ban do 3500/3501 cua cay nay (ogd_man_danh_muc mac dinh
+      3000, cong khong phai cua cay nay). Ky vong ma 0,
       dong `o=30 khang-dinh=70/70`. Chieu do cua thuoc thuoc ve ho so do.
       Hien trang 2026-09-22 (evidence/ogd-sau-rebase-607fe361.txt): ma 1, 48 dong
       `khong doc duoc nhan` — bo chon nhan cua thuoc do (`span.truncate, span.block`)
@@ -189,7 +191,7 @@ evals:
       - "apps/app/app/(app)/[slug]/campaigns/campaigns-table.tsx"
     steps:
       - "Kiem cong 3500 va 3501 truoc: lsof -nP -iTCP:<cong> -sTCP:LISTEN -t roi lsof -a -p <pid> -d cwd -Fn; cwd phai nam trong CAY DANG XET. Khong phai -> thoat ma 2, KHONG chup. Khong tat may chu cua phien khac."
-      - "Chup bang lenh cua ho so: APP_URL=http://localhost:3500 RA=_acceptance/tieu-de-cot-doc-tron/evidence/E9 MAN=deals,companies,campaigns KHO=320,1024 TIENG=vi,en bun _acceptance/tieu-de-cot-doc-tron/rang/chup.mjs"
+      - "Chup bang lenh cua ho so, tu goc kho, QUA vo xep hang (tien de lan do + khoa): bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh 'RA=_acceptance/tieu-de-cot-doc-tron/evidence/E9 MAN=deals,companies,campaigns KHO=320,1024 TIENG=vi,en bun _acceptance/tieu-de-cot-doc-tron/rang/chup.mjs' — khong chay chup.mjs tran: thieu tien de thi trang bi day sang /onboarding/research"
       - "Mo 12 anh evidence/E9/<man>-<kho>-<tieng>.png"
     inputs:
       - _acceptance/tieu-de-cot-doc-tron/evidence/
