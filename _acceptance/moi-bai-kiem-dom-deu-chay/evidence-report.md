@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 00dcd70fbbfb47f0bd58b4055496c25de13fd0bf
+verified_commit: 41b7b5981c8fc04964711de25d51481c3127f3a5
 human_signoff: Manh Phan 2026-09-23
 ---
 
@@ -127,3 +127,7 @@ none — không có eval nào runs > 1 trong round này (không có phương sai
 
 Round 1: 7 eval script (E1-E7) và ba lệnh suite (bun run test, bunx turbo run lint --force, bun run lint:slop) đều chạy thật và xanh, nhưng lệnh thứ năm `bunx turbo run build --force` không có kết quả — agent phụ trách bị skip/chết trước khi lệnh chạy xong. Verdict BLOCKED vì thiếu bằng chứng của lệnh build, không phải vì có eval nào đỏ.
 Round 2: chạy lại đủ cả năm lệnh của bộ chứng (bun run test, bunx turbo run lint --force, bun run lint:slop, bunx turbo run build --force) cùng cả 7 eval script; tất cả xanh, mã thoát 0, có bằng chứng đầy đủ. Verdict PASS.
+
+### Re-pin lần 1 — 2026-09-23, do kéo onehub mới (#97) vào nhánh
+run_id: repin-20260923T153324Z-22396
+sha: 41b7b5981c8fc04964711de25d51481c3127f3a5 · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng
