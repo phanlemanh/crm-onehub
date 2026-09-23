@@ -635,6 +635,15 @@ executors:
     ccc_khong_chu_la: bun run test -- "bun _acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs --chan khong-chu-la"
     ccc_dot_bien: bun run test -- "bun _acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs --chan dot-bien"
     ccc_pham_vi: bun _acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs --chan pham-vi
+    tosd_khac_cay: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca khac-cay"
+    tosd_giua_chung: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca giua-gieo,sau-gieo,sau-chrome"
+    tosd_tin_hieu: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca sigterm,sigint"
+    tosd_thieu_nguoi: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca thieu-nguoi"
+    tosd_token: bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca token
+    tosd_mau: bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca mau
+    tosd_that: bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca that
+    tosd_pham_vi: bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca pham-vi
+    tosd_steps_cu: bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca steps-cu
     tdc_tieu_de_cot: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs"
     tdc_doi_chung_ke_hoach: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "DUOI_CONG=1 bun _acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs"
     bdc_bo_dung_ui: bun run test --filter=@crm/ui
