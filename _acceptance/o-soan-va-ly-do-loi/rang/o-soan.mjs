@@ -1,8 +1,9 @@
 import { randomUUID } from "node:crypto";
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
+import { builderToken } from "../../../apps/agent/agent/lib/custom-agent-dispatch.ts";
 import { db } from "../../../packages/db/src/client.ts";
 import {
 	APP,
@@ -10,17 +11,20 @@ import {
 	LANG,
 	phien,
 } from "../../cua-vao-noi-tieng-viet/rang/may-chu.mjs";
+import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 
 const DAY = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(DAY, "../../..");
-const BANG_CHUNG = resolve(DAY, "../evidence");
+const BANG_CHUNG = process.env.BANG_CHUNG
+	? resolve(process.env.BANG_CHUNG)
+	: resolve(DAY, "../evidence");
 const MAU = JSON.parse(
 	readFileSync(
 		resolve(GOC, "apps/api/test/fixtures/loi-hoi-thoai-events.json"),
 		"utf8",
 	),
 );
-const EMAIL = process.env.NGUOI ?? "manh.phan@onemount.com";
+const EMAIL = process.env.NGUOI;
 const KHO = [
 	{ ten: "1440", width: 1440, height: 900 },
 	{ ten: "375", width: 375, height: 812 },
@@ -33,14 +37,15 @@ const CHO_MS = 90_000;
 const CHO_BAM_MS = 3_000;
 const SO_LAN_BAM = 10;
 const SO_LAN_CHUP_CON_TRO = 12;
-const MAU_CON_TRO = "rgb(255, 0, 0)";
 const MAU_CON_TRO_RGB = [255, 0, 0];
+const MAU_CON_TRO = `rgb(${MAU_CON_TRO_RGB.join(", ")})`;
 const NGUONG_MAU_CON_TRO = 40;
 const TI_LE_HANG_CON_TRO = 0.6;
 const RONG_COT_CON_TRO = 2;
 const CHO_NHAP_NHAY_MS = 150;
 const MA_LOI = "TOOL_EXECUTION_FAILED";
 const O = '[data-slot="token-field"]';
+const MA_TIN_HIEU = { SIGINT: 130, SIGTERM: 143 };
 
 const CHE_DO = process.argv[2];
 if (!["con-tro", "go-chu", "chup"].includes(CHE_DO)) {
@@ -48,32 +53,46 @@ if (!["con-tro", "go-chu", "chup"].includes(CHE_DO)) {
 	process.exit(2);
 }
 
+class KhongDoDuoc extends Error {}
+
 function khongDo(cau) {
-	console.log(`KHONG DO DUOC: ${cau}`);
-	process.exit(2);
+	throw new KhongDoDuoc(cau);
 }
 
-async function chanCay() {
-	const ten = `o-soan-canh-${process.pid}-${randomUUID()}.svg`;
-	const dau = randomUUID();
-	const duong = resolve(GOC, "apps/app/public", ten);
-	writeFileSync(
-		duong,
-		`<svg xmlns="http://www.w3.org/2000/svg"><!--${dau}--></svg>`,
-	);
+const don = { trinh: null, hoiThoai: null, maTinHieu: null, dang: null };
+
+async function buocDon(ten, lam) {
 	try {
-		const res = await fetch(`${APP}/${ten}`, { redirect: "manual" });
-		const chu = await res.text();
-		if (!chu.includes(dau)) {
-			khongDo(
-				`khac-cay: ${APP} khong phuc vu cay ${GOC} (dau moc ${ten} khong ve)`,
-			);
-		}
+		await lam();
+		return true;
 	} catch (loi) {
-		khongDo(`may chu ${APP} khong tra loi: ${loi?.message ?? loi}`);
-	} finally {
-		rmSync(duong, { force: true });
+		console.log(`KHONG DON DUOC: ${ten}: ${loi?.message ?? loi}`);
+		return false;
 	}
+}
+
+function donDep() {
+	don.dang ??= (async () => {
+		const chrome = don.trinh
+			? await buocDon("chrome", () => don.trinh.close())
+			: true;
+		const hoiThoai = don.hoiThoai
+			? await buocDon(`hoi thoai ${don.hoiThoai}`, () =>
+					db.agentConversation.deleteMany({ where: { id: don.hoiThoai } }),
+				)
+			: true;
+		const coSo = await buocDon("co so du lieu", () => db.$disconnect());
+		return chrome && hoiThoai && coSo;
+	})();
+	return don.dang;
+}
+
+for (const [tin, ma] of Object.entries(MA_TIN_HIEU)) {
+	process.once(tin, async () => {
+		don.maTinHieu = ma;
+		await donDep();
+		process.exit(ma);
+	});
 }
 
 async function gieo() {
@@ -94,9 +113,10 @@ async function gieo() {
 		},
 		select: { id: true },
 	});
+	don.hoiThoai = hoiThoai.id;
 	await db.agentConversation.update({
 		where: { id: hoiThoai.id },
-		data: { continuationToken: `builder:${hoiThoai.id}` },
+		data: { continuationToken: builderToken(hoiThoai.id) },
 	});
 	const [suKien] = MAU;
 	await db.agentEvent.create({
@@ -501,39 +521,58 @@ async function chup(trinh, cookie, dich) {
 	return loi;
 }
 
-await chanCay();
-mkdirSync(BANG_CHUNG, { recursive: true });
-let cookie;
-try {
-	cookie = phien(EMAIL);
-} catch (loi) {
-	khongDo(`khong tao duoc phien cho ${EMAIL}: ${loi?.message ?? loi}`);
+function taoPhien() {
+	try {
+		return phien(EMAIL);
+	} catch (loi) {
+		khongDo(`khong tao duoc phien cho ${EMAIL}: ${loi?.message ?? loi}`);
+	}
 }
-const dich = await gieo();
-const trinh = await puppeteer.launch({
-	executablePath: CHROME,
-	headless: true,
-});
-let loi = [];
-try {
-	loi =
-		CHE_DO === "con-tro"
-			? await conTro(trinh, cookie, dich)
-			: CHE_DO === "go-chu"
-				? await goChu(trinh, cookie, dich)
-				: await chup(trinh, cookie, dich);
-} catch (hong) {
-	await trinh.close();
-	await db.agentConversation.deleteMany({ where: { id: dich.hoiThoai } });
-	await db.$disconnect();
-	khongDo(`rang hong giua chung: ${hong?.message ?? hong}`);
-}
-await trinh.close();
-await db.agentConversation.deleteMany({ where: { id: dich.hoiThoai } });
-await db.$disconnect();
 
-if (loi.length > 0) {
-	for (const dong of loi) console.log(`KHONG DAT: ${dong}`);
-	process.exit(1);
+async function doDuoc() {
+	if (!EMAIL)
+		khongDo(
+			"thieu NGUOI — dat NGUOI=<email nguoi do>, cung nguoi voi scripts/lan-do/tien-de.mjs",
+		);
+	const cay = await canhCay();
+	if (cay.ket !== "dung-cay") {
+		for (const dong of cay.dong) console.log(dong);
+		return 2;
+	}
+	mkdirSync(BANG_CHUNG, { recursive: true });
+	const cookie = taoPhien();
+	const dich = await gieo();
+	don.trinh = await puppeteer.launch({
+		executablePath: CHROME,
+		headless: true,
+		handleSIGINT: false,
+		handleSIGTERM: false,
+		handleSIGHUP: false,
+	});
+	const loi =
+		CHE_DO === "con-tro"
+			? await conTro(don.trinh, cookie, dich)
+			: CHE_DO === "go-chu"
+				? await goChu(don.trinh, cookie, dich)
+				: await chup(don.trinh, cookie, dich);
+	if (loi.length > 0) {
+		for (const dong of loi) console.log(`KHONG DAT: ${dong}`);
+		return 1;
+	}
+	console.log(`DAT: ${CHE_DO}`);
+	return 0;
 }
-console.log(`DAT: ${CHE_DO}`);
+
+let ma = 2;
+try {
+	ma = await doDuoc();
+} catch (hong) {
+	console.log(
+		hong instanceof KhongDoDuoc
+			? `KHONG DO DUOC: ${hong.message}`
+			: `KHONG DO DUOC: rang hong giua chung: ${hong?.message ?? hong}`,
+	);
+	ma = 2;
+}
+const sach = await donDep();
+process.exit(don.maTinHieu ?? (sach ? ma : 2));
