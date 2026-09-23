@@ -174,10 +174,12 @@ evals:
       luot tien-de khac va mac dinh ban do 3500/3501 cua cay nay (ogd_man_danh_muc mac dinh
       3000, cong khong phai cua cay nay). Ky vong ma 0,
       dong `o=30 khang-dinh=70/70`. Chieu do cua thuoc thuoc ve ho so do.
-      Hien trang 2026-09-22 (evidence/ogd-sau-rebase-607fe361.txt): ma 1, 48 dong
-      `khong doc duoc nhan` — bo chon nhan cua thuoc do (`span.truncate, span.block`)
-      khong khop nhan moi; khong dong cat/tran/nut nao. Eval nay DO cho toi khi ho so do
-      ghim lai bo chon; khong duoc sua thuoc do tu ho so nay.
+      Truoc khi sua bo chon cua thuoc do (607fe361, evidence/ogd-sau-rebase-607fe361.txt):
+      ma 1, 48 dong `khong doc duoc nhan`, khong dong cat/tran/nut nao. Sau khi sua bo chon
+      sang [data-slot=table-head-label] + dieu kien cat doc (commit 76cc0d10, duoc Cong 1
+      duyet): ma 0, `o=30 khang-dinh=70/70` (evidence/E8-xanh.txt). Chieu do tren cung
+      thuoc (evidence/E8-chieu-do.txt): nhan line-clamp-1 max-w-4 -> ma 1,
+      `onboarding-bang@320/vi tieu de bi cat: Đối tác, Im lặng`.
 
   - id: E9
     criterion: AC-9
