@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 652799b91d411dd9b8cbd86c038ea40bf9d8944d
+verified_commit: 50dd8c3e38dc5609113ac2a322d38ead2e487241
 human_signoff: Manh Phan 2026-09-23
 ---
 
@@ -190,3 +190,7 @@ none — every multi-run eval is uniform
 
 Round 1: E1-E10 và bốn lệnh suite (test/lint/lint:slop/build) đều exit 0, không eval máy nào đỏ. REJECT đến từ scope-triage: một finding "Trong hợp đồng" bậc high ánh xạ vào AC-5 — laNgoaiLeRest trong test/go-la-cat-quyen.spec.ts chỉ so phần đường của ngoại lệ REST, không so phương thức, nên PATCH /rest/workspace (workspace.update) lặng lẽ dùng chung đường /rest/workspace với GET /rest/workspace (workspace.get) và bị coi là ngoại lệ — E5 báo xanh nhưng chưa thật sự đo đường ghi này có bị 403 hay không. Trả về S3 để vá phép so ngoại lệ theo cặp (phương thức, đường) rồi chạy lại vòng verify.
 Round 2: E1-E10 và bốn lệnh suite đều exit 0. E5 nay so ngoại lệ REST theo cặp (phương thức, đường) — vá xong finding scope từ round 1, PATCH /rest/workspace không còn lọt qua ngoại lệ của GET cùng đường. E8 carry-forward từ round 1 (delta không chạm paths của eval). Không eval nào đỏ, không judgment item nào chờ người. PASS.
+
+### Re-pin lần 1 — 2026-09-23, do keo onehub 674dcd11 (bang deal keo tha) vao nhanh
+run_id: repin-20260923T142303Z-26868
+sha: 50dd8c3e38dc5609113ac2a322d38ead2e487241 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
