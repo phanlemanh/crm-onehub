@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 25664adb4fb06fe7694b37acaae374bc8cc0fa27
+verified_commit: b1101467ace5fb9057dd43fd7bf7254e06a5b132
 human_signoff: Phan Le Manh 2026-09-23
 ---
 
@@ -215,3 +215,7 @@ none — không có eval nào khai `runs` > 1 trong vòng này (không có eval 
 
 Round 1: PASS trên e14252d4, ký Cổng 2 ngày 2026-09-23 (Phan Le Manh). Sau đó vòng chấm 5 của hồ sơ bo-dung-chung-nhan-chuoi (chấm trên cùng nhánh) lộ hai lỗ: (a) E3 đo khoảng cách mũi tên–chữ bằng Range trên cả nhãn, gồm cả hộp span mũi tên, nên khoảng cách luôn ra 0 — phép đo rỗng; (b) nút tiêu đề sắp đè kiểu Button bằng className, trái docs/design.md. Mở lại hồ sơ: thêm cỡ `xs-wrap` vào Button trong packages/ui (29cde6d3); thước đo hộp chữ theo từng nút chữ (TreeWalker SHOW_TEXT) (57fbb4a8); chiều đỏ chạy bằng lệnh của eval nguyên văn — SortIndicator cột căn trái ml-1 → ml-8 → mã 1, 116 dòng, `deals@375/vi mui ten cach chu 32.0px o cot Tên, san 6` (25664adb). Returned to verification.
 Round 2 (round này): chấm lại trọn (--no-carry) trên 25664adb4fb06fe7694b37acaae374bc8cc0fa27. E1–E10 và bốn lệnh suite xanh; thước chính `o=50 khang-dinh=276/276`, thước onboarding `o=30 khang-dinh=70/70`, 12 ảnh E9 đạt. Verdict: PASS.
+
+### Re-pin lần 1 — 2026-09-23, do hoa cu do hop nhat onehub (PR 86: apps/api/test)
+run_id: repin-20260923T031737Z-62007
+sha: b1101467ace5fb9057dd43fd7bf7254e06a5b132 · suites: 4 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E9 · AC không có chốt máy: AC-9

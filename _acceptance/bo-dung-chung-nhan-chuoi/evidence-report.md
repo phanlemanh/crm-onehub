@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 088078c7bb8c3851bb8a4268ed00b96765a3d867
+verified_commit: b1101467ace5fb9057dd43fd7bf7254e06a5b132
 human_signoff: Phan Le Manh 2026-09-23
 ---
 
@@ -204,3 +204,7 @@ none — every multi-run eval is uniform
 Round 1–4 (2026-09-01): bốn vòng chấm ngữ cảnh sạch, báo cáo dạng kể chuyện; ký Cổng 2 — Manh Phan 2026-09-01. Sau chữ ký có một vòng người lạ lái thử, ghi vào cùng báo cáo. Bản kể chuyện đó còn nguyên trong lịch sử git (lần sửa cuối 75e5daf8), được thay bằng báo cáo khuôn máy này theo d-20260923T024743Z-4.
 Round 5 (2026-09-23, mở lại theo hồ sơ tieu-de-cot-doc-tron, d-20260923T010721Z-25 của hồ sơ đó): chuyển E1–E9 sang khuôn máy với lệnh ở config; chấm trên a1e9d9e5 — PASS; phát hiện ngoài hợp đồng ghi ở review-findings.md vòng đó, chưa ký. Returned to implementation: vòng chấm này lộ phép đo mũi tên rỗng và nút tiêu đề tự đè kiểu Button ở hồ sơ tieu-de-cot-doc-tron.
 Round 6 (round này): thêm E11 (`rang/cat-ba-cham.mjs`) đo cắt ba chấm và `title` trên trang thật cho AC-7, hai chiều đỏ đã chạy (evidence/cat-ba-cham-chieu-do.txt); E7 giữ làm hồi quy component. Chấm lại trọn E1–E9, E11 và bốn lệnh suite trên 088078c7 — PASS; E10 mang panel PASS từ round 5 vì đầu vào không đổi. Chờ người ký Cổng 2.
+
+### Re-pin lần 1 — 2026-09-23, do hoa cu do hop nhat onehub (PR 86: apps/api/test)
+run_id: repin-20260923T031737Z-62007
+sha: b1101467ace5fb9057dd43fd7bf7254e06a5b132 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10 · AC không có chốt máy: AC-10

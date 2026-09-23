@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 496726d395354129d7b6495b47a940eeec4550a2
+verified_commit: b1101467ace5fb9057dd43fd7bf7254e06a5b132
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -273,3 +273,7 @@ sha: e83bf65af354acd1a4f986baef7183405d2c0310 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-09-23, do hoa cu do nut tieu de xs-wrap va thuoc AC-3 cua tieu-de-cot-doc-tron vong 2
 run_id: repin-20260923T030726Z-53798
 sha: 496726d395354129d7b6495b47a940eeec4550a2 · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-12
+
+### Re-pin lần 4 — 2026-09-23, do hoa cu do hop nhat onehub (PR 86: apps/api/test)
+run_id: repin-20260923T031737Z-62007
+sha: b1101467ace5fb9057dd43fd7bf7254e06a5b132 · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-12
