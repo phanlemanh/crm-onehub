@@ -1,0 +1,119 @@
+schema_version: 1
+slug: moi-bai-kiem-dom-deu-chay
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.bkd_du_tep_app
+    paths:
+      - "apps/app/package.json"
+      - "apps/app/test/*.dom.tsx"
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
+    expected: |
+      Chay that `bun run test:dom` trong apps/app. Ma tran = danh sach tep test/*.dom.tsx doc
+      tu dia (16 tep ngay 23/09), moi tep 1 khang dinh: tep co dong «chay-dom: test/<tep>» va
+      doan cua no co «Ran N tests across 1 file» voi N > 0, dung mot lan; cong 1 khang dinh ma
+      thoat 0. Thu muc khong co tep nao -> ma 2.
+      CHIEU DO (da chay 2026-09-23 tren script danh sach tay cu): 16 dong «HONG app: tep <ten>
+      chay 0 lan (thieu tep)». Chieu do tren ban moi: ban sao bo chay loc bo keo-tha-thoa-thuan
+      -> do voi thong diep ghim "app: tep keo-tha-thoa-thuan.dom.tsx chay 0 lan".
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.bkd_du_tep_ui
+    paths:
+      - "packages/ui/package.json"
+      - "packages/ui/test/*.dom.tsx"
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
+    expected: |
+      Chay that `bun run test` trong packages/ui. Ma tran = tep test/*.dom.tsx tren dia (1 tep:
+      board-giu-nguyen.dom.tsx), moi tep 1 khang dinh nhu E1, cong ma thoat 0; cong 1 khang dinh
+      cac tep *.spec/*.test van chay: dem K tep bang find (bo node_modules), dau ra phai co mot
+      luot «Ran N tests across K files» voi N > 0.
+      CHIEU DO (da chay 2026-09-23 tren script cu): "ui: tep board-giu-nguyen.dom.tsx chay 0 lan
+      (thieu tep)". Chieu do ve spec: script ui chi con bo chay dom (bo `bun test` dau) ->
+      "ui: K tep spec khong con chay".
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.bkd_tep_moi
+    paths:
+      - "apps/app/package.json"
+      - "packages/ui/package.json"
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
+    expected: |
+      Voi moi goi [app, ui]: tao tep tam test/zz-do-thu-<che-do>-<pid>.dom.tsx (mot bai xanh),
+      chay lenh kiem cua goi, khang dinh tep tam da chay va ma thoat 0; tep tam luon bi xoa
+      (finally + SIGINT + SIGTERM). 2 goi x 2 = 4 khang dinh. Moi che do con khang dinh them
+      khong con tep zz-do-thu-* nao trong test/ cua ca hai goi.
+      CHIEU DO (da chay 2026-09-23 tren script cu): "app: tep moi zz-do-thu-... khong duoc chay"
+      va cung the cho ui.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.bkd_tep_do
+    paths:
+      - "apps/app/package.json"
+      - "packages/ui/package.json"
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
+    expected: |
+      Voi moi goi: tao tep tam co mot bai do, chay lenh kiem, khang dinh ma thoat khac 0 VA dau ra
+      goi ten tep tam. 4 khang dinh. Doi chung duong: E3 cung tep tam nhung bai xanh -> ma 0.
+      CHIEU DO (da chay 2026-09-23 tren script cu): "app: tep do ma lenh van xanh". Tren ban moi:
+      ban sao bo chay khong dung o tep do (bo tra ma loi) -> "app: tep do ma lenh van xanh".
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.bkd_cach_ly
+    paths:
+      - "apps/app/package.json"
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
+    expected: |
+      Chay that `bun run test:dom` trong apps/app: so luot «Ran ... across K file» bang so tep
+      tren dia, moi luot K = 1, ma thoat 0 (ca 16 tep xanh khi chay rieng). Ma tran: 1 + so luot + 1.
+      CHIEU DO (da chay 2026-09-23 tren script cu): "app: 1 luot bun test cho 16 tep (khong moi tep
+      mot tien trinh)" va "app: luot 1 chay 14 tep chung mot tien trinh".
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.bkd_mui_gio
+    paths:
+      - "apps/app/package.json"
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
+    expected: |
+      Tao tep tam trong apps/app/test khang dinh mui gio la Asia/Ho_Chi_Minh, chay `bun run test:dom`,
+      khang dinh tep da chay va ma 0. 2 khang dinh.
+      Thuoc ep tien trinh cha chay o TZ=UTC, nen chi phan tu dat TZ cua chinh script moi lam no
+      xanh (may do o +07 se che mat loi neu khong ep).
+      CHIEU DO: ban sao script bo TZ -> "app: bai kiem DOM khong chay voi TZ=Asia/Ho_Chi_Minh".
+
+  - id: E7
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.bkd_goc
+    paths:
+      - "package.json"
+      - "turbo.json"
+      - "packages/db/scripts/test-run.ts"
+      - "apps/app/package.json"
+      - "packages/ui/package.json"
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "_acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs"
+    expected: |
+      Chay tu goc kho dung duong cua pre-push: `bun run test -- --filter=app --filter=@crm/ui`.
+      Voi moi goi [app, ui]: tep tam xanh -> ma 0 va co dong «chay-dom» cua no; tep tam do -> ma
+      khac 0 va dau ra goi ten tep. 2 goi x 3 = 6 khang dinh, cong kiem khong sot tep tam.
+      CHIEU DO (da chay 2026-09-23 tren script cu): "app: tep xanh khong chay qua bun run test goc",
+      "app: tep do khong lam bun run test goc do" va cung the cho ui.
