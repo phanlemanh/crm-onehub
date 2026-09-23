@@ -1,0 +1,12 @@
+{
+  "feature_plain": "Bài kiểm «bước của tôi» thôi đỏ oan khi chạy từ nửa đêm tới 7 giờ sáng giờ Việt Nam: ngày của dữ liệu thử nay tính theo lịch Việt Nam, đúng như màn Tổng quan tính.",
+  "scope_plain": "Không đổi sản phẩm, không đụng bộ gieo cùng tên bên trợ lý, không soát các bài kiểm ngày khác.",
+  "decisions_plain": [
+    {"id": "d-20260922T235131Z-1", "p": "Sửa cách tạo ngày của dữ liệu thử cho khớp cách sản phẩm lưu hạn — đổi lại không khẳng định nào phải nới; đặt múi giờ cho lệnh chạy thì không chữa được."},
+    {"id": "d-20260922T235131Z-2", "p": "Bài kiểm chạy ở hai giờ cố định (6:30 sáng và 8:54 tối giờ VN) thay vì giờ lúc chạy — đổi lại riêng bài này thôi đo giờ thật."},
+    {"id": "d-20260922T235131Z-3", "p": "Chứng «trả về cách cũ thì đỏ» trên một bản sao ẩn thay vì phá thẳng tệp thật — đổi lại bản sao phải khớp nguyên văn bản sửa, lệch thì báo đỏ có tên."},
+    {"id": "d-20260922T235131Z-4", "p": "KHÔNG chạy bản quét độ phủ — không gian hẹp, ba trục khai thẳng trong hợp đồng; đổi lại không có bằng chứng độ phủ từ bản quét."},
+    {"id": "d-20260922T235131Z-5", "p": "KHÔNG viết đặc tả màn hình — việc này không chạm màn nào."},
+    {"id": "d-20260922T235131Z-6", "p": "KHÔNG mở vòng hỏi làm rõ — đề bài đã chốt gốc lỗi, cách sửa, hai giờ ghim và cách chứng đỏ; mọi lựa chọn còn lại ghi trong sổ."}
+  ]
+}

@@ -1,5 +1,6 @@
 import { DEFAULT_WORKSPACE_NAME, WORKSPACE_ID } from "@crm/auth";
 import { db } from "@crm/db";
+import { ngayVN } from "@crm/db/onboarding-nhac";
 import { workspaceSlug } from "@crm/db/workspace";
 import type { HttpException } from "@nestjs/common";
 import { OnboardingService } from "../../src/onboarding/onboarding.service";
@@ -183,12 +184,7 @@ export async function batHttp(
 }
 
 export function ngayCach(soNgay: number): Date {
-	const homNay = new Date();
 	return new Date(
-		Date.UTC(
-			homNay.getUTCFullYear(),
-			homNay.getUTCMonth(),
-			homNay.getUTCDate() + soNgay,
-		),
+		Date.parse(`${ngayVN(new Date())}T00:00:00Z`) + soNgay * DAY_MS,
 	);
 }
