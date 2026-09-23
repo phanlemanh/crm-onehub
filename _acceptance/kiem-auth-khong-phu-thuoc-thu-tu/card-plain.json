@@ -1,0 +1,38 @@
+{
+  "feature_plain": "Bộ kiểm đăng nhập bằng Google thôi đỏ ngẫu nhiên trên CI tuỳ theo thứ tự chạy tệp — PR không đụng tới đăng nhập sẽ không còn bị chặn oan.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ giữ hai ca «cửa Google còn sống» xanh dù bất kỳ tệp nào trong bốn tệp đổi danh sách cho phép chạy ngay trước — và chứng minh bản cũ đỏ ở cả bốn trường hợp đó"},
+    {"id": "AC-2", "p": "Sẽ không để tệp kiểm nào làm lệch danh sách cho phép của tệp chạy sau — quét toàn bộ tệp kiểm của phần đăng nhập, không chỉ bốn tệp đã biết"},
+    {"id": "AC-3", "p": "Sẽ xanh cả khi bộ chạy tự xáo thứ tự tệp (hai seed có tệp gây lỗi đứng trước) — và báo thẳng nếu seed không còn xếp đúng tình huống cần thử"},
+    {"id": "AC-4", "p": "Sẽ chạy trọn phần đăng nhập với cấu hình giống CI: không ca nào đỏ, không ca nào biến mất hay bị bỏ qua so với bản cũ"},
+    {"id": "AC-5", "p": "Sẽ qua đủ năm lệnh chứng minh của kho: kiểm kiểu, hai lint, bộ kiểm không dùng cache, bản dựng"},
+    {"id": "AC-6", "p": "Sẽ không đổi một dòng mã sản phẩm nào — mọi thay đổi nằm trong tệp kiểm (có phép đo gọi tên nếu lọt tệp sản phẩm)"},
+    {"id": "AC-8", "p": "Sẽ có một bài kiểm riêng canh chỗ đăng nhập Google chỉ nhận đúng miền công ty — bài này đỏ nếu ai đó cấu hình sai miền hoặc bỏ mất ràng buộc miền"}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Sẽ KHÔNG đổi cách phần đăng nhập đọc miền công ty lúc khởi động — đó là hành vi đúng của máy chủ"},
+    {"id": "OOS-2", "p": "Sẽ KHÔNG sửa các ca đỏ khác chỉ lộ ra khi xáo thứ tự (phụ thuộc dữ liệu còn sót) — CI chạy thứ tự thường không gặp"}
+  ],
+  "scope_plain": "Để lại: các ca đỏ chỉ khi xáo thứ tự, một cảnh báo lint có sẵn, khoá Google thật cho máy dev",
+  "coverage_plain": [
+    {"i": 0, "p": "Tệp nào làm lệch danh sách cho phép: quét hết mọi tệp kiểm (AC-2 quét cả lớp); bản cũ phải lộ đúng bốn tệp, bản mới không tệp nào (AC-1 thử từng tệp một)"},
+    {"i": 1, "p": "Ai quyết thứ tự chạy: tự cố định (AC-1), bộ chạy xáo theo seed (AC-3), thứ tự thường như CI (AC-4) — cách ba trục này đủ chưa là chỗ anh soi"},
+    {"i": 2, "p": "Hai chiều đo: bản mới xanh, và bản cũ phải đỏ đúng chỗ — đủ là khi mỗi phép đo có chiều đỏ lấy từ bản cũ thật trong lịch sử"},
+    {"i": 3, "p": "Lớp chạm: bộ kiểm đăng nhập (AC-1..4, AC-7 người chấm), chỗ nối miền công ty (AC-8), toàn kho (AC-5), không lọt mã sản phẩm (AC-6)"}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Bản sửa làm bộ kiểm cũ thôi tình cờ bắt được lỗi cấu hình sai miền công ty — đã thêm AC-8 kèm bài kiểm riêng và phép thử làm hỏng cố ý"},
+    {"i": 1, "p": "Chiều đỏ chỉ chứng minh cho một trong bốn tệp gây lỗi — đã đòi đủ bốn, tệp nào không tái hiện được thì phép đo dừng và gọi tên"},
+    {"i": 2, "p": "Chỉ thử bốn tệp đã biết, bỏ sót tệp thứ năm nếu có — đã đổi sang quét toàn bộ tệp kiểm, cả bản cũ lẫn bản mới"},
+    {"i": 3, "p": "Hai phép đo chỉ kiểm «không thấy đỏ», nên ca bị bỏ qua vẫn trông như xanh — đã thêm đếm ca xanh thật và đối chiếu tổng số ca với bản cũ"},
+    {"i": 4, "p": "Thiếu lệnh dựng bản và bộ kiểm có thể lấy kết quả cũ từ cache — đã thêm lệnh dựng và bắt chạy không cache"}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260923T034622Z-1", "p": "KHÔNG dùng bộ quét độ phủ tự động — không gian nhỏ, liệt kê tay trong mục độ phủ; đổi lại anh là người soi độ phủ"},
+    {"id": "d-20260923T034622Z-2", "p": "KHÔNG viết đặc tả giao diện — việc này không có màn hình nào"},
+    {"id": "d-20260923T034622Z-3", "p": "Sửa ở bộ kiểm, không sửa phần đăng nhập — sản phẩm giữ nguyên; đổi lại bộ kiểm cũ mất một khả năng bắt lỗi tình cờ (xem dòng thay thế bên dưới)"},
+    {"id": "d-20260923T034622Z-4", "p": "Trả lại danh sách cho phép sau mỗi tệp, không sau mỗi ca — giữ nguyên cách các ca trong cùng tệp đang dựa vào nhau"},
+    {"id": "d-20260923T034622Z-5", "p": "Mã sửa có trước hợp đồng, duyệt thiết kế gộp vào cổng này — tiết kiệm một lượt hỏi; rủi ro tiêu chí chiều theo mã, bù bằng chiều đỏ lấy từ bản cũ thật"},
+    {"id": "d-20260923T035655Z-6", "p": "Phần bù cho khả năng bắt lỗi bị mất là bài kiểm riêng của AC-8, thay cho lời hứa cũ không ai đo"}
+  ]
+}

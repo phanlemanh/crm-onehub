@@ -1,0 +1,92 @@
+schema_version: 1
+feature_slug: kiem-auth-khong-phu-thuoc-thu-tu
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.kat_cap
+    expected: "exit 0; ma tran 4x2 viet truoc (bon tep doi env x ban sua/ban goc b812b65a), tep do import co dinh thu tu tep_doi_env -> chia-mat-khau: ban sua moi cap hai ca cua-google-con-song xanh; ban goc moi cap hai ca do va log co 'does not satisfy the configured \"hd\" option \"example.com\"'; cap nao ban goc khong do thi exit 2 goi ten cap; so o da cham phai bang 8"
+    paths: ["packages/auth/test/**", "packages/auth/src/auth.ts", "packages/auth/src/workspace.ts", "_acceptance/kiem-auth-khong-phu-thuoc-thu-tu/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.kat_tra_env
+    expected: "exit 0; liet ke moi *.spec.ts trong packages/auth/test luc chay (suy tu vi tri script), chay tung tep voi preload canh env o ca ban goc b812b65a va ban sua: tap tep ro env o ban goc bang dung {cau-tu-choi, hosted-domain, cong-vao, tu-choi-khong-de-lai-hang} (loi ghim 'ENV-RO example.com ->'), o ban sua rong; them mot luot toan goi ban sua in 'ENV-GIU example.com'; lech tap nao thi exit 1 in hai tap"
+    paths: ["packages/auth/test/**", "_acceptance/kiem-auth-khong-phu-thuoc-thu-tu/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.kat_seed
+    expected: "exit 0; tien de: isGoogleConfigured() tra true trong env do; seed 1 va 3: thu tu tep doc tu junit co tep doi env truoc chia-mat-khau; ban sua junit co dung 2 testcase cua-google-con-song khong failure khong skipped; ban goc b812b65a cung seed co dung 2 testcase do mang failure; tien de mat thi exit 2 goi ten seed hoac ten tien de"
+    paths: ["packages/auth/test/**", "packages/auth/src/auth.ts", "packages/auth/src/workspace.ts", "_acceptance/kiem-auth-khong-phu-thuoc-thu-tu/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.kat_tu_nhien
+    expected: "exit 0; toan goi packages/auth voi env CI, co so du lieu moi, thu tu thuong: ban sua 0 fail; tong so ca ban sua bang tong so ca ban goc b812b65a cong so ca cua tep test moi cua AC-8; so skip ban sua khong vuot ban goc"
+    paths: ["packages/auth/**", "_acceptance/kiem-auth-khong-phu-thuoc-thu-tu/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.check_types_khong_cache
+    expected: "exit 0; moi task kiem kieu thanh cong, 0 cached"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.lint_khong_cache
+    expected: "exit 0; moi task lint thanh cong, 0 cached"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.lint_slop
+    expected: "exit 0; 0 warnings va 0 errors"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.api_khong_cache_tru_agent
+    expected: "exit 0; moi task test con lai thanh cong, 0 cached; goi agent bi loai bang --filter=!agent"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.build_khong_cache
+    expected: "exit 0; moi task build thanh cong, 0 cached"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.kat_pham_vi
+    expected: "exit 0; git diff b812b65a..HEAD ngoai _acceptance/** va docs/** chi gom tep duoi packages/auth/test/; danh sach mau co packages/auth/src/auth.ts thi ham kiem goi ten dung tep do — chieu do vang thi exit 1"
+    paths: ["packages/**", "apps/**", "_acceptance/kiem-auth-khong-phu-thuoc-thu-tu/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.kat_hd_noi
+    expected: "exit 0; tep test moi o packages/auth/test xanh voi auth.ts that; tren ban sao .sao-*, dot bien M1 (auth.ts dat hd la mot mien ngoai danh sach) va M2 (auth.ts bo han hd) moi dot bien lam ca do cua tep do do, rang ghim ten ca; dot bien nao van xanh thi exit 1 in 'RANG CUN' va ten dot bien"
+    paths: ["packages/auth/test/**", "packages/auth/src/auth.ts", "packages/auth/src/workspace.ts", "_acceptance/kiem-auth-khong-phu-thuoc-thu-tu/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-7
+    executor: judgment
+    question: "Token Google gia trong chia-mat-khau nay lay hd tu auth.options.socialProviders.google.hd thay vi doc lai ALLOWED_SIGN_IN. Hai ca cua-google-con-song con do dung dieu chung hua do — nguoi trong danh sach vao duoc bang Google, va cua Google tu choi token khong khop — hay phep so hd da thanh hang dung? Xet ca phan bu: tep test cua AC-8 co do cho noi hd cua auth.ts khong."
+    inputs: [_acceptance/kiem-auth-khong-phu-thuoc-thu-tu/contract.md, packages/auth/test/chia-mat-khau.integration.spec.ts, packages/auth/test/hd-cua-google.spec.ts, packages/auth/src/auth.ts, packages/auth/src/workspace.ts]
+    evidence_required: [judged_by, verdict, rationale]
