@@ -1,0 +1,12 @@
+# 2026-09-23T02:46:03Z sha 665375bb — bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-dung-chung-nhan-chuoi/rang/cat-ba-cham.mjs"
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: đã thêm tên miền được phép lan-do.onehub.vn (sẽ dọn)
+$ bun scripts/dev-session.ts manh.phan@onemount.com
+dat  deals@768/vi cat=true line-clamp=2 title=«Phụ trách»
+dat  deals@768/en cat=true line-clamp=2 title=«Owner»
+khang-dinh=4/4
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+-- tiền đề làn đo: đã dọn tên miền được phép
+exit=0

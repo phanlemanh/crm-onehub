@@ -1,0 +1,29 @@
+# 2026-09-23T02:46:37Z pha 1: packages/ui/src/components/data-table.tsx HEAD_LABEL_CLAMP = "" (bo line-clamp-2 khoi nhan)
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: đã thêm tên miền được phép lan-do.onehub.vn (sẽ dọn)
+$ bun scripts/dev-session.ts manh.phan@onemount.com
+HONG deals@768/vi cat=false line-clamp=none title=«Phụ trách»
+HONG deals@768/en cat=false line-clamp=none title=«Owner»
+khang-dinh=4/4
+HONG: deals@768/vi tieu de dai khong cat bang dau ba cham: cat=false line-clamp=none overflow=visible cao 0/0px
+HONG: deals@768/en tieu de dai khong cat bang dau ba cham: cat=false line-clamp=none overflow=visible cao 0/0px
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+-- tiền đề làn đo: đã dọn tên miền được phép
+exit=1
+
+# 2026-09-23T02:46:58Z pha 2: packages/ui/src/components/data-table.tsx bo title={columnLabel(column)} khoi TableHead
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: đã thêm tên miền được phép lan-do.onehub.vn (sẽ dọn)
+$ bun scripts/dev-session.ts manh.phan@onemount.com
+HONG deals@768/vi cat=true line-clamp=2 title=«null»
+HONG deals@768/en cat=true line-clamp=2 title=«null»
+khang-dinh=4/4
+HONG: deals@768/vi title cua o tieu de la «null», mong «Phụ trách»
+HONG: deals@768/en title cua o tieu de la «null», mong «Owner»
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+-- tiền đề làn đo: đã dọn tên miền được phép
+exit=1

@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e1c3ff8a020a3667823dbb8f87058686559ed67d
+verified_commit: 110662f789087b1a6c844f127d8a1f106f470c74
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -265,3 +265,19 @@ Round 1: mọi eval feature (E1-E17) xanh ngay ở lần chấm đầu; một fi
 ### Re-pin lần 1 — 2026-09-22, do hoa cu do merge origin/onehub (#84)
 run_id: repin-20260922T152039Z-31450
 sha: e1c3ff8a020a3667823dbb8f87058686559ed67d · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-12
+
+### Re-pin lần 2 — 2026-09-23, do DataTable doi nhan tieu de sang data-slot table-head-label, bo cuc auto (ho so tieu-de-cot-doc-tron)
+run_id: repin-20260923T001940Z-55145
+sha: e83bf65af354acd1a4f986baef7183405d2c0310 · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-12
+
+### Re-pin lần 3 — 2026-09-23, do hoa cu do nut tieu de xs-wrap va thuoc AC-3 cua tieu-de-cot-doc-tron vong 2
+run_id: repin-20260923T030726Z-53798
+sha: 496726d395354129d7b6495b47a940eeec4550a2 · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-12
+
+### Re-pin lần 4 — 2026-09-23, do hoa cu do hop nhat onehub (PR 86: apps/api/test)
+run_id: repin-20260923T031737Z-62007
+sha: b1101467ace5fb9057dd43fd7bf7254e06a5b132 · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-12
+
+### Re-pin lần 5 — 2026-09-23, do hoa cu do hop nhat onehub (PR 88: packages/auth/test)
+run_id: repin-20260923T071938Z-72479
+sha: 110662f789087b1a6c844f127d8a1f106f470c74 · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E14 · AC không có chốt máy: AC-12

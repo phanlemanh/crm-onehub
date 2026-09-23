@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thước onboarding trong PR này · tieu-de-cot-doc-tron</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1120px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 76ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.78rem; }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình thuoc-onboarding · Cổng 1 · tieu-de-cot-doc-tron · AC-8</p>
+    <h1>Sửa thước onboarding ngay trong PR này, hay để hồ sơ đó tự ghim</h1>
+    <p class="sub">Đổi DataTable chung cũng đổi bảng onboarding. Sau khi #85 merge, thước <code>ogd_man_danh_muc</code> chạy trên cây này đỏ vì không đọc được nhãn — không phải vì tiêu đề bị cắt hay tràn. Duyệt thì PR này sửa thước bên đó, chứng minh hai chiều rồi ghim lại; không duyệt thì AC-8 rời hợp đồng và hồ sơ onboarding đỏ trên onehub cho tới khi nó tự ghim.</p>
+
+<svg viewBox="0 0 1040 928" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#fafafa"/>
+<line x1="300" y1="96" x2="300" y2="848" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="760" y1="96" x2="760" y2="848" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+<rect x="120" y="320" width="840" height="504" rx="4" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+<rect x="121" y="640" width="838" height="183" fill="rgba(23,23,23,0.035)"/>
+<line x1="128" y1="640" x2="952" y2="640" stroke="rgba(23,23,23,0.35)" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="120" y="320" width="40" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+<text x="140" y="332" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">ALT</text>
+<text x="132" y="356" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.04em">[Cổng 1 duyệt AC-8 trong PR này]</text>
+<rect x="132" y="652" width="64" height="14" rx="2" fill="#fafafa" stroke="#575757" stroke-width="0.8" stroke-dasharray="3,2"/>
+<text x="164" y="662" fill="#171717" font-size="7" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NHÁNH RẼ</text>
+<text x="204" y="663" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.04em">[không duyệt]</text>
+<path d="M 760 200 L 304 200" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="472" y="180" width="120" height="12" rx="2" fill="#fafafa"/>
+<text x="532" y="189" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">REBASE LÊN onehub</text>
+<path d="M 300 400 L 604 400" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="412" y="380" width="80" height="12" rx="2" fill="#fafafa"/>
+<text x="452" y="389" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">SỬA BÊN ĐÓ</text>
+<path d="M 300 568 L 604 568" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="420" y="548" width="64" height="12" rx="2" fill="#fafafa"/>
+<text x="452" y="557" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">GHIM LẠI</text>
+<path d="M 300 760 L 604 760" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+<rect x="382" y="740" width="140" height="12" rx="2" fill="#fafafa"/>
+<text x="452" y="749" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">SAU KHI PR NÀY MERGE</text>
+<rect x="180" y="40" width="240" height="56" rx="6" fill="#fafafa"/>
+<rect x="180" y="40" width="240" height="56" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+<text x="300" y="60" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hồ sơ này</text>
+<text x="300" y="78" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">tieu-de-cot-doc-tron</text>
+<rect x="640" y="40" width="240" height="56" rx="6" fill="#fafafa"/>
+<rect x="640" y="40" width="240" height="56" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+<text x="760" y="60" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hồ sơ onboarding</text>
+<text x="760" y="78" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">onboarding-giong-deals</text>
+<rect x="640" y="120" width="240" height="48" rx="6" fill="#fafafa"/>
+<rect x="640" y="120" width="240" height="48" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+<text x="760" y="140" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">(1) #85 merge vào onehub</text>
+<text x="760" y="158" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">607fe361</text>
+<rect x="160" y="224" width="280" height="64" rx="6" fill="#fafafa"/>
+<rect x="160" y="224" width="280" height="64" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+<text x="300" y="244" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">(2) rebase, chạy ogd_man_danh_muc</text>
+<text x="300" y="262" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">đỏ · 48 dòng khong doc duoc nhan</text>
+<text x="300" y="278" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">không dòng cắt / tràn</text>
+<rect x="608" y="368" width="304" height="64" rx="6" fill="#fafafa"/>
+<rect x="608" y="368" width="304" height="64" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+<text x="760" y="388" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">(3) sửa man-danh-muc.mjs bên đó</text>
+<text x="760" y="406" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">bộ chọn + điều kiện cắt dọc</text>
+<text x="760" y="422" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">dòng sổ bên đó · expected E4 bên đó</text>
+<rect x="160" y="456" width="280" height="64" rx="6" fill="#fafafa"/>
+<rect x="160" y="456" width="280" height="64" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+<text x="300" y="476" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">(4) cặp hai chiều, cùng thước</text>
+<text x="300" y="494" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">xanh 70/70</text>
+<text x="300" y="510" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">phá line-clamp-1 → tieu de bi cat</text>
+<rect x="608" y="544" width="304" height="64" rx="6" fill="#fafafa"/>
+<rect x="608" y="544" width="304" height="64" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+<text x="760" y="564" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">(5) repin-lane --write</text>
+<text x="760" y="582" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ghim lại onboarding-giong-deals</text>
+<text x="760" y="598" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ở đỉnh nhánh</text>
+<rect x="160" y="684" width="280" height="40" rx="6" fill="#fafafa"/>
+<rect x="160" y="684" width="280" height="40" rx="6" fill="#fafafa" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+<text x="300" y="704" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">AC-8 ra khỏi hợp đồng</text>
+<rect x="608" y="740" width="304" height="64" rx="6" fill="#fafafa"/>
+<rect x="608" y="740" width="304" height="64" rx="6" fill="#fafafa" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+<text x="760" y="760" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">hồ sơ onboarding tự ghim lại</text>
+<text x="760" y="778" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">đỏ trên onehub</text>
+<text x="760" y="794" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">trong khoảng giữa</text>
+<line x1="40" y1="868" x2="1000" y2="868" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="40" y="888" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+<rect x="40" y="900" width="16" height="10" rx="2" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+<text x="64" y="909" fill="#575757" font-size="9" font-family="'Geist', sans-serif">bước nếu duyệt</text>
+<rect x="176" y="900" width="16" height="10" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+<text x="200" y="909" fill="#575757" font-size="9" font-family="'Geist', sans-serif">kết quả phải có để AC-8 xanh</text>
+<rect x="388" y="900" width="16" height="10" rx="2" fill="#fafafa" stroke="#575757" stroke-width="1" stroke-dasharray="3,2"/>
+<text x="412" y="909" fill="#575757" font-size="9" font-family="'Geist', sans-serif">nhánh rẽ · không duyệt</text>
+<line x1="576" y1="904" x2="608" y2="904" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+<text x="616" y="909" fill="#575757" font-size="9" font-family="'Geist', sans-serif">việc chạm sang hồ sơ bên kia</text>
+<line x1="800" y1="892" x2="800" y2="916" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="812" y="909" fill="#575757" font-size="9" font-family="'Geist', sans-serif">làn của một hồ sơ · thời gian đi xuống</text>
+</svg>
+
+    <footer>thuoc-onboarding · tieu-de-cot-doc-tron · d-…-9 · AC-8 · nguồn figures/index.md, contract.md (Notes), evidence/ogd-sau-rebase-607fe361.txt</footer>
+  </div>
+</body>
+</html>
