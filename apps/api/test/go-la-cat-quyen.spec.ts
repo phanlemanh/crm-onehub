@@ -244,7 +244,9 @@ async function taoKhoaTat(userId: string, name: string) {
 	return khoa;
 }
 
-function quaHeader(duong: string, key: string, body: object) {
+type ThanKhoa = { name?: string; keyId?: string; enabled?: boolean };
+
+function quaHeader(duong: string, key: string, body: ThanKhoa) {
 	return request(app.getHttpServer())
 		.post(duong)
 		.set(API_KEY_HEADER, key)
@@ -258,17 +260,17 @@ async function chayRoiHoanTac<T>(
 	fn: (tx: Prisma.TransactionClient) => Promise<T>,
 ): Promise<T> {
 	let ketQua: { gia: T } | null = null;
-	await db
-		.$transaction(
+	try {
+		await db.$transaction(
 			async (tx) => {
 				ketQua = { gia: await fn(tx) };
 				throw new HoanTac();
 			},
 			{ isolationLevel: "RepeatableRead" },
-		)
-		.catch((e: unknown) => {
-			if (!(e instanceof HoanTac)) throw e;
-		});
+		);
+	} catch (loi) {
+		if (!(loi instanceof HoanTac)) throw loi;
+	}
 	if (!ketQua) throw new Error("giao dich hoan tac khong tra ket qua");
 	return (ketQua as { gia: T }).gia;
 }
