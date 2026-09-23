@@ -228,6 +228,7 @@ evals:
       hồ sơ trước lúc chấm để hội đồng không bắn vào bia đang chạy.
     lenh: null
     executor: judgment
+    question: Chữ đọc như tiếng Việt của người trong nghề?
     inputs:
       - _acceptance/bo-dung-chung-nhan-chuoi/ban-dich.md
       - packages/ui/src/lib/messages.ts
