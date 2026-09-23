@@ -624,6 +624,11 @@ executors:
     xin_quyen_tien_de: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/man-xin-quyen-co-rang/rang/man-xin-quyen.mjs tien-de"
     xin_quyen_chup_san: APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/man-xin-quyen-co-rang/rang/man-xin-quyen.mjs chup-san"
     lm_tu_vung_goi: node _acceptance/loi-moi-da-huy-van-cho-vao/rang/tu-vung-goi.mjs
+    ccc_chu_la: bun run test -- "bun _acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs --chan chu-la"
+    ccc_tra_vai: bun run test -- "bun _acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs --chan tra-vai"
+    ccc_khong_chu_la: bun run test -- "bun _acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs --chan khong-chu-la"
+    ccc_dot_bien: bun run test -- "bun _acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs --chan dot-bien"
+    ccc_pham_vi: bun _acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs --chan pham-vi
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
