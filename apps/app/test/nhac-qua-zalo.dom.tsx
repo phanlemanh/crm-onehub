@@ -10,6 +10,11 @@ import {
 type DauVao = { channel?: string } | undefined;
 type LoiGoi = { duong: string; dauVao: DauVao };
 type Lay = (v: DauVao) => unknown;
+type ChonMutation = {
+	onMutate?: (v: DauVao) => void;
+	onSuccess?: (kq: never, v: DauVao) => void;
+	onError?: (e: Error) => void;
+};
 
 let daGoi: LoiGoi[] = [];
 const duLieu = new Map<string, Lay>();
@@ -31,7 +36,7 @@ function thuTuc(duong: string) {
 			queryKey: [duong],
 			queryFn: async () => doc(undefined),
 		}),
-		mutationOptions: (chon?: object) => ({
+		mutationOptions: (chon?: ChonMutation) => ({
 			...chon,
 			mutationKey: [duong],
 			mutationFn: async (v: DauVao) => (await doc(v)) ?? { ok: true },
@@ -85,7 +90,7 @@ const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 
 const t = nhacQuaZaloMessages("vi");
 
-function quaJson(giaTri: unknown): unknown {
+function quaJson(giaTri: ZaloCuaToi): unknown {
 	return JSON.parse(JSON.stringify(giaTri));
 }
 
