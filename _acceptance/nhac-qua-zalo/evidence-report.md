@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0ab96e3963f5c7dc00118505e87a1c27f5318c0e
+verified_commit: bd2413701530bdf78535910a813ac9bdcd4ccfe1
 human_signoff: Phan Le Manh 2026-09-23
 ---
 
@@ -343,3 +343,7 @@ none — every multi-run eval is uniform
 
 Round 1: E17 failed — command `ui-check:E17` exited 1 (exitCode=1). Dòng Expected 4 của E17 đòi đúng chuỗi "3/7" người đã nối, nhưng frame chụp được cho ra "4/10" vì môi trường DB dev đang dùng chung giữa nhiều worktree đang chạy song song (tổng thành viên workspace là 10, không phải 7) cộng với bước 7 (gieo lệch kênh) tự gieo ZaloLink cho chính người đăng nhập trước bước 9 (chụp trang kết nối), đẩy số đã nối từ 3 lên 4 — logic và cả hai trạng thái sống/im vẫn đúng, chỉ sai đúng phần chữ số được trích dẫn. Verdict REJECT, chờ quyết định ở Gate 2 (mở rộng contract cho môi trường DB dùng chung, hay bắt buộc một bàn đo cô lập cho E17).
 Round 2: Expected dòng 4 của E17 được sửa thành "x/y bằng đúng daNoi/tong tra lúc chụp" thay cho chuỗi cố định "3/7" (theo hướng quyết định ở Gate 2 round 1); toàn bộ 23 eval + 4 lệnh suite hồi quy đều PASS (exit 0), gồm cả E17 với 8 frame khớp đủ cả 6 dòng Expected trên ảnh thật (đối chiếu bằng Read từng file). Verdict PASS.
+
+### Re-pin lần 1 — 2026-09-23, do hoá cũ do hợp nhất onehub sau chữ ký
+run_id: repin-20260923T103714Z-83695
+sha: bd2413701530bdf78535910a813ac9bdcd4ccfe1 · suites: 4 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E17 · diff chạm vật đo ngoài làn máy: E17 — chưa chứng lại, đi vòng S4 delta
