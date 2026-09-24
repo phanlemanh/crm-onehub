@@ -31,6 +31,7 @@ const KHOA = "khoa-webhook-du-dai";
 const GIAY_TIN_DEN = 30;
 const NHIP_CU = [0, 60, 120];
 const HET_DONG_HO = 180;
+const DUONG_HUA = "/zalo/webhook";
 
 async function donZalo(): Promise<void> {
 	await db.zaloUpdateSeen.deleteMany({});
@@ -641,7 +642,7 @@ describe("kenh-route", () => {
 
 	test("kenh-route: kenh mount dung mot route POST /zalo/webhook va route do chay", async () => {
 		const route = kenhZalo.routes.filter(
-			(r) => r.method === "POST" && r.path === ZALO.webhook.duong,
+			(r) => r.method === "POST" && r.path === DUONG_HUA,
 		);
 		expect(route.length, "route /zalo/webhook duoc mount").toBe(1);
 		const { U, ma } = await gieoMa();
