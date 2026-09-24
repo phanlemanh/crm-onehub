@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e482d8d3ee21642b475427ea4984cd02a1c37c59
+verified_commit: bb2a22fbce6f69655e42f173fc8031f0bee76cf0
 human_signoff: Phan Le Manh 2026-09-24
 ---
 
@@ -179,3 +179,7 @@ Round 2: đủ 10 eval (E1-E10, thêm E9 cây-lệch và E10 xoá/đổi-tên-ch
 ### Re-pin lần 1 — 2026-09-24, do go neo cung dan-so (neo-dan-so-khong-cung) va gop onehub 2e...; ghim lai o dau nhanh
 run_id: repin-20260924T020954Z-69115
 sha: e482d8d3ee21642b475427ea4984cd02a1c37c59 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-24, do gop onehub 35796299 (#106) truoc khi merge #107
+run_id: repin-20260924T031944Z-19904
+sha: bb2a22fbce6f69655e42f173fc8031f0bee76cf0 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng

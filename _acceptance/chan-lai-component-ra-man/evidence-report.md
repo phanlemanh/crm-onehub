@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e482d8d3ee21642b475427ea4984cd02a1c37c59
+verified_commit: bb2a22fbce6f69655e42f173fc8031f0bee76cf0
 run_id: s4r1-20260906T145103Z-21187
 human_signoff: Manh Phan 2026-09-06
 ---
@@ -226,3 +226,7 @@ sha: 7e0af3e7d0c2219f8c9c97736a5c804f59a57ea9 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 8 — 2026-09-24, do go neo cung dan-so (neo-dan-so-khong-cung) va gop onehub 2e...; ghim lai o dau nhanh
 run_id: repin-20260924T020954Z-69115
 sha: e482d8d3ee21642b475427ea4984cd02a1c37c59 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10 (E10 không khai paths) · AC không có chốt máy: AC-10
+
+### Re-pin lần 9 — 2026-09-24, do gop onehub 35796299 (#106) truoc khi merge #107
+run_id: repin-20260924T031944Z-19904
+sha: bb2a22fbce6f69655e42f173fc8031f0bee76cf0 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10 (E10 không khai paths) · AC không có chốt máy: AC-10
