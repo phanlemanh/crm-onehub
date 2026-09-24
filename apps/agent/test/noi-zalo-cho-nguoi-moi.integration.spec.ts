@@ -963,6 +963,36 @@ describe("dang-ky-thu-tu", () => {
 		});
 	});
 
+	test("goi-nguoc: c da co url, dang ky lai ma xac minh hong -> url null, giu khoa Zalo vua nhan", async () => {
+		const { z } = mang2({ setWebhook: { outcome: "webhook.failed" } });
+		await datCaiDat({ zaloBotToken: TOK_T, zaloWebhookSecret: KHOA_CU });
+		await db.appSetting.update({
+			where: { id: SETTINGS_ID },
+			data: { zaloWebhookUrl: "https://u.test/zalo/webhook" },
+		});
+		const res = await goiCau(GOC_HTTPS, DUONG_BOT, {});
+		const than = await res.json();
+		const c = await cotZalo();
+		const khoaZaloGiu = z.goi.find((g) => g.method === "setWebhook")?.body
+			.secret_token;
+		expect(
+			{
+				url: c.zaloWebhookUrl,
+				lyDo: c.zaloWebhookLyDo,
+				token: c.zaloBotToken,
+				khoa: c.zaloWebhookSecret,
+				outcome: than.outcome,
+			},
+			"xac minh hong khi da co url: url null, khoa theo Zalo",
+		).toEqual({
+			url: null,
+			lyDo: "zalo-tu-choi",
+			token: TOK_T,
+			khoa: khoaZaloGiu ?? "?",
+			outcome: "invalid",
+		});
+	});
+
 	const CACH_GOI = [
 		["dang-ky-lai", {}],
 		["token-moi", { token: "777:moi" }],

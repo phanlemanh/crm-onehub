@@ -61,24 +61,26 @@ async function ghiCot(cot: Partial<CotZalo>): Promise<void> {
 	});
 }
 
+type KetDangKy = "duoc" | "tu-choi" | "xac-minh-hong";
+
 async function dangKy(
 	fetcher: typeof fetch,
 	token: string,
 	url: string,
 	khoa: string,
-): Promise<boolean> {
+): Promise<KetDangKy> {
 	try {
 		const ket = parseZaloSetWebhook(
 			await zaloGoi(fetcher, token, "setWebhook", { url, secret_token: khoa }),
 		);
 		if (ket.outcome !== null && ket.outcome !== ZALO.webhook.xacMinhOk) {
 			console.error(`[zalo] setWebhook xac minh hong outcome=${ket.outcome}`);
-			return false;
+			return "xac-minh-hong";
 		}
-		return true;
+		return "duoc";
 	} catch (loi) {
 		console.error(`[zalo] setWebhook loi: ${String(loi)}`);
-		return false;
+		return "tu-choi";
 	}
 }
 
@@ -114,9 +116,14 @@ export async function datBot(
 		zaloWebhookSecret: khoa,
 		zaloBotName: tenBot,
 	});
-	if (!(await dangKy(fetcher, token, url, khoa))) {
+	const ket = await dangKy(fetcher, token, url, khoa);
+	if (ket === "tu-choi") {
 		await ghiCot({ ...truoc, zaloWebhookLyDo: "zalo-tu-choi" });
 		return { outcome: "invalid", reason: ZALO.loi.dangKyHong };
+	}
+	if (ket === "xac-minh-hong") {
+		await ghiCot({ zaloWebhookUrl: null, zaloWebhookLyDo: "zalo-tu-choi" });
+		return { outcome: "invalid", reason: ZALO.loi.xacMinhHong };
 	}
 	await ghiCot({ zaloWebhookUrl: url, zaloWebhookLyDo: null });
 	return { outcome: "valid", tenBot, webhook: "da-dang-ky" };
