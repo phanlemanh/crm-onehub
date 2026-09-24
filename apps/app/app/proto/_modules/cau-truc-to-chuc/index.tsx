@@ -38,6 +38,7 @@ import {
 	type BoPhanMau,
 	CAY_HAI_CAP,
 	CHUA_XEP,
+	type NguoiMau,
 	PHONG_BAN_PHANG,
 	type PhongBanMau,
 } from "./du-lieu";
@@ -298,7 +299,151 @@ function ChonNoiNhanBuoc() {
 	);
 }
 
+function NutSoDo({
+	ten,
+	loai,
+	dong,
+	nguoi,
+}: {
+	ten: string;
+	loai: string;
+	dong: string;
+	nguoi: NguoiMau | null;
+}) {
+	return (
+		<div className="flex w-40 flex-col rounded-lg border bg-card text-sm">
+			<span className="flex flex-col gap-0.5 px-3 py-2">
+				<span className="font-medium" translate="no">
+					{ten}
+				</span>
+				<span className="text-muted-foreground text-xs">{loai}</span>
+			</span>
+			<span className="flex flex-col gap-1 border-t px-3 py-1.5 text-muted-foreground text-xs">
+				{nguoi ? (
+					<span className="flex items-center gap-1">
+						<PersonAvatar size="sm" name={nguoi.ten} email={nguoi.email} />
+						<span translate="no">{nguoi.ten}</span>
+					</span>
+				) : null}
+				<span className="tabular-nums">{dong}</span>
+			</span>
+		</div>
+	);
+}
+
+function NhanhSoDo({
+	nut,
+	con,
+	dau,
+	cuoi,
+}: {
+	nut: React.ReactNode;
+	con: React.ReactNode[];
+	dau: boolean;
+	cuoi: boolean;
+}) {
+	return (
+		<li className="relative flex flex-col items-center px-1 pt-4">
+			<span
+				aria-hidden
+				className="absolute top-0 left-1/2 h-4 w-px bg-border"
+			/>
+			{dau ? null : (
+				<span
+					aria-hidden
+					className="absolute top-0 right-1/2 left-0 h-px bg-border"
+				/>
+			)}
+			{cuoi ? null : (
+				<span
+					aria-hidden
+					className="absolute top-0 right-0 left-1/2 h-px bg-border"
+				/>
+			)}
+			{nut}
+			{con.length > 0 ? (
+				<>
+					<span aria-hidden className="h-4 w-px bg-border" />
+					<ul className="flex">{con}</ul>
+				</>
+			) : null}
+		</li>
+	);
+}
+
+function SoDoToChuc({ boPhan }: { boPhan: readonly BoPhanMau[] }) {
+	const soPhongBan = boPhan.reduce((t, b) => t + b.phongBan.length, 0);
+	return (
+		<div className="flex flex-col gap-3">
+			<figure
+				className="overflow-x-auto rounded-lg border bg-muted p-4"
+				aria-label="Sơ đồ tổ chức"
+			>
+				<div className="mx-auto flex w-max flex-col items-center">
+					<NutSoDo
+						ten="OneHub"
+						loai="Công ty"
+						dong={`${boPhan.length} bộ phận · ${soPhongBan} phòng ban`}
+						nguoi={null}
+					/>
+					<span aria-hidden className="h-4 w-px bg-border" />
+					<ul className="flex">
+						{boPhan.map((b, i) => (
+							<NhanhSoDo
+								key={b.id}
+								dau={i === 0}
+								cuoi={i === boPhan.length - 1}
+								nut={
+									<NutSoDo
+										ten={b.ten}
+										loai="Bộ phận"
+										dong={`${b.phongBan.length} phòng ban`}
+										nguoi={b.truong}
+									/>
+								}
+								con={b.phongBan.map((p, j) => (
+									<NhanhSoDo
+										key={p.id}
+										dau={j === 0}
+										cuoi={j === b.phongBan.length - 1}
+										con={[]}
+										nut={
+											<NutSoDo
+												ten={p.ten}
+												loai="Phòng ban"
+												dong={`${p.thanhVien.length} người · ${p.soBuoc} bước`}
+												nguoi={p.truong}
+											/>
+										}
+									/>
+								))}
+							/>
+						))}
+					</ul>
+				</div>
+			</figure>
+			<p className="text-muted-foreground text-xs sm:hidden">
+				Màn hẹp: kéo ngang để xem hết sơ đồ.
+			</p>
+			<p className="text-muted-foreground text-xs">
+				Chưa xếp vào bộ phận nào:{" "}
+				<span translate="no">{CHUA_XEP.map((p) => p.ten).join(", ")}</span>
+			</p>
+		</div>
+	);
+}
+
 export function CauTrucToChucMau({ state }: { state: string }) {
+	if (state === "ST-so-do") {
+		return (
+			<KhungMan
+				tieuDe="Sơ đồ tổ chức — nhìn cả công ty một lần"
+				mo="Cùng dữ liệu với cây, vẽ từ trên xuống: công ty → bộ phận → phòng ban, mỗi ô có người đứng đầu. Bản mẫu tĩnh; kéo, phóng to, di chuyển cần một thư viện sơ đồ — quyết ở Cổng Phạm vi."
+			>
+				<SoDoToChuc boPhan={CAY_HAI_CAP} />
+			</KhungMan>
+		);
+	}
 	if (state === "ST-hientai") {
 		return (
 			<KhungMan
