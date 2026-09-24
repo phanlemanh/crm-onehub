@@ -13,10 +13,13 @@ import {
 } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 import { type CayTho, dungCay } from "./cay";
+import { khoa, phanTichLo, type SnapNhap, tachDong } from "./nhap";
 import type {
 	DepartmentCreateInput,
 	DepartmentMoveInput,
 	HeadInput,
+	ImportApplyOutput,
+	ImportPreviewOutput,
 	PlacementInput,
 	TreeOutput,
 } from "./to-chuc.contracts";
@@ -369,5 +372,150 @@ export class ToChucService {
 			}),
 		]);
 		return { id: input.userId };
+	}
+	private async snapNhap(
+		tx: Pick<Db, "member" | "department" | "division"> = this.db,
+	): Promise<SnapNhap> {
+		const [members, departments, divisions] = await Promise.all([
+			tx.member.findMany({
+				where: { organizationId: WORKSPACE_ID },
+				select: { user: { select: { id: true, email: true } } },
+			}),
+			tx.department.findMany({
+				where: { archivedAt: null },
+				orderBy: { position: "asc" },
+				select: { id: true, name: true, divisionId: true },
+			}),
+			tx.division.findMany({
+				where: { archivedAt: null },
+				orderBy: { position: "asc" },
+				select: { id: true, name: true },
+			}),
+		]);
+		return { members: members.map((m) => m.user), departments, divisions };
+	}
+
+	private kiemLo(chu: string) {
+		const soDong = tachDong(chu).length;
+		if (soDong === 0) throw new BadRequestException(T.loRong);
+		if (soDong > TO_CHUC.nhap.toiDaDong)
+			throw new BadRequestException(T.loQuaDai(TO_CHUC.nhap.toiDaDong));
+	}
+
+	async previewImport(input: { text: string }): Promise<ImportPreviewOutput> {
+		this.kiemLo(input.text);
+		const kq = phanTichLo(input.text, await this.snapNhap());
+		return { rows: kq.rows, summary: kq.summary };
+	}
+
+	async applyImport(input: { text: string }): Promise<ImportApplyOutput> {
+		this.kiemLo(input.text);
+		return this.db.$transaction(async (tx) => {
+			const kq = phanTichLo(input.text, await this.snapNhap(tx));
+			if (kq.hopLe.length === 0)
+				throw new BadRequestException(T.khongDongHopLe);
+			const bpId = new Map<string, string>();
+			let viTriBp =
+				((
+					await tx.division.findFirst({
+						orderBy: { position: "desc" },
+						select: { position: true },
+					})
+				)?.position ?? -1) + 1;
+			let bpMoi = 0;
+			for (const h of kq.hopLe) {
+				if (h.divisionName === null) continue;
+				const k = khoa(h.divisionName);
+				if (bpId.has(k)) continue;
+				if (h.divisionId !== null) {
+					bpId.set(k, h.divisionId);
+					continue;
+				}
+				bpMoi += 1;
+				bpId.set(
+					k,
+					(
+						await tx.division.create({
+							data: { name: h.divisionName.trim(), position: viTriBp++ },
+							select: { id: true },
+						})
+					).id,
+				);
+			}
+			const pbId = new Map<string, string>();
+			let viTriPb =
+				((
+					await tx.department.findFirst({
+						orderBy: { position: "desc" },
+						select: { position: true },
+					})
+				)?.position ?? -1) + 1;
+			let pbMoi = 0;
+			for (const h of kq.hopLe) {
+				const k = khoa(h.departmentName);
+				const bp =
+					h.divisionName === null
+						? null
+						: (bpId.get(khoa(h.divisionName)) ?? null);
+				if (pbId.has(k)) continue;
+				if (h.departmentId !== null) {
+					pbId.set(k, h.departmentId);
+					if (bp !== null)
+						await tx.department.updateMany({
+							where: { id: h.departmentId, divisionId: null },
+							data: { divisionId: bp },
+						});
+					continue;
+				}
+				pbMoi += 1;
+				pbId.set(
+					k,
+					(
+						await tx.department.create({
+							data: {
+								name: h.departmentName.trim(),
+								position: viTriPb++,
+								divisionId: bp,
+							},
+							select: { id: true },
+						})
+					).id,
+				);
+			}
+			for (const h of kq.hopLe) {
+				const pb = pbId.get(khoa(h.departmentName)) as string;
+				await tx.orgPlacement.upsert({
+					where: { userId: h.userId },
+					create: { userId: h.userId, primaryDepartmentId: pb },
+					update: { primaryDepartmentId: pb },
+				});
+				await tx.orgSecondaryDepartment.deleteMany({
+					where: { userId: h.userId, departmentId: pb },
+				});
+				if (h.head === "phong-ban")
+					await tx.department.update({
+						where: { id: pb },
+						data: { headUserId: h.userId },
+					});
+				if (h.head === "bo-phan") {
+					const bp = (
+						await tx.department.findUnique({
+							where: { id: pb },
+							select: { divisionId: true },
+						})
+					)?.divisionId;
+					if (bp)
+						await tx.division.update({
+							where: { id: bp },
+							data: { headUserId: h.userId },
+						});
+				}
+			}
+			return {
+				written: kq.hopLe.length,
+				newDepartments: pbMoi,
+				newDivisions: bpMoi,
+			};
+		});
 	}
 }

@@ -18,6 +18,9 @@ import {
 	orgDivisionCreateInput,
 	orgHeadInput,
 	orgIdInput,
+	orgImportApplyOutput,
+	orgImportInput,
+	orgImportPreviewOutput,
 	orgOkOutput,
 	orgPlacementInput,
 	orgRenameInput,
@@ -184,5 +187,31 @@ export class ToChucRouter {
 	) {
 		await this.toChuc.yeuCauQuanTri(ctx.user.id);
 		return this.toChuc.setPlacement(input);
+	}
+
+	@Mutation({
+		input: orgImportInput,
+		output: orgImportPreviewOutput,
+		meta: restMeta("POST", "/org/import/preview", TAG),
+	})
+	async previewImport(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof orgImportInput>,
+	) {
+		await this.toChuc.yeuCauQuanTri(ctx.user.id);
+		return this.toChuc.previewImport(input);
+	}
+
+	@Mutation({
+		input: orgImportInput,
+		output: orgImportApplyOutput,
+		meta: restMeta("POST", "/org/import", TAG),
+	})
+	async applyImport(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof orgImportInput>,
+	) {
+		await this.toChuc.yeuCauQuanTri(ctx.user.id);
+		return this.toChuc.applyImport(input);
 	}
 }
