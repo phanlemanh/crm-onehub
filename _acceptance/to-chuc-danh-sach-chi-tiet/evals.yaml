@@ -1,0 +1,348 @@
+schema_version: 1
+slug: to-chuc-danh-sach-chi-tiet
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: ui
+    cmd: config:executors.test.tcds_chon_nut
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
+    expected: |
+      DOM test tren ToChuc voi cay mau 2 bo phan, 3 phong ban, 1 phong ban chua xep, 2 nguoi chua co
+      phong ban. Ma tran viet truoc 4 loai nut x [khung chi tiet data-chi-tiet dung loai, nut cay
+      aria-current=page dung mot nut, don trong URL dung gia tri] = 12 khang dinh; cong 3 gia tri
+      ?don= khong giai duoc (bp:khong-co, pb:<id da luu tru>, "rac") -> khung goc, 0 loi = 3; cong
+      4 lan dung MOI tu dia chi trang (khong bam): 4 loai nut x [khung chi tiet dung nut,
+      aria-current dung nut] = 8; cong 1 lan dung tu ?loc=chua-truong -> cay con dung K phong ban = 1.
+      Tong 24 khang dinh.
+      CHIEU DO: (1) ban sao bo nhanh roi-ve-goc -> do "?don=rac: khung chi tiet khong phai goc";
+      (2) ban sao giu nut dang chon trong useState -> do "?don=bp:<id> mo ra goc".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: ui
+    cmd: config:executors.test.tcds_truong_tai_cho
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
+    expected: |
+      DOM: chon phong ban 2 nguoi -> o "Truong phong ban" liet ke dung 2 nguoi do (so sanh tap ten
+      voi du lieu cay, khong so dem); chon mot nguoi -> goi org.setHead {kind:department,id,userId}
+      dung mot lan. Chon phong ban 0 nguoi -> o truong disabled, FieldDescription dung cau ghim
+      "Them nguoi vao phong ban truoc, roi chon truong trong so ho.", Empty co nut "Them nguoi".
+      CHIEU DO: ban sao liet ke moi thanh vien trong o truong phong ban -> do "o truong co nguoi
+      ngoai phong ban: <ten>".
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcds_truong_api
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/to-chuc-chi-tiet.spec.ts"
+    expected: |
+      API that: org.setHead tren phong ban roi org.tree -> head.id dung nguoi; nguoi ngoai phong ban
+      -> 400 voi cau ghim cua TO_CHUC, cay khong doi. Doi chung duong cua luot 1 van xanh.
+      CHIEU DO: goi setHead voi userId khong thuoc phong ban phai do "400".
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcds_gan_phong_ban
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/to-chuc-chi-tiet.spec.ts"
+    expected: |
+      API that org.attachDepartments tren bo phan B co 1 phong ban. Lo [pb chua xep, pb dang o bo
+      phan A, pb da o B] -> ca ba thuoc B; thu tu trong B = [pb cu cua B, pb chua xep, pb tu A] dung
+      thu tu da gui (3 khang dinh vi tri); A mat pb do. Ba lo tu choi: co pb da luu tru, co id khong
+      ton tai, B da luu tru -> moi lo 400 voi cau ghim rieng va anh chup org.tree (toan bo, khong loc
+      theo id) truoc = sau (3 x 2). Goi lai cung lo lan hai -> khong doi thu tu.
+      CHIEU DO: ban sao ghi tung phong ban ngoai giao dich -> lo co pb da luu tru do "cay doi sau
+      lo bi tu choi".
+
+  - id: E5
+    criterion: AC-3
+    executor: test
+    layer: ui
+    cmd: config:executors.test.tcds_gan_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
+    expected: |
+      DOM: chon bo phan -> "Gan phong ban co san" mo hop co o tich; moi dong phu la "Chua xep vao bo
+      phan" hoac "Dang o <bo phan>"; tich 2 -> nut ghi "Gan 2 phong ban"; xac nhan goi
+      org.attachDepartments dung mot lan voi dung thu tu da tich. O truong bo phan liet ke moi thanh
+      vien (tap ten = tap thanh vien mau). Chua tich gi -> nut xac nhan disabled.
+      CHIEU DO: ban sao goi moveDepartment tung phong ban -> do "attachDepartments goi 0 lan".
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcds_them_nguoi
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/to-chuc-chi-tiet.spec.ts"
+    expected: |
+      API that org.addPeople vao phong ban P voi 4 nguoi: a chua co phong ban, b o phong ban Q, c co
+      P lam phong ban phu, d co quan ly chon tay. Sau ghi: ca 4 co primaryDepartmentId = P (4); c
+      khong con P trong secondaryDepartmentIds (1); d giu managerOverrideId (1); b roi Q (1). Lo co
+      nguoi da roi -> 400 cau ghim, OrgPlacement cua ca 4 nguoi truoc = sau. Lo co id khong phai
+      thanh vien -> 400.
+      CHIEU DO: ban sao ghi tung nguoi ngoai giao dich -> do "lo co nguoi da roi van ghi <n> nguoi".
+
+  - id: E7
+    criterion: AC-4
+    executor: test
+    layer: ui
+    cmd: config:executors.test.tcds_them_nguoi_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
+    expected: |
+      DOM: chon phong ban -> "Them nguoi" mo hop; nguoi o phong ban khac co dong phu "Dang o <ten> —
+      se chuyen", nguoi chua co co "Chua co phong ban"; nguoi da o phong ban nay khong co trong hop;
+      tich 2 -> "Them 2 nguoi" goi org.addPeople dung mot lan voi dung 2 id. Fixture co nguoi giu
+      phong ban nay lam phong ban PHU: nguoi do co trong hop va tich duoc (1).
+      CHIEU DO: (1) ban sao an dong phu -> do "khong thay 'Dang o'"; (2) ban sao loc theo moi phong
+      ban cua nguoi -> do "nguoi phu vang mat trong hop".
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    layer: ui
+    cmd: config:executors.test.tcds_sap
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
+    expected: |
+      DOM: khung goc keo bo phan thu 3 len dau -> org.reorderDivisions nhan dung day id moi; khung
+      bo phan keo phong ban -> org.moveDepartment {id, divisionId, index} dung; ban phim Space, mui
+      ten, Space tren danh sach phong ban cung goi moveDepartment. Quet toan man: khong menu nao co
+      muc "Len tren" hay "Xuong duoi" (vi va en).
+      CHIEU DO: ban sao con muc "Len tren" trong menu bo phan -> do "con muc sap bang menu".
+
+  - id: E9
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcds_sap_api
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/to-chuc-chi-tiet.spec.ts"
+    expected: |
+      API that: reorderDivisions roi org.tree -> thu tu bo phan dung day da gui; moveDepartment
+      trong bo phan -> thu tu phong ban dung. Doc lai sau khi tai lai (org.tree moi).
+      CHIEU DO: day id thieu mot bo phan -> 400.
+
+  - id: E10
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcds_o_so
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/api/test/to-chuc-chi-tiet.spec.ts"
+    expected: |
+      API that gieo 6 thanh vien (2 chua co phong ban, 1 da roi), 4 phong ban (2 khong truong, 1
+      trong do chua xep). Phep dem doc lap bang Prisma: M, X, K. So voi org.tree.coverage va voi
+      nhom chuaCoPhongBan (M - X nguoi, dung tap id) va tap phong ban khong truong (K, dung tap id,
+      gom ca chua xep). 6 khang dinh.
+      CHIEU DO: ban sao coverage dem ca nguoi da roi -> do "M lech phep dem doc lap".
+
+  - id: E11
+    criterion: AC-6
+    executor: test
+    layer: ui
+    cmd: config:executors.test.tcds_o_so_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
+    expected: |
+      DOM: o so thu nhat noi "X/M" dung du lieu; bam -> don=chua-co va khung liet ke dung M - X ten.
+      O thu hai noi K; bam -> loc=chua-truong, cay chi con dung K phong ban (tap ten), aria-pressed
+      true; bam lai -> bo loc, cay du lai.
+      CHIEU DO: ban sao loc bo phong ban chua xep -> do "cay loc con <K-1> != K".
+
+  - id: E12
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcds_nhap_ten_moi
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/to-chuc-chi-tiet.spec.ts"
+    expected: |
+      API that: lo tao 2 phong ban moi va 1 bo phan moi. previewImport.newNames = tap ten; sau
+      applyImport, tap ten don vi moi xuat hien trong org.tree (rut tu cay, khong tu chuoi da gui)
+      bang dung newNames cua ban xem truoc. summary cu giu nguyen hinh dang (toEqual khoa cu).
+      CHIEU DO: ban sao newNames lay tu cot chu goc chua khop ten cu -> lo co "kinh doanh" viet
+      thuong trung don vi cu do "newNames co don vi da ton tai".
+
+  - id: E13
+    criterion: AC-7
+    executor: test
+    layer: ui
+    cmd: config:executors.test.tcds_nhap_ba_buoc
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
+    expected: |
+      DOM: hop nhap buoc 1 -> StepList buoc dang o = 1; Xem truoc -> buoc 2, tom tat chua dung ten
+      moi trong newNames mau (translate=no); Ghi -> buoc 3 noi so nguoi da ghi va ten don vi moi, co
+      nut "Xem cay". 3 buoc x [buoc dang o, noi dung buoc] = 6 khang dinh; cong buoc 2 voi lo 3 dong
+      hong: moi dong hien dung cau nguyen van cua no = 3. Tong 9.
+      CHIEU DO: ban sao bo ten trong tom tat -> do "buoc 2 khong neu ten don vi moi".
+
+  - id: E14
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcds_cau_loi_nhap
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/to-chuc-chi-tiet.spec.ts"
+      - "apps/api/test/to-chuc-nhap.spec.ts"
+    expected: |
+      API that previewImport lo 3 dong: thieu email, thieu phong ban, truong bo phan khong suy duoc
+      bo phan. So tung dong voi CHUOI NGUYEN VAN viet trong bai kiem (khong import hang so):
+      "Thieu email" (co dau), "Thieu phong ban", "Truong bo phan can cot bo phan, hoac phong ban da
+      thuoc mot bo phan" = 3 khang dinh quan he dong -> cau. Bai to-chuc-nhap.spec.ts cua
+      cau-truc-to-chuc sua theo cau moi va xanh.
+      CHIEU DO: ban sao trao hai hang so -> do "dong thieu email mang cau thieu phong ban".
+
+  - id: E15
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tcds_quyen
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/to-chuc-chi-tiet.spec.ts"
+    expected: |
+      API that: attachDepartments va addPeople bang phien thanh vien thuong -> FORBIDDEN (2), phien
+      quan tri -> 200 (2). Danh sach thu tuc ghi org.* rut tu tep sinh server.ts (cung cach bai
+      quyen cua luot 1) co ca hai ten moi (2).
+      CHIEU DO: ban sao bo yeuCauQuanTri o addPeople -> do "addPeople thanh vien thuong tra 200".
+
+  - id: E16
+    criterion: AC-9
+    executor: test
+    layer: ui
+    cmd: config:executors.test.tcds_chi_doc
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
+    expected: |
+      DOM vai thanh vien thuong, ma tran viet truoc rut tu bang "Nam loai nut" cua design: dau trang
+      [Nhap, Them bo phan]; goc [tay keo bo phan, Them bo phan, Gan vao bo phan]; bo phan [o truong,
+      Gan phong ban co san, Phong ban moi, tay keo phong ban, menu]; phong ban [o truong, Them
+      nguoi, menu, menu dong nguoi]; Chua co phong ban [Xep phong ban]; Da luu tru [Khoi phuc, Xoa
+      han] — moi o: co mat va disabled; dem khang dinh = so o. Dong "Chi quan tri sua duoc cay to
+      chuc." co mat. Doi chung quan tri: cung ma tran, khong disabled.
+      CHIEU DO: ban sao de "Xep phong ban" bam duoc o vai thanh vien -> do "Xep phong ban khong mo
+      o vai chi doc".
+
+  - id: E17
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tcds_man_chrome
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "_acceptance/to-chuc-danh-sach-chi-tiet/rang/man-chi-tiet.mjs"
+    steps:
+      - "Canh cay (rang/canh-cay.mjs) truoc man dau tien; lech cay -> ma 2"
+      - "Dang nhap quan tri bang dev:session, gieo 2 bo phan, 4 phong ban (1 chua xep), 8 nguoi, 2 chua co phong ban"
+      - "Mo {APP_URL}/<slug>/settings/organization?don=pb:<id> o 320, 375, 768, 1024, 1440, vi va en -> chup evidence/chi-tiet-<kho>-<tieng>.png"
+      - "Moi o: khong tran ngang; >=1024 cay va khung chi tiet cung thay; <1024 bam mot phong ban mo khung truot ben phai"
+      - "O 1440/vi: chi Tab va Enter chon mot phong ban roi mo hop Them nguoi -> chup evidence/ban-phim.png"
+      - "O 1440/vi, ghi that qua man roi tai lai: keo bo phan thu 3 len dau bang chuot; chon truong mot phong ban; gan 2 phong ban vao mot bo phan; them 1 nguoi dang giu phong ban do lam phong ban phu -> sau moi viec tai lai trang va doc lai"
+    expected: |
+      exit 0. Ma tran viet truoc 10 o x [khong tran, bo cuc dung kho, translate=no tren ten nguoi
+      va ten don vi] = 30, cong 2 khang dinh ban phim, cong 4 viec ghi that x [dung sau tai lai] = 4:
+      tong 36 (hang KY_MONG trong tep thuoc; lech -> ma 2). Moi o khong co loi hydrate.
+
+  - id: E18
+    criterion: AC-11
+    executor: test
+    layer: ui
+    cmd: config:executors.test.tcds_trang_thai
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
+    expected: |
+      DOM 3 trang thai: dang tai -> PageShellLoading (data-slot cua no); loi -> Empty co EmptyMedia,
+      EmptyDescription va nut "Thu lai" goi lai truy van; chua co cay -> Empty co 2 nut dung nhan.
+      Moi thu tuc ghi cua man thanh cong -> toast.success 1 lan, danh sach day du viet truoc:
+      setHead, addPeople, attachDepartments, reorderDivisions, moveDepartment, createDivision,
+      createDepartment, renameDivision, renameDepartment, setPlacement, applyImport, archive, restore
+      (13). Moi hop thoai cua man (don vi, vi tri, gan phong ban, them nguoi, nhap) khi may chu tu
+      choi -> FieldError duoi o dau va focus vao o do (5 x 2 = 10).
+      CHIEU DO: ban sao bo toast.success o addPeople -> do "addPeople khong bao thanh cong".
+
+  - id: E19
+    criterion: AC-12
+    executor: test
+    layer: ui
+    cmd: config:executors.test.tcds_luu_tru_chung
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx"
+      - "packages/ui/src/components/archived-list.tsx"
+      - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
+    expected: |
+      DOM hai man (To chuc, Dieu phoi): mo xac nhan luu tru -> nut xac nhan khong mang
+      data-variant=destructive (2); mo xac nhan xoa han -> nut mang destructive (2); muc Da luu tru
+      cua hai man la cung thanh phan (data-slot="archived-list"), nhan "Da luu tru (n)" dung n (2).
+      CHIEU DO: ban sao luu tru dung tone destructive -> do "luu tru to mau pha huy".
+
+  - id: E20
+    criterion: AC-13
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tcds_khong_hoi_quy
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/src/onboarding/**"
+      - "apps/app/app/(app)/[slug]/settings/**"
+      - "apps/app/test/**"
+      - "apps/api/test/**"
+    expected: |
+      Chay lan may (repin-lane.mjs khong --write) cho ba ho so cau-truc-to-chuc,
+      sua-luu-tru-dieu-phoi, noi-bon-nut-dieu-phoi tai HEAD: exit 0, moi eval may cua ca ba xanh.
+      Voi TUNG bai kiem co ten trong ba ho so (rut tu cmd cua evals.yaml ba ho so, tep + -t): ten
+      bai con o HEAD; so loi goi expect trong than bai tai HEAD >= tai base_commit; tap chuoi nguyen
+      van trong khang dinh chi mat dung cau gop cu "Thieu email, phong ban, hoac bo phan cua truong
+      bo phan". Cong: run-log.jsonl cua ba ho so co dong kind=repin moi voi sha la commit cua vong
+      nay va evals_exit du eval may.
+      CHIEU DO: (1) doi ten mot bai cua noi-bon-nut trong ban guong -> do "mat bai kiem da ky:
+      <ten>"; (2) xoa mot expect trong bai da doi -> do "bai <ten> mat khang dinh".
+
+  - id: E21
+    criterion: AC-14
+    executor: script
+    layer: ui
+    cmd: config:executors.script.tcds_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "packages/ui/src/components/**"
+      - "_acceptance/to-chuc-danh-sach-chi-tiet/rang/san-thiet-ke.mjs"
+    expected: |
+      Danh sach tep giao dien RUT TU git diff voi base_commit (*.tsx duoi apps/app), khong viet tay;
+      moi tep chay design-gate --mode static exit 0. Quet cac tep duoi settings/organization: khong
+      thuoc tinh className tren BAT KY phan tu JSX nao co ten viet hoa (thanh phan) — the HTML trần
+      viet thuong chi duoc className bo cuc (flex, grid, gap, p-, m-, w-, min-w-, truncate).
+      git diff duoi packages/ui chi cham tep da khai trong ke hoach (rut dong khai tu plan).
+      CHIEU DO: tep tam trong ban guong co <Button className="justify-start"> duoi settings/
+      organization -> exit 1 voi "className tren Button".

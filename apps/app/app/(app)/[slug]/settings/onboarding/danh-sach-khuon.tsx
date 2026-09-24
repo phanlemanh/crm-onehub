@@ -139,6 +139,7 @@ export function DanhSachKhuon({
 				nut={m.quanLy.luuTru}
 				thoi={m.quanLy.giu}
 				pending={luuTru.isPending}
+				tone="default"
 				onConfirm={() => {
 					const k = hoiLuuTru;
 					if (k === null || luuTru.isPending) return;

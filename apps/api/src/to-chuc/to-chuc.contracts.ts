@@ -12,6 +12,14 @@ export const orgDepartmentCreateInput = z.object({
 	name: tenTho,
 	divisionId: ma.nullable(),
 });
+export const orgAttachInput = z.object({
+	divisionId: ma,
+	departmentIds: z.array(ma).min(1).max(TO_CHUC.lo.toiDa),
+});
+export const orgAddPeopleInput = z.object({
+	departmentId: ma,
+	userIds: z.array(ma).min(1).max(TO_CHUC.lo.toiDa),
+});
 export const orgDepartmentMoveInput = z.object({
 	id: ma,
 	divisionId: ma.nullable(),
@@ -30,6 +38,9 @@ export const orgPlacementInput = z.object({
 });
 export const orgImportInput = z.object({
 	text: z.string().max(TO_CHUC.nhap.toiDaKyTu),
+});
+export const orgImportApplyInput = orgImportInput.extend({
+	traTen: z.boolean().optional(),
 });
 
 export const nguoiOutput = z.object({
@@ -105,11 +116,21 @@ export const orgImportPreviewOutput = z.object({
 		newDepartments: z.number(),
 		newDivisions: z.number(),
 	}),
+	newNames: z.object({
+		departments: z.array(z.string()),
+		divisions: z.array(z.string()),
+	}),
 });
 export const orgImportApplyOutput = z.object({
 	written: z.number(),
 	newDepartments: z.number(),
 	newDivisions: z.number(),
+	newNames: z
+		.object({
+			departments: z.array(z.string()),
+			divisions: z.array(z.string()),
+		})
+		.optional(),
 });
 
 export type TreeOutput = z.infer<typeof orgTreeOutput>;
@@ -118,6 +139,8 @@ export type NguonQuanLy = z.infer<typeof nguonQuanLy>;
 export type PlacementInput = z.infer<typeof orgPlacementInput>;
 export type HeadInput = z.infer<typeof orgHeadInput>;
 export type DepartmentMoveInput = z.infer<typeof orgDepartmentMoveInput>;
+export type AttachInput = z.infer<typeof orgAttachInput>;
+export type AddPeopleInput = z.infer<typeof orgAddPeopleInput>;
 export type DepartmentCreateInput = z.infer<typeof orgDepartmentCreateInput>;
 export type ImportPreviewOutput = z.infer<typeof orgImportPreviewOutput>;
 export type ImportApplyOutput = z.infer<typeof orgImportApplyOutput>;

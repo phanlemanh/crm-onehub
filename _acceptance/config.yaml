@@ -442,6 +442,24 @@ executors:
     ttc_thoi_luong: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/doi-nhan-phong-ban.dom.tsx -t thoi-luong"
     ttc_loc_bo_phan_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/doi-nhan-phong-ban.dom.tsx -t loc-bo-phan-man"
     ttc_luu_tru_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc.dom.tsx -t luu-tru-man"
+    tcds_chon_nut: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-chi-tiet.dom.tsx -t 'chon-nut'"
+    tcds_truong_tai_cho: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-chi-tiet.dom.tsx -t 'truong-tai-cho'"
+    tcds_truong_api: 'bun run test -- "cd apps/api && bun test test/to-chuc-chi-tiet.spec.ts -t \"truong-api\""'
+    tcds_gan_phong_ban: 'bun run test -- "cd apps/api && bun test test/to-chuc-chi-tiet.spec.ts -t \"gan-phong-ban\""'
+    tcds_gan_man: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-chi-tiet.dom.tsx -t 'gan-man'"
+    tcds_them_nguoi: 'bun run test -- "cd apps/api && bun test test/to-chuc-chi-tiet.spec.ts -t \"them-nguoi\""'
+    tcds_them_nguoi_man: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-chi-tiet.dom.tsx -t 'them-nguoi-man'"
+    tcds_sap: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-chi-tiet.dom.tsx -t 'sap:'"
+    tcds_sap_api: 'bun run test -- "cd apps/api && bun test test/to-chuc-chi-tiet.spec.ts -t \"sap-api\""'
+    tcds_o_so: 'bun run test -- "cd apps/api && bun test test/to-chuc-chi-tiet.spec.ts -t \"o-so\""'
+    tcds_o_so_man: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-chi-tiet.dom.tsx -t 'o-so-man'"
+    tcds_nhap_ten_moi: 'bun run test -- "cd apps/api && bun test test/to-chuc-chi-tiet.spec.ts -t \"nhap-moi: newNames\""'
+    tcds_nhap_ba_buoc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-chi-tiet.dom.tsx -t 'nhap-ba-buoc'"
+    tcds_cau_loi_nhap: 'bun run test -- "cd apps/api && bun test test/to-chuc-chi-tiet.spec.ts -t \"nhap-moi: moi dong hong\""'
+    tcds_quyen: 'bun run test -- "cd apps/api && bun test test/to-chuc-chi-tiet.spec.ts -t \"quyen-moi\""'
+    tcds_chi_doc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-chi-tiet.dom.tsx -t 'chi-doc'"
+    tcds_trang_thai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-chi-tiet.dom.tsx -t 'trang-thai'"
+    tcds_luu_tru_chung: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-chi-tiet.dom.tsx -t 'luu-tru-chung'"
     stdt_ma_tran: "cd packages/ui && bun test ./test/money-input.spec.ts -t ma-tran"
     stdt_tieng_kia: "cd packages/ui && bun test ./test/money-input.spec.ts -t tieng-kia"
     stdt_chinh_xac: "cd packages/ui && bun test ./test/money-input.spec.ts -t chinh-xac"
@@ -833,6 +851,9 @@ executors:
     ttc_migration_tren_du_lieu_cu: "bun _acceptance/cau-truc-to-chuc/rang/migration-tren-du-lieu-cu.mjs"
     ttc_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3710} API_URL=${API_URL:-http://localhost:3711} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cau-truc-to-chuc/rang/man-to-chuc.mjs"'
     ttc_san_thiet_ke: "bun _acceptance/cau-truc-to-chuc/rang/san-thiet-ke.mjs"
+    tcds_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3710} API_URL=${API_URL:-http://localhost:3711} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/to-chuc-danh-sach-chi-tiet/rang/man-chi-tiet.mjs"'
+    tcds_khong_hoi_quy: "node _acceptance/to-chuc-danh-sach-chi-tiet/rang/khong-hoi-quy.mjs"
+    tcds_san_thiet_ke: "bun _acceptance/to-chuc-danh-sach-chi-tiet/rang/san-thiet-ke.mjs"
     stdt_man_that: "bun _acceptance/o-so-tien-doc-theo-tieng/rang/man-that.mjs"
     stdt_soi_ma: "bun _acceptance/o-so-tien-doc-theo-tieng/rang/soi-ma.mjs"
     tcct_man_that: "bun _acceptance/tien-te-chua-tai-khong-doan/rang/man-that.mjs"

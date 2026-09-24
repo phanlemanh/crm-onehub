@@ -18,3 +18,32 @@ export const NHOM_CHUA_XEP = "__chua-xep";
 export function moiPhongBan(cay: CayDuLieu): PhongBanDuLieu[] {
 	return [...cay.divisions.flatMap((d) => d.departments), ...cay.chuaXep];
 }
+
+export const KHO_HEP = "(max-width: 1023px)";
+
+export type ChonDaGiai =
+	| { loai: "goc" }
+	| { loai: "bp"; bp: BoPhanDuLieu }
+	| { loai: "pb"; pb: PhongBanDuLieu; bp: BoPhanDuLieu | null }
+	| { loai: "chua-co" };
+
+export type HoiLuuTru = {
+	loai: "bo-phan" | "phong-ban";
+	id: string;
+	name: string;
+};
+
+export type HanhDong = {
+	sua: boolean;
+	moDonVi: (y: YeuCauDonVi) => void;
+	moNguoi: (id: string) => void;
+	hoiLuuTru: (x: HoiLuuTru) => void;
+	moGan: (bp: BoPhanDuLieu) => void;
+	moThem: (pb: PhongBanDuLieu) => void;
+};
+
+export function khopTim(chu: string, tim: string): boolean {
+	const bo = (x: string) =>
+		x.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase("vi").trim();
+	return bo(chu).includes(bo(tim));
+}

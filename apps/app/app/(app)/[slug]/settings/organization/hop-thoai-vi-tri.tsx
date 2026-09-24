@@ -2,7 +2,6 @@
 
 import Add from "@carbon/icons-react/es/Add";
 import Close from "@carbon/icons-react/es/Close";
-import { Alert, AlertDescription } from "@crm/ui/components/alert";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import {
@@ -13,7 +12,12 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@crm/ui/components/dialog";
-import { Field, FieldDescription, FieldLabel } from "@crm/ui/components/field";
+import {
+	Field,
+	FieldDescription,
+	FieldError,
+	FieldLabel,
+} from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
@@ -28,7 +32,8 @@ import {
 } from "@crm/ui/components/select";
 import { Spinner } from "@crm/ui/components/spinner";
 import { useMutation } from "@tanstack/react-query";
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { toast } from "sonner";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { toChucMessages } from "@/lib/messages/to-chuc";
 import { useTRPC } from "@/lib/trpc/client";
@@ -120,6 +125,7 @@ export function HopThoaiViTri({
 	const luu = useMutation(
 		trpc.org.setPlacement.mutationOptions({
 			onSuccess: async () => {
+				toast.success(dien(v.xong, { ten: nguoi.name }));
 				await lamMoi();
 				dong();
 			},
@@ -129,6 +135,10 @@ export function HopThoaiViTri({
 			},
 		}),
 	);
+
+	useEffect(() => {
+		if (loi) document.getElementById(maChinh)?.focus();
+	}, [loi, maChinh]);
 
 	const phongBan = moiPhongBan(cay);
 	const tenPb = (id: string) => phongBan.find((d) => d.id === id)?.name ?? id;
@@ -192,6 +202,7 @@ export function HopThoaiViTri({
 						nhanTrong={v.chuaChon}
 						onChange={(x) => setChinh(x === KHONG_CHON ? null : x)}
 					/>
+					{loi ? <FieldError>{loi}</FieldError> : null}
 				</Field>
 
 				<Field>
@@ -282,12 +293,6 @@ export function HopThoaiViTri({
 						) : null}
 					</span>
 				</Field>
-
-				{loi ? (
-					<Alert variant="destructive">
-						<AlertDescription>{loi}</AlertDescription>
-					</Alert>
-				) : null}
 
 				<DialogFooter>
 					<Button variant="outline" onClick={dong} disabled={luu.isPending}>

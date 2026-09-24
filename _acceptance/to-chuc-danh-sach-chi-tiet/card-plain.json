@@ -1,0 +1,88 @@
+{
+ "feature_plain": "Người quản trị dựng cây tổ chức trên màn danh sách – chi tiết: chọn một đơn vị trên cây bên trái, sửa ngay bên phải (trưởng, người, gắn nhiều phòng ban, sắp thứ tự), hai ô số lọc được, nhập bảng tính ba bước; màn hẹp mở khung trượt.",
+ "scope_plain": "Sơ đồ tổ chức phóng to, người đứng đầu toàn công ty, kéo thả người, mời người mới từ lô nhập và các màn Cài đặt khác vẫn để sau.",
+ "analyst_plain": "",
+ "decisions": [],
+ "decisions_plain": [
+  {
+   "id": "d-20260924T151310Z-1",
+   "p": "Chọn bố cục danh sách – chi tiết thay vì vá chữ gợi ý trên cây cũ hoặc đổi sang bảng người — đổi lại phải viết lại màn Tổ chức và dời bài kiểm màn của ba việc đã ký."
+  },
+  {
+   "id": "d-20260924T151310Z-2",
+   "p": "Gắn phòng ban và thêm người đi qua hai việc ghi hàng loạt, ghi trọn hoặc không ghi gì — đổi lại có thêm hai việc ghi phải kiểm quyền."
+  },
+  {
+   "id": "d-20260924T151310Z-3",
+   "p": "Tách câu lỗi nhập thành ba câu theo đúng cột thiếu — đổi lại phải sửa bài kiểm đã ký của cây tổ chức lượt 1 và ghim lại việc đó."
+  },
+  {
+   "id": "d-20260924T151310Z-4",
+   "p": "Sắp thứ tự chỉ còn kéo thả trong danh sách của nút cha, bỏ mục «Lên trên / Xuống dưới» — đổi lại muốn sắp bộ phận phải chọn gốc trước."
+  },
+  {
+   "id": "d-20260924T151310Z-5",
+   "p": "KHÔNG làm sơ đồ tổ chức, người đứng đầu OneHub, kéo thả người, và các chỗ lệch ở màn Cài đặt khác trong vòng này."
+  },
+  {
+   "id": "d-20260924T151310Z-6",
+   "p": "Dựng bản mẫu bấm được 17 trạng thái trong app thật để bạn duyệt trên hình, không duyệt bằng chữ."
+  },
+  {
+   "id": "d-20260924T152613Z-8",
+   "p": "Bốn thành phần giao diện mới (nút cây, ô số, hộp chọn nhiều, mục đã lưu trữ) nằm trong kho giao diện dùng chung — đổi lại thêm bốn chỗ khác bản của hãng."
+  },
+  {
+   "id": "d-20260924T154820Z-9",
+   "p": "Hai nút đầu trang tự mở hộp của mình giống màn Điều phối; gốc cây mang tên không gian làm việc, thiếu thì ghi «Toàn công ty» — đổi lại nút ở đầu trang và ở khung trống là hai chỗ mở hộp riêng."
+  },
+  {
+   "id": "d-20260924T160515Z-10",
+   "p": "Mỗi dòng trong danh sách kéo sắp có menu «…» riêng; dòng người có nút «Vị trí» thẳng; lưu trữ đúng đơn vị đang xem thì màn về đơn vị cha — đổi lại mỗi dòng thêm một nút nhỏ so với bản mẫu."
+  },
+  {
+   "id": "d-20260924T160720Z-11",
+   "p": "Đổi tên khoá phép đo của vòng này cho khỏi trùng với hồ sơ «tiêu đề cột» — không đổi thứ được đo."
+  },
+  {
+   "id": "d-20260924T160720Z-12",
+   "p": "Hộp nhập rộng hơn nhờ một cỡ mới của hộp thoại dùng chung thay vì chỉnh tại chỗ — đổi lại thêm một chỗ khác bản của hãng."
+  },
+  {
+   "id": "d-20260924T163118Z-13",
+   "p": "Sắp lại bộ phận mà màn đang cũ (thiếu bộ phận vừa thêm) thì bị từ chối kèm câu «tải lại rồi sắp lại», thay vì lặng lẽ ghi trùng vị trí — đổi lại hai bài đã ký chỉnh phần dựng dữ liệu vào."
+  },
+  {
+   "id": "d-20260924T163118Z-14",
+   "p": "Bổ sung hai bài kiểm máy chủ bị sót (đặt trưởng, sắp thứ tự), mỗi bài đã chứng được đỏ khi phá."
+  },
+  {
+   "id": "d-20260924T163118Z-15",
+   "p": "(Đã thay bằng mục sau) Nới cách phép đo lượt 1 đọc khai báo thành phần dùng chung."
+  },
+  {
+   "id": "d-20260924T163118Z-16",
+   "p": "Luật sàn thiết kế cho thẻ trần hiểu là «bố cục và token thiết kế» (cỡ chữ, màu chữ token, viền, bo theo thang) chứ không chỉ bố cục thuần; màu tự đặt, bóng, giá trị tuỳ ý vẫn bị chặn — cần người xác nhận cách hiểu này."
+  },
+  {
+   "id": "d-20260924T163315Z-17",
+   "p": "Bỏ bản nới ở mục trước, lấy cách sửa đúng gốc đã có trên nhánh chính (phép đo lượt 1 neo đúng khoảng của chính nó)."
+  },
+  {
+   "id": "d-20260924T180420Z-18",
+   "p": "Vòng chấm 1 bắt hai lỗi thật: email bị nút «Vị trí» đè ở màn 320, và bước kết quả nhập nêu tên theo bản xem trước; cả hai đã sửa, phép đo màn thật thêm điều kiện «nút không đè chữ»."
+  },
+  {
+   "id": "d-20260924T183308Z-19",
+   "p": "Bước kết quả của hộp nhập nêu đúng tên đơn vị mà lượt ghi tạo, do máy chủ trả (xin bằng một cờ tuỳ chọn) — đổi lại API nhập có thêm một cờ."
+  },
+  {
+   "id": "d-20260924T183308Z-20",
+   "p": "Một bài đã ký của lượt 1 («nhập ghi gửi chữ gốc») đổi giá trị mong đợi: dữ liệu gửi có thêm cờ xin tên — lời hứa của bài giữ nguyên nhưng lệch chữ của tiêu chí «không đổi bài đã ký», cần người phê."
+  },
+  {
+   "id": "d-20260924T183308Z-21",
+   "p": "Phép đo «không hồi quy» chạy lại làn máy ba hồ sơ một lần nếu lượt đầu đỏ, in cả hai lượt — đổi lại một lỗi thật chập chờn một nửa có thể lọt."
+  }
+ ]
+}
