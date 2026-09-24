@@ -5,7 +5,7 @@ slug: zalo-webhook-doc-khuon-that
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, docs]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-09-25-zalo-webhook-doc-khuon-that-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-24T22:57:51Z
