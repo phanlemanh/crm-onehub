@@ -1,0 +1,378 @@
+schema_version: 1
+slug: noi-zalo-cho-nguoi-moi
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_luu_bot
+    paths:
+      - "apps/agent/agent/channels/zalo.ts"
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "packages/validation/src/zalo-update.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+      - "apps/agent/test/support/zalo-gia.ts"
+    expected: |
+      Goi handler route POST /internal/zalo/bot lay tu kenh mac dinh cua
+      channels/zalo.ts (tim theo method + path, khong goi ham noi bo), Request that
+      o goc https://tac-tu.test, header Authorization dung AGENT_BRIDGE_SECRET,
+      than {token: T}. Zalo gia tra getMe dung khuon getMe THAT 23/09 (id,
+      account_name "bot.uipSwwnr", account_type, can_join_groups, display_name
+      "Bot OneHub"). Ma tran:
+        1 dung 1 getMe, dung 1 setWebhook
+        2 setWebhook.url = "https://tac-tu.test/zalo/webhook" (chu ghim, khong lay hang cua ma)
+        3 setWebhook.secret_token dai 64, chi [0-9a-f]
+        4 doc LAI DB: zaloBotToken = T, zaloWebhookSecret = dung chuoi o dong 3,
+          zaloBotName = "Bot OneHub", zaloWebhookUrl = url dong 2, zaloWebhookLyDo null
+        5 than phan hoi khong chua T
+      Doi chung am cung fixture: khong header -> 401, 0 loi goi Zalo.
+      DOT BIEN (ban sao): doi display_name -> account_name trong parseZaloGetMe ->
+      dong 4 do voi thong diep ghim "ten bot theo display_name".
+  - id: E2
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_luu_bot_api
+    paths:
+      - "apps/api/src/zalo/**"
+      - "apps/api/test/noi-zalo-cho-nguoi-moi.spec.ts"
+    expected: |
+      Goi zalo.luuBot qua caller tRPC that, phien quan tri vien, cau noi tro vao
+      mot may chu gia tai cho (Bun.serve) doi vai tac tu va GHI AppSetting nhu tac
+      tu that (token T, url, ten). Roi goi zalo.xuong. Ma tran:
+        1 may chu gia nhan dung 1 yeu cau, than chua T
+        2 xuong.nguonToken = "man-hinh"
+        3 xuong.goiToken = 4 ky tu cuoi cua T
+        4 xuong.webhook.trangThai = "da-dang-ky"
+        5 JSON.stringify(ket qua luuBot) va JSON.stringify(xuong) KHONG chua T
+      DOT BIEN: tra nguyen zaloBotToken trong xuong -> dong 5 do voi thong diep ghim
+      "token khong ve trinh duyet".
+  - id: E3
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_token_sai_api
+    paths:
+      - "apps/api/src/zalo/**"
+      - "apps/api/test/noi-zalo-cho-nguoi-moi.spec.ts"
+    expected: |
+      Ca (a) chuoi 18 ky tu khong co ":" -> loi co "<số>:<chuỗi>" va "Secret Token";
+      may chu gia cua cau noi nhan 0 yeu cau; cac cot Zalo cua AppSetting doc lai
+      bang dung ban chup truoc (so tung cot).
+      Doi chung duong cung may chu gia: token "12345:abc" -> may chu nhan 1 yeu cau.
+      DOT BIEN: bo kiem dang o API -> ca (a) do voi thong diep ghim
+      "sai dang thi khong goi tac tu".
+  - id: E4
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_token_sai
+    paths:
+      - "apps/agent/agent/channels/zalo.ts"
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+    expected: |
+      Route cau noi voi token "12345:abc", Zalo gia tra 401 cho getMe:
+        1 phan hoi outcome "invalid", reason chua "Zalo không nhận token này"
+        2 0 setWebhook
+        3 cot Zalo cua AppSetting doc lai bang ban chup truoc
+      Doi chung duong: cung token, getMe 200 -> co setWebhook.
+  - id: E5
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_can_https
+    paths:
+      - "apps/agent/agent/channels/zalo.ts"
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+    expected: |
+      Cung route, goc http://127.0.0.1:2000:
+        1 dung 1 getMe, 0 setWebhook
+        2 DB: zaloBotToken co, zaloBotName co, zaloWebhookUrl null, zaloWebhookLyDo "can-https"
+        3 phan hoi webhook "can-https"
+      Doi chung duong: goc https -> 1 setWebhook (E1).
+      DOT BIEN: bo nhanh kiem giao thuc -> dong 1 do voi thong diep ghim
+      "http thi khong setWebhook".
+  - id: E6
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_quyen_api
+    paths:
+      - "apps/api/src/zalo/**"
+      - "apps/api/test/noi-zalo-cho-nguoi-moi.spec.ts"
+    expected: |
+      Phien thanh vien thuong (vai tro gieo bang thu tuc cua kho, khong sua quyen
+      nguoi that): luuBot token hop le -> loi FORBIDDEN; may chu gia nhan 0 yeu cau;
+      AppSetting khong doi; xuong.canManage false, xuong.goiToken null.
+      Doi chung duong cung may chu gia: phien quan tri -> may chu nhan 1 yeu cau.
+  - id: E7
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_quyen_cau
+    paths:
+      - "apps/agent/agent/channels/zalo.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+    expected: |
+      Hai route cau noi (/internal/zalo/bot, /internal/zalo/gui-thu), moi route ba
+      ca header viet truoc: khong co; Bearer rong; Bearer sai -> 401, 0 loi goi Zalo,
+      AppSetting khong doi. Doi chung duong: Bearer dung -> khong phai 401.
+  - id: E8
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_nguon_token
+    paths:
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "apps/agent/agent/lib/nhac-ke-hoach.ts"
+      - "apps/agent/agent/channels/zalo.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+    expected: |
+      Ma tran viet truoc, 3 cau hinh x 4 duong, env dat qua process.env trong test
+      (khong qua deps.env, de do dung duong doc that):
+        AppSetting A/KA + env B/KB: webhook KA 200 · webhook KB 403 · kiemBot goi /botA/ · nhac goi /botA/
+        AppSetting rong + env B/KB: webhook KB 200 · kiemBot goi /botB/
+        ca hai rong: webhook 404 · kiemBot 0 loi goi
+      Moi o mot assert, so assert = so o. Duong goi doc tu URL ma Zalo gia nhan.
+      DOT BIEN: doi thu tu doc (env truoc) -> o "kiemBot goi /botA/" do voi thong
+      diep ghim "AppSetting thang env".
+  - id: E9
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_trang_thai_webhook
+    paths:
+      - "apps/agent/agent/lib/zalo-bot.ts"
+      - "apps/agent/agent/channels/zalo.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+      - "apps/agent/test/support/zalo-gia.ts"
+    expected: |
+      Chay ham run cua CHINH lich dispatch (khong goi kiemBot rieng) voi Zalo gia:
+        a getWebhookInfo tra {ok:true,result:{url:U}} -> zaloWebhookUrl = U
+        b 404 -> null
+        c 500 -> giu gia tri truoc nhip (gieo "https://cu.test/zalo/webhook")
+        moi ca: nhip khong nem
+      Roi route /internal/zalo/bot khong token: dung 1 setWebhook bang token dang
+      luu, secret_token khac khoa cu; webhook voi khoa cu 403, khoa moi 200.
+      Doi chung: ca a, b chay tren cung fixture khac nhau dung mot truong.
+  - id: E10
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_xuong_webhook
+    paths:
+      - "apps/api/src/zalo/**"
+      - "apps/api/test/noi-zalo-cho-nguoi-moi.spec.ts"
+    expected: |
+      Gieo AppSetting ba cau hinh viet truoc, goi zalo.xuong:
+        url co -> "da-dang-ky" · url null, lyDo null -> "chua-dang-ky" · url null, lyDo "can-https" -> "can-https"
+      Ba assert, ba cau hinh.
+  - id: E11
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_db_loi
+    paths:
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/agent/lib/zalo-webhook.ts"
+      - "packages/db/src/zalo-lien-ket.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+    expected: |
+      Lam hong giao dich ghi lien ket co chu dich (trigger DB tam, hoac khoa hang
+      zaloLink bang giao dich khac voi lock_timeout ngan — chon luc S2, go sau ca).
+      Lan 1: status 500; doc lai DB: 0 ZaloUpdateSeen cho message_id, 0 ZaloLink cua U;
+      Zalo gia 0 sendMessage. Go loi. Lan 2 cung tin: 200, 1 ZaloLink (U,Z), 1 seen, 1 sendMessage.
+      DOT BIEN: ghi seen truoc giao dich (hanh vi vong 1) -> lan 2 do voi thong diep
+      ghim "tin gap DB loi phai xu ly lai duoc".
+  - id: E12
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_gui_hong
+    paths:
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/agent/lib/zalo-webhook.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+    expected: |
+      Zalo gia tra 500 cho sendMessage. Lan 1: 200; DB co ZaloLink (U,Z) va seen;
+      console.error bat duoc dung 1 dong chua message_id (so khop bang, khong chuoi-co-mat
+      tren ca log dai). Lan 2 cung tin: 200; so sendMessage khong tang; van 1 ZaloLink.
+      Doi chung duong: sendMessage 200 -> 0 dong log loi.
+  - id: E13
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_da_noi_roi
+    paths:
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+    expected: |
+      Gieo ZaloLink (U "Phan Lê Mạnh", Z). Z nhan "xin chao":
+        1 dung 1 sendMessage toi Z
+        2 van ban chua "Bạn đã nối với Phan Lê Mạnh" va "08:30"
+        3 van ban khong chua ZALO.loi.huongDan
+        4 bo dem sai cua Z doc lai = 0
+      Y chua noi nhan cung chu: van ban = ZALO.loi.huongDan.
+      Gio "08:30" la chu ghim; DOT BIEN doi NHAC.gio.phut -> dong 2 do.
+  - id: E14
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_gui_thu
+    paths:
+      - "apps/agent/agent/channels/zalo.ts"
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+    expected: |
+      Route /internal/zalo/gui-thu, ba nguoi viet truoc:
+        U da noi Zalo -> 1 sendMessage toi zaloUserId cua U, chua cau tin thu;
+          phan hoi kenh "zalo"; so hang AgentTask truoc = sau
+        V chi khop Slack -> 1 loi goi Slack gia toi slackUserId cua V; kenh "slack"; 0 sendMessage
+        W khong kenh -> kenh null; 0 sendMessage; 0 Slack
+      DOT BIEN: tao AgentTask nhac-ke-hoach thay vi gui thang -> assert AgentTask do.
+  - id: E15
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_gui_thu_api
+    paths:
+      - "apps/api/src/zalo/**"
+      - "apps/api/test/noi-zalo-cho-nguoi-moi.spec.ts"
+    expected: |
+      zalo.guiThu qua caller that: may chu gia tra kenh null -> loi co "chưa có kênh nào";
+      AGENT_BRIDGE_SECRET rong -> loi yeu cau, khong nem ngoai tRPC; may chu gia tra
+      kenh "zalo" -> ket qua {kenh:"zalo"} va may chu nhan userId cua CHINH phien.
+  - id: E16
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_go_thanh_vien
+    paths:
+      - "apps/api/src/workspace/workspace.service.ts"
+      - "apps/api/test/noi-zalo-cho-nguoi-moi.spec.ts"
+    expected: |
+      Gieo U va V, moi nguoi 3 hang (ZaloLink, ZaloLinkCode, NotificationPreference)
+      bang thu tuc cua kho. Quan tri go U qua workspace.removeMember that. Doc LAI DB:
+      U 0/0/0, V 1/1/1. Sau ca, go V va don.
+      DOT BIEN: bo deleteMany ZaloLink -> o "U ZaloLink = 0" do voi thong diep ghim
+      "nguoi roi xuong bi go lien ket Zalo".
+  - id: E17
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_ten_bot
+    paths:
+      - "packages/validation/src/zalo-update.ts"
+      - "apps/agent/agent/lib/zalo-bot.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+    expected: |
+      Chay run cua lich dispatch, getMe tra account_name "bot.uipSwwnr",
+      display_name "Bot OneHub" (khuon getMe that). zaloBotName doc lai = "Bot OneHub".
+      Doi chung am: zaloBotName khac "bot.uipSwwnr".
+  - id: E18
+    criterion: AC-13
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.nzm_o_token
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/connections/zalo/**"
+      - "apps/app/lib/messages/nhac-qua-zalo.ts"
+      - "apps/app/test/noi-zalo-cho-nguoi-moi.dom.tsx"
+    expected: |
+      Render component o token that (khong mock component con), tRPC gia dem so yeu cau:
+        1 dan "abc", bam Luu -> 0 yeu cau; loi hien trong phan tu aria-live="polite";
+          document.activeElement la o; o giu "abc"
+        2 dan "12345:abc", API gia tra loi "Zalo không nhận token này" -> 1 yeu cau;
+          loi hien; o giu chu
+        3 trong luc yeu cau treo (promise chua giai): nut co chu "Đang kiểm…" va disabled
+        4 o co type="password" va autocomplete="off"
+      Doi chung: token dung dang, API gia thanh cong -> khong co loi.
+  - id: E19
+    criterion: AC-14
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.design.ui_check
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/notifications/**"
+      - "apps/app/app/(app)/[slug]/settings/connections/zalo/**"
+      - "apps/app/lib/messages/nhac-qua-zalo.ts"
+      - "packages/ui/src/components/reui/stepper.tsx"
+    steps:
+      - "Dat truoc MOI buoc: APP_URL=http://127.0.0.1:3300 va API_URL=http://127.0.0.1:3301 — dung 127.0.0.1"
+      - "Dung ca hai may chu cua CAY DANG XET: api 3301, app 3300. Kiem cong 3300 va 3301 truoc khi dung — tai nguyen chung; dung ma PID de tat, khong pkill"
+      - "CHAN CAY, hai phia: dat mot dau moc vao apps/app/public roi xin lai qua APP_URL; VA doc mot ban ghi moc qua API_URL. Khong nhan lai duoc -> thoat ma 2 va goi ten cay dang xet, KHONG chup anh nao"
+      - "KHONG nang quyen thanh vien that, KHONG tao phien cho tai khoan nguoi khac. Thanh vien thuong la mot tai khoan gieo rieng cho lan do, go khi xong"
+      - "Gieo bang thu tuc cua kho: AppSetting zaloBotName 'Bot OneHub', zaloBotToken gia '12345:gia-cho-anh', zaloWebhookUrl 'https://tac-tu.test/zalo/webhook', zaloPolledAt 1 phut truoc; 3 thanh vien da noi"
+      - "Doc slug workspace that tu DB (organization id WORKSPACE_ID) — goi la <slug>"
+      - "Thong bao cua ban, nguoi dang nhap chua noi: chup _acceptance/noi-zalo-cho-nguoi-moi/evidence/E19-chua-noi-1440.png; tao ma: E19-ma-cho-1440.png; gieo ZaloLink: E19-da-noi-1440.png"
+      - "Ket noi › Zalo, quan tri: E19-song-1440.png; dat zaloWebhookUrl null va zaloWebhookLyDo 'can-https': E19-can-https-1440.png; xoa zaloBotToken va zaloBotName: E19-chua-bat-1440.png"
+      - "Tra lai trang thai song; dang nhap tai khoan thanh vien thuong gieo rieng: E19-thanh-vien-1440.png"
+      - "Lap lai chua-noi, ma-cho, song o kho 375: E19-chua-noi-375.png, E19-ma-cho-375.png, E19-song-375.png"
+      - "Moi anh ghi o _acceptance/noi-zalo-cho-nguoi-moi/evidence/ (duong tinh tu goc kho). Xoa dau moc va don du lieu gieo khi xong"
+    inputs:
+      - _acceptance/noi-zalo-cho-nguoi-moi/evidence/
+    expected: |
+      Nhin thay duoc tren anh, khong suy tu ma:
+        chua-noi: ba buoc co so thu tu; buoc 1 co chu "Bot OneHub"; buoc 2 co nut "Nối Zalo"
+        ma-cho: buoc 3 dang mo, co mot ma 6 so va nut "Chép mã"
+        da-noi: nut "Gửi thử nhắc ngay"
+        chua-bat: huong dan co "Zalo Bot Manager", co "<số>:<chuỗi>" hoac vi du dang so:chuoi,
+          co "Secret Token"; KHONG co ".env", KHONG co "bot.zaloplatforms.com"; co o token va nut Lưu
+        song: "Bot OneHub", dong nhan tin qua webhook, token dang ••••; nhan "Chưa nối" doc tron o 375
+        can-https: canh bao co "https" va "zalo:poll"
+        thanh-vien: KHONG co o token; co cau chi quan tri vien thay duoc bot
+        moi anh: khong co "Zalo: Zalo", khong co "Slack: Slack", khong co "bot.uipSwwnr"
+  - id: E20
+    criterion: AC-14
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.nzm_chu_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/notifications/**"
+      - "apps/app/app/(app)/[slug]/settings/connections/zalo/**"
+      - "apps/app/lib/messages/nhac-qua-zalo.ts"
+      - "apps/app/test/noi-zalo-cho-nguoi-moi.dom.tsx"
+    expected: |
+      Render that khoi kenh o hai ngon ngu x hai ly do khoa (Zalo tat, Zalo chua noi,
+      Slack chua khop): moi dong ly do KHONG bat dau lap lai ten kenh da in truoc no
+      (khong co "Zalo: Zalo", "Slack: Slack"). 6 o, 6 assert.
+      Render trang ket noi voi danh sach: StatusIndicator cua moi dong KHONG co lop
+      w-20; cau huong dan tao bot o hai ngon ngu khong chua ".env" va "bot.zaloplatforms.com".
+  - id: E21
+    criterion: AC-15
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.nzm_giu_da_ky
+    paths:
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "apps/agent/test/nhac-qua-zalo.integration.spec.ts"
+      - "apps/agent/test/zalo-qua-webhook.integration.spec.ts"
+      - "apps/agent/test/support/zalo-gia.ts"
+    expected: |
+      Lenh hai ve, ve nao do thi thoat khac 0 voi thong diep ghim:
+        1 git diff --quiet <merge-base HEAD voi origin/onehub, tinh luc chay> -- hai tep
+          spec -> co thay doi thi in "spec da ky bi sua: <tep>" va thoat 1
+        2 chay tron hai tep qua wrapper bun run test -> moi ca xanh
+      DOT BIEN: sua mot dong trong zalo-qua-webhook spec -> ve 1 do.
+  - id: E22
+    criterion: AC-15
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.nzm_tai_lieu
+    paths:
+      - "docs/connections.md"
+      - "docs/environment.md"
+      - ".env.example"
+      - "docs/proto.md"
+    expected: |
+      Script node doc bon tep, moi dieu mot kiem, in ten dieu thieu va thoat 1:
+        docs/connections.md: muc Zalo co "Bot Token" va "webhook"
+        docs/environment.md va .env.example: dong ZALO_BOT_TOKEN va ZALO_WEBHOOK_SECRET
+          co chu "AppSetting"
+        docs/proto.md: co tieu de muc chua "ReUI" va chu "tham chiếu"
+      Doi chung: chay tren ban onehub (git show origin/onehub:<tep>) -> it nhat mot dieu thieu.
