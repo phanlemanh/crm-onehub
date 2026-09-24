@@ -4,11 +4,13 @@ import type { INestApplication } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import {
-	departmentCreateInput,
 	enrollmentUpsertInput,
 	templateCreateInput,
 } from "../src/onboarding/onboarding.contracts";
 import { OnboardingService } from "../src/onboarding/onboarding.service";
+import { orgDepartmentCreateInput } from "../src/to-chuc/to-chuc.contracts";
+import { ToChucService } from "../src/to-chuc/to-chuc.service";
+import { TO_CHUC } from "../src/to-chuc/to-chuc-config";
 import { batLoi } from "./dieu-phoi-gieo";
 import { gieoThanhVien, mintPhien } from "./phien-thu";
 
@@ -33,6 +35,7 @@ const daGieo = {
 };
 
 const service = new OnboardingService(db);
+const toChuc = new ToChucService(db);
 
 async function gieoNguoi(): Promise<string> {
 	const id = ma("u");
@@ -44,7 +47,10 @@ async function gieoNguoi(): Promise<string> {
 }
 
 async function gieoBoPhan(): Promise<string> {
-	const bp = await service.createDepartment({ name: ma("Bo phan") });
+	const bp = await toChuc.createDepartment({
+		name: ma("Bo phan"),
+		divisionId: null,
+	});
 	daGieo.boPhan.push(bp.id);
 	return bp.id;
 }
@@ -92,17 +98,26 @@ afterAll(async () => {
 describe("ghi-bo-phan", () => {
 	test("ghi-bo-phan: dau vao qua JSON va schema that ghi dung mot bo phan", async () => {
 		const ten = ma("Kinh doanh");
-		const input = departmentCreateInput.parse(quaJson({ name: ten }));
-		const bp = await service.createDepartment(input);
+		const input = orgDepartmentCreateInput.parse(
+			quaJson({ name: ten, divisionId: null }),
+		);
+		const bp = await toChuc.createDepartment(input);
 		daGieo.boPhan.push(bp.id);
 
 		const hang = await db.department.findMany({ where: { name: ten } });
 		expect(hang.map((h) => h.name)).toEqual([ten]);
 
+		const trong = { name: { in: ["", "  "] } };
+		const truoc = await db.department.count({ where: trong });
 		const loi = await batLoi(async () =>
-			departmentCreateInput.parse(quaJson({ name: "  " })),
+			toChuc.createDepartment(
+				orgDepartmentCreateInput.parse(
+					quaJson({ name: "  ", divisionId: null }),
+				),
+			),
 		);
-		expect(loi).toContain("name");
+		expect(loi).toBe(`BadRequestException: ${TO_CHUC.thongDiep.tenTrong}`);
+		expect(await db.department.count({ where: trong })).toBe(truoc);
 	});
 });
 
