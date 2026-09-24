@@ -429,13 +429,13 @@ ngày đổi trạng thái gần nhất. Không sửa dòng cũ, chỉ nối th�
 | 1 | `cay-to-chuc-co-nguoi` | chưa mở | — | — | đứng trên `cau-truc-to-chuc` |
 | 2 | `vai-chi-okr` | chưa mở | — | — | chốt 2026-09-23 (Manh Phan) |
 | 3 | `dat-okr-trong-crm` | chưa mở | — | — | — |
-| 4 | `cap-nhat-tuan-okr` | chưa mở | — | — | — |
+| 4 | `cap-nhat-tuan-okr` | chưa mở | — | — | nhắc qua Zalo cần vòng 1–2 và triển khai của `lo-trinh-zalo.md`, xong trước 26/10 |
 | 5 | `toan-canh-okr` | chưa mở | — | — | — |
 | 6 | `so-okr-tu-chay` | chưa mở | — | — | — |
 | 7 | `khep-ky-okr` | chưa mở | — | — | hạn cứng 2026-12-14 |
 | 8 | `canh-kr-okr` | chưa mở | — | — | xếp lại sau bốn tuần chạy thử |
 | 9 | `tro-ly-okr` | chưa mở | — | — | chờ trần chi tiêu AI |
-| 10 | `okr-trong-chat` | chưa mở | — | — | chờ số đo độ trễ của lượt 4 |
+| 10 | `okr-trong-chat` | chưa mở | — | — | chờ số đo độ trễ của lượt 4 · Zalo không có nút, trên Zalo là trả lời bằng chữ — vòng 3–4 của `lo-trinh-zalo.md`, đề xuất gộp vòng 4 |
 
 ## 11. Bắt đầu thế nào
 
