@@ -5,7 +5,7 @@ slug: test-api-khong-de-viec-vo-chu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ci]
-status: implemented
+status: verified
 approved_by:
 approved_at:
 veto_state: mo

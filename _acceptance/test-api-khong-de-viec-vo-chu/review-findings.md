@@ -1,24 +1,43 @@
 ## Trong hợp đồng
 
-- **Hình dạng 4 (âm tính một mình): phần "0 dòng AgentTask chưa xong" của E5 xanh cả trước lẫn sau bản vá**
-  file: `_acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts:88`
-  severity: medium
-  AC: AC-5
-  source: measurement
-  detail: caGoi() gộp chuaXong.length + lienHe.length + congTy.length > 0 vào một điều kiện exit 1 duy nhất. Đối chứng dương duy nhất là _prisma_migrations >= 1, tức là chỉ kiểm cơ sở dữ liệu đã chạy migration, không kiểm lượt test có thật sự sinh dòng AgentTask. Bản ghi chiều đỏ evidence/chieu-do/vvc_ca_goi_api.truoc-va.log trên mã trước vá in "agentTask moi trang thai: []" và "agentTask chua xong=0": thành phần AgentTask ra 0 ngay cả trên mã lỗi, và exit 1 ở lần đó chỉ đến từ 11 liên hệ và 25 công ty. evals.yaml E5 tự thừa nhận "chiều đỏ của dòng việc do E4 gánh". Hệ quả: vế AgentTask trong AC-5 ("0 dòng AgentTask chưa xong", đúng loại hỏng làm đỏ claimDue ở gói agent) không có phép đo nào trong E5 phân biệt được mã đúng với mã sai. Vế đó chỉ dựa vào E4, mà E4 là một tình huống tự dựng trên một file, không phải cả gói.
+[]
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt ở Cổng 1 — người quyết, máy không tự sửa.
 
-- **Hình dạng 4 (âm tính một mình): số "bo phan" của E1 bằng 0 theo cấu trúc, không bao giờ đỏ được**
-    Người dùng thấy gì: Nếu luồng thiết lập ban đầu (onboarding) tạo ra bộ phận rồi để sót lại, bài kiểm tra hiện tại sẽ không phát hiện ra — phần này đã được ghi nhận từ trước là nằm ngoài phạm vi của tính năng dọn dẹp lần này.
-    file: `_acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts:38`
-    severity: low
-    Đề xuất: known-limits
+- **BackfillService teardown uses OnModuleDestroy, unlike the OnApplicationShutdown pattern used elsewhere, and leaves the sign-in handler registered**
+  Người dùng thấy gì: Cách làm hiện tại chỉ đúng khi hệ thống chạy một bản dịch vụ tại một thời điểm — đúng như vận hành hôm nay. Nếu sau này chạy nhiều bản song song hoặc khởi động lại liên tục, các phiên cũ có thể vẫn âm thầm giữ lại một phần xử lý không cần thiết mà không ai nhận ra ngay.
+  file: `apps/api/src/backfill/backfill.service.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **dem-sot.ts 'dieu-phoi' check hard-codes seed prefixes copied from dieu-phoi-gieo.ts and has no guard against measuring nothing**
+  Người dùng thấy gì: Nếu sau này ai đó đổi cách đặt tên cho dữ liệu thử nghiệm, phép kiểm có thể báo 'đã dọn sạch' dù dữ liệu rác thật ra vẫn còn, khiến người xem báo cáo tin nhầm là mọi thứ ổn.
+  file: `_acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **dem-sot.ts checks the raw TEST_RUN_ID against the database name, but the name holds the slugged id**
+  Người dùng thấy gì: Nếu người chạy thử tự đặt một mã lượt có chữ hoa hoặc dấu gạch, công cụ kiểm tra có thể báo lỗi giả dù dữ liệu vẫn đúng, khiến người xem báo cáo mất thời gian tra một sự cố không có thật.
+  file: `_acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 2 + 4: E1 đếm theo khuôn tên chép tay từ bộ gieo, không có đối chứng dương trong lượt**
+  Người dùng thấy gì: Bốn phép đo dùng để khẳng định 'đã dọn sạch' không có bước chứng minh chúng thật sự bắt được rác nếu có; đổi cách đặt tên dữ liệu thử sau này có thể khiến báo cáo báo 'sạch' trong khi rác vẫn còn mà không ai phát hiện.
+  file: `_acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4: số 'bo phan' của E1 bằng 0 theo cấu trúc, không bao giờ đỏ được**
+  Người dùng thấy gì: Một trong bốn phần của phép kiểm không bao giờ có thể phát hiện ra vấn đề vì kịch bản thử không tạo loại dữ liệu đó — hạn chế này đã được ghi nhận từ trước và không thay đổi ở lần này.
+  file: `_acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts`
+  severity: low
+  Đề xuất: known-limits
 
 ## Chưa adversarial-verify (refuter chết)
 
-(không có)
+[]
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

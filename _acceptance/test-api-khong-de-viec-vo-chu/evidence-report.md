@@ -3,12 +3,11 @@ schema_version: 2
 feature_slug: test-api-khong-de-viec-vo-chu
 verdict: PASS
 failed_evals: []
-reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 06672e78818f8bbb850de1eef9db71652a3c55a4
-human_signoff:
+verified_commit: cc49b5983716fddcaf4991021d3b3cd3c935e7db
+human_signoff: 
 ---
 
 # Evidence Report: test-api-khong-de-viec-vo-chu
@@ -27,88 +26,75 @@ human_signoff:
 - eval: E1
   run_id: muf1mthhxvdf
   exit_code: 0
-  baseline: red
   verifier: config:executors.script.vvc_dieu_phoi_don_sach
-  verified_at: 2026-09-24T09:00:00Z
-  output: |
-    co so du lieu: crm_muf1mthhxvdf_test
-    sach sau dieu-phoi: ca nhan=0 cong ty=0 nguoi=0 bo phan=0
-    test-run: dropped crm_muf1mthhxvdf_test
+  verified_at: 2026-09-24T04:39:21Z
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval.
 
 - eval: E2
   run_id: muf1mt1qg55f
   exit_code: 0
-  baseline: red
   verifier: config:executors.test.vvc_ung_dung_da_dong
-  verified_at: 2026-09-24T09:02:00Z
-  output: |
-     3 expect() calls
-    Ran 1 test across 1 file. [1419.00ms]
-    test-run: dropped crm_muf1mt1qg55f_test
+  verified_at: 2026-09-24T04:39:21Z
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval.
 
 - eval: E3
   run_id: muf1msx72jg1
   exit_code: 0
-  baseline: red
   verifier: config:executors.test.vvc_van_quet_that
-  verified_at: 2026-09-24T09:04:00Z
-  output: |
-     2 expect() calls
-    Ran 1 test across 1 file. [3.18s]
-    test-run: dropped crm_muf1msx72jg1_test
+  verified_at: 2026-09-24T04:39:21Z
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval.
 
 - eval: E4
   run_id: muf1mstwm83e
   exit_code: 0
-  baseline: red
   verifier: config:executors.script.vvc_go_la_khong_quet
-  verified_at: 2026-09-24T09:06:00Z
-  output: |
-    co so du lieu: crm_muf1mstwm83e_test
-    lien he le cmuf1mtt300002ncfwfx8rwlp con nguyen, 0 dong viec
-    test-run: dropped crm_muf1mstwm83e_test
+  verified_at: 2026-09-24T04:39:21Z
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval.
 
 - eval: E5
-  run_id: muf1mu8wjnz7
+  run_id: muf2511jedth
   exit_code: 0
   baseline: red
   verifier: config:executors.script.vvc_ca_goi_api
-  verified_at: 2026-09-24T09:08:00Z
+  verified_at: 2026-09-24T05:01:15Z
   output: |
     agentTask moi trang thai: []
-    goi api sach: agentTask chua xong=0 lien he=0 cong ty=0
-    test-run: dropped crm_muf1mu8wjnz7_test
+    goi api sach: agentTask chua xong=0 (cua lien he le=0) lien he=0 cong ty=0; lien he le cmuf251v60000gtcfbxl5zfos con nguyen
+    test-run: dropped crm_muf2511jedth_test
 
 - eval: E6
   run_id: minted-test-api-khong-de-viec-vo-chu-E6-r1
   exit_code: 0
-  baseline: red
   verifier: config:executors.script.vvc_go_la_chi_them_dong
-  verified_at: 2026-09-24T09:10:00Z
-  output: |
-    apps/api/test/go-la-cat-quyen.spec.ts so voi 679b5164: them=3 xoa=0
+  verified_at: 2026-09-24T04:39:21Z
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: muf1msssiuw5
+  run_id: muf253dxghxq
   exit_code: 0
-  verified_at: 2026-09-24T09:12:00Z
+  verified_at: 2026-09-24T05:01:15Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-test-api-khong-de-viec-vo-chu-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-test-api-khong-de-viec-vo-chu-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-24T09:14:00Z
+  verified_at: 2026-09-24T05:01:15Z
 
 - cmd: bun run lint:slop
-  run_id: minted-test-api-khong-de-viec-vo-chu-SUITE-bun_run_lint_slop-r1
+  run_id: minted-test-api-khong-de-viec-vo-chu-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-24T09:15:00Z
+  verified_at: 2026-09-24T05:01:15Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-test-api-khong-de-viec-vo-chu-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-test-api-khong-de-viec-vo-chu-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-24T09:17:00Z
+  verified_at: 2026-09-24T05:01:15Z
 
 ## Known limits
 
@@ -120,8 +106,9 @@ none — moi eval feature deu red tren baseline (co phan biet)
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — khong co eval runs>1 trong vong nay.
 
 ## Iterations
 
-Round 1: E1-E6 tất cả pass ngay lần chạy đầu; bun run test / turbo lint / lint:slop / turbo build toàn bộ xanh.
+Round 1: E1–E6 và bộ suite (test, lint, lint:slop, build) đều xanh ở lần chạy đầu; xem run-log round 1 (sha 06672e78).
+Round 2: delta chạm paths của E5 (gọi gói api) — chạy lại E5 và bộ suite hồi quy (test, lint, lint:slop, build); tất cả xanh. E1–E4 và E6 carry-forward vì delta không chạm paths của chúng.
