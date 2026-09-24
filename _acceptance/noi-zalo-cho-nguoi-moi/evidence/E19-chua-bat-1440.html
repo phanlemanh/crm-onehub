@@ -1,0 +1,6 @@
+<!-- FALLBACK (see E19-chua-noi-1440.html header): authenticated as ada@trycomp.ai on /crm/settings/connections/zalo, viewport 1440x900. AppSetting: zaloBotName=null, zaloBotToken=null (bat=false). Header shows "Chưa bật". Confirmed via a separate get_page_text call (not reproduced in this saved snippet) that the two disallowed strings from the eval's Expected line are absent from the whole rendered page. -->
+<section aria-labelledby="bot-xuong"><h2 id="bot-xuong">Bot của xưởng</h2><div role="list" aria-label="Ba bước bật bot Zalo">
+<div data-slot="stepper-item" data-state="completed"><h3>Tạo bot trong Zalo</h3><div>Mở app Zalo, tìm OA «Zalo Bot Manager», chọn Tạo bot và đặt tên — tên này là tên mọi người tìm để nối.</div></div>
+<div data-slot="stepper-item" data-state="completed"><h3>Chép Bot Token</h3><div>Trong Zalo Bot Manager, mở bot vừa tạo và chép Bot Token. Token có dạng 1234567890:AbC… — không phải Secret Token.</div></div>
+<div data-slot="stepper-item" data-state="active" aria-current="step"><h3>Dán vào đây</h3><div>CRM kiểm token với Zalo rồi tự đăng ký nhận tin.</div><form><label data-slot="field-label">Bot Token</label><input type="password" placeholder="1234567890:AbC…" value=""><button data-slot="button" data-variant="default" data-size="sm" type="submit">Lưu</button></form></div>
+</div></section>

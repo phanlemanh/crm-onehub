@@ -1,0 +1,44 @@
+E19 network/console raw dump (Claude_Browser MCP), captured after running all steps.
+
+SCOPING NOTE: _acceptance/config.yaml declares dev_server.url = "http://localhost:3000"
+and dev_server.api_base = ["http://localhost:3001"]. Per this eval's own instructions
+(wf-label ui:E19, step 1) we ran the app/api on http://127.0.0.1:3300 and
+http://127.0.0.1:3301 instead (127.0.0.1, non-default ports, to isolate this
+measurement from any other checkout using the config's default ports). Every
+request observed below is therefore to an origin OUTSIDE the scope declared in
+config.yaml -> classification is "unscoped-partial" (note-only), not app-fail,
+per the FAIL-eligibility rule (FAIL-eligible = config's declared dev_server.url /
+api_base only).
+
+=== Console errors seen during the session (read_console_messages, onlyErrors) ===
+- Many "WebSocket connection to 'ws://127.0.0.1:3300/_next/hmr?id=...' failed" —
+  Next.js/Turbopack HMR websocket, expected in this proxied Browser-pane preview
+  (no live-reload channel available here); not a fetch/XHR to app data, not
+  FAIL-eligible under any scoping.
+- Several "Failed to load resource: the server responded with a status of 403
+  (Forbidden)" — associated with the same HMR/dev-asset channel (recurs in lockstep
+  with the HMR websocket retries); not app data traffic.
+- One "Failed to load resource: the server responded with a status of 502 (Bad
+  Gateway)" — this is a STALE artifact from this session's own setup mistake: the
+  app dev server was first started without API_URL set, so the proxy route
+  (apps/app/app/api/[...path]/route.ts) returned 502 "The API at
+  http://localhost:3001 is not reachable." for one manual `fetch('/api/trpc/...')`
+  probe I ran to diagnose that misconfiguration, BEFORE restarting the app server
+  with API_URL=http://127.0.0.1:3301 correctly set. Every subsequent real page
+  load/action (all 11 evidence captures) succeeded (200 OK) once the app was
+  restarted with the correct API_URL — see e.g. the zalo.cuaToi / zalo.xuong /
+  zalo.taoMa calls behind each screenshot, all 200. Not indicative of a defect in
+  the feature under test.
+
+=== Sample of real app-origin (127.0.0.1:3300) requests during the verified steps, all 200 OK ===
+GET  /api/trpc/enrichment.queue?batch=1&input=...            200 OK  (unrelated background poller in the app shell, present on every settings page)
+GET  /api/trpc/zalo.cuaToi ...                                200 OK  (Thông báo của bạn — chưa nối / mã chờ / đã nối)
+POST /api/trpc/zalo.taoMa                                     200 OK  (Nối Zalo button)
+GET  /api/trpc/zalo.xuong ...                                 200 OK  (Kết nối › Zalo — song / can-https / chưa bật / chưa webhook / thành viên)
+GET  /_next/static/chunks/*.js, /_next/static/media/*.woff2   200 OK  (bundle/font assets)
+
+No FAIL-eligible (per config.yaml's declared origins) request failed. No app-origin
+(127.0.0.1:3300 / 127.0.0.1:3301) fetch/XHR carrying zalo.* data returned an error
+status during any of the 11 captured states.
+
+networkObserved = "unscoped-partial"
