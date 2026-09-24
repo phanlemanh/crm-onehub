@@ -289,7 +289,7 @@ evals:
   - id: E18
     criterion: AC-13
     executor: test
-    layer: ui-observed
+    layer: backend-effect
     cmd: config:executors.test.nzm_o_token
     paths:
       - "apps/app/app/(app)/[slug]/settings/connections/zalo/**"
@@ -347,7 +347,7 @@ evals:
   - id: E20
     criterion: AC-14
     executor: test
-    layer: ui-observed
+    layer: backend-effect
     cmd: config:executors.test.nzm_chu_man
     paths:
       - "apps/app/app/(app)/[slug]/settings/notifications/**"
@@ -421,7 +421,7 @@ evals:
   - id: E24
     criterion: AC-14
     executor: script
-    layer: ui-observed
+    layer: backend-effect
     cmd: config:executors.script.nzm_san_thiet_ke
     paths:
       - "apps/app/app/(app)/[slug]/settings/notifications/**"
