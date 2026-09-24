@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cc49b5983716fddcaf4991021d3b3cd3c935e7db
+verified_commit: 82fde06b0b1d4dba28c763a69516913c1dc88411
 human_signoff: 
 ---
 
@@ -112,3 +112,7 @@ none — khong co eval runs>1 trong vong nay.
 
 Round 1: E1–E6 và bộ suite (test, lint, lint:slop, build) đều xanh ở lần chạy đầu; xem run-log round 1 (sha 06672e78).
 Round 2: delta chạm paths của E5 (gọi gói api) — chạy lại E5 và bộ suite hồi quy (test, lint, lint:slop, build); tất cả xanh. E1–E4 và E6 carry-forward vì delta không chạm paths của chúng.
+
+### Re-pin lần 1 — 2026-09-24, do hoa cu do gop onehub 41e04c72
+run_id: repin-20260924T051137Z-62143
+sha: 82fde06b0b1d4dba28c763a69516913c1dc88411 · suites: 4 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng
