@@ -217,9 +217,11 @@ evals:
       - "apps/agent/agent/**"
       - "apps/api/src/zalo/**"
       - "_acceptance/zalo-goi-thu-hong-hien-dung-bot/rang/giu-da-ky.mjs"
+      - "_acceptance/zalo-goi-thu-hong-hien-dung-bot/rang/cau-hinh.mjs"
     expected: |
-      rang/giu-da-ky.mjs: B = merge-base HEAD origin/onehub.
-        1 git diff B cua nhac-qua-zalo va zalo-qua-webhook spec rong
+      rang/giu-da-ky.mjs: B = 090bd517, S = 8d89f2df (hai dau cua merge #122,
+      rang/cau-hinh.mjs); moi diff tinh tu B toi S.
+        1 git diff B S cua nhac-qua-zalo va zalo-qua-webhook spec rong
         2 diff cua noi-zalo-cho-nguoi-moi.integration.spec.ts: moi hunk nam trong than
           hai test "goi-nguoc: b" va "goi-nguoc: c" (vi tri tinh tu cay test that bang
           dong mo test(...) cua file o B), va moi dong +/- chua "outcome" hoac "webhook"
@@ -235,6 +237,7 @@ evals:
       - "docs/connections.md"
       - "docs/plan/lo-trinh-zalo.md"
       - "_acceptance/zalo-goi-thu-hong-hien-dung-bot/rang/tai-lieu.mjs"
+      - "_acceptance/zalo-goi-thu-hong-hien-dung-bot/rang/cau-hinh.mjs"
     expected: |
       rang/tai-lieu.mjs (ROOT suy tu vi tri script) doc hai tep that:
         1 muc Zalo cua docs/connections.md (tu tieu de Zalo toi tieu de ## ke) co mot

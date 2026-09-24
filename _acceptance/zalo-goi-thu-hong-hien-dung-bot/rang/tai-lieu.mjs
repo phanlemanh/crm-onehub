@@ -2,9 +2,10 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { VONG } from "./cau-hinh.mjs";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const BAN_GOC = "090bd517e6e143ac00e1015d2ec570959c02d5e3";
+const BAN_GOC = VONG.truoc;
 const CONNECTIONS = "docs/connections.md";
 const LO_TRINH = "docs/plan/lo-trinh-zalo.md";
 const SLUG = "`zalo-goi-thu-hong-hien-dung-bot`";

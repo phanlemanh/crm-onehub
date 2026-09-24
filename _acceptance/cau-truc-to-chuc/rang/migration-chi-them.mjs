@@ -1,21 +1,18 @@
 import { execFileSync } from "node:child_process";
-import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { VONG } from "./cau-hinh.mjs";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const THU_MUC = join(GOC, "packages/db/prisma/migrations");
+const THU_MUC = "packages/db/prisma/migrations";
 const git = (...d) =>
 	execFileSync("git", ["-C", GOC, ...d], { encoding: "utf8" }).trim();
 
-const moc = git("merge-base", "HEAD", "origin/onehub");
-const cu = new Set(
-	git("ls-tree", "--name-only", `${moc}:packages/db/prisma/migrations`).split(
-		"\n",
-	),
-);
+const lietKe = (sha) =>
+	git("ls-tree", "--name-only", `${sha}:${THU_MUC}`).split("\n");
+const cu = new Set(lietKe(VONG.truoc));
 const BANG_CU = new Set(
-	git("show", `${moc}:packages/db/prisma/schema.prisma`)
+	git("show", `${VONG.truoc}:packages/db/prisma/schema.prisma`)
 		.split("\n")
 		.map((d) => d.match(/@@map\("([^"]+)"\)/)?.[1])
 		.filter(Boolean),
@@ -82,14 +79,14 @@ if (process.argv[2] === "--chieu-do") {
 	process.exit(bat === 3 ? 1 : 0);
 }
 
-const moi = readdirSync(THU_MUC).filter(
+const moi = lietKe(VONG.sau).filter(
 	(t) => !cu.has(t) && t !== "migration_lock.toml",
 );
 let dem = 0;
 const hong = [];
 for (const t of moi) {
 	for (const c of cauLenh(
-		readFileSync(join(THU_MUC, t, "migration.sql"), "utf8"),
+		git("show", `${VONG.sau}:${THU_MUC}/${t}/migration.sql`),
 	)) {
 		dem += 1;
 		const v = viPham(c);

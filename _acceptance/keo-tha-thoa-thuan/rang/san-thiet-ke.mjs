@@ -1,9 +1,13 @@
 import { execFileSync, spawnSync } from "node:child_process";
+import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const NHANH_GOC = "origin/onehub";
+const VONG = Object.freeze({
+	truoc: "ae50f942dc3e5830c2688360c2c2e51ad382782e",
+	sau: "9d405a8fc3a9dd43d07b5804176720f9cf8ddaec",
+});
 const VUNG = [
 	/^apps\/app\/app\/\(app\)\/\[slug\]\/deals\/.+\.tsx$/,
 	/^packages\/ui\/src\/components\/board\.tsx$/,
@@ -13,11 +17,10 @@ const VUNG = [
 const git = (...doi) =>
 	execFileSync("git", ["-C", GOC, ...doi], { encoding: "utf8" }).trim();
 
-const moc = git("merge-base", "HEAD", NHANH_GOC);
-const tep = git("diff", "--name-only", `${moc}...HEAD`)
+const tep = git("diff", "--name-only", `${VONG.truoc}...${VONG.sau}`)
 	.split("\n")
-	.concat(git("diff", "--name-only").split("\n"))
 	.filter((t) => VUNG.some((v) => v.test(t)))
+	.filter((t) => existsSync(join(GOC, t)))
 	.filter((t, i, ds) => ds.indexOf(t) === i);
 
 console.log(`so tep giao dien vong nay cham: ${tep.length}`);
