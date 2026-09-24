@@ -1,0 +1,14 @@
+{
+  "feature_plain": "Trên bảng cột thoả thuận, thả một thẻ sang cột khác thì số thoả thuận, tổng tiền và lời «chưa quy đổi» ở đầu hai cột đổi ngay; máy chủ từ chối thì mọi thứ trở về như trước khi kéo.",
+  "scope_plain": "Không đổi menu giai đoạn trên thẻ, không đổi cách thả vào cột thua, không sửa các hạn chế đo lường cũ của bảng cột; danh sách mã tiền của cột trên 50 thoả thuận giữ nguyên trong lúc lưu.",
+  "analyst_plain": "",
+  "decisions_plain": [
+    {"id": "d-20260924T013022Z-1", "p": "Máy chủ nói thẳng thẻ nào được cộng vào tổng, đầu cột tính theo các thẻ đang dời — trình duyệt không tự đoán; đổi lại dữ liệu bảng cột có thêm hai trường."},
+    {"id": "d-20260924T013022Z-2", "p": "KHÔNG làm bước quét chống sót tiêu chí — ba trục loại thẻ, tình trạng cột, kết cục đã liệt kê đủ trong thiết kế."},
+    {"id": "d-20260924T013022Z-3", "p": "KHÔNG làm phiên thẩm mỹ trên bản bấm được — màn không đổi hình dạng, chỉ đổi con số trong lúc lưu."},
+    {"id": "d-20260924T013022Z-4", "p": "KHÔNG viết đặc tả trải nghiệm — không có màn, luồng hay trạng thái mới."},
+    {"id": "d-20260924T013022Z-5", "p": "KHÔNG chụp màn trên trình duyệt thật — lúc đang lưu chỉ vài trăm mili giây; bài kiểm giữ máy chủ chờ để đọc đúng chữ ở đầu cột."},
+    {"id": "d-20260924T014006Z-6", "p": "Sửa câu chữ một tiêu chí cho khớp màn thật: cột không còn thoả thuận được tính hiện y như khi máy chủ trả tổng rỗng."},
+    {"id": "d-20260924T014006Z-7", "p": "Đổi cách phá thử một phép đo sang đúng lỗi có thể xảy ra (lấy nhầm cột nguồn); cách phá cũ không thể gây lỗi với cách tính này."}
+  ]
+}

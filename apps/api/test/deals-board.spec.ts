@@ -22,6 +22,8 @@ const domain = `deals-board-${suffix}.test`;
 const ownerA = `user-board-a-${suffix}`;
 const ownerB = `user-board-b-${suffix}`;
 const ownerC = `user-board-c-${suffix}`;
+const ownerD = `user-board-d-${suffix}`;
+const ownerE = `user-board-e-${suffix}`;
 const fieldKey = `board_nguoi_${suffix}`.replace(/[^a-z0-9_]/gi, "_");
 const TOKEN = `kbtok${suffix}`.replace(/[^a-z0-9]/gi, "");
 const FIXTURE_DIR = join(
@@ -118,19 +120,81 @@ function writeFixture(name: string, board: DealBoardResult) {
 	Bun.spawnSync(["bunx", "biome", "format", "--write", file]);
 }
 
+type Raw = {
+	name: string;
+	stage: DealStage;
+	owner: string;
+	cents: number | null;
+	kind: "counted" | "stale" | "pending" | "none";
+};
+
+function pendingCurrency() {
+	return (
+		["GBP", "CHF"].find((code) => code !== base && code !== other(base)) ??
+		"GBP"
+	);
+}
+
+async function seedRaw(rows: Raw[]): Promise<Map<string, string>> {
+	const ids = new Map<string, string>();
+	for (const [i, row] of rows.entries()) {
+		const amount = row.cents === null ? null : row.cents / 100;
+		const currency =
+			row.kind === "counted"
+				? base
+				: row.kind === "stale"
+					? other(base)
+					: row.kind === "pending"
+						? pendingCurrency()
+						: base;
+		const deal = await db.deal.create({
+			data: {
+				name: row.name,
+				stage: row.stage,
+				companyId,
+				ownerId: row.owner,
+				amount,
+				currency,
+				baseAmount:
+					row.kind === "counted" || row.kind === "stale" ? amount : null,
+				baseCurrency:
+					row.kind === "counted"
+						? base
+						: row.kind === "stale"
+							? other(base)
+							: null,
+				createdAt: new Date(Date.UTC(2026, 1, 1, 0, 0, i)),
+			},
+			select: { id: true },
+		});
+		ids.set(row.name, deal.id);
+	}
+	return ids;
+}
+
+function writeMoveFixture(cases: unknown[]) {
+	if (process.env.GHI_FIXTURE_BANG_COT !== "1") return;
+	const file = join(FIXTURE_DIR, "deals-board-sau-luu.json");
+	mkdirSync(dirname(file), { recursive: true });
+	writeFileSync(file, `${JSON.stringify({ cases }, null, "\t")}\n`);
+	Bun.spawnSync(["bunx", "biome", "format", "--write", file]);
+}
+
 async function clean() {
 	await db.deal.deleteMany({ where: { company: { domain } } });
 	await db.company.deleteMany({ where: { domain } });
 	await db.fieldDefinition.deleteMany({
 		where: { entity: "DEAL", key: fieldKey },
 	});
-	await db.user.deleteMany({ where: { id: { in: [ownerA, ownerB, ownerC] } } });
+	await db.user.deleteMany({
+		where: { id: { in: [ownerA, ownerB, ownerC, ownerD, ownerE] } },
+	});
 }
 
 beforeAll(async () => {
 	await clean();
 	base = await conversion.reportingCurrency();
-	for (const id of [ownerA, ownerB, ownerC]) {
+	for (const id of [ownerA, ownerB, ownerC, ownerD, ownerE]) {
 		await db.user.create({
 			data: {
 				id,
@@ -281,6 +345,67 @@ describe("deals.board", () => {
 		expect(checks).toBe(STAGES.length * 4);
 		expect(board.reportingCurrency).toBe(base);
 		writeFixture("deals-board-dem-tong.json", board);
+	});
+
+	it("duoc-tinh: co counted cua the va countedCount cua cot theo luat tien te", async () => {
+		const board = await deals.board(input({ owner: [ownerA] }));
+		const mine = madeA.filter((d) => d.owner === ownerA && !d.archived);
+		const truth = new Map(
+			mine.map((d) => [d.id, d.counted && d.cents !== null]),
+		);
+		const matrix = mine.length + STAGES.length + STAGES.length;
+		let checks = 0;
+		for (const stage of STAGES) {
+			const got = column(board, stage);
+			for (const card of got.cards) {
+				const want = truth.get(card.id);
+				if (card.counted !== want) {
+					const name = mine.find((d) => d.id === card.id)?.name;
+					throw new Error(`the ${name}: counted ${card.counted} != ${want}`);
+				}
+				checks += 1;
+			}
+			const wantCounted = mine.filter(
+				(d) => d.stage === stage && d.counted && d.cents !== null,
+			).length;
+			if (got.countedCount !== wantCounted) {
+				throw new Error(
+					`cot ${stage}: countedCount ${got.countedCount} != ${wantCounted}`,
+				);
+			}
+			checks += 1;
+			const countedCards = got.cards.filter((c) => c.counted);
+			const sum = countedCards.reduce(
+				(t, c) => t + (c.baseAmountCents ?? 0),
+				0,
+			);
+			const want = got.countedCount === 0 ? null : sum;
+			if (got.count !== got.cards.length || got.valueCents !== want) {
+				throw new Error(
+					`cot ${stage}: tong the counted ${want} != valueCents ${got.valueCents}`,
+				);
+			}
+			checks += 1;
+		}
+		expect(checks).toBe(matrix);
+
+		const rows: Raw[] = Array.from({ length: 53 }, (_, i) => ({
+			name: `D${String(i).padStart(2, "0")}`,
+			stage: "QUALIFIED_TO_BUY",
+			owner: ownerD,
+			cents: 10_00,
+			kind: i === 0 || i === 52 ? "pending" : "counted",
+		}));
+		await seedRaw(rows);
+		const cut = column(
+			await deals.board(input({ owner: [ownerD] })),
+			"QUALIFIED_TO_BUY",
+		);
+		expect(cut.cards.length).toBe(DEAL_BOARD.cardsPerColumn);
+		if (cut.countedCount !== 51) {
+			throw new Error(`cot bi cat: countedCount ${cut.countedCount} != 51`);
+		}
+		await db.deal.deleteMany({ where: { ownerId: ownerD } });
 	});
 
 	it("tran-50: 53 thoa thuan con 50 the theo thu tu cua list", async () => {
@@ -448,5 +573,177 @@ describe("deals.board", () => {
 			select: { closedReason: true },
 		});
 		expect(row.closedReason).toBe("Hết ngân sách");
+	});
+	it("sau-luu: dau ra may chu truoc va sau tung luot luu that", async () => {
+		const main = await seedRaw([
+			{
+				name: "E1",
+				stage: "DEMO_BOOKED",
+				owner: ownerE,
+				cents: 100_00,
+				kind: "counted",
+			},
+			{
+				name: "E2",
+				stage: "DEMO_BOOKED",
+				owner: ownerE,
+				cents: 250_00,
+				kind: "counted",
+			},
+			{
+				name: "E3",
+				stage: "DEMO_BOOKED",
+				owner: ownerE,
+				cents: 900_00,
+				kind: "stale",
+			},
+			{
+				name: "E4",
+				stage: "DEMO_BOOKED",
+				owner: ownerE,
+				cents: 50_00,
+				kind: "pending",
+			},
+			{
+				name: "E5",
+				stage: "DEMO_BOOKED",
+				owner: ownerE,
+				cents: null,
+				kind: "none",
+			},
+			{
+				name: "E6",
+				stage: "QUALIFIED_TO_BUY",
+				owner: ownerE,
+				cents: null,
+				kind: "none",
+			},
+			{
+				name: "E7",
+				stage: "CONTRACT_SENT",
+				owner: ownerE,
+				cents: 1_000_00,
+				kind: "counted",
+			},
+			{
+				name: "E8",
+				stage: "CLOSED_WON",
+				owner: ownerE,
+				cents: 3_000_00,
+				kind: "counted",
+			},
+		]);
+		const cut = await seedRaw(
+			Array.from({ length: 53 }, (_, i) => ({
+				name: `D${String(i).padStart(2, "0")}`,
+				stage: "QUALIFIED_TO_BUY" as DealStage,
+				owner: ownerD,
+				cents: 10_00,
+				kind: i === 0 || i === 52 ? ("pending" as const) : ("counted" as const),
+			})),
+		);
+		const id = (ids: Map<string, string>, name: string) => {
+			const found = ids.get(name);
+			if (!found) throw new Error(`thieu ${name}`);
+			return found;
+		};
+		const plan: {
+			ten: string;
+			owner: string;
+			luot: {
+				ten: string;
+				ids: Map<string, string>;
+				from: DealStage;
+				to: DealStage;
+			}[];
+		}[] = [
+			{
+				ten: "the-duoc-tinh",
+				owner: ownerE,
+				luot: [
+					{ ten: "E1", ids: main, from: "DEMO_BOOKED", to: "QUALIFIED_TO_BUY" },
+				],
+			},
+			{
+				ten: "the-eur",
+				owner: ownerE,
+				luot: [
+					{ ten: "E3", ids: main, from: "DEMO_BOOKED", to: "QUALIFIED_TO_BUY" },
+				],
+			},
+			{
+				ten: "chua-quy-doi-that",
+				owner: ownerE,
+				luot: [
+					{ ten: "E4", ids: main, from: "DEMO_BOOKED", to: "QUALIFIED_TO_BUY" },
+				],
+			},
+			{
+				ten: "khong-so-tien",
+				owner: ownerE,
+				luot: [
+					{ ten: "E5", ids: main, from: "DEMO_BOOKED", to: "QUALIFIED_TO_BUY" },
+				],
+			},
+			{
+				ten: "cuoi-cung",
+				owner: ownerE,
+				luot: [
+					{
+						ten: "E7",
+						ids: main,
+						from: "CONTRACT_SENT",
+						to: "DECISION_MAKER_BOUGHT_IN",
+					},
+				],
+			},
+			{
+				ten: "hai-luot",
+				owner: ownerE,
+				luot: [
+					{ ten: "E1", ids: main, from: "DEMO_BOOKED", to: "QUALIFIED_TO_BUY" },
+					{ ten: "E2", ids: main, from: "DEMO_BOOKED", to: "QUALIFIED_TO_BUY" },
+				],
+			},
+			{
+				ten: "cot-bi-cat",
+				owner: ownerD,
+				luot: [
+					{ ten: "D00", ids: cut, from: "QUALIFIED_TO_BUY", to: "DEMO_BOOKED" },
+					{ ten: "D01", ids: cut, from: "QUALIFIED_TO_BUY", to: "DEMO_BOOKED" },
+				],
+			},
+		];
+		const cases: unknown[] = [];
+		for (const c of plan) {
+			const truoc = await deals.board(input({ owner: [c.owner] }));
+			for (const l of c.luot) {
+				await deals.setStage({ id: id(l.ids, l.ten), stage: l.to }, c.owner);
+			}
+			const sau = await deals.board(input({ owner: [c.owner] }));
+			for (const l of c.luot) {
+				if (
+					!column(sau, l.to).cards.some((card) => card.id === id(l.ids, l.ten))
+				) {
+					throw new Error(`ca ${c.ten}: ${l.ten} khong o cot ${l.to}`);
+				}
+			}
+			for (const l of c.luot) {
+				await deals.setStage({ id: id(l.ids, l.ten), stage: l.from }, c.owner);
+			}
+			cases.push({
+				ten: c.ten,
+				luot: c.luot.map((l) => ({
+					id: id(l.ids, l.ten),
+					from: l.from,
+					to: l.to,
+				})),
+				truoc,
+				sau,
+			});
+		}
+		expect(cases.length).toBe(plan.length);
+		writeMoveFixture(cases);
+		await db.deal.deleteMany({ where: { ownerId: { in: [ownerD, ownerE] } } });
 	});
 });
