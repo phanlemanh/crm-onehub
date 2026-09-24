@@ -71,15 +71,21 @@ for (const t of tep) {
 const ui = git("diff", "--name-only", `${moc}...HEAD`, "--", "packages/ui")
 	.split("\n")
 	.filter(Boolean);
+const keHoach = [
+	"docs/superpowers/plans/2026-09-24-cau-truc-to-chuc.md",
+	...git("diff", "--name-only", `${moc}...HEAD`, "--", "docs/superpowers/plans")
+		.split("\n")
+		.filter((t) => t.endsWith(".md") && existsSync(join(GOC, t))),
+];
 const daKhai = new Set(
-	(
-		readFileSync(
-			join(GOC, "docs/superpowers/plans/2026-09-24-cau-truc-to-chuc.md"),
-			"utf8",
-		)
-			.split("\n")
-			.find((d) => d.startsWith("- Thành phần dùng chung được sửa:")) ?? ""
-	).match(/packages\/ui\/[^`]+/g) ?? [],
+	keHoach.flatMap(
+		(t) =>
+			(
+				readFileSync(join(GOC, t), "utf8")
+					.split("\n")
+					.find((d) => d.startsWith("- Thành phần dùng chung được sửa")) ?? ""
+			).match(/packages\/ui\/[^`]+/g) ?? [],
+	),
 );
 const ngoaiKhai = ui.filter((f) => !daKhai.has(f));
 if (ngoaiKhai.length > 0) {

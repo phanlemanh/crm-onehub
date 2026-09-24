@@ -364,3 +364,61 @@ describe("nhap-moi", () => {
 		]);
 	});
 });
+
+describe("truong-api", () => {
+	test("truong-api: dat truong phong ban roi doc cay dung nguoi, nguoi ngoai phong ban bi tu choi va cay khong doi", async () => {
+		const pb = await pbMoi("ta-pb");
+		const trong = await nguoiMoi("ta-trong");
+		const ngoai = await nguoiMoi("ta-ngoai");
+		ok(await datViTri(trong, pb), "xep nguoi");
+		ok(
+			await goi("org.setHead", { kind: "department", id: pb, userId: trong }),
+			"dat truong",
+		);
+		const doc = async () =>
+			(await cay()).chuaXep.find((d) => d.id === pb)?.head?.id ?? null;
+		expect(await doc()).toBe(trong);
+
+		const truoc = JSON.stringify(await cay());
+		const tra = await goi("org.setHead", {
+			kind: "department",
+			id: pb,
+			userId: ngoai,
+		});
+		expect(`HTTP ${tra.status} ${tra.loi}`).toBe(
+			`HTTP 400 ${T.truongNgoaiPhongBan}`,
+		);
+		expect(JSON.stringify(await cay()) === truoc ? "" : "cay doi").toBe("");
+	});
+});
+
+describe("sap-api", () => {
+	test("sap-api: sap bo phan va phong ban roi doc lai dung thu tu, day thieu mot bo phan bi tu choi", async () => {
+		const a = await tao("org.createDivision", { name: ma("sa-a") }, "bp a");
+		const b = await tao("org.createDivision", { name: ma("sa-b") }, "bp b");
+		const khac = (await cay()).divisions
+			.map((d) => d.id)
+			.filter((id) => id !== a && id !== b);
+		ok(
+			await goi("org.reorderDivisions", { ids: [b, ...khac, a] }),
+			"sap bo phan",
+		);
+		const thuTu = (await cay()).divisions.map((d) => d.id);
+		expect(thuTu).toEqual([b, ...khac, a]);
+
+		const p1 = await pbMoi("sa-p1", a);
+		const p2 = await pbMoi("sa-p2", a);
+		const p3 = await pbMoi("sa-p3", a);
+		ok(
+			await goi("org.moveDepartment", { id: p3, divisionId: a, index: 0 }),
+			"sap phong ban",
+		);
+		expect(await thuTuTrong(a)).toEqual([p3, p1, p2]);
+
+		const tra = await goi("org.reorderDivisions", { ids: [a, ...khac] });
+		expect(`HTTP ${tra.status} ${tra.loi}`).toBe(
+			`HTTP 400 ${T.thuTuBoPhanLech}`,
+		);
+		expect((await cay()).divisions.map((d) => d.id)).toEqual([b, ...khac, a]);
+	});
+});

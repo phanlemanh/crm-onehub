@@ -17,8 +17,8 @@
 
 - Không viết chú thích trong code (`AGENTS.md`).
 - Không `className` trên thành phần `@crm/ui` dưới `settings/organization`. Thẻ HTML trần chỉ được class bố cục (flex, grid, gap, p-, m-, w-, min-w-, truncate).
-- Tệp sửa hoặc thêm trong `packages/ui` chỉ gồm: `src/components/nav-item.tsx`, `src/components/stat-tile.tsx`, `src/components/pick-list-dialog.tsx`, `src/components/archived-list.tsx`, cùng tệp chữ `src/lib/messages.ts` nếu thành phần cần chữ mặc định.
-- Thành phần dùng chung được sửa (khai cho E21): `packages/ui/src/components/nav-item.tsx`, `packages/ui/src/components/stat-tile.tsx`, `packages/ui/src/components/pick-list-dialog.tsx`, `packages/ui/src/components/archived-list.tsx`, `packages/ui/src/lib/messages.ts`.
+- Tệp sửa hoặc thêm trong `packages/ui` chỉ gồm: `src/components/nav-item.tsx`, `src/components/stat-tile.tsx`, `src/components/pick-list-dialog.tsx`, `src/components/archived-list.tsx`, cùng tệp chữ `src/lib/messages.ts` nếu thành phần cần chữ mặc định, và biến thể `size="wide"` của `src/components/dialog.tsx` cho hộp nhập (thay `className` tại chỗ gọi).
+- Thành phần dùng chung được sửa (khai cho E21): `packages/ui/src/components/nav-item.tsx`, `packages/ui/src/components/stat-tile.tsx`, `packages/ui/src/components/pick-list-dialog.tsx`, `packages/ui/src/components/archived-list.tsx`, `packages/ui/src/lib/messages.ts`, `packages/ui/src/components/dialog.tsx`, `packages/ui/test/to-chuc-thanh-phan.dom.tsx`.
 - Client component không nhập `@crm/db`, `@crm/auth`.
 - Hằng số chỉnh được ở `apps/api/src/to-chuc/to-chuc-config.ts` (`TO_CHUC`, `as const`): trần lô `TO_CHUC.lo.toiDa = 50`.
 - Ba câu lỗi nhập nguyên văn: «Thiếu email» · «Thiếu phòng ban» · «Trưởng bộ phận cần cột bộ phận, hoặc phòng ban đã thuộc một bộ phận».
@@ -312,7 +312,7 @@ export const toChucParsers = {
 - Create: `_acceptance/to-chuc-danh-sach-chi-tiet/rang/man-chi-tiet.mjs`. Chép khuôn từ `_acceptance/cau-truc-to-chuc/rang/man-to-chuc.mjs`, kể cả tự đăng nhập quản trị, cổng mặc định 3710/3711 và `canhCay`. Hằng `KY_MONG = 36`, `O_MONG = 10`.
 - Create: `rang/khong-hoi-quy.mjs`. Với ba hồ sơ đã ký, rút tên bài từ `evals.yaml` của chúng (tệp và `-t`), rồi so tên bài, số `expect` và tập chuỗi ghim giữa `git merge-base HEAD origin/onehub` và HEAD. Sau đó kiểm `run-log.jsonl` của ba hồ sơ có dòng `repin` mới với `evals_exit` đủ. Cờ `--chi-dem` chỉ in số đếm.
 - Create: `rang/san-thiet-ke.mjs`. Chép khuôn của `cau-truc-to-chuc`. Quét `className` trên mọi phần tử JSX có tên viết hoa dưới `settings/organization`. Danh sách tệp `packages/ui` được phép rút từ dòng «Thành phần dùng chung được sửa» của kế hoạch này.
-- Modify: `_acceptance/config.yaml` — thêm `executors.test.tdc_*` (mỗi eval một khoá, lệnh chạy `bun test … -t <khối>`) và `executors.script.tdc_man_chrome` (bọc bằng `scripts/lan-do/tien-de.mjs`, mặc định cổng 3710/3711), `tdc_khong_hoi_quy`, `tdc_san_thiet_ke`.
+- Modify: `_acceptance/config.yaml` — thêm `executors.test.tcds_*` (mỗi eval một khoá, lệnh chạy `bun test … -t <khối>`) và `executors.script.tcds_man_chrome` (bọc bằng `scripts/lan-do/tien-de.mjs`, mặc định cổng 3710/3711), `tcds_khong_hoi_quy`, `tcds_san_thiet_ke`.
 - Modify: `docs/api.md`, mục «The organization tree» — thêm hai thủ tục ghi hàng loạt.
 
 - [ ] **Step 1:** Viết ba script.

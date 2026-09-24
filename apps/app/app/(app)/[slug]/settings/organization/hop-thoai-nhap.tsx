@@ -123,7 +123,7 @@ export function HopThoaiNhap({ dong }: { dong: () => void }) {
 				if (!mo && !ghi.isPending) dong();
 			}}
 		>
-			<DialogContent className="sm:max-w-(--container-sheet)">
+			<DialogContent size="wide">
 				<DialogHeader>
 					<DialogTitle>{m.tieuDe}</DialogTitle>
 					<DialogDescription>{m.moTa}</DialogDescription>
@@ -215,7 +215,9 @@ export function HopThoaiNhap({ dong }: { dong: () => void }) {
 								<TableBody>
 									{ketQua?.xem.rows.map((r) => (
 										<TableRow key={r.line} data-hong={r.error ? "co" : "khong"}>
-											<TableCell className="tabular-nums">{r.line}</TableCell>
+											<TableCell>
+												<span className="tabular-nums">{r.line}</span>
+											</TableCell>
 											<TableCell translate="no">{r.email}</TableCell>
 											<TableCell translate="no">{r.department}</TableCell>
 											<TableCell translate="no">{r.division}</TableCell>

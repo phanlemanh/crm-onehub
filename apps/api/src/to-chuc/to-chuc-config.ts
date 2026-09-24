@@ -26,6 +26,8 @@ export const TO_CHUC = {
 			`Người ${id} không phải thành viên đang hoạt động.`,
 		truongNgoaiPhongBan: "Trưởng phòng ban phải là người của phòng ban đó.",
 		phuTrungChinh: "Phòng ban phụ không được trùng phòng ban chính.",
+		thuTuBoPhanLech:
+			"Danh sách bộ phận đã đổi trong lúc sắp — tải lại rồi sắp lại.",
 		quanLyLaChinhMinh: "Quản lý trực tiếp phải là người khác.",
 		loQuaDai: (n: number) => `Lô có quá ${n} dòng — chia nhỏ rồi nhập lại.`,
 		loRong: "Không có dòng nào để nhập.",

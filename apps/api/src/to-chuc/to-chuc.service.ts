@@ -175,6 +175,17 @@ export class ToChucService {
 	}
 
 	async reorderDivisions(input: { ids: string[] }) {
+		const song = await this.db.division.findMany({
+			where: { archivedAt: null },
+			select: { id: true },
+		});
+		const gui = new Set(input.ids);
+		if (
+			gui.size !== input.ids.length ||
+			gui.size !== song.length ||
+			song.some((d) => !gui.has(d.id))
+		)
+			throw new BadRequestException(T.thuTuBoPhanLech);
 		await this.db.$transaction(
 			input.ids.map((id, viTri) =>
 				this.db.division.update({ where: { id }, data: { position: viTri } }),

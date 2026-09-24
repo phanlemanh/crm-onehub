@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type * as React from "react";
 import { Suspense } from "react";
 import {
 	PageShell,
@@ -22,31 +23,46 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: toChucMessages(await getLocale()).title };
 }
 
+function DauTrang({
+	tieuDe,
+	moTa,
+	hanhDong,
+}: {
+	tieuDe: string;
+	moTa: string;
+	hanhDong?: React.ReactNode;
+}) {
+	return (
+		<PageShellHeader>
+			<PageShellHeading>
+				<PageShellTitle>{tieuDe}</PageShellTitle>
+				<PageShellDescription>{moTa}</PageShellDescription>
+			</PageShellHeading>
+			{hanhDong ? <PageShellActions>{hanhDong}</PageShellActions> : null}
+		</PageShellHeader>
+	);
+}
+
 export default async function CaiDatToChucPage() {
 	const m = toChucMessages(await getLocale());
 
 	return (
-		<PageShell className="min-h-0">
-			<PageShellHeader>
-				<PageShellHeading>
-					<PageShellTitle>{m.title}</PageShellTitle>
-					<PageShellDescription>{m.moTa}</PageShellDescription>
-				</PageShellHeading>
-				<PageShellActions>
-					<HanhDongToChuc />
-				</PageShellActions>
-			</PageShellHeader>
-
-			<PageShellContent className="min-h-0">
-				<Suspense fallback={<PageShellLoading />}>
-					<CaiDat />
-				</Suspense>
-			</PageShellContent>
+		<PageShell>
+			<Suspense
+				fallback={
+					<>
+						<DauTrang tieuDe={m.title} moTa={m.moTa} />
+						<PageShellLoading />
+					</>
+				}
+			>
+				<CaiDat tieuDe={m.title} moTa={m.moTa} />
+			</Suspense>
 		</PageShell>
 	);
 }
 
-async function CaiDat() {
+async function CaiDat({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 	await requireSession();
 
 	const trpc = getServerTrpc();
@@ -59,7 +75,10 @@ async function CaiDat() {
 
 	return (
 		<HydrateClient>
-			<ToChuc tenGoc={workspace?.name || undefined} />
+			<DauTrang tieuDe={tieuDe} moTa={moTa} hanhDong={<HanhDongToChuc />} />
+			<PageShellContent>
+				<ToChuc tenGoc={workspace?.name || undefined} />
+			</PageShellContent>
 		</HydrateClient>
 	);
 }
