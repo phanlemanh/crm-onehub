@@ -243,8 +243,10 @@ evals:
           chua "`zalo-goi-thu-hong-hien-dung-bot`"
         3 dong co "`noi-zalo-cho-nguoi-moi`" trong bang do chua "#118" va "đã lên
           `onehub`", khong chua "PR mở"
-      Chieu do tren BAN GOC: --goc doc hai tep o merge-base HEAD origin/onehub (git
-      show) -> ca ba moc do, exit 1, thong diep ghim ten tung moc. Doi chung am --tu-kiem
+      Chieu do tren BAN GOC: doc hai tep o sha co dinh 090bd517 (git show) — onehub
+      ngay truoc merge #122, cung la merge-base luc ghim cuoi 3bc0d769; merge-base
+      dong da chua ca ba moc sau khi #122 len onehub -> ca ba moc do, exit 1,
+      thong diep ghim ten tung moc. Doi chung am --tu-kiem
       chep ban that vao thu muc tam, pha tung moc lan luot -> exit 1 ghim ten moc;
       ban that -> 0.
   - id: E11

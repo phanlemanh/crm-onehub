@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3bc0d769451e7ff38dd92f368f194847e41b6a1d
+verified_commit: f8f5cf916142628e2450d9cf7f46411b36b9c906
 human_signoff: Phan Le Manh 2026-09-24
 ---
 
@@ -205,3 +205,7 @@ Round 1: E1–E12 và bốn lệnh suite (bun run test, turbo lint, lint:slop, t
 ### Re-pin lần 1 — 2026-09-24, do hoá cũ do gộp onehub 090bd517 (#120 cây tổ chức, #121)
 run_id: repin-20260924T112315Z-99165
 sha: 3bc0d769451e7ff38dd92f368f194847e41b6a1d · suites: 4 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E8
+
+### Re-pin lần 2 — 2026-09-24, do E10 neo ban goc vao 090bd517: merge-base dong da chua ca ba moc sau khi #122 len onehub
+run_id: repin-20260924T151335Z-48982
+sha: f8f5cf916142628e2450d9cf7f46411b36b9c906 · suites: 4 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E8
