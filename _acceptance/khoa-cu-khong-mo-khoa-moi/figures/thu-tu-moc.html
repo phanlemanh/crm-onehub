@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thứ tự móc · Sơ đồ trình tự</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1140px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 48rem;
+      margin-bottom: 1.5rem;
+    }
+    code { font-family: var(--font-mono); font-size: 0.8125rem; }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình quyết định · khoá cũ không mở khoá mới · d-1</p>
+    <h1>Phép kiểm phải đứng sau móc khoá</h1>
+    <p class="sub">Better Auth chạy móc chung (<code>hooks.before</code>) trước móc của plugin khoá, mà chỉ móc plugin khoá mới dựng phiên từ header <code>x-api-key</code>. Phép kiểm nằm trong móc chung nên thấy «chưa có phiên» và cho qua. Dời nó thành plugin đứng ngay sau <code>apiKey()</code> thì nó hỏi đúng danh tính endpoint sắp dùng — kể cả khi lời gọi mang cả cookie của thành viên lẫn header khoá.</p>
+
+    <svg viewBox="0 0 1100 800" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-ink" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#171717"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <rect x="48" y="120" width="1004" height="608" rx="4" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <line x1="56" y1="424" x2="1044" y2="424" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+
+      <line x1="136" y1="96" x2="136" y2="728" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="344" y1="96" x2="344" y2="728" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="552" y1="96" x2="552" y2="728" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="760" y1="96" x2="760" y2="728" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="968" y1="96" x2="968" y2="728" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+
+      <rect x="48" y="120" width="80" height="20" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <text x="88" y="134" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">TRƯỚC VÁ</text>
+      <rect x="136" y="124" width="184" height="16" rx="2" fill="#fafafa"/>
+      <text x="140" y="134" fill="#575757" font-size="10" font-family="'Geist', sans-serif">chỉ header khoá, không cookie</text>
+
+      <rect x="48" y="424" width="64" height="20" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <text x="80" y="438" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">SAU VÁ</text>
+      <rect x="120" y="428" width="200" height="16" rx="2" fill="#fafafa"/>
+      <text x="124" y="438" fill="#575757" font-size="10" font-family="'Geist', sans-serif">chỉ header, hay cookie + header</text>
+
+      <rect x="340" y="176" width="8" height="40" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+      <rect x="756" y="216" width="8" height="40" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+      <rect x="548" y="256" width="8" height="88" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+      <rect x="964" y="344" width="8" height="40" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+
+      <rect x="340" y="480" width="8" height="40" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+      <rect x="548" y="520" width="8" height="88" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+      <rect x="756" y="608" width="8" height="88" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+
+      <line x1="140" y1="176" x2="340" y2="176" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="348" y1="216" x2="756" y2="216" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="756" y1="256" x2="556" y2="256" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 556 280 H 600 Q 608 280 608 288 V 304 Q 608 312 600 312 H 556" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="556" y1="344" x2="964" y2="344" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="964" y1="384" x2="140" y2="384" stroke="#171717" stroke-width="1.4" marker-end="url(#arrow-ink)"/>
+
+      <line x1="140" y1="480" x2="340" y2="480" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="348" y1="520" x2="548" y2="520" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 556 544 H 600 Q 608 544 608 552 V 568 Q 608 576 600 576 H 556" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="556" y1="608" x2="756" y2="608" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 764 632 H 808 Q 816 632 816 640 V 656 Q 816 664 808 664 H 764" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="756" y1="696" x2="140" y2="696" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <rect x="168" y="152" width="144" height="16" rx="2" fill="#fafafa"/>
+      <text x="240" y="164" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">POST /api-key/create</text>
+
+      <rect x="616" y="192" width="80" height="16" rx="2" fill="#fafafa"/>
+      <text x="656" y="204" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">hỏi phiên</text>
+
+      <rect x="584" y="232" width="144" height="16" rx="2" fill="#fafafa"/>
+      <text x="656" y="244" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chưa có phiên · cho qua</text>
+
+      <rect x="616" y="288" width="112" height="16" rx="2" fill="#fafafa"/>
+      <text x="620" y="300" fill="#575757" font-size="10" font-family="'Geist', sans-serif">dựng phiên từ khoá</text>
+
+      <rect x="816" y="320" width="96" height="16" rx="2" fill="#fafafa"/>
+      <text x="864" y="332" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chạy endpoint</text>
+
+      <rect x="156" y="360" width="168" height="16" rx="2" fill="#fafafa"/>
+      <text x="240" y="372" fill="#171717" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan font-family="'Geist Mono', monospace">200</tspan> · thêm 1 dòng khoá</text>
+
+      <rect x="168" y="456" width="144" height="16" rx="2" fill="#fafafa"/>
+      <text x="240" y="468" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">POST /api-key/create</text>
+
+      <rect x="408" y="496" width="80" height="16" rx="2" fill="#fafafa"/>
+      <text x="448" y="508" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chuyển tiếp</text>
+
+      <rect x="616" y="552" width="112" height="16" rx="2" fill="#fafafa"/>
+      <text x="620" y="564" fill="#575757" font-size="10" font-family="'Geist', sans-serif">dựng phiên từ khoá</text>
+
+      <rect x="600" y="584" width="112" height="16" rx="2" fill="#fafafa"/>
+      <text x="656" y="596" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">phiên của chủ khoá</text>
+
+      <rect x="824" y="640" width="128" height="16" rx="2" fill="#fafafa"/>
+      <text x="828" y="652" fill="#575757" font-size="10" font-family="'Geist', sans-serif">không có dòng <tspan font-family="'Geist Mono', monospace">member</tspan></text>
+
+      <rect x="920" y="600" width="96" height="16" rx="2" fill="#fafafa"/>
+      <text x="968" y="612" fill="#666666" font-size="10" font-style="italic" font-family="'Lora', serif" text-anchor="middle">không chạy tới</text>
+
+      <rect x="148" y="672" width="184" height="16" rx="2" fill="#fafafa"/>
+      <text x="240" y="684" fill="#006B4F" font-size="10" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle"><tspan font-family="'Geist Mono', monospace">403 NOT_A_MEMBER</tspan> · 0 dòng</text>
+
+      <rect x="48" y="40" width="176" height="56" rx="6" fill="#fafafa"/>
+      <rect x="48" y="40" width="176" height="56" rx="6" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="1"/>
+      <text x="136" y="64" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Người ngoài kho</text>
+      <text x="136" y="82" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">header x-api-key</text>
+
+      <rect x="256" y="40" width="176" height="56" rx="6" fill="#fafafa"/>
+      <rect x="256" y="40" width="176" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="344" y="64" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Móc chung</text>
+      <text x="344" y="82" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">hooks.before</text>
+
+      <rect x="464" y="40" width="176" height="56" rx="6" fill="#fafafa"/>
+      <rect x="464" y="40" width="176" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="552" y="64" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Móc plugin khoá</text>
+      <text x="552" y="82" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">apiKey()</text>
+
+      <rect x="672" y="40" width="176" height="56" rx="6" fill="#fafafa"/>
+      <rect x="672" y="40" width="176" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="760" y="64" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Phép kiểm tư cách</text>
+      <text x="760" y="82" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">canhKhoaApi</text>
+
+      <rect x="880" y="40" width="176" height="56" rx="6" fill="#fafafa"/>
+      <rect x="880" y="40" width="176" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="968" y="64" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Endpoint tạo khoá</text>
+      <text x="968" y="82" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">/api-key/create</text>
+
+      <line x1="40" y1="752" x2="1060" y2="752" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="776" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <line x1="140" y1="772" x2="168" y2="772" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="180" y="776" fill="#575757" font-size="9" font-family="'Geist', sans-serif">chuyển lượt</text>
+
+      <rect x="260" y="766" width="8" height="12" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+      <text x="280" y="776" fill="#575757" font-size="9" font-family="'Geist', sans-serif">đang giữ lượt</text>
+
+      <line x1="376" y1="772" x2="404" y2="772" stroke="#171717" stroke-width="1.4" marker-end="url(#arrow-ink)"/>
+      <text x="416" y="776" fill="#575757" font-size="9" font-family="'Geist', sans-serif">lỗ: khoá mới được ghi</text>
+
+      <line x1="548" y1="772" x2="576" y2="772" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="588" y="776" fill="#575757" font-size="9" font-family="'Geist', sans-serif">đường của thiết kế này</text>
+
+      <text x="1060" y="776" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">AC-1 · AC-2 · AC-3</text>
+    </svg>
+  </div>
+</body>
+</html>

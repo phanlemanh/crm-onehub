@@ -45,9 +45,11 @@ import {
 	paginate,
 	resolveOrderBy,
 } from "../trpc/list-input";
+import { DEAL_BOARD } from "./deal-board-config";
 import type {
 	ClosingWindow,
 	DealAttachContactInput,
+	DealBoardInput,
 	DealBulkOwnerInput,
 	DealBulkStageInput,
 	DealContactRoleInput,
@@ -86,6 +88,8 @@ const CONTACT_SELECT = {
 } as const;
 
 const LOSING = new Set<DealStage>(LOSING_DEAL_STAGES);
+
+const DEAL_BOARD_STAGES = [...OPEN_DEAL_STAGES, ...CLOSED_DEAL_STAGES] as const;
 
 const SORTABLE: OrderByColumns<Prisma.DealOrderByWithRelationInput[]> = {
 	name: (dir) => [{ name: dir }],
@@ -189,6 +193,86 @@ export class DealsService {
 			reportingCurrency: string;
 			unconverted: { count: number; currencies: string[] };
 		};
+	}
+
+	async board(input: DealBoardInput) {
+		const filterableFields = await this.fields.filterableFieldsFor("DEAL");
+		const where = this.buildWhere(
+			{
+				...input,
+				status: "all",
+				stage: [],
+				archived: false,
+				page: 1,
+				pageSize: 1,
+			},
+			filterableFields,
+		);
+		const base = await this.conversion.reportingCurrency();
+		const orderBy = resolveOrderBy(input, SORTABLE, [{ createdAt: "desc" }]);
+
+		const columns = await Promise.all(
+			DEAL_BOARD_STAGES.map(async (stage) => {
+				const stageWhere: Prisma.DealWhereInput = { AND: [where, { stage }] };
+				const [count, value, unconverted, cards] = await Promise.all([
+					this.db.deal.count({ where: stageWhere }),
+					this.db.deal.aggregate({
+						where: { AND: [stageWhere, this.conversion.countedWhere(base)] },
+						_sum: { baseAmount: true },
+					}),
+					this.conversion.unconverted(stageWhere),
+					this.db.deal.findMany({
+						where: stageWhere,
+						take: DEAL_BOARD.cardsPerColumn,
+						orderBy,
+						select: {
+							id: true,
+							name: true,
+							stage: true,
+							amount: true,
+							currency: true,
+							baseAmount: true,
+							expectedCloseDate: true,
+							closedAt: true,
+							company: { select: COMPANY_SELECT },
+							owner: { select: OWNER_SELECT },
+							lastActivityAt: true,
+							createdAt: true,
+							archivedAt: true,
+						},
+					}),
+				]);
+				return {
+					stage,
+					count,
+					valueCents: toCents(value._sum.baseAmount),
+					unconverted,
+					cards: cards.map(
+						({
+							amount,
+							baseAmount,
+							expectedCloseDate,
+							closedAt,
+							lastActivityAt,
+							createdAt,
+							archivedAt,
+							...card
+						}) => ({
+							...card,
+							amountCents: toCents(amount),
+							baseAmountCents: toCents(baseAmount),
+							expectedCloseDate: expectedCloseDate?.toISOString() ?? null,
+							closedAt: closedAt?.toISOString() ?? null,
+							lastActivityAt: lastActivityAt?.toISOString() ?? null,
+							createdAt: createdAt.toISOString(),
+							archivedAt: archivedAt?.toISOString() ?? null,
+						}),
+					),
+				};
+			}),
+		);
+
+		return { columns, reportingCurrency: base };
 	}
 
 	async byId(id: string) {

@@ -11,6 +11,7 @@ context until you read them, and the rules in them are not optional.
 | `.env`, configuration, which variables exist and why | `docs/environment.md` |
 | UI in `apps/app` or `packages/ui` | `docs/design.md` (below) |
 | Bản mẫu giao diện dưới `/proto`, thêm một proto cho phiên design-pass | `docs/proto.md` |
+| Cài hay dùng một thành phần, ví dụ hay block ReUI (`@reui/…`) | `docs/reui.md` |
 | Agent chat UI — AI Elements owns the conversation; check its register before building anything | `docs/chat-ui.md` |
 | Deal amounts, totals, charts, exchange rates | `docs/currency.md` |
 | The record sheet's Agent tab | `docs/agent-panel.md` |

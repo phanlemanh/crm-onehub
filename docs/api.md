@@ -56,8 +56,18 @@ here, what do we sell.
   button tell the truth: without it, anyone removed walks straight back in at the next
   sign-in. It takes the read path as a parameter so a test can inject a throwing one —
   `db` is a proxy, so `spyOn` cannot reach it.
-- **Removing a member is one transaction**: the member row goes and the allowance
-  moves to `cancelled` together.
+- **Removing a member is one transaction**: the member row goes, their sessions go,
+  their API keys are **disabled** (not deleted — the rows say who held what), and
+  the allowance moves to `cancelled`, together. Allowing them again restores the
+  membership, not the keys.
+- **A non-member cannot create, update or re-enable a key** through Better Auth's
+  own `/api-key/*` endpoints either. `canhKhoaApiPlugin` sits right after `apiKey()`
+  in `plugins`, so its check runs once the key plugin has turned an `x-api-key`
+  header into a session: it asks about the identity the endpoint will act as — the
+  key's owner when a key is sent, the cookie's otherwise. Moving it before `apiKey()`,
+  or back into `hooks.before`, lets a key alone through. A server-side call with no
+  session is untouched. Keys a non-member still held when this shipped were disabled
+  once by the `tat_khoa_nguoi_ngoai_kho` migration.
 - **First account is owner**, and the hook enrols pre-existing users, oldest first.
   That migration branch still names the first user owner regardless of the role an
   allowance gave them — a narrow case the contract does not cover yet.
@@ -146,6 +156,16 @@ self-hoster's admin cannot redeploy.
 - **One router per module**, `*.router.ts` (the codegen glob), with
   `@Router({ alias })` and `@UseMiddlewares(AuthMiddleware)`. **No `AuthMiddleware`
   means public — there is no other guard.**
+- **`AuthMiddleware` means signed in AND a member of the workspace.** It reads the
+  `member` row on every call, never a cache, so a removed person loses every
+  procedure at once — a fresh sign-in, a tab still holding the five-minute session
+  cookie cache, and an API key all resolve to a user with no `member` row. The
+  refusal is `FORBIDDEN` with `NOT_A_MEMBER` (`@crm/auth`), and it runs before
+  `.input()` and before any role check in a service.
+- **`SignedInMiddleware` is the one named exception**: signed in, membership not
+  asked. Only `workspace.get` uses it, because `proxy.ts` asks it whether the viewer
+  is still in the workspace and treats an error as *unknown* — which lets the
+  request through. A second procedure on it is a decision, not a convenience.
 - **Routers are thin**: zod in, service call out; Prisma lives in `*.service.ts`.
 - Services throw Nest's `HttpException` family; `DomainErrorMiddleware` maps them.
 - **Filter, sort and paginate in Prisma.** List procedures take `listInput` and return

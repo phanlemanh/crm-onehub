@@ -111,6 +111,7 @@ const en = {
 	board: {
 		empty: "Empty",
 		more: (count: string) => `${count} more`,
+		drag: (title: string) => `Drag ${title}`,
 	},
 };
 
@@ -227,6 +228,7 @@ const vi = {
 	board: {
 		empty: "Trống",
 		more: (count: string) => `còn ${count} thẻ`,
+		drag: (title: string) => `Kéo ${title}`,
 	},
 } satisfies Messages;
 

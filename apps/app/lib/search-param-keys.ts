@@ -31,6 +31,9 @@ export const SEARCH_PARAM = {
 	overview: {
 		scope: "scope",
 	},
+	deals: {
+		view: "view",
+	},
 	onboarding: {
 		trangThai: "trangThai",
 		cachXem: "cachXem",

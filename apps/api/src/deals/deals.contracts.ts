@@ -223,6 +223,37 @@ export const dealListOutput = z.object({
 
 export type DealListResult = z.infer<typeof dealListOutput>;
 
+export const dealBoardInput = dealListInput.pick({
+	q: true,
+	sort: true,
+	dir: true,
+	owner: true,
+	closing: true,
+	fields: true,
+});
+
+export type DealBoardInput = z.infer<typeof dealBoardInput>;
+
+export const dealBoardCardOutput = dealListRowOutput.omit({ fields: true });
+
+export const dealBoardOutput = z.object({
+	columns: z.array(
+		z.object({
+			stage: stageEnum,
+			count: z.number(),
+			valueCents: z.number().nullable(),
+			unconverted: z.object({
+				count: z.number(),
+				currencies: z.array(z.string()),
+			}),
+			cards: z.array(dealBoardCardOutput),
+		}),
+	),
+	reportingCurrency: z.string(),
+});
+
+export type DealBoardResult = z.infer<typeof dealBoardOutput>;
+
 export const dealDetailOutput = z.object({
 	id: z.string(),
 	name: z.string(),
