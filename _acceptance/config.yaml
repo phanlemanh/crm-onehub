@@ -376,6 +376,10 @@ executors:
     ktt_man_loc_vao_board: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t loc-vao-board"
     ktt_man_dau_cot: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t dau-cot"
     ktt_man_tro_nang: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t tro-nang"
+    ddc_api_duoc_tinh: 'bun run test -- "cd apps/api && bun test test/deals-board.spec.ts -t duoc-tinh"'
+    ddc_ham_doi: "cd apps/app && bun test ./test/dem-dau-cot.spec.ts"
+    ddc_man_dang_luu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t dang-luu-dau-cot"
+    ddc_man_loi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t loi-tra-dau-cot"
     ktt_board_giu_nguyen: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/board-giu-nguyen.dom.tsx"
   script:
     zqw_giu_nqz: 'B=$(git merge-base HEAD origin/onehub) && { git diff --quiet "$B" -- apps/agent/test/nhac-qua-zalo.integration.spec.ts || { echo "spec da ky cua nhac-qua-zalo bi sua" >&2; exit 1; }; } && bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts"'
@@ -711,6 +715,16 @@ executors:
     tosd_that: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca that"
     tosd_pham_vi: bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca pham-vi
     tosd_steps_cu: bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca steps-cu
+    ndk_them_tep: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca them-tep
+    ndk_them_mac_dinh: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca them-mac-dinh
+    ndk_bo_sot: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca bo-sot
+    ndk_chua_theo_doi: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca chua-theo-doi
+    ndk_khong_do_duoc: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca khong-do-duoc
+    ndk_cay_that: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca cay-that"
+    ndk_pham_vi: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca pham-vi
+    ndk_ho_so_goc: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca ho-so-goc"
+    ndk_xoa_chua_commit: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca xoa-chua-commit
+    ndk_cay_lech: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca cay-lech
     tdc_tieu_de_cot: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs"
     tdc_doi_chung_ke_hoach: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "DUOI_CONG=1 bun _acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs"
     bdc_bo_dung_ui: bun run test --filter=@crm/ui
