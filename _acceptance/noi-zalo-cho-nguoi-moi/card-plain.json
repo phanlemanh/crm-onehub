@@ -1,5 +1,82 @@
 {
- "feature_plain": "Quản trị viên bật bot Zalo ngay trên màn bằng cách dán Bot Token; người mới nối Zalo theo ba bước có tên bot thật và bấm gửi thử để thấy nhắc tới ngay.",
+ "feature_plain": "Quản trị viên bật bot Zalo ngay trên màn bằng cách dán Bot Token; người mới nối Zalo theo ba bước có tên bot thật, rồi bấm gửi thử để thấy nhắc tới ngay.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ kiểm Bot Token với Zalo, tự đăng ký nhận tin, lưu token và chỉ trả về màn bốn ký tự cuối."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ báo đúng chỗ sai khi dán nhầm Secret Token hoặc token Zalo không nhận, và không lưu gì."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ chỉ cho quản trị viên đặt bot; thành viên thường xem được trạng thái, không thấy ô token."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ dùng token dán trên màn trước, token trong .env chỉ là đường dự phòng — cho cả bảy chỗ dùng token."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ báo trên trang khi Zalo chưa giao tin về CRM, và cho quản trị viên bấm «Đăng ký lại»."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ không mất tin nhắn mã khi cơ sở dữ liệu lỗi giữa chừng: trả lỗi để Zalo gửi lại, lần sau nối được."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ vẫn nối người dùng khi bot trả lời hỏng, và ghi lại tin đó để tra."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ cho bot nhận ra người đã nối: «Bạn đã nối với … Nhắc đến lúc 08:30»."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ có nút «Gửi thử nhắc ngay» gửi một tin thử qua đúng kênh nhắc sẽ dùng (Zalo hoặc Slack)."
+  },
+  {
+   "id": "AC-12",
+   "p": "Sẽ hiện tên bot người dùng tìm được trong Zalo («Bot OneHub»), không còn tên máy «bot.uipSwwnr»."
+  },
+  {
+   "id": "AC-14",
+   "p": "Sẽ hiện ba bước có số cho người mới và hướng dẫn tạo bot đúng chỗ; sửa hai lỗi chữ lái thử (nhãn bị cắt, chữ Zalo lặp)."
+  },
+  {
+   "id": "AC-16",
+   "p": "Sẽ lưu token và khoá mới TRƯỚC khi đăng ký với Zalo, để lần Zalo gọi thử được nhận; Zalo xác minh hỏng thì không báo «đã đăng ký»."
+  },
+  {
+   "id": "AC-17",
+   "p": "Sẽ giữ nguyên token và khoá đang chạy khi một lần đăng ký lại hay đổi token bị Zalo từ chối, và báo cho quản trị viên là chưa thành."
+  },
+  {
+   "id": "AC-18",
+   "p": "Sẽ chứng minh nhịp kiểm bot chạy trọn (ghi giờ, dọn tin cũ) cả khi Zalo trả lỗi lúc hỏi trạng thái webhook."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-3",
+   "p": "Sẽ KHÔNG đăng ký nhận tin khi tác tử chưa có địa chỉ https — trang nói thẳng và chỉ lệnh thử tại máy."
+  },
+  {
+   "id": "AC-11",
+   "p": "Chặn liên kết Zalo còn sót khi một người rời xưởng: gỡ liên kết, mã và lựa chọn kênh của người đó."
+  },
+  {
+   "id": "AC-13",
+   "p": "Chặn gửi token sai dạng đi máy chủ; lỗi hiện ngay dưới ô, ô giữ nguyên chữ đã dán."
+  },
+  {
+   "id": "AC-15",
+   "p": "Sẽ KHÔNG sửa các phép đo đã ký của hai vòng trước; tài liệu đổi theo cách bật mới."
+  }
+ ],
+ "scope_plain": "Để sau: nút gỡ bot, mã hoá token, giới hạn gửi thử, mã QR, báo quản trị khi webhook rơi, trả lời tin nhắc và hỏi CRM qua Zalo, triển khai production.",
  "decisions_plain": [
   {
    "id": "d-20260924T034940Z-1",
@@ -44,6 +121,122 @@
   {
    "id": "d-20260924T045227Z-12",
    "p": "Stepper của ReUI là dạng tab nên thêm một danh sách bước tĩnh trong packages/ui dựng trên nó — đổi lại thêm một tệp giao diện dùng chung."
+  },
+  {
+   "id": "d-20260924T055654Z-13",
+   "p": "Ngoài-1: thông báo lỗi cầu nối còn chung chung — ghi giới hạn đã biết."
+  },
+  {
+   "id": "d-20260924T055654Z-14",
+   "p": "Ngoài-2: quy tắc dạng Bot Token viết ở hai nơi — ghi giới hạn đã biết."
+  },
+  {
+   "id": "d-20260924T055654Z-15",
+   "p": "Ngoài-3: tài liệu API chưa ghi việc gỡ thành viên xoá liên kết Zalo — ghi giới hạn đã biết."
+  },
+  {
+   "id": "d-20260924T055654Z-16",
+   "p": "Ngoài-7: năng lực «nhắc qua Zalo» của tác tử vẫn chỉ đọc biến môi trường — ghi giới hạn đã biết."
+  },
+  {
+   "id": "d-20260924T055654Z-17",
+   "p": "Ngoài-9: phép đo chữ khối kênh còn lỏng — ghi giới hạn đã biết."
+  },
+  {
+   "id": "d-20260924T055654Z-18",
+   "p": "Ngoài-10: vế cấm của phép đo tài liệu chưa từng đỏ — ghi giới hạn đã biết."
+  },
+  {
+   "id": "d-20260924T055654Z-19",
+   "p": "Ngoài-11: lưới thiết kế tĩnh chưa có đối chứng đỏ — ghi giới hạn đã biết."
+  },
+  {
+   "id": "d-20260924T055654Z-20",
+   "p": "Ngoài-12: một phép đo API dùng dữ liệu do tác tử giả ghi — ghi giới hạn đã biết."
+  },
+  {
+   "id": "d-20260924T055654Z-21",
+   "p": "Ngoài-13: khẳng định «token không về trình duyệt» rỗng nghĩa khi lưu thất bại — ghi giới hạn đã biết."
+  },
+  {
+   "id": "d-20260924T055654Z-22",
+   "p": "Ngoài-6: lỗi từ Zalo hay tác tử hiện sai nguyên nhân — tách thành việc riêng."
+  },
+  {
+   "id": "d-20260924T055654Z-23",
+   "p": "Ngoài-4: đăng ký webhook trước khi lưu khoá — sửa ngay trong vòng này (AC-16)."
+  },
+  {
+   "id": "d-20260924T055654Z-24",
+   "p": "Ngoài-5: đăng ký hỏng xoá khoá đang dùng — sửa ngay trong vòng này (AC-17)."
+  },
+  {
+   "id": "d-20260924T055654Z-25",
+   "p": "Ngoài-8: phép đo nhịp kiểm bot không phân biệt nhịp hỏng — sửa ngay trong vòng này (AC-18)."
+  },
+  {
+   "id": "d-20260924T055654Z-26",
+   "p": "Cổng Bằng chứng vòng 1 trả lại để nâng phạm vi ba mục trên — đổi lại phải duyệt lại phạm vi và chấm S4 vòng 2."
+  }
+ ],
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Trục người dùng: quản trị viên, thành viên thường, người mới, người đã nối, người rời xưởng — đủ khi mỗi vai có ít nhất một tiêu chí."
+  },
+  {
+   "i": 1,
+   "p": "Trục nguồn token và đường tin: token trên màn, trong .env, cả hai, không có; tác tử https hay không."
+  },
+  {
+   "i": 2,
+   "p": "Trục sự kiện: lưu đúng, sai dạng, Zalo từ chối, dán nhầm Secret Token, webhook rơi, nhắn mã, nhắn chữ khi đã nối, gửi thử, lỗi giữa chừng, rời xưởng."
+  },
+  {
+   "i": 3,
+   "p": "Trục màn: Kết nối › Zalo, Thông báo của bạn, và câu bot trả trong Zalo."
+  },
+  {
+   "i": 4,
+   "p": "Mỗi ô cốt lõi có tiêu chí đo: AC-1 tới AC-15, không ô nào bỏ trống."
+  },
+  {
+   "i": 5,
+   "p": "Ba giả định chưa đo được, chờ anh gạch:"
+  },
+  {
+   "i": 6,
+   "p": "(1) Zalo báo địa chỉ nhận tin theo đúng mẫu tài liệu — mới đo được ca «chưa đặt»; sai thì trang báo «chưa đăng ký» thay vì im lặng."
+  },
+  {
+   "i": 7,
+   "p": "(2) Zalo gửi lại tin khi CRM trả lỗi — cách giữ tin (AC-7) dựa vào điều này; không đúng thì tin lỗi vẫn mất, chỉ có thêm dấu vết."
+  },
+  {
+   "i": 8,
+   "p": "(3) Trên Vercel, tác tử thấy đúng tên miền mà API gọi — sai thì Zalo gửi tin vào bản triển khai cũ; kiểm lúc triển khai."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Chưa có phép đo nào nối API với tác tử thật, nên API gửi sai tên trường thì cả hai phía vẫn xanh. Đã sửa: thêm phép đo nối thật hai phía, khuôn chung cho yêu cầu, và gắn nhãn xuyên lớp cho bốn tiêu chí."
+  },
+  {
+   "i": 1,
+   "p": "Tiêu chí nguồn token mới phủ ba trong sáu chỗ dùng, bỏ sót lệnh thử tại máy mà chính trang chỉ người dùng chạy. Đã sửa: phủ đủ bảy chỗ, bảng đo 21 ô."
+  },
+  {
+   "i": 2,
+   "p": "Trang «chưa đăng ký nhận tin» chỉ được đo ở dữ liệu, không ai chụp màn; nút «Đăng ký lại» chưa được thử. Đã sửa: thêm ảnh trạng thái đó, thêm ca đăng ký lại, chốt cách xử khi Zalo trả mẫu lạ."
+  },
+  {
+   "i": 3,
+   "p": "Phép đo tài liệu có thể xanh sẵn mà tài liệu vẫn sai. Đã sửa: đối chứng riêng từng điều, cấm câu hướng dẫn sửa .env làm đường chính."
+  },
+  {
+   "i": 4,
+   "p": "Chưa khai kiểu nút, nên màn có thể có ba nút tô đầy mà không phép đo nào bắt. Đã sửa: khai kiểu từng nút, ảnh kiểm «nhiều nhất một nút tô đầy», thêm lưới quét ghi đè kiểu."
   }
  ]
 }
