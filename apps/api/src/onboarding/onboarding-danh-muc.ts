@@ -39,7 +39,9 @@ export const CHON_KE_HOACH_DANH_MUC = {
 			updatedAt: true,
 			assigneeId: true,
 			assignee: { select: { name: true } },
-			department: { select: { id: true, name: true, position: true } },
+			department: {
+				select: { id: true, name: true, position: true, divisionId: true },
+			},
 		},
 	},
 } as const;
@@ -53,7 +55,12 @@ export type BuocTho = {
 	updatedAt: Date;
 	assigneeId?: string | null;
 	assignee?: { name: string } | null;
-	department: { id: string; name: string; position: number };
+	department: {
+		id: string;
+		name: string;
+		position: number;
+		divisionId: string | null;
+	};
 };
 
 export type KeHoachTho = {
@@ -87,7 +94,7 @@ export type HangDanhMuc = PlanRow & {
 
 type LocDanhMuc = Pick<
 	PlanListInput,
-	"status" | "boPhan" | "nguoiCam" | "nguoiGiao"
+	"status" | "boPhan" | "nguoiCam" | "nguoiGiao" | "division"
 >;
 
 export type DemBoLoc = {
@@ -95,6 +102,7 @@ export type DemBoLoc = {
 	boPhan: FacetCount;
 	nguoiCam: FacetCount;
 	nguoiGiao: FacetCount;
+	division: FacetCount;
 };
 
 type SapDanhMuc = Pick<PlanListInput, "sort" | "dir">;
@@ -124,6 +132,7 @@ export function dungHang(plan: KeHoachTho, bayGio: Date): HangDanhMuc {
 		tacO: dang?.label ?? null,
 		boPhanTac: dang?.department.name ?? null,
 		boPhanTacId: dang?.department.id ?? null,
+		boPhanCapTrenId: dang?.department.divisionId ?? null,
 		imNgay: soNgay(moiNhat, bayGio),
 		ownerId: plan.ownerId,
 		closedAt: plan.closedAt,
@@ -162,6 +171,14 @@ function khopBoPhan(hang: HangDanhMuc, loc: LocDanhMuc): boolean {
 	);
 }
 
+function khopDivision(hang: HangDanhMuc, loc: LocDanhMuc): boolean {
+	const chon = loc.division ?? [];
+	return (
+		chon.length === 0 ||
+		(hang.boPhanCapTrenId !== null && chon.includes(hang.boPhanCapTrenId))
+	);
+}
+
 function khopNguoiCam(hang: HangDanhMuc, loc: LocDanhMuc): boolean {
 	return loc.nguoiCam.length === 0 || loc.nguoiCam.includes(hang.ownerId);
 }
@@ -179,7 +196,8 @@ export function locHang(hang: HangDanhMuc[], loc: LocDanhMuc): HangDanhMuc[] {
 			khopTrangThai(h, loc) &&
 			khopBoPhan(h, loc) &&
 			khopNguoiCam(h, loc) &&
-			khopNguoiGiao(h, loc),
+			khopNguoiGiao(h, loc) &&
+			khopDivision(h, loc),
 	);
 }
 
@@ -210,7 +228,7 @@ function demNhieu(
 export function demBoLoc(hang: HangDanhMuc[], loc: LocDanhMuc): DemBoLoc {
 	const tru = (bo: (h: HangDanhMuc, l: LocDanhMuc) => boolean) =>
 		hang.filter((h) =>
-			[khopTrangThai, khopBoPhan, khopNguoiCam, khopNguoiGiao]
+			[khopTrangThai, khopBoPhan, khopNguoiCam, khopNguoiGiao, khopDivision]
 				.filter((f) => f !== bo)
 				.every((f) => f(h, loc)),
 		);
@@ -221,6 +239,7 @@ export function demBoLoc(hang: HangDanhMuc[], loc: LocDanhMuc): DemBoLoc {
 		nguoiGiao: demNhieu(tru(khopNguoiGiao), (h) =>
 			h.nguoiGiao.map((n) => n.id),
 		),
+		division: demTheo(tru(khopDivision), (h) => h.boPhanCapTrenId),
 	};
 }
 
@@ -466,6 +485,7 @@ export function dangLoc(input: PlanListInput): boolean {
 		input.boPhan.length > 0 ||
 		input.nguoiCam.length > 0 ||
 		input.nguoiGiao.length > 0 ||
+		(input.division ?? []).length > 0 ||
 		input.status === "da-dong"
 	);
 }

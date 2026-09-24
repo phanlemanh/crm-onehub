@@ -260,6 +260,7 @@ export const planListInput = listInput.extend({
 	boPhan: danhSachMa.default([]),
 	nguoiCam: danhSachMa.default([]),
 	nguoiGiao: danhSachMa.default([]),
+	division: danhSachMa.optional(),
 });
 
 export const planRow = z.object({
@@ -274,6 +275,7 @@ export const planRow = z.object({
 	tacO: z.string().nullable(),
 	boPhanTac: z.string().nullable(),
 	boPhanTacId: z.string().nullable(),
+	boPhanCapTrenId: z.string().nullable(),
 	imNgay: z.number(),
 	ownerId: z.string(),
 	closedAt: z.date().nullable(),
