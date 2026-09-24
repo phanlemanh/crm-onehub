@@ -903,3 +903,182 @@ describe("tin-den", () => {
 		expect(dem?.failures, "bo dem sai tang 1").toBe(1);
 	});
 });
+
+describe("dang-ky-thu-tu", () => {
+	let traLai: (() => void) | null = null;
+	afterEach(() => {
+		traLai?.();
+		traLai = null;
+	});
+
+	function mang2(chon: ChonZaloGia = {}): MangGia {
+		const m = { z: zaloGia(chon), s: slackGia() };
+		traLai?.();
+		traLai = thayFetchHai(m);
+		return m;
+	}
+
+	let soGoiThu = 0;
+	async function goiThuWebhook(_url: string, khoa: string): Promise<number> {
+		soGoiThu += 1;
+		const than = JSON.stringify(
+			thanWebhook({ messageId: `gn-${soGoiThu}`, fromId: "ZG", text: "chao" }),
+		);
+		const res = await nhanWebhook(yeuCauWebhook(than, khoa).request, {
+			fetcher: zaloGia().fetcher,
+			now: () => GOC,
+		});
+		return res.status;
+	}
+
+	test("goi-nguoc: a Zalo goi thu trong luc setWebhook -> 200, url duoc ghi", async () => {
+		const { z } = mang2({ goiNguoc: goiThuWebhook });
+		await goiCau(GOC_HTTPS, DUONG_BOT, { token: TOK_T });
+		const c = await cotZalo();
+		expect(z.goiNguoc, "Zalo goi thu phai gap khoa moi").toEqual([200]);
+		expect({ url: c.zaloWebhookUrl, lyDo: c.zaloWebhookLyDo }).toEqual({
+			url: "https://tac-tu.test/zalo/webhook",
+			lyDo: null,
+		});
+	});
+
+	test("goi-nguoc: b xac minh hong -> zalo-tu-choi, url null, khong bao da dang ky", async () => {
+		mang2({ setWebhook: { outcome: "webhook.failed" } });
+		const res = await goiCau(GOC_HTTPS, DUONG_BOT, { token: TOK_T });
+		const than = await res.json();
+		const c = await cotZalo();
+		expect(
+			{
+				lyDo: c.zaloWebhookLyDo,
+				url: c.zaloWebhookUrl,
+				outcome: than.outcome,
+				webhook: than.webhook ?? null,
+			},
+			"xac minh hong khong bao da dang ky",
+		).toEqual({
+			lyDo: "zalo-tu-choi",
+			url: null,
+			outcome: "invalid",
+			webhook: null,
+		});
+	});
+
+	const CACH_GOI = [
+		["dang-ky-lai", {}],
+		["token-moi", { token: "777:moi" }],
+	] as const;
+	const CACH_HONG = ["ok-false", "loi-mang"] as const;
+
+	test("dang-ky-hong: 2 cach goi x 2 cach hong -> giu token va khoa dang dung", async () => {
+		type OHong = {
+			token: string | null;
+			khoa: string | null;
+			lyDo: string | null;
+			khoaCu: number;
+			outcome: string;
+		};
+		const thucTe: Record<string, OHong> = {};
+		for (const [tenGoi, than] of CACH_GOI) {
+			for (const hong of CACH_HONG) {
+				const { z } = mang2({ setWebhook: hong });
+				await datCaiDat({ zaloBotToken: TOK_T, zaloWebhookSecret: KHOA_CU });
+				await db.appSetting.update({
+					where: { id: SETTINGS_ID },
+					data: { zaloWebhookUrl: "https://u.test/zalo/webhook" },
+				});
+				const res = await goiCau(GOC_HTTPS, DUONG_BOT, than);
+				const phanHoi = await res.json();
+				const c = await cotZalo();
+				const tin = JSON.stringify(
+					thanWebhook({
+						messageId: `dh-${tenGoi}-${hong}`,
+						fromId: "ZH",
+						text: "chao",
+					}),
+				);
+				const voiKhoaCu = await voiBien(
+					{ ZALO_BOT_TOKEN: "", ZALO_WEBHOOK_SECRET: "" },
+					() =>
+						nhanWebhook(yeuCauWebhook(tin, KHOA_CU).request, {
+							fetcher: z.fetcher,
+							now: () => GOC,
+						}),
+				);
+				thucTe[`${tenGoi}/${hong}`] = {
+					token: c.zaloBotToken,
+					khoa: c.zaloWebhookSecret,
+					lyDo: c.zaloWebhookLyDo,
+					khoaCu: voiKhoaCu.status,
+					outcome: String(phanHoi.outcome),
+				};
+				await donZalo();
+			}
+		}
+		console.table(thucTe);
+		const moiO = {
+			token: TOK_T,
+			khoa: KHOA_CU,
+			lyDo: "zalo-tu-choi",
+			khoaCu: 200,
+			outcome: "invalid",
+		};
+		expect(thucTe, "dang ky hong giu khoa dang dung").toEqual({
+			"dang-ky-lai/ok-false": moiO,
+			"dang-ky-lai/loi-mang": moiO,
+			"token-moi/ok-false": moiO,
+			"token-moi/loi-mang": moiO,
+		});
+	});
+
+	test("dang-ky-hong: doi chung duong, setWebhook ok -> token va khoa doi sang moi", async () => {
+		const { z } = mang2();
+		await datCaiDat({ zaloBotToken: TOK_T, zaloWebhookSecret: KHOA_CU });
+		await goiCau(GOC_HTTPS, DUONG_BOT, { token: "777:moi" });
+		const c = await cotZalo();
+		const khoaMoi = z.goi.find((g) => g.method === "setWebhook")?.body
+			.secret_token;
+		expect({ token: c.zaloBotToken, khoa: c.zaloWebhookSecret }).toEqual({
+			token: "777:moi",
+			khoa: khoaMoi ?? "?",
+		});
+	});
+
+	test("nhip-tron: getWebhookInfo 500 -> giu url, ghi zaloPolledAt moi, don seen cu", async () => {
+		const cuQua = new Date(Date.now() - ZALO.poll.giuDauMs - 60_000);
+		const moc = new Date(Date.now() - 60_000);
+		await datCaiDat({ zaloBotToken: "1:abc" });
+		await db.appSetting.update({
+			where: { id: SETTINGS_ID },
+			data: {
+				zaloWebhookUrl: "https://u.test/zalo/webhook",
+				zaloPolledAt: moc,
+			},
+		});
+		await db.zaloUpdateSeen.create({
+			data: { messageId: "nt-cu", seenAt: cuQua },
+		});
+		const traLaiNhip = thayFetchZalo(zaloGia({ webhookInfo: 500 }));
+		try {
+			await voiBien({ ZALO_BOT_TOKEN: "", ZALO_WEBHOOK_SECRET: "" }, () =>
+				chayNhipDispatch(),
+			);
+		} finally {
+			traLaiNhip();
+		}
+		const s = await db.appSetting.findUnique({ where: { id: SETTINGS_ID } });
+		expect(
+			{
+				url: s?.zaloWebhookUrl,
+				polledMoi: (s?.zaloPolledAt?.getTime() ?? 0) > moc.getTime(),
+				seenCu: await db.zaloUpdateSeen.count({
+					where: { messageId: "nt-cu" },
+				}),
+			},
+			"nhip chay tron khi getWebhookInfo 500",
+		).toEqual({
+			url: "https://u.test/zalo/webhook",
+			polledMoi: true,
+			seenCu: 0,
+		});
+	});
+});

@@ -25,6 +25,8 @@ export type ChonZaloGia = {
 	vatVoTan?: boolean;
 	chiGiaoKhiMo?: TinDen[];
 	webhookInfo?: 404 | 500 | "la" | { url: string };
+	setWebhook?: "ok-false" | "loi-mang" | { outcome: string };
+	goiNguoc?: (url: string, khoa: string) => Promise<number>;
 };
 
 export const TRAN_BAO_VE_VO_TAN = 100;
@@ -37,7 +39,7 @@ const HET_TIN_THAT = {
 	error_code: 408,
 };
 
-function traDatWebhook(url: string): Response {
+function traDatWebhook(url: string, outcome = "webhook.ok"): Response {
 	return Response.json({
 		ok: true,
 		result: {
@@ -46,7 +48,7 @@ function traDatWebhook(url: string): Response {
 			verification: {
 				ok: true,
 				url,
-				outcome: "webhook.ok",
+				outcome,
 				hint: "Your endpoint responded successfully.",
 			},
 		},
@@ -150,6 +152,7 @@ function traTin(t: TinGia): Response {
 
 export function zaloGia(chon: ChonZaloGia = {}) {
 	const goi: LoiGoiZalo[] = [];
+	const goiNguoc: number[] = [];
 	const hang = [...(chon.tin ?? [])];
 	let soTinVoTan = 0;
 	const tinKe = (): TinGia | undefined => {
@@ -170,7 +173,23 @@ export function zaloGia(chon: ChonZaloGia = {}) {
 		goi.push({ method, token, body });
 		if (method === "getMe") return traGetMe(chon);
 		if (method === "sendMessage") return traSend(chon, goi.length);
-		if (method === "setWebhook") return traDatWebhook(body.url ?? "");
+		if (method === "setWebhook") {
+			if (chon.goiNguoc) {
+				goiNguoc.push(
+					await chon.goiNguoc(body.url ?? "", body.secret_token ?? ""),
+				);
+			}
+			const kieu = chon.setWebhook;
+			if (kieu === "loi-mang") throw new Error("mang Zalo gia dut");
+			if (kieu === "ok-false") {
+				return Response.json({
+					ok: false,
+					error_code: 400,
+					description: "bad",
+				});
+			}
+			return traDatWebhook(body.url ?? "", kieu?.outcome);
+		}
 		if (method === "deleteWebhook") return traXoaWebhook();
 		if (method === "getWebhookInfo") return traWebhookInfo(chon);
 		if (chon.chiGiaoKhiMo) return giaoKhiMo.goi(Number(body.timeout ?? "0"));
@@ -184,6 +203,7 @@ export function zaloGia(chon: ChonZaloGia = {}) {
 	return {
 		fetcher,
 		goi,
+		goiNguoc,
 		guiToi,
 		soGoi,
 		datDongHo: giaoKhiMo.datDongHo,

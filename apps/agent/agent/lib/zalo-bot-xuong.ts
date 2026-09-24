@@ -7,7 +7,6 @@ import type {
 	DatBotPhanHoi,
 	DatBotYeuCau,
 	GuiThuPhanHoi,
-	WebhookKet,
 } from "@crm/validation/zalo-cau-noi";
 import {
 	parseZaloGetMe,
@@ -24,38 +23,63 @@ export function gioNhac(): string {
 	return `${hai(NHAC.gio.gio)}:${hai(NHAC.gio.phut)}`;
 }
 
+type CotZalo = {
+	zaloBotToken: string | null;
+	zaloWebhookSecret: string | null;
+	zaloBotName: string | null;
+	zaloWebhookUrl: string | null;
+	zaloWebhookLyDo: string | null;
+};
+
+async function chupCot(): Promise<CotZalo> {
+	const s = await db.appSetting.findUnique({
+		where: { id: SETTINGS_ID },
+		select: {
+			zaloBotToken: true,
+			zaloWebhookSecret: true,
+			zaloBotName: true,
+			zaloWebhookUrl: true,
+			zaloWebhookLyDo: true,
+		},
+	});
+	return (
+		s ?? {
+			zaloBotToken: null,
+			zaloWebhookSecret: null,
+			zaloBotName: null,
+			zaloWebhookUrl: null,
+			zaloWebhookLyDo: null,
+		}
+	);
+}
+
+async function ghiCot(cot: Partial<CotZalo>): Promise<void> {
+	await db.appSetting.upsert({
+		where: { id: SETTINGS_ID },
+		create: { id: SETTINGS_ID, ...cot },
+		update: cot,
+	});
+}
+
 async function dangKy(
 	fetcher: typeof fetch,
 	token: string,
 	url: string,
 	khoa: string,
-): Promise<WebhookKet> {
+): Promise<boolean> {
 	try {
-		parseZaloSetWebhook(
+		const ket = parseZaloSetWebhook(
 			await zaloGoi(fetcher, token, "setWebhook", { url, secret_token: khoa }),
 		);
-		return "da-dang-ky";
+		if (ket.outcome !== null && ket.outcome !== ZALO.webhook.xacMinhOk) {
+			console.error(`[zalo] setWebhook xac minh hong outcome=${ket.outcome}`);
+			return false;
+		}
+		return true;
 	} catch (loi) {
 		console.error(`[zalo] setWebhook loi: ${String(loi)}`);
-		return "zalo-tu-choi";
+		return false;
 	}
-}
-
-function cotGhi(
-	token: string,
-	khoa: string,
-	tenBot: string,
-	url: string,
-	webhook: WebhookKet,
-) {
-	const daDangKy = webhook === "da-dang-ky";
-	return {
-		zaloBotToken: token,
-		zaloWebhookSecret: daDangKy ? khoa : null,
-		zaloBotName: tenBot,
-		zaloWebhookUrl: daDangKy ? url : null,
-		zaloWebhookLyDo: daDangKy ? null : webhook,
-	};
 }
 
 export async function datBot(
@@ -72,19 +96,30 @@ export async function datBot(
 		return { outcome: "invalid", reason: ZALO.loi.tokenSai };
 	}
 	const { tenBot } = parseZaloGetMe(me.than);
+	if (goc.protocol !== ZALO.webhook.giaoThucAnToan) {
+		await ghiCot({
+			zaloBotToken: token,
+			zaloWebhookSecret: null,
+			zaloBotName: tenBot,
+			zaloWebhookUrl: null,
+			zaloWebhookLyDo: "can-https",
+		});
+		return { outcome: "valid", tenBot, webhook: "can-https" };
+	}
 	const khoa = randomBytes(ZALO.webhook.khoa.sinhByte).toString("hex");
 	const url = new URL(ZALO.webhook.duong, goc).toString();
-	const anToan = goc.protocol === ZALO.webhook.giaoThucAnToan;
-	const webhook = anToan
-		? await dangKy(fetcher, token, url, khoa)
-		: "can-https";
-	const cot = cotGhi(token, khoa, tenBot, url, webhook);
-	await db.appSetting.upsert({
-		where: { id: SETTINGS_ID },
-		create: { id: SETTINGS_ID, ...cot },
-		update: cot,
+	const truoc = await chupCot();
+	await ghiCot({
+		zaloBotToken: token,
+		zaloWebhookSecret: khoa,
+		zaloBotName: tenBot,
 	});
-	return { outcome: "valid", tenBot, webhook };
+	if (!(await dangKy(fetcher, token, url, khoa))) {
+		await ghiCot({ ...truoc, zaloWebhookLyDo: "zalo-tu-choi" });
+		return { outcome: "invalid", reason: ZALO.loi.dangKyHong };
+	}
+	await ghiCot({ zaloWebhookUrl: url, zaloWebhookLyDo: null });
+	return { outcome: "valid", tenBot, webhook: "da-dang-ky" };
 }
 
 export async function guiThu(

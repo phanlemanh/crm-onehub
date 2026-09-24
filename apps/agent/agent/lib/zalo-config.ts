@@ -19,6 +19,7 @@ export const ZALO = {
 		header: "x-bot-api-secret-token",
 		khoa: { min: 8, max: 256, sinhByte: 32 },
 		giaoThucAnToan: "https:",
+		xacMinhOk: "webhook.ok",
 	},
 	chatRieng: "PRIVATE",
 	tranKyTu: 2_000,
@@ -32,6 +33,8 @@ export const ZALO = {
 		guiThu: (gio: string) =>
 			`Tin thử từ CRM. Nhắc việc buổi sáng của bạn sẽ đến ở đây lúc ${gio}.`,
 		tokenSai: "Zalo không nhận token này.",
+		dangKyHong:
+			"Zalo chưa nhận đăng ký nhận tin. Bot đang dùng giữ nguyên; thử lại sau.",
 		khongCoToken: "Chưa có Bot Token nào để đăng ký.",
 	},
 } as const;
