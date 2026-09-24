@@ -31,6 +31,7 @@ import { FieldsCog, RecordFields } from "@/components/crm/fields/record-fields";
 import {
 	InlineDateField,
 	InlineField,
+	InlineMoneyField,
 	InlineSelectField,
 	InlineTextArea,
 	InlineTextCell,
@@ -322,25 +323,12 @@ function DealOverview({ deal }: { deal: Deal }) {
 						saving={isSaving("name")}
 						onSave={(name) => name && save({ name })}
 					/>
-					<InlineField
+					<InlineMoneyField
 						label={m.deal.fields.amount}
-						value={
-							deal.amountCents === null ? null : String(deal.amountCents / 100)
-						}
-						placeholder="24000"
+						cents={deal.amountCents}
+						currency={currency}
 						saving={isSaving("amountCents")}
-						onSave={(next) => {
-							if (next === "") return save({ amountCents: null });
-							const parsed = Number.parseFloat(next);
-							if (!Number.isFinite(parsed) || parsed < 0) {
-								toast.error(m.deal.amountNotNumber);
-								return;
-							}
-							save({ amountCents: Math.round(parsed * 100) });
-						}}
-						render={(value) =>
-							formatMoney(Math.round(Number(value) * 100), currency, locale)
-						}
+						onSave={(amountCents) => save({ amountCents })}
 					/>
 					<InlineSelectField
 						label={m.deal.fields.currency}

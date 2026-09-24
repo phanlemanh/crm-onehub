@@ -180,7 +180,6 @@ const en = {
 		created: (name: string) => `${name} created.`,
 		noOwner: "Could not work out who should own this deal.",
 		create: "Create deal",
-		amountNotNumber: "Amount has to be a number.",
 		remove: "Remove",
 		deleteWarning: (company: string, people: string) =>
 			`Its stage history, notes and agent conversations go too. ${company} and the ${people} on it stay in the CRM.`,
@@ -371,7 +370,6 @@ const vi = {
 		created: (name: string) => `Đã tạo ${name}.`,
 		noOwner: "Không xác định được ai phụ trách thoả thuận này.",
 		create: "Tạo thoả thuận",
-		amountNotNumber: "Giá trị phải là một con số.",
 		remove: "Gỡ",
 		deleteWarning: (company: string, people: string) =>
 			`Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. ${company} và ${people} trong đó vẫn ở lại CRM.`,

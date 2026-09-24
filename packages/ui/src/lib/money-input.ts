@@ -25,6 +25,7 @@ export const MONEY_EXAMPLE_CENTS = {
 const CENT_DIGITS = 2;
 const NEGATIVE = /^[-−]/;
 const MAX_CENTS = BigInt(Number.MAX_SAFE_INTEGER);
+const CENT_UNIT = BigInt(10) ** BigInt(CENT_DIGITS);
 
 const separators = new Map<Locale, MoneySeparators>();
 
@@ -60,7 +61,7 @@ function readWith(text: string, seps: MoneySeparators, minor: number): Read {
 		return { kind: "invalid", reason: "fraction" };
 	}
 	const cents =
-		BigInt(whole) * 10n ** BigInt(CENT_DIGITS) +
+		BigInt(whole) * CENT_UNIT +
 		BigInt(fraction.padEnd(CENT_DIGITS, "0"));
 	if (cents > MAX_CENTS) return { kind: "invalid", reason: "tooLarge" };
 	return { kind: "ok", cents: Number(cents) };
@@ -109,10 +110,9 @@ export function formatMoneyInput(
 	{ locale }: MoneyInputOptions,
 ): string {
 	const all = BigInt(Math.round(Math.abs(cents)));
-	const unit = 10n ** BigInt(CENT_DIGITS);
-	const whole = wholeFormat(locale).format(all / unit);
-	const rest = all % unit;
-	if (rest === 0n) return whole;
+	const whole = wholeFormat(locale).format(all / CENT_UNIT);
+	const rest = all % CENT_UNIT;
+	if (rest === BigInt(0)) return whole;
 	const fraction = rest.toString().padStart(CENT_DIGITS, "0");
 	return `${whole}${moneySeparators(locale).decimal}${fraction}`;
 }
