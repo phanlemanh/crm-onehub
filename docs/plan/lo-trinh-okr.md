@@ -131,6 +131,9 @@ cây và gán người ở Cài đặt, kể cả nhập hàng loạt từ bản
   trưởng. Nhập hàng loạt: dán hoặc tải bảng email · phòng ban · bộ phận · trưởng,
   xem trước rồi mới ghi, báo dòng hỏng.
 - Màn Điều phối 30 ngày đổi nhãn theo từ điển mới; lọc theo bộ phận hoạt động.
+- Sheet kế hoạch 30 ngày đổi nhãn ô «Mục tiêu» (đang hiện số ngày, vd «30
+  ngày») sang một chữ không trùng với Mục tiêu của OKR — chốt 2026-09-24
+  (Manh Phan).
 
 **Ngoài phạm vi:** quyền theo đơn vị (lượt 2–3), cấp «nhóm», đồng bộ hệ thống
 nhân sự (TC-07, Chưa làm).
