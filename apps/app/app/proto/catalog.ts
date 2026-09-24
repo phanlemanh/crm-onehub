@@ -136,6 +136,27 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-ket-noi-zalo-tat", nhan: "Kết nối — chưa bật" },
 		],
 	},
+	{
+		slug: "noi-zalo-cho-nguoi-moi",
+		ten: "Nối Zalo cho người mới",
+		states: [
+			{ id: "ST-thong-bao-chua-noi", nhan: "Thông báo — chưa nối, ba bước" },
+			{ id: "ST-thong-bao-ma-cho", nhan: "Thông báo — mã đang chờ" },
+			{ id: "ST-thong-bao-ma-het-han", nhan: "Thông báo — mã hết hạn" },
+			{ id: "ST-thong-bao-da-noi", nhan: "Thông báo — đã nối, gửi thử" },
+			{ id: "ST-thong-bao-gui-thu-xong", nhan: "Thông báo — gửi thử xong" },
+			{ id: "ST-thong-bao-gui-thu-loi", nhan: "Thông báo — gửi thử lỗi" },
+			{ id: "ST-ket-noi-chua-bat", nhan: "Kết nối — chưa bật, ba bước" },
+			{ id: "ST-ket-noi-dang-luu", nhan: "Kết nối — đang kiểm token" },
+			{ id: "ST-ket-noi-token-sai", nhan: "Kết nối — token sai dạng" },
+			{ id: "ST-ket-noi-zalo-tu-choi", nhan: "Kết nối — Zalo từ chối token" },
+			{ id: "ST-ket-noi-song", nhan: "Kết nối — bot sống, nhận qua webhook" },
+			{ id: "ST-ket-noi-can-https", nhan: "Kết nối — tác tử chưa https" },
+			{ id: "ST-ket-noi-chua-webhook", nhan: "Kết nối — webhook chưa đăng ký" },
+			{ id: "ST-ket-noi-env", nhan: "Kết nối — token trong .env" },
+			{ id: "ST-ket-noi-thanh-vien", nhan: "Kết nối — thành viên thường" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);

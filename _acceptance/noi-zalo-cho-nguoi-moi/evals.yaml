@@ -320,6 +320,7 @@ evals:
       Nhin thay duoc tren anh, khong suy tu ma:
         chua-noi: ba buoc co so thu tu; buoc 1 co chu "Bot OneHub"; buoc 2 co nut "Nối Zalo"
         ma-cho: buoc 3 dang mo, co mot ma 6 so va nut "Chép mã"
+        ma-cho o 375: dong "hết hạn lúc <giờ>" doc tron, khong co dau "…"
         da-noi: nut "Gửi thử nhắc ngay"
         chua-bat: huong dan co "Zalo Bot Manager", co "<số>:<chuỗi>" hoac vi du dang so:chuoi,
           co "Secret Token"; KHONG co ".env", KHONG co "bot.zaloplatforms.com"; co o token va nut Lưu
