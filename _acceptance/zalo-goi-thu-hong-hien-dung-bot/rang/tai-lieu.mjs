@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const NHANH_CHINH = process.env.NHANH_CHINH ?? "origin/onehub";
+const BAN_GOC = "090bd517e6e143ac00e1015d2ec570959c02d5e3";
 const CONNECTIONS = "docs/connections.md";
 const LO_TRINH = "docs/plan/lo-trinh-zalo.md";
 const SLUG = "`zalo-goi-thu-hong-hien-dung-bot`";
@@ -67,12 +67,17 @@ const MOC = [
 const docTep = (tep) => readFileSync(join(GOC, tep), "utf8");
 
 function docGoc(tep) {
-	const base = execFileSync("git", ["-C", GOC, "merge-base", "HEAD", NHANH_CHINH], {
-		encoding: "utf8",
-	}).trim();
-	return execFileSync("git", ["-C", GOC, "show", `${base}:${tep}`], {
-		encoding: "utf8",
-	});
+	try {
+		return execFileSync("git", ["-C", GOC, "show", `${BAN_GOC}:${tep}`], {
+			encoding: "utf8",
+			stdio: ["ignore", "pipe", "pipe"],
+		});
+	} catch (loiGit) {
+		console.error(
+			`khong doc duoc ${tep} o ban goc ${BAN_GOC}: ${loiGit.stderr ?? loiGit.message}`,
+		);
+		process.exit(1);
+	}
 }
 
 const PHA = {
@@ -91,7 +96,7 @@ for (const [ten, tep, dat] of MOC) {
 	const that = docTep(tep);
 	if (!dat(that)) bao(`thieu moc ${ten} trong ${tep}`);
 	if (dat(docGoc(tep))) {
-		bao(`doi chung hong: moc ${ten} da dat san o merge-base voi ${NHANH_CHINH}`);
+		bao(`doi chung hong: moc ${ten} da dat san o ban goc ${BAN_GOC}`);
 	}
 	if (dat(PHA[ten](that))) {
 		bao(`tu kiem hong: pha moc ${ten} ma thuoc van xanh`);
