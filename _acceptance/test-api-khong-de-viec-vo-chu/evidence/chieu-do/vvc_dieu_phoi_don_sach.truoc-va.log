@@ -1,0 +1,6 @@
+test-run: crm_muf11kdjev6q_test is this run's database (TEST_RUN_ID=muf11kdjev6q)
+ 24 pass
+ 0 fail
+co so du lieu: crm_muf11kdjev6q_test
+con sot sau dieu-phoi: ca nhan=11 cong ty=25 nguoi=25 bo phan=0
+test-run: dropped crm_muf11kdjev6q_test

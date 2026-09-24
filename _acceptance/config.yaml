@@ -168,6 +168,8 @@ executors:
     kcm_don_mot_lan: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t don-mot-lan"'
     kcm_don_bang_rong: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t don-bang-rong"'
     kcm_xem_truoc: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t xem-truoc"'
+    vvc_ung_dung_da_dong: 'bun run test -- "cd apps/api && bun test test/quet-khi-dang-nhap.spec.ts -t ung-dung-da-dong"'
+    vvc_van_quet_that: 'bun run test -- "cd apps/api && bun test test/quet-khi-dang-nhap.spec.ts -t van-quet-that"'
     api_khong_cache_tru_agent: "bun run test -- --force --filter=!agent"
     rang3_khoa_chet: "cd apps/app && bun test test/messages-guard.spec.ts"
     tv_canh_kho_ui: "cd packages/ui && bun test test/messages-guard.spec.ts"
@@ -390,6 +392,10 @@ executors:
     stdt_sua_tai_cho: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/o-so-tien.dom.tsx -t sua-tai-cho"
     stdt_them_nhanh: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/o-so-tien.dom.tsx -t them-nhanh"
   script:
+    vvc_dieu_phoi_don_sach: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts test/dieu-phoi-diem-nhan.spec.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts dieu-phoi"'
+    vvc_go_la_khong_quet: 'bun run test -- "NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts gieo-le && cd apps/api && bun test test/go-la-cat-quyen.spec.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts sau-dang-nhap"'
+    vvc_ca_goi_api: 'bun run test -- "NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts gieo-le && cd apps/api && bun test && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts ca-goi"'
+    vvc_go_la_chi_them_dong: 'node _acceptance/test-api-khong-de-viec-vo-chu/rang/chi-them-dong.mjs'
     zqw_giu_nqz: 'B=$(git merge-base HEAD origin/onehub) && { git diff --quiet "$B" -- apps/agent/test/nhac-qua-zalo.integration.spec.ts || { echo "spec da ky cua nhac-qua-zalo bi sua" >&2; exit 1; }; } && bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts"'
     ogd_man_danh_muc: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "DUOI_CONG=1 bun _acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs"'
     dp30_hang_so_o_config: 'node _acceptance/dieu-phoi-30-ngay-dau/rang/hang-so-o-config.mjs'

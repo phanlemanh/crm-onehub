@@ -1,0 +1,13 @@
+{
+  "feature_plain": "Một lượt kiểm thử của phần máy chủ không còn để lại việc tìm hiểu liên hệ vô chủ, nên phần tác nhân chạy sau không đỏ oan.",
+  "scope_plain": "Không dọn bộ phận tạo qua dịch vụ điều phối, không sửa gói đăng nhập (vẫn còn handler cũ nằm im), không chờ lượt quét dở khi tắt, không thêm khoá ngoại cho dòng việc",
+  "analyst_plain": "",
+  "decisions_plain": [
+    {"id": "d-20260924T041816Z-1", "p": "Ứng dụng đã đóng thôi quét khi có người đăng nhập, bằng một cờ trong dịch vụ quét — đổi lại handler cũ vẫn nằm trong danh sách, chỉ không làm gì; bản huỷ đăng ký đúng nghĩa để dành gửi lên hãng."},
+    {"id": "d-20260924T041816Z-2", "p": "KHÔNG quét độ phủ tiêu chí — hai nguồn rò đã đo bằng số; đổi lại không có bảng chứng độ phủ, lưới thay thế là phép đếm cả gói."},
+    {"id": "d-20260924T041816Z-3", "p": "KHÔNG viết đặc tả màn hình — việc này không có màn hình nào."},
+    {"id": "d-20260924T041816Z-4", "p": "Bài kiểm quyền (gỡ là cắt quyền) tắt lượt quét của chính nó thay vì chờ rồi dọn — đổi lại đường quét thật có một bài chứng riêng."},
+    {"id": "d-20260924T043912Z-5", "p": "Bỏ một lượt chấm vì agent chấm tự sửa hai file test và tự commit; chấm lại trên mã sạch với agent chạy lệnh mạnh hơn — tốn thêm một lượt, lỗi bộ kit đã mở việc riêng."},
+    {"id": "d-20260924T045327Z-6", "p": "Phép đếm cả gói gieo thêm một liên hệ mồi để bắt được dòng việc vô chủ trên cả gói (đã phá thử: đỏ đúng một dòng) — đổi lại phép đếm dựa vào một hàng có tên trong cơ sở dữ liệu của lượt."}
+  ]
+}
