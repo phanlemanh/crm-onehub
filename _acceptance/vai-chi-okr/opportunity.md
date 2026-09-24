@@ -49,7 +49,7 @@ Vật liệu nền: mục «Vai «chỉ OKR»» trong `CONTEXT.md` (chốt 2026-
 - Câu hỏi phép đo trả lời: sau khi mở CRM cho cả công ty, có người mang vai «chỉ OKR» nào đọc được dữ liệu đối tác không, và họ có vào được CRM không?
 - Kết quả nào là SỐNG: 0 lượt đọc dữ liệu đối tác thành công của vai «chỉ OKR» trong nhật ký sau hai tuần kể từ 2026-10-26 (số từ nhật ký lời gọi tRPC: vai = chỉ OKR · phạm vi = đối tác · kết quả = ok).
 - Kết quả nào là CHẾT: ≥ 1 lượt đọc như trên; hoặc một người mang vai này bị chặn ở màn xin quyền hộp thư.
-- [đề xuất] Kết quả nào là SỐNG (vế đăng nhập): ≥ 90 % người được gán vai «chỉ OKR» đã đăng nhập ít nhất một lần trong hai tuần đầu (số từ bảng phiên nối bảng thành viên theo vai — đã có sẵn trong cơ sở dữ liệu).
+- Kết quả nào là SỐNG (vế đăng nhập): ≥ 90 % người được gán vai «chỉ OKR» đã đăng nhập ít nhất một lần trong hai tuần đầu (số từ bảng phiên nối bảng thành viên theo vai — đã có sẵn trong cơ sở dữ liệu).
 - Timebox: đo ở phiên nghiệm thu R1 ngày 2026-11-13 (mục 6 lộ trình).
 
 ## Kết quả prototype
@@ -73,7 +73,7 @@ component sẵn của `/packages/ui`.
 
 - **decision = build.** Căn cứ: lộ trình OKR mục 5 «Lượt 2» và mục 6 — không mở CRM cho người ngoài khối kinh doanh khi vai này chưa lên; chủ kho chốt 2026-09-23, uỷ quyền phiên điều phối ký các cổng của lượt ngày 2026-09-24.
 - **disposition = archive.** Căn cứ: không có mã bản mẫu.
-- **Ngưỡng UAT chốt cùng lúc ký:** 0 lượt đọc dữ liệu đối tác thành công của vai «chỉ OKR» trong nhật ký sau hai tuần; vế đăng nhập còn mang tiền tố đề xuất, chốt ở Cổng Phạm vi.
+- **Ngưỡng UAT chốt cùng lúc ký:** 0 lượt đọc dữ liệu đối tác thành công của vai «chỉ OKR» trong nhật ký sau hai tuần; vế đăng nhập ≥ 90 % người được gán vai đăng nhập trong hai tuần đầu — chốt tại Cổng Phạm vi 2026-09-24.
 
 ## Thước đo thành công → ứng viên criterion
 

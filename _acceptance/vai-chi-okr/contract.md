@@ -5,9 +5,9 @@ slug: vai-chi-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Manh Phan — uỷ quyền phiên điều phối 2026-09-24
+approved_at: 2026-09-24T16:26:07Z
 design_doc: docs/superpowers/specs/2026-09-24-vai-chi-okr-design.md
 ---
 
@@ -58,7 +58,7 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 ## Đường đo
 
 - Thước: 0 lượt đọc được dữ liệu đối tác của vai «chỉ OKR» trong hai tuần · số từ: dòng nhật ký `tRPC` có `role: okr`, `phamVi: doi-tac`, `outcome: ok` · bảo đảm bởi: AC-11
-- Thước: [đề xuất] ≥ 90 % người được gán vai «chỉ OKR» đăng nhập ít nhất một lần trong hai tuần đầu · số từ: bảng `session` nối bảng `member` theo `role = okr` · bảo đảm bởi: đã có sẵn: cơ sở dữ liệu (`session.userId`, `member.role`)
+- Thước: ≥ 90 % người được gán vai «chỉ OKR» đăng nhập ít nhất một lần trong hai tuần đầu · số từ: bảng `session` nối bảng `member` theo `role = okr` · bảo đảm bởi: đã có sẵn: cơ sở dữ liệu (`session.userId`, `member.role`)
 
 ## Out of scope
 
@@ -78,5 +78,6 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 - Hạng T3: chạm `packages/auth`, `apps/api/src/workspace`, `apps/api/src/api-keys`; lớp `trpc/middlewares` không nằm trong `t3_paths` nhưng đổi nghĩa cho mọi router — khai T3 chủ động, có Cổng 1.5.
 - Hai vòng khác đang chạy song song trên `apps/api/src/to-chuc`, `apps/api/src/onboarding` và màn `settings/organization`: lượt này chỉ đổi dòng khai phạm vi ở hai router đó.
 - Cổng người của lượt do phiên điều phối ký theo uỷ quyền của Manh Phan ngày 2026-09-24; dòng ký ghi «Manh Phan — uỷ quyền phiên điều phối 2026-09-24».
+- **Thay đổi đi kèm, duyệt tại Cổng Phạm vi (Manh Phan — uỷ quyền phiên điều phối 2026-09-24):** ba thủ tục ghi của Cài đặt chung — model trợ lý AI, khoá research, thời gian lưu trữ — hôm nay mở cho mọi thành viên do sót; lượt này đóng cho mọi vai không phải quản trị (AC-12, sổ quyết định d-11). Thành viên thường mất một quyền chưa từng được cấp có chủ ý.
 - Tập «tự phục vụ» của AC-12 là hằng viết trước trong bài kiểm; thêm một thủ tục ghi cho vai «chỉ OKR» dùng được là sửa hằng đó có chủ ý.
 - Nền hạ tầng (`duong-nen.md`): hai dòng đỏ là báo động giả của bộ kit (từ đầu lệnh `B=$(git merge-base …)` bị đọc thành tên chương trình) — mở chip sang kho kit; dòng đỏ `build_khong_cache` do shell nền lấy Node 22 trong khi `eve` đòi ≥ 24 — chạy tay với Node 24 thì xanh; đặt Node 24 làm mặc định của máy là việc của người.
