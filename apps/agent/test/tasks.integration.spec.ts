@@ -88,9 +88,12 @@ describe("claimDue", () => {
 	});
 
 	it("leaves work that is not due yet", async () => {
-		await queue({ dueAt: new Date(Date.now() + 60_000) });
+		const later = await queue({ dueAt: new Date(Date.now() + 60_000) });
+		const due = await queue();
+
 		const claimed = await claimDue(10, MINE);
-		expect(claimed).toHaveLength(0);
+		expect(claimed.map((t) => t.id)).toEqual([due.id]);
+		expect(claimed.map((t) => t.id)).not.toContain(later.id);
 	});
 
 	it("leaves a visible kind to the visible lane", async () => {
@@ -158,7 +161,7 @@ describe("claimDue", () => {
 
 	it("stops claiming once the work is finished", async () => {
 		const task = await queue();
-		await claimDue(10, MINE);
+		expect((await claimDue(10, MINE)).map((t) => t.id)).toContain(task.id);
 		await completeTask(task.id, "ran");
 
 		await db.agentTask.update({
