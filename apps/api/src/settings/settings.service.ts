@@ -1,3 +1,4 @@
+import { canManageSettings, workspaceRoleOf } from "@crm/auth";
 import type { Db } from "@crm/db";
 import {
 	DEFAULT_AGENT_MODEL,
@@ -9,7 +10,12 @@ import {
 	writeArchiveRetentionDays,
 	writeContextDevKey,
 } from "@crm/db/settings";
-import { BadRequestException, Injectable, Logger } from "@nestjs/common";
+import {
+	BadRequestException,
+	ForbiddenException,
+	Injectable,
+	Logger,
+} from "@nestjs/common";
 import { ResearchKeyService } from "../agent/research-key.service";
 import { BackfillService } from "../backfill/backfill.service";
 import { InjectDatabase } from "../database/database.constants";
@@ -32,6 +38,14 @@ export class SettingsService {
 		private readonly backfill: BackfillService,
 	) {}
 
+	private async yeuCauQuanTri(userId: string): Promise<void> {
+		if (!canManageSettings(await workspaceRoleOf(userId))) {
+			throw new ForbiddenException(
+				"Only an owner or an admin can change workspace settings.",
+			);
+		}
+	}
+
 	async agentModel(): Promise<AgentModelSettings> {
 		const [model, row] = await Promise.all([
 			readAgentModel(this.db),
@@ -47,7 +61,12 @@ export class SettingsService {
 		};
 	}
 
-	async setAgentModel(modelId: string | null): Promise<AgentModelSettings> {
+	async setAgentModel(
+		userId: string,
+		modelId: string | null,
+	): Promise<AgentModelSettings> {
+		await this.yeuCauQuanTri(userId);
+
 		if (modelId === null) {
 			await writeAgentModel(this.db, null);
 			this.logger.log({ message: "Agent model reset to the default" });
@@ -91,7 +110,12 @@ export class SettingsService {
 		return { configured: key !== null, hint: key ? maskKey(key) : null };
 	}
 
-	async setResearchKey(apiKey: string): Promise<ResearchKeySettings> {
+	async setResearchKey(
+		userId: string,
+		apiKey: string,
+	): Promise<ResearchKeySettings> {
+		await this.yeuCauQuanTri(userId);
+
 		const check = await this.researchKeys.verify(apiKey);
 
 		if (check.outcome === "invalid") {
@@ -134,7 +158,12 @@ export class SettingsService {
 		return { days: await readArchiveRetentionDays(this.db) };
 	}
 
-	async setArchiveRetention(days: number): Promise<ArchiveRetentionSettings> {
+	async setArchiveRetention(
+		userId: string,
+		days: number,
+	): Promise<ArchiveRetentionSettings> {
+		await this.yeuCauQuanTri(userId);
+
 		const saved = await writeArchiveRetentionDays(this.db, days);
 
 		this.logger.log({

@@ -9,7 +9,7 @@ import {
 } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	fieldAccessOutput,
@@ -31,7 +31,7 @@ import {
 import { FieldsService } from "./fields.service";
 
 @Router({ alias: "fields" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViDoiTacMiddleware)
 export class FieldsRouter {
 	constructor(@Inject(FieldsService) private readonly fields: FieldsService) {}
 

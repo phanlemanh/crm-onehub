@@ -9,7 +9,7 @@ import {
 } from "nestjs-trpc";
 import { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	addDomainInput,
@@ -29,7 +29,7 @@ import {
 import { TrackingService } from "./tracking.service";
 
 @Router({ alias: "tracking" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViDoiTacMiddleware)
 export class TrackingRouter {
 	constructor(
 		@Inject(TrackingService) private readonly tracking: TrackingService,
