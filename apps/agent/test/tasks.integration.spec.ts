@@ -196,18 +196,27 @@ describe("retireExhausted", () => {
 		const task = await queue();
 
 		for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-			await claimDue(10, MINE);
+			expect((await claimDue(10, MINE)).map((t) => t.id)).toContain(task.id);
 			if (attempt < MAX_ATTEMPTS - 1) await expire(task.id);
 		}
 
-		expect(await retireExhausted()).toHaveLength(0);
+		const leased = await db.agentTask.findUnique({ where: { id: task.id } });
+		expect(leased?.attempts).toBe(MAX_ATTEMPTS);
+		expect(leased?.leasedUntil?.getTime()).toBeGreaterThan(Date.now());
+
+		expect((await retireExhausted()).map((t) => t.id)).not.toContain(task.id);
+		const row = await db.agentTask.findUnique({ where: { id: task.id } });
+		expect(row?.finishedAt).toBeNull();
 	});
 
 	it("leaves work that still has attempts left", async () => {
-		await queue();
-		await claimDue(10, MINE);
+		const task = await queue();
+		expect((await claimDue(10, MINE)).map((t) => t.id)).toContain(task.id);
+		await expire(task.id);
 
-		expect(await retireExhausted()).toHaveLength(0);
+		expect((await retireExhausted()).map((t) => t.id)).not.toContain(task.id);
+		const row = await db.agentTask.findUnique({ where: { id: task.id } });
+		expect(row?.finishedAt).toBeNull();
 	});
 
 	it("retires no more rows than the limit allows", async () => {
