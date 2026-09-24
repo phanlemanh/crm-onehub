@@ -1,11 +1,6 @@
 "use client";
 
-import { Button } from "@crm/ui/components/button";
-import {
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
-} from "@crm/ui/components/collapsible";
+import { ArchivedList } from "@crm/ui/components/archived-list";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -47,46 +42,20 @@ export function DaLuuTru({ khoa }: { khoa: boolean }) {
 	};
 
 	return (
-		<Collapsible className="md:col-span-2">
-			<CollapsibleTrigger asChild>
-				<Button variant="ghost">{`${m.quanLy.daLuuTru} (${muc.length})`}</Button>
-			</CollapsibleTrigger>
-			<CollapsibleContent>
-				<ul className="flex flex-col gap-2">
-					{muc.map((x) => (
-						<li
-							className="flex items-center justify-between gap-3"
-							data-luu-tru={x.id}
-							key={x.id}
-						>
-							<span className="min-w-0 truncate text-sm" translate="no">
-								{x.name}
-							</span>
-							<div className="flex shrink-0 items-center gap-2">
-								<Button
-									variant="outline"
-									disabled={khoa || dangKhoiPhuc}
-									onClick={() => {
-										if (dangKhoiPhuc) return;
-										khoiPhucKhuon.mutate({ id: x.id }, xuLy);
-									}}
-								>
-									{m.quanLy.khoiPhuc}
-								</Button>
-								{x.purgeable ? (
-									<Button
-										variant="ghost"
-										disabled={khoa || dangXoa}
-										onClick={() => setHoiXoa(x)}
-									>
-										{m.quanLy.xoaVinhVien}
-									</Button>
-								) : null}
-							</div>
-						</li>
-					))}
-				</ul>
-			</CollapsibleContent>
+		<div className="md:col-span-2">
+			<ArchivedList
+				label={m.quanLy.daLuuTru}
+				restoreLabel={m.quanLy.khoiPhuc}
+				purgeLabel={m.quanLy.xoaVinhVien}
+				items={muc}
+				disabled={khoa}
+				pending={dangKhoiPhuc || dangXoa}
+				onRestore={(id) => {
+					if (dangKhoiPhuc) return;
+					khoiPhucKhuon.mutate({ id }, xuLy);
+				}}
+				onPurge={(x) => setHoiXoa(x)}
+			/>
 
 			<ConfirmDialog
 				open={hoiXoa !== null}
@@ -116,6 +85,6 @@ export function DaLuuTru({ khoa }: { khoa: boolean }) {
 					);
 				}}
 			/>
-		</Collapsible>
+		</div>
 	);
 }

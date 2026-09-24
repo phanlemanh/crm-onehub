@@ -44,6 +44,6 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.vvc_go_la_chi_them_dong
-    expected: "exit 0; rang/chi-them-dong.mjs so apps/api/test/go-la-cat-quyen.spec.ts với merge-base của origin/onehub bằng git diff --numstat: số dòng xoá phải là 0 và số dòng thêm > 0, in hai số. Xoá > 0 thì exit 1 với 'bai cu cua go-la-cat-quyen bi sua'; file không đổi thì exit 1 với 'khong thay thay doi — phep do mo'. Chiều đỏ: sửa một dòng assert cũ trong bản sao tạm thì thước exit 1 với thông điệp xoá."
+    expected: "exit 0; rang/chi-them-dong.mjs so apps/api/test/go-la-cat-quyen.spec.ts từ 41e04c72 tới f969304e (hai đầu của merge #112) bằng git diff --numstat: số dòng xoá phải là 0 và số dòng thêm > 0, in hai số. Xoá > 0 thì exit 1 với 'bai cu cua go-la-cat-quyen bi sua'; file không đổi thì exit 1 với 'khong thay thay doi — phep do mo'. Chiều đỏ: sửa một dòng assert cũ trong bản sao tạm thì thước exit 1 với thông điệp xoá."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/api/test/go-la-cat-quyen.spec.ts, _acceptance/test-api-khong-de-viec-vo-chu/rang/chi-them-dong.mjs]

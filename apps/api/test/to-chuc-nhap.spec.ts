@@ -104,7 +104,7 @@ async function dungLo(): Promise<Lo> {
 			["hopLe-truongPhongBan", null],
 			["hopLe-truongBoPhan", null],
 			["khongThanhVien", N.emailKhongPhaiThanhVien],
-			["thieuPhongBan", N.thieuCot],
+			["thieuPhongBan", N.thieuPhongBan],
 			["pbBoPhanKhac", N.phongBanBoPhanKhac(tenPb(pbCo), tenBp(bpCo))],
 			["truongLa", N.truongLa],
 			["emailLap-1", N.emailLap],
@@ -230,7 +230,7 @@ describe("xem-truoc", () => {
 			"xem",
 		);
 		expect(kq.rows.map((r) => [r.line, r.error])).toEqual([
-			[1, N.thieuCot],
+			[1, N.thieuEmail],
 			[2, N.emailKhongPhaiThanhVien],
 			[3, null],
 		]);

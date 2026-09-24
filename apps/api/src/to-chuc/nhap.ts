@@ -38,7 +38,14 @@ export type KetQuaNhap = {
 		newDepartments: number;
 		newDivisions: number;
 	};
+	newNames: { departments: string[]; divisions: string[] };
 };
+
+function tenKhongTrung(ten: string[]): string[] {
+	const da = new Map<string, string>();
+	for (const t of ten) if (!da.has(khoa(t))) da.set(khoa(t), t.trim());
+	return [...da.values()];
+}
 
 export const khoa = (s: string) => s.trim().toLocaleLowerCase("vi");
 
@@ -130,7 +137,8 @@ export function phanTichLo(chu: string, snap: SnapNhap): KetQuaNhap {
 
 	for (const r of tho) {
 		const lt = loaiTruong(r.head);
-		if (r.email === "" || r.department === "") r.error = N.thieuCot;
+		if (r.email === "") r.error = N.thieuEmail;
+		else if (r.department === "") r.error = N.thieuPhongBan;
 		else if (!nguoi.has(khoa(r.email))) r.error = N.emailKhongPhaiThanhVien;
 		else if (lt === "la") r.error = N.truongLa;
 		else {
@@ -185,7 +193,7 @@ export function phanTichLo(chu: string, snap: SnapNhap): KetQuaNhap {
 				bpTrongLo.set(khoa(r.department), r.division);
 		for (const r of conLai)
 			if (loaiTruong(r.head) === "bo-phan" && bpHieuLuc(r) === "")
-				r.error = N.thieuCot;
+				r.error = N.thieuBoPhanTruong;
 		danhCap(
 			nhom((r) => {
 				const lt = loaiTruong(r.head);
@@ -240,6 +248,21 @@ export function phanTichLo(chu: string, snap: SnapNhap): KetQuaNhap {
 					)
 					.map((h) => khoa(h.divisionName as string)),
 			).size,
+		},
+		newNames: {
+			departments: tenKhongTrung(
+				hopLe
+					.filter((h) => h.departmentId === null)
+					.map((h) => h.departmentName),
+			),
+			divisions: tenKhongTrung(
+				hopLe
+					.filter(
+						(h) =>
+							h.divisionName !== null && !bpTheoTen.has(khoa(h.divisionName)),
+					)
+					.map((h) => h.divisionName as string),
+			),
 		},
 	};
 }

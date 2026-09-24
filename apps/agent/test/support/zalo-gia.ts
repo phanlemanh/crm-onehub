@@ -20,9 +20,9 @@ export type TinDen = { giay: number; than: unknown };
 
 export type ChonZaloGia = {
 	tin?: TinGia[];
-	getMe?: "ok" | 401;
+	getMe?: "ok" | 401 | 500 | "la" | "ok-false-401" | "ok-false-500";
 	tenBot?: string;
-	send?: "ok" | 500 | "ok-false";
+	send?: "ok" | 500 | "ok-false" | "la";
 	vatVoTan?: boolean;
 	chiGiaoKhiMo?: TinDen[];
 	webhookInfo?: 404 | 500 | "la" | { url: string };
@@ -92,6 +92,24 @@ function traGetMe(chon: ChonZaloGia): Response {
 			{ status: 401 },
 		);
 	}
+	if (chon.getMe === 500) return new Response("loi", { status: 500 });
+	if (chon.getMe === "la") {
+		return Response.json({ ok: true, result: { khac: 1 } });
+	}
+	if (chon.getMe === "ok-false-401") {
+		return Response.json({
+			ok: false,
+			error_code: 401,
+			description: "Unauthorized",
+		});
+	}
+	if (chon.getMe === "ok-false-500") {
+		return Response.json({
+			ok: false,
+			error_code: 500,
+			description: "Internal error",
+		});
+	}
 	return Response.json({
 		ok: true,
 		result: {
@@ -125,6 +143,9 @@ function traSend(chon: ChonZaloGia, soGoi: number): Response {
 			error_code: 400,
 			description: "blocked",
 		});
+	}
+	if (chon.send === "la") {
+		return Response.json({ ok: true, result: { khac: 1 } });
 	}
 	return Response.json({
 		ok: true,

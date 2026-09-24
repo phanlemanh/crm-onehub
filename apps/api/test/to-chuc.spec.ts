@@ -114,7 +114,10 @@ describe("vong-doi-don-vi", () => {
 		ky.boPhan[0] = { id: a, name: tenA2, phongBan: [] };
 		await soVoi("sau khi doi ten");
 
-		ok(await goi("org.reorderDivisions", { ids: [b, a] }), "sap");
+		const conLai = (await cay()).divisions
+			.map((d) => d.id)
+			.filter((id) => id !== a && id !== b);
+		ok(await goi("org.reorderDivisions", { ids: [b, a, ...conLai] }), "sap");
 		ky.boPhan.reverse();
 		await soVoi("sau khi sap");
 
@@ -886,7 +889,10 @@ async function dungDauVaoHopLe(): Promise<Record<string, () => Promise<Json>>> {
 			id: await bpMoi(),
 			name: ma("q-ten"),
 		}),
-		"org.reorderDivisions": async () => ({ ids: [await bpMoi()] }),
+		"org.reorderDivisions": async () => {
+			await bpMoi();
+			return { ids: (await cay()).divisions.map((d) => d.id) };
+		},
 		"org.archiveDivision": async () => ({ id: await bpMoi() }),
 		"org.restoreDivision": async () => ({ id: await bpLuu() }),
 		"org.purgeDivision": async () => ({ id: await bpLuu() }),
@@ -902,6 +908,14 @@ async function dungDauVaoHopLe(): Promise<Record<string, () => Promise<Json>>> {
 			id: await pbTrong(),
 			divisionId: await bpMoi(),
 			index: 0,
+		}),
+		"org.attachDepartments": async () => ({
+			divisionId: await bpMoi(),
+			departmentIds: [await pbTrong()],
+		}),
+		"org.addPeople": async () => ({
+			departmentId: await pbTrong(),
+			userIds: [await nguoiMoi("q-them")],
 		}),
 		"org.setHead": async () => ({
 			kind: "division",

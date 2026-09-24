@@ -402,7 +402,18 @@ onboarding, OKR, reports and filters read it; no area keeps its own.
   (`nhap.ts`) against a snapshot and returns every row with its error; `applyImport`
   re-checks, writes the valid rows in one transaction and skips the broken ones.
   Row and character caps live in `TO_CHUC` (`to-chuc-config.ts`), with every
-  user-facing message.
+  user-facing message. The preview also returns `newNames` — the exact departments
+  and divisions the apply will create — outside `summary`, so the screen can name
+  them.
+- **Two bulk writes, all or nothing.** `attachDepartments` puts 1–50 live
+  departments into one division, appended in the order sent, leaving those already
+  there in place. `addPeople` makes one department the primary of 1–50 active
+  members, drops it from their secondaries, and keeps their manager override. Any
+  bad id in the batch refuses the whole batch in one transaction; the cap is
+  `TO_CHUC.lo.toiDa`.
+- **Reordering divisions sends the whole list.** `reorderDivisions` is refused when
+  the ids are not exactly the live divisions, so a stale screen cannot leave two
+  divisions on the same position.
 
 ## Money
 

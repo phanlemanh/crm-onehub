@@ -509,6 +509,9 @@ const { onboardingMessages } = await import("@/lib/messages/onboarding");
 const { ToChuc } = await import(
 	"@/app/(app)/[slug]/settings/organization/to-chuc"
 );
+const { HanhDongToChuc } = await import(
+	"@/app/(app)/[slug]/settings/organization/hanh-dong-dau-trang"
+);
 const { toChucMessages } = await import("@/lib/messages/to-chuc");
 const { toast } = await import("sonner");
 
@@ -520,7 +523,7 @@ let dangMo: San[] = [];
 
 const goc = Element.prototype.getBoundingClientRect;
 
-async function mo(man: ReactElement): Promise<San> {
+async function mo(man: ReactElement, don = ""): Promise<San> {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
 	const root = createRoot(o);
@@ -529,7 +532,7 @@ async function mo(man: ReactElement): Promise<San> {
 	});
 	await act(async () => {
 		root.render(
-			<NuqsTestingAdapter searchParams="" hasMemory>
+			<NuqsTestingAdapter searchParams={don} hasMemory>
 				<QueryClientProvider client={client}>
 					<LocaleProvider locale="vi">
 						<TooltipProvider>
@@ -895,8 +898,20 @@ async function moCaiDat(): Promise<void> {
 	await mo(<CaiDatDieuPhoi />);
 }
 
-async function moToChuc(): Promise<void> {
-	await mo(<ToChuc />);
+async function moToChuc(don = "?don=bp:khoi"): Promise<void> {
+	await mo(
+		<>
+			<div data-slot="page-shell-actions">
+				<HanhDongToChuc />
+			</div>
+			<ToChuc />
+		</>,
+		don,
+	);
+	await cho(
+		() => document.body.querySelector("[data-chi-tiet]") !== null,
+		"khung chi tiet to chuc",
+	);
 }
 
 function timNut(chu: string): HTMLButtonElement | null {
