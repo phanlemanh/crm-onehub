@@ -8,7 +8,7 @@ decision:
 decided_by:
 decided_at:
 prototype:
-  base_commit:
+  base_commit: 875413c096a896fcd8bb89674d0a675388bed7b1
   disposition:
 ---
 
@@ -45,6 +45,37 @@ phòng) và người quản lý (xem khối lượng việc theo bộ phận).
 ## Ngưỡng chết / ngưỡng UAT
 
 Chưa khai — đợi Cổng Đáng.
+
+## Kết quả prototype
+
+Dựng 2026-09-24 trên nhánh `proto/cau-truc-to-chuc`, bản mẫu `/proto/cau-truc-to-chuc`
+(bật bằng `PROTO_ROUTE=1`, xem `docs/proto.md`). Dữ liệu giả, không đường ghi. Bản mẫu
+chỉ hội tụ ý định, không đo ngưỡng — ngưỡng chưa khai.
+
+Sáu trạng thái, mỗi trạng thái đặt một câu hỏi mở lên màn:
+
+| Trạng thái | Cho thấy | Câu hỏi mở nó phục vụ |
+|---|---|---|
+| Hôm nay — danh sách phẳng | Sáu hàng ngang nhau như trên prod | (mốc so sánh) |
+| Cây hai cấp | Bộ phận chứa phòng ban; phòng ban cũ giữ bước đã giao; phòng ban chưa xếp nằm riêng | Hướng giữ `Department`, thêm `Division` ở trên |
+| Cây — đang tìm | Gõ «vùng»: chỉ nhánh khớp còn lại và tự mở | Người điều phối lọc theo bộ phận |
+| Cây — có thành viên và trưởng | Thành viên, trưởng phòng, trưởng bộ phận | Thành viên có thuộc phòng ban không; có trưởng không |
+| Giao bước kế hoạch | Ô chọn nhóm phòng ban theo bộ phận | Bước giao cho phòng ban hay cho người |
+| Chưa có bộ phận nào | Ngày đầu sau khi bật: mọi phòng ban ở «chưa xếp», không mất bước nào | Dữ liệu cũ không phải chuyển |
+
+Ảnh chụp ở `evidence/proto/` (6 trạng thái × khổ 1280 và 375), không trạng thái nào tràn
+ngang. Khi dựng đã sửa một lỗi khổ điện thoại: dòng trưởng bộ phận đẩy mất tên bộ phận,
+nay nằm ở dòng riêng.
+
+Điều bản mẫu lộ ra cho vòng làm thật: hàng bộ phận đang ghép tạm từ nút `ghost` của thư
+viện — kho chưa có thành phần cây; nếu làm thật thì cần một thành phần cây trong
+`packages/ui` (ứng viên: `@reui/tree`, kéo theo `@headless-tree`), quyết ở Cổng Phạm vi.
+
+## Nguồn ngoài & phạm vi kế thừa
+
+| Món vật liệu | Nguồn (đường dẫn/tên gói) | Phân loại | Kế thừa? | Người ký |
+|---|---|---|---|---|
+| Khuôn cây hai cấp có ô tìm tự mở nhánh khớp (nhóm là thư mục gập được, mục con là lá) | block Pro ReUI `form-9` (`role-tree.tsx`) | ngôn-ngữ-thiết-kế/hình-thái | đề xuất: có — chỉ khuôn tương tác, dựng lại bằng thành phần sẵn có của kho; không chép mã block | chờ ký ở Cổng Đáng |
 
 ## Out of scope từ khám phá
 
