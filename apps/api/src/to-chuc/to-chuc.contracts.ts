@@ -39,6 +39,9 @@ export const orgPlacementInput = z.object({
 export const orgImportInput = z.object({
 	text: z.string().max(TO_CHUC.nhap.toiDaKyTu),
 });
+export const orgImportApplyInput = orgImportInput.extend({
+	traTen: z.boolean().optional(),
+});
 
 export const nguoiOutput = z.object({
 	id: z.string(),
@@ -122,6 +125,12 @@ export const orgImportApplyOutput = z.object({
 	written: z.number(),
 	newDepartments: z.number(),
 	newDivisions: z.number(),
+	newNames: z
+		.object({
+			departments: z.array(z.string()),
+			divisions: z.array(z.string()),
+		})
+		.optional(),
 });
 
 export type TreeOutput = z.infer<typeof orgTreeOutput>;

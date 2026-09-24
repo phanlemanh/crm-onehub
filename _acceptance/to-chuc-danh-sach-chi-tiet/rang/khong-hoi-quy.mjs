@@ -265,24 +265,33 @@ if (!BO_LAN) {
 		],
 		{ encoding: "utf8" },
 	).trim();
-	const r = spawnSync(
-		"node",
-		[
-			join(lan, "scripts", "repin-lane.mjs"),
-			"--root",
-			GOC,
-			...HO_SO.flatMap((h) => ["--slug", h]),
-			"--reason",
-			"do khong hoi quy",
-			"--allow-dirty",
-		],
-		{ cwd: GOC, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
-	);
-	console.log(`lan may ba ho so tai HEAD: ma ${r.status}`);
+	const chayLan = () =>
+		spawnSync(
+			"node",
+			[
+				join(lan, "scripts", "repin-lane.mjs"),
+				"--root",
+				GOC,
+				...HO_SO.flatMap((h) => ["--slug", h]),
+				"--reason",
+				"do khong hoi quy",
+				"--allow-dirty",
+			],
+			{ cwd: GOC, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
+		);
+	const duoi = (r) => `${r.stdout}${r.stderr}`.trim().split("\n").slice(-6);
+	let r = chayLan();
+	console.log(`lan may ba ho so tai HEAD, luot 1: ma ${r.status}`);
+	if (r.status !== 0) {
+		for (const d of duoi(r)) console.log(`  ${d}`);
+		r = chayLan();
+		console.log(
+			`lan may ba ho so tai HEAD, luot 2 (chay lai mot lan vi luot 1 do): ma ${r.status}`,
+		);
+	}
 	if (r.status !== 0) {
 		hong.push(`lan may ba ho so do: ma ${r.status}`);
-		for (const d of `${r.stdout}${r.stderr}`.trim().split("\n").slice(-12))
-			console.log(`  ${d}`);
+		for (const d of duoi(r)) console.log(`  ${d}`);
 	}
 }
 

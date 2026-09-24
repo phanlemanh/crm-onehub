@@ -482,7 +482,10 @@ export class ToChucService {
 		return { rows: kq.rows, summary: kq.summary, newNames: kq.newNames };
 	}
 
-	async applyImport(input: { text: string }): Promise<ImportApplyOutput> {
+	async applyImport(input: {
+		text: string;
+		traTen?: boolean;
+	}): Promise<ImportApplyOutput> {
 		this.kiemLo(input.text);
 		return this.db.$transaction(async (tx) => {
 			const kq = phanTichLo(input.text, await this.snapNhap(tx));
@@ -496,7 +499,7 @@ export class ToChucService {
 						select: { position: true },
 					})
 				)?.position ?? -1) + 1;
-			let bpMoi = 0;
+			const bpMoi: string[] = [];
 			for (const h of kq.hopLe) {
 				if (h.divisionName === null) continue;
 				const k = khoa(h.divisionName);
@@ -505,7 +508,7 @@ export class ToChucService {
 					bpId.set(k, h.divisionId);
 					continue;
 				}
-				bpMoi += 1;
+				bpMoi.push(h.divisionName.trim());
 				bpId.set(
 					k,
 					(
@@ -524,7 +527,7 @@ export class ToChucService {
 						select: { position: true },
 					})
 				)?.position ?? -1) + 1;
-			let pbMoi = 0;
+			const pbMoi: string[] = [];
 			for (const h of kq.hopLe) {
 				const k = khoa(h.departmentName);
 				const bp =
@@ -547,7 +550,7 @@ export class ToChucService {
 						});
 					continue;
 				}
-				pbMoi += 1;
+				pbMoi.push(h.departmentName.trim());
 				pbId.set(
 					k,
 					(
@@ -591,11 +594,14 @@ export class ToChucService {
 						});
 				}
 			}
-			return {
+			const ra = {
 				written: kq.hopLe.length,
-				newDepartments: pbMoi,
-				newDivisions: bpMoi,
+				newDepartments: pbMoi.length,
+				newDivisions: bpMoi.length,
 			};
+			return input.traTen
+				? { ...ra, newNames: { departments: pbMoi, divisions: bpMoi } }
+				: ra;
 		});
 	}
 }

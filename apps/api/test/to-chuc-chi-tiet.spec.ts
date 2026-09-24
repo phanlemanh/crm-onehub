@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
+import type { ImportApplyOutput } from "../src/to-chuc/to-chuc.contracts";
 import { TO_CHUC } from "../src/to-chuc/to-chuc-config";
 import {
 	cay,
@@ -320,7 +321,9 @@ describe("nhap-moi", () => {
 				...t.divisions.flatMap((d) => d.departments.map((p) => p.name)),
 			]);
 		const truoc = tenTruoc(await cay());
-		ok(await goi("org.applyImport", { text: chu }), "ghi");
+		const ghi = ok<{
+			newNames?: { departments: string[]; divisions: string[] };
+		}>(await goi("org.applyImport", { text: chu, traTen: true }), "ghi");
 		const sau = await cay();
 		const moiPb = [
 			...sau.chuaXep,
@@ -340,6 +343,22 @@ describe("nhap-moi", () => {
 		expect(`so pb moi ${moiPb.length}, bp moi ${moiBp.length}`).toBe(
 			"so pb moi 2, bp moi 1",
 		);
+		expect({
+			pb: [...(ghi.newNames?.departments ?? [])].sort(),
+			bp: [...(ghi.newNames?.divisions ?? [])].sort(),
+		}).toEqual({ pb: moiPb, bp: moiBp });
+		const d = await nguoiMoi("nm-d");
+		const khongXin = ok<ImportApplyOutput>(
+			await goi("org.applyImport", {
+				text: `${d}@thu.test\t${pbMoi1}\t${tenBpCu}\t`,
+			}),
+			"ghi khong xin ten",
+		);
+		expect(Object.keys(khongXin).sort()).toEqual([
+			"newDepartments",
+			"newDivisions",
+			"written",
+		]);
 	});
 
 	test("nhap-moi: moi dong hong mang dung cau cua cot thieu, chuoi nguyen van", async () => {

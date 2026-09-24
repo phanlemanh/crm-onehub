@@ -20,6 +20,7 @@ import {
 	orgDivisionCreateInput,
 	orgHeadInput,
 	orgIdInput,
+	orgImportApplyInput,
 	orgImportApplyOutput,
 	orgImportInput,
 	orgImportPreviewOutput,
@@ -231,13 +232,13 @@ export class ToChucRouter {
 	}
 
 	@Mutation({
-		input: orgImportInput,
+		input: orgImportApplyInput,
 		output: orgImportApplyOutput,
 		meta: restMeta("POST", "/org/import", TAG),
 	})
 	async applyImport(
 		@Ctx() ctx: AuthedTrpcContext,
-		@Input() input: z.infer<typeof orgImportInput>,
+		@Input() input: z.infer<typeof orgImportApplyInput>,
 	) {
 		await this.toChuc.yeuCauQuanTri(ctx.user.id);
 		return this.toChuc.applyImport(input);

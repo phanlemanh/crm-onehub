@@ -190,27 +190,13 @@ function thuTuc<TRa>(ten: string, doc: () => Promise<TRa> | TRa) {
 				const loi = cheDo.get(ten);
 				if (loi !== undefined) throw new Error(loi);
 				if (ten === "previewImport") return xemTruocMau();
-				if (ten === "applyImport") {
-					cay = {
-						...cay,
-						divisions: [
-							...cay.divisions,
-							...daTao.divisions.map((name, i) => ({
-								id: `bp-nhap-${i}`,
-								name,
-								position: 90 + i,
-								head: null,
-								departments: [],
-							})),
-						],
-					};
-				}
-				return {
+				const ra = {
 					id: `${ten}-ok`,
 					written: 4,
 					newDepartments: daTao.departments.length,
 					newDivisions: daTao.divisions.length,
 				};
+				return dauVao.traTen === true ? { ...ra, newNames: daTao } : ra;
 			},
 		}),
 	};
@@ -866,6 +852,10 @@ async function chonMuc(chu: string): Promise<void> {
 	);
 	if (!muc) throw new Error(`menu khong co "${chu}"`);
 	await bam(muc);
+}
+
+function dauVaoCuoiCua(ten: string): unknown {
+	return [...daGoi].reverse().find((g) => g.ten === ten)?.dauVao;
 }
 
 function goiCua(ten: string) {
@@ -1572,7 +1562,7 @@ describe("nhap-ba-buoc", () => {
 					: `dong ${i + 3}: ${li?.textContent}`,
 			);
 		}
-		daTao = { ...CHUA_TAO, divisions: ["Tài chính"] };
+		daTao = { departments: ["Kho mới"], divisions: ["Tài chính"] };
 		await bam(nutTheoChu(hop(), "Ghi 2 dòng · bỏ 3 dòng hỏng")[0]);
 		await cho(
 			() => hop().querySelector("[data-buoc-nhap='3']") !== null,
@@ -1588,6 +1578,13 @@ describe("nhap-ba-buoc", () => {
 				? "buoc 3 neu don vi ban xem truoc hua ma luot ghi khong tao"
 				: "buoc 3: chi neu don vi luot ghi tao",
 		);
+		const dongMoi = [...hop().querySelectorAll("[data-buoc-nhap='3'] li")].map(
+			(li) => li.textContent?.trim(),
+		);
+		thay.push(`buoc 3 theo loai: ${dongMoi.join(" | ")}`);
+		thay.push(
+			`applyImport xin ten: ${JSON.stringify(dauVaoCuoiCua("applyImport"))}`,
+		);
 		await bam(nutTheoChu(hop(), m.nhapHop.xemCay)[0]);
 		await doiDong();
 		expect({ thay, don: url.get("don"), khung: khung() }).toEqual({
@@ -1602,6 +1599,8 @@ describe("nhap-ba-buoc", () => {
 				"buoc 3: dang o 3",
 				"buoc 3: true xem-cay=1",
 				"buoc 3: chi neu don vi luot ghi tao",
+				`buoc 3 theo loai: ${m.nhapHop.pbMoi} Kho mới | ${m.nhapHop.bpMoi} Tài chính`,
+				`applyImport xin ten: ${JSON.stringify({ text: "hung@onehub.vn\tBảo hành\tTài chính", traTen: true })}`,
 			],
 			don: "goc",
 			khung: "goc",

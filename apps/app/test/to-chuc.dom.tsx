@@ -630,7 +630,7 @@ describe("nhap-man", () => {
 		]);
 		await bam(nutGhi);
 		await cho(() => dauVaoCuoi("applyImport") !== undefined, "goi applyImport");
-		expect(dauVaoCuoi("applyImport")).toEqual({ text: CHU_GOC });
+		expect(dauVaoCuoi("applyImport")).toEqual({ text: CHU_GOC, traTen: true });
 	});
 
 	test("nhap-man: moi dong hong thi nut ghi khoa", async () => {
