@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f7a31a583af36e847d87df37ffd44f12b1d45a85
+verified_commit: 787d66525c93e022bee430e6450c361c2fbd5a49
 human_signoff: Phan Le Manh 2026-09-24
 ---
 
@@ -213,3 +213,7 @@ sha: f8f5cf916142628e2450d9cf7f46411b36b9c906 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-09-24, do thuoc «vong nay» neo cap sha cua merge (merge-base(M^1,M^2)..M^2) thay merge-base dong; env GOOGLE_CLIENT_* nhu CI
 run_id: repin-20260924T155831Z-87643
 sha: f7a31a583af36e847d87df37ffd44f12b1d45a85 · suites: 4 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E8
+
+### Re-pin lần 4 — 2026-09-24, do ghim lai tren cay hop nhat sau khi gop onehub 973f1b01 (#125)
+run_id: repin-20260924T160407Z-81970
+sha: 787d66525c93e022bee430e6450c361c2fbd5a49 · suites: 4 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E8 · diff chạm vật đo ngoài làn máy: E8 — chưa chứng lại, đi vòng S4 delta
