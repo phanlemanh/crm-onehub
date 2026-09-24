@@ -1,7 +1,6 @@
 "use client";
 
 import Upload from "@carbon/icons-react/es/Upload";
-import { Alert, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import {
 	Dialog,
@@ -11,10 +10,16 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@crm/ui/components/dialog";
-import { Field, FieldDescription, FieldLabel } from "@crm/ui/components/field";
+import {
+	Field,
+	FieldDescription,
+	FieldError,
+	FieldLabel,
+} from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
+import { StepList, StepListItem } from "@crm/ui/components/step-list";
 import {
 	Table,
 	TableBody,
@@ -25,15 +30,19 @@ import {
 } from "@crm/ui/components/table";
 import { Textarea } from "@crm/ui/components/textarea";
 import { useMutation } from "@tanstack/react-query";
-import { useId, useRef, useState } from "react";
+import { useQueryStates } from "nuqs";
+import { useEffect, useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { toChucMessages } from "@/lib/messages/to-chuc";
+import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { useLamMoiToChuc } from "./lam-moi";
+import { toChucParsers } from "./to-chuc-search-params";
 
 type XemTruoc = RouterOutputs["org"]["previewImport"];
+type DaGhi = RouterOutputs["org"]["applyImport"];
 
 export function HopThoaiNhap({ dong }: { dong: () => void }) {
 	const m = toChucMessages(useLocale()).nhapHop;
@@ -48,6 +57,13 @@ export function HopThoaiNhap({ dong }: { dong: () => void }) {
 		null,
 	);
 	const [loi, setLoi] = useState<string | null>(null);
+	const [daGhi, setDaGhi] = useState<DaGhi | null>(null);
+	const [, datUrl] = useQueryStates(toChucParsers);
+	const buoc = daGhi ? 3 : ketQua ? 2 : 1;
+
+	useEffect(() => {
+		if (loi) document.getElementById(maO)?.focus();
+	}, [loi, maO]);
 
 	const xem = useMutation(
 		trpc.org.previewImport.mutationOptions({
@@ -61,11 +77,14 @@ export function HopThoaiNhap({ dong }: { dong: () => void }) {
 	const ghi = useMutation(
 		trpc.org.applyImport.mutationOptions({
 			onSuccess: async (kq) => {
+				toast.success(dien(m.daGhi, { n: kq.written }));
+				setDaGhi(kq);
 				await lamMoi();
-				toast(dien(m.daGhi, { n: kq.written }));
-				dong();
 			},
-			onError: (e) => setLoi(e.message),
+			onError: (e) => {
+				setKetQua(null);
+				setLoi(e.message);
+			},
 			onSettled: () => {
 				dangGui.current = false;
 			},
@@ -95,6 +114,7 @@ export function HopThoaiNhap({ dong }: { dong: () => void }) {
 
 	const tom = ketQua?.xem.summary;
 	const hong = ketQua?.xem.rows.filter((r) => r.error !== null) ?? [];
+	const moi = ketQua?.xem.newNames ?? { departments: [], divisions: [] };
 
 	return (
 		<Dialog
@@ -109,43 +129,64 @@ export function HopThoaiNhap({ dong }: { dong: () => void }) {
 					<DialogDescription>{m.moTa}</DialogDescription>
 				</DialogHeader>
 
-				<Field>
-					<FieldLabel htmlFor={maO}>{m.o}</FieldLabel>
-					<Textarea
-						id={maO}
-						rows={ketQua ? 3 : 8}
-						value={chu}
-						disabled={ghi.isPending}
-						translate="no"
-						placeholder={m.mau}
-						onChange={(e) => doiChu(e.target.value)}
-					/>
-					<FieldDescription>{m.goiY}</FieldDescription>
-					<input
-						ref={tep}
-						type="file"
-						accept=".csv,text/csv"
-						className="sr-only"
-						tabIndex={-1}
-						aria-hidden
-						onChange={async (e) => {
-							const f = e.target.files?.[0];
-							if (f) doiChu(await f.text());
-							e.target.value = "";
-						}}
-					/>
-				</Field>
+				<StepList activeStep={buoc} label={m.buoc.nhan} markCompleted>
+					<StepListItem step={1} activeStep={buoc} title={m.buoc.dan} />
+					<StepListItem step={2} activeStep={buoc} title={m.buoc.xem} />
+					<StepListItem step={3} activeStep={buoc} title={m.buoc.ketQua} />
+				</StepList>
 
-				{tom ? (
-					<>
+				{buoc === 1 ? (
+					<Field data-buoc-nhap="1">
+						<FieldLabel htmlFor={maO}>{m.o}</FieldLabel>
+						<Textarea
+							id={maO}
+							rows={8}
+							value={chu}
+							translate="no"
+							placeholder={m.mau}
+							aria-invalid={loi ? true : undefined}
+							onChange={(e) => doiChu(e.target.value)}
+						/>
+						{loi ? <FieldError>{loi}</FieldError> : null}
+						<FieldDescription>{m.goiY}</FieldDescription>
+						<input
+							ref={tep}
+							type="file"
+							accept=".csv,text/csv"
+							className="sr-only"
+							tabIndex={-1}
+							aria-hidden
+							onChange={async (e) => {
+								const f = e.target.files?.[0];
+								if (f) doiChu(await f.text());
+								e.target.value = "";
+							}}
+						/>
+					</Field>
+				) : null}
+
+				{buoc === 2 && tom ? (
+					<div className="flex flex-col gap-3" data-buoc-nhap="2">
 						<p className="text-sm" aria-live="polite" data-tom-tat>
 							{dien(m.tomTat, { v: tom.valid, h: tom.invalid })}
-							{tom.valid > 0
-								? dien(m.tomTatTao, {
-										pb: tom.newDepartments,
-										bp: tom.newDivisions,
-									})
-								: ""}
+							{moi.departments.length > 0 ? (
+								<>
+									{` · ${m.seTaoPhongBan} `}
+									<span translate="no" data-ten-moi="phong-ban">
+										{moi.departments.join(", ")}
+									</span>
+								</>
+							) : null}
+							{moi.divisions.length > 0 ? (
+								<>
+									{moi.departments.length > 0
+										? ` ${m.va} ${m.boPhanMoiNoi} `
+										: ` · ${m.seTaoBoPhan} `}
+									<span translate="no" data-ten-moi="bo-phan">
+										{moi.divisions.join(", ")}
+									</span>
+								</>
+							) : null}
 						</p>
 						{hong.length > 0 ? (
 							<ul
@@ -193,41 +234,86 @@ export function HopThoaiNhap({ dong }: { dong: () => void }) {
 								</TableBody>
 							</Table>
 						</div>
-					</>
+					</div>
 				) : null}
 
-				{loi ? (
-					<Alert variant="destructive">
-						<AlertDescription>{loi}</AlertDescription>
-					</Alert>
+				{buoc === 3 && daGhi ? (
+					<div className="flex flex-col gap-2 text-sm" data-buoc-nhap="3">
+						<p aria-live="polite">{dien(m.ketQuaGhi, { n: daGhi.written })}</p>
+						{moi.departments.length + moi.divisions.length === 0 ? (
+							<p className="text-muted-foreground">{m.khongTaoMoi}</p>
+						) : (
+							<ul className="list-disc ps-5 text-muted-foreground">
+								{moi.departments.length > 0 ? (
+									<li>
+										{`${m.pbMoi} `}
+										<span translate="no">{moi.departments.join(", ")}</span>
+									</li>
+								) : null}
+								{moi.divisions.length > 0 ? (
+									<li>
+										{`${m.bpMoi} `}
+										<span translate="no">{moi.divisions.join(", ")}</span>
+									</li>
+								) : null}
+							</ul>
+						)}
+					</div>
 				) : null}
 
 				<DialogFooter>
-					<Button
-						variant="outline"
-						disabled={ban}
-						onClick={() => tep.current?.click()}
-					>
-						<Icon icon={Upload} data-icon="inline-start" />
-						{m.chonTep}
-					</Button>
-					{tom ? (
-						<Button disabled={tom.valid === 0 || ban} onClick={ghiLo}>
-							{ghi.isPending ? <Spinner /> : null}
-							{ghi.isPending
-								? m.dangGhi
-								: tom.valid === 0
-									? m.khongGhi
-									: tom.invalid === 0
-										? dien(m.ghiHet, { v: tom.valid })
-										: dien(m.ghi, { v: tom.valid, h: tom.invalid })}
-						</Button>
-					) : (
-						<Button disabled={ban || chu.trim() === ""} onClick={xemTruoc}>
-							{xem.isPending ? <Spinner /> : null}
-							{xem.isPending ? m.dangXem : m.xemTruoc}
-						</Button>
-					)}
+					{buoc === 1 ? (
+						<>
+							<Button
+								variant="outline"
+								disabled={ban}
+								onClick={() => tep.current?.click()}
+							>
+								<Icon icon={Upload} data-icon="inline-start" />
+								{m.chonTep}
+							</Button>
+							<Button disabled={ban || chu.trim() === ""} onClick={xemTruoc}>
+								{xem.isPending ? <Spinner /> : null}
+								{xem.isPending ? m.dangXem : m.xemTruoc}
+							</Button>
+						</>
+					) : null}
+					{buoc === 2 && tom ? (
+						<>
+							<Button
+								variant="outline"
+								disabled={ban}
+								onClick={() => setKetQua(null)}
+							>
+								{m.quayLai}
+							</Button>
+							<Button disabled={tom.valid === 0 || ban} onClick={ghiLo}>
+								{ghi.isPending ? <Spinner /> : null}
+								{ghi.isPending
+									? m.dangGhi
+									: tom.valid === 0
+										? m.khongGhi
+										: tom.invalid === 0
+											? dien(m.ghiHet, { v: tom.valid })
+											: dien(m.ghi, { v: tom.valid, h: tom.invalid })}
+							</Button>
+						</>
+					) : null}
+					{buoc === 3 ? (
+						<>
+							<Button variant="outline" onClick={dong}>
+								{m.dongHop}
+							</Button>
+							<Button
+								onClick={() => {
+									void datUrl({ [SEARCH_PARAM.toChuc.don]: { loai: "goc" } });
+									dong();
+								}}
+							>
+								{m.xemCay}
+							</Button>
+						</>
+					) : null}
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

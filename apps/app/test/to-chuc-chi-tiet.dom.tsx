@@ -11,7 +11,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import type { TreeOutput } from "../../api/src/to-chuc/to-chuc.contracts";
+import type {
+	ImportPreviewOutput,
+	TreeOutput,
+} from "../../api/src/to-chuc/to-chuc.contracts";
 
 const nguoi = (id: string, name: string) => ({
 	id,
@@ -131,6 +134,33 @@ let daGoi: { ten: string; dauVao: unknown }[] = [];
 let cheDo = new Map<string, string>();
 let khuonLuuTru: { id: string; name: string; purgeable: boolean }[] = [];
 
+const LOI_NHAP = [
+	"Thiếu email",
+	"Thiếu phòng ban",
+	"Trưởng bộ phận cần cột bộ phận, hoặc phòng ban đã thuộc một bộ phận",
+];
+
+function xemTruocMau(): ImportPreviewOutput {
+	const dong = (
+		line: number,
+		email: string,
+		department: string,
+		division: string,
+		error: string | null,
+	) => ({ line, email, department, division, head: "", error });
+	return {
+		rows: [
+			dong(1, "hung@onehub.vn", "Bảo hành", "Tài chính", null),
+			dong(2, "mai@onehub.vn", "Kinh doanh vùng 1", "Kinh doanh", null),
+			dong(3, "", "Kho vận", "", LOI_NHAP[0] ?? ""),
+			dong(4, "tuan@onehub.vn", "", "", LOI_NHAP[1] ?? ""),
+			dong(5, "thao@onehub.vn", "Pháp chế", "", LOI_NHAP[2] ?? ""),
+		],
+		summary: { valid: 2, invalid: 3, newDepartments: 1, newDivisions: 1 },
+		newNames: { departments: ["Bảo hành"], divisions: ["Tài chính"] },
+	};
+}
+
 type Json =
 	| string
 	| number
@@ -156,6 +186,7 @@ function thuTuc<TRa>(ten: string, doc: () => Promise<TRa> | TRa) {
 				daGoi.push({ ten, dauVao: JSON.parse(JSON.stringify(dauVao)) });
 				const loi = cheDo.get(ten);
 				if (loi !== undefined) throw new Error(loi);
+				if (ten === "previewImport") return xemTruocMau();
 				return {
 					id: `${ten}-ok`,
 					written: 4,
@@ -1441,5 +1472,150 @@ describe("trang-thai", () => {
 				(ten) => `${ten}: loi=true con-tro=true`,
 			),
 		);
+	});
+});
+
+async function goVung(o: HTMLTextAreaElement, chu: string): Promise<void> {
+	const dat = Object.getOwnPropertyDescriptor(
+		HTMLTextAreaElement.prototype,
+		"value",
+	)?.set;
+	await act(async () => {
+		dat?.call(o, chu);
+		o.dispatchEvent(new Event("input", { bubbles: true }));
+	});
+}
+
+function buocDangO(): string | null {
+	return (
+		hop()
+			.querySelector("[role='listitem'][aria-current='step']")
+			?.getAttribute("data-step") ??
+		String(
+			[...hop().querySelectorAll("[role='listitem']")].findIndex(
+				(x) => x.getAttribute("aria-current") === "step",
+			) + 1,
+		)
+	);
+}
+
+async function moNhap(): Promise<void> {
+	await bam(
+		nutTheoChu(
+			document.body.querySelector(
+				"[data-slot='page-shell-actions']",
+			) as HTMLElement,
+			m.nhap,
+		)[0],
+	);
+	await cho(() => khungMoi() > 0, "hop nhap");
+}
+
+describe("nhap-ba-buoc", () => {
+	test("nhap-ba-buoc: buoc dan, xem truoc neu ten don vi moi, ket qua co nut Xem cay", async () => {
+		await mo("?don=bp:bp-kd");
+		await moNhap();
+		const thay: string[] = [];
+		thay.push(`buoc 1: dang o ${buocDangO()}`);
+		thay.push(
+			`buoc 1: o dan ${hop().querySelector("[data-buoc-nhap='1'] textarea") !== null}`,
+		);
+		await goVung(
+			hop().querySelector("textarea") as HTMLTextAreaElement,
+			"hung@onehub.vn\tBảo hành\tTài chính",
+		);
+		await bam(nutTheoChu(hop(), m.nhapHop.xemTruoc)[0]);
+		await cho(
+			() => hop().querySelector("[data-buoc-nhap='2']") !== null,
+			"buoc 2",
+		);
+		thay.push(`buoc 2: dang o ${buocDangO()}`);
+		const tom = hop().querySelector("[data-tom-tat]");
+		const ten = [...(tom?.querySelectorAll("[translate='no']") ?? [])].map(
+			(x) => x.textContent,
+		);
+		thay.push(
+			ten.join("|") === "Bảo hành|Tài chính"
+				? "buoc 2: neu ten don vi moi"
+				: "buoc 2 khong neu ten don vi moi",
+		);
+		for (const [i, loi] of LOI_NHAP.entries()) {
+			const li = [
+				...hop().querySelectorAll(`[aria-label="${m.nhapHop.dongHong}"] li`),
+			].find((x) => x.textContent?.startsWith(`Dòng ${i + 3}:`));
+			thay.push(
+				li?.textContent === `Dòng ${i + 3}: ${loi}`
+					? `dong ${i + 3}: dung cau`
+					: `dong ${i + 3}: ${li?.textContent}`,
+			);
+		}
+		await bam(nutTheoChu(hop(), "Ghi 2 dòng · bỏ 3 dòng hỏng")[0]);
+		await cho(
+			() => hop().querySelector("[data-buoc-nhap='3']") !== null,
+			"buoc 3",
+		);
+		thay.push(`buoc 3: dang o ${buocDangO()}`);
+		const kq = hop().querySelector("[data-buoc-nhap='3']")?.textContent ?? "";
+		thay.push(
+			`buoc 3: ${kq.includes("Đã ghi 4 người.") && kq.includes("Bảo hành") && kq.includes("Tài chính")} xem-cay=${nutTheoChu(hop(), m.nhapHop.xemCay).length}`,
+		);
+		await bam(nutTheoChu(hop(), m.nhapHop.xemCay)[0]);
+		await doiDong();
+		expect({ thay, don: url.get("don"), khung: khung() }).toEqual({
+			thay: [
+				"buoc 1: dang o 1",
+				"buoc 1: o dan true",
+				"buoc 2: dang o 2",
+				"buoc 2: neu ten don vi moi",
+				"dong 3: dung cau",
+				"dong 4: dung cau",
+				"dong 5: dung cau",
+				"buoc 3: dang o 3",
+				"buoc 3: true xem-cay=1",
+			],
+			don: "goc",
+			khung: "goc",
+		});
+	});
+
+	test("nhap-ba-buoc: ghi thanh cong bao toast.success mot lan, may chu tu choi thi loi duoi o dan va con tro o do", async () => {
+		const bao = spyOn(toast, "success");
+		await mo();
+		await moNhap();
+		await goVung(hop().querySelector("textarea") as HTMLTextAreaElement, "x");
+		await bam(nutTheoChu(hop(), m.nhapHop.xemTruoc)[0]);
+		await cho(() => hop().querySelector("[data-buoc-nhap='2']") !== null, "b2");
+		const truoc = bao.mock.calls.length;
+		await bam(nutTheoChu(hop(), "Ghi 2 dòng · bỏ 3 dòng hỏng")[0]);
+		await cho(() => hop().querySelector("[data-buoc-nhap='3']") !== null, "b3");
+		const lan = bao.mock.calls.length - truoc;
+		bao.mockRestore();
+		await bam(nutTheoChu(hop(), m.nhapHop.dongHop)[0]);
+		await doiDong();
+
+		cheDo.set("previewImport", "May chu tu choi previewImport");
+		await moNhap();
+		await goVung(hop().querySelector("textarea") as HTMLTextAreaElement, "x");
+		const nut = nutTheoChu(hop(), m.nhapHop.xemTruoc)[0];
+		await act(async () => {
+			nut?.focus();
+		});
+		await bam(nut);
+		await cho(
+			() => hop().querySelector("[data-slot='field-error']") !== null,
+			"loi nhap",
+		);
+		const loi = hop().querySelector("[data-slot='field-error']") as HTMLElement;
+		expect({
+			applyImport: lan === 1 ? "bao thanh cong" : `bao ${lan} lan`,
+			loi: loi.textContent,
+			conTro:
+				loi.closest("[data-slot='field']")?.contains(document.activeElement) ===
+				true,
+		}).toEqual({
+			applyImport: "bao thanh cong",
+			loi: "May chu tu choi previewImport",
+			conTro: true,
+		});
 	});
 });
