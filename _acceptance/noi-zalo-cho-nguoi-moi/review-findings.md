@@ -1,45 +1,31 @@
 ## Trong hợp đồng
 
-### When Zalo accepts setWebhook but verification fails, the code restores the old URL and key, so the status still reads «da-dang-ky»
-- file: `apps/agent/agent/lib/zalo-bot-xuong.ts:117`
-- severity: high
-- source: conventions
-- AC: AC-16
-
-`dangKy` returns false in two different cases. (1) The call itself fails: `ok:false` or a network error. (2) Zalo answers `ok:true` but `verification.outcome` is not `webhook.ok`. `datBot` handles both the same way, with `ghiCot({ ...truoc, zaloWebhookLyDo: "zalo-tu-choi" })`. That restores the whole previous row, including the old `zaloWebhookUrl` and `zaloWebhookSecret`.
-
-AC-16 requires that when `outcome` is not `webhook.ok`, `zaloWebhookUrl` is null and `zalo.xuong` does not return «da-dang-ky». The Given of AC-16 is not limited to a first-time setup. But when a bot is already registered (url U, key K) and the admin registers again, a failed verification brings back url U. `trangThaiWebhook` in apps/api/src/zalo/zalo.service.ts:41 returns «da-dang-ky» whenever the url is non-null, so the screen still says the webhook is registered. AC-17 (keep the old token and key) only covers `ok:false` and network errors, not a failed verification.
-
-There is also a likely runtime effect. Zalo answered `ok:true`, so it has probably saved the webhook with the new `secret_token`. The DB now holds key K again, so every later webhook call would get 401 while the UI shows it as registered.
-
-The test «goi-nguoc: b» only covers the first-time case (no previous url), so this gap passes unnoticed. Case (2) needs its own branch: set url to null, keep «zalo-tu-choi», and decide which secret to keep. Add a test that starts with a url already registered.
-
-### Re-registering the same bot when Zalo says ok:true but verification failed: the old secret is put back while Zalo keeps the new one, so every webhook message is rejected and the screen still shows «da-dang-ky»
-- file: `apps/agent/agent/lib/zalo-bot-xuong.ts:117`
-- severity: medium
-- source: bugs
-- AC: AC-16
-
-`dangKy` now returns false when `setWebhook` answers `ok: true` but `verification.outcome` is not `webhook.ok`. `datBot` then runs `ghiCot({ ...truoc, zaloWebhookLyDo: "zalo-tu-choi" })`, which writes back the old token T, the old secret K and the old `zaloWebhookUrl` U. But `ok: true` means Zalo accepted `setWebhook` and stored the new `secret_token` K2. The repo's own CLI (`zalo-dang-ky.ts`) and docs/agent.md read it the same way: they treat `ok: true` as registered and print the outcome only as information.
-
-Scenario: a bot is running with T/K/U. The admin clicks «Đăng ký lại» (`luuBot({})`, so the token resolves to T), or pastes the same token again. Zalo returns `{ok:true, result:{url, verification:{outcome:"webhook.failed"}}}`, for example because its test call timed out. The DB goes back to secret K, while Zalo now signs every delivery with K2. `nhanWebhook` compares the header against `zaloKhoaWebhook()` = K and rejects every real message, and nothing logs it at the setup step. `trangThaiWebhook(url=U, …)` still returns «da-dang-ky», so the screen shows the webhook as fine while nothing arrives. This also breaks AC-16 («zalo.xuong không trả da-dang-ky» when verification fails) whenever a URL was already stored. The E25 case b test only covers a first-time setup with url null, so it misses this.
-
-The rollback is only safe when Zalo actually refused the call (`ok:false`, or the call threw before it reached Zalo). When the verification outcome is bad but `ok` is true, the code should either keep K2 and set `zaloWebhookUrl` to null, or call `deleteWebhook` before restoring K.
-
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **console.table left in integration tests**
-  Người dùng thấy gì: Người dùng không thấy gì thay đổi; đây chỉ là một dòng ghi thừa trong nhật ký chạy kiểm thử nội bộ, không ảnh hưởng tới tính năng thật.
+- **CotZalo is a hand-written type with zaloWebhookLyDo: string | null, so the ly-do values the code writes are no longer checked against ZALO_LY_DO**
+  Người dùng thấy gì: Nếu sau nay có người gõ nhầm giá trị lý do webhook trong code, hệ thống sẽ không báo lỗi lúc biên dịch, và màn hình quản trị có thể lặng lẽ hiện sai trạng thái kết nối Zalo mà không ai nhận ra ngay.
+  file: `apps/agent/agent/lib/zalo-bot-xuong.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **Verification failure now saves a new bot, but the API reports an error and the page never refreshes, so the screen shows the old bot**
+  Người dùng thấy gì: Khi quản trị viên đổi Bot Token và Zalo từ chối xác minh webhook, hệ thống đã lặng lẽ lưu bot mới và xóa webhook cũ, nhưng màn hình vẫn hiện tên bot cũ và trạng thái xanh như chưa có gì thay đổi — quản trị viên tưởng lưu thất bại nên không bấm Đăng ký lại, trong khi bot cũ đã mất khóa và ngừng nhận tin.
+  file: `apps/agent/agent/lib/zalo-bot-xuong.ts`
+  severity: high
+  Đề xuất: new-contract
+
+- **The xac-minh-hong state lasts only one dispatch tick: kiemBot rewrites zaloWebhookUrl from getWebhookInfo**
+  Người dùng thấy gì: Cảnh báo Zalo chưa nhận tin sau một lần xác minh thất bại chỉ hiện được một nhịp rồi tự biến mất ở lần kiểm tiếp theo, dù webhook thật ra chưa được xác minh lại — quản trị viên có thể tưởng nhầm là đã ổn.
+  file: `apps/agent/agent/lib/zalo-bot-xuong.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Shape 5 (a class claimed, but only point cases tested): the new 'xac-minh-hong' failure branch is tested only for 'dang-ky-lai', not in the CACH_GOI matrix, so the token assertion can never fail**
+  Người dùng thấy gì: Bộ test cho tình huống xác minh webhook thất bại chưa phủ hết trường hợp kèm token mới, nên nếu code sau này vô tình lưu nhầm token mới thay vì giữ token cũ, bộ test hiện tại sẽ không bắt được lỗi đó.
   file: `apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts`
   severity: low
-  Đề xuất: wont-fix
-
-- **Shape 3 (checks a value exists, but the promise is a relation): E27 nhip-tron cannot go red with its own declared mutation, and row 2 cannot witness the 500 branch**
-  Người dùng thấy gì: Nếu sau này có lỗi khiến việc kiểm tra webhook khi Zalo báo lỗi 500 làm ngừng luôn cả nhịp gửi nhắc buổi sáng, bộ kiểm thử hiện tại có thể không phát hiện ra, nên người dùng có thể mất nhắc mà không ai biết ngay.
-  file: `apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts`
-  severity: medium
   Đề xuất: known-limits
 
 - **Every bridge failure becomes a 400 'agent not connected', and schema mismatches and agent 500s are silently dropped (r1)**
@@ -55,7 +41,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   Đề xuất: known-limits
 
 - **Member removal now deletes Zalo links and notification preferences, but docs/api.md was not updated (r1)**
-  Người dùng thấy gì: Tài liệu nội bộ chưa nói rõ là liên kết Zalo và cài đặt nhắc của một thành viên bị xoá hẳn khi gỡ họ khỏi xưởng, dễ khiến đội ngũ tưởng nhầm là mời lại sẽ khôi phục được.
+  Người dùng thấy gì: Tài liệu nội bộ chưa nói rõ là liên kết Zalo và cài đặt nhắc của một thành viên bị xóa hẳn khi gỡ họ khỏi xưởng, dễ khiến đội ngũ tưởng nhầm là mời lại sẽ khôi phục được.
   file: `apps/api/src/workspace/workspace.service.ts`
   severity: low
   Đề xuất: known-limits
@@ -95,5 +81,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `apps/api/test/noi-zalo-cho-nguoi-moi.spec.ts`
   severity: low
   Đề xuất: known-limits
+
+## Chưa adversarial-verify (refuter chết)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
