@@ -149,22 +149,23 @@ async function luuKhuon(id: string) {
 }
 
 async function keHoachCoBuoc(pbId: string) {
-	const k = await khuonMoi([pbId]);
 	const cty = await db.company.create({
 		data: { name: ma("cty") },
 		select: { id: true },
 	});
-	ok(
-		await trpc("onboarding.createFromTemplate", {
+	await db.onboardingPlan.create({
+		data: {
 			companyId: cty.id,
-			templateId: k.id,
-			startedAt: "2026-09-21",
+			startedAt: new Date(),
+			targetDays: 30,
 			ownerId: phien.quan.nguoi,
-		}),
-		"tao ke hoach",
-	);
-	await luuKhuon(k.id);
-	return k;
+			steps: {
+				create: [
+					{ label: "buoc", departmentId: pbId, dueAt: new Date(), position: 0 },
+				],
+			},
+		},
+	});
 }
 
 async function luuPb(id: string) {
@@ -573,6 +574,7 @@ describe("mdg-luat-xoa-han", () => {
 	test("mdg-luat-xoa-han: con buoc va trong khuon — cau con buoc thang", async () => {
 		const id = await pbMoi("xh-hai-ve");
 		await keHoachCoBuoc(id);
+		await luuKhuon((await khuonMoi([id])).id);
 		await luuPb(id);
 		const tra = await trpc("org.purgeDepartment", { id });
 		expect(`hai ve: HTTP ${tra.status} ${tra.loi}`).toBe(
