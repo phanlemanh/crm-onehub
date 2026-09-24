@@ -5,7 +5,7 @@ slug: zalo-qua-webhook
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, config, docs]
-status: verified
+status: machine-cleared
 design_doc: docs/superpowers/specs/2026-09-24-zalo-qua-webhook-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-24T01:36:20Z
