@@ -5,7 +5,7 @@ slug: loi-tac-tu-zalo-noi-dung-nguyen-nhan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui, docs]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-24-loi-tac-tu-zalo-noi-dung-nguyen-nhan-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-24T09:39:27Z
@@ -72,3 +72,12 @@ Quét bằng `morphological-scan` (preset test-matrix) —
 - Hai khẳng định «Tác tử chưa nối được» trong `apps/api/test/noi-zalo-cho-nguoi-moi.spec.ts` (E15 của hồ sơ đã ký `noi-zalo-cho-nguoi-moi`) đổi sang câu mới; lời hứa của E15 («lỗi yêu cầu, không ném») giữ nguyên. Hai spec do `nzm_giu_da_ky` / `zqw_giu_nqz` canh không bị chạm.
 - Lệch phiên bản lúc triển khai: API cũ + tác tử mới đọc một lần gửi thử hỏng thành «đã gửi» cho tới khi API lên; triển khai tay thì cho API lên trước.
 - Phiên song song `goi-thu-hong-man-noi-that` cùng chạm `zalo-bot-xuong.ts` (nhánh `xac-minh-hong`) và có thể cùng thêm nhánh vào `datBotPhanHoi`; phiên nào lên sau thì gộp.
+- Ngoài-3 (mọi 4xx của `getMe`, kể cả 408 và 429, bị đọc thành token sai) tách sang một hợp đồng riêng.
+
+### Known limits (Cổng Bằng chứng vòng 1, 2026-09-24)
+
+- Ngoài-1: `docs/agent.md` nói mọi lỗi Zalo in dòng `[zalo] <method> hong: <lớp>`, nhưng bước `setWebhook` (`dangKy`) vẫn in `[zalo] setWebhook loi: …` kèm message lỗi (không lộ token vì `String(Error)` không có `path`).
+- Ngoài-2: ghi chú dòng 2c ở bảng mục 7 của `docs/plan/lo-trinh-zalo.md` gọi nhầm vòng kia là «2b mở PR sau khi A merge» và chưa ghi #122 đã merge.
+- Ngoài-4: bộ đếm ô của E1, E3, E4, E5, E7 so với độ dài chính mảng mà vòng lặp duyệt, nên luôn đúng; một ô bị xoá khỏi bảng vẫn xanh (chỉ E2 ghim số 12 tường minh).
+- Ngoài-5: đối chứng dương của `log-khong-lo-token` và `cau-noi-log` chỉ khẳng định 0 dòng log, không kiểm lời gọi đã tới tác tử và thành công.
+- Ngoài-6: test màn E8 ném `Error` trần thay vì lỗi đúng khuôn tRPC client.
