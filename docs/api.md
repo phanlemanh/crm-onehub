@@ -370,10 +370,21 @@ onboarding, OKR, reports and filters read it; no area keeps its own.
 - **A department head must be an active member of that department.** Someone who
   moves out stops counting as its head without a write; the department reads as
   headless until an admin picks again.
-- **Archive, then purge, same as records.** A department is refused archive while
-  active members hold it as primary, and refused purge while any placement points at
-  it. A division is refused archive while it holds live departments, and refused
-  purge while any department, archived or not, still points at it.
+- **`org.*` is the only way to write a department.** Create, rename, move, archive,
+  restore and purge all live here; `onboarding` keeps `listDepartments` for reading
+  and has no department writes. A department write anywhere else — a new procedure,
+  a REST route, a Prisma call outside `apps/api/src/to-chuc` — is a second rulebook
+  waiting to drift.
+- **Archive, then purge, same as records.** A department is refused archive while a
+  live template holds it or active members hold it as primary, and refused purge
+  while it is live, a plan step or any placement points at it, or any template —
+  archived or not — still holds it. A division is refused archive while it holds live
+  departments, and refused purge while any department, archived or not, still points
+  at it.
+- **Purgeability is one function.** `lyDoKhongXoaPhongBan` (`xoa-phong-ban.ts`)
+  returns the refusal or nothing; `org.tree`, `org.purgeDepartment`,
+  `org.archiveDepartment` and `onboarding.listDepartments` all call it, so no screen
+  can offer «Xoá hẳn» on a department the server will refuse.
 - **Import is preview, then apply.** `previewImport` parses tab or CSV text
   (`nhap.ts`) against a snapshot and returns every row with its error; `applyImport`
   re-checks, writes the valid rows in one transaction and skips the broken ones.
