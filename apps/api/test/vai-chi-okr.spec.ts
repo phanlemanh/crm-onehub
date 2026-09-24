@@ -11,6 +11,7 @@ import type { AddressInfo } from "node:net";
 import { join } from "node:path";
 import { auth, KHONG_TRONG_PHAM_VI, NOT_A_MEMBER } from "@crm/auth";
 import { db } from "@crm/db";
+import { readContextDevKey, writeContextDevKey } from "@crm/db/settings";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import request from "supertest";
@@ -646,6 +647,8 @@ describe("vai-chi-okr", () => {
 		const member = await gieoNguoi("member", "member");
 		const cookieOkr = await dangNhap(okr.email);
 		const cookieMember = await dangNhap(member.email);
+		const khoaTruoc = await readContextDevKey(db);
+		await writeContextDevKey(db, "lan-do-khong-phai-khoa-that");
 		const server = await app.listen(0, "127.0.0.1");
 		const { port } = server.address() as AddressInfo;
 		const apiUrl = `http://127.0.0.1:${port}`;
@@ -677,5 +680,6 @@ describe("vai-chi-okr", () => {
 		});
 		expect(res.status).toBe(200);
 		expect(res.body.result.data.viewerRole).toBe("okr");
+		await writeContextDevKey(db, khoaTruoc ?? "");
 	});
 });
