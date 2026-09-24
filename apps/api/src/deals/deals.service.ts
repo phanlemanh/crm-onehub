@@ -219,6 +219,7 @@ export class DealsService {
 					this.db.deal.aggregate({
 						where: { AND: [stageWhere, this.conversion.countedWhere(base)] },
 						_sum: { baseAmount: true },
+						_count: { _all: true },
 					}),
 					this.conversion.unconverted(stageWhere),
 					this.db.deal.findMany({
@@ -232,6 +233,7 @@ export class DealsService {
 							amount: true,
 							currency: true,
 							baseAmount: true,
+							baseCurrency: true,
 							expectedCloseDate: true,
 							closedAt: true,
 							company: { select: COMPANY_SELECT },
@@ -246,11 +248,13 @@ export class DealsService {
 					stage,
 					count,
 					valueCents: toCents(value._sum.baseAmount),
+					countedCount: value._count._all,
 					unconverted,
 					cards: cards.map(
 						({
 							amount,
 							baseAmount,
+							baseCurrency,
 							expectedCloseDate,
 							closedAt,
 							lastActivityAt,
@@ -261,6 +265,10 @@ export class DealsService {
 							...card,
 							amountCents: toCents(amount),
 							baseAmountCents: toCents(baseAmount),
+							counted: this.conversion.isCounted(
+								{ baseAmount, baseCurrency },
+								base,
+							),
 							expectedCloseDate: expectedCloseDate?.toISOString() ?? null,
 							closedAt: closedAt?.toISOString() ?? null,
 							lastActivityAt: lastActivityAt?.toISOString() ?? null,
