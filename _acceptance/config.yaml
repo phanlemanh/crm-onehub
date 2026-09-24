@@ -415,6 +415,12 @@ executors:
     check_types: "bun run check-types"
     check_types_khong_cache: "bunx turbo run check-types --force"
     build_khong_cache: 'bunx turbo run build --force'
+    cdt_hang_xom_lanh: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh lanh"'
+    cdt_hang_xom_pha: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh pha"'
+    cdt_hang_xom_pha_don_bang: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh pha-don-bang"'
+    cdt_chung_luot_lanh: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/chung-luot.sh lanh 5"'
+    cdt_chung_luot_pha: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/chung-luot.sh pha 1"'
+    cdt_lanes_giu_nhanh_except: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/lanes-giu-except.sh"'
     oc_moi_o_cam_chay_duoc: bun _acceptance/o-cam-chay-duoc-that/rang/moi-o-cam-chay-duoc.mjs
     oc_yaml_doc_duoc: bun _acceptance/o-cam-chay-duoc-that/rang/yaml-doc-duoc.mjs
     oc_hai_trinh_doc_bang_nhau: bun _acceptance/o-cam-chay-duoc-that/rang/hai-trinh-doc-bang-nhau.mjs
