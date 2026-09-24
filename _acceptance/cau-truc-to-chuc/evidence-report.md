@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e7ce10a3c802b132528a6424414258aa60302bc6
+verified_commit: 5f611b5627d37209b3d9562547aab287b24fd751
 human_signoff:
 ---
 
@@ -364,3 +364,7 @@ none — every multi-run eval is uniform (không eval nào khai `runs > 1` ở r
 Round 1: baseline (diffBase) và các finding ngoài-hợp-đồng carried được chốt trước round này — xem "Carried từ round 1" trong review-findings.md; không có dữ liệu chi tiết round 1 khác được truyền vào round này.
 Round 2: 24 eval + 4 lệnh suite hồi quy đều exit 0 (không eval nào fail máy); verdict tổng REJECT vì 2 finding "Trong hợp đồng" xác nhận vi phạm AC-9 (order-dependency của nhập lô, loại lỗi "phòng ban hai bộ phận") và AC-14 (thiếu translate="no" cho ô hiển thị tên người) — xem review-findings.md.
 Round 3: 24 eval + 4 lệnh suite hồi quy đều exit 0; 2 eval ui-check (E20, E22) đọc lại 6 frame ảnh bằng Read, không frame nào mâu thuẫn Expected. review-findings.md ghi 1 finding mới map vào hợp đồng dưới AC-10 (hiệu năng nhập lô, `to-chuc.service.ts:491`) cùng các finding ngoài-hợp-đồng mới + carried từ round 1-2 — verdict PASS.
+
+### Re-pin lần 1 — 2026-09-24, do gộp onehub 5bc9b6b0 (#113, #116, #118) trước khi mở PR
+run_id: repin-20260924T090321Z-88014
+sha: 5f611b5627d37209b3d9562547aab287b24fd751 · suites: 4 lệnh exit 0 · evals: 23/23 eval máy đạt kỳ vọng · ngoài làn máy: E20, E22 · AC không có chốt máy: AC-14
