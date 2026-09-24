@@ -30,6 +30,7 @@ import {
 	MessageScrollerButton,
 	MessageScrollerProvider,
 } from "../src/components/message-scroller";
+import { MoneyInput } from "../src/components/money-input";
 import { Reasoning } from "../src/components/reasoning";
 import { Sheet, SheetContent, SheetTitle } from "../src/components/sheet";
 import { SkeletonSwap } from "../src/components/skeleton-swap";
@@ -251,6 +252,17 @@ const CA: Ca[] = [
 	{
 		ten: "DatePicker",
 		ve: () => <DatePicker value="2026-09-01" onChange={() => {}} />,
+	},
+	{
+		ten: "MoneyInput",
+		ve: () => (
+			<MoneyInput
+				id="so-tien"
+				value="1.500,50"
+				currency="USD"
+				onValueChange={() => {}}
+			/>
+		),
 	},
 	{ ten: "SortableItem", ve: () => <SortableItem id="1" label="Tên cột" /> },
 	{

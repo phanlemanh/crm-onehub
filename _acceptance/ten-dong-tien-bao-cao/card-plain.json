@@ -1,0 +1,9 @@
+{
+  "feature_plain": "Tấm tạo thoả thuận giờ gọi thiết lập tiền tệ là «đồng tiền báo cáo» — cùng tên với màn Cài đặt và ô thêm nhanh — nên người đọc lời báo lỗi tìm được đúng thiết lập đó; từ điển sản phẩm có mục mới cho khái niệm này.",
+  "scope_plain": "Hoãn: đổi tên thiết lập trong mã và cơ sở dữ liệu, rà các khái niệm tiền tệ khác để đưa vào từ điển.",
+  "decisions_plain": [
+    {"id": "d-20260924T082028Z-1", "p": "Thống nhất về «đồng tiền báo cáo» (tên đã có ở Cài đặt và thêm nhanh), không dùng «đồng tiền mặc định» — đổi lại phải sửa bài kiểm và thước của hồ sơ trước."},
+    {"id": "d-20260924T082028Z-2", "p": "Không sửa hợp đồng đã duyệt của vòng trước; thêm một dòng ghi chú ở đó trỏ sang vòng này — đổi lại hai tiêu chí cũ đọc lệch chữ với sản phẩm, người đọc phải theo dòng ghi chú."},
+    {"id": "d-20260924T082028Z-3", "p": "KHÔNG làm bản mẫu bấm được — vòng chỉ đổi chữ của hai câu có sẵn; ảnh màn thật có ở gói bằng chứng."}
+  ]
+}

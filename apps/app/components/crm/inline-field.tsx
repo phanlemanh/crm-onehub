@@ -4,6 +4,8 @@ import { Button } from "@crm/ui/components/button";
 import { DatePicker } from "@crm/ui/components/date-picker";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { Input } from "@crm/ui/components/input";
+import { useLocale } from "@crm/ui/components/locale-provider";
+import { MoneyInput } from "@crm/ui/components/money-input";
 import {
 	Select,
 	SelectContent,
@@ -14,8 +16,10 @@ import {
 import { SOURCED_VALUE, SourcedValue } from "@crm/ui/components/sourced-value";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
+import { formatMoney } from "@crm/ui/lib/format";
+import { formatMoneyInput, parseMoneyInput } from "@crm/ui/lib/money-input";
 import { cn } from "@crm/ui/lib/utils";
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { PROPERTY_LABEL, PROPERTY_ROW } from "@/components/detail-sheet";
 
 const ROW = cn(PROPERTY_ROW, "items-center");
@@ -150,6 +154,98 @@ export function InlineField({
 				{body}
 				{suggestion}
 			</div>
+		</div>
+	);
+}
+
+export function InlineMoneyField({
+	label,
+	cents,
+	currency,
+	onSave,
+	saving = false,
+}: {
+	label: string;
+	cents: number | null;
+	currency: string;
+	onSave: (next: number | null) => void;
+	saving?: boolean;
+}) {
+	const id = useId();
+	const locale = useLocale();
+	const [editing, setEditing] = useState(false);
+	const initial =
+		cents === null ? "" : formatMoneyInput(cents, { locale, currency });
+	const [draft, setDraft] = useState(initial);
+	const closed = useRef(false);
+
+	const open = () => {
+		closed.current = false;
+		setDraft(initial);
+		setEditing(true);
+	};
+
+	const close = () => {
+		closed.current = true;
+		setEditing(false);
+	};
+
+	const commit = (text: string) => {
+		if (closed.current) return;
+		if (text.trim() === initial) return close();
+		const reading = parseMoneyInput(text, { locale, currency });
+		if (reading.kind === "invalid") return;
+		const next = reading.kind === "ok" ? reading.cents : null;
+		close();
+		if (next !== cents) onSave(next);
+	};
+
+	const control = editing ? (
+		<MoneyInput
+			id={id}
+			autoFocus
+			value={draft}
+			currency={currency}
+			onValueChange={setDraft}
+			onBlur={(event) => commit(event.currentTarget.value)}
+			onKeyDown={(event) => {
+				if (event.key === "Enter") {
+					event.preventDefault();
+					commit(event.currentTarget.value);
+				}
+				if (event.key === "Escape") {
+					setDraft(initial);
+					close();
+				}
+			}}
+		/>
+	) : (
+		<Button
+			variant="ghost"
+			size="sm"
+			className={CONTROL}
+			disabled={saving}
+			onClick={open}
+		>
+			{saving ? <Spinner /> : null}
+			{cents === null ? (
+				<span className="truncate text-muted-foreground">
+					<EmptyCellValue />
+				</span>
+			) : (
+				<span className="truncate" translate="no">
+					{formatMoney(cents, currency, locale)}
+				</span>
+			)}
+		</Button>
+	);
+
+	return (
+		<div className={cn(ROW, editing && "items-start")}>
+			<label htmlFor={id} className={cn(LABEL, editing && "pt-2")}>
+				{label}
+			</label>
+			{control}
 		</div>
 	);
 }

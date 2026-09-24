@@ -102,6 +102,13 @@ trong mạng lưới. Trên màn hình đang hiện dưới `Deals`. Chốt 2026
 _Avoid_: cơ hội, deal bán hàng, giao dịch
 Vì sao: nó không phải một ca lẻ do đối tác đưa về, và không phải một lần bán.
 
+**Đồng tiền báo cáo**: đồng tiền duy nhất mà mọi tổng, biểu đồ và báo cáo quy về. Mỗi
+không gian làm việc chọn một đồng ở Cài đặt → Tiền tệ; thoả thuận không chọn đồng riêng
+thì mang đồng này. Trên màn tiếng Anh là `Reporting currency`. Chốt 2026-09-24.
+_Avoid_: đồng tiền mặc định, default currency, tiền tệ gốc
+Vì sao: «mặc định» chỉ nói chỗ điền sẵn của một ô, không nói vai của thiết lập; người
+đọc một lời báo lỗi phải tìm được đúng thiết lập ấy ở Cài đặt, nơi nó mang tên này.
+
 **Giai đoạn thoả thuận**: bước hiện tại của một thoả thuận hợp tác. **CHƯA CHỐT
 NGHĨA.** Dữ liệu đang mang bảy bước của một phễu bán phần mềm — `DEMO_BOOKED`,
 `QUALIFIED_TO_BUY`, `CLOSED_WON`… — thừa kế từ kho gốc và không mô tả quy trình
