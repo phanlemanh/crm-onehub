@@ -5,7 +5,7 @@ slug: o-so-tien-doc-theo-tieng
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: machine-cleared
 design_doc: docs/superpowers/specs/2026-09-24-o-so-tien-doc-theo-tieng-design.md
 approved_by:
 approved_at:
@@ -65,3 +65,5 @@ Chân sản phẩm: dựng từ repo — hai tiếng của sản phẩm [SUY-T�
 ## Notes
 
 - Không đụng máy chủ: `deals.create` và `deals.update` nhận `amountCents` như cũ; việc sửa nằm hoàn toàn ở chỗ đọc chuỗi.
+- Known limits (Ngoài-6, Gate 2): bài kiểm «nút Tạo của thêm nhanh bị khoá khi thiết lập tiền tệ chưa về» chỉ đo chiều khoá, không có đối chứng nút bật khi đủ điều kiện; các ca còn lại gửi biểu mẫu bằng `requestSubmit()` nên không đi qua trạng thái khoá của nút.
+- Known limits (Ngoài-7, Gate 2): thước soi mã (`rang/soi-ma.mjs`) đếm số khẳng định nhưng không so với con số khai trước; nếu thư mục câu chữ đổi đuôi tệp, vế «không còn khoá amountNotNumber» có thể không kiểm tệp nào mà vẫn xanh.

@@ -1,0 +1,13 @@
+{
+  "feature_plain": "Người gõ số tiền thoả thuận theo kiểu tiếng Việt (150.000.000) giờ được lưu đúng số đó, thấy ngay máy đọc ra bao nhiêu trước khi lưu, và chuỗi viết lẫn kiểu bị từ chối kèm câu chỉ cách sửa thay vì lưu sai.",
+  "scope_plain": "Hoãn sang vòng sau: ô tỷ giá ở Cài đặt tiền tệ, dán chuỗi có ký hiệu tiền hay viết tắt «150tr», tự chèn dấu chấm theo từng phím gõ, chặn số vượt trần ngay trên máy người dùng, và trường số tự tạo.",
+  "analyst_plain": "Mọi phép đo của vòng này đều đỏ trên bản trước khi sửa và xanh sau khi sửa, nên không phép đo nào xanh sẵn từ đầu.",
+  "decisions_plain": [
+    {"id": "d-20260924T051556Z-1", "p": "Tự làm ô số tiền trên nền ô nhập sẵn có của kho, không dùng ô của ReUI — đổi lại tự giữ ô này, vì ô ReUI kéo thêm một thư viện nền thứ hai, ghi đè nhãn của kho và đọc «1.5» tiếng Việt thành 15."},
+    {"id": "d-20260924T051556Z-2", "p": "Cho thấy số đã đọc bằng dòng «Đọc là …» dưới ô và viết lại dấu chấm khi rời ô, không chèn dấu theo từng phím — đổi lại chữ trong ô chỉ gọn lại sau khi rời ô."},
+    {"id": "d-20260924T051556Z-3", "p": "Chuỗi đúng kiểu của tiếng đang dùng thì đọc theo tiếng đó (tiếng Việt «1.500» là một nghìn năm trăm), chuỗi chỉ đúng kiểu tiếng kia thì từ chối — đổi lại người quen kiểu Anh phải tự nhìn dòng đọc lại."},
+    {"id": "d-20260924T051556Z-4", "p": "Sửa luôn ô thêm nhanh thoả thuận ở tấm công ty vì cùng lỗi — đổi lại vòng này chạm thêm một màn."},
+    {"id": "d-20260924T051556Z-5", "p": "KHÔNG sửa ô tỷ giá ở Cài đặt tiền tệ trong vòng này — đổi lại tỷ giá gõ kiểu tiếng Việt vẫn có thể đọc sai tới vòng sau."},
+    {"id": "d-20260924T051556Z-6", "p": "KHÔNG làm bản mẫu bấm được trước khi duyệt phạm vi — đổi lại giao diện được duyệt bằng chữ, ảnh màn thật ở khổ điện thoại và máy tính có ở gói bằng chứng này."}
+  ]
+}
