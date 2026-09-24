@@ -4,17 +4,26 @@ import {
 	beforeEach,
 	describe,
 	expect,
+	spyOn,
 	test,
 } from "bun:test";
+import { join } from "node:path";
 import { db } from "@crm/db";
 import { SETTINGS_ID } from "@crm/db/settings";
-import { taoMaLienKet } from "@crm/db/zalo-lien-ket";
+import { ghiSai, taoMaLienKet, ZALO_LIEN_KET } from "@crm/db/zalo-lien-ket";
+import kenhZalo from "../agent/channels/zalo";
 import { ZALO } from "../agent/lib/zalo-config";
 import { pollZalo, vongTay } from "../agent/lib/zalo-poll";
+import { nhanWebhook } from "../agent/lib/zalo-webhook";
 import dispatch from "../agent/schedules/dispatch";
 import { donDep, gieoNguoi, moXuong, TIEN_TO } from "./support/nhac-gieo";
 import { zaloGia } from "./support/zalo-gia";
-import { thanGetUpdates } from "./support/zalo-tin";
+import {
+	type ChonTin,
+	thanGetUpdates,
+	thanWebhook,
+	yeuCauWebhook,
+} from "./support/zalo-tin";
 
 const GOC = new Date("2026-10-10T02:00:00Z");
 const TOKEN = "1:abc";
@@ -243,5 +252,417 @@ describe("giao-khi-mo", () => {
 			),
 			"vong tay bat duoc tin",
 		).toEqual(["Z2"]);
+	});
+
+	test("giao-khi-mo: webhook nhan tin den o giay 30", async () => {
+		const { U, ma } = await gieoMa();
+		const z = zaloGia();
+		const yc = yeuCauWebhook(
+			JSON.stringify(
+				thanWebhook({ messageId: "gm-c", fromId: "Z3", text: ma }),
+			),
+			KHOA,
+		);
+		const res = await nhanWebhook(yc.request, {
+			fetcher: z.fetcher,
+			now: () => GOC,
+			env: { token: TOKEN, khoa: KHOA },
+		});
+		expect(res.status).toBe(200);
+		expect(
+			(await db.zaloLink.findMany({ where: { crmUserId: U.id } })).map(
+				(l) => l.zaloUserId,
+			),
+			"webhook bat duoc tin",
+		).toEqual(["Z3"]);
+	});
+});
+
+const DU_BIEN = { token: TOKEN, khoa: KHOA };
+
+async function demBang() {
+	const [lienKet, daThay, lanSai] = await Promise.all([
+		db.zaloLink.count(),
+		db.zaloUpdateSeen.count(),
+		db.zaloLinkAttempt.count(),
+	]);
+	return { lienKet, daThay, lanSai };
+}
+
+async function guiWebhook(
+	than: string,
+	z: ReturnType<typeof zaloGia>,
+	header: string | null = KHOA,
+) {
+	const yc = yeuCauWebhook(than, header);
+	const res = await nhanWebhook(yc.request, {
+		fetcher: z.fetcher,
+		now: () => GOC,
+		env: DU_BIEN,
+	});
+	return { res, yc };
+}
+
+function tin(chon: ChonTin): string {
+	return JSON.stringify(thanWebhook(chon));
+}
+
+async function maCua(userId: string) {
+	return db.zaloLinkCode.findUnique({ where: { crmUserId: userId } });
+}
+
+describe("webhook-noi", () => {
+	test("webhook-noi: khoa dung, ma song -> noi U voi Z, doc lai tu DB", async () => {
+		const { U, ma } = await gieoMa();
+		const z = zaloGia();
+		const { res } = await guiWebhook(
+			tin({ messageId: "wn-1", fromId: "Z", ten: "Zed", text: ma }),
+			z,
+		);
+		expect(res.status, "webhook tra 200").toBe(200);
+		const lk = await db.zaloLink.findMany({ where: { crmUserId: U.id } });
+		expect(
+			lk.map((l) => [l.zaloUserId, l.zaloDisplayName]),
+			"webhook noi duoc U voi Z",
+		).toEqual([["Z", "Zed"]]);
+		expect((await maCua(U.id))?.usedAt, "ma da dung").not.toBeNull();
+		expect(
+			await db.zaloUpdateSeen.count({ where: { messageId: "wn-1" } }),
+			"mot hang da thay",
+		).toBe(1);
+		expect(
+			z.guiToi("Z").map((g) => g.body.text?.includes(U.name)),
+			"bot xac nhan mang ten CRM",
+		).toEqual([true]);
+
+		await guiWebhook(
+			tin({ messageId: "wn-2", fromId: "Z9", text: "999999" }),
+			z,
+		);
+		expect(
+			await db.zaloLink.count({ where: { zaloUserId: "Z9" } }),
+			"ma khong ton tai thi khong noi",
+		).toBe(0);
+	});
+});
+
+describe("webhook-khoa", () => {
+	const CA: [string, string | null][] = [
+		["khong header", null],
+		["header rong", ""],
+		["sai cung do dai", "x".repeat(KHOA.length)],
+		["sai dai 1", "k"],
+		["sai dai 300", "k".repeat(300)],
+	];
+
+	test("webhook-khoa: ma tran nam ca viet truoc", () => {
+		expect(CA.length, "ma tran nam ca khoa sai").toBe(5);
+	});
+
+	for (const [ten, header] of CA) {
+		test(`webhook-khoa: ${ten} -> 403, khong doc than, khong ghi`, async () => {
+			const { U, ma } = await gieoMa();
+			const z = zaloGia();
+			const truoc = await demBang();
+			const yc = yeuCauWebhook(
+				tin({ messageId: `wk-${ten}`, fromId: "Z", text: ma }),
+				header,
+			);
+			const cho = nhanWebhook(yc.request, {
+				fetcher: z.fetcher,
+				now: () => GOC,
+				env: DU_BIEN,
+			});
+			await expect(cho, "khoa khac do dai tra 403").resolves.toBeInstanceOf(
+				Response,
+			);
+			const res = await cho;
+			expect(res.status, "khoa sai tra 403").toBe(403);
+			expect(
+				{ bodyUsed: yc.request.bodyUsed, keo: yc.soLanKeo() },
+				"than khong bi doc khi khoa sai",
+			).toEqual({ bodyUsed: false, keo: 0 });
+			expect(await demBang(), "khoa sai khong ghi hang nao").toEqual(truoc);
+			expect(z.goi.length, "khoa sai khong goi Zalo").toBe(0);
+			expect((await maCua(U.id))?.usedAt ?? null, "ma van song").toBeNull();
+		});
+	}
+
+	test("webhook-khoa: doi chung — cung than, khoa dung -> 200 va noi", async () => {
+		const { U, ma } = await gieoMa();
+		const z = zaloGia();
+		const { res } = await guiWebhook(
+			tin({ messageId: "wk-dung", fromId: "Z", text: ma }),
+			z,
+		);
+		expect(res.status).toBe(200);
+		expect(await db.zaloLink.count({ where: { crmUserId: U.id } })).toBe(1);
+	});
+});
+
+type KetQuaCon = {
+	nap: string;
+	status: number;
+	bodyUsed: boolean;
+	soGoiZalo: number;
+};
+
+const MA_CON = `
+let so = 0;
+globalThis.fetch = async () => { so += 1; return new Response("{}"); };
+const kenh = (await import("./agent/channels/zalo.ts")).default;
+const route = kenh.routes.find((r) => r.method === "POST" && r.path === "/zalo/webhook");
+const req = new Request("http://t/zalo/webhook", {
+	method: "POST",
+	headers: { "x-bot-api-secret-token": "bat-ky" },
+	body: JSON.stringify({ ok: true }),
+});
+const res = await route.handler(req, {});
+console.log(JSON.stringify({ nap: "ok", status: res.status, bodyUsed: req.bodyUsed, soGoiZalo: so }));
+process.exit(0);
+`;
+
+async function chayCon(bien: Record<string, string>) {
+	const con = Bun.spawn(["bun", "-e", MA_CON], {
+		cwd: join(import.meta.dir, ".."),
+		env: { ...process.env, ...bien },
+		stdout: "pipe",
+		stderr: "pipe",
+	});
+	const [ra, loi, ma] = await Promise.all([
+		new Response(con.stdout).text(),
+		new Response(con.stderr).text(),
+		con.exited,
+	]);
+	return { ra, loi, ma };
+}
+
+describe("webhook-tat", () => {
+	const CA: [string, Record<string, string>][] = [
+		[
+			"thieu ZALO_WEBHOOK_SECRET",
+			{ ZALO_BOT_TOKEN: TOKEN, ZALO_WEBHOOK_SECRET: "" },
+		],
+		["thieu ZALO_BOT_TOKEN", { ZALO_BOT_TOKEN: "", ZALO_WEBHOOK_SECRET: KHOA }],
+	];
+	for (const [ten, bien] of CA) {
+		test(`webhook-tat: ${ten} -> nap khong nem, 404, khong goi, khong ghi`, async () => {
+			const truoc = await demBang();
+			const { ra, loi, ma } = await chayCon(bien);
+			expect(ma, `nap kenh khong nem khi thieu bien: ${loi}`).toBe(0);
+			const dong = ra.trim().split("\n").at(-1) ?? "{}";
+			const ket: KetQuaCon = JSON.parse(dong);
+			expect(ket, "thieu bien tra 404").toEqual({
+				nap: "ok",
+				status: 404,
+				bodyUsed: false,
+				soGoiZalo: 0,
+			});
+			expect(await demBang(), "thieu bien khong ghi hang nao").toEqual(truoc);
+		});
+	}
+});
+
+describe("webhook-trung", () => {
+	test("webhook-trung: cung message_id qua webhook hai lan roi qua poll -> mot lan", async () => {
+		const { U, ma } = await gieoMa();
+		const chon: ChonTin = { messageId: "wt-1", fromId: "Z", text: ma };
+		const z = zaloGia();
+		const lan1 = await guiWebhook(tin(chon), z);
+		const lan2 = await guiWebhook(tin(chon), z);
+		expect([lan1.res.status, lan2.res.status], "hai lan deu 200").toEqual([
+			200, 200,
+		]);
+		const zPoll = zaloGia({
+			chiGiaoKhiMo: [{ giay: 0, than: thanGetUpdates(chon) }],
+		});
+		await voiBien({ ZALO_BOT_TOKEN: TOKEN, ZALO_WEBHOOK_SECRET: KHOA }, () =>
+			pollZalo({ fetcher: zPoll.fetcher, now: () => GOC }),
+		);
+		expect(
+			await db.zaloLink.count({ where: { crmUserId: U.id } }),
+			"mot lien ket",
+		).toBe(1);
+		expect(
+			await db.zaloUpdateSeen.count({ where: { messageId: "wt-1" } }),
+			"mot hang da thay",
+		).toBe(1);
+		expect(
+			z.guiToi("Z").length + zPoll.guiToi("Z").length,
+			"moi tin tra loi mot lan",
+		).toBe(1);
+	});
+});
+
+describe("webhook-bo-qua", () => {
+	test("webhook-bo-qua: than hong, khong vo, tu bot, tu nhom -> 200, khong ghi, log khoa", async () => {
+		const { U, ma } = await gieoMa();
+		const CA: [string, string][] = [
+			["a khong-json", "khong-json"],
+			[
+				"b sai khuon",
+				JSON.stringify({
+					ok: true,
+					result: { message: { message_id: "m-hong" } },
+				}),
+			],
+			[
+				"c khong vo",
+				JSON.stringify(
+					thanWebhook({ messageId: "wb-c", fromId: "Z", text: ma }).result,
+				),
+			],
+			[
+				"d tu bot",
+				tin({ messageId: "wb-d", fromId: "Z", text: ma, isBot: true }),
+			],
+			[
+				"e tu nhom",
+				tin({ messageId: "wb-e", fromId: "Z", text: ma, chatType: "GROUP" }),
+			],
+		];
+		expect(CA.length, "ma tran nam ca bo qua").toBe(5);
+		const log: string[] = [];
+		const nghe = spyOn(console, "error").mockImplementation(
+			(...a: unknown[]) => {
+				log.push(a.map(String).join(" "));
+			},
+		);
+		const z = zaloGia();
+		try {
+			for (const [ten, than] of CA) {
+				const truoc = await demBang();
+				const lenh = log.length;
+				const { res } = await guiWebhook(than, z);
+				expect(res.status, `${ten}: than hong tra 200`).toBe(200);
+				expect(await demBang(), `${ten}: khong ghi`).toEqual(truoc);
+				expect(z.soGoi("sendMessage"), `${ten}: khong tra loi`).toBe(0);
+				const moi = log.slice(lenh).join("\n");
+				if (ten.startsWith("b")) {
+					expect(moi, "log in khoa cap dau").toContain("result");
+					expect(moi, "log mang message_id").toContain("m-hong");
+				}
+				if (ten.startsWith("c")) {
+					expect(moi, "log in khoa cap dau").toContain("event_name,message");
+				}
+			}
+		} finally {
+			nghe.mockRestore();
+		}
+		expect(
+			(await maCua(U.id))?.usedAt ?? null,
+			"tin tu nhom bi bo qua",
+		).toBeNull();
+		const { res } = await guiWebhook(
+			tin({ messageId: "wb-e2", fromId: "Z", text: ma, chatType: "PRIVATE" }),
+			z,
+		);
+		expect(res.status).toBe(200);
+		expect(
+			await db.zaloLink.count({ where: { crmUserId: U.id } }),
+			"doi chung: PRIVATE thi noi",
+		).toBe(1);
+	});
+});
+
+describe("webhook-luat-ma", () => {
+	async function soSai(zaloUserId: string): Promise<number> {
+		return (
+			(await db.zaloLinkAttempt.findUnique({ where: { zaloUserId } }))
+				?.failures ?? 0
+		);
+	}
+
+	test("webhook-luat-ma: sai, chu, anh, dang bi chan", async () => {
+		const { U, ma } = await gieoMa();
+		const z = zaloGia();
+		const huongDan = () =>
+			z.guiToi("Z").filter((g) => g.body.text === ZALO.loi.huongDan).length;
+
+		const r1 = await guiWebhook(
+			tin({
+				messageId: "wl-1",
+				fromId: "Z",
+				text: ma === "000000" ? "111111" : "000000",
+			}),
+			z,
+		);
+		expect(await soSai("Z"), "ma sai tang dem").toBe(1);
+		expect(huongDan(), "ma sai nhan huong dan").toBe(1);
+
+		const r2 = await guiWebhook(
+			tin({ messageId: "wl-2", fromId: "Z", text: "xin chao" }),
+			z,
+		);
+		expect(await soSai("Z"), "chu khong tang dem").toBe(1);
+		expect(huongDan(), "chu nhan huong dan").toBe(2);
+
+		const r3 = await guiWebhook(
+			tin({
+				messageId: "wl-3",
+				fromId: "Z",
+				text: null,
+				photo: "https://anh.test/a.jpg",
+			}),
+			z,
+		);
+		expect(await soSai("Z"), "anh khong tang dem").toBe(1);
+		expect(huongDan(), "anh nhan huong dan").toBe(3);
+
+		for (let i = await soSai("Z"); i < ZALO_LIEN_KET.doMa.toiDa; i++) {
+			await ghiSai(db, "Z", GOC);
+		}
+		const truocGui = z.soGoi("sendMessage");
+		const r4 = await guiWebhook(
+			tin({ messageId: "wl-4", fromId: "Z", text: ma }),
+			z,
+		);
+		expect(
+			await db.zaloLink.count({ where: { crmUserId: U.id } }),
+			"dang bi chan thi im",
+		).toBe(0);
+		expect(z.soGoi("sendMessage"), "dang bi chan thi khong tra loi").toBe(
+			truocGui,
+		);
+		expect((await maCua(U.id))?.usedAt ?? null).toBeNull();
+		expect(
+			[r1, r2, r3, r4].map((r) => r.res.status),
+			"moi lan 200",
+		).toEqual([200, 200, 200, 200]);
+	});
+});
+
+describe("kenh-route", () => {
+	let traLai: (() => void) | null = null;
+	afterEach(() => {
+		traLai?.();
+		traLai = null;
+	});
+
+	test("kenh-route: kenh mount dung mot route POST /zalo/webhook va route do chay", async () => {
+		const route = kenhZalo.routes.filter(
+			(r) => r.method === "POST" && r.path === ZALO.webhook.duong,
+		);
+		expect(route.length, "route /zalo/webhook duoc mount").toBe(1);
+		const { U, ma } = await gieoMa();
+		const z = zaloGia();
+		traLai = thayFetch({ zalo: z.fetcher, khac: [] });
+		const goi = (header: string) =>
+			voiBien({ ZALO_BOT_TOKEN: TOKEN, ZALO_WEBHOOK_SECRET: KHOA }, () =>
+				Promise.resolve(
+					route[0]?.handler(
+						yeuCauWebhook(
+							tin({ messageId: `kr-${header.length}`, fromId: "Z", text: ma }),
+							header,
+						).request,
+						{} as never,
+					),
+				),
+			);
+		const dung = await goi(KHOA);
+		expect(dung?.status).toBe(200);
+		expect(await db.zaloLink.count({ where: { crmUserId: U.id } })).toBe(1);
+		const sai = await goi("sai");
+		expect(sai?.status, "khoa sai qua route tra 403").toBe(403);
 	});
 });
