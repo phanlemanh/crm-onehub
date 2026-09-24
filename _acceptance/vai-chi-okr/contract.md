@@ -5,7 +5,7 @@ slug: vai-chi-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan — uỷ quyền phiên điều phối 2026-09-24
 approved_at: 2026-09-24T16:26:07Z
 design_doc: docs/superpowers/specs/2026-09-24-vai-chi-okr-design.md
@@ -81,3 +81,9 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 - **Thay đổi đi kèm, duyệt tại Cổng Phạm vi (Manh Phan — uỷ quyền phiên điều phối 2026-09-24):** ba thủ tục ghi của Cài đặt chung — model trợ lý AI, khoá research, thời gian lưu trữ — hôm nay mở cho mọi thành viên do sót; lượt này đóng cho mọi vai không phải quản trị (AC-12, sổ quyết định d-11). Thành viên thường mất một quyền chưa từng được cấp có chủ ý.
 - Tập «tự phục vụ» của AC-12 là hằng viết trước trong bài kiểm; thêm một thủ tục ghi cho vai «chỉ OKR» dùng được là sửa hằng đó có chủ ý.
 - Nền hạ tầng (`duong-nen.md`): hai dòng đỏ là báo động giả của bộ kit (từ đầu lệnh `B=$(git merge-base …)` bị đọc thành tên chương trình) — mở chip sang kho kit; dòng đỏ `build_khong_cache` do shell nền lấy Node 22 trong khi `eve` đòi ≥ 24 — chạy tay với Node 24 thì xanh; đặt Node 24 làm mặc định của máy là việc của người.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-25 (Manh Phan):
+
+- Ngoài-1 (mở hợp đồng mới): khi kho chưa có hoặc vừa xoá khoá research, thành viên thường và người vai «chỉ OKR» bị đưa về màn nhập khoá mà nay không lưu được (hệ quả của việc đóng ba ô ghi Cài đặt chung), kẹt tới khi quản trị nhập hộ. Production đang có khoá. Tách thành một việc riêng: cổng khoá research bỏ qua vai không quản trị.
+- Ngoài-2: thanh điều hướng và thanh bên Cài đặt thành khung mờ nếu câu hỏi «tôi là ai trong kho» lỗi — với mọi vai; là chặn-mặc-định có chủ ý.
+- Sáu giới hạn của cách đo ghi trong «Known limits» của báo cáo bằng chứng (ảnh 375 không tự chứng rail hai mục; ảnh trang «ngoài phạm vi» không có thanh địa chỉ; `menu-vai.png` chụp giữa hoạt ảnh; `sso.signInOptions` ghi `role: null`; làn S4 chạy tuần tự không có baseline A/B; khung mờ khi `workspace.get` lỗi) — chấp nhận.
