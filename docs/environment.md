@@ -123,8 +123,8 @@ single place that knows what is set.
 | `BLOB_READ_WRITE_TOKEN` | Mirrors logos and photos into Blob |
 | `AI_GATEWAY_API_KEY` | The model. Not needed on Vercel (OIDC) |
 | `AGENT_BRIDGE_SECRET` | The rep-facing Agent panel — see `agent.md` |
-| `ZALO_BOT_TOKEN` | The morning reminder on Zalo and the bot that answers link codes — see `agent.md` and `connections.md` |
-| `ZALO_WEBHOOK_SECRET` | The secret Zalo sends with every webhook call to `/zalo/webhook`; without it the route answers 404 — see `agent.md` |
+| `ZALO_BOT_TOKEN` | Fallback Bot Token. Người quản trị dán token ở Kết nối › Zalo, lưu trong `AppSetting`, và giá trị đó thắng biến này — see `agent.md` and `connections.md` |
+| `ZALO_WEBHOOK_SECRET` | Fallback webhook secret. Khi bot bật trên màn, tác tử sinh khoá và lưu trong `AppSetting`, giá trị đó thắng biến này; không có cả hai thì `/zalo/webhook` trả 404 — see `agent.md` |
 | `ZALO_API_URL` | Base URL of the Zalo Bot API; empty means the real one. Only for running against a fake Zalo in tests |
 
 `ZALO_BOT_TOKEN` and `ZALO_WEBHOOK_SECRET` are read by `apps/agent` only, so they

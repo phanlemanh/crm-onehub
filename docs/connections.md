@@ -157,10 +157,22 @@ follow, and none of them is a gap to fill later.
   API mints codes, stores the channel preference, deletes links and reads status —
   row work only. It knows Zalo is on because the agent writes
   `appSetting.zaloBotName`, not because it reads the token.
-- **The connection page only shows; linking and unlinking are personal.**
-  `/settings/connections/zalo` shows whether the bot is on, its name, when it last
-  answered, and who has linked — the same "capability, not controls" rule as every
-  other connection page. «Nối Zalo», «Tạo mã mới», «Gỡ» and the choice of Zalo or
+- **An admin switches the bot on from the screen.** Trên Kết nối › Zalo, quản trị
+  viên dán Bot Token (chép trong OA «Zalo Bot Manager» của app Zalo; dạng
+  `<số>:<chuỗi>`, khác Secret Token). The API checks the shape and that the person
+  can manage connections, then asks the agent over the bridge
+  (`POST /internal/zalo/bot`): the agent calls `getMe`, generates a webhook secret,
+  calls `setWebhook` to `<agent>/zalo/webhook` when the agent address is `https://`,
+  and writes token, secret, bot name and webhook URL to `AppSetting` itself. The page
+  only ever receives the last four characters.
+- **The page says whether messages reach the CRM.** Three webhook states come from
+  `AppSetting`, which the tick refreshes with `getWebhookInfo`: «Nhận tin qua
+  webhook»; «Tin nhắn tới bot chưa về CRM» when the agent has no `https` address
+  (run `zalo:poll` on your machine); «Zalo chưa giao tin nhắn về CRM» with a «Đăng
+  ký lại» button when no webhook is registered. `ZALO_BOT_TOKEN` in `.env` still
+  works as a fallback when nothing was pasted, and the page says so.
+- **Linking and unlinking are personal.** Members see the bot state and who has
+  linked but not the token field. «Nối Zalo», «Tạo mã mới», «Gỡ» and the choice of Zalo or
   Slack for the morning reminder live on «Thông báo của bạn»
   (`/settings/notifications`), the personal page in Settings. An admin cannot
   unlink someone else's Zalo.

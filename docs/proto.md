@@ -83,6 +83,21 @@ Bốn bước, theo đúng thứ tự:
    ngược lại, đều là mồ côi và bị phép đo bắt.
 4. **Chạy phép đo** — `cd apps/app && bun test test/proto-catalog.spec.ts`.
 
+## Block ReUI chỉ là tham chiếu bố cục
+
+Block Pro của ReUI (vd `settings-8`, `settings-12`, `onboarding-2`) là vật liệu
+để **xem**, không phải để cài. Đo bằng `ui:add … --dry-run` ngày 2026-09-24:
+`@reui/settings-8` ghi đè 5 tệp, `@reui/settings-12` ghi đè 7 tệp đã tuỳ biến
+trong `packages/ui` (`button`, `card`, `badge`…) và thêm 18 biến màu vào
+`globals.css`. `docs/reui.md` cấm `--overwrite`, `docs/design.md` cấm màu lạ.
+
+Nên dùng block làm tham chiếu: mở ảnh hay mã nguồn của nó
+(`ui:add … --dry-run --view`), rút bố cục, rồi dựng lại bản mẫu bằng component
+sẵn có của kho. Cần một primitive kho chưa có thì cài **component miễn phí** của
+ReUI vào `packages/ui` theo bốn chỗ sửa của `docs/reui.md` — ví dụ
+`@reui/stepper`, trên đó kho dựng `step-list`. Việc cài là một finding Nhóm 2
+của phiên design-pass, làm ở S3, không làm trong lúc dựng bản mẫu.
+
 ## Ba điều cấm
 
 - **Không sửa `packages/ui`** để bản mẫu đẹp hơn. Thiếu hay xấu ở tầng component
