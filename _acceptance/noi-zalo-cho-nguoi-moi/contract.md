@@ -5,10 +5,10 @@ slug: noi-zalo-cho-nguoi-moi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, config, docs]
-status: draft
+status: approved
 design_doc: docs/superpowers/specs/2026-09-24-noi-zalo-cho-nguoi-moi-design.md
-approved_by:
-approved_at:
+approved_by: Phan Le Manh
+approved_at: 2026-09-24T06:53:58Z
 ---
 
 # Acceptance Contract: noi-zalo-cho-nguoi-moi
