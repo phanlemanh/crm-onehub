@@ -33,18 +33,59 @@ phòng) và người quản lý (xem khối lượng việc theo bộ phận).
   **Phòng ban** (`Department`) và thêm cấp **Bộ phận** (`Division`) ở trên —
   bước kế hoạch vẫn giao cho phòng ban, dữ liệu cũ không phải chuyển.
 - Cấu trúc hai cấp có ích ngoài Điều phối 30 ngày — chưa kiểm chứng.
+- Cây này là nền của OKR: lượt 2–5 của lộ trình OKR (`docs/plan/lo-trinh-okr.md`) đứng trên
+  nó, và OKR quý 4 của mọi phòng ban bắt đầu 2026-10-26. OKR không có cây riêng — một cây
+  cho cả CRM.
 
 ## Câu hỏi mở cho Cổng Đáng
 
-- Thành viên có thuộc phòng ban không? Có trưởng phòng / trưởng bộ phận không?
-- Bước kế hoạch giao cho phòng ban, hay giao cho người trong phòng ban?
-- Báo cáo, lọc, quyền xem có đi theo bộ phận không?
-- Chỉ Điều phối 30 ngày dùng, hay các khu khác (công ty, thoả thuận, chiến
-  dịch) cũng cần?
+Mỗi câu kèm câu trả lời mà lộ trình OKR đề xuất (mục 4 bước 2 và lượt 1) — đề xuất,
+chưa chốt; người ký Cổng Đáng chốt hoặc sửa.
+
+- Thành viên có thuộc phòng ban không? → đề xuất: có — mỗi thành viên một phòng ban
+  **chính**, thêm phòng ban phụ được; bảng nối thành viên–phòng ban.
+- Có trưởng phòng / trưởng bộ phận không? → đề xuất: có cả hai — trưởng là trường trên
+  đơn vị, không phải vai workspace (vai lạ hôm nay bị hạ im lặng về member). Quản lý
+  trực tiếp suy từ trưởng phòng ban chính, ghi đè được từng người.
+- Bước kế hoạch giao cho phòng ban, hay cho người trong phòng ban? → đề xuất: vẫn giao
+  cho phòng ban như hôm nay; dữ liệu cũ không phải chuyển.
+- Báo cáo, lọc, quyền xem có đi theo bộ phận không? → đề xuất: báo cáo và lọc theo bộ
+  phận có; **quyền** theo đơn vị thì không làm ở đây (lượt 2–3 của OKR).
+- Chỉ Điều phối 30 ngày dùng, hay các khu khác cũng cần? → đề xuất: mọi khu dùng chung
+  một cây; hai cấp cố định dưới gốc OneHub, cấp «nhóm» dưới phòng ban để sau.
+
+## Nhóm việc OKR gộp về ô này
+
+Lộ trình OKR (`docs/plan/lo-trinh-okr.md`, viết 2026-09-24) đặt ô này làm nền của lượt 1
+`cay-to-chuc-co-nguoi` (R1 · T3 · dự kiến 2026-10-01 → 2026-10-05), phủ bốn mã TC-01 ·
+TC-02 · TC-03 · TC-04 của bản phạm vi OKR. Qua Cổng Đáng, vòng làm chạy
+`/feature-loop:feature-loop` với ý định của lượt 1; slug vòng làm là `cay-to-chuc-co-nguoi`.
+
+Phạm vi lượt 1 theo lộ trình:
+
+- Bảng `Division` ở trên `Department` hiện có; bảng nối thành viên với phòng ban (chính
+  hoặc phụ); trưởng là trường trên đơn vị.
+- Quản lý trực tiếp suy từ trưởng phòng ban chính, ghi đè được từng người.
+- Cài đặt → màn Tổ chức: cây, thêm, đổi tên, sắp, lưu trữ, gán người, gán trưởng.
+- Nhập hàng loạt: dán hoặc tải bảng email · phòng ban · bộ phận · trưởng, xem trước rồi
+  mới ghi, báo dòng hỏng.
+- Màn Điều phối 30 ngày đổi nhãn theo từ điển mới (hôm nay «Bộ phận» là bảng phẳng; sau
+  lượt 1 bảng đó là **Phòng ban**, **Bộ phận** là cấp trên); lọc theo bộ phận hoạt động.
+
+Việc đi kèm ở bước chuẩn bị (không thuộc ô này nhưng phải xong trước vòng làm): thêm vào
+`CONTEXT.md` các mục Bộ phận, Phòng ban, Trưởng đơn vị và sửa mục «Bộ phận» hiện có.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-Chưa khai — đợi Cổng Đáng.
+- Câu hỏi phép đo trả lời: [đề xuất] Cây tổ chức có phản ánh đúng công ty tới mức OKR quý 4
+  và Điều phối 30 ngày dựa được vào nó không.
+- Kết quả nào là SỐNG: [đề xuất] Trên production một tuần sau khi bật: ≥ 90% thành viên
+  còn hiệu lực có phòng ban chính, và mọi phòng ban có trưởng — đếm từ bảng nối (ngưỡng
+  gợi ý của lộ trình OKR, lượt 1).
+- Kết quả nào là CHẾT: [đề xuất] Một tuần sau khi bật dưới 70% thành viên còn hiệu lực có
+  phòng ban chính, hoặc quản trị phải nhờ sửa cơ sở dữ liệu mới dựng được cây — cây không
+  đủ làm nền cho OKR quý 4 bắt đầu 2026-10-26.
+- Timebox: [đề xuất] vòng làm lượt 1 từ 2026-10-01 đến 2026-10-05; đo lần đầu 2026-10-12.
 
 ## Kết quả prototype
 
@@ -89,3 +130,6 @@ hai phụ thuộc mà kho chưa có, cùng là phụ thuộc của block `flow-2
 
 - Đổi tên, lưu trữ, sắp thứ tự danh sách hiện có — làm ở vòng
   `sua-luu-tru-dieu-phoi`, dùng lại được khi thêm cấp bộ phận ở trên.
+- Quyền xem theo đơn vị — lượt 2–3 của OKR.
+- Cấp «nhóm» dưới phòng ban — để sau, khi có đơn vị thật cần.
+- Đồng bộ cây từ hệ thống nhân sự (TC-07) — chưa có hệ thống nguồn.
