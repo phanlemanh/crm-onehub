@@ -5,10 +5,10 @@ slug: zalo-qua-webhook
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, config, docs]
-status: verified
+status: draft
 design_doc: docs/superpowers/specs/2026-09-24-zalo-qua-webhook-design.md
-approved_by: Phan Le Manh
-approved_at: 2026-09-24T01:02:59Z
+approved_by:
+approved_at:
 ---
 
 # Acceptance Contract: zalo-qua-webhook
@@ -38,7 +38,7 @@ chủ kho duyệt trong chat 2026-09-24 · design doc ở `design_doc`.
 - AC-7: Given lịch `dispatch` mỗi phút, When hàm `run` của chính lịch đó chạy với một Zalo giả thay mạng, trong ba trường hợp: (a) token có và `getMe` thành công, (b) token có và `getMe` trả 401, (c) không token, Then không trường hợp nào có lời gọi `getUpdates`; (a) có đúng một `getMe`, và `zaloBotName` là tên bot, `zaloPolledAt` không cũ hơn lúc bắt đầu nhịp; (b) nhịp không ném và `zaloBotName` null; (c) không có lời gọi nào tới Zalo và `zaloBotName` null.
 - AC-8: Given Zalo giả chỉ giao tin cho lời gọi `getUpdates` đang mở, và tin mang mã sống của U đến ở giây thứ 30 của đồng hồ ảo, When đọc theo ba đường trên cùng dữ liệu: (a) nhịp kiểu #94, mở 1 giây ở giây 0, 60, 120; (b) vòng tay `zalo:poll`, mở `ZALO.pollTay.timeoutGiay` giây liên tục; (c) tin đó đến qua webhook, Then (a) không tạo `ZaloLink` và không có `sendMessage`, tái hiện lỗi của #94; (b) và (c) mỗi đường tạo đúng một `ZaloLink` (U, Z).
 - AC-9: Given lệnh `zalo:webhook`, When chạy (a) với URL `https://` và hai biến có, (b) với cờ `--xoa`, (c) với URL `http://`, (d) thiếu `ZALO_WEBHOOK_SECRET`, (e) thiếu `ZALO_BOT_TOKEN`, Then (a) có đúng một `setWebhook` mang `url` đó và `secret_token` bằng `ZALO_WEBHOOK_SECRET`, và kết quả in ra chứa `verification.outcome` Zalo trả về; (b) có đúng một `deleteWebhook` và không `setWebhook` nào; (c), (d), (e) — chạy bằng đúng lệnh `bun run zalo:webhook` trong `apps/agent` — tiến trình thoát mã khác 0, stderr gọi đích danh thứ sai hay thiếu, và không có lời gọi nào tới Zalo; và lệnh `bun run zalo:poll` chạy khi thiếu `ZALO_BOT_TOKEN` cũng thoát mã khác 0 với stderr gọi tên biến đó.
-- AC-10: Given kho sau vòng này, When đọc `.env.example`, `docs/environment.md`, `turbo.json` và `apps/agent/turbo.json`, Then `.env.example` và `docs/environment.md` có `ZALO_WEBHOOK_SECRET` kèm ghi chú; `globalEnv` của `turbo.json` có `ZALO_BOT_TOKEN` và `ZALO_WEBHOOK_SECRET`; `passThroughEnv` của `dev` và `dev:headless` trong `apps/agent/turbo.json` có cả hai; và `.env.example` chỉ nơi tạo bot là OA «Zalo Bot Manager» trong app Zalo, không còn chỉ tạo bot ở `bot.zaloplatforms.com`.
+- AC-10: Given kho sau vòng này, When đọc `.env.example`, `docs/environment.md`, `turbo.json` và `apps/agent/turbo.json`, Then `.env.example` và `docs/environment.md` có `ZALO_WEBHOOK_SECRET` kèm ghi chú; `globalPassThroughEnv` của `turbo.json` có `ZALO_BOT_TOKEN` và `ZALO_WEBHOOK_SECRET`, còn `globalEnv` không có biến Zalo nào; `passThroughEnv` của `dev` và `dev:headless` trong `apps/agent/turbo.json` có cả hai; và `.env.example` chỉ nơi tạo bot là OA «Zalo Bot Manager» trong app Zalo, không còn chỉ tạo bot ở `bot.zaloplatforms.com`.
 - AC-11: Given kênh mặc định export từ `apps/agent/agent/channels/zalo.ts`, When tìm route có `method` `POST` và `path` `/zalo/webhook` rồi gọi handler của nó với tin của AC-1 và khoá đúng, rồi với khoá sai, Then route đó tồn tại đúng một, lần khoá đúng tạo `ZaloLink` như AC-1, và lần khoá sai trả 403. (cross-layer)
 - AC-12: Given các phép đo đã ký của `nhac-qua-zalo` (`apps/agent/test/nhac-qua-zalo.integration.spec.ts`), When chạy trọn tệp đó ở đỉnh nhánh của vòng này, Then mọi ca xanh, và tệp đó không có thay đổi nào so với `merge-base` của nhánh với `onehub`.
 
@@ -84,3 +84,20 @@ nghĩa, cắt còn 11 ô Core (khoảng 20%).
   định (2) ở Coverage; nó chưa phải một AC vì vòng này chưa có URL công khai.
 - Một bot không chạy được webhook và `getUpdates` cùng lúc. Bot đã đăng ký webhook
   thì vòng tay không nhận được gì cho tới khi gỡ bằng `zalo:webhook --xoa`.
+
+### Known limits (Cổng Bằng chứng vòng 1, 2026-09-24)
+
+- Ngoài-2: hằng mã HTTP của webhook khai tại chỗ trong `zalo-webhook.ts`, chưa
+  nằm trong `ZALO`.
+- Ngoài-5: vòng tay `zalo:poll` dùng một mốc giờ cho cả lượt, lượt có thể dài tới
+  khoảng 10 phút; hạn mã và cửa sổ chặn tính theo mốc đó. Chỉ ảnh hưởng bot thử.
+- Ngoài-6: E9 chứng minh lệnh không gọi mạng bằng cách kiểm stderr không có
+  `error_code`, không có đối chứng dương.
+- Ngoài-7: E5 kiểm dòng log bằng chuỗi có mặt.
+- Ngoài-8: vỏ thân webhook trong test viết theo mẫu tài liệu Zalo (giả định (2)).
+- Chưa phân loại: nhánh `pollZalo` của E4 chỉ đo «không trả lời thêm», không
+  chứng minh vòng đọc đã nhận lại tin trùng.
+- Chuyển sang vòng 2 (`noi-zalo-cho-nguoi-moi`): Ngoài-3 (tin lỗi giữa chừng mất
+  hẳn vì đã đánh dấu đã thấy mà vẫn trả 200) và Ngoài-4 (trang báo bot sống chỉ dựa
+  vào `getMe`).
+

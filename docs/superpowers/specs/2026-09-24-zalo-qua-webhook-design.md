@@ -91,7 +91,8 @@ Zalo ── POST /zalo/webhook ──> channels/zalo.ts ──> nhanWebhook(requ
 - `ZALO_WEBHOOK_SECRET` (8–256 ký tự) là mới. Khai ở `.env.example` và
   `docs/environment.md`. Chỉ tác tử đọc nó, nên không vào `env.validation.ts`.
 - Cả `ZALO_BOT_TOKEN` và `ZALO_WEBHOOK_SECRET` được khai:
-  - trong `globalEnv` của `turbo.json`;
+  - trong `globalPassThroughEnv` của `turbo.json`, theo nếp khoá bí mật của kho
+    (`docs/environment.md`: «`passThroughEnv`, never `env`»);
   - trong `passThroughEnv` của `dev` và `dev:headless` ở `apps/agent/turbo.json`.
 
   Việc này sửa Ngoài-3 của `nhac-qua-zalo`.

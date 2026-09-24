@@ -227,7 +227,8 @@ evals:
       Doc tep bang duong suy tu vi tri test (import.meta.dir), khong hardcode goc.
       turbo.json va apps/agent/turbo.json parse bang JSONC (co comment) roi so
       MANG, khong so chuoi:
-        1 globalEnv chua ca ZALO_BOT_TOKEN va ZALO_WEBHOOK_SECRET
+        1 globalPassThroughEnv chua ca ZALO_BOT_TOKEN va ZALO_WEBHOOK_SECRET;
+          globalEnv khong chua bien Zalo nao
         2 tasks.dev.passThroughEnv va tasks["dev:headless"].passThroughEnv moi mang
           chua ca hai
         3 .env.example co dong khai ZALO_WEBHOOK_SECRET (dang comment "# ZALO_...=")
@@ -237,6 +238,8 @@ evals:
           trong khoi Zalo
       DOT BIEN: xoa ZALO_WEBHOOK_SECRET khoi passThroughEnv cua dev:headless -> dong 2
       do voi ten task bi thieu.
+      DOT BIEN 2: dua ZALO_BOT_TOKEN vao globalEnv -> dong 1 do voi
+      "globalEnv khong chua bien Zalo".
 
   - id: E11
     criterion: AC-11
