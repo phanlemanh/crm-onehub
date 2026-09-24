@@ -16,6 +16,8 @@ import { type CayTho, dungCay } from "./cay";
 import type {
 	DepartmentCreateInput,
 	DepartmentMoveInput,
+	HeadInput,
+	PlacementInput,
 	TreeOutput,
 } from "./to-chuc.contracts";
 import { TO_CHUC } from "./to-chuc-config";
@@ -274,5 +276,98 @@ export class ToChucService {
 			),
 		]);
 		return { id: input.id };
+	}
+
+	private async thanhVienHieuLuc(userId: string): Promise<void> {
+		const m = await this.db.member.findUnique({
+			where: {
+				organizationId_userId: { organizationId: WORKSPACE_ID, userId },
+			},
+			select: { id: true },
+		});
+		if (!m) throw new BadRequestException(T.khongPhaiThanhVien(userId));
+	}
+
+	async setHead(input: HeadInput) {
+		if (input.kind === "division") {
+			const bp = await this.boPhanSong(input.id);
+			if (bp.archivedAt !== null)
+				throw new BadRequestException(T.boPhanDaLuuTru);
+			if (input.userId !== null) await this.thanhVienHieuLuc(input.userId);
+			return this.db.division.update({
+				where: { id: input.id },
+				data: { headUserId: input.userId },
+				select: { id: true },
+			});
+		}
+		const pb = await this.phongBanCo(input.id);
+		if (pb.archivedAt !== null)
+			throw new BadRequestException(T.phongBanDaLuuTru);
+		if (input.userId !== null) {
+			await this.thanhVienHieuLuc(input.userId);
+			const [chinh, phu] = await Promise.all([
+				this.db.orgPlacement.findFirst({
+					where: { userId: input.userId, primaryDepartmentId: input.id },
+					select: { userId: true },
+				}),
+				this.db.orgSecondaryDepartment.findFirst({
+					where: { userId: input.userId, departmentId: input.id },
+					select: { userId: true },
+				}),
+			]);
+			if (!chinh && !phu) throw new BadRequestException(T.truongNgoaiPhongBan);
+		}
+		return this.db.department.update({
+			where: { id: input.id },
+			data: { headUserId: input.userId },
+			select: { id: true },
+		});
+	}
+
+	async setPlacement(input: PlacementInput) {
+		await this.thanhVienHieuLuc(input.userId);
+		const phu = [...new Set(input.secondaryDepartmentIds)];
+		if (
+			input.primaryDepartmentId !== null &&
+			phu.includes(input.primaryDepartmentId)
+		) {
+			throw new BadRequestException(T.phuTrungChinh);
+		}
+		for (const id of [input.primaryDepartmentId, ...phu]) {
+			if (id === null) continue;
+			const pb = await this.phongBanCo(id);
+			if (pb.archivedAt !== null)
+				throw new BadRequestException(T.phongBanDaLuuTru);
+		}
+		if (input.managerUserId !== null) {
+			if (input.managerUserId === input.userId) {
+				throw new BadRequestException(T.quanLyLaChinhMinh);
+			}
+			await this.thanhVienHieuLuc(input.managerUserId);
+		}
+		await this.db.$transaction([
+			this.db.orgPlacement.upsert({
+				where: { userId: input.userId },
+				create: {
+					userId: input.userId,
+					primaryDepartmentId: input.primaryDepartmentId,
+					managerUserId: input.managerUserId,
+				},
+				update: {
+					primaryDepartmentId: input.primaryDepartmentId,
+					managerUserId: input.managerUserId,
+				},
+			}),
+			this.db.orgSecondaryDepartment.deleteMany({
+				where: { userId: input.userId },
+			}),
+			this.db.orgSecondaryDepartment.createMany({
+				data: phu.map((departmentId) => ({
+					userId: input.userId,
+					departmentId,
+				})),
+			}),
+		]);
+		return { id: input.userId };
 	}
 }

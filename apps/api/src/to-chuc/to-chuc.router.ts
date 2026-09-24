@@ -16,8 +16,10 @@ import {
 	orgDepartmentCreateInput,
 	orgDepartmentMoveInput,
 	orgDivisionCreateInput,
+	orgHeadInput,
 	orgIdInput,
 	orgOkOutput,
+	orgPlacementInput,
 	orgRenameInput,
 	orgReorderInput,
 	orgTreeOutput,
@@ -156,5 +158,31 @@ export class ToChucRouter {
 	) {
 		await this.toChuc.yeuCauQuanTri(ctx.user.id);
 		return this.toChuc.moveDepartment(input);
+	}
+
+	@Mutation({
+		input: orgHeadInput,
+		output: orgOkOutput,
+		meta: restMeta("POST", "/org/heads", TAG),
+	})
+	async setHead(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof orgHeadInput>,
+	) {
+		await this.toChuc.yeuCauQuanTri(ctx.user.id);
+		return this.toChuc.setHead(input);
+	}
+
+	@Mutation({
+		input: orgPlacementInput,
+		output: orgOkOutput,
+		meta: restMeta("POST", "/org/placements", TAG),
+	})
+	async setPlacement(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof orgPlacementInput>,
+	) {
+		await this.toChuc.yeuCauQuanTri(ctx.user.id);
+		return this.toChuc.setPlacement(input);
 	}
 }
