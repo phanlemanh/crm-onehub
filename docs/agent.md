@@ -246,6 +246,18 @@ API; the API only reads and writes rows.
   - `POST /internal/zalo/gui-thu {userId}` sends one test message on the channel
     `kenhSeDungCua` picks, without an `AgentTask`.
   Both bodies are parsed with `@crm/validation/zalo-cau-noi`.
+- **A bridge route does not throw when Zalo or Slack fails; it answers with the
+  cause.** `/internal/zalo/bot` returns `outcome: "zalo-loi"` when `getMe` cannot be
+  reached, answers 5xx, answers `ok:false` with a code outside 4xx, or answers a body
+  of the wrong shape; a 4xx — as the HTTP status or as `error_code` in an `ok:false`
+  body — is still a wrong token. `/internal/zalo/gui-thu` returns `guiDuoc: false`
+  when the test message did not go out. Each failure prints one
+  `[zalo] <method> hong: <class>` line with the error's **name only**: a Bun
+  `fetch` error carries the whole URL, `/bot<token>/…`, in `path`, so the error
+  object itself is never logged. The API names five bridge causes of its own
+  (`thieu-cau-noi`, `khong-toi-duoc`, `sai-khoa`, `tac-tu-loi`, `sai-khuon`), logs
+  one `warn` «Zalo bridge call failed» with `nguyenNhan` per failure, and maps each
+  cause to its own sentence in `ZALO_THONG_DIEP`.
 - **Token and secret: `AppSetting` first, `.env` second.** `zaloToken()` and
   `zaloKhoaWebhook()` read what the admin pasted and fall back to
   `ZALO_BOT_TOKEN` and `ZALO_WEBHOOK_SECRET`.

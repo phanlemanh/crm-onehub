@@ -496,9 +496,11 @@ const agent = readFileSync(join(GOC, "docs/agent.md"), "utf8");
 const dauZalo = agent.search(/^#+ .*Zalo/m);
 const sauZalo = dauZalo < 0 ? "" : agent.slice(dauZalo);
 const capDau = sauZalo.match(/^(#+) /)?.[1] ?? "#";
-const ketZalo = sauZalo.slice(1).search(new RegExp(`^#{1,${capDau.length}} `, "m"));
-const mucZalo = ketZalo < 0 ? sauZalo : sauZalo.slice(0, ketZalo + 1);
-for (const can of ["zalo-loi", "guiDuoc", "không ném"]) {
+const hetTieuDe = sauZalo.indexOf("\n");
+const thanMuc = hetTieuDe < 0 ? "" : sauZalo.slice(hetTieuDe + 1);
+const ketZalo = thanMuc.search(new RegExp(`^#{1,${capDau.length}} `, "m"));
+const mucZalo = ketZalo < 0 ? sauZalo : sauZalo.slice(0, hetTieuDe + 1 + ketZalo);
+for (const can of ["zalo-loi", "guiDuoc", "does not throw"]) {
 	if (!mucZalo.includes(can)) hong.push(`docs/agent.md muc Zalo thieu "${can}"`);
 }
 
