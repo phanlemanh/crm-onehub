@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 12b614b399e2007bf3b5dc1cdf2341e99808de26
+verified_commit: 7ddf69e18ba83d4e366f61d4b43b768253da2f60
 human_signoff:
 ---
 
@@ -201,3 +201,7 @@ none — không có eval nào chạy nhiều lần (runs > 1)
 ## Iterations
 
 Round 1: toàn bộ 11 eval pass ngay từ lượt đầu — không có vòng sửa nào trước đó.
+
+### Re-pin lần 1 — 2026-09-24, do hoá cũ do gộp origin/onehub vào nhánh (mã api và test của hồ sơ khác)
+run_id: repin-20260924T063913Z-89099
+sha: 7ddf69e18ba83d4e366f61d4b43b768253da2f60 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
