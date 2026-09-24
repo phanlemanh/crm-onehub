@@ -24,7 +24,8 @@ import { useMutation } from "@tanstack/react-query";
 import { Fragment, useRef, useState } from "react";
 import { toast } from "sonner";
 import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialog";
-import { dien, toChucMessages } from "@/lib/messages/to-chuc";
+import { dien } from "@/components/crm/record-sheet/plan-copy";
+import { toChucMessages } from "@/lib/messages/to-chuc";
 import { useTRPC } from "@/lib/trpc/client";
 import type {
 	BoPhanDuLieu,

@@ -90,7 +90,6 @@ const en = {
 	tao: {
 		save: "Save",
 		cancel: "Cancel",
-		boPhan: { title: "New department", name: "Department name" },
 		khuon: {
 			title: "New plan template",
 			name: "Template name",
@@ -124,7 +123,6 @@ const en = {
 	},
 	quanLy: {
 		menu: "More actions",
-		doiTen: "Rename",
 		sua: "Edit",
 		luuTru: "Archive",
 		khoiPhuc: "Restore",
@@ -134,7 +132,6 @@ const en = {
 		daLuuTruTen: "Archived {ten}",
 		canQuyen: "You need admin rights to change the onboarding setup.",
 		keHoachKhongDoi: "Plans already created from this template do not change.",
-		suaBoPhan: "Rename department",
 		suaKhuon: "Edit plan template",
 		xacNhanLuuTruTieuDe: "Archive {ten}?",
 		xacNhanLuuTruThan:
@@ -166,11 +163,8 @@ const en = {
 		templates: "Plan templates",
 		departments: "Departments",
 		newTemplate: "New template",
-		newDepartment: "New department",
 		noTemplate:
 			"No template yet. A template holds the steps for one kind of partner.",
-		noDepartment:
-			"No department yet. A step always belongs to one, even before anyone takes it.",
 		departmentsMoved: "Departments now live in Settings › Organization.",
 		departmentsLink: "Open Settings › Organization",
 	},
@@ -333,7 +327,6 @@ type OnboardingMessages = {
 	tao: {
 		save: string;
 		cancel: string;
-		boPhan: { title: string; name: string };
 		khuon: Record<
 			| "title"
 			| "name"
@@ -364,7 +357,6 @@ type OnboardingMessages = {
 	};
 	quanLy: Record<
 		| "menu"
-		| "doiTen"
 		| "sua"
 		| "luuTru"
 		| "khoiPhuc"
@@ -374,7 +366,6 @@ type OnboardingMessages = {
 		| "daLuuTruTen"
 		| "canQuyen"
 		| "keHoachKhongDoi"
-		| "suaBoPhan"
 		| "suaKhuon"
 		| "xacNhanLuuTruTieuDe"
 		| "xacNhanLuuTruThan"
@@ -407,9 +398,7 @@ type OnboardingMessages = {
 		templates: string;
 		departments: string;
 		newTemplate: string;
-		newDepartment: string;
 		noTemplate: string;
-		noDepartment: string;
 		departmentsMoved: string;
 		departmentsLink: string;
 	};
@@ -599,7 +588,6 @@ const vi = {
 	tao: {
 		save: "Lưu",
 		cancel: "Huỷ",
-		boPhan: { title: "Thêm phòng ban", name: "Tên phòng ban" },
 		khuon: {
 			title: "Soạn khuôn kế hoạch",
 			name: "Tên khuôn",
@@ -633,7 +621,6 @@ const vi = {
 	},
 	quanLy: {
 		menu: "Thao tác khác",
-		doiTen: "Đổi tên",
 		sua: "Sửa",
 		luuTru: "Lưu trữ",
 		khoiPhuc: "Khôi phục",
@@ -643,7 +630,6 @@ const vi = {
 		daLuuTruTen: "Đã lưu trữ {ten}",
 		canQuyen: "Cần quyền quản trị để đổi cấu hình điều phối.",
 		keHoachKhongDoi: "Kế hoạch đã tạo từ khuôn này không đổi theo.",
-		suaBoPhan: "Đổi tên phòng ban",
 		suaKhuon: "Sửa khuôn kế hoạch",
 		xacNhanLuuTruTieuDe: "Lưu trữ {ten}?",
 		xacNhanLuuTruThan:
@@ -675,11 +661,8 @@ const vi = {
 		templates: "Khuôn kế hoạch",
 		departments: "Phòng ban",
 		newTemplate: "Soạn khuôn",
-		newDepartment: "Thêm phòng ban",
 		noTemplate:
 			"Chưa có khuôn nào. Một khuôn giữ bộ bước cho một loại đối tác.",
-		noDepartment:
-			"Chưa có phòng ban nào. Bước nào cũng thuộc một phòng ban, kể cả khi chưa ai nhận.",
 		departmentsMoved: "Phòng ban nay dựng và sắp ở Cài đặt › Tổ chức.",
 		departmentsLink: "Mở Cài đặt › Tổ chức",
 	},

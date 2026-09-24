@@ -78,7 +78,7 @@ const vi = {
 		dongHong: "Dòng hỏng",
 		cot: {
 			dong: "Dòng",
-			email: "Email",
+			email: "Địa chỉ email",
 			phongBan: "Phòng ban",
 			boPhan: "Bộ phận",
 			truong: "Trưởng",
@@ -86,7 +86,6 @@ const vi = {
 		},
 		hopLe: "Hợp lệ",
 		hong: "Hỏng",
-		huy: "Huỷ",
 	},
 	viTri: {
 		tieuDe: "Vị trí trong tổ chức — {ten}",
@@ -198,7 +197,6 @@ const en: ToChucMessages = {
 		},
 		hopLe: "Valid",
 		hong: "Broken",
-		huy: "Cancel",
 	},
 	viTri: {
 		tieuDe: "Place in organization — {ten}",
@@ -225,11 +223,4 @@ const BANG = { en, vi } satisfies Record<Locale, ToChucMessages>;
 
 export function toChucMessages(locale: Locale): ToChucMessages {
 	return BANG[locale];
-}
-
-export function dien(
-	mau: string,
-	gia: Record<string, string | number>,
-): string {
-	return mau.replace(/\{(\w+)\}/g, (_, k: string) => String(gia[k] ?? ""));
 }

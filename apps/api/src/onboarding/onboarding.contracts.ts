@@ -370,6 +370,9 @@ export const danhMucTrangThai = z.enum([
 export const danhMucOutput = planListOutput.extend({
 	soKhuon: z.number(),
 	trangThai: danhMucTrangThai,
+	boPhanCapTren: z
+		.array(z.object({ id: z.string(), name: z.string() }))
+		.optional(),
 });
 
 export type DanhMucTrangThai = z.infer<typeof danhMucTrangThai>;

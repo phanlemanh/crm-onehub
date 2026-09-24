@@ -21,7 +21,8 @@ import {
 import { Spinner } from "@crm/ui/components/spinner";
 import { useMutation } from "@tanstack/react-query";
 import { useId, useRef, useState } from "react";
-import { dien, toChucMessages } from "@/lib/messages/to-chuc";
+import { dien } from "@/components/crm/record-sheet/plan-copy";
+import { toChucMessages } from "@/lib/messages/to-chuc";
 import { useTRPC } from "@/lib/trpc/client";
 import { type CayDuLieu, moiPhongBan, type YeuCauDonVi } from "./kieu";
 import { useLamMoiToChuc } from "./lam-moi";
@@ -70,12 +71,12 @@ export function HopThoaiDonVi({
 			dangGui.current = false;
 		},
 	};
-	const taoBp = useMutation(trpc.org.createDivision.mutationOptions(opt));
-	const taoPb = useMutation(trpc.org.createDepartment.mutationOptions(opt));
-	const tenBp = useMutation(trpc.org.renameDivision.mutationOptions(opt));
-	const tenPb = useMutation(trpc.org.renameDepartment.mutationOptions(opt));
-	const truong = useMutation(trpc.org.setHead.mutationOptions(opt));
-	const chuyen = useMutation(trpc.org.moveDepartment.mutationOptions(opt));
+	const taoBp = useMutation(trpc.org.createDivision.mutationOptions());
+	const taoPb = useMutation(trpc.org.createDepartment.mutationOptions());
+	const tenBp = useMutation(trpc.org.renameDivision.mutationOptions());
+	const tenPb = useMutation(trpc.org.renameDepartment.mutationOptions());
+	const truong = useMutation(trpc.org.setHead.mutationOptions());
+	const chuyen = useMutation(trpc.org.moveDepartment.mutationOptions());
 	const dangLuu = [taoBp, taoPb, tenBp, tenPb, truong, chuyen].some(
 		(x) => x.isPending,
 	);
@@ -119,25 +120,28 @@ export function HopThoaiDonVi({
 		const giaTri = chon === KHONG ? null : chon;
 		switch (yeuCau.loai) {
 			case "tao-bo-phan":
-				taoBp.mutate({ name: ten });
+				taoBp.mutate({ name: ten }, opt);
 				return;
 			case "tao-phong-ban":
-				taoPb.mutate({ name: ten, divisionId: yeuCau.divisionId });
+				taoPb.mutate({ name: ten, divisionId: yeuCau.divisionId }, opt);
 				return;
 			case "doi-ten":
 				if (yeuCau.don === "bo-phan")
-					tenBp.mutate({ id: yeuCau.id, name: ten });
-				else tenPb.mutate({ id: yeuCau.id, name: ten });
+					tenBp.mutate({ id: yeuCau.id, name: ten }, opt);
+				else tenPb.mutate({ id: yeuCau.id, name: ten }, opt);
 				return;
 			case "truong":
-				truong.mutate({
-					kind: yeuCau.don === "bo-phan" ? "division" : "department",
-					id: yeuCau.id,
-					userId: giaTri,
-				});
+				truong.mutate(
+					{
+						kind: yeuCau.don === "bo-phan" ? "division" : "department",
+						id: yeuCau.id,
+						userId: giaTri,
+					},
+					opt,
+				);
 				return;
 			case "chuyen":
-				chuyen.mutate({ id: yeuCau.id, divisionId: giaTri, index: 0 });
+				chuyen.mutate({ id: yeuCau.id, divisionId: giaTri, index: 0 }, opt);
 				return;
 		}
 	};

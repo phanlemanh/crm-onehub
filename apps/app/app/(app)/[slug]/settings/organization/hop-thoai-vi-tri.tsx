@@ -29,7 +29,8 @@ import {
 import { Spinner } from "@crm/ui/components/spinner";
 import { useMutation } from "@tanstack/react-query";
 import { useId, useRef, useState } from "react";
-import { dien, toChucMessages } from "@/lib/messages/to-chuc";
+import { dien } from "@/components/crm/record-sheet/plan-copy";
+import { toChucMessages } from "@/lib/messages/to-chuc";
 import { useTRPC } from "@/lib/trpc/client";
 import {
 	type CayDuLieu,

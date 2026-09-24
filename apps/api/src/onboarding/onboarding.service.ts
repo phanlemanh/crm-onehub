@@ -501,12 +501,17 @@ export class OnboardingService {
 	}
 
 	async manDanhMuc(input: PlanListInput): Promise<DanhMucOutput> {
-		const [tap, soKhuon] = await Promise.all([
+		const [tap, soKhuon, boPhanCapTren] = await Promise.all([
 			this.taiTap(input),
 			this.db.onboardingTemplate.count({ where: { archivedAt: null } }),
+			this.db.division.findMany({
+				where: { archivedAt: null },
+				orderBy: [{ position: "asc" }, { name: "asc" }],
+				select: { id: true, name: true },
+			}),
 		]);
 
-		return manDanhMucTuHang(tap, input, soKhuon);
+		return { ...manDanhMucTuHang(tap, input, soKhuon), boPhanCapTren };
 	}
 
 	async listPlans(input: PlanListInput): Promise<PlanListOutput> {

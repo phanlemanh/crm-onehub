@@ -35,6 +35,7 @@ export function useBoLoc(): () => void {
 			boPhan: null,
 			nguoiCam: null,
 			nguoiGiao: null,
+			division: null,
 		});
 		setOnboarding({ trangThai: null });
 	};
