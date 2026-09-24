@@ -1,0 +1,16 @@
+{
+  "feature_plain": "Người nhắn mã cho bot Zalo được nối ngay qua webhook, không còn mất tin như bản đầu; nhịp mỗi phút chỉ còn kiểm bot sống; có hai lệnh để bật webhook và thử bot tại máy.",
+  "decisions": [],
+  "scope_plain": "Để sang vòng sau như đã duyệt: dấu đăng ký webhook, mọi thay đổi màn hình, trả lời tin nhắc, hỏi CRM qua Zalo, tin nhóm, và việc bật webhook cho bot công ty.",
+  "decisions_plain": [
+    {"id": "d-20260924T004824Z-1", "p": "Nhận tin bằng một kênh trong tác tử — đổi lại địa chỉ công khai này phải tự kiểm khoá bí mật."},
+    {"id": "d-20260924T004824Z-2", "p": "Tin hỏng vẫn trả «đã nhận» — đổi lại lỗi khuôn chỉ thấy trong log."},
+    {"id": "d-20260924T004824Z-3", "p": "KHÔNG làm dấu «đã đăng ký webhook» ở vòng này — đổi lại trang vẫn báo bot sống dù webhook chưa đăng ký, tới vòng 2."},
+    {"id": "d-20260924T004824Z-4", "p": "Bỏ qua tin trong nhóm — đổi lại người nhắn mã trong nhóm không nhận phản hồi."},
+    {"id": "d-20260924T004824Z-5", "p": "KHÔNG đặc tả màn hình vì vòng này không chạm màn hình nào."},
+    {"id": "d-20260924T005349Z-6", "p": "Nhánh thành công của hai lệnh tay đo lúc triển khai — đổi lại lỗi nối dây ở nhánh đó chỉ lộ khi anh chạy lệnh."},
+    {"id": "d-20260924T011054Z-8", "p": "Phép phá đã khai cho vòng tay (rút ngắn thời gian mở) không làm phép đo đỏ, vì vòng tay gọi liền nhau; thay bằng phép phá «vòng tay chỉ chạy một lượt», và cửa sổ của Zalo giả đổi thành nửa mở cho khớp thật — đổi lại việc «mở lâu hơn thì ít khe hở hơn» chưa được đo."},
+    {"id": "d-20260924T011705Z-9", "p": "Làm đúng hợp đồng: hai biến Zalo nằm trong globalEnv của turbo.json, dù nếp của kho đặt khoá bí mật ở chỗ khác — đổi lại mỗi lần đổi token, turbo dựng lại mọi thứ; chuyển chỗ là một sửa hợp đồng nhỏ chờ anh quyết."}
+  ],
+  "analyst_plain": ""
+}

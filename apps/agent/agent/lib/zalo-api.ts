@@ -5,6 +5,10 @@ export function zaloToken(): string | null {
 	return process.env.ZALO_BOT_TOKEN?.trim() || null;
 }
 
+export function zaloKhoaWebhook(): string | null {
+	return process.env.ZALO_WEBHOOK_SECRET?.trim() || null;
+}
+
 export async function zaloGoi(
 	fetcher: typeof fetch,
 	token: string,

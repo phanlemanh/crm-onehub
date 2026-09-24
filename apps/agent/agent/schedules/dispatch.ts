@@ -9,7 +9,7 @@ import {
 import { brief, drainAll, taskAuth } from "../lib/dispatch";
 import { lenLichNhac } from "../lib/nhac-ke-hoach";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
-import { pollZalo } from "../lib/zalo-poll";
+import { kiemBot } from "../lib/zalo-bot";
 
 export default defineSchedule({
 	cron: "* * * * *",
@@ -18,7 +18,7 @@ export default defineSchedule({
 			Promise.all([
 				sweepBlankFacts(),
 				lenLichNhac(),
-				pollZalo(),
+				kiemBot(),
 
 				(async () => {
 					await reconcileStaleTasks();

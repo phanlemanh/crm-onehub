@@ -1,0 +1,17 @@
+---
+slug: zalo-qua-webhook
+at: 2026-09-24T00:50:21Z
+verdict: findings
+p0: 1
+p1: 3
+p2: 1
+---
+## Findings
+
+| Sev | Artifact | Thiếu gì | Kịch bản fail | Thước đo | Xử lý |
+|---|---|---|---|---|---|
+| P0 | evals | Vỏ thân webhook `{ok, result: {event_name, message}}` và tên header `X-Bot-Api-Secret-Token` chỉ lấy từ mẫu tài liệu; mọi fixture viết tay đúng khuôn bên đọc; nhánh thân hỏng nuốt thành 200; log E5b ghim `message_id` ở đường giả định | Zalo thật gửi khác vỏ hoặc khác header — mọi tin rơi vào 200 + log hoặc 403, không ai nối được như #94, cả 11 eval vẫn xanh; `webhook.ok` chỉ chứng đăng ký | (a) fixture `message` chép từ phản hồi `getUpdates` thật 23/09; (b) log in khoá cấp đầu + ca E5e thân không vỏ; (c) ghi rõ giả định (2) và bước đo sau triển khai | fixed: (a) E1 khai fixture `apps/agent/test/fixtures/zalo-tin-that.json` chép khuôn từ 4 phản hồi thật 23/09, chỉ thay giá trị định danh; (b) AC-5 và E5 thêm ca `{event_name, message}` không vỏ, log in danh sách khoá cấp đầu; (c) Coverage giả định (2) viết lại nói rõ chỉ vỏ và header chưa đo, Notes thêm bước gửi tin thật sau triển khai. human-gate1: giả định (2) chỉ đo được khi có URL công khai — máy không có tunnel và không tự cài; chủ kho gạch hoặc đòi đo trước S4 |
+| P1 | contract | Notes nói `pollZalo` giữ nguyên hành vi nhưng bộ lọc `PRIVATE` ở lõi chung làm nó đổi; không eval nào giữ các phép đo đã ký của `nhac-qua-zalo` với fixture nguyên vẹn | Fixture cũ thiếu `chat_type` → poll bỏ qua mọi tin, eval đã ký đỏ, người làm sửa fixture cho xanh mà không ai thấy | Sửa Notes, thêm AC chạy spec đã ký ở tip và cấm diff lên nó theo merge-base | fixed: Notes nêu ngoại lệ tin nhóm; thêm AC-12 và E12 (`config:executors.script.zqw_giu_nqz`) — spec của `nhac-qua-zalo` không đổi so với merge-base và chạy trọn xanh; giá trị `chat_type` của ca PRIVATE lấy từ fixture thật |
+| P1 | evals | AC-9 và AC-8(b) hứa về LỆNH nhưng E9, E8b gọi hàm; không đo đường qua script `package.json`, đọc `argv`, mã thoát [moi-bai-kiem-dom-deu-chay#F2] | `--xoa` bị hiểu là URL, script trỏ sai, lệnh ném mà thoát 0 — eval vẫn xanh | Chạy lệnh thật bằng `Bun.spawn` cho các ca lỗi; kiểm `docThamSo` | fixed: AC-9 và E9 thêm lớp lệnh thật (`bun run zalo:webhook`, `bun run zalo:poll` bằng `Bun.spawn`) cho ca http, thiếu secret, thiếu token: mã thoát khác 0, stderr gọi đích danh, stderr không chứa `error_code`; E9 đo `docThamSo`. deferred: nhánh thành công của lệnh có gọi mạng thật chỉ chạy lúc triển khai (hàng T) — ghi entry revisit |
+| P1 | evals | Nối dây đo bằng lối tắt: E3 truyền biến qua `deps`, E11 chỉ chạy khi đủ biến, E7 tìm tên `pollZalo` trong AST | Kênh parse biến lúc nạp module làm cả tác tử không khởi động khi thiếu Zalo; `import { pollZalo as docZalo }` qua mặt AST | Nạp kênh trong tiến trình con thiếu biến; chạy `run()` của lịch với Zalo giả | fixed: AC-3 và E3 chạy trong tiến trình con thiếu từng biến — nạp không ném, 404; AC-7 và E7 gọi chính `run` của lịch `dispatch` với `fetch` toàn cục bị thay, đếm `getUpdates` và `getMe` — bỏ phép đọc AST |
+| P2 | evals | Ma trận khoá sai không ghim độ dài, không có ca header rỗng; `timingSafeEqual` ném khi độ dài khác | Header ngắn hơn làm handler ném, trả 500 thay 403 | Thêm ba ca độ dài và ca rỗng; đột biến bỏ băm | fixed: AC-2 và E2 thành năm ca rời nhau (không header, rỗng, cùng độ dài, dài 1, dài 300), mỗi ca kiểm 403 và không reject; thiết kế so khoá qua băm SHA-256 |
