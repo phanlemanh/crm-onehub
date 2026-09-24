@@ -10,7 +10,7 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-24-vai-chi-okr-design.md` · hợp đồng `_acceptance/vai-chi-okr/contract.md` (approved 2026-09-24) · evals `_acceptance/vai-chi-okr/evals.yaml`
 
-**Duyệt kế hoạch (Cổng 1.5, T3):** chờ phiên điều phối (uỷ quyền Manh Phan 2026-09-24).
+**Duyệt kế hoạch (Cổng 1.5): Manh Phan — uỷ quyền phiên điều phối 2026-09-24.** Ba dặn thêm cho S3: ở `to-chuc.router.ts` và `onboarding.router.ts` chỉ thêm đúng dòng khai phạm vi; suite và build chạy với tiền tố PATH Node 24 trong `duong-nen.md`; không đẩy nhánh trước PR.
 
 ## Global Constraints
 
