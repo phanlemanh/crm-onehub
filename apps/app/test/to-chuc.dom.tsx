@@ -556,6 +556,105 @@ describe("luu-tru-man", () => {
 	});
 });
 
+const CHU_GOC = [
+	"hung@onehub.vn\tKinh doanh vùng 1\tKinh doanh\tphòng ban",
+	"mai@onehub.vn\tKinh doanh vùng 1\tKinh doanh\t",
+	"thao@onehub.vn\tChăm sóc khách hàng\tVận hành\t",
+	"tuan@onehub.vn\tKho vận\tVận hành\t",
+	"an@onehub.vn\tKế toán\tTài chính\t",
+	"duc@onehub.vn\tKinh doanh vùng 1\tVận hành\t",
+	"lan@onehub.vn\tPháp chế\t\tcó",
+].join("\n");
+
+const N = TO_CHUC.thongDiep.nhap;
+
+function xem(hongTu: number): ImportPreviewOutput {
+	const loi = [
+		N.emailKhongPhaiThanhVien,
+		N.phongBanBoPhanKhac("Kinh doanh vùng 1", "Kinh doanh"),
+		N.truongLa,
+	];
+	const rows = CHU_GOC.split("\n").map((d, i) => {
+		const [email = "", department = "", division = "", head = ""] =
+			d.split("\t");
+		return {
+			line: i + 1,
+			email,
+			department,
+			division,
+			head,
+			error: i >= hongTu ? (loi[i - 4] ?? N.truongLa) : null,
+		};
+	});
+	const valid = rows.filter((r) => r.error === null).length;
+	return {
+		rows,
+		summary: {
+			valid,
+			invalid: rows.length - valid,
+			newDepartments: 0,
+			newDivisions: 0,
+		},
+		newNames: { departments: [], divisions: [] },
+	};
+}
+
+async function moNhap(ketQua: ImportPreviewOutput): Promise<HTMLElement> {
+	xemTruoc = ketQua;
+	await mo(<ToChuc />);
+	await bam(nut(m.nhap));
+	await cho(() => hopThoai() !== null, "mo hop nhap");
+	const hop = hopThoai() as HTMLElement;
+	const o = hop.querySelector("textarea") as HTMLTextAreaElement;
+	await act(async () => {
+		const dat = Object.getOwnPropertyDescriptor(
+			HTMLTextAreaElement.prototype,
+			"value",
+		)?.set;
+		dat?.call(o, CHU_GOC);
+		o.dispatchEvent(new Event("input", { bubbles: true }));
+	});
+	await bam(nut(m.nhapHop.xemTruoc, hop));
+	await cho(() => hop.querySelector("tbody tr") !== null, "bang xem truoc");
+	return hop;
+}
+
+describe("nhap-man", () => {
+	test("nhap-man: nut ghi noi so dong, bang du dong, loi tung dong, ghi gui chu goc", async () => {
+		const hop = await moNhap(xem(4));
+		const nutGhi = nut("Ghi ", hop);
+		expect(nutGhi.textContent?.trim()).toBe("Ghi 4 dòng · bỏ 3 dòng hỏng");
+		expect(hop.querySelectorAll("tbody tr").length).toBe(7);
+		const oNguoiNhap = [...hop.querySelectorAll("tbody tr")].flatMap((tr) =>
+			[...tr.querySelectorAll("td")]
+				.slice(1, 5)
+				.filter((td) => td.getAttribute("translate") !== "no")
+				.map(
+					(td) =>
+						`dong ${tr.firstElementChild?.textContent}: ${td.textContent}`,
+				),
+		);
+		expect(oNguoiNhap).toEqual([]);
+		const loi = [
+			...hop.querySelectorAll(`[aria-label="${m.nhapHop.dongHong}"] li`),
+		].map((l) => l.textContent);
+		expect(loi).toEqual([
+			`Dòng 5: ${N.emailKhongPhaiThanhVien}`,
+			`Dòng 6: ${N.phongBanBoPhanKhac("Kinh doanh vùng 1", "Kinh doanh")}`,
+			`Dòng 7: ${N.truongLa}`,
+		]);
+		await bam(nutGhi);
+		await cho(() => dauVaoCuoi("applyImport") !== undefined, "goi applyImport");
+		expect(dauVaoCuoi("applyImport")).toEqual({ text: CHU_GOC, traTen: true });
+	});
+
+	test("nhap-man: moi dong hong thi nut ghi khoa", async () => {
+		const hop = await moNhap(xem(0));
+		const nutGhi = nut(m.nhapHop.khongGhi, hop);
+		expect(nutGhi.disabled).toBe(true);
+	});
+});
+
 const T = TO_CHUC.thongDiep;
 
 function soLanGoi(duong: string): number {
@@ -707,104 +806,5 @@ describe("mdg-man-goi-org", () => {
 			await donMan();
 		}
 		expect(soKhangDinh).toBe(15);
-	});
-});
-
-const CHU_GOC = [
-	"hung@onehub.vn\tKinh doanh vùng 1\tKinh doanh\tphòng ban",
-	"mai@onehub.vn\tKinh doanh vùng 1\tKinh doanh\t",
-	"thao@onehub.vn\tChăm sóc khách hàng\tVận hành\t",
-	"tuan@onehub.vn\tKho vận\tVận hành\t",
-	"an@onehub.vn\tKế toán\tTài chính\t",
-	"duc@onehub.vn\tKinh doanh vùng 1\tVận hành\t",
-	"lan@onehub.vn\tPháp chế\t\tcó",
-].join("\n");
-
-const N = TO_CHUC.thongDiep.nhap;
-
-function xem(hongTu: number): ImportPreviewOutput {
-	const loi = [
-		N.emailKhongPhaiThanhVien,
-		N.phongBanBoPhanKhac("Kinh doanh vùng 1", "Kinh doanh"),
-		N.truongLa,
-	];
-	const rows = CHU_GOC.split("\n").map((d, i) => {
-		const [email = "", department = "", division = "", head = ""] =
-			d.split("\t");
-		return {
-			line: i + 1,
-			email,
-			department,
-			division,
-			head,
-			error: i >= hongTu ? (loi[i - 4] ?? N.truongLa) : null,
-		};
-	});
-	const valid = rows.filter((r) => r.error === null).length;
-	return {
-		rows,
-		summary: {
-			valid,
-			invalid: rows.length - valid,
-			newDepartments: 0,
-			newDivisions: 0,
-		},
-		newNames: { departments: [], divisions: [] },
-	};
-}
-
-async function moNhap(ketQua: ImportPreviewOutput): Promise<HTMLElement> {
-	xemTruoc = ketQua;
-	await mo(<ToChuc />);
-	await bam(nut(m.nhap));
-	await cho(() => hopThoai() !== null, "mo hop nhap");
-	const hop = hopThoai() as HTMLElement;
-	const o = hop.querySelector("textarea") as HTMLTextAreaElement;
-	await act(async () => {
-		const dat = Object.getOwnPropertyDescriptor(
-			HTMLTextAreaElement.prototype,
-			"value",
-		)?.set;
-		dat?.call(o, CHU_GOC);
-		o.dispatchEvent(new Event("input", { bubbles: true }));
-	});
-	await bam(nut(m.nhapHop.xemTruoc, hop));
-	await cho(() => hop.querySelector("tbody tr") !== null, "bang xem truoc");
-	return hop;
-}
-
-describe("nhap-man", () => {
-	test("nhap-man: nut ghi noi so dong, bang du dong, loi tung dong, ghi gui chu goc", async () => {
-		const hop = await moNhap(xem(4));
-		const nutGhi = nut("Ghi ", hop);
-		expect(nutGhi.textContent?.trim()).toBe("Ghi 4 dòng · bỏ 3 dòng hỏng");
-		expect(hop.querySelectorAll("tbody tr").length).toBe(7);
-		const oNguoiNhap = [...hop.querySelectorAll("tbody tr")].flatMap((tr) =>
-			[...tr.querySelectorAll("td")]
-				.slice(1, 5)
-				.filter((td) => td.getAttribute("translate") !== "no")
-				.map(
-					(td) =>
-						`dong ${tr.firstElementChild?.textContent}: ${td.textContent}`,
-				),
-		);
-		expect(oNguoiNhap).toEqual([]);
-		const loi = [
-			...hop.querySelectorAll(`[aria-label="${m.nhapHop.dongHong}"] li`),
-		].map((l) => l.textContent);
-		expect(loi).toEqual([
-			`Dòng 5: ${N.emailKhongPhaiThanhVien}`,
-			`Dòng 6: ${N.phongBanBoPhanKhac("Kinh doanh vùng 1", "Kinh doanh")}`,
-			`Dòng 7: ${N.truongLa}`,
-		]);
-		await bam(nutGhi);
-		await cho(() => dauVaoCuoi("applyImport") !== undefined, "goi applyImport");
-		expect(dauVaoCuoi("applyImport")).toEqual({ text: CHU_GOC, traTen: true });
-	});
-
-	test("nhap-man: moi dong hong thi nut ghi khoa", async () => {
-		const hop = await moNhap(xem(0));
-		const nutGhi = nut(m.nhapHop.khongGhi, hop);
-		expect(nutGhi.disabled).toBe(true);
 	});
 });
