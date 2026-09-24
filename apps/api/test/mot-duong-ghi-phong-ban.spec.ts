@@ -4,6 +4,7 @@ import type { NestExpressApplication } from "@nestjs/platform-express";
 import type { AnyProcedure } from "@trpc/server";
 import { AppRouterHost } from "nestjs-trpc";
 import request from "supertest";
+import { z } from "zod";
 import { createApp } from "../src/create-app";
 import type { TreeOutput } from "../src/to-chuc/to-chuc.contracts";
 import { TO_CHUC } from "../src/to-chuc/to-chuc-config";
@@ -17,19 +18,28 @@ const ma = (phan: string) =>
 	`${TIEN_TO}-${phan}-${Date.now().toString(36)}-${++dem}`;
 
 type Ai = "quan" | "thuong" | "chu";
+type Json =
+	| string
+	| number
+	| boolean
+	| null
+	| readonly Json[]
+	| { readonly [khoa: string]: Json | undefined };
 type TraLoi = { status: number; data: unknown; loi: string };
+type Phien = { nguoi: string; cookie: string };
+type DuongRest = readonly [Verb, string, Json | undefined];
 type Verb = "get" | "post" | "patch" | "delete";
 
-const phien: Record<Ai, { nguoi: string; cookie: string }> = {
+const phien = {
 	quan: { nguoi: "", cookie: "" },
 	thuong: { nguoi: "", cookie: "" },
 	chu: { nguoi: "", cookie: "" },
-};
+} satisfies Record<Ai, Phien>;
 let app: NestExpressApplication;
 
 async function trpc(
 	thuTuc: string,
-	vao: object,
+	vao: Json,
 	ai: Ai = "quan",
 ): Promise<TraLoi> {
 	const res = await request(app.getHttpServer())
@@ -46,7 +56,7 @@ async function trpc(
 
 async function docTrpc(
 	thuTuc: string,
-	vao?: object,
+	vao?: Json,
 	ai: Ai = "quan",
 ): Promise<TraLoi> {
 	const q =
@@ -66,7 +76,7 @@ async function docTrpc(
 async function rest(
 	verb: Verb,
 	duong: string,
-	vao: object | undefined,
+	vao: Json | undefined,
 	ai: Ai = "quan",
 ): Promise<TraLoi> {
 	let req = request(app.getHttpServer())
@@ -587,7 +597,7 @@ describe("mdg-luat-xoa-han", () => {
 
 describe("mdg-xoa-duoc-mot-noi", () => {
 	test("mdg-xoa-duoc-mot-noi: org.tree, onboarding.listDepartments va lenh xoa cung mot cau tra loi", async () => {
-		const gieoSauLuu: Record<string, (id: string) => Promise<void>> = {
+		const gieoSauLuu = {
 			"con buoc ke hoach": async () => {},
 			"nguoi hieu luc nhan lam chinh": async (id) => {
 				const n = await nguoiMoi("xd-song");
@@ -620,7 +630,8 @@ describe("mdg-xoa-duoc-mot-noi", () => {
 			},
 			"trong khuon da luu tru": async () => {},
 			trong: async () => {},
-		};
+		} satisfies Record<string, (id: string) => Promise<void>>;
+
 		const CA = [
 			{ ten: "con buoc ke hoach", mong: false },
 			{ ten: "nguoi hieu luc nhan lam chinh", mong: false },
@@ -679,14 +690,22 @@ describe("mdg-quyen-ba-thu-tuc", () => {
 		const THU_TUC = [
 			{
 				ten: "org.archiveDepartment",
-				rest: (id: string) => ["post", `/org/departments/${id}/archive`, {}],
+				rest: (id: string): DuongRest => [
+					"post",
+					`/org/departments/${id}/archive`,
+					{},
+				],
 				gieo: () => pbMoi("q-trong"),
 				doc: async (id: string) =>
 					`${(await db.department.findUnique({ where: { id } }))?.archivedAt !== null}`,
 			},
 			{
 				ten: "org.restoreDepartment",
-				rest: (id: string) => ["post", `/org/departments/${id}/restore`, {}],
+				rest: (id: string): DuongRest => [
+					"post",
+					`/org/departments/${id}/restore`,
+					{},
+				],
 				gieo: async () => {
 					const id = await pbMoi("q-luu");
 					await luuPb(id);
@@ -697,7 +716,11 @@ describe("mdg-quyen-ba-thu-tuc", () => {
 			},
 			{
 				ten: "org.purgeDepartment",
-				rest: (id: string) => ["delete", `/org/departments/${id}`, undefined],
+				rest: (id: string): DuongRest => [
+					"delete",
+					`/org/departments/${id}`,
+					undefined,
+				],
 				gieo: async () => {
 					const id = await pbMoi("q-xoa");
 					await luuPb(id);
@@ -712,11 +735,7 @@ describe("mdg-quyen-ba-thu-tuc", () => {
 				for (const ai of ["thuong", "quan", "chu"] as const) {
 					const id = await t.gieo();
 					const truoc = await t.doc(id);
-					const [verb, duong, vao] = t.rest(id) as [
-						Verb,
-						string,
-						object | undefined,
-					];
+					const [verb, duong, vao] = t.rest(id);
 					const tra =
 						lop === "trpc"
 							? await trpc(t.ten, { id }, ai)
@@ -739,19 +758,19 @@ describe("mdg-quyen-ba-thu-tuc", () => {
 	});
 });
 
-const khaiRest = (meta: unknown) => {
-	const o = (
-		meta as { openapi?: { method?: string; path?: string } } | undefined
-	)?.openapi;
-	return o?.method && o.path ? `${o.method.toUpperCase()} ${o.path}` : null;
-};
+const khaiRest = z
+	.object({ openapi: z.object({ method: z.string(), path: z.string() }) })
+	.transform((m) => `${m.openapi.method.toUpperCase()} ${m.openapi.path}`);
 
 function thuTucGhi() {
 	const { appRouter } = app.get(AppRouterHost);
 	const procs = appRouter._def.procedures as Record<string, AnyProcedure>;
 	return Object.entries(procs)
 		.filter(([, p]) => p._def.type === "mutation")
-		.map(([ten, p]) => ({ ten, rest: khaiRest(p._def.meta) }));
+		.map(([ten, p]) => {
+			const r = khaiRest.safeParse(p._def.meta);
+			return { ten, rest: r.success ? r.data : null };
+		});
 }
 
 describe("mdg-go-duong-cu", () => {
@@ -787,7 +806,7 @@ describe("mdg-go-duong-cu", () => {
 		for (const [lop, duong, vao] of DUONG_CU) {
 			const tra =
 				lop === "trpc"
-					? await trpc(duong, vao as object)
+					? await trpc(duong, vao ?? {})
 					: await rest(lop, duong, vao);
 			const nhan =
 				lop === "trpc" ? duong : `${lop.toUpperCase()} /rest${duong}`;

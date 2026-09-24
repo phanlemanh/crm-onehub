@@ -159,6 +159,15 @@ function thuTuc<TRa>(ten: string, doc: () => TRa, router = "org") {
 	};
 }
 
+const GHI_CU = [
+	"createDepartment",
+	"updateDepartment",
+	"reorderDepartments",
+	"archiveDepartment",
+	"restoreDepartment",
+	"purgeDepartment",
+] as const;
+
 const khongDoc = () => {
 	throw new Error("khong doc thu tuc nay");
 };
@@ -185,18 +194,13 @@ mock.module("@/lib/trpc/client", () => ({
 			restoreDepartment: thuTuc("restoreDepartment", khongDoc),
 			purgeDepartment: thuTuc("purgeDepartment", khongDoc),
 		},
-		onboarding: new Proxy(
-			{
-				listDepartments: thuTuc("listDepartments", () => [], "onboarding"),
-				manDanhMuc: thuTuc("manDanhMuc", () => null, "onboarding"),
-			} as Record<string, ReturnType<typeof thuTuc>>,
-			{
-				get: (o, k) =>
-					typeof k === "string" && !(k in o) && k.endsWith("Department")
-						? thuTuc(k, khongDoc, "onboarding")
-						: o[k as string],
-			},
-		),
+		onboarding: {
+			listDepartments: thuTuc("listDepartments", () => [], "onboarding"),
+			manDanhMuc: thuTuc("manDanhMuc", () => null, "onboarding"),
+			...Object.fromEntries(
+				GHI_CU.map((ten) => [ten, thuTuc(ten, khongDoc, "onboarding")]),
+			),
+		},
 	}),
 }));
 
