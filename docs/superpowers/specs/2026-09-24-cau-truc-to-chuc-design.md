@@ -93,6 +93,8 @@ kết quả xem trước, nên không có đường nào đưa dữ liệu chưa
   lô · thiếu email hoặc thiếu phòng ban · phòng ban thuộc bộ phận khác · một phòng ban
   mang hai bộ phận trong lô · giá trị «trưởng» lạ · hai người cùng làm trưởng một đơn
   vị trong lô · quá 1000 dòng (cả lô bị từ chối).
+- Lỗi cặp (email lặp, một phòng ban hai bộ phận, hai trưởng một đơn vị): mọi dòng trong
+  cặp đều hỏng — không dòng nào thắng theo thứ tự.
 - Ghi: chỉ dòng hợp lệ, trong một giao dịch; nút nói rõ «Ghi 42 dòng · bỏ 3 dòng
   hỏng». Dòng hợp lệ đặt phòng ban chính của người (thay phòng ban chính cũ; phòng
   ban phụ không đổi) và đặt trưởng. Nhập lại cùng tệp không tạo đơn vị trùng.
@@ -110,7 +112,9 @@ trưởng).
 
 - Điều phối 30 ngày: mọi chữ «bộ phận» đang chỉ danh sách phẳng thành «phòng ban»
   (cột, bộ lọc «Phòng ban đang cầm», chia cột, khuôn kế hoạch). Thêm bộ lọc **«Bộ
-  phận»**: giữ kế hoạch mà phòng ban đang cầm thuộc bộ phận đã chọn.
+  phận»**: giữ kế hoạch mà phòng ban đang cầm thuộc bộ phận đã chọn. Lọc ở máy chủ,
+  như mọi bộ lọc khác của danh mục (tham số mới trên đường dẫn và trong đầu vào của
+  truy vấn danh mục, số đếm bộ lọc tính cùng chỗ) — không lọc trên trình duyệt.
 - Cài đặt › Điều phối 30 ngày thôi giữ danh sách bộ phận/phòng ban; chỗ đó thành một
   dòng trỏ sang Cài đặt › Tổ chức. Một nơi tạo phòng ban, không hai.
 - Sheet kế hoạch 30 ngày: ô «Mục tiêu» (đang hiện «30 ngày») thành **«Thời lượng»**,

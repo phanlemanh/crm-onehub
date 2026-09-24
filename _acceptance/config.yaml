@@ -399,6 +399,8 @@ executors:
     ttc_vi_tri_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc.dom.tsx -t vi-tri-man"
     ttc_nhan_dieu_phoi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/doi-nhan-phong-ban.dom.tsx -t nhan-dieu-phoi"
     ttc_thoi_luong: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/doi-nhan-phong-ban.dom.tsx -t thoi-luong"
+    ttc_loc_bo_phan_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/doi-nhan-phong-ban.dom.tsx -t loc-bo-phan-man"
+    ttc_luu_tru_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc.dom.tsx -t luu-tru-man"
   script:
     zqw_giu_nqz: 'B=$(git merge-base HEAD origin/onehub) && { git diff --quiet "$B" -- apps/agent/test/nhac-qua-zalo.integration.spec.ts || { echo "spec da ky cua nhac-qua-zalo bi sua" >&2; exit 1; }; } && bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts"'
     ogd_man_danh_muc: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "DUOI_CONG=1 bun _acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs"'
@@ -760,6 +762,7 @@ executors:
     ktt_reui_da_chinh: "bun _acceptance/keo-tha-thoa-thuan/rang/reui-da-chinh.mjs"
     ktt_san_thiet_ke: "bun _acceptance/keo-tha-thoa-thuan/rang/san-thiet-ke.mjs"
     ttc_migration_chi_them: "node _acceptance/cau-truc-to-chuc/rang/migration-chi-them.mjs"
+    ttc_migration_tren_du_lieu_cu: "bun _acceptance/cau-truc-to-chuc/rang/migration-tren-du-lieu-cu.mjs"
     ttc_man_chrome: "bun _acceptance/cau-truc-to-chuc/rang/man-to-chuc.mjs"
     ttc_san_thiet_ke: "bun _acceptance/cau-truc-to-chuc/rang/san-thiet-ke.mjs"
     bkd_du_tep_app: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs du-tep app"

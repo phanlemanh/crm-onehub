@@ -4,25 +4,40 @@ slug: cau-truc-to-chuc
 evals:
   - id: E1
     criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ttc_migration_tren_du_lieu_cu
+    paths:
+      - "packages/db/prisma/**"
+      - "_acceptance/cau-truc-to-chuc/rang/migration-tren-du-lieu-cu.mjs"
+    expected: |
+      Script suy goc kho tu vi tri cua chinh no. Tao co so du lieu tam rieng (crm_ttc_mig_<pid>),
+      ap cac migration tai base_commit cua ho so (thu muc migrations rut bang git tu base_commit,
+      khong chep tay), gieo du lieu bang SQL cua LUOC DO CU: 5 phong ban trong do hai phong ban
+      trung ten (mot da luu tru), position khong lien nhau (0, 3, 7, 8, 12); 1 khuon; 2 ke hoach 6
+      buoc rai tren cac phong ban; 3 member. Doc anh chup truoc. Roi chay rieng cac migration moi
+      cua luot nay (prisma migrate deploy tren thu muc migrations cua HEAD). Ma tran viet truoc:
+      5 phong ban x [ten, position, archivedAt, so buoc] = 20 khang dinh truoc = sau; cong 3:
+      moi phong ban cu co divisionId null va headUserId null, bang OrgPlacement rong. Migration
+      that bai -> exit 1 kem loi. Xoa co so du lieu tam o finally.
+      CHIEU DO: tep migration gia trong ban guong tmpdir them "ALTER TABLE department ADD COLUMN
+      x TEXT NOT NULL" -> exit 1 voi thong diep ghim "migration do tren du lieu cu".
+
+  - id: E1b
+    criterion: AC-1
     executor: test
     layer: backend-effect
     cmd: config:executors.test.ttc_du_lieu_cu
     paths:
-      - "packages/db/prisma/**"
       - "apps/api/src/to-chuc/**"
       - "apps/api/src/onboarding/**"
       - "apps/api/test/to-chuc.spec.ts"
     expected: |
-      Tich hop tren co so du lieu kiem cua bun run test (da chay migration cua luot nay). Fixture
-      dung dang du lieu cu: 4 phong ban tao bang dung duong ghi onboarding.createDepartment (khong
-      truyen divisionId), 1 phong ban da luu tru, 1 khuon, 2 ke hoach co 6 buoc rai tren cac phong
-      ban. Ma tran viet truoc: 5 phong ban x [ten, position, archivedAt, so buoc] = 20 khang dinh
-      so voi gia tri doc TRUOC khi goi org.tree; cong 4 khang dinh: org.tree dat dung 4 phong ban
-      chua luu tru vao nhom chuaXep theo position; cong 1: onboarding danh muc tra cung tap
-      (planId, stepId, departmentId) truoc va sau khi goi cac thu tuc org.* doc.
-      CHIEU DO: ban sao org.tree bo nhom chuaXep (chi tra phong ban co divisionId) -> do voi thong
-      diep ghim "chuaXep: 0 phong ban != 4".
-
+      Tren co so du lieu kiem da migrate: 4 phong ban chua luu tru khong co divisionId (ghi bang
+      DUNG duong onboarding.createDepartment that, khong chen SQL tay) va 1 da luu tru. Khang dinh:
+      org.tree.chuaXep = dung 4 phong ban theo position (4 khang dinh thu tu); phong ban da luu tru
+      chi nam trong org.tree.archived (1). Doi chung: chuyen 1 phong ban vao bo phan -> chuaXep con 3.
+      CHIEU DO: ban sao org.tree bo nhom chuaXep -> do "chuaXep: 0 phong ban != 4".
   - id: E2
     criterion: AC-1
     executor: script
@@ -32,13 +47,15 @@ evals:
       - "packages/db/prisma/migrations/**"
       - "_acceptance/cau-truc-to-chuc/rang/migration-chi-them.mjs"
     expected: |
-      Doc moi thu muc migration moi so voi base_commit cua ho so (suy tu git, khong ghi cung ten).
-      Moi cau lenh SQL phai thuoc tap viet truoc: CREATE TABLE, CREATE INDEX, CREATE UNIQUE INDEX,
-      ALTER TABLE ... ADD COLUMN, ALTER TABLE ... ADD CONSTRAINT. Dem so cau lenh doc duoc > 0.
-      Bat ky UPDATE, DELETE, DROP, ALTER COLUMN, RENAME nao -> exit 1 kem ten tep va cau lenh.
-      CHIEU DO: tep migration gia trong tmpdir ban guong chua "DROP COLUMN" -> exit 1 voi thong diep
-      ghim "migration khong chi them: DROP COLUMN".
-
+      Script suy goc kho tu vi tri cua chinh no; doc moi thu muc migration moi so voi base_commit
+      (suy tu git). Moi cau lenh SQL phai thuoc tap viet truoc: CREATE TABLE, CREATE INDEX,
+      CREATE UNIQUE INDEX tren BANG MOI, ALTER TABLE ... ADD COLUMN (nullable hoac co DEFAULT),
+      ALTER TABLE ... ADD CONSTRAINT ... FOREIGN KEY. Cam: UPDATE, DELETE, DROP, ALTER COLUMN,
+      RENAME, ADD COLUMN ... NOT NULL khong DEFAULT tren bang da co, ADD CONSTRAINT UNIQUE hoac
+      CHECK tren bang da co, CREATE UNIQUE INDEX tren bang da co. So cau lenh doc duoc > 0 va in ra.
+      CHIEU DO (3 tep gia trong tmpdir, moi tep mot vi pham): "DROP COLUMN", "ADD COLUMN x TEXT NOT
+      NULL" tren department, "ADD CONSTRAINT u UNIQUE (name)" tren department -> ca 3 exit 1 voi
+      thong diep ghim "migration khong chi them: <loai>".
   - id: E3
     criterion: AC-2
     executor: test
@@ -67,14 +84,15 @@ evals:
       - "apps/api/src/onboarding/**"
       - "apps/api/test/to-chuc.spec.ts"
     expected: |
-      Ma tran viet truoc 8 ca: [luu tru phong ban con 2 nguoi chinh, luu tru phong ban chi con
+      Ma tran viet truoc 10 ca: [luu tru phong ban con 2 nguoi chinh, luu tru phong ban chi con
       nguoi phu, luu tru bo phan con 1 phong ban, luu tru bo phan chi con phong ban da luu tru,
-      khoi phuc phong ban, xoa han phong ban con buoc, xoa han phong ban con nguoi chinh, xoa han
-      bo phan khong con gi]. Ky vong tung ca viet truoc (tu choi kem so dem trong cau / cho phep);
-      ca tu choi thi org.tree truoc = sau. Khoi phuc: phong ban ve dung divisionId va position cu.
-      Don vi da luu tru khong xuat hien trong org.tree.divisions nhung co trong org.tree.archived.
+      khoi phuc phong ban, xoa han phong ban DA luu tru con buoc, xoa han phong ban DA luu tru con
+      nguoi chinh, xoa han bo phan DA luu tru khong con gi, xoa han bo phan CHUA luu tru va rong,
+      xoa han phong ban CHUA luu tru va rong]. Ky vong tung ca viet truoc (tu choi kem cau ghim
+      co so dem / cho phep); ca tu choi thi org.tree truoc = sau. Khoi phuc: phong ban ve dung
+      divisionId va position cu. Don vi da luu tru khong xuat hien trong org.tree.divisions nhung
+      co trong org.tree.archived.
       CHIEU DO: ban sao bo chan nguoi chinh -> do "luu tru phong ban con 2 nguoi: khong bi tu choi".
-
   - id: E5
     criterion: AC-4
     executor: test
@@ -136,13 +154,16 @@ evals:
       - "packages/auth/src/organization.ts"
       - "apps/api/test/to-chuc.spec.ts"
     expected: |
-      Danh sach thu tuc ghi RUT TU router that (duyet metadata cac thu tuc mutation cua org va cac
-      mutation Department cua onboarding), khong viet tay; so thu tuc rut duoc > 10 va duoc in ra.
-      Moi thu tuc x [thanh vien thuong, quan tri] = 2N khang dinh: thuong -> FORBIDDEN, quan tri ->
-      khong FORBIDDEN (duoc phep tra BadRequest vi input rong, mien khong phai FORBIDDEN).
+      Danh sach thu tuc ghi RUT TU router that (metadata mutation cua org va cac mutation
+      Department cua onboarding), in so N > 10. Bai kiem giu bang input HOP LE toi thieu cho tung
+      thu tuc tren du lieu gieo san; thu tuc rut duoc ma khong co input trong bang -> bai kiem do
+      ("thieu input hop le cho <ten>"), nen them thu tuc moi khong lot. Moi thu tuc x [thanh vien
+      thuong, quan tri, chu] = 3N khang dinh: thuong -> FORBIDDEN; quan tri va chu -> chay, hoac loi
+      nghiep vu da ghim, KHONG BAO GIO BAD_REQUEST do input. In "da gui input hop le: N/N".
       org.tree va org.access voi thanh vien thuong: chay, access.canManage = false.
-      CHIEU DO: ban sao bo kiem quyen o moveDepartment -> do "moveDepartment: thanh vien thuong khong bi FORBIDDEN".
-
+      CHIEU DO: (a) ban sao bo kiem quyen o moveDepartment -> do "moveDepartment: thanh vien thuong
+      khong bi FORBIDDEN"; (b) ban sao canManageOrganization tra false cho vai chu -> do
+      "setHead: chu bi FORBIDDEN".
   - id: E9
     criterion: AC-7
     executor: test
@@ -184,15 +205,16 @@ evals:
       - "apps/api/src/to-chuc/**"
       - "apps/api/test/to-chuc-nhap.spec.ts"
     expected: |
-      Mot lo 12 dong viet truoc: 4 hop le (1 tao phong ban moi, 1 tao bo phan moi, 1 dat truong
-      phong ban, 1 dat truong bo phan) + 7 dong hong, dung MOT dong cho moi loai hong + 1 dong tieu
-      de. Ma tran: 7 loai x [dong bi danh hong, cau loi dung chuoi ghim] = 14 khang dinh; 4 dong hop
-      le x [khong co loi] = 4; tom tat [hop le 4, hong 7, tao 1 phong ban, tao 1 bo phan] = 4.
-      Hai dinh dang (tab va dau phay .csv) chay cung bang ky vong. Lo 1001 dong -> tu choi ca lo voi
-      cau ghim; lo 1000 dong -> xem truoc duoc. Dem hang Division, Department, OrgPlacement,
-      OrgSecondaryDepartment truoc = sau xem truoc (4 khang dinh).
-      CHIEU DO: ban sao bo kiem "hai nguoi cung lam truong" -> do "loai truong-trung: 0 dong bi danh hong".
-
+      Mot lo viet truoc: 1 dong tieu de + 4 dong hop le (1 tao phong ban moi, 1 tao bo phan moi,
+      1 dat truong phong ban, 1 dat truong bo phan) + 4 dong hong don (email khong phai thanh vien,
+      thieu phong ban, phong ban thuoc bo phan khac, truong la) + 3 cap hong (email lap, mot phong
+      ban hai bo phan, hai truong mot don vi) = 6 dong = 14 dong du lieu. Ma tran theo TUNG DONG
+      du lieu: 14 x [hop le hay hong, cau loi dung chuoi ghim] = 28 khang dinh; tom tat [hop le 4,
+      hong 10, tao 1 phong ban, tao 1 bo phan] = 4. Hai dinh dang (tab va dau phay .csv) chay cung
+      bang ky vong. Lo 1001 dong -> tu choi ca lo voi cau ghim; lo 1000 dong -> xem truoc duoc.
+      Dem hang Division, Department, OrgPlacement, OrgSecondaryDepartment truoc = sau (4).
+      CHIEU DO: ban sao chi danh hong dong SAU cua cap "hai truong" -> do "dong 12 (cap hai truong):
+      hop le != hong".
   - id: E12
     criterion: AC-10
     executor: test
@@ -367,3 +389,35 @@ evals:
     expected: |
       Cung lan chay E20, 2 khang dinh them (bo phan moi co mat sau khi luu; ten trung hien cau loi va
       so bo phan khong doi). CHIEU DO chung voi E20.
+
+  - id: E23
+    criterion: AC-12
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.ttc_loc_bo_phan_man
+    paths:
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/test/doi-nhan-phong-ban.dom.tsx"
+    expected: |
+      Dung man Dieu phoi voi tRPC gia lap ghi lai input cua truy van danh muc. Chon bo phan A trong
+      bo loc "Bo phan": input truy van mang dung ma bo phan A (1); danh sach hien dung tap ke hoach
+      ma phan hoi gia lap tra (so tung ma, 1); so dem canh lua chon A lay tu facetCounts cua phan
+      hoi (1); duong dan mang tham so bo phan, tai lai giu lua chon (1). Bo chon -> input khong con
+      ma bo phan (1).
+      CHIEU DO: ban sao khong dua ma bo phan vao input -> do "truy van danh muc: thieu ma bo phan A".
+
+  - id: E24
+    criterion: AC-3
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.ttc_luu_tru_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc.dom.tsx"
+    expected: |
+      Man To chuc voi cay mau co 1 phong ban da luu tru. Khang dinh: muc "Da luu tru" co phong ban
+      do voi nut "Khoi phuc" va "Xoa han" (2); don vi chua luu tru khong co nut "Xoa han" (1); o
+      chon phong ban chinh trong hop thoai vi tri khong co phong ban da luu tru (1); thu tuc luu tru
+      gia lap tra loi "Con 2 nguoi co phong ban chinh o day" -> thong bao hien dung cau do va cay
+      khong doi (2).
+      CHIEU DO: ban sao hien "Xoa han" cho moi don vi -> do "don vi chua luu tru: co nut Xoa han".
