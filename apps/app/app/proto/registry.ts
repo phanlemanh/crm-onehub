@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { BanMauOkrMau } from "./_modules/ban-mau-okr";
 import { DieuPhoi30NgayDauMau } from "./_modules/dieu-phoi-30-ngay-dau";
 import { DuongProtoMau } from "./_modules/duong-proto";
 import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
@@ -6,12 +7,14 @@ import { KeoThaThoaThuanMau } from "./_modules/keo-tha-thoa-thuan";
 import { MayNhacTruocNguoiMau } from "./_modules/may-nhac-truoc-nguoi";
 import { MoiPhiaDeuThayKeHoachMau } from "./_modules/moi-phia-deu-thay-ke-hoach";
 import { NhacQuaZaloMau } from "./_modules/nhac-qua-zalo";
+import { NoiZaloChoNguoiMoiMau } from "./_modules/noi-zalo-cho-nguoi-moi";
 import { VaoBangMatKhauMau } from "./_modules/vao-bang-mat-khau";
 import { PROTO_CATALOG } from "./catalog";
 
 export type ProtoComponent = (props: { state: string }) => ReactNode;
 
 const BANG_GHEP = {
+	"ban-mau-okr": BanMauOkrMau,
 	"dieu-phoi-30-ngay-dau": DieuPhoi30NgayDauMau,
 	"duong-proto-cho-design-pass": DuongProtoMau,
 	"ke-hoach-la-mot-ban-ghi": KeHoachLaMotBanGhiMau,
@@ -19,6 +22,7 @@ const BANG_GHEP = {
 	"may-nhac-truoc-nguoi": MayNhacTruocNguoiMau,
 	"moi-phia-deu-thay-ke-hoach": MoiPhiaDeuThayKeHoachMau,
 	"nhac-qua-zalo": NhacQuaZaloMau,
+	"noi-zalo-cho-nguoi-moi": NoiZaloChoNguoiMoiMau,
 	"vao-bang-email-va-mat-khau": VaoBangMatKhauMau,
 } satisfies Record<string, ProtoComponent>;
 

@@ -1,5 +1,8 @@
 import { createHash, randomInt } from "node:crypto";
 import type { Db } from "./client";
+import type { Prisma } from "./generated/prisma/client";
+
+export type DbGhi = Db | Prisma.TransactionClient;
 
 const SECOND_MS = 1_000;
 const MINUTE_MS = 60 * SECOND_MS;
@@ -64,7 +67,7 @@ export async function trangThaiLienKet(
 	return { loai: "ma-cho", expiresAt: ma.expiresAt };
 }
 
-function veAutoNeuZalo(db: Db, userId: string) {
+function veAutoNeuZalo(db: DbGhi, userId: string) {
 	return db.notificationPreference.updateMany({
 		where: { userId, channel: "ZALO" },
 		data: { channel: "AUTO" },
@@ -83,7 +86,7 @@ function conCuaSo(batDau: Date, now: Date): boolean {
 }
 
 export async function dangBiChan(
-	db: Db,
+	db: DbGhi,
 	zaloUserId: string,
 	now: Date,
 ): Promise<boolean> {
@@ -96,7 +99,7 @@ export async function dangBiChan(
 }
 
 export async function ghiSai(
-	db: Db,
+	db: DbGhi,
 	zaloUserId: string,
 	now: Date,
 ): Promise<void> {
@@ -115,9 +118,16 @@ export type KetQuaNoi =
 	| { loai: "da-noi"; crmUserId: string; tenCrm: string }
 	| { loai: "ma-hong" };
 
-export async function noiBangMa(
-	db: Db,
-	chon: { ma: string; zaloUserId: string; tenZalo: string; now: Date },
+export type ChonNoi = {
+	ma: string;
+	zaloUserId: string;
+	tenZalo: string;
+	now: Date;
+};
+
+async function noiTrong(
+	db: Prisma.TransactionClient,
+	chon: ChonNoi,
 ): Promise<KetQuaNoi> {
 	const hang = await db.zaloLinkCode.findUnique({
 		where: { codeHash: bamMa(chon.ma) },
@@ -129,32 +139,33 @@ export async function noiBangMa(
 	const cu = await db.zaloLink.findUnique({
 		where: { zaloUserId: chon.zaloUserId },
 	});
-	const nguoiMatLienKet =
-		cu && cu.crmUserId !== hang.crmUserId
-			? [veAutoNeuZalo(db, cu.crmUserId)]
-			: [];
-	await db.$transaction([
-		db.zaloLink.deleteMany({
-			where: {
-				OR: [{ zaloUserId: chon.zaloUserId }, { crmUserId: hang.crmUserId }],
-			},
-		}),
-		db.zaloLink.create({
-			data: {
-				crmUserId: hang.crmUserId,
-				zaloUserId: chon.zaloUserId,
-				zaloDisplayName: chon.tenZalo,
-			},
-		}),
-		db.zaloLinkCode.update({
-			where: { id: hang.id },
-			data: { usedAt: chon.now },
-		}),
-		...nguoiMatLienKet,
-	]);
+	await db.zaloLink.deleteMany({
+		where: {
+			OR: [{ zaloUserId: chon.zaloUserId }, { crmUserId: hang.crmUserId }],
+		},
+	});
+	await db.zaloLink.create({
+		data: {
+			crmUserId: hang.crmUserId,
+			zaloUserId: chon.zaloUserId,
+			zaloDisplayName: chon.tenZalo,
+		},
+	});
+	await db.zaloLinkCode.update({
+		where: { id: hang.id },
+		data: { usedAt: chon.now },
+	});
+	if (cu && cu.crmUserId !== hang.crmUserId) {
+		await veAutoNeuZalo(db, cu.crmUserId);
+	}
 	return {
 		loai: "da-noi",
 		crmUserId: hang.crmUserId,
 		tenCrm: hang.crmUser.name,
 	};
+}
+
+export async function noiBangMa(db: DbGhi, chon: ChonNoi): Promise<KetQuaNoi> {
+	if ("$transaction" in db) return db.$transaction((tx) => noiTrong(tx, chon));
+	return noiTrong(db, chon);
 }

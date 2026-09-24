@@ -400,7 +400,8 @@ vọng đi từ ngày đó tới 2026-12-31.
 | Nhắc OKR làm tin buổi sáng quá dài | Trần số việc mỗi tin và 2.000 ký tự mỗi tin Zalo, như nhắc kế hoạch đang làm |
 | Số tự đo sai nghĩa làm mất tin | Danh mục cố định trong mã; phép thử tin số là AC của lượt 6; nhãn nguồn trên mọi số |
 | Bản rẽ khỏi hãng phình | Mã ở chỗ riêng theo mục 2; kiểm xung đột với `release` mỗi tuần |
-| Test chập chờn làm đỏ CI (vd `claimDue`) | Việc sửa riêng đang chờ; không `--no-verify` |
+| Test chập chờn làm đỏ CI (vd `claimDue`) | Đã sửa (PR #108); không `--no-verify` |
+| GitHub Actions không chạy job vì lỗi thanh toán tài khoản (từ 2026-09-24) | Bằng chứng tạm là năm lệnh kiểm ở máy, ghi rõ trong hồ sơ; chủ kho sửa ở Billing & plans; không PR nào của lộ trình được coi là xanh CI cho tới khi job chạy thật |
 | Chi phí AI khi cả công ty dùng | Lượt 9 chỉ mở khi có trần; tóm tắt gom theo đơn vị |
 | R1 trễ làm lỡ ngày mở cho cả công ty | Lùi theo tuần, không cắt lượt 2 hay lượt 4; lượt 5 có thể lên sau ngày mở vài ngày vì cập nhật tuần không cần nó |
 | Cả công ty vào cùng lúc, câu hỏi dồn về một người | Hướng dẫn theo vai và đào tạo theo bộ phận trước ngày mở; một kênh hỏi đáp chung; trưởng bộ phận là tuyến hỏi đầu |
@@ -448,11 +449,11 @@ ngày đổi trạng thái gần nhất. Không sửa dòng cũ, chỉ nối th�
 
 | # | Slug | Trạng thái | Ngày | PR | Ghi chú |
 | --- | --- | --- | --- | --- | --- |
-| 0 | chuẩn bị | đang dựng | 2026-09-24 | #110 | từ điển · Cổng Đáng của `cau-truc-to-chuc` · design-pass `/proto` OKR. Chốt 2026-09-24 (Manh Phan): mọi phòng ban áp dụng từ quý 4. Từ điển xong: PR #110 gộp 2026-09-24 (`ea4fff80`), thêm mục Bộ phận · Phòng ban · Trưởng đơn vị · vai «chỉ OKR» và các mục OKR. Cổng Đáng `cau-truc-to-chuc` ký 2026-09-24 (Manh Phan) — xem dòng 1. Design-pass bốn màn OKR đang chạy, lấy cây của `/proto/cau-truc-to-chuc` làm khung |
-| 1 | `cay-to-chuc-co-nguoi` | Cổng Đáng | 2026-09-24 | — | Cổng Đáng ký 2026-09-24 (Manh Phan): build, ngưỡng SỐNG ≥ 90% thành viên có phòng ban chính và mọi phòng ban có trưởng, CHẾT < 70% hoặc phải sửa DB, đo lần đầu 2026-10-26; hồ sơ ở `_acceptance/cau-truc-to-chuc` (`c5d3daf3`, nhánh `proto/cau-truc-to-chuc`). Thêm việc: đổi nhãn ô «Mục tiêu» của sheet kế hoạch 30 ngày. Sơ đồ kéo/phóng to để sau lượt 1. Vòng làm mở ngay 2026-09-24 theo điều phối, không đợi 01/10 |
+| 0 | chuẩn bị | xong | 2026-09-24 | #110 | từ điển · Cổng Đáng của `cau-truc-to-chuc` · design-pass `/proto` OKR. Chốt 2026-09-24 (Manh Phan): mọi phòng ban áp dụng từ quý 4. Từ điển xong: PR #110 gộp 2026-09-24 (`ea4fff80`), thêm mục Bộ phận · Phòng ban · Trưởng đơn vị · vai «chỉ OKR» và các mục OKR. Cổng Đáng `cau-truc-to-chuc` ký 2026-09-24 (Manh Phan) — xem dòng 1. Design-pass bốn màn OKR xong: chủ kho duyệt gói 2026-09-24, PR #113 gộp (`03efe44c`), hồ sơ `_acceptance/ban-mau-okr` với 23 trạng thái, 58 ảnh. Bốn chỗ mở đã chốt: heatmap toàn cảnh theo đơn vị × tuần; mức tự tin ba bậc Cao · Vừa · Thấp (lượt 4 dựng theo); cây căn chỉnh nằm trong «Theo đơn vị»; mọi vai kể cả «chỉ OKR» thấy «Toàn cảnh». 11 biến thể `packages/ui` cho lượt 5 ở mục Nhóm 2 của `design-pass.md`. Việc cho lượt 3: màn «Theo đơn vị» nhập thẳng cây từ module `cau-truc-to-chuc`, bỏ bản chép trong `ban-mau-okr`. Bước chuẩn bị xong |
+| 1 | `cay-to-chuc-co-nguoi` | đang dựng | 2026-09-24 | — | Cổng Đáng ký 2026-09-24 (Manh Phan): build, ngưỡng SỐNG ≥ 90% thành viên có phòng ban chính và mọi phòng ban có trưởng, CHẾT < 70% hoặc phải sửa DB, đo lần đầu 2026-10-26; hồ sơ ở `_acceptance/cau-truc-to-chuc` (`c5d3daf3`, nhánh `proto/cau-truc-to-chuc`). Thêm việc: đổi nhãn ô «Mục tiêu» của sheet kế hoạch 30 ngày. Sơ đồ kéo/phóng to để sau lượt 1. Vòng làm mở ngay 2026-09-24 theo điều phối, không đợi 01/10. Hồ sơ nghiệm thu dùng chung `_acceptance/cau-truc-to-chuc/` (slug bản mẫu phải bằng slug hồ sơ); nhánh `feat/cay-to-chuc-co-nguoi`. Cổng Phạm vi duyệt 2026-09-24 (Manh Phan): 15 tiêu chí, 25 phép đo; ô «Mục tiêu» của sheet kế hoạch thành «Thời lượng». Cổng 1.5 duyệt 2026-09-24: kế hoạch 11 việc (`docs/superpowers/plans/2026-09-24-cau-truc-to-chuc.md`); `org.tree` trả bộ phận · chưa xếp · phòng ban chưa có trưởng · người kèm quản lý · độ phủ, là thứ lượt 3 đọc; hai hồ sơ Điều phối sẽ ghim lại vì danh sách phòng ban dời sang Cài đặt › Tổ chức. Đang dựng (S3) |
 | 2 | `vai-chi-okr` | chưa mở | — | — | chốt 2026-09-23 (Manh Phan) |
 | 3 | `dat-okr-trong-crm` | chưa mở | — | — | — |
-| 4 | `cap-nhat-tuan-okr` | chưa mở | — | — | nhắc qua Zalo cần vòng 1–2 và triển khai của `lo-trinh-zalo.md`, xong trước 26/10 · Zalo vòng 1 máy thông 24/09 |
+| 4 | `cap-nhat-tuan-okr` | chưa mở | — | — | nhắc qua Zalo cần vòng 1–2 và triển khai của `lo-trinh-zalo.md`, xong trước 26/10 · Zalo vòng 1 đã lên onehub 24/09 (#105) · vòng 2 chủ kho ký Cổng Bằng chứng 24/09, PR mở |
 | 5 | `toan-canh-okr` | chưa mở | — | — | — |
 | 6 | `so-okr-tu-chay` | chưa mở | — | — | — |
 | 7 | `khep-ky-okr` | chưa mở | — | — | hạn cứng 2026-12-14 |

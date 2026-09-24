@@ -1,4 +1,3 @@
-import { timingSafeEqual } from "node:crypto";
 import { EnrichmentStatus, Prisma } from "@crm/db";
 import { MAX_ATTEMPTS } from "@crm/db/agent-tasks";
 import { schemas } from "@crm/validation";
@@ -9,6 +8,7 @@ import {
 import { type ChannelEvents, defineChannel, GET, POST } from "eve/channels";
 import { z } from "zod";
 import { recordBuilderInputRequest } from "../lib/builder-input";
+import { authorised } from "../lib/cau-noi-auth";
 import { verifyKey } from "../lib/context-dev";
 import {
 	builderIdFromToken,
@@ -60,18 +60,6 @@ const receiveTarget = z
 		taskId: z.string().nullable().catch(null),
 	})
 	.catch({ builderSubmissionId: null, runId: null, taskId: null });
-
-function authorised(request: Request): boolean {
-	const secret = process.env.AGENT_BRIDGE_SECRET?.trim();
-	if (!secret) return false;
-	const header = request.headers.get("authorization");
-	if (!header?.startsWith("Bearer ")) return false;
-	const candidate = Buffer.from(header.slice("Bearer ".length));
-	const expected = Buffer.from(secret);
-	if (candidate.length !== expected.length) return false;
-
-	return timingSafeEqual(candidate, expected);
-}
 
 export function taskToken(taskId: string): string {
 	return `${TASK_MARKER}${taskId}`;

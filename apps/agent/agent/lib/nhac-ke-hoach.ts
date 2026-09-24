@@ -107,7 +107,7 @@ export async function chayNhac(
 		(await viecCanNhac(db, { now: new Date(), userId })).get(userId) ?? [];
 	if (viec.length === 0) return dong(task.id, "khong-viec");
 
-	const token = zaloToken();
+	const token = await zaloToken();
 	const kenh = await kenhSeDungCua(db, userId, { coToken: token !== null });
 	if (kenh.kenh === null) {
 		const slack = await slackAccessToken();
@@ -169,12 +169,40 @@ async function guiQuaSlack(
 		throw new Error("kenh Slack duoc chon ma thieu token hoac nguoi khop");
 	}
 	const { text, daGui } = dungTin(ten, viec, lienKet);
-	await sendSlackMessage(
+	await guiSlackRieng(token, slackUserId, ten, text, taskId, deps.fetcher);
+	return daGui;
+}
+
+function guiSlackRieng(
+	token: string,
+	slackUserId: string,
+	ten: string,
+	text: string,
+	maTin: string,
+	fetcher: typeof fetch | undefined,
+) {
+	return sendSlackMessage(
 		token,
 		{ kind: "user", id: slackUserId, label: ten },
 		text,
-		taskId,
-		{ fetcher: deps.fetcher },
+		maTin,
+		{ fetcher },
 	);
-	return daGui;
+}
+
+export async function guiQuaSlackThu(
+	slackUserId: string,
+	text: string,
+	chon: { fetcher?: typeof fetch; maTin: string },
+): Promise<void> {
+	const token = await slackAccessToken();
+	if (!token) throw new Error("kenh Slack duoc chon ma thieu token");
+	await guiSlackRieng(
+		token,
+		slackUserId,
+		slackUserId,
+		text,
+		chon.maTin,
+		chon.fetcher,
+	);
 }

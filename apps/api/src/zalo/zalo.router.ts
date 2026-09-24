@@ -14,6 +14,9 @@ import { restMeta } from "../trpc/openapi";
 import {
 	zaloCuaToiOutput,
 	zaloGoOutput,
+	zaloGuiThuOutput,
+	zaloLuuBotInput,
+	zaloLuuBotOutput,
 	zaloLuuUuTienInput,
 	zaloLuuUuTienOutput,
 	zaloTaoMaOutput,
@@ -52,6 +55,26 @@ export class ZaloRouter {
 		@Input() input: z.infer<typeof zaloLuuUuTienInput>,
 	) {
 		return this.zalo.luuUuTien(ctx.user.id, input.channel);
+	}
+
+	@Mutation({
+		input: zaloLuuBotInput,
+		output: zaloLuuBotOutput,
+		meta: restMeta("PUT", "/zalo/bot", ["Zalo"]),
+	})
+	luuBot(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof zaloLuuBotInput>,
+	) {
+		return this.zalo.luuBot(ctx.user.id, input.token);
+	}
+
+	@Mutation({
+		output: zaloGuiThuOutput,
+		meta: restMeta("POST", "/zalo/test-message", ["Zalo"]),
+	})
+	guiThu(@Ctx() ctx: AuthedTrpcContext) {
+		return this.zalo.guiThu(ctx.user.id);
 	}
 
 	@Query({

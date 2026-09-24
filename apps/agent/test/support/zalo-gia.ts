@@ -2,7 +2,11 @@ import { z } from "zod";
 
 const thanGoi = z.record(z.string(), z.string());
 
-export type LoiGoiZalo = { method: string; body: z.infer<typeof thanGoi> };
+export type LoiGoiZalo = {
+	method: string;
+	token: string;
+	body: z.infer<typeof thanGoi>;
+};
 
 export type TinGia = {
 	messageId: string;
@@ -20,6 +24,9 @@ export type ChonZaloGia = {
 	send?: "ok" | 500 | "ok-false";
 	vatVoTan?: boolean;
 	chiGiaoKhiMo?: TinDen[];
+	webhookInfo?: 404 | 500 | "la" | { url: string };
+	setWebhook?: "ok-false" | "loi-mang" | { outcome: string };
+	goiNguoc?: (url: string, khoa: string) => Promise<number>;
 };
 
 export const TRAN_BAO_VE_VO_TAN = 100;
@@ -32,7 +39,7 @@ const HET_TIN_THAT = {
 	error_code: 408,
 };
 
-function traDatWebhook(url: string): Response {
+function traDatWebhook(url: string, outcome = "webhook.ok"): Response {
 	return Response.json({
 		ok: true,
 		result: {
@@ -41,7 +48,7 @@ function traDatWebhook(url: string): Response {
 			verification: {
 				ok: true,
 				url,
-				outcome: "webhook.ok",
+				outcome,
 				hint: "Your endpoint responded successfully.",
 			},
 		},
@@ -88,11 +95,25 @@ function traGetMe(chon: ChonZaloGia): Response {
 		ok: true,
 		result: {
 			id: "b1",
-			account_name: "Bot OneHub",
+			account_name: "bot.uipSwwnr",
 			account_type: "BASIC",
 			can_join_groups: false,
+			display_name: "Bot OneHub",
 		},
 	});
+}
+
+function traWebhookInfo(chon: ChonZaloGia): Response {
+	const w = chon.webhookInfo ?? 404;
+	if (w === 404) {
+		return Response.json(
+			{ ok: false, error_code: 404, description: "Not Found" },
+			{ status: 404 },
+		);
+	}
+	if (w === 500) return new Response("loi", { status: 500 });
+	if (w === "la") return Response.json({ ok: true, result: { khac: 1 } });
+	return Response.json({ ok: true, result: { url: w.url, updated_at: 1 } });
 }
 
 function traSend(chon: ChonZaloGia, soGoi: number): Response {
@@ -131,6 +152,7 @@ function traTin(t: TinGia): Response {
 
 export function zaloGia(chon: ChonZaloGia = {}) {
 	const goi: LoiGoiZalo[] = [];
+	const goiNguoc: number[] = [];
 	const hang = [...(chon.tin ?? [])];
 	let soTinVoTan = 0;
 	const tinKe = (): TinGia | undefined => {
@@ -140,14 +162,36 @@ export function zaloGia(chon: ChonZaloGia = {}) {
 		return { messageId: `v${soTinVoTan}`, fromId: "zv", text: "chao" };
 	};
 	const giaoKhiMo = hangGiaoKhiMo(chon.chiGiaoKhiMo ?? []);
-	const fetcher = (async (input: RequestInfo | URL, init?: RequestInit) => {
-		const method = String(input).split("/").at(-1) ?? "";
+	const fetcher = (async (
+		input: Parameters<typeof fetch>[0],
+		init?: RequestInit,
+	) => {
+		const phan = String(input).split("/");
+		const method = phan.at(-1) ?? "";
+		const token = (phan.at(-2) ?? "").replace(/^bot/, "");
 		const body = thanGoi.parse(JSON.parse(String(init?.body ?? "{}")));
-		goi.push({ method, body });
+		goi.push({ method, token, body });
 		if (method === "getMe") return traGetMe(chon);
 		if (method === "sendMessage") return traSend(chon, goi.length);
-		if (method === "setWebhook") return traDatWebhook(body.url ?? "");
+		if (method === "setWebhook") {
+			if (chon.goiNguoc) {
+				goiNguoc.push(
+					await chon.goiNguoc(body.url ?? "", body.secret_token ?? ""),
+				);
+			}
+			const kieu = chon.setWebhook;
+			if (kieu === "loi-mang") throw new Error("mang Zalo gia dut");
+			if (kieu === "ok-false") {
+				return Response.json({
+					ok: false,
+					error_code: 400,
+					description: "bad",
+				});
+			}
+			return traDatWebhook(body.url ?? "", kieu?.outcome);
+		}
 		if (method === "deleteWebhook") return traXoaWebhook();
+		if (method === "getWebhookInfo") return traWebhookInfo(chon);
 		if (chon.chiGiaoKhiMo) return giaoKhiMo.goi(Number(body.timeout ?? "0"));
 		const t = tinKe();
 		return t ? traTin(t) : Response.json(HET_TIN, { status: 408 });
@@ -159,6 +203,7 @@ export function zaloGia(chon: ChonZaloGia = {}) {
 	return {
 		fetcher,
 		goi,
+		goiNguoc,
 		guiToi,
 		soGoi,
 		datDongHo: giaoKhiMo.datDongHo,

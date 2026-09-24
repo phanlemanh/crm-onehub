@@ -1,0 +1,15 @@
+E19 network truth dump
+Driver: mcp__Claude_Browser (interactive tab), app-scope = http://127.0.0.1:3300 (dev_server.url override), api-scope = http://127.0.0.1:3301 (dev_server.api_base override)
+Note: the 11 evidence PNGs were captured with a cookie-aware headless puppeteer script (scripts/e19-capture.mjs, capture-only, no network introspection API). This dump comes from a parallel interactive session (same DB/session/app tree) navigating the same two pages (notifications, connections/zalo) as admin, to exercise the network-truth rail.
+
+read_network_requests (last 80 of 244, filtered view + trpc + zalo):
+- All /_next/static/* asset requests: 200 OK or 304 Not Modified
+- GET /crm/settings/notifications -> 200 OK
+- GET /crm/settings/connections/zalo -> 200 OK
+- GET /api/trpc/enrichment.queue?... -> 200 OK (x2, background enrichment badge poll, app-scope, unrelated to Zalo)
+- No zalo.* XHR observed on this pass (KhoiZalo's client refetch only fires when lienKet.loai === "ma-cho"; the page was captured after that transient state, and the initial data comes from the RSC server fetch which used the API server internally, not a browser-visible request)
+- No 4xx/5xx, no connection errors, no timeouts in the FAIL-eligible set (app origin 127.0.0.1:3300, api base 127.0.0.1:3301)
+
+read_console_messages: only React DevTools info line and "[HMR] connected" log lines (dev-mode noise). No console errors.
+
+Verdict: clean

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tin đến, một giao dịch · Hình d-5</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1040px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 68ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.78rem; }
+    svg { width: 100%; min-width: 880px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình d-5 · Flowchart · noi-zalo-cho-nguoi-moi</p>
+    <h1>Tin đến: đánh dấu đã thấy cùng giao dịch với việc nối</h1>
+    <p class="sub">Hàng <code>ZaloUpdateSeen</code> và hiệu ứng DB của tin commit chung một giao dịch. DB lỗi thì cả hai lui và webhook trả 500 để Zalo gửi lại; gửi câu trả lời hỏng sau khi đã commit thì vẫn là xong. Đóng Ngoài-3 của vòng 1. AC-7, AC-8.</p>
+
+    <svg viewBox="0 0 1040 904" xmlns="http://www.w3.org/2000/svg" lang="vi">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH d-5 · NGOÀI-3 · GIẢ ĐỊNH (2)</text>
+
+      <line x1="440" y1="120" x2="440" y2="164" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <line x1="552" y1="212" x2="636" y2="212" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="580" y="192" width="28" height="12" rx="2" fill="#fafafa"/>
+      <text x="594" y="202" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">có</text>
+
+      <line x1="440" y1="256" x2="440" y2="296" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <text x="452" y="280" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">không</text>
+
+      <line x1="440" y1="392" x2="440" y2="436" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <line x1="520" y1="484" x2="636" y2="484" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <rect x="564" y="464" width="28" height="12" rx="2" fill="#fafafa"/>
+      <text x="578" y="474" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">có</text>
+
+      <path d="M 920 484 L 936 484 A 8 8 0 0 0 944 476 L 944 104 A 8 8 0 0 0 936 96 L 572 96" fill="none" stroke="#1f4f7a" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow-link)"/>
+      <text x="956" y="292" fill="#1f4f7a" font-size="9" font-family="'Geist Mono', monospace">Zalo</text>
+      <text x="956" y="304" fill="#1f4f7a" font-size="9" font-family="'Geist Mono', monospace">gửi lại</text>
+
+      <line x1="440" y1="528" x2="440" y2="568" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <text x="452" y="552" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">không</text>
+
+      <line x1="440" y1="612" x2="440" y2="648" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <line x1="520" y1="696" x2="636" y2="696" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="564" y="676" width="28" height="12" rx="2" fill="#fafafa"/>
+      <text x="578" y="686" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">có</text>
+
+      <path d="M 780 724 L 780 796 A 8 8 0 0 1 772 804 L 508 804" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <line x1="440" y1="740" x2="440" y2="780" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <text x="452" y="764" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">không</text>
+
+      <line x1="144" y1="368" x2="144" y2="388" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="144" y1="424" x2="144" y2="444" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <rect x="312" y="72" width="256" height="48" rx="24" fill="#fafafa"/>
+      <rect x="312" y="72" width="256" height="48" rx="24" fill="#ffffff" stroke="#1f4f7a" stroke-width="1"/>
+      <text x="440" y="92" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Zalo <tspan font-family="'Geist Mono', monospace" font-size="11" font-weight="500">POST /zalo/webhook</tspan></text>
+      <text x="440" y="108" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">khoá đúng, tin riêng</text>
+
+      <polygon points="440,168 552,212 440,256 328,212" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="440" y="216" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đã thấy <tspan font-family="'Geist Mono', monospace" font-size="10" font-weight="500">message_id</tspan>?</text>
+
+      <rect x="640" y="192" width="200" height="40" rx="6" fill="#fafafa"/>
+      <rect x="640" y="192" width="200" height="40" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <text x="740" y="216" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">200, bỏ qua</text>
+
+      <rect x="280" y="300" width="320" height="92" rx="8" fill="#fafafa"/>
+      <rect x="280" y="300" width="320" height="92" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="292" y="316" fill="#006B4F" font-size="8" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">MỘT GIAO DỊCH</text>
+      <rect x="296" y="328" width="136" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="364" y="348" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">ghi</text>
+      <text x="364" y="364" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">ZaloUpdateSeen</text>
+      <rect x="448" y="328" width="136" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="516" y="356" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">nối / ghi sai</text>
+
+      <polygon points="440,440 520,484 440,528 360,484" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="440" y="488" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">DB lỗi?</text>
+
+      <rect x="640" y="456" width="280" height="56" rx="6" fill="#fafafa"/>
+      <rect x="640" y="456" width="280" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="652" y="480" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">giao dịch lui, không seen,</text>
+      <text x="652" y="498" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">trả 500 → Zalo gửi lại</text>
+      <text x="640" y="532" fill="#575757" font-size="11" font-style="italic" font-family="'Lora', Georgia, serif">giả định (2): Zalo gửi lại khi khác 2xx</text>
+      <text x="640" y="548" fill="#575757" font-size="11" font-style="italic" font-family="'Lora', Georgia, serif">— chưa đo trên bot thật</text>
+
+      <rect x="340" y="572" width="200" height="40" rx="6" fill="#fafafa"/>
+      <rect x="340" y="572" width="200" height="40" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="440" y="596" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">gửi câu trả lời</text>
+
+      <polygon points="440,652 520,696 440,740 360,696" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="440" y="700" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">gửi hỏng?</text>
+
+      <rect x="640" y="668" width="280" height="56" rx="6" fill="#fafafa"/>
+      <rect x="640" y="668" width="280" height="56" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <text x="652" y="692" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">vẫn 200, log <tspan font-family="'Geist Mono', monospace" font-size="11" font-weight="500">message_id</tspan>;</text>
+      <text x="652" y="710" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">liên kết đã có</text>
+
+      <rect x="376" y="784" width="128" height="40" rx="20" fill="#fafafa"/>
+      <rect x="376" y="784" width="128" height="40" rx="20" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="440" y="808" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">200</text>
+
+      <rect x="40" y="300" width="208" height="204" rx="8" fill="transparent" stroke="rgba(23,23,23,0.30)" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="56" y="320" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">SO VỚI VÒNG 1</text>
+      <rect x="56" y="336" width="176" height="32" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+      <text x="144" y="356" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="middle">vòng 1: seen ghi TRƯỚC</text>
+      <rect x="56" y="392" width="176" height="32" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+      <text x="144" y="412" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="middle">lỗi vẫn 200</text>
+      <rect x="56" y="448" width="176" height="32" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1" stroke-dasharray="3,3"/>
+      <text x="144" y="468" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">→ tin mất hẳn (Ngoài-3)</text>
+
+      <line x1="40" y1="856" x2="1000" y2="856" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="884" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <rect x="116" y="874" width="24" height="14" rx="7" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="148" y="884" fill="#575757" font-size="9" font-family="'Geist', sans-serif">vào / ra</text>
+      <polygon points="220,874 228,881 220,888 212,881" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="236" y="884" fill="#575757" font-size="9" font-family="'Geist', sans-serif">câu hỏi rẽ</text>
+      <rect x="308" y="874" width="24" height="14" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="340" y="884" fill="#575757" font-size="9" font-family="'Geist', sans-serif">commit chung hoặc lui chung</text>
+      <line x1="484" y1="881" x2="512" y2="881" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="520" y="884" fill="#575757" font-size="9" font-family="'Geist', sans-serif">nhánh quyết định d-5 thêm vào</text>
+      <line x1="668" y1="881" x2="696" y2="881" stroke="#1f4f7a" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow-link)"/>
+      <text x="704" y="884" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Zalo gửi lại</text>
+      <text x="784" y="884" fill="#575757" font-size="10" font-style="italic" font-family="'Lora', Georgia, serif">nghiêng</text>
+      <text x="828" y="884" fill="#575757" font-size="9" font-family="'Geist', sans-serif">giả định chưa đo</text>
+    </svg>
+
+    <footer>d-5 + giả định (2) · noi-zalo-cho-nguoi-moi · AC-7 AC-8 · thiết kế 2026-09-24</footer>
+  </div>
+</body>
+</html>

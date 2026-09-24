@@ -3,6 +3,8 @@ const SECOND_MS = 1_000;
 export const ZALO_MAN = {
 	lamMoiMs: 5 * SECOND_MS,
 	nhomMa: 3,
+	botToken: /^\d+:[A-Za-z0-9_-]+$/,
+	lenhPoll: "bun run --filter=agent zalo:poll",
 } as const;
 
 export function nhomMa(ma: string): string {

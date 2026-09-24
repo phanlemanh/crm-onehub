@@ -231,9 +231,29 @@ API; the API only reads and writes rows.
   - `ZaloUpdateSeen` dedupes by `message_id`;
   - `dangBiChan`, `noiBangMa`, `ghiSai` and the replies in `ZALO.loi` keep the
     link-code rules exactly.
+- **A failed write is retried by Zalo.** The `ZaloUpdateSeen` row and the link
+  work (`noiBangMa` or `ghiSai`) commit in one transaction. A database error rolls
+  both back and the webhook answers 500, so Zalo sends the message again. Once the
+  rows are written, a failed reply to the person is logged with its `message_id`
+  and still counts as done.
+- **A linked person who writes text gets «Bạn đã nối với <tên CRM>. Nhắc đến lúc
+  08:30.»** instead of the link-code instructions.
+- **Two bridge routes, same Bearer rule as `crm.ts`** (`lib/cau-noi-auth.ts`):
+  - `POST /internal/zalo/bot {token?}` checks a Bot Token with `getMe`, registers
+    the webhook when the request came in on `https://`, and writes token, secret,
+    name, URL and the reason it could not register to `AppSetting`. Without a token
+    it re-registers the one stored, with a new secret.
+  - `POST /internal/zalo/gui-thu {userId}` sends one test message on the channel
+    `kenhSeDungCua` picks, without an `AgentTask`.
+  Both bodies are parsed with `@crm/validation/zalo-cau-noi`.
+- **Token and secret: `AppSetting` first, `.env` second.** `zaloToken()` and
+  `zaloKhoaWebhook()` read what the admin pasted and fall back to
+  `ZALO_BOT_TOKEN` and `ZALO_WEBHOOK_SECRET`.
 - **The tick only checks the bot.** `kiemBot` (`lib/zalo-bot.ts`) calls `getMe`
-  once: success writes `zaloBotName` and `zaloPolledAt`; failure writes
-  `zaloBotName = null` and logs. No token writes null and makes no call. It also
+  once: success writes `zaloBotName` (Zalo's `display_name`) and `zaloPolledAt`,
+  then `getWebhookInfo` writes `zaloWebhookUrl` (404 or a body of the wrong shape
+  writes null; other errors keep the old value); failure writes
+  `zaloBotName = null` and `zaloWebhookUrl = null` and logs. No token writes null and makes no call. It also
   trims `ZaloUpdateSeen` rows older than `ZALO.poll.giuDauMs`. The tick never calls
   `getUpdates`: a bot with a webhook cannot use it anyway.
 - **Two commands for whoever runs it:**
