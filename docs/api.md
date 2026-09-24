@@ -173,8 +173,9 @@ self-hoster's admin cannot redeploy.
   interpolate `sort` into a field name — use `resolveOrderBy`.
 - **`src/generated/server.ts` is generated *and committed*, and `build` must never
   regenerate it** — the generator needs GLIBC 2.39, newer than Vercel's build image.
-  Only `check-types` and `dev` run it. If the app cannot see a new procedure, it has
-  not run.
+  Only `dev` (its `dev:trpc` watcher) and `cd apps/api && bun run trpc:generate` run
+  it — `check-types` is plain `tsc --noEmit` and does not. If the app cannot see a new
+  procedure, it has not run.
 
 ### Internal ingest endpoints are the one documented exception
 
