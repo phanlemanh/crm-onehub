@@ -1,38 +1,121 @@
 {
   "feature_plain": "Người nhắn mã cho bot Zalo ở production được nối và nhận trả lời — hôm nay bot bỏ mọi tin vì đọc sai khuôn thân mà Zalo thật gửi.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ nối được mã dù Zalo gửi thân không vỏ (khuôn thật đo 25/09) hay có vỏ (khuôn theo tài liệu), và bot trả lời đúng người."},
-    {"id": "AC-2", "p": "Sẽ chỉ nối và trả lời một lần khi cùng một tin tới hai lần, kể cả lần hai ở khuôn khác."},
-    {"id": "AC-3", "p": "Sẽ bỏ qua thân không đọc được mà vẫn báo Zalo đã nhận, và để lại một dòng log gọi tên các trường có trong tin — không kèm nội dung tin."},
-    {"id": "AC-4", "p": "Sẽ cho bộ Zalo giả của test gửi đúng khuôn production, rút từ dữ liệu thật; các bài kiểm đã ký chạy lại trên khuôn đó, và chỉ một ca cũ («thân không vỏ thì bỏ qua») được gỡ."},
-    {"id": "AC-5", "p": "Sẽ ghi vào tài liệu tác tử rằng thân thật không có vỏ, và thêm dòng 2d vào bảng theo dõi lộ trình Zalo."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ nối được mã dù Zalo gửi thân không vỏ (khuôn thật đo 25/09) hay có vỏ (khuôn theo tài liệu), và bot trả lời đúng người."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ chỉ nối và trả lời một lần khi cùng một tin tới hai lần, kể cả lần hai ở khuôn khác."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ bỏ qua thân không đọc được mà vẫn báo Zalo đã nhận, và để lại một dòng log gọi tên các trường có trong tin — không kèm nội dung tin."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ cho bộ Zalo giả của test gửi đúng khuôn production, rút từ dữ liệu thật; các bài kiểm đã ký chạy lại trên khuôn đó, và chỉ một ca cũ («thân không vỏ thì bỏ qua») được gỡ."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ ghi vào tài liệu tác tử rằng thân thật không có vỏ, và thêm dòng 2d vào bảng theo dõi lộ trình Zalo."
+    }
   ],
   "scope_plain": "Không đổi đường đọc tin bằng tay (zalo:poll), không đụng bot thật trước merge, để ba lỗi nhỏ thấy trong log sang vòng sau.",
   "coverage_plain": [
-    {"i": 0, "p": "Vỏ thân: đã phủ khuôn thật, khuôn có vỏ và thân hỏng — căn cứ là log production 25/09, tài liệu Zalo và cách Telegram giao webhook."},
-    {"i": 1, "p": "Tin bên trong: đã phủ mã sống, tin trùng, các luật mã cũ và tin thiếu trường — căn cứ là luật mã đã ký của hai vòng Zalo trước."},
-    {"i": 2, "p": "Điều quan sát được: đã phủ kết quả nối trong dữ liệu, tin bot trả lời, mã trả về cho Zalo và dòng log không lộ nội dung."},
-    {"i": 3, "p": "Mỗi ô đã có tiêu chí: hai khuôn nối (AC-1), tin trùng (AC-2), thân hỏng (AC-3), luật cũ trên khuôn thật (AC-4), tài liệu (AC-5)."},
-    {"i": 4, "p": "Ô bỏ: thân hỏng không có tin nên không xét mã hay tin trùng."},
-    {"i": 5, "p": "Giả định chờ anh gạch: các trường bên trong tin của webhook thật giống tin đọc bằng tay đo 23/09; sai thì tin rơi vào nhánh log, và log nay in đủ tên trường để đo ở lượt thử đầu."},
-    {"i": 6, "p": "Giả định chờ anh gạch: Zalo có thể giao một tin hai lần ở hai vỏ khác nhau — chưa thấy thật, AC-2 chỉ ghim chống trùng không phụ thuộc vỏ."}
+    {
+      "i": 0,
+      "p": "Vỏ thân: đã phủ khuôn thật, khuôn có vỏ và thân hỏng — căn cứ là log production 25/09, tài liệu Zalo và cách Telegram giao webhook."
+    },
+    {
+      "i": 1,
+      "p": "Tin bên trong: đã phủ mã sống, tin trùng, các luật mã cũ và tin thiếu trường — căn cứ là luật mã đã ký của hai vòng Zalo trước."
+    },
+    {
+      "i": 2,
+      "p": "Điều quan sát được: đã phủ kết quả nối trong dữ liệu, tin bot trả lời, mã trả về cho Zalo và dòng log không lộ nội dung."
+    },
+    {
+      "i": 3,
+      "p": "Mỗi ô đã có tiêu chí: hai khuôn nối (AC-1), tin trùng (AC-2), thân hỏng (AC-3), luật cũ trên khuôn thật (AC-4), tài liệu (AC-5)."
+    },
+    {
+      "i": 4,
+      "p": "Ô bỏ: thân hỏng không có tin nên không xét mã hay tin trùng."
+    },
+    {
+      "i": 5,
+      "p": "Giả định chờ anh gạch: các trường bên trong tin của webhook thật giống tin đọc bằng tay đo 23/09; sai thì tin rơi vào nhánh log, và log nay in đủ tên trường để đo ở lượt thử đầu."
+    },
+    {
+      "i": 6,
+      "p": "Giả định chờ anh gạch: Zalo có thể giao một tin hai lần ở hai vỏ khác nhau — chưa thấy thật, AC-2 chỉ ghim chống trùng không phụ thuộc vỏ."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Thiếu: sau khi thước khoá bài kiểm đã ký đỏ sẵn trên nhánh, không gì chặn việc lén nới thêm ca khác. Đã sửa: thêm phép đo riêng chỉ cho phép đúng việc gỡ ca «không vỏ»."},
-    {"i": 1, "p": "Thiếu: Zalo giả vẫn tự dựng thân theo điều bộ đọc mong — đúng kiểu đã che lỗi production. Đã sửa: thân giả phải khớp dữ liệu thật đã chụp và dòng log production 25/09."},
-    {"i": 2, "p": "Thiếu: chiều đỏ chỉ chứng một ca cũ chạy trên khuôn thật. Đã sửa: viết trước danh sách mọi ca cũ phụ thuộc thân webhook, rồi đối chiếu cả danh sách khi phá thử."},
-    {"i": 3, "p": "Thiếu: bốn mục ngoài phạm vi không ghi lý do và cái giá; lý do «không chụp thân thật» ghi sai. Đã sửa: ghi đủ vào sổ quyết định, lượt thử production sau merge là lúc kiểm giả định."},
-    {"i": 4, "p": "Thiếu: kiểm tài liệu chỉ tìm chữ có mặt, tài liệu cũ có thể lọt. Đã sửa: đòi câu nói rõ «không có vỏ», và bản tài liệu cũ phải trượt."}
+    {
+      "i": 0,
+      "p": "Thiếu: sau khi thước khoá bài kiểm đã ký đỏ sẵn trên nhánh, không gì chặn việc lén nới thêm ca khác. Đã sửa: thêm phép đo riêng chỉ cho phép đúng việc gỡ ca «không vỏ»."
+    },
+    {
+      "i": 1,
+      "p": "Thiếu: Zalo giả vẫn tự dựng thân theo điều bộ đọc mong — đúng kiểu đã che lỗi production. Đã sửa: thân giả phải khớp dữ liệu thật đã chụp và dòng log production 25/09."
+    },
+    {
+      "i": 2,
+      "p": "Thiếu: chiều đỏ chỉ chứng một ca cũ chạy trên khuôn thật. Đã sửa: viết trước danh sách mọi ca cũ phụ thuộc thân webhook, rồi đối chiếu cả danh sách khi phá thử."
+    },
+    {
+      "i": 3,
+      "p": "Thiếu: bốn mục ngoài phạm vi không ghi lý do và cái giá; lý do «không chụp thân thật» ghi sai. Đã sửa: ghi đủ vào sổ quyết định, lượt thử production sau merge là lúc kiểm giả định."
+    },
+    {
+      "i": 4,
+      "p": "Thiếu: kiểm tài liệu chỉ tìm chữ có mặt, tài liệu cũ có thể lọt. Đã sửa: đòi câu nói rõ «không có vỏ», và bản tài liệu cũ phải trượt."
+    }
   ],
   "decisions_plain": [
-    {"id": "d-20260924T224253Z-1", "p": "Đã chọn gỡ ca «thân không vỏ thì bỏ qua» khỏi bài kiểm đã ký (lựa chọn A) — đổi lại thước khoá bài kiểm đã ký đỏ trên nhánh tới khi merge."},
-    {"id": "d-20260924T224253Z-2", "p": "Đã chọn một bộ đọc riêng cho thân webhook — đổi lại có hai bộ đọc cho hai nguồn, không nới bộ đọc tin tay."},
-    {"id": "d-20260924T224253Z-3", "p": "Đã chọn cho Zalo giả gửi khuôn thật làm mặc định — đổi lại mọi bài kiểm cũ nay đứng trên khuôn production thay vì khuôn tài liệu."},
-    {"id": "d-20260924T224253Z-4", "p": "KHÔNG viết đặc tả màn hình — vòng này không chạm màn nào."},
-    {"id": "d-20260924T224253Z-5", "p": "KHÔNG sửa hồ sơ nghiệm thu của hai vòng Zalo trước — đổi lại người đọc hồ sơ cũ phải tra ngược mới thấy lời hứa đã bị thay."},
-    {"id": "d-20260924T224705Z-6", "p": "KHÔNG chụp thân webhook thật trong vòng này vì phải trỏ bot thật sang chỗ khác — đổi lại giả định về các trường của tin chỉ kiểm được ở lượt thử production sau merge."},
-    {"id": "d-20260924T224705Z-7", "p": "KHÔNG đổi đường đọc tin bằng tay — nó đang đúng với Zalo thật."},
-    {"id": "d-20260924T224705Z-8", "p": "KHÔNG sửa ba lỗi nhỏ trong log (lỗi kết nối DB, dòng năng lực báo tắt, giờ UTC) — để trước đợt triển khai."},
-    {"id": "d-20260924T224705Z-9", "p": "KHÔNG gọi bot thật hay tự thử production — lượt thử sau merge là việc tay của anh."}
-  ]
+    {
+      "id": "d-20260924T224253Z-1",
+      "p": "Đã chọn gỡ ca «thân không vỏ thì bỏ qua» khỏi bài kiểm đã ký (lựa chọn A) — đổi lại thước khoá bài kiểm đã ký đỏ trên nhánh tới khi merge."
+    },
+    {
+      "id": "d-20260924T224253Z-2",
+      "p": "Đã chọn một bộ đọc riêng cho thân webhook — đổi lại có hai bộ đọc cho hai nguồn, không nới bộ đọc tin tay."
+    },
+    {
+      "id": "d-20260924T224253Z-3",
+      "p": "Đã chọn cho Zalo giả gửi khuôn thật làm mặc định — đổi lại mọi bài kiểm cũ nay đứng trên khuôn production thay vì khuôn tài liệu."
+    },
+    {
+      "id": "d-20260924T224253Z-4",
+      "p": "KHÔNG viết đặc tả màn hình — vòng này không chạm màn nào."
+    },
+    {
+      "id": "d-20260924T224253Z-5",
+      "p": "KHÔNG sửa hồ sơ nghiệm thu của hai vòng Zalo trước — đổi lại người đọc hồ sơ cũ phải tra ngược mới thấy lời hứa đã bị thay."
+    },
+    {
+      "id": "d-20260924T224705Z-6",
+      "p": "KHÔNG chụp thân webhook thật trong vòng này vì phải trỏ bot thật sang chỗ khác — đổi lại giả định về các trường của tin chỉ kiểm được ở lượt thử production sau merge."
+    },
+    {
+      "id": "d-20260924T224705Z-7",
+      "p": "KHÔNG đổi đường đọc tin bằng tay — nó đang đúng với Zalo thật."
+    },
+    {
+      "id": "d-20260924T224705Z-8",
+      "p": "KHÔNG sửa ba lỗi nhỏ trong log (lỗi kết nối DB, dòng năng lực báo tắt, giờ UTC) — để trước đợt triển khai."
+    },
+    {
+      "id": "d-20260924T224705Z-9",
+      "p": "KHÔNG gọi bot thật hay tự thử production — lượt thử sau merge là việc tay của anh."
+    },
+    {
+      "id": "d-20260924T230824Z-11",
+      "p": "Đã thêm một ca cũ vào danh sách ca phải đỏ khi bộ đọc hỏng (10 lên 11), vì ca đó đo dòng log theo mã tin — đổi lại dự đoán viết trước đã sót một ca đo gián tiếp."
+    }
+  ],
+  "analyst_plain": ""
 }
