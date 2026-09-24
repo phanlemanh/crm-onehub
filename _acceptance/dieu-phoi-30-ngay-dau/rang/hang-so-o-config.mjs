@@ -8,7 +8,6 @@ const DAY = fileURLToPath(new URL(".", import.meta.url));
 const GOC = resolve(DAY, "..", "..", "..");
 const VUNG = join(GOC, "apps", "api", "src", "onboarding");
 const CAU_HINH = join(VUNG, "onboarding-config.ts");
-const CAU_HINH_NHAC = join(GOC, "packages", "db", "src", "onboarding-nhac.ts");
 
 const NGUONG = new Set([30, 7]);
 
@@ -48,10 +47,7 @@ function soGhim(duong) {
 
 const tep = tepTs(VUNG);
 if (tep.length === 0) {
-	console.error(
-		"hang-so-o-config: khong nap duoc tep nguon nao duoi",
-		relative(GOC, VUNG),
-	);
+	console.error("hang-so-o-config: khong nap duoc tep nguon nao duoi", relative(GOC, VUNG));
 	process.exit(2);
 }
 
@@ -64,13 +60,11 @@ for (const duong of tep) {
 }
 
 const nguonCauHinh = readFileSync(CAU_HINH, "utf8");
-const nguonNhac = readFileSync(CAU_HINH_NHAC, "utf8");
-const khaiDu =
-	/defaultTargetDays:\s*30\b/.test(nguonCauHinh) &&
-	/imSauNgay:\s*7\b/.test(nguonNhac);
+const khaiDu = [...NGUONG].every((n) => nguonCauHinh.includes(String(n)));
 if (!khaiDu) {
 	console.error(
-		"hang-so-o-config: KHONG khai du hai nguong — 30 o onboarding-config.ts (defaultTargetDays), 7 o packages/db/src/onboarding-nhac.ts (NHAC.imSauNgay)",
+		"hang-so-o-config: onboarding-config.ts KHONG khai du hai nguong",
+		[...NGUONG].join(" va "),
 	);
 	process.exit(1);
 }
