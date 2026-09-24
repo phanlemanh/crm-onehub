@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e76c7501ff85aacdebb58911968c745669fbc3cc
+verified_commit: b1b17ff4c5075fd65fa6552146afce566c456ffd
 human_signoff: Manh Phan 2026-09-24
 ---
 
@@ -173,3 +173,7 @@ none — không có eval multi-run nào trong round này (không eval nào khai 
 ## Iterations
 
 Round 1: cả 10 eval và 4 lệnh suite (test, lint, lint:slop, build) đều đạt ngay; không có vòng lặp trước đó.
+
+### Re-pin lần 1 — 2026-09-24, do kéo onehub mới vào nhánh trước khi mở PR
+run_id: repin-20260924T015616Z-20599
+sha: b1b17ff4c5075fd65fa6552146afce566c456ffd · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
