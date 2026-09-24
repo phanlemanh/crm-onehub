@@ -699,14 +699,14 @@ executors:
     tosd_that: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca that"
     tosd_pham_vi: bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca pham-vi
     tosd_steps_cu: bun _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs --ca steps-cu
-    ndk_them_tep: node _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca them-tep
-    ndk_them_mac_dinh: node _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca them-mac-dinh
-    ndk_bo_sot: node _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca bo-sot
-    ndk_chua_theo_doi: node _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca chua-theo-doi
-    ndk_khong_do_duoc: node _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca khong-do-duoc
-    ndk_cay_that: node _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca cay-that
-    ndk_pham_vi: node _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca pham-vi
-    ndk_ho_so_goc: node _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca ho-so-goc
+    ndk_them_tep: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca them-tep
+    ndk_them_mac_dinh: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca them-mac-dinh
+    ndk_bo_sot: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca bo-sot
+    ndk_chua_theo_doi: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca chua-theo-doi
+    ndk_khong_do_duoc: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca khong-do-duoc
+    ndk_cay_that: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca cay-that
+    ndk_pham_vi: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca pham-vi
+    ndk_ho_so_goc: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca ho-so-goc
     tdc_tieu_de_cot: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs"
     tdc_doi_chung_ke_hoach: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "DUOI_CONG=1 bun _acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs"
     bdc_bo_dung_ui: bun run test --filter=@crm/ui

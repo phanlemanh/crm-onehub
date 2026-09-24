@@ -1,0 +1,33 @@
+export const DO_NEO = Object.freeze({
+	goc: "e22d82882e656a0b536ed7756a4ae7e7c11ffb9d",
+	rang: "_acceptance/chan-lai-component-ra-man/rang",
+	laiRaMan: "_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs",
+	moiMacDinh: "_acceptance/chan-lai-component-ra-man/rang/moi-mac-dinh.mjs",
+	soHoSoGoc: "_acceptance/chan-lai-component-ra-man/decisions.jsonl",
+	hoSoGoc: "chan-lai-component-ra-man",
+	slug: "neo-dan-so-khong-cung",
+	canChep: [
+		"packages/ui/src",
+		"apps/app/components",
+		"apps/app/lib",
+		"apps/app/app",
+		"_acceptance/chan-lai-component-ra-man/rang",
+		"_acceptance/chu-mac-dinh-thu-vien-ngoai/rang",
+	],
+	thuMucGoc: [
+		"packages/ui/src",
+		"apps/app/components",
+		"apps/app/lib",
+		"apps/app/app",
+	],
+	chayRieng: ".acceptance-runs/neo-dan-so-khong-cung",
+	loaiTruCu: 'export const LOAI_TRU = ["node_modules", ".next", "dist", "build"];',
+	loaiTruTiem:
+		'export const LOAI_TRU = ["node_modules", ".next", "dist", "build", "lib"];',
+	tepThem: "apps/app/lib/do-neo-them.ts",
+	tepMacDinh: "apps/app/components/do-neo-mac-dinh.tsx",
+	tepChuaCommit: "apps/app/lib/do-neo-chua-commit.ts",
+	lenhCong: ["cl_tieng_viet_den_man", "cl_dan_so"],
+	mauPhamVi: "packages/ui/src/components/button.tsx",
+	nhanhChinh: "origin/onehub",
+});
