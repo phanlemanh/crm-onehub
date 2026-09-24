@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 43f0c84cbb8a1547d530381408a71d546a2b74e8
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-24
 ---
 
 # Evidence Report: noi-zalo-cho-nguoi-moi

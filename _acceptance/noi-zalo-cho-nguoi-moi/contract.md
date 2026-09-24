@@ -5,7 +5,7 @@ slug: noi-zalo-cho-nguoi-moi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, config, docs]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-24-noi-zalo-cho-nguoi-moi-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-24T06:53:58Z
@@ -107,3 +107,19 @@ nghĩa, cắt còn 12 ô Core (khoảng 20%).
   không phải bên ghi thật (E23 phủ chỗ nối thật).
 - Ngoài-13: khẳng định «token không về trình duyệt» trên kết quả `luuBot` rỗng
   nghĩa khi `luuBot` thất bại.
+
+### Known limits (Cổng Bằng chứng vòng 3, 2026-09-24)
+
+Số mục theo thẻ vòng 3; mục mang theo từ vòng 1 ghi số cũ trong ngoặc.
+
+- Ngoài-1: `CotZalo` viết tay, `zaloWebhookLyDo` là `string | null`, nên giá trị lý
+  do code ghi không còn được đối chiếu với `ZALO_LY_DO` lúc biên dịch.
+- Ngoài-3: sau một lần gọi thử hỏng, nhịp `kiemBot` kế tiếp ghi lại
+  `zaloWebhookUrl` từ `getWebhookInfo`, nên cảnh báo tự biến mất trong vòng một phút.
+- Ngoài-4: nhánh gọi thử hỏng chỉ được kiểm ở ca đăng ký lại, chưa vào ma trận
+  `CACH_GOI` kèm token mới.
+- Ngoài-5 (vòng 1: Ngoài-1), Ngoài-6 (Ngoài-2), Ngoài-7 (Ngoài-3), Ngoài-9
+  (Ngoài-7), Ngoài-10 (Ngoài-9), Ngoài-11 (Ngoài-10), Ngoài-12 (Ngoài-12),
+  Ngoài-13 (Ngoài-13): giữ nguyên như khối vòng 1 ở trên.
+- Ngoài-2 (gọi thử hỏng: bot mới đã lưu mà màn hình hiện bot cũ) và Ngoài-8
+  (vòng 1: Ngoài-6) tách sang hợp đồng riêng.
