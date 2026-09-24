@@ -76,6 +76,14 @@ async function caGoi(): Promise<void> {
 	>`select count(*) as so from "_prisma_migrations"`;
 	if (!moc || moc.so < 1n) dung(1, "phep do mo: khong thay _prisma_migrations");
 
+	const le = await db.contact.findFirst({
+		where: { firstName: LE },
+		select: { id: true, enrichmentStatus: true },
+	});
+	if (!le || le.enrichmentStatus !== "PENDING") {
+		dung(1, "khong thay lien he le — phep do mo");
+	}
+
 	const moiTrangThai = await db.agentTask.groupBy({
 		by: ["kind"],
 		_count: true,
@@ -89,10 +97,14 @@ async function caGoi(): Promise<void> {
 			where: { finishedAt: null },
 			select: { kind: true, contactId: true, companyId: true },
 		}),
-		db.contact.findMany({ select: { firstName: true } }),
+		db.contact.findMany({
+			where: { id: { not: le.id } },
+			select: { firstName: true },
+		}),
 		db.company.findMany({ select: { name: true } }),
 	]);
-	const dem = `agentTask chua xong=${chuaXong.length} lien he=${lienHe.length} cong ty=${congTy.length}`;
+	const choLe = chuaXong.filter((v) => v.contactId === le.id).length;
+	const dem = `agentTask chua xong=${chuaXong.length} (cua lien he le=${choLe}) lien he=${lienHe.length} cong ty=${congTy.length}`;
 	if (chuaXong.length + lienHe.length + congTy.length > 0) {
 		dung(
 			1,
@@ -110,7 +122,7 @@ async function caGoi(): Promise<void> {
 			].join("\n"),
 		);
 	}
-	console.log(`goi api sach: ${dem}`);
+	console.log(`goi api sach: ${dem}; lien he le ${le.id} con nguyen`);
 }
 
 const VIEC = {
