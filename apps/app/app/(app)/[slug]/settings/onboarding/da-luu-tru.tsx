@@ -15,8 +15,7 @@ import { onboardingMessages } from "@/lib/messages/onboarding";
 import { useTRPC } from "@/lib/trpc/client";
 import { useLamMoiDieuPhoi } from "./lam-moi";
 
-type Loai = "boPhan" | "khuon";
-type MucLuuTru = { loai: Loai; id: string; name: string; purgeable: boolean };
+type MucLuuTru = { id: string; name: string; purgeable: boolean };
 
 export function DaLuuTru({ khoa }: { khoa: boolean }) {
 	const m = onboardingMessages(useLocale());
@@ -24,43 +23,24 @@ export function DaLuuTru({ khoa }: { khoa: boolean }) {
 	const lamMoi = useLamMoiDieuPhoi();
 	const [hoiXoa, setHoiXoa] = useState<MucLuuTru | null>(null);
 
-	const boPhan = useQuery(
-		trpc.onboarding.listDepartments.queryOptions({ archived: true }),
-	);
 	const khuon = useQuery(
 		trpc.onboarding.listTemplates.queryOptions({ archived: true }),
-	);
-
-	const khoiPhucBoPhan = useMutation(
-		trpc.onboarding.restoreDepartment.mutationOptions(),
 	);
 	const khoiPhucKhuon = useMutation(
 		trpc.onboarding.restoreTemplate.mutationOptions(),
 	);
-	const xoaBoPhan = useMutation(
-		trpc.onboarding.purgeDepartment.mutationOptions(),
-	);
 	const xoaKhuon = useMutation(trpc.onboarding.purgeTemplate.mutationOptions());
 
-	const muc: MucLuuTru[] = [
-		...(boPhan.data ?? []).map((d) => ({
-			loai: "boPhan" as const,
-			id: d.id,
-			name: d.name,
-			purgeable: d.purgeable,
-		})),
-		...(khuon.data ?? []).map((k) => ({
-			loai: "khuon" as const,
-			id: k.id,
-			name: k.name,
-			purgeable: k.purgeable,
-		})),
-	];
+	const muc: MucLuuTru[] = (khuon.data ?? []).map((k) => ({
+		id: k.id,
+		name: k.name,
+		purgeable: k.purgeable,
+	}));
 
 	if (muc.length === 0) return null;
 
-	const dangKhoiPhuc = khoiPhucBoPhan.isPending || khoiPhucKhuon.isPending;
-	const dangXoa = xoaBoPhan.isPending || xoaKhuon.isPending;
+	const dangKhoiPhuc = khoiPhucKhuon.isPending;
+	const dangXoa = xoaKhuon.isPending;
 	const xuLy = {
 		onSuccess: lamMoi,
 		onError: (error: { message: string }) => toast.error(error.message),
@@ -77,7 +57,7 @@ export function DaLuuTru({ khoa }: { khoa: boolean }) {
 						<li
 							className="flex items-center justify-between gap-3"
 							data-luu-tru={x.id}
-							key={`${x.loai}-${x.id}`}
+							key={x.id}
 						>
 							<span className="min-w-0 truncate text-sm" translate="no">
 								{x.name}
@@ -88,11 +68,7 @@ export function DaLuuTru({ khoa }: { khoa: boolean }) {
 									disabled={khoa || dangKhoiPhuc}
 									onClick={() => {
 										if (dangKhoiPhuc) return;
-										if (x.loai === "boPhan") {
-											khoiPhucBoPhan.mutate({ id: x.id }, xuLy);
-										} else {
-											khoiPhucKhuon.mutate({ id: x.id }, xuLy);
-										}
+										khoiPhucKhuon.mutate({ id: x.id }, xuLy);
 									}}
 								>
 									{m.quanLy.khoiPhuc}
@@ -125,21 +101,19 @@ export function DaLuuTru({ khoa }: { khoa: boolean }) {
 				onConfirm={() => {
 					const x = hoiXoa;
 					if (x === null || dangXoa) return;
-					const sauCung = {
-						onSuccess: async () => {
-							setHoiXoa(null);
-							await lamMoi();
+					xoaKhuon.mutate(
+						{ id: x.id },
+						{
+							onSuccess: async () => {
+								setHoiXoa(null);
+								await lamMoi();
+							},
+							onError: (error: { message: string }) => {
+								setHoiXoa(null);
+								toast.error(error.message);
+							},
 						},
-						onError: (error: { message: string }) => {
-							setHoiXoa(null);
-							toast.error(error.message);
-						},
-					};
-					if (x.loai === "boPhan") {
-						xoaBoPhan.mutate({ id: x.id }, sauCung);
-					} else {
-						xoaKhuon.mutate({ id: x.id }, sauCung);
-					}
+					);
 				}}
 			/>
 		</Collapsible>

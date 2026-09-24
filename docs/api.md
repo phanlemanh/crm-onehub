@@ -349,6 +349,37 @@ Below is `purge`'s contract — everything that used to be `delete`'s:
 - **Recompute after commit, logging rather than throwing** — the row is already gone,
   and a raised error makes the browser skip invalidation and retry into a 404.
 
+## The organization tree
+
+`apps/api/src/to-chuc` owns the `org.*` router: two fixed levels under the
+workspace, `Division` above `Department`. There is one tree for the whole CRM —
+onboarding, OKR, reports and filters read it; no area keeps its own.
+
+- **`Department` is the onboarding table, not a copy.** The tree added a nullable
+  `divisionId` and `headUserId` to it. A department with no division is listed as
+  unassigned, not hidden. The `migration` is additive only, so rows that existed
+  before the tree keep working untouched.
+- **Every mutation calls `yeuCauQuanTri` first.** `canManageOrganization`
+  (`@crm/auth`) is the one rule; the `quyen` spec parses `generated/server.ts` and
+  fails when a new `org.*` mutation is not covered. `org.tree` and `org.access` are
+  readable by any member.
+- **A person has one `OrgPlacement` row**: a primary department, optional secondary
+  departments, and an optional manager override. The direct manager is derived, not
+  stored — override, then the primary department's head, then the division's head,
+  never oneself and never someone who has left (`quan-ly.ts`).
+- **A department head must be an active member of that department.** Someone who
+  moves out stops counting as its head without a write; the department reads as
+  headless until an admin picks again.
+- **Archive, then purge, same as records.** A department is refused archive while
+  active members hold it as primary, and refused purge while any placement points at
+  it. A division is refused archive while it holds live departments, and refused
+  purge while any department, archived or not, still points at it.
+- **Import is preview, then apply.** `previewImport` parses tab or CSV text
+  (`nhap.ts`) against a snapshot and returns every row with its error; `applyImport`
+  re-checks, writes the valid rows in one transaction and skips the broken ones.
+  Row and character caps live in `TO_CHUC` (`to-chuc-config.ts`), with every
+  user-facing message.
+
 ## Money
 
 A deal is sold in one currency and reported in another, and **only `baseAmount` may

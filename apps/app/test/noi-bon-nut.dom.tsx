@@ -24,6 +24,7 @@ import {
 	type KeHoachTho,
 	manDanhMucTuHang,
 } from "../../api/src/onboarding/onboarding-danh-muc";
+import { orgDepartmentCreateInput } from "../../api/src/to-chuc/to-chuc.contracts";
 
 type BoPhan = {
 	id: string;
@@ -136,8 +137,69 @@ const khongDoc = () => {
 	throw new Error("khong doc thu tuc nay");
 };
 
+function orgMock() {
+	const khong = (ten: string) => thuTuc(ten, khongDoc);
+	return {
+		tree: thuTuc("tree", () => ({
+			divisions: [
+				{
+					id: "khoi",
+					name: "Khối",
+					position: 0,
+					head: null,
+					departments: boPhan.map((d) => ({
+						id: d.id,
+						name: d.name,
+						position: d.position,
+						divisionId: "khoi",
+						head: null,
+						stepCount: 0,
+						people: [],
+					})),
+				},
+			],
+			chuaXep: [],
+			chuaCoPhongBan: [],
+			people: [],
+			archived: { divisions: [], departments: [] },
+			coverage: { members: 0, withPrimary: 0, departmentsWithoutHead: 0 },
+		})),
+		access: thuTuc("orgAccess", () => ({ canManage: true })),
+		createDepartment: thuTuc(
+			"createDepartment",
+			khongDoc,
+			ghi<z.input<typeof orgDepartmentCreateInput>>("createDepartment", (v) => {
+				const d = orgDepartmentCreateInput.parse(quaJson(v));
+				boPhan = [
+					...boPhan,
+					{
+						id: `bp-${boPhan.length}`,
+						name: d.name,
+						position: boPhan.length,
+						archivedAt: null,
+						purgeable: false,
+					},
+				];
+			}),
+		),
+		createDivision: khong("createDivision"),
+		renameDivision: khong("renameDivision"),
+		reorderDivisions: khong("reorderDivisions"),
+		archiveDivision: khong("archiveDivision"),
+		restoreDivision: khong("restoreDivision"),
+		purgeDivision: khong("purgeDivision"),
+		renameDepartment: khong("renameDepartment"),
+		moveDepartment: khong("moveDepartment"),
+		setHead: khong("setHead"),
+		setPlacement: khong("setPlacement"),
+		previewImport: khong("previewImport"),
+		applyImport: khong("applyImport"),
+	};
+}
+
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
+		org: orgMock(),
 		onboarding: {
 			access: thuTuc("access", () => ({ canManage: true })),
 			listDepartments: thuTuc(
@@ -309,8 +371,13 @@ const { HoSoKeHoach } = await import(
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { onboardingMessages } = await import("@/lib/messages/onboarding");
+const { ToChuc } = await import(
+	"@/app/(app)/[slug]/settings/organization/to-chuc"
+);
+const { toChucMessages } = await import("@/lib/messages/to-chuc");
 
 const m = onboardingMessages("vi");
+const tc = toChucMessages("vi");
 
 type San = { o: HTMLElement; root: Root };
 let dangMo: San[] = [];
@@ -505,23 +572,38 @@ afterEach(async () => {
 });
 
 async function moHopThoaiBoPhan(): Promise<void> {
-	await mo(<CaiDatDieuPhoi />);
-	await bam(nut(m.settings.newDepartment));
+	await mo(<ToChuc />);
+	const nhan = tc.menu.replace("{ten}", "Khối");
+	const menu = [...document.body.querySelectorAll("button")].find(
+		(b) => b.querySelector(".sr-only")?.textContent === nhan,
+	);
+	if (!menu) throw new Error("khong thay menu bo phan Khoi");
+	await bam(menu);
+	await cho(
+		() => document.body.querySelectorAll('[role="menuitem"]').length > 0,
+		"mo menu bo phan",
+	);
+	const muc = [...document.body.querySelectorAll('[role="menuitem"]')].find(
+		(x) => x.textContent?.trim() === tc.themPhongBan,
+	);
+	if (!muc) throw new Error("menu khong co Them phong ban");
+	await bam(muc);
 	await cho(() => hopThoai() !== null, "mo hop thoai bo phan");
 }
 
 describe("them-bo-phan", () => {
 	test("them-bo-phan: luu gui dung mot loi goi qua schema that, danh sach hien ten moi", async () => {
 		await moHopThoaiBoPhan();
-		await go(oNhap(m.tao.boPhan.name), "Kinh doanh");
+		await go(oNhap(tc.donVi.tenPhongBan), "Kinh doanh");
 		await bam(nutLuu());
 		await cho(() => hopThoai() === null, "dong hop thoai");
 
 		expect(`so loi goi: ${soGoi("createDepartment")}`).toBe("so loi goi: 1");
 		expect(
-			departmentCreateInput.parse(quaJson(dauVaoCuoi("createDepartment"))),
+			orgDepartmentCreateInput.parse(quaJson(dauVaoCuoi("createDepartment"))),
 		).toEqual({
 			name: "Kinh doanh",
+			divisionId: "khoi",
 		});
 		await cho(
 			() => document.body.textContent?.includes("Kinh doanh") === true,
@@ -849,8 +931,8 @@ const BON_HOP_THOAI: HopThoaiCa[] = [
 		thuTuc: "createDepartment",
 		chuanBi: () => {},
 		mo: moHopThoaiBoPhan,
-		dien: async () => go(oNhap(m.tao.boPhan.name), "Kinh doanh"),
-		giu: () => [oNhap(m.tao.boPhan.name).value],
+		dien: async () => go(oNhap(tc.donVi.tenPhongBan), "Kinh doanh"),
+		giu: () => [oNhap(tc.donVi.tenPhongBan).value],
 	},
 	{
 		ten: "soan khuon",

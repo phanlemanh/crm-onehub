@@ -1,0 +1,7 @@
+E20 / man-to-chuc.mjs chạy Chrome qua puppeteer-core trong tiến trình con của
+lệnh `bun _acceptance/cau-truc-to-chuc/rang/man-to-chuc.mjs`, không phải qua
+browser MCP tool của phiên này — phiên không có đường đọc network/console của
+trang đó (không có read_network_requests/read_console_messages tương đương).
+networkObserved = n-a (driver): kịch bản tự đọc pageerror/console trong tiến
+trình con (biến LOI_HYDRATE) và đã gộp vào hong[]; không có lỗi hydrate nào
+được kịch bản ghi nhận trong lượt chạy này (khang-dinh=50/50, hong.length=0).

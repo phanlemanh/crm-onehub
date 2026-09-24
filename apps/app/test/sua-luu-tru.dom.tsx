@@ -18,8 +18,6 @@ import {
 import { createRoot, type Root } from "react-dom/client";
 import {
 	departmentListOutput,
-	departmentReorderInput,
-	departmentUpdateInput,
 	enrollmentListOutput,
 	enrollmentStageInput,
 	enrollmentUpsertInput,
@@ -30,6 +28,10 @@ import {
 	templateUpdateInput,
 } from "../../api/src/onboarding/onboarding.contracts";
 import { ONBOARDING } from "../../api/src/onboarding/onboarding-config";
+import {
+	orgDepartmentMoveInput,
+	orgRenameInput,
+} from "../../api/src/to-chuc/to-chuc.contracts";
 
 type Buoc = {
 	label: string;
@@ -174,8 +176,87 @@ function datKhuon(id: string, thay: Partial<KhuonTho>) {
 
 type VaoId = { id: string };
 
+function cayTuBoPhan() {
+	return {
+		divisions: [
+			{
+				id: "khoi",
+				name: "Khối",
+				position: 0,
+				head: null,
+				departments: boPhan
+					.filter((d) => !d.luuTru)
+					.sort((a, b) => a.position - b.position)
+					.map((d) => ({
+						id: d.id,
+						name: d.name,
+						position: d.position,
+						divisionId: "khoi",
+						head: null,
+						stepCount: 0,
+						people: [],
+					})),
+			},
+		],
+		chuaXep: [],
+		chuaCoPhongBan: [],
+		people: [],
+		archived: {
+			divisions: [],
+			departments: boPhan
+				.filter((d) => d.luuTru)
+				.map((d) => ({ id: d.id, name: d.name, purgeable: !d.dung })),
+		},
+		coverage: { members: 0, withPrimary: 0, departmentsWithoutHead: 0 },
+	};
+}
+
+function orgMock() {
+	const khong = (ten: string) => thuTuc(ten, khongDoc);
+	return {
+		tree: thuTuc("tree", () => cayTuBoPhan()),
+		access: thuTuc("orgAccess", () => ({ canManage: quyen })),
+		renameDepartment: thuTuc(
+			"renameDepartment",
+			khongDoc,
+			ghi<{ id: string; name: string }>("renameDepartment", (v) =>
+				datBoPhan(v.id, { name: v.name }),
+			),
+		),
+		moveDepartment: thuTuc(
+			"moveDepartment",
+			khongDoc,
+			ghi<{ id: string; divisionId: string | null; index: number }>(
+				"moveDepartment",
+				(v) => {
+					const ids = boPhan
+						.filter((d) => !d.luuTru && d.id !== v.id)
+						.sort((a, b) => a.position - b.position)
+						.map((d) => d.id);
+					ids.splice(v.index, 0, v.id);
+					ids.forEach((id, viTri) => {
+						datBoPhan(id, { position: viTri });
+					});
+				},
+			),
+		),
+		createDepartment: khong("orgCreateDepartment"),
+		createDivision: khong("createDivision"),
+		renameDivision: khong("renameDivision"),
+		reorderDivisions: khong("reorderDivisions"),
+		archiveDivision: khong("archiveDivision"),
+		restoreDivision: khong("restoreDivision"),
+		purgeDivision: khong("purgeDivision"),
+		setHead: khong("setHead"),
+		setPlacement: khong("setPlacement"),
+		previewImport: khong("previewImport"),
+		applyImport: khong("applyImport"),
+	};
+}
+
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
+		org: orgMock(),
 		onboarding: {
 			access: thuTuc("access", () => ({ canManage: quyen })),
 			listDepartments: thuTuc("listDepartments", (v?: { archived?: boolean }) =>
@@ -425,9 +506,14 @@ const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { Toaster } = await import("@crm/ui/components/sonner");
 const { onboardingMessages } = await import("@/lib/messages/onboarding");
+const { ToChuc } = await import(
+	"@/app/(app)/[slug]/settings/organization/to-chuc"
+);
+const { toChucMessages } = await import("@/lib/messages/to-chuc");
 const { toast } = await import("sonner");
 
 const m = onboardingMessages("vi");
+const tc = toChucMessages("vi");
 
 type San = { o: HTMLElement; root: Root };
 let dangMo: San[] = [];
@@ -583,9 +669,9 @@ function dauVaoCuoi(ten: string): unknown {
 }
 
 async function moMenu(ten: string): Promise<void> {
-	const nhan = `${m.quanLy.menu} ${ten}`;
-	const trigger = [...document.body.querySelectorAll("button")].find(
-		(b) => b.querySelector(".sr-only")?.textContent === nhan,
+	const nhan = [`${m.quanLy.menu} ${ten}`, tc.menu.replace("{ten}", ten)];
+	const trigger = [...document.body.querySelectorAll("button")].find((b) =>
+		nhan.includes(b.querySelector(".sr-only")?.textContent ?? ""),
 	);
 	if (!trigger) throw new Error(`khong thay menu cua ${ten}`);
 	await bam(trigger);
@@ -611,14 +697,14 @@ async function xacNhan(nhanNut: string): Promise<void> {
 }
 
 function thuTuBoPhan(): string[] {
-	return [...document.body.querySelectorAll("[data-bo-phan]")].map(
-		(x) => x.getAttribute("data-bo-phan") ?? "",
+	return [...document.body.querySelectorAll("[data-phong-ban]")].map(
+		(x) => x.getAttribute("data-phong-ban") ?? "",
 	);
 }
 
 function tayKeo(id: string): HTMLButtonElement {
 	const dong = document.body.querySelector(
-		`[data-bo-phan="${id}"]`,
+		`[data-phong-ban="${id}"]`,
 	)?.parentElement;
 	const tay = dong?.querySelector("button");
 	if (!(tay instanceof HTMLButtonElement))
@@ -741,7 +827,7 @@ beforeEach(() => {
 	daGoi = [];
 	daDoc = [];
 	Element.prototype.getBoundingClientRect = function viTri(this: Element) {
-		if (this.querySelector(":scope > [data-bo-phan]") === null) {
+		if (this.querySelector(":scope > [data-phong-ban]") === null) {
 			return {
 				x: 0,
 				y: -10000,
@@ -809,6 +895,26 @@ async function moCaiDat(): Promise<void> {
 	await mo(<CaiDatDieuPhoi />);
 }
 
+async function moToChuc(): Promise<void> {
+	await mo(<ToChuc />);
+}
+
+function timNut(chu: string): HTMLButtonElement | null {
+	return (
+		[...document.body.querySelectorAll("button")].find((b) =>
+			b.textContent?.trim().startsWith(chu),
+		) ?? null
+	);
+}
+
+function timMenu(nhan: string): HTMLButtonElement | null {
+	return (
+		[...document.body.querySelectorAll("button")].find(
+			(b) => b.querySelector(".sr-only")?.textContent === nhan,
+		) ?? null
+	);
+}
+
 async function moHoSo(): Promise<void> {
 	await mo(<HoSoKeHoach planId={KE_HOACH} />);
 }
@@ -816,24 +922,24 @@ async function moHoSo(): Promise<void> {
 describe("doi-ten-bo-phan", () => {
 	test("doi-ten-bo-phan: menu Doi ten gui updateDepartment qua schema that", async () => {
 		boPhan = hai();
-		await moCaiDat();
+		await moToChuc();
 		await moMenu("Kinh doanh");
-		await chonMuc(m.quanLy.doiTen);
+		await chonMuc(tc.doiTen);
 		await cho(() => hopThoai() !== null, "mo hop doi ten");
-		expect(`dien san: ${oNhap(m.tao.boPhan.name).value}`).toBe(
+		expect(`dien san: ${oNhap(tc.donVi.tenPhongBan).value}`).toBe(
 			"dien san: Kinh doanh",
 		);
-		await go(oNhap(m.tao.boPhan.name), "Kinh doanh vung 1");
+		await go(oNhap(tc.donVi.tenPhongBan), "Kinh doanh vung 1");
 		const hop = hopThoai();
 		if (!hop) throw new Error("hop thoai dong som");
 		await bam(nut(m.tao.save, hop));
 		await cho(() => hopThoai() === null, "dong hop doi ten");
 
 		expect(
-			`updateDepartment ${soGoi("updateDepartment")} createDepartment ${soGoi("createDepartment")}`,
-		).toBe("updateDepartment 1 createDepartment 0");
+			`renameDepartment ${soGoi("renameDepartment")} createDepartment ${soGoi("createDepartment")}`,
+		).toBe("renameDepartment 1 createDepartment 0");
 		expect(
-			departmentUpdateInput.parse(quaJson(dauVaoCuoi("updateDepartment"))),
+			orgRenameInput.parse(quaJson(dauVaoCuoi("renameDepartment"))),
 		).toEqual({
 			id: "bp-a",
 			name: "Kinh doanh vung 1",
@@ -843,16 +949,16 @@ describe("doi-ten-bo-phan", () => {
 
 	test("doi-ten-bo-phan: doi chung — ten rong thi Luu tat, khong loi goi", async () => {
 		boPhan = hai();
-		await moCaiDat();
+		await moToChuc();
 		await moMenu("Kinh doanh");
-		await chonMuc(m.quanLy.doiTen);
+		await chonMuc(tc.doiTen);
 		await cho(() => hopThoai() !== null, "mo hop doi ten");
-		await go(oNhap(m.tao.boPhan.name), "  ");
+		await go(oNhap(tc.donVi.tenPhongBan), "  ");
 		const hop = hopThoai();
 		if (!hop) throw new Error("hop thoai dong som");
 		expect(nut(m.tao.save, hop).disabled).toBe(true);
 		await bam(nut(m.tao.save, hop));
-		expect(soGoi("updateDepartment")).toBe(0);
+		expect(soGoi("renameDepartment")).toBe(0);
 	});
 
 	test("doi-ten-bo-phan: ho so ke hoach hien departmentName, khong hien ma", async () => {
@@ -890,18 +996,17 @@ describe("sap-bo-phan", () => {
 					dung: false,
 				},
 			];
-			cheDo = new Map(ca.loi ? [["reorderDepartments", "loi"]] : []);
+			cheDo = new Map(ca.loi ? [["moveDepartment", "loi"]] : []);
 			daGoi = [];
-			await moCaiDat();
+			await moToChuc();
 			await keoLenDau("bp-c", 2);
-			await cho(
-				() => soGoi("reorderDepartments") === 1,
-				`${ca.ten}: goi sap xep`,
-			);
+			await cho(() => soGoi("moveDepartment") === 1, `${ca.ten}: goi sap xep`);
 			expect(
-				departmentReorderInput.parse(quaJson(dauVaoCuoi("reorderDepartments"))),
+				orgDepartmentMoveInput.parse(quaJson(dauVaoCuoi("moveDepartment"))),
 			).toEqual({
-				ids: ["bp-c", "bp-a", "bp-b"],
+				id: "bp-c",
+				divisionId: "khoi",
+				index: 0,
 			});
 			await cho(
 				() => thuTuBoPhan().join(",") === ca.mong.join(","),
@@ -913,6 +1018,8 @@ describe("sap-bo-phan", () => {
 			if (ca.loi) {
 				await cho(() => coChu(LOI), `${ca.ten}: toast loi`);
 			} else {
+				await donSan();
+				await moCaiDat();
 				await bam(nut(m.settings.newTemplate));
 				await cho(() => hopThoai() !== null, "mo soan khuon");
 				const trigger = document.body.querySelector(
@@ -946,7 +1053,7 @@ describe("sap-bo-phan", () => {
 describe("luu-tru-bo-phan", () => {
 	test("luu-tru-bo-phan: xac nhan luu tru, hien trong Da luu tru, Hoan tac khoi phuc", async () => {
 		boPhan = hai();
-		await moCaiDat();
+		await moToChuc();
 		await moMenu("Dao tao");
 		await chonMuc(m.quanLy.luuTru);
 		await xacNhan(m.quanLy.luuTru);
@@ -966,7 +1073,7 @@ describe("luu-tru-bo-phan", () => {
 
 	test("luu-tru-bo-phan: doi chung — Giu lai o hop xac nhan thi 0 loi goi", async () => {
 		boPhan = hai();
-		await moCaiDat();
+		await moToChuc();
 		await moMenu("Dao tao");
 		await chonMuc(m.quanLy.luuTru);
 		await xacNhan(m.quanLy.giu);
@@ -979,7 +1086,7 @@ describe("bi-chan-luu-tru", () => {
 	test("bi-chan-luu-tru: may chu tu choi, bo phan o lai, thong diep hien", async () => {
 		const thongDiep = ONBOARDING.thongDiep.boPhanTrongKhuon(["San moi gioi"]);
 		boPhan = hai();
-		await moCaiDat();
+		await moToChuc();
 		cheDo = new Map([["archiveDepartment", "loi"]]);
 		await moMenu("Kinh doanh");
 		await chonMuc(m.quanLy.luuTru);
@@ -1130,7 +1237,8 @@ describe("khoi-phuc", () => {
 				},
 			];
 			daGoi = [];
-			await moCaiDat();
+			if (ca.thuTuc === "restoreDepartment") await moToChuc();
+			else await moCaiDat();
 			await moDaLuuTru();
 			await bam(nut(m.quanLy.khoiPhuc, dongLuuTru(ca.id)));
 			await cho(() => soGoi(ca.thuTuc) === 1, `${ca.ten}: goi`);
@@ -1236,15 +1344,17 @@ describe("xoa-vinh-vien", () => {
 						]
 					: [];
 			daGoi = [];
-			await moCaiDat();
+			const nhanXoa = ca.loai === "bp" ? tc.xoaHan : m.quanLy.xoaVinhVien;
+			if (ca.loai === "bp") await moToChuc();
+			else await moCaiDat();
 			await moDaLuuTru();
-			const coNutXoa = coNut(m.quanLy.xoaVinhVien, dongLuuTru(ca.id));
+			const coNutXoa = coNut(nhanXoa, dongLuuTru(ca.id));
 			expect(`${ca.ten}: nut xoa ${coNutXoa}`).toBe(
 				`${ca.ten}: nut xoa ${!ca.dung}`,
 			);
 			if (!ca.dung) {
-				await bam(nut(m.quanLy.xoaVinhVien, dongLuuTru(ca.id)));
-				await xacNhan(m.quanLy.xoaVinhVien);
+				await bam(nut(nhanXoa, dongLuuTru(ca.id)));
+				await xacNhan(nhanXoa);
 				await cho(() => soGoi(ca.thuTuc) === 1, `${ca.ten}: goi xoa`);
 				expect(`${ca.ten}: ${JSON.stringify(dauVaoCuoi(ca.thuTuc))}`).toBe(
 					`${ca.ten}: {"id":"${ca.id}"}`,
@@ -1268,33 +1378,12 @@ describe("xoa-vinh-vien", () => {
 });
 
 describe("khoa-theo-quyen", () => {
-	function cacNut(): Array<[string, HTMLButtonElement]> {
-		const menuBoPhan = [...document.body.querySelectorAll("button")].find(
-			(b) =>
-				b.querySelector(".sr-only")?.textContent ===
-				`${m.quanLy.menu} Kinh doanh`,
-		);
-		const menuKhuon = [...document.body.querySelectorAll("button")].find(
-			(b) =>
-				b.querySelector(".sr-only")?.textContent ===
-				`${m.quanLy.menu} San moi gioi`,
-		);
-		if (!menuBoPhan || !menuKhuon) throw new Error("khong thay menu");
-		return [
-			["Thêm bộ phận", nut(m.settings.newDepartment)],
-			["Soạn khuôn", nut(m.settings.newTemplate)],
-			["menu bo phan", menuBoPhan],
-			["menu khuon", menuKhuon],
-			["keo sap xep", tayKeo("bp-a")],
-			["Khôi phục", nut(m.quanLy.khoiPhuc, dongLuuTru("bp-c"))],
-			["Xoá vĩnh viễn", nut(m.quanLy.xoaVinhVien, dongLuuTru("bp-c"))],
-		];
-	}
-
 	const CA = [
 		{ ten: "thanh vien", canManage: false },
 		{ ten: "quan tri", canManage: true },
 	] as const;
+
+	const khoa = (b: HTMLButtonElement | null) => b === null || b.disabled;
 
 	test("khoa-theo-quyen: hai vai, moi nut cau hinh khoa khi khong du quyen", async () => {
 		let soAssert = 0;
@@ -1309,19 +1398,35 @@ describe("khoa-theo-quyen", () => {
 			expect(`${ca.ten}: dong can quyen ${coChu(m.quanLy.canQuyen)}`).toBe(
 				`${ca.ten}: dong can quyen ${!ca.canManage}`,
 			);
-			await moDaLuuTru();
-			for (const [ten, b] of cacNut()) {
-				expect(`${ca.ten}: ${ten} khoa ${b.disabled}`).toBe(
+			const ketQua: Array<[string, boolean]> = [
+				["Soạn khuôn", khoa(timNut(m.settings.newTemplate))],
+				["menu khuon", khoa(timMenu(`${m.quanLy.menu} San moi gioi`))],
+			];
+			await donSan();
+			await moToChuc();
+			if (ca.canManage) await moDaLuuTru();
+			const trongLuuTru = (chu: string) => {
+				const dong = document.body.querySelector('[data-luu-tru="bp-c"]');
+				return dong
+					? ([...dong.querySelectorAll("button")].find((b) =>
+							b.textContent?.trim().startsWith(chu),
+						) ?? null)
+					: null;
+			};
+			ketQua.push(
+				["Thêm bộ phận", khoa(timNut(tc.themBoPhan))],
+				["menu bo phan", khoa(timMenu(tc.menu.replace("{ten}", "Kinh doanh")))],
+				["keo sap xep", khoa(tayKeo("bp-a"))],
+				["Khôi phục", khoa(trongLuuTru(tc.khoiPhuc))],
+				["Xoá vĩnh viễn", khoa(trongLuuTru(tc.xoaHan))],
+			);
+			for (const [ten, daKhoa] of ketQua) {
+				expect(`${ca.ten}: ${ten} khoa ${daKhoa}`).toBe(
 					`${ca.ten}: ${ten} khoa ${!ca.canManage}`,
 				);
 				soAssert += 1;
 			}
-			for (const san of dangMo) {
-				await act(async () => san.root.unmount());
-				san.o.remove();
-			}
-			dangMo = [];
-			document.body.innerHTML = "";
+			await donSan();
 		}
 		expect(soAssert).toBe(14);
 	});
@@ -1633,25 +1738,26 @@ describe("loi-va-mot-lan", () => {
 	const THAO_TAC: ThaoTac[] = [
 		{
 			ten: "doi ten bo phan",
-			thuTuc: "updateDepartment",
+			thuTuc: "renameDepartment",
 			chuanBi: () => {
 				boPhan = hai();
 			},
 			mo: async () => {
-				await moCaiDat();
+				await moToChuc();
 				await moMenu("Kinh doanh");
-				await chonMuc(m.quanLy.doiTen);
+				await chonMuc(tc.doiTen);
 				await cho(() => hopThoai() !== null, "hop doi ten");
-				await go(oNhap(m.tao.boPhan.name), "Ten dang go");
+				await go(oNhap(tc.donVi.tenPhongBan), "Ten dang go");
 			},
 			lam: async () => bam(trongHop(m.tao.save)),
 			giu: () =>
-				hopThoai() !== null && oNhap(m.tao.boPhan.name).value === "Ten dang go",
+				hopThoai() !== null &&
+				oNhap(tc.donVi.tenPhongBan).value === "Ten dang go",
 			khoa: () => trongHop(m.tao.save),
 		},
 		{
 			ten: "sap xep bo phan",
-			thuTuc: "reorderDepartments",
+			thuTuc: "moveDepartment",
 			chuanBi: () => {
 				boPhan = [
 					...hai(),
@@ -1664,7 +1770,7 @@ describe("loi-va-mot-lan", () => {
 					},
 				];
 			},
-			mo: moCaiDat,
+			mo: moToChuc,
 			lam: async () => keoLenDau("bp-c", 2),
 			giu: () => thuTuBoPhan().join(",") === "bp-a,bp-b,bp-c",
 			khoa: () => tayKeo("bp-a"),
@@ -1700,7 +1806,7 @@ describe("loi-va-mot-lan", () => {
 				boPhan = hai();
 			},
 			mo: async () => {
-				await moCaiDat();
+				await moToChuc();
 				await moXacNhanLuuTru("Dao tao");
 			},
 			lam: async () => {
@@ -1735,7 +1841,7 @@ describe("loi-va-mot-lan", () => {
 				boPhan = hai();
 			},
 			mo: async () => {
-				await moCaiDat();
+				await moToChuc();
 				await luuTruThanhCong("Dao tao");
 			},
 			lam: async () => {
@@ -1768,7 +1874,7 @@ describe("loi-va-mot-lan", () => {
 				boPhan = motBoPhanLuuTru();
 			},
 			mo: async () => {
-				await moCaiDat();
+				await moToChuc();
 				await moDaLuuTru();
 			},
 			lam: async () => bam(nut(m.quanLy.khoiPhuc, dongLuuTru("bp-b"))),
@@ -1797,17 +1903,17 @@ describe("loi-va-mot-lan", () => {
 				boPhan = motBoPhanLuuTru();
 			},
 			mo: async () => {
-				await moCaiDat();
+				await moToChuc();
 				await moDaLuuTru();
-				await bam(nut(m.quanLy.xoaVinhVien, dongLuuTru("bp-b")));
+				await bam(nut(tc.xoaHan, dongLuuTru("bp-b")));
 				await cho(() => hopXacNhan() !== null, "hop xac nhan xoa");
 			},
 			lam: async () => {
-				const x = trongXacNhan(m.quanLy.xoaVinhVien);
+				const x = trongXacNhan(tc.xoaHan);
 				if (x) await bam(x);
 			},
 			giu: () => conLuuTru("bp-b"),
-			khoa: () => trongXacNhan(m.quanLy.xoaVinhVien),
+			khoa: () => trongXacNhan(tc.xoaHan),
 		},
 		{
 			ten: "xoa vinh vien khuon",

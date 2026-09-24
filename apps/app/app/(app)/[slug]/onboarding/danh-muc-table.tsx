@@ -248,6 +248,15 @@ export function DanhMucTable() {
 	const khongKhop = data?.trangThai === "ST-danhmuc-khongkhop";
 	const facets: DataTableFacet[] = [
 		{
+			id: "division",
+			label: m.facets.division,
+			options: tuyChonCoDem(
+				data?.boPhanCapTren ?? [],
+				facetCounts?.division,
+				list.division,
+			),
+		},
+		{
 			id: "boPhan",
 			label: m.facets.department,
 			options: tuyChonCoDem(

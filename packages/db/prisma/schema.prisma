@@ -61,6 +61,12 @@ model User {
   zaloLinkCode            ZaloLinkCode?
   notificationPreference  NotificationPreference?
 
+  divisionsHeaded         Division[]               @relation("DivisionHead")
+  departmentsHeaded       Department[]             @relation("DepartmentHead")
+  orgPlacement            OrgPlacement?            @relation("OrgPlacement")
+  managedPlacements       OrgPlacement[]           @relation("OrgManager")
+  orgSecondaryDepartments OrgSecondaryDepartment[]
+
   @@unique([email])
   @@map("user")
 }
@@ -1704,14 +1710,68 @@ model Department {
   name     String
   position Int
 
-  archivedAt DateTime?
-  steps      OnboardingStep[]
+  divisionId String?
+  division   Division? @relation(fields: [divisionId], references: [id], onDelete: Restrict)
+  headUserId String?
+  head       User?     @relation("DepartmentHead", fields: [headUserId], references: [id], onDelete: SetNull)
+
+  archivedAt       DateTime?
+  steps            OnboardingStep[]
+  primaryOf        OrgPlacement[]           @relation("PrimaryDepartment")
+  secondaryMembers OrgSecondaryDepartment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([position])
+  @@index([divisionId])
   @@map("department")
+}
+
+model Division {
+  id       String @id @default(cuid())
+  name     String
+  position Int
+
+  headUserId String?
+  head       User?   @relation("DivisionHead", fields: [headUserId], references: [id], onDelete: SetNull)
+
+  archivedAt  DateTime?
+  departments Department[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([position])
+  @@map("division")
+}
+
+model OrgPlacement {
+  userId String @id
+  user   User   @relation("OrgPlacement", fields: [userId], references: [id], onDelete: Cascade)
+
+  primaryDepartmentId String?
+  primaryDepartment   Department? @relation("PrimaryDepartment", fields: [primaryDepartmentId], references: [id], onDelete: Restrict)
+  managerUserId       String?
+  manager             User?       @relation("OrgManager", fields: [managerUserId], references: [id], onDelete: SetNull)
+
+  updatedAt DateTime @updatedAt
+
+  @@index([primaryDepartmentId])
+  @@index([managerUserId])
+  @@map("orgPlacement")
+}
+
+model OrgSecondaryDepartment {
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+
+  @@id([userId, departmentId])
+  @@index([departmentId])
+  @@map("orgSecondaryDepartment")
 }
 
 model OnboardingTemplate {
