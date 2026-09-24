@@ -36,7 +36,9 @@ nên màn Tổ chức phải gọi cả hai router.
 
 1. `org` nhận ba thủ tục mới: `archiveDepartment`, `restoreDepartment`,
    `purgeDepartment` — cùng khuôn với ba thủ tục của bộ phận: gọi `yeuCauQuanTri`
-   trước (`canManageOrganization`), nhận `{ id }`, trả `{ id }`, REST
+   trước (`canManageOrganization`), nhận `{ id }`, trả `{ id }` — riêng lưu trữ trả thêm
+   `purgeable` tính bằng hàm luật chung (hồ sơ `khuon-mat-bo-phan` hứa lệnh lưu trữ báo
+   `purgeable` khớp danh sách), REST
    `POST /org/departments/{id}/archive`, `POST /org/departments/{id}/restore`,
    `DELETE /org/departments/{id}`.
 2. `onboarding` mất sáu thủ tục ghi phòng ban (`create`, `update`, `archive`,

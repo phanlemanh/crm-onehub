@@ -329,11 +329,14 @@ export class ToChucService {
 		});
 		if (conNguoi > 0)
 			throw new BadRequestException(T.phongBanConNguoi(conNguoi));
-		return this.db.department.update({
+		await this.db.department.update({
 			where: { id: input.id },
 			data: { archivedAt: new Date() },
-			select: { id: true },
 		});
+		return {
+			id: input.id,
+			purgeable: (await this.lyDoKhongXoa(input.id)) === null,
+		};
 	}
 
 	async restoreDepartment(input: { id: string }) {
@@ -345,19 +348,23 @@ export class ToChucService {
 		});
 	}
 
-	async purgeDepartment(input: { id: string }) {
-		const pb = await this.phongBanCo(input.id);
+	private async lyDoKhongXoa(id: string) {
+		const pb = await this.phongBanCo(id);
 		const [stepCount, primaryCount, khuon] = await Promise.all([
-			this.db.onboardingStep.count({ where: { departmentId: input.id } }),
-			this.db.orgPlacement.count({ where: { primaryDepartmentId: input.id } }),
-			this.khuonChua(input.id),
+			this.db.onboardingStep.count({ where: { departmentId: id } }),
+			this.db.orgPlacement.count({ where: { primaryDepartmentId: id } }),
+			this.khuonChua(id),
 		]);
-		const lyDo = lyDoKhongXoaPhongBan({
+		return lyDoKhongXoaPhongBan({
 			archived: pb.archivedAt !== null,
 			stepCount,
 			primaryCount,
 			khuon: khuon.map((k) => k.name),
 		});
+	}
+
+	async purgeDepartment(input: { id: string }) {
+		const lyDo = await this.lyDoKhongXoa(input.id);
 		if (lyDo !== null) throw new BadRequestException(lyDo);
 		return this.db.department.delete({
 			where: { id: input.id },

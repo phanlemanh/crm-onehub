@@ -15,6 +15,7 @@ import {
 	orgAccessOutput,
 	orgAddPeopleInput,
 	orgAttachInput,
+	orgDepartmentArchiveOutput,
 	orgDepartmentCreateInput,
 	orgDepartmentMoveInput,
 	orgDivisionCreateInput,
@@ -155,7 +156,7 @@ export class ToChucRouter {
 
 	@Mutation({
 		input: orgIdInput,
-		output: orgOkOutput,
+		output: orgDepartmentArchiveOutput,
 		meta: restMeta("POST", "/org/departments/{id}/archive", TAG),
 	})
 	async archiveDepartment(
