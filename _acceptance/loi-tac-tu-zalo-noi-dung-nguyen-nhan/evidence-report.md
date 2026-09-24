@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c3c6ffd6472abe3ec2518c235df8b13e9a71600f
+verified_commit: d844debfc1376487f4be0f7f371eb51e9ef575f4
 human_signoff: Phan Le Manh 2026-09-24
 ---
 
@@ -181,3 +181,7 @@ none — không có eval nào khai `runs` > 1 (không có eval ngẫu nhiên)
 ## Iterations
 
 Round 1: cả 10 eval máy (E1–E10) và đánh giá hội đồng E11 đều đạt ngay từ vòng đầu; bốn lệnh suite hồi quy (test, lint, lint:slop, build) đều xanh; không có vòng sửa nào.
+
+### Re-pin lần 1 — 2026-09-24, do CI Bun 1.3.12 đỏ: lỗi mạng fetch không phải TypeError — sửa lopLoi và thăm dò địa chỉ chết
+run_id: repin-20260924T154351Z-53002
+sha: d844debfc1376487f4be0f7f371eb51e9ef575f4 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E11 (E11 không khai paths) · AC không có chốt máy: AC-10
