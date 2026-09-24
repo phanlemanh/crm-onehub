@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6a8c8e99070c818fa5d3ad863ba6548d98986d58
+verified_commit: f7a31a583af36e847d87df37ffd44f12b1d45a85
 human_signoff: Mạnh 10/09/2026 — ký lại trên bằng chứng vòng 7 sau khi hoà onehub và sửa lớp chuỗi thứ năm. Bảng đăng ký và kế hoạch chuyển đã sửa trước khi ký, theo quyết định của chủ kho. Các mục còn lại ghi ở Known limits của hợp đồng.
 ---
 
@@ -199,3 +199,7 @@ Round 7 (vòng hiện tại): 12/12 eval PASS trên verified_commit 040c52395de2
 ### Re-pin lần 1 — 2026-09-17, do sửa đường ghi E11 ra .acceptance-runs
 run_id: repin-20260917T074956Z-81715
 sha: 6a8c8e99070c818fa5d3ad863ba6548d98986d58 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-24, do thuoc «vong nay» neo cap sha cua merge (merge-base(M^1,M^2)..M^2) thay merge-base dong; env GOOGLE_CLIENT_* nhu CI
+run_id: repin-20260924T155831Z-87643
+sha: f7a31a583af36e847d87df37ffd44f12b1d45a85 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng

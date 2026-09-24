@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 82fde06b0b1d4dba28c763a69516913c1dc88411
+verified_commit: f7a31a583af36e847d87df37ffd44f12b1d45a85
 human_signoff: 
 ---
 
@@ -116,3 +116,7 @@ Round 2: delta chạm paths của E5 (gọi gói api) — chạy lại E5 và b�
 ### Re-pin lần 1 — 2026-09-24, do hoa cu do gop onehub 41e04c72
 run_id: repin-20260924T051137Z-62143
 sha: 82fde06b0b1d4dba28c763a69516913c1dc88411 · suites: 4 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-24, do thuoc «vong nay» neo cap sha cua merge (merge-base(M^1,M^2)..M^2) thay merge-base dong; env GOOGLE_CLIENT_* nhu CI
+run_id: repin-20260924T155831Z-87643
+sha: f7a31a583af36e847d87df37ffd44f12b1d45a85 · suites: 4 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng

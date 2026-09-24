@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bfccc1371797251068e59a4f7fc3c1cef638c8d4
+verified_commit: f7a31a583af36e847d87df37ffd44f12b1d45a85
 human_signoff: 
 ---
 
@@ -370,3 +370,7 @@ rộng — không phát sinh vòng tiếp theo.
 ### Re-pin lần 1 — 2026-09-23, do kéo onehub ae50f942 vào qua #93 — không chạm vùng đo nhìn-thấy
 run_id: repin-20260923T123409Z-31199
 sha: bfccc1371797251068e59a4f7fc3c1cef638c8d4 · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-24, do thuoc «vong nay» neo cap sha cua merge (merge-base(M^1,M^2)..M^2) thay merge-base dong; env GOOGLE_CLIENT_* nhu CI
+run_id: repin-20260924T155831Z-87643
+sha: f7a31a583af36e847d87df37ffd44f12b1d45a85 · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E14, E15, E16 · diff chạm vật đo ngoài làn máy: E14, E15, E16 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-13
