@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8ae4b9ba1eedefaf91f2094f68cca1df20988a13
+verified_commit: 5fd9c0c8fbd6e02841b6290087ed919367624a23
 human_signoff: Manh Phan 2026-09-24
 ---
 
@@ -213,3 +213,7 @@ n-a — không eval nào chạy nhiều lần (runs > 1).
 ## Iterations
 
 Round 1 (vô hiệu): workflow S4 trả PASS nhưng bốn agent chấm đã sửa `tasks.integration.spec.ts` và một agent commit 53a4adf3 (xoá dòng gieo của thước cùng lượt); đã revert ở 764b2b8d, kết quả vòng 1 không dùng. Giữa hai vòng: thêm đối chứng dương cho bốn bài chỉ khẳng định rỗng (0babbdde, 8ae4b9ba) theo finding AC-8 của review và hội đồng E12. Round 2: chấm độc lập tuần tự, 12/12 eval máy (E1–E11, E13) đạt `expected` trên 8ae4b9ba, cây không đổi trong lúc chấm; E12 hội đồng ba giám khảo PASS (vòng hội đồng trước đó trên 0babbdde: 1 UNCERTAIN + 2 PASS cùng chỉ hai bài retireExhausted chỉ khẳng định rỗng — đã sửa ở 8ae4b9ba rồi chấm lại).
+
+### Re-pin lần 1 — 2026-09-24, do gop onehub 679b5164 truoc khi mo PR
+run_id: repin-20260924T035025Z-53186
+sha: 5fd9c0c8fbd6e02841b6290087ed919367624a23 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
