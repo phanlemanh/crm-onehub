@@ -80,7 +80,7 @@ async function chacBiTuChoi(): Promise<void> {
 	try {
 		await fetch(DIA_CHI_CHET);
 	} catch (loi) {
-		if (loi instanceof TypeError) return;
+		if (loi instanceof Error) return;
 	}
 	throw new Error("cong da bi cap lai — loi moi truong");
 }

@@ -13,6 +13,7 @@ import {
 	parseZaloGetMe,
 	parseZaloSetWebhook,
 } from "@crm/validation/zalo-update";
+import { z } from "zod";
 import { guiQuaSlackThu } from "./nhac-ke-hoach";
 import {
 	guiZalo,
@@ -77,9 +78,12 @@ function baoLoiZalo(method: string, lop: string): void {
 	console.error(`[zalo] ${method} hong: ${lop}`);
 }
 
+const loiMang = z.object({ code: z.string().min(1) });
+
 function lopLoi(loi: Error): string {
 	if (loi instanceof LoiHttpZalo) return `http-${loi.status}`;
-	if (loi instanceof TypeError) return `mang (${loi.name})`;
+	const mang = loiMang.safeParse(loi);
+	if (mang.success) return `mang (${mang.data.code})`;
 	return `tra-loi-la (${loi.name})`;
 }
 
@@ -92,7 +96,10 @@ async function docBot(fetcher: typeof fetch, token: string): Promise<KetGetMe> {
 	try {
 		me = await zaloGoiTho(fetcher, token, "getMe", {});
 	} catch (loi) {
-		baoLoiZalo("getMe", loi instanceof Error ? lopLoi(loi) : "khong-ro");
+		baoLoiZalo(
+			"getMe",
+			`mang (${loi instanceof Error ? loi.name : "khong-ro"})`,
+		);
 		return { loai: "zalo-loi" };
 	}
 	const maThan = maLoiZalo(me.than);
