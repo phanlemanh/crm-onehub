@@ -252,7 +252,11 @@ API; the API only reads and writes rows.
 - **The tick only checks the bot.** `kiemBot` (`lib/zalo-bot.ts`) calls `getMe`
   once: success writes `zaloBotName` (Zalo's `display_name`) and `zaloPolledAt`,
   then `getWebhookInfo` writes `zaloWebhookUrl` (404 or a body of the wrong shape
-  writes null; other errors keep the old value); failure writes
+  writes null; other errors keep the old value). While `zaloWebhookLyDo` is
+  `zalo-tu-choi` — the last registration failed, or Zalo could not reach the
+  webhook when checking it — the tick never writes a URL, only null: one
+  conditional `updateMany`, so a registration that lands mid-tick keeps its flag.
+  Only a registration that passes Zalo's check clears it. `getMe` failure writes
   `zaloBotName = null` and `zaloWebhookUrl = null` and logs. No token writes null and makes no call. It also
   trims `ZaloUpdateSeen` rows older than `ZALO.poll.giuDauMs`. The tick never calls
   `getUpdates`: a bot with a webhook cannot use it anyway.
