@@ -808,7 +808,10 @@ function boChuThich(nguon: string): string {
 	return ra.replace(/,(\s*[}\]])/g, "$1");
 }
 
-const turboGoc = z.object({ globalEnv: z.array(z.string()) });
+const turboGoc = z.object({
+	globalEnv: z.array(z.string()),
+	globalPassThroughEnv: z.array(z.string()),
+});
 const turboAgent = z.object({
 	tasks: z.record(
 		z.string(),
@@ -817,11 +820,15 @@ const turboAgent = z.object({
 });
 
 describe("khai-bien", () => {
-	test("khai-bien: turbo.json globalEnv co ca hai bien", () => {
+	test("khai-bien: turbo.json cho hai bien Zalo di qua, khong dua vao khoa cache", () => {
 		const goc = turboGoc.parse(JSON.parse(boChuThich(docTep("turbo.json"))));
 		expect(
-			BIEN_ZALO.filter((b) => !goc.globalEnv.includes(b)),
-			"globalEnv thieu bien Zalo",
+			BIEN_ZALO.filter((b) => !goc.globalPassThroughEnv.includes(b)),
+			"globalPassThroughEnv thieu bien Zalo",
+		).toEqual([]);
+		expect(
+			BIEN_ZALO.filter((b) => goc.globalEnv.includes(b)),
+			"globalEnv khong chua bien Zalo",
 		).toEqual([]);
 	});
 

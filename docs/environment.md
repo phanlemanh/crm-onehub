@@ -127,8 +127,8 @@ single place that knows what is set.
 | `ZALO_WEBHOOK_SECRET` | The secret Zalo sends with every webhook call to `/zalo/webhook`; without it the route answers 404 — see `agent.md` |
 
 `ZALO_BOT_TOKEN` and `ZALO_WEBHOOK_SECRET` are read by `apps/agent` only, so they
-are not in `env.validation.ts`. Both are in `turbo.json` `globalEnv` and in the
-agent's `dev` pass-through, so `bun run dev` at the root hands them to the agent.
+are not in `env.validation.ts`. Both are in `turbo.json` `globalPassThroughEnv` — secrets, so never
+`env` — and in the agent's `dev` pass-through, so `bun run dev` at the root hands them to the agent.
 The API learns Zalo is on from `appSetting.zaloBotName`, which the agent writes
 each tick.
 
