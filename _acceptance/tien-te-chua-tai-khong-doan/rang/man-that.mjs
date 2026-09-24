@@ -36,12 +36,51 @@ const CENTS = 15_000_000_000;
 const CHO_DONG = 20_000;
 const NBSP = /[  ]/g;
 
+const CHO_SAN_SANG = 120_000;
+const NGHI = (ms) => new Promise((r) => setTimeout(r, ms));
+
 mkdirSync(BANG_CHUNG, { recursive: true });
+
+async function choMayChu(url) {
+	const han = Date.now() + CHO_SAN_SANG;
+	let cuoi = "";
+	while (Date.now() < han) {
+		try {
+			const res = await fetch(url, { redirect: "manual" });
+			if (res.status < 500) return;
+			cuoi = `tra ${res.status}`;
+		} catch (e) {
+			cuoi = String(e);
+		}
+		await NGHI(2000);
+	}
+	await khongDo(
+		`KHONG DO DUOC: may chu ${url} khong san sang sau ${CHO_SAN_SANG / 1000}s — ${cuoi}`,
+	);
+}
+
+await choMayChu(`${API}/`);
+await choMayChu(`${APP}/`);
 
 const cay = await canhCay();
 if (cay.ket !== "dung-cay") await khongDo(...cay.dong);
 
-const cookie = phien();
+async function phienBen() {
+	let cuoi = null;
+	for (let lan = 0; lan < 6; lan += 1) {
+		try {
+			return phien();
+		} catch (e) {
+			cuoi = e;
+			await NGHI(5000);
+		}
+	}
+	return khongDo(
+		`KHONG DO DUOC: tien de thieu — khong xin duoc phien dang nhap sau 6 lan: ${String(cuoi).slice(0, 200)}`,
+	);
+}
+
+const cookie = await phienBen();
 const slug = await suySlug(cookie);
 
 async function doc(duong, vao) {
