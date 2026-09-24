@@ -22,7 +22,7 @@ Các lỗi dưới đây là thật, nhưng nằm ngoài phạm vi đã duyệt 
   Người dùng thấy gì: Khi kho chưa có (hoặc vừa xoá) khoá Context, mọi đường dẫn của một thành viên thường hay người chỉ OKR đều bị đưa về màn nhập khoá; bấm Lưu thì nhận «Only an owner or an admin can change workspace settings» và không có lối nào khác — đến khi một quản trị nhập khoá hộ. Trước lượt này ai cũng nhập được nên tự thoát. Trên production khoá đang có nên hôm nay không ai kẹt; kẹt chỉ xảy ra khi khoá bị xoá.
   file: `apps/app/proxy.ts`, `apps/app/app/(landing)/onboarding/research/research-form.tsx`, `apps/api/src/settings/settings.service.ts`
   severity: medium
-  Đề xuất: fix-now
+  Đề xuất: new-contract
 
 - **Thanh điều hướng và thanh bên Cài đặt thành khung mờ nếu câu hỏi «tôi là ai trong kho» lỗi — với mọi vai**
   Người dùng thấy gì: Một thành viên thường mở ứng dụng đúng lúc API trả lỗi cho riêng `workspace.get` thì rail và thanh bên Cài đặt chỉ là các nút mờ không bấm được, dù nội dung trang có thể vẫn hiện; trước lượt này hai thanh đó là tĩnh, luôn có.
