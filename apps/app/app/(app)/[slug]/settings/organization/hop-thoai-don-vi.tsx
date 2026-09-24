@@ -20,7 +20,8 @@ import {
 } from "@crm/ui/components/select";
 import { Spinner } from "@crm/ui/components/spinner";
 import { useMutation } from "@tanstack/react-query";
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { toast } from "sonner";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { toChucMessages } from "@/lib/messages/to-chuc";
 import { useTRPC } from "@/lib/trpc/client";
@@ -64,8 +65,28 @@ export function HopThoaiDonVi({
 			: (truongHienTai ?? KHONG_CHON),
 	);
 
+	useEffect(() => {
+		if (loi) document.getElementById(maO)?.focus();
+	}, [loi, maO]);
+
+	const baoXong = () => {
+		switch (yeuCau.loai) {
+			case "tao-bo-phan":
+				return dien(m.xong.taoBoPhan, { ten: ten.trim() });
+			case "tao-phong-ban":
+				return dien(m.xong.taoPhongBan, { ten: ten.trim() });
+			case "doi-ten":
+				return dien(m.xong.doiTen, { ten: ten.trim() });
+			case "truong":
+				return dien(m.xong.truong, { ten: yeuCau.name });
+			case "chuyen":
+				return dien(m.xong.chuyen, { ten: yeuCau.name });
+		}
+	};
+
 	const opt = {
 		onSuccess: async () => {
+			toast.success(baoXong());
 			await lamMoi();
 			dong();
 		},

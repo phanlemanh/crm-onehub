@@ -126,6 +126,13 @@ const vi = {
 		chuyenDi: "Chuyển {ten} sang",
 		luu: "Lưu",
 		huy: "Huỷ",
+		xong: {
+			taoBoPhan: "Đã thêm bộ phận {ten}",
+			taoPhongBan: "Đã thêm phòng ban {ten}",
+			doiTen: "Đã đổi tên thành {ten}",
+			truong: "Đã đặt trưởng cho {ten}",
+			chuyen: "Đã chuyển {ten}",
+		},
 	},
 	nhapHop: {
 		tieuDe: "Nhập từ bảng tính",
@@ -174,6 +181,7 @@ const vi = {
 		veTheoTruong: "Về theo trưởng phòng ban",
 		luu: "Lưu",
 		huy: "Huỷ",
+		xong: "Đã lưu vị trí của {ten}",
 	},
 };
 
@@ -306,6 +314,13 @@ const en: ToChucMessages = {
 		chuyenDi: "Move {ten} to",
 		luu: "Save",
 		huy: "Cancel",
+		xong: {
+			taoBoPhan: "Added division {ten}",
+			taoPhongBan: "Added department {ten}",
+			doiTen: "Renamed to {ten}",
+			truong: "Head set for {ten}",
+			chuyen: "Moved {ten}",
+		},
 	},
 	nhapHop: {
 		tieuDe: "Import from spreadsheet",
@@ -354,6 +369,7 @@ const en: ToChucMessages = {
 		veTheoTruong: "Back to the department head",
 		luu: "Save",
 		huy: "Cancel",
+		xong: "Saved {ten}'s place",
 	},
 };
 

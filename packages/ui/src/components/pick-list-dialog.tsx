@@ -12,7 +12,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@crm/ui/components/dialog";
-import { FieldError } from "@crm/ui/components/field";
+import { Field, FieldError } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import {
 	InputGroup,
@@ -64,7 +64,7 @@ function PickListDialog({
 	const doi = (id: string, chon: boolean) =>
 		onSelectedChange(
 			chon
-				? items.map((m) => m.id).filter((x) => x === id || selected.includes(x))
+				? [...selected.filter((x) => x !== id), id]
 				: selected.filter((x) => x !== id),
 		);
 
@@ -79,19 +79,22 @@ function PickListDialog({
 					<DialogTitle>{title}</DialogTitle>
 					<DialogDescription>{description}</DialogDescription>
 				</DialogHeader>
-				<InputGroup>
-					<InputGroupAddon>
-						<Icon icon={Search} />
-					</InputGroupAddon>
-					<InputGroupInput
-						ref={oTim}
-						aria-label={searchPlaceholder}
-						placeholder={searchPlaceholder}
-						value={tim}
-						aria-invalid={error ? true : undefined}
-						onChange={(e) => setTim(e.target.value)}
-					/>
-				</InputGroup>
+				<Field>
+					<InputGroup>
+						<InputGroupAddon>
+							<Icon icon={Search} />
+						</InputGroupAddon>
+						<InputGroupInput
+							ref={oTim}
+							aria-label={searchPlaceholder}
+							placeholder={searchPlaceholder}
+							value={tim}
+							aria-invalid={error ? true : undefined}
+							onChange={(e) => setTim(e.target.value)}
+						/>
+					</InputGroup>
+					{error ? <FieldError>{error}</FieldError> : null}
+				</Field>
 				{items.length === 0 ? (
 					<p className="text-muted-foreground text-sm">{emptyLabel}</p>
 				) : (
@@ -126,7 +129,6 @@ function PickListDialog({
 						))}
 					</ul>
 				)}
-				{error ? <FieldError>{error}</FieldError> : null}
 				<DialogFooter>
 					<Button
 						variant="outline"

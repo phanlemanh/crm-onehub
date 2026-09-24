@@ -44,6 +44,7 @@ export function ConfirmDialog({
 					<AlertDialogCancel disabled={pending}>{thoi}</AlertDialogCancel>
 					<AlertDialogAction
 						variant={tone}
+						data-variant={tone}
 						disabled={pending}
 						onClick={(event) => {
 							event.preventDefault();
