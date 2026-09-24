@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ed70d70dd0ec9ee7412b45e63c90c925500d50c6
+verified_commit: bb2a22fbce6f69655e42f173fc8031f0bee76cf0
 run_id: s4r1-20260906T145103Z-21187
 human_signoff: Manh Phan 2026-09-06
 ---
@@ -214,3 +214,19 @@ sha: b1a2d0780b772507ddacbea855931706f43f53de · suites: 5 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-09-17, do chiến dịch ghim lại kit 2.14.0 (PR #47): làn eval thật trên cây đã chuyển đường ghi tạo phẩm; đo bằng phanlemanh@gmail.com
 run_id: repin-20260917T051527Z-61120
 sha: ed70d70dd0ec9ee7412b45e63c90c925500d50c6 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
+
+### Re-pin lần 6 — 2026-09-23, do canh neo dan so lai-ra-man 472 file sau PR #90, #94
+run_id: repin-20260923T105425Z-21855
+sha: 80756cd62d5871bc48856c3f380b025ea0cca5cf · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10 (E10 không khai paths) · AC không có chốt máy: AC-10
+
+### Re-pin lần 7 — 2026-09-24, do gop onehub d2a55da8, canh neo lai-ra-man 478 file
+run_id: repin-20260924T005441Z-38083
+sha: 7e0af3e7d0c2219f8c9c97736a5c804f59a57ea9 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10 (E10 không khai paths) · AC không có chốt máy: AC-10
+
+### Re-pin lần 8 — 2026-09-24, do go neo cung dan-so (neo-dan-so-khong-cung) va gop onehub 2e...; ghim lai o dau nhanh
+run_id: repin-20260924T020954Z-69115
+sha: e482d8d3ee21642b475427ea4984cd02a1c37c59 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10 (E10 không khai paths) · AC không có chốt máy: AC-10
+
+### Re-pin lần 9 — 2026-09-24, do gop onehub 35796299 (#106) truoc khi merge #107
+run_id: repin-20260924T031944Z-19904
+sha: bb2a22fbce6f69655e42f173fc8031f0bee76cf0 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10 (E10 không khai paths) · AC không có chốt máy: AC-10

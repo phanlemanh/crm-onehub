@@ -1,17 +1,39 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { duongLuot, xoaTaoPhamCu } from "./luot-chay.mjs";
-import { docFile, docMacDinh } from "./moi-mac-dinh.mjs";
+import { GOC as THU_MUC_GOC, docFile, docMacDinh } from "./moi-mac-dinh.mjs";
 
 const GOC = join(import.meta.dirname, "..", "..", "..");
 
-const NEO = { file: 388, mac_dinh: 92, dong_bang_cu: 9 };
+const NEO = { mac_dinh: 93, dong_bang_cu: 9 };
 
 function banVeRong(banVe) {
 	return Object.values(banVe)
 		.flat()
 		.every((b) => b.loi_dong !== null && b.loi_mo !== null);
+}
+
+function docGit(goc) {
+	let dinh;
+	try {
+		dinh = execFileSync("git", ["-C", goc, "rev-parse", "--show-toplevel"], {
+			encoding: "utf8",
+			stdio: ["ignore", "pipe", "pipe"],
+		}).trim();
+	} catch (loi) {
+		return { loi: `khong doc duoc git o ${goc}: ${String(loi?.stderr ?? loi).trim().split("\n")[0]}` };
+	}
+	if (realpathSync(dinh) !== realpathSync(goc))
+		return { loi: `goc git ${dinh} khac goc dang do ${goc}` };
+	const ra = execFileSync("git", ["-C", goc, "ls-files", "-z", "--", ...THU_MUC_GOC], {
+		encoding: "utf8",
+	});
+	return {
+		tep: ra
+			.split("\0")
+			.filter((f) => /\.tsx?$/.test(f) && existsSync(join(goc, f))),
+	};
 }
 
 function ghi(ten, gt) {
@@ -43,18 +65,37 @@ export function danSo() {
 		`gia tri mac dinh la chuoi co chu: ${doDuoc.mac_dinh} · component so huu: ${new Set(macDinh.map((m) => m.file)).size}`,
 	);
 	console.log(`dong trong bang gioi han vong truoc: ${doDuoc.dong_bang_cu}`);
-	const lech = Object.entries(NEO).filter(([k, v]) => doDuoc[k] !== v);
-	if (lech.length > 0) {
-		for (const [k, v] of lech)
-			console.error(`DO: neo ${k} ghim ${v} nhung do duoc ${doDuoc[k]}`);
-		return 1;
-	}
 	if (doDuoc.file === 0 || doDuoc.mac_dinh === 0) {
 		console.error("KHONG DO DUOC: tap nguon rong");
 		return 2;
 	}
-	console.log("XANH: moi neo khop dia.");
-	return 0;
+	const phiaGit = docGit(GOC);
+	if (phiaGit.loi) {
+		console.error(`KHONG DO DUOC: ${phiaGit.loi}`);
+		return 2;
+	}
+	if (phiaGit.tep.length === 0) {
+		console.error(
+			`KHONG DO DUOC: phia git rong trong khi bo duyet thay ${doDuoc.file} tep — khong doi chieu duoc`,
+		);
+		return 2;
+	}
+	console.log(`tep git theo doi duoi goc: ${phiaGit.tep.length}`);
+	let ma = 0;
+	const thay = new Set(file);
+	const sot = phiaGit.tep.filter((f) => !thay.has(f));
+	if (sot.length > 0) {
+		console.error(
+			`BO-SOT: ${sot.length} tep git theo doi ma bo duyet khong thay: ${sot.slice(0, 5).join(", ")}`,
+		);
+		ma = 1;
+	}
+	const lech = Object.entries(NEO).filter(([k, v]) => doDuoc[k] !== v);
+	for (const [k, v] of lech)
+		console.error(`DO: neo ${k} ghim ${v} nhung do duoc ${doDuoc[k]}`);
+	if (lech.length > 0) ma = 1;
+	if (ma === 0) console.log("XANH: moi neo khop dia, bo duyet thay du tep git theo doi.");
+	return ma;
 }
 
 function chayBanVe() {

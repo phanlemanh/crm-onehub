@@ -83,6 +83,16 @@ export class ConversionService {
 		return { baseAmount: { not: null }, baseCurrency: base };
 	}
 
+	isCounted(
+		deal: {
+			baseAmount: PrismaTypes.Decimal | null;
+			baseCurrency: string | null;
+		},
+		base: string,
+	): boolean {
+		return deal.baseAmount !== null && deal.baseCurrency === base;
+	}
+
 	pendingWhere(base: string): PrismaTypes.DealWhereInput {
 		return {
 			amount: { not: null },

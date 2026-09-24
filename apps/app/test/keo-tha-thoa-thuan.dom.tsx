@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { DealStage } from "@crm/db/enums";
 import type { BoardProps } from "@crm/ui/components/board";
+import { formatMoney } from "@crm/ui/lib/format";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
 import { act, createElement as h, type ReactNode } from "react";
@@ -26,7 +27,7 @@ const LOI_MAY_CHU = "Khong duoc doi.";
 
 let boardState: BoardData = docFixture("deals-board-dem-tong.json");
 let boardMode: "ok" | "loi" | "treo" = "ok";
-let setStageMode: "ok" | "loi" | "treo" = "ok";
+let setStageMode: "ok" | "loi" | "treo" | "treo-loi" = "ok";
 let moTreoGhi: (() => void) | null = null;
 let boardInputs: BoardInput[] = [];
 let setStageCalls: StageWrite[] = [];
@@ -94,11 +95,12 @@ mock.module("@/lib/trpc/client", () => ({
 			setStage: thuTuc("deals.setStage", rong, async (v: StageWrite) => {
 				setStageCalls.push(v);
 				if (setStageMode === "loi") throw new Error(LOI_MAY_CHU);
-				if (setStageMode === "treo") {
+				if (setStageMode === "treo" || setStageMode === "treo-loi") {
 					await new Promise<void>((xong) => {
 						moTreoGhi = xong;
 					});
 				}
+				if (setStageMode === "treo-loi") throw new Error(LOI_MAY_CHU);
 				dichChuyenMayChu(v.id, v.stage);
 				return { id: v.id, stage: v.stage };
 			}),
@@ -689,5 +691,127 @@ describe("tro-nang", () => {
 			expect(a.length).toBeGreaterThan(0);
 		}
 		expect(cap.length * 2).toBe(6);
+	});
+});
+
+function dauCot(k: HTMLElement, stage: string) {
+	return cotCua(k, stage).querySelector("h3")?.textContent ?? "";
+}
+
+function soDauCot(k: HTMLElement, stage: string) {
+	return cotCua(k, stage).querySelector("h3 span span:last-child")?.textContent;
+}
+
+function theDemo(counted: boolean): Card {
+	const card = column("DEMO_BOOKED").cards.find(
+		(c) => c.counted === counted && c.amountCents !== null,
+	);
+	if (!card)
+		throw new Error(`fixture thieu the DEMO_BOOKED counted=${counted}`);
+	return card;
+}
+
+describe("dang-luu-dau-cot", () => {
+	test("the duoc tinh: dau hai cot doi ngay, cot cu khong hien con", async () => {
+		setStageMode = "treo";
+		const k = await dung("?view=board");
+		const cu = structuredClone(column("DEMO_BOOKED"));
+		const moi = structuredClone(column("QUALIFIED_TO_BUY"));
+		const the = theDemo(true);
+		await tha(the.id, "DEMO_BOOKED", "QUALIFIED_TO_BUY");
+		await cho(2);
+		const soCu = soDauCot(k, "DEMO_BOOKED");
+		if (soCu !== String(cu.count - 1)) {
+			throw new Error(
+				`dang luu: cot DEMO_BOOKED hien ${soCu} != ${cu.count - 1}`,
+			);
+		}
+		expect(soDauCot(k, "QUALIFIED_TO_BUY")).toBe(String(moi.count + 1));
+		const tong = (cents: number) =>
+			formatMoney(cents, boardState.reportingCurrency, "vi").replace(
+				/\s/g,
+				" ",
+			);
+		expect(dauCot(k, "DEMO_BOOKED").replace(/\s/g, " ")).toContain(
+			tong((cu.valueCents ?? 0) - (the.baseAmountCents ?? 0)),
+		);
+		expect(dauCot(k, "QUALIFIED_TO_BUY").replace(/\s/g, " ")).toContain(
+			tong(the.baseAmountCents ?? 0),
+		);
+		if (cotCua(k, "DEMO_BOOKED").textContent?.includes("còn")) {
+			throw new Error("dang luu: cot DEMO_BOOKED co dong còn 1 thẻ");
+		}
+		await act(async () => moTreoGhi?.());
+		await cho();
+		expect(soDauCot(k, "DEMO_BOOKED")).toBe(
+			String(column("DEMO_BOOKED").count),
+		);
+		expect(soDauCot(k, "QUALIFIED_TO_BUY")).toBe(
+			String(column("QUALIFIED_TO_BUY").count),
+		);
+	});
+
+	test("the chua quy doi: loi chua quy doi doi cot, cot moi tong rong nhu may chu tra", async () => {
+		setStageMode = "treo";
+		const m = dealMessages("vi");
+		const k = await dung("?view=board");
+		const the = theDemo(false);
+		const bao = m.meta.notCounted("1", the.currency);
+		if (!dauCot(k, "DEMO_BOOKED").includes(bao)) {
+			throw new Error(
+				"doi chung: cot DEMO_BOOKED truoc khi tha thieu loi chua quy doi",
+			);
+		}
+		expect(dauCot(k, "QUALIFIED_TO_BUY")).not.toContain(the.currency);
+		const tongCu = formatMoney(
+			column("DEMO_BOOKED").valueCents ?? 0,
+			boardState.reportingCurrency,
+			"vi",
+		).replace(/\s/g, " ");
+		const tongMoi = formatMoney(
+			column("QUALIFIED_TO_BUY").valueCents ?? 0,
+			boardState.reportingCurrency,
+			"vi",
+		).replace(/\s/g, " ");
+		expect(dauCot(k, "DEMO_BOOKED").replace(/\s/g, " ")).toContain(tongCu);
+		expect(dauCot(k, "QUALIFIED_TO_BUY").replace(/\s/g, " ")).toContain(
+			tongMoi,
+		);
+		await tha(the.id, "DEMO_BOOKED", "QUALIFIED_TO_BUY");
+		await cho(2);
+		if (!dauCot(k, "QUALIFIED_TO_BUY").includes(bao)) {
+			throw new Error(`dang luu: cot QUALIFIED_TO_BUY thieu ${the.currency}`);
+		}
+		expect(dauCot(k, "DEMO_BOOKED")).not.toContain(the.currency);
+		expect(dauCot(k, "DEMO_BOOKED").replace(/\s/g, " ")).toContain(tongCu);
+		expect(dauCot(k, "QUALIFIED_TO_BUY").replace(/\s/g, " ")).not.toContain(
+			tongMoi,
+		);
+		await act(async () => moTreoGhi?.());
+		await cho();
+	});
+});
+
+describe("loi-tra-dau-cot", () => {
+	test("may chu tu choi: dau ca bay cot ve dung nhu truoc khi keo", async () => {
+		setStageMode = "treo-loi";
+		const k = await dung("?view=board");
+		const anh = new Map(THU_TU.map((stage) => [stage, dauCot(k, stage)]));
+		const the = theDemo(false);
+		await tha(the.id, "DEMO_BOOKED", "QUALIFIED_TO_BUY");
+		await cho(2);
+		expect(dauCot(k, "DEMO_BOOKED")).not.toBe(anh.get("DEMO_BOOKED"));
+		await act(async () => moTreoGhi?.());
+		await cho();
+		let khang = 0;
+		for (const stage of THU_TU) {
+			if (dauCot(k, stage) !== anh.get(stage)) {
+				throw new Error(`sau tu choi: cot ${stage} khac anh chup`);
+			}
+			khang += 1;
+		}
+		expect(khang).toBe(7);
+		expect(theTrongCot(k, "DEMO_BOOKED")).toContain(the.id);
+		expect(toastErrors).toEqual([LOI_MAY_CHU]);
 	});
 });

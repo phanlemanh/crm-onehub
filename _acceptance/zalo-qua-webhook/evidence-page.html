@@ -1,0 +1,128 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bằng chứng · zalo-qua-webhook</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+</style></head><body><div class="wrap">
+<h1>Bot Zalo nhận tin qua webhook — tin mã tới là nối ngay, không còn mất giữa hai nhịp cron; cron chỉ kiểm bot sống; hai lệnh tay đăng ký webhook và đọc tin cho bot thử</h1><div class="sub">Trang bằng chứng · <span class="mono">zalo-qua-webhook</span> · tier T2</div>
+<div class="card" style="margin-top:12px"><span class="badge pend">PENDING-JUDGMENT</span>
+<div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">mueuh2z5ofk5</td><td class="mono">2026-09-24T01:18:09Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-2</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-zalo-qua-webhook-E2-r1</td><td class="mono">2026-09-24T01:18:09Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-3</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">mueuh1zkg51v</td><td class="mono">2026-09-24T01:18:09Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-4</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">mueuh3zxux38</td><td class="mono">2026-09-24T01:18:09Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-5</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">mueuh37vqu2d</td><td class="mono">2026-09-24T01:18:09Z</td></tr>
+<tr><td><a href="#E6">E6</a></td><td>AC-6</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">mueuh4hsad1b</td><td class="mono">2026-09-24T01:18:09Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-7</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">mueuh44akfxv</td><td class="mono">2026-09-24T01:18:09Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-8</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">mueuh2e7vfwz</td><td class="mono">2026-09-24T01:18:09Z</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-9</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">mueuh3jsibsj</td><td class="mono">2026-09-24T01:18:09Z</td></tr>
+<tr><td><a href="#E10">E10</a></td><td>AC-10</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">mueuh34b54sz</td><td class="mono">2026-09-24T01:18:09Z</td></tr>
+<tr><td><a href="#E11">E11</a></td><td>AC-11</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">mueuhem5mi7g</td><td class="mono">2026-09-24T01:18:09Z</td></tr>
+<tr><td><a href="#E12">E12</a></td><td>AC-12</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">mueuhg92tomh</td><td class="mono">2026-09-24T01:18:09Z</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · test</h3><p class="crit">AC-1: Given `ZALO_BOT_TOKEN` và `ZALO_WEBHOOK_SECRET` có, U có mã nối còn sống, When `POST /zalo/webhook` đến với header `X-Bot-Api-Secret-Token` đúng và thân là tin chữ của người Zalo Z (cuộc trò chuyện `PRIVATE`) chứa mã đó, Then phản hồi 200; đọc lại từ DB có đúng một `ZaloLink` (U, Z) mang `display_name` của Z, mã có `usedAt`, có một hàng `ZaloUpdateSeen` cho `message_id` đó; và có đúng một `sendMessage` tới Z chứa tên CRM của U.</p>
+<div class="kv"><span>run_id <b>mueuh2z5ofk5</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.zqw_webhook_noi</b></span><span>verified_at <b>2026-09-24T01:18:09Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">6 expect() calls
+Ran 1 test across 1 file. [512.00ms]
+test-run: dropped crm_mueuh2z5ofk5_test</pre>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · test</h3><p class="crit">AC-2: Given hai biến có, When `POST /zalo/webhook` đến với thân là tin mang mã sống của U và header lần lượt là: không có; có mặt nhưng rỗng; sai cùng độ dài với khoá đúng; sai với độ dài 1 ký tự; sai với độ dài 300 ký tự, Then mỗi lần phản hồi 403 và không ném; thân request không bị đọc; không có hàng `ZaloLink`, `ZaloUpdateSeen` hay `ZaloLinkAttempt` mới; không có lời gọi nào tới Zalo; và mã của U vẫn sống.</p>
+<div class="kv"><span>run_id <b>minted-zalo-qua-webhook-E2-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.zqw_webhook_khoa</b></span><span>verified_at <b>2026-09-24T01:18:09Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">33 expect() calls
+Ran 7 tests across 1 file. [551.00ms]
+test-run: dropped crm_mueuh360fyjy_test</pre>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · test</h3><p class="crit">AC-3: Given thiếu `ZALO_WEBHOOK_SECRET`, hoặc thiếu `ZALO_BOT_TOKEN`, trong môi trường của tiến trình, When nạp kênh Zalo và `POST /zalo/webhook` đến với bất kỳ header nào, Then việc nạp kênh không ném, phản hồi 404, thân không bị đọc, không có hàng mới nào và không có lời gọi nào tới Zalo.</p>
+<div class="kv"><span>run_id <b>mueuh1zkg51v</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.zqw_webhook_tat</b></span><span>verified_at <b>2026-09-24T01:18:09Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">6 expect() calls
+Ran 2 tests across 1 file. [581.00ms]
+test-run: dropped crm_mueuh1zkg51v_test</pre>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · test</h3><p class="crit">AC-4: Given hai biến có, U có mã sống, When cùng một tin (cùng `message_id`, chứa mã của U) đến qua webhook hai lần, rồi một lần nữa qua vòng tay `zalo:poll`, Then cả hai lần webhook đều trả 200; chỉ có một `ZaloLink` (U, Z), một hàng `ZaloUpdateSeen` và một `sendMessage` cho tin đó.</p>
+<div class="kv"><span>run_id <b>mueuh3zxux38</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.zqw_webhook_trung</b></span><span>verified_at <b>2026-09-24T01:18:09Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">4 expect() calls
+Ran 1 test across 1 file. [697.00ms]
+test-run: dropped crm_mueuh3zxux38_test</pre>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · test</h3><p class="crit">AC-5: Given hai biến có và khoá đúng, When thân webhook lần lượt là: không phải JSON; JSON sai khuôn nhưng có `message_id`; `{event_name, message}` không có vỏ `ok`/`result`; tin mang mã sống từ người có `is_bot` true; và tin mang mã sống trong cuộc trò chuyện `GROUP`, Then mọi lần đều trả 200; không lần nào tạo `ZaloLink`, `ZaloUpdateSeen` hay `ZaloLinkAttempt`, và không lần nào có `sendMessage`; mỗi lần thân sai khuôn ghi một dòng log chứa danh sách khoá cấp đầu của thân, và lần có `message_id` thì chứa cả `message_id` đó; mã của U vẫn sống.</p>
+<div class="kv"><span>run_id <b>mueuh37vqu2d</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.zqw_webhook_bo_qua</b></span><span>verified_at <b>2026-09-24T01:18:09Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">22 expect() calls
+Ran 1 test across 1 file. [450.00ms]
+test-run: dropped crm_mueuh37vqu2d_test</pre>
+</div>
+<div class="card eval" id="E6"><h3><span class="badge pass">PASS</span> &nbsp;E6 · test</h3><p class="crit">AC-6: Given hai biến có và khoá đúng, When người Zalo Z gửi qua webhook lần lượt: một mã sai; một tin chữ không phải 6 số; một tin không có chữ (ảnh); rồi mã sống của U sau khi Z đã sai đủ `ZALO_LIEN_KET.doMa.toiDa` lần trong cửa sổ, Then mã sai tăng bộ đếm sai của Z thêm một và nhận câu `ZALO.loi.huongDan`; tin chữ và tin ảnh mỗi tin nhận câu hướng dẫn, không tăng bộ đếm; lần mang mã sống lúc đang bị chặn không tạo liên kết và không có câu trả lời; mọi lần đều trả 200.</p>
+<div class="kv"><span>run_id <b>mueuh4hsad1b</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.zqw_webhook_luat_ma</b></span><span>verified_at <b>2026-09-24T01:18:09Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">10 expect() calls
+Ran 1 test across 1 file. [345.00ms]
+test-run: dropped crm_mueuh4hsad1b_test</pre>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge pass">PASS</span> &nbsp;E7 · test</h3><p class="crit">AC-7: Given lịch `dispatch` mỗi phút, When hàm `run` của chính lịch đó chạy với một Zalo giả thay mạng, trong ba trường hợp: (a) token có và `getMe` thành công, (b) token có và `getMe` trả 401, (c) không token, Then không trường hợp nào có lời gọi `getUpdates`; (a) có đúng một `getMe`, và `zaloBotName` là tên bot, `zaloPolledAt` không cũ hơn lúc bắt đầu nhịp; (b) nhịp không ném và `zaloBotName` null; (c) không có lời gọi nào tới Zalo và `zaloBotName` null.</p>
+<div class="kv"><span>run_id <b>mueuh44akfxv</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.zqw_kiem_bot</b></span><span>verified_at <b>2026-09-24T01:18:09Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">9 expect() calls
+Ran 3 tests across 1 file. [727.00ms]
+test-run: dropped crm_mueuh44akfxv_test</pre>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · test</h3><p class="crit">AC-8: Given Zalo giả chỉ giao tin cho lời gọi `getUpdates` đang mở, và tin mang mã sống của U đến ở giây thứ 30 của đồng hồ ảo, When đọc theo ba đường trên cùng dữ liệu: (a) nhịp kiểu #94, mở 1 giây ở giây 0, 60, 120; (b) vòng tay `zalo:poll`, mở `ZALO.pollTay.timeoutGiay` giây liên tục; (c) tin đó đến qua webhook, Then (a) không tạo `ZaloLink` và không có `sendMessage`, tái hiện lỗi của #94; (b) và (c) mỗi đường tạo đúng một `ZaloLink` (U, Z).</p>
+<div class="kv"><span>run_id <b>mueuh2e7vfwz</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.zqw_giao_khi_mo</b></span><span>verified_at <b>2026-09-24T01:18:09Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">6 expect() calls
+Ran 4 tests across 1 file. [504.00ms]
+test-run: dropped crm_mueuh2e7vfwz_test</pre>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pass">PASS</span> &nbsp;E9 · test</h3><p class="crit">AC-9: Given lệnh `zalo:webhook`, When chạy (a) với URL `https://` và hai biến có, (b) với cờ `--xoa`, (c) với URL `http://`, (d) thiếu `ZALO_WEBHOOK_SECRET`, (e) thiếu `ZALO_BOT_TOKEN`, Then (a) có đúng một `setWebhook` mang `url` đó và `secret_token` bằng `ZALO_WEBHOOK_SECRET`, và kết quả in ra chứa `verification.outcome` Zalo trả về; (b) có đúng một `deleteWebhook` và không `setWebhook` nào; (c), (d), (e) — chạy bằng đúng lệnh `bun run zalo:webhook` trong `apps/agent` — tiến trình thoát mã khác 0, stderr gọi đích danh thứ sai hay thiếu, và không có lời gọi nào tới Zalo; và lệnh `bun run zalo:poll` chạy khi thiếu `ZALO_BOT_TOKEN` cũng thoát mã khác 0 với stderr gọi tên biến đó.</p>
+<div class="kv"><span>run_id <b>mueuh3jsibsj</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.zqw_lenh_webhook</b></span><span>verified_at <b>2026-09-24T01:18:09Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">17 expect() calls
+Ran 7 tests across 1 file. [756.00ms]
+test-run: dropped crm_mueuh3jsibsj_test</pre>
+</div>
+<div class="card eval" id="E10"><h3><span class="badge pass">PASS</span> &nbsp;E10 · test</h3><p class="crit">AC-10: Given kho sau vòng này, When đọc `.env.example`, `docs/environment.md`, `turbo.json` và `apps/agent/turbo.json`, Then `.env.example` và `docs/environment.md` có `ZALO_WEBHOOK_SECRET` kèm ghi chú; `globalEnv` của `turbo.json` có `ZALO_BOT_TOKEN` và `ZALO_WEBHOOK_SECRET`; `passThroughEnv` của `dev` và `dev:headless` trong `apps/agent/turbo.json` có cả hai; và `.env.example` chỉ nơi tạo bot là OA «Zalo Bot Manager» trong app Zalo, không còn chỉ tạo bot ở `bot.zaloplatforms.com`.</p>
+<div class="kv"><span>run_id <b>mueuh34b54sz</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.zqw_khai_bien</b></span><span>verified_at <b>2026-09-24T01:18:09Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">8 expect() calls
+Ran 4 tests across 1 file. [445.00ms]
+test-run: dropped crm_mueuh34b54sz_test</pre>
+</div>
+<div class="card eval" id="E11"><h3><span class="badge pass">PASS</span> &nbsp;E11 · test</h3><p class="crit">AC-11: Given kênh mặc định export từ `apps/agent/agent/channels/zalo.ts`, When tìm route có `method` `POST` và `path` `/zalo/webhook` rồi gọi handler của nó với tin của AC-1 và khoá đúng, rồi với khoá sai, Then route đó tồn tại đúng một, lần khoá đúng tạo `ZaloLink` như AC-1, và lần khoá sai trả 403. (cross-layer)</p>
+<div class="kv"><span>run_id <b>mueuhem5mi7g</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.zqw_kenh_route</b></span><span>verified_at <b>2026-09-24T01:18:09Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">4 expect() calls
+Ran 1 test across 1 file. [319.00ms]
+test-run: dropped crm_mueuhem5mi7g_test</pre>
+</div>
+<div class="card eval" id="E12"><h3><span class="badge pass">PASS</span> &nbsp;E12 · script</h3><p class="crit">AC-12: Given các phép đo đã ký của `nhac-qua-zalo` (`apps/agent/test/nhac-qua-zalo.integration.spec.ts`), When chạy trọn tệp đó ở đỉnh nhánh của vòng này, Then mọi ca xanh, và tệp đó không có thay đổi nào so với `merge-base` của nhánh với `onehub`.</p>
+<div class="kv"><span>run_id <b>mueuhg92tomh</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.zqw_giu_nqz</b></span><span>verified_at <b>2026-09-24T01:18:09Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">77 expect() calls
+Ran 34 tests across 1 file. [1.56s]
+test-run: dropped crm_mueuhg92tomh_test</pre>
+</div>
+<h2>Eval không phân biệt (Analyst)</h2><div class="flag fred">E12 — pass trên cả HEAD lẫn baseline (diffBase onehub), nên bài test này tự nó không phân biệt được feature khỏi code cũ; đây là regression-guard có chủ ý (giữ nguyên spec đã ký của nhac-qua-zalo để bảo vệ hành vi cronjob cũ khi thêm đường webhook), không phải một chỗ thiếu assert của feature.</div>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1: toàn bộ 12 eval máy (E1–E12) đều PASS và bốn lệnh suite hồi quy (bun run test, turbo lint, lint:slop, turbo build) đều xanh; verdict tổng là PENDING-JUDGMENT vì bước phân loại phạm vi (scope-triage) không chạy được ở vòng này — xem review-findings.md mục &quot;Chưa phân loại (triage-failed)&quot;.</li></ul>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>

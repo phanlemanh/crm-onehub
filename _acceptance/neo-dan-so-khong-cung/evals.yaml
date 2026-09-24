@@ -1,0 +1,82 @@
+schema_version: 1
+feature_slug: neo-dan-so-khong-cung
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.ndk_them_tep
+    expected: "exit 0 khi CA HAI chieu dung tren cung ca them-tep (ban sao them apps/app/lib/do-neo-them.ts, noi dung 'export const doNeoThem = 1;', da commit): ban sua thoat 0 va so tep in ra = so tep ban sao nguyen ven + 1 (ca hai so in ra); doi chung: ban goc e22d8288 tren ban sao nguyen ven thoat 0 (lech -> exit 2 'TIEN DE: ban goc do san'); ban goc tren ban sao da them tep thoat 1 va co dong dung 'DO: neo file ghim <NEO.file cua ban goc> nhung do duoc <nguyen ven + 1>'. Sai mot chieu -> exit 1 ghim '<ban> them-tep: <ly do>'. Dong cuoi 'DO-NEO KET LUAN: ... ma thoat <x>'"
+    paths: ["_acceptance/chan-lai-component-ra-man/rang/**", "_acceptance/neo-dan-so-khong-cung/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.ndk_them_mac_dinh
+    expected: "exit 0 khi: doi chung duong — ban sua tren ban sao nguyen ven thoat 0; ban sao them apps/app/components/do-neo-mac-dinh.tsx (export function DoNeo({ nhan = \"Hello there\" }) tra ve <span>{nhan}</span>, da commit) -> ban sua thoat 1 va co dong 'DO: neo mac_dinh ghim <N> nhung do duoc <N+1>' voi N la neo trong ban sua"
+    paths: ["_acceptance/chan-lai-component-ra-man/rang/**", "_acceptance/neo-dan-so-khong-cung/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.ndk_bo_sot
+    expected: "exit 0 khi: ban sao sua moi-mac-dinh.mjs them \"lib\" vao LOAI_TRU (tiem bang thay chuoi, moc vang -> exit 2 goi ten moc); so tep ban sua in ra < ban sao nguyen ven (tiem da vao that); ban sua thoat 1, co dong bat dau 'BO-SOT:' voi so tep bi sot BANG DUNG (so tep nguyen ven - so tep sau tiem) va it nhat mot duong dan chua '/lib/'; ban goc cung ca thoat 1 voi 'DO: neo file' (chi bat vi so tep giam, khong goi ten tep)"
+    paths: ["_acceptance/chan-lai-component-ra-man/rang/**", "_acceptance/neo-dan-so-khong-cung/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.ndk_chua_theo_doi
+    expected: "exit 0 khi: ban sao them apps/app/lib/do-neo-chua-commit.ts KHONG git add; ban sua thoat 0, so tep in ra = nguyen ven + 1 (bo duyet thay tep), va khong co dong 'BO-SOT:' hay 'DO:'; chieu do cung ca: ban goc thoat 1 voi 'DO: neo file'"
+    paths: ["_acceptance/chan-lai-component-ra-man/rang/**", "_acceptance/neo-dan-so-khong-cung/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.ndk_khong_do_duoc
+    expected: "exit 0 khi hai ca deu dung: (a) ban sao KHONG git init dat o thu muc tam he thong (bo do kiem truoc 'git rev-parse' that bai o do) -> ban sua thoat 2, co dong 'KHONG DO DUOC:' chua chu 'git'; (c) ban sao KHONG git init dat trong .acceptance-runs/ cua kho (thu muc bi git bo qua) -> ban sua thoat 2 voi dong bat dau 'KHONG DO DUOC: goc git ' va chua ' khac goc dang do ' (dong 'phia git rong' khong tinh), va doi chung dot bien: cung ban sao ma lai-ra-man bi go chan so goc git (thay chuoi, moc vang -> exit 2 goi ten moc) thi khang dinh do goi ten sai; (b) ban sao da git init nhung xoa ca bon thu muc goc -> ban sua thoat 2 voi dong 'KHONG DO DUOC: tap nguon rong'. Doi chung: ban sao nguyen ven da git init -> ban sua thoat 0"
+    paths: ["_acceptance/chan-lai-component-ra-man/rang/**", "_acceptance/neo-dan-so-khong-cung/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.ndk_cay_that
+    expected: "exit 0 khi bo do doc dung dong lenh cl_tieng_viet_den_man va cl_dan_so tu _acceptance/config.yaml (khong chep lenh tay), chay tung dong o goc kho, ca hai thoat 0; in nguyen van dong lenh da chay"
+    paths: ["_acceptance/config.yaml", "_acceptance/chan-lai-component-ra-man/rang/**", "packages/ui/**", "apps/app/**", "_acceptance/neo-dan-so-khong-cung/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.ndk_pham_vi
+    expected: "exit 0 khi git diff $(git merge-base origin/onehub HEAD)...HEAD (tru _acceptance/** va tep khop risk_tiers.t1_skip_globs) rong, VA danh sach mau co packages/ui/src/components/button.tsx thi ham kiem goi ten dung tep do"
+    paths: ["apps/**", "packages/**", "scripts/**", "_acceptance/neo-dan-so-khong-cung/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.ndk_ho_so_goc
+    expected: "exit 0 khi: (1) _acceptance/chan-lai-component-ra-man/decisions.jsonl moi dong la JSON hop le va co dung >= 1 dong type revisit ma decision nhac 'neo-dan-so-khong-cung'; (2) bo do chay lan cua ho so goc o che do chi do (repin-lane --allow-dirty, khong --write) — moi suite va moi eval may exit 0. Doi chung am cho (1): mot ban sao so sach khong co dong revisit -> ham kiem goi ten 'HO-SO-GOC: thieu con tro revisit'"
+    paths: ["_acceptance/chan-lai-component-ra-man/**", "_acceptance/neo-dan-so-khong-cung/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.ndk_cay_lech
+    expected: "exit 0 khi: git worktree tach roi o HEAD trong thu muc tam, commit them apps/app/lib/do-neo-lech.ts; bo do cua chinh cay do chay --ca them-tep,bo-sot,chua-theo-doi thoat 0 (ban goc dung tu git archive e22d8288); doi chung: thay do-neo.mjs cua cay do bang ban o 785a1d7e roi chay --ca them-tep thi thoat 2 voi dong bat dau 'TIEN DE: ban goc do san'; worktree tam go bo trong finally"
+    paths: ["_acceptance/chan-lai-component-ra-man/rang/**", "_acceptance/neo-dan-so-khong-cung/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.ndk_xoa_chua_commit
+    expected: "exit 0 khi hai ca deu dung: ban sao commit them apps/app/lib/do-neo-them.ts (ban sua xanh san), roi (xoa) rm khoi dia khong commit, (doi-ten) mv sang apps/app/lib/do-neo-doi-ten.ts khong stage -> ban sua thoat 0, khong dong 'BO-SOT:'; cung hai ca, ban sao voi lai-ra-man o 785a1d7e thoat 1 voi dong dung 'BO-SOT: 1 tep git theo doi ma bo duyet khong thay: apps/app/lib/do-neo-them.ts'"
+    paths: ["_acceptance/chan-lai-component-ra-man/rang/**", "_acceptance/neo-dan-so-khong-cung/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
