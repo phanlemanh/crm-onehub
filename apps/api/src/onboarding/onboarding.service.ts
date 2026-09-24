@@ -1,4 +1,4 @@
-import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
+import { canManageOnboarding, WORKSPACE_ID, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import {
 	type OnboardingTemplateStep,
@@ -262,6 +262,17 @@ export class OnboardingService {
 				ONBOARDING.thongDiep.boPhanTrongKhuon(khuon),
 			);
 		}
+		const conNguoi = await this.db.orgPlacement.count({
+			where: {
+				primaryDepartmentId: input.id,
+				user: { members: { some: { organizationId: WORKSPACE_ID } } },
+			},
+		});
+		if (conNguoi > 0) {
+			throw new BadRequestException(
+				ONBOARDING.thongDiep.phongBanConNguoi(conNguoi),
+			);
+		}
 
 		return this.motBoPhanRa(
 			await this.db.department.update({
@@ -297,6 +308,12 @@ export class OnboardingService {
 		}
 		if (row._count.steps > 0) {
 			throw new BadRequestException(ONBOARDING.thongDiep.daDung);
+		}
+		const tro = await this.db.orgPlacement.count({
+			where: { primaryDepartmentId: input.id },
+		});
+		if (tro > 0) {
+			throw new BadRequestException(ONBOARDING.thongDiep.phongBanConNguoiXoa);
 		}
 		const khuon = (await this.banDoKhuon()).get(row.id) ?? [];
 		if (khuon.length > 0) {

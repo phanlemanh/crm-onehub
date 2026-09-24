@@ -1,4 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { db } from "@crm/db";
 import type { INestApplication } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
@@ -765,5 +767,301 @@ describe("do-phu", () => {
 		expect(`X tang ${c2.coverage.withPrimary - c.coverage.withPrimary}`).toBe(
 			"X tang 1",
 		);
+	});
+});
+
+type Chieu = { boPhan: Buoc["boPhan"]; chuaXep: string[]; luu: string[] };
+
+function chieuLuu(c: TreeOutput, bpIds: string[], pbIds: string[]): Chieu {
+	return {
+		...chieu(c, bpIds, pbIds),
+		luu: [
+			...c.archived.divisions.map((d) => d.id),
+			...c.archived.departments.map((d) => d.id),
+		]
+			.filter((id) => bpIds.includes(id) || pbIds.includes(id))
+			.sort(),
+	};
+}
+
+describe("luu-tru", () => {
+	test("luu-tru: muoi ca luu tru, khoi phuc, xoa han", async () => {
+		const bp = await tao("org.createDivision", { name: ma("lt-bp") }, "bp");
+		const bpRong = await tao(
+			"org.createDivision",
+			{ name: ma("lt-bp-rong") },
+			"bp rong",
+		);
+		const bpXoa = await tao(
+			"org.createDivision",
+			{ name: ma("lt-bp-xoa") },
+			"bp xoa",
+		);
+		const bpChuaLuu = await tao(
+			"org.createDivision",
+			{ name: ma("lt-bp-chua") },
+			"bp chua luu",
+		);
+		const pbNguoi = await pbMoi("lt-nguoi", bp);
+		const pbPhu = await pbMoi("lt-phu", bp);
+		const pbCuaBpRong = await pbMoi("lt-trong-bp-rong", bpRong);
+		const pbBuoc = await pbMoi("lt-buoc");
+		const pbNguoiRoi = await pbMoi("lt-nguoi-roi");
+		const pbChuaLuu = await pbMoi("lt-chua-luu");
+		const bpIds = [bp, bpRong, bpXoa, bpChuaLuu];
+		const pbIds = [pbNguoi, pbPhu, pbCuaBpRong, pbBuoc, pbNguoiRoi, pbChuaLuu];
+
+		const n1 = await nguoiMoi("lt-n1");
+		const n2 = await nguoiMoi("lt-n2");
+		const n3 = await nguoiMoi("lt-n3");
+		const nRoi = await nguoiMoi("lt-roi");
+		ok(await datViTri(n1, pbNguoi), "n1");
+		ok(await datViTri(n2, pbNguoi), "n2");
+		ok(await datViTri(n3, null, [pbPhu]), "n3 phu");
+		ok(await datViTri(nRoi, pbNguoiRoi), "nguoi roi");
+		await db.member.delete({
+			where: {
+				organizationId_userId: { organizationId: "workspace", userId: nRoi },
+			},
+		});
+		const cty = await db.company.create({
+			data: { name: ma("lt-cty") },
+			select: { id: true },
+		});
+		const keHoach = await db.onboardingPlan.create({
+			data: {
+				companyId: cty.id,
+				startedAt: new Date(),
+				targetDays: 30,
+				ownerId: phien.quan.nguoi,
+				steps: {
+					create: [
+						{
+							label: "buoc",
+							departmentId: pbBuoc,
+							dueAt: new Date(),
+							position: 0,
+						},
+					],
+				},
+			},
+			select: { id: true },
+		});
+		const viTriPhu = await db.department.findUnique({
+			where: { id: pbPhu },
+			select: { divisionId: true, position: true },
+		});
+
+		const tuChoi = async (
+			nhan: string,
+			thuTuc: string,
+			id: string,
+			cau: string,
+		) => {
+			const truoc = chieuLuu(await cay(), bpIds, pbIds);
+			const r = await goi(thuTuc, { id });
+			expect(`${nhan}: HTTP ${r.status} ${r.loi}`).toBe(
+				`${nhan}: HTTP 400 ${cau}`,
+			);
+			expect(chieuLuu(await cay(), bpIds, pbIds)).toEqual(truoc);
+		};
+
+		await tuChoi(
+			"1 luu tru phong ban con 2 nguoi chinh",
+			"onboarding.archiveDepartment",
+			pbNguoi,
+			"Còn 2 người có phòng ban chính ở đây — chuyển họ trước.",
+		);
+		ok(
+			await goi("onboarding.archiveDepartment", { id: pbPhu }),
+			"2 luu tru phong ban chi con nguoi phu",
+		);
+		await tuChoi(
+			"3 luu tru bo phan con 1 phong ban",
+			"org.archiveDivision",
+			bpRong,
+			"Bộ phận còn 1 phòng ban — chuyển hoặc lưu trữ chúng trước.",
+		);
+		ok(
+			await goi("onboarding.archiveDepartment", { id: pbCuaBpRong }),
+			"luu tru pb cua bp rong",
+		);
+		ok(
+			await goi("org.archiveDivision", { id: bpRong }),
+			"4 luu tru bo phan chi con phong ban da luu tru",
+		);
+		ok(
+			await goi("onboarding.restoreDepartment", { id: pbPhu }),
+			"5 khoi phuc phong ban",
+		);
+		expect(
+			await db.department.findUnique({
+				where: { id: pbPhu },
+				select: { divisionId: true, position: true },
+			}),
+		).toEqual(viTriPhu);
+
+		ok(
+			await goi("onboarding.archiveDepartment", { id: pbBuoc }),
+			"luu tru pb buoc",
+		);
+		await tuChoi(
+			"6 xoa han phong ban da luu tru con buoc",
+			"onboarding.purgeDepartment",
+			pbBuoc,
+			"Đã được dùng nên không xoá vĩnh viễn được — lịch sử kế hoạch còn trỏ tới.",
+		);
+		ok(
+			await goi("onboarding.archiveDepartment", { id: pbNguoiRoi }),
+			"luu tru pb nguoi roi",
+		);
+		await tuChoi(
+			"7 xoa han phong ban da luu tru con nguoi chinh",
+			"onboarding.purgeDepartment",
+			pbNguoiRoi,
+			"Phòng ban còn người trỏ tới nên không xoá hẳn được.",
+		);
+		ok(await goi("org.archiveDivision", { id: bpXoa }), "luu tru bp xoa");
+		ok(
+			await goi("org.purgeDivision", { id: bpXoa }),
+			"8 xoa han bo phan da luu tru khong con gi",
+		);
+		await tuChoi(
+			"9 xoa han bo phan chua luu tru va rong",
+			"org.purgeDivision",
+			bpChuaLuu,
+			"Chỉ xoá hẳn được đơn vị đã lưu trữ.",
+		);
+		await tuChoi(
+			"10 xoa han phong ban chua luu tru va rong",
+			"onboarding.purgeDepartment",
+			pbChuaLuu,
+			"Chỉ xoá vĩnh viễn được thứ đã lưu trữ.",
+		);
+
+		const c = await cay();
+		expect({
+			bpRongTrongCay: c.divisions.some((d) => d.id === bpRong),
+			bpRongLuuTru: c.archived.divisions.some((d) => d.id === bpRong),
+		}).toEqual({ bpRongTrongCay: false, bpRongLuuTru: true });
+
+		await db.onboardingPlan.delete({ where: { id: keHoach.id } });
+		await db.company.delete({ where: { id: cty.id } });
+	});
+});
+
+function thuTucGhi(): string[] {
+	const nguon = readFileSync(
+		join(import.meta.dir, "../src/generated/server.ts"),
+		"utf8",
+	);
+	const ra: string[] = [];
+	let nhom = "";
+	let thuTuc = "";
+	for (const dong of nguon.split("\n")) {
+		const r = dong.match(/^ {2}(\w+): t\.router\(/);
+		if (r) nhom = r[1] as string;
+		const p = dong.match(/^ {4}(\w+): publicProcedure/);
+		if (p) thuTuc = p[1] as string;
+		if (dong.includes(".mutation(") && nhom !== "" && thuTuc !== "") {
+			ra.push(`${nhom}.${thuTuc}`);
+		}
+	}
+	return ra
+		.filter((t) => t.startsWith("org.") || /^onboarding\.\w*Department/.test(t))
+		.sort();
+}
+
+async function dungDauVaoHopLe(): Promise<
+	Record<string, () => Promise<unknown>>
+> {
+	const bpMoi = () => tao("org.createDivision", { name: ma("q-bp") }, "q bp");
+	const pbTrong = () => pbMoi("q-pb");
+	const pbLuu = async () => {
+		const id = await pbTrong();
+		ok(await goi("onboarding.archiveDepartment", { id }), "q luu pb");
+		return id;
+	};
+	const bpLuu = async () => {
+		const id = await bpMoi();
+		ok(await goi("org.archiveDivision", { id }), "q luu bp");
+		return id;
+	};
+	return {
+		"org.createDivision": async () => ({ name: ma("q-tao-bp") }),
+		"org.renameDivision": async () => ({
+			id: await bpMoi(),
+			name: ma("q-ten"),
+		}),
+		"org.reorderDivisions": async () => ({ ids: [await bpMoi()] }),
+		"org.archiveDivision": async () => ({ id: await bpMoi() }),
+		"org.restoreDivision": async () => ({ id: await bpLuu() }),
+		"org.purgeDivision": async () => ({ id: await bpLuu() }),
+		"org.createDepartment": async () => ({
+			name: ma("q-tao-pb"),
+			divisionId: null,
+		}),
+		"org.renameDepartment": async () => ({
+			id: await pbTrong(),
+			name: ma("q-ten-pb"),
+		}),
+		"org.moveDepartment": async () => ({
+			id: await pbTrong(),
+			divisionId: await bpMoi(),
+			index: 0,
+		}),
+		"org.setHead": async () => ({
+			kind: "division",
+			id: await bpMoi(),
+			userId: await nguoiMoi("q-truong"),
+		}),
+		"org.setPlacement": async () => ({
+			userId: await nguoiMoi("q-vi-tri"),
+			primaryDepartmentId: await pbTrong(),
+			secondaryDepartmentIds: [],
+			managerUserId: null,
+		}),
+		"onboarding.createDepartment": async () => ({ name: ma("q-onb-tao") }),
+		"onboarding.updateDepartment": async () => ({
+			id: await pbTrong(),
+			name: ma("q-onb-ten"),
+		}),
+		"onboarding.archiveDepartment": async () => ({ id: await pbTrong() }),
+		"onboarding.restoreDepartment": async () => ({ id: await pbLuu() }),
+		"onboarding.purgeDepartment": async () => ({ id: await pbLuu() }),
+		"onboarding.reorderDepartments": async () => ({ ids: [await pbTrong()] }),
+	};
+}
+
+describe("quyen", () => {
+	test("quyen: moi thu tuc ghi rut tu router — thuong FORBIDDEN, quan tri va chu khong", async () => {
+		const thuTuc = thuTucGhi();
+		console.log(`thu tuc ghi: ${thuTuc.length} — ${thuTuc.join(", ")}`);
+		expect(thuTuc.length).toBeGreaterThan(10);
+		const vao = await dungDauVaoHopLe();
+		const thieu = thuTuc.filter((t) => !(t in vao));
+		expect(`thieu input hop le cho ${thieu.join(", ")}`).toBe(
+			"thieu input hop le cho ",
+		);
+		let daGui = 0;
+		for (const t of thuTuc) {
+			const lam = vao[t] as () => Promise<unknown>;
+			const thuong = await goi(t, await lam(), "thuong");
+			expect(`${t}: thuong HTTP ${thuong.status}`).toBe(
+				`${t}: thuong HTTP 403`,
+			);
+			for (const ai of ["quan", "chu"] as const) {
+				const r = await goi(t, await lam(), ai);
+				expect(`${t}: ${ai} HTTP ${r.status} ${r.loi}`).toBe(
+					`${t}: ${ai} HTTP 200 `,
+				);
+			}
+			daGui += 1;
+		}
+		console.log(`da gui input hop le: ${daGui}/${thuTuc.length}`);
+		expect(
+			(await doc<{ canManage: boolean }>("org.access", "thuong")).canManage,
+		).toBe(false);
+		await doc("org.tree", "thuong");
 	});
 });
