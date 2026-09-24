@@ -316,7 +316,7 @@ gần nhất. Không sửa dòng cũ; chỉ nối thêm vào cột Ghi chú.
 | --- | --- | --- | --- | --- | --- |
 | 0 | lái thử và lộ trình | xong | 2026-09-24 | — | lái thử bot thật 23/09; chủ kho đồng ý thứ tự 24/09 |
 | 1 | `zalo-qua-webhook` | đã lên `onehub` | 2026-09-24 | #105 | cửa sổ 24/09 → 25/09 · S4 vòng 1 PENDING-JUDGMENT, chủ kho nâng phạm vi AC-10 (biến Zalo sang `globalPassThroughEnv`) · S4 vòng 2 PASS 12/12, máy thông (machine-cleared), cửa veto mở · Ngoài-3/Ngoài-4 (tin lỗi giữa chừng mất hẳn; trang báo bot sống chỉ theo `getMe`) chuyển sang vòng 2 · đã lên onehub 24/09 (#105, `790fa85e`) |
-| 2 | `noi-zalo-cho-nguoi-moi` | chưa mở | — | — | cửa sổ 26/09 → 30/09; có design-pass |
+| 2 | `noi-zalo-cho-nguoi-moi` | S3 xong, chờ S4 | 2026-09-24 | `feat/noi-zalo-cho-nguoi-moi` | cửa sổ 26/09 → 30/09, mở sớm 24/09 · Cổng Phạm vi và Cổng 1.5 chủ kho duyệt 24/09 · 15 AC, 24 eval, design-pass trên `/proto/noi-zalo-cho-nguoi-moi` · nhận luôn Ngoài-3/Ngoài-4 của vòng 1 và ba lỗi chữ lái thử · thêm `migration` `20260924043321_noi_zalo_cho_nguoi_moi` cho hàng T |
 | T | triển khai | chưa mở | — | — | hạn cứng trước 26/10 |
 | 3 | `tra-loi-tin-nhac` | chờ điều kiện | — | — | chờ hai tuần nhắc thật và lượt 4 OKR |
 | 4 | `hoi-crm-qua-zalo` | chờ điều kiện | — | — | chờ quyết ranh giới dữ liệu và trần chi tiêu AI; đề xuất gộp lượt 10 OKR |
