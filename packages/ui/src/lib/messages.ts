@@ -113,6 +113,20 @@ const en = {
 		more: (count: string) => `${count} more`,
 		drag: (title: string) => `Drag ${title}`,
 	},
+	soTien: {
+		docLa: "Reads as",
+		format: (example: string) =>
+			`Can't read this number. Use a comma between thousands and a period before decimals — for example ${example}.`,
+		otherLocale: (example: string) =>
+			`This number is written the Vietnamese way. Here a comma separates thousands and a period comes before decimals — for example ${example}.`,
+		fractionNone: (currency: string, example: string) =>
+			`${currency} has no decimals — type a whole amount, for example ${example}.`,
+		fractionMax: (currency: string, digits: string) =>
+			`${currency} takes at most ${digits} decimal places.`,
+		negative: "The amount can't be negative.",
+		tooLarge: "That amount is too large to record.",
+		canDongTien: "Choose a currency to read this amount.",
+	},
 };
 
 export type Messages = typeof en;
@@ -229,6 +243,20 @@ const vi = {
 		empty: "Trống",
 		more: (count: string) => `còn ${count} thẻ`,
 		drag: (title: string) => `Kéo ${title}`,
+	},
+	soTien: {
+		docLa: "Đọc là",
+		format: (example: string) =>
+			`Chưa đọc được số này. Dấu chấm ngăn hàng nghìn, dấu phẩy đứng trước phần lẻ — ví dụ ${example}.`,
+		otherLocale: (example: string) =>
+			`Số này viết theo kiểu tiếng Anh. Ở đây dấu chấm ngăn hàng nghìn, dấu phẩy đứng trước phần lẻ — ví dụ ${example}.`,
+		fractionNone: (currency: string, example: string) =>
+			`${currency} không có phần lẻ — gõ số tròn, ví dụ ${example}.`,
+		fractionMax: (currency: string, digits: string) =>
+			`${currency} có tối đa ${digits} chữ số lẻ.`,
+		negative: "Số tiền không được âm.",
+		tooLarge: "Số này quá lớn để lưu.",
+		canDongTien: "Chọn đồng tiền để đọc số này.",
 	},
 } satisfies Messages;
 

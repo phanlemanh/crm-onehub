@@ -179,8 +179,11 @@ const en = {
 		addToDeal: "Add to deal",
 		created: (name: string) => `${name} created.`,
 		noOwner: "Could not work out who should own this deal.",
+		currencyLoading: "Loading the reporting currency…",
+		currencyLoadFailed:
+			"Couldn't load the reporting currency, so the amount can't be saved yet. Leave the amount empty to create the deal, or try again.",
+		retry: "Try again",
 		create: "Create deal",
-		amountNotNumber: "Amount has to be a number.",
 		remove: "Remove",
 		deleteWarning: (company: string, people: string) =>
 			`Its stage history, notes and agent conversations go too. ${company} and the ${people} on it stay in the CRM.`,
@@ -370,8 +373,11 @@ const vi = {
 		addToDeal: "Thêm vào thoả thuận",
 		created: (name: string) => `Đã tạo ${name}.`,
 		noOwner: "Không xác định được ai phụ trách thoả thuận này.",
+		currencyLoading: "Đang tải đồng tiền báo cáo…",
+		currencyLoadFailed:
+			"Không tải được đồng tiền báo cáo, nên chưa lưu được số tiền. Bỏ trống số tiền để tạo thoả thuận, hoặc thử lại.",
+		retry: "Thử lại",
 		create: "Tạo thoả thuận",
-		amountNotNumber: "Giá trị phải là một con số.",
 		remove: "Gỡ",
 		deleteWarning: (company: string, people: string) =>
 			`Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. ${company} và ${people} trong đó vẫn ở lại CRM.`,
