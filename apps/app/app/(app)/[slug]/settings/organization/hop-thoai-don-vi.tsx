@@ -24,10 +24,13 @@ import { useId, useRef, useState } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { toChucMessages } from "@/lib/messages/to-chuc";
 import { useTRPC } from "@/lib/trpc/client";
-import { type CayDuLieu, moiPhongBan, type YeuCauDonVi } from "./kieu";
+import {
+	type CayDuLieu,
+	KHONG_CHON,
+	moiPhongBan,
+	type YeuCauDonVi,
+} from "./kieu";
 import { useLamMoiToChuc } from "./lam-moi";
-
-const KHONG = "__none";
 
 export function HopThoaiDonVi({
 	cay,
@@ -57,8 +60,8 @@ export function HopThoaiDonVi({
 			: undefined;
 	const [chon, setChon] = useState<string>(
 		yeuCau.loai === "chuyen"
-			? (yeuCau.divisionId ?? KHONG)
-			: (truongHienTai ?? KHONG),
+			? (yeuCau.divisionId ?? KHONG_CHON)
+			: (truongHienTai ?? KHONG_CHON),
 	);
 
 	const opt = {
@@ -117,7 +120,7 @@ export function HopThoaiDonVi({
 		if (dangGui.current || dangLuu || !sanSang) return;
 		dangGui.current = true;
 		setLoi(null);
-		const giaTri = chon === KHONG ? null : chon;
+		const giaTri = chon === KHONG_CHON ? null : chon;
 		switch (yeuCau.loai) {
 			case "tao-bo-phan":
 				taoBp.mutate({ name: ten }, opt);
@@ -188,7 +191,7 @@ export function HopThoaiDonVi({
 									<SelectValue />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value={KHONG}>
+									<SelectItem value={KHONG_CHON}>
 										{yeuCau.loai === "chuyen" ? mc.chuaXep : m.khongAi}
 									</SelectItem>
 									{yeuCau.loai === "chuyen"

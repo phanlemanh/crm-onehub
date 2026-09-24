@@ -117,9 +117,7 @@ export function HopThoaiNhap({ dong }: { dong: () => void }) {
 						value={chu}
 						disabled={ghi.isPending}
 						translate="no"
-						placeholder={
-							"lan@onehub.vn\tKinh doanh vùng 1\tKinh doanh\tphòng ban"
-						}
+						placeholder={m.mau}
 						onChange={(e) => doiChu(e.target.value)}
 					/>
 					<FieldDescription>{m.goiY}</FieldDescription>
@@ -180,7 +178,7 @@ export function HopThoaiNhap({ dong }: { dong: () => void }) {
 											<TableCell translate="no">{r.email}</TableCell>
 											<TableCell translate="no">{r.department}</TableCell>
 											<TableCell translate="no">{r.division}</TableCell>
-											<TableCell>{r.head}</TableCell>
+											<TableCell translate="no">{r.head}</TableCell>
 											<TableCell>
 												{r.error ? (
 													<span className="text-destructive">{m.hong}</span>

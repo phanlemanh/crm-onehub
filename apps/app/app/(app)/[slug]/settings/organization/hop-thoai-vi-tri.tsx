@@ -34,13 +34,13 @@ import { toChucMessages } from "@/lib/messages/to-chuc";
 import { useTRPC } from "@/lib/trpc/client";
 import {
 	type CayDuLieu,
+	KHONG_CHON,
 	moiPhongBan,
 	type NguoiDuLieu,
+	NHOM_CHUA_XEP,
 	type PhongBanDuLieu,
 } from "./kieu";
 import { useLamMoiToChuc } from "./lam-moi";
-
-const KHONG = "__none";
 
 function ChonPhongBan({
 	id,
@@ -64,7 +64,7 @@ function ChonPhongBan({
 			name: d.name,
 			ds: d.departments,
 		})),
-		{ id: "__chua-xep", name: m.chuaXep, ds: cay.chuaXep },
+		{ id: NHOM_CHUA_XEP, name: m.chuaXep, ds: cay.chuaXep },
 	];
 	return (
 		<Select value={giaTri} onValueChange={onChange}>
@@ -72,7 +72,7 @@ function ChonPhongBan({
 				<SelectValue />
 			</SelectTrigger>
 			<SelectContent>
-				<SelectItem value={KHONG}>{nhanTrong}</SelectItem>
+				<SelectItem value={KHONG_CHON}>{nhanTrong}</SelectItem>
 				{nhom.map((g) => {
 					const con = g.ds.filter((d) => !boQua.includes(d.id));
 					if (con.length === 0) return null;
@@ -103,6 +103,7 @@ export function HopThoaiViTri({
 }) {
 	const m = toChucMessages(useLocale());
 	const v = m.viTri;
+	const [tieuDeTruoc, tieuDeSau = ""] = v.tieuDe.split("{ten}");
 	const trpc = useTRPC();
 	const lamMoi = useLamMoiToChuc();
 	const maChinh = useId();
@@ -174,8 +175,9 @@ export function HopThoaiViTri({
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>
-						{v.tieuDe.split("{ten}")[0]}
+						{tieuDeTruoc}
 						<span translate="no">{nguoi.name}</span>
+						{tieuDeSau}
 					</DialogTitle>
 					<DialogDescription translate="no">{nguoi.email}</DialogDescription>
 				</DialogHeader>
@@ -185,10 +187,10 @@ export function HopThoaiViTri({
 					<ChonPhongBan
 						id={maChinh}
 						cay={cay}
-						giaTri={chinh ?? KHONG}
+						giaTri={chinh ?? KHONG_CHON}
 						boQua={phu}
 						nhanTrong={v.chuaChon}
-						onChange={(x) => setChinh(x === KHONG ? null : x)}
+						onChange={(x) => setChinh(x === KHONG_CHON ? null : x)}
 					/>
 				</Field>
 
@@ -216,11 +218,11 @@ export function HopThoaiViTri({
 					<ChonPhongBan
 						id={maPhu}
 						cay={cay}
-						giaTri={KHONG}
+						giaTri={KHONG_CHON}
 						boQua={[...phu, ...(chinh ? [chinh] : [])]}
 						nhanTrong={v.themPhu}
 						onChange={(x) => {
-							if (x !== KHONG) setPhu((ds) => [...ds, x]);
+							if (x !== KHONG_CHON) setPhu((ds) => [...ds, x]);
 						}}
 					/>
 				</Field>
@@ -236,14 +238,14 @@ export function HopThoaiViTri({
 					<FieldDescription>{moTa}</FieldDescription>
 					{chonTay ? (
 						<Select
-							value={tay ?? KHONG}
-							onValueChange={(x) => setTay(x === KHONG ? null : x)}
+							value={tay ?? KHONG_CHON}
+							onValueChange={(x) => setTay(x === KHONG_CHON ? null : x)}
 						>
 							<SelectTrigger id={maQuanLy}>
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
-								<SelectItem value={KHONG}>{v.khongCo}</SelectItem>
+								<SelectItem value={KHONG_CHON}>{v.khongCo}</SelectItem>
 								{cay.people
 									.filter((p) => p.id !== nguoi.id)
 									.map((p) => (

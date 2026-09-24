@@ -255,6 +255,63 @@ function chieuNguoi(c: TreeOutput, ids: string[]) {
 }
 
 describe("ghi", () => {
+	test("ghi: bo-phan-tu-dong-hong — dong hong khong cho bo phan, phong ban mang hai bo phan thi moi dong cua no hong, dao thu tu cung ket qua", async () => {
+		const a = await nguoiMoi("hd-a");
+		const b = await nguoiMoi("hd-b");
+		const c = await nguoiMoi("hd-c");
+		const d = await nguoiMoi("hd-d");
+		const x = await nguoiMoi("hd-x");
+		const y = await nguoiMoi("hd-y");
+		const z = await nguoiMoi("hd-z");
+		const pbHai = ma("hd-pb-hai");
+		const pbHong = ma("hd-pb-hong");
+		const pbTruong = ma("hd-pb-truong");
+		const bpA = ma("hd-bp-a");
+		const bpB = ma("hd-bp-b");
+		const bpC = ma("hd-bp-c");
+		const bpD = ma("hd-bp-d");
+		const dong: Dong[] = [
+			[emailCua(a), pbHai, bpA, ""],
+			[emailCua(b), pbHai, bpB, ""],
+			[emailCua(c), pbHai, "", "bộ phận"],
+			[`khong-ai-${ma("hd")}@thu.test`, pbHong, bpC, ""],
+			[emailCua(d), pbHong, "", ""],
+			[emailCua(x), pbTruong, bpD, "bộ phận"],
+			[emailCua(y), pbTruong, bpD, "bộ phận"],
+			[emailCua(z), pbTruong, "", ""],
+		];
+		const xem = async (ds: Dong[]) =>
+			ok<ImportPreviewOutput>(
+				await goi("org.previewImport", { text: tab(ds) }),
+				"xem",
+			);
+		const xuoi = await xem(dong);
+		const nguoc = await xem([...dong].reverse());
+		const loiTheoEmail = (k: ImportPreviewOutput) =>
+			Object.fromEntries(k.rows.map((r) => [r.email, r.error]));
+		expect(loiTheoEmail(nguoc)).toEqual(loiTheoEmail(xuoi));
+		expect(xuoi.rows.map((r) => r.error)).toEqual([
+			N.phongBanHaiBoPhan(pbHai),
+			N.phongBanHaiBoPhan(pbHai),
+			N.phongBanHaiBoPhan(pbHai),
+			N.emailKhongPhaiThanhVien,
+			null,
+			N.haiTruong(bpD),
+			N.haiTruong(bpD),
+			null,
+		]);
+		expect(xuoi.summary).toMatchObject({ valid: 2, newDivisions: 0 });
+		const kq = ok<ImportApplyOutput>(
+			await goi("org.applyImport", { text: tab(dong) }),
+			"ghi",
+		);
+		expect(kq).toEqual({ written: 2, newDepartments: 2, newDivisions: 0 });
+		expect(chieuNguoi(await cay(), [d, z]).map((p) => p.boPhan)).toEqual([
+			null,
+			null,
+		]);
+	});
+
 	test("ghi: thu-tu-dong — phong ban moi nhan bo phan tu bat ky dong nao, dao thu tu dong ra cung cay", async () => {
 		const dung = async (nhan: string, dao: boolean) => {
 			const [a, b] = await Promise.all([

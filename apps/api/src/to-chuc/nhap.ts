@@ -114,47 +114,38 @@ export function phanTichLo(chu: string, snap: SnapNhap): KetQuaNhap {
 		};
 	});
 
+	type Dong = (typeof tho)[number];
 	const bpSongCua = (ten: string) => {
 		const pb = pbTheoTen.get(khoa(ten));
 		return pb?.divisionId ? bpTheoId.get(pb.divisionId) : undefined;
 	};
-	const bpTrongLo = new Map<string, string>();
-	for (const r of tho) {
-		if (r.department === "" || r.division === "") continue;
-		const cu = bpSongCua(r.department);
-		if (cu && khoa(cu.name) !== khoa(r.division)) continue;
-		if (!bpTrongLo.has(khoa(r.department)))
-			bpTrongLo.set(khoa(r.department), r.division);
-	}
-	const tenBpCua = (r: (typeof tho)[number]) =>
+	let bpTrongLo = new Map<string, string>();
+	const tenBpCua = (r: Dong) =>
 		r.division !== ""
 			? r.division
 			: (bpTrongLo.get(khoa(r.department)) ??
 				bpSongCua(r.department)?.name ??
 				null);
-	const bpHieuLuc = (r: (typeof tho)[number]) => khoa(tenBpCua(r) ?? "");
+	const bpHieuLuc = (r: Dong) => khoa(tenBpCua(r) ?? "");
 
 	for (const r of tho) {
 		const lt = loaiTruong(r.head);
-		if (
-			r.email === "" ||
-			r.department === "" ||
-			(lt === "bo-phan" && bpHieuLuc(r) === "")
-		)
-			r.error = N.thieuCot;
+		if (r.email === "" || r.department === "") r.error = N.thieuCot;
 		else if (!nguoi.has(khoa(r.email))) r.error = N.emailKhongPhaiThanhVien;
 		else if (lt === "la") r.error = N.truongLa;
 		else {
-			const pb = pbTheoTen.get(khoa(r.department));
-			const bp = pb?.divisionId ? bpTheoId.get(pb.divisionId) : undefined;
+			const bp = bpSongCua(r.department);
 			if (bp && r.division !== "" && khoa(bp.name) !== khoa(r.division)) {
-				r.error = N.phongBanBoPhanKhac(pb?.name ?? r.department, bp.name);
+				r.error = N.phongBanBoPhanKhac(
+					pbTheoTen.get(khoa(r.department))?.name ?? r.department,
+					bp.name,
+				);
 			}
 		}
 	}
 
-	const nhom = <K>(chon: (r: (typeof tho)[number]) => K | null) => {
-		const m = new Map<K, (typeof tho)[number][]>();
+	const nhom = <K>(chon: (r: Dong) => K | null) => {
+		const m = new Map<K, Dong[]>();
 		for (const r of tho) {
 			const k = chon(r);
 			if (k === null) continue;
@@ -163,9 +154,9 @@ export function phanTichLo(chu: string, snap: SnapNhap): KetQuaNhap {
 		return m;
 	};
 	const danhCap = (
-		m: Map<unknown, (typeof tho)[number][]>,
-		loi: (r: (typeof tho)[number]) => string,
-		hong: (ds: (typeof tho)[number][]) => boolean,
+		m: Map<unknown, Dong[]>,
+		loi: (r: Dong) => string,
+		hong: (ds: Dong[]) => boolean,
 	) => {
 		for (const ds of m.values())
 			if (hong(ds)) for (const r of ds) if (r.error === null) r.error = loi(r);
@@ -177,27 +168,40 @@ export function phanTichLo(chu: string, snap: SnapNhap): KetQuaNhap {
 		(ds) => ds.length > 1,
 	);
 	danhCap(
-		nhom((r) =>
-			r.department === "" || r.division === "" ? null : khoa(r.department),
-		),
+		nhom((r) => (r.department === "" ? null : khoa(r.department))),
 		(r) => N.phongBanHaiBoPhan(r.department),
-		(ds) => new Set(ds.map((r) => khoa(r.division))).size > 1,
+		(ds) =>
+			new Set(ds.filter((r) => r.division !== "").map((r) => khoa(r.division)))
+				.size > 1,
 	);
-	danhCap(
-		nhom((r) => {
-			const lt = loaiTruong(r.head);
-			if (lt === "phong-ban") return `pb:${khoa(r.department)}`;
-			if (lt === "bo-phan") return `bp:${bpHieuLuc(r)}`;
-			return null;
-		}),
-		(r) =>
-			N.haiTruong(
-				loaiTruong(r.head) === "bo-phan"
-					? r.division || bpHieuLuc(r)
-					: r.department,
-			),
-		(ds) => ds.length > 1,
-	);
+
+	for (let truoc = -1; ; ) {
+		const conLai = tho.filter((r) => r.error === null);
+		if (conLai.length === truoc) break;
+		truoc = conLai.length;
+		bpTrongLo = new Map();
+		for (const r of conLai)
+			if (r.division !== "" && !bpTrongLo.has(khoa(r.department)))
+				bpTrongLo.set(khoa(r.department), r.division);
+		for (const r of conLai)
+			if (loaiTruong(r.head) === "bo-phan" && bpHieuLuc(r) === "")
+				r.error = N.thieuCot;
+		danhCap(
+			nhom((r) => {
+				const lt = loaiTruong(r.head);
+				if (lt === "phong-ban") return `pb:${khoa(r.department)}`;
+				if (lt === "bo-phan") return `bp:${bpHieuLuc(r)}`;
+				return null;
+			}),
+			(r) =>
+				N.haiTruong(
+					loaiTruong(r.head) === "bo-phan"
+						? r.division || bpHieuLuc(r)
+						: r.department,
+				),
+			(ds) => ds.length > 1,
+		);
+	}
 
 	const hopLe: DongHopLe[] = tho
 		.filter((r) => r.error === null)

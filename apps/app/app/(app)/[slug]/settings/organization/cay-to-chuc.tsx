@@ -27,11 +27,12 @@ import { ConfirmDialog } from "@/app/(app)/[slug]/settings/members/confirm-dialo
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { toChucMessages } from "@/lib/messages/to-chuc";
 import { useTRPC } from "@/lib/trpc/client";
-import type {
-	BoPhanDuLieu,
-	CayDuLieu,
-	PhongBanDuLieu,
-	YeuCauDonVi,
+import {
+	type BoPhanDuLieu,
+	type CayDuLieu,
+	NHOM_CHUA_XEP,
+	type PhongBanDuLieu,
+	type YeuCauDonVi,
 } from "./kieu";
 import { useLamMoiToChuc } from "./lam-moi";
 
@@ -452,7 +453,7 @@ export function CayToChuc({
 						<span className="px-3 text-muted-foreground text-xs">
 							{m.chuaXep}
 						</span>
-						{danhSachPhongBan("__chua-xep", null, "", chuaXepHien)}
+						{danhSachPhongBan(NHOM_CHUA_XEP, null, "", chuaXepHien)}
 					</li>
 				) : null}
 				{chuaCoHien.length > 0 ? (

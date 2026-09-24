@@ -575,6 +575,16 @@ describe("nhap-man", () => {
 		const nutGhi = nut("Ghi ", hop);
 		expect(nutGhi.textContent?.trim()).toBe("Ghi 4 dòng · bỏ 3 dòng hỏng");
 		expect(hop.querySelectorAll("tbody tr").length).toBe(7);
+		const oNguoiNhap = [...hop.querySelectorAll("tbody tr")].flatMap((tr) =>
+			[...tr.querySelectorAll("td")]
+				.slice(1, 5)
+				.filter((td) => td.getAttribute("translate") !== "no")
+				.map(
+					(td) =>
+						`dong ${tr.firstElementChild?.textContent}: ${td.textContent}`,
+				),
+		);
+		expect(oNguoiNhap).toEqual([]);
 		const loi = [
 			...hop.querySelectorAll(`[aria-label="${m.nhapHop.dongHong}"] li`),
 		].map((l) => l.textContent);

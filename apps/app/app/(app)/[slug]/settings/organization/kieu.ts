@@ -12,6 +12,9 @@ export type YeuCauDonVi =
 	| { loai: "truong"; don: "bo-phan" | "phong-ban"; id: string; name: string }
 	| { loai: "chuyen"; id: string; name: string; divisionId: string | null };
 
+export const KHONG_CHON = "__none";
+export const NHOM_CHUA_XEP = "__chua-xep";
+
 export function moiPhongBan(cay: CayDuLieu): PhongBanDuLieu[] {
 	return [...cay.divisions.flatMap((d) => d.departments), ...cay.chuaXep];
 }
