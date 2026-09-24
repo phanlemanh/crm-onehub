@@ -600,7 +600,10 @@ describe("mdg-man-goi-org", () => {
 		let soKhangDinh = 0;
 		const s1 = await mo(<ToChuc />, "?don=bp:bp-kd");
 		await luuTruPb1(s1);
-		await cho(() => soLanGoi("org.archiveDepartment") === 1, "goi luu tru");
+		await cho(
+			() => soLanGoi("org.archiveDepartment") === 1,
+			"goi luu tru",
+		).catch(() => undefined);
 		expect(
 			`luu tru: org.archiveDepartment ${soLanGoi("org.archiveDepartment")} loi goi`,
 		).toBe("luu tru: org.archiveDepartment 1 loi goi");
@@ -609,7 +612,10 @@ describe("mdg-man-goi-org", () => {
 		);
 		await cho(() => nutCo(document.body, m.hoanTac), "nut hoan tac");
 		await bam(nut(m.hoanTac));
-		await cho(() => soLanGoi("org.restoreDepartment") === 1, "goi hoan tac");
+		await cho(
+			() => soLanGoi("org.restoreDepartment") === 1,
+			"goi hoan tac",
+		).catch(() => undefined);
 		expect(
 			`hoan tac: org.restoreDepartment ${soLanGoi("org.restoreDepartment")} loi goi`,
 		).toBe("hoan tac: org.restoreDepartment 1 loi goi");
@@ -622,7 +628,10 @@ describe("mdg-man-goi-org", () => {
 		const s2 = await mo(<ToChuc />, "?don=pb:pb-1");
 		const dong = await moDaLuuTru(s2);
 		await bam(nut(m.khoiPhuc, dong));
-		await cho(() => soLanGoi("org.restoreDepartment") === 2, "goi khoi phuc");
+		await cho(
+			() => soLanGoi("org.restoreDepartment") === 2,
+			"goi khoi phuc",
+		).catch(() => undefined);
 		expect(
 			`khoi phuc: org.restoreDepartment ${soLanGoi("org.restoreDepartment") - 1} loi goi`,
 		).toBe("khoi phuc: org.restoreDepartment 1 loi goi");
@@ -632,7 +641,9 @@ describe("mdg-man-goi-org", () => {
 		await donMan();
 		const s3 = await mo(<ToChuc />, "?don=pb:pb-1");
 		await xoaHanPbCu(s3);
-		await cho(() => soLanGoi("org.purgeDepartment") === 1, "goi xoa han");
+		await cho(() => soLanGoi("org.purgeDepartment") === 1, "goi xoa han").catch(
+			() => undefined,
+		);
 		expect(
 			`xoa han: org.purgeDepartment ${soLanGoi("org.purgeDepartment")} loi goi`,
 		).toBe("xoa han: org.purgeDepartment 1 loi goi");
