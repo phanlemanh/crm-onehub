@@ -26,11 +26,11 @@ import {
 } from "../src/components/dialog";
 import { DotMatrix } from "../src/components/dot-matrix";
 import { LocaleProvider } from "../src/components/locale-provider";
-import { MoneyInput } from "../src/components/money-input";
 import {
 	MessageScrollerButton,
 	MessageScrollerProvider,
 } from "../src/components/message-scroller";
+import { MoneyInput } from "../src/components/money-input";
 import { Reasoning } from "../src/components/reasoning";
 import { Sheet, SheetContent, SheetTitle } from "../src/components/sheet";
 import { SkeletonSwap } from "../src/components/skeleton-swap";
