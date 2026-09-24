@@ -1,0 +1,156 @@
+schema_version: 1
+feature_slug: vai-chi-okr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.vco_ma_tran_trpc
+    expected: "exit 0; MA TRẬN TOÀN PHẦN rút lúc chạy từ app.get(AppRouterHost).appRouter — mọi thủ tục đang mount, query GET, mutation POST, đầu vào rỗng; bài đỏ nếu dưới 50 thủ tục. Người gieo với role okr, đăng nhập bằng auth.api.signInEmail thật, cookie từ set-cookie. Bài gom tập thủ tục KHÔNG trả 403 với đúng hằng KHONG_TRONG_PHAM_VI (xuất từ @crm/validation/vai-workspace) rồi so BẰNG (toEqual trên mảng đã sắp) với hằng CHO_PHEP của bài — mọi thủ tục của các alias users, settings, currency, zalo, apiKeys, sso, workspace, org cộng workspace.get và sso.signInOptions — quan hệ tập, không phải chuỗi-có-mặt; và khẳng định mọi thủ tục contacts.*, companies.*, deals.*, campaigns.*, onboarding.* trả đúng 403 + hằng đó. Ma trận gọi mọi query trước rồi mới tới mutation; bài in danh sách mutation KHÔNG có schema đầu vào (số ghim trong bài, đổi là bài đỏ) và kết bài khẳng định workspace.get của người okr vẫn 200 với viewerRole 'okr' — tư cách không đổi giữa chừng. Chiều đỏ trên cùng dựng cảnh: (a) bản trước vá — okr bị hạ về member, contacts.list trả 200 — bài đỏ, thông điệp in tập thừa; (b) xếp một router doi-tac sang PhamViChungMiddleware thì tập thừa alias đó và bài đỏ; (c) xếp users sang PhamViDoiTacMiddleware thì tập thiếu users.* và bài đỏ, thông điệp in hai tập."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/trpc/middlewares/**, apps/api/src/**/*.router.ts, packages/validation/src/vai-workspace.ts, packages/auth/src/roles.ts, apps/api/test/vai-chi-okr.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.vco_ma_tran_khoa_rest
+    expected: "exit 0; người okr gọi POST /api/trpc/apiKeys.create với đầu vào hợp lệ bằng cookie — phải 2xx và trả key (đối chứng dương cho phạm vi chung); rồi cùng ma trận tRPC của E1 qua header x-api-key với khoá đó: tập không bị từ chối về phạm vi so BẰNG với CHO_PHEP; rồi MA TRẬN REST rút lúc chạy từ khai báo openapi (method, path) của từng thủ tục, gọi dưới /rest với đúng phương thức, đầu vào rỗng, x-api-key: tập đường không bị từ chối về phạm vi so BẰNG với CHO_PHEP chiếu sang restKey; đường khai mà cầu không gắn thật (404) làm bài đỏ; bài đỏ nếu dưới 30 đường; kết bài workspace.get bằng khoá vẫn 200 với viewerRole 'okr'. Chiều đỏ: bỏ câu hỏi phạm vi khỏi AuthMiddleware thì cả hai vế đỏ, thông điệp ghim tên thủ tục/đường đầu tiên lọt."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/trpc/middlewares/**, apps/api/src/create-app.ts, apps/api/src/trpc/openapi.ts, apps/api/src/api-keys/**, packages/auth/src/auth.ts, apps/api/test/vai-chi-okr.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.vco_doi_chung
+    expected: "exit 0; đối chứng dương trên CÙNG ma trận của E1 cho hai người: role member và role admin, đăng nhập bằng cùng đường mật khẩu. Không hàng nào mang KHONG_TRONG_PHAM_VI (mã khác — 400/404/403 theo vai quản trị/409 — được phép); sáu thủ tục mẫu contacts.list, companies.list, deals.list, activities.myTasks, search.quick, campaigns.list trả 200 cho cả hai — gọi TRƯỚC ma trận; sau ma trận, workspace.get của mỗi người vẫn 200 với đúng vai đã gieo (một mutation không đầu vào làm đổi tư cách giữa chừng là bài đỏ, in tên thủ tục nghi ngờ = thủ tục cuối cùng trước khi tư cách đổi). Chiều đỏ: docDuocPhamVi trả false cho member ở một phạm vi bất kỳ thì hàng đó mang thông điệp phạm vi và bài đỏ, thông điệp ghim tên thủ tục đầu tiên bị chặn oan."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/trpc/middlewares/**, packages/validation/src/vai-workspace.ts, apps/api/test/vai-chi-okr.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.vco_khong_khai_nhom
+    expected: "exit 0; bài kiểm đơn vị trên lớp nền AuthMiddleware lấy từ app.get(AuthMiddleware) (không khai phamVi), gọi use() với ctx.session.user là người okr THẬT trong cơ sở dữ liệu của lượt kiểm và path 'router-moi.list': next KHÔNG được gọi và lỗi ném ra là TRPCError FORBIDDEN với message === KHONG_TRONG_PHAM_VI; cùng lớp với người member: next được gọi đúng một lần và ctx trả về mang user. Thêm: PhamViChungMiddleware với người okr → next gọi một lần. Chiều đỏ: cho lớp nền mặc định phamVi = 'chung' thì vế okr đỏ (next bị gọi), thông điệp in số lần gọi next."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/trpc/middlewares/**, packages/validation/src/vai-workspace.ts, apps/api/test/vai-chi-okr.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vco_proxy
+    expected: "exit 0; API THẬT (AppModule) nghe cổng tạm; hàm proxy THẬT của apps/app/proxy.ts chạy trong tiến trình bun con đứng ở apps/app với API_URL trỏ cổng đó — không giả lập fetch. Người okr đăng nhập thật; với cookie đó: GET /contacts, /deals, /onboarding, /chat, /settings/members → mỗi phản hồi là chuyển hướng có location kết thúc bằng /<slug>/ngoai-pham-vi; GET / và /settings/notifications → location KHÔNG chứa ngoai-pham-vi; GET /settings → location kết thúc bằng /settings/notifications; thành viên member GET /contacts → location không chứa ngoai-pham-vi. Thêm: GET /api/trpc/workspace.get bằng cookie okr trả 200 và result.data.viewerRole === 'okr'. Chiều đỏ: bỏ dieuHuongTheoVai khỏi proxy thì vế /contacts đỏ, thông điệp in location nhận được; gắn AuthMiddleware phạm vi doi-tac cho workspace.get thì proxy coi là không biết và cho qua, cũng đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/proxy.ts, apps/app/lib/onboarding.ts, apps/app/lib/pham-vi-man.ts, apps/api/src/workspace/workspace.router.ts, apps/api/test/vai-chi-okr.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.vco_cau_noi
+    expected: "exit 0; handler THẬT của apps/app/app/eve/v1/[...path]/route.ts; chỉ giả lập getSession, connection() và fetch ra ngoài (đếm lời gọi sang trợ lý AI). Vai đọc từ cơ sở dữ liệu thật của lượt kiểm. Hai chiều trên cùng dựng cảnh: member → 200 và đúng 1 lời gọi sang trợ lý AI; okr → 403, body.error === KHONG_TRONG_PHAM_VI, 0 lời gọi. Chiều đỏ: bỏ câu hỏi phạm vi khỏi route thì vế okr đỏ, thông điệp in {status, soLanToiAgent}."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/eve/v1/**", packages/validation/src/vai-workspace.ts, apps/app/test/eve-cau-noi-chi-okr.spec.ts]
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.vco_kenh_agent
+    expected: "exit 0; repFromCrm(secret) của apps/agent/agent/channels/eve.ts với token HS256 đúc thật (cùng cách test/channel-auth.spec.ts) cho hai người gieo thật trong cơ sở dữ liệu của lượt kiểm: subject là người role okr → auth trả null (không xác thực); subject là người role member → principal {principalType:'user', principalId: userId}; subject không có dòng member → null. Chiều đỏ: bỏ lần đọc member khỏi repFromCrm thì vế okr đỏ, thông điệp in principal nhận được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/channels/eve.ts, packages/validation/src/vai-workspace.ts, apps/agent/test/kenh-chi-okr.spec.ts]
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.vco_gan_vai
+    expected: "exit 0; WorkspaceService thật. (1) admin gọi setMemberRole(memberId, 'okr') → đọc lại db.member: role === 'okr'; (2) admin gọi allowEmail({email, role:'okr'}) → db.invitation.role === 'okr'; rồi người đó đăng nhập bằng auth.api.signInEmail thật (móc session.create.before tạo dòng member) → db.member.role === 'okr', và toWorkspaceRole('okr') === 'okr'; (3) member gọi setMemberRole(..., 'okr') → ném ForbiddenException; (4) chủ sở hữu duy nhất tự đổi thành 'okr' → ném ForbiddenException với thông điệp cần một chủ sở hữu, role đọc lại vẫn 'owner'. Chiều đỏ: bỏ 'okr' khỏi WORKSPACE_ROLES thì (1) đỏ ở zod (đầu vào không nhận) và (2) đỏ vì toWorkspaceRole hạ về member, thông điệp in role đọc lại."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/workspace/**, packages/auth/src/roles.ts, packages/auth/src/organization.ts, packages/auth/src/allow-list.ts, packages/validation/src/vai-workspace.ts, apps/api/test/vai-chi-okr.spec.ts]
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.vco_hop_thu
+    expected: "exit 0; bài kiểm thuần trên needsMailboxGrant(accounts, role) và mailboxGrantsNeeded(accounts, role) của packages/auth/src/scopes.ts: accounts = [{providerId:'google', scope:'openid email profile'}] (không quyền hộp thư) — role 'okr' → false và []; role 'member' → true và ['google']; role 'admin' → true; accounts có quyền hộp thư, role 'member' → false (hành vi cũ). Chiều đỏ: bỏ tham số role (hàm cũ) thì vế okr đỏ, thông điệp in mảng trả về."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/auth/src/scopes.ts, apps/app/lib/session.ts, packages/auth/test/mailbox-grant-vai.spec.ts]
+
+  - id: E9b
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vco_tuong_hop_thu
+    expected: "exit 0; đo ở chỗ nối của ứng dụng: hàm quyết tường hộp thư của apps/app/lib/session.ts (tách ra từ requireMailboxAccess, nhận userId, đọc dòng member và các dòng account THẬT trong cơ sở dữ liệu của lượt kiểm, trả danh sách nhà cung cấp cần cấp) — không giả lập workspaceRoleOf. Hai người cùng dòng account Google không quyền hộp thư: người role okr → []; người role member → ['google']. Người okr thêm dòng account credential → vẫn []. Chiều đỏ: chỗ nối gọi needsMailboxGrant(accounts) không truyền vai (tham số mặc định) thì vế okr trả ['google'] và bài đỏ, in mảng nhận được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/session.ts, packages/auth/src/scopes.ts, apps/app/test/tuong-hop-thu.spec.ts]
+
+  - id: E10
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.vco_pham_vi_man
+    expected: "exit 0; bài kiểm thuần trên apps/app/lib/pham-vi-man.ts: mucRailChoVai('okr') trả đúng hai khoá ['overview','settings'] theo thứ tự, settings có href '/settings/notifications'; mucRailChoVai('member') === MUC_RAIL (8 mục); mucCaiDatChoVai('okr') trả đúng ['thongBaoCuaBan','khoaApi']; mucCaiDatChoVai('admin') === MUC_CAI_DAT; dieuHuongTheoVai('okr', '/contacts') → {toi:'/ngoai-pham-vi'}, '/deals/abc' → cùng, '/settings/members' → cùng, '/settings' → {toi:'/settings/notifications'}, '/' → 'ok', '/settings/notifications' → 'ok', '/settings/api-keys' → 'ok', '/ngoai-pham-vi' → 'ok'; dieuHuongTheoVai('member', '/contacts') → 'ok'; dieuHuongTheoVai(null, '/contacts') → 'ok' (tư cách là việc của cổng khác). Chiều đỏ: bỏ '/onboarding' khỏi KHU_DOI_TAC thì ca '/onboarding' đỏ, thông điệp in kết quả."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/pham-vi-man.ts, apps/app/lib/khung-dieu-huong.ts, apps/app/lib/cai-dat-dieu-huong.ts, apps/app/test/pham-vi-man.spec.ts]
+
+  - id: E11
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.vco_man_chrome
+    steps:
+      - "Canh cay (rang/canh-cay.mjs cua man-cai-dat-noi-tieng-viet) truoc man dau tien; lech cay -> ma 2"
+      - "Dang nhap bang dev:session cho hai nguoi: mot nguoi role okr, mot nguoi role admin (cot role ghi thang vao db.member)"
+      - "Nguoi okr: mo {APP_URL}/<slug> o 375 va 1440, vi va en -> chup evidence/tong-quan-okr-<kho>-<tieng>.png; rail co dung 2 link (Tong quan, Cai dat), khong co chu Cong ty/Ca nhan/Thoa thuan/Chien dich/30 ngay/Hoi thoai; trang co lien ket toi /settings/notifications; khong co chu Thoa thuan hay so tien"
+      - "Nguoi okr: mo /<slug>/settings/notifications -> thanh ben co dung 2 muc (Thong bao cua ban, Khoa API) -> chup evidence/cai-dat-okr-<kho>.png"
+      - "Nguoi okr: go /<slug>/contacts -> URL cuoi ket thuc bang /ngoai-pham-vi, h1 la tieu de ngoai pham vi, co lien ket ve Tong quan -> chup evidence/ngoai-pham-vi-<kho>-<tieng>.png; bam lien ket -> ve /<slug>"
+      - "Nguoi admin: mo /<slug> o 1440/vi -> rail co 8 link -> chup evidence/rail-admin.png"
+      - "Moi o: scrollWidth <= innerWidth; khong loi console hydrat"
+      - "Nguoi okr, tren ca ba man (Tong quan, Cai dat › Thong bao cua ban, ngoai pham vi): bat request tren trang, dem request toi /api/trpc/ ma alias thuoc pham vi doi-tac == 0 va khong phan hoi 403 nao; in danh sach alias da goi"
+    paths: [apps/app/components/app-icon-rail.tsx, "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx", "apps/app/app/(app)/[slug]/page.tsx", "apps/app/app/(app)/[slug]/ngoai-pham-vi/**", apps/app/lib/pham-vi-man.ts, _acceptance/vai-chi-okr/rang/man-chi-okr.mjs]
+    expected: "exit 0 và ảnh ở _acceptance/vai-chi-okr/evidence/; script đếm link trong nav[aria-label] của rail, đọc textContent để khẳng định vắng nhãn đối tác (cả vi lẫn en), đọc URL sau khi gõ /contacts. Chiều đỏ trên cùng dựng cảnh: bỏ bộ lọc mucRailChoVai khỏi AppIconRail thì đếm link ra 8 và bài đỏ, thông điệp in danh sách nhãn; bỏ dieuHuongTheoVai khỏi proxy thì URL sau /contacts không phải ngoai-pham-vi và bài đỏ; gỡ điều kiện vai khỏi prefetch dashboard.summary ở Tổng quan thì đếm request doi-tac > 0 và bài đỏ, in alias."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.vco_man_chrome
+    steps:
+      - "Cung lan chay voi E11 (config:executors.script.vco_man_chrome)"
+      - "Nguoi admin: mo /<slug>/settings/members o 1440/vi, mo menu vai cua nguoi member gieo san -> menu co 4 muc, co muc «Chỉ OKR» -> chup evidence/menu-vai.png; chon «Chỉ OKR» -> o vai cua dong doi thanh «Chỉ OKR» -> chup evidence/da-doi-vai.png"
+      - "Mo hop thoai cho phep dia chi -> o vai co «Chỉ OKR» -> chup evidence/cho-phep-vai.png"
+    paths: ["apps/app/app/(app)/[slug]/settings/members/**", apps/app/lib/messages/settings-thanh-vien.ts, _acceptance/vai-chi-okr/rang/man-chi-okr.mjs]
+    expected: "Cùng lần chạy E11, ba khẳng định thêm (menu có «Chỉ OKR»; ô vai đổi sau khi chọn; hộp thoại cho phép có «Chỉ OKR»). Chiều đỏ: bỏ khoá okr khỏi vaiTro thì menu 3 mục và bài đỏ, thông điệp in các nhãn menu."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-10
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.vco_man_chrome
+    paths: ["apps/api/src/workspace/**", _acceptance/vai-chi-okr/rang/man-chi-okr.mjs]
+    expected: "Cùng lần chạy E11/E12: sau khi chọn «Chỉ OKR» trên màn, script đọc db.member của người đó bằng @crm/db và khẳng định role === 'okr' (trước khi chọn là 'member'). Đây là vế lớp dữ liệu của AC-10 — màn đổi nhãn mà cột không đổi là bài đỏ, thông điệp in role đọc lại."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.vco_nhat_ky
+    expected: "exit 0; app thật; spy trên process.stdout.write (khuôn của logging.spec.ts) hoặc trên Logger của LoggingMiddleware; người okr gọi GET /api/trpc/contacts.list → dòng nhật ký tRPC gần nhất có path 'contacts.list', outcome 'err', role 'okr', phamVi 'doi-tac'; người member gọi GET /api/trpc/users.me → role 'member', phamVi 'chung', outcome 'ok'; và trên toàn bộ dòng nhật ký bắt được trong bài, KHÔNG dòng nào có đồng thời role 'okr', phamVi 'doi-tac', outcome 'ok' (đối chứng cho phép đếm của ngưỡng — chiều không-bắn). Chiều đỏ: bỏ role/phamVi khỏi LoggingMiddleware thì hai vế đỏ, thông điệp in object nhật ký nhận được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/trpc/middlewares/logging.middleware.ts, apps/api/src/trpc/middlewares/auth.middleware.ts, apps/api/src/logging/request-context.ts, apps/api/test/vai-chi-okr.spec.ts]
+
+  - id: E15
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.vco_ghi_chung
+    expected: "exit 0; danh sách mutation của các alias phạm vi chung và to-chuc rút lúc chạy từ sổ router (số ghim, ≥ 15); bảng đầu vào hợp lệ tối thiểu viết trước cho TỪNG mutation — thiếu bảng cho một mutation mới là bài đỏ gọi tên (bảng là hằng của bài, không phải fixture giả lập bên đọc: giá trị lấy từ chính schema zod của contracts). Người okr gọi từng mutation với đầu vào đó: tập KHÔNG bị từ chối (2xx hoặc lỗi nghiệp vụ không phải 403) so BẰNG tập TU_PHUC_VU = [apiKeys.create, apiKeys.revoke, zalo.taoMa, zalo.go, zalo.luuUuTien, zalo.guiThu]; mọi mutation khác trả 403 với thông điệp theo vai quản trị (không phải KHONG_TRONG_PHAM_VI, không phải NOT_A_MEMBER). Thêm: người member gọi settings.setAgentModel, settings.setResearchKey, settings.setArchiveRetention → 403; admin gọi ba thủ tục đó → 2xx (đối chứng dương). Chiều đỏ: bỏ kiểm quản trị ở settings.setArchiveRetention thì tập thừa tên đó và bài đỏ, in hai tập."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/settings/**, apps/api/src/currency/**, apps/api/src/zalo/**, apps/api/src/sso/**, apps/api/src/workspace/**, apps/api/src/api-keys/**, apps/api/src/to-chuc/**, packages/auth/src/organization.ts, apps/api/test/vai-chi-okr.spec.ts]
+
+  - id: E16
+    criterion: AC-13
+    executor: test
+    cmd: config:executors.test.vco_duong_ngoai_router
+    expected: "exit 0; danh sách đường HTTP rút lúc chạy từ stack của Express (app.getHttpAdapter().getInstance()._router) cộng các đường Better Auth mà /api/auth/* gắn, trừ /api/trpc/* và /rest/*; bài in danh sách và đỏ nếu dưới 20 đường. Với cookie okr, gọi từng đường đúng phương thức, tham số đường thay bằng 'khong-co', không thân: tập trả 2xx so BẰNG tập KHAI_2XX viết trước trong bài (GET /health, GET /auth/me, GET /auth/session, GET /openapi.json, GET / (Swagger), các đường Better Auth chỉ-đọc của chính mình như /api/auth/get-session) — quan hệ tập; đường internal/* trả 401 hoặc 503 (bí mật chưa đặt); GET /api/conversations/attachments/khong-co trả 404. Chiều đỏ: thêm một controller GET /thu trả JSON không gác thì tập thừa /thu và bài đỏ, in đường."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/**/*.controller.ts, apps/api/src/create-app.ts, packages/auth/src/auth.ts, apps/api/test/vai-chi-okr.spec.ts]
