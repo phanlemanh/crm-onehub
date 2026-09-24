@@ -174,13 +174,19 @@ describe("trung-hai-khuon", () => {
 			}
 			expect(
 				await db.zaloLink.count({ where: { crmUserId: nguoi.id } }),
-				"chong trung khong phu thuoc vo",
+				"mot lien ket",
 			).toBe(1);
 			expect(
 				await db.zaloUpdateSeen.count({ where: { messageId: chon.messageId } }),
 				"mot hang da thay",
 			).toBe(1);
-			expect(z.guiToi(chon.fromId).length, "mot tin tra loi").toBe(1);
+			expect(
+				{
+					traLoi: z.guiToi(chon.fromId).length,
+					daThay: await db.zaloUpdateSeen.count(),
+				},
+				"chong trung khong phu thuoc vo",
+			).toEqual({ traLoi: 1, daThay: 1 });
 		});
 	}
 
