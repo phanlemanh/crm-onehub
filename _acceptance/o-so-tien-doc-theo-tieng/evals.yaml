@@ -1,0 +1,211 @@
+schema_version: 1
+slug: o-so-tien-doc-theo-tieng
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.stdt_ma_tran
+    paths:
+      - "packages/ui/src/lib/money-input.ts"
+      - "packages/db/src/currency.ts"
+      - "packages/ui/test/money-input.spec.ts"
+    expected: |
+      Ma tran viet truoc trong bai kiem: 2 tieng [vi, en] x 2 dong [VND, USD] x 12 dang chuoi
+      [rong, tran, nhom-dung, le-trong-han, le-vuot, tieng-kia, nhom-lech, ky-tu-la,
+      dau-le-tro-troi, am-gach "-", am-tru "−" (U+2212), qua-lon (20 chu so)] = 48 o, moi o ghi
+      san ket qua (cents hoac ly do co ten); moi ly do [format, otherLocale, fraction, negative,
+      tooLarge] co it nhat mot o o moi tieng. Hang JPY chay lai 12 dang cua VND o ca hai tieng
+      va so bang ket qua VND (24 o). Doi chung duong cua qua-lon: 999.999.999.999 (vi) /
+      999,999,999,999 (en) VND -> ok 99999999999900. So khang dinh = so o = 74, bai kiem
+      dem so o da chay va so voi 74.
+      CHIEU DO (chay o S3, ghi lai): ban sao doi bo doc thanh Number.parseFloat sau khi bo dau nhom
+      kieu en -> do voi thong diep ghim "vi/VND nhom-dung «150.000.000»: 150 != 15000000000".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.stdt_tieng_kia
+    paths:
+      - "packages/ui/src/lib/money-input.ts"
+      - "packages/ui/test/money-input.spec.ts"
+    expected: |
+      Danh sach viet truoc 5 chuoi (vi: "1.5", "1,500.50", "1,500" voi USD; en: "150.000.000",
+      "1.500,50" voi USD). Moi chuoi hai khang dinh tren CUNG chuoi: doc theo tieng dang dung ->
+      invalid otherLocale; doc theo tieng cua no -> ok voi cents ghi san. 10 khang dinh.
+      CHIEU DO (chay o S3): ban sao bo nhanh do tieng kia -> do voi thong diep ghim
+      "vi «1,500.50» USD: fraction != otherLocale" hoac "format != otherLocale".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.stdt_chinh_xac
+    paths:
+      - "packages/ui/src/lib/money-input.ts"
+      - "packages/ui/test/money-input.spec.ts"
+    expected: |
+      Ba gia tri ghi san theo tung tieng: 0,29 -> 29; 1.234.567,89 -> 123456789;
+      999.999.999.999,99 -> 99999999999999 (va ban en tuong ung). Vong tron: 300 gia tri cents
+      sinh tat dinh (gom 0, 1, 29, 99, 100, 1000050, 99999999999999 va cac so gia ngau nhien seed
+      co dinh), lam tron theo so chu so le cua dong; chuoi dau vao lay tu formatMoneyInput THAT
+      (writer that), khong tu dung chuoi. 2 tieng x 3 dong [VND, USD, JPY] x 300 = 1800 lan doc,
+      moi lan phai bang cents ban dau.
+      CHIEU DO (chay o S3): ban sao tinh cents bang Number(chuoi chuan hoa) * 100 khong lam tron
+      -> do voi thong diep ghim "vi/USD «0,29»: 28.999999999999996 != 29".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.stdt_o_doc_lai
+    paths:
+      - "packages/ui/src/components/money-input.tsx"
+      - "packages/ui/src/lib/money-input.ts"
+      - "packages/ui/src/lib/messages.ts"
+      - "packages/ui/test/money-input.dom.tsx"
+    expected: |
+      Render MoneyInput trong LocaleProvider (jsdom). Ma tran 2 tieng x 5 tinh huong [doc-duoc,
+      tieng-kia, le-vuot, sai-dang, am] = 10 o, moi o khang dinh: text dong duoi o bang chuoi ghi
+      san (doc-duoc: tien to «Đọc là»/«Reads as» + formatMoney that); aria-invalid dung (true khi
+      tu choi, vang khi doc duoc); aria-describedby cua o tro dung id cua dong; dong co
+      aria-live="polite"; phan tu chua so tien trong dong doc-duoc co translate="no", phan tien to
+      thi khong (2 tieng). Them: o rong -> khong co dong (2 tieng); doi prop currency USD -> VND
+      voi chu "1.500,50" -> dong doi tu doc-duoc sang cau le-vuot cua VND.
+      CHIEU DO (chay o S3): ban sao bo aria-invalid -> do voi thong diep ghim
+      "vi/tieng-kia: aria-invalid null != true"; ban sao bo translate -> "vi/doc-duoc: translate null != no".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.stdt_o_roi_o
+    paths:
+      - "packages/ui/src/components/money-input.tsx"
+      - "packages/ui/src/lib/money-input.ts"
+      - "packages/ui/test/money-input.dom.tsx"
+    expected: |
+      Cap hai chieu tren cung o: go "150000000" (vi, VND), blur -> onValueChange nhan "150.000.000";
+      go "1.5" (vi, VND), blur -> chu giu nguyen "1.5", khong goi onValueChange voi chuoi khac.
+      Them ban en: "1500000.5" USD -> "1,500,000.50".
+      CHIEU DO (chay o S3): ban sao bo buoc nhom lai khi blur -> do voi thong diep ghim
+      "roi o vi/VND: «150000000» != «150.000.000»".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.stdt_tao
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "packages/ui/src/components/money-input.tsx"
+      - "packages/ui/src/lib/money-input.ts"
+      - "apps/app/test/o-so-tien.dom.tsx"
+    expected: |
+      Render CreateDealSheet that voi tRPC gia (currency.settings VND, users.me, users.list) va
+      mo tam. Ba ca tren CUNG form: "150.000.000" + Tao -> dung 1 lenh deals.create voi
+      amountCents 15000000000 va currency "VND"; "1.5" + Tao -> 0 lenh, document.activeElement la o
+      so tien, cau loi hien, nut Tao khong disabled; rong + Tao -> amountCents null.
+      Ca doi dong tien tren cung form: chon USD, go "1.500,50", doi sang VND, Tao -> 0 lenh, cau
+      loi phan le hien; doi lai USD, Tao -> dung 1 lenh amountCents 150050, currency "USD".
+      CHIEU DO (chay o S3): ban sao tra lai Number.parseFloat trong create-deal-sheet -> do voi
+      thong diep ghim "tao: amountCents 15000 != 15000000000"; ban sao doc bang dong tien cu (giu
+      cents khi doi dong) -> "doi dong VND: 1 lenh != 0".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.stdt_sua_tai_cho
+    paths:
+      - "apps/app/components/crm/inline-field.tsx"
+      - "apps/app/components/crm/record-sheet/deal-sheet.tsx"
+      - "packages/ui/src/components/money-input.tsx"
+      - "apps/app/test/o-so-tien.dom.tsx"
+    expected: |
+      Render InlineMoneyField (cents 150000050, USD, vi). Nam ca: mo sua -> value o "1.500.000,50";
+      sua "2.000.000,75" + Enter -> onSave(200000075) dung 1 lan; "1.5" + Enter -> onSave 0 lan, van
+      la o nhap, cau loi hien; "1.5" + blur -> onSave 0 lan, van la o nhap; Esc -> ve nut hien gia
+      tri cu, onSave 0 lan; xoa trong + Enter -> onSave(null). Deal-sheet dung InlineMoneyField do
+      E11 soi.
+      CHIEU DO (chay o S3): ban sao cho InlineMoneyField luu khi loi (bo nhanh chan) -> do voi
+      thong diep ghim "sua-tai-cho «1.5»: onSave goi 1 lan != 0".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.stdt_them_nhanh
+    paths:
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "packages/ui/src/components/money-input.tsx"
+      - "apps/app/test/o-so-tien.dom.tsx"
+    expected: |
+      Render QuickAddDeal that voi tRPC gia (currency.settings reportingCurrency VND). Hai ca cung
+      form: "150.000.000" + Tao -> 1 lenh deals.create voi amountCents 15000000000, currency "VND";
+      "1,5" -> cau loi phan le cua VND hien, Tao -> 0 lenh va document.activeElement la o so tien;
+      rong + Tao -> 1 lenh amountCents null, currency "VND". Ca rieng: currency.settings chua tra
+      ve (promise treo) -> nut Tao disabled.
+      CHIEU DO (chay o S3): ban sao doc quick-add bang parseFloat -> do voi thong diep ghim
+      "them-nhanh: amountCents 150 != 15000000000".
+
+  - id: E9
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.stdt_man_that
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "apps/app/components/crm/inline-field.tsx"
+      - "apps/app/components/crm/record-sheet/deal-sheet.tsx"
+      - "packages/ui/src/components/money-input.tsx"
+      - "packages/ui/src/lib/money-input.ts"
+      - "_acceptance/o-so-tien-doc-theo-tieng/rang/man-that.mjs"
+    steps:
+      - "Canh cay (canh-cay.mjs) truoc man dau tien; lech cay -> ma 2"
+      - "Dang nhap bang dev:session, tao mot cong ty do"
+      - "vi, 1440 va 375: mo tam tao thoa thuan, chon VND, go 150.000.000 -> doc dong duoi o bang chu nguoi thay, chup evidence/tao-doc-lai-<kho>.png; bam Tao"
+      - "en, 1440: mo thoa thuan USD da gieo, sua so tien thanh 1,500,000.50, chup evidence/sua-doc-lai-en.png, Enter"
+      - "vi, 1440: sua so tien thoa thuan do thanh 1.5, Enter, roi o (bam ra ngoai) -> o van la o nhap, chup evidence/sua-tieng-kia-vi.png; doc deals.byId; roi moi Esc"
+    expected: |
+      Frame nhin thay: dong duoi o doc dung "Đọc là 150.000.000 ₫" (vi) va "Reads as $1,500,000.50"
+      (en) truoc khi luu; o 1.5 dong duoi o la cau "viet theo kieu tieng Anh" va o co aria-invalid.
+      Trang khong tran ngang o 375. Doi chung duong: chay voi ban dung truoc vong (parseFloat) thi
+      dong doc lai khong ton tai -> script do voi thong diep ghim "khong thay dong doc lai".
+
+  - id: E10
+    criterion: AC-9
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.stdt_man_that
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "apps/app/components/crm/inline-field.tsx"
+      - "apps/app/components/crm/record-sheet/deal-sheet.tsx"
+      - "packages/ui/src/lib/money-input.ts"
+      - "_acceptance/o-so-tien-doc-theo-tieng/rang/man-that.mjs"
+    expected: |
+      Cung lan chay E9, doc API that sau moi buoc man: thoa thuan tao tu tam (vi, VND) co
+      deals.byId amountCents 15000000000 va currency VND; thoa thuan USD sau khi sua (en) co
+      amountCents 150000050; sau buoc "1.5" + Enter + roi o, TRUOC Esc, amountCents van 150000050
+      va o van o che do sua.
+      Ma tran 3 khang dinh ghi san. Don dep thoa thuan va cong ty da gieo o cuoi (ca khi do).
+      CHIEU DO (chay o S3 tren ban cay truoc vong): buoc tao ra amountCents 15000 hoac null ->
+      do voi thong diep ghim "tao vi/VND: amountCents 15000 != 15000000000"; buoc sua "1.5" + Enter
+      luu 150 -> "sua vi «1.5» Enter: amountCents 150 != 150000050".
+
+  - id: E11
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.stdt_soi_ma
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/deal-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "apps/app/components/crm/inline-field.tsx"
+      - "packages/ui/src/components/money-input.tsx"
+      - "packages/ui/package.json"
+      - "apps/app/lib/messages/**"
+      - "_acceptance/o-so-tien-doc-theo-tieng/rang/soi-ma.mjs"
+    expected: |
+      Ma tran viet truoc 3 tep goi x [co MoneyInput hoac InlineMoneyField, khong Number.parseFloat]
+      = 6 khang dinh; packages/ui/package.json khong co @base-ui/react va khong co goi cn;
+      khong ton tai packages/ui/src/components/reui/number-field.tsx; khong con khoa
+      amountNotNumber trong apps/app/lib/messages; cong thiet ke tinh (design-gate --mode static)
+      dat tren money-input.tsx, inline-field.tsx, create-deal-sheet.tsx, quick-add.tsx.
+      CHIEU DO (chay o S3): ban sao cua create-deal-sheet.tsx con Number.parseFloat -> do voi
+      thong diep ghim "create-deal-sheet.tsx: con Number.parseFloat".

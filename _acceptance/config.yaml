@@ -381,6 +381,14 @@ executors:
     ddc_man_dang_luu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t dang-luu-dau-cot"
     ddc_man_loi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t loi-tra-dau-cot"
     ktt_board_giu_nguyen: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/board-giu-nguyen.dom.tsx"
+    stdt_ma_tran: "cd packages/ui && bun test ./test/money-input.spec.ts -t ma-tran"
+    stdt_tieng_kia: "cd packages/ui && bun test ./test/money-input.spec.ts -t tieng-kia"
+    stdt_chinh_xac: "cd packages/ui && bun test ./test/money-input.spec.ts -t chinh-xac"
+    stdt_o_doc_lai: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/money-input.dom.tsx -t doc-lai"
+    stdt_o_roi_o: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/money-input.dom.tsx -t roi-o"
+    stdt_tao: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/o-so-tien.dom.tsx -t tao-thoa-thuan"
+    stdt_sua_tai_cho: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/o-so-tien.dom.tsx -t sua-tai-cho"
+    stdt_them_nhanh: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/o-so-tien.dom.tsx -t them-nhanh"
   script:
     zqw_giu_nqz: 'B=$(git merge-base HEAD origin/onehub) && { git diff --quiet "$B" -- apps/agent/test/nhac-qua-zalo.integration.spec.ts || { echo "spec da ky cua nhac-qua-zalo bi sua" >&2; exit 1; }; } && bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts"'
     ogd_man_danh_muc: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "DUOI_CONG=1 bun _acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs"'
@@ -741,6 +749,8 @@ executors:
     ktt_man_chrome: "bun _acceptance/keo-tha-thoa-thuan/rang/man-bang-cot.mjs"
     ktt_reui_da_chinh: "bun _acceptance/keo-tha-thoa-thuan/rang/reui-da-chinh.mjs"
     ktt_san_thiet_ke: "bun _acceptance/keo-tha-thoa-thuan/rang/san-thiet-ke.mjs"
+    stdt_man_that: "bun _acceptance/o-so-tien-doc-theo-tieng/rang/man-that.mjs"
+    stdt_soi_ma: "bun _acceptance/o-so-tien-doc-theo-tieng/rang/soi-ma.mjs"
     bkd_du_tep_app: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs du-tep app"
     bkd_du_tep_ui: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs du-tep ui"
     bkd_tep_moi: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs tep-moi"
