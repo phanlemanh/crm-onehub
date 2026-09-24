@@ -5,7 +5,7 @@ slug: zalo-webhook-doc-khuon-that
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, docs]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-25-zalo-webhook-doc-khuon-that-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-24T22:57:51Z
@@ -72,3 +72,11 @@ Quét bằng `morphological-scan` (preset test-matrix) —
 - Sau merge: chủ kho tạo mã mới ở Cài đặt › Thông báo, nhắn cho «Bot OneHub 1», rồi
   kiểm `vercel logs … --query zalo` — không còn dòng `webhook sai khuon`, và trang
   Kết nối › Zalo đếm thêm một người đã nối.
+
+### Known limits (Cổng Bằng chứng vòng 1, 2026-09-25)
+
+- Ngoài-1: `packages/validation/src/zalo-webhook.ts` lặp bộ liệt kê khoá
+  (`khoaCua`, trùng `khoaCapDauCua`) và bộ đọc `message_id` đã có ở
+  `zalo-update.ts`; hai bản có thể trôi khác nhau khi chỉ sửa một chỗ.
+- Ca `webhook-trung` của spec đã ký `zalo-qua-webhook` vẫn xanh khi bộ đọc webhook
+  hỏng, vì vòng tay bắt tin thay; chống trùng qua webhook do E2 của vòng này đo.

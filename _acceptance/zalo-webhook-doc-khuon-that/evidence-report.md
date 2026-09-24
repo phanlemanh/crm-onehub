@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 866c87472ac923cc99cd386edc5e9cf11ea6c050
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-25
 ---
 
 # Evidence Report: zalo-webhook-doc-khuon-that
