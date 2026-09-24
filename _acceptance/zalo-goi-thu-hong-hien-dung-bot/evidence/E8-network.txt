@@ -1,0 +1,4 @@
+APP=http://127.0.0.1:3300 API=http://127.0.0.1:3301
+--- failed/4xx/5xx (app+api scope only shown, full list below) ---
+--- console errors ---
+--- summary: failedCount=0 consoleErrorCount=0
