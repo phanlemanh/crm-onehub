@@ -136,6 +136,41 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-ket-noi-zalo-tat", nhan: "Kết nối — chưa bật" },
 		],
 	},
+	{
+		slug: "ban-mau-okr",
+		ten: "Bản mẫu OKR — bốn màn",
+		states: [
+			{ id: "ST-cuatoi-codulieu", nhan: "Của tôi — có dữ liệu" },
+			{
+				id: "ST-cuatoi-dieuhuong",
+				nhan: "Của tôi — điều hướng vai «chỉ OKR» trên máy nhỏ",
+			},
+			{ id: "ST-cuatoi-rong", nhan: "Của tôi — chưa phụ trách KR nào" },
+			{ id: "ST-cuatoi-dangtai", nhan: "Của tôi — đang tải" },
+			{ id: "ST-cuatoi-loi", nhan: "Của tôi — lỗi" },
+			{ id: "ST-capnhat-dangdien", nhan: "Cập nhật tuần — đang điền" },
+			{
+				id: "ST-capnhat-sokhonghople",
+				nhan: "Cập nhật tuần — số không hợp lệ",
+			},
+			{ id: "ST-capnhat-danggui", nhan: "Cập nhật tuần — đang gửi" },
+			{ id: "ST-capnhat-loigui", nhan: "Cập nhật tuần — gửi lỗi" },
+			{ id: "ST-capnhat-dagui", nhan: "Cập nhật tuần — đã gửi" },
+			{ id: "ST-capnhat-rong", nhan: "Cập nhật tuần — không có KR" },
+			{ id: "ST-capnhat-dangtai", nhan: "Cập nhật tuần — đang tải" },
+			{ id: "ST-capnhat-loi", nhan: "Cập nhật tuần — lỗi" },
+			{ id: "ST-donvi-danhsach", nhan: "Theo đơn vị — danh sách" },
+			{ id: "ST-donvi-caycanchinh", nhan: "Theo đơn vị — cây căn chỉnh" },
+			{ id: "ST-donvi-sheet", nhan: "Theo đơn vị — sheet mục tiêu" },
+			{ id: "ST-donvi-rong", nhan: "Theo đơn vị — đơn vị chưa đặt OKR" },
+			{ id: "ST-donvi-dangtai", nhan: "Theo đơn vị — đang tải" },
+			{ id: "ST-donvi-loi", nhan: "Theo đơn vị — lỗi" },
+			{ id: "ST-toancanh-codulieu", nhan: "Toàn cảnh — có dữ liệu" },
+			{ id: "ST-toancanh-tuandau", nhan: "Toàn cảnh — tuần đầu, chưa có số" },
+			{ id: "ST-toancanh-dangtai", nhan: "Toàn cảnh — đang tải" },
+			{ id: "ST-toancanh-loi", nhan: "Toàn cảnh — lỗi" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);
