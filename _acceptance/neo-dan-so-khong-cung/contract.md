@@ -5,7 +5,7 @@ slug: neo-dan-so-khong-cung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [script]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-09-24-neo-dan-so-khong-cung-design.md
 approved_by:
 approved_at:
