@@ -102,6 +102,11 @@ const DAU_VAO_HOP_LE = {
 	"org.createDepartment": { name: "Phong thu", divisionId: null },
 	"org.renameDepartment": { id: "khong-co", name: "x" },
 	"org.moveDepartment": { id: "khong-co", divisionId: null, index: 0 },
+	"org.attachDepartments": {
+		divisionId: "khong-co",
+		departmentIds: ["khong-co"],
+	},
+	"org.addPeople": { departmentId: "khong-co", userIds: ["khong-co"] },
 	"org.setHead": { kind: "division", id: "khong-co", userId: null },
 	"org.setPlacement": {
 		userId: "khong-co",
