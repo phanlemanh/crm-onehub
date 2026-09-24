@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vòng đời cờ zalo-tu-choi · Bốn bước</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1340px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 52rem;
+      margin-bottom: 1.5rem;
+    }
+    code { font-family: var(--font-mono); font-size: 0.8125rem; }
+    svg { width: 100%; min-width: 1100px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Máy trạng thái bốn bước · d-…-2 · Cổng 1 · zalo-goi-thu-hong-hien-dung-bot</p>
+    <h1>Cờ «zalo-tu-choi» chặn nhịp ghi url</h1>
+    <p class="sub">Hai ô <code>zaloWebhookUrl</code>, <code>zaloWebhookLyDo</code> và cái màn đọc ra từ chúng, qua bốn bước. Chỗ rẽ là bước 2: hôm nay nhịp kiểm ghi url và cảnh báo biến mất; sau sửa, cờ giữ url null cho tới lần đăng ký lại thành công.</p>
+
+    <svg viewBox="0 0 1304 432" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- ===== Đường nối giữa các bước (vẽ trước) ===== -->
+      <line x1="368" y1="88" x2="416" y2="88" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="816" y1="88" x2="864" y2="88" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="1040" y1="88" x2="1088" y2="88" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <!-- ===== Cột nhãn hàng ===== -->
+      <text x="40" y="164" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace">zaloWebhookUrl</text>
+      <text x="40" y="180" fill="#666666" font-size="10" font-family="'Geist', sans-serif">url</text>
+      <text x="40" y="228" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace">zaloWebhookLyDo</text>
+      <text x="40" y="244" fill="#666666" font-size="10" font-family="'Geist', sans-serif">cờ</text>
+      <text x="40" y="292" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">màn</text>
+      <text x="40" y="308" fill="#666666" font-size="10" font-family="'Geist', sans-serif">Kết nối › Zalo</text>
+
+      <!-- ===== Bước 1 ===== -->
+      <rect x="192" y="40" width="176" height="296" rx="8" fill="#f2f2f2" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="204" y="60" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">BƯỚC 1</text>
+      <text x="204" y="80" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Lưu bot, gọi thử hỏng</text>
+
+      <rect x="204" y="144" width="152" height="48" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="280" y="172" fill="#171717" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">null</text>
+      <rect x="204" y="208" width="152" height="48" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="280" y="236" fill="#171717" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">zalo-tu-choi</text>
+      <rect x="204" y="272" width="152" height="48" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="280" y="300" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">cảnh báo</text>
+
+      <!-- ===== Bước 2 (chỗ rẽ) ===== -->
+      <rect x="416" y="40" width="400" height="296" rx="8" fill="#f2f2f2" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="428" y="60" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">BƯỚC 2</text>
+      <text x="428" y="80" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Nhịp kiểm, Zalo trả url <tspan font-family="'Geist Mono', monospace">U2</tspan></text>
+
+      <text x="428" y="128" fill="#b4232a" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.08em">HÔM NAY</text>
+      <text x="628" y="128" fill="#006B4F" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.08em">SAU SỬA</text>
+
+      <rect x="428" y="144" width="176" height="48" rx="6" fill="rgba(218,47,53,0.06)" stroke="#da2f35" stroke-width="1.4"/>
+      <text x="516" y="172" fill="#b4232a" font-size="12" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">U2</text>
+      <rect x="428" y="208" width="176" height="48" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="516" y="236" fill="#666666" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">như bước 1</text>
+      <rect x="428" y="272" width="176" height="48" rx="6" fill="rgba(218,47,53,0.06)" stroke="#da2f35" stroke-width="1.4"/>
+      <text x="516" y="300" fill="#b4232a" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">cảnh báo biến mất</text>
+
+      <rect x="628" y="144" width="176" height="48" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="716" y="172" fill="#006B4F" font-size="12" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">null</text>
+      <rect x="628" y="208" width="176" height="48" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="716" y="236" fill="#666666" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">như bước 1</text>
+      <rect x="628" y="272" width="176" height="48" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="716" y="300" fill="#006B4F" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">cảnh báo còn</text>
+
+      <!-- ===== Bước 3 ===== -->
+      <rect x="864" y="40" width="176" height="296" rx="8" fill="#f2f2f2" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="876" y="60" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">BƯỚC 3</text>
+      <text x="876" y="80" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Quản trị viên bấm</text>
+      <text x="876" y="96" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">«Đăng ký lại»,</text>
+      <text x="876" y="112" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">gọi thử được</text>
+
+      <rect x="876" y="144" width="152" height="48" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="952" y="172" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">địa chỉ tác tử</text>
+      <rect x="876" y="208" width="152" height="48" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="952" y="236" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle"><tspan font-family="'Geist Mono', monospace">null</tspan> · cờ gỡ</text>
+      <rect x="876" y="272" width="152" height="48" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="952" y="300" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">xanh</text>
+
+      <!-- ===== Bước 4 ===== -->
+      <rect x="1088" y="40" width="176" height="296" rx="8" fill="#f2f2f2" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="1100" y="60" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">BƯỚC 4</text>
+      <text x="1100" y="80" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Nhịp kiểm kế</text>
+
+      <rect x="1100" y="144" width="152" height="48" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="1176" y="172" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle"><tspan font-family="'Geist Mono', monospace">U2</tspan> · ghi như cũ</text>
+      <rect x="1100" y="208" width="152" height="48" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="1176" y="236" fill="#666666" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">như bước 3</text>
+      <rect x="1100" y="272" width="152" height="48" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+      <text x="1176" y="300" fill="#666666" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">như bước 3</text>
+
+      <!-- ===== Chú giải ===== -->
+      <line x1="40" y1="376" x2="1264" y2="376" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="404" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="120" y="394" width="24" height="14" rx="3" fill="rgba(218,47,53,0.06)" stroke="#da2f35" stroke-width="1.4"/>
+      <text x="152" y="404" fill="#575757" font-size="10" font-family="'Geist', sans-serif">hôm nay: sai</text>
+
+      <rect x="296" y="394" width="24" height="14" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="328" y="404" fill="#575757" font-size="10" font-family="'Geist', sans-serif">sau sửa: đúng</text>
+
+      <text x="480" y="404" fill="#666666" font-size="10" font-family="'Geist', sans-serif">«như bước N»: ô không đổi so với bước đó</text>
+
+      <text x="1264" y="404" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC liên quan: AC-4 · AC-5 · AC-8</text>
+    </svg>
+  </div>
+</body>
+</html>

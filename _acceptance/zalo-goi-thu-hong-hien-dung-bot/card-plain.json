@@ -1,0 +1,43 @@
+{
+  "feature_plain": "Khi quản trị viên đổi bot Zalo mà Zalo nhận nhưng chưa gọi thử được địa chỉ nhận tin, màn Kết nối › Zalo hiện đúng bot vừa lưu cùng lời nhắc bấm «Đăng ký lại», và lời nhắc ấy không tự biến mất sau một phút.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ lưu bot mới và báo rõ «đã lưu, Zalo chưa gọi thử được» khi đổi token mà gọi thử hỏng, thay vì báo lỗi trong lúc bot mới đã được lưu."},
+    {"id": "AC-2", "p": "Sẽ xử lý đúng từng tổ hợp: ba cách lưu (đổi token, lần đầu, đăng ký lại) nhân bốn kết quả từ Zalo, mỗi ô ghi đúng bot, khoá và tên đã hứa từ trước."},
+    {"id": "AC-3", "p": "Sẽ cho màn hình nhận câu trả lời «đã lưu» thật qua đường nối thật giữa máy chủ và tác tử, và sau một nhịp kiểm màn vẫn báo chưa nhận tin."},
+    {"id": "AC-4", "p": "Sẽ giữ lời nhắc «Zalo chưa giao tin» qua mọi nhịp kiểm của tác tử cho tới khi đăng ký lại thành công, kể cả khi một nhịp chen giữa lúc đang lưu."},
+    {"id": "AC-5", "p": "Sẽ gỡ lời nhắc ngay khi quản trị viên bấm «Đăng ký lại» và Zalo gọi thử được; từ đó nhịp kiểm lại chạy như cũ."},
+    {"id": "AC-6", "p": "Sẽ hiện một thông báo cảnh báo có tên bot mới và gọi đúng tên nút «Đăng ký lại» (cả tiếng Việt lẫn tiếng Anh), xoá ô token và tải lại màn."},
+    {"id": "AC-7", "p": "Sẽ để nút «Đăng ký lại» báo cảnh báo khi Zalo vẫn chưa gọi thử được, không báo «đã đăng ký» sai."},
+    {"id": "AC-8", "p": "Sẽ chụp màn thật ở khổ máy tính và điện thoại: sau khi lưu thấy bot mới và lời nhắc, sau một nhịp kiểm lời nhắc vẫn còn."},
+    {"id": "AC-10", "p": "Sẽ cập nhật hướng dẫn kết nối Zalo và bảng theo dõi của lộ trình Zalo (thêm dòng cho việc này, ghi vòng 2 đã lên nhánh chính qua #118)."}
+  ],
+  "wont_do": [
+    {"id": "AC-9", "p": "Chặn mọi sửa vào hai bộ kiểm đã ký của vòng 1 và vòng 2; trong bộ kiểm của vòng 2 chỉ được đổi đúng hai chỗ ghim hành vi cũ «gọi thử hỏng = lỗi»."}
+  ],
+  "scope_plain": "Không lùi về bot cũ, không tự gỡ lời nhắc khi tin tới, không để tác tử tự đăng ký lại — và các giới hạn đã biết khác của vòng 2 vẫn để nguyên.",
+  "coverage_plain": [
+    {"i": 0, "p": "Đã quét đủ ba cách quản trị viên lưu bot: đổi token khi đang có bot, dán token lần đầu, bấm đăng ký lại."},
+    {"i": 1, "p": "Đã quét đủ bốn kết quả Zalo có thể trả khi đăng ký; hai ca còn lại (máy chủ không có https, token sai) đã có tiêu chí ở vòng 2."},
+    {"i": 2, "p": "Đã quét đủ bốn câu trả lời của Zalo ở nhịp kiểm, trên cả ba trạng thái của lời nhắc (AC-4, bảng 12 ô)."},
+    {"i": 3, "p": "Đã soi từ bốn phía: câu trả lời của tác tử, dữ liệu đã lưu, trang tổng quan Zalo và màn thật."},
+    {"i": 4, "p": "Mỗi ô quan trọng đều có tiêu chí: đổi token gọi thử hỏng (AC-1, AC-3, AC-6, AC-8), đăng ký lại (AC-2, AC-7), lời nhắc giữ qua nhịp (AC-4), đường gỡ (AC-5), không phá vòng cũ (AC-9, AC-10)."},
+    {"i": 5, "p": "Ba giả định dưới đây chờ anh gạch:"},
+    {"i": 6, "p": "(1) Zalo thật có thể «nhận đăng ký nhưng gọi thử hỏng» — khuôn lấy từ lần gọi thật ở vòng 2, chưa thấy ca hỏng trên bot thật."},
+    {"i": 7, "p": "(2) Sau khi gọi thử hỏng, Zalo vẫn báo địa chỉ đã đăng ký — đó chính là lý do lời nhắc từng tự biến mất."},
+    {"i": 8, "p": "(3) Sau khi gọi thử hỏng, Zalo không giao tin về CRM cho tới lần đăng ký lại; nếu sai thì lời nhắc báo nhầm chiều, bấm «Đăng ký lại» một lần là gỡ."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép đo thông báo có thể so câu với chính nó, nên câu tiếng Anh thiếu tên nút vẫn qua. Đã sửa: đo câu có đúng tên nút mà màn thật hiện, kèm một lần phá thử."},
+    {"i": 1, "p": "Bảng 12 ô chưa kiểm tên bot, trong khi lời hứa là hiện đúng bot. Đã sửa: thêm tên bot vào mọi ô, cả trong dữ liệu lẫn câu trả lời."},
+    {"i": 2, "p": "Cách giữ lời nhắc «đọc rồi mới ghi» có thể thua một lần lưu chen giữa. Đã sửa: ghi bằng một lệnh có điều kiện, thêm ô đo «nhịp chen»."},
+    {"i": 3, "p": "Ảnh chụp màn thật chưa chứng được nhịp kiểm đã chạy, và có thể bị tác tử của nhánh khác chen vào. Đã sửa: chặn khi có tác tử khác, ghi số lần gọi Zalo, chờ tới khi thấy bot mới rồi mới chụp."},
+    {"i": 4, "p": "Phép đo tài liệu có thể đạt ngay cả khi chưa sửa chữ nào. Đã sửa: bản tài liệu trước vòng này phải bị đo là chưa đạt."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260924T090513Z-1", "p": "Chọn giữ bot mới và nói thật trên màn — đổi lại bot cũ thôi nhận tin qua CRM ngay khi đổi token; loại cách lùi về bot cũ vì khi Zalo cấp lại token cho cùng bot, lùi về là mất bot."},
+    {"id": "d-20260924T090513Z-2", "p": "Chọn giữ lời nhắc bằng dấu «lần đăng ký gần nhất hỏng» đã có sẵn, không thêm cột dữ liệu — đổi lại khi Zalo từ chối hẳn lúc đang có địa chỉ cũ, nhịp kiểm không cập nhật sang địa chỉ khác cho tới lần đăng ký thành công."},
+    {"id": "d-20260924T090513Z-3", "p": "Chọn sửa đúng hai chỗ trong bộ kiểm đã ký của vòng 2 vốn ghim «gọi thử hỏng = lỗi» — đổi lại phép đo đã ký đổi kỳ vọng; một phép đo riêng khoá việc sửa vào đúng hai chỗ đó."},
+    {"id": "d-20260924T090513Z-4", "p": "KHÔNG làm phiên thiết kế trên bản bấm được — không thêm màn hay khối nào, chỉ đổi loại thông báo; đổi lại anh duyệt phần giao diện bằng chữ, ảnh thật có ở vòng chấm."},
+    {"id": "d-20260924T090513Z-5", "p": "KHÔNG tự gỡ lời nhắc khi tin tới và KHÔNG thêm trạng thái riêng — đổi lại nếu Zalo vẫn giao tin sau khi gọi thử hỏng, lời nhắc báo nhầm cho tới một lần «Đăng ký lại»; xem lại khi lái thử ở hàng triển khai."}
+  ]
+}
