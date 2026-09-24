@@ -276,9 +276,9 @@ dùng chung cho cả CRM: Điều phối 30 ngày, OKR, báo cáo và bộ lọc
 cây, không khu nào có cây riêng. Ví dụ: bộ phận «Kinh doanh» chứa hai phòng ban
 «Kinh doanh vùng 1» và «Kinh doanh vùng 2». Chốt 2026-09-24, thay nghĩa chốt
 2026-09-22.
-Màn hình đổi nhãn ở lượt 1 (`cay-to-chuc-co-nguoi`). Tới lúc đó Cài đặt › Điều
-phối 30 ngày vẫn gọi danh sách phẳng của nó là «Bộ phận» — theo nghĩa ở đây, danh
-sách ấy là **phòng ban**. Đó là nhãn cũ đang chờ đổi, không phải màn đang sai.
+Màn hình đã đổi nhãn ở lượt 1 (`cau-truc-to-chuc`): danh sách phẳng mà Cài đặt ›
+Điều phối 30 ngày trước đây gọi là «Bộ phận» nay là **phòng ban**, dựng và sắp ở
+Cài đặt › Tổ chức; «Bộ phận» trên màn Điều phối chỉ còn là bộ lọc theo cấp trên.
 _Avoid_: phòng ban (cho cấp trên), division, khối, team, nhóm
 Vì sao: hai cấp phải mang hai chữ, nếu không «bộ phận Kinh doanh» và «bộ phận
 Kinh doanh vùng 1» nghe ngang hàng. «Khối» là chữ thường trong câu nói (như
@@ -287,9 +287,9 @@ ban nếu sau này có đơn vị thật cần.
 
 **Phòng ban**: cấp dưới của cây tổ chức; thuộc đúng một bộ phận. Mỗi thành viên
 CRM có một phòng ban chính, và có thể thêm phòng ban phụ. Mỗi bước của kế hoạch
-30 ngày giao cho đúng một phòng ban. Đây chính là danh sách hôm nay màn Điều phối
-30 ngày gọi là «Bộ phận»: dữ liệu giữ nguyên, lượt 1 chỉ thêm cấp bộ phận ở trên
-và đổi nhãn. Chốt 2026-09-24.
+30 ngày giao cho đúng một phòng ban. Đây chính là danh sách màn Điều phối
+30 ngày từng gọi là «Bộ phận»: dữ liệu giữ nguyên, lượt 1 đã thêm cấp bộ phận ở
+trên và đổi nhãn. Chốt 2026-09-24.
 _Avoid_: bộ phận (cho cấp này), department, team
 Vì sao: màn điều phối dùng «bộ phận» cho cấp này tới hết lượt 1; giữ chữ cũ sau đó
 là để một chữ chỉ hai cấp.
@@ -346,8 +346,8 @@ vị muốn đổi, tự đặt và tự căn chỉnh. Gọi là đánh giá hi�
 — muốn đạt trong một chu kỳ, viết bằng chữ; con số nằm ở kết quả then chốt. Mỗi
 mục tiêu có một đến vài kết quả then chốt đo nó. Chốt 2026-09-24.
 Trùng chữ đang có: sheet kế hoạch 30 ngày có ô «Mục tiêu» hiện số ngày (`30
-ngày`). Ô đó không phải mục tiêu OKR; nhãn của nó đổi ở lượt 1, cùng đợt đổi nhãn
-màn Điều phối (chốt 2026-09-24, Manh Phan).
+ngày`). Ô đó không phải mục tiêu OKR; lượt 1 đã đổi nhãn nó thành «Thời lượng», cùng đợt
+đổi nhãn màn Điều phối (chốt 2026-09-24, Manh Phan).
 _Avoid_: objective, mục đích, chỉ tiêu
 Vì sao: «chỉ tiêu» là một con số — đó là việc của kết quả then chốt; «mục đích»
 nói lý do làm, không nói điều phải đạt trong kỳ.

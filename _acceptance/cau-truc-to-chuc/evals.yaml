@@ -372,8 +372,8 @@ evals:
       Danh sach tep giao dien RUT TU git diff so voi base_commit (loc *.tsx duoi apps/app), khong
       viet tay; moi tep chay design-gate --mode static, exit 0. So tep > 0 va duoc in. Kiem them:
       git diff duoi packages/ui rong, hoac chi cham tep thanh phan dung chung da khai trong plan.
-      CHIEU DO: tep tam trong tmpdir ban guong co className="rounded-[7px]" -> exit 1 voi vi pham
-      ban kinh goc.
+      CHIEU DO: tep tam trong tmpdir ban guong co className="bg-blue-600 text-gray-500" -> exit khac 0
+      voi vi pham gray-on-color (static gate chi danh do luat P0; rounded-[7px] khong phai P0).
 
   - id: E22
     criterion: AC-2

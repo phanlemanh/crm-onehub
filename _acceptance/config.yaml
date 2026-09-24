@@ -769,7 +769,7 @@ executors:
     ktt_san_thiet_ke: "bun _acceptance/keo-tha-thoa-thuan/rang/san-thiet-ke.mjs"
     ttc_migration_chi_them: "node _acceptance/cau-truc-to-chuc/rang/migration-chi-them.mjs"
     ttc_migration_tren_du_lieu_cu: "bun _acceptance/cau-truc-to-chuc/rang/migration-tren-du-lieu-cu.mjs"
-    ttc_man_chrome: "bun _acceptance/cau-truc-to-chuc/rang/man-to-chuc.mjs"
+    ttc_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3710} API_URL=${API_URL:-http://localhost:3711} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cau-truc-to-chuc/rang/man-to-chuc.mjs"'
     ttc_san_thiet_ke: "bun _acceptance/cau-truc-to-chuc/rang/san-thiet-ke.mjs"
     bkd_du_tep_app: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs du-tep app"
     bkd_du_tep_ui: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs du-tep ui"

@@ -14,6 +14,7 @@
 
 - Không viết chú thích trong code (AGENTS.md).
 - Không sửa `packages/ui`; chỉ dùng thành phần có sẵn, nhập theo subpath `@crm/ui/components/<tên>`.
+- Thành phần dùng chung được sửa: `packages/ui/src/components/sortable-list.tsx` — `DndContext` nhận `id` từ `useId()`, vì mã tự sinh của dnd-kit lệch giữa server và client làm lỗi hydrate ở mọi màn render danh sách kéo-thả từ server (thêm ở S3, sổ quyết định).
 - Client component không nhập `@crm/db`, `@crm/auth`.
 - Hằng số chỉnh được ở `apps/api/src/to-chuc/to-chuc-config.ts` (một object `TO_CHUC`, `as const`).
 - `migration` chỉ thêm: không `UPDATE`/`DELETE`/`DROP`/`ALTER COLUMN`/`RENAME`, không `NOT NULL` không `DEFAULT` trên bảng đã có, không ràng buộc hay chỉ mục duy nhất trên bảng đã có.
