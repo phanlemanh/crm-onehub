@@ -13,6 +13,8 @@ import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	orgAccessOutput,
+	orgAddPeopleInput,
+	orgAttachInput,
 	orgDepartmentCreateInput,
 	orgDepartmentMoveInput,
 	orgDivisionCreateInput,
@@ -161,6 +163,32 @@ export class ToChucRouter {
 	) {
 		await this.toChuc.yeuCauQuanTri(ctx.user.id);
 		return this.toChuc.moveDepartment(input);
+	}
+
+	@Mutation({
+		input: orgAttachInput,
+		output: orgOkOutput,
+		meta: restMeta("POST", "/org/divisions/{divisionId}/departments", TAG),
+	})
+	async attachDepartments(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof orgAttachInput>,
+	) {
+		await this.toChuc.yeuCauQuanTri(ctx.user.id);
+		return this.toChuc.attachDepartments(input);
+	}
+
+	@Mutation({
+		input: orgAddPeopleInput,
+		output: orgOkOutput,
+		meta: restMeta("POST", "/org/departments/{departmentId}/people", TAG),
+	})
+	async addPeople(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof orgAddPeopleInput>,
+	) {
+		await this.toChuc.yeuCauQuanTri(ctx.user.id);
+		return this.toChuc.addPeople(input);
 	}
 
 	@Mutation({

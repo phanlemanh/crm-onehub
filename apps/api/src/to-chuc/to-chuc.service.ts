@@ -15,6 +15,8 @@ import { InjectDatabase } from "../database/database.constants";
 import { type CayTho, dungCay } from "./cay";
 import { khoa, phanTichLo, type SnapNhap, tachDong } from "./nhap";
 import type {
+	AddPeopleInput,
+	AttachInput,
 	DepartmentCreateInput,
 	DepartmentMoveInput,
 	HeadInput,
@@ -279,6 +281,67 @@ export class ToChucService {
 			),
 		]);
 		return { id: input.id };
+	}
+
+	async attachDepartments(input: AttachInput) {
+		const bp = await this.boPhanSong(input.divisionId);
+		if (bp.archivedAt !== null) throw new BadRequestException(T.boPhanDaLuuTru);
+		const ids = [...new Set(input.departmentIds)];
+		const pbs = await this.db.department.findMany({
+			where: { id: { in: ids } },
+			select: { id: true, archivedAt: true },
+		});
+		for (const id of ids) {
+			const pb = pbs.find((p) => p.id === id);
+			if (!pb) throw new NotFoundException(T.khongCoPhongBan(id));
+			if (pb.archivedAt !== null)
+				throw new BadRequestException(T.phongBanDaLuuTru);
+		}
+		const cu = await this.db.department.findMany({
+			where: { divisionId: input.divisionId, archivedAt: null },
+			orderBy: [{ position: "asc" }, { name: "asc" }],
+			select: { id: true },
+		});
+		const thuTu = [
+			...cu.map((d) => d.id),
+			...ids.filter((id) => !cu.some((d) => d.id === id)),
+		];
+		await this.db.$transaction(
+			thuTu.map((id, viTri) =>
+				this.db.department.update({
+					where: { id },
+					data: { divisionId: input.divisionId, position: viTri },
+				}),
+			),
+		);
+		return { id: input.divisionId };
+	}
+
+	async addPeople(input: AddPeopleInput) {
+		const pb = await this.phongBanCo(input.departmentId);
+		if (pb.archivedAt !== null)
+			throw new BadRequestException(T.phongBanDaLuuTru);
+		const ids = [...new Set(input.userIds)];
+		const members = await this.db.member.findMany({
+			where: { organizationId: WORKSPACE_ID, userId: { in: ids } },
+			select: { userId: true },
+		});
+		for (const id of ids)
+			if (!members.some((m) => m.userId === id))
+				throw new BadRequestException(T.khongPhaiThanhVien(id));
+		await this.db.$transaction([
+			...ids.map((userId) =>
+				this.db.orgPlacement.upsert({
+					where: { userId },
+					create: { userId, primaryDepartmentId: input.departmentId },
+					update: { primaryDepartmentId: input.departmentId },
+				}),
+			),
+			this.db.orgSecondaryDepartment.deleteMany({
+				where: { userId: { in: ids }, departmentId: input.departmentId },
+			}),
+		]);
+		return { id: input.departmentId };
 	}
 
 	private async thanhVienHieuLuc(userId: string): Promise<void> {

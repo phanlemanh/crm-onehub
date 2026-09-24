@@ -903,6 +903,14 @@ async function dungDauVaoHopLe(): Promise<Record<string, () => Promise<Json>>> {
 			divisionId: await bpMoi(),
 			index: 0,
 		}),
+		"org.attachDepartments": async () => ({
+			divisionId: await bpMoi(),
+			departmentIds: [await pbTrong()],
+		}),
+		"org.addPeople": async () => ({
+			departmentId: await pbTrong(),
+			userIds: [await nguoiMoi("q-them")],
+		}),
 		"org.setHead": async () => ({
 			kind: "division",
 			id: await bpMoi(),

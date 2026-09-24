@@ -1,5 +1,6 @@
 export const TO_CHUC = {
 	ten: { toiDa: 80 },
+	lo: { toiDa: 50 },
 	nhap: {
 		toiDaDong: 1000,
 		toiDaKyTu: 200_000,
