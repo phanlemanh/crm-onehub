@@ -48,3 +48,8 @@ Chân sản phẩm: ba chỗ gọi tên thiết lập [SUY-TỪ-REPO: apps/app/l
 ## Notes
 
 - Hợp đồng `tien-te-chua-tai-khong-doan` ghim nguyên văn câu cũ ở AC-1 và AC-2; vòng này không sửa hợp đồng đã duyệt đó mà thêm một dòng Notes trỏ sang đây.
+- Known limits (Ngoài-1, Gate 2): E4 chạy thước màn thật của hồ sơ `tien-te-chua-tai-khong-doan`, nên ảnh mới nằm ở `.acceptance-runs/tien-te-chua-tai-khong-doan/evidence/`; ảnh đã lưu trong `evidence/` của hồ sơ đó chụp trước khi đổi chữ.
+- Known limits (Ngoài-2, Gate 2): ba phép đo màn thật của hai hồ sơ trước (E8, E11 của `tien-te-chua-tai-khong-doan`; E9 của `o-so-tien-doc-theo-tieng`) có thước bị sửa ở vòng này; các thước đó đã chạy xanh (trong S4 và trong làn máy) nhưng ảnh trong hồ sơ đã ký chưa được chụp lại bằng một vòng S4 riêng.
+- Known limits (Ngoài-3, Gate 2): thước quét chữ giữ con số 18 khẳng định bằng cách viết (mỗi nhánh luôn cộng đủ), nên phép so số khẳng định không bao giờ đỏ.
+- Known limits (Ngoài-4, Gate 2): phép tìm tên cũ và phép kiểm có tên mới đọc tệp theo hai đường khác nhau; một bảng câu chữ bị lượt quét bỏ sót thì cả hai vẫn xanh.
+- Known limits (Ngoài-5, Gate 2): mục từ điển chỉ được kiểm là có chữ «Cài đặt» và «Tiền tệ» ở bất kỳ đâu trong mục, không kiểm đường dẫn «Cài đặt → Tiền tệ».
