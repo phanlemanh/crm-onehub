@@ -165,8 +165,14 @@ for (const ca of CA_DO) {
 	try {
 		const kq = quet(tam, tep);
 		const bat = kq.viPham.filter((v) => v.startsWith(ca.ghim));
-		console.log(`chieu do ${ca.tep}: bat ${bat.length} vi pham`);
-		if (bat.length !== 1 || kq.viPham.length !== that.viPham.length + 1)
+		const coSan = that.viPham.filter((v) => v.startsWith(ca.ghim));
+		console.log(
+			`chieu do ${ca.tep}: bat ${bat.length - coSan.length} vi pham moi`,
+		);
+		if (
+			bat.length !== coSan.length + 1 ||
+			kq.viPham.length !== that.viPham.length + 1
+		)
 			mu = true;
 	} finally {
 		fs.rmSync(tam, { recursive: true, force: true });
