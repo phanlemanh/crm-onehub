@@ -5,7 +5,7 @@ slug: cau-truc-to-chuc
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-09-24-cau-truc-to-chuc-design.md
 approved_by: Manh Phan
 approved_at: 2026-09-24
