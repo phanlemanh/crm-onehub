@@ -23,6 +23,7 @@ import {
 	zaloXuongOutput,
 } from "../src/zalo/zalo.contracts";
 import { ZALO_THONG_DIEP, ZaloService } from "../src/zalo/zalo.service";
+import { ZaloCauNoiService } from "../src/zalo/zalo-cau-noi.service";
 import { mintPhien } from "./phien-thu";
 import {
 	donDep,
@@ -105,7 +106,11 @@ const cuaToi = (userId: string) => doc(userId, "cuaToi", cuaToiJson);
 const xuong = (userId: string) => doc(userId, "xuong", xuongJson);
 
 function dichVu(): ZaloService {
-	return new ZaloService(db, new AgentAccessService(db));
+	return new ZaloService(
+		db,
+		new AgentAccessService(db),
+		new ZaloCauNoiService(),
+	);
 }
 
 async function datBot(
