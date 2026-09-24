@@ -202,6 +202,11 @@ describe("luu-bot-api", () => {
 		try {
 			const ket = await luuBot(Q.id, { token: TOKEN_T });
 			const x = await xuong(Q.id);
+			expect(
+				JSON.stringify(ket).includes(TOKEN_T) ||
+					JSON.stringify(x).includes(TOKEN_T),
+				"token khong ve trinh duyet",
+			).toBe(false);
 			expect(tt.nhan.length, "tac tu nhan dung mot yeu cau").toBe(1);
 			expect(
 				datBotYeuCau.parse(tt.nhan[0]?.than).token,
@@ -216,11 +221,6 @@ describe("luu-bot-api", () => {
 				goi: TOKEN_T.slice(-4),
 				webhook: "da-dang-ky",
 			});
-			expect(
-				JSON.stringify(ket).includes(TOKEN_T) ||
-					JSON.stringify(x).includes(TOKEN_T),
-				"token khong ve trinh duyet",
-			).toBe(false);
 		} finally {
 			tt.dung();
 		}
@@ -234,10 +234,10 @@ describe("token-sai-api", () => {
 		try {
 			const truoc = await cotZalo();
 			const r = await luuBot(Q.id, { token: "aBcDeFgHiJkLmNoPqR" });
+			expect(tt.nhan.length, "sai dang thi khong goi tac tu").toBe(0);
 			expect(r.status).toBe(400);
 			expect(r.loi).toContain("<số>:<chuỗi>");
 			expect(r.loi).toContain("Secret Token");
-			expect(tt.nhan.length, "sai dang thi khong goi tac tu").toBe(0);
 			expect(await cotZalo(), "AppSetting khong doi").toEqual(truoc);
 		} finally {
 			tt.dung();
