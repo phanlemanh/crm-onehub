@@ -381,6 +381,24 @@ executors:
     ddc_man_dang_luu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t dang-luu-dau-cot"
     ddc_man_loi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t loi-tra-dau-cot"
     ktt_board_giu_nguyen: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/board-giu-nguyen.dom.tsx"
+    ttc_du_lieu_cu: 'bun run test -- "cd apps/api && bun test test/to-chuc.spec.ts -t du-lieu-cu"'
+    ttc_vong_doi_don_vi: 'bun run test -- "cd apps/api && bun test test/to-chuc.spec.ts -t vong-doi-don-vi"'
+    ttc_luu_tru: 'bun run test -- "cd apps/api && bun test test/to-chuc.spec.ts -t luu-tru"'
+    ttc_vi_tri: 'bun run test -- "cd apps/api && bun test test/to-chuc.spec.ts -t vi-tri"'
+    ttc_truong: 'bun run test -- "cd apps/api && bun test test/to-chuc.spec.ts -t truong"'
+    ttc_quan_ly: 'bun run test -- "cd apps/api && bun test test/to-chuc.spec.ts -t quan-ly"'
+    ttc_quyen: 'bun run test -- "cd apps/api && bun test test/to-chuc.spec.ts -t quyen"'
+    ttc_nguoi_roi: 'bun run test -- "cd apps/api && bun test test/to-chuc.spec.ts -t nguoi-roi"'
+    ttc_do_phu: 'bun run test -- "cd apps/api && bun test test/to-chuc.spec.ts -t do-phu"'
+    ttc_nhap_xem_truoc: 'bun run test -- "cd apps/api && bun test test/to-chuc-nhap.spec.ts -t xem-truoc"'
+    ttc_nhap_ghi: 'bun run test -- "cd apps/api && bun test test/to-chuc-nhap.spec.ts -t ghi"'
+    ttc_loc_bo_phan: 'bun run test -- "cd apps/api && bun test test/to-chuc-dieu-phoi.spec.ts -t loc-bo-phan"'
+    ttc_chi_doc_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc.dom.tsx -t chi-doc"
+    ttc_nhap_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc.dom.tsx -t nhap-man"
+    ttc_cay_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc.dom.tsx -t cay-man"
+    ttc_vi_tri_man: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc.dom.tsx -t vi-tri-man"
+    ttc_nhan_dieu_phoi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/doi-nhan-phong-ban.dom.tsx -t nhan-dieu-phoi"
+    ttc_thoi_luong: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/doi-nhan-phong-ban.dom.tsx -t thoi-luong"
   script:
     zqw_giu_nqz: 'B=$(git merge-base HEAD origin/onehub) && { git diff --quiet "$B" -- apps/agent/test/nhac-qua-zalo.integration.spec.ts || { echo "spec da ky cua nhac-qua-zalo bi sua" >&2; exit 1; }; } && bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts"'
     ogd_man_danh_muc: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "DUOI_CONG=1 bun _acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs"'
@@ -741,6 +759,9 @@ executors:
     ktt_man_chrome: "bun _acceptance/keo-tha-thoa-thuan/rang/man-bang-cot.mjs"
     ktt_reui_da_chinh: "bun _acceptance/keo-tha-thoa-thuan/rang/reui-da-chinh.mjs"
     ktt_san_thiet_ke: "bun _acceptance/keo-tha-thoa-thuan/rang/san-thiet-ke.mjs"
+    ttc_migration_chi_them: "node _acceptance/cau-truc-to-chuc/rang/migration-chi-them.mjs"
+    ttc_man_chrome: "bun _acceptance/cau-truc-to-chuc/rang/man-to-chuc.mjs"
+    ttc_san_thiet_ke: "bun _acceptance/cau-truc-to-chuc/rang/san-thiet-ke.mjs"
     bkd_du_tep_app: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs du-tep app"
     bkd_du_tep_ui: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs du-tep ui"
     bkd_tep_moi: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs tep-moi"

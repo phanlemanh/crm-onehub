@@ -80,3 +80,18 @@ export const CAY_HAI_CAP: readonly BoPhanMau[] = [
 ];
 
 export const CHUA_XEP: readonly PhongBanMau[] = [pb("phapche")];
+
+export const CHUA_CO_PHONG_BAN: readonly NguoiMau[] = [
+	LAN,
+	nguoi("quan", "Phan Minh Quân"),
+	nguoi("vy", "Trịnh Hà Vy"),
+];
+
+export const PHONG_BAN_PHU: Readonly<Record<string, readonly NguoiMau[]>> = {
+	cskh: [MAI],
+};
+
+export const DA_LUU_TRU: readonly { id: string; ten: string; loai: string }[] =
+	[{ id: "marketing-cu", ten: "Marketing (cũ)", loai: "Phòng ban" }];
+
+export const NGUOI_MAU = { LAN, HUNG, MAI, DUC, THAO, KHOA, NGA, TUAN };

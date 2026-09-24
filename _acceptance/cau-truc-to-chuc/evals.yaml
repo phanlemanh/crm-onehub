@@ -1,0 +1,369 @@
+schema_version: 1
+slug: cau-truc-to-chuc
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttc_du_lieu_cu
+    paths:
+      - "packages/db/prisma/**"
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/to-chuc.spec.ts"
+    expected: |
+      Tich hop tren co so du lieu kiem cua bun run test (da chay migration cua luot nay). Fixture
+      dung dang du lieu cu: 4 phong ban tao bang dung duong ghi onboarding.createDepartment (khong
+      truyen divisionId), 1 phong ban da luu tru, 1 khuon, 2 ke hoach co 6 buoc rai tren cac phong
+      ban. Ma tran viet truoc: 5 phong ban x [ten, position, archivedAt, so buoc] = 20 khang dinh
+      so voi gia tri doc TRUOC khi goi org.tree; cong 4 khang dinh: org.tree dat dung 4 phong ban
+      chua luu tru vao nhom chuaXep theo position; cong 1: onboarding danh muc tra cung tap
+      (planId, stepId, departmentId) truoc va sau khi goi cac thu tuc org.* doc.
+      CHIEU DO: ban sao org.tree bo nhom chuaXep (chi tra phong ban co divisionId) -> do voi thong
+      diep ghim "chuaXep: 0 phong ban != 4".
+
+  - id: E2
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.ttc_migration_chi_them
+    paths:
+      - "packages/db/prisma/migrations/**"
+      - "_acceptance/cau-truc-to-chuc/rang/migration-chi-them.mjs"
+    expected: |
+      Doc moi thu muc migration moi so voi base_commit cua ho so (suy tu git, khong ghi cung ten).
+      Moi cau lenh SQL phai thuoc tap viet truoc: CREATE TABLE, CREATE INDEX, CREATE UNIQUE INDEX,
+      ALTER TABLE ... ADD COLUMN, ALTER TABLE ... ADD CONSTRAINT. Dem so cau lenh doc duoc > 0.
+      Bat ky UPDATE, DELETE, DROP, ALTER COLUMN, RENAME nao -> exit 1 kem ten tep va cau lenh.
+      CHIEU DO: tep migration gia trong tmpdir ban guong chua "DROP COLUMN" -> exit 1 voi thong diep
+      ghim "migration khong chi them: DROP COLUMN".
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttc_vong_doi_don_vi
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/to-chuc.spec.ts"
+    expected: |
+      Chuoi thao tac tren fixture rong: tao 2 bo phan, doi ten 1, sap lai (dao thu tu), tao 3 phong
+      ban trong bo phan A, chuyen 1 sang B, chuyen 1 ve chuaXep. Sau moi buoc doc org.tree va so
+      voi cay ky vong tinh bang mot ham doc lap trong bai kiem (6 buoc x cay day du).
+      Ma tran tu choi viet truoc: [ten trong, ten 81 ky tu, trung ten khac hoa thuong] x [bo phan,
+      phong ban] = 6 ca, moi ca BadRequest voi cau loi ghim va org.tree khong doi. Doi chung duong:
+      ten 80 ky tu va ten trung voi don vi DA LUU TRU thi duoc.
+      CHIEU DO: ban sao bo so sanh khong phan biet hoa thuong -> do "trung ten 'kinh doanh': khong bi tu choi".
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttc_luu_tru
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/to-chuc.spec.ts"
+    expected: |
+      Ma tran viet truoc 8 ca: [luu tru phong ban con 2 nguoi chinh, luu tru phong ban chi con
+      nguoi phu, luu tru bo phan con 1 phong ban, luu tru bo phan chi con phong ban da luu tru,
+      khoi phuc phong ban, xoa han phong ban con buoc, xoa han phong ban con nguoi chinh, xoa han
+      bo phan khong con gi]. Ky vong tung ca viet truoc (tu choi kem so dem trong cau / cho phep);
+      ca tu choi thi org.tree truoc = sau. Khoi phuc: phong ban ve dung divisionId va position cu.
+      Don vi da luu tru khong xuat hien trong org.tree.divisions nhung co trong org.tree.archived.
+      CHIEU DO: ban sao bo chan nguoi chinh -> do "luu tru phong ban con 2 nguoi: khong bi tu choi".
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttc_vi_tri
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/to-chuc.spec.ts"
+    expected: |
+      Fixture 4 thanh vien, 3 phong ban. Chuoi: dat chinh P1 cho A; dat chinh P2 cho A (thay P1);
+      them phu P3, P1 cho A; dat phu trung chinh P2 -> BadRequest; bo phu P3. Sau moi buoc: tap
+      phong ban cua A trong org.tree (P2 chinh, P1 phu) va so hang OrgPlacement cua A = 1.
+      Nguoi khong co phong ban chinh nam trong org.tree.chuaCoPhongBan, du co phong ban phu.
+      CHIEU DO: ban sao setPlacement them hang moi thay vi thay -> do "A: 2 phong ban chinh".
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttc_truong
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "packages/auth/src/organization.ts"
+      - "apps/api/test/to-chuc.spec.ts"
+    expected: |
+      Ma tran viet truoc: [dat truong phong ban la nguoi trong phong ban, la nguoi ngoai phong
+      ban, bo truong, dat truong bo phan la bat ky thanh vien, dat truong la nguoi da roi] = 5 ca,
+      ky vong tung ca (cho / tu choi kem cau ghim). Dat truong moi thay truong cu (1 truong moi don
+      vi). Cap hai chieu: thanh vien thuong DANG lam truong goi setHead, createDivision,
+      setPlacement, applyImport -> 4 x FORBIDDEN; quan tri goi cung 4 thu tuc -> 4 x chay.
+      CHIEU DO: ban sao canManageOrganization tra true cho nguoi dang lam truong -> do
+      "truong thuong goi setHead: khong FORBIDDEN".
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttc_quan_ly
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/to-chuc.spec.ts"
+    expected: |
+      Fixture 7 nguoi phu du bon nhanh cua chuoi suy: nguoi thuong co truong phong ban; chinh
+      truong phong ban (len truong bo phan); chinh truong bo phan (khong co); phong ban khong
+      truong (len truong bo phan); ghi de con hieu luc; ghi de tro toi chinh minh (bi tu choi khi
+      ghi); nguoi khong phong ban chinh (khong co). Bang ky vong 7 dong viet truoc = 7 khang dinh
+      tren org.tree. Sau do doi truong phong ban P1 -> doc lai: moi nguoi cua P1 (khong ghi de) co
+      quan ly moi; nguoi co ghi de giu nguyen. Xoa ghi de -> ve phep suy.
+      CHIEU DO: ban sao bo nac truong bo phan -> do "chinh truong phong ban: quan ly null != lan".
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttc_quyen
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/src/onboarding/**"
+      - "packages/auth/src/organization.ts"
+      - "apps/api/test/to-chuc.spec.ts"
+    expected: |
+      Danh sach thu tuc ghi RUT TU router that (duyet metadata cac thu tuc mutation cua org va cac
+      mutation Department cua onboarding), khong viet tay; so thu tuc rut duoc > 10 va duoc in ra.
+      Moi thu tuc x [thanh vien thuong, quan tri] = 2N khang dinh: thuong -> FORBIDDEN, quan tri ->
+      khong FORBIDDEN (duoc phep tra BadRequest vi input rong, mien khong phai FORBIDDEN).
+      org.tree va org.access voi thanh vien thuong: chay, access.canManage = false.
+      CHIEU DO: ban sao bo kiem quyen o moveDepartment -> do "moveDepartment: thanh vien thuong khong bi FORBIDDEN".
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.ttc_chi_doc_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc.dom.tsx"
+    expected: |
+      Dung man To chuc voi access.canManage = false va cay mau 2 bo phan, 3 phong ban, 4 nguoi.
+      Khang dinh viet truoc: dong do phu co mat; ten ca 5 don vi co mat; so nut "Them bo phan",
+      "Nhap tu bang tinh", menu don vi, nut mo hop thoai vi tri = 0 (4 khang dinh). Doi chung cung
+      cay voi canManage = true: ca 4 co mat.
+      CHIEU DO: ban sao bo dieu kien canManage o nut nhap -> do "chi doc: nut Nhap tu bang tinh co mat".
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttc_nguoi_roi
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/src/workspace/**"
+      - "apps/api/test/to-chuc.spec.ts"
+    expected: |
+      Fixture: R co phong ban chinh P1, lam truong P1, la quan ly ghi de cua S; T o P1. Go R bang
+      DUNG duong go thanh vien that cua workspace (khong xoa hang tay). Khang dinh viet truoc:
+      R khong con trong org.tree (moi nhom); P1.truong = null; dong do phu: M giam 1, K tang 1;
+      quan ly cua S = ket qua phep suy (khong phai R); quan ly cua T khong con la R.
+      Doi chung: truoc khi go ca 5 dieu nguoc lai deu dung.
+      CHIEU DO: ban sao bo loc member con hieu luc -> do "R van trong cay sau khi go".
+
+  - id: E11
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttc_nhap_xem_truoc
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/to-chuc-nhap.spec.ts"
+    expected: |
+      Mot lo 12 dong viet truoc: 4 hop le (1 tao phong ban moi, 1 tao bo phan moi, 1 dat truong
+      phong ban, 1 dat truong bo phan) + 7 dong hong, dung MOT dong cho moi loai hong + 1 dong tieu
+      de. Ma tran: 7 loai x [dong bi danh hong, cau loi dung chuoi ghim] = 14 khang dinh; 4 dong hop
+      le x [khong co loi] = 4; tom tat [hop le 4, hong 7, tao 1 phong ban, tao 1 bo phan] = 4.
+      Hai dinh dang (tab va dau phay .csv) chay cung bang ky vong. Lo 1001 dong -> tu choi ca lo voi
+      cau ghim; lo 1000 dong -> xem truoc duoc. Dem hang Division, Department, OrgPlacement,
+      OrgSecondaryDepartment truoc = sau xem truoc (4 khang dinh).
+      CHIEU DO: ban sao bo kiem "hai nguoi cung lam truong" -> do "loai truong-trung: 0 dong bi danh hong".
+
+  - id: E12
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttc_nhap_ghi
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/to-chuc-nhap.spec.ts"
+    expected: |
+      Cung lo 12 dong cua E11. applyImport: cay sau khi ghi so voi cay ky vong RUT TU ket qua
+      previewImport that (khong viet tay) — tung dong hop le co mat, tung dong hong khong de lai
+      hang nao. Ghi lan hai cung chu: so hang Division, Department khong doi, org.tree bang lan
+      mot. Loi giua giao dich (bai kiem tiem loi o dong hop le thu 3) -> khong dong nao duoc ghi.
+      Lo toan dong hong -> applyImport tra BadRequest, khong ghi gi.
+      CHIEU DO: ban sao ghi tung dong ngoai giao dich -> do "tiem loi dong 3: 2 dong da ghi != 0".
+
+  - id: E13
+    criterion: AC-10
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.ttc_nhap_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc.dom.tsx"
+    expected: |
+      Hop thoai nhap voi ket qua xem truoc gia lap (4 hop le, 3 hong): nut ghi doc "Ghi 4 dong ·
+      bo 3 dong hong", bang co 7 dong, dong hong hien dung cau loi. Ket qua toan dong hong: nut ghi
+      bi khoa. Bam ghi: goi applyImport voi CHU GOC trong o dan (khong phai ket qua xem truoc).
+      CHIEU DO: ban sao gui ket qua xem truoc thay chu goc -> do "applyImport nhan mang dong, khong phai chu".
+
+  - id: E14
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttc_do_phu
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/to-chuc.spec.ts"
+    expected: |
+      Fixture: 10 thanh vien con hieu luc (7 co phong ban chinh, 1 chi co phong ban phu, 1 co phong
+      ban chinh DA LUU TRU, 1 khong gi), 1 nguoi da roi co phong ban chinh; 5 phong ban (2 co truong
+      con hieu luc, 1 truong da roi, 1 khong truong, 1 da luu tru khong truong). Ky vong tinh bang
+      mot truy van SQL doc lap trong bai kiem (khong goi ham cua dich vu): X = 7, M = 10, K = 2.
+      Khang dinh 3 so. Cap hai chieu: gan phong ban chinh cho nguoi "khong gi" -> X = 8.
+      CHIEU DO: ban sao dem ca nguoi da roi vao M -> do "M: 11 != 10".
+
+  - id: E15
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttc_loc_bo_phan
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/to-chuc-dieu-phoi.spec.ts"
+    expected: |
+      Fixture 6 ke hoach, phong ban dang cam rai tren 2 bo phan va nhom chua xep. Ma tran: 3 lua
+      chon loc bo phan [A, B, A+B] x [tap planId tra ve, so dem facet cua bo phan do] = 6 khang
+      dinh; ky vong tinh tu fixture bang ham doc lap. Loc bo phan ket hop loc "Phong ban dang cam"
+      thi la giao (1 khang dinh). Khong chon gi -> ca 6 (1 khang dinh).
+      CHIEU DO: ban sao loc theo departmentId thay divisionId -> do "loc bo phan A: 0 ke hoach != 3".
+
+  - id: E16
+    criterion: AC-12
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.ttc_nhan_dieu_phoi
+    paths:
+      - "apps/app/lib/messages/onboarding.ts"
+      - "apps/app/app/(app)/[slug]/onboarding/**"
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "apps/app/test/doi-nhan-phong-ban.dom.tsx"
+    expected: |
+      Doc kho chu vi cua Dieu phoi va dung ba man (danh sach Dieu phoi, Cai dat Dieu phoi, soan
+      khuon). Khang dinh: cot, bo loc "Phong ban dang cam", chia cot, o phong ban cua khuon doc
+      "Phong ban" (4); bo loc "Bo phan" co mat (1); Cai dat Dieu phoi khong con danh sach phong
+      ban va co lien ket toi /settings/organization (2). Quet toan bo chuoi vi cua khu Dieu phoi:
+      khong con chuoi "bộ phận" nao ngoai nhan bo loc cap tren (liet ke tung chuoi vi pham).
+      CHIEU DO: tra lai mot chuoi "Bộ phận đang cầm" -> do "con chu bo phan chi cap phong ban: facets.department".
+
+  - id: E17
+    criterion: AC-13
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.ttc_thoi_luong
+    paths:
+      - "apps/app/lib/messages/onboarding.ts"
+      - "apps/app/components/crm/record-sheet/plan-sheet.tsx"
+      - "apps/app/test/doi-nhan-phong-ban.dom.tsx"
+    expected: |
+      Dung sheet ke hoach voi targetDays 30, vi va en. Khang dinh 2 tieng x [nhan "Thời lượng" /
+      "Duration" co mat canh "30", khong con "Mục tiêu" / "Target" trong sheet] = 4.
+      CHIEU DO: tra nhan cu -> do "sheet vi: con chu Mục tiêu".
+
+  - id: E18
+    criterion: AC-4
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.ttc_cay_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc.dom.tsx"
+    expected: |
+      Man To chuc voi cay mau: 2 bo phan, 1 phong ban chua xep, nguoi A chinh P1 phu P2, nguoi B
+      khong phong ban. Khang dinh: A duoi P1 khong nhan "phu", A duoi P2 co nhan "phu", B trong
+      nhom "Chua co phong ban", P3 trong nhom "Chua xep vao bo phan", huy hieu truong dung nguoi
+      (5). Ten nguoi, ten don vi, email mang translate="no" (dem phan tu mang ten = dem co thuoc tinh).
+      CHIEU DO: ban sao bo nhan "phu" -> do "A duoi P2: thieu nhan phu".
+
+  - id: E19
+    criterion: AC-6
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.ttc_vi_tri_man
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc.dom.tsx"
+    expected: |
+      Hop thoai vi tri voi hai du lieu: quan ly theo phep suy -> doc "theo trưởng phòng ban" va
+      khong co nut "Về theo trưởng phòng ban"; quan ly ghi de -> doc "đã chọn tay" va co nut; bam
+      nut -> goi setPlacement voi managerUserId null. 3 khang dinh.
+      CHIEU DO: ban sao luon hien "theo trưởng phòng ban" -> do "ghi de: thieu chu da chon tay".
+
+  - id: E20
+    criterion: AC-14
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ttc_man_chrome
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "_acceptance/cau-truc-to-chuc/rang/man-to-chuc.mjs"
+    steps:
+      - "Canh cay (rang/canh-cay.mjs) truoc man dau tien; lech cay -> ma 2"
+      - "Dang nhap quan tri bang dev:session, gieo 3 bo phan, 6 phong ban (1 chua xep), 12 nguoi, 1 nguoi chua co phong ban"
+      - "Mo {APP_URL}/<slug>/settings/organization o 320, 375, 768, 1024, 1440, vi va en -> chup evidence/to-chuc-<kho>-<tieng>.png"
+      - "Moi o: scrollWidth <= innerWidth; dong do phu, ten 3 bo phan, huy hieu truong thay duoc"
+      - "O 1440/vi va 375/vi: mo hop thoai vi tri cua mot nguoi, mo hop thoai nhap, dan lo 5 dong co 2 dong hong, bam Xem truoc -> chup evidence/vi-tri-<kho>.png, evidence/nhap-xem-truoc-<kho>.png, khong tran ngang"
+      - "O 1440/vi: chi dung Tab va Enter mo mot phong ban va mo hop thoai cua mot nguoi -> chup evidence/ban-phim.png"
+    expected: |
+      exit 0. Chrome that tren may chu dev cua cay dang xet. Ma tran viet truoc 5 kho x 2 tieng =
+      10 o x [khong tran, dong do phu, 3 ten bo phan, huy hieu truong] = 40 khang dinh, cong 2 kho x
+      [hop thoai vi tri khong tran, xem truoc khong tran, 2 dong hong co cau loi] = 6, cong 2 khang
+      dinh ban phim = 48 (hang KY_MONG trong tep thuoc; lech -> ma 2). Moi o khong co loi hydrate.
+
+  - id: E21
+    criterion: AC-15
+    executor: script
+    layer: ui-observed
+    cmd: config:executors.script.ttc_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/components/crm/record-sheet/plan-sheet.tsx"
+      - "apps/app/app/(app)/[slug]/settings/onboarding/**"
+      - "_acceptance/cau-truc-to-chuc/rang/san-thiet-ke.mjs"
+    expected: |
+      Danh sach tep giao dien RUT TU git diff so voi base_commit (loc *.tsx duoi apps/app), khong
+      viet tay; moi tep chay design-gate --mode static, exit 0. So tep > 0 va duoc in. Kiem them:
+      git diff duoi packages/ui rong, hoac chi cham tep thanh phan dung chung da khai trong plan.
+      CHIEU DO: tep tam trong tmpdir ban guong co className="rounded-[7px]" -> exit 1 voi vi pham
+      ban kinh goc.
+
+  - id: E22
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ttc_man_chrome
+    steps:
+      - "Cung lan chay voi E20 (config:executors.script.ttc_man_chrome)"
+      - "O 1440/vi: bam Them bo phan, go ten, luu -> bo phan moi hien trong cay; go ten trung khac hoa thuong -> cau loi duoi o, cay khong doi -> chup evidence/ten-trung.png"
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "_acceptance/cau-truc-to-chuc/rang/man-to-chuc.mjs"
+    expected: |
+      Cung lan chay E20, 2 khang dinh them (bo phan moi co mat sau khi luu; ten trung hien cau loi va
+      so bo phan khong doi). CHIEU DO chung voi E20.
