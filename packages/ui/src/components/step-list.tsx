@@ -16,10 +16,12 @@ import type * as React from "react";
 function StepList({
 	activeStep,
 	label,
+	markCompleted = false,
 	children,
 }: {
 	activeStep: number;
 	label: string;
+	markCompleted?: boolean;
 	children: React.ReactNode;
 }) {
 	return (
@@ -28,7 +30,9 @@ function StepList({
 			orientation="vertical"
 			role="list"
 			aria-label={label}
-			indicators={{ completed: <Icon icon={Checkmark} /> }}
+			indicators={
+				markCompleted ? { completed: <Icon icon={Checkmark} /> } : {}
+			}
 			className="flex flex-col"
 		>
 			{children}

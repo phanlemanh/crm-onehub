@@ -61,6 +61,10 @@ mock.module("@/lib/trpc/cache", () => ({
 	useCrmCache: () => new Proxy({}, { get: () => async () => {} }),
 }));
 
+mock.module("next/navigation", () => ({
+	useRouter: () => ({ refresh: () => {} }),
+}));
+
 mock.module("next/link", () => ({
 	default: ({
 		href,
@@ -323,6 +327,10 @@ describe("trang-thai-man", () => {
 					daNoi: 3,
 					tong: 7,
 					nguoi: NGUOI,
+					canManage: false,
+					nguonToken: "env",
+					goiToken: null,
+					webhook: "da-dang-ky",
 				}}
 			/>,
 		);
