@@ -1,9 +1,9 @@
-import { db } from "../../../packages/db/src/index.ts";
-import { SETTINGS_ID } from "../../../packages/db/src/settings.ts";
 import kenhZalo from "../../../apps/agent/agent/channels/zalo";
 import { kiemBot } from "../../../apps/agent/agent/lib/zalo-bot";
 import { zaloGia } from "../../../apps/agent/test/support/zalo-gia";
 import { zaloMayChu } from "../../../apps/agent/test/support/zalo-may-chu";
+import { db } from "../../../packages/db/src/index.ts";
+import { SETTINGS_ID } from "../../../packages/db/src/settings.ts";
 
 const GOC_TAC_TU = "https://tac-tu.test";
 const DUONG_BOT = "/internal/zalo/bot";
