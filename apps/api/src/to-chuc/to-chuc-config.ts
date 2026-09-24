@@ -1,5 +1,6 @@
 export const TO_CHUC = {
 	ten: { toiDa: 80 },
+	lo: { toiDa: 50 },
 	nhap: {
 		toiDaDong: 1000,
 		toiDaKyTu: 200_000,
@@ -25,6 +26,8 @@ export const TO_CHUC = {
 			`Người ${id} không phải thành viên đang hoạt động.`,
 		truongNgoaiPhongBan: "Trưởng phòng ban phải là người của phòng ban đó.",
 		phuTrungChinh: "Phòng ban phụ không được trùng phòng ban chính.",
+		thuTuBoPhanLech:
+			"Danh sách bộ phận đã đổi trong lúc sắp — tải lại rồi sắp lại.",
 		quanLyLaChinhMinh: "Quản lý trực tiếp phải là người khác.",
 		loQuaDai: (n: number) => `Lô có quá ${n} dòng — chia nhỏ rồi nhập lại.`,
 		loRong: "Không có dòng nào để nhập.",
@@ -32,7 +35,10 @@ export const TO_CHUC = {
 		nhap: {
 			emailKhongPhaiThanhVien: "Email này chưa là thành viên CRM",
 			emailLap: "Email này xuất hiện nhiều lần trong lô",
-			thieuCot: "Thiếu email, phòng ban, hoặc bộ phận của trưởng bộ phận",
+			thieuEmail: "Thiếu email",
+			thieuPhongBan: "Thiếu phòng ban",
+			thieuBoPhanTruong:
+				"Trưởng bộ phận cần cột bộ phận, hoặc phòng ban đã thuộc một bộ phận",
 			phongBanBoPhanKhac: (pb: string, bp: string) =>
 				`Phòng ban «${pb}» đang thuộc bộ phận «${bp}»`,
 			phongBanHaiBoPhan: (pb: string) =>

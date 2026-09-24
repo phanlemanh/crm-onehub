@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gọi thử hỏng · Sơ đồ ba nhánh</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 50rem;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ ba nhánh · d-…-1 · Cổng 1 · zalo-goi-thu-hong-hien-dung-bot</p>
+    <h1>Gọi thử hỏng: giữ bot mới, không lùi về bot cũ</h1>
+    <p class="sub">Cùng một điểm vào, ba cách xử lý. «Hôm nay» và hướng máy khuyên ghi cùng một thứ vào DB; chỗ khác nhau là lời API báo và việc màn có tải lại hay không.</p>
+
+    <svg viewBox="0 0 1200 776" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- ===== Đường nối (vẽ trước) ===== -->
+      <path d="M 480 112 L 480 128 Q 480 136 472 136 L 208 136 Q 200 136 200 144 L 200 212" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="600" y1="112" x2="600" y2="212" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M 720 112 L 720 128 Q 720 136 728 136 L 992 136 Q 1000 136 1000 144 L 1000 212" fill="none" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <line x1="200" y1="284" x2="200" y2="332" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="200" y1="404" x2="200" y2="452" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="200" y1="524" x2="200" y2="572" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <line x1="600" y1="284" x2="600" y2="332" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="600" y1="404" x2="600" y2="452" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="600" y1="524" x2="600" y2="572" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <line x1="1000" y1="284" x2="1000" y2="392" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <line x1="1000" y1="464" x2="1000" y2="572" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <!-- ===== Nhãn nhánh ===== -->
+      <rect x="208" y="160" width="64" height="20" rx="2" fill="#fafafa"/>
+      <text x="212" y="175" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Hôm nay</text>
+
+      <rect x="608" y="160" width="176" height="20" rx="2" fill="#fafafa"/>
+      <text x="612" y="175" fill="#006B4F" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Giữ bot mới — máy khuyên</text>
+
+      <rect x="1008" y="160" width="164" height="20" rx="2" fill="#fafafa"/>
+      <text x="1012" y="175" fill="#575757" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Lùi về bot cũ — đã loại</text>
+
+      <!-- ===== Điểm vào ===== -->
+      <rect x="336" y="40" width="528" height="72" rx="36" fill="#fafafa"/>
+      <rect x="336" y="40" width="528" height="72" rx="36" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="600" y="70" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Quản trị viên dán token mới <tspan font-family="'Geist Mono', monospace">T2</tspan></text>
+      <text x="600" y="92" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Zalo nhận <tspan font-family="'Geist Mono', monospace">setWebhook</tspan> · gọi thử hỏng</text>
+
+      <!-- ===== Nhánh Hôm nay ===== -->
+      <rect x="40" y="212" width="320" height="72" rx="6" fill="#fafafa"/>
+      <rect x="40" y="212" width="320" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="48" y="220" width="36" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="66" y="232" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">DB</text>
+      <text x="200" y="258" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">DB đã lưu <tspan font-family="'Geist Mono', monospace">T2</tspan> / «Bot Mới»</text>
+
+      <rect x="40" y="332" width="320" height="72" rx="6" fill="#fafafa"/>
+      <rect x="40" y="332" width="320" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="48" y="340" width="36" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="66" y="352" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">API</text>
+      <text x="200" y="378" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">API báo lỗi</text>
+
+      <rect x="40" y="452" width="320" height="72" rx="6" fill="#fafafa"/>
+      <rect x="40" y="452" width="320" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="48" y="460" width="36" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="66" y="472" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÀN</text>
+      <text x="200" y="498" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">màn không tải lại</text>
+
+      <rect x="40" y="572" width="320" height="72" rx="36" fill="#fafafa"/>
+      <rect x="40" y="572" width="320" height="72" rx="36" fill="rgba(218,47,53,0.06)" stroke="#da2f35" stroke-width="1.4"/>
+      <text x="200" y="613" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">màn hiện «Bot Cũ» xanh</text>
+      <rect x="160" y="660" width="80" height="20" rx="2" fill="transparent" stroke="#b4232a" stroke-width="0.8"/>
+      <text x="200" y="674" fill="#b4232a" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NÓI SAI</text>
+
+      <!-- ===== Nhánh Giữ bot mới (máy khuyên) ===== -->
+      <rect x="440" y="212" width="320" height="72" rx="6" fill="#fafafa"/>
+      <rect x="440" y="212" width="320" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="448" y="220" width="36" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="466" y="232" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">DB</text>
+      <text x="600" y="258" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">DB lưu <tspan font-family="'Geist Mono', monospace">T2</tspan> / «Bot Mới»</text>
+
+      <rect x="440" y="332" width="320" height="72" rx="6" fill="#fafafa"/>
+      <rect x="440" y="332" width="320" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="448" y="340" width="36" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="466" y="352" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">API</text>
+      <text x="600" y="370" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">API trả thành công</text>
+      <text x="600" y="388" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">kèm «<tspan font-family="'Geist Mono', monospace" font-weight="500">zalo-tu-choi</tspan>»</text>
+
+      <rect x="440" y="452" width="320" height="72" rx="6" fill="#fafafa"/>
+      <rect x="440" y="452" width="320" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="448" y="460" width="36" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="466" y="472" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÀN</text>
+      <text x="600" y="498" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">thông báo cảnh báo + tải lại</text>
+
+      <rect x="440" y="572" width="320" height="72" rx="36" fill="#fafafa"/>
+      <rect x="440" y="572" width="320" height="72" rx="36" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="600" y="613" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">màn hiện «Bot Mới» + «Đăng ký lại»</text>
+      <rect x="552" y="660" width="96" height="20" rx="2" fill="transparent" stroke="#006B4F" stroke-width="0.8"/>
+      <text x="600" y="674" fill="#006B4F" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NÓI ĐÚNG</text>
+
+      <!-- ===== Nhánh Lùi về bot cũ (đã loại) ===== -->
+      <rect x="840" y="212" width="320" height="72" rx="6" fill="#fafafa"/>
+      <rect x="840" y="212" width="320" height="72" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="848" y="220" width="36" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="866" y="232" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">DB</text>
+      <text x="1000" y="258" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">DB trả về <tspan font-family="'Geist Mono', monospace">T</tspan> / «Bot Cũ»</text>
+
+      <rect x="840" y="392" width="320" height="72" rx="6" fill="#fafafa"/>
+      <rect x="840" y="392" width="320" height="72" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="848" y="400" width="44" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="870" y="412" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ZALO</text>
+      <text x="1000" y="430" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">nếu Zalo vừa cấp lại token</text>
+      <text x="1000" y="448" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">cho CÙNG bot thì <tspan font-family="'Geist Mono', monospace">T</tspan> đã chết</text>
+
+      <rect x="840" y="572" width="320" height="72" rx="36" fill="#fafafa"/>
+      <rect x="840" y="572" width="320" height="72" rx="36" fill="rgba(218,47,53,0.06)" stroke="#da2f35" stroke-width="1.4"/>
+      <text x="1000" y="613" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">bot tắt mà màn vẫn xanh</text>
+      <rect x="960" y="660" width="80" height="20" rx="2" fill="transparent" stroke="#b4232a" stroke-width="0.8"/>
+      <text x="1000" y="674" fill="#b4232a" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NÓI SAI</text>
+
+      <!-- ===== Chú giải ===== -->
+      <line x1="40" y1="712" x2="1160" y2="712" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="740" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="120" y="730" width="24" height="14" rx="7" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="152" y="740" fill="#575757" font-size="10" font-family="'Geist', sans-serif">điểm vào / màn cuối cùng</text>
+
+      <rect x="296" y="730" width="24" height="14" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="328" y="740" fill="#575757" font-size="10" font-family="'Geist', sans-serif">một bước</text>
+
+      <rect x="404" y="730" width="24" height="14" rx="7" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="436" y="740" fill="#575757" font-size="10" font-family="'Geist', sans-serif">màn nói đúng</text>
+
+      <rect x="532" y="730" width="24" height="14" rx="7" fill="rgba(218,47,53,0.06)" stroke="#da2f35" stroke-width="1.4"/>
+      <text x="564" y="740" fill="#575757" font-size="10" font-family="'Geist', sans-serif">màn nói sai</text>
+
+      <rect x="652" y="730" width="24" height="14" rx="3" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="684" y="740" fill="#575757" font-size="10" font-family="'Geist', sans-serif">phương án đã loại</text>
+
+      <text x="1160" y="740" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC liên quan: AC-1 · AC-2 · AC-3 · AC-6</text>
+    </svg>
+  </div>
+</body>
+</html>

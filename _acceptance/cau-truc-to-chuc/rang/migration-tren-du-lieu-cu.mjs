@@ -1,6 +1,5 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import {
-	cpSync,
 	mkdirSync,
 	mkdtempSync,
 	readFileSync,
@@ -11,6 +10,7 @@ import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { VONG } from "./cau-hinh.mjs";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const DB_GOI = join(GOC, "packages/db");
@@ -18,8 +18,6 @@ const pg = createRequire(join(DB_GOI, "package.json"))("pg");
 const { dropDatabase, withMaintenance } = await import(
 	join(DB_GOI, "scripts/test-db-admin.ts")
 );
-const git = (...d) =>
-	execFileSync("git", ["-C", GOC, ...d], { encoding: "utf8" }).trim();
 
 function coSo() {
 	if (process.env.TEST_DATABASE_URL) return process.env.TEST_DATABASE_URL;
@@ -64,15 +62,19 @@ function migrate(thuMuc) {
 }
 
 const chieuDo = process.argv[2] === "--chieu-do";
-const moc = git("merge-base", "HEAD", "origin/onehub");
-const cu = mkdtempSync(join(tmpdir(), "ttc-mig-cu-"));
-execFileSync("sh", [
-	"-c",
-	`git -C "${GOC}" archive ${moc} packages/db/prisma/migrations | tar -x -C "${cu}"`,
-]);
-const thuMucCu = join(cu, "packages/db/prisma/migrations");
-const moi = mkdtempSync(join(tmpdir(), "ttc-mig-moi-"));
-cpSync(join(DB_GOI, "prisma/migrations"), moi, { recursive: true });
+const MIGRATIONS = "packages/db/prisma/migrations";
+function rut(sha, tienTo) {
+	const thuMuc = mkdtempSync(join(tmpdir(), tienTo));
+	execFileSync("sh", [
+		"-c",
+		`git -C "${GOC}" archive ${sha} ${MIGRATIONS} | tar -x -C "${thuMuc}"`,
+	]);
+	return thuMuc;
+}
+const cu = rut(VONG.truoc, "ttc-mig-cu-");
+const thuMucCu = join(cu, MIGRATIONS);
+const sau = rut(VONG.sau, "ttc-mig-moi-");
+const moi = join(sau, MIGRATIONS);
 if (chieuDo) {
 	mkdirSync(join(moi, "29990101000000_do"));
 	writeFileSync(
@@ -195,6 +197,6 @@ try {
 } finally {
 	await withMaintenance(goc, (c) => dropDatabase(c, ten));
 	rmSync(cu, { recursive: true, force: true });
-	rmSync(moi, { recursive: true, force: true });
+	rmSync(sau, { recursive: true, force: true });
 }
 process.exit(ma);

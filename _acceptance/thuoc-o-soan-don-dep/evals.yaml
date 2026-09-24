@@ -75,7 +75,7 @@ evals:
     criterion: AC-8
     executor: script
     cmd: config:executors.script.tosd_pham_vi
-    expected: "exit 0 khi git diff $(git merge-base origin/onehub HEAD)...HEAD (tru _acceptance/** va tep khop risk_tiers.t1_skip_globs) rong, VA danh sach mau co apps/agent/agent/lib/custom-agent-dispatch.ts thi ham kiem goi ten dung tep do (doi chung duong)"
+    expected: "exit 0 khi git diff 7cf69d6a...d19c8b21 (hai dau cua merge #92, PHA_THU.vong) (tru _acceptance/** va tep khop risk_tiers.t1_skip_globs) rong, VA danh sach mau co apps/agent/agent/lib/custom-agent-dispatch.ts thi ham kiem goi ten dung tep do (doi chung duong)"
     paths: ["apps/**", "packages/**", "scripts/**", "_acceptance/thuoc-o-soan-don-dep/rang/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -83,6 +83,6 @@ evals:
     criterion: AC-9
     executor: script
     cmd: config:executors.script.tosd_steps_cu
-    expected: "exit 0 khi diff cua _acceptance/o-soan-va-ly-do-loi/evals.yaml tu merge-base origin/onehub toi HEAD: dung ba dong doi, la ba dong Chay: cua E1, E2, E8 (xac dinh bang khoi eval chua dong), moi dong moi = dong cu voi 'NGUOI=${NGUOI:-dev@localhost} ' chen ngay truoc 'bun scripts/lan-do/tien-de.mjs'; doi chung duong: mot cap cu/moi mau bot che do 'chup' va mot cap mau them co '--bo-qua' deu bi ham so goi ten 'steps-cu: doi ngoai tien to NGUOI'"
+    expected: "exit 0 khi diff cua _acceptance/o-soan-va-ly-do-loi/evals.yaml tu 7cf69d6a toi d19c8b21 (PHA_THU.vong): dung ba dong doi, la ba dong Chay: cua E1, E2, E8 (xac dinh bang khoi eval chua dong), moi dong moi = dong cu voi 'NGUOI=${NGUOI:-dev@localhost} ' chen ngay truoc 'bun scripts/lan-do/tien-de.mjs'; doi chung duong: mot cap cu/moi mau bot che do 'chup' va mot cap mau them co '--bo-qua' deu bi ham so goi ten 'steps-cu: doi ngoai tien to NGUOI'"
     paths: ["_acceptance/o-soan-va-ly-do-loi/evals.yaml", "_acceptance/thuoc-o-soan-don-dep/rang/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]

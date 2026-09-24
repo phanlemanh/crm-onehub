@@ -171,6 +171,12 @@ follow, and none of them is a gap to fill later.
   (run `zalo:poll` on your machine); «Zalo chưa giao tin nhắn về CRM» with a «Đăng
   ký lại» button when no webhook is registered. `ZALO_BOT_TOKEN` in `.env` still
   works as a fallback when nothing was pasted, and the page says so.
+- **Khi Zalo nhận đăng ký nhưng gọi thử hỏng, bot mới vẫn được lưu.** Zalo đã giữ
+  token và khoá mới, nên màn tải lại với tên bot mới, báo «đã lưu, Zalo chưa gọi thử
+  được địa chỉ nhận tin» và hiện «Zalo chưa giao tin nhắn về CRM» với nút «Đăng ký
+  lại». Cảnh báo đó giữ nguyên qua các nhịp kiểm của tác tử, tới khi một lần «Đăng
+  ký lại» gọi thử được. Zalo từ chối hẳn (`ok: false`, lỗi mạng) thì bot đang dùng
+  giữ nguyên và màn báo lỗi dưới ô token.
 - **Linking and unlinking are personal.** Members see the bot state and who has
   linked but not the token field. «Nối Zalo», «Tạo mã mới», «Gỡ» and the choice of Zalo or
   Slack for the morning reminder live on «Thông báo của bạn»

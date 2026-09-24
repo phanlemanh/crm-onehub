@@ -15,6 +15,8 @@ import { InjectDatabase } from "../database/database.constants";
 import { type CayTho, dungCay } from "./cay";
 import { khoa, phanTichLo, type SnapNhap, tachDong } from "./nhap";
 import type {
+	AddPeopleInput,
+	AttachInput,
 	DepartmentCreateInput,
 	DepartmentMoveInput,
 	HeadInput,
@@ -173,6 +175,17 @@ export class ToChucService {
 	}
 
 	async reorderDivisions(input: { ids: string[] }) {
+		const song = await this.db.division.findMany({
+			where: { archivedAt: null },
+			select: { id: true },
+		});
+		const gui = new Set(input.ids);
+		if (
+			gui.size !== input.ids.length ||
+			gui.size !== song.length ||
+			song.some((d) => !gui.has(d.id))
+		)
+			throw new BadRequestException(T.thuTuBoPhanLech);
 		await this.db.$transaction(
 			input.ids.map((id, viTri) =>
 				this.db.division.update({ where: { id }, data: { position: viTri } }),
@@ -279,6 +292,67 @@ export class ToChucService {
 			),
 		]);
 		return { id: input.id };
+	}
+
+	async attachDepartments(input: AttachInput) {
+		const bp = await this.boPhanSong(input.divisionId);
+		if (bp.archivedAt !== null) throw new BadRequestException(T.boPhanDaLuuTru);
+		const ids = [...new Set(input.departmentIds)];
+		const pbs = await this.db.department.findMany({
+			where: { id: { in: ids } },
+			select: { id: true, archivedAt: true },
+		});
+		for (const id of ids) {
+			const pb = pbs.find((p) => p.id === id);
+			if (!pb) throw new NotFoundException(T.khongCoPhongBan(id));
+			if (pb.archivedAt !== null)
+				throw new BadRequestException(T.phongBanDaLuuTru);
+		}
+		const cu = await this.db.department.findMany({
+			where: { divisionId: input.divisionId, archivedAt: null },
+			orderBy: [{ position: "asc" }, { name: "asc" }],
+			select: { id: true },
+		});
+		const thuTu = [
+			...cu.map((d) => d.id),
+			...ids.filter((id) => !cu.some((d) => d.id === id)),
+		];
+		await this.db.$transaction(
+			thuTu.map((id, viTri) =>
+				this.db.department.update({
+					where: { id },
+					data: { divisionId: input.divisionId, position: viTri },
+				}),
+			),
+		);
+		return { id: input.divisionId };
+	}
+
+	async addPeople(input: AddPeopleInput) {
+		const pb = await this.phongBanCo(input.departmentId);
+		if (pb.archivedAt !== null)
+			throw new BadRequestException(T.phongBanDaLuuTru);
+		const ids = [...new Set(input.userIds)];
+		const members = await this.db.member.findMany({
+			where: { organizationId: WORKSPACE_ID, userId: { in: ids } },
+			select: { userId: true },
+		});
+		for (const id of ids)
+			if (!members.some((m) => m.userId === id))
+				throw new BadRequestException(T.khongPhaiThanhVien(id));
+		await this.db.$transaction([
+			...ids.map((userId) =>
+				this.db.orgPlacement.upsert({
+					where: { userId },
+					create: { userId, primaryDepartmentId: input.departmentId },
+					update: { primaryDepartmentId: input.departmentId },
+				}),
+			),
+			this.db.orgSecondaryDepartment.deleteMany({
+				where: { userId: { in: ids }, departmentId: input.departmentId },
+			}),
+		]);
+		return { id: input.departmentId };
 	}
 
 	private async thanhVienHieuLuc(userId: string): Promise<void> {
@@ -405,10 +479,13 @@ export class ToChucService {
 	async previewImport(input: { text: string }): Promise<ImportPreviewOutput> {
 		this.kiemLo(input.text);
 		const kq = phanTichLo(input.text, await this.snapNhap());
-		return { rows: kq.rows, summary: kq.summary };
+		return { rows: kq.rows, summary: kq.summary, newNames: kq.newNames };
 	}
 
-	async applyImport(input: { text: string }): Promise<ImportApplyOutput> {
+	async applyImport(input: {
+		text: string;
+		traTen?: boolean;
+	}): Promise<ImportApplyOutput> {
 		this.kiemLo(input.text);
 		return this.db.$transaction(async (tx) => {
 			const kq = phanTichLo(input.text, await this.snapNhap(tx));
@@ -422,7 +499,7 @@ export class ToChucService {
 						select: { position: true },
 					})
 				)?.position ?? -1) + 1;
-			let bpMoi = 0;
+			const bpMoi: string[] = [];
 			for (const h of kq.hopLe) {
 				if (h.divisionName === null) continue;
 				const k = khoa(h.divisionName);
@@ -431,7 +508,7 @@ export class ToChucService {
 					bpId.set(k, h.divisionId);
 					continue;
 				}
-				bpMoi += 1;
+				bpMoi.push(h.divisionName.trim());
 				bpId.set(
 					k,
 					(
@@ -450,7 +527,7 @@ export class ToChucService {
 						select: { position: true },
 					})
 				)?.position ?? -1) + 1;
-			let pbMoi = 0;
+			const pbMoi: string[] = [];
 			for (const h of kq.hopLe) {
 				const k = khoa(h.departmentName);
 				const bp =
@@ -473,7 +550,7 @@ export class ToChucService {
 						});
 					continue;
 				}
-				pbMoi += 1;
+				pbMoi.push(h.departmentName.trim());
 				pbId.set(
 					k,
 					(
@@ -517,11 +594,14 @@ export class ToChucService {
 						});
 				}
 			}
-			return {
+			const ra = {
 				written: kq.hopLe.length,
-				newDepartments: pbMoi,
-				newDivisions: bpMoi,
+				newDepartments: pbMoi.length,
+				newDivisions: bpMoi.length,
 			};
+			return input.traTen
+				? { ...ra, newNames: { departments: pbMoi, divisions: bpMoi } }
+				: ra;
 		});
 	}
 }

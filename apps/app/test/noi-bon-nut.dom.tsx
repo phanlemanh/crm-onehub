@@ -572,22 +572,16 @@ afterEach(async () => {
 });
 
 async function moHopThoaiBoPhan(): Promise<void> {
-	await mo(<ToChuc />);
-	const nhan = tc.menu.replace("{ten}", "Khối");
-	const menu = [...document.body.querySelectorAll("button")].find(
-		(b) => b.querySelector(".sr-only")?.textContent === nhan,
-	);
-	if (!menu) throw new Error("khong thay menu bo phan Khoi");
-	await bam(menu);
+	await mo(<ToChuc />, "?don=bp:khoi");
 	await cho(
-		() => document.body.querySelectorAll('[role="menuitem"]').length > 0,
-		"mo menu bo phan",
+		() => document.body.querySelector('[data-chi-tiet="bo-phan"]') !== null,
+		"khung bo phan Khoi",
 	);
-	const muc = [...document.body.querySelectorAll('[role="menuitem"]')].find(
-		(x) => x.textContent?.trim() === tc.themPhongBan,
+	const nutMoi = [...document.body.querySelectorAll("button")].find(
+		(b) => b.textContent?.trim() === tc.chiTiet.phongBanMoi,
 	);
-	if (!muc) throw new Error("menu khong co Them phong ban");
-	await bam(muc);
+	if (!nutMoi) throw new Error("khong thay nut Phong ban moi cua Khoi");
+	await bam(nutMoi);
 	await cho(() => hopThoai() !== null, "mo hop thoai bo phan");
 }
 

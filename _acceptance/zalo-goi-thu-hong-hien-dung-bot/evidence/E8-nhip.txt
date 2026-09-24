@@ -1,0 +1,2 @@
+getWebhookInfo=1 url=null lyDo=zalo-tu-choi kiemBot=song
+getWebhookInfo=1 url=null lyDo=zalo-tu-choi kiemBot=song

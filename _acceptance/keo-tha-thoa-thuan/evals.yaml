@@ -313,8 +313,8 @@ evals:
       - "packages/ui/src/components/reui/**"
       - "_acceptance/keo-tha-thoa-thuan/rang/san-thiet-ke.mjs"
     expected: |
-      Danh sach tep lay tu git diff --name-only <merge-base voi onehub>...HEAD giao voi cac glob
-      .tsx cua paths (khong ghi dich danh), in so tep; danh sach rong -> ma 2. Chay cong thiet ke
+      Danh sach tep lay tu git diff --name-only ae50f942...9d405a8f (hai dau cua merge #96)
+      giao voi cac glob .tsx cua paths, bo tep da xoa khoi cay (khong ghi dich danh), in so tep; danh sach rong -> ma 2. Chay cong thiet ke
       tinh tren tung tep, moi tep exit 0.
       CHIEU DO (da chay 2026-09-23): ban sao dat chu xam tren nen mau (bg-blue-600 text-gray-400)
       vao cot cua board.tsx -> do voi thong diep ghim "HONG packages/ui/src/components/board.tsx".

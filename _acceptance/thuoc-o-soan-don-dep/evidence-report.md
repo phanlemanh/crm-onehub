@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 807d1357efe8e5957d837d2a4800704a535406cc
+verified_commit: 787d66525c93e022bee430e6450c361c2fbd5a49
 human_signoff: Phan Le Manh 2026-09-23
 ---
 
@@ -177,3 +177,11 @@ none — every multi-run eval is uniform (mọi eval trong vòng này đều run
 Round 1: E1, E4, E9 thất bại — E1 (khac-cay) thoát mã 1 và E9 (steps-cu) thoát mã 1 dù outputTail cho thấy các dòng "DUNG" ở từng chiều kiểm tra được cấp trong đoạn log rút gọn (nguyên nhân đúng nằm ngoài phần outputTail được cung cấp cho vòng này); E4 (thieu-nguoi) thoát mã 2. Trả về triển khai để xem lại ba ca này trong _acceptance/thuoc-o-soan-don-dep/rang/pha-thu.mjs trước vòng đo kế tiếp.
 Round 2: BLOCKED — E1-E6, E8, E9 và bốn lệnh suite (test/lint/lint:slop/build) đều xanh (exit 0), nhưng E7 (ui-check, `pha-thu.mjs --ca that` chạy thật trên máy chủ dev 3600/3601 của cây đang xét) không hoàn tất trong hạn của lượt gọi công cụ: tiến trình nền cần tối đa ~30 phút cho ba eval E1/E2/E8 của "that", vượt trần một lời gọi Bash, và phiên bị buộc gọi StructuredOutput trước khi thấy dòng EXITCODE. Chưa đọc được evidence/that.json hay ảnh chụp mới nào. Cần chạy lại/khoanh đủ thời gian nền cho E7 ở vòng kế tiếp rồi mới kết luận DAT/KHONG DAT.
 Round 3: tất cả 9 eval (E1-E9) và bốn lệnh suite (test/lint/lint:slop/build) đều xanh (exit 0); E7 (ui-check `pha-thu.mjs --ca that`) hoàn tất đúng hạn lần này — that.json ghi DAT ở cả ba chiều con-tro/go-chu/chup với 0 vật sót, băm thư mục evidence cũ trước/sau không đổi, đủ 11 ảnh + 3 tệp phụ trợ. Verdict PASS.
+
+### Re-pin lần 1 — 2026-09-24, do thuoc «vong nay» neo cap sha cua merge (merge-base(M^1,M^2)..M^2) thay merge-base dong; env GOOGLE_CLIENT_* nhu CI
+run_id: repin-20260924T155831Z-87643
+sha: f7a31a583af36e847d87df37ffd44f12b1d45a85 · suites: 4 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E7 · diff chạm vật đo ngoài làn máy: E7 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-7
+
+### Re-pin lần 2 — 2026-09-24, do ghim lai tren cay hop nhat sau khi gop onehub 973f1b01 (#125)
+run_id: repin-20260924T160407Z-81970
+sha: 787d66525c93e022bee430e6450c361c2fbd5a49 · suites: 4 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E7 · AC không có chốt máy: AC-7

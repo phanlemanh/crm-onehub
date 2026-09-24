@@ -40,7 +40,11 @@ export function OToken({
 			onSuccess: async (kq) => {
 				setNhap("");
 				setLoi(null);
-				toast.success(t.daLuu(kq.tenBot));
+				if (kq.webhook === "zalo-tu-choi") {
+					toast.warning(t.daLuuChuaNhanTin(kq.tenBot));
+				} else {
+					toast.success(t.daLuu(kq.tenBot));
+				}
 				await cache.zalo();
 				router.refresh();
 			},
