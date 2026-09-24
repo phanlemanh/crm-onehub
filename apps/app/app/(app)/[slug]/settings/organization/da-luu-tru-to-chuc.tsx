@@ -1,11 +1,6 @@
 "use client";
 
-import { Button } from "@crm/ui/components/button";
-import {
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
-} from "@crm/ui/components/collapsible";
+import { ArchivedList } from "@crm/ui/components/archived-list";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
@@ -24,7 +19,7 @@ type Muc = {
 	purgeable: boolean;
 };
 
-export function DaLuuTruToChuc({ cay }: { cay: CayDuLieu }) {
+export function DaLuuTruToChuc({ cay, sua }: { cay: CayDuLieu; sua: boolean }) {
 	const m = toChucMessages(useLocale());
 	const trpc = useTRPC();
 	const lamMoi = useLamMoiToChuc();
@@ -44,64 +39,43 @@ export function DaLuuTruToChuc({ cay }: { cay: CayDuLieu }) {
 			...d,
 		})),
 	];
-	if (muc.length === 0) return null;
-
+	const theoId = new Map(muc.map((x) => [x.id, x]));
 	const dangKhoi = khoiBp.isPending || khoiPb.isPending;
 	const dangXoa = xoaBp.isPending || xoaPb.isPending;
 	const loi = (e: { message: string }) => toast.error(e.message);
 
 	return (
-		<Collapsible>
-			<CollapsibleTrigger asChild>
-				<Button variant="ghost" className="justify-start">
-					{dien(m.daLuuTru, { n: muc.length })}
-				</Button>
-			</CollapsibleTrigger>
-			<CollapsibleContent>
-				<ul className="divide-y rounded-lg border">
-					{muc.map((x) => (
-						<li
-							key={`${x.loai}-${x.id}`}
-							className="flex items-center justify-between gap-3 px-3 py-2"
-							data-luu-tru={x.id}
-						>
-							<span
-								className="min-w-0 truncate text-sm"
-								translate="no"
-								data-ten
-							>
-								{x.name}
-							</span>
-							<span className="flex shrink-0 items-center gap-2">
-								<Button
-									variant="outline"
-									size="sm"
-									disabled={dangKhoi}
-									onClick={() => {
-										if (dangKhoi) return;
-										const xong = { onSuccess: lamMoi, onError: loi };
-										if (x.loai === "bo-phan") khoiBp.mutate({ id: x.id }, xong);
-										else khoiPb.mutate({ id: x.id }, xong);
-									}}
-								>
-									{m.khoiPhuc}
-								</Button>
-								{x.purgeable ? (
-									<Button
-										variant="ghost"
-										size="sm"
-										disabled={dangXoa}
-										onClick={() => setHoiXoa(x)}
-									>
-										{m.xoaHan}
-									</Button>
-								) : null}
-							</span>
-						</li>
-					))}
-				</ul>
-			</CollapsibleContent>
-
+		<>
+			<ArchivedList
+				label={m.daLuuTru}
+				restoreLabel={m.khoiPhuc}
+				purgeLabel={m.xoaHan}
+				items={muc.map((x) => ({
+					id: x.id,
+					name: x.name,
+					kind: x.loai === "bo-phan" ? m.boPhanLoai : m.phongBanLoai,
+					purgeable: x.purgeable,
+				}))}
+				disabled={!sua}
+				pending={dangKhoi || dangXoa}
+				onRestore={(id) => {
+					const x = theoId.get(id);
+					if (!x || dangKhoi) return;
+					const xong = {
+						onSuccess: async () => {
+							toast.success(dien(m.daKhoiPhucTen, { ten: x.name }));
+							await lamMoi();
+						},
+						onError: loi,
+					};
+					if (x.loai === "bo-phan") khoiBp.mutate({ id: x.id }, xong);
+					else khoiPb.mutate({ id: x.id }, xong);
+				}}
+				onPurge={(item) => {
+					const x = theoId.get(item.id);
+					if (x) setHoiXoa(x);
+				}}
+			/>
 			<ConfirmDialog
 				open={hoiXoa !== null}
 				onOpenChange={(mo) => {
@@ -118,6 +92,7 @@ export function DaLuuTruToChuc({ cay }: { cay: CayDuLieu }) {
 					const sau = {
 						onSuccess: async () => {
 							setHoiXoa(null);
+							toast.success(dien(m.daXoaTen, { ten: x.name }));
 							await lamMoi();
 						},
 						onError: (e: { message: string }) => {
@@ -129,6 +104,6 @@ export function DaLuuTruToChuc({ cay }: { cay: CayDuLieu }) {
 					else xoaPb.mutate({ id: x.id }, sau);
 				}}
 			/>
-		</Collapsible>
+		</>
 	);
 }

@@ -1,8 +1,8 @@
 import { Skeleton } from "@crm/ui/components/skeleton";
-import { Spinner } from "@crm/ui/components/spinner";
 import { cn } from "@crm/ui/lib/utils";
 import type * as React from "react";
 import { PageLoadingStatus } from "./page-loading-status";
+import { PageShellLoading } from "./page-shell-loading";
 import { PageTransition } from "./page-transition";
 
 function PageShell({
@@ -126,14 +126,6 @@ function PageShellContent({
 			{...props}
 		>
 			{children}
-		</div>
-	);
-}
-
-function PageShellLoading() {
-	return (
-		<div aria-busy="true" className="flex justify-center py-12">
-			<Spinner size="lg" />
 		</div>
 	);
 }

@@ -34,6 +34,10 @@ export const SEARCH_PARAM = {
 	deals: {
 		view: "view",
 	},
+	toChuc: {
+		don: "don",
+		loc: "loc",
+	},
 	onboarding: {
 		trangThai: "trangThai",
 		cachXem: "cachXem",

@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
 	PageShell,
+	PageShellActions,
 	PageShellContent,
+	PageShellDescription,
 	PageShellHeader,
 	PageShellHeading,
 	PageShellLoading,
@@ -13,6 +15,7 @@ import { toChucMessages } from "@/lib/messages/to-chuc";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { HanhDongToChuc } from "./hanh-dong-dau-trang";
 import { ToChuc } from "./to-chuc";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,7 +30,11 @@ export default async function CaiDatToChucPage() {
 			<PageShellHeader>
 				<PageShellHeading>
 					<PageShellTitle>{m.title}</PageShellTitle>
+					<PageShellDescription>{m.moTa}</PageShellDescription>
 				</PageShellHeading>
+				<PageShellActions>
+					<HanhDongToChuc />
+				</PageShellActions>
 			</PageShellHeader>
 
 			<PageShellContent className="min-h-0">
@@ -44,14 +51,15 @@ async function CaiDat() {
 
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
-	await Promise.all([
+	const [, , workspace] = await Promise.all([
 		queryClient.prefetchQuery(trpc.org.tree.queryOptions()),
 		queryClient.prefetchQuery(trpc.org.access.queryOptions()),
+		queryClient.fetchQuery(trpc.workspace.get.queryOptions()).catch(() => null),
 	]);
 
 	return (
 		<HydrateClient>
-			<ToChuc />
+			<ToChuc tenGoc={workspace?.name || undefined} />
 		</HydrateClient>
 	);
 }
