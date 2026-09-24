@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ebca47a3c9db0dfb6926726b5b41a1d375c0f2e2
+verified_commit: e482d8d3ee21642b475427ea4984cd02a1c37c59
 human_signoff: Phan Le Manh 2026-09-24
 ---
 
@@ -175,3 +175,7 @@ none — every multi-run eval is uniform
 
 Round 1: 8 eval (E1-E8) và 4 lệnh suite hồi quy PASS ngay từ lần đo đầu tiên; Gate 2 quyết nâng phạm vi (Ngoài-1, Ngoài-2, Ngoài-4, Ngoài-5, Ngoài-6) thêm AC-9, AC-10 vào hợp đồng, giữ Ngoài-3 làm known-limits trong ## Notes — trả lại để sửa bản gốc dựng cố định từ git archive e22d8288 và docGit bỏ tệp đã xoá khỏi đĩa.
 Round 2: đủ 10 eval (E1-E10, thêm E9 cây-lệch và E10 xoá/đổi-tên-chưa-commit) và 4 lệnh suite hồi quy PASS — không có eval nào phải quay lại implementation.
+
+### Re-pin lần 1 — 2026-09-24, do go neo cung dan-so (neo-dan-so-khong-cung) va gop onehub 2e...; ghim lai o dau nhanh
+run_id: repin-20260924T020954Z-69115
+sha: e482d8d3ee21642b475427ea4984cd02a1c37c59 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
