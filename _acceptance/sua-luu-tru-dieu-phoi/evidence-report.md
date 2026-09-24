@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a22b9eb1cfcb3dfdd762dac4cb2d2d0e3a86b471
+verified_commit: ff81251be877f3cd4c53c7682150e2def52a09b0
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -425,3 +425,7 @@ sha: 18ddded26be1c1a204d4e2df661aa27669700a88 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-09-22, do gộp onehub (#80) và sửa bản giả E27 trước PR lượt 3
 run_id: repin-20260922T132144Z-13202
 sha: a22b9eb1cfcb3dfdd762dac4cb2d2d0e3a86b471 · suites: 4 lệnh exit 0 · evals: 28/28 eval máy đạt kỳ vọng · ngoài làn máy: E26 · diff chạm vật đo ngoài làn máy: E26 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15
+
+### Re-pin lần 4 — 2026-09-24, do hành vi phòng ban dời sang Cài đặt › Tổ chức (cau-truc-to-chuc AC-12)
+run_id: repin-20260924T071819Z-86475
+sha: ff81251be877f3cd4c53c7682150e2def52a09b0 · suites: 4 lệnh exit 0 · evals: 28/28 eval máy đạt kỳ vọng · ngoài làn máy: E26 · diff chạm vật đo ngoài làn máy: E26 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15
