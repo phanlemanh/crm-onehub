@@ -256,3 +256,18 @@ evals:
       - "apps/app/app/(app)/[slug]/settings/connections/zalo/**"
     expected: |
       design-gate static tren trang Ket noi › Zalo (P0 floor cua lan design), exit 0.
+  - id: E12
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.zgh_api_cau_noi_that
+    paths:
+      - "apps/api/src/zalo/**"
+      - "apps/agent/agent/channels/zalo.ts"
+      - "apps/agent/agent/lib/zalo-bot*.ts"
+      - "apps/api/test/zalo-goi-thu-hong.spec.ts"
+    expected: |
+      Doi cua lop may chu cho AC-8 (cung lenh voi E3, chay mot lan): cung chuoi luuBot
+      token moi -> kiemBot getWebhookInfo url -> zalo.xuong ma E8 chup tren man.
+      xuong.tenBot = "Bot Moi" va webhook.trangThai = "chua-dang-ky" SAU nhip — dung hai
+      dieu anh E8-sau-luu va E8-sau-nhip phai hien. Thong diep ghim nhu E3.
