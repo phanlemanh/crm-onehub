@@ -1,0 +1,155 @@
+schema_version: 1
+slug: zalo-webhook-doc-khuon-that
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.zwk_hai_khuon_noi
+    paths:
+      - "apps/agent/agent/lib/zalo-webhook.ts"
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "packages/validation/src/zalo-webhook.ts"
+      - "packages/validation/src/zalo-update.ts"
+      - "apps/agent/test/zalo-webhook-doc-khuon-that.integration.spec.ts"
+      - "apps/agent/test/support/zalo-tin.ts"
+      - "apps/agent/test/fixtures/zalo-tin-that.json"
+    expected: |
+      Goi nhanWebhook that (DB that, Zalo gia bat sendMessage). Hai o viet truoc:
+        o that: U co ma song, than = thanWebhook({messageId "hk-that", fromId "Z1",
+                ten "Zed Mot", text ma cua U}) -> khoa cap dau ["event_name","message"]
+        o vo:   V co ma song, than = thanWebhookCoVo({messageId "hk-vo", fromId "Z2",
+                ten "Zed Hai", text ma cua V}) -> khoa cap dau ["ok","result"]
+      Moi o: res.status 200; ZaloLink cua nguoi do doc tu DB bang dung
+      [[zaloUserId, zaloDisplayName]] cua o; usedAt cua ma khac null; dem
+      ZaloUpdateSeen theo messageId cua o = 1; guiToi(fromId) dai 1 va text chua ten
+      CRM cua dung nguoi do (quan he nguoi -> Zalo, khong chi co mat).
+      So o thuc chay = 2, dem trong test.
+      Chieu do (pha-thu tren ban sao, S3): docCapNhat quay ve parseZaloGetUpdates ->
+      o that do voi thong diep ghim "khuon that phai noi duoc"; o vo van xanh.
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.zwk_trung_hai_khuon
+    paths:
+      - "apps/agent/agent/lib/zalo-webhook.ts"
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "packages/validation/src/zalo-webhook.ts"
+      - "apps/agent/test/zalo-webhook-doc-khuon-that.integration.spec.ts"
+      - "apps/agent/test/support/zalo-tin.ts"
+    expected: |
+      Hai thu tu viet truoc: [that, vo] va [vo, that]; moi thu tu mot nguoi rieng co ma
+      song, cung messageId cho hai luot, messageId khac nhau giua hai thu tu.
+      Moi thu tu: hai res.status deu 200; ZaloLink cua nguoi do dem = 1; ZaloUpdateSeen
+      theo messageId dem = 1; guiToi(fromId) dai 1.
+      Doi chung duong cung fixture: hai messageId KHAC nhau, cung khuon, hai nguoi ->
+      hai lien ket, hai tin (chung to bo dem khong hang 1).
+      Chieu do (pha-thu, S3): chen buoc chong trung theo vo (vd ghi seen voi tien to
+      khuon) -> thu tu [that, vo] do voi thong diep ghim "chong trung khong phu thuoc vo".
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.zwk_sai_khuon_log
+    paths:
+      - "apps/agent/agent/lib/zalo-webhook.ts"
+      - "packages/validation/src/zalo-webhook.ts"
+      - "apps/agent/test/zalo-webhook-doc-khuon-that.integration.spec.ts"
+    expected: |
+      Ma tran bon o viet truoc (a khong-json, b that thieu from.id, c vo thieu from,
+      d {"event_name":"x"}); text cua b, c = "NOI-DUNG-BI-MAT-<o>". Ghi so o = 4 tuong
+      minh. spyOn(console, "error") bat moi doi so; tuan tu hoa bang Bun.inspect.
+      Moi o: res.status 200; bang dem ZaloLink/ZaloUpdateSeen/ZaloLinkAttempt bang
+      truoc; soGoi("sendMessage") = 0; dung 1 dong moi bat dau "[zalo] webhook sai
+      khuon". Tach dong thanh truong bang regex khoa=(\S*) khoa_message=(\S*)
+      message_id=(\S+): va so BANG (toEqual), khong toContain:
+        a khoa ""                    khoa_message ""                          message_id "?"
+        b khoa "event_name,message"  khoa_message = khoa cua message cua o b  message_id "sk-b"
+        c khoa "ok,result"           khoa_message = khoa cua result.message   message_id "sk-c"
+        d khoa "event_name"          khoa_message ""                          message_id "?"
+      Gia tri mong doi cua b, c tinh tu chinh doi tuong than da gui (Object.keys),
+      khong go tay. Khong dong nao chua "NOI-DUNG-BI-MAT".
+      Doi chung duong: than hop le khuon that -> 0 dong "webhook sai khuon" va noi.
+      Chieu do (pha-thu, S3): (1) bo khoa_message khoi dong log -> o b do voi thong diep
+      ghim "log in khoa cua message"; (2) in JSON cua than vao log -> o b do voi thong
+      diep ghim "log khong mang noi dung tin".
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.zwk_gia_khuon_that
+    paths:
+      - "apps/agent/test/support/zalo-tin.ts"
+      - "apps/agent/test/fixtures/zalo-tin-that.json"
+      - "apps/agent/test/fixtures/zalo-webhook-log-that.txt"
+      - "apps/agent/test/zalo-webhook-doc-khuon-that.integration.spec.ts"
+      - "apps/agent/test/zalo-qua-webhook.integration.spec.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+      - "apps/agent/agent/lib/zalo-*.ts"
+      - "packages/validation/src/zalo-webhook.ts"
+    expected: |
+      Buoc 1: -t gia-khuon-that — rut tu VAT THAT, khong go tay:
+        thanWebhookCoVo(x).result toEqual result cua zalo-tin-that.json sau khi thay
+        dung cac truong dinh danh cua x (message_id, from.id, chat.id, display_name,
+        text) — moi truong khac, ke ca event_name, bang fixture;
+        thanWebhook(x) toEqual thanWebhookCoVo(x).result;
+        Object.keys(thanWebhook(x)).join(",") toEqual gia tri khoa= tach bang regex
+        khoa=(\S*) tu dong log production 25/09 trong zalo-webhook-log-that.txt;
+        Object.keys(thanWebhookCoVo(x)) toEqual ["ok","result"].
+      Buoc 2: chay tron zalo-qua-webhook.integration.spec.ts va
+      noi-zalo-cho-nguoi-moi.integration.spec.ts; exit 0.
+      Chieu do (pha-thu, S3), hai lop:
+        (1) doi event_name trong thanWebhook -> buoc 1 do voi thong diep ghim
+            "gia khong rut tu fixture".
+        (2) TRUOC khi pha-thu, commit danh sach ten moi ca da ky ma ket qua phu thuoc
+            viec doc than webhook (_acceptance/zalo-webhook-doc-khuon-that/rang/
+            ca-qua-webhook.json, ghi so ca tuong minh). Roi dua docCapNhat ve
+            parseZaloGetUpdates, chay buoc 2, so TAP ca do bang (toEqual) danh sach
+            do. Thieu ca -> ghi nhan "ca da ky chua chay tren khuon that" va tim ca do
+            dung than khong qua thanWebhook; thua ca -> sua du doan, ghi ly do vao decisions.jsonl.
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.zwk_tai_lieu
+    paths:
+      - "docs/agent.md"
+      - "docs/plan/lo-trinh-zalo.md"
+      - "_acceptance/zalo-webhook-doc-khuon-that/rang/tai-lieu.mjs"
+    expected: |
+      node _acceptance/zalo-webhook-doc-khuon-that/rang/tai-lieu.mjs; goc kho suy tu vi
+      tri script (GOC_KHO de ghi de). Cat muc «Zalo: webhook» cua docs/agent.md theo
+      tieu de den tieu de cung cap, tach thanh cau. Doi:
+        - mot cau chua dong thoi "{event_name, message}" va "không có vỏ";
+        - mot cau chua dong thoi token nguyen "`ok`" va "`result`" (co backtick) va
+          chu "vẫn";
+        - chuoi "khoa_message".
+      Bang muc 7 cua docs/plan/lo-trinh-zalo.md co dung 1 dong chua
+      "`zalo-webhook-doc-khuon-that`", cot Trang thai thuoc tap gia tri cua muc 7.
+      Moi vat hong in mot dong ghim, exit 1.
+      Chieu do: chay voi GOC_KHO tro ban sao lay docs/ o merge-base cua origin/onehub
+      -> exit 1 "docs/agent.md chua noi than that {event_name, message}"; ban sao xoa
+      dong 2d -> exit 1 "bang muc 7 khong co dong cho zalo-webhook-doc-khuon-that".
+  - id: E6
+    criterion: AC-4
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.zwk_giu_da_ky
+    paths:
+      - "apps/agent/test/zalo-qua-webhook.integration.spec.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+      - "_acceptance/zalo-webhook-doc-khuon-that/rang/giu-da-ky.mjs"
+    expected: |
+      node _acceptance/zalo-webhook-doc-khuon-that/rang/giu-da-ky.mjs; goc kho suy tu vi
+      tri script. B = git merge-base HEAD origin/onehub.
+        - noi-zalo-cho-nguoi-moi.integration.spec.ts: noi dung o B bang noi dung HEAD.
+        - zalo-qua-webhook.integration.spec.ts: neu HEAD bang B (da merge) -> kiem cau
+          truc: ma tran webhook-bo-qua co dung 4 ca, khong chuoi "c khong vo". Neu
+          khac: noi dung HEAD phai BANG bien doi co ten cua ban o B — go khoi ca
+          "c khong vo", go khoi if (ten.startsWith("c")), "toBe(5)" cua ma tran bo qua
+          thanh "toBe(4)" kem thong diep "ma tran bon ca bo qua", ten ca bo ", khong vo"
+          — khong con khac biet nao khac.
+      Chieu do (ban sao GOC_KHO): sua mot expect o webhook-noi -> exit 1 "spec da ky
+      bi sua ngoai ca c"; sua mot dong noi-zalo spec -> exit 1 "spec da ky bi sua:
+      noi-zalo-cho-nguoi-moi". Doi chung duong: cay nhanh nay -> exit 0.
