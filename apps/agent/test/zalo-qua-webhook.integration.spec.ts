@@ -7,10 +7,12 @@ import {
 	spyOn,
 	test,
 } from "bun:test";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { SETTINGS_ID } from "@crm/db/settings";
 import { ghiSai, taoMaLienKet, ZALO_LIEN_KET } from "@crm/db/zalo-lien-ket";
+import { z } from "zod";
 import kenhZalo from "../agent/channels/zalo";
 import { ZALO } from "../agent/lib/zalo-config";
 import { dangKyWebhook, docThamSo } from "../agent/lib/zalo-dang-ky";
@@ -763,4 +765,106 @@ describe("lenh-webhook", () => {
 			);
 		});
 	}
+});
+
+const GOC_KHO = join(import.meta.dir, "..", "..", "..");
+const BIEN_ZALO = ["ZALO_BOT_TOKEN", "ZALO_WEBHOOK_SECRET"];
+
+function docTep(duong: string): string {
+	return readFileSync(join(GOC_KHO, duong), "utf8");
+}
+
+function boChuThich(nguon: string): string {
+	let ra = "";
+	let trongChuoi = false;
+	for (let i = 0; i < nguon.length; i++) {
+		const kyTu = nguon[i];
+		const ke = nguon[i + 1];
+		if (trongChuoi) {
+			ra += kyTu;
+			if (kyTu === "\\") {
+				ra += ke ?? "";
+				i++;
+			} else if (kyTu === '"') trongChuoi = false;
+			continue;
+		}
+		if (kyTu === '"') {
+			trongChuoi = true;
+			ra += kyTu;
+			continue;
+		}
+		if (kyTu === "/" && ke === "*") {
+			const het = nguon.indexOf("*/", i + 2);
+			i = het === -1 ? nguon.length : het + 1;
+			continue;
+		}
+		if (kyTu === "/" && ke === "/") {
+			const het = nguon.indexOf("\n", i);
+			i = het === -1 ? nguon.length : het - 1;
+			continue;
+		}
+		ra += kyTu;
+	}
+	return ra.replace(/,(\s*[}\]])/g, "$1");
+}
+
+const turboGoc = z.object({ globalEnv: z.array(z.string()) });
+const turboAgent = z.object({
+	tasks: z.record(
+		z.string(),
+		z.object({ passThroughEnv: z.array(z.string()).optional() }),
+	),
+});
+
+describe("khai-bien", () => {
+	test("khai-bien: turbo.json globalEnv co ca hai bien", () => {
+		const goc = turboGoc.parse(JSON.parse(boChuThich(docTep("turbo.json"))));
+		expect(
+			BIEN_ZALO.filter((b) => !goc.globalEnv.includes(b)),
+			"globalEnv thieu bien Zalo",
+		).toEqual([]);
+	});
+
+	test("khai-bien: dev va dev:headless cua agent cho ca hai bien di qua", () => {
+		const agent = turboAgent.parse(
+			JSON.parse(boChuThich(docTep("apps/agent/turbo.json"))),
+		);
+		for (const task of ["dev", "dev:headless"]) {
+			const qua = agent.tasks[task]?.passThroughEnv ?? [];
+			expect(
+				BIEN_ZALO.filter((b) => !qua.includes(b)),
+				`passThroughEnv cua ${task} thieu bien Zalo`,
+			).toEqual([]);
+		}
+	});
+
+	test("khai-bien: .env.example khai ZALO_WEBHOOK_SECRET kem ghi chu, chi dung noi tao bot", () => {
+		const dong = docTep(".env.example").split("\n");
+		const viTri = dong.findIndex((d) => d.startsWith("# ZALO_WEBHOOK_SECRET="));
+		expect(viTri, ".env.example khai ZALO_WEBHOOK_SECRET").toBeGreaterThan(0);
+		expect(
+			dong[viTri - 1]?.startsWith("# ") &&
+				!/^# [A-Z0-9_]+=/.test(dong[viTri - 1] ?? ""),
+			"dong ghi chu ngay tren ZALO_WEBHOOK_SECRET",
+		).toBe(true);
+		const dauKhoi = dong.findIndex((d) =>
+			d.includes("morning reminder on Zalo"),
+		);
+		const khoi = dong.slice(dauKhoi, viTri + 1).join("\n");
+		expect(khoi, "chi noi tao bot la Zalo Bot Manager").toContain(
+			"Zalo Bot Manager",
+		);
+		expect(khoi, "khong con chi tao bot tren web").not.toContain(
+			"bot.zaloplatforms.com",
+		);
+	});
+
+	test("khai-bien: docs/environment.md co hang ZALO_WEBHOOK_SECRET", () => {
+		expect(
+			docTep("docs/environment.md")
+				.split("\n")
+				.some((d) => d.startsWith("| `ZALO_WEBHOOK_SECRET`")),
+			"docs/environment.md co hang ZALO_WEBHOOK_SECRET",
+		).toBe(true);
+	});
 });

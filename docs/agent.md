@@ -206,36 +206,49 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   mã và loại (`@crm/validation/nhac-ke-hoach`) — không tên, không nội dung. Mục bị
   cắt vì trần ký tự của Zalo không vào `daGui`.
 
-#### Poll Zalo
+#### Zalo: webhook, and a bot check on the tick
 
-`pollZalo` (`lib/zalo-poll.ts`) chạy trên cùng nhịp dispatch, cạnh `lenLichNhac`.
-Chỉ agent gọi Zalo Bot API; API chỉ đọc và ghi hàng.
+Zalo hands a message only to a `getUpdates` call that is **open** when it arrives —
+a message that lands between two calls is gone. The first version read on the
+dispatch tick with a one-second call, so link codes were almost always lost (live
+test 2026-09-23). The agent is serverless, so a long-lived reader is not an
+option: messages arrive by webhook instead. Only the agent talks to the Zalo Bot
+API; the API only reads and writes rows.
 
-- **Không token thì tắt, không ném.** Thiếu `ZALO_BOT_TOKEN` thì ghi
-  `appSetting.zaloBotName = null` rồi về. Có token thì gọi `getMe` một lần: thành
-  công thì ghi tên bot và `zaloPolledAt`; lỗi (ví dụ token bị thu hồi) thì ghi
-  `zaloBotName = null`, ghi log, và không ném cả nhịp. Phía API, «Zalo bật» nghĩa
-  là `zaloBotName` khác null, và `zaloPolledAt` cũ hơn `ZALO_LIEN_KET.imSauMs` là
-  «bot không trả lời».
-- **Mỗi nhịp tối đa `ZALO.poll.toiDaMoiNhip` lần `getUpdates`**, `timeout`
-  `ZALO.poll.timeoutGiay`, dừng ở lần đầu không có tin. `getUpdates` không có
-  `offset` và mỗi lần trả một tin. Tin được phân tích ở biên bằng
-  `@crm/validation/zalo-update`; tin hỏng tính là một lỗi, ghi log kèm
-  `message_id`, và vòng đi tiếp.
-- **Chống trùng bằng `ZaloUpdateSeen`.** Chưa rõ `getUpdates` có trả lại tin cũ
-  không, nên mỗi `message_id` được ghi trước khi xử lý và tin đã thấy thì bỏ qua.
-  Hàng cũ hơn `ZALO.poll.giuDauMs` bị tỉa đầu mỗi nhịp. Tin từ bot khác cũng bỏ qua.
-- **Chống dò mã.** Mã chỉ có 6 số, nên mỗi `zaloUserId` sai quá
-  `ZALO_LIEN_KET.doMa.toiDa` lần trong `doMa.cuaSoMs` thì bị bỏ qua (`dangBiChan`):
-  không tra mã, không trả lời, tới hết cửa sổ. Mã sai, hết hạn hay đã dùng thì
-  tăng đếm (`ghiSai`) và bot trả lời một câu hướng dẫn chung không nêu tên ai. Tin
-  không phải 6 số thì bot trả lời câu hướng dẫn, không tính là một lần sai.
-- **Mã khớp thì nối** (`noiBangMa`): mã lưu dạng băm SHA-256, sống
-  `ZALO_LIEN_KET.ma.songMs`, dùng một lần. Zalo đó đang nối người khác thì liên kết
-  cũ bị thay, và người kia đang ưu tiên `ZALO` thì về `AUTO`. Bot trả lời «Đã nối
-  với <tên CRM>».
-- **Nội dung tin người nhắn bot không được lưu, cũng không vào log.** Chỉ
-  `message_id` và bộ đếm lần sai.
+- **`POST /zalo/webhook`** is a custom eve channel (`channels/zalo.ts`) around
+  `nhanWebhook` (`lib/zalo-webhook.ts`).
+  - No `ZALO_BOT_TOKEN` or no `ZALO_WEBHOOK_SECRET` → 404. The capability is off,
+    and nothing throws, including at module load.
+  - Wrong or missing `X-Bot-Api-Secret-Token` → 403, and the body is never read.
+    The header is compared through SHA-256, so any length is safe.
+  - A body that is not JSON, or not the known shape, still answers 200, so Zalo
+    does not resend. The log line names the body's top-level keys and its
+    `message_id`, so a changed envelope shows up on the first real message.
+- **One core for every path.** `xuLyTinDen` (`lib/zalo-nhan.ts`) handles a
+  message from the webhook and from the manual reader alike:
+  - messages from bots and from chats that are not `PRIVATE` are skipped. Replying
+    «Đã nối với <tên CRM>» in a group would show the name to the group;
+  - `ZaloUpdateSeen` dedupes by `message_id`;
+  - `dangBiChan`, `noiBangMa`, `ghiSai` and the replies in `ZALO.loi` keep the
+    link-code rules exactly.
+- **The tick only checks the bot.** `kiemBot` (`lib/zalo-bot.ts`) calls `getMe`
+  once: success writes `zaloBotName` and `zaloPolledAt`; failure writes
+  `zaloBotName = null` and logs. No token writes null and makes no call. It also
+  trims `ZaloUpdateSeen` rows older than `ZALO.poll.giuDauMs`. The tick never calls
+  `getUpdates`: a bot with a webhook cannot use it anyway.
+- **Two commands for whoever runs it:**
+  - `bun run --filter=agent zalo:webhook https://<agent>/zalo/webhook` calls
+    `setWebhook` with `ZALO_WEBHOOK_SECRET` and prints Zalo's
+    `verification.outcome`. `--xoa` calls `deleteWebhook`. A non-`https://` URL or
+    a missing variable stops before any call to Zalo.
+  - `bun run --filter=agent zalo:poll` is `pollZalo` in a loop with
+    `ZALO.pollTay.timeoutGiay`, for a bot on your own machine that has no
+    webhook.
+
+  One bot cannot do both: a bot with a webhook set gets nothing from `getUpdates`
+  until the webhook is removed.
+- **Message text is never stored or logged.** Only `message_id` and the failure
+  counter.
 
 ### Backfills
 
