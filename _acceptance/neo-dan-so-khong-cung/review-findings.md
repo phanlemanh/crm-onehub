@@ -8,40 +8,46 @@
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **The original-version control in E1/E3/E4 still depends on the file count equalling 478, so the brittleness this feature removes comes back inside its own evals**
-  Người dùng thấy gì: Nếu sau này có người thêm một tệp mã nguồn mới vào dự án, phép đo nội bộ của tính năng này có thể tự báo lỗi giả và làm việc ghim lại bị kẹt, dù tính năng không có lỗi thật.
-  file: `_acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs`
+- **The pointer line added to the signed chan-lai dossier's decision log carries a made-up time and names the human for a Gate 2 decision that had not happened yet**
+  Người dùng thấy gì: Một dòng trong sổ quyết định có thể ghi sai thời điểm và ghi tên người đã duyệt cho một bước duyệt thật ra chưa diễn ra, khiến ai tra lại lịch sử dễ hiểu nhầm ai đã quyết gì và khi nào.
+  file: `_acceptance/chan-lai-component-ra-man/decisions.jsonl`
   severity: medium
   Đề xuất: known-limits
 
-- **docGit takes git ls-files at face value: a tracked file deleted in the working tree is reported as BO-SOT (the walker missed a file)**
-  Người dùng thấy gì: Nếu ai đó xoá tạm một tệp mã đang được git theo dõi nhưng chưa lưu (chưa commit) việc xoá đó, công cụ kiểm tra có thể báo lỗi giả 'bỏ sót tệp' và chặn công việc dù không có lỗi thật.
-  file: `_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs`
-  severity: medium
+- **The measurement config repeats moi-mac-dinh's list of root folders instead of importing it**
+  Người dùng thấy gì: Nếu sau này ai đó thêm một thư mục mới vào danh sách gốc ở một chỗ mà quên cập nhật chỗ kia, phép đo có thể báo lỗi sai chỗ, khiến người xem mất công tìm nhầm nguyên nhân.
+  file: `_acceptance/neo-dan-so-khong-cung/rang/cau-hinh.mjs`
+  severity: low
   Đề xuất: known-limits
 
-- **lenhTuConfig/globT1 parse config.yaml by hand instead of with Bun.YAML.parse, the parser other scripts in the repo already use**
-  Người dùng thấy gì: Nếu cách viết lệnh trong tệp cấu hình sau này đổi kiểu (ví dụ dùng dấu ngoặc đặc biệt), bước kiểm tra nội bộ có thể âm thầm chạy nhầm lệnh mà không ai nhận ra.
+- **Shell pipelines without pipefail hide a failed git archive and blame it on the original version going red**
+  Người dùng thấy gì: Nếu việc dựng bản để so sánh bị lỗi âm thầm bên trong, người xem báo cáo có thể tưởng nhầm là mã nguồn thật sự có vấn đề, trong khi thực ra là công cụ đo bị trục trặc.
   file: `_acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Unstaged deletion or rename of a tracked file turns the gate red with a false 'BO-SOT' that blames the file walker**
-  Người dùng thấy gì: Nếu ai đó xoá hoặc đổi tên một tệp mã đang được git theo dõi mà chưa lưu thay đổi đó, công cụ kiểm tra có thể báo lỗi giả và chặn công việc dù không có lỗi thật.
+- **docGit: git ls-files is outside the try, so a git failure after rev-parse exits 1 (red) instead of 2 (KHONG DO DUOC)**
+  Người dùng thấy gì: Nếu dữ liệu git bị hỏng theo một cách hiếm gặp, công cụ có thể báo đây là lỗi của sản phẩm thay vì báo đúng là 'không đo được', khiến người xem hiểu nhầm mức độ nghiêm trọng.
   file: `_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs`
-  severity: medium
+  severity: low
   Đề xuất: known-limits
 
-- **E1, E3 and E4 fail with exit 2 (TIEN DE) as soon as the tree has more or fewer than 478 source files, bringing back the fragility this change removes**
-  Người dùng thấy gì: Khi dự án có thêm hoặc bớt tệp mã nguồn theo thời gian, một phần phép đo nội bộ của tính năng này có thể tự báo lỗi sai và bị kẹt vĩnh viễn dù tính năng vẫn đúng.
+- **cay-lech ignores a failed `git worktree remove`, leaving the temporary worktree registered in the main repo**
+  Người dùng thấy gì: Trong một số tình huống hiếm khi hai lượt đo chạy cùng lúc, một bản sao tạm có thể không được dọn sạch hoàn toàn, để lại rác kỹ thuật trong kho mà không ai được báo.
   file: `_acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs`
-  severity: medium
+  severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 4 (không ghim thông điệp): ca (c) của E5 vẫn xanh khi bỏ hẳn chặn «gốc git khác gốc đang đo»**
-  Người dùng thấy gì: Việc kiểm tra cho tình huống 'thư mục đo nằm trong một kho git khác' có thể vẫn báo đạt ngay cả khi phần chặn thật sự đã bị gỡ bỏ sau này, khiến lỗi đó âm thầm lọt qua mà không ai phát hiện.
+- **Each temporary copy leaks a $TMPDIR/chan-lai-component-ra-man-<hash> folder that donBanSao never deletes**
+  Người dùng thấy gì: Mỗi lần chạy phép đo để lại một thư mục tạm không được xoá, và theo thời gian những thư mục này có thể tích tụ và chiếm dung lượng ổ đĩa của máy chạy đo.
   file: `_acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs`
-  severity: medium
+  severity: low
   Đề xuất: known-limits
+
+- **Hình dạng 5: ma trận Coverage khai ô «dòng bảng cũ — giữ» nhưng không có ca nào đo, dù đoạn mã so neo đã bị dời**
+  Người dùng thấy gì: Hồ sơ nghiệm thu ghi rằng một tiêu chí cũ vẫn được giữ nguyên, nhưng thực ra không có phép đo nào kiểm tra lại điều đó sau khi mã liên quan bị dời chỗ, nên nếu tiêu chí đó vô tình hỏng trong tương lai sẽ không ai được cảnh báo.
+  file: `_acceptance/neo-dan-so-khong-cung/contract.md`
+  severity: low
+  Đề xuất: new-contract
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
