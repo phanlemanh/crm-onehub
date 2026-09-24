@@ -37,6 +37,7 @@ const MAN_THEO_STATE = {
 	"ST-donvi-danhsach": { trang: "theo-don-vi", hinh: "danh-sach" },
 	"ST-donvi-caycanchinh": { trang: "theo-don-vi", hinh: "cay-can-chinh" },
 	"ST-donvi-sheet": { trang: "theo-don-vi", hinh: "sheet" },
+	"ST-donvi-truong": { trang: "theo-don-vi", hinh: "truong" },
 	"ST-donvi-rong": { trang: "theo-don-vi", hinh: "rong" },
 	"ST-donvi-dangtai": { trang: "theo-don-vi", hinh: "dang-tai" },
 	"ST-donvi-loi": { trang: "theo-don-vi", hinh: "loi" },
@@ -80,6 +81,11 @@ export function BanMauOkrMau({ state }: { state: string }) {
 		<KhungUngDung
 			key={state}
 			moDieuHuong={man.trang === "cua-toi" && man.moDieuHuong === true}
+			nguoi={
+				man.trang === "theo-don-vi" && man.hinh === "truong"
+					? "Võ Phương Thảo"
+					: undefined
+			}
 			trang={man.trang}
 			vai={vai}
 		>

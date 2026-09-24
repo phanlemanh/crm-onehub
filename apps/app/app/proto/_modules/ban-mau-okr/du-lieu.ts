@@ -101,7 +101,7 @@ export const CAY_DON_VI: DonViMau = {
 			id: "vanhanh",
 			ten: "Vận hành",
 			cap: "bo-phan",
-			truong: NGUOI.thao,
+			truong: null,
 			con: [
 				{
 					id: "cskh",
@@ -136,6 +136,10 @@ export const CAY_DON_VI: DonViMau = {
 		},
 	],
 };
+
+export const CHUA_XEP: DonViMau[] = [
+	{ id: "phapche", ten: "Pháp chế", cap: "phong-ban", truong: null, con: [] },
+];
 
 const kr = (
 	id: string,
@@ -449,6 +453,7 @@ export const MUC_TIEU_CUA_DON_VI = new Map<string, MucTieuMau[]>([
 	["kho", []],
 	["taichinh", []],
 	["ketoan", [MT_KETOAN]],
+	["phapche", []],
 ]);
 
 export const MUC_TIEU_CUA_TOI: MucTieuMau[] = [MT_CSKH_1, MT_CSKH_2];

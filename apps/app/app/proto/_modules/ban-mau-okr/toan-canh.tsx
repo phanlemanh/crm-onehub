@@ -279,9 +279,9 @@ export function ToanCanh({ hinh }: { hinh: HinhToanCanh }) {
 					value={tuanDau ? "—" : "5"}
 				/>
 				<StatCard
-					description="Kho vận chưa đặt"
+					description="Tài chính, Kho vận, Pháp chế chưa đặt"
 					label="Đơn vị đã công bố OKR"
-					value="8/9"
+					value="7/10"
 				/>
 			</StatGroup>
 
@@ -298,7 +298,7 @@ export function ToanCanh({ hinh }: { hinh: HinhToanCanh }) {
 			) : (
 				<DashboardSection
 					action={<ChuThichVach />}
-					description="Bộ phận in đậm, phòng ban thụt vào dưới bộ phận của nó."
+					description="Bộ phận in đậm và gộp số của các phòng ban thụt vào bên dưới."
 					title="Theo đơn vị"
 				>
 					<BangDonVi />

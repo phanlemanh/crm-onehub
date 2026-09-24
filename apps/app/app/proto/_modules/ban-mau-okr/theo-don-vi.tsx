@@ -2,10 +2,16 @@
 
 import Add from "@carbon/icons-react/es/Add";
 import ChevronDown from "@carbon/icons-react/es/ChevronDown";
+import ChevronRight from "@carbon/icons-react/es/ChevronRight";
 import DocumentImport from "@carbon/icons-react/es/DocumentImport";
 import Target from "@carbon/icons-react/es/Target";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from "@crm/ui/components/collapsible";
 import {
 	Empty,
 	EmptyContent,
@@ -42,6 +48,7 @@ import {
 import { KhoiMucTieu } from "./cua-toi";
 import {
 	CAY_DON_VI,
+	CHUA_XEP,
 	type DonViMau,
 	KY,
 	LICH_SU_KR,
@@ -74,6 +81,7 @@ export type HinhDonVi =
 	| "danh-sach"
 	| "cay-can-chinh"
 	| "sheet"
+	| "truong"
 	| "rong"
 	| "dang-tai"
 	| "loi";
@@ -91,58 +99,104 @@ function tatCaDonVi(dv: DonViMau): DonViMau[] {
 	return [dv, ...dv.con.flatMap(tatCaDonVi)];
 }
 
-function NutDonVi({
+function DongDonVi({
 	dv,
 	chon,
-	cap,
+	thut = false,
 }: {
 	dv: DonViMau;
 	chon: string;
-	cap: number;
+	thut?: boolean;
 }) {
 	const dangChon = dv.id === chon;
 	const n = soMucTieu(dv);
 	return (
 		<li>
 			<Button
-				className={cn(
-					"h-auto w-full justify-between gap-2 py-1.5 font-normal text-muted-foreground",
-					dangChon &&
-						"bg-muted text-foreground hover:bg-muted hover:text-foreground",
-				)}
-				style={{ paddingInlineStart: `${0.5 + cap * 1}rem` }}
 				aria-current={dangChon ? "true" : undefined}
+				className={cn(
+					"w-full justify-start gap-2 font-normal",
+					thut && "ps-8",
+					dangChon && "bg-muted hover:bg-muted",
+				)}
 				variant="ghost"
 			>
-				<span className="min-w-0 truncate text-left" translate="no">
+				<span className="min-w-0 flex-1 truncate text-start" translate="no">
 					{dv.ten}
 				</span>
-				<span className="shrink-0 text-xs tabular-nums">
-					{n === 0 ? "chưa đặt" : n}
+				<span className="text-muted-foreground text-xs tabular-nums">
+					{n === 0 ? "chưa đặt" : `${n} mục tiêu`}
 				</span>
 			</Button>
-			{dv.con.length > 0 ? (
-				<ul>
-					{dv.con.map((c) => (
-						<NutDonVi cap={cap + 1} chon={chon} dv={c} key={c.id} />
-					))}
-				</ul>
-			) : null}
 		</li>
+	);
+}
+
+function NhanhBoPhan({ boPhan, chon }: { boPhan: DonViMau; chon: string }) {
+	const [mo, setMo] = useState(true);
+	const dangChon = boPhan.id === chon;
+	const n = soMucTieu(boPhan);
+	return (
+		<Collapsible asChild onOpenChange={setMo} open={mo}>
+			<li data-bo-phan={boPhan.id}>
+				<CollapsibleTrigger asChild>
+					<Button
+						aria-current={dangChon ? "true" : undefined}
+						className={cn(
+							"w-full justify-start",
+							dangChon && "bg-muted hover:bg-muted",
+						)}
+						variant="ghost"
+					>
+						<Icon
+							className={
+								mo ? "rotate-90 transition-transform" : "transition-transform"
+							}
+							icon={ChevronRight}
+						/>
+						<span className="min-w-0 flex-1 truncate text-start" translate="no">
+							{boPhan.ten}
+						</span>
+						<span className="font-normal text-muted-foreground text-xs tabular-nums">
+							{n === 0 ? "chưa đặt" : `${n} mục tiêu`}
+						</span>
+					</Button>
+				</CollapsibleTrigger>
+				<CollapsibleContent asChild>
+					<ul>
+						{boPhan.con.map((pb) => (
+							<DongDonVi chon={chon} dv={pb} key={pb.id} thut />
+						))}
+					</ul>
+				</CollapsibleContent>
+			</li>
+		</Collapsible>
 	);
 }
 
 function CayDonVi({ chon }: { chon: string }) {
 	return (
-		<nav
-			aria-label="Đơn vị"
-			className="hidden w-60 shrink-0 flex-col gap-2 lg:flex"
-		>
-			<span className="px-2 font-medium text-muted-foreground text-xs">
-				Đơn vị · số mục tiêu
-			</span>
-			<ul aria-label="Cây tổ chức" className="flex flex-col">
-				<NutDonVi cap={0} chon={chon} dv={CAY_DON_VI} />
+		<nav aria-label="Đơn vị" className="hidden w-72 shrink-0 lg:block">
+			<ul
+				aria-label="Cây tổ chức"
+				className="flex flex-col gap-1 rounded-lg border p-2"
+			>
+				<DongDonVi chon={chon} dv={CAY_DON_VI} />
+				{CAY_DON_VI.con.map((bp) => (
+					<NhanhBoPhan boPhan={bp} chon={chon} key={bp.id} />
+				))}
+				{CHUA_XEP.length > 0 ? (
+					<li className="flex flex-col gap-1 pt-2" data-bo-phan="chua-xep">
+						<span className="px-3 text-muted-foreground text-xs">
+							Chưa xếp vào bộ phận nào
+						</span>
+						<ul>
+							{CHUA_XEP.map((pb) => (
+								<DongDonVi chon={chon} dv={pb} key={pb.id} thut />
+							))}
+						</ul>
+					</li>
+				) : null}
 			</ul>
 		</nav>
 	);
@@ -158,31 +212,44 @@ function ChonDonViMayNho({ chon }: { chon: string }) {
 				<SelectItem value={CAY_DON_VI.id}>{CAY_DON_VI.ten}</SelectItem>
 				{CAY_DON_VI.con.map((bp) => (
 					<SelectGroup key={bp.id}>
-						<SelectLabel>{bp.ten}</SelectLabel>
+						<SelectLabel translate="no">{bp.ten}</SelectLabel>
 						{tatCaDonVi(bp).map((dv) => (
-							<SelectItem key={dv.id} value={dv.id}>
+							<SelectItem key={dv.id} translate="no" value={dv.id}>
 								{dv.ten}
 							</SelectItem>
 						))}
 					</SelectGroup>
 				))}
+				<SelectGroup>
+					<SelectLabel>Chưa xếp vào bộ phận nào</SelectLabel>
+					{CHUA_XEP.map((dv) => (
+						<SelectItem key={dv.id} translate="no" value={dv.id}>
+							{dv.ten}
+						</SelectItem>
+					))}
+				</SelectGroup>
 			</SelectContent>
 		</Select>
 	);
 }
 
 function timDonVi(id: string): DonViMau {
-	return tatCaDonVi(CAY_DON_VI).find((d) => d.id === id) ?? CAY_DON_VI;
+	return (
+		[...tatCaDonVi(CAY_DON_VI), ...CHUA_XEP].find((d) => d.id === id) ??
+		CAY_DON_VI
+	);
 }
 
 function DauDonVi({
 	dv,
 	che,
 	datChe,
+	laTruong,
 }: {
 	dv: DonViMau;
 	che: "danh-sach" | "cay";
 	datChe: (v: "danh-sach" | "cay") => void;
+	laTruong: boolean;
 }) {
 	const mt = MUC_TIEU_CUA_DON_VI.get(dv.id) ?? [];
 	const soKr = mt.reduce((t, m) => t + m.kr.length, 0);
@@ -230,6 +297,18 @@ function DauDonVi({
 					<ToggleGroupItem value="danh-sach">Danh sách</ToggleGroupItem>
 					<ToggleGroupItem value="cay">Cây căn chỉnh</ToggleGroupItem>
 				</ToggleGroup>
+				{laTruong ? (
+					<>
+						<Button size="sm" variant="outline">
+							<Icon icon={DocumentImport} data-icon="inline-start" />
+							Nhập từ bảng tính
+						</Button>
+						<Button size="sm">
+							<Icon icon={Add} data-icon="inline-start" />
+							Thêm mục tiêu
+						</Button>
+					</>
+				) : null}
 			</div>
 		</div>
 	);
@@ -543,18 +622,13 @@ export function TheoDonVi({ hinh }: { hinh: HinhDonVi }) {
 						<span translate="no">{dv.ten}</span> chưa đặt OKR cho {KY.ten}
 					</EmptyTitle>
 					<EmptyDescription>
-						Phòng ban chưa có trưởng. Bạn là trưởng bộ phận Vận hành nên đặt
-						được thay — hoặc nhập bộ OKR đang có trong bảng tính.
+						Phòng ban Kho vận và bộ phận Vận hành đều chưa có trưởng. Gán trưởng
+						ở Cài đặt › Tổ chức để phòng ban tự đặt OKR của mình.
 					</EmptyDescription>
 				</EmptyHeader>
-				<EmptyContent className="flex-row justify-center">
-					<Button size="sm">
-						<Icon icon={Add} data-icon="inline-start" />
-						Đặt mục tiêu
-					</Button>
+				<EmptyContent>
 					<Button size="sm" variant="outline">
-						<Icon icon={DocumentImport} data-icon="inline-start" />
-						Nhập từ bảng tính
+						Gán trưởng
 					</Button>
 				</EmptyContent>
 			</Empty>
@@ -576,7 +650,12 @@ export function TheoDonVi({ hinh }: { hinh: HinhDonVi }) {
 			<CayDonVi chon={chon} />
 			<div className="flex min-w-0 flex-1 flex-col gap-4">
 				<ChonDonViMayNho chon={chon} />
-				<DauDonVi che={che} datChe={setChe} dv={dv} />
+				<DauDonVi
+					che={che}
+					datChe={setChe}
+					dv={dv}
+					laTruong={hinh === "truong"}
+				/>
 				{noiDung}
 			</div>
 			{hinh === "sheet" ? <SheetMucTieu mt={MT_CSKH_1} /> : null}

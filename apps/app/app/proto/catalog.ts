@@ -162,6 +162,10 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-donvi-danhsach", nhan: "Theo đơn vị — danh sách" },
 			{ id: "ST-donvi-caycanchinh", nhan: "Theo đơn vị — cây căn chỉnh" },
 			{ id: "ST-donvi-sheet", nhan: "Theo đơn vị — sheet mục tiêu" },
+			{
+				id: "ST-donvi-truong",
+				nhan: "Theo đơn vị — trưởng phòng ban đang xem",
+			},
 			{ id: "ST-donvi-rong", nhan: "Theo đơn vị — đơn vị chưa đặt OKR" },
 			{ id: "ST-donvi-dangtai", nhan: "Theo đơn vị — đang tải" },
 			{ id: "ST-donvi-loi", nhan: "Theo đơn vị — lỗi" },

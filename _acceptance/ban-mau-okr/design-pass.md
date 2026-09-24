@@ -9,10 +9,10 @@ reaction: nac-1 (ghim)
 options: https://claude.ai/artifact/72K5NtWCfrQ5ZcGtBPCBTd — mục «Bốn chỗ còn mở», mỗi chỗ hai hướng, hướng máy khuyên ghim viền xanh cạnh ảnh
 divergence: opened
 ds_skill: web-design-guidelines
-states: [ST-capnhat-dagui, ST-capnhat-dangdien, ST-capnhat-danggui, ST-capnhat-dangtai, ST-capnhat-loi, ST-capnhat-loigui, ST-capnhat-rong, ST-capnhat-sokhonghople, ST-cuatoi-codulieu, ST-cuatoi-dangtai, ST-cuatoi-dieuhuong, ST-cuatoi-loi, ST-cuatoi-rong, ST-donvi-caycanchinh, ST-donvi-dangtai, ST-donvi-danhsach, ST-donvi-loi, ST-donvi-rong, ST-donvi-sheet, ST-toancanh-codulieu, ST-toancanh-dangtai, ST-toancanh-loi, ST-toancanh-tuandau]
+states: [ST-capnhat-dagui, ST-capnhat-dangdien, ST-capnhat-danggui, ST-capnhat-dangtai, ST-capnhat-loi, ST-capnhat-loigui, ST-capnhat-rong, ST-capnhat-sokhonghople, ST-cuatoi-codulieu, ST-cuatoi-dangtai, ST-cuatoi-dieuhuong, ST-cuatoi-loi, ST-cuatoi-rong, ST-donvi-caycanchinh, ST-donvi-dangtai, ST-donvi-danhsach, ST-donvi-loi, ST-donvi-rong, ST-donvi-sheet, ST-donvi-truong, ST-toancanh-codulieu, ST-toancanh-dangtai, ST-toancanh-loi, ST-toancanh-tuandau]
 breakpoints: [mobile-390, desktop-1440]
 themes: [light, dark]
-patched: 7
+patched: 8
 deferred: 11
 ---
 # design-pass — ban-mau-okr
@@ -34,8 +34,21 @@ Ai thấy gì trong bản mẫu: «Của tôi», «Cập nhật tuần», «Theo
 Bùi Thu Nga — thành viên Chăm sóc khách hàng mang vai «chỉ OKR», nên rail chỉ có OKR
 và Cài đặt (và ngăn điều hướng trên máy nhỏ ở `ST-cuatoi-dieuhuong` cũng vậy).
 «Toàn cảnh» nhìn bằng mắt lãnh đạo có vai đầy đủ: rail đủ mục, OKR đứng sau «30
-ngày đầu». `ST-donvi-rong` nhìn bằng mắt Võ Phương Thảo, trưởng bộ phận Vận hành, để
-thấy lời mời đặt OKR thay phòng ban chưa có trưởng.
+ngày đầu». `ST-donvi-truong` nhìn bằng mắt Võ Phương Thảo, trưởng phòng ban Chăm sóc khách
+hàng, nên có thêm «Thêm mục tiêu» và «Nhập từ bảng tính». `ST-donvi-rong` là Kho
+vận: cả phòng ban và bộ phận Vận hành đều chưa có trưởng, nên lời mời là gán trưởng.
+
+Cây đơn vị bên trái «Theo đơn vị» lấy lại đúng hình và dữ liệu mẫu của bản mẫu
+`cau-truc-to-chuc` (nhánh `proto/cau-truc-to-chuc`, chưa gộp): khung viền, bộ phận
+là nhánh gập mở, phòng ban thụt vào, nhóm «Chưa xếp vào bộ phận nào», Vận hành chưa
+có trưởng. Lớp OKR chỉ thêm dòng OneHub ở đầu và số mục tiêu bên phải mỗi đơn vị.
+Khi hai bản mẫu cùng vào `onehub`, cây này nên nhập thẳng từ module kia thay vì
+chép hình.
+
+CI trên GitHub không chạy job nào từ 24/09 (lỗi thanh toán tài khoản, chủ kho đang
+xử lý): PR đỏ trong vài giây với 0 bước, không phải lỗi mã. Bằng chứng thay thế là
+năm lệnh chạy ở máy: `check-types`, `lint`, `lint:slop`, `test`, `build`, và phép
+đo sổ bản mẫu `apps/app/test/proto-catalog.spec.ts`.
 
 Luật đọc tiến độ trong bản mẫu: vạch «lẽ ra đã tới đây» đi thẳng từ ngày công bố
 (02/11) tới 31/12, hôm nay 30/11 là 47%. Mục tiêu cam kết: từ 85% vạch trở lên là
@@ -89,6 +102,8 @@ chương trình của lượt 3.
 | ST-donvi-rong | mobile-390 | light | evidence/design-pass/ST-donvi-rong--mobile-390.png |
 | ST-donvi-sheet | desktop-1440 | light | evidence/design-pass/ST-donvi-sheet--desktop-1440.png |
 | ST-donvi-sheet | mobile-390 | light | evidence/design-pass/ST-donvi-sheet--mobile-390.png |
+| ST-donvi-truong | desktop-1440 | light | evidence/design-pass/ST-donvi-truong--desktop-1440.png |
+| ST-donvi-truong | mobile-390 | light | evidence/design-pass/ST-donvi-truong--mobile-390.png |
 | ST-toancanh-codulieu | desktop-1440 | dark | evidence/design-pass/ST-toancanh-codulieu--desktop-1440--dark.png |
 | ST-toancanh-codulieu | desktop-1440 | light | evidence/design-pass/ST-toancanh-codulieu--desktop-1440.png |
 | ST-toancanh-codulieu | mobile-390 | light | evidence/design-pass/ST-toancanh-codulieu--mobile-390.png |
@@ -126,6 +141,7 @@ tiếng Việt) và sheet kế hoạch 30 ngày, ở cả 1440 và 390. Máy c�
 - Thanh tab khu OKR dính chữ vào nhau: theo đúng cách `DetailSheetTabs` dùng biến thể `line` (khoảng cách và gạch chân ở chỗ gọi).
 - Chú giải heatmap «ô đậm hơn» sai nghĩa ở nền tối vì thang đảo chiều: đổi thành «ô càng nổi khỏi nền, càng nhiều KR tự tin cao».
 - Cây đơn vị và cây căn chỉnh từng khai vai `tree` mà không đi được bằng bàn phím: bỏ vai, về danh sách lồng thường, đơn vị đang chọn mang `aria-current`.
+- Cây đơn vị tự vẽ khác hình bản mẫu cây tổ chức: lấy lại hình và dữ liệu của `cau-truc-to-chuc` (theo nhắc của phiên điều phối), thêm trạng thái trưởng phòng ban đang xem để giữ hai nút đặt và nhập OKR.
 - Kiểu dữ liệu mẫu khai từ điển mở cho giá trị đã biết (`lint:slop` bắt tám chỗ): đổi sang `satisfies` và `Map`.
 
 ### Nhóm 2 — đòi-đổi-DS/component (chờ Gate 1)

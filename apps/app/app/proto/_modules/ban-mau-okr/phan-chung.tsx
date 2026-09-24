@@ -162,9 +162,11 @@ export function KhungUngDung({
 	vai,
 	trang,
 	moDieuHuong = false,
+	nguoi,
 	children,
 }: {
 	vai: Vai;
+	nguoi?: string;
 	trang: TrangOkr;
 	moDieuHuong?: boolean;
 	children: ReactNode;
@@ -192,7 +194,7 @@ export function KhungUngDung({
 				</span>
 				<span className="ml-auto flex items-center gap-2">
 					<PersonAvatar
-						name={vai === "chi-okr" ? TOI.ten : "Đỗ Hải Sơn"}
+						name={nguoi ?? (vai === "chi-okr" ? TOI.ten : "Đỗ Hải Sơn")}
 						size="sm"
 					/>
 				</span>
