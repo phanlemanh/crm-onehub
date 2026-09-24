@@ -89,3 +89,54 @@ export function parseZaloSend(value: unknown): ZaloDaGui {
 		: "hinh dang la";
 	throw new Error(`Zalo rejected the message (${lyDo}).`);
 }
+
+const thanBatKy = z.record(z.string(), z.unknown());
+
+export function khoaCapDauCua(value: unknown): string {
+	const ket = thanBatKy.safeParse(value);
+	return ket.success ? Object.keys(ket.data).join(",") : "";
+}
+
+const datWebhook = z.object({
+	ok: z.literal(true),
+	result: z.object({
+		url: z.string(),
+		verification: z
+			.object({ outcome: z.string(), hint: z.string().optional() })
+			.optional(),
+	}),
+});
+
+export type ZaloDatWebhook = {
+	url: string;
+	outcome: string | null;
+	hint: string | null;
+};
+
+export function parseZaloSetWebhook(value: unknown): ZaloDatWebhook {
+	const ket = datWebhook.safeParse(value);
+	if (!ket.success) {
+		throw new Error(`setWebhook tra hinh dang la: ${ket.error.message}`);
+	}
+	const xacMinh = ket.data.result.verification;
+	return {
+		url: ket.data.result.url,
+		outcome: xacMinh?.outcome ?? null,
+		hint: xacMinh?.hint ?? null,
+	};
+}
+
+const xoaWebhook = z.object({
+	ok: z.literal(true),
+	result: z.object({ url: z.string() }),
+});
+
+export type ZaloDaXoaWebhook = { url: string };
+
+export function parseZaloDeleteWebhook(value: unknown): ZaloDaXoaWebhook {
+	const ket = xoaWebhook.safeParse(value);
+	if (!ket.success) {
+		throw new Error(`deleteWebhook tra hinh dang la: ${ket.error.message}`);
+	}
+	return { url: ket.data.result.url };
+}

@@ -1,0 +1,101 @@
+import { z } from "zod";
+import { ZALO } from "../../agent/lib/zalo-config";
+import tinGoc from "../fixtures/zalo-tin-that.json";
+
+const khuonGoc = z.object({
+	ok: z.literal(true),
+	result: z.object({
+		message: z.looseObject({
+			chat: z.looseObject({ id: z.string(), chat_type: z.string() }),
+			text: z.string().optional(),
+			message_id: z.string(),
+			date: z.number(),
+			from: z.looseObject({
+				id: z.string(),
+				is_bot: z.boolean(),
+				display_name: z.string(),
+			}),
+		}),
+		event_name: z.string(),
+	}),
+	error_code: z.number(),
+});
+
+type KhuonGoc = z.infer<typeof khuonGoc>;
+type TinZaloThat = KhuonGoc["result"]["message"];
+
+export type ChonTin = {
+	messageId: string;
+	fromId: string;
+	ten?: string;
+	text?: string | null;
+	chatType?: string;
+	isBot?: boolean;
+	photo?: string;
+};
+
+function goc(): KhuonGoc {
+	return khuonGoc.parse(structuredClone(tinGoc));
+}
+
+export function tinThat(chon: ChonTin): TinZaloThat {
+	const message = goc().result.message;
+	message.message_id = chon.messageId;
+	message.from.id = chon.fromId;
+	message.chat.id = chon.fromId;
+	if (chon.ten !== undefined) message.from.display_name = chon.ten;
+	if (chon.chatType !== undefined) message.chat.chat_type = chon.chatType;
+	if (chon.isBot !== undefined) message.from.is_bot = chon.isBot;
+	if (chon.text === null) delete message.text;
+	else if (chon.text !== undefined) message.text = chon.text;
+	if (chon.photo !== undefined) {
+		return { ...message, photo: chon.photo };
+	}
+	return message;
+}
+
+export function thanGetUpdates(chon: ChonTin): KhuonGoc {
+	const than = goc();
+	than.result.message = tinThat(chon);
+	return than;
+}
+
+export type ThanWebhook = {
+	ok: true;
+	result: { event_name: string; message: TinZaloThat };
+};
+
+export function thanWebhook(chon: ChonTin): ThanWebhook {
+	const than = thanGetUpdates(chon);
+	return {
+		ok: true,
+		result: {
+			event_name: than.result.event_name,
+			message: than.result.message,
+		},
+	};
+}
+
+export type YeuCauGia = { request: Request; soLanKeo: () => number };
+
+export function yeuCauWebhook(than: string, header: string | null): YeuCauGia {
+	let keo = 0;
+	const headers = new Headers({ "content-type": "application/json" });
+	if (header !== null) headers.set(ZALO.webhook.header, header);
+	const request = new Request(`http://tac-tu${ZALO.webhook.duong}`, {
+		method: "POST",
+		headers,
+		body: new ReadableStream(
+			{
+				pull(dieuKhien) {
+					keo += 1;
+					dieuKhien.enqueue(new TextEncoder().encode(than));
+					dieuKhien.close();
+				},
+			},
+			{ highWaterMark: 0 },
+		),
+		duplex: "half",
+	});
+	return { request, soLanKeo: () => keo };
+}
