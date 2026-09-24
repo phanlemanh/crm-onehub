@@ -212,15 +212,23 @@ evals:
     layer: ui
     cmd: config:executors.script.mdg_mot_cho_ghi_app
     paths:
-      - "apps/app/**"
+      - "apps/**"
+      - "packages/*/src/**"
       - "_acceptance/mot-duong-ghi-phong-ban/rang/mot-cho-ghi.mjs"
     expected: |
-      Cung script voi E2, che do app: quet moi tep .ts/.tsx cua apps/app (tru node_modules, .next,
-      test/) tim "onboarding.(createDepartment|updateDepartment|reorderDepartments|archiveDepartment|
-      restoreDepartment|purgeDepartment)". In so tep da quet (> 0). Tim thay -> exit 1 kem
-      duong dan:dong. CHIEU DO cung lan: ban guong tmpdir chen "trpc.onboarding.purgeDepartment"
-      vao xac-nhan-luu-tru.tsx -> phai bat voi thong diep ghim "man web goi duong ghi cu:
-      apps/app/app/(app)/[slug]/settings/organization/xac-nhan-luu-tru.tsx". Khong bat -> exit 2.
+      Cung script voi E2, che do app: quet moi tep .ts/.tsx/.mjs cua MOI app (apps/app, apps/agent,
+      apps/api...) va packages/*/src (tru node_modules, .next, .output, .eve, generated, test/,
+      *.spec.*, *.dom.*) tim hai dang goi duong ghi cu: ten thu tuc
+      "onboarding.(createDepartment|updateDepartment|reorderDepartments|archiveDepartment|
+      restoreDepartment|purgeDepartment)" va duong REST ghi "/onboarding/departments" (moi dang tru GET
+      danh sach: chuoi "/onboarding/departments" di kem method POST/PATCH/DELETE hoac hau to
+      /archive /restore /reorder /{id}). In so tep da quet theo tung app (> 0 moi app). Tim thay ->
+      exit 1 kem duong dan:dong. CHIEU DO cung lan, hai ban guong tmpdir: (a) chen
+      "trpc.onboarding.archiveDepartment" vao xac-nhan-luu-tru.tsx -> phai bat voi thong diep ghim
+      "man web goi duong ghi cu: apps/app/app/(app)/[slug]/settings/organization/xac-nhan-luu-tru.tsx";
+      (b) chen `fetch(`${api}/rest/onboarding/departments`, { method: "POST" })` vao mot tep cua
+      apps/agent -> phai bat voi thong diep ghim "goi duong ghi cu ngoai man To chuc: apps/agent/...".
+      Mot trong hai khong bat -> exit 2 "thuoc mu".
 
   - id: E9
     criterion: AC-7
