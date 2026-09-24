@@ -1,13 +1,12 @@
 ---
 schema_version: 2
 feature_slug: tien-te-chua-tai-khong-doan
-verdict: BLOCKED
+verdict: PASS
 failed_evals: []
-reason: "bun _acceptance/tien-te-chua-tai-khong-doan/rang/man-that.mjs (evals E9, E12): Verification script requires the API server running at http://localhost:3001, but it is not accessible. The verification test tried to create a dev session but failed at connection stage. To run this verification: start the API server with `cd apps/api && bun run dev` in another terminal, then retry the verification command."
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0ee38022eb0efd17df0bce40787946433b2f3b82
+verified_commit: f19f04d4902f1782c7885b980f0d1229994ef4c7
 human_signoff:
 ---
 
@@ -23,176 +22,165 @@ human_signoff:
 | E6 | AC-6 | test | PASS |
 | E7 | AC-7 | test | PASS |
 | E8 | AC-8 | ui-check | PASS |
-| E9 | AC-8 | script | BLOCKED |
+| E9 | AC-8 | script | PASS |
 | E10 | AC-9 | script | PASS |
 | E11 | AC-10 | ui-check | PASS |
-| E12 | AC-10 | script | BLOCKED |
+| E12 | AC-10 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-tien-te-chua-tai-khong-doan-E1-r1
+  run_id: minted-tien-te-chua-tai-khong-doan-E1-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tcct_tao_dang_tai
-  verified_at: 2026-09-24T00:00:00Z
+  verified_at: 2026-09-24T15:00:00Z
   output: |
-    0 fail
-    2 expect() calls
-    Ran 1 test across 1 file. [715.00ms]
+     0 fail
+     2 expect() calls
+    Ran 1 test across 1 file. [813.00ms]
 
 - eval: E2
-  run_id: minted-tien-te-chua-tai-khong-doan-E2-r1
+  run_id: minted-tien-te-chua-tai-khong-doan-E2-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tcct_tao_loi
-  verified_at: 2026-09-24T00:00:00Z
+  verified_at: 2026-09-24T15:00:00Z
   output: |
-    0 fail
-    2 expect() calls
-    Ran 1 test across 1 file. [978.00ms]
+     0 fail
+     2 expect() calls
+    Ran 1 test across 1 file. [575.00ms]
 
 - eval: E3
-  run_id: minted-tien-te-chua-tai-khong-doan-E3-r1
+  run_id: minted-tien-te-chua-tai-khong-doan-E3-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tcct_tao_ma_tran
-  verified_at: 2026-09-24T00:00:00Z
+  verified_at: 2026-09-24T15:00:00Z
   output: |
-    Ran 1 test across 1 file. [1403.00ms]
+     0 fail
+     2 expect() calls
+    Ran 1 test across 1 file. [1214.00ms]
 
 - eval: E4
-  run_id: minted-tien-te-chua-tai-khong-doan-E4-r1
+  run_id: minted-tien-te-chua-tai-khong-doan-E4-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tcct_nhanh_dang_tai
-  verified_at: 2026-09-24T00:00:00Z
+  verified_at: 2026-09-24T15:00:00Z
   output: |
-    0 fail
-    1 expect() calls
-    Ran 1 test across 1 file. [620.00ms]
+     0 fail
+     1 expect() calls
+    Ran 1 test across 1 file. [541.00ms]
 
 - eval: E5
-  run_id: minted-tien-te-chua-tai-khong-doan-E5-r1
+  run_id: minted-tien-te-chua-tai-khong-doan-E5-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tcct_nhanh_loi
-  verified_at: 2026-09-24T00:00:00Z
+  verified_at: 2026-09-24T15:00:00Z
   output: |
-    0 fail
-    1 expect() calls
-    Ran 1 test across 1 file. [584.00ms]
+     0 fail
+     1 expect() calls
+    Ran 1 test across 1 file. [579.00ms]
 
 - eval: E6
-  run_id: minted-tien-te-chua-tai-khong-doan-E6-r1
+  run_id: minted-tien-te-chua-tai-khong-doan-E6-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tcct_nhanh_thu_lai
-  verified_at: 2026-09-24T00:00:00Z
+  verified_at: 2026-09-24T15:00:00Z
   output: |
-    0 fail
-    3 expect() calls
-    Ran 2 tests across 1 file. [738.00ms]
+     0 fail
+     3 expect() calls
+    Ran 2 tests across 1 file. [536.00ms]
 
 - eval: E7
-  run_id: minted-tien-te-chua-tai-khong-doan-E7-r1
+  run_id: minted-tien-te-chua-tai-khong-doan-E7-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.tcct_o_chua_biet
-  verified_at: 2026-09-24T00:00:00Z
+  verified_at: 2026-09-24T15:00:00Z
   output: |
-    0 fail
-    2 expect() calls
-    Ran 1 test across 1 file. [366.00ms]
+     0 fail
+     2 expect() calls
+    Ran 1 test across 1 file. [523.00ms]
 
-- eval: E8
-  run_id: minted-tien-te-chua-tai-khong-doan-E8-r1
+- eval: E9
+  run_id: minted-tien-te-chua-tai-khong-doan-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tcct_man_that
-  verified_at: 2026-09-24T00:00:00Z
-  screenshot: evidence/tao-loi-truoc-khi-chon.png
-  observed: |
-    4 frame da doc bang Read (anh that, khong doan tu tri nho):
-    - tao-loi-truoc-khi-chon.png: tam "Thoả thuận mới" mo, o "Giá trị" co "150.000.000", dong duoi o do dung "Không tải được đồng tiền mặc định — chọn đồng tiền bên cạnh để nhập số tiền.", o chon canh no hien chu "Tiền tệ" (khong phai USD/ma dong tien nao) — dung Expected truoc-khi-chon.
-    - tao-sau-khi-chon.png: sau khi chon EUR (DONG_CHON), o chon hien "EUR", dong duoi doi thanh "Đọc là 150.000.000 €" — dung mau "Đọc là " + so theo DONG_CHON.
-    - nhanh-loi.png (evidence phu tro E11 cung lan chay): tam them nhanh tren cong ty gieo, dong loi dung cau nhanh-loi, co nut "Thử lại" canh o, nut "Tạo thoả thuận" khong khoa (mau xanh binh thuong).
-    - nhanh-sau-thu-lai.png: sau Thu lai, dong doi thanh "Đọc là 150.000.000 ₫" (theo dong bao cao VND), khong con nut "Thử lại".
-    Doi chung voi ban truoc vong (PR #114, o chon hien USD) khong con xay ra — o chon dung la nhan trung tinh "Tiền tệ" khi chua biet dong tien, dung nhu Expected mong.
-  network_observed: n-a (driver)
-
-- eval: E9
-  run_id: minted-tien-te-chua-tai-khong-doan-E9-r1
-  exit_code: 1
-  baseline: red
-  verifier: config:executors.script.tcct_man_that
-  verified_at: 2026-09-24T00:00:00Z
-  cannot_run: true
-  reason: "Verification script requires the API server running at http://localhost:3001, but it is not accessible. The verification test tried to create a dev session but failed at connection stage. To run this verification: start the API server with `cd apps/api && bun run dev` in another terminal, then retry the verification command."
+  verified_at: 2026-09-24T15:00:00Z
   output: |
-    error: Unable to connect. Is the computer able to access the url?
-      path: "http://localhost:3001/api/trpc/deals.list?input=%7B%22q%22%3A%22tcctmuf7xho6%22%2C%22pageSize%22%3A50%7D"
-     errno: 0,
-      code: "ConnectionRefused"
-    Bun v1.3.10 (macOS arm64)
+    dong bao cao=VND dong chon=EUR yeu cau da chan=8 khang-dinh=10/10
+
+- eval: E12
+  run_id: minted-tien-te-chua-tai-khong-doan-E12-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.tcct_man_that
+  verified_at: 2026-09-24T15:00:00Z
+  output: |
+    dong bao cao=VND dong chon=EUR yeu cau da chan=8 khang-dinh=10/10
 
 - eval: E10
-  run_id: minted-tien-te-chua-tai-khong-doan-E10-r1
+  run_id: minted-tien-te-chua-tai-khong-doan-E10-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.tcct_soi_ma
-  verified_at: 2026-09-24T00:00:00Z
+  verified_at: 2026-09-24T15:00:00Z
   output: |
     soi-ma: 10/10 khang dinh, 0 lech
 
-- eval: E11
-  run_id: minted-tien-te-chua-tai-khong-doan-E11-r1
+- eval: E8
+  run_id: tcctmuf8hpt3 (mã tự sinh của man-that.mjs, lần chạy fresh 2026-09-24 14:52)
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tcct_man_that
-  verified_at: 2026-09-24T00:00:00Z
-  screenshot: evidence/nhanh-loi.png
+  verified_at: 2026-09-24T14:52:00Z
+  screenshot: /Users/manhphan/dev/crm/.claude/worktrees/beautiful-thompson-16c095/_acceptance/tien-te-chua-tai-khong-doan/evidence/E8-step1.png
   observed: |
-    nhanh-loi.png (bang chung 1, cong ty gieo, tam them nhanh, add=deal): o "Giá trị" = "150.000.000", co nut "Thử lại" ngay canh o (dung vi tri, chu "Thử lại"); dong duoi o = "Không tải được đồng tiền báo cáo, nên chưa lưu được số tiền. Bỏ trống số tiền để tạo thoả thuận, hoặc thử lại." khop dung CAU_NHANH_LOI trong script; nut "Tạo thoả thuận" hien mau xanh dam (fill), khong co dang xam/mo cua trang thai disabled — dung Expected "nút Tạo không khoá".
-    nhanh-sau-thu-lai.png (bang chung 2, cung tam sau khi bam Thử lại): nut "Thử lại" da bien mat khoi canh o "Giá trị"; dong duoi o doi thanh "Đọc là 150.000.000 đ" (dong bao cao doc duoc tu server la VND, ky hieu "đ" dung dinh dang tienVi("VND")); nut "Tạo thoả thuận" van hien fill, khong khoa. Ca hai frame khop dung Expected cua E11, khong roi vao doi chung cua ban truoc vong (khong khoa Tao, khong con Thu lai sau khi bam).
+    Đã mở bằng Read (ảnh thật) hai frame E8 vừa lưu, không đoán từ trí nhớ:
+    - E8-step1.png (= tao-loi-truoc-khi-chon.png, sau bước 4): tấm "Thoả thuận mới" đang mở, ô "Giá trị" chứa "150.000.000", dòng ngay dưới ô đúng câu "Không tải được đồng tiền mặc định — chọn đồng tiền bên cạnh để nhập số tiền." (đúng CAU_TAO_LOI), và ô chọn đồng tiền cạnh nó hiện chữ trung tính "Tiền tệ" — KHÔNG phải mã đồng tiền nào (không phải USD). Khớp đúng Expected "trước khi chọn: dòng là câu lỗi + ô chọn = Tiền tệ".
+    - E8-step2.png (= tao-sau-khi-chon.png, sau bước 5, đã chọn EUR = DONG_CHON): ô chọn đồng tiền đổi thành "EUR", dòng dưới ô đổi thành "Đọc là 150.000.000 €" — đúng mẫu "Đọc là " + số theo DONG_CHON. Khớp đúng Expected "sau khi chọn: dòng = Đọc là + số theo DONG_CHON".
+    Đối chứng bản trước vòng (PR #114, ô chọn hiện USD, dòng "Đọc là 150.000.000 US$") KHÔNG tái hiện ở đây — thoát khỏi thông điệp ghim 'tao truoc khi chon: o chon dong tien «USD» != «Tiền tệ»'.
   network_observed: n-a (driver)
 
-- eval: E12
-  run_id: minted-tien-te-chua-tai-khong-doan-E12-r1
-  exit_code: 1
-  baseline: red
+- eval: E11
+  run_id: E11-verify-fresh-run
+  exit_code: 0
+  baseline: n-a
   verifier: config:executors.script.tcct_man_that
-  verified_at: 2026-09-24T00:00:00Z
-  cannot_run: true
-  reason: "Verification script requires the API server running at http://localhost:3001, but it is not accessible. The verification test tried to create a dev session but failed at connection stage. To run this verification: start the API server with `cd apps/api && bun run dev` in another terminal, then retry the verification command."
-  output: |
-    error: Unable to connect. Is the computer able to access the url?
-      path: "http://localhost:3001/api/trpc/deals.list?input=%7B%22q%22%3A%22tcctmuf7xho6%22%2C%22pageSize%22%3A50%7D"
-     errno: 0,
-      code: "ConnectionRefused"
-    Bun v1.3.10 (macOS arm64)
+  verified_at: 2026-09-24T15:00:00Z
+  screenshot: /Users/manhphan/dev/crm/.claude/worktrees/beautiful-thompson-16c095/_acceptance/tien-te-chua-tai-khong-doan/evidence/E11-step1.png
+  observed: |
+    E11-step1.png (= nhanh-loi.png, tam them nhanh tren cong ty gieo, add=deal, luc chan currency.settings): o "Giá trị" = "150.000.000"; nut "Thử lại" nam ngay canh o (dung Expected "co nut Thử lại canh o"); dong duoi o = "Không tải được đồng tiền báo cáo, nên chưa lưu được số tiền. Bỏ trống số tiền để tạo thoả thuận, hoặc thử lại." — dung "cau loi cua them nhanh"; nut "Tạo thoả thuận" hien fill mau xanh dam binh thuong, khong co dang xam/disabled — dung "nut Tạo không khoá". Khop toan bo Expected cua frame luc chan.
+    E11-step2.png (= nhanh-sau-thu-lai.png, cung tam sau khi bam Thử lại va bo chan): nut "Thử lại" da bien mat hoan toan khoi canh o "Giá trị"; dong duoi o doi thanh "Đọc là 150.000.000 đ" (ky hieu "đ" = dong bao cao VND doc tu server, dung mau "Đọc là" theo dong bao cao); nut "Tạo thoả thuận" van fill xanh dam, khong khoa. Khop dung Expected "sau Thu lai: dong Đọc là theo dong bao cao, khong con nut Thu lai".
+    Doi chung voi ban loi truoc vong (nut Tao khoa true, khong co nut Thu lai): KHONG xay ra o ca hai frame — nut Tao luon fill/khong khoa va nut Thu lai co mat dung luc roi mat dung luc, nen khong roi vao thong diep ghim "nhanh loi: khong thay nut Thử lại" / "nhanh loi: nut Tao khoa true != false".
+  network_observed: n-a (driver)
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: muf7xh8t4yeb
+  run_id: minted-tien-te-chua-tai-khong-doan-SUITE-bun_run_test-r2
   exit_code: 0
-  verified_at: 2026-09-24T00:00:00Z
+  verified_at: 2026-09-24T15:00:00Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-tien-te-chua-tai-khong-doan-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-tien-te-chua-tai-khong-doan-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-24T00:00:00Z
+  verified_at: 2026-09-24T15:00:00Z
 
 - cmd: bun run lint:slop
-  run_id: minted-tien-te-chua-tai-khong-doan-SUITE-bun_run_lint_slop-r1
+  run_id: minted-tien-te-chua-tai-khong-doan-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-24T00:00:00Z
+  verified_at: 2026-09-24T15:00:00Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-tien-te-chua-tai-khong-doan-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-tien-te-chua-tai-khong-doan-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-24T00:00:00Z
+  verified_at: 2026-09-24T15:00:00Z
 
 ## Known limits
 
@@ -200,12 +188,15 @@ human_signoff:
 
 ## Analyst
 
-none — mọi eval feature đều red trên baseline (có phân biệt).
+carried từ round 1 — baseline không đo lại round này.
+
+none — danh sách eval không-phân-biệt rỗng round này (baseline không đo lại; xem round 1 nếu cần dữ liệu discriminating). Các lệnh suite xanh-cả-hai-phía là regression-guard bình thường, không liệt kê ở đây.
 
 ## Variance
 
-none — every multi-run eval is uniform.
+none — không có eval nào mang `runs` > 1 hay `pass_rate` lệch round này; toàn bộ 12 eval đều deterministic (runs: 1).
 
 ## Iterations
 
-Round 1: BLOCKED — E9, E12 (bun _acceptance/tien-te-chua-tai-khong-doan/rang/man-that.mjs) không chạy được vì API server tại http://localhost:3001 không truy cập được (ConnectionRefused khi script cố tạo dev session để đọc deals.list); E1-E8, E10, E11 đã PASS trên cùng lượt chạy. Remedy: khởi động `cd apps/api && bun run dev` ở một terminal khác rồi chạy lại man-that.mjs cho E9/E12 — chưa quay lại implementation, không phải một fail cần sửa code.
+Round 1: E9, E12 BLOCKED — máy chủ api ở http://localhost:3001 không tới được nên `man-that.mjs` không mở được phiên xin dev-session; 10 eval còn lại và cả bốn lệnh suite đã xanh. Trả về S3 để chỉnh thước đo.
+Round 2: sửa `_acceptance/tien-te-chua-tai-khong-doan/rang/man-that.mjs` để chờ máy chủ api sẵn sàng rồi mới thử lại xin phiên, không còn phụ thuộc việc máy chủ đã lên kịp lúc script chạy. Toàn bộ 12 eval (E1–E12) và cả bốn lệnh suite (`bun run test`, `bunx turbo run lint --force`, `bun run lint:slop`, `bunx turbo run build --force`) đều pass — verdict PASS.
