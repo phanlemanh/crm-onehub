@@ -60,7 +60,7 @@ export function messageIdCua(value: unknown): string | null {
 
 const getMe = z.object({
 	ok: z.literal(true),
-	result: z.object({ id: z.string(), account_name: z.string().min(1) }),
+	result: z.object({ id: z.string(), display_name: z.string().min(1) }),
 });
 
 export type ZaloBot = { id: string; tenBot: string };
@@ -70,7 +70,7 @@ export function parseZaloGetMe(value: unknown): ZaloBot {
 	if (!ket.success) {
 		throw new Error(`getMe tra hinh dang la: ${ket.error.message}`);
 	}
-	return { id: ket.data.result.id, tenBot: ket.data.result.account_name };
+	return { id: ket.data.result.id, tenBot: ket.data.result.display_name };
 }
 
 const guiDuoc = z.object({
@@ -139,4 +139,27 @@ export function parseZaloDeleteWebhook(value: unknown): ZaloDaXoaWebhook {
 		throw new Error(`deleteWebhook tra hinh dang la: ${ket.error.message}`);
 	}
 	return { url: ket.data.result.url };
+}
+
+export const ZALO_LY_DO = ["can-https", "zalo-tu-choi"] as const;
+export type ZaloLyDo = (typeof ZALO_LY_DO)[number];
+
+export function docLyDo(value: string | null): ZaloLyDo | null {
+	const ket = z.enum(ZALO_LY_DO).safeParse(value);
+	return ket.success ? ket.data : null;
+}
+
+const webhookInfo = z.object({
+	ok: z.literal(true),
+	result: z.object({ url: z.string().min(1) }),
+});
+
+export type ZaloWebhookInfo =
+	| { loai: "co-url"; url: string }
+	| { loai: "la"; khoa: string };
+
+export function parseZaloWebhookInfo(value: unknown): ZaloWebhookInfo {
+	const ket = webhookInfo.safeParse(value);
+	if (ket.success) return { loai: "co-url", url: ket.data.result.url };
+	return { loai: "la", khoa: khoaCapDauCua(value) };
 }
