@@ -40,7 +40,8 @@ dòng `revisit` trỏ sang hồ sơ này: phần «đỏ khi neo `file` lệch»
 
 - Dựng bản sao từ các tệp git đang theo dõi (nội dung ở cây làm việc), nối
   `node_modules`, rồi `git init` + commit trong bản sao để bản sao có phía git riêng.
-- Chiều đỏ: thay `lai-ra-man.mjs` của bản sao bằng bản ở `e22d8288`.
+- Chiều đỏ: bản sao của bản gốc dựng bằng `git archive e22d8288`, không chép cây hiện tại — nếu không, bản gốc ghim 478 sẽ đỏ sẵn ngay khi kho thêm một tệp, và bộ đo tự mang lại đúng cái giòn nó gỡ (Cổng 2 vòng 1, Ngoài-1/5; chứng bằng ca `cay-lech` trên một worktree lệch một tệp).
+- Phía git chỉ lấy tệp còn trên đĩa: tệp đang theo dõi đã xoá hay đổi tên mà chưa commit không làm đỏ `BO-SOT` (Ngoài-2/4, ca `xoa-chua-commit`).
 - Mỗi ca in `DUNG|SAI <ban> — <thông điệp ghim>` và dòng cuối
   `DO-NEO KET LUAN: <n> DUNG, <m> SAI — ma thoat <x>`.
 
