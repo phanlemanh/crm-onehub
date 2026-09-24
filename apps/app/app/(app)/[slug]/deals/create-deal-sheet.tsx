@@ -88,6 +88,7 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 	const nameId = useId();
 	const amountId = useId();
 	const amountRef = useRef<HTMLInputElement>(null);
+	const currencyRef = useRef<HTMLButtonElement>(null);
 	const closeDateId = useId();
 
 	const users = useQuery(trpc.users.list.queryOptions());
@@ -96,7 +97,7 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 
 	const resolvedOwner = ownerId || me.data?.id || UNSET;
 	const workspaceCurrency = currencies.data?.reportingCurrency;
-	const resolvedCurrency = currency || workspaceCurrency || "USD";
+	const knownCurrency = currency || workspaceCurrency || null;
 
 	const create = useMutation(
 		trpc.deals.create.mutationOptions({
@@ -133,11 +134,15 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 					className="flex-1 overflow-y-auto px-4"
 					onSubmit={(event) => {
 						event.preventDefault();
-						const reading = parseMoneyInput(amount, {
-							locale,
-							currency: resolvedCurrency,
-						});
-						if (reading.kind === "invalid") {
+						if (knownCurrency === null && amount.trim() !== "") {
+							currencyRef.current?.focus();
+							return;
+						}
+						const reading =
+							knownCurrency === null
+								? null
+								: parseMoneyInput(amount, { locale, currency: knownCurrency });
+						if (reading?.kind === "invalid") {
 							amountRef.current?.focus();
 							return;
 						}
@@ -146,8 +151,8 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 							companyId: company,
 							ownerId: resolvedOwner,
 							stage: stage as never,
-							amountCents: reading.kind === "ok" ? reading.cents : null,
-							currency: resolvedCurrency,
+							amountCents: reading?.kind === "ok" ? reading.cents : null,
+							currency: knownCurrency ?? undefined,
 							expectedCloseDate: closeDate || null,
 						});
 					}}
@@ -222,14 +227,23 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 								ref={amountRef}
 								value={amount}
 								onValueChange={setAmount}
-								currency={resolvedCurrency}
+								currency={knownCurrency}
+								missingCurrency={
+									currencies.isError
+										? m.create.currencyLoadFailed
+										: m.create.currencyLoading
+								}
 								end={
-									<Select value={resolvedCurrency} onValueChange={setCurrency}>
+									<Select
+										value={knownCurrency ?? ""}
+										onValueChange={setCurrency}
+									>
 										<SelectTrigger
+											ref={currencyRef}
 											aria-label={m.create.currency}
 											className="w-28 shrink-0"
 										>
-											<SelectValue />
+											<SelectValue placeholder={m.create.currency} />
 										</SelectTrigger>
 										<SelectContent>
 											{CURRENCIES.map((entry) => (

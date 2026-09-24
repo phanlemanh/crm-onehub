@@ -22,9 +22,12 @@ type MoneyInputProps = Omit<
 > & {
 	value: string;
 	onValueChange: (text: string) => void;
-	currency: string;
+	currency: string | null;
+	missingCurrency?: string;
 	end?: ReactNode;
 };
+
+type MoneyState = MoneyReading | { kind: "noCurrency" };
 
 function rejection(
 	reason: MoneyRejection,
@@ -65,6 +68,7 @@ export function MoneyInput({
 	value,
 	onValueChange,
 	currency,
+	missingCurrency,
 	end,
 	id,
 	onBlur,
@@ -77,29 +81,35 @@ export function MoneyInput({
 	const generated = useId();
 	const inputId = id ?? generated;
 	const noteId = `${inputId}-reading`;
-	const options = { locale, currency };
-	const reading = parseMoneyInput(value, options);
+	const reading: MoneyState =
+		currency === null
+			? value.trim() === ""
+				? { kind: "empty" }
+				: { kind: "noCurrency" }
+			: parseMoneyInput(value, { locale, currency });
 	const invalid = reading.kind === "invalid";
+	const minor = currency === null ? null : minorUnitsOf(currency);
 
 	const input = (
 		<Input
 			{...props}
 			id={inputId}
 			type="text"
-			inputMode={minorUnitsOf(currency) > 0 ? "decimal" : "numeric"}
+			inputMode={minor === 0 ? "numeric" : "decimal"}
 			autoComplete="off"
 			spellCheck={false}
 			value={value}
 			placeholder={
-				placeholder ?? formatMoneyInput(MONEY_EXAMPLE_CENTS.whole, options)
+				placeholder ??
+				formatMoneyInput(MONEY_EXAMPLE_CENTS.whole, { locale, currency: "" })
 			}
 			aria-invalid={invalid || undefined}
 			aria-describedby={reading.kind === "empty" ? undefined : noteId}
 			className={cn("tabular-nums", className)}
 			onChange={(event) => onValueChange(event.target.value)}
 			onBlur={(event) => {
-				if (reading.kind === "ok") {
-					const tidy = formatMoneyInput(reading.cents, options);
+				if (reading.kind === "ok" && currency !== null) {
+					const tidy = formatMoneyInput(reading.cents, { locale, currency });
 					if (tidy !== value) onValueChange(tidy);
 				}
 				onBlur?.(event);
@@ -119,15 +129,17 @@ export function MoneyInput({
 					invalid ? "text-destructive" : "text-muted-foreground",
 				)}
 			>
-				{reading.kind === "ok" ? (
+				{reading.kind === "ok" && currency !== null ? (
 					<>
 						{m.docLa}{" "}
 						<span translate="no" className="tabular-nums">
 							{formatMoney(reading.cents, currency, locale)}
 						</span>
 					</>
-				) : reading.kind === "invalid" ? (
-					rejection(reading.reason, m, options)
+				) : reading.kind === "invalid" && currency !== null ? (
+					rejection(reading.reason, m, { locale, currency })
+				) : reading.kind === "noCurrency" ? (
+					(missingCurrency ?? m.canDongTien)
 				) : null}
 			</p>
 		</div>

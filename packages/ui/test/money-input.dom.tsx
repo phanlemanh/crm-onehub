@@ -309,3 +309,115 @@ describe("roi-o", () => {
 		expect(lech).toEqual([]);
 	});
 });
+
+function VoChuaBiet({
+	locale,
+	value,
+	cau,
+}: {
+	locale: Locale;
+	value: string;
+	cau?: string;
+}) {
+	const [chu, setChu] = useState(value);
+	return h(
+		LocaleProvider,
+		{ locale },
+		h(MoneyInput, {
+			id: "so-tien",
+			value: chu,
+			currency: null,
+			missingCurrency: cau,
+			onValueChange: (moi: string) => {
+				daDoi.push(moi);
+				setChu(moi);
+			},
+		}),
+	);
+}
+
+describe("chua-biet", () => {
+	test("chua-biet: dong tien chua biet thi noi vi sao, khong doc so", () => {
+		const ca: {
+			locale: Locale;
+			nhan: string;
+			cau?: string;
+			chu: string;
+			dong: string;
+		}[] = [
+			{
+				locale: "vi",
+				nhan: "truyen-vao",
+				cau: "Câu thử",
+				chu: "150.000.000",
+				dong: "Câu thử",
+			},
+			{
+				locale: "en",
+				nhan: "truyen-vao",
+				cau: "Test line",
+				chu: "150,000,000",
+				dong: "Test line",
+			},
+			{
+				locale: "vi",
+				nhan: "mac-dinh",
+				chu: "150.000.000",
+				dong: "Chọn đồng tiền để đọc số này.",
+			},
+			{
+				locale: "en",
+				nhan: "mac-dinh",
+				chu: "150,000,000",
+				dong: "Choose a currency to read this amount.",
+			},
+			{ locale: "vi", nhan: "rong", chu: "", dong: "" },
+			{ locale: "en", nhan: "rong", chu: "", dong: "" },
+		];
+		const lech: string[] = [];
+		let daChay = 0;
+		for (const c of ca) {
+			khung = document.createElement("div");
+			document.body.appendChild(khung);
+			root = createRoot(khung);
+			act(() => {
+				root?.render(
+					h(VoChuaBiet, { locale: c.locale, value: c.chu, cau: c.cau }),
+				);
+			});
+			const k = khung;
+			const nhan = `${c.locale}/${c.nhan}`;
+			const d = dong(k);
+			const input = o(k);
+			daChay += 1;
+			if (d.textContent !== c.dong) {
+				lech.push(`${nhan}: dong «${d.textContent}» != «${c.dong}»`);
+			}
+			if (d.getAttribute("aria-live") !== "polite") {
+				lech.push(
+					`${nhan}: aria-live ${d.getAttribute("aria-live")} != polite`,
+				);
+			}
+			if (input.getAttribute("aria-invalid") !== null) {
+				lech.push(
+					`${nhan}: aria-invalid ${input.getAttribute("aria-invalid")} != null`,
+				);
+			}
+			const tro = c.chu === "" ? null : d.id;
+			if (input.getAttribute("aria-describedby") !== tro) {
+				lech.push(
+					`${nhan}: aria-describedby ${input.getAttribute("aria-describedby")} != ${tro}`,
+				);
+			}
+			daDoi = [];
+			roi(k);
+			if (daDoi.length !== 0)
+				lech.push(`${nhan}: roi o viet lai ${JSON.stringify(daDoi)}`);
+			act(() => root?.unmount());
+			k.remove();
+			root = null;
+		}
+		expect(lech).toEqual([]);
+		expect(daChay).toBe(6);
+	});
+});

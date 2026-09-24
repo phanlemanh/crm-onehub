@@ -125,6 +125,7 @@ const en = {
 			`${currency} takes at most ${digits} decimal places.`,
 		negative: "The amount can't be negative.",
 		tooLarge: "That amount is too large to record.",
+		canDongTien: "Choose a currency to read this amount.",
 	},
 };
 
@@ -255,6 +256,7 @@ const vi = {
 			`${currency} có tối đa ${digits} chữ số lẻ.`,
 		negative: "Số tiền không được âm.",
 		tooLarge: "Số này quá lớn để lưu.",
+		canDongTien: "Chọn đồng tiền để đọc số này.",
 	},
 } satisfies Messages;
 

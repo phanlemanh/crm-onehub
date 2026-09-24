@@ -273,7 +273,8 @@ export function QuickAddDeal({
 	const me = useQuery(trpc.users.me.queryOptions());
 	const settings = useQuery(trpc.currency.settings.queryOptions());
 	const owner = ownerId ?? me.data?.id ?? null;
-	const currency = settings.data?.reportingCurrency;
+	const currency = settings.data?.reportingCurrency ?? null;
+	const currencyFailed = currency === null && settings.isError;
 	const amountRef = useRef<HTMLInputElement>(null);
 
 	const create = useMutation(
@@ -293,10 +294,14 @@ export function QuickAddDeal({
 			return;
 		}
 
-		if (!currency) return;
+		if (currency === null && amount.trim() !== "") {
+			amountRef.current?.focus();
+			return;
+		}
 
-		const reading = parseMoneyInput(amount, { locale, currency });
-		if (reading.kind === "invalid") {
+		const reading =
+			currency === null ? null : parseMoneyInput(amount, { locale, currency });
+		if (reading?.kind === "invalid") {
 			amountRef.current?.focus();
 			return;
 		}
@@ -305,8 +310,8 @@ export function QuickAddDeal({
 			name,
 			companyId,
 			ownerId: owner,
-			amountCents: reading.kind === "ok" ? reading.cents : null,
-			currency,
+			amountCents: reading?.kind === "ok" ? reading.cents : null,
+			currency: currency ?? undefined,
 			expectedCloseDate: closeDate || null,
 		});
 	};
@@ -315,7 +320,7 @@ export function QuickAddDeal({
 		<QuickAddForm
 			submitLabel={m.create}
 			pending={create.isPending}
-			ready={name.trim() !== "" && currency !== undefined}
+			ready={name.trim() !== "" && (currency !== null || currencyFailed)}
 			onCancel={onDone}
 			onSubmit={submit}
 		>
@@ -337,7 +342,21 @@ export function QuickAddDeal({
 					ref={amountRef}
 					value={amount}
 					onValueChange={setAmount}
-					currency={currency ?? ""}
+					currency={currency}
+					missingCurrency={
+						currencyFailed ? m.currencyLoadFailed : m.currencyLoading
+					}
+					end={
+						currencyFailed ? (
+							<Button
+								type="button"
+								variant="outline"
+								onClick={() => void settings.refetch()}
+							>
+								{m.retry}
+							</Button>
+						) : undefined
+					}
 				/>
 			</Field>
 			<Field>

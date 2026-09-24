@@ -391,6 +391,14 @@ executors:
     stdt_tao: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/o-so-tien.dom.tsx -t tao-thoa-thuan"
     stdt_sua_tai_cho: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/o-so-tien.dom.tsx -t sua-tai-cho"
     stdt_them_nhanh: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/o-so-tien.dom.tsx -t them-nhanh"
+    tcct_tao_dang_tai: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tien-te-chua-tai.dom.tsx -t tao-dang-tai"
+    tcct_tao_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tien-te-chua-tai.dom.tsx -t tao-loi"
+    tcct_tao_ma_tran: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tien-te-chua-tai.dom.tsx -t tao-ma-tran"
+    tcct_nhanh_dang_tai: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tien-te-chua-tai.dom.tsx -t nhanh-dang-tai"
+    tcct_nhanh_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tien-te-chua-tai.dom.tsx -t nhanh-loi"
+    tcct_nhanh_thu_lai: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tien-te-chua-tai.dom.tsx -t nhanh-thu-lai"
+    tcct_o_chua_biet: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/money-input.dom.tsx -t chua-biet"
+    tdb_tao_hai_tieng: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tien-te-chua-tai.dom.tsx -t ten-bao-cao"
   script:
     vvc_dieu_phoi_don_sach: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts test/dieu-phoi-diem-nhan.spec.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts dieu-phoi"'
     vvc_go_la_khong_quet: 'bun run test -- "NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts gieo-le && cd apps/api && bun test test/go-la-cat-quyen.spec.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts sau-dang-nhap"'
@@ -757,6 +765,10 @@ executors:
     ktt_san_thiet_ke: "bun _acceptance/keo-tha-thoa-thuan/rang/san-thiet-ke.mjs"
     stdt_man_that: "bun _acceptance/o-so-tien-doc-theo-tieng/rang/man-that.mjs"
     stdt_soi_ma: "bun _acceptance/o-so-tien-doc-theo-tieng/rang/soi-ma.mjs"
+    tcct_man_that: "bun _acceptance/tien-te-chua-tai-khong-doan/rang/man-that.mjs"
+    tcct_soi_ma: "bun _acceptance/tien-te-chua-tai-khong-doan/rang/soi-ma.mjs"
+    tdb_quet_chu: "bun _acceptance/ten-dong-tien-bao-cao/rang/quet-chu.mjs"
+    tdb_lan_hai_ho_so: 'node "$(node scripts/resolve-plugin.mjs --plugin feature-loop --require scripts/repin-lane.mjs)/scripts/repin-lane.mjs" --root . --slug tien-te-chua-tai-khong-doan --slug o-so-tien-doc-theo-tieng --allow-dirty'
     bkd_du_tep_app: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs du-tep app"
     bkd_du_tep_ui: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs du-tep ui"
     bkd_tep_moi: "bun _acceptance/moi-bai-kiem-dom-deu-chay/rang/dem-tep-dom.mjs tep-moi"
