@@ -13,6 +13,7 @@ import { SETTINGS_ID } from "@crm/db/settings";
 import { ghiSai, taoMaLienKet, ZALO_LIEN_KET } from "@crm/db/zalo-lien-ket";
 import kenhZalo from "../agent/channels/zalo";
 import { ZALO } from "../agent/lib/zalo-config";
+import { dangKyWebhook, docThamSo } from "../agent/lib/zalo-dang-ky";
 import { pollZalo, vongTay } from "../agent/lib/zalo-poll";
 import { nhanWebhook } from "../agent/lib/zalo-webhook";
 import dispatch from "../agent/schedules/dispatch";
@@ -666,4 +667,100 @@ describe("kenh-route", () => {
 		const sai = await goi("sai");
 		expect(sai?.status, "khoa sai qua route tra 403").toBe(403);
 	});
+});
+
+const URL_HTTPS = "https://tac-tu.test/zalo/webhook";
+
+async function chayLenh(lenh: string[], bien: Record<string, string>) {
+	const con = Bun.spawn(["bun", "run", ...lenh], {
+		cwd: join(import.meta.dir, ".."),
+		env: {
+			...process.env,
+			ZALO_BOT_TOKEN: "1:gia",
+			ZALO_WEBHOOK_SECRET: "khoa-gia-du-dai",
+			...bien,
+		},
+		stdout: "pipe",
+		stderr: "pipe",
+	});
+	const [ra, loi, ma] = await Promise.all([
+		new Response(con.stdout).text(),
+		new Response(con.stderr).text(),
+		con.exited,
+	]);
+	return { ra, loi, ma };
+}
+
+describe("lenh-webhook", () => {
+	test("lenh-webhook: https + du bien -> dung mot setWebhook, in outcome", async () => {
+		const z = zaloGia();
+		const ket = await dangKyWebhook(
+			{ url: URL_HTTPS, xoa: false },
+			{ fetcher: z.fetcher, env: DU_BIEN },
+		);
+		const dat = z.goi.filter((g) => g.method === "setWebhook");
+		expect(
+			dat.map((g) => g.body),
+			"dang ky dung url va khoa",
+		).toEqual([{ url: URL_HTTPS, secret_token: KHOA }]);
+		expect(ket, "in outcome Zalo tra ve").toContain("webhook.ok");
+	});
+
+	test("lenh-webhook: --xoa -> dung mot deleteWebhook, khong setWebhook", async () => {
+		const z = zaloGia();
+		await dangKyWebhook(
+			{ url: null, xoa: true },
+			{ fetcher: z.fetcher, env: DU_BIEN },
+		);
+		expect(
+			{ xoa: z.soGoi("deleteWebhook"), dat: z.soGoi("setWebhook") },
+			"go webhook",
+		).toEqual({ xoa: 1, dat: 0 });
+	});
+
+	test("lenh-webhook: doc tham so", () => {
+		expect(docThamSo(["--xoa"]), "--xoa khong phai url").toEqual({
+			url: null,
+			xoa: true,
+		});
+		expect(docThamSo([URL_HTTPS])).toEqual({ url: URL_HTTPS, xoa: false });
+	});
+
+	const CA_LENH: [string, string[], Record<string, string>, string][] = [
+		[
+			"c http",
+			["zalo:webhook", "http://tac-tu.test/zalo/webhook"],
+			{},
+			"https",
+		],
+		[
+			"d thieu khoa",
+			["zalo:webhook", URL_HTTPS],
+			{ ZALO_WEBHOOK_SECRET: "" },
+			"ZALO_WEBHOOK_SECRET",
+		],
+		[
+			"e thieu token",
+			["zalo:webhook", URL_HTTPS],
+			{ ZALO_BOT_TOKEN: "" },
+			"ZALO_BOT_TOKEN",
+		],
+		[
+			"f poll thieu token",
+			["zalo:poll"],
+			{ ZALO_BOT_TOKEN: "" },
+			"ZALO_BOT_TOKEN",
+		],
+	];
+
+	for (const [ten, lenh, bien, goiTen] of CA_LENH) {
+		test(`lenh-webhook: ${ten} -> thoat khac 0, goi dich danh, khong goi mang`, async () => {
+			const { loi, ma } = await chayLenh(lenh, bien);
+			expect(ma, `${ten}: lenh thoat ma khac 0`).not.toBe(0);
+			expect(loi, `${ten}: chi nhan https / goi dich danh`).toContain(goiTen);
+			expect(loi, `${ten}: dung truoc khi goi mang`).not.toContain(
+				"error_code",
+			);
+		});
+	}
 });
