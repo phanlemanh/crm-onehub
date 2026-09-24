@@ -1,0 +1,8 @@
+NETWORK TRUTH — E17 (AC-10)
+Driver chinh cua eval (bun _acceptance/to-chuc-danh-sach-chi-tiet/rang/man-chi-tiet.mjs, chay qua scripts/lan-do/tien-de.mjs) la mot script puppeteer-core rieng, khong lo qua bat ky Claude_Browser/read_network_requests/read_console_messages nao — script chi tu bat "pageerror"/"console" loc theo regex /hydrat/i (khong co dong nao xuat hien trong stdout, script cung khong in "HONG ... loi hydrate").
+=> networkObserved cho lan chay chinh: "n-a (driver)" (curl+grep/capture-only-equivalent; driver khong lo network cho verifier doc).
+
+Bo sung (chan doan doc lap, KHONG phai driver duoc cham): mo mcp__Claude_Browser tai http://localhost:3710 (cung may chu 3710/3711 dang chay cua worktree nay) de doc lap kiem tra loi chong-lan "Vi tri" o nguoi (xem outputTail). Doc network + console tren phien nay:
+- read_network_requests (loc "3710"): 232 request, 50 dong cuoi deu 200 OK (chunks _next/static, /api/trpc/enrichment.queue). Khong thay request fail-eligible nao loi.
+- read_console_messages (onlyErrors): "No console logs." — khong co loi console.
+- Scope: config.yaml dev_server.url=http://localhost:3000, api_base=[http://localhost:3001] — KHAC voi cong thuc te dang chay (3710/3711, dung rieng cho eval nay theo executors.script.tcds_man_chrome). Traffic quan sat o ngoai scope da khai trong config.yaml => "unscoped-partial" (note-only, khong lam eval fail) cho phien chan doan bo sung nay.
