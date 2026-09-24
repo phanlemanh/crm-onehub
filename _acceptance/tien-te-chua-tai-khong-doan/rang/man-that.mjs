@@ -18,7 +18,7 @@ import {
 } from "../../man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const BANG_CHUNG = join(HERE, "..", "evidence");
+const BANG_CHUNG = join(HERE, "..", "..", "..", ".acceptance-runs", "tien-te-chua-tai-khong-doan", "evidence");
 const RONG = 1440;
 const CAO = 900;
 const KY_MONG = 10;
@@ -27,7 +27,7 @@ const NHAN_SO_TIEN = "Giá trị";
 const NHAN_TIEN_TE = "Tiền tệ";
 const THU_LAI = "Thử lại";
 const CAU_TAO_LOI =
-	"Không tải được đồng tiền mặc định — chọn đồng tiền bên cạnh để nhập số tiền.";
+	"Không tải được đồng tiền báo cáo — chọn đồng tiền bên cạnh để nhập số tiền.";
 const CAU_NHANH_LOI =
 	"Không tải được đồng tiền báo cáo, nên chưa lưu được số tiền. Bỏ trống số tiền để tạo thoả thuận, hoặc thử lại.";
 const UNG_VIEN = ["EUR", "VND", "JPY"];

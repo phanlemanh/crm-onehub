@@ -18,7 +18,7 @@ evals:
         en/dang-tai -> "Loading the reporting currency…"
         en/loi      -> "Couldn't load the reporting currency — pick a currency next to the amount to enter it."
       Bai kiem dem so o da chay == 4.
-      CHIEU DO (chay o S3): ban truoc vong (chu «mặc định») -> do voi thong diep ghim
+      CHIEU DO (da chay 2026-09-24): ban truoc vong (chu «mặc định») -> do voi thong diep ghim
       "vi/dang-tai: dong «Đang tải đồng tiền mặc định…» != «Đang tải đồng tiền báo cáo…»".
 
   - id: E2
@@ -46,7 +46,7 @@ evals:
           duoi dang chuoi "…".
         AC-6 — 2 khang dinh: phan Criteria cua contract tien-te-chua-tai-khong-doan bang tung byte voi
           ban o commit f87ca17f (git show); phan Notes cua no co dong nhac ten-dong-tien-bao-cao.
-      CHIEU DO (chay o S3, ban guong tmpdir qua QUET_GOC): deals.ts con chu cu -> "deals.ts: con
+      CHIEU DO (da chay 2026-09-24 tren ma truoc vong, 10 lech): deals.ts con chu cu -> "deals.ts: con
       «đồng tiền mặc định»"; doi «…» thanh «...» trong deals.ts -> "AC-1 vi/dang-tai: khong co nguyen
       van trong deals.ts"; xoa dong Notes -> "tien-te-chua-tai-khong-doan: Notes khong tro sang day".
 
@@ -102,5 +102,7 @@ evals:
       Chay lan may cua bo kit (repin-lane.mjs, --allow-dirty, KHONG --write — chi do, khong ghim) cho
       ca hai slug: bon lenh bo chung va MOI eval test/script khai trong evals.yaml cua tung ho so (lan
       tu doi chieu du so eval da khai). Ma thoat 0 va dong ket «LÀN XANH».
-      Doi chung: lan nay tung do khi chu cu con trong bai kiem cua ho so cu (se chung o S3 bang cach
-      chay truoc khi cap nhat bai kiem).
+      Doi chung (da chay 2026-09-24): sau khi doi chu ma chua cap nhat bai kiem cua ho so cu, lan do
+      "LÀN ĐỎ — ... eval đỏ: tien-te-chua-tai-khong-doan/E1=1, E2=1, E3=1, E9=1, E12=1". Lan con do khi
+      mot thuoc ghi vao _acceptance/<slug>/ cua ho so da qua cong ("executor chạm hồ sơ đã thông Cổng
+      Bằng chứng").

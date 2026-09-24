@@ -166,9 +166,9 @@ const { QuickAddDeal } = await import(
 	"@/components/crm/record-sheet/quick-add"
 );
 
-const CAU_TAO_DANG_TAI = "Đang tải đồng tiền mặc định…";
+const CAU_TAO_DANG_TAI = "Đang tải đồng tiền báo cáo…";
 const CAU_TAO_LOI =
-	"Không tải được đồng tiền mặc định — chọn đồng tiền bên cạnh để nhập số tiền.";
+	"Không tải được đồng tiền báo cáo — chọn đồng tiền bên cạnh để nhập số tiền.";
 const CAU_NHANH_LOI =
 	"Không tải được đồng tiền báo cáo, nên chưa lưu được số tiền. Bỏ trống số tiền để tạo thoả thuận, hoặc thử lại.";
 const docLa = (currency: string) =>
@@ -185,7 +185,7 @@ async function cho(n = 6) {
 	}
 }
 
-async function dung(cay: ReactNode, search = "") {
+async function dung(cay: ReactNode, search = "", locale: "vi" | "en" = "vi") {
 	const queryClient = new QueryClient({
 		defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
 	});
@@ -196,7 +196,7 @@ async function dung(cay: ReactNode, search = "") {
 		root?.render(
 			<NuqsTestingAdapter searchParams={search} hasMemory>
 				<QueryClientProvider client={queryClient}>
-					<LocaleProvider locale="vi">{cay}</LocaleProvider>
+					<LocaleProvider locale={locale}>{cay}</LocaleProvider>
 				</QueryClientProvider>
 			</NuqsTestingAdapter>,
 		),
@@ -535,5 +535,56 @@ describe("nhanh-thu-lai", () => {
 		await cho();
 		expect(soLanGoi).toBe(2);
 		expect(nutThuLai(form)).toBeTruthy();
+	});
+});
+
+describe("ten-bao-cao", () => {
+	test("ten-bao-cao: tam tao goi dung ten dong tien bao cao o hai tieng", async () => {
+		const ca: { locale: "vi" | "en"; mode: CheDo; so: string; dong: string }[] =
+			[
+				{
+					locale: "vi",
+					mode: "treo",
+					so: "150.000.000",
+					dong: "Đang tải đồng tiền báo cáo…",
+				},
+				{
+					locale: "vi",
+					mode: "loi",
+					so: "150.000.000",
+					dong: "Không tải được đồng tiền báo cáo — chọn đồng tiền bên cạnh để nhập số tiền.",
+				},
+				{
+					locale: "en",
+					mode: "treo",
+					so: "150,000,000",
+					dong: "Loading the reporting currency…",
+				},
+				{
+					locale: "en",
+					mode: "loi",
+					so: "150,000,000",
+					dong: "Couldn't load the reporting currency — pick a currency next to the amount to enter it.",
+				},
+			];
+		const lech: string[] = [];
+		let daChay = 0;
+		for (const c of ca) {
+			cheDo = [c.mode];
+			soLanGoi = 0;
+			await dung(
+				h(CreateDealSheet, { companyId: "c1" }),
+				"?new=true",
+				c.locale,
+			);
+			go(oSoTien(), c.so);
+			daChay += 1;
+			const nhan = `${c.locale}/${c.mode === "treo" ? "dang-tai" : "loi"}`;
+			if (dong() !== c.dong)
+				lech.push(`${nhan}: dong «${dong()}» != «${c.dong}»`);
+			don();
+		}
+		expect(lech).toEqual([]);
+		expect(daChay).toBe(4);
 	});
 });
