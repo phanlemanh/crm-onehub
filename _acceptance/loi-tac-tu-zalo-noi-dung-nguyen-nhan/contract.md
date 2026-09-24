@@ -5,7 +5,7 @@ slug: loi-tac-tu-zalo-noi-dung-nguyen-nhan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui, docs]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-24-loi-tac-tu-zalo-noi-dung-nguyen-nhan-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-24T09:39:27Z
