@@ -44,7 +44,8 @@ chưa chốt; người ký Cổng Đáng chốt hoặc sửa.
 
 - Thành viên có thuộc phòng ban không? → đề xuất: có — mỗi thành viên một phòng ban
   **chính**, thêm phòng ban phụ được; bảng nối thành viên–phòng ban.
-- Có trưởng phòng / trưởng bộ phận không? → đề xuất: có cả hai — trưởng là trường trên
+- Có trưởng phòng / trưởng bộ phận không? → đề xuất: có cả hai — «trưởng phòng ban» và
+  «trưởng bộ phận», gọi chung «trưởng đơn vị» (từ điển PR #110) — trưởng là trường trên
   đơn vị, không phải vai workspace (vai lạ hôm nay bị hạ im lặng về member). Quản lý
   trực tiếp suy từ trưởng phòng ban chính, ghi đè được từng người.
 - Bước kế hoạch giao cho phòng ban, hay cho người trong phòng ban? → đề xuất: vẫn giao
@@ -72,8 +73,17 @@ Phạm vi lượt 1 theo lộ trình:
 - Màn Điều phối 30 ngày đổi nhãn theo từ điển mới (hôm nay «Bộ phận» là bảng phẳng; sau
   lượt 1 bảng đó là **Phòng ban**, **Bộ phận** là cấp trên); lọc theo bộ phận hoạt động.
 
-Việc đi kèm ở bước chuẩn bị (không thuộc ô này nhưng phải xong trước vòng làm): thêm vào
-`CONTEXT.md` các mục Bộ phận, Phòng ban, Trưởng đơn vị và sửa mục «Bộ phận» hiện có.
+Việc đi kèm ở bước chuẩn bị (không thuộc ô này): các mục Bộ phận, Phòng ban, Đơn vị,
+Trưởng đơn vị của `CONTEXT.md` đang ở PR #110 (`docs/tu-dien-okr`). Vòng làm dùng đúng chữ
+trong đó; PR chưa gộp thì chờ, không viết mục từ điển riêng.
+
+Lịch và phụ thuộc (phiên điều phối lộ trình OKR báo 2026-09-24):
+
+- Mọi phòng ban áp dụng OKR quý 4 trên CRM từ 2026-10-26 (chủ kho chốt 2026-09-24).
+- Danh sách nhân sự thật tới trước 2026-10-16; quản trị dựng cây và nhập người trong tuần
+  2026-10-19.
+- R1 lên production trước 2026-10-23, và lượt 2 (vai «chỉ OKR») đứng trên lượt này — nên
+  phạm vi lượt 1 phải gọn.
 
 ## Ngưỡng chết / ngưỡng UAT
 
@@ -85,7 +95,9 @@ Việc đi kèm ở bước chuẩn bị (không thuộc ô này nhưng phải x
 - Kết quả nào là CHẾT: [đề xuất] Một tuần sau khi bật dưới 70% thành viên còn hiệu lực có
   phòng ban chính, hoặc quản trị phải nhờ sửa cơ sở dữ liệu mới dựng được cây — cây không
   đủ làm nền cho OKR quý 4 bắt đầu 2026-10-26.
-- Timebox: [đề xuất] vòng làm lượt 1 từ 2026-10-01 đến 2026-10-05; đo lần đầu 2026-10-12.
+- Timebox: [đề xuất] vòng làm lượt 1 từ 2026-10-01 đến 2026-10-05; cây thật được dựng trong
+  tuần 2026-10-19 (danh sách nhân sự tới trước 2026-10-16), nên đo lần đầu 2026-10-26 — một
+  tuần sau, cũng là ngày OKR quý 4 bắt đầu.
 
 ## Kết quả prototype
 
@@ -100,7 +112,7 @@ Bảy trạng thái, mỗi trạng thái đặt một câu hỏi mở lên màn:
 | Hôm nay — danh sách phẳng | Sáu hàng ngang nhau như trên prod | (mốc so sánh) |
 | Cây hai cấp | Bộ phận chứa phòng ban; phòng ban cũ giữ bước đã giao; phòng ban chưa xếp nằm riêng | Hướng giữ `Department`, thêm `Division` ở trên |
 | Cây — đang tìm | Gõ «vùng»: chỉ nhánh khớp còn lại và tự mở | Người điều phối lọc theo bộ phận |
-| Cây — có thành viên và trưởng | Thành viên, trưởng phòng, trưởng bộ phận | Thành viên có thuộc phòng ban không; có trưởng không |
+| Cây — có thành viên và trưởng | Thành viên, trưởng phòng ban, trưởng bộ phận | Thành viên có thuộc phòng ban không; có trưởng không |
 | Sơ đồ tổ chức | Cùng dữ liệu vẽ từ trên xuống: công ty → bộ phận → phòng ban, mỗi ô có người đứng đầu và số người, số bước | Cần sơ đồ nhìn cả công ty, hay cây gập mở là đủ |
 | Giao bước kế hoạch | Ô chọn nhóm phòng ban theo bộ phận | Bước giao cho phòng ban hay cho người |
 | Chưa có bộ phận nào | Ngày đầu sau khi bật: mọi phòng ban ở «chưa xếp», không mất bước nào | Dữ liệu cũ không phải chuyển |
@@ -133,3 +145,5 @@ hai phụ thuộc mà kho chưa có, cùng là phụ thuộc của block `flow-2
 - Quyền xem theo đơn vị — lượt 2–3 của OKR.
 - Cấp «nhóm» dưới phòng ban — để sau, khi có đơn vị thật cần.
 - Đồng bộ cây từ hệ thống nhân sự (TC-07) — chưa có hệ thống nguồn.
+- [đề xuất] Sơ đồ tổ chức có kéo, phóng to, di chuyển (React Flow + dagre) — để sau lượt 1
+  nếu nó làm trễ R1; lượt 1 giữ cây gập mở, sơ đồ tĩnh là tuỳ chọn.

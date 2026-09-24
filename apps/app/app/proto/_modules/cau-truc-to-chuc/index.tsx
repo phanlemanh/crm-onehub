@@ -105,7 +105,7 @@ function DongPhongBan({
 							<PersonAvatar size="sm" name={nguoi.ten} email={nguoi.email} />
 							<span translate="no">{nguoi.ten}</span>
 							{phongBan.truong?.id === nguoi.id ? (
-								<Badge variant="outline">Trưởng phòng</Badge>
+								<Badge variant="outline">Trưởng phòng ban</Badge>
 							) : null}
 						</span>
 					))}
@@ -488,7 +488,7 @@ export function CauTrucToChucMau({ state }: { state: string }) {
 		return (
 			<KhungMan
 				tieuDe="Nếu thành viên thuộc phòng ban — câu hỏi mở cho Cổng Đáng"
-				mo="Mỗi phòng ban có thành viên và một trưởng phòng; bộ phận có trưởng bộ phận. Đây là phương án để quyết, chưa phải hướng đã chốt."
+				mo="Mỗi phòng ban có thành viên và một trưởng phòng ban; bộ phận có trưởng bộ phận. Đây là phương án để quyết, chưa phải hướng đã chốt."
 			>
 				<CayToChuc boPhan={CAY_HAI_CAP} chuaXep={CHUA_XEP} coNguoi timSan="" />
 			</KhungMan>
