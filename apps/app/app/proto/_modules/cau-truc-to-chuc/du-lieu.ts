@@ -87,9 +87,11 @@ export const CHUA_CO_PHONG_BAN: readonly NguoiMau[] = [
 	nguoi("vy", "Trịnh Hà Vy"),
 ];
 
-export const PHONG_BAN_PHU: Readonly<Record<string, readonly NguoiMau[]>> = {
-	cskh: [MAI],
-};
+export type PhongBanPhuMau = { phongBanId: string; nguoi: NguoiMau };
+
+export const PHONG_BAN_PHU: readonly PhongBanPhuMau[] = [
+	{ phongBanId: "cskh", nguoi: MAI },
+];
 
 export const DA_LUU_TRU: readonly { id: string; ten: string; loai: string }[] =
 	[{ id: "marketing-cu", ten: "Marketing (cũ)", loai: "Phòng ban" }];

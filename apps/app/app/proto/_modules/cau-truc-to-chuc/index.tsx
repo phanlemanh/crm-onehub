@@ -439,54 +439,66 @@ function SoDoToChuc({ boPhan }: { boPhan: readonly BoPhanMau[] }) {
 	);
 }
 
-const MAN_TO_CHUC: Record<
-	string,
-	{ tieuDe: string; mo: string; noiDung: React.ReactNode }
-> = {
-	"ST-tochuc-cay": {
+type ManMau = {
+	id: string;
+	tieuDe: string;
+	mo: string;
+	noiDung: React.ReactNode;
+};
+
+const MAN_TO_CHUC: readonly ManMau[] = [
+	{
+		id: "ST-tochuc-cay",
 		tieuDe: "Cài đặt › Tổ chức — quản trị",
 		mo: "Dòng độ phủ ở đầu là con số ngưỡng đọc ngày 26/10. Bấm một người để mở vị trí của họ; menu «…» trên mỗi đơn vị.",
 		noiDung: <ManToChuc sua />,
 	},
-	"ST-tochuc-chidoc": {
+	{
+		id: "ST-tochuc-chidoc",
 		tieuDe: "Cài đặt › Tổ chức — thành viên thường",
 		mo: "Cùng cây, cùng dòng độ phủ; không nút thêm, không menu, không nhập, người không bấm được.",
 		noiDung: <ManToChuc sua={false} />,
 	},
-	"ST-vitri-theotruong": {
+	{
+		id: "ST-vitri-theotruong",
 		tieuDe: "Vị trí của một người — quản lý theo trưởng phòng ban",
 		mo: "Phòng ban chính, phòng ban phụ, và quản lý trực tiếp suy từ trưởng phòng ban chính.",
 		noiDung: <HopThoaiViTri ghiDe={false} />,
 	},
-	"ST-vitri-ghide": {
+	{
+		id: "ST-vitri-ghide",
 		tieuDe: "Vị trí của một người — quản lý đã chọn tay",
 		mo: "Ghi đè hiện rõ là chọn tay, kèm lối quay về phép suy.",
 		noiDung: <HopThoaiViTri ghiDe />,
 	},
-	"ST-nhap-trong": {
+	{
+		id: "ST-nhap-trong",
 		tieuDe: "Nhập từ bảng tính — chưa dán",
 		mo: "Dán thẳng từ bảng tính hoặc chọn tệp .csv.",
 		noiDung: <HopThoaiNhap buoc="trong" />,
 	},
-	"ST-nhap-xemtruoc": {
+	{
+		id: "ST-nhap-xemtruoc",
 		tieuDe: "Nhập từ bảng tính — xem trước",
 		mo: "Chưa ghi gì. Dòng hỏng nói lý do; nút ghi nói rõ số dòng sẽ bỏ.",
 		noiDung: <HopThoaiNhap buoc="xem-truoc" />,
 	},
-	"ST-nhap-honghet": {
+	{
+		id: "ST-nhap-honghet",
 		tieuDe: "Nhập từ bảng tính — mọi dòng hỏng",
 		mo: "Nút ghi khoá; sửa bảng tính rồi dán lại trong cùng hộp thoại.",
 		noiDung: <HopThoaiNhap buoc="hong-het" />,
 	},
-	"ST-dieuphoi-locbophan": {
+	{
+		id: "ST-dieuphoi-locbophan",
 		tieuDe: "Điều phối 30 ngày — lọc theo bộ phận, nhãn mới",
 		mo: "Bộ lọc «Bộ phận» đứng trước «Phòng ban đang cầm». Sheet kế hoạch: ô «Mục tiêu» đổi thành «Thời lượng».",
 		noiDung: <LocDieuPhoi />,
 	},
-};
+];
 
 export function CauTrucToChucMau({ state }: { state: string }) {
-	const man = MAN_TO_CHUC[state];
+	const man = MAN_TO_CHUC.find((m) => m.id === state);
 	if (man) {
 		return (
 			<KhungMan tieuDe={man.tieuDe} mo={man.mo}>

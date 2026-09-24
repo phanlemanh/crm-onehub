@@ -135,7 +135,9 @@ function Nguoi({
 }
 
 function PhongBan({ phongBan, sua }: { phongBan: PhongBanMau; sua: boolean }) {
-	const phu = PHONG_BAN_PHU[phongBan.id] ?? [];
+	const phu = PHONG_BAN_PHU.filter((x) => x.phongBanId === phongBan.id).map(
+		(x) => x.nguoi,
+	);
 	return (
 		<li
 			className="flex flex-col gap-2 py-2 ps-8 pe-1"
