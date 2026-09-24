@@ -100,7 +100,11 @@ const en = {
 		saiDang:
 			"This is not a Bot Token. A Bot Token looks like 1234567890:AbC…, not like the Secret Token.",
 		daLuu: (ten: string) => `${ten} is switched on.`,
+		daLuuChuaNhanTin: (ten: string) =>
+			`${ten} is saved, but Zalo could not reach the CRM yet. Press “Sign up again” in a few minutes.`,
 		daDangKyLai: "Signed up for messages again.",
+		dangKyLaiChuaXong:
+			"Zalo took the sign-up but could not reach the CRM yet. Try “Sign up again” in a few minutes.",
 		tokenEnv:
 			"The token is set in the server's .env file. Paste a token here to replace it.",
 		chiQuanTri: "Only an admin can change the bot.",
@@ -215,7 +219,11 @@ const vi = {
 		saiDang:
 			"Đây không phải Bot Token. Bot Token có dạng 1234567890:AbC…, khác Secret Token.",
 		daLuu: (ten: string) => `Đã bật ${ten}.`,
+		daLuuChuaNhanTin: (ten: string) =>
+			`Đã lưu ${ten}, nhưng Zalo chưa gọi thử được địa chỉ nhận tin. Bấm “Đăng ký lại” sau ít phút.`,
 		daDangKyLai: "Đã đăng ký nhận tin lại.",
+		dangKyLaiChuaXong:
+			"Zalo nhận đăng ký nhưng chưa gọi thử được địa chỉ nhận tin. Thử “Đăng ký lại” sau ít phút.",
 		tokenEnv:
 			"Token đang đặt trong tệp .env của máy chủ. Dán token ở đây để thay.",
 		chiQuanTri: "Chỉ quản trị viên thay được bot.",

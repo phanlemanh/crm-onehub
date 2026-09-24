@@ -9,7 +9,10 @@ export const PHA_THU = Object.freeze({
 	chayRieng: ".acceptance-runs/thuoc-o-soan-don-dep",
 	bangChungThat: "_acceptance/thuoc-o-soan-don-dep/evidence",
 	bangChungCu: "_acceptance/o-soan-va-ly-do-loi/evidence",
-	nhanhChinh: "origin/onehub",
+	vong: Object.freeze({
+		truoc: "7cf69d6a049cccfce3f0f16324a3d9112d834551",
+		sau: "d19c8b2138fc11f0b2b5fcab94b7dbb7141afc63",
+	}),
 	nguoi: "dev@localhost",
 	tieuDe: "o-soan do",
 	dauMoc: ["canh-cay-", "o-soan-canh-"],

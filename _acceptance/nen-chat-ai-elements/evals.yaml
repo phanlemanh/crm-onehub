@@ -255,7 +255,8 @@ evals:
     paths:
       - "**"
     expected: |
-      Xanh: chay `git diff --name-only <nhanh nen>...HEAD` roi doi chieu tung duong
+      Xanh: chay `git diff --name-only 08cc6754...2340eacc` (merge-base va dinh nhanh cua
+      vong trong merge #33) roi doi chieu tung duong
       voi DANH SACH TRANG ghi nguyen van trong AC-2. In ra tong so tep doi va danh
       sach tep VI PHAM (rong khi xanh), khong chi mot chu OK.
       Kiem rieng, ghim ten: sau tep chat 109 KB — agent-builder-chat.tsx,

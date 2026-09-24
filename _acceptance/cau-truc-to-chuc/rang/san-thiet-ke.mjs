@@ -2,9 +2,9 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { VONG } from "./cau-hinh.mjs";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const NHANH_GOC = "origin/onehub";
 const VUNG = [
 	/^apps\/app\/app\/\(app\)\/\[slug\]\/settings\/organization\/.+\.tsx$/,
 	/^apps\/app\/app\/\(app\)\/\[slug\]\/settings\/onboarding\/.+\.tsx$/,
@@ -14,10 +14,8 @@ const VUNG = [
 const git = (...doi) =>
 	execFileSync("git", ["-C", GOC, ...doi], { encoding: "utf8" }).trim();
 
-const moc = git("merge-base", "HEAD", NHANH_GOC);
-const tep = git("diff", "--name-only", `${moc}...HEAD`)
+const tep = git("diff", "--name-only", `${VONG.truoc}...${VONG.sau}`)
 	.split("\n")
-	.concat(git("diff", "--name-only").split("\n"))
 	.filter((t) => VUNG.some((v) => v.test(t)))
 	.filter((t) => existsSync(join(GOC, t)))
 	.filter((t, i, ds) => ds.indexOf(t) === i);
@@ -68,24 +66,24 @@ for (const t of tep) {
 		console.log(`dat  ${t}`);
 	}
 }
-const ui = git("diff", "--name-only", `${moc}...HEAD`, "--", "packages/ui")
+const ui = git(
+	"diff",
+	"--name-only",
+	`${VONG.truoc}...${VONG.sau}`,
+	"--",
+	"packages/ui",
+)
 	.split("\n")
 	.filter(Boolean);
-const keHoach = [
-	"docs/superpowers/plans/2026-09-24-cau-truc-to-chuc.md",
-	...git("diff", "--name-only", `${moc}...HEAD`, "--", "docs/superpowers/plans")
-		.split("\n")
-		.filter((t) => t.endsWith(".md") && existsSync(join(GOC, t))),
-];
 const daKhai = new Set(
-	keHoach.flatMap(
-		(t) =>
-			(
-				readFileSync(join(GOC, t), "utf8")
-					.split("\n")
-					.find((d) => d.startsWith("- Thành phần dùng chung được sửa")) ?? ""
-			).match(/packages\/ui\/[^`]+/g) ?? [],
-	),
+	(
+		readFileSync(
+			join(GOC, "docs/superpowers/plans/2026-09-24-cau-truc-to-chuc.md"),
+			"utf8",
+		)
+			.split("\n")
+			.find((d) => d.startsWith("- Thành phần dùng chung được sửa:")) ?? ""
+	).match(/packages\/ui\/[^`]+/g) ?? [],
 );
 const ngoaiKhai = ui.filter((f) => !daKhai.has(f));
 if (ngoaiKhai.length > 0) {

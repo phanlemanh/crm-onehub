@@ -9,11 +9,19 @@ import type {
 	GuiThuPhanHoi,
 } from "@crm/validation/zalo-cau-noi";
 import {
+	maLoiZalo,
 	parseZaloGetMe,
 	parseZaloSetWebhook,
 } from "@crm/validation/zalo-update";
+import { z } from "zod";
 import { guiQuaSlackThu } from "./nhac-ke-hoach";
-import { guiZalo, zaloGoi, zaloGoiTho, zaloToken } from "./zalo-api";
+import {
+	guiZalo,
+	LoiHttpZalo,
+	zaloGoi,
+	zaloGoiTho,
+	zaloToken,
+} from "./zalo-api";
 import { ZALO } from "./zalo-config";
 
 const CHU_SO_GIO = 2;
@@ -61,6 +69,57 @@ async function ghiCot(cot: Partial<CotZalo>): Promise<void> {
 	});
 }
 
+type KetGetMe =
+	| { loai: "duoc"; tenBot: string }
+	| { loai: "token-sai" }
+	| { loai: "zalo-loi" };
+
+function baoLoiZalo(method: string, lop: string): void {
+	console.error(`[zalo] ${method} hong: ${lop}`);
+}
+
+const loiMang = z.object({ code: z.string().min(1) });
+
+function lopLoi(loi: Error): string {
+	if (loi instanceof LoiHttpZalo) return `http-${loi.status}`;
+	const mang = loiMang.safeParse(loi);
+	if (mang.success) return `mang (${mang.data.code})`;
+	return `tra-loi-la (${loi.name})`;
+}
+
+function laTuChoi(ma: number | null): boolean {
+	return ma !== null && ma >= ZALO.http.tuChoi.tu && ma < ZALO.http.tuChoi.den;
+}
+
+async function docBot(fetcher: typeof fetch, token: string): Promise<KetGetMe> {
+	let me: { status: number; than: unknown };
+	try {
+		me = await zaloGoiTho(fetcher, token, "getMe", {});
+	} catch (loi) {
+		baoLoiZalo(
+			"getMe",
+			`mang (${loi instanceof Error ? loi.name : "khong-ro"})`,
+		);
+		return { loai: "zalo-loi" };
+	}
+	const maThan = maLoiZalo(me.than);
+	if (laTuChoi(me.status) || laTuChoi(maThan)) return { loai: "token-sai" };
+	if (me.status !== ZALO.http.ok) {
+		baoLoiZalo("getMe", `http-${me.status}`);
+		return { loai: "zalo-loi" };
+	}
+	if (maThan !== null) {
+		baoLoiZalo("getMe", `ok-false-${maThan}`);
+		return { loai: "zalo-loi" };
+	}
+	try {
+		return { loai: "duoc", tenBot: parseZaloGetMe(me.than).tenBot };
+	} catch {
+		baoLoiZalo("getMe", "sai-khuon");
+		return { loai: "zalo-loi" };
+	}
+}
+
 type KetDangKy = "duoc" | "tu-choi" | "xac-minh-hong";
 
 async function dangKy(
@@ -93,11 +152,14 @@ export async function datBot(
 	const token = yeuCau.token ?? (await zaloToken());
 	if (!token)
 		return { outcome: "khong-co-token", reason: ZALO.loi.khongCoToken };
-	const me = await zaloGoiTho(fetcher, token, "getMe", {});
-	if (me.status !== ZALO.http.ok) {
+	const bot = await docBot(fetcher, token);
+	if (bot.loai === "token-sai") {
 		return { outcome: "invalid", reason: ZALO.loi.tokenSai };
 	}
-	const { tenBot } = parseZaloGetMe(me.than);
+	if (bot.loai === "zalo-loi") {
+		return { outcome: "zalo-loi", reason: ZALO.loi.zaloKhongTraLoi };
+	}
+	const { tenBot } = bot;
 	if (goc.protocol !== ZALO.webhook.giaoThucAnToan) {
 		await ghiCot({
 			zaloBotToken: token,
@@ -123,10 +185,23 @@ export async function datBot(
 	}
 	if (ket === "xac-minh-hong") {
 		await ghiCot({ zaloWebhookUrl: null, zaloWebhookLyDo: "zalo-tu-choi" });
-		return { outcome: "invalid", reason: ZALO.loi.xacMinhHong };
+		return { outcome: "valid", tenBot, webhook: "zalo-tu-choi" };
 	}
 	await ghiCot({ zaloWebhookUrl: url, zaloWebhookLyDo: null });
 	return { outcome: "valid", tenBot, webhook: "da-dang-ky" };
+}
+
+async function guiDuocKhong(
+	method: string,
+	gui: () => Promise<unknown>,
+): Promise<boolean> {
+	try {
+		await gui();
+		return true;
+	} catch (loi) {
+		baoLoiZalo(method, loi instanceof Error ? lopLoi(loi) : "khong-ro");
+		return false;
+	}
 }
 
 export async function guiThu(
@@ -136,14 +211,21 @@ export async function guiThu(
 	const token = await zaloToken();
 	const kenh = await kenhSeDungCua(db, userId, { coToken: token !== null });
 	const cau = ZALO.loi.guiThu(gioNhac());
+	let guiDuoc = true;
 	if (kenh.kenh === "zalo" && token && kenh.zaloUserId) {
-		await guiZalo(token, kenh.zaloUserId, cau, { fetcher: deps.fetcher });
+		const zaloUserId = kenh.zaloUserId;
+		guiDuoc = await guiDuocKhong("sendMessage", () =>
+			guiZalo(token, zaloUserId, cau, { fetcher: deps.fetcher }),
+		);
 	}
 	if (kenh.kenh === "slack" && kenh.slackUserId) {
-		await guiQuaSlackThu(kenh.slackUserId, cau, {
-			fetcher: deps.slackFetcher,
-			maTin: `nhac-thu-${userId}-${Date.now()}`,
-		});
+		const slackUserId = kenh.slackUserId;
+		guiDuoc = await guiDuocKhong("slack", () =>
+			guiQuaSlackThu(slackUserId, cau, {
+				fetcher: deps.slackFetcher,
+				maTin: `nhac-thu-${userId}-${Date.now()}`,
+			}),
+		);
 	}
-	return { kenh: kenh.kenh, lech: kenh.lech };
+	return { kenh: kenh.kenh, lech: kenh.lech, guiDuoc };
 }

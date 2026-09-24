@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 82cee2e5a904b9cf39315dc6eafba034bad29fc8
+verified_commit: 787d66525c93e022bee430e6450c361c2fbd5a49
 human_signoff: Manh Phan 2026-09-24
 ---
 
@@ -372,3 +372,11 @@ sha: 5f611b5627d37209b3d9562547aab287b24fd751 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-09-24, do gộp onehub 36a2a670 (#114, #117, #119) sau chữ ký để PR hết xung đột
 run_id: repin-20260924T092133Z-45227
 sha: 82cee2e5a904b9cf39315dc6eafba034bad29fc8 · suites: 4 lệnh exit 0 · evals: 23/23 eval máy đạt kỳ vọng · ngoài làn máy: E20, E22 · AC không có chốt máy: AC-14
+
+### Re-pin lần 3 — 2026-09-24, do thuoc «vong nay» neo cap sha cua merge (merge-base(M^1,M^2)..M^2) thay merge-base dong; env GOOGLE_CLIENT_* nhu CI
+run_id: repin-20260924T155831Z-87643
+sha: f7a31a583af36e847d87df37ffd44f12b1d45a85 · suites: 4 lệnh exit 0 · evals: 23/23 eval máy đạt kỳ vọng · ngoài làn máy: E20, E22 · AC không có chốt máy: AC-14
+
+### Re-pin lần 4 — 2026-09-24, do ghim lai tren cay hop nhat sau khi gop onehub 973f1b01 (#125)
+run_id: repin-20260924T160407Z-81970
+sha: 787d66525c93e022bee430e6450c361c2fbd5a49 · suites: 4 lệnh exit 0 · evals: 23/23 eval máy đạt kỳ vọng · ngoài làn máy: E20, E22 · AC không có chốt máy: AC-14

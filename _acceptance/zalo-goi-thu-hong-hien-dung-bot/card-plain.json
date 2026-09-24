@@ -1,0 +1,28 @@
+{
+  "feature_plain": "Khi quản trị viên đổi bot Zalo mà Zalo nhận nhưng chưa gọi thử được địa chỉ nhận tin, màn Kết nối › Zalo hiện đúng bot vừa lưu cùng lời nhắc bấm «Đăng ký lại», và lời nhắc ấy không tự biến mất sau một phút.",
+  "scope_plain": "Không lùi về bot cũ, không tự gỡ lời nhắc khi tin tới, không để tác tử tự đăng ký lại — và các giới hạn đã biết khác của vòng 2 vẫn để nguyên.",
+  "decisions_plain": [
+    {
+      "id": "d-20260924T090513Z-1",
+      "p": "Chọn giữ bot mới và nói thật trên màn — đổi lại bot cũ thôi nhận tin qua CRM ngay khi đổi token; loại cách lùi về bot cũ vì khi Zalo cấp lại token cho cùng bot, lùi về là mất bot."
+    },
+    {
+      "id": "d-20260924T090513Z-2",
+      "p": "Chọn giữ lời nhắc bằng dấu «lần đăng ký gần nhất hỏng» đã có sẵn, không thêm cột dữ liệu — đổi lại khi Zalo từ chối hẳn lúc đang có địa chỉ cũ, nhịp kiểm không cập nhật sang địa chỉ khác cho tới lần đăng ký thành công."
+    },
+    {
+      "id": "d-20260924T090513Z-3",
+      "p": "Chọn sửa đúng hai chỗ trong bộ kiểm đã ký của vòng 2 vốn ghim «gọi thử hỏng = lỗi» — đổi lại phép đo đã ký đổi kỳ vọng; một phép đo riêng khoá việc sửa vào đúng hai chỗ đó."
+    },
+    {
+      "id": "d-20260924T090513Z-4",
+      "p": "KHÔNG làm phiên thiết kế trên bản bấm được — không thêm màn hay khối nào, chỉ đổi loại thông báo; đổi lại anh duyệt phần giao diện bằng chữ, ảnh thật có ở vòng chấm."
+    },
+    {
+      "id": "d-20260924T090513Z-5",
+      "p": "KHÔNG tự gỡ lời nhắc khi tin tới và KHÔNG thêm trạng thái riêng — đổi lại nếu Zalo vẫn giao tin sau khi gọi thử hỏng, lời nhắc báo nhầm cho tới một lần «Đăng ký lại»; xem lại khi lái thử ở hàng triển khai."
+    }
+  ],
+  "decisions": [],
+  "analyst_plain": ""
+}

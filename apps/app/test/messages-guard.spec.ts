@@ -427,6 +427,10 @@ describe("kho chuoi cua vong ③a", () => {
 			],
 			"nhac-qua-zalo:khoiZalo.hetHanLuc": ["Hết hạn lúc 1", "Hết hạn lúc 12"],
 			"nhac-qua-zalo:ketNoi.daLuu": ["Đã bật 1.", "Đã bật 12."],
+			"nhac-qua-zalo:ketNoi.daLuuChuaNhanTin": [
+				"Đã lưu 1, nhưng Zalo chưa gọi thử được địa chỉ nhận tin. Bấm “Đăng ký lại” sau ít phút.",
+				"Đã lưu 12, nhưng Zalo chưa gọi thử được địa chỉ nhận tin. Bấm “Đăng ký lại” sau ít phút.",
+			],
 			"nhac-qua-zalo:ketNoi.traLoiLanCuoi": [
 				"trả lời lần cuối lúc 1",
 				"trả lời lần cuối lúc 12",

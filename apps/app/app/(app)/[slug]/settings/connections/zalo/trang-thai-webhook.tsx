@@ -30,8 +30,12 @@ export function TrangThaiWebhookZalo({
 	const router = useRouter();
 	const dangKyLai = useMutation(
 		trpc.zalo.luuBot.mutationOptions({
-			onSuccess: async () => {
-				toast.success(t.daDangKyLai);
+			onSuccess: async (kq) => {
+				if (kq.webhook === "zalo-tu-choi") {
+					toast.warning(t.dangKyLaiChuaXong);
+				} else {
+					toast.success(t.daDangKyLai);
+				}
 				await cache.zalo();
 				router.refresh();
 			},
