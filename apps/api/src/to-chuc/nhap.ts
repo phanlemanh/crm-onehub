@@ -79,8 +79,8 @@ export function tachDong(chu: string): { line: number; o: string[] }[] {
 		.map((d, i) => ({ line: i + 1, d }))
 		.filter((x) => x.d.trim() !== "")
 		.map((x) => ({ line: x.line, o: tachO(x.d) }));
-	if (dong.length > 0 && !(dong[0]?.o[0] ?? "").includes("@"))
-		return dong.slice(1);
+	const dau = boDau(dong[0]?.o[0] ?? "");
+	if (TO_CHUC.nhap.tenCotEmail.some((t) => t === dau)) return dong.slice(1);
 	return dong;
 }
 
@@ -114,12 +114,25 @@ export function phanTichLo(chu: string, snap: SnapNhap): KetQuaNhap {
 		};
 	});
 
-	const bpHieuLuc = (r: (typeof tho)[number]) => {
-		if (r.division !== "") return khoa(r.division);
-		const pb = pbTheoTen.get(khoa(r.department));
-		const bp = pb?.divisionId ? bpTheoId.get(pb.divisionId) : undefined;
-		return bp ? khoa(bp.name) : "";
+	const bpSongCua = (ten: string) => {
+		const pb = pbTheoTen.get(khoa(ten));
+		return pb?.divisionId ? bpTheoId.get(pb.divisionId) : undefined;
 	};
+	const bpTrongLo = new Map<string, string>();
+	for (const r of tho) {
+		if (r.department === "" || r.division === "") continue;
+		const cu = bpSongCua(r.department);
+		if (cu && khoa(cu.name) !== khoa(r.division)) continue;
+		if (!bpTrongLo.has(khoa(r.department)))
+			bpTrongLo.set(khoa(r.department), r.division);
+	}
+	const tenBpCua = (r: (typeof tho)[number]) =>
+		r.division !== ""
+			? r.division
+			: (bpTrongLo.get(khoa(r.department)) ??
+				bpSongCua(r.department)?.name ??
+				null);
+	const bpHieuLuc = (r: (typeof tho)[number]) => khoa(tenBpCua(r) ?? "");
 
 	for (const r of tho) {
 		const lt = loaiTruong(r.head);
@@ -190,7 +203,7 @@ export function phanTichLo(chu: string, snap: SnapNhap): KetQuaNhap {
 		.filter((r) => r.error === null)
 		.map((r) => {
 			const pb = pbTheoTen.get(khoa(r.department));
-			const tenBp = r.division !== "" ? r.division : null;
+			const tenBp = tenBpCua(r);
 			const bp = tenBp ? bpTheoTen.get(khoa(tenBp)) : undefined;
 			const lt = loaiTruong(r.head);
 			return {
@@ -199,7 +212,7 @@ export function phanTichLo(chu: string, snap: SnapNhap): KetQuaNhap {
 				departmentName: pb?.name ?? r.department,
 				departmentId: pb?.id ?? null,
 				divisionName: bp?.name ?? tenBp,
-				divisionId: bp?.id ?? pb?.divisionId ?? null,
+				divisionId: bp?.id ?? null,
 				head: lt === "la" ? null : lt,
 			};
 		});

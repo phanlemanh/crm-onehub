@@ -216,6 +216,26 @@ describe("xem-truoc", () => {
 		);
 		expect(kq.rows.map((r) => [r.department, r.error])).toEqual([[ten, null]]);
 	});
+
+	test("xem-truoc: dong-dau-thieu-email — dong du lieu dau khong co @ van la dong du lieu, bao hong co cau loi", async () => {
+		const a = await nguoiMoi("dd");
+		const ten = ma("dd-pb");
+		const chu = [
+			`\t${ten}\t\t`,
+			`${ma("dd-sai")}.onehub.vn\t${ten}\t\t`,
+			`${emailCua(a)}\t${ten}\t\t`,
+		].join("\n");
+		const kq = ok<ImportPreviewOutput>(
+			await goi("org.previewImport", { text: chu }),
+			"xem",
+		);
+		expect(kq.rows.map((r) => [r.line, r.error])).toEqual([
+			[1, N.thieuCot],
+			[2, N.emailKhongPhaiThanhVien],
+			[3, null],
+		]);
+		expect(kq.summary).toMatchObject({ valid: 1, invalid: 2 });
+	});
 });
 
 function chieuNguoi(c: TreeOutput, ids: string[]) {
@@ -235,6 +255,104 @@ function chieuNguoi(c: TreeOutput, ids: string[]) {
 }
 
 describe("ghi", () => {
+	test("ghi: thu-tu-dong — phong ban moi nhan bo phan tu bat ky dong nao, dao thu tu dong ra cung cay", async () => {
+		const dung = async (nhan: string, dao: boolean) => {
+			const [a, b] = await Promise.all([
+				nguoiMoi(`${nhan}a`),
+				nguoiMoi(`${nhan}b`),
+			]);
+			const pb = ma(`${nhan}-pb`);
+			const bp = ma(`${nhan}-bp`);
+			const dong: Dong[] = [
+				[emailCua(a), pb, "", ""],
+				[emailCua(b), pb, bp, "bộ phận"],
+			];
+			const chu = tab(dao ? [...dong].reverse() : dong);
+			const xem = ok<ImportPreviewOutput>(
+				await goi("org.previewImport", { text: chu }),
+				"xem",
+			);
+			const kq = ok<ImportApplyOutput>(
+				await goi("org.applyImport", { text: chu }),
+				"ghi",
+			);
+			const chieu = chieuNguoi(await cay(), [a, b]).map((x) => ({
+				...x,
+				id: x.id === a ? "a" : "b",
+				phongBan: x.phongBan === pb ? "pb" : x.phongBan,
+				boPhan: x.boPhan === bp ? "bp" : x.boPhan,
+			}));
+			return {
+				loi: xem.rows.map((r) => r.error),
+				xem: xem.summary,
+				kq,
+				chieu,
+			};
+		};
+		const xuoi = await dung("tt1", false);
+		const nguoc = await dung("tt2", true);
+		expect(xuoi.chieu).toEqual([
+			{
+				id: "a",
+				phongBan: "pb",
+				boPhan: "bp",
+				truongPhongBan: false,
+				truongBoPhan: false,
+			},
+			{
+				id: "b",
+				phongBan: "pb",
+				boPhan: "bp",
+				truongPhongBan: false,
+				truongBoPhan: true,
+			},
+		]);
+		expect(nguoc).toEqual(xuoi);
+		expect(xuoi.kq).toEqual({ written: 2, newDepartments: 1, newDivisions: 1 });
+	});
+
+	test("ghi: bo-phan-da-luu-tru — phong ban con tro bo phan da luu tru thi ghi dung bo phan moi nhu ban xem truoc", async () => {
+		const a = await nguoiMoi("lt");
+		const cu = await tao(
+			"org.createDivision",
+			{ name: ma("lt-bp-cu") },
+			"bp cu",
+		);
+		const pb = await pbMoi("lt-pb", cu);
+		ok(await goi("onboarding.archiveDepartment", { id: pb }), "luu pb");
+		ok(await goi("org.archiveDivision", { id: cu }), "luu bp");
+		ok(await goi("onboarding.restoreDepartment", { id: pb }), "khoi phuc pb");
+		const tenPb = (await db.department.findUniqueOrThrow({ where: { id: pb } }))
+			.name;
+		const tenMoi = ma("lt-bp-moi");
+		const chu = tab([[emailCua(a), tenPb, tenMoi, "bộ phận"]]);
+		const xem = ok<ImportPreviewOutput>(
+			await goi("org.previewImport", { text: chu }),
+			"xem",
+		);
+		const kq = ok<ImportApplyOutput>(
+			await goi("org.applyImport", { text: chu }),
+			"ghi",
+		);
+		expect({ xem: xem.summary.newDivisions, ghi: kq.newDivisions }).toEqual({
+			xem: 1,
+			ghi: 1,
+		});
+		expect(chieuNguoi(await cay(), [a])).toEqual([
+			{
+				id: a,
+				phongBan: tenPb,
+				boPhan: tenMoi,
+				truongPhongBan: false,
+				truongBoPhan: true,
+			},
+		]);
+		const bpCu = await db.division.findUniqueOrThrow({ where: { id: cu } });
+		expect(`bo phan da luu tru co truong: ${bpCu.headUserId}`).toBe(
+			"bo phan da luu tru co truong: null",
+		);
+	});
+
 	test("ghi: dung cac dong hop le cua ban xem truoc, dong hong khong de lai gi, ghi lan hai khong doi", async () => {
 		const lo = await dungLo();
 		const chu = tab(lo.dong);

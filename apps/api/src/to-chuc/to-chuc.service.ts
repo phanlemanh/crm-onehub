@@ -462,7 +462,13 @@ export class ToChucService {
 					pbId.set(k, h.departmentId);
 					if (bp !== null)
 						await tx.department.updateMany({
-							where: { id: h.departmentId, divisionId: null },
+							where: {
+								id: h.departmentId,
+								OR: [
+									{ divisionId: null },
+									{ division: { is: { archivedAt: { not: null } } } },
+								],
+							},
 							data: { divisionId: bp },
 						});
 					continue;

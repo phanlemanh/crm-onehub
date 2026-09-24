@@ -1,6 +1,10 @@
 export const TO_CHUC = {
 	ten: { toiDa: 80 },
-	nhap: { toiDaDong: 1000, toiDaKyTu: 200_000 },
+	nhap: {
+		toiDaDong: 1000,
+		toiDaKyTu: 200_000,
+		tenCotEmail: ["email", "e-mail", "dia chi email", "email address"],
+	},
 	thongDiep: {
 		canQuyenQuanTri: "Cần quyền quản trị để sửa cây tổ chức.",
 		tenTrong: "Tên không được để trống.",
