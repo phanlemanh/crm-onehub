@@ -12,6 +12,7 @@ import type { AuthedTrpcContext } from "../trpc/context.types";
 import { PhamViChungMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { SignedInMiddleware } from "../trpc/middlewares/signed-in.middleware";
 import { restMeta } from "../trpc/openapi";
+import { ghiPhamViYeuCau } from "../trpc/pham-vi-yeu-cau";
 import {
 	allowanceListOutput,
 	allowanceOutput,
@@ -42,7 +43,9 @@ export class WorkspaceRouter {
 	})
 	@UseMiddlewares(SignedInMiddleware)
 	async get(@Ctx() ctx: AuthedTrpcContext) {
-		return this.workspace.get(ctx.user.id);
+		const ketQua = await this.workspace.get(ctx.user.id);
+		ghiPhamViYeuCau(ctx, { role: ketQua.viewerRole, phamVi: "chung" });
+		return ketQua;
 	}
 
 	@Query({

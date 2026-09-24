@@ -455,6 +455,48 @@ describe("vai-chi-okr", () => {
 			),
 			"okr doc duoc doi tac ma nhat ky ghi ok",
 		).toEqual([]);
+		const loDong: DongNhatKy[] = [];
+		const spyLo = spyOn(ContextLogger.prototype, "log").mockImplementation(
+			(message) => {
+				const doc = dongNhatKy.safeParse(message);
+				if (doc.success) loDong.push(doc.data);
+			},
+		);
+		try {
+			const lo = await gan(
+				request(app.getHttpServer()).get(
+					`/api/trpc/workspace.get,zalo.cuaToi,contacts.list?batch=1&input=${encodeURIComponent(JSON.stringify({ 2: {} }))}`,
+				),
+				{ cookie: cookieOkr },
+			);
+			expect([200, 207], JSON.stringify(lo.body).slice(0, 300)).toContain(
+				lo.status,
+			);
+		} finally {
+			spyLo.mockRestore();
+		}
+		const cuaLo = (path: string) => loDong.find((d) => d.path === path);
+		expect(cuaLo("contacts.list"), JSON.stringify(loDong)).toMatchObject({
+			outcome: "err",
+			role: "okr",
+			phamVi: "doi-tac",
+		});
+		expect(cuaLo("zalo.cuaToi"), JSON.stringify(loDong)).toMatchObject({
+			outcome: "ok",
+			role: "okr",
+			phamVi: "chung",
+		});
+		expect(cuaLo("workspace.get"), JSON.stringify(loDong)).toMatchObject({
+			outcome: "ok",
+			role: "okr",
+			phamVi: "chung",
+		});
+		expect(
+			loDong.filter(
+				(d) => d.role === "okr" && d.phamVi === "doi-tac" && d.outcome === "ok",
+			),
+			"trong mot lo, dong cua thu tuc chung bi nhiem pham vi doi tac",
+		).toEqual([]);
 	});
 
 	test("ghi-chung: okr chi ghi duoc thu cua minh; cau hinh he thong doi quan tri", async () => {

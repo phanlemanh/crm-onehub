@@ -36,7 +36,7 @@ export class AuthMiddleware implements TRPCMiddleware {
 			throw new TRPCError({ code: "FORBIDDEN", message: NOT_A_MEMBER });
 		}
 
-		ghiPhamViYeuCau(ctx.req, { role, phamVi: this.phamVi });
+		ghiPhamViYeuCau(ctx, { role, phamVi: this.phamVi });
 
 		if (!docDuocPhamVi(role, this.phamVi)) {
 			throw new TRPCError({ code: "FORBIDDEN", message: KHONG_TRONG_PHAM_VI });

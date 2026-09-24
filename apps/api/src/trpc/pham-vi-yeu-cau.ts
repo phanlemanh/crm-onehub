@@ -1,20 +1,26 @@
 import type { PhamViDuLieu, WorkspaceRole } from "@crm/auth";
-import type { Request } from "express";
 
 export type PhamViYeuCau = {
 	role: WorkspaceRole | null;
 	phamVi: PhamViDuLieu | null;
 };
 
-const theoYeuCau = new WeakMap<Request, PhamViYeuCau>();
+export type CoPhamViYeuCau = { phamViYeuCau?: PhamViYeuCau };
 
-export function ghiPhamViYeuCau(
-	req: Request | undefined,
-	phamVi: PhamViYeuCau,
-): void {
-	if (req) theoYeuCau.set(req, phamVi);
+export function moPhamViYeuCau(): PhamViYeuCau {
+	return { role: null, phamVi: null };
 }
 
-export function docPhamViYeuCau(req: Request | undefined): PhamViYeuCau {
-	return (req && theoYeuCau.get(req)) ?? { role: null, phamVi: null };
+export function ghiPhamViYeuCau(
+	ctx: CoPhamViYeuCau,
+	phamVi: PhamViYeuCau,
+): void {
+	if (ctx.phamViYeuCau) {
+		ctx.phamViYeuCau.role = phamVi.role;
+		ctx.phamViYeuCau.phamVi = phamVi.phamVi;
+	}
+}
+
+export function docPhamViYeuCau(ctx: CoPhamViYeuCau): PhamViYeuCau {
+	return ctx.phamViYeuCau ?? moPhamViYeuCau();
 }

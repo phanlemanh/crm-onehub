@@ -5,7 +5,7 @@ slug: vai-chi-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: implemented
 approved_by: Manh Phan — uỷ quyền phiên điều phối 2026-09-24
 approved_at: 2026-09-24T16:26:07Z
 design_doc: docs/superpowers/specs/2026-09-24-vai-chi-okr-design.md
