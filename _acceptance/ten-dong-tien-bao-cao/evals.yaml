@@ -1,0 +1,106 @@
+schema_version: 1
+slug: ten-dong-tien-bao-cao
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tdb_tao_hai_tieng
+    paths:
+      - "apps/app/lib/messages/deals.ts"
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "apps/app/test/tien-te-chua-tai.dom.tsx"
+    expected: |
+      Render CreateDealSheet that (tRPC gia) o 2 tieng x 2 trang thai [dang-tai, loi] = 4 o, go so
+      tien roi doc dong duoi o; moi o so voi cau ghi san trong bai kiem:
+        vi/dang-tai -> "Đang tải đồng tiền báo cáo…"
+        vi/loi      -> "Không tải được đồng tiền báo cáo — chọn đồng tiền bên cạnh để nhập số tiền."
+        en/dang-tai -> "Loading the reporting currency…"
+        en/loi      -> "Couldn't load the reporting currency — pick a currency next to the amount to enter it."
+      Bai kiem dem so o da chay == 4.
+      CHIEU DO (chay o S3): ban truoc vong (chu «mặc định») -> do voi thong diep ghim
+      "vi/dang-tai: dong «Đang tải đồng tiền mặc định…» != «Đang tải đồng tiền báo cáo…»".
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.tdb_quet_chu
+    paths:
+      - "apps/app/**"
+      - "packages/ui/src/**"
+      - "CONTEXT.md"
+      - "_acceptance/ten-dong-tien-bao-cao/**"
+      - "_acceptance/tien-te-chua-tai-khong-doan/contract.md"
+    expected: |
+      Mot script (goc suy tu vi tri script), so khang dinh GHI CUNG = 18, so voi so da chay (ma 2 neu lech):
+        AC-2 — 2 am tinh: quet moi tep .ts/.tsx duoi apps/app va packages/ui/src (bo thu muc test/,
+          node_modules/, .next/), chuan hoa NFC, khong phan biet hoa thuong: khong tep nao chua
+          «đồng tiền mặc định», khong tep nao chua "default currency"; so tep da quet >= 100 (neu
+          khong -> ma 2). 6 duong tinh: settings.ts, record-sheet.ts, deals.ts moi tep chua ca
+          «đồng tiền báo cáo» va "reporting currency".
+        AC-3 — 4 khang dinh trong muc CONTEXT.md (tu dong "**Đồng tiền báo cáo**:" toi muc ke tiep): co
+          dong mo muc; co cau dinh nghia khong rong sau dau hai cham; co ca «Cài đặt» va «Tiền tệ»;
+          dong _Avoid_ chua ca «đồng tiền mặc định» va "default currency".
+          4 khang dinh nguyen van: rut bon cau cua AC-1 tu contract.md cua ho so nay (hai cau «…» va
+          hai cau "…" tren dong AC-1), moi cau phai co mat nguyen van (NFC, tung ky tu) trong deals.ts
+          duoi dang chuoi "…".
+        AC-6 — 2 khang dinh: phan Criteria cua contract tien-te-chua-tai-khong-doan bang tung byte voi
+          ban o commit f87ca17f (git show); phan Notes cua no co dong nhac ten-dong-tien-bao-cao.
+      CHIEU DO (chay o S3, ban guong tmpdir qua QUET_GOC): deals.ts con chu cu -> "deals.ts: con
+      «đồng tiền mặc định»"; doi «…» thanh «...» trong deals.ts -> "AC-1 vi/dang-tai: khong co nguyen
+      van trong deals.ts"; xoa dong Notes -> "tien-te-chua-tai-khong-doan: Notes khong tro sang day".
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.tdb_quet_chu
+    paths:
+      - "CONTEXT.md"
+      - "apps/app/lib/messages/deals.ts"
+      - "_acceptance/ten-dong-tien-bao-cao/**"
+    expected: |
+      Cung lan chay E2: 4 khang dinh muc CONTEXT.md va 4 khang dinh nguyen van cau AC-1 (xem E2).
+      CHIEU DO (chay o S3, ban guong): xoa cau noi cho dat -> "CONTEXT.md: muc thieu «Cài đặt»/«Tiền tệ»".
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.tdb_quet_chu
+    paths:
+      - "_acceptance/tien-te-chua-tai-khong-doan/contract.md"
+      - "_acceptance/ten-dong-tien-bao-cao/rang/quet-chu.mjs"
+    expected: |
+      Cung lan chay E2: 2 khang dinh ve hop dong cu (Criteria khong doi, Notes tro sang day).
+      CHIEU DO: xem E2.
+
+  - id: E4
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tcct_man_that
+    paths:
+      - "apps/app/lib/messages/deals.ts"
+      - "_acceptance/tien-te-chua-tai-khong-doan/rang/man-that.mjs"
+    steps:
+      - "Chay thuoc man that cua ho so tien-te-chua-tai-khong-doan (da cap nhat sang cau moi)"
+      - "vi 1440, chan currency.settings: mo tam tao, go 150.000.000 -> doc dong, chup evidence/tao-loi-truoc-khi-chon.png"
+    expected: |
+      Frame: dong duoi o la "Không tải được đồng tiền báo cáo — chọn đồng tiền bên cạnh để nhập số tiền.".
+      Thuoc so dung chuoi nay; tren ban truoc vong (cau «mặc định») thuoc do voi thong diep ghim
+      "tao truoc khi chon: dong «Không tải được đồng tiền mặc định ...» != «Không tải được đồng tiền báo cáo ...»".
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.tdb_lan_hai_ho_so
+    paths:
+      - "apps/**"
+      - "packages/**"
+      - "_acceptance/tien-te-chua-tai-khong-doan/**"
+      - "_acceptance/o-so-tien-doc-theo-tieng/**"
+    expected: |
+      Chay lan may cua bo kit (repin-lane.mjs, --allow-dirty, KHONG --write — chi do, khong ghim) cho
+      ca hai slug: bon lenh bo chung va MOI eval test/script khai trong evals.yaml cua tung ho so (lan
+      tu doi chieu du so eval da khai). Ma thoat 0 va dong ket «LÀN XANH».
+      Doi chung: lan nay tung do khi chu cu con trong bai kiem cua ho so cu (se chung o S3 bang cach
+      chay truoc khi cap nhat bai kiem).
