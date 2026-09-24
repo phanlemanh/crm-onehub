@@ -17,6 +17,11 @@ export type MoneyInputOptions = { locale: Locale; currency: string };
 
 export type MoneySeparators = { group: string; decimal: string };
 
+export const MONEY_EXAMPLE_CENTS = {
+	whole: 15_000_000_000,
+	fraction: 150_000_050,
+} as const;
+
 const CENT_DIGITS = 2;
 const NEGATIVE = /^[-−]/;
 const MAX_CENTS = BigInt(Number.MAX_SAFE_INTEGER);
