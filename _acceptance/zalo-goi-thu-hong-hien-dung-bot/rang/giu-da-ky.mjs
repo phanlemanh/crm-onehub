@@ -1,9 +1,9 @@
 import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { VONG } from "./cau-hinh.mjs";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const NHANH_CHINH = process.env.NHANH_CHINH ?? "origin/onehub";
 const KHONG_DOI = [
 	"apps/agent/test/nhac-qua-zalo.integration.spec.ts",
 	"apps/agent/test/zalo-qua-webhook.integration.spec.ts",
@@ -23,7 +23,7 @@ function daiCuaCa(goc) {
 	const dong = goc.split("\n");
 	return CA_DUOC_SUA.map((mo) => {
 		const dau = dong.findIndex((d) => d.includes(mo));
-		if (dau < 0) throw new Error(`khong thay ca ${mo} o merge-base`);
+		if (dau < 0) throw new Error(`khong thay ca ${mo} o ${VONG.truoc}`);
 		const ke = dong.findIndex((d, i) => i > dau && /^\s*test\(/.test(d));
 		return { tu: dau + 1, den: ke < 0 ? dong.length : ke };
 	});
@@ -51,7 +51,6 @@ export function viPhamDiff(diff, dai) {
 	return viPham;
 }
 
-const base = git("merge-base", "HEAD", NHANH_CHINH).trim();
 let loi = 0;
 const bao = (dong) => {
 	console.error(dong);
@@ -59,11 +58,12 @@ const bao = (dong) => {
 };
 
 for (const tep of KHONG_DOI) {
-	if (git("diff", base, "--", tep).trim() !== "") bao(`spec da ky bi sua: ${tep}`);
+	if (git("diff", VONG.truoc, VONG.sau, "--", tep).trim() !== "")
+		bao(`spec da ky bi sua: ${tep}`);
 }
 
-const dai = daiCuaCa(git("show", `${base}:${SPEC_VONG_2}`));
-const diffThat = git("diff", "-U0", base, "--", SPEC_VONG_2);
+const dai = daiCuaCa(git("show", `${VONG.truoc}:${SPEC_VONG_2}`));
+const diffThat = git("diff", "-U0", VONG.truoc, VONG.sau, "--", SPEC_VONG_2);
 for (const v of viPhamDiff(diffThat, dai)) bao(v);
 
 const diffPha = `${diffThat}\n@@ -1 +1 @@\n-import a\n+import b\n`;

@@ -10,13 +10,15 @@ evals:
     paths:
       - "packages/db/prisma/**"
       - "_acceptance/cau-truc-to-chuc/rang/migration-tren-du-lieu-cu.mjs"
+      - "_acceptance/cau-truc-to-chuc/rang/cau-hinh.mjs"
     expected: |
       Script suy goc kho tu vi tri cua chinh no. Tao co so du lieu tam rieng (crm_ttc_mig_<pid>),
-      ap cac migration tai base_commit cua ho so (thu muc migrations rut bang git tu base_commit,
-      khong chep tay), gieo du lieu bang SQL cua LUOC DO CU: 5 phong ban trong do hai phong ban
+      ap cac migration tai base_commit cua ho so (36a2a670, cha thu nhat cua merge #120, ghi o
+      rang/cau-hinh.mjs; thu muc migrations rut bang git tu base_commit, khong chep tay), gieo du lieu bang SQL cua LUOC DO CU: 5 phong ban trong do hai phong ban
       trung ten (mot da luu tru), position khong lien nhau (0, 3, 7, 8, 12); 1 khuon; 2 ke hoach 6
       buoc rai tren cac phong ban; 3 member. Doc anh chup truoc. Roi chay rieng cac migration moi
-      cua luot nay (prisma migrate deploy tren thu muc migrations cua HEAD). Ma tran viet truoc:
+      cua luot nay (prisma migrate deploy tren thu muc migrations rut tu b24da0b5, dinh nhanh cua
+      vong trong merge #120). Ma tran viet truoc:
       5 phong ban x [ten, position, archivedAt, so buoc] = 20 khang dinh truoc = sau; cong 3:
       moi phong ban cu co divisionId null va headUserId null, bang OrgPlacement rong. Migration
       that bai -> exit 1 kem loi. Xoa co so du lieu tam o finally.
@@ -46,9 +48,10 @@ evals:
     paths:
       - "packages/db/prisma/migrations/**"
       - "_acceptance/cau-truc-to-chuc/rang/migration-chi-them.mjs"
+      - "_acceptance/cau-truc-to-chuc/rang/cau-hinh.mjs"
     expected: |
-      Script suy goc kho tu vi tri cua chinh no; doc moi thu muc migration moi so voi base_commit
-      (suy tu git). Moi cau lenh SQL phai thuoc tap viet truoc: CREATE TABLE, CREATE INDEX,
+      Script suy goc kho tu vi tri cua chinh no; doc moi thu muc migration co o b24da0b5 ma chua co o
+      base_commit 36a2a670 (hai dau cua merge #120, rang/cau-hinh.mjs; suy tu git). Moi cau lenh SQL phai thuoc tap viet truoc: CREATE TABLE, CREATE INDEX,
       CREATE UNIQUE INDEX tren BANG MOI, ALTER TABLE ... ADD COLUMN (nullable hoac co DEFAULT),
       ALTER TABLE ... ADD CONSTRAINT ... FOREIGN KEY. Cam: UPDATE, DELETE, DROP, ALTER COLUMN,
       RENAME, ADD COLUMN ... NOT NULL khong DEFAULT tren bang da co, ADD CONSTRAINT UNIQUE hoac
@@ -368,10 +371,12 @@ evals:
       - "apps/app/components/crm/record-sheet/plan-sheet.tsx"
       - "apps/app/app/(app)/[slug]/settings/onboarding/**"
       - "_acceptance/cau-truc-to-chuc/rang/san-thiet-ke.mjs"
+      - "_acceptance/cau-truc-to-chuc/rang/cau-hinh.mjs"
     expected: |
-      Danh sach tep giao dien RUT TU git diff so voi base_commit (loc *.tsx duoi apps/app), khong
+      Danh sach tep giao dien RUT TU git diff 36a2a670...b24da0b5 (hai dau cua merge #120,
+      rang/cau-hinh.mjs; loc *.tsx duoi apps/app, bo tep da xoa khoi cay), khong
       viet tay; moi tep chay design-gate --mode static, exit 0. So tep > 0 va duoc in. Kiem them:
-      git diff duoi packages/ui rong, hoac chi cham tep thanh phan dung chung da khai trong plan.
+      git diff 36a2a670...b24da0b5 duoi packages/ui rong, hoac chi cham tep thanh phan dung chung da khai trong plan.
       CHIEU DO: tep tam trong tmpdir ban guong co className="bg-blue-600 text-gray-500" -> exit khac 0
       voi vi pham gray-on-color (static gate chi danh do luat P0; rounded-[7px] khong phai P0).
 

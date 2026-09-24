@@ -5,8 +5,6 @@ import { fileURLToPath } from "node:url";
 
 const GOC_KHO = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
-const NHANH_CHINH_MAC_DINH = "origin/onehub";
-
 const DANH_SACH_TRANG = [
   "packages/ui/src/components/ai-elements/**",
   "packages/ui/src/lib/**",
@@ -37,24 +35,10 @@ const SAU_TEP_CHAT = [
   "apps/app/components/agent-builder/agent-builder-route-fallback.tsx",
 ];
 
-function nhanhNen() {
-  const tuThamSo = process.argv[2];
-  if (tuThamSo && tuThamSo.trim() !== "") return tuThamSo.trim();
-  const tuMoiTruong = process.env.NHANH_NEN ?? process.env.BASE_REF;
-  if (tuMoiTruong && tuMoiTruong.trim() !== "") return tuMoiTruong.trim();
-  return diemRe(NHANH_CHINH_MAC_DINH);
-}
-
-function diemRe(nhanhChinh) {
-  try {
-    return execFileSync("git", ["merge-base", "HEAD", nhanhChinh], {
-      cwd: GOC_KHO,
-      encoding: "utf8",
-    }).trim();
-  } catch {
-    return null;
-  }
-}
+const VONG = Object.freeze({
+  truoc: "08cc6754282046494bd6eda63eae7066dad20707",
+  sau: "2340eaccf09c5febcbc9d079c47863406aeb67be",
+});
 
 function git(doiSo) {
   return execFileSync("git", doiSo, { cwd: GOC_KHO, encoding: "utf8" });
@@ -66,34 +50,23 @@ function trongDanhSachTrang(duong) {
   );
 }
 
-const nen = nhanhNen();
-
-if (nen === null) {
-  console.error(
-    `RĂNG PHẠM VI KHÔNG ĐO ĐƯỢC: không giải được điểm rẽ với "${NHANH_CHINH_MAC_DINH}" trong kho ${GOC_KHO}.`,
-  );
-  console.error(
-    "Mã 2 nghĩa là THIẾU PHÉP ĐO, không phải cây sạch và cũng không phải có vi phạm.",
-  );
-  console.error("Truyền nhánh nền tay: NHANH_NEN=<ref hoặc sha> node <script>.");
-  process.exit(2);
-}
-
-try {
-  git(["rev-parse", "--verify", "--quiet", `${nen}^{commit}`]);
-} catch {
-  console.error(
-    `RĂNG PHẠM VI KHÔNG ĐO ĐƯỢC: không tìm thấy nhánh nền "${nen}" trong kho ${GOC_KHO}.`,
-  );
-  console.error(
-    "Mã 2 nghĩa là THIẾU PHÉP ĐO, không phải cây sạch và cũng không phải có vi phạm.",
-  );
-  process.exit(2);
+for (const sha of [VONG.truoc, VONG.sau]) {
+  try {
+    git(["rev-parse", "--verify", "--quiet", `${sha}^{commit}`]);
+  } catch {
+    console.error(
+      `RĂNG PHẠM VI KHÔNG ĐO ĐƯỢC: không tìm thấy commit ${sha} của vòng trong kho ${GOC_KHO}.`,
+    );
+    console.error(
+      "Mã 2 nghĩa là THIẾU PHÉP ĐO, không phải cây sạch và cũng không phải có vi phạm.",
+    );
+    process.exit(2);
+  }
 }
 
 let thoRaw;
 try {
-  thoRaw = git(["diff", "--name-only", "-z", `${nen}...HEAD`]);
+  thoRaw = git(["diff", "--name-only", "-z", `${VONG.truoc}...${VONG.sau}`]);
 } catch (loi) {
   console.error(`RĂNG PHẠM VI: chạy git diff hỏng — ${loi.message}`);
   process.exit(1);
@@ -101,13 +74,13 @@ try {
 
 const duongDoi = thoRaw.split("\0").filter((duong) => duong !== "");
 
-console.log(`RĂNG PHẠM VI — nhánh nền ${nen}`);
+console.log(`RĂNG PHẠM VI — vòng ${VONG.truoc}...${VONG.sau}`);
 console.log(`Gốc kho: ${GOC_KHO}`);
 console.log(`Tổng số tệp đổi: ${duongDoi.length}`);
 
 if (duongDoi.length === 0) {
   console.error("");
-  console.error("Diff RỖNG so với nhánh nền. Chưa làm gì không phải là giữ đúng phạm vi.");
+  console.error("Diff RỖNG giữa hai đầu của vòng. Chưa làm gì không phải là giữ đúng phạm vi.");
   process.exit(2);
 }
 

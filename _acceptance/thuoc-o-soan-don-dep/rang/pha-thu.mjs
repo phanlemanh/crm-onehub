@@ -409,10 +409,6 @@ export function ngoaiPhamVi(tep, globs) {
 	);
 }
 
-function mocNhanh() {
-	return git("merge-base", PHA_THU.nhanhChinh, "HEAD").trim();
-}
-
 function caPhamVi() {
 	const globs = globT1();
 	const mau = ngoaiPhamVi(
@@ -424,14 +420,14 @@ function caPhamVi() {
 			? `DUNG doi-chung — pham-vi: goi ten ${PHA_THU.dispatch}`
 			: `SAI doi-chung — pham-vi: mau tra ${JSON.stringify(mau)}`,
 	];
-	const moc = mocNhanh();
-	const doi = git("diff", "--name-only", `${moc}...HEAD`)
+	const { truoc, sau } = PHA_THU.vong;
+	const doi = git("diff", "--name-only", `${truoc}...${sau}`)
 		.split("\n")
 		.filter(Boolean);
 	const ngoai = ngoaiPhamVi(doi, globs);
 	hang.push(
 		ngoai.length === 0
-			? `DUNG sua — pham-vi: ${doi.length} tep doi tu ${moc.slice(0, 8)}, 0 ngoai _acceptance va T1`
+			? `DUNG sua — pham-vi: ${doi.length} tep doi tu ${truoc.slice(0, 8)}...${sau.slice(0, 8)}, 0 ngoai _acceptance va T1`
 			: `SAI sua — pham-vi: doi ngoai _acceptance va T1: ${ngoai.join(", ")}`,
 	);
 	return hang;
@@ -483,8 +479,8 @@ export function soSteps(cu, moi) {
 }
 
 function caStepsCu() {
-	const cu = git("show", `${mocNhanh()}:${PHA_THU.evalsCu}`);
-	const moi = readFileSync(join(GOC, PHA_THU.evalsCu), "utf8");
+	const cu = git("show", `${PHA_THU.vong.truoc}:${PHA_THU.evalsCu}`);
+	const moi = git("show", `${PHA_THU.vong.sau}:${PHA_THU.evalsCu}`);
 	const dung = apDungTienTo(cu);
 	const bot = dung.replace("o-soan.mjs chup'", "o-soan.mjs'");
 	const co = dung.replace(
