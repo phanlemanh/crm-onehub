@@ -5,6 +5,13 @@ export const ZALO = {
 	api: "https://bot-api.zaloplatforms.com",
 	http: { hetTin: 408 },
 	poll: { toiDaMoiNhip: 20, timeoutGiay: 1, giuDauMs: 7 * DAY_MS },
+	pollTay: { timeoutGiay: 30 },
+	webhook: {
+		duong: "/zalo/webhook",
+		header: "x-bot-api-secret-token",
+		khoa: { min: 8, max: 256 },
+	},
+	chatRieng: "PRIVATE",
 	tranKyTu: 2_000,
 	loi: {
 		huongDan:

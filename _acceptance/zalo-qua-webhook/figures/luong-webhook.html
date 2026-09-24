@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luồng webhook Zalo — một đường vào, bốn chỗ rẽ</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --page:   #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:   #171717;
+      --ink:    #fafafa;
+      --muted:  #b4b4b4;
+      --soft:   #9a9a9a;
+      --rule:   rgba(250,250,250,0.16);
+      --accent: #2f9b7a;
+    }
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1320px; width: 100%; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .standfirst {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 72ch;
+    margin-bottom: 1.75rem;
+  }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 1120px; display: block; }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Cổng Phạm vi · Hình · AC-1 · AC-2 · AC-3 · AC-5 · AC-6 · AC-11 · zalo-qua-webhook</p>
+  <h1>Luồng webhook Zalo — một đường vào, bốn chỗ rẽ</h1>
+  <p class="standfirst">Mỗi request Zalo gửi tới tác tử đi qua bốn câu hỏi theo thứ tự. Trả lời «không» ở câu nào thì dừng ở đó với một mã HTTP riêng; qua đủ bốn câu thì tin vào lõi dùng chung với <code>zalo:poll</code>.</p>
+
+  <div class="card">
+  <svg viewBox="0 0 1784 640" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sơ đồ luồng webhook Zalo: POST /zalo/webhook qua bốn điều kiện — đủ hai biến, header khớp, thân đúng khuôn, tin từ người PRIVATE; nhánh không của từng điều kiện trả 404, 403, 200 kèm log, 200 bỏ qua; qua đủ thì vào lõi chung với zalo:poll rồi trả 200">
+    <defs>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');
+        svg {
+          --paper:#fafafa; --node:#ffffff; --ink:#171717; --muted:#575757;
+          --soft:#666666; --rule:rgba(23,23,23,0.12); --accent:#006B4F;
+          --tint:rgba(0,107,79,0.08); --leader:rgba(23,23,23,0.42);
+        }
+        @media (prefers-color-scheme: dark) {
+          svg {
+            --paper:#171717; --node:#212121; --ink:#fafafa; --muted:#b4b4b4;
+            --soft:#9a9a9a; --rule:rgba(250,250,250,0.16); --accent:#2f9b7a;
+            --tint:rgba(47,155,122,0.14); --leader:rgba(250,250,250,0.42);
+          }
+        }
+        .bg   { fill: var(--paper); }
+        .mask { fill: var(--paper); }
+        .node { fill: var(--node); stroke: var(--ink); stroke-width: 1; }
+        .focal{ fill: var(--tint); stroke: var(--accent); stroke-width: 1.4; }
+        .edge { fill: none; stroke: var(--muted); stroke-width: 1; }
+        .mk   { fill: var(--muted); }
+        .name { fill: var(--ink); font: 600 15px 'Geist', system-ui, sans-serif; }
+        .q    { fill: var(--ink); font: 500 14px 'Geist', system-ui, sans-serif; }
+        .qm   { fill: var(--ink); font: 500 12px 'Geist Mono', ui-monospace, monospace; }
+        .code { fill: var(--ink); font: 600 20px 'Geist Mono', ui-monospace, monospace; }
+        .sub  { fill: var(--muted); font: 400 13px 'Geist', system-ui, sans-serif; }
+        .subm { fill: var(--muted); font: 400 12px 'Geist Mono', ui-monospace, monospace; }
+        .alab { fill: var(--soft); font: 400 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.06em; }
+        .call { fill: var(--ink); font: italic 400 16px 'Lora', Georgia, serif; }
+        .lead { fill: none; stroke: var(--leader); stroke-width: 1; stroke-dasharray: 4,3; }
+        .dot  { fill: var(--ink); }
+        .hr   { stroke: var(--rule); stroke-width: 0.8; }
+        .lgl  { fill: var(--muted); font: 500 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.16em; }
+        .lgi  { fill: var(--muted); font: 400 11px 'Geist Mono', ui-monospace, monospace; }
+      </style>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon class="mk" points="0 0, 8 3, 0 6"/>
+      </marker>
+    </defs>
+
+    <rect class="bg" width="100%" height="100%"/>
+
+    <path class="edge" d="M 200 240 H 254" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 512 240 H 566" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 824 240 H 878" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 1136 240 H 1190" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 1448 240 H 1502" marker-end="url(#arrow)"/>
+
+    <path class="edge" d="M 384 320 V 398" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 696 320 V 398" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 1008 320 V 398" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 1320 320 V 398" marker-end="url(#arrow)"/>
+    <path class="edge" d="M 1624 288 V 398" marker-end="url(#arrow)"/>
+
+    <rect class="mask" x="526" y="212" width="28" height="16" rx="2"/>
+    <text class="alab" x="540" y="224" text-anchor="middle">CÓ</text>
+    <rect class="mask" x="838" y="212" width="28" height="16" rx="2"/>
+    <text class="alab" x="852" y="224" text-anchor="middle">CÓ</text>
+    <rect class="mask" x="1150" y="212" width="28" height="16" rx="2"/>
+    <text class="alab" x="1164" y="224" text-anchor="middle">CÓ</text>
+    <rect class="mask" x="1462" y="212" width="28" height="16" rx="2"/>
+    <text class="alab" x="1476" y="224" text-anchor="middle">CÓ</text>
+
+    <rect class="mask" x="392" y="352" width="52" height="16" rx="2"/>
+    <text class="alab" x="396" y="364">KHÔNG</text>
+    <rect class="mask" x="704" y="352" width="52" height="16" rx="2"/>
+    <text class="alab" x="708" y="364">KHÔNG</text>
+    <rect class="mask" x="1016" y="352" width="52" height="16" rx="2"/>
+    <text class="alab" x="1020" y="364">KHÔNG</text>
+    <rect class="mask" x="1328" y="352" width="52" height="16" rx="2"/>
+    <text class="alab" x="1332" y="364">KHÔNG</text>
+
+    <rect class="node" x="40" y="200" width="160" height="80" rx="20"/>
+    <text class="name" x="120" y="234" text-anchor="middle">Zalo gửi</text>
+    <text class="qm"   x="120" y="256" text-anchor="middle">POST /zalo/webhook</text>
+
+    <polygon class="mask" points="384,160 512,240 384,320 256,240"/>
+    <polygon class="node" points="384,160 512,240 384,320 256,240"/>
+    <text class="q" x="384" y="232" text-anchor="middle">Có <tspan class="qm">ZALO_BOT_TOKEN</tspan></text>
+    <text class="q" x="384" y="254" text-anchor="middle">và <tspan class="qm">ZALO_WEBHOOK_SECRET</tspan>?</text>
+
+    <polygon class="mask" points="696,160 824,240 696,320 568,240"/>
+    <polygon class="node" points="696,160 824,240 696,320 568,240"/>
+    <text class="q"  x="696" y="222" text-anchor="middle">Header</text>
+    <text class="qm" x="696" y="244" text-anchor="middle">X-Bot-Api-Secret-Token</text>
+    <text class="q"  x="696" y="266" text-anchor="middle">khớp? (so qua băm)</text>
+
+    <polygon class="mask" points="1008,160 1136,240 1008,320 880,240"/>
+    <polygon class="node" points="1008,160 1136,240 1008,320 880,240"/>
+    <text class="q"  x="1008" y="222" text-anchor="middle">Thân đúng khuôn</text>
+    <text class="qm" x="1008" y="244" text-anchor="middle">{ok, result:{event_name,</text>
+    <text class="qm" x="1008" y="264" text-anchor="middle">message}}?</text>
+
+    <polygon class="mask" points="1320,160 1448,240 1320,320 1192,240"/>
+    <polygon class="node" points="1320,160 1448,240 1320,320 1192,240"/>
+    <text class="q"  x="1320" y="236" text-anchor="middle">Tin từ người,</text>
+    <text class="qm" x="1320" y="256" text-anchor="middle">PRIVATE?</text>
+
+    <rect class="mask"  x="1504" y="192" width="240" height="96" rx="6"/>
+    <rect class="focal" x="1504" y="192" width="240" height="96" rx="6"/>
+    <text class="name" x="1624" y="226" text-anchor="middle">Lõi chung với <tspan class="qm">zalo:poll</tspan></text>
+    <text class="sub"  x="1624" y="250" text-anchor="middle">chống trùng · chống dò</text>
+    <text class="sub"  x="1624" y="270" text-anchor="middle">nối mã · trả lời</text>
+
+    <rect class="node" x="280" y="400" width="208" height="72" rx="20"/>
+    <text class="code" x="384" y="432" text-anchor="middle">404</text>
+    <text class="sub"  x="384" y="456" text-anchor="middle">tính năng tắt</text>
+
+    <rect class="node" x="592" y="400" width="208" height="72" rx="20"/>
+    <text class="code" x="696" y="432" text-anchor="middle">403</text>
+    <text class="sub"  x="696" y="456" text-anchor="middle">không đọc thân</text>
+
+    <rect class="node" x="904" y="400" width="208" height="72" rx="20"/>
+    <text class="code" x="1008" y="432" text-anchor="middle">200 + log</text>
+    <text class="sub"  x="1008" y="456" text-anchor="middle">khoá cấp đầu</text>
+
+    <rect class="node" x="1216" y="400" width="208" height="72" rx="20"/>
+    <text class="code" x="1320" y="432" text-anchor="middle">200</text>
+    <text class="sub"  x="1320" y="456" text-anchor="middle">bỏ qua</text>
+
+    <rect class="node" x="1520" y="400" width="208" height="72" rx="20"/>
+    <text class="code" x="1624" y="444" text-anchor="middle">200</text>
+
+    <text class="call" x="852" y="100" text-anchor="middle">giả định (2): chưa đo trên bot thật</text>
+    <path class="lead" d="M 696 156 V 124 H 1008 V 156"/>
+    <circle class="dot" cx="696" cy="160" r="2.5"/>
+    <circle class="dot" cx="1008" cy="160" r="2.5"/>
+
+    <path class="lead" d="M 1008 476 V 500"/>
+    <circle class="dot" cx="1008" cy="472" r="2.5"/>
+    <text class="call" x="1008" y="524" text-anchor="middle">giả định (1): Zalo gửi lại khi khác 2xx</text>
+
+    <line class="hr" x1="40" y1="572" x2="1744" y2="572"/>
+    <text class="lgl" x="40" y="604">CHÚ GIẢI</text>
+    <text class="lgi" x="176" y="604">thoi = câu hỏi · ô bo tròn = phản hồi HTTP trả cho Zalo</text>
+    <text class="lgi" x="668" y="604">chữ nghiêng = giả định chưa đo, chờ người gạch (Coverage của hợp đồng)</text>
+    <text class="lgi" x="1300" y="604">ô xanh = lõi dùng chung với zalo:poll</text>
+  </svg>
+  </div>
+
+  <footer>
+    Vẽ theo docs/superpowers/specs/2026-09-24-zalo-qua-webhook-design.md §3 và contract.md của hồ sơ zalo-qua-webhook.<br>
+    Hai giả định là mục [GIẢ ĐỊNH] ở phần Coverage của hợp đồng · hình dựng 24/09/2026
+  </footer>
+</div>
+</body>
+</html>

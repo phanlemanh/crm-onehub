@@ -11,7 +11,7 @@ flowchart TD
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>58 việc"]
+  GB --> DG["Đã giao<br/>59 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>7 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
 ```
@@ -104,6 +104,7 @@ flowchart TD
 - Màn Tổng quan và khung điều hướng nói tiếng Việt — màn đầu tiên sau đăng nhập, thanh bên, thanh đầu, hộp tìm nhanh đọc đúng tiếng nhân viên chọn; và bộ thước màn nhìn thấy cả khung chứ không chỉ khung nội dung (`tong-quan-va-khung-noi-tieng-viet`)
 - Trần một-lần-uỷ-thác agent_builder áp cho cả lượt KHÔNG có quyền — hook builder-delegation đang return sớm khi commandType khác CREATE_AGENT, nên chốt cứng duy nhất không chạy trên nhánh not_authorized và chỉ còn câu chữ trong prompt giữ trần (`tran-mot-lan-uy-thac`)
 - Bộ đo của trần một-lần-uỷ-thác bắt được khi chốt chết, và kiểu tham số neo vào type công khai của eve — CỘNG bằng chứng từ mã eve cho biết vì sao ca «step chạy lại bị giết oan» KHÔNG vá được ở lớp actions.requested, ghi thành giới hạn đã khai và ghim bằng một phép đo có tên (`tran-uy-thac-chiu-chay-lai`)
+- Bot Zalo nhận tin qua webhook — tin mã tới là nối ngay, không còn mất giữa hai nhịp cron; cron chỉ kiểm bot sống; hai lệnh tay đăng ký webhook và đọc tin cho bot thử (`zalo-qua-webhook`) — đã giao — máy thông, bằng chứng xanh-sạch
 
 ## Đã nghiệm thu giá trị
 

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zalo chỉ giao tin khi đang mở — ba đường đọc, một tin mã</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --page:   #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:   #171717;
+      --ink:    #fafafa;
+      --muted:  #b4b4b4;
+      --soft:   #9a9a9a;
+      --rule:   rgba(250,250,250,0.16);
+      --accent: #2f9b7a;
+    }
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+  .frame { max-width: 1320px; width: 100%; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .standfirst {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 72ch;
+    margin-bottom: 1.75rem;
+  }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 1040px; display: block; }
+  footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <p class="eyebrow">Cổng Phạm vi · Hình · AC-8 · zalo-qua-webhook</p>
+  <h1>Zalo chỉ giao tin khi đang mở — ba đường đọc, một tin mã</h1>
+  <p class="standfirst">Cùng một tin mã đến ở giây 30 của đồng hồ ảo, đọc theo ba đường. Zalo chỉ trao tin cho lời gọi <code>getUpdates</code> đang mở đúng lúc tin đến; tin đến lúc không có lời gọi nào mở thì mất.</p>
+
+  <div class="card">
+  <svg viewBox="0 0 1640 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dòng thời gian 0 đến 180 giây, ba làn: nhịp cũ #94 mở 1 giây ở giây 0, 60, 120 nên tin mã đến ở giây 30 nằm ngoài cửa sổ và mất; vòng tay zalo:poll mở cửa sổ 30 giây liền nhau nên tin rơi vào cửa sổ và được nối; webhook nhận tin Zalo đẩy ngay ở giây 30 và được nối">
+    <defs>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');
+        svg {
+          --paper:#fafafa; --node:#ffffff; --ink:#171717; --muted:#575757;
+          --soft:#666666; --rule:rgba(23,23,23,0.12); --accent:#006B4F;
+          --win:rgba(23,23,23,0.14); --winline:rgba(23,23,23,0.46);
+        }
+        @media (prefers-color-scheme: dark) {
+          svg {
+            --paper:#171717; --node:#212121; --ink:#fafafa; --muted:#b4b4b4;
+            --soft:#9a9a9a; --rule:rgba(250,250,250,0.16); --accent:#2f9b7a;
+            --win:rgba(250,250,250,0.16); --winline:rgba(250,250,250,0.5);
+          }
+        }
+        .bg   { fill: var(--paper); }
+        .mask { fill: var(--paper); }
+        .win  { fill: var(--win); stroke: var(--winline); stroke-width: 1; }
+        .div  { stroke: var(--winline); stroke-width: 1; }
+        .hr   { stroke: var(--rule); stroke-width: 0.8; }
+        .axis { stroke: var(--muted); stroke-width: 1; }
+        .tick { stroke: var(--muted); stroke-width: 1; }
+        .now  { stroke: var(--accent); stroke-width: 1.4; }
+        .got  { fill: var(--ink); }
+        .lost { fill: var(--paper); stroke: var(--muted); stroke-width: 1.4; }
+        .name { fill: var(--ink); font: 600 16px 'Geist', system-ui, sans-serif; }
+        .nm   { fill: var(--ink); font: 600 14px 'Geist Mono', ui-monospace, monospace; }
+        .sub  { fill: var(--muted); font: 400 13px 'Geist', system-ui, sans-serif; }
+        .inl  { fill: var(--muted); font: 400 12px 'Geist', system-ui, sans-serif; }
+        .hd   { fill: var(--muted); font: 500 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.16em; }
+        .tl   { fill: var(--muted); font: 400 12px 'Geist Mono', ui-monospace, monospace; }
+        .nowl { fill: var(--accent); font: 600 14px 'Geist', system-ui, sans-serif; }
+        .ok   { fill: var(--ink); font: 600 16px 'Geist', system-ui, sans-serif; }
+        .miss { fill: var(--muted); font: 600 16px 'Geist', system-ui, sans-serif; }
+        .lgl  { fill: var(--muted); font: 500 11px 'Geist Mono', ui-monospace, monospace; letter-spacing: 0.16em; }
+        .lgi  { fill: var(--muted); font: 400 11px 'Geist Mono', ui-monospace, monospace; }
+      </style>
+    </defs>
+
+    <rect class="bg" width="100%" height="100%"/>
+
+    <text class="hd" x="40" y="108">ĐƯỜNG ĐỌC</text>
+    <text class="hd" x="1440" y="108">KẾT QUẢ</text>
+
+    <line class="hr" x1="40" y1="120" x2="1600" y2="120"/>
+    <line class="hr" x1="40" y1="240" x2="1600" y2="240"/>
+    <line class="hr" x1="40" y1="360" x2="1600" y2="360"/>
+    <line class="hr" x1="40" y1="480" x2="1600" y2="480"/>
+
+    <rect class="win" x="320" y="164" width="6" height="32"/>
+    <rect class="win" x="680" y="164" width="6" height="32"/>
+    <rect class="win" x="1040" y="164" width="6" height="32"/>
+
+    <rect class="win" x="320" y="284" width="1080" height="32"/>
+    <line class="div" x1="680" y1="284" x2="680" y2="316"/>
+    <line class="div" x1="860" y1="284" x2="860" y2="316"/>
+    <line class="div" x1="1040" y1="284" x2="1040" y2="316"/>
+    <line class="div" x1="1220" y1="284" x2="1220" y2="316"/>
+
+    <line class="axis" x1="320" y1="496" x2="1400" y2="496"/>
+    <line class="tick" x1="320"  y1="492" x2="320"  y2="500"/>
+    <line class="tick" x1="500"  y1="492" x2="500"  y2="500"/>
+    <line class="tick" x1="680"  y1="492" x2="680"  y2="500"/>
+    <line class="tick" x1="860"  y1="492" x2="860"  y2="500"/>
+    <line class="tick" x1="1040" y1="492" x2="1040" y2="500"/>
+    <line class="tick" x1="1220" y1="492" x2="1220" y2="500"/>
+    <line class="tick" x1="1400" y1="492" x2="1400" y2="500"/>
+    <text class="tl" x="320"  y="520" text-anchor="middle">0</text>
+    <text class="tl" x="500"  y="520" text-anchor="middle">30</text>
+    <text class="tl" x="680"  y="520" text-anchor="middle">60</text>
+    <text class="tl" x="860"  y="520" text-anchor="middle">90</text>
+    <text class="tl" x="1040" y="520" text-anchor="middle">120</text>
+    <text class="tl" x="1220" y="520" text-anchor="middle">150</text>
+    <text class="tl" x="1400" y="520" text-anchor="middle">180</text>
+    <text class="tl" x="1440" y="520">giây · đồng hồ ảo</text>
+
+    <line class="now" x1="500" y1="100" x2="500" y2="480"/>
+    <rect class="mask" x="448" y="68" width="104" height="24" rx="2"/>
+    <text class="nowl" x="500" y="86" text-anchor="middle">tin mã đến</text>
+
+    <circle class="lost" cx="500" cy="180" r="7"/>
+    <circle class="got"  cx="500" cy="300" r="6"/>
+    <circle class="got"  cx="500" cy="420" r="6"/>
+
+    <text class="inl" x="516" y="220">ngoài cửa sổ</text>
+    <text class="inl" x="516" y="340">rơi vào cửa sổ</text>
+    <text class="inl" x="516" y="448">Zalo đẩy tin ngay</text>
+
+    <text class="name" x="40" y="176">Nhịp cũ #94</text>
+    <text class="sub"  x="40" y="200">mở 1 giây ở giây 0, 60, 120</text>
+
+    <text class="name" x="40" y="296">Vòng tay <tspan class="nm">zalo:poll</tspan></text>
+    <text class="sub"  x="40" y="320">cửa sổ 30 giây liền nhau</text>
+
+    <text class="name" x="40" y="416">Webhook</text>
+    <text class="sub"  x="40" y="440">Zalo đẩy tin tới tác tử</text>
+
+    <text class="miss" x="1440" y="186">mất, không nối</text>
+    <text class="ok"   x="1440" y="306">nối</text>
+    <text class="ok"   x="1440" y="426">nối</text>
+
+    <line class="hr" x1="40" y1="556" x2="1600" y2="556"/>
+    <text class="lgl" x="40" y="588">CHÚ GIẢI</text>
+    <rect class="win" x="176" y="578" width="24" height="12"/>
+    <text class="lgi" x="212" y="588">cửa sổ getUpdates đang mở</text>
+    <circle class="got" cx="444" cy="584" r="5"/>
+    <text class="lgi" x="460" y="588">tin được giao, nối được</text>
+    <circle class="lost" cx="664" cy="584" r="5"/>
+    <text class="lgi" x="680" y="588">tin mất, Zalo không giữ lại</text>
+    <line class="now" x1="904" y1="576" x2="904" y2="592"/>
+    <text class="lgi" x="916" y="588">giây 30, cùng một tin cho cả ba làn</text>
+    <text class="lgi" x="1236" y="588">trục thật: 1 giây = 6 đơn vị</text>
+  </svg>
+  </div>
+
+  <footer>
+    Vẽ theo AC-8 của contract.md và §6 «Zalo giả mang luật giao tin» của docs/superpowers/specs/2026-09-24-zalo-qua-webhook-design.md.<br>
+    Cửa sổ 1 giây của nhịp cũ vẽ đúng tỉ lệ trục, nên mảnh · hình dựng 24/09/2026
+  </footer>
+</div>
+</body>
+</html>
