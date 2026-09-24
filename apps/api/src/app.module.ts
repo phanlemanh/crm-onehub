@@ -29,6 +29,7 @@ import { logAuthRoute } from "./logging/request-logger.middleware";
 import { MailboxModule } from "./mailbox/mailbox.module";
 import { MicrosoftModule } from "./microsoft/microsoft.module";
 import { OnboardingModule } from "./onboarding/onboarding.module";
+import { ToChucModule } from "./to-chuc/to-chuc.module";
 import { SavedViewsModule } from "./saved-views/saved-views.module";
 import { SearchModule } from "./search/search.module";
 import { SettingsModule } from "./settings/settings.module";
@@ -87,6 +88,7 @@ import { ZaloModule } from "./zalo/zalo.module";
 		ListingsModule,
 		CampaignsModule,
 		OnboardingModule,
+		ToChucModule,
 	],
 })
 export class AppModule {}

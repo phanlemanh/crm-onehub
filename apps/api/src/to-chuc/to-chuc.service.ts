@@ -1,0 +1,278 @@
+import {
+	canManageOrganization,
+	WORKSPACE_ID,
+	workspaceRoleOf,
+} from "@crm/auth";
+import type { Db } from "@crm/db";
+import { parseOnboardingTemplateSteps } from "@crm/validation/onboarding-template";
+import {
+	BadRequestException,
+	ForbiddenException,
+	Injectable,
+	NotFoundException,
+} from "@nestjs/common";
+import { InjectDatabase } from "../database/database.constants";
+import { type CayTho, dungCay } from "./cay";
+import type {
+	DepartmentCreateInput,
+	DepartmentMoveInput,
+	TreeOutput,
+} from "./to-chuc.contracts";
+import { TO_CHUC } from "./to-chuc-config";
+
+const T = TO_CHUC.thongDiep;
+
+export function kiemTen(ten: string): string {
+	const sach = ten.trim();
+	if (sach === "") throw new BadRequestException(T.tenTrong);
+	if (sach.length > TO_CHUC.ten.toiDa)
+		throw new BadRequestException(T.tenDai(TO_CHUC.ten.toiDa));
+	return sach;
+}
+
+@Injectable()
+export class ToChucService {
+	constructor(@InjectDatabase() private readonly db: Db) {}
+
+	async access(userId: string) {
+		return { canManage: canManageOrganization(await workspaceRoleOf(userId)) };
+	}
+
+	async yeuCauQuanTri(userId: string): Promise<void> {
+		if (!canManageOrganization(await workspaceRoleOf(userId))) {
+			throw new ForbiddenException(T.canQuyenQuanTri);
+		}
+	}
+
+	async anhCay(): Promise<CayTho> {
+		const [members, divisions, departments, placements, secondaries, khuon] =
+			await Promise.all([
+				this.db.member.findMany({
+					where: { organizationId: WORKSPACE_ID },
+					select: { user: { select: { id: true, name: true, email: true } } },
+				}),
+				this.db.division.findMany({
+					select: {
+						id: true,
+						name: true,
+						position: true,
+						headUserId: true,
+						archivedAt: true,
+						_count: { select: { departments: true } },
+					},
+				}),
+				this.db.department.findMany({
+					select: {
+						id: true,
+						name: true,
+						position: true,
+						divisionId: true,
+						headUserId: true,
+						archivedAt: true,
+						_count: { select: { steps: true } },
+					},
+				}),
+				this.db.orgPlacement.findMany({
+					select: {
+						userId: true,
+						primaryDepartmentId: true,
+						managerUserId: true,
+					},
+				}),
+				this.db.orgSecondaryDepartment.findMany({
+					select: { userId: true, departmentId: true },
+				}),
+				this.db.onboardingTemplate.findMany({ select: { steps: true } }),
+			]);
+		return {
+			members: members.map((m) => m.user),
+			divisions: divisions.map(({ _count, ...d }) => ({
+				...d,
+				departmentCount: _count.departments,
+			})),
+			departments: departments.map(({ _count, ...d }) => ({
+				...d,
+				stepCount: _count.steps,
+			})),
+			placements,
+			secondaries,
+			departmentsInTemplates: new Set(
+				khuon.flatMap((k) =>
+					parseOnboardingTemplateSteps(k.steps).map((b) => b.departmentId),
+				),
+			),
+		};
+	}
+
+	async tree(): Promise<TreeOutput> {
+		return dungCay(await this.anhCay());
+	}
+
+	private async tenKhongTrung(
+		bang: "division" | "department",
+		ten: string,
+		boQua: string | null,
+	): Promise<void> {
+		const where = {
+			archivedAt: null,
+			name: { equals: ten, mode: "insensitive" as const },
+			...(boQua ? { NOT: { id: boQua } } : {}),
+		};
+		const trung =
+			bang === "division"
+				? await this.db.division.findFirst({ where, select: { id: true } })
+				: await this.db.department.findFirst({ where, select: { id: true } });
+		if (trung) throw new BadRequestException(T.tenTrung(ten));
+	}
+
+	private async boPhanSong(id: string) {
+		const d = await this.db.division.findUnique({
+			where: { id },
+			select: { id: true, archivedAt: true },
+		});
+		if (!d) throw new NotFoundException(T.khongCoBoPhan(id));
+		return d;
+	}
+
+	private async phongBanCo(id: string) {
+		const d = await this.db.department.findUnique({
+			where: { id },
+			select: { id: true, archivedAt: true, divisionId: true },
+		});
+		if (!d) throw new NotFoundException(T.khongCoPhongBan(id));
+		return d;
+	}
+
+	async createDivision(input: { name: string }) {
+		const ten = kiemTen(input.name);
+		await this.tenKhongTrung("division", ten, null);
+		const cuoi = await this.db.division.findFirst({
+			orderBy: { position: "desc" },
+			select: { position: true },
+		});
+		return this.db.division.create({
+			data: { name: ten, position: (cuoi?.position ?? -1) + 1 },
+			select: { id: true },
+		});
+	}
+
+	async renameDivision(input: { id: string; name: string }) {
+		const ten = kiemTen(input.name);
+		await this.boPhanSong(input.id);
+		await this.tenKhongTrung("division", ten, input.id);
+		return this.db.division.update({
+			where: { id: input.id },
+			data: { name: ten },
+			select: { id: true },
+		});
+	}
+
+	async reorderDivisions(input: { ids: string[] }) {
+		await this.db.$transaction(
+			input.ids.map((id, viTri) =>
+				this.db.division.update({ where: { id }, data: { position: viTri } }),
+			),
+		);
+		return { id: input.ids[0] as string };
+	}
+
+	async archiveDivision(input: { id: string }) {
+		await this.boPhanSong(input.id);
+		const con = await this.db.department.count({
+			where: { divisionId: input.id, archivedAt: null },
+		});
+		if (con > 0) throw new BadRequestException(T.boPhanConPhongBan(con));
+		return this.db.division.update({
+			where: { id: input.id },
+			data: { archivedAt: new Date() },
+			select: { id: true },
+		});
+	}
+
+	async restoreDivision(input: { id: string }) {
+		await this.boPhanSong(input.id);
+		return this.db.division.update({
+			where: { id: input.id },
+			data: { archivedAt: null },
+			select: { id: true },
+		});
+	}
+
+	async purgeDivision(input: { id: string }) {
+		const d = await this.boPhanSong(input.id);
+		if (d.archivedAt === null) throw new BadRequestException(T.chuaLuuTru);
+		const con = await this.db.department.count({
+			where: { divisionId: input.id },
+		});
+		if (con > 0) throw new BadRequestException(T.boPhanConTro);
+		return this.db.division.delete({
+			where: { id: input.id },
+			select: { id: true },
+		});
+	}
+
+	async createDepartment(input: DepartmentCreateInput) {
+		const ten = kiemTen(input.name);
+		if (input.divisionId !== null) {
+			const bp = await this.boPhanSong(input.divisionId);
+			if (bp.archivedAt !== null)
+				throw new BadRequestException(T.boPhanDaLuuTru);
+		}
+		await this.tenKhongTrung("department", ten, null);
+		const cuoi = await this.db.department.findFirst({
+			orderBy: { position: "desc" },
+			select: { position: true },
+		});
+		return this.db.department.create({
+			data: {
+				name: ten,
+				position: (cuoi?.position ?? -1) + 1,
+				divisionId: input.divisionId,
+			},
+			select: { id: true },
+		});
+	}
+
+	async renameDepartment(input: { id: string; name: string }) {
+		const ten = kiemTen(input.name);
+		await this.phongBanCo(input.id);
+		await this.tenKhongTrung("department", ten, input.id);
+		return this.db.department.update({
+			where: { id: input.id },
+			data: { name: ten },
+			select: { id: true },
+		});
+	}
+
+	async moveDepartment(input: DepartmentMoveInput) {
+		const pb = await this.phongBanCo(input.id);
+		if (pb.archivedAt !== null)
+			throw new BadRequestException(T.phongBanDaLuuTru);
+		if (input.divisionId !== null) {
+			const bp = await this.boPhanSong(input.divisionId);
+			if (bp.archivedAt !== null)
+				throw new BadRequestException(T.boPhanDaLuuTru);
+		}
+		const cung = await this.db.department.findMany({
+			where: {
+				divisionId: input.divisionId,
+				archivedAt: null,
+				NOT: { id: input.id },
+			},
+			orderBy: [{ position: "asc" }, { name: "asc" }],
+			select: { id: true },
+		});
+		const thuTu = cung.map((d) => d.id);
+		thuTu.splice(Math.min(input.index, thuTu.length), 0, input.id);
+		await this.db.$transaction([
+			this.db.department.update({
+				where: { id: input.id },
+				data: { divisionId: input.divisionId },
+			}),
+			...thuTu.map((id, viTri) =>
+				this.db.department.update({ where: { id }, data: { position: viTri } }),
+			),
+		]);
+		return { id: input.id };
+	}
+}
