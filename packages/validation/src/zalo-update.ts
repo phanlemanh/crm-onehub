@@ -8,6 +8,11 @@ const loiZalo = z.object({
 	description: z.string().optional(),
 });
 
+export function maLoiZalo(value: unknown): number | null {
+	const ket = loiZalo.safeParse(value);
+	return ket.success ? (ket.data.error_code ?? null) : null;
+}
+
 export const zaloMessage = z.object({
 	from: z.object({
 		id: z.string().min(1),

@@ -11,6 +11,7 @@ export const ZALO = {
 		saiThan: 400,
 		cam: 403,
 		loiMayChu: 500,
+		tuChoi: { tu: 400, den: 500 },
 	},
 	poll: { toiDaMoiNhip: 20, timeoutGiay: 1, giuDauMs: 7 * DAY_MS },
 	pollTay: { timeoutGiay: 30 },
@@ -33,6 +34,8 @@ export const ZALO = {
 		guiThu: (gio: string) =>
 			`Tin thử từ CRM. Nhắc việc buổi sáng của bạn sẽ đến ở đây lúc ${gio}.`,
 		tokenSai: "Zalo không nhận token này.",
+		zaloKhongTraLoi:
+			"Zalo đang không trả lời nên chưa kiểm được token. Bot đang dùng giữ nguyên; thử lại sau ít phút.",
 		xacMinhHong:
 			"Zalo đã nhận đăng ký nhưng gọi thử địa chỉ nhận tin không được. Bấm Đăng ký lại sau ít phút.",
 		dangKyHong:
