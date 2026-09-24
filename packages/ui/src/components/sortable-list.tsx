@@ -22,7 +22,7 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import type { ReactNode } from "react";
+import { type ReactNode, useId } from "react";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
 import { cn } from "@crm/ui/lib/utils";
@@ -37,6 +37,7 @@ export function SortableList({
 	onReorder: (ids: string[]) => void;
 	children: ReactNode;
 }) {
+	const id = useId();
 	const sensors = useSensors(
 		useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
 		useSensor(KeyboardSensor, {
@@ -57,6 +58,7 @@ export function SortableList({
 
 	return (
 		<DndContext
+			id={id}
 			sensors={sensors}
 			collisionDetection={closestCenter}
 			modifiers={[restrictToVerticalAxis, restrictToParentElement]}

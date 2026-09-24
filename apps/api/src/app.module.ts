@@ -36,6 +36,7 @@ import { SlackModule } from "./slack/slack.module";
 import { SsoModule } from "./sso/sso.module";
 import { SyncModule } from "./sync/sync.module";
 import { TelemetryModule } from "./telemetry/telemetry.module";
+import { ToChucModule } from "./to-chuc/to-chuc.module";
 import { TrackingModule } from "./tracking/tracking.module";
 import { TrpcModule } from "./trpc/trpc.module";
 import { UsersModule } from "./users/users.module";
@@ -87,6 +88,7 @@ import { ZaloModule } from "./zalo/zalo.module";
 		ListingsModule,
 		CampaignsModule,
 		OnboardingModule,
+		ToChucModule,
 	],
 })
 export class AppModule {}
