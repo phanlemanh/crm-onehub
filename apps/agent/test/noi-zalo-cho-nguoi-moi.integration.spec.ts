@@ -10,6 +10,7 @@ import {
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { SETTINGS_ID } from "@crm/db/settings";
+import { taoMaLienKet } from "@crm/db/zalo-lien-ket";
 import {
 	type DatBotYeuCau,
 	type GuiThuPhanHoi,
@@ -742,5 +743,163 @@ describe("cau-noi", () => {
 			await db.slackMemberMatch.deleteMany({ where: { crmUserId: V.id } });
 			await db.account.deleteMany({ where: { userId: V.id } });
 		}
+	});
+});
+
+async function guiTinWebhook(
+	z: ReturnType<typeof zaloGia>,
+	messageId: string,
+	fromId: string,
+	text: string,
+	ten?: string,
+): Promise<number> {
+	const than = JSON.stringify(thanWebhook({ messageId, fromId, text, ten }));
+	const res = await voiBien(
+		{ ZALO_BOT_TOKEN: TOK_T, ZALO_WEBHOOK_SECRET: KHOA_B },
+		() =>
+			nhanWebhook(yeuCauWebhook(than, KHOA_B).request, {
+				fetcher: z.fetcher,
+				now: () => GOC,
+			}),
+	);
+	return res.status;
+}
+
+async function batLog(chay: () => Promise<unknown>): Promise<string[]> {
+	const loi: string[] = [];
+	const goc = console.error;
+	console.error = (...m: unknown[]) => {
+		loi.push(m.map(String).join(" "));
+	};
+	try {
+		await chay();
+	} finally {
+		console.error = goc;
+	}
+	return loi;
+}
+
+async function demTin(messageId: string, crmUserId: string) {
+	return {
+		seen: await db.zaloUpdateSeen.count({ where: { messageId } }),
+		link: await db.zaloLink.count({ where: { crmUserId } }),
+	};
+}
+
+describe("tin-den", () => {
+	test("db-loi: transaction noi hong -> 500, khong seen, gui lai khi lanh -> noi dung mot lan", async () => {
+		const U = await gieoNguoi("Uyen Db Loi");
+		const { ma } = await taoMaLienKet(db, U.id, GOC);
+		const z = zaloGia();
+		await db.$executeRawUnsafe(
+			`CREATE OR REPLACE FUNCTION nzm_chan() RETURNS trigger AS $$ BEGIN RAISE EXCEPTION 'nzm-chan'; END $$ LANGUAGE plpgsql`,
+		);
+		await db.$executeRawUnsafe(
+			`CREATE TRIGGER nzm_chan BEFORE INSERT ON "zaloLink" FOR EACH ROW EXECUTE FUNCTION nzm_chan()`,
+		);
+		let lan1: number;
+		try {
+			lan1 = await guiTinWebhook(z, "dl-1", "ZD", ma);
+		} finally {
+			await db.$executeRawUnsafe(
+				`DROP TRIGGER IF EXISTS nzm_chan ON "zaloLink"`,
+			);
+			await db.$executeRawUnsafe(`DROP FUNCTION IF EXISTS nzm_chan()`);
+		}
+		expect(
+			{
+				status: lan1,
+				...(await demTin("dl-1", U.id)),
+				gui: z.soGoi("sendMessage"),
+			},
+			"DB loi: 500, khong seen, khong link, khong gui",
+		).toEqual({ status: 500, seen: 0, link: 0, gui: 0 });
+		const lan2 = await guiTinWebhook(z, "dl-1", "ZD", ma);
+		expect(
+			{
+				status: lan2,
+				...(await demTin("dl-1", U.id)),
+				gui: z.soGoi("sendMessage"),
+			},
+			"tin gap DB loi phai xu ly lai duoc",
+		).toEqual({ status: 200, seen: 1, link: 1, gui: 1 });
+	});
+
+	test("gui-hong: noi xong ma gui hong -> 200, co link va seen, mot dong log; gui lai khong gui them", async () => {
+		const U = await gieoNguoi("Uyen Gui Hong");
+		const { ma } = await taoMaLienKet(db, U.id, GOC);
+		const z = zaloGia({ send: 500 });
+		let lan1 = 0;
+		const log = await batLog(async () => {
+			lan1 = await guiTinWebhook(z, "gh-1", "ZG", ma);
+		});
+		expect(
+			{ status: lan1, ...(await demTin("gh-1", U.id)) },
+			"gui hong van tinh la xong",
+		).toEqual({ status: 200, seen: 1, link: 1 });
+		expect(
+			log.filter((d) => d.includes("message_id=gh-1")),
+			"mot dong log chua message_id",
+		).toHaveLength(1);
+		const guiTruoc = z.soGoi("sendMessage");
+		const lan2 = await guiTinWebhook(z, "gh-1", "ZG", ma);
+		expect(
+			{
+				status: lan2,
+				gui: z.soGoi("sendMessage"),
+				...(await demTin("gh-1", U.id)),
+			},
+			"gui lai khong gui them",
+		).toEqual({ status: 200, gui: guiTruoc, seen: 1, link: 1 });
+	});
+
+	test("gui-hong: doi chung duong, gui ok -> khong dong log loi", async () => {
+		const U = await gieoNguoi("Uyen Gui Ok");
+		const { ma } = await taoMaLienKet(db, U.id, GOC);
+		const z = zaloGia();
+		const log = await batLog(() => guiTinWebhook(z, "go-1", "ZO", ma));
+		expect(log.filter((d) => d.includes("message_id=go-1"))).toHaveLength(0);
+	});
+
+	test("da-noi-roi: nguoi da noi nhan chu -> ban da noi voi <ten>, 08:30; nguoi chua noi -> huong dan", async () => {
+		const U = await db.user.update({
+			where: { id: (await gieoNguoi("x")).id },
+			data: { name: "Phan Lê Mạnh" },
+		});
+		await db.zaloLink.create({
+			data: { crmUserId: U.id, zaloUserId: "ZM", zaloDisplayName: "Mạnh" },
+		});
+		const z = zaloGia();
+		await guiTinWebhook(z, "dn-1", "ZM", "xin chào");
+		await guiTinWebhook(z, "dn-2", "ZY", "xin chào");
+		const toiZ = z.guiToi("ZM");
+		expect(toiZ.length, "Z nhan dung mot tin").toBe(1);
+		const chu = toiZ[0]?.body.text ?? "";
+		expect(chu).toContain("Bạn đã nối với Phan Lê Mạnh");
+		expect(chu).toContain("08:30");
+		expect(chu.includes(ZALO.loi.huongDan), "khong phai cau huong dan").toBe(
+			false,
+		);
+		expect(
+			await db.zaloLinkAttempt.findUnique({ where: { zaloUserId: "ZM" } }),
+			"bo dem sai cua Z khong tang",
+		).toBeNull();
+		expect(z.guiToi("ZY")[0]?.body.text, "Y chua noi nhan huong dan").toBe(
+			ZALO.loi.huongDan,
+		);
+	});
+
+	test("da-noi-roi: nguoi da noi nhan mot ma da dung -> ghi sai, nhan huong dan", async () => {
+		const U = await gieoNguoi("Uyen Ma Cu");
+		const { ma } = await taoMaLienKet(db, U.id, GOC);
+		const z = zaloGia();
+		await guiTinWebhook(z, "mc-1", "ZC", ma);
+		await guiTinWebhook(z, "mc-2", "ZC", ma);
+		const tin = z.guiToi("ZC").map((g) => g.body.text ?? "");
+		expect(tin[1], "ma da dung la ma hong").toBe(ZALO.loi.huongDan);
+		const dem = await db.zaloLinkAttempt.findUnique({
+			where: { zaloUserId: "ZC" },
+		});
+		expect(dem?.failures, "bo dem sai tang 1").toBe(1);
 	});
 });
