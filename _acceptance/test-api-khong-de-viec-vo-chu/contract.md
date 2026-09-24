@@ -5,7 +5,7 @@ slug: test-api-khong-de-viec-vo-chu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ci]
-status: verified
+status: machine-cleared
 approved_by:
 approved_at:
 veto_state: mo
@@ -52,3 +52,11 @@ Source input: prompt (bằng chứng CI run 35879017470 lượt 1, phanlemanh/cr
 - Đổi sản phẩm duy nhất: `apps/api/src/backfill/backfill.service.ts` thêm `onModuleDestroy` bật cờ đã dừng; handler đăng nhập bỏ qua khi cờ bật. Production chỉ có một ứng dụng, đóng khi tắt tiến trình — không ai quan sát được khác biệt.
 - Phép đo AC-3 dựa vào bộ nhớ đệm riêng từng ứng dụng (không đặt `REDIS_URL`, như CI và `.env` hiện tại). Có Redis dùng chung thì khoá chống quét lặp 5 phút có thể chặn lượt quét của bài.
 - Bản vá cờ đã-dừng đáng gửi lên hãng (`trycompai/crm`) — cùng lỗi tích handler có ở bản gốc.
+
+### Known limits (Cổng Bằng chứng vòng 2, 2026-09-24)
+
+- Ngoài-1: dịch vụ quét tắt bằng `OnModuleDestroy` và một cờ, khác nếp `OnApplicationShutdown` của các dịch vụ khác; handler của ứng dụng đã đóng vẫn nằm trong danh sách đăng nhập, chỉ không làm gì.
+- Ngoài-2: thước đếm sau hai file điều phối chép tay khuôn tên từ bộ gieo và không có bước báo «đo rỗng»; bộ gieo đổi tên thì thước có thể báo sạch sai.
+- Ngoài-3: thước so mã lượt thô với tên cơ sở dữ liệu; mã lượt tự đặt có chữ hoa hoặc gạch nối làm thước báo đọc nhầm giả. Mã lượt máy sinh không vấp.
+- Ngoài-4: phép đếm sau hai file điều phối không có đối chứng dương chạy lại mỗi lượt; chiều đỏ chỉ có bản ghi một lần trên mã trước vá.
+- Ngoài-5: vế «bộ phận» của phép đếm đó luôn bằng 0, vì hai file điều phối không gieo bộ phận qua bộ gieo.
