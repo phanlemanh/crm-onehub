@@ -62,12 +62,14 @@ export function thanGetUpdates(chon: ChonTin): KhuonGoc {
 	return than;
 }
 
-export type ThanWebhook = {
+export type ThanWebhookCoVo = {
 	ok: true;
 	result: { event_name: string; message: TinZaloThat };
 };
 
-export function thanWebhook(chon: ChonTin): ThanWebhook {
+export type ThanWebhook = ThanWebhookCoVo["result"];
+
+export function thanWebhookCoVo(chon: ChonTin): ThanWebhookCoVo {
 	const than = thanGetUpdates(chon);
 	return {
 		ok: true,
@@ -76,6 +78,10 @@ export function thanWebhook(chon: ChonTin): ThanWebhook {
 			message: than.result.message,
 		},
 	};
+}
+
+export function thanWebhook(chon: ChonTin): ThanWebhook {
+	return thanWebhookCoVo(chon).result;
 }
 
 export type YeuCauGia = { request: Request; soLanKeo: () => number };

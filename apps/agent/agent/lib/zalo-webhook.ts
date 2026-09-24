@@ -1,10 +1,9 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import {
-	khoaCapDauCua,
-	messageIdCua,
-	parseZaloGetUpdates,
-	type ZaloUpdate,
-} from "@crm/validation/zalo-update";
+	moTaThanWebhook,
+	parseZaloWebhook,
+	type ZaloTinWebhook,
+} from "@crm/validation/zalo-webhook";
 import { zaloKhoaWebhook, zaloToken } from "./zalo-api";
 import { ZALO } from "./zalo-config";
 import { xuLyTinDen } from "./zalo-nhan";
@@ -30,20 +29,25 @@ function traVe(status: number): Response {
 	return new Response(null, { status });
 }
 
-function docCapNhat(tho: string): ZaloUpdate | null {
-	let than: ReturnType<typeof JSON.parse>;
+function ghiSaiKhuon(than: unknown, lyDo: string): void {
+	const moTa = moTaThanWebhook(than);
+	console.error(
+		`[zalo] webhook sai khuon khoa=${moTa.khoa.join(",")} khoa_message=${moTa.khoaMessage.join(",")} message_id=${moTa.messageId ?? "?"}: ${lyDo}`,
+	);
+}
+
+function docCapNhat(tho: string): ZaloTinWebhook | null {
+	let than: unknown;
 	try {
 		than = JSON.parse(tho);
 	} catch {
-		console.error("[zalo] webhook than khong phai JSON");
+		ghiSaiKhuon(undefined, "than khong phai JSON");
 		return null;
 	}
 	try {
-		return parseZaloGetUpdates(than);
+		return parseZaloWebhook(than);
 	} catch (loi) {
-		console.error(
-			`[zalo] webhook sai khuon khoa=${khoaCapDauCua(than)} message_id=${messageIdCua(than) ?? "?"}: ${String(loi)}`,
-		);
+		ghiSaiKhuon(than, String(loi));
 		return null;
 	}
 }
@@ -60,9 +64,9 @@ export async function nhanWebhook(
 	if (!khopKhoa(request.headers.get(ZALO.webhook.header), bien.khoa)) {
 		return traVe(ZALO.http.cam);
 	}
-	const cap = docCapNhat(await request.text());
-	if (cap?.loai === "tin") {
-		const ket = await xuLyTinDen(bien.token, cap.message, {
+	const tin = docCapNhat(await request.text());
+	if (tin) {
+		const ket = await xuLyTinDen(bien.token, tin.message, {
 			fetcher: deps.fetcher ?? fetch,
 			now: (deps.now ?? (() => new Date()))(),
 		});

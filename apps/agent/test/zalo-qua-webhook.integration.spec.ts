@@ -499,7 +499,7 @@ describe("webhook-trung", () => {
 });
 
 describe("webhook-bo-qua", () => {
-	test("webhook-bo-qua: than hong, khong vo, tu bot, tu nhom -> 200, khong ghi, log khoa", async () => {
+	test("webhook-bo-qua: than hong, tu bot, tu nhom -> 200, khong ghi, log khoa", async () => {
 		const { U, ma } = await gieoMa();
 		const CA: [string, string][] = [
 			["a khong-json", "khong-json"],
@@ -511,12 +511,6 @@ describe("webhook-bo-qua", () => {
 				}),
 			],
 			[
-				"c khong vo",
-				JSON.stringify(
-					thanWebhook({ messageId: "wb-c", fromId: "Z", text: ma }).result,
-				),
-			],
-			[
 				"d tu bot",
 				tin({ messageId: "wb-d", fromId: "Z", text: ma, isBot: true }),
 			],
@@ -525,7 +519,7 @@ describe("webhook-bo-qua", () => {
 				tin({ messageId: "wb-e", fromId: "Z", text: ma, chatType: "GROUP" }),
 			],
 		];
-		expect(CA.length, "ma tran nam ca bo qua").toBe(5);
+		expect(CA.length, "ma tran bon ca bo qua").toBe(4);
 		const log: string[] = [];
 		const nghe = spyOn(console, "error").mockImplementation(
 			(...a: unknown[]) => {
@@ -545,9 +539,6 @@ describe("webhook-bo-qua", () => {
 				if (ten.startsWith("b")) {
 					expect(moi, "log in khoa cap dau").toContain("result");
 					expect(moi, "log mang message_id").toContain("m-hong");
-				}
-				if (ten.startsWith("c")) {
-					expect(moi, "log in khoa cap dau").toContain("event_name,message");
 				}
 			}
 		} finally {
