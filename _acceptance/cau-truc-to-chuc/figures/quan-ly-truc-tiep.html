@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý trực tiếp suy từ đâu · cau-truc-to-chuc</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 64ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.78rem; }
+    svg { width: 100%; min-width: 900px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình · Luồng rẽ · cau-truc-to-chuc · AC-6 · AC-8</p>
+    <h1>Quản lý trực tiếp suy từ đâu</h1>
+    <p class="sub">Một hàm, bốn bước nối tiếp, dừng ở câu «có» đầu tiên. Mỗi nhánh «không» gồm cả hai lối bỏ qua: người được trỏ tới đã rời workspace, hoặc chính là X. Không bảng nào lưu kết quả suy.</p>
+
+    <svg viewBox="0 0 1000 760" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="44" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">QUẢN LÝ TRỰC TIẾP CỦA X · DỪNG Ở CÂU «CÓ» ĐẦU TIÊN</text>
+
+      <line x1="320" y1="112" x2="320" y2="140" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="480" y1="200" x2="560" y2="200" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="320" y1="260" x2="320" y2="300" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="480" y1="360" x2="560" y2="360" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="320" y1="420" x2="320" y2="460" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="480" y1="520" x2="560" y2="520" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="320" y1="580" x2="320" y2="620" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <rect x="508" y="176" width="24" height="16" rx="2" fill="#fafafa"/>
+      <text x="520" y="188" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">CÓ</text>
+      <rect x="508" y="336" width="24" height="16" rx="2" fill="#fafafa"/>
+      <text x="520" y="348" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">CÓ</text>
+      <rect x="508" y="496" width="24" height="16" rx="2" fill="#fafafa"/>
+      <text x="520" y="508" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">CÓ</text>
+
+      <rect x="328" y="272" width="48" height="16" rx="2" fill="#fafafa"/>
+      <text x="352" y="284" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">KHÔNG</text>
+      <rect x="328" y="432" width="48" height="16" rx="2" fill="#fafafa"/>
+      <text x="352" y="444" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">KHÔNG</text>
+      <rect x="328" y="592" width="48" height="16" rx="2" fill="#fafafa"/>
+      <text x="352" y="604" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">KHÔNG</text>
+
+      <path d="M 788 412 Q 744 408 724 388" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="724" cy="386" r="2" fill="#171717"/>
+
+      <rect x="240" y="64" width="160" height="48" rx="24" fill="#fafafa"/>
+      <rect x="240" y="64" width="160" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="320" y="92" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Người X</text>
+
+      <polygon points="320,140 480,200 320,260 160,200" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="320" y="190" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Có ghi đè, người đó</text>
+      <text x="320" y="204" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">còn trong workspace</text>
+      <text x="320" y="218" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">và khác X?</text>
+
+      <polygon points="320,300 480,360 320,420 160,360" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="320" y="350" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Phòng ban chính</text>
+      <text x="320" y="364" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">có trưởng còn trong</text>
+      <text x="320" y="378" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">workspace, khác X?</text>
+
+      <polygon points="320,460 480,520 320,580 160,520" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="320" y="510" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bộ phận của phòng ban</text>
+      <text x="320" y="524" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chính có trưởng còn</text>
+      <text x="320" y="538" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">trong workspace, khác X?</text>
+
+      <rect x="560" y="176" width="200" height="48" rx="24" fill="#fafafa"/>
+      <rect x="560" y="176" width="200" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="660" y="204" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Người được ghi đè</text>
+
+      <rect x="560" y="336" width="200" height="48" rx="24" fill="#fafafa"/>
+      <rect x="560" y="336" width="200" height="48" rx="24" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="660" y="364" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trưởng phòng ban chính</text>
+
+      <rect x="560" y="496" width="200" height="48" rx="24" fill="#fafafa"/>
+      <rect x="560" y="496" width="200" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="660" y="524" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trưởng bộ phận</text>
+
+      <rect x="240" y="620" width="160" height="48" rx="24" fill="#fafafa"/>
+      <rect x="240" y="620" width="160" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="320" y="648" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Không có quản lý</text>
+
+      <text x="792" y="420" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">Đổi trưởng phòng ban là</text>
+      <text x="792" y="440" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">mọi người không ghi đè</text>
+      <text x="792" y="460" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">đổi quản lý theo — không</text>
+      <text x="792" y="480" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">lưu kết quả suy.</text>
+
+      <line x1="40" y1="700" x2="960" y2="700" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="720" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI · HÌNH DẠNG MANG LOẠI</text>
+
+      <rect x="40" y="732" width="24" height="12" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="72" y="742" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Người vào / kết quả</text>
+
+      <polygon points="248,738 260,732 272,738 260,744" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="284" y="742" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Câu hỏi — «không» gồm cả đã rời và chính là X</text>
+
+      <line x1="552" y1="738" x2="580" y2="738" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="592" y="742" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nhánh «theo trưởng phòng ban»</text>
+
+      <line x1="784" y1="738" x2="812" y2="738" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="824" y="742" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nhánh</text>
+    </svg>
+
+    <footer>cau-truc-to-chuc · figures/quan-ly-truc-tiep · nguồn: design doc §Quản lý trực tiếp, AC-6, AC-8</footer>
+  </div>
+</body>
+</html>

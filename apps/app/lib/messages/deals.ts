@@ -60,6 +60,9 @@ const en = {
 			"A new deal is an open deal — close it from the pipeline once there is an outcome to record.",
 		submit: "Add deal",
 		cancel: "Cancel",
+		currencyLoading: "Loading the reporting currency…",
+		currencyLoadFailed:
+			"Couldn't load the reporting currency — pick a currency next to the amount to enter it.",
 	},
 	bulk: {
 		reassigned: (n: string) => `${n} reassigned.`,
@@ -162,6 +165,9 @@ const vi = {
 			"Thoả thuận mới là thoả thuận đang mở — chốt nó khi đã có kết quả để ghi lại.",
 		submit: "Thêm thoả thuận",
 		cancel: "Huỷ",
+		currencyLoading: "Đang tải đồng tiền báo cáo…",
+		currencyLoadFailed:
+			"Không tải được đồng tiền báo cáo — chọn đồng tiền bên cạnh để nhập số tiền.",
 	},
 	bulk: {
 		reassigned: (n: string) => `Đã đổi người phụ trách cho ${n}.`,

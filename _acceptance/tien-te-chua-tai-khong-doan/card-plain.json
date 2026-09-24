@@ -1,0 +1,10 @@
+{
+  "feature_plain": "Khi thiết lập tiền tệ của không gian làm việc chưa tải xong hoặc tải lỗi, hai ô số tiền không còn đoán USD: người thấy vì sao chưa đọc được số và làm gì tiếp, thoả thuận không có số tiền vẫn tạo được, và không thoả thuận nào bị lưu bằng một đồng tiền không ai chọn.",
+  "scope_plain": "Hoãn: tự thử lại thiết lập theo lịch, báo lỗi tải thiết lập ở chỗ khác ngoài hai ô số tiền; thước soi mã của vòng trước vẫn giữ hạn chế đã biết của nó.",
+  "decisions_plain": [
+    {"id": "d-20260924T072001Z-1", "p": "Đồng tiền chưa biết là một trạng thái của ô số tiền dùng chung, câu giải thích do từng màn truyền vào — không khoá cả biểu mẫu, không đoán đồng mặc định; đổi lại ô dùng chung có thêm một trạng thái."},
+    {"id": "d-20260924T072001Z-2", "p": "Số tiền để trống thì không cần đồng tiền: khi chưa biết đồng nào thì để máy chủ chọn đồng báo cáo như trước — đổi lại có hai đường chọn đồng tiền."},
+    {"id": "d-20260924T072001Z-3", "p": "Thêm nhanh vẫn khoá nút Tạo trong lúc đang tải (giữ đúng hợp đồng vòng trước), chỉ mở lại khi tải lỗi — đổi lại người bấm rất nhanh có thể thấy nút khoá thoáng qua."},
+    {"id": "d-20260924T072001Z-4", "p": "KHÔNG làm bản mẫu bấm được trước khi duyệt phạm vi — ảnh màn thật của cả hai màn lúc tải lỗi có ở gói bằng chứng này."}
+  ]
+}

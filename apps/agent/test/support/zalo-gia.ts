@@ -21,6 +21,7 @@ export type TinDen = { giay: number; than: unknown };
 export type ChonZaloGia = {
 	tin?: TinGia[];
 	getMe?: "ok" | 401 | 500 | "la" | "ok-false-401" | "ok-false-500";
+	tenBot?: string;
 	send?: "ok" | 500 | "ok-false" | "la";
 	vatVoTan?: boolean;
 	chiGiaoKhiMo?: TinDen[];
@@ -116,7 +117,7 @@ function traGetMe(chon: ChonZaloGia): Response {
 			account_name: "bot.uipSwwnr",
 			account_type: "BASIC",
 			can_join_groups: false,
-			display_name: "Bot OneHub",
+			display_name: chon.tenBot ?? "Bot OneHub",
 		},
 	});
 }

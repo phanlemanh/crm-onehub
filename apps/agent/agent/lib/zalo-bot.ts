@@ -3,6 +3,7 @@ import { SETTINGS_ID } from "@crm/db/settings";
 import {
 	parseZaloGetMe,
 	parseZaloWebhookInfo,
+	type ZaloLyDo,
 } from "@crm/validation/zalo-update";
 import { zaloGoi, zaloGoiTho, zaloToken } from "./zalo-api";
 import { ZALO } from "./zalo-config";
@@ -22,6 +23,21 @@ async function ghiBot(data: GhiBot): Promise<void> {
 		where: { id: SETTINGS_ID },
 		create: { id: SETTINGS_ID, ...data },
 		update: data,
+	});
+}
+
+const DANG_KY_HONG: ZaloLyDo = "zalo-tu-choi";
+
+async function ghiUrlKhiKhongCoHong(url: string): Promise<void> {
+	await db.appSetting.updateMany({
+		where: {
+			id: SETTINGS_ID,
+			OR: [
+				{ zaloWebhookLyDo: null },
+				{ zaloWebhookLyDo: { not: DANG_KY_HONG } },
+			],
+		},
+		data: { zaloWebhookUrl: url },
 	});
 }
 
@@ -64,7 +80,7 @@ async function docWebhook(token: string, fetcher: typeof fetch): Promise<void> {
 			await ghiBot({ zaloWebhookUrl: null });
 			return;
 		}
-		await ghiBot({ zaloWebhookUrl: info.url });
+		await ghiUrlKhiKhongCoHong(info.url);
 	} catch (loi) {
 		console.error(
 			`[zalo] getWebhookInfo loi, giu trang thai cu: ${String(loi)}`,

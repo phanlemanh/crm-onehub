@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@crm/ui/components/button";
 import {
 	Card,
 	CardContent,
@@ -9,17 +10,18 @@ import {
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { useTRPC } from "@/lib/trpc/client";
 import { DaLuuTru } from "./da-luu-tru";
-import { DanhSachBoPhan } from "./danh-sach-bo-phan";
 import { DanhSachKhuon } from "./danh-sach-khuon";
 import { SoanKhuon } from "./soan-khuon";
-import { ThemBoPhan } from "./them-bo-phan";
 
 export function CaiDatDieuPhoi() {
 	const m = onboardingMessages(useLocale());
 	const trpc = useTRPC();
+	const { slug } = useParams<{ slug: string }>();
 
 	const khuon = useQuery(trpc.onboarding.listTemplates.queryOptions());
 	const boPhan = useQuery(trpc.onboarding.listDepartments.queryOptions());
@@ -65,10 +67,19 @@ export function CaiDatDieuPhoi() {
 				<CardHeader>
 					<CardTitle>{m.settings.departments}</CardTitle>
 				</CardHeader>
-				<CardContent className="flex flex-col gap-3">
-					<DanhSachBoPhan boPhan={dsBoPhan} khoa={khoa} />
+				<CardContent
+					className="flex flex-col gap-3"
+					data-trang-thai="ST-caidat-phongban-doi-cho"
+				>
+					<p className="text-muted-foreground text-sm">
+						{m.settings.departmentsMoved}
+					</p>
 					<div>
-						<ThemBoPhan khoa={khoa} />
+						<Button asChild variant="outline">
+							<Link href={`/${slug}/settings/organization`}>
+								{m.settings.departmentsLink}
+							</Link>
+						</Button>
 					</div>
 				</CardContent>
 			</Card>

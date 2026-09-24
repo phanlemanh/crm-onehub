@@ -36,8 +36,6 @@ export const ZALO = {
 		tokenSai: "Zalo không nhận token này.",
 		zaloKhongTraLoi:
 			"Zalo đang không trả lời nên chưa kiểm được token. Bot đang dùng giữ nguyên; thử lại sau ít phút.",
-		xacMinhHong:
-			"Zalo đã nhận đăng ký nhưng gọi thử địa chỉ nhận tin không được. Bấm Đăng ký lại sau ít phút.",
 		dangKyHong:
 			"Zalo chưa nhận đăng ký nhận tin. Bot đang dùng giữ nguyên; thử lại sau.",
 		khongCoToken: "Chưa có Bot Token nào để đăng ký.",

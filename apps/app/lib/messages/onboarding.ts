@@ -17,6 +17,7 @@ const en = {
 		closed: "Closed",
 		status: "Plan status",
 		department: "Department holding it",
+		division: "Division",
 		owner: "Owner",
 	},
 	search: "Search partners",
@@ -89,7 +90,6 @@ const en = {
 	tao: {
 		save: "Save",
 		cancel: "Cancel",
-		boPhan: { title: "New department", name: "Department name" },
 		khuon: {
 			title: "New plan template",
 			name: "Template name",
@@ -101,7 +101,7 @@ const en = {
 			addStep: "Add a step",
 			removeStep: "Remove step",
 			noDepartment:
-				"No department yet. Add a department first, then write the template.",
+				"No department yet. Add one in Settings › Organization, then write the template.",
 		},
 		keHoach: {
 			title: "New plan from a template",
@@ -123,7 +123,6 @@ const en = {
 	},
 	quanLy: {
 		menu: "More actions",
-		doiTen: "Rename",
 		sua: "Edit",
 		luuTru: "Archive",
 		khoiPhuc: "Restore",
@@ -133,7 +132,6 @@ const en = {
 		daLuuTruTen: "Archived {ten}",
 		canQuyen: "You need admin rights to change the onboarding setup.",
 		keHoachKhongDoi: "Plans already created from this template do not change.",
-		suaBoPhan: "Rename department",
 		suaKhuon: "Edit plan template",
 		xacNhanLuuTruTieuDe: "Archive {ten}?",
 		xacNhanLuuTruThan:
@@ -165,11 +163,10 @@ const en = {
 		templates: "Plan templates",
 		departments: "Departments",
 		newTemplate: "New template",
-		newDepartment: "New department",
 		noTemplate:
 			"No template yet. A template holds the steps for one kind of partner.",
-		noDepartment:
-			"No department yet. A step always belongs to one, even before anyone takes it.",
+		departmentsMoved: "Departments now live in Settings › Organization.",
+		departmentsLink: "Open Settings › Organization",
 	},
 	sheet: {
 		subtitle: "30-day plan",
@@ -191,7 +188,7 @@ const en = {
 		fields: {
 			template: "Template",
 			started: "Started",
-			target: "Target",
+			target: "Duration",
 			owner: "Owner",
 		},
 		noTemplate: "No template",
@@ -280,7 +277,7 @@ type OnboardingMessages = {
 		string
 	>;
 	facets: Record<
-		"running" | "closed" | "status" | "department" | "owner",
+		"running" | "closed" | "status" | "department" | "division" | "owner",
 		string
 	>;
 	search: string;
@@ -330,7 +327,6 @@ type OnboardingMessages = {
 	tao: {
 		save: string;
 		cancel: string;
-		boPhan: { title: string; name: string };
 		khuon: Record<
 			| "title"
 			| "name"
@@ -361,7 +357,6 @@ type OnboardingMessages = {
 	};
 	quanLy: Record<
 		| "menu"
-		| "doiTen"
 		| "sua"
 		| "luuTru"
 		| "khoiPhuc"
@@ -371,7 +366,6 @@ type OnboardingMessages = {
 		| "daLuuTruTen"
 		| "canQuyen"
 		| "keHoachKhongDoi"
-		| "suaBoPhan"
 		| "suaKhuon"
 		| "xacNhanLuuTruTieuDe"
 		| "xacNhanLuuTruThan"
@@ -404,9 +398,9 @@ type OnboardingMessages = {
 		templates: string;
 		departments: string;
 		newTemplate: string;
-		newDepartment: string;
 		noTemplate: string;
-		noDepartment: string;
+		departmentsMoved: string;
+		departmentsLink: string;
 	};
 	sheet: {
 		subtitle: string;
@@ -512,14 +506,15 @@ const vi = {
 		silent: "Im lặng",
 		steps: "Bước",
 		days: "Ngày",
-		department: "Bộ phận",
+		department: "Phòng ban",
 		owner: "Cầm trịch",
 	},
 	facets: {
 		running: "Đang chạy",
 		closed: "Đã đóng",
 		status: "Trạng thái kế hoạch",
-		department: "Bộ phận đang cầm",
+		department: "Phòng ban đang cầm",
+		division: "Bộ phận",
 		owner: "Người cầm trịch",
 	},
 	search: "Tìm đối tác",
@@ -527,7 +522,7 @@ const vi = {
 	chia: {
 		label: "Chia cột theo",
 		buoc: "Bước đang tắc",
-		"bo-phan": "Bộ phận",
+		"bo-phan": "Phòng ban",
 		bac: "Bậc phễu",
 		"trang-thai": "Trạng thái",
 		"nguoi-giao": "Người được giao",
@@ -593,19 +588,18 @@ const vi = {
 	tao: {
 		save: "Lưu",
 		cancel: "Huỷ",
-		boPhan: { title: "Thêm bộ phận", name: "Tên bộ phận" },
 		khuon: {
 			title: "Soạn khuôn kế hoạch",
 			name: "Tên khuôn",
 			partnerType: "Loại đối tác (tuỳ chọn)",
 			steps: "Các bước",
 			stepLabel: "Bước",
-			stepDepartment: "Bộ phận",
+			stepDepartment: "Phòng ban",
 			stepDay: "Ngày thứ",
 			addStep: "Thêm bước",
 			removeStep: "Bỏ bước",
 			noDepartment:
-				"Chưa có bộ phận nào. Thêm bộ phận trước rồi mới soạn khuôn.",
+				"Chưa có phòng ban nào. Thêm phòng ban ở Cài đặt › Tổ chức rồi mới soạn khuôn.",
 		},
 		keHoach: {
 			title: "Tạo kế hoạch từ khuôn",
@@ -627,7 +621,6 @@ const vi = {
 	},
 	quanLy: {
 		menu: "Thao tác khác",
-		doiTen: "Đổi tên",
 		sua: "Sửa",
 		luuTru: "Lưu trữ",
 		khoiPhuc: "Khôi phục",
@@ -637,7 +630,6 @@ const vi = {
 		daLuuTruTen: "Đã lưu trữ {ten}",
 		canQuyen: "Cần quyền quản trị để đổi cấu hình điều phối.",
 		keHoachKhongDoi: "Kế hoạch đã tạo từ khuôn này không đổi theo.",
-		suaBoPhan: "Đổi tên bộ phận",
 		suaKhuon: "Sửa khuôn kế hoạch",
 		xacNhanLuuTruTieuDe: "Lưu trữ {ten}?",
 		xacNhanLuuTruThan:
@@ -667,13 +659,12 @@ const vi = {
 	settings: {
 		title: "Điều phối 30 ngày",
 		templates: "Khuôn kế hoạch",
-		departments: "Bộ phận",
+		departments: "Phòng ban",
 		newTemplate: "Soạn khuôn",
-		newDepartment: "Thêm bộ phận",
 		noTemplate:
 			"Chưa có khuôn nào. Một khuôn giữ bộ bước cho một loại đối tác.",
-		noDepartment:
-			"Chưa có bộ phận nào. Bước nào cũng thuộc một bộ phận, kể cả khi chưa ai nhận.",
+		departmentsMoved: "Phòng ban nay dựng và sắp ở Cài đặt › Tổ chức.",
+		departmentsLink: "Mở Cài đặt › Tổ chức",
 	},
 	sheet: {
 		subtitle: "Kế hoạch 30 ngày",
@@ -695,7 +686,7 @@ const vi = {
 		fields: {
 			template: "Khuôn",
 			started: "Bắt đầu",
-			target: "Mục tiêu",
+			target: "Thời lượng",
 			owner: "Cầm trịch",
 		},
 		noTemplate: "Không từ khuôn",
@@ -720,7 +711,7 @@ const vi = {
 		cancel: "Thôi",
 		noSteps: {
 			title: "Kế hoạch chưa có bước nào",
-			body: "Thêm bước đầu tiên và chọn bộ phận giữ nó.",
+			body: "Thêm bước đầu tiên và chọn phòng ban giữ nó.",
 		},
 		closedNote: "Đã đóng {ngay}",
 		closedHint: "Kế hoạch đã đóng — mở lại để sửa.",

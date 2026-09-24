@@ -5,6 +5,7 @@ import { DatePicker } from "@crm/ui/components/date-picker";
 import { Field, FieldLabel } from "@crm/ui/components/field";
 import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { MoneyInput } from "@crm/ui/components/money-input";
 import {
 	Select,
 	SelectContent,
@@ -13,8 +14,9 @@ import {
 	SelectValue,
 } from "@crm/ui/components/select";
 import { Spinner } from "@crm/ui/components/spinner";
+import { parseMoneyInput } from "@crm/ui/lib/money-input";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { contactName } from "@/components/crm/contact-name";
 import { crmMessages } from "@/lib/messages/crm";
@@ -257,7 +259,8 @@ export function QuickAddDeal({
 }) {
 	const trpc = useTRPC();
 	const cache = useCrmCache();
-	const m = recordSheetMessages(useLocale()).deal;
+	const locale = useLocale();
+	const m = recordSheetMessages(locale).deal;
 
 	const [name, setName] = useState("");
 	const [amount, setAmount] = useState("");
@@ -268,7 +271,11 @@ export function QuickAddDeal({
 	const closeId = useId();
 
 	const me = useQuery(trpc.users.me.queryOptions());
+	const settings = useQuery(trpc.currency.settings.queryOptions());
 	const owner = ownerId ?? me.data?.id ?? null;
+	const currency = settings.data?.reportingCurrency ?? null;
+	const currencyFailed = currency === null && settings.isError;
+	const amountRef = useRef<HTMLInputElement>(null);
 
 	const create = useMutation(
 		trpc.deals.create.mutationOptions({
@@ -287,21 +294,24 @@ export function QuickAddDeal({
 			return;
 		}
 
-		let amountCents: number | null = null;
-		if (amount.trim() !== "") {
-			const parsed = Number.parseFloat(amount);
-			if (!Number.isFinite(parsed) || parsed < 0) {
-				toast.error(m.amountNotNumber);
-				return;
-			}
-			amountCents = Math.round(parsed * 100);
+		if (currency === null && amount.trim() !== "") {
+			amountRef.current?.focus();
+			return;
+		}
+
+		const reading =
+			currency === null ? null : parseMoneyInput(amount, { locale, currency });
+		if (reading?.kind === "invalid") {
+			amountRef.current?.focus();
+			return;
 		}
 
 		create.mutate({
 			name,
 			companyId,
 			ownerId: owner,
-			amountCents,
+			amountCents: reading?.kind === "ok" ? reading.cents : null,
+			currency: currency ?? undefined,
 			expectedCloseDate: closeDate || null,
 		});
 	};
@@ -310,7 +320,7 @@ export function QuickAddDeal({
 		<QuickAddForm
 			submitLabel={m.create}
 			pending={create.isPending}
-			ready={name.trim() !== ""}
+			ready={name.trim() !== "" && (currency !== null || currencyFailed)}
 			onCancel={onDone}
 			onSubmit={submit}
 		>
@@ -327,12 +337,26 @@ export function QuickAddDeal({
 			</Field>
 			<Field>
 				<FieldLabel htmlFor={amountId}>{m.fields.amount}</FieldLabel>
-				<Input
+				<MoneyInput
 					id={amountId}
+					ref={amountRef}
 					value={amount}
-					onChange={(event) => setAmount(event.target.value)}
-					placeholder="24000"
-					autoComplete="off"
+					onValueChange={setAmount}
+					currency={currency}
+					missingCurrency={
+						currencyFailed ? m.currencyLoadFailed : m.currencyLoading
+					}
+					end={
+						currencyFailed ? (
+							<Button
+								type="button"
+								variant="outline"
+								onClick={() => void settings.refetch()}
+							>
+								{m.retry}
+							</Button>
+						) : undefined
+					}
 				/>
 			</Field>
 			<Field>

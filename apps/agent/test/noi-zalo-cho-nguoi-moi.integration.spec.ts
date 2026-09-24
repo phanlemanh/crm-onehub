@@ -958,8 +958,8 @@ describe("dang-ky-thu-tu", () => {
 		).toEqual({
 			lyDo: "zalo-tu-choi",
 			url: null,
-			outcome: "invalid",
-			webhook: null,
+			outcome: "valid",
+			webhook: "zalo-tu-choi",
 		});
 	});
 
@@ -989,7 +989,7 @@ describe("dang-ky-thu-tu", () => {
 			lyDo: "zalo-tu-choi",
 			token: TOK_T,
 			khoa: khoaZaloGiu ?? "?",
-			outcome: "invalid",
+			outcome: "valid",
 		});
 	});
 

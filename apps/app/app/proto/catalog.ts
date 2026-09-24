@@ -11,6 +11,27 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "cau-truc-to-chuc",
+		ten: "Cấu trúc tổ chức hai cấp",
+		states: [
+			{ id: "ST-hientai", nhan: "Hôm nay — danh sách phẳng" },
+			{ id: "ST-cay", nhan: "Cây hai cấp" },
+			{ id: "ST-cay-tim", nhan: "Cây — đang tìm" },
+			{ id: "ST-cay-nguoi", nhan: "Cây — có thành viên và trưởng" },
+			{ id: "ST-so-do", nhan: "Sơ đồ tổ chức" },
+			{ id: "ST-giao-buoc", nhan: "Giao bước kế hoạch" },
+			{ id: "ST-rong", nhan: "Chưa có bộ phận nào" },
+			{ id: "ST-tochuc-cay", nhan: "Tổ chức — quản trị" },
+			{ id: "ST-tochuc-chidoc", nhan: "Tổ chức — chỉ đọc" },
+			{ id: "ST-vitri-theotruong", nhan: "Vị trí — quản lý theo trưởng" },
+			{ id: "ST-vitri-ghide", nhan: "Vị trí — quản lý chọn tay" },
+			{ id: "ST-nhap-trong", nhan: "Nhập — chưa dán" },
+			{ id: "ST-nhap-xemtruoc", nhan: "Nhập — xem trước" },
+			{ id: "ST-nhap-honghet", nhan: "Nhập — mọi dòng hỏng" },
+			{ id: "ST-dieuphoi-locbophan", nhan: "Điều phối — lọc bộ phận" },
+		],
+	},
+	{
 		slug: "duong-proto-cho-design-pass",
 		ten: "Bản mẫu đường proto",
 		states: [

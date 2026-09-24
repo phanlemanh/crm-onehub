@@ -32,11 +32,14 @@ export const ONBOARDING = {
 		khuonDaLuuTru: (ten: string) =>
 			`Khuôn ${ten} đã lưu trữ — khôi phục trước khi tạo kế hoạch.`,
 		boPhanTrongKhuon: (khuon: string[]) =>
-			`Bộ phận này còn nằm trong khuôn ${khuon.join(", ")} — sửa khuôn trước.`,
+			`Phòng ban này còn nằm trong khuôn ${khuon.join(", ")} — sửa khuôn trước.`,
 		boPhanConTrongKhuon: (khuon: string[]) =>
-			`Bộ phận này còn nằm trong khuôn ${khuon.join(", ")} — xoá vĩnh viễn khuôn đó hoặc bỏ bộ phận khỏi khuôn trước.`,
+			`Phòng ban này còn nằm trong khuôn ${khuon.join(", ")} — xoá vĩnh viễn khuôn đó hoặc bỏ phòng ban khỏi khuôn trước.`,
+		phongBanConNguoi: (n: number) =>
+			`Còn ${n} người có phòng ban chính ở đây — chuyển họ trước.`,
+		phongBanConNguoiXoa: "Phòng ban còn người trỏ tới nên không xoá hẳn được.",
 		boPhanDaLuuTru: (ten: string[]) =>
-			`Bộ phận ${ten.join(", ")} đã lưu trữ — khôi phục hoặc chọn bộ phận khác.`,
+			`Phòng ban ${ten.join(", ")} đã lưu trữ — khôi phục hoặc chọn phòng ban khác.`,
 	},
 } as const;
 

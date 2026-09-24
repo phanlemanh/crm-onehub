@@ -39,6 +39,7 @@ export {
 	canManageCurrency,
 	canManageFields,
 	canManageOnboarding,
+	canManageOrganization,
 	canManageTracking,
 	canRenameWorkspace,
 	DEFAULT_WORKSPACE_NAME,

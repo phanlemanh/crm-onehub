@@ -14,6 +14,7 @@ import { ForeignText } from "@crm/ui/components/foreign-text";
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { MoneyInput } from "@crm/ui/components/money-input";
 import {
 	Select,
 	SelectContent,
@@ -32,9 +33,10 @@ import {
 	SheetTrigger,
 } from "@crm/ui/components/sheet";
 import { Spinner } from "@crm/ui/components/spinner";
+import { parseMoneyInput } from "@crm/ui/lib/money-input";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
-import { type ComponentProps, Suspense, useId, useState } from "react";
+import { type ComponentProps, Suspense, useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { CompanyPicker } from "@/components/crm/company-picker";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
@@ -65,7 +67,8 @@ export function CreateDealSheet({ companyId }: { companyId?: string }) {
 }
 
 function CreateDealForm({ companyId }: { companyId?: string }) {
-	const m = dealMessages(useLocale());
+	const locale = useLocale();
+	const m = dealMessages(locale);
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 	const cache = useCrmCache();
@@ -84,6 +87,8 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 
 	const nameId = useId();
 	const amountId = useId();
+	const amountRef = useRef<HTMLInputElement>(null);
+	const currencyRef = useRef<HTMLButtonElement>(null);
 	const closeDateId = useId();
 
 	const users = useQuery(trpc.users.list.queryOptions());
@@ -92,7 +97,7 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 
 	const resolvedOwner = ownerId || me.data?.id || UNSET;
 	const workspaceCurrency = currencies.data?.reportingCurrency;
-	const resolvedCurrency = currency || workspaceCurrency || "USD";
+	const knownCurrency = currency || workspaceCurrency || null;
 
 	const create = useMutation(
 		trpc.deals.create.mutationOptions({
@@ -129,16 +134,25 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 					className="flex-1 overflow-y-auto px-4"
 					onSubmit={(event) => {
 						event.preventDefault();
-						const parsed = Number.parseFloat(amount);
+						if (knownCurrency === null && amount.trim() !== "") {
+							currencyRef.current?.focus();
+							return;
+						}
+						const reading =
+							knownCurrency === null
+								? null
+								: parseMoneyInput(amount, { locale, currency: knownCurrency });
+						if (reading?.kind === "invalid") {
+							amountRef.current?.focus();
+							return;
+						}
 						create.mutate({
 							name,
 							companyId: company,
 							ownerId: resolvedOwner,
 							stage: stage as never,
-							amountCents: Number.isFinite(parsed)
-								? Math.round(parsed * 100)
-								: null,
-							currency: currency || workspaceCurrency,
+							amountCents: reading?.kind === "ok" ? reading.cents : null,
+							currency: knownCurrency ?? undefined,
 							expectedCloseDate: closeDate || null,
 						});
 					}}
@@ -208,31 +222,39 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 
 						<Field>
 							<FieldLabel htmlFor={amountId}>{m.create.amount}</FieldLabel>
-							<div className="flex gap-2">
-								<Input
-									id={amountId}
-									value={amount}
-									onChange={(event) => setAmount(event.target.value)}
-									placeholder="24000"
-									inputMode="decimal"
-									autoComplete="off"
-								/>
-								<Select value={resolvedCurrency} onValueChange={setCurrency}>
-									<SelectTrigger
-										aria-label={m.create.currency}
-										className="w-28 shrink-0"
+							<MoneyInput
+								id={amountId}
+								ref={amountRef}
+								value={amount}
+								onValueChange={setAmount}
+								currency={knownCurrency}
+								missingCurrency={
+									currencies.isError
+										? m.create.currencyLoadFailed
+										: m.create.currencyLoading
+								}
+								end={
+									<Select
+										value={knownCurrency ?? ""}
+										onValueChange={setCurrency}
 									>
-										<SelectValue />
-									</SelectTrigger>
-									<SelectContent>
-										{CURRENCIES.map((entry) => (
-											<SelectItem key={entry.code} value={entry.code}>
-												{entry.code}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							</div>
+										<SelectTrigger
+											ref={currencyRef}
+											aria-label={m.create.currency}
+											className="w-28 shrink-0"
+										>
+											<SelectValue placeholder={m.create.currency} />
+										</SelectTrigger>
+										<SelectContent>
+											{CURRENCIES.map((entry) => (
+												<SelectItem key={entry.code} value={entry.code}>
+													{entry.code}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+								}
+							/>
 						</Field>
 
 						<Field>

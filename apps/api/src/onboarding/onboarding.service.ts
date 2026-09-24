@@ -1,4 +1,4 @@
-import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
+import { canManageOnboarding, WORKSPACE_ID, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import {
 	type OnboardingTemplateStep,
@@ -262,6 +262,17 @@ export class OnboardingService {
 				ONBOARDING.thongDiep.boPhanTrongKhuon(khuon),
 			);
 		}
+		const conNguoi = await this.db.orgPlacement.count({
+			where: {
+				primaryDepartmentId: input.id,
+				user: { members: { some: { organizationId: WORKSPACE_ID } } },
+			},
+		});
+		if (conNguoi > 0) {
+			throw new BadRequestException(
+				ONBOARDING.thongDiep.phongBanConNguoi(conNguoi),
+			);
+		}
 
 		return this.motBoPhanRa(
 			await this.db.department.update({
@@ -290,13 +301,21 @@ export class OnboardingService {
 			select: CHON_BO_PHAN,
 		});
 		if (row === null) {
-			throw new NotFoundException(`Không có bộ phận nào mang mã ${input.id}.`);
+			throw new NotFoundException(
+				`Không có phòng ban nào mang mã ${input.id}.`,
+			);
 		}
 		if (row.archivedAt === null) {
 			throw new BadRequestException(ONBOARDING.thongDiep.chuaLuuTru);
 		}
 		if (row._count.steps > 0) {
 			throw new BadRequestException(ONBOARDING.thongDiep.daDung);
+		}
+		const tro = await this.db.orgPlacement.count({
+			where: { primaryDepartmentId: input.id },
+		});
+		if (tro > 0) {
+			throw new BadRequestException(ONBOARDING.thongDiep.phongBanConNguoiXoa);
 		}
 		const khuon = (await this.banDoKhuon()).get(row.id) ?? [];
 		if (khuon.length > 0) {
@@ -482,12 +501,17 @@ export class OnboardingService {
 	}
 
 	async manDanhMuc(input: PlanListInput): Promise<DanhMucOutput> {
-		const [tap, soKhuon] = await Promise.all([
+		const [tap, soKhuon, boPhanCapTren] = await Promise.all([
 			this.taiTap(input),
 			this.db.onboardingTemplate.count({ where: { archivedAt: null } }),
+			this.db.division.findMany({
+				where: { archivedAt: null },
+				orderBy: [{ position: "asc" }, { name: "asc" }],
+				select: { id: true, name: true },
+			}),
 		]);
 
-		return manDanhMucTuHang(tap, input, soKhuon);
+		return { ...manDanhMucTuHang(tap, input, soKhuon), boPhanCapTren };
 	}
 
 	async listPlans(input: PlanListInput): Promise<PlanListOutput> {
@@ -770,7 +794,7 @@ export class OnboardingService {
 		const thieu = ids.filter((id) => !boPhan.some((bp) => bp.id === id));
 		if (thieu.length > 0) {
 			throw new NotFoundException(
-				`Không có bộ phận nào mang mã ${thieu.join(", ")}.`,
+				`Không có phòng ban nào mang mã ${thieu.join(", ")}.`,
 			);
 		}
 
@@ -791,7 +815,7 @@ export class OnboardingService {
 		});
 
 		if (co === null) {
-			throw new NotFoundException(`Không có bộ phận nào mang mã ${id}.`);
+			throw new NotFoundException(`Không có phòng ban nào mang mã ${id}.`);
 		}
 	}
 }
