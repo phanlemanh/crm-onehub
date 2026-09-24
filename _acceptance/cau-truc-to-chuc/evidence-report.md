@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 787d66525c93e022bee430e6450c361c2fbd5a49
+verified_commit: ded515a9d79a9a0a729930d227b1fe7b5801e70b
 human_signoff: Manh Phan 2026-09-24
 ---
 
@@ -380,3 +380,7 @@ sha: f7a31a583af36e847d87df37ffd44f12b1d45a85 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-09-24, do ghim lai tren cay hop nhat sau khi gop onehub 973f1b01 (#125)
 run_id: repin-20260924T160407Z-81970
 sha: 787d66525c93e022bee430e6450c361c2fbd5a49 · suites: 4 lệnh exit 0 · evals: 23/23 eval máy đạt kỳ vọng · ngoài làn máy: E20, E22 · AC không có chốt máy: AC-14
+
+### Re-pin lần 5 — 2026-09-24, do dời bài kiểm đã ký sang bố cục danh sách – chi tiết (to-chuc-danh-sach-chi-tiet), đổi câu lỗi nhập theo AC-8
+run_id: repin-20260924T164220Z-99128
+sha: ded515a9d79a9a0a729930d227b1fe7b5801e70b · suites: 4 lệnh exit 0 · evals: 23/23 eval máy đạt kỳ vọng · ngoài làn máy: E20, E22 · diff chạm vật đo ngoài làn máy: E20, E22 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-14
