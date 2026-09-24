@@ -142,6 +142,13 @@ executors:
     nzm_goi_nguoc: 'bun run test -- "cd apps/agent && bun test test/noi-zalo-cho-nguoi-moi.integration.spec.ts -t goi-nguoc"'
     nzm_dang_ky_hong: 'bun run test -- "cd apps/agent && bun test test/noi-zalo-cho-nguoi-moi.integration.spec.ts -t dang-ky-hong"'
     nzm_nhip_tron: 'bun run test -- "cd apps/agent && bun test test/noi-zalo-cho-nguoi-moi.integration.spec.ts -t nhip-tron"'
+    zgh_luu_bot_moi: 'bun run test -- "cd apps/agent && bun test test/zalo-goi-thu-hong.integration.spec.ts -t luu-bot-moi"'
+    zgh_ma_tran_goi: 'bun run test -- "cd apps/agent && bun test test/zalo-goi-thu-hong.integration.spec.ts -t ma-tran-goi"'
+    zgh_nhip_giu_co: 'bun run test -- "cd apps/agent && bun test test/zalo-goi-thu-hong.integration.spec.ts -t nhip-giu-co"'
+    zgh_go_co: 'bun run test -- "cd apps/agent && bun test test/zalo-goi-thu-hong.integration.spec.ts -t go-co"'
+    zgh_api_cau_noi_that: 'bun run test -- "cd apps/api && bun test test/zalo-goi-thu-hong.spec.ts"'
+    zgh_o_token_man: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/zalo-goi-thu-hong.dom.tsx -t o-token-canh-bao"
+    zgh_dang_ky_lai_man: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/zalo-goi-thu-hong.dom.tsx -t dang-ky-lai-canh-bao"
     hv_qua_han_ngay: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t qua-han-ngay"'
     hv_bien_nua_dem: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t bien-nua-dem"'
     hv_ca_doi: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t ca-doi"'
@@ -451,6 +458,9 @@ executors:
     nzm_giu_da_ky: 'B=$(git merge-base HEAD origin/onehub) && for f in apps/agent/test/nhac-qua-zalo.integration.spec.ts apps/agent/test/zalo-qua-webhook.integration.spec.ts; do git diff --quiet "$B" -- "$f" || { echo "spec da ky bi sua: $f" >&2; exit 1; }; done && bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts test/zalo-qua-webhook.integration.spec.ts"'
     nzm_tai_lieu: 'node _acceptance/noi-zalo-cho-nguoi-moi/rang/tai-lieu.mjs'
     nzm_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/settings/notifications/page.tsx" "apps/app/app/(app)/[slug]/settings/connections/zalo/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    zgh_giu_da_ky: 'node _acceptance/zalo-goi-thu-hong-hien-dung-bot/rang/giu-da-ky.mjs'
+    zgh_tai_lieu: 'node _acceptance/zalo-goi-thu-hong-hien-dung-bot/rang/tai-lieu.mjs'
+    zgh_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/app/(app)/[slug]/settings/connections/zalo/page.tsx" --mode static'
     ogd_man_danh_muc: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "DUOI_CONG=1 bun _acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs"'
     dp30_hang_so_o_config: 'node _acceptance/dieu-phoi-30-ngay-dau/rang/hang-so-o-config.mjs'
     trg_tieu_de_trang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs tieu-de-trang"'

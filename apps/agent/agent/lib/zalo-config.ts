@@ -33,8 +33,6 @@ export const ZALO = {
 		guiThu: (gio: string) =>
 			`Tin thử từ CRM. Nhắc việc buổi sáng của bạn sẽ đến ở đây lúc ${gio}.`,
 		tokenSai: "Zalo không nhận token này.",
-		xacMinhHong:
-			"Zalo đã nhận đăng ký nhưng gọi thử địa chỉ nhận tin không được. Bấm Đăng ký lại sau ít phút.",
 		dangKyHong:
 			"Zalo chưa nhận đăng ký nhận tin. Bot đang dùng giữ nguyên; thử lại sau.",
 		khongCoToken: "Chưa có Bot Token nào để đăng ký.",
