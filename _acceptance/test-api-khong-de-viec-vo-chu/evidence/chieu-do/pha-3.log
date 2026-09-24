@@ -1,0 +1,5 @@
+error: bai de lai dong viec cua luot quet
+Expected: 0
+Received: 1
+(fail) quet-khi-dang-nhap > van-quet-that: dang nhap tren ung dung dang chay van xep identify, bai don dung dong luot quet sinh ra [1783.72ms]
+error: script "test" exited with code 1

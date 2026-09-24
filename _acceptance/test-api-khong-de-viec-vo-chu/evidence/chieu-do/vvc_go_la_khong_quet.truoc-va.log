@@ -1,0 +1,8 @@
+test-run: crm_muf11lwywr6k_test is this run's database (TEST_RUN_ID=muf11lwywr6k)
+co so du lieu: crm_muf11lwywr6k_test
+da gieo lien he le cmuf11mpc0000elcfi0dv85j5
+ 17 pass
+ 0 fail
+co so du lieu: crm_muf11lwywr6k_test
+dang nhap trong go-la-cat-quyen van xep viec cho lien he le: identify
+test-run: dropped crm_muf11lwywr6k_test

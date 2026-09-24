@@ -1,0 +1,5 @@
+error: duong quet that khong con xep identify
+Expected: true
+Received: false
+(fail) quet-khi-dang-nhap > van-quet-that: dang nhap tren ung dung dang chay van xep identify, bai don dung dong luot quet sinh ra [10253.30ms]
+error: script "test" exited with code 1

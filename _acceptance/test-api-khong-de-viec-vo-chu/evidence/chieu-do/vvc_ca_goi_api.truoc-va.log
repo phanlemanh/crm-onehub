@@ -1,0 +1,10 @@
+test-run: crm_muf11rexsd9p_test is this run's database (TEST_RUN_ID=muf11rexsd9p)
+ 596 pass
+ 0 fail
+co so du lieu: crm_muf11rexsd9p_test
+agentTask moi trang thai: []
+goi api de lai hang: agentTask chua xong=0 lien he=11 cong ty=25
+viec: []
+lien he: Ca nhan-1790223848021-32, Ca nhan-1790223848025-35, Ca nhan-1790223848030-38, Ca nhan-1790223848100-57, Ca nhan-1790223848107-60, Ca nhan-1790223848115-65, Ca nhan-1790223850497-72, Ca nhan-1790223850504-75, Ca nhan-1790223850517-78, Ca nhan-1790223850540-85, Ca nhan-1790223850540-86
+cong ty: Cong ty-1790223848021-30, Cong ty-1790223848025-33, Cong ty-1790223848030-36, Cong ty-1790223848035-39, Cong ty-1790223848042-41, Cong ty-1790223848052-43, Cong ty-1790223848059-45, Cong ty-1790223848071-47, Cong ty-1790223848078-49, Cong ty-1790223848084-51, Cong ty-1790223848092-53, Cong ty-1790223848098-55, Cong ty-1790223848106-58, Cong ty-1790223848113-61, Cong ty-1790223848113-63, Cong ty-1790223848121-66, Cong ty-1790223848151-68, Cong ty-1790223850496-70, Cong ty-1790223850503-73, Cong ty-1790223850515-76
+test-run: dropped crm_muf11rexsd9p_test
