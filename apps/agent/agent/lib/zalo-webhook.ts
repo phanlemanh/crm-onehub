@@ -17,8 +17,6 @@ export type PhuThuocWebhook = {
 	env?: BienWebhook;
 };
 
-const HTTP = { ok: 200, cam: 403, tat: 404 } as const;
-
 function bam(giaTri: string): Buffer {
 	return createHash("sha256").update(giaTri).digest();
 }
@@ -54,17 +52,21 @@ export async function nhanWebhook(
 	request: Request,
 	deps: PhuThuocWebhook = {},
 ): Promise<Response> {
-	const bien = deps.env ?? { token: zaloToken(), khoa: zaloKhoaWebhook() };
-	if (!bien.token || !bien.khoa) return traVe(HTTP.tat);
+	const bien = deps.env ?? {
+		token: await zaloToken(),
+		khoa: await zaloKhoaWebhook(),
+	};
+	if (!bien.token || !bien.khoa) return traVe(ZALO.http.khongCo);
 	if (!khopKhoa(request.headers.get(ZALO.webhook.header), bien.khoa)) {
-		return traVe(HTTP.cam);
+		return traVe(ZALO.http.cam);
 	}
 	const cap = docCapNhat(await request.text());
 	if (cap?.loai === "tin") {
-		await xuLyTinDen(bien.token, cap.message, {
+		const ket = await xuLyTinDen(bien.token, cap.message, {
 			fetcher: deps.fetcher ?? fetch,
 			now: (deps.now ?? (() => new Date()))(),
 		});
+		if (ket === "loi") return traVe(ZALO.http.loiMayChu);
 	}
-	return traVe(HTTP.ok);
+	return traVe(ZALO.http.ok);
 }

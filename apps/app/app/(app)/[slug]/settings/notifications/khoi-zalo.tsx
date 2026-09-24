@@ -1,6 +1,7 @@
 "use client";
 
 import Copy from "@carbon/icons-react/es/Copy";
+import SendAlt from "@carbon/icons-react/es/SendAlt";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -18,6 +19,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { Spinner } from "@crm/ui/components/spinner";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
+import { StepList, StepListItem } from "@crm/ui/components/step-list";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -27,6 +29,8 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
 type MaVuaTao = { ma: string; expiresAt: string };
+
+const BUOC = { timBot: 1, layMa: 2, nhanMa: 3 } as const;
 
 export function KhoiZalo({
 	khoangLamMoiMs = ZALO_MAN.lamMoiMs,
@@ -55,6 +59,16 @@ export function KhoiZalo({
 		}),
 	);
 
+	const [guiThuLoi, setGuiThuLoi] = useState(false);
+	const guiThu = useMutation(
+		trpc.zalo.guiThu.mutationOptions({
+			onMutate: () => setGuiThuLoi(false),
+			onSuccess: (kq) =>
+				toast.success(kq.kenh === "zalo" ? t.daGuiThuZalo : t.daGuiThuSlack),
+			onError: () => setGuiThuLoi(true),
+		}),
+	);
+
 	const go = useMutation(
 		trpc.zalo.go.mutationOptions({
 			onSuccess: async () => {
@@ -76,104 +90,155 @@ export function KhoiZalo({
 
 	if (lienKet.loai === "da-noi") {
 		return (
-			<div className="flex flex-wrap items-center gap-3">
-				<StatusIndicator
-					tone="success"
-					className="text-sm"
-					label={
-						<>
-							{t.daNoi} · <span translate="no">{lienKet.tenZalo}</span>
-						</>
-					}
-				/>
-				<AlertDialog>
-					<AlertDialogTrigger asChild>
-						<Button variant="outline" size="sm" className="ml-auto">
-							{t.go}
-						</Button>
-					</AlertDialogTrigger>
-					<AlertDialogContent>
-						<AlertDialogHeader>
-							<AlertDialogTitle>{t.goTieuDe}</AlertDialogTitle>
-							<AlertDialogDescription>
-								{du.uuTien === "ZALO" ? t.goVeSlack : t.goThuong}
-							</AlertDialogDescription>
-						</AlertDialogHeader>
-						<AlertDialogFooter>
-							<AlertDialogCancel>{t.goGiu}</AlertDialogCancel>
-							<AlertDialogAction
-								variant="destructive"
-								onClick={() => go.mutate()}
-							>
-								{t.goXacNhan}
-							</AlertDialogAction>
-						</AlertDialogFooter>
-					</AlertDialogContent>
-				</AlertDialog>
+			<div className="flex flex-col gap-2">
+				<div className="flex flex-wrap items-center gap-3">
+					<StatusIndicator
+						tone="success"
+						className="text-sm"
+						label={
+							<>
+								{t.daNoi} · <span translate="no">{lienKet.tenZalo}</span>
+							</>
+						}
+					/>
+					<Button
+						variant="outline"
+						size="sm"
+						className="ml-auto"
+						disabled={guiThu.isPending}
+						onClick={() => guiThu.mutate()}
+					>
+						{guiThu.isPending ? (
+							<Spinner data-icon="inline-start" />
+						) : (
+							<Icon icon={SendAlt} data-icon="inline-start" />
+						)}
+						{guiThu.isPending ? t.dangGui : t.guiThu}
+					</Button>
+					<AlertDialog>
+						<AlertDialogTrigger asChild>
+							<Button variant="outline" size="sm">
+								{t.go}
+							</Button>
+						</AlertDialogTrigger>
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle>{t.goTieuDe}</AlertDialogTitle>
+								<AlertDialogDescription>
+									{du.uuTien === "ZALO" ? t.goVeSlack : t.goThuong}
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+							<AlertDialogFooter>
+								<AlertDialogCancel>{t.goGiu}</AlertDialogCancel>
+								<AlertDialogAction
+									variant="destructive"
+									onClick={() => go.mutate()}
+								>
+									{t.goXacNhan}
+								</AlertDialogAction>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
+				</div>
+				{guiThuLoi ? (
+					<p role="alert" className="text-destructive text-xs">
+						{t.guiThuLoi}
+					</p>
+				) : null}
 			</div>
 		);
 	}
 
-	if (lienKet.loai === "ma-cho") {
-		const hetHan = gioPhut(locale, lienKet.expiresAt);
-		return (
-			<div className="flex flex-col gap-3 rounded-lg border p-4">
-				{maVuaTao ? (
-					<>
-						<p className="text-sm">{t.nhanMaCho(du.tenBot ?? "")}</p>
-						<div className="flex flex-wrap items-center gap-3">
-							<output
-								aria-label={t.maNoi}
-								className="font-medium font-mono text-3xl tabular-nums tracking-widest"
-							>
-								{nhomMa(maVuaTao.ma)}
-							</output>
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={async () => {
-									await navigator.clipboard.writeText(maVuaTao.ma);
-									toast.success(t.daChep);
-								}}
-							>
-								<Icon icon={Copy} data-icon="inline-start" />
-								{t.chepMa}
-							</Button>
-						</div>
-					</>
-				) : null}
-				<div className="flex flex-wrap items-center gap-3">
-					<StatusIndicator busy size="sm" label={t.dangCho(hetHan)} />
-					{maVuaTao ? null : (
+	const maCho = lienKet.loai === "ma-cho";
+	const hetHan = maCho ? gioPhut(locale, lienKet.expiresAt) : null;
+	const buocDang = maCho ? BUOC.nhanMa : BUOC.layMa;
+
+	return (
+		<div className="flex flex-col gap-4">
+			<p className="text-muted-foreground text-sm">{t.chuaNoi}</p>
+			<StepList activeStep={buocDang} label={t.baBuoc} markCompleted={maCho}>
+				<StepListItem
+					step={BUOC.timBot}
+					activeStep={buocDang}
+					title={
+						<>
+							{t.buocTimBot} <span translate="no">{du.tenBot ?? ""}</span>
+						</>
+					}
+					description={maCho ? undefined : t.buocTimBotMoTa}
+				/>
+				<StepListItem
+					step={BUOC.layMa}
+					activeStep={buocDang}
+					title={lienKet.loai === "ma-het-han" ? t.hetHan : t.buocLayMa}
+					description={maCho ? undefined : t.buocLayMaMoTa}
+				>
+					{maCho ? null : (
 						<Button
 							size="sm"
-							variant="outline"
-							className="ml-auto"
 							disabled={taoMa.isPending}
 							onClick={() => taoMa.mutate()}
 						>
-							{t.taoMaMoi}
+							{taoMa.isPending ? <Spinner data-icon="inline-start" /> : null}
+							{lienKet.loai === "ma-het-han" ? t.taoMaMoi : t.noi}
 						</Button>
 					)}
-				</div>
-			</div>
-		);
-	}
-
-	return (
-		<div className="flex flex-wrap items-center gap-3">
-			<p className="text-muted-foreground text-sm">
-				{lienKet.loai === "ma-het-han" ? t.hetHan : t.chuaNoi}
-			</p>
-			<Button
-				size="sm"
-				className="ml-auto"
-				disabled={taoMa.isPending}
-				onClick={() => taoMa.mutate()}
-			>
-				{taoMa.isPending ? <Spinner data-icon="inline-start" /> : null}
-				{lienKet.loai === "ma-het-han" ? t.taoMaMoi : t.noi}
-			</Button>
+				</StepListItem>
+				<StepListItem
+					step={BUOC.nhanMa}
+					activeStep={buocDang}
+					title={t.buocNhanMa}
+					description={maCho ? undefined : t.buocNhanMaMoTa}
+				>
+					{maCho ? (
+						<div className="flex flex-col gap-3 rounded-lg border p-4">
+							{maVuaTao ? (
+								<>
+									<p className="text-sm">{t.nhanMaCho(du.tenBot ?? "")}</p>
+									<div className="flex flex-wrap items-center gap-3">
+										<output
+											aria-label={t.maNoi}
+											className="font-medium font-mono text-3xl tabular-nums tracking-widest"
+										>
+											{nhomMa(maVuaTao.ma)}
+										</output>
+										<Button
+											variant="outline"
+											size="sm"
+											onClick={async () => {
+												await navigator.clipboard.writeText(maVuaTao.ma);
+												toast.success(t.daChep);
+											}}
+										>
+											<Icon icon={Copy} data-icon="inline-start" />
+											{t.chepMa}
+										</Button>
+									</div>
+								</>
+							) : null}
+							<div className="flex flex-wrap items-center gap-3">
+								<div className="flex flex-col gap-1">
+									<StatusIndicator busy size="sm" label={t.dangChoNgan} />
+									<p className="text-muted-foreground text-xs">
+										{t.hetHanLuc(hetHan ?? "")}
+									</p>
+								</div>
+								{maVuaTao ? null : (
+									<Button
+										size="sm"
+										variant="outline"
+										className="ml-auto"
+										disabled={taoMa.isPending}
+										onClick={() => taoMa.mutate()}
+									>
+										{t.taoMaMoi}
+									</Button>
+								)}
+							</div>
+						</div>
+					) : null}
+				</StepListItem>
+			</StepList>
 		</div>
 	);
 }

@@ -42,6 +42,10 @@ async function ZaloConnectionPageContent({ params }: ZaloConnectionPageProps) {
 					daNoi: xuong.daNoi,
 					tong: xuong.tong,
 					nguoi: xuong.nguoi,
+					canManage: xuong.canManage,
+					nguonToken: xuong.nguonToken,
+					goiToken: xuong.goiToken,
+					webhook: xuong.webhook.trangThai,
 				}}
 			/>
 		</ConnectionPage>

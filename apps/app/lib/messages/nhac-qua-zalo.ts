@@ -12,7 +12,21 @@ const en = {
 		taoMaMoi: "New code",
 		hetHan: "The code has expired.",
 		nhanMaCho: (bot: string) => `Send this code to ${bot} on Zalo.`,
-		dangCho: (gio: string) => `Waiting for your message · expires at ${gio}`,
+		dangChoNgan: "Waiting for your message",
+		hetHanLuc: (gio: string) => `Expires at ${gio}`,
+		baBuoc: "Three steps to connect Zalo",
+		buocTimBot: "Open Zalo and find",
+		buocTimBotMoTa:
+			"Type this exact name into Zalo's search box, then tap Message.",
+		buocLayMa: "Get a link code",
+		buocLayMaMoTa: "The code has 6 digits and lasts 15 minutes.",
+		buocNhanMa: "Send the code to the bot",
+		buocNhanMaMoTa: "Once you are connected this page switches to «Connected».",
+		guiThu: "Send a test reminder now",
+		dangGui: "Sending…",
+		daGuiThuZalo: "Test message sent on Zalo.",
+		daGuiThuSlack: "Test message sent on Slack.",
+		guiThuLoi: "Could not send the test message. Try again.",
 		maNoi: "Zalo link code",
 		chepMa: "Copy code",
 		daChep: "Code copied",
@@ -37,10 +51,10 @@ const en = {
 			"Only Zalo. If Zalo cannot be used, the reminder goes to Slack and this page tells you.",
 		moTaSlack:
 			"Only Slack. If Slack cannot be used, the reminder goes to Zalo and this page tells you.",
-		khoaZaloTat: "Zalo is not switched on for this workspace.",
-		khoaZaloChuaNoi: "Connect Zalo first.",
+		khoaZaloTat: "not switched on for this workspace.",
+		khoaZaloChuaNoi: "you have not connected it yet.",
 		khoaSlack:
-			"Slack does not recognise you yet — ask an admin to match people under Connections › Slack.",
+			"does not recognise you yet — ask an admin to match people under Connections › Slack.",
 		lechQuaZalo: "Tomorrow's reminder will go to Zalo",
 		lechQuaSlack: "Tomorrow's reminder will go to Slack",
 		lechMoTa:
@@ -67,11 +81,37 @@ const en = {
 		noiCuaToi: "Connect my Zalo",
 		daNoi: "Connected",
 		chuaNoi: "Not connected",
-		cachBatTieuDe: "How to switch it on",
-		cachBat1: "Create a bot at bot.zaloplatforms.com and copy its token.",
-		cachBat2:
-			"Put it in the .env file at the server root as ZALO_BOT_TOKEN, then restart the agent.",
-		cachBat3: "Within a minute this page shows the bot as running.",
+		botXuong: "The workspace bot",
+		baBuoc: "Three steps to switch on the Zalo bot",
+		buoc1TieuDe: "Create a bot in Zalo",
+		buoc1MoTa:
+			"Open the Zalo app, find the official account «Zalo Bot Manager», choose Create bot and give it a name — people search for this name to connect.",
+		buoc2TieuDe: "Copy the Bot Token",
+		buoc2MoTa:
+			"In Zalo Bot Manager, open the new bot and copy its Bot Token. It looks like 1234567890:AbC… — not the Secret Token.",
+		buoc3TieuDe: "Paste it here",
+		buoc3MoTa:
+			"The CRM checks the token with Zalo and signs up for messages on its own.",
+		nhanToken: "Bot Token",
+		goiYToken: "1234567890:AbC…",
+		luu: "Save",
+		thayToken: "Replace token",
+		dangKiem: "Checking…",
+		saiDang:
+			"This is not a Bot Token. A Bot Token looks like 1234567890:AbC…, not like the Secret Token.",
+		daLuu: (ten: string) => `${ten} is switched on.`,
+		daDangKyLai: "Signed up for messages again.",
+		tokenEnv:
+			"The token is set in the server's .env file. Paste a token here to replace it.",
+		chiQuanTri: "Only an admin can change the bot.",
+		nhanQuaWebhook: "Receives messages through the webhook",
+		canHttpsTieuDe: "Messages to the bot do not reach the CRM yet",
+		canHttpsMoTa:
+			"The agent has no https address, so Zalo cannot deliver messages. When testing on your machine, run",
+		chuaWebhookTieuDe: "Zalo is not delivering messages to the CRM",
+		chuaWebhookMoTa:
+			"People who send their code will not be connected until you sign up again.",
+		dangKyLai: "Sign up again",
 	},
 };
 
@@ -88,7 +128,21 @@ const vi = {
 		taoMaMoi: "Tạo mã mới",
 		hetHan: "Mã đã hết hạn.",
 		nhanMaCho: (bot: string) => `Nhắn mã này cho ${bot} trên Zalo.`,
-		dangCho: (gio: string) => `Đang chờ bạn nhắn · hết hạn lúc ${gio}`,
+		dangChoNgan: "Đang chờ bạn nhắn",
+		hetHanLuc: (gio: string) => `Hết hạn lúc ${gio}`,
+		baBuoc: "Ba bước nối Zalo",
+		buocTimBot: "Mở Zalo, tìm",
+		buocTimBotMoTa:
+			"Gõ đúng tên này vào ô tìm kiếm của Zalo, rồi bấm Nhắn tin.",
+		buocLayMa: "Lấy mã nối",
+		buocLayMaMoTa: "Mã có 6 số, dùng được 15 phút.",
+		buocNhanMa: "Nhắn mã cho bot",
+		buocNhanMaMoTa: "Nối xong trang này tự chuyển sang «Đã nối».",
+		guiThu: "Gửi thử nhắc ngay",
+		dangGui: "Đang gửi…",
+		daGuiThuZalo: "Đã gửi tin thử qua Zalo.",
+		daGuiThuSlack: "Đã gửi tin thử qua Slack.",
+		guiThuLoi: "Chưa gửi được tin thử. Thử lại.",
 		maNoi: "Mã nối Zalo",
 		chepMa: "Chép mã",
 		daChep: "Đã chép mã",
@@ -113,10 +167,10 @@ const vi = {
 			"Chỉ Zalo. Zalo không dùng được thì tin đi qua Slack và trang này báo cho bạn.",
 		moTaSlack:
 			"Chỉ Slack. Slack không dùng được thì tin đi qua Zalo và trang này báo cho bạn.",
-		khoaZaloTat: "Zalo chưa bật cho xưởng.",
-		khoaZaloChuaNoi: "Nối Zalo trước.",
+		khoaZaloTat: "chưa bật cho xưởng này.",
+		khoaZaloChuaNoi: "bạn chưa nối.",
 		khoaSlack:
-			"Slack chưa nhận ra bạn — nhờ quản trị viên ghép người ở Kết nối › Slack.",
+			"chưa nhận ra bạn — nhờ quản trị viên ghép người ở Kết nối › Slack.",
 		lechQuaZalo: "Nhắc sáng mai sẽ qua Zalo",
 		lechQuaSlack: "Nhắc sáng mai sẽ qua Slack",
 		lechMoTa:
@@ -143,11 +197,35 @@ const vi = {
 		noiCuaToi: "Nối Zalo của tôi",
 		daNoi: "Đã nối",
 		chuaNoi: "Chưa nối",
-		cachBatTieuDe: "Cách bật",
-		cachBat1: "Tạo một bot ở bot.zaloplatforms.com và chép token của nó.",
-		cachBat2:
-			"Đặt token vào tệp .env ở gốc máy chủ với tên ZALO_BOT_TOKEN, rồi khởi động lại tác tử.",
-		cachBat3: "Trong một phút trang này chuyển sang đang chạy.",
+		botXuong: "Bot của xưởng",
+		baBuoc: "Ba bước bật bot Zalo",
+		buoc1TieuDe: "Tạo bot trong Zalo",
+		buoc1MoTa:
+			"Mở app Zalo, tìm OA «Zalo Bot Manager», chọn Tạo bot và đặt tên — tên này là tên mọi người tìm để nối.",
+		buoc2TieuDe: "Chép Bot Token",
+		buoc2MoTa:
+			"Trong Zalo Bot Manager, mở bot vừa tạo và chép Bot Token. Token có dạng 1234567890:AbC… — không phải Secret Token.",
+		buoc3TieuDe: "Dán vào đây",
+		buoc3MoTa: "CRM kiểm token với Zalo rồi tự đăng ký nhận tin.",
+		nhanToken: "Bot Token",
+		goiYToken: "1234567890:AbC…",
+		luu: "Lưu",
+		thayToken: "Đổi token",
+		dangKiem: "Đang kiểm…",
+		saiDang:
+			"Đây không phải Bot Token. Bot Token có dạng 1234567890:AbC…, khác Secret Token.",
+		daLuu: (ten: string) => `Đã bật ${ten}.`,
+		daDangKyLai: "Đã đăng ký nhận tin lại.",
+		tokenEnv:
+			"Token đang đặt trong tệp .env của máy chủ. Dán token ở đây để thay.",
+		chiQuanTri: "Chỉ quản trị viên thay được bot.",
+		nhanQuaWebhook: "Nhận tin qua webhook",
+		canHttpsTieuDe: "Tin nhắn tới bot chưa về CRM",
+		canHttpsMoTa:
+			"Tác tử chưa có địa chỉ https nên Zalo không giao tin về được. Khi thử tại máy, chạy",
+		chuaWebhookTieuDe: "Zalo chưa giao tin nhắn về CRM",
+		chuaWebhookMoTa: "Người nhắn mã sẽ không được nối cho tới khi đăng ký lại.",
+		dangKyLai: "Đăng ký lại",
 	},
 } satisfies NhacQuaZaloMessages;
 

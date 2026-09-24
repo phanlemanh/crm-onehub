@@ -1437,6 +1437,10 @@ model AppSetting {
 
   zaloBotName  String?
   zaloPolledAt DateTime?
+  zaloBotToken      String?
+  zaloWebhookSecret String?
+  zaloWebhookUrl    String?
+  zaloWebhookLyDo   String?
 
   updatedAt DateTime @updatedAt
 
