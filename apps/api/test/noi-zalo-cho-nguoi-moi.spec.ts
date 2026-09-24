@@ -8,6 +8,7 @@ import {
 } from "bun:test";
 import { db } from "@crm/db";
 import { SETTINGS_ID } from "@crm/db/settings";
+import { noiBangMa, taoMaLienKet } from "@crm/db/zalo-lien-ket";
 import {
 	type DatBotYeuCau,
 	datBotYeuCau,
@@ -383,5 +384,45 @@ describe("gui-thu-api", () => {
 		const r = await guiThu(U.id);
 		expect(r.status).toBe(400);
 		expect(r.loi).toContain("Tác tử chưa nối được");
+	});
+});
+
+async function gieoBaHang(userId: string, zaloUserId: string): Promise<void> {
+	const { ma } = await taoMaLienKet(db, userId);
+	await noiBangMa(db, { ma, zaloUserId, tenZalo: zaloUserId, now: new Date() });
+	await taoMaLienKet(db, userId);
+	await db.notificationPreference.create({ data: { userId, channel: "ZALO" } });
+}
+
+async function demBaHang(userId: string) {
+	return {
+		lienKet: await db.zaloLink.count({ where: { crmUserId: userId } }),
+		ma: await db.zaloLinkCode.count({ where: { crmUserId: userId } }),
+		uuTien: await db.notificationPreference.count({ where: { userId } }),
+	};
+}
+
+describe("go-thanh-vien", () => {
+	test("go-thanh-vien: go U khoi xuong -> U mat ba hang Zalo, V con nguyen", async () => {
+		const Q = await gieoThanhVien("Quan Tri Go", "admin");
+		const U = await gieoThanhVien("Uyen Roi Xuong", "member");
+		const V = await gieoThanhVien("Vinh O Lai", "member");
+		await gieoBaHang(U.id, `zu-${U.id}`);
+		await gieoBaHang(V.id, `zv-${V.id}`);
+		const res = await request(app.getHttpServer())
+			.post("/api/trpc/workspace.removeMember")
+			.set("cookie", await cookie(Q.id))
+			.set("content-type", "application/json")
+			.send(JSON.stringify({ memberId: `m-${U.id}` }));
+		expect(res.status, "quan tri go duoc").toBe(200);
+		expect(
+			await demBaHang(U.id),
+			"nguoi roi xuong bi go lien ket Zalo",
+		).toEqual({ lienKet: 0, ma: 0, uuTien: 0 });
+		expect(await demBaHang(V.id), "nguoi o lai con nguyen").toEqual({
+			lienKet: 1,
+			ma: 1,
+			uuTien: 1,
+		});
 	});
 });
