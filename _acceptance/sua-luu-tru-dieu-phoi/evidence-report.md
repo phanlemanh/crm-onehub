@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ded515a9d79a9a0a729930d227b1fe7b5801e70b
+verified_commit: 70776c91ed7b3c29c44fdcd1863f171659aa4346
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -437,3 +437,7 @@ sha: 7aa510c3404a0b01e5e523712f5cfc65906f3f3f · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 6 — 2026-09-24, do dời bài kiểm đã ký sang bố cục danh sách – chi tiết (to-chuc-danh-sach-chi-tiet), đổi câu lỗi nhập theo AC-8
 run_id: repin-20260924T164220Z-99128
 sha: ded515a9d79a9a0a729930d227b1fe7b5801e70b · suites: 4 lệnh exit 0 · evals: 28/28 eval máy đạt kỳ vọng · ngoài làn máy: E26 · diff chạm vật đo ngoài làn máy: E26 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15
+
+### Re-pin lần 7 — 2026-09-24, do S4 vòng 2 của to-chuc-danh-sach-chi-tiet: bài nhap-man đổi dữ liệu gửi mong đợi (traTen), dòng người và bước 3 hộp nhập
+run_id: repin-20260924T183547Z-84900
+sha: 70776c91ed7b3c29c44fdcd1863f171659aa4346 · suites: 4 lệnh exit 0 · evals: 28/28 eval máy đạt kỳ vọng · ngoài làn máy: E26 · AC không có chốt máy: AC-15
