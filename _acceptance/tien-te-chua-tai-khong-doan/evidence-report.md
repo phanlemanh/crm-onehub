@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f19f04d4902f1782c7885b980f0d1229994ef4c7
+verified_commit: 09234bc36c10fffd85564767bd8dd83a1ab08aa2
 human_signoff:
 ---
 
@@ -200,3 +200,7 @@ none — không có eval nào mang `runs` > 1 hay `pass_rate` lệch round này;
 
 Round 1: E9, E12 BLOCKED — máy chủ api ở http://localhost:3001 không tới được nên `man-that.mjs` không mở được phiên xin dev-session; 10 eval còn lại và cả bốn lệnh suite đã xanh. Trả về S3 để chỉnh thước đo.
 Round 2: sửa `_acceptance/tien-te-chua-tai-khong-doan/rang/man-that.mjs` để chờ máy chủ api sẵn sàng rồi mới thử lại xin phiên, không còn phụ thuộc việc máy chủ đã lên kịp lúc script chạy. Toàn bộ 12 eval (E1–E12) và cả bốn lệnh suite (`bun run test`, `bunx turbo run lint --force`, `bun run lint:slop`, `bunx turbo run build --force`) đều pass — verdict PASS.
+
+### Re-pin lần 1 — 2026-09-24, do hoá cũ do vòng ten-dong-tien-bao-cao đổi chữ và đổi thư mục ghi ảnh của thước màn thật
+run_id: repin-20260924T084643Z-52504
+sha: 09234bc36c10fffd85564767bd8dd83a1ab08aa2 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E8, E11 · diff chạm vật đo ngoài làn máy: E8, E11 — chưa chứng lại, đi vòng S4 delta
