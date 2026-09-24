@@ -235,6 +235,17 @@ evals:
   - id: E11
     criterion: AC-10
     executor: judgment
+    cmd: judgment
+    question: |
+      Doc tam cau loi moi: nam cau cau noi trong ZALO_THONG_DIEP.cauNoi va hai cau
+      ZALO_THONG_DIEP.guiHong (apps/api/src/zalo/zalo.service.ts), cau
+      ZALO.loi.zaloKhongTraLoi (apps/agent/agent/lib/zalo-config.ts). Mot nhan vien
+      hoac quan tri vien nguoi Viet khong biet ky thuat doc lan dau: moi cau co noi
+      dung chang hong (CRM chua noi, khong goi duoc, sai khoa, dich vu loi, tra loi
+      sai khuon, Zalo khong tra loi, Zalo/Slack chua nhan tin) va noi ho lam gi tiep
+      (thu lai sau hay bao nguoi cai dat CRM) khong? Co cau nao dung chu «tác tử»,
+      «agent», ten bien moi truong, hay tu ma CONTEXT.md xep vao Avoid khong? Co cau
+      nao khong phai tieng Viet co dau khong?
     inputs:
       - "apps/api/src/zalo/zalo.service.ts"
       - "apps/agent/agent/lib/zalo-config.ts"
