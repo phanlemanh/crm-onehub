@@ -54,7 +54,10 @@ export async function nhanWebhook(
 	request: Request,
 	deps: PhuThuocWebhook = {},
 ): Promise<Response> {
-	const bien = deps.env ?? { token: zaloToken(), khoa: zaloKhoaWebhook() };
+	const bien = deps.env ?? {
+		token: await zaloToken(),
+		khoa: await zaloKhoaWebhook(),
+	};
 	if (!bien.token || !bien.khoa) return traVe(HTTP.tat);
 	if (!khopKhoa(request.headers.get(ZALO.webhook.header), bien.khoa)) {
 		return traVe(HTTP.cam);

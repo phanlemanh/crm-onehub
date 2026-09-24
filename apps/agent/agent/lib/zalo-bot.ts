@@ -40,7 +40,7 @@ async function docBot(
 export async function kiemBot(deps: PhuThuocBot = {}): Promise<TrangThaiBot> {
 	const fetcher = deps.fetcher ?? fetch;
 	const now = (deps.now ?? (() => new Date()))();
-	const token = zaloToken();
+	const token = await zaloToken();
 	if (!token) {
 		await ghiBot({ zaloBotName: null });
 		return "tat";

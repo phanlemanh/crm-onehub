@@ -125,6 +125,7 @@ single place that knows what is set.
 | `AGENT_BRIDGE_SECRET` | The rep-facing Agent panel — see `agent.md` |
 | `ZALO_BOT_TOKEN` | The morning reminder on Zalo and the bot that answers link codes — see `agent.md` and `connections.md` |
 | `ZALO_WEBHOOK_SECRET` | The secret Zalo sends with every webhook call to `/zalo/webhook`; without it the route answers 404 — see `agent.md` |
+| `ZALO_API_URL` | Base URL of the Zalo Bot API; empty means the real one. Only for running against a fake Zalo in tests |
 
 `ZALO_BOT_TOKEN` and `ZALO_WEBHOOK_SECRET` are read by `apps/agent` only, so they
 are not in `env.validation.ts`. Both are in `turbo.json` `globalPassThroughEnv` — secrets, so never

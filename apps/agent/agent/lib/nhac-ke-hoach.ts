@@ -107,7 +107,7 @@ export async function chayNhac(
 		(await viecCanNhac(db, { now: new Date(), userId })).get(userId) ?? [];
 	if (viec.length === 0) return dong(task.id, "khong-viec");
 
-	const token = zaloToken();
+	const token = await zaloToken();
 	const kenh = await kenhSeDungCua(db, userId, { coToken: token !== null });
 	if (kenh.kenh === null) {
 		const slack = await slackAccessToken();
