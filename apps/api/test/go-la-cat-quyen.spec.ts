@@ -4,6 +4,7 @@ import {
 	beforeEach,
 	describe,
 	expect,
+	spyOn,
 	test,
 } from "bun:test";
 import type { AddressInfo } from "node:net";
@@ -23,6 +24,7 @@ import {
 	sqlLuotDon,
 } from "../../../packages/db/scripts/luot-don-sql";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
+import { BackfillService } from "../src/backfill/backfill.service";
 import { createApp } from "../src/create-app";
 import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
 import { WorkspaceService } from "../src/workspace/workspace.service";
@@ -345,6 +347,7 @@ async function locationQuaProxy(cookie: string, apiUrl: string) {
 
 beforeAll(async () => {
 	app = await createApp();
+	spyOn(app.get(BackfillService), "auto").mockResolvedValue({ started: false });
 	workspace = new WorkspaceService(db, {
 		workspaceChanged: async () => undefined,
 	} as unknown as AgentTriggerService);
