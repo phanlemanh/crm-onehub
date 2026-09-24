@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 09234bc36c10fffd85564767bd8dd83a1ab08aa2
+verified_commit: d3911564da114e9b2f61ebe02d24e13039f5d81d
 human_signoff:
 ---
 
@@ -213,3 +213,7 @@ sha: da582c9865c0f29c3871bad51cc74e904d5a9dfc · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-09-24, do hoá cũ do vòng ten-dong-tien-bao-cao đổi chữ và đổi thư mục ghi ảnh của thước màn thật
 run_id: repin-20260924T084643Z-52504
 sha: 09234bc36c10fffd85564767bd8dd83a1ab08aa2 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 4 — 2026-09-24, do hoá cũ do gộp origin/onehub (51 commit) vào nhánh trước khi gộp PR #114
+run_id: repin-20260924T090705Z-75556
+sha: d3911564da114e9b2f61ebe02d24e13039f5d81d · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E9

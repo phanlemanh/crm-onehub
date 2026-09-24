@@ -16,3 +16,4 @@
 {"ts":"2026-09-24T08:32:35Z","sha":"44b2540fcad93905a8985c3ea02e0f453681d600","round":1,"kind":"baseline","evals_hash":"347df39683bf7f3a4a1275db2f91c806a6e062230d0b063cc5744500385bad8d","non_discriminating":[]}
 {"ts":"2026-09-24T08:32:35Z","sha":"44b2540fcad93905a8985c3ea02e0f453681d600","round":1,"kind":"round-tally","verdict":"PASS","expected":8,"returned":8,"blocked":0}
 {"ts":"2026-09-24T08:32:35Z","sha":"44b2540fcad93905a8985c3ea02e0f453681d600","round":1,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":10}
+{"ts":"2026-09-24T09:07:05Z","kind":"repin","run_id":"repin-20260924T090705Z-75556","sha":"d3911564da114e9b2f61ebe02d24e13039f5d81d","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E6":0,"E5":0},"evals_not_machine":["E4"]}

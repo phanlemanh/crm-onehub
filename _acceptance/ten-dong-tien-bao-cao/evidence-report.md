@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 44b2540fcad93905a8985c3ea02e0f453681d600
+verified_commit: d3911564da114e9b2f61ebe02d24e13039f5d81d
 human_signoff: Manh Phan 2026-09-24
 ---
 
@@ -127,3 +127,7 @@ none — không có eval nào mang `runs` > 1 hay `pass_rate` lệch round này;
 ## Iterations
 
 Round 1: toàn bộ 6 eval (E1–E6) và cả bốn lệnh suite (`bun run test`, `bunx turbo run lint --force`, `bun run lint:slop`, `bunx turbo run build --force`) đều pass ngay từ lần chạy đầu — verdict PASS.
+
+### Re-pin lần 1 — 2026-09-24, do hoá cũ do gộp origin/onehub (51 commit) vào nhánh trước khi gộp PR #114
+run_id: repin-20260924T090705Z-75556
+sha: d3911564da114e9b2f61ebe02d24e13039f5d81d · suites: 4 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · ngoài làn máy: E4 · AC không có chốt máy: AC-4
