@@ -58,7 +58,7 @@ describe("gan-phong-ban", () => {
 		);
 
 		const pbLuu = await pbMoi("gan-luu");
-		ok(await goi("onboarding.archiveDepartment", { id: pbLuu }), "luu pb");
+		ok(await goi("org.archiveDepartment", { id: pbLuu }), "luu pb");
 		const bLuu = await tao(
 			"org.createDivision",
 			{ name: ma("gan-b-luu") },
