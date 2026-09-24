@@ -1,5 +1,7 @@
 export const DO_NEO = Object.freeze({
 	goc: "e22d82882e656a0b536ed7756a4ae7e7c11ffb9d",
+	suaV1: "785a1d7ea3a8514c01278ae2956ae32ffbd0610c",
+	boDo: "_acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs",
 	rang: "_acceptance/chan-lai-component-ra-man/rang",
 	laiRaMan: "_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs",
 	moiMacDinh: "_acceptance/chan-lai-component-ra-man/rang/moi-mac-dinh.mjs",
@@ -21,12 +23,18 @@ export const DO_NEO = Object.freeze({
 		"apps/app/app",
 	],
 	chayRieng: ".acceptance-runs/neo-dan-so-khong-cung",
-	loaiTruCu: 'export const LOAI_TRU = ["node_modules", ".next", "dist", "build"];',
+	loaiTruCu:
+		'export const LOAI_TRU = ["node_modules", ".next", "dist", "build"];',
 	loaiTruTiem:
 		'export const LOAI_TRU = ["node_modules", ".next", "dist", "build", "lib"];',
 	tepThem: "apps/app/lib/do-neo-them.ts",
 	tepMacDinh: "apps/app/components/do-neo-mac-dinh.tsx",
 	tepChuaCommit: "apps/app/lib/do-neo-chua-commit.ts",
+	tepLech: "apps/app/lib/do-neo-lech.ts",
+	tepDoiTen: "apps/app/lib/do-neo-doi-ten.ts",
+	caCayLech: ["them-tep", "bo-sot", "chua-theo-doi"],
+	chanGocGit:
+		"\tif (realpathSync(dinh) !== realpathSync(goc))\n\t\treturn { loi: `goc git ${dinh} khac goc dang do ${goc}` };\n",
 	lenhCong: ["cl_tieng_viet_den_man", "cl_dan_so"],
 	mauPhamVi: "packages/ui/src/components/button.tsx",
 	nhanhChinh: "origin/onehub",

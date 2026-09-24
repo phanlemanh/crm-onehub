@@ -4,6 +4,7 @@ import {
 	mkdirSync,
 	mkdtempSync,
 	readFileSync,
+	renameSync,
 	rmSync,
 	symlinkSync,
 	writeFileSync,
@@ -36,24 +37,41 @@ function gitSao(d, ...thamSo) {
 	);
 }
 
-function dungBanSao({ ban, coGit = true, noi = tmpdir() }) {
-	mkdirSync(noi, { recursive: true });
-	const d = mkdtempSync(join(noi, "do-neo-"));
+function chepCayLamViec(d) {
 	const tep = git(GOC, "ls-files", "-z", "--", ...DO_NEO.canChep)
 		.split("\0")
 		.filter((f) => f && existsSync(join(GOC, f)));
 	const danhSach = join(d, ".danh-sach");
 	writeFileSync(danhSach, tep.join("\0"));
-	execFileSync("bash", [
-		"-c",
-		`tar --null -T "${danhSach}" -cf - | tar -xf - -C "${d}"`,
-	], { cwd: GOC });
+	execFileSync(
+		"bash",
+		["-c", `tar --null -T "${danhSach}" -cf - | tar -xf - -C "${d}"`],
+		{ cwd: GOC },
+	);
 	rmSync(danhSach);
+}
+
+function chepCayGoc(d) {
+	execFileSync(
+		"bash",
+		[
+			"-c",
+			`git archive --format=tar ${DO_NEO.goc} -- ${DO_NEO.canChep.join(" ")} | tar -xf - -C "${d}"`,
+		],
+		{ cwd: GOC },
+	);
+}
+
+function dungBanSao({ ban, coGit = true, noi = tmpdir() }) {
+	mkdirSync(noi, { recursive: true });
+	const d = mkdtempSync(join(noi, "do-neo-"));
+	if (ban === "goc") chepCayGoc(d);
+	else chepCayLamViec(d);
 	symlinkSync(join(GOC, "node_modules"), join(d, "node_modules"));
-	if (ban === "goc")
+	if (ban === "sua-v1")
 		writeFileSync(
 			join(d, DO_NEO.laiRaMan),
-			git(GOC, "show", `${DO_NEO.goc}:${DO_NEO.laiRaMan}`),
+			git(GOC, "show", `${DO_NEO.suaV1}:${DO_NEO.laiRaMan}`),
 		);
 	if (coGit) {
 		writeFileSync(join(d, ".gitignore"), "node_modules\n");
@@ -129,7 +147,10 @@ function caThemTep() {
 		const r1 = chay(d);
 		return { n0: soTep(r0.ra), r1 };
 	});
-	const neoGoc = neoTrong(git(GOC, "show", `${DO_NEO.goc}:${DO_NEO.laiRaMan}`), "file");
+	const neoGoc = neoTrong(
+		git(GOC, "show", `${DO_NEO.goc}:${DO_NEO.laiRaMan}`),
+		"file",
+	);
 	const goc = voiBanSao({ ban: "goc" }, (d) => {
 		const r0 = nenXanh("goc", d);
 		themVaCommit(d, DO_NEO.tepThem, noiDung);
@@ -176,7 +197,8 @@ function caThemMacDinh() {
 function tiemLoaiTru(d) {
 	const p = join(d, DO_NEO.moiMacDinh);
 	const s = readFileSync(p, "utf8");
-	if (!s.includes(DO_NEO.loaiTruCu)) tienDe("moc LOAI_TRU khong co trong moi-mac-dinh.mjs");
+	if (!s.includes(DO_NEO.loaiTruCu))
+		tienDe("moc LOAI_TRU khong co trong moi-mac-dinh.mjs");
 	writeFileSync(p, s.replace(DO_NEO.loaiTruCu, DO_NEO.loaiTruTiem));
 }
 
@@ -257,6 +279,25 @@ function khongDoDuocGit(r) {
 	);
 }
 
+function khongDoDuocGocKhac(r) {
+	return (
+		r.ma === 2 &&
+		dong(r.ra).some(
+			(l) =>
+				l.startsWith("KHONG DO DUOC: goc git ") &&
+				l.includes(" khac goc dang do "),
+		)
+	);
+}
+
+function goChanGocGit(d) {
+	const p = join(d, DO_NEO.laiRaMan);
+	const s = readFileSync(p, "utf8");
+	if (!s.includes(DO_NEO.chanGocGit))
+		tienDe("moc chan goc git khong co trong lai-ra-man.mjs");
+	writeFileSync(p, s.replace(DO_NEO.chanGocGit, ""));
+}
+
 function caKhongDoDuoc() {
 	const hang = [];
 	const a = voiBanSao({ ban: "sua", coGit: false }, (d) => {
@@ -276,18 +317,26 @@ function caKhongDoDuoc() {
 			const top = coGitO(d);
 			if (top === null || resolve(top) === resolve(d))
 				tienDe(`ban sao ${d} khong nam trong kho khac`);
-			return chay(d);
+			const that = chay(d);
+			goChanGocGit(d);
+			return { that, dotBien: chay(d) };
 		},
 	);
 	hang.push(
 		ket(
-			khongDoDuocGit(c),
-			"sua — khong-do-duoc (c) trong kho khac: thoat 2, KHONG DO DUOC nhac git",
-			`sua — khong-do-duoc (c): thoat ${c.ma}\n${c.ra.slice(-300)}`,
+			khongDoDuocGocKhac(c.that),
+			"sua — khong-do-duoc (c) trong kho khac: thoat 2, KHONG DO DUOC: goc git ... khac goc dang do ...",
+			`sua — khong-do-duoc (c): thoat ${c.that.ma}\n${c.that.ra.slice(-300)}`,
+		),
+		ket(
+			!khongDoDuocGocKhac(c.dotBien),
+			`doi-chung — khong-do-duoc (c) dot bien go chan goc git: khang dinh goi ten sai (thoat ${c.dotBien.ma})`,
+			`doi-chung — khong-do-duoc (c) dot bien go chan goc git van qua khang dinh:\n${c.dotBien.ra.slice(-300)}`,
 		),
 	);
 	const b = voiBanSao({ ban: "sua" }, (d) => {
-		for (const g of DO_NEO.thuMucGoc) rmSync(join(d, g), { recursive: true, force: true });
+		for (const g of DO_NEO.thuMucGoc)
+			rmSync(join(d, g), { recursive: true, force: true });
 		gitSao(d, "add", "-A");
 		gitSao(d, "commit", "-q", "-m", "xoa goc");
 		return chay(d);
@@ -308,6 +357,85 @@ function caKhongDoDuoc() {
 		),
 	);
 	return hang;
+}
+
+function caXoaChuaCommit() {
+	const noiDung = "export const doNeoThem = 1;\n";
+	const lam = (ban, bienDoi) =>
+		voiBanSao({ ban }, (d) => {
+			themVaCommit(d, DO_NEO.tepThem, noiDung);
+			nenXanh(ban, d);
+			bienDoi(d);
+			return chay(d);
+		});
+	const xoa = (d) => rmSync(join(d, DO_NEO.tepThem));
+	const doiTen = (d) =>
+		renameSync(join(d, DO_NEO.tepThem), join(d, DO_NEO.tepDoiTen));
+	const mongV1 = `BO-SOT: 1 tep git theo doi ma bo duyet khong thay: ${DO_NEO.tepThem}`;
+	return [
+		["xoa", xoa],
+		["doi-ten", doiTen],
+	].flatMap(([ten, bienDoi]) => {
+		const sua = lam("sua", bienDoi);
+		const v1 = lam("sua-v1", bienDoi);
+		const boSot = dong(sua.ra).filter((l) => l.startsWith("BO-SOT:"));
+		return [
+			ket(
+				sua.ma === 0 && boSot.length === 0,
+				`sua — ${ten}-chua-commit: thoat 0, khong BO-SOT`,
+				`sua — ${ten}-chua-commit: thoat ${sua.ma}, dong ${JSON.stringify(boSot)}`,
+			),
+			ket(
+				v1.ma === 1 && dong(v1.ra).includes(mongV1),
+				`sua-v1 — ${ten}-chua-commit: ${mongV1}`,
+				`sua-v1 — ${ten}-chua-commit: chieu do khong hien (thoat ${v1.ma}, mong ${JSON.stringify(mongV1)})`,
+			),
+		];
+	});
+}
+
+function chayBoDo(goc, cacCa) {
+	const r = spawnSync(
+		"bun",
+		[join(goc, DO_NEO.boDo), "--ca", cacCa.join(",")],
+		{
+			cwd: goc,
+			encoding: "utf8",
+		},
+	);
+	return { ma: r.status, ra: `${r.stdout ?? ""}${r.stderr ?? ""}` };
+}
+
+function caCayLech() {
+	const noi = mkdtempSync(join(tmpdir(), "do-neo-cay-lech-"));
+	const cay = join(noi, "cay");
+	git(GOC, "worktree", "add", "-q", "--detach", cay, "HEAD");
+	try {
+		symlinkSync(join(GOC, "node_modules"), join(cay, "node_modules"));
+		themVaCommit(cay, DO_NEO.tepLech, "export const doNeoLech = 1;\n");
+		const moi = chayBoDo(cay, DO_NEO.caCayLech);
+		writeFileSync(
+			join(cay, DO_NEO.boDo),
+			git(GOC, "show", `${DO_NEO.suaV1}:${DO_NEO.boDo}`),
+		);
+		const cu = chayBoDo(cay, ["them-tep"]);
+		return [
+			ket(
+				moi.ma === 0,
+				`sua — cay-lech: ${DO_NEO.caCayLech.join(", ")} thoat 0 tren cay HEAD + 1 tep`,
+				`sua — cay-lech: thoat ${moi.ma}\n${moi.ra.slice(-600)}`,
+			),
+			ket(
+				cu.ma === 2 &&
+					dong(cu.ra).some((l) => l.startsWith("TIEN DE: ban goc do san")),
+				"sua-v1 — cay-lech: bo do vong 1 thoat 2 TIEN DE: ban goc do san",
+				`sua-v1 — cay-lech: chieu do khong hien (thoat ${cu.ma})\n${cu.ra.slice(-300)}`,
+			),
+		];
+	} finally {
+		spawnSync("git", ["worktree", "remove", "--force", cay], { cwd: GOC });
+		rmSync(noi, { recursive: true, force: true });
+	}
 }
 
 function lenhTuConfig(khoa) {
@@ -350,9 +478,14 @@ export function ngoaiPhamVi(tep, globs) {
 
 function caPhamVi() {
 	const globs = globT1();
-	const mau = ngoaiPhamVi([DO_NEO.mauPhamVi, "_acceptance/x/contract.md", "docs/x.md"], globs);
+	const mau = ngoaiPhamVi(
+		[DO_NEO.mauPhamVi, "_acceptance/x/contract.md", "docs/x.md"],
+		globs,
+	);
 	const moc = git(GOC, "merge-base", DO_NEO.nhanhChinh, "HEAD").trim();
-	const doi = git(GOC, "diff", "--name-only", `${moc}...HEAD`).split("\n").filter(Boolean);
+	const doi = git(GOC, "diff", "--name-only", `${moc}...HEAD`)
+		.split("\n")
+		.filter(Boolean);
 	const ngoai = ngoaiPhamVi(doi, globs);
 	return [
 		ket(
@@ -374,7 +507,11 @@ export function kiemConTro(dongSo) {
 	dongSo.forEach((l, i) => {
 		try {
 			const d = JSON.parse(l);
-			if (d.type === "revisit" && String(d.decision ?? "").includes(DO_NEO.slug)) co += 1;
+			if (
+				d.type === "revisit" &&
+				String(d.decision ?? "").includes(DO_NEO.slug)
+			)
+				co += 1;
 		} catch {
 			loi.push(`HO-SO-GOC: dong ${i + 1} khong phai JSON`);
 		}
@@ -384,7 +521,9 @@ export function kiemConTro(dongSo) {
 }
 
 function caHoSoGoc() {
-	const dongSo = readFileSync(join(GOC, DO_NEO.soHoSoGoc), "utf8").split("\n").filter(Boolean);
+	const dongSo = readFileSync(join(GOC, DO_NEO.soHoSoGoc), "utf8")
+		.split("\n")
+		.filter(Boolean);
 	const mauSach = dongSo.filter((l) => !l.includes(DO_NEO.slug));
 	const hang = [
 		ket(
@@ -395,16 +534,33 @@ function caHoSoGoc() {
 	];
 	const loi = kiemConTro(dongSo);
 	hang.push(
-		ket(loi.length === 0, "sua — ho-so-goc: co con tro revisit hop le", `sua — ${loi.join("; ")}`),
+		ket(
+			loi.length === 0,
+			"sua — ho-so-goc: co con tro revisit hop le",
+			`sua — ${loi.join("; ")}`,
+		),
 	);
 	const fl = execFileSync(
 		"node",
-		["scripts/resolve-plugin.mjs", "--plugin", "feature-loop", "--require", "scripts/repin-lane.mjs"],
+		[
+			"scripts/resolve-plugin.mjs",
+			"--plugin",
+			"feature-loop",
+			"--require",
+			"scripts/repin-lane.mjs",
+		],
 		{ cwd: GOC, encoding: "utf8" },
 	).trim();
 	const r = spawnSync(
 		"node",
-		[join(fl, "scripts/repin-lane.mjs"), "--root", ".", "--slug", DO_NEO.hoSoGoc, "--allow-dirty"],
+		[
+			join(fl, "scripts/repin-lane.mjs"),
+			"--root",
+			".",
+			"--slug",
+			DO_NEO.hoSoGoc,
+			"--allow-dirty",
+		],
 		{ cwd: GOC, encoding: "utf8" },
 	);
 	hang.push(
@@ -426,16 +582,21 @@ const CAC_CA = {
 	"cay-that": caCayThat,
 	"pham-vi": caPhamVi,
 	"ho-so-goc": caHoSoGoc,
+	"xoa-chua-commit": caXoaChuaCommit,
+	"cay-lech": caCayLech,
 };
 
 if (import.meta.main || process.argv[1]?.endsWith("do-neo.mjs")) {
 	const i = process.argv.indexOf("--ca");
-	const cacCa = (i >= 0 ? process.argv[i + 1] ?? "" : "").split(",").filter(Boolean);
+	const cacCa = (i >= 0 ? (process.argv[i + 1] ?? "") : "")
+		.split(",")
+		.filter(Boolean);
 	let ma = 0;
 	let dung = 0;
 	let sai = 0;
 	try {
-		if (cacCa.length === 0) tienDe(`thieu --ca <${Object.keys(CAC_CA).join("|")}>`);
+		if (cacCa.length === 0)
+			tienDe(`thieu --ca <${Object.keys(CAC_CA).join("|")}>`);
 		for (const ten of cacCa) {
 			if (!CAC_CA[ten]) tienDe(`ca la: ${ten}`);
 			const hang = CAC_CA[ten]();
@@ -446,7 +607,9 @@ if (import.meta.main || process.argv[1]?.endsWith("do-neo.mjs")) {
 		if (sai > 0) ma = 1;
 	} catch (loi) {
 		console.log(
-			loi instanceof TienDe ? `TIEN DE: ${loi.message}` : `TIEN DE: bo do hong: ${loi?.stack ?? loi}`,
+			loi instanceof TienDe
+				? `TIEN DE: ${loi.message}`
+				: `TIEN DE: bo do hong: ${loi?.stack ?? loi}`,
 		);
 		ma = 2;
 	}

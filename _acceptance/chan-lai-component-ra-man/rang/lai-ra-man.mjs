@@ -29,7 +29,11 @@ function docGit(goc) {
 	const ra = execFileSync("git", ["-C", goc, "ls-files", "-z", "--", ...THU_MUC_GOC], {
 		encoding: "utf8",
 	});
-	return { tep: ra.split("\0").filter((f) => /\.tsx?$/.test(f)) };
+	return {
+		tep: ra
+			.split("\0")
+			.filter((f) => /\.tsx?$/.test(f) && existsSync(join(goc, f))),
+	};
 }
 
 function ghi(ten, gt) {

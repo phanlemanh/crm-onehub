@@ -707,6 +707,8 @@ executors:
     ndk_cay_that: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca cay-that"
     ndk_pham_vi: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca pham-vi
     ndk_ho_so_goc: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca ho-so-goc"
+    ndk_xoa_chua_commit: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca xoa-chua-commit
+    ndk_cay_lech: bun _acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs --ca cay-lech
     tdc_tieu_de_cot: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tieu-de-cot-doc-tron/rang/tieu-de-cot.mjs"
     tdc_doi_chung_ke_hoach: bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "DUOI_CONG=1 bun _acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs"
     bdc_bo_dung_ui: bun run test --filter=@crm/ui
