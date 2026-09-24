@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: e76c7501ff85aacdebb58911968c745669fbc3cc
-human_signoff:
+human_signoff: Manh Phan 2026-09-24
 ---
 
 # Evidence Report: dem-dau-cot-khi-dang-luu

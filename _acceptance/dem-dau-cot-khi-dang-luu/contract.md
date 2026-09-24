@@ -5,7 +5,7 @@ slug: dem-dau-cot-khi-dang-luu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-24-dem-dau-cot-khi-dang-luu-design.md
 approved_by:
 approved_at:
@@ -52,3 +52,4 @@ Source input: Known limits Ngoài-2 của `_acceptance/keo-tha-thoa-thuan/contra
 ## Notes
 
 - Dữ liệu mẫu hiện có đúng ca khó của AC-2: cột DEMO_BOOKED có thẻ EUR mang giá trị quy đổi 90000 xu nhưng không nằm trong tổng 35000 (quy đổi theo tiền báo cáo cũ). Trình duyệt vì thế không được đoán «được tính» từ giá trị quy đổi.
+- Known limits (Ngoài-1, Gate 2): dữ liệu mẫu trước/sau lượt lưu (`deals-board-sau-luu.json`) được rút từ máy chủ thật chỉ khi chạy bài kiểm API với `GHI_FIXTURE_BANG_COT=1`; không phép đo nào tự so tệp đã commit với đầu ra máy chủ của cây đang xét, nên đổi cách máy chủ tính đầu cột mà không sinh lại tệp thì bài kiểm hàm vẫn xanh trên số cũ.
