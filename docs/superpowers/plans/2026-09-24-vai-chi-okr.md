@@ -941,7 +941,7 @@ Kiểm `channel-auth.spec.ts` cũ: nó dùng `sub: "user_123"` không có dòng 
 
 **Files:**
 - Create: `apps/app/test/tuong-hop-thu.spec.ts`
-- Modify: `apps/app/lib/session.ts`
+- Modify: `apps/app/lib/session.ts`, `apps/app/app/(landing)/grant-access/page.tsx`
 
 **Interfaces:** Produces `hopThuCanCap(userId: string): Promise<MailboxProviderId[]>` (`@/lib/session`).
 
@@ -964,7 +964,7 @@ export async function requireMailboxAccess(): Promise<Session> {
 }
 ```
 
-(`MailboxProviderId` phải được xuất từ `@crm/auth` — kiểm `index.ts`, thêm nếu thiếu.) Kiểm `grant-access/page.tsx` có dùng `mailboxGrantsNeeded(accounts)` không — nếu có, truyền thêm vai qua `workspaceRoleOf`.
+(`MailboxProviderId` phải được xuất từ `@crm/auth` — kiểm `index.ts`, thêm nếu thiếu.) `apps/app/app/(landing)/grant-access/page.tsx` dòng 19 gọi `mailboxGrantsNeeded(await signInAccounts(user.id))` — đổi thành `await hopThuCanCap(user.id)` để hai chỗ cùng một câu trả lời.
 
 - [ ] **Step 3: Kiểm + commit** — `bun run test -- "cd apps/app && bun test test/tuong-hop-thu.spec.ts"` PASS; chiều đỏ: gọi `mailboxGrantsNeeded(accounts)` không vai → đỏ. `git commit -m "vai-chi-okr: tường xin quyền hộp thư không áp cho vai chỉ OKR"`.
 
