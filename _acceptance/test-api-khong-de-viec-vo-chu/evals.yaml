@@ -1,0 +1,49 @@
+schema_version: 1
+feature_slug: test-api-khong-de-viec-vo-chu
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.vvc_dieu_phoi_don_sach
+    expected: "exit 0; trong CÙNG cơ sở dữ liệu của lượt, chạy dieu-phoi.spec.ts và dieu-phoi-diem-nhan.spec.ts rồi rang/dem-sot.ts dieu-phoi đếm theo khuôn tên bộ gieo sinh: liên hệ firstName bắt đầu 'Ca nhan-', công ty name bắt đầu 'Cong ty-', người dùng name 'Nguoi thu nghiem', bộ phận name bắt đầu 'Bo phan-' — cả bốn số phải bằng 0 và được in ra. Thước tự kiểm nó đang đọc cơ sở dữ liệu của lượt (current_database() kết thúc bằng _test và chứa TEST_RUN_ID), sai thì exit 2 với thông điệp 'dang doc nham co so du lieu'. Chiều đỏ trên cùng lượt lệnh: mã trước vá (cây tạm từ onehub) còn 11 liên hệ và 25 công ty, thước exit 1 với thông điệp 'con sot sau dieu-phoi' kèm bốn số."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/test/dieu-phoi-gieo.ts, apps/api/test/dieu-phoi.spec.ts, apps/api/test/dieu-phoi-diem-nhan.spec.ts, _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.vvc_ung_dung_da_dong
+    expected: "exit 0; một bài dựng ứng dụng A bằng createApp(), thay auto() của BackfillService của A bằng spy trả {started:false}, đóng A; dựng B, spy tương tự; đăng nhập thật bằng auth.api.signInEmail một lần. Đối chứng dương: spy của B được gọi đúng 1 lần (chờ tối đa vài giây) — thông điệp ghim 'ung dung dang chay khong nhan dang nhap'. Âm tính: spy của A 0 lần — thông điệp ghim 'ung dung da dong van quet khi co nguoi dang nhap'. Hai spy đều không chạy quét thật nên bài không sinh dòng việc. Chiều đỏ: bỏ cờ đã-dừng khỏi BackfillService (mã trước vá) thì A nhận 1 lần gọi và bài đỏ với thông điệp của A."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/backfill/backfill.service.ts, apps/api/test/quet-khi-dang-nhap.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.vvc_van_quet_that
+    expected: "exit 0; ứng dụng C đang chạy, không spy; bài gieo một liên hệ chưa tìm hiểu, ghi mốc t0, đăng nhập thật, chờ tới khi có dòng AgentTask kind 'identify', contactId = liên hệ đó, finishedAt null (hết hạn chờ thì đỏ với 'duong quet that khong con xep identify'). Rồi đóng C và chờ YÊN: đếm MỌI dòng AgentTask có createdAt >= t0 (không lọc loại, không lọc liên hệ) cho tới khi số không đổi qua một khoảng yên — lượt quét không ai chờ có thể còn ghi sau identify. Xoá mọi dòng đó cùng liên hệ đã gieo, chờ thêm một khoảng yên, đếm lại bằng CÙNG điều kiện rộng: phải bằng 0 — thông điệp ghim 'bai de lai dong viec cua luot quet'. Chiều đỏ phần dò: thay auto() bằng hàm rỗng thì không có dòng identify và bài đỏ ở phép chờ. Chiều đỏ phần dọn: thu hẹp điều kiện xoá về riêng liên hệ đã gieo trong khi một liên hệ lẻ thứ hai cũng chưa tìm hiểu thì phép đếm rộng còn 1 và bài đỏ với thông điệp dọn."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/backfill/backfill.service.ts, apps/api/src/agent/agent-trigger.service.ts, apps/api/test/quet-khi-dang-nhap.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.vvc_go_la_khong_quet
+    expected: "exit 0; trong CÙNG cơ sở dữ liệu của lượt: rang/dem-sot.ts gieo-le tạo một liên hệ lẻ firstName 'vvc-le-<TEST_RUN_ID>' (enrichmentStatus PENDING) TRƯỚC, rồi chạy go-la-cat-quyen.spec.ts, rồi rang/dem-sot.ts sau-dang-nhap. Cả hai bước của thước tự kiểm đang đọc cơ sở dữ liệu của lượt (như E1, sai thì exit 2 'dang doc nham co so du lieu'). Đối chứng dương: liên hệ lẻ phải còn và vẫn chưa tìm hiểu (không thấy thì exit 1 'khong thay lien he le — phep do mo'). Âm tính: số dòng AgentTask có contactId = liên hệ lẻ phải là 0 (thông điệp ghim 'dang nhap trong go-la-cat-quyen van xep viec cho lien he le' kèm kind các dòng). Chiều đỏ: mã trước vá — ứng dụng của go-la-cat-quyen quét thật khi đăng nhập và xếp identify cho liên hệ lẻ, thước exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/test/go-la-cat-quyen.spec.ts, apps/api/src/backfill/backfill.service.ts, _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.vvc_ca_goi_api
+    expected: "exit 0; chạy cả gói api trong một lượt (cd apps/api && bun test, exit 0) rồi rang/dem-sot.ts ca-goi trong cùng cơ sở dữ liệu. Thước tự kiểm cơ sở dữ liệu như E1 (exit 2 'dang doc nham co so du lieu') và có đối chứng dương: bảng _prisma_migrations của cơ sở dữ liệu đó phải có ít nhất một dòng, không thì exit 1 'phep do mo'. Rồi in số dòng AgentTask ở MỌI trạng thái theo kind (để đọc), và số dòng AgentTask chưa xong theo kind, số liên hệ, số công ty; cả ba phải bằng 0, khác 0 thì exit 1 với 'goi api de lai hang' kèm danh sách kind và tên. Chiều đỏ: mã trước vá để lại 11 liên hệ và 25 công ty, thước exit 1 (ở máy này thứ tự file xếp go-la-cat-quyen sớm nên số dòng việc chưa xong trước vá là 0 — chiều đỏ của dòng việc do E4 gánh, không phải E5)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.vvc_go_la_chi_them_dong
+    expected: "exit 0; rang/chi-them-dong.mjs so apps/api/test/go-la-cat-quyen.spec.ts với merge-base của origin/onehub bằng git diff --numstat: số dòng xoá phải là 0 và số dòng thêm > 0, in hai số. Xoá > 0 thì exit 1 với 'bai cu cua go-la-cat-quyen bi sua'; file không đổi thì exit 1 với 'khong thay thay doi — phep do mo'. Chiều đỏ: sửa một dòng assert cũ trong bản sao tạm thì thước exit 1 với thông điệp xoá."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/test/go-la-cat-quyen.spec.ts, _acceptance/test-api-khong-de-viec-vo-chu/rang/chi-them-dong.mjs]
