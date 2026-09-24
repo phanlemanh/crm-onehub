@@ -468,7 +468,7 @@ export class ToChucService {
 	async previewImport(input: { text: string }): Promise<ImportPreviewOutput> {
 		this.kiemLo(input.text);
 		const kq = phanTichLo(input.text, await this.snapNhap());
-		return { rows: kq.rows, summary: kq.summary };
+		return { rows: kq.rows, summary: kq.summary, newNames: kq.newNames };
 	}
 
 	async applyImport(input: { text: string }): Promise<ImportApplyOutput> {

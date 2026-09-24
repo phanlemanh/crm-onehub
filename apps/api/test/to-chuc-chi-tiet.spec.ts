@@ -287,3 +287,80 @@ describe("o-so", () => {
 		expect(khongTruongCay).toEqual(khongTruong);
 	});
 });
+
+describe("nhap-moi", () => {
+	test("nhap-moi: newNames bang dung tap don vi ma luot ghi tao ra, bo trung chu hoa thuong", async () => {
+		const bpCu = await tao(
+			"org.createDivision",
+			{ name: ma("nm-kd") },
+			"bp cu",
+		);
+		const c0 = await cay();
+		const tenBpCu = c0.divisions.find((d) => d.id === bpCu)?.name ?? "";
+		const [a, b, c] = [
+			await nguoiMoi("nm-a"),
+			await nguoiMoi("nm-b"),
+			await nguoiMoi("nm-c"),
+		];
+		const pbMoi1 = ma("nm-pb1");
+		const pbMoi2 = ma("nm-pb2");
+		const bpMoi = ma("nm-bp-moi");
+		const chu = [
+			`${a}@thu.test\t${pbMoi1}\t${tenBpCu.toLocaleUpperCase("vi")}\t`,
+			`${b}@thu.test\t${pbMoi2}\t${bpMoi}\t`,
+			`${c}@thu.test\t${pbMoi2.toLocaleUpperCase("vi")}\t${bpMoi}\t`,
+		].join("\n");
+		const xem = ok<{
+			newNames: { departments: string[]; divisions: string[] };
+		}>(await goi("org.previewImport", { text: chu }), "xem");
+		const tenTruoc = (t: typeof c0) =>
+			new Set([
+				...t.divisions.map((d) => d.name),
+				...t.chuaXep.map((d) => d.name),
+				...t.divisions.flatMap((d) => d.departments.map((p) => p.name)),
+			]);
+		const truoc = tenTruoc(await cay());
+		ok(await goi("org.applyImport", { text: chu }), "ghi");
+		const sau = await cay();
+		const moiPb = [
+			...sau.chuaXep,
+			...sau.divisions.flatMap((d) => d.departments),
+		]
+			.map((d) => d.name)
+			.filter((t) => !truoc.has(t))
+			.sort();
+		const moiBp = sau.divisions
+			.map((d) => d.name)
+			.filter((t) => !truoc.has(t))
+			.sort();
+		expect({
+			pb: [...xem.newNames.departments].sort(),
+			bp: [...xem.newNames.divisions].sort(),
+		}).toEqual({ pb: moiPb, bp: moiBp });
+		expect(`so pb moi ${moiPb.length}, bp moi ${moiBp.length}`).toBe(
+			"so pb moi 2, bp moi 1",
+		);
+	});
+
+	test("nhap-moi: moi dong hong mang dung cau cua cot thieu, chuoi nguyen van", async () => {
+		const a = await nguoiMoi("nc-a");
+		const b = await nguoiMoi("nc-b");
+		const chu = [
+			`\t${ma("nc-pb")}\t\t`,
+			`${a}@thu.test\t\t${ma("nc-bp")}\t`,
+			`${b}@thu.test\t${ma("nc-pb2")}\t\tbộ phận`,
+		].join("\n");
+		const xem = ok<{ rows: { line: number; error: string | null }[] }>(
+			await goi("org.previewImport", { text: chu }),
+			"xem",
+		);
+		expect(xem.rows.map((r) => [r.line, r.error])).toEqual([
+			[1, "Thiếu email"],
+			[2, "Thiếu phòng ban"],
+			[
+				3,
+				"Trưởng bộ phận cần cột bộ phận, hoặc phòng ban đã thuộc một bộ phận",
+			],
+		]);
+	});
+});

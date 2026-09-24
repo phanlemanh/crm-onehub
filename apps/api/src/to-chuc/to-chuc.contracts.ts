@@ -113,6 +113,10 @@ export const orgImportPreviewOutput = z.object({
 		newDepartments: z.number(),
 		newDivisions: z.number(),
 	}),
+	newNames: z.object({
+		departments: z.array(z.string()),
+		divisions: z.array(z.string()),
+	}),
 });
 export const orgImportApplyOutput = z.object({
 	written: z.number(),

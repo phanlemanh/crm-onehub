@@ -33,7 +33,10 @@ export const TO_CHUC = {
 		nhap: {
 			emailKhongPhaiThanhVien: "Email này chưa là thành viên CRM",
 			emailLap: "Email này xuất hiện nhiều lần trong lô",
-			thieuCot: "Thiếu email, phòng ban, hoặc bộ phận của trưởng bộ phận",
+			thieuEmail: "Thiếu email",
+			thieuPhongBan: "Thiếu phòng ban",
+			thieuBoPhanTruong:
+				"Trưởng bộ phận cần cột bộ phận, hoặc phòng ban đã thuộc một bộ phận",
 			phongBanBoPhanKhac: (pb: string, bp: string) =>
 				`Phòng ban «${pb}» đang thuộc bộ phận «${bp}»`,
 			phongBanHaiBoPhan: (pb: string) =>
