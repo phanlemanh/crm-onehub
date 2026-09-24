@@ -3,13 +3,13 @@ schema_version: 1
 slug: cau-truc-to-chuc
 feature: Tổ chức có hai cấp — bộ phận chứa phòng ban — thay cho một danh sách phẳng mà Điều phối 30 ngày đang gọi là «bộ phận»
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-09-24T04:50:41Z
 prototype:
   base_commit: 875413c096a896fcd8bb89674d0a675388bed7b1
-  disposition:
+  disposition: keep
 ---
 
 ## Vấn đề & ai gặp
@@ -88,15 +88,15 @@ Lịch và phụ thuộc (phiên điều phối lộ trình OKR báo 2026-09-24)
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] Cây tổ chức có phản ánh đúng công ty tới mức OKR quý 4
+- Câu hỏi phép đo trả lời: Cây tổ chức có phản ánh đúng công ty tới mức OKR quý 4
   và Điều phối 30 ngày dựa được vào nó không.
-- Kết quả nào là SỐNG: [đề xuất] Trên production một tuần sau khi bật: ≥ 90% thành viên
+- Kết quả nào là SỐNG: Trên production một tuần sau khi bật: ≥ 90% thành viên
   còn hiệu lực có phòng ban chính, và mọi phòng ban có trưởng — đếm từ bảng nối (ngưỡng
   gợi ý của lộ trình OKR, lượt 1).
-- Kết quả nào là CHẾT: [đề xuất] Một tuần sau khi bật dưới 70% thành viên còn hiệu lực có
+- Kết quả nào là CHẾT: Một tuần sau khi bật dưới 70% thành viên còn hiệu lực có
   phòng ban chính, hoặc quản trị phải nhờ sửa cơ sở dữ liệu mới dựng được cây — cây không
   đủ làm nền cho OKR quý 4 bắt đầu 2026-10-26.
-- Timebox: [đề xuất] vòng làm lượt 1 từ 2026-10-01 đến 2026-10-05; cây thật được dựng trong
+- Timebox: vòng làm lượt 1 từ 2026-10-01 đến 2026-10-05; cây thật được dựng trong
   tuần 2026-10-19 (danh sách nhân sự tới trước 2026-10-16), nên đo lần đầu 2026-10-26 — một
   tuần sau, cũng là ngày OKR quý 4 bắt đầu.
 
@@ -138,6 +138,36 @@ hai phụ thuộc mà kho chưa có, cùng là phụ thuộc của block `flow-2
 |---|---|---|---|---|
 | Khuôn cây hai cấp có ô tìm tự mở nhánh khớp (nhóm là thư mục gập được, mục con là lá) | block Pro ReUI `form-9` (`role-tree.tsx`) | ngôn-ngữ-thiết-kế/hình-thái | đề xuất: có — chỉ khuôn tương tác, dựng lại bằng thành phần sẵn có của kho; không chép mã block | chờ ký ở Cổng Đáng |
 | Hình sơ đồ cây từ trên xuống (ô có tiêu đề, dòng phụ, chân ô; đường kẻ nối cha con, tự dàn trang) | block Pro ReUI `flow-2` | ngôn-ngữ-thiết-kế/hình-thái | đề xuất: có — chỉ hình, dựng tĩnh trong bản mẫu; không chép mã block, không thêm thư viện | chờ ký ở Cổng Đáng |
+
+## Cổng 0
+
+- **decision = build** Căn cứ (chủ kho, 2026-09-24T04:50:41Z): cây tổ chức là nền của OKR R1 — vai
+  «chỉ OKR», đặt OKR, cập nhật tuần đều đứng trên nó — và mọi phòng ban áp dụng OKR quý 4
+  trên CRM từ 2026-10-26. Vòng làm là lượt 1 `cay-to-chuc-co-nguoi` của
+  `docs/plan/lo-trinh-okr.md`.
+- **disposition = keep** Căn cứ: bản mẫu `/proto/cau-truc-to-chuc` chỉ có mã trong
+  `apps/app/app/proto/` và hồ sơ này, không có mã sản phẩm; nó là vật liệu cho bước thiết kế
+  của vòng làm. Ba chốt canh: diffBase = `prototype.base_commit`; baseline bắt buộc; nhánh
+  vòng làm cắt từ nhánh chính `onehub`.
+- **Ngưỡng UAT chốt cùng lúc ký:** nguyên văn bốn vế ở mục «Ngưỡng chết / ngưỡng UAT»
+  (câu hỏi phép đo, SỐNG, CHẾT, timebox).
+
+Chưa ký ở cổng này, còn mang trạng thái đề xuất:
+
+- Câu trả lời cho các «Câu hỏi mở cho Cổng Đáng» — phạm vi lượt 1 của lộ trình OKR là căn
+  cứ; vòng làm chốt chúng thành tiêu chí ở Cổng Phạm vi.
+- Hai dòng «Nguồn ngoài» (hình của block ReUI `form-9`, `flow-2`) — còn «chờ ký»; chưa ký
+  thì theo luật mặc định, vòng làm KHÔNG kế thừa hình thái của chúng.
+- Dòng ngoài phạm vi «sơ đồ có kéo, phóng to — để sau lượt 1».
+
+## Bảng nợ kế thừa (CHỈ khi disposition: keep)
+
+| Path | Giữ / Dựng lại | Chạm t3_paths? | Ghi chú |
+|---|---|---|---|
+| `apps/app/app/proto/_modules/cau-truc-to-chuc/` | Giữ | không | Bản mẫu, dữ liệu giả, không đường ghi; hàng bộ phận ghép tạm từ nút `ghost` vì kho chưa có thành phần cây — màn thật cần thành phần cây trong `packages/ui` |
+| `apps/app/app/proto/catalog.ts`, `registry.ts` | Giữ | không | Mục sổ bản mẫu; slug bằng tên hồ sơ |
+| Trạng thái «Sơ đồ tổ chức» trong bản mẫu | Giữ như bản mẫu | không | Sơ đồ tĩnh; màn thật dựng lại nếu chọn sơ đồ (thư viện sơ đồ là quyết định riêng) |
+| `_acceptance/cau-truc-to-chuc/evidence/proto/` | Giữ | không | Ảnh chụp 7 trạng thái × 2 khổ |
 
 ## Out of scope từ khám phá
 
