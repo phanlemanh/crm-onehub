@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chuỗi nguyên nhân lỗi Zalo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 52rem;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Luồng · lỗi cầu nối Zalo nói đúng nguyên nhân · d-2 · d-3</p>
+    <h1>Chặng nào phát hiện, người dùng đọc câu nào</h1>
+    <p class="sub">Lời gọi đi từ màn sang phải. Mỗi hỏng hóc được gọi tên ở đúng chặng phát hiện ra nó, rồi quay về màn trái thành một câu. Chữ mono là tên thật trong mã — không dịch.</p>
+
+    <svg viewBox="0 0 1200 992" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-ink" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#171717"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- ===== Mũi tên (vẽ trước ô) ===== -->
+      <line x1="404" y1="44" x2="443" y2="44" stroke="#171717" stroke-width="1.2" marker-end="url(#arrow-ink)"/>
+      <line x1="684" y1="44" x2="723" y2="44" stroke="#171717" stroke-width="1.2" marker-end="url(#arrow-ink)"/>
+      <line x1="980" y1="44" x2="1011" y2="44" stroke="#171717" stroke-width="1.2" marker-end="url(#arrow-ink)"/>
+
+      <line x1="444" y1="160" x2="405" y2="160" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="444" y1="224" x2="405" y2="224" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="444" y1="288" x2="405" y2="288" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="444" y1="352" x2="405" y2="352" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="444" y1="416" x2="405" y2="416" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <line x1="1012" y1="552" x2="981" y2="552" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="1012" y1="616" x2="981" y2="616" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="1012" y1="680" x2="981" y2="680" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="1012" y1="744" x2="981" y2="744" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <line x1="724" y1="552" x2="405" y2="552" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="724" y1="616" x2="405" y2="616" stroke="#575757" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+      <line x1="724" y1="680" x2="405" y2="680" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="724" y1="744" x2="405" y2="744" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <!-- ===== Nhãn mũi tên qua cột API ===== -->
+      <rect x="500" y="530" width="128" height="16" rx="2" fill="#fafafa"/>
+      <text x="564" y="542" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">luuBot ném reason</text>
+      <rect x="500" y="594" width="128" height="16" rx="2" fill="#fafafa"/>
+      <text x="564" y="606" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">luuBot ném reason</text>
+      <rect x="488" y="658" width="152" height="16" rx="2" fill="#fafafa"/>
+      <text x="564" y="670" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">guiThu ném guiHong.zalo</text>
+      <rect x="484" y="722" width="160" height="16" rx="2" fill="#fafafa"/>
+      <text x="564" y="734" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">guiThu ném guiHong.slack</text>
+
+      <!-- ===== Hàng chặng ===== -->
+      <rect x="24" y="16" width="380" height="56" rx="6" fill="#f2f2f2" stroke="#171717" stroke-width="1.2"/>
+      <text x="40" y="40" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Màn</text>
+      <text x="40" y="58" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Kết nối › Zalo (luuBot) · Thông báo của bạn (guiThu)</text>
+      <text x="388" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC-7</text>
+
+      <rect x="444" y="16" width="240" height="56" rx="6" fill="#f2f2f2" stroke="#171717" stroke-width="1.2"/>
+      <text x="460" y="40" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">API</text>
+      <text x="460" y="58" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">zalo-cau-noi.service.ts</text>
+
+      <rect x="724" y="16" width="256" height="56" rx="6" fill="#f2f2f2" stroke="#171717" stroke-width="1.2"/>
+      <text x="740" y="40" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Tác tử</text>
+      <text x="740" y="58" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">zalo-bot-xuong.ts</text>
+
+      <rect x="1012" y="16" width="164" height="56" rx="6" fill="#f2f2f2" stroke="#171717" stroke-width="1.2"/>
+      <text x="1028" y="40" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Zalo / Slack</text>
+      <text x="1028" y="58" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">getMe · sendMessage</text>
+
+      <!-- ===== Dải 1: API phát hiện ===== -->
+      <line x1="24" y1="92" x2="1176" y2="92" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="24" y="116" font-size="11" font-family="'Geist', sans-serif" fill="#575757"><tspan fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.14em">API PHÁT HIỆN</tspan><tspan dx="8">năm nguyên nhân ở cầu nối — như nhau cho luuBot và guiThu</tspan><tspan dx="12" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">AC-1 · AC-2</tspan></text>
+
+      <rect x="24" y="132" width="380" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <text x="36" y="156" fill="#171717" font-size="11" font-family="'Geist', sans-serif">CRM chưa được nối với dịch vụ nhắc việc.</text>
+      <text x="36" y="172" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Báo người cài đặt CRM.</text>
+      <rect x="444" y="132" width="240" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="456" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Thiếu cầu nối</text>
+      <text x="456" y="174" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">nguyenNhan: thieu-cau-noi</text>
+
+      <rect x="24" y="196" width="380" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <text x="36" y="220" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Không gọi được dịch vụ nhắc việc — có thể nó đang tắt</text>
+      <text x="36" y="236" fill="#171717" font-size="11" font-family="'Geist', sans-serif">hoặc đang khởi động. Thử lại sau ít phút.</text>
+      <rect x="444" y="196" width="240" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="456" y="220" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Không tới được tác tử</text>
+      <text x="456" y="238" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">nguyenNhan: khong-toi-duoc</text>
+
+      <rect x="24" y="260" width="380" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <text x="36" y="284" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Dịch vụ nhắc việc không nhận khoá của CRM.</text>
+      <text x="36" y="300" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Báo người cài đặt CRM.</text>
+      <rect x="444" y="260" width="240" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="456" y="284" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Tác tử trả 401</text>
+      <text x="456" y="302" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">nguyenNhan: sai-khoa · status: 401</text>
+
+      <rect x="24" y="324" width="380" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <text x="36" y="348" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Dịch vụ nhắc việc gặp lỗi (mã N).</text>
+      <text x="36" y="364" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Thử lại; nếu vẫn lỗi, báo người cài đặt CRM.</text>
+      <rect x="444" y="324" width="240" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="456" y="348" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Tác tử trả mã khác 2xx</text>
+      <text x="456" y="366" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">nguyenNhan: tac-tu-loi · status: N</text>
+
+      <rect x="24" y="388" width="380" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <text x="36" y="406" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Dịch vụ nhắc việc trả lời theo khuôn CRM không đọc được —</text>
+      <text x="36" y="420" fill="#171717" font-size="11" font-family="'Geist', sans-serif">có thể hai bên đang chạy hai phiên bản khác nhau.</text>
+      <text x="36" y="434" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Báo người cài đặt CRM.</text>
+      <rect x="444" y="388" width="240" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="456" y="412" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Thân sai khuôn: JSON sai / HTML</text>
+      <text x="456" y="430" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">nguyenNhan: sai-khuon</text>
+
+      <!-- Ghi chú dải 1 -->
+      <rect x="724" y="132" width="452" height="148" rx="6" fill="#f2f2f2"/>
+      <text x="744" y="156" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">DÒNG LOG Ở API · AC-2 · AC-6</text>
+      <text x="744" y="178" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Mỗi lời gọi hỏng ghi đúng một dòng logger.warn</text>
+      <text x="744" y="200" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">{ message: "Zalo bridge call failed",</text>
+      <text x="756" y="216" fill="#171717" font-size="10" font-family="'Geist Mono', monospace">duong, nguyenNhan, status?, loi? }</text>
+      <text x="744" y="240" fill="#575757" font-size="11" font-family="'Geist', sans-serif">loi là tên lớp lỗi, hoặc đường dẫn zod bị từ chối.</text>
+      <text x="744" y="258" fill="#575757" font-size="11" font-family="'Geist', sans-serif">Không header, không thân phản hồi, không khoá cầu nối.</text>
+
+      <rect x="724" y="296" width="452" height="148" rx="6" fill="#f2f2f2"/>
+      <text x="744" y="320" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">NGƯỜI GỌI NHẬN GÌ · AC-1</text>
+      <text x="744" y="342" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Lỗi yêu cầu — HTTP 400, không phải 500</text>
+      <text x="744" y="366" fill="#575757" font-size="11" font-family="'Geist', sans-serif">Sai khuôn tách hai ô đo (JSON sai, HTML) nhưng chung một câu.</text>
+      <text x="744" y="384" fill="#575757" font-size="11" font-family="'Geist', sans-serif">Năm câu của năm nguyên nhân đôi một khác nhau.</text>
+      <text x="744" y="402" fill="#575757" font-size="11" font-family="'Geist', sans-serif">Không câu nào còn «Tác tử chưa nối được».</text>
+      <text x="744" y="424" fill="#575757" font-size="11" font-family="'Geist', sans-serif">Đổi mã sang 502/503: ngoài phạm vi vòng này.</text>
+
+      <!-- ===== Dải 2: Tác tử phát hiện ===== -->
+      <line x1="24" y1="468" x2="1176" y2="468" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="24" y="490" font-size="11" font-family="'Geist', sans-serif" fill="#575757"><tspan fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.14em">TÁC TỬ PHÁT HIỆN</tspan><tspan dx="8">Zalo hay Slack hỏng — tác tử trả kết quả có kiểu thay vì ném, nên cầu nối không còn thành 500</tspan><tspan dx="12" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">AC-3 · AC-4 · AC-5</tspan></text>
+      <text x="24" y="508" font-size="11" font-family="'Geist', sans-serif" fill="#575757">Mỗi lần hỏng một dòng <tspan font-size="9" font-family="'Geist Mono', monospace" fill="#171717">console.error "[zalo] &lt;method&gt; &lt;lớp&gt;"</tspan>, lớp là <tspan font-size="9" font-family="'Geist Mono', monospace" fill="#171717">http-&lt;mã&gt; · mang (&lt;tên lỗi&gt;) · sai-khuon</tspan>. Bot Token trong <tspan font-size="9" font-family="'Geist Mono', monospace" fill="#171717">/bot&lt;token&gt;/</tspan> bị che trước khi in.<tspan dx="12" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">AC-6</tspan></text>
+
+      <!-- Hàng 6 — zalo-loi (focal) -->
+      <rect x="24" y="524" width="380" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <text x="36" y="548" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Zalo đang không trả lời nên chưa kiểm được token.</text>
+      <text x="36" y="564" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Bot đang dùng giữ nguyên; thử lại sau ít phút.</text>
+      <rect x="724" y="524" width="256" height="56" rx="6" fill="#fafafa"/>
+      <rect x="724" y="524" width="256" height="56" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="736" y="544" fill="#006B4F" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Zalo không trả lời</text>
+      <text x="736" y="559" fill="#171717" font-size="9" font-family="'Geist Mono', monospace">outcome: zalo-loi</text>
+      <text x="736" y="573" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">log: [zalo] getMe &lt;lớp&gt;</text>
+      <rect x="1012" y="524" width="164" height="56" rx="6" fill="#fafafa"/>
+      <rect x="1012" y="524" width="164" height="56" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="1024" y="542" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif">getMe hỏng</text>
+      <text x="1024" y="557" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">mạng · 5xx · sai khuôn</text>
+      <text x="1024" y="571" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">ok:false 5xx</text>
+
+      <!-- Hàng 7 — token sai (đối chứng) -->
+      <rect x="24" y="588" width="380" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="36" y="612" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Zalo không nhận token này.</text>
+      <text x="36" y="628" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">ZALO.loi.tokenSai — câu cũ, không đổi</text>
+      <rect x="724" y="588" width="256" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="736" y="612" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Token sai</text>
+      <text x="736" y="630" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">outcome: invalid</text>
+      <rect x="1012" y="588" width="164" height="56" rx="6" fill="#fafafa"/>
+      <rect x="1012" y="588" width="164" height="56" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="1024" y="606" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif">getMe từ chối</text>
+      <text x="1024" y="621" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">HTTP 4xx</text>
+      <text x="1024" y="635" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">ok:false 4xx</text>
+
+      <!-- Hàng 8 — gửi Zalo hỏng -->
+      <rect x="24" y="652" width="380" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <text x="36" y="676" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Zalo chưa nhận tin thử.</text>
+      <text x="36" y="692" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Thử lại sau ít phút.</text>
+      <rect x="724" y="652" width="256" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="736" y="672" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Gửi Zalo hỏng</text>
+      <text x="736" y="687" fill="#171717" font-size="9" font-family="'Geist Mono', monospace">guiDuoc: false · kenh: zalo</text>
+      <text x="736" y="701" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">log: [zalo] sendMessage &lt;lớp&gt;</text>
+      <rect x="1012" y="652" width="164" height="56" rx="6" fill="#fafafa"/>
+      <rect x="1012" y="652" width="164" height="56" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="1024" y="670" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif">sendMessage hỏng</text>
+      <text x="1024" y="685" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">mạng · 5xx · ok:false</text>
+      <text x="1024" y="699" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">sai khuôn</text>
+
+      <!-- Hàng 9 — gửi Slack hỏng -->
+      <rect x="24" y="716" width="380" height="56" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <text x="36" y="740" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Slack chưa nhận tin thử.</text>
+      <text x="36" y="756" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Thử lại sau ít phút.</text>
+      <rect x="724" y="716" width="256" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="736" y="736" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Gửi Slack hỏng</text>
+      <text x="736" y="751" fill="#171717" font-size="9" font-family="'Geist Mono', monospace">guiDuoc: false · kenh: slack</text>
+      <text x="736" y="765" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">log: [zalo] slack &lt;lớp&gt;</text>
+      <rect x="1012" y="716" width="164" height="56" rx="6" fill="#fafafa"/>
+      <rect x="1012" y="716" width="164" height="56" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="1024" y="748" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif">Slack gửi hỏng</text>
+
+      <!-- ===== Dải 3: Lệch phiên bản ===== -->
+      <line x1="24" y1="796" x2="1176" y2="796" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="24" y="820" font-size="11" font-family="'Geist', sans-serif" fill="#575757"><tspan fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LỆCH PHIÊN BẢN KHI TRIỂN KHAI</tspan><tspan dx="8">API và tác tử lên Vercel riêng; ghép hai đời khác nhau thì ra hai ca</tspan></text>
+
+      <rect x="24" y="836" width="600" height="84" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="40" y="860" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">API mới + tác tử cũ — đọc đúng</text>
+      <text x="608" y="860" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC-8</text>
+      <text x="40" y="882" fill="#575757" font-size="11" font-family="'Geist', sans-serif">Tác tử cũ không có trường guiDuoc, nhưng gửi hỏng thì nó ném (trả 500), không trả 200.</text>
+      <text x="40" y="902" fill="#575757" font-size="11" font-family="'Geist', sans-serif"><tspan font-size="9" font-family="'Geist Mono', monospace" fill="#171717">guiDuoc: z.boolean().default(true)</tspan> — thiếu trường thì đọc là đã gửi, đúng sự thật.</text>
+
+      <rect x="648" y="836" width="528" height="84" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="664" y="860" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">API cũ + tác tử mới — Known limit</text>
+      <text x="664" y="882" fill="#575757" font-size="11" font-family="'Geist', sans-serif">API cũ bỏ qua guiDuoc: gửi thử hỏng vẫn hiện «đã gửi».</text>
+      <text x="664" y="902" fill="#575757" font-size="11" font-family="'Geist', sans-serif">Chỉ trong cửa sổ triển khai; triển khai tay thì cho API lên trước.</text>
+
+      <!-- ===== Chú giải ===== -->
+      <line x1="24" y1="944" x2="1176" y2="944" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <rect x="24" y="960" width="20" height="12" rx="2" fill="#f2f2f2" stroke="#171717" stroke-width="1.2"/>
+      <text x="52" y="970" fill="#575757" font-size="10" font-family="'Geist', sans-serif">chặng</text>
+      <rect x="116" y="960" width="20" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="144" y="970" fill="#575757" font-size="10" font-family="'Geist', sans-serif">nguyên nhân, đặt ở chặng phát hiện</text>
+      <rect x="352" y="960" width="20" height="12" rx="2" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="380" y="970" fill="#575757" font-size="10" font-family="'Geist', sans-serif">hỏng ở phía Zalo / Slack</text>
+      <rect x="532" y="960" width="20" height="12" rx="2" fill="#ffffff" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <text x="560" y="970" fill="#575757" font-size="10" font-family="'Geist', sans-serif">câu người dùng thấy</text>
+      <rect x="692" y="960" width="20" height="12" rx="2" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="720" y="970" fill="#575757" font-size="10" font-family="'Geist', sans-serif">đối chứng — câu cũ, không đổi</text>
+      <rect x="904" y="960" width="20" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="932" y="970" fill="#575757" font-size="10" font-family="'Geist', sans-serif">nhánh mới tách khỏi «token sai»</text>
+    </svg>
+  </div>
+</body>
+</html>
