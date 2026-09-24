@@ -27,11 +27,14 @@ import { canhSlackConnect } from "./slack-connect";
 import { rememberSlackInstall, replaceSlackConnection } from "./slack-grant";
 import { SLACK_REQUESTED_SCOPES, SLACK_USER_SCOPES } from "./slack-scopes";
 import { queueSlackInventorySync } from "./slack-sync";
+import { guiThuBaoDaDoi, guiThuXinDatLai } from "./thu-mat-khau";
 import {
 	googleHostedDomain,
 	hasSignInAllowList,
 	primaryWorkspaceDomain,
 } from "./workspace";
+
+const XIN_DAT_LAI = { cuaSoGiay: 15 * 60, toiDa: 3 } as const;
 
 const socialProviders: NonNullable<BetterAuthOptions["socialProviders"]> = {};
 const slackOAuth = env.slack;
@@ -87,6 +90,12 @@ export const auth = betterAuth({
 		revokeSessionsOnPasswordReset: true,
 		minPasswordLength: PASSWORD.minLength,
 		resetPasswordTokenExpiresIn: PASSWORD.tokenTtlSeconds,
+		sendResetPassword: async ({ user, token }) => {
+			await guiThuXinDatLai({ email: user.email, token });
+		},
+		onPasswordReset: async ({ user }) => {
+			await guiThuBaoDaDoi(user.email);
+		},
 	},
 
 	socialProviders,
@@ -111,6 +120,12 @@ export const auth = betterAuth({
 	rateLimit: {
 		enabled: true,
 		storage: "database",
+		customRules: {
+			"/request-password-reset": {
+				window: XIN_DAT_LAI.cuaSoGiay,
+				max: XIN_DAT_LAI.toiDa,
+			},
+		},
 	},
 
 	advanced: {

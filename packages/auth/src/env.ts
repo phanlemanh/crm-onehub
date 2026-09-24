@@ -42,6 +42,20 @@ const microsoftCredentials = ():
 	};
 };
 
+const thuCredentials = (): { apiKey: string; from: string } | undefined => {
+	const apiKey = optional("RESEND_API_KEY");
+	const from = optional("MAIL_FROM");
+
+	if (!apiKey || !from) {
+		if (apiKey || from) {
+			throw new Error("RESEND_API_KEY and MAIL_FROM must be set together.");
+		}
+		return undefined;
+	}
+
+	return { apiKey, from };
+};
+
 const slackCredentials = ():
 	| { clientId: string; clientSecret: string }
 	| undefined => pair("SLACK_CLIENT_ID", "SLACK_CLIENT_SECRET");
@@ -62,6 +76,7 @@ export const env = {
 	google: googleCredentials(),
 	microsoft: microsoftCredentials(),
 	slack: slackCredentials(),
+	thu: thuCredentials(),
 	cookieDomain: optional("AUTH_COOKIE_DOMAIN"),
 	trustedOrigins: [...new Set([...appUrls, apiUrl])],
 	isProduction: process.env.NODE_ENV === "production",
@@ -73,6 +88,10 @@ export function isGoogleConfigured(): boolean {
 
 export function isMicrosoftConfigured(): boolean {
 	return env.microsoft !== undefined;
+}
+
+export function isMailConfigured(): boolean {
+	return env.thu !== undefined;
 }
 
 export function isSlackConfigured(): boolean {
