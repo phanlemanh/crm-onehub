@@ -353,3 +353,85 @@ describe("ten-bot", () => {
 		expect(s?.zaloBotName, "khong ghi account_name").not.toBe("bot.uipSwwnr");
 	});
 });
+
+function thayFetchZalo(z: ReturnType<typeof zaloGia>): () => void {
+	const cu = globalThis.fetch;
+	globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) =>
+		String(input).startsWith(ZALO.api)
+			? z.fetcher(input, init)
+			: new Response("", { status: 503 })) as typeof fetch;
+	return () => {
+		globalThis.fetch = cu;
+	};
+}
+
+const URL_CU = "https://cu.test/zalo/webhook";
+
+async function nhipVoi(chon: ChonZaloGia): Promise<void> {
+	await datCaiDat({ zaloBotToken: "1:abc" });
+	await db.appSetting.update({
+		where: { id: SETTINGS_ID },
+		data: { zaloWebhookUrl: URL_CU },
+	});
+	const traLai = thayFetchZalo(zaloGia(chon));
+	try {
+		await voiBien({ ZALO_BOT_TOKEN: "", ZALO_WEBHOOK_SECRET: "" }, () =>
+			chayNhipDispatch(),
+		);
+	} finally {
+		traLai();
+	}
+}
+
+async function urlDangGhi(): Promise<string | null> {
+	const s = await db.appSetting.findUnique({ where: { id: SETTINGS_ID } });
+	return s?.zaloWebhookUrl ?? null;
+}
+
+describe("trang-thai-webhook", () => {
+	const CA: { ten: string; chon: ChonZaloGia; ky: string | null }[] = [
+		{
+			ten: "a co url",
+			chon: { webhookInfo: { url: "https://u.test/zalo/webhook" } },
+			ky: "https://u.test/zalo/webhook",
+		},
+		{ ten: "b 404", chon: { webhookInfo: 404 }, ky: null },
+		{ ten: "c 500 giu cu", chon: { webhookInfo: 500 }, ky: URL_CU },
+		{ ten: "d than la", chon: { webhookInfo: "la" }, ky: null },
+	];
+	for (const ca of CA) {
+		test(`trang-thai-webhook: nhip ${ca.ten}`, async () => {
+			const loi: string[] = [];
+			const goc = console.error;
+			console.error = (...m: unknown[]) => {
+				loi.push(m.map(String).join(" "));
+			};
+			try {
+				await nhipVoi(ca.chon);
+			} finally {
+				console.error = goc;
+			}
+			expect(await urlDangGhi(), `nhip ${ca.ten}`).toBe(ca.ky);
+			if (ca.ten.startsWith("d")) {
+				expect(
+					loi.filter(
+						(d) =>
+							d.includes("getWebhookInfo") &&
+							d.includes("ok,result") &&
+							d.includes("khac"),
+					),
+					"than la ghi mot dong log khoa cap dau",
+				).toHaveLength(1);
+			}
+		});
+	}
+
+	test("trang-thai-webhook: getMe 401 thi ten bot va url ve null", async () => {
+		await nhipVoi({ getMe: 401, webhookInfo: { url: "https://u.test/x" } });
+		const s = await db.appSetting.findUnique({ where: { id: SETTINGS_ID } });
+		expect(
+			{ ten: s?.zaloBotName ?? null, url: s?.zaloWebhookUrl ?? null },
+			"bot bi xoa thi trang ve chua bat",
+		).toEqual({ ten: null, url: null });
+	});
+});

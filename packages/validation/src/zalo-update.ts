@@ -156,10 +156,15 @@ const webhookInfo = z.object({
 
 export type ZaloWebhookInfo =
 	| { loai: "co-url"; url: string }
-	| { loai: "la"; khoa: string };
+	| { loai: "la"; khoa: string; khoaKetQua: string };
 
 export function parseZaloWebhookInfo(value: unknown): ZaloWebhookInfo {
 	const ket = webhookInfo.safeParse(value);
 	if (ket.success) return { loai: "co-url", url: ket.data.result.url };
-	return { loai: "la", khoa: khoaCapDauCua(value) };
+	const ketQua = z.object({ result: z.unknown() }).safeParse(value);
+	return {
+		loai: "la",
+		khoa: khoaCapDauCua(value),
+		khoaKetQua: ketQua.success ? khoaCapDauCua(ketQua.data.result) : "",
+	};
 }

@@ -60,3 +60,18 @@ export async function guiZalo(
 		}),
 	);
 }
+
+export async function zaloGoiTho(
+	fetcher: typeof fetch,
+	token: string,
+	method: string,
+	body: Record<string, string>,
+): Promise<{ status: number; than: unknown }> {
+	const res = await fetcher(`${zaloApiGoc()}/bot${token}/${method}`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json; charset=utf-8" },
+		body: JSON.stringify(body),
+	});
+	const than: unknown = await res.json().catch(() => null);
+	return { status: res.status, than };
+}

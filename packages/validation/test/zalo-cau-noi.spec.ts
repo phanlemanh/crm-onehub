@@ -47,6 +47,7 @@ describe("zalo-cau-noi", () => {
 		expect(parseZaloWebhookInfo({ ok: true, result: { khac: 1 } })).toEqual({
 			loai: "la",
 			khoa: "ok,result",
+			khoaKetQua: "khac",
 		});
 	});
 
