@@ -121,7 +121,7 @@ export class ToChucService {
 		const where = {
 			archivedAt: null,
 			name: { equals: ten, mode: "insensitive" as const },
-			...(boQua ? { NOT: { id: boQua } } : {}),
+			id: { not: boQua ?? "" },
 		};
 		const trung =
 			bang === "division"

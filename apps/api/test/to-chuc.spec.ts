@@ -11,6 +11,7 @@ import {
 	doc,
 	dungSan,
 	goi,
+	type Json,
 	ma,
 	nguoiMoi,
 	ok,
@@ -150,7 +151,7 @@ describe("vong-doi-don-vi", () => {
 		ky.chuaXep = [pb[2] as string];
 		await soVoi("sau khi ve chua xep");
 
-		const TU_CHOI: [string, unknown, string][] = [
+		const TU_CHOI: [string, Json, string][] = [
 			["org.createDivision", { name: "   " }, "Tên không được để trống."],
 			["org.createDivision", { name: "x".repeat(81) }, "Tên dài quá 80 ký tự."],
 			[
@@ -301,7 +302,7 @@ describe("truong", () => {
 			},
 		});
 
-		const MA_TRAN: [string, unknown, string][] = [
+		const MA_TRAN: [string, Json, string][] = [
 			[
 				"pb, nguoi trong",
 				{ kind: "department", id: pb, userId: trong },
@@ -359,7 +360,7 @@ describe("truong", () => {
 			}),
 			"thuong lam truong",
 		);
-		const GHI: [string, () => unknown][] = [
+		const GHI: [string, () => Json][] = [
 			["org.setHead", () => ({ kind: "department", id: pb, userId: khac })],
 			[
 				"org.applyImport",
@@ -866,9 +867,7 @@ function thuTucGhi(): string[] {
 		.sort();
 }
 
-async function dungDauVaoHopLe(): Promise<
-	Record<string, () => Promise<unknown>>
-> {
+async function dungDauVaoHopLe(): Promise<Record<string, () => Promise<Json>>> {
 	const bpMoi = () => tao("org.createDivision", { name: ma("q-bp") }, "q bp");
 	const pbTrong = () => pbMoi("q-pb");
 	const pbLuu = async () => {
@@ -945,7 +944,7 @@ describe("quyen", () => {
 		);
 		let daGui = 0;
 		for (const t of thuTuc) {
-			const lam = vao[t] as () => Promise<unknown>;
+			const lam = vao[t] as () => Promise<Json>;
 			const thuong = await goi(t, await lam(), "thuong");
 			expect(`${t}: thuong HTTP ${thuong.status}`).toBe(
 				`${t}: thuong HTTP 403`,

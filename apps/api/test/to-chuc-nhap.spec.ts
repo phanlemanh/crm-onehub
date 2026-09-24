@@ -296,40 +296,34 @@ describe("ghi", () => {
 			n.map((id, i) => [emailCua(id), ma(`tl-pb${i}`), "", ""] as Dong),
 			false,
 		);
-		const boc = <T extends object>(
-			goc: T,
-			sua: (k: PropertyKey, v: unknown) => unknown,
-		): T =>
-			new Proxy(goc, {
-				get(t, k) {
-					const v = Reflect.get(t, k);
-					const moi = sua(k, v);
-					if (moi !== undefined) return moi;
-					return typeof v === "function" ? v.bind(t) : v;
+		let lan = 0;
+		type CoViTri = { orgPlacement: typeof db.orgPlacement };
+		const bocUpsert = <T extends CoViTri>(nguon: T): T =>
+			new Proxy(nguon, {
+				get(goc, khoa) {
+					if (khoa !== "orgPlacement") return Reflect.get(goc, khoa);
+					const viTri = goc.orgPlacement;
+					const upsert = viTri.upsert.bind(viTri);
+					const hong = async (vao: Parameters<typeof upsert>[0]) => {
+						lan += 1;
+						if (lan === 3) throw new Error("tiem loi dong 3");
+						return upsert(vao);
+					};
+					return new Proxy(viTri, {
+						get: (o, m) => (m === "upsert" ? hong : Reflect.get(o, m)),
+					});
 				},
 			});
-		let lan = 0;
-		const bocUpsert = (dauMoi: object) =>
-			boc(dauMoi, (k2, v2) =>
-				k2 === "orgPlacement"
-					? boc(v2 as object, (k3, v3) =>
-							k3 === "upsert"
-								? async (...a: unknown[]) => {
-										lan += 1;
-										if (lan === 3) throw new Error("tiem loi dong 3");
-										return (v3 as (...x: unknown[]) => unknown).apply(v2, a);
-									}
-								: undefined,
-						)
-					: undefined,
-			);
-		const dbLoi = boc(db, (k, v) => {
-			if (k === "$transaction") {
-				return (viec: (tx: unknown) => Promise<unknown>) =>
-					(v as typeof db.$transaction).call(db, (tx) => viec(bocUpsert(tx)));
-			}
-			if (k === "orgPlacement") return Reflect.get(bocUpsert(db), k);
-			return undefined;
+		type Giao = Parameters<Parameters<typeof db.$transaction>[0]>[0];
+		const dbLoi = new Proxy(db, {
+			get(goc, khoa) {
+				if (khoa === "orgPlacement") return bocUpsert(goc).orgPlacement;
+				if (khoa === "$transaction") {
+					return (viec: (tx: Giao) => Promise<ImportApplyOutput>) =>
+						goc.$transaction((tx) => viec(bocUpsert(tx)));
+				}
+				return Reflect.get(goc, khoa);
+			},
 		});
 		let loi = "";
 		try {

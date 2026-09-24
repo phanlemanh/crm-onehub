@@ -9,8 +9,6 @@ import type {
 } from "../../api/src/to-chuc/to-chuc.contracts";
 import { TO_CHUC } from "../../api/src/to-chuc/to-chuc-config";
 
-type CheDo = "loi";
-
 const nguoi = (id: string, name: string) => ({
 	id,
 	name,
@@ -119,34 +117,42 @@ function cayMau(): TreeOutput {
 const LOI = "may chu tu choi thao tac nay";
 let cay: TreeOutput = cayMau();
 let quyen = true;
-let cheDo = new Map<string, CheDo | string>();
+let cheDo = new Map<string, string>();
 let daGoi: { ten: string; dauVao: unknown }[] = [];
 let xemTruoc: ImportPreviewOutput | null = null;
 
-function viet(ten: string, apDung: (v: never) => void = () => {}) {
-	return async (dauVao: unknown) => {
+type Json =
+	| string
+	| number
+	| boolean
+	| null
+	| readonly Json[]
+	| { readonly [khoa: string]: Json | undefined };
+type DauVao = { readonly [khoa: string]: Json | undefined };
+type ChonGhi = {
+	onSuccess?: (...a: never[]) => void;
+	onError?: (e: Error) => void;
+	onSettled?: () => void;
+};
+
+function viet(ten: string) {
+	return async (dauVao: DauVao) => {
 		daGoi.push({ ten, dauVao: JSON.parse(JSON.stringify(dauVao)) });
 		const cd = cheDo.get(ten);
-		if (cd === "loi") throw new Error(LOI);
-		if (typeof cd === "string") throw new Error(cd);
-		apDung(dauVao as never);
+		if (cd !== undefined) throw new Error(cd === "loi" ? LOI : cd);
 		if (ten === "previewImport") return xemTruoc;
 		return { id: `${ten}-ok`, written: 4, newDepartments: 0, newDivisions: 0 };
 	};
 }
 
-function thuTuc(
-	ten: string,
-	doc: () => unknown,
-	ghi?: (v: unknown) => Promise<unknown>,
-) {
+function thuTuc<TRa>(ten: string, doc: () => TRa) {
 	return {
 		queryKey: () => [ten],
 		queryOptions: () => ({ queryKey: [ten], queryFn: async () => doc() }),
-		mutationOptions: (chon: Record<string, unknown> = {}) => ({
+		mutationOptions: (chon: ChonGhi = {}) => ({
 			...chon,
 			mutationKey: [ten],
-			mutationFn: ghi ?? viet(ten),
+			mutationFn: viet(ten),
 		}),
 	};
 }
@@ -171,8 +177,8 @@ mock.module("@/lib/trpc/client", () => ({
 			moveDepartment: thuTuc("moveDepartment", khongDoc),
 			setHead: thuTuc("setHead", khongDoc),
 			setPlacement: thuTuc("setPlacement", khongDoc),
-			previewImport: thuTuc("previewImport", khongDoc, viet("previewImport")),
-			applyImport: thuTuc("applyImport", khongDoc, viet("applyImport")),
+			previewImport: thuTuc("previewImport", khongDoc),
+			applyImport: thuTuc("applyImport", khongDoc),
 		},
 		onboarding: {
 			listDepartments: thuTuc("listDepartments", () => []),

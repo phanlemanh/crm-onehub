@@ -13,20 +13,28 @@ export function ma(phan: string): string {
 	return `${TIEN_TO}-${phan}-${Date.now().toString(36)}-${dem}`;
 }
 
-export type TraLoi = { status: number; data: unknown; loi: string };
+export type Json =
+	| string
+	| number
+	| boolean
+	| null
+	| readonly Json[]
+	| { readonly [khoa: string]: Json | undefined };
+
+export type TraLoi = { status: number; data: Json; loi: string };
 export type Ai = "quan" | "thuong" | "chu";
 type Phien = { nguoi: string; cookie: string; token: string };
 
 let app: INestApplication;
-export const phien: Record<Ai, Phien> = {
+export const phien = {
 	quan: { nguoi: "", cookie: "", token: "" },
 	thuong: { nguoi: "", cookie: "", token: "" },
 	chu: { nguoi: "", cookie: "", token: "" },
-};
+} satisfies Record<Ai, Phien>;
 
 export async function goi(
 	thuTuc: string,
-	vao: unknown,
+	vao: Json,
 	ai: Ai = "quan",
 ): Promise<TraLoi> {
 	const res = await request(app.getHttpServer())
@@ -44,7 +52,7 @@ export async function goi(
 export async function doc<T>(
 	thuTuc: string,
 	ai: Ai = "quan",
-	vao?: unknown,
+	vao?: Json,
 ): Promise<T> {
 	const q =
 		vao === undefined
@@ -66,7 +74,7 @@ export const cay = () => doc<TreeOutput>("org.tree");
 
 export async function tao(
 	thuTuc: string,
-	vao: unknown,
+	vao: Json,
 	nhan: string,
 ): Promise<string> {
 	return ok<{ id: string }>(await goi(thuTuc, vao), nhan).id;

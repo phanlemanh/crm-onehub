@@ -56,15 +56,21 @@ function keHoach(i: number, pb: (typeof PHONG_BAN)[number]): KeHoachTho {
 	};
 }
 
-function thuTuc(ten: string, chay: (v: never) => unknown = () => null) {
+type ChonGhi = {
+	onSuccess?: (...a: never[]) => void;
+	onError?: (e: Error) => void;
+	onSettled?: () => void;
+};
+
+function thuTuc<TVao, TRa>(ten: string, chay: (v: TVao) => TRa) {
 	return {
-		queryKey: (v?: unknown) => (v === undefined ? [ten] : [ten, v]),
+		queryKey: (v?: TVao) => (v === undefined ? [ten] : [ten, v]),
 		pathKey: () => [ten],
-		queryOptions: (v?: unknown) => ({
+		queryOptions: (v?: TVao) => ({
 			queryKey: v === undefined ? [ten] : [ten, v],
-			queryFn: async () => chay(v as never),
+			queryFn: async () => chay(v as TVao),
 		}),
-		mutationOptions: (chon: Record<string, unknown> = {}) => ({
+		mutationOptions: (chon: ChonGhi = {}) => ({
 			...chon,
 			mutationKey: [ten],
 			mutationFn: async () => ({ id: "ok" }),
@@ -72,9 +78,10 @@ function thuTuc(ten: string, chay: (v: never) => unknown = () => null) {
 	};
 }
 
-function nhom(ten: string, biet: Record<string, unknown>) {
+function nhom<T extends object>(ten: string, biet: T): T {
 	return new Proxy(biet, {
-		get: (t, k) => (k in t ? t[k as string] : thuTuc(`${ten}.${String(k)}`)),
+		get: (t, k) =>
+			k in t ? Reflect.get(t, k) : thuTuc(`${ten}.${String(k)}`, () => null),
 	});
 }
 
@@ -223,14 +230,12 @@ async function dongHet(): Promise<void> {
 	document.body.innerHTML = "";
 }
 
-function moiChuoi(o: unknown, duong = ""): [string, string][] {
-	if (typeof o === "string") return [[duong, o]];
-	if (o && typeof o === "object") {
-		return Object.entries(o).flatMap(([k, v]) =>
-			moiChuoi(v, duong ? `${duong}.${k}` : k),
-		);
-	}
-	return [];
+function khoaCoBoPhan(goc: ReturnType<typeof onboardingMessages>): string[] {
+	return [...JSON.stringify(goc).matchAll(/"(\w+)":"([^"]*)"/g)]
+		.filter(
+			([, khoa, chu]) => khoa !== "division" && /bộ phận/i.test(chu ?? ""),
+		)
+		.map(([, khoa]) => khoa ?? "");
 }
 
 beforeEach(() => {
@@ -257,10 +262,7 @@ describe("nhan-dieu-phoi", () => {
 			m.tao.khuon.stepDepartment,
 		]).toEqual(["Phòng ban", "Phòng ban đang cầm", "Phòng ban", "Phòng ban"]);
 		expect(m.facets.division).toBe("Bộ phận");
-		const viPham = moiChuoi(m)
-			.filter(([duong]) => duong !== "facets.division")
-			.filter(([, chu]) => /bộ phận/i.test(chu));
-		expect(viPham.map(([d]) => d)).toEqual([]);
+		expect(khoaCoBoPhan(m)).toEqual([]);
 	});
 
 	test("nhan-dieu-phoi: tren man — cot va hai bo loc doc dung chu; Cai dat Dieu phoi tro sang To chuc", async () => {
