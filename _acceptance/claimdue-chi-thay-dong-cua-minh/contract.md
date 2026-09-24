@@ -5,7 +5,7 @@ slug: claimdue-chi-thay-dong-cua-minh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-24-claimdue-chi-thay-dong-cua-minh-design.md
 approved_by:
 approved_at:
@@ -34,7 +34,7 @@ Source input: prompt
 - AC-3: Given một bản sao của file trong thư mục tạm, trong đó mọi lời gọi `claimDue` của ba khối trên lọc lại bằng `RESEARCH` như cũ, When chạy bản sao với cùng dòng lạ của AC-1, Then lượt đỏ và danh sách bài hỏng chứa đủ ba tên của CI: `claims due work and leases it`, `does not hand the same row to two dispatchers`, `leaves work that is not due yet`; và bộ dò dòng lạ báo `HANG-XOM-BI-DUNG` ở ít nhất một trong ba bài đó — bộ dò của AC-2 biết kêu.
 - AC-4: Given một cơ sở dữ liệu của lượt đã gieo 22 dòng `identify` hình CI, When chạy `tasks.integration.spec.ts` cùng chín file agent ghi `AgentTask` theo ba thứ tự (tasks đầu, giữa, cuối) lặp năm lần, cộng một lượt chung một tiến trình, Then file tasks 0 hỏng và đủ số bài ở cả 16 lượt; ở 15 lượt có thứ tự, ngay trước file tasks còn ít nhất 22 dòng lạ đến hạn chưa bị thuê. Chín file kia được báo kết quả nhưng không chấm — chúng nằm ngoài phạm vi.
 - AC-5: Given bản sao phá của AC-3 thay cho file thật, When chạy bộ lượt của AC-4, Then lượt đầu của cả ba thứ tự đều đỏ ở file bản sao — thước AC-4 cắn được ở mọi thứ tự.
-- AC-6: Given `lanes.integration.spec.ts` chạy trên mã thật và trên bản sao `tasks.ts` trong thư mục tạm mà nhánh `except` bỏ qua bộ lọc, When chạy cả hai, Then bản thật xanh và bản đột biến đỏ — nhánh lọc bài test bỏ đi vẫn có một bài sẽ đỏ khi nó hỏng.
+- AC-6: Given `tasks.integration.spec.ts` và `lanes.integration.spec.ts` chạy trên mã thật và trên bản gương trong thư mục tạm có `tasks.ts` đột biến — nhánh `except` bỏ qua bộ lọc — When chạy cả hai bản, Then mã thật xanh cả hai file và bản đột biến đỏ ở bài `claimDue > leaves a visible kind to the visible lane`: một bài kín trong khối `claimDue` đặt một dòng nghiên cứu và một dòng `brand` của chính nó ở ưu tiên tối đa, gọi `claimDue(1, RESEARCH)` và đòi nhận đúng dòng nghiên cứu.
 - AC-7: Given cây làm việc sau khi sửa, When chạy kiểm kiểu, lint, lint:slop, build và toàn bộ `bun run test`, Then tất cả xanh.
 - AC-8: Given file sau khi sửa, When đọc từng bài trong ba khối đã đổi lọc, Then mỗi bài vẫn đo đúng điều tên nó hứa — đổi nhánh lọc không làm khẳng định rỗng hay tự đúng. (judgment)
 - AC-9: Given một bản sao giữ `{ only: [kind] }` nhưng thêm `beforeEach` xoá cả bảng `AgentTask` — phương án đã bị loại — When chạy với dòng lạ của AC-1, Then bộ dò báo `HANG-XOM-MAT` và lượt được tính là đỏ.
@@ -64,3 +64,11 @@ Không có `opportunity.md` — vòng không đi từ Cổng Đáng, không có 
 ## Notes
 
 Không có bề mặt web. Không eval thiết kế, không `ui-check`.
+
+**AC-6 đổi sau Cổng 1, giữa S3 (entry `fix` trong sổ, chờ phê ở Cổng 2).**
+Bản gốc đòi `lanes.integration.spec.ts` đỏ khi nhánh `except` bỏ qua bộ lọc. Đo
+thật thì lanes vẫn xanh trên bản đột biến: nó luôn gọi làn hiển thị trước, nên
+dòng `brand` đã bị thuê trước khi làn nghiên cứu nhìn tới. Việc làn nghiên cứu
+chừa loại hiển thị ra chưa từng có bài nào canh — cả trước vòng này, vì
+`tasks.integration.spec.ts` cũ chỉ tạo dòng `test-lease`. Vòng này thêm một bài
+canh điều đó thay vì hạ lời hứa của AC-6 xuống.

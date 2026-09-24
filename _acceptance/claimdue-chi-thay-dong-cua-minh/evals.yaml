@@ -44,9 +44,9 @@ evals:
   - id: E6
     criterion: AC-6
     executor: script
-    cmd: config:executors.script.cdt_lanes_giu_nhanh_except
-    expected: "exit 0; lanes.integration.spec.ts xanh tren ma that (JUnit failures = 0) VA do tren ban guong trong thu muc tam co tasks.ts dot bien — nhanh except bo qua bo loc (ELSE TRUE); dot bien ma lanes van xanh -> exit 1 'NHANH-EXCEPT-MO-COI'"
-    paths: [apps/agent/test/lanes.integration.spec.ts, apps/agent/agent/lib/tasks.ts, _acceptance/claimdue-chi-thay-dong-cua-minh/rang/**]
+    cmd: config:executors.script.cdt_nhanh_except_co_nguoi_giu
+    expected: "exit 0; ma that: tasks va lanes deu tests = so it( khai, failures = 0; ban guong trong thu muc tam co tasks.ts dot bien (ELSE TRUE o nhanh except): JUnit co 'FAIL claimDue > leaves a visible kind to the visible lane'. Dot bien ma bai do khong do -> exit 1 'NHANH-EXCEPT-MO-COI'; KHONG_DOT_BIEN=1 la luot pha-thu cua chinh thuoc va phai thoat 1 voi thong diep do"
+    paths: [apps/agent/test/tasks.integration.spec.ts, apps/agent/test/lanes.integration.spec.ts, apps/agent/agent/lib/tasks.ts, _acceptance/claimdue-chi-thay-dong-cua-minh/rang/**]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
@@ -87,7 +87,7 @@ evals:
   - id: E12
     criterion: AC-8
     executor: judgment
-    question: "Cac loi goi claimDue trong ba khoi claimDue, retireExhausted, completeTask cua tasks.integration.spec.ts doi tu { except: DIRECT_KINDS } sang { only: [kind] }. Voi tung bai, ten bai hua mot dieu (vd 'does not hand the same row to two dispatchers', 'takes the most urgent first'). Sau khi doi loc, moi bai con do dung dieu ten no hua khong, hay co bai nao khang dinh da rong hoac tu dung (vd luon tra rong bat ke claimDue lam gi)?"
+    question: "Cac loi goi claimDue trong ba khoi claimDue, retireExhausted, completeTask cua tasks.integration.spec.ts doi tu { except: DIRECT_KINDS } sang { only: [kind] }. Voi tung bai, ten bai hua mot dieu (vd 'does not hand the same row to two dispatchers', 'takes the most urgent first'). Sau khi doi loc, moi bai con do dung dieu ten no hua khong, hay co bai nao khang dinh da rong hoac tu dung (vd luon tra rong bat ke claimDue lam gi)? Rieng bai moi 'leaves a visible kind to the visible lane' giu RESEARCH co y: no co that su do viec lan nghien cuu chua loai hien thi ra khong, va co kin truoc dong la khong?"
     inputs: [_acceptance/claimdue-chi-thay-dong-cua-minh/contract.md, apps/agent/test/tasks.integration.spec.ts, apps/agent/agent/lib/tasks.ts]
     evidence_required: [judged_by, verdict, rationale]
 
