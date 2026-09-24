@@ -1,5 +1,6 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import {
+	type MoTaThanWebhook,
 	moTaThanWebhook,
 	parseZaloWebhook,
 	type ZaloTinWebhook,
@@ -29,8 +30,7 @@ function traVe(status: number): Response {
 	return new Response(null, { status });
 }
 
-function ghiSaiKhuon(than: unknown, lyDo: string): void {
-	const moTa = moTaThanWebhook(than);
+function ghiSaiKhuon(moTa: MoTaThanWebhook, lyDo: string): void {
 	console.error(
 		`[zalo] webhook sai khuon khoa=${moTa.khoa.join(",")} khoa_message=${moTa.khoaMessage.join(",")} message_id=${moTa.messageId ?? "?"}: ${lyDo}`,
 	);
@@ -41,13 +41,13 @@ function docCapNhat(tho: string): ZaloTinWebhook | null {
 	try {
 		than = JSON.parse(tho);
 	} catch {
-		ghiSaiKhuon(undefined, "than khong phai JSON");
+		ghiSaiKhuon(moTaThanWebhook(undefined), "than khong phai JSON");
 		return null;
 	}
 	try {
 		return parseZaloWebhook(than);
 	} catch (loi) {
-		ghiSaiKhuon(than, String(loi));
+		ghiSaiKhuon(moTaThanWebhook(than), String(loi));
 		return null;
 	}
 }

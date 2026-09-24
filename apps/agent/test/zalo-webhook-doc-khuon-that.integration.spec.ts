@@ -23,10 +23,10 @@ const BI_MAT = "NOI-DUNG-BI-MAT";
 
 type Khuon = "that" | "vo";
 
-const DUNG: Record<Khuon, (chon: ChonTin) => object> = {
+const DUNG = {
 	that: thanWebhook,
 	vo: thanWebhookCoVo,
-};
+} satisfies Record<Khuon, (chon: ChonTin) => unknown>;
 
 async function donZalo(): Promise<void> {
 	await db.zaloUpdateSeen.deleteMany({});
@@ -49,8 +49,7 @@ async function gieoMa(ten: string) {
 	return { nguoi, ma };
 }
 
-async function gui(than: object | string, z: ReturnType<typeof zaloGia>) {
-	const tho = typeof than === "string" ? than : JSON.stringify(than);
+async function gui(tho: string, z: ReturnType<typeof zaloGia>) {
 	return nhanWebhook(yeuCauWebhook(tho, DU_BIEN.khoa).request, {
 		fetcher: z.fetcher,
 		now: () => GOC,
@@ -70,11 +69,7 @@ async function demBang() {
 function ngheLog() {
 	const log: string[] = [];
 	const nghe = spyOn(console, "error").mockImplementation((...a: unknown[]) => {
-		log.push(
-			a
-				.map((x) => (typeof x === "string" ? x : Bun.inspect(x, { depth: 10 })))
-				.join(" "),
-		);
+		log.push(a.map((x) => Bun.inspect(x, { depth: 10 })).join(" "));
 	});
 	return { log, tha: () => nghe.mockRestore() };
 }
@@ -124,7 +119,7 @@ describe("hai-khuon-noi", () => {
 				text: ma,
 			});
 			expect(Object.keys(than), `${o.ten}: khoa cap dau`).toEqual(o.khoa);
-			const res = await gui(than, z);
+			const res = await gui(JSON.stringify(than), z);
 			expect(res.status, `${o.ten}: tra 200`).toBe(200);
 			const lienKet = await db.zaloLink.findMany({
 				where: { crmUserId: nguoi.id },
@@ -169,7 +164,7 @@ describe("trung-hai-khuon", () => {
 			const z = zaloGia();
 			const chon = { messageId: `th-${i}`, fromId: `ZT${i}`, text: ma };
 			for (const khuon of [dau, sau]) {
-				const res = await gui(DUNG[khuon](chon), z);
+				const res = await gui(JSON.stringify(DUNG[khuon](chon)), z);
 				expect(res.status, `${khuon}: tra 200`).toBe(200);
 			}
 			expect(
@@ -197,7 +192,9 @@ describe("trung-hai-khuon", () => {
 			const { nguoi: n, ma } = await gieoMa(`Nguoi doi chung ${i}`);
 			nguoi.push(n.id);
 			const res = await gui(
-				thanWebhook({ messageId: `dc-${i}`, fromId: `ZD${i}`, text: ma }),
+				JSON.stringify(
+					thanWebhook({ messageId: `dc-${i}`, fromId: `ZD${i}`, text: ma }),
+				),
 				z,
 			);
 			expect(res.status).toBe(200);
@@ -275,7 +272,7 @@ describe("sai-khuon-log", () => {
 				expect(await demBang(), `${ten}: khong ghi`).toEqual(truoc);
 				expect(z.soGoi("sendMessage"), `${ten}: khong tra loi`).toBe(0);
 				const moi = log.slice(lenh);
-				const dong = moi.filter((l) => l.startsWith(DAU_LOG));
+				const dong = moi.filter((l) => l.includes(DAU_LOG));
 				expect(dong.length, `${ten}: mot dong log sai khuon`).toBe(1);
 				expect(
 					DONG_LOG.exec(dong[0] ?? "")?.slice(1, 4),
@@ -301,7 +298,9 @@ describe("sai-khuon-log", () => {
 		const { log, tha } = ngheLog();
 		try {
 			const res = await gui(
-				thanWebhook({ messageId: "sk-ok", fromId: "ZK", text: ma }),
+				JSON.stringify(
+					thanWebhook({ messageId: "sk-ok", fromId: "ZK", text: ma }),
+				),
 				z,
 			);
 			expect(res.status).toBe(200);
@@ -309,7 +308,7 @@ describe("sai-khuon-log", () => {
 			tha();
 		}
 		expect(
-			log.filter((l) => l.startsWith(DAU_LOG)).length,
+			log.filter((l) => l.includes(DAU_LOG)).length,
 			"than hop le khong ghi dong sai khuon",
 		).toBe(0);
 		expect(
