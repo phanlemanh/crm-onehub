@@ -118,7 +118,7 @@ _Avoid_: onboarding, hồ sơ kế hoạch, dự án
 Vì sao: "onboarding" để nguyên thì màn lẫn tiếng; "hồ sơ" là tên trang riêng đã
 bỏ; "dự án" gợi một thứ có ngân sách và nghiệm thu, kế hoạch này thì không.
 
-**Bước**: một việc trong kế hoạch 30 ngày, luôn thuộc một bộ phận, có hạn, có thể
+**Bước**: một việc trong kế hoạch 30 ngày, luôn thuộc một phòng ban, có hạn, có thể
 chưa giao cho ai. Được chép từ khuôn lúc tạo kế hoạch, sửa trên kế hoạch không
 đổi khuôn. Chốt 2026-09-22.
 _Avoid_: task, việc cần làm, nhiệm vụ
@@ -126,10 +126,10 @@ Vì sao: "việc cần làm" là một loại hoạt động khác đã có trê
 hai chữ cho hai thứ khác nhau thì người đọc nhầm ngay.
 
 **Người cầm trịch**: một người duy nhất chịu trách nhiệm cả kế hoạch 30 ngày của
-một đối tác, điều phối nhiều bộ phận. Chốt 2026-09-22.
+một đối tác, điều phối nhiều phòng ban. Chốt 2026-09-22.
 _Avoid_: phụ trách, owner, chủ kế hoạch
 Vì sao: thoả thuận dùng "phụ trách" cho người sở hữu một thương vụ; người cầm
-trịch không sở hữu việc của bộ phận nào, họ giữ nhịp cho mọi bộ phận — hai vai
+trịch không sở hữu việc của phòng ban nào, họ giữ nhịp cho mọi phòng ban — hai vai
 khác nhau nên hai chữ khác nhau (quyết tại Cổng Phạm vi 2026-09-22).
 
 **Người được giao**: người phải làm một bước của kế hoạch 30 ngày; một bước có
@@ -270,16 +270,49 @@ Vì sao: màn Cài đặt hiện CẢ trường chuẩn lẫn trường tự t�
 tạo" vào nhãn là nói hẹp hơn thứ người thấy; ba từ còn lại là tiếng của nhà khác,
 hoặc nửa Việt nửa Anh.
 
-**Bộ phận**: một đơn vị trong OneHub nhận việc của kế hoạch 30 ngày đầu — mỗi
-bước của kế hoạch giao cho đúng một bộ phận. Người quản trị quản danh sách ở Cài
-đặt › Điều phối 30 ngày. Hôm nay danh sách phẳng; cấp phòng ban thuộc bộ phận đang
-chờ ở ô `cau-truc-to-chuc`. Chốt 2026-09-22.
-_Avoid_: phòng ban (chưa có cấp này), team, nhóm
-Vì sao: «phòng ban» sẽ là tên của cấp con khi ô `cau-truc-to-chuc` được làm; dùng
-nó bây giờ cho danh sách phẳng là đặt sẵn một nghĩa sai.
+**Bộ phận**: cấp trên của cây tổ chức OneHub; một bộ phận chứa nhiều phòng ban.
+Cây có đúng hai cấp cố định dưới gốc OneHub — bộ phận, rồi phòng ban — và là cây
+dùng chung cho cả CRM: Điều phối 30 ngày, OKR, báo cáo và bộ lọc cùng đọc một
+cây, không khu nào có cây riêng. Ví dụ: bộ phận «Kinh doanh» chứa hai phòng ban
+«Kinh doanh vùng 1» và «Kinh doanh vùng 2». Chốt 2026-09-24, thay nghĩa chốt
+2026-09-22.
+Màn hình đổi nhãn ở lượt 1 (`cay-to-chuc-co-nguoi`). Tới lúc đó Cài đặt › Điều
+phối 30 ngày vẫn gọi danh sách phẳng của nó là «Bộ phận» — theo nghĩa ở đây, danh
+sách ấy là **phòng ban**. Đó là nhãn cũ đang chờ đổi, không phải màn đang sai.
+_Avoid_: phòng ban (cho cấp trên), division, khối, team, nhóm
+Vì sao: hai cấp phải mang hai chữ, nếu không «bộ phận Kinh doanh» và «bộ phận
+Kinh doanh vùng 1» nghe ngang hàng. «Khối» là chữ thường trong câu nói (như
+«khối kinh doanh»), không phải một cấp của cây. «Nhóm» để dành cho cấp dưới phòng
+ban nếu sau này có đơn vị thật cần.
 
-**Khuôn kế hoạch**: bộ bước mẫu cho một loại đối tác — mỗi bước có nhãn, bộ phận
-nhận và ngày thứ mấy. Tạo kế hoạch từ khuôn là chép các bước đó vào kế hoạch; sửa
+**Phòng ban**: cấp dưới của cây tổ chức; thuộc đúng một bộ phận. Mỗi thành viên
+CRM có một phòng ban chính, và có thể thêm phòng ban phụ. Mỗi bước của kế hoạch
+30 ngày giao cho đúng một phòng ban. Đây chính là danh sách hôm nay màn Điều phối
+30 ngày gọi là «Bộ phận»: dữ liệu giữ nguyên, lượt 1 chỉ thêm cấp bộ phận ở trên
+và đổi nhãn. Chốt 2026-09-24.
+_Avoid_: bộ phận (cho cấp này), department, team
+Vì sao: màn điều phối dùng «bộ phận» cho cấp này tới hết lượt 1; giữ chữ cũ sau đó
+là để một chữ chỉ hai cấp.
+
+**Đơn vị**: chữ chung cho một bộ phận hoặc một phòng ban, khi câu nói về cả hai —
+«trưởng đơn vị», màn OKR «Theo đơn vị». Gốc OneHub cũng là một đơn vị khi đặt
+OKR cấp công ty. Chốt 2026-09-24.
+_Avoid_: tổ chức con, nhánh, unit
+Vì sao: «tổ chức» đã là cả cây; «nhánh» gợi chi nhánh theo địa lý.
+
+**Trưởng đơn vị**: người đứng đầu một phòng ban (trưởng phòng ban) hoặc một bộ
+phận (trưởng bộ phận); mỗi đơn vị một trưởng. Trưởng là một ô trên đơn vị, không
+phải vai trong workspace: làm trưởng không cho thêm quyền quản trị CRM nào. Trong
+OKR, trưởng sửa được OKR của đơn vị mình và đơn vị con. Quản lý trực tiếp của một
+người suy từ trưởng phòng ban chính của họ, và ghi đè được cho từng người. Chốt
+2026-09-24.
+_Avoid_: quản trị, admin, manager, sếp
+Vì sao: «quản trị» là vai trong workspace, có quyền trên cả CRM; trưởng chỉ có
+quyền trên OKR của đơn vị mình. «Quản lý trực tiếp» là quan hệ giữa hai người và
+có thể khác trưởng phòng ban khi đã ghi đè — nên không dùng thay cho trưởng.
+
+**Khuôn kế hoạch**: bộ bước mẫu cho một loại đối tác — mỗi bước có nhãn, phòng
+ban nhận và ngày thứ mấy. Tạo kế hoạch từ khuôn là chép các bước đó vào kế hoạch; sửa
 khuôn sau đó không đổi kế hoạch đã tạo. Chốt 2026-09-22.
 _Avoid_: template, mẫu kế hoạch, quy trình
 Vì sao: «quy trình» gợi một thứ sống, đổi là mọi kế hoạch đổi theo — khuôn thì chỉ
@@ -297,3 +330,98 @@ không cho chứng chỉ hành nghề môi giới, không lộ mã số nào. CR
 _Avoid_: số chứng chỉ, mã chứng chỉ, số giấy phép hành nghề
 Vì sao: in một ô «số chứng chỉ» ra màn hình là hứa một dữ liệu không ai có;
 người đọc đi tìm rồi thấy trống, và lần sau họ không tin cột nào nữa.
+
+**OKR**: cách OneHub đặt và theo dõi mục tiêu theo chu kỳ — mỗi mục tiêu đo bằng
+vài kết quả then chốt, cập nhật mỗi tuần, chấm khi chu kỳ khép. Mọi phòng ban áp
+dụng, bắt đầu từ OKR quý 4 năm 2026 đặt trong CRM từ 2026-10-26; không có nhóm
+thí điểm. Chốt 2026-09-24 (Manh Phan). Đây là giao một công cụ quản trị nội bộ,
+không phải thử phương pháp: thang chấm, trần số mục tiêu, OKR cá nhân là cấu hình
+của chương trình, không phải nghĩa của từ.
+_Avoid_: KPI, chỉ tiêu, đánh giá hiệu suất
+Vì sao: KPI và chỉ tiêu là số giao xuống để đo việc thường ngày; OKR là điều đơn
+vị muốn đổi, tự đặt và tự căn chỉnh. Gọi là đánh giá hiệu suất thì người ta đặt
+đích thấp cho an toàn.
+
+**Mục tiêu**: điều một đơn vị — hoặc một người, nếu chương trình bật OKR cá nhân
+— muốn đạt trong một chu kỳ, viết bằng chữ; con số nằm ở kết quả then chốt. Mỗi
+mục tiêu có một đến vài kết quả then chốt đo nó. Chốt 2026-09-24.
+Trùng chữ đang có: sheet kế hoạch 30 ngày có ô «Mục tiêu» hiện số ngày (`30
+ngày`). Ô đó không phải mục tiêu OKR, và nhãn của nó phải đổi trước khi khu OKR
+lên.
+_Avoid_: objective, mục đích, chỉ tiêu
+Vì sao: «chỉ tiêu» là một con số — đó là việc của kết quả then chốt; «mục đích»
+nói lý do làm, không nói điều phải đạt trong kỳ.
+
+**Kết quả then chốt (KR)**: thứ đo được cho biết mục tiêu đã đạt tới đâu —
+thường là một con số có khởi điểm, đích và giá trị hiện tại, hoặc một mốc xong hay
+chưa xong. Mỗi KR có đúng một người phụ trách. Trên màn đã
+đứng trong khu OKR thì nhãn là «KR»; ở chỗ khác viết đủ chữ. Chốt 2026-09-24.
+_Avoid_: key result, chỉ số, KPI, việc cần làm, sáng kiến
+Vì sao: KR đo kết quả, không đo việc làm — «gọi 50 cuộc» là việc, không phải KR.
+Việc và sáng kiến gắn vào KR là thứ khác. «Chỉ số» là danh mục số đo CRM mà một KR
+có thể lấy số từ đó; KR có đích và người phụ trách, chỉ số thì không.
+
+**Cập nhật tuần**: lần người phụ trách ghi cho một KR giá trị mới, mức tự tin và
+một dòng ghi chú, mỗi tuần một lần. Lần cập nhật chỉ thêm, không sửa lần cũ. Màn
+«Cập nhật tuần của tôi» gom mọi KR một người phụ trách. Là chữ chốt cho
+«check-in». Chốt 2026-09-24.
+_Avoid_: check-in, báo cáo tuần, điểm danh
+Vì sao: «check-in» để nguyên thì màn lẫn tiếng; «báo cáo tuần» gợi một văn bản
+gửi lên để duyệt, còn cập nhật là một con số và một dòng; «điểm danh» nói có mặt,
+không nói tiến độ. Số tự chảy từ CRM vào KR không phải cập nhật tuần — mức tự tin
+và ghi chú vẫn do người ghi.
+
+**Mức tự tin**: phán đoán của người phụ trách, ghi ở mỗi lần cập nhật tuần, rằng
+KR sẽ tới đích khi chu kỳ khép. Người chọn; máy không chọn thay. Chốt 2026-09-24.
+_Avoid_: tình trạng, rủi ro, trạng thái, điểm
+Vì sao: tình trạng — đúng nhịp hay đang trượt — máy tính được từ số và vạch kỳ
+vọng; mức tự tin là điều người biết mà số chưa cho thấy. Hai thứ đứng cạnh nhau
+trên màn, và lúc chúng lệch nhau là lúc đáng bàn. «Điểm» là của cuối kỳ.
+
+**Chu kỳ**: khoảng thời gian một bộ OKR sống — năm, hoặc quý nằm trong năm. Có
+ngày đầu, ngày cuối và khoảng nghỉ như Tết. Quản trị chương trình mở và khoá chu
+kỳ. Trong khu OKR, «kỳ» trần là chữ ngắn của chu kỳ — «cuối kỳ», «rà giữa kỳ».
+Chốt 2026-09-24.
+_Avoid_: giai đoạn, đợt, sprint
+Vì sao: «giai đoạn» đã là chữ của thoả thuận; «đợt» đã là chữ của chiến dịch;
+sprint là nhịp làm việc của đội phần mềm, không phải kỳ đặt mục tiêu.
+
+**Căn chỉnh**: liên kết nói một mục tiêu góp vào một mục tiêu hoặc một KR ở cấp
+trên. Đơn vị cấp dưới tự chọn chỗ mình góp; một mục tiêu có thể góp vào nhiều
+chỗ. Chốt 2026-09-24.
+_Avoid_: phân rã, cascade, alignment, cha–con
+Vì sao: «phân rã» gợi KR cấp trên được chép xuống thành mục tiêu cấp dưới — đúng
+thứ sản phẩm đã quyết không làm. «Cha–con» gợi mỗi mục tiêu một cha, còn căn chỉnh
+thì nhiều–nhiều; cha–con là chuyện của cây tổ chức.
+
+**Người phụ trách (OKR)**: người duy nhất trả lời cho một KR hoặc một mục tiêu —
+ghi cập nhật tuần, được nhắc khi KR im. Mỗi KR và mỗi mục tiêu có đúng một người
+phụ trách; người khác có thể tham gia. Trên màn là cột «Phụ trách», cùng chữ với
+người phụ trách một thoả thuận, vì cùng nghĩa: người sở hữu thứ đó. Chốt
+2026-09-24.
+_Avoid_: owner, chủ KR, người cầm trịch, người được giao
+Vì sao: **người cầm trịch** giữ nhịp một kế hoạch 30 ngày cho nhiều phòng ban mà
+không sở hữu việc của phòng ban nào; người phụ trách KR sở hữu con số của mình.
+Người được giao làm một bước, không trả lời cho một con số. Trưởng đơn vị sửa được
+OKR của đơn vị nhưng không tự thành người phụ trách mọi KR trong đó.
+
+**Điểm cuối kỳ**: số chấm cho mỗi KR khi chu kỳ khép, theo thang chương trình đã
+khai. Máy gợi ý từ số chốt; người chỉnh được, kèm lý do. Đọc theo loại mục tiêu:
+với mục tiêu tham vọng, 0,7 là tốt. **Không phải đánh giá nhân sự** — không nối vào
+lương, thưởng hay xếp hạng người, và màn chấm ghi rõ câu đó. Chốt 2026-09-24.
+_Avoid_: điểm KPI, điểm hiệu suất, xếp loại, đánh giá
+Vì sao: điểm mà quyết lương thì người ta đặt đích thấp và làm đẹp số, và OKR
+thành một bảng chỉ tiêu nữa. Hoa hồng đã gắn doanh số; điểm cuối kỳ để học, không
+để trả công.
+
+**Vai «chỉ OKR»**: vai trong workspace cho người vào CRM chỉ để làm OKR — hôm nay
+là người ngoài khối kinh doanh. Họ đăng nhập, thấy khu OKR và hồ sơ của chính
+mình, nhưng không đọc được cá nhân, công ty, thoả thuận hợp tác, chiến dịch hay kế
+hoạch 30 ngày — qua màn, qua API, qua khoá API, hay qua trợ lý AI. Quản trị gán
+vai cho từng người; vai không suy ra từ bộ phận hay phòng ban. Chốt 2026-09-23
+(Manh Phan). CRM không mở cho người ngoài khối kinh doanh trước khi vai này lên
+(lượt 2).
+_Avoid_: khách, người xem, viewer, tài khoản hạn chế
+Vì sao: «người xem» gợi xem được mọi thứ mà không sửa — ở đây ngược lại: họ sửa
+OKR của mình mà không xem dữ liệu đối tác. «Khách» là người ngoài OneHub, còn
+người mang vai này là nhân viên. «Tài khoản hạn chế» không nói hạn chế cái gì.
