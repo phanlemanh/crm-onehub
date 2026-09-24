@@ -5,7 +5,7 @@ slug: dem-dau-cot-khi-dang-luu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-09-24-dem-dau-cot-khi-dang-luu-design.md
 approved_by:
 approved_at:
