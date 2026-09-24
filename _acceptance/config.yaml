@@ -518,7 +518,7 @@ executors:
     resolve_plugin: "node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/product-map.mjs"
     lint: "bun run lint"
     lint_khong_cache: "bunx turbo run lint --force"
-    vco_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3710} API_URL=${API_URL:-http://localhost:3711} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/vai-chi-okr/rang/man-chi-okr.mjs"'
+    vco_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3810} API_URL=${API_URL:-http://localhost:3811} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/vai-chi-okr/rang/man-chi-okr.mjs"'
     lint_slop: "bun run lint:slop"
     ngv_dot_bien_utc: node _acceptance/ngay-gieo-theo-gio-vn/rang/dot-bien-utc.mjs
     check_types: "bun run check-types"

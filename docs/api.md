@@ -72,7 +72,7 @@ here, what do we sell.
   That migration branch still names the first user owner regardless of the role an
   allowance gave them — a narrow case the contract does not cover yet.
 - **Permissions come from `@crm/auth`** — `canRenameWorkspace`, `canChangeRole`,
-  `canConfigureSso`, `canManageCurrency` — enforced by the service *and* used to
+  `canConfigureSso`, `canManageCurrency`, `canManageSettings` — enforced by the service *and* used to
   disable the UI control, so the button and the 403 cannot disagree.
   `WorkspaceService` adds one invariant: **the last owner cannot be demoted**, with
   `FOR UPDATE` on the owner rows before counting.
@@ -156,12 +156,36 @@ self-hoster's admin cannot redeploy.
 - **One router per module**, `*.router.ts` (the codegen glob), with
   `@Router({ alias })` and `@UseMiddlewares(AuthMiddleware)`. **No `AuthMiddleware`
   means public — there is no other guard.**
-- **`AuthMiddleware` means signed in AND a member of the workspace.** It reads the
-  `member` row on every call, never a cache, so a removed person loses every
-  procedure at once — a fresh sign-in, a tab still holding the five-minute session
-  cookie cache, and an API key all resolve to a user with no `member` row. The
-  refusal is `FORBIDDEN` with `NOT_A_MEMBER` (`@crm/auth`), and it runs before
-  `.input()` and before any role check in a service.
+- **`AuthMiddleware` means signed in AND a member of the workspace AND allowed to
+  read the router's data scope.** It reads the `member` row on every call, never a
+  cache, so a removed person loses every procedure at once and a role change takes
+  effect on the next call. The refusal for a non-member is `FORBIDDEN` with
+  `NOT_A_MEMBER`; the refusal for a role outside the scope is `FORBIDDEN` with
+  `KHONG_TRONG_PHAM_VI` (both from `@crm/auth`; the second lives in
+  `@crm/validation/vai-workspace` so the app and the agent read the same rule). Both
+  run before `.input()` and before any role check in a service.
+- **Every router declares its data scope by choosing its middleware class.**
+  `PhamViDoiTacMiddleware` (partner data: contacts, companies, deals, campaigns,
+  activities, onboarding, search, dashboard, enrichment, savedViews, fields, google,
+  microsoft, tracking, slack, agents, conversations) · `PhamViToChucMiddleware`
+  (`org`) · `PhamViChungMiddleware` (users, settings, currency, zalo, apiKeys, sso,
+  workspace) · `PhamViOkrMiddleware` (reserved for the OKR routers). They extend
+  `AuthMiddleware` and only set `phamVi`. **A bare `AuthMiddleware` is an
+  undeclared scope**: `owner`/`admin`/`member` still pass, the `okr` role is
+  refused. Forgetting to declare closes the door, it never opens it.
+  `docDuocPhamVi(role, phamVi)` is the one rule; `apps/api/test/vai-chi-okr.spec.ts`
+  pins the exact set of procedures the `okr` role may reach, so adding a router to
+  the shared scope is a conscious edit of that list.
+- **The `okr` role is the fourth workspace role** (`WORKSPACE_ROLES`): signs in,
+  reads the shared and organization scopes, never partner data — through tRPC, the
+  REST bridge, an API key or the agent bridge alike. `toWorkspaceRole` keeps it;
+  everything unknown still falls back to `member`. `LoggingMiddleware` prints
+  `role` and `phamVi` on every `tRPC` line, which is how "reads of partner data by
+  an OKR-only user" is counted after release.
+- **Writes in the shared scope are either self-service or admin-only.** API keys
+  and the person's own Zalo channel are self-service; every system setting —
+  `settings.*` writes included, gated by `canManageSettings` — requires an owner
+  or an admin. The `ghi-chung` case of the spec above pins the self-service set.
 - **`SignedInMiddleware` is the one named exception**: signed in, membership not
   asked. Only `workspace.get` uses it, because `proxy.ts` asks it whether the viewer
   is still in the workspace and treats an error as *unknown* — which lets the

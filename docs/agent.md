@@ -597,6 +597,10 @@ browser → /eve/v1/*  (same origin, session cookie, x-crm-contact header)
   human. `repFromCrm` maps the subject to a real user principal
   (`test/channel-auth.spec.ts`).
 - **`AGENT_BRIDGE_SECRET` unset skips the auth entry rather than opening it.**
+- **`repFromCrm` reads the `member` row itself** and returns no principal for a
+  subject with no row or with the `okr` role — the bridge route refuses those first
+  (`KHONG_TRONG_PHAM_VI`), and the agent refuses again so a token minted elsewhere or
+  still alive after a role change buys nothing (`test/kenh-chi-okr.spec.ts`).
 
 ### The panel
 
