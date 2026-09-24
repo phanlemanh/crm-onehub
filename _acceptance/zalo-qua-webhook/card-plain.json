@@ -1,0 +1,45 @@
+{
+  "feature_plain": "Người nhắn mã cho bot Zalo là được nối ngay, không còn mất tin như bản đầu; người vận hành có hai lệnh để bật webhook cho bot công ty và thử bot tại máy.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ nối Zalo ngay khi Zalo đẩy tin mã tới tác tử, và bot nhắn lại «Đã nối với <tên CRM>»."},
+    {"id": "AC-4", "p": "Sẽ xử lý mỗi tin đúng một lần, kể cả khi Zalo gửi lại tin đó hoặc tin đó đến qua cả hai đường."},
+    {"id": "AC-5", "p": "Sẽ im lặng bỏ qua tin hỏng khuôn, tin từ bot khác và tin trong nhóm, và ghi log đủ để thấy ngay nếu Zalo gửi khác khuôn đã biết."},
+    {"id": "AC-6", "p": "Sẽ giữ nguyên luật mã cũ qua đường mới: mã sai bị đếm, chữ và ảnh chỉ nhận câu hướng dẫn, người dò mã bị làm ngơ."},
+    {"id": "AC-9", "p": "Sẽ có lệnh đăng ký và gỡ webhook cho bot; lệnh báo đích danh thứ thiếu và dừng trước khi gọi Zalo nếu thiếu biến hoặc URL không an toàn."},
+    {"id": "AC-10", "p": "Sẽ khai biến mới của webhook ở mọi chỗ kho đòi, và sửa hướng dẫn tạo bot cho đúng nơi (OA «Zalo Bot Manager» trong app Zalo)."},
+    {"id": "AC-11", "p": "Sẽ có đúng một địa chỉ nhận tin trên tác tử (`/zalo/webhook`), và địa chỉ đó chạy đúng như các tiêu chí trên."},
+    {"id": "AC-12", "p": "Sẽ giữ mọi phép đo đã ký của lượt nhắc qua Zalo trước xanh mà không sửa một dòng nào của chúng."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Chặn mọi tin không mang đúng khoá bí mật, trả 403 mà không đọc nội dung, dù khoá sai dài hay ngắn bao nhiêu."},
+    {"id": "AC-3", "p": "Sẽ KHÔNG làm tác tử hỏng khi máy chưa cài Zalo: thiếu biến thì địa chỉ nhận tin trả 404 và mọi thứ khác vẫn chạy."},
+    {"id": "AC-7", "p": "Sẽ KHÔNG đọc tin trong nhịp mỗi phút nữa; nhịp chỉ còn kiểm bot còn sống để trang kết nối báo đúng."},
+    {"id": "AC-8", "p": "Sẽ KHÔNG để tin rơi mất giữa hai lần đọc: phép đo tái hiện đúng lỗi của bản đầu rồi chứng minh hai đường mới bắt được tin."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Đường tin vào: webhook, vòng đọc tay, và nhịp cũ bị bỏ — chuẩn đối chiếu là tài liệu Zalo nói hai cơ chế loại trừ nhau."},
+    {"i": 1, "p": "Cổng vào: đủ khoá, khoá sai, thiếu khoá, thiếu từng biến — đối chiếu cách Telegram kiểm khoá bí mật và luật «thiếu khoá thì mất năng lực» của kho."},
+    {"i": 2, "p": "Loại tin: mã đúng, mã sai, chữ, ảnh, tin trùng, tin hỏng, tin từ bot, tin nhóm, người đang bị chặn — đối chiếu luật mã của lượt trước."},
+    {"i": 3, "p": "Nhịp và vận hành: tin đến trong hay ngoài lúc đang đọc, nhịp kiểm bot, đăng ký, gỡ, URL không an toàn — đối chiếu lần lái thử bot thật 23/09."},
+    {"i": 4, "p": "Mỗi ô quan trọng có đúng một tiêu chí gánh; 11 ô Core trên khoảng 55 ô có nghĩa."},
+    {"i": 5, "p": "Hai giả định dưới đây chờ anh gạch hoặc đòi đo trước:"},
+    {"i": 6, "p": "(1) Zalo gửi lại tin khi tác tử trả lỗi — nên tin hỏng vẫn được báo «đã nhận» để tránh gửi lại liên tục."},
+    {"i": 7, "p": "(2) Vỏ tin webhook và tên header đúng như tài liệu Zalo — chưa đo trên bot thật vì máy không có địa chỉ công khai; phần ruột tin đã chép từ tin thật 23/09. Sai thì mọi tin rơi vào nhánh «đã nhận + log» và log sẽ chỉ ra ngay khi triển khai."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Mọi tin thử viết tay đúng khuôn bộ đọc mong, nên nếu Zalo thật gửi khác thì phép đo vẫn xanh mà không ai nối được. Đã sửa: ruột tin chép từ tin thật, log in khuôn thân tin, thêm ca tin không có vỏ. Phần vỏ và header còn là giả định (2) — anh quyết."},
+    {"i": 1, "p": "Hợp đồng nói đường đọc cũ giữ nguyên nhưng bộ lọc tin nhóm làm nó đổi. Đã sửa: ghi rõ ngoại lệ và thêm tiêu chí giữ phép đo đã ký của lượt trước xanh mà không sửa chúng."},
+    {"i": 2, "p": "Hai lệnh tay chỉ được đo qua hàm bên trong. Đã sửa: chạy đúng lệnh thật cho các ca lỗi; nhánh thành công có gọi Zalo thật hoãn tới lúc triển khai."},
+    {"i": 3, "p": "Việc nối dây được đo bằng lối tắt. Đã sửa: nạp kênh trong một tiến trình thiếu biến, và chạy chính nhịp mỗi phút với Zalo giả thay vì đọc tên hàm trong mã."},
+    {"i": 4, "p": "Khoá sai khác độ dài có thể làm tác tử ném lỗi. Đã sửa: năm ca khoá sai rời nhau, và so khoá qua băm."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260924T004824Z-1", "p": "Nhận tin bằng một kênh trong tác tử — đổi lại địa chỉ công khai này phải tự kiểm khoá bí mật."},
+    {"id": "d-20260924T004824Z-2", "p": "Tin hỏng vẫn trả «đã nhận» — đổi lại lỗi khuôn chỉ thấy trong log, Zalo không biết."},
+    {"id": "d-20260924T004824Z-3", "p": "KHÔNG làm dấu «đã đăng ký webhook» ở vòng này — đổi lại trang vẫn báo bot sống dù webhook chưa đăng ký, tới vòng 2."},
+    {"id": "d-20260924T004824Z-4", "p": "Bỏ qua tin trong nhóm — đổi lại người nhắn mã trong nhóm không nhận phản hồi gì."},
+    {"id": "d-20260924T004824Z-5", "p": "KHÔNG đặc tả màn hình vì vòng này không chạm màn hình nào."},
+    {"id": "d-20260924T005349Z-6", "p": "Nhánh thành công của hai lệnh tay đo lúc triển khai — đổi lại lỗi nối dây ở nhánh đó chỉ lộ khi anh chạy lệnh."}
+  ],
+  "scope_plain": "Để sang vòng sau: dấu đăng ký webhook, mọi thay đổi màn hình, trả lời tin nhắc, hỏi CRM qua Zalo, tin nhóm, và việc bật webhook cho bot công ty."
+}
