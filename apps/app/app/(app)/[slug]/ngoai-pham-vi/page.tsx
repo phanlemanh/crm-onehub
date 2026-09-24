@@ -35,9 +35,11 @@ export default async function NgoaiPhamViPage({
 			</PageShellHeader>
 
 			<PageShellContent>
-				<Button asChild variant="outline">
-					<Link href={workspaceUrl(slug)}>{t.veTongQuan}</Link>
-				</Button>
+				<div>
+					<Button asChild variant="outline">
+						<Link href={workspaceUrl(slug)}>{t.veTongQuan}</Link>
+					</Button>
+				</div>
 			</PageShellContent>
 		</PageShell>
 	);

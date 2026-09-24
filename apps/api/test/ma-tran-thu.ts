@@ -19,7 +19,9 @@ export type ThuTuc = {
 };
 export type HangMaTran = { ten: string; status: number; message: string };
 export type Dau = Record<string, string>;
-export type DauVao = Record<string, unknown> | undefined;
+export type GiaTriDauVao = string | number | boolean | null | readonly string[];
+export type DauVaoHopLe = Readonly<Record<string, GiaTriDauVao>>;
+export type DauVao = DauVaoHopLe | undefined;
 
 const khaiRest = z
 	.object({ openapi: z.object({ method: z.string(), path: z.string() }) })

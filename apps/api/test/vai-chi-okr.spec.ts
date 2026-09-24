@@ -15,6 +15,7 @@ import { readContextDevKey, writeContextDevKey } from "@crm/db/settings";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import request from "supertest";
+import { z } from "zod";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { BackfillService } from "../src/backfill/backfill.service";
 import { createApp } from "../src/create-app";
@@ -23,6 +24,7 @@ import { AuthMiddleware } from "../src/trpc/middlewares/auth.middleware";
 import { PhamViChungMiddleware } from "../src/trpc/middlewares/pham-vi-du-lieu.middleware";
 import { WorkspaceService } from "../src/workspace/workspace.service";
 import {
+	type DauVaoHopLe,
 	dangNhap,
 	datMatKhau,
 	gan,
@@ -62,7 +64,7 @@ const THU_TUC_MAU = [
 	{ ten: "campaigns.list", input: undefined },
 ] as const;
 
-const DAU_VAO_HOP_LE: Record<string, Record<string, unknown>> = {
+const DAU_VAO_HOP_LE = {
 	"apiKeys.create": { name: "thu", expiresInDays: null },
 	"apiKeys.revoke": { id: "khong-co" },
 	"zalo.taoMa": {},
@@ -109,7 +111,19 @@ const DAU_VAO_HOP_LE: Record<string, Record<string, unknown>> = {
 	},
 	"org.previewImport": { text: "" },
 	"org.applyImport": { text: "" },
-};
+} satisfies Record<string, DauVaoHopLe>;
+const dauVaoCua = (ten: string): DauVaoHopLe | undefined =>
+	ten in DAU_VAO_HOP_LE
+		? DAU_VAO_HOP_LE[ten as keyof typeof DAU_VAO_HOP_LE]
+		: undefined;
+const dongNhatKy = z.object({
+	path: z.string(),
+	outcome: z.string(),
+	role: z.string().nullable(),
+	phamVi: z.string().nullable(),
+});
+type DongNhatKy = z.infer<typeof dongNhatKy>;
+
 const TU_PHUC_VU = [
 	"apiKeys.create",
 	"apiKeys.revoke",
@@ -409,12 +423,11 @@ describe("vai-chi-okr", () => {
 		const member = await gieoNguoi("member", "member");
 		const cookieOkr = await dangNhap(okr.email);
 		const cookieMember = await dangNhap(member.email);
-		const dong: Record<string, unknown>[] = [];
+		const dong: DongNhatKy[] = [];
 		const spy = spyOn(ContextLogger.prototype, "log").mockImplementation(
-			(message: unknown) => {
-				if (message && typeof message === "object") {
-					dong.push(message as Record<string, unknown>);
-				}
+			(message) => {
+				const doc = dongNhatKy.safeParse(message);
+				if (doc.success) dong.push(doc.data);
 			},
 		);
 		try {
@@ -465,13 +478,13 @@ describe("vai-chi-okr", () => {
 		);
 		expect(mutation.length).toBeGreaterThanOrEqual(SAN_MUTATION_CHUNG);
 		const thieu = mutation
-			.filter((t) => !(t.ten in DAU_VAO_HOP_LE))
+			.filter((t) => dauVaoCua(t.ten) === undefined)
 			.map((t) => t.ten);
 		expect(thieu, `thieu dau vao hop le cho: ${thieu.join(", ")}`).toEqual([]);
 		const khongBiChan: string[] = [];
 		const saiThongDiep: string[] = [];
 		for (const { ten } of mutation) {
-			const res = await goiTrpc(app, ten, "mutation", DAU_VAO_HOP_LE[ten], {
+			const res = await goiTrpc(app, ten, "mutation", dauVaoCua(ten), {
 				cookie: cookieOkr,
 			});
 			const message = String(res.body?.error?.message ?? "");
@@ -494,7 +507,7 @@ describe("vai-chi-okr", () => {
 			"settings.setResearchKey",
 			"settings.setArchiveRetention",
 		]) {
-			const res = await goiTrpc(app, ten, "mutation", DAU_VAO_HOP_LE[ten], {
+			const res = await goiTrpc(app, ten, "mutation", dauVaoCua(ten), {
 				cookie: cookieMember,
 			});
 			expect(res.status, `${ten} cho member`).toBe(403);

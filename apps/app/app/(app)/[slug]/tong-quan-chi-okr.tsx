@@ -26,11 +26,13 @@ export async function TongQuanChiOkr({ slug }: { slug: string }) {
 			</PageShellHeader>
 
 			<PageShellContent>
-				<Button asChild variant="outline">
-					<Link href={workspaceUrl(slug, CAI_DAT_MAC_DINH_CHI_OKR)}>
-						{m.chiOkr.noiKenh}
-					</Link>
-				</Button>
+				<div>
+					<Button asChild variant="outline">
+						<Link href={workspaceUrl(slug, CAI_DAT_MAC_DINH_CHI_OKR)}>
+							{m.chiOkr.noiKenh}
+						</Link>
+					</Button>
+				</div>
 			</PageShellContent>
 		</PageShell>
 	);
