@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 8ae4b9ba1eedefaf91f2094f68cca1df20988a13
-human_signoff:
+human_signoff: Manh Phan 2026-09-24
 ---
 
 # Evidence Report: claimdue-chi-thay-dong-cua-minh

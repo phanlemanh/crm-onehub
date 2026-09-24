@@ -5,7 +5,7 @@ slug: claimdue-chi-thay-dong-cua-minh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-24-claimdue-chi-thay-dong-cua-minh-design.md
 approved_by:
 approved_at:
@@ -72,3 +72,7 @@ dòng `brand` đã bị thuê trước khi làn nghiên cứu nhìn tới. Việ
 chừa loại hiển thị ra chưa từng có bài nào canh — cả trước vòng này, vì
 `tasks.integration.spec.ts` cũ chỉ tạo dòng `test-lease`. Vòng này thêm một bài
 canh điều đó thay vì hạ lời hứa của AC-6 xuống.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-24 (Manh Phan), từ mục ngoài hợp đồng của S4:
+
+- Ngoài-1: danh sách chín file ghi `AgentTask` trong `rang/chung-luot.sh` là danh sách viết tay, không suy từ lớp. Thêm một file mới ghi việc nghiên cứu thì phép đo cùng lượt không tự thấy nó, và báo cáo vẫn in như đã quét đủ.
