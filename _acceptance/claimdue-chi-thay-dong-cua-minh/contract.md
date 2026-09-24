@@ -5,7 +5,7 @@ slug: claimdue-chi-thay-dong-cua-minh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-09-24-claimdue-chi-thay-dong-cua-minh-design.md
 approved_by:
 approved_at:
