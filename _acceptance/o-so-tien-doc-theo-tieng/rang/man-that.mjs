@@ -18,7 +18,7 @@ import {
 } from "../../man-cai-dat-noi-tieng-viet/rang/man-that-lib.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const BANG_CHUNG = join(HERE, "..", "evidence");
+const BANG_CHUNG = join(HERE, "..", "..", "..", ".acceptance-runs", "o-so-tien-doc-theo-tieng", "evidence");
 const CAO = 900;
 const KHO_TAO = [1440, 375];
 const KY_MONG = 11;

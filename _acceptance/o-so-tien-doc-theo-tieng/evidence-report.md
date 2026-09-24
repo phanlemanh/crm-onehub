@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: da582c9865c0f29c3871bad51cc74e904d5a9dfc
+verified_commit: 09234bc36c10fffd85564767bd8dd83a1ab08aa2
 human_signoff:
 ---
 
@@ -209,3 +209,7 @@ sha: 7ddf69e18ba83d4e366f61d4b43b768253da2f60 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-09-24, do hoá cũ do vòng tien-te-chua-tai-khong-doan chạm ô số tiền, tấm tạo và thêm nhanh
 run_id: repin-20260924T080246Z-15787
 sha: da582c9865c0f29c3871bad51cc74e904d5a9dfc · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
+
+### Re-pin lần 3 — 2026-09-24, do hoá cũ do vòng ten-dong-tien-bao-cao đổi chữ và đổi thư mục ghi ảnh của thước màn thật
+run_id: repin-20260924T084643Z-52504
+sha: 09234bc36c10fffd85564767bd8dd83a1ab08aa2 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta
