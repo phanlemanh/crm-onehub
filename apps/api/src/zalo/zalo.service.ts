@@ -19,14 +19,32 @@ import { AgentAccessService } from "../agent/agent-access.service";
 import { InjectDatabase } from "../database/database.constants";
 import { ZALO_API } from "./zalo.config";
 import type { ZaloCuaToi, ZaloXuong } from "./zalo.contracts";
-import { ZaloCauNoiService } from "./zalo-cau-noi.service";
+import {
+	type NguyenNhanCauNoi,
+	ZaloCauNoiService,
+} from "./zalo-cau-noi.service";
 
 export const ZALO_THONG_DIEP = {
 	zaloChuaDung: "Zalo chưa dùng được cho bạn — hãy nối Zalo trước.",
 	slackChuaDung: "Slack chưa dùng được cho bạn — Slack chưa nhận ra bạn.",
 	saiDang:
 		"Đây không phải Bot Token. Bot Token có dạng <số>:<chuỗi> (vd 1234567890:AbC…), khác Secret Token.",
-	khongCauNoi: "Tác tử chưa nối được, nên chưa làm được việc này. Thử lại sau.",
+	cauNoi: {
+		"thieu-cau-noi": () =>
+			"CRM chưa được nối với dịch vụ nhắc việc. Báo người cài đặt CRM.",
+		"khong-toi-duoc": () =>
+			"Không gọi được dịch vụ nhắc việc — có thể nó đang tắt hoặc đang khởi động. Thử lại sau ít phút.",
+		"sai-khoa": () =>
+			"Dịch vụ nhắc việc không nhận khoá của CRM. Báo người cài đặt CRM.",
+		"tac-tu-loi": (status?: number) =>
+			`Dịch vụ nhắc việc gặp lỗi (mã ${status}). Thử lại; nếu vẫn lỗi, báo người cài đặt CRM.`,
+		"sai-khuon": () =>
+			"Dịch vụ nhắc việc trả lời theo khuôn CRM không đọc được — có thể hai bên đang chạy hai phiên bản khác nhau. Báo người cài đặt CRM.",
+	} satisfies Record<NguyenNhanCauNoi, (status?: number) => string>,
+	guiHong: {
+		zalo: "Zalo chưa nhận tin thử. Thử lại sau ít phút.",
+		slack: "Slack chưa nhận tin thử. Thử lại sau ít phút.",
+	},
 	chuaCoKenh:
 		"Bạn chưa có kênh nào để nhận tin thử — hãy nối Zalo hoặc nhờ quản trị viên ghép Slack.",
 	chiQuanTri: "Chỉ quản trị viên thay được bot.",
@@ -59,7 +77,11 @@ export class ZaloService {
 			throw new BadRequestException(ZALO_THONG_DIEP.saiDang);
 		}
 		const ket = await this.cauNoi.datBot(token === undefined ? {} : { token });
-		if (!ket.ok) throw new BadRequestException(ZALO_THONG_DIEP.khongCauNoi);
+		if (!ket.ok) {
+			throw new BadRequestException(
+				ZALO_THONG_DIEP.cauNoi[ket.nguyenNhan](ket.status),
+			);
+		}
 		if (ket.data.outcome !== "valid") {
 			throw new BadRequestException(ket.data.reason);
 		}
@@ -69,9 +91,16 @@ export class ZaloService {
 	async guiThu(userId: string) {
 		await this.access.assertMember(userId);
 		const ket = await this.cauNoi.guiThu(userId);
-		if (!ket.ok) throw new BadRequestException(ZALO_THONG_DIEP.khongCauNoi);
+		if (!ket.ok) {
+			throw new BadRequestException(
+				ZALO_THONG_DIEP.cauNoi[ket.nguyenNhan](ket.status),
+			);
+		}
 		if (ket.data.kenh === null) {
 			throw new BadRequestException(ZALO_THONG_DIEP.chuaCoKenh);
+		}
+		if (!ket.data.guiDuoc) {
+			throw new BadRequestException(ZALO_THONG_DIEP.guiHong[ket.data.kenh]);
 		}
 		return { kenh: ket.data.kenh };
 	}

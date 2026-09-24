@@ -25,6 +25,7 @@ import {
 	zaloLuuBotOutput,
 	zaloXuongOutput,
 } from "../src/zalo/zalo.contracts";
+import { ZALO_THONG_DIEP } from "../src/zalo/zalo.service";
 import { mintPhien } from "./phien-thu";
 import { donDep, gieoThanhVien, moXuong } from "./support/ke-hoach-gieo";
 
@@ -374,7 +375,7 @@ describe("gui-thu-api", () => {
 		process.env.AGENT_BRIDGE_SECRET = "";
 		const r = await guiThu(U.id);
 		expect(r.status).toBe(400);
-		expect(r.loi).toContain("Tác tử chưa nối được");
+		expect(r.loi).toBe(ZALO_THONG_DIEP.cauNoi["thieu-cau-noi"]());
 	});
 
 	test("gui-thu-api: tac tu khong ai nghe -> loi tac tu chua noi duoc", async () => {
@@ -383,7 +384,7 @@ describe("gui-thu-api", () => {
 		tt.dung();
 		const r = await guiThu(U.id);
 		expect(r.status).toBe(400);
-		expect(r.loi).toContain("Tác tử chưa nối được");
+		expect(r.loi).toBe(ZALO_THONG_DIEP.cauNoi["khong-toi-duoc"]());
 	});
 });
 
