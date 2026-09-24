@@ -154,6 +154,45 @@ export class ToChucRouter {
 	}
 
 	@Mutation({
+		input: orgIdInput,
+		output: orgOkOutput,
+		meta: restMeta("POST", "/org/departments/{id}/archive", TAG),
+	})
+	async archiveDepartment(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof orgIdInput>,
+	) {
+		await this.toChuc.yeuCauQuanTri(ctx.user.id);
+		return this.toChuc.archiveDepartment(input);
+	}
+
+	@Mutation({
+		input: orgIdInput,
+		output: orgOkOutput,
+		meta: restMeta("POST", "/org/departments/{id}/restore", TAG),
+	})
+	async restoreDepartment(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof orgIdInput>,
+	) {
+		await this.toChuc.yeuCauQuanTri(ctx.user.id);
+		return this.toChuc.restoreDepartment(input);
+	}
+
+	@Mutation({
+		input: orgIdInput,
+		output: orgOkOutput,
+		meta: restMeta("DELETE", "/org/departments/{id}", TAG),
+	})
+	async purgeDepartment(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof orgIdInput>,
+	) {
+		await this.toChuc.yeuCauQuanTri(ctx.user.id);
+		return this.toChuc.purgeDepartment(input);
+	}
+
+	@Mutation({
 		input: orgDepartmentMoveInput,
 		output: orgOkOutput,
 		meta: restMeta("POST", "/org/departments/{id}/move", TAG),

@@ -921,6 +921,18 @@ const appRouter = t.router({
       .input(orgRenameInput)
       .output(orgOkOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    archiveDepartment: publicProcedure
+      .input(orgIdInput)
+      .output(orgOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    restoreDepartment: publicProcedure
+      .input(orgIdInput)
+      .output(orgOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    purgeDepartment: publicProcedure
+      .input(orgIdInput)
+      .output(orgOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     moveDepartment: publicProcedure
       .input(orgDepartmentMoveInput)
       .output(orgOkOutput)

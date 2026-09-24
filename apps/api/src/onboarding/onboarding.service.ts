@@ -12,6 +12,7 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
+import { lyDoKhongXoaPhongBan } from "../to-chuc/xoa-phong-ban";
 import type {
 	AccessOutput,
 	ArchivedInput,
@@ -71,7 +72,7 @@ const CHON_BO_PHAN = {
 	name: true,
 	position: true,
 	archivedAt: true,
-	_count: { select: { steps: true } },
+	_count: { select: { steps: true, primaryOf: true } },
 } as const;
 
 type HangBoPhan = {
@@ -79,7 +80,7 @@ type HangBoPhan = {
 	name: string;
 	position: number;
 	archivedAt: Date | null;
-	_count: { steps: number };
+	_count: { steps: number; primaryOf: number };
 };
 
 type KhuonNhac = { name: string; archived: boolean };
@@ -91,7 +92,13 @@ function boPhanRa(row: HangBoPhan, khuon: KhuonNhac[]): DepartmentOutput {
 		position: row.position,
 		archivedAt: row.archivedAt,
 		purgeable:
-			row.archivedAt !== null && row._count.steps === 0 && khuon.length === 0,
+			row.archivedAt !== null &&
+			lyDoKhongXoaPhongBan({
+				archived: true,
+				stepCount: row._count.steps,
+				primaryCount: row._count.primaryOf,
+				khuon: khuon.map((k) => k.name),
+			}) === null,
 	};
 }
 
