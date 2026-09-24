@@ -5,7 +5,7 @@ slug: tien-te-chua-tai-khong-doan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: machine-cleared
 design_doc: docs/superpowers/specs/2026-09-24-tien-te-chua-tai-khong-doan-design.md
 approved_by:
 approved_at:
@@ -55,3 +55,5 @@ Chân sản phẩm: hai ô gọi thiết lập tiền tệ [SUY-TỪ-REPO: apps/
 ## Notes
 
 - Hai hành vi của hồ sơ `o-so-tien-doc-theo-tieng` được giữ nguyên và vẫn do bộ đo của hồ sơ đó canh: nút Tạo của tấm tạo không khoá vì số tiền (AC-6 cũ), nút Tạo của thêm nhanh khoá khi thiết lập đang tải (AC-8 cũ). Vòng này chạm tệp của hồ sơ đó nên hồ sơ đó được ghim lại bằng làn máy trước khi giao.
+- Known limits (Ngoài-2, Gate 2): thước màn thật (`rang/man-that.mjs`) gặp ngoại lệ bất ngờ ở vài bước (bấm, chờ bộ chọn, gọi mạng trong bộ chặn yêu cầu) thì thoát mã 1 như «tính năng hỏng» thay vì mã 2 «không đo được».
+- Known limits (Ngoài-3, Gate 2): thước soi mã (`rang/soi-ma.mjs`) tính con số khẳng định kỳ vọng từ chính danh sách nó lặp, nên phép so số khẳng định không bao giờ đỏ; danh sách khoá câu chữ chọn tay, không rút từ diff.
