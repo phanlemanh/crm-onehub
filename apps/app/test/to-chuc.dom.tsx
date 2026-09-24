@@ -546,6 +546,7 @@ function xem(hongTu: number): ImportPreviewOutput {
 			newDepartments: 0,
 			newDivisions: 0,
 		},
+		newNames: { departments: [], divisions: [] },
 	};
 }
 
