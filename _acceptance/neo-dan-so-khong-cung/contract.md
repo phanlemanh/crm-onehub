@@ -5,7 +5,7 @@ slug: neo-dan-so-khong-cung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [script]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-24-neo-dan-so-khong-cung-design.md
 approved_by:
 approved_at:
@@ -66,3 +66,10 @@ Không dùng skill morphological-scan: không gian là ba neo × hai hướng đ
 Không có bề mặt người nhìn; không eval thiết kế, không `ui-check`.
 
 - known-limits: `lenhTuConfig`/`globT1` trong bộ đo đọc `_acceptance/config.yaml` bằng tay thay vì `Bun.YAML.parse` — hôm nay ra đúng hai lệnh cổng; giá trị lệnh đổi kiểu viết (nháy đơn, escape, gập dòng) thì E6 có thể chạy lệnh khác lệnh cổng (Cổng 2 vòng 1, Ngoài-3, d-20260924T014042Z-11).
+- known-limits: sổ quyết định: dòng con trỏ `d-20260924T012130Z-20` ở `chan-lai-component-ra-man` ghi tầng `gate2`, giờ đoán và `decided_by` cho một quyết định Cổng 2 chưa có; chín dòng sổ hồ sơ này mang giờ đoán tròn — đã sửa bằng dòng mới (sổ chỉ ghi thêm), dòng cũ còn đó (Cổng 2 vòng 2, Ngoài-1, d-20260924T020537Z-20).
+- known-limits: `cau-hinh.mjs` chép tay bốn thư mục gốc thay vì import `GOC` từ `moi-mac-dinh.mjs` — thêm gốc một chỗ mà quên chỗ kia thì E5 (b) đỏ sai lý do (Cổng 2 vòng 2, Ngoài-2, d-20260924T020537Z-21).
+- known-limits: `git archive | tar` trong bộ đo không có `pipefail` — lỗi dựng bản gốc hiện ra như `TIEN DE: ban goc do san` (vẫn thoát 2) (Cổng 2 vòng 2, Ngoài-3, d-20260924T020537Z-22).
+- known-limits: `docGit` gọi `git ls-files` ngoài `try` — git hỏng giữa chừng thì thoát 1 thay vì 2 `KHONG DO DUOC` (Cổng 2 vòng 2, Ngoài-4, d-20260924T020537Z-23).
+- known-limits: ca `cay-lech` không kiểm `git worktree remove` — worktree tạm có thể còn đăng ký mà không ai được báo (Cổng 2 vòng 2, Ngoài-5, d-20260924T020537Z-24).
+- known-limits: mỗi bản sao để lại `$TMPDIR/chan-lai-component-ra-man-<băm>` không được xoá (Cổng 2 vòng 2, Ngoài-6, d-20260924T020537Z-25).
+- known-limits: neo `dong_bang_cu` không có ca đỏ riêng; nó đi chung vòng so với `mac_dinh` mà AC-2 đã chứng (Cổng 2 vòng 2, Ngoài-7, d-20260924T020537Z-26).
