@@ -1,0 +1,210 @@
+schema_version: 1
+slug: tien-te-chua-tai-khong-doan
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tcct_tao_dang_tai
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "packages/ui/src/components/money-input.tsx"
+      - "apps/app/test/tien-te-chua-tai.dom.tsx"
+    expected: |
+      Render CreateDealSheet that, tRPC gia voi currency.settings TREO (promise giu tay, mo duoc).
+      Cung mot form: go "150.000.000" -> dong duoi o dung "Đang tải đồng tiền mặc định…", o khong
+      aria-invalid, chu tren nut kich o chon dong tien DUNG BANG "Tiền tệ" (va khong co muc nao
+      mang data-checked/dang chon); Tao -> 0 lenh, document.activeElement la
+      nut kich o chon dong tien; mo promise tra VND -> dong "Đọc là " + formatMoney(15e9,"VND","vi")
+      (khong go lai); Tao -> dung 1 lenh [15000000000, "VND"].
+      CHIEU DO (chay o S3): ban sao tra lai du phong "USD" -> do voi thong diep ghim
+      'tao dang tai: gui [[15000000000,"USD"]] != []'.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tcct_tao_loi
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "packages/ui/src/components/money-input.tsx"
+      - "apps/app/test/tien-te-chua-tai.dom.tsx"
+    expected: |
+      currency.settings NEM LOI. Cung form: go "150.000.000" -> dong dung cau loi cua tam tao;
+      Tao -> 0 lenh, focus o chon dong tien; chon VND -> dong "Đọc là ..."; Tao -> 1 lenh
+      [15000000000, "VND"].
+      CHIEU DO (chay o S3): ban sao bo cau loi (truyen cau dang tai cho ca hai) -> do voi thong
+      diep ghim "tao loi: dong «Đang tải đồng tiền mặc định…» != «Không tải được ...»".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tcct_tao_ma_tran
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "apps/app/test/tien-te-chua-tai.dom.tsx"
+    expected: |
+      Ma tran viet truoc 3 thiet lap [ve-VND, dang-tai, loi] x 2 lua chon [khong-chon, chon-USD] x
+      2 so tien ["150.000.000", trong] = 12 o. Bang ky vong (lenh gui di; "-" = khong co currency;
+      [] = khong lenh nao), bai kiem giu DUNG bang nay:
+        ve-VND   / khong-chon / so    -> [[15000000000,"VND"]]
+        ve-VND   / khong-chon / trong -> [[null,"VND"]]
+        ve-VND   / chon-USD   / so    -> [[15000000000,"USD"]]
+        ve-VND   / chon-USD   / trong -> [[null,"USD"]]
+        dang-tai / khong-chon / so    -> []
+        dang-tai / khong-chon / trong -> [[null,"-"]]
+        dang-tai / chon-USD   / so    -> [[15000000000,"USD"]]
+        dang-tai / chon-USD   / trong -> [[null,"USD"]]
+        loi      / khong-chon / so    -> []
+        loi      / khong-chon / trong -> [[null,"-"]]
+        loi      / chon-USD   / so    -> [[15000000000,"USD"]]
+        loi      / chon-USD   / trong -> [[null,"USD"]]
+      Quan he doc = gui: o co so thi TRUOC khi Tao, dong duoi o bang "Đọc là " + formatMoney(15e9,
+      <currency cua lenh>, "vi") (VND "150.000.000 ₫" khac USD "150.000.000 US$"); o co so ma khong
+      lenh thi dong la cau dang-tai/loi. Bai kiem dem so o da chay == 12.
+      CHIEU DO (chay o S3): ban sao gui currency: knownCurrency ?? "USD" -> do voi thong diep ghim
+      'loi/khong-chon/trong: [[null,"USD"]] != [[null,"-"]]'.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.tcct_nhanh_dang_tai
+    paths:
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "apps/app/test/tien-te-chua-tai.dom.tsx"
+    expected: |
+      Cap hai chieu tren CUNG form: settings treo -> nut Tao disabled === true; mo promise tra VND
+      -> nut Tao disabled === false (ten da go).
+      CHIEU DO (chay o S3): ban sao cho ready luon false -> do voi thong diep ghim
+      "nhanh sau khi ve: nut Tao disabled true != false".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.tcct_nhanh_loi
+    paths:
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "packages/ui/src/components/money-input.tsx"
+      - "apps/app/test/tien-te-chua-tai.dom.tsx"
+    expected: |
+      Settings nem loi. Cung form: nut Tao disabled === false; co nut "Thử lại"; go "150.000.000"
+      -> dong dung cau loi cua them nhanh; Tao -> 0 lenh, focus o so tien; xoa so, Tao -> dung 1
+      lenh [null, khong-co-currency].
+      CHIEU DO (chay o S3): ban sao gui du khi loi -> do voi thong diep ghim
+      "nhanh loi «150.000.000»: 1 lenh != 0".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.tcct_nhanh_thu_lai
+    paths:
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "apps/app/test/tien-te-chua-tai.dom.tsx"
+    expected: |
+      Settings lan 1 nem loi, lan 2 tra VND (dem so lan goi). Go "150.000.000", bam "Thử lại" ->
+      so lan goi tang dung 1 (1 -> 2), nut "Thử lại" khong con, dong "Đọc là ..."; Tao -> 1 lenh
+      [15000000000, "VND"].
+      CHIEU DO (chay o S3): ban sao nut Thu lai khong goi refetch -> do voi thong diep ghim
+      "nhanh thu lai: so lan goi 1 != 2".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.tcct_o_chua_biet
+    paths:
+      - "packages/ui/src/components/money-input.tsx"
+      - "packages/ui/src/lib/messages.ts"
+      - "packages/ui/test/money-input.dom.tsx"
+    expected: |
+      Ma tran 2 tieng x [cau truyen vao, cau mac dinh] = 4 o, moi o: dong dung cau ghi san,
+      aria-live="polite", aria-invalid vang, aria-describedby tro dong. Them 2 o: chu rong -> dong rong (2 tieng).
+      Dem 6 o.
+      CHIEU DO (chay o S3): ban sao doc so voi currency null nhu hai chu so le -> do voi thong diep
+      ghim "vi/truyen-vao: dong «Đọc là ...» != «Câu thử»".
+
+  - id: E8
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tcct_man_that
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "packages/ui/src/components/money-input.tsx"
+      - "_acceptance/tien-te-chua-tai-khong-doan/rang/man-that.mjs"
+    steps:
+      - "Canh cay (canh-cay.mjs) truoc man dau tien; lech cay -> ma 2"
+      - "Doc reportingCurrency qua API; USD -> ma 2 (khong phan biet duoc voi ban cu); chon DONG_CHON = dong dau tien trong [EUR, VND, JPY] khac ca USD lan dong bao cao"
+      - "Chan mang: moi yeu cau /api/trpc co currency.settings -> may do tu goi lo that roi thay phan tu currency.settings bang loi"
+      - "vi 1440: mo tam tao, go ten, chon cong ty gieo, go 150.000.000 -> doc dong, chup evidence/tao-loi-truoc-khi-chon.png; chu o chon dong tien bang Tiền tệ"
+      - "chon DONG_CHON -> doc dong 'Đọc là ' + so theo DONG_CHON, chup evidence/tao-sau-khi-chon.png; Tao"
+      - "tao thoa thuan thu hai voi so tien trong, Tao"
+    expected: |
+      Frame: truoc khi chon, dong la cau loi cua tam tao va chu o chon dong tien bang "Tiền tệ";
+      sau khi chon DONG_CHON, dong la "Đọc là" + so theo DONG_CHON. Doi chung: tren ban truoc vong
+      (PR #114), o chon hien USD va dong la "Đọc là 150.000.000 US$" -> thuoc do voi thong diep
+      ghim "tao truoc khi chon: o chon dong tien «USD» != «Tiền tệ»".
+
+  - id: E9
+    criterion: AC-8
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tcct_man_that
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "_acceptance/tien-te-chua-tai-khong-doan/rang/man-that.mjs"
+    expected: |
+      Cung lan chay E8 va E11, doc API that: tam tao co so -> deals.byId amountCents 15000000000,
+      currency DONG_CHON; tam tao so trong -> currency == reportingCurrency (doc thang tu may chu,
+      da ghim khac USD); them nhanh sau Thu lai -> amountCents 15000000000, currency ==
+      reportingCurrency. Ma tran thuoc ghim so khang dinh (so voi hang KY_MONG). Don dep trong finally.
+      CHIEU DO (chay o S3 tren ban truoc vong): tam tao so trong mang USD -> "tao so trong:
+      currency USD != VND".
+
+  - id: E11
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tcct_man_that
+    paths:
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "packages/ui/src/components/money-input.tsx"
+      - "_acceptance/tien-te-chua-tai-khong-doan/rang/man-that.mjs"
+    steps:
+      - "Cung lan chay E8; van dang chan currency.settings"
+      - "vi 1440: mo tam cong ty gieo voi add=deal, go ten, go 150.000.000 -> doc dong va tim nut Thử lại, chup evidence/nhanh-loi.png"
+      - "Bo chan, bam Thử lại -> dong 'Đọc là' theo dong bao cao, nut Thử lại mat, chup evidence/nhanh-sau-thu-lai.png; Tao"
+    expected: |
+      Frame: luc chan, co nut "Thử lại" canh o va dong la cau loi cua them nhanh; nut Tao khong khoa.
+      Sau Thu lai: dong "Đọc là" theo dong bao cao, khong con nut Thu lai. Doi chung tren ban truoc
+      vong: nut Tao khoa va khong co nut Thu lai -> thuoc do voi thong diep ghim
+      "nhanh loi: khong thay nut Thử lại".
+
+  - id: E10
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.tcct_soi_ma
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "packages/ui/src/components/money-input.tsx"
+      - "_acceptance/tien-te-chua-tai-khong-doan/rang/soi-ma.mjs"
+    expected: |
+      Khang dinh viet truoc, so khang dinh so voi con so khai trong script (khong chi dem):
+      create-deal-sheet.tsx khong con chuoi '"USD"'; cong thiet ke tinh dat tren 3 tep; cac khoa
+      moi (soTien.canDongTien, deal.currencyLoadFailed, deal.retry...) co ca vi va en.
+      CHIEU DO (chay o S3, ban guong tmpdir): them lai '|| "USD"' -> "create-deal-sheet.tsx: con du
+      phong \"USD\"".
+
+  - id: E12
+    criterion: AC-10
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tcct_man_that
+    paths:
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "_acceptance/tien-te-chua-tai-khong-doan/rang/man-that.mjs"
+    expected: |
+      Cung lan chay E11, doc API that sau khi Tao o them nhanh: thoa thuan moi cua cong ty gieo
+      (tim theo ten) co deals.byId amountCents 15000000000 va currency == reportingCurrency doc
+      thang tu may chu (da ghim khac USD).
+      CHIEU DO (chay o S3 tren ban truoc vong): nut Tao khoa nen khong tao duoc -> "nhanh: khong
+      thay thoa thuan vua tao".
