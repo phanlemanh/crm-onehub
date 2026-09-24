@@ -365,6 +365,10 @@ executors:
     ktt_man_loc_vao_board: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t loc-vao-board"
     ktt_man_dau_cot: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t dau-cot"
     ktt_man_tro_nang: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t tro-nang"
+    ddc_api_duoc_tinh: 'bun run test -- "cd apps/api && bun test test/deals-board.spec.ts -t duoc-tinh"'
+    ddc_ham_doi: "cd apps/app && bun test ./test/dem-dau-cot.spec.ts"
+    ddc_man_dang_luu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t dang-luu-dau-cot"
+    ddc_man_loi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t loi-tra-dau-cot"
     ktt_board_giu_nguyen: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/board-giu-nguyen.dom.tsx"
   script:
     ogd_man_danh_muc: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "DUOI_CONG=1 bun _acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs"'

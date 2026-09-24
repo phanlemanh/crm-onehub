@@ -1,0 +1,166 @@
+schema_version: 1
+slug: dem-dau-cot-khi-dang-luu
+
+evals:
+  - id: E1
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ddc_api_duoc_tinh
+    paths:
+      - "apps/api/src/deals/**"
+      - "apps/api/src/currency/conversion.service.ts"
+      - "apps/api/test/deals-board.spec.ts"
+    expected: |
+      Tich hop tren co so du lieu kiem cua bun run test, cung seed cua dem-tong (A1..A9, B1..).
+      Ma tran viet truoc tu seed: moi the cua ownerA khong luu tru -> 1 khang dinh the.counted ==
+      (seed.counted && seed.cents !== null); moi cot trong 7 cot -> 1 khang dinh countedCount ==
+      so seed cua cot co counted && cents !== null; moi cot hien du the -> 1 khang dinh quan he:
+      tong baseAmountCents cua the counted == valueCents, va countedCount 0 thi valueCents null.
+      So khang dinh = so the + 7 + 7, dem va so voi do dai ma tran.
+      Cot bi cat (53 thoa thuan o QUALIFIED_TO_BUY, 51 duoc tinh): countedCount == 51, the tra ve 50.
+      CHIEU DO (ghim, da chay truoc khi code): ban sao tinh counted bang baseAmount !== null -> "the
+      A3: counted true != false"; ban sao dem countedCount tren the tra ve -> "cot bi cat:
+      countedCount 49 != 51".
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ddc_ham_doi
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/use-deal-board-move.ts"
+      - "apps/app/test/dem-dau-cot.spec.ts"
+      - "apps/app/test/fixtures/deals-board-sau-luu-*.json"
+      - "apps/api/test/deals-board.spec.ts"
+    expected: |
+      Chuan so RUT TU MAY CHU THAT, khong viet tay: bai kiem API "sau-luu" (cung tep E1, chay voi
+      GHI_FIXTURE_BANG_COT=1) dung bo thoa thuan rieng, ghi dau ra deals.board TRUOC, roi voi moi ca
+      goi DealsService.setStage that, ghi dau ra deals.board SAU (fixture deals-board-sau-luu-<ca>.json),
+      roi tra ve. Bai kiem ham doc hai fixture qua dealBoardOutput.parse va khang dinh
+      applyMoves(truoc, cac luot doi cua ca) BANG sau o ca 7 cot x 5 truong dau cot (count, valueCents,
+      countedCount, unconverted.count, unconverted.currencies) va tap id the cua moi cot.
+      Ma tran ca viet truoc (9 ca): the-duoc-tinh (cot moi truoc rong tong); the-eur (quy doi theo tien
+      cu); chua-quy-doi-that (baseAmount null); khong-so-tien; cuoi-cung (the duoc tinh cuoi cung roi
+      cot); hai-luot (hai the cung cot nguon); mot-luot-da-tai (truoc = sau cua the-duoc-tinh, con hai
+      luot cho -> bang sau cua hai-luot); sau-tai-lai (truoc = sau, luot con cho -> khong chinh);
+      cot-bi-cat (53 thoa thuan, doi mot the chua quy doi dang hien va mot the duoc tinh).
+      9 ca x 7 cot x 6 = 378 khang dinh, dem va so voi ma tran.
+      CHIEU DO (ghim): applyMoves cu (chi doi the) -> "ca the-duoc-tinh: cot DEMO_BOOKED count 5 != 4".
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ddc_ham_doi
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/use-deal-board-move.ts"
+      - "apps/app/test/dem-dau-cot.spec.ts"
+      - "apps/app/test/fixtures/deals-board-sau-luu-*.json"
+    expected: |
+      Hai ca cua E2: the-eur (baseAmountCents khac null nhung counted false) va chua-quy-doi-that
+      (baseAmountCents null, amountCents khac null, ma tien GBP). Tong hai cot khong doi, unconverted
+      cot cu -1, cot moi +1 kem ma tien — bang fixture sau.
+      CHIEU DO (ghim): ban sao suy counted tu baseAmountCents !== null -> "ca the-eur: cot
+      QUALIFIED_TO_BUY valueCents 90000 != null"; ban sao phan loai chua quy doi bang baseAmountCents
+      -> "ca chua-quy-doi-that: cot DEMO_BOOKED unconverted.count 2 != 1".
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ddc_ham_doi
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/use-deal-board-move.ts"
+      - "apps/app/test/dem-dau-cot.spec.ts"
+      - "apps/app/test/fixtures/deals-board-sau-luu-*.json"
+    expected: |
+      Ca khong-so-tien cua E2: chi count doi; cac truong con lai bang fixture sau.
+      CHIEU DO (ghim): ban sao coi the amountCents null la chua quy doi -> "ca khong-so-tien: cot
+      DEMO_BOOKED unconverted.count 3 != 2".
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.ddc_man_dang_luu
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/**"
+      - "packages/ui/src/components/board.tsx"
+      - "apps/app/test/keo-tha-thoa-thuan.dom.tsx"
+    expected: |
+      Man that (DealsTable -> DealsBoard -> Board that cua packages/ui) trong DOM, may chu gia treo
+      loi dap setStage. Luot 1: tha the duoc tinh dau tien cua DEMO_BOOKED sang QUALIFIED_TO_BUY; doc
+      h3 hai cot TRONG LUC treo: so dau cot -1/+1, chu tong cot moi (truoc rong tong) = formatMoney gia
+      tri the, cot cu KHONG co chu "còn". Luot 2 (man moi): tha the EUR sang QUALIFIED_TO_BUY; trong
+      luc treo cot moi co loi «1 thoa thuan chua quy doi» kem EUR, cot cu mat EUR. Doi chung duong:
+      truoc khi tha, cot cu co EUR va cot moi khong.
+      CHIEU DO (ghim): applyMoves cu -> "dang luu: cot DEMO_BOOKED hien 3 != 2" va "dang luu: cot
+      DEMO_BOOKED co dong còn 1 thẻ".
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.ddc_ham_doi
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/use-deal-board-move.ts"
+      - "apps/app/test/dem-dau-cot.spec.ts"
+      - "apps/app/test/fixtures/deals-board-sau-luu-*.json"
+    expected: |
+      Hai ca cua E2: cuoi-cung -> valueCents cot cu null (fixture sau cua may chu that tra null);
+      the-duoc-tinh -> cot moi truoc rong tong nay bang gia tri the.
+      CHIEU DO (ghim): ban sao tru thang khong ve null -> "ca cuoi-cung: cot CONTRACT_SENT valueCents 0 != null".
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.ddc_man_loi
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/**"
+      - "packages/ui/src/components/board.tsx"
+      - "apps/app/test/keo-tha-thoa-thuan.dom.tsx"
+    expected: |
+      Man that trong DOM. Chup toan bo chu h3 cua ca 7 cot (so, tong, loi chua quy doi) TRUOC khi keo.
+      May chu gia treo roi tu choi setStage cho mot lan tha the EUR. Doi chung duong: trong luc treo chu
+      h3 cua cot cu KHAC anh chup. Sau tu choi: the o cot cu va chu h3 cua ca 7 cot BANG anh chup
+      (7 khang dinh + 1 doi chung).
+      CHIEU DO (ghim): ban sao giu luot doi khi loi (khong forget) -> "sau tu choi: cot DEMO_BOOKED
+      khac anh chup".
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.ddc_ham_doi
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/use-deal-board-move.ts"
+      - "apps/app/test/dem-dau-cot.spec.ts"
+      - "apps/app/test/fixtures/deals-board-sau-luu-*.json"
+    expected: |
+      Ca sau-tai-lai cua E2: truoc = fixture sau cua may chu, luot doi van con -> applyMoves tra dung
+      fixture do o ca 7 cot.
+      CHIEU DO (ghim): ban sao bo nhanh "the da o cot dich" -> "ca sau-tai-lai: cot QUALIFIED_TO_BUY
+      count 3 != 2".
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.ddc_ham_doi
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/use-deal-board-move.ts"
+      - "apps/app/test/dem-dau-cot.spec.ts"
+      - "apps/app/test/fixtures/deals-board-sau-luu-*.json"
+    expected: |
+      Ca the-eur va chua-quy-doi-that cua E2 (moi ma tien EUR, GBP chi mot the chua quy doi o cot cu
+      hien du): danh sach ma tien cot cu bang fixture sau (mat dung ma do). Ca cot-bi-cat: danh sach
+      cu giu nguyen, bang fixture sau vi the chua quy doi an van mang cung ma.
+      CHIEU DO (ghim): ban sao khong tinh lai danh sach -> "ca the-eur: cot DEMO_BOOKED currencies
+      EUR,GBP != GBP".
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.ddc_ham_doi
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/use-deal-board-move.ts"
+      - "apps/app/test/dem-dau-cot.spec.ts"
+      - "apps/app/test/fixtures/deals-board-sau-luu-*.json"
+    expected: |
+      Ca hai-luot va mot-luot-da-tai cua E2, deu so voi fixture sau cua may chu that sau khi ca hai
+      luot luu.
+      CHIEU DO (ghim): ban sao chi ap luot doi cuoi -> "ca hai-luot: cot DEMO_BOOKED count 4 != 3".
