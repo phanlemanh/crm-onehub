@@ -430,3 +430,59 @@ evals:
       design-gate che do static tren hai trang, cung lenh voi nqz_san_thiet_ke: moi
       vi pham token/className ghi de lam lenh thoat khac 0 va goi ten tep.
       Doi chung: mot tep mau co className="rounded-xl" tren Button -> lenh do.
+  - id: E25
+    criterion: AC-16
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_goi_nguoc
+    paths:
+      - "apps/agent/agent/lib/zalo-bot-xuong.ts"
+      - "apps/agent/agent/lib/zalo-webhook.ts"
+      - "apps/agent/agent/lib/zalo-api.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+      - "apps/agent/test/support/zalo-gia.ts"
+    expected: |
+      Zalo gia, trong luc xu ly setWebhook, goi nhanWebhook THAT (Request toi
+      /zalo/webhook, header X-Bot-Api-Secret-Token = secret_token vua nhan, than la
+      tin rieng hop le) va ghi lai status. Hai ca viet truoc tren cung fixture:
+        a verification outcome "webhook.ok" -> status goi nguoc = 200; DB zaloWebhookUrl
+          co, zaloWebhookLyDo null
+        b verification outcome "webhook.failed" -> zaloWebhookLyDo "zalo-tu-choi",
+          zaloWebhookUrl null; phan hoi route khong phai valid/da-dang-ky
+      Hai o, hai assert, cau ghim "Zalo goi thu phai gap khoa moi" (ca a) va
+      "xac minh hong khong bao da dang ky" (ca b).
+      DOT BIEN: doi thu tu (ghi AppSetting SAU setWebhook, hanh vi r1) -> ca a do
+      voi cau ghim ca a.
+  - id: E26
+    criterion: AC-17
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_dang_ky_hong
+    paths:
+      - "apps/agent/agent/lib/zalo-bot-xuong.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+      - "apps/agent/test/support/zalo-gia.ts"
+    expected: |
+      Gieo token T, khoa K, url U. Ma tran viet truoc 2 cach goi (dang ky lai {},
+      token moi T2) x 2 cach hong (setWebhook ok:false, loi mang) = 4 o. Moi o doc
+      LAI DB: zaloBotToken = T, zaloWebhookSecret = K, zaloWebhookLyDo "zalo-tu-choi";
+      nhanWebhook voi khoa K tra 200; phan hoi route outcome khac "valid".
+      So assert = 4 o x 4 dieu, in bang o luc chay, cau ghim "dang ky hong giu khoa
+      dang dung". Doi chung duong: setWebhook ok -> token/khoa doi sang moi.
+      DOT BIEN: ghi null cho khoa khi hong (hanh vi r1) -> o dau do voi cau ghim.
+  - id: E27
+    criterion: AC-18
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nzm_nhip_tron
+    paths:
+      - "apps/agent/agent/lib/zalo-bot.ts"
+      - "apps/agent/test/noi-zalo-cho-nguoi-moi.integration.spec.ts"
+    expected: |
+      Gieo zaloWebhookUrl U, zaloPolledAt cu, mot ZaloUpdateSeen cu hon ZALO.poll.giuDauMs.
+      Chay run cua lich dispatch voi getWebhookInfo 500:
+        1 zaloWebhookUrl van U
+        2 zaloPolledAt moi hon moc truoc nhip
+        3 hang ZaloUpdateSeen cu bi don
+      Cau ghim "nhip chay tron khi getWebhookInfo 500".
+      DOT BIEN: nem loi trong nhanh 500 cua docWebhook -> dong 2 hoac 3 do.

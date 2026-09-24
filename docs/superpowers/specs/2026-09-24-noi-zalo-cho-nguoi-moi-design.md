@@ -48,6 +48,14 @@ Tác tử **tự ghi** token và khoá vào `AppSetting` (khác khoá nghiên c�
 ghi): khoá webhook phải là đúng chuỗi đã gửi cho `setWebhook`, nên nơi sinh khoá
 cũng là nơi lưu nó, và khoá không đi qua API. API trả về cho màn một bản đã che.
 
+**Thứ tự ghi khi đăng ký (thêm sau Cổng Bằng chứng vòng 1).** Zalo thật gọi thử
+địa chỉ webhook ngay trong lúc xử lý `setWebhook`, nên tác tử chụp các cột Zalo
+đang có, ghi token và khoá mới TRƯỚC khi gọi `setWebhook`, rồi: thành công (và
+`verification.outcome` là `webhook.ok` hoặc vắng) thì ghi `zaloWebhookUrl`; thất
+bại (`ok: false`, lỗi mạng, hay `outcome` khác `webhook.ok`) thì trả lại đúng các
+cột đã chụp, ghi `zaloWebhookLyDo = zalo-tu-choi` và trả `invalid` cho màn — khoá
+đang dùng không bao giờ bị ghi null vì một lần đăng ký hỏng.
+
 Gốc URL cho webhook lấy từ chính yêu cầu cầu nối gửi tới tác tử (tức `AGENT_URL`
 của API). Gốc không phải `https:` thì không gọi `setWebhook`: token vẫn lưu, lý do
 ghi là `can-https`, và màn chỉ lệnh `zalo:poll` cho bot thử tại máy.

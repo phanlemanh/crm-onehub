@@ -139,6 +139,9 @@ executors:
     nzm_o_token: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/noi-zalo-cho-nguoi-moi.dom.tsx -t o-token"
     nzm_chu_man: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/noi-zalo-cho-nguoi-moi.dom.tsx -t chu-man"
     nzm_cau_noi_that: 'bun run test -- "cd apps/api && bun test test/noi-zalo-cau-noi.spec.ts"'
+    nzm_goi_nguoc: 'bun run test -- "cd apps/agent && bun test test/noi-zalo-cho-nguoi-moi.integration.spec.ts -t goi-nguoc"'
+    nzm_dang_ky_hong: 'bun run test -- "cd apps/agent && bun test test/noi-zalo-cho-nguoi-moi.integration.spec.ts -t dang-ky-hong"'
+    nzm_nhip_tron: 'bun run test -- "cd apps/agent && bun test test/noi-zalo-cho-nguoi-moi.integration.spec.ts -t nhip-tron"'
     hv_qua_han_ngay: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t qua-han-ngay"'
     hv_bien_nua_dem: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t bien-nua-dem"'
     hv_ca_doi: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t ca-doi"'

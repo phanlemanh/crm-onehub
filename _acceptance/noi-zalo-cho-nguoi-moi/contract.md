@@ -5,10 +5,10 @@ slug: noi-zalo-cho-nguoi-moi
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, config, docs]
-status: verified
+status: draft
 design_doc: docs/superpowers/specs/2026-09-24-noi-zalo-cho-nguoi-moi-design.md
-approved_by: Phan Le Manh
-approved_at: 2026-09-24T04:13:18Z
+approved_by:
+approved_at:
 ---
 
 # Acceptance Contract: noi-zalo-cho-nguoi-moi
@@ -43,6 +43,9 @@ duyệt trong chat 2026-09-24 · design doc ở `design_doc`.
 - AC-13: Given trang Kết nối › Zalo của quản trị viên chưa bật bot, When dán `abc` rồi bấm Lưu; rồi dán token đúng dạng mà API trả lỗi «Zalo không nhận token này», Then ca `abc` không gửi yêu cầu nào; lỗi hiện dưới ô trong vùng `aria-live`, focus về ô, ô vẫn giữ chữ đã dán; trong lúc yêu cầu chạy, nút ghi «Đang kiểm…» và bị khoá; ô có `type="password"` và `autocomplete="off"`.
 - AC-14: Given màn thật chạy ở 1440 và 375, When mở Thông báo của bạn ở ba trạng thái chưa nối, mã chờ, đã nối, và Kết nối › Zalo ở năm trạng thái chưa bật (quản trị), sống, can-https, chưa đăng ký webhook, thành viên thường, Then nhìn thấy trên ảnh: ba bước có số với tên bot «Bot OneHub»; bước 3 có mã 6 số; nút «Gửi thử nhắc ngay» ở trạng thái đã nối; hướng dẫn tạo bot chỉ Zalo › OA «Zalo Bot Manager» và nói Bot Token có dạng `<số>:<chuỗi>`, khác Secret Token; không có chữ `.env` hay `bot.zaloplatforms.com`; trạng thái chưa đăng ký webhook có cảnh báo «Zalo chưa giao tin nhắn về CRM» và nút «Đăng ký lại», không có «Nhận tin qua webhook»; mỗi ảnh có nhiều nhất một nút tô đầy; thành viên thường không thấy ô token; nhãn «Chưa nối» và dòng giờ hết hạn của mã không bị cắt ở 375; không có «Zalo: Zalo» hay «Slack: Slack».
 - AC-15: Given kho sau vòng này, When chạy trọn `apps/agent/test/nhac-qua-zalo.integration.spec.ts` và `apps/agent/test/zalo-qua-webhook.integration.spec.ts`, và đọc `docs/connections.md`, `docs/environment.md`, `.env.example`, `docs/proto.md`, Then hai tệp test không đổi so với `merge-base` của nhánh với `onehub` và mọi ca xanh; mục Zalo của `docs/connections.md` chỉ quản trị viên dán Bot Token ở Kết nối › Zalo và mô tả trạng thái webhook, không còn lấy «sửa `.env` rồi khởi động lại tác tử» làm đường chính; `docs/environment.md` và `.env.example` ghi `ZALO_BOT_TOKEN`, `ZALO_WEBHOOK_SECRET` là đường dự phòng khi `AppSetting` rỗng; `docs/proto.md` có mục block ReUI chỉ làm tham chiếu bố cục.
+- AC-16: Given quản trị viên dán token hợp lệ, tác tử ở gốc `https://`, và Zalo giả gọi thử `POST /zalo/webhook` của tác tử bằng đúng `secret_token` nó vừa nhận NGAY TRONG lúc xử lý `setWebhook` (như Zalo thật xác minh địa chỉ), When gọi `zalo.luuBot`, Then lời gọi thử đó nhận 200; và khi Zalo giả trả `verification.outcome` khác `webhook.ok`, `zaloWebhookLyDo` là «zalo-tu-choi», `zaloWebhookUrl` null và `zalo.xuong` không trả «da-dang-ky». (cross-layer)
+- AC-17: Given bot đang chạy với token T và khoá K đã đăng ký, When quản trị viên đăng ký lại (không kèm token) hoặc dán token mới T2, và Zalo giả làm `setWebhook` thất bại (trả `ok: false`, hoặc lỗi mạng), Then đọc lại `AppSetting`: `zaloBotToken` vẫn là T, `zaloWebhookSecret` vẫn là K, `zaloWebhookLyDo` là «zalo-tu-choi»; webhook với khoá K vẫn trả 200; và phản hồi cho màn nói đăng ký không thành, không báo đã bật. (cross-layer)
+- AC-18: Given token đang lưu, `zaloWebhookUrl` là U và có hàng `ZaloUpdateSeen` cũ hơn hạn giữ, When nhịp `dispatch` chạy với `getWebhookInfo` trả 500, Then `zaloWebhookUrl` vẫn là U, đồng thời `zaloPolledAt` được ghi mới trong nhịp đó và hàng `ZaloUpdateSeen` cũ bị dọn — nhịp chạy trọn chứ không dừng giữa chừng.
 
 ## Coverage
 
@@ -79,3 +82,28 @@ nghĩa, cắt còn 12 ô Core (khoảng 20%).
   `@reui/stepper` là component miễn phí cài vào `packages/ui` ở S3.
 - Chip riêng «Sửa ba lỗi giao diện Zalo thấy khi lái thử» (23/09) chưa ai mở; vòng
   này làm luôn ba lỗi đó, nên chip ấy bỏ được.
+- AC-16, AC-17, AC-18 thêm sau Cổng Bằng chứng vòng 1 (chủ kho nâng phạm vi
+  Ngoài-4, Ngoài-5, Ngoài-8, 2026-09-24).
+- Ngoài-6 (lỗi từ Zalo hay tác tử hiện thành câu «Tác tử chưa nối được», API không
+  ghi log) tách sang một hợp đồng riêng.
+
+### Known limits (Cổng Bằng chứng vòng 1, 2026-09-24)
+
+- Ngoài-1: mọi lỗi cầu nối (thiếu cầu nối, tác tử trả mã khác 2xx, lỗi mạng, phản
+  hồi sai khuôn) đều thành cùng một câu «Tác tử chưa nối được»; mã khác 2xx không
+  được ghi log.
+- Ngoài-2: quy tắc dạng Bot Token viết ở hai nơi (`apps/api/src/zalo/zalo.config.ts`,
+  `apps/app/lib/nhac-qua-zalo-man.ts`), chưa nằm trong schema đầu vào của tRPC.
+- Ngoài-3: `docs/api.md` chưa ghi việc gỡ thành viên nay xoá hẳn liên kết Zalo, mã
+  nối và lựa chọn kênh (cho phép lại không khôi phục).
+- Ngoài-7: năng lực «Zalo reminders» trong `capabilities.ts` vẫn chỉ đọc
+  `ZALO_BOT_TOKEN`, nên báo tắt khi token chỉ dán trên màn.
+- Ngoài-9: ma trận sáu ô của E20 vẫn đạt khi một ô không có dòng, và khẳng định
+  «đủ 6 ô» là hằng đúng.
+- Ngoài-10: vế cấm «sửa .env rồi khởi động lại» của `rang/tai-lieu.mjs` chưa từng
+  được chứng minh đỏ.
+- Ngoài-11: E24 hứa một đối chứng đỏ nhưng lệnh chỉ chạy trên hai trang thật.
+- Ngoài-12: E2 đọc `zalo.xuong` trên hàng `AppSetting` do tác tử giả trong test ghi,
+  không phải bên ghi thật (E23 phủ chỗ nối thật).
+- Ngoài-13: khẳng định «token không về trình duyệt» trên kết quả `luuBot` rỗng
+  nghĩa khi `luuBot` thất bại.
