@@ -57,6 +57,19 @@ là «Đúng nhịp», dưới đó chỉ «Chậm nhịp» — không bao giờ
 và không so với đường thẳng. Các ngưỡng này là giá trị mẫu; con số thật là cấu hình
 chương trình của lượt 3.
 
+## Duyệt
+
+2026-09-24, Manh Phan: gật cả gói, vòng phản ứng thứ nhất (nac-1, trên ảnh). Bốn
+chỗ còn mở chốt theo hướng máy khuyên, bản mẫu đang dựng đúng như vậy:
+
+- Heatmap «Toàn cảnh»: trục đơn vị × tuần, ô là tỷ lệ KR tự tin cao.
+- Mức tự tin: ba bậc Cao · Vừa · Thấp.
+- Cây căn chỉnh: trong «Theo đơn vị», nút chuyển Danh sách / Cây — giữ bốn tab.
+- «Toàn cảnh»: mọi vai đều thấy, kể cả «chỉ OKR».
+
+Lượt 3, 4, 5 dựng theo bản mẫu này; mười một biến thể ở Nhóm 2 là việc của lượt 5
+trong `packages/ui`.
+
 ## Ma trận capture
 
 | state | breakpoint | theme | file |
