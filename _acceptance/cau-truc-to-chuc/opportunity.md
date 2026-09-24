@@ -72,10 +72,11 @@ Phạm vi lượt 1 theo lộ trình:
   mới ghi, báo dòng hỏng.
 - Màn Điều phối 30 ngày đổi nhãn theo từ điển mới (hôm nay «Bộ phận» là bảng phẳng; sau
   lượt 1 bảng đó là **Phòng ban**, **Bộ phận** là cấp trên); lọc theo bộ phận hoạt động.
+- Sheet kế hoạch 30 ngày đổi nhãn ô «Mục tiêu» (đang hiện số ngày, vd «30 ngày») sang một
+  chữ không trùng với Mục tiêu của OKR — chủ kho chốt 2026-09-24.
 
-Việc đi kèm ở bước chuẩn bị (không thuộc ô này): các mục Bộ phận, Phòng ban, Đơn vị,
-Trưởng đơn vị của `CONTEXT.md` đang ở PR #110 (`docs/tu-dien-okr`). Vòng làm dùng đúng chữ
-trong đó; PR chưa gộp thì chờ, không viết mục từ điển riêng.
+Từ điển: các mục Bộ phận, Phòng ban, Đơn vị, Trưởng đơn vị đã có trong `CONTEXT.md` (PR #110,
+gộp vào `onehub` ở `ea4fff80`). Vòng làm dùng đúng chữ trong đó.
 
 Lịch và phụ thuộc (phiên điều phối lộ trình OKR báo 2026-09-24):
 
