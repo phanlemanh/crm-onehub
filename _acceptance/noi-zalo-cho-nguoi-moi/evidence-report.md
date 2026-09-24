@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 43f0c84cbb8a1547d530381408a71d546a2b74e8
+verified_commit: c52bd85fd682f9dae5a51bcaec82ef68f81947d9
 human_signoff: Phan Le Manh 2026-09-24
 ---
 
@@ -392,3 +392,7 @@ none — every multi-run eval is uniform
 
 Round 1: hợp đồng khởi tạo cho noi-zalo-cho-nguoi-moi — 9 phát hiện ngoài hợp đồng ghi nhận, nay carried sang round này (xem review-findings.md).
 Round 3 (hiện tại): 27 eval + 4 lệnh suite (test/lint/lint:slop/build) đều PASS trên commit 43f0c84c; hai sửa của vòng này (14d76573, c31f783d) trên nhánh xử lý xác minh webhook hỏng (zalo-bot-xuong.ts) sinh thêm 4 phát hiện mới ngoài hợp đồng (xem review-findings.md).
+
+### Re-pin lần 1 — 2026-09-24, do gop onehub sau chu ky Cong Bang chung
+run_id: repin-20260924T084151Z-32478
+sha: c52bd85fd682f9dae5a51bcaec82ef68f81947d9 · suites: 4 lệnh exit 0 · evals: 26/26 eval máy đạt kỳ vọng · ngoài làn máy: E19
