@@ -59,13 +59,13 @@ export function KhoiZalo({
 		}),
 	);
 
-	const [guiThuLoi, setGuiThuLoi] = useState(false);
+	const [guiThuLoi, setGuiThuLoi] = useState<string | null>(null);
 	const guiThu = useMutation(
 		trpc.zalo.guiThu.mutationOptions({
-			onMutate: () => setGuiThuLoi(false),
+			onMutate: () => setGuiThuLoi(null),
 			onSuccess: (kq) =>
 				toast.success(kq.kenh === "zalo" ? t.daGuiThuZalo : t.daGuiThuSlack),
-			onError: () => setGuiThuLoi(true),
+			onError: (e) => setGuiThuLoi(e.message || t.guiThuLoi),
 		}),
 	);
 
@@ -142,7 +142,7 @@ export function KhoiZalo({
 				</div>
 				{guiThuLoi ? (
 					<p role="alert" className="text-destructive text-xs">
-						{t.guiThuLoi}
+						{guiThuLoi}
 					</p>
 				) : null}
 			</div>

@@ -24,6 +24,7 @@ export const datBotPhanHoi = z.discriminatedUnion("outcome", [
 		outcome: z.literal("khong-co-token"),
 		reason: z.string().min(1),
 	}),
+	z.object({ outcome: z.literal("zalo-loi"), reason: z.string().min(1) }),
 ]);
 export type DatBotPhanHoi = z.infer<typeof datBotPhanHoi>;
 
@@ -33,5 +34,6 @@ export type GuiThuYeuCau = z.infer<typeof guiThuYeuCau>;
 export const guiThuPhanHoi = z.object({
 	kenh: z.enum(["zalo", "slack"]).nullable(),
 	lech: z.boolean(),
+	guiDuoc: z.boolean().default(true),
 });
 export type GuiThuPhanHoi = z.infer<typeof guiThuPhanHoi>;

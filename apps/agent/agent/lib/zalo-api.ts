@@ -26,6 +26,15 @@ export async function zaloKhoaWebhook(): Promise<string | null> {
 	);
 }
 
+export class LoiHttpZalo extends Error {
+	constructor(
+		method: string,
+		readonly status: number,
+	) {
+		super(`Zalo ${method} tra HTTP ${status}.`);
+	}
+}
+
 export function zaloApiGoc(): string {
 	return process.env.ZALO_API_URL?.trim().replace(/\/+$/, "") || ZALO.api;
 }
@@ -42,7 +51,7 @@ export async function zaloGoi(
 		body: JSON.stringify(body),
 	});
 	if (!res.ok && res.status !== ZALO.http.hetTin) {
-		throw new Error(`Zalo ${method} tra HTTP ${res.status}.`);
+		throw new LoiHttpZalo(method, res.status);
 	}
 	return res.json();
 }

@@ -1,0 +1,54 @@
+{
+ "feature_plain": "Khi lưu bot Zalo hay gửi tin thử bị hỏng, người dùng thấy đúng nguyên nhân kèm việc nên làm tiếp, còn người vận hành có một dòng log gọi tên nguyên nhân và mã — thay cho câu chung «Tác tử chưa nối được».",
+ "scope_plain": "Chưa đổi mã lỗi HTTP (vẫn 400), chưa có câu lỗi tiếng Anh, chưa tách «người nhận chặn bot», không tự thử lại, và không sửa màn hiện bot cũ sau gọi thử hỏng (việc của phiên song song).",
+ "decisions_plain": [
+  {
+   "id": "d-20260924T091924Z-1",
+   "p": "Câu lỗi do máy chủ CRM soạn, màn chỉ hiện lại (như màn lưu bot đang làm) — đổi lại giao diện tiếng Anh vẫn thấy câu tiếng Việt ở hai chỗ này."
+  },
+  {
+   "id": "d-20260924T091924Z-2",
+   "p": "Dịch vụ nhắc việc tự phân loại lỗi Zalo và trả kết quả rõ ràng thay vì sập — đổi lại khuôn trao đổi giữa hai bên có thêm một nhánh và một trường."
+  },
+  {
+   "id": "d-20260924T091924Z-3",
+   "p": "Máy chủ CRM bản mới hiểu được dịch vụ nhắc việc bản cũ — đổi lại trong vài phút triển khai, nếu dịch vụ lên trước, một lần gửi thử hỏng có thể hiện là đã gửi."
+  },
+  {
+   "id": "d-20260924T091924Z-4",
+   "p": "KHÔNG làm phiên thiết kế giao diện — màn chỉ đổi chữ trong khung báo lỗi đã có; đổi lại anh duyệt phần màn bằng chữ và hình, không bằng bản bấm được."
+  },
+  {
+   "id": "d-20260924T091924Z-5",
+   "p": "KHÔNG chụp màn thật làm bằng chứng — bài kiểm dựng đúng khối Thông báo và đọc chữ trong khung lỗi; đổi lại lúc ký bằng chứng anh không có ảnh để nhìn."
+  },
+  {
+   "id": "d-20260924T091924Z-6",
+   "p": "KHÔNG đổi mã lỗi HTTP sang 502/503 — tránh chạm phần xử lý lỗi dùng chung mọi màn; đổi lại giám sát theo mã HTTP vẫn chưa tách được lỗi hạ tầng."
+  },
+  {
+   "id": "d-20260924T091924Z-7",
+   "p": "Sửa hai kiểm tra cũ của vòng Zalo trước cho khớp câu mới — lời hứa của chúng («lỗi yêu cầu, không sập») giữ nguyên; đổi lại chạm tệp kiểm của một hồ sơ đã ký."
+  },
+  {
+   "id": "d-20260924T091924Z-8",
+   "p": "Trên màn gọi là «dịch vụ nhắc việc», không thêm mục mới vào từ điển sản phẩm — đổi lại cùng một thứ có hai tên: tác tử trong tài liệu kỹ thuật, dịch vụ nhắc việc trên màn."
+  },
+  {
+   "id": "d-20260924T093943Z-10",
+   "p": "Làm theo luật điều phối hai phiên Zalo (phiên kia lên trước, vòng này mở PR sau), với ba ngoại lệ anh duyệt cùng lượt Cổng Phạm vi — đổi lại vòng này phải gộp nhánh chính và chạy S4 sau phiên kia."
+  },
+  {
+   "id": "d-20260924T093943Z-11",
+   "p": "KHÔNG vá báo động giả «thiếu merge-base» của bộ kit tại đây — việc đó đã mở chip riêng bên kho bộ kit; đổi lại thẻ Cổng Phạm vi mang cờ nền đỏ giả."
+  },
+  {
+   "id": "d-20260924T094359Z-12",
+   "p": "Làm tuần tự trong một phiên thay vì chia nhiều máy, và log chỉ ghi tên lỗi — đổi lại log không có nội dung lỗi mạng, nhưng chắc chắn không lộ Bot Token."
+  },
+  {
+   "id": "d-20260924T095803Z-13",
+   "p": "Thêm câu hỏi cho hội đồng chấm câu chữ (E11) vì công cụ chấm bắt buộc, chép đúng tiêu chí đã duyệt — đổi lại tệp phép đo bị sửa sau khi anh đóng dấu."
+  }
+ ]
+}
