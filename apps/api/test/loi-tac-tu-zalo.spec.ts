@@ -19,8 +19,8 @@ import kenhZalo from "../../agent/agent/channels/zalo";
 import { ZALO } from "../../agent/agent/lib/zalo-config";
 import type { ChonZaloGia } from "../../agent/test/support/zalo-gia";
 import { zaloMayChu } from "../../agent/test/support/zalo-may-chu";
-import type { NguyenNhanCauNoi } from "../src/zalo/zalo-cau-noi.service";
 import { ZALO_THONG_DIEP } from "../src/zalo/zalo.service";
+import type { NguyenNhanCauNoi } from "../src/zalo/zalo-cau-noi.service";
 import { mintPhien } from "./phien-thu";
 import { donDep, gieoThanhVien, moXuong } from "./support/ke-hoach-gieo";
 
@@ -77,11 +77,12 @@ function datBien(k: Bien, v: string | undefined): void {
 }
 
 async function chacBiTuChoi(): Promise<void> {
-	const bi = await fetch(DIA_CHI_CHET).then(
-		() => false,
-		(loi: unknown) => loi instanceof TypeError,
-	);
-	if (!bi) throw new Error("cong da bi cap lai — loi moi truong");
+	try {
+		await fetch(DIA_CHI_CHET);
+	} catch (loi) {
+		if (loi instanceof TypeError) return;
+	}
+	throw new Error("cong da bi cap lai — loi moi truong");
 }
 
 function inRa(doiSo: unknown[]): string {

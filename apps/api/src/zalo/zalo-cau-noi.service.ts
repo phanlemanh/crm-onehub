@@ -24,9 +24,6 @@ type Hong = { nguyenNhan: NguyenNhanCauNoi; status?: number };
 
 export type KetCauNoi<T> = { ok: true; data: T } | ({ ok: false } & Hong);
 
-const tenLoi = (loi: unknown): string =>
-	loi instanceof Error ? loi.name : typeof loi;
-
 @Injectable()
 export class ZaloCauNoiService {
 	private readonly logger = new Logger(ZaloCauNoiService.name);
@@ -44,7 +41,7 @@ export class ZaloCauNoiService {
 			message: "Zalo bridge call failed",
 			duong,
 			...ket,
-			...(loi === undefined ? {} : { loi }),
+			loi,
 		});
 		return { ok: false, ...ket };
 	}
@@ -68,7 +65,11 @@ export class ZaloCauNoiService {
 				signal: AbortSignal.timeout(ZALO_API.cauNoi.timeoutMs),
 			});
 		} catch (loi) {
-			return this.hong(duong, { nguyenNhan: "khong-toi-duoc" }, tenLoi(loi));
+			return this.hong(
+				duong,
+				{ nguyenNhan: "khong-toi-duoc" },
+				loi instanceof Error ? loi.name : "khong-ro",
+			);
 		}
 		if (res.status === ZALO_API.cauNoi.chuaQuyen) {
 			return this.hong(duong, { nguyenNhan: "sai-khoa", status: res.status });
@@ -80,9 +81,14 @@ export class ZaloCauNoiService {
 		try {
 			thanPhanHoi = await res.json();
 		} catch (loi) {
-			return loi instanceof SyntaxError
-				? this.hong(duong, { nguyenNhan: "sai-khuon" }, "khong-phai-json")
-				: this.hong(duong, { nguyenNhan: "khong-toi-duoc" }, tenLoi(loi));
+			if (loi instanceof SyntaxError) {
+				return this.hong(duong, { nguyenNhan: "sai-khuon" }, "khong-phai-json");
+			}
+			return this.hong(
+				duong,
+				{ nguyenNhan: "khong-toi-duoc" },
+				loi instanceof Error ? loi.name : "khong-ro",
+			);
 		}
 		const ket = schema.safeParse(thanPhanHoi);
 		if (!ket.success) {

@@ -9,7 +9,10 @@ import {
 } from "bun:test";
 import { db } from "@crm/db";
 import { kenhSeDungCua } from "@crm/db/kenh-thong-bao";
-import { guiThuPhanHoi } from "@crm/validation/zalo-cau-noi";
+import {
+	type GuiThuPhanHoi,
+	guiThuPhanHoi,
+} from "@crm/validation/zalo-cau-noi";
 import { zaloToken } from "../agent/lib/zalo-api";
 import { guiThu } from "../agent/lib/zalo-bot-xuong";
 import {
@@ -88,12 +91,14 @@ describe("gui-thu-slack-hong", () => {
 		for (const ca of CA) {
 			const loiGhi = spyOn(console, "error").mockImplementation(() => {});
 			try {
-				const ket = await guiThu(V.id, { slackFetcher: ca.fetcher }).then(
-					(r) => guiThuPhanHoi.parse(r),
-					(loi: unknown) => ({
-						nem: loi instanceof Error ? loi.message : String(loi),
-					}),
-				);
+				let ket: GuiThuPhanHoi | { nem: string };
+				try {
+					ket = guiThuPhanHoi.parse(
+						await guiThu(V.id, { slackFetcher: ca.fetcher }),
+					);
+				} catch (loi) {
+					ket = { nem: loi instanceof Error ? loi.message : "khong-ro" };
+				}
 				expect(
 					ket,
 					`${ca.ten}: slack hong -> guiDuoc false, khong nem`,

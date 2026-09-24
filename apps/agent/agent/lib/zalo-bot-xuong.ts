@@ -77,10 +77,10 @@ function baoLoiZalo(method: string, lop: string): void {
 	console.error(`[zalo] ${method} hong: ${lop}`);
 }
 
-function lopLoi(loi: unknown): string {
+function lopLoi(loi: Error): string {
 	if (loi instanceof LoiHttpZalo) return `http-${loi.status}`;
 	if (loi instanceof TypeError) return `mang (${loi.name})`;
-	return `tra-loi-la (${loi instanceof Error ? loi.name : typeof loi})`;
+	return `tra-loi-la (${loi.name})`;
 }
 
 function laTuChoi(ma: number | null): boolean {
@@ -92,7 +92,7 @@ async function docBot(fetcher: typeof fetch, token: string): Promise<KetGetMe> {
 	try {
 		me = await zaloGoiTho(fetcher, token, "getMe", {});
 	} catch (loi) {
-		baoLoiZalo("getMe", lopLoi(loi));
+		baoLoiZalo("getMe", loi instanceof Error ? lopLoi(loi) : "khong-ro");
 		return { loai: "zalo-loi" };
 	}
 	const maThan = maLoiZalo(me.than);
@@ -192,7 +192,7 @@ async function guiDuocKhong(
 		await gui();
 		return true;
 	} catch (loi) {
-		baoLoiZalo(method, lopLoi(loi));
+		baoLoiZalo(method, loi instanceof Error ? lopLoi(loi) : "khong-ro");
 		return false;
 	}
 }
