@@ -69,7 +69,12 @@ ghi là `can-https`, và màn chỉ lệnh `zalo:poll` cho bot thử tại máy.
   `AppSetting` trước, biến môi trường sau. Sáu chỗ gọi (webhook, `kiemBot`,
   `pollZalo`, nhắc buổi sáng, `zalo:webhook`, `zalo:poll`) đổi theo.
 - `kiemBot`: sau `getMe` gọi thêm `getWebhookInfo`; có URL thì ghi
-  `zaloWebhookUrl`, trả 404 thì ghi null. Lỗi khác giữ nguyên giá trị cũ.
+  `zaloWebhookUrl`, trả 404 thì ghi null. Trả 200 mà thân không đúng khuôn thì
+  cũng ghi null và log danh sách khoá cấp đầu: báo nhầm «chưa đăng ký» rẻ hơn báo
+  nhầm «đã đăng ký». Lỗi mạng hay 5xx giữ nguyên giá trị cũ.
+- Thân yêu cầu và phản hồi của hai route cầu nối là shape đi qua ranh giới hai
+  gói, nên khai một lần ở `packages/validation/src/zalo-cau-noi.ts`; API và tác tử
+  cùng parse theo nó.
 - `channels/zalo.ts` thêm hai route cầu nối, cùng luật `authorised()` của `crm.ts`:
   - `POST /internal/zalo/bot {token?}` — thiếu token thì đăng ký lại bằng token
     đang lưu. Trả `{outcome: "valid"|"invalid", tenBot?, webhook: "da-dang-ky"|"can-https"|"zalo-tu-choi", reason?}`.
@@ -115,6 +120,10 @@ ghi là `can-https`, và màn chỉ lệnh `zalo:poll` cho bot thử tại máy.
   giả, gỡ thành viên đọc lại từ DB.
 - Màn (`apps/app/test/noi-zalo-cho-nguoi-moi.dom.tsx`) và một `ui-check` chụp màn
   thật ở 1440 và 375.
+- Chỗ nối API ↔ tác tử (`apps/api/test/noi-zalo-cau-noi.spec.ts`): caller tRPC
+  thật, cầu nối trỏ vào handler THẬT của `channels/zalo.ts` chạy bằng `Bun.serve`
+  trong tiến trình, Zalo giả ở ngoài cùng. Đây là phép đo duy nhất bắt được API
+  gửi sai tên trường mà hai phía vẫn xanh riêng.
 - Hai tệp test đã ký của vòng trước (`nhac-qua-zalo.integration.spec.ts`,
   `zalo-qua-webhook.integration.spec.ts`) không đổi một dòng và vẫn xanh.
 
@@ -180,6 +189,7 @@ ghi là `can-https`, và màn chỉ lệnh `zalo:poll` cho bot thử tại máy.
 | Component | Nấc (dùng / ghép / mở rộng / tạo) | Vì sao (1 dòng) |
 |---|---|---|
 | Ô token + Lưu + gợi ý che | ghép | Chép khuôn `settings/research-key.tsx` (Input, Button, toast) |
+| Nút | dùng | Mỗi màn đúng một nút tô đầy: «Lưu» (chưa bật), «Nối Zalo» / «Tạo mã mới» (chưa nối). Còn lại `outline`: «Thay token», «Đăng ký lại», «Nối Zalo của tôi», «Gửi thử nhắc ngay», «Gỡ» (gỡ xong nối lại được nên không `destructive`, nút xác nhận trong hộp thoại mới `destructive`). Không `className` ghi đè component của `@crm/ui` ngoài lớp bố cục |
 | Ba bước có số | dùng (sau khi cài) | `@reui/stepper` cài vào `packages/ui` ở S3; proto tạm dùng danh sách có số |
 | Trạng thái webhook | dùng | `StatusIndicator` + `Alert` sẵn có; bố cục tham chiếu block ReUI settings-8 |
 | Khối kênh, gỡ, mã | dùng | Thành phần vòng `nhac-qua-zalo` giữ nguyên |
