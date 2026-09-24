@@ -190,6 +190,21 @@ evals:
       "xoa han: org.purgeDepartment 0 loi goi"; ban sao hien toast chung -> do
       "xoa han tu choi: toast khac cau may chu".
 
+  - id: E7b
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mdg_luat_luu_tru
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/mot-duong-ghi-phong-ban.spec.ts"
+    expected: |
+      Ve may chu cua AC-6 (ghep cap voi E7): cung lan chay voi E3. Ba thu tuc ma man goi
+      (org.archiveDepartment, org.restoreDepartment, org.purgeDepartment) ton tai tren may chu that,
+      nhan dung dau vao {id} ma E7 ghi lai o man, va ghi that vao bang phong ban (archivedAt doi,
+      hang mat khi xoa han); cau tu choi ma E7 hien o man la dung chuoi may chu tra (E3 ca 3, E4 ca 2).
+      CHIEU DO chung voi E3.
+
   - id: E8
     criterion: AC-6
     executor: script
