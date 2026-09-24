@@ -20,7 +20,7 @@ export function ConfirmDialog({
 	onOpenChange,
 	onConfirm,
 	pending,
-	tone = "destructive",
+	tone,
 }: {
 	tieuDe: string;
 	than: string;
@@ -43,8 +43,8 @@ export function ConfirmDialog({
 				<AlertDialogFooter>
 					<AlertDialogCancel disabled={pending}>{thoi}</AlertDialogCancel>
 					<AlertDialogAction
-						variant={tone}
-						data-variant={tone}
+						variant={tone ?? "destructive"}
+						data-variant={tone ?? "destructive"}
 						disabled={pending}
 						onClick={(event) => {
 							event.preventDefault();
