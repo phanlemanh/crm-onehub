@@ -1,4 +1,4 @@
-import { canManageOnboarding, WORKSPACE_ID, workspaceRoleOf } from "@crm/auth";
+import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import {
 	type OnboardingTemplateStep,
@@ -20,11 +20,7 @@ import type {
 	BangCotOutput,
 	DanhMucOutput,
 	DeletedOutput,
-	DepartmentCreateInput,
-	DepartmentIdInput,
 	DepartmentOutput,
-	DepartmentReorderInput,
-	DepartmentUpdateInput,
 	EnrollmentOutput,
 	EnrollmentRemoveInput,
 	EnrollmentRemoveOutput,
@@ -228,128 +224,6 @@ export class OnboardingService {
 		});
 		const banDo = await this.banDoKhuon();
 		return rows.map((row) => boPhanRa(row, banDo.get(row.id) ?? []));
-	}
-
-	async createDepartment(
-		input: DepartmentCreateInput,
-	): Promise<DepartmentOutput> {
-		const cuoi = await this.db.department.findFirst({
-			orderBy: { position: "desc" },
-			select: { position: true },
-		});
-
-		return this.motBoPhanRa(
-			await this.db.department.create({
-				data: { name: input.name, position: (cuoi?.position ?? -1) + 1 },
-				select: CHON_BO_PHAN,
-			}),
-		);
-	}
-
-	async updateDepartment(
-		input: DepartmentUpdateInput,
-	): Promise<DepartmentOutput> {
-		await this.doiChieuBoPhan(input.id);
-
-		return this.motBoPhanRa(
-			await this.db.department.update({
-				where: { id: input.id },
-				data: { name: input.name },
-				select: CHON_BO_PHAN,
-			}),
-		);
-	}
-
-	async archiveDepartment(input: DepartmentIdInput): Promise<DepartmentOutput> {
-		await this.doiChieuBoPhan(input.id);
-
-		const khuon = await this.khuonDungBoPhan(input.id);
-		if (khuon.length > 0) {
-			throw new BadRequestException(
-				ONBOARDING.thongDiep.boPhanTrongKhuon(khuon),
-			);
-		}
-		const conNguoi = await this.db.orgPlacement.count({
-			where: {
-				primaryDepartmentId: input.id,
-				user: { members: { some: { organizationId: WORKSPACE_ID } } },
-			},
-		});
-		if (conNguoi > 0) {
-			throw new BadRequestException(
-				ONBOARDING.thongDiep.phongBanConNguoi(conNguoi),
-			);
-		}
-
-		return this.motBoPhanRa(
-			await this.db.department.update({
-				where: { id: input.id },
-				data: { archivedAt: new Date() },
-				select: CHON_BO_PHAN,
-			}),
-		);
-	}
-
-	async restoreDepartment(input: DepartmentIdInput): Promise<DepartmentOutput> {
-		await this.doiChieuBoPhan(input.id);
-
-		return this.motBoPhanRa(
-			await this.db.department.update({
-				where: { id: input.id },
-				data: { archivedAt: null },
-				select: CHON_BO_PHAN,
-			}),
-		);
-	}
-
-	async purgeDepartment(input: DepartmentIdInput): Promise<DeletedOutput> {
-		const row = await this.db.department.findUnique({
-			where: { id: input.id },
-			select: CHON_BO_PHAN,
-		});
-		if (row === null) {
-			throw new NotFoundException(
-				`Không có phòng ban nào mang mã ${input.id}.`,
-			);
-		}
-		if (row.archivedAt === null) {
-			throw new BadRequestException(ONBOARDING.thongDiep.chuaLuuTru);
-		}
-		if (row._count.steps > 0) {
-			throw new BadRequestException(ONBOARDING.thongDiep.daDung);
-		}
-		const tro = await this.db.orgPlacement.count({
-			where: { primaryDepartmentId: input.id },
-		});
-		if (tro > 0) {
-			throw new BadRequestException(ONBOARDING.thongDiep.phongBanConNguoiXoa);
-		}
-		const khuon = (await this.banDoKhuon()).get(row.id) ?? [];
-		if (khuon.length > 0) {
-			throw new BadRequestException(
-				ONBOARDING.thongDiep.boPhanConTrongKhuon(khuon.map((k) => k.name)),
-			);
-		}
-
-		return this.db.department.delete({
-			where: { id: input.id },
-			select: { id: true },
-		});
-	}
-
-	async reorderDepartments(
-		input: DepartmentReorderInput,
-	): Promise<DepartmentOutput[]> {
-		await this.db.$transaction(
-			input.ids.map((id, viTri) =>
-				this.db.department.update({
-					where: { id },
-					data: { position: viTri },
-				}),
-			),
-		);
-
-		return this.listDepartments({ archived: false });
 	}
 
 	async listTemplates(
@@ -754,11 +628,6 @@ export class OnboardingService {
 		}
 	}
 
-	private async khuonDungBoPhan(id: string): Promise<string[]> {
-		const khuon = (await this.banDoKhuon()).get(id) ?? [];
-		return khuon.filter((k) => !k.archived).map((k) => k.name);
-	}
-
 	private async banDoKhuon(): Promise<Map<string, KhuonNhac[]>> {
 		const khuon = await this.db.onboardingTemplate.findMany({
 			orderBy: { createdAt: "asc" },
@@ -785,10 +654,6 @@ export class OnboardingService {
 			);
 	}
 
-	private async motBoPhanRa(row: HangBoPhan): Promise<DepartmentOutput> {
-		return boPhanRa(row, (await this.banDoKhuon()).get(row.id) ?? []);
-	}
-
 	private async kiemBoPhanDangDung(
 		steps: OnboardingTemplateStep[],
 	): Promise<void> {
@@ -812,17 +677,6 @@ export class OnboardingService {
 			throw new BadRequestException(
 				ONBOARDING.thongDiep.boPhanDaLuuTru(daLuuTru),
 			);
-		}
-	}
-
-	private async doiChieuBoPhan(id: string): Promise<void> {
-		const co = await this.db.department.findUnique({
-			where: { id },
-			select: { id: true },
-		});
-
-		if (co === null) {
-			throw new NotFoundException(`Không có phòng ban nào mang mã ${id}.`);
 		}
 	}
 }

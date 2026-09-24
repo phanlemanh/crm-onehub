@@ -1,6 +1,8 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import type { NestExpressApplication } from "@nestjs/platform-express";
+import type { AnyProcedure } from "@trpc/server";
+import { AppRouterHost } from "nestjs-trpc";
 import request from "supertest";
 import { createApp } from "../src/create-app";
 import type { TreeOutput } from "../src/to-chuc/to-chuc.contracts";
@@ -734,5 +736,120 @@ describe("mdg-quyen-ba-thu-tuc", () => {
 			}
 		}
 		expect(soKhangDinh).toBe(24);
+	});
+});
+
+const khaiRest = (meta: unknown) => {
+	const o = (
+		meta as { openapi?: { method?: string; path?: string } } | undefined
+	)?.openapi;
+	return o?.method && o.path ? `${o.method.toUpperCase()} ${o.path}` : null;
+};
+
+function thuTucGhi() {
+	const { appRouter } = app.get(AppRouterHost);
+	const procs = appRouter._def.procedures as Record<string, AnyProcedure>;
+	return Object.entries(procs)
+		.filter(([, p]) => p._def.type === "mutation")
+		.map(([ten, p]) => ({ ten, rest: khaiRest(p._def.meta) }));
+}
+
+describe("mdg-go-duong-cu", () => {
+	test("mdg-go-duong-cu: sau thu tuc va sau duong REST cu tra 404, moi duong ghi phong ban nam duoi org", async () => {
+		const bp = await pbMoi("gc-pb");
+		const chup = () =>
+			db.department.findMany({
+				orderBy: { id: "asc" },
+				select: {
+					id: true,
+					name: true,
+					position: true,
+					archivedAt: true,
+					divisionId: true,
+				},
+			});
+		const truoc = await chup();
+		const DUONG_CU = [
+			["trpc", "onboarding.createDepartment", { name: ma("gc-moi") }],
+			["trpc", "onboarding.updateDepartment", { id: bp, name: ma("gc-ten") }],
+			["trpc", "onboarding.reorderDepartments", { ids: [bp] }],
+			["trpc", "onboarding.archiveDepartment", { id: bp }],
+			["trpc", "onboarding.restoreDepartment", { id: bp }],
+			["trpc", "onboarding.purgeDepartment", { id: bp }],
+			["post", "/onboarding/departments", { name: ma("gc-moi") }],
+			["patch", `/onboarding/departments/${bp}`, { name: ma("gc-ten") }],
+			["post", "/onboarding/departments/reorder", { ids: [bp] }],
+			["post", `/onboarding/departments/${bp}/archive`, {}],
+			["post", `/onboarding/departments/${bp}/restore`, {}],
+			["delete", `/onboarding/departments/${bp}`, undefined],
+		] as const;
+		let soKhangDinh = 0;
+		for (const [lop, duong, vao] of DUONG_CU) {
+			const tra =
+				lop === "trpc"
+					? await trpc(duong, vao as object)
+					: await rest(lop, duong, vao);
+			const nhan =
+				lop === "trpc" ? duong : `${lop.toUpperCase()} /rest${duong}`;
+			expect(`${nhan}: HTTP ${tra.status}`).toBe(`${nhan}: HTTP 404`);
+			soKhangDinh += 1;
+		}
+		expect(await chup()).toEqual(truoc);
+		soKhangDinh += 1;
+
+		const ghi = thuTucGhi();
+		const tenNgoai = ghi
+			.filter((t) => /Department/.test(t.ten) && !t.ten.startsWith("org."))
+			.map((t) => t.ten)
+			.sort();
+		expect(`thu tuc ghi phong ban ngoai org: ${tenNgoai.join(", ")}`).toBe(
+			"thu tuc ghi phong ban ngoai org: ",
+		);
+		const restNgoai = ghi
+			.flatMap((t) => (t.rest ? [t.rest] : []))
+			.filter(
+				(r) =>
+					r.includes("/departments") && !r.split(" ")[1]?.startsWith("/org/"),
+			)
+			.sort();
+		expect(`duong REST ghi phong ban ngoai org: ${restNgoai.join(", ")}`).toBe(
+			"duong REST ghi phong ban ngoai org: ",
+		);
+		const cuaOrg = ghi.filter((t) => /^org\.\w*Department$/.test(t.ten));
+		expect(cuaOrg.map((t) => t.ten).sort()).toEqual(
+			[
+				"org.archiveDepartment",
+				"org.createDepartment",
+				"org.moveDepartment",
+				"org.purgeDepartment",
+				"org.renameDepartment",
+				"org.restoreDepartment",
+			].sort(),
+		);
+		expect(cuaOrg.map((t) => t.rest).sort()).toEqual(
+			[
+				"POST /org/departments",
+				"PATCH /org/departments/{id}",
+				"POST /org/departments/{id}/move",
+				"POST /org/departments/{id}/archive",
+				"POST /org/departments/{id}/restore",
+				"DELETE /org/departments/{id}",
+			].sort(),
+		);
+		soKhangDinh += 4;
+
+		const dsTrpc = ok<{ id: string }[]>(
+			await docTrpc("onboarding.listDepartments"),
+			"doc tRPC",
+		);
+		expect(
+			`tRPC listDepartments co pb: ${dsTrpc.some((d) => d.id === bp)}`,
+		).toBe("tRPC listDepartments co pb: true");
+		const dsRest = await rest("get", "/onboarding/departments", undefined);
+		expect(
+			`REST GET /onboarding/departments: HTTP ${dsRest.status} co pb ${(dsRest.data as { id: string }[]).some?.((d) => d.id === bp)}`,
+		).toBe("REST GET /onboarding/departments: HTTP 200 co pb true");
+		soKhangDinh += 2;
+		expect(soKhangDinh).toBe(19);
 	});
 });

@@ -31,13 +31,6 @@ export const ONBOARDING = {
 			"Đã được dùng nên không xoá vĩnh viễn được — lịch sử kế hoạch còn trỏ tới.",
 		khuonDaLuuTru: (ten: string) =>
 			`Khuôn ${ten} đã lưu trữ — khôi phục trước khi tạo kế hoạch.`,
-		boPhanTrongKhuon: (khuon: string[]) =>
-			`Phòng ban này còn nằm trong khuôn ${khuon.join(", ")} — sửa khuôn trước.`,
-		boPhanConTrongKhuon: (khuon: string[]) =>
-			`Phòng ban này còn nằm trong khuôn ${khuon.join(", ")} — xoá vĩnh viễn khuôn đó hoặc bỏ phòng ban khỏi khuôn trước.`,
-		phongBanConNguoi: (n: number) =>
-			`Còn ${n} người có phòng ban chính ở đây — chuyển họ trước.`,
-		phongBanConNguoiXoa: "Phòng ban còn người trỏ tới nên không xoá hẳn được.",
 		boPhanDaLuuTru: (ten: string[]) =>
 			`Phòng ban ${ten.join(", ")} đã lưu trữ — khôi phục hoặc chọn phòng ban khác.`,
 	},
