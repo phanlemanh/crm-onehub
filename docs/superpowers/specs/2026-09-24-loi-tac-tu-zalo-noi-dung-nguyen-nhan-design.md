@@ -42,9 +42,10 @@ Chủ kho duyệt lối **B** ở brainstorm ngày 24/09: câu lỗi sống ở 
   vì ném. Gửi được, hoặc không có kênh nào, thì `guiDuoc: true`.
 - Mỗi lần hỏng in đúng một dòng `console.error` có tiền tố `[zalo]`. Dòng này nêu
   method (`getMe`, `sendMessage`, `slack`) và lớp hỏng (`http-<mã>`, `mang
-  (<tên lỗi>)`, `sai-khuon`). Nó không chứa Bot Token, dù địa chỉ gọi Zalo mang
-  token trong đường dẫn (`/bot<token>/…`). Chuỗi mô tả lỗi đi qua một hàm che token
-  trước khi in.
+  (<tên lỗi>)`, `sai-khuon`). Dòng log chỉ mang **tên** lớp lỗi, không bao giờ
+  mang đối tượng lỗi hay message của nó. Đo ngày 24/09: lỗi mạng của `fetch` trong
+  Bun là `TypeError` có `path` chứa nguyên URL `/bot<token>/…`, và `Bun.inspect`
+  in cả `path` ra. Nên bỏ hẳn đối tượng lỗi khỏi log là cách chặn chắc hơn che.
 - `packages/validation/src/zalo-cau-noi.ts`: `datBotPhanHoi` thêm nhánh
   `{outcome: "zalo-loi", reason}`, `guiThuPhanHoi` thêm `guiDuoc`. Bộ đọc mã lỗi
   Zalo (`error_code` trong thân `ok:false`) nằm ở
