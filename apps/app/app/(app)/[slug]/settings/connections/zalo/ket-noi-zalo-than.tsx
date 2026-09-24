@@ -30,11 +30,10 @@ export type KetNoiZaloDu = {
 	webhook: TrangThaiWebhook;
 };
 
-type ChuKetNoi = ReturnType<typeof nhacQuaZaloMessages>["ketNoi"];
-
 const BUOC_DAN_TOKEN = 3;
 
-function BotCuaXuong({ du, t }: { du: KetNoiZaloDu; t: ChuKetNoi }) {
+function BotCuaXuong({ du, locale }: { du: KetNoiZaloDu; locale: Locale }) {
+	const t = nhacQuaZaloMessages(locale).ketNoi;
 	if (!du.canManage) {
 		return <p className="text-muted-foreground text-sm">{t.chiQuanTri}</p>;
 	}
@@ -124,7 +123,7 @@ export function KetNoiZaloThan({
 						canManage={du.canManage}
 					/>
 				) : null}
-				<BotCuaXuong du={du} t={t} />
+				<BotCuaXuong du={du} locale={locale} />
 			</section>
 			<section className="flex flex-col gap-2 border-t px-(--spacing-block-inline) pt-5">
 				<h2 className="font-medium text-sm">{t.mangVe}</h2>
