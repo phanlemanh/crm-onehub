@@ -425,10 +425,7 @@ describe("kho chuoi cua vong ③a", () => {
 				"Nhắn mã này cho 1 trên Zalo.",
 				"Nhắn mã này cho 12 trên Zalo.",
 			],
-			"nhac-qua-zalo:khoiZalo.hetHanLuc": [
-				"Hết hạn lúc 1",
-				"Hết hạn lúc 12",
-			],
+			"nhac-qua-zalo:khoiZalo.hetHanLuc": ["Hết hạn lúc 1", "Hết hạn lúc 12"],
 			"nhac-qua-zalo:ketNoi.daLuu": ["Đã bật 1.", "Đã bật 12."],
 			"nhac-qua-zalo:ketNoi.traLoiLanCuoi": [
 				"trả lời lần cuối lúc 1",

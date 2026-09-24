@@ -191,7 +191,7 @@ describe("o-token", () => {
 	});
 
 	test("o-token: 3 trong luc cho -> nut Dang kiem va bi khoa", async () => {
-		let xong: (v: unknown) => void = () => {};
+		let xong: (v: { tenBot: string; webhook: string }) => void = () => {};
 		dat(
 			"zalo.luuBot",
 			() =>

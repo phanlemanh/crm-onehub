@@ -53,11 +53,16 @@ function dungMang(chon: ChonZaloGia) {
 	const handler = route().handler;
 	const tacTu = Bun.serve({
 		port: 0,
-		fetch: (req) =>
-			handler(
+		fetch: async (req) => {
+			const traLoi = await handler(
 				new Request(`${GOC_TAC_TU}${new URL(req.url).pathname}`, req),
 				{} as never,
-			),
+			);
+			if (!(traLoi instanceof Response)) {
+				throw new Error("route cau noi khong tra Response");
+			}
+			return traLoi;
+		},
 	});
 	datBien("AGENT_URL", `http://127.0.0.1:${tacTu.port}`);
 	datBien("AGENT_BRIDGE_SECRET", BI_MAT);

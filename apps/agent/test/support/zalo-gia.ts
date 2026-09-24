@@ -159,7 +159,10 @@ export function zaloGia(chon: ChonZaloGia = {}) {
 		return { messageId: `v${soTinVoTan}`, fromId: "zv", text: "chao" };
 	};
 	const giaoKhiMo = hangGiaoKhiMo(chon.chiGiaoKhiMo ?? []);
-	const fetcher = (async (input: RequestInfo | URL, init?: RequestInit) => {
+	const fetcher = (async (
+		input: Parameters<typeof fetch>[0],
+		init?: RequestInit,
+	) => {
 		const phan = String(input).split("/");
 		const method = phan.at(-1) ?? "";
 		const token = (phan.at(-2) ?? "").replace(/^bot/, "");
