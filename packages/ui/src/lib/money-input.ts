@@ -41,15 +41,16 @@ export function moneySeparators(locale: Locale): MoneySeparators {
 	return made;
 }
 
-const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const escapeRegExp = (value: string) =>
+	value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 type Read =
 	| { kind: "ok"; cents: number }
 	| { kind: "invalid"; reason: "format" | "fraction" | "tooLarge" };
 
 function readWith(text: string, seps: MoneySeparators, minor: number): Read {
-	const group = escape(seps.group);
-	const decimal = escape(seps.decimal);
+	const group = escapeRegExp(seps.group);
+	const decimal = escapeRegExp(seps.decimal);
 	const shape = new RegExp(
 		`^(\\d{1,3}(?:${group}\\d{3})+|\\d+)(?:${decimal}(\\d+))?$`,
 	);
@@ -61,8 +62,7 @@ function readWith(text: string, seps: MoneySeparators, minor: number): Read {
 		return { kind: "invalid", reason: "fraction" };
 	}
 	const cents =
-		BigInt(whole) * CENT_UNIT +
-		BigInt(fraction.padEnd(CENT_DIGITS, "0"));
+		BigInt(whole) * CENT_UNIT + BigInt(fraction.padEnd(CENT_DIGITS, "0"));
 	if (cents > MAX_CENTS) return { kind: "invalid", reason: "tooLarge" };
 	return { kind: "ok", cents: Number(cents) };
 }
@@ -82,9 +82,7 @@ export function parseMoneyInput(
 
 	const otherReads = LOCALES.filter((other) => other !== locale)
 		.map(moneySeparators)
-		.filter(
-			(seps) => seps.group !== own.group || seps.decimal !== own.decimal,
-		)
+		.filter((seps) => seps.group !== own.group || seps.decimal !== own.decimal)
 		.map((seps) => readWith(trimmed, seps, minor));
 	if (otherReads.some((other) => other.kind === "ok")) {
 		return { kind: "invalid", reason: "otherLocale" };

@@ -4,7 +4,8 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const GOC =
-	process.env.SOI_GOC ?? join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+	process.env.SOI_GOC ??
+	join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const doc = (duong) => readFileSync(join(GOC, duong), "utf8");
 
 const GOI = [
@@ -29,7 +30,8 @@ for (const { tep, dung } of GOI) {
 	const ma = doc(tep);
 	const ten = tep.split("/").at(-1);
 	khangDinh += 1;
-	if (!dung.test(ma)) lech.push(`${ten}: khong dung ${dung.source.slice(1, -2)}`);
+	if (!dung.test(ma))
+		lech.push(`${ten}: khong dung ${dung.source.slice(1, -2)}`);
 	khangDinh += 1;
 	if (/Number\.parseFloat/.test(ma)) lech.push(`${ten}: con Number.parseFloat`);
 }
@@ -37,7 +39,8 @@ for (const { tep, dung } of GOI) {
 const goiUi = JSON.parse(doc("packages/ui/package.json"));
 const phuThuoc = { ...goiUi.dependencies, ...goiUi.devDependencies };
 khangDinh += 1;
-if ("@base-ui/react" in phuThuoc) lech.push("packages/ui/package.json: co @base-ui/react");
+if ("@base-ui/react" in phuThuoc)
+	lech.push("packages/ui/package.json: co @base-ui/react");
 khangDinh += 1;
 if ("cn" in phuThuoc) lech.push("packages/ui/package.json: co goi cn");
 khangDinh += 1;
@@ -81,11 +84,20 @@ for (const t of SAN) {
 	khangDinh += 1;
 	const r = spawnSync(
 		"node",
-		[join(goiKit, "scripts", "design-gate.mjs"), "--target", t, "--mode", "static"],
+		[
+			join(goiKit, "scripts", "design-gate.mjs"),
+			"--target",
+			t,
+			"--mode",
+			"static",
+		],
 		{ cwd: GOC, encoding: "utf8" },
 	);
 	if (r.status !== 0) {
-		const dong = `${r.stdout ?? ""}${r.stderr ?? ""}`.trim().split("\n").slice(0, 6);
+		const dong = `${r.stdout ?? ""}${r.stderr ?? ""}`
+			.trim()
+			.split("\n")
+			.slice(0, 6);
 		lech.push(`cong thiet ke tinh ${t}: ma ${r.status} — ${dong.join(" | ")}`);
 	}
 }

@@ -4,8 +4,8 @@ import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 import {
-	APP,
 	API,
+	APP,
 	CHO_TAI,
 	CHROME,
 	datTrinhDuyet,
@@ -38,10 +38,15 @@ const slug = await suySlug(cookie);
 
 async function doc(duong, vao) {
 	const q =
-		vao === undefined ? "" : `?input=${encodeURIComponent(JSON.stringify(vao))}`;
-	const res = await fetch(`${API}/api/trpc/${duong}${q}`, { headers: mu(cookie) });
+		vao === undefined
+			? ""
+			: `?input=${encodeURIComponent(JSON.stringify(vao))}`;
+	const res = await fetch(`${API}/api/trpc/${duong}${q}`, {
+		headers: mu(cookie),
+	});
 	const chu = await res.text();
-	if (!res.ok) return { loi: `${duong} tra ${res.status}: ${chu.slice(0, 160)}` };
+	if (!res.ok)
+		return { loi: `${duong} tra ${res.status}: ${chu.slice(0, 160)}` };
 	return { gia: JSON.parse(chu).result.data };
 }
 
@@ -57,7 +62,9 @@ let trinhDuyet = null;
 
 async function donDep() {
 	const tao = await doc("deals.list", { q: MA, pageSize: 50 });
-	const ids = [...new Set([...daGieo, ...(tao.gia?.rows ?? []).map((r) => r.id)])];
+	const ids = [
+		...new Set([...daGieo, ...(tao.gia?.rows ?? []).map((r) => r.id)]),
+	];
 	if (ids.length > 0) {
 		await goiApiTao(cookie, "deals.bulkArchive", { ids });
 		await goiApiTao(cookie, "deals.bulkPurge", { ids });
@@ -92,8 +99,13 @@ async function moTrang(tieng, rong, duong) {
 		{ name: cookie.ten, value: cookie.gia, domain: host, path: "/" },
 		{ name: "lang", value: tieng, domain: host, path: "/" },
 	);
-	await trang.goto(`${APP}/${slug}${duong}`, { waitUntil: "load", timeout: CHO_TAI });
-	await trang.waitForNetworkIdle({ idleTime: 500, timeout: CHO_TAI }).catch(() => null);
+	await trang.goto(`${APP}/${slug}${duong}`, {
+		waitUntil: "load",
+		timeout: CHO_TAI,
+	});
+	await trang
+		.waitForNetworkIdle({ idleTime: 500, timeout: CHO_TAI })
+		.catch(() => null);
 	return trang;
 }
 
@@ -167,13 +179,20 @@ for (const rong of KHO_TAO) {
 	const form = await trang
 		.waitForSelector("form#create-deal", { visible: true, timeout: CHO_TAI })
 		.catch(() => null);
-	if (!form) await dung(`KHONG DO DUOC: ${rong}/vi tam tao thoa thuan khong mo`);
+	if (!form)
+		await dung(`KHONG DO DUOC: ${rong}/vi tam tao thoa thuan khong mo`);
 	const ten = `${MA} tao ${rong}`;
-	await trang.type('form#create-deal input:not([data-slot="money-input"] input)', ten);
+	await trang.type(
+		'form#create-deal input:not([data-slot="money-input"] input)',
+		ten,
+	);
 
 	const tenCongTy = `Cong ty ${MA}`;
 	await trang.click("#create-deal-company");
-	await trang.waitForSelector("[cmdk-input]", { visible: true, timeout: CHO_TAI });
+	await trang.waitForSelector("[cmdk-input]", {
+		visible: true,
+		timeout: CHO_TAI,
+	});
 	await trang.type("[cmdk-input]", tenCongTy);
 	const muc = await trang
 		.waitForFunction(
@@ -187,16 +206,27 @@ for (const rong of KHO_TAO) {
 			tenCongTy,
 		)
 		.catch(() => null);
-	if (!muc) await dung(`KHONG DO DUOC: ${rong}/vi khong thay cong ty gieo trong o chon`);
+	if (!muc)
+		await dung(
+			`KHONG DO DUOC: ${rong}/vi khong thay cong ty gieo trong o chon`,
+		);
 	await muc.asElement().click();
 	await new Promise((r) => setTimeout(r, 300));
-	const daChon = await trang.$eval("#create-deal-company", (el) => el.textContent ?? "");
+	const daChon = await trang.$eval(
+		"#create-deal-company",
+		(el) => el.textContent ?? "",
+	);
 	if (!daChon.includes(tenCongTy)) {
-		await dung(`KHONG DO DUOC: ${rong}/vi chon cong ty khong an — o hien «${daChon}»`);
+		await dung(
+			`KHONG DO DUOC: ${rong}/vi chon cong ty khong an — o hien «${daChon}»`,
+		);
 	}
 
 	await trang.click(`[aria-label="${NHAN_TIEN_TE.vi}"]`);
-	await trang.waitForSelector('[role="option"]', { visible: true, timeout: CHO_TAI });
+	await trang.waitForSelector('[role="option"]', {
+		visible: true,
+		timeout: CHO_TAI,
+	});
 	await bamTheoChu(trang, '[role="option"]', "VND");
 	await new Promise((r) => setTimeout(r, 300));
 
@@ -206,7 +236,9 @@ for (const rong of KHO_TAO) {
 	const muon = "Đọc là 150.000.000 ₫";
 	if (sach(o1.dong) !== muon) {
 		hong.push(
-			o1.dong ? `tao vi/${rong}: dong «${sach(o1.dong)}» != «${muon}»` : `tao vi/${rong}: khong thay dong doc lai`,
+			o1.dong
+				? `tao vi/${rong}: dong «${sach(o1.dong)}» != «${muon}»`
+				: `tao vi/${rong}: khong thay dong doc lai`,
 		);
 	}
 	khang += 1;
@@ -237,19 +269,27 @@ async function moSoTien(tieng) {
 	const nhan = NHAN_SO_TIEN[tieng];
 	await trang
 		.waitForFunction(
-			(nhan) => [...document.querySelectorAll("label")].some((l) => l.textContent === nhan),
+			(nhan) =>
+				[...document.querySelectorAll("label")].some(
+					(l) => l.textContent === nhan,
+				),
 			{ timeout: CHO_TAI },
 			nhan,
 		)
 		.catch(() => null);
 	const moDuoc = await trang.evaluate((nhan) => {
-		const l = [...document.querySelectorAll("label")].find((x) => x.textContent === nhan);
+		const l = [...document.querySelectorAll("label")].find(
+			(x) => x.textContent === nhan,
+		);
 		const nut = l?.parentElement?.querySelector("button");
 		if (!nut) return false;
 		nut.click();
 		return true;
 	}, nhan);
-	if (!moDuoc) await dung(`KHONG DO DUOC: ${tieng} khong mo duoc o so tien tren tam thoa thuan`);
+	if (!moDuoc)
+		await dung(
+			`KHONG DO DUOC: ${tieng} khong mo duoc o so tien tren tam thoa thuan`,
+		);
 	return trang;
 }
 
@@ -260,7 +300,11 @@ async function moSoTien(tieng) {
 	khang += 1;
 	const muon = "Reads as $1,500,000.50";
 	if (sach(o2.dong) !== muon) {
-		hong.push(o2.dong ? `sua en: dong «${sach(o2.dong)}» != «${muon}»` : "sua en: khong thay dong doc lai");
+		hong.push(
+			o2.dong
+				? `sua en: dong «${sach(o2.dong)}» != «${muon}»`
+				: "sua en: khong thay dong doc lai",
+		);
 	}
 	await trang.screenshot({ path: join(BANG_CHUNG, "sua-doc-lai-en.png") });
 	await trang.keyboard.press("Enter");
@@ -268,7 +312,9 @@ async function moSoTien(tieng) {
 	const ban = (await doc("deals.byId", { id: gieo.gia.id })).gia ?? {};
 	khang += 1;
 	if (ban.amountCents !== 150_000_050) {
-		hong.push(`sua en «1,500,000.50»: amountCents ${ban.amountCents} != 150000050`);
+		hong.push(
+			`sua en «1,500,000.50»: amountCents ${ban.amountCents} != 150000050`,
+		);
 	}
 	await trang.close();
 }
@@ -283,7 +329,9 @@ async function moSoTien(tieng) {
 	const o3 = await trang.evaluate(docO);
 	khang += 1;
 	if (!o3.co || o3.invalid !== "true") {
-		hong.push(`sua vi «1.5» Enter + roi o: o ${o3.co ? "con" : "mat"}, aria-invalid ${o3.invalid}`);
+		hong.push(
+			`sua vi «1.5» Enter + roi o: o ${o3.co ? "con" : "mat"}, aria-invalid ${o3.invalid}`,
+		);
 	}
 	khang += 1;
 	if (!sach(o3.dong).startsWith("Số này viết theo kiểu tiếng Anh")) {
@@ -293,7 +341,9 @@ async function moSoTien(tieng) {
 	const ban = (await doc("deals.byId", { id: gieo.gia.id })).gia ?? {};
 	khang += 1;
 	if (ban.amountCents !== 150_000_050) {
-		hong.push(`sua vi «1.5» Enter: amountCents ${ban.amountCents} != 150000050`);
+		hong.push(
+			`sua vi «1.5» Enter: amountCents ${ban.amountCents} != 150000050`,
+		);
 	}
 	await trang.focus("[data-do-o]").catch(() => null);
 	await trang.keyboard.press("Escape");

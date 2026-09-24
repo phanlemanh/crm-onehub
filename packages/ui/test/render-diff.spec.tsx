@@ -26,6 +26,7 @@ import {
 } from "../src/components/dialog";
 import { DotMatrix } from "../src/components/dot-matrix";
 import { LocaleProvider } from "../src/components/locale-provider";
+import { MoneyInput } from "../src/components/money-input";
 import {
 	MessageScrollerButton,
 	MessageScrollerProvider,
@@ -251,6 +252,17 @@ const CA: Ca[] = [
 	{
 		ten: "DatePicker",
 		ve: () => <DatePicker value="2026-09-01" onChange={() => {}} />,
+	},
+	{
+		ten: "MoneyInput",
+		ve: () => (
+			<MoneyInput
+				id="so-tien"
+				value="1.500,50"
+				currency="USD"
+				onValueChange={() => {}}
+			/>
+		),
 	},
 	{ ten: "SortableItem", ve: () => <SortableItem id="1" label="Tên cột" /> },
 	{

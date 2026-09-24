@@ -125,10 +125,10 @@ describe("ma-tran", () => {
 				}
 			}
 		}
-		const doiChung: Record<Locale, string> = {
+		const doiChung = {
 			vi: "999.999.999.999",
 			en: "999,999,999,999",
-		};
+		} satisfies Record<Locale, string>;
 		for (const locale of TIENG) {
 			const that = parseMoneyInput(doiChung[locale], {
 				locale,
@@ -155,9 +155,9 @@ describe("ma-tran", () => {
 		expect(ke(parseMoneyInput("0,00", { locale: "vi", currency: "USD" }))).toBe(
 			"0",
 		);
-		expect(ke(parseMoneyInput("150 000", { locale: "vi", currency: "VND" }))).toBe(
-			"format",
-		);
+		expect(
+			ke(parseMoneyInput("150 000", { locale: "vi", currency: "VND" })),
+		).toBe("format");
 	});
 });
 
@@ -193,9 +193,7 @@ describe("tieng-kia", () => {
 			});
 			daChay += 1;
 			if (ke(cuaNo) !== String(ca.cents)) {
-				lech.push(
-					`${ca.cuaNo} «${ca.text}» USD: ${ke(cuaNo)} != ${ca.cents}`,
-				);
+				lech.push(`${ca.cuaNo} «${ca.text}» USD: ${ke(cuaNo)} != ${ca.cents}`);
 			}
 		}
 		expect(lech).toEqual([]);
@@ -252,7 +250,9 @@ describe("chinh-xac", () => {
 					const that = parseMoneyInput(text, { locale, currency });
 					daChay += 1;
 					if (ke(that) !== String(cents)) {
-						lech.push(`${locale}/${currency} «${text}»: ${ke(that)} != ${cents}`);
+						lech.push(
+							`${locale}/${currency} «${text}»: ${ke(that)} != ${cents}`,
+						);
 					}
 				}
 			}
@@ -262,18 +262,18 @@ describe("chinh-xac", () => {
 	});
 
 	test("chinh-xac: formatMoneyInput viet dung tieng", () => {
-		expect(formatMoneyInput(15_000_000_000, { locale: "vi", currency: "VND" })).toBe(
-			"150.000.000",
-		);
-		expect(formatMoneyInput(150_000_050, { locale: "vi", currency: "USD" })).toBe(
-			"1.500.000,50",
-		);
-		expect(formatMoneyInput(150_000_050, { locale: "en", currency: "USD" })).toBe(
-			"1,500,000.50",
-		);
-		expect(formatMoneyInput(150_000_050, { locale: "vi", currency: "VND" })).toBe(
-			"1.500.000,50",
-		);
+		expect(
+			formatMoneyInput(15_000_000_000, { locale: "vi", currency: "VND" }),
+		).toBe("150.000.000");
+		expect(
+			formatMoneyInput(150_000_050, { locale: "vi", currency: "USD" }),
+		).toBe("1.500.000,50");
+		expect(
+			formatMoneyInput(150_000_050, { locale: "en", currency: "USD" }),
+		).toBe("1,500,000.50");
+		expect(
+			formatMoneyInput(150_000_050, { locale: "vi", currency: "VND" }),
+		).toBe("1.500.000,50");
 		expect(
 			ke(parseMoneyInput("1.500.000,50", { locale: "vi", currency: "VND" })),
 		).toBe("fraction");

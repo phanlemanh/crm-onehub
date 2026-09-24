@@ -202,7 +202,9 @@ describe("doc-lai", () => {
 				);
 			}
 			if (d.getAttribute("aria-live") !== "polite") {
-				lech.push(`${nhan}: aria-live ${d.getAttribute("aria-live")} != polite`);
+				lech.push(
+					`${nhan}: aria-live ${d.getAttribute("aria-live")} != polite`,
+				);
 			}
 			if (!ca.loi) {
 				const so = d.querySelector("[translate]");
@@ -296,7 +298,9 @@ describe("roi-o", () => {
 			}
 			const muon = c.chu === c.sau ? [] : [c.sau];
 			if (JSON.stringify(daDoi) !== JSON.stringify(muon)) {
-				lech.push(`${nhan}: goi ${JSON.stringify(daDoi)} != ${JSON.stringify(muon)}`);
+				lech.push(
+					`${nhan}: goi ${JSON.stringify(daDoi)} != ${JSON.stringify(muon)}`,
+				);
 			}
 			act(() => root?.unmount());
 			k.remove();

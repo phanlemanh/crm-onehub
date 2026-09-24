@@ -56,10 +56,14 @@ mock.module("@/lib/trpc/client", () => ({
 			),
 		},
 		deals: {
-			create: thuTuc("deals.create", () => null, async (v: DealWrite) => {
-				createCalls.push(v);
-				return { id: `d${createCalls.length}`, name: v.name };
-			}),
+			create: thuTuc(
+				"deals.create",
+				() => null,
+				async (v: DealWrite) => {
+					createCalls.push(v);
+					return { id: `d${createCalls.length}`, name: v.name };
+				},
+			),
 		},
 	}),
 }));
@@ -140,15 +144,11 @@ async function dung(cay: ReactNode, search = "") {
 	root = createRoot(khung);
 	await act(async () =>
 		root?.render(
-			h(
-				NuqsTestingAdapter,
-				{ searchParams: search, hasMemory: true },
-				h(
-					QueryClientProvider,
-					{ client: queryClient },
-					h(LocaleProvider, { locale: "vi" }, cay),
-				),
-			),
+			<NuqsTestingAdapter searchParams={search} hasMemory>
+				<QueryClientProvider client={queryClient}>
+					<LocaleProvider locale="vi">{cay}</LocaleProvider>
+				</QueryClientProvider>
+			</NuqsTestingAdapter>,
 		),
 	);
 	await cho();
@@ -178,14 +178,17 @@ function phim(input: HTMLInputElement, key: string): KeyboardEvent {
 }
 
 function oSoTien(goc: ParentNode = document): HTMLInputElement {
-	const o = goc.querySelector<HTMLInputElement>('[data-slot="money-input"] input');
+	const o = goc.querySelector<HTMLInputElement>(
+		'[data-slot="money-input"] input',
+	);
 	if (!o) throw new Error("khong thay o so tien");
 	return o;
 }
 
 function dongDocLai(goc: ParentNode = document): string {
 	return (
-		goc.querySelector('[data-slot="money-input"] [aria-live]')?.textContent ?? ""
+		goc.querySelector('[data-slot="money-input"] [aria-live]')?.textContent ??
+		""
 	);
 }
 
@@ -294,7 +297,9 @@ describe("tao-thoa-thuan", () => {
 		if (createCalls.length !== 0) {
 			lech.push(`doi dong VND: ${createCalls.length} lenh != 0`);
 		}
-		if (dongDocLai() !== "VND không có phần lẻ — gõ số tròn, ví dụ 150.000.000.") {
+		if (
+			dongDocLai() !== "VND không có phần lẻ — gõ số tròn, ví dụ 150.000.000."
+		) {
 			lech.push(`doi dong VND: dong «${dongDocLai()}»`);
 		}
 		expect(lech).toEqual([]);
@@ -332,29 +337,38 @@ describe("sua-tai-cho", () => {
 	test("sua-tai-cho: mo, luu, tu choi, Esc, de trong", async () => {
 		const lech: string[] = [];
 		let o = await mo();
-		if (o.value !== "1.500.000,50") lech.push(`mo sua: «${o.value}» != «1.500.000,50»`);
+		if (o.value !== "1.500.000,50")
+			lech.push(`mo sua: «${o.value}» != «1.500.000,50»`);
 		go(o, "2.000.000,75");
 		phim(o, "Enter");
 		if (JSON.stringify(luu) !== "[200000075]") {
-			lech.push(`sua-tai-cho «2.000.000,75»: ${JSON.stringify(luu)} != [200000075]`);
+			lech.push(
+				`sua-tai-cho «2.000.000,75»: ${JSON.stringify(luu)} != [200000075]`,
+			);
 		}
 		act(() => root?.unmount());
 
 		o = await mo();
 		go(o, "1.5");
 		phim(o, "Enter");
-		if (luu.length !== 0) lech.push(`sua-tai-cho «1.5»: onSave goi ${luu.length} lan != 0`);
+		if (luu.length !== 0)
+			lech.push(`sua-tai-cho «1.5»: onSave goi ${luu.length} lan != 0`);
 		if (!khung?.querySelector('[data-slot="money-input"] input')) {
 			lech.push("sua-tai-cho «1.5» Enter: roi che do sua");
 		}
-		if (!dongDocLai(khung ?? document).startsWith("Số này viết theo kiểu tiếng Anh")) {
+		if (
+			!dongDocLai(khung ?? document).startsWith(
+				"Số này viết theo kiểu tiếng Anh",
+			)
+		) {
 			lech.push(`sua-tai-cho «1.5»: dong «${dongDocLai(khung ?? document)}»`);
 		}
 		act(() => {
 			o.focus();
 			o.blur();
 		});
-		if (luu.length !== 0) lech.push(`sua-tai-cho «1.5» blur: onSave goi ${luu.length} lan != 0`);
+		if (luu.length !== 0)
+			lech.push(`sua-tai-cho «1.5» blur: onSave goi ${luu.length} lan != 0`);
 		if (!khung?.querySelector('[data-slot="money-input"] input')) {
 			lech.push("sua-tai-cho «1.5» blur: roi che do sua");
 		}
@@ -402,7 +416,9 @@ describe("them-nhanh", () => {
 		let form = await mo();
 		go(oSoTien(form), "150.000.000");
 		await gui(form);
-		let lenh = JSON.stringify(createCalls.map((c) => [c.amountCents, c.currency]));
+		let lenh = JSON.stringify(
+			createCalls.map((c) => [c.amountCents, c.currency]),
+		);
 		if (lenh !== JSON.stringify([[15_000_000_000, "VND"]])) {
 			lech.push(`them-nhanh: amountCents ${lenh} != [[15000000000,"VND"]]`);
 		}
@@ -412,12 +428,17 @@ describe("them-nhanh", () => {
 		form = await mo();
 		const o = oSoTien(form);
 		go(o, "1,5");
-		if (dongDocLai(form) !== "VND không có phần lẻ — gõ số tròn, ví dụ 150.000.000.") {
+		if (
+			dongDocLai(form) !==
+			"VND không có phần lẻ — gõ số tròn, ví dụ 150.000.000."
+		) {
 			lech.push(`them-nhanh «1,5»: dong «${dongDocLai(form)}»`);
 		}
 		await gui(form);
-		if (createCalls.length !== 0) lech.push(`them-nhanh «1,5»: ${createCalls.length} lenh != 0`);
-		if (document.activeElement !== o) lech.push("them-nhanh «1,5»: focus khong o o so tien");
+		if (createCalls.length !== 0)
+			lech.push(`them-nhanh «1,5»: ${createCalls.length} lenh != 0`);
+		if (document.activeElement !== o)
+			lech.push("them-nhanh «1,5»: focus khong o o so tien");
 		act(() => root?.unmount());
 		createCalls = [];
 
