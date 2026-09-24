@@ -346,8 +346,8 @@ vị muốn đổi, tự đặt và tự căn chỉnh. Gọi là đánh giá hi�
 — muốn đạt trong một chu kỳ, viết bằng chữ; con số nằm ở kết quả then chốt. Mỗi
 mục tiêu có một đến vài kết quả then chốt đo nó. Chốt 2026-09-24.
 Trùng chữ đang có: sheet kế hoạch 30 ngày có ô «Mục tiêu» hiện số ngày (`30
-ngày`). Ô đó không phải mục tiêu OKR, và nhãn của nó phải đổi trước khi khu OKR
-lên.
+ngày`). Ô đó không phải mục tiêu OKR; nhãn của nó đổi ở lượt 1, cùng đợt đổi nhãn
+màn Điều phối (chốt 2026-09-24, Manh Phan).
 _Avoid_: objective, mục đích, chỉ tiêu
 Vì sao: «chỉ tiêu» là một con số — đó là việc của kết quả then chốt; «mục đích»
 nói lý do làm, không nói điều phải đạt trong kỳ.
