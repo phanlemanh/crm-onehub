@@ -6,6 +6,7 @@ import { Button } from "@crm/ui/components/button";
 import { Field, FieldGroup, FieldLabel } from "@crm/ui/components/field";
 import { Input } from "@crm/ui/components/input";
 import { Spinner } from "@crm/ui/components/spinner";
+import Link from "next/link";
 import { type FormEvent, useState } from "react";
 
 export function PasswordSignIn({
@@ -14,12 +15,14 @@ export function PasswordSignIn({
 	dangNhap,
 	dangGui,
 	saiChung,
+	quenMatKhau,
 }: {
 	diaChi: string;
 	matKhau: string;
 	dangNhap: string;
 	dangGui: string;
 	saiChung: string;
+	quenMatKhau: string | null;
 }) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -81,6 +84,14 @@ export function PasswordSignIn({
 					/>
 				</Field>
 			</FieldGroup>
+			{quenMatKhau ? (
+				<Link
+					className="self-start text-muted-foreground text-sm underline-offset-4 hover:underline"
+					href="/quen-mat-khau"
+				>
+					{quenMatKhau}
+				</Link>
+			) : null}
 			<Button className="w-full" disabled={pending} type="submit">
 				{pending ? <Spinner data-icon="inline-start" /> : null}
 				<span>{pending ? dangGui : dangNhap}</span>

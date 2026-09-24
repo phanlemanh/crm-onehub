@@ -20,6 +20,7 @@ export {
 	apiUrl,
 	appUrl,
 	isGoogleConfigured,
+	isMailConfigured,
 	isMicrosoftConfigured,
 	isSlackConfigured,
 } from "./env";

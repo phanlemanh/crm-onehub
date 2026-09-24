@@ -8,7 +8,13 @@ export const authClient = createAuthClient({
 	plugins: [ssoClient(), genericOAuthClient(), apiKeyClient()],
 });
 
-export const { getSession, resetPassword, signIn, signOut, useSession } =
-	authClient;
+export const {
+	getSession,
+	requestPasswordReset,
+	resetPassword,
+	signIn,
+	signOut,
+	useSession,
+} = authClient;
 
 export type AuthClient = typeof authClient;
