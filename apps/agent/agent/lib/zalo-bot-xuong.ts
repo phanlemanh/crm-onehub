@@ -123,7 +123,7 @@ export async function datBot(
 	}
 	if (ket === "xac-minh-hong") {
 		await ghiCot({ zaloWebhookUrl: null, zaloWebhookLyDo: "zalo-tu-choi" });
-		return { outcome: "invalid", reason: ZALO.loi.xacMinhHong };
+		return { outcome: "valid", tenBot, webhook: "zalo-tu-choi" };
 	}
 	await ghiCot({ zaloWebhookUrl: url, zaloWebhookLyDo: null });
 	return { outcome: "valid", tenBot, webhook: "da-dang-ky" };
