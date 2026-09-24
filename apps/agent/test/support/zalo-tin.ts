@@ -21,6 +21,8 @@ const khuonGoc = z.object({
 	error_code: z.number(),
 });
 
+const HEADER_ZALO = "X-Bot-Api-Secret-Token";
+
 type KhuonGoc = z.infer<typeof khuonGoc>;
 type TinZaloThat = KhuonGoc["result"]["message"];
 
@@ -81,7 +83,7 @@ export type YeuCauGia = { request: Request; soLanKeo: () => number };
 export function yeuCauWebhook(than: string, header: string | null): YeuCauGia {
 	let keo = 0;
 	const headers = new Headers({ "content-type": "application/json" });
-	if (header !== null) headers.set(ZALO.webhook.header, header);
+	if (header !== null) headers.set(HEADER_ZALO, header);
 	const request = new Request(`http://tac-tu${ZALO.webhook.duong}`, {
 		method: "POST",
 		headers,
