@@ -22,6 +22,7 @@
 		"./onboarding-ingest": "./src/onboarding-ingest.ts",
 		"./onboarding-template": "./src/onboarding-template.ts",
 		"./saved-view": "./src/saved-view.ts",
+		"./vai-workspace": "./src/vai-workspace.ts",
 		"./zalo-cau-noi": "./src/zalo-cau-noi.ts",
 		"./zalo-update": "./src/zalo-update.ts"
 	},

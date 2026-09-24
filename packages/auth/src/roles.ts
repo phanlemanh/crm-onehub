@@ -1,14 +1,17 @@
-export const WORKSPACE_ROLES = ["owner", "admin", "member"] as const;
+import type { WorkspaceRole } from "@crm/validation/vai-workspace";
 
-export type WorkspaceRole = (typeof WORKSPACE_ROLES)[number];
-
-export function isWorkspaceRole(value: string): value is WorkspaceRole {
-	return (WORKSPACE_ROLES as readonly string[]).includes(value);
-}
-
-export function toWorkspaceRole(value: string): WorkspaceRole {
-	return isWorkspaceRole(value) ? value : "member";
-}
+export {
+	docDuocPhamVi,
+	isWorkspaceRole,
+	KHONG_TRONG_PHAM_VI,
+	laVaiChiOkr,
+	PHAM_VI_DU_LIEU,
+	type PhamViDuLieu,
+	toWorkspaceRole,
+	VAI_CHI_OKR,
+	WORKSPACE_ROLES,
+	type WorkspaceRole,
+} from "@crm/validation/vai-workspace";
 
 export function isWorkspaceAdmin(role: WorkspaceRole | null): boolean {
 	return role === "owner" || role === "admin";
