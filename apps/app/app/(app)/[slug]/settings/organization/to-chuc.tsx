@@ -291,7 +291,16 @@ export function ToChuc({ tenGoc }: { tenGoc?: string }) {
 				/>
 			) : null}
 			{moNhap ? <HopThoaiNhap dong={() => setMoNhap(false)} /> : null}
-			<XacNhanLuuTru hoi={hoiLuu} dong={() => setHoiLuu(null)} />
+			<XacNhanLuuTru
+				hoi={hoiLuu}
+				dong={() => setHoiLuu(null)}
+				daLuu={(x) => {
+					if (chon.loai === "pb" && chon.pb.id === x.id)
+						chonDon(chon.bp ? { loai: "bp", id: chon.bp.id } : { loai: "goc" });
+					if (chon.loai === "bp" && chon.bp.id === x.id)
+						chonDon({ loai: "goc" });
+				}}
+			/>
 		</>
 	);
 }

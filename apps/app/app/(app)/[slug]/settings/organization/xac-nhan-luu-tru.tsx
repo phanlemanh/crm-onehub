@@ -14,9 +14,11 @@ import { useLamMoiToChuc } from "./lam-moi";
 export function XacNhanLuuTru({
 	hoi,
 	dong,
+	daLuu,
 }: {
 	hoi: HoiLuuTru | null;
 	dong: () => void;
+	daLuu: (x: HoiLuuTru) => void;
 }) {
 	const m = toChucMessages(useLocale());
 	const trpc = useTRPC();
@@ -67,6 +69,7 @@ export function XacNhanLuuTru({
 				const sau = {
 					onSuccess: async () => {
 						dong();
+						daLuu(x);
 						await lamMoi();
 						toast.success(dien(m.daLuuTruTen, { ten: x.name }), {
 							action: { label: m.hoanTac, onClick: () => hoanTac(x) },

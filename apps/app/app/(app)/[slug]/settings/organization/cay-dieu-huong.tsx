@@ -88,7 +88,7 @@ export function CayDieuHuong({
 				</span>
 			</NavItem>
 			{boPhan.map(({ bp, ds }) => (
-				<div key={bp.id} className="flex flex-col gap-1" data-bo-phan={bp.id}>
+				<div key={bp.id} className="flex flex-col gap-1" data-nhanh={bp.id}>
 					<NavItem
 						level={1}
 						active={la({ loai: "bp", id: bp.id })}

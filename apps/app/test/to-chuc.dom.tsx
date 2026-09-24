@@ -193,6 +193,9 @@ mock.module("@/lib/trpc/client", () => ({
 const { ToChuc } = await import(
 	"@/app/(app)/[slug]/settings/organization/to-chuc"
 );
+const { HanhDongToChuc } = await import(
+	"@/app/(app)/[slug]/settings/organization/hanh-dong-dau-trang"
+);
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { Toaster } = await import("@crm/ui/components/sonner");
@@ -204,7 +207,7 @@ const m = toChucMessages("vi");
 type San = { o: HTMLElement; root: Root };
 let dangMo: San[] = [];
 
-async function mo(man: ReactElement): Promise<San> {
+async function mo(man: ReactElement, don = ""): Promise<San> {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
 	const root = createRoot(o);
@@ -213,10 +216,13 @@ async function mo(man: ReactElement): Promise<San> {
 	});
 	await act(async () => {
 		root.render(
-			<NuqsTestingAdapter searchParams="" hasMemory>
+			<NuqsTestingAdapter searchParams={don} hasMemory>
 				<QueryClientProvider client={client}>
 					<LocaleProvider locale="vi">
 						<TooltipProvider>
+							<div data-slot="page-shell-actions">
+								<HanhDongToChuc />
+							</div>
 							{man}
 							<Toaster />
 						</TooltipProvider>
@@ -264,7 +270,7 @@ async function bam(o: Element): Promise<void> {
 }
 
 function nutCo(goc: ParentNode, chu: string): boolean {
-	return [...goc.querySelectorAll("button")].some((b) =>
+	return [...goc.querySelectorAll("button:not(:disabled)")].some((b) =>
 		b.textContent?.trim().startsWith(chu),
 	);
 }
@@ -329,10 +335,11 @@ afterEach(async () => {
 const BON_NUT = (o: HTMLElement) => [
 	nutCo(o, m.themBoPhan),
 	nutCo(o, m.nhap),
-	[...o.querySelectorAll(".sr-only")].some((s) =>
+	[...o.querySelectorAll("button:not(:disabled) .sr-only")].some((s) =>
 		s.textContent?.startsWith("Thao tác với"),
 	),
-	o.querySelectorAll('[aria-haspopup="dialog"][data-nguoi]').length > 0,
+	o.querySelectorAll('[aria-haspopup="dialog"][data-nguoi]:not(:disabled)')
+		.length > 0,
 ];
 
 describe("chi-doc", () => {
@@ -355,7 +362,7 @@ describe("chi-doc", () => {
 	});
 
 	test("chi-doc: doi chung — quan tri thay du bon loai nut", async () => {
-		const s = await mo(<ToChuc />);
+		const s = await mo(<ToChuc />, "?don=pb:pb-1");
 		expect(BON_NUT(s.o)).toEqual([true, true, true, true]);
 	});
 });
@@ -363,10 +370,24 @@ describe("chi-doc", () => {
 describe("cay-man", () => {
 	test("cay-man: nguoi, nhan phu, hai nhom cuoi, huy hieu truong, translate no", async () => {
 		const s = await mo(<ToChuc />);
+		const anh = document.createElement("div");
+		for (const nutCay of ["pb:pb-1", "pb:pb-cskh", "chua-co", "bp:bp-kd"]) {
+			await bam(s.o.querySelector(`[data-nut-cay="${nutCay}"]`) as HTMLElement);
+			await cho(
+				() =>
+					s.o
+						.querySelector(`[data-nut-cay="${nutCay}"]`)
+						?.getAttribute("aria-current") === "page",
+				`chon ${nutCay}`,
+			);
+			anh.appendChild(s.o.cloneNode(true));
+		}
 		const trong = (sel: string, chu: string) =>
-			s.o.querySelector(sel)?.textContent?.includes(chu) ?? false;
+			[...anh.querySelectorAll(sel)].some(
+				(x) => x.textContent?.includes(chu) ?? false,
+			);
 		const nguoiTrongPb = (pb: string, id: string) =>
-			s.o.querySelector(`[data-phong-ban="${pb}"] [data-nguoi="${id}"]`)
+			anh.querySelector(`[data-phong-ban="${pb}"] [data-dong-nguoi="${id}"]`)
 				?.textContent ?? "";
 		expect({
 			maiDuoiPb1: nguoiTrongPb("pb-1", "mai").includes(m.phu),
@@ -383,8 +404,8 @@ describe("cay-man", () => {
 			hungTruong: true,
 			lanTruong: true,
 		});
-		const coTen = s.o.querySelectorAll("[data-ten]").length;
-		const coTenKhongDich = s.o.querySelectorAll(
+		const coTen = anh.querySelectorAll("[data-ten]").length;
+		const coTenKhongDich = anh.querySelectorAll(
 			'[data-ten][translate="no"]',
 		).length;
 		expect(`${coTenKhongDich}/${coTen}`).toBe(`${coTen}/${coTen}`);
@@ -395,7 +416,20 @@ describe("cay-man", () => {
 describe("vi-tri-man", () => {
 	test("vi-tri-man: theo truong khong co nut ve; chon tay co nut, bam roi luu gui managerUserId null", async () => {
 		await mo(<ToChuc />);
-		const moNguoi = async (id: string) => {
+		const phongBanCua = { mai: "pb-1", thao: "pb-cskh" } as const;
+		const moNguoi = async (id: keyof typeof phongBanCua) => {
+			await bam(
+				document.body.querySelector(
+					`[data-nut-cay="pb:${phongBanCua[id]}"]`,
+				) as HTMLElement,
+			);
+			await cho(
+				() =>
+					document.body.querySelector(
+						`[data-phong-ban] [data-nguoi="${id}"]`,
+					) !== null,
+				`khung phong ban cua ${id}`,
+			);
 			const n = document.body.querySelector(
 				`[data-phong-ban] [data-nguoi="${id}"]`,
 			);
@@ -434,7 +468,7 @@ describe("vi-tri-man", () => {
 
 describe("luu-tru-man", () => {
 	test("luu-tru-man: da luu tru co khoi phuc va xoa han, don vi song khong co xoa han, o chon khong co don vi da luu tru, loi hien dung cau", async () => {
-		const s = await mo(<ToChuc />);
+		const s = await mo(<ToChuc />, "?don=pb:pb-1");
 		const trigger = nut(m.daLuuTru.replace("{n}", "1"));
 		await bam(trigger);
 		await cho(
@@ -484,7 +518,7 @@ describe("luu-tru-man", () => {
 
 		const cau = "Còn 2 người có phòng ban chính ở đây — chuyển họ trước.";
 		cheDo = new Map([["archiveDepartment", cau]]);
-		const s2 = await mo(<ToChuc />);
+		const s2 = await mo(<ToChuc />, "?don=bp:bp-kd");
 		await moMenu("Kinh doanh vùng 1");
 		await chonMuc(m.luuTru);
 		await cho(

@@ -88,7 +88,10 @@ export function DongNguoi({
 	cuoi: ReactNode;
 }) {
 	return (
-		<li className="flex items-center gap-3 px-3 py-2" data-nguoi={nguoi.id}>
+		<li
+			className="flex items-center gap-3 px-3 py-2"
+			data-dong-nguoi={nguoi.id}
+		>
 			<PersonAvatar size="sm" name={nguoi.name} email={nguoi.email} />
 			<span className="flex min-w-0 flex-1 flex-col items-start gap-1">
 				<span className="truncate text-sm" translate="no" data-ten>

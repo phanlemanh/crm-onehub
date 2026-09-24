@@ -56,7 +56,11 @@ export function ChiTietPhongBan({
 	);
 
 	return (
-		<section className="flex flex-col gap-5 p-4" data-chi-tiet="phong-ban">
+		<section
+			className="flex flex-col gap-5 p-4"
+			data-chi-tiet="phong-ban"
+			data-phong-ban={pb.id}
+		>
 			<TieuDeChiTiet
 				an={anTieuDe}
 				duong={bp?.name ?? t.chuaXep}
@@ -141,11 +145,17 @@ export function ChiTietPhongBan({
 									return ten ? dien(m.quanLy, { ten }) : null;
 								})()}
 								cuoi={
-									<MenuDong
-										ten={n.name}
-										sua={hd.sua}
-										muc={[{ nhan: m.viTri, lam: () => hd.moNguoi(n.id) }]}
-									/>
+									<Button
+										variant="ghost"
+										size="xs"
+										disabled={!hd.sua}
+										aria-haspopup="dialog"
+										aria-label={dien(m.viTriCua, { ten: n.name })}
+										data-nguoi={n.id}
+										onClick={() => hd.moNguoi(n.id)}
+									>
+										{m.viTriNgan}
+									</Button>
 								}
 							/>
 						))}

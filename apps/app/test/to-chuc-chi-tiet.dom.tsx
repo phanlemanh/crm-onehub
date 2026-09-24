@@ -548,7 +548,7 @@ describe("o-so-man", () => {
 		await cho(() => khung() === "chua-co-phong-ban", "khung chua co");
 		const ten = [
 			...document.body.querySelectorAll(
-				"[data-chi-tiet='chua-co-phong-ban'] [data-nguoi] [data-ten]",
+				"[data-chi-tiet='chua-co-phong-ban'] [data-dong-nguoi] [data-ten]",
 			),
 		]
 			.map((e) => e.textContent)
@@ -620,6 +620,7 @@ async function maTran(): Promise<string[]> {
 	ghi("goc", "tay-keo-bo-phan", nutTheoNhanAn(k, "Đổi thứ tự "));
 	ghi("goc", "them-bo-phan", nutTheoChu(k, m.themBoPhan));
 	ghi("goc", "gan-vao-bo-phan", nutTheoChu(k, m.chiTiet.ganVaoBoPhan));
+	ghi("goc", "menu-dong-bo-phan", nutTheoNhanAn(k, "Thao tác với Kinh doanh"));
 
 	await chonNut("bp:bp-vh");
 	k = document.body.querySelector("[data-chi-tiet]") as HTMLElement;
@@ -630,6 +631,11 @@ async function maTran(): Promise<string[]> {
 	ghi("bo-phan", "phong-ban-moi", nutTheoChu(k, m.chiTiet.phongBanMoi));
 	ghi("bo-phan", "tay-keo-phong-ban", nutTheoNhanAn(k, "Đổi thứ tự "));
 	ghi("bo-phan", "menu", nutTheoNhanAn(k, "Thao tác với Vận hành"));
+	ghi(
+		"bo-phan",
+		"menu-dong-phong-ban",
+		nutTheoNhanAn(k, "Thao tác với Kho vận"),
+	);
 
 	await chonNut("pb:pb-1");
 	k = document.body.querySelector("[data-chi-tiet]") as HTMLElement;
@@ -638,11 +644,9 @@ async function maTran(): Promise<string[]> {
 	]);
 	ghi("phong-ban", "them-nguoi", nutTheoChu(k, m.chiTiet.themNguoi));
 	ghi("phong-ban", "menu", nutTheoNhanAn(k, "Thao tác với Kinh doanh vùng 1"));
-	ghi(
-		"phong-ban",
-		"menu-dong-nguoi",
-		nutTheoNhanAn(k, `Thao tác với ${HUNG.name}`),
-	);
+	ghi("phong-ban", "nut-vi-tri-dong-nguoi", [
+		...k.querySelectorAll<HTMLButtonElement>("button[data-nguoi]"),
+	]);
 
 	await chonNut("chua-co");
 	k = document.body.querySelector("[data-chi-tiet]") as HTMLElement;
@@ -663,15 +667,17 @@ const O_MA_TRAN = [
 	"goc/tay-keo-bo-phan",
 	"goc/them-bo-phan",
 	"goc/gan-vao-bo-phan",
+	"goc/menu-dong-bo-phan",
 	"bo-phan/o-truong",
 	"bo-phan/gan-co-san",
 	"bo-phan/phong-ban-moi",
 	"bo-phan/tay-keo-phong-ban",
 	"bo-phan/menu",
+	"bo-phan/menu-dong-phong-ban",
 	"phong-ban/o-truong",
 	"phong-ban/them-nguoi",
 	"phong-ban/menu",
-	"phong-ban/menu-dong-nguoi",
+	"phong-ban/nut-vi-tri-dong-nguoi",
 	"chua-co/xep-phong-ban",
 	"da-luu-tru/khoi-phuc",
 	"da-luu-tru/xoa-han",
@@ -1362,8 +1368,7 @@ describe("trang-thai", () => {
 			await doiDong();
 		});
 		await dem("setPlacement", async () => {
-			await moMenu(THAO.name);
-			await chonMuc(m.chiTiet.viTri);
+			await bam(document.body.querySelector("button[data-nguoi='thao']"));
 			await cho(() => khungMoi() > 0, "hop vi tri");
 			await bam(nutTheoChu(hop(), m.viTri.luu)[0]);
 			await doiDong();
@@ -1447,8 +1452,7 @@ describe("trang-thai", () => {
 		await hopDonVi("Pháp lý");
 		await do_("createDivision");
 
-		await moMenu(THAO.name);
-		await chonMuc(m.chiTiet.viTri);
+		await bam(document.body.querySelector("button[data-nguoi='thao']"));
 		await cho(() => khungMoi() > 0, "hop vi tri");
 		await bamNhuNguoi(nutTheoChu(hop(), m.viTri.luu)[0]);
 		await do_("setPlacement");

@@ -41,7 +41,11 @@ export function ChiTietBoPhan({
 	const tenPb = new Map(moiPhongBan(cay).map((p) => [p.id, p.name]));
 
 	return (
-		<section className="flex flex-col gap-5 p-4" data-chi-tiet="bo-phan">
+		<section
+			className="flex flex-col gap-5 p-4"
+			data-chi-tiet="bo-phan"
+			data-bo-phan={bp.id}
+		>
 			<TieuDeChiTiet
 				an={anTieuDe}
 				duong={tenGoc}
@@ -122,6 +126,38 @@ export function ChiTietBoPhan({
 				) : (
 					<>
 						<DanhSachKeo
+							loai="phong-ban"
+							menu={(x) => [
+								{
+									nhan: t.doiTen,
+									lam: () =>
+										hd.moDonVi({
+											loai: "doi-ten",
+											don: "phong-ban",
+											id: x.id,
+											name: x.name,
+										}),
+								},
+								{
+									nhan: t.chuyen,
+									lam: () =>
+										hd.moDonVi({
+											loai: "chuyen",
+											id: x.id,
+											name: x.name,
+											divisionId: bp.id,
+										}),
+								},
+								{
+									nhan: t.luuTru,
+									lam: () =>
+										hd.hoiLuuTru({
+											loai: "phong-ban",
+											id: x.id,
+											name: x.name,
+										}),
+								},
+							]}
 							muc={bp.departments.map((pb) => ({
 								id: pb.id,
 								name: pb.name,

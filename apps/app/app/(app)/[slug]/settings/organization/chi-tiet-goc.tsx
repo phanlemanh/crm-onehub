@@ -52,6 +52,24 @@ export function ChiTietGoc({
 				) : (
 					<>
 						<DanhSachKeo
+							loai="bo-phan"
+							menu={(x) => [
+								{
+									nhan: t.doiTen,
+									lam: () =>
+										hd.moDonVi({
+											loai: "doi-ten",
+											don: "bo-phan",
+											id: x.id,
+											name: x.name,
+										}),
+								},
+								{
+									nhan: t.luuTru,
+									lam: () =>
+										hd.hoiLuuTru({ loai: "bo-phan", id: x.id, name: x.name }),
+								},
+							]}
 							muc={cay.divisions.map((bp) => ({
 								id: bp.id,
 								name: bp.name,

@@ -2,16 +2,21 @@
 
 import { SortableItem, SortableList } from "@crm/ui/components/sortable-list";
 import { useState } from "react";
+import { MenuDong, type MucMenu } from "./chi-tiet-chung";
 
 export type MucKeo = { id: string; name: string; phu: string };
 
 export function DanhSachKeo({
+	loai,
 	muc,
+	menu,
 	sua,
 	dangGhi,
 	ghi,
 }: {
+	loai: "bo-phan" | "phong-ban";
 	muc: MucKeo[];
+	menu: (x: MucKeo) => MucMenu[];
 	sua: boolean;
 	dangGhi: boolean;
 	ghi: (moi: string[], id: string, xong: () => void) => void;
@@ -42,14 +47,16 @@ export function DanhSachKeo({
 					return (
 						<SortableItem key={x.id} id={x.id} label={x.name} disabled={khoa}>
 							<div
-								className="flex min-w-0 flex-1 items-center justify-between gap-2 py-2"
+								className="flex min-w-0 flex-1 items-center justify-between gap-2 py-2 pe-2"
 								data-muc-keo={x.id}
+								data-phong-ban={loai === "phong-ban" ? x.id : undefined}
 							>
 								<span className="truncate text-sm" translate="no" data-ten>
 									{x.name}
 								</span>
-								<span className="shrink-0 text-muted-foreground text-xs">
+								<span className="flex shrink-0 items-center gap-2 text-muted-foreground text-xs">
 									{x.phu}
+									<MenuDong ten={x.name} sua={sua} muc={menu(x)} />
 								</span>
 							</div>
 						</SortableItem>

@@ -21,6 +21,7 @@ export function ChiTietChuaCo({
 		<section
 			className="flex flex-col gap-4 p-4"
 			data-chi-tiet="chua-co-phong-ban"
+			data-nhom="chua-co-phong-ban"
 		>
 			<TieuDeChiTiet ten={t.chuaCoPhongBan} an={anTieuDe} />
 			<p className="text-muted-foreground text-sm">
@@ -38,6 +39,7 @@ export function ChiTietChuaCo({
 									size="sm"
 									disabled={!hd.sua}
 									aria-haspopup="dialog"
+									data-nguoi={n.id}
 									onClick={() => hd.moNguoi(n.id)}
 								>
 									{m.xepPhongBan}

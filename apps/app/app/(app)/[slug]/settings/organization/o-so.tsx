@@ -19,10 +19,18 @@ export function OSo({
 	moChuaCo: () => void;
 	doiLoc: () => void;
 }) {
-	const m = toChucMessages(useLocale()).oSo;
+	const t = toChucMessages(useLocale());
+	const m = t.oSo;
 	const { members, withPrimary, departmentsWithoutHead } = coverage;
 	return (
 		<div className="grid grid-cols-1 gap-3 sm:grid-cols-2" data-o-so>
+			<p className="sr-only" aria-live="polite" data-do-phu>
+				{dien(t.doPhu, {
+					x: withPrimary,
+					m: members,
+					k: departmentsWithoutHead,
+				})}
+			</p>
 			<StatTile
 				data-o="chua-co"
 				label={m.coPhongBan}
