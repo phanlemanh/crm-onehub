@@ -12,16 +12,70 @@ export type TinGia = {
 	hong?: boolean;
 };
 
+export type TinDen = { giay: number; than: unknown };
+
 export type ChonZaloGia = {
 	tin?: TinGia[];
 	getMe?: "ok" | 401;
 	send?: "ok" | 500 | "ok-false";
 	vatVoTan?: boolean;
+	chiGiaoKhiMo?: TinDen[];
 };
 
 export const TRAN_BAO_VE_VO_TAN = 100;
 
 const HET_TIN = { ok: false, error_code: 408, description: "timeout" };
+
+const HET_TIN_THAT = {
+	ok: false,
+	description: "Request timeout",
+	error_code: 408,
+};
+
+function traDatWebhook(url: string): Response {
+	return Response.json({
+		ok: true,
+		result: {
+			url,
+			updated_at: 1,
+			verification: {
+				ok: true,
+				url,
+				outcome: "webhook.ok",
+				hint: "Your endpoint responded successfully.",
+			},
+		},
+	});
+}
+
+function traXoaWebhook(): Response {
+	return Response.json({ ok: true, result: { url: "", updated_at: 1 } });
+}
+
+function hangGiaoKhiMo(dau: TinDen[]) {
+	const hang = [...dau].sort((x, y) => x.giay - y.giay);
+	let giay = 0;
+	const goi = (timeoutGiay: number): Response => {
+		const tu = giay;
+		const den = tu + timeoutGiay;
+		while (hang.length > 0 && (hang[0]?.giay ?? den) < tu) hang.shift();
+		const dauHang = hang[0];
+		if (dauHang && dauHang.giay < den) {
+			hang.shift();
+			giay = dauHang.giay;
+			return Response.json(dauHang.than);
+		}
+		giay = den;
+		return Response.json(HET_TIN_THAT);
+	};
+	return {
+		goi,
+		datDongHo: (moi: number) => {
+			giay = moi;
+		},
+		dongHo: () => giay,
+	};
+}
 
 function traGetMe(chon: ChonZaloGia): Response {
 	if (chon.getMe === 401) {
@@ -85,14 +139,16 @@ export function zaloGia(chon: ChonZaloGia = {}) {
 		soTinVoTan += 1;
 		return { messageId: `v${soTinVoTan}`, fromId: "zv", text: "chao" };
 	};
+	const giaoKhiMo = hangGiaoKhiMo(chon.chiGiaoKhiMo ?? []);
 	const fetcher = (async (input: RequestInfo | URL, init?: RequestInit) => {
 		const method = String(input).split("/").at(-1) ?? "";
-		goi.push({
-			method,
-			body: thanGoi.parse(JSON.parse(String(init?.body ?? "{}"))),
-		});
+		const body = thanGoi.parse(JSON.parse(String(init?.body ?? "{}")));
+		goi.push({ method, body });
 		if (method === "getMe") return traGetMe(chon);
 		if (method === "sendMessage") return traSend(chon, goi.length);
+		if (method === "setWebhook") return traDatWebhook(body.url ?? "");
+		if (method === "deleteWebhook") return traXoaWebhook();
+		if (chon.chiGiaoKhiMo) return giaoKhiMo.goi(Number(body.timeout ?? "0"));
 		const t = tinKe();
 		return t ? traTin(t) : Response.json(HET_TIN, { status: 408 });
 	}) as typeof fetch;
@@ -100,5 +156,12 @@ export function zaloGia(chon: ChonZaloGia = {}) {
 		goi.filter((g) => g.method === "sendMessage" && g.body.chat_id === id);
 	const soGoi = (method: string) =>
 		goi.filter((g) => g.method === method).length;
-	return { fetcher, goi, guiToi, soGoi };
+	return {
+		fetcher,
+		goi,
+		guiToi,
+		soGoi,
+		datDongHo: giaoKhiMo.datDongHo,
+		dongHo: giaoKhiMo.dongHo,
+	};
 }

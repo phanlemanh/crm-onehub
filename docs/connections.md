@@ -152,7 +152,8 @@ follow, and none of them is a gap to fill later.
   also only message someone who has messaged it first, which the code step
   guarantees.
 - **The API never calls Zalo.** Only `apps/agent` holds `ZALO_BOT_TOKEN` and talks
-  to the Zalo Bot API, on the dispatch tick (`pollZalo`, see `docs/agent.md`). The
+  to the Zalo Bot API: messages arrive by webhook at `POST /zalo/webhook` on the
+  agent, and the dispatch tick only checks the bot (see `docs/agent.md`). The
   API mints codes, stores the channel preference, deletes links and reads status —
   row work only. It knows Zalo is on because the agent writes
   `appSetting.zaloBotName`, not because it reads the token.

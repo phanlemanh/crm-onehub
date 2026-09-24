@@ -108,6 +108,17 @@ executors:
     nqz_go_xac_nhan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/nhac-qua-zalo.dom.tsx -t go-xac-nhan"
     nqz_lam_moi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/nhac-qua-zalo.dom.tsx -t lam-moi"
     nqz_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/settings/notifications/page.tsx" "apps/app/app/(app)/[slug]/settings/connections/zalo/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    zqw_webhook_noi: 'bun run test -- "cd apps/agent && bun test test/zalo-qua-webhook.integration.spec.ts -t webhook-noi"'
+    zqw_webhook_khoa: 'bun run test -- "cd apps/agent && bun test test/zalo-qua-webhook.integration.spec.ts -t webhook-khoa"'
+    zqw_webhook_tat: 'bun run test -- "cd apps/agent && bun test test/zalo-qua-webhook.integration.spec.ts -t webhook-tat"'
+    zqw_webhook_trung: 'bun run test -- "cd apps/agent && bun test test/zalo-qua-webhook.integration.spec.ts -t webhook-trung"'
+    zqw_webhook_bo_qua: 'bun run test -- "cd apps/agent && bun test test/zalo-qua-webhook.integration.spec.ts -t webhook-bo-qua"'
+    zqw_webhook_luat_ma: 'bun run test -- "cd apps/agent && bun test test/zalo-qua-webhook.integration.spec.ts -t webhook-luat-ma"'
+    zqw_kiem_bot: 'bun run test -- "cd apps/agent && bun test test/zalo-qua-webhook.integration.spec.ts -t kiem-bot"'
+    zqw_giao_khi_mo: 'bun run test -- "cd apps/agent && bun test test/zalo-qua-webhook.integration.spec.ts -t giao-khi-mo"'
+    zqw_lenh_webhook: 'bun run test -- "cd apps/agent && bun test test/zalo-qua-webhook.integration.spec.ts -t lenh-webhook"'
+    zqw_khai_bien: 'bun run test -- "cd apps/agent && bun test test/zalo-qua-webhook.integration.spec.ts -t khai-bien"'
+    zqw_kenh_route: 'bun run test -- "cd apps/agent && bun test test/zalo-qua-webhook.integration.spec.ts -t kenh-route"'
     hv_qua_han_ngay: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t qua-han-ngay"'
     hv_bien_nua_dem: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t bien-nua-dem"'
     hv_ca_doi: 'bun run test -- "cd apps/api && bun test test/han-viec.spec.ts -t ca-doi"'
@@ -371,6 +382,7 @@ executors:
     ddc_man_loi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/keo-tha-thoa-thuan.dom.tsx -t loi-tra-dau-cot"
     ktt_board_giu_nguyen: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/board-giu-nguyen.dom.tsx"
   script:
+    zqw_giu_nqz: 'B=$(git merge-base HEAD origin/onehub) && { git diff --quiet "$B" -- apps/agent/test/nhac-qua-zalo.integration.spec.ts || { echo "spec da ky cua nhac-qua-zalo bi sua" >&2; exit 1; }; } && bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts"'
     ogd_man_danh_muc: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "DUOI_CONG=1 bun _acceptance/onboarding-giong-deals/rang/man-danh-muc.mjs"'
     dp30_hang_so_o_config: 'node _acceptance/dieu-phoi-30-ngay-dau/rang/hang-so-o-config.mjs'
     trg_tieu_de_trang: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/truong-tu-tao-o-cai-dat/rang/trang-truong.mjs tieu-de-trang"'
