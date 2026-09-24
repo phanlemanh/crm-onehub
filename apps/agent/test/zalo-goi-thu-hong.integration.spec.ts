@@ -1,7 +1,14 @@
-import { afterAll, afterEach, beforeEach, describe, expect, test } from "bun:test";
+import {
+	afterAll,
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	test,
+} from "bun:test";
 import { db } from "@crm/db";
 import { SETTINGS_ID } from "@crm/db/settings";
-import type { DatBotYeuCau } from "@crm/validation/zalo-cau-noi";
+import { type DatBotYeuCau, datBotPhanHoi } from "@crm/validation/zalo-cau-noi";
 import kenhZalo from "../agent/channels/zalo";
 import { kiemBot } from "../agent/lib/zalo-bot";
 import { ZALO } from "../agent/lib/zalo-config";
@@ -127,10 +134,16 @@ function thayFetch(z: ReturnType<typeof zaloGia>): () => void {
 
 type PhanHoi = {
 	outcome: string;
-	tenBot?: string;
-	webhook?: string;
-	reason?: string;
+	tenBot: string | null;
+	webhook: string | null;
 };
+
+function tomTat(tho: string): PhanHoi {
+	const p = datBotPhanHoi.parse(JSON.parse(tho));
+	return p.outcome === "valid"
+		? { outcome: p.outcome, tenBot: p.tenBot, webhook: p.webhook }
+		: { outcome: p.outcome, tenBot: null, webhook: null };
+}
 
 async function goiRoute(
 	than: DatBotYeuCau,
@@ -152,7 +165,7 @@ async function goiRoute(
 		);
 		if (!(res instanceof Response)) throw new Error("route khong tra Response");
 		const tho = await res.text();
-		return { phanHoi: JSON.parse(tho) as PhanHoi, tho, z };
+		return { phanHoi: tomTat(tho), tho, z };
 	} finally {
 		traLai();
 	}
@@ -181,7 +194,11 @@ const CACH_GOI = {
 type CachGoi = keyof typeof CACH_GOI;
 const CACH = Object.keys(CACH_GOI) as CachGoi[];
 
-type O = Cot & { outcome: string; webhook: string | null; tenBot: string | null };
+type O = Cot & {
+	outcome: string;
+	webhook: string | null;
+	tenBot: string | null;
+};
 
 function kyVong(cach: CachGoi, ket: KetQua, khoaNhan: string | null): O {
 	const { truoc, than } = CACH_GOI[cach];
@@ -226,8 +243,8 @@ describe("luu-bot-moi", () => {
 		expect(
 			{
 				outcome: phanHoi.outcome,
-				tenBot: phanHoi.tenBot ?? null,
-				webhook: phanHoi.webhook ?? null,
+				tenBot: phanHoi.tenBot,
+				webhook: phanHoi.webhook,
 				coToken: tho.includes(TOK_MOI),
 				token: c.token,
 				ten: c.ten,
@@ -273,8 +290,8 @@ describe("ma-tran-goi", () => {
 				thucTe[o] = {
 					...(await docCot()),
 					outcome: phanHoi.outcome,
-					webhook: phanHoi.webhook ?? null,
-					tenBot: phanHoi.tenBot ?? null,
+					webhook: phanHoi.webhook,
+					tenBot: phanHoi.tenBot,
 				};
 				mongDoi[o] = kyVong(cach, ket, khoaZaloNhan(z));
 			}
@@ -314,7 +331,10 @@ const URL_SAU_NHIP = {
 
 describe("nhip-giu-co", () => {
 	test("nhip-giu-co: 3 trang thai co x 4 tra loi getWebhookInfo, bang viet truoc", async () => {
-		const thucTe: Record<string, { url: string | null; lyDo: string | null; ket: string }> = {};
+		const thucTe: Record<
+			string,
+			{ url: string | null; lyDo: string | null; ket: string }
+		> = {};
 		const mongDoi: typeof thucTe = {};
 		for (const tt of Object.keys(TRANG_THAI) as TrangThai[]) {
 			for (const tl of Object.keys(TRA_LOI) as TraLoi[]) {
@@ -337,7 +357,10 @@ describe("nhip-giu-co", () => {
 	test("nhip-giu-co: 13 luu bot goi-thu-hong chen giua luc nhip doc va luc ghi -> co con", async () => {
 		await gieo({ token: TOK_CU, ten: TEN_CU, lyDo: null, url: null });
 		const zNhip = zaloGia({ webhookInfo: { url: URL_ZALO } });
-		const chen = (async (input: Parameters<typeof fetch>[0], init?: RequestInit) => {
+		const chen = (async (
+			input: Parameters<typeof fetch>[0],
+			init?: RequestInit,
+		) => {
 			if (String(input).endsWith("/getWebhookInfo")) {
 				await goiRoute({ token: TOK_MOI }, CHON_KET_QUA["goi-thu-hong"]);
 			}
@@ -365,7 +388,7 @@ describe("go-co", () => {
 				url: sauDangKy.url,
 				lyDo: sauDangKy.lyDo,
 				outcome: phanHoi.outcome,
-				webhook: phanHoi.webhook ?? null,
+				webhook: phanHoi.webhook,
 				urlSauNhip: sauNhip.url,
 			},
 			"dang ky lai thanh cong go co",

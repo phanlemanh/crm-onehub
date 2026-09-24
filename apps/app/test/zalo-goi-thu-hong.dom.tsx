@@ -2,6 +2,8 @@ import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import type { z } from "zod";
+import type { zaloLuuBotOutput } from "../../api/src/zalo/zalo.contracts";
 
 type DauVao = { token?: string } | undefined;
 type ChonMutation = {
@@ -11,7 +13,9 @@ type ChonMutation = {
 type LoaiToast = "success" | "warning" | "error" | "info";
 type Toast = { loai: LoaiToast; chu: string };
 
-let phanHoi: unknown = null;
+type PhanHoiLuu = z.infer<typeof zaloLuuBotOutput>;
+
+let phanHoi: PhanHoiLuu | null = null;
 let toasts: Toast[] = [];
 let soLamMoi = 0;
 let soTaiLai = 0;
@@ -40,8 +44,8 @@ const trpcGia = new Proxy(
 );
 
 function ghiToast(loai: LoaiToast) {
-	return (chu: unknown) => {
-		toasts.push({ loai, chu: String(chu) });
+	return (chu: string) => {
+		toasts.push({ loai, chu });
 	};
 }
 
@@ -141,10 +145,10 @@ async function luuToken(vo: HTMLElement): Promise<void> {
 	const nut = vo.querySelector<HTMLButtonElement>("button[type='submit']");
 	if (!o || !nut) throw new Error("khong thay o token hay nut luu");
 	await act(async () => {
-		Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set?.call(
-			o,
-			TOKEN_DUNG_DANG,
-		);
+		Object.getOwnPropertyDescriptor(
+			HTMLInputElement.prototype,
+			"value",
+		)?.set?.call(o, TOKEN_DUNG_DANG);
 		o.dispatchEvent(new Event("input", { bubbles: true }));
 	});
 	await act(async () => {
