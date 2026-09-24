@@ -1,0 +1,248 @@
+schema_version: 1
+slug: loi-tac-tu-zalo-noi-dung-nguyen-nhan
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ltz_cau_noi_ma_tran
+    paths:
+      - "apps/api/src/zalo/**"
+      - "packages/validation/src/zalo-cau-noi.ts"
+      - "apps/api/test/loi-tac-tu-zalo.spec.ts"
+    expected: |
+      Goi zalo.luuBot (phien quan tri vien, token dung dang) va zalo.guiThu (phien
+      thanh vien) qua HTTP tRPC that cua AppModule. Tac tu gia Bun.serve tai cho.
+      Ma tran viet TRUOC, 6 tinh trang x 2 thao tac = 12 o, moi o mot assert:
+        a AGENT_BRIDGE_SECRET = ""                   -> ZALO_THONG_DIEP.cauNoi["thieu-cau-noi"]
+        b AGENT_URL = http://127.0.0.1:1             -> cauNoi["khong-toi-duoc"]
+        c tac tu gia tra 401                         -> cauNoi["sai-khoa"]
+        d tac tu gia tra 500                         -> cauNoi["tac-tu-loi"](500)
+        e tac tu gia tra 200 JSON {"la":1}           -> cauNoi["sai-khuon"]
+        f tac tu gia tra 200 text/html "<html>"      -> cauNoi["sai-khuon"]
+      O (b): ngay truoc khi goi, tham do bang fetch toi dia chi do phai bi tu choi
+      ket noi; khong bi tu choi -> nem voi thong diep ghim "cong da bi cap lai — loi
+      moi truong" (khong cham o).
+      Moi o: status HTTP 400 (khong 500), message BANG (toBe) cau cua o; them:
+      tap cau cua nam nguyen nhan co kich thuoc 5; cau (d) chua "500"; khong cau nao
+      chua "Tác tử chưa nối được". So o thuc chay = 12 (dem trong test, khong hang dung).
+      Doi chung duong cung fixture: tac tu gia tra phan hoi dung khuon -> luuBot tra
+      tenBot, guiThu tra {kenh:"zalo"}.
+      DOT BIEN (ban sao): (1) anh xa 401 ve "tac-tu-loi" trong zalo-cau-noi.service.ts
+      -> o (c) do voi thong diep ghim "401 -> sai-khoa"; (2) gop res.json() vao try
+      cua fetch -> o (f) do voi thong diep ghim "than khong phai JSON la sai-khuon,
+      khong phai mang".
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ltz_cau_noi_log
+    paths:
+      - "apps/api/src/zalo/zalo-cau-noi.service.ts"
+      - "apps/api/test/loi-tac-tu-zalo.spec.ts"
+    expected: |
+      Cung ma tran 12 o cua E1; spyOn(Logger.prototype, "warn") bat moi doi so.
+      Token gui qua luuBot la chuoi danh dau "4242:TOKEN-CAU-NOI-<ngau nhien>"; khoa
+      cau noi la chuoi danh dau rieng; tac tu gia nhet "THAN-BI-MAT-<o>" vao than o
+      (d), (e), (f).
+      Moi o: dung 1 dong warn co message "Zalo bridge call failed"; duong bang
+      ZALO_CAU_NOI cua thao tac (quan he truong-gia-tri); nguyenNhan bang ten
+      nguyen nhan cua o ((e) va (f) deu "sai-khuon"); status = 401 o (c), 500 o (d),
+      vang o (a)(b)(e)(f).
+      Tuan tu hoa moi doi so bang Bun.inspect (depth 10, nhu console in, gom ca
+      message/stack/cause cua Error) — KHONG JSON.stringify (Error ra "{}"). Chuoi da
+      tuan tu hoa khong chua token, khoa cau noi, hay chuoi THAN-BI-MAT.
+      Doi chung duong: o lanh -> 0 dong warn.
+      DOT BIEN: (1) bo logger.warn o nhanh ma khac 2xx -> o (d) do voi thong diep ghim
+      "moi loi goi hong dung mot dong warn"; (2) dua input (than yeu cau) vao dong warn
+      -> o (d) luuBot do voi thong diep ghim "warn cau noi khong chua Bot Token".
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ltz_getme_zalo_hong
+    paths:
+      - "apps/agent/agent/lib/zalo-bot-xuong.ts"
+      - "apps/agent/agent/lib/zalo-api.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/agent/channels/zalo.ts"
+      - "packages/validation/src/zalo-cau-noi.ts"
+      - "packages/validation/src/zalo-update.ts"
+      - "apps/api/src/zalo/**"
+      - "apps/agent/test/support/zalo-gia.ts"
+      - "apps/api/test/loi-tac-tu-zalo.spec.ts"
+    expected: |
+      Chuoi that: tRPC zalo.luuBot -> bridge() -> handler route POST
+      /internal/zalo/bot lay tu kenh mac dinh cua channels/zalo.ts (tim theo method +
+      path) sau Bun.serve o goc https://tac-tu.test -> Zalo gia zaloMayChu.
+      Gieo AppSetting bot A: token TA, khoa KA, ten "Bot Cu", url UA, lyDo null.
+      Ma tran 6 o, token TB:
+        a ZALO_API_URL = http://127.0.0.1:1 (tham do tu choi truoc) -> zaloKhongTraLoi
+        b getMe tra HTTP 500                                     -> zaloKhongTraLoi
+        c getMe tra 200 than {"la":1}                            -> zaloKhongTraLoi
+        d getMe tra 200 {ok:false,error_code:500,description:"x"} -> zaloKhongTraLoi
+        e getMe tra HTTP 401 (doi chung)                         -> ZALO.loi.tokenSai
+        f getMe tra 200 {ok:false,error_code:401,description:"x"} -> ZALO.loi.tokenSai
+      Vo loi (d)(f) theo vo Zalo that do khi lai thu 23/09 ({ok,error_code,description}).
+      Moi o: status 400; message BANG cau cua o; so loi goi setWebhook = 0; doc LAI
+      AppSetting: nam cot (zaloBotToken, zaloWebhookSecret, zaloBotName,
+      zaloWebhookUrl, zaloWebhookLyDo) toEqual ban chup truoc khi goi.
+      Doi chung duong: getMe ok -> luuBot tra tenBot.
+      DOT BIEN: (1) tra lai nhanh cu "status !== 200 -> tokenSai" -> o (b) do voi thong
+      diep ghim "getMe 5xx khong phai token sai"; (2) bo nhanh doc error_code cua than
+      ok:false -> o (f) do voi thong diep ghim "ok:false 401 la token sai".
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ltz_gui_thu_zalo_hong
+    paths:
+      - "apps/agent/agent/lib/zalo-bot-xuong.ts"
+      - "apps/agent/agent/lib/zalo-api.ts"
+      - "apps/agent/agent/channels/zalo.ts"
+      - "packages/validation/src/zalo-cau-noi.ts"
+      - "packages/validation/src/zalo-update.ts"
+      - "apps/api/src/zalo/**"
+      - "apps/agent/test/support/zalo-gia.ts"
+      - "apps/api/test/loi-tac-tu-zalo.spec.ts"
+    expected: |
+      Chuoi that nhu E3, route POST /internal/zalo/gui-thu. U da noi Zalo bang thu tuc
+      cua kho (taoMaLienKet + noiBangMa), uu tien ZALO, AppSetting co token.
+      Ma tran 5 o:
+        a ZALO_API_URL = http://127.0.0.1:1 (tham do tu choi truoc) -> guiHong.zalo
+        b sendMessage tra 500                -> guiHong.zalo
+        c sendMessage tra 200 ok:false       -> guiHong.zalo
+        d sendMessage tra 200 than {"la":1}  -> guiHong.zalo
+        e sendMessage ok (doi chung)         -> data {kenh:"zalo"}
+      Moi o hong: status 400, message BANG guiHong.zalo, data vang. O (e): data
+      toEqual {kenh:"zalo"} va Zalo gia nhan dung 1 sendMessage.
+      DOT BIEN: bo try/catch quanh guiZalo trong guiThu -> o (b) do voi thong diep
+      ghim "gui hong -> guiHong.zalo" (vi route tra 500 -> cau tac-tu-loi).
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ltz_gui_thu_slack_hong
+    paths:
+      - "apps/agent/agent/lib/zalo-bot-xuong.ts"
+      - "apps/agent/test/loi-tac-tu-zalo.integration.spec.ts"
+    expected: |
+      Goi thang guiThu(V.id, {slackFetcher}) cua zalo-bot-xuong.ts. V chi khop Slack
+      (gieo bang thu tuc cua kho), Slack co token.
+        a slackFetcher tra {ok:false, error:"channel_not_found"} -> ket qua
+          toEqual {kenh:"slack", lech:<nhu kenhSeDungCua>, guiDuoc:false}, khong nem
+        b slackFetcher nem TypeError (mang)  -> nhu (a)
+        c slackFetcher tra ok (doi chung)    -> guiDuoc true
+      Ket qua moi o parse qua guiThuPhanHoi (schema that).
+      DOT BIEN: bo try/catch quanh guiQuaSlackThu -> o (a) do voi thong diep ghim
+      "slack hong -> guiDuoc false, khong nem".
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ltz_gui_thu_slack_api
+    paths:
+      - "apps/api/src/zalo/**"
+      - "apps/api/test/loi-tac-tu-zalo.spec.ts"
+    expected: |
+      Tac tu gia tra {kenh:"slack", lech:false, guiDuoc:false} -> zalo.guiThu status
+      400, message BANG ZALO_THONG_DIEP.guiHong.slack; tra {kenh:"zalo", lech:false,
+      guiDuoc:false} -> guiHong.zalo (hai cau khac nhau); tra guiDuoc:true -> data
+      {kenh:"slack"}.
+      DOT BIEN: bo nhanh !guiDuoc trong zalo.service.ts -> o dau do voi thong diep
+      ghim "guiDuoc false -> guiHong.slack".
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ltz_log_khong_lo_token
+    paths:
+      - "apps/agent/agent/lib/zalo-bot-xuong.ts"
+      - "apps/agent/agent/lib/zalo-api.ts"
+      - "apps/api/src/zalo/zalo-cau-noi.service.ts"
+      - "apps/api/test/loi-tac-tu-zalo.spec.ts"
+    expected: |
+      Chuoi that nhu E3/E4; token T la chuoi danh dau "4242:TOKEN-DANH-DAU-<ngau nhien>".
+      spyOn(console, "error") va spyOn(Logger.prototype, "warn") bat moi doi so suot ca;
+      tuan tu hoa bang Bun.inspect (depth 10, gom message/stack/cause cua Error) —
+      KHONG JSON.stringify.
+      Ma tran 4 o:
+        a luuBot voi T, ZALO_API_URL = http://127.0.0.1:1 (tham do tu choi truoc)
+        b luuBot voi T, getMe tra 500
+        c guiThu (AppSetting token T), ZALO_API_URL = http://127.0.0.1:1
+        d guiThu, sendMessage tra 500
+      Moi o: co >= 1 dong console.error bat dau "[zalo]" chua ten method cua o
+      ("getMe" o a,b; "sendMessage" o c,d) va lop hong ("mang" o a,c; "http-500" o b,d);
+      chuoi tuan tu hoa cua moi doi so da bat khong chua T.
+      Doi chung duong: o lanh -> 0 dong "[zalo]" loi.
+      DOT BIEN: (1) in thang URL goi Zalo (co /bot<T>/) trong dong log mang -> o (a) do
+      voi thong diep ghim "khong dong log nao chua Bot Token"; (2) truyen nguyen doi
+      tuong loi co message chua /bot<T>/ lam doi so thu hai cua dong [zalo] -> o (a)
+      do voi cung thong diep ghim.
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.ltz_man_gui_thu_loi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/notifications/khoi-zalo.tsx"
+      - "apps/app/lib/messages/nhac-qua-zalo.ts"
+      - "apps/app/test/loi-tac-tu-zalo.dom.tsx"
+    expected: |
+      Render KhoiZalo that (tRPC gia nhu noi-zalo-cho-nguoi-moi.dom.tsx), zalo.cuaToi
+      tra da-noi. Ma tran:
+        1 guiThu nem Error("Zalo chưa nhận tin thử. Thử lại sau ít phút.") -> dung 1
+          phan tu role="alert" co textContent BANG cau do
+        2 guiThu nem Error("") o locale vi -> role="alert" BANG nhacQuaZaloMessages("vi")...guiThuLoi
+        3 nhu 2 o locale en -> BANG ban en cua guiThuLoi
+        4 sau o 1, dat guiThu tra {kenh:"zalo"}, bam lai -> 0 phan tu role="alert"
+      DOT BIEN: tra khoi-zalo ve cau co dinh t.guiThuLoi -> o 1 do voi thong diep
+      ghim "man hien cau nguyen nhan cua API".
+  - id: E9
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ltz_lech_phien_ban
+    paths:
+      - "packages/validation/src/zalo-cau-noi.ts"
+      - "apps/api/src/zalo/**"
+      - "apps/api/test/loi-tac-tu-zalo.spec.ts"
+    expected: |
+      Tac tu gia tra {kenh:"zalo", lech:false} (khong co guiDuoc) -> zalo.guiThu
+      data toEqual {kenh:"zalo"}, 0 dong warn nguyenNhan "sai-khuon".
+      Doi chung am cung fixture: {kenh:"zalo", lech:false, guiDuoc:"co"} (sai kieu)
+      -> 400 cauNoi["sai-khuon"].
+      DOT BIEN: bo .default(true) cua guiDuoc -> o dau do voi thong diep ghim
+      "tac tu doi truoc khong co guiDuoc van la da gui".
+  - id: E10
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.ltz_tai_lieu
+    paths:
+      - "docs/agent.md"
+      - "docs/plan/lo-trinh-zalo.md"
+      - "_acceptance/loi-tac-tu-zalo-noi-dung-nguyen-nhan/rang/tai-lieu.mjs"
+    expected: |
+      Script doc tep THAT (duong suy tu vi tri script, khong hardcode ROOT):
+        1 muc Zalo cua docs/agent.md (khoi tu tieu de chua "Zalo" toi tieu de cung cap
+          ke) co "zalo-loi" VA "guiDuoc" VA mot cau noi tac tu khong nem khi Zalo hong
+        2 bang muc 7 cua docs/plan/lo-trinh-zalo.md: dung 1 dong co cot Slug chua
+          "loi-tac-tu-zalo-noi-dung-nguyen-nhan"; cot Trang thai (tach cot bang "|")
+          thuoc tap gia tri doc tu CHINH doan van dau muc 7 (khong chep tay tap do)
+      Exit 0 khi ca hai dat; exit 1 va in ten dong hong.
+      Doi chung: script chay tren ban sao da xoa dong bang -> exit 1 voi thong diep
+      ghim "bang muc 7 thieu dong loi-tac-tu-zalo-noi-dung-nguyen-nhan".
+  - id: E11
+    criterion: AC-10
+    executor: judgment
+    inputs:
+      - "apps/api/src/zalo/zalo.service.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "CONTEXT.md"
+      - "docs/superpowers/specs/2026-09-24-loi-tac-tu-zalo-noi-dung-nguyen-nhan-design.md"
+    expected: |
+      Hoi dong doc tam cau loi moi (ZALO_THONG_DIEP.cauNoi x5, guiHong x2 trong
+      zalo.service.ts; ZALO.loi.zaloKhongTraLoi trong zalo-config.ts) va cham tung cau:
+      noi dung chang hong; noi viec lam tiep (thu lai / bao nguoi cai dat CRM);
+      khong dung «tác tử», «agent», ten bien moi truong; tieng Viet co dau; khong dung
+      tu CONTEXT.md bao Avoid. Mot cau truot mot tieu chi -> FAIL kem ten cau.
