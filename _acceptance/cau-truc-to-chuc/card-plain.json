@@ -1,0 +1,56 @@
+{
+  "feature_plain": "Quản trị dựng cây tổ chức hai cấp (bộ phận chứa phòng ban), gán mỗi người vào một phòng ban chính, đặt trưởng — bằng tay hoặc nhập từ bảng tính — và cả CRM đọc chung một cây.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ giữ nguyên mọi phòng ban và bước kế hoạch 30 ngày đang có; ngày đầu chúng nằm ở nhóm «Chưa xếp vào bộ phận» (AC-1, dữ liệu cũ còn nguyên)."},
+    {"id": "AC-2", "p": "Sẽ cho quản trị thêm, đổi tên, sắp bộ phận, thêm phòng ban vào bộ phận và chuyển phòng ban giữa các bộ phận; tên trống, quá dài hay trùng thì báo lỗi ngay dưới ô."},
+    {"id": "AC-4", "p": "Sẽ cho mỗi người đúng một phòng ban chính và thêm phòng ban phụ tuỳ ý; ai chưa có phòng ban chính hiện ở nhóm «Chưa có phòng ban»."},
+    {"id": "AC-5", "p": "Sẽ cho mỗi phòng ban và mỗi bộ phận một trưởng, hiện huy hiệu trên cây; làm trưởng không cho thêm quyền quản trị nào."},
+    {"id": "AC-6", "p": "Sẽ tự suy quản lý trực tiếp của mỗi người từ trưởng phòng ban chính, lên trưởng bộ phận khi cần, và cho quản trị chọn tay rồi quay về phép suy."},
+    {"id": "AC-7", "p": "Sẽ cho thành viên thường xem cả cây nhưng không sửa được gì, kể cả khi gọi thẳng máy chủ."},
+    {"id": "AC-8", "p": "Sẽ ẩn người đã rời workspace khỏi cây và mọi phép đếm; đơn vị họ làm trưởng hiện «Chưa có trưởng»."},
+    {"id": "AC-9", "p": "Sẽ cho dán hoặc tải bảng bốn cột và xem trước từng dòng — dòng hỏng nói rõ lý do, cặp dòng mâu thuẫn thì hỏng cả hai — trước khi ghi bất cứ gì."},
+    {"id": "AC-10", "p": "Sẽ ghi đúng các dòng hợp lệ trong một lần, khớp bản xem trước; nhập lại cùng tệp không tạo đơn vị trùng."},
+    {"id": "AC-11", "p": "Sẽ hiện dòng «X/M thành viên có phòng ban chính · K phòng ban chưa có trưởng» đầu màn — đúng con số ngưỡng đọc ngày 26/10."},
+    {"id": "AC-12", "p": "Sẽ đổi chữ «bộ phận» thành «phòng ban» ở Điều phối 30 ngày, thêm bộ lọc «Bộ phận», và chuyển việc quản lý phòng ban sang Cài đặt › Tổ chức."},
+    {"id": "AC-13", "p": "Sẽ đổi nhãn ô «Mục tiêu» trên sheet kế hoạch 30 ngày thành «Thời lượng» để «Mục tiêu» chỉ còn nghĩa của OKR."}
+  ],
+  "wont_do": [
+    {"id": "AC-3", "p": "Chặn lưu trữ phòng ban còn người hay bộ phận còn phòng ban, và chặn xoá hẳn đơn vị chưa lưu trữ hoặc còn bước kế hoạch trỏ tới."},
+    {"id": "AC-14", "p": "Chặn tràn ngang trên mọi khổ từ điện thoại tới màn rộng, cả tiếng Việt lẫn tiếng Anh; cây đi hết được bằng bàn phím."},
+    {"id": "AC-15", "p": "Chặn mọi vi phạm luật thiết kế của kho trên các màn chạm tới; không sửa thư viện giao diện dùng chung cho riêng màn này."}
+  ],
+  "scope_plain": "Để sau: cấp «nhóm», quyền theo đơn vị, sơ đồ tổ chức, tệp .xlsx, nhập tạo lời mời, nhật ký thay đổi cây.",
+  "coverage_plain": [
+    {"i": 0, "p": "Mọi thao tác trên một đơn vị — tạo, đổi tên, sắp, chuyển, lưu trữ, xoá hẳn — đều có tiêu chí (AC-2, AC-3)."},
+    {"i": 1, "p": "Mọi thứ xảy ra với một người trong cây — phòng ban chính, phụ, làm trưởng, quản lý chọn tay, nhập hàng loạt, rời công ty — đều có tiêu chí; đối chiếu HubSpot và BambooHR."},
+    {"i": 2, "p": "Ba vai được xét riêng: quản trị, thành viên thường (kể cả người đang làm trưởng), người đã rời (AC-5, AC-7, AC-8)."},
+    {"i": 3, "p": "Các trạng thái dữ liệu — rỗng, dữ liệu cũ chưa xếp, thiếu trưởng, lô nhập lỗi — đều có tiêu chí (AC-1, AC-8, AC-9, AC-11)."},
+    {"i": 4, "p": "Mọi nơi đọc cây trong lượt này — màn Tổ chức, Điều phối 30 ngày, sheet kế hoạch — có tiêu chí; OKR đọc cây ở lượt 3."},
+    {"i": 5, "p": "Áp mọi màn: khổ hẹp đến rộng, hai tiếng, tên người không bị trình duyệt tự dịch, dùng được bằng bàn phím (AC-14, AC-15)."},
+    {"i": 6, "p": "Mười lăm tiêu chí đều là phần làm ngay; phần để sau và không làm nằm ở danh sách ngoài phạm vi và sổ quyết định."},
+    {"i": 7, "p": "Giả định chờ anh gạch: trưởng phòng ban phải là người của chính phòng ban đó; trưởng bộ phận thì không cần."},
+    {"i": 8, "p": "Giả định chờ anh gạch: trưởng bộ phận cũng phải có một phòng ban chính — không thì họ kéo dòng độ phủ xuống dưới ngưỡng dù cây đã đúng."},
+    {"i": 9, "p": "Giả định chờ anh gạch: nhập ghi dòng hợp lệ, bỏ dòng hỏng — không bắt cả lô phải sạch."},
+    {"i": 10, "p": "Giả định chờ anh gạch: cây ghép từ thành phần gập-mở sẵn có, không cài thêm thành phần cây mới."},
+    {"i": 11, "p": "Giả định chờ anh gạch: lấy kiểu «gõ tìm thì nhánh khớp tự mở» từ một block ReUI Pro — chỉ lấy kiểu, không chép mã."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép đo cho «dữ liệu cũ còn nguyên» chạy trên cơ sở dữ liệu rỗng nên không bắt được lỗi chỉ xảy ra trên dữ liệu thật — đã sửa: nay dựng lại dữ liệu kiểu cũ (có tên trùng) rồi mới chạy bản nâng cấp, và cấm các kiểu thay đổi dễ gãy trên dữ liệu có sẵn."},
+    {"i": 1, "p": "Phép đo quyền gửi dữ liệu rỗng nên bị từ chối vì dữ liệu sai trước khi tới chỗ kiểm quyền — đã sửa: gửi dữ liệu hợp lệ cho từng thao tác, thêm vai chủ."},
+    {"i": 2, "p": "Tiêu chí nhập không nói dòng nào hỏng khi hai dòng mâu thuẫn — đã sửa: cả hai dòng đều hỏng, kết quả không phụ thuộc thứ tự dòng."},
+    {"i": 3, "p": "Không phép đo nào kiểm màn Điều phối có thật sự gửi lựa chọn bộ phận khi lọc — đã sửa: thêm phép đo trên màn, và ghi rõ lọc ở máy chủ."},
+    {"i": 4, "p": "Chưa đo ca xoá hẳn một đơn vị chưa lưu trữ và chưa đo mục «Đã lưu trữ» trên màn — đã sửa: thêm hai ca và một phép đo trên màn."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260924T051107Z-1", "p": "Đã chọn lưu phòng ban chính ở một bảng một-hàng-một-người, để không thể có hai phòng ban chính — đổi lại thêm một bảng."},
+    {"id": "d-20260924T051107Z-2", "p": "Đã chọn ẩn người đã rời ngay lúc đọc, không đụng luồng gỡ thành viên — đổi lại họ hiện lại nguyên chỗ cũ nếu được cho vào lại."},
+    {"id": "d-20260924T051107Z-3", "p": "Đã chọn một nơi duy nhất quản lý phòng ban là Cài đặt › Tổ chức — đổi lại Cài đặt Điều phối mất danh sách quen thuộc."},
+    {"id": "d-20260924T051107Z-4", "p": "Đã chọn nhập ghi dòng hợp lệ, bỏ dòng hỏng — đổi lại quản trị phải đọc tóm tắt để không bỏ sót người."},
+    {"id": "d-20260924T051107Z-5", "p": "Đã chọn ghép cây từ thành phần sẵn có, không cài thành phần cây mới — đổi lại phím mũi tên trong cây phải tự làm nếu sau này cần."},
+    {"id": "d-20260924T051107Z-6", "p": "KHÔNG làm sơ đồ tổ chức ở lượt này — đổi lại chưa có hình nhìn cả công ty một lần."},
+    {"id": "d-20260924T051107Z-7", "p": "KHÔNG đọc tệp .xlsx ở lượt này — đổi lại quản trị lưu thành .csv hoặc dán thẳng."},
+    {"id": "d-20260924T051107Z-8", "p": "Đã chọn chữ «Thời lượng» thay «Mục tiêu» trên sheet kế hoạch — anh đổi được chữ khác ngay ở cổng này."},
+    {"id": "d-20260924T051107Z-9", "p": "Đã dựng thêm tám trạng thái bấm được trên bản mẫu cũ, giữ nguyên hình cây cho phiên OKR đang dùng."},
+    {"id": "d-20260924T052038Z-10", "p": "Đã chọn: hai dòng nhập mâu thuẫn thì hỏng cả hai — đổi lại quản trị sửa cả hai rồi dán lại."}
+  ]
+}

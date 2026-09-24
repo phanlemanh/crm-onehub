@@ -167,7 +167,7 @@ evals:
   - id: E9
     criterion: AC-7
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.ttc_chi_doc_man
     paths:
       - "apps/app/app/(app)/[slug]/settings/organization/**"
@@ -234,7 +234,7 @@ evals:
   - id: E13
     criterion: AC-10
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.ttc_nhap_man
     paths:
       - "apps/app/app/(app)/[slug]/settings/organization/**"
@@ -279,7 +279,7 @@ evals:
   - id: E16
     criterion: AC-12
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.ttc_nhan_dieu_phoi
     paths:
       - "apps/app/lib/messages/onboarding.ts"
@@ -297,7 +297,7 @@ evals:
   - id: E17
     criterion: AC-13
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.ttc_thoi_luong
     paths:
       - "apps/app/lib/messages/onboarding.ts"
@@ -311,7 +311,7 @@ evals:
   - id: E18
     criterion: AC-4
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.ttc_cay_man
     paths:
       - "apps/app/app/(app)/[slug]/settings/organization/**"
@@ -326,7 +326,7 @@ evals:
   - id: E19
     criterion: AC-6
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.ttc_vi_tri_man
     paths:
       - "apps/app/app/(app)/[slug]/settings/organization/**"
@@ -361,7 +361,7 @@ evals:
   - id: E21
     criterion: AC-15
     executor: script
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.script.ttc_san_thiet_ke
     paths:
       - "apps/app/app/(app)/[slug]/settings/organization/**"
@@ -393,7 +393,7 @@ evals:
   - id: E23
     criterion: AC-12
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.ttc_loc_bo_phan_man
     paths:
       - "apps/app/app/(app)/[slug]/onboarding/**"
@@ -409,7 +409,7 @@ evals:
   - id: E24
     criterion: AC-3
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.ttc_luu_tru_man
     paths:
       - "apps/app/app/(app)/[slug]/settings/organization/**"

@@ -36,7 +36,7 @@ vị). Làm trưởng không cho quyền quản trị nào.
 
 ### Người đã rời workspace
 
-Mọi phép đọc lọc theo hàng `member` còn hiệu lực — không sửa giao dịch gỡ thành
+Mọi phép đọc lọc theo hàng `member` còn hiệu lực — không sửa luồng gỡ thành
 viên của `workspace`. Người đã gỡ biến khỏi cây và khỏi mọi phép đếm; đơn vị họ làm
 trưởng hiện «Chưa có trưởng» và tính là chưa có trưởng; ghi đè quản lý trỏ tới họ
 bị bỏ qua, quản lý trực tiếp rơi về phép suy. Cho phép vào lại thì hàng cũ hiện lại
@@ -95,7 +95,7 @@ kết quả xem trước, nên không có đường nào đưa dữ liệu chưa
   vị trong lô · quá 1000 dòng (cả lô bị từ chối).
 - Lỗi cặp (email lặp, một phòng ban hai bộ phận, hai trưởng một đơn vị): mọi dòng trong
   cặp đều hỏng — không dòng nào thắng theo thứ tự.
-- Ghi: chỉ dòng hợp lệ, trong một giao dịch; nút nói rõ «Ghi 42 dòng · bỏ 3 dòng
+- Ghi: chỉ dòng hợp lệ, trong một lần ghi (`transaction`); nút nói rõ «Ghi 42 dòng · bỏ 3 dòng
   hỏng». Dòng hợp lệ đặt phòng ban chính của người (thay phòng ban chính cũ; phòng
   ban phụ không đổi) và đặt trưởng. Nhập lại cùng tệp không tạo đơn vị trùng.
 
