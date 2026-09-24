@@ -1,0 +1,5 @@
+error: ung dung da dong van quet khi co nguoi dang nhap
+Expected: 0
+Received: 1
+(fail) quet-khi-dang-nhap > ung-dung-da-dong: ung dung da dong khong quet khi co nguoi dang nhap, ung dung dang chay van nhan [185.35ms]
+error: script "test" exited with code 1

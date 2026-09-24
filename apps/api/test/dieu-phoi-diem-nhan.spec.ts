@@ -6,7 +6,7 @@ import { OnboardingController } from "../src/onboarding/onboarding.controller";
 import { OnboardingService } from "../src/onboarding/onboarding.service";
 import { ONBOARDING } from "../src/onboarding/onboarding-config";
 import { OnboardingIngestService } from "../src/onboarding/onboarding-ingest.service";
-import { gieoCaNhan, gieoKeHoach } from "./dieu-phoi-gieo";
+import { donGieo, gieoCaNhan, gieoKeHoach } from "./dieu-phoi-gieo";
 
 const KHOA = "bi-mat-dieu-phoi";
 const VIEC = "onboarding-identify";
@@ -84,6 +84,7 @@ function muc(ma: string) {
 
 afterAll(async () => {
 	await db.agentTask.deleteMany({ where: { kind: VIEC } });
+	await donGieo();
 });
 
 describe("diem nhan tu nen tang", () => {
