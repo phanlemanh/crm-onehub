@@ -491,6 +491,16 @@ export class WorkspaceService {
 
 			await tx.session.deleteMany({ where: { userId: target.userId } });
 
+			await tx.zaloLink.deleteMany({ where: { crmUserId: target.userId } });
+
+			await tx.zaloLinkCode.deleteMany({
+				where: { crmUserId: target.userId },
+			});
+
+			await tx.notificationPreference.deleteMany({
+				where: { userId: target.userId },
+			});
+
 			const keys = await tx.apikey.updateMany({
 				where: { referenceId: target.userId },
 				data: { enabled: false },

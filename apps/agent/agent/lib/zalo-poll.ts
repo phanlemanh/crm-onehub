@@ -41,7 +41,7 @@ export async function pollZalo(deps: PhuThuocPoll = {}): Promise<KetQuaPoll> {
 	const trangThai = await kiemBot({ fetcher, now: () => now });
 	if (trangThai === "tat") return { xuLy: 0, loi: 0 };
 	if (trangThai === "loi") return { xuLy: 0, loi: 1 };
-	const token = zaloToken();
+	const token = await zaloToken();
 	if (!token) return { xuLy: 0, loi: 0 };
 	let xuLy = 0;
 	let loi = 0;

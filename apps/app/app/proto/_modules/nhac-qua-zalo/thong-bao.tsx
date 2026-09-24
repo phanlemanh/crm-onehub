@@ -35,7 +35,7 @@ function nhomMa(ma: string): string {
 	return `${ma.slice(0, 3)} ${ma.slice(3)}`;
 }
 
-function KhoiMa({
+export function KhoiMa({
 	lienKet,
 	tenBot,
 }: {
@@ -139,14 +139,14 @@ function KhoiZalo({ du }: { du: ThongBaoMau }) {
 }
 
 function lyDoKhoa(du: ThongBaoMau, kenh: KenhUuTien): string | null {
-	if (kenh === "ZALO" && !du.zaloBat) return "Zalo chưa bật cho xưởng.";
-	if (kenh === "ZALO" && du.lienKet.loai !== "da-noi") return "Nối Zalo trước.";
+	if (kenh === "ZALO" && !du.zaloBat) return "chưa bật cho xưởng.";
+	if (kenh === "ZALO" && du.lienKet.loai !== "da-noi") return "bạn chưa nối.";
 	if (kenh === "SLACK" && !du.slackKhop)
-		return "Slack chưa nhận ra bạn — nhờ quản trị viên ghép người ở Kết nối › Slack.";
+		return "chưa nhận ra bạn — nhờ quản trị viên ghép người ở Kết nối › Slack.";
 	return null;
 }
 
-function KhoiKenh({ du }: { du: ThongBaoMau }) {
+export function KhoiKenh({ du }: { du: ThongBaoMau }) {
 	const [chon, setChon] = useState<KenhUuTien>(du.uuTien);
 	const khoaZalo = lyDoKhoa(du, "ZALO");
 	const khoaSlack = lyDoKhoa(du, "SLACK");

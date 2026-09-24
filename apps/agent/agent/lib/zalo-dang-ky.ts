@@ -24,7 +24,10 @@ export async function dangKyWebhook(
 	deps: PhuThuocDangKy = {},
 ): Promise<string> {
 	const fetcher = deps.fetcher ?? fetch;
-	const bien = deps.env ?? { token: zaloToken(), khoa: zaloKhoaWebhook() };
+	const bien = deps.env ?? {
+		token: await zaloToken(),
+		khoa: await zaloKhoaWebhook(),
+	};
 	if (!bien.token) throw new Error("Thiếu ZALO_BOT_TOKEN.");
 	if (thamSo.xoa) {
 		parseZaloDeleteWebhook(

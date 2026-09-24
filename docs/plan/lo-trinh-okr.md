@@ -453,7 +453,7 @@ ngày đổi trạng thái gần nhất. Không sửa dòng cũ, chỉ nối th�
 | 1 | `cay-to-chuc-co-nguoi` | đang dựng | 2026-09-24 | — | Cổng Đáng ký 2026-09-24 (Manh Phan): build, ngưỡng SỐNG ≥ 90% thành viên có phòng ban chính và mọi phòng ban có trưởng, CHẾT < 70% hoặc phải sửa DB, đo lần đầu 2026-10-26; hồ sơ ở `_acceptance/cau-truc-to-chuc` (`c5d3daf3`, nhánh `proto/cau-truc-to-chuc`). Thêm việc: đổi nhãn ô «Mục tiêu» của sheet kế hoạch 30 ngày. Sơ đồ kéo/phóng to để sau lượt 1. Vòng làm mở ngay 2026-09-24 theo điều phối, không đợi 01/10. Hồ sơ nghiệm thu dùng chung `_acceptance/cau-truc-to-chuc/` (slug bản mẫu phải bằng slug hồ sơ); nhánh `feat/cay-to-chuc-co-nguoi`. Cổng Phạm vi duyệt 2026-09-24 (Manh Phan): 15 tiêu chí, 25 phép đo; ô «Mục tiêu» của sheet kế hoạch thành «Thời lượng». Cổng 1.5 duyệt 2026-09-24: kế hoạch 11 việc (`docs/superpowers/plans/2026-09-24-cau-truc-to-chuc.md`); `org.tree` trả bộ phận · chưa xếp · phòng ban chưa có trưởng · người kèm quản lý · độ phủ, là thứ lượt 3 đọc; hai hồ sơ Điều phối sẽ ghim lại vì danh sách phòng ban dời sang Cài đặt › Tổ chức. Đang dựng (S3) |
 | 2 | `vai-chi-okr` | chưa mở | — | — | chốt 2026-09-23 (Manh Phan) |
 | 3 | `dat-okr-trong-crm` | chưa mở | — | — | — |
-| 4 | `cap-nhat-tuan-okr` | chưa mở | — | — | nhắc qua Zalo cần vòng 1–2 và triển khai của `lo-trinh-zalo.md`, xong trước 26/10 · Zalo vòng 1 máy thông 24/09 |
+| 4 | `cap-nhat-tuan-okr` | chưa mở | — | — | nhắc qua Zalo cần vòng 1–2 và triển khai của `lo-trinh-zalo.md`, xong trước 26/10 · Zalo vòng 1 đã lên onehub 24/09 (#105) · vòng 2 chủ kho ký Cổng Bằng chứng 24/09, PR mở |
 | 5 | `toan-canh-okr` | chưa mở | — | — | — |
 | 6 | `so-okr-tu-chay` | chưa mở | — | — | — |
 | 7 | `khep-ky-okr` | chưa mở | — | — | hạn cứng 2026-12-14 |

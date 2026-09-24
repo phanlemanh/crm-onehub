@@ -1,4 +1,5 @@
 import { UU_TIEN } from "@crm/db/kenh-thong-bao";
+import { WEBHOOK_KET } from "@crm/validation/zalo-cau-noi";
 import { z } from "zod";
 
 export const zaloTaoMaOutput = z.object({
@@ -40,5 +41,21 @@ export const zaloXuongOutput = z.object({
 			tenZalo: z.string().nullable(),
 		}),
 	),
+	canManage: z.boolean(),
+	nguonToken: z.enum(["man-hinh", "env"]).nullable(),
+	goiToken: z.string().nullable(),
+	webhook: z.object({
+		trangThai: z.enum(["da-dang-ky", "can-https", "chua-dang-ky"]),
+		url: z.string().nullable(),
+	}),
 });
 export type ZaloXuong = z.infer<typeof zaloXuongOutput>;
+
+export const zaloLuuBotInput = z.object({
+	token: z.string().trim().min(1).optional(),
+});
+export const zaloLuuBotOutput = z.object({
+	tenBot: z.string(),
+	webhook: z.enum(WEBHOOK_KET),
+});
+export const zaloGuiThuOutput = z.object({ kenh: z.enum(["zalo", "slack"]) });
