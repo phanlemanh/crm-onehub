@@ -15,7 +15,7 @@ cá nhân, bước duyệt) là cấu hình của chương trình, không cứng
 | Mốc | Ngày | Nghĩa là |
 | --- | --- | --- |
 | R1 lên production | 2026-10-23 | Cả công ty đặt, cập nhật, xem OKR quý trong CRM; người ngoài khối kinh doanh vào bằng vai «chỉ OKR» |
-| Chạy thử quý 4 | 2026-10-26 → 2026-12-31 | Ban lãnh đạo và các đơn vị sẵn sàng đưa OKR quý 4 đang có vào CRM và cập nhật hằng tuần — thử công cụ, không thử phương pháp |
+| Quý 4 trên CRM, mọi phòng ban | 2026-10-26 → 2026-12-31 | Mọi phòng ban đưa OKR quý 4 vào CRM và cập nhật hằng tuần — chốt 2026-09-24 (Manh Phan). Phòng ban chưa có OKR quý 4 đặt trong tuần đầu |
 | R2 lên production | 2026-11-20 | Số tự chảy từ CRM; rà giữa kỳ, chấm, nhìn lại, mang sang trong công cụ |
 | R3 lên production | 2026-12-18 | Trợ lý AI; cập nhật ngay trong Slack hoặc Zalo |
 | Đóng quý 4 trong công cụ | 2026-12-28 → 2027-01-08 | Lần chấm và nhìn lại đầu tiên chạy thật |
@@ -42,7 +42,7 @@ gantt
   Lượt 9 trợ lý viết và tóm tắt       :r9, 2026-11-23, 8d
   Lượt 10 cập nhật trong chat, rủi ro :r10, after r9, 10d
   section Vận hành
-  Chạy thử quý 4                      :q4, 2026-10-26, 2026-12-31
+  Quý 4 mọi phòng ban                 :q4, 2026-10-26, 2026-12-31
   Nghiệm thu R1                       :milestone, u1, 2026-11-13, 0d
   Đặt OKR năm và quý 1                :okr, 2026-12-07, 2027-01-11
   Đóng quý 4                          :cl, 2026-12-28, 2027-01-08
@@ -50,7 +50,7 @@ gantt
 
 Tốc độ dựng không phải điểm nghẽn: các lượt của Điều phối 30 ngày đi từ Cổng
 Đáng tới merge trong vài giờ tới một ngày rưỡi. Lịch trên chừa chỗ cho ba thứ
-chậm hơn — design-pass, Cổng 1.5 của lượt T3, và phản hồi từ người chạy thử —
+chậm hơn — design-pass, Cổng 1.5 của lượt T3, và phản hồi từ người dùng quý 4 —
 và cho việc khác của CRM chạy song song. Mọi lượt đi **tuần tự**: 32 commit ghim
 lại từ 15/09 là cái giá của nhiều nhánh song song.
 
@@ -131,6 +131,9 @@ cây và gán người ở Cài đặt, kể cả nhập hàng loạt từ bản
   trưởng. Nhập hàng loạt: dán hoặc tải bảng email · phòng ban · bộ phận · trưởng,
   xem trước rồi mới ghi, báo dòng hỏng.
 - Màn Điều phối 30 ngày đổi nhãn theo từ điển mới; lọc theo bộ phận hoạt động.
+- Sheet kế hoạch 30 ngày đổi nhãn ô «Mục tiêu» (đang hiện số ngày, vd «30
+  ngày») sang một chữ không trùng với Mục tiêu của OKR — chốt 2026-09-24
+  (Manh Phan).
 
 **Ngoài phạm vi:** quyền theo đơn vị (lượt 2–3), cấp «nhóm», đồng bộ hệ thống
 nhân sự (TC-07, Chưa làm).
@@ -197,9 +200,8 @@ hạn và mẫu (lượt 8).
 
 **Cảnh ngữ cảnh ở design-pass:** màn chi tiết mục tiêu cạnh sheet Thoả thuận.
 
-**Ngưỡng đo gợi ý:** trong tuần đầu chạy thử, mọi đơn vị tham gia có bộ OKR
-quý 4 ở pha «Đang chạy»; không bộ nào phải sửa trong bảng tính rồi nhập lại
-quá một lần.
+**Ngưỡng đo gợi ý:** đến 2026-11-02, mọi phòng ban có bộ OKR quý 4 ở pha
+«Đang chạy»; không bộ nào phải sửa trong bảng tính rồi nhập lại quá một lần.
 
 ### Lượt 4 — `cap-nhat-tuan-okr` · R1 · T3
 
@@ -223,7 +225,7 @@ XEM-10, QT-05.
   màn Thành viên.
 - Màn chạy tốt ở 390px.
 
-**Ngưỡng đo gợi ý:** trong nhóm chạy thử, ≥ 80% KR có lần cập nhật mỗi tuần,
+**Ngưỡng đo gợi ý:** trên mọi phòng ban, ≥ 80% KR có lần cập nhật mỗi tuần,
 ba tuần liền; trung vị thời gian một lần cập nhật dưới 60 giây — đều từ bảng
 lần cập nhật.
 
@@ -311,7 +313,7 @@ tái cơ cấu giữa kỳ không làm OKR mồ côi.
 XEM-09, TC-06.
 
 **Điều kiện mở lượt:** lượt nặng nhất về số mã, nhẹ nhất về độ khó. Sau bốn
-tuần chạy thử, xếp lại theo điều người dùng thật hỏi nhiều nhất và cắt đôi nếu
+tuần dùng quý 4, xếp lại theo điều người dùng thật hỏi nhiều nhất và cắt đôi nếu
 hợp đồng vượt 15 tiêu chí.
 
 ### Lượt 9 — `tro-ly-okr` · R3 · T2
@@ -356,19 +358,36 @@ thì lượt này lùi.
 
 ## 6. Triển khai cho người dùng
 
+Chốt 2026-09-24 (Manh Phan): **mọi phòng ban áp dụng**, bắt đầu từ OKR quý 4.
+Không có nhóm thí điểm, nên ngày 2026-10-26 là ngày cả công ty vào CRM lần đầu —
+kể cả những người chưa từng dùng nó. Bốn điều kiện phải xong trước ngày đó:
+
+- **Danh sách nhân sự** (email · phòng ban · bộ phận · trưởng) từ nhân sự trước
+  2026-10-16, để quản trị nhập hàng loạt ở lượt 1.
+- **Lượt 2 trên production.** Không mở CRM cho người ngoài khối kinh doanh khi
+  vai «chỉ OKR» chưa lên: nếu lượt 2 trễ, ngày bắt đầu lùi theo tuần, không bỏ
+  lượt 2.
+- **Hướng dẫn và đào tạo.** Một trang ngắn cho mỗi vai (người phụ trách KR,
+  trưởng đơn vị, quản trị) viết trong lượt 5, không đợi sau nó; một buổi 30 phút
+  cho mỗi bộ phận trong tuần 2026-10-19.
+- **Kênh nhắc.** Mỗi người nối Zalo hoặc Slack; màn sức khoẻ chương trình đếm
+  người chưa có kênh nhắc.
+
 | Tuần | Việc | Ai |
 | --- | --- | --- |
-| 2026-10-19 | Quản trị dựng cây tổ chức, nhập người, gán trưởng, gán vai «chỉ OKR» | Quản trị chương trình |
-| 2026-10-26 | Nhập OKR quý 4 đang có từ bảng tính; bật nhắc buổi sáng cho nhóm chạy thử | Trưởng đơn vị chạy thử |
-| 2026-10-26 → 12-31 | Chạy thử quý 4: cập nhật tuần, họp tuần trên màn, phản hồi vào hàng việc | Ban lãnh đạo, đơn vị chạy thử |
-| 2026-11-13 | Phiên nghiệm thu R1 (`/acceptance-gate:uat-session`) với ngưỡng của lượt 1–5 | Chủ sản phẩm, người dùng đại diện |
+| 2026-10-12 → 10-16 | Nhân sự gửi danh sách; ban lãnh đạo gửi OKR quý 4 cấp OneHub nếu đã có | Nhân sự, ban lãnh đạo |
+| 2026-10-19 → 10-23 | Quản trị dựng cây tổ chức, nhập người, gán trưởng, gán vai «chỉ OKR»; đào tạo theo bộ phận; mỗi người nối kênh nhắc | Quản trị chương trình, trưởng bộ phận |
+| 2026-10-26 → 11-02 | Phòng ban đã có OKR quý 4 nhập từ bảng tính; phòng ban chưa có đặt ngay trong CRM, căn chỉnh vào OKR cấp OneHub; công bố trước 2026-11-02; bật nhắc buổi sáng | Trưởng phòng ban |
+| 2026-11-02 → 12-31 | Cập nhật tuần, họp tuần trên màn, phản hồi vào hàng việc | Mọi phòng ban |
+| 2026-11-13 | Phiên nghiệm thu R1 (`/acceptance-gate:uat-session`) với ngưỡng của lượt 1–5; người dùng đại diện lấy từ ít nhất ba bộ phận, có cả người mang vai «chỉ OKR» | Chủ sản phẩm, người dùng đại diện |
 | 2026-12-07 → 12-18 | Ban lãnh đạo đặt OKR năm 2027 cấp OneHub | Ban lãnh đạo |
-| 2026-12-21 → 2027-01-11 | Các đơn vị đặt và công bố OKR quý 1 | Trưởng đơn vị |
-| 2026-12-28 → 2027-01-08 | Chấm và nhìn lại quý 4 trong công cụ | Đơn vị chạy thử |
-| 2027-02-09 | Đo bốn tuần đầu quý 1 toàn công ty — Cổng Giá trị của R1–R3 | Chủ sản phẩm |
+| 2026-12-21 → 2027-01-11 | Các phòng ban đặt và công bố OKR quý 1 | Trưởng phòng ban |
+| 2026-12-28 → 2027-01-08 | Chấm và nhìn lại quý 4 trong công cụ | Mọi phòng ban |
+| 2027-02-09 | Đo bốn tuần đầu quý 1 — Cổng Giá trị của R1–R3 | Chủ sản phẩm |
 
-Hướng dẫn người dùng: một trang ngắn cho mỗi vai (người phụ trách KR, trưởng
-đơn vị, quản trị), viết sau lượt 5, sửa sau phiên nghiệm thu R1.
+Quý 4 chỉ còn chín tuần khi bắt đầu, nên cách đọc tiến độ phải tính từ ngày
+công bố, không từ 2026-10-01: khởi điểm của KR là số tại ngày công bố, vạch kỳ
+vọng đi từ ngày đó tới 2026-12-31.
 
 ## 7. Rủi ro và cách giảm
 
@@ -383,6 +402,10 @@ Hướng dẫn người dùng: một trang ngắn cho mỗi vai (người phụ 
 | Bản rẽ khỏi hãng phình | Mã ở chỗ riêng theo mục 2; kiểm xung đột với `release` mỗi tuần |
 | Test chập chờn làm đỏ CI (vd `claimDue`) | Việc sửa riêng đang chờ; không `--no-verify` |
 | Chi phí AI khi cả công ty dùng | Lượt 9 chỉ mở khi có trần; tóm tắt gom theo đơn vị |
+| R1 trễ làm lỡ ngày mở cho cả công ty | Lùi theo tuần, không cắt lượt 2 hay lượt 4; lượt 5 có thể lên sau ngày mở vài ngày vì cập nhật tuần không cần nó |
+| Cả công ty vào cùng lúc, câu hỏi dồn về một người | Hướng dẫn theo vai và đào tạo theo bộ phận trước ngày mở; một kênh hỏi đáp chung; trưởng bộ phận là tuyến hỏi đầu |
+| Phòng ban đặt OKR vội trong một tuần | Kiểm chất lượng bằng luật (lượt 7) đưa lên sớm nếu lượt 3 còn chỗ; quý 1 có đủ ba tuần đặt |
+| Người mới vào CRM lần đầu thấy màn dữ liệu đối tác | Vai «chỉ OKR» là điều kiện mở; phép đo cho từng đường vào ở lượt 2 |
 
 ## 8. Bảng phủ — mọi mã về đúng một chỗ
 
@@ -425,8 +448,8 @@ ngày đổi trạng thái gần nhất. Không sửa dòng cũ, chỉ nối th�
 
 | # | Slug | Trạng thái | Ngày | PR | Ghi chú |
 | --- | --- | --- | --- | --- | --- |
-| 0 | chuẩn bị | chưa mở | — | — | từ điển · Cổng Đáng của `cau-truc-to-chuc` · design-pass `/proto` OKR |
-| 1 | `cay-to-chuc-co-nguoi` | chưa mở | — | — | đứng trên `cau-truc-to-chuc` |
+| 0 | chuẩn bị | đang dựng | 2026-09-24 | #110 | từ điển · Cổng Đáng của `cau-truc-to-chuc` · design-pass `/proto` OKR. Chốt 2026-09-24 (Manh Phan): mọi phòng ban áp dụng từ quý 4. Từ điển xong: PR #110 gộp 2026-09-24 (`ea4fff80`), thêm mục Bộ phận · Phòng ban · Trưởng đơn vị · vai «chỉ OKR» và các mục OKR. Cổng Đáng `cau-truc-to-chuc` ký 2026-09-24 (Manh Phan) — xem dòng 1. Design-pass bốn màn OKR đang chạy, lấy cây của `/proto/cau-truc-to-chuc` làm khung |
+| 1 | `cay-to-chuc-co-nguoi` | Cổng Đáng | 2026-09-24 | — | Cổng Đáng ký 2026-09-24 (Manh Phan): build, ngưỡng SỐNG ≥ 90% thành viên có phòng ban chính và mọi phòng ban có trưởng, CHẾT < 70% hoặc phải sửa DB, đo lần đầu 2026-10-26; hồ sơ ở `_acceptance/cau-truc-to-chuc` (`c5d3daf3`, nhánh `proto/cau-truc-to-chuc`). Thêm việc: đổi nhãn ô «Mục tiêu» của sheet kế hoạch 30 ngày. Sơ đồ kéo/phóng to để sau lượt 1. Vòng làm mở ngay 2026-09-24 theo điều phối, không đợi 01/10 |
 | 2 | `vai-chi-okr` | chưa mở | — | — | chốt 2026-09-23 (Manh Phan) |
 | 3 | `dat-okr-trong-crm` | chưa mở | — | — | — |
 | 4 | `cap-nhat-tuan-okr` | chưa mở | — | — | nhắc qua Zalo cần vòng 1–2 và triển khai của `lo-trinh-zalo.md`, xong trước 26/10 · Zalo vòng 1 máy thông 24/09 |

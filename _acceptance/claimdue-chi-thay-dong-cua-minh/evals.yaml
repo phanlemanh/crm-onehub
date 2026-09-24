@@ -1,0 +1,100 @@
+schema_version: 1
+feature_slug: claimdue-chi-thay-dong-cua-minh
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.cdt_hang_xom_lanh
+    expected: "exit 0; doc JUnit (khong doc stdout): tests = so it( khai trong file, failures = 0, skipped = 0; in 'hang-xom lanh: N/N bai xanh'. Cung fixture, E3 va E13 cho do"
+    paths: [apps/agent/test/tasks.integration.spec.ts, apps/agent/agent/lib/tasks.ts, _acceptance/claimdue-chi-thay-dong-cua-minh/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.cdt_hang_xom_lanh
+    expected: "exit 0; preload chup moi dong la truoc tung bai, so MOI cot sau bai; script ghep so thu tu bai voi JUnit; ba khoi claimDue/retireExhausted/completeTask: 0 dong 'HANG-XOM-BI-DUNG <bai>' (dong la doi cot) va 0 dong 'HANG-XOM-MAT <bai>' (dong la bien mat); in 'hang-xom lanh: 0 dong la bi dung'. Chieu do cua bo do: E3 (BI-DUNG) va E13 (MAT)"
+    paths: [apps/agent/test/tasks.integration.spec.ts, apps/agent/agent/lib/tasks.ts, _acceptance/claimdue-chi-thay-dong-cua-minh/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.cdt_hang_xom_pha
+    expected: "exit 0 NGHIA LA ban sao pha (loc lai bang RESEARCH) do dung cach: JUnit co ca ba ten CI trong failures VA bo do in HANG-XOM-BI-DUNG cho it nhat mot ten CI; in 'hang-xom pha: do'. Thieu mot ten CI -> exit 1, 'THUOC-KHONG-CAN <ten>'; bo do cam -> exit 1, 'THUOC-KHONG-CAN bo-do-bi-dung'"
+    paths: [apps/agent/test/tasks.integration.spec.ts, _acceptance/claimdue-chi-thay-dong-cua-minh/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.cdt_chung_luot_lanh
+    expected: "exit 0; in 'chung-luot lanh: 16/16 luot xanh'. Moi luot: file tasks doc JUnit tests = N, failures = 0, skipped = 0. 15 luot co thu tu: gieo lai 22 dong identify ngay truoc file tasks va in 'truoc tasks: <k> dong la den han chua thue' voi k >= 22, k < 22 -> exit 1 'GIEO-DA-CAN <thu tu>'. Chin file kia: in ket qua, khong cham"
+    paths: [apps/agent/test/**, apps/agent/agent/lib/tasks.ts, _acceptance/claimdue-chi-thay-dong-cua-minh/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.cdt_chung_luot_pha
+    expected: "exit 0 NGHIA LA thuoc chung-luot can o moi thu tu: ban sao pha thay file tasks, luot 1 cua CA BA thu tu (dau, giua, cuoi) deu co failures > 0 o ban sao; in 'chung-luot pha: do 3/3 thu tu'. Thu tu nao xanh -> exit 1 'THUOC-KHONG-CAN chung-luot <thu tu>'"
+    paths: [apps/agent/test/tasks.integration.spec.ts, _acceptance/claimdue-chi-thay-dong-cua-minh/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.cdt_nhanh_except_co_nguoi_giu
+    expected: "exit 0; ma that: tasks va lanes deu tests = so it( khai, failures = 0; ban guong trong thu muc tam co tasks.ts dot bien (ELSE TRUE o nhanh except): JUnit co 'FAIL claimDue > leaves a visible kind to the visible lane'. Dot bien ma bai do khong do -> exit 1 'NHANH-EXCEPT-MO-COI'; KHONG_DOT_BIEN=1 la luot pha-thu cua chinh thuoc va phai thoat 1 voi thong diep do"
+    paths: [apps/agent/test/tasks.integration.spec.ts, apps/agent/test/lanes.integration.spec.ts, apps/agent/agent/lib/tasks.ts, _acceptance/claimdue-chi-thay-dong-cua-minh/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.check_types_khong_cache
+    expected: "exit 0; moi task kiem kieu thanh cong, 0 cached"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.api
+    expected: "exit 0; moi goi xanh trong mot co so du lieu rieng cua luot"
+    evidence_required: [run_id, exit_code, verifier, verified_at]
+
+  - id: E9
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.lint_khong_cache
+    expected: "exit 0; moi task lint thanh cong, 0 cached"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.lint_slop
+    expected: "exit 0"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.build_khong_cache
+    expected: "exit 0; moi task build thanh cong, 0 cached"
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-8
+    executor: judgment
+    question: "Cac loi goi claimDue trong ba khoi claimDue, retireExhausted, completeTask cua tasks.integration.spec.ts doi tu { except: DIRECT_KINDS } sang { only: [kind] }. Voi tung bai, ten bai hua mot dieu (vd 'does not hand the same row to two dispatchers', 'takes the most urgent first'). Sau khi doi loc, moi bai con do dung dieu ten no hua khong, hay co bai nao khang dinh da rong hoac tu dung (vd luon tra rong bat ke claimDue lam gi)? Rieng bai moi 'leaves a visible kind to the visible lane' giu RESEARCH co y: no co that su do viec lan nghien cuu chua loai hien thi ra khong, va co kin truoc dong la khong?"
+    inputs: [_acceptance/claimdue-chi-thay-dong-cua-minh/contract.md, apps/agent/test/tasks.integration.spec.ts, apps/agent/agent/lib/tasks.ts]
+    evidence_required: [judged_by, verdict, rationale]
+
+  - id: E13
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.cdt_hang_xom_pha_don_bang
+    expected: "exit 0 NGHIA LA bo do bat duoc phuong an bi loai: ban sao giu { only: [kind] } nhung them beforeEach xoa ca bang; bo do in HANG-XOM-MAT cho it nhat mot bai cua ba khoi; in 'hang-xom pha-don-bang: do'. Khong co HANG-XOM-MAT -> exit 1 'THUOC-KHONG-CAN bo-do-mat'"
+    paths: [apps/agent/test/tasks.integration.spec.ts, _acceptance/claimdue-chi-thay-dong-cua-minh/rang/**]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

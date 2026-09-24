@@ -1,0 +1,15 @@
+{
+  "feature_plain": "Bộ kiểm tra tự động của CI thôi đỏ oan khi một phần kiểm tra khác để lại việc chờ trong kho dữ liệu dùng chung — bài kiểm hàng đợi của trợ lý chỉ nhìn việc do chính nó tạo.",
+  "scope_plain": "Chưa bịt nguồn rò (lượt đăng nhập trong phần kiểm tra của API tự xếp việc vô chủ) — đã tách thành việc riêng.",
+  "decisions_plain": [
+    {"id": "d-20260924T011157Z-1", "p": "Chọn cho bài kiểm chỉ nhận việc mang loại riêng của nó, thay vì dọn sạch hàng đợi trước mỗi bài — kín cả khi có người ghi chen giữa chừng; đổi lại phần «làn nghiên cứu» phải có bài khác canh."},
+    {"id": "d-20260924T011157Z-2", "p": "KHÔNG bịt nguồn rò ở phần kiểm tra của API trong vòng này — vòng gọn một file; đổi lại nguồn rò còn đó cho tới khi việc riêng được làm."},
+    {"id": "d-20260924T011157Z-3", "p": "KHÔNG chạy bước quét độ phủ tiêu chí — không gian chỉ là một file kiểm và một đường rò đã chứng; đổi lại độ phủ là ba trục viết tay."},
+    {"id": "d-20260924T011157Z-4", "p": "KHÔNG viết đặc tả giao diện — việc này không có màn hình nào."},
+    {"id": "d-20260924T011157Z-5", "p": "KHÔNG làm bước «thu hồi việc hết lượt» chỉ nhìn việc của bài — hàm thật không nhận bộ lọc và chưa ai để lại việc hết lượt; đổi lại hai bài của khối đó có thể đỏ nếu một ngày có."},
+    {"id": "d-20260924T012331Z-7", "p": "Thêm một bài canh việc «làn nghiên cứu chừa việc hiển thị (logo, ảnh) ra», vì đo thật cho thấy chưa bài nào canh điều đó — giữ nguyên lời hứa của tiêu chí thay vì hạ nó; đổi lại thêm một bài (20 thay vì 19)."},
+    {"id": "d-20260924T014018Z-8", "p": "Hủy kết quả lần chấm đầu vì chính các máy chấm đã sửa và commit vào bài đang chấm; đã hoàn tác, chấm lại bằng một máy chấm độc lập chạy từng lệnh, có kiểm cây không bị đụng; đổi lại tốn thêm một vòng."},
+    {"id": "d-20260924T014018Z-9", "p": "Hai bài từng chỉ khẳng định «không nhận gì» nay phải nhận đúng việc của mình trước — một hàng đợi hỏng kiểu luôn trả rỗng không còn qua mặt được."},
+    {"id": "d-20260924T014409Z-10", "p": "Làm nốt lớp đó cho cả hai bài của khối «thu hồi việc hết lượt» sau khi hội đồng chấm chỉ ra — soát cả 20 bài một lượt thay vì vá từng bài."}
+  ]
+}
