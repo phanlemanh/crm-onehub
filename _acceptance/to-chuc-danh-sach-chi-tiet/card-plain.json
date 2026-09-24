@@ -1,130 +1,8 @@
 {
- "feature_plain": "Quản trị dựng cây tổ chức ngay tại chỗ: chọn một đơn vị trên cây, rồi đặt trưởng, thêm người, gắn nhiều phòng ban và sắp thứ tự trong khung chi tiết bên cạnh; hai ô số đầu trang dẫn thẳng tới chỗ còn thiếu.",
- "will_do": [
-  {
-   "id": "AC-1",
-   "p": "Sẽ mở khung chi tiết của đúng nút bạn bấm trên cây, giữ nút đó trong địa chỉ trang để tải lại hay gửi liên kết vẫn về đúng chỗ."
-  },
-  {
-   "id": "AC-2",
-   "p": "Sẽ cho chọn trưởng phòng ban ngay trong khung chi tiết, chỉ trong số người của phòng ban đó; phòng ban chưa có ai thì nói rõ phải thêm người trước."
-  },
-  {
-   "id": "AC-3",
-   "p": "Sẽ cho gắn nhiều phòng ban vào một bộ phận trong một lần; lô có phòng ban hỏng thì từ chối cả lô, cây không đổi."
-  },
-  {
-   "id": "AC-4",
-   "p": "Sẽ cho thêm nhiều người vào một phòng ban trong một lần, thấy trước ai đang ở phòng ban khác và sẽ chuyển sang."
-  },
-  {
-   "id": "AC-5",
-   "p": "Sẽ sắp thứ tự bộ phận và phòng ban bằng một cách duy nhất: kéo thả trong khung chi tiết, làm được cả bằng bàn phím."
-  },
-  {
-   "id": "AC-6",
-   "p": "Sẽ cho bấm vào hai ô số đầu trang để xem ngay ai chưa có phòng ban và phòng ban nào chưa có trưởng."
-  },
-  {
-   "id": "AC-7",
-   "p": "Sẽ dẫn việc nhập bảng tính qua ba bước, bản xem trước nêu đúng tên đơn vị sẽ được tạo."
-  },
-  {
-   "id": "AC-8",
-   "p": "Sẽ báo lỗi nhập theo đúng cột thiếu — «Thiếu email», «Thiếu phòng ban», hoặc câu riêng cho trưởng bộ phận — thay cho câu gộp của lượt 1."
-  },
-  {
-   "id": "AC-9",
-   "p": "Sẽ cho thành viên thường xem đủ mọi thứ với các nút sửa hiện nhưng mờ; hai việc ghi mới chỉ quản trị làm được."
-  },
-  {
-   "id": "AC-10",
-   "p": "Sẽ hiện hai cột trên màn rộng và khung trượt trên màn hẹp, không tràn ngang ở năm khổ màn cả tiếng Việt lẫn tiếng Anh."
-  },
-  {
-   "id": "AC-11",
-   "p": "Sẽ dùng cùng kiểu đang tải, lỗi, trống, thông báo thành công và lỗi dưới ô như các màn Cài đặt khác."
-  },
-  {
-   "id": "AC-13",
-   "p": "Sẽ giữ nguyên mọi lời hứa đã ký của ba việc trước (cây tổ chức lượt 1, sửa và lưu trữ Điều phối, bốn nút điều phối), chỉ đổi đúng câu lỗi nhập đã nói ở trên."
-  }
- ],
- "wont_do": [
-  {
-   "id": "AC-12",
-   "p": "Sẽ KHÔNG tô đỏ nút lưu trữ nữa, vì lưu trữ khôi phục được; chỉ «Xoá hẳn» còn tô đỏ, ở cả Tổ chức lẫn Điều phối 30 ngày."
-  },
-  {
-   "id": "AC-14",
-   "p": "Chặn việc tự chỉnh giao diện tại chỗ: nút cây và ô số đi thành biến thể dùng chung, cổng thiết kế tĩnh phải sạch."
-  }
- ],
- "scope_plain": "Sơ đồ tổ chức, người đứng đầu OneHub, kéo thả người, mời người mới khi nhập, và các màn Cài đặt khác để sau.",
- "coverage_plain": [
-  {
-   "i": 0,
-   "p": "Trục nút đang chọn: phủ đủ bốn loại nút trên cây — gốc, bộ phận, phòng ban, nhóm chưa có phòng ban (AC-1, AC-6)."
-  },
-  {
-   "i": 1,
-   "p": "Trục việc: phủ mọi việc người lạ vấp khi dựng cây tay, cộng lưu trữ và nhập (AC-2 đến AC-8, AC-12)."
-  },
-  {
-   "i": 2,
-   "p": "Trục vai: phủ quản trị và thành viên thường (AC-9 quyền và chỉ đọc)."
-  },
-  {
-   "i": 3,
-   "p": "Trục khổ màn: phủ màn rộng hai cột và màn hẹp khung trượt, đo ở năm khổ (AC-10)."
-  },
-  {
-   "i": 4,
-   "p": "Áp cho mọi ô: tiếng Việt và tiếng Anh, tên không bị dịch, bàn phím, địa chỉ trang giữ trạng thái, ba trạng thái tải · lỗi · trống, và không làm hỏng ba việc đã ký (AC-10, AC-11, AC-13)."
-  },
-  {
-   "i": 5,
-   "p": "Làm hết AC-1 đến AC-14; phần để sau nằm ở mục ngoài phạm vi và sổ quyết định."
-  },
-  {
-   "i": 6,
-   "p": "Giả định cần bạn gạch: «Thêm người» đổi phòng ban chính và chuyển người đang ở nơi khác sang; muốn thêm ai làm phòng ban phụ thì vẫn làm trong hộp vị trí của từng người."
-  },
-  {
-   "i": 7,
-   "p": "Giả định cần bạn gạch: gắn một phòng ban đang thuộc bộ phận khác thì chuyển nó sang, không từ chối."
-  },
-  {
-   "i": 8,
-   "p": "Giả định cần bạn gạch: lọc «chưa có trưởng» tính cả phòng ban chưa xếp vào bộ phận nào."
-  },
-  {
-   "i": 9,
-   "p": "Giả định cần bạn gạch: màn dưới 1024 điểm ảnh mở chi tiết trong khung trượt, từ 1024 trở lên là hai cột."
-  }
- ],
- "gap_probe_plain": [
-  {
-   "i": 0,
-   "p": "Mở trang từ một liên kết có nút đang chọn chưa được đo — đã thêm phép đo dựng thẳng từ địa chỉ trang cho bốn loại nút và cho bộ lọc."
-  },
-  {
-   "i": 1,
-   "p": "Ba câu lỗi nhập mới chưa được viết ra và phép đo không kiểm câu đúng với cột — đã ghi nguyên văn ba câu vào tiêu chí và đo từng dòng với đúng câu của nó."
-  },
-  {
-   "i": 2,
-   "p": "Bài kiểm đã ký của ba việc trước có thể bị rút bớt khẳng định mà vẫn giữ tên — đã thêm phép đếm khẳng định từng bài và kiểm dòng ghim lại."
-  },
-  {
-   "i": 3,
-   "p": "Ba phép đo «mọi nút», «mọi hộp thoại», «mọi thành phần» chỉ liệt kê một phần — đã đổi sang danh sách đủ viết trước."
-  },
-  {
-   "i": 4,
-   "p": "Chưa có phép đo ghi thật qua trình duyệt rồi tải lại, và thiếu ca người giữ phòng ban làm phòng ban phụ — đã thêm bốn việc ghi thật trên Chrome và ca người phụ."
-  }
- ],
+ "feature_plain": "Người quản trị dựng cây tổ chức trên màn danh sách – chi tiết: chọn một đơn vị trên cây bên trái, sửa ngay bên phải (trưởng, người, gắn nhiều phòng ban, sắp thứ tự), hai ô số lọc được, nhập bảng tính ba bước; màn hẹp mở khung trượt.",
+ "scope_plain": "Sơ đồ tổ chức phóng to, người đứng đầu toàn công ty, kéo thả người, mời người mới từ lô nhập và các màn Cài đặt khác vẫn để sau.",
+ "analyst_plain": "",
+ "decisions": [],
  "decisions_plain": [
   {
    "id": "d-20260924T151310Z-1",
@@ -149,6 +27,62 @@
   {
    "id": "d-20260924T151310Z-6",
    "p": "Dựng bản mẫu bấm được 17 trạng thái trong app thật để bạn duyệt trên hình, không duyệt bằng chữ."
+  },
+  {
+   "id": "d-20260924T152613Z-8",
+   "p": "Bốn thành phần giao diện mới (nút cây, ô số, hộp chọn nhiều, mục đã lưu trữ) nằm trong kho giao diện dùng chung — đổi lại thêm bốn chỗ khác bản của hãng."
+  },
+  {
+   "id": "d-20260924T154820Z-9",
+   "p": "Hai nút đầu trang tự mở hộp của mình giống màn Điều phối; gốc cây mang tên không gian làm việc, thiếu thì ghi «Toàn công ty» — đổi lại nút ở đầu trang và ở khung trống là hai chỗ mở hộp riêng."
+  },
+  {
+   "id": "d-20260924T160515Z-10",
+   "p": "Mỗi dòng trong danh sách kéo sắp có menu «…» riêng; dòng người có nút «Vị trí» thẳng; lưu trữ đúng đơn vị đang xem thì màn về đơn vị cha — đổi lại mỗi dòng thêm một nút nhỏ so với bản mẫu."
+  },
+  {
+   "id": "d-20260924T160720Z-11",
+   "p": "Đổi tên khoá phép đo của vòng này cho khỏi trùng với hồ sơ «tiêu đề cột» — không đổi thứ được đo."
+  },
+  {
+   "id": "d-20260924T160720Z-12",
+   "p": "Hộp nhập rộng hơn nhờ một cỡ mới của hộp thoại dùng chung thay vì chỉnh tại chỗ — đổi lại thêm một chỗ khác bản của hãng."
+  },
+  {
+   "id": "d-20260924T163118Z-13",
+   "p": "Sắp lại bộ phận mà màn đang cũ (thiếu bộ phận vừa thêm) thì bị từ chối kèm câu «tải lại rồi sắp lại», thay vì lặng lẽ ghi trùng vị trí — đổi lại hai bài đã ký chỉnh phần dựng dữ liệu vào."
+  },
+  {
+   "id": "d-20260924T163118Z-14",
+   "p": "Bổ sung hai bài kiểm máy chủ bị sót (đặt trưởng, sắp thứ tự), mỗi bài đã chứng được đỏ khi phá."
+  },
+  {
+   "id": "d-20260924T163118Z-15",
+   "p": "(Đã thay bằng mục sau) Nới cách phép đo lượt 1 đọc khai báo thành phần dùng chung."
+  },
+  {
+   "id": "d-20260924T163118Z-16",
+   "p": "Luật sàn thiết kế cho thẻ trần hiểu là «bố cục và token thiết kế» (cỡ chữ, màu chữ token, viền, bo theo thang) chứ không chỉ bố cục thuần; màu tự đặt, bóng, giá trị tuỳ ý vẫn bị chặn — cần người xác nhận cách hiểu này."
+  },
+  {
+   "id": "d-20260924T163315Z-17",
+   "p": "Bỏ bản nới ở mục trước, lấy cách sửa đúng gốc đã có trên nhánh chính (phép đo lượt 1 neo đúng khoảng của chính nó)."
+  },
+  {
+   "id": "d-20260924T180420Z-18",
+   "p": "Vòng chấm 1 bắt hai lỗi thật: email bị nút «Vị trí» đè ở màn 320, và bước kết quả nhập nêu tên theo bản xem trước; cả hai đã sửa, phép đo màn thật thêm điều kiện «nút không đè chữ»."
+  },
+  {
+   "id": "d-20260924T183308Z-19",
+   "p": "Bước kết quả của hộp nhập nêu đúng tên đơn vị mà lượt ghi tạo, do máy chủ trả (xin bằng một cờ tuỳ chọn) — đổi lại API nhập có thêm một cờ."
+  },
+  {
+   "id": "d-20260924T183308Z-20",
+   "p": "Một bài đã ký của lượt 1 («nhập ghi gửi chữ gốc») đổi giá trị mong đợi: dữ liệu gửi có thêm cờ xin tên — lời hứa của bài giữ nguyên nhưng lệch chữ của tiêu chí «không đổi bài đã ký», cần người phê."
+  },
+  {
+   "id": "d-20260924T183308Z-21",
+   "p": "Phép đo «không hồi quy» chạy lại làn máy ba hồ sơ một lần nếu lượt đầu đỏ, in cả hai lượt — đổi lại một lỗi thật chập chờn một nửa có thể lọt."
   }
  ]
 }
