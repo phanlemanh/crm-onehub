@@ -5,7 +5,7 @@ slug: zalo-goi-thu-hong-hien-dung-bot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui, docs]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-24-zalo-goi-thu-hong-hien-dung-bot-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-24T09:29:31Z
