@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7ddf69e18ba83d4e366f61d4b43b768253da2f60
+verified_commit: da582c9865c0f29c3871bad51cc74e904d5a9dfc
 human_signoff:
 ---
 
@@ -205,3 +205,7 @@ Round 1: toàn bộ 11 eval pass ngay từ lượt đầu — không có vòng s
 ### Re-pin lần 1 — 2026-09-24, do hoá cũ do gộp origin/onehub vào nhánh (mã api và test của hồ sơ khác)
 run_id: repin-20260924T063913Z-89099
 sha: 7ddf69e18ba83d4e366f61d4b43b768253da2f60 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-09-24, do hoá cũ do vòng tien-te-chua-tai-khong-doan chạm ô số tiền, tấm tạo và thêm nhanh
+run_id: repin-20260924T080246Z-15787
+sha: da582c9865c0f29c3871bad51cc74e904d5a9dfc · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
