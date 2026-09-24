@@ -200,7 +200,9 @@ function caBoSot() {
 			`sua — bo-sot: tiem khong vao (so tep ${soTep(sua.r1.ra)}, nguyen ven ${sua.n0})`,
 		),
 		ket(
-			sua.r1.ma === 1 && soSot >= 1 && boSot.includes("apps/app/lib/"),
+			sua.r1.ma === 1 &&
+				soSot === sua.n0 - soTep(sua.r1.ra) &&
+				boSot.includes("/lib/"),
 			`sua — bo-sot: ${boSot.slice(0, 160)}`,
 			`sua — bo-sot: quan he git khong keu (thoat ${sua.r1.ma}, dong ${JSON.stringify(boSot)})`,
 		),

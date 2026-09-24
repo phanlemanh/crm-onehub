@@ -21,7 +21,7 @@ evals:
     criterion: AC-3
     executor: script
     cmd: config:executors.script.ndk_bo_sot
-    expected: "exit 0 khi: ban sao sua moi-mac-dinh.mjs them \"lib\" vao LOAI_TRU (tiem bang thay chuoi, moc vang -> exit 2 goi ten moc); so tep ban sua in ra < ban sao nguyen ven (tiem da vao that); ban sua thoat 1, co dong bat dau 'BO-SOT:' nham so tep bi sot >= 1 va it nhat mot duong dan bat dau 'apps/app/lib/'; ban goc cung ca thoat 1 voi 'DO: neo file' (chi bat vi so tep giam, khong goi ten tep)"
+    expected: "exit 0 khi: ban sao sua moi-mac-dinh.mjs them \"lib\" vao LOAI_TRU (tiem bang thay chuoi, moc vang -> exit 2 goi ten moc); so tep ban sua in ra < ban sao nguyen ven (tiem da vao that); ban sua thoat 1, co dong bat dau 'BO-SOT:' voi so tep bi sot BANG DUNG (so tep nguyen ven - so tep sau tiem) va it nhat mot duong dan chua '/lib/'; ban goc cung ca thoat 1 voi 'DO: neo file' (chi bat vi so tep giam, khong goi ten tep)"
     paths: ["_acceptance/chan-lai-component-ra-man/rang/**", "_acceptance/neo-dan-so-khong-cung/rang/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 

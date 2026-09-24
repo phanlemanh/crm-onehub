@@ -5,7 +5,7 @@ slug: neo-dan-so-khong-cung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [script]
-status: draft
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-24-neo-dan-so-khong-cung-design.md
 approved_by:
 approved_at:
@@ -36,7 +36,7 @@ Thuật ngữ:
 
 - AC-1: Given bản sao có thêm một tệp `.ts` mới đã commit dưới `apps/app/lib` không chứa giá trị mặc định nào, When chạy `dan-so` của bản sửa, Then thoát 0 và số tệp in ra lớn hơn bản sao nguyên vẹn đúng 1; cùng ca, bản gốc thoát 1 với dòng `DO: neo file ghim <neo của bản gốc> nhung do duoc <số nguyên vẹn + 1>`; đối chứng: bản gốc trên bản sao nguyên vẹn thoát 0.
 - AC-2: Given bản sao có thêm một component đã commit với một tham số mang giá trị mặc định là chuỗi có chữ cái, When chạy `dan-so` của bản sửa, Then thoát 1 với dòng `DO: neo mac_dinh ghim <N> nhung do duoc <N+1>`; đối chứng: bản sao nguyên vẹn thì bản sửa thoát 0.
-- AC-3: Given bản sao mà `LOAI_TRU` của bộ duyệt bị thêm tên thư mục `lib`, When chạy `dan-so` của bản sửa, Then số tệp bộ duyệt in ra nhỏ hơn bản sao nguyên vẹn, và thoát 1 với dòng bắt đầu `BO-SOT:` nêu số tệp bị sót và ít nhất một đường dẫn dưới `apps/app/lib`; cùng ca, bản gốc thoát 1 với `DO: neo file` (chỉ bắt được vì số tệp giảm, không gọi tên tệp).
+- AC-3: Given bản sao mà `LOAI_TRU` của bộ duyệt bị thêm tên thư mục `lib`, When chạy `dan-so` của bản sửa, Then số tệp bộ duyệt in ra nhỏ hơn bản sao nguyên vẹn, và thoát 1 với dòng bắt đầu `BO-SOT:` nêu số tệp bị sót BẰNG ĐÚNG số tệp bộ duyệt vừa mất, cùng ít nhất một đường dẫn nằm trong một thư mục `lib`; cùng ca, bản gốc thoát 1 với `DO: neo file` (chỉ bắt được vì số tệp giảm, không gọi tên tệp).
 - AC-4: Given bản sao có thêm một tệp `.ts` CHƯA theo dõi git dưới `apps/app/lib`, When chạy `dan-so` của bản sửa, Then thoát 0 và số tệp in ra lớn hơn bản sao nguyên vẹn đúng 1 (bộ duyệt thấy tệp, quan hệ git không đỏ vì tệp chưa commit); cùng ca, bản gốc thoát 1 với `DO: neo file`.
 - AC-5: Given một bản sao KHÔNG phải kho git (không `git init`), When chạy `dan-so` của bản sửa, Then thoát 2 với dòng `KHONG DO DUOC:` nhắc git — cả khi bản sao nằm ngoài mọi kho, lẫn khi bản sao nằm trong một thư mục bị git bỏ qua của kho khác (gốc git khác gốc đang đo); và bản sao mà cả bốn thư mục gốc rỗng thì vẫn thoát 2 `KHONG DO DUOC: tap nguon rong`.
 - AC-6: Given cây làm việc ở HEAD, When chạy đúng lệnh cổng `cl_tieng_viet_den_man` và `cl_dan_so` trong `_acceptance/config.yaml`, Then cả hai thoát 0.
