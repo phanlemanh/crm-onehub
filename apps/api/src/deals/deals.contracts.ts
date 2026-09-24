@@ -234,7 +234,9 @@ export const dealBoardInput = dealListInput.pick({
 
 export type DealBoardInput = z.infer<typeof dealBoardInput>;
 
-export const dealBoardCardOutput = dealListRowOutput.omit({ fields: true });
+export const dealBoardCardOutput = dealListRowOutput
+	.omit({ fields: true })
+	.extend({ counted: z.boolean() });
 
 export const dealBoardOutput = z.object({
 	columns: z.array(
@@ -242,6 +244,7 @@ export const dealBoardOutput = z.object({
 			stage: stageEnum,
 			count: z.number(),
 			valueCents: z.number().nullable(),
+			countedCount: z.number(),
 			unconverted: z.object({
 				count: z.number(),
 				currencies: z.array(z.string()),

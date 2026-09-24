@@ -11,6 +11,11 @@ to dollars and printed `$2.0M`, silently.)
   converted against a stale base is indistinguishable from a correct one.
   - **`countedWhere(base)` filters every money aggregate.** Counts are deliberately
     *not* filtered, so stage groups read counts and sums from separate queries.
+  - **`isCounted(deal, base)` is the same rule for a row already read** — the deals
+    board sends it as `counted` on every card, with `countedCount` per column, so the
+    board can move a card's value between column totals while a drag is saving.
+    The browser never infers it from `baseAmountCents`: a deal converted against an old
+    reporting currency has one and is still not counted.
   - **`pendingWhere(base)`** = null `baseAmount` *or* wrong `baseCurrency`, and it
     **matches null explicitly** — `{ not: base }` is `NULL`, not true, for a null
     column, so such rows were invisible everywhere.
