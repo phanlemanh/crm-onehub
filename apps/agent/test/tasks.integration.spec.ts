@@ -19,27 +19,14 @@ const VISIBLE_KIND = "brand";
 const VISIBLE_REASON = "test-lease-visible";
 const TOP_PRIORITY = 2_147_483_647;
 
-let testMarker = "";
-
 async function clear() {
 	await db.agentTask.deleteMany({
-		where: {
-			OR: [
-				{ kind: kind },
-				{ reason: VISIBLE_REASON },
-				{ reason: "chung-luot-gieo" },
-				{ reason: "lane-test" },
-				...(testMarker ? [{ reason: testMarker }] : []),
-			],
-		},
+		where: { OR: [{ kind }, { reason: VISIBLE_REASON }] },
 	});
 	await db.contact.deleteMany({ where: { email: { startsWith: "lease-" } } });
 }
 
-beforeEach(() => {
-	testMarker = `chung-luot-test-${crypto.randomUUID()}`;
-	return clear();
-});
+beforeEach(clear);
 afterEach(clear);
 
 async function queue(
@@ -48,7 +35,7 @@ async function queue(
 	return db.agentTask.create({
 		data: {
 			kind,
-			reason: testMarker,
+			reason: "test",
 			dueAt: overrides.dueAt ?? new Date(Date.now() - 1000),
 			priority: overrides.priority ?? 0,
 			budget: 4,
