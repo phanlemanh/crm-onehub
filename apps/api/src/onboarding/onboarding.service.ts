@@ -301,7 +301,9 @@ export class OnboardingService {
 			select: CHON_BO_PHAN,
 		});
 		if (row === null) {
-			throw new NotFoundException(`Không có bộ phận nào mang mã ${input.id}.`);
+			throw new NotFoundException(
+				`Không có phòng ban nào mang mã ${input.id}.`,
+			);
 		}
 		if (row.archivedAt === null) {
 			throw new BadRequestException(ONBOARDING.thongDiep.chuaLuuTru);
@@ -787,7 +789,7 @@ export class OnboardingService {
 		const thieu = ids.filter((id) => !boPhan.some((bp) => bp.id === id));
 		if (thieu.length > 0) {
 			throw new NotFoundException(
-				`Không có bộ phận nào mang mã ${thieu.join(", ")}.`,
+				`Không có phòng ban nào mang mã ${thieu.join(", ")}.`,
 			);
 		}
 
@@ -808,7 +810,7 @@ export class OnboardingService {
 		});
 
 		if (co === null) {
-			throw new NotFoundException(`Không có bộ phận nào mang mã ${id}.`);
+			throw new NotFoundException(`Không có phòng ban nào mang mã ${id}.`);
 		}
 	}
 }
