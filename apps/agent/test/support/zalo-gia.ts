@@ -60,7 +60,7 @@ function hangGiaoKhiMo(dau: TinDen[]) {
 		const den = tu + timeoutGiay;
 		while (hang.length > 0 && (hang[0]?.giay ?? den) < tu) hang.shift();
 		const dauHang = hang[0];
-		if (dauHang && dauHang.giay <= den) {
+		if (dauHang && dauHang.giay < den) {
 			hang.shift();
 			giay = dauHang.giay;
 			return Response.json(dauHang.than);
