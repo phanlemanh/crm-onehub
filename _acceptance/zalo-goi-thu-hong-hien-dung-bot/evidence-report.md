@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: e5dd707c31d5334044f0f742a27eabcf34055c8f
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-24
 ---
 
 # Evidence Report: zalo-goi-thu-hong-hien-dung-bot

@@ -5,7 +5,7 @@ slug: zalo-goi-thu-hong-hien-dung-bot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui, docs]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-24-zalo-goi-thu-hong-hien-dung-bot-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-24T09:29:31Z
@@ -69,3 +69,17 @@ Quét bằng `morphological-scan` (`_acceptance/zalo-goi-thu-hong-hien-dung-bot/
 - Hai ca `goi-nguoc: b`, `goi-nguoc: c` của spec đã ký `noi-zalo-cho-nguoi-moi` ghim
   `outcome: "invalid"` cho nhánh gọi thử hỏng; vòng này đổi đúng vế đó (xem sổ quyết định).
   Hồ sơ `_acceptance/noi-zalo-cho-nguoi-moi/` không bị chạm.
+
+### Known limits (Cổng Bằng chứng, 2026-09-24)
+
+- Ngoài-1: cờ «zalo-tu-choi» mà nhánh `setWebhook` `ok: false` hay lỗi mạng đặt (AC-17
+  hồ sơ vòng 2) cũng chặn nhịp ghi lại `zaloWebhookUrl`. Nếu sau đó một lỗi `getMe` hay
+  một 404 thoáng qua làm url về null, màn báo «Zalo chưa giao tin nhắn về CRM» cho tới
+  khi có người bấm «Đăng ký lại», dù tin vẫn về. Sửa tận gốc cần tách lý do (lật
+  AC-16/AC-17 đã ký) hoặc thêm cột.
+- Ngoài-2: ô 13 «nhịp chen» của E4 chỉ bắt kiểu đọc-rồi-ghi đọc cờ trước lời gọi
+  `getWebhookInfo`; kiểu đọc ngay trước lúc ghi không bị bắt.
+- Ngoài-3: spec API `zalo-goi-thu-hong.spec.ts` không đếm lời gọi `getWebhookInfo` và
+  không có đối chứng dương cho nhịp ghi url khi không có cờ.
+- Ngoài-4: tự kiểm của `rang/giu-da-ky.mjs` chỉ chứng luật dải dòng; luật từ khoá
+  `outcome`/`webhook` chưa từng được chứng minh đỏ.
