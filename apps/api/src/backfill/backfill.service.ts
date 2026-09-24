@@ -3,7 +3,13 @@ import { type Db, EnrichmentStatus, type Prisma } from "@crm/db";
 import { PRIORITY } from "@crm/db/agent-tasks";
 import { readWorkspaceIdentity } from "@crm/db/workspace";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
-import { Inject, Injectable, Logger, type OnModuleInit } from "@nestjs/common";
+import {
+	Inject,
+	Injectable,
+	Logger,
+	type OnModuleDestroy,
+	type OnModuleInit,
+} from "@nestjs/common";
 import type { Cache } from "cache-manager";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { FaviconService } from "../companies/favicon.service";
@@ -45,8 +51,10 @@ const RECHECK_BRAND_AFTER_MS = 30 * 24 * 60 * 60_000;
 const RECHECK_WORKSPACE_AFTER_MS = 7 * 24 * 60 * 60_000;
 
 @Injectable()
-export class BackfillService implements OnModuleInit {
+export class BackfillService implements OnModuleInit, OnModuleDestroy {
 	private readonly logger = new Logger(BackfillService.name);
+
+	private stopped = false;
 
 	constructor(
 		@InjectDatabase() private readonly db: Db,
@@ -58,8 +66,13 @@ export class BackfillService implements OnModuleInit {
 
 	onModuleInit(): void {
 		onSignedIn(() => {
+			if (this.stopped) return;
 			void this.auto();
 		});
+	}
+
+	onModuleDestroy(): void {
+		this.stopped = true;
 	}
 
 	async auto(): Promise<{ started: boolean }> {

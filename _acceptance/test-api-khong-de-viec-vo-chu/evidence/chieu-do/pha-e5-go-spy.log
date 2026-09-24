@@ -1,0 +1,10 @@
+test-run: crm_muf22kld866p_test is this run's database (TEST_RUN_ID=muf22kld866p)
+co so du lieu: crm_muf22kld866p_test
+da gieo lien he le cmuf22lgw0000xkcfmvikwoxu
+ 598 pass
+ 0 fail
+co so du lieu: crm_muf22kld866p_test
+agentTask moi trang thai: [["identify",1]]
+goi api de lai hang: agentTask chua xong=1 (cua lien he le=1) lien he=0 cong ty=0
+viec: [{"kind":"identify","contactId":"cmuf22lgw0000xkcfmvikwoxu","companyId":null}]
+test-run: dropped crm_muf22kld866p_test

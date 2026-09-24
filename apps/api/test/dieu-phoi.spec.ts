@@ -1,8 +1,9 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import { OnboardingService } from "../src/onboarding/onboarding.service";
 import {
 	batLoi,
+	donGieo,
 	gieoBaBuoc,
 	gieoCaNhan,
 	gieoCongTy,
@@ -10,6 +11,8 @@ import {
 	gieoKeHoachVaCaNhan,
 	gieoNguoi,
 } from "./dieu-phoi-gieo";
+
+afterAll(donGieo);
 
 async function dungDichVu(): Promise<OnboardingService> {
 	return new OnboardingService(db);
