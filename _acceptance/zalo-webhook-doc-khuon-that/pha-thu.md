@@ -35,3 +35,7 @@ và kiểm `git status` sạch trước lượt kế. Lệnh test chạy trong `
 - **Lượt phá đầu tiên thoát 1 mà không chạy test nào.** Nguyên nhân là đường dẫn
   tính từ gốc kho được đưa vào sau `cd apps/agent`. Lượt đó không tính; mọi hàng
   ở bảng trên lấy từ lượt chạy lại có dòng `(fail)` và thông điệp.
+- **Sau khi sửa theo `lint:slop` (`101e560f`), E1 và E3 được phá lại.** `ghiSaiKhuon` nay
+  nhận bản mô tả thân thay cho thân, và bộ gom log tuần tự hoá mọi đối số bằng
+  `Bun.inspect`. Lượt phá lại: E1 và E3 (1) đỏ như cũ. Bản phá E3 (2) phải dời sang
+  chỗ gọi, nối `JSON.stringify(than)` vào lý do; nó đỏ `b: log khong mang noi dung tin`.
