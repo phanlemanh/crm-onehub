@@ -177,7 +177,7 @@ evals:
       - "apps/app/test/to-chuc.dom.tsx"
     expected: |
       Man To chuc voi tRPC gia lap GHI LAI moi loi goi theo "<router>.<thu tuc>". Ma tran viet
-      truoc 4 thao tac: luu tru phong ban tu menu tren cay · hoan tac · khoi phuc trong "Da luu
+      truoc 4 thao tac: luu tru phong ban tu menu dong trong khung chi tiet bo phan (qua hop xac nhan) · hoan tac · khoi phuc trong "Da luu
       tru" · xoa han trong "Da luu tru" (qua hop xac nhan). Moi thao tac: dung 1 loi goi
       org.<archive|restore|restore|purge>Department voi input {"id":"<id phong ban>"} (4 x 2 = 8);
       sau ca 4 thao tac, tap loi goi co tien to "onboarding." va ten ket thuc "Department" = rong (1).
@@ -187,7 +187,8 @@ evals:
       van, hang van trong danh sach (2); org.restoreDepartment tra cau tu choi -> toast nguyen van,
       hang van trong danh sach (2). Tong 15.
       CHIEU DO: ban sao da-luu-tru-to-chuc.tsx goi lai onboarding.purgeDepartment -> do
-      "xoa han: org.purgeDepartment 0 loi goi"; ban sao hien toast chung -> do
+      "xoa han: org.purgeDepartment 0 loi goi"; ban sao xac-nhan-luu-tru.tsx goi lai
+      onboarding.archiveDepartment -> do "luu tru: org.archiveDepartment 0 loi goi"; ban sao hien toast chung -> do
       "xoa han tu choi: toast khac cau may chu".
 
   - id: E7b
@@ -218,8 +219,8 @@ evals:
       test/) tim "onboarding.(createDepartment|updateDepartment|reorderDepartments|archiveDepartment|
       restoreDepartment|purgeDepartment)". In so tep da quet (> 0). Tim thay -> exit 1 kem
       duong dan:dong. CHIEU DO cung lan: ban guong tmpdir chen "trpc.onboarding.purgeDepartment"
-      vao da-luu-tru-to-chuc.tsx -> phai bat voi thong diep ghim "man web goi duong ghi cu:
-      apps/app/app/(app)/[slug]/settings/organization/da-luu-tru-to-chuc.tsx". Khong bat -> exit 2.
+      vao xac-nhan-luu-tru.tsx -> phai bat voi thong diep ghim "man web goi duong ghi cu:
+      apps/app/app/(app)/[slug]/settings/organization/xac-nhan-luu-tru.tsx". Khong bat -> exit 2.
 
   - id: E9
     criterion: AC-7
@@ -233,7 +234,7 @@ evals:
       - "apps/api/test/**"
       - "apps/app/test/**"
     expected: |
-      Doc diff cua moi tep kiem thuoc bay ho so da ky va bang dem (hai tep do script
+      Doc diff cua moi tep kiem thuoc tam ho so da ky va bang dem (hai tep do script
       rang/ho-so-da-ghim.mjs sinh tu base cua vong, khong chep tay; bang dem liet ke cho tung tep so
       khang dinh expect/ok truoc va sau). Voi MOI khang dinh (expect/toBe/toEqual/ok(...)) bi xoa hoac doi trong diff:
       chi ra khang dinh thay the chung CUNG dieu (cung doi tuong, cung quan he, khong noi nguong,
@@ -243,7 +244,7 @@ evals:
       "sap xep" cua sua-luu-tru.spec: phai giu nguyen khang dinh thu tu c,a,b VA vi tri tuyet doi
       c:0, a:1, b:2 (gieo ba phong ban trong mot bo phan rieng cua bai kiem). PASS khi
       khong co khang dinh nao bi bo hay noi; FAIL neu co, kem duong dan:dong. Kiem them: moi ho so
-      trong bay co dong revisit moi trong decisions.jsonl nhac ten tep kiem cua no.
+      trong tam co dong revisit moi trong decisions.jsonl nhac ten tep kiem cua no.
 
   - id: E10
     criterion: AC-8
@@ -263,15 +264,15 @@ evals:
       (a) TAP BI CHAM rut bang may: moi ho so trang thai signed-off / machine-cleared /
       da-cham-boi-thuc-te / verified (tru chinh mot-duong-ghi-phong-ban) co it nhat mot eval
       test/script ma lenh (giai config: ref qua _acceptance/config.yaml) nhac toi mot tep kiem nam
-      trong git diff --name-only <base> HEAD. Tap nay phai BANG dung bay slug viet truoc trong
+      trong git diff --name-only <base> HEAD. Tap nay phai BANG dung tam slug viet truoc trong
       contract AC-7 (1); lech -> in slug thua/thieu.
       (b) Voi moi slug cua tap: dong kind "repin" CUOI trong run-log.jsonl co evals_exit khong rong,
       moi gia tri = 0, suites_exit toan 0 (2); sha cua dong do == verified_commit trong frontmatter
       evidence-report.md (1); git diff --name-only <sha> HEAD khong co tep nao ngoai _acceptance/ va
-      ngoai risk_tiers.t1_skip_globs (1). 7 x 4 = 28. Bay slug chung MOT run_id (1).
+      ngoai risk_tiers.t1_skip_globs (1). 8 x 4 = 32. Tam slug chung MOT run_id (1).
       (c) Chay "bash scripts/pre-merge-check.sh . --base origin/onehub" KHONG --slug: moi dong
       VIOLATION trong dau ra chi duoc nhac chinh [mot-duong-ghi-phong-ban] (ho so dang cham, chua co
-      bang chung la dung luc nay); so dong VIOLATION cua ho so khac = 0 (1). Tong 31.
+      bang chung la dung luc nay); so dong VIOLATION cua ho so khac = 0 (1). Tong 35.
       Sinh them hai tep cho E9: bai-kiem-da-ky.diff (git diff <base> HEAD tren cac tep kiem cua tap
       bi cham) va bai-kiem-dem.md (moi tep: so khang dinh expect( / ok( truoc va sau).
       CHIEU DO cung lan, tren ban sao trong bo nho: (1) doi evals_exit cua mot eval thanh 1 trong dong

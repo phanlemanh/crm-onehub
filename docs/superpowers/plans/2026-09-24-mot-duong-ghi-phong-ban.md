@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Mọi thao tác ghi phòng ban đi qua `org.*` với một bộ luật; sáu thủ tục ghi `onboarding.*Department` bị gỡ; điều kiện «xoá hẳn được» là một hàm; bảy hồ sơ đã ký được sửa bài kiểm và ghim lại bằng một lượt làn máy.
+**Goal:** Mọi thao tác ghi phòng ban đi qua `org.*` với một bộ luật; sáu thủ tục ghi `onboarding.*Department` bị gỡ; điều kiện «xoá hẳn được» là một hàm; tám hồ sơ đã ký được sửa bài kiểm và ghim lại bằng một lượt làn máy.
 
-**Architecture:** Thêm `org.archiveDepartment` / `restoreDepartment` / `purgeDepartment` vào `ToChucService` + `ToChucRouter`, cùng một hàm thuần `lyDoKhongXoaPhongBan` trong `apps/api/src/to-chuc/xoa-phong-ban.ts` mà `cay.ts`, `org.purgeDepartment` và `onboarding.listDepartments` cùng gọi. Bài kiểm của bảy hồ sơ chuyển sang `org.*` TRƯỚC khi gỡ đường cũ, để mỗi bước giữa chừng vẫn xanh. Màn Tổ chức đổi bốn chỗ gọi.
+**Architecture:** Thêm `org.archiveDepartment` / `restoreDepartment` / `purgeDepartment` vào `ToChucService` + `ToChucRouter`, cùng một hàm thuần `lyDoKhongXoaPhongBan` trong `apps/api/src/to-chuc/xoa-phong-ban.ts` mà `cay.ts`, `org.purgeDepartment` và `onboarding.listDepartments` cùng gọi. Bài kiểm của tám hồ sơ chuyển sang `org.*` TRƯỚC khi gỡ đường cũ, để mỗi bước giữa chừng vẫn xanh. Màn Tổ chức (bản cây điều hướng + khung chi tiết của vòng `to-chuc-danh-sach-chi-tiet`) đổi bốn chỗ gọi.
 
 **Tech Stack:** NestJS + nestjs-trpc (`bun run trpc:generate` sinh `apps/api/src/generated/server.ts`), trpc-to-openapi (REST dưới `/rest`), Prisma, bun:test + supertest, React DOM test với `setup-dom.ts`.
 
@@ -17,7 +17,7 @@
 - Mọi thủ tục ghi `org.*` gọi `this.toChuc.yeuCauQuanTri(ctx.user.id)` trước (`docs/api.md` «The organization tree»).
 - Chỉ đổi đúng bốn chỗ gọi trong `apps/app/app/(app)/[slug]/settings/organization/`; không đổi hình, nhãn, `className`.
 - Không chạm `packages/auth`, middleware, `packages/db/prisma` (lượt 2 OKR chạy song song ở đó).
-- Bài kiểm của hồ sơ đã ký: chỉ đổi đường gieo, đường gọi, tên gieo (hậu tố riêng), hai câu của AC-3, gỡ giả lập của thủ tục không còn khi không khẳng định nào đọc nó — và MỘT ngoại lệ chờ duyệt ở Gate 1.5 (xem Task 4, `noi-bon-nut.spec.ts`).
+- Bài kiểm của hồ sơ đã ký: chỉ đổi đường gieo, đường gọi, tên gieo (hậu tố riêng), hai câu của AC-3, gỡ giả lập của thủ tục không còn khi không khẳng định nào đọc nó — và MỘT ngoại lệ đã duyệt d-20260924T154916Z-16 (Task 4, `noi-bon-nut.spec.ts`).
 - Mỗi phép đo mới có cặp hai chiều trên cùng fixture: vật lành → xanh; phá vật thật (sửa tạm mã nguồn rồi `git checkout` trả lại) → đỏ với thông điệp ghim.
 - Năm lệnh chứng từ gốc kho: `bun run test`, `bun run check-types`, `bun run lint`, `bun run lint:slop`, `bun run build`.
 
@@ -42,10 +42,10 @@
 | `apps/api/src/onboarding/onboarding.router.ts`, `onboarding.contracts.ts`, `onboarding-config.ts` | gỡ sáu thủ tục, schema và câu chỉ chúng dùng | 3 |
 | `apps/api/src/generated/server.ts` | sinh lại | 1, 3 |
 | `apps/api/test/mot-duong-ghi-phong-ban.spec.ts` (mới) | E1, E3, E4, E5, E6 | 1, 3 |
-| `apps/app/app/(app)/[slug]/settings/organization/cay-to-chuc.tsx`, `da-luu-tru-to-chuc.tsx` | đổi bốn chỗ gọi | 5 |
+| `apps/app/app/(app)/[slug]/settings/organization/xac-nhan-luu-tru.tsx`, `da-luu-tru-to-chuc.tsx` | đổi bốn chỗ gọi | 5 |
 | `apps/app/test/to-chuc.dom.tsx` | E7 + mock theo router | 5 |
-| Bài kiểm của bảy hồ sơ (bảng Task 4) | đổi sang `org.*` | 4 |
-| `_acceptance/<7 slug>/decisions.jsonl` | dòng `revisit` | 4 |
+| Bài kiểm của tám hồ sơ (bảng Task 4) | đổi sang `org.*` | 4 |
+| `_acceptance/<8 slug>/decisions.jsonl` | dòng `revisit` | 2 |
 | `_acceptance/mot-duong-ghi-phong-ban/rang/mot-cho-ghi.mjs` (mới) | E2, E8 | 3 |
 | `_acceptance/mot-duong-ghi-phong-ban/rang/ho-so-da-ghim.mjs` (mới) | E10 + sinh tệp cho E9 | 6 |
 | `docs/api.md` | mục «The organization tree» | 6 |
@@ -343,18 +343,18 @@ Lần lượt, mỗi lần một chỗ, chạy lại đúng `-t` rồi `git chec
 
 ---
 
-### Task 2: Dòng `revisit` ở bảy hồ sơ đã ký
+### Task 2: Dòng `revisit` ở tám hồ sơ đã ký
 
-`independent: false` · phục vụ E9 · verify: `for s in <7 slug>; do tail -1 _acceptance/$s/decisions.jsonl | python3 -m json.tool >/dev/null && echo $s; done`
+`independent: false` · phục vụ E9 · verify: `for s in <8 slug>; do tail -1 _acceptance/$s/decisions.jsonl | python3 -m json.tool >/dev/null && echo $s; done`
 
-**Files:** `_acceptance/{dieu-phoi-30-ngay-dau,test-api-khong-de-viec-vo-chu,quan-ly-danh-muc-30-ngay,noi-bon-nut-dieu-phoi,khuon-mat-bo-phan,sua-luu-tru-dieu-phoi,cau-truc-to-chuc}/decisions.jsonl`
+**Files:** `_acceptance/{dieu-phoi-30-ngay-dau,test-api-khong-de-viec-vo-chu,quan-ly-danh-muc-30-ngay,noi-bon-nut-dieu-phoi,khuon-mat-bo-phan,sua-luu-tru-dieu-phoi,cau-truc-to-chuc,to-chuc-danh-sach-chi-tiet}/decisions.jsonl`
 
 - [ ] **Step 1:** Với mỗi hồ sơ, append ĐÚNG khối lệnh `DEC-ID-RECIPE` của feature-loop (mỗi dòng một lần chạy), `"type":"revisit","stage":"gate2"`, `decision` nêu tên tệp kiểm đổi và câu «vòng mot-duong-ghi-phong-ban gỡ đường ghi onboarding.*Department; bài kiểm chuyển sang org.*, không bỏ hay nới khẳng định nào», `impact` «hồ sơ ghim lại bằng làn máy trong cùng PR». Riêng `cau-truc-to-chuc`: thêm «hai câu từ chối xoá phòng ban đổi theo d-…-3 của mot-duong-ghi-phong-ban; E1b nay gieo qua org.createDepartment». Riêng `test-api-khong-de-viec-vo-chu`: «không đổi tệp của hồ sơ; dieu-phoi.spec.ts nó chạy lại đã đổi đường gieo».
-- [ ] **Step 2: Commit** — `acceptance: dòng revisit cho bảy hồ sơ có bài kiểm đi qua đường ghi phòng ban cũ`.
+- [ ] **Step 2: Commit** — `acceptance: dòng revisit cho tám hồ sơ có bài kiểm đi qua đường ghi phòng ban cũ`.
 
 ---
 
-### Task 4 (chạy trước Task 3): Chuyển bài kiểm của bảy hồ sơ sang `org.*`
+### Task 4 (chạy trước Task 3): Chuyển bài kiểm của tám hồ sơ sang `org.*`
 
 `independent: false` · phục vụ E9, E10 · verify: từng lệnh eval của hồ sơ đó trong `_acceptance/config.yaml` (bảng dưới), rồi `bun run test`.
 
@@ -368,14 +368,16 @@ Luật chung: mỗi khẳng định giữ nguyên chữ; chỉ đổi dòng gieo
 | `apps/api/test/khuon-mat-bo-phan.spec.ts` | thêm `goiOrg(thuTuc, vao)` post `/api/trpc/org.${thuTuc}`; `taoBoPhan` → `goiOrg("createDepartment", { name, divisionId: null })` và trả `{ id, name, purgeable: false }`; mọi `goi("archiveDepartment"|"restoreDepartment"|"purgeDepartment", …)` → `goiOrg(…)`. `coTheXoa` vẫn đọc `onboarding.listDepartments`. | `kmbp_*` (4 khoá) |
 | `apps/api/test/sua-luu-tru.spec.ts` | `goi` nhận tên đầy đủ khi có dấu chấm: `` `/api/trpc/${thuTuc.includes(".") ? thuTuc : `onboarding.${thuTuc}`}` ``; mọi `create/update/archive/restore/purgeDepartment` → `org.createDepartment` (thêm `divisionId`), `org.renameDepartment`, `org.archiveDepartment`, `org.restoreDepartment`, `org.purgeDepartment`; `taoBoPhan(divisionId = null)` trả `{ id, name, position, purgeable: false }` (đọc `position` từ DB). `api-bo-phan` «sắp xếp»: gieo `a,b,c` trong `bp = org.createDivision(ma("Khoi"))`, rồi `org.moveDepartment({ id: c, divisionId: bp, index: 0 })` — giữ nguyên CẢ khẳng định thứ tự `c,a,b` lẫn vị trí `c:0, a:1, b:2`. `api-quyen`: bảng `CAU_HINH` giữ 11 dòng — `org.createDepartment`, `org.renameDepartment`, `org.moveDepartment` (thay `reorderDepartments`, `{ id: dX.id, divisionId: null, index: 0 }`), `org.archiveDepartment`, `org.restoreDepartment`, `org.purgeDepartment` + năm dòng khuôn; `soAssert` vẫn 11; «chủ tạo bộ phận» → `org.createDepartment`. | `slt_api_*` (9 khoá) |
 | `apps/api/test/to-chuc.spec.ts` | `du-lieu-cu`: `tao("onboarding.createDepartment", { name })` → `pbMoi`-dạng `tao("org.createDepartment", { name, divisionId: null })`; mọi `onboarding.archiveDepartment` / `restoreDepartment` / `purgeDepartment` → `org.*`; ca 6 câu → `"Phòng ban còn bước kế hoạch trỏ tới nên không xoá hẳn được."`, ca 10 câu → `"Chỉ xoá hẳn được đơn vị đã lưu trữ."` (hai câu của AC-3); `dungDauVaoHopLe`: bỏ sáu khoá `onboarding.*`, thêm `"org.archiveDepartment": { id: pbTrong() }`, `"org.restoreDepartment"`, `"org.purgeDepartment"` (`{ id: pbLuu() }`), `pbLuu` gọi `org.archiveDepartment`. Bộ lọc `thuTucGhi` GIỮ vế `/^onboarding\.\w*Department/`. | `ttc_du_lieu_cu`, `ttc_vong_doi_don_vi`, `ttc_luu_tru`, `ttc_quyen` |
-| `apps/api/test/to-chuc-nhap.spec.ts:192,379,381` | `onboarding.archiveDepartment` / `restoreDepartment` → `org.*` | `ttc_nhap_xem_truoc`, `ttc_nhap_ghi` |
+| `apps/api/test/to-chuc-nhap.spec.ts` | mọi `onboarding.archiveDepartment` / `restoreDepartment` → `org.*` (tìm bằng `grep -n onboarding\.`) | `ttc_nhap_xem_truoc`, `ttc_nhap_ghi` |
+| `apps/api/test/to-chuc-chi-tiet.spec.ts:61` | `onboarding.archiveDepartment` → `org.archiveDepartment` | `tcds_*` API (các khoá chạy `to-chuc-chi-tiet.spec.ts`) |
+| `apps/app/test/to-chuc-chi-tiet.dom.tsx:238-240` | chuyển ba mock `archiveDepartment`, `restoreDepartment`, `purgeDepartment` (cùng khoá, cùng thân) từ khối `onboarding` sang khối `org` | `tcds_*` DOM (các khoá chạy `to-chuc-chi-tiet.dom.tsx`) |
 | `apps/app/test/sua-luu-tru.dom.tsx` | chuyển các mock `archiveDepartment`, `restoreDepartment`, `purgeDepartment` (cùng khoá, cùng thân `ghi`) từ khối `onboarding` sang `orgMock()`; `orgMock().createDepartment` đổi từ `khong("orgCreateDepartment")` sang `thuTuc("createDepartment", khongDoc, ghi("createDepartment", () => {}))` để khẳng định «đổi tên không tạo mới» vẫn đo `createDepartment` thật; gỡ mock `onboarding.createDepartment`, `updateDepartment`, `reorderDepartments`; `ONBOARDING.thongDiep.boPhanTrongKhuon([...])` → `TO_CHUC.thongDiep.phongBanTrongKhuon([...])` (cùng chuỗi). | `slt_*` DOM (14 khoá) |
 | `apps/app/test/noi-bon-nut.dom.tsx` | gỡ mock `onboarding.createDepartment` (dùng `departmentCreateInput` sắp bị gỡ), `updateDepartment`, `archiveDepartment`, `restoreDepartment`, `purgeDepartment`, `reorderDepartments` và import `departmentCreateInput`; thêm `archiveDepartment`, `restoreDepartment`, `purgeDepartment` vào `orgMock()` dạng `khong(…)`. Trước khi gỡ: `grep -n 'soGoi("\(update\|archive\|restore\|purge\|reorder\)Department")\|dauVaoCuoi("\(update\|archive\|restore\|purge\|reorder\)Department")'` phải rỗng. | `nbn_*` DOM (8 khoá) |
 | `apps/app/test/dieu-phoi-xoa-ghi-danh.dom.tsx:119-122` | gỡ bốn dòng mock `createDepartment`, `updateDepartment`, `archiveDepartment`, `reorderDepartments` sau khi `grep` như trên rỗng | `dp30_xoa_co_xac_nhan` |
 
 - [ ] **Step 1:** Sửa từng tệp theo bảng, chạy lệnh verify của tệp đó ngay sau khi sửa (xanh trên cây còn đường cũ).
 - [ ] **Step 2:** `bun run test` xanh; `bun run check-types`, `bun run lint`.
-- [ ] **Step 3: Commit** — `test: bài kiểm của bảy hồ sơ đi qua org.* thay đường ghi phòng ban cũ`.
+- [ ] **Step 3: Commit** — `test: bài kiểm của tám hồ sơ đi qua org.* thay đường ghi phòng ban cũ`.
 
 ---
 
@@ -399,43 +401,44 @@ Luật chung: mỗi khẳng định giữ nguyên chữ; chỉ đổi dòng gieo
 
 `independent: false` · phục vụ E7, E8 · verify: `cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc.dom.tsx`, `bun _acceptance/mot-duong-ghi-phong-ban/rang/mot-cho-ghi.mjs app`
 
-**Files:** `apps/app/app/(app)/[slug]/settings/organization/cay-to-chuc.tsx:181-187`, `da-luu-tru-to-chuc.tsx:34-38`, `apps/app/test/to-chuc.dom.tsx`
+**Files:** `apps/app/app/(app)/[slug]/settings/organization/xac-nhan-luu-tru.tsx:27-33`, `da-luu-tru-to-chuc.tsx:29-33`, `apps/app/test/to-chuc.dom.tsx`
 
 - [ ] **Step 1: Mock theo router.** Trong `to-chuc.dom.tsx`: thêm `let duongGoi: string[] = []`; `thuTuc(ten, doc, router = "org")` ghi thêm `duongGoi.push(\`${router}.${ten}\`)` trong `viet`; khối `org` thêm `archiveDepartment`, `restoreDepartment`, `purgeDepartment` (cùng khoá `daGoi` như cũ); khối `onboarding` bỏ ba mock đó và bọc bằng `new Proxy(...)` trả `thuTuc(key, khongDoc, "onboarding")` cho mọi khoá kết thúc bằng `Department` để một lời gọi lạc được GHI thay vì làm sập màn. Reset `duongGoi` cùng chỗ reset `daGoi`. Khẳng định cũ (`cheDo` khoá `archiveDepartment`, `daGoi`) giữ nguyên.
-- [ ] **Step 2: Viết E7 `mdg-man-goi-org`** — bốn thao tác (lưu trữ `pb-1` từ menu → hoàn tác trên toast → khôi phục `pb-cu` trong «Đã lưu trữ» → xoá hẳn `pb-cu` qua hộp xác nhận); mỗi thao tác: `duongGoi.filter(x => x === "org.<thủ tục>").length` === 1 và `dauVaoCuoi` === `{"id":"<id>"}` (8); `duongGoi.filter(x => x.startsWith("onboarding.") && x.endsWith("Department"))` === `[]` (1). Ba ca từ chối, câu lấy từ `TO_CHUC.thongDiep` import từ `../../api/src/to-chuc/to-chuc-config` (như `TO_CHUC.thongDiep.nhap` đã được import ở tệp này): `archiveDepartment` → `phongBanConNguoi(2)`, toast nguyên văn + `pb-1` còn trong cây; `purgeDepartment` → `phongBanConBuoc`, toast + hàng `pb-cu` còn trong danh sách; `restoreDepartment` → `phongBanTrongKhuon(["Khuôn A"])`, toast + hàng còn (6). `expect(soKhangDinh).toBe(15)`.
+- [ ] **Step 2: Viết E7 `mdg-man-goi-org`** — mở `?don=bp:bp-kd` như `-t luu-tru-man`; bốn thao tác (lưu trữ `pb-1` từ menu dòng trong khung chi tiết bộ phận → hộp xác nhận → hoàn tác trên toast → khôi phục `pb-cu` trong «Đã lưu trữ» → xoá hẳn `pb-cu` qua hộp xác nhận); mỗi thao tác: `duongGoi.filter(x => x === "org.<thủ tục>").length` === 1 và `dauVaoCuoi` === `{"id":"<id>"}` (8); `duongGoi.filter(x => x.startsWith("onboarding.") && x.endsWith("Department"))` === `[]` (1). Ba ca từ chối, câu lấy từ `TO_CHUC.thongDiep` import từ `../../api/src/to-chuc/to-chuc-config` (như `TO_CHUC.thongDiep.nhap` đã được import ở tệp này): `archiveDepartment` → `phongBanConNguoi(2)`, toast nguyên văn + `pb-1` còn trong cây; `purgeDepartment` → `phongBanConBuoc`, toast + hàng `pb-cu` còn trong danh sách; `restoreDepartment` → `phongBanTrongKhuon(["Khuôn A"])`, toast + hàng còn (6). `expect(soKhangDinh).toBe(15)`.
 - [ ] **Step 3:** Chạy → đỏ `luu tru: org.archiveDepartment 0 loi goi` (màn còn gọi `onboarding`).
-- [ ] **Step 4:** `cay-to-chuc.tsx`: `trpc.onboarding.archiveDepartment` → `trpc.org.archiveDepartment`, `trpc.onboarding.restoreDepartment` → `trpc.org.restoreDepartment`; `da-luu-tru-to-chuc.tsx`: `trpc.onboarding.restoreDepartment` → `trpc.org.restoreDepartment`, `trpc.onboarding.purgeDepartment` → `trpc.org.purgeDepartment`.
+- [ ] **Step 4:** `xac-nhan-luu-tru.tsx`: `trpc.onboarding.archiveDepartment` → `trpc.org.archiveDepartment`, `trpc.onboarding.restoreDepartment` → `trpc.org.restoreDepartment`; `da-luu-tru-to-chuc.tsx`: `trpc.onboarding.restoreDepartment` → `trpc.org.restoreDepartment`, `trpc.onboarding.purgeDepartment` → `trpc.org.purgeDepartment`.
 - [ ] **Step 5:** E7 xanh, `-t luu-tru-man` và `-t cay-man` xanh; `mot-cho-ghi.mjs app` exit 0.
-- [ ] **Step 6: Phá-thử** — trả `da-luu-tru-to-chuc.tsx` về `onboarding.purgeDepartment` → đỏ `xoa han: org.purgeDepartment 0 loi goi` và `mot-cho-ghi.mjs app` exit 1 gọi tên tệp; thay `toast.error(e.message)` bằng `toast.error("x")` → đỏ `xoa han tu choi: toast khac cau may chu`; `git checkout` trả lại.
+- [ ] **Step 6: Phá-thử** — trả `xac-nhan-luu-tru.tsx` về `onboarding.archiveDepartment` → đỏ `luu tru: org.archiveDepartment 0 loi goi`; trả `da-luu-tru-to-chuc.tsx` về `onboarding.purgeDepartment` → đỏ `xoa han: org.purgeDepartment 0 loi goi` và `mot-cho-ghi.mjs app` exit 1 gọi tên tệp; thay `toast.error(e.message)` bằng `toast.error("x")` → đỏ `xoa han tu choi: toast khac cau may chu`; `git checkout` trả lại.
 - [ ] **Step 7: Commit** — `feat(app): màn Tổ chức lưu trữ, khôi phục, xoá hẳn phòng ban qua org.*`.
 
 ---
 
-### Task 6: Tài liệu, thước hồ sơ, năm lệnh chứng, ghim lại bảy hồ sơ
+### Task 6: Tài liệu, thước hồ sơ, năm lệnh chứng, ghim lại tám hồ sơ
 
 `independent: false` · phục vụ E9, E10 · verify: `bun _acceptance/mot-duong-ghi-phong-ban/rang/ho-so-da-ghim.mjs`
 
 **Files:** `docs/api.md`, Create `_acceptance/mot-duong-ghi-phong-ban/rang/ho-so-da-ghim.mjs`, sinh `_acceptance/mot-duong-ghi-phong-ban/bai-kiem-da-ky.diff`, `bai-kiem-dem.md`, `PRODUCT-MAP.md`
 
 - [ ] **Step 1: `docs/api.md` «The organization tree»** — gạch đầu dòng «Archive, then purge»: thêm «`org.archiveDepartment` / `restoreDepartment` / `purgeDepartment` are the only way; `onboarding` has no department writes and keeps `listDepartments` for reading»; và «purgeability is one function, `lyDoKhongXoaPhongBan` (`xoa-phong-ban.ts`) — `org.tree`, `org.purgeDepartment` and `onboarding.listDepartments` all call it».
-- [ ] **Step 2: Thước `ho-so-da-ghim.mjs`** đúng `expected` của E10: (a) rút tập bị chạm từ `evals.yaml` của mọi hồ sơ trạng thái `signed-off|machine-cleared|da-cham-boi-thuc-te|verified` trừ chính hồ sơ này — eval `test`/`script` có `cmd: config:executors.<nhóm>.<khoá>`, giải khoá trong `_acceptance/config.yaml`, lệnh nhắc tên một tệp trong `git diff --name-only <base> HEAD` dưới `apps/*/test/` — so với hằng `BAY` (bảy slug); (b) mỗi slug: dòng `"kind":"repin"` cuối, `evals_exit` khác rỗng và toàn 0, `suites_exit` toàn 0, `sha` === `verified_commit` (frontmatter `evidence-report.md`), `git diff --name-only <sha> HEAD` chỉ gồm `_acceptance/**` hoặc khớp `risk_tiers.t1_skip_globs` (đọc từ config, so bằng `Bun.Glob`); bảy slug chung một `run_id`; (c) `bash scripts/pre-merge-check.sh . --base origin/onehub` — mọi dòng `VIOLATION` chỉ được chứa `[mot-duong-ghi-phong-ban]`. Sinh `bai-kiem-da-ky.diff` = `git diff <base> HEAD -- <các tệp kiểm của tập>` và `bai-kiem-dem.md` = bảng `| tệp | expect/ok trước | expect/ok sau |` (đếm `/\bexpect\(|\bok\(/g` trên `git show <base>:<tệp>` và bản HEAD). Chiều đỏ trong bộ nhớ như `expected`. `base` = `git merge-base HEAD origin/onehub`.
+- [ ] **Step 2: Thước `ho-so-da-ghim.mjs`** đúng `expected` của E10: (a) rút tập bị chạm từ `evals.yaml` của mọi hồ sơ trạng thái `signed-off|machine-cleared|da-cham-boi-thuc-te|verified` trừ chính hồ sơ này — eval `test`/`script` có `cmd: config:executors.<nhóm>.<khoá>`, giải khoá trong `_acceptance/config.yaml`, lệnh nhắc tên một tệp trong `git diff --name-only <base> HEAD` dưới `apps/*/test/` — so với hằng `TAM` (tám slug); (b) mỗi slug: dòng `"kind":"repin"` cuối, `evals_exit` khác rỗng và toàn 0, `suites_exit` toàn 0, `sha` === `verified_commit` (frontmatter `evidence-report.md`), `git diff --name-only <sha> HEAD` chỉ gồm `_acceptance/**` hoặc khớp `risk_tiers.t1_skip_globs` (đọc từ config, so bằng `Bun.Glob`); tám slug chung một `run_id`; (c) `bash scripts/pre-merge-check.sh . --base origin/onehub` — mọi dòng `VIOLATION` chỉ được chứa `[mot-duong-ghi-phong-ban]`. Sinh `bai-kiem-da-ky.diff` = `git diff <base> HEAD -- <các tệp kiểm của tập>` và `bai-kiem-dem.md` = bảng `| tệp | expect/ok trước | expect/ok sau |` (đếm `/\bexpect\(|\bok\(/g` trên `git show <base>:<tệp>` và bản HEAD). Chiều đỏ trong bộ nhớ như `expected`. `base` = `git merge-base HEAD origin/onehub`.
 - [ ] **Step 3: Năm lệnh chứng** — `bun run test`, `bun run check-types`, `bun run lint`, `bun run lint:slop`, `bun run build` đều exit 0; commit mọi thứ còn lại (cây sạch ngoài `_acceptance/`).
-- [ ] **Step 4: Ghim lại bảy hồ sơ bằng một lượt làn**
+- [ ] **Step 4: Ghim lại tám hồ sơ bằng một lượt làn**
 
 ```bash
 node "$(node scripts/resolve-plugin.mjs --plugin feature-loop --require scripts/repin-lane.mjs)/scripts/repin-lane.mjs" --root . --ag-root . \
   --slug dieu-phoi-30-ngay-dau --slug test-api-khong-de-viec-vo-chu --slug quan-ly-danh-muc-30-ngay \
-  --slug noi-bon-nut-dieu-phoi --slug khuon-mat-bo-phan --slug sua-luu-tru-dieu-phoi --slug cau-truc-to-chuc \
+  --slug noi-bon-nut-dieu-phoi --slug khuon-mat-bo-phan --slug sua-luu-tru-dieu-phoi --slug cau-truc-to-chuc --slug to-chuc-danh-sach-chi-tiet \
   --reason "mot-duong-ghi-phong-ban: bài kiểm chuyển sang org.*, đường ghi phòng ban cũ gỡ" --write
 ```
 
-(Bỏ `--ag-root .` nếu kho không tự host kit.) Làn đỏ → DỪNG, sửa nguyên nhân, chạy lượt mới — không ghi tay. Xanh → commit bảy hồ sơ `repin(<7 slug>): ghim lại sau khi gỡ đường ghi phòng ban cũ`.
-- [ ] **Step 5:** `bun …/ho-so-da-ghim.mjs` exit 0 (in 31 khẳng định), rồi phá-thử trong bộ nhớ đã nằm trong thước; `node <acceptance-gate>/scripts/product-map.mjs --root .`; commit `bai-kiem-da-ky.diff`, `bai-kiem-dem.md`, `PRODUCT-MAP.md`. Hợp đồng sang `status: implemented`.
+(Bỏ `--ag-root .` nếu kho không tự host kit.) Làn đỏ → DỪNG, sửa nguyên nhân, chạy lượt mới — không ghi tay. Xanh → commit tám hồ sơ `repin(<8 slug>): ghim lại sau khi gỡ đường ghi phòng ban cũ`.
+- [ ] **Step 5:** `bun …/ho-so-da-ghim.mjs` exit 0 (in 35 khẳng định), rồi phá-thử trong bộ nhớ đã nằm trong thước; `node <acceptance-gate>/scripts/product-map.mjs --root .`; commit `bai-kiem-da-ky.diff`, `bai-kiem-dem.md`, `PRODUCT-MAP.md`. Hợp đồng sang `status: implemented`.
 
 ---
 
 ## Self-review
 
-- Phủ spec: mục 1 → Task 1; mục 2 → Task 3; mục 3–4 → Task 1; mục 5 → Task 1 (câu) + Task 4 (hai câu ghim của `to-chuc.spec.ts`); mục 6 → Task 5; «Hồ sơ đã ký bị chạm» → Task 2, 4, 6; `docs/api.md` → Task 6.
+- Phủ spec: mục 1 → Task 1; mục 2 → Task 3; mục 3–4 → Task 1; mục 5 → Task 1 (câu) + Task 4 (hai câu ghim của `to-chuc.spec.ts`); mục 6 → Task 5 (màn mới của `to-chuc-danh-sach-chi-tiet`); «Hồ sơ đã ký bị chạm» → Task 2, 4, 6; `docs/api.md` → Task 6.
 - Tên dùng xuyên task: `lyDoKhongXoaPhongBan`, `PhongBanDeXoa`, `T.phongBanConBuoc`, `T.phongBanTrongKhuon`, `T.phongBanConTrongKhuon`, `khuonCuaPhongBan` — cùng một chính tả ở mọi task.
-- Một chỗ lệch hợp đồng, trình ở Gate 1.5: chiều đỏ của `nbn_ghi_bo_phan` (Task 4).
+- Ngoại lệ chiều đỏ của `nbn_ghi_bo_phan` (Task 4) đã duyệt và nay nằm trong AC-7.
+- Rút lại tập hồ sơ sau khi gộp `onehub` `472e8880`: tám (thêm `to-chuc-danh-sach-chi-tiet`).

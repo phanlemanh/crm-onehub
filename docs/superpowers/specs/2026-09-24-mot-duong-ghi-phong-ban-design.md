@@ -65,7 +65,8 @@ nên màn Tổ chức phải gọi cả hai router.
    Hai câu cũ vẫn sống cho **khuôn** kế hoạch — khuôn có nút «Xoá vĩnh viễn» riêng ở
    Cài đặt › Điều phối 30 ngày, không thuộc vòng này. Câu «còn nằm trong khuôn … — xoá
    vĩnh viễn khuôn đó…» giữ nguyên vì nó nói về thao tác trên khuôn.
-6. Màn Tổ chức (`cay-to-chuc.tsx`, `da-luu-tru-to-chuc.tsx`) đổi bốn chỗ gọi
+6. Màn Tổ chức (sau vòng `to-chuc-danh-sach-chi-tiet`: hộp xác nhận `xac-nhan-luu-tru.tsx`
+   và mục «Đã lưu trữ» `da-luu-tru-to-chuc.tsx`) đổi bốn chỗ gọi
    `trpc.onboarding.*Department` sang `trpc.org.*Department`. Không đổi hình, không đổi
    nhãn. Làm mới sau khi ghi vẫn qua `useLamMoiToChuc` (đã làm mới cả `org.tree` lẫn
    `onboarding.listDepartments`).
@@ -83,7 +84,7 @@ Loại đi:
 
 ## Hồ sơ đã ký bị chạm
 
-Bảy hồ sơ có eval máy chạy một tệp kiểm gọi đường cũ — tập này do máy rút (eval nào
+Tám hồ sơ có eval máy chạy một tệp kiểm gọi đường cũ — tập này do máy rút (eval nào
 của hồ sơ đã ký có lệnh nhắc tới tệp kiểm vòng này sửa), không liệt kê tay. Vòng này không phá lời hứa nào của chúng: mỗi bài
 kiểm giữ nguyên điều nó chứng, chỉ đổi đường gieo và đường gọi sang `org.*`, rồi mỗi hồ
 sơ được ghim lại bằng **một lượt làn máy** (`repin-lane.mjs`, nhiều `--slug`) tại HEAD
@@ -98,11 +99,16 @@ sơ được ghim lại bằng **một lượt làn máy** (`repin-lane.mjs`, nh
 | `khuon-mat-bo-phan` | `apps/api/test/khuon-mat-bo-phan.spec.ts` | tạo, lưu trữ, khôi phục, xoá qua `org.*`; đọc `purgeable` vẫn qua `onboarding.listDepartments` |
 | `sua-luu-tru-dieu-phoi` | `apps/api/test/sua-luu-tru.spec.ts`, `apps/app/test/sua-luu-tru.dom.tsx` | ghi qua `org.*`; «sắp xếp» gieo ba phòng ban trong một bộ phận riêng của bài kiểm rồi sắp bằng `org.moveDepartment` — giữ nguyên cả khẳng định thứ tự lẫn vị trí tuyệt đối 0·1·2 |
 | `cau-truc-to-chuc` | `apps/api/test/to-chuc.spec.ts`, `to-chuc-nhap.spec.ts`, `apps/app/test/to-chuc.dom.tsx` | lưu trữ, khôi phục, xoá qua `org.*`; hai câu đổi ở mục 5; danh sách thủ tục ghi của bài kiểm quyền rút từ router chỉ còn `org.*` |
+| `to-chuc-danh-sach-chi-tiet` | `apps/api/test/to-chuc-chi-tiet.spec.ts`, `apps/app/test/to-chuc-chi-tiet.dom.tsx` | lưu trữ qua `org.archiveDepartment`; ba giả lập lưu trữ/khôi phục/xoá hẳn chuyển từ khối `onboarding` sang khối `org`, cùng khoá |
 
 Quyết định `d-20260924T062111Z-12` của `cau-truc-to-chuc` từng giữ thủ tục cũ vì
 `dieu-phoi.spec.ts` tạo lại «Van hanh» nhiều lần trong một lượt. Lời hứa của bài đó là
 «đổi tên / lưu trữ phòng ban không cắt nó khỏi bước kế hoạch», không phải «tạo được hai
 phòng ban cùng tên»; hậu tố riêng giữ nguyên lời hứa và thôi dựa vào lỗ hổng.
+
+Một ngoại lệ đã duyệt (d-20260924T154916Z-16): bài «tên trống bị từ chối» của
+`noi-bon-nut-dieu-phoi` đo lời từ chối của bộ kiểm dữ liệu vào cũ — bộ đó gỡ cùng đường
+cũ, nên chiều đỏ đổi sang câu «Tên không được để trống.» của cây kèm vế «không ghi hàng nào».
 
 Trước khi sửa bài kiểm của một hồ sơ đã ký, sổ quyết định của hồ sơ đó nhận một dòng
 `revisit` nói bài nào đổi và vì sao.
