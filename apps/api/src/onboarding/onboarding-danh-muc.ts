@@ -59,7 +59,7 @@ export type BuocTho = {
 		id: string;
 		name: string;
 		position: number;
-		divisionId: string | null;
+		divisionId?: string | null;
 	};
 };
 

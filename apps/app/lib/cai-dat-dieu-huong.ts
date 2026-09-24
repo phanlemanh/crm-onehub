@@ -21,6 +21,7 @@ export const MUC_CAI_DAT: readonly MucCaiDat[] = [
 	{ khoa: "khoaApi", href: `${GOC_CAI_DAT}/api-keys` },
 	{ khoa: "sso", href: `${GOC_CAI_DAT}/sso` },
 	{ khoa: "thongBaoCuaBan", href: `${GOC_CAI_DAT}/notifications` },
+	{ khoa: "toChuc", href: `${GOC_CAI_DAT}/organization` },
 	{ khoa: "dieuPhoi", href: `${GOC_CAI_DAT}/onboarding` },
 ];
 
