@@ -32,6 +32,8 @@ export function ArchiveRetention() {
 	const daysId = useId();
 	const [draft, setDraft] = useState("");
 
+	const workspace = useQuery(trpc.workspace.get.queryOptions());
+	const coQuyen = workspace.data?.canManageSettings ?? false;
 	const retention = useQuery(trpc.settings.archiveRetention.queryOptions());
 
 	useEffect(() => {
@@ -64,6 +66,7 @@ export function ArchiveRetention() {
 						type="submit"
 						form="archive-retention"
 						disabled={
+							!coQuyen ||
 							save.isPending ||
 							unchanged ||
 							draft.trim() === "" ||
@@ -95,7 +98,7 @@ export function ArchiveRetention() {
 								id={daysId}
 								inputMode="numeric"
 								value={draft}
-								disabled={save.isPending}
+								disabled={!coQuyen || save.isPending}
 								onChange={(event) => setDraft(event.target.value)}
 							/>
 							<FieldDescription>{t.luuTru.donVi}</FieldDescription>

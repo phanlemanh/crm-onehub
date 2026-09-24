@@ -81,7 +81,7 @@ evals:
     cmd: config:executors.test.vco_tuong_hop_thu
     expected: "exit 0; đo ở chỗ nối của ứng dụng: hàm quyết tường hộp thư của apps/app/lib/session.ts (tách ra từ requireMailboxAccess, nhận userId, đọc dòng member và các dòng account THẬT trong cơ sở dữ liệu của lượt kiểm, trả danh sách nhà cung cấp cần cấp) — không giả lập workspaceRoleOf. Hai người cùng dòng account Google không quyền hộp thư: người role okr → []; người role member → ['google']. Người okr thêm dòng account credential → vẫn []. Chiều đỏ: chỗ nối gọi needsMailboxGrant(accounts) không truyền vai (tham số mặc định) thì vế okr trả ['google'] và bài đỏ, in mảng nhận được."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/app/lib/session.ts, packages/auth/src/scopes.ts, apps/app/test/tuong-hop-thu.spec.ts]
+    paths: [apps/app/lib/session.ts, apps/app/lib/hop-thu.ts, "apps/app/app/(landing)/grant-access/page.tsx", packages/auth/src/scopes.ts, apps/app/test/tuong-hop-thu.spec.ts]
 
   - id: E10
     criterion: AC-9
