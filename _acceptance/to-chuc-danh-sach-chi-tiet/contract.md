@@ -5,7 +5,7 @@ slug: to-chuc-danh-sach-chi-tiet
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-24-to-chuc-danh-sach-chi-tiet-design.md
 approved_by: Manh Phan
 approved_at: 2026-09-24
@@ -66,3 +66,12 @@ Chân sản phẩm: màn và thủ tục hiện có [SUY-TỪ-REPO: apps/app/app
 
 - Bản mẫu 17 trạng thái: `/proto/to-chuc-danh-sach-chi-tiet`, ảnh ở `evidence/design-pass/`.
 - Hai thủ tục ghi mới nằm trong module `to-chuc` của API, không chạm đường T3.
+- Hai chỗ lệch được phê tại Cổng Bằng chứng (khối quyết định tạm): bài đã ký «nhap-man» của `cau-truc-to-chuc` đổi giá trị mong đợi của dữ liệu gửi lượt ghi (thêm `traTen: true`, lời hứa giữ nguyên); luật E21 cho thẻ HTML trần đọc là «bố cục + token thiết kế».
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-25 (Manh Phan):
+
+- Ngoài-3: Bài kiểm tự động cho bước xem kết quả nhập có thể vẫn báo đạt dù màn hình đang hiển thị nhầm danh sách bộ phận dự kiến ban đầu thay vì danh sách thực sự đã tạo, nên một lỗi hiển thị sai kiểu này có thể lọt qua mà không ai phát hiện.
+- Ngoài-4: Nếu sau này có người chỉnh ngưỡng thu nhỏ màn ở một chỗ mà quên chỗ kia, cây thư mục và khung chi tiết có thể đổi cỡ màn hình không cùng lúc với nhau.
+- Ngoài-5: Trong một tổ chức lớn, admin có thể tích hơn 50 người hoặc phòng ban rồi bấm xác nhận mà nút vẫn cho bấm, chỉ để nhận một câu lỗi khó hiểu và không có gì được lưu.
+- Ngoài-6: Nếu việc lấy tên không gian làm việc bị lỗi, tên gốc trên cây tổ chức âm thầm đổi thành «Toàn công ty» mà không có dấu hiệu nào báo có sự cố.
+- Ngoài-7: Một số nút và hộp thoại mới có thể đang phá kiểu dùng chung của hệ thống mà công cụ rà lỗi thiết kế chưa bắt được.
