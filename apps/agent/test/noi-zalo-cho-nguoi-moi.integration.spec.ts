@@ -10,13 +10,28 @@ import {
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { SETTINGS_ID } from "@crm/db/settings";
+import {
+	type DatBotYeuCau,
+	type GuiThuPhanHoi,
+	type GuiThuYeuCau,
+	guiThuPhanHoi,
+} from "@crm/validation/zalo-cau-noi";
+import kenhZalo from "../agent/channels/zalo";
 import { chayNhac, lenLichNhac } from "../agent/lib/nhac-ke-hoach";
 import { kiemBot } from "../agent/lib/zalo-bot";
 import { ZALO } from "../agent/lib/zalo-config";
 import { pollZalo } from "../agent/lib/zalo-poll";
 import { nhanWebhook } from "../agent/lib/zalo-webhook";
 import dispatch from "../agent/schedules/dispatch";
-import { donDep, moXuong, slackGia, TIEN_TO } from "./support/nhac-gieo";
+import {
+	donDep,
+	gieoNguoi,
+	khopSlack,
+	moXuong,
+	noiSlack,
+	slackGia,
+	TIEN_TO,
+} from "./support/nhac-gieo";
 import { gieoGui, hangCua } from "./support/nhac-gui-gieo";
 import { type ChonZaloGia, type LoiGoiZalo, zaloGia } from "./support/zalo-gia";
 import { zaloMayChu } from "./support/zalo-may-chu";
@@ -33,7 +48,11 @@ const CHO_LOI_GOI_MS = 30_000;
 const NHIP_CHO_MS = 100;
 const URL_WEBHOOK = "https://tac-tu.test/zalo/webhook";
 
-type BienZalo = "ZALO_BOT_TOKEN" | "ZALO_WEBHOOK_SECRET" | "ZALO_API_URL";
+type BienZalo =
+	| "ZALO_BOT_TOKEN"
+	| "ZALO_WEBHOOK_SECRET"
+	| "ZALO_API_URL"
+	| "AGENT_BRIDGE_SECRET";
 
 async function donZalo(): Promise<void> {
 	await db.zaloUpdateSeen.deleteMany({});
@@ -433,5 +452,295 @@ describe("trang-thai-webhook", () => {
 			{ ten: s?.zaloBotName ?? null, url: s?.zaloWebhookUrl ?? null },
 			"bot bi xoa thi trang ve chua bat",
 		).toEqual({ ten: null, url: null });
+	});
+});
+
+const BI_MAT = "bi-mat-cau-noi";
+const TOK_T = "999:ttt";
+const GOC_HTTPS = "https://tac-tu.test";
+const GOC_HTTP = "http://127.0.0.1:2000";
+const DUONG_BOT = "/internal/zalo/bot";
+const DUONG_GUI_THU = "/internal/zalo/gui-thu";
+const KHOA_CU = "khoa-cu-du-dai";
+
+type MangGia = {
+	z: ReturnType<typeof zaloGia>;
+	s: ReturnType<typeof slackGia>;
+};
+
+function thayFetchHai(mang: MangGia): () => void {
+	const cu = globalThis.fetch;
+	globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+		const url = String(input);
+		if (url.startsWith(ZALO.api)) return mang.z.fetcher(input, init);
+		if (url.includes("slack.com")) return mang.s.fetcher(input, init);
+		return new Response("", { status: 503 });
+	}) as typeof fetch;
+	return () => {
+		globalThis.fetch = cu;
+	};
+}
+
+function routeCua(duong: string) {
+	const ds = kenhZalo.routes.filter(
+		(r) => r.method === "POST" && r.path === duong,
+	);
+	expect(ds.length, `route ${duong} mount dung mot`).toBe(1);
+	const route = ds[0];
+	if (!route) throw new Error(`thieu route ${duong}`);
+	return route;
+}
+
+async function goiCau(
+	goc: string,
+	duong: string,
+	than: DatBotYeuCau | GuiThuYeuCau,
+	auth: string | null = `Bearer ${BI_MAT}`,
+): Promise<Response> {
+	const headers = new Headers({ "content-type": "application/json" });
+	if (auth !== null) headers.set("authorization", auth);
+	const req = new Request(`${goc}${duong}`, {
+		method: "POST",
+		headers,
+		body: JSON.stringify(than),
+	});
+	return voiBien(
+		{
+			AGENT_BRIDGE_SECRET: BI_MAT,
+			ZALO_BOT_TOKEN: "",
+			ZALO_WEBHOOK_SECRET: "",
+		},
+		async () => routeCua(duong).handler(req, {} as never),
+	);
+}
+
+async function cotZalo() {
+	const s = await db.appSetting.findUnique({
+		where: { id: SETTINGS_ID },
+		select: {
+			zaloBotName: true,
+			zaloBotToken: true,
+			zaloWebhookSecret: true,
+			zaloWebhookUrl: true,
+			zaloWebhookLyDo: true,
+		},
+	});
+	return (
+		s ?? {
+			zaloBotName: null,
+			zaloBotToken: null,
+			zaloWebhookSecret: null,
+			zaloWebhookUrl: null,
+			zaloWebhookLyDo: null,
+		}
+	);
+}
+
+describe("cau-noi", () => {
+	let traLai: (() => void) | null = null;
+	afterEach(() => {
+		traLai?.();
+		traLai = null;
+	});
+
+	function mang(chon: ChonZaloGia = {}): MangGia {
+		const m = { z: zaloGia(chon), s: slackGia() };
+		traLai?.();
+		traLai = thayFetchHai(m);
+		return m;
+	}
+
+	test("luu-bot: token dung, goc https -> getMe, setWebhook, ghi AppSetting, khong tra token", async () => {
+		const { z } = mang();
+		const res = await goiCau(GOC_HTTPS, DUONG_BOT, { token: TOK_T });
+		const than = await res.json();
+		expect(
+			{ getMe: z.soGoi("getMe"), setWebhook: z.soGoi("setWebhook") },
+			"dung mot getMe, mot setWebhook",
+		).toEqual({ getMe: 1, setWebhook: 1 });
+		const dat = z.goi.find((g) => g.method === "setWebhook");
+		expect(dat?.body.url, "url webhook tu goc yeu cau").toBe(
+			"https://tac-tu.test/zalo/webhook",
+		);
+		expect(dat?.body.secret_token ?? "", "khoa 64 ky tu hex").toMatch(
+			/^[0-9a-f]{64}$/,
+		);
+		expect(await cotZalo(), "ghi AppSetting").toEqual({
+			zaloBotName: "Bot OneHub",
+			zaloBotToken: TOK_T,
+			zaloWebhookSecret: dat?.body.secret_token ?? "?",
+			zaloWebhookUrl: "https://tac-tu.test/zalo/webhook",
+			zaloWebhookLyDo: null,
+		});
+		expect(JSON.stringify(than).includes(TOK_T), "token khong ve").toBe(false);
+		expect(than).toEqual({
+			outcome: "valid",
+			tenBot: "Bot OneHub",
+			webhook: "da-dang-ky",
+		});
+	});
+
+	test("luu-bot: doi chung am, khong header -> 401, khong goi Zalo", async () => {
+		const { z } = mang();
+		const res = await goiCau(GOC_HTTPS, DUONG_BOT, { token: TOK_T }, null);
+		expect(res.status).toBe(401);
+		expect(z.goi.length, "khong goi Zalo").toBe(0);
+	});
+
+	test("luu-bot: hai lan lien tiep -> lan sau thang tron, token di cung khoa", async () => {
+		const { z } = mang();
+		await goiCau(GOC_HTTPS, DUONG_BOT, { token: "1:mot" });
+		await goiCau(GOC_HTTPS, DUONG_BOT, { token: "2:hai" });
+		const dat = z.goi.filter((g) => g.method === "setWebhook");
+		const c = await cotZalo();
+		expect(
+			{ token: c.zaloBotToken, khoa: c.zaloWebhookSecret },
+			"lan sau thang tron",
+		).toEqual({ token: "2:hai", khoa: dat[1]?.body.secret_token ?? "?" });
+	});
+
+	test("token-sai: getMe 401 -> invalid, khong setWebhook, AppSetting khong doi", async () => {
+		const { z } = mang({ getMe: 401 });
+		const truoc = await cotZalo();
+		const res = await goiCau(GOC_HTTPS, DUONG_BOT, { token: "12345:abc" });
+		const than = await res.json();
+		expect(than.outcome).toBe("invalid");
+		expect(String(than.reason)).toContain("Zalo không nhận token này");
+		expect(z.soGoi("setWebhook"), "khong setWebhook").toBe(0);
+		expect(await cotZalo(), "AppSetting khong doi").toEqual(truoc);
+	});
+
+	test("token-sai: doi chung duong, getMe 200 -> co setWebhook", async () => {
+		const { z } = mang();
+		await goiCau(GOC_HTTPS, DUONG_BOT, { token: "12345:abc" });
+		expect(z.soGoi("setWebhook")).toBe(1);
+	});
+
+	test("can-https: goc http -> luu token, khong setWebhook, ly do can-https", async () => {
+		const { z } = mang();
+		const res = await goiCau(GOC_HTTP, DUONG_BOT, { token: TOK_T });
+		const than = await res.json();
+		expect(
+			{ getMe: z.soGoi("getMe"), setWebhook: z.soGoi("setWebhook") },
+			"http thi khong setWebhook",
+		).toEqual({ getMe: 1, setWebhook: 0 });
+		const c = await cotZalo();
+		expect({
+			token: c.zaloBotToken,
+			ten: c.zaloBotName,
+			url: c.zaloWebhookUrl,
+			lyDo: c.zaloWebhookLyDo,
+			webhook: than.webhook,
+		}).toEqual({
+			token: TOK_T,
+			ten: "Bot OneHub",
+			url: null,
+			lyDo: "can-https",
+			webhook: "can-https",
+		});
+	});
+
+	test("quyen-cau: hai route x ba header sai -> 401, khong goi Zalo, AppSetting khong doi", async () => {
+		const { z } = mang();
+		const truoc = await cotZalo();
+		const thucTe: Record<string, number> = {};
+		for (const duong of [DUONG_BOT, DUONG_GUI_THU]) {
+			for (const auth of [null, "Bearer ", "Bearer sai"]) {
+				const than = duong === DUONG_BOT ? { token: TOK_T } : { userId: "x" };
+				const res = await goiCau(GOC_HTTPS, duong, than, auth);
+				thucTe[`${duong} ${auth ?? "(khong)"}`] = res.status;
+			}
+		}
+		expect(Object.values(thucTe), "sau o deu 401").toEqual([
+			401, 401, 401, 401, 401, 401,
+		]);
+		expect(z.goi.length, "khong goi Zalo").toBe(0);
+		expect(await cotZalo(), "AppSetting khong doi").toEqual(truoc);
+	});
+
+	test("quyen-cau: doi chung duong, Bearer dung -> khong 401", async () => {
+		mang();
+		const a = await goiCau(GOC_HTTPS, DUONG_BOT, { token: TOK_T });
+		const b = await goiCau(GOC_HTTPS, DUONG_GUI_THU, { userId: "x" });
+		expect([a.status, b.status]).toEqual([200, 200]);
+	});
+
+	test("trang-thai-webhook: dang ky lai bang token dang luu, khoa moi thay khoa cu", async () => {
+		const { z } = mang();
+		await datCaiDat({ zaloBotToken: TOK_T, zaloWebhookSecret: KHOA_CU });
+		await goiCau(GOC_HTTPS, DUONG_BOT, {});
+		const dat = z.goi.filter((g) => g.method === "setWebhook");
+		expect(dat.length, "dung mot setWebhook").toBe(1);
+		expect(dat[0]?.token, "dung token dang luu").toBe(TOK_T);
+		const khoaMoi = dat[0]?.body.secret_token ?? "";
+		expect(khoaMoi, "khoa moi khac khoa cu").not.toBe(KHOA_CU);
+		const guiVoi = async (khoa: string, so: string) => {
+			const than = JSON.stringify(
+				thanWebhook({ messageId: `dkl-${so}`, fromId: "Z", text: "chao" }),
+			);
+			const res = await voiBien(
+				{ ZALO_BOT_TOKEN: "", ZALO_WEBHOOK_SECRET: "" },
+				() =>
+					nhanWebhook(yeuCauWebhook(than, khoa).request, {
+						fetcher: z.fetcher,
+						now: () => GOC,
+					}),
+			);
+			return res.status;
+		};
+		expect(
+			[await guiVoi(KHOA_CU, "cu"), await guiVoi(khoaMoi, "moi")],
+			"khoa cu 403, khoa moi 200",
+		).toEqual([403, 200]);
+	});
+
+	test("gui-thu: U Zalo, V Slack, W khong kenh -> dung kenh, khong tao AgentTask", async () => {
+		const { z, s } = mang();
+		await datCaiDat({ zaloBotToken: TOK_T, zaloBotName: "Bot OneHub" });
+		const U = await gieoNguoi("Uyen Gui Thu");
+		const V = await gieoNguoi("Vinh Gui Thu");
+		const W = await gieoNguoi("Wai Gui Thu");
+		await db.zaloLink.create({
+			data: { crmUserId: U.id, zaloUserId: "ZU", zaloDisplayName: "Zalo U" },
+		});
+		await noiSlack(V.id);
+		await khopSlack(V.id, "SV");
+		try {
+			const truoc = await db.agentTask.count();
+			const ket: Record<string, GuiThuPhanHoi["kenh"]> = {};
+			for (const [ten, nguoi] of [
+				["U", U],
+				["V", V],
+				["W", W],
+			] as const) {
+				const res = await goiCau(GOC_HTTPS, DUONG_GUI_THU, {
+					userId: nguoi.id,
+				});
+				ket[ten] = guiThuPhanHoi.parse(await res.json()).kenh;
+			}
+			expect(ket, "kenh tung nguoi").toEqual({
+				U: "zalo",
+				V: "slack",
+				W: null,
+			});
+			const guiU = z.guiToi("ZU");
+			expect(guiU.length, "U mot sendMessage").toBe(1);
+			expect(guiU[0]?.body.text ?? "").toContain("Tin thử từ CRM");
+			expect(z.soGoi("sendMessage"), "chi U nhan Zalo").toBe(1);
+			expect(
+				s.goi
+					.filter((c) => c.url.endsWith("conversations.open"))
+					.map((c) => c.body.users),
+				"V mo DM Slack",
+			).toEqual(["SV"]);
+			expect(
+				s.goi.filter((c) => c.url.endsWith("chat.postMessage")).length,
+				"V mot tin Slack",
+			).toBe(1);
+			expect(await db.agentTask.count(), "khong tao AgentTask").toBe(truoc);
+		} finally {
+			await db.slackMemberMatch.deleteMany({ where: { crmUserId: V.id } });
+			await db.account.deleteMany({ where: { userId: V.id } });
+		}
 	});
 });
