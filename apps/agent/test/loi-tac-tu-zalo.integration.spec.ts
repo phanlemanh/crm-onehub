@@ -88,8 +88,11 @@ describe("gui-thu-slack-hong", () => {
 		for (const ca of CA) {
 			const loiGhi = spyOn(console, "error").mockImplementation(() => {});
 			try {
-				const ket = guiThuPhanHoi.parse(
-					await guiThu(V.id, { slackFetcher: ca.fetcher }),
+				const ket = await guiThu(V.id, { slackFetcher: ca.fetcher }).then(
+					(r) => guiThuPhanHoi.parse(r),
+					(loi: unknown) => ({
+						nem: loi instanceof Error ? loi.message : String(loi),
+					}),
 				);
 				expect(
 					ket,
