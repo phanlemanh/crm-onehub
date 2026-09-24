@@ -210,11 +210,14 @@ const vong = new Set(
 );
 for (const hs of HO_SO) {
 	const tepLog = join(GOC, "_acceptance", hs, "run-log.jsonl");
-	const may = [
-		...docTep(`_acceptance/${hs}/evals.yaml`).matchAll(
-			/- id: (E\d+)\n(?:.*\n)*?\s+executor: (test|script)\n/g,
-		),
-	].map((x) => x[1]);
+	const may = docTep(`_acceptance/${hs}/evals.yaml`)
+		.split(/\n(?= {2}- id: )/)
+		.map((khoi) => ({
+			id: /- id: (E\d+)/.exec(khoi)?.[1],
+			loai: /\n\s+executor: (\S+)/.exec(khoi)?.[1],
+		}))
+		.filter((e) => e.id && (e.loai === "test" || e.loai === "script"))
+		.map((e) => e.id);
 	const dong = existsSync(tepLog)
 		? readFileSync(tepLog, "utf8")
 				.split("\n")
