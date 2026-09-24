@@ -1,0 +1,42 @@
+{
+  "feature_plain": "Phòng ban chỉ còn một đường ghi với một bộ luật: mọi thao tác tạo, đổi tên, chuyển, lưu trữ, khôi phục, xoá hẳn đều đi qua cây tổ chức, và màn hình không còn báo «xoá được» cho một phòng ban máy chủ sẽ từ chối.",
+  "will_do": [
+    {"id": "AC-4", "p": "Sẽ cho ba chỗ — danh sách lưu trữ của màn Tổ chức, danh sách phòng ban của Điều phối 30 ngày, và lệnh xoá hẳn — cùng một câu trả lời «xoá hẳn được hay không» cho mọi phòng ban (AC-4, một luật xoá được)."},
+    {"id": "AC-6", "p": "Sẽ để màn Tổ chức lưu trữ, hoàn tác, khôi phục và xoá hẳn phòng ban qua cây tổ chức; khi máy chủ từ chối, câu từ chối hiện nguyên văn và cây không đổi (AC-6, màn chỉ gọi một đường)."},
+    {"id": "AC-8", "p": "Sẽ ghim lại bảy hồ sơ đã ký bằng một lượt máy chạy lại mọi phép đo của chúng, và kiểm tra trước khi gộp của cả kho phải sạch (AC-8, hồ sơ cũ còn giữ lời)."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Chặn mọi đường ghi phòng ban cũ của Điều phối 30 ngày — gọi thẳng vào nhận «không có» và không ghi gì; danh sách phòng ban để đọc vẫn chạy như cũ (AC-1, gỡ đường cũ)."},
+    {"id": "AC-2", "p": "Chặn lưu trữ phòng ban còn nằm trong một khuôn đang dùng hoặc còn người nhận làm phòng ban chính, với đúng câu nói lý do; khôi phục đưa phòng ban về đúng bộ phận và vị trí cũ (AC-2, luật lưu trữ)."},
+    {"id": "AC-3", "p": "Chặn xoá hẳn phòng ban chưa lưu trữ, còn bước kế hoạch, còn người trỏ tới (kể cả người đã rời) hay còn nằm trong khuôn; hai câu từ chối đổi sang chữ «xoá hẳn» cho khớp nút trên màn (AC-3, luật xoá hẳn)."},
+    {"id": "AC-5", "p": "Chặn thành viên thường lưu trữ, khôi phục, xoá hẳn phòng ban — cả qua ứng dụng lẫn qua REST; quản trị và chủ làm được (AC-5, quyền)."}
+  ],
+  "scope_plain": "Không đổi đường đọc danh sách phòng ban của Điều phối 30 ngày, không đổi luật tên của nhập hàng loạt, không đụng khuôn kế hoạch.",
+  "coverage_plain": [
+    {"i": 0, "p": "Sáu thao tác trên phòng ban đều có tiêu chí: ba thao tác mới chuyển sang cây (AC-2, AC-3) và đường cũ bị gỡ (AC-1); tạo, đổi tên, chuyển đã được hồ sơ cây tổ chức chứng."},
+    {"i": 1, "p": "Mọi lối vào — ứng dụng, REST của cây, REST và ứng dụng cũ của Điều phối, màn Tổ chức, và chính mã nguồn — đều có phép đo riêng (AC-1, AC-5, AC-6)."},
+    {"i": 2, "p": "Ba vai quản trị, chủ và thành viên thường được thử trên cả ba thao tác mới (AC-5)."},
+    {"i": 3, "p": "Tám trạng thái của một phòng ban (chưa lưu trữ, còn bước, còn người, người đã rời, chỉ người phụ, khuôn đang dùng, khuôn đã lưu trữ, trống) đi qua cả luật lưu trữ, luật xoá và phép so ba nơi (AC-2, AC-3, AC-4)."},
+    {"i": 4, "p": "Hai việc xuyên suốt: hồ sơ đã ký bị chạm phải giữ lời (AC-7, AC-8), và câu từ chối theo chữ của cây (AC-3)."},
+    {"i": 5, "p": "Cả tám tiêu chí đều làm trong vòng này; phần để lại nằm ở mục ngoài phạm vi và sổ quyết định."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Danh sách hồ sơ phải ghim lại từng viết tay sáu tên — máy rút lại thì ra bảy (thêm hồ sơ kiểm dữ liệu sót sau Điều phối). Đã sửa: tập do máy rút và so với danh sách, và kiểm tra trước khi gộp chạy cho cả kho."},
+    {"i": 1, "p": "Tiêu chí «không nới bài kiểm cũ» mâu thuẫn với thiết kế ở bài sắp xếp phòng ban. Đã sửa: giữ nguyên cả thứ tự lẫn vị trí tuyệt đối, và người chấm nhận bảng đếm khẳng định trước/sau."},
+    {"i": 2, "p": "Phép đo «đường REST cũ đã đóng» không có đối chứng chứng rằng nó gọi đúng chỗ. Đã sửa: thêm lời gọi đọc qua cùng đường REST phải trả dữ liệu, và danh sách sáu đường REST mới viết trước."},
+    {"i": 3, "p": "Câu từ chối chỉ được đo qua ứng dụng, chưa qua REST. Đã sửa: các ca từ chối lưu trữ và xoá hẳn chạy thêm qua REST, với chiều đỏ khi REST trả lỗi máy chủ."},
+    {"i": 4, "p": "Màn chỉ được thử câu từ chối khi lưu trữ. Đã sửa: thêm ca từ chối cho xoá hẳn và khôi phục, và câu lấy từ đúng nguồn của máy chủ thay vì gõ tay."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260924T095502Z-1", "p": "Gỡ hẳn sáu đường ghi cũ, không giữ lối chuyển tiếp — đổi lại ai gọi đường cũ từ ngoài sẽ nhận «không có» thay vì lời báo đổi đường (không ai ngoài kho đang gọi)."},
+    {"id": "d-20260924T095502Z-2", "p": "Điều kiện «xoá hẳn được» thành một luật duy nhất cho ba chỗ đọc — đổi lại phần Điều phối mượn luật của cây tổ chức."},
+    {"id": "d-20260924T095502Z-3", "p": "Hai câu từ chối xoá phòng ban đổi sang chữ «xoá hẳn» cho khớp nút và câu của bộ phận — đổi lại hai câu ghim trong bài kiểm của hồ sơ cây tổ chức đổi theo."},
+    {"id": "d-20260924T095502Z-4", "p": "Sửa bài kiểm của bảy hồ sơ đã ký cho đi đường mới rồi ghim lại bằng máy, thay vì giữ đường cũ cho bài kiểm khỏi đổi — đổi lại người phải soi ở Cổng Bằng chứng rằng không bài nào bị nới."},
+    {"id": "d-20260924T095502Z-5", "p": "KHÔNG làm buổi thiết kế trên bản bấm được — màn không đổi hình, chỉ đổi đường gọi."},
+    {"id": "d-20260924T095502Z-6", "p": "KHÔNG viết đặc tả trải nghiệm — không có màn, trạng thái hay nhãn mới."},
+    {"id": "d-20260924T095503Z-7", "p": "KHÔNG chụp màn thật làm bằng chứng — thứ đổi là lời gọi, được đo bằng bài kiểm ghi lại từng lời gọi và bằng quét mã."},
+    {"id": "d-20260924T095503Z-8", "p": "KHÔNG làm luật tên dài quá 80 ký tự cho nhập hàng loạt — để một hợp đồng riêng; đổi lại nhập vẫn nhận tên dài."},
+    {"id": "d-20260924T095503Z-9", "p": "KHÔNG chuyển các màn Điều phối sang đọc phòng ban từ cây — đổi lại vẫn còn hai đường đọc danh sách."},
+    {"id": "d-20260924T100034Z-10", "p": "Bài sắp xếp phòng ban giữ nguyên cả thứ tự lẫn vị trí tuyệt đối bằng cách gieo trong một bộ phận riêng — đổi lại bài kiểm gieo thêm một bộ phận."}
+  ]
+}
