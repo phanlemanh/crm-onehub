@@ -29,7 +29,7 @@ import {
 	TableRow,
 } from "@crm/ui/components/table";
 import { Textarea } from "@crm/ui/components/textarea";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
 import { useEffect, useId, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -38,11 +38,20 @@ import { toChucMessages } from "@/lib/messages/to-chuc";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { type CayDuLieu, moiPhongBan } from "./kieu";
 import { useLamMoiToChuc } from "./lam-moi";
 import { toChucParsers } from "./to-chuc-search-params";
 
 type XemTruoc = RouterOutputs["org"]["previewImport"];
 type DaGhi = RouterOutputs["org"]["applyImport"];
+type TenDonVi = { departments: string[]; divisions: string[] };
+
+function tenTrongCay(cay: CayDuLieu | undefined): TenDonVi {
+	return {
+		departments: cay ? moiPhongBan(cay).map((d) => d.name) : [],
+		divisions: cay ? cay.divisions.map((d) => d.name) : [],
+	};
+}
 
 export function HopThoaiNhap({ dong }: { dong: () => void }) {
 	const m = toChucMessages(useLocale()).nhapHop;
@@ -58,6 +67,11 @@ export function HopThoaiNhap({ dong }: { dong: () => void }) {
 	);
 	const [loi, setLoi] = useState<string | null>(null);
 	const [daGhi, setDaGhi] = useState<DaGhi | null>(null);
+	const [taoMoi, setTaoMoi] = useState<TenDonVi | null>(null);
+	const queryClient = useQueryClient();
+	const truocGhi = useRef<TenDonVi>({ departments: [], divisions: [] });
+	const docCay = () =>
+		tenTrongCay(queryClient.getQueryData<CayDuLieu>(trpc.org.tree.queryKey()));
 	const [, datUrl] = useQueryStates(toChucParsers);
 	const buoc = daGhi ? 3 : ketQua ? 2 : 1;
 
@@ -78,8 +92,16 @@ export function HopThoaiNhap({ dong }: { dong: () => void }) {
 		trpc.org.applyImport.mutationOptions({
 			onSuccess: async (kq) => {
 				toast.success(dien(m.daGhi, { n: kq.written }));
-				setDaGhi(kq);
 				await lamMoi();
+				const sau = docCay();
+				const truoc = truocGhi.current;
+				setTaoMoi({
+					departments: sau.departments.filter(
+						(t) => !truoc.departments.includes(t),
+					),
+					divisions: sau.divisions.filter((t) => !truoc.divisions.includes(t)),
+				});
+				setDaGhi(kq);
 			},
 			onError: (e) => {
 				setKetQua(null);
@@ -109,6 +131,7 @@ export function HopThoaiNhap({ dong }: { dong: () => void }) {
 		if (dangGui.current || ban || ketQua === null) return;
 		dangGui.current = true;
 		setLoi(null);
+		truocGhi.current = docCay();
 		ghi.mutate({ text: ketQua.chu });
 	};
 
@@ -239,23 +262,23 @@ export function HopThoaiNhap({ dong }: { dong: () => void }) {
 					</div>
 				) : null}
 
-				{buoc === 3 && daGhi ? (
+				{buoc === 3 && daGhi && taoMoi ? (
 					<div className="flex flex-col gap-2 text-sm" data-buoc-nhap="3">
 						<p aria-live="polite">{dien(m.ketQuaGhi, { n: daGhi.written })}</p>
-						{moi.departments.length + moi.divisions.length === 0 ? (
+						{taoMoi.departments.length + taoMoi.divisions.length === 0 ? (
 							<p className="text-muted-foreground">{m.khongTaoMoi}</p>
 						) : (
 							<ul className="list-disc ps-5 text-muted-foreground">
-								{moi.departments.length > 0 ? (
+								{taoMoi.departments.length > 0 ? (
 									<li>
 										{`${m.pbMoi} `}
-										<span translate="no">{moi.departments.join(", ")}</span>
+										<span translate="no">{taoMoi.departments.join(", ")}</span>
 									</li>
 								) : null}
-								{moi.divisions.length > 0 ? (
+								{taoMoi.divisions.length > 0 ? (
 									<li>
 										{`${m.bpMoi} `}
-										<span translate="no">{moi.divisions.join(", ")}</span>
+										<span translate="no">{taoMoi.divisions.join(", ")}</span>
 									</li>
 								) : null}
 							</ul>

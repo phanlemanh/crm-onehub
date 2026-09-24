@@ -29,6 +29,7 @@ const KY_MONG = 36;
 const MA = `tcds${Date.now().toString(36).slice(-6)}`;
 const LOI_HYDRATE = /hydrat/i;
 const CHO_HYDRATE_MS = 1000;
+const CHO_YEN = 10000;
 const NHAN = {
 	themNguoi: "Thêm người",
 	ganCoSan: "Gắn phòng ban có sẵn",
@@ -215,7 +216,7 @@ async function moLai(trang, don) {
 	if (!hien)
 		await dung(`KHONG DO DUOC: man To chuc khong hien cay dieu huong (${hoi})`);
 	await trang
-		.waitForNetworkIdle({ idleTime: 500, timeout: CHO_TAI })
+		.waitForNetworkIdle({ idleTime: 500, timeout: CHO_YEN })
 		.catch(() => null);
 	await new Promise((r) => setTimeout(r, CHO_HYDRATE_MS));
 }
@@ -247,6 +248,37 @@ const tenKhongDich = (trang, ten) =>
 		);
 		return coTen.length > 0 && deuKhongDich && du;
 	}, ten);
+
+const khongDeChu = (trang) =>
+	trang.evaluate(() => {
+		const dong = [...document.querySelectorAll("[data-dong-nguoi]")];
+		if (dong.length === 0) return false;
+		const giao = (a, b) =>
+			Math.min(a.right, b.right) - Math.max(a.left, b.left) > 1 &&
+			Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 1;
+		return dong.every((li) => {
+			const nut = [...li.querySelectorAll("button")].map((b) =>
+				b.getBoundingClientRect(),
+			);
+			const chu = [...li.querySelectorAll("span")]
+				.filter((e) => e.children.length === 0 && e.textContent?.trim())
+				.flatMap((e) => {
+					const r = document.createRange();
+					r.selectNodeContents(e);
+					const khung = e.getBoundingClientRect();
+					return [...r.getClientRects()].map((c) => ({
+						left: Math.max(c.left, khung.left),
+						right: Math.min(c.right, khung.right),
+						top: Math.max(c.top, khung.top),
+						bottom: Math.min(c.bottom, khung.bottom),
+						width:
+							Math.min(c.right, khung.right) - Math.max(c.left, khung.left),
+					}));
+				})
+				.filter((r) => r.width > 0);
+			return nut.every((n) => chu.every((c) => !giao(n, c)));
+		});
+	});
 
 const khungTruotPhai = (trang) =>
 	trang.evaluate(() => {
@@ -303,7 +335,7 @@ async function choDong(trang) {
 		},
 	);
 	await trang
-		.waitForNetworkIdle({ idleTime: 500, timeout: CHO_TAI })
+		.waitForNetworkIdle({ idleTime: 500, timeout: CHO_YEN })
 		.catch(() => null);
 }
 
@@ -329,7 +361,10 @@ for (const rong of KHO) {
 		const n = `${rong}/${tieng}`;
 		console.log(`o ${n}`);
 		if (rongHaiCot) {
-			kiem(`${n}: khong hien hai cot`, await haiCot(trang));
+			kiem(
+				`${n}: khong hien hai cot hoac nut de len chu trong dong nguoi`,
+				(await haiCot(trang)) && (await khongDeChu(trang)),
+			);
 		} else {
 			const chiCay = !(await thay(trang, "[data-chi-tiet]"));
 			await trang.click(`nav [data-nut-cay='pb:${pb.v1}']`);
@@ -341,8 +376,8 @@ for (const rong of KHO) {
 				.catch(() => null);
 			await new Promise((r) => setTimeout(r, 400));
 			kiem(
-				`${n}: cay khong chiem ca be ngang hoac khung truot khong mo ben phai`,
-				chiCay && (await khungTruotPhai(trang)),
+				`${n}: cay khong chiem ca be ngang, khung truot khong mo ben phai, hoac nut de len chu trong dong nguoi`,
+				chiCay && (await khungTruotPhai(trang)) && (await khongDeChu(trang)),
 			);
 		}
 		kiem(`${n}: tran ngang`, await khongTran(trang));
@@ -422,7 +457,7 @@ if (tu && den && idThuBa) {
 	await new Promise((r) => setTimeout(r, 200));
 	await trang.mouse.up();
 	await trang
-		.waitForNetworkIdle({ idleTime: 800, timeout: CHO_TAI })
+		.waitForNetworkIdle({ idleTime: 800, timeout: CHO_YEN })
 		.catch(() => null);
 }
 await moLai(trang, "goc");
@@ -450,7 +485,7 @@ await trang.evaluate((t) => {
 	muc?.click();
 }, `${TEN[3]} ${MA}`);
 await trang
-	.waitForNetworkIdle({ idleTime: 800, timeout: CHO_TAI })
+	.waitForNetworkIdle({ idleTime: 800, timeout: CHO_YEN })
 	.catch(() => null);
 await moLai(trang, `pb:${pb.kho}`);
 const truong = await trang.evaluate(

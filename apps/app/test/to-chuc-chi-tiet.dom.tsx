@@ -133,6 +133,9 @@ let soLanDocCay = 0;
 let daGoi: { ten: string; dauVao: unknown }[] = [];
 let cheDo = new Map<string, string>();
 let khuonLuuTru: { id: string; name: string; purgeable: boolean }[] = [];
+type TenDaTao = ImportPreviewOutput["newNames"];
+const CHUA_TAO: TenDaTao = { departments: [], divisions: [] };
+let daTao: TenDaTao = CHUA_TAO;
 
 const LOI_NHAP = [
 	"Thiếu email",
@@ -187,11 +190,26 @@ function thuTuc<TRa>(ten: string, doc: () => Promise<TRa> | TRa) {
 				const loi = cheDo.get(ten);
 				if (loi !== undefined) throw new Error(loi);
 				if (ten === "previewImport") return xemTruocMau();
+				if (ten === "applyImport") {
+					cay = {
+						...cay,
+						divisions: [
+							...cay.divisions,
+							...daTao.divisions.map((name, i) => ({
+								id: `bp-nhap-${i}`,
+								name,
+								position: 90 + i,
+								head: null,
+								departments: [],
+							})),
+						],
+					};
+				}
 				return {
 					id: `${ten}-ok`,
 					written: 4,
-					newDepartments: 0,
-					newDivisions: 0,
+					newDepartments: daTao.departments.length,
+					newDivisions: daTao.divisions.length,
 				};
 			},
 		}),
@@ -380,6 +398,7 @@ beforeEach(() => {
 	loiKhiVe = [];
 	cheDo = new Map();
 	khuonLuuTru = [];
+	daTao = CHUA_TAO;
 });
 
 afterEach(async () => {
@@ -1553,6 +1572,7 @@ describe("nhap-ba-buoc", () => {
 					: `dong ${i + 3}: ${li?.textContent}`,
 			);
 		}
+		daTao = { ...CHUA_TAO, divisions: ["Tài chính"] };
 		await bam(nutTheoChu(hop(), "Ghi 2 dòng · bỏ 3 dòng hỏng")[0]);
 		await cho(
 			() => hop().querySelector("[data-buoc-nhap='3']") !== null,
@@ -1561,7 +1581,12 @@ describe("nhap-ba-buoc", () => {
 		thay.push(`buoc 3: dang o ${buocDangO()}`);
 		const kq = hop().querySelector("[data-buoc-nhap='3']")?.textContent ?? "";
 		thay.push(
-			`buoc 3: ${kq.includes("Đã ghi 4 người.") && kq.includes("Bảo hành") && kq.includes("Tài chính")} xem-cay=${nutTheoChu(hop(), m.nhapHop.xemCay).length}`,
+			`buoc 3: ${kq.includes("Đã ghi 4 người.") && kq.includes("Tài chính")} xem-cay=${nutTheoChu(hop(), m.nhapHop.xemCay).length}`,
+		);
+		thay.push(
+			kq.includes("Bảo hành")
+				? "buoc 3 neu don vi ban xem truoc hua ma luot ghi khong tao"
+				: "buoc 3: chi neu don vi luot ghi tao",
 		);
 		await bam(nutTheoChu(hop(), m.nhapHop.xemCay)[0]);
 		await doiDong();
@@ -1576,6 +1601,7 @@ describe("nhap-ba-buoc", () => {
 				"dong 5: dung cau",
 				"buoc 3: dang o 3",
 				"buoc 3: true xem-cay=1",
+				"buoc 3: chi neu don vi luot ghi tao",
 			],
 			don: "goc",
 			khung: "goc",

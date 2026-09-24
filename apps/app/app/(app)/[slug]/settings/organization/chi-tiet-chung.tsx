@@ -93,14 +93,18 @@ export function DongNguoi({
 			data-dong-nguoi={nguoi.id}
 		>
 			<PersonAvatar size="sm" name={nguoi.name} email={nguoi.email} />
-			<span className="flex min-w-0 flex-1 flex-col items-start gap-1">
+			<span className="flex min-w-0 flex-1 flex-col gap-1">
 				<span className="truncate text-sm" translate="no" data-ten>
 					{nguoi.name}
 				</span>
 				<span className="truncate text-muted-foreground text-xs" translate="no">
 					{phu ?? nguoi.email}
 				</span>
-				{nhan ? <Badge variant="outline">{nhan}</Badge> : null}
+				{nhan ? (
+					<span className="flex">
+						<Badge variant="outline">{nhan}</Badge>
+					</span>
+				) : null}
 			</span>
 			{cuoi}
 		</li>
