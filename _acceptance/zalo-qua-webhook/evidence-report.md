@@ -1,19 +1,17 @@
 ---
 schema_version: 2
 feature_slug: zalo-qua-webhook
-verdict: PENDING-JUDGMENT
-triage_failed: true
+verdict: PASS
 failed_evals: []
-reason:
+reason: 
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 66bd2987adecd32a7054ed6ff272941de2ed15de
-human_signoff:
+verified_commit: 6d97b4eef5f75dc90fbe620ea58c5878eb4cc767
+human_signoff: 
 ---
 
 # Evidence Report: zalo-qua-webhook
-⚠ phân loại phạm vi KHÔNG chạy được — không lỗi nào được máy tự sửa, danh sách đầy đủ nằm trong review-findings.md, người xem lại toàn bộ trước khi ký.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -33,158 +31,158 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: mueuh2z5ofk5
+  run_id: muev5uz4s0d4
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.zqw_webhook_noi
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
   output: |
-    6 expect() calls
-    Ran 1 test across 1 file. [512.00ms]
-    test-run: dropped crm_mueuh2z5ofk5_test
+     6 expect() calls
+    Ran 1 test across 1 file. [385.00ms]
+    test-run: dropped crm_muev5uz4s0d4_test
 
 - eval: E2
-  run_id: minted-zalo-qua-webhook-E2-r1
+  run_id: muev5w9tj08j
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.zqw_webhook_khoa
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
   output: |
-    33 expect() calls
-    Ran 7 tests across 1 file. [551.00ms]
-    test-run: dropped crm_mueuh360fyjy_test
+     33 expect() calls
+    Ran 7 tests across 1 file. [791.00ms]
+    test-run: dropped crm_muev5w9tj08j_test
 
 - eval: E3
-  run_id: mueuh1zkg51v
+  run_id: muev5v8cvait
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.zqw_webhook_tat
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
   output: |
-    6 expect() calls
-    Ran 2 tests across 1 file. [581.00ms]
-    test-run: dropped crm_mueuh1zkg51v_test
+     6 expect() calls
+    Ran 2 tests across 1 file. [479.00ms]
+    test-run: dropped crm_muev5v8cvait_test
 
 - eval: E4
-  run_id: mueuh3zxux38
+  run_id: muev5vpl663z
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.zqw_webhook_trung
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
   output: |
-    4 expect() calls
-    Ran 1 test across 1 file. [697.00ms]
-    test-run: dropped crm_mueuh3zxux38_test
+     4 expect() calls
+    Ran 1 test across 1 file. [458.00ms]
+    test-run: dropped crm_muev5vpl663z_test
 
 - eval: E5
-  run_id: mueuh37vqu2d
+  run_id: muev5vu3a2zq
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.zqw_webhook_bo_qua
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
   output: |
-    22 expect() calls
-    Ran 1 test across 1 file. [450.00ms]
-    test-run: dropped crm_mueuh37vqu2d_test
+     22 expect() calls
+    Ran 1 test across 1 file. [471.00ms]
+    test-run: dropped crm_muev5vu3a2zq_test
 
 - eval: E6
-  run_id: mueuh4hsad1b
+  run_id: muev5wimcyxp
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.zqw_webhook_luat_ma
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
   output: |
-    10 expect() calls
-    Ran 1 test across 1 file. [345.00ms]
-    test-run: dropped crm_mueuh4hsad1b_test
+     10 expect() calls
+    Ran 1 test across 1 file. [833.00ms]
+    test-run: dropped crm_muev5wimcyxp_test
 
 - eval: E7
-  run_id: mueuh44akfxv
+  run_id: muev5vx6isgp
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.zqw_kiem_bot
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
   output: |
-    9 expect() calls
-    Ran 3 tests across 1 file. [727.00ms]
-    test-run: dropped crm_mueuh44akfxv_test
+     9 expect() calls
+    Ran 3 tests across 1 file. [476.00ms]
+    test-run: dropped crm_muev5vx6isgp_test
 
 - eval: E8
-  run_id: mueuh2e7vfwz
+  run_id: muev5wgvghk0
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.zqw_giao_khi_mo
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
   output: |
     6 expect() calls
-    Ran 4 tests across 1 file. [504.00ms]
-    test-run: dropped crm_mueuh2e7vfwz_test
+    Ran 4 tests across 1 file. [791.00ms]
+    test-run: dropped crm_muev5wgvghk0_test
 
 - eval: E9
-  run_id: mueuh3jsibsj
+  run_id: minted-zalo-qua-webhook-E9-r2
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.zqw_lenh_webhook
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
   output: |
-    17 expect() calls
-    Ran 7 tests across 1 file. [756.00ms]
-    test-run: dropped crm_mueuh3jsibsj_test
+     17 expect() calls
+    Ran 7 tests across 1 file. [634.00ms]
+    test-run: dropped crm_muev5vrsjklz_test
 
 - eval: E10
-  run_id: mueuh34b54sz
+  run_id: minted-zalo-qua-webhook-E10-r2
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.zqw_khai_bien
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
   output: |
-    8 expect() calls
-    Ran 4 tests across 1 file. [445.00ms]
-    test-run: dropped crm_mueuh34b54sz_test
+     9 expect() calls
+    Ran 4 tests across 1 file. [403.00ms]
+    test-run: dropped crm_muev5vzc62sh_test
 
 - eval: E11
-  run_id: mueuhem5mi7g
+  run_id: muev68i2smmz
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.zqw_kenh_route
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
   output: |
-    4 expect() calls
-    Ran 1 test across 1 file. [319.00ms]
-    test-run: dropped crm_mueuhem5mi7g_test
+     4 expect() calls
+    Ran 1 test across 1 file. [356.00ms]
+    test-run: dropped crm_muev68i2smmz_test
 
 - eval: E12
-  run_id: mueuhg92tomh
+  run_id: muev69tcpudy
   exit_code: 0
   baseline: green
   verifier: config:executors.script.zqw_giu_nqz
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
   output: |
-    77 expect() calls
-    Ran 34 tests across 1 file. [1.56s]
-    test-run: dropped crm_mueuhg92tomh_test
+     77 expect() calls
+    Ran 34 tests across 1 file. [1.60s]
+    test-run: dropped crm_muev69tcpudy_test
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: minted-zalo-qua-webhook-SUITE-bun_run_test-r1
+  run_id: muev5t6s5yzo
   exit_code: 0
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-zalo-qua-webhook-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-zalo-qua-webhook-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
 
 - cmd: bun run lint:slop
-  run_id: minted-zalo-qua-webhook-SUITE-bun_run_lint_slop-r1
+  run_id: minted-zalo-qua-webhook-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-zalo-qua-webhook-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-zalo-qua-webhook-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-09-24T01:18:09Z
+  verified_at: 2026-09-24T01:37:18Z
 
 ## Known limits
 
@@ -192,12 +190,13 @@ human_signoff:
 
 ## Analyst
 
-E12 — pass trên cả HEAD lẫn baseline (diffBase onehub), nên bài test này tự nó không phân biệt được feature khỏi code cũ; đây là regression-guard có chủ ý (giữ nguyên spec đã ký của nhac-qua-zalo để bảo vệ hành vi cronjob cũ khi thêm đường webhook), không phải một chỗ thiếu assert của feature.
+E12 (`B=$(git merge-base HEAD origin/onehub) && { git diff --quiet "$B" -- apps/agent/test/nhac-qua-zalo.integration.spec.ts || { echo "spec da ky cua nhac-qua-zalo bi sua" >&2; exit 1; }; } && bun run test -- "cd apps/agent && bun test test/nhac-qua-zalo.integration.spec.ts"`) — pass trên cả HEAD lẫn baseline (diffBase). Đây là regression-guard có chủ ý cho tính năng nhắc-qua-zalo đã ký từ trước: bài kiểm giữ nguyên spec đã ký (phần 1 của lệnh chặn nếu ai sửa spec đó) rồi chạy trọn bộ test hiện có của nhắc-qua-zalo qua wrapper của kho. Nó không đo hành vi mới của zalo-qua-webhook nên xanh-cả-hai-phía là đúng dự kiến, không phải dấu hiệu thiếu phân biệt của feature này.
 
 ## Variance
 
-none — không có eval nào chạy nhiều lần (mọi eval đều runs=1, deterministic).
+none — every multi-run eval is uniform (không eval nào khai `runs` > 1 trong vòng này)
 
 ## Iterations
 
-Round 1: toàn bộ 12 eval máy (E1–E12) đều PASS và bốn lệnh suite hồi quy (bun run test, turbo lint, lint:slop, turbo build) đều xanh; verdict tổng là PENDING-JUDGMENT vì bước phân loại phạm vi (scope-triage) không chạy được ở vòng này — xem review-findings.md mục "Chưa phân loại (triage-failed)".
+Round 1: đã sinh review-findings với 5 mục ngoài hợp đồng (carried sang round 2, xem review-findings.md); dữ liệu bàn giao cho vòng này không kèm bản ghi kết quả máy của round 1.
+Round 2 (vòng hiện tại): chạy lại toàn bộ E1–E12 cùng bốn lệnh suite (`bun run test`, `bunx turbo run lint --force`, `bun run lint:slop`, `bunx turbo run build --force`) — tất cả PASS, verdict PASS.
