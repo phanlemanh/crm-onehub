@@ -5,7 +5,7 @@ slug: mot-duong-ghi-phong-ban
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-24-mot-duong-ghi-phong-ban-design.md
 approved_by: Manh Phan — uỷ quyền phiên điều phối 2026-09-24
 approved_at: 2026-09-25
