@@ -13,27 +13,13 @@ import {
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Fragment, type ReactNode, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { dien } from "@/components/crm/record-sheet/plan-copy";
+import { dien, dienNode } from "@/components/crm/record-sheet/plan-copy";
 import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
 import { useTRPC } from "@/lib/trpc/client";
 
 export type NguoiDi = { userId: string; name: string };
-
-function dienNode(mau: string, gia: Record<string, ReactNode>): ReactNode[] {
-	let viTri = 0;
-	return mau.split(/(\{\w+\})/).map((phan) => {
-		const khoa = /^\{(\w+)\}$/.exec(phan)?.[1];
-		const khoaReact = `${viTri}`;
-		viTri += phan.length;
-		return (
-			<Fragment key={khoaReact}>
-				{khoa === undefined ? phan : (gia[khoa] ?? "")}
-			</Fragment>
-		);
-	});
-}
 
 export function ChuyenViecDialog({
 	nguoi,
