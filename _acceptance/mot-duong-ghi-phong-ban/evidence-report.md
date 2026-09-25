@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f6ff38da0423df968af03c2dea294f98df0c6fee
+verified_commit: fd84691490a809b8f7127cb49f946f67d01c38d7
 human_signoff: Manh Phan — uỷ quyền phiên điều phối 2026-09-24, 2026-09-25
 ---
 
@@ -206,3 +206,7 @@ none — every multi-run eval is uniform (không eval nào mang `runs` > 1 trong
 ## Iterations
 
 Round 1: 11 eval feature (E1–E8, E10) + 4 lệnh suite hồi quy đều PASS trên HEAD (mã f6ff38da0423df968af03c2dea294f98df0c6fee), mọi baseline red trừ E6b (green, đã ghi ở Analyst). E9 (AC-7, judgment) UNCERTAIN ở cả ba lens — panel đề xuất UNCERTAIN, người quyết ở Gate 2 vì thiếu sổ quyết định (decision log) của chín hồ sơ đã ghim để đối chiếu dòng revisit theo tên tệp kiểm.
+
+### Re-pin lần 1 — 2026-09-25, do gộp onehub 5d9e8b9c (#135 Zalo) vào nhánh — lượt riêng sau bảy hồ sơ vì E10 đòi chúng đã ghim tại HEAD
+run_id: repin-20260925T042706Z-54445
+sha: fd84691490a809b8f7127cb49f946f67d01c38d7 · suites: 4 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-7
