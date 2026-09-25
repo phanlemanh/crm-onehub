@@ -205,8 +205,10 @@ const tepKiemCuaTap = tepKiemDoi.filter((t) =>
 			h.refs.some((r) => (lenh.get(r) ?? "").includes(path.basename(t))),
 		),
 );
+const RA = path.join(GOC, ".acceptance-runs", CHINH);
+fs.mkdirSync(RA, { recursive: true });
 fs.writeFileSync(
-	path.join(GOC, "_acceptance", CHINH, "bai-kiem-da-ky.diff"),
+	path.join(RA, "bai-kiem-da-ky.diff"),
 	git("diff", base, "HEAD", "--", ...tepKiemCuaTap),
 );
 const hang = tepKiemCuaTap.map((t) => {
@@ -219,7 +221,7 @@ const hang = tepKiemCuaTap.map((t) => {
 	return `| \`${t}\` | ${truoc} | ${demKhangDinh(docTep(t))} |`;
 });
 fs.writeFileSync(
-	path.join(GOC, "_acceptance", CHINH, "bai-kiem-dem.md"),
+	path.join(RA, "bai-kiem-dem.md"),
 	[
 		`# Đếm khẳng định trước và sau — base ${base.slice(0, 8)}`,
 		"",
@@ -230,7 +232,7 @@ fs.writeFileSync(
 	].join("\n"),
 );
 console.log(
-	`sinh: bai-kiem-da-ky.diff (${tepKiemCuaTap.length} tep), bai-kiem-dem.md`,
+	`sinh: .acceptance-runs/${CHINH}/bai-kiem-da-ky.diff (${tepKiemCuaTap.length} tep), bai-kiem-dem.md`,
 );
 
 const doCau = ghimTheoSlug.get("cau-truc-to-chuc");
