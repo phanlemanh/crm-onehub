@@ -321,6 +321,11 @@ describe("nhac-im", () => {
 				soNgay: [...new Set(cuaKr.map((x) => x.v.soNgay))],
 			};
 		});
+		const demT = im.filter((x) => x.userId === T.id && x.v.keyResultId === kT);
+		expect(
+			{ T_nhan_cho_KR_cua_minh: demT.length },
+			"T nhan dung mot viec cho KR minh tu phu trach",
+		).toEqual({ T_nhan_cho_KR_cua_minh: 1 });
 		expect(thay, "ma tran 6 KR").toEqual([
 			{ kr: "k13", chu: false, truong: [], soNgay: [] },
 			{ kr: "k14", chu: true, truong: [], soNgay: [14] },
@@ -329,11 +334,6 @@ describe("nhac-im", () => {
 			{ kr: "k21-bo-phan", chu: true, truong: ["TB:Phong"], soNgay: [21] },
 			{ kr: "k21-T-tu-phu-trach", chu: true, truong: [], soNgay: [21] },
 		]);
-		const demT = im.filter((x) => x.userId === T.id && x.v.keyResultId === kT);
-		expect(
-			{ T_nhan_cho_KR_cua_minh: demT.length },
-			"T nhan dung mot viec cho KR minh tu phu trach",
-		).toEqual({ T_nhan_cho_KR_cua_minh: 1 });
 	});
 });
 
