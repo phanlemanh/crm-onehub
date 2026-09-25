@@ -24,6 +24,7 @@ export const ZALO = {
 	},
 	chatRieng: "PRIVATE",
 	tranKyTu: 2_000,
+	lenh: { tu: ["xong", "done"], toiDaSo: 20 },
 	loi: {
 		huongDan:
 			"Chào bạn. Để nhận nhắc việc, mở CRM › Cài đặt › Thông báo của bạn, bấm «Nối Zalo» rồi nhắn mã 6 số ở đây.",
