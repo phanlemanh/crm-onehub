@@ -1,5 +1,7 @@
 import { afterAll, beforeEach, describe, expect, test } from "bun:test";
-import { type LoaiNhac, NHAC } from "@crm/db/onboarding-nhac";
+import { type LoaiNhac, NHAC, viecCanNhac } from "@crm/db/onboarding-nhac";
+import { db } from "@crm/db";
+import { dungTin } from "../agent/lib/tin-nhac";
 import { ZALO } from "../agent/lib/zalo-config";
 import { donDep } from "./support/nhac-gieo";
 import { lucVN, NGAY_NHAC, PHUT_SAU } from "./support/nhac-gui-gieo";
@@ -50,18 +52,23 @@ describe("danh-so", () => {
 	test("danh-so: dong n cua tin Zalo thuoc daGui[n-1], goi y mot dong, trong tran, Slack khong so", async () => {
 		let daChay = 0;
 
-		const { A } = await gieoNhac(GOC, { quaHan: 1, sapHan: 1, im: true, moc: true });
+		const { A } = await gieoNhac(GOC, {
+			quaHan: 1,
+			sapHan: 1,
+			im: true,
+			moc: true,
+		});
 		await noiZalo(A.id, "ZA");
 		const bon = await guiNhac(A.id, GOC);
 		expect(bon.kenh, "o zalo-bon di qua Zalo").toBe("zalo");
-		expect(bon.daGui.map((m) => m.loai), "du bon loai").toEqual([
-			"buoc-qua-han",
-			"buoc-sap-han",
-			"ke-hoach-im",
-			"moc-ngay",
-		]);
+		expect(
+			bon.daGui.map((m) => m.loai),
+			"du bon loai",
+		).toEqual(["buoc-qua-han", "buoc-sap-han", "ke-hoach-im", "moc-ngay"]);
 		const dong = dongDanhSo(bon.text);
-		expect(dong.length, "so dong danh so = daGui.length").toBe(bon.daGui.length);
+		expect(dong.length, "so dong danh so = daGui.length").toBe(
+			bon.daGui.length,
+		);
 		dong.forEach((d, i) => {
 			const n = i + 1;
 			const muc = phanTu(bon.daGui, n);
@@ -87,8 +94,12 @@ describe("danh-so", () => {
 		);
 		await noiZalo(M.id, "ZM");
 		const dai = await guiNhac(M.id, GOC);
-		expect(dai.text.length, "khong vuot tran").toBeLessThanOrEqual(ZALO.tranKyTu);
-		expect(dai.daGui.length, "tran thuc su cat bot dong").toBeLessThan(NHAC.tran);
+		expect(dai.text.length, "khong vuot tran").toBeLessThanOrEqual(
+			ZALO.tranKyTu,
+		);
+		expect(dai.daGui.length, "tran thuc su cat bot dong").toBeLessThan(
+			NHAC.tran,
+		);
 		expect(dongDanhSo(dai.text).length, "so dong danh so = daGui.length").toBe(
 			dai.daGui.length,
 		);
@@ -107,5 +118,29 @@ describe("danh-so", () => {
 		daChay += 1;
 
 		expect(daChay, "so o thuc chay").toBe(3);
+	});
+
+	test("danh-so: tran sat, dong goi y tinh vao tran", async () => {
+		const { A } = await gieoNhac(GOC, { quaHan: 3 }, "Sat");
+		const viec =
+			(await viecCanNhac(db, { now: GOC, userId: A.id })).get(A.id) ?? [];
+		expect(viec.length, "du ba viec").toBe(3);
+		const khongLienKet = () => null;
+		const du = dungTin(
+			"Sat",
+			viec,
+			khongLienKet,
+			"tron",
+			Number.POSITIVE_INFINITY,
+			ZALO.loi.goiY,
+		);
+		const tran = du.text.length - 1;
+		const sat = dungTin("Sat", viec, khongLienKet, "tron", tran, ZALO.loi.goiY);
+		expect(
+			sat.text.length,
+			"khong vuot tran khi tin sat tran",
+		).toBeLessThanOrEqual(tran);
+		expect(sat.daGui.length, "tran sat cat mot dong").toBe(viec.length - 1);
+		expect(sat.text.includes(ZALO.loi.goiY), "van giu dong goi y").toBe(true);
 	});
 });
