@@ -108,6 +108,53 @@ const lan = spawnSync(
 		"--reason",
 		`${SLUG}: kiem ho so da ky bi cham`,
 	],
-	{ stdio: "inherit" },
+	{ encoding: "utf8", maxBuffer: 256 * 1024 * 1024 },
 );
-process.exit(lan.status ?? 1);
+const loLan = `${lan.stdout ?? ""}${lan.stderr ?? ""}`;
+process.stdout.write(loLan);
+
+if (lan.status === 0) {
+	console.log("lan ghim lai xanh tron");
+	process.exit(0);
+}
+const SUITE = /suite \[([\d,]*)\]/;
+const suite = SUITE.exec(loLan)?.[1]?.split(",").map(Number) ?? [];
+if (suite.length === 0 || suite.some((m) => m !== 0)) {
+	dung(1, `suite khong xanh o HEAD: [${suite.join(",")}]`);
+}
+const DONG = /^\[lane\] (\S+) (E\w+): (.*) → exit (\d+) \(/;
+const doHead = loLan
+	.split("\n")
+	.map((d) => DONG.exec(d))
+	.filter((m) => m !== null && m[4] !== "0")
+	.map((m) => ({ ten: m[1], id: m[2], lenh: m[3], ma: Number(m[4]) }));
+console.log(`do o HEAD: ${doHead.length} eval`);
+if (doHead.length === 0) process.exit(0);
+
+const cayGoc = join(GOC, ".acceptance-runs", SLUG, "goc");
+spawnSync("git", ["-C", GOC, "worktree", "remove", "--force", cayGoc]);
+git("worktree", "add", "--detach", cayGoc, coSo);
+try {
+	spawnSync("ln", ["-s", join(GOC, ".env"), join(cayGoc, ".env")]);
+	for (const buoc of [["install"], ["run", "db:generate"]]) {
+		const r = spawnSync("bun", buoc, { cwd: cayGoc, encoding: "utf8" });
+		if (r.status !== 0)
+			dung(2, `khong dung duoc cay goc: bun ${buoc.join(" ")}`);
+	}
+	const moi = [];
+	for (const d of doHead) {
+		const r = spawnSync("bash", ["-c", d.lenh], {
+			cwd: cayGoc,
+			encoding: "utf8",
+		});
+		const maGoc = r.status ?? -1;
+		console.log(`${d.ten} ${d.id}: HEAD ${d.ma} · merge-base ${maGoc}`);
+		if (maGoc === 0) moi.push(`${d.ten} ${d.id}`);
+	}
+	if (moi.length > 0) {
+		dung(1, `vong nay lam do them ${moi.length} eval: ${moi.join(", ")}`);
+	}
+	console.log(`khong eval nao do them so voi ${coSo.slice(0, 8)}`);
+} finally {
+	spawnSync("git", ["-C", GOC, "worktree", "remove", "--force", cayGoc]);
+}
