@@ -9,7 +9,7 @@ import {
 } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViChungMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	currencySettingsOutput,
@@ -20,7 +20,7 @@ import {
 import { CurrencyService } from "./currency.service";
 
 @Router({ alias: "currency" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViChungMiddleware)
 export class CurrencyRouter {
 	constructor(
 		@Inject(CurrencyService) private readonly currency: CurrencyService,

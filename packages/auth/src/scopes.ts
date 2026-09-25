@@ -1,3 +1,5 @@
+import { laVaiChiOkr, type WorkspaceRole } from "./roles";
+
 export const GOOGLE_PROVIDER_ID = "google";
 export const MICROSOFT_PROVIDER_ID = "microsoft";
 export const SLACK_PROVIDER_ID = "slack";
@@ -71,7 +73,10 @@ export function signsInWithMicrosoft(
 
 export function mailboxGrantsNeeded(
 	accounts: readonly SignInAccount[],
+	role: WorkspaceRole | null = null,
 ): MailboxProviderId[] {
+	if (laVaiChiOkr(role)) return [];
+
 	const everyRowIsAMailbox =
 		accounts.length > 0 &&
 		accounts.every((account) => isMailboxProvider(account.providerId));
@@ -90,8 +95,11 @@ export function mailboxGrantsNeeded(
 	];
 }
 
-export function needsMailboxGrant(accounts: readonly SignInAccount[]): boolean {
-	return mailboxGrantsNeeded(accounts).length > 0;
+export function needsMailboxGrant(
+	accounts: readonly SignInAccount[],
+	role: WorkspaceRole | null = null,
+): boolean {
+	return mailboxGrantsNeeded(accounts, role).length > 0;
 }
 
 export function parseScopes(scope: string | null | undefined): Set<string> {

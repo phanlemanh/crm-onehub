@@ -3,6 +3,7 @@
 import { Button } from "@crm/ui/components/button";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { cn } from "@crm/ui/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
@@ -13,6 +14,8 @@ import {
 	mucCaiDatDangMo,
 } from "@/lib/cai-dat-dieu-huong";
 import { settingsMessages } from "@/lib/messages/settings";
+import { mucCaiDatChoVai } from "@/lib/pham-vi-man";
+import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
 function NavLink({
@@ -97,13 +100,22 @@ export function SettingsSidebar() {
 	const t = settingsMessages(useLocale());
 	const pathname = usePathname();
 	const workspaceUrl = useWorkspaceUrl();
+	const trpc = useTRPC();
+	const workspace = useQuery(trpc.workspace.get.queryOptions());
+	const viewerRole = workspace.data?.viewerRole ?? null;
+	const daBiet = workspace.data !== undefined;
 
 	const root = workspaceUrl(GOC_CAI_DAT);
 	const items = useMemo(
 		() =>
-			MUC_CAI_DAT.map((item) => ({ ...item, href: workspaceUrl(item.href) })),
-		[workspaceUrl],
+			mucCaiDatChoVai(viewerRole).map((item) => ({
+				...item,
+				href: workspaceUrl(item.href),
+			})),
+		[workspaceUrl, viewerRole],
 	);
+
+	if (!daBiet) return <SettingsSidebarFallback />;
 
 	return (
 		<>

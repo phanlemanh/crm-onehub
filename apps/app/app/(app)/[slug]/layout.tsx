@@ -1,3 +1,4 @@
+import { laVaiChiOkr, toWorkspaceRole } from "@crm/validation/vai-workspace";
 import { notFound, unstable_rethrow } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
@@ -23,7 +24,7 @@ export default function AppLayout({
 
 				<div className="flex min-h-0 flex-1">
 					<Suspense fallback={<AppIconRailFallback />}>
-						<AppIconRail />
+						<RailTheoVai />
 					</Suspense>
 					{children}
 				</div>
@@ -33,7 +34,7 @@ export default function AppLayout({
 				</Suspense>
 
 				<Suspense fallback={null}>
-					<QuickSwitcher />
+					<TimNhanhTheoVai />
 				</Suspense>
 			</div>
 		</MobileNavProvider>
@@ -49,6 +50,10 @@ async function loadWorkspace() {
 		unstable_rethrow(error);
 		return null;
 	}
+}
+
+function chiOkr(viewerRole: string | null | undefined): boolean {
+	return viewerRole ? laVaiChiOkr(toWorkspaceRole(viewerRole)) : false;
 }
 
 async function WorkspaceHeader({
@@ -72,6 +77,30 @@ async function WorkspaceHeader({
 					image: user.image ?? null,
 				}}
 			/>
+		</HydrateClient>
+	);
+}
+
+async function RailTheoVai() {
+	await connection();
+	await loadWorkspace();
+
+	return (
+		<HydrateClient>
+			<AppIconRail />
+		</HydrateClient>
+	);
+}
+
+async function TimNhanhTheoVai() {
+	await connection();
+	const workspace = await loadWorkspace();
+
+	if (chiOkr(workspace?.viewerRole)) return null;
+
+	return (
+		<HydrateClient>
+			<QuickSwitcher />
 		</HydrateClient>
 	);
 }

@@ -181,6 +181,20 @@ executors:
     trg_khoa_bo_dau: "cd packages/db && bun test test/fields.spec.ts"
     trg_khoa_tham_so: "cd apps/app && bun test lib/search-param-keys.test.ts"
     api: "bun run test"
+    vco_ma_tran_trpc: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran-trpc"'
+    vco_ma_tran_khoa_rest: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran-khoa-rest"'
+    vco_doi_chung: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t doi-chung"'
+    vco_khong_khai_nhom: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t khong-khai-nhom"'
+    vco_proxy: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t proxy-ngoai-pham-vi"'
+    vco_gan_vai: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t gan-vai"'
+    vco_nhat_ky: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t nhat-ky"'
+    vco_cau_noi: 'bun run test -- "cd apps/app && bun test test/eve-cau-noi-chi-okr.spec.ts"'
+    vco_kenh_agent: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/kenh-chi-okr.spec.ts"'
+    vco_hop_thu: "cd packages/auth && bun test test/mailbox-grant-vai.spec.ts"
+    vco_pham_vi_man: "cd apps/app && bun test test/pham-vi-man.spec.ts"
+    vco_tuong_hop_thu: 'bun run test -- "cd apps/app && bun test test/tuong-hop-thu.spec.ts"'
+    vco_ghi_chung: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ghi-chung"'
+    vco_duong_ngoai_router: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t duong-ngoai-router"'
     gl_ma_tran_dang_nhap_lai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ma-tran-dang-nhap-lai"'
     gl_ngoai_le_dung_tap_khai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ngoai-le-dung-tap-khai"'
     gl_doi_chung_thanh_vien: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t doi-chung-thanh-vien"'
@@ -538,6 +552,7 @@ executors:
     resolve_plugin: "node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/product-map.mjs"
     lint: "bun run lint"
     lint_khong_cache: "bunx turbo run lint --force"
+    vco_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3810} API_URL=${API_URL:-http://localhost:3811} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/vai-chi-okr/rang/man-chi-okr.mjs"'
     lint_slop: "bun run lint:slop"
     ngv_dot_bien_utc: node _acceptance/ngay-gieo-theo-gio-vn/rang/dot-bien-utc.mjs
     check_types: "bun run check-types"

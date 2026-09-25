@@ -1,4 +1,6 @@
-import { describe, expect, it } from "bun:test";
+import { afterAll, beforeAll, describe, expect, it } from "bun:test";
+import { db } from "@crm/db";
+import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	BRIDGE_AUDIENCE,
 	BRIDGE_ISSUER,
@@ -64,6 +66,48 @@ function claims(overrides: Partial<BridgeClaims> = {}): BridgeClaims {
 		...overrides,
 	};
 }
+
+const REP = "user_123";
+
+beforeAll(async () => {
+	const now = new Date();
+	await db.organization.upsert({
+		where: { id: WORKSPACE_ID },
+		create: { id: WORKSPACE_ID, name: "CRM", slug: "crm", createdAt: now },
+		update: {},
+	});
+	await db.user.upsert({
+		where: { id: REP },
+		create: {
+			id: REP,
+			name: "Lewis Carhart",
+			email: "lewis@trycomp.ai",
+			emailVerified: true,
+			createdAt: now,
+			updatedAt: now,
+		},
+		update: {},
+	});
+	await db.member.upsert({
+		where: {
+			organizationId_userId: { organizationId: WORKSPACE_ID, userId: REP },
+		},
+		create: {
+			id: `member-${REP}`,
+			organizationId: WORKSPACE_ID,
+			userId: REP,
+			role: "member",
+			createdAt: now,
+		},
+		update: { role: "member" },
+	});
+});
+
+afterAll(async () => {
+	await db.member.deleteMany({ where: { userId: REP } });
+	await db.user.deleteMany({ where: { id: REP } });
+	await db.$disconnect();
+});
 
 describe("repFromCrm", () => {
 	it("resolves a valid token to the rep, as a person", async () => {

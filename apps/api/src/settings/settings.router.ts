@@ -1,7 +1,15 @@
 import { Inject } from "@nestjs/common";
-import { Input, Mutation, Query, Router, UseMiddlewares } from "nestjs-trpc";
+import {
+	Ctx,
+	Input,
+	Mutation,
+	Query,
+	Router,
+	UseMiddlewares,
+} from "nestjs-trpc";
 import type { z } from "zod";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import type { AuthedTrpcContext } from "../trpc/context.types";
+import { PhamViChungMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	agentModelOutput,
@@ -15,7 +23,7 @@ import {
 import { SettingsService } from "./settings.service";
 
 @Router({ alias: "settings" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViChungMiddleware)
 export class SettingsRouter {
 	constructor(
 		@Inject(SettingsService) private readonly settings: SettingsService,
@@ -42,8 +50,11 @@ export class SettingsRouter {
 		output: agentModelOutput,
 		meta: restMeta("PATCH", "/settings/agent-model", ["Settings"]),
 	})
-	async setAgentModel(@Input() input: z.infer<typeof setAgentModelInput>) {
-		return this.settings.setAgentModel(input.modelId);
+	async setAgentModel(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof setAgentModelInput>,
+	) {
+		return this.settings.setAgentModel(ctx.user.id, input.modelId);
 	}
 
 	@Query({
@@ -59,8 +70,11 @@ export class SettingsRouter {
 		output: researchKeyOutput,
 		meta: restMeta("PATCH", "/settings/research-key", ["Settings"]),
 	})
-	async setResearchKey(@Input() input: z.infer<typeof setResearchKeyInput>) {
-		return this.settings.setResearchKey(input.apiKey);
+	async setResearchKey(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof setResearchKeyInput>,
+	) {
+		return this.settings.setResearchKey(ctx.user.id, input.apiKey);
 	}
 
 	@Query({
@@ -77,8 +91,9 @@ export class SettingsRouter {
 		meta: restMeta("PATCH", "/settings/archive-retention", ["Settings"]),
 	})
 	async setArchiveRetention(
+		@Ctx() ctx: AuthedTrpcContext,
 		@Input() input: z.infer<typeof setArchiveRetentionDaysInput>,
 	) {
-		return this.settings.setArchiveRetention(input.days);
+		return this.settings.setArchiveRetention(ctx.user.id, input.days);
 	}
 }
