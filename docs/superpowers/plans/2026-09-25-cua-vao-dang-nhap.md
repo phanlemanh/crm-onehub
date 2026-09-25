@@ -69,7 +69,7 @@ Mọi đoạn mã dưới đây giả định bản `page.tsx` SAU #104 (có `qu
   - `buocLanDau(cua: CuaDangNhap, chu: { duongChoPhep: string; duongPhatLienKet: string; phut: number }, m: CuaVaoMessages, tenHang: (p: MailboxProviderId) => string): BuocLanDau[]`
   - `cuaVaoMessages(locale: Locale): CuaVaoMessages`
 
-- [ ] **Step 1: Viết test đỏ** — `apps/app/test/cua-vao-ham.spec.ts`
+- [x] **Step 1: Viết test đỏ** — `apps/app/test/cua-vao-ham.spec.ts`
 
 ```ts
 import { describe, expect, it } from "bun:test";
@@ -127,12 +127,12 @@ describe("chonCua va buocLanDau", () => {
 });
 ```
 
-- [ ] **Step 2: Chạy, xác nhận đỏ**
+- [x] **Step 2: Chạy, xác nhận đỏ**
 
 Run: `cd apps/app && bun test ./test/cua-vao-ham.spec.ts`
 Expected: FAIL — `Cannot find module '@/lib/cua-vao/chon-cua'`
 
-- [ ] **Step 3: Viết bộ chữ** — `apps/app/lib/messages/cua-vao.ts`
+- [x] **Step 3: Viết bộ chữ** — `apps/app/lib/messages/cua-vao.ts`
 
 ```ts
 import type { Locale } from "@crm/ui/lib/locale";
@@ -228,7 +228,7 @@ export function cuaVaoMessages(locale: Locale): CuaVaoMessages {
 
 Kiểm trước khi viết: chữ «Cài đặt» đã có trong một kho chữ khác (vd `lib/messages/settings*.ts`, nhãn điều hướng) thì DÙNG khoá đó thay cho `caiDat` mới — `grep -rn '"Cài đặt"' apps/app/lib/messages`. «Thành viên» lấy từ `thanhVienMessages(locale).trang.tieuDe`; «Cho phép một địa chỉ» lấy từ `thanhVienMessages(locale).duocPhepVao.nutThem` (bước 1 ghép thêm `› <nutThem>`: `m.duongThanhVien(caiDat, trang.tieuDe) + " › " + nutThem`). Hàm `phut` và `duong` ghép ở server.
 
-- [ ] **Step 4: Viết phân loại lỗi** — `apps/app/lib/cua-vao/loi-dang-nhap.ts`
+- [x] **Step 4: Viết phân loại lỗi** — `apps/app/lib/cua-vao/loi-dang-nhap.ts`
 
 ```ts
 export const TIEN_TO_CHUA_CHO_PHEP = "This_CRM_is_private.";
@@ -247,7 +247,7 @@ export function phanLoaiLoiDangNhap(
 }
 ```
 
-- [ ] **Step 5: Viết chọn cửa + bước** — `apps/app/lib/cua-vao/chon-cua.ts`. Rút nguyên logic chọn nút hiện có của `sign-in/page.tsx` (các dòng `configured`, `insisted`, `showSso`, `social`) vào đây, không đổi hành vi:
+- [x] **Step 5: Viết chọn cửa + bước** — `apps/app/lib/cua-vao/chon-cua.ts`. Rút nguyên logic chọn nút hiện có của `sign-in/page.tsx` (các dòng `configured`, `insisted`, `showSso`, `social`) vào đây, không đổi hành vi:
 
 ```ts
 import type { MailboxProviderId } from "@crm/auth/scopes";
@@ -296,13 +296,13 @@ export function buocLanDau(
 
 Kiểm với `RouterOutputs["sso"]["signInOptions"]` sau #104: nếu `providers[number]` không có `name` thì dừng và báo — đó là khuôn API khác spec.
 
-- [ ] **Step 6: Đổi chữ trong `lib/messages/auth.ts`**
+- [x] **Step 6: Đổi chữ trong `lib/messages/auth.ts`**
 
 `en.shell.headline`: `"The OneHub CRM: partners, 30-day plans and OKRs."` · `vi.shell.headline`: `"CRM của OneHub: đối tác, kế hoạch 30 ngày và OKR."`
 `en.signIn.title`: `"Sign in to the CRM"` · `vi.signIn.title`: `"Đăng nhập vào CRM"`
 `en.signIn.description`: `"Use the exact email address you were allowed in with."` · `vi.signIn.description`: `"Dùng đúng địa chỉ email đã được cho phép."`
 
-- [ ] **Step 7: Ghim hàm mới vào `messages-guard`** — thêm vào `GHIM` trong `apps/app/test/messages-guard.spec.ts` (mỗi khoá hàm hai mẫu `[mot, nhieu]` tiếng Việt):
+- [x] **Step 7: Ghim hàm mới vào `messages-guard`** — thêm vào `GHIM` trong `apps/app/test/messages-guard.spec.ts` (mỗi khoá hàm hai mẫu `[mot, nhieu]` tiếng Việt):
 
 ```ts
 "cua-vao:buoc.choPhep.moTa": ["Ở 1.", "Ở 12."],
@@ -316,12 +316,12 @@ Kiểm với `RouterOutputs["sso"]["signInOptions"]` sau #104: nếu `providers[
 
 Đọc cách `GHIM` gọi hàm hai đối số trước khi viết mẫu (`sed -n 640,672p apps/app/test/messages-guard.spec.ts`) — mẫu phải khớp đúng cách test đó dựng đối số.
 
-- [ ] **Step 8: Chạy xanh**
+- [x] **Step 8: Chạy xanh**
 
 Run: `cd apps/app && bun test ./test/cua-vao-ham.spec.ts ./test/messages-guard.spec.ts ./test/auth-messages.spec.ts`
 Expected: PASS. `auth-messages.spec.ts` đỏ vì ghim «Mừng bạn quay lại» → sửa ghim đó sang chữ mới (đó là thước cũ nói đúng thứ vừa đổi, không phải hồi quy).
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add apps/app/lib/cua-vao apps/app/lib/messages/cua-vao.ts apps/app/lib/messages/auth.ts apps/app/test/cua-vao-ham.spec.ts apps/app/test/messages-guard.spec.ts apps/app/test/auth-messages.spec.ts
@@ -329,6 +329,8 @@ git commit -m "feat: chữ và hàm chọn cửa, phân loại lỗi cho cửa v
 ```
 
 ---
+
+**Đã làm 2026-09-26 (trước #104, phiên điều phối cho phép), commit `c8dbc6a0`.** Lệch kế hoạch: không thêm khoá «Cài đặt» mới — trang lấy `settingsMessages(locale).thanhBen.nhan`; dấu ` › ` ghép ở máy chủ; `SignInOptions` chưa có `quenMatKhau` (thêm khi #104 vào). `cua-vao-ham.spec.ts` 20/20; `messages-guard` xanh sau khi Task 4 gọi đủ khoá mới.
 
 ### Task 2: `StepList` chế độ tĩnh (packages/ui)
 
@@ -406,7 +408,7 @@ Kiểm tên `data-slot` thật của chỉ báo trong `packages/ui/src/component
 
 Hình dạng khi CÓ `gioiThieu`: `<main className="grid min-h-svh bg-background text-foreground lg:grid-cols-[…]">` với thứ tự DOM: (1) section khung đăng nhập (như hôm nay), (2) `<section aria-label={…} className="flex flex-col gap-6 bg-muted px-6 py-8 sm:px-10 lg:order-first lg:justify-between lg:p-12 xl:p-12">` chứa `<div className="hidden lg:flex"><LogoLockup aria-hidden="true" className="h-5 w-auto shrink-0" /></div>` rồi `{gioiThieu}`. Không `AuthShader`. Khi KHÔNG có `gioiThieu`: y hệt hôm nay (section trái đầu DOM, `hidden lg:flex`, `AuthShader`, eyebrow, `h1` headline) trừ lớp `dark` ở `<main>`.
 
-- [ ] **Step 1: Test đỏ** — `apps/app/test/cua-vao-shell.dom.tsx` (chỉ mock `@/lib/locale/server`; KHÔNG mock `auth-shell`, `auth-shader`):
+- [x] **Step 1: Test đỏ** — `apps/app/test/cua-vao-shell.dom.tsx` (chỉ mock `@/lib/locale/server`; KHÔNG mock `auth-shell`, `auth-shader`):
 
 ```tsx
 import { describe, expect, it, mock } from "bun:test";
@@ -452,15 +454,17 @@ describe("AuthShell khong khoi", () => {
 });
 ```
 
-- [ ] **Step 2: Chạy đỏ** — `cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cua-vao-shell.dom.tsx` → FAIL «lop dark» / «khong co data-khoi».
+- [x] **Step 2: Chạy đỏ** — `cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cua-vao-shell.dom.tsx` → FAIL «lop dark» / «khong co data-khoi».
 
-- [ ] **Step 3: Cài** theo hình dạng ở trên. `AuthHeading`: `const TieuDe = cap ?? "h2";` rồi `<TieuDe className=…>` giữ nguyên lớp cũ.
+- [x] **Step 3: Cài** theo hình dạng ở trên. `AuthHeading`: `const TieuDe = cap ?? "h2";` rồi `<TieuDe className=…>` giữ nguyên lớp cũ.
 
-- [ ] **Step 4: Chạy xanh** (cùng lệnh) và `bun run test:dom` của `apps/app` (bốn trang kia có test DOM riêng).
+- [x] **Step 4: Chạy xanh** (cùng lệnh) và `bun run test:dom` của `apps/app` (bốn trang kia có test DOM riêng).
 
-- [ ] **Step 5: Commit** — `git commit -m "feat: AuthShell nhận khối cột trái, theo giao diện máy"`
+- [x] **Step 5: Commit** — `git commit -m "feat: AuthShell nhận khối cột trái, theo giao diện máy"`
 
 ---
+
+**Đã làm 2026-09-26, commit `c8dbc6a0`.** Test dựng bằng `renderToStaticMarkup` (không cần router của `next/link`). Chiều đỏ trên worktree tạm ở `8c75aae8` (mã cũ + test mới): 6/7 đỏ, 1 ca «bản thật» xanh. Sửa thước giữa chừng: `className` của `svg` là `SVGAnimatedString` → đọc thuộc tính `class`.
 
 ### Task 4: Trang đăng nhập — khối hướng dẫn và ô lỗi
 
@@ -487,21 +491,23 @@ Trang (`page.tsx`): `SignInPage` trả
 ```
 `HuongDan` (async, cùng tệp): `const [options, { method }, locale] = await Promise.all([signInOptions(), searchParams, getLocale()])`; `const cua = chonCua(options, method)`; dựng `duongChoPhep` = `${caiDat} › ${thanhVien.trang.tieuDe} › ${thanhVien.duocPhepVao.nutThem}`, `duongPhatLienKet` = `${caiDat} › ${thanhVien.trang.tieuDe}`, `phut = Math.round(PASSWORD.tokenTtlSeconds / SECONDS_PER_MINUTE)` (cùng nguồn `SECONDS_PER_MINUTE` với trang `dat-mat-khau`); trả `<KhoiHuongDan …/>`. `SignIn`: đọc thêm `error` từ `searchParams`, thay khối `configured/insisted/showSso/social` bằng `chonCua(options, method)`, dùng `cua.sso.length > 0` cho `showSso` và `cua.social` cho nút; `AuthHeading cap="h1"`; ngay sau `AuthHeading`: `{loai ? <OLoiDangNhap loai={loai} m={cv.loi} /> : null}`. `signInOptions()` gọi hai lần trong cùng request — `getServerQueryClient().fetchQuery` dùng chung cache của request; nếu đo thấy hai lượt gọi API thì bọc bằng `cache` của React trong `page.tsx`.
 
-- [ ] **Step 1: Test đỏ `cua-vao-sign-in.dom.tsx`** — khuôn mock theo `sign-in-mat-khau-luon-hien.spec.ts` (mock `password-sign-in`, `social-sign-in`, `sso-sign-in` thành hàm ghi props; mock `@/lib/session`, `@/lib/trpc/server` với `fetchQuery` đọc `let tuyChon: SignInOptions | Error` đổi theo ca; mock `@/lib/locale/server`, `next/navigation` với `redirect` ghi lại đích). KHÔNG mock `@crm/auth`, KHÔNG mock `auth-shell`. Dựng trang bằng `renderToString` của `react-dom/server` trên cây đã giải async (duyệt tay như `dungManDangNhap`, giải cả `HuongDan` trong prop `gioiThieu`). Mỗi `describe` mang đúng tag của config: `ba-buoc-google`, `ma-tran-cua`, `o-loi`, `chu`, `quen-mat-khau`. Nội dung từng ca đúng theo `expected` của E3, E4, E6–E10, E15 trong `evals.yaml` — ma trận viết trước, thông điệp ghim nguyên văn ở đó. Ca E6 lấy giá trị `error` bằng cách nhập hàm rút của `_acceptance/cua-vao-dang-nhap/rang/ma-loi-that.mjs` (Task 5a — viết Task 5a Step 1–3 trước Step này, hoặc tạm để ca đó `it.todo` và bật lại ở Task 5a).
+- [x] **Step 1: Test đỏ `cua-vao-sign-in.dom.tsx`** — khuôn mock theo `sign-in-mat-khau-luon-hien.spec.ts` (mock `password-sign-in`, `social-sign-in`, `sso-sign-in` thành hàm ghi props; mock `@/lib/session`, `@/lib/trpc/server` với `fetchQuery` đọc `let tuyChon: SignInOptions | Error` đổi theo ca; mock `@/lib/locale/server`, `next/navigation` với `redirect` ghi lại đích). KHÔNG mock `@crm/auth`, KHÔNG mock `auth-shell`. Dựng trang bằng `renderToString` của `react-dom/server` trên cây đã giải async (duyệt tay như `dungManDangNhap`, giải cả `HuongDan` trong prop `gioiThieu`). Mỗi `describe` mang đúng tag của config: `ba-buoc-google`, `ma-tran-cua`, `o-loi`, `chu`, `quen-mat-khau`. Nội dung từng ca đúng theo `expected` của E3, E4, E6–E10, E15 trong `evals.yaml` — ma trận viết trước, thông điệp ghim nguyên văn ở đó. Ca E6 lấy giá trị `error` bằng cách nhập hàm rút của `_acceptance/cua-vao-dang-nhap/rang/ma-loi-that.mjs` (Task 5a — viết Task 5a Step 1–3 trước Step này, hoặc tạm để ca đó `it.todo` và bật lại ở Task 5a).
 
-- [ ] **Step 2: Test đỏ `cua-vao-trang-khac.dom.tsx`** — mock `@/components/auth-shell` thành `AuthShell` ghi `props.gioiThieu` vào mảng, `AuthHeading` trả `null`; mock dữ liệu phụ của từng trang (`@crm/db`, `@/lib/session`, trpc) đủ để trang render; ma trận 5 dòng của E1.
+- [x] **Step 2: Test đỏ `cua-vao-trang-khac.dom.tsx`** — mock `@/components/auth-shell` thành `AuthShell` ghi `props.gioiThieu` vào mảng, `AuthHeading` trả `null`; mock dữ liệu phụ của từng trang (`@crm/db`, `@/lib/session`, trpc) đủ để trang render; ma trận 5 dòng của E1.
 
-- [ ] **Step 3: Chạy đỏ** — hai lệnh `cvdn_*` tương ứng trong `_acceptance/config.yaml` (xem khoá `cvdn_chi_sign_in`, `cvdn_ba_buoc_google`…). Expected: FAIL với thông điệp ghim «khong thay khoi «Lần đầu vào?»» / «sign-in: AuthShell khong nhan khoi».
+- [x] **Step 3: Chạy đỏ** — hai lệnh `cvdn_*` tương ứng trong `_acceptance/config.yaml` (xem khoá `cvdn_chi_sign_in`, `cvdn_ba_buoc_google`…). Expected: FAIL với thông điệp ghim «khong thay khoi «Lần đầu vào?»» / «sign-in: AuthShell khong nhan khoi».
 
-- [ ] **Step 4: Cài** hai component và trang theo Interfaces ở trên.
+- [x] **Step 4: Cài** hai component và trang theo Interfaces ở trên.
 
-- [ ] **Step 5: Chạy xanh** — sáu lệnh `cvdn_*` loại `test`, rồi `cd apps/app && bun run test:dom && bun test`.
+- [x] **Step 5: Chạy xanh** — sáu lệnh `cvdn_*` loại `test`, rồi `cd apps/app && bun run test:dom && bun test`.
 
-- [ ] **Step 6: Hai thứ tự** — `cd apps/app && bun test --randomize --seed 1` và `--seed 2`; so tập ca đỏ với cùng lệnh trên `merge-base` (bài học `mock.module` sống qua tệp).
+- [x] **Step 6: Hai thứ tự** — `cd apps/app && bun test --randomize --seed 1` và `--seed 2`; so tập ca đỏ với cùng lệnh trên `merge-base` (bài học `mock.module` sống qua tệp).
 
 - [ ] **Step 7: Commit** — `git commit -m "feat: trang đăng nhập nói cách vào và báo lỗi khi bị từ chối"`
 
 ---
+
+**Đã làm 2026-09-26, commit `c8dbc6a0`, TRỪ ca E15 «Quên mật khẩu?» (chờ #104) và dòng `quenMatKhau={…}` (#104 thêm).** Lệch kế hoạch: không giả lập `AuthShell` ở E1 — hàm trang trả phần tử `<AuthShell>` chưa vẽ nên đọc thẳng `props.gioiThieu`; `phutLienKetDatMatKhau()` ở `lib/cua-vao/thoi-han.ts` thay hằng `SECONDS_PER_MINUTE` tại chỗ của trang `dat-mat-khau`. Chiều đỏ trên cây cũ: `cua-vao-sign-in` 20/24 đỏ (4 ca đo điều cũ vốn đúng), `cua-vao-trang-khac` 1/5 đỏ («sign-in: AuthShell khong nhan khoi»). Phá-thử trên cây đã commit: bỏ `method` khi tính bước → đỏ `method-google`; in `error` ra trang → 6 ca «HTML chua gia tri URL»; `onboarding` nhận khối → đỏ ca đó; ô lỗi sau ô mật khẩu → «o loi dung sau nut dang nhap». `bun test --randomize` seed 1 và 2: 399/399.
 
 ### Task 5a: Răng không cần màn — mã lỗi thật, soi mã, thước đã ký
 
@@ -518,13 +524,15 @@ Trang (`page.tsx`): `SignInPage` trả
 
 Mọi đường dẫn suy từ `import.meta.url` (`const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..")`), không hardcode gốc. Mỗi răng in một dòng `DUNG …`/`SAI …` cho mỗi phần tử ma trận viết trước và một dòng `KET LUAN n DUNG, k SAI — ma thoat x`; thiếu phần tử → `SAI thieu <ma>`.
 
-- [ ] **Step 1: `ma-loi-that.mjs`** — dùng `typescript` (có trong `node_modules`) để parse `packages/auth/src/auth.ts` (hoặc `process.env.CVDN_AUTH_TS`), tìm `new APIError("FORBIDDEN", { message })` trong thân `user.create.before`; chuỗi thường lấy nguyên, template `${domain}` thay `onemount.com`, nhánh `: "…"` lấy đủ hai. Mỏ neo: đọc `link-account.mjs`, `callback.mjs` của better-auth resolve từ `packages/auth` (`createRequire(join(GOC,"packages/auth/package.json")).resolve("better-auth/package.json")`), và `@better-auth/sso/dist/index.mjs` (hoặc `CVDN_SSO_DIST`) — ghim chuỗi trích nguyên văn ở `expected` của E5. Ma trận `{oauth, sso} × {co-mien, khong-mien, chua-khai}` = 6 dòng.
-- [ ] **Step 2: Chiều đỏ E5** — bản sao `auth.ts` với «This workspace is private.» qua `CVDN_AUTH_TS` → `SAI oauth-co-mien`, mã 1; bản sao dist SSO đổi `split(" ").join("_")` → `SAI moc sso`, mã 1. Ghi nguyên văn hai lượt đỏ vào Notes của hợp đồng.
-- [ ] **Step 3: `soi-ma.mjs`** — parse bằng `typescript` mọi tệp vòng này viết/sửa dưới `apps/app` (lấy từ `git diff --name-only $(git merge-base HEAD origin/onehub)`), bốn điều (a)–(d) của E16; đối chứng dương trên `rang/fixtures/*.tsx`. Chiều đỏ trên bản sao có `import { PASSWORD } from "@crm/auth"` trong tệp client.
+- [x] **Step 1: `ma-loi-that.mjs`** — dùng `typescript` (có trong `node_modules`) để parse `packages/auth/src/auth.ts` (hoặc `process.env.CVDN_AUTH_TS`), tìm `new APIError("FORBIDDEN", { message })` trong thân `user.create.before`; chuỗi thường lấy nguyên, template `${domain}` thay `onemount.com`, nhánh `: "…"` lấy đủ hai. Mỏ neo: đọc `link-account.mjs`, `callback.mjs` của better-auth resolve từ `packages/auth` (`createRequire(join(GOC,"packages/auth/package.json")).resolve("better-auth/package.json")`), và `@better-auth/sso/dist/index.mjs` (hoặc `CVDN_SSO_DIST`) — ghim chuỗi trích nguyên văn ở `expected` của E5. Ma trận `{oauth, sso} × {co-mien, khong-mien, chua-khai}` = 6 dòng.
+- [x] **Step 2: Chiều đỏ E5** — bản sao `auth.ts` với «This workspace is private.» qua `CVDN_AUTH_TS` → `SAI oauth-co-mien`, mã 1; bản sao dist SSO đổi `split(" ").join("_")` → `SAI moc sso`, mã 1. Ghi nguyên văn hai lượt đỏ vào Notes của hợp đồng.
+- [x] **Step 3: `soi-ma.mjs`** — parse bằng `typescript` mọi tệp vòng này viết/sửa dưới `apps/app` (lấy từ `git diff --name-only $(git merge-base HEAD origin/onehub)`), bốn điều (a)–(d) của E16; đối chứng dương trên `rang/fixtures/*.tsx`. Chiều đỏ trên bản sao có `import { PASSWORD } from "@crm/auth"` trong tệp client.
 - [ ] **Step 4: `thuoc-da-ky.mjs`** — đọc `evals.yaml` của ba hồ sơ, lọc eval `test`/`script` có `paths` chạm vùng sửa, giải `config:` ref từ `_acceptance/config.yaml`, chạy trên HEAD và trên `git worktree add` tại `merge-base` (gỡ ở `finally`, kể cả khi lỗi); so theo luật E20. Chạy lâu — chạy nền, theo bài học «thước hồ sơ đã ký bị chạm».
 - [ ] **Step 5: Chạy cả ba** (`cvdn_ma_loi_that`, `cvdn_soi_ma`, `cvdn_thuoc_da_ky`), commit — `git commit -m "test: răng đo mã lỗi thật, soi mã và thước đã ký cho cua-vao-dang-nhap"`
 
 ---
+
+**Step 1–3 đã làm 2026-09-26.** `ma-loi-that.mjs` 9/9 (3 mỏ neo + 2 writer × 3 câu); chiều đỏ: câu hook đổi → 4 SAI; dist SSO đổi phép biến đổi → «SAI moc sso». `soi-ma.mjs` 19/19 kèm 2 đối chứng dương; chiều đỏ: bản sao client nhập `@crm/auth` → SAI (a), `<Card className="rounded-2xl bg-muted">` → SAI (c). **Step 4 (`thuoc-da-ky`) để lại**: chạy eval của ba hồ sơ đã ký trên hai cây, nặng như một làn đo — xin lượt phiên điều phối.
 
 ### Task 5b: Bàn đo màn thật
 
