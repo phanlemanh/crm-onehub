@@ -262,12 +262,16 @@ describe("hop-thoai-nhap-okr", () => {
 		const nutGhi = document.body.querySelector(
 			'[data-nut="ghi-lo"]',
 		) as HTMLButtonElement;
+		const cuonHop = document.body.querySelector("[data-cuon-hop]");
+		const bang = document.body.querySelector("table");
 		expect({
 			tomTat: tomTat?.textContent,
 			soDongHong: dongHongLi.length,
 			cauDongHong: dongHongLi.map((l) => l.textContent),
 			nhanNutGhi: nutGhi.textContent?.trim(),
 			khoa: nutGhi.disabled,
+			nutGhiTrongCuon: cuonHop?.contains(nutGhi) ?? false,
+			bangTrongCuon: (bang && cuonHop?.contains(bang)) ?? false,
 		}).toEqual({
 			tomTat: "3 dòng hợp lệ · 2 dòng hỏng · 2 mục tiêu",
 			soDongHong: 2,
@@ -277,6 +281,8 @@ describe("hop-thoai-nhap-okr", () => {
 			],
 			nhanNutGhi: "Ghi 3 dòng · bỏ 2 dòng hỏng",
 			khoa: false,
+			nutGhiTrongCuon: false,
+			bangTrongCuon: true,
 		});
 	});
 

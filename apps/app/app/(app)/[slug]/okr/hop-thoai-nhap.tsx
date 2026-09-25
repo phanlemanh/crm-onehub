@@ -151,152 +151,158 @@ export function HopThoaiNhapOkr({
 					<StepListItem step={3} activeStep={buoc} title={m.buoc.ketQua} />
 				</StepList>
 
-				{buoc === 1 ? (
-					<div
-						className="flex flex-col gap-4"
-						data-buoc-nhap="1"
-						data-trang-thai="ST-nhap-dan"
-					>
-						<div className="grid grid-cols-2 gap-3">
-							<Field data-disabled>
-								<FieldLabel htmlFor={`${maO}-chu-ky`}>{mAll.chuKy}</FieldLabel>
-								<Input
-									id={`${maO}-chu-ky`}
-									value={tenKy}
-									disabled
+				<div className="-m-1 max-h-[70svh] overflow-y-auto p-1" data-cuon-hop>
+					{buoc === 1 ? (
+						<div
+							className="flex flex-col gap-4"
+							data-buoc-nhap="1"
+							data-trang-thai="ST-nhap-dan"
+						>
+							<div className="grid grid-cols-2 gap-3">
+								<Field data-disabled>
+									<FieldLabel htmlFor={`${maO}-chu-ky`}>
+										{mAll.chuKy}
+									</FieldLabel>
+									<Input
+										id={`${maO}-chu-ky`}
+										value={tenKy}
+										disabled
+										translate="no"
+									/>
+								</Field>
+								<Field data-disabled>
+									<FieldLabel htmlFor={`${maO}-don-vi`}>
+										{mAll.donVi}
+									</FieldLabel>
+									<Input
+										id={`${maO}-don-vi`}
+										value={tenDonVi}
+										disabled
+										translate="no"
+									/>
+								</Field>
+							</div>
+							<Field>
+								<FieldLabel htmlFor={maO}>{m.o}</FieldLabel>
+								<Textarea
+									id={maO}
+									rows={8}
+									value={chu}
 									translate="no"
+									placeholder={m.mau}
+									aria-invalid={loi ? true : undefined}
+									onChange={(e) => doiChu(e.target.value)}
 								/>
-							</Field>
-							<Field data-disabled>
-								<FieldLabel htmlFor={`${maO}-don-vi`}>{mAll.donVi}</FieldLabel>
-								<Input
-									id={`${maO}-don-vi`}
-									value={tenDonVi}
-									disabled
-									translate="no"
+								{loi ? <FieldError>{loi}</FieldError> : null}
+								<FieldDescription>{m.goiY}</FieldDescription>
+								<input
+									ref={tep}
+									type="file"
+									accept=".csv,text/csv"
+									className="sr-only"
+									tabIndex={-1}
+									aria-hidden
+									onChange={async (e) => {
+										const f = e.target.files?.[0];
+										if (f) doiChu(await f.text());
+										e.target.value = "";
+									}}
 								/>
 							</Field>
 						</div>
-						<Field>
-							<FieldLabel htmlFor={maO}>{m.o}</FieldLabel>
-							<Textarea
-								id={maO}
-								rows={8}
-								value={chu}
-								translate="no"
-								placeholder={m.mau}
-								aria-invalid={loi ? true : undefined}
-								onChange={(e) => doiChu(e.target.value)}
-							/>
-							{loi ? <FieldError>{loi}</FieldError> : null}
-							<FieldDescription>{m.goiY}</FieldDescription>
-							<input
-								ref={tep}
-								type="file"
-								accept=".csv,text/csv"
-								className="sr-only"
-								tabIndex={-1}
-								aria-hidden
-								onChange={async (e) => {
-									const f = e.target.files?.[0];
-									if (f) doiChu(await f.text());
-									e.target.value = "";
-								}}
-							/>
-						</Field>
-					</div>
-				) : null}
+					) : null}
 
-				{buoc === 2 && tom ? (
-					<div
-						className="flex flex-col gap-3"
-						data-buoc-nhap="2"
-						data-trang-thai="ST-nhap-xemtruoc"
-					>
-						<p className="text-sm" aria-live="polite" data-tom-tat>
-							{dien(m.tomTat, {
-								v: tom.valid,
-								h: tom.invalid,
-								m: tom.objectives,
-							})}
-						</p>
-						{hong.length > 0 ? (
-							<ul
-								className="flex flex-col gap-1 text-destructive text-sm"
-								aria-label={m.dongHong}
-							>
-								{hong.map((r) => (
-									<li key={r.line} data-dong-hong>
-										{dien(m.dong, { n: r.line, loi: r.error ?? "" })}
-									</li>
-								))}
-							</ul>
-						) : null}
-						<SimpleTable
-							containerClassName="max-h-80 overflow-y-auto"
-							columns={[
-								{ id: "dong", header: m.cot.dong },
-								{ id: "mucTieu", header: m.cot.mucTieu },
-								{ id: "kr", header: m.cot.kr },
-								{ id: "kieu", header: m.cot.kieu },
-								{ id: "khoiDiem", header: m.cot.khoiDiem },
-								{ id: "dich", header: m.cot.dich },
-								{ id: "donViDo", header: m.cot.donViDo },
-								{ id: "email", header: m.cot.email },
-								{ id: "ketQua", header: m.cot.ketQua },
-							]}
+					{buoc === 2 && tom ? (
+						<div
+							className="flex flex-col gap-3"
+							data-buoc-nhap="2"
+							data-trang-thai="ST-nhap-xemtruoc"
 						>
-							{ketQua?.xem.rows.map((r) => (
-								<SimpleTableRow
-									key={r.line}
-									data-hong={r.error ? "co" : "khong"}
+							<p className="text-sm" aria-live="polite" data-tom-tat>
+								{dien(m.tomTat, {
+									v: tom.valid,
+									h: tom.invalid,
+									m: tom.objectives,
+								})}
+							</p>
+							{hong.length > 0 ? (
+								<ul
+									className="flex flex-col gap-1 text-destructive text-sm"
+									aria-label={m.dongHong}
 								>
-									<TableCell>
-										<span className="tabular-nums">{r.line}</span>
-									</TableCell>
-									<TableCell translate="no">{r.objective}</TableCell>
-									<TableCell translate="no">{r.keyResult}</TableCell>
-									<TableCell translate="no">{r.kind}</TableCell>
-									<TableCell translate="no">{r.start}</TableCell>
-									<TableCell translate="no">{r.target}</TableCell>
-									<TableCell translate="no">{r.unit}</TableCell>
-									<TableCell translate="no">{r.email}</TableCell>
-									<TableCell>
-										{r.error ? (
-											<span className="text-destructive">{m.hong}</span>
-										) : (
-											<span className="text-muted-foreground">{m.hopLe}</span>
-										)}
-									</TableCell>
-								</SimpleTableRow>
-							))}
-						</SimpleTable>
-						<Field orientation="horizontal">
-							<FieldLabel htmlFor={maCongBo}>{m.congBoNgay}</FieldLabel>
-							<Switch
-								id={maCongBo}
-								checked={congBo}
-								onCheckedChange={setCongBo}
-								data-cong-bo-ngay
-							/>
-						</Field>
-					</div>
-				) : null}
+									{hong.map((r) => (
+										<li key={r.line} data-dong-hong>
+											{dien(m.dong, { n: r.line, loi: r.error ?? "" })}
+										</li>
+									))}
+								</ul>
+							) : null}
+							<SimpleTable
+								containerClassName="max-h-80 overflow-y-auto"
+								columns={[
+									{ id: "dong", header: m.cot.dong },
+									{ id: "mucTieu", header: m.cot.mucTieu },
+									{ id: "kr", header: m.cot.kr },
+									{ id: "kieu", header: m.cot.kieu },
+									{ id: "khoiDiem", header: m.cot.khoiDiem },
+									{ id: "dich", header: m.cot.dich },
+									{ id: "donViDo", header: m.cot.donViDo },
+									{ id: "email", header: m.cot.email },
+									{ id: "ketQua", header: m.cot.ketQua },
+								]}
+							>
+								{ketQua?.xem.rows.map((r) => (
+									<SimpleTableRow
+										key={r.line}
+										data-hong={r.error ? "co" : "khong"}
+									>
+										<TableCell>
+											<span className="tabular-nums">{r.line}</span>
+										</TableCell>
+										<TableCell translate="no">{r.objective}</TableCell>
+										<TableCell translate="no">{r.keyResult}</TableCell>
+										<TableCell translate="no">{r.kind}</TableCell>
+										<TableCell translate="no">{r.start}</TableCell>
+										<TableCell translate="no">{r.target}</TableCell>
+										<TableCell translate="no">{r.unit}</TableCell>
+										<TableCell translate="no">{r.email}</TableCell>
+										<TableCell>
+											{r.error ? (
+												<span className="text-destructive">{m.hong}</span>
+											) : (
+												<span className="text-muted-foreground">{m.hopLe}</span>
+											)}
+										</TableCell>
+									</SimpleTableRow>
+								))}
+							</SimpleTable>
+							<Field orientation="horizontal">
+								<FieldLabel htmlFor={maCongBo}>{m.congBoNgay}</FieldLabel>
+								<Switch
+									id={maCongBo}
+									checked={congBo}
+									onCheckedChange={setCongBo}
+									data-cong-bo-ngay
+								/>
+							</Field>
+						</div>
+					) : null}
 
-				{buoc === 3 && daGhi ? (
-					<div
-						className="flex flex-col gap-2 text-sm"
-						data-buoc-nhap="3"
-						data-trang-thai="ST-nhap-ketqua"
-					>
-						<p aria-live="polite">
-							{dien(m.ketQuaGhi, {
-								m: daGhi.objectives,
-								k: daGhi.keyResults,
-							})}
-						</p>
-					</div>
-				) : null}
+					{buoc === 3 && daGhi ? (
+						<div
+							className="flex flex-col gap-2 text-sm"
+							data-buoc-nhap="3"
+							data-trang-thai="ST-nhap-ketqua"
+						>
+							<p aria-live="polite">
+								{dien(m.ketQuaGhi, {
+									m: daGhi.objectives,
+									k: daGhi.keyResults,
+								})}
+							</p>
+						</div>
+					) : null}
+				</div>
 
 				<DialogFooter>
 					{buoc === 1 ? (
