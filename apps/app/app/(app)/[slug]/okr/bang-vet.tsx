@@ -114,7 +114,7 @@ function thayDoi(vet: Vet, bc: BoiCanh): ThayDoi[] {
 	});
 }
 
-function luc(at: string, locale: Locale): string {
+export function luc(at: string, locale: Locale): string {
 	const d = new Date(at);
 	const gio = dateFormat(locale, { hour: "2-digit", minute: "2-digit" });
 	return `${formatDay(toDay(d), locale)} ${gio.format(d)}`;

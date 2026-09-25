@@ -81,7 +81,7 @@ const DINH_DANG = { vi: "vi-VN", en: "en-GB" } satisfies Record<Locale, string>;
 
 const KHUNG_TAI = ["mot", "hai", "ba"] as const;
 
-type LanTruoc = "tuan-nay" | "tuan-truoc" | "lan-truoc";
+export type LanTruoc = "tuan-nay" | "tuan-truoc" | "lan-truoc";
 
 type O = { giaTri: string; tuTin: MucTuTin | null; ghiChu: string };
 
@@ -125,7 +125,7 @@ function laMucTuTin(v: string): MucTuTin | null {
 	return MUC_TU_TIN.find((m) => m === v) ?? null;
 }
 
-function oBanDau(kr: KrCapNhat, locale: Locale): O {
+export function oBanDau(kr: KrCapNhat, locale: Locale): O {
 	const giaTriDau =
 		kr.kind === "moc"
 			? kr.currentValue >= 1
@@ -135,12 +135,12 @@ function oBanDau(kr: KrCapNhat, locale: Locale): O {
 	return { giaTri: giaTriDau, tuTin: null, ghiChu: "" };
 }
 
-function docGiaTri(kr: KrCapNhat, chu: string): number | null {
+export function docGiaTri(kr: KrCapNhat, chu: string): number | null {
 	if (kr.kind === "moc") return chu === MOC.xong ? 1 : 0;
 	return docSoOkr(chu);
 }
 
-function loiSo(kr: KrCapNhat, so: number | null): LoiSo | null {
+export function loiSo(kr: KrCapNhat, so: number | null): LoiSo | null {
 	if (so === null) return "so";
 	return kiemGiaTriTheoKieu(kr.kind, so) === null ? null : "phan-tram";
 }
@@ -453,7 +453,7 @@ function DongCapNhat({
 	);
 }
 
-function OGiaTri({
+export function OGiaTri({
 	kr,
 	value,
 	so,
@@ -549,7 +549,7 @@ function OGiaTri({
 	);
 }
 
-function ChonTuTin({
+export function ChonTuTin({
 	kr,
 	value,
 	lan,
@@ -601,7 +601,7 @@ function ChonTuTin({
 	);
 }
 
-function OGhiChu({
+export function OGhiChu({
 	id,
 	value,
 	datGhiChu,
