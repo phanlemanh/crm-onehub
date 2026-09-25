@@ -456,11 +456,13 @@ describe("mot-tin", () => {
 			dongDau: text.split("\n")[0],
 			soDaGui: daGui.length,
 			daGuiDau: daGui[0],
+			daGuiCoCapNhat: daGui.includes("okr-cap-nhat"),
 			conLai: text.includes("và 2 việc nữa"),
 		}).toEqual({
 			dongDau: "Chào An, sáng nay có 12 việc cần bạn để ý.",
 			soDaGui: 10,
 			daGuiDau: "okr-cap-nhat",
+			daGuiCoCapNhat: true,
 			conLai: true,
 		});
 	});
