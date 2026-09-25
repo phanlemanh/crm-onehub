@@ -1,19 +1,32 @@
 ---
 schema_version: 2
 feature_slug: logo-onehub
-verdict: PASS
+verdict: BLOCKED
 failed_evals: []
-reason: 
+reason: |
+  ui-check:E11 khong the chay. Script rang/chup.mjs tu ket thuc voi ma thoat 2
+  ("KHONG DO DUOC") truoc khi chup bat ky anh nao — khong phai do tool/timeout
+  giet. Nguyen nhan: cookie phien dev:session cua ada@trycomp.ai truy cap
+  http://localhost:3300/ bi 307-redirect toi /onboarding/research (xac nhan
+  bang curl doc lap), nen suySlug() trong chup.mjs tra ve null va script
+  khongDo() ngay. Da tra dau: tRPC workspace.get tra onboarded:true (gate
+  workspace da settled) nhung tRPC settings.researchKey tra configured:false,
+  nen middleware rieng cua /onboarding/research (khong lien quan onboarding
+  chung) van chan. Day la trang thai AppSetting cua workspace "crm" dung chung
+  tren DB dev cua may (postgresql://.../crm, khong phai crm_test), khong phai
+  loi do thay doi logo-onehub gay ra, va cung khong sua duoc trong pham vi mot
+  verifier (cam sua tep nguon, khong duoc phep ghi AppSetting — mot lan thu
+  doc bang du lieu AppSetting da bi bo phan loai tu-dong chan vi "Credential
+  Exploration"). Da thu lai 2 lan (cach nhau ~10 phut, va poll 5 lan cach 3s)
+  — ket qua on dinh, khong phai luot chay thoang qua.
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8aa296c7026ea33a778796170a34953c1c40e723
-human_signoff: 
+verified_commit: 35c1d3e41e32cbccd2b857bad0d6166f49768a8a
+human_signoff:
 ---
 
 # Evidence Report: logo-onehub
-
-Round 2: khoảng hở đo lường AC-9/E10 phát hiện ở round 1 (script chỉ khai một file làm vùng cấm thay vì cả thư mục `apps/app/app/(landing)/`) đã được vá; review round này không tìm thấy finding trong-hợp-đồng nào sống sót. Một finding ngoài-hợp-đồng mới (rename blind-spot trong `ranh-gioi.mjs`) và bốn finding ngoài-hợp-đồng cũ từ round 1 được chuyển nguyên vào `review-findings.md` cho người quyết ở Cổng Bằng chứng.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -27,182 +40,213 @@ Round 2: khoảng hở đo lường AC-9/E10 phát hiện ở round 1 (script ch
 | E8 | AC-7 | test | PASS |
 | E9 | AC-8 | test | PASS |
 | E10 | AC-9 | script | PASS |
-| E11 | AC-10 | ui-check | PASS |
+| E11 | AC-10 | ui-check | BLOCKED |
 | E12 | AC-3 | script | PASS |
+| E13 | AC-11 | script | PASS |
+| E14 | AC-11 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-logo-onehub-E1-r2
+  run_id: minted-logo-onehub-E1-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.lgo_khop_goc
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
   output: |
-    cd packages/ui && bun test test/logo-khop-goc.spec.ts
      4 pass
      0 fail
-    Ran 4 tests across 1 file. [80.00ms]
+    Ran 4 tests across 1 file. [92.00ms]
 
 - eval: E2
-  run_id: minted-logo-onehub-E2-r2
+  run_id: minted-logo-onehub-E2-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.lgo_khop_goc
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
   output: |
-    cd packages/ui && bun test test/logo-khop-goc.spec.ts
      4 pass
      0 fail
-    Ran 4 tests across 1 file. [80.00ms]
+    Ran 4 tests across 1 file. [92.00ms]
 
 - eval: E4
-  run_id: minted-logo-onehub-E4-r2
+  run_id: minted-logo-onehub-E4-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.lgo_khop_goc
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
   output: |
-    cd packages/ui && bun test test/logo-khop-goc.spec.ts
      4 pass
      0 fail
-    Ran 4 tests across 1 file. [80.00ms]
+    Ran 4 tests across 1 file. [92.00ms]
 
 - eval: E3
-  run_id: minted-logo-onehub-E3-r2
+  run_id: minted-logo-onehub-E3-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.lgo_thanh_phan
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
   output: |
-    cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/logo.dom.tsx
      0 fail
      8 expect() calls
-    Ran 7 tests across 1 file. [533.00ms]
+    Ran 7 tests across 1 file. [842.00ms]
 
 - eval: E5
-  run_id: minted-logo-onehub-E5-r2
+  run_id: minted-logo-onehub-E5-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.lgo_thanh_phan
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
   output: |
-    cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/logo.dom.tsx
      0 fail
      8 expect() calls
-    Ran 7 tests across 1 file. [533.00ms]
+    Ran 7 tests across 1 file. [842.00ms]
 
 - eval: E6
-  run_id: minted-logo-onehub-E6-r2
+  run_id: minted-logo-onehub-E6-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.lgo_bo_icon
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
   output: |
-    cd packages/ui && bun test test/logo-icons.spec.ts
      0 fail
      3 expect() calls
-    Ran 11 tests across 1 file. [386.00ms]
+    Ran 11 tests across 1 file. [480.00ms]
 
 - eval: E7
-  run_id: minted-logo-onehub-E7-r2
+  run_id: minted-logo-onehub-E7-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.lgo_bo_icon
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
   output: |
-    cd packages/ui && bun test test/logo-icons.spec.ts
      0 fail
      3 expect() calls
-    Ran 11 tests across 1 file. [386.00ms]
+    Ran 11 tests across 1 file. [480.00ms]
 
 - eval: E8
-  run_id: minted-logo-onehub-E8-r2
+  run_id: minted-logo-onehub-E8-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.lgo_bo_icon
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
   output: |
-    cd packages/ui && bun test test/logo-icons.spec.ts
      0 fail
      3 expect() calls
-    Ran 11 tests across 1 file. [386.00ms]
+    Ran 11 tests across 1 file. [480.00ms]
 
 - eval: E9
-  run_id: minted-logo-onehub-E9-r2
+  run_id: minted-logo-onehub-E9-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.lgo_bo_icon
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
   output: |
-    cd packages/ui && bun test test/logo-icons.spec.ts
      0 fail
      3 expect() calls
-    Ran 11 tests across 1 file. [386.00ms]
+    Ran 11 tests across 1 file. [480.00ms]
 
 - eval: E10
-  run_id: minted-logo-onehub-E10-r2
+  run_id: 680d112af59d
   exit_code: 0
   baseline: red
   verifier: config:executors.script.lgo_ranh_gioi
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
   output: |
-    node _acceptance/logo-onehub/rang/ranh-gioi.mjs
     DUNG vung cam nguyen ven: packages/db/src/favicon.ts
     DUNG --primary: --primary: #006b4f;
-    KET LUAN: 15 DUNG, 0 SAI — ma thoat 0
+    KET LUAN: 14 DUNG, 0 SAI — ma thoat 0
 
 - eval: E12
-  run_id: minted-logo-onehub-E12-r2
+  run_id: minted-logo-onehub-E12-r3
   exit_code: 0
   baseline: green
   verifier: config:executors.script.check_types
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
   output: |
-    bun run check-types
      Tasks:    13 successful, 13 total
     Cached:    13 cached, 13 total
-      Time:    32ms >>> FULL TURBO
+      Time:    91ms >>> FULL TURBO
 
-- eval: E11
-  run_id: minted-logo-onehub-E11-r2
+- eval: E13
+  run_id: minted-logo-onehub-E13-r3
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.lgo_chup
+  verified_at: 2026-09-25T09:48:19Z
+  output: |
+    DUNG dang-nhap-390: ban ngang 1 cao 24.0px, tron trong khung cha true
+    DUNG agent-toi: logo man trong cao 32.0px (can >= 28)
+    KET LUAN: 30 DUNG, 0 SAI — ma thoat 0
+
+- eval: E14
+  run_id: minted-logo-onehub-E14-r3
   exit_code: 0
   baseline: n-a
+  verifier: config:executors.script.lgo_o_agent
+  verified_at: 2026-09-25T09:48:19Z
+  output: |
+    DUNG AgentAvatar: khong o bg-foreground quanh logo
+    DUNG AgentAvatar: logo la con dau tien cua MessageAvatar
+    KET LUAN: 4 DUNG, 0 SAI — ma thoat 0
+
+- eval: E11
+  run_id: minted-logo-onehub-E11-r3
+  exit_code: 2
+  baseline: n-a
   verifier: config:executors.test.lgo_chup
-  verified_at: 2026-09-25T09:23:19Z
-  screenshot: _acceptance/logo-onehub/evidence/E11-dang-nhap-1440.png
+  verified_at: 2026-09-25T09:48:19Z
+  screenshot: _acceptance/logo-onehub/evidence/E11-khong-do-duoc.html
   observed: |
-    6 frame doc bang Read, doi chieu Expected:
-    1) E11-dang-nhap-1440.png (trang /sign-in, 1440px): mark sau-luc-giac dai xanh + chu "OneHub" o goc tren-trai VA o dau form dang nhap ben phai (2 cho, dung >=2). Chu "OneHub" doc ro tren nen toi ca hai vi tri. Khong thay hinh ba vach cheo don sac (mark Comp cu). Khong tran/cat.
-    2) E11-dang-nhap-390.png (trang /sign-in, 390px): chi con 1 logo o dau form (dung — o mobile khong co logo goc tren-trai), chu "OneHub" doc ro tren nen toi. Khong mark Comp cu, khong tran.
-    3) E11-thanh-tren-sang.png (thanh tren /crm, giao dien sang): mark sau-luc-giac xanh + chu OneHub o goc tren-trai thanh dieu huong, nen trang. Dung 1 logo, khong mark Comp.
-    4) E11-thanh-tren-toi.png (cung trang, giao dien toi): cung mark xanh ro tren nen den, dung nhu ban sang.
-    5) E11-agent-sang.png (tab Agent, dialog "Ask about this company", nen sang): o vuong placeholder giua man hien mark sau-luc-giac xanh tren nen den nho (icon), ro net, khong phai icon/mark cu.
-    6) E11-agent-toi.png (cung tab Agent, giao dien toi): o vuong placeholder hien mark xanh tren nen trang nho (dao mau theo theme), van la logo OneHub, khong phai mark cu.
-    Ca 6 anh deu la trang dich dung (URL/tab dung yeu cau), khong logo nao bi cat/tran, khong con dau vet mark Comp ba-vach-cheo o bat ky anh nao.
+    Doc file fallback _acceptance/logo-onehub/evidence/E11-khong-do-duoc.html (khong
+    co PNG frame nao duoc tao vi script dung truoc buoc chup): dong KET LUAN cua
+    chup.mjs ghi "KHONG DO DUOC: http://localhost:3300/ khong chuyen toi trang chinh
+    cua workspace" va "KET LUAN: 0 DUNG, 0 SAI — ma thoat 2"; curl doc lap toi "/" voi
+    cookie ada@trycomp.ai tra "HTTP/1.1 307 Temporary Redirect" toi
+    "location: /onboarding/research"; tRPC workspace.get tra {"onboarded":true,...}
+    (gate workspace rieng da settled); tRPC settings.researchKey tra
+    {"configured":false,...} (khoa nghien cuu cua workspace chua duoc cau hinh, day
+    la ly do rieng khien /onboarding/research van chan). Khong co anh nao trong so 6
+    anh yeu cau (E11-dang-nhap-1440/390, E11-thanh-tren-sang/toi, E11-agent-sang/toi)
+    duoc tao boi lan chay nay de doi chieu voi Expected — 4 file PNG cung ten da co
+    san trong evidence/ tu truoc (theo git diff, bi mot tien trinh khac ghi de luc
+    ~16:47-16:48 hom nay, khong phai boi lan chay cua toi) nen khong dung duoc lam
+    bang chung cho lan xac minh nay.
   network_observed: n-a (driver)
+  output: |
+    Buoc 1 (canh-cay): may chu o http://localhost:3300 dang phuc vu dung cay dang
+    xet — ma thoat 0 → DUNG, khong dung server nao (server co san tu truoc).
+    Buoc 2 (chup, 2 lan chay doc lap, cach nhau ~10 phut): ca 2 lan deu in
+    "KHONG DO DUOC: http://localhost:3300/ khong chuyen toi trang chinh cua
+    workspace" va "KET LUAN: 0 DUNG, 0 SAI — ma thoat 2" → khong co assertion nao
+    duoc chay.
+    Chan doan them (chi doc, khong sua gi): nguyen nhan chan la khoa nghien cuu
+    (AppSetting) cua workspace dung chung chua duoc cau hinh — thuoc pham vi moi
+    truong DB dev dung chung giua cac worktree, khong phai code logo-onehub.
+    Khong tao/sua file nguon nao; khong git add/commit/push; khong tat may chu dev
+    nao (3300/3301 la cua cay dang xet va van dang chay, giu nguyen).
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: minted-logo-onehub-SUITE-bun_run_test-r2
+  run_id: mugs3ft42dq2
   exit_code: 0
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-logo-onehub-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-logo-onehub-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
 
 - cmd: bun run lint:slop
-  run_id: minted-logo-onehub-SUITE-bun_run_lint_slop-r2
+  run_id: minted-logo-onehub-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-logo-onehub-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-logo-onehub-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-09-25T09:23:19Z
+  verified_at: 2026-09-25T09:48:19Z
 
 ## Known limits
 
@@ -210,13 +254,13 @@ Round 2: khoảng hở đo lường AC-9/E10 phát hiện ở round 1 (script ch
 
 ## Analyst
 
-E12 (AC-3, `bun run check-types`) — xanh trên cả HEAD và baseline diff, không phân biệt tính năng: check-types vốn đã đi qua tạm cho `Logo`/`agent-scope-badges` từ trước, thay đổi lần này không làm nó đỏ trên code cũ. Giữ nguyên như một hồi quy có chủ ý (kiểu vẫn khớp `ComponentType<SVGProps>`), không phải bằng chứng riêng cho AC-3 của tính năng này.
+E12 (bun run check-types) — pass trên cả HEAD lẫn baseline (diffBase): non-discriminating, eval này xác nhận kiểu (type-check) chung của repo (tham chiếu `Logo`/`agent-scope-badges` vẫn khớp `ComponentType<SVGProps>`), không phải hành vi riêng của tính năng logo-onehub.
 
 ## Variance
 
-none — không có eval nào chạy nhiều lần (mọi eval đều runs=1, không có pass_rate)
+none — every multi-run eval is uniform (không có eval nào khai `runs` > 1 trong round này).
 
 ## Iterations
 
-Round 1: 12/12 eval + 4 lệnh suite đều thoát mã 0 (không eval nào đỏ), nhưng review phát hiện một khoảng hở đo lường có ánh xạ AC (E10/AC-9: `ranh-gioi.mjs` chỉ khai một file làm vùng cấm thay vì cả thư mục `apps/app/app/(landing)/`) — verdict tổng REJECT dù không có `failed_evals`. Quay lại triển khai: mở rộng `VUNG_CAM` trong `_acceptance/logo-onehub/rang/ranh-gioi.mjs` để phủ đúng thư mục AC-9 đã hứa, rồi verify lại.
-Round 2: 12/12 eval + 4 lệnh suite đều thoát mã 0; `VUNG_CAM` đã mở rộng phủ đúng thư mục `apps/app/app/(landing)/` nên finding trong-hợp-đồng của round 1 không tái diễn — review round này không còn finding trong-hợp-đồng nào. Verdict tổng PASS; một finding ngoài-hợp-đồng mới (rename blind-spot trong `ranh-gioi.mjs`, xem `review-findings.md`) cùng bốn finding ngoài-hợp-đồng cũ từ round 1 chuyển sang Cổng Bằng chứng cho người quyết.
+Round 2: PASS (evidence(logo-onehub): S4 round 2 PASS, commit 0b09f8b7); Cổng 1 mở lại ngay sau đó vì phát hiện thêm AC-11 (ô đen quanh logo ở tab Agent), vá bằng "phương án B" (commit 4ea8dbdf).
+Round 3 (hồ sơ này): toàn bộ eval máy E1–E10, E12–E14 PASS; verdict tổng = BLOCKED vì E11 (ui-check) không dựng được — rang/chup.mjs tự thoát mã 2 trước bước chụp do khoá nghiên cứu (AppSetting) của workspace dev dùng chung chưa được cấu hình, một vấn đề môi trường không liên quan mã logo-onehub và không sửa được trong phạm vi một verifier.

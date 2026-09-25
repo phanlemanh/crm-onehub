@@ -1,13 +1,27 @@
 ## Trong hợp đồng
 
+(không có finding nào map được vào một AC round này)
+
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **ranh-gioi.mjs misses files renamed or moved out of a forbidden zone, and renamed Logo caller files, because rename detection lists only the new path**
-  Người dùng thấy gì: Nếu sau này có người đổi tên hoặc di chuyển tệp ra khỏi vùng cấm, công cụ kiểm tra ranh giới có thể không phát hiện và báo an toàn nhầm, để lọt một thay đổi lẽ ra không được phép mà không ai hay biết ngay lúc đó.
-  file: `_acceptance/logo-onehub/rang/ranh-gioi.mjs:68`
+- **AgentAvatar is now a 32x20 grey pill, not a square badge, and no eval renders it**
+  Người dùng thấy gì: Trong tab Agent, khi đã có hội thoại, ảnh đại diện của trợ lý có thể hiển thị dẹt thành một dải ngang thay vì một khối vuông cân đối như trước khi đổi logo.
+  file: `apps/app/components/crm/agent-panel.tsx`
   severity: medium
+  Đề xuất: known-limits
+
+- **AC-11 checks skip the logo's own element, so a box drawn on the <Logo> itself passes both E13 and E14**
+  Người dùng thấy gì: Nếu về sau có người vô tình đặt lại khung nền tối ngay trên chính hình logo (thay vì trên khung bao quanh), bộ kiểm tra tự động hiện tại sẽ không phát hiện ra, và lỗi hiển thị đó có thể lọt ra ngoài mà không ai hay biết.
+  file: `_acceptance/logo-onehub/rang/o-agent.mjs`
+  severity: medium
+  Đề xuất: new-contract
+
+- **AgentAvatar is now a 32x20 grey rectangle, not a square avatar**
+  Người dùng thấy gì: Trong tab Agent, khi đã có hội thoại, ảnh đại diện của trợ lý có thể hiển thị dẹt thành một dải ngang thay vì một khối vuông cân đối như trước khi đổi logo.
+  file: `apps/app/components/crm/agent-panel.tsx`
+  severity: low
   Đề xuất: known-limits
 
 - **Logo icon generator and its helpers are never type-checked by the repo gate (r1)**
@@ -32,6 +46,16 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   Người dùng thấy gì: Các bài kiểm thử bộ icon (favicon, icon cài app, ảnh xuất cho Slack/Zalo/Google) có thể báo 'đạt' ngay cả khi icon bị dựng ra trống trơn, vì chúng chỉ kiểm viền và nền trắng chứ không kiểm logo có thực sự xuất hiện hay không.
   file: `packages/ui/test/logo-icons.spec.ts`
   severity: high
+  Đề xuất: known-limits
+
+## Chưa adversarial-verify (refuter chết)
+
+(không có finding nào rơi vào diện này round này)
+
+- **ranh-gioi.mjs misses files renamed or moved out of a forbidden zone, and renamed Logo caller files, because rename detection lists only the new path (r2)**
+  Người dùng thấy gì: Nếu sau này có người đổi tên hoặc di chuyển tệp ra khỏi vùng cấm, công cụ kiểm tra ranh giới có thể không phát hiện và báo an toàn nhầm, để lọt một thay đổi lẽ ra không được phép mà không ai hay biết ngay lúc đó.
+  file: `_acceptance/logo-onehub/rang/ranh-gioi.mjs:68`
+  severity: medium
   Đề xuất: known-limits
 
 - **ranh-gioi.mjs cannot find the PR merge commit once the branch is on onehub: it gives up with exit 2, or checks the wrong range (r1)**
