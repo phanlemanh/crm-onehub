@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khoá spec đã ký · Dòng mốc</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 50rem;
+      margin-bottom: 1.5rem;
+    }
+    code { font-family: var(--font-mono); font-size: 0.8rem; }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Dòng mốc · d-1 · Cổng Phạm vi · zalo-webhook-doc-khuon-that</p>
+    <h1>Gỡ một ca của spec đã ký: thước khoá đỏ tới khi merge</h1>
+    <p class="sub">Bốn mốc theo thứ tự, không theo tỉ lệ thời gian. Mốc 2 là cái giá chủ kho đã nhận ở quyết định A: <code>nzm_giu_da_ky</code> đỏ trên nhánh, và chỉ xanh lại khi <code>merge-base</code> dời.</p>
+
+    <svg viewBox="0 0 1200 440" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="80" y1="256" x2="1120" y2="256" stroke="#575757" stroke-width="1"/>
+
+      <line x1="200" y1="216" x2="200" y2="252" stroke="#575757" stroke-width="1"/>
+      <line x1="480" y1="216" x2="480" y2="250" stroke="#da2f35" stroke-width="1.2"/>
+      <line x1="760" y1="216" x2="760" y2="252" stroke="#575757" stroke-width="1"/>
+      <line x1="1040" y1="216" x2="1040" y2="250" stroke="#006B4F" stroke-width="1.2"/>
+
+      <line x1="480" y1="262" x2="480" y2="292" stroke="rgba(23,23,23,0.24)" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <line x1="1040" y1="262" x2="1040" y2="292" stroke="rgba(23,23,23,0.24)" stroke-width="0.8" stroke-dasharray="3,3"/>
+
+      <circle cx="200" cy="256" r="4" fill="#171717"/>
+      <circle cx="480" cy="256" r="6" fill="#da2f35"/>
+      <circle cx="760" cy="256" r="4" fill="#171717"/>
+      <circle cx="1040" cy="256" r="6" fill="#006B4F"/>
+
+      <rect x="80" y="80" width="240" height="136" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="96" y="104" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">MỐC 1</text>
+      <text x="96" y="128" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Gỡ ca «<tspan font-family="'Geist Mono', monospace" font-weight="500">c khong vo</tspan>»</text>
+      <text x="96" y="150" fill="#575757" font-size="12" font-family="'Geist', sans-serif">khỏi <tspan font-family="'Geist Mono', monospace" font-size="11">webhook-bo-qua</tspan></text>
+      <text x="96" y="170" fill="#575757" font-size="12" font-family="'Geist', sans-serif">lời hứa AC-5 ý (3) của</text>
+      <text x="96" y="190" fill="#575757" font-size="12" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" font-size="11">zalo-qua-webhook</tspan> bị thay</text>
+
+      <rect x="360" y="40" width="240" height="176" rx="6" fill="rgba(218,47,53,0.06)" stroke="#da2f35" stroke-width="1.4"/>
+      <text x="376" y="64" fill="#b4232a" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">MỐC 2 · CÁI GIÁ ĐÃ NHẬN</text>
+      <text x="376" y="88" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" font-weight="500">nzm_giu_da_ky</tspan> đỏ trên nhánh</text>
+      <text x="376" y="110" fill="#575757" font-size="12" font-family="'Geist', sans-serif">so tệp với <tspan font-family="'Geist Mono', monospace" font-size="11">merge-base</tspan></text>
+      <text x="376" y="130" fill="#575757" font-size="12" font-family="'Geist', sans-serif">E6 <tspan font-family="'Geist Mono', monospace" font-size="11">giu-da-ky</tspan> thay chỗ:</text>
+      <text x="376" y="150" fill="#575757" font-size="12" font-family="'Geist', sans-serif">chỉ cho phép đúng</text>
+      <text x="376" y="170" fill="#575757" font-size="12" font-family="'Geist', sans-serif">biến đổi có tên</text>
+      <rect x="376" y="184" width="100" height="18" rx="2" fill="transparent" stroke="#b4232a" stroke-width="0.8"/>
+      <text x="426" y="197" fill="#b4232a" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">QUYẾT ĐỊNH A</text>
+
+      <rect x="640" y="144" width="240" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="656" y="168" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">MỐC 3</text>
+      <text x="656" y="194" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Merge vào <tspan font-family="'Geist Mono', monospace" font-weight="500">onehub</tspan></text>
+
+      <rect x="920" y="64" width="240" height="152" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="936" y="88" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">MỐC 4</text>
+      <text x="936" y="112" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" font-weight="500">nzm_giu_da_ky</tspan> xanh lại</text>
+      <text x="936" y="134" fill="#575757" font-size="12" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" font-size="11">merge-base</tspan> dời tới commit</text>
+      <text x="936" y="154" fill="#575757" font-size="12" font-family="'Geist', sans-serif">đã có bản sửa</text>
+      <text x="936" y="174" fill="#575757" font-size="12" font-family="'Geist', sans-serif">không hồ sơ cũ nào</text>
+      <text x="936" y="194" fill="#575757" font-size="12" font-family="'Geist', sans-serif">phải ghim lại</text>
+
+      <text x="80" y="300" fill="#575757" font-size="11" font-family="'Geist Mono', monospace">nzm_giu_da_ky</text>
+      <rect x="480" y="292" width="560" height="8" rx="4" fill="#da2f35"/>
+      <rect x="1040" y="292" width="80" height="8" rx="4" fill="#006B4F"/>
+      <text x="760" y="320" fill="#b4232a" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đỏ</text>
+      <text x="1080" y="320" fill="#006B4F" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">xanh</text>
+
+      <path d="M 200 332 L 200 340 L 752 340 L 752 332" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="476" y="360" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">trên nhánh này</text>
+      <path d="M 768 332 L 768 340 L 1120 340 L 1120 332" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="944" y="360" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">trên <tspan font-family="'Geist Mono', monospace" font-size="11">onehub</tspan></text>
+
+      <line x1="40" y1="384" x2="1160" y2="384" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="416" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <circle cx="132" cy="412" r="4" fill="#171717"/>
+      <text x="144" y="416" fill="#575757" font-size="10" font-family="'Geist', sans-serif">mốc</text>
+
+      <circle cx="200" cy="412" r="6" fill="#da2f35"/>
+      <text x="212" y="416" fill="#575757" font-size="10" font-family="'Geist', sans-serif">cái giá đã nhận</text>
+
+      <circle cx="320" cy="412" r="6" fill="#006B4F"/>
+      <text x="332" y="416" fill="#575757" font-size="10" font-family="'Geist', sans-serif">xanh lại</text>
+
+      <rect x="408" y="408" width="24" height="8" rx="4" fill="#da2f35"/>
+      <text x="440" y="416" fill="#575757" font-size="10" font-family="'Geist', sans-serif">trạng thái thước khoá</text>
+
+      <text x="1160" y="416" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC liên quan: AC-4</text>
+    </svg>
+  </div>
+</body>
+</html>

@@ -24,7 +24,8 @@
 		"./onboarding-template": "./src/onboarding-template.ts",
 		"./saved-view": "./src/saved-view.ts",
 		"./zalo-cau-noi": "./src/zalo-cau-noi.ts",
-		"./zalo-update": "./src/zalo-update.ts"
+		"./zalo-update": "./src/zalo-update.ts",
+		"./zalo-webhook": "./src/zalo-webhook.ts"
 	},
 	"scripts": {
 		"check-types": "tsc --noEmit",

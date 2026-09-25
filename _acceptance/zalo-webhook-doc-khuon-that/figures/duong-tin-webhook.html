@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đường một tin webhook · Sơ đồ luồng</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-soft:   #666666;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1400px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 52rem;
+      margin-bottom: 1.5rem;
+    }
+    code { font-family: var(--font-mono); font-size: 0.8rem; }
+    svg { width: 100%; min-width: 1100px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ luồng · d-2 · Cổng Phạm vi · zalo-webhook-doc-khuon-that</p>
+    <h1>Đường một tin webhook: hôm nay và sau vòng này</h1>
+    <p class="sub">Cùng một thân Zalo gửi tới. Hôm nay bộ đọc dùng khuôn của <code>getUpdates</code> nên bỏ tin; sau vòng này <code>parseZaloWebhook</code> nhận cả hai khuôn, chỉ thân hỏng mới dừng ở một dòng log.</p>
+
+    <svg viewBox="0 0 1360 720" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="232" y1="248" x2="1320" y2="248" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="240" y="64" fill="#b4232a" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">HÔM NAY — LỖI PRODUCTION 25/09</text>
+      <text x="240" y="280" fill="#575757" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">SAU VÒNG NÀY</text>
+
+      <path d="M 120 236 L 120 144 Q 120 136 128 136 L 264 136" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="424" y1="136" x2="480" y2="136" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="720" y1="136" x2="824" y2="136" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="1024" y1="136" x2="1080" y2="136" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <path d="M 120 324 L 120 416 Q 120 424 128 424 L 264 424" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="504" y1="424" x2="680" y2="424" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 384 360 L 384 328 Q 384 320 392 320 L 792 320 Q 800 320 800 328 L 800 388" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 384 488 L 384 552 Q 384 560 392 560 L 1080 560" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="920" y1="424" x2="1080" y2="424" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <rect x="736" y="110" width="72" height="18" rx="2" fill="#fafafa"/>
+      <text x="772" y="123" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">không khớp</text>
+
+      <rect x="516" y="382" width="152" height="34" rx="2" fill="#fafafa"/>
+      <text x="592" y="396" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">khuôn thật</text>
+      <text x="592" y="411" fill="#575757" font-size="11" font-family="'Geist Mono', monospace" text-anchor="middle">{event_name, message}</text>
+
+      <rect x="504" y="292" width="176" height="20" rx="2" fill="#fafafa"/>
+      <text x="592" y="306" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">khuôn có vỏ <tspan fill="#575757" font-size="11" font-weight="400" font-family="'Geist Mono', monospace">{ok, result}</tspan></text>
+
+      <rect x="536" y="532" width="48" height="20" rx="2" fill="#fafafa"/>
+      <text x="560" y="546" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">hỏng</text>
+
+      <rect x="40" y="236" width="160" height="88" rx="44" fill="#fafafa"/>
+      <rect x="40" y="236" width="160" height="88" rx="44" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="120" y="266" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Zalo POST</text>
+      <text x="120" y="284" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">/zalo/webhook</text>
+      <text x="120" y="302" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">{event_name, message}</text>
+
+      <rect x="264" y="100" width="160" height="72" rx="6" fill="#fafafa"/>
+      <rect x="264" y="100" width="160" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="344" y="141" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">khoá bí mật đúng</text>
+
+      <rect x="480" y="100" width="240" height="72" rx="6" fill="#fafafa"/>
+      <rect x="480" y="100" width="240" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="600" y="130" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">đọc bằng khuôn <tspan font-family="'Geist Mono', monospace" font-weight="500">getUpdates</tspan></text>
+      <text x="600" y="152" fill="#575757" font-size="11" font-family="'Geist Mono', monospace" text-anchor="middle">{ok, result}</text>
+
+      <rect x="824" y="100" width="200" height="72" rx="6" fill="#fafafa"/>
+      <rect x="824" y="100" width="200" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="924" y="130" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">log «<tspan font-family="'Geist Mono', monospace" font-weight="500">sai khuon</tspan>»</text>
+      <text x="924" y="152" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">trả 200</text>
+
+      <rect x="1080" y="100" width="240" height="72" rx="36" fill="#fafafa"/>
+      <rect x="1080" y="100" width="240" height="72" rx="36" fill="rgba(218,47,53,0.06)" stroke="#da2f35" stroke-width="1.4"/>
+      <text x="1200" y="141" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">tin bị bỏ, không nối</text>
+
+      <polygon points="264,424 384,360 504,424 384,488" fill="#fafafa"/>
+      <polygon points="264,424 384,360 504,424 384,488" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="384" y="424" fill="#171717" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">parseZaloWebhook</text>
+      <text x="384" y="442" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="middle">rẽ ba nhánh</text>
+
+      <rect x="680" y="388" width="240" height="72" rx="6" fill="#fafafa"/>
+      <rect x="680" y="388" width="240" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="800" y="418" fill="#171717" font-size="13" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">xuLyTinDen</text>
+      <text x="800" y="440" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="middle">chống trùng <tspan font-family="'Geist Mono', monospace">message_id</tspan> · luật mã</text>
+      <rect x="776" y="472" width="48" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="800" y="484" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-2</text>
+
+      <rect x="1080" y="388" width="240" height="72" rx="36" fill="#fafafa"/>
+      <rect x="1080" y="388" width="240" height="72" rx="36" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="1200" y="429" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">nối + trả lời</text>
+      <rect x="1176" y="472" width="48" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="1200" y="484" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-1</text>
+
+      <rect x="1080" y="516" width="240" height="88" rx="44" fill="#fafafa"/>
+      <rect x="1080" y="516" width="240" height="88" rx="44" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1200" y="546" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">trả 200 + một dòng log</text>
+      <text x="1200" y="566" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">khoa · khoa_message · message_id</text>
+      <text x="1200" y="584" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="middle">không nội dung</text>
+      <rect x="1176" y="616" width="48" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="1200" y="628" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-3</text>
+
+      <line x1="40" y1="660" x2="1320" y2="660" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="692" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="120" y="682" width="24" height="14" rx="7" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="152" y="692" fill="#575757" font-size="10" font-family="'Geist', sans-serif">điểm vào / kết cục</text>
+
+      <rect x="272" y="682" width="24" height="14" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="304" y="692" fill="#575757" font-size="10" font-family="'Geist', sans-serif">một bước</text>
+
+      <polygon points="380,689 392,681 404,689 392,697" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="412" y="692" fill="#575757" font-size="10" font-family="'Geist', sans-serif">rẽ nhánh</text>
+
+      <rect x="484" y="682" width="24" height="14" rx="7" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="516" y="692" fill="#575757" font-size="10" font-family="'Geist', sans-serif">tin được nối</text>
+
+      <rect x="608" y="682" width="24" height="14" rx="7" fill="rgba(218,47,53,0.06)" stroke="#da2f35" stroke-width="1.4"/>
+      <text x="640" y="692" fill="#575757" font-size="10" font-family="'Geist', sans-serif">tin bị bỏ</text>
+
+      <text x="1320" y="692" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC liên quan: AC-1 · AC-2 · AC-3</text>
+    </svg>
+  </div>
+</body>
+</html>
