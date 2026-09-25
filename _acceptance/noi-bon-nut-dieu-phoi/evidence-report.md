@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: dd85e27b0cd98a954011374c51e2679021a3c880
+verified_commit: dfc8ff345842e738f421c08891eb1754198d9064
 human_signoff: Phan Le Manh 2026-09-21
 ---
 
@@ -272,3 +272,7 @@ sha: 70776c91ed7b3c29c44fdcd1863f171659aa4346 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 10 — 2026-09-25, do mot-duong-ghi-phong-ban: bài kiểm chuyển sang org.*, đường ghi phòng ban cũ gỡ
 run_id: repin-20260925T025226Z-13987
 sha: dd85e27b0cd98a954011374c51e2679021a3c880 · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E12 · AC không có chốt máy: AC-9
+
+### Re-pin lần 11 — 2026-09-25, do mot-duong-ghi-phong-ban: ghim lại sau gộp onehub a8572437 (#129) và thêm ba thủ tục org.*Department
+run_id: repin-20260925T032447Z-74232
+sha: dfc8ff345842e738f421c08891eb1754198d9064 · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E12 · AC không có chốt máy: AC-9
