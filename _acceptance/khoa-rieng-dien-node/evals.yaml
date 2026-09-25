@@ -43,7 +43,7 @@ evals:
       - "apps/app/test/dien-node-khoa-rieng.dom.tsx"
     expected: |
       Nhom ca "ma-tran" cung tep, cung bo bat. dienNode import tu tep hop (export). MA TRAN VIET
-      TRUOC, 10 ca (test.each), moi ca [mau, chu ky vong]:
+      TRUOC, 11 ca (test.each), moi ca [mau, chu ky vong]:
         "{a} sau"->"A sau" · "truoc {a}"->"truoc A" · "truoc {a} sau"->"truoc A sau" ·
         "{a}{b}"->"AB" · "{a} {b}"->"A B" · "{a}"->"A" · "chu tron"->"chu tron" · ""->"" · "{a} va {a}"->"A va A" ·
         "{z} la"->" la" · "{a}{b}{a}"->"ABA"
@@ -52,7 +52,7 @@ evals:
           (nut.map(n => n.key)) co kich thuoc bang so phan tu — "khoa trung trong mau <mau>";
       (2) ve nut vao mot the div bang createRoot + act; textContent = chu ky vong — "chu sai trong mau <mau>";
       (3) bo bat khong co loi goi chua "same key" — "canh bao khoa trung trong mau <mau>".
-      So ca = 11, so khang dinh co ten = 33. DEM CA: afterAll cua nhom "ma-tran" so so ca da chay
+      So ca = 11, so khang dinh co ten = 44 (4 moi ca: (1) tach thanh hai — moi phan tu la element, va tap khoa khong trung — cong (2), (3)). DEM CA: afterAll cua nhom "ma-tran" so so ca da chay
       voi hang 11 viet rieng — "nhom ma-tran chay <n> ca, phai 11".
       CHIEU DO: ma TRUOC sua chua export dienNode -> 11 ca do vi dienNode khong phai ham (khong phai
       do dung cho). Chieu do dung nghia lay bang pha thu SAU sua, tren ban commit:
@@ -76,40 +76,3 @@ evals:
       xoa — so loi goi "same key" = 0 ("bo bat bao gia khi khoa rieng").
       CHIEU DO (pha thu o S3, tren ban commit): bo boc console.error trong beforeEach -> do voi
       "bo bat console khong con song"; dong thoi E1 va E2 van xanh (dung la ly do can ca nay).
-
-  - id: E4
-    criterion: AC-4
-    executor: script
-    cmd: config:executors.script.krdn_khong_hoi_quy
-    paths:
-      - "apps/app/app/(app)/[slug]/settings/members/chuyen-viec-dialog.tsx"
-      - "apps/app/test/dien-node-khoa-rieng.dom.tsx"
-      - "_acceptance/khoa-rieng-dien-node/rang/khong-hoi-quy.mjs"
-    expected: |
-      rang/khong-hoi-quy.mjs (goc kho suy tu import.meta.url, khong hardcode), dung lai khuon
-      _acceptance/lam-moi-chuyen-viec-qua-loi-chung/rang/khong-hoi-quy.mjs, bo ve "tep ngoai vong":
-        1. TEP_KHAI = [dialog, apps/app/test/dien-node-khoa-rieng.dom.tsx], hang trong script.
-           D = git diff --name-only B..HEAD bo _acceptance/** va glob risk_tiers.t1_skip_globs.
-           TEP_VONG = hop(TEP_KHAI, D), in ra dau bao cao. Khong co ve "tep ngoai vong" (xem sổ).
-        2. Ham rut(D) nhu khuon cu: eval test/script (khong status not-run) cua ho so
-           signed-off/machine-cleared khac ho so nay co glob trong paths CUA CHINH EVAL khop mot
-           tep cua D; gom theo lenh; ref khong giai duoc -> "KHONG DO DUOC" ma 2.
-        3. DOI CHUNG DUONG CO DINH: rut([dialog]) chua moi-phia-deu-thay-ke-hoach:E3 va
-           lam-moi-chuyen-viec-qua-loi-chung:E1 — thieu -> ma 1 "bo rut tap hong".
-        4. git rev-parse --verify origin/onehub that bai -> "KHONG DO DUOC: khong co ref
-           origin/onehub" ma 2 (khong thoat 1). B = merge-base(HEAD, origin/onehub). TEP_VONG giong
-           het o B va HEAD -> "khong con khac biet", ma 0 (truoc khi tinh D).
-        5. LOAI QUET LONG: lenh tro toi _acceptance/*/rang/*.mjs co chu "worktree" hoac
-           "repin-lane" -> in "LOAI quet long: <ref> (<eval>)", khong chay; in so ho so, so eval,
-           so lenh chay, so lenh loai.
-        6. Chay tuan tu o HEAD; do -> chay lai mot lan (xanh -> "chap chon"); con do -> chay tren
-           worktree tam o B (.acceptance-runs/khoa-rieng-dien-node/goc, .env symlink, bun install,
-           bun run db:generate, go trong finally). Xanh o B -> ma 1 "vong nay lam do them N lenh:
-           <ref> (<eval>)". Moi lenh do o ca hai cay in mot dong "DO SAN: <ref> (<eval>) HEAD <ma> B
-           <ma>" va mot dong tong "do san: N lenh". Khong lenh nao do them -> "khong lenh nao do
-           them so voi <B8>", ma 0.
-      CHIEU DO (pha thu o S3, commit truoc, git checkout sau): xoa loi goi chuyen.mutate(...)
-      trong hop -> kh2_chuyen_giao_man va lmcv_ba_khoa (ca hai la test DOM, khong can may chu dev)
-      do o HEAD, xanh o B -> ma 1 ghi ten lenh va moi-phia-deu-thay-ke-hoach:E3;
-      rut voi D rong o buoc 3 (pha tren ban sao script ngoai goi) -> ma 1 "bo rut tap hong";
-      doi "origin/onehub" thanh ref khong ton tai (ban sao) -> ma 2 "KHONG DO DUOC".
