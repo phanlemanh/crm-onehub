@@ -77,6 +77,7 @@ export const OKR = {
 		traoDoi: {
 			krKhacMucTieu: "KR này không thuộc mục tiêu đang bình luận.",
 			nguoiKhongCon: "Người không còn trong CRM",
+			nhacKhongConThanhVien: "Người được nhắc không còn là thành viên.",
 		},
 		chuyen: {
 			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",

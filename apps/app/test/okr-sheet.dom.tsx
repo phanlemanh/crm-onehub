@@ -176,6 +176,7 @@ mock.module("@/lib/trpc/client", () => ({
 			addAlignment: thuTuc("okr.addAlignment"),
 			removeAlignment: thuTuc("okr.removeAlignment"),
 			comments: thuTuc("okr.comments", () => ({ comments: binhLuan })),
+			thanhVien: thuTuc("okr.thanhVien", () => [HUNG, LAN]),
 			addComment: thuTuc("okr.addComment"),
 			follow: thuTuc(
 				"okr.follow",

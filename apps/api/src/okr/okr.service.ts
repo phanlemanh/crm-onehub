@@ -407,14 +407,18 @@ export class OkrService {
 		});
 	}
 
-	async assertThanhVien(tx: Tx | Db, ids: string[]) {
+	async assertThanhVien(
+		tx: Tx | Db,
+		ids: string[],
+		loi: (id: string) => string = T.khongPhaiThanhVien,
+	) {
 		const can = [...new Set(ids)];
 		const co = await tx.member.findMany({
 			where: { organizationId: WORKSPACE_ID, userId: { in: can } },
 			select: { userId: true },
 		});
 		const thieu = can.find((id) => !co.some((m) => m.userId === id));
-		if (thieu) throw new BadRequestException(T.khongPhaiThanhVien(thieu));
+		if (thieu) throw new BadRequestException(loi(thieu));
 	}
 
 	private async kiemTranMucTieu(

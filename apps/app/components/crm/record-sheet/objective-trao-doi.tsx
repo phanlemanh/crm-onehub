@@ -192,7 +192,7 @@ function KhungSoan({
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const ma = useId();
-	const users = useQuery(trpc.users.list.queryOptions());
+	const thanhVien = useQuery(trpc.okr.thanhVien.queryOptions());
 	const [noiDung, setNoiDung] = useState("");
 	const [kr, setKr] = useState(CA_MUC_TIEU);
 	const [nhac, setNhac] = useState<string[]>([]);
@@ -208,8 +208,8 @@ function KhungSoan({
 	);
 
 	const tenNguoi = (id: string) =>
-		users.data?.find((u) => u.id === id)?.name ?? id;
-	const luaChon = (users.data ?? [])
+		thanhVien.data?.find((u) => u.id === id)?.name ?? id;
+	const luaChon = (thanhVien.data ?? [])
 		.filter((u) => !nhac.includes(u.id))
 		.map((u) => ({
 			value: u.id,
@@ -288,12 +288,12 @@ function KhungSoan({
 						<FieldLabel htmlFor={`${ma}-nhac`}>{m.nhacTen}</FieldLabel>
 						<Combobox
 							data-o-nhac-ten
-							disabled={users.isPending || them.isPending}
+							disabled={thanhVien.isPending || them.isPending}
 							empty={h.khongAi}
 							id={`${ma}-nhac`}
 							onValueChange={(v) => setNhac((ds) => [...ds, v])}
 							options={luaChon}
-							placeholder={users.isPending ? h.dangTai : m.themNguoi}
+							placeholder={thanhVien.isPending ? h.dangTai : m.themNguoi}
 							searchPlaceholder={h.timNguoi}
 							translate="no"
 							value=""

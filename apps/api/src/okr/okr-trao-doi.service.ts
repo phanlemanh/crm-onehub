@@ -2,6 +2,7 @@ import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { LOAI_NHAC_OKR, lienQuanOkr, type ViecOkr } from "@crm/db/okr-nhac";
 import { type ViecNhac, viecCanNhac } from "@crm/db/onboarding-nhac";
+import { WORKSPACE_ID } from "@crm/db/workspace";
 import { PHA_GHI_DUOC } from "@crm/validation/okr-chu-ky";
 import type {
 	AddCommentInput,
@@ -20,6 +21,7 @@ import { InjectDatabase } from "../database/database.constants";
 import type {
 	CommentsOutput,
 	FollowOutput,
+	ThanhVienOutput,
 	TransferOkrOutput,
 	ViecCuaToiOutput,
 } from "./okr.contracts";
@@ -72,6 +74,20 @@ export class OkrTraoDoiService {
 		});
 		if (!mt) throw new NotFoundException(T.khongCoMucTieu(objectiveId));
 		return mt;
+	}
+
+	async thanhVien(): Promise<ThanhVienOutput> {
+		const rows = await this.db.member.findMany({
+			where: { organizationId: WORKSPACE_ID },
+			select: { user: { select: chonNguoi } },
+		});
+		return rows
+			.map((r) => r.user)
+			.sort(
+				(a, b) =>
+					a.name.localeCompare(b.name, "vi") ||
+					a.email.localeCompare(b.email, "vi"),
+			);
 	}
 
 	async comments(objectiveId: string): Promise<CommentsOutput> {
@@ -130,7 +146,11 @@ export class OkrTraoDoiService {
 				if (kr.objectiveId !== input.objectiveId)
 					throw new BadRequestException(T.traoDoi.krKhacMucTieu);
 			}
-			await this.okr.assertThanhVien(tx, nhac);
+			await this.okr.assertThanhVien(
+				tx,
+				nhac,
+				() => T.traoDoi.nhacKhongConThanhVien,
+			);
 			const c = await tx.okrComment.create({
 				data: {
 					objectiveId: input.objectiveId,

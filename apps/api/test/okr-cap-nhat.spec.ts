@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { KHONG_TRONG_PHAM_VI } from "@crm/auth";
 import { db } from "@crm/db";
 import { type ViecNhac, viecCanNhac } from "@crm/db/onboarding-nhac";
+import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { GuiCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { LOI_KHUON_TRAO_DOI } from "@crm/validation/okr-trao-doi";
 import { type OkrVetSnapshot, parseOkrVet } from "@crm/validation/okr-vet";
@@ -1052,12 +1053,12 @@ describe("trao-doi", () => {
 			[
 				"nhac D da roi",
 				{ objectiveId: O, body: "x", mentionUserIds: [D] },
-				`400 ${T.khongPhaiThanhVien(D)}`,
+				`400 ${T.traoDoi.nhacKhongConThanhVien}`,
 			],
 			[
 				"nhac ma la",
 				{ objectiveId: O, body: "x", mentionUserIds: ["khong-co"] },
-				`400 ${T.khongPhaiThanhVien("khong-co")}`,
+				`400 ${T.traoDoi.nhacKhongConThanhVien}`,
 			],
 			[
 				"KR9 voi O",
@@ -1088,6 +1089,44 @@ describe("trao-doi", () => {
 				.filter((t) => /Comment/i.test(t))
 				.sort(),
 		).toEqual(["addComment", "comments"]);
+	});
+
+	test("trao-doi: thanh vien de nhac ten — nguoi da roi workspace khong co, nguoi con co, vai chi OKR doc duoc, xep theo ten", async () => {
+		const con = await nguoiMoi("td-tv-con");
+		const chiOkr = await nguoiMoi("td-tv-okr", "okr");
+		const roi = await nguoiMoi("td-tv-roi");
+		await db.member.deleteMany({ where: { userId: roi } });
+		const cOkr = await phienCua(chiOkr);
+		const ds = await doc<{ id: string; name: string; email: string }[]>(
+			"okr.thanhVien",
+			cOkr,
+		);
+		const ids = ds.map((n) => n.id);
+		const tenXep = [...ds]
+			.sort(
+				(a, b) =>
+					a.name.localeCompare(b.name, "vi") ||
+					a.email.localeCompare(b.email, "vi"),
+			)
+			.map((n) => n.id);
+		const soThanhVien = await db.member.count({
+			where: { organizationId: WORKSPACE_ID },
+		});
+		expect({
+			con: ids.includes(con),
+			chiOkr: ids.includes(chiOkr),
+			roi: ids.includes(roi),
+			xep: ids,
+			dem: ds.length,
+			khoa: Object.keys(ds[0] ?? {}).sort(),
+		}).toEqual({
+			con: true,
+			chiOkr: true,
+			roi: false,
+			xep: tenXep,
+			dem: soThanhVien,
+			khoa: ["email", "id", "name"],
+		});
 	});
 });
 

@@ -270,6 +270,7 @@ export const commentsOutput = z.object({
 	),
 });
 export const addCommentOutput = z.object({ id: z.string() });
+export const thanhVienOutput = z.array(nguoiOkr);
 export const followOutput = z.object({
 	following: z.boolean(),
 	followerCount: z.number(),
@@ -332,6 +333,7 @@ export type UpdateKrInput = z.infer<typeof updateKrInput>;
 export type CapNhatTuanOutput = z.infer<typeof capNhatTuanOutput>;
 export type CommentsOutput = z.infer<typeof commentsOutput>;
 export type FollowOutput = z.infer<typeof followOutput>;
+export type ThanhVienOutput = z.infer<typeof thanhVienOutput>;
 export type ViecOkrOutput = z.infer<typeof viecOkrOutput>;
 export type ViecCuaToiOutput = z.infer<typeof viecCuaToiOutput>;
 export type TransferOkrOutput = z.infer<typeof transferOkrOutput>;

@@ -53,6 +53,7 @@ import {
 	programOutput,
 	setCyclePhaseInput,
 	setProgramInput,
+	thanhVienOutput,
 	transferOkrOutput,
 	updateKrInput,
 	updateObjectiveInput,
@@ -364,6 +365,14 @@ export class OkrRouter {
 	})
 	viecCuaToi(@Ctx() ctx: AuthedTrpcContext) {
 		return this.traoDoi.viecCuaToi(ctx.user.id);
+	}
+
+	@Query({
+		output: thanhVienOutput,
+		meta: restMeta("GET", "/okr/members", TAG),
+	})
+	thanhVien() {
+		return this.traoDoi.thanhVien();
 	}
 
 	@Query({
