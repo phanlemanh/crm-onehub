@@ -109,7 +109,7 @@ function canhCua(state: string): Canh {
 						ten="Hướng «Đều nhau» — máy khuyên"
 						truc="Trục: các bước là hướng dẫn tĩnh hay tiến độ."
 						dongCo="Động cơ: ba bước ngang hàng; người mới đọc cả ba trước khi bấm, không bước nào trông như chưa mở."
-						danhDoi="Đánh đổi: StepList sinh ra cho tiến độ — cần thêm chế độ tĩnh ở packages/ui thay vì đặt bước đang làm vượt số bước."
+						danhDoi="Đánh đổi: StepList sinh ra cho tiến độ — dùng chế độ tĩnh vừa thêm cho StepList ở packages/ui."
 					/>
 				),
 			};
@@ -164,7 +164,7 @@ function KhoiHuongDan({
 	const buoc = coGoogle
 		? [BUOC_CHO_PHEP, BUOC_GOOGLE, BUOC_MAT_KHAU_PHU]
 		: [BUOC_CHO_PHEP, BUOC_MAT_KHAU_CHINH];
-	const dangLam = huong === "tien-do" ? 1 : buoc.length + 1;
+	const tinh = huong !== "tien-do";
 
 	return (
 		<Card>
@@ -173,10 +173,10 @@ function KhoiHuongDan({
 				<CardDescription>{CHU.lanDauMoTa}</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<StepList activeStep={dangLam} label={CHU.lanDau}>
+				<StepList activeStep={1} label={CHU.lanDau} tinh={tinh}>
 					{buoc.map((b, i) => (
 						<StepListItem
-							activeStep={dangLam}
+							activeStep={1}
 							description={b.moTa}
 							key={b.tieuDe}
 							step={i + 1}
