@@ -48,6 +48,7 @@ export type WorkspaceGate = {
 	gate: Gate;
 	slug: string | null;
 	inWorkspace: boolean | null;
+	viewerRole: string | null;
 };
 
 export async function readWorkspaceGate(
@@ -56,9 +57,10 @@ export async function readWorkspaceGate(
 	const workspace = workspaceAnswer.parse(await read(request, "workspace.get"));
 
 	const slug = workspace.slug;
+	const viewerRole = workspace.viewerRole ?? null;
 
 	if (workspace.onboarded === null) {
-		return { gate: "unknown", slug, inWorkspace: null };
+		return { gate: "unknown", slug, inWorkspace: null, viewerRole };
 	}
 
 	return {
@@ -69,6 +71,7 @@ export async function readWorkspaceGate(
 		slug,
 		inWorkspace:
 			workspace.viewerRole === undefined ? null : workspace.viewerRole !== null,
+		viewerRole,
 	};
 }
 

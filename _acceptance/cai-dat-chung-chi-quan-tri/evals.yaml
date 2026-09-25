@@ -10,9 +10,9 @@ evals:
       - "packages/auth/src/**"
       - "packages/auth/test/quyen-cai-dat.spec.ts"
     expected: |
-      Ma tran viet truoc bon ca [owner true, admin true, member false, null false]; mot test
-      khang dinh tap vai trong ma tran (bo null) bang dung WORKSPACE_ROLES. Dem ca = 4 + 1.
-      CHIEU DO: canManageWorkspaceSettings tra true cho member -> do voi thong diep ghim
+      Ma tran viet truoc nam ca [owner true, admin true, member false, okr false, null false];
+      mot test khang dinh tap vai trong ma tran (bo null) bang dung WORKSPACE_ROLES. Dem ca = 5 + 1.
+      CHIEU DO: canManageSettings tra true cho member -> do voi thong diep ghim
       "member: true".
 
   - id: E2
@@ -27,15 +27,15 @@ evals:
     expected: |
       Qua HTTP that: app dung bang createApp() (co /api/trpc va cau REST /rest), supertest.
       ResearchKeyService.verify, ModelCatalogService.models, BackfillService.run bi spyOn tren
-      the hien trong app de dem loi goi. Ma tran viet truoc BON loi x BA thao tac = 12 ca: loi
+      the hien trong app de dem loi goi. Ma tran viet truoc NAM loi x BA thao tac = 15 ca: loi
       (a) phien member qua tRPC, (b) khoa API cua member qua tRPC (header x-api-key, khoa tao
-      cho dung user do), (c) phien cua nguoi khong co hang member qua tRPC, (d) phien member qua
-      REST (PATCH /rest/settings/research-key|agent-model|archive-retention). Ba thao tac:
+      cho dung user do), (c) phien vai okr qua tRPC, (d) phien cua nguoi khong co hang member
+      qua tRPC, (e) phien member qua REST (PATCH /rest/settings/research-key|agent-model|archive-retention). Ba thao tac:
       setResearchKey, setAgentModel, setArchiveRetention; moi ca dat gia tri truoc bang ham ghi
       cua @crm/db/settings roi goi voi gia tri KHAC. Moi ca: HTTP 403, thong diep chua cau
-      khong-du-quyen cua settings-config (loi member) hoac NOT_A_MEMBER (loi nonMember — lop
+      khong-du-quyen cua settings-config (loi member, okr) hoac NOT_A_MEMBER (loi nonMember — lop
       chan san co cua AuthMiddleware); doc thang DB: khoa / model / so ngay van la gia tri
-      truoc; bo dem verify, catalog.models, backfill.run deu = 0 sau ca. Dem ca = 12.
+      truoc; bo dem verify, catalog.models, backfill.run deu = 0 sau ca. Dem ca = 15.
       CHIEU DO: bo requireManager o mot thao tac (vd setArchiveRetention) -> do voi thong diep
       ghim loi va ten thao tac; dat requireManager SAU researchKeys.verify -> ca setResearchKey
       do voi thong diep ghim "verify goi 1 lan"; requireManager bo qua role null -> loi (c) do
@@ -84,9 +84,9 @@ evals:
       - "packages/auth/src/**"
       - "apps/api/test/cai-dat-chung-chi-quan-tri.spec.ts"
     expected: |
-      Ma tran viet truoc BON phien x BA query = 12 ca: owner true, admin true, member false
-      (HTTP 200, data.canManage dung gia tri); nguoi co phien nhung khong co hang member ->
-      HTTP 403 NOT_A_MEMBER, khong co data (khong 500). Dem ca = 12.
+      Ma tran viet truoc NAM phien x BA query = 15 ca: owner true, admin true, member false,
+      okr false (HTTP 200, data.canManage dung gia tri); nguoi co phien nhung khong co hang member ->
+      HTTP 403 NOT_A_MEMBER, khong co data (khong 500). Dem ca = 15.
       CHIEU DO: agentModel tra canManage true co dinh -> member do voi thong diep ghim
       "member agentModel canManage".
 
@@ -143,7 +143,8 @@ evals:
     expected: |
       Chay toan bo apps/app/test/onboarding-gate.spec.ts sau khi bo dung researchKey gia mang
       canManage (mac dinh true — hinh that cua tra loi); roi rang khang-dinh-cu-nguyen-ven.mjs
-      lay tep do o sha re nhanh CO DINH 43ef79bd (git show, khong merge-base), cat moi khoi
+      lay tep do o sha CO DINH a8572437 (dinh onehub da gop vao nhanh, gom #129; git show, khong
+      merge-base), cat moi khoi
       it(/test( den dong dong cung muc thut, va doi moi khoi cu phai co NGUYEN VAN trong tep
       hien tai. Ma tran toan phan: so khoi cat duoc = so dong mo khoi cua tep goc (30), khong
       khop thi ma 2. Dong cuoi "KET LUAN: n DUNG, m SAI — ma thoat X".

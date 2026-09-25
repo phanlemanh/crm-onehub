@@ -65,6 +65,7 @@ type Loi =
 	| "owner"
 	| "admin"
 	| "member"
+	| "okr"
 	| "nonMember"
 	| "memberKey"
 	| "adminKey";
@@ -75,6 +76,7 @@ const dauXac = {
 	owner: { header: "cookie", value: "" },
 	admin: { header: "cookie", value: "" },
 	member: { header: "cookie", value: "" },
+	okr: { header: "cookie", value: "" },
 	nonMember: { header: "cookie", value: "" },
 	memberKey: { header: API_KEY_HEADER, value: "" },
 	adminKey: { header: API_KEY_HEADER, value: "" },
@@ -262,6 +264,7 @@ beforeAll(async () => {
 	await moPhien("owner", "owner");
 	const adminId = await moPhien("admin", "admin");
 	const memberId = await moPhien("member", "member");
+	await moPhien("okr", "okr");
 	await moPhien("nonMember", null);
 	await moKhoa("memberKey", memberId);
 	await moKhoa("adminKey", adminId);
@@ -297,6 +300,7 @@ afterAll(async () => {
 const LOI_BI_CHAN: ReadonlyArray<[Loi, Lop]> = [
 	["member", "trpc"],
 	["memberKey", "trpc"],
+	["okr", "trpc"],
 	["nonMember", "trpc"],
 	["member", "rest"],
 ];
@@ -410,6 +414,7 @@ describe("ccq-co-quyen", () => {
 			["owner", true],
 			["admin", true],
 			["member", false],
+			["okr", false],
 			["nonMember", "khong-thanh-vien"],
 		];
 		const BA_QUERY = ["researchKey", "agentModel", "archiveRetention"] as const;

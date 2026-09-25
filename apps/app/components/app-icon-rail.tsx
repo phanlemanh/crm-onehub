@@ -25,6 +25,7 @@ import {
 	TooltipTrigger,
 } from "@crm/ui/components/tooltip";
 import { cn } from "@crm/ui/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
@@ -39,6 +40,8 @@ import {
 	mucDangMo,
 } from "@/lib/khung-dieu-huong";
 import { khungUngDungMessages } from "@/lib/messages/khung-ung-dung";
+import { mucRailChoVai } from "@/lib/pham-vi-man";
+import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
 const ICON = {
@@ -212,10 +215,14 @@ export function AppIconRail() {
 	const { open, setOpen } = useMobileNav();
 	const prefetchSection = usePrefetchSection();
 	const m = khungUngDungMessages(useLocale());
+	const trpc = useTRPC();
+	const workspace = useQuery(trpc.workspace.get.queryOptions());
+	const viewerRole = workspace.data?.viewerRole ?? null;
+	const daBiet = workspace.data !== undefined;
 
 	const items = useMemo(
 		() =>
-			MUC_RAIL.map(
+			mucRailChoVai(viewerRole).map(
 				(muc): RailItem => ({
 					muc,
 					label: m.rail[muc.key],
@@ -225,8 +232,9 @@ export function AppIconRail() {
 					iconClassName: laMucHoiThoai(muc) ? LOP_ICON_HOI_THOAI : undefined,
 				}),
 			),
-		[workspaceUrl, m],
+		[workspaceUrl, m, viewerRole],
 	);
+	if (!daBiet) return <AppIconRailFallback />;
 	const active = (item: RailItem) =>
 		mucDangMo(item.muc, pathname, workspaceUrl);
 	const inChat = items.some((item) => laMucHoiThoai(item.muc) && active(item));

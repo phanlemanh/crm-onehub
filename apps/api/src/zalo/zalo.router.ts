@@ -9,7 +9,7 @@ import {
 } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViChungMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	zaloCuaToiOutput,
@@ -25,7 +25,7 @@ import {
 import { ZaloService } from "./zalo.service";
 
 @Router({ alias: "zalo" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViChungMiddleware)
 export class ZaloRouter {
 	constructor(@Inject(ZaloService) private readonly zalo: ZaloService) {}
 

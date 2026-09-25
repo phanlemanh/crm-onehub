@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(HERE, "../../..");
 const TEP = process.env.TEP ?? "apps/app/test/onboarding-gate.spec.ts";
-const NEO = process.env.NEO ?? "43ef79bd35ab5e58b1067bb242876ec3a90e04de";
+const NEO = process.env.NEO ?? "a8572437e9d5014fd21609c8ccbb97d9654a5df9";
 const MO_KHOI = /^(\s*)(it|test)(\.\w+)?\(/;
 
 function ket(ma, dong) {

@@ -9,7 +9,7 @@ import {
 } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViChungMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	agentModelOutput,
@@ -23,7 +23,7 @@ import {
 import { SettingsService } from "./settings.service";
 
 @Router({ alias: "settings" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViChungMiddleware)
 export class SettingsRouter {
 	constructor(
 		@Inject(SettingsService) private readonly settings: SettingsService,

@@ -8,6 +8,7 @@ import {
 	readResearchGate,
 	readWorkspaceGate,
 } from "@/lib/onboarding";
+import { dieuHuongTheoVai } from "@/lib/pham-vi-man";
 import { duongProtoHopLe, PROTO_PREFIX, protoMoDuoc } from "@/lib/proto-gate";
 import { isAnonymous, isUnder } from "@/lib/proxy-paths";
 import { workspaceUrl } from "@/lib/workspace-url";
@@ -74,6 +75,16 @@ export async function proxy(request: NextRequest) {
 	if (workspace.gate === "required") return sendTo(ONBOARDING_PATH, request);
 	if (research === "required") return sendTo(RESEARCH_PATH, request);
 
+	if (workspace.slug) {
+		const duong = dieuHuongTheoVai(
+			workspace.viewerRole,
+			boSlug(pathname, workspace.slug),
+		);
+		if (duong !== "ok") {
+			return sendTo(workspaceUrl(workspace.slug, duong.toi), request);
+		}
+	}
+
 	const settled = workspace.gate === "settled" && research === "settled";
 
 	if (!settled || !workspace.slug) return NextResponse.next();
@@ -95,6 +106,11 @@ function appPath(pathname: string, slug: string): string {
 	if (first === slug) return pathname;
 
 	return workspaceUrl(slug, rest.length ? `/${rest.join("/")}` : "/");
+}
+
+function boSlug(pathname: string, slug: string): string {
+	const [first, ...rest] = pathname.slice(1).split("/");
+	return first === slug ? `/${rest.join("/")}` : pathname;
 }
 
 function isPublic(pathname: string): boolean {

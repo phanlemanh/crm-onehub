@@ -123,6 +123,7 @@ describe("readWorkspaceGate", () => {
 			gate: "settled",
 			slug: SLUG,
 			inWorkspace: true,
+			viewerRole: "owner",
 		});
 	});
 
@@ -135,6 +136,7 @@ describe("readWorkspaceGate", () => {
 			gate: "settled",
 			slug: SLUG,
 			inWorkspace: false,
+			viewerRole: null,
 		});
 	});
 

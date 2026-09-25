@@ -48,9 +48,7 @@ export function canManageOrganization(role: WorkspaceRole | null): boolean {
 	return isWorkspaceAdmin(role);
 }
 
-export function canManageWorkspaceSettings(
-	role: WorkspaceRole | null,
-): boolean {
+export function canManageSettings(role: WorkspaceRole | null): boolean {
 	return isWorkspaceAdmin(role);
 }
 

@@ -40,8 +40,8 @@ export {
 	canManageFields,
 	canManageOnboarding,
 	canManageOrganization,
+	canManageSettings,
 	canManageTracking,
-	canManageWorkspaceSettings,
 	canRenameWorkspace,
 	DEFAULT_WORKSPACE_NAME,
 	ensureWorkspaceMembership,
@@ -50,9 +50,15 @@ export {
 	workspaceRoleOf,
 } from "./organization";
 export {
+	docDuocPhamVi,
 	isWorkspaceAdmin,
 	isWorkspaceRole,
+	KHONG_TRONG_PHAM_VI,
+	laVaiChiOkr,
+	PHAM_VI_DU_LIEU,
+	type PhamViDuLieu,
 	toWorkspaceRole,
+	VAI_CHI_OKR,
 	WORKSPACE_ROLES,
 	type WorkspaceRole,
 } from "./roles";

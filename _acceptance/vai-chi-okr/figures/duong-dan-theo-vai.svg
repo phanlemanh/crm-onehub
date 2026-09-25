@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 840 464" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');
+          @media (prefers-color-scheme: dark) {
+            .p  { fill: #171717; }
+            .pn { fill: #212121; }
+            .pi { fill: rgba(180,180,180,0.10); }
+            .ti { fill: #fafafa; }
+            .tm { fill: #b4b4b4; }
+            .ta { fill: #2f9b7a; }
+            .si { stroke: #fafafa; }
+            .sm { stroke: #b4b4b4; }
+            .ss { stroke: #9a9a9a; }
+            .sa { stroke: #2f9b7a; }
+            .sr { stroke: rgba(250,250,250,0.12); }
+            .fa { fill: rgba(47,155,122,0.12); }
+          }
+        </style>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon class="tm" points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon class="ta" points="0 0, 8 3, 0 6" fill="#006B4F"/>
+        </marker>
+      </defs>
+
+      <rect class="p" width="100%" height="100%" fill="#fafafa"/>
+
+      <text class="tm" x="36" y="36" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">HÌNH 2 · ĐƯỜNG DẪN THEO VAI · VAI CHỈ OKR</text>
+
+      <path class="sm" d="M 420 104 L 420 168" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path class="sm" d="M 420 136 L 160 136 A 8 8 0 0 0 152 144 L 152 168" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path class="sm" d="M 420 136 L 680 136 A 8 8 0 0 1 688 144 L 688 168" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <circle class="tm" cx="420" cy="136" r="4" fill="#575757"/>
+
+      <path class="sa" d="M 152 224 L 152 264" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path class="sm" d="M 420 224 L 420 264" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path class="sm" d="M 688 224 L 688 264" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <rect class="p" x="300" y="56" width="240" height="48" rx="6" fill="#fafafa"/>
+      <rect class="pn si" x="300" y="56" width="240" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text class="ti" x="420" y="84" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Vai «chỉ OKR» gõ một đường dẫn</text>
+
+      <rect class="p" x="36" y="168" width="232" height="56" rx="6" fill="#fafafa"/>
+      <rect class="pi ss" x="36" y="168" width="232" height="56" rx="6" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="0.8"/>
+      <text class="ti" x="152" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Khu đối tác, hoặc mục Cài đặt</text>
+      <text class="ti" x="152" y="208" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">dành cho quản trị</text>
+
+      <rect class="p" x="304" y="168" width="232" height="56" rx="6" fill="#fafafa"/>
+      <rect class="pi ss" x="304" y="168" width="232" height="56" rx="6" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="0.8"/>
+      <text class="ti" x="420" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cài đặt, chưa chọn mục</text>
+      <text class="tm" x="420" y="208" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">/settings</text>
+
+      <rect class="p" x="572" y="168" width="232" height="56" rx="6" fill="#fafafa"/>
+      <rect class="pi ss" x="572" y="168" width="232" height="56" rx="6" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="0.8"/>
+      <text class="ti" x="688" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Tổng quan · Thông báo của bạn</text>
+      <text class="ti" x="688" y="208" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Khoá API · Ngoài phạm vi</text>
+
+      <rect class="p" x="36" y="264" width="232" height="48" rx="6" fill="#fafafa"/>
+      <rect class="fa sa" x="36" y="264" width="232" height="48" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text class="ti" x="152" y="284" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trang ngoài phạm vi</text>
+      <text class="tm" x="152" y="300" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">có liên kết về Tổng quan</text>
+
+      <rect class="p" x="304" y="264" width="232" height="48" rx="6" fill="#fafafa"/>
+      <rect class="pn si" x="304" y="264" width="232" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text class="ti" x="420" y="284" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Thông báo của bạn</text>
+      <text class="tm" x="420" y="300" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chuyển thẳng tới mục cá nhân đầu tiên</text>
+
+      <rect class="p" x="572" y="264" width="232" height="48" rx="6" fill="#fafafa"/>
+      <rect class="pn si" x="572" y="264" width="232" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text class="ti" x="688" y="284" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đi tiếp</text>
+      <text class="tm" x="688" y="300" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">màn mở như bình thường</text>
+
+      <text class="tm" x="420" y="352" fill="#575757" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif" text-anchor="middle">Vai khác — chủ sở hữu, quản trị, thành viên — luôn đi tiếp, gõ gì cũng vậy.</text>
+
+      <line class="sr" x1="36" y1="376" x2="804" y2="376" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text class="tm" x="36" y="392" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect class="pi ss" x="128" y="384" width="14" height="10" rx="2" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="0.8"/>
+      <text class="tm" x="150" y="392" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Điều người gõ</text>
+      <rect class="fa sa" x="256" y="384" width="14" height="10" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text class="tm" x="278" y="392" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Trang mới của lượt này</text>
+      <rect class="pn si" x="424" y="384" width="14" height="10" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text class="tm" x="446" y="392" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nơi đến</text>
+
+      <text class="tm" x="36" y="420" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">một hàm thuần dieuHuongTheoVai(role, pathname) chạy trong proxy, ngay sau cổng tư cách</text>
+      <text class="tm" x="36" y="436" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">khu đối tác = /companies /contacts /deals /campaigns /onboarding /chat /agents · trang ngoài phạm vi = /ngoai-pham-vi</text>
+      <text class="tm" x="36" y="452" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">Thông báo của bạn = /settings/notifications · AC-5 · AC-9</text>
+    </svg>

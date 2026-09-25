@@ -1,4 +1,4 @@
-import { canManageWorkspaceSettings, workspaceRoleOf } from "@crm/auth";
+import { canManageSettings, workspaceRoleOf } from "@crm/auth";
 import type { Db } from "@crm/db";
 import {
 	DEFAULT_AGENT_MODEL,
@@ -40,7 +40,7 @@ export class SettingsService {
 	) {}
 
 	private async canManage(userId: string): Promise<boolean> {
-		return canManageWorkspaceSettings(await workspaceRoleOf(userId));
+		return canManageSettings(await workspaceRoleOf(userId));
 	}
 
 	private async requireManager(userId: string): Promise<void> {

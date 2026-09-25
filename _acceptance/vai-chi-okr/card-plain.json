@@ -1,0 +1,11 @@
+{
+  "feature_plain": "Vai «chỉ OKR» đã có: nhân viên ngoài khối kinh doanh đăng nhập được, thấy Tổng quan rút gọn và Cài đặt cá nhân, nhưng không đọc được cá nhân, công ty, thoả thuận, chiến dịch, kế hoạch 30 ngày — qua màn, gọi thẳng API, cầu REST, khoá API hay trợ lý AI; không bị đòi cấp quyền hộp thư.",
+  "decisions": [],
+  "scope_plain": "Chưa làm (như đã duyệt ở Cổng Phạm vi): quyền xem đối tác theo đơn vị, khu OKR (lượt 3), nhắc OKR qua Zalo/Slack (lượt 5), gỡ khung bản ghi gõ tay, các endpoint khác của Better Auth, kênh nội bộ của trợ lý AI và kênh Zalo.",
+  "analyst_plain": "Không có phép đo nào bị nghi là xanh sẵn trên cây cũ: làn tuần tự không dựng cây gốc để so, nên máy không tự khẳng định được; bù lại từng phép đo đã được làm đỏ tay trước khi xanh, và phép đo màn đã đỏ thật một lần (hàng làm giàu ở tiêu đề gọi dữ liệu đối tác cho vai này) rồi mới xanh.",
+  "decisions_plain": [
+    { "id": "d-20260924T163514Z-13", "p": "Trên thanh điều hướng của vai «chỉ OKR», mục Cài đặt trỏ thẳng tới Thông báo của bạn và vẫn sáng ở mọi trang Cài đặt — đổi lại không đổi hình của mục điều hướng, chỉ khai thêm đường liên quan." },
+    { "id": "d-20260924T163514Z-14", "p": "Bộ dựng ma trận đo được chép sang một file mới thay vì tách khỏi bài kiểm của hồ sơ đã ký — đổi lại hai bản gần giống nhau cùng tồn tại, nhưng hồ sơ đã ký không đổi một dòng." },
+    { "id": "d-20260924T171758Z-15", "p": "Vai và phạm vi của mỗi lời gọi API được ghi riêng cho từng thủ tục, kể cả khi nhiều thủ tục đi chung một lô — sửa sau khi soát đối kháng chỉ ra dòng nhật ký có thể nhiễm chéo trong lô; đổi lại ngữ cảnh lời gọi thêm một ô tuỳ chọn." }
+  ]
+}
