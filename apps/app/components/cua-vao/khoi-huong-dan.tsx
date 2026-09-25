@@ -21,25 +21,27 @@ export function KhoiHuongDan({
 	laGi: string;
 }) {
 	return (
-		<div className="flex w-full max-w-md flex-col gap-6" data-khoi-huong-dan="">
-			<Card>
-				<CardHeader>
-					<CardTitle>{tieuDe}</CardTitle>
-					<CardDescription>{moTa}</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<StepList label={tieuDe} tinh>
-						{buoc.map((b, i) => (
-							<StepListItem
-								description={b.moTa}
-								key={b.tieuDe}
-								step={i + 1}
-								title={b.tieuDe}
-							/>
-						))}
-					</StepList>
-				</CardContent>
-			</Card>
+		<div className="contents" data-khoi-huong-dan="">
+			<div className="w-full max-w-md">
+				<Card>
+					<CardHeader>
+						<CardTitle>{tieuDe}</CardTitle>
+						<CardDescription>{moTa}</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<StepList label={tieuDe} tinh>
+							{buoc.map((b, i) => (
+								<StepListItem
+									description={b.moTa}
+									key={b.tieuDe}
+									step={i + 1}
+									title={b.tieuDe}
+								/>
+							))}
+						</StepList>
+					</CardContent>
+				</Card>
+			</div>
 			<p className="text-muted-foreground text-sm">{laGi}</p>
 		</div>
 	);
