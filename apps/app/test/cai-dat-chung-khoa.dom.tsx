@@ -137,6 +137,23 @@ async function mo(man: ReactElement): Promise<HTMLElement> {
 
 type Control = { ten: string; tim: (the: HTMLElement) => HTMLElement | null };
 
+type DoiChung = {
+	o: (the: HTMLElement) => HTMLInputElement | null;
+	go: string;
+	nut: string;
+};
+
+async function go(o: HTMLInputElement, giaTri: string): Promise<void> {
+	const datGia = Object.getOwnPropertyDescriptor(
+		HTMLInputElement.prototype,
+		"value",
+	)?.set;
+	await act(async () => {
+		datGia?.call(o, giaTri);
+		o.dispatchEvent(new Event("input", { bubbles: true }));
+	});
+}
+
 type Card = {
 	ten: string;
 	man: () => ReactElement;
@@ -146,6 +163,7 @@ type Card = {
 	mongGiaTri: string;
 	controls: Control[];
 	moKhiCoQuyen: string[];
+	doiChung: DoiChung | null;
 };
 
 const nutTheoChu = (the: HTMLElement, chu: string) =>
@@ -173,6 +191,11 @@ const BA_CARD: readonly Card[] = [
 			},
 		],
 		moKhiCoQuyen: ["o khoa"],
+		doiChung: {
+			o: (the) => the.querySelector("input[type=password]"),
+			go: "ccq-khoa-moi-12345",
+			nut: "nut thay khoa",
+		},
 	},
 	{
 		ten: "luu tru",
@@ -191,6 +214,11 @@ const BA_CARD: readonly Card[] = [
 			{ ten: "nut luu", tim: (the) => nutTheoChu(the, t.luuTru.luu) },
 		],
 		moKhiCoQuyen: ["o so ngay"],
+		doiChung: {
+			o: (the) => the.querySelector("input[inputmode=numeric]"),
+			go: "43",
+			nut: "nut luu",
+		},
 	},
 	{
 		ten: "model",
@@ -203,6 +231,7 @@ const BA_CARD: readonly Card[] = [
 			{ ten: "nut chon", tim: (the) => the.querySelector("[role=combobox]") },
 		],
 		moKhiCoQuyen: ["nut chon"],
+		doiChung: null,
 	},
 ];
 
@@ -267,6 +296,19 @@ describe("ccq-man-khoa", () => {
 						expect(`${card.ten}: ${control.ten} disabled ${el?.disabled}`).toBe(
 							`${card.ten}: ${control.ten} disabled false`,
 						);
+					}
+					if (card.doiChung) {
+						const o = card.doiChung.o(the);
+						expect(`${card.ten}: co o de go ${o !== null}`).toBe(
+							`${card.ten}: co o de go true`,
+						);
+						if (o) await go(o, card.doiChung.go);
+						const nut = card.controls
+							.find((c) => c.ten === card.doiChung?.nut)
+							?.tim(the) as HTMLButtonElement | null | undefined;
+						expect(
+							`${card.ten}: ${card.doiChung.nut} bat sau khi go ${nut?.disabled === false}`,
+						).toBe(`${card.ten}: ${card.doiChung.nut} bat sau khi go true`);
 					}
 				}
 				soCa += 1;

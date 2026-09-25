@@ -1,0 +1,18 @@
+NETWORK TRUTH — E9 (AC-9)
+Driver: curl/HTTP only (khong dung browser network reader cho buoc quyet dinh nay).
+=> networkObserved = "n-a (driver)"
+
+Cac request HTTP thuc te da chay (khong qua trinh doc network cua trinh duyet):
+1) GET http://localhost:3000/e9-canh-cay.svg (khong cookie)
+   -> 200, than khop dau moc random (guard cay: dung-cay)
+2) GET http://localhost:3001/api/trpc/settings.researchKey (cookie=admin e12-admin-1789807964659@onehub.center)
+   -> 200 {"result":{"data":{"configured":false,"hint":null,"canManage":true}}}
+3) GET http://localhost:3001/api/trpc/settings.researchKey (cookie=member dev@localhost)
+   -> 200 {"result":{"data":{"configured":false,"hint":null,"canManage":false}}}
+4) GET http://localhost:3000/crm/settings (cookie=admin e12-admin-1789807964659@onehub.center)
+   -> 307, redirect_url=http://localhost:3000/onboarding/research
+
+Ket luan: khong co request FAIL-eligible (khong co 4xx/5xx/loi mang tren scope
+app). Van de la o TIEN DE nghiep vu (configured=false toan workspace, khong
+phai loi mang), nen day khong phai "app-fail" theo nghia network — day la FAIL
+o buoc TIEN DE cua eval (item 4 trong steps), truoc khi cham toi buoc chup anh.

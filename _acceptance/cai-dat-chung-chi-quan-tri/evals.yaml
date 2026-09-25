@@ -126,7 +126,8 @@ evals:
       moi control co aria-describedby tro toi mot phan tu co that nam TRONG cung card va mang
       cau khongDuQuyen cua card do. canManage true: khong co cau khongDuQuyen nao trong ba card;
       o khoa, o so ngay, nut chon model khong disabled. Moi khang dinh ghim ten card va ten
-      control. Dem ca = 3 x 2.
+      control. canManage true: go vao o khoa va o so ngay thi nut thay khoa va nut luu BAT
+      (doi chung duong cho phep kiem disabled cua thanh vien). Dem ca = 3 x 2.
       CHIEU DO: bo disabled o nut chon model -> do voi thong diep ghim "model: nut chon
       disabled"; aria-describedby tro id khong ton tai -> do voi thong diep ghim "mo ta ton tai".
 
@@ -138,26 +139,27 @@ evals:
       - "apps/app/lib/onboarding.ts"
       - "apps/app/proxy.ts"
       - "apps/app/test/onboarding-gate.spec.ts"
+      - "_acceptance/cai-dat-chung-chi-quan-tri/rang/khang-dinh-cu-nguyen-ven.mjs"
     expected: |
       Chay toan bo apps/app/test/onboarding-gate.spec.ts sau khi bo dung researchKey gia mang
-      canManage (mac dinh true — hinh that cua tra loi); roi git diff -U0 tu merge-base voi
-      origin/onehub cua chinh tep do khong co dong bi xoa nao chua "expect(" hay "it(" — khang
-      dinh cu khong bi viet lai de vua luat moi.
-      CHIEU DO: sua ky vong mot ca cu (vd "sends an onboarded rep with no key") -> lenh do vi
-      grep bat dong "-" chua expect.
+      canManage (mac dinh true — hinh that cua tra loi); roi rang khang-dinh-cu-nguyen-ven.mjs
+      lay tep do o sha re nhanh CO DINH 43ef79bd (git show, khong merge-base), cat moi khoi
+      it(/test( den dong dong cung muc thut, va doi moi khoi cu phai co NGUYEN VAN trong tep
+      hien tai. Ma tran toan phan: so khoi cat duoc = so dong mo khoi cua tep goc (30), khong
+      khop thi ma 2. Dong cuoi "KET LUAN: n DUNG, m SAI — ma thoat X".
+      CHIEU DO: sua .toBe cua ca "sends an onboarded rep with no key" (dong rieng) -> SAI goi
+      ten ca, ma 1; doi mot it( thut mot tab thanh it.skip( -> SAI goi ten ca; NEO hong -> ma 2.
 
   - id: E9
     criterion: AC-9
     executor: ui-check
     layer: ui-observed
-    cmd: config:executors.design.ui_check
+    cmd: config:executors.test.ccq_chup_hai_vai
     steps:
-      - "Dung api va app cua CAY DANG XET; cong lay tu APP_URL va API_URL; khong sua tep nao trong cay"
-      - "CHAN CAY: dat dau moc .svg vao apps/app/public roi xin lai qua APP_URL; xin settings.researchKey qua API_URL va kiem tra tra loi co truong canManage — thieu dau moc hoac thieu truong -> thoat ma 2"
-      - "Dang nhap bang `cd apps/api && bun run dev:session <email>` cho mot quan tri va mot thanh vien, dat cookie vao trinh duyet chup"
-      - "TIEN DE: settings.researchKey cua quan tri tra configured true (neu khong, quan tri bi day sang /onboarding/research) — sai thi thoat ma 2, KHONG tu ghi khoa vao DB dung chung"
-      - "Truoc moi anh: pathname cuoi cua trang phai la /<slug>/settings — lech thi thoat ma 2"
-      - "Chup Cai dat › Chung cho thanh vien va cho quan tri o 1440 va 768: evidence/E9-<vai>-<kho>.png"
+      - "Dung api va app cua CAY DANG XET o cap cong ban-do-cot (api 3501, app 3500 — ca hai khai APP_URL cua 3500) bang .claude/launch.json cua cay; kiem cong truoc, cong bi giu thi BLOCKED goi ten tien trinh, khong giet"
+      - "Chay O TIEN CANH (khong chay nen), Bash timeout 600000: lenh cua ccq_chup_hai_vai — mot-luot.sh xep hang voi moi lan do khac, tien-de.mjs dat khoa nghien cuu linh canh chi trong luot roi don; rang chup.mjs tu chan cay (canhCay qua APP_URL), tu kiem tien de (configured true, ada@trycomp.ai canManage true, marcus@trycomp.ai canManage false), tu kiem trang cuoi la /<slug>/settings, doi hydrate xong (o so ngay co gia tri), roi chup evidence/E9-<vai>-<kho>.png o 1440 va 768"
+      - "Doc dong KET LUAN cuoi: ma thoat 0 = 16 DUNG; ma 2 = khong do duoc (goi ten tien de hong); ma 1 = co dong SAI"
+      - "Mo bon anh va doi chieu bang mat voi Expected"
     inputs:
       - _acceptance/cai-dat-chung-chi-quan-tri/evidence/
     paths:
@@ -165,10 +167,12 @@ evals:
       - "apps/app/app/(app)/[slug]/settings/agent-model.tsx"
       - "apps/app/app/(app)/[slug]/settings/archive-retention.tsx"
       - "apps/app/lib/messages/settings.ts"
+      - "_acceptance/cai-dat-chung-chi-quan-tri/rang/chup.mjs"
     expected: |
-      Nhin thay tren anh: ban thanh vien co dong ly do o ca ba card Khoa nghien cuu, Luu tru,
-      Model va control mo; ban quan tri khong co dong do o ba card va control sang. Kho 768
-      khong co gi tran ngang. Thieu anh nao -> khong dat.
+      Nhin thay tren anh: ban thanh vien co dong ly do o ca ba card Khoa nghien cuu, Ban ghi
+      da xoa, Tac nhan nghien cuu va control mo; ban quan tri khong co dong do o ba card va
+      control sang. O so ngay hien so (khong trong). Kho 768 khong co gi tran ngang. Thieu anh
+      nao -> khong dat.
 
   - id: E10
     criterion: AC-6
