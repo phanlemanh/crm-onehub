@@ -449,6 +449,31 @@ const vi = {
 		},
 		dangTai: "Đang tải KR của bạn…",
 	},
+	viecCuaToi: {
+		tieuDe: { "tong-quan": "Việc OKR", "cua-toi": "Việc cần làm" },
+		moTa: "Từ KR và mục tiêu bạn phụ trách, theo dõi hoặc được nhắc tên",
+		danhSach: "Việc OKR cần bạn",
+		cau: {
+			capNhat: "{n} KR chờ cập nhật tuần này",
+			krIm: "KR im {n} ngày",
+			krImCuaNguoi: "KR của {nguoi} im {n} ngày",
+			giaoKr: "Bạn được giao phụ trách KR",
+			giaoMucTieu: "Bạn được giao phụ trách mục tiêu",
+			nhacTen: "{nguoi} nhắc tên bạn",
+			theoDoi: "{capNhat} cập nhật, {binhLuan} bình luận mới",
+			theoDoiCapNhat: "{capNhat} cập nhật mới",
+			theoDoiBinhLuan: "{binhLuan} bình luận mới",
+		},
+		capNhatTuan: "Cập nhật tuần",
+		moMucTieu: "Mở mục tiêu",
+		rong: "Hôm nay OKR không cần gì từ bạn",
+		loi: {
+			title: "Không lấy được việc OKR của bạn",
+			body: "Chưa có gì bị mất — thử lại sau ít phút.",
+			action: "Thử lại",
+		},
+		dangTai: "Đang tải việc OKR của bạn…",
+	},
 };
 
 type OkrMessages = typeof vi;
@@ -905,6 +930,31 @@ const en: OkrMessages = {
 			action: "Try again",
 		},
 		dangTai: "Loading your key results…",
+	},
+	viecCuaToi: {
+		tieuDe: { "tong-quan": "OKR to-dos", "cua-toi": "To-dos" },
+		moTa: "From key results and objectives you own, follow or are mentioned on",
+		danhSach: "OKR to-dos for you",
+		cau: {
+			capNhat: "Key results waiting for this week's update: {n}",
+			krIm: "Key result quiet for {n} days",
+			krImCuaNguoi: "{nguoi}'s key result quiet for {n} days",
+			giaoKr: "You now own a key result",
+			giaoMucTieu: "You now own an objective",
+			nhacTen: "{nguoi} mentioned you",
+			theoDoi: "New: {capNhat} updates, {binhLuan} comments",
+			theoDoiCapNhat: "New updates: {capNhat}",
+			theoDoiBinhLuan: "New comments: {binhLuan}",
+		},
+		capNhatTuan: "Weekly update",
+		moMucTieu: "Open objective",
+		rong: "Nothing in OKR needs you today",
+		loi: {
+			title: "Couldn't load your OKR to-dos",
+			body: "Nothing is lost — try again in a few minutes.",
+			action: "Try again",
+		},
+		dangTai: "Loading your OKR to-dos…",
 	},
 };
 
