@@ -1,17 +1,30 @@
+
+# Review Findings: logo-onehub (round 4)
+
 ## Trong hợp đồng
 
-Không có phát hiện nào khớp với AC ở vòng này.
+(không có — không có finding nào map được vào AC ở vòng này)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-Không có phát hiện mới ở round này.
+- **Hình dạng 2 — fixture VIẾT TAY: E15 đo một bản chép AgentAvatar trong logo-markup.ts, không phải AgentAvatar thật**
+  Người dùng thấy gì: Bài đo tự động hiện kiểm tra một bản sao viết tay của ảnh đại diện trợ lý, không phải đúng thành phần đang hiển thị trong ứng dụng. Nếu sau này ai đó lỡ đổi kích thước hay hình dạng logo ở màn hình thật, hệ thống kiểm tra sẽ không phát hiện ra.
+  file: `packages/ui/test/logo-markup.ts`
+  severity: high
+  Đề xuất: known-limits
 
-- **ranh-gioi.mjs misses files renamed or moved out of a forbidden zone, and renamed Logo caller files, because rename detection lists only the new path (r2)**
-  Người dùng thấy gì: Nếu sau này có người đổi tên hoặc di chuyển tệp ra khỏi vùng cấm, công cụ kiểm tra ranh giới có thể không phát hiện và báo an toàn nhầm, để lọt một thay đổi lẽ ra không được phép mà không ai hay biết ngay lúc đó.
-  file: `_acceptance/logo-onehub/rang/ranh-gioi.mjs`
+- **Hình dạng 3 — lời hứa là một QUAN HỆ (nền = xám chuẩn bg-muted) nhưng chỉ assert «nền không trong suốt»**
+  Người dùng thấy gì: Bài đo hiện chỉ kiểm tra nền phía sau logo không trong suốt, chứ chưa so sánh đúng với màu xám tiêu chuẩn đã hứa. Nếu ô nền đen từng gây lỗi trước đây quay lại trong một lần sửa sau này, hệ thống kiểm tra tự động có thể không báo đỏ.
+  file: `_acceptance/logo-onehub/rang/chup.mjs`
   severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 3 — E14 assert chuỗi «square» có mặt, trong khi lời hứa là giá trị của thuộc tính phải đúng**
+  Người dùng thấy gì: Bài đo hiện chỉ tìm xem chữ 'square' có xuất hiện trong mã hay không, mà chưa kiểm tra tùy chọn đó có thật sự đang bật hay không. Nếu sau này ai đó vô tình tắt tùy chọn này, ảnh đại diện trợ lý có thể không còn vuông như đã hứa mà hệ thống kiểm tra vẫn báo đạt.
+  file: `_acceptance/logo-onehub/rang/o-agent.mjs`
+  severity: low
   Đề xuất: known-limits
 
 - **Logo icon generator and its helpers are never type-checked by the repo gate (r1)**
@@ -38,17 +51,11 @@ Không có phát hiện mới ở round này.
   severity: high
   Đề xuất: known-limits
 
-- **AgentAvatar is now a 32x20 grey rectangle, not a square avatar — no eval renders it (r3)**
-  Người dùng thấy gì: Trong tab Agent, khi đã có hội thoại, ảnh đại diện của trợ lý hiển thị dẹt thành một khối xám ngang 32×20 thay vì một khối vuông cân đối như trước khi đổi logo.
-  file: `apps/app/components/crm/agent-panel.tsx:458`
+- **ranh-gioi.mjs misses files renamed or moved out of a forbidden zone, and renamed Logo caller files, because rename detection lists only the new path (r2)**
+  Người dùng thấy gì: Nếu sau này có người đổi tên hoặc di chuyển tệp ra khỏi vùng cấm, công cụ kiểm tra ranh giới có thể không phát hiện và báo an toàn nhầm, để lọt một thay đổi lẽ ra không được phép mà không ai hay biết ngay lúc đó.
+  file: `_acceptance/logo-onehub/rang/ranh-gioi.mjs`
   severity: medium
   Đề xuất: known-limits
-
-- **AC-11 checks skip the logo's own element, so a box drawn on the <Logo> itself passes both E13 and E14 (r3)**
-  Người dùng thấy gì: Nếu về sau có người vô tình đặt lại khung nền tối ngay trên chính hình logo (thay vì trên khung bao quanh), bộ kiểm tra tự động hiện tại sẽ không phát hiện ra, và lỗi hiển thị đó có thể lọt ra ngoài mà không ai hay biết.
-  file: `_acceptance/logo-onehub/rang/o-agent.mjs:53`
-  severity: medium
-  Đề xuất: new-contract
 
 - **ranh-gioi.mjs cannot find the PR merge commit once the branch is on onehub: it gives up with exit 2, or checks the wrong range (r1)**
   Người dùng thấy gì: Sau khi việc đổi logo này được gộp vào nhánh chính, công cụ tự động kiểm tra 'không đụng vùng cấm' có thể báo nhầm hoặc không kiểm tra được gì, nên một thay đổi trái phép vào vùng cấm về sau có nguy cơ không bị phát hiện.

@@ -144,11 +144,16 @@ evals:
       - "packages/ui/test/logo-icons.spec.ts"
     expected: |
       Ca "xuat-ngoai": chay CLI that `bun packages/ui/scripts/logo-icons.ts --external <tmpdir>`
-      (spawn, khong goi ham) voi tmpdir ngoai kho; ghi lai `git status --porcelain` truoc va
-      sau. Ma tran 3 file x (dung co, min alpha 255, goc trang) + zalo: diem anh khac nen nam
-      trong vong ban kinh 0.4*S + google < 1MB + git status truoc === sau. Dem ca = 5.
+      (spawn, khong goi ham) voi tmpdir ngoai kho. "Kho khong doi" do dung hai cach CLI co the
+      ghi vao kho: dau bam sha256 cua bay tep icon dich (tu ICON_ONEHUB.trongKho) truoc === sau,
+      va khong ten anh ngoai nao xuat hien o goc kho, apps/app/public, packages/ui (khong so git
+      status: lan chup song song dat tep dau moc canh-cay-*.svg vao apps/app/public, do 25/09
+      tai hien 5/6 luot do gia). Ma tran 3 file x (dung co, min alpha 255, goc trang) + zalo:
+      diem anh khac nen nam trong vong ban kinh 0.4*S + google < 1MB + hai ve kho khong doi.
+      Dem ca = 5.
       CHIEU DO: goi CLI khong co --external ma voi --external trong -> exit khac 0 va thong diep
-      ghim "--external can mot thu muc".
+      ghim "--external can mot thu muc"; CLI ghi them anh ngoai vao GOC_KHO -> ghim "anh ngoai
+      ghi vao kho"; CLI de favicon.svg trong kho -> ghim "luot xuat ngoai ghi de tep icon".
 
   - id: E10
     criterion: AC-9
