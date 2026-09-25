@@ -5,7 +5,7 @@ slug: bang-thanh-vien-giu-hang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -68,3 +68,8 @@ Never: ảo hoá hay thu gọn danh sách «Được phép vào» — lời hứ
 - Chiều đỏ đã chạy trên mã chưa sửa (25/09): 13 SAI, mã 1; ảnh ở `.acceptance-runs/bang-thanh-vien-giu-hang/truoc-sua/`.
 - Sửa sau niêm phong Cổng 1 (S3, xem sổ): bỏ `min-h-0` làm lộ lỗi hai vùng cuộn — hai `span` sr-only ở tiêu đề bảng «Được phép vào» vẽ tay không có khối chứa trong `main`, kéo dài `document` (153/387/632px) và gây luôn tràn ngang 98px ở 375. AC-3 thêm «một vùng cuộn»; `<section>` của khối đó thành khối chứa (`relative`).
 - S4 round 1 (REJECT): thước tràn ngang đo `document` nên không thấy bảng sáu cột tràn BÊN TRONG `main` ở 375 — 98px ban đầu có hai nguồn chồng nhau, S3 chỉ gỡ một. Thước nay đo cả hai hộp; AC-3 trả về bản đã niêm phong (tràn ngang chấm ở 1440 và 768).
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-25 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 2:
+
+- Ngoài-2: vế «cao từ 16px» của AC-5 (E5) đo khung lớp phủ có đệm `py-8`, không đo chính câu «Không ai khớp với bộ lọc này.», nên vế chiều cao không bao giờ đỏ; câu co nhỏ khó đọc thì bàn đo vẫn báo đạt (hai vế «trong khung» và «không bị che» vẫn đo được).
+- Ngoài-3: AC-6 nói «bảy trang lấp đầy không đổi» nhưng E6 chỉ đo trang Khoá API; sáu trang còn lại (SSO, Liên hệ, Thoả thuận, Công ty, Chiến dịch, Danh mục onboarding) chưa được đo lại sau vòng này.
