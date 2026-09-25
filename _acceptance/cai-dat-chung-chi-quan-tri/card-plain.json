@@ -3,16 +3,105 @@
   "scope_plain": "Để sau: các khu khác chưa phân quyền, nhật ký ai đổi gì, quyền nhiều mức, và sửa màn tên công ty cũ.",
   "analyst_plain": "",
   "decisions_plain": [
-    {"id": "d-20260924T232726Z-1", "p": "Đã chọn gửi cờ quyền kèm chính ba câu trả lời cài đặt — đổi lại ba câu trả lời đổi hình và bài kiểm cổng cũ phải thêm cờ."},
-    {"id": "d-20260924T232726Z-2", "p": "Đã chọn để thành viên thường vào thẳng ứng dụng khi chưa có khoá — đổi lại nghiên cứu công ty chờ tới khi quản trị cắm khoá."},
-    {"id": "d-20260924T232726Z-3", "p": "Đã chọn kiểm quyền trước mọi việc khác — đổi lại bài kiểm phải đếm lời gọi tới ba dịch vụ."},
-    {"id": "d-20260924T232726Z-4", "p": "KHÔNG làm bản mẫu bấm được — màn đã có, chỉ khoá nút; ảnh thật hai vai chụp ở bước chấm."},
-    {"id": "d-20260924T232726Z-5", "p": "KHÔNG phân quyền các khu khác và KHÔNG sửa màn tên công ty cũ — đổi lại lỗ cùng loại còn ở nơi khác."},
-    {"id": "d-20260925T020202Z-7", "p": "Máy hiểu việc anh dán dòng /goal sau lời mời duyệt kế hoạch là đã duyệt kế hoạch — đổi lại chữ duyệt là suy từ hành động, cần anh xác nhận ở đây."},
-    {"id": "d-20260925T020223Z-8", "p": "Đã làm tuần tự thay vì hai việc song song — đổi lại chậm vài phút, tránh dựng lại môi trường cho hai bản sao tạm."},
-    {"id": "d-20260925T020511Z-9", "p": "Đã sửa chữ hai tiêu chí sau Cổng 1: người không thuộc workspace bị chặn sớm hơn bằng lớp chặn sẵn có («không phải thành viên»), nên không thấy thông điệp riêng của Cài đặt và không đọc được cờ — đổi lại lời hứa đổi chữ sau khi anh duyệt, cần anh phê."},
-    {"id": "d-20260925T023317Z-10", "p": "Đã thay cách kiểm hồi quy cổng đăng nhập: so nguyên văn từng khối kiểm cũ với bản trước vòng này — đổi lại thêm một tệp đo."},
-    {"id": "d-20260925T023317Z-11", "p": "Đã thêm đối chứng cho nút lưu: quản trị gõ vào ô thì nút phải sáng — đổi lại bài kiểm màn dài hơn."},
-    {"id": "d-20260925T023317Z-12", "p": "Đã đổi cách chụp ảnh thật: đặt khoá tạm chỉ trong lượt đo rồi dọn, chụp hai tài khoản chủ và thành viên có sẵn — đổi lại bước đo ảnh khác bản anh duyệt ở Cổng 1."}
+    {
+      "id": "d-20260924T232726Z-1",
+      "p": "Đã chọn gửi cờ quyền kèm chính ba câu trả lời cài đặt — đổi lại ba câu trả lời đổi hình và bài kiểm cổng cũ phải thêm cờ."
+    },
+    {
+      "id": "d-20260924T232726Z-2",
+      "p": "Đã chọn để thành viên thường vào thẳng ứng dụng khi chưa có khoá — đổi lại nghiên cứu công ty chờ tới khi quản trị cắm khoá."
+    },
+    {
+      "id": "d-20260924T232726Z-3",
+      "p": "Đã chọn kiểm quyền trước mọi việc khác — đổi lại bài kiểm phải đếm lời gọi tới ba dịch vụ."
+    },
+    {
+      "id": "d-20260924T232726Z-4",
+      "p": "KHÔNG làm bản mẫu bấm được — màn đã có, chỉ khoá nút; ảnh thật hai vai chụp ở bước chấm."
+    },
+    {
+      "id": "d-20260924T232726Z-5",
+      "p": "KHÔNG phân quyền các khu khác và KHÔNG sửa màn tên công ty cũ — đổi lại lỗ cùng loại còn ở nơi khác."
+    },
+    {
+      "id": "d-20260925T020202Z-7",
+      "p": "Máy hiểu việc anh dán dòng /goal sau lời mời duyệt kế hoạch là đã duyệt kế hoạch — đổi lại chữ duyệt là suy từ hành động, cần anh xác nhận ở đây."
+    },
+    {
+      "id": "d-20260925T020223Z-8",
+      "p": "Đã làm tuần tự thay vì hai việc song song — đổi lại chậm vài phút, tránh dựng lại môi trường cho hai bản sao tạm."
+    },
+    {
+      "id": "d-20260925T020511Z-9",
+      "p": "Đã sửa chữ hai tiêu chí sau Cổng 1: người không thuộc workspace bị chặn sớm hơn bằng lớp chặn sẵn có («không phải thành viên»), nên không thấy thông điệp riêng của Cài đặt và không đọc được cờ — đổi lại lời hứa đổi chữ sau khi anh duyệt, cần anh phê."
+    },
+    {
+      "id": "d-20260925T023317Z-10",
+      "p": "Đã thay cách kiểm hồi quy cổng đăng nhập: so nguyên văn từng khối kiểm cũ với bản trước vòng này — đổi lại thêm một tệp đo."
+    },
+    {
+      "id": "d-20260925T023317Z-11",
+      "p": "Đã thêm đối chứng cho nút lưu: quản trị gõ vào ô thì nút phải sáng — đổi lại bài kiểm màn dài hơn."
+    },
+    {
+      "id": "d-20260925T023317Z-12",
+      "p": "Đã đổi cách chụp ảnh thật: đặt khoá tạm chỉ trong lượt đo rồi dọn, chụp hai tài khoản chủ và thành viên có sẵn — đổi lại bước đo ảnh khác bản anh duyệt ở Cổng 1."
+    },
+    {
+      "id": "d-20260925T024630Z-13",
+      "p": "Lần ký trước: Ngoài-1 ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260925T024630Z-14",
+      "p": "Lần ký trước: Ngoài-2 ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260925T024630Z-15",
+      "p": "Lần ký trước: Ngoài-3 ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260925T024630Z-16",
+      "p": "Lần ký trước: Ngoài-4 ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260925T024630Z-17",
+      "p": "Lần ký trước: Ngoài-5 ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260925T024630Z-18",
+      "p": "Lần ký trước: Ngoài-6 ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260925T024630Z-19",
+      "p": "Lần ký trước: Ngoài-7 ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260925T024630Z-20",
+      "p": "Lần ký trước: Ngoài-8 ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260925T024630Z-21",
+      "p": "Lần ký trước: Ngoài-9 ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260925T024630Z-22",
+      "p": "Lần ký trước: Ngoài-10 ghi vào hạn chế đã biết."
+    },
+    {
+      "id": "d-20260925T024630Z-23",
+      "p": "Lần ký trước: đồng ý phạm vi đã cắt."
+    },
+    {
+      "id": "d-20260925T024630Z-24",
+      "p": "Lần ký trước: phê hết các quyết định máy ra sau Cổng 1."
+    },
+    {
+      "id": "d-20260925T024630Z-25",
+      "p": "Lần ký trước (trước khi gộp #129): anh đã ký."
+    },
+    {
+      "id": "d-20260925T030507Z-26",
+      "p": "Theo lựa chọn «một nguồn» của anh khi gộp #129: dùng chung luật quyền canManageSettings của #129, bỏ bản trùng; ba card và cổng đăng nhập đọc cờ theo từng câu trả lời cài đặt; thêm vai okr vào phép đo — đổi lại hợp đồng đổi chữ sau lần ký trước nên cần ký lại."
+    }
   ]
 }
