@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { beforeAll, describe, expect, test } from "bun:test";
 import { db, setPrismaLogSink } from "@crm/db";
 import {
 	type AiHoacCookie,
@@ -92,21 +92,26 @@ async function doLuot(
 	return { ms, cau };
 }
 
+const DEM_DUOC = process.env.PRISMA_LOG_QUERIES === "true";
+
+type Cap = readonly [string, Json, Json];
+
+let cap: Cap[] = [];
+
 describe("hieu-nang", () => {
-	test("hieu-nang: 50 phong ban × 2.000 KR duoi 1 giay, so cau truy van khong tang theo so don vi", async () => {
+	beforeAll(async () => {
 		ok(await goi("okr.setProgram", { ...CHUONG_TRINH_RONG }), "cau hinh");
 		const kyNho = await kyDangChay("hn-nho");
 		const kyLon = await kyDangChay("hn-lon");
 		const nho = await gieo(kyNho, 1, 5, 1, 1);
 		const lon = await gieo(kyLon, 10, 5, 8, 5);
 		expect([nho.soMucTieu, lon.soMucTieu]).toEqual([5, 400]);
-
 		const loc = {
 			phuTrach: [phien.quan.nguoi],
 			loai: ["cam-ket"],
 			trangThai: ["cong-bo"],
 		};
-		const cap = [
+		cap = [
 			["okr.toanCanh", { cycleId: kyNho }, { cycleId: kyLon }],
 			[
 				"okr.danhSach",
@@ -114,22 +119,37 @@ describe("hieu-nang", () => {
 				{ cycleId: kyLon, unit: { loai: "bp", id: lon.boPhan }, loc },
 			],
 			["okr.sucKhoe", { cycleId: kyNho }, { cycleId: kyLon }],
-		] as const;
-		const ket: string[] = [];
-		for (const [thuTuc, vaoNho, vaoLon] of cap) {
+		];
+	}, 120_000);
+
+	test("hieu-nang: 50 phong ban × 2.000 KR duoi 1 giay", async () => {
+		expect(cap.length).toBe(3);
+		for (const [thuTuc, , vaoLon] of cap) {
 			await doLuot(thuTuc, vaoLon);
-			const a = await doLuot(thuTuc, vaoNho);
 			const b = await doLuot(thuTuc, vaoLon);
-			expect(`${thuTuc} đếm được câu truy vấn: ${a.cau > 0}`).toBe(
-				`${thuTuc} đếm được câu truy vấn: true`,
-			);
-			ket.push(
-				`${thuTuc}: số câu 5 đơn vị = ${a.cau}, 50 đơn vị = ${b.cau}; ${b.ms < NGUONG_MS ? "dưới" : "TRÊN"} ${NGUONG_MS} ms`,
-			);
 			console.log(`${thuTuc}: ${Math.round(b.ms)} ms ở 50 đơn vị`);
-			expect(ket.at(-1)).toBe(
-				`${thuTuc}: số câu 5 đơn vị = ${a.cau}, 50 đơn vị = ${a.cau}; dưới ${NGUONG_MS} ms`,
-			);
+			expect(
+				`${thuTuc}: ${b.ms < NGUONG_MS ? "dưới" : "TRÊN"} ${NGUONG_MS} ms`,
+			).toBe(`${thuTuc}: dưới ${NGUONG_MS} ms`);
 		}
 	}, 120_000);
+
+	test.if(DEM_DUOC)(
+		"hieu-nang: so cau truy van khong tang theo so don vi",
+		async () => {
+			expect(cap.length).toBe(3);
+			for (const [thuTuc, vaoNho, vaoLon] of cap) {
+				await doLuot(thuTuc, vaoLon);
+				const a = await doLuot(thuTuc, vaoNho);
+				const b = await doLuot(thuTuc, vaoLon);
+				expect(`${thuTuc} đếm được câu truy vấn: ${a.cau > 0}`).toBe(
+					`${thuTuc} đếm được câu truy vấn: true`,
+				);
+				expect(
+					`${thuTuc}: số câu 5 đơn vị = ${a.cau}, 50 đơn vị = ${b.cau}`,
+				).toBe(`${thuTuc}: số câu 5 đơn vị = ${a.cau}, 50 đơn vị = ${a.cau}`);
+			}
+		},
+		120_000,
+	);
 });
