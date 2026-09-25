@@ -80,6 +80,13 @@ export function soNgayVN(tu: Date, den: Date): number {
 	return Math.round((dau(den) - dau(tu)) / DAY_MS);
 }
 
+export function dauTuanVN(now: Date): string {
+	const hom = Date.parse(`${ngayVN(now)}T00:00:00Z`);
+	const thu = new Date(hom).getUTCDay();
+	const lui = (thu + 6) % 7;
+	return new Date(hom - lui * DAY_MS).toISOString().slice(0, 10);
+}
+
 export function daToiGioNhac(now: Date): boolean {
 	const phan = dinhGio.formatToParts(now);
 	const so = (loai: "hour" | "minute") =>

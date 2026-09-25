@@ -239,6 +239,11 @@ const vi = {
 		"gan-can-chinh": "Gắn căn chỉnh",
 		"go-can-chinh": "Gỡ căn chỉnh",
 		"nhap-bang-tinh": "Nhập từ bảng tính",
+		"cap-nhat-tuan": "Cập nhật tuần",
+		"binh-luan": "Bình luận",
+		"theo-doi": "Theo dõi",
+		"bo-theo-doi": "Bỏ theo dõi",
+		"chuyen-viec": "Chuyển việc",
 	},
 	vet: {
 		cot: {
@@ -629,6 +634,11 @@ const en: OkrMessages = {
 		"gan-can-chinh": "Aligned",
 		"go-can-chinh": "Removed alignment",
 		"nhap-bang-tinh": "Imported from spreadsheet",
+		"cap-nhat-tuan": "Weekly update",
+		"binh-luan": "Commented",
+		"theo-doi": "Followed",
+		"bo-theo-doi": "Unfollowed",
+		"chuyen-viec": "Transferred work",
 	},
 	vet: {
 		cot: {
