@@ -317,7 +317,7 @@ executors:
     mk_dang_nhap_cung_man: cd apps/app && bun test ./test/mk-dang-nhap-cung-man.spec.ts
     mk_dat_mat_khau_loi: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/mk-dat-mat-khau-loi.dom.tsx
     qmk_co_tat_api: bun run test -- "cd apps/api && bun test test/quen-mat-khau-co.spec.ts -t co-tat"
-    qmk_co_bat_api: bun run test -- "cd apps/api && bun test test/quen-mat-khau-co.spec.ts -t co-bat && bun test test/auth.e2e.spec.ts"
+    qmk_co_bat_api: GOOGLE_CLIENT_ID=ci-only-google-client-id GOOGLE_CLIENT_SECRET=ci-only-google-client-secret bun run test -- "cd apps/api && bun test test/quen-mat-khau-co.spec.ts -t co-bat && bun test test/auth.e2e.spec.ts"
     qmk_co_tat_man: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/quen-mat-khau-man.dom.tsx -t co-tat
     qmk_lien_ket_man: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/quen-mat-khau-man.dom.tsx -t lien-ket
     qmk_form_trang_thai: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/quen-mat-khau-man.dom.tsx -t form
