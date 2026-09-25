@@ -43,7 +43,13 @@ import {
 	updateObjectiveInput,
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
-import { danhSachInput, danhSachOutput } from "./okr-xem.contracts";
+import {
+	cycleOnlyInput,
+	danhSachInput,
+	danhSachOutput,
+	sucKhoeOutput,
+	toanCanhOutput,
+} from "./okr-xem.contracts";
 import { OkrXemService } from "./okr-xem.service";
 
 const TAG = ["OKR"];
@@ -319,5 +325,29 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof danhSachInput>,
 	) {
 		return this.xem.danhSach(ctx.user.id, input);
+	}
+
+	@Query({
+		input: cycleOnlyInput,
+		output: toanCanhOutput,
+		meta: restMeta("GET", "/okr/overview", TAG),
+	})
+	toanCanh(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof cycleOnlyInput>,
+	) {
+		return this.xem.toanCanh(ctx.user.id, input.cycleId);
+	}
+
+	@Query({
+		input: cycleOnlyInput,
+		output: sucKhoeOutput,
+		meta: restMeta("GET", "/okr/program-health", TAG),
+	})
+	sucKhoe(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof cycleOnlyInput>,
+	) {
+		return this.xem.sucKhoe(ctx.user.id, input.cycleId);
 	}
 }

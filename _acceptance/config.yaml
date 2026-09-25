@@ -209,7 +209,7 @@ executors:
     dok_chi_okr: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t chi-okr && bun test test/vai-chi-okr.spec.ts -t ma-tran-trpc"'
     tco_danh_sach: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t danh-sach"'
     tco_toan_canh: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh-thuan.spec.ts -t toan-canh && bun test test/okr-toan-canh.spec.ts -t toan-canh-tien-do"'
-    tco_hieu_nang: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t hieu-nang"'
+    tco_hieu_nang: 'bun run test -- "cd apps/api && PRISMA_LOG_QUERIES=true bun test test/okr-toan-canh-hieu-nang.spec.ts"'
     tco_toan_canh_tu_tin: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh-thuan.spec.ts -t heatmap && bun test test/okr-toan-canh.spec.ts -t toan-canh-tu-tin"'
     tco_hop_tuan: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh-thuan.spec.ts -t hop-tuan && bun test test/okr-toan-canh.spec.ts -t hop-tuan-xep"'
     tco_mo_hop_tuan: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t mo-hop-tuan"'
