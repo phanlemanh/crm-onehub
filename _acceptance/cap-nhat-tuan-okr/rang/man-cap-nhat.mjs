@@ -536,9 +536,15 @@ async function gieoMucTieu() {
 	KR.k29c = o29c.kr[0];
 	await lam(cookie.tp, "okr.publishObjective", { id: o29c.id });
 
+	const luiVe = new Date(Date.now() - NGAY_LUI_CONG_BO * 24 * 3600 * 1000);
+	const moiCongBo = [OKR.cn, OKR.ot, OKR.a, OKR.c, OKR.u, OKR.di, OKR.o29a, OKR.o29c];
 	await db.okrObjective.updateMany({
-		where: { id: { in: [OKR.cn, OKR.ot, OKR.a, OKR.c, OKR.u, OKR.di, OKR.o29a, OKR.o29c] } },
-		data: { publishedAt: new Date(Date.now() - NGAY_LUI_CONG_BO * 24 * 3600 * 1000) },
+		where: { id: { in: moiCongBo } },
+		data: { publishedAt: luiVe },
+	});
+	await db.okrKeyResult.updateMany({
+		where: { objectiveId: { in: moiCongBo }, startLockedAt: { not: null } },
+		data: { startLockedAt: luiVe },
 	});
 }
 
@@ -1258,10 +1264,15 @@ async function buocE18E19() {
 		"E18 buoc 5: TP co menu thao tac tren KR1",
 		await coSel(tp, `button[aria-label='Thao tác với KR trao đổi ${MA}']`),
 	);
-	await bamSel(tp, `button[aria-label='Thao tác với KR trao đổi ${MA}']`);
-	await doi(tp, "E18 buoc 5: menu KR mo", () => document.querySelector("[role='menuitem']") !== null);
-	await bamChu(tp, "[data-muc='cap-nhat-kr']", CHU.capNhatMenu);
-	await doi(tp, "E18 buoc 5: hop cap nhat KR mo", (id) => document.querySelector(`[data-hop-cap-nhat-kr='${id}']`) !== null, KR.ot1);
+
+	async function moHopCapNhatKr() {
+		await bamSel(tp, `button[aria-label='Thao tác với KR trao đổi ${MA}']`);
+		await doi(tp, "E18 buoc 5: menu KR mo", () => document.querySelector("[role='menuitem']") !== null);
+		await bamChu(tp, "[data-muc='cap-nhat-kr']", CHU.capNhatMenu);
+		await doi(tp, "E18 buoc 5: hop cap nhat KR mo", (id) => document.querySelector(`[data-hop-cap-nhat-kr='${id}']`) !== null, KR.ot1);
+	}
+
+	await moHopCapNhatKr();
 	kiem(
 		`E18 buoc 5: hop ghi ho phai noi «${CHU.ghiHo}» va ten M`,
 		(await chuSel(tp, "[data-ghi-ho]")).includes(CHU.ghiHo) &&
@@ -1269,14 +1280,18 @@ async function buocE18E19() {
 	);
 	await chup(tp, "E18-step5.png", true);
 	await doiRong(tp, HEP);
+	await moHopCapNhatKr();
 	await chup(tp, "E18-step6.png", true);
 	await doiRong(tp, RONG);
+	await moHopCapNhatKr();
 
 	await bamChu(tp, `[data-hop-cap-nhat-kr='${KR.ot1}'] [data-o='tu-tin'] [data-slot='toggle-group-item']`, CHU.cao);
 	await doi(tp, "E18 buoc 5: nut gui cap nhat KR bat", () => document.querySelector("[data-nut='gui-cap-nhat-kr']")?.disabled === false);
 	await bamSel(tp, "[data-nut='gui-cap-nhat-kr']");
 	await doi(tp, "E18 buoc 5: hop dong sau khi gui", () => document.querySelector("[data-hop-cap-nhat-kr]") === null);
 
+	await bamChu(tp, `[data-okr-sheet='${OKR.ot}'] [role='tab']`, CHU.traoDoi);
+	await doi(tp, "E18 translate: tab Trao doi hien binh luan", () => document.querySelector("[data-binh-luan]") !== null);
 	await kiemKhongDich(tp, "E18 translate", "[data-binh-luan]", "Tuần này cần thêm người");
 	await kiemKhongDich(tp, "E18 translate", `[data-okr-sheet='${OKR.ot}']`, NGUOI.tp.ten);
 	await kiemKhongDich(tp, "E18 translate", `[data-okr-sheet='${OKR.ot}']`, `KR trao đổi ${MA}`);
@@ -1400,6 +1415,13 @@ async function suaKrTrongSheet(trang, objectiveId, krTitle) {
 	await hienSel(trang, "[data-hop-thoai-kr]");
 }
 
+async function moLaiHopSuaKr(trang, krTitle) {
+	await bamSel(trang, `button[aria-label='Thao tác với ${krTitle}']`);
+	await doi(trang, "E29: menu KR mo lai", () => document.querySelector("[role='menuitem']") !== null);
+	await bamChu(trang, "[role='menuitem']", CHU.suaMenu);
+	await hienSel(trang, "[data-hop-thoai-kr]");
+}
+
 async function buocE29() {
 	const tp = await moTrang(cookie.tp, RONG, "", "E29");
 	await suaKrTrongSheet(tp, OKR.o29a, `KR29a ${MA}`);
@@ -1420,6 +1442,7 @@ async function buocE29() {
 	await doiRong(tp, HEP);
 	await chup(tp, "E29-step2.png", true);
 	await doiRong(tp, RONG);
+	await moLaiHopSuaKr(tp, `KR29a ${MA}`);
 
 	await ganGiaTri(tp, "[data-o-dich]", "60");
 	await doi(tp, "E29: nut Luu bat", () => document.querySelector("[data-nut='gui-kr']")?.disabled === false);
