@@ -17,6 +17,7 @@ const TAM = [
 	"sua-luu-tru-dieu-phoi",
 	"cau-truc-to-chuc",
 	"to-chuc-danh-sach-chi-tiet",
+	"vai-chi-okr",
 ];
 const DA_KY = new Set([
 	"signed-off",

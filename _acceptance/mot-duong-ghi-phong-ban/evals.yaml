@@ -234,7 +234,7 @@ evals:
     criterion: AC-7
     executor: judgment
     question: >-
-      Trong diff cua cac tep kiem thuoc tam ho so da ky, co khang dinh nao bi bo hoac bi noi
+      Trong diff cua cac tep kiem thuoc chin ho so da ky, co khang dinh nao bi bo hoac bi noi
       (doi tuong khac, quan he long hon, ma tran it o hon) ngoai cac thay doi duoc phep cua
       AC-7 khong, va moi ho so co dong revisit nhac ten tep kiem cua no khong?
     inputs:
@@ -246,7 +246,7 @@ evals:
       - "apps/api/test/**"
       - "apps/app/test/**"
     expected: |
-      Doc diff cua moi tep kiem thuoc tam ho so da ky va bang dem (hai tep do script
+      Doc diff cua moi tep kiem thuoc chin ho so da ky va bang dem (hai tep do script
       rang/ho-so-da-ghim.mjs sinh tu base cua vong, khong chep tay; bang dem liet ke cho tung tep so
       khang dinh expect/ok truoc va sau). Voi MOI khang dinh (expect/toBe/toEqual/ok(...)) bi xoa hoac doi trong diff:
       chi ra khang dinh thay the chung CUNG dieu (cung doi tuong, cung quan he, khong noi nguong,
@@ -256,7 +256,7 @@ evals:
       "sap xep" cua sua-luu-tru.spec: phai giu nguyen khang dinh thu tu c,a,b VA vi tri tuyet doi
       c:0, a:1, b:2 (gieo ba phong ban trong mot bo phan rieng cua bai kiem). PASS khi
       khong co khang dinh nao bi bo hay noi; FAIL neu co, kem duong dan:dong. Kiem them: moi ho so
-      trong tam co dong revisit moi trong decisions.jsonl nhac ten tep kiem cua no.
+      trong chin co dong revisit moi trong decisions.jsonl nhac ten tep kiem cua no.
 
   - id: E10
     criterion: AC-8
@@ -276,18 +276,18 @@ evals:
       (a) TAP BI CHAM rut bang may: moi ho so trang thai signed-off / machine-cleared /
       da-cham-boi-thuc-te / verified (tru chinh mot-duong-ghi-phong-ban) co it nhat mot eval
       test/script ma lenh (giai config: ref qua _acceptance/config.yaml) nhac toi mot tep kiem nam
-      trong git diff --name-only <base> HEAD. Tap nay phai BANG dung tam slug viet truoc trong
+      trong git diff --name-only <base> HEAD. Tap nay phai BANG dung chin slug viet truoc trong
       contract AC-7 (1); lech -> in slug thua/thieu.
-      (b) Voi moi slug CHUA KHEP cua tap (6): dong kind "repin" CUOI trong run-log.jsonl co evals_exit
+      (b) Voi moi slug CHUA KHEP cua tap (7): dong kind "repin" CUOI trong run-log.jsonl co evals_exit
       khong rong, moi gia tri = 0, suites_exit toan 0 (2); sha cua dong do == verified_commit trong
       frontmatter evidence-report.md (1); git diff --name-only <sha> HEAD khong co tep nao ngoai
-      _acceptance/ va ngoai risk_tiers.t1_skip_globs (1). 6 x 4 = 24. Sau slug chung MOT run_id (1).
+      _acceptance/ va ngoai risk_tiers.t1_skip_globs (1). 7 x 4 = 28. Bay slug chung MOT run_id (1).
       Voi moi slug DA CHAM BOI THUC TE (2: dieu-phoi-30-ngay-dau, quan-ly-danh-muc-30-ngay):
       node lib/workspace-record.cjs --thuc-te tra ma 0 (dong quan sat du ve, thuoc khong doi) (2) —
       mien ghim theo luat dong ho so cua bo kit; bai kiem cua chung chay trong bo kiem day du.
       (c) Chay "bash scripts/pre-merge-check.sh . --base origin/onehub" KHONG --slug: moi dong
       VIOLATION trong dau ra chi duoc nhac chinh [mot-duong-ghi-phong-ban] (ho so dang cham, chua co
-      bang chung la dung luc nay); so dong VIOLATION cua ho so khac = 0 (1). Tong 29 (1 + 24 + 1 + 2 + 1).
+      bang chung la dung luc nay); so dong VIOLATION cua ho so khac = 0 (1). Tong 33 (1 + 28 + 1 + 2 + 1).
       Sinh them hai tep cho E9: bai-kiem-da-ky.diff (git diff <base> HEAD tren cac tep kiem cua tap
       bi cham) va bai-kiem-dem.md (moi tep: so khang dinh expect( / ok( truoc va sau).
       CHIEU DO cung lan, tren ban sao trong bo nho: (1) doi evals_exit cua mot eval thanh 1 trong dong
