@@ -55,7 +55,10 @@ export function ChuyenOkrDialog({
 		}),
 		enabled: mo,
 	});
-	const dsNguoi = useQuery({ ...trpc.okr.thanhVien.queryOptions(), enabled: mo });
+	const dsNguoi = useQuery({
+		...trpc.okr.thanhVien.queryOptions(),
+		enabled: mo,
+	});
 
 	const dong = () => {
 		setNhan("");

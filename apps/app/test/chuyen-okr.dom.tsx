@@ -97,7 +97,10 @@ const THANH_VIEN = [
 	{ id: "m-k", userId: "u-k", name: "Kim Anh" },
 ];
 
-function datThanhVien(canManage: boolean, xemTruoc: { kr: number; mucTieu: number }) {
+function datThanhVien(
+	canManage: boolean,
+	xemTruoc: { kr: number; mucTieu: number },
+) {
 	dat("workspace.get", () => ({
 		id: "ws",
 		name: "OneHub",
@@ -274,8 +277,8 @@ describe("chuyen-okr-man", () => {
 			(i) => i.textContent?.trim() ?? "",
 		);
 		expect(ten.sort(), "nguoi nhan khong co H").toEqual(["Kim Anh", "Tuan Do"]);
-		const chonT = [...document.body.querySelectorAll("[cmdk-item]")].find(
-			(i) => i.textContent?.includes("Tuan Do"),
+		const chonT = [...document.body.querySelectorAll("[cmdk-item]")].find((i) =>
+			i.textContent?.includes("Tuan Do"),
 		);
 		if (!chonT) throw new Error("khong thay Tuan Do");
 		await bam(chonT);
