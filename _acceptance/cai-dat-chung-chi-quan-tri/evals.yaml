@@ -33,7 +33,8 @@ evals:
       REST (PATCH /rest/settings/research-key|agent-model|archive-retention). Ba thao tac:
       setResearchKey, setAgentModel, setArchiveRetention; moi ca dat gia tri truoc bang ham ghi
       cua @crm/db/settings roi goi voi gia tri KHAC. Moi ca: HTTP 403, thong diep chua cau
-      khong-du-quyen cua settings-config; doc thang DB: khoa / model / so ngay van la gia tri
+      khong-du-quyen cua settings-config (loi member) hoac NOT_A_MEMBER (loi nonMember — lop
+      chan san co cua AuthMiddleware); doc thang DB: khoa / model / so ngay van la gia tri
       truoc; bo dem verify, catalog.models, backfill.run deu = 0 sau ca. Dem ca = 12.
       CHIEU DO: bo requireManager o mot thao tac (vd setArchiveRetention) -> do voi thong diep
       ghim loi va ten thao tac; dat requireManager SAU researchKeys.verify -> ca setResearchKey
@@ -83,9 +84,9 @@ evals:
       - "packages/auth/src/**"
       - "apps/api/test/cai-dat-chung-chi-quan-tri.spec.ts"
     expected: |
-      Ma tran viet truoc BON phien x BA query = 12 ca: owner true, admin true, member false,
-      nguoi co phien nhung khong co hang member false; moi ca HTTP 200 (khong 500) va
-      data.canManage dung gia tri. Dem ca = 12.
+      Ma tran viet truoc BON phien x BA query = 12 ca: owner true, admin true, member false
+      (HTTP 200, data.canManage dung gia tri); nguoi co phien nhung khong co hang member ->
+      HTTP 403 NOT_A_MEMBER, khong co data (khong 500). Dem ca = 12.
       CHIEU DO: agentModel tra canManage true co dinh -> member do voi thong diep ghim
       "member agentModel canManage".
 

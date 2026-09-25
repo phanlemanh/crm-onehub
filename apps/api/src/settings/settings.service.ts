@@ -1,3 +1,4 @@
+import { canManageWorkspaceSettings, workspaceRoleOf } from "@crm/auth";
 import type { Db } from "@crm/db";
 import {
 	DEFAULT_AGENT_MODEL,
@@ -9,11 +10,17 @@ import {
 	writeArchiveRetentionDays,
 	writeContextDevKey,
 } from "@crm/db/settings";
-import { BadRequestException, Injectable, Logger } from "@nestjs/common";
+import {
+	BadRequestException,
+	ForbiddenException,
+	Injectable,
+	Logger,
+} from "@nestjs/common";
 import { ResearchKeyService } from "../agent/research-key.service";
 import { BackfillService } from "../backfill/backfill.service";
 import { InjectDatabase } from "../database/database.constants";
 import { ModelCatalogService } from "./model-catalog.service";
+import { SETTINGS_CONFIG } from "./settings-config";
 import type {
 	AgentModelSettings,
 	ArchiveRetentionSettings,
@@ -32,10 +39,21 @@ export class SettingsService {
 		private readonly backfill: BackfillService,
 	) {}
 
-	async agentModel(): Promise<AgentModelSettings> {
-		const [model, row] = await Promise.all([
+	private async canManage(userId: string): Promise<boolean> {
+		return canManageWorkspaceSettings(await workspaceRoleOf(userId));
+	}
+
+	private async requireManager(userId: string): Promise<void> {
+		if (!(await this.canManage(userId))) {
+			throw new ForbiddenException(SETTINGS_CONFIG.messages.forbidden);
+		}
+	}
+
+	async agentModel(userId: string): Promise<AgentModelSettings> {
+		const [model, row, canManage] = await Promise.all([
 			readAgentModel(this.db),
 			this.db.appSetting.findFirst({ select: { updatedAt: true } }),
+			this.canManage(userId),
 		]);
 
 		return {
@@ -44,14 +62,20 @@ export class SettingsService {
 			defaultId: DEFAULT_AGENT_MODEL.id,
 			effective: await this.catalog.find(model.id),
 			updatedAt: row?.updatedAt.toISOString() ?? null,
+			canManage,
 		};
 	}
 
-	async setAgentModel(modelId: string | null): Promise<AgentModelSettings> {
+	async setAgentModel(
+		userId: string,
+		modelId: string | null,
+	): Promise<AgentModelSettings> {
+		await this.requireManager(userId);
+
 		if (modelId === null) {
 			await writeAgentModel(this.db, null);
 			this.logger.log({ message: "Agent model reset to the default" });
-			return this.agentModel();
+			return this.agentModel(userId);
 		}
 
 		const models = await this.catalog.models();
@@ -77,7 +101,7 @@ export class SettingsService {
 
 		this.logger.log({ message: "Agent model changed", modelId: chosen.id });
 
-		return this.agentModel();
+		return this.agentModel(userId);
 	}
 
 	async modelCatalog(): Promise<ModelCatalogResult> {
@@ -85,13 +109,25 @@ export class SettingsService {
 		return { models: models ?? [], available: models !== null };
 	}
 
-	async researchKey(): Promise<ResearchKeySettings> {
-		const key = await readContextDevKey(this.db);
+	async researchKey(userId: string): Promise<ResearchKeySettings> {
+		const [key, canManage] = await Promise.all([
+			readContextDevKey(this.db),
+			this.canManage(userId),
+		]);
 
-		return { configured: key !== null, hint: key ? maskKey(key) : null };
+		return {
+			configured: key !== null,
+			hint: key ? maskKey(key) : null,
+			canManage,
+		};
 	}
 
-	async setResearchKey(apiKey: string): Promise<ResearchKeySettings> {
+	async setResearchKey(
+		userId: string,
+		apiKey: string,
+	): Promise<ResearchKeySettings> {
+		await this.requireManager(userId);
+
 		const check = await this.researchKeys.verify(apiKey);
 
 		if (check.outcome === "invalid") {
@@ -127,14 +163,24 @@ export class SettingsService {
 				);
 			});
 
-		return this.researchKey();
+		return this.researchKey(userId);
 	}
 
-	async archiveRetention(): Promise<ArchiveRetentionSettings> {
-		return { days: await readArchiveRetentionDays(this.db) };
+	async archiveRetention(userId: string): Promise<ArchiveRetentionSettings> {
+		const [days, canManage] = await Promise.all([
+			readArchiveRetentionDays(this.db),
+			this.canManage(userId),
+		]);
+
+		return { days, canManage };
 	}
 
-	async setArchiveRetention(days: number): Promise<ArchiveRetentionSettings> {
+	async setArchiveRetention(
+		userId: string,
+		days: number,
+	): Promise<ArchiveRetentionSettings> {
+		await this.requireManager(userId);
+
 		const saved = await writeArchiveRetentionDays(this.db, days);
 
 		this.logger.log({
@@ -142,6 +188,6 @@ export class SettingsService {
 			days: saved,
 		});
 
-		return { days: saved };
+		return { days: saved, canManage: true };
 	}
 }

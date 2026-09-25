@@ -20,6 +20,7 @@ export const agentModelOutput = z.object({
 	defaultId: z.string(),
 	effective: catalogModelOutput.nullable(),
 	updatedAt: z.string().nullable(),
+	canManage: z.boolean(),
 });
 
 export type AgentModelSettings = z.infer<typeof agentModelOutput>;
@@ -34,12 +35,14 @@ export type ModelCatalogResult = z.infer<typeof modelCatalogOutput>;
 export const researchKeyOutput = z.object({
 	configured: z.boolean(),
 	hint: z.string().nullable(),
+	canManage: z.boolean(),
 });
 
 export type ResearchKeySettings = z.infer<typeof researchKeyOutput>;
 
 export const archiveRetentionOutput = z.object({
 	days: z.number(),
+	canManage: z.boolean(),
 });
 
 export type ArchiveRetentionSettings = z.infer<typeof archiveRetentionOutput>;
