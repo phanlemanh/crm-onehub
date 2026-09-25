@@ -27,6 +27,7 @@ const MAT_KHAU_MOI = "mot-cau-rat-dai-va-sach-2026";
 const KHOA_VERCEL = Symbol.for("@vercel/request-context");
 const HAN_XA = new Date("2099-01-01");
 const HAN_CA_MS = 60_000;
+const HAI_PHUT_MS = 2 * SECONDS_PER_MINUTE * SECOND_MS;
 
 setDefaultTimeout(HAN_CA_MS);
 
@@ -208,6 +209,13 @@ function demChiaCon(userId: string): Promise<number> {
 	});
 }
 
+async function lui(ip: string, ms: number): Promise<void> {
+	await db.rateLimit.updateMany({
+		where: { key: { startsWith: `${ip}|` } },
+		data: { lastRequest: BigInt(Date.now() - ms) },
+	});
+}
+
 function gaiContextVercel(): Promise<unknown>[] {
 	const daGiao: Promise<unknown>[] = [];
 	datContextVercel((p) => {
@@ -338,20 +346,22 @@ describe("mot-lan", () => {
 		expect(await demChiaCon(nguoi.id)).toBe(0);
 	});
 
-	test("resend-chet: don chia khong doi thu", async () => {
-		const nguoi = await gieoNguoi("con-quyen");
-		await xin(nguoi.email);
-		await xin(nguoi.email);
-		await choNen();
-		const [c1, c2] = daGui.map(chiaTuThu);
-		cheDoThu = "mang-chet";
-		await datMatKhau(c1 ?? "");
-		const lan2 = await datMatKhau(c2 ?? "");
-		if (!lan2.than.includes("INVALID_TOKEN")) {
-			throw new Error("don chia phu thuoc thu");
-		}
-		expect(await demChiaCon(nguoi.id)).toBe(0);
-	});
+	for (const che of ["cham", "mang-chet"] as const) {
+		test(`resend-chet ${che}: don chia khong doi thu`, async () => {
+			const nguoi = await gieoNguoi("con-quyen");
+			await xin(nguoi.email);
+			await xin(nguoi.email);
+			await choNen();
+			const [c1, c2] = daGui.map(chiaTuThu);
+			cheDoThu = che;
+			await datMatKhau(c1 ?? "");
+			const lan2 = await datMatKhau(c2 ?? "");
+			if (!lan2.than.includes("INVALID_TOKEN")) {
+				throw new Error("don chia phu thuoc thu");
+			}
+			expect(await demChiaCon(nguoi.id)).toBe(0);
+		});
+	}
 });
 
 describe("het-han", () => {
@@ -399,8 +409,9 @@ describe("qua-luot", () => {
 			(await xin(a.email, ip)).ma,
 			(await xin(diaChiLa(), ip)).ma,
 			(await xin(diaChiLa(), ip)).ma,
-			(await xin(b.email, ip)).ma,
 		];
+		await lui(ip, HAI_PHUT_MS);
+		ma.push((await xin(b.email, ip)).ma);
 		if (ma[3] !== 429) throw new Error(`lan thu tu phai 429, duoc ${ma[3]}`);
 		expect(ma.slice(0, 3)).toEqual([200, 200, 200]);
 		await choNen();
