@@ -5,7 +5,7 @@ slug: lam-moi-chuyen-viec-qua-loi-chung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-09-25-lam-moi-chuyen-viec-qua-loi-chung-design.md
 approved_by:
 approved_at:
