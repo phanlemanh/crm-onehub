@@ -569,7 +569,6 @@ async function gieoBinhLuanVaNhac() {
 	});
 }
 
-let hangCalibHong = null;
 async function gieoLichSuTuanTruoc() {
 	const moPhien = await lam(cookie.m, "okr.moCapNhat", { entry: "tab" });
 	await lam(cookie.m, "okr.guiCapNhat", {
@@ -621,7 +620,6 @@ async function gieoLichSuTuanTruoc() {
 			createdAt: luc,
 		},
 	});
-	hangCalibHong = { checkInId: hangThat.id, sessionId: phienThat.id };
 	await db.okrCheckIn.delete({ where: { id: hangThat.id } });
 	await db.okrCheckInSession.delete({ where: { id: phienThat.id } });
 }
@@ -740,6 +738,15 @@ async function doi(trang, nhan, fn, ...doiSo) {
 
 const coSel = (trang, sel) =>
 	trang.evaluate((s) => document.querySelector(s) !== null, sel);
+const coChu = (trang, sel, chu) =>
+	trang.evaluate(
+		(s, c) =>
+			[...document.querySelectorAll(s)].some((e) =>
+				e.textContent?.replace(/\s+/g, " ").trim().includes(c),
+			),
+		sel,
+		chu,
+	);
 const demSel = (trang, sel) =>
 	trang.evaluate((s) => document.querySelectorAll(s).length, sel);
 const chuSel = (trang, sel) =>
@@ -862,7 +869,6 @@ async function kiemKhongDich(trang, nhan, sel, chu) {
 	kiem(`${nhan}: «${chu}» khong nam trong translate=no`, co);
 }
 
-// ---------- E6 + E7 ----------
 async function buocE6E7() {
 	const truocCheckIn = await db.okrCheckIn.count({ where: { authorUserId: id.m } });
 	const truocPhien = await db.okrCheckInSession.count({ where: { userId: id.m } });
@@ -1074,7 +1080,6 @@ async function buocE6E7() {
 	await t.close();
 }
 
-// ---------- E13 + E14 ----------
 async function buocE13E14() {
 	const a = await moTrang(cookie.a, RONG, "", "E13");
 	await hienSel(a, "[data-the-viec-okr='tong-quan']");
@@ -1084,7 +1089,7 @@ async function buocE13E14() {
 	);
 	kiem(
 		`E13 buoc 1: the viec ke hoach «${CHU.tasksTitle}» van hien`,
-		await coSel(a, `[data-slot='card-title']`),
+		await coChu(a, `[data-slot='card-title']`, CHU.tasksTitle),
 	);
 	await chup(a, "E13-step1.png", true);
 	await doiRong(a, HEP);
@@ -1132,7 +1137,6 @@ async function buocE13E14() {
 	await c2.close();
 
 	const r = await moTrang(cookie.r, RONG, "", "E13");
-	await doi(r, "E13 buoc 7: cho phan hoi okr.viecCuaToi", () => true);
 	await r
 		.waitForResponse(
 			(res) => res.url().includes("okr.viecCuaToi") && res.request().method() === "GET",
@@ -1144,7 +1148,7 @@ async function buocE13E14() {
 		"E13 buoc 7: R khong co the viec OKR",
 		!(await coSel(r, "[data-the-viec-okr='tong-quan']")),
 	);
-	kiem(`E13 buoc 7: the ke hoach van hien cho R`, await coSel(r, "[data-slot='card-title']"));
+	kiem(`E13 buoc 7: the ke hoach van hien cho R`, await coChu(r, "[data-slot='card-title']", CHU.tasksTitle));
 	await chup(r, "E13-step7.png", true);
 	await r.close();
 
@@ -1167,7 +1171,6 @@ async function buocE13E14() {
 	);
 }
 
-// ---------- E16 ----------
 async function buocE16() {
 	const truoc = await db.okrCheckIn.count({ where: { authorUserId: id.u } });
 	const u = await moTrang(cookie.u, RONG, "", "E16");
@@ -1194,7 +1197,6 @@ async function buocE16() {
 	kiem(`E16: okrCheckIn cua U +1, thay ${sau - truoc}`, sau === truoc + 1);
 }
 
-// ---------- E18 + E19 ----------
 async function buocE18E19() {
 	const deal = await db.deal.findFirst({ select: { id: true } });
 	if (deal === null)
@@ -1326,7 +1328,6 @@ async function buocE18E19() {
 	);
 }
 
-// ---------- E23 ----------
 async function buocE23() {
 	const q = await moTrang(cookie.admin, RONG, "/settings/members", "E23");
 	await hienSel(q, "input[placeholder]");
@@ -1353,9 +1354,10 @@ async function buocE23() {
 
 	await bamChu(q, "[role='menuitem']", CHU.chuyenOkrMenu);
 	await doi(q, "E23 buoc 2: hop chuyen OKR mo", (ten) => document.body.textContent?.includes(ten), NGUOI.nguoiDi.ten);
-	await doi(q, "E23 buoc 2: cau co viec hien", () =>
-		document.querySelector("[role='dialog']")?.textContent?.includes("2 KR") ?? false,
-	);
+	await doi(q, "E23 buoc 2: cau co viec hien", () => {
+		const chu = document.querySelector("[role='dialog']")?.textContent ?? "";
+		return chu.includes("2 KR") && chu.includes("1 mục tiêu");
+	});
 	await chonTuySelect(q, "[role='dialog'] [role='combobox']", NGUOI.r.ten);
 	await bamChu(q, "[role='dialog'] button", CHU.xacNhanChuyen);
 	await doi(q, "E23 buoc 2: toast xac nhan", () =>
@@ -1401,7 +1403,6 @@ async function buocE23() {
 	);
 }
 
-// ---------- E29 ----------
 async function suaKrTrongSheet(trang, objectiveId, krTitle) {
 	await trang.goto(`${APP}/${slug}/deals?record=objective:${objectiveId}`, {
 		waitUntil: "load",
