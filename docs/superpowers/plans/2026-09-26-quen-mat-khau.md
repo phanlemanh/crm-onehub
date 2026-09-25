@@ -1236,3 +1236,13 @@ git commit -m "chore(quen-mat-khau): xong S3, sẵn chấm"
 
 | Task | Phá gì | Lệnh | Dòng đỏ thật |
 |---|---|---|---|
+| 1 | env.ts không ném khi thiếu một nửa | `bun test test/quen-mat-khau-cau-hinh.spec.ts -t cau-hinh-nua` | 2 fail: hai ca nửa cấu hình, ca đủ vẫn xanh |
+| 2 | bỏ `backgroundTasks` | `-t khong-cho-thu` | `tra loi cho thu gui xong: 1529 ms` · `thu khong nam trong waitUntil: 0 lan` |
+| 2 | handler thả promise | `-t noi-nen` | `thu khong nam trong waitUntil: 0 lan` (cả hai luồng) |
+| 2 | bỏ `donChiaCu` | `-t mot-lan` | `chia con treo van dung duoc` · `don chia phu thuoc thu` |
+| 2 | `await` thư báo | `-t bao-da-doi` | `dat mat khau cho thu bao: 1557 ms` |
+| 2 | dọn chìa sau thư trong nền | `-t resend-chet` | lần đầu XANH (thước hỏng) → sửa thêm ca Resend treo → `don chia phu thuoc thu` |
+| 2 | `storage: "memory"` | `-t qua-luot` | `bo dem khong chung giua cac instance` |
+| 2 | bỏ `customRules` | `-t 'lan thu tu tu cung'` | lần đầu XANH (luật mặc định 60 giây che) → lùi mốc 2 phút → `lan thu tu phai 429, duoc 200` |
+| 2 | log mang thân lỗi Resend | `-t thu-hong` | `log mang dia chi: 1 dong` |
+| 2 | (vật thật, không phá) bộ dọn của better-auth | ca `sau-don` ở scratchpad | `bo don hang dem xoa cua so 15 phut: lan thu tu 200` — lỗi thật, chờ chủ kho |
