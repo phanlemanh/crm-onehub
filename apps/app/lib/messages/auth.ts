@@ -74,15 +74,18 @@ const en = {
 	quenMatKhau: {
 		title: "Forgot your password",
 		description:
-			"Enter your email address and we will send you a link to set a new password.",
+			"Enter your email address to get a link for setting a new password.",
 		diaChi: "Email address",
 		gui: "Send the link",
 		dangGui: "Sending…",
 		quayLai: "Back to sign in",
+		loi: "The link could not be sent. Check your connection and send again.",
+		quaLuot: (phut: number) =>
+			`You have asked too many times. Wait ${phut} minutes and try again.`,
 		xong: {
 			title: "Check your email",
-			description:
-				"If that address can sign in to this CRM, a link is on its way. It can be used once and expires in an hour. Nothing changes until you open it.",
+			description: (phut: number) =>
+				`If that address can sign in to this CRM, a link is on its way. It can be used once and expires in ${phut} minutes. Nothing changes until you open it.`,
 			quayLai: "Back to sign in",
 		},
 	},
@@ -193,10 +196,13 @@ const vi = {
 		gui: "Gửi liên kết",
 		dangGui: "Đang gửi…",
 		quayLai: "Quay lại đăng nhập",
+		loi: "Chưa gửi được liên kết. Kiểm tra kết nối rồi bấm gửi lại.",
+		quaLuot: (phut: number) =>
+			`Bạn đã xin quá nhiều lần. Chờ ${phut} phút rồi thử lại.`,
 		xong: {
 			title: "Kiểm tra hộp thư",
-			description:
-				"Nếu địa chỉ này vào được CRM, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn một giờ. Chưa mở thì mật khẩu hiện tại vẫn nguyên.",
+			description: (phut: number) =>
+				`Nếu địa chỉ này vào được CRM, liên kết đang trên đường tới. Liên kết dùng được một lần và còn hạn ${phut} phút. Chưa mở thì mật khẩu hiện tại vẫn nguyên.`,
 			quayLai: "Quay lại đăng nhập",
 		},
 	},

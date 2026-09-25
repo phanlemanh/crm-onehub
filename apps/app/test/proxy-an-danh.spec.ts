@@ -2,8 +2,19 @@ import { describe, expect, test } from "bun:test";
 import { ANONYMOUS, isAnonymous } from "../lib/proxy-paths";
 
 describe("đường ẩn danh của proxy", () => {
-	test("danh sách dài đúng ba mục", () => {
-		expect([...ANONYMOUS].sort()).toEqual(["/dat-mat-khau", "/proto", "/t"]);
+	test("danh sách dài đúng bốn mục", () => {
+		expect([...ANONYMOUS].sort()).toEqual([
+			"/dat-mat-khau",
+			"/proto",
+			"/quen-mat-khau",
+			"/t",
+		]);
+	});
+
+	test("nhánh quen-mat-khau đi qua — người chưa đăng nhập xin được liên kết", () => {
+		expect(isAnonymous("/quen-mat-khau")).toBe(true);
+		expect(isAnonymous("/quen-mat-khau-cu")).toBe(false);
+		expect(isAnonymous("/quen-mat-khauX")).toBe(false);
 	});
 
 	test("nhánh proto đi qua", () => {

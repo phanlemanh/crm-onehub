@@ -35,8 +35,6 @@ import {
 	primaryWorkspaceDomain,
 } from "./workspace";
 
-const XIN_DAT_LAI = { cuaSoGiay: 15 * 60, toiDa: 3 } as const;
-
 const socialProviders: NonNullable<BetterAuthOptions["socialProviders"]> = {};
 const slackOAuth = env.slack;
 const slackRedirectUri = new URL(
@@ -124,8 +122,8 @@ export const auth = betterAuth({
 		storage: "database",
 		customRules: {
 			"/request-password-reset": {
-				window: XIN_DAT_LAI.cuaSoGiay,
-				max: XIN_DAT_LAI.toiDa,
+				window: PASSWORD.requestWindowSeconds,
+				max: PASSWORD.requestMax,
 			},
 		},
 	},

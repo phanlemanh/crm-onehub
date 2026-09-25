@@ -1,26 +1,29 @@
+import { PASSWORD } from "@crm/auth";
 import type { Metadata } from "next";
 import { redirect, unstable_rethrow } from "next/navigation";
 import { Suspense } from "react";
 import { AuthHeading, AuthShell } from "@/components/auth-shell";
 import { getLocale } from "@/lib/locale/server";
 import { authMessages } from "@/lib/messages/auth";
+import { duongQuenMatKhau, type TuyChonQuen } from "@/lib/quen-mat-khau";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { QuenMatKhauForm } from "./quen-mat-khau-form";
+
+const SECONDS_PER_MINUTE = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
 	return { title: authMessages(await getLocale()).docTitle.quenMatKhau };
 }
 
-async function guiThuDuoc(): Promise<boolean> {
+async function docTuyChon(): Promise<TuyChonQuen> {
 	try {
-		const options = await getServerQueryClient().fetchQuery(
+		return await getServerQueryClient().fetchQuery(
 			getServerTrpc().sso.signInOptions.queryOptions(),
 		);
-		return options.quenMatKhau;
 	} catch (error) {
 		unstable_rethrow(error);
 		console.error("Quen mat khau: could not read the sign-in options.", error);
-		return false;
+		return null;
 	}
 }
 
@@ -39,13 +42,14 @@ export default async function QuenMatKhauPage() {
 }
 
 async function QuenMatKhau() {
-	const [duoc, locale] = await Promise.all([guiThuDuoc(), getLocale()]);
+	const [tuyChon, locale] = await Promise.all([docTuyChon(), getLocale()]);
 
-	if (!duoc) {
+	if (duongQuenMatKhau(tuyChon) !== "hien") {
 		redirect("/sign-in");
 	}
 
 	const m = authMessages(locale).quenMatKhau;
+	const phut = Math.round(PASSWORD.tokenTtlSeconds / SECONDS_PER_MINUTE);
 
 	return (
 		<QuenMatKhauForm
@@ -53,11 +57,15 @@ async function QuenMatKhau() {
 			description={m.description}
 			diaChi={m.diaChi}
 			gui={m.gui}
+			loi={m.loi}
+			quaLuot={m.quaLuot(
+				Math.round(PASSWORD.requestWindowSeconds / SECONDS_PER_MINUTE),
+			)}
 			quayLai={m.quayLai}
 			title={m.title}
 			xong={{
 				title: m.xong.title,
-				description: m.xong.description,
+				description: m.xong.description(phut),
 				quayLai: m.xong.quayLai,
 			}}
 		/>

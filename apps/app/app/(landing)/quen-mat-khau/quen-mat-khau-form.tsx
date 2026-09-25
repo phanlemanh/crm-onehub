@@ -1,12 +1,23 @@
 "use client";
 
 import { requestPasswordReset } from "@crm/auth/client";
+import { Alert, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import { Field, FieldGroup, FieldLabel } from "@crm/ui/components/field";
 import { Input } from "@crm/ui/components/input";
 import { Spinner } from "@crm/ui/components/spinner";
 import Link from "next/link";
 import { type FormEvent, useState } from "react";
+
+const HTTP_QUA_LUOT = 429;
+
+type TrangThai = "nhap" | "dang-gui" | "da-gui" | "loi" | "qua-luot";
+
+export type XinLienKet = (dau: {
+	email: string;
+}) => Promise<{ error: { status?: number } | null }>;
+
+const xinThat: XinLienKet = (dau) => requestPasswordReset(dau);
 
 function Heading({
 	title,
@@ -40,7 +51,10 @@ export function QuenMatKhauForm({
 	gui,
 	dangGui,
 	quayLai,
+	loi,
+	quaLuot,
 	xong,
+	xin = xinThat,
 }: {
 	title: string;
 	description: string;
@@ -48,63 +62,78 @@ export function QuenMatKhauForm({
 	gui: string;
 	dangGui: string;
 	quayLai: string;
+	loi: string;
+	quaLuot: string;
 	xong: XongChu;
+	xin?: XinLienKet;
 }) {
 	const [email, setEmail] = useState("");
-	const [pending, setPending] = useState(false);
-	const [daGui, setDaGui] = useState(false);
+	const [trangThai, setTrangThai] = useState<TrangThai>("nhap");
+	const dangChay = trangThai === "dang-gui";
 
 	async function submit() {
-		setPending(true);
-		await requestPasswordReset({ email });
-		setPending(false);
-		setDaGui(true);
+		const ket = await xin({ email });
+		if (!ket.error) {
+			setTrangThai("da-gui");
+			return;
+		}
+		setTrangThai(ket.error.status === HTTP_QUA_LUOT ? "qua-luot" : "loi");
 	}
 
 	function handleSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
-		submit().catch(() => {
-			setPending(false);
-			setDaGui(true);
-		});
+		if (dangChay) return;
+		setTrangThai("dang-gui");
+		submit().catch(() => setTrangThai("loi"));
 	}
 
-	if (daGui) {
-		return (
-			<>
-				<Heading description={xong.description} title={xong.title} />
-				<Button asChild className="w-full" variant="outline">
-					<Link href="/sign-in">{xong.quayLai}</Link>
-				</Button>
-			</>
-		);
-	}
+	const cauBao =
+		trangThai === "loi" ? loi : trangThai === "qua-luot" ? quaLuot : null;
 
 	return (
-		<>
-			<Heading description={description} title={title} />
-			<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-				<FieldGroup>
-					<Field>
-						<FieldLabel htmlFor="dia-chi">{diaChi}</FieldLabel>
-						<Input
-							autoComplete="email"
-							id="dia-chi"
-							onChange={(event) => setEmail(event.target.value)}
-							required
-							type="email"
-							value={email}
-						/>
-					</Field>
-				</FieldGroup>
-				<Button className="w-full" disabled={pending} type="submit">
-					{pending ? <Spinner data-icon="inline-start" /> : null}
-					<span>{pending ? dangGui : gui}</span>
-				</Button>
-				<Button asChild className="w-full" variant="ghost">
-					<Link href="/sign-in">{quayLai}</Link>
-				</Button>
-			</form>
-		</>
+		<div aria-live="polite" className="contents">
+			{trangThai === "da-gui" ? (
+				<>
+					<Heading description={xong.description} title={xong.title} />
+					<Button asChild className="w-full" variant="outline">
+						<Link href="/sign-in">{xong.quayLai}</Link>
+					</Button>
+				</>
+			) : (
+				<>
+					<Heading description={description} title={title} />
+					<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+						{cauBao ? (
+							<Alert variant="destructive">
+								<AlertDescription>{cauBao}</AlertDescription>
+							</Alert>
+						) : null}
+						<FieldGroup>
+							<Field>
+								<FieldLabel htmlFor="dia-chi">{diaChi}</FieldLabel>
+								<Input
+									autoComplete="email"
+									id="dia-chi"
+									inputMode="email"
+									name="email"
+									onChange={(event) => setEmail(event.target.value)}
+									required
+									spellCheck={false}
+									type="email"
+									value={email}
+								/>
+							</Field>
+						</FieldGroup>
+						<Button className="w-full" disabled={dangChay} type="submit">
+							{dangChay ? <Spinner data-icon="inline-start" /> : null}
+							<span>{dangChay ? dangGui : gui}</span>
+						</Button>
+						<Button asChild className="w-full" variant="ghost">
+							<Link href="/sign-in">{quayLai}</Link>
+						</Button>
+					</form>
+				</>
+			)}
+		</div>
 	);
 }
