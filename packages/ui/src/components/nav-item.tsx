@@ -58,7 +58,7 @@ function NavGroupLabel({ className, ...props }: React.ComponentProps<"p">) {
 		<p
 			data-slot="nav-group-label"
 			className={cn(
-				"px-3 pb-1 font-medium text-muted-foreground text-xs",
+				"px-3 pb-1 font-medium text-muted-foreground text-xs uppercase tracking-wider",
 				className,
 			)}
 			{...props}
