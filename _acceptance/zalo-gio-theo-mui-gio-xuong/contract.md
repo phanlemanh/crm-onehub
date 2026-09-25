@@ -5,7 +5,7 @@ slug: zalo-gio-theo-mui-gio-xuong
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-25-zalo-gio-theo-mui-gio-xuong-design.md
 approved_by:
 approved_at:
@@ -48,3 +48,11 @@ Quét bằng `morphological-scan` (`_acceptance/zalo-gio-theo-mui-gio-xuong/morp
 ## Notes
 
 - `ngayGio` nhận múi giờ là tham số bắt buộc; trình biên dịch bắt chỗ gọi quên nó.
+
+### Known limits (Cổng Bằng chứng, 2026-09-25)
+
+- Ngoài-1: câu `expected` của E1 hứa so từng ô với một `Intl.DateTimeFormat` khai múi giờ,
+  nhưng test không chạy phép so đó; test ghim nguyên văn chuỗi mong đợi và có đối chứng
+  «tiến trình đang chạy UTC».
+- Ngoài-2: thuộc vòng `zalo-webhook-doc-khuon-that` (#130) — phần `message` bên trong thân
+  webhook trong test dựng tay từ khuôn `getUpdates`, chưa lấy từ một thân webhook thật.
