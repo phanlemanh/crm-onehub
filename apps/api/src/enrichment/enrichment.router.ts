@@ -2,7 +2,7 @@ import { enrichmentQueueInput } from "@crm/validation/enrichment-queue";
 import { Inject } from "@nestjs/common";
 import { Input, Query, Router, UseMiddlewares } from "nestjs-trpc";
 import { z } from "zod";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import { EnrichmentService } from "./enrichment.service";
 
@@ -50,7 +50,7 @@ const enrichmentQueueOutput = z.object({
 });
 
 @Router({ alias: "enrichment" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViDoiTacMiddleware)
 export class EnrichmentRouter {
 	constructor(
 		@Inject(EnrichmentService) private readonly enrichment: EnrichmentService,

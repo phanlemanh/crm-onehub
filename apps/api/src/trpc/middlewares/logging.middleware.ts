@@ -4,6 +4,8 @@ import type {
 	MiddlewareResponse,
 	TRPCMiddleware,
 } from "nestjs-trpc";
+import type { BaseTrpcContext } from "../context.types";
+import { moPhamViYeuCau } from "../pham-vi-yeu-cau";
 
 @Injectable()
 export class LoggingMiddleware implements TRPCMiddleware {
@@ -11,8 +13,14 @@ export class LoggingMiddleware implements TRPCMiddleware {
 
 	async use(opts: MiddlewareOptions): Promise<MiddlewareResponse> {
 		const startedAt = Date.now();
-		const result = await opts.next();
+		const phamViYeuCau = moPhamViYeuCau();
+		const ctx: BaseTrpcContext = {
+			...(opts.ctx as BaseTrpcContext),
+			phamViYeuCau,
+		};
+		const result = await opts.next({ ctx });
 		const durationMs = Date.now() - startedAt;
+		const { role, phamVi } = phamViYeuCau;
 
 		this.logger.log({
 			message: `${opts.type} ${opts.path} ${result.ok ? "ok" : "err"} ${durationMs}ms`,
@@ -20,6 +28,8 @@ export class LoggingMiddleware implements TRPCMiddleware {
 			path: opts.path,
 			outcome: result.ok ? "ok" : "err",
 			durationMs,
+			role,
+			phamVi,
 		});
 
 		return result;

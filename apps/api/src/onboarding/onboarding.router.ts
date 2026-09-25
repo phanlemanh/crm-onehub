@@ -9,7 +9,7 @@ import {
 } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	accessOutput,
@@ -64,7 +64,7 @@ import { OnboardingTheoDoi } from "./onboarding-theo-doi";
 const TAG = ["Onboarding"];
 
 @Router({ alias: "onboarding" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViDoiTacMiddleware)
 export class OnboardingRouter {
 	constructor(
 		@Inject(OnboardingService)

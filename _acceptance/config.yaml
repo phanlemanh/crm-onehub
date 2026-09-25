@@ -181,6 +181,20 @@ executors:
     trg_khoa_bo_dau: "cd packages/db && bun test test/fields.spec.ts"
     trg_khoa_tham_so: "cd apps/app && bun test lib/search-param-keys.test.ts"
     api: "bun run test"
+    vco_ma_tran_trpc: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran-trpc"'
+    vco_ma_tran_khoa_rest: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ma-tran-khoa-rest"'
+    vco_doi_chung: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t doi-chung"'
+    vco_khong_khai_nhom: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t khong-khai-nhom"'
+    vco_proxy: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t proxy-ngoai-pham-vi"'
+    vco_gan_vai: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t gan-vai"'
+    vco_nhat_ky: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t nhat-ky"'
+    vco_cau_noi: 'bun run test -- "cd apps/app && bun test test/eve-cau-noi-chi-okr.spec.ts"'
+    vco_kenh_agent: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/kenh-chi-okr.spec.ts"'
+    vco_hop_thu: "cd packages/auth && bun test test/mailbox-grant-vai.spec.ts"
+    vco_pham_vi_man: "cd apps/app && bun test test/pham-vi-man.spec.ts"
+    vco_tuong_hop_thu: 'bun run test -- "cd apps/app && bun test test/tuong-hop-thu.spec.ts"'
+    vco_ghi_chung: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ghi-chung"'
+    vco_duong_ngoai_router: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t duong-ngoai-router"'
     gl_ma_tran_dang_nhap_lai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ma-tran-dang-nhap-lai"'
     gl_ngoai_le_dung_tap_khai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ngoai-le-dung-tap-khai"'
     gl_doi_chung_thanh_vien: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t doi-chung-thanh-vien"'
@@ -422,6 +436,10 @@ executors:
     ltz_log_khong_lo_token: 'bun run test -- "cd apps/api && bun test test/loi-tac-tu-zalo.spec.ts -t log-khong-lo-token"'
     ltz_man_gui_thu_loi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/loi-tac-tu-zalo.dom.tsx -t man-gui-thu-loi"
     ltz_lech_phien_ban: 'bun run test -- "cd apps/api && bun test test/loi-tac-tu-zalo.spec.ts -t lech-phien-ban"'
+    zwk_hai_khuon_noi: 'bun run test -- "cd apps/agent && bun test test/zalo-webhook-doc-khuon-that.integration.spec.ts -t hai-khuon-noi"'
+    zwk_trung_hai_khuon: 'bun run test -- "cd apps/agent && bun test test/zalo-webhook-doc-khuon-that.integration.spec.ts -t trung-hai-khuon"'
+    zwk_sai_khuon_log: 'bun run test -- "cd apps/agent && bun test test/zalo-webhook-doc-khuon-that.integration.spec.ts -t sai-khuon-log"'
+    zwk_gia_khuon_that: 'bun run test -- "cd apps/agent && bun test test/zalo-webhook-doc-khuon-that.integration.spec.ts -t gia-khuon-that && bun test test/zalo-qua-webhook.integration.spec.ts test/noi-zalo-cho-nguoi-moi.integration.spec.ts"'
     ttc_du_lieu_cu: 'bun run test -- "cd apps/api && bun test test/to-chuc.spec.ts -t du-lieu-cu"'
     ttc_vong_doi_don_vi: 'bun run test -- "cd apps/api && bun test test/to-chuc.spec.ts -t vong-doi-don-vi"'
     ttc_luu_tru: 'bun run test -- "cd apps/api && bun test test/to-chuc.spec.ts -t luu-tru"'
@@ -492,6 +510,8 @@ executors:
     nzm_tai_lieu: 'node _acceptance/noi-zalo-cho-nguoi-moi/rang/tai-lieu.mjs'
     nzm_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/settings/notifications/page.tsx" "apps/app/app/(app)/[slug]/settings/connections/zalo/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     ltz_tai_lieu: 'node _acceptance/loi-tac-tu-zalo-noi-dung-nguyen-nhan/rang/tai-lieu.mjs'
+    zwk_tai_lieu: 'node _acceptance/zalo-webhook-doc-khuon-that/rang/tai-lieu.mjs'
+    zwk_giu_da_ky: 'node _acceptance/zalo-webhook-doc-khuon-that/rang/giu-da-ky.mjs'
     zgh_giu_da_ky: 'node _acceptance/zalo-goi-thu-hong-hien-dung-bot/rang/giu-da-ky.mjs'
     zgh_tai_lieu: 'node _acceptance/zalo-goi-thu-hong-hien-dung-bot/rang/tai-lieu.mjs'
     zgh_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/app/(app)/[slug]/settings/connections/zalo/page.tsx" --mode static'
@@ -538,6 +558,7 @@ executors:
     resolve_plugin: "node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/product-map.mjs"
     lint: "bun run lint"
     lint_khong_cache: "bunx turbo run lint --force"
+    vco_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3810} API_URL=${API_URL:-http://localhost:3811} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/vai-chi-okr/rang/man-chi-okr.mjs"'
     lint_slop: "bun run lint:slop"
     ngv_dot_bien_utc: node _acceptance/ngay-gieo-theo-gio-vn/rang/dot-bien-utc.mjs
     check_types: "bun run check-types"

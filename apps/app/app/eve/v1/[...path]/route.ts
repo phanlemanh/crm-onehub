@@ -1,4 +1,9 @@
-import { NOT_A_MEMBER, workspaceRoleOf } from "@crm/auth";
+import {
+	docDuocPhamVi,
+	KHONG_TRONG_PHAM_VI,
+	NOT_A_MEMBER,
+	workspaceRoleOf,
+} from "@crm/auth";
 import { db } from "@crm/db";
 import { connection } from "next/server";
 import {
@@ -23,8 +28,12 @@ async function handler(request: Request): Promise<Response> {
 		return Response.json({ error: "Not signed in." }, { status: 401 });
 	}
 
-	if (!(await workspaceRoleOf(session.user.id))) {
+	const role = await workspaceRoleOf(session.user.id);
+	if (!role) {
 		return Response.json({ error: NOT_A_MEMBER }, { status: 403 });
+	}
+	if (!docDuocPhamVi(role, "doi-tac")) {
+		return Response.json({ error: KHONG_TRONG_PHAM_VI }, { status: 403 });
 	}
 
 	const url = new URL(request.url);

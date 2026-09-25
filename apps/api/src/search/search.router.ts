@@ -1,7 +1,7 @@
 import { Inject } from "@nestjs/common";
 import { Input, Query, Router, UseMiddlewares } from "nestjs-trpc";
 import { z } from "zod";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import { SearchService } from "./search.service";
 
@@ -21,7 +21,7 @@ const searchHitOutput = z.object({
 const quickOutput = z.object({ hits: z.array(searchHitOutput) });
 
 @Router({ alias: "search" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViDoiTacMiddleware)
 export class SearchRouter {
 	constructor(@Inject(SearchService) private readonly search: SearchService) {}
 

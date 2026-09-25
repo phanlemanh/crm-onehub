@@ -97,6 +97,7 @@ export const workspaceOutput = z.object({
 	canChangeRoles: z.boolean(),
 	canManageMembers: z.boolean(),
 	canIssuePasswordLink: z.boolean(),
+	canManageSettings: z.boolean(),
 });
 
 export type Workspace = z.infer<typeof workspaceOutput>;

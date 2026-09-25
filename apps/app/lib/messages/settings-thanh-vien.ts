@@ -10,6 +10,7 @@ const en = {
 		owner: "Owner",
 		admin: "Admin",
 		member: "Member",
+		okr: "OKR only",
 	},
 	bang: {
 		ten: "Name",
@@ -98,6 +99,7 @@ const vi = {
 		owner: "Chủ sở hữu",
 		admin: "Quản trị",
 		member: "Thành viên",
+		okr: "Chỉ OKR",
 	},
 	bang: {
 		ten: "Tên",
