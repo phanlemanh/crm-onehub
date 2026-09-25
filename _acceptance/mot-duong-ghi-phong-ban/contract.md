@@ -5,7 +5,7 @@ slug: mot-duong-ghi-phong-ban
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-09-24-mot-duong-ghi-phong-ban-design.md
 approved_by: Manh Phan — uỷ quyền phiên điều phối 2026-09-24
 approved_at: 2026-09-25
@@ -67,3 +67,9 @@ CÙNG một tài nguyên trên cùng một bề mặt API, không rải ra hai d
 
 - Hạng T3 do chủ kho khai (đổi thủ tục ghi có kiểm quyền); máy suy từ `risk_tiers.t3_paths` ra T2 vì không tệp nào nằm trong đường T3 đã khai. Vòng đi hạng cao hơn.
 - Vị từ quyền không đổi: `canManageOnboarding` và `canManageOrganization` cùng là `isWorkspaceAdmin`; vòng này không chạm `packages/auth`.
+- E10 của `dieu-phoi-30-ngay-dau` đỏ sẵn trên `onehub` từ 22/09: vòng `may-nhac-truoc-nguoi` dời ngưỡng «im 7 ngày» sang `NHAC.imSauNgay` mà không sửa thước; hồ sơ đó đã chấm bởi thực tế nên thước bị khoá. Phiên điều phối mở việc riêng.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-25 (Manh Phan — uỷ quyền phiên điều phối 2026-09-24):
+
+- Ngoài-2: Một vài hồ sơ đã ký có thể hiện là đã xác nhận lại dù phần vòng này đổi lẽ ra cần người xem lại: lượt ghim lại thứ hai không mang theo cờ «chưa chứng lại» của `to-chuc-danh-sach-chi-tiet` (E17), `cau-truc-to-chuc` (E20, E22), `vai-chi-okr` (E11, E12). Lỗi nằm ở làn ghim lại của bộ kit; chip sửa đã mở sang kho kit.
+- Ngoài-4: Bài màn hình E7 không phân biệt được lưu trữ/khôi phục thành công với bị từ chối qua vế «phòng ban vẫn còn trong cây», vì dữ liệu giả lập không đổi theo kết quả; chỉ vế «thông báo hiện đúng câu máy chủ» phân biệt được.

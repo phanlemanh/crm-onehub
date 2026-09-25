@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: mot-duong-ghi-phong-ban
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: f6ff38da0423df968af03c2dea294f98df0c6fee
-human_signoff:
+human_signoff: Manh Phan — uỷ quyền phiên điều phối 2026-09-24, 2026-09-25
 ---
 
 # Evidence Report: mot-duong-ghi-phong-ban
@@ -189,7 +189,7 @@ human_signoff:
     - spec-alignment: UNCERTAIN — Diff (bai-kiem-da-ky.diff) và bảng đếm (bai-kiem-dem.md, không tệp nào giảm số expect/ok) cho thấy mọi thay đổi trong 14 tệp kiểm chỉ nằm trong phạm vi AC-7 cho phép: đường gieo/đường gọi đổi sang org.*, tên gieo thêm hậu tố riêng, hai câu đổi đúng khớp AC-3, gỡ giả lập của thủ tục đã mất, thêm đầu vào hợp lệ cho vai-chi-okr, và ngoại lệ đã duyệt cho noi-bon-nut-dieu-phoi — không thấy khẳng định nào đổi đối tượng, nới quan hệ hay giảm ô ma trận. Nhưng câu hỏi AC-7 còn vế "mỗi hồ sơ có dòng revisit nhắc tên tệp kiểm của nó", và danh sách Input được cấp cho eval này không có sổ quyết định (decision log) của chín hồ sơ — nên vế đó không có căn cứ để phán, và theo luật phạm vi của eval này tôi không được tự đi tìm file đó.
       required_evidence:
         - (judge không nêu bằng-chứng-thiếu — ghi chú nguồn: vote gốc của lens này lẫn một đoạn tag hỏng (`</rationale>` + `<parameter name="required_evidence">...`) trong trường rationale, chép nguyên trạng ở trên vì luật "không lược, không viết lại"; trường required_evidence chính thức mà judge trả về chỉ có giá trị placeholder này)
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — Manh Phan — uỷ quyền phiên điều phối 2026-09-24, 2026-09-25. Hội đồng không thấy khẳng định nào bị bỏ hay nới, chín hồ sơ đều có dòng «xem lại», và đổi bảng đầu vào của bài kiểm quyền trong to-chuc.spec.ts (bỏ sáu thủ tục đã gỡ, thêm ba thủ tục mới) cùng bản chất với «đổi đường gọi» mà AC-7 cho phép.
 
 ## Known limits
 
