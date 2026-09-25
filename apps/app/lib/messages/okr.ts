@@ -57,7 +57,7 @@ const vi = {
 		"dung-nhip": "Đúng nhịp",
 		"cham-nhip": "Chậm nhịp",
 		truot: "Trượt",
-		"chua-co-ky-vong": "Chưa công bố",
+		"chua-co-ky-vong": "Chưa có kỳ vọng",
 	},
 	moc: {
 		xong: "Xong",
@@ -93,6 +93,11 @@ const vi = {
 		chuaTruong:
 			"Đơn vị này chưa có trưởng. Gán trưởng ở Cài đặt › Tổ chức để đơn vị tự đặt OKR của mình.",
 		ganTruong: "Gán trưởng",
+	},
+	khongThay: {
+		title: "Không thấy đơn vị này",
+		body: "Đơn vị có thể đã được lưu trữ. Chọn một đơn vị khác trong cây.",
+		action: "Về toàn công ty",
 	},
 	cuaToiRong: {
 		title: "Bạn chưa phụ trách mục tiêu hay KR nào",
@@ -167,7 +172,7 @@ const en: OkrMessages = {
 		"dung-nhip": "On track",
 		"cham-nhip": "Behind",
 		truot: "Off track",
-		"chua-co-ky-vong": "Not published",
+		"chua-co-ky-vong": "No baseline yet",
 	},
 	moc: {
 		xong: "Done",
@@ -203,6 +208,11 @@ const en: OkrMessages = {
 		chuaTruong:
 			"This unit has no head. Assign one in Settings › Organization so the unit can set its own OKRs.",
 		ganTruong: "Assign a head",
+	},
+	khongThay: {
+		title: "Unit not found",
+		body: "It may have been archived. Pick another unit from the tree.",
+		action: "Back to the whole company",
 	},
 	cuaToiRong: {
 		title: "You don't own any objectives or KRs",

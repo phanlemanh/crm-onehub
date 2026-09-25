@@ -11,6 +11,7 @@ import {
 	SelectGroup,
 	SelectItem,
 	SelectLabel,
+	SelectSeparator,
 	SelectTrigger,
 	SelectValue,
 } from "@crm/ui/components/select";
@@ -49,6 +50,10 @@ export function CayDonVi({
 	const m = okrMessages(useLocale());
 	const hep = useKhoHep();
 	const chon = don === null ? null : khoaDon(don);
+	const nguoi =
+		don?.loai === "nguoi"
+			? (cay.people.find((p) => p.id === don.id) ?? null)
+			: null;
 
 	if (hep)
 		return (
@@ -68,7 +73,7 @@ export function CayDonVi({
 					</SelectItem>
 					{cay.divisions.map((bp) => (
 						<SelectGroup key={bp.id}>
-							<SelectLabel translate="no">{bp.name}</SelectLabel>
+							<SelectSeparator />
 							<SelectItem value={`bp:${bp.id}`}>
 								<span translate="no">{bp.name}</span>
 							</SelectItem>
@@ -81,12 +86,22 @@ export function CayDonVi({
 					))}
 					{cay.chuaXep.length > 0 ? (
 						<SelectGroup>
+							<SelectSeparator />
 							<SelectLabel>{m.chuaXep}</SelectLabel>
 							{cay.chuaXep.map((pb) => (
 								<SelectItem key={pb.id} value={`pb:${pb.id}`}>
 									<span translate="no">{pb.name}</span>
 								</SelectItem>
 							))}
+						</SelectGroup>
+					) : null}
+					{nguoi ? (
+						<SelectGroup>
+							<SelectSeparator />
+							<SelectLabel>{m.cap.nguoi}</SelectLabel>
+							<SelectItem value={`nguoi:${nguoi.id}`}>
+								<span translate="no">{nguoi.name}</span>
+							</SelectItem>
 						</SelectGroup>
 					) : null}
 				</SelectContent>

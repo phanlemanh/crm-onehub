@@ -197,7 +197,7 @@ màn Tổ chức, cùng dữ liệu `org.tree`, số đếm là số mục tiêu
 thành `Select`). Cột phải: đầu đơn vị (tên, cấp, trưởng, đếm), `ToggleGroup`
 Danh sách / Cây căn chỉnh, nút «Thêm mục tiêu» và «Nhập từ bảng tính» khi
 `canEdit`. Danh sách = một `Card` mỗi mục tiêu (`CardHeader`: tên, loại, phụ trách,
-chỗ góp; `CardContent`: `SimpleTable` KR — tên, phụ trách, tiến độ `Progress` +
+chỗ góp; ngay dưới đầu thẻ, trực tiếp trong `Card`: `SimpleTable` KR — tên, phụ trách, tiến độ `Progress` +
 `StatusIndicator`, đích). Cây căn chỉnh = `SimpleTable` một cột thụt lề theo cấp
 (thành phần cây bàn phím là việc lượt 5).
 
@@ -231,8 +231,8 @@ Mọi màn có ba trạng thái rỗng · đang tải · lỗi (`Empty`, `Skelet
 | --- | --- | --- |
 | Thanh tab khu OKR | 1 — `Tabs variant="line"` nguyên dạng | proto thêm class ở chỗ gọi → bỏ; biến thể thanh điều hướng là Nhóm 2 lượt 5 |
 | Cây đơn vị | 1 — `NavItem` (như màn Tổ chức) | cây bàn phím `role="tree"`: ReUI «tree» kéo `@headless-tree` — Nhóm 2 lượt 5 |
-| Khối mục tiêu | 1 — `Card` + `CardHeader`/`CardTitle`/`CardContent` | shadcn `item` chưa cài — không cần vì hàng KR có cột |
-| Hàng KR | 1 — `SimpleTable` | |
+| Khối mục tiêu | 1 — `Card` + `CardHeader`/`CardTitle`/`CardAction` | shadcn `item` chưa cài — không cần vì hàng KR có cột |
+| Hàng KR | 1 — `SimpleTable` trực tiếp trong `Card`, không qua `CardContent` (theo tiền lệ `currency-settings.tsx`) | |
 | Cây căn chỉnh | 1 — `SimpleTable` thụt lề | thành phần cây là bậc 5, hoãn lượt 5 (Nhóm 2 của bản mẫu) |
 | Tiến độ | 1 — `Progress` | biến thể trung tính có vạch kỳ vọng là Nhóm 2 lượt 5; lượt này tô `primary`, ghi Known limits của hợp đồng |
 | Tình trạng, mức tự tin, trạng thái | 1 — `StatusIndicator`, `Badge variant="outline"` | |

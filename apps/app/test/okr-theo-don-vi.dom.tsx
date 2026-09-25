@@ -467,6 +467,56 @@ describe("theo-don-vi", () => {
 	});
 });
 
+describe("theo-don-vi-bien", () => {
+	test("theo-don-vi-khong-thay: id don vi khong co trong cay noi ro, khong the rong ten, ve goc duoc", async () => {
+		const s = await mo("bp:bp-da-luu-tru");
+		const truoc = {
+			khongThay:
+				s.o.querySelector('[data-trang-thai="ST-donvi-khongthay"]') !== null,
+			theDonVi: s.o.querySelector("[data-don-vi]"),
+			cay: s.o.querySelectorAll("[data-nut-cay]").length,
+		};
+		const nutVe = [...s.o.querySelectorAll("button")].find(
+			(b) => b.textContent?.trim() === m.khongThay.action,
+		);
+		await act(async () => {
+			nutVe?.click();
+		});
+		await cho(() => s.o.querySelector("[data-don-vi]") !== null, "ve goc");
+		expect({
+			truoc,
+			sau: s.o.querySelector("[data-don-vi]")?.getAttribute("data-don-vi"),
+		}).toEqual({
+			truoc: { khongThay: true, theDonVi: null, cay: 6 },
+			sau: "goc",
+		});
+	});
+
+	test("theo-don-vi-hang-nut: hang nut nam ngoai dau the va xuong dong duoc, khong o CardAction", async () => {
+		theoDon.set(JSON.stringify(donVao("pb:pb-1")), {
+			objectives: [{ ...mucTieu("a", 1), expected: 0 }],
+			canEdit: true,
+		});
+		const s = await mo("pb:pb-1");
+		const hang = s.o.querySelector("[data-hang-nut]");
+		expect({
+			wrap: hang?.classList.contains("flex-wrap"),
+			trongDau: hang?.closest('[data-slot="card-header"]') !== null,
+			cardAction: s.o.querySelectorAll(
+				'[data-don-vi] [data-slot="card-action"]',
+			).length,
+			nut: hang?.querySelectorAll("button").length,
+			tinhTrang: s.o.querySelector("[data-tinh-trang]")?.textContent,
+		}).toEqual({
+			wrap: true,
+			trongDau: false,
+			cardAction: 0,
+			nut: 4,
+			tinhTrang: "Chưa có kỳ vọng",
+		});
+	});
+});
+
 describe("thanh-tab", () => {
 	test("thanh-tab: tab dang chon theo duong, ba lien ket giu kyOkr, tieu de theo tab", async () => {
 		const o = document.createElement("div");

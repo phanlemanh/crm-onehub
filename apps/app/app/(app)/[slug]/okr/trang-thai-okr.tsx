@@ -4,6 +4,7 @@ import Renew from "@carbon/icons-react/es/Renew";
 import Target from "@carbon/icons-react/es/Target";
 import WarningAlt from "@carbon/icons-react/es/WarningAlt";
 import { Button } from "@crm/ui/components/button";
+import { Card, CardContent } from "@crm/ui/components/card";
 import {
 	Empty,
 	EmptyContent,
@@ -33,11 +34,13 @@ export function DangTai() {
 				{m.dangTai}
 			</p>
 			{KHUNG_TAI.map((id) => (
-				<div className="flex flex-col gap-2 rounded-lg border p-4" key={id}>
-					<Skeleton className="h-4 w-2/3" />
-					<Skeleton className="h-3 w-full" />
-					<Skeleton className="h-3 w-1/2" />
-				</div>
+				<Card key={id}>
+					<CardContent>
+						<Skeleton className="h-4 w-2/3" />
+						<Skeleton className="h-3 w-full" />
+						<Skeleton className="h-3 w-1/2" />
+					</CardContent>
+				</Card>
 			))}
 		</div>
 	);
@@ -123,6 +126,26 @@ export function Rong({
 					</Button>
 				</EmptyContent>
 			) : null}
+		</Empty>
+	);
+}
+
+export function DonKhongThay({ veGoc }: { veGoc: () => void }) {
+	const m = okrMessages(useLocale());
+	return (
+		<Empty data-trang-thai="ST-donvi-khongthay">
+			<EmptyHeader>
+				<EmptyMedia variant="icon">
+					<Icon icon={WarningAlt} />
+				</EmptyMedia>
+				<EmptyTitle>{m.khongThay.title}</EmptyTitle>
+				<EmptyDescription>{m.khongThay.body}</EmptyDescription>
+			</EmptyHeader>
+			<EmptyContent>
+				<Button variant="outline" onClick={veGoc}>
+					{m.khongThay.action}
+				</Button>
+			</EmptyContent>
 		</Empty>
 	);
 }
