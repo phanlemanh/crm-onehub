@@ -1,0 +1,37 @@
+{
+  "feature_plain": "Chỉ chủ và quản trị đổi được khoá nghiên cứu, model của trợ lý và số ngày giữ mục đã lưu trữ; thành viên thường vẫn xem được, thấy vì sao không bấm được, và không còn bị nhốt ở màn cắm khoá.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ có một luật quyền duy nhất cho Cài đặt chung: chủ và quản trị được, thành viên thường và người ngoài workspace không."},
+    {"id": "AC-3", "p": "Sẽ để chủ và quản trị đổi cả ba cài đặt như hôm nay — bằng phiên, bằng khoá API hay qua REST; lưu khoá vẫn tự chạy nghiên cứu đang chờ."},
+    {"id": "AC-4", "p": "Sẽ để thành viên thường vẫn xem được cả ba giá trị hiện tại (khoá chỉ hiện dạng che) và danh mục model."},
+    {"id": "AC-5", "p": "Sẽ cho màn hình và cổng đăng nhập biết người đang xem có quyền đổi hay không, đúng với bốn vai."},
+    {"id": "AC-6", "p": "Sẽ chỉ đẩy chủ và quản trị tới màn cắm khoá khi workspace chưa có khoá; thành viên thường vào thẳng ứng dụng — đo bằng câu trả lời thật của máy chủ."},
+    {"id": "AC-8", "p": "Sẽ giữ nguyên mọi hành vi cũ của cổng đăng nhập (đặt tên trước, khoá sau, không tự lặp), không sửa kỳ vọng cũ nào."},
+    {"id": "AC-9", "p": "Sẽ có ảnh thật Cài đặt › Chung cho thành viên và quản trị ở màn rộng và màn vừa."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Chặn thành viên thường và người ngoài workspace đổi ba cài đặt khi gọi thẳng máy chủ (phiên, khoá API, REST): trả lỗi không đủ quyền, không ghi gì, không gọi dịch vụ ngoài nào."},
+    {"id": "AC-7", "p": "Sẽ KHÔNG để thành viên thường bấm được ô nhập, nút lưu hay nút chọn model; mỗi card có một dòng nói vì sao, trình đọc màn hình đọc được dòng đó."}
+  ],
+  "scope_plain": "Để sau: các khu khác chưa phân quyền, nhật ký ai đổi gì, quyền nhiều mức, và sửa màn tên công ty cũ.",
+  "coverage_plain": [
+    {"i": 0, "p": "Vai trò: đủ bốn vai — chủ, quản trị, thành viên thường, người có phiên nhưng không thuộc workspace (AC-2, AC-3, AC-5)."},
+    {"i": 1, "p": "Thao tác: cả ba thao tác đổi và bốn thao tác đọc của khu Cài đặt đều có ca đo (AC-2, AC-3, AC-4); đối chiếu HubSpot và Salesforce cùng giới hạn cài đặt chung cho quản trị."},
+    {"i": 2, "p": "Lối vào: phiên, khoá API, REST, màn Cài đặt › Chung và màn cắm khoá lúc đăng nhập — mỗi lối một ca (AC-2, AC-3, AC-6, AC-7)."},
+    {"i": 3, "p": "Khi bị từ chối: không ghi, không thử khoá với dịch vụ ngoài, không đọc danh mục model, không xếp việc nghiên cứu (AC-2)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Cổng đăng nhập từng chỉ được đo bằng câu trả lời giả tự viết — lệch với máy chủ thật thì quản trị mất màn cắm khoá mà test vẫn xanh. Đã sửa: phần đọc dời vào gói dùng chung, thêm phép đo lấy câu trả lời thật của máy chủ đưa qua đúng hàm cổng dùng."},
+    {"i": 1, "p": "Hợp đồng hứa chặn cả REST nhưng chưa ca nào gọi REST. Đã sửa: mỗi thao tác thêm một ca REST cho thành viên (bị chặn) và quản trị (làm được)."},
+    {"i": 2, "p": "Ảnh thật có thể chụp nhầm màn cắm khoá nếu bàn đo chưa có khoá. Đã sửa: kiểm tiền đề đã có khoá và kiểm đúng trang trước mỗi ảnh, sai thì dừng."},
+    {"i": 3, "p": "Hồi quy cổng không chặn việc viết lại kỳ vọng cũ cho vừa luật mới. Đã sửa: lệnh đo đỏ nếu một dòng kiểm cũ bị xoá hay sửa."},
+    {"i": 4, "p": "Luồng lỗi 403 → thông báo nằm trong đặc tả mà không có phép đo. Đã sửa: ghi rõ đó là hành vi sẵn có, vòng này không đổi."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260924T232726Z-1", "p": "Đã chọn gửi cờ quyền kèm chính ba câu trả lời cài đặt — đổi lại ba câu trả lời đổi hình và bài kiểm cổng cũ phải thêm cờ."},
+    {"id": "d-20260924T232726Z-2", "p": "Đã chọn để thành viên thường vào thẳng ứng dụng khi chưa có khoá — đổi lại nghiên cứu công ty chờ tới khi quản trị cắm khoá."},
+    {"id": "d-20260924T232726Z-3", "p": "Đã chọn kiểm quyền trước mọi việc khác — đổi lại bài kiểm phải đếm lời gọi tới ba dịch vụ."},
+    {"id": "d-20260924T232726Z-4", "p": "KHÔNG làm bản mẫu bấm được — màn đã có, chỉ khoá nút; ảnh thật hai vai chụp ở bước chấm."},
+    {"id": "d-20260924T232726Z-5", "p": "KHÔNG phân quyền các khu khác và KHÔNG sửa màn tên công ty cũ — đổi lại lỗ cùng loại còn ở nơi khác."}
+  ]
+}
