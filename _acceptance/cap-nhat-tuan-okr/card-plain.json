@@ -1,0 +1,51 @@
+{
+  "feature_plain": "Sáng thứ Hai người phụ trách KR được nhắc trong cùng tin buổi sáng, bấm vào một màn gom mọi KR của mình với số tuần trước điền sẵn, ghi số, mức tự tin và một dòng ghi chú trong một lượt; trên mục tiêu có trao đổi, nhắc tên, theo dõi; quản trị chuyển KR của người nghỉ cho người khác.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ ghi mỗi lần cập nhật thành một dòng không sửa được (số, mức tự tin, ghi chú, ai ghi, tuần), đổi số hiện tại của KR, và từ chối cả lô nếu một KR sai."},
+    {"id": "AC-2", "p": "Sẽ đo số giây từ lúc mở màn tới lúc gửi bằng đồng hồ máy chủ — người dùng không tự khai được — và có sẵn ba câu đếm cho ngưỡng Cổng Giá trị."},
+    {"id": "AC-3", "p": "Sẽ cho trưởng đơn vị ghi hộ KR của người trong đơn vị mình, dòng ghi nói rõ là ghi hộ; người khác bị chặn."},
+    {"id": "AC-4", "p": "Sẽ có tab «Cập nhật tuần» dựng theo bản mẫu đã duyệt: số điền sẵn, ba nút mức tự tin, lỗi gửi không mất chữ đã gõ, chạy được trên điện thoại."},
+    {"id": "AC-5", "p": "Sẽ thêm việc OKR vào đúng một tin buổi sáng — «N KR chờ cập nhật tuần này» đứng đầu; KR im 14 ngày nhắc người phụ trách, 21 ngày thêm trưởng; người chỉ có OKR cũng nhận tin."},
+    {"id": "AC-6", "p": "Sẽ báo trong tin sáng hôm sau khi mình được giao KR, được nhắc tên, hoặc mục tiêu mình theo dõi có việc mới."},
+    {"id": "AC-7", "p": "Sẽ hiện thẻ việc OKR ở Tổng quan, ở Tổng quan của vai «chỉ OKR» và ở tab Của tôi — cùng nội dung với tin nhắc, bấm là tới đúng chỗ."},
+    {"id": "AC-8", "p": "Sẽ để người chưa nối Zalo hay Slack vẫn thấy thẻ và cập nhật được như mọi người; chỉ là không có tin."},
+    {"id": "AC-9", "p": "Sẽ cho mọi người (kể cả vai «chỉ OKR») bình luận, nhắc tên đồng nghiệp và theo dõi một mục tiêu; bình luận không sửa hay xoá được."},
+    {"id": "AC-10", "p": "Sẽ thêm tab «Trao đổi», nút «Theo dõi» và lệnh «Cập nhật» từng KR trên sheet mục tiêu, chụp cạnh sheet Thoả thuận ở hai khổ."},
+    {"id": "AC-11", "p": "Sẽ chặn xoá KR đã có lần cập nhật bằng một câu rõ ràng, và chạy lại mọi phép đo của các hồ sơ đã ký bị chạm để chắc không gì vỡ."},
+    {"id": "AC-12", "p": "Sẽ thêm mục «Chuyển OKR…» ở màn Thành viên: quản trị xem trước số KR và mục tiêu rồi giao hết cho một người, lịch sử giữ nguyên."},
+    {"id": "AC-13", "p": "Sẽ mở mọi việc mới cho vai «chỉ OKR» (trừ chuyển việc, chỉ quản trị) mà vẫn không cho họ thấy dữ liệu đối tác."},
+    {"id": "AC-15", "p": "Sẽ chỉ thêm bảng mới vào cơ sở dữ liệu, không đổi bảng nào đang có."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Sẽ KHÔNG cho cập nhật bằng cách trả lời tin Zalo/Slack, và chưa cảnh báo KR đang trượt — lượt 10."},
+    {"id": "OOS-2", "p": "Sẽ KHÔNG dựng toàn cảnh, bảng họp tuần hay màn đếm người chưa nối kênh — lượt 5."},
+    {"id": "OOS-3", "p": "Sẽ KHÔNG gửi tin thứ hai hay báo tức thì khi được nhắc tên."},
+    {"id": "OOS-4", "p": "Sẽ KHÔNG cho sửa, xoá lần cập nhật hay bình luận; máy KHÔNG chọn mức tự tin thay người."},
+    {"id": "OOS-5", "p": "Sẽ KHÔNG khoá ô «giá trị hiện tại» trong hộp sửa KR của lượt 3 — đổi số qua đó không được đếm là cập nhật tuần."},
+    {"id": "OOS-6", "p": "Sẽ KHÔNG ghép OKR vào hộp «Chuyển việc 30 ngày» đã ký, và KHÔNG chuyển mục tiêu cá nhân của người nghỉ."}
+  ],
+  "scope_plain": "Cập nhật trong chat, toàn cảnh và họp tuần, số tự chảy, sửa/xoá lần cập nhật và bình luận, khoá ô số trong hộp KR — để các lượt sau.",
+  "coverage_plain": [
+    {"i": 0, "p": "Mọi thứ được ghi — lần cập nhật, phiên đo giờ, việc nhắc, bình luận, theo dõi, người phụ trách — mỗi thứ có ít nhất một tiêu chí đọc lại từ cơ sở dữ liệu (AC-1, AC-2, AC-5, AC-6, AC-9, AC-12)."},
+    {"i": 1, "p": "Mọi lối vào — màn tuần, tin nhắc, thẻ ở ba chỗ, sheet mục tiêu, màn Thành viên — đều có tiêu chí và ảnh chụp (AC-4, AC-5, AC-7, AC-10, AC-12)."},
+    {"i": 2, "p": "Mọi người liên quan — phụ trách, trưởng, người được nhắc, quản trị, vai «chỉ OKR», người chưa nối kênh, người nghỉ — đều có ca riêng (AC-3, AC-5, AC-6, AC-8, AC-12, AC-13)."},
+    {"i": 3, "p": "Mọi mốc thời gian — ngày cập nhật, hết tuần, im 14/21 ngày, 24 giờ, kỳ bị khoá — đo bằng bảng giờ viết trước (AC-1, AC-5, AC-6)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Nặng nhất: chưa ai kiểm rằng người KHÔNG có kế hoạch 30 ngày (phần lớn công ty) vẫn nhận tin nhắc OKR — nếu sót, sáng 02/11 không ai nhận tin. Đã sửa: tiêu chí hứa rõ, phép đo thêm đúng người đó, thêm câu đếm «đã nối kênh mà không nhận tin»."},
+    {"i": 1, "p": "Chưa kiểm rằng đồng hồ bắt đầu lúc mở màn chứ không lúc bấm gửi — nếu sai, số giây đọc ra gần 0 và ngưỡng 60 giây đạt giả. Đã sửa: phép đo chờ 5 giây và đếm đúng một phiên mỗi lần mở."},
+    {"i": 2, "p": "Câu đếm tỷ lệ cập nhật chưa phân biệt «một KR gửi hai lần» với «hai KR», và đang bỏ KR cấp bộ phận, cá nhân khỏi mẫu số. Đã sửa: đếm KR khác nhau, mẫu số là mọi KR đang chạy — ghi thành giả định để anh duyệt."},
+    {"i": 3, "p": "Danh sách hồ sơ đã ký bị chạm đang khai tay nên có thể sót. Đã sửa: máy tự rút danh sách, so với bản khai, chạy lại mọi phép đo của chúng và kiểm cả kho."},
+    {"i": 4, "p": "Phép đo «dùng thành phần có sẵn» chấm trên tài liệu thay vì mã thật. Đã sửa: đưa tệp giao diện thật vào, bắt thêm danh sách tự vẽ."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260925T144931Z-1", "p": "Tin nhắc và thẻ việc đọc cùng một nguồn nên không bao giờ nói khác nhau — đổi lại mỗi sáng máy đọc thêm dữ liệu OKR cho mọi người."},
+    {"id": "d-20260925T144931Z-2", "p": "Đo thời gian cập nhật bằng giờ máy chủ lúc mở màn và lúc gửi — đổi lại có thêm một bảng ghi lần mở."},
+    {"id": "d-20260925T144931Z-3", "p": "Chuyển OKR là một mục riêng cạnh «Chuyển việc 30 ngày», không ghép vào hộp đã ký — đổi lại quản trị bấm hai lần cho một người nghỉ."},
+    {"id": "d-20260925T144931Z-4", "p": "Dòng «N KR chờ cập nhật tuần này» đứng đầu tin để không bị trần 10 việc cắt mất — đổi lại người bán hàng thấy dòng OKR trên cùng tin quen."},
+    {"id": "d-20260925T144931Z-5", "p": "KR đã có lần cập nhật thì không xoá được nữa, để lịch sử thật sự chỉ thêm — đổi lại muốn bỏ KR đó thì bỏ cả mục tiêu hoặc đổi tên."},
+    {"id": "d-20260925T144931Z-6", "p": "KHÔNG làm phiên thiết kế riêng: màn chính đã có bản mẫu duyệt; bốn chỗ mới được chụp ở bước nghiệm thu máy để anh nhìn ảnh ở Cổng Bằng chứng."},
+    {"id": "d-20260925T144931Z-7", "p": "KHÔNG khoá ô số trong hộp sửa KR của lượt 3 — đổi lại ai sửa số qua đó thì không được đếm là cập nhật tuần."},
+    {"id": "d-20260925T144931Z-8", "p": "Tuần tính thứ Hai → Chủ nhật, cửa sổ báo 24 giờ, im 14/21 ngày — xem lại sau ba tuần đo đầu (23/11)."}
+  ]
+}

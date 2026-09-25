@@ -1,0 +1,104 @@
+---
+schema_version: 1
+feature: Cập nhật tuần OKR — màn «Cập nhật tuần của tôi» gom mọi KR tôi phụ trách, điền sẵn số tuần trước, ghi giá trị · mức tự tin · một dòng ghi chú; nhắc buổi sáng và thẻ «việc của tôi» dẫn thẳng vào màn; bình luận và nhắc tên trên mục tiêu và KR; chuyển KR khi người nghỉ
+slug: cap-nhat-tuan-okr
+owner: phanlemanh@gmail.com
+risk_tier: T3
+surfaces: [api, ui]
+status: draft
+approved_by:
+approved_at:
+design_doc: docs/superpowers/specs/2026-09-25-cap-nhat-tuan-okr-design.md
+---
+
+# Acceptance Contract: cap-nhat-tuan-okr
+
+## Context
+
+Lượt 3 (#140) cho đặt và công bố OKR, nhưng sau công bố không có lần cập nhật nào
+được ghi, không mức tự tin, không ai được nhắc. Lượt này thêm năm bảng mới ở cuối
+`schema.prisma` (lần cập nhật, phiên cập nhật, bình luận, nhắc tên, theo dõi), các
+thủ tục `okr.*` tương ứng, màn «Cập nhật tuần của tôi» dựng theo bản mẫu đã duyệt,
+loại việc OKR trong cùng một tin nhắc buổi sáng và thẻ «việc của tôi» đọc cùng một
+hàm, tab «Trao đổi» trên sheet mục tiêu, và mục «Chuyển OKR…» ở màn Thành viên.
+**Màn cập nhật và thẻ việc chạy đầy đủ cho người chưa nối Zalo hay Slack — nhắc
+qua kênh chỉ là một lối vào thêm.**
+
+Source input: `docs/plan/lo-trinh-okr.md` mục 5 «Lượt 4» (CI-01…04, NH-01…04,
+XEM-01, XEM-10, QT-05) + `_acceptance/cap-nhat-tuan-okr/opportunity.md` (Cổng Đáng
+2026-09-25) + `_acceptance/ban-mau-okr/design-pass.md` mục «Duyệt» + ghi chú của
+phiên điều phối cho S1 (thẻ OKR cho vai «chỉ OKR»; người chưa nối kênh).
+
+## Criteria
+
+- AC-1: Given một người phụ trách ba KR (kiểu tăng tới, mốc, phần trăm) trong mục tiêu đã công bố ở chu kỳ «Đang chạy», When họ mở một phiên rồi gửi một lô ba mục, mỗi mục có giá trị, mức tự tin (cao · vừa · thấp) và ghi chú, Then bảng lần cập nhật đọc lại từ cơ sở dữ liệu có đúng ba dòng mang KR, tuần (thứ Hai giờ Việt Nam), giá trị, mức tự tin, ghi chú, người ghi, người phụ trách lúc ghi, ghi hộ = không, kênh `web` và phiên; giá trị hiện tại của mỗi KR đổi theo; mỗi KR có đúng một dòng vết «cập nhật tuần» trước → sau; And gửi lô thứ hai trong cùng tuần thêm dòng mới, dòng cũ còn nguyên, và router không có thủ tục nào sửa hay xoá lần cập nhật; And một lô có một mục hỏng — mức tự tin thiếu hoặc lạ, giá trị không phải số, mốc khác 0/1, phần trăm ngoài 0–100, ghi chú quá 200 ký tự, KR mà người gọi không phụ trách và không sửa được đơn vị, mục tiêu nháp hoặc đã bỏ, chu kỳ không ở pha «Đang chạy» — bị từ chối cả lô với câu ghim đúng loại, không dòng nào được ghi và giá trị KR không đổi.
+- AC-2: Given một người mở phiên cập nhật, When họ gửi lô sau một khoảng thời gian, Then phiên đọc lại có mốc mở và mốc gửi do máy chủ ghi và số giây bằng hiệu hai mốc; màn mở đúng một phiên mỗi lần vào, lúc danh sách hiện chứ không lúc bấm gửi, và «Gửi lại» sau lỗi dùng lại phiên đó; And đầu vào gửi kèm một trường số giây hay người ghi bị từ chối (khuôn chặt), gửi bằng phiên của người khác bị từ chối, gửi lần hai bằng phiên đã gửi xong bị từ chối với câu ghim, còn lô bị từ chối không đóng phiên nên gửi lại cùng phiên được; And ba câu truy vấn đường đo — tỷ lệ KR đang chạy (đếm KR khác nhau, không đếm dòng) có ít nhất một lần cập nhật mỗi tuần theo phòng ban chính của người phụ trách, trung vị số giây của phiên đã gửi, và số người đã nối kênh có việc «cập nhật tuần» mà không nhận được tin — trả đúng con số viết trước trên một bộ dữ liệu gieo qua đường ghi thật.
+- AC-3: Given một phòng ban có trưởng và một KR của thành viên khác trong mục tiêu phòng ban đó, When trưởng gửi cập nhật cho KR đó, Then dòng lần cập nhật đọc lại có người ghi là trưởng, người phụ trách là thành viên kia, ghi hộ = có; And trưởng một phòng ban khác, và người phụ trách một KR khác cùng mục tiêu, gửi cho KR đó thì bị từ chối và không dòng nào ghi; And quản trị ghi hộ được KR của mục tiêu cấp OneHub.
+- AC-4: Given người phụ trách có KR đang chạy, When mở «Mục tiêu › Cập nhật tuần» bằng trình duyệt thật của cây đang xét, Then tab thứ tư «Cập nhật tuần» hiện mỗi KR với tên, mục tiêu, giá trị điền sẵn từ lần gần nhất, dòng «Tuần trước: …» về mức tự tin, ô giá trị (KR mốc là hai nút Chưa xong / Xong), ba nút mức tự tin, ô ghi chú; gõ chữ vào ô số hiện câu lỗi dưới ô và khoá nút gửi; chọn mức tự tin cho hai trên ba KR thì nút là «Gửi 2 cập nhật»; gửi thì thấy «Đã gửi 2 cập nhật … mất S giây» và cơ sở dữ liệu có đúng hai dòng mới với lối vào `tab`; máy chủ trả lỗi khi gửi thì cảnh báo hiện, các ô còn nguyên và «Gửi lại» ghi được; người không phụ trách KR nào thấy trạng thái rỗng; tải danh sách lỗi thì `Empty` có «Thử lại» và bấm tải lại được; And ở 390 trang không tràn ngang và ba nút mức tự tin trải đủ bề ngang; tên KR, mục tiêu, đơn vị đo mang `translate="no"`. (cross-layer)
+- AC-5: Given chu kỳ «Đang chạy» có ngày cập nhật thứ Hai, KR của nhiều người ở các hoàn cảnh khác nhau, When tính `viecCanNhac` tại các thời điểm viết trước (thứ Hai trước và sau khi cập nhật, thứ Tư, Chủ nhật, thứ Hai tuần sau), Then người phụ trách có đúng một việc «N KR chờ cập nhật tuần này» (liệt kê đúng các KR chưa có lần cập nhật trong tuần, không kể KR công bố hôm nay, KR của mục tiêu nháp hay chu kỳ khác pha) từ ngày cập nhật tới hết Chủ nhật, và mất việc đó ngay sau khi gửi đủ; KR im từ 14 ngày có việc «KR im N ngày» cho người phụ trách, từ 21 ngày có thêm việc cho trưởng phòng ban (không có trưởng thì trưởng bộ phận), không gửi trùng khi trưởng cũng là người phụ trách; And `lenLichNhac` ghi đúng một hàng nhắc cho mỗi người có ít nhất một việc, mỗi ngày — kể cả người chỉ có việc OKR và không có kế hoạch 30 ngày nào (họ nhận tin `da-gui` với câu chào OKR), và người có cả hai loại vẫn chỉ một hàng; `chayNhac` gửi một tin duy nhất chứa cả hai, việc «cập nhật tuần» đứng đầu, trần 10 việc và 2.000 ký tự Zalo áp chung, dòng cập nhật mang đường `/okr/cap-nhat-tuan?tu=nhac`, dòng khác mang đường mở sheet mục tiêu, `payload.daGui` chỉ chứa mã; tin chỉ có việc kế hoạch giữ nguyên câu chào cũ.
+- AC-6: Given trong 24 giờ trước thời điểm tính có người được giao một KR và một mục tiêu (tạo, sửa người phụ trách, chuyển), có người được nhắc tên trong một bình luận, và một mục tiêu có người theo dõi nhận một lần cập nhật và một bình luận của người khác, When tính `viecCanNhac`, Then người được giao có việc «được giao» cho đúng KR và mục tiêu đó, người được nhắc có việc «nhắc tên», người theo dõi có việc «đang theo dõi» với đúng số cập nhật và bình luận mới; And việc chính mình làm không sinh việc cho chính mình, sự kiện cũ hơn 24 giờ không sinh việc, và người đã rời workspace không nhận việc nào.
+- AC-7: Given một người có việc OKR, When gọi `okr.viecCuaToi` và mở ba chỗ hiện thẻ — Tổng quan của vai đầy đủ, Tổng quan của vai «chỉ OKR», khối «Việc của tôi» ở tab «Của tôi» — bằng trình duyệt thật, Then `okr.viecCuaToi` trả đúng tập việc OKR mà `viecCanNhac` trả cho cùng người tại cùng thời điểm (so từng phần tử); cả ba chỗ hiện các dòng đó; bấm dòng «cập nhật tuần» tới màn cập nhật và phiên mở ra mang lối vào `viec-cua-toi`; bấm dòng khác mở sheet mục tiêu đúng mã; người không có việc thấy câu rỗng; And thẻ việc kế hoạch hiện có trên Tổng quan của vai đầy đủ vẫn hiện như trước. (cross-layer)
+- AC-8: Given một người phụ trách KR không có liên kết Zalo, không khớp Slack, và workspace không có Bot Token Zalo, When tới ngày cập nhật, Then `chayNhac` đóng hàng nhắc của họ với kết quả `khong-slack` hoặc `khong-khop`, không gọi Zalo hay Slack và không ném; nhưng `okr.viecCuaToi` vẫn trả việc «cập nhật tuần» của họ, thẻ trên Tổng quan hiện dòng đó, và họ mở màn rồi gửi được — cơ sở dữ liệu có dòng lần cập nhật như người đã nối kênh. (cross-layer)
+- AC-9: Given một mục tiêu đã công bố có hai KR, When một thành viên thường, một người vai «chỉ OKR» và một trưởng đơn vị lần lượt thêm bình luận — một bình luận gắn một KR của mục tiêu và nhắc tên hai thành viên — rồi bật theo dõi mục tiêu, Then bảng bình luận, bảng nhắc tên và bảng theo dõi đọc lại đúng người viết, mục tiêu, KR, nội dung, người được nhắc và người theo dõi; `okr.comments` trả chúng theo thứ tự thời gian; `okr.objective` trả `following` đúng cho người gọi và đếm người theo dõi; `okr.mine` có mục tiêu đang theo dõi; mỗi thủ tục ghi để lại một dòng vết không chứa nội dung bình luận; And nhắc tên người đã rời workspace hay mã lạ, gắn KR của mục tiêu khác, nội dung rỗng hay quá 2.000 ký tự, bị từ chối và không dòng nào ghi; bật theo dõi hai lần vẫn một dòng; bỏ theo dõi xoá dòng; router không có thủ tục sửa hay xoá bình luận.
+- AC-10: Given sheet Thoả thuận đang mở trong ứng dụng thật, When mở sheet mục tiêu chồng lên, Then có tab «Trao đổi» với bình luận cũ → mới, chip KR và tên người được nhắc; viết một bình luận, chọn một KR và nhắc tên một người rồi «Gửi» thì bình luận hiện ở cuối và cơ sở dữ liệu có dòng bình luận và dòng nhắc tên; nút «Theo dõi» hiện cho cả người không sửa được mục tiêu, bấm thì đổi thành «Đang theo dõi» và cơ sở dữ liệu có dòng theo dõi; menu của một dòng KR có «Cập nhật» cho người phụ trách và trưởng đơn vị (không có cho người khác), mở hộp một KR, trưởng thấy câu «Bạn ghi hộ <tên>», gửi thì cơ sở dữ liệu có dòng lần cập nhật với lối vào `sheet` và ghi hộ = có — chụp ở 1440 và 390, cạnh sheet Thoả thuận. (cross-layer)
+- AC-11: Given một mục tiêu có KR đã có lần cập nhật và một KR chưa có, When người sửa được mục tiêu xoá từng KR, Then KR chưa có lần cập nhật bị xoá như lượt 3, còn KR đã có lần cập nhật bị từ chối với câu ghim «KR đã có lần cập nhật …», KR và mọi lần cập nhật của nó đọc lại nguyên vẹn; And tập hồ sơ đã ký có phép đo máy chạm tệp lượt này đổi được máy rút ra (lệnh và `paths` của từng eval giao với `diff` của lượt), bằng đúng danh sách khai ở thiết kế mục 10, và mọi phép đo máy của các hồ sơ đó chạy lại xanh.
+- AC-12: Given một người sắp nghỉ đang phụ trách KR và mục tiêu cấp đơn vị ở chu kỳ «Đang chạy», một KR ở chu kỳ đã đóng, một mục tiêu cá nhân và các lần cập nhật cũ, When quản trị mở menu «…» của họ ở màn Thành viên, chọn «Chuyển OKR…», thấy số KR và mục tiêu sẽ chuyển, chọn người nhận và xác nhận, Then trong một lần ghi mọi KR và mục tiêu cấp đơn vị ở chu kỳ còn ghi được đổi người phụ trách sang người nhận, mỗi bản ghi một dòng vết «chuyển việc»; KR ở chu kỳ đã đóng, mục tiêu cá nhân và người ghi của lần cập nhật cũ không đổi; số trả về bằng số xem trước; `viecCanNhac` của người đi không còn việc OKR và người nhận có việc «được giao»; And mục «Chuyển việc 30 ngày…» và hộp của nó không đổi; người không phải quản trị bị từ chối cả xem trước lẫn chuyển; chuyển cho chính người đi hay cho người ngoài workspace bị từ chối và không bản ghi nào đổi. (cross-layer)
+- AC-13: Given một người vai «chỉ OKR» phụ trách một KR, When họ đăng nhập và gọi các thủ tục OKR mới, Then mọi thủ tục mới (`okr.capNhatTuan`, `okr.moCapNhat`, `okr.guiCapNhat`, `okr.viecCuaToi`, `okr.comments`, `okr.addComment`, `okr.follow`) chạy cho họ, riêng `okr.transferPreview` và `okr.transferWork` từ chối theo vai quản trị; `contacts.list`, `deals.list`, `dashboard.summary` vẫn từ chối phạm vi; And ma trận phạm vi của hồ sơ `vai-chi-okr` chạy lại xanh; trang Tổng quan của họ có thẻ việc OKR đọc qua phạm vi `okr`.
+- AC-14: Given các tệp giao diện lượt này chạm, When chạy cổng thiết kế tĩnh và bộ quét «Dấu hiệu vẽ tay», Then không tệp nào có vi phạm P0; không tệp nào chứa `<table`, `<h1`, `<h2`, chấm `size-2 rounded-full`, `navigator.clipboard`, `AlertDialog` ráp tay, `divide-y`, hộp `rounded-lg border` tự dựng; không tệp có sẵn nào trong `packages/ui` bị sửa (thêm `item.tsx` được); And bảng bậc thang ở mục 8 thiết kế có một dòng cho mỗi tệp `.tsx` mới. (judgment)
+- AC-15: Given cơ sở dữ liệu có cây tổ chức, kế hoạch 30 ngày và OKR của lượt 3, When chạy migration của lượt này, Then mọi câu lệnh chỉ tạo bảng, chỉ mục, khoá ngoại mới; không `UPDATE`, `DELETE`, `DROP`, `ALTER COLUMN`, không cột mới trên bảng có sẵn; các model OKR vẫn là một dãy liền ở cuối `schema.prisma`; And dữ liệu cũ đọc lại nguyên vẹn.
+
+## Coverage
+
+Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
+
+- **Trục A — vật:** lần cập nhật · phiên cập nhật · việc cần nhắc · bình luận có nhắc tên · theo dõi · quyền phụ trách  [thước CE: năm gạch «Trong phạm vi» của lộ trình mục 5 lượt 4; năm cột bảng lần cập nhật lộ trình kê] → AC-1, AC-2, AC-5, AC-6, AC-9, AC-12
+- **Trục B — lối vào:** màn Cập nhật tuần · tin nhắc · thẻ việc của tôi (ba chỗ) · sheet mục tiêu · hộp chuyển ở Thành viên  [thước CE: ý định lượt 4; bản mẫu `cua-toi.tsx` `ViecCanLam`; `tong-quan-chi-okr.tsx`] → AC-4, AC-5, AC-7, AC-10, AC-12
+- **Trục C — người:** người phụ trách · trưởng đơn vị (ghi hộ, nhận nhắc im) · người được nhắc tên / theo dõi · quản trị · vai «chỉ OKR» · người chưa nối kênh · người đã nghỉ  [thước CE: `WORKSPACE_ROLES`, `OkrAccessService`, `kenhSeDungCua`] → AC-3, AC-5, AC-6, AC-8, AC-12, AC-13
+- **Trục D — thời gian:** ngày cập nhật · phần còn lại của tuần · im 14 / 21 ngày · cửa sổ 24 giờ · pha khoá  [thước CE: `OkrCycle.updateWeekday`, `NHAC`, lộ trình «nhắc người phụ trách, rồi trưởng đơn vị»] → AC-1, AC-5, AC-6
+- Cross-cutting: ba trạng thái màn, 390/1440, `translate="no"` (AC-4, AC-7, AC-10) · vết trên mọi ghi (AC-1, AC-9, AC-12) · dấu hiệu vẽ tay (AC-14) · migration chỉ thêm (AC-15) · hồ sơ lượt 3 và lượt 2 xanh nguyên (AC-11, AC-13).
+- Chân ngành: cập nhật KR kèm bình luận, mức tự tin theo thời gian [NGÀNH: Perdoo]; cập nhật hằng tuần so với tuần trước [NGÀNH: Weekdone].
+- [GIẢ ĐỊNH] Tuần là thứ Hai → Chủ nhật giờ Việt Nam; việc «cập nhật tuần» hiện từ ngày cập nhật của chu kỳ tới hết Chủ nhật, nên tin nhắc lặp mỗi sáng tới khi xong.
+- [GIẢ ĐỊNH] Ngưỡng im: 14 ngày nhắc người phụ trách, 21 ngày thêm trưởng đơn vị (hằng số `OKR_NHAC`).
+- [GIẢ ĐỊNH] Cửa sổ sự kiện «được giao · nhắc tên · theo dõi» là 24 giờ, cho cả tin lẫn thẻ (một hàm).
+- [GIẢ ĐỊNH] Chuyển OKR là mục riêng «Chuyển OKR…» cạnh «Chuyển việc 30 ngày…», không ghép vào hộp đã ký của `moi-phia-deu-thay-ke-hoach` (bài đo hồ sơ đó ghim đúng hai con số và một lời gọi).
+- [GIẢ ĐỊNH] Ghi hộ thuộc người sửa được đơn vị của mục tiêu (trưởng; quản trị ở cấp OneHub), không thêm vai mới.
+- [GIẢ ĐỊNH] Chỉ cập nhật được KR của mục tiêu đã công bố ở chu kỳ «Đang chạy».
+- [GIẢ ĐỊNH] Ô «giá trị hiện tại» trong hộp thoại KR của lượt 3 giữ nguyên; đổi số qua đó không phải lần cập nhật tuần và không được đếm.
+- [GIẢ ĐỊNH] Thẻ việc OKR hiện cả khi rỗng, ở cả hai trang Tổng quan.
+- [GIẢ ĐỊNH] Mẫu số của ngưỡng «≥ 80% KR mỗi tuần trên mọi phòng ban» là **mọi** KR đang chạy (mục tiêu công bố, chu kỳ «Đang chạy», mọi cấp kể cả OneHub, bộ phận và cá nhân), xếp vào phòng ban chính của người phụ trách KR; KR của người chưa có phòng ban chính vào nhóm «chưa xếp».
+
+## Đường đo
+
+- Thước: ≥ 80% KR đang chạy có ít nhất một lần cập nhật mỗi tuần, ba tuần liền, trên mọi phòng ban · số từ: bảng `okrCheckIn` (`weekStart`, `keyResultId`) nối KR → mục tiêu (`cong-bo`, mọi cấp) → chu kỳ `dang-chay`, xếp theo phòng ban chính của người phụ trách (`orgPlacement`), câu truy vấn `rang/ty-le-cap-nhat-tuan.sql` (đếm KR khác nhau; mẫu số theo giả định ở Coverage) · bảo đảm bởi: AC-1 (dòng và tuần đọc lại), AC-2 (câu truy vấn đúng trên dữ liệu gieo)
+- Thước: trung vị số giây một lần cập nhật < 60 · số từ: bảng `okrCheckInSession` (`seconds` của phiên đã gửi), câu truy vấn `rang/trung-vi-giay.sql` · bảo đảm bởi: AC-2 (mốc máy chủ, máy khách không khai được)
+- Thước: không phải sửa DB tay để ghi, chuyển, gỡ · số từ: phiên nghiệm thu hỏi người dùng đại diện · bảo đảm bởi: AC-1, AC-11, AC-12
+- Thước: người đã nối kênh nhận tin vào ngày cập nhật · số từ: `agentTask` loại `nhac-ke-hoach`, `payload.daGui` có `loai = 'okr-cap-nhat'`, `outcome LIKE 'da-gui%'`, đối chiếu người có ZaloLink hoặc SlackMemberMatch và có KR đang chạy, câu truy vấn `rang/nguoi-noi-kenh-nhan-tin.sql` · bảo đảm bởi: AC-2 (câu truy vấn đúng trên dữ liệu gieo), AC-5 (người chỉ có việc OKR vẫn có hàng và tin)
+
+## Out of scope
+
+- **Cập nhật bằng trả lời tin Zalo/Slack; cảnh báo KR đang trượt** — lượt 10.
+- **Toàn cảnh, heatmap, bảng họp tuần, màn sức khoẻ đếm người chưa nối kênh** — lượt 5; lượt này chỉ ghi dữ liệu các màn đó sẽ đọc.
+- **Số tự chảy từ CRM vào KR** — lượt 6; mọi giá trị do người ghi.
+- **Tin thứ hai, báo tức thì khi được nhắc tên** — trái luật một tin buổi sáng.
+- **Sửa hay xoá lần cập nhật; máy chọn mức tự tin hay ghi số thay người** — từ điển «Cập nhật tuần», NG-05.
+- **Sửa, xoá bình luận; phản ứng; đính kèm** — chờ số dùng thật.
+- **Khoá ô «giá trị hiện tại» của hộp thoại KR sau công bố** — đổi hành vi đã ký ở lượt 3 (AC-5 của `dat-okr-trong-crm`).
+- **Ghép OKR vào hộp «Chuyển việc 30 ngày»; chuyển mục tiêu cá nhân của người nghỉ** — xem Coverage và thiết kế mục 7.
+- **Danh sách người chưa cập nhật, xếp hạng người** — lộ trình lượt 5 «theo KR, không liệt kê người»; NG-07.
+
+> Rationale từng mục: `decisions.jsonl`.
+
+## Notes
+
+- Luật đã đọc: `AGENTS.md`, `CONTEXT.md`, `docs/api.md`, `docs/agent.md`, `docs/design.md` (kể cả «Vẽ tay là bậc cuối»), `docs/settings.md`, `docs/reui.md`; hồ sơ `ban-mau-okr`, `dat-okr-trong-crm`, `may-nhac-truoc-nguoi`, `moi-phia-deu-thay-ke-hoach`, `vai-chi-okr`; skill `morphological-scan`, `web-design-guidelines`. S3 nạp `.agents/skills/nestjs-trpc`, `prisma-database-setup`, `eve`, `shadcn`, `nuqs`.
+- Hạng T3: chạm `packages/db/prisma` (năm bảng mới) — có Cổng 1.5.
+- Cổng người của lượt do phiên điều phối ký theo uỷ quyền của Manh Phan ngày 2026-09-24; dòng ký ghi «Manh Phan — uỷ quyền phiên điều phối 2026-09-24».
+- S4 chạy trong phiên riêng có công cụ Workflow (điều phối 2026-09-25); phiên dựng dừng ở `status: implemented` với tệp đối số S4 sinh sẵn.
+- Máy chủ dev cho phép đo màn hình: app/api của chính cây này ở 3920/3921; ảnh ghi vào `.acceptance-runs/cap-nhat-tuan-okr/evidence/`.
+- Nền hạ tầng (`duong-nen.md`): build đỏ vì shell đăng nhập của script đường nền lấy Node 22; xanh khi chạy với PATH Node 24; làn S4 chạy với cùng tiền tố.
+- Hồ sơ đã ký có thể phải ghim lại: thiết kế mục 10.
+
+Known limits — đường nền (theo điều phối 2026-09-25):
+
+- Hai dòng `THIEU merge-base` (khoá `zqw_giu_nqz`, `nzm_giu_da_ky`) là báo giả của bộ kit.
+- Dòng `CAY BAN SAU SUITE …/opportunity.md` của lượt nền đầu là báo giả (tệp do phiên viết trong lúc suite chạy).
