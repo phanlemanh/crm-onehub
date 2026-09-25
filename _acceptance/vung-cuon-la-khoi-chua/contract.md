@@ -5,7 +5,7 @@ slug: vung-cuon-la-khoi-chua
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
@@ -67,3 +67,6 @@ Never: che thanh cuộn bằng `overflow-x-hidden`/`overflow: clip` trên khung 
 
 - Không có `opportunity.md` — vòng sửa lỗi đi từ việc ngoài hợp đồng của `bang-thanh-vien-giu-hang`, không có ngưỡng nghiệm thu, nên không có mục Đường đo.
 - Sáu hồ sơ đã ký đo `page-shell.tsx` trong `paths` (`bang-thanh-vien-giu-hang`, `chan-lai-component-ra-man`, `khung-trang-cai-dat`, `logo-onehub`, `mot-duong-ghi-phong-ban`, `tong-quan-va-khung-noi-tieng-viet`); sau khi vòng này xanh, ghim lại chúng bằng một lượt làn.
+- Chiều đỏ trên mã chưa sửa (25/09, commit `070fab63`): 13 DUNG, 9 SAI, mã 1 — AC-2 5/29 ở ba khổ (Tiền tệ 1, Trường 14, Chương trình OKR 4, Danh mục onboarding 1, Tổ chức 1 — 21 phần tử), AC-4 và AC-5 29/29 ở ba khổ (khung ứng dụng trượt tới 2400px); AC-1, AC-3 xanh; AC-6, AC-7 xanh với tập xét rỗng như đã khai.
+- Xanh sau khi sửa: 22 DUNG, 0 SAI, mã 0, 213s; AC-6 xét đúng 21 phần tử đã thoát trước khi sửa.
+- Phá-thử trên mã đã sửa: `relative top-2` → AC-7 đỏ 29/29 (lệch 8px), kéo theo AC-3/4/5; `VCKC_PHA_GHIM=1` → AC-1 đỏ ở `/settings/notifications`; span `absolute top-0 right-0` trong `PageShellContent` → AC-6 đỏ 29/29, gọi đúng tên span; `min-w-[3000px]` thay `min-w-0` của `main` → AC-3 và AC-4 đỏ ngang 1616–2625px; `VCKC_PHA_DOAN=1` → mã 2 gọi tên `[doanLa]`. Bỏ `relative` là chính mã chưa sửa ở dòng đầu. Đầu ra ở `.acceptance-runs/vung-cuon-la-khoi-chua/`.
