@@ -500,6 +500,8 @@ executors:
     mdg_xoa_duoc_mot_noi: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/mot-duong-ghi-phong-ban.spec.ts -t mdg-xoa-duoc-mot-noi"'
     mdg_quyen_ba_thu_tuc: 'bun run test -- "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test --preload ./test/setup.ts test/mot-duong-ghi-phong-ban.spec.ts -t mdg-quyen-ba-thu-tuc"'
     mdg_man_goi_org: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc.dom.tsx -t mdg-man-goi-org"
+    zgm_ca_production: "cd apps/app && TZ=UTC bun test ./test/zalo-gio-theo-mui-gio-xuong.spec.ts -t ca-production"
+    zgm_bien_nua_dem: "cd apps/app && TZ=UTC bun test ./test/zalo-gio-theo-mui-gio-xuong.spec.ts -t bien-nua-dem"
   script:
     vvc_dieu_phoi_don_sach: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts test/dieu-phoi-diem-nhan.spec.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts dieu-phoi"'
     vvc_go_la_khong_quet: 'bun run test -- "NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts gieo-le && cd apps/api && bun test test/go-la-cat-quyen.spec.ts && cd ../.. && NODE_ENV=test bun _acceptance/test-api-khong-de-viec-vo-chu/rang/dem-sot.ts sau-dang-nhap"'
