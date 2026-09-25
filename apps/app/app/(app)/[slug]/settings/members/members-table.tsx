@@ -261,6 +261,7 @@ export function MembersTable() {
 	return (
 		<>
 			<DataTable
+				layout="content"
 				query={query}
 				search={<ListSearch placeholder={t.bang.tim} />}
 				columns={columns(

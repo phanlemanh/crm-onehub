@@ -10,14 +10,17 @@ evals:
     paths:
       - "apps/app/components/page-shell.tsx"
       - "apps/app/test/khung-trang-cai-dat.dom.tsx"
+      - "apps/app/test/fixtures/page-shell-truoc-width.tsx.txt"
     expected: |
       DOM test dung PageShell that. Ma tran viet truoc 5 gia tri (narrow, page, wide, full, khong
       truyen) x [class max-w dung bang, co/khong mx-auto dung bang] = 10 khang dinh (full: w-full,
       khong max-w, can trai; khong truyen: max-w-7xl mx-auto nhu cu). Cong 1: dung CUNG MOT cay
       PageShell + PageShellHeader + PageShellHeading + PageShellTitle + PageShellDescription +
-      PageShellActions khong width, khong breadcrumb bang ban hien tai VA bang ban cua merge-base
-      (git show <merge-base>:apps/app/components/page-shell.tsx chep ra thu muc tam canh tep kiem,
-      nap that) -> outerHTML bang nhau. Tong 11.
+      PageShellActions khong width, khong breadcrumb bang ban hien tai VA bang ban goc truoc vong nay
+      (page-shell.tsx o 65bf27cc, ghim o apps/app/test/fixtures/page-shell-truoc-width.tsx.txt, chep
+      ra thu muc tam canh tep kiem, nap that) -> outerHTML bang nhau. Tong 11. (25/09: ban dau lay
+      ban goc bang git merge-base HEAD origin/onehub — CI checkout nong khong co ref do nen ca tep
+      do; sau khi gop, merge-base la HEAD nen phep do so tep voi chinh no.)
       CHIEU DO: (1) ban sao de mx-auto cho width=page -> do "width=page van can giua";
       (2) ban sao boc tieu de va hanh dong trong mot div moi -> do "khong width: outerHTML khac ban
       goc".
