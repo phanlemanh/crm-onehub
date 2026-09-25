@@ -7,6 +7,10 @@ export const NGUONG_LOGO = {
 	lechTamTiLe: 0.01,
 	alphaDuc: 255,
 	alphaCo: 127,
+	lechKenhToiDa: 2,
+	tiLeDiemLechToiDa: 0.005,
+	lechNenTrang: 8,
+	banKinhAnToan: 0.4,
 } as const;
 
 export type AnhRgba = { data: Uint8Array; rong: number; cao: number };
