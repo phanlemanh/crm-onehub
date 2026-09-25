@@ -333,9 +333,7 @@ function Idle({
 		<Empty width="wide">
 			<EmptyHeader>
 				<EmptyMedia>
-					<span className="flex size-8 items-center justify-center bg-foreground text-background">
-						<Logo className="size-4" />
-					</span>
+					<Logo className="size-8" />
 				</EmptyMedia>
 				<EmptyTitle>{copy.title}</EmptyTitle>
 				<EmptyDescription>{copy.blurb}</EmptyDescription>
@@ -457,9 +455,7 @@ function Sources({ sources }: { sources: Source[] }) {
 function AgentAvatar() {
 	return (
 		<MessageAvatar>
-			<span className="flex size-7 items-center justify-center bg-foreground text-background">
-				<Logo className="size-3.5" />
-			</span>
+			<Logo className="size-5" />
 		</MessageAvatar>
 	);
 }

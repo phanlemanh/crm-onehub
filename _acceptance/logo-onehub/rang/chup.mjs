@@ -16,6 +16,7 @@ const CAO = 900;
 const CHO_MS = 30_000;
 const LOCKUP_VIEWBOX = "0 0 2048 622";
 const LOCKUP_CAO_TOI_THIEU = 20;
+const LOGO_MAN_TRONG_CAO_TOI_THIEU = 28;
 const ICON_KHAI = {
 	"/favicon.ico": "apps/app/app/favicon.ico",
 	"/favicon.svg": "apps/app/public/favicon.svg",
@@ -159,6 +160,37 @@ async function chup(opts) {
 	return { ctx, p };
 }
 
+async function kiemManTrong(p, nhan) {
+	const kq = await p.evaluate(() => {
+		const khoi = document.querySelector('[role="dialog"] [data-slot="empty"]');
+		const svg = khoi?.querySelector('svg[aria-label="OneHub"]');
+		if (!khoi || !svg) return null;
+		const nen = [];
+		for (let el = svg.parentElement; el && el !== khoi.parentElement; el = el.parentElement) {
+			const mau = getComputedStyle(el).backgroundColor;
+			const alpha =
+				mau === "transparent"
+					? 0
+					: mau.includes("/")
+						? Number.parseFloat(mau.split("/")[1])
+						: mau.startsWith("rgba")
+							? Number.parseFloat(mau.split(",")[3])
+							: 1;
+			if (alpha > 0) nen.push(`${el.getAttribute("data-slot") ?? el.tagName.toLowerCase()} ${mau}`);
+		}
+		return { cao: svg.getBoundingClientRect().height, nen };
+	});
+	if (!kq) {
+		kiem(`${nhan}: man trong thieu logo`, false);
+		return;
+	}
+	kiem(
+		kq.nen.length > 0 ? `${nhan}: o to nen quanh logo (${kq.nen.join(", ")})` : `${nhan}: khong o to nen quanh logo`,
+		kq.nen.length === 0,
+	);
+	kiem(`${nhan}: logo man trong cao ${kq.cao.toFixed(1)}px (can >= ${LOGO_MAN_TRONG_CAO_TOI_THIEU})`, kq.cao >= LOGO_MAN_TRONG_CAO_TOI_THIEU - 0.5);
+}
+
 async function kiemIcon(p) {
 	const khai = await p.evaluate(() =>
 		Array.from(
@@ -258,6 +290,7 @@ for (const giaoDien of ["light", "dark"]) {
 		vung: '[role="dialog"]',
 		cho: () => document.querySelector('[role="dialog"] svg[aria-label="OneHub"]') !== null,
 	});
+	await kiemManTrong(agent.p, `agent-${nhan}`);
 	await agent.ctx.close();
 }
 
