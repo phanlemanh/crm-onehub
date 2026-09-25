@@ -11,32 +11,39 @@ import {
 	useStepItem,
 } from "@crm/ui/components/reui/stepper";
 import { cn } from "@crm/ui/lib/utils";
+import { createContext, useContext } from "react";
 import type * as React from "react";
+
+const TinhContext = createContext(false);
 
 function StepList({
 	activeStep,
 	label,
 	markCompleted = false,
+	tinh = false,
 	children,
 }: {
-	activeStep: number;
+	activeStep?: number;
 	label: string;
 	markCompleted?: boolean;
+	tinh?: boolean;
 	children: React.ReactNode;
 }) {
 	return (
-		<Stepper
-			value={activeStep}
-			orientation="vertical"
-			role="list"
-			aria-label={label}
-			indicators={
-				markCompleted ? { completed: <Icon icon={Checkmark} /> } : {}
-			}
-			className="flex flex-col"
-		>
-			{children}
-		</Stepper>
+		<TinhContext.Provider value={tinh}>
+			<Stepper
+				value={tinh ? Number.MAX_SAFE_INTEGER : activeStep}
+				orientation="vertical"
+				role="list"
+				aria-label={label}
+				indicators={
+					markCompleted && !tinh ? { completed: <Icon icon={Checkmark} /> } : {}
+				}
+				className="flex flex-col"
+			>
+				{children}
+			</Stepper>
+		</TinhContext.Provider>
 	);
 }
 
@@ -78,16 +85,17 @@ function StepListItem({
 	activeStep,
 }: {
 	step: number;
-	activeStep: number;
+	activeStep?: number;
 	title: React.ReactNode;
 	description?: React.ReactNode;
 	children?: React.ReactNode;
 }) {
+	const tinh = useContext(TinhContext);
 	return (
 		<StepperItem
 			step={step}
 			role="listitem"
-			aria-current={step === activeStep ? "step" : undefined}
+			aria-current={!tinh && step === activeStep ? "step" : undefined}
 			className="flex-row items-start justify-start gap-3 pb-5 last:pb-0"
 		>
 			<StepperIndicator>{step}</StepperIndicator>
