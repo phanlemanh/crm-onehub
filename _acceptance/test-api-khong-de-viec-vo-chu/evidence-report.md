@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 787d66525c93e022bee430e6450c361c2fbd5a49
+verified_commit: dd85e27b0cd98a954011374c51e2679021a3c880
 human_signoff: 
 ---
 
@@ -124,3 +124,7 @@ sha: f7a31a583af36e847d87df37ffd44f12b1d45a85 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-09-24, do ghim lai tren cay hop nhat sau khi gop onehub 973f1b01 (#125)
 run_id: repin-20260924T160407Z-81970
 sha: 787d66525c93e022bee430e6450c361c2fbd5a49 · suites: 4 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng
+
+### Re-pin lần 4 — 2026-09-25, do mot-duong-ghi-phong-ban: bài kiểm chuyển sang org.*, đường ghi phòng ban cũ gỡ
+run_id: repin-20260925T025226Z-13987
+sha: dd85e27b0cd98a954011374c51e2679021a3c880 · suites: 4 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng

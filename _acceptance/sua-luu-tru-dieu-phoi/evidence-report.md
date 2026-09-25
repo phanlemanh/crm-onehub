@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 70776c91ed7b3c29c44fdcd1863f171659aa4346
+verified_commit: dd85e27b0cd98a954011374c51e2679021a3c880
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -441,3 +441,7 @@ sha: ded515a9d79a9a0a729930d227b1fe7b5801e70b · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 7 — 2026-09-24, do S4 vòng 2 của to-chuc-danh-sach-chi-tiet: bài nhap-man đổi dữ liệu gửi mong đợi (traTen), dòng người và bước 3 hộp nhập
 run_id: repin-20260924T183547Z-84900
 sha: 70776c91ed7b3c29c44fdcd1863f171659aa4346 · suites: 4 lệnh exit 0 · evals: 28/28 eval máy đạt kỳ vọng · ngoài làn máy: E26 · AC không có chốt máy: AC-15
+
+### Re-pin lần 8 — 2026-09-25, do mot-duong-ghi-phong-ban: bài kiểm chuyển sang org.*, đường ghi phòng ban cũ gỡ
+run_id: repin-20260925T025226Z-13987
+sha: dd85e27b0cd98a954011374c51e2679021a3c880 · suites: 4 lệnh exit 0 · evals: 28/28 eval máy đạt kỳ vọng · ngoài làn máy: E26 · AC không có chốt máy: AC-15

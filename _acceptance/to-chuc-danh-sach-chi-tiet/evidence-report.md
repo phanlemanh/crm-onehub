@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d66a9dfbcdfd410ee35a0f1ecde3c1feb8c6eeda
+verified_commit: dd85e27b0cd98a954011374c51e2679021a3c880
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -317,3 +317,7 @@ none — khong eval nao khai runs>1 (khong co phuong sai).
 Round 1: E17 failed — o kho 320px (vi va en), nhan "Vi tri" cua dong nguoi dau tien de chong len email do `<li className="flex items-center ...">` can giua toan bo chieu cao trong khi noi dung giua la nhieu dong. Tra ve implementation.
 Round 2: E17 da xanh (bug chong lan da sua, quan sat doc lap tren 12 frame khop Expected). Nhung E20 (khong-hoi-quy.mjs) do LÀN ĐỎ tai ho so sua-luu-tru-dieu-phoi/E17 (suite [0,0,0,0]); dong thoi E3 (AC-2, truong-api) khong co ket qua vi agent bi skip/chet giua luot chay. → BLOCKED, chua the tinh PASS/REJECT cho ca hai.
 Round 3: Ca 21 eval xanh, ba lenh chung (test/lint/lint:slop/build) xanh, lan may ba ho so tai HEAD (E20) xanh, khong con LÀN ĐỎ; E3 co ket qua day du (9 expect() calls). → PASS.
+
+### Re-pin lần 1 — 2026-09-25, do mot-duong-ghi-phong-ban: bài kiểm chuyển sang org.*, đường ghi phòng ban cũ gỡ
+run_id: repin-20260925T025226Z-13987
+sha: dd85e27b0cd98a954011374c51e2679021a3c880 · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E17 · diff chạm vật đo ngoài làn máy: E17 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10
