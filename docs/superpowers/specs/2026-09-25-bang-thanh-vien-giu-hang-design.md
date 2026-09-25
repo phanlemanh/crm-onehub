@@ -56,6 +56,14 @@ Hai thay đổi, cùng một vòng:
 - *Đổi luôn mặc định của `DataTable` sang cao-theo-nội-dung.* Bảy trang đang dựa vào
   cách lấp đầy (tiêu đề bảng dính, cuộn trong vỏ); đổi chúng là một vòng khác.
 
+3. **Khối «Được phép vào» là khối chứa của chính nó** (`<section className="relative …">`).
+   Thêm ở S3: khi trang đã cuộn, hai `span` sr-only ở hàng tiêu đề của bảng vẽ tay (định
+   vị `absolute`, không tổ tiên định vị nào trong `main`) lấy `body` làm khối chứa, kéo
+   dài `document` thêm 153/387/632px ở 1440/768/375 — hai vùng cuộn dọc lồng nhau — và
+   gây luôn tràn ngang 98px ở 375 mà bản đầu của thiết kế này đổ nhầm cho bề rộng bảng.
+   Đã loại: cho `main` của `PageShell` làm khối chứa cho mọi trang — đúng hơn về nguyên
+   tắc nhưng chạm mọi trang dùng `PageShell`; ghi thành việc ngoài hợp đồng.
+
 Không gửi lên hãng: bố cục hai khối của trang Thành viên là của OneHub.
 
 ## Đặc tả UX
@@ -133,6 +141,4 @@ Chiều đỏ đã chạy trên mã chưa sửa: 13 SAI, mã 1 (ảnh ở
 
 - Bảng «Được phép vào» vẫn vẽ tay (`<table>`, `<h2>`) — thay bằng `SimpleTable`/`Card` là
   đợt 3–4 của `docs/settings.md`.
-- Tràn ngang ở 375px do bảng «Được phép vào» sáu cột không có vỏ cuộn ngang — cùng
-  đợt trên.
 - Bảy trang dùng `DataTable` lấp đầy giữ nguyên cách xếp.

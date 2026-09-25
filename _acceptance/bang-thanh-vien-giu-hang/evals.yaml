@@ -13,11 +13,11 @@ evals:
       - "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
     expected: |
       Ban do tu chan cay (canhCay qua APP_URL), gieo 15 loi moi cho, mo trang that o
-      1440x900, 768x1024, 375x812. Ma tran viet truoc cho ca luot: 27 khang dinh =
-      7 moi kho x 3 kho (so hang nam tron, hang bi cat/tran trong, thu tu khoi, cuon,
-      doi chung elementFromPoint, nut menu khong bi che, menu du vai) + 2 tran ngang
-      (1440, 768) + 1 tim rong + 1 Khoa API lap day + 2 don. Dong KET LUAN cuoi:
-      "27 DUNG, 0 SAI — ma thoat 0".
+      1440x900, 768x1024, 375x812. Ma tran viet truoc cho ca luot: 31 khang dinh =
+      9 moi kho x 3 kho (so hang nam tron, hang bi cat/tran trong, thu tu khoi, cuon,
+      mot vung cuon, tran ngang, doi chung elementFromPoint, nut menu khong bi che, menu
+      du vai) + 1 tim rong + 1 Khoa API lap day + 2 don. Dong KET LUAN cuoi:
+      "31 DUNG, 0 SAI — ma thoat 0".
       Rieng AC-1, o ca ba kho: "DUNG <kho>: bang thanh vien hien N/N hang" — mau so N la so
       thanh vien doc thang DB theo WORKSPACE_ID, tu so la so hang tbody nam tron trong hop vo
       bang (cao > 0, top/bottom trong hop +-2px); tien dieu kien 2 <= N <= 25 (mot trang),
@@ -53,19 +53,23 @@ evals:
     paths:
       - "apps/app/app/(app)/[slug]/settings/members/page.tsx"
       - "apps/app/components/page-shell.tsx"
+      - "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx"
       - "packages/ui/src/components/data-table.tsx"
       - "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
     expected: |
       O ca ba kho: "DUNG <kho>: trang cuon duoc va toi duoc loi moi cuoi" — main
       [data-slot=page-shell-scroll] co scrollHeight > clientHeight, va sau khi dat scrollTop
       toi cuoi, hang loi moi cuoi nam tron THEO CHIEU DOC trong hop cua main (top >= main.top-2,
-      bottom <= main.bottom+2); chieu ngang khong xet o dong nay. O 1440 va 768: "DUNG <kho>:
-      tran ngang 0px". O 375 chi mot dong "GHI CHU 375x812: tran ngang <n>px — ... ngoai pham
-      vi", khong cham.
-      CHIEU DO (ma chua sua): "SAI 375x812: trang cuon duoc va toi duoc loi moi cuoi", ma 1.
-      Pha-thu rieng cua E3 sau khi sua: them prop `contained` cho PageShell o page.tsx (main
-      thanh overflow-hidden, khong cuon) -> "SAI <kho>: trang cuon duoc va toi duoc loi moi
-      cuoi" o it nhat mot kho, ma 1 — do bang chinh dong cua E3.
+      bottom <= main.bottom+2); chieu ngang khong xet o dong nay. "Loi moi cuoi" la hang tbody
+      cuoi cua bang Duoc phep vao theo thu tu DOM (15 loi moi gieo cung luc nen thu tu
+      createdAt giua chung khong xac dinh — ban dau cua thuoc chon theo email va do gia o 375).
+      Moi kho con hai dong: "DUNG <kho>: chi mot vung cuon — tai lieu tran doc 0px"
+      (document.scrollHeight - clientHeight <= 0) va "DUNG <kho>: tran ngang 0px".
+      CHIEU DO da chay 25/09 tren ban sua chua co section relative: "SAI <kho>: chi mot vung
+      cuon — tai lieu tran doc 153|387|632px" o ca ba kho, ma 1; o 375 tran ngang 98px (hai
+      span sr-only thoat khoi main). Pha-thu rieng cho dong cuon: them prop `contained` cho
+      PageShell o page.tsx (main thanh overflow-hidden) -> "SAI <kho>: trang cuon duoc va toi
+      duoc loi moi cuoi", ma 1 — do bang chinh dong cua E3.
 
   - id: E4
     criterion: AC-4
@@ -136,7 +140,7 @@ evals:
     steps:
       - "Cap cong 3500/3501 (ban-do-cot-app / ban-do-cot-api trong .claude/launch.json). Cong da co may chu: chay `APP_URL=http://localhost:3500 bun _acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs` — ma 0 thi dung luon; ma khac 0 thi BLOCKED goi ten tien trinh giu cong, khong giet. Cong trong: dung api va app cua CAY DANG XET bang hai muc do trong launch.json"
       - "Chay O TIEN CANH, Bash timeout 600000: lenh cua ttv_do_bang — mot-luot.sh xep hang voi moi lan do khac, tien-de.mjs dat khoa nghien cuu linh canh roi don; do-bang.mjs tu chan cay, gieo va don loi moi thu, chup vao evidence/"
-      - "Doc dong KET LUAN cuoi: ma 0 = 27 DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Doc dong KET LUAN cuoi: ma 0 = 31 DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
       - "Mo tam anh va doi chieu bang mat voi Expected"
     inputs:
       - _acceptance/bang-thanh-vien-giu-hang/evidence/
