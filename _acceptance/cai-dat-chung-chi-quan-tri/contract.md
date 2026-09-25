@@ -5,7 +5,7 @@ slug: cai-dat-chung-chi-quan-tri
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-25
 design_doc: docs/superpowers/specs/2026-09-25-cai-dat-chung-chi-quan-tri-design.md
@@ -75,3 +75,13 @@ Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-25 (Phan Le M
 - Ngoài-8: `CongNghienCuu` (`packages/validation/src/cong-nghien-cuu.ts`) và `Gate` (`apps/app/lib/onboarding.ts`) khai cùng một union ở hai nơi; thêm giá trị ở một nơi thì hai cổng lệch nhau mà trình biên dịch không báo.
 - Ngoài-9: ca người ngoài workspace của E2 bị `AuthMiddleware` chặn trước `requireManager`, nên chiều đỏ «`requireManager` bỏ qua vai null» không đỏ được bằng ca đó.
 - Ngoài-10: E10 chứng «`onboarding.ts` gọi đúng hàm chung» bằng cách tìm chuỗi import trong mã nguồn, không bằng đầu ra; hành vi cổng thì vẫn đo bằng trả lời thật và proxy thật.
+
+Known limits — chấp nhận khi ký lại Cổng Bằng chứng 2026-09-25 (Phan Le Manh), sau khi gộp onehub (#129, #131, #136), từ mục ngoài hợp đồng của S4 round 4:
+
+- Ngoài-1: `workspace.get` vẫn tính và trả `canManageSettings` (`workspace.service.ts`, `workspace.contracts.ts`) nhưng không màn nào đọc nữa; một quyền đang phát ra ở hai đầu ra. Gỡ trường đó là đổi hợp đồng REST (`GET /workspace`).
+- Ngoài-2: `traLoiKhoaNghienCuu` (`packages/validation/src/cong-nghien-cuu.ts`) và `researchKeyOutput` (`apps/api/src/settings/settings.contracts.ts`) là hai schema viết tay cho cùng một trả lời, bản dùng chung lỏng hơn bản lưu; `CongNghienCuu` lặp lại union `Gate` của `onboarding.ts`.
+- Ngoài-3: `rang/chup.mjs` nuốt lỗi hết giờ chờ hydrate, nên môi trường treo bị chấm thành SAI (mã 1) thay vì mã 2 «không đo được».
+- Ngoài-4: `afterAll` của `cai-dat-chung-chi-quan-tri.spec.ts` trả model của trợ lý về với `contextWindowTokens: 0` thay vì giá trị gốc; chỉ gây hại khi DB thử có sẵn model tuỳ chỉnh.
+- Ngoài-5: E8 chỉ chứng khối `it()` cũ còn nguyên văn, không chứng khẳng định cũ còn chạy (bọc `describe.skip`, chú thích, nhánh không chạy vẫn cho DUNG).
+- Ngoài-6: E10 chứng «`onboarding.ts` gọi hàm chung» bằng cách tìm chuỗi import trong mã nguồn.
+- Ngoài-7: số khối cũ (30) của E8 không được ghim trong phép đo, nên ma trận toàn phần không viết trước.

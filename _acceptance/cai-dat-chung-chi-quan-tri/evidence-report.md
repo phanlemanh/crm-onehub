@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 81f13ffce80b3c3237b262bc0b39a36befec80c5
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-25
 ---
 
 # Evidence Report: cai-dat-chung-chi-quan-tri
