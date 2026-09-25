@@ -5,7 +5,7 @@ slug: vung-cuon-la-khoi-chua
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: verified
 approved_by:
 approved_at:
 veto_state: mo

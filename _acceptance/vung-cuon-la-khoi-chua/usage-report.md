@@ -66,3 +66,34 @@ wall: 782s
 - **claude-opus-5-5**: 3 agent · 32 calls · out 12,352 · in 64 · cache_read 3,088,519 · cache_create 266,625
 - **claude-haiku-4-5-20251001**: 5 agent · 14 calls · out 6,273 · in 122 · cache_read 697,167 · cache_create 248,200
 
+### S4 round 3 — wf_dc18c8fe-6e8 (11 agent, 38,801 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5 | 3 | 18,058 | 6 | 216,482 | 169 |
+| ui:E8 | claude-sonnet-5 | 6 | 8,878 | 12 | 411,424 | 539 |
+| review:bugs | claude-opus-5-5 | 5 | 2,810 | 10 | 410,494 | 38 |
+| review:measurement | claude-opus-5-5 | 3 | 1,714 | 6 | 212,654 | 22 |
+| machine:bun run test | claude-haiku-4-5-20251001 | 6 | 1,713 | 50 | 337,079 | 233 |
+| machine:APP_URL=${APP_URL:-http://localhost:3500 | claude-haiku-4-5-20251001 | 2 | 1,471 | 18 | 89,425 | 233 |
+| capture:provenance | claude-sonnet-5 | 2 | 1,015 | 4 | 89,398 | 15 |
+| review:conventions | claude-opus-5-5 | 3 | 990 | 6 | 179,288 | 15 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 812 | 18 | 89,331 | 14 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 729 | 18 | 89,331 | 23 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 611 | 18 | 89,329 | 12 |
+
+
+wall: 726s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| machine | 5 | 5,336 | 694,495 | 286 | 16:01:13 | 16:06:00 |
+| ui | 1 | 8,878 | 411,424 | 539 | 16:01:13 | 16:10:12 |
+| review | 3 | 5,514 | 802,436 | 40 | 16:01:13 | 16:01:53 |
+| capture | 1 | 1,015 | 89,398 | 15 | 16:10:13 | 16:10:29 |
+| synthesize | 1 | 18,058 | 216,482 | 169 | 16:10:30 | 16:13:19 |
+
+- **claude-sonnet-5**: 3 agent · 11 calls · out 27,951 · in 22 · cache_read 717,304 · cache_create 437,072
+- **claude-opus-5-5**: 3 agent · 11 calls · out 5,514 · in 22 · cache_read 802,436 · cache_create 253,929
+- **claude-haiku-4-5-20251001**: 5 agent · 14 calls · out 5,336 · in 122 · cache_read 694,495 · cache_create 247,188
+
