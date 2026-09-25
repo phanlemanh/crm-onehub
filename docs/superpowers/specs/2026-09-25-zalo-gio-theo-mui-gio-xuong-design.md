@@ -21,6 +21,10 @@ chủ Vercel chạy UTC; máy dev ở VN nên lỗi không hiện khi thử tạ
 - Trang Kết nối › Zalo truyền `NHAC.muiGio` (`@crm/db/onboarding-nhac`, `Asia/Ho_Chi_Minh`) —
   cùng nguồn với giờ nhắc 08:30. Trang là component máy chủ nên được import `@crm/db`; tệp
   `nhac-qua-zalo-man.ts` vẫn không import gói máy chủ (component client dùng nó).
+- Chỗ gọi `ngayGio` (đo 25/09, `git grep`): duy nhất `page.tsx` của Kết nối › Zalo — máy chủ,
+  truyền `NHAC.muiGio`. Không có chỗ gọi nào ở client.
+- Định dạng hiện hành giữ nguyên, chỉ đổi múi giờ: vi `05:27 25-09`, en `09/25, 05:27 AM`
+  (đồng hồ 12 giờ ở en như hôm nay).
 - `gioPhut` («Hết hạn lúc» ở Thông báo của bạn) không đổi: nó chạy trong trình duyệt nên theo
   múi giờ máy người xem, đúng với người ở VN.
 
@@ -52,7 +56,7 @@ chủ Vercel chạy UTC; máy dev ở VN nên lỗi không hiện khi thử tạ
 <!-- <<<UX-STATE-TABLE -->
 | Trạng thái | Màn | Hiển thị gì | Người làm gì tiếp |
 |---|---|---|---|
-| ST-ket-noi-zalo-song | Kết nối › Zalo | «<tên bot> · trả lời lần cuối lúc 05:27 25-09» theo giờ VN | không cần |
+| ST-ket-noi-zalo-song | Kết nối › Zalo | «<tên bot> · trả lời lần cuối lúc 05:27 25-09» theo giờ VN (en: «09/25, 05:27 AM») | không cần |
 <!-- UX-STATE-TABLE>>> -->
 
 ### 4. Hành vi

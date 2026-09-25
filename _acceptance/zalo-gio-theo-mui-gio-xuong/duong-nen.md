@@ -1,10 +1,10 @@
 ---
 slug: zalo-gio-theo-mui-gio-xuong
-at: 2026-09-25T02:52:14.718Z
-sha: 325dbc7f167ac0406a53851db7814bd0e3c44c17
+at: 2026-09-25T02:54:24.323Z
+sha: 6934d1bdc768061d1183dc04de3d67ee5146a22c
 nen: do
 cong_cu: do
-suite: do
+suite: xanh
 luoi: xanh
 engine: xanh
 ---
@@ -13,5 +13,3 @@ engine: xanh
 
 - nen cong-cu: THIEU merge-base (khoa executors.script.zqw_giu_nqz)
 - nen cong-cu: THIEU merge-base (khoa executors.script.nzm_giu_da_ky)
-- nen suite: CAY BAN SAU SUITE _acceptance/zalo-gio-theo-mui-gio-xuong/morphological-scan.md
-- nen suite: CAY BAN SAU SUITE docs/superpowers/specs/2026-09-25-zalo-gio-theo-mui-gio-xuong-design.md
