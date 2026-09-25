@@ -293,20 +293,38 @@ không sửa tệp có sẵn nào trong `packages/ui`, chỉ thêm `item.tsx`.
 
 ## 10. Hồ sơ đã ký bị chạm
 
-Danh sách dưới là bản khai tay lúc S1; tập thật do máy rút (`rang/ho-so-bi-cham.mjs`,
-E21: lệnh và `paths` của mọi eval máy ở mọi hồ sơ đã ký, giao với `diff` của lượt).
-Cuối S3 chép tập máy rút vào `HO_SO_BI_CHAM` của `rang/cau-hinh.mjs` và sửa danh sách
-này cho khớp; E21 đỏ khi hai bên lệch. Mọi hồ sơ trong tập được ghim lại bằng làn
-eval sau khi lượt lên `onehub`.
+Danh sách dưới từng là bản khai tay lúc S1 (chỉ `vai-chi-okr`, `dat-okr-trong-crm`,
+`nhac-qua-zalo`, `may-nhac-truoc-nguoi`, `moi-phia-deu-thay-ke-hoach`, và ức đoán có
+điều kiện `khung-dieu-huong`). Cuối S3, `rang/ho-so-bi-cham.mjs` (E21) rút tập THẬT:
+với mọi hồ sơ `_acceptance/*/` có contract `status: signed-off` hoặc `machine-cleared`,
+giao `paths` và tệp thật thi hành của mọi eval `test`/`script` (không `not-run`) với
+`git diff --name-only` của lượt (bỏ `_acceptance/**`). Tập thật rộng hơn bản khai tay
+nhiều — phần lớn đến từ các lưới quét rộng `apps/app/**`/`packages/ui/**` (chặn
+component lọt ra màn, ai được vào màn, cách trình bày danh sách…) mà bất kỳ tệp
+`.tsx` mới nào trong lượt cũng khớp; `khung-dieu-huong` không tồn tại như một hồ sơ
+nên không có trong tập. Tập dưới đã chép nguyên văn vào `HO_SO_BI_CHAM` của
+`rang/cau-hinh.mjs`; E21 đỏ khi hai bên lệch. Mọi hồ sơ trong tập được ghim lại bằng
+làn eval sau khi lượt lên `onehub`.
 
-
-- `vai-chi-okr` — thủ tục mới dưới alias `okr` (ma trận chạy lại, danh sách không đổi).
-- `dat-okr-trong-crm` — sheet mục tiêu thêm tab và nút, `okr.objective` thêm trường,
-  `removeKeyResult` thêm một câu từ chối, `updateKeyResult` từ chối đổi số hiện tại
-  của KR đang chạy (mục 6b — phép đo E5 của hồ sơ đó sửa khẳng định); chắc chắn ghim lại.
-- `nhac-qua-zalo`, `may-nhac-truoc-nguoi`, `moi-phia-deu-thay-ke-hoach` — dựng tin và
-  khuôn `payload` đổi; tin chỉ có việc kế hoạch giữ nguyên chữ.
-- `khung-dieu-huong` (thanh tab OKR ba → bốn), nếu bài đo đếm tab.
+`agent-builder-noi-tieng-viet`, `bang-thanh-vien-giu-hang`, `bo-dung-chung-nhan-chuoi`,
+`cai-dat-con-lai-noi-tieng-viet`, `cau-truc-to-chuc`, `chan-lai-component-ra-man`,
+`cho-phep-ai-vao-o-man-hinh`, `chu-cuoi-cung-tien-de`, `chu-mac-dinh-thu-vien-ngoai`,
+`claimdue-chi-thay-dong-cua-minh`, `cron-theo-ban-khai`, `cua-so-tro-chuyen-noi-tieng-viet`,
+`dat-okr-trong-crm`, `do-quyen-luot-bang-hanh-vi`, `duong-proto-cho-design-pass`,
+`go-la-cat-quyen-that`, `han-viec-theo-ngay`, `ke-hoach-la-mot-ban-ghi`,
+`khoa-cu-khong-mo-khoa-moi`, `khoa-lo-giu-tran`, `khung-trang-cai-dat`,
+`lam-moi-chuyen-viec-qua-loi-chung`, `lenh-chung-khong-an-cache-doi`,
+`lenh-dung-do-khong-ai-thay`, `logo-onehub`, `loi-tac-tu-zalo-noi-dung-nguyen-nhan`,
+`ma-tran-phai-co-chieu-song`, `man-cai-dat-noi-tieng-viet`, `may-nhac-truoc-nguoi`,
+`moi-bai-kiem-dom-deu-chay`, `moi-phia-deu-thay-ke-hoach`, `mot-duong-ghi-phong-ban`,
+`nen-chat-ai-elements`, `neo-dan-so-khong-cung`, `ngay-gieo-theo-gio-vn`,
+`nhac-qua-zalo`, `noi-zalo-cho-nguoi-moi`, `o-cam-chay-duoc-that`,
+`o-so-tien-doc-theo-tieng`, `okr-soat-anh-luot-3`, `ten-dong-tien-bao-cao`,
+`thanh-vien-hai-khoi-cung-khuon`, `thuoc-o-soan-don-dep`, `tiep-thi-tuyen-doi-tac`,
+`tieu-de-cot-doc-tron`, `to-chuc-danh-sach-chi-tiet`, `tong-quan-va-khung-noi-tieng-viet`,
+`truong-tu-tao-o-cai-dat`, `vai-chi-okr`, `vao-bang-email-va-mat-khau`,
+`vung-cuon-la-khoi-chua`, `zalo-gio-theo-mui-gio-xuong`, `zalo-goi-thu-hong-hien-dung-bot`,
+`zalo-webhook-doc-khuon-that`.
 
 ## 11. Luật và skill đã đọc
 
