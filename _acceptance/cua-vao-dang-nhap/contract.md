@@ -5,9 +5,9 @@ slug: cua-vao-dang-nhap
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-09-25T20:21:04Z
 design_doc: docs/superpowers/specs/2026-09-25-cua-vao-dang-nhap-design.md
 ---
 
@@ -90,3 +90,4 @@ Ngưỡng ở `opportunity.md` (chờ ký Cổng Đáng):
 - Phản biện context sạch 25/09 (`gap-probe.md`): 4 P1 + 1 P2, đã sửa trong artifact. Hoãn một phần của P1 thứ tư: nhánh chỉ-mật-khẩu, SSO và Microsoft chỉ đo bằng test DOM với fixture mang kiểu thật của router — trên màn thật chỉ đo cấu hình mà API của cây trả về.
 - Test DOM của vòng này tách ba tệp, mỗi tệp một lệnh, vì `mock.module` của bun sống cả tiến trình; S3 chạy gói `apps/app` hai thứ tự `--randomize --seed` và so tập đỏ trước khi tin màu xanh.
 - design-pass 25/09 (`design-pass.md`): bản mẫu `/proto/cua-vao-dang-nhap`, 36 ảnh; một vá Nhóm 1 (ô lỗi có tiêu đề + biểu tượng), năm mục Nhóm 2 chờ Cổng Phạm vi — trong đó hướng của khối «Lần đầu vào?» («Đều nhau» hay «Tiến độ»).
+- Lint W6 của kit báo 8 chữ theo nghĩa khác với mục `_Avoid_` của `CONTEXT.md`: «ẩn» là ẩn phần tử bằng CSS (không phải lưu trữ); «khách» nằm trong chuỗi cũ «Mọi khách hàng, một chỗ.» mà vòng này bỏ; «quản trị» là vai quản trị của không gian làm việc (không phải trưởng đơn vị); «thuộc tính» là thuộc tính HTML (không phải trường); «điểm» là điểm Tab; «người xem» là người đang nhìn màn hình (không phải vai).
