@@ -315,3 +315,12 @@ evals:
     paths: [apps/api/src/okr/**, "apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, apps/api/test/okr-toan-canh.spec.ts, _acceptance/toan-canh-okr/rang/soi-ma.mjs]
     expected: "exit 0; hai bài. (a) API: mục tiêu M của phòng ban P; đọc okr.objective(M).trail (đếm n); trưởng P gọi okr.moHopTuan → ghi true; đọc lại okr.objective(M).trail → đúng n dòng, không dòng nào action mo-hop-tuan. Đối chứng dương: sửa tên M → trail n+1. (b) soi mã: mọi lời gọi okrTrail.findMany/count/groupBy trong apps/api/src có điều kiện objectiveId khác rỗng HOẶC loại action mo-hop-tuan (duyệt AST, in danh sách chỗ đọc và điều kiện của từng chỗ). CHIỀU ĐỎ: (a) bản sao moHopTuan ghi objectiveId của một mục tiêu trong đơn vị → trail n+1, bài in «dòng mo-hop-tuan lọt vào tab Vết»; (b) --chieu-do thêm một findMany theo cycleId không lọc → soi mã đỏ in tệp:dòng."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E31
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tco_cay_day_du
+    paths: [apps/api/src/okr/**, apps/api/test/okr-toan-canh.spec.ts, apps/api/test/okr-can-chinh.spec.ts]
+    expected: "exit 0; okr.cayCanChinh trả đúng cấu trúc okr.alignmentTree (so toEqual sau khi bỏ trường expected — cùng id, loai, objectiveId, children ở mọi tầng); nút mục tiêu mang expected bằng okr.objective(id).expected; nút KR số mang expected của mục tiêu cha; nút KR mốc không có vạch (null). Bài dungCayCanChinh của lượt 3 (okr-can-chinh.spec) vẫn xanh không sửa. CHIỀU ĐỎ: bản sao gắn expected cho cả KR mốc → dòng [moc, \"khong vach\"] đỏ, bài in giá trị."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

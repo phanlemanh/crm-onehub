@@ -942,6 +942,10 @@ export class OkrService {
 	}
 
 	async alignmentTree(userId: string, cycleId: string) {
+		return dungCayCanChinh(await this.mucTieuCuaCay(userId, cycleId));
+	}
+
+	async mucTieuCuaCay(userId: string, cycleId: string) {
 		const q = await this.quyenOkr.quyen(userId);
 		const ky = await this.db.okrCycle.findUnique({
 			where: { id: cycleId },
@@ -970,7 +974,7 @@ export class OkrService {
 					userId,
 					q,
 				);
-		return dungCayCanChinh([...cha, ...cua, ...con]);
+		return [...cha, ...cua, ...con];
 	}
 
 	async docMucTieu(

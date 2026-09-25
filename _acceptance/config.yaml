@@ -217,6 +217,7 @@ executors:
     tco_dien_bien: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh-thuan.spec.ts -t dien-bien && bun test test/okr-toan-canh.spec.ts -t dien-bien && cd ../../packages/ui && bun test --preload ./test/setup-dom.ts ./test/target-line-chart.dom.tsx"'
     tco_khoi_cua_toi: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t khoi-cua-toi"'
     tco_suc_khoe: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t suc-khoe"'
+    tco_cay_day_du: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t cay-day-du && bun test test/okr-can-chinh.spec.ts"'
     tco_pham_vi: 'bun run test -- "cd apps/api && bun test test/okr-toan-canh.spec.ts -t pham-vi && bun test test/vai-chi-okr.spec.ts -t ma-tran-trpc"'
     tco_ui_cay: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/tree-nav.dom.tsx'
     tco_ui_thanh_phan: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/okr-thanh-phan.dom.tsx'

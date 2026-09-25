@@ -3,7 +3,7 @@ import {
 	TRANG_THAI_MUC_TIEU,
 } from "@crm/validation/okr-muc-tieu";
 import { z } from "zod";
-import { donViChon, mucTieuOutput } from "./okr.contracts";
+import { donViChon, mucTieuOutput, type NutCanChinh } from "./okr.contracts";
 import { OKR_XEM } from "./okr-xem.config";
 
 const ma = z.string().trim().min(1).max(120);
@@ -38,6 +38,33 @@ export const danhSachOutput = z.object({
 });
 
 export const cycleOnlyInput = z.object({ cycleId: ma });
+
+export type NutCayDayDu = Omit<NutCanChinh, "children"> & {
+	expected: number | null;
+	children: NutCayDayDu[];
+};
+
+export const nutCayDayDu: z.ZodType<NutCayDayDu> = z.lazy(() =>
+	z.object({
+		id: z.string(),
+		loai: z.enum(["muc-tieu", "kr"]),
+		objectiveId: z.string(),
+		unitName: z.string(),
+		title: z.string(),
+		progress: z.number(),
+		status: z.enum(TRANG_THAI_MUC_TIEU),
+		kind: z.enum(LOAI_MUC_TIEU),
+		gop: z.number(),
+		lapLai: z.boolean(),
+		expected: z.number().nullable(),
+		children: z.array(nutCayDayDu),
+	}),
+);
+
+export const cayCanChinhOutput = z.object({
+	roots: z.array(nutCayDayDu),
+	chuaCanChinh: z.array(nutCayDayDu),
+});
 
 const capHang = z.enum(["goc", "bo-phan", "phong-ban"]);
 
@@ -81,6 +108,7 @@ export const sucKhoeOutput = z.object({
 	hang: z.array(hangSucKhoe),
 });
 
+export type CayCanChinhOutput = z.infer<typeof cayCanChinhOutput>;
 export type LocDanhSach = z.infer<typeof locDanhSach>;
 export type DanhSachInput = z.infer<typeof danhSachInput>;
 export type DanhSachOutput = z.infer<typeof danhSachOutput>;

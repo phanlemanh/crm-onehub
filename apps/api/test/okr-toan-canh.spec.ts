@@ -493,3 +493,70 @@ describe("pham-vi", () => {
 		]);
 	});
 });
+
+type NutDoc = {
+	id: string;
+	loai: string;
+	objectiveId: string;
+	expected?: number | null;
+	children: NutDoc[];
+};
+
+type CayNut = { roots: NutDoc[]; chuaCanChinh: NutDoc[] };
+
+const boKyVong = (n: NutDoc): Omit<NutDoc, "expected"> => ({
+	id: n.id,
+	loai: n.loai,
+	objectiveId: n.objectiveId,
+	children: n.children.map(boKyVong),
+});
+
+describe("cay-day-du", () => {
+	test("cay-day-du: cung cau truc cay cu, them ky vong cua muc tieu, KR moc khong vach", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("tco-cay");
+		const G = await taoMucTieu(
+			quy,
+			{ level: "onehub" },
+			phien.quan.nguoi,
+			"quan",
+		);
+		const krG = await taoKr(G, phien.quan.nguoi, "quan");
+		const moc = ok<Tra>(
+			await goi("okr.createKeyResult", {
+				objectiveId: G,
+				title: ma("moc"),
+				kind: "moc",
+				ownerUserId: phien.quan.nguoi,
+				startValue: 0,
+				targetValue: 1,
+				currentValue: 0,
+				unit: "",
+				dueOn: null,
+				weight: 1,
+			}),
+			"kr moc",
+		).id;
+		await congBo(G, "quan");
+		const cu = await doc<CayNut>("okr.alignmentTree", "okr", { cycleId: quy });
+		const moi = await doc<CayNut>("okr.cayCanChinh", "okr", { cycleId: quy });
+		expect({
+			roots: moi.roots.map(boKyVong),
+			chuaCanChinh: moi.chuaCanChinh.map(boKyVong),
+		}).toEqual({
+			roots: cu.roots.map(boKyVong),
+			chuaCanChinh: cu.chuaCanChinh.map(boKyVong),
+		});
+		const kv = (
+			await doc<{ expected: number | null }>("okr.objective", "quan", { id: G })
+		).expected;
+		const goc = moi.roots.find((n) => n.id === G);
+		expect(goc?.expected).toBe(kv);
+		expect(
+			goc?.children.map((c) => [c.id, c.expected ?? "khong vach"]),
+		).toEqual([
+			[krG, kv],
+			[moc, "khong vach"],
+		]);
+	});
+});

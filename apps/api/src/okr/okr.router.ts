@@ -44,6 +44,7 @@ import {
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
 import {
+	cayCanChinhOutput,
 	cycleOnlyInput,
 	danhSachInput,
 	danhSachOutput,
@@ -349,5 +350,17 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof cycleOnlyInput>,
 	) {
 		return this.xem.sucKhoe(ctx.user.id, input.cycleId);
+	}
+
+	@Query({
+		input: cycleOnlyInput,
+		output: cayCanChinhOutput,
+		meta: restMeta("GET", "/okr/alignment-tree-full", TAG),
+	})
+	cayCanChinh(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof cycleOnlyInput>,
+	) {
+		return this.xem.cayCanChinh(ctx.user.id, input.cycleId);
 	}
 }

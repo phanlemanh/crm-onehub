@@ -8,13 +8,16 @@ import {
 import { ForbiddenException, Inject, Injectable } from "@nestjs/common";
 import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
+import { dungCayCanChinh } from "./can-chinh";
 import { demMatLoc, type MucTieuGon } from "./danh-sach";
-import type { DonViChon } from "./okr.contracts";
+import type { DonViChon, NutCanChinh } from "./okr.contracts";
 import { OkrService } from "./okr.service";
 import { OkrAccessService, type Quyen } from "./okr-access.service";
 import { OKR } from "./okr-config";
 import { OKR_XEM } from "./okr-xem.config";
 import type {
+	CayCanChinhOutput,
+	NutCayDayDu,
 	DanhSachInput,
 	DanhSachOutput,
 	LocDanhSach,
@@ -229,5 +232,31 @@ export class OkrXemService {
 			);
 		}
 		return gopSucKhoe(cayGon(q), rieng, OKR.tenGoc);
+	}
+
+	async cayCanChinh(
+		userId: string,
+		cycleId: string,
+	): Promise<CayCanChinhOutput> {
+		const mts = await this.okr.mucTieuCuaCay(userId, cycleId);
+		const kyVong = new Map(mts.map((m) => [m.id, m.expected]));
+		const laMoc = new Set(
+			mts.flatMap((m) =>
+				m.keyResults.filter((k) => k.kind === "moc").map((k) => k.id),
+			),
+		);
+		const gan = (n: NutCanChinh): NutCayDayDu => ({
+			...n,
+			expected:
+				n.loai === "kr" && laMoc.has(n.id)
+					? null
+					: (kyVong.get(n.objectiveId) ?? null),
+			children: n.children.map(gan),
+		});
+		const cay = dungCayCanChinh(mts);
+		return {
+			roots: cay.roots.map(gan),
+			chuaCanChinh: cay.chuaCanChinh.map(gan),
+		};
 	}
 }
