@@ -257,7 +257,7 @@ human_signoff:
     (lượt trước, chưa gộp vào `onehub`) đứng dưới nhánh này; dùng đúng gốc VONG.truoc thì
     tệp đó không nằm trong diff của lượt này, nên không phải khối thiếu dòng. Không khối
     nào dừng ở bậc 5 (xác nhận bởi cả bảng và cả ba judge).
-  human_override:
+  human_override: Đạt — Manh Phan 2026-09-25
 
 - eval: E19
   run_id: dokr-e19-migrationchithem
