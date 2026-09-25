@@ -283,9 +283,9 @@ describe("xoa", () => {
 
 		for (const [target, message] of refusals) {
 			const run = cli(["--xoa", "--kho", target]);
+			expect(await exists(target), "kho khong dau bi xoa").toBe(true);
 			expect(run.status, `--xoa ${target}`).toBe(2);
 			expect(run.stderr).toMatch(message);
-			expect(await exists(target), "kho khong dau bi xoa").toBe(true);
 		}
 	});
 });

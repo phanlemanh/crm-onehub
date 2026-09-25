@@ -20,6 +20,7 @@ import {
 	MA,
 	mayChu,
 	RA,
+	thoatKhongDo,
 	vanTay,
 	xoaKhoGia,
 } from "./kho-gia.mjs";
@@ -423,10 +424,17 @@ if (!CHE_DO[cheDo]) {
 	process.exit(3);
 }
 
-mayChu();
 try {
+	mayChu();
 	await CHE_DO[cheDo]();
+} catch (loi) {
+	await donPhien();
+	thoatKhongDo(loi);
 } finally {
+	await donPhien();
+}
+
+async function donPhien() {
 	for (const ten of khoGia) await xoaKhoGia(ten);
 	for (const cay of cayDaDung) {
 		for (const ten of [measureDatabaseName(cay), templateDatabaseName(cay)]) {
@@ -437,5 +445,7 @@ try {
 			force: true,
 		});
 	}
+	khoGia.length = 0;
+	cayDaDung.clear();
 }
 ketThuc(`phien ${cheDo}`);

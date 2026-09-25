@@ -16,6 +16,7 @@ import {
 	lech,
 	MA,
 	mayChu,
+	thoatKhongDo,
 	truyVan,
 	vanTay,
 	xoaKhoGia,
@@ -67,8 +68,9 @@ async function mot(ten, url, chiIn) {
 	khang(doi.length === 0, `[${ten}] dau van tay kho chung doi`, doi.join(", "));
 }
 
-const gia = await dungKhoGia("okr");
+let gia = null;
 try {
+	gia = await dungKhoGia("okr");
 	await mot("kho chung gia", gia.url, false);
 
 	const that = databaseUrlCua(new URL(mayChu()).pathname.replace(/^\//, ""));
@@ -90,8 +92,12 @@ try {
 			);
 		await mot(`kho crm that (${chuKy[0].n} chu ky la)`, that, coNguoi);
 	}
+} catch (loi) {
+	if (gia) await xoaKhoGia(gia.ten);
+	gia = null;
+	thoatKhongDo(loi);
 } finally {
-	await xoaKhoGia(gia.ten);
+	if (gia) await xoaKhoGia(gia.ten);
 	for (const ten of [measureDatabaseName(CAY), templateDatabaseName(CAY)]) {
 		await dropMeasureDatabase(mayChu(), ten).catch(() => {});
 	}

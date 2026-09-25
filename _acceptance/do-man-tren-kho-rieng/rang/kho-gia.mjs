@@ -44,8 +44,15 @@ export function ketThuc(ten) {
 	process.exit(sai > 0 ? 1 : 0);
 }
 
+export class KhongDoDuoc extends Error {}
+
 export function khongDo(cau) {
-	console.log(`KHONG DO DUOC: ${cau}`);
+	throw new KhongDoDuoc(cau);
+}
+
+export function thoatKhongDo(loi) {
+	if (!(loi instanceof KhongDoDuoc)) throw loi;
+	console.log(`KHONG DO DUOC: ${loi.message}`);
 	process.exit(2);
 }
 

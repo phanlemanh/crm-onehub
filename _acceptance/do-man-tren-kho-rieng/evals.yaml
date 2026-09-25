@@ -36,9 +36,9 @@ evals:
       bat dau "crm phien do" va mang gio ISO trong 10 phut. Dong cuoi stdout cua CLI
       `bun scripts/measure-db.ts --tao --ten thu<runid>` bang URL tra ve. Dau van tay kho chung
       sau == truoc (toEqual tren doi tuong bang -> {dem, md5}). Don kho trong afterAll.
-      CHIEU DO (pha thu o S3): seed chay voi NODE_ENV=test bi ro ra -> seed ghi nham kho luot
-      test, ca do voi "dau van tay kho chung doi" in ten bang doi; bo buoc migrate deploy cua kho
-      mau -> ca do "thieu migration" in migration dau tien thieu.
+      CHIEU DO (pha thu o S3, da chay 26/09): seed chay voi NODE_ENV=test -> seed ghi nham kho
+      luot test, ca do "thieu deal seed-deal-wise-1"; bo buoc migrate deploy cua kho mau -> ca do
+      "prisma/seed.ts exited 1" (P2021, bang chua co).
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E3
@@ -90,9 +90,9 @@ evals:
       that. MA TRAN VIET TRUOC: tap kho con lai trong nam ten BANG DUNG [non, khong-dau,
       mau-con-dung] va gia tri tra ve BANG DUNG [gia, mau-bo] (sap xep). Doi chung duong tren
       cung fixture: goi truoc voi now som hon 2 phut -> tra ve rong, ca nam con.
-      CHIEU DO (pha thu o S3): bo dieu kien tuoi -> kho non bi xoa, ca do "kho non tuoi bi xoa";
-      bo loc COMMENT -> kho khong-dau bi xoa, ca do "kho khong dau bi xoa"; bo gio dung khoi
-      moc tuoi -> mau-con-dung bi xoa, ca do "kho mau con dung bi xoa".
+      CHIEU DO (pha thu o S3, da chay 26/09): bo dieu kien tuoi -> ca do "kho non bi xoa khi quet
+      truoc han"; bo loc COMMENT -> ca do "kho khong-dau bi xoa khi quet truoc han"; bo gio dung
+      khoi moc tuoi -> ca do "kho mau-con-dung bi xoa khi quet truoc han".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E6
@@ -114,8 +114,8 @@ evals:
       nghe (lsof rong), kho do khong con trong pg_database, dau van tay kho chung sau == truoc.
       CHIEU DO (pha thu o S3): bo buoc xoa kho trong finally -> do "kho do con sau phien"; lenh
       do ep APP_URL ve mot cong khong ai nghe -> canhCay khong-noi-duoc, do "may chu khong phuc
-      vu cay nay"; phien chay dev:session khong kem DATABASE_URL cua kho do -> do "NGUOI khong co
-      trong kho do".
+      vu cay nay"; phien chay dev:session khong kem DATABASE_URL cua kho do -> chinh phien chan
+      som: thoat 2 "khong co hang workspace sau dev:session", rang thoat 2 KHONG DO DUOC.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
@@ -170,9 +170,11 @@ evals:
       -> APP_URL trong lenh do == APP_URL cua phien ngoai (lenh do ghi ca hai), stderr khong co
       dong cho khoa, ma 0. (c) DATABASE_URL = kho mau crm_dmk_td_<id>_mau_do (da co sau ca a)
       -> lenh do thay ten kho _do (khong phai _mau_do), ma 0, dau van tay kho mau truoc == sau.
-      CHIEU DO (pha thu o S3): bo re-exec trong tien-de -> ca (a) do "dau van tay kho chung doi"
-      (tien-de dat khoa gia vao kho chung); bo nhan dien kho _do -> ca (b) treo cho khoa, rang
-      dung sau tran thoi gian va in "tien-de long dung phien thu hai".
+      CHIEU DO (pha thu o S3, da chay 26/09): bo re-exec trong tien-de -> tien-de chay thang tren
+      kho chung gia, khong co NGUOI nen thoat 2 truoc khi ghi; ca (a) do "ca a: lenh do chay tren
+      kho do cua cay"; bo nhan dien kho _do ca o tien-de lan o duong long cua phien-do (mot mat
+      thi mat kia van do) -> phien long nhau cho khoa cua chinh minh, rang giet o tran 6 phut va
+      in "tien-de long dung phien thu hai".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E10
