@@ -169,7 +169,7 @@ evals:
     cmd: config:executors.script.vckc_do_khung
     steps:
       - "Cap cong 3500/3501 (ban-do-cot-app / ban-do-cot-api trong .claude/launch.json). Cong da co may chu: chay `APP_URL=http://localhost:3500 bun _acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs` — ma 0 thi dung luon; ma khac 0 thi BLOCKED goi ten tien trinh giu cong, khong giet. Cong trong: dung api va app cua CAY DANG XET bang hai muc do trong launch.json"
-      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/vung-cuon-la-khoi-chua/evidence dat tuong minh: lenh cua vckc_do_khung — mot-luot.sh xep hang voi moi lan do khac, tien-de.mjs dat khoa nghien cuu linh canh roi don; do-khung.mjs tu chan cay va chup vao evidence/"
+      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000, NGUYEN VAN dong lenh nay (khong rut gon, khong goi thang do-khung.mjs — thieu mot-luot.sh thi thieu tien-de va trang bi day sang /onboarding/research): BANG_CHUNG=_acceptance/vung-cuon-la-khoi-chua/evidence APP_URL=http://localhost:3500 API_URL=http://localhost:3501 NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh \"bun _acceptance/vung-cuon-la-khoi-chua/rang/do-khung.mjs\" — mot-luot.sh xep hang voi moi lan do khac (co the cho toi 4 phut sau luot may), do-khung.mjs tu chan cay va chup vao evidence/"
       - "Doc dong KET LUAN cuoi: ma 0 = khong dong SAI; ma 2 = khong do duoc; ma 1 = co dong SAI"
       - "Mo sau anh va doi chieu bang mat voi Expected"
     inputs:
