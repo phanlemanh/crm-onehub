@@ -43,13 +43,18 @@ import {
 	updateObjectiveInput,
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
+import { danhSachInput, danhSachOutput } from "./okr-xem.contracts";
+import { OkrXemService } from "./okr-xem.service";
 
 const TAG = ["OKR"];
 
 @Router({ alias: "okr" })
 @UseMiddlewares(PhamViOkrMiddleware)
 export class OkrRouter {
-	constructor(@Inject(OkrService) private readonly okr: OkrService) {}
+	constructor(
+		@Inject(OkrService) private readonly okr: OkrService,
+		@Inject(OkrXemService) private readonly xem: OkrXemService,
+	) {}
 
 	@Query({ output: okrAccessOutput, meta: restMeta("GET", "/okr/access", TAG) })
 	access(@Ctx() ctx: AuthedTrpcContext) {
@@ -302,5 +307,17 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof okrImportApplyInput>,
 	) {
 		return this.okr.applyImport(ctx.user.id, input);
+	}
+
+	@Query({
+		input: danhSachInput,
+		output: danhSachOutput,
+		meta: restMeta("POST", "/okr/units/list", TAG),
+	})
+	danhSach(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof danhSachInput>,
+	) {
+		return this.xem.danhSach(ctx.user.id, input);
 	}
 }

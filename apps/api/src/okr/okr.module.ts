@@ -4,9 +4,10 @@ import { TrpcModule } from "../trpc/trpc.module";
 import { OkrRouter } from "./okr.router";
 import { OkrService } from "./okr.service";
 import { OkrAccessService } from "./okr-access.service";
+import { OkrXemService } from "./okr-xem.service";
 
 @Module({
 	imports: [TrpcModule, ToChucModule],
-	providers: [OkrAccessService, OkrService, OkrRouter],
+	providers: [OkrAccessService, OkrService, OkrXemService, OkrRouter],
 })
 export class OkrModule {}

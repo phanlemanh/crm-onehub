@@ -973,7 +973,7 @@ export class OkrService {
 		return dungCayCanChinh([...cha, ...cua, ...con]);
 	}
 
-	private async docMucTieu(
+	async docMucTieu(
 		tx: Tx | Db,
 		where: Prisma.OkrObjectiveWhereInput,
 		viewerId: string,
