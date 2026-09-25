@@ -3,10 +3,10 @@ schema_version: 1
 slug: toan-canh-okr
 feature: Toàn cảnh OKR và họp tuần — danh sách theo đơn vị có lọc ở máy chủ, cây căn chỉnh toàn công ty đi bằng bàn phím, bảng họp tuần xếp theo thứ đáng bàn, toàn cảnh cho lãnh đạo có heatmap, khối OKR trên Tổng quan và trang OKR của một người, màn sức khoẻ chương trình cho quản trị; các biến thể packages/ui từ bản mẫu
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan — uỷ quyền phiên điều phối 2026-09-24
+decided_at: 2026-09-26T04:00:00Z
 prototype:
   base_commit: 100847e8a747d474b79bc10adb82a94e06313f82
   disposition: keep
@@ -55,9 +55,9 @@ giá trị, mức tự tin, ghi chú).
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: trưởng đơn vị có chạy được họp tuần chỉ trên màn của CRM, không mở bảng tính hay màn khác, không?
-- Kết quả nào là SỐNG: [đề xuất] ở phiên nghiệm thu R1, ≥ 2/3 trưởng đơn vị dự phiên chạy xong họp tuần của đơn vị mình chỉ trên bảng họp tuần — bấm giờ, trung vị ≤ 15 phút cho một đơn vị ≤ 12 KR; và từ tuần thứ ba của quý 4, ≥ 60% đơn vị có trưởng mở bảng họp tuần ít nhất một lần mỗi tuần (số từ nhật ký tRPC của thủ tục bảng họp tuần theo `userId`).
-- Kết quả nào là CHẾT: [đề xuất] trưởng đơn vị phải mở màn khác hoặc bảng tính để biết KR nào đáng bàn; hoặc < 30% đơn vị mở bảng họp tuần ở tuần thứ ba.
-- Timebox: đo ở phiên nghiệm thu R1 ngày 2026-11-13; số nhật ký lấy tuần 2026-11-09.
+- Kết quả nào là SỐNG: ở phiên nghiệm thu R1 (2026-11-13), ≥ 2/3 trưởng đơn vị dự phiên chạy xong họp tuần của đơn vị mình chỉ trên bảng họp tuần — bấm giờ, trung vị ≤ 15 phút cho một đơn vị ≤ 12 KR; và ở tuần thứ ba của lịch đo lượt 4 (ba tuần bắt đầu 2026-11-02, 2026-11-09, 2026-11-16), ≥ 60% đơn vị có trưởng mở bảng họp tuần ít nhất một lần trong tuần bắt đầu 2026-11-16. Số lần mở đếm từ nguồn bền đọc lại được sau nhiều tuần (bảng chỉ thêm — xem Đường đo của hợp đồng), không từ nhật ký tRPC.
+- Kết quả nào là CHẾT: trưởng đơn vị phải mở màn khác hoặc bảng tính để biết KR nào đáng bàn; hoặc < 30% đơn vị có trưởng mở bảng họp tuần trong tuần bắt đầu 2026-11-16.
+- Timebox: phần bấm giờ đo ở phiên nghiệm thu R1 ngày 2026-11-13; phần đếm mở bảng đọc số ngày 2026-11-23.
 
 ## Kết quả prototype
 
@@ -78,13 +78,14 @@ trước Cổng Phạm vi.
 
 ## Cổng 0
 
-- **decision:** chờ người ký (uỷ quyền phiên điều phối). Máy khuyên **build**: lượt đã có trong lộ trình, hạn R1 2026-10-23.
+- **decision = build.** Căn cứ: lộ trình OKR mục 5 «Lượt 5», hạn R1 2026-10-23. Quyết 2026-09-26 bởi phiên điều phối theo uỷ quyền chủ kho ngày 2026-09-24.
+- **Ngưỡng chốt cùng lúc ký:** gỡ nhãn đề xuất, kèm hai chỉnh của người ký — nguồn đếm «trưởng mở bảng họp tuần» phải bền (sự kiện telemetry hoặc bảng chỉ thêm, chọn ở S1, có phép đo câu đếm trên dữ liệu gieo); «tuần thứ ba» neo vào lịch đo lượt 4 (02/11, 09/11, 16/11), đọc số ngày 23/11. Giả định 4 và 5 để Cổng Phạm vi quyết. Design-pass không đồng bộ cho bốn bề mặt chưa có bản mẫu: đồng ý.
 - **disposition = keep.** Bản mẫu `ban-mau-okr` ở lại kho; lượt này thêm một module bản mẫu cho bốn bề mặt còn thiếu.
 
 ## Thước đo thành công → ứng viên criterion
 
 - Thời gian họp tuần trên màn → AC bảng họp tuần xếp đúng thứ đáng bàn, theo KR.
-- Số lần mở bảng họp tuần theo trưởng đơn vị → thủ tục riêng cho bảng họp tuần, dòng nhật ký tRPC có `userId` (đã có sẵn ở `LoggingMiddleware`).
+- Số lần mở bảng họp tuần theo trưởng đơn vị → một dòng chỉ thêm mỗi người × đơn vị × tuần khi mở bảng, đọc lại bằng một câu đếm có phép đo trên dữ liệu gieo.
 
 ## Bảng nợ kế thừa (CHỈ khi disposition: keep)
 
