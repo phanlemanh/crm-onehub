@@ -1,3 +1,4 @@
+import { congNghienCuu } from "@crm/validation/cong-nghien-cuu";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 import { API_URL } from "@/lib/env";
@@ -23,10 +24,6 @@ const workspaceAnswer = z
 	})
 	.catch({ onboarded: null, canRename: null, slug: null });
 
-const researchKeyAnswer = z
-	.object({ configured: z.boolean().nullable().catch(null) })
-	.catch({ configured: null });
-
 async function read(request: NextRequest, procedure: string) {
 	const cookie = request.headers.get("cookie");
 
@@ -51,6 +48,7 @@ export type WorkspaceGate = {
 	gate: Gate;
 	slug: string | null;
 	inWorkspace: boolean | null;
+	viewerRole: string | null;
 };
 
 export async function readWorkspaceGate(
@@ -59,9 +57,10 @@ export async function readWorkspaceGate(
 	const workspace = workspaceAnswer.parse(await read(request, "workspace.get"));
 
 	const slug = workspace.slug;
+	const viewerRole = workspace.viewerRole ?? null;
 
 	if (workspace.onboarded === null) {
-		return { gate: "unknown", slug, inWorkspace: null };
+		return { gate: "unknown", slug, inWorkspace: null, viewerRole };
 	}
 
 	return {
@@ -72,15 +71,10 @@ export async function readWorkspaceGate(
 		slug,
 		inWorkspace:
 			workspace.viewerRole === undefined ? null : workspace.viewerRole !== null,
+		viewerRole,
 	};
 }
 
 export async function readResearchGate(request: NextRequest): Promise<Gate> {
-	const { configured } = researchKeyAnswer.parse(
-		await read(request, "settings.researchKey"),
-	);
-
-	if (configured === null) return "unknown";
-
-	return configured ? "settled" : "required";
+	return congNghienCuu(await read(request, "settings.researchKey"));
 }

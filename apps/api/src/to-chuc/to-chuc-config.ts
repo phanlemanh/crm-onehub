@@ -22,6 +22,12 @@ export const TO_CHUC = {
 		chuaLuuTru: "Chỉ xoá hẳn được đơn vị đã lưu trữ.",
 		boPhanConTro: "Bộ phận còn phòng ban trỏ tới nên không xoá hẳn được.",
 		phongBanConNguoiXoa: "Phòng ban còn người trỏ tới nên không xoá hẳn được.",
+		phongBanConBuoc:
+			"Phòng ban còn bước kế hoạch trỏ tới nên không xoá hẳn được.",
+		phongBanTrongKhuon: (khuon: readonly string[]) =>
+			`Phòng ban này còn nằm trong khuôn ${khuon.join(", ")} — sửa khuôn trước.`,
+		phongBanConTrongKhuon: (khuon: readonly string[]) =>
+			`Phòng ban này còn nằm trong khuôn ${khuon.join(", ")} — xoá vĩnh viễn khuôn đó hoặc bỏ phòng ban khỏi khuôn trước.`,
 		khongPhaiThanhVien: (id: string) =>
 			`Người ${id} không phải thành viên đang hoạt động.`,
 		truongNgoaiPhongBan: "Trưởng phòng ban phải là người của phòng ban đó.",

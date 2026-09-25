@@ -10,7 +10,7 @@ import {
 } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext, BaseTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViChungMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { SessionOnlyMiddleware } from "../trpc/middlewares/session-only.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
@@ -28,7 +28,7 @@ function headersOf(ctx: BaseTrpcContext): Headers {
 }
 
 @Router({ alias: "apiKeys" })
-@UseMiddlewares(AuthMiddleware, SessionOnlyMiddleware)
+@UseMiddlewares(PhamViChungMiddleware, SessionOnlyMiddleware)
 export class ApiKeysRouter {
 	constructor(
 		@Inject(ApiKeysService) private readonly apiKeys: ApiKeysService,

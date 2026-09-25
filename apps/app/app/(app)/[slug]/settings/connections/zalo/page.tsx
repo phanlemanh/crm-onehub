@@ -1,3 +1,4 @@
+import { NHAC } from "@crm/db/onboarding-nhac";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageShellLoading } from "@/components/page-shell";
@@ -52,7 +53,9 @@ async function ZaloConnectionPageContent({ params }: ZaloConnectionPageProps) {
 			du={{
 				bat: xuong.bat,
 				tenBot: xuong.tenBot,
-				pollCuoi: xuong.pollCuoi ? ngayGio(locale, xuong.pollCuoi) : null,
+				pollCuoi: xuong.pollCuoi
+					? ngayGio(locale, xuong.pollCuoi, NHAC.muiGio)
+					: null,
 				im: xuong.im,
 				daNoi: xuong.daNoi,
 				tong: xuong.tong,

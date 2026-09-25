@@ -9,6 +9,10 @@ const en = {
 			"What the team has closed, what is still in play, and what needs you today.",
 	},
 	scope: { label: "Whose numbers to show", me: "Me", everyone: "Everyone" },
+	chiOkr: {
+		moTa: "The OKR area opens in a later release. Until then you can connect your reminder channel.",
+		noiKenh: "Open morning reminders",
+	},
 	stats: {
 		closedWon: "Closed won this month",
 		vsLastMonth: "vs. last month",
@@ -92,6 +96,10 @@ const vi = {
 		everyone: "Đội đã chốt được gì, còn gì đang mở, và hôm nay cần bạn ở đâu.",
 	},
 	scope: { label: "Xem số của ai", me: "Tôi", everyone: "Cả đội" },
+	chiOkr: {
+		moTa: "Khu OKR mở ở lượt sau. Trong lúc chờ, bạn có thể nối kênh nhắc.",
+		noiKenh: "Mở Nhắc buổi sáng",
+	},
 	stats: {
 		closedWon: "Chốt được tháng này",
 		vsLastMonth: "so với tháng trước",

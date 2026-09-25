@@ -1,0 +1,34 @@
+{
+  "feature_plain": "Phòng ban chỉ còn một đường ghi với một bộ luật: mọi thao tác ghi phòng ban đi qua cây tổ chức, và màn hình không còn báo «xoá được» cho một phòng ban máy chủ sẽ từ chối.",
+  "decisions": [
+    {"id": "E9", "q": "Bài kiểm của chín hồ sơ cũ có giữ nguyên mọi lời hứa không?", "why": "Hội đồng không thấy khẳng định nào bị bỏ hay nới, và không tệp nào giảm số khẳng định. Họ chỉ không đọc được sổ của chín hồ sơ; máy đã kiểm: cả chín có dòng xem lại nêu đúng tệp kiểm của mình."}
+  ],
+  "analyst_plain": "",
+  "scope_plain": "Không đổi đường đọc danh sách phòng ban của Điều phối 30 ngày, không đổi luật tên của nhập hàng loạt, không đụng khuôn kế hoạch.",
+  "decisions_plain": [
+    {"id": "d-20260924T095502Z-1", "p": "Gỡ hẳn sáu đường ghi cũ, không giữ lối chuyển tiếp — đổi lại ai gọi đường cũ từ ngoài sẽ nhận «không có»."},
+    {"id": "d-20260924T095502Z-2", "p": "Điều kiện «xoá hẳn được» thành một luật duy nhất cho mọi chỗ đọc — đổi lại phần Điều phối mượn luật của cây tổ chức."},
+    {"id": "d-20260924T095502Z-3", "p": "Hai câu từ chối xoá phòng ban đổi sang chữ «xoá hẳn» — đổi lại hai câu ghim trong bài kiểm của hồ sơ cây tổ chức đổi theo."},
+    {"id": "d-20260924T095502Z-4", "p": "Sửa bài kiểm của các hồ sơ đã ký cho đi đường mới rồi ghim lại bằng máy — đổi lại người phải soi rằng không bài nào bị nới."},
+    {"id": "d-20260924T095502Z-5", "p": "KHÔNG làm buổi thiết kế trên bản bấm được — màn không đổi hình."},
+    {"id": "d-20260924T095502Z-6", "p": "KHÔNG viết đặc tả trải nghiệm — không có màn hay nhãn mới."},
+    {"id": "d-20260924T095503Z-7", "p": "KHÔNG chụp màn thật — thứ đổi là lời gọi, đo bằng bài kiểm ghi lời gọi và quét mã."},
+    {"id": "d-20260924T095503Z-8", "p": "KHÔNG làm luật tên dài cho nhập hàng loạt — để hợp đồng riêng."},
+    {"id": "d-20260924T095503Z-9", "p": "KHÔNG chuyển các màn Điều phối sang đọc phòng ban từ cây."},
+    {"id": "d-20260924T100034Z-10", "p": "Bài sắp xếp phòng ban giữ nguyên cả thứ tự lẫn vị trí tuyệt đối."},
+    {"id": "d-20260924T102117Z-12", "p": "Chuyển bài kiểm sang đường mới trước rồi mới gỡ đường cũ, làm tuần tự — đổi lại không rút thời gian bằng chạy song song."},
+    {"id": "d-20260924T102117Z-13", "p": "Bài «tên trống bị từ chối» của nối bốn nút đo câu tiếng Việt của cây kèm vế «không ghi hàng nào» — chờ duyệt, rồi đã được chủ kho duyệt."},
+    {"id": "d-20260924T154445Z-14", "p": "Tạm dừng vòng chờ vòng dựng lại màn Tổ chức gộp trước, để hai PR khỏi đè nhau."},
+    {"id": "d-20260924T154916Z-15", "p": "Chủ kho uỷ quyền phiên điều phối ký các cổng còn lại và gộp PR của vòng này."},
+    {"id": "d-20260924T154916Z-16", "p": "Chủ kho chấp thuận ngoại lệ bài «tên trống»."},
+    {"id": "d-20260924T212040Z-17", "p": "Mở lại hợp đồng theo màn Tổ chức mới: chỗ bấm lưu trữ đổi, tập hồ sơ phải ghim thành tám."},
+    {"id": "d-20260924T212142Z-19", "p": "Duyệt kế hoạch sáu việc, và thước quét mã mở rộng sang mọi ứng dụng kể cả tác nhân."},
+    {"id": "d-20260924T222113Z-20", "p": "Lệnh lưu trữ phòng ban trả thêm «xoá hẳn được hay không» để giữ nguyên lời hứa của hồ sơ khuôn mặt bộ phận."},
+    {"id": "d-20260924T224949Z-21", "p": "Thử sửa thước của hai hồ sơ khác cho khớp cây thật — một bản sửa sau bị bỏ vì hồ sơ đó đã khép."},
+    {"id": "d-20260924T225905Z-22", "p": "Hai hồ sơ «đã chấm bởi thực tế» không ghim lại theo luật đóng hồ sơ; thước của Điều phối trả về nguyên trạng."},
+    {"id": "d-20260925T024331Z-23", "p": "Duyệt chỉnh chữ tiêu chí ghim lại: hồ sơ đã khép miễn ghim với hai điều kiện kiểm được."},
+    {"id": "d-20260925T025318Z-25", "p": "Sửa lỗi cộng trong mô tả phép đo ghim lại."},
+    {"id": "d-20260925T025354Z-26", "p": "Thêm câu hỏi cho hội đồng chấm, không đổi điều được chấm."},
+    {"id": "d-20260925T030827Z-27", "p": "Duyệt nâng tập hồ sơ phải ghim lên chín, thêm hồ sơ vai chỉ OKR — bài kiểm của nó phủ luôn ba thủ tục mới."}
+  ]
+}

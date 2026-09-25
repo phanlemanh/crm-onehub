@@ -27,11 +27,11 @@ import {
 	templateListOutput,
 	templateUpdateInput,
 } from "../../api/src/onboarding/onboarding.contracts";
-import { ONBOARDING } from "../../api/src/onboarding/onboarding-config";
 import {
 	orgDepartmentMoveInput,
 	orgRenameInput,
 } from "../../api/src/to-chuc/to-chuc.contracts";
+import { TO_CHUC } from "../../api/src/to-chuc/to-chuc-config";
 
 type Buoc = {
 	label: string;
@@ -240,7 +240,30 @@ function orgMock() {
 				},
 			),
 		),
-		createDepartment: khong("orgCreateDepartment"),
+		createDepartment: thuTuc(
+			"createDepartment",
+			khongDoc,
+			ghi("createDepartment", () => {}),
+		),
+		archiveDepartment: thuTuc(
+			"archiveDepartment",
+			khongDoc,
+			ghi<VaoId>("archiveDepartment", (v) => datBoPhan(v.id, { luuTru: true })),
+		),
+		restoreDepartment: thuTuc(
+			"restoreDepartment",
+			khongDoc,
+			ghi<VaoId>("restoreDepartment", (v) =>
+				datBoPhan(v.id, { luuTru: false }),
+			),
+		),
+		purgeDepartment: thuTuc(
+			"purgeDepartment",
+			khongDoc,
+			ghi<VaoId>("purgeDepartment", (v) => {
+				boPhan = boPhan.filter((d) => d.id !== v.id);
+			}),
+		),
 		createDivision: khong("createDivision"),
 		renameDivision: khong("renameDivision"),
 		reorderDivisions: khong("reorderDivisions"),
@@ -264,48 +287,6 @@ mock.module("@/lib/trpc/client", () => ({
 			),
 			listTemplates: thuTuc("listTemplates", (v?: { archived?: boolean }) =>
 				dsKhuon(v?.archived === true),
-			),
-			createDepartment: thuTuc(
-				"createDepartment",
-				khongDoc,
-				ghi("createDepartment", () => {}),
-			),
-			updateDepartment: thuTuc(
-				"updateDepartment",
-				khongDoc,
-				ghi<{ id: string; name: string }>("updateDepartment", (v) =>
-					datBoPhan(v.id, { name: v.name }),
-				),
-			),
-			reorderDepartments: thuTuc(
-				"reorderDepartments",
-				khongDoc,
-				ghi<{ ids: string[] }>("reorderDepartments", (v) => {
-					v.ids.forEach((id, viTri) => {
-						datBoPhan(id, { position: viTri });
-					});
-				}),
-			),
-			archiveDepartment: thuTuc(
-				"archiveDepartment",
-				khongDoc,
-				ghi<VaoId>("archiveDepartment", (v) =>
-					datBoPhan(v.id, { luuTru: true }),
-				),
-			),
-			restoreDepartment: thuTuc(
-				"restoreDepartment",
-				khongDoc,
-				ghi<VaoId>("restoreDepartment", (v) =>
-					datBoPhan(v.id, { luuTru: false }),
-				),
-			),
-			purgeDepartment: thuTuc(
-				"purgeDepartment",
-				khongDoc,
-				ghi<VaoId>("purgeDepartment", (v) => {
-					boPhan = boPhan.filter((d) => d.id !== v.id);
-				}),
 			),
 			createTemplate: thuTuc(
 				"createTemplate",
@@ -1099,7 +1080,7 @@ describe("luu-tru-bo-phan", () => {
 
 describe("bi-chan-luu-tru", () => {
 	test("bi-chan-luu-tru: may chu tu choi, bo phan o lai, thong diep hien", async () => {
-		const thongDiep = ONBOARDING.thongDiep.boPhanTrongKhuon(["San moi gioi"]);
+		const thongDiep = TO_CHUC.thongDiep.phongBanTrongKhuon(["San moi gioi"]);
 		boPhan = hai();
 		await moToChuc();
 		cheDo = new Map([["archiveDepartment", "loi"]]);

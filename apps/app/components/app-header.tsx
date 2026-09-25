@@ -36,6 +36,7 @@ import {
 	type Locale,
 } from "@/lib/locale/locale";
 import { khungUngDungMessages } from "@/lib/messages/khung-ung-dung";
+import { mucRailChoVai } from "@/lib/pham-vi-man";
 import { signOutAndRedirect } from "@/lib/sign-out";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -49,6 +50,9 @@ export function AppHeader({ user }: { user: User }) {
 	const workspaceUrl = useWorkspaceUrl();
 	const workspace = useQuery(trpc.workspace.get.queryOptions());
 	const label = workspaceLabel(workspace.data?.name);
+	const coHangLamGiau = mucRailChoVai(workspace.data?.viewerRole ?? null).some(
+		(muc) => muc.key === "companies",
+	);
 	const t = khungUngDungMessages(useLocale());
 
 	return (
@@ -77,7 +81,7 @@ export function AppHeader({ user }: { user: User }) {
 			</div>
 
 			<div className="ml-auto flex shrink-0 items-center gap-1.5">
-				<EnrichmentQueue />
+				{coHangLamGiau ? <EnrichmentQueue /> : null}
 				<UserMenu
 					user={user}
 					onSignOut={() => {

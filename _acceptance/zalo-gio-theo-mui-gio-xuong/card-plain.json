@@ -1,0 +1,11 @@
+{
+  "feature_plain": "Màn Kết nối › Zalo in giờ «trả lời lần cuối» của bot theo giờ Việt Nam, thay vì giờ UTC của máy chủ.",
+  "scope_plain": "Không đổi «Hết hạn lúc» ở Thông báo của bạn (đã theo giờ máy người xem), không cho mỗi người tự chọn múi giờ, không đổi múi giờ của project trên Vercel.",
+  "decisions_plain": [
+    {"id": "d-20260925T025221Z-1", "p": "Chọn định dạng giờ ở máy chủ theo múi giờ xưởng (cùng nguồn với giờ nhắc 08:30), bắt buộc mọi chỗ gọi nói rõ múi giờ — đổi lại người xem ở múi giờ khác vẫn thấy giờ Việt Nam."},
+    {"id": "d-20260925T025221Z-2", "p": "KHÔNG đổi «Hết hạn lúc» ở Thông báo của bạn — nó đã theo giờ máy người xem; đổi lại hai màn Zalo dùng hai quy ước múi giờ, xem lại khi có người dùng ngoài Việt Nam."},
+    {"id": "d-20260925T025221Z-3", "p": "KHÔNG làm phiên thiết kế trên bản bấm được — không đổi bố cục, chỉ đổi múi giờ của một chuỗi giờ; ảnh màn thật có ở vòng chấm."}
+  ],
+  "decisions": [],
+  "analyst_plain": ""
+}

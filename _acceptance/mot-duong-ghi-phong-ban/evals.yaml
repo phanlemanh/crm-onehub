@@ -1,0 +1,296 @@
+schema_version: 1
+slug: mot-duong-ghi-phong-ban
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mdg_go_duong_cu
+    paths:
+      - "apps/api/src/onboarding/**"
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/src/trpc/**"
+      - "apps/api/test/mot-duong-ghi-phong-ban.spec.ts"
+    expected: |
+      Nest app that (createApp), phien quan tri that. Ma tran viet truoc 12 duong cu = 6 tRPC
+      (onboarding.createDepartment, updateDepartment, reorderDepartments, archiveDepartment,
+      restoreDepartment, purgeDepartment) + 6 REST (POST /rest/onboarding/departments, PATCH
+      /rest/onboarding/departments/{id}, POST .../{id}/archive, POST .../{id}/restore, DELETE
+      .../{id}, POST .../reorder), moi duong goi voi input HOP LE tren mot phong ban gieo qua
+      org.createDepartment. Moi duong: HTTP 404 (12 khang dinh); anh chup bang department
+      (id, name, position, archivedAt, divisionId cua moi hang) truoc = sau (1).
+      Quan he rut tu router DANG CHAY (appRouter._def.procedures, cung khuon go-la-cat-quyen.spec):
+      tap thu tuc mutation co "Department" trong ten, tru tap co tien to "org." = rong (1); tap
+      duong REST cua mutation co "/departments" trong path, tru tap bat dau "/org/" = rong (1);
+      tap mutation org.*Department = dung {createDepartment, renameDepartment, moveDepartment,
+      archiveDepartment, restoreDepartment, purgeDepartment} (1); tap duong REST cua 6 mutation do
+      = dung {POST /org/departments, PATCH /org/departments/{id}, POST /org/departments/{id}/move,
+      POST /org/departments/{id}/archive, POST /org/departments/{id}/restore, DELETE
+      /org/departments/{id}} (1). Doi chung duong, CUNG may khach va CUNG tien to voi tung lop:
+      tRPC GET onboarding.listDepartments tra 200 va chua phong ban vua gieo (1); REST GET
+      /rest/onboarding/departments tra 200 va chua phong ban vua gieo (1).
+      Tong 19 khang dinh; so dem ma tran la hang trong tep kiem, lech -> do.
+      CHIEU DO: ban sao router onboarding giu lai createDepartment (ca tRPC lan REST POST) -> do
+      "onboarding.createDepartment: HTTP 200 != 404", "POST /rest/onboarding/departments: HTTP 200 != 404"
+      va "thu tuc ghi phong ban ngoai org: onboarding.createDepartment".
+
+  - id: E2
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.mdg_mot_cho_ghi_api
+    paths:
+      - "apps/**/src/**"
+      - "apps/app/app/**"
+      - "apps/app/lib/**"
+      - "apps/app/components/**"
+      - "packages/*/src/**"
+      - "_acceptance/mot-duong-ghi-phong-ban/rang/mot-cho-ghi.mjs"
+    expected: |
+      Script suy goc kho tu vi tri cua chinh no. Quet moi tep .ts/.tsx cua apps/* va packages/*
+      (tru node_modules, generated, test/, *.spec.*, *.dom.*) tim lenh ghi vao bang phong ban:
+      <bat ky ten>.department.(create|createMany|update|updateMany|upsert|delete|deleteMany)( va
+      SQL tho INSERT INTO / UPDATE / DELETE FROM "department". In so tep da quet (> 0) va so lenh
+      ghi tim thay (> 0). Moi lenh ghi phai nam duoi apps/api/src/to-chuc/; lenh nao ngoai -> exit 1
+      kem duong dan:dong.
+      CHIEU DO cung chay trong mot lan: chep cay nguon can quet sang ban guong trong os.tmpdir(),
+      chen dong "await this.db.department.update({ where: { id }, data: {} })" vao
+      apps/api/src/onboarding/onboarding.service.ts cua ban guong, quet ban guong -> phai bat dung
+      1 vi pham voi thong diep ghim "lenh ghi phong ban ngoai to-chuc: apps/api/src/onboarding/onboarding.service.ts".
+      Ban guong khong bat duoc -> exit 2 "thuoc mu". Khong ghi tep nao vao cay that.
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mdg_luat_luu_tru
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/mot-duong-ghi-phong-ban.spec.ts"
+    expected: |
+      Nest app that, phien quan tri. Ma tran viet truoc 7 ca, moi ca [ten, cach goi, ma HTTP, cau,
+      archivedAt sau]: (1) trong khuon chua luu tru -> 400, cau chua ten khuon dung nguyen van
+      "Phòng ban này còn nằm trong khuôn <ten> — sửa khuôn trước.", archivedAt null; (2) chi trong
+      khuon da luu tru -> 200, archivedAt khac null; (3) 2 thanh vien hieu luc nhan lam phong ban
+      chinh -> 400 "Còn 2 người có phòng ban chính ở đây — chuyển họ trước.", archivedAt null;
+      (4) chi nguoi phu -> 200; (5) chi nguoi da roi nhan lam chinh -> 200; (6) co buoc ke hoach
+      -> 200; (7) trong -> 200. Ca 1-4 goi qua tRPC org.archiveDepartment, ca 5-7 qua REST POST
+      /rest/org/departments/{id}/archive. Hai ca tu choi (1) va (3) chay THEM mot lan qua REST tren
+      phong ban cung trang thai: HTTP 400, cau nguyen van trong than loi, archivedAt null. 7 x 3 +
+      2 x 3 = 27 khang dinh.
+      Khoi phuc: phong ban trong bo phan B o vi tri thu 2 -> luu tru -> org.restoreDepartment ->
+      divisionId va position bang truoc (2); nam lai trong org.tree duoi bo phan B (1).
+      CHIEU DO: ban sao bo vế kiem khuon -> do "ca 1 trong khuon chua luu tru: HTTP 200 != 400";
+      ban sao nem Error thuong thay loi nghiep vu -> do "ca 1 REST: HTTP 500 != 400".
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mdg_luat_xoa_han
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/mot-duong-ghi-phong-ban.spec.ts"
+    expected: |
+      Ma tran viet truoc 7 ca goi org.purgeDepartment, moi ca [ten, ma HTTP, cau, hang con/mat]:
+      (1) chua luu tru -> 400 "Chỉ xoá hẳn được đơn vị đã lưu trữ." hang con; (2) da luu tru con
+      buoc ke hoach -> 400 "Phòng ban còn bước kế hoạch trỏ tới nên không xoá hẳn được." hang con;
+      (3) da luu tru con nguoi hieu luc nhan lam chinh -> 400 "Phòng ban còn người trỏ tới nên
+      không xoá hẳn được." hang con; (4) da luu tru chi con nguoi DA ROI nhan lam chinh -> cung cau
+      (3), hang con; (5) da luu tru nam trong khuon da luu tru -> 400 cau "Phòng ban này còn nằm
+      trong khuôn <ten> — xoá vĩnh viễn khuôn đó hoặc bỏ phòng ban khỏi khuôn trước." hang con;
+      (6) da luu tru chi con nguoi phu -> 200, hang mat, so dong orgSecondaryDepartment tro toi = 0;
+      (7) da luu tru trong -> 200 qua REST DELETE /rest/org/departments/{id}, hang mat.
+      7 x 3 = 21 khang dinh + 1 (dong phu mat). Hai ca tu choi (1) va (2) chay THEM qua REST DELETE
+      /rest/org/departments/{id}: HTTP 400, cau nguyen van, hang con (2 x 3 = 6). Doi chung cau:
+      ca (1) cua bo phan (org.purgeDivision tren bo phan chua luu tru) tra CUNG chuoi voi ca (1)
+      phong ban (1). Tong 29.
+      CHIEU DO: ban sao bo vế kiem buoc ke hoach -> do "ca 2 con buoc: HTTP 200 != 400".
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mdg_xoa_duoc_mot_noi
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/src/onboarding/**"
+      - "apps/api/test/mot-duong-ghi-phong-ban.spec.ts"
+    expected: |
+      Gieo 7 phong ban roi LUU TRU ca 7 (moi vế mot phong ban): con buoc ke hoach · nguoi hieu luc
+      nhan lam chinh (gieo placement sau khi luu tru) · nguoi da roi nhan lam chinh · chi nguoi phu ·
+      nam trong khuon chua luu tru (trang thai API khong tao duoc nhung du lieu cu co the co: gieo
+      thang steps cua khuon bang db sau khi luu tru) ·
+      nam trong khuon da luu tru · trong. Voi moi phong ban doc A = org.tree
+      archived.departments[id].purgeable, B = onboarding.listDepartments({archived:true})[id].purgeable,
+      roi goi org.purgeDepartment -> C = (HTTP 200). Khang dinh QUAN HE tren tung phong ban:
+      A == B va A == C (7 x 2 = 14). Ma tran ky vong viet truoc (A cua 7 ca = F,F,F,T,F,F,T) de
+      chac ca hai gia tri deu xuat hien (7). Tong 21.
+      CHIEU DO: ban sao onboarding.listDepartments tinh purgeable khong co vế nguoi (dung ban cu)
+      -> do "nguoi hieu luc nhan lam chinh: org.tree false, listDepartments true".
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mdg_quyen_ba_thu_tuc
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/mot-duong-ghi-phong-ban.spec.ts"
+    expected: |
+      Ba phien that: thanh vien thuong, quan tri, chu. Ma tran viet truoc 3 thu tuc x 2 lop (tRPC,
+      REST) x 3 vai = 18 o; moi o gieo input hop le rieng (phong ban trong / da luu tru). Thuong ->
+      403 va hang phong ban khong doi (archivedAt, ton tai) — 6 x 2 = 12; quan tri va chu -> 200 —
+      12. Tong 24.
+      CHIEU DO: ban sao org.archiveDepartment khong goi yeuCauQuanTri -> do
+      "org.archiveDepartment trpc thuong: HTTP 200 != 403".
+
+  - id: E6b
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ttc_quyen
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/src/onboarding/**"
+      - "apps/api/src/generated/server.ts"
+      - "apps/api/test/to-chuc.spec.ts"
+    expected: |
+      Bai kiem quyen cua cau-truc-to-chuc (dung lai, khong nhan ban): rut danh sach thu tuc ghi tu
+      src/generated/server.ts. Sau vong nay danh sach in ra chua org.archiveDepartment,
+      org.restoreDepartment, org.purgeDepartment va khong chua thu tuc onboarding.* nao; moi thu tuc
+      co input hop le, thuong 403, quan tri va chu 200. Bo loc cua ham rut danh sach phai giu vế
+      /^onboarding\.\w*Department/ de mot thu tuc cu quay lai thi bi do.
+      CHIEU DO: ban sao them lai onboarding.createDepartment vao server.ts ma khong co input ->
+      do "thieu input hop le cho onboarding.createDepartment".
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: ui
+    cmd: config:executors.test.mdg_man_goi_org
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/test/to-chuc.dom.tsx"
+    expected: |
+      Man To chuc voi tRPC gia lap GHI LAI moi loi goi theo "<router>.<thu tuc>". Ma tran viet
+      truoc 4 thao tac: luu tru phong ban tu menu dong trong khung chi tiet bo phan (qua hop xac nhan) · hoan tac · khoi phuc trong "Da luu
+      tru" · xoa han trong "Da luu tru" (qua hop xac nhan). Moi thao tac: dung 1 loi goi
+      org.<archive|restore|restore|purge>Department voi input {"id":"<id phong ban>"} (4 x 2 = 8);
+      sau ca 4 thao tac, tap loi goi co tien to "onboarding." va ten ket thuc "Department" = rong (1).
+      Tu choi, ba ca, cau lay tu TO_CHUC.thongDiep cua may chu (nguon ben viet, khong go tay):
+      org.archiveDepartment tra phongBanConNguoi(2) -> toast hien nguyen van, phong ban van trong
+      cay (2); org.purgeDepartment trong "Da luu tru" tra cau "con buoc ke hoach" -> toast nguyen
+      van, hang van trong danh sach (2); org.restoreDepartment tra cau tu choi -> toast nguyen van,
+      hang van trong danh sach (2). Tong 15.
+      CHIEU DO: ban sao da-luu-tru-to-chuc.tsx goi lai onboarding.purgeDepartment -> do
+      "xoa han: org.purgeDepartment 0 loi goi"; ban sao xac-nhan-luu-tru.tsx goi lai
+      onboarding.archiveDepartment -> do "luu tru: org.archiveDepartment 0 loi goi"; ban sao hien toast chung -> do
+      "xoa han tu choi: toast khac cau may chu".
+
+  - id: E7b
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mdg_luat_luu_tru
+    paths:
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/test/mot-duong-ghi-phong-ban.spec.ts"
+    expected: |
+      Ve may chu cua AC-6 (ghep cap voi E7): cung lan chay voi E3. Ba thu tuc ma man goi
+      (org.archiveDepartment, org.restoreDepartment, org.purgeDepartment) ton tai tren may chu that,
+      nhan dung dau vao {id} ma E7 ghi lai o man, va ghi that vao bang phong ban (archivedAt doi,
+      hang mat khi xoa han); cau tu choi ma E7 hien o man la dung chuoi may chu tra (E3 ca 3, E4 ca 2).
+      CHIEU DO chung voi E3.
+
+  - id: E8
+    criterion: AC-6
+    executor: script
+    layer: ui
+    cmd: config:executors.script.mdg_mot_cho_ghi_app
+    paths:
+      - "apps/**"
+      - "packages/*/src/**"
+      - "_acceptance/mot-duong-ghi-phong-ban/rang/mot-cho-ghi.mjs"
+    expected: |
+      Cung script voi E2, che do app: quet moi tep .ts/.tsx/.mjs cua MOI app (apps/app, apps/agent,
+      apps/api...) va packages/*/src (tru node_modules, .next, .output, .eve, generated, test/,
+      *.spec.*, *.dom.*) tim hai dang goi duong ghi cu: ten thu tuc
+      "onboarding.(createDepartment|updateDepartment|reorderDepartments|archiveDepartment|
+      restoreDepartment|purgeDepartment)" va duong REST ghi "/onboarding/departments" (moi dang tru GET
+      danh sach: chuoi "/onboarding/departments" di kem method POST/PATCH/DELETE hoac hau to
+      /archive /restore /reorder /{id}). In so tep da quet theo tung app (> 0 moi app). Tim thay ->
+      exit 1 kem duong dan:dong. CHIEU DO cung lan, hai ban guong tmpdir: (a) chen
+      "trpc.onboarding.archiveDepartment" vao xac-nhan-luu-tru.tsx -> phai bat voi thong diep ghim
+      "man web goi duong ghi cu: apps/app/app/(app)/[slug]/settings/organization/xac-nhan-luu-tru.tsx";
+      (b) chen `fetch(`${api}/rest/onboarding/departments`, { method: "POST" })` vao mot tep cua
+      apps/agent -> phai bat voi thong diep ghim "goi duong ghi cu ngoai man To chuc: apps/agent/...".
+      Mot trong hai khong bat -> exit 2 "thuoc mu".
+
+  - id: E9
+    criterion: AC-7
+    executor: judgment
+    question: >-
+      Trong diff cua cac tep kiem thuoc chin ho so da ky, co khang dinh nao bi bo hoac bi noi
+      (doi tuong khac, quan he long hon, ma tran it o hon) ngoai cac thay doi duoc phep cua
+      AC-7 khong, va moi ho so co dong revisit nhac ten tep kiem cua no khong?
+    inputs:
+      - "_acceptance/mot-duong-ghi-phong-ban/bai-kiem-da-ky.diff"
+      - "_acceptance/mot-duong-ghi-phong-ban/bai-kiem-dem.md"
+      - "docs/superpowers/specs/2026-09-24-mot-duong-ghi-phong-ban-design.md"
+      - "_acceptance/mot-duong-ghi-phong-ban/contract.md"
+    paths:
+      - "apps/api/test/**"
+      - "apps/app/test/**"
+    expected: |
+      Doc diff cua moi tep kiem thuoc chin ho so da ky va bang dem (hai tep do script
+      rang/ho-so-da-ghim.mjs sinh tu base cua vong, khong chep tay; bang dem liet ke cho tung tep so
+      khang dinh expect/ok truoc va sau). Voi MOI khang dinh (expect/toBe/toEqual/ok(...)) bi xoa hoac doi trong diff:
+      chi ra khang dinh thay the chung CUNG dieu (cung doi tuong, cung quan he, khong noi nguong,
+      khong doi ma tran thanh it o hon) hoac chi ra no thuoc hai cau doi cua AC-3. Moi thay doi
+      khac (doi ten goi, doi duong gieo, hau to ten, go gia lap cua thu tuc khong con ton tai) phai
+      khong lam mat mot khang dinh nao; mot gia lap bi go ma co khang dinh doc no -> FAIL. Rieng
+      "sap xep" cua sua-luu-tru.spec: phai giu nguyen khang dinh thu tu c,a,b VA vi tri tuyet doi
+      c:0, a:1, b:2 (gieo ba phong ban trong mot bo phan rieng cua bai kiem). PASS khi
+      khong co khang dinh nao bi bo hay noi; FAIL neu co, kem duong dan:dong. Kiem them: moi ho so
+      trong chin co dong revisit moi trong decisions.jsonl nhac ten tep kiem cua no.
+
+  - id: E10
+    criterion: AC-8
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.mdg_ho_so_da_ghim
+    paths:
+      - "_acceptance/*/run-log.jsonl"
+      - "_acceptance/*/evidence-report.md"
+      - "_acceptance/*/evals.yaml"
+      - "_acceptance/config.yaml"
+      - "apps/api/test/**"
+      - "apps/app/test/**"
+      - "_acceptance/mot-duong-ghi-phong-ban/rang/ho-so-da-ghim.mjs"
+    expected: |
+      Script suy goc kho tu vi tri cua chinh no; base = merge-base HEAD origin/onehub (suy bang git).
+      (a) TAP BI CHAM rut bang may: moi ho so trang thai signed-off / machine-cleared /
+      da-cham-boi-thuc-te / verified (tru chinh mot-duong-ghi-phong-ban) co it nhat mot eval
+      test/script ma lenh (giai config: ref qua _acceptance/config.yaml) nhac toi mot tep kiem nam
+      trong git diff --name-only <base> HEAD. Tap nay phai BANG dung chin slug viet truoc trong
+      contract AC-7 (1); lech -> in slug thua/thieu.
+      (b) Voi moi slug CHUA KHEP cua tap (7): dong kind "repin" CUOI trong run-log.jsonl co evals_exit
+      khong rong, moi gia tri = 0, suites_exit toan 0 (2); sha cua dong do == verified_commit trong
+      frontmatter evidence-report.md (1); git diff --name-only <sha> HEAD khong co tep nao ngoai
+      _acceptance/ va ngoai risk_tiers.t1_skip_globs (1). 7 x 4 = 28. Bay slug chung MOT run_id (1).
+      Voi moi slug DA CHAM BOI THUC TE (2: dieu-phoi-30-ngay-dau, quan-ly-danh-muc-30-ngay):
+      node lib/workspace-record.cjs --thuc-te tra ma 0 (dong quan sat du ve, thuoc khong doi) (2) —
+      mien ghim theo luat dong ho so cua bo kit; bai kiem cua chung chay trong bo kiem day du.
+      (c) Chay "bash scripts/pre-merge-check.sh . --base origin/onehub" KHONG --slug: moi dong
+      VIOLATION trong dau ra chi duoc nhac chinh [mot-duong-ghi-phong-ban] (ho so dang cham, chua co
+      bang chung la dung luc nay); so dong VIOLATION cua ho so khac = 0 (1). Tong 33 (1 + 28 + 1 + 2 + 1).
+      Sinh them hai tep cho E9: bai-kiem-da-ky.diff (git diff <base> HEAD tren cac tep kiem cua tap
+      bi cham) va bai-kiem-dem.md (moi tep: so khang dinh expect( / ok( truoc va sau).
+      CHIEU DO cung lan, tren ban sao trong bo nho: (1) doi evals_exit cua mot eval thanh 1 trong dong
+      repin cuoi cua cau-truc-to-chuc -> phai bao "cau-truc-to-chuc: lan ghim co eval do"; (2) them
+      mot ho so gia co eval tro toi apps/api/test/dieu-phoi.spec.ts -> phai bao "<slug gia>: bi cham ma
+      chua ghim lai". Mot trong hai khong bao -> exit 2 "thuoc mu".

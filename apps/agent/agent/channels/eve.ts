@@ -1,3 +1,6 @@
+import { db } from "@crm/db";
+import { WORKSPACE_ID } from "@crm/db/workspace";
+import { laVaiChiOkr, toWorkspaceRole } from "@crm/validation/vai-workspace";
 import {
 	type AuthFn,
 	extractBearerToken,
@@ -29,6 +32,14 @@ export function repFromCrm(secret: string): AuthFn<Request> {
 			const claims = result.sessionAuth;
 			const userId = claims.subject;
 			if (!userId) return null;
+
+			const member = await db.member.findUnique({
+				where: {
+					organizationId_userId: { organizationId: WORKSPACE_ID, userId },
+				},
+				select: { role: true },
+			});
+			if (!member || laVaiChiOkr(toWorkspaceRole(member.role))) return null;
 
 			return {
 				attributes: claims.attributes ?? {},

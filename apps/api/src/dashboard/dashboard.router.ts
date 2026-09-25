@@ -2,7 +2,7 @@ import { Inject } from "@nestjs/common";
 import { Ctx, Input, Query, Router, UseMiddlewares } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	dashboardSummaryInput,
@@ -11,7 +11,7 @@ import {
 import { DashboardService } from "./dashboard.service";
 
 @Router({ alias: "dashboard" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViDoiTacMiddleware)
 export class DashboardRouter {
 	constructor(
 		@Inject(DashboardService) private readonly dashboard: DashboardService,

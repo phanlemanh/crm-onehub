@@ -3,6 +3,22 @@ import { act, createElement as h, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
 let duongHienTai = "/ws/settings";
+let vaiHienTai = "admin";
+
+const KHOA_WORKSPACE = ["workspace.get"];
+
+mock.module("@/lib/trpc/client", () => ({
+	useTRPC: () => ({
+		workspace: {
+			get: {
+				queryOptions: () => ({
+					queryKey: KHOA_WORKSPACE,
+					queryFn: async () => ({ viewerRole: vaiHienTai }),
+				}),
+			},
+		},
+	}),
+}));
 
 mock.module("next/navigation", () => ({
 	usePathname: () => duongHienTai,
@@ -26,6 +42,9 @@ mock.module("next/link", () => ({
 	}) => h("a", { href, ...rest }, children),
 }));
 
+const { QueryClient, QueryClientProvider } = await import(
+	"@tanstack/react-query"
+);
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { SettingsSidebar, SettingsSidebarFallback } = await import(
 	"@/app/(app)/[slug]/settings/settings-sidebar"
@@ -61,6 +80,7 @@ let root: Root | null = null;
 let khung: HTMLElement | null = null;
 
 afterEach(() => {
+	vaiHienTai = "admin";
 	act(() => root?.unmount());
 	khung?.remove();
 	root = null;
@@ -72,8 +92,14 @@ function dung(noiDung: ReactNode): HTMLElement {
 	khung = document.createElement("div");
 	document.body.appendChild(khung);
 	root = createRoot(khung);
+	const hoi = new QueryClient();
+	hoi.setQueryData(KHOA_WORKSPACE, { viewerRole: vaiHienTai });
 	act(() =>
-		root?.render(<LocaleProvider locale="vi">{noiDung}</LocaleProvider>),
+		root?.render(
+			<QueryClientProvider client={hoi}>
+				<LocaleProvider locale="vi">{noiDung}</LocaleProvider>
+			</QueryClientProvider>,
+		),
 	);
 	return khung;
 }
@@ -151,5 +177,16 @@ describe("khung-trang-cai-dat-thanh-ben", () => {
 			),
 		).toEqual(NHOM.flatMap(([, muc]) => [...muc]));
 		expect(hang?.querySelector("[data-slot='nav-group-label']")).toBeNull();
+	});
+
+	test("thanh-ben: vai chi okr chi thay nhom Bao mat voi Khoa API", () => {
+		vaiHienTai = "okr";
+		duongHienTai = "/ws/settings/api-keys";
+		const k = dung(h(SettingsSidebar));
+		expect(doc(k)).toEqual([{ nhan: "Bảo mật", muc: ["Khoá API"] }]);
+		expect(
+			[...k.querySelectorAll("a")].map((a) => a.getAttribute("href")),
+		).toEqual(["/ws/settings/api-keys", "/ws/settings/api-keys"]);
+		duongHienTai = "/ws/settings";
 	});
 });

@@ -30,6 +30,7 @@ export function ArchiveRetention() {
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const daysId = useId();
+	const lyDoId = useId();
 	const [draft, setDraft] = useState("");
 
 	const retention = useQuery(trpc.settings.archiveRetention.queryOptions());
@@ -50,6 +51,8 @@ export function ArchiveRetention() {
 
 	if (!retention.data) return null;
 
+	const { canManage } = retention.data;
+	const lyDo = canManage ? undefined : lyDoId;
 	const days = Number.parseInt(draft, 10);
 	const unchanged = days === retention.data.days;
 
@@ -63,7 +66,9 @@ export function ArchiveRetention() {
 					<Button
 						type="submit"
 						form="archive-retention"
+						aria-describedby={lyDo}
 						disabled={
+							!canManage ||
 							save.isPending ||
 							unchanged ||
 							draft.trim() === "" ||
@@ -95,13 +100,20 @@ export function ArchiveRetention() {
 								id={daysId}
 								inputMode="numeric"
 								value={draft}
-								disabled={save.isPending}
+								disabled={!canManage || save.isPending}
+								aria-describedby={lyDo}
 								onChange={(event) => setDraft(event.target.value)}
 							/>
 							<FieldDescription>{t.luuTru.donVi}</FieldDescription>
 						</Field>
 					</FieldGroup>
 				</form>
+
+				{canManage ? null : (
+					<p id={lyDoId} className="text-muted-foreground text-xs">
+						{t.luuTru.khongDuQuyen}
+					</p>
+				)}
 			</CardContent>
 		</Card>
 	);

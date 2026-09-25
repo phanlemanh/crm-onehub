@@ -116,10 +116,6 @@ function thuTuc(ten: string) {
 
 const BAN_GIA = {
 	listDepartments: thuTuc("listDepartments"),
-	createDepartment: thuTuc("createDepartment"),
-	updateDepartment: thuTuc("updateDepartment"),
-	archiveDepartment: thuTuc("archiveDepartment"),
-	reorderDepartments: thuTuc("reorderDepartments"),
 	listTemplates: thuTuc("listTemplates"),
 	createTemplate: thuTuc("createTemplate"),
 	updateTemplate: thuTuc("updateTemplate"),

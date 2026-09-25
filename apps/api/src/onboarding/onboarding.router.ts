@@ -9,7 +9,7 @@ import {
 } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	accessOutput,
@@ -20,12 +20,7 @@ import {
 	contactPlanListOutput,
 	danhMucOutput,
 	deletedOutput,
-	departmentCreateInput,
-	departmentIdInput,
 	departmentListOutput,
-	departmentOutput,
-	departmentReorderInput,
-	departmentUpdateInput,
 	enrollmentListOutput,
 	enrollmentOutput,
 	enrollmentRemoveInput,
@@ -69,7 +64,7 @@ import { OnboardingTheoDoi } from "./onboarding-theo-doi";
 const TAG = ["Onboarding"];
 
 @Router({ alias: "onboarding" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViDoiTacMiddleware)
 export class OnboardingRouter {
 	constructor(
 		@Inject(OnboardingService)
@@ -95,84 +90,6 @@ export class OnboardingRouter {
 	})
 	listDepartments(@Input() input: z.infer<typeof archivedInput>) {
 		return this.onboarding.listDepartments(input);
-	}
-
-	@Mutation({
-		input: departmentCreateInput,
-		output: departmentOutput,
-		meta: restMeta("POST", "/onboarding/departments", TAG),
-	})
-	async createDepartment(
-		@Ctx() ctx: AuthedTrpcContext,
-		@Input() input: z.infer<typeof departmentCreateInput>,
-	) {
-		await this.onboarding.yeuCauQuanTri(ctx.user.id);
-		return this.onboarding.createDepartment(input);
-	}
-
-	@Mutation({
-		input: departmentUpdateInput,
-		output: departmentOutput,
-		meta: restMeta("PATCH", "/onboarding/departments/{id}", TAG),
-	})
-	async updateDepartment(
-		@Ctx() ctx: AuthedTrpcContext,
-		@Input() input: z.infer<typeof departmentUpdateInput>,
-	) {
-		await this.onboarding.yeuCauQuanTri(ctx.user.id);
-		return this.onboarding.updateDepartment(input);
-	}
-
-	@Mutation({
-		input: departmentIdInput,
-		output: departmentOutput,
-		meta: restMeta("POST", "/onboarding/departments/{id}/archive", TAG),
-	})
-	async archiveDepartment(
-		@Ctx() ctx: AuthedTrpcContext,
-		@Input() input: z.infer<typeof departmentIdInput>,
-	) {
-		await this.onboarding.yeuCauQuanTri(ctx.user.id);
-		return this.onboarding.archiveDepartment(input);
-	}
-
-	@Mutation({
-		input: departmentIdInput,
-		output: departmentOutput,
-		meta: restMeta("POST", "/onboarding/departments/{id}/restore", TAG),
-	})
-	async restoreDepartment(
-		@Ctx() ctx: AuthedTrpcContext,
-		@Input() input: z.infer<typeof departmentIdInput>,
-	) {
-		await this.onboarding.yeuCauQuanTri(ctx.user.id);
-		return this.onboarding.restoreDepartment(input);
-	}
-
-	@Mutation({
-		input: departmentIdInput,
-		output: deletedOutput,
-		meta: restMeta("DELETE", "/onboarding/departments/{id}", TAG),
-	})
-	async purgeDepartment(
-		@Ctx() ctx: AuthedTrpcContext,
-		@Input() input: z.infer<typeof departmentIdInput>,
-	) {
-		await this.onboarding.yeuCauQuanTri(ctx.user.id);
-		return this.onboarding.purgeDepartment(input);
-	}
-
-	@Mutation({
-		input: departmentReorderInput,
-		output: departmentListOutput,
-		meta: restMeta("POST", "/onboarding/departments/reorder", TAG),
-	})
-	async reorderDepartments(
-		@Ctx() ctx: AuthedTrpcContext,
-		@Input() input: z.infer<typeof departmentReorderInput>,
-	) {
-		await this.onboarding.yeuCauQuanTri(ctx.user.id);
-		return this.onboarding.reorderDepartments(input);
 	}
 
 	@Query({

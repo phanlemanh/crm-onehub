@@ -10,6 +10,7 @@
 		"./agent-manifest": "./src/agent-manifest.ts",
 		"./agent-transcript": "./src/agent-transcript.ts",
 		"./builder-question": "./src/builder-question.ts",
+		"./cong-nghien-cuu": "./src/cong-nghien-cuu.ts",
 		"./enrichment-queue": "./src/enrichment-queue.ts",
 		"./eve-stream": "./src/eve-stream.ts",
 		"./eve-tool": "./src/eve-tool.ts",
@@ -22,8 +23,10 @@
 		"./onboarding-ingest": "./src/onboarding-ingest.ts",
 		"./onboarding-template": "./src/onboarding-template.ts",
 		"./saved-view": "./src/saved-view.ts",
+		"./vai-workspace": "./src/vai-workspace.ts",
 		"./zalo-cau-noi": "./src/zalo-cau-noi.ts",
-		"./zalo-update": "./src/zalo-update.ts"
+		"./zalo-update": "./src/zalo-update.ts",
+		"./zalo-webhook": "./src/zalo-webhook.ts"
 	},
 	"scripts": {
 		"check-types": "tsc --noEmit",

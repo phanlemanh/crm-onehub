@@ -9,12 +9,13 @@ import {
 } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViToChucMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	orgAccessOutput,
 	orgAddPeopleInput,
 	orgAttachInput,
+	orgDepartmentArchiveOutput,
 	orgDepartmentCreateInput,
 	orgDepartmentMoveInput,
 	orgDivisionCreateInput,
@@ -35,7 +36,7 @@ import { ToChucService } from "./to-chuc.service";
 const TAG = ["Organization"];
 
 @Router({ alias: "org" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViToChucMiddleware)
 export class ToChucRouter {
 	constructor(@Inject(ToChucService) private readonly toChuc: ToChucService) {}
 
@@ -151,6 +152,45 @@ export class ToChucRouter {
 	) {
 		await this.toChuc.yeuCauQuanTri(ctx.user.id);
 		return this.toChuc.renameDepartment(input);
+	}
+
+	@Mutation({
+		input: orgIdInput,
+		output: orgDepartmentArchiveOutput,
+		meta: restMeta("POST", "/org/departments/{id}/archive", TAG),
+	})
+	async archiveDepartment(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof orgIdInput>,
+	) {
+		await this.toChuc.yeuCauQuanTri(ctx.user.id);
+		return this.toChuc.archiveDepartment(input);
+	}
+
+	@Mutation({
+		input: orgIdInput,
+		output: orgOkOutput,
+		meta: restMeta("POST", "/org/departments/{id}/restore", TAG),
+	})
+	async restoreDepartment(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof orgIdInput>,
+	) {
+		await this.toChuc.yeuCauQuanTri(ctx.user.id);
+		return this.toChuc.restoreDepartment(input);
+	}
+
+	@Mutation({
+		input: orgIdInput,
+		output: orgOkOutput,
+		meta: restMeta("DELETE", "/org/departments/{id}", TAG),
+	})
+	async purgeDepartment(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof orgIdInput>,
+	) {
+		await this.toChuc.yeuCauQuanTri(ctx.user.id);
+		return this.toChuc.purgeDepartment(input);
 	}
 
 	@Mutation({

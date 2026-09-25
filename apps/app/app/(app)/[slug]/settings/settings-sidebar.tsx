@@ -2,6 +2,7 @@
 
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { NavGroup, NavGroupLabel, NavItem } from "@crm/ui/components/nav-item";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useId, useMemo } from "react";
@@ -13,6 +14,8 @@ import {
 	type NhomCaiDat,
 } from "@/lib/cai-dat-dieu-huong";
 import { settingsMessages } from "@/lib/messages/settings";
+import { nhomCaiDatChoVai } from "@/lib/pham-vi-man";
+import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
 type TrangThaiMuc = { dangMo: (muc: MucCaiDat) => boolean } | null;
@@ -120,16 +123,22 @@ export function SettingsSidebarFallback() {
 export function SettingsSidebar() {
 	const pathname = usePathname();
 	const workspaceUrl = useWorkspaceUrl();
+	const trpc = useTRPC();
+	const workspace = useQuery(trpc.workspace.get.queryOptions());
+	const viewerRole = workspace.data?.viewerRole ?? null;
+	const daBiet = workspace.data !== undefined;
 
 	const root = workspaceUrl(GOC_CAI_DAT);
 	const nhom = useMemo(
 		() =>
-			NHOM_CAI_DAT.map((n) => ({
+			nhomCaiDatChoVai(viewerRole).map((n) => ({
 				...n,
 				muc: n.muc.map((muc) => ({ ...muc, href: workspaceUrl(muc.href) })),
 			})),
-		[workspaceUrl],
+		[workspaceUrl, viewerRole],
 	);
+
+	if (!daBiet) return <SettingsSidebarFallback />;
 
 	return (
 		<ThanhBen
