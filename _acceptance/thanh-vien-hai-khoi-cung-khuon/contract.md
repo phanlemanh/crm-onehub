@@ -5,7 +5,7 @@ slug: thanh-vien-hai-khoi-cung-khuon
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -86,3 +86,10 @@ Never: gộp hai khối thành một `DataTable` có tab — hai danh sách là 
 - Sửa ở S3 (xem sổ): dựng đầu trang trong vùng hydrate như trang Tổ chức làm bản stream ẩn của React chứa `page-shell-content`, và thước đã ký `ttv_do_bang` đo trúng bản ẩn (7 SAI). Ranh `Suspense` trả về trong `PageShellContent`; nút đầu trang có ranh riêng. `do-khoi.mjs` cũng chờ tới khi không còn `[hidden]` chứa bảng.
 - Cổng Bằng chứng 25/09 (chủ kho): Ngoài-1 của round 1–2 — làm mới danh sách bằng query key liệt tại chỗ gọi, lệch luật Freshness của `docs/api.md` — nâng phạm vi sửa ngay thành AC-17; chấm lại ở round 3 (xem sổ).
 - S3 của phần AC-17 (25/09): E19 đỏ 2 DUNG, 8 SAI trên mã trước sửa, xanh 9/0 sau; phá-thử trên bản sao — bỏ `workspace.allowances` khỏi `cache.workspace` → SAI, khối dưới tự `refetch()` → SAI. Bàn đo màn thật chuyển sang cổng 3620/3621 vì 3500/3501 đang do phiên khác giữ (xem sổ); trên cổng mới `do-khoi` 46/0 và `do-bang.mjs` của hồ sơ đã ký 30/0.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-25 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 3:
+
+- Ngoài-1: E19 (AC-17) soi «có gọi `useCrmCache()` và `.workspace(`» theo từng tệp, không theo từng thao tác; nếu sau này riêng «Phát liên kết» thôi làm mới danh sách mà «Rút» vẫn làm mới, E19 vẫn xanh và bàn đo màn thật không đo dòng vết sau khi phát.
+- Ngoài-2: nút «Cho phép một địa chỉ» ở đầu trang do server quyết một lần (`quyenQuanTri` trong `page.tsx`); nếu `workspace.get` lỗi tạm thời phía server, quản trị không thấy nút cho tới khi tải lại trang, dù khối «Được phép vào» vẫn hiện.
+
+Mở hợp đồng mới (Cổng Bằng chứng 2026-09-25): Ngoài-3 — soi mã E17 thiếu ca đối chứng dương nằm trong lệnh; Ngoài-4 — «một ô tìm» (E13) chỉ đếm ô mang đúng chữ gợi ý của khối trên; Ngoài-5 — «mỗi hàng có nút» (E6) chỉ đo 15 hàng do bàn đo gieo.

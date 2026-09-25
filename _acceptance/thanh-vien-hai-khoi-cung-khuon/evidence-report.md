@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 444d323b0f995102b444855556e79e4e0cbe2d38
-human_signoff:
+human_signoff: Phan Le Manh 2026-09-25
 ---
 
 # Evidence Report: thanh-vien-hai-khoi-cung-khuon
