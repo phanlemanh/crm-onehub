@@ -5,7 +5,7 @@ slug: cai-dat-chung-chi-quan-tri
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-09-25
 design_doc: docs/superpowers/specs/2026-09-25-cai-dat-chung-chi-quan-tri-design.md
