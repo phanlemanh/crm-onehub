@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { KHONG_TRONG_PHAM_VI } from "@crm/auth";
 import { db } from "@crm/db";
 import { parseOkrVet } from "@crm/validation/okr-vet";
 import { OKR } from "../src/okr/okr-config";
@@ -7,9 +8,11 @@ import {
 	type AiHoacCookie,
 	bpMoi,
 	CHUONG_TRINH_RONG,
+	datViTri,
 	doc,
 	dungSan,
 	goi,
+	goiQuery,
 	type Json,
 	kyDangChay,
 	ma,
@@ -953,5 +956,370 @@ describe("vet-okr", () => {
 			"cham diem",
 		);
 		expect((await docVet()).length).toBe(vet.length + 1);
+	});
+});
+
+type Nguoi = "p1" | "p2" | "b1" | "b2" | "k" | "admin" | "member";
+
+describe("quyen-ban-ghi", () => {
+	test("quyen-ban-ghi: ma tran 7 nguoi x 8 viec dung bang hang, doc du 200, b1 kiem p3", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("qbg");
+		const quan = phien.quan.nguoi;
+
+		const bp1 = await bpMoi("qbg-b1");
+		const pb1 = await pbMoi("qbg-p1", bp1);
+		const pb2 = await pbMoi("qbg-p2", bp1);
+		const bp2 = await bpMoi("qbg-b2");
+		const pb3 = await pbMoi("qbg-p3", bp2);
+
+		const truongP1 = await truongMoi("department", pb1, "qbg-truong-p1");
+		const truongP2 = await truongMoi("department", pb2, "qbg-truong-p2");
+		const truongB1 = await truongMoi("division", bp1, "qbg-truong-b1");
+		const truongB2 = await truongMoi("division", bp2, "qbg-truong-b2");
+
+		const k = await nguoiMoi("qbg-k");
+		const cookieK = await phienCua(k);
+		const memberTran = await nguoiMoi("qbg-tran");
+		const cookieTran = await phienCua(memberTran);
+
+		const dvOnehub = { level: "onehub" };
+		const dvP1 = { level: "phong-ban", departmentId: pb1 };
+		const dvP2 = { level: "phong-ban", departmentId: pb2 };
+		const dvB1 = { level: "bo-phan", divisionId: bp1 };
+		const dvB2 = { level: "bo-phan", divisionId: bp2 };
+
+		const mtOnehub = await taoMucTieu(mucTieuVao(quy, dvOnehub, quan), "quan");
+		const mtB1 = await taoMucTieu(
+			mucTieuVao(quy, dvB1, truongB1.nguoi),
+			truongB1.cookie,
+		);
+		const mtB2 = await taoMucTieu(
+			mucTieuVao(quy, dvB2, truongB2.nguoi),
+			truongB2.cookie,
+		);
+		const mtP1 = await taoMucTieu(
+			mucTieuVao(quy, dvP1, truongP1.nguoi),
+			truongP1.cookie,
+		);
+		const mtP2 = await taoMucTieu(
+			mucTieuVao(quy, dvP2, truongP2.nguoi),
+			truongP2.cookie,
+		);
+		const krK = await taoKr(krVao(mtP1.id, k), truongP1.cookie);
+
+		const NGUOI: Record<Nguoi, AiHoacCookie> = {
+			p1: truongP1.cookie,
+			p2: truongP2.cookie,
+			b1: truongB1.cookie,
+			b2: truongB2.cookie,
+			k: cookieK,
+			admin: "quan",
+			member: cookieTran,
+		};
+		const THU_TU: Nguoi[] = ["p1", "p2", "b1", "b2", "k", "admin", "member"];
+
+		const KY_VONG: Record<Nguoi, boolean[]> = {
+			p1: [true, true, false, false, false, false, true, false],
+			p2: [false, false, true, false, false, false, false, false],
+			b1: [true, true, true, true, false, false, true, false, true],
+			b2: [false, false, false, false, true, false, false, false],
+			k: [false, false, false, false, false, false, true, false],
+			admin: [false, false, false, false, false, true, false, true],
+			member: [false, false, false, false, false, false, false, false],
+		};
+
+		const targetCongBo = async () => {
+			const mt = await taoMucTieu(
+				mucTieuVao(quy, dvP1, truongP1.nguoi),
+				truongP1.cookie,
+				"cb target",
+			);
+			await taoKr(krVao(mt.id, truongP1.nguoi), truongP1.cookie, "cb kr");
+			return mt.id;
+		};
+
+		const ketQua = {} as Record<Nguoi, boolean[]>;
+		let dem = 0;
+		for (const nguoi of THU_TU) {
+			const cookie = NGUOI[nguoi];
+			const viec: boolean[] = [];
+			viec.push(
+				(
+					await goi(
+						"okr.updateObjective",
+						{ id: mtP1.id, title: ma("qbg-sua-p1") },
+						cookie,
+					)
+				).status === 200,
+			);
+			const congBoId = await targetCongBo();
+			viec.push(
+				(await goi("okr.publishObjective", { id: congBoId }, cookie)).status ===
+					200,
+			);
+			viec.push(
+				(
+					await goi(
+						"okr.updateObjective",
+						{ id: mtP2.id, title: ma("qbg-sua-p2") },
+						cookie,
+					)
+				).status === 200,
+			);
+			viec.push(
+				(
+					await goi(
+						"okr.updateObjective",
+						{ id: mtB1.id, title: ma("qbg-sua-b1") },
+						cookie,
+					)
+				).status === 200,
+			);
+			viec.push(
+				(
+					await goi(
+						"okr.updateObjective",
+						{ id: mtB2.id, title: ma("qbg-sua-b2") },
+						cookie,
+					)
+				).status === 200,
+			);
+			viec.push(
+				(
+					await goi(
+						"okr.updateObjective",
+						{ id: mtOnehub.id, title: ma("qbg-sua-oh") },
+						cookie,
+					)
+				).status === 200,
+			);
+			dem += 1;
+			viec.push(
+				(
+					await goi(
+						"okr.updateKeyResult",
+						{ id: krK, currentValue: 20 + dem },
+						cookie,
+					)
+				).status === 200,
+			);
+			viec.push(
+				(
+					await goi(
+						"okr.createCycle",
+						{
+							kind: "nam",
+							name: ma("qbg-taochuky"),
+							parentId: null,
+							startsOn: "2031-01-01",
+							endsOn: "2031-12-31",
+							breakStartsOn: null,
+							breakEndsOn: null,
+							updateWeekday: 1,
+						},
+						cookie,
+					)
+				).status === 200,
+			);
+			ketQua[nguoi] = viec;
+		}
+
+		ok(await datViTri(truongB1.nguoi, null, [pb3]), "xep b1 vao p3");
+		ok(
+			await goi("org.setHead", {
+				kind: "department",
+				id: pb3,
+				userId: truongB1.nguoi,
+			}),
+			"truong p3 la b1",
+		);
+		const mtP3 = await taoMucTieu(
+			mucTieuVao(
+				quy,
+				{ level: "phong-ban", departmentId: pb3 },
+				truongB1.nguoi,
+			),
+			truongB1.cookie,
+			"tao p3",
+		);
+		ketQua.b1.push(
+			(
+				await goi(
+					"okr.updateObjective",
+					{ id: mtP3.id, title: ma("qbg-sua-p3") },
+					truongB1.cookie,
+				)
+			).status === 200,
+		);
+
+		expect(ketQua).toEqual(KY_VONG);
+
+		for (const nguoi of THU_TU) {
+			const cookie = NGUOI[nguoi];
+			await doc("okr.objective", cookie, { id: mtOnehub.id });
+			await doc("okr.byUnit", cookie, { cycleId: quy, unit: { loai: "goc" } });
+		}
+	});
+});
+
+describe("chi-okr", () => {
+	test("chi-okr: vai chi-okr lam truong ghi duoc OKR phong ban, khong truong tu choi dung thong diep, doi tac 403", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("chiokr");
+		const pb = await pbMoi("chiokr-p");
+
+		const truong = await nguoiMoi("chiokr-truong", "okr");
+		ok(await datViTri(truong, pb), "xep truong vao pb");
+		ok(
+			await goi("org.setHead", { kind: "department", id: pb, userId: truong }),
+			"truong pb",
+		);
+		const cookieTruong = await phienCua(truong);
+
+		const mt = await taoMucTieu(
+			mucTieuVao(quy, { level: "phong-ban", departmentId: pb }, truong),
+			cookieTruong,
+			"chiokr tao",
+		);
+		const krId = await taoKr(krVao(mt.id, truong), cookieTruong, "chiokr kr");
+		ok(
+			await goi("okr.publishObjective", { id: mt.id }, cookieTruong),
+			"chiokr cong bo",
+		);
+
+		const mtSau = await db.okrObjective.findUniqueOrThrow({
+			where: { id: mt.id },
+		});
+		expect([mtSau.status, mtSau.publishedAt !== null]).toEqual([
+			"cong-bo",
+			true,
+		]);
+		const krSau = await db.okrKeyResult.findUniqueOrThrow({
+			where: { id: krId },
+		});
+		expect(krSau.startLockedAt !== null).toBe(true);
+
+		await doc("org.tree", cookieTruong);
+
+		const thuong = await nguoiMoi("chiokr-thuong", "okr");
+		const cookieThuong = await phienCua(thuong);
+		await doc("okr.byUnit", cookieThuong, {
+			cycleId: quy,
+			unit: { loai: "pb", id: pb },
+		});
+		const tuChoiTao = await goi(
+			"okr.createObjective",
+			mucTieuVao(quy, { level: "phong-ban", departmentId: pb }, thuong),
+			cookieThuong,
+		);
+		expect(tuChoiTao.status).toBe(403);
+		expect(tuChoiTao.loi).toBe(T.khongSuaDuocDonVi);
+		expect(tuChoiTao.loi).not.toBe(KHONG_TRONG_PHAM_VI);
+
+		for (const cookie of [cookieTruong, cookieThuong]) {
+			const contacts = await goiQuery("contacts.list", cookie, {});
+			expect(contacts.status).toBe(403);
+			expect(contacts.loi).toBe(KHONG_TRONG_PHAM_VI);
+			const deals = await goiQuery("deals.list", cookie, {});
+			expect(deals.status).toBe(403);
+			expect(deals.loi).toBe(KHONG_TRONG_PHAM_VI);
+		}
+	});
+});
+
+describe("cua-toi", () => {
+	test("cua-toi: okr.mine gom owner, participant va KR cua toi; P3 khong lien quan; access dung headOf", async () => {
+		await caiChuongTrinh();
+		const quy = await kyDangChay("cuatoi");
+
+		const pb1 = await pbMoi("ct-p1");
+		const pb2 = await pbMoi("ct-p2");
+		const pb3 = await pbMoi("ct-p3");
+
+		const truong = await nguoiMoi("ct-truong");
+		ok(await datViTri(truong, pb1, [pb2, pb3]), "xep truong");
+		ok(
+			await goi("org.setHead", { kind: "department", id: pb1, userId: truong }),
+			"truong p1",
+		);
+		ok(
+			await goi("org.setHead", { kind: "department", id: pb2, userId: truong }),
+			"truong p2",
+		);
+		ok(
+			await goi("org.setHead", { kind: "department", id: pb3, userId: truong }),
+			"truong p3",
+		);
+		const cookieTruong = await phienCua(truong);
+
+		const k = await nguoiMoi("ct-k");
+		const cookieK = await phienCua(k);
+		const memberTrang = await nguoiMoi("ct-trang");
+		const cookieTrang = await phienCua(memberTrang);
+
+		const mtP1 = await taoMucTieu(
+			mucTieuVao(quy, { level: "phong-ban", departmentId: pb1 }, truong),
+			cookieTruong,
+			"ct p1",
+		);
+		await taoKr(krVao(mtP1.id, k), cookieTruong, "ct kr k");
+		const mtP2 = await taoMucTieu(
+			mucTieuVao(quy, { level: "phong-ban", departmentId: pb2 }, truong, {
+				participantIds: [k],
+			}),
+			cookieTruong,
+			"ct p2",
+		);
+		const mtCaNhan = await taoMucTieu(
+			mucTieuVao(quy, { level: "ca-nhan", personUserId: k }, k),
+			cookieK,
+			"ct ca nhan",
+		);
+		const mtP3 = await taoMucTieu(
+			mucTieuVao(quy, { level: "phong-ban", departmentId: pb3 }, truong),
+			cookieTruong,
+			"ct p3",
+		);
+
+		const mine = await doc<{
+			objectives: { id: string; keyResults: { laCuaToi: boolean }[] }[];
+		}>("okr.mine", cookieK, { cycleId: quy });
+		expect(mine.objectives.map((o) => o.id).sort()).toEqual(
+			[mtP1.id, mtP2.id, mtCaNhan.id].sort(),
+		);
+		expect(mine.objectives.some((o) => o.id === mtP3.id)).toBe(false);
+		const soCuaToi = mine.objectives
+			.flatMap((o) => o.keyResults)
+			.filter((kr) => kr.laCuaToi).length;
+		expect(soCuaToi).toBe(1);
+
+		const mineTrang = await doc<{ objectives: unknown[] }>(
+			"okr.mine",
+			cookieTrang,
+			{ cycleId: quy },
+		);
+		expect(mineTrang.objectives).toEqual([]);
+
+		const byUnitTrang = await doc<{ objectives: { id: string }[] }>(
+			"okr.byUnit",
+			cookieTrang,
+			{ cycleId: quy, unit: { loai: "pb", id: pb1 } },
+		);
+		expect(byUnitTrang.objectives.map((o) => o.id)).toContain(mtP1.id);
+
+		const accessTruong = await doc<{
+			canManageProgram: boolean;
+			headOf: { divisions: string[]; departments: string[] };
+		}>("okr.access", cookieTruong);
+		expect(accessTruong.headOf.departments).toContain(pb1);
+		expect(accessTruong.canManageProgram).toBe(false);
+
+		const accessAdmin = await doc<{
+			canManageProgram: boolean;
+			headOf: { divisions: string[]; departments: string[] };
+		}>("okr.access", "quan");
+		expect(accessAdmin.canManageProgram).toBe(true);
+		expect(accessAdmin.headOf).toEqual({ divisions: [], departments: [] });
 	});
 });

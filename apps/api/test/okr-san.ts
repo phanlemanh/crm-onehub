@@ -59,11 +59,11 @@ export async function goi(
 	};
 }
 
-export async function doc<T>(
+export async function goiQuery(
 	thuTuc: string,
 	ai: AiHoacCookie = "quan",
 	vao?: Json,
-): Promise<T> {
+): Promise<TraLoi> {
 	const q =
 		vao === undefined
 			? ""
@@ -71,8 +71,21 @@ export async function doc<T>(
 	const res = await request(app.getHttpServer())
 		.get(`/api/trpc/${thuTuc}${q}`)
 		.set("cookie", cookieCua(ai));
-	expect(`${thuTuc}: HTTP ${res.status}`).toBe(`${thuTuc}: HTTP 200`);
-	return res.body.result.data as T;
+	return {
+		status: res.status,
+		data: res.body?.result?.data,
+		loi: String(res.body?.error?.message ?? ""),
+	};
+}
+
+export async function doc<T>(
+	thuTuc: string,
+	ai: AiHoacCookie = "quan",
+	vao?: Json,
+): Promise<T> {
+	const tra = await goiQuery(thuTuc, ai, vao);
+	expect(`${thuTuc}: HTTP ${tra.status}`).toBe(`${thuTuc}: HTTP 200`);
+	return tra.data as T;
 }
 
 export function ok<T>(tra: TraLoi, nhan: string): T {
