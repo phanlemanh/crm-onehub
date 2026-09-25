@@ -163,15 +163,98 @@ function tepDiff() {
 		.filter((t) => existsSync(join(GOC, t)));
 }
 
-function lopTrong(bieuThuc) {
+const HANG = new Map();
+
+function hangTrongTep(tep) {
+	if (HANG.has(tep)) return HANG.get(tep);
+	const bang = new Map();
+	HANG.set(tep, bang);
+	if (!existsSync(join(GOC, tep))) return bang;
+	const sf = ts.createSourceFile(
+		tep,
+		readFileSync(join(GOC, tep), "utf8"),
+		ts.ScriptTarget.Latest,
+		true,
+		ts.ScriptKind.TSX,
+	);
+	for (const s of sf.statements) {
+		if (!ts.isVariableStatement(s)) continue;
+		for (const d of s.declarationList.declarations)
+			if (
+				ts.isIdentifier(d.name) &&
+				d.initializer &&
+				(ts.isStringLiteral(d.initializer) ||
+					ts.isNoSubstitutionTemplateLiteral(d.initializer))
+			)
+				bang.set(d.name.text, d.initializer.text);
+	}
+	return bang;
+}
+
+function duongNhap(tep, nguon) {
+	const goc = nguon.startsWith("@/")
+		? join("apps/app", nguon.slice(2))
+		: nguon.startsWith(".")
+			? join(dirname(tep), nguon)
+			: null;
+	if (goc === null) return null;
+	for (const duoi of [".ts", ".tsx", "/index.ts"])
+		if (existsSync(join(GOC, goc + duoi))) return goc + duoi;
+	return null;
+}
+
+function giaiTen(sf, tep, ten) {
+	const trong = hangTrongTep(tep).get(ten);
+	if (trong !== undefined) return trong;
+	for (const s of sf.statements) {
+		if (!ts.isImportDeclaration(s) || !s.importClause?.namedBindings) continue;
+		const nb = s.importClause.namedBindings;
+		if (!ts.isNamedImports(nb)) continue;
+		const e = nb.elements.find((x) => x.name.text === ten);
+		if (!e) continue;
+		const tepNguon = duongNhap(tep, s.moduleSpecifier.text);
+		if (tepNguon === null) return null;
+		return hangTrongTep(tepNguon).get((e.propertyName ?? e.name).text) ?? null;
+	}
+	return null;
+}
+
+function lopTrong(bieuThuc, sf, tep) {
 	const lop = [];
+	const khongGiai = [];
+	const them = (chu) => lop.push(...chu.split(/\s+/).filter(Boolean));
 	moiNut(bieuThuc, (c) => {
-		if (ts.isStringLiteral(c) || ts.isNoSubstitutionTemplateLiteral(c))
-			lop.push(...c.text.split(/\s+/).filter(Boolean));
+		if (ts.isStringLiteral(c) || ts.isNoSubstitutionTemplateLiteral(c)) them(c.text);
 		if (ts.isTemplateHead(c) || ts.isTemplateMiddle(c) || ts.isTemplateTail(c))
-			lop.push(...c.text.split(/\s+/).filter(Boolean));
+			them(c.text);
+		if (
+			sf &&
+			ts.isIdentifier(c) &&
+			!(ts.isPropertyAccessExpression(c.parent) && c.parent.name === c) &&
+			!(ts.isCallExpression(c.parent) && c.parent.expression === c)
+		) {
+			const gia = giaiTen(sf, tep, c.text);
+			if (gia === null) khongGiai.push(c.text);
+			else them(gia);
+		}
 	});
-	return lop;
+	return { lop, khongGiai };
+}
+
+function dongDoi(tep) {
+	if (process.env.OSA_TEP) return null;
+	const git = (...doi) =>
+		execFileSync("git", ["-C", GOC_THAT, ...doi], { encoding: "utf8" });
+	const moc = git("merge-base", "HEAD", NHANH_GOC).trim();
+	const dong = new Set();
+	for (const d of git("diff", "-U0", moc, "--", tep).split("\n")) {
+		const m = d.match(/^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@/);
+		if (!m) continue;
+		const dau = Number(m[1]);
+		const so = m[2] === undefined ? 1 : Number(m[2]);
+		for (let i = 0; i < so; i += 1) dong.add(dau + i);
+	}
+	return dong;
 }
 
 function caThanhPhan() {
@@ -223,7 +306,7 @@ function caThanhPhan() {
 	const sb = cay(TEP.sidebar);
 	const dungStrip = the(sb, "NavStrip").length >= 1;
 	const navTay = the(sb, "nav").filter((n) =>
-		lopTrong(thuocTinh(n, "className") ?? n).includes("overflow-x-auto"),
+		lopTrong(thuocTinh(n, "className") ?? n).lop.includes("overflow-x-auto"),
 	).length;
 	ghi(
 		"khung-dung-nav-strip",
@@ -249,19 +332,27 @@ function caThanhPhan() {
 			if (nb && ts.isNamedImports(nb))
 				for (const e of nb.elements) ten.add(e.name.text);
 		}
+		const doi = dongDoi(t);
 		moiNut(sf, (n) => {
 			if (!(ts.isJsxOpeningElement(n) || ts.isJsxSelfClosingElement(n))) return;
 			const tag = n.tagName.getText();
 			if (!ten.has(tag)) return;
-			const dong = sf.getLineAndCharacterOfPosition(n.getStart()).line + 1;
+			const dau = sf.getLineAndCharacterOfPosition(n.getStart()).line + 1;
+			const cuoi = sf.getLineAndCharacterOfPosition(n.getEnd()).line + 1;
 			const a = thuocTinh(n, "className");
-			const lop = a?.initializer ? lopTrong(a.initializer) : [];
+			const { lop, khongGiai } = a?.initializer
+				? lopTrong(a.initializer, sf, t)
+				: { lop: [], khongGiai: [] };
 			const cam = lop.filter((l) => LOP_CAM.test(l.split(":").pop().replace(/^!/, "")));
-			ghi(
-				`lop-${t}:${dong}`,
-				cam.length === 0,
-				`${tag}${a ? ` className ${JSON.stringify(lop)}` : " khong className"}${cam.length ? ` — lop cam: ${cam.join(" ")}` : ""}`,
-			);
+			const cau = `${tag}${a ? ` className ${JSON.stringify(lop)}` : " khong className"}${cam.length ? ` — lop cam: ${cam.join(" ")}` : ""}${khongGiai.length ? ` — khong giai duoc: ${khongGiai.join(", ")}` : ""}`;
+			let vongNay = doi === null;
+			for (let i = dau; !vongNay && i <= cuoi; i += 1) vongNay = doi.has(i);
+			if (!vongNay) {
+				if (cam.length || khongGiai.length)
+					console.log(`GHI CHU co-san ${t}:${dau} ${cau}`);
+				return;
+			}
+			ghi(`lop-${t}:${dau}`, cam.length === 0 && khongGiai.length === 0, cau);
 		});
 	}
 	ghi("lop-dem-tep", soTep === tep.length && tep.length > 0, `so tep ${soTep} = so tep diff ${tep.length}`);

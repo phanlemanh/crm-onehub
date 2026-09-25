@@ -223,8 +223,10 @@ evals:
       origin/onehub)` loc *.tsx duoi apps/app (tru test/, app/proto/) va
       packages/ui/src/components, in "tap tep: <n>" va moi tep mot dong "DUNG <tep>: design-gate
       ma 0"; <n> = so tep khop trong diff (dong doi chung). Tap rong -> ma 2 "KHONG DO DUOC".
-      Doi chung am (--pha, ban sao tmpdir): chen className="bg-red-500" vao mot TableCell cua
-      hop-thoai-nhap.tsx -> "SAI ... design-gate ma <k>" ma 1.
+      design-gate chan nam loi nen P0 (low-contrast, gray-on-color, text-overflow, broken-image,
+      body-text-viewport-edge), khong soi lop mau — luat lop do E13 do. Doi chung am (--pha, ban
+      sao tmpdir): chen className="bg-red-500 text-gray-400" vao mot TableCell cua
+      hop-thoai-nhap.tsx -> "DUNG pha-gray-on-color: ... design-gate ma 2", pha thu ma 0.
 
   - id: E13
     criterion: AC-8
@@ -244,9 +246,11 @@ evals:
       SimpleTableRow invalid=..., StatusIndicator), "DUNG khung-dung-nav-strip"
       (settings-sidebar.tsx dung NavStrip, khong con <nav ... overflow-x-auto>). Ma tran
       "lop-o-cho-goi": tap tep rut tu diff nhu E12 (chi *.tsx duoi apps/app), moi tep lay tap ten
-      nhap tu "@crm/ui/..."; MOI phan tu JSX mang mot trong cac ten do la mot dong "DUNG
-      lop-<tep>:<dong> <Ten>" (khong className, hoac className chi gom lop khong doi mau/goc/
-      khoang cach/bong) hoac "SAI ..." goi ten lop vi pham; luat lop: text-<mau>, bg-*, border-
+      nhap tu "@crm/ui/..."; MOI phan tu JSX mang mot trong cac ten do ma cham dong doi cua diff
+      (git diff -U0) la mot dong "DUNG lop-<tep>:<dong> <Ten>" (khong className, hoac className
+      chi gom lop khong doi mau/goc/khoang cach/bong) hoac "SAI ..." goi ten lop vi pham; ten
+      hang trong className (vd CELL) giai toi gia tri chuoi o tep khai no, khong giai duoc ->
+      SAI; phan tu khong cham dong doi ma co lop cam -> "GHI CHU co-san ..." (khong tinh); luat lop: text-<mau>, bg-*, border-
       <mau>, ring-*, rounded*, shadow*, p/px/py/pt/pb/pl/pr/m/mx/my/mt/mb/ml/mr/gap/space-*.
       In "so tep <a> = so tep diff <b>". Doi chung am (--ca pha, ban sao tmpdir): them
       className="text-destructive" vao mot TableCell -> "SAI lop-..." ma 1.

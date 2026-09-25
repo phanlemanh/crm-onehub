@@ -54,14 +54,17 @@ if (process.argv.includes("--pha")) {
 	const tam = mkdtempSync(join(tmpdir(), "osa-san-"));
 	const ban = join(tam, "hop-thoai-nhap.tsx");
 	const goc = readFileSync(join(GOC, TEP_PHA), "utf8");
-	const pha = goc.replace("<TableCell", '<TableCell className="bg-red-500"');
+	const pha = goc.replace(
+		"<TableCell",
+		'<TableCell className="bg-red-500 text-gray-400"',
+	);
 	if (pha === goc) khongDo(`khong chen duoc className vao TableCell cua ${TEP_PHA}`);
 	writeFileSync(ban, pha);
 	const r = cong(ban);
 	rmSync(tam, { recursive: true, force: true });
-	const dat = r.status !== 0;
+	const dat = r.status !== 0 && /gray-on-color/.test(r.stdout ?? "");
 	console.log(
-		`${dat ? "DUNG" : "SAI"} pha-bg-red: ban sao co className="bg-red-500" tren TableCell -> design-gate ma ${r.status}`,
+		`${dat ? "DUNG" : "SAI"} pha-gray-on-color: ban sao co className="bg-red-500 text-gray-400" tren TableCell -> design-gate ma ${r.status}`,
 	);
 	process.exit(dat ? 0 : 1);
 }
