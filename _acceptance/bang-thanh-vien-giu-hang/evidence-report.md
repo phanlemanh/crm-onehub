@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 1bafee3fde8bf56a96580398273a9fba8d9f081b
+verified_commit: d60133f3d91fdf51b9db5e788dc375d25de6c12a
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -161,3 +161,7 @@ none — every multi-run eval is uniform
 
 Round 1: E3 REJECT — thước tràn ngang cũ chỉ đo `document`, bỏ sót bảng "Được phép vào" tràn bên trong `main` ở 375px (thước cũ báo "DUNG 375: tràn ngang 0px" trong khi ảnh 375 cho thấy bảng tràn trong main); trở lại thực thi để sửa thước đo cả `main.scrollWidth`.
 Round 2: toàn bộ 8 eval (E1–E8) và 4 lệnh suite (test, lint, lint:slop, build) PASS.
+
+### Re-pin lần 1 — 2026-09-25, do tệp kiểm khung-trang-cai-dat.dom.tsx thôi gọi git merge-base (CI không có origin/onehub); E16 neo vào cặp sha của lần gộp #138
+run_id: repin-20260925T105306Z-51706
+sha: d60133f3d91fdf51b9db5e788dc375d25de6c12a · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E8 · diff chạm vật đo ngoài làn máy: E8 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8
