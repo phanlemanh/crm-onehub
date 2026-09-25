@@ -24,3 +24,5 @@
 {"ts":"2026-09-25T09:09:07Z","sha":"806ef47b5df0bd0fd0b19d4d3305c717d1f0a25c","round":1,"kind":"baseline","evals_hash":"08c0ee2aa9c0116df992ae40c80cd2ab9bceffc87c03093372fe94fc405bf995","non_discriminating":[{"cmd":"bun run check-types","evals":["E12"]}]}
 {"ts":"2026-09-25T09:09:07Z","sha":"806ef47b5df0bd0fd0b19d4d3305c717d1f0a25c","round":1,"kind":"round-tally","verdict":"REJECT","expected":10,"returned":10,"blocked":0}
 {"ts":"2026-09-25T09:09:07Z","sha":"806ef47b5df0bd0fd0b19d4d3305c717d1f0a25c","round":1,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":16}
+{"kind":"thuoc-vat","ts":"2026-09-25T09:23:06Z","round":1,"san":"a23e9256dc73f6f894d38c3b6988503b0cd53b06","vat":[7,3],"thuoc":[5,3],"ho_so":[28,0],"nhat":1,"lan":0,"tep_thuoc":["_acceptance/logo-onehub/evals.yaml","_acceptance/logo-onehub/rang/ranh-gioi.mjs"]}
+{"kind":"thuoc-lech","ts":"2026-09-25T09:23:06Z","round":1,"sha":"806ef47b5df0bd0fd0b19d4d3305c717d1f0a25c","tep":[{"tep":"_acceptance/logo-onehub/evals.yaml","doi":"đổi nội dung"},{"tep":"_acceptance/logo-onehub/rang/ranh-gioi.mjs","doi":"đổi nội dung"}]}
