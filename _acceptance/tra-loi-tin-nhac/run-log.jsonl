@@ -33,3 +33,4 @@
 {"ts":"2026-09-25T11:25:41Z","sha":"1842e1d59031f23f42734f5a0351a348a36d4278","round":1,"kind":"round-tally","verdict":"PASS","expected":21,"returned":21,"blocked":0}
 {"ts":"2026-09-25T11:25:41Z","sha":"1842e1d59031f23f42734f5a0351a348a36d4278","round":1,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":21}
 {"kind":"thuoc-vat","ts":"2026-09-25T12:51:11Z","round":1,"san":"a596e19609794047ed72bbc651e6bbc2f4c20e58","vat":[0,0],"thuoc":[18,3],"ho_so":[1,0],"nhat":1,"lan":0,"tep_thuoc":["_acceptance/tra-loi-tin-nhac/evals.yaml","_acceptance/tra-loi-tin-nhac/rang/ho-so-cham.mjs"]}
+{"ts":"2026-09-25T16:43:36Z","kind":"repin","run_id":"repin-20260925T164336Z-27997","sha":"a8f91b7d213fc1789b080870e55ded6b0c08e6b6","suites_exit":[0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0,"E5":0,"E6":0,"E7":0,"E8":0,"E9":0,"E10":0,"E11":0,"E12":0,"E13":0,"E14":0,"E15":0,"E16":0,"E17":0}}

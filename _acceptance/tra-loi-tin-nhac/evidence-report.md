@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 1842e1d59031f23f42734f5a0351a348a36d4278
+verified_commit: a8f91b7d213fc1789b080870e55ded6b0c08e6b6
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -258,3 +258,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E1–E17 và bốn lệnh suite (`bun run test`, `bunx turbo run lint --force`, `bun run lint:slop`, `bunx turbo run build --force`) đều xanh ngay từ lần chạy đầu; không có vòng trước để so sánh.
+
+### Re-pin lần 1 — 2026-09-25, do gộp onehub 47b7f00c (#139, #140, #141) sau chữ ký
+run_id: repin-20260925T164336Z-27997
+sha: a8f91b7d213fc1789b080870e55ded6b0c08e6b6 · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng
