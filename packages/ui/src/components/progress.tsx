@@ -10,6 +10,7 @@ type ProgressProps = React.ComponentProps<typeof ProgressPrimitive.Root> & {
   variant?: "neutral"
   expected?: number | null
   label?: string
+  valueText?: string
 }
 
 const kep = (n: number) => Math.max(0, Math.min(100, Math.round(n)))
@@ -20,6 +21,7 @@ function Progress({
   variant,
   expected,
   label,
+  valueText,
   ...props
 }: ProgressProps) {
   const msg = useMessages()
@@ -45,9 +47,10 @@ function Progress({
   const vach = expected === null || expected === undefined ? null : kep(expected)
   const nhan = label ?? msg.tienDo.nhan
   const doc =
-    vach === null
+    valueText ??
+    (vach === null
       ? msg.tienDo.khongVach(nhan, String(phan))
-      : msg.tienDo.coVach(nhan, String(phan), String(vach))
+      : msg.tienDo.coVach(nhan, String(phan), String(vach)))
   return (
     <div
       data-slot="progress-neutral"

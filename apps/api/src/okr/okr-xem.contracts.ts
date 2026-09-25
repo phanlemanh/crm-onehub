@@ -35,6 +35,7 @@ export const danhSachOutput = z.object({
 		loai: z.array(demGiaTri),
 		trangThai: z.array(demGiaTri),
 	}),
+	canEdit: z.boolean(),
 });
 
 export const cycleOnlyInput = z.object({ cycleId: ma });

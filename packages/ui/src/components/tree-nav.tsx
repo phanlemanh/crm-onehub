@@ -2,6 +2,7 @@
 
 import {
 	hotkeysCoreFeature,
+	selectionFeature,
 	syncDataLoaderFeature,
 } from "@headless-tree/core";
 import { useTree } from "@headless-tree/react";
@@ -26,6 +27,9 @@ type TreeNavProps<T> = {
 	selectedId?: string | null;
 	onSelect?: (id: string) => void;
 	renderLabel: (node: TreeNavNode<T>) => ReactNode;
+	itemAttrs?: (node: TreeNavNode<T>) => {
+		[khoa: `data-${string}`]: string | undefined;
+	};
 	indent?: number;
 	className?: string;
 };
@@ -59,6 +63,7 @@ function CayNoi<T>({
 	selectedId,
 	onSelect,
 	renderLabel,
+	itemAttrs,
 	indent,
 	className,
 }: TreeNavProps<T>) {
@@ -71,12 +76,16 @@ function CayNoi<T>({
 			getItem: (id) => bang.get(id) ?? { id, name: "", node: null },
 			getChildren: (id) => con.get(id) ?? [],
 		},
-		state: { expandedItems: expanded },
+		state: {
+			expandedItems: expanded,
+			selectedItems: selectedId ? [selectedId] : [],
+		},
+		setSelectedItems: () => undefined,
 		setExpandedItems: (cap) =>
 			onExpandedChange(typeof cap === "function" ? cap(expanded) : cap),
 		initialState: { focusedItem: selectedId ?? nodes[0]?.id ?? null },
 		onPrimaryAction: (item) => onSelect?.(item.getId()),
-		features: [syncDataLoaderFeature, hotkeysCoreFeature],
+		features: [syncDataLoaderFeature, selectionFeature, hotkeysCoreFeature],
 	});
 
 	return (
@@ -92,6 +101,7 @@ function CayNoi<T>({
 				const dangChon = nut.id === (selectedId ?? null);
 				return (
 					<TreeItem
+						{...itemAttrs?.(nut)}
 						aria-selected={dangChon}
 						data-id={nut.id}
 						data-nav-selected={dangChon}

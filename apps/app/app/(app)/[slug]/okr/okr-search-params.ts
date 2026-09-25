@@ -1,6 +1,11 @@
 import {
+	LOAI_MUC_TIEU,
+	TRANG_THAI_MUC_TIEU,
+} from "@crm/validation/okr-muc-tieu";
+import {
 	createLoader,
 	createParser,
+	parseAsArrayOf,
 	parseAsString,
 	parseAsStringLiteral,
 } from "nuqs/server";
@@ -40,6 +45,13 @@ export const okrParsers = {
 	[SEARCH_PARAM.okr.ky]: parseAsString,
 	[SEARCH_PARAM.okr.don]: parseAsDonOkr,
 	[SEARCH_PARAM.okr.xem]: parseAsStringLiteral(CACH_XEM),
+	[SEARCH_PARAM.okr.phuTrach]: parseAsArrayOf(parseAsString).withDefault([]),
+	[SEARCH_PARAM.okr.loai]: parseAsArrayOf(
+		parseAsStringLiteral(LOAI_MUC_TIEU),
+	).withDefault([]),
+	[SEARCH_PARAM.okr.trangThai]: parseAsArrayOf(
+		parseAsStringLiteral(TRANG_THAI_MUC_TIEU),
+	).withDefault([]),
 };
 
 export const loadOkrSearchParams = createLoader(okrParsers);

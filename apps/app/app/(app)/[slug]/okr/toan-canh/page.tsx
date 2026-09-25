@@ -1,43 +1,53 @@
-import Dashboard from "@carbon/icons-react/es/Dashboard";
-import {
-	Empty,
-	EmptyDescription,
-	EmptyHeader,
-	EmptyMedia,
-	EmptyTitle,
-} from "@crm/ui/components/empty";
-import { Icon } from "@crm/ui/components/icon";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageShellContent, PageShellLoading } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { okrMessages } from "@/lib/messages/okr";
+import { SEARCH_PARAM } from "@/lib/search-param-keys";
+import { requireSession } from "@/lib/session";
+import { HydrateClient } from "@/lib/trpc/hydrate";
+import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { giaiKy, loadOkrSearchParams } from "../okr-search-params";
+import { ToanCanh } from "./toan-canh";
+
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export async function generateMetadata(): Promise<Metadata> {
 	return { title: okrMessages(await getLocale()).tieuDe["toan-canh"] };
 }
 
-export default function ToanCanhPage() {
+export default function ToanCanhPage({
+	searchParams,
+}: {
+	searchParams: SearchParams;
+}) {
 	return (
 		<PageShellContent>
 			<Suspense fallback={<PageShellLoading />}>
-				<ToanCanh />
+				<NoiDung searchParams={searchParams} />
 			</Suspense>
 		</PageShellContent>
 	);
 }
 
-async function ToanCanh() {
-	const m = okrMessages(await getLocale());
+async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
+	await requireSession();
+	const thamSo = await loadOkrSearchParams(searchParams);
+	const trpc = getServerTrpc();
+	const queryClient = getServerQueryClient();
+	const [cycles] = await Promise.all([
+		queryClient.fetchQuery(trpc.okr.cycles.queryOptions()).catch(() => null),
+		queryClient.prefetchQuery(trpc.okr.access.queryOptions()),
+	]);
+	const cycleId = giaiKy(thamSo[SEARCH_PARAM.okr.ky], cycles);
+	if (cycleId)
+		await queryClient.prefetchQuery(
+			trpc.okr.toanCanh.queryOptions({ cycleId }),
+		);
+
 	return (
-		<Empty data-trang-thai="ST-toancanh">
-			<EmptyHeader>
-				<EmptyMedia variant="icon">
-					<Icon icon={Dashboard} />
-				</EmptyMedia>
-				<EmptyTitle>{m.toanCanh.title}</EmptyTitle>
-				<EmptyDescription>{m.toanCanh.body}</EmptyDescription>
-			</EmptyHeader>
-		</Empty>
+		<HydrateClient>
+			<ToanCanh />
+		</HydrateClient>
 	);
 }

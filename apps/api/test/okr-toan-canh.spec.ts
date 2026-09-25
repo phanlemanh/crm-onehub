@@ -555,7 +555,7 @@ describe("cay-day-du", () => {
 		expect(
 			goc?.children.map((c) => [c.id, c.expected ?? "khong vach"]),
 		).toEqual([
-			[krG, kv],
+			[krG, kv ?? "khong vach"],
 			[moc, "khong vach"],
 		]);
 	});

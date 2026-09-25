@@ -12,7 +12,11 @@ import { dungCayCanChinh } from "./can-chinh";
 import { demMatLoc, type MucTieuGon } from "./danh-sach";
 import type { DonViChon, NutCanChinh } from "./okr.contracts";
 import { OkrService } from "./okr.service";
-import { OkrAccessService, type Quyen } from "./okr-access.service";
+import {
+	type DonViCuaMucTieu,
+	OkrAccessService,
+	type Quyen,
+} from "./okr-access.service";
 import { OKR } from "./okr-config";
 import { OKR_XEM } from "./okr-xem.config";
 import type {
@@ -52,6 +56,20 @@ function cayGon(q: Quyen): CayGon {
 		})),
 		chuaXep: q.cay.chuaXep.map(pb),
 	};
+}
+
+function donViCuaChon(unit: DonViChon): DonViCuaMucTieu {
+	const rong = { divisionId: null, departmentId: null, personUserId: null };
+	switch (unit.loai) {
+		case "goc":
+			return { ...rong, level: "onehub" };
+		case "bp":
+			return { ...rong, level: "bo-phan", divisionId: unit.id };
+		case "pb":
+			return { ...rong, level: "phong-ban", departmentId: unit.id };
+		case "nguoi":
+			return { ...rong, level: "ca-nhan", personUserId: unit.id };
+	}
 }
 
 @Injectable()
@@ -153,6 +171,7 @@ export class OkrXemService {
 			rows,
 			total: rows.length,
 			facetCounts: demMatLoc(ds, input.loc),
+			canEdit: this.quyenOkr.suaDuocDonVi(q, userId, donViCuaChon(input.unit)),
 		};
 	}
 
