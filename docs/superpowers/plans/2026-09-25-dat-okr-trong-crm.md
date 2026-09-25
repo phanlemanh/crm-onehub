@@ -8,6 +8,8 @@
 
 **Tech Stack:** Bun, Turbo, NestJS + nestjs-trpc, Prisma (Postgres), zod, Next.js App Router, React Query, nuqs, `@crm/ui` (shadcn), bun:test + JSDOM, puppeteer-core.
 
+**Duyệt kế hoạch (Cổng 1.5):** Manh Phan — uỷ quyền phiên điều phối 2026-09-24.
+
 **Spec:** `docs/superpowers/specs/2026-09-25-dat-okr-trong-crm-design.md` · hợp đồng `_acceptance/dat-okr-trong-crm/contract.md` (15 tiêu chí, duyệt 2026-09-25) · phép đo `_acceptance/dat-okr-trong-crm/evals.yaml` (22 ô, khoá `dok_*` trong `_acceptance/config.yaml`).
 
 ## Global Constraints
