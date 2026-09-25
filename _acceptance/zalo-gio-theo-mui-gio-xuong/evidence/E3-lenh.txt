@@ -1,0 +1,77 @@
+E3 — verifier doc lap — 2026-09-25
+
+[Buoc 1] APP_URL=http://127.0.0.1:3300  API_URL=http://127.0.0.1:3301
+
+[Buoc 2] Kiem cong truoc khi dung:
+  port 3300: khong co tien trinh nao nghe
+  port 3301: khong co tien trinh nao nghe
+  port 2000: khong co tien trinh nao nghe
+
+[Buoc 3] Dung may chu cua CAY DANG XET:
+  API (3301): cd apps/api && PORT=3301 API_URL=http://127.0.0.1:3301 APP_URL=http://127.0.0.1:3300 nohup bun src/main.ts > e3-api.log 2>&1 &
+    PID_API (bun launcher, giu de tat) = 24318 ; PID thuc su nghe 3301 = 24318 (lsof xac nhan)
+  APP (3300): cd apps/app && TZ=UTC PORT=3300 API_URL=http://127.0.0.1:3301 NEXT_PUBLIC_API_URL=http://127.0.0.1:3301 APP_URL=http://127.0.0.1:3300 nohup bun run dev -- -p 3300 -H 127.0.0.1 > e3-app.log 2>&1 &
+    PID_APP (bun launcher tu $!, giu de tat) = 32523
+    Chuoi tien trinh: 32523 (bun run dev) -> 32524 (node .../next dev -p 3300 -H 127.0.0.1) -> 32585 (next-server, giu socket LISTEN 127.0.0.1:3300)
+
+  Doc TZ that tu moi truong cua PID_APP=32523:
+    $ ps eww 32523 | tr ' ' '\n' | grep '^TZ='
+    TZ=UTC
+
+  Doi chieu tren PID cha truc tiep 32524 (node .../next dev), van con nguyen argv, chua doi ten:
+    $ ps eww 32524 | tr ' ' '\n' | grep '^TZ='
+    TZ=UTC
+
+  Ghi chu ky thuat: PID thuc su giu socket (32585) tu doi ten process.title thanh
+  "next-server (v16.3.0)" (hanh vi noi bo cua Next dev/Turbopack). Tren macOS, khi mot
+  tien trinh node doi process.title, `ps eww` mat kha nang doc lai environ cua chinh no
+  (loi da biet cua ps/KERN_PROCARGS2 khi argv bi ghi de) — `ps eww 32585` tra ve RONG,
+  khong phai vi bien moi truong khong ton tai. Da doi chung doc lap bang mot tien trinh
+  node toi gian ben ngoai cay nay:
+    $ TZ=UTC node -e "process.title='next-server (v16.3.0)'; setTimeout(()=>{},6000)" &
+    $ ps eww <pid do> | tr ' ' '\n' | grep '^TZ='   ->  RONG (giong het 32585)
+  32585 la con truc tiep cua 32524 (fork/exec ke thua toan bo env, khong co co che nao
+  trong Next.js loc rieng TZ ma giu lai DATABASE_URL/API_URL — trang van doc dung DB va
+  goi dung API 3301, chung to env day du duoc ke thua). Ket luan: TZ=UTC la moi truong
+  THAT cua tien trinh app (32523 -> 32524 -> 32585), doc duoc tren hai PID dau chuoi,
+  PID cuoi khong doc duoc do gioi han cong cu ps tren macOS, khong phai do thieu bien.
+
+[Buoc 4] CHAN CAY: dat dau moc apps/app/public/canh-cay-905D53BF-4CA2-48A5-B549-976D38CB8CDD.svg,
+  xin lai qua http://127.0.0.1:3300/canh-cay-905D53BF-4CA2-48A5-B549-976D38CB8CDD.svg -> nhan dung
+  noi dung (<svg .../>). Ket luan: may chu 3300 dang phuc vu DUNG cay dang xet. Da xoa dau moc.
+
+[Buoc 5] AppSetting truoc khi gieo: zaloBotName="bot.uipSwwnr", zaloPolledAt="2026-09-23T23:34:46.228Z"
+  (khac rong nen KHONG doi zaloBotName). Gieo zaloPolledAt=2026-09-24T22:27:04Z.
+  Sau khi gieo (doc lai): {"zaloBotName":"bot.uipSwwnr","zaloPolledAt":"2026-09-24T22:27:04.000Z"}
+
+[Buoc 6] Dang nhap: cd apps/api && bun run dev:session e3-verifier@onehub.local
+  -> cookie crm.session_token=dev-session-dev-65332d76657269666965.JwtLh0aX8kB4g6Y7W2qD9mAanQ4jTAzOAmGyo8MtSa0%3D
+  Nang vai thanh vien nay len "admin" (isWorkspaceAdmin) bang mot script rieng (member.upsert
+  role=admin) de dat "quan tri vien" nhu yeu cau, vi dev-session mac dinh gan "member" khi
+  workspace da co nguoi.
+
+  Chup anh: dung mot script puppeteer-core rieng (KHONG phai config:capture.ui, vi
+  scripts/ui-capture.mjs khong ho tro dat cookie phien — no mo mot Chrome moi hoan toan
+  khong dang nhap). Script tam thoi dat 2 cookie (crm.session_token that tu buoc tren,
+  lang=vi de dung dung locale "vi" ma tieu chi doi hoi) roi goto + screenshot + luu file,
+  cung co che Chrome/headless nhu ui-capture.mjs. Da xoa script tam sau khi xong.
+
+  Anh 1440x900: _acceptance/zalo-gio-theo-mui-gio-xuong/evidence/E3-1440.png
+    Doc lai AppSetting.zaloPolledAt ngay sau: 2026-09-24T22:27:04.000Z (khop hat gieo)
+  Anh 375x900:  _acceptance/zalo-gio-theo-mui-gio-xuong/evidence/E3-375.png
+    Doc lai AppSetting.zaloPolledAt ngay sau: 2026-09-24T22:27:04.000Z (khop hat gieo)
+  (Khong can gieo lai / chup lai lan 2 — ca hai lan doc deu khop ngay lan dau.)
+
+  Luu y lan chup dau tien (truoc khi them cookie lang=vi): trang ra tieng Anh
+  "last answered at 09/25, 05:27 AM" — dung gio (05:27) nhung sai ngon ngu so voi tieu
+  chi (doi "trả lời lần cuối lúc 05:27 25-09"). Da sua bang cach dat them cookie lang=vi
+  va chup lai — anh cuoi cung (luu trong evidence/) la ban co lang=vi, dung ca gio lan chu.
+
+[Buoc 7] Danh sach anh luu tai _acceptance/zalo-gio-theo-mui-gio-xuong/evidence/:
+  E3-1440.png, E3-375.png, E3-network.txt
+  Tra AppSetting ve gia tri cu: {"zaloBotName":"bot.uipSwwnr","zaloPolledAt":"2026-09-23T23:34:46.228Z"} — OK (doc lai khop).
+  Xoa dau moc canh-cay (da xoa o buoc 4). Xoa user/session/member tam e3-verifier@onehub.local.
+  Tat may chu: kill 32523 (app, wrapper -> keo theo 32524, 32585) va kill 24318 (api).
+  Doc lai lsof cong 3300/3301 sau kill: ca hai deu trong (free).
+  Xoa 3 file script tam (apps/api/tmp-e3-appsetting.ts, apps/api/tmp-e3-admin.ts,
+  scripts/tmp-e3-capture.mjs) — git status sau cung chi con evidence/ la untracked.
