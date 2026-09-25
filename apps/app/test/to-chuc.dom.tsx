@@ -119,6 +119,7 @@ let cay: TreeOutput = cayMau();
 let quyen = true;
 let cheDo = new Map<string, string>();
 let daGoi: { ten: string; dauVao: unknown }[] = [];
+let duongGoi: string[] = [];
 let xemTruoc: ImportPreviewOutput | null = null;
 
 type Json =
@@ -135,9 +136,10 @@ type ChonGhi = {
 	onSettled?: () => void;
 };
 
-function viet(ten: string) {
+function viet(ten: string, router: string) {
 	return async (dauVao: DauVao) => {
 		daGoi.push({ ten, dauVao: JSON.parse(JSON.stringify(dauVao)) });
+		duongGoi.push(`${router}.${ten}`);
 		const cd = cheDo.get(ten);
 		if (cd !== undefined) throw new Error(cd === "loi" ? LOI : cd);
 		if (ten === "previewImport") return xemTruoc;
@@ -145,17 +147,26 @@ function viet(ten: string) {
 	};
 }
 
-function thuTuc<TRa>(ten: string, doc: () => TRa) {
+function thuTuc<TRa>(ten: string, doc: () => TRa, router = "org") {
 	return {
 		queryKey: () => [ten],
 		queryOptions: () => ({ queryKey: [ten], queryFn: async () => doc() }),
 		mutationOptions: (chon: ChonGhi = {}) => ({
 			...chon,
 			mutationKey: [ten],
-			mutationFn: viet(ten),
+			mutationFn: viet(ten, router),
 		}),
 	};
 }
+
+const GHI_CU = [
+	"createDepartment",
+	"updateDepartment",
+	"reorderDepartments",
+	"archiveDepartment",
+	"restoreDepartment",
+	"purgeDepartment",
+] as const;
 
 const khongDoc = () => {
 	throw new Error("khong doc thu tuc nay");
@@ -179,13 +190,16 @@ mock.module("@/lib/trpc/client", () => ({
 			setPlacement: thuTuc("setPlacement", khongDoc),
 			previewImport: thuTuc("previewImport", khongDoc),
 			applyImport: thuTuc("applyImport", khongDoc),
-		},
-		onboarding: {
-			listDepartments: thuTuc("listDepartments", () => []),
-			manDanhMuc: thuTuc("manDanhMuc", () => null),
 			archiveDepartment: thuTuc("archiveDepartment", khongDoc),
 			restoreDepartment: thuTuc("restoreDepartment", khongDoc),
 			purgeDepartment: thuTuc("purgeDepartment", khongDoc),
+		},
+		onboarding: {
+			listDepartments: thuTuc("listDepartments", () => [], "onboarding"),
+			manDanhMuc: thuTuc("manDanhMuc", () => null, "onboarding"),
+			...Object.fromEntries(
+				GHI_CU.map((ten) => [ten, thuTuc(ten, khongDoc, "onboarding")]),
+			),
 		},
 	}),
 }));
@@ -317,6 +331,7 @@ beforeEach(() => {
 	quyen = true;
 	cheDo = new Map();
 	daGoi = [];
+	duongGoi = [];
 	xemTruoc = null;
 });
 
@@ -637,5 +652,159 @@ describe("nhap-man", () => {
 		const hop = await moNhap(xem(0));
 		const nutGhi = nut(m.nhapHop.khongGhi, hop);
 		expect(nutGhi.disabled).toBe(true);
+	});
+});
+
+const T = TO_CHUC.thongDiep;
+
+function soLanGoi(duong: string): number {
+	return duongGoi.filter((d) => d === duong).length;
+}
+
+function hopXacNhan(): HTMLElement {
+	return document.body.querySelector('[role="alertdialog"]') as HTMLElement;
+}
+
+async function luuTruPb1(s: San): Promise<void> {
+	await moMenu("Kinh doanh vùng 1");
+	await chonMuc(m.luuTru);
+	await cho(() => hopXacNhan() !== null, "hop xac nhan luu tru");
+	await bam(nut(m.luuTru, hopXacNhan()));
+	void s;
+}
+
+async function moDaLuuTru(s: San): Promise<HTMLElement> {
+	await bam(nut(m.daLuuTru.replace("{n}", "1")));
+	await cho(
+		() => s.o.querySelector('[data-luu-tru="pb-cu"]') !== null,
+		"mo da luu tru",
+	);
+	return s.o.querySelector('[data-luu-tru="pb-cu"]') as HTMLElement;
+}
+
+async function xoaHanPbCu(s: San): Promise<void> {
+	const dong = await moDaLuuTru(s);
+	await bam(nut(m.xoaHan, dong));
+	await cho(() => hopXacNhan() !== null, "hop xac nhan xoa han");
+	await bam(nut(m.xoaHan, hopXacNhan()));
+}
+
+async function donMan(): Promise<void> {
+	await act(async () => {
+		toast.dismiss();
+	});
+	for (const san of dangMo) await act(async () => san.root.unmount());
+	dangMo = [];
+	document.body.innerHTML = "";
+}
+
+describe("mdg-man-goi-org", () => {
+	test("mdg-man-goi-org: luu tru, hoan tac, khoi phuc, xoa han deu goi org.*; tu choi hien nguyen cau may chu", async () => {
+		let soKhangDinh = 0;
+		const s1 = await mo(<ToChuc />, "?don=bp:bp-kd");
+		await luuTruPb1(s1);
+		await cho(
+			() => soLanGoi("org.archiveDepartment") === 1,
+			"goi luu tru",
+		).catch(() => undefined);
+		expect(
+			`luu tru: org.archiveDepartment ${soLanGoi("org.archiveDepartment")} loi goi`,
+		).toBe("luu tru: org.archiveDepartment 1 loi goi");
+		expect(JSON.stringify(dauVaoCuoi("archiveDepartment"))).toBe(
+			'{"id":"pb-1"}',
+		);
+		await cho(() => nutCo(document.body, m.hoanTac), "nut hoan tac");
+		await bam(nut(m.hoanTac));
+		await cho(
+			() => soLanGoi("org.restoreDepartment") === 1,
+			"goi hoan tac",
+		).catch(() => undefined);
+		expect(
+			`hoan tac: org.restoreDepartment ${soLanGoi("org.restoreDepartment")} loi goi`,
+		).toBe("hoan tac: org.restoreDepartment 1 loi goi");
+		expect(JSON.stringify(dauVaoCuoi("restoreDepartment"))).toBe(
+			'{"id":"pb-1"}',
+		);
+		soKhangDinh += 4;
+		await donMan();
+
+		const s2 = await mo(<ToChuc />, "?don=pb:pb-1");
+		const dong = await moDaLuuTru(s2);
+		await bam(nut(m.khoiPhuc, dong));
+		await cho(
+			() => soLanGoi("org.restoreDepartment") === 2,
+			"goi khoi phuc",
+		).catch(() => undefined);
+		expect(
+			`khoi phuc: org.restoreDepartment ${soLanGoi("org.restoreDepartment") - 1} loi goi`,
+		).toBe("khoi phuc: org.restoreDepartment 1 loi goi");
+		expect(JSON.stringify(dauVaoCuoi("restoreDepartment"))).toBe(
+			'{"id":"pb-cu"}',
+		);
+		await donMan();
+		const s3 = await mo(<ToChuc />, "?don=pb:pb-1");
+		await xoaHanPbCu(s3);
+		await cho(() => soLanGoi("org.purgeDepartment") === 1, "goi xoa han").catch(
+			() => undefined,
+		);
+		expect(
+			`xoa han: org.purgeDepartment ${soLanGoi("org.purgeDepartment")} loi goi`,
+		).toBe("xoa han: org.purgeDepartment 1 loi goi");
+		expect(JSON.stringify(dauVaoCuoi("purgeDepartment"))).toBe(
+			'{"id":"pb-cu"}',
+		);
+		soKhangDinh += 4;
+		expect(
+			duongGoi.filter(
+				(d) => d.startsWith("onboarding.") && d.endsWith("Department"),
+			),
+		).toEqual([]);
+		soKhangDinh += 1;
+		await donMan();
+
+		const TU_CHOI = [
+			{
+				ten: "luu tru tu choi",
+				thuTuc: "archiveDepartment",
+				cau: T.phongBanConNguoi(2),
+				don: "?don=bp:bp-kd",
+				lam: luuTruPb1,
+				con: (s: San) => s.o.querySelector('[data-phong-ban="pb-1"]') !== null,
+			},
+			{
+				ten: "xoa han tu choi",
+				thuTuc: "purgeDepartment",
+				cau: T.phongBanConBuoc,
+				don: "?don=pb:pb-1",
+				lam: xoaHanPbCu,
+				con: (s: San) => s.o.querySelector('[data-luu-tru="pb-cu"]') !== null,
+			},
+			{
+				ten: "khoi phuc tu choi",
+				thuTuc: "restoreDepartment",
+				cau: T.phongBanTrongKhuon(["Khuôn A"]),
+				don: "?don=pb:pb-1",
+				lam: async (s: San) => {
+					await bam(nut(m.khoiPhuc, await moDaLuuTru(s)));
+				},
+				con: (s: San) => s.o.querySelector('[data-luu-tru="pb-cu"]') !== null,
+			},
+		] as const;
+		for (const ca of TU_CHOI) {
+			cheDo = new Map([[ca.thuTuc, ca.cau]]);
+			const s = await mo(<ToChuc />, ca.don);
+			await ca.lam(s);
+			await cho(
+				() => document.body.textContent?.includes(ca.cau) === true,
+				`${ca.ten}: toast`,
+			).catch(() => undefined);
+			expect(
+				`${ca.ten}: ${document.body.textContent?.includes(ca.cau) ? "toast dung cau may chu" : "toast khac cau may chu"}`,
+			).toBe(`${ca.ten}: toast dung cau may chu`);
+			expect(`${ca.ten}: con ${ca.con(s)}`).toBe(`${ca.ten}: con true`);
+			soKhangDinh += 2;
+			await donMan();
+		}
+		expect(soKhangDinh).toBe(15);
 	});
 });

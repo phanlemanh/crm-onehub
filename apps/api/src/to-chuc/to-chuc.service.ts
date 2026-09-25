@@ -26,6 +26,7 @@ import type {
 	TreeOutput,
 } from "./to-chuc.contracts";
 import { TO_CHUC } from "./to-chuc-config";
+import { lyDoKhongXoaPhongBan } from "./xoa-phong-ban";
 
 const T = TO_CHUC.thongDiep;
 
@@ -89,7 +90,10 @@ export class ToChucService {
 				this.db.orgSecondaryDepartment.findMany({
 					select: { userId: true, departmentId: true },
 				}),
-				this.db.onboardingTemplate.findMany({ select: { steps: true } }),
+				this.db.onboardingTemplate.findMany({
+					orderBy: { createdAt: "asc" },
+					select: { name: true, steps: true },
+				}),
 			]);
 		return {
 			members: members.map((m) => m.user),
@@ -103,11 +107,13 @@ export class ToChucService {
 			})),
 			placements,
 			secondaries,
-			departmentsInTemplates: new Set(
-				khuon.flatMap((k) =>
+			khuonCuaPhongBan: khuon.reduce((banDo, k) => {
+				for (const id of new Set(
 					parseOnboardingTemplateSteps(k.steps).map((b) => b.departmentId),
-				),
-			),
+				))
+					banDo.set(id, [...(banDo.get(id) ?? []), k.name]);
+				return banDo;
+			}, new Map<string, string[]>()),
 		};
 	}
 
@@ -292,6 +298,78 @@ export class ToChucService {
 			),
 		]);
 		return { id: input.id };
+	}
+
+	private async khuonChua(id: string) {
+		const khuon = await this.db.onboardingTemplate.findMany({
+			orderBy: { createdAt: "asc" },
+			select: { name: true, steps: true, archivedAt: true },
+		});
+		return khuon
+			.filter((k) =>
+				parseOnboardingTemplateSteps(k.steps).some(
+					(b) => b.departmentId === id,
+				),
+			)
+			.map((k) => ({ name: k.name, archived: k.archivedAt !== null }));
+	}
+
+	async archiveDepartment(input: { id: string }) {
+		await this.phongBanCo(input.id);
+		const song = (await this.khuonChua(input.id))
+			.filter((k) => !k.archived)
+			.map((k) => k.name);
+		if (song.length > 0)
+			throw new BadRequestException(T.phongBanTrongKhuon(song));
+		const conNguoi = await this.db.orgPlacement.count({
+			where: {
+				primaryDepartmentId: input.id,
+				user: { members: { some: { organizationId: WORKSPACE_ID } } },
+			},
+		});
+		if (conNguoi > 0)
+			throw new BadRequestException(T.phongBanConNguoi(conNguoi));
+		await this.db.department.update({
+			where: { id: input.id },
+			data: { archivedAt: new Date() },
+		});
+		return {
+			id: input.id,
+			purgeable: (await this.lyDoKhongXoa(input.id)) === null,
+		};
+	}
+
+	async restoreDepartment(input: { id: string }) {
+		await this.phongBanCo(input.id);
+		return this.db.department.update({
+			where: { id: input.id },
+			data: { archivedAt: null },
+			select: { id: true },
+		});
+	}
+
+	private async lyDoKhongXoa(id: string) {
+		const pb = await this.phongBanCo(id);
+		const [stepCount, primaryCount, khuon] = await Promise.all([
+			this.db.onboardingStep.count({ where: { departmentId: id } }),
+			this.db.orgPlacement.count({ where: { primaryDepartmentId: id } }),
+			this.khuonChua(id),
+		]);
+		return lyDoKhongXoaPhongBan({
+			archived: pb.archivedAt !== null,
+			stepCount,
+			primaryCount,
+			khuon: khuon.map((k) => k.name),
+		});
+	}
+
+	async purgeDepartment(input: { id: string }) {
+		const lyDo = await this.lyDoKhongXoa(input.id);
+		if (lyDo !== null) throw new BadRequestException(lyDo);
+		return this.db.department.delete({
+			where: { id: input.id },
+			select: { id: true },
+		});
 	}
 
 	async attachDepartments(input: AttachInput) {

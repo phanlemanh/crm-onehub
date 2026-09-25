@@ -1,0 +1,1233 @@
+diff --git a/apps/api/test/dieu-phoi.spec.ts b/apps/api/test/dieu-phoi.spec.ts
+index 80db9862..3a6ac32d 100644
+--- a/apps/api/test/dieu-phoi.spec.ts
++++ b/apps/api/test/dieu-phoi.spec.ts
+@@ -1,6 +1,7 @@
+ import { afterAll, describe, expect, test } from "bun:test";
+ import { db } from "@crm/db";
+ import { OnboardingService } from "../src/onboarding/onboarding.service";
++import { ToChucService } from "../src/to-chuc/to-chuc.service";
+ import {
+ 	batLoi,
+ 	donGieo,
+@@ -18,6 +19,19 @@ async function dungDichVu(): Promise<OnboardingService> {
+ 	return new OnboardingService(db);
+ }
+ 
++const toChuc = new ToChucService(db);
++let demPb = 0;
++const tenRieng = (ten: string) =>
++	`${ten} ${Date.now().toString(36)}-${++demPb}`;
++
++async function taoPb(ten: string) {
++	const { id } = await toChuc.createDepartment({
++		name: tenRieng(ten),
++		divisionId: null,
++	});
++	return db.department.findUniqueOrThrow({ where: { id } });
++}
++
+ describe("luoc-do", () => {
+ 	test("luoc-do: ghi danh duy nhat theo cap ke hoach va ca nhan", async () => {
+ 		const { planId, contactId } = await gieoKeHoachVaCaNhan();
+@@ -80,12 +94,12 @@ describe("luoc-do", () => {
+ 
+ describe("doi-ten-bo-phan", () => {
+ 	test("doi-ten-bo-phan: ba buoc van tro dung bo phan va hien ten moi", async () => {
+-		const service = await dungDichVu();
+-		const dep = await service.createDepartment({ name: "Ky thuat" });
++		const dep = await taoPb("Ky thuat");
+ 		const plan = await gieoKeHoach();
+ 		await gieoBaBuoc(plan.id, dep.id);
+ 
+-		await service.updateDepartment({ id: dep.id, name: "Ky thuat va Du lieu" });
++		const tenMoi = tenRieng("Ky thuat va Du lieu");
++		await toChuc.renameDepartment({ id: dep.id, name: tenMoi });
+ 
+ 		const steps = await db.onboardingStep.findMany({
+ 			where: { planId: plan.id },
+@@ -94,19 +108,17 @@ describe("doi-ten-bo-phan", () => {
+ 
+ 		expect(steps).toHaveLength(3);
+ 		expect(steps.every((s) => s.departmentId === dep.id)).toBe(true);
+-		expect(
+-			steps.every((s) => s.department.name === "Ky thuat va Du lieu"),
+-		).toBe(true);
++		expect(steps.every((s) => s.department.name === tenMoi)).toBe(true);
+ 		expect(steps.some((s) => s.departmentId === null)).toBe(false);
+ 	});
+ 
+ 	test("doi-ten-bo-phan: luu tru mem khong cat bo phan khoi buoc", async () => {
+ 		const service = await dungDichVu();
+-		const dep = await service.createDepartment({ name: "Van hanh" });
++		const dep = await taoPb("Van hanh");
+ 		const plan = await gieoKeHoach();
+ 		await gieoBaBuoc(plan.id, dep.id);
+ 
+-		await service.archiveDepartment({ id: dep.id });
++		await toChuc.archiveDepartment({ id: dep.id });
+ 
+ 		const steps = await db.onboardingStep.findMany({
+ 			where: { planId: plan.id },
+@@ -142,7 +154,7 @@ const baBuocKhuon = (departmentId: string) => [
+ describe("tao ke hoach tu khuon", () => {
+ 	test("chep-khong-tham-chieu: sua nhan trong khuon khong dong ke hoach dang chay", async () => {
+ 		const service = await dungDichVu();
+-		const dep = await service.createDepartment({ name: "Van hanh" });
++		const dep = await taoPb("Van hanh");
+ 		const tpl = await service.createTemplate({
+ 			name: "San moi gioi",
+ 			partnerType: "moi-gioi",
+@@ -178,7 +190,7 @@ describe("tao ke hoach tu khuon", () => {
+ 
+ 	test("buoc-chua-giao: van mang bo phan va van loc ra duoc", async () => {
+ 		const service = await dungDichVu();
+-		const dep = await service.createDepartment({ name: "Ky thuat" });
++		const dep = await taoPb("Ky thuat");
+ 		const tpl = await service.createTemplate({
+ 			name: "San moi gioi",
+ 			partnerType: null,
+@@ -209,7 +221,7 @@ describe("tao ke hoach tu khuon", () => {
+ 		expect(loc.rows.map((r) => r.id)).toContain(step.id);
+ 		expect(loc.total).toBe(3);
+ 
+-		const depKhac = await service.createDepartment({ name: "Dao tao" });
++		const depKhac = await taoPb("Dao tao");
+ 		const locKhac = await service.listSteps({
+ 			planId: plan.id,
+ 			departmentId: depKhac.id,
+@@ -220,7 +232,7 @@ describe("tao ke hoach tu khuon", () => {
+ 
+ 	test("nguoi-cam-trich: ownerId khac rong, cong thuc dem tra ve 1, thieu thi khong sinh hang", async () => {
+ 		const service = await dungDichVu();
+-		const dep = await service.createDepartment({ name: "Van hanh" });
++		const dep = await taoPb("Van hanh");
+ 		const tpl = await service.createTemplate({
+ 			name: "San moi gioi",
+ 			partnerType: null,
+@@ -261,7 +273,7 @@ describe("tao ke hoach tu khuon", () => {
+ 
+ 	test("chep-khong-tham-chieu: han suy tu ngay bat dau cong lech ngay cua khuon", async () => {
+ 		const service = await dungDichVu();
+-		const dep = await service.createDepartment({ name: "Van hanh" });
++		const dep = await taoPb("Van hanh");
+ 		const tpl = await service.createTemplate({
+ 			name: "San moi gioi",
+ 			partnerType: null,
+@@ -295,7 +307,7 @@ async function gieoKeHoachCoBuoc(input: {
+ 	soBuocXong?: number;
+ 	imNgay?: number;
+ }) {
+-	const dep = await input.service.createDepartment({ name: input.tenBoPhan });
++	const dep = await taoPb(input.tenBoPhan);
+ 	const tpl = await input.service.createTemplate({
+ 		name: `Khuon ${input.tenBoPhan}`,
+ 		partnerType: null,
+@@ -359,7 +371,7 @@ describe("danh muc va vong doi", () => {
+ 		expect(kq.rows[0]?.imNgay).toBe(9);
+ 		expect(kq.facetCounts.boPhan?.[a.dep.id]).toBe(1);
+ 
+-		const depTrong = await service.createDepartment({ name: "Khong co gi" });
++		const depTrong = await taoPb("Khong co gi");
+ 		const rong = await service.listPlans({
+ 			q: "",
+ 			sort: "",
+@@ -528,7 +540,7 @@ describe("man danh muc", () => {
+ 		expect(rong.rows).toHaveLength(0);
+ 		expect(rong.trangThai).toBe("ST-danhmuc-chuacokhuon");
+ 
+-		const dep = await service.createDepartment({ name: "Co khuon roi" });
++		const dep = await taoPb("Co khuon roi");
+ 		await service.createTemplate({
+ 			name: "Khuon dau tien",
+ 			partnerType: null,
+diff --git a/apps/api/test/khuon-mat-bo-phan.spec.ts b/apps/api/test/khuon-mat-bo-phan.spec.ts
+index 8932b9d3..f7314c20 100644
+--- a/apps/api/test/khuon-mat-bo-phan.spec.ts
++++ b/apps/api/test/khuon-mat-bo-phan.spec.ts
+@@ -40,6 +40,19 @@ async function goi(thuTuc: string, dauVao: DauVao): Promise<TraLoi> {
+ 	};
+ }
+ 
++async function goiOrg(thuTuc: string, dauVao: DauVao): Promise<TraLoi> {
++	const res = await request(app.getHttpServer())
++		.post(`/api/trpc/org.${thuTuc}`)
++		.set("cookie", phien.cookie)
++		.set("content-type", "application/json")
++		.send(JSON.stringify(dauVao));
++	return {
++		status: res.status,
++		data: res.body?.result?.data,
++		loi: String(res.body?.error?.message ?? ""),
++	};
++}
++
+ async function doc(thuTuc: string, dauVao: DauVao): Promise<TraLoi> {
+ 	const res = await request(app.getHttpServer())
+ 		.get(
+@@ -77,10 +90,12 @@ function buoc(boPhanIds: string[]): BuocKhuon[] {
+ }
+ 
+ async function taoBoPhan(): Promise<BoPhanRa> {
+-	return ok<BoPhanRa>(
+-		await goi("createDepartment", { name: ma("Bo phan") }),
++	const name = ma("Bo phan");
++	const { id } = ok<{ id: string }>(
++		await goiOrg("createDepartment", { name, divisionId: null }),
+ 		"tao bo phan",
+ 	);
++	return { id, name, purgeable: false };
+ }
+ 
+ async function taoKhuon(boPhanIds: string[]): Promise<KhuonRa> {
+@@ -126,7 +141,7 @@ async function khuonLuuTruVoiBoPhan(): Promise<{
+ 	const boPhan = await taoBoPhan();
+ 	const khuon = await taoKhuon([boPhan.id]);
+ 	ok(await goi("archiveTemplate", { id: khuon.id }), "luu tru khuon");
+-	ok(await goi("archiveDepartment", { id: boPhan.id }), "luu tru bo phan");
++	ok(await goiOrg("archiveDepartment", { id: boPhan.id }), "luu tru bo phan");
+ 	return { boPhan, khuon };
+ }
+ 
+@@ -165,7 +180,7 @@ describe("kmbp-chan-xoa", () => {
+ 	test("kmbp-chan-xoa: bo phan con trong khuon da luu tru khong xoa vinh vien duoc", async () => {
+ 		const { boPhan: b, khuon: k } = await khuonLuuTruVoiBoPhan();
+ 		expect(`B purgeable ${await coTheXoa(b.id)}`).toBe("B purgeable false");
+-		const xoaB = await goi("purgeDepartment", { id: b.id });
++		const xoaB = await goiOrg("purgeDepartment", { id: b.id });
+ 		expect(
+ 			`purgeDepartment B phai bi tu choi vi con trong khuon K: HTTP ${xoaB.status} nhac K ${xoaB.loi.includes(k.name)}`,
+ 		).toBe(
+@@ -178,8 +193,8 @@ describe("kmbp-chan-xoa", () => {
+ 		const k2 = await taoKhuon([b2.id]);
+ 		ok(await goi("archiveTemplate", { id: k1.id }), "luu tru K1");
+ 		ok(await goi("archiveTemplate", { id: k2.id }), "luu tru K2");
+-		ok(await goi("archiveDepartment", { id: b2.id }), "luu tru B2");
+-		const xoaHai = await goi("purgeDepartment", { id: b2.id });
++		ok(await goiOrg("archiveDepartment", { id: b2.id }), "luu tru B2");
++		const xoaHai = await goiOrg("purgeDepartment", { id: b2.id });
+ 		expect(
+ 			`B2 trong K1 va K2: HTTP ${xoaHai.status} nhac K1 ${xoaHai.loi.includes(k1.name)} nhac K2 ${xoaHai.loi.includes(k2.name)}`,
+ 		).toBe("B2 trong K1 va K2: HTTP 400 nhac K1 true nhac K2 true");
+@@ -188,7 +203,7 @@ describe("kmbp-chan-xoa", () => {
+ 		expect(
+ 			`B2 con trong K2 sau khi xoa K1: purgeable ${await coTheXoa(b2.id)}`,
+ 		).toBe("B2 con trong K2 sau khi xoa K1: purgeable false");
+-		const xoaSau = await goi("purgeDepartment", { id: b2.id });
++		const xoaSau = await goiOrg("purgeDepartment", { id: b2.id });
+ 		expect(
+ 			`B2 con trong K2 sau khi xoa K1: HTTP ${xoaSau.status} nhac K2 ${xoaSau.loi.includes(k2.name)} nhac K1 ${xoaSau.loi.includes(k1.name)}`,
+ 		).toBe(
+@@ -197,11 +212,11 @@ describe("kmbp-chan-xoa", () => {
+ 		expect(`B2 con hang ${await conHang(b2.id)}`).toBe("B2 con hang true");
+ 
+ 		const c = await taoBoPhan();
+-		ok(await goi("archiveDepartment", { id: c.id }), "luu tru C");
++		ok(await goiOrg("archiveDepartment", { id: c.id }), "luu tru C");
+ 		expect(`C khong o dau ca: purgeable ${await coTheXoa(c.id)}`).toBe(
+ 			"C khong o dau ca: purgeable true",
+ 		);
+-		ok(await goi("purgeDepartment", { id: c.id }), "xoa vinh vien C");
++		ok(await goiOrg("purgeDepartment", { id: c.id }), "xoa vinh vien C");
+ 		expect(`C con hang ${await conHang(c.id)}`).toBe("C con hang false");
+ 	});
+ });
+@@ -209,12 +224,12 @@ describe("kmbp-chan-xoa", () => {
+ describe("kmbp-khoi-phuc", () => {
+ 	test("kmbp-khoi-phuc: khoi phuc khuon K sau khi thu xoa B", async () => {
+ 		const { boPhan: b, khuon: k } = await khuonLuuTruVoiBoPhan();
+-		const xoa = await goi("purgeDepartment", { id: b.id });
++		const xoa = await goiOrg("purgeDepartment", { id: b.id });
+ 		expect(
+ 			`khoi phuc khuon K sau khi thu xoa B: xoa B HTTP ${xoa.status}`,
+ 		).toBe("khoi phuc khuon K sau khi thu xoa B: xoa B HTTP 400");
+ 
+-		ok(await goi("restoreDepartment", { id: b.id }), "khoi phuc B");
++		ok(await goiOrg("restoreDepartment", { id: b.id }), "khoi phuc B");
+ 		const khoiPhucK = await goi("restoreTemplate", { id: k.id });
+ 		expect(
+ 			`khoi phuc khuon K sau khi thu xoa B: HTTP ${khoiPhucK.status} ${khoiPhucK.loi}`,
+@@ -242,7 +257,7 @@ describe("kmbp-thu-tu-don", () => {
+ 		expect(
+ 			`sau khi xoa K, B phai xoa duoc: purgeable ${await coTheXoa(b.id)}`,
+ 		).toBe("sau khi xoa K, B phai xoa duoc: purgeable true");
+-		const xoa = await goi("purgeDepartment", { id: b.id });
++		const xoa = await goiOrg("purgeDepartment", { id: b.id });
+ 		expect(
+ 			`sau khi xoa K, B phai xoa duoc: HTTP ${xoa.status} ${xoa.loi}`,
+ 		).toBe("sau khi xoa K, B phai xoa duoc: HTTP 200 ");
+@@ -252,19 +267,19 @@ describe("kmbp-thu-tu-don", () => {
+ 	test("kmbp-thu-tu-don: loi b — bo B khoi K", async () => {
+ 		const { boPhan: b, khuon: k } = await khuonLuuTruVoiBoPhan();
+ 		const khac = await taoBoPhan();
+-		ok(await goi("restoreDepartment", { id: b.id }), "khoi phuc B");
++		ok(await goiOrg("restoreDepartment", { id: b.id }), "khoi phuc B");
+ 		ok(await goi("restoreTemplate", { id: k.id }), "khoi phuc K");
+ 		ok(
+ 			await goi("updateTemplate", { id: k.id, steps: buoc([khac.id]) }),
+ 			"sua K bo B",
+ 		);
+ 		ok(await goi("archiveTemplate", { id: k.id }), "luu tru lai K");
+-		ok(await goi("archiveDepartment", { id: b.id }), "luu tru lai B");
++		ok(await goiOrg("archiveDepartment", { id: b.id }), "luu tru lai B");
+ 
+ 		expect(
+ 			`sau khi bo B khoi K, B phai xoa duoc: purgeable ${await coTheXoa(b.id)}`,
+ 		).toBe("sau khi bo B khoi K, B phai xoa duoc: purgeable true");
+-		const xoa = await goi("purgeDepartment", { id: b.id });
++		const xoa = await goiOrg("purgeDepartment", { id: b.id });
+ 		expect(
+ 			`sau khi bo B khoi K, B phai xoa duoc: HTTP ${xoa.status} ${xoa.loi}`,
+ 		).toBe("sau khi bo B khoi K, B phai xoa duoc: HTTP 200 ");
+@@ -307,7 +322,7 @@ describe("kmbp-khop", () => {
+ 		const luuTru = new Map<string, boolean>();
+ 		for (const ca of CA) {
+ 			const bp = ok<BoPhanRa>(
+-				await goi("archiveDepartment", { id: ca.id }),
++				await goiOrg("archiveDepartment", { id: ca.id }),
+ 				`luu tru ${ca.ten}`,
+ 			);
+ 			luuTru.set(ca.id, bp.purgeable);
+@@ -321,7 +336,7 @@ describe("kmbp-khop", () => {
+ 			).toBe(`${ca.ten}: archiveDepartment ${trongDs} danh sach ${ca.mong}`);
+ 			soQuanHe += 1;
+ 
+-			const xoa = await goi("purgeDepartment", { id: ca.id });
++			const xoa = await goiOrg("purgeDepartment", { id: ca.id });
+ 			expect(
+ 				`${ca.ten}: purgeable ${trongDs} xoa duoc ${xoa.status === 200}`,
+ 			).toBe(`${ca.ten}: purgeable ${ca.mong} xoa duoc ${ca.mong}`);
+diff --git a/apps/api/test/noi-bon-nut.spec.ts b/apps/api/test/noi-bon-nut.spec.ts
+index 8ba1b334..54fc072c 100644
+--- a/apps/api/test/noi-bon-nut.spec.ts
++++ b/apps/api/test/noi-bon-nut.spec.ts
+@@ -4,11 +4,13 @@ import type { INestApplication } from "@nestjs/common";
+ import { Test, type TestingModule } from "@nestjs/testing";
+ import request from "supertest";
+ import {
+-	departmentCreateInput,
+ 	enrollmentUpsertInput,
+ 	templateCreateInput,
+ } from "../src/onboarding/onboarding.contracts";
+ import { OnboardingService } from "../src/onboarding/onboarding.service";
++import { orgDepartmentCreateInput } from "../src/to-chuc/to-chuc.contracts";
++import { ToChucService } from "../src/to-chuc/to-chuc.service";
++import { TO_CHUC } from "../src/to-chuc/to-chuc-config";
+ import { batLoi } from "./dieu-phoi-gieo";
+ import { gieoThanhVien, mintPhien } from "./phien-thu";
+ 
+@@ -33,6 +35,7 @@ const daGieo = {
+ };
+ 
+ const service = new OnboardingService(db);
++const toChuc = new ToChucService(db);
+ 
+ async function gieoNguoi(): Promise<string> {
+ 	const id = ma("u");
+@@ -44,7 +47,10 @@ async function gieoNguoi(): Promise<string> {
+ }
+ 
+ async function gieoBoPhan(): Promise<string> {
+-	const bp = await service.createDepartment({ name: ma("Bo phan") });
++	const bp = await toChuc.createDepartment({
++		name: ma("Bo phan"),
++		divisionId: null,
++	});
+ 	daGieo.boPhan.push(bp.id);
+ 	return bp.id;
+ }
+@@ -92,17 +98,26 @@ afterAll(async () => {
+ describe("ghi-bo-phan", () => {
+ 	test("ghi-bo-phan: dau vao qua JSON va schema that ghi dung mot bo phan", async () => {
+ 		const ten = ma("Kinh doanh");
+-		const input = departmentCreateInput.parse(quaJson({ name: ten }));
+-		const bp = await service.createDepartment(input);
++		const input = orgDepartmentCreateInput.parse(
++			quaJson({ name: ten, divisionId: null }),
++		);
++		const bp = await toChuc.createDepartment(input);
+ 		daGieo.boPhan.push(bp.id);
+ 
+ 		const hang = await db.department.findMany({ where: { name: ten } });
+ 		expect(hang.map((h) => h.name)).toEqual([ten]);
+ 
++		const trong = { name: { in: ["", "  "] } };
++		const truoc = await db.department.count({ where: trong });
+ 		const loi = await batLoi(async () =>
+-			departmentCreateInput.parse(quaJson({ name: "  " })),
++			toChuc.createDepartment(
++				orgDepartmentCreateInput.parse(
++					quaJson({ name: "  ", divisionId: null }),
++				),
++			),
+ 		);
+-		expect(loi).toContain("name");
++		expect(loi).toBe(`BadRequestException: ${TO_CHUC.thongDiep.tenTrong}`);
++		expect(await db.department.count({ where: trong })).toBe(truoc);
+ 	});
+ });
+ 
+diff --git a/apps/api/test/quan-ly-danh-muc.spec.ts b/apps/api/test/quan-ly-danh-muc.spec.ts
+index b2f97b2d..6efc3c7d 100644
+--- a/apps/api/test/quan-ly-danh-muc.spec.ts
++++ b/apps/api/test/quan-ly-danh-muc.spec.ts
+@@ -8,6 +8,7 @@ import type {
+ import { OnboardingService } from "../src/onboarding/onboarding.service";
+ import { ONBOARDING } from "../src/onboarding/onboarding-config";
+ import { COT_XONG } from "../src/onboarding/onboarding-danh-muc";
++import { ToChucService } from "../src/to-chuc/to-chuc.service";
+ import {
+ 	gieoBoPhan as taoBoPhan,
+ 	gieoNguoi as taoNguoi,
+@@ -531,7 +532,10 @@ describe("bang-cot-bo-phan", () => {
+ 		expect(cotTheoKhoa(bang)).toEqual({ [a.id]: 2, [b.id]: 1, [COT_XONG]: 1 });
+ 		expect(moiIdMotLan(bang).sort()).toEqual(plans.map((p) => p.id).sort());
+ 
+-		await service.updateDepartment({ id: a.id, name: `Ten moi ${t}` });
++		await new ToChucService(db).renameDepartment({
++			id: a.id,
++			name: `Ten moi ${t}`,
++		});
+ 		const sauDoiTen = await bangCot(service, "bo-phan", { q: t });
+ 		expect(sauDoiTen.cot.find((c) => c.khoa === a.id)?.nhan).toBe(
+ 			`Ten moi ${t}`,
+diff --git a/apps/api/test/sua-luu-tru.spec.ts b/apps/api/test/sua-luu-tru.spec.ts
+index 2d8fb9f5..b57af917 100644
+--- a/apps/api/test/sua-luu-tru.spec.ts
++++ b/apps/api/test/sua-luu-tru.spec.ts
+@@ -36,7 +36,7 @@ async function goi(
+ 	ai: keyof typeof cookie = "quanTri",
+ ): Promise<TraLoi> {
+ 	const res = await request(app.getHttpServer())
+-		.post(`/api/trpc/onboarding.${thuTuc}`)
++		.post(`/api/trpc/${thuTuc.includes(".") ? thuTuc : `onboarding.${thuTuc}`}`)
+ 		.set("cookie", cookie[ai])
+ 		.set("content-type", "application/json")
+ 		.send(dauVao === undefined ? "" : JSON.stringify(dauVao));
+@@ -80,11 +80,17 @@ type BoPhanRa = {
+ type KhuonRa = { id: string; name: string; purgeable: boolean };
+ type BuocRa = { label: string; departmentName: string };
+ 
+-async function taoBoPhan(): Promise<BoPhanRa> {
+-	return ok<BoPhanRa>(
+-		await goi("createDepartment", { name: ma("Bo phan") }),
++async function taoBoPhan(divisionId: string | null = null): Promise<BoPhanRa> {
++	const name = ma("Bo phan");
++	const { id } = ok<{ id: string }>(
++		await goi("org.createDepartment", { name, divisionId }),
+ 		"tao bo phan",
+ 	);
++	const { position } = await db.department.findUniqueOrThrow({
++		where: { id },
++		select: { position: true },
++	});
++	return { id, name, position, purgeable: false };
+ }
+ 
+ async function taoKhuon(boPhanIds: string[]): Promise<KhuonRa> {
+@@ -189,6 +195,7 @@ afterAll(async () => {
+ 		where: { name: { startsWith: TIEN_TO } },
+ 	});
+ 	await db.department.deleteMany({ where: { name: { startsWith: TIEN_TO } } });
++	await db.division.deleteMany({ where: { name: { startsWith: TIEN_TO } } });
+ 	await db.session.deleteMany({ where: { token: { in: daGieo.phien } } });
+ 	await db.member.deleteMany({ where: { userId: { in: daGieo.nguoi } } });
+ 	await db.user.deleteMany({ where: { id: { in: daGieo.nguoi } } });
+@@ -196,13 +203,24 @@ afterAll(async () => {
+ 
+ describe("api-bo-phan", () => {
+ 	test("api-bo-phan: doi ten, sap xep, luu tru va khoi phuc qua HTTP", async () => {
+-		const [a, b, c] = [await taoBoPhan(), await taoBoPhan(), await taoBoPhan()];
++		const khoi = ok<{ id: string }>(
++			await goi("org.createDivision", { name: ma("Khoi") }),
++			"tao bo phan cap tren",
++		).id;
++		const [a, b, c] = [
++			await taoBoPhan(khoi),
++			await taoBoPhan(khoi),
++			await taoBoPhan(khoi),
++		];
+ 		if (!a || !b || !c) throw new Error("thieu bo phan");
+ 		const khuon = await taoKhuon([a.id]);
+ 		const kh = await taoKeHoach(khuon.id);
+ 
+ 		const tenMoi = ma("Ten moi");
+-		ok(await goi("updateDepartment", { id: a.id, name: tenMoi }), "doi ten");
++		ok(
++			await goi("org.renameDepartment", { id: a.id, name: tenMoi }),
++			"doi ten",
++		);
+ 		const trongDb = await db.department.findUniqueOrThrow({
+ 			where: { id: a.id },
+ 		});
+@@ -215,7 +233,10 @@ describe("api-bo-phan", () => {
+ 			`ten buoc ${tenMoi}`,
+ 		);
+ 
+-		ok(await goi("reorderDepartments", { ids: [c.id, a.id, b.id] }), "sap xep");
++		ok(
++			await goi("org.moveDepartment", { id: c.id, divisionId: khoi, index: 0 }),
++			"sap xep",
++		);
+ 		const thuTu = (await danhSachBoPhan(false))
+ 			.filter((d) => [a.id, b.id, c.id].includes(d.id))
+ 			.map((d) => d.id);
+@@ -234,7 +255,7 @@ describe("api-bo-phan", () => {
+ 		]);
+ 
+ 		ok(await goi("archiveTemplate", { id: khuon.id }), "luu tru khuon");
+-		ok(await goi("archiveDepartment", { id: a.id }), "luu tru bo phan");
++		ok(await goi("org.archiveDepartment", { id: a.id }), "luu tru bo phan");
+ 		const dangDungSauLuuTru = (await danhSachBoPhan(false)).some(
+ 			(d) => d.id === a.id,
+ 		);
+@@ -252,7 +273,7 @@ describe("api-bo-phan", () => {
+ 			`ten buoc sau luu tru ${tenMoi}`,
+ 		);
+ 
+-		ok(await goi("restoreDepartment", { id: a.id }), "khoi phuc");
++		ok(await goi("org.restoreDepartment", { id: a.id }), "khoi phuc");
+ 		const dangDungSauKhoiPhuc = (await danhSachBoPhan(false)).some(
+ 			(d) => d.id === a.id,
+ 		);
+@@ -289,7 +310,7 @@ describe("api-chan-luu-tru", () => {
+ 
+ 		let soCa = 0;
+ 		for (const ca of CA) {
+-			const tra = await goi("archiveDepartment", { id: ca.id });
++			const tra = await goi("org.archiveDepartment", { id: ca.id });
+ 			expect(`${ca.ten}: HTTP ${tra.status}`).toBe(`${ca.ten}: HTTP ${ca.ma}`);
+ 			const dong = await db.department.findUniqueOrThrow({
+ 				where: { id: ca.id },
+@@ -376,7 +397,7 @@ describe("api-khuon", () => {
+ 		const khuonB = await taoKhuon([dB.id]);
+ 		ok(await goi("archiveTemplate", { id: khuonA.id }), "luu tru khuon A");
+ 		ok(await goi("archiveTemplate", { id: khuonB.id }), "luu tru khuon B");
+-		ok(await goi("archiveDepartment", { id: dA.id }), "luu tru bo phan A");
++		ok(await goi("org.archiveDepartment", { id: dA.id }), "luu tru bo phan A");
+ 		const khuonSua = await taoKhuon([dB.id]);
+ 		const soKhuonTruoc = await db.onboardingTemplate.count();
+ 
+@@ -447,7 +468,7 @@ describe("api-xoa-vinh-vien", () => {
+ 	test("api-xoa-vinh-vien: nam ca xoa vinh vien", async () => {
+ 		const chuaDung = await taoBoPhan();
+ 		ok(
+-			await goi("archiveDepartment", { id: chuaDung.id }),
++			await goi("org.archiveDepartment", { id: chuaDung.id }),
+ 			"luu tru chua dung",
+ 		);
+ 
+@@ -458,7 +479,10 @@ describe("api-xoa-vinh-vien", () => {
+ 			await goi("archiveTemplate", { id: khuonDung.id }),
+ 			"luu tru khuon da dung",
+ 		);
+-		ok(await goi("archiveDepartment", { id: daDung.id }), "luu tru da dung");
++		ok(
++			await goi("org.archiveDepartment", { id: daDung.id }),
++			"luu tru da dung",
++		);
+ 
+ 		const dangDung = await taoBoPhan();
+ 
+@@ -479,7 +503,7 @@ describe("api-xoa-vinh-vien", () => {
+ 				ten: "bo phan chua dung",
+ 				purgeable: co(bpLuuTru, chuaDung.id),
+ 				mong: true,
+-				thuTuc: "purgeDepartment",
++				thuTuc: "org.purgeDepartment",
+ 				id: chuaDung.id,
+ 				ma: 200,
+ 				conHang: false,
+@@ -489,7 +513,7 @@ describe("api-xoa-vinh-vien", () => {
+ 				ten: "bo phan da dung",
+ 				purgeable: co(bpLuuTru, daDung.id),
+ 				mong: false,
+-				thuTuc: "purgeDepartment",
++				thuTuc: "org.purgeDepartment",
+ 				id: daDung.id,
+ 				ma: 400,
+ 				conHang: true,
+@@ -499,7 +523,7 @@ describe("api-xoa-vinh-vien", () => {
+ 				ten: "bo phan chua luu tru",
+ 				purgeable: undefined,
+ 				mong: undefined,
+-				thuTuc: "purgeDepartment",
++				thuTuc: "org.purgeDepartment",
+ 				id: dangDung.id,
+ 				ma: 400,
+ 				conHang: true,
+@@ -551,7 +575,7 @@ describe("api-quyen", () => {
+ 	test("api-quyen: thanh vien bi 403 o moi thu tuc cau hinh, van lam viec tren ke hoach", async () => {
+ 		const dX = await taoBoPhan();
+ 		const dY = await taoBoPhan();
+-		ok(await goi("archiveDepartment", { id: dY.id }), "luu tru dY");
++		ok(await goi("org.archiveDepartment", { id: dY.id }), "luu tru dY");
+ 		const kX = await taoKhuon([dX.id]);
+ 		const kY = await taoKhuon([dX.id]);
+ 		ok(await goi("archiveTemplate", { id: kY.id }), "luu tru kY");
+@@ -570,12 +594,12 @@ describe("api-quyen", () => {
+ 		const truoc = await chup();
+ 
+ 		const CAU_HINH: ReadonlyArray<[string, DauVao]> = [
+-			["createDepartment", { name: ma("Bo phan") }],
+-			["updateDepartment", { id: dX.id, name: ma("Doi") }],
+-			["reorderDepartments", { ids: [dX.id] }],
+-			["archiveDepartment", { id: dX.id }],
+-			["restoreDepartment", { id: dY.id }],
+-			["purgeDepartment", { id: dY.id }],
++			["org.createDepartment", { name: ma("Bo phan"), divisionId: null }],
++			["org.renameDepartment", { id: dX.id, name: ma("Doi") }],
++			["org.moveDepartment", { id: dX.id, divisionId: null, index: 0 }],
++			["org.archiveDepartment", { id: dX.id }],
++			["org.restoreDepartment", { id: dY.id }],
++			["org.purgeDepartment", { id: dY.id }],
+ 			[
+ 				"createTemplate",
+ 				{
+@@ -609,7 +633,11 @@ describe("api-quyen", () => {
+ 			`thanh vien ${await quyen("thanhVien")} quan tri ${await quyen("quanTri")} chu ${await quyen("chu")}`,
+ 		).toBe("thanh vien false quan tri true chu true");
+ 		ok(
+-			await goi("createDepartment", { name: ma("Cua chu") }, "chu"),
++			await goi(
++				"org.createDepartment",
++				{ name: ma("Cua chu"), divisionId: null },
++				"chu",
++			),
+ 			"chu tao bo phan",
+ 		);
+ 
+diff --git a/apps/api/test/to-chuc-chi-tiet.spec.ts b/apps/api/test/to-chuc-chi-tiet.spec.ts
+index 7b47ce1e..a7b24e0f 100644
+--- a/apps/api/test/to-chuc-chi-tiet.spec.ts
++++ b/apps/api/test/to-chuc-chi-tiet.spec.ts
+@@ -58,7 +58,7 @@ describe("gan-phong-ban", () => {
+ 		);
+ 
+ 		const pbLuu = await pbMoi("gan-luu");
+-		ok(await goi("onboarding.archiveDepartment", { id: pbLuu }), "luu pb");
++		ok(await goi("org.archiveDepartment", { id: pbLuu }), "luu pb");
+ 		const bLuu = await tao(
+ 			"org.createDivision",
+ 			{ name: ma("gan-b-luu") },
+diff --git a/apps/api/test/to-chuc-nhap.spec.ts b/apps/api/test/to-chuc-nhap.spec.ts
+index 260b6c4c..53e40e0d 100644
+--- a/apps/api/test/to-chuc-nhap.spec.ts
++++ b/apps/api/test/to-chuc-nhap.spec.ts
+@@ -189,7 +189,7 @@ describe("xem-truoc", () => {
+ 			{ name: ten, divisionId: null },
+ 			"cu",
+ 		);
+-		ok(await goi("onboarding.archiveDepartment", { id: cu }), "luu cu");
++		ok(await goi("org.archiveDepartment", { id: cu }), "luu cu");
+ 		const moi = await tao(
+ 			"org.createDepartment",
+ 			{ name: ten, divisionId: null },
+@@ -376,9 +376,9 @@ describe("ghi", () => {
+ 			"bp cu",
+ 		);
+ 		const pb = await pbMoi("lt-pb", cu);
+-		ok(await goi("onboarding.archiveDepartment", { id: pb }), "luu pb");
++		ok(await goi("org.archiveDepartment", { id: pb }), "luu pb");
+ 		ok(await goi("org.archiveDivision", { id: cu }), "luu bp");
+-		ok(await goi("onboarding.restoreDepartment", { id: pb }), "khoi phuc pb");
++		ok(await goi("org.restoreDepartment", { id: pb }), "khoi phuc pb");
+ 		const tenPb = (await db.department.findUniqueOrThrow({ where: { id: pb } }))
+ 			.name;
+ 		const tenMoi = ma("lt-bp-moi");
+diff --git a/apps/api/test/to-chuc.spec.ts b/apps/api/test/to-chuc.spec.ts
+index 7434177b..1b070d79 100644
+--- a/apps/api/test/to-chuc.spec.ts
++++ b/apps/api/test/to-chuc.spec.ts
+@@ -29,18 +29,18 @@ describe("du-lieu-cu", () => {
+ 		for (const ten of ["D", "A", "C", "B"]) {
+ 			ids.push(
+ 				await tao(
+-					"onboarding.createDepartment",
+-					{ name: ma(ten) },
++					"org.createDepartment",
++					{ name: ma(ten), divisionId: null },
+ 					`tao ${ten}`,
+ 				),
+ 			);
+ 		}
+ 		const luu = await tao(
+-			"onboarding.createDepartment",
+-			{ name: ma("luu") },
++			"org.createDepartment",
++			{ name: ma("luu"), divisionId: null },
+ 			"tao luu",
+ 		);
+-		ok(await goi("onboarding.archiveDepartment", { id: luu }), "luu tru");
++		ok(await goi("org.archiveDepartment", { id: luu }), "luu tru");
+ 
+ 		const c1 = await cay();
+ 		const thuTu = c1.chuaXep.map((d) => d.id).filter((id) => ids.includes(id));
+@@ -194,7 +194,7 @@ describe("vong-doi-don-vi", () => {
+ 			"ten 80 ky tu",
+ 		);
+ 		ok(await goi("org.archiveDivision", { id: daiId }), "luu tru ten dai");
+-		ok(await goi("onboarding.archiveDepartment", { id: pb[0] }), "luu tru P1");
++		ok(await goi("org.archiveDepartment", { id: pb[0] }), "luu tru P1");
+ 		await tao(
+ 			"org.createDepartment",
+ 			{ name: tenP1, divisionId: null },
+@@ -766,12 +766,12 @@ describe("luu-tru", () => {
+ 
+ 		await tuChoi(
+ 			"1 luu tru phong ban con 2 nguoi chinh",
+-			"onboarding.archiveDepartment",
++			"org.archiveDepartment",
+ 			pbNguoi,
+ 			"Còn 2 người có phòng ban chính ở đây — chuyển họ trước.",
+ 		);
+ 		ok(
+-			await goi("onboarding.archiveDepartment", { id: pbPhu }),
++			await goi("org.archiveDepartment", { id: pbPhu }),
+ 			"2 luu tru phong ban chi con nguoi phu",
+ 		);
+ 		await tuChoi(
+@@ -781,7 +781,7 @@ describe("luu-tru", () => {
+ 			"Bộ phận còn 1 phòng ban — chuyển hoặc lưu trữ chúng trước.",
+ 		);
+ 		ok(
+-			await goi("onboarding.archiveDepartment", { id: pbCuaBpRong }),
++			await goi("org.archiveDepartment", { id: pbCuaBpRong }),
+ 			"luu tru pb cua bp rong",
+ 		);
+ 		ok(
+@@ -789,7 +789,7 @@ describe("luu-tru", () => {
+ 			"4 luu tru bo phan chi con phong ban da luu tru",
+ 		);
+ 		ok(
+-			await goi("onboarding.restoreDepartment", { id: pbPhu }),
++			await goi("org.restoreDepartment", { id: pbPhu }),
+ 			"5 khoi phuc phong ban",
+ 		);
+ 		expect(
+@@ -799,23 +799,20 @@ describe("luu-tru", () => {
+ 			}),
+ 		).toEqual(viTriPhu);
+ 
+-		ok(
+-			await goi("onboarding.archiveDepartment", { id: pbBuoc }),
+-			"luu tru pb buoc",
+-		);
++		ok(await goi("org.archiveDepartment", { id: pbBuoc }), "luu tru pb buoc");
+ 		await tuChoi(
+ 			"6 xoa han phong ban da luu tru con buoc",
+-			"onboarding.purgeDepartment",
++			"org.purgeDepartment",
+ 			pbBuoc,
+-			"Đã được dùng nên không xoá vĩnh viễn được — lịch sử kế hoạch còn trỏ tới.",
++			"Phòng ban còn bước kế hoạch trỏ tới nên không xoá hẳn được.",
+ 		);
+ 		ok(
+-			await goi("onboarding.archiveDepartment", { id: pbNguoiRoi }),
++			await goi("org.archiveDepartment", { id: pbNguoiRoi }),
+ 			"luu tru pb nguoi roi",
+ 		);
+ 		await tuChoi(
+ 			"7 xoa han phong ban da luu tru con nguoi chinh",
+-			"onboarding.purgeDepartment",
++			"org.purgeDepartment",
+ 			pbNguoiRoi,
+ 			"Phòng ban còn người trỏ tới nên không xoá hẳn được.",
+ 		);
+@@ -832,9 +829,9 @@ describe("luu-tru", () => {
+ 		);
+ 		await tuChoi(
+ 			"10 xoa han phong ban chua luu tru va rong",
+-			"onboarding.purgeDepartment",
++			"org.purgeDepartment",
+ 			pbChuaLuu,
+-			"Chỉ xoá vĩnh viễn được thứ đã lưu trữ.",
++			"Chỉ xoá hẳn được đơn vị đã lưu trữ.",
+ 		);
+ 
+ 		const c = await cay();
+@@ -875,7 +872,7 @@ async function dungDauVaoHopLe(): Promise<Record<string, () => Promise<Json>>> {
+ 	const pbTrong = () => pbMoi("q-pb");
+ 	const pbLuu = async () => {
+ 		const id = await pbTrong();
+-		ok(await goi("onboarding.archiveDepartment", { id }), "q luu pb");
++		ok(await goi("org.archiveDepartment", { id }), "q luu pb");
+ 		return id;
+ 	};
+ 	const bpLuu = async () => {
+@@ -934,15 +931,9 @@ async function dungDauVaoHopLe(): Promise<Record<string, () => Promise<Json>>> {
+ 		"org.applyImport": async () => ({
+ 			text: `${await nguoiMoi("q-nhap")}@thu.test\t${ma("q-nhap-pb")}\t\t`,
+ 		}),
+-		"onboarding.createDepartment": async () => ({ name: ma("q-onb-tao") }),
+-		"onboarding.updateDepartment": async () => ({
+-			id: await pbTrong(),
+-			name: ma("q-onb-ten"),
+-		}),
+-		"onboarding.archiveDepartment": async () => ({ id: await pbTrong() }),
+-		"onboarding.restoreDepartment": async () => ({ id: await pbLuu() }),
+-		"onboarding.purgeDepartment": async () => ({ id: await pbLuu() }),
+-		"onboarding.reorderDepartments": async () => ({ ids: [await pbTrong()] }),
++		"org.archiveDepartment": async () => ({ id: await pbTrong() }),
++		"org.restoreDepartment": async () => ({ id: await pbLuu() }),
++		"org.purgeDepartment": async () => ({ id: await pbLuu() }),
+ 	};
+ }
+ 
+diff --git a/apps/api/test/vai-chi-okr.spec.ts b/apps/api/test/vai-chi-okr.spec.ts
+index c2b66fb5..ab21b06b 100644
+--- a/apps/api/test/vai-chi-okr.spec.ts
++++ b/apps/api/test/vai-chi-okr.spec.ts
+@@ -100,6 +100,9 @@ const DAU_VAO_HOP_LE = {
+ 	"org.archiveDivision": { id: "khong-co" },
+ 	"org.restoreDivision": { id: "khong-co" },
+ 	"org.purgeDivision": { id: "khong-co" },
++	"org.archiveDepartment": { id: "khong-co" },
++	"org.restoreDepartment": { id: "khong-co" },
++	"org.purgeDepartment": { id: "khong-co" },
+ 	"org.createDepartment": { name: "Phong thu", divisionId: null },
+ 	"org.renameDepartment": { id: "khong-co", name: "x" },
+ 	"org.moveDepartment": { id: "khong-co", divisionId: null, index: 0 },
+diff --git a/apps/app/test/dieu-phoi-xoa-ghi-danh.dom.tsx b/apps/app/test/dieu-phoi-xoa-ghi-danh.dom.tsx
+index 138026b9..aeea4351 100644
+--- a/apps/app/test/dieu-phoi-xoa-ghi-danh.dom.tsx
++++ b/apps/app/test/dieu-phoi-xoa-ghi-danh.dom.tsx
+@@ -116,10 +116,6 @@ function thuTuc(ten: string) {
+ 
+ const BAN_GIA = {
+ 	listDepartments: thuTuc("listDepartments"),
+-	createDepartment: thuTuc("createDepartment"),
+-	updateDepartment: thuTuc("updateDepartment"),
+-	archiveDepartment: thuTuc("archiveDepartment"),
+-	reorderDepartments: thuTuc("reorderDepartments"),
+ 	listTemplates: thuTuc("listTemplates"),
+ 	createTemplate: thuTuc("createTemplate"),
+ 	updateTemplate: thuTuc("updateTemplate"),
+diff --git a/apps/app/test/noi-bon-nut.dom.tsx b/apps/app/test/noi-bon-nut.dom.tsx
+index 0bd19cdf..24ffa134 100644
+--- a/apps/app/test/noi-bon-nut.dom.tsx
++++ b/apps/app/test/noi-bon-nut.dom.tsx
+@@ -12,7 +12,6 @@ import { createRoot, type Root } from "react-dom/client";
+ import type { z } from "zod";
+ import type { DanhMucInput } from "@/app/(app)/[slug]/onboarding/onboarding-search-params";
+ import {
+-	departmentCreateInput,
+ 	enrollmentUpsertInput,
+ 	planCreateFromTemplateInput,
+ 	planListInput,
+@@ -190,6 +189,9 @@ function orgMock() {
+ 		purgeDivision: khong("purgeDivision"),
+ 		renameDepartment: khong("renameDepartment"),
+ 		moveDepartment: khong("moveDepartment"),
++		archiveDepartment: khong("archiveDepartment"),
++		restoreDepartment: khong("restoreDepartment"),
++		purgeDepartment: khong("purgeDepartment"),
+ 		setHead: khong("setHead"),
+ 		setPlacement: khong("setPlacement"),
+ 		previewImport: khong("previewImport"),
+@@ -209,11 +211,6 @@ mock.module("@/lib/trpc/client", () => ({
+ 			listTemplates: thuTuc("listTemplates", (v?: { archived?: boolean }) =>
+ 				v?.archived === true ? [] : khuon,
+ 			),
+-			updateDepartment: thuTuc("updateDepartment", khongDoc),
+-			archiveDepartment: thuTuc("archiveDepartment", khongDoc),
+-			restoreDepartment: thuTuc("restoreDepartment", khongDoc),
+-			purgeDepartment: thuTuc("purgeDepartment", khongDoc),
+-			reorderDepartments: thuTuc("reorderDepartments", khongDoc),
+ 			updateTemplate: thuTuc("updateTemplate", khongDoc),
+ 			archiveTemplate: thuTuc("archiveTemplate", khongDoc),
+ 			restoreTemplate: thuTuc("restoreTemplate", khongDoc),
+@@ -231,23 +228,6 @@ mock.module("@/lib/trpc/client", () => ({
+ 			closePlan: thuTuc("closePlan", khongDoc),
+ 			reopenPlan: thuTuc("reopenPlan", khongDoc),
+ 			markEnrollmentStage: thuTuc("markEnrollmentStage", khongDoc),
+-			createDepartment: thuTuc(
+-				"createDepartment",
+-				khongDoc,
+-				ghi<z.input<typeof departmentCreateInput>>("createDepartment", (v) => {
+-					const d = departmentCreateInput.parse(quaJson(v));
+-					boPhan = [
+-						...boPhan,
+-						{
+-							id: `bp-${boPhan.length}`,
+-							name: d.name,
+-							position: boPhan.length,
+-							archivedAt: null,
+-							purgeable: false,
+-						},
+-					];
+-				}),
+-			),
+ 			createTemplate: thuTuc(
+ 				"createTemplate",
+ 				khongDoc,
+diff --git a/apps/app/test/sua-luu-tru.dom.tsx b/apps/app/test/sua-luu-tru.dom.tsx
+index 7d05edb3..e24aa721 100644
+--- a/apps/app/test/sua-luu-tru.dom.tsx
++++ b/apps/app/test/sua-luu-tru.dom.tsx
+@@ -27,11 +27,11 @@ import {
+ 	templateListOutput,
+ 	templateUpdateInput,
+ } from "../../api/src/onboarding/onboarding.contracts";
+-import { ONBOARDING } from "../../api/src/onboarding/onboarding-config";
+ import {
+ 	orgDepartmentMoveInput,
+ 	orgRenameInput,
+ } from "../../api/src/to-chuc/to-chuc.contracts";
++import { TO_CHUC } from "../../api/src/to-chuc/to-chuc-config";
+ 
+ type Buoc = {
+ 	label: string;
+@@ -240,7 +240,30 @@ function orgMock() {
+ 				},
+ 			),
+ 		),
+-		createDepartment: khong("orgCreateDepartment"),
++		createDepartment: thuTuc(
++			"createDepartment",
++			khongDoc,
++			ghi("createDepartment", () => {}),
++		),
++		archiveDepartment: thuTuc(
++			"archiveDepartment",
++			khongDoc,
++			ghi<VaoId>("archiveDepartment", (v) => datBoPhan(v.id, { luuTru: true })),
++		),
++		restoreDepartment: thuTuc(
++			"restoreDepartment",
++			khongDoc,
++			ghi<VaoId>("restoreDepartment", (v) =>
++				datBoPhan(v.id, { luuTru: false }),
++			),
++		),
++		purgeDepartment: thuTuc(
++			"purgeDepartment",
++			khongDoc,
++			ghi<VaoId>("purgeDepartment", (v) => {
++				boPhan = boPhan.filter((d) => d.id !== v.id);
++			}),
++		),
+ 		createDivision: khong("createDivision"),
+ 		renameDivision: khong("renameDivision"),
+ 		reorderDivisions: khong("reorderDivisions"),
+@@ -265,48 +288,6 @@ mock.module("@/lib/trpc/client", () => ({
+ 			listTemplates: thuTuc("listTemplates", (v?: { archived?: boolean }) =>
+ 				dsKhuon(v?.archived === true),
+ 			),
+-			createDepartment: thuTuc(
+-				"createDepartment",
+-				khongDoc,
+-				ghi("createDepartment", () => {}),
+-			),
+-			updateDepartment: thuTuc(
+-				"updateDepartment",
+-				khongDoc,
+-				ghi<{ id: string; name: string }>("updateDepartment", (v) =>
+-					datBoPhan(v.id, { name: v.name }),
+-				),
+-			),
+-			reorderDepartments: thuTuc(
+-				"reorderDepartments",
+-				khongDoc,
+-				ghi<{ ids: string[] }>("reorderDepartments", (v) => {
+-					v.ids.forEach((id, viTri) => {
+-						datBoPhan(id, { position: viTri });
+-					});
+-				}),
+-			),
+-			archiveDepartment: thuTuc(
+-				"archiveDepartment",
+-				khongDoc,
+-				ghi<VaoId>("archiveDepartment", (v) =>
+-					datBoPhan(v.id, { luuTru: true }),
+-				),
+-			),
+-			restoreDepartment: thuTuc(
+-				"restoreDepartment",
+-				khongDoc,
+-				ghi<VaoId>("restoreDepartment", (v) =>
+-					datBoPhan(v.id, { luuTru: false }),
+-				),
+-			),
+-			purgeDepartment: thuTuc(
+-				"purgeDepartment",
+-				khongDoc,
+-				ghi<VaoId>("purgeDepartment", (v) => {
+-					boPhan = boPhan.filter((d) => d.id !== v.id);
+-				}),
+-			),
+ 			createTemplate: thuTuc(
+ 				"createTemplate",
+ 				khongDoc,
+@@ -1099,7 +1080,7 @@ describe("luu-tru-bo-phan", () => {
+ 
+ describe("bi-chan-luu-tru", () => {
+ 	test("bi-chan-luu-tru: may chu tu choi, bo phan o lai, thong diep hien", async () => {
+-		const thongDiep = ONBOARDING.thongDiep.boPhanTrongKhuon(["San moi gioi"]);
++		const thongDiep = TO_CHUC.thongDiep.phongBanTrongKhuon(["San moi gioi"]);
+ 		boPhan = hai();
+ 		await moToChuc();
+ 		cheDo = new Map([["archiveDepartment", "loi"]]);
+diff --git a/apps/app/test/to-chuc-chi-tiet.dom.tsx b/apps/app/test/to-chuc-chi-tiet.dom.tsx
+index 3016178b..32a7363e 100644
+--- a/apps/app/test/to-chuc-chi-tiet.dom.tsx
++++ b/apps/app/test/to-chuc-chi-tiet.dom.tsx
+@@ -231,13 +231,13 @@ mock.module("@/lib/trpc/client", () => ({
+ 			setPlacement: thuTuc("setPlacement", khongDoc),
+ 			previewImport: thuTuc("previewImport", khongDoc),
+ 			applyImport: thuTuc("applyImport", khongDoc),
++			archiveDepartment: thuTuc("archiveDepartment", khongDoc),
++			restoreDepartment: thuTuc("restoreDepartment", khongDoc),
++			purgeDepartment: thuTuc("purgeDepartment", khongDoc),
+ 		},
+ 		onboarding: {
+ 			listDepartments: thuTuc("listDepartments", () => []),
+ 			manDanhMuc: thuTuc("manDanhMuc", () => null),
+-			archiveDepartment: thuTuc("archiveDepartment", khongDoc),
+-			restoreDepartment: thuTuc("restoreDepartment", khongDoc),
+-			purgeDepartment: thuTuc("purgeDepartment", khongDoc),
+ 			listTemplates: thuTuc("listTemplates", () => khuonLuuTru),
+ 			archiveTemplate: thuTuc("archiveTemplate", khongDoc),
+ 			restoreTemplate: thuTuc("restoreTemplate", khongDoc),
+diff --git a/apps/app/test/to-chuc.dom.tsx b/apps/app/test/to-chuc.dom.tsx
+index 56d06f84..4d8b9398 100644
+--- a/apps/app/test/to-chuc.dom.tsx
++++ b/apps/app/test/to-chuc.dom.tsx
+@@ -119,6 +119,7 @@ let cay: TreeOutput = cayMau();
+ let quyen = true;
+ let cheDo = new Map<string, string>();
+ let daGoi: { ten: string; dauVao: unknown }[] = [];
++let duongGoi: string[] = [];
+ let xemTruoc: ImportPreviewOutput | null = null;
+ 
+ type Json =
+@@ -135,9 +136,10 @@ type ChonGhi = {
+ 	onSettled?: () => void;
+ };
+ 
+-function viet(ten: string) {
++function viet(ten: string, router: string) {
+ 	return async (dauVao: DauVao) => {
+ 		daGoi.push({ ten, dauVao: JSON.parse(JSON.stringify(dauVao)) });
++		duongGoi.push(`${router}.${ten}`);
+ 		const cd = cheDo.get(ten);
+ 		if (cd !== undefined) throw new Error(cd === "loi" ? LOI : cd);
+ 		if (ten === "previewImport") return xemTruoc;
+@@ -145,18 +147,27 @@ function viet(ten: string) {
+ 	};
+ }
+ 
+-function thuTuc<TRa>(ten: string, doc: () => TRa) {
++function thuTuc<TRa>(ten: string, doc: () => TRa, router = "org") {
+ 	return {
+ 		queryKey: () => [ten],
+ 		queryOptions: () => ({ queryKey: [ten], queryFn: async () => doc() }),
+ 		mutationOptions: (chon: ChonGhi = {}) => ({
+ 			...chon,
+ 			mutationKey: [ten],
+-			mutationFn: viet(ten),
++			mutationFn: viet(ten, router),
+ 		}),
+ 	};
+ }
+ 
++const GHI_CU = [
++	"createDepartment",
++	"updateDepartment",
++	"reorderDepartments",
++	"archiveDepartment",
++	"restoreDepartment",
++	"purgeDepartment",
++] as const;
++
+ const khongDoc = () => {
+ 	throw new Error("khong doc thu tuc nay");
+ };
+@@ -179,14 +190,17 @@ mock.module("@/lib/trpc/client", () => ({
+ 			setPlacement: thuTuc("setPlacement", khongDoc),
+ 			previewImport: thuTuc("previewImport", khongDoc),
+ 			applyImport: thuTuc("applyImport", khongDoc),
+-		},
+-		onboarding: {
+-			listDepartments: thuTuc("listDepartments", () => []),
+-			manDanhMuc: thuTuc("manDanhMuc", () => null),
+ 			archiveDepartment: thuTuc("archiveDepartment", khongDoc),
+ 			restoreDepartment: thuTuc("restoreDepartment", khongDoc),
+ 			purgeDepartment: thuTuc("purgeDepartment", khongDoc),
+ 		},
++		onboarding: {
++			listDepartments: thuTuc("listDepartments", () => [], "onboarding"),
++			manDanhMuc: thuTuc("manDanhMuc", () => null, "onboarding"),
++			...Object.fromEntries(
++				GHI_CU.map((ten) => [ten, thuTuc(ten, khongDoc, "onboarding")]),
++			),
++		},
+ 	}),
+ }));
+ 
+@@ -317,6 +331,7 @@ beforeEach(() => {
+ 	quyen = true;
+ 	cheDo = new Map();
+ 	daGoi = [];
++	duongGoi = [];
+ 	xemTruoc = null;
+ });
+ 
+@@ -639,3 +654,157 @@ describe("nhap-man", () => {
+ 		expect(nutGhi.disabled).toBe(true);
+ 	});
+ });
++
++const T = TO_CHUC.thongDiep;
++
++function soLanGoi(duong: string): number {
++	return duongGoi.filter((d) => d === duong).length;
++}
++
++function hopXacNhan(): HTMLElement {
++	return document.body.querySelector('[role="alertdialog"]') as HTMLElement;
++}
++
++async function luuTruPb1(s: San): Promise<void> {
++	await moMenu("Kinh doanh vùng 1");
++	await chonMuc(m.luuTru);
++	await cho(() => hopXacNhan() !== null, "hop xac nhan luu tru");
++	await bam(nut(m.luuTru, hopXacNhan()));
++	void s;
++}
++
++async function moDaLuuTru(s: San): Promise<HTMLElement> {
++	await bam(nut(m.daLuuTru.replace("{n}", "1")));
++	await cho(
++		() => s.o.querySelector('[data-luu-tru="pb-cu"]') !== null,
++		"mo da luu tru",
++	);
++	return s.o.querySelector('[data-luu-tru="pb-cu"]') as HTMLElement;
++}
++
++async function xoaHanPbCu(s: San): Promise<void> {
++	const dong = await moDaLuuTru(s);
++	await bam(nut(m.xoaHan, dong));
++	await cho(() => hopXacNhan() !== null, "hop xac nhan xoa han");
++	await bam(nut(m.xoaHan, hopXacNhan()));
++}
++
++async function donMan(): Promise<void> {
++	await act(async () => {
++		toast.dismiss();
++	});
++	for (const san of dangMo) await act(async () => san.root.unmount());
++	dangMo = [];
++	document.body.innerHTML = "";
++}
++
++describe("mdg-man-goi-org", () => {
++	test("mdg-man-goi-org: luu tru, hoan tac, khoi phuc, xoa han deu goi org.*; tu choi hien nguyen cau may chu", async () => {
++		let soKhangDinh = 0;
++		const s1 = await mo(<ToChuc />, "?don=bp:bp-kd");
++		await luuTruPb1(s1);
++		await cho(
++			() => soLanGoi("org.archiveDepartment") === 1,
++			"goi luu tru",
++		).catch(() => undefined);
++		expect(
++			`luu tru: org.archiveDepartment ${soLanGoi("org.archiveDepartment")} loi goi`,
++		).toBe("luu tru: org.archiveDepartment 1 loi goi");
++		expect(JSON.stringify(dauVaoCuoi("archiveDepartment"))).toBe(
++			'{"id":"pb-1"}',
++		);
++		await cho(() => nutCo(document.body, m.hoanTac), "nut hoan tac");
++		await bam(nut(m.hoanTac));
++		await cho(
++			() => soLanGoi("org.restoreDepartment") === 1,
++			"goi hoan tac",
++		).catch(() => undefined);
++		expect(
++			`hoan tac: org.restoreDepartment ${soLanGoi("org.restoreDepartment")} loi goi`,
++		).toBe("hoan tac: org.restoreDepartment 1 loi goi");
++		expect(JSON.stringify(dauVaoCuoi("restoreDepartment"))).toBe(
++			'{"id":"pb-1"}',
++		);
++		soKhangDinh += 4;
++		await donMan();
++
++		const s2 = await mo(<ToChuc />, "?don=pb:pb-1");
++		const dong = await moDaLuuTru(s2);
++		await bam(nut(m.khoiPhuc, dong));
++		await cho(
++			() => soLanGoi("org.restoreDepartment") === 2,
++			"goi khoi phuc",
++		).catch(() => undefined);
++		expect(
++			`khoi phuc: org.restoreDepartment ${soLanGoi("org.restoreDepartment") - 1} loi goi`,
++		).toBe("khoi phuc: org.restoreDepartment 1 loi goi");
++		expect(JSON.stringify(dauVaoCuoi("restoreDepartment"))).toBe(
++			'{"id":"pb-cu"}',
++		);
++		await donMan();
++		const s3 = await mo(<ToChuc />, "?don=pb:pb-1");
++		await xoaHanPbCu(s3);
++		await cho(() => soLanGoi("org.purgeDepartment") === 1, "goi xoa han").catch(
++			() => undefined,
++		);
++		expect(
++			`xoa han: org.purgeDepartment ${soLanGoi("org.purgeDepartment")} loi goi`,
++		).toBe("xoa han: org.purgeDepartment 1 loi goi");
++		expect(JSON.stringify(dauVaoCuoi("purgeDepartment"))).toBe(
++			'{"id":"pb-cu"}',
++		);
++		soKhangDinh += 4;
++		expect(
++			duongGoi.filter(
++				(d) => d.startsWith("onboarding.") && d.endsWith("Department"),
++			),
++		).toEqual([]);
++		soKhangDinh += 1;
++		await donMan();
++
++		const TU_CHOI = [
++			{
++				ten: "luu tru tu choi",
++				thuTuc: "archiveDepartment",
++				cau: T.phongBanConNguoi(2),
++				don: "?don=bp:bp-kd",
++				lam: luuTruPb1,
++				con: (s: San) => s.o.querySelector('[data-phong-ban="pb-1"]') !== null,
++			},
++			{
++				ten: "xoa han tu choi",
++				thuTuc: "purgeDepartment",
++				cau: T.phongBanConBuoc,
++				don: "?don=pb:pb-1",
++				lam: xoaHanPbCu,
++				con: (s: San) => s.o.querySelector('[data-luu-tru="pb-cu"]') !== null,
++			},
++			{
++				ten: "khoi phuc tu choi",
++				thuTuc: "restoreDepartment",
++				cau: T.phongBanTrongKhuon(["Khuôn A"]),
++				don: "?don=pb:pb-1",
++				lam: async (s: San) => {
++					await bam(nut(m.khoiPhuc, await moDaLuuTru(s)));
++				},
++				con: (s: San) => s.o.querySelector('[data-luu-tru="pb-cu"]') !== null,
++			},
++		] as const;
++		for (const ca of TU_CHOI) {
++			cheDo = new Map([[ca.thuTuc, ca.cau]]);
++			const s = await mo(<ToChuc />, ca.don);
++			await ca.lam(s);
++			await cho(
++				() => document.body.textContent?.includes(ca.cau) === true,
++				`${ca.ten}: toast`,
++			).catch(() => undefined);
++			expect(
++				`${ca.ten}: ${document.body.textContent?.includes(ca.cau) ? "toast dung cau may chu" : "toast khac cau may chu"}`,
++			).toBe(`${ca.ten}: toast dung cau may chu`);
++			expect(`${ca.ten}: con ${ca.con(s)}`).toBe(`${ca.ten}: con true`);
++			soKhangDinh += 2;
++			await donMan();
++		}
++		expect(soKhangDinh).toBe(15);
++	});
++});

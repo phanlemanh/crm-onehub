@@ -12,7 +12,6 @@ import { createRoot, type Root } from "react-dom/client";
 import type { z } from "zod";
 import type { DanhMucInput } from "@/app/(app)/[slug]/onboarding/onboarding-search-params";
 import {
-	departmentCreateInput,
 	enrollmentUpsertInput,
 	planCreateFromTemplateInput,
 	planListInput,
@@ -190,6 +189,9 @@ function orgMock() {
 		purgeDivision: khong("purgeDivision"),
 		renameDepartment: khong("renameDepartment"),
 		moveDepartment: khong("moveDepartment"),
+		archiveDepartment: khong("archiveDepartment"),
+		restoreDepartment: khong("restoreDepartment"),
+		purgeDepartment: khong("purgeDepartment"),
 		setHead: khong("setHead"),
 		setPlacement: khong("setPlacement"),
 		previewImport: khong("previewImport"),
@@ -209,11 +211,6 @@ mock.module("@/lib/trpc/client", () => ({
 			listTemplates: thuTuc("listTemplates", (v?: { archived?: boolean }) =>
 				v?.archived === true ? [] : khuon,
 			),
-			updateDepartment: thuTuc("updateDepartment", khongDoc),
-			archiveDepartment: thuTuc("archiveDepartment", khongDoc),
-			restoreDepartment: thuTuc("restoreDepartment", khongDoc),
-			purgeDepartment: thuTuc("purgeDepartment", khongDoc),
-			reorderDepartments: thuTuc("reorderDepartments", khongDoc),
 			updateTemplate: thuTuc("updateTemplate", khongDoc),
 			archiveTemplate: thuTuc("archiveTemplate", khongDoc),
 			restoreTemplate: thuTuc("restoreTemplate", khongDoc),
@@ -231,23 +228,6 @@ mock.module("@/lib/trpc/client", () => ({
 			closePlan: thuTuc("closePlan", khongDoc),
 			reopenPlan: thuTuc("reopenPlan", khongDoc),
 			markEnrollmentStage: thuTuc("markEnrollmentStage", khongDoc),
-			createDepartment: thuTuc(
-				"createDepartment",
-				khongDoc,
-				ghi<z.input<typeof departmentCreateInput>>("createDepartment", (v) => {
-					const d = departmentCreateInput.parse(quaJson(v));
-					boPhan = [
-						...boPhan,
-						{
-							id: `bp-${boPhan.length}`,
-							name: d.name,
-							position: boPhan.length,
-							archivedAt: null,
-							purgeable: false,
-						},
-					];
-				}),
-			),
 			createTemplate: thuTuc(
 				"createTemplate",
 				khongDoc,

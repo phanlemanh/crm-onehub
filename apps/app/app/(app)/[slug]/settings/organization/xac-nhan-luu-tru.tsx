@@ -24,13 +24,9 @@ export function XacNhanLuuTru({
 	const trpc = useTRPC();
 	const lamMoi = useLamMoiToChuc();
 	const dangHoanTac = useRef(false);
-	const luuPb = useMutation(
-		trpc.onboarding.archiveDepartment.mutationOptions(),
-	);
+	const luuPb = useMutation(trpc.org.archiveDepartment.mutationOptions());
 	const luuBp = useMutation(trpc.org.archiveDivision.mutationOptions());
-	const khoiPb = useMutation(
-		trpc.onboarding.restoreDepartment.mutationOptions(),
-	);
+	const khoiPb = useMutation(trpc.org.restoreDepartment.mutationOptions());
 	const khoiBp = useMutation(trpc.org.restoreDivision.mutationOptions());
 	const dangLuu = luuPb.isPending || luuBp.isPending;
 

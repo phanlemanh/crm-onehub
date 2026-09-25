@@ -189,7 +189,7 @@ describe("xem-truoc", () => {
 			{ name: ten, divisionId: null },
 			"cu",
 		);
-		ok(await goi("onboarding.archiveDepartment", { id: cu }), "luu cu");
+		ok(await goi("org.archiveDepartment", { id: cu }), "luu cu");
 		const moi = await tao(
 			"org.createDepartment",
 			{ name: ten, divisionId: null },
@@ -376,9 +376,9 @@ describe("ghi", () => {
 			"bp cu",
 		);
 		const pb = await pbMoi("lt-pb", cu);
-		ok(await goi("onboarding.archiveDepartment", { id: pb }), "luu pb");
+		ok(await goi("org.archiveDepartment", { id: pb }), "luu pb");
 		ok(await goi("org.archiveDivision", { id: cu }), "luu bp");
-		ok(await goi("onboarding.restoreDepartment", { id: pb }), "khoi phuc pb");
+		ok(await goi("org.restoreDepartment", { id: pb }), "khoi phuc pb");
 		const tenPb = (await db.department.findUniqueOrThrow({ where: { id: pb } }))
 			.name;
 		const tenMoi = ma("lt-bp-moi");

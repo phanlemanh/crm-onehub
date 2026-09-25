@@ -205,9 +205,21 @@ if (CHI_DEM) {
 	process.exit(hong.length === 0 ? 0 : 1);
 }
 
-const vong = new Set(
-	git("rev-list", `${moc}..HEAD`).split("\n").filter(Boolean),
-);
+const daGhim = /^verified_commit:\s*(\S+)/m.exec(
+	docTep("_acceptance/to-chuc-danh-sach-chi-tiet/evidence-report.md"),
+)?.[1];
+const laToTien = (a, b) =>
+	spawnSync("git", ["-C", GOC, "merge-base", "--is-ancestor", a, b]).status ===
+	0;
+const gop = daGhim
+	? git("rev-list", "--first-parent", "--merges", NHANH_GOC)
+			.split("\n")
+			.filter(Boolean)
+			.find((m) => laToTien(daGhim, m) && !laToTien(daGhim, `${m}^1`))
+	: undefined;
+const dayVong = gop ? `${gop}^1..${gop}^2` : `${moc}..HEAD`;
+console.log(`vong cua ho so: ${dayVong}`);
+const vong = new Set(git("rev-list", dayVong).split("\n").filter(Boolean));
 for (const hs of HO_SO) {
 	const tepLog = join(GOC, "_acceptance", hs, "run-log.jsonl");
 	const may = docTep(`_acceptance/${hs}/evals.yaml`)

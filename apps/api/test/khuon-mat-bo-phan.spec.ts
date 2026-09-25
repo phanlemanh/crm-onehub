@@ -40,6 +40,19 @@ async function goi(thuTuc: string, dauVao: DauVao): Promise<TraLoi> {
 	};
 }
 
+async function goiOrg(thuTuc: string, dauVao: DauVao): Promise<TraLoi> {
+	const res = await request(app.getHttpServer())
+		.post(`/api/trpc/org.${thuTuc}`)
+		.set("cookie", phien.cookie)
+		.set("content-type", "application/json")
+		.send(JSON.stringify(dauVao));
+	return {
+		status: res.status,
+		data: res.body?.result?.data,
+		loi: String(res.body?.error?.message ?? ""),
+	};
+}
+
 async function doc(thuTuc: string, dauVao: DauVao): Promise<TraLoi> {
 	const res = await request(app.getHttpServer())
 		.get(
@@ -77,10 +90,12 @@ function buoc(boPhanIds: string[]): BuocKhuon[] {
 }
 
 async function taoBoPhan(): Promise<BoPhanRa> {
-	return ok<BoPhanRa>(
-		await goi("createDepartment", { name: ma("Bo phan") }),
+	const name = ma("Bo phan");
+	const { id } = ok<{ id: string }>(
+		await goiOrg("createDepartment", { name, divisionId: null }),
 		"tao bo phan",
 	);
+	return { id, name, purgeable: false };
 }
 
 async function taoKhuon(boPhanIds: string[]): Promise<KhuonRa> {
@@ -126,7 +141,7 @@ async function khuonLuuTruVoiBoPhan(): Promise<{
 	const boPhan = await taoBoPhan();
 	const khuon = await taoKhuon([boPhan.id]);
 	ok(await goi("archiveTemplate", { id: khuon.id }), "luu tru khuon");
-	ok(await goi("archiveDepartment", { id: boPhan.id }), "luu tru bo phan");
+	ok(await goiOrg("archiveDepartment", { id: boPhan.id }), "luu tru bo phan");
 	return { boPhan, khuon };
 }
 
@@ -165,7 +180,7 @@ describe("kmbp-chan-xoa", () => {
 	test("kmbp-chan-xoa: bo phan con trong khuon da luu tru khong xoa vinh vien duoc", async () => {
 		const { boPhan: b, khuon: k } = await khuonLuuTruVoiBoPhan();
 		expect(`B purgeable ${await coTheXoa(b.id)}`).toBe("B purgeable false");
-		const xoaB = await goi("purgeDepartment", { id: b.id });
+		const xoaB = await goiOrg("purgeDepartment", { id: b.id });
 		expect(
 			`purgeDepartment B phai bi tu choi vi con trong khuon K: HTTP ${xoaB.status} nhac K ${xoaB.loi.includes(k.name)}`,
 		).toBe(
@@ -178,8 +193,8 @@ describe("kmbp-chan-xoa", () => {
 		const k2 = await taoKhuon([b2.id]);
 		ok(await goi("archiveTemplate", { id: k1.id }), "luu tru K1");
 		ok(await goi("archiveTemplate", { id: k2.id }), "luu tru K2");
-		ok(await goi("archiveDepartment", { id: b2.id }), "luu tru B2");
-		const xoaHai = await goi("purgeDepartment", { id: b2.id });
+		ok(await goiOrg("archiveDepartment", { id: b2.id }), "luu tru B2");
+		const xoaHai = await goiOrg("purgeDepartment", { id: b2.id });
 		expect(
 			`B2 trong K1 va K2: HTTP ${xoaHai.status} nhac K1 ${xoaHai.loi.includes(k1.name)} nhac K2 ${xoaHai.loi.includes(k2.name)}`,
 		).toBe("B2 trong K1 va K2: HTTP 400 nhac K1 true nhac K2 true");
@@ -188,7 +203,7 @@ describe("kmbp-chan-xoa", () => {
 		expect(
 			`B2 con trong K2 sau khi xoa K1: purgeable ${await coTheXoa(b2.id)}`,
 		).toBe("B2 con trong K2 sau khi xoa K1: purgeable false");
-		const xoaSau = await goi("purgeDepartment", { id: b2.id });
+		const xoaSau = await goiOrg("purgeDepartment", { id: b2.id });
 		expect(
 			`B2 con trong K2 sau khi xoa K1: HTTP ${xoaSau.status} nhac K2 ${xoaSau.loi.includes(k2.name)} nhac K1 ${xoaSau.loi.includes(k1.name)}`,
 		).toBe(
@@ -197,11 +212,11 @@ describe("kmbp-chan-xoa", () => {
 		expect(`B2 con hang ${await conHang(b2.id)}`).toBe("B2 con hang true");
 
 		const c = await taoBoPhan();
-		ok(await goi("archiveDepartment", { id: c.id }), "luu tru C");
+		ok(await goiOrg("archiveDepartment", { id: c.id }), "luu tru C");
 		expect(`C khong o dau ca: purgeable ${await coTheXoa(c.id)}`).toBe(
 			"C khong o dau ca: purgeable true",
 		);
-		ok(await goi("purgeDepartment", { id: c.id }), "xoa vinh vien C");
+		ok(await goiOrg("purgeDepartment", { id: c.id }), "xoa vinh vien C");
 		expect(`C con hang ${await conHang(c.id)}`).toBe("C con hang false");
 	});
 });
@@ -209,12 +224,12 @@ describe("kmbp-chan-xoa", () => {
 describe("kmbp-khoi-phuc", () => {
 	test("kmbp-khoi-phuc: khoi phuc khuon K sau khi thu xoa B", async () => {
 		const { boPhan: b, khuon: k } = await khuonLuuTruVoiBoPhan();
-		const xoa = await goi("purgeDepartment", { id: b.id });
+		const xoa = await goiOrg("purgeDepartment", { id: b.id });
 		expect(
 			`khoi phuc khuon K sau khi thu xoa B: xoa B HTTP ${xoa.status}`,
 		).toBe("khoi phuc khuon K sau khi thu xoa B: xoa B HTTP 400");
 
-		ok(await goi("restoreDepartment", { id: b.id }), "khoi phuc B");
+		ok(await goiOrg("restoreDepartment", { id: b.id }), "khoi phuc B");
 		const khoiPhucK = await goi("restoreTemplate", { id: k.id });
 		expect(
 			`khoi phuc khuon K sau khi thu xoa B: HTTP ${khoiPhucK.status} ${khoiPhucK.loi}`,
@@ -242,7 +257,7 @@ describe("kmbp-thu-tu-don", () => {
 		expect(
 			`sau khi xoa K, B phai xoa duoc: purgeable ${await coTheXoa(b.id)}`,
 		).toBe("sau khi xoa K, B phai xoa duoc: purgeable true");
-		const xoa = await goi("purgeDepartment", { id: b.id });
+		const xoa = await goiOrg("purgeDepartment", { id: b.id });
 		expect(
 			`sau khi xoa K, B phai xoa duoc: HTTP ${xoa.status} ${xoa.loi}`,
 		).toBe("sau khi xoa K, B phai xoa duoc: HTTP 200 ");
@@ -252,19 +267,19 @@ describe("kmbp-thu-tu-don", () => {
 	test("kmbp-thu-tu-don: loi b — bo B khoi K", async () => {
 		const { boPhan: b, khuon: k } = await khuonLuuTruVoiBoPhan();
 		const khac = await taoBoPhan();
-		ok(await goi("restoreDepartment", { id: b.id }), "khoi phuc B");
+		ok(await goiOrg("restoreDepartment", { id: b.id }), "khoi phuc B");
 		ok(await goi("restoreTemplate", { id: k.id }), "khoi phuc K");
 		ok(
 			await goi("updateTemplate", { id: k.id, steps: buoc([khac.id]) }),
 			"sua K bo B",
 		);
 		ok(await goi("archiveTemplate", { id: k.id }), "luu tru lai K");
-		ok(await goi("archiveDepartment", { id: b.id }), "luu tru lai B");
+		ok(await goiOrg("archiveDepartment", { id: b.id }), "luu tru lai B");
 
 		expect(
 			`sau khi bo B khoi K, B phai xoa duoc: purgeable ${await coTheXoa(b.id)}`,
 		).toBe("sau khi bo B khoi K, B phai xoa duoc: purgeable true");
-		const xoa = await goi("purgeDepartment", { id: b.id });
+		const xoa = await goiOrg("purgeDepartment", { id: b.id });
 		expect(
 			`sau khi bo B khoi K, B phai xoa duoc: HTTP ${xoa.status} ${xoa.loi}`,
 		).toBe("sau khi bo B khoi K, B phai xoa duoc: HTTP 200 ");
@@ -307,7 +322,7 @@ describe("kmbp-khop", () => {
 		const luuTru = new Map<string, boolean>();
 		for (const ca of CA) {
 			const bp = ok<BoPhanRa>(
-				await goi("archiveDepartment", { id: ca.id }),
+				await goiOrg("archiveDepartment", { id: ca.id }),
 				`luu tru ${ca.ten}`,
 			);
 			luuTru.set(ca.id, bp.purgeable);
@@ -321,7 +336,7 @@ describe("kmbp-khop", () => {
 			).toBe(`${ca.ten}: archiveDepartment ${trongDs} danh sach ${ca.mong}`);
 			soQuanHe += 1;
 
-			const xoa = await goi("purgeDepartment", { id: ca.id });
+			const xoa = await goiOrg("purgeDepartment", { id: ca.id });
 			expect(
 				`${ca.ten}: purgeable ${trongDs} xoa duoc ${xoa.status === 200}`,
 			).toBe(`${ca.ten}: purgeable ${ca.mong} xoa duoc ${ca.mong}`);

@@ -8,6 +8,7 @@ import type {
 import { OnboardingService } from "../src/onboarding/onboarding.service";
 import { ONBOARDING } from "../src/onboarding/onboarding-config";
 import { COT_XONG } from "../src/onboarding/onboarding-danh-muc";
+import { ToChucService } from "../src/to-chuc/to-chuc.service";
 import {
 	gieoBoPhan as taoBoPhan,
 	gieoNguoi as taoNguoi,
@@ -531,7 +532,10 @@ describe("bang-cot-bo-phan", () => {
 		expect(cotTheoKhoa(bang)).toEqual({ [a.id]: 2, [b.id]: 1, [COT_XONG]: 1 });
 		expect(moiIdMotLan(bang).sort()).toEqual(plans.map((p) => p.id).sort());
 
-		await service.updateDepartment({ id: a.id, name: `Ten moi ${t}` });
+		await new ToChucService(db).renameDepartment({
+			id: a.id,
+			name: `Ten moi ${t}`,
+		});
 		const sauDoiTen = await bangCot(service, "bo-phan", { q: t });
 		expect(sauDoiTen.cot.find((c) => c.khoa === a.id)?.nhan).toBe(
 			`Ten moi ${t}`,
