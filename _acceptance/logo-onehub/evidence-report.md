@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ebdb680c39a99fa613f97c7442c6763c4cfdc9a5
+verified_commit: 77c4aea3309e79b3228469cd79e8029037755757
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -245,3 +245,7 @@ none — không có eval nào khai `runs` > 1; mọi eval là deterministic (run
 
 Round 4: REJECT — E9 đỏ giả vì làn chụp song song ghi đè dấu vết git status; sửa phép đo E9 sang so sánh sha256 nội dung bảy tệp icon đích thay vì git status.
 Round 5: chủ kho ký cho phép chạy tiếp trên hợp đồng đã ở trạng thái implemented; toàn bộ eval máy, lệnh suite hồi quy và ui-check đều PASS, không phát sinh REJECT mới.
+
+### Re-pin lần 1 — 2026-09-25, do hoá cũ do gộp onehub 739c8701 (#139, #140) để giải xung đột PR #141
+run_id: repin-20260925T140435Z-71954
+sha: 77c4aea3309e79b3228469cd79e8029037755757 · suites: 4 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E11 · diff chạm vật đo ngoài làn máy: E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10
