@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 66e9181d34b2c4ed0ef7479eeac460f01d9049c6
+verified_commit: fd4ed7c19a1d747430525b716a645d0a4fd7f732
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -317,3 +317,11 @@ Round 3 (S4 delta sau gộp origin/onehub, cây chạm đường của E1, E12, 
 ### Re-pin lần 1 — 2026-09-25, do hoá cũ do gộp onehub (#130)
 run_id: repin-20260925T025024Z-57386
 sha: 66e9181d34b2c4ed0ef7479eeac460f01d9049c6 · suites: 4 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12 · diff chạm vật đo ngoài làn máy: E11, E12 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 2 — 2026-09-25, do mot-duong-ghi-phong-ban: ghim lại sau gộp onehub a8572437 (#129) và thêm ba thủ tục org.*Department
+run_id: repin-20260925T032447Z-74232
+sha: dfc8ff345842e738f421c08891eb1754198d9064 · suites: 4 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12
+
+### Re-pin lần 3 — 2026-09-25, do gộp onehub 5d9e8b9c (#135 Zalo) vào nhánh — mã Zalo không chạm phòng ban
+run_id: repin-20260925T042418Z-71551
+sha: fd4ed7c19a1d747430525b716a645d0a4fd7f732 · suites: 4 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12

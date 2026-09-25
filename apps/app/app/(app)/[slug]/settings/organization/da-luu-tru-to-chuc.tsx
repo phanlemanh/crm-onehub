@@ -26,11 +26,9 @@ export function DaLuuTruToChuc({ cay, sua }: { cay: CayDuLieu; sua: boolean }) {
 	const [hoiXoa, setHoiXoa] = useState<Muc | null>(null);
 
 	const khoiBp = useMutation(trpc.org.restoreDivision.mutationOptions());
-	const khoiPb = useMutation(
-		trpc.onboarding.restoreDepartment.mutationOptions(),
-	);
+	const khoiPb = useMutation(trpc.org.restoreDepartment.mutationOptions());
 	const xoaBp = useMutation(trpc.org.purgeDivision.mutationOptions());
-	const xoaPb = useMutation(trpc.onboarding.purgeDepartment.mutationOptions());
+	const xoaPb = useMutation(trpc.org.purgeDepartment.mutationOptions());
 
 	const muc: Muc[] = [
 		...cay.archived.divisions.map((d) => ({ loai: "bo-phan" as const, ...d })),

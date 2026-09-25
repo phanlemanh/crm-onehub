@@ -1,5 +1,6 @@
 import { quanLyTrucTiep } from "./quan-ly";
 import type { NguoiOutput, TreeOutput } from "./to-chuc.contracts";
+import { lyDoKhongXoaPhongBan } from "./xoa-phong-ban";
 
 export type CayTho = {
 	members: NguoiOutput[];
@@ -26,7 +27,7 @@ export type CayTho = {
 		managerUserId: string | null;
 	}[];
 	secondaries: { userId: string; departmentId: string }[];
-	departmentsInTemplates: ReadonlySet<string>;
+	khuonCuaPhongBan: ReadonlyMap<string, readonly string[]>;
 };
 
 const theoTen = (a: NguoiOutput, b: NguoiOutput) =>
@@ -149,7 +150,13 @@ export function dungCay(tho: CayTho): TreeOutput {
 			managerSource: ql.source,
 		};
 	});
-	const primaryRefs = new Set(tho.placements.map((p) => p.primaryDepartmentId));
+	const soChinh = new Map<string, number>();
+	for (const p of tho.placements)
+		if (p.primaryDepartmentId !== null)
+			soChinh.set(
+				p.primaryDepartmentId,
+				(soChinh.get(p.primaryDepartmentId) ?? 0) + 1,
+			);
 	return {
 		divisions,
 		chuaXep,
@@ -171,9 +178,12 @@ export function dungCay(tho: CayTho): TreeOutput {
 					id: d.id,
 					name: d.name,
 					purgeable:
-						d.stepCount === 0 &&
-						!primaryRefs.has(d.id) &&
-						!tho.departmentsInTemplates.has(d.id),
+						lyDoKhongXoaPhongBan({
+							archived: true,
+							stepCount: d.stepCount,
+							primaryCount: soChinh.get(d.id) ?? 0,
+							khuon: tho.khuonCuaPhongBan.get(d.id) ?? [],
+						}) === null,
 				})),
 		},
 		coverage: {

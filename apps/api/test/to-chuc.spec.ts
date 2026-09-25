@@ -29,18 +29,18 @@ describe("du-lieu-cu", () => {
 		for (const ten of ["D", "A", "C", "B"]) {
 			ids.push(
 				await tao(
-					"onboarding.createDepartment",
-					{ name: ma(ten) },
+					"org.createDepartment",
+					{ name: ma(ten), divisionId: null },
 					`tao ${ten}`,
 				),
 			);
 		}
 		const luu = await tao(
-			"onboarding.createDepartment",
-			{ name: ma("luu") },
+			"org.createDepartment",
+			{ name: ma("luu"), divisionId: null },
 			"tao luu",
 		);
-		ok(await goi("onboarding.archiveDepartment", { id: luu }), "luu tru");
+		ok(await goi("org.archiveDepartment", { id: luu }), "luu tru");
 
 		const c1 = await cay();
 		const thuTu = c1.chuaXep.map((d) => d.id).filter((id) => ids.includes(id));
@@ -194,7 +194,7 @@ describe("vong-doi-don-vi", () => {
 			"ten 80 ky tu",
 		);
 		ok(await goi("org.archiveDivision", { id: daiId }), "luu tru ten dai");
-		ok(await goi("onboarding.archiveDepartment", { id: pb[0] }), "luu tru P1");
+		ok(await goi("org.archiveDepartment", { id: pb[0] }), "luu tru P1");
 		await tao(
 			"org.createDepartment",
 			{ name: tenP1, divisionId: null },
@@ -766,12 +766,12 @@ describe("luu-tru", () => {
 
 		await tuChoi(
 			"1 luu tru phong ban con 2 nguoi chinh",
-			"onboarding.archiveDepartment",
+			"org.archiveDepartment",
 			pbNguoi,
 			"Còn 2 người có phòng ban chính ở đây — chuyển họ trước.",
 		);
 		ok(
-			await goi("onboarding.archiveDepartment", { id: pbPhu }),
+			await goi("org.archiveDepartment", { id: pbPhu }),
 			"2 luu tru phong ban chi con nguoi phu",
 		);
 		await tuChoi(
@@ -781,7 +781,7 @@ describe("luu-tru", () => {
 			"Bộ phận còn 1 phòng ban — chuyển hoặc lưu trữ chúng trước.",
 		);
 		ok(
-			await goi("onboarding.archiveDepartment", { id: pbCuaBpRong }),
+			await goi("org.archiveDepartment", { id: pbCuaBpRong }),
 			"luu tru pb cua bp rong",
 		);
 		ok(
@@ -789,7 +789,7 @@ describe("luu-tru", () => {
 			"4 luu tru bo phan chi con phong ban da luu tru",
 		);
 		ok(
-			await goi("onboarding.restoreDepartment", { id: pbPhu }),
+			await goi("org.restoreDepartment", { id: pbPhu }),
 			"5 khoi phuc phong ban",
 		);
 		expect(
@@ -799,23 +799,20 @@ describe("luu-tru", () => {
 			}),
 		).toEqual(viTriPhu);
 
-		ok(
-			await goi("onboarding.archiveDepartment", { id: pbBuoc }),
-			"luu tru pb buoc",
-		);
+		ok(await goi("org.archiveDepartment", { id: pbBuoc }), "luu tru pb buoc");
 		await tuChoi(
 			"6 xoa han phong ban da luu tru con buoc",
-			"onboarding.purgeDepartment",
+			"org.purgeDepartment",
 			pbBuoc,
-			"Đã được dùng nên không xoá vĩnh viễn được — lịch sử kế hoạch còn trỏ tới.",
+			"Phòng ban còn bước kế hoạch trỏ tới nên không xoá hẳn được.",
 		);
 		ok(
-			await goi("onboarding.archiveDepartment", { id: pbNguoiRoi }),
+			await goi("org.archiveDepartment", { id: pbNguoiRoi }),
 			"luu tru pb nguoi roi",
 		);
 		await tuChoi(
 			"7 xoa han phong ban da luu tru con nguoi chinh",
-			"onboarding.purgeDepartment",
+			"org.purgeDepartment",
 			pbNguoiRoi,
 			"Phòng ban còn người trỏ tới nên không xoá hẳn được.",
 		);
@@ -832,9 +829,9 @@ describe("luu-tru", () => {
 		);
 		await tuChoi(
 			"10 xoa han phong ban chua luu tru va rong",
-			"onboarding.purgeDepartment",
+			"org.purgeDepartment",
 			pbChuaLuu,
-			"Chỉ xoá vĩnh viễn được thứ đã lưu trữ.",
+			"Chỉ xoá hẳn được đơn vị đã lưu trữ.",
 		);
 
 		const c = await cay();
@@ -875,7 +872,7 @@ async function dungDauVaoHopLe(): Promise<Record<string, () => Promise<Json>>> {
 	const pbTrong = () => pbMoi("q-pb");
 	const pbLuu = async () => {
 		const id = await pbTrong();
-		ok(await goi("onboarding.archiveDepartment", { id }), "q luu pb");
+		ok(await goi("org.archiveDepartment", { id }), "q luu pb");
 		return id;
 	};
 	const bpLuu = async () => {
@@ -934,15 +931,9 @@ async function dungDauVaoHopLe(): Promise<Record<string, () => Promise<Json>>> {
 		"org.applyImport": async () => ({
 			text: `${await nguoiMoi("q-nhap")}@thu.test\t${ma("q-nhap-pb")}\t\t`,
 		}),
-		"onboarding.createDepartment": async () => ({ name: ma("q-onb-tao") }),
-		"onboarding.updateDepartment": async () => ({
-			id: await pbTrong(),
-			name: ma("q-onb-ten"),
-		}),
-		"onboarding.archiveDepartment": async () => ({ id: await pbTrong() }),
-		"onboarding.restoreDepartment": async () => ({ id: await pbLuu() }),
-		"onboarding.purgeDepartment": async () => ({ id: await pbLuu() }),
-		"onboarding.reorderDepartments": async () => ({ ids: [await pbTrong()] }),
+		"org.archiveDepartment": async () => ({ id: await pbTrong() }),
+		"org.restoreDepartment": async () => ({ id: await pbLuu() }),
+		"org.purgeDepartment": async () => ({ id: await pbLuu() }),
 	};
 }
 

@@ -27,12 +27,12 @@ import { enrichmentQueueInput } from "@crm/validation/enrichment-queue";
 import { fieldAccessOutput, fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
-import { accessOutput, archivedInput, departmentListOutput, departmentCreateInput, departmentOutput, departmentUpdateInput, departmentIdInput, deletedOutput, departmentReorderInput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, planListInput, planListOutput, planIdInput, planDetailOutput, planCreateFromTemplateInput, planOutput, watchInput, watchOutput, stepAssignInput, stepOutput, stepDoneInput, stepRescheduleInput, stepAddInput, stepIdInput, stepRemovedOutput, stepReorderInput, stepListOutput, planOwnerInput, plansOfCompanyInput, companyPlanListOutput, plansOfContactInput, contactPlanListOutput, transferPreviewInput, transferOutput, transferWorkInput, stepListInput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput, bangCotInput, bangCotOutput } from "../onboarding/onboarding.contracts";
+import { accessOutput, archivedInput, departmentListOutput, templateListOutput, templateCreateInput, templateOutput, templateUpdateInput, templateIdInput, deletedOutput, planListInput, planListOutput, planIdInput, planDetailOutput, planCreateFromTemplateInput, planOutput, watchInput, watchOutput, stepAssignInput, stepOutput, stepDoneInput, stepRescheduleInput, stepAddInput, stepIdInput, stepRemovedOutput, stepReorderInput, stepListOutput, planOwnerInput, plansOfCompanyInput, companyPlanListOutput, plansOfContactInput, contactPlanListOutput, transferPreviewInput, transferOutput, transferWorkInput, stepListInput, enrollmentListOutput, enrollmentUpsertInput, enrollmentOutput, enrollmentRemoveInput, enrollmentRemoveOutput, enrollmentStageInput, danhMucOutput, bangCotInput, bangCotOutput } from "../onboarding/onboarding.contracts";
 import { savedViewListInput, savedViewListOutput, savedViewCreateInput, savedViewOutput, savedViewUpdateArgs, savedViewIdInput, savedViewDeleteOutput } from "../saved-views/saved-views.contracts";
 import { agentModelOutput, modelCatalogOutput, setAgentModelInput, researchKeyOutput, setResearchKeyInput, archiveRetentionOutput, setArchiveRetentionDaysInput } from "../settings/settings.contracts";
 import { slackStatusOutput, slackMatchesOutput, slackChannelsInput, slackChannelsOutput, slackJoinChannelInput, slackJoinChannelOutput, slackRefreshPeopleOutput, slackCreateChannelInput, slackCreateChannelOutput, slackDisconnectOutput } from "../slack/slack.contracts";
 import { ssoSignInOptionsOutput, ssoSettingsOutput, ssoProviderListInput, ssoProviderListOutput, registerSsoProviderInput, ssoProviderOutput, deleteSsoProviderInput, deleteSsoProviderOutput } from "../sso/sso.contracts";
-import { orgAccessOutput, orgTreeOutput, orgDivisionCreateInput, orgOkOutput, orgRenameInput, orgReorderInput, orgIdInput, orgDepartmentCreateInput, orgDepartmentMoveInput, orgAttachInput, orgAddPeopleInput, orgHeadInput, orgPlacementInput, orgImportInput, orgImportPreviewOutput, orgImportApplyInput, orgImportApplyOutput } from "../to-chuc/to-chuc.contracts";
+import { orgAccessOutput, orgTreeOutput, orgDivisionCreateInput, orgOkOutput, orgRenameInput, orgReorderInput, orgIdInput, orgDepartmentCreateInput, orgDepartmentArchiveOutput, orgDepartmentMoveInput, orgAttachInput, orgAddPeopleInput, orgHeadInput, orgPlacementInput, orgImportInput, orgImportPreviewOutput, orgImportApplyInput, orgImportApplyOutput } from "../to-chuc/to-chuc.contracts";
 import { trackingSettingsOutput, trackingFlagInput, cookieLifetimeInput, addDomainInput, trackedDomainOutput, removeDomainInput, rotateSiteIdOutput, verifyInput, verifyOutput, sourcesOutput, companyActivityInput, websiteActivityOutput, contactActivityInput } from "../tracking/tracking.contracts";
 import { workspaceOutput, memberListInput, memberListOutput, updateWorkspaceInput, setMemberRoleInput, workspaceMemberOutput, allowanceListOutput, allowEmailInput, allowanceOutput, issuePasswordLinkInput, passwordLinkOutput, revokeAllowanceInput, removeMemberInput, removeMemberOutput } from "../workspace/workspace.contracts";
 import { zaloTaoMaOutput, zaloGoOutput, zaloLuuUuTienInput, zaloLuuUuTienOutput, zaloLuuBotInput, zaloLuuBotOutput, zaloGuiThuOutput, zaloCuaToiOutput, zaloXuongOutput } from "../zalo/zalo.contracts";
@@ -628,30 +628,6 @@ const appRouter = t.router({
       .input(archivedInput)
       .output(departmentListOutput)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
-    createDepartment: publicProcedure
-      .input(departmentCreateInput)
-      .output(departmentOutput)
-      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
-    updateDepartment: publicProcedure
-      .input(departmentUpdateInput)
-      .output(departmentOutput)
-      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
-    archiveDepartment: publicProcedure
-      .input(departmentIdInput)
-      .output(departmentOutput)
-      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
-    restoreDepartment: publicProcedure
-      .input(departmentIdInput)
-      .output(departmentOutput)
-      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
-    purgeDepartment: publicProcedure
-      .input(departmentIdInput)
-      .output(deletedOutput)
-      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
-    reorderDepartments: publicProcedure
-      .input(departmentReorderInput)
-      .output(departmentListOutput)
-      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     listTemplates: publicProcedure
       .input(archivedInput)
       .output(templateListOutput)
@@ -919,6 +895,18 @@ const appRouter = t.router({
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     renameDepartment: publicProcedure
       .input(orgRenameInput)
+      .output(orgOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    archiveDepartment: publicProcedure
+      .input(orgIdInput)
+      .output(orgDepartmentArchiveOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    restoreDepartment: publicProcedure
+      .input(orgIdInput)
+      .output(orgOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    purgeDepartment: publicProcedure
+      .input(orgIdInput)
       .output(orgOkOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     moveDepartment: publicProcedure

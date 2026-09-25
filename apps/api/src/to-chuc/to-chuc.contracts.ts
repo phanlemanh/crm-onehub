@@ -100,6 +100,9 @@ export const orgTreeOutput = z.object({
 });
 export const orgAccessOutput = z.object({ canManage: z.boolean() });
 export const orgOkOutput = z.object({ id: z.string() });
+export const orgDepartmentArchiveOutput = orgOkOutput.extend({
+	purgeable: z.boolean(),
+});
 export const dongNhapOutput = z.object({
 	line: z.number(),
 	email: z.string(),
