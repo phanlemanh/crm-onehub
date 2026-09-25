@@ -285,7 +285,11 @@ async function lanToiCuoi(p) {
 		const r = document
 			.querySelector("main[data-slot=page-shell-scroll]")
 			.getBoundingClientRect();
-		return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+		const trai = Math.max(r.left, 0);
+		const phai = Math.min(r.right, window.innerWidth);
+		const tren = Math.max(r.top, 0);
+		const duoi = Math.min(r.bottom, window.innerHeight);
+		return { x: (trai + phai) / 2, y: (tren + duoi) / 2 };
 	});
 	await p.mouse.move(hop.x, hop.y);
 	const cuon = () =>
