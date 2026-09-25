@@ -11,6 +11,25 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "khung-trang-cai-dat",
+		ten: "Khung trang Cài đặt — thanh bên bốn nhóm, cột căn trái",
+		states: [
+			{ id: "ST-chung", nhan: "Trang mục — Chung (page)" },
+			{ id: "ST-thanh-vien", nhan: "Trang mục — Thành viên (wide)" },
+			{ id: "ST-ket-noi", nhan: "Danh sách Kết nối" },
+			{ id: "ST-google", nhan: "Trang con — Kết nối › Google" },
+			{ id: "ST-slack-nguoi", nhan: "Trang con — Kết nối › Slack › Người" },
+			{ id: "ST-intake", nhan: "Trang con hẹp — Tiếp nhận (narrow)" },
+			{ id: "ST-dang-tai", nhan: "Thanh bên và trang đang tải" },
+			{ id: "ST-menu", nhan: "Menu người dùng mở" },
+			{ id: "ST-nhac", nhan: "Nhắc buổi sáng — không thanh bên" },
+			{
+				id: "ST-phuong-an-a",
+				nhan: "Phân kỳ — hướng A: mọi trang có đường dẫn",
+			},
+		],
+	},
+	{
 		slug: "cau-truc-to-chuc",
 		ten: "Cấu trúc tổ chức hai cấp",
 		states: [

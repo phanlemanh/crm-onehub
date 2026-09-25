@@ -28,7 +28,7 @@ export default async function FieldsSettingsPage({
 	const t = settingsMessages(await getLocale());
 
 	return (
-		<PageShell>
+		<PageShell width="wide">
 			<PageShellHeader>
 				<PageShellHeading>
 					<PageShellTitle>{t.truong.tieuDe}</PageShellTitle>

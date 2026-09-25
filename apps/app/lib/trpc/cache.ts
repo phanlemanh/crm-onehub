@@ -26,6 +26,7 @@ export type CrmCache = {
 	contact(id?: string, options?: Options): Promise<void>;
 	deal(id?: string, options?: Options): Promise<void>;
 	plan(id?: string, options?: Options): Promise<void>;
+	okr(id?: string, options?: Options): Promise<void>;
 	campaign(id?: string, options?: Options): Promise<void>;
 	campaignList(options?: Options): Promise<void>;
 	fields(entity?: RecordKind, options?: Options): Promise<void>;
@@ -231,6 +232,25 @@ export function useCrmCache(): CrmCache {
 					trpc.onboarding.bangCot.queryKey(),
 					...activityKeys(),
 					trpc.companies.byId.queryKey(),
+				],
+				options,
+			),
+
+		okr: (id, options) =>
+			run(
+				[
+					id
+						? trpc.okr.objective.queryKey({ id })
+						: trpc.okr.objective.queryKey(),
+				],
+				[
+					trpc.okr.byUnit.queryKey(),
+					trpc.okr.mine.queryKey(),
+					trpc.okr.alignmentTree.queryKey(),
+					trpc.okr.countByUnit.queryKey(),
+					trpc.okr.alignmentTargets.queryKey(),
+					trpc.okr.cycles.queryKey(),
+					trpc.okr.program.queryKey(),
 				],
 				options,
 			),

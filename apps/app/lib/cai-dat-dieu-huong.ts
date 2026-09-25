@@ -9,21 +9,50 @@ export type MucCaiDat = {
 	href: string;
 };
 
+export type NhomCaiDat = {
+	khoa: keyof SettingsMessages["nhomThanhBen"];
+	muc: readonly MucCaiDat[];
+};
+
 export const GOC_CAI_DAT = "/settings";
 
-export const MUC_CAI_DAT: readonly MucCaiDat[] = [
-	{ khoa: "chung", href: GOC_CAI_DAT },
-	{ khoa: "theoDoi", href: `${GOC_CAI_DAT}/tracking` },
-	{ khoa: "ketNoi", href: `${GOC_CAI_DAT}/connections` },
-	{ khoa: "tienTe", href: `${GOC_CAI_DAT}/currencies` },
-	{ khoa: "truong", href: `${GOC_CAI_DAT}/fields` },
-	{ khoa: "thanhVien", href: `${GOC_CAI_DAT}/members` },
-	{ khoa: "khoaApi", href: `${GOC_CAI_DAT}/api-keys` },
-	{ khoa: "sso", href: `${GOC_CAI_DAT}/sso` },
-	{ khoa: "thongBaoCuaBan", href: `${GOC_CAI_DAT}/notifications` },
-	{ khoa: "toChuc", href: `${GOC_CAI_DAT}/organization` },
-	{ khoa: "dieuPhoi", href: `${GOC_CAI_DAT}/onboarding` },
+export const NHOM_CAI_DAT: readonly NhomCaiDat[] = [
+	{
+		khoa: "khongGian",
+		muc: [
+			{ khoa: "chung", href: GOC_CAI_DAT },
+			{ khoa: "tienTe", href: `${GOC_CAI_DAT}/currencies` },
+			{ khoa: "truong", href: `${GOC_CAI_DAT}/fields` },
+		],
+	},
+	{
+		khoa: "conNguoi",
+		muc: [
+			{ khoa: "thanhVien", href: `${GOC_CAI_DAT}/members` },
+			{ khoa: "toChuc", href: `${GOC_CAI_DAT}/organization` },
+			{ khoa: "chuongTrinhOkr", href: `${GOC_CAI_DAT}/okr` },
+			{ khoa: "dieuPhoi", href: `${GOC_CAI_DAT}/onboarding` },
+		],
+	},
+	{
+		khoa: "ketNoiDuLieu",
+		muc: [
+			{ khoa: "ketNoi", href: `${GOC_CAI_DAT}/connections` },
+			{ khoa: "theoDoi", href: `${GOC_CAI_DAT}/tracking` },
+		],
+	},
+	{
+		khoa: "baoMat",
+		muc: [
+			{ khoa: "sso", href: `${GOC_CAI_DAT}/sso` },
+			{ khoa: "khoaApi", href: `${GOC_CAI_DAT}/api-keys` },
+		],
+	},
 ];
+
+export const MUC_CAI_DAT: readonly MucCaiDat[] = NHOM_CAI_DAT.flatMap(
+	(nhom) => nhom.muc,
+);
 
 export function mucCaiDatDangMo(
 	href: string,

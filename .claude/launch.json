@@ -123,6 +123,24 @@
         "cd apps/app && PORT=3810 NEXT_PUBLIC_API_URL=http://localhost:3811 API_URL=http://localhost:3811 APP_URL=http://localhost:3810 bun run dev"
       ],
       "port": 3810
+    },
+    {
+      "name": "logo-ban-do-api",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/api && PORT=3301 APP_URL=http://localhost:3300,http://127.0.0.1:3300 API_URL=http://localhost:3301 bun run dev"
+      ],
+      "port": 3301
+    },
+    {
+      "name": "logo-ban-do-app",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/app && PORT=3300 NEXT_PUBLIC_API_URL=http://localhost:3301 API_URL=http://localhost:3301 APP_URL=http://localhost:3300 bun run dev"
+      ],
+      "port": 3300
     }
   ]
 }

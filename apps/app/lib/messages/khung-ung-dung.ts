@@ -9,6 +9,7 @@ const en = {
 		deals: "Deals",
 		campaigns: "Campaigns",
 		onboarding: "First 30 days",
+		okr: "Objectives",
 		settings: "Settings",
 	},
 	nav: {
@@ -24,6 +25,7 @@ const en = {
 		accountMenu: "Account menu",
 		lightMode: "Light mode",
 		darkMode: "Dark mode",
+		nhacBuoiSang: "Morning reminders",
 		signOut: "Sign out",
 		signOutFailed: "Could not sign out.",
 		loading: "Loading workspace header…",
@@ -67,6 +69,7 @@ const vi = {
 		deals: "Thoả thuận",
 		campaigns: "Chiến dịch",
 		onboarding: "30 ngày đầu",
+		okr: "Mục tiêu",
 		settings: "Cài đặt",
 	},
 	nav: {
@@ -82,6 +85,7 @@ const vi = {
 		accountMenu: "Menu tài khoản",
 		lightMode: "Nền sáng",
 		darkMode: "Nền tối",
+		nhacBuoiSang: "Nhắc buổi sáng",
 		signOut: "Đăng xuất",
 		signOutFailed: "Chưa đăng xuất được.",
 		loading: "Đang tải thanh đầu…",

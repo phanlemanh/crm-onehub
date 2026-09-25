@@ -1,0 +1,200 @@
+{
+  "feature_plain": "Mọi trang Cài đặt đứng trên cùng một khung: nội dung căn trái cạnh thanh bên, tiêu đề không nhảy khi chuyển mục, thanh bên chia bốn nhóm, và trang nhắc buổi sáng của riêng mỗi người dời ra menu người dùng.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ cho khung trang chung chọn một trong bốn bề rộng, luôn căn trái; trang nào không chọn thì giữ nguyên như hôm nay, nên 23 trang ngoài Cài đặt không đổi."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ đưa mọi trang Cài đặt về đúng một khung, bỏ hết các khung tự dựng riêng ở mục Kết nối."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ giữ mép trái tiêu đề đứng yên trên cả 16 trang, và giữ đỉnh tiêu đề đứng yên khi chuyển mục trên thanh bên; trang con thấp hơn đúng một dòng đường dẫn."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ cho mỗi trang con Kết nối một tiêu đề là tên kết nối, đưa nút ở đầu trang vào đúng chỗ hành động."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ hiện dòng đường dẫn «Kết nối › Google» trên trang con, bấm «Kết nối» là về trang cha."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ đổi nhãn theo từ điển: «Cài đặt», mục đầu «Chung», thẻ đầu «Không gian làm việc»; bỏ «Tổng quan», «Cài đặt công ty», «Công ty»."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ thêm mục «Nhắc buổi sáng» vào menu người dùng, mở trang nhắc riêng của mỗi người, không kèm thanh bên Cài đặt."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ chuyển người đang dùng dấu trang cũ của trang «Thông báo của bạn» sang trang mới."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ sửa từ điển và bảng bề rộng cho khớp chỗ làm việc mới."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ đổi một lời hứa đã ký: «Điều phối 30 ngày» đứng cuối nhóm Con người thay vì cuối cả thanh."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ chạy lại phép đo của 11 việc đã ký có đụng cùng chỗ, chỉ cho đổi đúng những gì đã khai."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-6",
+      "p": "Sẽ KHÔNG còn mục «Thông báo của bạn» trên thanh bên; thanh bên chỉ còn bốn nhóm, mỗi lúc sáng đúng một mục."
+    },
+    {
+      "id": "AC-13",
+      "p": "Chặn mọi chỗ tự đè kiểu dáng lên thanh bên và đường dẫn; hai thứ còn thiếu (nhãn nhóm, dòng đường dẫn) phải vào bộ component chung."
+    }
+  ],
+  "scope_plain": "Nội dung bên trong từng thẻ, khối đầu trang có logo cho kết nối, chia nhóm danh sách Kết nối, dọn thư mục của hai khối nhắc, chấm lại 10 phép đo nhìn-thấy của sáu việc đã ký, và quyền trên trang Chung — đều để các vòng sau.",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Loại trang đã phủ đủ bốn loại: 10 trang mục, 6 trang con Kết nối, trang nhắc cá nhân, và đường cũ chuyển hướng."
+    },
+    {
+      "i": 1,
+      "p": "Phần khung đã phủ đủ năm phần: bề rộng, đầu trang, đường dẫn, thanh bên, và các lối vào trang nhắc."
+    },
+    {
+      "i": 2,
+      "p": "Khổ màn đo ở 1920, 1440, 768 (thanh bên dọc) và 375 (thanh bên thành hàng ngang)."
+    },
+    {
+      "i": 3,
+      "p": "Cả tiếng Việt và tiếng Anh đều được đo."
+    },
+    {
+      "i": 4,
+      "p": "Đo chung cho mọi trang: lúc đang tải không nhảy, dùng bàn phím được, tên riêng không bị trình duyệt tự dịch, 11 việc đã ký không hồi quy."
+    },
+    {
+      "i": 5,
+      "p": "Cả 13 tiêu chí đều là phần làm ngay; phần để sau nằm ở mục «Sẽ không làm» và sổ quyết định."
+    },
+    {
+      "i": 6,
+      "p": "Tham khảo ngành: Twenty và v0 giữ cài đặt cá nhân trong thanh bên; anh đã chọn menu người dùng — ghi để anh thấy, không đổi."
+    },
+    {
+      "i": 7,
+      "p": "Giả định chờ anh gạch: trang nhắc nằm ở địa chỉ «/reminders», tiếng Anh như mọi địa chỉ khác của app."
+    },
+    {
+      "i": 8,
+      "p": "Giả định chờ anh gạch: Điều phối 30 ngày dùng bề rộng lớn, danh sách Kết nối dùng bề rộng thường."
+    },
+    {
+      "i": 9,
+      "p": "Giả định chờ anh gạch: trang Tiếp nhận và trang Slack chưa kết nối (hôm nay nằm giữa màn hình) cũng căn trái."
+    },
+    {
+      "i": 10,
+      "p": "Giả định chờ anh gạch: dòng đường dẫn chỉ có ở trang con (hướng B máy khuyên); hướng A để sẵn trên bản mẫu."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Chưa đo được lời hứa «trang con thấp hơn đúng một dòng» — nay đo thêm khoảng chênh giữa hai loại trang."
+    },
+    {
+      "i": 1,
+      "p": "Trang Tổ chức sẽ nằm giữa màn hình rộng và làm mép trái nhảy — đã sửa: bề rộng lớn nhất cũng căn trái, đo thêm khổ 1920."
+    },
+    {
+      "i": 2,
+      "p": "Một lần dựng dữ liệu không thể có Slack vừa kết nối vừa chưa — nay dựng hai lần, trang nào không vẽ được thì phép đo dừng thay vì bỏ qua."
+    },
+    {
+      "i": 3,
+      "p": "Chưa tra xem các việc đã ký có ghim chữ cũ không — đã tra: tìm thêm phép đo nhìn-thấy của «Nối Zalo cho người mới», nay khai rõ hai phép đo phải chấm lại."
+    },
+    {
+      "i": 4,
+      "p": "Phép đo «23 trang không đổi» mới so chữ trong mã cũ — nay dựng thật cả bản cũ và bản mới rồi so kết quả."
+    }
+  ],
+  "decisions_plain": [
+    {
+      "id": "d-20260925T013411Z-1",
+      "p": "Bề rộng trang chọn qua một tham số của khung chung, mặc định giữ hành vi cũ — đổi lại đụng một thành phần cả app dùng, nhưng 23 trang ngoài Cài đặt không đổi."
+    },
+    {
+      "id": "d-20260925T013411Z-2",
+      "p": "Hai khối Zalo và kênh nhắc để nguyên thư mục cũ, trang nhắc mới lấy từ đó — đổi lại không đụng ba bài kiểm đã ký, nhưng tệp nằm sai chỗ tới vòng dọn riêng."
+    },
+    {
+      "id": "d-20260925T013411Z-3",
+      "p": "KHÔNG làm logo và trạng thái trong đầu trang kết nối ở đợt này — đầu trang kết nối tạm thiếu logo cạnh tiêu đề."
+    },
+    {
+      "id": "d-20260925T013411Z-4",
+      "p": "Phép đo nhìn-thấy của việc «Nhắc qua Zalo» được sửa theo chỗ mới nhưng chưa chấm lại — việc đó chờ một vòng chấm riêng."
+    },
+    {
+      "id": "d-20260925T014019Z-5",
+      "p": "Bản mẫu duyệt là khung tĩnh ghép từ thành phần thật — thấy căn trái, thanh bên, đường dẫn ở khổ thật; thanh biểu tượng của app không vẽ lại."
+    },
+    {
+      "id": "d-20260925T014019Z-6",
+      "p": "Dòng đường dẫn chỉ có ở trang con, không ở mọi trang — tiêu đề đứng yên khi chuyển mục, trang con thấp hơn một dòng."
+    },
+    {
+      "id": "d-20260925T014422Z-7",
+      "p": "Phép đo nhìn-thấy của việc «Nối Zalo cho người mới» cũng bị đụng vì màn dời chỗ — chưa chấm lại trong vòng này."
+    },
+    {
+      "id": "d-20260925T021111Z-9",
+      "p": "Nhãn «Chung» là chữ Việt không dấu, nên được thêm vào danh sách miễn của bài kiểm dấu đã ký — giữ đúng nhãn anh chốt, đổi lại một bài đã ký đổi dữ liệu miễn."
+    },
+    {
+      "id": "d-20260925T022312Z-10",
+      "p": "Sửa con số: vòng này đụng 10 phép đo nhìn-thấy ở sáu việc đã ký, không phải 2 như khai lúc duyệt phạm vi — sáu việc đó cần vòng chấm lại riêng."
+    },
+    {
+      "id": "d-20260925T022312Z-11",
+      "p": "Tám phép đo nhìn-thấy giữ lời hứa nhưng màn đã đổi — các việc đó vẫn ký, chỉ là ảnh bằng chứng cũ không còn chụp khung hiện tại."
+    },
+    {
+      "id": "d-20260925T022825Z-12",
+      "p": "Chỉ tên thương hiệu (Google, Microsoft, Slack, Zalo) được chặn tự dịch; trang Slack › Người lấy tiêu đề «Người» khớp đường dẫn — tiêu chí đầu trang kết nối đổi chữ sau khi duyệt."
+    },
+    {
+      "id": "d-20260925T023638Z-13",
+      "p": "KHÔNG đòi mọi phép đo của 11 việc đã ký phải xanh; chỉ đòi không phép đo nào đỏ vì vòng này — các lỗi đỏ sẵn trên nhánh chính chỉ được liệt kê, phép đo cần máy chủ chạy ở lần ghim lại."
+    },
+    {
+      "id": "d-20260925T030505Z-14",
+      "p": "KHÔNG sửa bảng Thành viên tràn 165px ở màn 375 trong đợt khung — khung không tràn, bảng nội dung tràn được đưa ra như lỗi ngoài hợp đồng."
+    },
+    {
+      "id": "d-20260925T031150Z-15",
+      "p": "Thêm phép đo cột nội dung phải thẳng mép với tiêu đề, vì lần phá thử cho thấy chỉ đo tiêu đề thì bỏ lọt đúng lỗi «cột nội dung nhảy»."
+    },
+    {
+      "id": "d-20260925T035541Z-16",
+      "p": "Bài kiểm chuyển hướng tự giả lập phần điều hướng, nên không còn đỏ khi chạy chung với tệp khác — đã chạy hai thứ tự và hai hạt ngẫu nhiên, đủ 352/352."
+    },
+    {
+      "id": "d-20260925T070301Z-17",
+      "p": "Nhãn nhóm thanh bên Cài đặt đổi sang chữ in hoa giãn chữ, cùng kiểu «HÔM NAY» của Hội thoại, theo nhận xét của anh ở cổng này — đổi lại phải chấm lại vòng 3."
+    },
+    {
+      "id": "d-20260925T070608Z-18",
+      "p": "KHÔNG sửa bố cục trang Trường trong vòng này — để đợt 3; nhãn loại trường bị cắt chữ («rong danh») ghi hạn chế đã biết, sửa ở đầu đợt 2."
+    }
+  ],
+  "decisions": [],
+  "analyst_plain": ""
+}

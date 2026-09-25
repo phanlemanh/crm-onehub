@@ -71,7 +71,7 @@ export function AllowancesTable() {
 	);
 
 	return (
-		<section className="flex flex-col gap-4">
+		<section className="relative flex flex-col gap-4">
 			<div className="flex items-start justify-between gap-4">
 				<div>
 					<h2 className="font-medium text-base">{t.duocPhepVao.tieuDe}</h2>

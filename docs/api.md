@@ -426,6 +426,45 @@ onboarding, OKR, reports and filters read it; no area keeps its own.
   the ids are not exactly the live divisions, so a stale screen cannot leave two
   divisions on the same position.
 
+## OKR
+
+`apps/api/src/okr` owns the `okr.*` router: cycles, the program config,
+objectives, key results, alignments, the trail and spreadsheet import. It reads the
+organization tree through `ToChucService`; it never keeps its own copy of units.
+
+- **`okr` is its own data scope, open to all four roles.** The router carries
+  `PhamViOkrMiddleware`, so the «chỉ OKR» role passes the same way `admin`, `owner`
+  and `member` do. Adding the alias to `ALIAS_CHO_PHEP` in
+  `apps/api/test/vai-chi-okr.spec.ts` was the deliberate list change; a new router
+  does not get it by default.
+- **Permission is per record, from the unit's head.** `OkrAccessService` decides:
+  a department head edits that department's objectives, a division head edits the
+  division and every department in it, a person edits their own personal
+  objectives, and a KR's owner edits that KR. Admins are not heads by role — they
+  manage cycles, the program config and OneHub-level objectives, and may import
+  into any unit. The screen asks `canEdit` / `canEditKr` from the API; it never
+  re-derives them.
+- **Eleven writes are locked by cycle phase.** Every objective, key-result and
+  alignment write, plus `previewImport` and `applyImport`, calls
+  `assertKyGhiDuoc` first: only `lap-ke-hoach` and `dang-chay` accept writes. Phase
+  only moves forward (`setCyclePhase`).
+- **Every write leaves one `OkrTrail` row, never an `Activity`.** The trail holds
+  the action and a typed `before`/`after` snapshot (`@crm/validation/okr-vet`);
+  `okr.objective` returns the rows for that objective. The import row is cycle-level
+  (`objectiveId` null, `after` carries the unit and the counts) and each imported
+  objective gets its own `tao` row.
+- **Categories are Zod enums in `packages/validation`, not Prisma enums.** Cycle
+  kind and phase, objective level, kind and status, the six KR kinds, KR source and
+  trail actions live in `@crm/validation/okr-*` and are stored as strings. Adding a
+  value is a schema change, not a `migration`.
+- **Import is preview, then apply, same as the organization tree.**
+  `previewImport` parses tab, semicolon or comma text (`nhap.ts`) against a
+  snapshot and returns every row with its error; `applyImport` re-parses inside one
+  transaction, writes the valid rows grouped into objectives and skips the broken
+  ones. An objective title that already exists for that unit and cycle is a broken
+  row, so pasting the same batch twice writes nothing. Caps and messages live in
+  `OKR` (`okr-config.ts`).
+
 ## Money
 
 A deal is sold in one currency and reported in another, and **only `baseAmount` may

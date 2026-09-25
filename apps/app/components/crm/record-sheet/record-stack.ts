@@ -14,7 +14,7 @@ export const ENTITY_KINDS = ["company", "contact", "deal"] as const;
 
 export type EntityKind = (typeof ENTITY_KINDS)[number];
 
-export const RECORD_KINDS = [...ENTITY_KINDS, "plan"] as const;
+export const RECORD_KINDS = [...ENTITY_KINDS, "plan", "objective"] as const;
 
 export type RecordKind = (typeof RECORD_KINDS)[number];
 

@@ -30,6 +30,11 @@ export function usePrefetchRecord() {
 						trpc.onboarding.planById.queryOptions({ id }),
 					);
 					return;
+				case "objective":
+					void queryClient.prefetchQuery(
+						trpc.okr.objective.queryOptions({ id }),
+					);
+					return;
 			}
 		},
 		[trpc, queryClient],

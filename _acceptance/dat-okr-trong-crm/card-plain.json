@@ -1,0 +1,230 @@
+{
+ "feature_plain": "Khu «Mục tiêu» mới trong CRM: quản trị mở chu kỳ năm và quý; trưởng đơn vị đặt mục tiêu và KR (sáu kiểu) cho đơn vị mình, gắn vào cấp trên rồi công bố; phòng ban dán bộ OKR quý 4 từ bảng tính, xem trước rồi ghi; mọi sửa đổi để lại vết.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ cho quản trị mở chu kỳ năm và quý (ngày lịch Việt Nam, khoảng nghỉ Tết, ngày cập nhật trong tuần) và chuyển pha chỉ đi tới; quý lệch năm hay chồng quý khác bị từ chối; người không phải quản trị bị từ chối."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ lưu cấu hình chương trình thành từng phiên bản (trần mục tiêu, trần KR, cảnh báo hay chặn, thang chấm, trọng số, OKR cá nhân); vượt trần ở chế độ cảnh báo vẫn ghi kèm câu cảnh báo, ở chế độ chặn bị từ chối; tắt OKR cá nhân thì không đặt được cấp cá nhân."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ cho đặt mục tiêu nháp ở bốn cấp — OneHub, bộ phận, phòng ban, cá nhân — với loại, người phụ trách, người tham gia và «vì sao lúc này», đọc lại đúng từ cơ sở dữ liệu; đơn vị lệch cấp bị từ chối."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ nhận đủ sáu kiểu KR (tăng tới · giảm xuống · giữ trên · giữ dưới · mốc · phần trăm) với khởi điểm, đích, hiện tại, đơn vị đo, hạn, trọng số, người phụ trách; tiến độ tính theo từng kiểu; số không hợp với kiểu bị từ chối."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ công bố mục tiêu có ít nhất một KR và khoá khởi điểm mọi KR từ lúc đó — sửa khởi điểm sau công bố bị từ chối, sửa đích thì được; «bỏ» giữ nguyên KR và chỗ góp; ở pha Chấm điểm và Đã đóng cả mười một thủ tục ghi đều bị khoá."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ cho trưởng phòng ban sửa OKR phòng ban mình, trưởng bộ phận sửa bộ phận và các phòng ban con, người phụ trách KR sửa KR của mình, quản trị sửa cấp OneHub và mở chu kỳ — mọi tổ hợp khác bị từ chối; ai cũng đọc được."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ cho một mục tiêu góp vào nhiều mục tiêu hoặc KR cấp trên đã công bố (cùng chu kỳ hoặc năm cha), cây căn chỉnh hiện nó ở từng chỗ góp; gắn cùng cấp, thấp hơn, vào nháp, hay gắn trùng bị từ chối."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ ghi đúng một dòng vết cho mỗi lần ghi — ai, việc gì, trước và sau — trong bảng vết riêng, không đụng nhật ký hoạt động của CRM; tab «Vết» trong sheet hiện đúng các dòng đó."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ nhập bộ OKR từ bảng tính bảy cột: xem trước báo từng dòng hỏng với câu lỗi ghim mà chưa ghi gì; ghi gom mục tiêu theo tên, tuỳ chọn công bố ngay, một dòng vết cho cả lô; dán lại lô cũ thì không ghi thêm gì; người không sửa được đơn vị bị từ chối."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ có màn «Theo đơn vị»: cây đơn vị thật bên trái với số mục tiêu đã công bố, danh sách hoặc cây căn chỉnh bên phải, chọn chu kỳ; trưởng thấy nút Thêm và Nhập; có trạng thái rỗng, chưa có trưởng, chưa mở chu kỳ, lỗi có nút Thử lại; mục «Mục tiêu» trên thanh điều hướng cho mọi vai."
+  },
+  {
+   "id": "AC-11",
+   "p": "Sẽ mở sheet mục tiêu chồng lên sheet Thoả thuận (1440 và 390) với ba tab KR · Căn chỉnh · Vết; thêm KR và công bố ngay trong sheet ghi thật vào cơ sở dữ liệu; nút Quay lại trả về đúng sheet Thoả thuận."
+  },
+  {
+   "id": "AC-12",
+   "p": "Sẽ cho người vai «chỉ OKR» làm trưởng đặt và công bố OKR phòng ban mình, người vai đó không làm trưởng chỉ đọc; cả hai vẫn không đọc được đối tác; thanh điều hướng của vai này có Tổng quan · Mục tiêu · Cài đặt."
+  },
+  {
+   "id": "AC-13",
+   "p": "Sẽ có trang Cài đặt › Chương trình OKR theo khung Cài đặt: bảng chu kỳ với «Mở chu kỳ» và «Chuyển pha», form cấu hình lưu bằng nút ở góc thẻ; người không đủ quyền thấy điều khiển khoá và một dòng nói vì sao."
+  },
+  {
+   "id": "AC-14",
+   "p": "Sẽ qua cổng thiết kế tĩnh và bộ quét «Dấu hiệu vẽ tay» trên mọi tệp giao diện chạm; không sửa tệp nào trong packages/ui; thiết kế có bảng bậc thang cho từng khối."
+  },
+  {
+   "id": "AC-15",
+   "p": "Sẽ thêm sáu bảng bằng migration chỉ thêm — không sửa bảng có sẵn — thành một dãy liền ở cuối lược đồ; dữ liệu cây tổ chức và kế hoạch cũ đọc lại nguyên vẹn."
+  },
+  {
+   "id": "AC-16",
+   "p": "Sẽ có tab «Của tôi» gom mục tiêu tôi phụ trách, tôi tham gia và KR tôi phụ trách; người chưa giữ gì thấy trạng thái rỗng trỏ sang Theo đơn vị."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "1",
+   "p": "Sẽ KHÔNG có cập nhật tuần, mức tự tin theo tuần, nhắc — lượt 4."
+  },
+  {
+   "id": "2",
+   "p": "Sẽ KHÔNG có Toàn cảnh, heatmap, họp tuần, 11 biến thể giao diện — lượt 5; tab Toàn cảnh chỉ là chỗ đứng."
+  },
+  {
+   "id": "3",
+   "p": "Sẽ KHÔNG tự đo số từ CRM hay API — lượt 6."
+  },
+  {
+   "id": "4",
+   "p": "Sẽ KHÔNG rà giữa kỳ, chấm, khép kỳ, sửa ngày chu kỳ, lùi pha — lượt 7."
+  },
+  {
+   "id": "5",
+   "p": "Sẽ KHÔNG có mức hiển thị giới hạn, mẫu OKR, cột căn chỉnh trong bảng tính — lượt 8."
+  },
+  {
+   "id": "6",
+   "p": "Sẽ KHÔNG chuyển mục tiêu khi người nghỉ — lượt 4."
+  },
+  {
+   "id": "7",
+   "p": "Sẽ KHÔNG dựng thành phần cây bàn phím, biến thể thanh tiến độ trung tính, hay chuyển hộp hỏi lại vào packages/ui — dùng thứ có sẵn."
+  },
+  {
+   "id": "8",
+   "p": "Sẽ KHÔNG phân rã KR cấp trên thành mục tiêu cấp dưới, KHÔNG xoá hẳn chu kỳ hay mục tiêu, KHÔNG sửa vết."
+  }
+ ],
+ "scope_plain": "Đặt và công bố bộ OKR quý 4 cho mọi cấp, nhập từ bảng tính, vết — phần theo dõi tuần, toàn cảnh, số tự đo, chấm và khép kỳ để các lượt sau.",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Bảy thứ có thật trong lượt — chu kỳ, cấu hình, mục tiêu, KR, căn chỉnh, vết, lô nhập — mỗi thứ có tiêu chí riêng (AC-1…AC-9); đủ vì mỗi bảng trong thiết kế là một dòng."
+  },
+  {
+   "i": 1,
+   "p": "Sáu việc làm với mỗi thứ — tạo, sửa, công bố hay đổi pha, bỏ, đọc lại, nhập lô — đều có tiêu chí; mọi lần ghi đều có vế đọc lại từ cơ sở dữ liệu."
+  },
+  {
+   "i": 2,
+   "p": "Sáu tư thế người — quản trị, trưởng bộ phận, trưởng phòng ban, người phụ trách KR, thành viên thường, vai «chỉ OKR» (làm trưởng hoặc không) — có ma trận quyền (AC-6) và bài riêng cho vai «chỉ OKR» (AC-12)."
+  },
+  {
+   "i": 3,
+   "p": "Bốn cấp (OneHub, bộ phận, phòng ban, cá nhân bật/tắt) và hai loại chu kỳ (quý, năm) đều có tiêu chí (AC-2, AC-3, AC-7)."
+  },
+  {
+   "i": 4,
+   "p": "Áp cho mọi màn: ba trạng thái rỗng/đang tải/lỗi, hai khổ 390 và 1440, hai thứ tiếng, không dịch tên người nhập, cổng thiết kế tĩnh, migration chỉ thêm, vết trên mọi lần ghi."
+  },
+  {
+   "i": 5,
+   "p": "Đối chiếu ngành: kiểu KR và pha chu kỳ theo Perdoo và Weekdone; mục tiêu cam kết và tham vọng theo Google re:Work."
+  },
+  {
+   "i": 6,
+   "p": "[GIẢ ĐỊNH] Sáu kiểu KR là tăng tới · giảm xuống · giữ trên · giữ dưới · mốc · phần trăm — theo công cụ cùng loại vì bản phạm vi riêng không nằm trong kho; anh chốt ở đây."
+  },
+  {
+   "i": 7,
+   "p": "[GIẢ ĐỊNH] Mục tiêu cấp OneHub do quản trị workspace sửa, vì cây tổ chức không có «trưởng OneHub»."
+  },
+  {
+   "i": 8,
+   "p": "[GIẢ ĐỊNH] Chỉ gắn được vào mục tiêu hay KR cấp trên đã công bố; nháp của cấp trên không hiện làm ứng viên."
+  },
+  {
+   "i": 9,
+   "p": "[GIẢ ĐỊNH] Nhập từ bảng tính là việc của trưởng đơn vị, không phải quản trị; bảng bảy cột, mỗi dòng một KR, mục tiêu gom theo tên."
+  },
+  {
+   "i": 10,
+   "p": "[GIẢ ĐỊNH] Mục trên thanh điều hướng gọi là «Mục tiêu» / «Objectives» (chữ từ điển); tiêu đề màn vẫn dùng chữ OKR như bản mẫu."
+  },
+  {
+   "i": 11,
+   "p": "[GIẢ ĐỊNH] Mục «Mục tiêu» đứng sau «30 ngày đầu», trước «Cài đặt» như bản mẫu; bài kiểm ghim vị trí của hồ sơ cũ sửa theo và ghim lại."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Thiếu phép đo mở hộp thoại nhập trên màn thật (đường duy nhất tới ngưỡng «không nhập lại quá một lần») — đã thêm một phép đo màn (dán lô có tab thật, đếm dòng hỏng, nút Ghi khoá khi 0 dòng hợp lệ) và một phép đo đọc lại qua API sau khi ghi."
+  },
+  {
+   "i": 1,
+   "p": "Tab «Của tôi» — màn đổ bộ khi bấm «Mục tiêu» — không có tiêu chí nào; đã thêm AC-16 với phép đo ba vế (tôi phụ trách, tôi tham gia, KR tôi phụ trách) và bước chụp màn; hợp đồng thành 16 tiêu chí, một hơn trần."
+  },
+  {
+   "i": 2,
+   "p": "Khoá theo pha chỉ đo 5 trên 11 thủ tục ghi và một pha; vết thiếu gỡ căn chỉnh; chưa chốt ghi cấu hình có để vết không — đã sửa: ma trận 11 thủ tục × 2 pha, chuỗi vết 11 việc, thiết kế chốt ghi cấu hình để vết và nhập chỉ để vết khi có dòng ghi."
+  },
+  {
+   "i": 3,
+   "p": "Phép đo màn chưa thử nút Thử lại, đơn vị chưa có trưởng, trạng thái không có chu kỳ, và chỉ đếm «có nút Quay lại» — đã thêm các bước đó và đo Quay lại bằng địa chỉ và tiêu đề sheet Thoả thuận."
+  },
+  {
+   "i": 4,
+   "p": "Đường đo «không nhập lại quá một lần» có thể đếm cả lô rỗng; thiếu câu lỗi vượt trần khi chặn; hồ sơ cơ hội còn ghi kiểu thứ sáu khác sổ quyết định — đã chốt vết nhập chỉ khi có dòng ghi, thêm ca chặn, sửa hồ sơ cơ hội."
+  }
+ ],
+ "decisions_plain": [
+  {
+   "id": "d-20260925T033813Z-1",
+   "p": "Chọn sáu kiểu KR cố định trong mã (tăng tới, giảm xuống, giữ trên, giữ dưới, mốc, phần trăm) — đổi lại KR nào không xếp được thì phải mở vòng nhỏ thêm kiểu."
+  },
+  {
+   "id": "d-20260925T033813Z-2",
+   "p": "Danh mục (kiểu, pha, cấp, trạng thái) lưu chữ và kiểm bằng khuôn ở lớp kiểm dữ liệu, không khoá cứng trong cơ sở dữ liệu — đổi lại thêm giá trị không cần migration."
+  },
+  {
+   "id": "d-20260925T033813Z-3",
+   "p": "Mục tiêu cấp OneHub do quản trị sửa vì không có «trưởng OneHub» — đổi lại ban lãnh đạo không phải quản trị thì nhờ quản trị đặt hộ."
+  },
+  {
+   "id": "d-20260925T033813Z-4",
+   "p": "Nhập từ bảng tính là việc của trưởng, bảng phẳng bảy cột mỗi dòng một KR, mục tiêu gom theo tên — đổi lại loại mục tiêu và người tham gia sửa sau trong sheet."
+  },
+  {
+   "id": "d-20260925T033813Z-5",
+   "p": "Chỉ gắn vào mục tiêu hay KR cấp trên đã công bố — đổi lại phòng ban phải chờ cấp trên công bố mới căn chỉnh được."
+  },
+  {
+   "id": "d-20260925T033813Z-6",
+   "p": "Mục thanh điều hướng là «Mục tiêu» đứng sau «30 ngày đầu» như bản mẫu — đổi lại một hồ sơ đã ký phải ghim lại."
+  },
+  {
+   "id": "d-20260925T033813Z-7",
+   "p": "Cây đơn vị của màn OKR ghép lại cùng hình và cùng dữ liệu với màn Tổ chức nhưng đặt trong khu OKR — đổi lại hai chỗ ghép cây, thành phần dùng chung để lượt 5."
+  },
+  {
+   "id": "d-20260925T033813Z-8",
+   "p": "Thanh tiến độ dùng thành phần có sẵn (tô xanh), cây căn chỉnh dùng bảng thụt lề — đổi lại màn lệch bản mẫu ở thanh tiến độ, nhưng không có mẫu vẽ tay nào bị trả ở review."
+  },
+  {
+   "id": "d-20260925T033813Z-9",
+   "p": "KHÔNG làm design-pass lượt này vì bản mẫu bốn màn đã duyệt ở bước chuẩn bị — đổi lại ba bề mặt mới (hộp thoại mục tiêu/KR, hộp thoại nhập, trang Cài đặt) được duyệt bằng chữ, chỉ thấy ở lượt chấm."
+  },
+  {
+   "id": "d-20260925T033813Z-10",
+   "p": "KHÔNG chuyển hộp hỏi lại vào packages/ui lượt này — vòng khác đang làm; dùng như sheet kế hoạch đang dùng."
+  },
+  {
+   "id": "d-20260925T033813Z-11",
+   "p": "KHÔNG dựng nội dung cho tab Toàn cảnh (chỉ là chỗ đứng) và tab Của tôi chỉ đọc — giữ đủ bốn tab của bản mẫu mà không làm hai màn ngoài lượt."
+  },
+  {
+   "id": "d-20260925T033813Z-12",
+   "p": "KHÔNG xoá hẳn chu kỳ hay mục tiêu, KHÔNG sửa vết, KHÔNG lùi pha — vết phải sống; mở lại kỳ là lượt 7."
+  },
+  {
+   "id": "d-20260925T035637Z-13",
+   "p": "Sau phản biện: thêm tiêu chí cho tab «Của tôi» (chấp nhận 16 tiêu chí), ghi cấu hình và nhập lô đều để vết, vết nhập chỉ khi có dòng ghi — đổi lại hợp đồng dài hơn một dòng, ngưỡng đếm đúng."
+  }
+ ]
+}

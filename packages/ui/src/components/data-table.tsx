@@ -123,7 +123,23 @@ export type DataTableProps<TRow, TSub> = {
 	empty?: ReactNode;
 	className?: string;
 	tableClassName?: string;
+	layout?: DataTableLayout;
 };
+
+const LAYOUT_CLASS = {
+	fill: {
+		root: "flex min-h-0 flex-1 flex-col gap-3",
+		container: "min-h-0 flex-1 overflow-auto rounded-lg border bg-card",
+		emptyContainer: "",
+	},
+	content: {
+		root: "flex flex-col gap-3",
+		container: "overflow-x-auto rounded-lg border bg-card",
+		emptyContainer: "min-h-40",
+	},
+} as const;
+
+export type DataTableLayout = keyof typeof LAYOUT_CLASS;
 
 const HIDE_BELOW_CLASS = {
 	sm: "hidden sm:table-cell",
@@ -360,6 +376,7 @@ export function DataTable<TRow, TSub = unknown>({
 	empty,
 	className,
 	tableClassName,
+	layout = "fill",
 }: DataTableProps<TRow, TSub>) {
 	const msg = useMessages();
 	const [expandedIds, setExpandedIds] = useQueryState(
@@ -428,7 +445,7 @@ export function DataTable<TRow, TSub = unknown>({
 		(tabs && query.tab !== "all" ? 1 : 0) + activeFacetFilterCount;
 
 	return (
-		<div className={cn("flex min-h-0 flex-1 flex-col gap-3", className)}>
+		<div className={cn(LAYOUT_CLASS[layout].root, className)}>
 			{selecting && selection ? (
 				<div className="flex h-8 items-center gap-2">
 					<span className="truncate text-xs text-muted-foreground">
@@ -627,7 +644,10 @@ export function DataTable<TRow, TSub = unknown>({
 					"[&_td]:max-w-0 [&_td:first-child]:pl-4 [&_th:first-child]:pl-4 [&_td:last-child]:pr-4 [&_th:last-child]:pr-4",
 					tableClassName,
 				)}
-				containerClassName="min-h-0 flex-1 overflow-auto rounded-lg border bg-card"
+				containerClassName={cn(
+					LAYOUT_CLASS[layout].container,
+					deferredRows.length === 0 && LAYOUT_CLASS[layout].emptyContainer,
+				)}
 				overlay={
 					deferredRows.length === 0 ? (
 						<div className="absolute inset-x-0 top-11 bottom-0 flex items-center justify-center px-4 py-8 text-center text-muted-foreground">
