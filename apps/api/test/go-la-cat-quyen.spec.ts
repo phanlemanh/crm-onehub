@@ -35,8 +35,10 @@ const MAT_KHAU = "mat-khau-thu-du-dai-1";
 const NGOAI_LE = ["sso.signInOptions", "workspace.get"] as const;
 const SAN_THU_TUC = 50;
 const SAN_DUONG_REST = 30;
-const POOL_PG = 10;
 const LO_SONG_SONG = 8;
+const KET_NOI_DU_TRU = 2;
+const SO_TRUY_VAN_DO_POOL = 32;
+const NGU_DO_POOL_GIAY = 0.05;
 const SO_PHAN_TU_GIA = 40;
 const THU_MUC_APP = join(import.meta.dir, "..", "..", "app");
 const MOC_THOI_CU = new Date("2020-01-01T00:00:00.000Z");
@@ -399,6 +401,19 @@ async function luotCungLuc(lo?: number) {
 	return { ds, kq, lonNhat };
 }
 
+async function coPoolThat(): Promise<number> {
+	const hang = await Promise.all(
+		Array.from(
+			{ length: SO_TRUY_VAN_DO_POOL },
+			() =>
+				db.$queryRaw<
+					Array<{ pid: number }>
+				>`SELECT pg_backend_pid() AS pid FROM pg_sleep(${NGU_DO_POOL_GIAY}::float8)`,
+		),
+	);
+	return new Set(hang.map(([h]) => h?.pid)).size;
+}
+
 test("theo-lo: bo chia lo mac dinh chay tung luot, LO_SONG_SONG chay dung so luot da khai", async () => {
 	const tuanTu = await luotCungLuc();
 	expect(tuanTu.lonNhat, "bo chia lo mac dinh chay nhieu hon mot luot").toBe(1);
@@ -409,9 +424,14 @@ test("theo-lo: bo chia lo mac dinh chay tung luot, LO_SONG_SONG chay dung so luo
 		"bo chia lo khong chay dung LO_SONG_SONG luot cung luc",
 	).toBe(LO_SONG_SONG);
 	expect(songSong.kq, "bo chia lo song song lech thu tu").toEqual(songSong.ds);
-	expect(LO_SONG_SONG, "LO_SONG_SONG lan vao pool pg").toBeLessThanOrEqual(
-		POOL_PG - 2,
+	const coPool = await coPoolThat();
+	expect(coPool, "phep do pool chua lam day pool").toBeLessThan(
+		SO_TRUY_VAN_DO_POOL,
 	);
+	expect(
+		LO_SONG_SONG + KET_NOI_DU_TRU,
+		"LO_SONG_SONG lan vao pool pg",
+	).toBeLessThanOrEqual(coPool);
 });
 
 describe("go-la-cat-quyen", () => {

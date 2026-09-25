@@ -17,14 +17,36 @@ const TEP_WORKFLOW = [
 	".github/workflows/acceptance.yml",
 ];
 
+const SPEC_TUONG_DOI = "apps/api/test/go-la-cat-quyen.spec.ts";
+const GOI_TUONG_DOI = "apps/api/package.json";
+
 function docNeuCo(tuongDoi) {
 	const tep = join(GOC, tuongDoi);
 	return existsSync(tep) ? readFileSync(tep, "utf8") : null;
 }
 
-function soiTran(spec, packageJson) {
+function tepPreload(packageJson) {
+	const lenh = JSON.parse(packageJson).scripts?.test ?? "";
+	return [...lenh.matchAll(/--preload\s+(\S+)/g)].map((m) =>
+		join("apps/api", m[1]).replace(/\\/g, "/"),
+	);
+}
+
+function docVat() {
+	const packageJson = readFileSync(join(API, "package.json"), "utf8");
+	const vat = {
+		[SPEC_TUONG_DOI]: readFileSync(SPEC, "utf8"),
+		[GOI_TUONG_DOI]: packageJson,
+	};
+	for (const t of [...TEP_BUNFIG, ...TEP_WORKFLOW, ...tepPreload(packageJson)])
+		vat[t] = docNeuCo(t);
+	return vat;
+}
+
+function soiTran(vat) {
 	const loi = [];
 	const dat = [];
+	const spec = vat[SPEC_TUONG_DOI];
 	const cacCa = loiGoiTest(spec);
 	if (cacCa.length !== SO_CA)
 		loi.push(`tep co ${cacCa.length} loi goi test(, ky vong ${SO_CA}`);
@@ -34,15 +56,25 @@ function soiTran(spec, packageJson) {
 			loi.push(`test ${ca.ten} co tran rieng (${ca.doiSo.length} doi so)`);
 		else dat.push(`test ${ca.ten}: 2 doi so`);
 	}
-	if (spec.includes("setDefaultTimeout")) loi.push("tep goi setDefaultTimeout");
-	else dat.push("tep khong goi setDefaultTimeout");
+	const preload = tepPreload(vat[GOI_TUONG_DOI]);
+	if (preload.length === 0)
+		loi.push(
+			"script test cua apps/api khong khai --preload nao — khong soat duoc tep thiet lap",
+		);
+	for (const t of [SPEC_TUONG_DOI, ...preload]) {
+		const nd = vat[t];
+		if (nd === null || nd === undefined) loi.push(`${t}: khong doc duoc`);
+		else if (nd.includes("setDefaultTimeout"))
+			loi.push(`${t} goi setDefaultTimeout`);
+		else dat.push(`${t}: khong goi setDefaultTimeout`);
+	}
 	for (const t of TEP_BUNFIG) {
-		const nd = docNeuCo(t);
+		const nd = vat[t];
 		if (nd === null) dat.push(`${t}: vang`);
 		else if (/^\s*timeout\s*=/m.test(nd)) loi.push(`${t} co khoa timeout`);
 		else dat.push(`${t}: khong co timeout`);
 	}
-	const scripts = JSON.parse(packageJson).scripts ?? {};
+	const scripts = JSON.parse(vat[GOI_TUONG_DOI]).scripts ?? {};
 	for (const [ten, lenh] of Object.entries(scripts)) {
 		if (!lenh.includes("bun test")) continue;
 		if (lenh.includes("--timeout"))
@@ -50,17 +82,22 @@ function soiTran(spec, packageJson) {
 		else dat.push(`apps/api/package.json script ${ten}: khong --timeout`);
 	}
 	for (const t of TEP_WORKFLOW) {
-		const nd = docNeuCo(t);
+		const nd = vat[t];
 		if (nd === null) {
 			dat.push(`${t}: vang`);
 			continue;
 		}
-		for (const dong of nd.split("\n")) {
-			if (!/\brun:/.test(dong) || !/bun (run )?test/.test(dong)) continue;
-			if (dong.includes("--timeout"))
-				loi.push(`${t} co --timeout: ${dong.trim()}`);
-			else dat.push(`${t}: ${dong.trim()}`);
-		}
+		const dong = nd.split("\n");
+		const chayTest = dong.filter((d) => /bun (run )?test/.test(d));
+		dat.push(`${t}: da doc ${dong.length} dong, ${chayTest.length} dong chay test`);
+		for (const d of dong.filter((x) => x.includes("--timeout")))
+			loi.push(`${t} co --timeout: ${d.trim()}`);
+		if (t === TEP_WORKFLOW[0] && chayTest.length === 0)
+			loi.push(
+				`${t}: khong thay dong nao chay test — bo soat khong nhin thay lenh CI`,
+			);
+		for (const d of chayTest)
+			dat.push(`${t} chay test khong --timeout: ${d.trim()}`);
 	}
 	return { loi, dat };
 }
@@ -132,36 +169,64 @@ function themVaoCuoiCa(spec, ca, them) {
 	return spec.slice(0, c.ket) + them + spec.slice(c.ket);
 }
 
-const spec = readFileSync(SPEC, "utf8");
-const packageJson = readFileSync(join(API, "package.json"), "utf8");
+const vat = docVat();
+const spec = vat[SPEC_TUONG_DOI];
 const nhom = process.argv[2];
 let that;
 const tuKiemDong = [];
 
+function tuKiemTran(ten, tep, doi, thongDiep) {
+	const ban = { ...vat, [tep]: doi(vat[tep]) };
+	tuKiemDong.push(
+		tuKiem(ten, soiTran(ban).loi, thongDiep) ??
+			`HONG tu kiem ${ten}: dot bien ${tep} ma khong bat "${thongDiep}"`,
+	);
+}
+
 if (nhom === "khong-noi-tran") {
-	that = soiTran(spec, packageJson);
-	const specTran = themVaoCuoiCa(spec, "khoa-con-bat", ", 15_000");
-	tuKiemDong.push(
-		tuKiem(
-			"spec",
-			soiTran(specTran, packageJson).loi,
-			"test khoa-con-bat co tran rieng",
-		) ??
-			'HONG tu kiem spec: them 15_000 vao khoa-con-bat ma khong bat "test khoa-con-bat co tran rieng"',
+	that = soiTran(vat);
+	tuKiemTran(
+		"spec",
+		SPEC_TUONG_DOI,
+		(nd) => themVaoCuoiCa(nd, "khoa-con-bat", ", 15_000"),
+		"test khoa-con-bat co tran rieng",
 	);
-	const goi = JSON.parse(packageJson);
-	const goiTran = JSON.stringify({
-		...goi,
-		scripts: { ...goi.scripts, test: `${goi.scripts.test} --timeout 15000` },
-	});
-	tuKiemDong.push(
-		tuKiem(
-			"package.json",
-			soiTran(spec, goiTran).loi,
-			"apps/api/package.json script test co --timeout",
-		) ??
-			'HONG tu kiem package.json: them --timeout ma khong bat "apps/api/package.json script test co --timeout"',
+	tuKiemTran(
+		"package.json",
+		GOI_TUONG_DOI,
+		(nd) => {
+			const goi = JSON.parse(nd);
+			return JSON.stringify({
+				...goi,
+				scripts: {
+					...goi.scripts,
+					test: `${goi.scripts.test} --timeout 15000`,
+				},
+			});
+		},
+		"apps/api/package.json script test co --timeout",
 	);
+	tuKiemTran(
+		"bunfig",
+		TEP_BUNFIG[0],
+		(nd) => `${nd ?? ""}[test]\ntimeout = 15000\n`,
+		`${TEP_BUNFIG[0]} co khoa timeout`,
+	);
+	tuKiemTran(
+		"workflow nhieu dong",
+		TEP_WORKFLOW[0],
+		(nd) =>
+			`${nd}      - name: thu\n        run: |\n          bun test --timeout 15000\n`,
+		`${TEP_WORKFLOW[0]} co --timeout`,
+	);
+	const [preloadDau] = tepPreload(vat[GOI_TUONG_DOI]);
+	if (preloadDau)
+		tuKiemTran(
+			"preload",
+			preloadDau,
+			(nd) => `${nd}\nsetDefaultTimeout(15_000);\n`,
+			`${preloadDau} goi setDefaultTimeout`,
+		);
 } else if (nhom === "tuan-tu") {
 	that = soiTuanTu(spec);
 	const specSongSong = themVaoCa(

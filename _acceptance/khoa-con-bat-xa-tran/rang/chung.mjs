@@ -249,3 +249,12 @@ export function apDotBien(noiDung, dotBien) {
 	}
 	return noiDung.replace(dotBien.tim, dotBien.thay);
 }
+
+const MA_MAU = new RegExp(`${String.fromCharCode(27)}\\[[0-9;]*m`, "g");
+
+export function khopLoi(ra, thongDiep) {
+	return ra
+		.replace(MA_MAU, "")
+		.split("\n")
+		.some((dong) => dong.trimEnd() === `error: ${thongDiep}`);
+}
