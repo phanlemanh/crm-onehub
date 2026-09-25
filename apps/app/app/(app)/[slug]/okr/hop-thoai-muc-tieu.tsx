@@ -166,10 +166,26 @@ export function HopThoaiMucTieu({
 		chu !== "" &&
 		(yeuCau.loai === "sua" || donVi !== null);
 
+	const nguoiThamGia = thamGia.filter((id) => id !== chu);
+	const doi = cu
+		? {
+				title: ten.trim() === cu.title ? undefined : ten,
+				kind: loai === cu.kind ? undefined : loai,
+				ownerUserId: chu === cu.owner.id ? undefined : chu,
+				participantIds: cungTapHop(
+					nguoiThamGia,
+					cu.participants.map((p) => p.id),
+				)
+					? undefined
+					: nguoiThamGia,
+				whyNow: viSao.trim() === cu.whyNow ? undefined : viSao,
+			}
+		: null;
+	const daSua = doi === null || Object.values(doi).some((v) => v !== undefined);
+
 	const gui = () => {
-		if (dangLuu || !sanSang) return;
+		if (dangLuu || !sanSang || !daSua) return;
 		setLoi(null);
-		const nguoiThamGia = thamGia.filter((id) => id !== chu);
 		if (yeuCau.loai === "tao") {
 			if (!donVi) return;
 			tao.mutate({
@@ -183,20 +199,7 @@ export function HopThoaiMucTieu({
 			});
 			return;
 		}
-		const mt = yeuCau.mucTieu;
-		sua.mutate({
-			id: mt.id,
-			title: ten.trim() === mt.title ? undefined : ten,
-			kind: loai === mt.kind ? undefined : loai,
-			ownerUserId: chu === mt.owner.id ? undefined : chu,
-			participantIds: cungTapHop(
-				nguoiThamGia,
-				mt.participants.map((p) => p.id),
-			)
-				? undefined
-				: nguoiThamGia,
-			whyNow: viSao.trim() === mt.whyNow ? undefined : viSao,
-		});
+		if (doi) sua.mutate({ id: yeuCau.mucTieu.id, ...doi });
 	};
 
 	const moiNguoi = users.data ?? [];
@@ -223,153 +226,155 @@ export function HopThoaiMucTieu({
 						{yeuCau.loai === "sua" ? h.suaMucTieu : m.themMucTieu}
 					</DialogTitle>
 				</DialogHeader>
-				<form
-					id={`${ma}-form`}
-					onSubmit={(e) => {
-						e.preventDefault();
-						gui();
-					}}
-				>
-					<FieldGroup>
-						<div className="grid grid-cols-2 gap-3">
-							<Field data-disabled={capChon.length === 1}>
-								<FieldLabel htmlFor={`${ma}-cap`}>{h.cap}</FieldLabel>
+				<div className="-m-1 max-h-[70svh] overflow-y-auto p-1" data-cuon-hop>
+					<form
+						id={`${ma}-form`}
+						onSubmit={(e) => {
+							e.preventDefault();
+							gui();
+						}}
+					>
+						<FieldGroup>
+							<div className="grid grid-cols-2 gap-3">
+								<Field data-disabled={capChon.length === 1}>
+									<FieldLabel htmlFor={`${ma}-cap`}>{h.cap}</FieldLabel>
+									<Select
+										value={cap}
+										disabled={capChon.length === 1}
+										onValueChange={(v) => {
+											const moi = capChon.find((c) => c === v);
+											if (moi) setCap(moi);
+										}}
+									>
+										<SelectTrigger id={`${ma}-cap`}>
+											<SelectValue />
+										</SelectTrigger>
+										<SelectContent>
+											{capChon.map((c) => (
+												<SelectItem key={c} value={c}>
+													{h.capMucTieu[c]}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+								</Field>
+								<Field data-disabled>
+									<FieldLabel htmlFor={`${ma}-don-vi`}>{m.donVi}</FieldLabel>
+									<Input
+										id={`${ma}-don-vi`}
+										value={tenDonVi}
+										disabled
+										translate="no"
+									/>
+								</Field>
+							</div>
+							{yeuCau.loai === "sua" ? (
+								<FieldDescription>{h.khongDoiDonVi}</FieldDescription>
+							) : cap === "ca-nhan" ? (
+								<FieldDescription>{h.caNhanCua}</FieldDescription>
+							) : null}
+							<Field>
+								<FieldLabel htmlFor={`${ma}-ten`}>{h.tenMucTieu}</FieldLabel>
+								<Input
+									id={`${ma}-ten`}
+									value={ten}
+									maxLength={200}
+									autoComplete="off"
+									translate="no"
+									onChange={(e) => setTen(e.target.value)}
+								/>
+							</Field>
+							<Field>
+								<FieldLabel htmlFor={`${ma}-loai`}>{h.loai}</FieldLabel>
 								<Select
-									value={cap}
-									disabled={capChon.length === 1}
+									value={loai}
 									onValueChange={(v) => {
-										const moi = capChon.find((c) => c === v);
-										if (moi) setCap(moi);
+										const moi = LOAI_MUC_TIEU.find((l) => l === v);
+										if (moi) setLoai(moi);
 									}}
 								>
-									<SelectTrigger id={`${ma}-cap`}>
+									<SelectTrigger id={`${ma}-loai`}>
 										<SelectValue />
 									</SelectTrigger>
 									<SelectContent>
-										{capChon.map((c) => (
-											<SelectItem key={c} value={c}>
-												{h.capMucTieu[c]}
+										{LOAI_MUC_TIEU.map((l) => (
+											<SelectItem key={l} value={l}>
+												{m.loai[l]}
 											</SelectItem>
 										))}
 									</SelectContent>
 								</Select>
 							</Field>
-							<Field data-disabled>
-								<FieldLabel htmlFor={`${ma}-don-vi`}>{m.donVi}</FieldLabel>
-								<Input
-									id={`${ma}-don-vi`}
-									value={tenDonVi}
-									disabled
+							<Field>
+								<FieldLabel htmlFor={`${ma}-chu`}>{m.phuTrach}</FieldLabel>
+								<Combobox
+									id={`${ma}-chu`}
 									translate="no"
+									disabled={users.isPending}
+									options={luaChonChu}
+									value={chu}
+									onValueChange={(v) => {
+										setChuChon(v);
+										setThamGia((ds) => ds.filter((id) => id !== v));
+									}}
+									placeholder={users.isPending ? h.dangTai : h.chonNguoi}
+									searchPlaceholder={h.timNguoi}
+									empty={h.khongAi}
 								/>
 							</Field>
-						</div>
-						{yeuCau.loai === "sua" ? (
-							<FieldDescription>{h.khongDoiDonVi}</FieldDescription>
-						) : cap === "ca-nhan" ? (
-							<FieldDescription>{h.caNhanCua}</FieldDescription>
-						) : null}
-						<Field>
-							<FieldLabel htmlFor={`${ma}-ten`}>{h.tenMucTieu}</FieldLabel>
-							<Input
-								id={`${ma}-ten`}
-								value={ten}
-								maxLength={200}
-								autoComplete="off"
-								translate="no"
-								onChange={(e) => setTen(e.target.value)}
-							/>
-						</Field>
-						<Field>
-							<FieldLabel htmlFor={`${ma}-loai`}>{h.loai}</FieldLabel>
-							<Select
-								value={loai}
-								onValueChange={(v) => {
-									const moi = LOAI_MUC_TIEU.find((l) => l === v);
-									if (moi) setLoai(moi);
-								}}
-							>
-								<SelectTrigger id={`${ma}-loai`}>
-									<SelectValue />
-								</SelectTrigger>
-								<SelectContent>
-									{LOAI_MUC_TIEU.map((l) => (
-										<SelectItem key={l} value={l}>
-											{m.loai[l]}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</Field>
-						<Field>
-							<FieldLabel htmlFor={`${ma}-chu`}>{m.phuTrach}</FieldLabel>
-							<Combobox
-								id={`${ma}-chu`}
-								translate="no"
-								disabled={users.isPending}
-								options={luaChonChu}
-								value={chu}
-								onValueChange={(v) => {
-									setChuChon(v);
-									setThamGia((ds) => ds.filter((id) => id !== v));
-								}}
-								placeholder={users.isPending ? h.dangTai : h.chonNguoi}
-								searchPlaceholder={h.timNguoi}
-								empty={h.khongAi}
-							/>
-						</Field>
-						<Field>
-							<FieldLabel htmlFor={`${ma}-tham-gia`}>{h.thamGia}</FieldLabel>
-							<Combobox
-								id={`${ma}-tham-gia`}
-								disabled={users.isPending}
-								options={luaChonThamGia}
-								value=""
-								onValueChange={(v) => setThamGia((ds) => [...ds, v])}
-								placeholder={h.themNguoi}
-								searchPlaceholder={h.timNguoi}
-								empty={h.khongAi}
-							/>
-							{thamGia.length > 0 ? (
-								<div className="flex flex-wrap gap-1" data-nguoi-tham-gia>
-									{thamGia.map((id) => (
-										<TokenFieldItem key={id}>
-											<span className="truncate px-1" translate="no">
-												{tenNguoi(id)}
-											</span>
-											<TokenFieldAction
-												aria-label={dien(h.boNguoi, { ten: tenNguoi(id) })}
-												onClick={() =>
-													setThamGia((ds) => ds.filter((x) => x !== id))
-												}
-											>
-												<Icon icon={Close} />
-											</TokenFieldAction>
-										</TokenFieldItem>
-									))}
-								</div>
+							<Field>
+								<FieldLabel htmlFor={`${ma}-tham-gia`}>{h.thamGia}</FieldLabel>
+								<Combobox
+									id={`${ma}-tham-gia`}
+									disabled={users.isPending}
+									options={luaChonThamGia}
+									value=""
+									onValueChange={(v) => setThamGia((ds) => [...ds, v])}
+									placeholder={h.themNguoi}
+									searchPlaceholder={h.timNguoi}
+									empty={h.khongAi}
+								/>
+								{thamGia.length > 0 ? (
+									<div className="flex flex-wrap gap-1" data-nguoi-tham-gia>
+										{thamGia.map((id) => (
+											<TokenFieldItem key={id}>
+												<span className="truncate px-1" translate="no">
+													{tenNguoi(id)}
+												</span>
+												<TokenFieldAction
+													aria-label={dien(h.boNguoi, { ten: tenNguoi(id) })}
+													onClick={() =>
+														setThamGia((ds) => ds.filter((x) => x !== id))
+													}
+												>
+													<Icon icon={Close} />
+												</TokenFieldAction>
+											</TokenFieldItem>
+										))}
+									</div>
+								) : null}
+							</Field>
+							<Field>
+								<FieldLabel htmlFor={`${ma}-vi-sao`}>{h.viSao}</FieldLabel>
+								<Textarea
+									id={`${ma}-vi-sao`}
+									value={viSao}
+									maxLength={500}
+									translate="no"
+									aria-describedby={`${ma}-vi-sao-mo-ta`}
+									onChange={(e) => setViSao(e.target.value)}
+								/>
+								<FieldDescription id={`${ma}-vi-sao-mo-ta`}>
+									{h.viSaoMoTa}
+								</FieldDescription>
+							</Field>
+							{ten.trim() !== "" && !tenHopLe ? (
+								<FieldError>{h.tenQuaNgan}</FieldError>
 							) : null}
-						</Field>
-						<Field>
-							<FieldLabel htmlFor={`${ma}-vi-sao`}>{h.viSao}</FieldLabel>
-							<Textarea
-								id={`${ma}-vi-sao`}
-								value={viSao}
-								maxLength={500}
-								translate="no"
-								aria-describedby={`${ma}-vi-sao-mo-ta`}
-								onChange={(e) => setViSao(e.target.value)}
-							/>
-							<FieldDescription id={`${ma}-vi-sao-mo-ta`}>
-								{h.viSaoMoTa}
-							</FieldDescription>
-						</Field>
-						{ten.trim() !== "" && !tenHopLe ? (
-							<FieldError>{h.tenQuaNgan}</FieldError>
-						) : null}
-						{loi ? <FieldError>{loi}</FieldError> : null}
-					</FieldGroup>
-				</form>
+							{loi ? <FieldError>{loi}</FieldError> : null}
+						</FieldGroup>
+					</form>
+				</div>
 				<DialogFooter>
 					<Button variant="outline" onClick={dong} disabled={dangLuu}>
 						{h.huy}
@@ -377,7 +382,8 @@ export function HopThoaiMucTieu({
 					<Button
 						type="submit"
 						form={`${ma}-form`}
-						disabled={dangLuu || !sanSang}
+						disabled={dangLuu || !sanSang || !daSua}
+						data-nut="gui-muc-tieu"
 					>
 						{dangLuu ? <Spinner /> : null}
 						{yeuCau.loai === "sua" ? h.luu : h.taoMucTieu}

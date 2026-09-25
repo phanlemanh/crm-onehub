@@ -106,6 +106,8 @@ const KHONG_DAU = new Set([
 	"header.otherLocale",
 	"datMatKhau.xong.title",
 	"sheet.tabKr",
+	"cot.kr",
+	"moc.xong",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -624,6 +626,10 @@ describe("kho chuoi cua vong ③a", () => {
 			"agent-builder-o-soan:the.go": ["Gỡ 1", "Gỡ 12"],
 			"agent-builder-hoi-thoai-thao-tac:xoa.xoaMot": ["Xoá 1", "Xoá 12"],
 			"agent-builder-hoi-thoai-thao-tac:xoa.xoaHoi": ["Xoá 1?", "Xoá 12?"],
+			"okr:demMucTieu": ["1 mục tiêu", "12 mục tiêu"],
+			"okr:demDonVi": ["1 mục tiêu · A KR", "12 mục tiêu · A KR"],
+			"okr:gopVao": ["góp vào 1 chỗ", "góp vào 12 chỗ"],
+			"okr:tienDoCua": ["Tiến độ 1: A%", "Tiến độ 12: A%"],
 			"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [
 				"Cả đội · 1",
 				"Cả đội · 12",

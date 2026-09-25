@@ -551,3 +551,97 @@ describe("sheet-kr-hop-le", () => {
 		});
 	});
 });
+
+async function moMenu(nhan: string, muc: string): Promise<void> {
+	const trigger = document.body.querySelector(`[aria-label="${nhan}"]`);
+	if (!trigger) throw new Error(`khong co menu ${nhan}`);
+	await bam(trigger);
+	await cho(
+		() => document.body.querySelector('[role="menuitem"]') !== null,
+		`menu ${nhan} mo`,
+	);
+	const chon = [...document.body.querySelectorAll('[role="menuitem"]')].find(
+		(o) => o.textContent === muc,
+	);
+	if (!chon) throw new Error(`khong co muc ${muc}`);
+	await bam(chon);
+}
+
+describe("hop-thoai-sua-va-cuon", () => {
+	test("hop-thoai-sua-va-cuon: sua KR — Luu tat toi khi doi mot o, chan hop nam ngoai khung cuon, chi gui truong da doi", async () => {
+		chiTiet = mucTieu("cong-bo", true);
+		await mo();
+		await moMenu("Thao tác với KR kr-1", m.sheet.suaKr);
+		await cho(() => hop() !== null, "hop thoai KR");
+		const h = hop();
+		if (!h) throw new Error("khong co hop");
+		const cuon = h.querySelector("[data-cuon-hop]");
+		const gui = () => h.querySelector<HTMLButtonElement>('[data-nut="gui-kr"]');
+		const huy = nut(m.hopThoai.huy, h);
+		const truoc = {
+			tat: gui()?.disabled,
+			formTrongKhung: cuon?.querySelector("form") !== null,
+			guiNgoaiKhung: cuon?.contains(gui()) === false,
+			huyNgoaiKhung: cuon?.contains(huy) === false,
+		};
+		await go(h.querySelector("[data-o-dich]"), "60");
+		const sau = gui()?.disabled;
+		const btn = gui();
+		if (!btn) throw new Error("khong co nut gui");
+		await bam(btn);
+		await cho(() => daGoi.length > 0, "goi sua KR");
+		expect({ truoc, sau, goi: daGoi }).toEqual({
+			truoc: {
+				tat: true,
+				formTrongKhung: true,
+				guiNgoaiKhung: true,
+				huyNgoaiKhung: true,
+			},
+			sau: false,
+			goi: [
+				{
+					duong: "okr.updateKeyResult",
+					dauVao: { id: "kr-1", targetValue: 60 },
+				},
+			],
+		});
+	});
+
+	test("hop-thoai-sua-va-cuon: sua muc tieu — Luu tat toi khi doi ten, chan hop ngoai khung cuon", async () => {
+		await mo();
+		await moMenu(m.sheet.menu, m.sheet.sua);
+		await cho(
+			() => document.body.querySelector("[data-hop-thoai-muc-tieu]") !== null,
+			"hop thoai muc tieu",
+		);
+		const h = document.body.querySelector("[data-hop-thoai-muc-tieu]");
+		if (!h) throw new Error("khong co hop");
+		const cuon = h.querySelector("[data-cuon-hop]");
+		const gui = () =>
+			h.querySelector<HTMLButtonElement>('[data-nut="gui-muc-tieu"]');
+		const truoc = {
+			tat: gui()?.disabled,
+			guiNgoaiKhung: cuon?.contains(gui()) === false,
+			huyNgoaiKhung: cuon?.contains(nut(m.hopThoai.huy, h)) === false,
+		};
+		await go(
+			h.querySelector('[id$="-ten"]'),
+			"Tăng khách hàng doanh nghiệp lớn",
+		);
+		const sau = gui()?.disabled;
+		const btn = gui();
+		if (!btn) throw new Error("khong co nut gui");
+		await bam(btn);
+		await cho(() => daGoi.length > 0, "goi sua muc tieu");
+		expect({ truoc, sau, goi: daGoi }).toEqual({
+			truoc: { tat: true, guiNgoaiKhung: true, huyNgoaiKhung: true },
+			sau: false,
+			goi: [
+				{
+					duong: "okr.updateObjective",
+					dauVao: { id: "mt-1", title: "Tăng khách hàng doanh nghiệp lớn" },
+				},
+			],
+		});
+	});
+});

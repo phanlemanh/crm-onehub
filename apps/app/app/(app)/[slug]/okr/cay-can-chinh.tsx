@@ -43,7 +43,7 @@ function DongCanChinh({ dong }: { dong: DongPhang }) {
 						}
 						translate="no"
 					>
-						{laKr ? `${m.cot.ten} · ${nut.title}` : nut.title}
+						{laKr ? `${m.cot.kr} · ${nut.title}` : nut.title}
 					</span>
 					{laKr ? null : (
 						<span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-muted-foreground text-xs">

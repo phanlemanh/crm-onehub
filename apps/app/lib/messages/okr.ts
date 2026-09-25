@@ -1,7 +1,6 @@
 import type { Locale } from "@crm/ui/lib/locale";
 
 const vi = {
-	khu: "Mục tiêu",
 	tabNhan: "Khu mục tiêu",
 	tab: {
 		"cua-toi": "Của tôi",
@@ -65,7 +64,7 @@ const vi = {
 		daXong: "Đã xong",
 		dangCho: "Mốc, chưa xong",
 	},
-	cot: { ten: "KR", phuTrach: "Phụ trách", tienDo: "Tiến độ", dich: "Đích" },
+	cot: { kr: "KR", phuTrach: "Phụ trách", tienDo: "Tiến độ", dich: "Đích" },
 	chuaCoKr: "Mục tiêu này chưa có KR.",
 	cotCay: {
 		ten: "Mục tiêu và KR",
@@ -270,7 +269,6 @@ const vi = {
 type OkrMessages = typeof vi;
 
 const en: OkrMessages = {
-	khu: "Objectives",
 	tabNhan: "Objectives area",
 	tab: {
 		"cua-toi": "Mine",
@@ -337,7 +335,7 @@ const en: OkrMessages = {
 		daXong: "Done",
 		dangCho: "Milestone, not done",
 	},
-	cot: { ten: "KR", phuTrach: "Owner", tienDo: "Progress", dich: "Target" },
+	cot: { kr: "KR", phuTrach: "Owner", tienDo: "Progress", dich: "Target" },
 	chuaCoKr: "This objective has no KRs yet.",
 	cotCay: {
 		ten: "Objectives and KRs",
@@ -381,7 +379,7 @@ const en: OkrMessages = {
 		body: "This release has Mine and By unit.",
 	},
 	sheet: {
-		tabKr: "Key results",
+		tabKr: "KR",
 		tabCanChinh: "Alignment",
 		tabVet: "History",
 		tieuDePhu: "Objective",

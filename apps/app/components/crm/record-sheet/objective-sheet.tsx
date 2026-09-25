@@ -367,6 +367,7 @@ function TabCanChinh({ mt }: { mt: ChiTiet }) {
 				/>
 			) : null}
 			<ConfirmDialog
+				tone="default"
 				nut={m.hoiGo.action}
 				thoi={m.hoiGo.cancel}
 				tieuDe={dien(m.hoiGo.title, { ten: goDi ? tenNoi(goDi) : "" })}

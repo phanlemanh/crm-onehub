@@ -46,7 +46,7 @@ export function BangKr({
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const cot: SimpleTableColumn[] = [
-		{ id: "ten", header: m.cot.ten },
+		{ id: "ten", header: m.cot.kr },
 		{ id: "phuTrach", header: m.cot.phuTrach, width: "w-40" },
 		{ id: "tienDo", header: m.cot.tienDo, width: "w-48" },
 		{ id: "dich", header: m.cot.dich, width: "w-40", align: "right" },
