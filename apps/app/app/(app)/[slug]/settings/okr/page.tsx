@@ -50,7 +50,7 @@ export default async function CaiDatChuongTrinhOkrPage() {
 	const m = okrMessages(await getLocale()).caiDat;
 
 	return (
-		<PageShell>
+		<PageShell width="page">
 			<Suspense
 				fallback={
 					<>
@@ -80,7 +80,7 @@ async function NoiDung({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 		<HydrateClient>
 			<DauTrang tieuDe={tieuDe} moTa={moTa} lyDo={<LyDoKhongQuyen />} />
 			<PageShellContent>
-				<div className="flex max-w-(--container-page) flex-col gap-6">
+				<div className="flex flex-col gap-6">
 					<BangChuKy />
 					<FormCauHinh />
 				</div>
