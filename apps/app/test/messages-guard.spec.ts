@@ -107,6 +107,7 @@ const KHONG_DAU = new Set([
 	"datMatKhau.xong.title",
 	"sheet.tabKr",
 	"cot.kr",
+	"cot.pha",
 	"moc.xong",
 ]);
 
@@ -630,6 +631,10 @@ describe("kho chuoi cua vong ③a", () => {
 			"okr:demDonVi": ["1 mục tiêu · A KR", "12 mục tiêu · A KR"],
 			"okr:gopVao": ["góp vào 1 chỗ", "góp vào 12 chỗ"],
 			"okr:tienDoCua": ["Tiến độ 1: A%", "Tiến độ 12: A%"],
+			"okr:caiDat.chuKy.chuyenSang": ["Chuyển sang 1", "Chuyển sang 12"],
+			"okr:caiDat.chuKy.daChuyen": ["1 đã sang A.", "12 đã sang A."],
+			"okr:caiDat.chuKy.hoi.title": ["Chuyển 1 sang A?", "Chuyển 12 sang A?"],
+			"okr:caiDat.mo.daMo": ["Đã mở 1.", "Đã mở 12."],
 			"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [
 				"Cả đội · 1",
 				"Cả đội · 12",

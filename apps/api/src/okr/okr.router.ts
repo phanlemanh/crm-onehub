@@ -86,8 +86,8 @@ export class OkrRouter {
 	}
 
 	@Query({ output: programOutput, meta: restMeta("GET", "/okr/program", TAG) })
-	program() {
-		return this.okr.program();
+	program(@Ctx() ctx: AuthedTrpcContext) {
+		return this.okr.programFor(ctx.user.id);
 	}
 
 	@Mutation({

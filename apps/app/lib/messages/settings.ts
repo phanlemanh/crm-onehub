@@ -13,12 +13,14 @@ const en = {
 		sso: "SSO",
 		thongBaoCuaBan: "Your notifications",
 		toChuc: "Organization",
+		chuongTrinhOkr: "OKR program",
 		dieuPhoi: "Onboarding",
 	},
 	tieuDeTab: {
 		chung: "General",
 		tienTe: "Currencies",
 		truong: "Fields",
+		chuongTrinhOkr: "OKR program",
 	},
 	chung: {
 		tieuDe: "General",
@@ -149,12 +151,14 @@ const vi = {
 		sso: "SSO",
 		thongBaoCuaBan: "Thông báo của bạn",
 		toChuc: "Tổ chức",
+		chuongTrinhOkr: "Chương trình OKR",
 		dieuPhoi: "Điều phối 30 ngày",
 	},
 	tieuDeTab: {
 		chung: "Tổng quan",
 		tienTe: "Tiền tệ",
 		truong: "Trường",
+		chuongTrinhOkr: "Chương trình OKR",
 	},
 	chung: {
 		tieuDe: "Tổng quan",

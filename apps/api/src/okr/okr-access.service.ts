@@ -1,4 +1,5 @@
 import {
+	canManageSettings,
 	isWorkspaceAdmin,
 	NOT_A_MEMBER,
 	type WorkspaceRole,
@@ -28,6 +29,7 @@ export type DonViCuaMucTieu = {
 export type Quyen = {
 	role: WorkspaceRole;
 	quanTri: boolean;
+	quanTriChuongTrinh: boolean;
 	truongBoPhan: Set<string>;
 	truongPhongBan: Set<string>;
 	boPhanCua: Map<string, string | null>;
@@ -77,6 +79,7 @@ export class OkrAccessService {
 		return {
 			role,
 			quanTri: isWorkspaceAdmin(role),
+			quanTriChuongTrinh: canManageSettings(role),
 			truongBoPhan,
 			truongPhongBan,
 			boPhanCua: new Map(moiPb.map((p) => [p.id, p.divisionId])),
@@ -111,8 +114,12 @@ export class OkrAccessService {
 		}
 	}
 
+	async quanTriChuongTrinh(userId: string): Promise<boolean> {
+		return canManageSettings(await workspaceRoleOf(userId));
+	}
+
 	async assertQuanTri(userId: string): Promise<void> {
-		if (!isWorkspaceAdmin(await workspaceRoleOf(userId)))
+		if (!(await this.quanTriChuongTrinh(userId)))
 			throw new ForbiddenException(OKR.thongDiep.canQuyenQuanTri);
 	}
 

@@ -46,7 +46,10 @@ export const setCyclePhaseInput = z.object({
 	id: ma,
 	phase: z.enum(PHA_CHU_KY),
 });
-export const programOutput = okrProgram.extend({ version: z.number() });
+export const programOutput = okrProgram.extend({
+	version: z.number(),
+	canManage: z.boolean(),
+});
 export const setProgramInput = okrProgram;
 export const okrAccessOutput = z.object({
 	canManageProgram: z.boolean(),

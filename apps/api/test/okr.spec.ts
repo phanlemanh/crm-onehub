@@ -1,5 +1,9 @@
 import { describe, expect, spyOn, test } from "bun:test";
-import { KHONG_TRONG_PHAM_VI } from "@crm/auth";
+import {
+	canManageSettings,
+	KHONG_TRONG_PHAM_VI,
+	workspaceRoleOf,
+} from "@crm/auth";
 import { db } from "@crm/db";
 import { parseOkrVet } from "@crm/validation/okr-vet";
 import type { NutCanChinh } from "../src/okr/okr.contracts";
@@ -53,6 +57,7 @@ type ChuongTrinh = {
 	weightsOn: boolean;
 	personalOn: boolean;
 	version: number;
+	canManage: boolean;
 };
 
 describe("chu-ky", () => {
@@ -235,11 +240,11 @@ describe("chuong-trinh", () => {
 			weightsOn: true,
 			personalOn: false,
 		} as const;
-		const v2 = ok<{ version: number }>(
+		const v2 = ok<ChuongTrinh>(
 			await goi("okr.setProgram", moi),
 			"cau hinh moi",
 		);
-		expect(v2).toEqual({ ...moi, version: v1.version + 1 });
+		expect(v2).toEqual({ ...moi, version: v1.version + 1, canManage: true });
 
 		const hai = await db.okrProgramConfig.findMany({
 			orderBy: { version: "desc" },
@@ -252,10 +257,12 @@ describe("chuong-trinh", () => {
 		expect(await doc<ChuongTrinh>("okr.program")).toEqual({
 			...moi,
 			version: v1.version + 1,
+			canManage: true,
 		});
 		expect(await doc<ChuongTrinh>("okr.program", "thuong")).toEqual({
 			...moi,
 			version: v1.version + 1,
+			canManage: false,
 		});
 
 		const soDong = await db.okrProgramConfig.count();
@@ -272,6 +279,29 @@ describe("chuong-trinh", () => {
 		expect(vet.map((v) => parseOkrVet(v.after)?.version)).toEqual([
 			v1.version,
 			v1.version + 1,
+		]);
+	});
+
+	test("chuong-trinh: quyen quan tri chuong trinh la canManageSettings, doc va ghi cung mot co", async () => {
+		const ra: string[] = [];
+		for (const ai of ["chu", "quan", "thuong", "okr"] as const) {
+			const duoc = canManageSettings(await workspaceRoleOf(phien[ai].nguoi));
+			const access = await doc<{ canManageProgram: boolean }>("okr.access", ai);
+			const ct = await doc<ChuongTrinh>("okr.program", ai);
+			const ghi = await goi(
+				"okr.setCyclePhase",
+				{ id: ma("khong-co"), phase: "dang-chay" },
+				ai,
+			);
+			ra.push(
+				`${ai} ${duoc} ${access.canManageProgram} ${ct.canManage} ${ghi.status}`,
+			);
+		}
+		expect(ra).toEqual([
+			"chu true true true 404",
+			"quan true true true 404",
+			"thuong false false false 403",
+			"okr false false false 403",
 		]);
 	});
 });

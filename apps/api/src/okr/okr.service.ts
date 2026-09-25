@@ -214,7 +214,7 @@ export class OkrService {
 	async access(userId: string) {
 		const q = await this.quyenOkr.quyen(userId);
 		return {
-			canManageProgram: q.quanTri,
+			canManageProgram: q.quanTriChuongTrinh,
 			headOf: {
 				divisions: [...q.truongBoPhan],
 				departments: [...q.truongPhongBan],
@@ -320,6 +320,14 @@ export class OkrService {
 		});
 	}
 
+	async programFor(userId: string) {
+		const [ct, canManage] = await Promise.all([
+			this.program(),
+			this.quyenOkr.quanTriChuongTrinh(userId),
+		]);
+		return { ...ct, canManage };
+	}
+
 	async program(
 		tx: Tx | Db = this.db,
 	): Promise<OkrProgram & { version: number }> {
@@ -355,7 +363,7 @@ export class OkrService {
 				{ version: cu.version },
 				{ ...input, version: row.version },
 			);
-			return { ...input, version: row.version };
+			return { ...input, version: row.version, canManage: true };
 		});
 	}
 

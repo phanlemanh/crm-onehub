@@ -47,6 +47,7 @@ export const SEARCH_PARAM = {
 		ky: "kyOkr",
 		don: "donOkr",
 		xem: "xemOkr",
+		moChuKy: "moChuKy",
 	},
 } as const;
 

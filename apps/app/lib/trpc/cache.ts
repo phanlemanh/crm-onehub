@@ -249,6 +249,8 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.alignmentTree.queryKey(),
 					trpc.okr.countByUnit.queryKey(),
 					trpc.okr.alignmentTargets.queryKey(),
+					trpc.okr.cycles.queryKey(),
+					trpc.okr.program.queryKey(),
 				],
 				options,
 			),
