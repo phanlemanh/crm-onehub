@@ -1,35 +1,39 @@
-import SlackLogo from "@crm/ui/components/brand-logos/slack";
-import { Spinner } from "@crm/ui/components/spinner";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { PageShellLoading } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { ketNoiMessages } from "@/lib/messages/settings-ket-noi";
 import { requireSession } from "@/lib/session";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
-import { ConnectionPage } from "../../connection-page";
+import { KhungKetNoi } from "../../khung-ket-noi";
 import { SlackPeopleMatches } from "./slack-people-matches";
 
 type SlackPeoplePageProps = {
 	params: Promise<{ slug: string }>;
 };
 
-export default function SlackPeoplePage(props: SlackPeoplePageProps) {
+export default async function SlackPeoplePage(props: SlackPeoplePageProps) {
+	const locale = await getLocale();
+	const t = ketNoiMessages(locale);
+
 	return (
-		<Suspense
-			fallback={
-				<ConnectionPage centered>
-					<Spinner size="lg" />
-				</ConnectionPage>
-			}
+		<KhungKetNoi
+			params={props.params}
+			kind="slackNguoi"
+			locale={locale}
+			tieuDe={t.nguoi.nhan}
+			laTenRieng={false}
+			moTa={t.nguoi.moTa}
 		>
-			<SlackPeoplePageContent {...props} />
-		</Suspense>
+			<Suspense fallback={<PageShellLoading />}>
+				<SlackPeoplePageContent {...props} />
+			</Suspense>
+		</KhungKetNoi>
 	);
 }
 
 async function SlackPeoplePageContent({ params }: SlackPeoplePageProps) {
 	await requireSession();
-	const t = ketNoiMessages(await getLocale());
 	const { slug } = await params;
 	const queryClient = getServerQueryClient();
 	const trpc = getServerTrpc();
@@ -39,16 +43,5 @@ async function SlackPeoplePageContent({ params }: SlackPeoplePageProps) {
 		trpc.slack.matches.queryOptions(),
 	);
 
-	return (
-		<ConnectionPage centered>
-			<header className="flex flex-col gap-3 px-(--spacing-block-inline) text-center">
-				<SlackLogo className="mx-auto size-7" />
-				<h1 className="font-medium text-2xl tracking-tight">
-					{t.nguoi.tieuDe}
-				</h1>
-				<p className="text-muted-foreground text-sm">{t.nguoi.moTa}</p>
-			</header>
-			<SlackPeopleMatches slug={slug} initialMatches={matches} />
-		</ConnectionPage>
-	);
+	return <SlackPeopleMatches slug={slug} initialMatches={matches} />;
 }

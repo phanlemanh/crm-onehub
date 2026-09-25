@@ -3,6 +3,8 @@ import {
 	GOC_CAI_DAT,
 	MUC_CAI_DAT,
 	type MucCaiDat,
+	NHOM_CAI_DAT,
+	type NhomCaiDat,
 } from "@/lib/cai-dat-dieu-huong";
 import { MUC_RAIL, type MucRail } from "@/lib/khung-dieu-huong";
 import { isUnder } from "@/lib/proxy-paths";
@@ -19,12 +21,13 @@ export const KHU_DOI_TAC = [
 
 export const DUONG_NGOAI_PHAM_VI = "/ngoai-pham-vi";
 
-export const CAI_DAT_MAC_DINH_CHI_OKR = `${GOC_CAI_DAT}/notifications`;
+export const CAI_DAT_MAC_DINH_CHI_OKR = `${GOC_CAI_DAT}/api-keys`;
 
-const MUC_CAI_DAT_CHI_OKR: readonly MucCaiDat["khoa"][] = [
-	"thongBaoCuaBan",
-	"khoaApi",
-];
+export const DUONG_NHAC_BUOI_SANG = "/reminders";
+
+const DUONG_CU_NHAC_BUOI_SANG = `${GOC_CAI_DAT}/notifications`;
+
+const MUC_CAI_DAT_CHI_OKR: readonly MucCaiDat["khoa"][] = ["khoaApi"];
 
 export type DieuHuong = { toi: string } | "ok";
 
@@ -52,6 +55,17 @@ export function mucCaiDatChoVai(role: string | null): readonly MucCaiDat[] {
 	return chiOkr(role) ? CAI_DAT_CHI_OKR : MUC_CAI_DAT;
 }
 
+const NHOM_CAI_DAT_CHI_OKR: readonly NhomCaiDat[] = NHOM_CAI_DAT.flatMap(
+	(nhom) => {
+		const muc = nhom.muc.filter((m) => CAI_DAT_CHI_OKR.includes(m));
+		return muc.length > 0 ? [{ ...nhom, muc }] : [];
+	},
+);
+
+export function nhomCaiDatChoVai(role: string | null): readonly NhomCaiDat[] {
+	return chiOkr(role) ? NHOM_CAI_DAT_CHI_OKR : NHOM_CAI_DAT;
+}
+
 export function dieuHuongTheoVai(
 	role: string | null,
 	pathname: string,
@@ -61,6 +75,7 @@ export function dieuHuongTheoVai(
 		return { toi: DUONG_NGOAI_PHAM_VI };
 	}
 	if (pathname === GOC_CAI_DAT) return { toi: CAI_DAT_MAC_DINH_CHI_OKR };
+	if (pathname === DUONG_CU_NHAC_BUOI_SANG) return "ok";
 	if (
 		isUnder(pathname, GOC_CAI_DAT) &&
 		!CAI_DAT_CHI_OKR.some((muc) => isUnder(pathname, muc.href))

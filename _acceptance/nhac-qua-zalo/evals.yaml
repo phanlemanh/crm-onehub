@@ -443,7 +443,7 @@ evals:
       - "KHONG nang quyen bat ky thanh vien nao trong DB, KHONG tao phien cho tai khoan nguoi khac"
       - "Gieo bang thu tuc cua kho (ham packages/db, khong insert tay): appSetting zaloBotName 'Bot OneHub', zaloPolledAt 1 phut truoc; 3 thanh vien da noi; nguoi dang nhap co ma dang cho"
       - "Doc slug workspace that tu DB (bang organization, id WORKSPACE_ID) — goi la <slug>; moi duong duoi day la /<slug>/..., KHONG dung chu onehub"
-      - "Mo /<slug>/settings/notifications o kho 1440, chup _acceptance/nhac-qua-zalo/evidence/E17-ma-cho-1440.png (duong tinh tu goc kho, KHONG ghi vao evidence/ o goc)"
+      - "Mo /<slug>/reminders o kho 1440, chup _acceptance/nhac-qua-zalo/evidence/E17-ma-cho-1440.png (duong tinh tu goc kho, KHONG ghi vao evidence/ o goc)"
       - "Gieo ZaloLink cho nguoi dang nhap, uu tien SLACK, khong khop Slack; tai lai, chup _acceptance/nhac-qua-zalo/evidence/E17-lech-1440.png"
       - "Dat zaloBotName null; tai lai, chup _acceptance/nhac-qua-zalo/evidence/E17-zalo-tat-1440.png"
       - "Tra zaloBotName, mo /<slug>/settings/connections/zalo, goi GET zalo.xuong ghi lai daNoi va tong vao output, chup _acceptance/nhac-qua-zalo/evidence/E17-ket-noi-song-1440.png; dat zaloPolledAt 10 phut truoc, chup _acceptance/nhac-qua-zalo/evidence/E17-ket-noi-im-1440.png"
@@ -458,7 +458,7 @@ evals:
         3 dong canh bao lech kenh
         4 trang ket noi: dong "x/y người đã nối Zalo" voi x, y bang dung daNoi, tong ma zalo.xuong
           tra luc chup (so trong DB dev dung chung, khong phai so co dinh); anh im co canh bao bot khong tra loi
-        5 thanh ben Cai dat co muc "Thông báo của bạn"
+        5 menu nguoi dung co muc "Nhắc buổi sáng" dan toi trang nay (doi 2026-09-25 theo khung-trang-cai-dat AC-12)
         6 ba anh 375 khong tran ngang
       Mot dong khong nhin thay -> FAIL, ghi dong nao.
 

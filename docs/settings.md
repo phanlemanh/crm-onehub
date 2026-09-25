@@ -15,8 +15,8 @@ cuối».
   | `width` | Bề rộng | Dùng cho |
   | --- | --- | --- |
   | `narrow` | `--container-narrow` (560px) | trang giới thiệu, Intake, màn trước khi kết nối |
-  | `page` | `--container-page` (820px) | Chung, Theo dõi, Tiền tệ, chi tiết một kết nối |
-  | `wide` | `--container-page-wide` (1120px) | Thành viên, Khoá API, SSO, Trường |
+  | `page` | `--container-page` (820px) | Chung, Theo dõi, Tiền tệ, Kết nối (danh sách), chi tiết một kết nối, Nhắc buổi sáng |
+  | `wide` | `--container-page-wide` (1120px) | Thành viên, Khoá API, SSO, Trường, Điều phối 30 ngày |
   | `full` | cả vùng nội dung | Tổ chức (danh sách – chi tiết) |
 
 - Cột nội dung **căn trái**, sát thanh bên, ở mọi bề rộng: mép trái đứng yên khi

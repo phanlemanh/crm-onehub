@@ -775,7 +775,7 @@ describe("vai-chi-okr", () => {
 			}
 			expect(
 				duongCua(await locationQuaProxy(cookieOkr, apiUrl, "/settings")),
-			).toMatch(/\/settings\/notifications$/);
+			).toMatch(/\/settings\/api-keys$/);
 			expect(
 				duongCua(await locationQuaProxy(cookieMember, apiUrl, "/contacts")) ??
 					"",

@@ -5,11 +5,24 @@ import { PageLoadingStatus } from "./page-loading-status";
 import { PageShellLoading } from "./page-shell-loading";
 import { PageTransition } from "./page-transition";
 
+const BE_RONG = {
+	narrow: { className: "max-w-(--container-narrow)" },
+	page: { className: "max-w-(--container-page)" },
+	wide: { className: "max-w-(--container-page-wide)" },
+	full: { className: "" },
+} as const;
+
+type BeRongTrang = keyof typeof BE_RONG;
+
 function PageShell({
 	className,
 	contained = false,
+	width,
 	...props
-}: React.ComponentProps<"div"> & { contained?: boolean }) {
+}: React.ComponentProps<"div"> & {
+	contained?: boolean;
+	width?: BeRongTrang;
+}) {
 	return (
 		<PageTransition>
 			<main
@@ -22,7 +35,9 @@ function PageShell({
 				<div
 					data-slot="page-shell"
 					className={cn(
-						"mx-auto flex w-full min-w-0 max-w-7xl flex-1 flex-col gap-6",
+						width
+							? `flex w-full min-w-0 flex-1 flex-col gap-6 ${BE_RONG[width].className}`
+							: "mx-auto flex w-full min-w-0 max-w-7xl flex-1 flex-col gap-6",
 						className,
 					)}
 					{...props}
@@ -35,8 +50,9 @@ function PageShell({
 function PageShellHeader({
 	className,
 	children,
+	breadcrumb,
 	...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"div"> & { breadcrumb?: React.ReactNode }) {
 	return (
 		<header
 			data-slot="page-shell-header"
@@ -46,6 +62,7 @@ function PageShellHeader({
 			)}
 			{...props}
 		>
+			{breadcrumb}
 			<div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2">
 				{children}
 			</div>
@@ -148,6 +165,8 @@ function PageShellFallback() {
 		</PageShell>
 	);
 }
+
+export type { BeRongTrang };
 
 export {
 	PageShell,

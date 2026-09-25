@@ -1,0 +1,314 @@
+schema_version: 1
+slug: khung-trang-cai-dat
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: ui
+    cmd: config:executors.test.ktcd_be_rong
+    paths:
+      - "apps/app/components/page-shell.tsx"
+      - "apps/app/test/khung-trang-cai-dat.dom.tsx"
+    expected: |
+      DOM test dung PageShell that. Ma tran viet truoc 5 gia tri (narrow, page, wide, full, khong
+      truyen) x [class max-w dung bang, co/khong mx-auto dung bang] = 10 khang dinh (full: w-full,
+      khong max-w, can trai; khong truyen: max-w-7xl mx-auto nhu cu). Cong 1: dung CUNG MOT cay
+      PageShell + PageShellHeader + PageShellHeading + PageShellTitle + PageShellDescription +
+      PageShellActions khong width, khong breadcrumb bang ban hien tai VA bang ban cua merge-base
+      (git show <merge-base>:apps/app/components/page-shell.tsx chep ra thu muc tam canh tep kiem,
+      nap that) -> outerHTML bang nhau. Tong 11.
+      CHIEU DO: (1) ban sao de mx-auto cho width=page -> do "width=page van can giua";
+      (2) ban sao boc tieu de va hanh dong trong mot div moi -> do "khong width: outerHTML khac ban
+      goc".
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    layer: unit
+    cmd: config:executors.script.ktcd_cau_truc
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/**"
+      - "apps/app/app/(app)/[slug]/reminders/**"
+      - "_acceptance/khung-trang-cai-dat/rang/cau-truc.mjs"
+    expected: |
+      Quet tinh moi page.tsx duoi settings/ va reminders/. Ma tran viet truoc: BANG_BE_RONG trong tep
+      thuoc liet ke 17 duong (10 muc, 6 trang con, reminders) -> moi duong mot khang dinh width dung
+      = 17; so tep page.tsx tim thay tru trang chuyen huong phai BANG 17 (lech -> ma 2, khong do).
+      Cong 5 mau cam tren ca cay settings/ (ConnectionPage, ConnectionPageLoading, <main, <h1,
+      max-w-3xl) moi mau 0 lan = 5. Tong 22.
+      CHIEU DO: ban sao chen <ConnectionPage> vao connections/zalo/page.tsx -> do
+      "mau cam ConnectionPage o connections/zalo/page.tsx"; ban sao doi width cua currencies sang wide
+      -> do "currencies: width wide, bang doi page".
+
+  - id: E3
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ktcd_man_chrome
+    paths:
+      - "apps/app/components/page-shell.tsx"
+      - "apps/app/app/(app)/[slug]/settings/**"
+      - "apps/app/app/(app)/[slug]/reminders/**"
+      - "_acceptance/khung-trang-cai-dat/rang/man-chrome.mjs"
+    steps:
+      - "Canh cay (rang/canh-cay.mjs) truoc man dau tien; lech cay -> ma 2"
+      - "Dang nhap quan tri bang dev:session. HAI LAN GIEO co dinh, khai trong tep thuoc: lan 1 Slack chua ket noi (trang gioi thieu); lan 2 Slack da ket noi co it nhat 1 nguoi khop, Google va Microsoft da ket noi, Zalo bat (zaloBotName dat). Mot trang con khong ve duoc o lan gieo cua no -> ma 2, KHONG bo o, KHONG ha so khang dinh"
+      - "Mo 16 duong Cai dat va /reminders o 1920, 1440 va 768 -> doc getBoundingClientRect cua moi h1 va cua nav breadcrumb, dem so h1, chup evidence/<duong>-<kho>.png"
+      - "O 375 mo 17 duong -> mep phai cua page-shell-header, page-shell, nav[aria-label] khong vuot clientWidth; tai lieu tran thi in ten phan tu dau tien trong page-shell-content vuot mep (ngoai-khung, khong tinh)"
+    expected: |
+      exit 0. Ma tran viet truoc: 16 trang x 2 kho (1440, 768) x [dung 1 h1] = 32; 3 kho (1920, 1440,
+      768) x [left cua h1 cua 15 trang lech <= 1px so voi trang Chung] = 45 (1920 bat to-chuc width
+      full can giua); 3 kho x 16 trang x [left cua khoi dau tien trong page-shell-content trung left
+      cua h1 <= 1px] = 48 (bat lop boc can giua trong vung noi dung — ban dau h1 dung yen con cot noi
+      dung nhay); 2 kho x [top cua h1 cua 9 trang muc lech <= 1px so voi Chung, top cua 5 trang
+      con lech <= 1px so voi Google] = 28; 2 kho x [top h1 Google - top h1 Chung = chieu cao hop nav
+      breadcrumb + khoang cach HANG trong tep thuoc, lech <= 1px] = 2; 17 duong x 375 khong tran = 17.
+      Tong 172; cong E4 38, E6 12, E8 4, E11 5, E13 1 = 232 (hang KY_MONG trong tep thuoc; lech -> ma 2). Moi o khong co loi hydrate.
+      CHIEU DO: (1) ban sao boc noi dung tracking trong khoi mx-auto max-w-3xl -> do "tracking 1440:
+      h1 left lech <n>px so voi Chung"; (2) ban sao them mb-4 cho o breadcrumb -> do "google 1440:
+      trang con thap hon <n>px, mong <m>px"; (3) ban sao cho full can giua -> do "to-chuc 1920: h1
+      left lech <n>px so voi Chung".
+
+  - id: E4
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ktcd_man_chrome
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/connections/**"
+      - "_acceptance/khung-trang-cai-dat/rang/man-chrome.mjs"
+    steps:
+      - "Cung luot voi E3 (lan gieo 2 cho Google, Microsoft, Slack da ket noi, Slack Nguoi; lan gieo 1 cho Slack chua ket noi), o 1440 vi va en"
+      - "Moi trang con: doc textContent va thuoc tinh translate cua h1; doc tieu de the dau tien (data-slot=card-title) cua Google va Microsoft"
+      - "Danh sach Ket noi va Slack da ket noi: tim nut 'Thêm' / 'Ngắt kết nối' ben trong [data-slot=page-shell-actions]"
+      - "Slack chua ket noi: tim chu 'Chưa cắm' ben trong [data-slot=page-shell-content]"
+    expected: |
+      exit 0. Ma tran: 7 trang (Google, Microsoft, Slack da, Slack chua, Slack Nguoi, Zalo, Intake)
+      x 2 tieng x [h1 dung ten, translate dung: "no" cho 5 trang ten thuong hieu, vang cho Intake va
+      Nguoi vi la chu thuong can dich] = 28; 2 the x 2 tieng x [tieu de the khong chua ten nha
+      cung cap] = 4; 2 nut x 2 tieng x [nam trong page-shell-actions] = 4; 2 tieng x [Chua cam trong
+      than] = 2. Tong 38.
+      CHIEU DO: ban sao tra ten "Google" vao CardTitle -> do "google vi: tieu de the chua Google".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: ui
+    cmd: config:executors.test.ktcd_breadcrumb
+    paths:
+      - "apps/app/components/page-shell.tsx"
+      - "apps/app/lib/cai-dat-breadcrumb.ts"
+      - "packages/ui/src/components/breadcrumb.tsx"
+      - "apps/app/test/khung-trang-cai-dat.dom.tsx"
+    expected: |
+      DOM: dung PageShellHeader voi breadcrumb tu ham duong-cha cua kho (lib/cai-dat-breadcrumb.ts)
+      cho 6 duong trang con + 10 duong muc. Ma tran: 6 trang con x [chuoi muc dung thu tu, moi muc
+      truoc cuoi la <a> href dung cha, muc cuoi aria-current=page khong phai <a>] = 18; 10 trang muc
+      x [khong co nav breadcrumb] = 10. Tong 28.
+      CHIEU DO: ban sao de muc cuoi la <a> -> do "slack/people: muc cuoi la lien ket".
+
+  - id: E6
+    criterion: AC-5
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ktcd_man_chrome
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/connections/**"
+      - "_acceptance/khung-trang-cai-dat/rang/man-chrome.mjs"
+    steps:
+      - "Cung luot voi E3, o 1440 vi: moi trang con doc nav[aria-label] breadcrumb that tren trang; bam muc 'Kết nối' -> dia chi thanh /<slug>/settings/connections"
+    expected: |
+      exit 0. 6 trang con x [breadcrumb co mat tren trang that, bam muc dau ve dung duong] = 12.
+      CHIEU DO: ban sao bo breadcrumb khoi zalo/page.tsx -> do "zalo: khong co breadcrumb".
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: ui
+    cmd: config:executors.test.ktcd_thanh_ben
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx"
+      - "apps/app/lib/cai-dat-dieu-huong.ts"
+      - "apps/app/test/khung-trang-cai-dat-thanh-ben.dom.tsx"
+    expected: |
+      DOM test SettingsSidebar va SettingsSidebarFallback, usePathname gia lap tung duong. Ma tran
+      viet truoc: 16 duong x [dung mot muc aria-current, muc do dung ten mong doi] = 32; [4 nhom dung
+      ten va dung thu tu, 10 muc dung thu tu trong nhom] = 2; moi muc data-slot=nav-item = 1; vo tai:
+      [cung so nhom, cung thu tu muc] = 2; khong co muc href /settings/notifications = 1. Tong 38.
+      Chay rieng mot tien trinh bun (mock.module next/navigation khong ro sang tep khac).
+      CHIEU DO: ban sao de mucCaiDatDangMo khop ca /settings cho moi duong -> do
+      "/settings/connections/slack: 2 muc aria-current".
+
+  - id: E8
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ktcd_man_chrome
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx"
+      - "_acceptance/khung-trang-cai-dat/rang/man-chrome.mjs"
+    steps:
+      - "Cung luot voi E3: o 1440 va 768 doc 4 nhan nhom hien (offsetParent khac null); o 375 nhan nhom an, nav la mot hang co overflow-x cuon duoc; chup evidence/thanh-ben-<kho>.png"
+    expected: |
+      exit 0. [1440, 768] x [4 nhan nhom hien] = 2; 375 x [0 nhan nhom hien, hang cuon ngang] = 2.
+      Tong 4.
+      CHIEU DO: ban sao an nhan nhom o moi kho -> do "1440: 0/4 nhan nhom hien".
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    layer: unit
+    cmd: config:executors.test.ktcd_nhan
+    paths:
+      - "apps/app/lib/messages/settings.ts"
+      - "apps/app/lib/cai-dat-dieu-huong.ts"
+      - "apps/app/test/khung-trang-cai-dat.spec.ts"
+    expected: |
+      Doc settingsMessages that ca hai tieng: thanhBen.nhan = "Cài đặt"/"Settings"; thanhBen.chung,
+      chung.tieuDe, tieuDeTab.chung = "Chung"/"General" (3 x 2 = 6); congTy.tieuDe = "Không gian làm
+      việc"/"Workspace" (2); chung.moTa tieng Viet chua "OneHub" va khong chua "Công ty bạn" (2); ten 4
+      nhom dung chuoi ghim ca hai tieng (8); duyet de quy moi chuoi cua settingsMessages("vi") khong
+      chuoi nao chua "Tổng quan" hay "Cài đặt công ty", va khong chuoi nao BANG "Công ty" (1). Tong 19.
+      CHIEU DO: ban sao tra "Tổng quan" vao chung.tieuDe -> do "vi: chung.tieuDe = Tổng quan".
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    layer: ui
+    cmd: config:executors.test.ktcd_menu_nguoi_dung
+    paths:
+      - "apps/app/components/app-header.tsx"
+      - "apps/app/lib/messages/khung-ung-dung.ts"
+      - "apps/app/test/khung-trang-cai-dat-menu.dom.tsx"
+    expected: |
+      DOM: mo menu nguoi dung that (Radix DropdownMenu). Mang [menuitem] theo thu tu: muc "Nhắc buổi
+      sáng" dung ngay truoc muc doi giao dien; la <a> href /ws/reminders; toi duoc bang ArrowDown
+      tu muc dau (focus roi dung vao no). Hai tieng. 2 x 3 = 6.
+      CHIEU DO: ban sao dat muc sau dong doi giao dien -> do "vi: Nhac buoi sang khong dung ngay truoc
+      doi giao dien".
+
+  - id: E11
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ktcd_man_chrome
+    paths:
+      - "apps/app/app/(app)/[slug]/reminders/**"
+      - "apps/app/components/app-header.tsx"
+      - "apps/app/app/(app)/[slug]/settings/connections/zalo/**"
+      - "_acceptance/khung-trang-cai-dat/rang/man-chrome.mjs"
+    steps:
+      - "Cung luot voi E3: o 1440 vi bam avatar -> bam 'Nhắc buổi sáng' -> doi dia chi /<slug>/reminders; chup evidence/nhac-1440.png"
+      - "Tren /reminders: doc h1, tim hai khoi (id khoi-zalo va khoi-kenh), tim nav cua thanh ben Cai dat"
+      - "Lan gieo 2 (Zalo bat): mo /<slug>/settings/connections/zalo, doc href cua lien ket 'Nối Zalo của tôi'. Khong tim thay lien ket -> ma 2, khong bo o"
+    expected: |
+      exit 0. [bam menu toi dung duong, h1 = Nhắc buổi sáng, 2 khoi co mat, 0 nav Cai dat] = 4; lien
+      ket Zalo tro /<slug>/reminders = 1. Tong 5.
+      CHIEU DO: ban sao de reminders dung layout cua settings -> do "reminders: co thanh ben Cai dat".
+
+  - id: E12
+    criterion: AC-9
+    executor: test
+    layer: unit
+    cmd: config:executors.test.ktcd_chuyen_huong
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/notifications/page.tsx"
+      - "apps/app/test/khung-trang-cai-dat.spec.ts"
+    expected: |
+      Goi thang default export cua settings/notifications/page.tsx voi params {slug:"ws"} va
+      {slug:"cong-ty-a"}; moi lan phai nem loi redirect cua Next ma digest chua dung duong
+      /ws/reminders, /cong-ty-a/reminders. 2 khang dinh + 2 khang dinh khong render JSX nao truoc
+      (ham nem truoc khi tra ve) = 4.
+      CHIEU DO: ban sao chuyen huong toi /reminders khong kem slug -> do "ws: digest khong chua
+      /ws/reminders".
+
+  - id: E13
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ktcd_man_chrome
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/notifications/**"
+      - "_acceptance/khung-trang-cai-dat/rang/man-chrome.mjs"
+    steps:
+      - "Cung luot voi E3: mo /<slug>/settings/notifications -> location.pathname cuoi cung"
+    expected: |
+      exit 0. Duong cuoi = /<slug>/reminders = 1.
+      CHIEU DO: ban sao de trang cu ve lai noi dung -> do "duong cu khong chuyen huong".
+
+  - id: E14
+    criterion: AC-10
+    executor: script
+    layer: unit
+    cmd: config:executors.script.ktcd_tai_lieu
+    paths:
+      - "CONTEXT.md"
+      - "docs/settings.md"
+      - "_acceptance/khung-trang-cai-dat/rang/tai-lieu.mjs"
+    expected: |
+      Doc muc **Nối Zalo** cua CONTEXT.md (tach theo muc in dam, khong grep ca tep): chua "Nhắc buổi
+      sáng" va "menu người dùng", khong chua "Thông báo của bạn" (3). Doc bang width cua
+      docs/settings.md: dong cua "Điều phối 30 ngày" va "Kết nối (danh sách)" co mat (2). Tong 5.
+      CHIEU DO: ban sao tra "Thông báo của bạn" vao muc Noi Zalo -> do "Nối Zalo: con Thông báo
+      của bạn"; ban sao de chu do o muc KHAC -> xanh (do theo muc, khong theo tep).
+
+  - id: E15
+    criterion: AC-11
+    executor: test
+    layer: unit
+    cmd: config:executors.test.lv30_loi_vao_cai_dat
+    paths:
+      - "apps/app/lib/cai-dat-dieu-huong.ts"
+      - "apps/app/test/cai-dat-dieu-huong.spec.ts"
+    expected: |
+      Bai kiem da ky cua loi-vao-dieu-phoi-30-ngay, ca "loi-vao-dieu-phoi" doi khang dinh "dung cuoi"
+      thanh "dung cuoi nhom Con nguoi" (NHOM_CAI_DAT); moi khang dinh khac va ten bai giu nguyen.
+      Ma 0.
+      CHIEU DO: ban sao doi thu tu nhom Con nguoi dat Dieu phoi truoc To chuc -> do "dieu phoi khong
+      dung cuoi nhom Con nguoi".
+
+  - id: E16
+    criterion: AC-12
+    executor: script
+    layer: unit
+    cmd: config:executors.script.ktcd_khong_hoi_quy
+    paths:
+      - "apps/app/**"
+      - "packages/ui/**"
+      - "_acceptance/khung-trang-cai-dat/rang/khong-hoi-quy.mjs"
+    expected: |
+      Chay moi eval test/script cua 11 ho so trong AC-12 (rut tu evals.yaml cua tung ho so, lenh
+      giai qua config.yaml, trung lenh chay mot lan), TRU lenh can may chu (tien-de, APP_URL) —
+      liet ke ten, de lan ghim lai cua tung ho so. Lenh do o HEAD chay lai tren worktree merge-base:
+      do ca hai = "do san" (liet ke, khong tinh); chi do o HEAD = hoi quy -> do. Cong mot phep so: bai kiem cua cac ho so do tai
+      merge-base va tai HEAD co cung tap ten bai, va than bai chi khac o dung ca AC-11 cong dung mot
+      thay doi du lieu da khai: danh sach mien dau KHONG_DAU cua apps/app/test/messages-guard.spec.ts
+      them dung 3 khoa thanhBen.chung, tieuDeTab.chung, chung.tieuDe (nhan "Chung" khong dau). Doc E17 cua
+      nhac-qua-zalo: dong "thanh ben Cai dat co muc Thông báo của bạn" da doi sang menu nguoi dung,
+      buoc mo dung /reminders. Tap eval ui-check/judgment cua 11 ho so co paths khop mot tep trong
+      diff merge-base..HEAD phai BANG dung tap khai trong tep thuoc (10 eval, 6 ho so); lech -> do, goi
+      ten eval thua hoac thieu. So ho so doc duoc phai bang 11 (lech -> ma 2).
+      CHIEU DO: ban sao sua mot bai kiem da ky khac ngoai AC-11 -> do "<ho so>: bai <ten> doi ngoai
+      pham vi da khai".
+
+  - id: E17
+    criterion: AC-13
+    executor: script
+    layer: unit
+    cmd: config:executors.script.ktcd_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/**"
+      - "apps/app/app/(app)/[slug]/reminders/**"
+      - "apps/app/components/page-shell.tsx"
+      - "apps/app/components/app-header.tsx"
+      - "packages/ui/src/components/breadcrumb.tsx"
+      - "_acceptance/khung-trang-cai-dat/rang/san-thiet-ke.mjs"
+    expected: |
+      design-gate --mode static tren moi tep giao dien trong diff (danh sach rut tu git diff
+      merge-base, khong chep tay; rong -> ma 2). Cong: settings-sidebar.tsx khong co thuoc tinh
+      className tren the NavItem, Button, hay the nhan nhom (doc JSX, khong grep chuoi); nav-item.tsx
+      xuat nhan nhom va kieu hang ngang; breadcrumb.tsx khong import tu
+      goi "cn", khong co chu thich, khong import lucide-react, khong co mau hex hay rounded-[.
+      CHIEU DO: ban sao them className="text-muted-foreground" vao NavItem cua thanh ben -> do
+      "settings-sidebar.tsx: NavItem mang className".

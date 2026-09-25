@@ -50,7 +50,7 @@ const PHAM_VI_DOI_TAC = new Set([
 const NHAN = {
 	vi: {
 		railChinh: "Điều hướng chính",
-		thanhBen: "Cài đặt công ty",
+		thanhBen: "Cài đặt",
 		doiTac: [
 			"Công ty",
 			"Cá nhân",
@@ -69,7 +69,7 @@ const NHAN = {
 	},
 	en: {
 		railChinh: "Primary",
-		thanhBen: "Workspace settings",
+		thanhBen: "Settings",
 		doiTac: [
 			"Companies",
 			"Contacts",
@@ -279,8 +279,8 @@ try {
 			const lo = t.doiTac.filter((nhan) => chu.includes(nhan));
 			kiem(`${n}: lo nhan doi tac ${lo.join(", ")}`, lo.length === 0);
 			kiem(
-				`${n}: thieu lien ket toi Thong bao cua ban`,
-				await coLink(trang, "/settings/notifications"),
+				`${n}: thieu lien ket toi Nhac buoi sang`,
+				await coLink(trang, "/reminders"),
 			);
 			kiem(
 				`${n}: goi router doi tac ${goiDoiTac.join(",")}`,
@@ -299,7 +299,7 @@ try {
 					cookieOkr,
 					tieng,
 					rong,
-					`/${slug}/settings/notifications`,
+					`/${slug}/settings/api-keys`,
 					"main",
 				);
 				const demBen = await m.trang.evaluate(
@@ -310,8 +310,8 @@ try {
 					t.thanhBen,
 				);
 				kiem(
-					`${n}: thanh ben Cai dat phai 2 muc moi nav, thay ${JSON.stringify(demBen)}`,
-					demBen.length >= 1 && demBen.every((x) => x === 2),
+					`${n}: thanh ben Cai dat phai 1 muc moi nav, thay ${JSON.stringify(demBen)}`,
+					demBen.length >= 1 && demBen.every((x) => x === 1),
 				);
 				kiem(
 					`${n}: cai dat goi router doi tac ${m.goiDoiTac.join(",")}`,
