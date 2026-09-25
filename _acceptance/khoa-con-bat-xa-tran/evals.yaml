@@ -1,0 +1,117 @@
+schema_version: 1
+slug: khoa-con-bat-xa-tran
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.kcb_thoi_gian
+    paths:
+      - "apps/api/test/go-la-cat-quyen.spec.ts"
+      - "apps/api/test/setup.ts"
+      - "apps/api/test/phien-thu.ts"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/do-thoi-gian.mjs"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/chung.mjs"
+    expected: |
+      Lenh boc trong `bun run test --` nen co co so du lieu rieng cua luot; script tu choi
+      (ma 2, goi ten) neu TEST_DATABASE_URL vang hoac ten co so du lieu la crm_test, va in ten
+      co so du lieu. Xin khoa chung cua ho so (.acceptance-runs/khoa-con-bat-xa-tran/lan.khoa,
+      mkdir + pid, don khoa cua pid da chet) truoc khi do, de E1/E2/E3 khong chay chong nhau.
+      Chay that apps/api/test/go-la-cat-quyen.spec.ts 10 luot, moi luot mot tien trinh
+      `bun test --preload ./test/setup.ts --randomize --reporter=junit` trong apps/api, env
+      ALLOWED_SIGN_IN/GOOGLE_CLIENT_ID/GOOGLE_CLIENT_SECRET/API_URL/APP_URL doc tu
+      .github/workflows/ci.yml (script parse tep, khong chep tay; thieu khoa nao -> ma 2).
+      Ma tran viet truoc = 10 luot x {ma thoat 0; junit co dung 18 testcase va 0 failure;
+      testcase khoa-con-bat co mat dung mot lan; time cua no <= 1.250s} + 1 khang dinh 10 seed
+      (doc tu dau ra cua bun, khong tu dat) doi mot khac nhau. Moi luot in: seed, thoi gian
+      khoa-con-bat, so ca do, so tien trinh `bun test` khac dang chay luc bat dau luot.
+      CHIEU DO: cung script voi `--ban-sha 679432a0` (ban truoc va cua tep, dung o ban sao
+      .acceptance-runs/khoa-con-bat-xa-tran/) -> do voi thong diep ghim
+      "khoa-con-bat vuot 1250ms o luot <n>: <ms>ms" (do truoc khi lam: 1.63-4.10s).
+      Ban cu co 17 testcase nen `--ban-sha` doc so ca ky vong tu chinh ban sao (dem test( ).
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.kcb_lech_hang
+    paths:
+      - "apps/api/test/go-la-cat-quyen.spec.ts"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/chung.mjs"
+    expected: |
+      Boc trong `bun run test --`, cung khoa ho so nhu E1. Ban sao cua tep hien tai o
+      .acceptance-runs/khoa-con-bat-xa-tran/sao-<pid>/, import tuong doi viet lai thanh duong
+      tuyet doi, chay rieng `-t khoa-con-bat`. Ma tran viet truoc = 4 ban sao:
+      (a) nguyen ven -> ma 0 (doi chung duong, cung khung dung ban sao);
+      (b) bien vong lap cua bo chia lo bo lo cuoi (hut hang) -> ma khac 0 VA dau ra chua
+          "ma tran tRPC song song lech danh sach thu tuc";
+      (c) bo chia lo dao thu tu ket qua trong moi lo (cung do dai, cung tap ten) -> ma khac 0
+          VA dau ra chua "ma tran tRPC song song lech danh sach thu tuc";
+      (d) chi maTranRest bo duong dau tien cua danh sach -> ma khac 0 VA dau ra chua
+          "ma tran REST song song lech danh sach duong".
+      Chuoi dich cua mot dot bien khong co trong tep -> ma 2 goi ten dot bien, khong bao xanh.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.kcb_con_thanh_vien
+    paths:
+      - "apps/api/test/go-la-cat-quyen.spec.ts"
+      - "apps/api/src/trpc/middlewares/**"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/chung.mjs"
+    expected: |
+      Cung khung E2: (a) ban sao nguyen ven -> ma 0; (b) ban sao bo dong
+      `await db.member.delete(...)` trong khoa-con-bat (khoa thuoc nguoi VAN la thanh vien) ->
+      ma khac 0 VA dau ra chua thong diep ghim
+      "tRPC: khoa con bat cua nguoi ngoai van qua duoc". Dong can bo khong tim thay -> ma 2.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.kcb_khong_noi_tran
+    paths:
+      - "apps/api/test/go-la-cat-quyen.spec.ts"
+      - "apps/api/package.json"
+      - "apps/api/bunfig.toml"
+      - "bunfig.toml"
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/acceptance.yml"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs"
+    expected: |
+      Doc tep (vang = khong cau hinh, in ra la vang). Ma tran viet truoc:
+      - tep spec: dung 18 loi goi test( (dem bang quet ngoac can bang, khong regex dong); moi
+        loi goi dung hai doi so (ten, ham) — 18 khang dinh, thong diep ghim ten ca;
+        + 1 khang dinh khong co `setDefaultTimeout`;
+      - apps/api/bunfig.toml, bunfig.toml: khong co khoa `timeout` — 2 khang dinh;
+      - moi script cua apps/api/package.json co chua `bun test`: khong co `--timeout`;
+      - moi dong `run:` cua ci.yml va acceptance.yml co chua `bun test` hoac `bun run test`:
+        khong co `--timeout`.
+      Tu kiem hai chieu trong cung lan chay, tren cung ham doc: noi dung that -> xanh; noi dung
+      spec them `, 15_000)` vao test khoa-con-bat -> phai bat voi thong diep ghim
+      "test khoa-con-bat co tran rieng"; noi dung package.json them `--timeout 15000` vao script
+      test -> phai bat voi thong diep ghim "apps/api/package.json script test co --timeout".
+      Mot trong hai lan tu kiem khong bat -> script do, thuoc hong.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.kcb_tuan_tu
+    paths:
+      - "apps/api/test/go-la-cat-quyen.spec.ts"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs"
+    expected: |
+      Boc trong `bun run test --`, cung khoa ho so nhu E1. Hai ve:
+      (1) Hanh vi: chay that ca `theo-lo` cua tep (`-t theo-lo`) -> ma 0. Ca do dem so luot dang
+          chay cung luc lon nhat cua bo chia lo tren 40 phan tu gia: mac dinh = 1, LO_SONG_SONG
+          = dung LO_SONG_SONG, va LO_SONG_SONG <= 8. Chieu do: ban sao dot bien bo chia lo bo
+          qua tham so so luot (Promise.all ca danh sach) -> ma khac 0 VA dau ra chua
+          "bo chia lo mac dinh chay nhieu hon mot luot".
+      (2) Cho goi: danh sach viet truoc = {ma-tran-dang-nhap-lai: maTranTrpc x1,
+          ngoai-le-dung-tap-khai: maTranTrpc x1, doi-chung-thanh-vien: maTranTrpc x1,
+          tab-dang-mo: maTranTrpc x1, khoa-con-bat: maTranTrpc x1 + maTranRest x1}; moi phan tu
+          mot khang dinh: loi goi trong khoa-con-bat co doi so thu hai LO_SONG_SONG, loi goi o
+          ca khac dung mot doi so; tong so loi goi trong tep dung 6. Tu kiem: noi dung them
+          `, LO_SONG_SONG` vao loi goi cua doi-chung-thanh-vien -> phai bat voi thong diep ghim
+          "doi-chung-thanh-vien goi ma tran song song".
