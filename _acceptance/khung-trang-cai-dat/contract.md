@@ -5,7 +5,7 @@ slug: khung-trang-cai-dat
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 design_doc: docs/superpowers/specs/2026-09-25-khung-trang-cai-dat-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-09-25
