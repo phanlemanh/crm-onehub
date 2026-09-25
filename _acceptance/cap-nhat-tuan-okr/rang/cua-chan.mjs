@@ -28,7 +28,7 @@ const server = createServer(async (req, res) => {
 		const than = await docThan(req);
 		try {
 			const vao = JSON.parse(than.toString("utf8") || "{}");
-			chanThuTuc = typeof vao.thuTuc === "string" ? vao.thuTuc : null;
+			chanThuTuc = String(vao.thuTuc) === vao.thuTuc ? vao.thuTuc : null;
 		} catch {
 			chanThuTuc = null;
 		}

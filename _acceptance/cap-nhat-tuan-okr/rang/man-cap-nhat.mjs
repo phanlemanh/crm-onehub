@@ -1028,7 +1028,7 @@ async function buocE6E7() {
 	);
 	kiem(
 		`E7: seconds >= 5, thay ${phienMoi?.seconds}`,
-		typeof phienMoi?.seconds === "number" && phienMoi.seconds >= 5,
+		Number.isFinite(phienMoi?.seconds) && phienMoi.seconds >= 5,
 	);
 
 	const r = await moTrang(cookie.r, RONG, "/okr/cap-nhat-tuan", "E6");
