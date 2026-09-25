@@ -48,6 +48,7 @@ const ALIAS_CHO_PHEP = [
 	"sso",
 	"workspace",
 	"org",
+	"okr",
 ] as const;
 const NGOAI_LE = ["workspace.get", "sso.signInOptions"] as const;
 const SAN_THU_TUC = 50;
@@ -194,6 +195,9 @@ function choPhepRest(): string[] {
 		.flatMap((t) => (ten.has(t.ten) && t.restKey ? [t.restKey] : []))
 		.sort();
 }
+
+const khongGanCau = (h: { status: number; message: string }) =>
+	h.status === 404 && h.message === "Not found";
 
 const biChanPhamVi = (h: { status: number; message: string }) =>
 	h.status === 403 && h.message === KHONG_TRONG_PHAM_VI;
@@ -351,7 +355,7 @@ describe("vai-chi-okr", () => {
 			const rest = await maTranRest(app, dau);
 			expect(rest.length).toBeGreaterThanOrEqual(SAN_DUONG_REST);
 			expect(
-				rest.filter((h) => h.status === 404).map((h) => h.ten),
+				rest.filter(khongGanCau).map((h) => h.ten),
 				"duong khai ma cau khong gan",
 			).toEqual([]);
 			expect(
@@ -775,7 +779,7 @@ describe("vai-chi-okr", () => {
 			}
 			expect(
 				duongCua(await locationQuaProxy(cookieOkr, apiUrl, "/settings")),
-			).toMatch(/\/settings\/notifications$/);
+			).toMatch(/\/settings\/api-keys$/);
 			expect(
 				duongCua(await locationQuaProxy(cookieMember, apiUrl, "/contacts")) ??
 					"",

@@ -10,7 +10,7 @@ import {
 } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { tongQuanMessages } from "@/lib/messages/tong-quan";
-import { CAI_DAT_MAC_DINH_CHI_OKR } from "@/lib/pham-vi-man";
+import { DUONG_NHAC_BUOI_SANG } from "@/lib/pham-vi-man";
 import { workspaceUrl } from "@/lib/workspace-url";
 
 export async function TongQuanChiOkr({ slug }: { slug: string }) {
@@ -26,9 +26,12 @@ export async function TongQuanChiOkr({ slug }: { slug: string }) {
 			</PageShellHeader>
 
 			<PageShellContent>
-				<div>
+				<div className="flex gap-2">
 					<Button asChild variant="outline">
-						<Link href={workspaceUrl(slug, CAI_DAT_MAC_DINH_CHI_OKR)}>
+						<Link href={workspaceUrl(slug, "/okr")}>{m.chiOkr.noiKhu}</Link>
+					</Button>
+					<Button asChild variant="outline">
+						<Link href={workspaceUrl(slug, DUONG_NHAC_BUOI_SANG)}>
 							{m.chiOkr.noiKenh}
 						</Link>
 					</Button>

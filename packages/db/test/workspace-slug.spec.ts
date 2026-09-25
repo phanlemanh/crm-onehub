@@ -28,6 +28,7 @@ describe("workspaceSlug", () => {
 
 		expect(workspaceSlug("Settings")).toBe("settings-crm");
 		expect(workspaceSlug("Sign In")).toBe("sign-in-crm");
+		expect(workspaceSlug("okr")).toBe("okr-crm");
 	});
 
 	it("falls back rather than producing an empty segment", () => {

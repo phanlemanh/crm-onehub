@@ -28,7 +28,7 @@ export default async function MembersSettingsPage({
 	const t = thanhVienMessages(await getLocale());
 
 	return (
-		<PageShell className="min-h-0">
+		<PageShell width="wide">
 			<PageShellHeader>
 				<PageShellHeading>
 					<PageShellTitle>{t.trang.tieuDe}</PageShellTitle>
@@ -36,7 +36,7 @@ export default async function MembersSettingsPage({
 				</PageShellHeading>
 			</PageShellHeader>
 
-			<PageShellContent className="min-h-0">
+			<PageShellContent>
 				<Suspense fallback={<PageShellLoading />}>
 					<Members searchParams={searchParams} />
 				</Suspense>
@@ -64,7 +64,7 @@ async function Members({
 
 	return (
 		<HydrateClient>
-			<div className="flex min-h-0 flex-col gap-8">
+			<div className="flex flex-col gap-8">
 				<MembersTable />
 				<AllowancesTable />
 			</div>

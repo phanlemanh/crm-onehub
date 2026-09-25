@@ -195,6 +195,18 @@ executors:
     vco_tuong_hop_thu: 'bun run test -- "cd apps/app && bun test test/tuong-hop-thu.spec.ts"'
     vco_ghi_chung: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ghi-chung"'
     vco_duong_ngoai_router: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t duong-ngoai-router"'
+    dok_chu_ky: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t chu-ky"'
+    dok_chuong_trinh: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t chuong-trinh"'
+    dok_muc_tieu: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t muc-tieu"'
+    dok_kr: 'bun run test -- "cd packages/validation && bun test test/okr-kr.spec.ts && cd ../../apps/api && bun test test/okr.spec.ts -t sau-kieu-kr"'
+    dok_cong_bo: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t cong-bo"'
+    dok_quyen: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t quyen-ban-ghi"'
+    dok_can_chinh: 'bun run test -- "cd apps/api && bun test test/okr-can-chinh.spec.ts && bun test test/okr.spec.ts -t can-chinh"'
+    dok_vet: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t vet-okr"'
+    dok_nhap: 'bun run test -- "cd apps/api && bun test test/okr-nhap.spec.ts && bun test test/okr.spec.ts -t nhap-bang-tinh"'
+    dok_dieu_huong: 'cd apps/app && bun test test/khung-dieu-huong.spec.ts test/pham-vi-man.spec.ts && cd ../../packages/db && bun test test/workspace-slug.spec.ts'
+    dok_cua_toi: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t cua-toi"'
+    dok_chi_okr: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t chi-okr && bun test test/vai-chi-okr.spec.ts -t ma-tran-trpc"'
     gl_ma_tran_dang_nhap_lai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ma-tran-dang-nhap-lai"'
     gl_ngoai_le_dung_tap_khai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ngoai-le-dung-tap-khai"'
     gl_doi_chung_thanh_vien: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t doi-chung-thanh-vien"'
@@ -492,6 +504,12 @@ executors:
     tcds_chi_doc: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-chi-tiet.dom.tsx -t 'chi-doc'"
     tcds_trang_thai: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-chi-tiet.dom.tsx -t 'trang-thai'"
     tcds_luu_tru_chung: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/to-chuc-chi-tiet.dom.tsx -t 'luu-tru-chung'"
+    ktcd_be_rong: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-trang-cai-dat.dom.tsx -t 'be-rong'"
+    ktcd_breadcrumb: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-trang-cai-dat.dom.tsx -t 'breadcrumb'"
+    ktcd_thanh_ben: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-trang-cai-dat-thanh-ben.dom.tsx"
+    ktcd_menu_nguoi_dung: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-trang-cai-dat-menu.dom.tsx"
+    ktcd_nhan: "cd apps/app && bun test test/khung-trang-cai-dat.spec.ts -t 'nhan'"
+    ktcd_chuyen_huong: "cd apps/app && bun test test/khung-trang-cai-dat.spec.ts -t 'chuyen-huong'"
     stdt_ma_tran: "cd packages/ui && bun test ./test/money-input.spec.ts -t ma-tran"
     stdt_tieng_kia: "cd packages/ui && bun test ./test/money-input.spec.ts -t tieng-kia"
     stdt_chinh_xac: "cd packages/ui && bun test ./test/money-input.spec.ts -t chinh-xac"
@@ -896,9 +914,17 @@ executors:
     ttc_migration_tren_du_lieu_cu: "bun _acceptance/cau-truc-to-chuc/rang/migration-tren-du-lieu-cu.mjs"
     ttc_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3710} API_URL=${API_URL:-http://localhost:3711} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cau-truc-to-chuc/rang/man-to-chuc.mjs"'
     ttc_san_thiet_ke: "bun _acceptance/cau-truc-to-chuc/rang/san-thiet-ke.mjs"
+    dok_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3910} API_URL=${API_URL:-http://localhost:3911} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dat-okr-trong-crm/rang/man-okr.mjs"'
+    dok_san_thiet_ke: "bun _acceptance/dat-okr-trong-crm/rang/san-thiet-ke.mjs"
+    dok_migration_chi_them: "node _acceptance/dat-okr-trong-crm/rang/migration-chi-them.mjs"
     tcds_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3710} API_URL=${API_URL:-http://localhost:3711} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/to-chuc-danh-sach-chi-tiet/rang/man-chi-tiet.mjs"'
     tcds_khong_hoi_quy: "node _acceptance/to-chuc-danh-sach-chi-tiet/rang/khong-hoi-quy.mjs"
     tcds_san_thiet_ke: "bun _acceptance/to-chuc-danh-sach-chi-tiet/rang/san-thiet-ke.mjs"
+    ktcd_cau_truc: "node _acceptance/khung-trang-cai-dat/rang/cau-truc.mjs"
+    ktcd_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3720} API_URL=${API_URL:-http://localhost:3721} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-trang-cai-dat/rang/man-chrome.mjs"'
+    ktcd_tai_lieu: "node _acceptance/khung-trang-cai-dat/rang/tai-lieu.mjs"
+    ktcd_khong_hoi_quy: "node _acceptance/khung-trang-cai-dat/rang/khong-hoi-quy.mjs"
+    ktcd_san_thiet_ke: "bun _acceptance/khung-trang-cai-dat/rang/san-thiet-ke.mjs"
     stdt_man_that: "bun _acceptance/o-so-tien-doc-theo-tieng/rang/man-that.mjs"
     stdt_soi_ma: "bun _acceptance/o-so-tien-doc-theo-tieng/rang/soi-ma.mjs"
     tcct_man_that: "bun _acceptance/tien-te-chua-tai-khong-doan/rang/man-that.mjs"
@@ -915,6 +941,7 @@ executors:
     mdg_mot_cho_ghi_api: "bun _acceptance/mot-duong-ghi-phong-ban/rang/mot-cho-ghi.mjs api"
     mdg_mot_cho_ghi_app: "bun _acceptance/mot-duong-ghi-phong-ban/rang/mot-cho-ghi.mjs app"
     mdg_ho_so_da_ghim: "bun _acceptance/mot-duong-ghi-phong-ban/rang/ho-so-da-ghim.mjs"
+    ttv_do_bang: 'APP_URL=${APP_URL:-http://localhost:3500} API_URL=${API_URL:-http://localhost:3501} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

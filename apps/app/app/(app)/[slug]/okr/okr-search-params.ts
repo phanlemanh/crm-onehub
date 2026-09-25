@@ -1,0 +1,59 @@
+import {
+	createLoader,
+	createParser,
+	parseAsString,
+	parseAsStringLiteral,
+} from "nuqs/server";
+import { SEARCH_PARAM } from "@/lib/search-param-keys";
+
+export type DonChonOkr =
+	| { loai: "goc" }
+	| { loai: "bp"; id: string }
+	| { loai: "pb"; id: string }
+	| { loai: "nguoi"; id: string };
+
+export const CACH_XEM = ["danh-sach", "cay"] as const;
+export type CachXem = (typeof CACH_XEM)[number];
+
+export const KY_HIEN_TAI = "current";
+
+export const khoaDon = (d: DonChonOkr): string =>
+	d.loai === "goc" ? d.loai : `${d.loai}:${d.id}`;
+
+export const parseAsDonOkr = createParser<DonChonOkr>({
+	parse: (v) => {
+		if (v === "goc") return { loai: "goc" };
+		const [loai, id, ...du] = v.split(":");
+		if (
+			(loai === "bp" || loai === "pb" || loai === "nguoi") &&
+			id &&
+			du.length === 0
+		)
+			return { loai, id };
+		return null;
+	},
+	serialize: khoaDon,
+	eq: (a, b) => khoaDon(a) === khoaDon(b),
+});
+
+export const okrParsers = {
+	[SEARCH_PARAM.okr.ky]: parseAsString,
+	[SEARCH_PARAM.okr.don]: parseAsDonOkr,
+	[SEARCH_PARAM.okr.xem]: parseAsStringLiteral(CACH_XEM),
+};
+
+export const loadOkrSearchParams = createLoader(okrParsers);
+
+export function giaiKy(
+	ky: string | null,
+	cycles: { cycles: { id: string }[]; currentId: string | null } | null,
+): string | null {
+	if (!cycles) return null;
+	if (
+		ky !== null &&
+		ky !== KY_HIEN_TAI &&
+		cycles.cycles.some((c) => c.id === ky)
+	)
+		return ky;
+	return cycles.currentId;
+}

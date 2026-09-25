@@ -43,6 +43,12 @@ export const SEARCH_PARAM = {
 		cachXem: "cachXem",
 		cachChia: "cachChia",
 	},
+	okr: {
+		ky: "kyOkr",
+		don: "donOkr",
+		xem: "xemOkr",
+		moChuKy: "moChuKy",
+	},
 } as const;
 
 export const RESERVED_SEARCH_PARAM_KEYS: ReadonlySet<string> = new Set(

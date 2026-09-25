@@ -1,5 +1,6 @@
 "use client";
 
+import Alarm from "@carbon/icons-react/es/Alarm";
 import Asleep from "@carbon/icons-react/es/Asleep";
 import Language from "@carbon/icons-react/es/Language";
 import Light from "@carbon/icons-react/es/Light";
@@ -121,12 +122,19 @@ export function AppHeaderFallback() {
 	);
 }
 
-function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
+export function UserMenu({
+	user,
+	onSignOut,
+}: {
+	user: User;
+	onSignOut: () => void;
+}) {
 	const { resolvedTheme, setTheme } = useTheme();
 	const isDark = resolvedTheme === "dark";
 	const locale = useLocale();
 	const router = useRouter();
 	const t = khungUngDungMessages(locale);
+	const workspaceUrl = useWorkspaceUrl();
 	const tiengKia: Locale = locale === "vi" ? "en" : "vi";
 
 	const chooseLocale = (next: Locale) => {
@@ -159,6 +167,12 @@ function UserMenu({ user, onSignOut }: { user: User; onSignOut: () => void }) {
 					</span>
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
+				<DropdownMenuItem asChild>
+					<Link href={workspaceUrl("/reminders")}>
+						<Alarm />
+						{t.header.nhacBuoiSang}
+					</Link>
+				</DropdownMenuItem>
 				<DropdownMenuItem
 					onSelect={(event) => {
 						event.preventDefault();

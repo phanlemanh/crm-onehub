@@ -24,7 +24,7 @@ export default async function CurrenciesSettingsPage() {
 	const t = settingsMessages(await getLocale());
 
 	return (
-		<PageShell>
+		<PageShell width="page">
 			<PageShellHeader>
 				<PageShellHeading>
 					<PageShellTitle>{t.tienTe.tieuDe}</PageShellTitle>
@@ -51,7 +51,7 @@ async function Currencies() {
 
 	return (
 		<HydrateClient>
-			<div className="flex max-w-3xl flex-col gap-6">
+			<div className="flex flex-col gap-6">
 				<CurrencySettings />
 			</div>
 		</HydrateClient>

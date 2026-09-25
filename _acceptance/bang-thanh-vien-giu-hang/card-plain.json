@@ -1,0 +1,16 @@
+{
+  "feature_plain": "Quản trị mở Cài đặt › Thành viên thấy đủ mọi thành viên và mở được menu đổi vai, kể cả khi danh sách «Được phép vào» dài hàng chục địa chỉ — trang cuộn như mọi trang Cài đặt khác.",
+  "scope_plain": "Để sau: thay bảng «Được phép vào» vẽ tay (và vì thế điện thoại vẫn phải kéo ngang bảng đó), đổi cách xếp của bảy trang danh sách khác, tiêu đề bảng dính khi cuộn.",
+  "decisions_plain": [
+    {"id": "d-20260925T090219Z-1", "p": "Thêm cách xếp «cao theo nội dung» cho bảng dùng chung và cho trang Thành viên cuộn như một trang — đổi lại bảng dùng chung có thêm một lựa chọn, bảy trang khác không đổi."},
+    {"id": "d-20260925T090219Z-2", "p": "KHÔNG làm phiên thiết kế trước khi duyệt, vì chỉ trả trang về hình lành đã có — đổi lại cổng đầu duyệt giao diện bằng chữ, ảnh thật chỉ có ở lượt chấm."},
+    {"id": "d-20260925T090219Z-3", "p": "KHÔNG dùng máy soi thiết kế tĩnh làm phép đo, vì nó không thể báo lỗi trên loại tệp này — đổi lại phần nhìn được chỉ do máy đo trình duyệt thật và ảnh chụp gánh."},
+    {"id": "d-20260925T090219Z-4", "p": "KHÔNG dùng lại phép đo màn «Chỉ OKR» của vòng trước, vì hôm nay nó xanh cả trên bản lỗi — đổi lại menu vai được kiểm bằng phép đo mới có tự gieo danh sách dài."},
+    {"id": "d-20260925T090219Z-5", "p": "KHÔNG sửa việc điện thoại phải kéo ngang bảng «Được phép vào» — đổi lại vòng này chỉ giữ đúng một lỗi, bảng đó chờ đợt thay bảng vẽ tay."},
+    {"id": "d-20260925T091441Z-7", "p": "Sửa thêm lỗi hai thanh cuộn chồng nhau mà bản sửa làm lộ ra, bằng cách cho khối «Được phép vào» tự giữ các nhãn ẩn của nó — đổi lại lỗi cùng kiểu có thể còn ở trang khác (đã mở việc riêng)."},
+    {"id": "d-20260925T091441Z-8", "p": "Từng lật lại để sửa luôn việc kéo ngang trên điện thoại — dựa trên một phép đo nhìn sai chỗ; dòng lật sau đã huỷ quyết định này."},
+    {"id": "d-20260925T091843Z-9", "p": "Phép đo cuộn trang nay cuộn bằng con lăn như người dùng thật, vì cách cũ báo «cuộn được» cả khi trang bị khoá cuộn — đổi lại mỗi lượt đo chậm hơn chút."},
+    {"id": "d-20260925T093808Z-10", "p": "Phép đo kéo ngang nay nhìn cả vùng cuộn của trang, không chỉ cả cửa sổ, sau khi lượt chấm đầu bắt được chỗ nhìn sai — đổi lại điện thoại lại hiện là giới hạn đã biết."},
+    {"id": "d-20260925T093808Z-11", "p": "Trả việc kéo ngang trên điện thoại về «để sau» như bản đã duyệt — đổi lại trên điện thoại cột «Rút» của bảng «Được phép vào» vẫn khuất tới đợt thay bảng."}
+  ]
+}

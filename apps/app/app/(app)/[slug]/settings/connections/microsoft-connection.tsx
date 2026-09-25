@@ -51,7 +51,6 @@ function MicrosoftUnavailable({ t }: { t: KetNoiMessages }) {
 			<CardHeader>
 				<CardTitle>
 					<div className="flex items-center gap-2">
-						<span translate="no">{t.ten.microsoft}</span>
 						<StatusIndicator
 							size="sm"
 							tone="neutral"
@@ -100,7 +99,6 @@ function ConnectMicrosoft({
 			<CardHeader>
 				<CardTitle>
 					<div className="flex items-center gap-2">
-						<span translate="no">{t.ten.microsoft}</span>
 						<StatusIndicator size="sm" tone="neutral" label={t.chung.chuaCam} />
 					</div>
 				</CardTitle>
@@ -219,7 +217,6 @@ export function MicrosoftConnection({
 			<CardHeader>
 				<CardTitle>
 					<div className="flex items-center gap-2">
-						<span translate="no">{t.ten.microsoft}</span>
 						<StatusIndicator
 							size="sm"
 							tone={healthy ? "success" : "warning"}
