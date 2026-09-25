@@ -1,4 +1,12 @@
-import { afterAll, beforeEach, describe, expect, test } from "bun:test";
+import {
+	afterAll,
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	setSystemTime,
+	test,
+} from "bun:test";
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { datBuocXong } from "@crm/db/onboarding-buoc";
@@ -37,6 +45,10 @@ async function chay(): Promise<string> {
 beforeEach(async () => {
 	await donTraLoi();
 	await batBot();
+});
+
+afterEach(() => {
+	setSystemTime();
 });
 
 afterAll(async () => {

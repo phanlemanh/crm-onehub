@@ -1,5 +1,6 @@
 import {
 	afterAll,
+	afterEach,
 	beforeEach,
 	describe,
 	expect,
@@ -71,6 +72,10 @@ function tieuDeTren(text: string, dong: string): string | undefined {
 beforeEach(async () => {
 	await donTraLoi();
 	await batBot();
+});
+
+afterEach(() => {
+	setSystemTime();
 });
 
 afterAll(async () => {
