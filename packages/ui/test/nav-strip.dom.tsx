@@ -1,4 +1,11 @@
-import { afterAll, afterEach, beforeAll, describe, expect, test } from "bun:test";
+import {
+	afterAll,
+	afterEach,
+	beforeAll,
+	describe,
+	expect,
+	test,
+} from "bun:test";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { NavStrip } from "../src/components/nav-item";
@@ -56,7 +63,8 @@ beforeAll(() => {
 
 afterAll(() => {
 	Element.prototype.getBoundingClientRect = rectGoc;
-	if (moTaCuon) Object.defineProperty(Element.prototype, "scrollLeft", moTaCuon);
+	if (moTaCuon)
+		Object.defineProperty(Element.prototype, "scrollLeft", moTaCuon);
 	else Reflect.deleteProperty(Element.prototype, "scrollLeft");
 });
 
@@ -132,7 +140,9 @@ describe("nav-strip", () => {
 		const khung = ve(0);
 		expect(khung.scrollLeft).toBe(0);
 		ve(1);
-		expect(khung.scrollLeft, "doi the ngoai khung khong canh").toBeGreaterThan(0);
+		expect(khung.scrollLeft, "doi the ngoai khung khong canh").toBeGreaterThan(
+			0,
+		);
 		expect(namTron(khung, 1), "doi the ngoai khung khong canh").toBe(true);
 	});
 
