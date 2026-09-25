@@ -28,8 +28,13 @@ Nest's half is to report *that something happened*: `AgentTriggerService` writes
 `AgentTask` row. A row, not an HTTP call — the agent already leases from that table,
 so the row survives the agent being down.
 
-About to add a vendor client to `apps/api`? You want `apps/agent/agent/lib`. One
-documented exception, for timing: the exchange-rate fetcher, below.
+About to add a vendor client to `apps/api`? You want `apps/agent/agent/lib`. Two
+documented exceptions, both for timing: the exchange-rate fetcher, below, and the
+transactional auth mail — `packages/auth` posts the password-reset link and the
+password-changed notice to Resend itself (`thu.ts`), in the background through
+`advanced.backgroundTasks`. The reset token must not sit in plain text in an
+`AgentTask` row, and a stopped agent must not leave someone waiting for a link. It
+decides nothing about a person; it only delivers what Better Auth made.
 
 ## One organization, and it is not a tenancy boundary
 

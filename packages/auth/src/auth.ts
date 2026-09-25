@@ -10,7 +10,8 @@ import { organization } from "better-auth/plugins/organization";
 import { decideSignInFromDb } from "./allow-list";
 import { API_KEY_EXPIRATION, API_KEY_HEADER, API_KEY_PREFIX } from "./api-keys";
 import { canhKhoaApiPlugin } from "./canh-khoa-api";
-import { PASSWORD } from "./chia-mat-khau";
+import { chayNen } from "./chay-nen";
+import { donChiaCu, PASSWORD } from "./chia-mat-khau";
 import { AUTH_COOKIE_PREFIX } from "./cookies";
 import { env } from "./env";
 import { ensureWorkspaceMembership } from "./organization";
@@ -94,7 +95,8 @@ export const auth = betterAuth({
 			await guiThuXinDatLai({ email: user.email, token });
 		},
 		onPasswordReset: async ({ user }) => {
-			await guiThuBaoDaDoi(user.email);
+			await donChiaCu(user.id);
+			chayNen(guiThuBaoDaDoi(user.email));
 		},
 	},
 
@@ -130,6 +132,7 @@ export const auth = betterAuth({
 
 	advanced: {
 		cookiePrefix: AUTH_COOKIE_PREFIX,
+		backgroundTasks: { handler: chayNen },
 
 		useSecureCookies: env.isProduction,
 		...(env.cookieDomain && {
