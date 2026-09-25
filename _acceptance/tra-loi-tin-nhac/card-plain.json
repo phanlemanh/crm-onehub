@@ -1,0 +1,49 @@
+{
+  "feature_plain": "Người nhận tin nhắc buổi sáng qua Zalo gõ «xong 2» (hay «xong 1 3») là các bước đó được đánh dấu xong như bấm trên màn kế hoạch, và bot đáp lại một dòng.",
+  "will_do": [
+    {"id": "AC-2", "p": "Sẽ đánh dấu xong đúng bước của mục vừa gõ, ghi dấu vết đứng tên người nhắn kèm nguồn Zalo, dòng thời gian kế hoạch đọc được dấu vết đó, và bot đáp một dòng nêu số cùng tên bước."},
+    {"id": "AC-3", "p": "Sẽ nhận nhiều số trong một tin, viết hoa hay thường, cách bằng dấu cách hay dấu phẩy, cả «done»; số lặp chỉ tính một lần."},
+    {"id": "AC-8", "p": "Sẽ chỉ cho người đã nối và còn quyền đánh dấu, và chỉ trên tin nhắc của chính họ; người vai OKR, người chưa nối, người đang bị chặn đều không đổi được gì."},
+    {"id": "AC-9", "p": "Sẽ hướng dẫn cách gõ khi chỉ nhắn «xong», trả câu «đã nối» kèm gợi ý khi nhắn câu khác, giữ nguyên cách nối bằng mã, và mọi hồ sơ đã ký mà vòng này chạm vào vẫn chạy xanh."},
+    {"id": "AC-10", "p": "Sẽ không ghi hai lần khi Zalo giao lại cùng một tin, và gặp lỗi cơ sở dữ liệu giữa chừng thì không bước nào đổi để Zalo gửi lại."},
+    {"id": "AC-11", "p": "Sẽ để màn kế hoạch và Zalo dùng chung một thủ tục đánh dấu xong; màn kế hoạch giữ nguyên mọi hành vi hiện có."},
+    {"id": "AC-13", "p": "Sẽ có sẵn thước đo hai ngưỡng của lộ trình: tỉ lệ tin nhắc Zalo có một lần «xong», và số lần đánh dấu nhầm."},
+    {"id": "AC-14", "p": "Sẽ cập nhật từ điển sản phẩm (mục Bot Zalo), tài liệu tác tử và bảng theo dõi lộ trình Zalo."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Sẽ KHÔNG đổi tin Slack; riêng tin Zalo được đánh số 1, 2, 3… đúng thứ tự mục đã gửi, kèm một dòng gợi ý «xong 2», vẫn trong giới hạn ký tự của Zalo."},
+    {"id": "AC-4", "p": "Sẽ KHÔNG đánh dấu gì khi có một số không có trong tin; bot nêu số sai và dải số hợp lệ."},
+    {"id": "AC-5", "p": "Sẽ KHÔNG đánh dấu gì khi một số trỏ vào mục «kế hoạch im» hay «mốc ngày»; bot nói mục đó không có «xong» và đưa đường mở kế hoạch nếu có."},
+    {"id": "AC-6", "p": "Sẽ KHÔNG ghi lại bước đã xong từ trước (bot tách rõ phần vừa xong và phần đã xong), và không đánh dấu gì khi một bước đã bị xoá hay kế hoạch đã đóng."},
+    {"id": "AC-7", "p": "Chặn mọi lệnh khi hôm nay chưa có tin nhắc qua Zalo — kể cả khi chỉ còn tin hôm qua; «hôm nay» tính theo giờ Việt Nam."},
+    {"id": "AC-12", "p": "Sẽ KHÔNG lưu hay ghi log nội dung tin người nhắn."}
+  ],
+  "scope_plain": "Hoàn tác qua Zalo, hiện «qua Zalo» trên màn, mục KR của OKR, trò chuyện với tác tử qua Zalo, trả lời trên Slack, và triển khai production — để các vòng sau.",
+  "coverage_plain": [
+    {"i": 0, "p": "Trục tin trả lời: một số, nhiều số, số sai, số trỏ mục không phải bước, thiếu số, câu khác, mã nối — mỗi dạng có một tiêu chí (AC-2 đến AC-5, AC-9)."},
+    {"i": 1, "p": "Trục tin nhắc của người nhắn: đã gửi Zalo hôm nay, gửi Slack, chưa chạy hay hết việc, chỉ có hôm qua — phủ ở AC-7 (chỉ tin hôm nay)."},
+    {"i": 2, "p": "Trục trạng thái bước: chưa xong, đã xong trước, đã xoá, kế hoạch đóng — phủ ở AC-6 (bước đổi sau khi gửi)."},
+    {"i": 3, "p": "Trục người nhắn: thành viên, vai OKR, chưa nối, đang bị chặn — phủ ở AC-8 (ai được đánh dấu)."},
+    {"i": 4, "p": "Mỗi ô của bốn trục trỏ về đúng một tiêu chí; phần áp chung (giao lại, lỗi DB, thủ tục dùng chung, không lưu nội dung, thước đo, tài liệu) có AC-10 đến AC-14."},
+    {"i": 5, "p": "Ô bị gạch vì không xảy ra được: người không đủ quyền thì lệnh chưa kịp được xét; không có tin nhắc hôm nay thì không có mục nào để xét."},
+    {"i": 6, "p": "Giả định chờ anh gạch: người bị gỡ khỏi workspace mất liên kết Zalo ngay, nên ca «đã nối mà không còn là thành viên» không có tiêu chí dựng riêng; máy vẫn chặn ca đó."},
+    {"i": 7, "p": "Giả định chờ anh gạch: thứ tự dòng trong tin trùng thứ tự các mục đã lưu — AC-1 đo đúng quan hệ này trên tin gửi thật."},
+    {"i": 8, "p": "Giả định chờ anh gạch: Zalo không cho biết người đang trả lời tin nào, nên «tin hôm nay» là cách duy nhất để hiểu số."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Các phép đo có thể tự dựng tin nhắc giả đúng khuôn mà bên đọc mong, nên xanh trong khi sản phẩm thật hỏng — đã sửa: mọi phép đo dựng tin nhắc bằng đúng đường gửi thật, bên đọc dùng chung schema với bên ghi."},
+    {"i": 1, "p": "Danh sách hồ sơ đã ký cần chạy lại bị liệt tay nên sót — đã sửa: máy tự rút tập hồ sơ bị vòng này chạm (đo trước được 27 hồ sơ) và chạy lại toàn bộ phép đo máy của chúng."},
+    {"i": 2, "p": "Câu xác nhận chỉ được đo là «có chứa số» chứ không đo số nào đi với bước nào — đã sửa: đo cặp số–tên bước, và tách đúng phần «vừa xong» với «đã xong từ trước»."},
+    {"i": 3, "p": "Dấu vết mới có thêm nguồn Zalo nhưng chưa ai đọc nó qua dòng thời gian kế hoạch — đã sửa: tiêu chí chính được gắn nhãn đi xuyên lớp và đo cả phía đọc."},
+    {"i": 4, "p": "Hai phép đo «không có gì xảy ra» thiếu đối chứng, có thể xanh vì lý do sai — đã sửa: thêm đối chứng dương và quét thêm hai bảng liên kết Zalo."}
+  ],
+  "decisions_plain": [
+    {"id": "d-20260925T080725Z-1", "p": "Làm vòng 3 ngay dù ba điều kiện mở của lộ trình chưa đủ — đổi lại ngưỡng chỉ đo được sau triển khai, và mục KR của OKR phải cắm thêm sau."},
+    {"id": "d-20260925T080725Z-2", "p": "Màn kế hoạch và Zalo dùng chung một thủ tục đánh dấu, không để tác tử gọi API hay tự chép lệnh ghi — đổi lại hàm dùng chung nhận bộ dựng dấu vết từ bên gọi."},
+    {"id": "d-20260925T080725Z-3", "p": "Nhiều số trong một tin, được cả hoặc không — đổi lại một số sai chặn cả lệnh, người phải nhắn lại."},
+    {"id": "d-20260925T080725Z-4", "p": "Chỉ nhận tin nhắc của hôm nay — đổi lại trước 08:30 không đánh dấu được theo tin hôm qua."},
+    {"id": "d-20260925T080725Z-5", "p": "KHÔNG viết đặc tả màn hình vì vòng này không có màn web — đổi lại anh thấy cấu trúc lần đầu trong code (mặt người nhìn là tin Zalo, đã tả trong thiết kế)."},
+    {"id": "d-20260925T080725Z-6", "p": "KHÔNG làm hoàn tác qua Zalo — người nhắn nhầm phải mở CRM để gỡ."},
+    {"id": "d-20260925T080725Z-7", "p": "KHÔNG hiện «qua Zalo» trên màn, chỉ ghi trong dữ liệu — giữ vòng không có màn web; người xem kế hoạch chưa biết bước đánh dấu từ đâu."}
+  ]
+}
