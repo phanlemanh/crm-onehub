@@ -12,6 +12,7 @@ const en = {
 		khoaApi: "API Keys",
 		sso: "SSO",
 		toChuc: "Organization",
+		chuongTrinhOkr: "OKR program",
 		dieuPhoi: "Onboarding",
 	},
 	nhomThanhBen: {
@@ -24,6 +25,7 @@ const en = {
 		chung: "General",
 		tienTe: "Currencies",
 		truong: "Fields",
+		chuongTrinhOkr: "OKR program",
 	},
 	chung: {
 		tieuDe: "General",
@@ -153,6 +155,7 @@ const vi = {
 		khoaApi: "Khoá API",
 		sso: "SSO",
 		toChuc: "Tổ chức",
+		chuongTrinhOkr: "Chương trình OKR",
 		dieuPhoi: "Điều phối 30 ngày",
 	},
 	nhomThanhBen: {
@@ -165,6 +168,7 @@ const vi = {
 		chung: "Chung",
 		tienTe: "Tiền tệ",
 		truong: "Trường",
+		chuongTrinhOkr: "Chương trình OKR",
 	},
 	chung: {
 		tieuDe: "Chung",

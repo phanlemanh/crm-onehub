@@ -7,6 +7,7 @@ import Dashboard from "@carbon/icons-react/es/Dashboard";
 import Partnership from "@carbon/icons-react/es/Partnership";
 import Roadmap from "@carbon/icons-react/es/Roadmap";
 import Settings from "@carbon/icons-react/es/Settings";
+import Target from "@carbon/icons-react/es/Target";
 import UserMultiple from "@carbon/icons-react/es/UserMultiple";
 import { Button } from "@crm/ui/components/button";
 import type { CarbonIcon } from "@crm/ui/components/icon";
@@ -52,6 +53,7 @@ const ICON = {
 	deals: Partnership,
 	campaigns: Bullhorn,
 	onboarding: Roadmap,
+	okr: Target,
 	settings: Settings,
 } satisfies Record<MucRailKey, CarbonIcon>;
 

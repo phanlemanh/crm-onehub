@@ -377,6 +377,17 @@ Vì sao: KR đo kết quả, không đo việc làm — «gọi 50 cuộc» là 
 Việc và sáng kiến gắn vào KR là thứ khác. «Chỉ số» là danh mục số đo CRM mà một KR
 có thể lấy số từ đó; KR có đích và người phụ trách, chỉ số thì không.
 
+**Kiểu KR**: cách một KR đo tiến độ, chọn một trong sáu: «tăng tới» (đích lớn
+hơn khởi điểm), «giảm xuống» (đích nhỏ hơn khởi điểm), «giữ trên» và «giữ dưới» (đạt
+khi giá trị hiện tại còn ở phía đúng của đích), «mốc» (xong hay chưa xong) và «phần
+trăm» (đích từ 0 đến 100). Khởi điểm khoá khi mục tiêu công bố. Đơn vị đo là chữ tự
+do, nên KR tiền là «tăng tới» với đơn vị tiền — không có kiểu tiền riêng. Danh mục
+cố định trong mã; thêm kiểu là một vòng có hợp đồng riêng. Chốt 2026-09-25.
+_Avoid_: loại KR, dạng chỉ số, công thức
+Vì sao: «loại» đã là chữ của mục tiêu — cam kết hay tham vọng; hai chữ «loại» trên
+cùng một hộp thoại thì người đọc không biết ô nào nói về cái gì. «Công thức» gợi
+người dùng tự viết phép tính, mà kiểu KR là một lựa chọn trong sáu.
+
 **Cập nhật tuần**: lần người phụ trách ghi cho một KR giá trị mới, mức tự tin và
 một dòng ghi chú, mỗi tuần một lần. Lần cập nhật chỉ thêm, không sửa lần cũ. Màn
 «Cập nhật tuần của tôi» gom mọi KR một người phụ trách. Là chữ chốt cho
@@ -401,6 +412,16 @@ Chốt 2026-09-24.
 _Avoid_: giai đoạn, đợt, sprint
 Vì sao: «giai đoạn» đã là chữ của thoả thuận; «đợt» đã là chữ của chiến dịch;
 sprint là nhịp làm việc của đội phần mềm, không phải kỳ đặt mục tiêu.
+
+**Chương trình OKR**: cách OKR chạy ở OneHub, áp cho mọi đơn vị — trần số mục
+tiêu mỗi đơn vị và số KR mỗi mục tiêu, vượt trần thì cảnh báo hay chặn, thang chấm,
+có dùng trọng số KR không, có bật OKR cá nhân không. Chỉ quản trị đổi, ở Cài đặt ›
+Chương trình OKR. Mỗi lần lưu thêm một phiên bản; phiên bản cũ giữ nguyên, nên luôn
+biết một chu kỳ đã chạy theo cấu hình nào. Chốt 2026-09-25.
+_Avoid_: cài đặt OKR, chính sách OKR, quy chế
+Vì sao: «cài đặt» là chỗ đặt, không phải thứ được đặt — trang Cài đặt chứa cả
+chu kỳ lẫn chương trình. «Quy chế» và «chính sách» gợi văn bản nhân sự có hiệu lực
+ràng buộc người, còn chương trình chỉ là vài con số và công tắc của công cụ.
 
 **Căn chỉnh**: liên kết nói một mục tiêu góp vào một mục tiêu hoặc một KR ở cấp
 trên. Đơn vị cấp dưới tự chọn chỗ mình góp; một mục tiêu có thể góp vào nhiều

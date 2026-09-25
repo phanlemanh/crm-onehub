@@ -195,6 +195,18 @@ executors:
     vco_tuong_hop_thu: 'bun run test -- "cd apps/app && bun test test/tuong-hop-thu.spec.ts"'
     vco_ghi_chung: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t ghi-chung"'
     vco_duong_ngoai_router: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr.spec.ts -t duong-ngoai-router"'
+    dok_chu_ky: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t chu-ky"'
+    dok_chuong_trinh: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t chuong-trinh"'
+    dok_muc_tieu: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t muc-tieu"'
+    dok_kr: 'bun run test -- "cd packages/validation && bun test test/okr-kr.spec.ts && cd ../../apps/api && bun test test/okr.spec.ts -t sau-kieu-kr"'
+    dok_cong_bo: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t cong-bo"'
+    dok_quyen: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t quyen-ban-ghi"'
+    dok_can_chinh: 'bun run test -- "cd apps/api && bun test test/okr-can-chinh.spec.ts && bun test test/okr.spec.ts -t can-chinh"'
+    dok_vet: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t vet-okr"'
+    dok_nhap: 'bun run test -- "cd apps/api && bun test test/okr-nhap.spec.ts && bun test test/okr.spec.ts -t nhap-bang-tinh"'
+    dok_dieu_huong: 'cd apps/app && bun test test/khung-dieu-huong.spec.ts test/pham-vi-man.spec.ts && cd ../../packages/db && bun test test/workspace-slug.spec.ts'
+    dok_cua_toi: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t cua-toi"'
+    dok_chi_okr: 'bun run test -- "cd apps/api && bun test test/okr.spec.ts -t chi-okr && bun test test/vai-chi-okr.spec.ts -t ma-tran-trpc"'
     gl_ma_tran_dang_nhap_lai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ma-tran-dang-nhap-lai"'
     gl_ngoai_le_dung_tap_khai: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t ngoai-le-dung-tap-khai"'
     gl_doi_chung_thanh_vien: 'bun run test -- "cd apps/api && bun test test/go-la-cat-quyen.spec.ts -t doi-chung-thanh-vien"'
@@ -896,6 +908,9 @@ executors:
     ttc_migration_tren_du_lieu_cu: "bun _acceptance/cau-truc-to-chuc/rang/migration-tren-du-lieu-cu.mjs"
     ttc_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3710} API_URL=${API_URL:-http://localhost:3711} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cau-truc-to-chuc/rang/man-to-chuc.mjs"'
     ttc_san_thiet_ke: "bun _acceptance/cau-truc-to-chuc/rang/san-thiet-ke.mjs"
+    dok_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3910} API_URL=${API_URL:-http://localhost:3911} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dat-okr-trong-crm/rang/man-okr.mjs"'
+    dok_san_thiet_ke: "bun _acceptance/dat-okr-trong-crm/rang/san-thiet-ke.mjs"
+    dok_migration_chi_them: "node _acceptance/dat-okr-trong-crm/rang/migration-chi-them.mjs"
     tcds_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3710} API_URL=${API_URL:-http://localhost:3711} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/to-chuc-danh-sach-chi-tiet/rang/man-chi-tiet.mjs"'
     tcds_khong_hoi_quy: "node _acceptance/to-chuc-danh-sach-chi-tiet/rang/khong-hoi-quy.mjs"
     tcds_san_thiet_ke: "bun _acceptance/to-chuc-danh-sach-chi-tiet/rang/san-thiet-ke.mjs"
