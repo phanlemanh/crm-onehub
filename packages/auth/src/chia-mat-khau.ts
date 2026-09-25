@@ -11,7 +11,7 @@ export const PASSWORD = {
 	tokenBytes: 24,
 	rowIdBytes: 16,
 	verificationPrefix: "reset-password:",
-	requestWindowSeconds: 15 * MINUTE_SECONDS,
+	requestWindowSeconds: MINUTE_SECONDS,
 	requestMax: 3,
 } as const;
 

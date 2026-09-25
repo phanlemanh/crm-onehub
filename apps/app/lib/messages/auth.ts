@@ -81,7 +81,7 @@ const en = {
 		quayLai: "Back to sign in",
 		loi: "The link could not be sent. Check your connection and send again.",
 		quaLuot: (phut: number) =>
-			`You have asked too many times. Wait ${phut} minutes and try again.`,
+			`You have asked too many times. Wait ${phut === 1 ? "a minute" : `${phut} minutes`} and try again.`,
 		xong: {
 			title: "Check your email",
 			description: (phut: number) =>

@@ -27,7 +27,10 @@ const MAT_KHAU_MOI = "mot-cau-rat-dai-va-sach-2026";
 const KHOA_VERCEL = Symbol.for("@vercel/request-context");
 const HAN_XA = new Date("2099-01-01");
 const HAN_CA_MS = 60_000;
-const HAI_PHUT_MS = 2 * SECONDS_PER_MINUTE * SECOND_MS;
+const CUA_SO_MS = PASSWORD.requestWindowSeconds * SECOND_MS;
+const TRONG_CUA_SO_MS = CUA_SO_MS / 2;
+const QUA_CUA_SO_MS = CUA_SO_MS + 10 * SECOND_MS;
+const XA_QUA_CUA_SO_MS = 20 * SECONDS_PER_MINUTE * SECOND_MS;
 
 setDefaultTimeout(HAN_CA_MS);
 
@@ -401,7 +404,7 @@ describe("qua-luot", () => {
 		expect(gioiHan.enabled).toBe(true);
 	});
 
-	test("lan thu tu tu cung mot noi bi 429 va khong co thu", async () => {
+	test("lan thu tu trong cua so bi 429 va khong co thu, qua cua so thi xin lai duoc", async () => {
 		const ip = ipMoi();
 		const a = await gieoNguoi("con-quyen");
 		const b = await gieoNguoi("con-quyen");
@@ -410,13 +413,34 @@ describe("qua-luot", () => {
 			(await xin(diaChiLa(), ip)).ma,
 			(await xin(diaChiLa(), ip)).ma,
 		];
-		await lui(ip, HAI_PHUT_MS);
+		await lui(ip, TRONG_CUA_SO_MS);
 		ma.push((await xin(b.email, ip)).ma);
 		if (ma[3] !== 429) throw new Error(`lan thu tu phai 429, duoc ${ma[3]}`);
 		expect(ma.slice(0, 3)).toEqual([200, 200, 200]);
 		await choNen();
 		expect(daGui.map((t) => t.to[0])).toEqual([a.email]);
-		expect((await xin(b.email)).ma).toBe(200);
+		await lui(ip, QUA_CUA_SO_MS);
+		const sau = (await xin(b.email, ip)).ma;
+		if (sau !== 200) {
+			throw new Error(
+				`qua cua so PASSWORD.requestWindowSeconds van bi chan: ${sau}`,
+			);
+		}
+	});
+
+	test("sau-don: bo don hang dem khong xoa cua so dang chan", async () => {
+		const ip = ipMoi();
+		for (let i = 0; i < PASSWORD.requestMax; i += 1) await xin(diaChiLa(), ip);
+		await lui(ip, TRONG_CUA_SO_MS);
+		const ipKhac = ipMoi();
+		await xin(diaChiLa(), ipKhac);
+		await lui(ipKhac, XA_QUA_CUA_SO_MS);
+		await xin(diaChiLa(), ipKhac);
+		await choNen();
+		const ma = (await xin(diaChiLa(), ip)).ma;
+		if (ma !== 429) {
+			throw new Error(`bo don hang dem xoa cua so dang chan: lan thu tu ${ma}`);
+		}
 	});
 });
 

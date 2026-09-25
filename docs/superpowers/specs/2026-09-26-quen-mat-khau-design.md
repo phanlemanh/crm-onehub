@@ -59,7 +59,9 @@ nó để làm S3, và cửa vào phải lên môi trường thật trước 19/
   Thư viện chỉ tự tiêu thụ đúng chìa vừa dùng.
 - **Log không mang dữ liệu người.** `guiThu` ghi mã trạng thái, không ghi thân lỗi
   của Resend.
-- **Giới hạn tần suất.** Giữ quy tắc của PR: ba lượt mỗi 15 phút cho
+- **Giới hạn tần suất.** (Sửa 26/09, chủ kho chọn hướng b — xem Notes của hợp
+  đồng.) Ba lượt mỗi 60 giây, không phải 15 phút như PR: bộ dọn của better-auth
+  xoá hàng đếm cũ hơn 60 giây. Bản gốc của mục này: ba lượt mỗi 15 phút cho
   `/request-password-reset`, tính theo địa chỉ IP (bộ đếm của better-auth). Cấu
   hình hiện có của kho đã khai `rateLimit.enabled: true` (không phụ thuộc
   `NODE_ENV`) và `storage: "database"`, nên mọi instance trên Vercel dùng chung
