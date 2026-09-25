@@ -7,8 +7,7 @@ import {
 	mock,
 	test,
 } from "bun:test";
-import { execFileSync } from "node:child_process";
-import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -36,6 +35,7 @@ mock.module("next/link", () => ({
 
 const DAY = dirname(fileURLToPath(import.meta.url));
 const TAM = join(DAY, ".tam-ktcd");
+const BAN_GOC = join(DAY, "fixtures", "page-shell-truoc-width.tsx.txt");
 
 const BE_RONG = [
 	["narrow", "max-w-(--container-narrow)", false],
@@ -95,14 +95,10 @@ let root: Root | null = null;
 let khung: HTMLElement | null = null;
 
 beforeAll(() => {
-	const goc = execFileSync("git", ["merge-base", "HEAD", "origin/onehub"], {
-		encoding: "utf8",
-	}).trim();
-	const nguon = execFileSync(
-		"git",
-		["show", `${goc}:apps/app/components/page-shell.tsx`],
-		{ encoding: "utf8" },
-	).replaceAll('from "./', 'from "@/components/');
+	const nguon = readFileSync(BAN_GOC, "utf8").replaceAll(
+		'from "./',
+		'from "@/components/',
+	);
 	mkdirSync(TAM, { recursive: true });
 	writeFileSync(join(TAM, "page-shell-goc.tsx"), nguon);
 });
