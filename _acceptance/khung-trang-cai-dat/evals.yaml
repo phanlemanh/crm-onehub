@@ -277,7 +277,9 @@ evals:
     expected: |
       Chay moi eval test/script cua 11 ho so trong AC-12 (rut tu evals.yaml cua tung ho so, lenh
       giai qua config.yaml, trung lenh chay mot lan), cong mot phep so: bai kiem cua cac ho so do tai
-      merge-base va tai HEAD co cung tap ten bai, va than bai chi khac o dung ca AC-11. Doc E17 cua
+      merge-base va tai HEAD co cung tap ten bai, va than bai chi khac o dung ca AC-11 cong dung mot
+      thay doi du lieu da khai: danh sach mien dau KHONG_DAU cua apps/app/test/messages-guard.spec.ts
+      them dung 3 khoa thanhBen.chung, tieuDeTab.chung, chung.tieuDe (nhan "Chung" khong dau). Doc E17 cua
       nhac-qua-zalo: dong "thanh ben Cai dat co muc Thông báo của bạn" da doi sang menu nguoi dung,
       buoc mo dung /reminders. Tap eval ui-check cua 11 ho so co paths hoac steps cham tep vong nay
       doi (diff merge-base..HEAD) phai BANG dung tap khai {nhac-qua-zalo E17, noi-zalo-cho-nguoi-moi

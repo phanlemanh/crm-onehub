@@ -1,140 +1,132 @@
 "use client";
 
-import { Button } from "@crm/ui/components/button";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { cn } from "@crm/ui/lib/utils";
+import { NavGroup, NavGroupLabel, NavItem } from "@crm/ui/components/nav-item";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import {
 	GOC_CAI_DAT,
-	MUC_CAI_DAT,
 	type MucCaiDat,
 	mucCaiDatDangMo,
+	NHOM_CAI_DAT,
+	type NhomCaiDat,
 } from "@/lib/cai-dat-dieu-huong";
 import { settingsMessages } from "@/lib/messages/settings";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
-function NavLink({
-	item,
+type TrangThaiMuc = { dangMo: (muc: MucCaiDat) => boolean } | null;
+
+function Muc({
+	muc,
 	nhan,
-	active,
-	className,
+	trangThai,
+	orientation,
 }: {
-	item: MucCaiDat;
+	muc: MucCaiDat;
 	nhan: string;
-	active: boolean;
-	className: string;
+	trangThai: TrangThaiMuc;
+	orientation: "vertical" | "horizontal";
 }) {
+	if (!trangThai) {
+		return (
+			<NavItem disabled orientation={orientation}>
+				{nhan}
+			</NavItem>
+		);
+	}
+
+	const dangMo = trangThai.dangMo(muc);
+
 	return (
-		<Button
-			asChild
-			variant="ghost"
-			className={cn(
-				"justify-start font-normal text-muted-foreground",
-				active &&
-					"bg-muted text-foreground hover:bg-muted hover:text-foreground",
-				className,
-			)}
-		>
-			<Link
-				href={item.href}
-				prefetch
-				aria-current={active ? "page" : undefined}
-				transitionTypes={["nav-lateral"]}
-			>
+		<NavItem asChild active={dangMo} orientation={orientation}>
+			<Link href={muc.href} prefetch transitionTypes={["nav-lateral"]}>
 				{nhan}
 			</Link>
-		</Button>
+		</NavItem>
 	);
 }
 
-export function SettingsSidebarFallback() {
+function ThanhBen({
+	nhom,
+	trangThai,
+}: {
+	nhom: readonly NhomCaiDat[];
+	trangThai: TrangThaiMuc;
+}) {
 	const t = settingsMessages(useLocale());
+	const dangTai = trangThai ? undefined : "true";
 
 	return (
 		<>
 			<aside className="hidden w-56 shrink-0 border-r md:block [view-transition-name:settings-sidebar]">
 				<nav
 					aria-label={t.thanhBen.nhan}
-					aria-busy="true"
-					className="flex flex-col gap-0.5 p-3"
+					aria-busy={dangTai}
+					className="flex flex-col gap-4 p-3"
 				>
-					{MUC_CAI_DAT.map((item) => (
-						<Button
-							key={item.href}
-							variant="ghost"
-							disabled
-							className="w-full justify-start px-3 font-normal text-muted-foreground"
-						>
-							{t.thanhBen[item.khoa]}
-						</Button>
+					{nhom.map((n) => (
+						<NavGroup key={n.khoa} aria-labelledby={`nhom-cai-dat-${n.khoa}`}>
+							<NavGroupLabel id={`nhom-cai-dat-${n.khoa}`}>
+								{t.nhomThanhBen[n.khoa]}
+							</NavGroupLabel>
+							{n.muc.map((muc) => (
+								<Muc
+									key={muc.href}
+									muc={muc}
+									nhan={t.thanhBen[muc.khoa]}
+									trangThai={trangThai}
+									orientation="vertical"
+								/>
+							))}
+						</NavGroup>
 					))}
 				</nav>
 			</aside>
 
 			<nav
 				aria-label={t.thanhBen.nhan}
-				aria-busy="true"
+				aria-busy={dangTai}
 				className="flex gap-1 overflow-x-auto border-b p-2 md:hidden [view-transition-name:settings-sidebar]"
 			>
-				{MUC_CAI_DAT.map((item) => (
-					<Button
-						key={item.href}
-						variant="ghost"
-						disabled
-						className="shrink-0 justify-start px-3 font-normal text-muted-foreground"
-					>
-						{t.thanhBen[item.khoa]}
-					</Button>
-				))}
+				{nhom.flatMap((n) =>
+					n.muc.map((muc) => (
+						<Muc
+							key={muc.href}
+							muc={muc}
+							nhan={t.thanhBen[muc.khoa]}
+							trangThai={trangThai}
+							orientation="horizontal"
+						/>
+					)),
+				)}
 			</nav>
 		</>
 	);
 }
 
+export function SettingsSidebarFallback() {
+	return <ThanhBen nhom={NHOM_CAI_DAT} trangThai={null} />;
+}
+
 export function SettingsSidebar() {
-	const t = settingsMessages(useLocale());
 	const pathname = usePathname();
 	const workspaceUrl = useWorkspaceUrl();
 
 	const root = workspaceUrl(GOC_CAI_DAT);
-	const items = useMemo(
+	const nhom = useMemo(
 		() =>
-			MUC_CAI_DAT.map((item) => ({ ...item, href: workspaceUrl(item.href) })),
+			NHOM_CAI_DAT.map((n) => ({
+				...n,
+				muc: n.muc.map((muc) => ({ ...muc, href: workspaceUrl(muc.href) })),
+			})),
 		[workspaceUrl],
 	);
 
 	return (
-		<>
-			<aside className="hidden w-56 shrink-0 border-r md:block [view-transition-name:settings-sidebar]">
-				<nav aria-label={t.thanhBen.nhan} className="flex flex-col gap-0.5 p-3">
-					{items.map((item) => (
-						<NavLink
-							key={item.href}
-							item={item}
-							nhan={t.thanhBen[item.khoa]}
-							active={mucCaiDatDangMo(item.href, root, pathname)}
-							className="w-full px-3"
-						/>
-					))}
-				</nav>
-			</aside>
-
-			<nav
-				aria-label={t.thanhBen.nhan}
-				className="flex gap-1 overflow-x-auto border-b p-2 md:hidden [view-transition-name:settings-sidebar]"
-			>
-				{items.map((item) => (
-					<NavLink
-						key={item.href}
-						item={item}
-						nhan={t.thanhBen[item.khoa]}
-						active={mucCaiDatDangMo(item.href, root, pathname)}
-						className="shrink-0 px-3"
-					/>
-				))}
-			</nav>
-		</>
+		<ThanhBen
+			nhom={nhom}
+			trangThai={{ dangMo: (muc) => mucCaiDatDangMo(muc.href, root, pathname) }}
+		/>
 	);
 }

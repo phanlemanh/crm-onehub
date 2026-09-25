@@ -2,7 +2,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 
 const en = {
 	thanhBen: {
-		nhan: "Workspace settings",
+		nhan: "Settings",
 		chung: "General",
 		theoDoi: "Tracking & Analytics",
 		ketNoi: "Connections",
@@ -11,9 +11,14 @@ const en = {
 		thanhVien: "Members",
 		khoaApi: "API Keys",
 		sso: "SSO",
-		thongBaoCuaBan: "Your notifications",
 		toChuc: "Organization",
 		dieuPhoi: "Onboarding",
+	},
+	nhomThanhBen: {
+		khongGian: "Workspace",
+		conNguoi: "People",
+		ketNoiDuLieu: "Connections & data",
+		baoMat: "Security",
 	},
 	tieuDeTab: {
 		chung: "General",
@@ -134,8 +139,8 @@ export type SettingsMessages = typeof en;
 
 const vi = {
 	thanhBen: {
-		nhan: "Cài đặt công ty",
-		chung: "Tổng quan",
+		nhan: "Cài đặt",
+		chung: "Chung",
 		theoDoi: "Theo dõi & phân tích",
 		ketNoi: "Kết nối",
 		tienTe: "Tiền tệ",
@@ -143,25 +148,30 @@ const vi = {
 		thanhVien: "Thành viên",
 		khoaApi: "Khoá API",
 		sso: "SSO",
-		thongBaoCuaBan: "Thông báo của bạn",
 		toChuc: "Tổ chức",
 		dieuPhoi: "Điều phối 30 ngày",
 	},
+	nhomThanhBen: {
+		khongGian: "Không gian làm việc",
+		conNguoi: "Con người",
+		ketNoiDuLieu: "Kết nối và dữ liệu",
+		baoMat: "Bảo mật",
+	},
 	tieuDeTab: {
-		chung: "Tổng quan",
+		chung: "Chung",
 		tienTe: "Tiền tệ",
 		truong: "Trường",
 	},
 	chung: {
-		tieuDe: "Tổng quan",
-		moTa: "Công ty bạn là ai, và tác nhân nghiên cứu nghĩ bằng model nào.",
+		tieuDe: "Chung",
+		moTa: "OneHub là ai, và tác nhân nghiên cứu nghĩ bằng model nào.",
 	},
 	truong: {
 		tieuDe: "Trường",
 		moTa: "Hình dạng dữ liệu của bạn: mỗi công ty, cá nhân và thoả thuận ghi những gì.",
 	},
 	congTy: {
-		tieuDe: "Công ty",
+		tieuDe: "Không gian làm việc",
 		moTa: "Tên và website của công ty đang dùng CRM này.",
 		luu: "Lưu",
 		ten: "Tên",
