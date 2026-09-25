@@ -644,6 +644,8 @@ describe("kho chuoi cua vong ③a", () => {
 			"okr:caiDat.chuKy.daChuyen": ["1 đã sang A.", "12 đã sang A."],
 			"okr:caiDat.chuKy.hoi.title": ["Chuyển 1 sang A?", "Chuyển 12 sang A?"],
 			"okr:caiDat.mo.daMo": ["Đã mở 1.", "Đã mở 12."],
+			"okr:caiDat.mo.tenGoiY.nam": ["Năm 1", "Năm 12"],
+			"okr:caiDat.mo.tenGoiY.quy": ["Quý 1/A", "Quý 12/A"],
 			"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [
 				"Cả đội · 1",
 				"Cả đội · 12",

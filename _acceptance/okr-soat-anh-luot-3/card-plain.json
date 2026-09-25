@@ -1,0 +1,16 @@
+{
+  "feature_plain": "Bốn chỗ vấp của khu OKR đã sửa: hộp nhập bảng tính thấy đủ bảy cột và hàng hỏng có vạch đỏ ở màn rộng; trên điện thoại, mục Cài đặt đang mở luôn nằm trong tầm nhìn; bộ chọn chu kỳ không còn lặp chữ «Quý»; gợi ý tên chu kỳ theo năm hiện tại.",
+  "scope_plain": "Không sửa nhãn số đếm của cây đơn vị (đang chờ chủ kho trả lời), không đổi hộp nhập cây tổ chức, không đánh dấu đúng ô gây lỗi trong hàng hỏng.",
+  "analyst_plain": "Lượt này không đo lại bản gốc để so; không phép đo nào bị đánh dấu là «không phân biệt được cũ với mới».",
+  "decisions_plain": [
+    {"id": "d-20260925T151751Z-1", "p": "KHÔNG quét tìm thêm chỗ vấp cùng loại ở màn khác — bốn chỗ đã do chủ kho khai; đổi lại có thể sót chỗ tương tự (như hộp nhập cây tổ chức)."},
+    {"id": "d-20260925T151751Z-2", "p": "KHÔNG dựng bản mẫu bấm được trước khi duyệt — thay bằng ảnh màn thật trước và sau ở hai khổ."},
+    {"id": "d-20260925T151751Z-3", "p": "Hộp nhập rộng ra (một cỡ hộp mới cho bảng nhiều cột) thay vì gộp cột — giữ đủ bảy cột để người đối chiếu với bảng tính gốc."},
+    {"id": "d-20260925T151751Z-4", "p": "Gợi ý quý là quý kế tiếp (hôm nay gợi ý «Quý 4/2026») — vì chu kỳ thường được mở trước khi nó bắt đầu."},
+    {"id": "d-20260925T151751Z-5", "p": "Chỉ bỏ chữ «Quý»/«Năm» khi tên chu kỳ đã chứa chữ đó — tên tự đặt như «Lượt thử tháng 10» vẫn thấy loại chu kỳ."},
+    {"id": "d-20260925T151751Z-6", "p": "Việc đưa mục đang mở vào tầm nhìn nằm trong thành phần dùng chung của kho — mọi trang Cài đặt được, không vá riêng trang OKR."},
+    {"id": "d-20260925T151751Z-7", "p": "Chưa sửa nhãn cây đơn vị — hỏi chủ kho: cây chỉ đếm mục tiêu đã công bố, máy khuyên đổi nhãn thành «1 đã công bố»."},
+    {"id": "d-20260925T153402Z-8", "p": "Phép soi giao diện chỉ bắt lỗi ở dòng vòng này sửa; lỗi đè màu/khoảng cách có từ trước được liệt ra nhưng không sửa — đó là việc của đợt dọn Cài đặt kế."},
+    {"id": "d-20260925T154235Z-9", "p": "Hai bài kiểm cũ đổi vài dòng để khớp cách truyền gợi ý tên từ máy chủ — đổi lại trình duyệt không bao giờ tự đoán ngày."}
+  ]
+}
