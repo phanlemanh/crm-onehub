@@ -5,7 +5,7 @@ slug: khoa-con-bat-xa-tran
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-09-26-khoa-con-bat-xa-tran-design.md
 approved_by:
 approved_at:
