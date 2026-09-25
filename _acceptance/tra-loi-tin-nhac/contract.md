@@ -5,7 +5,7 @@ slug: tra-loi-tin-nhac
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, docs]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-25T09:54:10Z
 design_doc: docs/superpowers/specs/2026-09-25-tra-loi-tin-nhac-design.md
@@ -88,3 +88,20 @@ Quét bằng `morphological-scan` (preset test-matrix) —
   vòng riêng hồ sơ ấy, hoặc đo chính bộ kit — đỏ ở mọi cây trong môi trường này. Lời
   hứa cũ «làn thoát 0» không đo được; lời hứa mới là «không làm đỏ thêm eval nào».
   Duyệt lại Cổng Phạm vi cho riêng thay đổi này.
+
+### Known limits (Cổng Bằng chứng vòng 1, 2026-09-25)
+
+- Ngoài-1: đường Zalo tự viết lại luật «ai được đánh dấu» (`coQuyen` trong
+  `apps/agent/agent/lib/tra-loi-nhac.ts`) thay vì gọi `docDuocPhamVi(role, "doi-tac")`
+  như màn kế hoạch; hôm nay hai bên cho cùng kết quả, đổi danh sách quyền của vai
+  `okr` mà quên một bên thì hai lối vào lệch nhau.
+- Ngoài-2: dòng `Activity` `PLAN_CHANGE` được ghi ở hai chỗ — `datBuocXong`
+  (`packages/db/src/onboarding-buoc.ts`) cho `setStepDone` và `ghiVet` của API cho các
+  thủ tục kế hoạch khác; sửa một chỗ mà quên chỗ kia thì dấu vết lệch.
+- Ngoài-3: `rang/nguong.ts` lấy dấu vết tới `--den` + 24 giờ nhưng hàng nhắc chỉ tới
+  `--den`, nên lần «xong» đúng ở ngày cuối kỳ đo bị tính là đánh dấu nhầm; phải sửa
+  trước khi đo ngưỡng trên dữ liệu thật (sau hàng T).
+- Ngoài-4: `rang/ho-so-cham.mjs` gọi `process.exit` bên trong `try`, nên ở nhánh lỗi
+  worktree tạm ở `merge-base` không được gỡ; lượt kế tự gỡ.
+- Ngoài-5: test của script ngưỡng kiểm `toContain` chuỗi con thay vì đúng dòng in ra,
+  nên một con số lệch thêm chữ số vẫn có thể lọt.
