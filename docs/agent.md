@@ -221,9 +221,16 @@ API; the API only reads and writes rows.
     and nothing throws, including at module load.
   - Wrong or missing `X-Bot-Api-Secret-Token` → 403, and the body is never read.
     The header is compared through SHA-256, so any length is safe.
-  - A body that is not JSON, or not the known shape, still answers 200, so Zalo
-    does not resend. The log line names the body's top-level keys and its
-    `message_id`, so a changed envelope shows up on the first real message.
+  - Thân webhook thật của Zalo là `{event_name, message}`, không có vỏ — đo
+    trên production 2026-09-25; tài liệu Zalo tả khác.
+  - Khuôn có vỏ `ok`/`result` theo tài liệu vẫn được nhận, qua cùng bộ đọc
+    `parseZaloWebhook` (`@crm/validation/zalo-webhook`). The `getUpdates`
+    reader (`parseZaloGetUpdates`) is separate: a `getUpdates` reply does carry
+    the envelope.
+  - A body that is not JSON, or matches neither shape, still answers 200, so
+    Zalo does not resend. The log line names the body's top-level keys
+    (`khoa`), the keys of `message` (`khoa_message`) and its `message_id` —
+    never the text — so a changed shape shows up on the first real message.
 - **One core for every path.** `xuLyTinDen` (`lib/zalo-nhan.ts`) handles a
   message from the webhook and from the manual reader alike:
   - messages from bots and from chats that are not `PRIVATE` are skipped. Replying
