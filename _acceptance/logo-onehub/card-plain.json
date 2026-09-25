@@ -157,6 +157,14 @@
   {
    "id": "d-20260925T094444Z-14",
    "p": "Chọn bỏ ô quanh logo ở tab Agent và sửa ngay vòng này — đổi lại duyệt lại phạm vi và dùng round chấm cuối."
+  },
+  {
+   "id": "d-20260925T100446Z-16",
+   "p": "Lượt chấm thứ ba bị chặn vì máy chấm gọi tắt lệnh chụp màn; đã ghi nguyên văn lệnh vào phép đo và chấm lại cùng lượt."
+  },
+  {
+   "id": "d-20260925T101637Z-17",
+   "p": "Lượt chấm lại vẫn bị chặn vì máy chấm lint chết giữa chừng — mọi phép đo khác đều xanh; không tự chạy thêm lượt, trình anh quyết."
   }
  ],
  "decisions": [],
