@@ -2,6 +2,7 @@ import { describe, test } from "bun:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import Logo from "../src/components/logo";
+import { LogoLockup } from "../src/components/logo-lockup";
 import { LOGO_ONEHUB } from "../src/lib/logo-onehub";
 import {
 	dat,
@@ -15,6 +16,7 @@ import {
 } from "./logo-raster";
 
 const KENH = ["R", "G", "B"] as const;
+const BIEN_CHU_X = 600;
 
 async function markTrenLuoiGoc() {
 	const goc = await docAnh(duongGoc("logo-mark.png"));
@@ -58,5 +60,23 @@ describe("logo OneHub khớp ảnh gốc", () => {
 		console.log(`lech tam x = ${lechX.toFixed(2)}, y = ${lechY.toFixed(2)}`);
 		dat(lechX <= tran, `lech tam x ${lechX.toFixed(2)} > ${tran}`);
 		dat(lechY <= tran, `lech tam y ${lechY.toFixed(2)} > ${tran}`);
+	});
+
+	test("ban-ngang-trung-goc", async () => {
+		const goc = await docAnh(duongGoc("logo-horizontal.png"));
+		const ve = await veSvg(
+			renderToStaticMarkup(
+				createElement(LogoLockup, {
+					width: goc.rong,
+					height: goc.cao,
+					style: { color: "#000" },
+				}),
+			),
+		);
+		const iouMark = iouMem(ve, goc, 0, BIEN_CHU_X);
+		const iouChu = iouMem(ve, goc, BIEN_CHU_X, goc.rong);
+		console.log(`IoU mark ban ngang = ${iouMark.toFixed(5)}, IoU chu = ${iouChu.toFixed(5)}`);
+		dat(iouMark >= NGUONG_LOGO.iou, `IoU mark ban ngang ${iouMark.toFixed(5)} < ${NGUONG_LOGO.iou}`);
+		dat(iouChu >= NGUONG_LOGO.iou, `IoU chu ${iouChu.toFixed(5)} < ${NGUONG_LOGO.iou}`);
 	});
 });

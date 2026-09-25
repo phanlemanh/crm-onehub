@@ -2,20 +2,10 @@ import type * as React from "react";
 import { useId } from "react";
 import { LOGO_ONEHUB } from "../lib/logo-onehub";
 
-const Logo = (props: React.SVGProps<SVGSVGElement>) => {
-	const id = useId();
+export function MarkOneHub({ id }: { id: string }) {
 	const { mark, dai } = LOGO_ONEHUB;
 	return (
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			width={512}
-			height={512}
-			viewBox={mark.viewBox}
-			fill="none"
-			role="img"
-			aria-label={LOGO_ONEHUB.ten}
-			{...props}
-		>
+		<>
 			<defs>
 				<linearGradient
 					id={id}
@@ -30,6 +20,24 @@ const Logo = (props: React.SVGProps<SVGSVGElement>) => {
 				</linearGradient>
 			</defs>
 			<path d={mark.path} fill={`url(#${id})`} />
+		</>
+	);
+}
+
+const Logo = (props: React.SVGProps<SVGSVGElement>) => {
+	const id = useId();
+	return (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width={512}
+			height={512}
+			viewBox={LOGO_ONEHUB.mark.viewBox}
+			fill="none"
+			role="img"
+			aria-label={LOGO_ONEHUB.ten}
+			{...props}
+		>
+			<MarkOneHub id={id} />
 		</svg>
 	);
 };

@@ -2,6 +2,7 @@ import { afterEach, describe, expect, test } from "bun:test";
 import { act, createElement as h } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import Logo from "../src/components/logo";
+import { LogoLockup } from "../src/components/logo-lockup";
 
 let root: Root | null = null;
 let khung: HTMLElement | null = null;
@@ -75,5 +76,37 @@ describe("Logo", () => {
 		const [, sau] = haiLogo();
 		expect(sau?.getAttribute("class")).toBe("size-5");
 		expect(sau?.getAttribute("aria-hidden")).toBe("true");
+	});
+});
+
+function haiBanNgang() {
+	return dung(h("div", null, h(LogoLockup, { key: "a" }), h(LogoLockup, { key: "b" })));
+}
+
+describe("LogoLockup", () => {
+	test("a: la hinh co ten OneHub", () => {
+		const [dau] = haiBanNgang();
+		expect(dau?.getAttribute("role")).toBe("img");
+		expect(dau?.getAttribute("aria-label")).toBe("OneHub");
+	});
+
+	test("b: chu theo currentColor", () => {
+		const [dau] = haiBanNgang();
+		const paths = Array.from(dau?.querySelectorAll("path") ?? []);
+		const chu = paths.filter((p) => !(p.getAttribute("fill") ?? "").startsWith("url("));
+		dat(chu.length === 1, `can dung mot path chu, thay ${chu.length}`);
+		dat(chu[0]?.getAttribute("fill") === "currentColor", "chu khong theo currentColor");
+	});
+
+	test("c: moi ban ngang to mark bang dai mau cua chinh no", () => {
+		const svgs = haiBanNgang();
+		const ids = svgs.map((svg) => dai(svg).id);
+		dat(ids[0] !== ids[1], `id trung: ${ids[0]}`);
+		for (const svg of svgs) {
+			const gradient = dai(svg);
+			const mark = svg.querySelector(`path[fill="url(#${gradient.id})"]`);
+			dat(mark !== null, `khong path nao to bang url(#${gradient.id})`);
+			dat(document.getElementById(gradient.id) === gradient, `url(#${gradient.id}) tro sang phan tu khac`);
+		}
 	});
 });

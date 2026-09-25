@@ -1,4 +1,4 @@
-import Logo from "@crm/ui/components/logo";
+import { LogoLockup } from "@crm/ui/components/logo-lockup";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { AuthShader } from "@/components/auth-shader";
@@ -15,7 +15,7 @@ export async function AuthShell({ children }: { children: ReactNode }) {
 
 				<div className="relative flex gap-2 text-sm/5">
 					<Link href="/" aria-label={m.homepage} className="flex">
-						<Logo className="size-5 shrink-0" />
+						<LogoLockup className="h-5 w-auto shrink-0" />
 					</Link>
 				</div>
 
@@ -36,7 +36,7 @@ export async function AuthShell({ children }: { children: ReactNode }) {
 
 			<section className="flex min-h-svh flex-col bg-background px-6 py-8 sm:px-10 lg:px-14">
 				<div className="flex gap-2 text-sm/5 max-lg:hidden lg:invisible">
-					<Logo className="size-5 shrink-0" />
+					<LogoLockup className="h-5 w-auto shrink-0" />
 				</div>
 
 				<div className="flex flex-1 items-center justify-center py-12">
@@ -59,7 +59,7 @@ export async function AuthHeading({
 	return (
 		<div className="flex flex-col gap-3 text-left">
 			<Link href="/" aria-label={m.homepage} className="flex">
-				<Logo className="size-6 shrink-0" />
+				<LogoLockup className="h-6 w-auto shrink-0" />
 			</Link>
 			<div className="flex flex-col gap-1">
 				<h2 className="text-2xl/8 font-semibold tracking-tight text-balance">
