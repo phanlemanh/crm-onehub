@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cbda96028fb13ce1c1138a31a6d7d6f91f3694b4
+verified_commit: 1924a1c321aecfeac46e076c49d3063c28d7c9e5
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -183,3 +183,7 @@ none — every multi-run eval is uniform
 
 Round 1: E9 không đo được (mã 2 — tiền đề chạy nhầm cổng 3000/3001) và lệnh suite `bun run test` đỏ (mã 1); đồng thời sửa thước đo hình dạng khẳng định cho E7, E8. Returned to implementation.
 Round 2: E1–E10 và các lệnh suite (`bun run test`, lint, lint:slop, build) đều xanh trên đúng cây (cổng 3500/3501); E9 tự dò đúng máy chủ của cây đang xét.
+
+### Re-pin lần 1 — 2026-09-25, do hoá cũ do gộp onehub (#130) vào nhánh trước PR
+run_id: repin-20260925T024951Z-28326
+sha: 1924a1c321aecfeac46e076c49d3063c28d7c9e5 · suites: 4 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E9 · AC không có chốt máy: AC-9
