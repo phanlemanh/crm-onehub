@@ -48,6 +48,12 @@ export function canManageOrganization(role: WorkspaceRole | null): boolean {
 	return isWorkspaceAdmin(role);
 }
 
+export function canManageWorkspaceSettings(
+	role: WorkspaceRole | null,
+): boolean {
+	return isWorkspaceAdmin(role);
+}
+
 export async function ensureWorkspaceMembership(
 	userId: string,
 	email = "",

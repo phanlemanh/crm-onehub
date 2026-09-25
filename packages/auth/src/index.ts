@@ -41,6 +41,7 @@ export {
 	canManageOnboarding,
 	canManageOrganization,
 	canManageTracking,
+	canManageWorkspaceSettings,
 	canRenameWorkspace,
 	DEFAULT_WORKSPACE_NAME,
 	ensureWorkspaceMembership,
