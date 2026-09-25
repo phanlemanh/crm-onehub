@@ -1,0 +1,400 @@
+schema_version: 1
+slug: quen-mat-khau
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.qmk_co_tat_api
+    paths:
+      - "apps/api/src/sso/**"
+      - "packages/auth/src/env.ts"
+      - "packages/auth/src/thu.ts"
+      - "apps/api/test/quen-mat-khau-co.spec.ts"
+    expected: |
+      Goi THAT sso.signInOptions qua Nest (supertest), khong goi ham service truc tiep.
+      Xoa RESEND_API_KEY va MAIL_FROM khoi process.env ngay trong ca, khong can tien trinh moi
+      (cau hinh thu doc luc goi). Khang dinh truong quenMatKhau === false.
+      CAP HAI CHIEU tren cung app da khoi dong: dat ca hai bien -> goi lai -> quenMatKhau === true.
+      Chieu am quan trong: neu cau hinh thu bi chup luc nap (env.thu tinh mot lan) thi chieu
+      duong thu hai do voi thong diep ghim "co quenMatKhau khong theo cau hinh thu luc goi".
+      Pha-thu: cho isMailConfigured() tra hang true -> ca tat phai do voi thong diep ghim.
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.qmk_co_tat_man
+    paths:
+      - "apps/app/app/(landing)/sign-in/**"
+      - "apps/app/app/(landing)/quen-mat-khau/**"
+      - "apps/app/lib/quen-mat-khau.ts"
+      - "apps/app/test/quen-mat-khau-man.dom.tsx"
+    expected: |
+      Hai ve, cung mot tep DOM:
+        1 render PasswordSignIn voi quenMatKhau = null -> KHONG co phan tu nao co href
+          "/quen-mat-khau" va khong co chu "Quên mật khẩu?"; render voi chuoi -> co dung MOT
+          lien ket href "/quen-mat-khau" mang dung chuoi do (doi chung duong tren cung ham render).
+        2 ham thuan quyet dinh cua trang /quen-mat-khau: dau vao { quenMatKhau: false } -> tra
+          dich "/sign-in"; { quenMatKhau: true } -> tra "hien"; doc options loi (null) -> "/sign-in".
+          Du ba dau vao, ba assert.
+      Pha-thu: page.tsx bo nhanh chuyen huong (ham tra "hien" vo dieu kien) -> ve 2 do voi
+      thong diep ghim "co tat thi trang phai ve /sign-in".
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.qmk_co_bat_api
+    paths:
+      - "apps/api/src/sso/**"
+      - "packages/auth/src/env.ts"
+      - "apps/api/test/quen-mat-khau-co.spec.ts"
+      - "apps/api/test/auth.e2e.spec.ts"
+    expected: |
+      Goi that sso.signInOptions voi ca hai bien da dat -> quenMatKhau === true, va toan bo
+      than tra loi khop toEqual voi dung bon truong { google, microsoft, quenMatKhau, providers }
+      (ca e2e cu auth.e2e.spec.ts "lets the sign-in page read what it may offer" cung phai
+      xanh voi truong moi). Chieu do: bo truong khoi contract zod -> ca do voi thong diep
+      ghim ten truong.
+
+  - id: E4
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.qmk_duong_an_danh
+    paths:
+      - "apps/app/lib/proxy-paths.ts"
+      - "apps/app/proxy.ts"
+      - "apps/app/test/proxy-an-danh.spec.ts"
+    expected: |
+      Ma tran TOAN PHAN viet truoc cua danh sach an danh: ANONYMOUS sap xep bang dung bon muc
+      ["/dat-mat-khau", "/proto", "/quen-mat-khau", "/t"] (so phan tu = so assert).
+      isAnonymous("/quen-mat-khau") === true. Doi chung duong: "/quen-mat-khau-cu" va
+      "/quen-mat-khauX" === false (tien to giong nhung khac doan).
+      Pha-thu: xoa "/quen-mat-khau" khoi ANONYMOUS -> hai ca do voi thong diep ghim ten duong.
+
+  - id: E5
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.qmk_lien_ket_man
+    paths:
+      - "apps/app/app/(landing)/sign-in/password-sign-in.tsx"
+      - "apps/app/app/(landing)/sign-in/page.tsx"
+      - "apps/app/test/quen-mat-khau-man.dom.tsx"
+    expected: |
+      Render PasswordSignIn voi quenMatKhau = "Quên mật khẩu?": lien ket nam SAU o mat khau
+      trong thu tu tai lieu (compareDocumentPosition), href dung "/quen-mat-khau", va la phan
+      tu co the tab toi. Doi chung am cua E2 ve 1 dung chung fixture.
+
+  - id: E6
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.qmk_cau_hinh_nua
+    paths:
+      - "packages/auth/src/env.ts"
+      - "packages/auth/test/quen-mat-khau-cau-hinh.spec.ts"
+    expected: |
+      Ba tien trinh con (Bun.spawn) nap packages/auth/src/env.ts voi: chi RESEND_API_KEY;
+      chi MAIL_FROM; ca hai. Hai ca dau: ma thoat khac 0 VA stderr chua ca hai chuoi
+      "RESEND_API_KEY" va "MAIL_FROM". Ca thu ba: ma 0 (doi chung duong cung khuon spawn,
+      de phan biet "loi dung cho" voi "tien trinh con khong chay duoc").
+
+  - id: E7
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.qmk_cung_cau_tra_loi
+    paths:
+      - "packages/auth/src/**"
+      - "packages/auth/test/quen-mat-khau.integration.spec.ts"
+    expected: |
+      Goi THAT auth.handler(new Request(".../request-password-reset")) — di qua rate limiter,
+      origin check va runInBackgroundOrAwait that, khong qua auth.api. fetch toi Resend bi
+      thay tam bang spyOn (khoi phuc afterEach), KHONG dung mock.module.
+      Bon dia chi gieo san: co tai khoan con quyen; khong co tai khoan; co tai khoan da bi thu
+      quyen (hang danh sach cancelled, khong con member); co tai khoan chi co hang account
+      google. Moi ca mot IP x-forwarded-for rieng de khong dung gioi han tan suat.
+      Khang dinh: bon ma trang thai bang nhau VA bon than tra loi (chuoi thuan, text()) bang
+      nhau tung byte — ma tran bon phan tu, bon assert so voi ca dau.
+      Pha-thu: cho sendResetPassword nem loi voi nguoi da bi thu quyen truoc khi tra ve (thay
+      vi im lang bo qua) -> than hoac ma lech -> ca do voi thong diep ghim loai dia chi.
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.qmk_khong_cho_thu
+    paths:
+      - "packages/auth/src/**"
+      - "packages/auth/package.json"
+      - "packages/auth/test/quen-mat-khau.integration.spec.ts"
+    expected: |
+      fetch toi api.resend.com bi thay tam bang ham tre 1500 ms roi tra { id }.
+      Do N = 5 luot cho dia chi co tai khoan con quyen va N = 5 luot cho dia chi khong co tai
+      khoan, xen ke, qua auth.handler that, moi luot mot IP rieng.
+      Khang dinh QUAN HE, khong khang dinh chuoi co mat:
+        1 thoi gian tung luot co tai khoan < 750 ms (mot nua do tre cua thu)
+        2 |trung vi(co) - trung vi(khong)| < 250 ms
+        3 sau khi cho toi 3000 ms: so lan fetch toi Resend dung = 5 (thu van di, chi di sau)
+      CHIEU DO tren cung fixture, day la ly do eval ton tai: bo advanced.backgroundTasks khoi
+      auth.ts -> dong 1 do voi thong diep ghim "tra loi cho thu gui xong". Chieu do chay THAT
+      trong luot pha-thu cua task, ghi lenh va dong do vao ban ke hoach.
+      CA NOI-NEN (sau gap-probe F1, cung tep): dat globalThis[Symbol.for("@vercel/request-context")]
+      thanh mot context co waitUntil la spy bat promise (xoa lai trong finally). Goi auth.handler
+      that cho /request-password-reset voi dia chi co tai khoan. Khang dinh QUAN HE:
+        a waitUntil duoc goi dung mot lan trong luot
+        b truoc khi await promise da bat: so lan fetch toi Resend chua tang (thu tre 1500 ms)
+        c sau khi await CHINH promise da bat: so lan fetch toi Resend tang dung 1
+      Chieu do: thay handler bang (p) => void p -> dong a do voi thong diep ghim
+      "thu khong nam trong waitUntil".
+
+  - id: E9
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.qmk_thu_dung_nguoi
+    paths:
+      - "packages/auth/src/**"
+      - "packages/auth/test/quen-mat-khau.integration.spec.ts"
+    expected: |
+      KHEP VONG GHI-DOC. Xin cho dia chi co tai khoan con quyen, cho nen xong, roi:
+        1 dung MOT lan goi fetch toi Resend, than JSON co to = [dia chi do]
+        2 than thu chua mot lien ket bat dau bang APP_URL + "/dat-mat-khau/"; chia rut tu lien
+          ket ay tim thay trong bang verification voi identifier "reset-password:<chia>" va
+          value = id cua chinh nguoi do — doc lai tu DB
+        3 than thu chua so phut = PASSWORD.tokenTtlSeconds / 60, doc tu hang so, khong viet tay
+      Lap lai cho tai khoan chi co Google -> cung ba dong.
+      Doi chung am cung fixture: dia chi khong co tai khoan va dia chi da thu quyen -> so lan
+      fetch toi Resend = 0 sau khi cho nen.
+      Pha-thu: viet cung "60" thay vi suy tu hang so, doi PASSWORD.tokenTtlSeconds trong ban
+      sao -> dong 3 do.
+
+  - id: E10
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.qmk_mot_lan
+    paths:
+      - "packages/auth/src/**"
+      - "packages/auth/test/quen-mat-khau.integration.spec.ts"
+    expected: |
+      Xin HAI lien ket cho cung mot nguoi qua duong thu (bat chia tu hai than thu).
+      Dat mat khau bang chia thu nhat -> thanh cong. Roi:
+        1 dat lai bang CHINH chia thu nhat -> bi tu choi INVALID_TOKEN
+        2 dat bang chia thu hai -> bi tu choi INVALID_TOKEN
+        3 dang nhap bang mat khau vua dat van duoc (mat khau khong doi)
+        4 dem hang verification tien to "reset-password:" cua nguoi do = 0
+      Pha-thu: bo loi goi don chia con treo trong onPasswordReset -> dong 2 va 4 do voi thong
+      diep ghim "chia con treo van dung duoc".
+      CA RESEND-CHET (sau gap-probe F2, cung fixture): fetch toi Resend nem loi mang. Dat mat
+      khau bang chia 1 roi NGAY LAP TUC, KHONG cho nen, dung chia 2 -> INVALID_TOKEN, va so hang
+      "reset-password:" cua nguoi do = 0. Chieu do: doi don chia vao sau thu trong promise nen
+      -> ca nay do voi thong diep ghim "don chia phu thuoc thu".
+
+  - id: E11
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.qmk_het_han
+    paths:
+      - "packages/auth/src/**"
+      - "packages/auth/test/quen-mat-khau.integration.spec.ts"
+    expected: |
+      Xin lien ket qua duong thu, ghi moc t0 truoc khi goi va t1 sau khi goi.
+        1 expiresAt cua hang verification nam trong [t0 + TTL, t1 + TTL] voi TTL =
+          PASSWORD.tokenTtlSeconds * 1000 — doc tu DB
+        2 doi expiresAt cua hang ay ve qua khu 1 giay (update truc tiep) -> dat mat khau bi tu
+          choi INVALID_TOKEN va dang nhap bang mat khau cu van duoc
+      Doi chung duong cung fixture: mot chia khac con han -> dat duoc.
+      Khong dung setSystemTime (dong ho gia song qua tep).
+
+  - id: E12
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.qmk_qua_luot
+    paths:
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/test/quen-mat-khau.integration.spec.ts"
+    expected: |
+      Dong 0 (sau gap-probe F4): doc auth.options.rateLimit -> enabled === true va storage ===
+      "database", khong dat NODE_ENV trong ca. Chieu do: storage "memory" trong ban sao -> dong 0
+      do voi thong diep ghim "bo dem khong chung giua cac instance".
+      Cung mot IP x-forwarded-for, bon lan xin qua auth.handler that voi BON dia chi khac
+      nhau (hai co tai khoan, hai khong). Ba lan dau ma 200; lan thu tu ma 429.
+      So lan fetch toi Resend sau khi cho nen = so dia chi co tai khoan trong BA lan dau (khong
+      co thu cho lan bi chan). Doi chung duong: mot IP khac xin ngay sau -> 200.
+      Pha-thu: xoa customRules cua /request-password-reset -> lan thu tu ra 200 -> do voi
+      thong diep ghim "lan thu tu phai 429".
+
+  - id: E13
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.qmk_form_trang_thai
+    paths:
+      - "apps/app/app/(landing)/quen-mat-khau/**"
+      - "apps/app/test/quen-mat-khau-man.dom.tsx"
+    expected: |
+      Chay chung lenh cua E17; o day chi chiu ve 429: requestPasswordReset (thay qua prop hoac
+      tham so, khong mock.module) tra { error: { status: 429 } } -> form hien chu qua luot lay
+      tu kho chu, KHONG hien man "Kiểm tra hộp thư".
+
+  - id: E14
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.qmk_bao_da_doi
+    paths:
+      - "packages/auth/src/**"
+      - "packages/auth/test/quen-mat-khau.integration.spec.ts"
+    expected: |
+      Dat mat khau bang chia bat tu thu. fetch toi Resend tre 1500 ms.
+        1 thoi gian cua loi goi dat mat khau < 750 ms
+        2 sau khi cho nen: co dung MOT thu moi toi dia chi cua tai khoan voi tieu de thu bao da doi
+      Ca loi: fetch toi Resend nem loi mang -> dat mat khau van thanh cong va dang nhap bang
+      mat khau moi duoc.
+      Pha-thu: await thu bao trong onPasswordReset -> dong 1 do voi thong diep ghim
+      "dat mat khau cho thu bao".
+      CA DUOI-NGUONG (chieu am, cung fixture): dat mat khau bang mot chia khong ton tai va bang
+      chia vua dung o dong 1 -> ca hai INVALID_TOKEN, va so lan fetch toi Resend sau khi cho nen
+      KHONG tang. Doi chung duong la dong 2.
+      CA NOI-NEN (sau gap-probe F1): voi context Vercel gia nhu E8, /reset-password that goi
+      waitUntil dung mot lan, va await promise ay thi thu bao tang dung 1.
+
+  - id: E15
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.qmk_thu_hong
+    paths:
+      - "packages/auth/src/thu.ts"
+      - "packages/auth/src/thu-mat-khau.ts"
+      - "packages/auth/test/quen-mat-khau.integration.spec.ts"
+    expected: |
+      Hai ca hong: Resend tra 422 voi than chua chinh dia chi nguoi nhan; fetch nem loi mang.
+      Moi ca: than va ma tra loi cua request-password-reset bang tung byte voi ca dia chi khong
+      co tai khoan (cung khuon E7). Bat moi dong console.warn/console.error trong luot (spyOn,
+      khoi phuc sau): co it nhat mot dong nhac toi gui thu hong VA ma 422 (ca mot), va KHONG
+      dong nao chua dia chi email nguoi nhan, cung khong chua than tra loi cua Resend.
+      Pha-thu: tra lai viec ghi than loi vao log -> ca 422 do voi thong diep ghim "log mang dia chi".
+
+  - id: E16
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.qmk_goi_nen
+    paths:
+      - "packages/auth/src/chay-nen.ts"
+      - "packages/auth/test/chay-nen.spec.ts"
+    expected: |
+      Don vi cho ham chayNen: khi globalThis[Symbol.for("@vercel/request-context")] tra ve
+      mot context co waitUntil gia -> waitUntil duoc goi dung mot lan voi chinh promise ay;
+      khi khong co context -> khong nem va promise van chay xong (co co dat trong then).
+      Promise bi reject -> chayNen khong lam tien trinh nem unhandled rejection.
+      Ca hai ve tren cung mot ham, chi doi context.
+
+  - id: E17
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.qmk_form_trang_thai
+    paths:
+      - "apps/app/app/(landing)/quen-mat-khau/**"
+      - "apps/app/lib/messages/auth.ts"
+      - "apps/app/test/quen-mat-khau-man.dom.tsx"
+    expected: |
+      Test DOM cho QuenMatKhauForm, moi trang thai mot ca, ham gui duoc tiem qua tham so:
+        dang-gui: ham gui treo -> nut disabled va chu "Đang gửi…"
+        da-gui: ham gui tra { data } -> tieu de "Kiểm tra hộp thư", mo ta chua so phut truyen vao
+          (truyen 45 -> thay "45", khong thay "một giờ"), vung bao quanh co aria-live="polite"
+        loi: ham gui nem loi mang -> Alert voi chu loi tu kho chu, van con o email, gia tri o
+          van la chuoi da go
+        loi-may-chu: tra { error: { status: 500 } } -> nhu ca loi
+        qua-luot: xem E13
+      Ma tran NAM trang thai, nam ca; ca da-gui la doi chung duong cua ca loi tren cung fixture.
+      Pha-thu: khoi phuc hanh vi PR (bo qua loi, luon setDaGui(true)) -> ca loi do voi thong
+      diep ghim "loi van hien man da gui".
+
+  - id: E18
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.test.qmk_chup
+    steps:
+      - "Cap cong: app 3300, api 3301 (cau hinh api-cay-nay / app-cay-nay trong .claude/launch.json). Cong 3300 la tai nguyen chung: chay canh-cay truoc; ma khac 0 thi BLOCKED goi ten tien trinh giu cong, khong giet. API phai khoi dong voi RESEND_API_KEY va MAIL_FROM gia (vd re_test_gia / 'CRM <no-reply@example.test>') de co bat."
+      - "Chay tu goc kho, O TIEN CANH, Bash timeout 600000, dung nguyen van lenh cua config:executors.test.qmk_chup."
+      - "rang/chup.mjs tu chan cay (canhCay qua APP_URL), khong dang nhap, chup vao _acceptance/quen-mat-khau/evidence/ (lenh config dat BANG_CHUNG): E18-dang-nhap-1440.png, E18-dang-nhap-390.png (co lien ket), E18-quen-trong-1440.png, E18-quen-trong-390.png, E18-da-gui-1440.png, E18-loi-1440.png (chan request-password-reset bang page.setRequestInterception -> abort), roi (sau gap-probe F5) xoa hang rateLimit cua khoa /request-password-reset trong DB dev truoc lan gui dau, gui form bon lan voi bon dia chi khac nhau KHONG chan mang va chup E18-qua-luot-1440.png, va doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; 2 = khong do duoc; 1 = co dong SAI."
+      - "Mo sau anh va doi chieu bang mat voi Expected."
+    inputs:
+      - _acceptance/quen-mat-khau/evidence/
+    paths:
+      - "apps/app/app/(landing)/quen-mat-khau/**"
+      - "apps/app/app/(landing)/sign-in/**"
+      - "apps/app/lib/proxy-paths.ts"
+      - "apps/app/lib/messages/auth.ts"
+      - "_acceptance/quen-mat-khau/rang/chup.mjs"
+    expected: |
+      Nguoi chua dang nhap: /sign-in co lien ket "Quên mật khẩu?" ngay duoi o mat khau; bam
+      vao thi URL la /quen-mat-khau (khong bi day ve /sign-in); form mot o mot nut nam trong
+      AuthShell nhu /dat-mat-khau; gui xong thay man "Kiểm tra hộp thư" voi so phut that; bi
+      chan mang thi thay Alert loi va o email con chu; lan gui thu tu toi may chu that (429 that,
+      client better-auth that) hien dung chuoi qua luot lay tu messages/auth.ts va KHONG co
+      "Kiểm tra hộp thư". O 390 khong tran ngang (scrollWidth <=
+      clientWidth, do bang script). Script dem DUNG/SAI tung dong va in KET LUAN.
+
+  - id: E19
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.qmk_san_thiet_ke
+    paths:
+      - "apps/app/app/(landing)/quen-mat-khau/**"
+      - "apps/app/app/(landing)/sign-in/password-sign-in.tsx"
+    expected: |
+      design-gate --mode static tren quen-mat-khau-form.tsx, page.tsx cua /quen-mat-khau va
+      password-sign-in.tsx: ma 0 cho ca ba. Chieu do: them lai Link tu dat className mau cho
+      lien ket quen mat khau trong ban sao -> design-gate phai bao (neu khong bao thi ghi ro
+      thuoc nay khong bat lop do, khong tuyen bo no bat).
+
+  - id: E20
+    criterion: AC-13
+    executor: judgment
+    cmd: judgment
+    question: |
+      Doc chu moi trong kho chuoi (vi va en): lien ket o man dang nhap, trang xin lien ket voi
+      nam trang thai (trong, dang gui, da gui, loi, qua luot), va hai la thu (xin dat lai, bao
+      da doi). Mot nhan vien kinh doanh nguoi Viet doc lan dau, khong ai giai thich: ho co biet
+      phai lam gi tiep o moi man khong? Co cau nao NGAM noi dia chi vua go co tai khoan hay
+      khong (vd "chung toi da gui thu toi ban")? Cau loi co noi cach thu lai khong, va cau qua
+      luot co khac cau loi mang khong? Co thuat ngu ky thuat tu duc nao ma luat nhan cua
+      CONTEXT.md cam khong?
+    inputs:
+      - apps/app/lib/messages/auth.ts
+      - packages/auth/src/thu-mat-khau.ts
+      - CONTEXT.md
+    expected: |
+      PASS khi ca bon cau tra loi deu tot cho nguoi dung: biet lam gi tiep; khong cau nao lo
+      tai khoan; loi va qua luot noi hai viec khac nhau va co duong thu lai; khong thuat ngu
+      tu duc. Mot cau lo tai khoan la FAIL, khong phai UNCERTAIN.
+
+  - id: E21
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.test.qmk_chup_tat
+    steps:
+      - "Them sau gap-probe F3. Cung cong voi E18 (app 3300, api 3301, canh-cay truoc). Khoi dong LAI api 3301 KHONG co RESEND_API_KEY va MAIL_FROM (xoa khoi moi truong cua tien trinh, ke ca .env neu co khai), giu nguyen app 3300."
+      - "Chay tu goc kho, O TIEN CANH, dung nguyen van lenh cua config:executors.test.qmk_chup_tat (rang/chup.mjs --ca tat)."
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; 2 = khong do duoc; 1 = co dong SAI. Xong thi khoi dong lai api voi cau hinh cu."
+    inputs:
+      - _acceptance/quen-mat-khau/evidence/
+    paths:
+      - "apps/app/app/(landing)/quen-mat-khau/**"
+      - "apps/app/app/(landing)/sign-in/**"
+      - "apps/app/lib/quen-mat-khau.ts"
+      - "apps/api/src/sso/**"
+      - "packages/auth/src/env.ts"
+      - "_acceptance/quen-mat-khau/rang/chup.mjs"
+    expected: |
+      Di het chuoi that: api khong co hai bien -> sso.signInOptions -> sign-in/page.tsx va
+      quen-mat-khau/page.tsx. Script khang dinh, moi dong DUNG/SAI: o /sign-in so phan tu
+      a[href="/quen-mat-khau"] = 0; mo thang /quen-mat-khau thi URL cuoi la /sign-in. Chup
+      E21-dang-nhap-tat-1440.png. Ghep cap voi luot bat cua E18 (1 lien ket, URL giu
+      /quen-mat-khau) — hai luot cung script, chi doi cau hinh api.
