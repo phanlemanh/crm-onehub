@@ -16,7 +16,7 @@ export default async function IntakeConnectionPage(
 	return (
 		<KhungKetNoi
 			params={props.params}
-			con="intake"
+			kind="intake"
 			locale={locale}
 			tieuDe={t.tiepNhan.tieuDe}
 			laTenRieng={false}

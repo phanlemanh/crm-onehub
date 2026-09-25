@@ -24,7 +24,7 @@ export default async function ZaloConnectionPage(
 	return (
 		<KhungKetNoi
 			params={props.params}
-			con="zalo"
+			kind="zalo"
 			locale={locale}
 			tieuDe={ketNoiMessages(locale).ten.zalo}
 			laTenRieng

@@ -19,7 +19,7 @@ export async function OAuthConnectionPage(props: OAuthConnectionPageProps) {
 	return (
 		<KhungKetNoi
 			params={props.params}
-			con={props.provider}
+			kind={props.provider}
 			locale={locale}
 			tieuDe={ketNoiMessages(locale).ten[props.provider]}
 			laTenRieng

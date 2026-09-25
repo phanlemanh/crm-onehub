@@ -12,52 +12,61 @@ import {
 } from "@/components/page-shell";
 import { duongCaiDat } from "@/lib/cai-dat-breadcrumb";
 
-export type TrangConKetNoi =
-	| "google"
-	| "microsoft"
-	| "slack"
-	| "slack/people"
-	| "zalo"
-	| "intake";
+const DUONG_CON = {
+	google: "google",
+	microsoft: "microsoft",
+	slack: "slack",
+	slackNguoi: "slack/people",
+	zalo: "zalo",
+	intake: "intake",
+} as const;
+
+export type TrangConKetNoi = keyof typeof DUONG_CON;
 
 const GIU_CHO = "_";
 
 async function DuongDanThat({
 	params,
-	con,
+	kind,
 	locale,
 }: {
 	params: Promise<{ slug: string }>;
-	con: TrangConKetNoi;
+	kind: TrangConKetNoi;
 	locale: Locale;
 }) {
 	const { slug } = await params;
-	const cap = duongCaiDat(`/${slug}/settings/connections/${con}`, locale);
+	const cap = duongCaiDat(
+		`/${slug}/settings/connections/${DUONG_CON[kind]}`,
+		locale,
+	);
 
 	return cap ? <CaiDatBreadcrumb cap={cap} /> : null;
 }
 
 function DuongDanKetNoi({
 	params,
-	con,
+	kind,
 	locale,
 }: {
 	params: Promise<{ slug: string }>;
-	con: TrangConKetNoi;
+	kind: TrangConKetNoi;
 	locale: Locale;
 }) {
-	const cho = duongCaiDat(`/${GIU_CHO}/settings/connections/${con}`, locale);
+	const cho = duongCaiDat(
+		`/${GIU_CHO}/settings/connections/${DUONG_CON[kind]}`,
+		locale,
+	);
 
 	return (
 		<Suspense fallback={cho ? <CaiDatBreadcrumb cap={cho} dangTai /> : null}>
-			<DuongDanThat params={params} con={con} locale={locale} />
+			<DuongDanThat params={params} kind={kind} locale={locale} />
 		</Suspense>
 	);
 }
 
 export function KhungKetNoi({
 	params,
-	con,
+	kind,
 	locale,
 	tieuDe,
 	laTenRieng,
@@ -66,7 +75,7 @@ export function KhungKetNoi({
 	children,
 }: {
 	params: Promise<{ slug: string }>;
-	con: TrangConKetNoi;
+	kind: TrangConKetNoi;
 	locale: Locale;
 	tieuDe: string;
 	laTenRieng: boolean;
@@ -75,10 +84,10 @@ export function KhungKetNoi({
 	children: ReactNode;
 }) {
 	return (
-		<PageShell width={con === "intake" ? "narrow" : "page"}>
+		<PageShell width={kind === "intake" ? "narrow" : "page"}>
 			<PageShellHeader
 				breadcrumb={
-					<DuongDanKetNoi params={params} con={con} locale={locale} />
+					<DuongDanKetNoi params={params} kind={kind} locale={locale} />
 				}
 			>
 				<PageShellHeading>

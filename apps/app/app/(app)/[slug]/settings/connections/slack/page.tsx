@@ -60,7 +60,7 @@ export default async function SlackConnectionPage(
 			fallback={
 				<KhungKetNoi
 					params={props.params}
-					con="slack"
+					kind="slack"
 					locale={locale}
 					tieuDe={ketNoiMessages(locale).ten.slack}
 					laTenRieng
@@ -97,7 +97,7 @@ async function SlackConnectionPageContent({
 	) : (
 		<KhungKetNoi
 			params={params}
-			con="slack"
+			kind="slack"
 			locale={locale}
 			tieuDe={t.ten.slack}
 			laTenRieng
@@ -197,7 +197,7 @@ function ConnectedSlack({
 	return (
 		<KhungKetNoi
 			params={params}
-			con="slack"
+			kind="slack"
 			locale={locale}
 			tieuDe={t.ten.slack}
 			laTenRieng

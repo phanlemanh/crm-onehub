@@ -19,7 +19,7 @@ export default async function SlackPeoplePage(props: SlackPeoplePageProps) {
 	return (
 		<KhungKetNoi
 			params={props.params}
-			con="slack/people"
+			kind="slackNguoi"
 			locale={locale}
 			tieuDe={t.nguoi.nhan}
 			laTenRieng={false}

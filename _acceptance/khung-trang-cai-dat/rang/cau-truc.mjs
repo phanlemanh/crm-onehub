@@ -130,7 +130,7 @@ function beRongCua(tep, chon) {
 		if (ten === "PageShell")
 			thay.add(chuoiCua(thuocTinh(n, "width")) ?? "khong-truyen");
 		if (ten === "KhungKetNoi")
-			thay.add(chon(chuoiCua(thuocTinh(n, "con")) ?? "?"));
+			thay.add(chon(chuoiCua(thuocTinh(n, "kind")) ?? "?"));
 		if (ten === "OAuthConnectionPage")
 			thay.add(chon(chuoiCua(thuocTinh(n, "provider")) ?? "?"));
 	});
