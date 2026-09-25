@@ -5,7 +5,7 @@ slug: okr-soat-anh-luot-3
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -69,3 +69,15 @@ tĩnh (AC-8), ảnh (AC-9), dọn (AC-10).
 - Chiều đỏ ở S3 trên giao diện cũ, cây này, cổng 3630/3631: `do-man.mjs` 22 DUNG, 27 SAI, mã 1 — chín cột nhập tràn vỏ 1365px, cột «Mục tiêu» một dòng, không hàng nào có vạch hay chấm trạng thái, thẻ «Chương trình OKR» lệch 84px ở 390 cùng năm thẻ sau nó (kể cả khi bấm thẻ), ô chọn «Quý 3/2026Quý», mục «Năm 2026Năm», gợi ý «Năm 2027» / «Quý 1/2027»; ảnh ở `evidence/truoc/`. Soi mã `dong-ho-page` và `goi-y-khong-cung` SAI.
 - Phá-thử ở S3: `NavStrip` bỏ điều kiện «cùng thẻ» → đỏ «nguoi tu cuon bi keo ve»; bỏ nhánh cuộn → đỏ «the dang mo van ngoai khung»; chỉ canh lúc dựng → đỏ «doi the ngoai khung khong canh»; soi mã trên bản sao — `new Date()` trong sheet → SAI, `className="text-destructive"` trên `TableCell` → SAI; sân thiết kế — `bg-red-500 text-gray-400` → design-gate mã 2 (`gray-on-color`); bàn đo — `OSA_PHA_SAU_GIEO=1` → mã 2, ba dòng dọn DUNG; `kill -TERM` sau gieo → mã 143, DB 0 chu kỳ; `kill -9` sau gieo → để lại 3 chu kỳ và sổ gieo, lượt kế in «don tan du 3 chu ky» rồi 49 DUNG / 0 SAI.
 - Chiều xanh ở S3 tại `9371249c`: `do-man.mjs` 49/0; `man-okr.mjs` đã ký 197 khẳng định / 0 hỏng; ba thước không trình duyệt của `khung-trang-cai-dat` đạt; năm lệnh ở gốc mã 0 (Node 24).
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-09-26 (Manh Phan), từ mục ngoài hợp đồng của S4 round 2:
+
+- Ngoài-1 và Ngoài-7: phần gợi ý tên chu kỳ tự giữ cách tính «hôm nay giờ Việt Nam» (`homNayVn`, `OKR_CHU_KY.muiGio`) thay vì dùng `ngayVN` có sẵn ở `@crm/db/onboarding-nhac` mà API OKR đang dùng; đổi múi giờ ở một chỗ mà quên chỗ kia thì gợi ý tên có thể lệch ngày.
+- Ngoài-2: hộp cỡ `table` mất lề hai bên khi cửa sổ rộng khoảng 640–1152px — hộp nhập bảng tính chạm sát hai mép màn ở các khổ trung bình.
+- Ngoài-3 và Ngoài-10: lượt đo E12 chỉ in «design-gate mã 0» mà không chạy đối chứng `--pha` trong cùng lượt; cổng thiết kế hỏng âm thầm thì E12 vẫn đạt.
+- Ngoài-4 và Ngoài-13: dòng đếm tệp của `soi-ma.mjs` và `san-thiet-ke.mjs` tự so với chính danh sách vừa đo, nên bộ lọc tệp bỏ sót một tệp giao diện thì không dòng nào báo.
+- Ngoài-5 và Ngoài-12: ma trận mã của `do-man.mjs` tự suy từ nguồn cột và mục Cài đặt, không ghim trước con số 9 cột và 11 mục; một cột hay một mục biến mất ở cả hai nơi thì lượt đo vẫn đạt.
+- Ngoài-6 và Ngoài-9: `dong-ho-page` chỉ soi trang có gọi hai hàm tính ngày, không soi giá trị đó được truyền tới đúng ô gợi ý.
+- Ngoài-11: đối chứng âm `pha-lop` chạy đường tắt (`OSA_TEP`) không đi qua bộ phân loại theo dòng đổi mà lượt đo thật dùng.
+
+Chấp nhận, không sửa (Cổng Bằng chứng 2026-09-26): Ngoài-8 — tên mục tiêu dài của lô thử có 119 ký tự thay vì ≥ 120 như bối cảnh ghi; kết quả đo không đổi.
