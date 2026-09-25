@@ -26,7 +26,7 @@ Cả hai khối theo khuôn section của kho, như `settings/tracking/allowed-d
 1. **Nút lên đầu trang.** «Cho phép một địa chỉ» vào `PageShellActions`. `page.tsx` dựng đầu
    trang bên trong vùng đã hydrate — cùng khuôn với `settings/organization/page.tsx` (fallback
    là đầu trang không nút + `PageShellLoading`). Nút là component client mới `cho-phep-dia-chi.tsx`
-   giữ `AllowDialog` và mutation `allowEmail`; xong thì làm mới truy vấn `workspace.allowances`.
+   giữ `AllowDialog` và mutation `allowEmail`; xong thì làm mới qua `useCrmCache().workspace()` — mục `workspace` của `lib/trpc/cache.ts` phủ cả `workspace.allowances` (luật Freshness của `docs/api.md`, nâng phạm vi ở Cổng Bằng chứng 25/09).
 2. **Khối trên** giữ nguyên `DataTable` (có tìm, lọc, phân trang), bọc trong `Card` + `CardHeader`
    với tiêu đề «Đã vào · N».
 3. **Khối dưới** thành `CardTable` (có `min-w-[48rem]`, cuộn ngang trong vỏ), tiêu đề «Được phép

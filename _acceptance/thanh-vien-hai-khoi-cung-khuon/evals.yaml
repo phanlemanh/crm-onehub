@@ -333,3 +333,27 @@ evals:
       vào · M»". Doi chung duong: cung hop, dia chi moi o E3 thi hop dong.
       CHIEU DO: ban sao o S3 dong hop trong onSettled cua mutation -> "SAI 1440 loi: hop van mo
       (false)", ma 1.
+
+  - id: E19
+    criterion: AC-17
+    executor: script
+    cmd: config:executors.script.tvhk_lam_moi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "apps/app/lib/trpc/cache.ts"
+      - "_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/lam-moi.mjs"
+    expected: |
+      Soi cay cu phap TypeScript: (a) trong apps/app/lib/trpc/cache.ts, loi goi run(...) cua muc
+      workspace co trpc.workspace.allowances.queryKey() trong mang dau; (b) moi tep .tsx cua
+      settings/members: 0 loi goi thuoc tinh ten invalidateQueries hoac refetchQueries, 0 loi
+      goi .queryKey(); (c) allowances-table.tsx va cho-phep-dia-chi.tsx: 0 loi goi .refetch(),
+      moi tep co useCrmCache() va it nhat mot loi goi .workspace(. DOI CHUNG AM CHAY TRONG CUNG
+      LENH: mot doan ma mau viet trong tep thuoc (queryClient.invalidateQueries({ queryKey:
+      trpc.x.queryKey() }) va list.refetch()) di qua CHINH bo do va phai bi bat du 3 vi pham —
+      bat thieu thi ma 2 "thuoc hong". Ket: "N DUNG, 0 SAI", exit 0; vi pham in "SAI <tep>:<dong>
+      <loi goi>".
+      CHIEU DO (ma hien tai, truoc sua): "SAI cho-phep-dia-chi.tsx:<dong> invalidateQueries",
+      "SAI ... queryKey", "SAI allowances-table.tsx:<dong> refetch", "SAI cache.ts: muc workspace
+      thieu workspace.allowances", "SAI cho-phep-dia-chi.tsx khong goi useCrmCache", exit 1.
+      Hanh vi tren man thuoc E3 (hang moi hien sau cho phep) va E6 (hang mat sau khi rut) chay
+      lai o round 3 vi paths cua chung cham members/**.

@@ -5,11 +5,11 @@ slug: thanh-vien-hai-khoi-cung-khuon
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: approved
 approved_by:
 approved_at:
 veto_state: mo
-veto_opened_at: 2026-09-25T11:58:42Z
+veto_opened_at: 2026-09-25T14:25:46Z
 design_doc: docs/superpowers/specs/2026-09-25-thanh-vien-hai-khoi-cung-khuon-design.md
 ---
 
@@ -45,6 +45,7 @@ do bàn đo gieo thêm, quản trị `ada@trycomp.ai`, tiếng Việt. «Vỏ b�
 - AC-14: Given ảnh chụp thật của lượt đo, When người xem mở ảnh đầu trang và ảnh chỗ nối hai khối ở mỗi khổ, ảnh menu «…» đang mở và ảnh của người không có quyền, Then nhìn thấy hai khối cùng một kiểu thẻ — tiêu đề có số đếm, vỏ bảng viền bo, tiêu đề cột nền xám — nút «Cho phép một địa chỉ» ở đầu trang, và «Rút» chỉ nằm trong menu.
 - AC-15 (cross-layer): Given hộp «Cho phép một địa chỉ» mở từ đầu trang, When quản trị cho phép một địa chỉ đã có trong danh sách chờ, Then hộp vẫn mở, thông điệp lỗi của API nằm trong hộp, cơ sở dữ liệu không thêm lời cho phép nào, và tiêu đề khối dưới giữ nguyên số đếm.
 - AC-16: Given các tệp của trang Thành viên sau vòng này, When soi mã, Then không component `@crm/ui` nào ở chỗ gọi mang lớp đổi viền, góc, nền hay bóng, các component khung (`Card`, `CardHeader`, `CardTitle`, `CardDescription`, `CardTable`, `DataTable`) không nhận `className`, và chuỗi lớp của `CardTable` trong `packages/ui` giữ nguyên.
+- AC-17: Given các thao tác đổi danh sách «Được phép vào» — cho phép một địa chỉ, rút, phát liên kết — When thao tác thành công, Then danh sách làm mới qua lối làm mới chung của ứng dụng (`useCrmCache().workspace()`, mà mục `workspace` trong `apps/app/lib/trpc/cache.ts` phủ cả `workspace.allowances`); không tệp nào của trang Thành viên gọi `invalidateQueries`/`refetchQueries` hay liệt `queryKey()` tại chỗ gọi, và khối «Được phép vào» không tự `refetch()`; trên màn thật hàng mới vẫn hiện sau khi cho phép và hàng vẫn biến mất sau khi rút.
 
 ## Coverage
 
@@ -56,7 +57,7 @@ Quét bằng morphological-scan (preset test-matrix), bốn trục:
 - Trục vai người xem: quản trị (chủ sở hữu, quản trị) | thành viên thường [thước CE: `canManageMembers` trong `apps/api/src/workspace/workspace.service.ts` — SUY-TỪ-REPO]
 - Cắt ngang mọi ô Core: số đếm không đổi theo bộ lọc · không tràn ngang · thao tác phá huỷ qua hỏi lại · dữ liệu thử được dọn · đối chiếu ngành: GitHub Organization › People (lời mời chờ tách khỏi thành viên, nút mời ở đầu trang) và Linear Settings › Members (nút «Invite» ở đầu trang) [NGÀNH: GitHub, Linear].
 
-Core: có hàng × hai khối × ba khổ (AC-1, AC-2, AC-5) · đầu trang × 1440 (AC-3, đường lỗi AC-15) · không đè lớp (AC-16) · tiêu đề và đếm (AC-4) · hành động hàng (AC-6, AC-7) · đang tải (AC-8) · rỗng (AC-9) · thành viên thường (AC-10) · từ điển (AC-11) · không hồi quy (AC-12) · dọn (AC-13) · ảnh (AC-14).
+Core: có hàng × hai khối × ba khổ (AC-1, AC-2, AC-5) · đầu trang × 1440 (AC-3, đường lỗi AC-15) · không đè lớp (AC-16) · làm mới qua lối chung (AC-17) · tiêu đề và đếm (AC-4) · hành động hàng (AC-6, AC-7) · đang tải (AC-8) · rỗng (AC-9) · thành viên thường (AC-10) · từ điển (AC-11) · không hồi quy (AC-12) · dọn (AC-13) · ảnh (AC-14).
 
 Later: lỗi khi tải «Được phép vào» — `Empty` có nút thử lại (đợt 4) · thành viên thường thấy khối ở dạng khoá (đợt 4) · khung xương của khối «Đã vào» (do `DataTable` lo, chưa đổi).
 
@@ -82,3 +83,4 @@ Never: gộp hai khối thành một `DataTable` có tab — hai danh sách là 
 - Chiều đỏ đã chạy ở S3 trên giao diện cũ, cây này, cổng 3500/3501: `do-khoi.mjs` 16 DUNG, 30 SAI, mã 1 (vỏ dưới không viền, chữ 14/12px, cột đầu lệch 17px, tràn ngang 98px ở 375, nút đáy 991px, 20 nút «Rút» hiện sẵn, không tiêu đề số đếm); test DOM đỏ 4/5 (ca đối chứng xanh); `tu-dien.mjs` 4 DUNG, 7 SAI.
 - Phá-thử sau sửa (25/09): vỏ `CardTable` `overflow-x-hidden` → SAI con lăn ngang; đóng hộp trong `onSettled` → SAI «hộp vẫn mở» (E18); bỏ `section` khối dưới → `ttv_do_bang` và `do-khoi` mã 2; `TVHK_BO_KHO=768` → đúng 4 dòng «SAI thiếu»; `TVHK_PHA_SAU_GIEO=1` → mã 2, DB 0 hàng tiền tố; `kill -9` sau gieo → 15 hàng nằm lại, lượt kế «xoá 15 tàn dư» và 46/0; soi mã trên bản sao — `className` trên `CardTable`, `bg-muted` qua template, đổi chuỗi lớp `CardTable` → mỗi cái mã 1.
 - Sửa ở S3 (xem sổ): dựng đầu trang trong vùng hydrate như trang Tổ chức làm bản stream ẩn của React chứa `page-shell-content`, và thước đã ký `ttv_do_bang` đo trúng bản ẩn (7 SAI). Ranh `Suspense` trả về trong `PageShellContent`; nút đầu trang có ranh riêng. `do-khoi.mjs` cũng chờ tới khi không còn `[hidden]` chứa bảng.
+- Cổng Bằng chứng 25/09 (chủ kho): Ngoài-1 của round 1–2 — làm mới danh sách bằng query key liệt tại chỗ gọi, lệch luật Freshness của `docs/api.md` — nâng phạm vi sửa ngay thành AC-17; chấm lại ở round 3 (xem sổ).

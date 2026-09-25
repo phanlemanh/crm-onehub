@@ -941,6 +941,7 @@ executors:
     tvhk_do_khoi: 'APP_URL=${APP_URL:-http://localhost:3500} API_URL=${API_URL:-http://localhost:3501} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thanh-vien-hai-khoi-cung-khuon/rang/do-khoi.mjs"'
     tvhk_tu_dien: "bun _acceptance/thanh-vien-hai-khoi-cung-khuon/rang/tu-dien.mjs"
     tvhk_soi_ma: "bun _acceptance/thanh-vien-hai-khoi-cung-khuon/rang/soi-ma.mjs"
+    tvhk_lam_moi: "bun _acceptance/thanh-vien-hai-khoi-cung-khuon/rang/lam-moi.mjs"
     tvhk_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/settings/members/page.tsx" "apps/app/app/(app)/[slug]/settings/members/members-table.tsx" "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx" "apps/app/app/(app)/[slug]/settings/members/cho-phep-dia-chi.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
