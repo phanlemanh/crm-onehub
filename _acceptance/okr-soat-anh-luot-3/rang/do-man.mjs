@@ -188,20 +188,20 @@ const phienBanSan =
 const so = { nguoi: [EMAIL], chuKy: [], phienBan: phienBanSan };
 ghiSoGieo(so);
 
-let daDon = false;
-async function donDep() {
-	if (daDon) return;
-	daDon = true;
-	await donTheoSo(so);
-	rmSync(SO_GIEO, { force: true });
+let huaDon = null;
+function donDep() {
+	huaDon ??= donTheoSo(so).then(() => rmSync(SO_GIEO, { force: true }));
+	return huaDon;
 }
 
 let trinhDuyet = null;
+let maTinHieu = null;
 for (const [tinHieu, maThoat] of [
 	["SIGTERM", 143],
 	["SIGINT", 130],
 ]) {
 	process.on(tinHieu, async () => {
+		maTinHieu = maThoat;
 		console.log(`GHI CHU nhan ${tinHieu} — don roi thoat ${maThoat}`);
 		await trinhDuyet?.close().catch(() => {});
 		await donDep().catch((e) => console.log(`don dep hong: ${e.message}`));
@@ -813,6 +813,8 @@ try {
 	await trinhDuyet?.close().catch(() => {});
 	await donDep().catch((e) => console.log(`don dep hong: ${e.message}`));
 }
+
+if (maTinHieu !== null) process.exit(maTinHieu);
 
 const conChuKy = await db.okrCycle.count();
 ghi("don-chu-ky", conChuKy === 0, `${conChuKy} chu ky OKR`);
