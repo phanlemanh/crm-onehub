@@ -97,6 +97,14 @@ _Avoid_: cá nhân môi giới, liên hệ, contact
 Vì sao: "cá nhân môi giới" khoá vào giai đoạn đầu; hai từ còn lại không nói được
 người này là ai trong mạng lưới.
 
+**Không gian làm việc**: bản CRM của OneHub — mọi thành viên, dữ liệu và cài đặt
+dùng chung. Là tên nhóm đầu của thanh bên Cài đặt; cài đặt trong đó áp cho mọi
+người, còn cài đặt của riêng một người (nhắc buổi sáng) nằm ở menu người dùng.
+Chốt 2026-09-25.
+_Avoid_: công ty (khi ý là OneHub)
+Vì sao: «công ty» đã là doanh nghiệp trong mạng lưới; «Cài đặt công ty» đọc ra
+cài đặt của một đối tác.
+
 **Thỏa thuận hợp tác**: một quan hệ hợp tác với một công ty hoặc một cá nhân
 trong mạng lưới. Trên màn hình đang hiện dưới `Deals`. Chốt 2026-09-01.
 _Avoid_: cơ hội, deal bán hàng, giao dịch
