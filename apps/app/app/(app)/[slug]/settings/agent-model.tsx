@@ -81,6 +81,8 @@ export function AgentModel() {
 	const cache = useCrmCache();
 	const [open, setOpen] = useState(false);
 
+	const workspace = useQuery(trpc.workspace.get.queryOptions());
+	const coQuyen = workspace.data?.canManageSettings ?? false;
 	const settings = useQuery(trpc.settings.agentModel.queryOptions());
 	const catalog = useQuery(trpc.settings.modelCatalog.queryOptions());
 
@@ -130,7 +132,9 @@ export function AgentModel() {
 							role="combobox"
 							aria-expanded={open}
 							aria-label={t.model.nhan}
-							disabled={save.isPending || catalog.isPending || unavailable}
+							disabled={
+								!coQuyen || save.isPending || catalog.isPending || unavailable
+							}
 						>
 							{currentLabel}
 							<Icon icon={ChevronDown} data-icon="inline-end" />

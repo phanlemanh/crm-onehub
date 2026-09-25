@@ -9,7 +9,7 @@ import {
 } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	savedViewCreateInput,
@@ -23,7 +23,7 @@ import {
 import { SavedViewsService } from "./saved-views.service";
 
 @Router({ alias: "savedViews" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViDoiTacMiddleware)
 export class SavedViewsRouter {
 	constructor(
 		@Inject(SavedViewsService) private readonly savedViews: SavedViewsService,

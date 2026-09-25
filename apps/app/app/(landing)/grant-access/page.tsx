@@ -1,10 +1,10 @@
-import { mailboxGrantsNeeded } from "@crm/auth";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { AuthHeading, AuthShell } from "@/components/auth-shell";
+import { hopThuCanCap } from "@/lib/hop-thu";
 import { getLocale } from "@/lib/locale/server";
 import { authMessages } from "@/lib/messages/auth";
-import { requireSession, signInAccounts } from "@/lib/session";
+import { requireSession } from "@/lib/session";
 import { GrantAccess } from "./grant-access";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -16,7 +16,7 @@ export const instant = false;
 export default async function GrantAccessPage() {
 	const { user } = await requireSession();
 
-	const providers = mailboxGrantsNeeded(await signInAccounts(user.id));
+	const providers = await hopThuCanCap(user.id);
 
 	if (providers.length === 0) {
 		redirect("/");

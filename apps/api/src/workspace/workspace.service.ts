@@ -3,6 +3,7 @@ import {
 	appUrl,
 	canChangeRole,
 	canIssuePasswordLink,
+	canManageSettings,
 	canRenameWorkspace,
 	decideSignInFromDb,
 	ducChia,
@@ -121,6 +122,7 @@ export class WorkspaceService {
 			canChangeRoles: canChangeRole(role),
 			canManageMembers: isWorkspaceAdmin(role),
 			canIssuePasswordLink: canIssuePasswordLink(role),
+			canManageSettings: canManageSettings(role),
 		};
 	}
 

@@ -5,6 +5,12 @@ import { formatTrpcError } from "./error-formatter";
 import { AuthMiddleware } from "./middlewares/auth.middleware";
 import { DomainErrorMiddleware } from "./middlewares/domain-error.middleware";
 import { LoggingMiddleware } from "./middlewares/logging.middleware";
+import {
+	PhamViChungMiddleware,
+	PhamViDoiTacMiddleware,
+	PhamViOkrMiddleware,
+	PhamViToChucMiddleware,
+} from "./middlewares/pham-vi-du-lieu.middleware";
 import { SessionOnlyMiddleware } from "./middlewares/session-only.middleware";
 import { SignedInMiddleware } from "./middlewares/signed-in.middleware";
 import { TrpcContext } from "./trpc.context";
@@ -27,9 +33,21 @@ import { TrpcErrorHandler } from "./trpc-error.handler";
 		LoggingMiddleware,
 		DomainErrorMiddleware,
 		AuthMiddleware,
+		PhamViDoiTacMiddleware,
+		PhamViToChucMiddleware,
+		PhamViOkrMiddleware,
+		PhamViChungMiddleware,
 		SessionOnlyMiddleware,
 		SignedInMiddleware,
 	],
-	exports: [AuthMiddleware, SessionOnlyMiddleware, SignedInMiddleware],
+	exports: [
+		AuthMiddleware,
+		PhamViDoiTacMiddleware,
+		PhamViToChucMiddleware,
+		PhamViOkrMiddleware,
+		PhamViChungMiddleware,
+		SessionOnlyMiddleware,
+		SignedInMiddleware,
+	],
 })
 export class TrpcModule {}

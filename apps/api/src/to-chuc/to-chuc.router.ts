@@ -9,7 +9,7 @@ import {
 } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViToChucMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	orgAccessOutput,
@@ -35,7 +35,7 @@ import { ToChucService } from "./to-chuc.service";
 const TAG = ["Organization"];
 
 @Router({ alias: "org" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViToChucMiddleware)
 export class ToChucRouter {
 	constructor(@Inject(ToChucService) private readonly toChuc: ToChucService) {}
 

@@ -97,6 +97,14 @@ _Avoid_: cá nhân môi giới, liên hệ, contact
 Vì sao: "cá nhân môi giới" khoá vào giai đoạn đầu; hai từ còn lại không nói được
 người này là ai trong mạng lưới.
 
+**Không gian làm việc**: bản CRM của OneHub — mọi thành viên, dữ liệu và cài đặt
+dùng chung. Là tên nhóm đầu của thanh bên Cài đặt; cài đặt trong đó áp cho mọi
+người, còn cài đặt của riêng một người (nhắc buổi sáng) nằm ở menu người dùng.
+Chốt 2026-09-25.
+_Avoid_: công ty (khi ý là OneHub)
+Vì sao: «công ty» đã là doanh nghiệp trong mạng lưới; «Cài đặt công ty» đọc ra
+cài đặt của một đối tác.
+
 **Thỏa thuận hợp tác**: một quan hệ hợp tác với một công ty hoặc một cá nhân
 trong mạng lưới. Trên màn hình đang hiện dưới `Deals`. Chốt 2026-09-01.
 _Avoid_: cơ hội, deal bán hàng, giao dịch
@@ -433,3 +441,25 @@ _Avoid_: khách, người xem, viewer, tài khoản hạn chế
 Vì sao: «người xem» gợi xem được mọi thứ mà không sửa — ở đây ngược lại: họ sửa
 OKR của mình mà không xem dữ liệu đối tác. «Khách» là người ngoài OneHub, còn
 người mang vai này là nhân viên. «Tài khoản hạn chế» không nói hạn chế cái gì.
+
+**Phạm vi dữ liệu**: phần của CRM mà một vai được đọc. Có bốn phạm vi: **đối tác**
+(cá nhân, công ty, thoả thuận hợp tác, chiến dịch, kế hoạch 30 ngày, thư và lịch
+đã đồng bộ, hoạt động web, tác nhân và hội thoại), **tổ chức** (cây bộ phận –
+phòng ban), **OKR**, và **chung** (hồ sơ và tên đồng nghiệp, cấu hình, kênh nhắc
+và khoá API của chính mình). Mỗi cụm thủ tục của API khai mình thuộc phạm vi nào;
+cụm chưa khai thì vai «chỉ OKR» không đọc được. Vai «chỉ OKR» đọc OKR, tổ chức và
+chung; ba vai còn lại đọc mọi phạm vi. Chốt 2026-09-24 (lượt 2 lộ trình OKR).
+_Avoid_: nhóm dữ liệu, quyền dữ liệu, module, scope
+Vì sao: «nhóm» đã dành cho người (bộ phận, phòng ban); «quyền» gợi từng thao tác
+đọc/ghi trong khi đây là một ranh trọn phần; «scope» lẫn với quyền OAuth của hộp
+thư ngay trong cùng màn.
+
+**Trợ lý AI**: người nghiên cứu tự động trong tab Agent của khung bản ghi và ở
+khung hội thoại — đọc lịch sử công ty, thoả thuận, tìm trong CRM và nghiên cứu
+đối tác theo yêu cầu của một người dùng đang đăng nhập. Là một phần của phạm vi
+dữ liệu đối tác: vai «chỉ OKR» không gọi được nó. Khác **Tác nhân** (việc tự động
+người dùng dựng ra, chạy theo mốc) và khác bot Zalo (chỉ nhắc và nối). Chốt
+2026-09-24.
+_Avoid_: agent, eve, bot, chatbot
+Vì sao: «agent» và «eve» là tên kỹ thuật trong mã; «bot» đã là bot Zalo; «trợ lý»
+một mình thì lẫn với hai thứ kia — luôn viết đủ «trợ lý AI».

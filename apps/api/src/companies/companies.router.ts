@@ -9,7 +9,7 @@ import {
 } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	companyArchiveResultOutput,
@@ -33,7 +33,7 @@ import {
 import { CompaniesService } from "./companies.service";
 
 @Router({ alias: "companies" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViDoiTacMiddleware)
 export class CompaniesRouter {
 	constructor(
 		@Inject(CompaniesService) private readonly companies: CompaniesService,

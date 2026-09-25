@@ -12,7 +12,7 @@ flowchart TD
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>72 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>8 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>9 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -43,6 +43,7 @@ flowchart TD
 - Kế hoạch hiện ra ở mọi chỗ người đã đứng — tab 30 ngày đầu ở sheet Công ty, mục 30 ngày đầu ở sheet Cá nhân, bước giao cho tôi trong thẻ Tasks, lọc và chia cột theo người được giao, chuyển việc 30 ngày khi một người nghỉ (`moi-phia-deu-thay-ke-hoach`)
 - Đội tiếp thị chạy trọn một chiến dịch tuyển đối tác trong CRM — phân khúc, làm giàu, nhắm, tiếp cận, đo (`tiep-thi-tuyen-doi-tac`)
 - Người quản trị tìm thấy trường tự tạo ở Cài đặt và được gợi ý bộ trường của môi giới Việt (`truong-tu-tao-o-cai-dat`)
+- Vai «chỉ OKR» — người mang vai này đăng nhập được, thấy khu OKR và hồ sơ của chính mình, nhưng không đọc được danh bạ, công ty, thoả thuận, chiến dịch, kế hoạch 30 ngày qua màn, tRPC, cầu REST, khoá API hay trợ lý AI (`vai-chi-okr`)
 - Vào được CRM từ mạng đang chặn Google — đăng nhập bằng email và mật khẩu (`vao-bang-email-va-mat-khau`)
 
 ## Đã giao

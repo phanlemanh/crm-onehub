@@ -9,7 +9,7 @@ import {
 } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import { ConversationSharingService } from "./conversation-sharing.service";
 import {
@@ -37,7 +37,7 @@ import {
 import { ConversationsService } from "./conversations.service";
 
 @Router({ alias: "conversations" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViDoiTacMiddleware)
 export class ConversationsRouter {
 	constructor(
 		@Inject(ConversationsService)

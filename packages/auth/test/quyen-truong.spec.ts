@@ -5,6 +5,7 @@ const MONG_DOI: ReadonlyArray<[WorkspaceRole | null, boolean]> = [
 	["owner", true],
 	["admin", true],
 	["member", false],
+	["okr", false],
 	[null, false],
 ];
 

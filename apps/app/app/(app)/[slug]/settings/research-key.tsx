@@ -35,6 +35,8 @@ export function ResearchKey() {
 	const keyId = useId();
 	const [draft, setDraft] = useState("");
 
+	const workspace = useQuery(trpc.workspace.get.queryOptions());
+	const coQuyen = workspace.data?.canManageSettings ?? false;
 	const key = useQuery(trpc.settings.researchKey.queryOptions());
 
 	const save = useMutation(
@@ -62,7 +64,7 @@ export function ResearchKey() {
 					<Button
 						type="submit"
 						form="research-key"
-						disabled={save.isPending || draft.trim() === ""}
+						disabled={!coQuyen || save.isPending || draft.trim() === ""}
 					>
 						{save.isPending ? <Spinner data-icon="inline-start" /> : null}
 						{configured ? t.nghienCuu.thayKhoa : t.nghienCuu.luuKhoa}
@@ -98,7 +100,7 @@ export function ResearchKey() {
 								autoCapitalize="off"
 								autoCorrect="off"
 								spellCheck={false}
-								disabled={save.isPending}
+								disabled={!coQuyen || save.isPending}
 							/>
 							<FieldDescription>
 								{t.nghienCuu.chuaCo}{" "}

@@ -9,7 +9,7 @@ import {
 } from "nestjs-trpc";
 import type { z } from "zod";
 import type { AuthedTrpcContext } from "../trpc/context.types";
-import { AuthMiddleware } from "../trpc/middlewares/auth.middleware";
+import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
 	microsoftConnectionStatusOutput,
@@ -21,7 +21,7 @@ import { MicrosoftConnectionService } from "./microsoft-connection.service";
 import { MicrosoftSyncService } from "./microsoft-sync.service";
 
 @Router({ alias: "microsoft" })
-@UseMiddlewares(AuthMiddleware)
+@UseMiddlewares(PhamViDoiTacMiddleware)
 export class MicrosoftRouter {
 	constructor(
 		@Inject(MicrosoftConnectionService)
