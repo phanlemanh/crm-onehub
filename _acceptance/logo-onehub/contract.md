@@ -5,7 +5,7 @@ slug: logo-onehub
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-09-25
 design_doc: docs/superpowers/specs/2026-09-25-logo-onehub-design.md
@@ -63,6 +63,13 @@ Core (vào AC): mark trùng gốc (AC-1, 2) · API component (AC-3, 4) · bộ i
 - Ảnh tab trình duyệt thật (thanh tab của Chrome): máy chụp đầu không giao diện không có thanh tab — AC-10 đo bằng byte favicon máy chủ trả về; ảnh tab thật chụp tay đính vào gói Cổng 2.
 
 ## Notes
+
+- Known limit (Ngoài-1, Cổng 2 25/09): Nếu sau này có thêm một tệp icon mới vào bộ nguồn, công cụ kiểm tra tự động có thể không được cập nhật theo và bỏ sót việc kiểm tra tệp đó. (`packages/ui/test/logo-icons.spec.ts`)
+- Known limit (Ngoài-6, Cổng 2 25/09): Bài đo hiện chỉ tìm xem chữ 'square' có xuất hiện trong mã hay không, mà chưa kiểm tra tùy chọn đó có thật sự đang bật hay không. Nếu sau này ai đó vô tình tắt tùy chọn này, ảnh đại diện trợ lý có thể không còn vuông như đã hứa mà hệ thống kiểm tra vẫn báo đạt. (`_acceptance/logo-onehub/rang/o-agent.mjs`)
+- Known limit (Ngoài-7, Cổng 2 25/09): Nếu sau này script sinh icon logo có lỗi kiểu dữ liệu, lỗi đó không bị chặn lại tự động cùng lúc với phần còn lại của mã nguồn, nên có thể lọt sang bản phát hành mà không ai biết trước. (`packages/ui/tsconfig.json`)
+- Known limit (Ngoài-8, Cổng 2 25/09): Người muốn cập nhật lại bộ icon logo sau này sẽ không biết chạy lệnh nào để làm mới, và thông báo lỗi cũng không chỉ ra cách khắc phục, dễ khiến icon cũ và logo mới lệch nhau mà không ai để ý. (`packages/ui/scripts/logo-icons.ts`)
+- Known limit (Ngoài-10, Cổng 2 25/09): Nếu sau này có người đổi tên hoặc di chuyển tệp ra khỏi vùng cấm, công cụ kiểm tra ranh giới có thể không phát hiện và báo an toàn nhầm, để lọt một thay đổi lẽ ra không được phép mà không ai hay biết ngay lúc đó. (`_acceptance/logo-onehub/rang/ranh-gioi.mjs`)
+- Known limit (Ngoài-12, Cổng 2 25/09): Sau khi việc đổi logo này được gộp vào nhánh chính, công cụ tự động kiểm tra 'không đụng vùng cấm' có thể báo nhầm hoặc không kiểm tra được gì, nên một thay đổi trái phép vào vùng cấm về sau có nguy cơ không bị phát hiện. (`_acceptance/logo-onehub/rang/ranh-gioi.mjs:57`)
 
 - Mở lại sau Cổng Bằng chứng round 2 (25/09): chủ kho chọn bỏ ô đen quanh logo ở tab Agent, sửa ngay trong vòng này — AC-9 thêm `agent-panel.tsx`, thêm AC-11.
 - Ảnh đại diện trợ lý chỉ hiện khi đã có hội thoại; bàn đo không có hội thoại mẫu, nên vế ảnh đại diện của AC-11 đo bằng cách dựng thành phần trong trình duyệt với stylesheet thật của máy chủ dev (không trong luồng chat thật).
