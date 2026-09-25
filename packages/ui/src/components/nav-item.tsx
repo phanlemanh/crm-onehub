@@ -8,7 +8,7 @@ const THUT = { 0: "", 1: "", 2: "ps-8" } as const;
 
 const HUONG = {
 	vertical: "w-full",
-	horizontal: "w-auto shrink-0",
+	horizontal: "w-auto",
 } as const;
 
 function NavItem({

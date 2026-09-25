@@ -36,7 +36,7 @@ function lop(el: Element | null): string[] {
 }
 
 describe("khung-trang-cai-dat-ui", () => {
-	test("nav-item-ngang: horizontal co w-auto va shrink-0, khong w-full; mac dinh giu w-full", () => {
+	test("nav-item-ngang: horizontal co w-auto, khong w-full; mac dinh giu w-full", () => {
 		const k = dung(
 			<nav>
 				<NavItem orientation="horizontal">Chung</NavItem>
@@ -45,7 +45,6 @@ describe("khung-trang-cai-dat-ui", () => {
 		);
 		const [ngang, doc] = [...k.querySelectorAll("[data-slot='nav-item']")];
 		const lopNgang = lop(ngang ?? null);
-		expect(lopNgang, "horizontal: thieu shrink-0").toContain("shrink-0");
 		expect(lopNgang, "horizontal: thieu w-auto").toContain("w-auto");
 		expect(lopNgang, "horizontal: con w-full").not.toContain("w-full");
 		expect(lop(doc ?? null), "mac dinh: mat w-full").toContain("w-full");
