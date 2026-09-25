@@ -29,6 +29,9 @@ const LECH_PX = 2;
 const TIM_KHONG_AI = "ttv-khong-ai-trung-tu-nay";
 const CO_TRANG = 25;
 const PHA_SAU_GIEO = process.env.TTV_PHA_SAU_GIEO === "1";
+const SO_NAC_CON_LAN = 40;
+const NAC_CON_LAN_PX = 600;
+const CHO_CON_LAN_MS = 80;
 const t = thanhVienMessages("vi");
 
 const dong = [];
@@ -144,13 +147,6 @@ async function doDoc(p, soThanhVien, emailMoc) {
 			return r.height > 0 && r.top >= hopBang.top - 2 && r.bottom <= hopBang.bottom + 2;
 		}).length;
 		const catHang = hang.filter((h) => h.getBoundingClientRect().bottom > hopBang.bottom + 2).length;
-		const doiDoc = cuon.scrollTop;
-		const hangCuoi = [...muc.querySelectorAll("tbody tr")].at(-1);
-		cuon.scrollTop = cuon.scrollHeight;
-		const cuoiSauCuon = hangCuoi.getBoundingClientRect();
-		const khungCuon = cuon.getBoundingClientRect();
-		const denDuoc = cuoiSauCuon.top >= khungCuon.top - 2 && cuoiSauCuon.bottom <= khungCuon.bottom + 2;
-		cuon.scrollTop = doiDoc;
 		return {
 			soHang: hienTron,
 			caoBang: Math.round(hopBang.height),
@@ -158,12 +154,40 @@ async function doDoc(p, soThanhVien, emailMoc) {
 			tranTrong: bang.scrollHeight - bang.clientHeight,
 			dayGoc: Math.round(goc.getBoundingClientRect().bottom),
 			dinhMuc: Math.round(muc.getBoundingClientRect().top),
-			cuonDuoc: cuon.scrollHeight > cuon.clientHeight,
-			denDuoc,
 			tranNgang: document.documentElement.scrollWidth - document.documentElement.clientWidth,
 			tranDocTaiLieu: document.documentElement.scrollHeight - document.documentElement.clientHeight,
 		};
 	}, t.duocPhepVao.tieuDe);
+}
+
+async function cuonBangConLan(p) {
+	const tam = await p.evaluate(() => {
+		const r = document.querySelector("[data-slot=page-shell-scroll]").getBoundingClientRect();
+		return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+	});
+	await p.mouse.move(tam.x, tam.y);
+	let truoc = -1;
+	for (let i = 0; i < SO_NAC_CON_LAN; i++) {
+		await p.mouse.wheel({ deltaY: NAC_CON_LAN_PX });
+		await new Promise((r) => setTimeout(r, CHO_CON_LAN_MS));
+		const nay = await p.evaluate(() => document.querySelector("[data-slot=page-shell-scroll]").scrollTop);
+		if (nay === truoc) break;
+		truoc = nay;
+	}
+	const ket = await p.evaluate((tieuDe) => {
+		const cuon = document.querySelector("[data-slot=page-shell-scroll]");
+		const muc = [...document.querySelectorAll("section")].find((s) => s.textContent?.includes(tieuDe));
+		const hangCuoi = [...muc.querySelectorAll("tbody tr")].at(-1).getBoundingClientRect();
+		const khung = cuon.getBoundingClientRect();
+		return {
+			daCuon: cuon.scrollTop,
+			denDuoc: hangCuoi.top >= khung.top - 2 && hangCuoi.bottom <= khung.bottom + 2,
+		};
+	}, t.duocPhepVao.tieuDe);
+	await p.evaluate(() => {
+		document.querySelector("[data-slot=page-shell-scroll]").scrollTop = 0;
+	});
+	return ket;
 }
 
 async function chupHaiCho(p, kho) {
@@ -283,7 +307,8 @@ async function doMan(slug, cookie, soThanhVien, tenNguoi) {
 		kiem(`${nhan}: bang thanh vien hien ${d.soHang}/${soThanhVien} hang`, d.soHang === soThanhVien);
 		kiem(`${nhan}: bang cao ${d.caoBang}px, ${d.catHang} hang bi cat, tran trong ${d.tranTrong}px`, d.catHang === 0 && d.tranTrong <= LECH_PX);
 		kiem(`${nhan}: muc Duoc phep vao bat dau o ${d.dinhMuc}px, duoi day bang ${d.dayGoc}px`, d.dinhMuc >= d.dayGoc);
-		kiem(`${nhan}: trang cuon duoc va toi duoc loi moi cuoi`, d.cuonDuoc && d.denDuoc);
+		const c = await cuonBangConLan(p);
+		kiem(`${nhan}: con lan cuon trang ${c.daCuon}px va toi duoc loi moi cuoi (${c.denDuoc})`, c.daCuon > 0 && c.denDuoc);
 		kiem(`${nhan}: chi mot vung cuon — tai lieu tran doc ${d.tranDocTaiLieu}px`, d.tranDocTaiLieu <= 0);
 		kiem(`${nhan}: tran ngang ${d.tranNgang}px`, d.tranNgang <= 0);
 		await chupHaiCho(p, kho);

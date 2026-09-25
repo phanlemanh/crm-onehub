@@ -24,8 +24,11 @@ evals:
       sai thi ma 2. Va "DUNG <kho>: bang cao <n>px, 0 hang bi cat, tran trong <=2px".
       CHIEU DO (da chay 25/09 tren ma chua sua, 13 DUNG 14 SAI ma 1): "SAI <kho>: bang thanh
       vien hien 0/10 hang" va "SAI <kho>: bang cao 2px, 10 hang bi cat, tran trong 709|981px"
-      o ca ba kho. Pha-thu sau khi sua: bo layout="content" o members-table.tsx -> cung hai
-      dong SAI do, ma 1.
+      o ca ba kho. Chieu do cua E1 la chinh ma goc (chuoi min-h-0 o page.tsx + DataTable lap
+      day). Pha-thu da chay 25/09 tren cay da commit: CHI bo layout="content" thi bang VAN giu
+      du hang (goc lap day trong cot cao theo noi dung nhan chieu cao noi dung) — chi E5 do,
+      30 DUNG 1 SAI; khop du doan cua design: bo min-h-0 cho AC-1..AC-4, bien the content cho
+      AC-5.
 
   - id: E2
     criterion: AC-2
@@ -57,19 +60,21 @@ evals:
       - "packages/ui/src/components/data-table.tsx"
       - "_acceptance/bang-thanh-vien-giu-hang/rang/do-bang.mjs"
     expected: |
-      O ca ba kho: "DUNG <kho>: trang cuon duoc va toi duoc loi moi cuoi" — main
-      [data-slot=page-shell-scroll] co scrollHeight > clientHeight, va sau khi dat scrollTop
-      toi cuoi, hang loi moi cuoi nam tron THEO CHIEU DOC trong hop cua main (top >= main.top-2,
-      bottom <= main.bottom+2); chieu ngang khong xet o dong nay. "Loi moi cuoi" la hang tbody
+      O ca ba kho: "DUNG <kho>: con lan cuon trang <n>px va toi duoc loi moi cuoi (true)" — dat
+      chuot vao tam main [data-slot=page-shell-scroll], lan con lan (toi 40 nac x 600px, dung
+      khi scrollTop het doi), roi khang dinh scrollTop > 0 VA hang loi moi cuoi nam tron THEO
+      CHIEU DOC trong hop cua main (top >= main.top-2, bottom <= main.bottom+2); chieu ngang khong xet o dong nay. "Loi moi cuoi" la hang tbody
       cuoi cua bang Duoc phep vao theo thu tu DOM (15 loi moi gieo cung luc nen thu tu
       createdAt giua chung khong xac dinh — ban dau cua thuoc chon theo email va do gia o 375).
       Moi kho con hai dong: "DUNG <kho>: chi mot vung cuon — tai lieu tran doc 0px"
       (document.scrollHeight - clientHeight <= 0) va "DUNG <kho>: tran ngang 0px".
       CHIEU DO da chay 25/09 tren ban sua chua co section relative: "SAI <kho>: chi mot vung
       cuon — tai lieu tran doc 153|387|632px" o ca ba kho, ma 1; o 375 tran ngang 98px (hai
-      span sr-only thoat khoi main). Pha-thu rieng cho dong cuon: them prop `contained` cho
-      PageShell o page.tsx (main thanh overflow-hidden) -> "SAI <kho>: trang cuon duoc va toi
-      duoc loi moi cuoi", ma 1 — do bang chinh dong cua E3.
+      span sr-only thoat khoi main). Pha-thu rieng cho dong cuon, da chay 25/09: them prop
+      `contained` cho PageShell o page.tsx (main thanh overflow-hidden) -> "SAI <kho>: con lan
+      cuon trang 0px va toi duoc loi moi cuoi (false)" o ca ba kho, 28 DUNG 3 SAI, ma 1. Ban
+      dau cua thuoc gan scrollTop bang JS va XANH tren pha-thu nay (gan scrollTop van chay tren
+      overflow hidden) — vi vay dong cuon phai di bang con lan.
 
   - id: E4
     criterion: AC-4
