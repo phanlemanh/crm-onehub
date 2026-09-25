@@ -1256,3 +1256,5 @@ git commit -m "chore(quen-mat-khau): xong S3, sẵn chấm"
 | 5 | xoá `/quen-mat-khau` khỏi `ANONYMOUS` | `qmk_chup` | `KET LUAN: 8 DUNG, 6 SAI — ma thoat 1`, gồm `SAI /quen-mat-khau 1440: khong bi day ve /sign-in` |
 | 5 | màn đăng nhập truyền nhãn vô điều kiện + trang luôn hiện | `qmk_chup_tat` | `KET LUAN: 0 DUNG, 2 SAI — ma thoat 1` |
 | 5 | vật lành | `qmk_chup` / `qmk_chup_tat` | `14 DUNG, 0 SAI` / `2 DUNG, 0 SAI`, cổng 3300/3301 22:38–22:40 UTC |
+| 2 (b) | `requestMax: 5` | `-t qua-luot` | `lan thu tu phai 429, duoc 200` |
+| 2 (b) | `requestWindowSeconds: 15 * MINUTE_SECONDS` | `-t qua-luot` | `bo don hang dem xoa cua so dang chan: lan thu tu 200` — đúng lỗi gốc, nay có răng |

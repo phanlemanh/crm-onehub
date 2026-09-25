@@ -215,17 +215,19 @@ evals:
     cmd: config:executors.test.qmk_qua_luot
     paths:
       - "packages/auth/src/auth.ts"
+      - "packages/auth/src/chia-mat-khau.ts"
       - "packages/auth/test/quen-mat-khau.integration.spec.ts"
     expected: |
-      Dong 0 (sau gap-probe F4): doc auth.options.rateLimit -> enabled === true va storage ===
-      "database", khong dat NODE_ENV trong ca. Chieu do: storage "memory" trong ban sao -> dong 0
-      do voi thong diep ghim "bo dem khong chung giua cac instance".
-      Cung mot IP x-forwarded-for, bon lan xin qua auth.handler that voi BON dia chi khac
-      nhau (hai co tai khoan, hai khong). Ba lan dau ma 200; lan thu tu ma 429.
-      So lan fetch toi Resend sau khi cho nen = so dia chi co tai khoan trong BA lan dau (khong
-      co thu cho lan bi chan). Doi chung duong: mot IP khac xin ngay sau -> 200.
-      Pha-thu: xoa customRules cua /request-password-reset -> lan thu tu ra 200 -> do voi
-      thong diep ghim "lan thu tu phai 429".
+      (Sua 26/09 theo AC-9 huong b: ba luot moi 60 giay, bo dem cua better-auth don hang
+      cu hon 60 giay.) Dong 0: doc auth.options.rateLimit -> enabled === true va storage ===
+      "database", khong dat NODE_ENV trong ca. Chieu do: storage "memory" -> dong 0 do voi
+      thong diep ghim "bo dem khong chung giua cac instance".
+      Cung mot IP x-forwarded-for, ba lan xin 200; lui moc hang dem nua cua so
+      (PASSWORD.requestWindowSeconds / 2) roi lan thu tu -> 429, khong thu cho lan bi chan;
+      lui qua cua so -> xin lai duoc 200. Ca sau-don: sau khi bo don cua better-auth chay
+      (kich bang mot khoa khac qua han), lan thu tu trong cua so van 429.
+      Pha-thu: requestMax 5 -> "lan thu tu phai 429"; requestWindowSeconds 15 phut ->
+      ca sau-don do voi thong diep ghim "bo don hang dem xoa cua so dang chan".
 
   - id: E13
     criterion: AC-9
