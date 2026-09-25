@@ -781,6 +781,8 @@ async function bamChu(trang, sel, chu) {
 	);
 	const el = tay.asElement();
 	if (!el) return kiem(`khong thay «${chu}» trong ${sel} de bam`, false);
+	await el.evaluate((e) => e.scrollIntoView({ block: "center", inline: "center" }));
+	await cho(100);
 	try {
 		await el.click();
 	} catch {
@@ -799,6 +801,8 @@ async function bamSel(trang, sel) {
 			continue;
 		}
 		try {
+			await e.evaluate((el) => el.scrollIntoView({ block: "center", inline: "center" }));
+			await cho(100);
 			await e.click();
 			return true;
 		} catch (err) {
@@ -909,6 +913,26 @@ async function buocE6E7() {
 	);
 	await chup(t, "E6-step3.png", true);
 
+	await doiRong(t, HEP);
+	kiem("E6 buoc 8: o 390 khong tran ngang", await khongTran(t));
+	const doRongCot = await t.evaluate((krId) => {
+		const kr = document.querySelector(`[data-kr='${krId}'] [data-o='tu-tin']`);
+		if (!kr) return null;
+		const rongToggle = kr.querySelector("[data-slot='toggle-group']")?.getBoundingClientRect().width ?? 0;
+		return { cot: kr.getBoundingClientRect().width, toggle: rongToggle };
+	}, KR.tt);
+	kiem(
+		"E6 buoc 8: ToggleGroup muc tu tin rong bang cot (sai so 2px)",
+		doRongCot !== null && Math.abs(doRongCot.cot - doRongCot.toggle) <= 2,
+	);
+	await chup(t, "E6-step8.png", true);
+
+	await doiRong(t, RONG);
+	await t.evaluate(() => document.documentElement.classList.add("dark"));
+	await cho(300);
+	await chup(t, "E6-step9.png", true);
+	await t.evaluate(() => document.documentElement.classList.remove("dark"));
+
 	let chanGui = true;
 	await t.setRequestInterception(true);
 	const chanGuiCapNhat = (r) => {
@@ -959,7 +983,7 @@ async function buocE6E7() {
 		sauCheckIn === truocCheckIn + 2,
 	);
 	const hangMoi = await db.okrCheckIn.findMany({
-		where: { authorUserId: id.m, keyResultId: { in: [KR.tt, KR.pt] }, weekStart: { gte: new Date(`${homNayVN}T00:00:00Z` ) } },
+		where: { authorUserId: id.m, keyResultId: { in: [KR.tt, KR.pt] }, createdAt: { gte: new Date(T0) } },
 		orderBy: { createdAt: "desc" },
 		take: 2,
 	});
@@ -1026,26 +1050,6 @@ async function buocE6E7() {
 	);
 	await chup(m2, "E6-step7.png", true);
 	await m2.close();
-
-	await doiRong(t, HEP);
-	kiem("E6 buoc 8: o 390 khong tran ngang", await khongTran(t));
-	const doRongCot = await t.evaluate((krId) => {
-		const kr = document.querySelector(`[data-kr='${krId}'] [data-o='tu-tin']`);
-		if (!kr) return null;
-		const rongToggle = kr.querySelector("[data-slot='toggle-group']")?.getBoundingClientRect().width ?? 0;
-		return { cot: kr.getBoundingClientRect().width, toggle: rongToggle };
-	}, KR.tt);
-	kiem(
-		"E6 buoc 8: ToggleGroup muc tu tin rong bang cot (sai so 2px)",
-		doRongCot !== null && Math.abs(doRongCot.cot - doRongCot.toggle) <= 2,
-	);
-	await chup(t, "E6-step8.png", true);
-
-	await doiRong(t, RONG);
-	await t.evaluate(() => document.documentElement.classList.add("dark"));
-	await cho(300);
-	await chup(t, "E6-step9.png", true);
-	await t.evaluate(() => document.documentElement.classList.remove("dark"));
 
 	await kiemKhongDich(t, "E6 translate", `[data-kr='${KR.tt}']`, `Mở rộng đối tác ${MA}`);
 	await kiemKhongDich(t, "E6 translate", `[data-kr='${KR.tt}']`, `Cập nhật tuần ${MA}`);
