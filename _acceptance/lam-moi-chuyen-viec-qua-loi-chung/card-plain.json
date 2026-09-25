@@ -1,0 +1,16 @@
+{
+  "feature_plain": "Sau khi quản trị chuyển việc 30 ngày của một người sang người khác, danh mục kế hoạch, bảng cột và phần xem trước vẫn tự cập nhật y như trước — chỉ là giờ đi qua lối làm mới chung của ứng dụng, đúng luật kho.",
+  "scope_plain": "Chưa làm mới thêm trang chi tiết kế hoạch đang mở sau khi chuyển (lệch có từ trước, để hợp đồng khác); không sửa bài kiểm của hồ sơ cũ; không dựng máy chủ thật để chạy lại các phép đo màn hình của hồ sơ khác.",
+  "decisions_plain": [
+    {"id": "d-20260925T150957Z-1", "p": "Thêm một mục làm mới riêng cho việc chuyển việc thay vì mở rộng mục kế hoạch sẵn có — đổi lại lối làm mới chung có thêm một mục chỉ một chỗ dùng, nhưng không chỗ nào khác đổi hành vi."},
+    {"id": "d-20260925T150957Z-2", "p": "KHÔNG quét độ phủ tiêu chí — việc chỉ có ba ca (thành công, đang chờ, lỗi) đã liệt đủ; đổi lại không có bằng chứng độ phủ riêng."},
+    {"id": "d-20260925T150957Z-3", "p": "KHÔNG dựng bản mẫu giao diện trước khi duyệt — hộp không đổi hình; đổi lại cổng đầu duyệt bằng chữ."},
+    {"id": "d-20260925T150957Z-4", "p": "KHÔNG viết đặc tả trải nghiệm — không có màn hay luồng mới; đổi lại cấu trúc không khai trước."},
+    {"id": "d-20260925T150957Z-5", "p": "KHÔNG chụp ảnh màn hình làm bằng chứng — hộp không đổi hình, cách hộp đóng/mở và báo lỗi được bài kiểm tự động đo; đổi lại anh đọc tên ca kiểm thay vì nhìn ảnh."},
+    {"id": "d-20260925T151229Z-6", "p": "Máy tự rút danh sách phép đo đã ký bị chạm và chỉ hứa «không làm đỏ thêm cái nào so với trước» — thay danh sách tám cái viết tay (sót 41); đổi lại mỗi lượt đo mất khoảng 25 phút."},
+    {"id": "d-20260925T154620Z-8", "p": "Phép đo không-hồi-quy bỏ qua thêm loại phép đo lồng chạy cả một làn ghim lại — lượt đầu để lọt một cái như vậy; đổi lại chạy ít hơn một lệnh."},
+    {"id": "d-20260925T161303Z-9", "p": "Lượt đo không-hồi-quy đầu tiên bắt được một lỗi thật do chính vòng này gây ra (bộ kiểm chất lượng mã báo đỏ ở công cụ đo mới); đã sửa công cụ, không nới phép đo."},
+    {"id": "d-20260925T161303Z-10", "p": "Vẫn bỏ qua phép đo lồng vừa bắt lỗi đó, vì lỗi nó bắt đến từ bộ kiểm chất lượng mà lượt chấm vẫn chạy trực tiếp; đổi lại mất một lượt đối chiếu trùng, tiết kiệm khoảng 10 phút mỗi lượt. Xem lại nếu nó từng bắt được thứ bộ kiểm không bắt."},
+    {"id": "d-20260925T171240Z-11", "p": "Dời dòng tiêu đề mà máy tổng hợp đặt sai chỗ trong báo cáo bằng chứng, để bộ kiểm trước khi gộp đọc được kết quả Đạt; không đổi chữ nào khác của báo cáo."}
+  ]
+}

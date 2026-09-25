@@ -26,6 +26,7 @@ export type CrmCache = {
 	contact(id?: string, options?: Options): Promise<void>;
 	deal(id?: string, options?: Options): Promise<void>;
 	plan(id?: string, options?: Options): Promise<void>;
+	workTransferred(options?: Options): Promise<void>;
 	okr(id?: string, options?: Options): Promise<void>;
 	campaign(id?: string, options?: Options): Promise<void>;
 	campaignList(options?: Options): Promise<void>;
@@ -236,6 +237,17 @@ export function useCrmCache(): CrmCache {
 				options,
 			),
 
+		workTransferred: (options) =>
+			run(
+				[
+					trpc.onboarding.manDanhMuc.queryKey(),
+					trpc.onboarding.bangCot.queryKey(),
+					trpc.onboarding.transferPreview.queryKey(),
+				],
+				[],
+				options,
+			),
+
 		okr: (id, options) =>
 			run(
 				[
@@ -363,7 +375,11 @@ export function useCrmCache(): CrmCache {
 
 		workspace: (options) =>
 			run(
-				[trpc.workspace.get.queryKey(), trpc.workspace.members.queryKey()],
+				[
+					trpc.workspace.get.queryKey(),
+					trpc.workspace.members.queryKey(),
+					trpc.workspace.allowances.queryKey(),
+				],
 				[],
 				options,
 			),

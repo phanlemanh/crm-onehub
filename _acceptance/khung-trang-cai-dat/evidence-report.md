@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context sequential verification subagent (round 3, classifier-fallback)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cf0f07286bb2e5f2ea764f2abf7f5224c94fd9af
+verified_commit: d91b70b5d3ef94d8d51e67642d164f6fac8253aa
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -329,3 +329,11 @@ sha: d60133f3d91fdf51b9db5e788dc375d25de6c12a · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-09-25, do gộp onehub 64b6c988 (#139) vào dat-okr-trong-crm trước PR
 run_id: repin-20260925T113608Z-86410
 sha: cf0f07286bb2e5f2ea764f2abf7f5224c94fd9af · suites: 4 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E3, E4, E6, E8, E11, E13 · diff chạm vật đo ngoài làn máy: E3 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-3, AC-4
+
+### Re-pin lần 4 — 2026-09-25, do gộp onehub #145 sau chữ ký; bản gốc ghim của PageShell đổi ở vung-cuon-la-khoi-chua
+run_id: repin-20260925T212443Z-96898
+sha: 944bd5dd993d38c3acc27f87820b5fe3e9351cb7 · suites: 4 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E3, E4, E6, E8, E11, E13 · diff chạm vật đo ngoài làn máy: E3 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-3, AC-4
+
+### Re-pin lần 5 — 2026-09-25, do gộp onehub #146 (thanh bên Cài đặt, packages/ui) khi tới lượt merge
+run_id: repin-20260925T222401Z-96602
+sha: d91b70b5d3ef94d8d51e67642d164f6fac8253aa · suites: 4 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E3, E4, E6, E8, E11, E13 · diff chạm vật đo ngoài làn máy: E3, E8 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-3, AC-4

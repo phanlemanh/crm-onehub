@@ -1,7 +1,12 @@
 "use client";
 
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { NavGroup, NavGroupLabel, NavItem } from "@crm/ui/components/nav-item";
+import {
+	NavGroup,
+	NavGroupLabel,
+	NavItem,
+	NavStrip,
+} from "@crm/ui/components/nav-item";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -95,10 +100,10 @@ function ThanhBen({
 				</nav>
 			</aside>
 
-			<nav
+			<NavStrip
 				aria-label={t.thanhBen.nhan}
 				aria-busy={dangTai}
-				className="flex gap-1 overflow-x-auto border-b p-2 md:hidden [view-transition-name:settings-sidebar]"
+				className="md:hidden [view-transition-name:settings-sidebar]"
 			>
 				{nhom.flatMap((n) =>
 					n.muc.map((muc) => (
@@ -111,7 +116,7 @@ function ThanhBen({
 						/>
 					)),
 				)}
-			</nav>
+			</NavStrip>
 		</>
 	);
 }

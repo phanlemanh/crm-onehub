@@ -161,6 +161,23 @@ _Avoid_: transfer, bàn giao tài khoản
 Vì sao: thao tác không đụng công ty, cá nhân hay thoả thuận của người đó — gọi
 là "bàn giao tài khoản" thì người dùng tưởng nó chuyển hết.
 
+**Đã vào**: người đã đăng nhập vào không gian làm việc ít nhất một lần và đang là
+thành viên, với một vai. Là tên phần trên của màn Thành viên, kèm số người. Đặt
+2026-09-25 theo phương án A của màn Thành viên.
+_Avoid_: đang hoạt động, đã tham gia
+Vì sao: «đang hoạt động» gợi người vừa dùng gần đây, trong khi phần này gồm cả
+người lâu không vào; «tham gia» đã là tên cột ngày vào ngay trong phần này.
+
+**Được phép vào**: một địa chỉ email quản trị đã cho phép vào không gian làm
+việc, mà người đó chưa đăng nhập lần nào. Lần đầu họ đăng nhập, địa chỉ rời phần
+này và người đó sang phần **Đã vào** với vai đã chọn lúc cho phép. Rút lời cho
+phép chỉ chặn người chưa vào. Là tên phần dưới của màn Thành viên. Đặt 2026-09-25
+theo phương án A của màn Thành viên.
+_Avoid_: lời mời, invitation, chờ duyệt
+Vì sao: không có thư mời nào được gửi — người đó tự đăng nhập bằng địa chỉ của
+mình, nên «lời mời» hứa một email không tồn tại; «chờ duyệt» sai chiều, vì quản
+trị đã duyệt rồi, chỉ là người đó chưa vào.
+
 **Kế hoạch im**: kế hoạch 30 ngày đang chạy mà không bước nào đổi trong số ngày
 đã khai ở ngưỡng im (đếm như cột ngày im của danh mục). Chốt 2026-09-22.
 _Avoid_: kế hoạch treo, kế hoạch chết

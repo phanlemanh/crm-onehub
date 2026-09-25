@@ -11,6 +11,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
 import { okrMessages } from "@/lib/messages/okr";
+import { canNhanLoai } from "@/lib/okr-chu-ky-nhan";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { giaiKy, okrParsers } from "./okr-search-params";
@@ -28,7 +29,8 @@ export function useChuKy() {
 }
 
 export function ChonChuKy() {
-	const m = okrMessages(useLocale());
+	const locale = useLocale();
+	const m = okrMessages(locale);
 	const { cycles, currentId, datKy } = useChuKy();
 	const ds = cycles.data?.cycles ?? [];
 	if (ds.length === 0 || currentId === null) return null;
@@ -41,7 +43,11 @@ export function ChonChuKy() {
 				{ds.map((c) => (
 					<SelectItem key={c.id} value={c.id}>
 						<span translate="no">{c.name}</span>
-						<span className="text-muted-foreground">{m.loaiChuKy[c.kind]}</span>
+						{canNhanLoai(c.name, m.loaiChuKy[c.kind], locale) ? (
+							<span className="text-muted-foreground">
+								{m.loaiChuKy[c.kind]}
+							</span>
+						) : null}
 					</SelectItem>
 				))}
 			</SelectContent>

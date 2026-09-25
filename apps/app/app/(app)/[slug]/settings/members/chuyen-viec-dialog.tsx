@@ -12,11 +12,12 @@ import {
 } from "@crm/ui/components/dialog";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { dien, dienNode } from "@/components/crm/record-sheet/plan-copy";
 import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
+import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
 export type NguoiDi = { userId: string; name: string };
@@ -30,7 +31,7 @@ export function ChuyenViecDialog({
 }) {
 	const k = keHoachNoiMessages(useLocale()).chuyen;
 	const trpc = useTRPC();
-	const queryClient = useQueryClient();
+	const cache = useCrmCache();
 	const [nhan, setNhan] = useState("");
 	const [loi, setLoi] = useState<string | null>(null);
 	const mo = nguoi !== null;
@@ -60,13 +61,7 @@ export function ChuyenViecDialog({
 						ten: tenNhan,
 					}),
 				);
-				await Promise.all(
-					[
-						trpc.onboarding.manDanhMuc.queryKey(),
-						trpc.onboarding.bangCot.queryKey(),
-						trpc.onboarding.transferPreview.queryKey(),
-					].map((queryKey) => queryClient.invalidateQueries({ queryKey })),
-				);
+				await cache.workTransferred();
 				dong();
 			},
 			onError: (error) => setLoi(error.message),

@@ -3,6 +3,12 @@
 import OverflowMenuHorizontal from "@carbon/icons-react/es/OverflowMenuHorizontal";
 import { Button } from "@crm/ui/components/button";
 import {
+	Card,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@crm/ui/components/card";
+import {
 	DataTable,
 	type DataTableColumn,
 	type DataTableFacet,
@@ -17,7 +23,7 @@ import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { toast } from "sonner";
 import { ListSearch } from "@/components/data-table/list-search";
 import { useTableQuery } from "@/components/data-table/use-table-query";
@@ -217,12 +223,17 @@ export function MembersTable() {
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const { query, input } = useTableQuery(membersSearchParams);
+	const tieuDeId = useId();
 
 	const workspace = useQuery(trpc.workspace.get.queryOptions());
 	const members = useQuery({
 		...trpc.workspace.members.queryOptions(input),
 		placeholderData: (previous) => previous,
 	});
+	const tatCa = useQuery(
+		trpc.workspace.members.queryOptions(membersSearchParams.defaultInput()),
+	);
+	const soDaVao = tatCa.data?.total;
 
 	const setRole = useMutation(
 		trpc.workspace.setMemberRole.mutationOptions({
@@ -271,39 +282,50 @@ export function MembersTable() {
 	];
 
 	return (
-		<>
-			<DataTable
-				layout="content"
-				query={query}
-				search={<ListSearch placeholder={t.bang.tim} />}
-				columns={columns(
-					t,
-					workspace.data?.canChangeRoles ?? false,
-					workspace.data?.canManageMembers ?? false,
-					workspace.data?.canIssuePasswordLink ?? false,
-					(member, role) => setRole.mutate({ memberId: member.id, role }),
-					(member) => setDangGo(member),
-					() => {
-						void members.refetch();
-					},
-					setRole.isPending || remove.isPending,
-					quyenKeHoach.data?.canManage
-						? (member) => setDangChuyen(member)
-						: null,
-					k.menu,
-					quyenKeHoach.data?.canManage
-						? (member) => setDangChuyenOkr(member)
-						: null,
-					kOkr.menu,
-				)}
-				rows={members.data?.rows ?? []}
-				total={members.data?.total ?? 0}
-				facetCounts={facetCounts}
-				facets={facets}
-				getRowId={(row) => row.id}
-				loading={members.isFetching}
-				empty={t.bang.trong}
-			/>
+		<section aria-labelledby={tieuDeId}>
+			<Card>
+				<CardHeader>
+					<CardTitle id={tieuDeId}>
+						{soDaVao === undefined
+							? t.bang.tieuDe
+							: t.dem(t.bang.tieuDe, soDaVao)}
+					</CardTitle>
+					<CardDescription>{t.bang.moTa}</CardDescription>
+				</CardHeader>
+
+				<DataTable
+					layout="content"
+					query={query}
+					search={<ListSearch placeholder={t.bang.tim} />}
+					columns={columns(
+						t,
+						workspace.data?.canChangeRoles ?? false,
+						workspace.data?.canManageMembers ?? false,
+						workspace.data?.canIssuePasswordLink ?? false,
+						(member, role) => setRole.mutate({ memberId: member.id, role }),
+						(member) => setDangGo(member),
+						() => {
+							void members.refetch();
+						},
+						setRole.isPending || remove.isPending,
+						quyenKeHoach.data?.canManage
+							? (member) => setDangChuyen(member)
+							: null,
+						k.menu,
+						quyenKeHoach.data?.canManage
+							? (member) => setDangChuyenOkr(member)
+							: null,
+						kOkr.menu,
+					)}
+					rows={members.data?.rows ?? []}
+					total={members.data?.total ?? 0}
+					facetCounts={facetCounts}
+					facets={facets}
+					getRowId={(row) => row.id}
+					loading={members.isFetching}
+					empty={t.bang.trong}
+				/>
+			</Card>
 
 			<ChuyenViecDialog
 				nguoi={
@@ -337,6 +359,6 @@ export function MembersTable() {
 				}}
 				pending={remove.isPending}
 			/>
-		</>
+		</section>
 	);
 }

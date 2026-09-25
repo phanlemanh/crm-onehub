@@ -149,6 +149,7 @@ const { PageShellHeader, PageShellHeading, PageShellTitle } = await import(
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrMessages } = await import("@/lib/messages/okr");
+const { goiYChuKy } = await import("@/lib/okr-chu-ky-nhan");
 
 const m = okrMessages("vi").caiDat;
 
@@ -179,7 +180,7 @@ async function mo(thamSo = ""): Promise<void> {
 									<LyDoKhongQuyen />
 								</PageShellHeading>
 							</PageShellHeader>
-							<BangChuKy />
+							<BangChuKy goiY={goiYChuKy("2026-09-25")} />
 							<FormCauHinh />
 						</TooltipProvider>
 					</LocaleProvider>
