@@ -12,8 +12,8 @@ evals:
       templateDatabaseName. MA TRAN VIET TRUOC 6 ten cay x 2 ham = 12 khang dinh toEqual ten
       mong doi: "compassionate-hofstadter-928035" -> crm_compassionate_hofstadter_928035_do /
       _mau_do; "crm" -> crm_crm_do; "Toan-Canh.OKR" -> crm_toan_canh_okr_do; "a--b" -> gop gach;
-      ten 80 ky tu -> dung 63 ky tu, ket thuc _do va _mau_do; "__" -> nem loi "khong con chu
-      hay so". Them: moi ten khop /^[a-z0-9_]+$/, khong ten nao bang crm/crm_test hay ket thuc
+      ten 80 ky tu -> dung 63 ky tu, ket thuc _do va _mau_do, hai ten 80 ky tu chi khac o ky tu
+      cuoi -> hai ten kho khac nhau (bam 6 ky tu); "__" -> nem loi "has no letter or digit left". Them: moi ten khop /^[a-z0-9_]+$/, khong ten nao bang crm/crm_test hay ket thuc
       _test, hai cay khac ten -> hai ten khac.
       CHIEU DO (pha thu o S3 tren ban da commit, git checkout sau): bo buoc cat 63 ky tu -> ca
       ten dai do voi thong diep ghim "ten kho qua 63 ky tu"; bo thay ky tu la -> ca Toan-Canh.OKR
@@ -32,7 +32,7 @@ evals:
       createMeasureDatabase that voi cay "thu<runid>" tren may chu do. Doc lai qua pg: kho
       crm_thu<runid>_do ton tai; tap migration_name hoan tat trong _prisma_migrations BANG DUNG
       tap thu muc trong packages/db/prisma/migrations (toEqual tren mang sap xep, khong chi dem);
-      organization co onboardedAt khac null; deal seed-deal-wise-1 ton tai; shobj_description
+      deal seed-deal-wise-1 ton tai; shobj_description
       bat dau "crm phien do" va mang gio ISO trong 10 phut. Dong cuoi stdout cua CLI
       `bun scripts/measure-db.ts --tao --ten thu<runid>` bang URL tra ve. Dau van tay kho chung
       sau == truoc (toEqual tren doi tuong bang -> {dem, md5}). Don kho trong afterAll.
@@ -67,10 +67,11 @@ evals:
     expected: |
       exit 0; ca "xoa": tao kho do cho cay thu, mo mot ket noi pg giu vao kho do, goi
       dropMeasureDatabase -> kho khong con trong pg_database. MA TRAN TU CHOI viet truoc 2 ca,
-      moi ca goi CLI `--xoa` voi --ten dan toi mot kho da dung san: (a) kho ten
-      crm_thu<runid>_khac (khong _do, tao bang CREATE DATABASE trong bai) -> exit 2 va stderr
-      chua "khong phai kho do"; (b) kho crm_thu<runid>b_do tao tay khong COMMENT -> exit 2 va
-      stderr chua "khong mang dau phien do"; sau moi ca kho van ton tai. Don trong afterAll.
+      moi ca goi CLI `bun scripts/measure-db.ts --xoa --kho <ten>` voi mot kho da dung san:
+      (a) kho ten crm_thu<runid>_khac (khong _do, tao bang CREATE DATABASE trong bai) -> exit 2
+      va stderr chua "is not a measure database"; (b) kho crm_thu<runid>b_do tao tay khong
+      COMMENT -> exit 2 va stderr chua "does not carry the measure-session mark"; sau moi ca
+      kho van ton tai. Don trong afterAll.
       CHIEU DO (pha thu o S3): bo kiem COMMENT truoc khi xoa -> ca (b) do "kho khong dau bi xoa".
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -108,7 +109,8 @@ evals:
       theo DO_MA (0). MA TRAN VIET TRUOC 8 khang dinh tren JSON: ten kho trong DATABASE_URL ==
       measureDatabaseName(cay nay); cong APP_URL trong dai PHIEN_DO.cong; cong API_URL trong dai;
       canhCay().ket == "dung-cay"; GET API_URL/health == 200; user NGUOI ton tai trong kho do;
-      ma phien == 0; PHIEN_DO == ten kho. Sau phien 3 khang dinh: hai cong khong con tien trinh
+      isOnboarded(metadata cua organization WORKSPACE_ID) == true; ma phien == 0; PHIEN_DO ==
+      ten kho. Sau phien 3 khang dinh: hai cong khong con tien trinh
       nghe (lsof rong), kho do khong con trong pg_database, dau van tay kho chung sau == truoc.
       CHIEU DO (pha thu o S3): bo buoc xoa kho trong finally -> do "kho do con sau phien"; lenh
       do ep APP_URL ve mot cong khong ai nghe -> canhCay khong-noi-duoc, do "may chu khong phuc

@@ -1,0 +1,344 @@
+import { afterAll, describe, expect, it } from "bun:test";
+import { spawnSync } from "node:child_process";
+import { readdirSync } from "node:fs";
+import { join, resolve } from "node:path";
+import pg from "pg";
+import {
+	createMeasureDatabase,
+	databaseFingerprint,
+	databaseUrl,
+	dropMeasureDatabase,
+	markMeasureDatabase,
+	markTemplate,
+	sourceFingerprint,
+	sweepMeasureDatabases,
+} from "../scripts/measure-db";
+import { dropDatabase, withMaintenance } from "../scripts/test-db-admin";
+import {
+	MEASURE_DATABASE,
+	measureDatabaseName,
+	parseMeasureComment,
+	templateDatabaseName,
+} from "../src/measure-database";
+
+const PACKAGE = resolve(import.meta.dirname, "..");
+const MIGRATIONS = join(PACKAGE, "prisma", "migrations");
+const SLOW_MS = 240_000;
+const MINUTE_MS = 60_000;
+const base = process.env.TEST_DATABASE_URL ?? "";
+const id = (process.env.TEST_RUN_ID ?? Date.now().toString(36))
+	.toLowerCase()
+	.replace(/[^a-z0-9]/g, "");
+const made = new Set<string>();
+
+function tree(label: string): string {
+	const name = `thu${id}${label}`;
+	made.add(measureDatabaseName(name));
+	made.add(templateDatabaseName(name));
+	return name;
+}
+
+async function query<T extends pg.QueryResultRow>(
+	url: string,
+	sql: string,
+	values: unknown[] = [],
+): Promise<T[]> {
+	const client = new pg.Client({ connectionString: url });
+	await client.connect();
+	try {
+		return (await client.query<T>(sql, values)).rows;
+	} finally {
+		await client.end();
+	}
+}
+
+async function commentOf(name: string): Promise<string | null> {
+	const rows = await query<{ description: string | null }>(
+		databaseUrl(base, "postgres"),
+		`SELECT s.description FROM pg_database d
+		   LEFT JOIN pg_shdescription s ON s.objoid = d.oid
+		  WHERE d.datname = $1`,
+		[name],
+	);
+	return rows[0]?.description ?? null;
+}
+
+async function exists(name: string): Promise<boolean> {
+	const rows = await query(
+		databaseUrl(base, "postgres"),
+		"SELECT 1 FROM pg_database WHERE datname = $1",
+		[name],
+	);
+	return rows.length === 1;
+}
+
+async function createEmpty(name: string): Promise<void> {
+	made.add(name);
+	await withMaintenance(base, async (client) => {
+		await dropDatabase(client, name);
+		await client.query(`CREATE DATABASE "${name}"`);
+	});
+}
+
+function cli(args: string[]) {
+	return spawnSync("bun", ["scripts/measure-db.ts", ...args], {
+		cwd: PACKAGE,
+		encoding: "utf8",
+		env: { ...process.env, DATABASE_URL: base },
+	});
+}
+
+afterAll(async () => {
+	await withMaintenance(base, async (client) => {
+		for (const name of made) await dropDatabase(client, name);
+	});
+});
+
+describe("ten-kho", () => {
+	const cases: [string, string, string][] = [
+		[
+			"compassionate-hofstadter-928035",
+			"crm_compassionate_hofstadter_928035_do",
+			"crm_compassionate_hofstadter_928035_mau_do",
+		],
+		["crm", "crm_crm_do", "crm_crm_mau_do"],
+		["Toan-Canh.OKR", "crm_toan_canh_okr_do", "crm_toan_canh_okr_mau_do"],
+		["a--b", "crm_a_b_do", "crm_a_b_mau_do"],
+	];
+
+	it("names the measure and template databases of a tree", () => {
+		for (const [name, measure, template] of cases) {
+			expect(measureDatabaseName(name), `ten kho do cua ${name}`).toEqual(
+				measure,
+			);
+			expect(templateDatabaseName(name), `ten kho mau cua ${name}`).toEqual(
+				template,
+			);
+		}
+	});
+
+	it("keeps a long tree name inside 63 characters with its suffix and a hash", () => {
+		const long = `cay-${"x".repeat(76)}`;
+		const other = `cay-${"x".repeat(75)}y`;
+
+		for (const name of [
+			measureDatabaseName(long),
+			templateDatabaseName(long),
+		]) {
+			expect(name.length, "ten kho qua 63 ky tu").toBeLessThanOrEqual(63);
+		}
+		expect(measureDatabaseName(long).endsWith("_do")).toBe(true);
+		expect(templateDatabaseName(long).endsWith("_mau_do")).toBe(true);
+		expect(measureDatabaseName(long), "hai cay dai trung ten kho").not.toEqual(
+			measureDatabaseName(other),
+		);
+	});
+
+	it("refuses a tree name with no letter or digit", () => {
+		expect(() => measureDatabaseName("__")).toThrow(
+			/has no letter or digit left/,
+		);
+	});
+
+	it("never names crm, crm_test or a _test database, and only uses a-z0-9_", () => {
+		const names = [
+			...cases.flatMap(([name]) => [
+				measureDatabaseName(name),
+				templateDatabaseName(name),
+			]),
+			measureDatabaseName(`cay-${"x".repeat(76)}`),
+		];
+
+		for (const name of names) {
+			expect(name, "ten kho chi gom a-z0-9_").toMatch(/^[a-z0-9_]+$/);
+			expect(["crm", "crm_test"]).not.toContain(name);
+			expect(name.endsWith("_test")).toBe(false);
+		}
+		expect(measureDatabaseName("cay-a")).not.toEqual(
+			measureDatabaseName("cay-b"),
+		);
+	});
+});
+
+describe("tao", () => {
+	it(
+		"builds the tree's measure database from a migrated, seeded template and leaves the shared database alone",
+		async () => {
+			await query(
+				base,
+				`INSERT INTO "okrCycle" (id, kind, name, "startsOn", "endsOn", "updatedAt")
+				 VALUES ($1, 'quy', 'chu ky la cua luot khac', '2026-10-01', '2026-12-31', now())
+				 ON CONFLICT (id) DO NOTHING`,
+				[`la-${id}`],
+			);
+			const before = await databaseFingerprint(base);
+			const name = tree("tao");
+
+			const url = await createMeasureDatabase({ base, tree: name });
+			const measure = measureDatabaseName(name);
+
+			expect(new URL(url).pathname).toEqual(`/${measure}`);
+			const applied = (
+				await query<{ migration_name: string }>(
+					url,
+					`SELECT migration_name FROM _prisma_migrations WHERE finished_at IS NOT NULL`,
+				)
+			)
+				.map((row) => row.migration_name)
+				.sort();
+			const onDisk = readdirSync(MIGRATIONS, { withFileTypes: true })
+				.filter((entry) => entry.isDirectory())
+				.map((entry) => entry.name)
+				.sort();
+			expect(applied, "thieu migration").toEqual(onDisk);
+
+			const deal = await query(url, `SELECT 1 FROM deal WHERE id = $1`, [
+				"seed-deal-wise-1",
+			]);
+			expect(deal.length, "thieu deal seed-deal-wise-1").toBe(1);
+
+			const mark = parseMeasureComment(await commentOf(measure));
+			expect(mark?.kind, "kho do khong mang dau phien do").toBe("session");
+			expect(Date.now() - (mark?.createdAt ?? 0)).toBeLessThan(10 * MINUTE_MS);
+
+			const run = cli(["--tao", "--ten", name]);
+			expect(run.status, run.stderr).toBe(0);
+			expect(run.stdout.trim().split("\n").pop()).toEqual(url);
+
+			const after = await databaseFingerprint(base);
+			expect(after, "dau van tay kho chung doi").toEqual(before);
+		},
+		SLOW_MS,
+	);
+});
+
+describe("kho-mau", () => {
+	it(
+		"reuses the template while the source fingerprint matches and rebuilds it when it does not",
+		async () => {
+			const name = tree("mau");
+			const fingerprint = sourceFingerprint();
+			const template = templateDatabaseName(name);
+			const measure = measureDatabaseName(name);
+
+			await createMeasureDatabase({ base, tree: name, fingerprint });
+			const firstTemplate = parseMeasureComment(await commentOf(template));
+			const firstMeasure = parseMeasureComment(await commentOf(measure));
+
+			await createMeasureDatabase({ base, tree: name, fingerprint });
+			const secondTemplate = parseMeasureComment(await commentOf(template));
+			const secondMeasure = parseMeasureComment(await commentOf(measure));
+
+			expect(
+				secondTemplate?.createdAt,
+				"kho mau bi dung lai du dau khop",
+			).toEqual(firstTemplate?.createdAt);
+			expect(secondMeasure?.createdAt ?? 0).toBeGreaterThan(
+				firstMeasure?.createdAt ?? 0,
+			);
+
+			await createMeasureDatabase({
+				base,
+				tree: name,
+				fingerprint: `${fingerprint}x`,
+			});
+			const third = parseMeasureComment(await commentOf(template));
+			expect(
+				third?.createdAt ?? 0,
+				"dau doi ma kho mau khong dung lai",
+			).toBeGreaterThan(secondTemplate?.createdAt ?? 0);
+		},
+		SLOW_MS * 2,
+	);
+});
+
+describe("xoa", () => {
+	it(
+		"drops the tree's measure database even while something is connected",
+		async () => {
+			const name = tree("xoa");
+			const url = await createMeasureDatabase({ base, tree: name });
+			const held = new pg.Client({ connectionString: url });
+			await held.connect();
+			held.on("error", () => {});
+
+			await dropMeasureDatabase(base, measureDatabaseName(name));
+			await held.end().catch(() => {});
+
+			expect(await exists(measureDatabaseName(name))).toBe(false);
+		},
+		SLOW_MS,
+	);
+
+	it("refuses a name that is not a measure database, and one without the mark", async () => {
+		const plain = `crm_thu${id}_khac`;
+		const unmarked = `crm_thu${id}b_do`;
+		await createEmpty(plain);
+		await createEmpty(unmarked);
+
+		const refusals: [string, RegExp][] = [
+			[plain, /is not a measure database/],
+			[unmarked, /does not carry the measure-session mark/],
+		];
+
+		for (const [target, message] of refusals) {
+			const run = cli(["--xoa", "--kho", target]);
+			expect(run.status, `--xoa ${target}`).toBe(2);
+			expect(run.stderr).toMatch(message);
+			expect(await exists(target), "kho khong dau bi xoa").toBe(true);
+		}
+	});
+});
+
+describe("quet-mo-coi", () => {
+	it("drops only marked databases untouched for longer than maxAgeMs", async () => {
+		const now = Date.now();
+		const age = MEASURE_DATABASE.maxAgeMs;
+		const old = `crm_thu${id}gia_do`;
+		const young = `crm_thu${id}non_do`;
+		const unmarked = `crm_thu${id}kd_do`;
+		const usedTemplate = `crm_thu${id}mcd_mau_do`;
+		const idleTemplate = `crm_thu${id}mb_mau_do`;
+		const five = [old, young, unmarked, usedTemplate, idleTemplate];
+
+		for (const name of five) await createEmpty(name);
+
+		await withMaintenance(base, async (client) => {
+			await markMeasureDatabase(client, old, now - age - MINUTE_MS);
+			await markMeasureDatabase(client, young, now - MINUTE_MS);
+			await markTemplate(
+				client,
+				usedTemplate,
+				"f",
+				now - 2 * age,
+				now - MINUTE_MS,
+			);
+			await markTemplate(
+				client,
+				idleTemplate,
+				"f",
+				now - age - MINUTE_MS,
+				now - age - MINUTE_MS,
+			);
+		});
+
+		const early = await withMaintenance(base, (client) =>
+			sweepMeasureDatabases(client, now - 2 * MINUTE_MS),
+		);
+		expect(early.filter((name) => five.includes(name))).toEqual([]);
+
+		const dropped = await withMaintenance(base, (client) =>
+			sweepMeasureDatabases(client, now),
+		);
+		expect(dropped.filter((name) => five.includes(name))).toEqual(
+			[old, idleTemplate].sort(),
+		);
+
+		const left: string[] = [];
+		for (const name of five) if (await exists(name)) left.push(name);
+		expect(left.includes(young), "kho non tuoi bi xoa").toBe(true);
+		expect(left.includes(unmarked), "kho khong dau bi xoa").toBe(true);
+		expect(left.includes(usedTemplate), "kho mau con dung bi xoa").toBe(true);
+		expect(left.sort()).toEqual([young, unmarked, usedTemplate].sort());
+	});
+});

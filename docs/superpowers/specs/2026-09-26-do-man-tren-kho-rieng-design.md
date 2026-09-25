@@ -92,7 +92,10 @@ Trình tự:
 7. **Cảnh cây.** Gọi `canhCay()` của `man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs` (nhập,
    không sửa) với `APP_URL` của phiên. Không `dung-cay` → mã 2 với đúng dòng nó in.
 8. **Phiên đăng nhập.** `bun run dev:session <NGUOI>` ở `apps/api` trên kho đo, cho
-   `NGUOI` (mặc định `PHIEN_DO.nguoi`, cùng hằng `tien-de.mjs` dùng).
+   `NGUOI` (mặc định `PHIEN_DO.nguoi`, cùng hằng `tien-de.mjs` dùng). Lần đăng nhập đầu tạo
+   hàng workspace; kho mới dựng chưa có hàng đó lúc seed chạy, nên seed không đặt được mốc
+   onboarding (trên kho chung, hàng đã có từ trước khi seed). Phiên đặt mốc ngay sau đó
+   bằng `markOnboarded` của `packages/db/src/workspace.ts` — đúng hàm seed dùng.
 9. **Lệnh.** `bash -c "<lệnh>"` ở gốc cây với `DATABASE_URL`, `APP_URL`, `API_URL`,
    `PHIEN_DO` của phiên. Mã thoát của phiên = mã của lệnh.
 10. **Dọn — `finally` và bắt SIGINT/SIGTERM/SIGHUP.** Giết lệnh nếu còn chạy, SIGTERM hai

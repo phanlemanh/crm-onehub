@@ -202,3 +202,53 @@ A rebuild drops the database and re-runs every migration, and it says which of t
 two reasons fired. Force one with `bun run db:test --reset`. Nothing else in the
 repo may drop a database, and this may only because the `_test` suffix is checked
 first.
+
+### Screen measurements get a database of their own
+
+A screen measurement (`_acceptance/*/rang/*.mjs` run through
+`scripts/lan-do/tien-de.mjs`) writes to the database it runs against: it plants OKR
+cycles, sets a placeholder research key, signs people in. When that database was the
+shared dev database `crm`, one lane's leftovers became the next lane's broken premise
+— and the person's working data. On 26/09 three trial OKR cycles left in `crm` by one
+worktree made a signed ruler that needs zero cycles exit 2 in another.
+
+So a measurement now runs in a **measure session** on a database of its own tree:
+
+- `bun run db:do --tao` creates `crm_<tree>_do` and prints its URL on the last line.
+  `<tree>` is the checkout's directory name (or `PHIEN_DO_TEN_CAY`), slugged. The
+  database is cloned (`CREATE DATABASE … TEMPLATE`) from `crm_<tree>_mau_do`, a
+  template built once by `migrate deploy` plus `prisma/seed.ts` and rebuilt when the
+  migrations, `schema.prisma` or `seed.ts` change. A clone takes about a second; the
+  seed alone takes thirty. Nothing is copied from `crm`. The seed runs with an empty
+  `BLOB_READ_WRITE_TOKEN`, so building a template never uploads to the blob store.
+- `bun run db:do --xoa` drops the tree's measure database. It refuses a name that does
+  not end in `_do`, and one without the measure-session `COMMENT`.
+- `bun run db:do --quet` drops every marked measure database and template with no
+  connection whose last touch — creation, or the last clone for a template — is older
+  than `MEASURE_DATABASE.maxAgeMs` (twelve hours). Every `--tao` runs the same sweep,
+  so a database left by a killed run goes on a later one. Rules and constants:
+  `packages/db/src/measure-database.ts`.
+- `bun run do:man --chay "<command>"` is a whole session
+  (`scripts/lan-do/phien-do.mjs`, constants in `scripts/lan-do/cau-hinh.mjs`): take a
+  Postgres advisory lock on the database name (a second session of the same tree
+  waits; the lock dies with the process), kill servers a killed session left behind,
+  create the measure database, start this tree's API and app on two free ports in
+  4100–4899 (the app builds into `.next-phien-do-<tree>`, so it never fights a dev
+  server in the same checkout), wait for `/health`, check with `canh-cay.mjs` that
+  the app serves this tree, run `dev:session` for `NGUOI`, mark the workspace
+  onboarded, then run the command with `DATABASE_URL`, `APP_URL`, `API_URL` and
+  `PHIEN_DO` set. It cleans up in `finally` and on SIGINT, SIGTERM and SIGHUP, and
+  exits with the command's code (130/143/129 when interrupted, 2 when the session
+  could not be built).
+- `tien-de` never runs on the shared database. When `DATABASE_URL` does not name a
+  throwaway database — `_do` other than a `_mau_do` template, or a `_gieo` scratch
+  database — it re-runs itself inside a session. Every screen eval in
+  `_acceptance/config.yaml` goes through it, so a single eval run by a Workflow agent
+  or `repin-lane` gets a clean database and its own servers without any change to the
+  eval. The ports an eval names (`${APP_URL:-http://localhost:3910}`) are only
+  defaults; the session's `APP_URL` wins.
+
+To measure a whole lane in one session — one database, one server start — wrap it:
+`bun run do:man --chay "node <feature-loop>/scripts/repin-lane.mjs --root . --slug <s>"`.
+Evals inside the lane then share that database the way they shared `crm` before. Evals
+that hard-code their ports (`ccq_chup_hai_vai`, `lgo_chup`) do not follow the session.
