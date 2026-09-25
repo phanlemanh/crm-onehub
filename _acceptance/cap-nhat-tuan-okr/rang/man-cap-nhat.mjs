@@ -4,7 +4,11 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { db } from "../../../packages/db/src/index.ts";
-import { WORKSPACE_ID } from "../../../packages/db/src/workspace.ts";
+import {
+	isOnboarded,
+	markOnboarded,
+	WORKSPACE_ID,
+} from "../../../packages/db/src/workspace.ts";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 import {
 	API,
@@ -28,6 +32,7 @@ const HEP = 390;
 const CAO = 900;
 const CHO = 30_000;
 const CHO_HYDRATE_MS = 800;
+const NGAY_LUI_CONG_BO = 2;
 const MA = `n${Date.now().toString(36).slice(-6)}`;
 const LOI_HYDRATE = /hydrat/i;
 const CUA_CHAN_URL = process.env.CUA_CHAN_URL ?? "http://localhost:3922";
@@ -37,7 +42,7 @@ mkdirSync(BANG_CHUNG, { recursive: true });
 const CHU = {
 	tabCapNhat: "Cập nhật tuần",
 	tuanTruoc: "Tuần trước: vừa",
-	loiPhanTram: "Nhập phần trăm từ 0 đến 100",
+	loiSo: "Nhập một số",
 	cao: "Cao",
 	vua: "Vừa",
 	thap: "Thấp",
@@ -140,6 +145,20 @@ for (const [k, n] of Object.entries(NGUOI)) {
 	cookie[k] = phienCua(n.email);
 	id[k] = await datNguoi(n.email, n.vai, n.ten);
 }
+
+{
+	const org = await db.organization.findUnique({
+		where: { id: WORKSPACE_ID },
+		select: { metadata: true },
+	});
+	if (org && !isOnboarded(org.metadata)) {
+		await db.organization.update({
+			where: { id: WORKSPACE_ID },
+			data: { metadata: markOnboarded(org.metadata, new Date()) },
+		});
+	}
+}
+
 const slug = await suySlug(cookie.admin);
 
 function mu(c) {
@@ -516,6 +535,11 @@ async function gieoMucTieu() {
 	OKR.o29c = o29c.id;
 	KR.k29c = o29c.kr[0];
 	await lam(cookie.tp, "okr.publishObjective", { id: o29c.id });
+
+	await db.okrObjective.updateMany({
+		where: { id: { in: [OKR.cn, OKR.ot, OKR.a, OKR.c, OKR.u, OKR.di, OKR.o29a, OKR.o29c] } },
+		data: { publishedAt: new Date(Date.now() - NGAY_LUI_CONG_BO * 24 * 3600 * 1000) },
+	});
 }
 
 async function gieoBinhLuanVaNhac() {
@@ -844,14 +868,17 @@ async function buocE6E7() {
 		"E6 buoc 1: tab Cap nhat tuan aria-current",
 		(await chuSel(t, "[aria-current='page']")).includes(CHU.tabCapNhat),
 	);
-	kiem("E6 buoc 1: co 3 dong KR", (await demSel(t, "[data-kr]")) === 3);
+	kiem(
+		"E6 buoc 1: co 4 dong KR (3 cua muc tieu cn + KR trao doi ot cung chu M)",
+		(await demSel(t, "[data-kr]")) === 4,
+	);
 	kiem(
 		"E6 buoc 1: KR tang-toi dien san 5",
 		(await t.$eval(`[data-kr='${KR.tt}'] input`, (e) => e.value)) === "5",
 	);
 	kiem(
 		`E6 buoc 1: dong «${CHU.tuanTruoc}» cho KR co lan truoc`,
-		(await chuSel(t, `[data-kr='${KR.tt}'] [data-o='gia-tri']`)).includes(CHU.tuanTruoc),
+		(await chuSel(t, `[data-kr='${KR.tt}'] [data-o='tu-tin']`)).includes(CHU.tuanTruoc),
 	);
 	kiem(
 		"E6 buoc 1: KR moc co 2 nut ToggleGroup",
@@ -862,8 +889,8 @@ async function buocE6E7() {
 	await ganGiaTri(t, `[data-kr='${KR.pt}'] input`, "ba");
 	await cho(200);
 	kiem(
-		`E6 buoc 2: loi phan-tram «${CHU.loiPhanTram}»`,
-		(await chuSel(t, `[data-kr='${KR.pt}'] [data-o='gia-tri']`)).includes(CHU.loiPhanTram),
+		`E6 buoc 2: loi so khi go chu khong phai so «${CHU.loiSo}»`,
+		(await chuSel(t, `[data-kr='${KR.pt}'] [data-o='gia-tri']`)).includes(CHU.loiSo),
 	);
 	kiem(
 		"E6 buoc 2: nut gui disabled khi co so hong",
@@ -1453,13 +1480,18 @@ async function buocE29() {
 	await tp.close();
 }
 
+const CHI = process.env.CHI
+	? new Set(process.env.CHI.split(",").map((s) => s.trim()))
+	: null;
+const chay = (khoi) => CHI === null || khoi.some((k) => CHI.has(k));
+
 try {
-	await buocE6E7();
-	await buocE13E14();
-	await buocE16();
-	await buocE18E19();
-	await buocE23();
-	await buocE29();
+	if (chay(["E6", "E7"])) await buocE6E7();
+	if (chay(["E13", "E14"])) await buocE13E14();
+	if (chay(["E16"])) await buocE16();
+	if (chay(["E18", "E19"])) await buocE18E19();
+	if (chay(["E23"])) await buocE23();
+	if (chay(["E29"])) await buocE29();
 } catch (e) {
 	hong.push(`ngoai le: ${e.stack ?? e.message}`);
 } finally {

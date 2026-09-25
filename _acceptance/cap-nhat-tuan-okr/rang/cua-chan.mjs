@@ -68,6 +68,8 @@ const server = createServer(async (req, res) => {
 
 	const headers = { ...req.headers, host: NANG_URL.host };
 	delete headers["content-length"];
+	delete headers["transfer-encoding"];
+	delete headers["connection"];
 	if (than.length > 0) headers["content-length"] = String(than.length);
 
 	const nguoc = httpRequest(
