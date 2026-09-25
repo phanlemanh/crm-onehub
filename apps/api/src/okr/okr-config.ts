@@ -23,6 +23,7 @@ export const OKR = {
 		khongCoChuKy: (id: string) => `Không có chu kỳ nào mang mã ${id}.`,
 		khongCoMucTieu: (id: string) => `Không có mục tiêu nào mang mã ${id}.`,
 		khongCoKr: (id: string) => `Không có KR nào mang mã ${id}.`,
+		khongCoDonVi: (id: string) => `Không có đơn vị nào mang mã ${id}.`,
 		krDangLaDich:
 			"KR này đang có mục tiêu góp vào — gỡ căn chỉnh trước khi xoá.",
 		quyNgoaiNam: "Quý phải nằm trọn trong năm cha.",

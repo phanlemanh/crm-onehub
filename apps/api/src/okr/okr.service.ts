@@ -44,7 +44,9 @@ import {
 } from "@nestjs/common";
 import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
+import { khoa } from "../to-chuc/nhap";
 import { dungCayCanChinh } from "./can-chinh";
+import { dongLoOkr, phanTichLoOkr } from "./nhap";
 import type {
 	ChuKyOutput,
 	CreateKrInput,
@@ -147,6 +149,10 @@ function donViChon(unit: DonViChon): DonViCuaMucTieu {
 		case "nguoi":
 			return donViCua({ level: "ca-nhan", personUserId: unit.id });
 	}
+}
+
+function khoaDonVi(unit: DonViChon): string {
+	return unit.loai === "goc" ? unit.loai : `${unit.loai}:${unit.id}`;
 }
 
 const soKr = (d: Prisma.Decimal | number) => Number(d);
@@ -335,7 +341,7 @@ export class OkrService {
 		});
 	}
 
-	async assertKyGhiDuoc(tx: Tx, cycleId: string) {
+	async assertKyGhiDuoc(tx: Tx | Db, cycleId: string) {
 		const c = await tx.okrCycle.findUnique({
 			where: { id: cycleId },
 			select: { phase: true },
@@ -1020,6 +1026,168 @@ export class OkrService {
 					departmentId: r.departmentId,
 					personUserId: r.personUserId,
 				}),
+			};
+		});
+	}
+
+	private kiemLoNhap(chu: string) {
+		const soDong = dongLoOkr(chu).length;
+		if (soDong === 0) throw new BadRequestException(T.nhap.loRong);
+		if (soDong > OKR.lo.toiDaDong)
+			throw new BadRequestException(T.nhap.loQuaDai(OKR.lo.toiDaDong));
+	}
+
+	private chuDonViNhap(q: Quyen, userId: string, dv: DonViCuaMucTieu) {
+		const moiPb = [
+			...q.cay.divisions.flatMap((b) => b.departments),
+			...q.cay.chuaXep,
+		];
+		switch (dv.level) {
+			case "onehub":
+				return userId;
+			case "ca-nhan":
+				return dv.personUserId ?? userId;
+			case "bo-phan": {
+				const b = q.cay.divisions.find((x) => x.id === dv.divisionId);
+				if (!b)
+					throw new NotFoundException(T.khongCoDonVi(dv.divisionId ?? ""));
+				return b.head?.id ?? userId;
+			}
+			case "phong-ban": {
+				const pb = moiPb.find((x) => x.id === dv.departmentId);
+				if (!pb)
+					throw new NotFoundException(T.khongCoDonVi(dv.departmentId ?? ""));
+				return pb.head?.id ?? userId;
+			}
+		}
+	}
+
+	private async phanTichNhap(
+		tx: Tx | Db,
+		cycleId: string,
+		dv: DonViCuaMucTieu,
+		chu: string,
+	) {
+		await this.assertKyGhiDuoc(tx, cycleId);
+		const ct = await this.program(tx);
+		if (dv.level === "ca-nhan" && !ct.personalOn)
+			throw new BadRequestException(T.caNhanTat);
+		const [members, coSan] = await Promise.all([
+			tx.member.findMany({
+				where: { organizationId: WORKSPACE_ID },
+				select: { user: { select: { id: true, email: true } } },
+			}),
+			tx.okrObjective.findMany({
+				where: { cycleId, ...dv, status: { not: "da-bo" } },
+				select: { title: true },
+			}),
+		]);
+		const kq = phanTichLoOkr(chu, {
+			members: members.map((m) => m.user),
+			daCo: coSan.map((m) => khoa(m.title)),
+			tranConLai: ct.capMode === "chan" ? ct.objectiveCap - coSan.length : null,
+		});
+		if (kq.vuotTran)
+			throw new BadRequestException(T.nhap.vuotTran(ct.objectiveCap));
+		return kq;
+	}
+
+	async previewImport(
+		userId: string,
+		input: { cycleId: string; unit: DonViChon; text: string },
+	) {
+		const dv = donViChon(input.unit);
+		const q = await this.quyenOkr.assertNhapDuoc(userId, dv);
+		this.kiemLoNhap(input.text);
+		this.chuDonViNhap(q, userId, dv);
+		const kq = await this.phanTichNhap(this.db, input.cycleId, dv, input.text);
+		return { rows: kq.rows, summary: kq.summary };
+	}
+
+	async applyImport(
+		userId: string,
+		input: { cycleId: string; unit: DonViChon; text: string; congBo: boolean },
+	) {
+		const dv = donViChon(input.unit);
+		const q = await this.quyenOkr.assertNhapDuoc(userId, dv);
+		this.kiemLoNhap(input.text);
+		const chu = this.chuDonViNhap(q, userId, dv);
+		return this.db.$transaction(async (tx) => {
+			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${input.cycleId} FOR UPDATE`;
+			const kq = await this.phanTichNhap(tx, input.cycleId, dv, input.text);
+			if (kq.mucTieu.length === 0) {
+				if (kq.rows.some((r) => r.error === T.nhap.daCo))
+					return { written: 0, objectives: 0, keyResults: 0 };
+				throw new BadRequestException(T.nhap.khongDongHopLe);
+			}
+			await this.assertThanhVien(tx, [chu]);
+			const luc = input.congBo ? new Date() : null;
+			const status = luc ? "cong-bo" : "nhap";
+			let viTri = await tx.okrObjective.count({
+				where: { cycleId: input.cycleId },
+			});
+			let demKr = 0;
+			for (const m of kq.mucTieu) {
+				const mt = await tx.okrObjective.create({
+					data: {
+						cycleId: input.cycleId,
+						...dv,
+						ownerUserId: chu,
+						kind: "cam-ket",
+						title: m.title,
+						whyNow: "",
+						position: viTri,
+						status,
+						publishedAt: luc,
+						keyResults: {
+							create: m.keyResults.map((k, i) => ({
+								title: k.title,
+								kind: k.kind,
+								ownerUserId: k.ownerUserId,
+								startValue: k.startValue,
+								targetValue: k.targetValue,
+								currentValue: k.startValue,
+								unit: k.unit,
+								source: "tay",
+								position: i,
+								startLockedAt: luc,
+							})),
+						},
+					},
+				});
+				viTri += 1;
+				demKr += m.keyResults.length;
+				await this.vet(
+					tx,
+					userId,
+					"tao",
+					{ objectiveId: mt.id, cycleId: mt.cycleId },
+					null,
+					{
+						title: mt.title,
+						kind: mt.kind,
+						level: mt.level,
+						status: mt.status,
+					},
+				);
+			}
+			await this.vet(
+				tx,
+				userId,
+				"nhap-bang-tinh",
+				{ cycleId: input.cycleId },
+				null,
+				{
+					unit: khoaDonVi(input.unit),
+					cycleId: input.cycleId,
+					objectives: kq.mucTieu.length,
+					keyResults: demKr,
+				},
+			);
+			return {
+				written: demKr,
+				objectives: kq.mucTieu.length,
+				keyResults: demKr,
 			};
 		});
 	}

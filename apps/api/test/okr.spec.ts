@@ -728,7 +728,28 @@ const THU_TUC_GHI: { ten: string; vao: (f: CoSo) => Json }[] = [
 		}),
 	},
 	{ ten: "removeAlignment", vao: (f) => ({ id: f.gopXoa }) },
+	{ ten: "previewImport", vao: (f) => loGoc(f.cycleId) },
+	{
+		ten: "applyImport",
+		vao: (f) => ({ ...loGoc(f.cycleId), congBo: false }),
+	},
 ];
+
+const oNhap = (...o: string[]) => o.join("\t");
+
+const loGoc = (cycleId: string) => ({
+	cycleId,
+	unit: { loai: "goc" },
+	text: oNhap(
+		ma("nhap pha"),
+		"KR",
+		"mốc",
+		"",
+		"",
+		"",
+		`${phien.quan.nguoi}@thu.test`,
+	),
+});
 
 async function dungCoSo(cycleId: string): Promise<CoSo> {
 	const quan = phien.quan.nguoi;
@@ -1651,5 +1672,297 @@ describe("can-chinh", () => {
 			tuChoi(await goi("okr.removeAlignment", { id: gopP2 }, truongP2.cookie)),
 			await demP2(),
 		]).toEqual([`400 ${T.daBo}`, `400 ${T.daBo}`, 1]);
+	});
+});
+
+type XemNhap = {
+	rows: { line: number; error: string | null }[];
+	summary: { valid: number; invalid: number; objectives: number };
+};
+type GhiNhap = { written: number; objectives: number; keyResults: number };
+
+describe("nhap-bang-tinh", () => {
+	test("nhap-bang-tinh: truong P xem truoc roi ghi, nhap lai 0 dong, cong bo, lo qua dai, tran chan, quyen", async () => {
+		const N = T.nhap;
+		await caiChuongTrinh();
+		const quy = await kyDangChay("nhap");
+		const p = await pbMoi("P nhap");
+		const truong = await truongMoi("department", p, "truong P");
+		const email = `${truong.nguoi}@thu.test`;
+		const mtA = ma("Tăng doanh thu");
+		const mtB = ma("Giữ chân khách");
+		const vao = {
+			cycleId: quy,
+			unit: { loai: "pb", id: p },
+			text: [
+				oNhap("Mục tiêu", "KR", "Kiểu", "Khởi điểm", "Đích", "Đơn vị", "Email"),
+				oNhap(
+					mtA,
+					"Doanh thu quý",
+					"Tăng tới",
+					"1000",
+					"2.000,5",
+					"triệu",
+					email.toUpperCase(),
+				),
+				"",
+				oNhap(mtA, "Khách mới", "mốc", "", "", "", email),
+				oNhap(mtB, "Tỉ lệ giữ", "phần trăm", "", "90", "%", email),
+				oNhap(mtB, "KR lạ", "tăng tới", "0", "10", "", "la@khac.test"),
+			].join("\n"),
+		};
+		const demMt = () =>
+			db.okrObjective.count({ where: { cycleId: quy, departmentId: p } });
+		const demVetLo = () =>
+			db.okrTrail.count({ where: { cycleId: quy, action: "nhap-bang-tinh" } });
+
+		const xem = ok<XemNhap>(
+			await goi("okr.previewImport", vao, truong.cookie),
+			"xem truoc",
+		);
+		expect(xem.rows.map((r) => [r.line, r.error])).toEqual([
+			[2, null],
+			[4, null],
+			[5, null],
+			[6, N.emailLa],
+		]);
+		expect(xem.summary).toEqual({ valid: 3, invalid: 1, objectives: 2 });
+		expect([await demMt(), await demVetLo()]).toEqual([0, 0]);
+
+		const ghi = ok<GhiNhap>(
+			await goi("okr.applyImport", { ...vao, congBo: false }, truong.cookie),
+			"ghi",
+		);
+		expect(ghi).toEqual({ written: 3, objectives: 2, keyResults: 3 });
+		const mts = await db.okrObjective.findMany({
+			where: { cycleId: quy, departmentId: p },
+			include: { keyResults: { orderBy: { position: "asc" } } },
+			orderBy: { position: "asc" },
+		});
+		expect(
+			mts.map((m) => [
+				m.title,
+				m.level,
+				m.status,
+				m.kind,
+				m.ownerUserId,
+				m.publishedAt,
+				m.keyResults.map((k) => [
+					k.title,
+					k.kind,
+					Number(k.startValue),
+					Number(k.targetValue),
+					Number(k.currentValue),
+					k.unit,
+					k.ownerUserId,
+					k.source,
+					k.position,
+					k.startLockedAt,
+				]),
+			]),
+		).toEqual([
+			[
+				mtA,
+				"phong-ban",
+				"nhap",
+				"cam-ket",
+				truong.nguoi,
+				null,
+				[
+					[
+						"Doanh thu quý",
+						"tang-toi",
+						1000,
+						2000.5,
+						1000,
+						"triệu",
+						truong.nguoi,
+						"tay",
+						0,
+						null,
+					],
+					["Khách mới", "moc", 0, 1, 0, "", truong.nguoi, "tay", 1, null],
+				],
+			],
+			[
+				mtB,
+				"phong-ban",
+				"nhap",
+				"cam-ket",
+				truong.nguoi,
+				null,
+				[
+					[
+						"Tỉ lệ giữ",
+						"phan-tram",
+						0,
+						90,
+						0,
+						"%",
+						truong.nguoi,
+						"tay",
+						0,
+						null,
+					],
+				],
+			],
+		]);
+		const vetLo = await db.okrTrail.findMany({
+			where: { cycleId: quy, action: "nhap-bang-tinh" },
+		});
+		expect(
+			vetLo.map((v) => [v.actorUserId, v.before, parseOkrVet(v.after)]),
+		).toEqual([
+			[
+				truong.nguoi,
+				null,
+				{ unit: `pb:${p}`, cycleId: quy, objectives: 2, keyResults: 3 },
+			],
+		]);
+		const vetTao = await db.okrTrail.findMany({
+			where: { action: "tao", objectiveId: { in: mts.map((m) => m.id) } },
+			orderBy: { at: "asc" },
+		});
+		expect(vetTao.map((v) => [v.objectiveId, v.actorUserId])).toEqual(
+			mts.map((m) => [m.id, truong.nguoi]),
+		);
+
+		const ghiLai = ok<GhiNhap>(
+			await goi("okr.applyImport", { ...vao, congBo: false }, truong.cookie),
+			"ghi lai",
+		);
+		expect([ghiLai, await demMt(), await demVetLo()]).toEqual([
+			{ written: 0, objectives: 0, keyResults: 0 },
+			2,
+			1,
+		]);
+
+		const xemLai = ok<XemNhap>(
+			await goi("okr.previewImport", vao, truong.cookie),
+			"xem lai",
+		);
+		expect(xemLai.rows.map((r) => r.error)).toEqual([
+			N.daCo,
+			N.daCo,
+			N.daCo,
+			N.emailLa,
+		]);
+		const mtC = ma("Công bố ngay");
+		ok<GhiNhap>(
+			await goi(
+				"okr.applyImport",
+				{
+					...vao,
+					text: oNhap(mtC, "KR công bố", "giữ trên", "0", "5", "", email),
+					congBo: true,
+				},
+				truong.cookie,
+			),
+			"ghi cong bo",
+		);
+		const c = await db.okrObjective.findFirstOrThrow({
+			where: { cycleId: quy, title: mtC },
+			include: { keyResults: true },
+		});
+		expect([
+			c.status,
+			c.publishedAt !== null,
+			c.keyResults.map((k) => k.startLockedAt !== null),
+		]).toEqual(["cong-bo", true, [true]]);
+
+		const truocQuaDai = [await demMt(), await demVetLo()];
+		const quaDai = {
+			...vao,
+			text: Array.from({ length: 1001 }, (_, i) =>
+				oNhap(`${mtA} ${i}`, "KR", "mốc", "", "", "", email),
+			).join("\n"),
+		};
+		const quaDaiRa = [
+			await goi("okr.previewImport", quaDai, truong.cookie),
+			await goi("okr.applyImport", { ...quaDai, congBo: false }, truong.cookie),
+		].map(tuChoi);
+		expect(quaDaiRa).toEqual([
+			`400 ${N.loQuaDai(OKR.lo.toiDaDong)}`,
+			`400 ${N.loQuaDai(OKR.lo.toiDaDong)}`,
+		]);
+		expect([await demMt(), await demVetLo()]).toEqual(truocQuaDai);
+
+		const q = await pbMoi("Q khong truong");
+		const demQ = () =>
+			db.okrObjective.count({ where: { cycleId: quy, departmentId: q } });
+		const baMoi = {
+			cycleId: quy,
+			unit: { loai: "pb", id: q },
+			text: ["Một", "Hai", "Ba"]
+				.map((t) => oNhap(ma(t), "KR", "mốc", "", "", "", email))
+				.join("\n"),
+		};
+		await caiChuongTrinh({ capMode: "chan", objectiveCap: 2 });
+		const vetTruocTran = await demVetLo();
+		const tran = [
+			await goi("okr.previewImport", baMoi),
+			await goi("okr.applyImport", { ...baMoi, congBo: false }),
+		].map(tuChoi);
+		expect(tran).toEqual([`400 ${N.vuotTran(2)}`, `400 ${N.vuotTran(2)}`]);
+		expect([await demQ(), await demVetLo()]).toEqual([0, vetTruocTran]);
+
+		await caiChuongTrinh({ objectiveCap: 2 });
+		const tuChoiThuong = [
+			await goi("okr.previewImport", vao, "thuong"),
+			await goi("okr.applyImport", { ...vao, congBo: false }, "thuong"),
+		].map(tuChoi);
+		expect(tuChoiThuong).toEqual([
+			`403 ${T.khongSuaDuocDonVi}`,
+			`403 ${T.khongSuaDuocDonVi}`,
+		]);
+
+		const mtQuan = ma("Quản trị nhập");
+		const loQuan = {
+			...vao,
+			text: oNhap(mtQuan, "KR quản trị", "mốc", "", "", "", email),
+		};
+		const quanXem = await goi("okr.previewImport", loQuan);
+		const quanGhi = await goi("okr.applyImport", { ...loQuan, congBo: false });
+		const quanKhongTruong = await goi("okr.applyImport", {
+			...baMoi,
+			congBo: false,
+		});
+		expect(
+			[quanXem, quanGhi, quanKhongTruong].map((r) => [r.status, r.data]),
+		).toEqual([
+			[
+				200,
+				{
+					rows: [
+						{
+							line: 1,
+							objective: mtQuan,
+							keyResult: "KR quản trị",
+							kind: "mốc",
+							start: "",
+							target: "",
+							unit: "",
+							email,
+							error: null,
+						},
+					],
+					summary: { valid: 1, invalid: 0, objectives: 1 },
+				},
+			],
+			[200, { written: 1, objectives: 1, keyResults: 1 }],
+			[200, { written: 3, objectives: 3, keyResults: 3 }],
+		]);
+		const chuMoi = await db.okrObjective.findMany({
+			where: { cycleId: quy, OR: [{ title: mtQuan }, { departmentId: q }] },
+			select: { departmentId: true, ownerUserId: true },
+			orderBy: { position: "asc" },
+		});
+		expect(chuMoi.map((m) => [m.departmentId, m.ownerUserId])).toEqual([
+			[p, truong.nguoi],
+			[q, phien.quan.nguoi],
+			[q, phien.quan.nguoi],
+			[q, phien.quan.nguoi],
+		]);
+		expect(phien.quan.nguoi).not.toBe(truong.nguoi);
 	});
 });

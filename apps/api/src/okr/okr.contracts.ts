@@ -188,13 +188,15 @@ export const alignmentTreeOutput = z.object({
 	roots: z.array(nutCanChinh),
 	chuaCanChinh: z.array(nutCanChinh),
 });
-export const importInput = z.object({
+export const okrImportInput = z.object({
 	cycleId: ma,
 	unit: donViChon,
 	text: z.string().max(OKR.lo.toiDaKyTu),
 });
-export const importApplyInput = importInput.extend({ congBo: z.boolean() });
-export const dongNhapOutput = z.object({
+export const okrImportApplyInput = okrImportInput.extend({
+	congBo: z.boolean(),
+});
+export const okrDongNhapOutput = z.object({
 	line: z.number(),
 	objective: z.string(),
 	keyResult: z.string(),
@@ -205,15 +207,15 @@ export const dongNhapOutput = z.object({
 	email: z.string(),
 	error: z.string().nullable(),
 });
-export const importPreviewOutput = z.object({
-	rows: z.array(dongNhapOutput),
+export const okrImportPreviewOutput = z.object({
+	rows: z.array(okrDongNhapOutput),
 	summary: z.object({
 		valid: z.number(),
 		invalid: z.number(),
 		objectives: z.number(),
 	}),
 });
-export const importApplyOutput = z.object({
+export const okrImportApplyOutput = z.object({
 	written: z.number(),
 	objectives: z.number(),
 	keyResults: z.number(),
@@ -224,7 +226,7 @@ export type MucTieuOutput = z.infer<typeof mucTieuOutput>;
 export type AlignmentTreeOutput = z.infer<typeof alignmentTreeOutput>;
 export type KrOutput = z.infer<typeof krOutput>;
 export type DonViChon = z.infer<typeof donViChon>;
-export type DongNhapOutput = z.infer<typeof dongNhapOutput>;
+export type OkrDongNhapOutput = z.infer<typeof okrDongNhapOutput>;
 export type VetOutput = z.infer<typeof vetOutput>;
 export type ObjectiveOutput = z.infer<typeof objectiveOutput>;
 export type CreateKrInput = z.infer<typeof createKrInput>;

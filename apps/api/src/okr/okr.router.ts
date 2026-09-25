@@ -30,6 +30,10 @@ import {
 	objectiveOutput,
 	okOutput,
 	okrAccessOutput,
+	okrImportApplyInput,
+	okrImportApplyOutput,
+	okrImportInput,
+	okrImportPreviewOutput,
 	programOutput,
 	setCyclePhaseInput,
 	setProgramInput,
@@ -263,5 +267,29 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof idInput>,
 	) {
 		return this.okr.removeAlignment(ctx.user.id, input.id);
+	}
+
+	@Mutation({
+		input: okrImportInput,
+		output: okrImportPreviewOutput,
+		meta: restMeta("POST", "/okr/import/preview", TAG),
+	})
+	previewImport(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof okrImportInput>,
+	) {
+		return this.okr.previewImport(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: okrImportApplyInput,
+		output: okrImportApplyOutput,
+		meta: restMeta("POST", "/okr/import", TAG),
+	})
+	applyImport(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof okrImportApplyInput>,
+	) {
+		return this.okr.applyImport(ctx.user.id, input);
 	}
 }
