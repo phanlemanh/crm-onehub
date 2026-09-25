@@ -742,7 +742,7 @@ const loGoc = (cycleId: string) => ({
 	unit: { loai: "goc" },
 	text: oNhap(
 		ma("nhap pha"),
-		"KR",
+		"KR pha",
 		"mốc",
 		"",
 		"",
@@ -1874,7 +1874,7 @@ describe("nhap-bang-tinh", () => {
 		const quaDai = {
 			...vao,
 			text: Array.from({ length: 1001 }, (_, i) =>
-				oNhap(`${mtA} ${i}`, "KR", "mốc", "", "", "", email),
+				oNhap(`${mtA} ${i}`, "KR lô", "mốc", "", "", "", email),
 			).join("\n"),
 		};
 		const quaDaiRa = [
@@ -1894,7 +1894,7 @@ describe("nhap-bang-tinh", () => {
 			cycleId: quy,
 			unit: { loai: "pb", id: q },
 			text: ["Một", "Hai", "Ba"]
-				.map((t) => oNhap(ma(t), "KR", "mốc", "", "", "", email))
+				.map((t) => oNhap(ma(t), "KR một", "mốc", "", "", "", email))
 				.join("\n"),
 		};
 		await caiChuongTrinh({ capMode: "chan", objectiveCap: 2 });
@@ -1905,6 +1905,22 @@ describe("nhap-bang-tinh", () => {
 		].map(tuChoi);
 		expect(tran).toEqual([`400 ${N.vuotTran(2)}`, `400 ${N.vuotTran(2)}`]);
 		expect([await demQ(), await demVetLo()]).toEqual([0, vetTruocTran]);
+		const laiQuaTran = await goi(
+			"okr.applyImport",
+			{ ...vao, congBo: false },
+			truong.cookie,
+		);
+		expect([
+			laiQuaTran.status,
+			laiQuaTran.data,
+			await demMt(),
+			await demVetLo(),
+		]).toEqual([
+			200,
+			{ written: 0, objectives: 0, keyResults: 0 },
+			3,
+			vetTruocTran,
+		]);
 
 		await caiChuongTrinh({ objectiveCap: 2 });
 		const tuChoiThuong = [
@@ -1964,5 +1980,88 @@ describe("nhap-bang-tinh", () => {
 			[q, phien.quan.nguoi],
 		]);
 		expect(phien.quan.nguoi).not.toBe(truong.nguoi);
+	});
+
+	test("nhap-bang-tinh: ten 250 ky tu la loi dong va khong ghi, tran KR khi chan co doi chung duong", async () => {
+		const N = T.nhap;
+		await caiChuongTrinh();
+		const quy = await kyDangChay("nhap-dai");
+		const p = await pbMoi("P dai");
+		const email = `${phien.quan.nguoi}@thu.test`;
+		const dai = `${ma("dai")} ${"x".repeat(250)}`.slice(0, 250);
+		const ngan = ma("Ngắn");
+		const lo = {
+			cycleId: quy,
+			unit: { loai: "pb", id: p },
+			text: [
+				oNhap(dai, "KR dài", "mốc", "", "", "", email),
+				oNhap(ngan, "KR ngắn", "mốc", "", "", "", email),
+			].join("\n"),
+		};
+		const xem = ok<XemNhap>(await goi("okr.previewImport", lo), "xem dai");
+		expect(xem.rows.map((r) => [r.line, r.error])).toEqual([
+			[1, N.doDai],
+			[2, null],
+		]);
+		const ghi = ok<GhiNhap>(
+			await goi("okr.applyImport", { ...lo, congBo: false }),
+			"ghi dai",
+		);
+		const tieuDe = (
+			await db.okrObjective.findMany({
+				where: { cycleId: quy, departmentId: p },
+				select: { title: true },
+			})
+		).map((m) => m.title);
+		expect([ghi, tieuDe]).toEqual([
+			{ written: 1, objectives: 1, keyResults: 1 },
+			[ngan],
+		]);
+		const lai = ok<GhiNhap>(
+			await goi("okr.applyImport", { ...lo, congBo: false }),
+			"ghi lai dai",
+		);
+		expect([
+			lai,
+			await db.okrObjective.count({ where: { cycleId: quy, departmentId: p } }),
+		]).toEqual([{ written: 0, objectives: 0, keyResults: 0 }, 1]);
+
+		await caiChuongTrinh({ capMode: "chan", krCap: 2 });
+		const q = await pbMoi("Q tran kr");
+		const demQ = () =>
+			db.okrObjective.count({ where: { cycleId: quy, departmentId: q } });
+		const demVetLo = () =>
+			db.okrTrail.count({ where: { cycleId: quy, action: "nhap-bang-tinh" } });
+		const loKr = (soKr: number) => {
+			const mt = ma("Trần KR");
+			return {
+				cycleId: quy,
+				unit: { loai: "pb", id: q },
+				text: Array.from({ length: soKr }, (_, i) =>
+					oNhap(mt, `KR số ${i}`, "mốc", "", "", "", email),
+				).join("\n"),
+			};
+		};
+		const vuot = loKr(3);
+		const vetTruoc = await demVetLo();
+		const tuChoiKr = [
+			await goi("okr.previewImport", vuot),
+			await goi("okr.applyImport", { ...vuot, congBo: false }),
+		].map(tuChoi);
+		expect(tuChoiKr).toEqual([
+			`400 ${T.vuotTranKr(2)}`,
+			`400 ${T.vuotTranKr(2)}`,
+		]);
+		expect([await demQ(), await demVetLo()]).toEqual([0, vetTruoc]);
+		const vua = loKr(2);
+		const vuaXem = await goi("okr.previewImport", vua);
+		const vuaGhi = await goi("okr.applyImport", { ...vua, congBo: false });
+		expect([vuaXem.status, vuaGhi.status, vuaGhi.data, await demQ()]).toEqual([
+			200,
+			200,
+			{ written: 2, objectives: 1, keyResults: 2 },
+			1,
+		]);
+		await caiChuongTrinh();
 	});
 });

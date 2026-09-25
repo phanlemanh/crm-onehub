@@ -1,6 +1,12 @@
 export const OKR = {
 	tenGoc: "OneHub",
-	ten: { mucTieuToiDa: 200, krToiDa: 200, donViDo: 24, viSao: 500 },
+	ten: {
+		toiThieu: 3,
+		mucTieuToiDa: 200,
+		krToiDa: 200,
+		donViDo: 24,
+		viSao: 500,
+	},
 	lo: { toiDaDong: 1000, toiDaKyTu: 200_000 },
 	nhap: {
 		tenCotDau: ["muc tieu", "objective"],
@@ -63,6 +69,8 @@ export const OKR = {
 		nhap: {
 			thieuMucTieu: "Thiếu mục tiêu",
 			thieuKr: "Thiếu KR",
+			doDai:
+				"Tên mục tiêu, tên KR phải dài 3–200 ký tự; đơn vị đo tối đa 24 ký tự",
 			kieuLa:
 				"Cột kiểu chỉ nhận: tăng tới, giảm xuống, giữ trên, giữ dưới, mốc, phần trăm",
 			emailLa: "Email này chưa là thành viên CRM",

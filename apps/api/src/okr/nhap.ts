@@ -4,7 +4,7 @@ import {
 	kieuKr,
 	soKr,
 } from "@crm/validation/okr-kr";
-import { boDau, khoa, tachDong } from "../to-chuc/nhap";
+import { boDau, khoa, tachO } from "../to-chuc/nhap";
 import type { OkrDongNhapOutput } from "./okr.contracts";
 import { OKR } from "./okr-config";
 
@@ -14,6 +14,7 @@ export type SnapNhapOkr = {
 	members: { id: string; email: string }[];
 	daCo: string[];
 	tranConLai: number | null;
+	tranKr: number | null;
 };
 
 export type KrNhap = {
@@ -33,12 +34,50 @@ export type KetQuaNhapOkr = {
 	mucTieu: MucTieuNhap[];
 	summary: { valid: number; invalid: number; objectives: number };
 	vuotTran: boolean;
+	vuotTranKr: boolean;
 };
 
 const kieuTheoChu = new Map<string, string>(Object.entries(OKR.nhap.kieu));
 
+const nhomNghin = /^-?\d{1,3}(\.\d{3})+$/;
+
+function tachTheo(dong: string, ngan: string): string[] {
+	const o: string[] = [];
+	let hienTai = "";
+	let trongNgoac = false;
+	for (let i = 0; i < dong.length; i += 1) {
+		const k = dong[i];
+		if (k === '"') {
+			if (trongNgoac && dong[i + 1] === '"') {
+				hienTai += '"';
+				i += 1;
+			} else trongNgoac = !trongNgoac;
+		} else if (k === ngan && !trongNgoac) {
+			o.push(hienTai.trim());
+			hienTai = "";
+		} else hienTai += k;
+	}
+	o.push(hienTai.trim());
+	return o;
+}
+
+function tachOOkr(dong: string): string[] {
+	if (dong.includes("\t")) return tachO(dong);
+	const theoChamPhay = tachTheo(dong, ";");
+	if (
+		theoChamPhay.length > 1 &&
+		theoChamPhay.length >= tachTheo(dong, ",").length
+	)
+		return theoChamPhay;
+	return tachO(dong);
+}
+
 export function dongLoOkr(chu: string): { line: number; o: string[] }[] {
-	const dong = tachDong(chu);
+	const dong = chu
+		.split(/\r?\n/)
+		.map((d, i) => ({ line: i + 1, d }))
+		.filter((x) => x.d.trim() !== "")
+		.map((x) => ({ line: x.line, o: tachOOkr(x.d) }));
 	const dau = boDau(dong[0]?.o[0] ?? "");
 	if (OKR.nhap.tenCotDau.some((t) => t === dau)) return dong.slice(1);
 	return dong;
@@ -46,9 +85,10 @@ export function dongLoOkr(chu: string): { line: number; o: string[] }[] {
 
 function docSo(o: string): number | null {
 	const s = o.replace(/\s/g, "");
-	const n = s.includes(",")
-		? Number(s.replace(/\./g, "").replace(",", "."))
-		: Number(s);
+	const n =
+		s.includes(",") || nhomNghin.test(s)
+			? Number(s.replace(/\./g, "").replace(",", "."))
+			: Number(s);
 	return soKr.safeParse(n).success ? n : null;
 }
 
@@ -65,6 +105,17 @@ function macDinh(kind: KieuKr): MacDinh {
 	return { khoi: null, dich: null };
 }
 
+const trongKhoang = (s: string, toiDa: number) =>
+	s.length >= OKR.ten.toiThieu && s.length <= toiDa;
+
+function dungDoDai(r: OkrDongNhapOutput): boolean {
+	return (
+		trongKhoang(r.objective, OKR.ten.mucTieuToiDa) &&
+		trongKhoang(r.keyResult, OKR.ten.krToiDa) &&
+		r.unit.length <= OKR.ten.donViDo
+	);
+}
+
 type Doc =
 	| { loi: string }
 	| { kind: KieuKr; ownerUserId: string; khoi: number; dich: number };
@@ -72,6 +123,7 @@ type Doc =
 function docDong(r: OkrDongNhapOutput, nguoi: Map<string, string>): Doc {
 	if (r.objective === "") return { loi: N.thieuMucTieu };
 	if (r.keyResult === "") return { loi: N.thieuKr };
+	if (!dungDoDai(r)) return { loi: N.doDai };
 	const kind = docKieu(r.kind);
 	if (kind === null) return { loi: N.kieuLa };
 	const ownerUserId = nguoi.get(khoa(r.email));
@@ -118,20 +170,18 @@ export function phanTichLoOkr(chu: string, snap: SnapNhapOkr): KetQuaNhapOkr {
 		const mt = nhom.get(k) ?? { title: objective, keyResults: [] };
 		mt.keyResults.push({
 			line,
-			title: keyResult.slice(0, OKR.ten.krToiDa),
+			title: keyResult,
 			kind: d.kind,
 			startValue: d.khoi,
 			targetValue: d.dich,
-			unit: unit.slice(0, OKR.ten.donViDo),
+			unit,
 			ownerUserId: d.ownerUserId,
 		});
 		nhom.set(k, mt);
 		return r;
 	});
-	const mucTieu = [...nhom.values()].map((m) => ({
-		...m,
-		title: m.title.slice(0, OKR.ten.mucTieuToiDa),
-	}));
+	const mucTieu = [...nhom.values()];
+	const tranKr = snap.tranKr;
 	const valid = rows.filter((r) => r.error === null).length;
 	return {
 		rows,
@@ -141,6 +191,11 @@ export function phanTichLoOkr(chu: string, snap: SnapNhapOkr): KetQuaNhapOkr {
 			invalid: rows.length - valid,
 			objectives: mucTieu.length,
 		},
-		vuotTran: snap.tranConLai !== null && mucTieu.length > snap.tranConLai,
+		vuotTran:
+			snap.tranConLai !== null &&
+			mucTieu.length > 0 &&
+			mucTieu.length > snap.tranConLai,
+		vuotTranKr:
+			tranKr !== null && mucTieu.some((m) => m.keyResults.length > tranKr),
 	};
 }

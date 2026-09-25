@@ -1086,9 +1086,11 @@ export class OkrService {
 			members: members.map((m) => m.user),
 			daCo: coSan.map((m) => khoa(m.title)),
 			tranConLai: ct.capMode === "chan" ? ct.objectiveCap - coSan.length : null,
+			tranKr: ct.capMode === "chan" ? ct.krCap : null,
 		});
 		if (kq.vuotTran)
 			throw new BadRequestException(T.nhap.vuotTran(ct.objectiveCap));
+		if (kq.vuotTranKr) throw new BadRequestException(T.vuotTranKr(ct.krCap));
 		return kq;
 	}
 

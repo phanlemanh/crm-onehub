@@ -13,6 +13,7 @@ const SNAP: SnapNhapOkr = {
 	],
 	daCo: [khoa("Mở rộng miền Bắc")],
 	tranConLai: null,
+	tranKr: null,
 };
 
 const dong = (...o: string[]) => o.join("\t");
@@ -65,6 +66,7 @@ const LO = [
 		"%",
 		"binh@onehub.vn",
 	),
+	dong("Tăng doanh thu", "KR", "tăng tới", "0", "10", "", "an@onehub.vn"),
 ].join("\n");
 
 const MA_TRAN: [number, string | null][] = [
@@ -80,13 +82,14 @@ const MA_TRAN: [number, string | null][] = [
 	[12, null],
 	[14, null],
 	[15, null],
+	[16, N.doDai],
 ];
 
 describe("okr-nhap", () => {
-	test("okr-nhap: lo 12 dong, ma tran 12 x cau loi ghim, gom 2 muc tieu", () => {
+	test("okr-nhap: lo 13 dong, ma tran 13 x cau loi ghim, gom 2 muc tieu", () => {
 		const kq = phanTichLoOkr(LO, SNAP);
 		expect(kq.rows.map((r) => [r.line, r.error])).toEqual(MA_TRAN);
-		expect(kq.summary).toEqual({ valid: 3, invalid: 9, objectives: 2 });
+		expect(kq.summary).toEqual({ valid: 3, invalid: 10, objectives: 2 });
 		expect(kq.vuotTran).toBe(false);
 		expect(kq.mucTieu).toEqual([
 			{
@@ -158,6 +161,16 @@ describe("okr-nhap", () => {
 				dong("Mục A", "KR 4", "giam xuong", "1e13", "0", "", "binh@onehub.vn"),
 				dong("Mục A", "KR 5", "phần trăm", "0", "", "", "binh@onehub.vn"),
 				dong("Mục A", "KR 6", "", "0", "10", "", "binh@onehub.vn"),
+				dong(
+					"Mục A",
+					"KR 7",
+					"giữ trên",
+					"1.000",
+					"1.250.000",
+					"",
+					"binh@onehub.vn",
+				),
+				dong("Mục A", "KR 8", "giữ dưới", "3.5", "1.500", "", "binh@onehub.vn"),
 			].join("\n"),
 			SNAP,
 		);
@@ -168,6 +181,15 @@ describe("okr-nhap", () => {
 			[5, N.soLa],
 			[6, N.thieuDich],
 			[7, N.kieuLa],
+			[8, null],
+			[9, null],
+		]);
+		expect(
+			kq.mucTieu[0]?.keyResults.map((k) => [k.startValue, k.targetValue]),
+		).toEqual([
+			[1250.5, 1300.25],
+			[1000, 1250000],
+			[3.5, 1500],
 		]);
 		expect(kq.mucTieu[0]?.keyResults[0]).toMatchObject({
 			kind: "giu-tren",
@@ -196,6 +218,95 @@ describe("okr-nhap", () => {
 			[2, false, 2],
 			[1, true, 2],
 			[0, true, 2],
+		]);
+	});
+
+	test("okr-nhap: do dai ten va don vi la loi dong, khong cat chu", () => {
+		const dai = "M".repeat(250);
+		const kq = phanTichLoOkr(
+			[
+				dong(dai, "KR dài", "mốc", "", "", "", "an@onehub.vn"),
+				dong("Mục A", "K".repeat(201), "mốc", "", "", "", "an@onehub.vn"),
+				dong(
+					"Mục A",
+					"KR đơn vị",
+					"mốc",
+					"",
+					"",
+					"đ".repeat(25),
+					"an@onehub.vn",
+				),
+				dong("Mở rộng miền Bắc", "KR", "mốc", "", "", "", "an@onehub.vn"),
+				dong(
+					"M".repeat(200),
+					"K".repeat(200),
+					"mốc",
+					"",
+					"",
+					"đ".repeat(24),
+					"an@onehub.vn",
+				),
+				dong("Mục", "KR3", "mốc", "", "", "", "an@onehub.vn"),
+			].join("\n"),
+			SNAP,
+		);
+		expect(kq.rows.map((r) => [r.line, r.error])).toEqual([
+			[1, N.doDai],
+			[2, N.doDai],
+			[3, N.doDai],
+			[4, N.doDai],
+			[5, null],
+			[6, null],
+		]);
+		expect(kq.mucTieu.map((m) => m.title.length)).toEqual([200, 3]);
+	});
+
+	test("okr-nhap: cham phay cua CSV kieu Viet, dau phay van tach nhu cu", () => {
+		const kq = phanTichLoOkr(
+			[
+				"Mục C;KR chấm phẩy;tăng tới;0;10;;an@onehub.vn",
+				"Mục C;KR thập phân;tăng tới;0;1.250,5;triệu;an@onehub.vn",
+				'"Mục; có chấm phẩy";"KR ""trích""";mốc;;;;an@onehub.vn',
+				"Tăng A; giảm B,KR phẩy,mốc,,,,an@onehub.vn",
+			].join("\n"),
+			SNAP,
+		);
+		expect(
+			kq.rows.map((r) => [r.objective, r.keyResult, r.target, r.error]),
+		).toEqual([
+			["Mục C", "KR chấm phẩy", "10", null],
+			["Mục C", "KR thập phân", "1.250,5", null],
+			["Mục; có chấm phẩy", 'KR "trích"', "", null],
+			["Tăng A; giảm B", "KR phẩy", "", null],
+		]);
+		expect(kq.mucTieu[0]?.keyResults.map((k) => k.targetValue)).toEqual([
+			10, 1250.5,
+		]);
+	});
+
+	test("okr-nhap: tran KR khi chan, dung bang tran thi qua, lo khong co muc tieu moi khong vuot tran", () => {
+		const ba = ["KR 1", "KR 2", "KR 3"]
+			.map((t) => dong("Mục A", t, "mốc", "", "", "", "an@onehub.vn"))
+			.join("\n");
+		expect(
+			[null, 3, 2].map(
+				(tranKr) => phanTichLoOkr(ba, { ...SNAP, tranKr }).vuotTranKr,
+			),
+		).toEqual([false, false, true]);
+		const chiDaCo = dong(
+			"Mở rộng miền Bắc",
+			"KR x",
+			"mốc",
+			"",
+			"",
+			"",
+			"an@onehub.vn",
+		);
+		const lai = phanTichLoOkr(chiDaCo, { ...SNAP, tranConLai: -1, tranKr: 0 });
+		expect([lai.vuotTran, lai.vuotTranKr, lai.summary.objectives]).toEqual([
+			false,
+			false,
+			0,
 		]);
 	});
 });
