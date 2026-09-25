@@ -34,6 +34,7 @@ function chiOkr(role: string | null): boolean {
 
 const RAIL_CHI_OKR: readonly MucRail[] = MUC_RAIL.flatMap((muc) => {
 	if (muc.key === "overview") return [muc];
+	if (muc.key === "okr") return [muc];
 	if (muc.key === "settings") {
 		return [{ ...muc, href: CAI_DAT_MAC_DINH_CHI_OKR, related: [GOC_CAI_DAT] }];
 	}

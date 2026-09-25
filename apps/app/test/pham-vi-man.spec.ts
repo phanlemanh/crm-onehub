@@ -8,11 +8,11 @@ import {
 } from "@/lib/pham-vi-man";
 
 describe("pham vi man theo vai", () => {
-	it("rail: okr hai muc, settings tro thang thong bao cua ban; vai khac du tam muc", () => {
+	it("rail: okr ba muc, settings tro thang thong bao cua ban; vai khac du tam muc", () => {
 		const okr = mucRailChoVai("okr");
-		expect(okr.map((m) => m.key)).toEqual(["overview", "settings"]);
-		expect(okr[1]?.href).toBe("/settings/notifications");
-		expect(okr[1]?.related).toContain("/settings");
+		expect(okr.map((m) => m.key)).toEqual(["overview", "okr", "settings"]);
+		expect(okr[2]?.href).toBe("/settings/notifications");
+		expect(okr[2]?.related).toContain("/settings");
 		expect(mucRailChoVai("member")).toBe(MUC_RAIL);
 		expect(mucRailChoVai(null)).toBe(MUC_RAIL);
 	});
@@ -52,6 +52,8 @@ describe("pham vi man theo vai", () => {
 			"/settings/notifications",
 			"/settings/api-keys",
 			"/ngoai-pham-vi",
+			"/okr",
+			"/okr/theo-don-vi",
 		]) {
 			expect(dieuHuongTheoVai("okr", p), p).toBe("ok");
 		}
