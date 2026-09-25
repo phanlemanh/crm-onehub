@@ -1,5 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { mkdirSync, readFileSync, rmSync } from "node:fs";
+import { loadavg } from "node:os";
 import { join } from "node:path";
 import {
 	banSaoCuaSha,
@@ -86,7 +87,9 @@ for (let n = 1; n <= soLuot; n += 1) {
 	const caDo = cacCa.filter((c) => c.ten === CA);
 	const ms = caDo.length === 1 ? Math.round(caDo[0].ms) : null;
 	console.log(
-		`luot ${n}: seed ${seed ?? "?"} · ma ${ma} · ${cacCa.length} ca · ${soHong} do · ${CA} ${ms ?? "?"}ms · ${khac} tien trinh bun test khac`,
+		`luot ${n}: seed ${seed ?? "?"} · ma ${ma} · ${cacCa.length} ca · ${soHong} do · ${CA} ${ms ?? "?"}ms · ${khac} tien trinh bun test khac · loadavg ${loadavg()
+			.map((x) => x.toFixed(2))
+			.join(" ")}`,
 	);
 	if (ma !== 0) loi.push(`luot ${n}: ma thoat ${ma}`);
 	if (cacCa.length !== soCaKyVong)

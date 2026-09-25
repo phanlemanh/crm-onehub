@@ -62,3 +62,11 @@ bắt «test khoa-con-bat co tran rieng»; thêm `--timeout 15000` vào script t
 «apps/api/package.json script test co --timeout»).
 `soi-tep.mjs tuan-tu` → 7 đạt, tự kiểm 1/1 (thêm `LO_SONG_SONG` vào `doi-chung-thanh-vien`
 → bắt «doi-chung-thanh-vien goi ma tran song song»).
+
+## Tải máy lúc đo
+
+Các số giờ ở mục E1 đo lúc 05:00–05:10 ngày 26/09, khi máy chạy song song hai
+repin-lane và một S4 của phiên khác. Phiên điều phối đo được loadavg 12.8 trên 14 lõi
+quanh lúc đó; bản thân lượt đo KHÔNG ghi loadavg. Từ sau S3, `do-thoi-gian.mjs` in loadavg
+ở từng lượt, và lượt S4 được xếp lúc máy rảnh. Tỉ lệ bản cũ/bản mới (~2.5×) đo trên cùng
+máy trong cùng khung giờ nên ít phụ thuộc tải hơn số tuyệt đối.
