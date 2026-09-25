@@ -88,6 +88,12 @@ async function duongMo(
 	return (planId) => `${appUrl}/${slug}?record=plan:${planId}`;
 }
 
+export async function lienKetKeHoach(): Promise<
+	(planId: string) => string | null
+> {
+	return duongMo(appUrlMacDinh());
+}
+
 async function dong(taskId: string, ket: KetQuaNhac): Promise<KetQuaNhac> {
 	await completeTask(taskId, ket);
 	return ket;

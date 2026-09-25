@@ -5,7 +5,7 @@ import {
 	type ViecNhac,
 } from "@crm/db/onboarding-nhac";
 
-const TIEU_DE = {
+export const TIEU_DE = {
 	"buoc-qua-han": "Quá hạn",
 	"buoc-sap-han": "Sắp hạn",
 	"ke-hoach-im": "Kế hoạch im",

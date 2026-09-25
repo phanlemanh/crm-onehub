@@ -45,9 +45,10 @@ describe("doc-lenh", () => {
 
 	test("doc-lenh: bien", () => {
 		for (const [chu, mong] of BIEN) {
-			expect(docLenh(chu), `o bien ${JSON.stringify(chu).slice(0, 30)}`).toEqual(
-				mong,
-			);
+			expect(
+				docLenh(chu),
+				`o bien ${JSON.stringify(chu).slice(0, 30)}`,
+			).toEqual(mong);
 		}
 	});
 });

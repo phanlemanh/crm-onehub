@@ -2,7 +2,10 @@ import { setSystemTime } from "bun:test";
 import { db } from "@crm/db";
 import { NHAC } from "@crm/db/onboarding-nhac";
 import { SETTINGS_ID } from "@crm/db/settings";
-import { type NhacPayload, parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
+import {
+	type NhacPayload,
+	parseNhacPayload,
+} from "@crm/validation/nhac-ke-hoach";
 import {
 	chayNhac,
 	chuDeNhac,
@@ -42,7 +45,9 @@ export async function donTraLoi(): Promise<void> {
 	});
 	await db.zaloUpdateSeen.deleteMany({});
 	await db.zaloLinkAttempt.deleteMany({});
-	await db.zaloLink.deleteMany({ where: { crmUserId: { startsWith: TIEN_TO } } });
+	await db.zaloLink.deleteMany({
+		where: { crmUserId: { startsWith: TIEN_TO } },
+	});
 	await db.zaloLinkCode.deleteMany({
 		where: { crmUserId: { startsWith: TIEN_TO } },
 	});
@@ -61,9 +66,16 @@ export async function batBot(): Promise<void> {
 	});
 }
 
-export async function noiZalo(userId: string, zaloUserId: string): Promise<void> {
+export async function noiZalo(
+	userId: string,
+	zaloUserId: string,
+): Promise<void> {
 	await db.zaloLink.create({
-		data: { crmUserId: userId, zaloUserId, zaloDisplayName: `Zalo ${zaloUserId}` },
+		data: {
+			crmUserId: userId,
+			zaloUserId,
+			zaloDisplayName: `Zalo ${zaloUserId}`,
+		},
 	});
 }
 
@@ -179,11 +191,12 @@ export async function nhan(
 	fromId: string,
 	text: string,
 	luc: Date,
-	chon: { messageId?: string } = {},
+	chon: { messageId?: string; send?: 500 } = {},
 ) {
 	demTin += 1;
-	const z = zaloGia();
-	const messageId = chon.messageId ?? `ttn-${Date.now().toString(36)}-${demTin}`;
+	const z = zaloGia(chon.send ? { send: chon.send } : {});
+	const messageId =
+		chon.messageId ?? `ttn-${Date.now().toString(36)}-${demTin}`;
 	const than = JSON.stringify(
 		thanWebhook({ messageId, fromId, ten: `Zalo ${fromId}`, text }),
 	);
@@ -199,7 +212,8 @@ export async function nhan(
 
 export function phanTu<T>(ds: T[], n: number): T {
 	const gia = ds[n - 1];
-	if (gia === undefined) throw new Error(`khong co muc ${n} trong ${ds.length} muc`);
+	if (gia === undefined)
+		throw new Error(`khong co muc ${n} trong ${ds.length} muc`);
 	return gia;
 }
 
@@ -216,4 +230,39 @@ export async function vetXong(stepId: string) {
 		where: { type: "PLAN_CHANGE", meta: { path: ["stepId"], equals: stepId } },
 		orderBy: { createdAt: "asc" },
 	});
+}
+
+export async function buocTheoId(stepId: string) {
+	return db.onboardingStep.findUniqueOrThrow({
+		where: { id: stepId },
+		select: {
+			id: true,
+			label: true,
+			planId: true,
+			assigneeId: true,
+			plan: { select: { company: { select: { name: true } } } },
+		},
+	});
+}
+
+export async function demVetZalo(): Promise<number> {
+	return db.activity.count({
+		where: { type: "PLAN_CHANGE", meta: { path: ["source"], equals: "zalo" } },
+	});
+}
+
+export async function demDaThay(messageId: string): Promise<number> {
+	return db.zaloUpdateSeen.count({ where: { messageId } });
+}
+
+export function buocCuaMuc(daGui: Muc[], n: number): string {
+	const stepId = phanTu(daGui, n).stepId;
+	if (!stepId) throw new Error(`muc ${n} khong phai buoc`);
+	return stepId;
+}
+
+export async function xongLucCua(daGui: Muc[]) {
+	return Promise.all(
+		daGui.flatMap((m) => (m.stepId ? [buocXongLuc(m.stepId)] : [])),
+	);
 }
