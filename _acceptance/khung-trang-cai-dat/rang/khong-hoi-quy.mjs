@@ -257,6 +257,7 @@ const canMayChu = [];
 function cayGoc() {
 	const goc = join(GOC, ".acceptance-runs", "khung-trang-cai-dat", "goc");
 	if (!existsSync(goc)) git("worktree", "add", "--detach", goc, moc);
+	else execFileSync("git", ["-C", goc, "checkout", "-q", "--detach", moc]);
 	const noi = [
 		".env",
 		"node_modules",
