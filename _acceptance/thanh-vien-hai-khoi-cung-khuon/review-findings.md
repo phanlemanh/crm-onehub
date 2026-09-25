@@ -6,11 +6,9 @@
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-(không có phát hiện MỚI round này — các mục dưới đây là mục mang theo từ round 1, tệp liên quan không đổi nên không chấm lại)
-
-- **New allowEmail mutation invalidates by listing a query key at the call site instead of going through useCrmCache() (r1)**
-  Người dùng thấy gì: Nút cho phép một địa chỉ vẫn hoạt động đúng cho người dùng, nhưng cách cập nhật lại danh sách sau khi bấm không theo đúng khuôn chung của hệ thống, nên các thay đổi tương tự sau này có nguy cơ bị làm sai cách.
-  file: `apps/app/app/(app)/[slug]/settings/members/cho-phep-dia-chi.tsx`
+- **Hình dạng 3 + 5: E19 chỉ kiểm «có lời gọi .workspace(» ở mỗi tệp, còn lời hứa là mỗi thao tác trong ba thao tác thành công đều làm mới qua lối chung**
+  Người dùng thấy gì: Phép kiểm tự động hiện tại có thể không phát hiện nếu sau này riêng thao tác 'phát liên kết' ngừng làm mới danh sách — trong trường hợp đó người dùng phải tự tải lại trang mới thấy đúng trạng thái.
+  file: `_acceptance/thanh-vien-hai-khoi-cung-khuon/rang/lam-moi.mjs`
   severity: medium
   Đề xuất: known-limits
 

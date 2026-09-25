@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7c8b156ad491bd0ae522b48846228a214f2082a9
+verified_commit: 444d323b0f995102b444855556e79e4e0cbe2d38
 human_signoff:
 ---
 
@@ -33,258 +33,260 @@ human_signoff:
 | E16 | AC-14 | ui-check | PASS |
 | E17 | AC-16 | script | PASS |
 | E18 | AC-15 | script | PASS |
+| E19 | AC-17 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E1-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E1-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvhk_do_khoi
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
-    -- tiền đề làn đo: đã dọn contextDevApiKey
-    -- tiền đề làn đo: đã dọn ảnh đại diện
-    -- tiền đề làn đo: đã dọn tên miền được phép
-    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — kết luận cuối "46 DUNG, 0 SAI — ma thoat 0")
+    DUNG don: loi cho phep co san truoc luot giu nguyen (6 truoc, 6 sau, trang thai trung true)
+    ANH .acceptance-runs/thanh-vien-hai-khoi-cung-khuon/evidence/
+    KET LUAN: 46 DUNG, 0 SAI — ma thoat 0
+    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — cùng một lượt chạy)
 
 - eval: E2
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E2-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E2-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvhk_do_khoi
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
-    -- tiền đề làn đo: đã dọn contextDevApiKey
-    -- tiền đề làn đo: đã dọn ảnh đại diện
-    -- tiền đề làn đo: đã dọn tên miền được phép
-    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — kết luận cuối "46 DUNG, 0 SAI — ma thoat 0")
+    DUNG don: loi cho phep co san truoc luot giu nguyen (6 truoc, 6 sau, trang thai trung true)
+    ANH .acceptance-runs/thanh-vien-hai-khoi-cung-khuon/evidence/
+    KET LUAN: 46 DUNG, 0 SAI — ma thoat 0
+    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — cùng một lượt chạy)
 
 - eval: E3
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E3-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E3-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvhk_do_khoi
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
-    -- tiền đề làn đo: đã dọn contextDevApiKey
-    -- tiền đề làn đo: đã dọn ảnh đại diện
-    -- tiền đề làn đo: đã dọn tên miền được phép
-    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — kết luận cuối "46 DUNG, 0 SAI — ma thoat 0")
+    DUNG don: loi cho phep co san truoc luot giu nguyen (6 truoc, 6 sau, trang thai trung true)
+    ANH .acceptance-runs/thanh-vien-hai-khoi-cung-khuon/evidence/
+    KET LUAN: 46 DUNG, 0 SAI — ma thoat 0
+    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — cùng một lượt chạy)
 
 - eval: E4
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E4-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E4-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvhk_do_khoi
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
-    -- tiền đề làn đo: đã dọn contextDevApiKey
-    -- tiền đề làn đo: đã dọn ảnh đại diện
-    -- tiền đề làn đo: đã dọn tên miền được phép
-    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — kết luận cuối "46 DUNG, 0 SAI — ma thoat 0")
+    DUNG don: loi cho phep co san truoc luot giu nguyen (6 truoc, 6 sau, trang thai trung true)
+    ANH .acceptance-runs/thanh-vien-hai-khoi-cung-khuon/evidence/
+    KET LUAN: 46 DUNG, 0 SAI — ma thoat 0
+    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — cùng một lượt chạy)
 
 - eval: E5
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E5-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E5-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvhk_do_khoi
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
-    -- tiền đề làn đo: đã dọn contextDevApiKey
-    -- tiền đề làn đo: đã dọn ảnh đại diện
-    -- tiền đề làn đo: đã dọn tên miền được phép
-    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — kết luận cuối "46 DUNG, 0 SAI — ma thoat 0")
+    DUNG don: loi cho phep co san truoc luot giu nguyen (6 truoc, 6 sau, trang thai trung true)
+    ANH .acceptance-runs/thanh-vien-hai-khoi-cung-khuon/evidence/
+    KET LUAN: 46 DUNG, 0 SAI — ma thoat 0
+    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — cùng một lượt chạy)
 
 - eval: E6
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E6-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E6-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvhk_do_khoi
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
-    -- tiền đề làn đo: đã dọn contextDevApiKey
-    -- tiền đề làn đo: đã dọn ảnh đại diện
-    -- tiền đề làn đo: đã dọn tên miền được phép
-    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — kết luận cuối "46 DUNG, 0 SAI — ma thoat 0")
+    DUNG don: loi cho phep co san truoc luot giu nguyen (6 truoc, 6 sau, trang thai trung true)
+    ANH .acceptance-runs/thanh-vien-hai-khoi-cung-khuon/evidence/
+    KET LUAN: 46 DUNG, 0 SAI — ma thoat 0
+    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — cùng một lượt chạy)
 
 - eval: E7
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E7-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E7-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvhk_do_khoi
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
-    -- tiền đề làn đo: đã dọn contextDevApiKey
-    -- tiền đề làn đo: đã dọn ảnh đại diện
-    -- tiền đề làn đo: đã dọn tên miền được phép
-    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — kết luận cuối "46 DUNG, 0 SAI — ma thoat 0")
+    DUNG don: loi cho phep co san truoc luot giu nguyen (6 truoc, 6 sau, trang thai trung true)
+    ANH .acceptance-runs/thanh-vien-hai-khoi-cung-khuon/evidence/
+    KET LUAN: 46 DUNG, 0 SAI — ma thoat 0
+    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — cùng một lượt chạy)
 
 - eval: E8
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E8-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E8-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.tvhk_dang_tai
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
      0 fail
      4 expect() calls
-    Ran 2 tests across 1 file. [527.00ms]
+    Ran 2 tests across 1 file. [688.00ms]
 
 - eval: E9
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E9-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E9-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.tvhk_rong
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
      0 fail
      12 expect() calls
-    Ran 4 tests across 1 file. [636.00ms]
+    Ran 4 tests across 1 file. [807.00ms]
 
 - eval: E10
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E10-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E10-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvhk_do_khoi
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
-    -- tiền đề làn đo: đã dọn contextDevApiKey
-    -- tiền đề làn đo: đã dọn ảnh đại diện
-    -- tiền đề làn đo: đã dọn tên miền được phép
-    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — kết luận cuối "46 DUNG, 0 SAI — ma thoat 0")
+    DUNG don: loi cho phep co san truoc luot giu nguyen (6 truoc, 6 sau, trang thai trung true)
+    ANH .acceptance-runs/thanh-vien-hai-khoi-cung-khuon/evidence/
+    KET LUAN: 46 DUNG, 0 SAI — ma thoat 0
+    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — cùng một lượt chạy)
 
 - eval: E11
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E11-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E11-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.script.tvhk_tu_dien
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
+    DUNG muc «Không gian làm việc» co dong Vì sao truoc muc ke tiep
     DUNG bang.tieuDe la "Đã vào", mong "Đã vào"
-    DUNG duocPhepVao.tieuDe la "Được phép vào", mong "Được phép vào"
     11 DUNG, 0 SAI — ma thoat 0
 
 - eval: E12
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E12-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E12-r3
   exit_code: 0
   baseline: n-a
-  verifier: config:executors.script.ttv_do_bang
-  verified_at: 2026-09-25T12:36:20Z
+  verifier: config:executors.script.tvhk_ttv_do_bang
+  verified_at: 2026-09-25T14:32:26Z
   output: |
     -- tiền đề làn đo: đã dọn contextDevApiKey
     -- tiền đề làn đo: đã dọn ảnh đại diện
     -- tiền đề làn đo: đã dọn tên miền được phép
-    (bản đồ đã ký của bang-thanh-vien-giu-hang, chạy lại trên cây mới — kết luận "30 DUNG, 0 SAI — ma thoat 0")
+    (bản đồ đã ký của bang-thanh-vien-giu-hang, chạy lại trên cây mới qua cổng 3620/3621 — kết luận "30 DUNG, 0 SAI — ma thoat 0")
 
 - eval: E13
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E13-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E13-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvhk_do_khoi
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
-    -- tiền đề làn đo: đã dọn contextDevApiKey
-    -- tiền đề làn đo: đã dọn ảnh đại diện
-    -- tiền đề làn đo: đã dọn tên miền được phép
-    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — kết luận cuối "46 DUNG, 0 SAI — ma thoat 0")
+    DUNG don: loi cho phep co san truoc luot giu nguyen (6 truoc, 6 sau, trang thai trung true)
+    ANH .acceptance-runs/thanh-vien-hai-khoi-cung-khuon/evidence/
+    KET LUAN: 46 DUNG, 0 SAI — ma thoat 0
+    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — cùng một lượt chạy)
 
 - eval: E14
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E14-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E14-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvhk_do_khoi
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
-    -- tiền đề làn đo: đã dọn contextDevApiKey
-    -- tiền đề làn đo: đã dọn ảnh đại diện
-    -- tiền đề làn đo: đã dọn tên miền được phép
-    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — kết luận cuối "46 DUNG, 0 SAI — ma thoat 0")
+    DUNG don: loi cho phep co san truoc luot giu nguyen (6 truoc, 6 sau, trang thai trung true)
+    ANH .acceptance-runs/thanh-vien-hai-khoi-cung-khuon/evidence/
+    KET LUAN: 46 DUNG, 0 SAI — ma thoat 0
+    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — cùng một lượt chạy)
 
 - eval: E15
-  run_id: design-gate-934956e1c5
+  run_id: design-gate-f3f8ddd03b
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.script.tvhk_san_thiet_ke
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
-    "hits": [],
-    "findings": []
+      "p0_count": 0,
+      "blocking": [],
+      "findings": []
 
 - eval: E16
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E16-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E16-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvhk_do_khoi
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   screenshot: evidence/tvhk-1440-dau.png
   observed: |
-    Đã mở cả 9 ảnh bằng Read và đối chiếu từng ảnh:
-
-    1) tvhk-1440-dau.png: tiêu đề trang "Thành viên", nút xanh lá «Cho phép một địa chỉ» ở góc phải đầu trang, khối "Đã vào · 10" với vỏ bảng có viền bo và hàng tiêu đề cột (Tên/Địa chỉ email/Vai trò/Ngày vào) nền xám đậm hơn nền trang. Khớp Expected.
-
-    2) tvhk-1440-noi.png: ảnh cuộn giữa trang — đáy đuôi khối trên (dòng "1–10 trong số 10") và khối dưới "Được phép vào · 20" hiện ra với tiêu đề có số đếm, mô tả xám nhỏ "Những địa chỉ vào được nhưng chưa vào lần nào.", vỏ bảng có viền bo, hàng tiêu đề cột (Địa chỉ/Vai trò khi vào/Người cho phép/Cho phép lúc) nền xám giống khối trên, cột đầu (Địa chỉ / Tên) cùng thụt lề như nhau. Khớp Expected.
-
-    3) tvhk-768-dau.png: cùng bố cục như 1440-dau nhưng ở khổ 768, sidebar và nội dung thu hẹp, tiêu đề trang, nút «Cho phép một địa chỉ» ở góc phải đầu trang, khối "Đã vào · 10" với vỏ bảng viền bo + hàng tiêu đề nền xám. Khớp Expected.
-
-    4) tvhk-768-noi.png: cuộn giữa trang ở khổ 768, đáy khối trên (1–10 trong số 10) và khối dưới "Được phép vào · 20" cùng kiểu thẻ — vỏ bảng viền bo, tiêu đề cột nền xám, cột đầu cũng thụt. Khớp Expected.
-
-    5) tvhk-375-dau.png: khổ điện thoại 375, header có icon hamburger, tab ngang (Chung/Tiến tệ/Trưởng/Thành viên...), tiêu đề "Thành viên", nút xanh «Cho phép một địa chỉ», khối "Đã vào · 10" với vỏ bảng viền bo, hàng tiêu đề (Tên/Vai trò) nền xám. Khớp Expected.
-
-    6) tvhk-375-noi.png: cuộn giữa trang 375, đáy khối trên (1–10 trong số 10) và đỉnh khối dưới "Được phép vào · 20" hiện tiêu đề cột (Địa chỉ/Vai trò khi vào) nền xám cùng màu, vỏ bảng viền bo. Khớp Expected.
-
-    7) tvhk-375-cuon-ngang.png: vỏ bảng dưới (Được phép vào) đã cuộn ngang sang phải, cột "Cho phép lúc" và nút "Phát liên kết" cùng nút "…" (hành động) hiện đầy đủ trong khung, không thấy trang bị tràn ngang (không có scrollbar ngang ở mức document, chỉ vỏ bảng cuộn riêng). Khớp Expected.
-
-    8) menu-rut-1440.png: khổ 1440, menu "…" đang mở tại hàng tvhk-lan-do-00@lan-do.onehub.vn với một mục menu "Rút" chữ màu đỏ/phá-hủy (destructive). Khớp Expected.
-
-    9) khong-quyen-1440.png: trang chỉ hiện khối "Đã vào · 10" với bảng thành viên đầy đủ, KHÔNG có nút «Cho phép một địa chỉ» ở đầu trang, và KHÔNG thấy khối "Được phép vào" nào bên dưới (trang kết thúc sau dòng "1–10 trong số 10", cột "Phát liên kết" bị mờ/vô hiệu hóa cho người không quyền). Khớp Expected.
-
-    Tất cả 9/9 ảnh khớp nội dung mô tả trong Expected — không có mâu thuẫn nào.
-  network_observed: n-a (driver)
+    Đã Read từng file frame thật trong _acceptance/thanh-vien-hai-khoi-cung-khuon/evidence/ và đối chiếu bằng mắt với Expected:
+    - tvhk-1440-dau.png: tiêu đề trang "Thành viên", nút xanh «Cho phép một địa chỉ» ở góc phải đầu trang, khối «Đã vào · 10» với vỏ bảng viền bo, hàng tiêu đề cột nền xám (Tên/Địa chỉ email/Vai trò/Ngày vào). Khớp Expected.
+    - tvhk-1440-noi.png: cuộn giữa khung — đáy khối trên và khối «Được phép vào · 20» cùng kiểu thẻ (tiêu đề có số đếm, mô tả xám nhỏ, vỏ bảng viền bo, hàng tiêu đề cột nền xám). Khớp Expected.
+    - tvhk-768-dau.png / tvhk-768-noi.png: cùng bố cục thu hẹp ở 768px, sidebar và bảng co lại, vẫn giữ đúng kiểu thẻ/tiêu đề/nút như 1440. Khớp Expected.
+    - tvhk-375-dau.png: 375px đầu trang — tiêu đề, nút «Cho phép một địa chỉ» màu xanh, khối «Đã vào · 10», bảng vẫn có viền bo dù thu hẹp. Khớp Expected.
+    - tvhk-375-noi.png: 375px cuộn giữa — đáy khối trên + khối «Được phép vào · 20», cùng kiểu thẻ. Khớp Expected.
+    - tvhk-375-cuon-ngang.png: vỏ bảng dưới đã cuộn ngang, cột «Cho phép lúc» và cột «…» (hành động) hiện ra, không thấy trang bị tràn ngang (không có thanh cuộn ngang cấp trang). Khớp Expected.
+    - menu-rut-1440.png: menu «…» đang mở với mục «Rút» hiện chữ màu đỏ (pha huỷ/destructive). Khớp Expected.
+    - khong-quyen-1440.png: người xem không có quyền (ML — Marcus Lindqvist, vai trò Thành viên) chỉ thấy khối «Đã vào · 10», không có nút «Cho phép một địa chỉ» ở đầu trang, nút «Phát liên kết» bị làm mờ/vô hiệu. Khớp Expected.
+    Cả 9 ảnh đều có mặt, đúng tên file, đúng nội dung như Expected. Không có dòng nào mâu thuẫn với Expected.
+  network_observed: n-a (driver): driver là lệnh Bash chạy mot-luot.sh → do-khoi.mjs (script Playwright nội bộ), không có công cụ browser với read_network_requests/read_console_messages trong phiên grader này để đọc wire truth trực tiếp; các khẳng định DUNG/SAI của do-khoi.mjs đã bao gồm cả kiểm tra lỗi API (ví dụ "hop van mo sau khi API tu choi", "DB van 1 loi cho phep dang cho") nên phần hiệu ứng backend đã được đo bằng script, không phải qua network tab.
 
 - eval: E17
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E17-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E17-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.script.tvhk_soi_ma
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
     GHI CHU soi 10 tep, 92 phan tu @crm/ui
     21 DUNG, 0 SAI — ma thoat 0
 
 - eval: E18
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E18-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E18-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvhk_do_khoi
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
   output: |
-    -- tiền đề làn đo: đã dọn contextDevApiKey
-    -- tiền đề làn đo: đã dọn ảnh đại diện
-    -- tiền đề làn đo: đã dọn tên miền được phép
-    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — kết luận cuối "46 DUNG, 0 SAI — ma thoat 0")
+    DUNG don: loi cho phep co san truoc luot giu nguyen (6 truoc, 6 sau, trang thai trung true)
+    ANH .acceptance-runs/thanh-vien-hai-khoi-cung-khuon/evidence/
+    KET LUAN: 46 DUNG, 0 SAI — ma thoat 0
+    (lệnh chung do-khoi.mjs bao phủ E1,E2,E3,E4,E5,E6,E7,E10,E13,E14,E18 — cùng một lượt chạy)
+
+- eval: E19
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-E19-r3
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.tvhk_lam_moi
+  verified_at: 2026-09-25T14:32:26Z
+  output: |
+    DUNG cho-phep-dia-chi.tsx goi useCrmCache()
+    DUNG cho-phep-dia-chi.tsx goi .workspace(
+    9 DUNG, 0 SAI — ma thoat 0
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test
-  run_id: mugy3linpfnu
+  run_id: muh28rwkcfy9
   exit_code: 0
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
 
 - cmd: bun run lint:slop
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-SUITE-bun_run_lint_slop-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-thanh-vien-hai-khoi-cung-khuon-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-thanh-vien-hai-khoi-cung-khuon-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-09-25T12:36:20Z
+  verified_at: 2026-09-25T14:32:26Z
 
 ## Known limits
 
@@ -292,15 +294,14 @@ human_signoff:
 
 ## Analyst
 
-carried tu round 1 — baseline khong do lai round nay
-
-none — baseline không đo lại round này nên không có eval nào được đánh giá non-discriminating (mọi baseline: n-a).
+none — moi eval feature deu red tren baseline (co phan biet)
 
 ## Variance
 
-none — every multi-run eval is uniform (không có eval nào mang runs > 1 round này).
+none — every multi-run eval is uniform
 
 ## Iterations
 
 Round 1: `bun run test` thất bại — suite chuỗi (messages-guard) thiếu khoá `dem` và `duocPhepVao.menu` trong từ điển tiếng Việt. Trả về S3 để bổ sung khoá.
 Round 2: 18 eval (E1–E18) và 4 lệnh suite hồi quy đều xanh — PASS.
+Round 3: nâng phạm vi từ phát hiện «Ngoài-1» của round 1 (allowEmail invalidate ngoài lối chung useCrmCache) — thêm AC-17/E19 «làm mới qua useCrmCache» cho cho-phep-dia-chi.tsx, allowances-table.tsx, members-table.tsx, cache.ts; 19 eval (E1–E19) và 4 lệnh suite hồi quy đều xanh — PASS.
